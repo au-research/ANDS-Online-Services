@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+Copyright 2009 The Australian National University
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+**************************************************************************** -->
+<form id="f1" title="Delete Data Source">
+   <text id="data_source_key" type="readonly">
+      <presentation>
+         <label>Key</label>
+      </presentation>
+   </text>
+   
+   <text id="title" type="displayonly">
+      <presentation>
+         <label>Title</label>
+      </presentation>
+   </text>
+   
+   <text id="provider_type" type="displayonly">
+      <presentation>
+         <label>Provider Type</label>
+      </presentation>
+   </text>
+   
+   <text id="uri" type="displayonly">
+      <presentation>
+         <label>URI</label>
+      </presentation>
+   </text>
+ 
+   <button>Cancel</button>
+   <button>Delete</button>
+   
+   <notes>Deleting this Data Source will also remove any related Registry Objects.</notes>
+
+</form>

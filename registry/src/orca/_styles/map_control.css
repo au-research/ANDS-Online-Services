@@ -1,0 +1,167 @@
+/*
+Copyright 2009 The Australian National University
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*******************************************************************************/
+			
+.mct_control
+{
+	font-family: verdana, sans-serif;
+	border: 1px solid #000000;
+}
+
+.mct_loaderror
+{
+	width: 300px;
+	font-size: 11px;
+	color: #aa0000;
+	background: #dddddd;
+	border: 1px solid #333333;
+	white-space: normal;
+	padding: 10px;
+}
+
+.mct_toolbar
+{
+	line-height: 18px;
+	height: 18px;
+	font-size: 11px;
+	color: #ffffff;
+	background: #444444 url("../_images/_controls/_map_control/mct_toolbar_bg.gif") repeat-x;
+	border-bottom: 1px solid #333333;
+}
+
+.mct_tool
+{
+	padding-left: 8px;
+	padding-right: 8px;
+	cursor: pointer;
+	color: #ffffff;
+	border-right: 1px solid #666666;
+}
+
+.mct_tool_active
+{
+	padding-left: 8px;
+	padding-right: 8px;
+	cursor: pointer;
+	color: #f68213;
+	text-decoration: underline;
+	border-right: 1px solid #666666;
+}
+
+.mct_special_tool
+{
+	padding-left: 8px;
+	padding-right: 8px;
+	cursor: pointer;
+	color: #aaaaaa;
+	border-right: 1px solid #666666;
+}
+
+.mct_tool:hover, .mct_tool_active:hover
+{
+	color: #f68213;
+	text-decoration: underline;
+}
+
+.mct_special_tool:hover
+{
+	color: #f74313;
+	text-decoration: underline;
+}
+
+.mct_buttonbar
+{
+	background: #bbbbbb url("../_images/_controls/_map_control/mct_buttonbar_bg.gif") repeat-x;
+	height: 24px;
+	padding: 3px 6px 0px 6px;
+	background-color: #bbbbbb;
+	border-top: 1px solid #888888;
+	overflow: hidden;
+}
+
+.mct_button
+{		
+	font-family: verdana, sans-serif;	
+	font-size: 11px;
+	width: 60px;
+}
+
+.mct_canvas
+{
+	width: 440px;
+	height: 320px;
+	overflow: hidden;
+}
+
+.mct_dialog_container
+{
+	width: 440px;
+	height: 320px;	
+	position: absolute;
+	z-index: 100;
+	display: none;
+	font-size: 11px;
+}
+
+.mct_dialog_back
+{
+	width: 440px;
+	height: 320px;
+	position: absolute;
+	z-index: 110;
+}
+
+.mct_dialog_outer
+{
+	width: 440px;
+	height: 320px;
+	position: absolute;
+	z-index: 120;
+}
+
+.mct_dialog_inner
+{
+	width: 300px;
+	overflow: hidden;
+	margin: auto;
+	margin-top: 40px;
+	color: #000000;
+	background-color: #eaeaea;
+	border: 1px solid #000000;
+}
+
+.mct_dialog_content
+{
+	height: 208px;
+	white-space: normal;
+	overflow: auto;
+}
+
+.mct_dialog_text
+{
+	padding: 4px 8px 4px 8px;
+}
+
+.mct_search_result
+{
+	font-size: 11px;
+	cursor: pointer;
+	color: #0042af;
+	padding: 1px;
+}
+
+.mct_search_result:hover
+{
+	text-decoration: underline;
+}

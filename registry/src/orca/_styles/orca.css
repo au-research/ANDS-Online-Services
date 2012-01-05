@@ -1,0 +1,249 @@
+/*
+Copyright 2009 The Australian National University
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*******************************************************************************/
+
+.subtable
+{
+	margin: 2px;
+	border: 1px solid #aaaaaa;
+	width: 100%;
+	background: #f5f2f0 URL('../_images/_layout/bg_light.gif') no-repeat;
+	table-layout: fixed;
+}
+
+.subtable1
+{
+	margin: 2px;
+	border: 1px solid #aaaaaa;
+	width: 100%;
+	background: #faf9f8 URL('../_images/_layout/bg_lighter.gif') no-repeat;
+}
+
+.recordTable .subtable td, .recordTable .subtable1 td
+{	
+	padding-top: 1px;
+	padding-bottom: 1px;
+	border: none;
+	table-layout: fixed;
+}
+
+.value
+{
+	font-size: 1.0em;
+	word-wrap: break-word;
+	word-break: break-word;
+}
+
+.valueAttribute
+{
+	color: #877c70;
+	font-size: 0.8em;
+	font-style: italic;
+	font-weight: normal;
+	word-wrap: break-word;
+	word-break: break-word;
+}
+
+.attribute
+{
+	color: #877c70;
+	font-size: 0.8em;
+	font-style: italic;
+	font-weight: normal;
+	width: 75px;
+	white-space: nowrap;
+}
+
+.majorAttribute
+{
+	font-size: 0.8em;
+	font-style: italic;
+	font-weight: bold;
+}
+
+td.attribute,
+td.majorAttribute
+{
+	text-align: right;
+	line-height: 1.4em;
+}
+
+.dates
+{
+	color: #877c70;
+	font-size: 0.8em;
+	font-style: italic;
+}
+
+a.external,
+a.external:link
+{
+	color: #030080;
+	text-decoration: none;
+}
+
+a.external:visited
+{
+	color: #7f2970;
+	text-decoration: none;
+}
+
+a.external:hover,
+a.external:active
+{
+	color: #7f2970;
+	text-decoration: underline;
+}
+
+a.external:hover > img.external
+{
+	text-decoration: none;
+}
+
+a.search,
+a.search:link
+{
+	color: #774e26;
+	text-decoration: none;
+}
+
+a.search:visited
+{
+	color: #774e26;
+	text-decoration: none;
+}
+
+a.search:hover,
+a.search:active
+{
+	color: #774e26;
+	text-decoration: underline;
+}
+
+.vocabControl
+{
+	margin: 0px;
+	padding: 0px;
+	border-top: 0px solid #aaaaaa;
+	border-right: 1px solid #aaaaaa;
+	border-bottom: 1px solid #888888;
+	border-left: 1px solid #cccccc;
+	background: #d5d2d0 url("../_images/_controls/_vocab_control/vc_bg.gif") repeat-y left;
+	color: #000000;
+	font-family: verdana, sans-serif;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 9px;
+	text-align: center;
+}
+
+.vcInnerContainer
+{
+	margin: 0px;
+	padding: 0px;
+	border: 1px solid #444444;
+}
+
+.vcCloseBar
+{
+	margin: 0px;
+	padding: 0px;
+	border-top: 1px solid #d0d0d0;
+	border-bottom: 1px solid #666666;
+	color: #000000;
+	background: #989897 url("../_images/_controls/_vocab_control/vc_bg_close.gif") repeat-y left;
+	text-align: right;
+	font-size: 2px;
+	height: 10px;
+}
+
+.vcClose
+{
+	cursor: pointer;
+	vertical-align: top;
+	border-left: 1px solid #cccccc;
+}
+
+.vcIcon
+{
+	cursor: pointer;
+	vertical-align: middle;
+}
+
+.vcScrollPane
+{
+	margin: 0px;
+	padding: 0px;
+	overflow: auto; 
+	max-height: 300px;
+	text-align: left;
+}
+
+.vcContent
+{
+	padding: 4px 4px 4px 4px; /* top right bottom left */
+	margin: 0px; 
+}
+
+.vcTermGroup
+{
+	margin: 0px;
+	padding: 2px 2px 0px 4px; /* top right bottom left */
+}
+
+.vcTerm
+{
+	cursor: pointer;
+	margin: 0px 0px 0px 0px;  /* top right bottom left */
+	padding: 1px 0px 1px 4px; /* top right bottom left */
+}
+
+.vcTermSelected
+{
+	cursor: pointer;
+	margin: 0px 0px 0px 0px;  /* top right bottom left */
+	padding: 1px 0px 1px 4px; /* top right bottom left */
+	color: #ffffff;
+	background-color: #00aac4;
+	border: 1px solid #333333;
+}
+
+.vcTerm:hover, .vcTermSelected:hover
+{
+	color: #ffffff;
+	background-color: #888888;
+}
+
+.mask {
+  position:absolute;
+  left:0;
+  top:0;
+  z-index:9000;
+  background-color:#000;
+  display:none;
+}
+   
+.window {
+  position:absolute;
+  width:500px;
+  height:180px;
+  display:none;
+  z-index:9999;
+  padding:20px;
+  border: 5px solid #555555;
+  background-color: #F0F0D8;	
+}
+.pagination-page{
+padding:0px 2px;	
+}

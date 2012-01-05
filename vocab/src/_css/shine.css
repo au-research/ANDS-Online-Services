@@ -1,0 +1,145 @@
+#header{
+	background: -moz-linear-gradient(top, #46474B 0%, #303135 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#46474B), color-stop(100%,#303135));
+	background: -webkit-linear-gradient(top, #46474B 0%,#303135 100%);
+	background: -o-linear-gradient(top, #46474B 0%,#303135 100%);
+	background: -ms-linear-gradient(top, #46474B 0%,#303135 100%);
+	background: linear-gradient(top, #46474B 0%,#303135 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#46474B', endColorstr='#303135');
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#46474B', endColorstr='#303135')";
+	height: 56px;
+	border-bottom: 1px solid #676A72;
+}
+
+#brand{
+	background: -moz-linear-gradient(top, white 0%, #DFDBDB 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,white), color-stop(100%,#DFDBDB));
+	background: -webkit-linear-gradient(top, white 0%,#DFDBDB 100%);
+	background: -o-linear-gradient(top, white 0%,#DFDBDB 100%);
+	background: -ms-linear-gradient(top, white 0%,#DFDBDB 100%);
+	background: linear-gradient(top, white 0%,#DFDBDB 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFFFFF', endColorstr='#DFDBDB');
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFFFFF', endColorstr='#DFDBDB')";
+	border: 1px solid #A0A0A0;
+}
+
+#brand img{
+	float:left;
+}
+
+
+/*
+ * Box
+ */
+.box{
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	border-radius: 4px;
+	background: #EBEBEB;
+	border: 1px solid #454E51;
+}
+.box-body{
+	margin: 5px;
+	background: white;
+	padding: 20px 20px 1px 20px;
+}
+.box-header{
+	line-height: 1;
+	cursor: pointer;
+	-moz-border-radius: 3px 3px 0 0;
+	-webkit-border-radius: 3px 3px 0 0;
+	border-radius: 3px 3px 0 0;
+	box-shadow: inset 0 1px 0 rgba(255,255,255,0.2);
+	margin: 0;
+	text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.4);
+	height: 27px;
+	color: white;
+	font-size: 13px;
+	background: #454E51;
+	padding: 14px 0 0 15px;
+	position: relative;
+}
+
+#vocab_tree 
+{
+	margin-top: -10px;
+	margin-left: -15px;
+}
+
+
+/*
+ * Top-Menu
+ * Shine Skin
+ */
+#top-menu {float: left;font-size: 1.5em;margin: 10px 10px 0px 10px;overflow:hidden;}
+#top-menu a {
+	padding: 		.75em 1em;
+	text-decoration:none;
+}
+#top-menu a, #top-menu a:visited  { /* visited pseudo selector so IE6 applies text colour*/
+	color:			white;
+}
+#top-menu li {background:	transparent;}
+#top-menu li li {
+	background:		#303135;
+}
+#top-menu ul li a{color:white;}
+#top-menu li li li {
+	background:		#303135;
+}
+#top-menu li:hover, #top-menu li.sfHover,
+#top-menu a:focus, #top-menu a:hover, #top-menu a:active {
+	background:		#aaa;
+	color: black;
+	outline:		0;
+}
+
+/*** arrows **/
+#top-menu a.sf-with-ul {
+	padding-right: 	2.25em;
+	min-width:		1px; /* trigger IE7 hasLayout so spans position accurately */
+}
+.sf-sub-indicator {
+	position:		absolute;
+	display:		block;
+	right:			.75em;
+	top:			1.05em; /* IE6 only */
+	width:			10px;
+	height:			10px;
+	text-indent: 	-999em;
+	overflow:		hidden;
+	background:		url('../_img/arrows-ffffff.png') no-repeat -10px -100px; /* 8-bit indexed alpha png. IE6 gets solid image only */
+}
+a > .sf-sub-indicator {  /* give all except IE6 the correct values */
+	top:			1.0em;
+	background-position: 0 -100px; /* use translucent arrow for modern browsers*/
+}
+/* apply hovers to modern browsers */
+a:focus > .sf-sub-indicator,
+a:hover > .sf-sub-indicator,
+a:active > .sf-sub-indicator,
+li:hover > a > .sf-sub-indicator,
+li.sfHover > a > .sf-sub-indicator {
+	background-position: -10px -100px; /* arrow hovers for modern browsers*/
+}
+
+/* point right for anchors in subs */
+#top-menu ul .sf-sub-indicator { background-position:  -10px 0; }
+#top-menu ul a > .sf-sub-indicator { background-position:  0 0; }
+/* apply hovers to modern browsers */
+#top-menu ul a:focus > .sf-sub-indicator,
+#top-menu ul a:hover > .sf-sub-indicator,
+#top-menu ul a:active > .sf-sub-indicator,
+#top-menu ul li:hover > a > .sf-sub-indicator,
+#top-menu ul li.sfHover > a > .sf-sub-indicator {
+	background-position: -10px 0; /* arrow hovers for modern browsers*/
+}
+
+/*
+ * DEMO
+ */
+#dialog_link {padding: .4em 1em .4em 20px;text-decoration: none;position: relative;}
+			#dialog_link span.ui-icon {margin: 0 5px 0 0;position: absolute;left: .2em;top: 50%;margin-top: -8px;}
+			ul#icons {margin: 0; padding: 0;}
+			ul#icons li {margin: 2px; position: relative; padding: 4px 0; cursor: pointer; float: left;  list-style: none;}
+			ul#icons span.ui-icon {float: left; margin: 0 4px;}

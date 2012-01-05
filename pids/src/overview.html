@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+	<!-- Date Modified: $Date: 2009-08-18 13:22:16 +1000 (Tue, 18 Aug 2009) $ -->
+	<!-- Version: $Revision: 89 $ -->
+</head>
+<body bgcolor="white">
+<h2>ANDS Persistent Identifier Service (APIDS) API</h2>
+
+<p>APIDS provides a service-oriented framework to support the minting and managing of persistent identifiers (PIs) in an ANDS context. APIDS is implemented as a Tomcat webapp based around CNRI's handle client API in accordance with ANDS requirements.</p>
+
+<p>APIDS requires a configured and running Local Handle Server be installed on the same server as the APIDS application in order for PKI authentication and several client operations to work. Authentication mechanisms providing access to the services can be configured, however the default implementation assumes the agent wishing to use the APIDS services has been authenticated prior to calling the services (e.g. via LDAP, Shibboleth or some local application mechanism).</p>
+
+<p>The default authenticator is <code>SSLHostAuthenticator</code> which simply ensures the host and authdomain matches and is a currently registered agent. It is assumed the trusted client making the request has already authenticated themselves within the trusted client environment</p>
+
+<h3>Services</h3>
+
+<p>HTTP Services have been implemented as Java servlets. Service contracts are detailed in the individual servlet classes (<code>au.edu.apsr.pids.servlet</code>).</p>
+ 
+<h3>Request/Response Format</h3>
+<p>When a request is sent to APIDS the request body must hold a number of properties to be used in authentication and within the handle services (assuming authentication succeeds). An example of a request body is as follows:
+<pre>
+&lt;request name="addValue"&gt;<br/>
+    &lt;properties&gt;<br/>
+        &lt;property name="appId" value="5d9a4da3580c528ba98d8e6f088dab93f680dd6b"/&gt;<br/>
+        &lt;property name="identifier" value="scott"/&gt;<br/>
+        &lt;property name="authDomain" value="mycomputer.anu.edu.au"/&gt;<br/>
+    &lt;/properties&gt;<br/>
+&lt;/request&gt;<br/>
+</pre>
+This information will be used by the AuthenticationManager to instantiate the correct authentication class and run the authentication process.
+</p>
+
+<p>Responses to requests follow a simple format indicating success or failure along with
+a set of properties the requestor may or may not wish to use in processing the response. The following examples show two successful responses and a single failure response.</p>
+
+<p>Example 1: Successful Response</p>
+<pre>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;<br/>
+&lt;response type="success"&gt;<br/>
+    &lt;properties&gt;<br/>
+        &lt;property name="index" value="2"/&gt;<br/>
+        &lt;property name="handle" value="10378.1/21"&gt;<br/>
+        &lt;property name="value" value="http://pilot.apsr.edu.au/public/mets/cry-mets-profile.html"/&gt;<br/>
+        &lt;property name="type" value="URL"/&gt;<br/>
+    &lt;/properties&gt;<br/>
+    &lt;timestamp&gt;2008-10-27T14:26:24Z&lt;/timestamp&gt;<br/>
+    &lt;message&gt;Value added successfully&lt;/message&gt;<br/>
+&lt;/response&gt;<br/>
+</pre>
+
+<p>Example 2: Successful Response (Grouped Properties)</p>
+<pre>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;<br/>
+&lt;response type="success"&gt;<br/>
+    &lt;properties&gt;<br/>
+        &lt;property-group name="handle" value="10378.1/21"&gt;<br/>
+            &lt;property name="index" value="1"/&gt;<br/>
+            &lt;property name="type" value="URL"/&gt;<br/>
+            &lt;property name="value" value="http://pilot.apsr.edu.au/public/mets/cry-mets-profile.xml"/&gt;<br/>
+        &lt;/property-group&gt;<br/>
+    &lt;/properties&gt;<br/>
+    &lt;timestamp&gt;2008-10-27T14:26:24Z&lt;/timestamp&gt;<br/>
+    &lt;message&gt;Handle listing successful&lt;/message&gt;<br/>
+&lt;/response&gt;<br/>
+</pre>
+
+<p>Example 3: Failure Response</p>
+<pre>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;<br/>
+&lt;response type="failure"&gt;<br/>
+    &lt;timestamp&gt;2008-10-27T14:26:24Z&lt;/timestamp&gt;<br/>
+    &lt;message&gt;The value http://pilot.apsr.edu.au/public/mets/cry-mets-profile.html was not found for handle 10378.1/21&lt;/message&gt;<br/>
+&lt;/response&gt;<br/>
+</pre>
+
+<h3>Developing Custom Authentication</h3>
+
+<p>The AuthenticationManager requires at a minimum the properties <code>identifier</code> and <code>authDomain</code> shown in the earlier example request body. The <code>authType</code> property indicates which Authenticator is to be instantiated. If not present it defaults to <code>SSLHost</code>. By writing a custom authenticator class and loading it to the <code>au.edu.apsr.pids.security</code> package with the name <code>&lt;authType&gt;Authenticator</code>, the AuthenticationManager via the AuthenticatorFactory will return an instance of the new authentication class when a service is accessed (assuming the authType property is set correctly in the request body).</p>
+
+<h3>About the default Java distribution</h3>
+
+<p>From a software perspective the goals of the Harvester Service development were: 
+<ul>
+<li>to make the application lightweight but flexible;</li>
+<li>not to be a burden for IT support staff (and other developers) to maintain;</li>
+<li>to use common and stable technologies;</li>
+<li>to be platform-independent</li>
+</ul>
+</p>
+
+<p>APIDS is based around Java servlet technology running under Tomcat although it should run under any servlet container supporting connection pooling via JNDI.</p>
+
+<p>The software was written in Java for platform-independence and is bundled with a Postgres database. The DAO design pattern has been used to make it easier to support other database platforms. To implement support for other databases a developer
+just has to replace the DAO classes (which are all in a single package within the source code), the database schema creation statements, and alter the connection pooling configuration to point to the new datasource.</p>
+
+</body>
+</html>

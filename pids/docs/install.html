@@ -1,0 +1,69 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+<html>
+    <head>
+	<!-- Date Modified: $Date: 2009-09-10 08:59:36 +1000 (Thu, 10 Sep 2009) $ -->
+	<!-- Version: $Revision: 140 $ -->
+        <title>PIDS Installation Guide</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" >
+    </head>
+    <body>
+        <h1>Persistent Identifier Service (PIDS) Installation Guide</h1>
+        <h2>Pre-requisites</h2>
+        <p>The following software must be avilable in order to install and run the Harvester Service:</p>
+            <ol>
+                <li>Sun's Java 1.5 SDK</li>
+                <li>Postgres 8.3</li>
+                <li>Apache Ant</li>
+                <li>Apache Tomcat 5.x or later</li>
+                <li>A Local Handle Server registered with CNRI using the default SQL schema in a Postgres database</li>
+            </ol>
+        </p>
+        <p>PIDS was developed to be platform-independent. This distribution has been tested on Mac OS X and RedHat Enterprise Server 4.0.</p>
+        <h2>PIDS Install process</h2>
+        <ol>
+            <li>If setting up a local handle server, ensure the database connection information is configured in the handle server's <code>config.dct</code> directory. For example:
+            <pre>
+storage_type = "sql"
+sql_settings = {
+sql_url = "jdbc:postgresql://localhost:5432/pids"
+sql_driver = "org.postgresql.Driver"
+sql_login = "pidmaster"
+sql_passwd = "my-password"
+sql_read_only = "no"
+}
+            </pre>
+            <li>login as the database administrator</li>
+            <li>Create a database user (<code>pidmaster</code> in this example):<p><code>createuser -P pidmaster</code><p>and assign a password to the user. Do not make the user a superuser and answer 'n' to all prompts</p></p></li>
+            <li>Create a new database called 'pids':<p><code>createdb --encoding="UTF-8" pids</code></p></li>
+            <li>Alter the single INSERT statement at the bottom of <code>$PIDS_SOURCE/etc/database/postgres/database.sql</code> by replacing <code>my_prefix</code> with the existing local handle server's registered prefix</p></li>
+            <li>Alter the user in the GRANT statements at the bottom of <code>$PIDS_SOURCE/etc/database/postgres/database.sql</code> to the correct database user (default is <code>pidmaster</code>)</p></li>
+            <li>Create the tables and indices:<p><code>psql -d pids &lt; $PIDS_SOURCE/etc/database/postgres/database.sql</code></p></li>
+            <li>Ensure <code>servlet-api.jar</code> is in the CLASSPATH. This should be found somewhere in the common library directories of the Tomcat install</li>
+            <li>Copy the existing Local Handler Server's <code>handle.jar</code> to the <code>$PIDS_SOURCE/lib</code> directory</li>
+            <li>Build the distribution:<p><code>cd $PIDS_SOURCE</code></p>
+            <p><code>ant -Dconfig-dir=&lt;handle config dir&gt; -Dprefix=&lt;registered handle prefix&gt; -Dadmin-ip=&lt;IP of admin server or desktop&gt; build_wars</p>
+            </li>
+            <li>Configure the default Tomcat datasource (connection pooling) by adding the following entry to the <code>server.xml</code> file's <code>Host</code> element:
+            	<p>&lt;Context path="/pids" docBase="pids" crossContext="true" reloadable="true" debug="1"&gt;<br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;&lt;Resource name="jdbc/postgres" auth="Container" type="javax.sql.DataSource" driverClassName="org.postgresql.Driver" url="jdbc:postgresql://my-server-ip:5432/pids" username="pidmaster"/&gt;<br/>
+        &lt;/Context&gt;</p>
+	        	<p>Ensure the IP and port number in the <code>url</code> attribute reflect the server setup and ensure the pids database user is correctly configured in the Postgres <code>pg_hba.conf</file>.</p>
+        	</li>
+        	<li><a href="http://jdbc.postgresql.org/download.html">Download</a> and copy the appropriate postgres jar file to the Tomcat <code>lib</code> directory
+            <li>Deploy <code>pids.war</code> to the Tomcat webapps directory</li>
+            <li>It is recommended this service be used only over secure (SSL) connections</li>
+        </ol>
+        <h2>Testing and Initialising PIDS</h2>
+        <p>NB: PIDS is a web application intended to be integrated with other applications and as such does not provide a user interface.</p>
+		<p>Once installed, to ensure PIDS is running try accessing <code>http://localhost:8080/pids/mint</code>. If PIDS is installed correctly this should produce an error response in XML form.</p>
+		<p>Depending on how PIDS is to be used an initial administrator needs to be registered. For example, if services are to be called via a UI or automated application, then an agent respresenting the UI or application must be registered. To do this use the <code>addTrustedClient</code> service providing the IP address of the trusted client. For example <p><code>http://localhost:8080/pids/addClient?ip=111.111.111.111</code>. The XML response will include the application id (appId) for this client.</p>
+		<p><strong>IMPORTANT: </strong>This service should only be run from a secure machine whose IP address is specified at build time and will appear in the <code>web.xml</code> entry for this servlet.</p>
+		
+        <h2>Services</h2>
+        <p>Refer to the javadocs (run <code>ant javadoc</code> to generate these) for details
+        on the available services.</p>
+        
+        <h2>Javadocs</h2>
+        <p>The javadocs can be built by running <code>ant javadoc</code></p>
+    </body>
+</html>

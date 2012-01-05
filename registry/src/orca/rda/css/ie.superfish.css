@@ -1,0 +1,122 @@
+/** 
+Copyright 2011 The Australian National University
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+***************************************************************************
+*
+**/ 
+/*** ESSENTIAL STYLES ***/
+.sf-menu, .sf-menu * {
+	margin:			0;
+	padding:		0;
+	list-style:		none;
+	text-align:		left;
+}
+.sf-menu {
+	line-height:	1.0;
+}
+.sf-menu ul {
+	position:		absolute;
+	top:			-999em;
+	width:			10em; /* left offset of submenus need to match (see below) */
+}
+.sf-menu ul li {
+	width:			100%;
+}
+.sf-menu li:hover {
+	visibility:		inherit; /* fixes IE7 'sticky bug' */
+}
+.sf-menu li {
+	float:			left;
+	position:		relative;
+}
+.sf-menu a {
+	display:		block;
+	position:		relative;
+}
+.sf-menu li:hover ul,
+.sf-menu li.sfHover ul {
+	left:			0;
+	top:			2.5em; /* match top ul list item height */
+	z-index:		99;
+}
+ul.sf-menu li:hover li ul,
+ul.sf-menu li.sfHover li ul {
+	top:			-999em;
+}
+ul.sf-menu li li:hover ul,
+ul.sf-menu li li.sfHover ul {
+	left:			10em; /* match ul width */
+	top:			0;
+}
+ul.sf-menu li li:hover li ul,
+ul.sf-menu li li.sfHover li ul {
+	top:			-999em;
+}
+ul.sf-menu li li li:hover ul,
+ul.sf-menu li li li.sfHover ul {
+	left:			10em; /* match ul width */
+	top:			0;
+}
+
+/*** DEMO SKIN ***/
+.top-menu-cover{background:url(../img/bg.png) no-repeat;width:960px;height:53px;}
+.sf-menu {
+    position:relative;
+    display:block;
+    float:left;
+    /*width:960px;*/
+    padding-left:1em;
+    /*General Styling*/
+    color: white;
+    overflow:visible;
+    margin:0px 15px 0px 15px;
+    z-index:9999;zoom:1;
+}
+.sf-menu a {
+    color:white;
+    padding:10px 15px;
+    text-decoration:none;
+}
+.sf-menu a, .sf-menu a:visited  { /* visited pseudo selector so IE6 applies text colour*/
+    position:relative;
+    color:white;
+    text-decoration:none;
+    font-variant: small-caps;
+    font-size: 20px;
+    
+    /*Text Shadow*/
+    text-shadow: 0px 2px 5px #000000; /*Modern*/
+    filter: dropshadow(color=#000000, offx=0, offy=0); /*IE*/
+}
+
+.sf-menu li a{
+    color:white;
+}
+
+.sf-menu li a:focus{
+    color:black;
+}
+
+.sf-menu li a:hover{
+    background:white;
+    color:black;
+    text-decoration:none;
+}
+
+.sf-menu li ul{
+    background:#3D3D3D;
+    margin:0px;
+    width:150px;
+    z-index:999;
+    zoom:1;
+}
