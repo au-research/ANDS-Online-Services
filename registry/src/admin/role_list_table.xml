@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+Copyright 2009 The Australian National University
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+**************************************************************************** -->
+<table title="" cols="8" show="25" numbered="true" max="1000000">
+	<row>
+		<head type="string" id="role_id" ref="role_view.php?role_id=" refkey="role_id">ID</head>
+		<head type="string" id="role_name" ref="role_view.php?role_id=" refkey="role_id">Name</head>
+		<head type="string" id="role_type_name" sort="d" ref="role_view.php?role_id=" refkey="role_id">Type</head>
+		<head type="boolean" id="role_enabled" ref="role_view.php?role_id=" refkey="role_id">Enabled</head>
+		<head type="datetime" id="modified_when" ref="role_view.php?role_id=" refkey="role_id">Last Modified</head>
+		<head type="datetime" id="last_login" ref="role_view.php?role_id=" refkey="role_id">Last Login</head>
+		<head type="string" id="authentication_service_name" ref="role_view.php?role_id=" refkey="role_id">Auth. Service</head>
+		<head type="boolean" id="authentication_service_enabled" ref="role_view.php?role_id=" refkey="role_id">Auth. Service Enabled</head>
+	</row>
+</table>
+
+

@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+
+<!--
+  - METS API build file
+  -
+  - Version:  $Revision: 95 $
+  - Date:     $Date: 2009-08-18 14:08:36 +1000 (Tue, 18 Aug 2009) $
+  -->
+
+<project name="rifcs-api" default="build_jar" basedir=".">
+
+  <!-- ============================================================= -->
+  <!-- Description                                                   -->
+  <!-- ============================================================= -->
+
+  <description>
+===================== DSpace platform build file =====================
+
+Common usage:
+
+  Fresh install, including database setup and registry loading:
+    % ant ;
+
+======================================================================
+  </description>
+
+  <target name="build_jar"
+          description="Compile the source code">
+    <mkdir dir="${basedir}/build/classes"/>
+    <javac srcdir="${basedir}/src"
+           destdir="${basedir}/build/classes"
+           debug="on" deprecation="on">
+      <include name="**/*.java"/>
+      <classpath>
+        <pathelement path="${env.CLASSPATH}"/>
+        <pathelement path="${basedir}/build/classes"/>
+        <fileset dir="${basedir}/lib">
+          <include name="**/*.jar"/>
+        </fileset>
+      </classpath>
+    </javac>
+    <jar jarfile="${basedir}/lib/rifcs-api.jar"
+         basedir="${basedir}/build/classes"/>
+  </target>
+  <!-- ============================================================= -->
+  <!-- Clean source code                                             -->
+  <!-- ============================================================= -->
+
+  <target name="clean"
+          description="Remove compiled files - does not affect installation">
+    <delete dir="${basedir}/build" />
+  </target>
+
+
+  <!-- ============================================================= -->
+  <!-- Create public API javadoc                                     -->
+  <!-- ============================================================= -->
+	
+	  <target name="javadoc"
+	          description="Create the javadoc documentation">
+	    <mkdir dir="${basedir}/build/javadoc" />
+	    <javadoc sourcepath="${basedir}/src"
+	             destdir="${basedir}/build/javadoc"
+	             author="true"
+	             version="true"
+	             access="public"
+	             doctitle="RIF-CS API"
+	             windowtitle="RIF-CS API"
+	             overview="${basedir}/src/overview.html"
+	             noindex="false"
+	             notree="false">
+	      <package name="org.ands.rifcs.*"/>
+	    </javadoc>
+	  </target>
+
+</project>

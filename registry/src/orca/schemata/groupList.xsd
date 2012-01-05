@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ***************************************************************************
+       Object: groupList.xsd
+   Written By: James Blanden
+ Created Date: 3 April 2008
+  Description: ORCA-Registry Group List Schema
+               Australian Partnership for Sustainable Repositories
+
+ Updated By           Date          Modifications
+ ==================== ============= ============================================
+
+
+**************************************************************************** -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="registryObjectGroups" >
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="group" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
+			</xs:sequence>
+			<xs:attribute name="instanceRootURI" type="xs:string" />
+		</xs:complexType>
+	</xs:element>
+</xs:schema>
