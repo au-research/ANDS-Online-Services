@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<!-- Date Modified: $Date: 2010-09-24 15:11:16 +1000 (Fri, 24 Sep 2010) $ -->
+<!-- Version: $Revision: 507 $ -->
+
+<web-app>
+
+  <display-name>PIDS</display-name>
+
+  <!-- Servlets -->
+
+  <servlet>
+    <servlet-name>addClient</servlet-name>
+    <servlet-class>au.edu.apsr.pids.servlet.AddTrustedClientServlet</servlet-class>
+    <init-param>
+      <param-name>admin-ip</param-name>
+      <param-value>@@admin-ip@@</param-value>
+    </init-param>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>addClient</servlet-name>
+    <url-pattern>/addClient</url-pattern>
+  </servlet-mapping>
+    
+  <servlet>
+    <servlet-name>listClients</servlet-name>
+    <servlet-class>au.edu.apsr.pids.servlet.ListTrustedClientServlet</servlet-class>
+    <init-param>
+      <param-name>admin-ip</param-name>
+      <param-value>@@admin-ip@@</param-value>
+    </init-param>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>listClients</servlet-name>
+    <url-pattern>/listClients</url-pattern>
+  </servlet-mapping>  
+    
+  <servlet>
+    <servlet-name>init</servlet-name>
+    <servlet-class>au.edu.apsr.pids.servlet.LoadConfigServlet</servlet-class>
+    <init-param>
+      <param-name>naming-authority</param-name>
+      <param-value>@@na@@</param-value>
+    </init-param>
+    <init-param>
+      <param-name>config-dir</param-name>
+      <param-value>@@config-dir@@</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+
+  <servlet>
+    <servlet-name>mint</servlet-name>
+    <servlet-class>au.edu.apsr.pids.servlet.MintServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>mint</servlet-name>
+    <url-pattern>/mint</url-pattern>
+  </servlet-mapping>
+
+  <!--servlet>
+    <servlet-name>register</servlet-name>
+    <servlet-class>au.edu.apsr.pids.servlet.RegisterServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>register</servlet-name>
+    <url-pattern>/register</url-pattern>
+  </servlet-mapping-->
+
+  <servlet>
+    <servlet-name>addValue</servlet-name>
+    <servlet-class>au.edu.apsr.pids.servlet.AddValueServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>addValue</servlet-name>
+    <url-pattern>/addValue</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>addValueByIndex</servlet-name>
+    <servlet-class>au.edu.apsr.pids.servlet.AddValueByIndexServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>addValueByIndex</servlet-name>
+    <url-pattern>/addValueByIndex</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>modifyValueByIndex</servlet-name>
+    <servlet-class>au.edu.apsr.pids.servlet.ModifyValueByIndexServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>modifyValueByIndex</servlet-name>
+    <url-pattern>/modifyValueByIndex</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>deleteValueByIndex</servlet-name>
+    <servlet-class>au.edu.apsr.pids.servlet.DeleteValueByIndexServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>deleteValueByIndex</servlet-name>
+    <url-pattern>/deleteValueByIndex</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>listHandles</servlet-name>
+    <servlet-class>au.edu.apsr.pids.servlet.ListHandlesServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>listHandles</servlet-name>
+    <url-pattern>/listHandles</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>getHandle</servlet-name>
+    <servlet-class>au.edu.apsr.pids.servlet.GetHandleServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>getHandle</servlet-name>
+    <url-pattern>/getHandle</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>getOwnerHandle</servlet-name>
+    <servlet-class>au.edu.apsr.pids.servlet.GetOwnerHandleServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>getOwnerHandle</servlet-name>
+    <url-pattern>/getOwnerHandle</url-pattern>
+  </servlet-mapping>
+
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>SSL Redirection</web-resource-name>
+      <url-pattern>/mint</url-pattern>
+      <!--url-pattern>/register</url-pattern-->
+      <url-pattern>/addClient</url-pattern>
+      <url-pattern>/listClients</url-pattern>
+      <url-pattern>/addValue</url-pattern>
+      <url-pattern>/addValueByIndex</url-pattern>
+      <url-pattern>/modifyValueByIndex</url-pattern>
+      <url-pattern>/deleteValueByIndex</url-pattern>
+      <url-pattern>/listHandles</url-pattern>
+      <url-pattern>/getHandle</url-pattern>
+      <url-pattern>/getOwnerHandle</url-pattern>
+    </web-resource-collection>
+    <user-data-constraint>
+      <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+    </user-data-constraint>
+   </security-constraint>
+   
+   <resource-ref>
+     <description>postgreSQL Datasource</description>
+     <res-ref-name>jdbc/postgres</res-ref-name>
+     <res-type>javax.sql.DataSource</res-type>
+     <res-auth>Container</res-auth>
+  </resource-ref>
+   
+</web-app>

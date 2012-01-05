@@ -1,0 +1,20 @@
+1.2.1
+=====
+Fixed bug introduced in 1.1.0 which stopped addValueByIndex from adding value at the supplied index
+
+1.2.0
+=====
+Added appId parameter to addClient service
+Added startHandle parameter to listHandles service
+Remove resolution of handles for listHandles service to improve performance
+
+1.1.0
+=====
+Added addValueByIndex service point and added optional index parameter to the mint service (allows applications to create and add values at reserved indexed values)
+Added getOwnerHandle service point
+Added release notes
+Fix for methods which call resolveHandle method with "type" array
+
+1.0.0
+=====
+Initial Production Version

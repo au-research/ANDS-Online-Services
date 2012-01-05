@@ -1,0 +1,11 @@
+body{min-width:98%;}
+#header{}
+#brand{}
+#container{position: relative;max-width:98%;display:block;overflow:hidden;}
+.box{margin:15px 10px 0px 10px;position:relative;float:left;}
+.box-body{position:relative;overflow:hidden;width:auto;}
+.w200{width:200px;}
+.w300{width:300px;}
+.w400{width:400px;}
+.w500{width:500px;}
+.w100p{width:99%;}

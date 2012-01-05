@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+	<!-- Date Modified: $Date: 2009-08-18 12:43:25 +1000 (Tue, 18 Aug 2009) $ -->
+	<!-- Version: $Revision: 84 $ -->
+</head>
+<body bgcolor="white">
+<h2>The Harvester Service API</h2>
+
+<p>The Harvester Service is an extension of OCLC's Harvester2 OAI-PMH harvester application providing HTTP services and 
+a database for managing harvests. The Harvester Service also supports the concept of "plug-in" harvesting modules whereby a harvesting
+class can be easily added where pre- or post- processing needs to occur. For example, in the default distribution
+there is a GET harvest (a substitute for an OAI PMH harvest which simply downloads URL content), a collections regsitry harvest (a targetted PMH harvest requiring
+the OAI-PMH wrapping be removed and the raw RIF metadata posted to an ORCA application) and a PMH harvest
+(a "normal" OAI-PMH harvest for a supplied metadata prefix). All three use the same service interface so the
+implementation details for each harvest are hidden from users.</p>
+
+<p>The Harvester Service provides a service-oriented framework to support the processing and routing of content 
+and metadata from a source Data Provider to a target application. It potentially makes management of distributed
+harvests simpler by providing a single harvest application which can service many clients wishing to perform
+harvesting without the overhead of writing their own embedded harvester. (Of course the code could also be taken
+and modified to work as an embedded harvester as well.)</p>
+
+<p>Multiple applications may make use of an Harvester Service service to obtain records from OAI-PMH Data Providers and use the 
+Harvester Service to schedule and run the harvest. For example Application X and Application Y may both harvest 
+Data Provider A each asking for the same or different set of records. In the simplest scenario, upon receiving a 
+harvest request from an external application (which may be a recurring or one-off harvest) the harvester will 
+schedule the harvest for execution. The responses from the Data Provider are passed back to the application for 
+processing via a service point the application provides in its harvest request. By default a response is forwarded 
+as soon as the harvester receives it. The harvester also is able to cater for custom harvests whereby some or all 
+of the standard harvesting process can be altered to suit particular client applications.</p>
+
+<h3>Services</h3>
+
+<p>Services for registering a harvest, reporting status, etc have been implemented as Java servlets and are detailed in the individual
+servlet classes.</p>
+ 
+<h3>About the default Java distribution</h3>
+
+<p>The Harvester Service distribution comprises a number of default harvests including a GET-type harvest (retrieval of 
+XML content from a URL), a standard OAI-PMH harvest, and a custom harvest known as RIF which was developed for 
+harvesting for a specific collection/services registry application known as ORCA.</p>
+
+<p>From a software perspective the goals of the Harvester Service development were: 
+<ul>
+<li>to make the application lightweight but flexible;</li>
+<li>not to be a burden for IT support staff (and other developers) to maintain;</li>
+<li>to use common and stable technologies;</li>
+<li>to be platform-independent</li>
+</ul>
+</p>
+
+<p>The harvester is based around Java servlet technology running under Tomcat although any servlet container supporting connection pooling via JNDI.</p>
+
+<p>The software was written in Java for platform-independence and is bundled with a Postgres database. The
+DAO design pattern has been used to make it easier to support other database platforms. To implement support for other databases a developer
+just has to replace the DAO classes (which are all in a single package within the source code) and alter
+the connection pooling configuration to point to the new datasource.</p>
+
+<h3>Developing Custom Harvests</h3>
+
+<p>Custom harvests can be added to the Harvester through the creation of a Java class extending the <code>HarvestThread</code> 
+class. Each <code>HarvestThread</code> class implements a particular harvesting method. For example the <code>GETHarvestThread</code>
+implements a pseudo-harvest which simply reads a URL pointing to an XML document containing metadata of interest 
+and passes the content direct to an application. The <code>RIFHarvestThread</code> is a custom harvest which performs an OAI 
+PMH harvest but strips the PMH markup and removes namespaces from the metadata payload before forwarding the 
+resultant fragment to a specific client application.</p>
+
+<p>The only requirements for custom harvests are that the class files must be deployed as part of the 
+<code>au.edu.apsr.harvester.thread</code> package; and to be used (instantiated) the value of the <code>method</code> 
+attribute of the <code>requestHarvest</code> service must be the string preceding <code>HarvestThread</code> in the class name
+i.e. <code>{$method}HarvestThread</code>. Custom harvests can override or ignore any harvest details. For 
+example, a custom harvest may want to support/enforce a single metadataPrefix; it may not want to store responses in the database or may want to process
+them some way before storing them; it may want to do a full, rather than an incremental harvest each time a harvest
+is executed; it may want to delete the harvest record from the system whenever a harvest fails; etc.</p>
+
+<h3>Notes on Default Harvest Flow</h3>
+
+<p>The harvester is designed to act as a service for applications wanting to harvest from Data Providers. 
+Typically a client application will send a <code>requestHarvest</code> service request to the Harvester which will result in 
+the Harvester recording the harvest details in its database and then scheduling the harvest for execution. Upon 
+execution, a harvest is initiated (the processing and flow is determined by the particular <code>{$method}HarvestThread</code> class) 
+and once completed is either deleted from the Harvester (in the case of a one-off harvest) or rescheduled as an 
+incremental harvest based on the date and frequency provided in the initial client request. Individual response 
+fragments in all current <code>HarvestThread</code> implementations are stored in the Harvester database and also posted back 
+to the URL specified in the reponsetargeturl. Upon completion of a successful harvest the response fragments are removed from the Harvester database.</p>
+
+<p>In the event the servlet container is shutdown, once restarted all jobs are rescheduled. One-off jobs 
+will be executed immediately on restart.</p>
+
+<p>In the event either a sourceurl or responsetargeturl is unavailable or returns an error, the harvest will 
+retry up to three times and then fail with an error status and rescheduled based on the harvest record's date 
+and frequency. The harvest will need to be restarted manually via the startHarvest service if needing to rerun prior 
+to the next scheduled run.</p>
+
+</body>
+</html>

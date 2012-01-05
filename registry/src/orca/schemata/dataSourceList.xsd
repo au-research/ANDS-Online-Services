@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ***************************************************************************
+       Object: dataSourceList.xsd
+   Written By: James Blanden
+ Created Date: 3 October 2007
+  Description: ORCA-Registry Data Source List Schema
+               Australian Partnership for Sustainable Repositories
+
+ Updated By           Date          Modifications
+ ==================== ============= ============================================
+ James Blanden        20/02/2008    Renamed file.
+ James Blanden        03/04/2008    Removed instanceDataURI.
+                                    Added providerType.
+
+**************************************************************************** -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="dataSources" >
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="dataSource" minOccurs="0" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="key" type="xs:string" />
+							<xs:element name="title" type="xs:string" />
+							<xs:element name="providerType" type="xs:string" />
+							<xs:element name="sourceDataURI" type="xs:string" />
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="instanceRootURI" type="xs:string" />
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

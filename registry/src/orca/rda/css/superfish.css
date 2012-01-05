@@ -1,0 +1,164 @@
+/** 
+Copyright 2011 The Australian National University
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+***************************************************************************
+*
+**/ 
+/*** ESSENTIAL STYLES ***/
+.sf-menu, .sf-menu * {
+	margin:			0;
+	padding:		0;
+	list-style:		none;
+	text-align:		left;
+}
+.sf-menu {
+	line-height:	1.0;
+}
+.sf-menu ul {
+	position:		absolute;
+	top:			-999em;
+	width:			10em; /* left offset of submenus need to match (see below) */
+}
+.sf-menu ul li {
+	width:			100%;
+}
+.sf-menu li:hover {
+	visibility:		inherit; /* fixes IE7 'sticky bug' */
+}
+.sf-menu li {
+	float:			left;
+	position:		relative;
+}
+.sf-menu a {
+	display:		block;
+	position:		relative;
+}
+.sf-menu li:hover ul,
+.sf-menu li.sfHover ul {
+	left:			0;
+	top:			2.5em; /* match top ul list item height */
+	z-index:		99;
+}
+ul.sf-menu li:hover li ul,
+ul.sf-menu li.sfHover li ul {
+	top:			-999em;
+}
+ul.sf-menu li li:hover ul,
+ul.sf-menu li li.sfHover ul {
+	left:			10em; /* match ul width */
+	top:			0;
+}
+ul.sf-menu li li:hover li ul,
+ul.sf-menu li li.sfHover li ul {
+	top:			-999em;
+}
+ul.sf-menu li li li:hover ul,
+ul.sf-menu li li li.sfHover ul {
+	left:			10em; /* match ul width */
+	top:			0;
+}
+
+/*** DEMO SKIN ***/
+.top-menu-cover{
+	height:40px;
+	/*Rounded Corners*/
+	-moz-border-radius-topleft: 0px; /*Firefox*/
+	-moz-border-radius-topright: 0px;
+	-moz-border-radius-bottomright: 20px;
+	-moz-border-radius-bottomleft: 20px;
+	border-top-left-radius: 0px; /*Webkit*/
+	border-top-right-radius: 0px;
+	border-bottom-right-radius: 20px;
+	border-bottom-left-radius: 20px;
+	
+	/*Gradient*/
+	background: #20ae20; /* Old browsers */
+	background: -moz-linear-gradient(top, #20ae20 0%, #0a450a 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#20ae20), color-stop(100%,#0a450a)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #20ae20 0%,#0a450a 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #20ae20 0%,#0a450a 100%); /* Opera11.10+ */
+	background: -ms-linear-gradient(top, #20ae20 0%,#0a450a 100%); /* IE10+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#20AE20', endColorstr='#0A450A',GradientType=0 ); /* IE6-9 */
+	background: linear-gradient(top, #20ae20 0%,#0a450a 100%); /* W3C */
+	
+	
+	/*Rounded Corners*/
+	-moz-border-radius-topleft: 0px; /*Firefox*/
+	-moz-border-radius-topright: 0px;
+	-moz-border-radius-bottomright: 20px;
+	-moz-border-radius-bottomleft: 20px;
+	border-top-left-radius: 0px; /*Webkit*/
+	border-top-right-radius: 0px;
+	border-bottom-right-radius: 20px;
+	border-bottom-left-radius: 20px;
+	
+	/*Bordering*/
+	border-left: 2px solid white;/*No top border*/
+	border-right: 2px solid white;
+	border-bottom: 2px solid white;
+	
+	/*Box Shadow*/
+	-webkit-box-shadow: 0px 5px 5px rgba(0,0,0,0.7);/*Webkit*/
+	-moz-box-shadow: 0px 5px 5px rbga(0,0,0,0.7);/*Firefox*/
+	box-shadow: 0px 5px 5px rgba(0,0,0,0.7);/*Opera*/
+	behavior: url(PIE.htc);zoom:1;
+
+}
+.sf-menu {
+	position:relative;
+	display:block;
+	float:left;
+	/*width:960px;*/
+	padding-left:1em;
+	/*General Styling*/
+	color: white;
+	overflow:visible;
+	margin:0px 15px 0px 15px;
+}
+.sf-menu a {
+	color:white;
+	padding:11px 15px;
+	text-decoration:none;
+}
+.sf-menu a, .sf-menu a:visited  { /* visited pseudo selector so IE6 applies text colour*/
+	position:relative;
+	color:white;
+	text-decoration:none;
+	font-variant: small-caps;
+	font-size: 18px;
+	
+	/*Text Shadow*/
+	text-shadow: 0px 1px 5px #000000; /*Modern*/
+	filter: dropshadow(color=#000000, offx=0, offy=0); /*IE*/
+}
+
+.sf-menu li a{
+    color:white;
+}
+
+.sf-menu li a:focus{
+    color:black;
+}
+
+.sf-menu li a:hover{
+    background:white;
+    color:black;
+    text-decoration:none;
+}
+
+.sf-menu li ul{
+    background:#3D3D3D;
+    margin:5px 0px;
+    width:150px;
+}
+

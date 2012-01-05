@@ -1,0 +1,157 @@
+body            { font: 12px/1.7em "trebuchet ms", arial, sans-serif; background: #FFF; color: #444;}
+
+h1,h2,h3,
+h4,h5,h6        { font-weight: bold; margin: 0.75em 0 0.25em 0; }
+
+h1              { font-size: 30px; font-weight: normal; line-height: 1em; margin-bottom: 1em; }
+h2              { font-size: 24px; font-weight: normal; margin-bottom: 1em }
+h3              { font-size: 16px; line-height: 1; margin-bottom: 1.25em }
+h4              { font-size: 14px; line-height: 1.25; margin-bottom: 1.25em }
+h5              { font-size: 12px; font-weight: bold; margin-bottom: 1.5em }
+h6              { font-size: 11px; font-weight: bold }
+
+p               { margin: 0 0 1.5em }
+p.last          { margin-bottom: 0 }
+img             { border: none; }
+
+ul, ol          { margin-left: 20px; margin-bottom: 2.5em; }
+li ul,
+li ol           { margin-top: 1em; }
+ul li           { list-style-type: disc; }
+li              { margin-bottom: .5em; }
+
+dl              { margin: 0 0 2em 0 }
+dl dt           { font-weight: bold; margin-bottom: .75em; }
+dd              { margin-left: 1.5em; margin-bottom: .75em; }
+
+abbr, 
+acronym         { border-bottom: 1px dotted #666 }
+address         { margin-top: 1.5em; font-style: italic }
+del             { color:#666 }
+sup             { font-size: 9px; vertical-align:top; }
+
+a               { color: #06C; text-decoration: none; }
+/* a:visited        { color: #667 } */
+a:focus, 
+a:hover         { text-decoration: underline; }
+
+blockquote      { margin: 1.5em; color: #666; font-style: italic }
+strong          { font-weight: bold }
+em,dfn          { font-style: italic; background: #ffc }
+dfn             { font-weight: bold }
+pre,code        { margin: 1.5em 0; white-space: pre }
+pre,code,tt     { font: 12px 'andale mono', 'monotype.com', 'lucida console', monospace; line-height: 1.5 } 
+tt              { display: block; margin: 1.5em 0; line-height: 1.5 }
+
+
+hr { border: none; border-bottom: 1px dotted #CCC; margin-bottom: 2em; margin-top: 1em; }
+
+table.data { width: 100%; border: 0; margin-bottom: 2em; border-collapse: collapse;  }
+
+     table.data thead th
+     {
+        font-size: 12px;
+        font-weight: bold;
+        text-align: left;
+        padding: 10px;
+        background-color: EEE;
+
+        color: #333;
+        
+        border: 1px solid #ddd;
+    }   
+    
+    table.data td { vertical-align: top; }
+    
+    table.data tbody tr td { background: #FFF; border-bottom: 1px dotted #DDD; }
+
+    table.data th { padding: 10px 0; }
+    table.data tbody td { padding: 10px; }
+    
+    table.data tr.even td { background: #F9F9F9; }
+    
+    table.data.stripe tr:nth-child(odd) td { background-color:#F6F6F6; }
+    table.data.stripe tr:nth-child(even) td { background-color:#FFF; }
+
+
+
+
+
+.placeholder { color: #999; }
+
+/* float clearing for IE6 */
+* html .clearfix{
+  height: 1%;
+  overflow: visible;
+}
+
+/* float clearing for IE7 */
+*+html .clearfix{
+  min-height: 1%;
+}
+
+/* float clearing for everyone else */
+.clearfix:after{
+  clear: both;
+  content: ".";
+  display: block;
+  height: 0;
+  visibility: hidden;
+  font-size: 0;
+}
+
+/*
+ * Top-Menu
+ */
+/*** ESSENTIAL STYLES ***/
+#top-menu, #top-menu * {
+	margin:			0;
+	padding:		0;
+	list-style:		none;
+}
+#top-menu {
+	line-height:	1.0;
+}
+#top-menu ul {
+	position:		absolute;
+	top:			-999em;
+	width:			10em; /* left offset of submenus need to match (see below) */
+}
+#top-menu ul li {
+	width:			100%;
+}
+#top-menu li:hover {
+	visibility:		inherit; /* fixes IE7 'sticky bug' */
+}
+#top-menu li {
+	float:			left;
+	position:		relative;
+}
+#top-menu a {
+	display:		block;
+	position:		relative;
+}
+#top-menu li:hover ul,
+#top-menu li.sfHover ul {
+	left:			0;
+	top:			2.5em; /* match top ul list item height */
+	z-index:		99;
+}
+ul#top-menu li:hover li ul,
+ul#top-menu li.sfHover li ul {
+	top:			-999em;
+}
+ul#top-menu li li:hover ul,
+ul#top-menu li li.sfHover ul {
+	left:			10em; /* match ul width */
+	top:			0;
+}
+ul#top-menu li li:hover li ul,
+ul#top-menu li li.sfHover li ul {
+	top:			-999em;
+}
+ul#top-menu li li li:hover ul,
+ul#top-menu li li li.sfHover ul {
+	left:			10em; /* match ul width */
+	top:			0;
+}

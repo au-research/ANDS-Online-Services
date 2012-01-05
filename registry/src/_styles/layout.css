@@ -1,0 +1,267 @@
+/*
+Copyright 2009 The Australian National University
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*******************************************************************************/
+/* LAYOUT CONTAINERS -------------------------------------------------------- */
+#banner
+{
+	padding: 0px 8px 0px 8px; /* top right bottom left */
+	border-bottom: 1px solid #d0d0d0;
+	border-top: 1px solid #dddddd;
+	overflow: hidden;
+	color: #000000;
+	background: #ffffff url("../_images/_layout/bg_banner.gif") repeat-x;
+	font-family: arial, sans-serif;
+	font-size: 2em;
+	line-height: 2em;
+	font-weight: normal;
+	height: 2em;
+}
+
+#bannerImage
+{
+	border: none;
+	float: left;
+}
+
+#bannerMargin
+{
+	background-color: #ffffff;
+}
+
+#topNav
+{
+	padding: 3px 1px 3px 0px; /* top right bottom left */
+	border-top: 1px solid #444444;
+	border-bottom: 1px solid #505050;
+	background: #ffffff url("../_images/_layout/bg_navigation.gif") repeat-x;
+	color: #cccccc;
+	font-size: 0.8em;
+}
+#topNav a
+{
+	color: #cccccc;
+	padding: 0em 1em 0em 1em; /* top right bottom left */
+	border-right: 1px solid #8a827e;
+	text-decoration: none;
+}
+#topNav a:hover,
+#topNav a:active
+{
+	text-decoration: underline;
+}
+
+#outerContentContainer
+{
+	background-color: #f0edea;
+}
+
+#menuContainer
+{
+	position: absolute;
+	width: 180px;
+	left: 0px;
+	background: transparent url("../_images/_layout/bg_container.gif") no-repeat 20px 0px;
+}
+
+#pageContainerWithMenu
+{
+	margin-left: 160px; /* menuContainer.width + menuContainer.border - margin */
+	min-height: 380px;  /* This value should be the same as that set in _javascript/dhtml.js-setPageHeight */
+	background: transparent url("../_images/_layout/bg_pageContent.gif") no-repeat 0px 0px;
+}
+
+#pageContainer
+{
+	min-height: 380px;  /* This value should be the same as that set in _javascript/dhtml.js-setPageHeight */
+	border-top: 1px solid #f0edea;
+}
+
+#pageActions
+{
+	padding: 3px 1px 3px 0px; /* top right bottom left */
+	color: #888888;
+	text-align: right;
+	font-size: 0.8em;
+}
+#pageActions a
+{
+	padding: 0em 1em 0em 1em; /* top right bottom left */
+	color: #000000;
+	border-left: 1px solid #cccccc;
+	text-decoration: none;
+}
+#pageActions a:hover,
+#pageActions a:active
+{
+	text-decoration: underline;
+}
+
+#pageContent
+{
+	padding: 1px 1em 1em 1em; /* top right bottom left */
+	                          /* 1px top is an IE6 BUG workaround */
+}
+
+#footer
+{
+	padding: 3px 1px 3px 0px; /* top right bottom left */
+	border-top: 1px solid #444444;
+	border-bottom: 1px solid #555555;
+	background: #ffffff url("../_images/_layout/bg_navigation.gif") repeat-x;
+	color: #aaaaaa;
+	text-align: right;
+	font-size: 0.8em;
+}
+#footer a
+{
+	padding: 0em 1em 0em 1em; /* top right bottom left */
+	color: #cccccc;
+	border-left: 1px solid #8a827e;
+	text-decoration: none;
+}
+#footer a:hover,
+#footer a:active
+{
+	text-decoration: underline;
+}
+
+/* MARGIN CLASSES ----------------------------------------------------------- */
+.marginLeftPageColour
+{
+	background: transparent url("../_images/_layout/bg_marginLeftPageColour.gif") repeat-y left;
+	padding-left: 20px;
+}
+
+.marginLeftDarkOrange
+{
+	background: transparent url("../_images/_layout/bg_marginLeftDarkOrange.gif") repeat-y left;
+	padding-left: 20px;
+}
+
+.marginLeftLightOrange
+{
+	background: transparent url("../_images/_layout/bg_marginLeftLightOrange.gif") repeat-y left;
+	padding-left: 20px;
+}
+
+.marginLeftDarkYellow
+{
+	background: transparent url("../_images/_layout/bg_marginLeftDarkYellow.gif") repeat-y left;
+	padding-left: 20px;
+}
+
+.marginLeftLightYellow
+{
+	background: transparent url("../_images/_layout/bg_marginLeftLightYellow.gif") repeat-y left;
+	padding-left: 20px;
+}
+
+.marginLeftDarkRed
+{
+	background: transparent url("../_images/_layout/bg_marginLeftDarkRed.gif") repeat-y left;
+	padding-left: 20px;
+}
+
+.marginLeftLightRed
+{
+	background: transparent url("../_images/_layout/bg_marginLeftLightRed.gif") repeat-y left;
+	padding-left: 20px;
+}
+
+.marginLeftDarkGreen
+{
+	background: transparent url("../_images/_layout/bg_marginLeftDarkGreen.gif") repeat-y left;
+	padding-left: 20px;
+}
+
+.marginLeftLightGreen
+{
+	background: transparent url("../_images/_layout/bg_marginLeftLightGreen.gif") repeat-y left;
+	padding-left: 20px;
+}
+
+.marginLeftDarkBlue
+{
+	background: transparent url("../_images/_layout/bg_marginLeftDarkBlue.gif") repeat-y left;
+	padding-left: 20px;
+}
+
+.marginLeftLightBlue
+{
+	background: transparent url("../_images/_layout/bg_marginLeftLightBlue.gif") repeat-y left;
+	padding-left: 20px;
+}
+
+.marginLeftWhite
+{
+	background: transparent url("../_images/_layout/bg_marginLeftWhite.gif") repeat-y left;
+	padding-left: 20px;
+}
+
+.marginLeftGrey
+{
+	background: transparent url("../_images/_layout/bg_marginLeftGrey.gif") repeat-y left;
+	padding-left: 20px;
+}
+
+.marginLeftGreyBtm
+{
+	background: transparent url("../_images/_layout/bg_marginLeftGreyBtm.gif") bottom left;
+	padding-left: 20px;
+}
+
+.marginRightGrey
+{
+	background: transparent url("../_images/_layout/bg_marginRightGrey.gif") repeat-y right;
+	padding-right: 20px;
+}
+
+/* THEME MARGINS ------------------------------------------------------------ */
+.marginLeft_ONE_Magenta
+{
+	background: transparent url("../_images/_layout/bg_marginLeft_ONE_Magenta.gif") repeat-y left;
+	padding-left: 20px;
+}
+
+.marginLeft_TWO_Blue
+{
+	background: transparent url("../_images/_layout/bg_marginLeft_TWO_Blue.gif") repeat-y left;
+	padding-left: 20px;
+}
+
+.marginLeft_EXAMPLE
+{
+	background: transparent url("../_images/_layout/bg_marginLeft_EXAMPLE.gif") repeat-y left;
+	padding-left: 20px;
+}
+
+.marginLeft_ANDSGreen
+{
+	background: transparent url("../_images/_layout/bg_marginLeft_ANDSGreen.gif") repeat-y left;
+	padding-left: 20px;
+}
+
+.marginLeft_ANDSLightGreen
+{
+	background: transparent url("../_images/_layout/bg_marginLeft_ANDSLightGreen.gif") repeat-y left;
+	padding-left: 20px;
+}
+
+.marginLeft_ANDSOrange
+{
+	background: transparent url("../_images/_layout/bg_marginLeft_ANDSOrange.gif") repeat-y left;
+	padding-left: 20px;
+}
+
+
