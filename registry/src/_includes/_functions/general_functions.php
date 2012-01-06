@@ -106,7 +106,15 @@ function getActivityHelpContentFragmentId($activity_id)
 
 function getCurrentPath()
 {
-	$path = $_SERVER['PHP_SELF'];
+	if (isset($_SERVER['REDIRECT_URL']))
+	{
+		$path = $_SERVER['REDIRECT_URL'];
+	} 
+	else
+	{
+		$path = $_SERVER['PHP_SELF'];
+	}
+	
 	$path = str_replace('\\','\/', $path);
 	return $path;
 }
