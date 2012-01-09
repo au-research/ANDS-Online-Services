@@ -247,3 +247,13 @@ a.search:active
 .pagination-page{
 padding:0px 2px;	
 }
+
+.hide{display:none;}
+
+/*RIFCS POPUP*/
+#rifcs_container{position:relative;}
+#rifcs_popup{position:absolute;font-size:10px;display:none;}
+#rifcs_popup ul{padding:5px;margin:-5px;list-style-type:none;background:#333;border:1px solid white;}
+#rifcs_popup li a{text-decoration:none;color:white;display:block;padding:5px;}
+#rifcs_popup a:hover{background:white;color:#333;}
+#rifcs_plain_content{width:600px;max-height:600px;min-height:400px;}
