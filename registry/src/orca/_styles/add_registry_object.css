@@ -603,8 +603,8 @@ label.mandatory:before {
     top:-2em; left:2em;
     margin:2px;padding:5px;
     border:1px solid #ccc;
-    background-color:#666666; color:white;
-    text-align: center;
+    background-color:#323; color:white;
+    text-align: left;
 }
     
     
