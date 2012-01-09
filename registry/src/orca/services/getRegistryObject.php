@@ -17,29 +17,64 @@ limitations under the License.
 require '../../_includes/init.php';
 require '../orca_init.php';
 
-// Set the Content-Type header.
-header("Content-Type: text/xml; charset=UTF-8", true);
 
 // Get the record from the database.
 $registryObject = getRegistryObject(getQueryValue('key'));
+$type = getQueryValue('type');
+if($type=='')$type='xml';
 
-$rifcs = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
-// BEGIN: XML Response
-// =============================================================================
-$rifcs .='<registryObjects xmlns="http://ands.org.au/standards/rif-cs/registryObjects" '."\n";
-$rifcs .='                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '."\n";
-$rifcs .='                 xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects '.gRIF2_SCHEMA_URI.'">'."\n";
-if( $registryObject )
-{
-	$rifcs .= getRegistryObjectXML($registryObject[0]['registry_object_key']);
+if($type=='xml'){
+	// Set the Content-Type header.
+	header("Content-Type: text/xml; charset=UTF-8", true);
+	$rifcs = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
+	
+	// BEGIN: XML Response
+	// =============================================================================
+	$rifcs .='<registryObjects xmlns="http://ands.org.au/standards/rif-cs/registryObjects" '."\n";
+	$rifcs .='                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '."\n";
+	$rifcs .='                 xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects '.gRIF2_SCHEMA_URI.'">'."\n";
+	if( $registryObject )
+	{
+		$rifcs .= getRegistryObjectXML($registryObject[0]['registry_object_key']);
+	}
+	$rifcs .= "</registryObjects>\n";
+	// TODO : this is needed untill we stop having rifcs 1.0 elements in the database!!!
+	// so delete it once the green and orange is imp[lemented + all data is migrated to rifcs 1.2 placeholders!!
+	$rifc2 = transformToRif2XML($rifcs);
+	print $rifc2;
+	
+	// END: XML Response
+	// =============================================================================
+	require '../../_includes/finish.php';
+	
+}elseif($type=='plain'){
+	//PRINT plain rifcs
+	print getRegistryObjectXML($registryObject[0]['registry_object_key']);
+}elseif($type=='download'){
+	// Set the Content-Type header.
+	header("Content-Type: text/xml; charset=UTF-8", true);
+	header('Content-Disposition: attachment; filename='.$registryObject[0]['registry_object_key'].'-rifcs-download.xml');
+	$rifcs = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
+	
+	// BEGIN: XML Response
+	// =============================================================================
+	$rifcs .='<registryObjects xmlns="http://ands.org.au/standards/rif-cs/registryObjects" '."\n";
+	$rifcs .='                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '."\n";
+	$rifcs .='                 xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects '.gRIF2_SCHEMA_URI.'">'."\n";
+	if( $registryObject )
+	{
+		$rifcs .= getRegistryObjectXML($registryObject[0]['registry_object_key']);
+	}
+	$rifcs .= "</registryObjects>\n";
+	// TODO : this is needed untill we stop having rifcs 1.0 elements in the database!!!
+	// so delete it once the green and orange is imp[lemented + all data is migrated to rifcs 1.2 placeholders!!
+	$rifc2 = transformToRif2XML($rifcs);
+	print $rifc2;
+	
+	// END: XML Response
+	// =============================================================================
+	require '../../_includes/finish.php';
 }
-$rifcs .= "</registryObjects>\n";
-// TODO : this is needed untill we stop having rifcs 1.0 elements in the database!!!
-// so delete it once the green and orange is imp[lemented + all data is migrated to rifcs 1.2 placeholders!!
-$rifc2 = transformToRif2XML($rifcs);
-print $rifc2;
 
-// END: XML Response
-// =============================================================================
-require '../../_includes/finish.php';
+
 ?>
