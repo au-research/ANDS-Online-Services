@@ -37,7 +37,6 @@ if( !$registryObject )
 }
 else
 {
-	
 	$registryObjectKey = $registryObject[0]['registry_object_key'];
 	$dataSourceKey = $registryObject[0]['data_source_key'];
 	$dataSource = getDataSources($dataSourceKey, null);
@@ -135,8 +134,28 @@ if( $registryObject )
 		$recordHistory = "<span style='float:right;'><a style='font-size:0.8em; font-weight: normal;' href='".eAPP_ROOT."orca/manage/view_history.php?action=record_view&key=".urlencode($registryObjectKey)."&data_source_key=".urlencode($dataSourceKey)."'>view record history</a></span>";
 	}
 	
+	//CC-47
 	
-	drawRecordField("<a href=\"services/getRegistryObject.php?key=".esc(urlencode($registryObjectKey))."\"><img title=\"Get RIF-CS XML for this record\" src=\"".gORCA_IMAGE_ROOT."rifcs.gif\" alt=\"\" /></a>", esc($registryObjectClass) . $recordHistory .$rdaLink);
+	print('<span class="hide" id="key">'.$registryObjectKey.'</span>');
+	$rifcs_button = '
+		<div id="rifcs_container">
+			<a href="#" id="rifcs_button"><img title="Get RIF-CS XML for this record" src="'.gORCA_IMAGE_ROOT.'rifcs.gif" alt="Get RIFCS"/></a>
+			<div id="rifcs_popup">
+				<ul>
+					<li><a href="#" id="rifcs_view">View RIF-CS</a></li>
+					<li><a href="'.eAPP_ROOT.'orca/services/getRegistryObject.php?key='.urlencode($registryObjectKey).'&type=download">Download RIF-CS</a></li>
+				</ul>
+			</div>
+			<div id="rifcs_plain" class="hide">
+				<textarea id="rifcs_plain_content"></textarea>
+			</div>
+		</div>
+	';
+	
+	echo '';
+	drawRecordField($rifcs_button, esc($registryObjectClass) . $recordHistory .$rdaLink);
+	//drawRecordField("<a href=\"services/getRegistryObject.php?key=".esc(urlencode($registryObjectKey))."\"><img title=\"Get RIF-CS XML for this record\" src=\"".gORCA_IMAGE_ROOT."rifcs.gif\" alt=\"\" /></a>", esc($registryObjectClass) . $recordHistory .$rdaLink);
+
 	
 	print("	</thead>\n");
 	print('	<tbody class="recordFields">'."\n");
