@@ -388,8 +388,13 @@ $().ready(function(){
 	 * CC-47
 	 * RIFCS-BUTTON on view page
 	 */
-	$('#rifcs_button').click(function(){
-		$('#rifcs_popup').toggle();
+	$('#rifcs_button').click(function(e){
+		$('#rifcs_popup').show();
+		e.stopPropagation();
+	});
+	
+	$('body').click(function(){
+		$('#rifcs_popup').hide();
 	});
 	
 	$('#rifcs_view').click(function(){
@@ -409,9 +414,16 @@ $().ready(function(){
 	                overlayCSS: { backgroundColor: '#000', opacity:   0.6}
             	});
             $('.blockOverlay').attr('title','Click to unblock').click($.unblockUI);
+            $('.closeBlockUI').click($.unblockUI);
 	       }
 	   );
+		$('#rifcs_popup').hide();
 	});
+	
+	$('#rifcs_download').click(function(){
+		$('#rifcs_popup').hide();
+	});
+	
 	
 	function htmlEntities(str) {
 	    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
