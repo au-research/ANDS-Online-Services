@@ -65,6 +65,26 @@ $_strings['*_rights_licence'] = ' ';
 $_strings['*_rights_accessRights'] = ' ';
 
 
+// Local strings (to be interpolated below)
+$dateFormatInfoString = <<<STREND
+Typically provided in W3CDTF (ISO 8601) format. Valid dates might include:<br/><br/>
+																		
+   Year:<br/>
+   &nbsp;&nbsp;&nbsp;YYYY (eg 1997)<br/>
+   Year and month:<br/>
+   &nbsp;&nbsp;&nbsp;YYYY-MM (eg 1997-07)<br/>
+   Complete date:<br/>
+   &nbsp;&nbsp;&nbsp;YYYY-MM-DD (eg 1997-07-16)<br/>
+   Complete date plus hours and minutes:<br/>
+   &nbsp;&nbsp;&nbsp;YYYY-MM-DDThh:mmTZD (eg 1997-07-16T19:20+01:00)<br/>
+   Complete date plus hours, minutes and seconds:<br/>
+   &nbsp;&nbsp;&nbsp;YYYY-MM-DDThh:mm:ssTZD (eg 1997-07-16T19:20:30+01:00)<br/>
+   Complete date plus hours, minutes, seconds and a decimal fraction of a
+second<br/>
+   &nbsp;&nbsp;&nbsp;YYYY-MM-DDThh:mm:ss.sTZD (eg 1997-07-16T19:20:30.45+01:00)<br/><br/>
+   
+STREND;
+										
 
 // 
 // Mandatory Information
@@ -82,6 +102,7 @@ $_strings['collection_mandatoryInformation_metadata_guidance'] = <<<HTMLEND
 										</ul>	
 										
 HTMLEND;
+
 $_strings['party_mandatoryInformation_metadata_guidance'] = <<<HTMLEND
 
 										<a href="javascript:toggleMetaGuide();" class="guideNotesPrompt" id="guideNotesPrompt_mandatoryInformation">+ Show Metadata Content Guidance Notes</a>
@@ -802,27 +823,29 @@ $_strings['*_name_namePart'] = <<<HTMLEND
 														<table id="table_name_%%SEQNUM1%%_namePart_%%SEQNUM2%%" class="rmdElementContainer" style="font-weight:normal;"> 
 															
 															<tbody class="formFields andsorange"> 
-		
+																
+																<tr>
+																	<td width="39px" style="text-align:right;"><label class="mandatory" for="object_name_%%SEQNUM1%%_namePart_%%SEQNUM2%%_value">Value:</label></td> 
+																	<td onclick="getHelpText('collection_namePart_value');"> 
+																		<input type="text" value="" name="object.name[%%SEQNUM1%%].namePart[%%SEQNUM2%%].value" id="object_name_%%SEQNUM1%%_namePart_%%SEQNUM2%%_value" maxlength="512" size="40" />
+																	</td>
+																	<td><div class="fieldError" name="errors_name_%%SEQNUM1%%_namePart_%%SEQNUM2%%_value" style="font-size:1.05em;"></div></td>
+																	<td width="100%">
+																		<input type="button" name="btn_name_%%SEQNUM1%%_namePart_%%SEQNUM2%%_remove" value="Remove this Name Part" onClick="decCount('object.name[%%SEQNUM1%%].namePart'); $('#table_name_%%SEQNUM1%%_namePart_%%SEQNUM2%%').remove();" style="float:right;" />									
+																	</td>
+																</tr>
+																
 																<tr id="row_name_%%SEQNUM1%%_namePart_%%SEQNUM2%%_type" style="display:none;">
 																	<td width="39px" style="text-align:right;"><label for="object_name_%%SEQNUM1%%_namePart_%%SEQNUM2%%_type">Type:</label></td>
 																	<td onclick="getHelpText('collection_namePart_type');" width="260px">
 																		<input type="text" id="object_name_%%SEQNUM1%%_namePart_%%SEQNUM2%%_type" name="object.name[%%SEQNUM1%%].namePart[%%SEQNUM2%%].type" maxlength="512" size="27" /><img id="button_name_%%SEQNUM1%%_namePart_%%SEQNUM2%%_type" src="{$eAPP_ROOT}orca/_images/buttons/dropdown_in.png" onClick='toggleDropdown(this.id);' class='cursorimg' style="vertical-align:bottom; height:16px; width:16px;" />
 																	</td>
 																	<td><div class="fieldError" name="errors_name_%%SEQNUM1%%_namePart_%%SEQNUM2%%_type" style="font-size:1.05em;"></div></td>
-																	<td width="100%"></td>
+																	<td width="100%">
+																		
+																	</td>
 																</tr>
 																
-																<tr>
-
-																	<td width="39px" style="text-align:right;"><label class="mandatory" for="object_name_%%SEQNUM1%%_namePart_%%SEQNUM2%%_value">Value:</label></td> 
-																	<td onclick="getHelpText('collection_namePart_value');"> 
-																		<input type="text" value="" name="object.name[%%SEQNUM1%%].namePart[%%SEQNUM2%%].value" id="object_name_%%SEQNUM1%%_namePart_%%SEQNUM2%%_value" maxlength="512" size="40" />
-																	</td>
-																	<td><div class="fieldError" name="errors_name_%%SEQNUM1%%_namePart_%%SEQNUM2%%_value" style="font-size:1.05em;"></div></td>
-																	<td>
-																		<input type="button" name="btn_name_%%SEQNUM1%%_namePart_%%SEQNUM2%%_remove" value="Remove this Name Part" onClick="decCount('object.name[%%SEQNUM1%%].namePart'); $('#table_name_%%SEQNUM1%%_namePart_%%SEQNUM2%%').remove();" style="float:right;" />
-																	</td>
-																</tr>
 															
 															</tbody>
 															
@@ -843,27 +866,28 @@ $_strings['party_name_namePart'] = <<<HTMLEND
 														<table id="table_name_%%SEQNUM1%%_namePart_%%SEQNUM2%%" class="rmdElementContainer" style="font-weight:normal;"> 
 															
 															<tbody class="formFields andsorange"> 
-												
+
+																<tr>
+																	<td style="text-align:right;"><label for="object_name_%%SEQNUM1%%_namePart_%%SEQNUM2%%_value">Value:</label></td> 
+																	<td onclick="getHelpText('collection_namePart_value');"> 
+																		<input type="text" value="" name="object.name[%%SEQNUM1%%].namePart[%%SEQNUM2%%].value" id="object_name_%%SEQNUM1%%_namePart_%%SEQNUM2%%_value" maxlength="512" size="40" />
+																	</td>
+																	<td><div class="fieldError" name="errors_name_%%SEQNUM1%%_namePart_%%SEQNUM2%%_value" style="font-size:1.05em;"></div></td> 
+																	<td rowspan="2" align="right" width="100%">
+																		<input type="button" name="btn_name_%%SEQNUM1%%_namePart_%%SEQNUM2%%_remove" value="Remove this Name Part" onClick="decCount('object.name[%%SEQNUM1%%].namePart'); $('#table_name_%%SEQNUM1%%_namePart_%%SEQNUM2%%').remove();"  /><br/>
+																	</td>
+																</tr>
+
+																												
 																<tr>
 																	<td style="text-align:right;"><label for="object_name_%%SEQNUM1%%_namePart_%%SEQNUM2%%_type">Type:</label></td>
 																	<td onclick="getHelpText('collection_namePart_type');" width="260px">
 																		<input type="text" id="object_name_%%SEQNUM1%%_namePart_%%SEQNUM2%%_type" name="object.name[%%SEQNUM1%%].namePart[%%SEQNUM2%%].type" maxlength="512" size="27" /><img id="button_name_%%SEQNUM1%%_namePart_%%SEQNUM2%%_type" src="{$eAPP_ROOT}orca/_images/buttons/dropdown_in.png" onClick='toggleDropdown(this.id);' class='cursorimg' style="vertical-align:bottom; height:16px; width:16px;" />
 																	</td>
 																	<td><div class="fieldError" name="errors_name_%%SEQNUM1%%_namePart_%%SEQNUM2%%_type" style="font-size:1.05em;"></div></td>
-																	<td rowspan="2" align="right" width="100%">
-																		<input type="button" name="btn_name_%%SEQNUM1%%_namePart_%%SEQNUM2%%_remove" value="Remove this Name Part" onClick="decCount('object.name[%%SEQNUM1%%].namePart'); $('#table_name_%%SEQNUM1%%_namePart_%%SEQNUM2%%').remove();"  /><br/>
-																	</td>
 																</tr>
 																
-																<tr>
-
-																	<td style="text-align:right;"><label for="object_name_%%SEQNUM1%%_namePart_%%SEQNUM2%%_value">Value:</label></td> 
-																	<td onclick="getHelpText('collection_namePart_value');"> 
-																		<input type="text" value="" name="object.name[%%SEQNUM1%%].namePart[%%SEQNUM2%%].value" id="object_name_%%SEQNUM1%%_namePart_%%SEQNUM2%%_value" maxlength="512" size="40" />
-																	</td>
-																	<td><div class="fieldError" name="errors_name_%%SEQNUM1%%_namePart_%%SEQNUM2%%_value" style="font-size:1.05em;"></div></td> 
-																</tr>
-															
+																
 															</tbody>
 															
 														</table>
@@ -1234,19 +1258,7 @@ $_strings['*_subject'] = <<<HTMLEND
 											
 											<tbody class="formFields andsgreen"> 
 																												
-												<tr>
-													<td width="39px" style="font-weight:normal; padding-left:8px; padding-top:8px;"><label class="mandatory" for="object_subject_%%SEQNUM1%%_type">Type:</label></td>
-													<td style="font-size:0.9em;" onclick="getHelpText('collection_subject_type');">
-														<input type="text" value="" name="object.subject[%%SEQNUM1%%].type" id="object_subject_%%SEQNUM1%%_type" maxlength="512" size="37" />
-														<img id="button_subject_%%SEQNUM1%%_type" src="{$eAPP_ROOT}orca/_images/buttons/dropdown_in.png" onClick='toggleDropdown(this.id);' class='cursorimg' style="vertical-align:bottom; height:21px; width:21px;" />
-													</td>
-													<td><div class="fieldError" name="errors_subject_%%SEQNUM1%%_type"></div></td>
-													
-													<td>
-														<input type="button" class="buttonSmall" name="btn_subject_%%SEQNUM1%%_remove" value="Remove this Subject" onClick="decCount('object.subject');$('#table_subject_%%SEQNUM1%%').remove();" style="float:right;" /><br/>
-													</td>
-												</tr>
-															
+																											
 												<tr>
 													<td style="text-align:right; font-weight:normal; padding-left:8px; padding-top:8px;">
 													<label class="mandatory" for="object_subject_%%SEQNUM1%%_value">Value:</label></td> 
@@ -1256,6 +1268,18 @@ $_strings['*_subject'] = <<<HTMLEND
 														<input type="hidden" name="object.subject[%%SEQNUM1%%].lang" id="object_subject_%%SEQNUM1%%_lang" />
 													</td> 
 													<td><div class="fieldError" name="errors_subject_%%SEQNUM1%%_value"></div></td>
+													<td>
+														<input type="button" class="buttonSmall" name="btn_subject_%%SEQNUM1%%_remove" value="Remove this Subject" onClick="decCount('object.subject');$('#table_subject_%%SEQNUM1%%').remove();" style="float:right;" /><br/>
+													</td>
+												</tr>
+												
+												<tr>
+													<td width="39px" style="font-weight:normal; padding-left:8px; padding-top:8px;"><label class="mandatory" for="object_subject_%%SEQNUM1%%_type">Type:</label></td>
+													<td style="font-size:0.9em;" onclick="getHelpText('collection_subject_type');">
+														<input type="text" value="" name="object.subject[%%SEQNUM1%%].type" id="object_subject_%%SEQNUM1%%_type" maxlength="512" size="37" />
+														<img id="button_subject_%%SEQNUM1%%_type" src="{$eAPP_ROOT}orca/_images/buttons/dropdown_in.png" onClick='toggleDropdown(this.id);' class='cursorimg' style="vertical-align:bottom; height:21px; width:21px;" />
+													</td>
+													<td><div class="fieldError" name="errors_subject_%%SEQNUM1%%_type"></div></td>
 													<td width="100%"></td>
 												</tr>
 												
@@ -1302,9 +1326,19 @@ $_strings['*_location'] = <<<HTMLEND
 											<tbody class="formFields andsgreen"> 
 												
 												<tr>
-													<td style="text-align:right; vertical-align:middle; font-weight:normal;"><label for="object_location_%%SEQNUM1%%_dateFrom">Date From:</label></td>
+													<td style="text-align:right; vertical-align:middle; font-weight:normal;">
+													
+														<span class="infoControl"><img id="infoIcon" alt="More information" src="../_images/info_control_icon.gif"/><span class="infoSpan">
+														
+														{$dateFormatInfoString}
+
+														</span></span>&nbsp;&nbsp; 
+														
+														<label for="object_location_%%SEQNUM1%%_dateFrom">Date From:</label>
+													
+													</td>
 													<td onclick="getHelpText('collection_location_date_from');" style="vertical-align:middle;">
-														<input type="text" value="" id="object_location_%%SEQNUM1%%_dateFrom" name="object.location[%%SEQNUM1%%].dateFrom" onchange="checkDTF(this.id);" class="dateTimeField" maxlength="32" size="60" style="width:230px;" /> &nbsp;<span id="location_%%SEQNUM1%%_date_from_dctImage">&nbsp;</span><span class="inputFormat"> YYYY-MM-DDThh:mm:ssZ</span>
+														<input type="text" value="" id="object_location_%%SEQNUM1%%_dateFrom" name="object.location[%%SEQNUM1%%].dateFrom" onchange="checkDTF(this.id);" class="dateTimeField" maxlength="32" size="60" style="width:230px;" /> &nbsp;<span id="location_%%SEQNUM1%%_date_from_dctImage">&nbsp;</span>
 													</td>
 													<td width="100px;"><div class="fieldError" id="errors_location_%%SEQNUM1%%_dateFrom" name="errors_location_%%SEQNUM1%%_dateFrom"></div></td>
 													<td>
@@ -1313,9 +1347,16 @@ $_strings['*_location'] = <<<HTMLEND
 												</tr>
 												
 												<tr>
-													<td style="text-align:right; vertical-align:middle; font-weight:normal;"><label for="object_location_%%SEQNUM1%%_dateTo">Date To:</label></td>
+													<td style="text-align:right; vertical-align:middle; font-weight:normal;">
+														<span class="infoControl"><img id="infoIcon" alt="More information" src="../_images/info_control_icon.gif"/><span class="infoSpan">
+														
+														{$dateFormatInfoString}
+
+														</span></span>&nbsp;&nbsp; 
+														<label for="object_location_%%SEQNUM1%%_dateTo">Date To:</label>
+													</td>
 													<td onclick="getHelpText('collection_location_dateTo');" style="vertical-align:middle;">
-														<input type="text" value="" id="object_location_%%SEQNUM1%%_dateTo" name="object.location[%%SEQNUM1%%].dateTo" onchange="checkDTF(this.id);"  class="dateTimeField" maxlength="32" size="60" style="width:230px;" /> &nbsp;<span id="location_%%SEQNUM1%%_date_to_dctImage">&nbsp;</span><span class="inputFormat"> YYYY-MM-DDThh:mm:ssZ</span>
+														<input type="text" value="" id="object_location_%%SEQNUM1%%_dateTo" name="object.location[%%SEQNUM1%%].dateTo" onchange="checkDTF(this.id);"  class="dateTimeField" maxlength="32" size="60" style="width:230px;" /> &nbsp;<span id="location_%%SEQNUM1%%_date_to_dctImage">&nbsp;</span>
 													</td>
 													<td width="100px;" colspan="2"><div class="fieldError" id="errors_location_%%SEQNUM1%%_dateTo" name="errors_location_%%SEQNUM1%%_dateTo"></div></td>
 												</tr>
@@ -1333,7 +1374,7 @@ $_strings['*_location'] = <<<HTMLEND
 														<div style="padding:4px;">Spatial:</div>
 														<div id="object.location_%%SEQNUM1%%_spatial_container">&nbsp;</div>			
 														<input type="button" name="btn_location_%%SEQNUM1%%_addspatial" value="Add new Spatial Location" onClick="getElement('spatial', [], 'object.location[%%SEQNUM1%%].', null, getNextSeq('location_%%SEQNUM1%%_spatial'));" style="float:left; font-size:0.8em;" />
-														&nbsp;&nbsp;<span class="infoControl"><img id="infoIcon" alt="More information" src="../_images/info_control_icon.gif"/><span class="infoSpan">Do not describe collection coverage here, go to the Coverage tab</span></span>
+														&nbsp;&nbsp;<span class="infoControl"><img id="infoIcon" alt="More information" src="../_images/info_control_icon.gif"/><span class="infoSpan">Do not describe collection coverage here. Please use the Coverage tab instead.</span></span>
 													</td>
 												</tr> 																						
 											</tbody> 
@@ -1418,16 +1459,7 @@ $_strings['*_location_address_electronic'] = <<<HTMLEND
 											
 											<tbody class="formFields andsgrey" style="font-size:1.2em;"> 
 
-												<tr>
-													<td style="text-align:right; vertical-align:middle; font-weight:normal; width:15px;"><label for="object_location_%%SEQNUM1%%_address_%%SEQNUM2%%_electronic_%%SEQNUM3%%_type">Type:</label></td>
-													<td onclick="getHelpText('collection_location_type');" style="vertical-align:middle;">
-														<input onChange="testAnyURI('button_location_%%SEQNUM1%%_address_%%SEQNUM2%%_electronic_%%SEQNUM3%%_value_1_value');" type="text" name="object.location[%%SEQNUM1%%].address[%%SEQNUM2%%].electronic[%%SEQNUM3%%].type" id="object_location_%%SEQNUM1%%_address_%%SEQNUM2%%_electronic_%%SEQNUM3%%_type" size="37" maxlength="512" />
-														<img id="button_location_%%SEQNUM1%%_address_%%SEQNUM2%%_electronic_%%SEQNUM3%%_type" src="{$eAPP_ROOT}orca/_images/buttons/dropdown_in.png" onClick='toggleDropdown(this.id);' class='cursorimg' style="vertical-align:bottom; height:21px; width:21px;" />
-													</td>
-													<td width="100px;"><div class="fieldError" name="errors_location_%%SEQNUM1%%_address_%%SEQNUM2%%_electronic_%%SEQNUM3%%_type" style="font-size:1.05em;"></div></td>
-													<td width="100%"><input type="button" name="btn_location_%%SEQNUM1%%_address_%%SEQNUM2%%_electronic_%%SEQNUM3%%_removeelectronic" value="Remove this Electronic Address" onClick="$('#table_location_%%SEQNUM1%%_address_%%SEQNUM2%%_electronic_%%SEQNUM3%%').remove();" style="float:right; font-size:0.8em;" /></td>
-												</tr>
-												
+											
 												<tr>
 													<td style="text-align:right; vertical-align:middle;font-weight:normal;"  width="15px"><label class="mandatory" for="object.location[%%SEQNUM1%%].address[%%SEQNUM2%%].electronic[%%SEQNUM3%%].value">Value:</label></td>
 													<td onclick="getHelpText('collection_coverage_temporal_text_value');" width="260px" style="vertical-align:middle;">
@@ -1436,8 +1468,19 @@ $_strings['*_location_address_electronic'] = <<<HTMLEND
 																	
 													</td>
 													<td width="100px;"><div class="fieldError" name="errors_location_%%SEQNUM1%%_address_%%SEQNUM2%%_electronic_%%SEQNUM3%%_value_1_value" style="font-size:1.05em;"></div></td>
+													<td width="100%"><input type="button" name="btn_location_%%SEQNUM1%%_address_%%SEQNUM2%%_electronic_%%SEQNUM3%%_removeelectronic" value="Remove this Electronic Address" onClick="$('#table_location_%%SEQNUM1%%_address_%%SEQNUM2%%_electronic_%%SEQNUM3%%').remove();" style="float:right; font-size:0.8em;" /></td>
+												</tr>
+												
+												<tr>
+													<td style="text-align:right; vertical-align:middle; font-weight:normal; width:15px;"><label for="object_location_%%SEQNUM1%%_address_%%SEQNUM2%%_electronic_%%SEQNUM3%%_type">Type:</label></td>
+													<td onclick="getHelpText('collection_location_type');" style="vertical-align:middle;">
+														<input onChange="testAnyURI('button_location_%%SEQNUM1%%_address_%%SEQNUM2%%_electronic_%%SEQNUM3%%_value_1_value');" type="text" name="object.location[%%SEQNUM1%%].address[%%SEQNUM2%%].electronic[%%SEQNUM3%%].type" id="object_location_%%SEQNUM1%%_address_%%SEQNUM2%%_electronic_%%SEQNUM3%%_type" size="37" maxlength="512" />
+														<img id="button_location_%%SEQNUM1%%_address_%%SEQNUM2%%_electronic_%%SEQNUM3%%_type" src="{$eAPP_ROOT}orca/_images/buttons/dropdown_in.png" onClick='toggleDropdown(this.id);' class='cursorimg' style="vertical-align:bottom; height:21px; width:21px;" />
+													</td>
+													<td width="100px;"><div class="fieldError" name="errors_location_%%SEQNUM1%%_address_%%SEQNUM2%%_electronic_%%SEQNUM3%%_type" style="font-size:1.05em;"></div></td>
 													<td></td>
 												</tr>
+												
 												
 												<tr>
 													<td style="text-align:left;width:100%;" colspan="4">
@@ -1485,16 +1528,6 @@ $_strings['service_location_address_electronic'] = <<<HTMLEND
 											<table id="table_location_%%SEQNUM1%%_address_%%SEQNUM2%%_electronic_%%SEQNUM3%%" class="formTable rmdElementContainer"> 
 											
 											<tbody class="formFields andsgrey" style="font-size:1.2em;"> 
-
-												<tr>
-													<td style="text-align:right; vertical-align:middle; font-weight:normal; width:15px;"><label for="object_location_%%SEQNUM1%%_address_%%SEQNUM2%%_electronic_%%SEQNUM3%%_type">Type:</label></td>
-													<td onclick="getHelpText('collection_location_type');" style="vertical-align:middle;">
-														<input onChange="testAnyURI('button_location_%%SEQNUM1%%_address_%%SEQNUM2%%_electronic_%%SEQNUM3%%_value_1_value');" type="text" name="object.location[%%SEQNUM1%%].address[%%SEQNUM2%%].electronic[%%SEQNUM3%%].type" id="object_location_%%SEQNUM1%%_address_%%SEQNUM2%%_electronic_%%SEQNUM3%%_type" maxlength="512" size="37" />
-														<img id="button_location_%%SEQNUM1%%_address_%%SEQNUM2%%_electronic_%%SEQNUM3%%_type" src="{$eAPP_ROOT}orca/_images/buttons/dropdown_in.png" onClick='toggleDropdown(this.id);' class='cursorimg' style="vertical-align:bottom; height:21px; width:21px;" />
-													</td>
-													<td width="100px;"><div class="fieldError" name="errors_location_%%SEQNUM1%%_address_%%SEQNUM2%%_electronic_%%SEQNUM3%%_type" style="font-size:1.05em;"></div></td>
-													<td width="100%"><input type="button" name="btn_location_%%SEQNUM1%%_address_%%SEQNUM2%%_electronic_%%SEQNUM3%%_removeelectronic" value="Remove this Electronic Address" onClick="$('#table_location_%%SEQNUM1%%_address_%%SEQNUM2%%_electronic_%%SEQNUM3%%').remove();" style="float:right; font-size:0.8em;" /></td>
-												</tr>
 												
 												<tr>
 													<td style="text-align:right; vertical-align:middle;font-weight:normal;"  width="15px"><label class="mandatory" for="object.location[%%SEQNUM1%%].address[%%SEQNUM2%%].electronic[%%SEQNUM3%%].value">Value:</label></td>
@@ -1504,6 +1537,16 @@ $_strings['service_location_address_electronic'] = <<<HTMLEND
 																	
 													</td>
 													<td width="100px;"><div class="fieldError" name="errors_location_%%SEQNUM1%%_address_%%SEQNUM2%%_electronic_%%SEQNUM3%%_value_1_value" style="font-size:1.05em;"></div></td>
+													<td width="100%"><input type="button" name="btn_location_%%SEQNUM1%%_address_%%SEQNUM2%%_electronic_%%SEQNUM3%%_removeelectronic" value="Remove this Electronic Address" onClick="$('#table_location_%%SEQNUM1%%_address_%%SEQNUM2%%_electronic_%%SEQNUM3%%').remove();" style="float:right; font-size:0.8em;" /></td>
+												</tr>
+												
+												<tr>
+													<td style="text-align:right; vertical-align:middle; font-weight:normal; width:15px;"><label for="object_location_%%SEQNUM1%%_address_%%SEQNUM2%%_electronic_%%SEQNUM3%%_type">Type:</label></td>
+													<td onclick="getHelpText('collection_location_type');" style="vertical-align:middle;">
+														<input onChange="testAnyURI('button_location_%%SEQNUM1%%_address_%%SEQNUM2%%_electronic_%%SEQNUM3%%_value_1_value');" type="text" name="object.location[%%SEQNUM1%%].address[%%SEQNUM2%%].electronic[%%SEQNUM3%%].type" id="object_location_%%SEQNUM1%%_address_%%SEQNUM2%%_electronic_%%SEQNUM3%%_type" maxlength="512" size="37" />
+														<img id="button_location_%%SEQNUM1%%_address_%%SEQNUM2%%_electronic_%%SEQNUM3%%_type" src="{$eAPP_ROOT}orca/_images/buttons/dropdown_in.png" onClick='toggleDropdown(this.id);' class='cursorimg' style="vertical-align:bottom; height:21px; width:21px;" />
+													</td>
+													<td width="100px;"><div class="fieldError" name="errors_location_%%SEQNUM1%%_address_%%SEQNUM2%%_electronic_%%SEQNUM3%%_type" style="font-size:1.05em;"></div></td>
 													<td></td>
 												</tr>
 												
@@ -1782,7 +1825,7 @@ $_strings['*_location_spatial'] = <<<HTMLEND
 																<tr id="object_location_%%SEQNUM1%%_spatial_%%SEQNUM2%%_valuerow">
 																	<td height="30px" align="left" style="padding:8px;" width="40px"><label for="object.location[%%SEQNUM1%%].spatial[%%SEQNUM2%%].value">Value:</label></td>
 																	<td align="left" style="padding:8px;" onclick="getHelpText('collection_location_spatial_value');">
-																		<input align="left" type="text" value="" name="object.location[%%SEQNUM1%%].spatial[%%SEQNUM2%%].value" id="object_location_%%SEQNUM1%%_spatial_%%SEQNUM2%%_value" maxlength="512" size="40" /> 
+																		<input style="vertical-align:top;" align="left" type="text" value="" name="object.location[%%SEQNUM1%%].spatial[%%SEQNUM2%%].value" id="object_location_%%SEQNUM1%%_spatial_%%SEQNUM2%%_value" maxlength="512" size="40" /> 
 																		<a href="javascript:rmd_showMap('object_location_%%SEQNUM1%%_spatial_%%SEQNUM2%%');" onclick="$('#object_location_%%SEQNUM1%%_spatial_%%SEQNUM2%%_type').val('kmlPolyCoords'); $('#object_location_%%SEQNUM1%%_spatial_%%SEQNUM2%%_typerow').hide(); $('#object_location_%%SEQNUM1%%_spatial_%%SEQNUM2%%_valuerow').hide(); $('[name=btn_location_%%SEQNUM1%%_spatial_%%SEQNUM2%%_removespatial_map]').show(); $('#object_location_%%SEQNUM1%%_spatial_%%SEQNUM2%%_maprow').show(); this.style.display='none';" title="Use Map"><img src="{$eAPP_ROOT}orca/_images/usemap.png" alt="Use Map" /></a>
 																		
 																	</td>
@@ -2067,24 +2110,25 @@ $_strings['*_relatedInfo'] = <<<HTMLEND
 															
 															<tbody class="formFields andsorange"> 
 												
+															
+																<tr>
+																	<td style="text-align:right;"><label class="mandatory" for="object_relatedInfo_%%SEQNUM1%%_identifier_1_value">Value:</label></td> 
+																	<td onclick="getHelpText('collection_relatedInfo_identifier_value');"> 
+																		<input type="text" value="" name="object.relatedInfo[%%SEQNUM1%%].identifier[1].value" id="object_relatedInfo_%%SEQNUM1%%_identifier_1_value" maxlength="512" size="40" />
+																	</td>
+																	<td><div class="fieldError" name="errors_relatedInfo_%%SEQNUM1%%_identifier_1_value"></div></td> 
+																	<td width="100%"></td>
+																</tr>
+																
 																<tr>
 																	<td style="text-align:right;" width="40px"><label class="mandatory" for="object_relatedInfo_%%SEQNUM1%%_identifier_1_type">Type:</label></td>
 																	<td onclick="getHelpText('collection_relatedInfo_identifier_type');" width="260px">
 																		<input type="text" value="" name="object.relatedInfo[%%SEQNUM1%%].identifier[1].type" id="object_relatedInfo_%%SEQNUM1%%_identifier_1_type" maxlength="512" size="37" /><img id="button_relatedInfo_%%SEQNUM1%%_identifier_1_type" src="{$eAPP_ROOT}orca/_images/buttons/dropdown_in.png" onClick='toggleDropdown(this.id);' class='cursorimg' style="vertical-align:bottom; height:18px; width:18px;" />
 																	</td>
 																	<td><div class="fieldError" name="errors_relatedInfo_%%SEQNUM1%%_identifier_1_type"></div></td>
-																	<td width="100%"></td>
-																</tr>
-																
-																<tr>
-
-																	<td style="text-align:right;"><label class="mandatory" for="object_relatedInfo_%%SEQNUM1%%_identifier_1_value">Value:</label></td> 
-																	<td onclick="getHelpText('collection_relatedInfo_identifier_value');"> 
-																		<input type="text" value="" name="object.relatedInfo[%%SEQNUM1%%].identifier[1].value" id="object_relatedInfo_%%SEQNUM1%%_identifier_1_value" maxlength="512" size="40" />
-																	</td>
-																	<td><div class="fieldError" name="errors_relatedInfo_%%SEQNUM1%%_identifier_1_value"></div></td> 
 																	<td></td>
 																</tr>
+																
 															
 															</tbody>
 															
@@ -2443,23 +2487,24 @@ $_strings['*_citationInfo_citationMetadata_contributor_namePart'] = <<<HTMLEND
 															<tbody class="formFields andswhite"> 
 												
 																<tr>
+																	<td style="text-align:right;"><label class="mandatory" for="object_citationInfo_%%SEQNUM1%%_citationMetadata_%%SEQNUM2%%_contributor_%%SEQNUM3%%_namePart_%%SEQNUM4%%_value">Value:</label></td>
+																	<td onclick="getHelpText('');" width="260px">
+																		<input type="text" value="" name="object.citationInfo[%%SEQNUM1%%].citationMetadata[%%SEQNUM2%%].contributor[%%SEQNUM3%%].namePart[%%SEQNUM4%%].value" id="object_citationInfo_%%SEQNUM1%%_citationMetadata_%%SEQNUM2%%_contributor_%%SEQNUM3%%_namePart_%%SEQNUM4%%_value" maxlength="512" size="40" />
+																	</td>
+																	<td><div class="fieldError" name="errors_citationInfo_%%SEQNUM1%%_citationMetadata_%%SEQNUM2%%_contributor_%%SEQNUM3%%_namePart_%%SEQNUM4%%_value" style="font-size:1.05em;"></div></td>
+																	<td rowspan="2" align="right">
+																		<input type="button" name="btn_citation_%%SEQNUM1%%_contributor_%%SEQNUM2%%_namepart_%%SEQNUM3%%_removenamepart" value="Remove this Name Part" onClick="decCount('object.citationInfo[%%SEQNUM1%%].citationMetadata[%%SEQNUM2%%].contributor[%%SEQNUM3%%].namePart');$('#table_citationInfo_%%SEQNUM1%%_citationMetadata_%%SEQNUM2%%_contributor_%%SEQNUM3%%_namePart_%%SEQNUM4%%').remove();"  /><br/>
+																	</td>
+																</tr>
+															
+																<tr>
 																	<td style="text-align:right;"><label for="object_citationInfo_%%SEQNUM1%%_citationMetadata_%%SEQNUM2%%_contributor_%%SEQNUM3%%_namePart_%%SEQNUM4%%_type">Type:</label></td>
 																	<td onclick="getHelpText('');" width="260px">
 																		<input type="text" value="" name="object.citationInfo[%%SEQNUM1%%].citationMetadata[%%SEQNUM2%%].contributor[%%SEQNUM3%%].namePart[%%SEQNUM4%%].type" id="object_citationInfo_%%SEQNUM1%%_citationMetadata_%%SEQNUM2%%_contributor_%%SEQNUM3%%_namePart_%%SEQNUM4%%_type" maxlength="512" size="37" />
 																		<img id="button_citationInfo_%%SEQNUM1%%_citationMetadata_%%SEQNUM2%%_contributor_%%SEQNUM3%%_namePart_%%SEQNUM4%%_type" src="{$eAPP_ROOT}orca/_images/buttons/dropdown_in.png" onClick='toggleDropdown(this.id);' class='cursorimg' style="vertical-align:bottom; height:18px; width:18px;" />
 																	</td>
 																	<td><div class="fieldError" name="errors_citationInfo_%%SEQNUM1%%_citationMetadata_%%SEQNUM2%%_contributor_%%SEQNUM3%%_namePart_%%SEQNUM4%%_type" style="font-size:1.05em;"></div></td>
-																	<td rowspan="2" align="right">
-																		<input type="button" name="btn_citation_%%SEQNUM1%%_contributor_%%SEQNUM2%%_namepart_%%SEQNUM3%%_removenamepart" value="Remove this Name Part" onClick="decCount('object.citationInfo[%%SEQNUM1%%].citationMetadata[%%SEQNUM2%%].contributor[%%SEQNUM3%%].namePart');$('#table_citationInfo_%%SEQNUM1%%_citationMetadata_%%SEQNUM2%%_contributor_%%SEQNUM3%%_namePart_%%SEQNUM4%%').remove();"  /><br/>
-																	</td>
-																</tr>
-																
-																<tr>
-																	<td style="text-align:right;"><label class="mandatory" for="object_citationInfo_%%SEQNUM1%%_citationMetadata_%%SEQNUM2%%_contributor_%%SEQNUM3%%_namePart_%%SEQNUM4%%_value">Value:</label></td>
-																	<td onclick="getHelpText('');" width="260px">
-																		<input type="text" value="" name="object.citationInfo[%%SEQNUM1%%].citationMetadata[%%SEQNUM2%%].contributor[%%SEQNUM3%%].namePart[%%SEQNUM4%%].value" id="object_citationInfo_%%SEQNUM1%%_citationMetadata_%%SEQNUM2%%_contributor_%%SEQNUM3%%_namePart_%%SEQNUM4%%_value" maxlength="512" size="40" />
-																	</td>
-																	<td><div class="fieldError" name="errors_citationInfo_%%SEQNUM1%%_citationMetadata_%%SEQNUM2%%_contributor_%%SEQNUM3%%_namePart_%%SEQNUM4%%_value" style="font-size:1.05em;"></div></td>
+																	
 																</tr>
 															
 															</tbody>
@@ -2519,9 +2564,16 @@ $_strings['*_existenceDates'] = <<<HTMLEND
 															<table class="formTable rmdElementContainer"> 
 																<tbody class="andsorange"> 
 																	<tr>
-																		<td style="text-align:right; vertical-align:middle; font-weight:normal;"><label for="object_existenceDates_%%SEQNUM1%%_startDate_1_value">Value:</label></td>
+																		<td style="text-align:right; vertical-align:middle; font-weight:normal;">
+																			<span class="infoControl"><img id="infoIcon" alt="More information" src="../_images/info_control_icon.gif"/><span class="infoSpan">
+																			
+																			{$dateFormatInfoString}
+
+																			</span></span>&nbsp;&nbsp; 
+																			<label for="object_existenceDates_%%SEQNUM1%%_startDate_1_value">Value:</label>
+																		</td>
 																		<td onclick="getHelpText('existenceDates_startDate');" style="vertical-align:middle;">
-																			<input type="text" value="" id="object_existenceDates_%%SEQNUM1%%_startDate_1_value" name="object.existenceDates[%%SEQNUM1%%].startDate[1].value" onchange="checkDTF(this.id);" class="dateTimeField" maxlength="32" size="60" style="width:230px;" /> &nbsp;<span id="existenceDates_%%SEQNUM1%%_startDate_1_value_dctImage" onClick="$('#object_existenceDates_%%SEQNUM1%%_startDate_1_dateFormat').val('W3CDTF');">&nbsp;</span>&nbsp;<span class="inputFormat"> YYYY-MM-DDThh:mm:ssZ</span>
+																			<input type="text" value="" id="object_existenceDates_%%SEQNUM1%%_startDate_1_value" name="object.existenceDates[%%SEQNUM1%%].startDate[1].value" onchange="checkDTF(this.id);" class="dateTimeField" maxlength="32" size="60" style="width:230px;" /> &nbsp;<span id="existenceDates_%%SEQNUM1%%_startDate_1_value_dctImage" onClick="$('#object_existenceDates_%%SEQNUM1%%_startDate_1_dateFormat').val('W3CDTF');">&nbsp;</span>&nbsp;
 																		</td>
 																		<td width="100%"><div class="fieldError" id="errors_existenceDates_%%SEQNUM1%%_startDate_1_value" name="errors_existenceDates_%%SEQNUM1%%_startDate_1_value"></div></td>													
 																	</tr>
@@ -2553,9 +2605,19 @@ $_strings['*_existenceDates'] = <<<HTMLEND
 															<table class="formTable rmdElementContainer"> 
 																<tbody class="andsorange"> 
 																	<tr>
-																		<td style="text-align:right; vertical-align:middle; font-weight:normal;"><label for="object_existenceDates_%%SEQNUM1%%_endDate_1_value">Value:</label></td>
+																		<td style="text-align:right; vertical-align:middle; font-weight:normal;">
+																		
+																			<span class="infoControl"><img id="infoIcon" alt="More information" src="../_images/info_control_icon.gif"/><span class="infoSpan">
+																			
+																			{$dateFormatInfoString}
+
+																			</span></span>&nbsp;&nbsp; 
+																			
+																			<label for="object_existenceDates_%%SEQNUM1%%_endDate_1_value">Value:</label>
+																			
+																		</td>
 																		<td onclick="getHelpText('existenceDates_endDate');" style="vertical-align:middle;">
-																			<input type="text" value="" id="object_existenceDates_%%SEQNUM1%%_endDate_1_value" name="object.existenceDates[%%SEQNUM1%%].endDate[1].value" onchange="checkDTF(this.id);" class="dateTimeField" maxlength="32" size="60" style="width:230px;" /> &nbsp;<span id="existenceDates_%%SEQNUM1%%_endDate_1_value_dctImage" onClick="$('#object_existenceDates_%%SEQNUM1%%_endDate_1_dateFormat').val('W3CDTF');">&nbsp;</span><span class="inputFormat"> YYYY-MM-DDThh:mm:ssZ</span>
+																			<input type="text" value="" id="object_existenceDates_%%SEQNUM1%%_endDate_1_value" name="object.existenceDates[%%SEQNUM1%%].endDate[1].value" onchange="checkDTF(this.id);" class="dateTimeField" maxlength="32" size="60" style="width:230px;" /> &nbsp;<span id="existenceDates_%%SEQNUM1%%_endDate_1_value_dctImage" onClick="$('#object_existenceDates_%%SEQNUM1%%_endDate_1_dateFormat').val('W3CDTF');">&nbsp;</span>
 																		</td>
 																		<td width="100%"><div class="fieldError" id="errors_existenceDates_%%SEQNUM1%%_endDate_1_value" name="errors_existenceDates_%%SEQNUM1%%_endDate_1_value"></div></td>													
 																	</tr>
