@@ -383,6 +383,46 @@ function doSolrSearch()
 
 
 $().ready(function(){
+	
+	/*
+	 * CC-47
+	 * RIFCS-BUTTON on view page
+	 */
+	$('#rifcs_button').click(function(){
+		$('#rifcs_popup').toggle();
+	});
+	
+	$('#rifcs_view').click(function(){
+		key = $('#key').html();
+		$.get(rootAppPath + 'orca/services/getRegistryObject.php?key='+encodeURIComponent(key)+'&type=plain',
+	       function(data) {
+			$('#rifcs_plain_content').val(data);
+	        $.blockUI({
+	            message: $('#rifcs_plain'),
+	            css: {
+	                width: '600px',
+	                top:'20%',
+	                left:'20%',
+	                textAlign: 'left',
+	                padding: '10px'
+	                },
+	                overlayCSS: { backgroundColor: '#000', opacity:   0.6}
+            	});
+            $('.blockOverlay').attr('title','Click to unblock').click($.unblockUI);
+	       }
+	   );
+	});
+	
+	function htmlEntities(str) {
+	    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+	}
+	
+	
+	
+	
+	/*
+	 * SOLR on Search page
+	 */
    $('#solr-input').click(function(){
        $('#page').val('1');
        doSolrSearch();
