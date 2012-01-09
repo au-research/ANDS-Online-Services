@@ -143,10 +143,11 @@ if( $registryObject )
 			<div id="rifcs_popup">
 				<ul>
 					<li><a href="#" id="rifcs_view">View RIF-CS</a></li>
-					<li><a href="'.eAPP_ROOT.'orca/services/getRegistryObject.php?key='.urlencode($registryObjectKey).'&type=download">Download RIF-CS</a></li>
+					<li><a href="'.eAPP_ROOT.'orca/services/getRegistryObject.php?key='.urlencode($registryObjectKey).'&type=download" id="rifcs_download">Download RIF-CS</a></li>
 				</ul>
 			</div>
 			<div id="rifcs_plain" class="hide">
+				<img src="'.gORCA_IMAGE_ROOT.'delete_16.png" style="float:right;" class="closeBlockUI"/>
 				<textarea id="rifcs_plain_content"></textarea>
 			</div>
 		</div>
