@@ -210,6 +210,7 @@ function getRegistryObjectXMLforSOLR($registryObjectKey,$includeRelated=false)
 	
 	if( $registryObject )
 	{
+		
 		// Registry Object
 		// =====================================================================
 		$group= esc($registryObject[0]['object_group']);
@@ -1144,6 +1145,20 @@ function getSpatialTypesXMLforSOLR($location_id)
 				    $xml .= "        <spatial>$coordinates</spatial>\n";
 					
 				}
+			}else{
+				foreach( $list as $element )
+				{
+					if( $type = $element['type'] )
+					{
+						$type = ' type="'.esc($type).'"';
+					}
+					if( $lang = $element['lang'] )
+					{
+						$lang = ' xml:lang="'.esc($lang).'"';
+					}
+					$value = esc($element['value']);
+					$xml .= "        <spatial$type$lang>$value</spatial>\n";
+				}
 			}
 	        if($centre != '')
 	        {
@@ -1703,6 +1718,7 @@ function getSubjectTypesXMLforSOLR($registryObjectKey, $elementName)
 function getDescriptionTypesXMLforSOLR($registryObjectKey, $elementName)
 {
 	$xml = '';
+	
 	$elementName = esc($elementName);
 	$list = getDescriptions($registryObjectKey);
 	if( $list )

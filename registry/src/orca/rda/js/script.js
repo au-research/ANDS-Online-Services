@@ -840,10 +840,10 @@ $(document).ready(function(){
 						poly.setMap(map2);
 						//console.log(poly);
 					});
-			}else{
-				$('#spatial_coverage_map').hide();
-				$('p.coverage').show();
-			}
+				}else{
+					$('#spatial_coverage_map').hide();
+					$('p.coverage').show();
+				}
 		    }else {
 		    	//console.log(coverages);
 		    	$.each(coverages, function(){
