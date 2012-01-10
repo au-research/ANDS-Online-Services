@@ -1,1 +1,1 @@
-php_value include_path "/var/www/htdocs/deployment/cosi/orca:."
+php_value include_path "."
