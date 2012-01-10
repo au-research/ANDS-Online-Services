@@ -817,10 +817,17 @@ $(document).ready(function(){
 		    var coverages = $('p.coverage');
 		    //console.log(coverages.html());
 		    //console.log(coverages.text());
-		    var coverageText = coverages.text();
-		    if(coverages.text().indexOf('northlimit') ==-1){
-				if(validateLonLatText(coverageText)){	
-					$.each(coverages, function(){
+		    
+		    
+		    var locationText = [];
+		    
+		    $.each(coverages, function(){
+		    	setTimeout(500);
+		    	var coverageText = $(this).text();
+		    	if(coverageText.indexOf('northlimit')==-1){
+		    		//there is no north limit
+		    		if(validateLonLatText(coverageText)){//if the coverage text is resolvable (normal way)
+		    			//console.log(coverageText);
 						coverage = $(this).html();
 						split = coverage.split(' ');
 						coords = [];
@@ -839,50 +846,67 @@ $(document).ready(function(){
 						});
 						poly.setMap(map2);
 						//console.log(poly);
-					});
-			}else{
-				$('#spatial_coverage_map').hide();
-				$('p.coverage').show();
-			}
-		    }else {
-		    	//console.log(coverages);
-		    	$.each(coverages, function(){
-		    		coverage = $(this).html();
-		    		split = coverage.split(';');
+					}else{
+						//CC-145
+						//console.log(coverageText);
+						locationText.push(coverageText);
+						
+						//setTimeout(drawTheAddress(coverageText, map2),100000);
+						//$('#spatial_coverage_map').hide();	
+					}
 		    		
-		    		$.each(split, function(){
-						word = this.split('=');
-						//console.log(word);
-						if(jQuery.trim(word[0])=='northlimit') n=word[1];
-						if(jQuery.trim(word[0])=='southlimit') s=word[1];
-						if(jQuery.trim(word[0])=='eastLimit') e=word[1];
-						if(jQuery.trim(word[0])=='eastlimit') e=word[1];
-						if(jQuery.trim(word[0])=='westlimit') w=word[1];
-					});
-		    		coords = [];
-		    		coords.push(new google.maps.LatLng(parseFloat(n), parseFloat(e)));
-		    		coords.push(new google.maps.LatLng(parseFloat(n), parseFloat(w)));
-		    		coords.push(new google.maps.LatLng(parseFloat(s), parseFloat(w)));
-		    		coords.push(new google.maps.LatLng(parseFloat(s), parseFloat(e)));
-		    		coords.push(new google.maps.LatLng(parseFloat(n), parseFloat(e)));
-		    		
-		    		$.each(coords, function(){
-		    			bounds.extend(this);
-		    		});
-		    		
-		    		poly = new google.maps.Polygon({
-					    paths: coords,
-					    strokeColor: "#FF0000",
-					    strokeOpacity: 0.8,
-					    strokeWeight: 2,
-					    fillColor: "#FF0000",
-					    fillOpacity: 0.35
-					});
+		    	}else{
+		    		//there is a northlimit in the coverage text
+		    		//console.log(coverages);
+			    	$.each(coverages, function(){
+			    		coverage = $(this).html();
+			    		split = coverage.split(';');
+			    		
+			    		$.each(split, function(){
+							word = this.split('=');
+							//console.log(word);
+							if(jQuery.trim(word[0])=='northlimit') n=word[1];
+							if(jQuery.trim(word[0])=='southlimit') s=word[1];
+							if(jQuery.trim(word[0])=='eastLimit') e=word[1];
+							if(jQuery.trim(word[0])=='eastlimit') e=word[1];
+							if(jQuery.trim(word[0])=='westlimit') w=word[1];
+						});
+			    		coords = [];
+			    		coords.push(new google.maps.LatLng(parseFloat(n), parseFloat(e)));
+			    		coords.push(new google.maps.LatLng(parseFloat(n), parseFloat(w)));
+			    		coords.push(new google.maps.LatLng(parseFloat(s), parseFloat(w)));
+			    		coords.push(new google.maps.LatLng(parseFloat(s), parseFloat(e)));
+			    		coords.push(new google.maps.LatLng(parseFloat(n), parseFloat(e)));
+			    		
+			    		$.each(coords, function(){
+			    			bounds.extend(this);
+			    		});
+			    		
+			    		poly = new google.maps.Polygon({
+						    paths: coords,
+						    strokeColor: "#FF0000",
+						    strokeOpacity: 0.8,
+						    strokeWeight: 2,
+						    fillColor: "#FF0000",
+						    fillOpacity: 0.35
+						});
 
-					poly.setMap(map2);
-		    		//console.log(poly);
-				});
-		    }
+						poly.setMap(map2);
+			    		//console.log(poly);
+					});
+		    	}
+		    });
+		    //console.log(locationText);
+		    var next = 0;
+		    var timer = setInterval(function(){
+		    	if(next < locationText.length){
+		    		drawTheAddress(locationText[next], map2);
+		    		next++;
+		    	}else{
+		    		this.clearInterval();
+		    	}
+		    }, 300);
+		    
 			//draw centers
 			var centers = $('.spatial_coverage_center');
 			$.each(centers, function(){
@@ -1902,7 +1926,36 @@ $(document).ready(function(){
     	$("html, body").animate({ scrollTop: 0 }, "slow");
     	return false;
     }
+    
+    function drawTheAddress(coverageText, map2){
+    	var geocoder = new google.maps.Geocoder();
+		var result = "";
+    	geocoder.geocode({ 'address': coverageText}, function (results, status) {
+		    if (status == google.maps.GeocoderStatus.OK) {
+		    	//console.log(results);
+			    	var geoCodeRectangle = new google.maps.Rectangle({ 
+			    		map: map2,
+			    		strokeColor: "#FF0000",
+					    strokeOpacity: 0.8,
+					    strokeWeight: 2,
+					    fillColor: "#FF0000",
+					    fillOpacity: 0.1 });
+					var bounds = results[0].geometry.bounds;
+			        geoCodeRectangle.setBounds(bounds);
+			        drawingArrays.push(geoCodeRectangle);
+			        map2.fitBounds(bounds);
+		        return true;
+		    } else {
+		    	//console.log(coverageText);
+		    	$('p:contains("'+coverageText+'")').show();
+		    	return false;
+		    }
+		});
+    }
+    
 });//END DOCUMENT READY
+
+
 
 
 function validateLonLatText(lonlatText)
@@ -1929,6 +1982,10 @@ function validateLonLatText(lonlatText)
 			coordsPair = coords[i].split(",");
 			lat = coordsPair[1];
 			lon = coordsPair[0];
+			
+			if(lat==undefined || lon==undefined){
+				valid = false;break;
+			}
 			
 			// Test for numbers.
 			if( isNaN(lat) || isNaN(lon) )
