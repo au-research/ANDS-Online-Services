@@ -1144,6 +1144,19 @@ function getSpatialTypesXMLforSOLR($location_id)
 				    $xml .= "        <spatial>$coordinates</spatial>\n";
 					
 				}
+			}else{
+				
+					if( $type = $element['type'] )
+					{
+						$type = ' type="'.esc($type).'"';
+					}
+					if( $lang = $element['lang'] )
+					{
+						$lang = ' xml:lang="'.esc($lang).'"';
+					}
+					$value = esc($element['value']);
+					$xml .= "        <spatial$type$lang>$value</spatial>\n";
+				
 			}
 	        if($centre != '')
 	        {
