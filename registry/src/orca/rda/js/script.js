@@ -867,10 +867,6 @@ $(document).ready(function(){
 		    		});
 		    		
 
-					poly.setMap(map2);
-		    		//console.log(poly);
-				});
-		    }
 			//draw centers
 			var centers = $('.spatial_coverage_center');
 			$.each(centers, function(){
