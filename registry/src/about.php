@@ -40,7 +40,7 @@ require '_includes/init.php';
       .emmc-tooltip {
     		border: 1px solid #666666;
     		background-color: #ffffff;
-    		color: #444444;
+    		color: #444445;
     		display:none;
         font-size:13px;
         padding:1px;
