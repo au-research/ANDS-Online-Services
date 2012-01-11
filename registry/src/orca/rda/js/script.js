@@ -817,7 +817,8 @@ $(document).ready(function(){
 		    var coverages = $('p.coverage');
 		    //console.log(coverages.html());
 		    //console.log(coverages.text());
-
+		    
+		    
 		    var locationText = [];
 		    
 		    $.each(coverages, function(){
@@ -845,8 +846,7 @@ $(document).ready(function(){
 						});
 						poly.setMap(map2);
 						//console.log(poly);
-		    		
-		    		}else{
+					}else{
 						//CC-145
 						//console.log(coverageText);
 						locationText.push(coverageText);
@@ -854,7 +854,7 @@ $(document).ready(function(){
 						//setTimeout(drawTheAddress(coverageText, map2),100000);
 						//$('#spatial_coverage_map').hide();	
 					}
-			    		
+		    		
 		    	}else{
 		    		//there is a northlimit in the coverage text
 		    		//console.log(coverages);
@@ -906,7 +906,7 @@ $(document).ready(function(){
 		    		this.clearInterval();
 		    	}
 		    }, 300);
-
+		    
 			//draw centers
 			var centers = $('.spatial_coverage_center');
 			$.each(centers, function(){
