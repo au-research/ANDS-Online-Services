@@ -817,10 +817,6 @@ $(document).ready(function(){
 		    var coverages = $('p.coverage');
 		    //console.log(coverages.html());
 		    //console.log(coverages.text());
-		    var coverageText = coverages.text();
-		    if(coverages.text().indexOf('northlimit') ==-1){
-				if(validateLonLatText(coverageText)){	
-					$.each(coverages, function(){
 						coverage = $(this).html();
 						split = coverage.split(' ');
 						coords = [];
@@ -870,14 +866,6 @@ $(document).ready(function(){
 		    			bounds.extend(this);
 		    		});
 		    		
-		    		poly = new google.maps.Polygon({
-					    paths: coords,
-					    strokeColor: "#FF0000",
-					    strokeOpacity: 0.8,
-					    strokeWeight: 2,
-					    fillColor: "#FF0000",
-					    fillOpacity: 0.35
-					});
 
 					poly.setMap(map2);
 		    		//console.log(poly);
