@@ -465,7 +465,7 @@ You can expect that:
 else
 {
 ?>
-<script type="text/javascript" src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=<?php print gMAPS_API_KEY ?>&amp;sensor=false"></script>
+<script type="text/javascript" src="<?php print ePROTOCOL ?>://maps.google.com/maps/api/js?sensor=false&libraries=drawing"></script>
 <script type="text/javascript" src="<?php print eAPP_ROOT ?>orca/_javascript/map_control.js"></script>
 <script type="text/javascript" src="<?php print eAPP_ROOT ?>orca/_javascript/orca_dhtml.js"></script>
 <script type="text/javascript">mctInit('<?php print gORCA_IMAGE_ROOT ?>_controls/_map_control/')</script>
