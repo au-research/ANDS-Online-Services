@@ -865,6 +865,8 @@ $(document).ready(function(){
 		    		$.each(coords, function(){
 		    			bounds.extend(this);
 		    		});
+=======
+>>>>>>> hotfix-cc145-map
 		    		
 
 			//draw centers
