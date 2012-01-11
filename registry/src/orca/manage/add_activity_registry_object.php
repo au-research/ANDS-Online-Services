@@ -41,7 +41,7 @@ require '../../_includes/header.php';
 ?>
 <?php //echo eAPP_ROOT;?>
 <script type="text/javascript" src="<?php print eAPP_ROOT ?>orca/_javascript/jquery-ui-1.8.9.custom.min.js"></script>	
-<script type="text/javascript" src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=<?php print gMAPS_API_KEY ?>&amp;sensor=false"></script>
+<script type="text/javascript" src="<?php print ePROTOCOL ?>://maps.google.com/maps/api/js?sensor=false&libraries=drawing"></script>
 <script type="text/javascript" src="<?php print eAPP_ROOT ?>orca/_javascript/orca_dhtml.js"></script>
 <script type="text/javascript" src="<?php print eAPP_ROOT ?>orca/_javascript/regmydata_dhtml.js"></script>
 <script type="text/javascript" src="<?php print eAPP_ROOT ?>orca/_javascript/map_control.js"></script>
