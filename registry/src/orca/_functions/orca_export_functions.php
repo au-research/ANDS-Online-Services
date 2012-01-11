@@ -1146,8 +1146,12 @@ function getSpatialTypesXMLforSOLR($location_id)
 					
 				}
 			}else{
+<<<<<<< HEAD
 				foreach( $list as $element )
 				{
+=======
+				
+>>>>>>> hotfix-cc145-map
 					if( $type = $element['type'] )
 					{
 						$type = ' type="'.esc($type).'"';
@@ -1158,7 +1162,11 @@ function getSpatialTypesXMLforSOLR($location_id)
 					}
 					$value = esc($element['value']);
 					$xml .= "        <spatial$type$lang>$value</spatial>\n";
+<<<<<<< HEAD
 				}
+=======
+				
+>>>>>>> hotfix-cc145-map
 			}
 	        if($centre != '')
 	        {
