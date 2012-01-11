@@ -817,7 +817,6 @@ $(document).ready(function(){
 		    var coverages = $('p.coverage');
 		    //console.log(coverages.html());
 		    //console.log(coverages.text());
-
 		    
 		    
 		    var locationText = [];
@@ -829,7 +828,6 @@ $(document).ready(function(){
 		    		//there is no north limit
 		    		if(validateLonLatText(coverageText)){//if the coverage text is resolvable (normal way)
 		    			//console.log(coverageText);
-
 						coverage = $(this).html();
 						split = coverage.split(' ');
 						coords = [];
@@ -848,37 +846,6 @@ $(document).ready(function(){
 						});
 						poly.setMap(map2);
 						//console.log(poly);
-					});
-				}else{
-					$('#spatial_coverage_map').hide();
-					$('p.coverage').show();
-				}
-		    }else {
-		    	//console.log(coverages);
-		    	$.each(coverages, function(){
-		    		coverage = $(this).html();
-		    		split = coverage.split(';');
-		    		
-		    		$.each(split, function(){
-						word = this.split('=');
-						//console.log(word);
-						if(jQuery.trim(word[0])=='northlimit') n=word[1];
-						if(jQuery.trim(word[0])=='southlimit') s=word[1];
-						if(jQuery.trim(word[0])=='eastLimit') e=word[1];
-						if(jQuery.trim(word[0])=='eastlimit') e=word[1];
-						if(jQuery.trim(word[0])=='westlimit') w=word[1];
-					});
-		    		coords = [];
-		    		coords.push(new google.maps.LatLng(parseFloat(n), parseFloat(e)));
-		    		coords.push(new google.maps.LatLng(parseFloat(n), parseFloat(w)));
-		    		coords.push(new google.maps.LatLng(parseFloat(s), parseFloat(w)));
-		    		coords.push(new google.maps.LatLng(parseFloat(s), parseFloat(e)));
-		    		coords.push(new google.maps.LatLng(parseFloat(n), parseFloat(e)));
-		    		
-		    		$.each(coords, function(){
-		    			bounds.extend(this);
-		    		});
-
 					}else{
 						//CC-145
 						//console.log(coverageText);
@@ -940,7 +907,6 @@ $(document).ready(function(){
 		    	}
 		    }, 300);
 		    
->>>>>>> hotfix-cc145-map
 			//draw centers
 			var centers = $('.spatial_coverage_center');
 			$.each(centers, function(){
