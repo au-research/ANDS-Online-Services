@@ -31,6 +31,6 @@ if (isset($vocabs) && $vocabs) {
 						 );
 	} 
 } else {
-	$terms[] = array (	"value" => "", "desc" => "Sorry - No Vocabularies found!");
+	$terms[] = array (	"value" => "", "desc" => "No suggestions matching '".getQueryValue("term")."'");
 }
 print json_encode($terms);
