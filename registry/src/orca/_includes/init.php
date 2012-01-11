@@ -130,8 +130,5 @@ $gORCA_STATUS_INFO = array (
 define('gPIDS_SERVICE_BASE_URI', "https://<HOSTNAME>:8443/pids/");
 define('gPIDS_APP_ID', "<APPID>");
 define('gSOLR_UPDATE_URL' , "http://<HOSTNAME>:8080/solr-prod/update");
-// Google Maps API key.
-// -----------------------------------------------------------------------------
 
-define('gMAPS_API_KEY', "");
 
