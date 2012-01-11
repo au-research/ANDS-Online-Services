@@ -31,6 +31,6 @@ if (isset($vocabs) && $vocabs) {
 						 );
 	} 
 } else {
-	$terms[] = array (	"value" => "", "desc" => "No suggestions matching '".getQueryValue("term")."'");
+	$terms[] = array (	"value" => getQueryValue("term"), "desc" => "No suggestions matching '".getQueryValue("term")."'");
 }
 print json_encode($terms);
