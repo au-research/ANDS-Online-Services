@@ -498,7 +498,8 @@ function displayMMRRecordTable($status, array $record_set = array(), array $butt
 		      		{
 		      			print('    <a href="'.eAPP_ROOT .'orca/manage/add_'.strtolower($record['class']).'_registry_object.php?data_source='.rawurlencode(getQueryValue('data_source')).'&key='.rawurlencode($record['key']).'" title="Modify this Record"><img src="'.(eAPP_ROOT . "orca/_images/edit.png").'" width="15px" height="15px" /></a>&nbsp;');
 		      		}
-		      		print('    <a href="'.eAPP_ROOT .'orca/admin/registry_object_delete.php?key='.esc(rawurlencode($record['key'])).'" title="Delete this Record"><img src="'.(eAPP_ROOT . "orca/_images/bin.png").'" width="15px" height="15px" /></a>');
+		      		//print('    <a href="'.eAPP_ROOT .'orca/admin/registry_object_delete.php?key='.esc(rawurlencode($record['key'])).'" title="Delete this Record"><img src="'.(eAPP_ROOT . "orca/_images/bin.png").'" width="15px" height="15px" /></a>');
+					echo'    <a href="'.eAPP_ROOT .'orca/admin/registry_object_delete.php?key='.esc(rawurlencode($record['key'])).'" title="Delete this Record" onClick="return confirmSubmit(\'You are about to delete 1 record. Do you want to continue?\')"><img src="'.(eAPP_ROOT . "orca/_images/bin.png").'" width="15px" height="15px" /></a>';
 
 		      	}
 				

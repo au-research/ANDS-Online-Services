@@ -338,6 +338,13 @@ function recoverRIFCS(anchor, data_source, key, version)
    }
 }
 
+function confirmSubmit(message){
+	var agree=confirm(message);
+	if(agree){
+		return true;
+	}else return false;
+}
+
 function doSolrSearch()
 {
    var solrURL = $('#solrUrl').val();
