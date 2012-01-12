@@ -1,5 +1,4 @@
 <?php
-
 $UNDER_MAINTENANCE = false;
 
 if ( isset($_SERVER["HTTP_X_FORWARDED_FOR"]) )    {
@@ -44,7 +43,7 @@ if($UNDER_MAINTENANCE & !in_array($ip, $allowed_list)){
  * NOTE: If you change these, also change the error_reporting() code below
  *
  */
-	define('ENVIRONMENT', 'production');
+	define('ENVIRONMENT', 'development');
 /*
  *---------------------------------------------------------------
  * ERROR REPORTING
@@ -215,7 +214,7 @@ if (defined('ENVIRONMENT'))
 
 		define('APPPATH', BASEPATH.$application_folder.'/');
 	}
-
+	
 /*
  * --------------------------------------------------------------------
  * LOAD THE BOOTSTRAP FILE

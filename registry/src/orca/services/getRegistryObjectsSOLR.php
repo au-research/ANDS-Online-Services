@@ -107,7 +107,7 @@ if($subject != '' && $vocab != '')
 }
 
 // comment this function out.....
-if($task == 'clearAllfuckthisnevercallthisfuckingfunctionfuck.???')
+if($task == 'clearAll')
 {
 
 	$response = clearSolrIndex();
