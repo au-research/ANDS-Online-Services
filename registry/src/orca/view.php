@@ -583,8 +583,10 @@ if( $registryObject )
 		}
 		if( hasActivity(aORCA_REGISTRY_OBJECT_DELETE) )
 		{
-			print("	      <input type=\"submit\" name=\"action\" value=\"Delete\" />&nbsp;\n");
+			//print("	      <input type=\"submit\" name=\"action\" value=\"Delete\" />&nbsp;\n");
+			echo '<input type="submit" name="action" value="Delete" onclick="return confirmSubmit(\'You are about to delete 1 record. Do you want to continue?\')"/>&nbsp';
 		}
+
 		print("	      </div>\n");
 		print("	      </form>\n");
 		print("	    </td>\n");
