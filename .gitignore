@@ -1,13 +1,7 @@
 /.buildpath
 /.project
 /registry/src/ckeditor
-/registry/src/_includes/_environment
-/registry/src/_includes/_configuration
-/registry/src/orca/_includes/init.php
 /registry/src/orca/htmlpurifier/
-/registry/src/orca/rda/index.php
 /registry/src/orca/rda/.htaccess
-/registry/src/orca/rda/application/config/database.php
-/registry/src/orca/rda/application/config/config.php
 .DS_Store
 ._*

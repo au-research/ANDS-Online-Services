@@ -1,29 +1,4 @@
 <?php
-$UNDER_MAINTENANCE = false;
-
-if ( isset($_SERVER["HTTP_X_FORWARDED_FOR"]) )    {
-$ip=$_SERVER["HTTP_X_FORWARDED_FOR"];
-} else if ( isset($_SERVER["HTTP_CLIENT_IP"]) )    {
-$ip=$_SERVER["HTTP_CLIENT_IP"];
-} else if ( isset($_SERVER["REMOTE_ADDR"]) )    {
-$ip=$_SERVER["REMOTE_ADDR"];
-} 
-
-/*
- * Allowed List of IPs that are allowed to view the page while under maintenance is true
- */
-$allowed_list = array(
-				'xx.xx.xx.xx'	// Exempt IP
-				);
-	
-if($UNDER_MAINTENANCE & !in_array($ip, $allowed_list)){
-	print("<html><body>");
-	print("<center><div style='border:1px solid #C7D7BA; width:400px;'>");
-	print("<img src='http://ands2.anu.edu.au:8080/ands_logo_white.jpg' width='60%' border='0'>");
-	print("<h3 style='font-family:\"Lucida Grande\", Verdana, Lucida, Helvetica'>Under maintenance, please check back later.</h3>");
-	print("</div></center>");
-	exit;	
-}
 
 /*
  *---------------------------------------------------------------
@@ -152,6 +127,12 @@ if (defined('ENVIRONMENT'))
 // --------------------------------------------------------------------
 // END OF USER CONFIGURABLE SETTINGS.  DO NOT EDIT BELOW THIS LINE
 // --------------------------------------------------------------------
+//DEFINE ANDS REGISTRY ONLINE SERVICE VARIABLES
+require_once(dirname(__FILE__).'/../../global_config.php');
+define('RDA_ROOT', $rda_root);
+define('HOST', $host);
+define('ORCA_ROOT', $orca_root);
+define('SOLR_URL', $solr_url);
 
 /*
  * ---------------------------------------------------------------
@@ -214,6 +195,8 @@ if (defined('ENVIRONMENT'))
 
 		define('APPPATH', BASEPATH.$application_folder.'/');
 	}
+	
+	
 	
 /*
  * --------------------------------------------------------------------

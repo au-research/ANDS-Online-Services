@@ -18,8 +18,12 @@ limitations under the License.
 *******************************************************************************/
 // Web Server Environment
 // -----------------------------------------------------------------------------
-define("eHOST", "<HOSTNAME>");
-define("eROOT_DIR", "<DIRECTORY>");
+
+//require_once("/var/www/htdocs/workareas/minh/ands/registry/src/global_config.php");
+require_once(dirname(__FILE__).'/../../global_config.php');
+
+define("eHOST", $host);
+define("eROOT_DIR", $cosi_root);
 define("ePROTOCOL", "http");
 define("eAPP_ROOT", ePROTOCOL.'://'.eHOST.'/'.eROOT_DIR.'/');
 define("eHTTP_APP_ROOT",  'http://'.eHOST.'/'.eROOT_DIR.'/');
@@ -28,7 +32,7 @@ define("eIMAGE_ROOT", eAPP_ROOT.'_images/');
 
 // Assume that the request root is set at the APP_ROOT
 // init.php will set this to the actual request root.
-$eRequestRoot = eAPP_ROOT;	
+$eRequestRoot = eAPP_ROOT;
 
 
 
@@ -36,7 +40,7 @@ $eRequestRoot = eAPP_ROOT;
 // -----------------------------------------------------------------------------
 // URI of PIDS service (Server IP address should be added as 
 //                      trusted admin on Tomcat PID service)
-$ePIDS_RESOURCE_URI = "https://<HOSTNAME>:8443/pids/";
+$ePIDS_RESOURCE_URI = $pids_uri;
 
 
 
@@ -72,16 +76,16 @@ define('eSHIBBOLETH_DISPLAYNAME_HEADER', 'displayName');
 // -----------------------------------------------------------------------------
 // Application deployment status 'DEVEL' | 'TEST' | '.....' | 'PROD'.
 // A status of anything other than 'PROD' will be displayed in the user interface.
-$eDeploymentStatus = 'PROD';
+$eDeploymentStatus = $deploy_as;
 
 // Custom debug information setting true | false.
 // Make sure that this is set to false for any deployment other than DEVEL.
 // A setting of true will display  in the user interface.
-$eDebugOnStatus = false;
+$eDebugOnStatus = $debug;
 
 // Display errors true | false.
 // Make sure that this is set to false for any deployment other than DEVEL.
-$eDisplayErrors = false;
+$eDisplayErrors = $error;
 
 
 if ( isset($_SERVER["HTTP_X_FORWARDED_FOR"]) )    {
