@@ -46,7 +46,7 @@ var mctMarkerListeners = new Array();
 var mctPolygons = new Array();
 var mctTempPolygons = new Array();
 var mctGeocoder = null;
-var mctDrawingManagers = new Array(); 
+var mctDrawingManagers = new Array(); // probably not useed
 var mctErrorMessage = "";
 
 var mctCurrentMapId = "";

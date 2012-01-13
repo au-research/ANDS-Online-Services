@@ -333,6 +333,11 @@ textarea {
 	float: left;
 }
 
+.fieldError span {
+	color: #444;
+	font-weight: bold;	
+}
+
 .fieldWarning {
 	color: #00529B;
 	background-color: #BDE5F8;
@@ -345,13 +350,19 @@ textarea {
 	padding-top: 2.5px;
 	padding-left: 19px;
 	border: 1px solid #00529B;
-	background-image: url('../_images/required_icon.png');
+	/*background-image: url('../_images/required_icon.png');
 	background-repeat: no-repeat;
-	background-position: top left;
+	background-position: top left;*/
 	white-space: nowrap;
 	display:none;
 	float: left;
 }
+
+.fieldWarning span {
+	color: #444;
+	/*font-weight: bold;*/	
+}
+
 
 .fieldInfo {
 	color: #00529B;
@@ -372,6 +383,12 @@ textarea {
 	display:none;
 	float: left;
 }
+
+.fieldInfo div {
+	color: #444;
+	font-weight: bold;	
+}
+
 
 
 #help-cell

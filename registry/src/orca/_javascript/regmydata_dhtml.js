@@ -2322,12 +2322,26 @@ function testAnyURI(field_id)
 			if(field_id.indexOf("relatedObject") > 0 || field_id.indexOf("accessPolicy") > 0 || field_id.indexOf("rightsUri") > 0)
 			{
 				$('[name=\"'+ errorField + '\"]').html('');
-				SetErrors(errorField,"The value must be a valid " + type);
+				if (type == 'URI')
+				{
+					SetErrors(errorField,"The value must be a valid URI. <br/><span>E.g. 'http://www.example.com/'</span>");
+				}
+				else
+				{
+					SetErrors(errorField,"The value must be a valid " + type);
+				}
 			}
 			else 
 			{			
 				$('[name=\"'+ warningField  + '\"]').html('');
-				SetWarnings(errorField,"The value should be a valid " + type);		
+				if (type == 'URI')
+				{
+					SetWarnings(errorField,"The value must be a valid URI. <br/><span>E.g. 'http://www.example.com/'</span>");	
+				}
+				else
+				{
+					SetWarnings(errorField,"The value should be a valid " + type);	
+				}
 			}
 		}
 	}
