@@ -9,3 +9,5 @@
 /registry/src/orca/rda/.htaccess
 /registry/src/orca/rda/application/config/database.php
 /registry/src/orca/rda/application/config/config.php
+.DS_Store
+._*
