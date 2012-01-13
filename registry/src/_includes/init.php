@@ -59,7 +59,7 @@ if( isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON' )
 
 // UNDER MAINTENANCE
 
-$UNDER_MAINTENANCE = false;
+$UNDER_MAINTENANCE = $maintenance;
 
 if ( isset($_SERVER["HTTP_X_FORWARDED_FOR"]) )    {
 $ip=$_SERVER["HTTP_X_FORWARDED_FOR"];

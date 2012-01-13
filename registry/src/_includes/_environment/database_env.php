@@ -20,16 +20,16 @@ limitations under the License.
 // COSI
 $gCNN_DBS_COSI = false;
 
-define("eCNN_DBS_COSI", "host=<HOSTNAME> dbname=dbs_cosi user=webuser connect_timeout=60");
+define("eCNN_DBS_COSI", "host=".$cosi_db_host." dbname=".$cosi_db_name." user=webuser connect_timeout=60");
 
 // ORCA
 $gCNN_DBS_ORCA = false;
-define("eCNN_DBS_ORCA", "host=<HOSTNAME> dbname=dbs_orca user=webuser connect_timeout=60");
+define("eCNN_DBS_ORCA", "host=".$orca_db_host." dbname=".$orca_db_name." user=webuser connect_timeout=60");
 
 // PIDS
 $gCNN_DBS_PIDS = false;
-define("eCNN_DBS_PIDS", "host=<HOSTNAME> dbname=pids user=webuser connect_timeout=60");
+define("eCNN_DBS_PIDS", "host=".$pids_db_host." dbname=".$pids_db_name." user=webuser connect_timeout=60");
 
 // DOIS
 $gCNN_DBS_DOIS = false;
-define("eCNN_DBS_DOIS", "host=<HOSTNAME> dbname=dois user=webuser connect_timeout=60");
+define("eCNN_DBS_DOIS", "host=".$dois_db_host." dbname=".$dois_db_name." user=webuser connect_timeout=60");
