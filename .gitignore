@@ -1,5 +1,5 @@
 /.buildpath
-/.gitignore
+.gitignore
 /.project
 /registry/src/ckeditor
 /registry/src/orca/htmlpurifier/
