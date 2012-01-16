@@ -123,7 +123,35 @@ function getFormattedDatetimeWithMask($datetime, $mask)
 function formatDateTimeWithMask($datetime, $mask)
 {
 
-	$formatDate = "";
+	$formatDate = "";	
+	$TZpos = strpos($datetime, "+");
+	if($TZpos === false)
+		$TZpos = strpos($datetime, "-");
+
+	if($TZpos > 0)
+	{
+		$timeZone = substr($datetime, $TZpos+1);
+		$timeZoneArray = explode(":", $timeZone);
+		$gmt_p_m =  substr($datetime, $TZpos, 1);
+		$Tpos = strpos($datetime, "T");
+		if($Tpos === false)
+			$Tpos = strpos($datetime, " ");
+		if($Tpos > 0 && sizeof($timeZoneArray) > 2)
+		{
+			// these are the buggy timestamps!!			
+			$time = substr($datetime,$Tpos+1, ($TZpos - $Tpos -1));
+			$timeArray = explode(":", $time);
+
+			$timeZoneArray = explode(":", $timeZone);
+			//for($i = 1; $i < sizeof($timeZoneArray) ; $i++)
+			//{
+			//if($timeArray[$i] != null && $timeZoneArray[$i] != null)
+			//	$timeArray[$i] = $timeArray[$i] - $timeZoneArray[$i];
+			//}
+			$datetime = substr($datetime,0, $Tpos)." ".$timeArray[0].":00:00".$gmt_p_m.$timeZoneArray[0];
+		}		
+	}
+	
 	
 	if( $datetime != "" && $datetime != null )
 	{
