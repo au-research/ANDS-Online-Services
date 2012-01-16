@@ -20,7 +20,7 @@ require '_includes/init.php';
 
 // -----------------------------------------------------------------------------
 // Begin the XHTML response. Any redirects must occur before this point.
-
+// Some of Liz comment
 // BEGIN: Page Content
 // =============================================================================
 ?>
