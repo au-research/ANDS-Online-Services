@@ -22,7 +22,7 @@ limitations under the License.
 	LOCAL WEB SERVER ENVIRONMENT
 ====================================*/
 $host 			= 'devl.ands.org.au';
-$cosi_root 		= 'workareas/liz/ands/registry/src';
+$cosi_root 		= 'workareas/minh/ands/registry/src';
 $orca_root 		= $cosi_root.'/orca';
 $rda_root 		= $orca_root.'/rda';
 
@@ -31,22 +31,6 @@ $solr_url 		= 'http://devl.ands.org.au:8080/solr/';
 $harvester_ip 	= '';
 $pids_uri		= "https://devl.ands.org.au:8443/pids/";
 $pids_fid 		= '';
-
-//=====================================
-// The name of the application.
-define("eAPP_TITLE", "Online Services");
-
-// The name of this installed instance of the application.
-// eINSTANCE_TITLE_SHORT will be used in the window title.
-// eINSTANCE_TITLE will be used as the logo alt/title.
-define("eINSTANCE_TITLE", "My Organisation");
-define("eINSTANCE_TITLE_SHORT", "MyORG");
-
-define("eCONTACT_EMAIL", "services@ands.org.au");
-define("eCONTACT_NAME", "Feedback");
-
-define("eCOPYRIGHT_NOTICE", "");
-
 
 
 //======================================
@@ -69,9 +53,6 @@ $ip=$_SERVER["HTTP_X_FORWARDED_FOR"];
 $ip=$_SERVER["HTTP_CLIENT_IP"];
 } else if ( isset($_SERVER["REMOTE_ADDR"]) )    {
 $ip=$_SERVER["REMOTE_ADDR"];
-} else {
-// Run by command line??
-$ip="127.0.0.1";
 } 
 	
 if($maintenance & !in_array($ip, $white_list_ip)){
@@ -85,37 +66,18 @@ if($maintenance & !in_array($ip, $white_list_ip)){
 
 
 /*====================================
-	LDAP AUTHENTICATION SERVER (optional)
-====================================*/
-// -----------------------------------------------------------------------------
-// These will be used by user roles that specify AUTHENTICATION_LDAP.
-$eLDAPHost = "ldaps://ldap.example.com.au"; 
-$eLDAPPort = 636; //636 | 389
-// The resource distinguished name.
-// The string @@ROLE_ID@@ will be replace with the user role_id, and escaped
-// for LDAP reserved characters before the bind is attempted.
-$eLDAPBaseDN = "ou=People, o=edu.au";
-$eLDAPuid = "uid=@@ROLE_ID@@";
-$eLDAPDN = "$eLDAPuid, $eLDAPBaseDN";
-
-
-/*====================================
 	DATABASE ENVIRONMENT
 ====================================*/
 $cosi_db_host = 'devl.ands.org.au';
-$cosi_db_port = 5432;
 $cosi_db_name = 'dbs_work_leo_cosi_2';
 //======================================
 $orca_db_host = $cosi_db_host;
-$orca_db_port = $cosi_db_port;
 $orca_db_name = 'dbs_work_leo_orca_2';
 //======================================
 $pids_db_host = $cosi_db_host;
-$pids_db_port = $cosi_db_port;
 $pids_db_name = 'pids';
 //======================================
 $dois_db_host = $cosi_db_host;
-$dois_db_port = $cosi_db_port;
 $dois_db_name = 'dois';
 //======================================
 ?>
