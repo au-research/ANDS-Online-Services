@@ -22,7 +22,7 @@ limitations under the License.
 	LOCAL WEB SERVER ENVIRONMENT
 ====================================*/
 $host 			= 'devl.ands.org.au';
-$cosi_root 		= 'workareas/minh/ands/registry/src';
+$cosi_root 		= 'workareas/liz/ands/registry/src';
 $orca_root 		= $cosi_root.'/orca';
 $rda_root 		= $orca_root.'/rda';
 
