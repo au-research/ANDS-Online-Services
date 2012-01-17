@@ -2253,11 +2253,11 @@ function testAnyURI(field_id)
 				regex = phoneRegex;
 				if($("#" + field_id.replace(/_value/,"_type")).val() == 'telephoneNumber')
 				{
-					type = "phone number";
+					type = "phone number <br/><span>E.g. '1800-123-456' (should not contain alphabetic characters)</span>";
 				}
 				else
 				{
-					type = "fax number";
+					type = "fax number <br/><span>E.g. '1800-123-456' (should not contain alphabetic characters)</span>";
 				}
 			}
 			else if($("#" + field_id.replace(/value_1_value/,"type")).val() != 'url' && $("#" + field_id.replace(/value_1_value/,"type")).val() != 'wsdl')
