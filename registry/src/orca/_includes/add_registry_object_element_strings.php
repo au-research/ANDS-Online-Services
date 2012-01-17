@@ -1760,7 +1760,7 @@ $_strings['*_location_address_physical_addressPart'] = <<<HTMLEND
 													<td style="text-align:right; vertical-align:middle; font-weight:normal; width:20px;"><label class="mandatory" for="object.location[%%SEQNUM1%%].address[%%SEQNUM2%%].physical[%%SEQNUM3%%].addressPart[%%SEQNUM4%%].value">Value:</label></td>
 													<td onclick="getHelpText('collection_location_physical_address_part_type');" style="vertical-align:middle; width:270px;">
 														
-														<textarea id="object_location_%%SEQNUM1%%_address_%%SEQNUM2%%_physical_%%SEQNUM3%%_addressPart_%%SEQNUM4%%_value" name="object.location[%%SEQNUM1%%].address[%%SEQNUM2%%].physical[%%SEQNUM3%%].addressPart[%%SEQNUM4%%].value"  class="ckeditor_text"></textarea>
+														<textarea id="object_location_%%SEQNUM1%%_address_%%SEQNUM2%%_physical_%%SEQNUM3%%_addressPart_%%SEQNUM4%%_value" name="object.location[%%SEQNUM1%%].address[%%SEQNUM2%%].physical[%%SEQNUM3%%].addressPart[%%SEQNUM4%%].value"  onChange="testAnyURI(this.id);" class="ckeditor_text"></textarea>
 														<script>CKEDITOR.replace('object_location_%%SEQNUM1%%_address_%%SEQNUM2%%_physical_%%SEQNUM3%%_addressPart_%%SEQNUM4%%_value',{ toolbar: 'Basic'}); </script>
 													</td>
 													<td><div class="fieldError" name="errors_location_%%SEQNUM1%%_address_%%SEQNUM2%%_physical_%%SEQNUM3%%_addressPart_%%SEQNUM4%%_value" style="font-size:1.05em;"></div></td>

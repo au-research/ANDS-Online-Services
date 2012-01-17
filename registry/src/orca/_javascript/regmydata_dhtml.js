@@ -971,6 +971,9 @@ function advanceLoadingStatus () {
 			}
 		});
 		
+		$('.ckeditor_text').each(function(){
+			testAddressPart(this.id)
+		});
 		// Validate URI strings
 		$('.validUri').each(function(){
 			testAnyURI(this.id);
@@ -1218,6 +1221,12 @@ function saveAndPreview() {
 					$("#rmd_saving").hide();
 					$("#rmd_preview").fadeIn('slow');
 					
+					
+					
+					$('.ckeditor_text').each(function(){
+						testAddressPart(this.id)
+					});
+										
 					$('.validUri').each(function(){
 						testAnyURI(this.id);
 					});
@@ -1520,7 +1529,7 @@ function addVocabComplete(field, type) {
 			$.getJSON( "process_registry_object.php?task=getvocab", {vocab:type, term:request.term}, response );
 		},
 		open: function ( event, ui ) {
-			$( button ).attr("src",$( button ).attr("src").replace(/in/,"out"));
+			$( button ).attr("src",$( button ).attr("src").replace(/_in/,"_out"));
 			return false;
 		},
 		close: function ( event, ui ) {
@@ -2238,11 +2247,13 @@ function testAddressPart(field_id)
 {	
 	//console.log(field_id);
 	var typeField = field_id.replace(/_value/,"_type");
-	console.log(typeField);
-	if(($("#"+typeField).val() == 'telephoneNumber'  || $("#"+typeField).val() == 'text' || $("#"+typeField).val() == 'faxNumber') && CKEDITOR.instances[field_id] != null)
+	if(($("#"+typeField).val() == 'telephoneNumber'  || $("#"+typeField).val() == 'text' || $("#"+typeField).val() == 'faxNumber'))
 	{
-		$('#'+field_id).val(CKEDITOR.instances[field_id].getData().replace( /<[^<|>]+?>/gi,'').trim());
-		CKEDITOR.instances[field_id].destroy(true);	
+		if(CKEDITOR.instances[field_id] != null)
+		{
+			$('#'+field_id).val(CKEDITOR.instances[field_id].getData().replace( /<[^<|>]+?>/gi,'').trim());
+			CKEDITOR.instances[field_id].destroy(true);	
+		}
 		testAnyURI(field_id);
 	}
 	else if($("#"+typeField).val() == 'addressLine' && CKEDITOR.instances[field_id] == null) // check if the description is still in the document
@@ -2258,7 +2269,7 @@ function testAnyURI(field_id)
 	$("#"+ field_id).val(fieldValue);
 	var regex =  new RegExp(/^(https?|ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i);
 	var emailRegex = new RegExp(/^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i);
-	var phoneRegex = new RegExp(/[^a-zA-Z]*/i);
+	var phoneRegex = new RegExp(/^[^a-zA-Z]*$/i);
 	var type = 'URI';
 	if(fieldValue != '')
 	{
@@ -2272,11 +2283,17 @@ function testAnyURI(field_id)
 				regex = emailRegex;
 				type = "email";
 			}
-			else if($("#" + field_id.replace(/_value/,"_type")).val() == 'telephoneNumber')
+			else if($("#" + field_id.replace(/_value/,"_type")).val() == 'telephoneNumber' || $("#" + field_id.replace(/_value/,"_type")).val() == 'faxNumber')
 			{
 				regex = phoneRegex;
-				console.log("telephoneNumber: " + fieldValue);
-				type = "phone number";
+				if($("#" + field_id.replace(/_value/,"_type")).val() == 'telephoneNumber')
+				{
+					type = "phone number";
+				}
+				else
+				{
+					type = "fax number";
+				}
 			}
 			else if($("#" + field_id.replace(/value_1_value/,"type")).val() != 'url' && $("#" + field_id.replace(/value_1_value/,"type")).val() != 'wsdl')
 			{
