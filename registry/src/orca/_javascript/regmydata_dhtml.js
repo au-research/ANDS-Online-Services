@@ -77,6 +77,12 @@ $(document).ready(function() {
 	
 	advanceLoadingStatus();
 	
+	$('.relatedObjectKey').live('blur', function(){
+		var key = $(this).val();
+		var target = $(this).parents().nextAll().find('.ro_preview').first();
+		getRelatedObjectPreview(key, target);
+	});
+	
 	// =============================================================================
 	// TAB NAVIGATION functionality
 	// ----
@@ -167,7 +173,6 @@ $(document).ready(function() {
 
 		
 	});
-
 });
 
 function setStatusSpan(status)
@@ -989,10 +994,25 @@ function advanceLoadingStatus () {
 			$('#enableBtn').removeAttr('disabled');
 			disableEditing();
 		}
+		
+		//load related objects preview
+		$('.relatedObjectKey').each(function(){
+			//console.log($(this).val());
+			var k = $(this).val();
+			var target = $(this).parents().nextAll().find('.ro_preview').first();
+			getRelatedObjectPreview(k, target);
+		});	
 	}
 	
 	var count = 1;
 	$('input[id^=object_'+activeTab.substring(1)+'],select[id^=object_'+activeTab.substring(1)+']').each(function(index, element){$(element).attr("tabIndex",count+1); count++;});
+
+}
+
+function getRelatedObjectPreview(key, target){
+	$.get('process_registry_object.php?task=related_object_preview&key='+key, function(data) {
+	  $(target).html(data);
+	});
 }
 
 function doKeepAlive() {
@@ -1556,6 +1576,57 @@ function addVocabComplete(field, type) {
 	};
 }
 
+function addRelatedObjectSearch(field){
+	searchField = '#'+field+'_search';
+	result = '#'+field+'_result';
+	button = '#'+field+'_button';
+	
+	$(button).click(function(){
+		$(result).html('Loading...');
+		doRelatedObjectSearch(field);
+	});
+	$(searchField).keypress(function(e){
+		if(e.which==13){//press enter
+			$(result).html('Loading...');
+			doRelatedObjectSearch(field);
+		}
+	}).keyup(function(){//on typing
+		//doRelatedObjectSearch(field);
+	});
+	
+	$('.selectRelatedObjectValue').live('click', function(){
+		where = $(this).attr('name');
+		$('#'+where+'_value').val($(this).attr('id'));
+		closeSearchModal(where);
+		var target = $('#'+where+'_value').parents().nextAll().find('.ro_preview').first();
+		getRelatedObjectPreview($(this).attr('id'), target);
+	});
+}
+
+function doRelatedObjectSearch(field){
+	term = $('#'+field+'_search').val();
+	roClass = $('#select_'+field+'_class').val(); 
+	roDS = $('#select_'+field+'_dataSource').val(); 
+	result = '#'+field+'_result';
+	//process_registry_object.php?task=searchRelated&sText=dr berry&oClass=Party&dSourceKey=monash-test
+	$.get("process_registry_object.php?task=searchRelated&sText="+term+"&oClass="+roClass+"&dSourceKey="+roDS,
+	   function(data){
+		   //console.log(data);
+			$(result).html('');
+			if(data){
+				$(result).append('<ul></ul>');
+				$.each(data, function(){
+					var thisRecord = '';
+					thisRecord +='<li><a href="javascript:void(0);" class="selectRelatedObjectValue" name="'+field+'" id="'+this.value+'">'+this.desc+'</a></li>';
+					$(result+' > ul').append(thisRecord);
+				});
+
+			}else{
+				$(result).html('No result');
+			}
+	   }, "json");
+}
+
 
 function toggleDropdown(button) {
 	button = "#" + button;
@@ -1588,7 +1659,7 @@ function showSearchModal(id)
 		$("#searchDialog_"+id).css('position', 'fixed');
 		$("#searchDialog_"+id).css('top',  winH/2-$("#searchDialog_"+id).height()/2);
 		$("#searchDialog_"+id).css('left', winW/2-$("#searchDialog_"+id).width()/2);
-	
+		$("#searchDialog_"+id).css('height', '360px');
 		//transition effect
 		$("#searchDialog_"+id).fadeIn(200); 
 		$( "#" + id + "_name").val($("#" + id + "_value").val());
