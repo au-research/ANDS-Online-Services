@@ -2,6 +2,7 @@
 .gitignore
 /.project
 /registry/src/ckeditor
+/registry/src/dois/
 /registry/src/orca/htmlpurifier/
 /registry/src/orca/rda/.htaccess
 .DS_Store

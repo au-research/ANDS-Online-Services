@@ -17,6 +17,7 @@ if (!IN_ORCA) die('No direct access to this file is permitted.');
 
 
 //OLD - use Search Draft By Name
+
 		$searchText = getQueryValue("sText");
 		$objectClass = getQueryValue("oClass");
 		$dataSourcekey = getQueryValue("dSourceKey");
@@ -34,6 +35,7 @@ if (!IN_ORCA) die('No direct access to this file is permitted.');
 				$values[] = array (	"value" => $value['registry_object_key'], "desc" => $value['display_title']." (".$value['status'].")");       		    	
 			}			
 		} else {
+
 			//$values[] = array (	"value" => "", "desc" => "Sorry - No Registry Object found!");
 		}
 
@@ -76,4 +78,4 @@ if (!IN_ORCA) die('No direct access to this file is permitted.');
 		}
 	
 		echo json_encode($values);
-		
+		

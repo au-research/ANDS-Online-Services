@@ -2063,6 +2063,7 @@ function searchByName($searchText, $objectClass, $dataSourceKey, $limit)
 	return $resultSet;
 }
 
+
 function searchDraftByName($searchText, $objectClass, $dataSourceKey, $limit)
 {
 	global $gCNN_DBS_ORCA;
@@ -2073,6 +2074,7 @@ function searchDraftByName($searchText, $objectClass, $dataSourceKey, $limit)
 	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);	
 	return $resultSet;
 }
+
 
 
 
