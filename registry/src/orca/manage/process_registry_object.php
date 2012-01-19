@@ -78,6 +78,10 @@ else if($task ==  'getRelatedClass')
 	{
 		include('_processes/get_related_class.php');
 	}
+else if($task ==  'related_object_preview')
+	{
+		include('_processes/related_object_preview.php');
+	}
 else if($task ==  'checkKey')
 	{	
 		include('_processes/check_key.php');

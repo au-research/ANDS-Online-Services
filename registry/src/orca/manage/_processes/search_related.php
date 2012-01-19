@@ -15,15 +15,17 @@ limitations under the License.
 *******************************************************************************/
 if (!IN_ORCA) die('No direct access to this file is permitted.');
 
+
+//OLD - use Search Draft By Name
 		$searchText = getQueryValue("sText");
 		$objectClass = getQueryValue("oClass");
 		$dataSourcekey = getQueryValue("dSourceKey");
 		$registryObjects = array();
 		$names = array();
 		
-		$limit = 10;
+		$limit = 100;
 
-		$names = searchByName($searchText, $objectClass , $dataSourcekey, $limit);
+		$names = searchDraftByName($searchText, $objectClass , $dataSourcekey, $limit);
 
 		if (isset($names) && $names) 
 		{ 		
@@ -32,7 +34,46 @@ if (!IN_ORCA) die('No direct access to this file is permitted.');
 				$values[] = array (	"value" => $value['registry_object_key'], "desc" => $value['display_title']." (".$value['status'].")");       		    	
 			}			
 		} else {
-			$values[] = array (	"value" => "", "desc" => "Sorry - No Registry Object found!");
+			//$values[] = array (	"value" => "", "desc" => "Sorry - No Registry Object found!");
 		}
 
-		print json_encode($values);
+		//print json_encode($values);
+
+
+//NEW - use SOLR
+		$objectClass = strtolower($objectClass);
+		$q = '+displayTitle:('.$searchText.') +class:('.$objectClass.')';
+		if($dataSourcekey!='') $q.=' +ds_key:('.$dataSourcekey.')';
+		$fields = array(
+			'q'=>$q,'version'=>'2.2','start'=>'0','rows'=>$limit, 'wt'=>'json',
+			'fl'=>'key, displayTitle, description_value, description_type, status'
+		);
+	
+		/*prep*/
+		$fields_string='';
+		foreach($fields as $key=>$value) { $fields_string .= $key.'='.$value.'&'; }//build the string
+		rtrim($fields_string,'&');
+	
+		//echo $fields_string;
+	
+		$ch = curl_init();
+		//set the url, number of POST vars, POST data
+		curl_setopt($ch,CURLOPT_URL,$solr_url.'select');//post to SOLR
+		curl_setopt($ch,CURLOPT_POST,count($fields));//number of POST var
+		curl_setopt($ch,CURLOPT_POSTFIELDS,$fields_string);//post the field strings
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);//return to variable
+		$content = curl_exec($ch);//execute the curl
+    	
+		curl_close($ch);//close the curl
+		
+		//echo 'json received+<pre>'.$content.'</pre>';	
+	
+		$decoded = json_decode($content);
+		//print_r($decoded);
+	
+		foreach($decoded->response->docs as $d){
+			$values[] = array (	"value" => $d->{'key'}, "desc" => $d->{'displayTitle'}.' ('.$d->{'status'}.')');
+		}
+	
+		echo json_encode($values);
+		
