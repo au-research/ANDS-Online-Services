@@ -706,7 +706,7 @@ function updateRecordsForDataSource($dataSourceKey, $manuallyPublish,$manuallyPu
 				  
 					$registryObject->schemaValidate(gRIF2_SCHEMA_URI); //xxx
 
-					$importError = importRegistryObjects($registryObject,$dataSourceKey, $resultMessage, getLoggedInUser(), $status, $owner, null, true);       
+					$importErrors = importRegistryObjects($registryObject,$dataSourceKey, $resultMessage, getLoggedInUser(), $status, $owner, null, true);       
 					if( !$importErrors )
 					{
 						$deleteErrors = deleteDraftRegistryObject($dataSourceKey,$registryObjectKey);
