@@ -28,6 +28,8 @@ limitations under the License.
 -- If you haven't yet created the database:
 ---   CREATE DATABASE dbs_cosi ENCODING = 'UTF8' LC_COLLATE = 'en_AU.UTF-8' LC_CTYPE = 'en_AU.UTF-8';
 ---   ALTER DATABASE dbs_cosi OWNER TO dba;
+---   GRANT CONNECT, TEMPORARY ON DATABASE dbs_cosi TO webuser;
+---   GRANT ALL ON DATABASE dbs_cosi TO dba;
 ---   \connect dbs_cosi_production
 
 -------------
@@ -43,7 +45,7 @@ SET client_min_messages = warning;
 -- Create the default schema (dba)
 CREATE SCHEMA dba;
 ALTER SCHEMA dba OWNER TO dba;
-DROP SCHEMA public; 
+DROP SCHEMA IF EXISTS public; 
 SET search_path = dba;
 
 -- Check that the plpgsql extension is loaded (requires postgres user)
@@ -363,16 +365,16 @@ CREATE TABLE tbl_role_relations (
 );
 ALTER TABLE dba.tbl_role_relations OWNER TO dba;
 
-INSERT INTO tbl_role_relations VALUES ('COSI_ADMIN', 'cosiadmin', '2009-04-14 11:39:10.328445+10', 'Default COSI Administrator (cosiadmin)', '2009-04-14 11:39:10.328445+10', 'Default COSI Administrator (cosiadmin)');
-INSERT INTO tbl_role_relations VALUES ('ORCA_DOIS_ADMIN', 'COSI_ADMIN', '2011-10-21 09:12:17.342643+11', 'Heather Grant (u4715076)', '2011-10-21 09:12:17.342643+11', 'Heather Grant (u4715076)');
-INSERT INTO tbl_role_relations VALUES ('ORCA_STATS_ADMIN', 'COSI_ADMIN', '2011-10-21 09:12:31.184152+11', 'Heather Grant (u4715076)', '2011-10-21 09:12:31.184152+11', 'Heather Grant (u4715076)');
-INSERT INTO tbl_role_relations VALUES ('ORCA_ADMIN', 'COSI_ADMIN', '2009-04-14 14:20:48.276289+10', 'James Blanden (u4034118)', '2009-04-14 14:20:48.276289+10', 'James Blanden (u4034118)');
-INSERT INTO tbl_role_relations VALUES ('ORCA_PIDS_ADMIN', 'COSI_ADMIN', '2011-01-25 15:55:57.228464+11', 'Ben Greenwood (u4552016)', '2011-01-25 15:55:57.228464+11', 'Ben Greenwood (u4552016)');
-INSERT INTO tbl_role_relations VALUES ('PIDS_USER', 'COSI_ADMIN', '2011-04-13 14:45:31.137863+10', 'Ben Greenwood (u4552016)', '2011-04-13 14:45:31.137863+10', 'Ben Greenwood (u4552016)');
-INSERT INTO tbl_role_relations VALUES ('PIDS_USER', 'SHIB_AUTHENTICATED', '2009-06-25 14:27:32.465607+10', 'James Blanden (u4034118)', '2009-06-25 14:27:32.465607+10', 'James Blanden (u4034118)');
-INSERT INTO tbl_role_relations VALUES ('ORCA_USER', 'SHIB_AUTHENTICATED', '2009-11-04 11:19:33.606326+11', 'James Blanden (u4034118)', '2009-11-04 11:19:33.606326+11', 'James Blanden (u4034118)');
-INSERT INTO tbl_role_relations VALUES ('ORCA_QUALITY_ASSESSOR', 'ORCA_ADMIN', '2011-09-21 13:41:03.76042+10', 'Leo Monus (u4187959)', '2011-09-21 13:41:03.76042+10', 'Leo Monus (u4187959)');
-INSERT INTO tbl_role_relations VALUES ('ORCA_CLIENT_LIAISON', 'ORCA_QUALITY_ASSESSOR', '2011-09-21 13:22:17.353168+10', 'Leo Monus (u4187959)', '2011-09-21 13:22:17.353168+10', 'Leo Monus (u4187959)');
+INSERT INTO tbl_role_relations (parent_role_id, child_role_id, created_who, modified_who) VALUES ('COSI_ADMIN', 'cosiadmin', 'SYSTEM', 'SYSTEM');
+INSERT INTO tbl_role_relations (parent_role_id, child_role_id, created_who, modified_who) VALUES ('ORCA_DOIS_ADMIN', 'COSI_ADMIN', 'SYSTEM', 'SYSTEM');
+INSERT INTO tbl_role_relations (parent_role_id, child_role_id, created_who, modified_who) VALUES ('ORCA_STATS_ADMIN', 'COSI_ADMIN', 'SYSTEM', 'SYSTEM');
+INSERT INTO tbl_role_relations (parent_role_id, child_role_id, created_who, modified_who) VALUES ('ORCA_ADMIN', 'COSI_ADMIN', 'SYSTEM', 'SYSTEM');
+INSERT INTO tbl_role_relations (parent_role_id, child_role_id, created_who, modified_who) VALUES ('ORCA_PIDS_ADMIN', 'COSI_ADMIN', 'SYSTEM', 'SYSTEM');
+INSERT INTO tbl_role_relations (parent_role_id, child_role_id, created_who, modified_who) VALUES ('PIDS_USER', 'COSI_ADMIN', 'SYSTEM', 'SYSTEM');
+INSERT INTO tbl_role_relations (parent_role_id, child_role_id, created_who, modified_who) VALUES ('PIDS_USER', 'SHIB_AUTHENTICATED', 'SYSTEM', 'SYSTEM');
+INSERT INTO tbl_role_relations (parent_role_id, child_role_id, created_who, modified_who) VALUES ('ORCA_USER', 'SHIB_AUTHENTICATED', 'SYSTEM', 'SYSTEM');
+INSERT INTO tbl_role_relations (parent_role_id, child_role_id, created_who, modified_who) VALUES ('ORCA_QUALITY_ASSESSOR', 'ORCA_ADMIN', 'SYSTEM', 'SYSTEM');
+INSERT INTO tbl_role_relations (parent_role_id, child_role_id, created_who, modified_who) VALUES ('ORCA_CLIENT_LIAISON', 'ORCA_QUALITY_ASSESSOR', 'SYSTEM', 'SYSTEM');
 
 
 -------------
