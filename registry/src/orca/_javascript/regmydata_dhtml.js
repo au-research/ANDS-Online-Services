@@ -2129,7 +2129,7 @@ function displayQuagmireSummary()
 		var reqArray = quagmire_getTriggered(REQUIRED);
 		var okReqArray = quagmire_getNotTriggered(REQUIRED);
 
-		req_message = "<a onclick=\"toggleList('reqWarningList')\"><img id=\"reqWarningList_img\" style=\"cursor:pointer\" src=\"" + orcaImageRoot + "expand_icon.png\" title=\"View list\" alt=\"Expand Icon\" /> You have met " + (allReqCount - reqCount) + " of the " + allReqCount + " required Metadata Content Requirements.</a> Refer to the tabs above as indicated by the <img src=\"" + orcaImageRoot + "required_icon.png\"/> Warning Icon.<br/>";
+		req_message = "<br/><a onclick=\"toggleList('reqWarningList')\" style=\"cursor:pointer\">You have met " + (allReqCount - reqCount) + " of the " + allReqCount + " required Metadata Content Requirements.</a>&nbsp;&nbsp;&nbsp;<input type=\"button\" id=\"reqWarningList_btn\" class=\"buttonSmall\" value=\"Show Details\" onclick=\"toggleList('reqWarningList')\">";
 		req_message += "<div id=\"reqWarningList\" style=\"display:none;\">";
 		if(okReqArray.length>0)
 		{
@@ -2149,6 +2149,7 @@ function displayQuagmireSummary()
 	    }
 		req_message += "</ul>";
 		req_message += "</div>";
+		req_message += "<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Refer to the tabs above as indicated by the <img src=\"" + orcaImageRoot + "required_icon.png\"/> Warning Icon.";
 	}
 	
 	var rec_message = "";
@@ -2158,9 +2159,7 @@ function displayQuagmireSummary()
 		var recArray = quagmire_getTriggered(RECOMMENDED);
 		var okRecArray = quagmire_getNotTriggered(RECOMMENDED);		
 		
-		rec_message += "";
-		
-		rec_message += "<a onclick=\"toggleList('recWarningList')\"><img id=\"recWarningList_img\" style=\"cursor:pointer\" src=\"" + orcaImageRoot + "expand_icon.png\" title=\"View list\" alt=\"Warning Icon\" /> You have met " + (allRecCount - recCount) + " of the " + allRecCount + " recommended Metadata Content Requirements.</a> Refer to the tabs above as indicated by the <img src=\"" + orcaImageRoot + "message_icon.png\"/> Warning Icon.<br/>";
+		rec_message += "<br/><a onclick=\"toggleList('recWarningList')\" style=\"cursor:pointer\">You have met " + (allRecCount - recCount) + " of the " + allRecCount + " recommended Metadata Content Requirements.</a>&nbsp;&nbsp;&nbsp;<input type=\"button\" id=\"recWarningList_btn\" class=\"buttonSmall\" value=\"Show Details\" onclick=\"toggleList('recWarningList')\">";
 		rec_message += "<div id=\"recWarningList\" style=\"display:none;\">";
 		if(okRecArray.length)
 		{
@@ -2180,7 +2179,9 @@ function displayQuagmireSummary()
 	    	rec_message += "<li>" + recArray[i] + "</li>";	
 	    }
 	    rec_message += "</ul>";
-	    rec_message += "</div>";	    
+	    rec_message += "</div>";
+	    rec_message += "<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Refer to the tabs above as indicated by the <img src=\"" + orcaImageRoot + "message_icon.png\"/> Warning Icon.";
+
 	}
 		
 	if(req_message != "")
@@ -2376,6 +2377,7 @@ function toggleList(list_id)
 				$('#' + list_id).slideUp();
 		}
 		$('#' + list_id + '_img').attr("src" , orcaImageRoot + "expand_icon.png");
+		$('#' + list_id + '_btn').attr("value" , "Show Details");
 	 }
 	 else
 	 {
@@ -2386,6 +2388,7 @@ function toggleList(list_id)
 				$('#' + list_id).slideDown(); 
 		}
 		$('#' + list_id + '_img').attr("src" , orcaImageRoot + "colapse_icon.png");
+		$('#' + list_id + '_btn').attr("value" , "Hide  Details");
 	 }
 }
 
