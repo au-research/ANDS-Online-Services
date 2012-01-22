@@ -64,6 +64,7 @@ if($maintenance & !in_array($ip, $white_list_ip)){
 	exit;	
 }
 
+
 /*====================================
 	LDAP AUTHENTICATION SERVER (optional)
 ====================================*/
@@ -77,7 +78,6 @@ $eLDAPPort = 636; //636 | 389
 $eLDAPBaseDN = "ou=People, o=edu.au";
 $eLDAPuid = "uid=@@ROLE_ID@@";
 $eLDAPDN = "$eLDAPuid, $eLDAPBaseDN";
-
 
 
 /*====================================

@@ -916,7 +916,9 @@ $_strings['*_relatedObject'] = <<<HTMLEND
 													<td width="100%">
 														<input type="button" class="buttonSmall" name="btn_relatedObject_%%SEQNUM1%%_remove" value="Remove this Related Object" onClick="decCount('object.relatedObject'); $('#table_relatedObject_%%SEQNUM1%%').remove();" style="float:right;" /><br/>
 													</td>
+													
 												</tr>
+												<tr><td colspan="4"><div class="ro_preview"></div></td></tr>
 												<tr>
 													<td colspan="4" style="text-align:left;">
 														<div style="padding:4px;">Relations:</div>
@@ -931,65 +933,45 @@ $_strings['*_relatedObject'] = <<<HTMLEND
 										</table> 																			
 											<div id="searchDialog_object_relatedObject_%%SEQNUM1%%_key_1" class="window">
 											<img src="{$eAPP_ROOT}orca/_images/error_icon.png" onClick='closeSearchModal("object_relatedObject_%%SEQNUM1%%_key_1");' style="cursor:pointer; position:absolute; top:5px; right:5px; width:16px;" />
-											<ul id="guideNotes_relatedObject" class="guideNotes" style="display: block; ">
-											<li>The name search will only return the first 10 entries found in the database. To narrow down the returned results please ensure your text entries are as specific as possible.</li>
-											</ul>
-											<table class="rmdElementContainer" style="font-weight:normal;"> 
-											<tbody class="formFields andsorange"> 			
-												<tr>
-												<td>
-												Search by name:
-												</td>
-												<td>
-													<input type="text" id="object_relatedObject_%%SEQNUM1%%_key_1_name" autocomplete="on" name="object.relatedObject[%%SEQNUM1%%].key[1].name" maxlength="512" size="30" />		
-													<!--img id="button_relatedObject_%%SEQNUM1%%_key_1_name" src="{$eAPP_ROOT}orca/_images/buttons/dropdown_in.png" onClick='toggleDropdown(this.id);' class='cursorimg' style="vertical-align:bottom; height:16px; width:16px;" /-->
-												</td>
-												</tr>
-												<tr>
-												<td>
-												Select object class:
-												</td>
-												<td>
-												<select id="select_relatedObject_%%SEQNUM1%%_key_1_class">
+											
+											
+												<p><label>Search by Name: </label><input type="text" class="searchTextBox" id="object_relatedObject_%%SEQNUM1%%_key_1_search"/></p>
+												<p>
+												<select id="select_object_relatedObject_%%SEQNUM1%%_key_1_class">
 												<option value="Collection">Collection</option>
 												<option value="Party" selected="selected">Party</option>
 												<option value="Activity">Activity</option>
 												<option value="Service">Service</option>
 												</select>
-												</td>
-												</tr>
-												<tr>
-												<td>
-												Select data source:
-												</td>
-												<td>
-												<select id="select_relatedObject_%%SEQNUM1%%_key_1_dataSource" style="width:280px;">
+												<select id="select_object_relatedObject_%%SEQNUM1%%_key_1_dataSource" style="width:280px;">
 													<option value="">All Data Sources</option>
 													{$ds_string}
 												</select>
-												</td>							
-												</tr>
-												<tr>
-													<td>
-														<input type="button" value="Choose Selected" onClick='setRelatedId("object_relatedObject_%%SEQNUM1%%_key_1");'/>
-													</td>
-												</tr>
-											</table>				
+												<a href="javascript:void(0);" id="object_relatedObject_%%SEQNUM1%%_key_1_button">Search</a></p>
+												<div class="relatedObject_result" id="object_relatedObject_%%SEQNUM1%%_key_1_result"></div>
+												
+												
 											</div>  
 											<div class="mask" onclick="closeSearchModal('object_relatedObject_%%SEQNUM1%%_key_1')" id="mask_object_relatedObject_%%SEQNUM1%%_key_1"></div>
 										
 										
 										
 										
-										<script>										
+										<script>	
+																		
 											if ({$has_fragment} == false) {
 												getElement('relation', [], 'object.relatedObject[%%SEQNUM1%%].', null, getNextSeq('relatedObject_%%SEQNUM1%%_relation'));
+												
+												showSearchModal("object_relatedObject_%%SEQNUM1%%_key_1");
 											}
-												addRelatedObjectAutocomplete('object_relatedObject_%%SEQNUM1%%_key_1_name');
+											addRelatedObjectSearch('object_relatedObject_%%SEQNUM1%%_key_1');
+												//addRelatedObjectAutocomplete('object_relatedObject_%%SEQNUM1%%_key_1_name');		
+												
 										</script>
 
 
 HTMLEND;
+
 
 
 $_strings['*_relatedObject_relation'] = <<<HTMLEND
@@ -1760,7 +1742,9 @@ $_strings['*_location_address_physical_addressPart'] = <<<HTMLEND
 													<td style="text-align:right; vertical-align:middle; font-weight:normal; width:20px;"><label class="mandatory" for="object.location[%%SEQNUM1%%].address[%%SEQNUM2%%].physical[%%SEQNUM3%%].addressPart[%%SEQNUM4%%].value">Value:</label></td>
 													<td onclick="getHelpText('collection_location_physical_address_part_type');" style="vertical-align:middle; width:270px;">
 														
+
 														<textarea id="object_location_%%SEQNUM1%%_address_%%SEQNUM2%%_physical_%%SEQNUM3%%_addressPart_%%SEQNUM4%%_value" name="object.location[%%SEQNUM1%%].address[%%SEQNUM2%%].physical[%%SEQNUM3%%].addressPart[%%SEQNUM4%%].value"  onChange="testAnyURI(this.id);" class="ckeditor_text"></textarea>
+
 														<script>CKEDITOR.replace('object_location_%%SEQNUM1%%_address_%%SEQNUM2%%_physical_%%SEQNUM3%%_addressPart_%%SEQNUM4%%_value',{ toolbar: 'Basic'}); </script>
 													</td>
 													<td><div class="fieldError" name="errors_location_%%SEQNUM1%%_address_%%SEQNUM2%%_physical_%%SEQNUM3%%_addressPart_%%SEQNUM4%%_value" style="font-size:1.05em;"></div></td>
