@@ -1567,6 +1567,7 @@ function getRelatedObjectTypesXML($registryObjectKey, $dataSourceKey, $registryO
 function getRelationType($relation_id)
 {
 	$list = getRelationDescriptions($relation_id);
+	$type = '';
 	if( $list )
 	{
 		foreach( $list as $element )
