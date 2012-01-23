@@ -37,6 +37,7 @@ importApplicationStylesheet(eAPP_ROOT.'orca/_styles/map_control.css');
 // Import the stylesheet for this page
 importApplicationStylesheet(eAPP_ROOT.'orca/_styles/add_registry_object.css');
 importApplicationStylesheet(eAPP_ROOT.'orca/_styles/jquery-ui-1.8.9.custom.css');
+importApplicationStylesheet(eAPP_ROOT.'orca/_styles/jquery-ui-1.8.17.custom.css');
 // Open a connection to the database.
 // This will be closed automatically by the framework.
 openDatabaseConnection($gCNN_DBS_ORCA, eCNN_DBS_ORCA);

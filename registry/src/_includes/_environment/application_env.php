@@ -48,12 +48,12 @@ $ePIDS_RESOURCE_URI = $pids_uri;
 // LDAP Settings
 // -----------------------------------------------------------------------------
 // These will be used by user roles that specify AUTHENTICATION_LDAP.
-$eLDAPHost = "ldaps://ldap.example.com.au"; // ldap://ldap.example.com.au
+$eLDAPHost = "ldaps://ldap.anu.edu.au"; // ldap://ldap.example.com.au
 $eLDAPPort = 636; //636 | 389
 // The resource distinguished name.
 // The string @@ROLE_ID@@ will be replace with the user role_id, and escaped
 // for LDAP reserved characters before the bind is attempted.
-$eLDAPBaseDN = "ou=People, o=edu.au";
+$eLDAPBaseDN = "ou=People, o=anu.edu.au";
 $eLDAPuid = "uid=@@ROLE_ID@@";
 
 $eLDAPDN = "$eLDAPuid, $eLDAPBaseDN";

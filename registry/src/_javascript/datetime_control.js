@@ -91,8 +91,32 @@ function dctGetDateTimeControl(inputFieldId, format)
 	inputField.size = format.length;
 	inputField.maxLength = 30;
 }
-
 function dctGetDateTimeControlSpec(inputFieldId, format, destElement)
+{
+	
+	$(function() {
+		$( "#" + inputFieldId ).datetimepicker({
+			changeMonth: true,
+			changeYear: true,			
+		    showOtherMonths: true,
+		    useTimeSelects: true,
+		    selectOtherMonths: true,
+		    showButtonPanel: true,
+		    showTimezone: false,
+			showSecond: false,
+		    timeFormat: "hh:mm:ssZ",		    
+		    yearRange: "c-100:c+100",
+			dateFormat: "yy-mm-dd",
+			showOn: "button",
+			buttonImage: "../_images/dct_icon_inactive.gif",
+			buttonImageOnly: true
+		});
+	});
+	var inputField = getObject(inputFieldId);
+	inputField.size = format.length;
+	inputField.maxLength = format.length;
+}
+function dctGetDateTimeControlSpec2(inputFieldId, format, destElement)
 {
 	// Setup the control icon.
 	inputField_Id = inputFieldId;

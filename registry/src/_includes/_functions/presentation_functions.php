@@ -78,11 +78,31 @@ function drawDateTimeInput($fieldNameAndID, $unsafeValue, $format)
 }
 
 function drawDateTimeZoneInput($fieldNameAndID, $unsafeValue, $format)
-{
-	print '<input type="text" size="20" maxlength="30" name="'.$fieldNameAndID.'" id="'.$fieldNameAndID.'" value="'.esc($unsafeValue).'" readonly="readonly"/>'."\n";
-	print '<script type="text/javascript">dctGetDateTimeControl(\''.$fieldNameAndID.'\', \''.$format.'\')</script>';
-	print '&nbsp;<span class="inputFormat">'.str_replace("X","",$format.'</span>');
+{	
+	print '<script>
+	$(function() {
+		$( "#'.$fieldNameAndID.'" ).datetimepicker({
+			changeMonth: true,
+			changeYear: true,			
+		    showOtherMonths: true,
+		    useTimeSelects: true,
+		    selectOtherMonths: true,
+		    showButtonPanel: false,
+		    showTimezone: true,
+		    timeFormat: "hh:mm:ss z",		    
+		    yearRange: "c-100:c+100",
+			dateFormat: "yy-mm-dd",
+			showOn: "button",
+			buttonImage: "../../_images/_controls/_datetime_control/dct_icon_inactive.gif",
+			buttonImageOnly: true
+		});
+	});
+	</script>
+	<input id="'.$fieldNameAndID.'" type="text" name="'.$fieldNameAndID.'" value="'.$unsafeValue.'" size="25">';
+
+	print '&nbsp;<span class="inputFormat">'.$format.'</span>';
 }
+
 function drawMonthYearInput($field1NameAndID, $unsafeValue1,$field2NameAndID, $unsafeValue2)
 {
 	if(!$unsafeValue1) $unsafeValue1=date("m");

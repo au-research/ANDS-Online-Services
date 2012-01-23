@@ -1938,6 +1938,41 @@ function checkDTF (field_id)
 	} 
 }
 
+function checkDFrom (field_id)
+{
+
+	var theStart = field_id.replace("endDate","startDate");
+	var startField = $('#' + theStart);
+	var endField = $('#' + field_id);
+	if(startField.val()!='')
+
+	if (startField.val() > endField.val())
+	{
+			SetErrors(field_id.replace(/object/,"errors"), "The value of this date must be greater than the start date.");
+	} else {
+		$('[name="' + field_id.replace(/object/,"errors")+'"]').html("").hide();
+		$('[name="' + theStart.replace(/object/,"errors")+'"]').html("").hide();		
+		checkDateDiff(field_id);
+	}
+}
+
+function checkDTo (field_id)
+{
+	var theEnd = field_id.replace("startDate","endDate");
+	var startField = $('#' + field_id);
+	var endField = $('#' + theEnd);
+	if(endField.val()!='')
+
+	if (startField.val() > endField.val())
+	{
+			SetErrors(field_id.replace(/object/,"errors"), "The value of this date must be less than the end date.");
+	}else {
+		$('[name="' + field_id.replace(/object/,"errors")+'"]').html("").hide();
+		$('[name="' + theEnd.replace(/object/,"errors")+'"]').html("").hide();	
+		checkDateDiff(field_id);
+	} 
+}
+
 function checkDateDiff(field_id)
 {
 	if(field_id.indexOf("_location_") > 0)

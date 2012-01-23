@@ -15,11 +15,12 @@ limitations under the License.
 *******************************************************************************/
 // Include required files and initialisation.
 require '../../_includes/init.php';
+//ini_set('display_errors',1); 
+//error_reporting(E_ALL);
 require '../orca_init.php';
 // Page processing
 // -----------------------------------------------------------------------------
 
-// Get the record from the database.
 
 $data_Source = getQueryValue('data_source_key');
 
@@ -44,10 +45,9 @@ $harvestMethod = $dataSource[0]['harvest_method'];
 $oaiSet = $dataSource[0]['oai_set'];
 if($dataSource[0]['time_zone_value']!='')
 {
-	$harvestDate = substr($dataSource[0]['time_zone_value'],0,16);
-	$theZone = str_replace("+","",substr($dataSource[0]['time_zone_value'],20,strlen($dataSource[0]['time_zone_value'])));
+	$harvestDate = $dataSource[0]['time_zone_value'];
 }else{
-	$harvestDate = formatDateTimeWithMask($dataSource[0]['harvest_date'], eDCT_FORMAT_ISO8601_DATE_TIME);
+	$harvestDate = str_replace("+10"," +10:00",str_replace("+11"," +11:00",$dataSource[0]['harvest_date']));
 }
 $harvestFrequency = $dataSource[0]['harvest_frequency'];
 $contactName = $dataSource[0]['contact_name'];
@@ -115,21 +115,7 @@ if( strtoupper(getPostedValue('action')) == "CANCEL" )
 
 if( strtoupper(getPostedValue('action')) == "SAVE" )
 {
-	//we need to set up the values to reset the time zone variables and display to be the selected values
-	
-	if(getPostedValue('harvest_date')){
-		$newNum = str_replace(":",".",getPostedValue('theZone'));
-		if($newNum>0)
-		{
-			$theString = '&nbsp;&nbsp;&nbsp;(GMT +'.str_replace(".",":",number_format($newNum,2)).')';
-			$theNum = "+".$newNum;
-		}else{
-			$theString = '&nbsp;&nbsp;&nbsp;(GMT '.str_replace(".",":",number_format($newNum,2)).')';
-			$theNum=$newNum;			
-		}
-		$newDateTimeZone = getPostedValue('harvest_date').":00 ".str_replace(".",":",$theNum);
-	}
-	
+
 	$title = getPostedValue('title');
 	if( $title == '' )
 	{ 
@@ -286,23 +272,14 @@ if( strtoupper(getPostedValue('action')) == "SAVE" )
 	{
 		// Update the record.
 
-		if(isset($newDateTimeZone))
-		{
-			$_POST['harvest_date'] = $newDateTimeZone;
-		}
 		$_POST['theZone'] = $_POST['harvest_date'];
-		//unset($_POST['theZone']); //we need to remove this variable from the POST array as it does not get used in the actual insert.
 		
 		unset($_POST['object_relatedObject']);
 		unset($_POST['object_primary_key_1_name']);			
 		unset($_POST['object_primary_key_2_name']);
 		unset($_POST['select_primary_key_1_class']);
-		unset($_POST['select_primary_key_2_class']);		
-		// we need to reset the harvest_date variable to remove the new datetimezone value set up to indicate it has a time zone. Add the seconds and then add the requested time zone
-		//print("<pre>");
-		//print_r($_POST);
-		//print("</pre>");	
-		//exit();
+		unset($_POST['select_primary_key_2_class']);	
+
 		$errors = updateDataSource();
 		$errors .= updateRecordsForDataSource($dataSourceKey, $autoPublish, $autoPublishOld , $qaFlag , $qaFlagOld,$create_primary_relationships, $create_primary_relationships_old,$class_1,$class_1_old,$class_2,$class_2_old);
 
@@ -324,7 +301,7 @@ require '../../_includes/header.php';
 ?>
 <script type="text/javascript" src="<?php print eAPP_ROOT ?>orca/_javascript/orca_dhtml.js"></script>
 <script type="text/javascript" src="<?php print eAPP_ROOT ?>orca/_javascript/data_source_functions.js"></script>
-<script type="text/javascript" src="<?php print eAPP_ROOT ?>orca/_javascript/jquery-ui-1.8.9.custom.min.js"></script>	
+
 <form id="data_source_edit" action="data_source_edit.php?data_source_key=<?php print(urlencode($dataSourceKey)); ?>" method="post" onSubmit="return checkModalId(this)">
 <div  style="width:1000px;overflow:auto">
 <table class="formTable" summary="Edit Data Source">
@@ -663,28 +640,17 @@ require '../../_includes/header.php';
 			<td class="">OAI Set:</td>
 			<td><input type="text" name="oai_set" id="oai_set" size="30" maxlength="128" value="<?php printSafe($oaiSet) ?>" /></td>
 		</tr>
+
 		<tr id="harvest_date_row">
 			<td class="">Harvest Date:</td>
-			<?php 		
-				$origin_dt = new DateTime(date("y-m-d h:s",time())) ;
-			    $remote_dtz = new DateTimeZone('GMT');
-			    $origin_dtz = new DateTimeZone(timezone_name_get(date_timezone_get($origin_dt)));			    
-    			$remote_dt = new DateTime("now",$remote_dtz);
-    			$offset = $origin_dtz->getOffset($origin_dt) - $remote_dtz->getOffset($remote_dt);
-    			$current = $offset/60/60;	
-    			if($current>0)$current = "+".$current;
-				$currentZone = "&nbsp;&nbsp;(GMT ".$current.")";
-				$currentNum = number_format($current);
-				if(isset($theZone))
-				{
-					$currentNum = $theZone;
-					if($theZone>0)$theZone = "+".$theZone;
-					$currentZone = "&nbsp;&nbsp;(GMT ".$theZone.")"; 
-				}
-			?>			
-			<td><?php drawDateTimeZoneInput('harvest_date', $harvestDate, eDCT_FORMAT_ISO8601_DATE_TIME."X") ?>
+		<!-- 			<td><?php drawDateTimeZoneInput('harvest_date', $harvestDate, eDCT_FORMAT_ISO8601_DATE_TIME."X") ?>
 			<span id="gmtZone" class="inputFormat"><?php if(isset($theString)){ echo $theString;} else { echo $currentZone ;} ?> </span>
 			<input name="theZone" id="theZone" type="hidden" value="<?php if(isset($newNum)){echo $newNum;}else { echo $currentNum ; }?>"/>
+			</td> -->
+			<td><?php drawDateTimeZoneInput('harvest_date', $harvestDate, eDCT_FORMAT_ISO8601_DATETIMESEC_UTC) ?></p>
+			<input name="theZone" id="theZone" type="hidden" value=""/>
+
+
 			</td>
 		</tr>		
 

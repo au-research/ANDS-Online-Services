@@ -677,7 +677,7 @@ $_strings['*_mandatoryInformation'] = <<<HTMLEND
 													<td><label for="object_mandatoryInformation_dateModified">Date Modified:</label> </td> 
 													<td onclick="getHelpText('collection_date_modified');">
 														<input type="text" value="" id="object_mandatoryInformation_dateModified" name="object.mandatoryInformation.dateModified" onchange="checkDTF(this.id);" class="dateTimeField" maxlength="32" size="20" /> 
-														<script type="text/javascript">dctGetDateTimeControlSpec('object_mandatoryInformation_dateModified', 'YYYY-MM-DDThh:mm:00Z', 'collection_date_modified_dctImage');</script>&nbsp;<span id="collection_date_modified_dctImage">&nbsp;</span>&nbsp;<span class="inputFormat"> YYYY-MM-DDThh:mm:ssZ</span>
+														<script type="text/javascript">dctGetDateTimeControlSpec('object_mandatoryInformation_dateModified', 'YYYY-MM-DD hh:mm:00Z', 'collection_date_modified_dctImage');</script>&nbsp;<span id="collection_date_modified_dctImage">&nbsp;</span>&nbsp;<span class="inputFormat"> YYYY-MM-DDThh:mm:ssZ</span>
 													</td> 
 													<td><div class="fieldError" name="errors_mandatoryInformation_dateModified"></div></td>
 												</tr> 
@@ -2573,7 +2573,7 @@ $_strings['*_existenceDates'] = <<<HTMLEND
 																			<label for="object_existenceDates_%%SEQNUM1%%_startDate_1_value">Value:</label>
 																		</td>
 																		<td onclick="getHelpText('existenceDates_startDate');" style="vertical-align:middle;">
-																			<input type="text" value="" id="object_existenceDates_%%SEQNUM1%%_startDate_1_value" name="object.existenceDates[%%SEQNUM1%%].startDate[1].value" onchange="checkDTF(this.id);" class="dateTimeField" maxlength="32" size="60" style="width:230px;" /> &nbsp;<span id="existenceDates_%%SEQNUM1%%_startDate_1_value_dctImage" onClick="$('#object_existenceDates_%%SEQNUM1%%_startDate_1_dateFormat').val('W3CDTF');">&nbsp;</span>&nbsp;
+																			<input type="text" value="" id="object_existenceDates_%%SEQNUM1%%_startDate_1_value" name="object.existenceDates[%%SEQNUM1%%].startDate[1].value" onchange="checkDTF(this.id); checkDTo(this.id);" class="dateTimeField" maxlength="32" size="60" style="width:230px;" /> &nbsp;<span id="existenceDates_%%SEQNUM1%%_startDate_1_value_dctImage" onClick="$('#object_existenceDates_%%SEQNUM1%%_startDate_1_dateFormat').val('W3CDTF');">&nbsp;</span>&nbsp;
 																		</td>
 																		<td width="100%"><div class="fieldError" id="errors_existenceDates_%%SEQNUM1%%_startDate_1_value" name="errors_existenceDates_%%SEQNUM1%%_startDate_1_value"></div></td>													
 																	</tr>
@@ -2617,7 +2617,7 @@ $_strings['*_existenceDates'] = <<<HTMLEND
 																			
 																		</td>
 																		<td onclick="getHelpText('existenceDates_endDate');" style="vertical-align:middle;">
-																			<input type="text" value="" id="object_existenceDates_%%SEQNUM1%%_endDate_1_value" name="object.existenceDates[%%SEQNUM1%%].endDate[1].value" onchange="checkDTF(this.id);" class="dateTimeField" maxlength="32" size="60" style="width:230px;" /> &nbsp;<span id="existenceDates_%%SEQNUM1%%_endDate_1_value_dctImage" onClick="$('#object_existenceDates_%%SEQNUM1%%_endDate_1_dateFormat').val('W3CDTF');">&nbsp;</span>
+																			<input type="text" value="" id="object_existenceDates_%%SEQNUM1%%_endDate_1_value" name="object.existenceDates[%%SEQNUM1%%].endDate[1].value" onchange="checkDTF(this.id); checkDFrom(this.id);" class="dateTimeField" maxlength="32" size="60" style="width:230px;" /> &nbsp;<span id="existenceDates_%%SEQNUM1%%_endDate_1_value_dctImage" onClick="$('#object_existenceDates_%%SEQNUM1%%_endDate_1_dateFormat').val('W3CDTF');">&nbsp;</span>
 																		</td>
 																		<td width="100%"><div class="fieldError" id="errors_existenceDates_%%SEQNUM1%%_endDate_1_value" name="errors_existenceDates_%%SEQNUM1%%_endDate_1_value"></div></td>													
 																	</tr>
