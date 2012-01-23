@@ -792,9 +792,14 @@ function drawStatTable($typeStats=null){
 		<tr><td>Registered Publisher Agents</td><?php printStatistics($months,"doiClient");?></tr>	
 		<tr><td>DOI Minting failures</td><?php printStatistics($months,"doiMintFail");?></tr>			
 		<tr><td bgcolor="#99FFFF">Registry:</td><?php printHeader($months);?></tr>
+		<tr><td>Organisations</td><?php printStatistics($months, "Organisations");?></tr>
+		<tr><td>Users</td><?php printStatistics($months, "Users");?></tr>				
 		<tr><td>Data Source Admins</td><?php printStatistics($months, "Data");?></tr>
 		<tr><td>Provider Org</td><?php printStatistics($months, "Provider");?></tr>
 		<tr><td>Publish my Data</td><?php printStatistics($months, "Publish");?></tr>
+		<tr><td>DIRECT</td><?php printStatistics($months, "DIRECT");?></tr>
+		<tr><td>Harvestor DIRECT</td><?php printStatistics($months, "GET");?></tr>	
+		<tr><td>Harvestor OAI-PMH</td><?php printStatistics($months, "RIF");?></tr>						
 		<tr><td>Total records</td><?php printStatistics($months, "Total");?></tr>
 		<tr><td>&nbsp;&nbsp;&nbsp;&nbsp;Collections</td><?php printStatistics($months, "Collections");?></tr>
 		<?php if($typeStats) printSubStats($months,'Collection')?>
@@ -866,11 +871,36 @@ function printStatistics($months,$statType){
 			<td><?php echo getDataSourceCount($theMonth);?></td><?php 
 			break
 			;
+			case "Organisations": 
+				?>
+			<td><?php echo getOrganisationCount($theMonth);?></td><?php 
+			break
+			;
+			case "Users": 
+				?>
+			<td><?php echo getUserCount($theMonth);?></td><?php 
+			break
+			;						
 			case "Publish": 
 				?>
 			<td><?php echo getPublishMyDataCount($theMonth);?></td><?php 
 			break
-			;			
+			;	
+			case "DIRECT": 
+				?>
+			<td><?php echo getHarvestMethodCount($theMonth, 'DIRECT');?></td><?php 
+			break
+			;
+			case "GET": 
+				?>
+			<td><?php echo getHarvestMethodCount($theMonth, 'GET');?></td><?php 
+			break
+			;
+			case "RIF": 
+				?>
+			<td><?php getHarvestMethodCount($theMonth, 'RIF');?></td><?php 
+			break
+			;					
 			case "Total": 
 				
 				?>
