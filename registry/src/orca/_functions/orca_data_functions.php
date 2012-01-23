@@ -2116,6 +2116,24 @@ function getPublishMyDataCount($created_when=null)
 	return $count;
 }
 
+function getHarvestMethodCount($created_when=null,$harvest_method)
+{
+	global $gCNN_DBS_ORCA;
+	
+	$count = 0;
+	$resultSet = null;
+	$strQuery = 'SELECT dba.udf_get_harvest_method_count($1,$2) AS count';
+	$params = array($created_when,$harvest_method);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	
+	if( $resultSet )
+	{
+		$count = $resultSet[0]['count'];
+	}
+	
+	return $count;
+}
+
 function getRegistryObjectStatCount($created_when=null,$registry_object_class)
 {
 	global $gCNN_DBS_ORCA;
@@ -2133,6 +2151,7 @@ function getRegistryObjectStatCount($created_when=null,$registry_object_class)
 	
 	return $count;
 }
+
 function getStoredStatCount($created_when=null,$table_column)
 {
 	global $gCNN_DBS_ORCA;

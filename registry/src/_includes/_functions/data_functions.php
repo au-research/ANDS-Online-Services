@@ -204,6 +204,41 @@ function getDataSorceAdminCount($date_filter)
 	
 	return $count;
 }
+
+function getOrganisationCount($created_when=null)
+{
+	global $gCNN_DBS_COSI;
+	
+	$count = 0;
+	$resultSet = null;
+	$strQuery = 'SELECT dba.udf_get_organisation_count($1) AS count';
+	$params = array($created_when);
+	$resultSet = executeQuery($gCNN_DBS_COSI, $strQuery, $params);
+	
+	if( $resultSet )
+	{
+		$count = $resultSet[0]['count'];
+	}
+	
+	return $count;
+}
+function getUserCount($created_when=null)
+{
+	global $gCNN_DBS_COSI;
+	
+	$count = 0;
+	$resultSet = null;
+	$strQuery = 'SELECT dba.udf_get_user_count($1) AS count';
+	$params = array($created_when);
+	$resultSet = executeQuery($gCNN_DBS_COSI, $strQuery, $params);
+	
+	if( $resultSet )
+	{
+		$count = $resultSet[0]['count'];
+	}
+	
+	return $count;
+}
 function getPidsCount($date_filter)
 {
 	global $gCNN_DBS_PIDS;
