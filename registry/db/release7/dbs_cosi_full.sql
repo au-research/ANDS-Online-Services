@@ -26,11 +26,13 @@ limitations under the License.
 --
 
 -- If you haven't yet created the database:
+---   CREATE USER webuser;
+---   CREATE USER dba;
 ---   CREATE DATABASE dbs_cosi ENCODING = 'UTF8' LC_COLLATE = 'en_AU.UTF-8' LC_CTYPE = 'en_AU.UTF-8';
 ---   ALTER DATABASE dbs_cosi OWNER TO dba;
 ---   GRANT CONNECT, TEMPORARY ON DATABASE dbs_cosi TO webuser;
 ---   GRANT ALL ON DATABASE dbs_cosi TO dba;
----   \connect dbs_cosi_production
+---   \connect dbs_cosi
 
 -------------
 -- SETUP THE DATABASE
@@ -202,7 +204,8 @@ CREATE TABLE tbl_roles (
 );
 ALTER TABLE dba.tbl_roles OWNER TO dba;
 
-INSERT INTO tbl_roles (role_id, role_type_id, name, authentication_service_id, enabled, created_who, modified_who, last_login) VALUES ('PUBLIC', 'ROLE_FUNCTIONAL     ', 'Public', NULL, true, NULL, 'SYSTEM', NULL, 'SYSTEM', NULL);
+INSERT INTO tbl_roles (role_id, role_type_id, name, authentication_service_id, enabled, created_who, modified_who, last_login) VALUES ('cosiadmin', 'ROLE_USER           ', 'Default COSI Administrator', 'AUTHENTICATION_BUILT_IN         ', true, 'SYSTEM', 'SYSTEM', NULL);
+INSERT INTO tbl_roles (role_id, role_type_id, name, authentication_service_id, enabled, created_who, modified_who, last_login) VALUES ('PUBLIC', 'ROLE_FUNCTIONAL     ', 'Public', NULL, true, 'SYSTEM', 'SYSTEM', NULL);
 INSERT INTO tbl_roles (role_id, role_type_id, name, authentication_service_id, enabled, created_who, modified_who, last_login) VALUES ('COSI_BUILT_IN_USERS', 'ROLE_FUNCTIONAL     ', 'COSI Built-in Authentication User', NULL, true,'SYSTEM','SYSTEM', NULL);
 INSERT INTO tbl_roles (role_id, role_type_id, name, authentication_service_id, enabled, created_who, modified_who, last_login) VALUES ('COSI_ADMIN', 'ROLE_FUNCTIONAL     ', 'COSI Administrator', NULL, true,'SYSTEM','SYSTEM', NULL);
 INSERT INTO tbl_roles (role_id, role_type_id, name, authentication_service_id, enabled, created_who, modified_who, last_login) VALUES ('LDAP_AUTHENTICATED', 'ROLE_FUNCTIONAL     ', 'LDAP Authenticated Users', NULL, true,'SYSTEM','SYSTEM', NULL);
