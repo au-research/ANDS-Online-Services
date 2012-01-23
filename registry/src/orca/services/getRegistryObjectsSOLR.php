@@ -109,7 +109,7 @@ if($subject != '' && $vocab != '')
 // comment this function out.....
 if($task == 'clearAll')
 {
-
+	echo "Running...";
 	$response = clearSolrIndex();
 	print $response;
 	require '../../_includes/finish.php';

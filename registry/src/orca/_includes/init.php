@@ -129,6 +129,6 @@ $gORCA_STATUS_INFO = array (
 // Service configuration.
 define('gPIDS_SERVICE_BASE_URI', "https://<HOSTNAME>:8443/pids/");
 define('gPIDS_APP_ID', "<APPID>");
-define('gSOLR_UPDATE_URL' , "http://<HOSTNAME>:8080/solr-prod/update");
+define('gSOLR_UPDATE_URL' , $solr_url . "update");
 
 
