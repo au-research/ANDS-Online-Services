@@ -2076,6 +2076,20 @@ function searchDraftByName($searchText, $objectClass, $dataSourceKey, $limit)
 
 
 
+function searchDraftByName($searchText, $objectClass, $dataSourceKey, $limit)
+{
+	global $gCNN_DBS_ORCA;
+	
+	$resultSet = null;
+	$strQuery = 'SELECT * FROM dba.udf_search_draft_by_name($1,$2,$3,$4)';
+	$params = array($searchText, $objectClass, $dataSourceKey, $limit);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);	
+	return $resultSet;
+}
+
+
+
+
 // functions defind to obtain registry statistics
 //------------------------------------------------------------
 function getDataSourceCount($created_when=null)
