@@ -68,25 +68,24 @@ function dctInit(imagePath)
 function dctGetDateTimeControl(inputFieldId, format)
 {
 
-	// Setup the control icon.
-	var title = "";
-	//format = format.replace("X","");
-	if( format.indexOf('YYYY') > -1 )
-	{
-		title += 'Calendar';
-	}
-	if( format.indexOf('hh') > -1 )
-	{
-		if( title.length > 0 )
-		{
-			title += ' and ';
-		}
-		title += 'Time';
-	}
-	
-	var onclick = "dctDisplayDateTimeControl('" + inputFieldId + "', '" +  format + "')";
-	document.write('<img class="dctIcon" src="' + dctImagesRootPath + DCT_ICON_INACTIVE + '" id="' + inputFieldId + DCT_ICON_ID_SUFFIX + '" onclick="' + onclick + '" alt="" title="' + title + '" style="vertical-align: middle;" />');
-	// Set the input field size and maxlength.
+	$(function() {
+		$( "#" + inputFieldId ).datetimepicker({
+			changeMonth: true,
+			changeYear: true,			
+		    showOtherMonths: true,
+		    useTimeSelects: true,
+		    selectOtherMonths: true,
+		    showButtonPanel: true,
+		    showTimezone: false,
+			showSecond: false,
+		    timeFormat: "hh:mm:ssZ",		    
+		    yearRange: "c-100:c+100",
+			dateFormat: "yy-mm-dd",
+			showOn: "button",
+			buttonImage: "../_images/dct_icon_inactive.gif",
+			buttonImageOnly: true
+		});
+	});
 	var inputField = getObject(inputFieldId);
 	inputField.size = format.length;
 	inputField.maxLength = 30;
