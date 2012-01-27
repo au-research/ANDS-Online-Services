@@ -26,6 +26,9 @@ $uriLabelClass = '';
 $providerTypeLabelClass = '';
 $harvestMethodLabelClass = '';
 $primaryRelationshipClass = '';
+$createPrimaryClass = '';
+$pushNLALabelClass ='';
+
 if(getPostedValue('action'))
 {	
 	$allow_reverse_internal_links = getPostedValue('allow_reverse_internal_links');
