@@ -69,14 +69,14 @@ limitations under the License.
 // Display deployment, debug and error status as required.
 if( $eDeploymentStatus != 'PROD' )
 {
-	switch( $eDeploymentStatus )
+	switch( strtok($eDeploymentStatus, " ") )
 	{
 		case 'DEVEL':
-			print "<div style=\"color: #ffffff; background: #ff4aaa; border: solid #be3790; border-width: 0px 0px 0px 20px; font-weight: bold; padding: 4px;\">&nbsp;DEVELOPMENT&nbsp;</div>";
+			print "<div style=\"color: #ffffff; background: #ff4aaa; border: solid #be3790; border-width: 0px 0px 0px 20px; font-weight: bold; padding: 4px;\">&nbsp;".esc($eDeploymentStatus)."&nbsp;</div>";
 			break;
 			
 		case 'TEST':
-			print "<div style=\"color: #ffffff; background: #00d8ff; border: solid #0096c7; border-width: 0px 0px 0px 20px; font-weight: bold; padding: 4px;\">&nbsp;TEST&nbsp;</div>";
+			print "<div style=\"color: #ffffff; background: #00d8ff; border: solid #0096c7; border-width: 0px 0px 0px 20px; font-weight: bold; padding: 4px;\">&nbsp;".esc($eDeploymentStatus)."&nbsp;</div>";
 			break'';
 			
 		default:
