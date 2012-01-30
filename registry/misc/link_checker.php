@@ -108,3 +108,5 @@ if($totalErrors > 0 || !$emalOnErrorOnly)
 	$footer = "<p>links checked: ".$linkChecked."<br/>number of bad links: ".$totalErrors."</body></html>";
 	mail(eCONTACT_EMAIL, $subject, $fileContent.$footer, $headers);
 }
+require '../../_includes/finish.php';
+?>
