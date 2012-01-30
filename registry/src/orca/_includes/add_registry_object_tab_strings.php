@@ -586,8 +586,7 @@ $_strings['*_preview'] = <<<HTMLEND
 					<tr>
 						<td>
 							<div style="height:22px;">&nbsp;</div>				
-							<div id="errors_preview"></div>		
-											
+							<div id="errors_preview"></div>						
 						</td>
 					</tr>
 					<tr>
@@ -600,7 +599,7 @@ $_strings['*_preview'] = <<<HTMLEND
 							<div id="rmd_preview" style="display:inline-block; width:100%;">
 							</div>
 							
-							
+							<a style="float:right; font-size:10px; font-weight:bold;" class="rda_preview" href="" target="_blank"><img src="{$orcaImgRoot}globe.png" />Preview in Research Data Australia</a>
 							</form>
 						</td>
 					</tr>
