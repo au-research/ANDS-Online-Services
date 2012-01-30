@@ -41,6 +41,7 @@ limitations under the License.
 	$orca = $this->config->item('orca');
 ?>
 <div>
+	<?php if($numFound >0 ):?>
 	<div class="resultListHeader">
 		<?php echo ''.$numFound.' results ('.$timeTaken.' seconds)';?>
 	</div>
@@ -105,5 +106,10 @@ limitations under the License.
 	<div class="resultListFooter">
 	<?php $this->load->view('search/pagination');?>
 	</div>
+	<?php else:?>
+	<div class="resultListHeader">
+		No result found!
+	</div>
+	<?php endif;?>
 </div>
 <?php endif;?>
