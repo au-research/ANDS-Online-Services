@@ -66,15 +66,15 @@ if($dataSources)
 							$headers = null;
 							if($headers = get_headers($relatedInfo['identifier']))
 							{
-	    						$httpCode = substr($headers[0], 9, 3);
-								if($httpCode == 404)
+	    						$httpCode = substr($headers[0], 9, 1);
+								if($httpCode == 4 || $httpCode == 5)
 								{
-									$validationResults[$i++] = Array("identifier" => $relatedInfo['identifier'],"registry_object_key" => $registryObject['registry_object_key']); 
+									$validationResults[$i++] = Array("identifier" => $relatedInfo['identifier'],"registry_object_key" => $registryObject['registry_object_key'], "response_code" => $headers[0]); 
 								}
 							}
 							else
 							{
-								$validationResults[$i++] = Array("identifier" => $relatedInfo['identifier'],"registry_object_key" => $registryObject['registry_object_key']); 								
+								$validationResults[$i++] = Array("identifier" => $relatedInfo['identifier'],"registry_object_key" => $registryObject['registry_object_key'], "response_code" => 'request timed out'); 								
 							}
 						}
 					}
@@ -87,11 +87,10 @@ if($dataSources)
 				$fileContent .= "<ul>\n";
 				for($j=0; $j < sizeof($validationResults) ; $j++)
 				{	
-					$fileContent .="<li>uri: ".$validationResults[$j]['identifier']." for registry_object_key: ".$validationResults[$j]['registry_object_key']."</li>\n";
+					$fileContent .="<li>uri: ".$validationResults[$j]['identifier']." for registry_object_key: ".$validationResults[$j]['registry_object_key']." response code: ".$validationResults[$j]['response_code']."</li>\n";
 				}
 				$fileContent .="</ul><br/>\n";
 			}
-	
 		}
 		$validationResults = Array();
 		$registryObjects = null;
@@ -107,8 +106,7 @@ if($totalErrors > 0 || !$emalOnErrorOnly)
 	$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
 	$footer = "<p>links checked: ".$linkChecked."<br/>number of bad links: ".$totalErrors."</body></html>";
 	mail($eCONTACT_EMAIL,$subject,$fileContent.$footer, $headers);
-	//$logFilePath =  "/var/www/htdocs/".$cosi_root;
 }
 
-require '../../_includes/finish.php';
+require '_includes/finish.php';
 ?>
