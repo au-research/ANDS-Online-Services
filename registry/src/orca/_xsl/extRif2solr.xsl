@@ -271,26 +271,7 @@
             <xsl:value-of select="@type"/>
         </xsl:element>       
     </xsl:template>
-    
-    
-    <xsl:template match="ro:name">
-		<xsl:apply-templates/>     
-    </xsl:template>
-    
-    <xsl:template match="ro:name/ro:listTitle">
-        <xsl:element name="field">
-            <xsl:attribute name="name">alt_list_title</xsl:attribute>
-            <xsl:value-of select="."/>
-        </xsl:element>       
-    </xsl:template>
-    
-    <xsl:template match="ro:name/ro:displayTitle">
-        <xsl:element name="field">
-            <xsl:attribute name="name">alt_display_title</xsl:attribute>
-            <xsl:value-of select="."/>
-        </xsl:element>       
-    </xsl:template>
-    
+      
     <xsl:template match="ro:subject" mode="value">
         <xsl:element name="field">
             <xsl:attribute name="name">subject_value_unresolved</xsl:attribute>
@@ -341,6 +322,8 @@
     </xsl:template>
    
     <xsl:template match="ro:date | ro:description"/>
+    
+    <xsl:template match="ro:name"/>
    		
    
 </xsl:stylesheet>
