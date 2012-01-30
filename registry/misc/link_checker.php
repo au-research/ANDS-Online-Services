@@ -21,13 +21,14 @@ ini_set("memory_limit","768M");
 ini_set('display_errors',0);
 //error_reporting(E_ALL|E_STRICT);
 
+$cosi_root = "/var/www/htdocs/home/";
+set_include_path(get_include_path() . PATH_SEPARATOR . $cosi_root);
 
-include '../src/global_config.php';
-include '../src/orca/_functions/orca_data_functions.php';
-include '../src/_includes/_functions/database_functions.php';
-include '../src/_includes/_functions/data_functions.php';
-include '../src/_includes/_environment/database_env.php';
-
+include 'global_config.php';
+include 'orca/_functions/orca_data_functions.php';
+include '_includes/_functions/database_functions.php';
+include '_includes/_functions/data_functions.php';
+include '_includes/_environment/database_env.php';
 
 //chdir($deployementDir."orca/admin");
 // Connect to the database.
@@ -65,15 +66,15 @@ if($dataSources)
 							$headers = null;
 							if($headers = get_headers($relatedInfo['identifier']))
 							{
-	    						$httpCode = substr($headers[0], 9, 3);
-								if($httpCode == 404)
+	    						$httpCode = substr($headers[0], 9, 1);
+								if($httpCode == 4 || $httpCode == 5)
 								{
-									$validationResults[$i++] = Array("identifier" => $relatedInfo['identifier'],"registry_object_key" => $registryObject['registry_object_key']); 
+									$validationResults[$i++] = Array("identifier" => $relatedInfo['identifier'],"registry_object_key" => $registryObject['registry_object_key'], "response_code" => $headers[0]); 
 								}
 							}
 							else
 							{
-								$validationResults[$i++] = Array("identifier" => $relatedInfo['identifier'],"registry_object_key" => $registryObject['registry_object_key']); 								
+								$validationResults[$i++] = Array("identifier" => $relatedInfo['identifier'],"registry_object_key" => $registryObject['registry_object_key'], "response_code" => 'request timed out'); 								
 							}
 						}
 					}
@@ -86,11 +87,10 @@ if($dataSources)
 				$fileContent .= "<ul>\n";
 				for($j=0; $j < sizeof($validationResults) ; $j++)
 				{	
-					$fileContent .="<li>uri: ".$validationResults[$j]['identifier']." for registry_object_key: ".$validationResults[$j]['registry_object_key']."</li>\n";
+					$fileContent .="<li>uri: ".$validationResults[$j]['identifier']." for registry_object_key: ".$validationResults[$j]['registry_object_key']." response code: ".$validationResults[$j]['response_code']."</li>\n";
 				}
 				$fileContent .="</ul><br/>\n";
 			}
-	
 		}
 		$validationResults = Array();
 		$registryObjects = null;
@@ -106,8 +106,7 @@ if($totalErrors > 0 || !$emalOnErrorOnly)
 	$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
 	$footer = "<p>links checked: ".$linkChecked."<br/>number of bad links: ".$totalErrors."</body></html>";
 	mail($eCONTACT_EMAIL,$subject,$fileContent.$footer, $headers);
-	//$logFilePath =  "/var/www/htdocs/".$cosi_root;
 }
 
-require '../../_includes/finish.php';
+require '_includes/finish.php';
 ?>
