@@ -52,10 +52,10 @@ $action = strtoupper(getPostedValue('action'));
 // Action the action.
 switch( $action )
 {
-	case 'EDIT ACCOUNT':
+	case 'EDIT DATA SOURCE':
 		responseRedirect('data_source_edit.php?data_source_key='.urlencode(getQueryValue('data_source_key')));
 		break;
-	case 'DELETE ACCOUNT':
+	case 'DELETE DATA SOURCE':
 		responseRedirect('data_source_delete.php?data_source_key='.urlencode(getQueryValue('data_source_key')));
 		break;
 	case 'CLEAR LOG':
@@ -165,8 +165,8 @@ require '../../_includes/header.php';
 		<tr style="border-bottom:2px solid black;">
 		<td colspan="2"><span style="float:left;"><h3>Account Administration Information</h3></span>
 		<span style="text-align:right;">
-				<input type="submit" name="action" value="Edit Account" title="Edit the settings for this Data Source" />&nbsp;
-				<?php if( hasActivity(aORCA_DATA_SOURCE_DELETE) ) { ?><input type="submit" name="action" value="Delete Account" title="Delete this Data Source" />&nbsp;<?php } ?>
+				<input type="submit" name="action" value="Edit Data Source" title="Edit the settings for this Data Source" />&nbsp;
+				<?php if( hasActivity(aORCA_DATA_SOURCE_DELETE) ) { ?><input type="submit" name="action" value="Delete Data Source" title="Delete this Data Source" />&nbsp;<?php } ?>
 		</span>
 		</td>
 		</tr>
