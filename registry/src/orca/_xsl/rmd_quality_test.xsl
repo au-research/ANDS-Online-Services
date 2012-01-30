@@ -14,7 +14,7 @@
 		    <xsl:when test="$output = 'script'">
 		        <script>
 					<xsl:apply-templates select="ro:registryObject"/>
-					<xsl:text>$("#errors_preview").delay(1100).css('display','inline-block');</xsl:text>
+					<xsl:text>$("#errors_preview").delay(1100).show();</xsl:text>
 				</script>
 		    </xsl:when>
 		    <xsl:otherwise>

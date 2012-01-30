@@ -270,10 +270,10 @@ textarea {
     padding: 15px 10px 15px 15px;
    /* background-position: 10px 10px;
     background-repeat: no-repeat; */
-    width:95%;
+    margin:10px;
 }
 
-.info_notification {
+.info_notification, #rda_preview_container {
 	background-color: #ffffff;
     /*background-image: url("../_images/message_icon.png"); */
     color: #00529B;
@@ -281,8 +281,13 @@ textarea {
     padding: 15px 10px 15px 15px;
    /* background-position: 10px 10px;
     background-repeat: no-repeat; */
-    width:95%;
+    margin:10px;
 }
+#rda_preview{
+	text-decoration:none;
+	color:blue;
+}
+#rda_preview:hover{text-decoration:underline;}
 
 .success_notification {
     background-color: #DFF2BF;
@@ -292,7 +297,7 @@ textarea {
     padding: 15px 10px 15px 50px;
     background-position: 10px 10px;
     background-repeat: no-repeat;
-    width:95%;   
+    margin:10px;
 }
 
 #panel_container {

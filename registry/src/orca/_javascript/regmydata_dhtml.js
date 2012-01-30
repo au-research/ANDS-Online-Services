@@ -1158,10 +1158,15 @@ function saveAndPreview() {
 	
 	if (userMode != 'readOnly')
 	{
+	
 		$("#errors_preview").before(
 							"<div id='save_notification' class='success_notification'>This draft has been saved successfully.<br/>" +
 							"<span style=\"font-size:10px;\"><b>Note:</b> Draft records are not added to the ANDS Registry but are saved and can be accessed through the <a href=\""+ rootAppPath + "orca/manage/my_records.php\" title=\"Manage my Records\" style=\"color:#336600\">Manage my Records</a> tool in the Register My Data menu.</span>" +
 							"</div>"
+		);
+		
+		$("#errors_preview").before(
+							"<div id='rda_preview_container'><a id='rda_preview' href='#' target='_blank'><img src='"+rootAppPath+"orca/_images/globe.png' /> Preview in Research Data Australia</a></div>"
 		);
 	} 
 
@@ -1366,7 +1371,7 @@ function SetWarnings(field, text, qCheck) {
 ////console.log("qaRequiredWWW: " + qaRequired);	
 		$("#errors_preview").removeClass('success_notification');
 		$("#errors_preview").addClass('warning_notification');
-		$("#errors_preview").html(	'<div style="float:left;display:inline-block;">' +
+		$("#errors_preview").html(	'<div>' +
 				'<span style="font-size:1.2em">This draft does not meet the ANDS Metadata Content Requirements.</span>'+
 				'<div id="quagmire_list">' +
 				'</div>' +		
@@ -2281,7 +2286,7 @@ function displayQuagmireSummary()
 	{
 		// Create the infos DIV if appropriate
 		if (!$("#infos_preview").length) {
-			$("#errors_preview").after('<div class="info_notification" id="infos_preview" style="display:block; width:100%;"></div>');
+			$("#errors_preview").after('<div class="info_notification" id="infos_preview"></div>');
 		}
 		
 		$("#infos_preview").html(rec_message).show();
