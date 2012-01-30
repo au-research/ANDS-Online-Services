@@ -116,8 +116,11 @@ $rdaLink = '<a href="'.esc(eHTTP_APP_ROOT.'orca/rda/index.php').'">Research Data
 			<i>Logged in as:</i> <?php printSafe(getSessionVar(sNAME))?>&nbsp;(<?php printSafe(getSessionVar(sROLE_ID)) ?>)&nbsp;&nbsp;
 			<?php } ?>
 			<?php if( $thisHelpURI && hasActivity('aCOSI_HELP') ){ ?>
+			<?php if( strpos(strtoupper($thisHelpURI), 'HTTP') === 0){ ?>
+			<a rel="help" href="<?php print($thisHelpURI); ?>" title="Help for this page (new window)">Help</a>
+			<?php } else {?>
 			<a rel="help" href="<?php print eAPP_ROOT.'help.php?id='.$gThisActivityID.'&amp;page='.urlencode($_SERVER['REQUEST_URI']).'#'.urlencode($thisHelpFragmentId) ?>" title="Help for this page (new window)">Help</a>
-			<?php } ?>
+			<?php } }?>
 		</div>
 		<div id="pageContent"><a id="contentStart" name="contentStart"></a>
 <!-- BEGIN: Page Content -->

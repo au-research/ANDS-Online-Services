@@ -629,7 +629,7 @@ addMenu($menu);
 			$activity = new activity('aORCA_DATA_SOURCE_VIEW', 'View Data Source', 'orca/admin/data_source_view.php');
 			$activity->menu_id = 'mORCA_DATA_SOURCE_ADMIN';
 			$activity->only_show_if_active= true;
-			$activity->help_content_uri = eAPP_ROOT.'orca/_helpcontent/hc_data_source_list.php';
+			$activity->help_content_uri = 'http://ands.org.au/guides/cpguide/cpgdsaaccount.html';
 			addActivity($activity);
 				
 			
