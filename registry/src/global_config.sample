@@ -32,6 +32,22 @@ $harvester_ip 	= '';
 $pids_uri		= "https://devl.ands.org.au:8443/pids/";
 $pids_fid 		= '';
 
+//=====================================
+// The name of the application.
+define("eAPP_TITLE", "Online Services");
+
+// The name of this installed instance of the application.
+// eINSTANCE_TITLE_SHORT will be used in the window title.
+// eINSTANCE_TITLE will be used as the logo alt/title.
+define("eINSTANCE_TITLE", "My Organisation");
+define("eINSTANCE_TITLE_SHORT", "MyORG");
+
+define("eCONTACT_EMAIL", "services@ands.org.au");
+define("eCONTACT_NAME", "Feedback");
+
+define("eCOPYRIGHT_NOTICE", "");
+
+
 
 //======================================
 $deploy_as		= 'PROD';
@@ -53,6 +69,9 @@ $ip=$_SERVER["HTTP_X_FORWARDED_FOR"];
 $ip=$_SERVER["HTTP_CLIENT_IP"];
 } else if ( isset($_SERVER["REMOTE_ADDR"]) )    {
 $ip=$_SERVER["REMOTE_ADDR"];
+} else {
+// Run by command line??
+$ip="127.0.0.1";
 } 
 	
 if($maintenance & !in_array($ip, $white_list_ip)){
