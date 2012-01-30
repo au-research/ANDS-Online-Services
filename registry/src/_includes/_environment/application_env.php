@@ -81,20 +81,6 @@ $ip=$_SERVER["REMOTE_ADDR"];
 $ip=$_SERVER["HTTP_CLIENT_IP"];
 }
 
-// The name of the application.
-define("eAPP_TITLE", "Online Services");
-
-// The name of this installed instance of the application.
-// eINSTANCE_TITLE_SHORT will be used in the window title.
-// eINSTANCE_TITLE will be used as the logo alt/title.
-define("eINSTANCE_TITLE", "My Organisation");
-define("eINSTANCE_TITLE_SHORT", "MyORG");
-
-define("eCONTACT_EMAIL", "services@my.org.au");
-define("eCONTACT_NAME", "Feedback");
-
-define("eCOPYRIGHT_NOTICE", "");
-
 
 // Set the identity theme for this instance of the application.
 $eThemes = array(   'EXAMPLE'	=> array( eIMAGE_ROOT.'_logos/logo_EXAMPLE.gif',
