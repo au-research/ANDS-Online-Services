@@ -21,13 +21,14 @@ ini_set("memory_limit","768M");
 ini_set('display_errors',0);
 //error_reporting(E_ALL|E_STRICT);
 
+$cosi_root = "/var/www/htdocs/home/";
+set_include_path(get_include_path() . PATH_SEPARATOR . $cosi_root);
 
-include '../src/global_config.php';
-include '../src/orca/_functions/orca_data_functions.php';
-include '../src/_includes/_functions/database_functions.php';
-include '../src/_includes/_functions/data_functions.php';
-include '../src/_includes/_environment/database_env.php';
-
+include 'global_config.php';
+include 'orca/_functions/orca_data_functions.php';
+include '_includes/_functions/database_functions.php';
+include '_includes/_functions/data_functions.php';
+include '_includes/_environment/database_env.php';
 
 //chdir($deployementDir."orca/admin");
 // Connect to the database.
