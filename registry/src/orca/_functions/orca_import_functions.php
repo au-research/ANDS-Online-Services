@@ -254,7 +254,7 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 				$rifcs .= '                 xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects '.gRIF_SCHEMA_URI.'">'."\n";
 				$rifcs .= $registryObjects->saveXML($registryObject);
 				$rifcs .= '</registryObjects>';
-				//return $rifcs;die();
+
 				if ($dataSourceKey != 'PUBLISH_MY_DATA' && getDraftCountByStatus($dataSourceKey, SUBMITTED_FOR_ASSESSMENT) == 0)
 				{
 					send_email(
@@ -520,6 +520,7 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 
 				$extRif = generateExtendedRIFCS($registryObjectKey);
 				if (!writeCache($dataSourceKey, $registryObjectKey, $extRif))
+
 				{
 					$runErrors .= "Could not writeCache() for key: " . $registryObjectKey ."\n";
 				} 

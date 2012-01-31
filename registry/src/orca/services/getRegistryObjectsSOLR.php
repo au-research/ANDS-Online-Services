@@ -151,6 +151,7 @@ if($solrUrl)
 			
 			if(($i % $chunkSize == 0 && $i != 0) || $i == ($arraySize -1))
 			{					
+<<<<<<< HEAD
 					$rifcs = wrapRegistryObjects($rifcsContent);
 					$solrrifcs = transformToSolr($rifcs);
 					printf("%-145s", "<i>Fetching extRif for records " . $i . " to " . ($i+$chunkSize) . "... [took ".bench(1)."s]</i>"); 
@@ -164,6 +165,13 @@ if($solrUrl)
 					{					
 						$result = curl_post($solrUrl, $solrrifcs);
 					}
+=======
+	
+					$rifcs .= wrapRegistryObjects($rifcsContent);
+					$rifcs = transformToSolr($rifcs);									
+					$result = curl_post($solrUrl, $rifcs);
+					print($j.': ('.$i.')registryObjects is sent to solr ' . $result . "<br/>");					
+>>>>>>> First cut at caching layer
 					
 					$result = curl_post($solrUrl.'?commit=true', '<commit waitFlush="false" waitSearcher="false"/>');
 					printf("%-145s", "Sending " . $chunkSize ." records to SOLR... [took ".bench(2)."s]</i> (Commit Result: ".$result.")<br/>"); 
@@ -186,8 +194,13 @@ else if($key && $foo)
 	$result =  getRegistryObjectXMLforSOLR($key);
 	header("Content-Type: text/xml; charset=UTF-8", true);
 	// BEGIN: XML Response
+<<<<<<< HEAD
 	$rifcs = wrapRegistryObjects($result);
 	$rifcs = transformToSolr($rifcs);
+=======
+
+	$rifcs = transformToSolr($result);
+>>>>>>> First cut at caching layer
 	// TODO : this is needed untill we stop having rifcs 1.0 elements in the database!!!
 	// so delete it once the green and orange is imp[lemented + all data is migrated to rifcs 1.2 placeholders!!
 
@@ -199,7 +212,10 @@ else if($key)
 {
 	header("Content-Type: text/xml; charset=UTF-8", true);
 
+<<<<<<< HEAD
 	$rifcs = '';
+=======
+>>>>>>> First cut at caching layer
 	if($registryObject = getRegistryObject($key))
 	{
 		$rifcs .= getRegistryObjectXMLforSOLR($key);

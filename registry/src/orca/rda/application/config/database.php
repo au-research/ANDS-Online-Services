@@ -56,10 +56,7 @@ limitations under the License.
 | the active record class
 */
 global $orca_db_host, $orca_db_name, $orca_db_port;
-<<<<<<< HEAD
 
-=======
->>>>>>> Initial dispatcher for SLUG-based URLs
 $active_group = 'default';
 $active_record = TRUE;
 

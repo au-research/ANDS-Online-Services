@@ -96,3 +96,4 @@ SET registry_date_modified = (
     FROM dba.tbl_registry_objects AS newValue 
     WHERE oldValue.registry_object_key= newValue.registry_object_key
 );
+

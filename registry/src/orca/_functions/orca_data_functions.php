@@ -2571,6 +2571,7 @@ function getRegistryObjectDataSourceKey($registry_object_key)
 		return $resultSet[0]['data_source_key'];
 }
 
+
 function getRegistryObjectRegistryDateModified($registry_object_key)
 {
 	global $gCNN_DBS_ORCA;
