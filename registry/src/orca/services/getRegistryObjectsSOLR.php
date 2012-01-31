@@ -136,7 +136,7 @@ if($solrUrl)
 		$arraySize = sizeof($allKeys);
 		print $arraySize . '<br/>';
 		ob_flush();flush();
-		$chunkSize = 100;
+		$chunkSize = 500;
 		$j = 1;
 		$result = 'test';
 		for($i = 0; $i < $arraySize ; $i++)
@@ -180,8 +180,8 @@ else if($key && $foo)
 	$result =  getRegistryObjectXMLforSOLR($key);
 	header("Content-Type: text/xml; charset=UTF-8", true);
 	// BEGIN: XML Response
-
-	$rifcs = transformToSolr($result);
+	$rifcs = wrapRegistryObjects($result);
+	$rifcs = transformToSolr($rifcs);
 	// TODO : this is needed untill we stop having rifcs 1.0 elements in the database!!!
 	// so delete it once the green and orange is imp[lemented + all data is migrated to rifcs 1.2 placeholders!!
 
@@ -198,7 +198,7 @@ else if($key)
 		$rifcs .= getRegistryObjectXMLforSOLR($key);
 		
 	}
-	$rifcs .= "</registryObjects>\n";
+	$rifcs = wrapRegistryObjects($rifcs);
 	// TODO : this is needed untill we stop having rifcs 1.0 elements in the database!!!
 	// so delete it once the green and orange is imp[lemented + all data is migrated to rifcs 1.2 placeholders!!
 
