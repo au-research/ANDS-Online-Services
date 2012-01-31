@@ -1,0 +1,13 @@
+RewriteEngine On
+RewriteBase /workareas/liz/ands/registry/src/
+
+# Remap version number and response type according to the URL structure
+RewriteRule ^dois/(.*)/(.*)\.(.*)/ doi/index.php?/$2/&api_version=$1&response_type=$3 [QSA,NC]
+RewriteRule ^dois/(.*)/(.*)/ doi/index.php?/$2/&api_version=$1&response_type=string [QSA,NC]
+
+# Remap old v1.0 API URLs to the new URL
+RewriteRule ^dois/doi_mint.php doi/index.php?/mint/&api_version=1.0&response_type=string [QSA,NC]
+
+
+
+# TODO: ADD THE REST HERE ^^
