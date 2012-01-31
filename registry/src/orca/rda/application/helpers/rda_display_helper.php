@@ -34,7 +34,7 @@ function displayFacet($facet_name, $facetFilter, $json, $ro_class){
 			}else $name = 'Types';				
 			$class="typeFilter";break;
 		case "group":$clear = 'clearGroup';$name='Research Groups';$class="groupFilter";break;
-		case "subject_value":$clear = 'clearSubjects';$name="Subjects";$class="subjectFilter";break;
+		case "subject_value_resolved":$clear = 'clearSubjects';$name="Subjects";$class="subjectFilter";break;
 	}
 	
 

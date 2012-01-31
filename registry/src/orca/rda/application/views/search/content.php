@@ -78,7 +78,7 @@ limitations under the License.
 				//var_dump($r->{'description_value'});
 				$type = $r->{'type'};
 				$ro_key = $r->{'key'};
-				$name = $r->{'listTitle'};
+				$name = $r->{'list_title'};
 				if($name=='')$name='(no name/title)';
 				$descriptions = array();if(isset($r->{'description_value'})) $descriptions = $r->{'description_value'};
 				$description_type=array();if(isset($r->{'description_type'})) $description_type = $r->{'description_type'};
@@ -103,8 +103,8 @@ limitations under the License.
 					$center = $r->{'spatial_coverage_center'}[0];
 				}
 				$subjects='';
-				if(isset($r->{'subject_value'})){
-					$subjects = $r->{'subject_value'};
+				if(isset($r->{'subject_value_resolved'})){
+					$subjects = $r->{'subject_value_resolved'};
 				}
 
 				echo '<div class="search_item">';

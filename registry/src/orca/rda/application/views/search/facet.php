@@ -47,6 +47,6 @@ if(($spatial_included_ids!='') || ($temporal!='All') || ($typeFilter!='All') || 
 	 * displayFacet is in helpers
 	*/
 	displayFacet('group', $groupFilter, $json, $classFilter);
-	displayFacet('subject_value', $subjectFilter, $json, $classFilter);
+	displayFacet('subject_value_resolved', $subjectFilter, $json, $classFilter);
 	displayFacet('type', $typeFilter, $json, $classFilter);
 ?>
