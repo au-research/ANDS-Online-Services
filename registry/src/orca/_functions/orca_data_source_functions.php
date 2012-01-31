@@ -586,7 +586,7 @@ function transformToSolr($registryObjectsXML)
 $qtestxsl = new DomDocument();
 $registryObjects = new DomDocument();
 $registryObjects->loadXML($registryObjectsXML);
-$qtestxsl->load('../_xsl/rif2solr.xsl');
+$qtestxsl->load('../_xsl/extRif2solr.xsl');
 $proc = new XSLTProcessor();
 $proc->importStyleSheet($qtestxsl);
 $transformResult = $proc->transformToXML($registryObjects);	
@@ -611,13 +611,7 @@ function runSolrIndexForDatasource($dataSourceKey)
 	}
 	if($publishedRecords > 0)
 	{
-				
-		$rifcs = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
-		$rifcs .='<registryObjects xmlns="http://ands.org.au/standards/rif-cs/registryObjects" '."\n";
-		$rifcs .='                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '."\n";
-		$rifcs .='                 xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects '.gRIF2_SCHEMA_URI.'">'."\n";	
-		$rifcs .= $rifcsContent;			
-		$rifcs .= "</registryObjects>\n";		
+		$rifcs = wrapRegistryObjects($rifcsContent);
 		$rifcs = transformToSolr($rifcs);									
 		$result .= curl_post(gSOLR_UPDATE_URL, $rifcs);					
 		$result .= curl_post(gSOLR_UPDATE_URL.'?commit=true', '<commit waitFlush="false" waitSearcher="false"/>');

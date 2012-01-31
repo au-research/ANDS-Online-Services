@@ -163,6 +163,15 @@ $menu = new menu('mORCA_CONTAINER', 'Collections Registry', gROOT_MENU_ID);
 $menu->margin_class = 'marginLeftLightYellow';
 addMenu($menu);
 
+
+	// =============================================================================
+	// Maintenance
+	$activity = new activity('aORCA_RUN_TASKS', '', 'orca/maintenance/runTasks.php');
+	$activity->menu_id = 'mORCA_CONTAINER';
+	addActivity($activity);
+	$activity->only_show_if_active= true;
+
+
 	// =============================================================================
 	// Index
 	$activity = new activity('aORCA_INDEX', '', 'orca/index.php');

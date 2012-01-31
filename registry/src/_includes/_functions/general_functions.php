@@ -386,4 +386,22 @@ function compareLooseXMLEquivalent ($xmlFragment1, $xmlFragment2, $stripWhitespa
 	// Loosely assume fragments are equivalent
 	return true;
 }
+
+$BENCHMARK_TIME = 0;
+function bench()
+{
+	global $BENCHMARK_TIME;
+	if ($BENCHMARK_TIME == 0) 
+	{
+		$BENCHMARK_TIME = microtime(true);
+	}
+	else
+	{
+		$BENCHMARK_TIME = 0;
+		return sprintf ("%.3f", (float) (microtime(true) - $BENCHMARK_TIME));
+	}
+}
+
+
+
 ?>
