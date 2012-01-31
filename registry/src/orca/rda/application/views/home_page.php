@@ -27,9 +27,9 @@ limitations under the License.
 		foreach($d->{'description_type'} as $index=>$type){
 			if($type=='logo') $partners[$key]['logo']=$d->{'description_value'}[$index];
 			if($type=='brief') {
-				$partners[$key]['full']='<h3><a href="search#!/q='.str_replace('-','',trim($d->{'displayTitle'})).'/tab=activity">'.$d->{'displayTitle'}.'</a></h3>'
+				$partners[$key]['full']='<h3><a href="search#!/q='.str_replace('-','',trim($d->{'display_title'})).'/tab=activity">'.$d->{'display_title'}.'</a></h3>'
 											.''.
-											$d->{'description_value'}[$index].''.
+											$d->{'description_value'}[$index].
 											'<p><a href="'.trim($d->{'location'}[0]).'" title="Visit Partner Portal">'.$d->{'location'}[0].'</a></p>';
 			}
 			$partners[$key]['url']=$d->{'location'}[0];

@@ -1121,7 +1121,7 @@ $(document).ready(function(){
 
 		$('.hp-class-item').live('click', function(){
 			var id = $(this).attr('id');
-			resultSort='listTitle asc';
+			resultSort='s_list_title asc';
 			changeHashTo(formatSearch(search_term,1,id));
 		});
 		
