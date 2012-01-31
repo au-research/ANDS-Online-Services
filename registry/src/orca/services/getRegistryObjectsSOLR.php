@@ -199,6 +199,7 @@ else if($key && $foo)
 	header("Content-Type: text/xml; charset=UTF-8", true);
 	// BEGIN: XML Response
 
+
 	$rifcs = wrapRegistryObjects($result);
 	$rifcs = transformToSolr($rifcs);
 
