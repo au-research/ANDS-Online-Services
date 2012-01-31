@@ -32,6 +32,7 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 	$totalElements = 0;
 	$totalRegistryObjectElements = 0;
 
+	$recordsCached = 0;
 	$totalRegistryObjectInserts = 0;
 	$totalRegistryObjectDeletes = 0;
 	$totalRegistryObjectChanges = 0;
@@ -242,7 +243,7 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 				$rifcs .= '                 xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects '.gRIF_SCHEMA_URI.'">'."\n";
 				$rifcs .= $registryObjects->saveXML($registryObject);
 				$rifcs .= '</registryObjects>';
-					
+				
 				if ($dataSourceKey != 'PUBLISH_MY_DATA' && getDraftCountByStatus($dataSourceKey, SUBMITTED_FOR_ASSESSMENT) == 0)
 				{
 					send_email(
@@ -494,10 +495,20 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 					
 				} // Service
 			
-		// Add a default and list title for the registry object
-		updateRegistryObjectTitles ($registryObjectKey, 
-                                    getOrderedNames($registryObjectKey, (isset($party) && $party), true), 
-                                    getOrderedNames($registryObjectKey, (isset($party) && $party), false));	                       
+				// Add a default and list title for the registry object
+				updateRegistryObjectTitles ($registryObjectKey, 
+                						getOrderedNames($registryObjectKey, (isset($party) && $party), true), 
+                                    	getOrderedNames($registryObjectKey, (isset($party) && $party), false));	
+										
+				// A new record has been inserted? Update the cache
+				if (!writeCache($dataSourceKey, $registryObjectKey, getExtendedRIFCS($registryObjectKey))
+				{
+					$runErrors .= "Could not writeCache() for key: " . $registryObjectKey ."\n";
+				} 
+				else
+				{
+					$recordsCached++;
+				}
 			}			
 		}
 		else
@@ -513,6 +524,7 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 	$runResultMessage .= "  ACTIONS\n";
 	$runResultMessage .= "    $totalRegistryObjectDeletes Registry Object/s deleted.\n";
 	$runResultMessage .= "    $totalRegistryObjectInserts Registry Object/s inserted.\n";
+	$runResultMessage .= "    $recordsCached records cached.\n";
 	$runResultMessage .= "    $totalAttemptedInserts attempted inserts.\n";
 	$runResultMessage .= "    $totalInserts inserts.\n";
 

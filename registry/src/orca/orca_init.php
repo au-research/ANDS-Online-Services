@@ -20,6 +20,7 @@ limitations under the License.
 require '_includes/init.php';
 require '_functions/orca_constants.php';
 require '_functions/orca_access_functions.php';
+require '_functions/orca_cache_functions.php';
 require '_functions/orca_data_functions.php';
 require '_functions/orca_import_functions.php';
 require '_functions/orca_export_functions.php';

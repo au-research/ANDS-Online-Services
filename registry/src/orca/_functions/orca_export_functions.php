@@ -12,12 +12,55 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+
+********************************************************************************
+$Date: 2011-11-25 14:26:15 +1100 (Fri, 25 Nov 2011) $
+$Revision: 1633 $
 *******************************************************************************/
 
-function getRegistryObjectXML($registryObjectKey)
+function getRegistryObjectXML($registryObjectKey, $forSOLR = false, $includeRelated = false)
 {
-	$xml = '';
+	$data_source_key = getRegistryObjectDataSourceKey($registryObjectKey);
+	
+	// Registry key probably doesn't exist?
+	if (!$data_source_key) return FALSE;
+	
+	// Get the result from cache as extended rifcs (hopefully!)
+	$result = getCacheItems($data_source_key, $registryObjectKey, eCACHE_CURRENT_NAME, $forSOLR);
+	
+	// No luck? Well, lets try and index it then...
+	if ($result === FALSE)
+	{
+		writeCache($data_source_key, $registryObjectKey, generateExtendedRIFCS($registryObjectKey));
+	}
+	$result = getCacheItems($data_source_key, $registryObjectKey, eCACHE_CURRENT_NAME, $forSOLR);
+	
+	// Still no luck? Fall back to getRegistryObjectXMLforSOLR and build from DB XXX: Temporary
+	if ($result !== FALSE)
+	{
+		return $result;
+	}
+	else
+	{
+		// go ahead and rebuild by hand (fallback)
+		return getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR, $includeRelated);
+	}
+}
+
+function getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR = false, $includeRelated = false)
+{
+	// go ahead and rebuild by hand (fallback)
+	$xml = '';	
 	$registryObject = getRegistryObject($registryObjectKey);
+	
+	if ($forSOLR)
+	{
+		$dataSourceKey = $registryObject[0]["data_source_key"];
+		$registryObjectStatus = $registryObject[0]["status"];
+		$dataSource = getDataSources($dataSourceKey, null);
+		$allow_reverse_internal_links = $dataSource[0]['allow_reverse_internal_links'];
+		$allow_reverse_external_links = $dataSource[0]['allow_reverse_external_links'];
+	}
 	
 	if( $registryObject )
 	{
@@ -30,16 +73,72 @@ function getRegistryObjectXML($registryObjectKey)
 		// =====================================================================
 		$xml .= "    <key>".esc($registryObjectKey)."</key>\n";
 		
-		// Registry Object Originating Source
-		// =====================================================================
-		$originatingSource = esc($registryObject[0]['originating_source']);
-		$originatingSourceType = '';
-		if( $registryObject[0]['originating_source_type'] )
-		{
-			$originatingSourceType = ' type="'.esc($registryObject[0]['originating_source_type']).'"';
-		}
 		
-		$xml .= "    <originatingSource$originatingSourceType>$originatingSource</originatingSource>\n";
+		if ($forSOLR)
+		{
+			$xml .= "    <extRif:extendedMetadata>\n";
+			$hash = getRegistryObjectHash($registryObjectKey);
+			if ($hash)
+			{
+				$xml .= "      <extRif:keyHash>".esc($hash)."</extRif:keyHash>\n";
+			}
+
+			$hash = getDataSourceHash($dataSourceKey);
+			if ($hash)
+			{
+				$xml .= "      <extRif:dataSourceKeyHash>".esc($hash)."</extRif:dataSourceKeyHash>\n";
+			}
+			$xml .= "      <extRif:status>".esc($registryObjectStatus)."</extRif:status>\n";
+			$xml .= "      <extRif:dataSourceKey>".esc($dataSourceKey)."</extRif:dataSourceKey>\n";		
+			$reverseLinks = 'NONE';
+			$allow_reverse_internal_links = $dataSource[0]['allow_reverse_internal_links'];
+			$allow_reverse_external_links = $dataSource[0]['allow_reverse_external_links'];
+			if($allow_reverse_internal_links == 't' && $allow_reverse_external_links == 't')
+			{
+				$reverseLinks = 'BOTH';
+			}
+			else if($allow_reverse_internal_links == 't')
+			{
+				$reverseLinks = 'INT';
+				
+			}
+			else if($allow_reverse_external_links == 't')
+			{
+				$reverseLinks = 'EXT';
+			}
+			$xml .= "      <extRif:reverseLinks>".$reverseLinks."</extRif:reverseLinks>\n";
+
+			// displayTitle
+			// -------------------------------------------------------------
+			$xml .= '      <extRif:displayTitle>'.esc(trim($registryObject[0]['display_title'])).'</extRif:displayTitle>'."\n";
+			$logo = '';
+			$logoStr = getDescriptionLogo($registryObjectKey);
+			if ($logoStr !== false)
+			{
+				$xml .= '      <extRif:displayLogo>'.$logoStr.'</extRif:displayLogo>'."\n";
+			}	
+			
+			// listTitle
+			// -------------------------------------------------------------
+			$xml .= '      <extRif:listTitle>'.esc(trim($registryObject[0]['list_title'])).'</extRif:listTitle>'."\n";
+			
+			
+			// searchBaseScore (base "boost" used to adjust search rankings)
+			$baseScore = eBOOST_DEFAULT_BASE;
+			
+			// number of related objects:
+			$number_of_related_objects = getRelatedObjectCount($registryObjectKey);
+			$baseScore += eBOOST_RELATED_OBJECT_ADJUSTMENT * (int) $number_of_related_objects;
+			
+			// number of INCOMING related objects (objects that relate to us):
+			$number_of_related_objects = getIncomingRelatedObjectCount($registryObjectKey);
+			$baseScore += eBOOST_INCOMING_RELATED_OBJECT_ADJUSTMENT * (int) $number_of_related_objects;
+			
+			$xml .= "      <extRif:searchBaseScore>$baseScore</extRif:searchBaseScore>\n";
+			
+			
+			$xml .= "    </extRif:extendedMetadata>\n";
+		}
 		
 		// Registry Object Class
 		// =====================================================================
@@ -59,6 +158,19 @@ function getRegistryObjectXML($registryObjectKey)
 			$dateModified = ' dateModified="'.esc(getXMLDateTime($registryObject[0]['date_modified'])).'"';
 		}	
 			
+		
+		// Registry Object Originating Source
+		// =====================================================================
+		$originatingSource = esc($registryObject[0]['originating_source']);
+		$originatingSourceType = '';
+		if( $registryObject[0]['originating_source_type'] )
+		{
+			$originatingSourceType = ' type="'.esc($registryObject[0]['originating_source_type']).'"';
+		}
+		
+		$xml .= "    <originatingSource$originatingSourceType>$originatingSource</originatingSource>\n";
+		
+		
 		// To prevent empty XML elements, we append to blank string and check that it actually
 		// contains data
 		$internalxml = "";
@@ -66,51 +178,65 @@ function getRegistryObjectXML($registryObjectKey)
 		// identifier
 		// -------------------------------------------------------------
 		$internalxml .= getIdentifierTypesXML($registryObjectKey, 'identifier');
-		// existenceDates
-		// -------------------------------------------------------------
-		$internalxml .= getExistenceDateTypesXML($registryObjectKey, 'existenceDates');	
 		
 		// name
 		// -------------------------------------------------------------
-		$internalxml .= getComplexNameTypesXML($registryObjectKey, 'name');
+		$internalxml .= getComplexNameTypesXML($registryObjectKey, 'name', $registryObjectClass, $forSOLR);
 		
 		// location
 		// -------------------------------------------------------------
-		$internalxml .= getLocationTypesXML($registryObjectKey, 'location');
+		$internalxml .= getLocationTypesXML($registryObjectKey, 'location', $forSOLR);
 
-		// coverage
-		// -------------------------------------------------------------
-		$internalxml .= getCoverageTypesXML($registryObjectKey, 'coverage');		
-		
-		// relatedObject
-		// -------------------------------------------------------------
-		$internalxml .= getRelatedObjectTypesXML($registryObjectKey, $dataSource, $registryObjectClass,'relatedObject');
+		if($forSOLR && $includeRelated)
+		{
+			// relatedObject
+			// -------------------------------------------------------------
+			$internalxml .= getRelatedObjectTypesXML($registryObjectKey, $dataSourceKey, $registryObjectClass, 'relatedObject', $forSOLR);
+		}
+		else if (!$forSOLR)
+		{
+			// relatedObject
+			// -------------------------------------------------------------
+			$internalxml .= getRelatedObjectTypesXML($registryObjectKey, $dataSource, $registryObjectClass,'relatedObject');
+		}
 		
 		// subject
 		// -------------------------------------------------------------
-		$internalxml .= getSubjectTypesXML($registryObjectKey, 'subject');
+		$internalxml .= getSubjectTypesXML($registryObjectKey, 'subject', $forSOLR);
 		
 		// description
 		// -------------------------------------------------------------
-		$internalxml .= getDescriptionTypesXML($registryObjectKey, 'description');
-		
-		// rights
+		$internalxml .= getDescriptionTypesXML($registryObjectKey, 'description', $forSOLR);
+
+		// coverage
 		// -------------------------------------------------------------
-		$internalxml .= getRightsTypesXML($registryObjectKey, 'rights');									
+		$internalxml .= getCoverageTypesXML($registryObjectKey, 'coverage', $forSOLR);		
+		
+		
+		// relatedInfo
+		// -------------------------------------------------------------
+		$internalxml .= getRelatedInfoTypesXML($registryObjectKey, 'relatedInfo');
+		
+		// rights 
+		// -------------------------------------------------------------
+		$internalxml .= getRightsTypesXML($registryObjectKey, 'rights', $forSOLR);			
+		
+		// existenceDates
+		// -------------------------------------------------------------
+		$internalxml .= getExistenceDateTypesXML($registryObjectKey, 'existenceDates');	
+
+		//citationInfo
+		// -------------------------------------------------------------
+		$internalxml .= getCitationInformationTypeXML($registryObjectKey, 'citationInfo');
+
+				
 		if($registryObjectClass  == 'service')
 		{				
 			// accessPolicy
 			// -------------------------------------------------------------
 			$internalxml .= getAccessPolicyTypesXML($registryObjectKey, 'accessPolicy');
-		}		
-		// relatedInfo
-		// -------------------------------------------------------------
-		$internalxml .= getRelatedInfoTypesXML($registryObjectKey, 'relatedInfo');
+		}	
 		
-		//citationInfo
-		// -------------------------------------------------------------
-		$internalxml .= getCitationInformationTypeXML($registryObjectKey, 'citationInfo');
-
 		if (strlen($internalxml) > 0)
 		{
 			$xml .= "    <$registryObjectClass type=\"$type\"".$dateAccessioned.$dateModified.">\n";
@@ -125,6 +251,8 @@ function getRegistryObjectXML($registryObjectKey)
 
 	return $xml;
 }
+
+
 function getRegistryObjectRelatedObjectsforSOLR($registryObjectKey)
 {
 	$xml = '';
@@ -179,7 +307,7 @@ function getRegistryObjectRelatedObjectsforSOLR($registryObjectKey)
 		$internalxml .= getExistenceDateTypesXMLSolr($registryObjectKey, 'existenceDates');				
 		// relatedObject
 		// -------------------------------------------------------------
-		$internalxml .= getRelatedObjectTypesXMLforSolr($registryObjectKey, $registryObjectClass,$dataSourceKey,'relatedObject');
+		$internalxml .= getRelatedObjectTypesXML($registryObjectKey, $registryObjectClass,$dataSourceKey,'relatedObject', true);
 		
 		// reverse links
 		// -------------------------------------------------------------		
@@ -198,8 +326,12 @@ function getRegistryObjectRelatedObjectsforSOLR($registryObjectKey)
 
 	return $xml;							
 }
+
+
 function getRegistryObjectXMLforSOLR($registryObjectKey,$includeRelated=false)
 {
+	return getRegistryObjectXML($registryObjectKey, true, $includeRelated);
+	/*
 	$xml = '';
 	$registryObject = getRegistryObject($registryObjectKey);
 	$dataSourceKey = $registryObject[0]["data_source_key"];
@@ -218,8 +350,8 @@ function getRegistryObjectXMLforSOLR($registryObjectKey,$includeRelated=false)
 		// Registry Object Key
 		// =====================================================================
 		$xml .= "    <key>".esc($registryObjectKey)."</key>\n";
-		$xml .= "    <status>".esc($registryObjectStatus)."</status>\n";
-		$xml .= "    <dataSourceKey>".esc($dataSourceKey)."</dataSourceKey>\n";		
+		$xml .= "    <extRif:status>".esc($registryObjectStatus)."</extRif:status>\n";
+		$xml .= "    <extRif:dataSourceKey>".esc($dataSourceKey)."</extRif:dataSourceKey>\n";		
 		$reverseLinks = 'NONE';
 		$allow_reverse_internal_links = $dataSource[0]['allow_reverse_internal_links'];
 		$allow_reverse_external_links = $dataSource[0]['allow_reverse_external_links'];
@@ -236,7 +368,7 @@ function getRegistryObjectXMLforSOLR($registryObjectKey,$includeRelated=false)
 		{
 			$reverseLinks = 'EXT';
 		}
-		$xml .= "    <reverseLinks>".$reverseLinks."</reverseLinks>\n";
+		$xml .= "    <extRif:reverseLinks>".$reverseLinks."</extRif:reverseLinks>\n";
 		// Registry Object Originating Source
 		// =====================================================================
 		$originatingSource = esc($registryObject[0]['originating_source']);
@@ -275,7 +407,7 @@ function getRegistryObjectXMLforSOLR($registryObjectKey,$includeRelated=false)
 		
 		// displayTitle
 		// -------------------------------------------------------------
-		$internalxml .= '<displayTitle>'.esc(trim($registryObject[0]['display_title'])).'</displayTitle>';
+		$internalxml .= '<extRif:displayTitle>'.esc(trim($registryObject[0]['display_title'])).'</extRif:displayTitle>';
 				$logo = '';
 	//if ($registryObjectClass == 'Party')
 	//{
@@ -283,20 +415,20 @@ function getRegistryObjectXMLforSOLR($registryObjectKey,$includeRelated=false)
 		if ($logoStr !== false)
 		{
 			
-			$internalxml .= '<displayLogo>'.$logoStr.'</displayLogo>';
-		/*	$logo = <<<HTML
+			$internalxml .= '<extRif:displayLogo>'.$logoStr.'</extRif:displayLogo>';
+			$logo = <<<HTML
 					<span style="position:relative;float:right;"><img id="party_logo" style="right:0; top:0;position:absolute; float:right;" src="{$logoStr}"/></span>
 					<script type="text/javascript">
 					testLogo('party_logo', '{$logoStr}');
 					</script>
-HTML; */
+HTML; 
 			
 		} 
 	//}
 		
 		// listTitle
 		// -------------------------------------------------------------
-		$internalxml .= '<listTitle>'.esc(trim($registryObject[0]['list_title'])).'</listTitle>';
+		$internalxml .= '<extRif:listTitle>'.esc(trim($registryObject[0]['list_title'])).'</extRif:listTitle>';
 		
 		// name
 		// -------------------------------------------------------------
@@ -355,8 +487,9 @@ HTML; */
 		
 		$xml .= "  </registryObject>\n";
 	}
-
+	
 	return $xml;
+	*/
 }
 
 
@@ -387,29 +520,6 @@ function getIdentifierTypesXML($registryObjectKey, $elementName)
 	return $xml;
 }
 
-function getComplexNameTypesXMLforSOLR($registryObjectKey, $elementName, $registryObjectClass)
-{
-	$xml = '';
-	$elementName = esc($elementName);
-	$list = getComplexNames($registryObjectKey);
-	if( $list )
-	{
-		foreach( $list as $element )
-		{
-			if( $type = $element['type'] )
-			{
-				$type = ' type="'.esc($type).'"';
-			}
-			if($element['type'] == 'alternative')
-			{
-				$xml .= "      <$elementName$type>\n";
-				$xml .= getNamePartsXMLforSOLR($element['complex_name_id'], $registryObjectClass);
-				$xml .= "      </$elementName>\n";
-			}
-		}
-	}
-	return $xml;
-}
 
 function getNamePartsXMLforSOLR($complex_name_id,$registryObjectClass)
 {
@@ -488,12 +598,12 @@ function getNamePartsXMLforSOLR($complex_name_id,$registryObjectClass)
 			}
 		}
 			
-	if($list_title) {$names = "<listTitle>".esc($list_title)."</listTitle>\n";}else{$names='';}	
-	$names .= "<displayTitle>".esc($display_title)."</displayTitle>\n";
+	if($list_title) {$names = "<extRif:listTitle>".esc($list_title)."</extRif:listTitle>\n";}else{$names='';}	
+	$names .= "<extRif:displayTitle>".esc($display_title)."</extRif:displayTitle>\n";
 	return $names;
 }
 
-function getComplexNameTypesXML($registryObjectKey, $elementName)
+function getComplexNameTypesXML($registryObjectKey, $elementName, $registryObjectClass, $forSOLR = false)
 {
 	$xml = '';
 	$elementName = esc($elementName);
@@ -518,9 +628,20 @@ function getComplexNameTypesXML($registryObjectKey, $elementName)
 			{
 				$lang = ' xml:lang="'.esc($lang).'"';
 			}
+			if ($forSOLR)
+			{
+				if($element['type'] == 'alternative')
+				{
+					$xml .= "      <extRif:$elementName$type>\n";
+					$xml .= getNamePartsXMLforSOLR($element['complex_name_id'], $registryObjectClass);
+					$xml .= "      </extRif:$elementName>\n";
+				}
+			}
+			
 			$xml .= "      <$elementName$dateFrom$dateTo$type$lang>\n";
 			$xml .= getNamePartsXML($element['complex_name_id']);
 			$xml .= "      </$elementName>\n";
+			
 		}
 	}
 	return $xml;
@@ -545,38 +666,7 @@ function getNamePartsXML($complex_name_id)
 	return $xml;
 }
 
-
-function getLocationTypesXMLforSOLR($registryObjectKey, $elementName)
-{
-	$xml = '';
-	$elementName = esc($elementName);
-	$list = getLocations($registryObjectKey);
-	if( $list )
-	{
-		foreach( $list as $element )
-		{
-			if( $dateFrom = $element['date_from'] )
-			{
-				$dateFrom = ' dateFrom="'.formatDateTime($dateFrom, gDATE).'"';
-			}
-			if( $dateTo = $element['date_to'] )
-			{
-				$dateTo = ' dateTo="'.formatDateTime($dateTo, gDATE).'"';
-			}
-			if( $type = $element['type'] )
-			{
-				$type = ' type="'.esc($type).'"';
-			}
-			$xml .= "      <$elementName$dateFrom$dateTo$type>\n";
-			$xml .= getAddressXMLforSOLR($element['location_id']);
-			$xml .= getSpatialTypesXMLforSOLR($element['location_id']);
-			$xml .= "      </$elementName>\n";
-		}
-	}
-	return $xml;
-}
-
-function getLocationTypesXML($registryObjectKey, $elementName)
+function getLocationTypesXML($registryObjectKey, $elementName, $forSOLR)
 {
 	$xml = '';
 	$elementName = esc($elementName);
@@ -588,27 +678,34 @@ function getLocationTypesXML($registryObjectKey, $elementName)
 			if( $dateFrom = $element['date_from'] )
 			{
 				$dateFrom = ' dateFrom="'.getXMLDateTime($dateFrom).'"';
+				if ($forSOLR)
+				{
+					$dateFrom .= ' extRif:dateFrom="'.formatDateTime($dateFrom, gDATE).'"';
+				}
 			}
 			if( $dateTo = $element['date_to'] )
 			{
 				$dateTo = ' dateTo="'.getXMLDateTime($dateTo).'"';
+				if ($forSOLR)
+				{
+					$dateTo .= ' extRif:dateTo="'.formatDateTime($dateTo, gDATE).'"';
+				}
+				
 			}
 			if( $type = $element['type'] )
 			{
 				$type = ' type="'.esc($type).'"';
 			}
 			$xml .= "      <$elementName$dateFrom$dateTo$type>\n";
-			$xml .= getAddressXML($element['location_id']);
-			$xml .= getSpatialTypesXML($element['location_id']);
+			$xml .= getAddressXML($element['location_id'], $forSOLR);
+			$xml .= getSpatialTypesXML($element['location_id'], $forSOLR);
 			$xml .= "      </$elementName>\n";
 		}
 	}
 	return $xml;
 }
 
-
-
-function getCoverageTypesXMLforSOLR($registryObjectKey, $elementName)
+function getCoverageTypesXML($registryObjectKey, $elementName, $forSOLR)
 {
 	$xml = '';
 	$elementName = esc($elementName);
@@ -618,26 +715,8 @@ function getCoverageTypesXMLforSOLR($registryObjectKey, $elementName)
 		foreach( $list as $element )
 		{
 			$xml .= "      <$elementName>\n";
-			$xml .= getSpatialCoverageXMLforSOLR($element['coverage_id']);
-			$xml .= getTemporalCoverageXMLforSOLR($element['coverage_id']);
-			$xml .= "      </$elementName>\n";
-		}
-	}
-	return $xml;
-}
-
-function getCoverageTypesXML($registryObjectKey, $elementName)
-{
-	$xml = '';
-	$elementName = esc($elementName);
-	$list = getCoverage($registryObjectKey);
-	if( $list )
-	{
-		foreach( $list as $element )
-		{
-			$xml .= "      <$elementName>\n";
-			$xml .= getSpatialCoverageXML($element['coverage_id']);
-			$xml .= getTemporalCoverageXML($element['coverage_id']);
+			$xml .= getSpatialCoverageXML($element['coverage_id'], $forSOLR);
+			$xml .= getTemporalCoverageXML($element['coverage_id'], $forSOLR);
 			$xml .= "      </$elementName>\n";
 		}
 	}
@@ -645,80 +724,7 @@ function getCoverageTypesXML($registryObjectKey, $elementName)
 }
 
 
-
-
-function getSpatialCoverageXMLforSOLR($coverage_id)
-{
-	$xml = '';
-	$centre = '';
-	$list = getSpatialCoverage($coverage_id);
-	if( $list )
-	{
-		foreach( $list as $element )
-		{
-			if( $type = $element['type'] )
-			{
-				$type = ' type="'.esc($type).'"';
-			}
-						
-			if($element['type'] == 'iso19139dcmiBox')
-			{
-				$valueString =  strtolower(esc($element['value'])).';';
-				$matches = array();
-				preg_match('/northlimit=([^;]*);/i', $valueString, $matches);
-				$north = (float)$matches[1];
-				preg_match('/southlimit=([^;]*);/i', $valueString, $matches);
-				$south = (float)$matches[1];
-				preg_match('/westlimit=([^;]*);/i', $valueString, $matches);
-				$west = (float)$matches[1];
-				preg_match('/eastlimit=([^;]*);/i', $valueString, $matches);
-				$east = (float)$matches[1];	
-				$coordinates = "$west,$north $east,$north $east,$south $west,$south $west,$north";		
-				$centre = (($east+$west)/2).','.(($north+$south)/2);
-				$xml .= "        <spatial>$west,$north $east,$north $east,$south $west,$south $west,$north</spatial>\n";
-			}
-			else if($element['type'] ==  'gmlKmlPolyCoords' || $element['type'] == 'kmlPolyCoords')
-			{
-				$coordinates = trim(esc($element['value']));
-				$coordinates = preg_replace("/\s+/", " ", $coordinates);
-				
-				if( validKmlPolyCoords($coordinates) )
-				{
-					// Build the coordinates string for the centre.
-					$points = explode(' ', $coordinates);
-					if( count($points) > 0 )
-					{
-						$north = -90.0;
-						$south = 90.0;
-						$west = 180.0;
-						$east = -180.0;
-						foreach( $points as $point )
-						{
-							$P = explode(',', $point); // lon,lat
-							if( (float)$P[0] >= $east ){ $east = (float)$P[0]; }
-							if( (float)$P[0] <= $west ){ $west = (float)$P[0]; }
-							if( (float)$P[1] >= $north ){ $north = (float)$P[1]; }
-							if( (float)$P[1] <= $south ){ $south = (float)$P[1]; }
-						}
-					}
-					$centre = (($east+$west)/2).','.(($north+$south)/2);
-					$xml .= "        <spatial>$coordinates</spatial>\n";
-				}
-			}else{
-				$valueString =  strtolower(esc($element['value']));
-				$xml .= "        <spatial $type>$valueString</spatial>\n";	
-			}
-	        if($centre != '')
-	        {
-	        	$xml .= "        <center>$centre</center>\n";
-	        }			
-		}
-	}
-	return $xml;
-}
-
-
-function getSpatialCoverageXML($coverage_id)
+function getSpatialCoverageXML($coverage_id, $forSOLR)
 {
 	$xml = '';
 	$list = getSpatialCoverage($coverage_id);
@@ -736,49 +742,82 @@ function getSpatialCoverageXML($coverage_id)
 			}
 			$value = esc($element['value']);
 			$xml .= "        <spatial$type$lang>$value</spatial>\n";
+			
+			if ($forSOLR)
+			{
+				
+				$xml .= "        <extRif:spatial$type$lang>\n";
+				$centre = '';
+				if($element['type'] == 'iso19139dcmiBox')
+				{
+					$valueString =  strtolower(esc($element['value'])).';';
+					$matches = array();
+					preg_match('/northlimit=([^;]*);/i', $valueString, $matches);
+					$north = (float)$matches[1];
+					preg_match('/southlimit=([^;]*);/i', $valueString, $matches);
+					$south = (float)$matches[1];
+					preg_match('/westlimit=([^;]*);/i', $valueString, $matches);
+					$west = (float)$matches[1];
+					preg_match('/eastlimit=([^;]*);/i', $valueString, $matches);
+					$east = (float)$matches[1];	
+					$coordinates = "$west,$north $east,$north $east,$south $west,$south $west,$north";		
+					$centre = (($east+$west)/2).','.(($north+$south)/2);
+					$xml .= "          <extRif:coords>$west,$north $east,$north $east,$south $west,$south $west,$north</extRif:coords>\n";
+				}
+				else if($element['type'] ==  'gmlKmlPolyCoords' || $element['type'] == 'kmlPolyCoords')
+				{
+					$coordinates = trim(esc($element['value']));
+					$coordinates = preg_replace("/\s+/", " ", $coordinates);
+					
+					if( validKmlPolyCoords($coordinates) )
+					{
+						// Build the coordinates string for the centre.
+						$points = explode(' ', $coordinates);
+						if( count($points) > 0 )
+						{
+							$north = -90.0;
+							$south = 90.0;
+							$west = 180.0;
+							$east = -180.0;
+							foreach( $points as $point )
+							{
+								$P = explode(',', $point); // lon,lat
+								if( (float)$P[0] >= $east ){ $east = (float)$P[0]; }
+								if( (float)$P[0] <= $west ){ $west = (float)$P[0]; }
+								if( (float)$P[1] >= $north ){ $north = (float)$P[1]; }
+								if( (float)$P[1] <= $south ){ $south = (float)$P[1]; }
+							}
+						}
+						$centre = (($east+$west)/2).','.(($north+$south)/2);
+						$xml .= "          <extRif:coords>$coordinates</extRif:coords>\n";
+					}
+				}
+//			}else{
+//				$valueString =  strtolower(esc($element['value']));
+//				$xml .= "        <spatial $type>$valueString</spatial>\n";	
+
+		        if($centre != '')
+		        {
+		        	$xml .= "          <extRif:center>$centre</extRif:center>\n";
+		        }			
+				$xml .= "        </extRif:spatial>\n";
+								
+			}
+			
 		}
 	}
 	return $xml;
 }
 
-function getTemporalCoverageXMLforSOLR($coverage_id)
+
+function getTemporalCoverageXML($coverage_id, $forSOLR)
 {
 	$xml = '';
 	$list = getTemporalCoverage($coverage_id);
 
 	if($list)
 	{
-		foreach( $list as $element )
-		{
-			$dateArray = getTemporalCoverageDate($element['temporal_coverage_id']);
-			if($dateArray)
-			{
-				$xml .= '<temporal>';
-				asort($dateArray);
-				foreach( $dateArray as $row )
-				{
-					$type = ' type="'.esc($row['type']).'"';	
-					$dateFormat = ' dateFormat="'.esc($row['date_format']).'"';
-					$value = FormatDateTime(esc($row['value']), gDATE);
-					$xml .= "            <date$type$dateFormat>$value</date>\n";
-				}
-				$xml .= '</temporal>';	
-			}
-		}	
-	}
-	return $xml;
-}
-
-
-
-function getTemporalCoverageXML($coverage_id)
-{
-	$xml = '';
-	$list = getTemporalCoverage($coverage_id);
-
-	if($list)
-	{
-	$xml .= '<temporal>';
+	$xml .= "        <temporal>\n";
 		foreach( $list as $element )
 		{
 			$textArray = getTemporalCoverageText($element['temporal_coverage_id']);
@@ -790,7 +829,7 @@ function getTemporalCoverageXML($coverage_id)
 				{
 					if($value = $row['value'])
 					{
-					$xml .= '<text>'.esc($value).'</text>';
+					$xml .= "          <text>".esc($value)."</text>\n";
 					}
 				}	
 			}
@@ -802,11 +841,24 @@ function getTemporalCoverageXML($coverage_id)
 					$type = ' type="'.esc($row['type']).'"';	
 					$dateFormat = ' dateFormat="'.esc($row['date_format']).'"';
 					$value = esc($row['value']);
-					$xml .= "            <date$type$dateFormat>$value</date>\n";
+					$xml .= "          <date$type$dateFormat>$value</date>\n";
+					
+					if ($forSOLR)
+					{
+						try 
+						{
+							$value = FormatDateTime(esc($row['value']), gDATE);
+						}
+						catch (Exception $e)
+						{
+							$value = ''; // ???? 2008-01-01 00:00:00-01-01T
+						}
+						$xml .= "          <extRif:date$type$dateFormat>$value</extRif:date>\n";
+					}
 				}	
 			}
 		}
-	$xml .= '</temporal>';	
+	$xml .= "        </temporal>\n";	
 	}
 	return $xml;
 }
@@ -912,7 +964,7 @@ function getCitationDatesXML($citation_info_id)
 }
 
 
-function getAddressXML($location_id)
+function getAddressXML($location_id, $forSOLR)
 {
 	$xml = '';
 	$list = getAddressLocations($location_id);
@@ -922,28 +974,13 @@ function getAddressXML($location_id)
 		{
 			$xml .= "        <address>\n";
 			$xml .= getElectronicAddressTypesXML($element['address_id']);
-			$xml .= getPhysicalAddressTypesXML($element['address_id']);
+			$xml .= getPhysicalAddressTypesXML($element['address_id'], $forSOLR);
 			$xml .= "        </address>\n";
 		}
 	}
 	return $xml;
 }
-function getAddressXMLforSOLR($location_id)
-{
-	$xml = '';
-	$list = getAddressLocations($location_id);
-	if( $list )
-	{
-		foreach( $list as $element )
-		{
-			$xml .= "        <address>\n";
-			$xml .= getElectronicAddressTypesXML($element['address_id']);
-			$xml .= getPhysicalAddressTypesXMLforSOLR($element['address_id']);
-			$xml .= "        </address>\n";
-		}
-	}
-	return $xml;
-}
+
 function getElectronicAddressTypesXML($address_id)
 {
 	$xml = '';
@@ -997,7 +1034,7 @@ function getElectronicAddressArgsXML($electronic_address_id)
 	return $xml;
 }
 
-function getPhysicalAddressTypesXML($address_id)
+function getPhysicalAddressTypesXML($address_id, $forSOLR)
 {
 	$xml = '';
 	$list = getPhysicalAddresses($address_id);
@@ -1014,60 +1051,15 @@ function getPhysicalAddressTypesXML($address_id)
 				$lang = ' xml:lang="'.esc($lang).'"';
 			}
 			$xml .= "          <physical$type$lang>\n";
-			$xml .= getAddressPartsXML($element['physical_address_id']);	
-			$xml .= "          </physical>\n";
-		}	
-	}
-	return $xml;
-}
-function getPhysicalAddressTypesXMLforSOLR($address_id)
-{
-	$xml = '';
-	$list = getPhysicalAddresses($address_id);
-	if( $list )
-	{
-		foreach( $list as $element )
-		{
-			if( $type = $element['type'] )
-			{
-				$type = ' type="'.esc($type).'"';
-			}
-			if( $lang = $element['lang'] )
-			{
-				$lang = ' xml:lang="'.esc($lang).'"';
-			}
-			$xml .= "          <physical$type$lang>\n";
-			$xml .= getAddressPartsXMLforSOLR($element['physical_address_id']);	
+			$xml .= getAddressPartsXML($element['physical_address_id'], $forSOLR);	
 			$xml .= "          </physical>\n";
 		}	
 	}
 	return $xml;
 }
 
-function getAddressPartsXMLforSOLR($physical_address_id)
-{
-	$xml = '';
-	$list = getAddressParts($physical_address_id);
-	if( $list )
-	{
-		asort($list);
-		foreach( $list as $element )
-		{			
-			if( $type = $element['type'] )
-			{
-				$type = ' type="'.strtolower(esc($type)).'"';
-			}
-			$value = ($element['value']);
-			$value = htmlspecialchars_decode($value);
-			$value = purify($value);
-			$value = htmlspecialchars($value);
-			$xml .= "            <addressPart$type>$value</addressPart>\n";
-		}		
-	}
-	return $xml;
-}
 
-function getAddressPartsXML($physical_address_id)
+function getAddressPartsXML($physical_address_id, $forSOLR)
 {
 	$xml = '';
 	$list = getAddressParts($physical_address_id);
@@ -1081,101 +1073,21 @@ function getAddressPartsXML($physical_address_id)
 			}
 			$value = esc($element['value']);
 			$xml .= "            <addressPart$type>$value</addressPart>\n";
+			
+			if ($forSOLR)
+			{
+				$value = htmlspecialchars_decode($value);
+				$value = purify($value);
+				$value = htmlspecialchars($value);
+				$xml .= "            <extRif:addressPart$type>$value</extRif:addressPart>\n";
+			}
 		}		
 	}
 	return $xml;
 }
 
 
-
-function getSpatialTypesXMLforSOLR($location_id)
-{
-	$xml = '';
-	$list = getSpatialLocations($location_id);
-	$centre = '';
-	if( $list )
-	{
-		foreach( $list as $element )
-		{
-			if( $type = $element['type'] )
-			{
-				$type = ' type="'.esc($type).'"';
-			}
-
-			if($element['type'] == 'iso19139dcmiBox')
-			{
-				$valueString = strtolower(esc($element['value'])).';';
-				$matches = array();
-				preg_match('/northlimit=([^;]*);/i', $valueString, $matches);
-				$north = (float)$matches[1];
-				preg_match('/southlimit=([^;]*);/i', $valueString, $matches);
-				$south = (float)$matches[1];
-				preg_match('/westlimit=([^;]*);/i', $valueString, $matches);
-				$west = (float)$matches[1];
-				preg_match('/eastlimit=([^;]*);/i', $valueString, $matches);
-				$east = (float)$matches[1];	
-				$coordinates = "$west,$north $east,$north $east,$south $west,$south $west,$north";		
-				$centre = (($east+$west)/2).','.(($north+$south)/2);
-				$xml .= "        <spatial>$west,$north $east,$north $east,$south $west,$south $west,$north</spatial>\n";
-				
-			}
-			else if($element['type'] ==  'gmlKmlPolyCoords' || $element['type'] == 'kmlPolyCoords')
-			{
-				$coordinates = trim(esc($element['value']));
-				$coordinates = preg_replace("/\s+/", " ", $coordinates);
-				
-				if( validKmlPolyCoords($coordinates) )
-				{
-					// Build the coordinates string for the centre.
-					$points = explode(' ', $coordinates);
-					if( count($points) > 0 )
-					{
-						$north = -90.0;
-						$south = 90.0;
-						$west = 180.0;
-						$east = -180.0;
-						foreach( $points as $point )
-						{
-							$P = explode(',', $point); // lon,lat
-							if( (float)$P[0] >= $east ){ $east = (float)$P[0]; }
-							if( (float)$P[0] <= $west ){ $west = (float)$P[0]; }
-							if( (float)$P[1] >= $north ){ $north = (float)$P[1]; }
-							if( (float)$P[1] <= $south ){ $south = (float)$P[1]; }
-						}
-					}
-					$centre = (($east+$west)/2).','.(($north+$south)/2);
-				    $xml .= "        <spatial>$coordinates</spatial>\n";
-					
-				}
-			}else{
-				
-					if( $type = $element['type'] )
-					{
-						$type = ' type="'.esc($type).'"';
-					}
-					if( $lang = $element['lang'] )
-					{
-						$lang = ' xml:lang="'.esc($lang).'"';
-					}
-					$value = esc($element['value']);
-					$xml .= "        <spatial$type$lang>$value</spatial>\n";
-				
-			}
-	        if($centre != '')
-	        {
-	        	$xml .= "        <center>$centre</center>\n";
-
-	        }			
-			
-			
-			
-		}
-	}
-	return $xml;
-}
-
-
-function getSpatialTypesXML($location_id)
+function getSpatialTypesXML($location_id, $forSOLR)
 {
 	$xml = '';
 	$list = getSpatialLocations($location_id);
@@ -1193,174 +1105,73 @@ function getSpatialTypesXML($location_id)
 			}
 			$value = esc($element['value']);
 			$xml .= "        <spatial$type$lang>$value</spatial>\n";
-		}
-	}
-	return $xml;
-}
-
-function getRelatedObjectTypesXMLforSolr($registryObjectKey,$registryObjectClass, $dataSourceKey, $elementName)
-{
-	$xml = '';
-	$elementName = esc($elementName);
-	$datasource = null;
-	$dataSource = getDataSources($dataSourceKey, null);	
-	$create_primary_relationships = $dataSource[0]['create_primary_relationships'];
-	$typeArray['collection'] = array(
-		"describes" => "Describes",
-		"hasAssociationWith" => "Associated with",
-		"hasCollector" => "Aggregated by",
-		"hasPart" => "Contains",
-		"isDescribedBy" => "Described by",
-		"isLocatedIn" => "Located in",
-		"isLocationFor" => "Location for",
-		"isEnrichedBy" => "Enriched by",
-		"isManagedBy" => "Managed by",
-		"isOutputOf" => "Output of",
-		"isOwnedBy" => "Owned by",
-		"isPartOf" => "Part of",
-		"supports" => "Supports"
-	);
-	$typeArray['party'] = array(
-		"hasAssociationWith" => "Associated with",
-		"hasMember" => "Has member",
-		"hasPart" => "Has part",
-		"isCollectorOf" => "Collector of",
-		"isFundedBy" => "Funded by",
-		"isFunderOf" => "Funds",
-		"isManagedBy" => "Managed by",
-		"isManagerOf" => "Manages",
-		"isMemberOf" => "Member of",
-		"isOwnedBy" => "Owned by",
-		"isOwnerOf" => "Owner of",
-		"isParticipantIn" => "Participant in",
-		"isPartOf" => "Part of",
-	);
-	$typeArray['service'] = array(
-		"hasAssociationWith" => "Associated with",
-		"hasPart" => "Includes",
-		"isManagedBy" => "Managed by",
-		"isMemberOf" => "Member of",	
-		"isOwnedBy" => "Owned by",
-		"isPartOf" => "Part of",
-		"isOutputOf" => "Output of",	
-		"isSupportedBy" => "Supported by",
-		"makesAvailable" => "Makes available"
-	);
-	$typeArray['activity'] = array(
-		"hasAssociationWith" => "Associated with",
-		"hasOutput" => "Produces",
-		"hasPart" => "Includes",
-		"hasParticipant" => "Undertaken by",
-		"isFundedBy" => "Funded by",
-		"isManagedBy" => "Managed by",
-		"isOwnedBy" => "Owned by",
-		"isPartOf" => "Part of",
-	);	
-
-	//we need to check if this datasource has primary relationships set up.
-	$pkey1 = '';
-	$pkey2 = '';
-	if($create_primary_relationships == 't'||$create_primary_relationships == '1')
-		{
-			$primary_key_1 =  $dataSource[0]['primary_key_1'];
-			$primary_key_2 =  $dataSource[0]['primary_key_2'];
-				$currentObject = getRegistryObject($registryObjectKey,true);			
-			if($primary_key_1!='' && $primary_key_1!=$registryObjectKey)
-			{
-
-				$pkey1 = esc($primary_key_1);
-				$relatedObject = getRegistryObject($pkey1,true);
-
-				$relatedclass= strtolower($relatedObject[0]['registry_object_class']);	
-			
-				$relation_logo = false;
-				if($typeArray[$relatedclass][$dataSource[0][strtolower($currentObject[0]['registry_object_class']).'_rel_1']])
-				{
-					$type = ' type="'.$typeArray[$relatedclass][$dataSource[0][strtolower($currentObject[0]['registry_object_class']).'_rel_1']].'"';
-				}else{
-					$type = ' type="'.$dataSource[0][strtolower($currentObject[0]['registry_object_class']).'_rel_1'].'"';
-				}
-				if (isset($row) &&	$relatedObject[0]['registry_object_class'] == 'Party' && strtolower($relatedObject[0]['type']) != 'person') 
-				{
-					$relation_logo = getDescriptionLogo($key);
-				}		
 				
-				$xml .= "      <$elementName>\n";
-				$xml .= "        <key>$pkey1</key>\n";				
-				$xml .= "		 <relatedObjectClass>".strtolower($relatedObject[0]['registry_object_class'])."</relatedObjectClass>";
-				$xml .= "		 <relatedObjectType>".strtolower($relatedObject[0]['type'])."</relatedObjectType>";
-				$xml .= "		 <relatedObjectListTitle>".esc($relatedObject[0]['list_title'])."</relatedObjectListTitle>";
-				$xml .= "		 <relatedObjectDisplayTitle>".esc($relatedObject[0]['display_title'])."</relatedObjectDisplayTitle>";
-				if($relation_logo) $xml .= "		 <relatedObjectLogo>".esc($relation_logo)."</relatedObjectLogo>";					
-				$xml .=   "<relation$type>\n</relation>";
-				$xml .= "      </$elementName>\n";			
+			if ($forSOLR)
+			{
+				$centre = '';
+				$xml .= "        <extRif:spatial>";
+				if($element['type'] == 'iso19139dcmiBox')
+				{
+					$valueString = strtolower(esc($element['value'])).';';
+					$matches = array();
+					preg_match('/northlimit=([^;]*);/i', $valueString, $matches);
+					$north = (float)$matches[1];
+					preg_match('/southlimit=([^;]*);/i', $valueString, $matches);
+					$south = (float)$matches[1];
+					preg_match('/westlimit=([^;]*);/i', $valueString, $matches);
+					$west = (float)$matches[1];
+					preg_match('/eastlimit=([^;]*);/i', $valueString, $matches);
+					$east = (float)$matches[1];	
+					$coordinates = "$west,$north $east,$north $east,$south $west,$south $west,$north";		
+					$centre = (($east+$west)/2).','.(($north+$south)/2);
+					$xml .= "          <extRif:coords>$west,$north $east,$north $east,$south $west,$south $west,$north</extRif:coords>\n";
 					
-			}
-			if($primary_key_2!='' && $primary_key_2!=$registryObjectKey)
-			{
-
-				$pkey2 = esc($primary_key_2);
-				$relatedObject = getRegistryObject($pkey2,true);
-				$relatedclass= strtolower($relatedObject[0]['registry_object_class']);	
-			
-				$relation_logo = false;
-				if($typeArray[$relatedclass][$dataSource[0][strtolower($currentObject[0]['registry_object_class']).'_rel_2']])
-				{
-					$type = ' type="'.$typeArray[$relatedclass][$dataSource[0][strtolower($currentObject[0]['registry_object_class']).'_rel_2']].'"';
-				}else{
-					$type = ' type="'.$dataSource[0][strtolower($currentObject[0]['registry_object_class']).'_rel_2'].'"';
 				}
-				if ($relatedObject[0]['registry_object_class'] == 'Party' && strtolower($relatedObject[0]['type']) != 'person') 
+				else if($element['type'] ==  'gmlKmlPolyCoords' || $element['type'] == 'kmlPolyCoords')
 				{
-					$relation_logo = getDescriptionLogo($key);
-				}		
+					$coordinates = trim(esc($element['value']));
+					$coordinates = preg_replace("/\s+/", " ", $coordinates);
+					
+					if( validKmlPolyCoords($coordinates) )
+					{
+						// Build the coordinates string for the centre.
+						$points = explode(' ', $coordinates);
+						if( count($points) > 0 )
+						{
+							$north = -90.0;
+							$south = 90.0;
+							$west = 180.0;
+							$east = -180.0;
+							foreach( $points as $point )
+							{
+								$P = explode(',', $point); // lon,lat
+								if( (float)$P[0] >= $east ){ $east = (float)$P[0]; }
+								if( (float)$P[0] <= $west ){ $west = (float)$P[0]; }
+								if( (float)$P[1] >= $north ){ $north = (float)$P[1]; }
+								if( (float)$P[1] <= $south ){ $south = (float)$P[1]; }
+							}
+						}
+						$centre = (($east+$west)/2).','.(($north+$south)/2);
+					    $xml .= "          <extRif:coords>$coordinates</extRif:coords>\n";
+						
+					}
+				}
 				
-				$xml .= "      <$elementName>\n";
-				$xml .= "        <key>$pkey2</key>\n";				
-				$xml .= "		 <relatedObjectClass>".strtolower($relatedObject[0]['registry_object_class'])."</relatedObjectClass>";
-				$xml .= "		 <relatedObjectType>".strtolower($relatedObject[0]['type'])."</relatedObjectType>";
-				$xml .= "		 <relatedObjectListTitle>".esc($relatedObject[0]['list_title'])."</relatedObjectListTitle>";
-				$xml .= "		 <relatedObjectDisplayTitle>".esc($relatedObject[0]['display_title'])."</relatedObjectDisplayTitle>";
-				if($relation_logo) $xml .= "		 <relatedObjectLogo>".esc($relation_logo)."</relatedObjectLogo>";					
-				$xml .=   "<relation$type>\n</relation>";
-				$xml .= "      </$elementName>\n";								
-			}			
-			
-		}	
-	$list = getRelatedObjects($registryObjectKey);
-
-	if( $list )
-	{
-		foreach( $list as $element )
-		{
-			$key = esc($element['related_registry_object_key']);
-			if($key!=$pkey1 && $key!=$pkey2)
-			{
-				$relatedObject = getRegistryObject($element['related_registry_object_key'],true);
-				$relation_logo = false;
-				$relationType = getRelationType($element['relation_id']);
-				if (isset($element) &&	$relatedObject[0]['registry_object_class'] == 'Party' && strtolower($relatedObject[0]['type']) != 'person' ) 
-				{
-					$relation_logo = getDescriptionLogo($key);
-				}		
-				$relatedclass= strtolower($relatedObject[0]['registry_object_class']);
+				
+		        if($centre != '')
+		        {
+		        	$xml .= "          <extRif:center>$centre</extRif:center>\n";
 	
-				$xml .= "      <$elementName>\n";
-				$xml .= "        <key>$key</key>\n";
-				$xml .= "		 <relatedObjectClass>".strtolower($relatedObject[0]['registry_object_class'])."</relatedObjectClass>";
-				$xml .= "		 <relatedObjectType>".strtolower($relatedObject[0]['type'])."</relatedObjectType>";
-				$xml .= "		 <relatedObjectListTitle>".esc($relatedObject[0]['list_title'])."</relatedObjectListTitle>";
-				$xml .= "		 <relatedObjectDisplayTitle>".esc($relatedObject[0]['display_title'])."</relatedObjectDisplayTitle>";
-				if($relation_logo) $xml .= "		 <relatedObjectLogo>".esc($relation_logo)."</relatedObjectLogo>";
-				$xml .= getRelationsXMLSOLR($element['relation_id'],$typeArray[$registryObjectClass]);
-				$xml .= "      </$elementName>\n";
+		        }		
+		        $xml .= "        </extRif:spatial>";	
+				
 			}
+			
 		}
 	}
 	return $xml;
-	
-	
 }
+
 function getReverseLinkTypesXMLforSolr($registryObjectKey,$dataSourceKey,$registryObjectClass, $elementName)
 {
 	$xml = '';
@@ -1513,53 +1324,127 @@ function getReverseLinkTypesXMLforSolr($registryObjectKey,$dataSourceKey,$regist
 	return $xml;
 }
 
-function getRelatedObjectTypesXML($registryObjectKey, $dataSourceKey, $registryObjectClass, $elementName)
+function getRelatedObjectTypesXML($registryObjectKey, $dataSourceKey, $registryObjectClass, $elementName, $forSOLR = false)
 {
+	global $typeArray;
+	
 	$xml = '';
 	$elementName = esc($elementName);
 	
 	//we need to check if this has related primary keys
-	$dataSource = getDataSources($dataSourceKey, null);
+	$dataSource = getDataSources($dataSourceKey, null);	
+	$create_primary_relationships = $dataSource[0]['create_primary_relationships'];
+	
 	$pkey1 = '';
 	$pkey2 = '';
 	
 	//we do not want to add the related primary objects if we are pasing the rifcs to te manual entry screens
 	$caller = explode('/',$_SERVER['PHP_SELF']);
 	$thecaller = $caller[count($caller)-1];
-		
+	
 	if(($dataSource[0]['create_primary_relationships']=='t'||$dataSource[0]['create_primary_relationships']=='1') && $thecaller != 'process_registry_object.php')
 	{
+		$primary_key_1 =  $dataSource[0]['primary_key_1'];
+		$primary_key_2 =  $dataSource[0]['primary_key_2'];
+		
 		if(trim($dataSource[0]['primary_key_1'])!='' && trim($dataSource[0]['primary_key_1'])!=$registryObjectKey)
 		{
+			
 			$pkey1 = esc($dataSource[0]["primary_key_1"]);
+			$relatedObject = getRegistryObject($pkey1,true);
+			$relatedclass= strtolower($relatedObject[0]['registry_object_class']);	
+			$relation_logo = false;
+			
+			if($typeArray[$relatedclass][$dataSource[0][strtolower($relatedObject[0]['registry_object_class']).'_rel_1']])
+			{
+				$type = ' type="'.$typeArray[$relatedclass][$dataSource[0][strtolower($relatedObject[0]['registry_object_class']).'_rel_1']].'"';
+			}else{
+				$type = ' type="'.$dataSource[0][strtolower($relatedObject[0]['registry_object_class']).'_rel_1'].'"';
+			}
+			if (isset($row) &&	$relatedObject[0]['registry_object_class'] == 'Party' && strtolower($relatedObject[0]['type']) != 'person') 
+			{
+				$relation_logo = getDescriptionLogo($key);
+			}
+			
 			$type = ' type="'.$dataSource[0][$registryObjectClass.'_rel_1'].'"';
 			$xml .= "      <$elementName>\n";
 			$xml .= "        <key>".$pkey1."</key>\n";
-			$xml .= "        <relation$type></relation>\n";			
+			$xml .= "        <relation$type></relation>\n";		
+			if ($forSOLR)
+			{
+				$xml .= "        <extRif:relatedObjectClass>".strtolower($relatedObject[0]['registry_object_class'])."</extRif:relatedObjectClass>\n";
+				$xml .= "        <extRif:relatedObjectType>".strtolower($relatedObject[0]['type'])."</extRif:relatedObjectType>\n";
+				$xml .= "        <extRif:relatedObjectListTitle>".esc($relatedObject[0]['list_title'])."</extRif:relatedObjectListTitle>\n";
+				$xml .= "        <extRif:relatedObjectDisplayTitle>".esc($relatedObject[0]['display_title'])."</extRif:relatedObjectDisplayTitle>\n";
+				if($relation_logo) 
+					$xml .= "        <extRif:relatedObjectLogo>".esc($relation_logo)."</extRif:relatedObjectLogo>\n";										
+			}
 			$xml .= "      </$elementName>\n";			
 		}
 		if(trim($dataSource[0]['primary_key_2'])!='' && trim($dataSource[0]['primary_key_2'])!=$registryObjectKey)
 		{
 			$pkey2 = esc($dataSource[0]["primary_key_2"]);
+			$relatedObject = getRegistryObject($pkey2,true);
+			$relatedclass= strtolower($relatedObject[0]['registry_object_class']);	
+			$relation_logo = false;
+			
+			if($typeArray[$relatedclass][$dataSource[0][strtolower($relatedObject[0]['registry_object_class']).'_rel_2']])
+			{
+				$type = ' type="'.$typeArray[$relatedclass][$dataSource[0][strtolower($relatedObject[0]['registry_object_class']).'_rel_2']].'"';
+			}else{
+				$type = ' type="'.$dataSource[0][strtolower($relatedObject[0]['registry_object_class']).'_rel_2'].'"';
+			}
+			if (isset($row) &&	$relatedObject[0]['registry_object_class'] == 'Party' && strtolower($relatedObject[0]['type']) != 'person') 
+			{
+				$relation_logo = getDescriptionLogo($key);
+			}
+			
 			$type = ' type="'.$dataSource[0][$registryObjectClass.'_rel_2'].'"';
 			$xml .= "      <$elementName>\n";
 			$xml .= "        <key>".$pkey2."</key>\n";
-			$xml .= "        <relation$type></relation>\n";			
-			$xml .= "      </$elementName>\n";			
+			$xml .= "        <relation$type></relation>\n";		
+			if ($forSOLR)
+			{
+				$xml .= "        <extRif:relatedObjectClass>".strtolower($relatedObject[0]['registry_object_class'])."</extRif:relatedObjectClass>\n";
+				$xml .= "        <extRif:relatedObjectType>".strtolower($relatedObject[0]['type'])."</extRif:relatedObjectType>\n";
+				$xml .= "        <extRif:relatedObjectListTitle>".esc($relatedObject[0]['list_title'])."</extRif:relatedObjectListTitle>\n";
+				$xml .= "        <extRif:relatedObjectDisplayTitle>".esc($relatedObject[0]['display_title'])."</extRif:relatedObjectDisplayTitle>\n";
+				if($relation_logo) 
+					$xml .= "        <extRif:relatedObjectLogo>".esc($relation_logo)."</extRif:relatedObjectLogo>\n";										
+			}
+			$xml .= "      </$elementName>\n";					
 		}		
 	}		
 	$list = getRelatedObjects($registryObjectKey);
 	if( $list )
 	{
-		foreach( $list as $element )
+	foreach( $list as $element )
 		{
-			$key = esc($element['related_registry_object_key']);			
-			if($key!=$pkey1 && $key!=$pkey2){
+			$key = esc($element['related_registry_object_key']);
+			if($key!=$pkey1 && $key!=$pkey2)
+			{
+				$relatedObject = getRegistryObject($element['related_registry_object_key'],true);
+				$relation_logo = false;
+				$relationType = getRelationType($element['relation_id']);
+				if (isset($element) &&	$relatedObject[0]['registry_object_class'] == 'Party' && strtolower($relatedObject[0]['type']) != 'person' ) 
+				{
+					$relation_logo = getDescriptionLogo($key);
+				}		
+				$relatedclass= strtolower($relatedObject[0]['registry_object_class']);
+	
 				$xml .= "      <$elementName>\n";
 				$xml .= "        <key>$key</key>\n";
-				$xml .= getRelationsXML($element['relation_id']);
+				$xml .= getRelationsXML($element['relation_id'],$typeArray[$registryObjectClass], $forSOLR);
+				if($forSOLR)
+				{
+					$xml .= "        <extRif:relatedObjectClass>".strtolower($relatedObject[0]['registry_object_class'])."</extRif:relatedObjectClass>\n";
+					$xml .= "        <extRif:relatedObjectType>".strtolower($relatedObject[0]['type'])."</extRif:relatedObjectType>\n";
+					$xml .= "        <extRif:relatedObjectListTitle>".esc($relatedObject[0]['list_title'])."</extRif:relatedObjectListTitle>\n";
+					$xml .= "        <extRif:relatedObjectDisplayTitle>".esc($relatedObject[0]['display_title'])."</extRif:relatedObjectDisplayTitle>\n";
+					if($relation_logo) $xml .= "        <extRif:relatedObjectLogo>".esc($relation_logo)."</extRif:relatedObjectLogo>\n";
+				}
 				$xml .= "      </$elementName>\n";
-			}			
+			}
 		}
 	}
 
@@ -1584,53 +1469,32 @@ function getRelationType($relation_id)
 	}
 	return $type;	
 }
-function getRelationsXML($relation_id)
+function getRelationsXML($relation_id, $forSOLR = false)
 {
+	global $typeArray;
 	$xml = '';
 	$list = getRelationDescriptions($relation_id);
 	if( $list )
 	{
 		foreach( $list as $element )
 		{
-			if( $type = $element['type'] )
+			$type ='';
+			if( $etype = $element['type'] )
 			{
-				$type = ' type="'.esc($type).'"';
-			}
-			if( $description = $element['description'] )
-			{
-				if( $lang = $element['lang'] )
+
+				if ($forSOLR)
 				{
-					$lang = ' xml:lang="'.esc($lang).'"';
+					if( array_key_exists($etype, $typeArray) )
+					{
+						$type .= ' extRif:type="'.$typeArray[$etype].'"';
+					}
+					else
+					{
+						$type .= ' extRif:type="'.changeFromCamelCase($etype).'"';
+					}
 				}
-				$description = "          <description$lang>".esc($element['description'])."</description>\n";
-			}
-			if( $url = $element['url'] )
-			{
-				$url = "          <url>".esc($element['url'])."</url>\n";
-			}
-			$xml .= "        <relation$type>\n$description$url        </relation>\n";
-		}
-	}
-	return $xml;
-}
-function getRelationsXMLSOLR($relation_id,$typeArray)
-{
-	$xml = '';
-	$list = getRelationDescriptions($relation_id);
-	if( $list )
-	{
-		foreach( $list as $element )
-		{
-			if( $type = $element['type'] )
-			{
-				if( array_key_exists($type, $typeArray) )
-				{
-					$type = ' type="'.$typeArray[$type].'"';
-				}
-				else
-				{
-					$type = ' type="'.changeFromCamelCase($type).'"';
-				}
+				
+				$type .= ' type="'.esc($etype).'"';
 				
 			}
 			if( $description = $element['description'] )
@@ -1645,12 +1509,13 @@ function getRelationsXMLSOLR($relation_id,$typeArray)
 			{
 				$url = "          <url>".esc($element['url'])."</url>\n";
 			}
-			$xml .= "        <relation$type>\n$description$url        </relation>\n";
+			$xml .= "        <relation$type>$description$url</relation>\n";
 		}
 	}
 	return $xml;
 }
-function getSubjectTypesXML($registryObjectKey, $elementName)
+
+function getSubjectTypesXML($registryObjectKey, $elementName, $forSOLR=false)
 {
 	$xml = '';
 	$elementName = esc($elementName);
@@ -1670,89 +1535,38 @@ function getSubjectTypesXML($registryObjectKey, $elementName)
 			if( $termId = $element['termIdentifier'] )
 			{
 				$termId = ' termIdentifier="'.esc($termId).'"';
-			}			
-			$value = esc($element['value']);
-			$xml .= "      <$elementName$type$lang>$value</$elementName>\n";
-		}
-	}
-	return $xml;
-}
-
-
-function getSubjectTypesXMLforSOLR($registryObjectKey, $elementName)
-{
-	$xml = '';
-	$elementName = esc($elementName);
-	$resolvedName = '';
-	$list = getSubjects($registryObjectKey);
-	if( $list )
-	{
-		foreach( $list as $element )
-		{
-			//var_dump($element['type']);
-			$value = esc(trim($element['value']));
-			$resolvedName = '';
-			if(($value != '') && (strlen($value) < 7) && is_numeric($value))
+			}	
+			$rawvalue = trim(esc($element['value']));
+			$value = $rawvalue;
+			$term = '';
+			if ($forSOLR)
 			{
-				$valueLength = strlen($value);
-				if($valueLength < 6){
-					for($i = 0; $i < (6 - $valueLength) ; $i++){
-						$value .= '0';
-					}				
+				$resolvedName = '';
+				if(($value != '') && (strlen($value) < 7) && is_numeric($value))
+				{
+					$valueLength = strlen($value);
+					if($valueLength < 6){
+						for($i = 0; $i < (6 - $valueLength) ; $i++){
+							$value .= '0';
+						}				
+					}
+					$resolvedName = getTermsForVocabByIdentifier(null, $value);
 				}
-				$resolvedName = getTermsForVocabByIdentifier(null, $value);
+				if($resolvedName && $resolvedName[0]['name'] != '')
+				{
+					$term = " extRif:resolvedValue=\"" . $resolvedName[0]['name'] . "\"";
+				}
+				else 
+				{
+					$term = " extRif:resolvedValue=\"" . $value . "\"";
+				}
 			}
-			if($resolvedName && $resolvedName[0]['name'] != '')
-			{
-				$term = $resolvedName[0]['name'];
-			}
-			else 
-			{
-				$term = $value;
-			}
-			$type = ' type="'.esc($element['type']).'"';
-			$xml .= "      <$elementName$type>$term</$elementName>\n";
+
+			$xml .= "      <$elementName$type$lang$term>$rawvalue</$elementName>\n";
 		}
 	}
 	return $xml;
 }
-
-function getDescriptionTypesXMLforSOLR($registryObjectKey, $elementName)
-{
-	$xml = '';
-	$elementName = esc($elementName);
-	$list = getDescriptions($registryObjectKey);
-	if( $list )
-	{
-		foreach( $list as $element )
-		{
-			if( $type = $element['type'] )
-			{
-				$type = ' type="'.esc($type).'"';
-			}
-			if( $lang = $element['lang'] )
-			{
-				$lang = ' xml:lang="'.esc($lang).'"';
-			}
-				
-			$value = $element['value'];
-			
-			if(str_replace("/>","",$value)==$value&&str_replace("</","",$value)==$value)
-			{
-				$value =  nl2br(str_replace("\t", "&#xA0;&#xA0;&#xA0;&#xA0;", $value));
-			}
-			$value = (trim($value));
-			
-			$value = htmlspecialchars_decode($value);
-			$value = purify($value);
-			$value = htmlspecialchars($value);
-			
-			$xml .= "      <$elementName$type$lang>$value</$elementName>\n";
-		}
-	}
-	return $xml;
-}
-
 
 function purify($dirty_html){
 	require_once "../htmlpurifier/library/HTMLPurifier.auto.php";
@@ -1777,7 +1591,7 @@ function purify($dirty_html){
     $clean_html = $purifier->purify($dirty_html);
     return $clean_html;
 }
-function getDescriptionTypesXML($registryObjectKey, $elementName)
+function getDescriptionTypesXML($registryObjectKey, $elementName, $forSOLR)
 {
 	$xml = '';
 	$elementName = esc($elementName);
@@ -1794,8 +1608,17 @@ function getDescriptionTypesXML($registryObjectKey, $elementName)
 			{
 				$lang = ' xml:lang="'.esc($lang).'"';
 			}
-			$value = esc($element['value']);
-			$xml .= "      <$elementName$type$lang>$value</$elementName>\n";
+			$value = trim($element['value']);
+			$xml .= "      <$elementName$type$lang>".esc($value)."</$elementName>\n";
+			
+			if ($forSOLR)
+			{
+				$value = htmlspecialchars_decode($value);
+				$value = purify($value);
+				$value = htmlspecialchars($value);
+				
+				$xml .= "      <extRif:$elementName$type$lang>$value</extRif:$elementName>\n";
+			}
 		}
 	}
 	return $xml;
@@ -1855,75 +1678,32 @@ function getRelatedInfoTypesXML($registryObjectKey, $elementName)
 	}
 	return $xml;
 }
-function getRightsTypesXMLforSOLR($registryObjectKey, $elementName)
+
+function getRightsTypesXML($registryObjectKey, $elementName, $forSOLR)
 {
 	$xml = '';
 	$elementName = esc($elementName);
-	$list = getDescriptions($registryObjectKey);
-	if( $list )
+
+	if ($forSOLR)
 	{
-		foreach( $list as $element )
+		$list = getDescriptions($registryObjectKey);
+		if( $list )
 		{
-			if( $type = $element['type'] && ($element['type']=='rights' || $element['type']=='accessRights'))
+			foreach( $list as $element )
 			{
-				$type = ' type="'.esc($element['type']).'"';
-		
-			$test = $element['type'];
-			$value = esc($element['value']);
-			$xml .= "      <$elementName$type>$value</$elementName>\n";
-			$type = '';
+				if( $type = $element['type'] && ($element['type']=='rights' || $element['type']=='accessRights'))
+				{
+					$type = ' type="'.esc($element['type']).'"';
+			
+				$test = $element['type'];
+				$value = esc($element['value']);
+				$xml .= "      <extRif:$elementName$type>$value</extRif:$elementName>\n";
+				$type = '';
+				}
 			}
 		}
 	}
-	$list = getRights($registryObjectKey);
-	//echo $registryObjectKey;
-	//print_r($list);
-	if( $list )
-	{
-		foreach( $list as $element )
-		{
-			if( $type = $element['access_rights'] || $type = $element['access_rights_uri'])
-			{
-				$type = ' type="accessRights"';
-				if($uri = $element['access_rights_uri'])
-				{
-					$uri = ' rightsUri = "'.esc($uri).'"';
-				}
-				$value = esc($element['access_rights']);
-				$xml .= "      <$elementName$type$uri>$value</$elementName>\n";				
-			}
-			
-			if( $type = $element['rights_statement'] || $type = $element['rights_statement_uri'])
-			{
-				$type = ' type="rights"';
-				if($uri = $element['rights_statement_uri'])
-				{
-					$uri = ' rightsUri = "'.esc($uri).'"';
-				}
-				$value = esc($element['rights_statement']);
-				$xml .= "      <$elementName$type$uri>$value</$elementName>\n";								
-			}
-			
-			if( $type = $element['licence'] || $type = $element['licence_uri'])
-			{
-				$type = ' type="licence"';
-				if($uri = $element['licence_uri'])
-				{
-					$uri = ' rightsUri = "'.esc($uri).'"';
-				}
-				$value = esc($element['licence']);
-				$xml .= "      <$elementName$type$uri>$value</$elementName>\n";										
-			}			
-		}
-	}	
-	return $xml;			
-}
-
-function getRightsTypesXML($registryObjectKey, $elementName)
-{
-	$xml = '';
-	$elementName = esc($elementName);
-
+	
 	$list = getRights($registryObjectKey);
 	if( $list )
 	{
@@ -1962,7 +1742,51 @@ function getRightsTypesXML($registryObjectKey, $elementName)
 				$value = esc($element['licence']);
 				$xml .= "      <$subType$uri>$value</$subType>\n";																
 			}
-			$xml .= "      </$elementName>\n";							
+			$xml .= "      </$elementName>\n";		
+
+			
+			if ($forSOLR)
+			{
+				$elementName = "extRif:rights";
+				if( $list )
+				{
+					foreach( $list as $element )
+					{
+						if( $type = $element['access_rights'] || $type = $element['access_rights_uri'])
+						{
+							$type = ' type="accessRights"';
+							if($uri = $element['access_rights_uri'])
+							{
+								$uri = ' rightsUri = "'.esc($uri).'"';
+							}
+							$value = esc($element['access_rights']);
+							$xml .= "      <$elementName$type$uri>$value</$elementName>\n";				
+						}
+						
+						if( $type = $element['rights_statement'] || $type = $element['rights_statement_uri'])
+						{
+							$type = ' type="rights"';
+							if($uri = $element['rights_statement_uri'])
+							{
+								$uri = ' rightsUri = "'.esc($uri).'"';
+							}
+							$value = esc($element['rights_statement']);
+							$xml .= "      <$elementName$type$uri>$value</$elementName>\n";								
+						}
+						
+						if( $type = $element['licence'] || $type = $element['licence_uri'])
+						{
+							$type = ' type="licence"';
+							if($uri = $element['licence_uri'])
+							{
+								$uri = ' rightsUri = "'.esc($uri).'"';
+							}
+							$value = esc($element['licence']);
+							$xml .= "      <$elementName$type$uri>$value</$elementName>\n";										
+						}			
+					}
+				}	
+			}
 		}	
 	}	
 	return $xml;			
@@ -2001,42 +1825,7 @@ function getExistenceDateTypesXML($registryObjectKey, $elementName)
 	}
 	return $xml;
 }
-function getExistenceDateTypesXMLSolr($registryObjectKey, $elementName)
-{
-	$xml = '';
-	$startdate = '';
-	$enddate = '';
-	$elementName = esc($elementName);
-	$list = getExistenceDate($registryObjectKey);
-	if( $list )
-	{	
-		foreach( $list as $element )
-		{
-			$xml .=	"		<$elementName>";
-			if($startdate = $element['start_date'])
-			{
-				$startdate1 = FormatDateTime(esc($startdate), gDATE);
-				//echo $startdate;
-				if($startDateFormat = $element['start_date_format'])
-				{
-					$dateFormat = ' dateFormat="'.$startDateFormat.'"';
-				}
-				$xml .= "			<startDate$dateFormat>$startdate1</startDate>";
-			}
-			if($enddate = $element['end_date'])
-			{
-				$enddate1 = FormatDateTime(esc($enddate), gDATE);				
-				if($startDateFormat = $element['end_date_format'])
-				{
-					$dateFormat = ' dateFormat="'.$startDateFormat.'"';
-				}
-				$xml .= "			<endDate$dateFormat>$enddate1</endDate>";
-			}			
-			$xml .= "      </$elementName>\n";
-		}
-	}
-	return $xml;
-}
+
 function getRegistryObjectKML($registryObjectKey)
 {
 	$kml = "";
@@ -2621,16 +2410,10 @@ function hasSpatialKMLData($registryObjectKey , $forType)
 
 function addSolrIndex($registryObjectKey, $commit=true)
 {
-
 		$result = '';
 		$rifcsContent = getRegistryObjectXMLforSOLR($registryObjectKey,true);
-		$rifcs = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
-		$rifcs .='<registryObjects xmlns="http://ands.org.au/standards/rif-cs/registryObjects" '."\n";
-		$rifcs .='                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '."\n";
-		$rifcs .='                 xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects '.gRIF2_SCHEMA_URI.'">'."\n";	
-		$rifcs .= $rifcsContent;			
-		$rifcs .= "</registryObjects>\n";	
-		$rifcs = transformToSolr($rifcs);									
+		$rifcsContent = wrapRegistryObjects($rifcsContent);
+		$rifcs = transformToSolr($rifcsContent);									
 		$result .= curl_post(gSOLR_UPDATE_URL, $rifcs);
 		if($commit)
 		{
@@ -2643,15 +2426,12 @@ function addSolrIndex($registryObjectKey, $commit=true)
 function addKeysToSolrIndex($keys, $commit=true)
 {
 		$result = '';
-		$rifcs = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
-		$rifcs .='<registryObjects xmlns="http://ands.org.au/standards/rif-cs/registryObjects" '."\n";
-		$rifcs .='                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '."\n";
-		$rifcs .='                 xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects '.gRIF2_SCHEMA_URI.'">'."\n";	
+		$rifcs = '';
 		foreach ($keys as $registryObjectKey)
 		{
 			$rifcs .= getRegistryObjectXMLforSOLR(rawurldecode($registryObjectKey),true);
 		}					
-		$rifcs .= "</registryObjects>\n";	
+		wrapRegistryObjects($rifcs);
 		$rifcs = transformToSolr($rifcs);									
 		$result .= curl_post(gSOLR_UPDATE_URL, $rifcs);
 		if($commit)
@@ -2728,12 +2508,703 @@ function changeFromCamelCase($camelCaseString)
 }
 function send_email($to, $subject, $message, $headers='')
 {
-	//$to = "ben.greenwood@anu.edu.au";
 	$headers .= 'From: "ANDS Services" <services@ands.org.au>' . "\r\n" .
 	    'Reply-To: "ANDS Services" <services@ands.org.au>' . "\r\n" .
 	    'X-Mailer: PHP/' . phpversion();
 	
 	@mail($to, $subject, $message, $headers);
 }
+
+/*
+function DIEDIEDIEgetSpatialTypesXMLforSOLR($location_id)
+{
+	$xml = '';
+	$list = getSpatialLocations($location_id);
+	$centre = '';
+	if( $list )
+	{
+		foreach( $list as $element )
+		{
+			if( $type = $element['type'] )
+			{
+				$type = ' type="'.esc($type).'"';
+			}
+
+			if($element['type'] == 'iso19139dcmiBox')
+			{
+				$valueString = strtolower(esc($element['value'])).';';
+				$matches = array();
+				preg_match('/northlimit=([^;]*);/i', $valueString, $matches);
+				$north = (float)$matches[1];
+				preg_match('/southlimit=([^;]*);/i', $valueString, $matches);
+				$south = (float)$matches[1];
+				preg_match('/westlimit=([^;]*);/i', $valueString, $matches);
+				$west = (float)$matches[1];
+				preg_match('/eastlimit=([^;]*);/i', $valueString, $matches);
+				$east = (float)$matches[1];	
+				$coordinates = "$west,$north $east,$north $east,$south $west,$south $west,$north";		
+				$centre = (($east+$west)/2).','.(($north+$south)/2);
+				$xml .= "        <spatial>$west,$north $east,$north $east,$south $west,$south $west,$north</spatial>\n";
+				
+			}
+			else if($element['type'] ==  'gmlKmlPolyCoords' || $element['type'] == 'kmlPolyCoords')
+			{
+				$coordinates = trim(esc($element['value']));
+				$coordinates = preg_replace("/\s+/", " ", $coordinates);
+				
+				if( validKmlPolyCoords($coordinates) )
+				{
+					// Build the coordinates string for the centre.
+					$points = explode(' ', $coordinates);
+					if( count($points) > 0 )
+					{
+						$north = -90.0;
+						$south = 90.0;
+						$west = 180.0;
+						$east = -180.0;
+						foreach( $points as $point )
+						{
+							$P = explode(',', $point); // lon,lat
+							if( (float)$P[0] >= $east ){ $east = (float)$P[0]; }
+							if( (float)$P[0] <= $west ){ $west = (float)$P[0]; }
+							if( (float)$P[1] >= $north ){ $north = (float)$P[1]; }
+							if( (float)$P[1] <= $south ){ $south = (float)$P[1]; }
+						}
+					}
+					$centre = (($east+$west)/2).','.(($north+$south)/2);
+				    $xml .= "        <spatial>$coordinates</spatial>\n";
+					
+				}
+			}
+	        if($centre != '')
+	        {
+	        	$xml .= "        <center>$centre</center>\n";
+
+	        }			
+			
+			
+			
+		}
+	}
+	return $xml;
+}*/
+
+/*
+function DIEDIEDIEgetComplexNameTypesXMLforSOLR($registryObjectKey, $elementName, $registryObjectClass)
+{
+	$xml = '';
+	$elementName = esc($elementName);
+	$list = getComplexNames($registryObjectKey);
+	if( $list )
+	{
+		foreach( $list as $element )
+		{
+			if( $type = $element['type'] )
+			{
+				$type = ' type="'.esc($type).'"';
+			}
+			if($element['type'] == 'alternative')
+			{
+				$xml .= "      <$elementName$type>\n";
+				$xml .= getNamePartsXMLforSOLR($element['complex_name_id'], $registryObjectClass);
+				$xml .= "      </$elementName>\n";
+			}
+		}
+	}
+	return $xml;
+}*/
+
+
+/*
+function getLocationTypesXMLforSOLR($registryObjectKey, $elementName)
+{
+	$xml = '';
+	$elementName = esc($elementName);
+	$list = getLocations($registryObjectKey);
+	if( $list )
+	{
+		foreach( $list as $element )
+		{
+			if( $dateFrom = $element['date_from'] )
+			{
+				$dateFrom = ' dateFrom="'.formatDateTime($dateFrom, gDATE).'"';
+			}
+			if( $dateTo = $element['date_to'] )
+			{
+				$dateTo = ' dateTo="'.formatDateTime($dateTo, gDATE).'"';
+			}
+			if( $type = $element['type'] )
+			{
+				$type = ' type="'.esc($type).'"';
+			}
+			$xml .= "      <$elementName$dateFrom$dateTo$type>\n";
+			$xml .= getAddressXMLforSOLR($element['location_id']);
+			$xml .= getSpatialTypesXMLforSOLR($element['location_id']);
+			$xml .= "      </$elementName>\n";
+		}
+	}
+	return $xml;
+}*/
+
+
+/*
+function getCoverageTypesXMLforSOLR($registryObjectKey, $elementName)
+{
+	$xml = '';
+	$elementName = esc($elementName);
+	$list = getCoverage($registryObjectKey);
+	if( $list )
+	{
+		foreach( $list as $element )
+		{
+			$xml .= "      <$elementName>\n";
+			$xml .= getSpatialCoverageXMLforSOLR($element['coverage_id']);
+			$xml .= getTemporalCoverageXMLforSOLR($element['coverage_id']);
+			$xml .= "      </$elementName>\n";
+		}
+	}
+	return $xml;
+}
+*/
+
+
+/*
+function getSpatialCoverageXMLforSOLR($coverage_id)
+{
+	$xml = '';
+	$centre = '';
+	$list = getSpatialCoverage($coverage_id);
+	if( $list )
+	{
+		foreach( $list as $element )
+		{
+			if( $type = $element['type'] )
+			{
+				$type = ' type="'.esc($type).'"';
+			}
+						
+			if($element['type'] == 'iso19139dcmiBox')
+			{
+				$valueString =  strtolower(esc($element['value'])).';';
+				$matches = array();
+				preg_match('/northlimit=([^;]*);/i', $valueString, $matches);
+				$north = (float)$matches[1];
+				preg_match('/southlimit=([^;]*);/i', $valueString, $matches);
+				$south = (float)$matches[1];
+				preg_match('/westlimit=([^;]*);/i', $valueString, $matches);
+				$west = (float)$matches[1];
+				preg_match('/eastlimit=([^;]*);/i', $valueString, $matches);
+				$east = (float)$matches[1];	
+				$coordinates = "$west,$north $east,$north $east,$south $west,$south $west,$north";		
+				$centre = (($east+$west)/2).','.(($north+$south)/2);
+				$xml .= "        <spatial>$west,$north $east,$north $east,$south $west,$south $west,$north</spatial>\n";
+			}
+			else if($element['type'] ==  'gmlKmlPolyCoords' || $element['type'] == 'kmlPolyCoords')
+			{
+				$coordinates = trim(esc($element['value']));
+				$coordinates = preg_replace("/\s+/", " ", $coordinates);
+				
+				if( validKmlPolyCoords($coordinates) )
+				{
+					// Build the coordinates string for the centre.
+					$points = explode(' ', $coordinates);
+					if( count($points) > 0 )
+					{
+						$north = -90.0;
+						$south = 90.0;
+						$west = 180.0;
+						$east = -180.0;
+						foreach( $points as $point )
+						{
+							$P = explode(',', $point); // lon,lat
+							if( (float)$P[0] >= $east ){ $east = (float)$P[0]; }
+							if( (float)$P[0] <= $west ){ $west = (float)$P[0]; }
+							if( (float)$P[1] >= $north ){ $north = (float)$P[1]; }
+							if( (float)$P[1] <= $south ){ $south = (float)$P[1]; }
+						}
+					}
+					$centre = (($east+$west)/2).','.(($north+$south)/2);
+					$xml .= "        <spatial>$coordinates</spatial>\n";
+				}
+			}
+	        if($centre != '')
+	        {
+	        	$xml .= "        <center>$centre</center>\n";
+	        }			
+		}
+	}
+	return $xml;
+}*/
+
+
+/*
+function getTemporalCoverageXMLforSOLR($coverage_id)
+{
+	$xml = '';
+	$list = getTemporalCoverage($coverage_id);
+	
+
+	if($list)
+	{
+		foreach( $list as $element )
+		{
+			$dateArray = getTemporalCoverageDate($element['temporal_coverage_id']);
+			if($dateArray)
+			{
+				$xml .= '<temporal>';
+				asort($dateArray);
+				foreach( $dateArray as $row )
+				{
+					$type = ' type="'.esc($row['type']).'"';	
+					$dateFormat = ' dateFormat="'.esc($row['date_format']).'"';
+					$value = FormatDateTime(esc($row['value']), gDATE);
+					$xml .= "            <date$type$dateFormat>$value</date>\n";
+				}
+				$xml .= '</temporal>';	
+			}
+		}	
+	}
+	return $xml;
+}
+*/
+
+
+/*function getAddressXMLforSOLR($location_id)
+{
+	$xml = '';
+	$list = getAddressLocations($location_id);
+	if( $list )
+	{
+		foreach( $list as $element )
+		{
+			$xml .= "        <address>\n";
+			$xml .= getElectronicAddressTypesXML($element['address_id']);
+			$xml .= getPhysicalAddressTypesXMLforSOLR($element['address_id']);
+			$xml .= "        </address>\n";
+		}
+	}
+	return $xml;
+}*/
+
+
+/*function getPhysicalAddressTypesXMLforSOLR($address_id)
+{
+	$xml = '';
+	$list = getPhysicalAddresses($address_id);
+	if( $list )
+	{
+		foreach( $list as $element )
+		{
+			if( $type = $element['type'] )
+			{
+				$type = ' type="'.esc($type).'"';
+			}
+			if( $lang = $element['lang'] )
+			{
+				$lang = ' xml:lang="'.esc($lang).'"';
+			}
+			$xml .= "          <physical$type$lang>\n";
+			$xml .= getAddressPartsXMLforSOLR($element['physical_address_id']);	
+			$xml .= "          </physical>\n";
+		}	
+	}
+	return $xml;
+}
+*/
+/*function DIEDIEDIEgetAddressPartsXMLforSOLR($physical_address_id)
+{
+	$xml = '';
+	$list = getAddressParts($physical_address_id);
+	if( $list )
+	{
+		asort($list);
+		foreach( $list as $element )
+		{			
+			if( $type = $element['type'] )
+			{
+				$type = ' type="'.strtolower(esc($type)).'"';
+			}
+			$value = ($element['value']);
+			$value = htmlspecialchars_decode($value);
+			$value = purify($value);
+			$value = htmlspecialchars($value);
+			$xml .= "            <addressPart$type>$value</addressPart>\n";
+		}		
+	}
+	return $xml;
+}*/
+
+
+
+/*function DIEDIEDIEgetRelatedObjectTypesXMLforSolr($registryObjectKey,$registryObjectClass, $dataSourceKey, $elementName)
+{
+	$xml = '';
+	$elementName = esc($elementName);
+	$datasource = null;
+	$dataSource = getDataSources($dataSourceKey, null);	
+	$create_primary_relationships = $dataSource[0]['create_primary_relationships'];
+	$typeArray['collection'] = array(
+		"describes" => "Describes",
+		"hasAssociationWith" => "Associated with",
+		"hasCollector" => "Aggregated by",
+		"hasPart" => "Contains",
+		"isDescribedBy" => "Described by",
+		"isLocatedIn" => "Located in",
+		"isLocationFor" => "Location for",
+		"isManagedBy" => "Managed by",
+		"isOutputOf" => "Output of",
+		"isOwnedBy" => "Owned by",
+		"isPartOf" => "Part of",
+		"supports" => "Supports"
+	);
+	$typeArray['party'] = array(
+		"hasAssociationWith" => "Associated with",
+		"hasMember" => "Has member",
+		"hasPart" => "Has part",
+		"isCollectorOf" => "Collector of",
+		"isFundedBy" => "Funded by",
+		"isFunderOf" => "Funds",
+		"isManagedBy" => "Managed by",
+		"isManagerOf" => "Manages",
+		"isMemberOf" => "Member of",
+		"isOwnedBy" => "Owned by",
+		"isOwnerOf" => "Owner of",
+		"isParticipantIn" => "Participant in",
+		"isPartOf" => "Part of",
+	);
+	$typeArray['service'] = array(
+		"hasAssociationWith" => "Associated with",
+		"hasPart" => "Includes",
+		"isManagedBy" => "Managed by",
+		"isOwnedBy" => "Owned by",
+		"isPartOf" => "Part of",
+		"isSupportedBy" => "Supported by",
+	);
+	$typeArray['activity'] = array(
+		"hasAssociationWith" => "Associated with",
+		"hasOutput" => "Produces",
+		"hasPart" => "Includes",
+		"hasParticipant" => "Undertaken by",
+		"isFundedBy" => "Funded by",
+		"isManagedBy" => "Managed by",
+		"isOwnedBy" => "Owned by",
+		"isPartOf" => "Part of",
+	);	
+
+	//we need to check if this datasource has primary relationships set up.
+	$pkey1 = '';
+	$pkey2 = '';
+	if($create_primary_relationships == 't'||$create_primary_relationships == '1')
+		{
+			$primary_key_1 =  $dataSource[0]['primary_key_1'];
+			$primary_key_2 =  $dataSource[0]['primary_key_2'];
+			if($primary_key_1!='' && $primary_key_1!=$registryObjectKey)
+			{
+
+				$pkey1 = esc($primary_key_1);
+				$relatedObject = getRegistryObject($pkey1,true);
+				$relatedclass= strtolower($relatedObject[0]['registry_object_class']);	
+			
+				$relation_logo = false;
+				if($typeArray[$relatedclass][$dataSource[0][strtolower($relatedObject[0]['registry_object_class']).'_rel_1']])
+				{
+					$type = ' type="'.$typeArray[$relatedclass][$dataSource[0][strtolower($relatedObject[0]['registry_object_class']).'_rel_1']].'"';
+				}else{
+					$type = ' type="'.$dataSource[0][strtolower($relatedObject[0]['registry_object_class']).'_rel_1'].'"';
+				}
+				if (isset($row) &&	$relatedObject[0]['registry_object_class'] == 'Party' && strtolower($relatedObject[0]['type']) != 'person') 
+				{
+					$relation_logo = getDescriptionLogo($key);
+				}		
+				
+				$xml .= "      <$elementName>\n";
+				$xml .= "        <key>$pkey1</key>\n";				
+				$xml .= "		 <relatedObjectClass>".strtolower($relatedObject[0]['registry_object_class'])."</relatedObjectClass>";
+				$xml .= "		 <relatedObjectType>".strtolower($relatedObject[0]['type'])."</relatedObjectType>";
+				$xml .= "		 <relatedObjectListTitle>".esc($relatedObject[0]['list_title'])."</relatedObjectListTitle>";
+				$xml .= "		 <relatedObjectDisplayTitle>".esc($relatedObject[0]['display_title'])."</relatedObjectDisplayTitle>";
+				if($relation_logo) $xml .= "		 <relatedObjectLogo>".esc($relation_logo)."</relatedObjectLogo>";					
+				$xml .=   "<relation$type>\n</relation>";
+				$xml .= "      </$elementName>\n";			
+					
+			}
+			if($primary_key_2!='' && $primary_key_2!=$registryObjectKey)
+			{
+
+				$pkey2 = esc($primary_key_2);
+				$relatedObject = getRegistryObject($pkey2,true);
+				$relatedclass= strtolower($relatedObject[0]['registry_object_class']);	
+			
+				$relation_logo = false;
+				if($typeArray[$relatedclass][$dataSource[0][strtolower($relatedObject[0]['registry_object_class']).'_rel_2']])
+				{
+					$type = ' type="'.$typeArray[$relatedclass][$dataSource[0][strtolower($relatedObject[0]['registry_object_class']).'_rel_2']].'"';
+				}else{
+					$type = ' type="'.$dataSource[0][strtolower($relatedObject[0]['registry_object_class']).'_rel_2'].'"';
+				}
+				if ($relatedObject[0]['registry_object_class'] == 'Party' && strtolower($relatedObject[0]['type']) != 'person') 
+				{
+					$relation_logo = getDescriptionLogo($key);
+				}		
+				
+				$xml .= "      <$elementName>\n";
+				$xml .= "        <key>$pkey2</key>\n";				
+				$xml .= "		 <relatedObjectClass>".strtolower($relatedObject[0]['registry_object_class'])."</relatedObjectClass>";
+				$xml .= "		 <relatedObjectType>".strtolower($relatedObject[0]['type'])."</relatedObjectType>";
+				$xml .= "		 <relatedObjectListTitle>".esc($relatedObject[0]['list_title'])."</relatedObjectListTitle>";
+				$xml .= "		 <relatedObjectDisplayTitle>".esc($relatedObject[0]['display_title'])."</relatedObjectDisplayTitle>";
+				if($relation_logo) $xml .= "		 <relatedObjectLogo>".esc($relation_logo)."</relatedObjectLogo>";					
+				$xml .=   "<relation$type>\n</relation>";
+				$xml .= "      </$elementName>\n";								
+			}			
+			
+		}	
+	$list = getRelatedObjects($registryObjectKey);
+
+	if( $list )
+	{
+		foreach( $list as $element )
+		{
+			$key = esc($element['related_registry_object_key']);
+			if($key!=$pkey1 && $key!=$pkey2)
+			{
+				$relatedObject = getRegistryObject($element['related_registry_object_key'],true);
+				$relation_logo = false;
+				$relationType = getRelationType($element['relation_id']);
+				if (isset($element) &&	$relatedObject[0]['registry_object_class'] == 'Party' && strtolower($relatedObject[0]['type']) != 'person' ) 
+				{
+					$relation_logo = getDescriptionLogo($key);
+				}		
+				$relatedclass= strtolower($relatedObject[0]['registry_object_class']);
+	
+				$xml .= "      <$elementName>\n";
+				$xml .= "        <key>$key</key>\n";
+				$xml .= "		 <relatedObjectClass>".strtolower($relatedObject[0]['registry_object_class'])."</relatedObjectClass>";
+				$xml .= "		 <relatedObjectType>".strtolower($relatedObject[0]['type'])."</relatedObjectType>";
+				$xml .= "		 <relatedObjectListTitle>".esc($relatedObject[0]['list_title'])."</relatedObjectListTitle>";
+				$xml .= "		 <relatedObjectDisplayTitle>".esc($relatedObject[0]['display_title'])."</relatedObjectDisplayTitle>";
+				if($relation_logo) $xml .= "		 <relatedObjectLogo>".esc($relation_logo)."</relatedObjectLogo>";
+				$xml .= getRelationsXMLSOLR($element['relation_id'],$typeArray[$registryObjectClass]);
+				$xml .= "      </$elementName>\n";
+			}
+		}
+	}
+	return $xml;
+	
+	
+}
+*/
+
+
+/*
+function DIEDIEDIEgetRelationsXMLSOLR($relation_id,$typeArray)
+{
+	$xml = '';
+	$list = getRelationDescriptions($relation_id);
+	if( $list )
+	{
+		foreach( $list as $element )
+		{
+			if( $type = $element['type'] )
+			{
+				if( array_key_exists($type, $typeArray) )
+				{
+					$type = ' type="'.$typeArray[$type].'"';
+				}
+				else
+				{
+					$type = ' type="'.changeFromCamelCase($type).'"';
+				}
+				
+			}
+			if( $description = $element['description'] )
+			{
+				if( $lang = $element['lang'] )
+				{
+					$lang = ' xml:lang="'.esc($lang).'"';
+				}
+				$description = "          <description$lang>".esc($element['description'])."</description>\n";
+			}
+			if( $url = $element['url'] )
+			{
+				$url = "          <url>".esc($element['url'])."</url>\n";
+			}
+			$xml .= "        <relation$type>\n$description$url        </relation>\n";
+		}
+	}
+	return $xml;
+}*/
+
+/*function DIEDIEDIEgetSubjectTypesXMLforSOLR($registryObjectKey, $elementName)
+{
+	$xml = '';
+	$elementName = esc($elementName);
+	$resolvedName = '';
+	$list = getSubjects($registryObjectKey);
+	if( $list )
+	{
+		foreach( $list as $element )
+		{
+			//var_dump($element['type']);
+			$value = esc(trim($element['value']));
+			$resolvedName = '';
+			if(($value != '') && (strlen($value) < 7) && is_numeric($value))
+			{
+				$valueLength = strlen($value);
+				if($valueLength < 6){
+					for($i = 0; $i < (6 - $valueLength) ; $i++){
+						$value .= '0';
+					}				
+				}
+				$resolvedName = getTermsForVocabByIdentifier(null, $value);
+			}
+			if($resolvedName && $resolvedName[0]['name'] != '')
+			{
+				$term = $resolvedName[0]['name'];
+			}
+			else 
+			{
+				$term = $value;
+			}
+			$type = ' type="'.esc($element['type']).'"';
+			$xml .= "      <$elementName$type>$term</$elementName>\n";
+		}
+	}
+	return $xml;
+}*/
+/*
+function getDescriptionTypesXMLforSOLR($registryObjectKey, $elementName)
+{
+	$xml = '';
+	$elementName = esc($elementName);
+	$list = getDescriptions($registryObjectKey);
+	if( $list )
+	{
+		foreach( $list as $element )
+		{
+			if( $type = $element['type'] )
+			{
+				$type = ' type="'.esc($type).'"';
+			}
+			if( $lang = $element['lang'] )
+			{
+				$lang = ' xml:lang="'.esc($lang).'"';
+			}
+			$value = (trim($element['value']));
+			
+			$value = htmlspecialchars_decode($value);
+			$value = purify($value);
+			$value = htmlspecialchars($value);
+			
+			$xml .= "      <$elementName$type$lang>$value</$elementName>\n";
+		}
+	}
+	return $xml;
+}
+*/
+
+/*
+function getRightsTypesXMLforSOLR($registryObjectKey, $elementName)
+{
+	$xml = '';
+	$elementName = esc($elementName);
+	$list = getDescriptions($registryObjectKey);
+	if( $list )
+	{
+		foreach( $list as $element )
+		{
+			if( $type = $element['type'] && ($element['type']=='rights' || $element['type']=='accessRights'))
+			{
+				$type = ' type="'.esc($element['type']).'"';
+		
+			$test = $element['type'];
+			$value = esc($element['value']);
+			$xml .= "      <$elementName$type>$value</$elementName>\n";
+			$type = '';
+			}
+		}
+	}
+	$list = getRights($registryObjectKey);
+	//echo $registryObjectKey;
+	//print_r($list);
+	if( $list )
+	{
+		foreach( $list as $element )
+		{
+			if( $type = $element['access_rights'] || $type = $element['access_rights_uri'])
+			{
+				$type = ' type="accessRights"';
+				if($uri = $element['access_rights_uri'])
+				{
+					$uri = ' rightsUri = "'.esc($uri).'"';
+				}
+				$value = esc($element['access_rights']);
+				$xml .= "      <$elementName$type$uri>$value</$elementName>\n";				
+			}
+			
+			if( $type = $element['rights_statement'] || $type = $element['rights_statement_uri'])
+			{
+				$type = ' type="rights"';
+				if($uri = $element['rights_statement_uri'])
+				{
+					$uri = ' rightsUri = "'.esc($uri).'"';
+				}
+				$value = esc($element['rights_statement']);
+				$xml .= "      <$elementName$type$uri>$value</$elementName>\n";								
+			}
+			
+			if( $type = $element['licence'] || $type = $element['licence_uri'])
+			{
+				$type = ' type="licence"';
+				if($uri = $element['licence_uri'])
+				{
+					$uri = ' rightsUri = "'.esc($uri).'"';
+				}
+				$value = esc($element['licence']);
+				$xml .= "      <$elementName$type$uri>$value</$elementName>\n";										
+			}			
+		}
+	}	
+	return $xml;			
+}
+*/
+
+/*function DIEDIEDIEgetExistenceDateTypesXMLSolr($registryObjectKey, $elementName)
+{
+	$xml = '';
+	$startdate = '';
+	$enddate = '';
+	$elementName = esc($elementName);
+	$list = getExistenceDate($registryObjectKey);
+	if( $list )
+	{	
+		foreach( $list as $element )
+		{
+			$xml .=	"		<$elementName>";
+			if($startdate = $element['start_date'])
+			{
+				$startdate1 = FormatDateTime(esc($startdate), gDATE);
+				//echo $startdate;
+				if($startDateFormat = $element['start_date_format'])
+				{
+					$dateFormat = ' dateFormat="'.$startDateFormat.'"';
+				}
+				$xml .= "			<startDate$dateFormat>$startdate1</startDate>";
+			}
+			if($enddate = $element['end_date'])
+			{
+				$enddate1 = FormatDateTime(esc($enddate), gDATE);				
+				if($startDateFormat = $element['end_date_format'])
+				{
+					$dateFormat = ' dateFormat="'.$startDateFormat.'"';
+				}
+				$xml .= "			<endDate$dateFormat>$enddate1</endDate>";
+			}			
+			$xml .= "      </$elementName>\n";
+		}
+	}
+	return $xml;
+}*/
+
 
 ?>

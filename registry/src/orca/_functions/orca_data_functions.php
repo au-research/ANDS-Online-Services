@@ -2202,6 +2202,34 @@ function getRelatedInfoTypeCount($created_when=null)
 	
 	return $resultSet;	
 }
+
+
+function getRelatedObjectCount($registry_object_key)
+{
+	global $gCNN_DBS_ORCA;
+	$strQuery = 'SELECT COUNT(*) AS "count" FROM dba.tbl_related_objects WHERE registry_object_key = $1';
+	$params = array($registry_object_key);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+
+	if (!isset($resultSet[0])) 
+		return 0;
+	else 
+		return $resultSet[0]['count']; 	
+}
+
+function getIncomingRelatedObjectCount($registry_object_key)
+{
+	global $gCNN_DBS_ORCA;
+	$strQuery = 'SELECT COUNT(*) AS "count" FROM dba.tbl_related_objects WHERE related_registry_object_key = $1';
+	$params = array($registry_object_key);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+
+	if (!isset($resultSet[0])) 
+		return 0;
+	else 
+		return $resultSet[0]['count']; 	
+}
+
 // function defined to obtain real subject values for dc xml
 //------------------------------------------------------------
 function getSubjectValue($identifier=NULL)
@@ -2370,6 +2398,124 @@ function setDraftFlag($draft_key, $data_source, $flag)
 	}
 }
 
+
+
+function insertTaskRequest($task_type, $created_by, $param_1='', $param_2='', $param_3='', $trigger_time)
+{
+	global $gCNN_DBS_ORCA;
+	$strQuery = 'INSERT INTO dba.tbl_queued_tasks (task_type, created_by, param_1, param_2, param_3, queue_time, trigger_time) '. 
+				'VALUES ($1, $2, $3, $4, $5, $6, $7)';
+	$params = array($task_type, $created_by, $param_1, $param_2, $param_3, time(), $trigger_time);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+
+	return $resultSet; 	
+}
+
+function updateTaskRequest($task_id, $start_time, $finish_time)
+{
+	global $gCNN_DBS_ORCA;
+	$strQuery = 'UPDATE dba.tbl_queued_tasks SET start_time = $2 , finish_time = $3 WHERE task_id = $1';
+	$params = array($task_id, $start_time, $finish_time);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+
+	return $resultSet; 	
+}
+
+// Get all outstanding task requests (tasks that haven't yet been started)
+// which have a trigger time in the past ([arbitrary] default: before 1/1/2020)
+function getTaskRequests($trigger_time=1577862061)
+{
+	global $gCNN_DBS_ORCA;
+	$strQuery = 'SELECT * FROM dba.tbl_queued_tasks WHERE trigger_time <= $1 AND start_time = 0 AND finish_time = 0';
+	$params = array($trigger_time);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+
+	return $resultSet; 	
+}
+
+
+function updateDataSourceHash($data_source_key, $hash)
+{
+	global $gCNN_DBS_ORCA;
+	$strQuery = 'UPDATE dba.tbl_data_sources SET key_hash = $2 WHERE data_source_key = $1';
+	$params = array($data_source_key, $hash);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+
+	return $resultSet; 	
+}
+
+function getDataSourceHash($data_source_key)
+{
+	global $gCNN_DBS_ORCA;
+	$strQuery = 'SELECT key_hash FROM dba.tbl_data_sources WHERE data_source_key = $1';
+	$params = array($data_source_key);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+
+	if (!isset($resultSet[0])) 
+		return false;
+	else 
+		return $resultSet[0]['key_hash']; 	
+}
+
+function getDataSourceByHash($hash)
+{
+	global $gCNN_DBS_ORCA;
+
+	$resultSet = null;
+	$strQuery = 'SELECT * FROM dba.tbl_data_sources WHERE key_hash = $1';
+	$params = array($hash);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+
+	return $resultSet;
+}
+
+function getRegistryObjectByHash($hash)
+{
+	global $gCNN_DBS_ORCA;
+
+	$resultSet = null;
+	$strQuery = 'SELECT * FROM dba.tbl_registry_objects WHERE key_hash = $1';
+	$params = array($hash);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+
+	return $resultSet;
+}
+
+function getRegistryObjectHash($registry_object_key)
+{
+	global $gCNN_DBS_ORCA;
+	$strQuery = 'SELECT key_hash FROM dba.tbl_registry_objects WHERE registry_object_key = $1';
+	$params = array($registry_object_key);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+
+	if (!isset($resultSet[0])) 
+		return false;
+	else 
+		return $resultSet[0]['key_hash']; 	
+}
+
+
+function updateRegistryObjectHash($registry_object_key, $hash)
+{
+	global $gCNN_DBS_ORCA;
+	$strQuery = 'UPDATE dba.tbl_registry_objects SET key_hash = $2 WHERE registry_object_key = $1';
+	$params = array($registry_object_key, $hash);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	return $resultSet; 	
+}
+
+function getRegistryObjectDataSourceKey($registry_object_key)
+{
+	global $gCNN_DBS_ORCA;
+	$strQuery = 'SELECT data_source_key FROM dba.tbl_registry_objects WHERE registry_object_key = $1';
+	$params = array($registry_object_key);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+
+	if (!isset($resultSet[0])) 
+		return false;
+	else 
+		return $resultSet[0]['data_source_key'];
+}
 
 
 

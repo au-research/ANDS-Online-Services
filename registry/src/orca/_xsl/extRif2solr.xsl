@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:ro="http://ands.org.au/standards/rif-cs/registryObjects" xmlns:extRif="http://ands.org.au/standards/rif-cs/ExtendedregistryObjects" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0" exclude-result-prefixes="ro extRif">
+<xsl:stylesheet xmlns:ro="http://ands.org.au/standards/rif-cs/registryObjects" xmlns:extRif="http://ands.org.au/standards/rif-cs/extendedRegistryObjects" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0" exclude-result-prefixes="ro extRif">
     <xsl:output indent="yes" />
     <xsl:strip-space elements="*"/>
 <xsl:template match="/">
@@ -11,12 +11,7 @@
     <xsl:apply-templates/>
      </add>
  </xsl:template> 
-  <!-- 
-      <extRif:keyHash>0001ea993f9e1744df376b853d22af896c2c7bc4</extRif:keyHash>
-      <extRif:dataSourceKeyHash>f546de82a493af449cdfc461a38ed690098988a0</extRif:dataSourceKeyHash>
-      <extRif:searchBaseScore>125</extRif:searchBaseScore>
-  
-  --> 
+
     <xsl:template match="ro:registryObject">
         <doc>
             <xsl:apply-templates select="ro:key"/>
@@ -98,7 +93,7 @@
     
     <xsl:template match="extRif:displayTitle">
         <xsl:element name="field">
-            <xsl:attribute name="name">display_itle</xsl:attribute>
+            <xsl:attribute name="name">display_title</xsl:attribute>
             <xsl:value-of select="."/>
         </xsl:element>       
     </xsl:template>
@@ -211,7 +206,7 @@
     
     <xsl:template match="ro:relatedObject/extRif:relatedObjectDisplayTitle">
         <xsl:element name="field">
-            <xsl:attribute name="name">related_object_diplay_title</xsl:attribute>
+            <xsl:attribute name="name">related_object_display_title</xsl:attribute>
             <xsl:value-of select="."/>
         </xsl:element>       
     </xsl:template>

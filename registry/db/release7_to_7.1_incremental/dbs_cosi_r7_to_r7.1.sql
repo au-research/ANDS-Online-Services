@@ -28,3 +28,5 @@ AND roles.created_when <= CAST($1 AS timestamp with time zone);$BODY$
 ALTER FUNCTION dba.udf_get_user_count(character varying)
   OWNER TO dba;
 
+INSERT INTO dba.tbl_activities (activity_id, created_who, modified_who) VALUES ('aORCA_RUN_TASKS','SYSTEM','SYSTEM');
+INSERT INTO dba.tbl_role_activities (role_id, activity_id, created_who, modified_who) VALUES ('COSI_ADMIN','aORCA_RUN_TASKS','SYSTEM','SYSTEM');
