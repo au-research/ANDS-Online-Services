@@ -501,7 +501,7 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
                                     	getOrderedNames($registryObjectKey, (isset($party) && $party), false));	
 										
 				// A new record has been inserted? Update the cache
-				if (!writeCache($dataSourceKey, $registryObjectKey, getExtendedRIFCS($registryObjectKey))
+				if (!writeCache($dataSourceKey, $registryObjectKey, getExtendedRIFCS($registryObjectKey)))
 				{
 					$runErrors .= "Could not writeCache() for key: " . $registryObjectKey ."\n";
 				} 

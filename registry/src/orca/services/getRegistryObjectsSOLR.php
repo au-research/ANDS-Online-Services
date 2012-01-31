@@ -144,12 +144,20 @@ if($solrUrl)
 			$key = $allKeys[$i]['registry_object_key'];		
 			$rifcsContent .= getRegistryObjectXMLforSOLR($key, true);
 ///			print $key . '<br/><br/>';ob_flush();flush();
-			if($i % $chunkSize == 0 || $i == ($arraySize -1))
+			if(($i % $chunkSize == 0 && $i != 0) || $i == ($arraySize -1))
 			{					
-	
-					$rifcs .= wrapRegistryObjects($rifcsContent);
-					$rifcs = transformToSolr($rifcs);									
-					$result = curl_post($solrUrl, $rifcs);
+					$rifcs = wrapRegistryObjects($rifcsContent);
+					$solrrifcs = transformToSolr($rifcs);
+					
+					
+					if (strlen($solrrifcs) == 0)
+					{
+						echo $rifcs;
+					}				
+					else
+					{					
+						$result = curl_post($solrUrl, $solrrifcs);
+					}
 					print($j.': ('.$i.')registryObjects is sent to solr ' . $result . "<br/>");					
 					
 					$result = curl_post($solrUrl.'?commit=true', '<commit waitFlush="false" waitSearcher="false"/>');
@@ -157,6 +165,7 @@ if($solrUrl)
 					ob_flush();flush();
 					$rifcsContent = '';
 					$j++;
+					bench();
 			}
 		}
 			$result = curl_post($solrUrl.'?optimize=true', '<optimize waitFlush="false" waitSearcher="false"/>');

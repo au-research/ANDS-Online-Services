@@ -20,6 +20,7 @@ $Revision: 1633 $
 
 function getRegistryObjectXML($registryObjectKey, $forSOLR = false, $includeRelated = false)
 {
+	
 	$data_source_key = getRegistryObjectDataSourceKey($registryObjectKey);
 	
 	// Registry key probably doesn't exist?
@@ -675,20 +676,22 @@ function getLocationTypesXML($registryObjectKey, $elementName, $forSOLR)
 	{
 		foreach( $list as $element )
 		{
-			if( $dateFrom = $element['date_from'] )
+			$dateFrom='';
+			$dateTo='';
+			if( $dateFromValue = $element['date_from'] )
 			{
-				$dateFrom = ' dateFrom="'.getXMLDateTime($dateFrom).'"';
+				$dateFrom = ' dateFrom="'.getXMLDateTime($dateFromValue).'"';
 				if ($forSOLR)
 				{
-					$dateFrom .= ' extRif:dateFrom="'.formatDateTime($dateFrom, gDATE).'"';
+					$dateFrom .= ' extRif:dateFrom="'.formatDateTime($dateFromValue, gDATE).'"';
 				}
 			}
-			if( $dateTo = $element['date_to'] )
+			if( $dateToValue = $element['date_to'] )
 			{
-				$dateTo = ' dateTo="'.getXMLDateTime($dateTo).'"';
+				$dateTo = ' dateTo="'.getXMLDateTime($dateToValue).'"';
 				if ($forSOLR)
 				{
-					$dateTo .= ' extRif:dateTo="'.formatDateTime($dateTo, gDATE).'"';
+					$dateTo .= ' extRif:dateTo="'.formatDateTime($dateToValue, gDATE).'"';
 				}
 				
 			}

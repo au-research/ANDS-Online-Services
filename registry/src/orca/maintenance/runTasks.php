@@ -7,7 +7,17 @@ require '../orca_init.php';
 $executionTimeoutSeconds = 0;
 ini_set("max_execution_time", "$executionTimeoutSeconds");
 
-include "_tasks/generate_hashes.php";
+$task = getQueryValue('task');
+
+switch ($task)
+{
+	case "generate_cache":
+		include "_tasks/generate_cache.php";
+	break;
+	default:
+		echo "Error: No task specified";
+}
+
 
 
 //header("Content-Type: text/xml; charset=UTF-8", true);

@@ -323,16 +323,19 @@ function getCacheItems($data_source_key, $registry_object_key='', $version=eCACH
 	
 	$payload = '';
 	
+
 	// Check cache structure
 	$directory_path = checkCacheStructure($data_source_key, $registry_object_key);
+
 	
+
 	$ds_hash = getDataSourceHash($data_source_key);
 	if (!$ds_hash)
 	{
 		//echo "Could not get data source hash from database - this data source isn't cached yet.";
 		return FALSE;
 	}
-	
+
 	
 	// If no registry_object_key, then we want all from that data_source
 	// Get a concatenated output of all payloads matching the version specified
@@ -378,11 +381,12 @@ function getCacheItems($data_source_key, $registry_object_key='', $version=eCACH
 			// this registry object isn't cached yet?;
 			return FALSE;
 		}
+	
 		
-		$output = array();
-		exec("cd " . eCACHE_DIRECTORY . "; cat " . $ds_hash . "/" . $ro_hash . "/" . $version, $output);
-		$payload = implode($output, "\n");
-		
+		//$output = array();
+		//exec("cd " . eCACHE_DIRECTORY . "; cat " . $ds_hash . "/" . $ro_hash . "/" . $version, $output);
+		$payload = file_get_contents(eCACHE_DIRECTORY . "/" . $ds_hash . "/" . $ro_hash . "/" . $version);
+	
 		// Some sanity checks on the payload
 		if (strlen($payload) > 0 && substr_count($payload, "<registryObject") == 0)
 		{
