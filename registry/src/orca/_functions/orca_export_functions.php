@@ -20,14 +20,12 @@ $Revision: 1633 $
 
 function getRegistryObjectXML($registryObjectKey, $forSOLR = false, $includeRelated = false)
 {
-<<<<<<< HEAD
+
 	if (!eCACHE_ENABLED)
 	{
 		return getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR, $includeRelated);
 	}
-	
-=======
->>>>>>> First cut at caching layer
+
 	$data_source_key = getRegistryObjectDataSourceKey($registryObjectKey);
 	return getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR, $includeRelated);
 	// Registry key probably doesn't exist?
@@ -42,10 +40,7 @@ function getRegistryObjectXML($registryObjectKey, $forSOLR = false, $includeRela
 		writeCache($data_source_key, $registryObjectKey, generateExtendedRIFCS($registryObjectKey));
 	}
 	$result = getCacheItems($data_source_key, $registryObjectKey, eCACHE_CURRENT_NAME, $forSOLR);
-<<<<<<< HEAD
-=======
-	
->>>>>>> First cut at caching layer
+
 	// Still no luck? Fall back to getRegistryObjectXMLforSOLR and build from DB XXX: Temporary
 	if ($result !== FALSE)
 	{
@@ -88,15 +83,11 @@ function getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR = false, $inclu
 		if ($forSOLR)
 		{
 			$xml .= "    <extRif:extendedMetadata>\n";
-<<<<<<< HEAD
-			
+
 			// url_slug
 			// -------------------------------------------------------------
 			$xml .= '      <extRif:urlSlug>'.esc(trim(getRegistryObjectURLSlug($registryObjectKey))).'</extRif:urlSlug>'."\n";
-			
-			
-=======
->>>>>>> First cut at caching layer
+
 			$hash = getRegistryObjectHash($registryObjectKey);
 			if ($hash)
 			{
@@ -127,9 +118,7 @@ function getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR = false, $inclu
 				$reverseLinks = 'EXT';
 			}
 			$xml .= "      <extRif:reverseLinks>".$reverseLinks."</extRif:reverseLinks>\n";
-<<<<<<< HEAD
-			
-			
+
 			// Get registry date modified			
 			if (!($registryDateModified =  getRegistryObjectStatusModified($registryObjectKey)))
 			{
@@ -138,8 +127,6 @@ function getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR = false, $inclu
 			$xml .= "      <extRif:registryDateModified>".$registryDateModified."</extRif:registryDateModified>\n";
 
 
-=======
->>>>>>> First cut at caching layer
 
 			// displayTitle
 			// -------------------------------------------------------------
@@ -154,11 +141,7 @@ function getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR = false, $inclu
 			// listTitle
 			// -------------------------------------------------------------
 			$xml .= '      <extRif:listTitle>'.esc(trim($registryObject[0]['list_title'])).'</extRif:listTitle>'."\n";
-			
-<<<<<<< HEAD
-=======
-			
->>>>>>> First cut at caching layer
+
 			// searchBaseScore (base "boost" used to adjust search rankings)
 			$baseScore = eBOOST_DEFAULT_BASE;
 			
@@ -170,7 +153,7 @@ function getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR = false, $inclu
 			$number_of_related_objects = getIncomingRelatedObjectCount($registryObjectKey);
 			$baseScore += eBOOST_INCOMING_RELATED_OBJECT_ADJUSTMENT * (int) $number_of_related_objects;
 			
-<<<<<<< HEAD
+
 			$xml .= "      <extRif:searchBaseScore>$baseScore</extRif:searchBaseScore>\n";			
 			$xml .= '      <extRif:flag>'.($registryObject[0]['flag'] == 'f' ? '0' : '1').'</extRif:flag>'."\n";
 			$xml .= '      <extRif:warning_count>'.esc(trim($registryObject[0]['warning_count'])).'</extRif:warning_count>'."\n";
@@ -181,11 +164,7 @@ function getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR = false, $inclu
 			$xml .= '      <extRif:quality_level>'.esc(trim($registryObject[0]['quality_level'])).'</extRif:quality_level>'."\n";	
 			$owner = ($registryObject[0]['created_who'] == 'SYSTEM' ? 'harvest' : 'manual');
 			$xml .= '      <extRif:feedType>'.$owner.'</extRif:feedType>'."\n";	
-=======
-			$xml .= "      <extRif:searchBaseScore>$baseScore</extRif:searchBaseScore>\n";
-			
-			
->>>>>>> First cut at caching layer
+
 			$xml .= "    </extRif:extendedMetadata>\n";
 		}
 		
@@ -716,7 +695,7 @@ function getNamePartsXML($complex_name_id)
 }
 
 function getLocationTypesXML($registryObjectKey, $elementName, $forSOLR)
-<<<<<<< HEAD
+
 {
 	$xml = '';
 	$elementName = esc($elementName);
@@ -728,6 +707,7 @@ function getLocationTypesXML($registryObjectKey, $elementName, $forSOLR)
 			$dateFrom='';
 			$dateTo='';
 			if( $dateFromValue = $element['date_from'] )
+
 			{
 				$dateFrom = ' dateFrom="'.getXMLDateTime($dateFromValue).'"';
 				if ($forSOLR)
@@ -758,8 +738,7 @@ function getLocationTypesXML($registryObjectKey, $elementName, $forSOLR)
 }
 
 function getCoverageTypesXML($registryObjectKey, $elementName, $forSOLR)
-=======
->>>>>>> First cut at caching layer
+
 {
 	$xml = '';
 	$elementName = esc($elementName);
@@ -768,7 +747,7 @@ function getCoverageTypesXML($registryObjectKey, $elementName, $forSOLR)
 	{
 		foreach( $list as $element )
 		{
-<<<<<<< HEAD
+
 			$xml .= "      <$elementName>\n";
 			$xml .= getSpatialCoverageXML($element['coverage_id'], $forSOLR);
 			$xml .= getTemporalCoverageXML($element['coverage_id'], $forSOLR);
@@ -859,44 +838,16 @@ function getSpatialCoverageXML($coverage_id, $forSOLR)
 								
 			}
 			
-=======
-			if( $dateFrom = $element['date_from'] )
-			{
-				$dateFrom = ' dateFrom="'.getXMLDateTime($dateFrom).'"';
-				if ($forSOLR)
-				{
-					$dateFrom .= ' extRif:dateFrom="'.formatDateTime($dateFrom, gDATE).'"';
-				}
-			}
-			if( $dateTo = $element['date_to'] )
-			{
-				$dateTo = ' dateTo="'.getXMLDateTime($dateTo).'"';
-				if ($forSOLR)
-				{
-					$dateTo .= ' extRif:dateTo="'.formatDateTime($dateTo, gDATE).'"';
-				}
-				
-			}
-			if( $type = $element['type'] )
-			{
-				$type = ' type="'.esc($type).'"';
-			}
-			$xml .= "      <$elementName$dateFrom$dateTo$type>\n";
-			$xml .= getAddressXML($element['location_id'], $forSOLR);
-			$xml .= getSpatialTypesXML($element['location_id'], $forSOLR);
-			$xml .= "      </$elementName>\n";
->>>>>>> First cut at caching layer
+
 		}
 	}
 	return $xml;
 }
 
-<<<<<<< HEAD
+
 
 function getTemporalCoverageXML($coverage_id, $forSOLR)
-=======
-function getCoverageTypesXML($registryObjectKey, $elementName, $forSOLR)
->>>>>>> First cut at caching layer
+
 {
 	$xml = '';
 	$list = getTemporalCoverage($coverage_id);
@@ -906,7 +857,7 @@ function getCoverageTypesXML($registryObjectKey, $elementName, $forSOLR)
 	$xml .= "        <temporal>\n";
 		foreach( $list as $element )
 		{
-<<<<<<< HEAD
+
 			$textArray = getTemporalCoverageText($element['temporal_coverage_id']);
 			$dateArray = getTemporalCoverageDate($element['temporal_coverage_id']);
 			if($textArray)
@@ -945,148 +896,7 @@ function getCoverageTypesXML($registryObjectKey, $elementName, $forSOLR)
 				}	
 			}
 		}
-=======
-			$xml .= "      <$elementName>\n";
-			$xml .= getSpatialCoverageXML($element['coverage_id'], $forSOLR);
-			$xml .= getTemporalCoverageXML($element['coverage_id'], $forSOLR);
-			$xml .= "      </$elementName>\n";
-		}
-	}
-	return $xml;
-}
 
-
-function getSpatialCoverageXML($coverage_id, $forSOLR)
-{
-	$xml = '';
-	$list = getSpatialCoverage($coverage_id);
-	if( $list )
-	{
-		foreach( $list as $element )
-		{
-			if( $type = $element['type'] )
-			{
-				$type = ' type="'.esc($type).'"';
-			}
-			if( $lang = $element['lang'] )
-			{
-				$lang = ' xml:lang="'.esc($lang).'"';
-			}
-			$value = esc($element['value']);
-			$xml .= "        <spatial$type$lang>$value</spatial>\n";
-			
-			if ($forSOLR)
-			{
-				
-				$xml .= "        <extRif:spatial$type$lang>\n";
-				$centre = '';
-				if($element['type'] == 'iso19139dcmiBox')
-				{
-					$valueString =  strtolower(esc($element['value'])).';';
-					$matches = array();
-					preg_match('/northlimit=([^;]*);/i', $valueString, $matches);
-					$north = (float)$matches[1];
-					preg_match('/southlimit=([^;]*);/i', $valueString, $matches);
-					$south = (float)$matches[1];
-					preg_match('/westlimit=([^;]*);/i', $valueString, $matches);
-					$west = (float)$matches[1];
-					preg_match('/eastlimit=([^;]*);/i', $valueString, $matches);
-					$east = (float)$matches[1];	
-					$coordinates = "$west,$north $east,$north $east,$south $west,$south $west,$north";		
-					$centre = (($east+$west)/2).','.(($north+$south)/2);
-					$xml .= "          <extRif:coords>$west,$north $east,$north $east,$south $west,$south $west,$north</extRif:coords>\n";
-				}
-				else if($element['type'] ==  'gmlKmlPolyCoords' || $element['type'] == 'kmlPolyCoords')
-				{
-					$coordinates = trim(esc($element['value']));
-					$coordinates = preg_replace("/\s+/", " ", $coordinates);
-					
-					if( validKmlPolyCoords($coordinates) )
-					{
-						// Build the coordinates string for the centre.
-						$points = explode(' ', $coordinates);
-						if( count($points) > 0 )
-						{
-							$north = -90.0;
-							$south = 90.0;
-							$west = 180.0;
-							$east = -180.0;
-							foreach( $points as $point )
-							{
-								$P = explode(',', $point); // lon,lat
-								if( (float)$P[0] >= $east ){ $east = (float)$P[0]; }
-								if( (float)$P[0] <= $west ){ $west = (float)$P[0]; }
-								if( (float)$P[1] >= $north ){ $north = (float)$P[1]; }
-								if( (float)$P[1] <= $south ){ $south = (float)$P[1]; }
-							}
-						}
-						$centre = (($east+$west)/2).','.(($north+$south)/2);
-						$xml .= "          <extRif:coords>$coordinates</extRif:coords>\n";
-					}
-				}
-		        if($centre != '')
-		        {
-		        	$xml .= "          <extRif:center>$centre</extRif:center>\n";
-		        }			
-				$xml .= "        </extRif:spatial>\n";
-								
-			}
-			
-		}
-	}
-	return $xml;
-}
-
-
-function getTemporalCoverageXML($coverage_id, $forSOLR)
-{
-	$xml = '';
-	$list = getTemporalCoverage($coverage_id);
-
-	if($list)
-	{
-	$xml .= "        <temporal>\n";
-		foreach( $list as $element )
-		{
-			$textArray = getTemporalCoverageText($element['temporal_coverage_id']);
-			$dateArray = getTemporalCoverageDate($element['temporal_coverage_id']);
-			if($textArray)
-			{
-				asort($textArray);
-				foreach( $textArray  as $row )
-				{
-					if($value = $row['value'])
-					{
-					$xml .= "          <text>".esc($value)."</text>\n";
-					}
-				}	
-			}
-			if($dateArray)
-			{
-				asort($dateArray);
-				foreach( $dateArray as $row )
-				{
-					$type = ' type="'.esc($row['type']).'"';	
-					$dateFormat = ' dateFormat="'.esc($row['date_format']).'"';
-					$value = esc($row['value']);
-					$xml .= "          <date$type$dateFormat>$value</date>\n";
-					
-					if ($forSOLR)
-					{
-						try 
-						{
-							$value = FormatDateTime(esc($row['value']), gDATE);
-						}
-						catch (Exception $e)
-						{
-							$value = ''; // ???? 2008-01-01 00:00:00-01-01T
-						}
-						$xml .= "          <extRif:date$type$dateFormat>$value</extRif:date>\n";
-					}
-				}	
-			}
-		}
->>>>>>> First cut at caching layer
 	$xml .= "        </temporal>\n";	
 	}
 	return $xml;
@@ -1355,7 +1165,7 @@ function getSpatialTypesXML($location_id, $forSOLR)
 					$centre = (($east+$west)/2).','.(($north+$south)/2);
 					$xml .= "          <extRif:coords>$west,$north $east,$north $east,$south $west,$south $west,$north</extRif:coords>\n";
 					
-<<<<<<< HEAD
+
 				}
 				else if($element['type'] ==  'gmlKmlPolyCoords' || $element['type'] == 'kmlPolyCoords')
 				{
@@ -1386,38 +1196,7 @@ function getSpatialTypesXML($location_id, $forSOLR)
 						
 					//}
 				}
-=======
-				}
-				else if($element['type'] ==  'gmlKmlPolyCoords' || $element['type'] == 'kmlPolyCoords')
-				{
-					$coordinates = trim(esc($element['value']));
-					$coordinates = preg_replace("/\s+/", " ", $coordinates);
-					
-					if( validKmlPolyCoords($coordinates) )
-					{
-						// Build the coordinates string for the centre.
-						$points = explode(' ', $coordinates);
-						if( count($points) > 0 )
-						{
-							$north = -90.0;
-							$south = 90.0;
-							$west = 180.0;
-							$east = -180.0;
-							foreach( $points as $point )
-							{
-								$P = explode(',', $point); // lon,lat
-								if( (float)$P[0] >= $east ){ $east = (float)$P[0]; }
-								if( (float)$P[0] <= $west ){ $west = (float)$P[0]; }
-								if( (float)$P[1] >= $north ){ $north = (float)$P[1]; }
-								if( (float)$P[1] <= $south ){ $south = (float)$P[1]; }
-							}
-						}
-						$centre = (($east+$west)/2).','.(($north+$south)/2);
-					    $xml .= "          <extRif:coords>$coordinates</extRif:coords>\n";
-						
-					}
-				}
->>>>>>> First cut at caching layer
+
 				
 				
 		        if($centre != '')
@@ -2692,17 +2471,13 @@ function addKeysToSolrIndex($keys, $commit=true)
 		foreach ($keys as $registryObjectKey)
 		{
 			$rifcs .= getRegistryObjectXMLforSOLR(rawurldecode($registryObjectKey),true);
-<<<<<<< HEAD
+
 		}			
 		//print $rifcs;die();		
 		$rifcs = wrapRegistryObjects($rifcs);
 		$rifcs = transformToSolr($rifcs);		
 		//print $rifcs;								
-=======
-		}					
-		wrapRegistryObjects($rifcs);
-		$rifcs = transformToSolr($rifcs);									
->>>>>>> First cut at caching layer
+
 		$result .= curl_post(gSOLR_UPDATE_URL, $rifcs);
 		if($commit)
 		{

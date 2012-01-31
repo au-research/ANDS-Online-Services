@@ -329,7 +329,6 @@ function getCacheItems($data_source_key, $registry_object_key='', $version=eCACH
 	$payload = '';
 	
 
-
 	// Check cache structure
 	$directory_path = checkCacheStructure($data_source_key, $registry_object_key);
 
@@ -388,8 +387,8 @@ function getCacheItems($data_source_key, $registry_object_key='', $version=eCACH
 		
 		//$output = array();
 		//exec("cd " . eCACHE_DIRECTORY . "; cat " . $ds_hash . "/" . $ro_hash . "/" . $version, $output);
+
 		$payload = @file_get_contents(eCACHE_DIRECTORY . "/" . $ds_hash . "/" . $ro_hash . "/" . $version);
-	
 
 		// Some sanity checks on the payload
 		if (strlen($payload) > 0 && substr_count($payload, "<registryObject") == 0)

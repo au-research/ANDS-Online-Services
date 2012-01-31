@@ -518,6 +518,7 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 
 				// A new record has been inserted? Update the cache
 
+
 				$extRif = generateExtendedRIFCS($registryObjectKey);
 				if (!writeCache($dataSourceKey, $registryObjectKey, $extRif))
 
