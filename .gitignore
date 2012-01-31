@@ -4,7 +4,6 @@
 /registry/src/ckeditor
 /registry/src/dois/
 /registry/src/orca/htmlpurifier/
-/registry/src/orca/rda/.htaccess
 .DS_Store
 ._*
 /registry/src/global_config.php
