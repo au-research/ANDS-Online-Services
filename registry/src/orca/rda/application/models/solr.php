@@ -38,7 +38,7 @@ limitations under the License.
     	if($classFilter!='All') $filter_query .= constructFilterQuery('class', $classFilter);
     	if($typeFilter!='All') $filter_query .= constructFilterQuery('type', $typeFilter);
     	if($groupFilter!='All') $filter_query .= constructFilterQuery('group', $groupFilter);
-    	if($subjectFilter!='All') $filter_query .= constructFilterQuery('subject_value', $subjectFilter);
+    	if($subjectFilter!='All') $filter_query .= constructFilterQuery('subject_value_resolved', $subjectFilter);
     	if($status!='All') $filter_query .= constructFilterQuery('status', $status);
     	
     	//echo $status;
@@ -52,7 +52,7 @@ limitations under the License.
 		if($q!='*:*')$q = escapeSolrValue($q);
 		//$r = '(fulltext:('.$q.') OR key:('.$q.')^50 OR displayTitle:('.$q.')^50 OR listTitle:('.$q.')^50 OR description_value:('.$q.')^5 OR subject_value:('.$q.')^10 OR name_part:('.$q.')^30)';
 		//$q .= $r . ' OR (fulltext:('.$q.') -data_source_key:("AU_RESEARCH_GRANTS"))^3000 OR (fulltext:('.$q.') -data_source_key:("nhmrc.gov.au"))^3000';
-		$q = '(fulltext:('.$q.') OR key:('.$q.')^50 OR displayTitle:('.$q.')^50 OR listTitle:('.$q.')^50 OR description_value:('.$q.')^5 OR subject_value:('.$q.')^10 OR name_part:('.$q.')^30 OR ((fulltext:('.$q.') -data_source_key:("AU_RESEARCH_GRANTS"))^3000 OR (fulltext:('.$q.') -data_source_key:("nhmrc.gov.au"))^3000))';
+		$q = '(fulltext:('.$q.') OR key:('.$q.')^50 OR display_title:('.$q.')^50 OR list_title:('.$q.')^50 OR description_value:('.$q.')^5 OR subject_value_resolved:('.$q.')^10 OR name_part:('.$q.')^30 OR ((fulltext:('.$q.') -data_source_key:("AU_RESEARCH_GRANTS"))^3000 OR (fulltext:('.$q.') -data_source_key:("nhmrc.gov.au"))^3000))';
 
 		//$q .= $r;
 		//OR (fulltext:('.$q.') -data_source_key:("AU_RESEARCH_GRANTS"))^3000 OR (fulltext:('.$q.') -data_source_key:("nhmrc.gov.au"))^3000
@@ -72,7 +72,7 @@ limitations under the License.
 		//if($filter_query!='') $fields['fq']=urlencode($filter_query);
 		//print_r($fields);
 		
-		$facet = '&facet=true&facet.field=type&facet.field=class&facet.field=group&facet.field=subject_value&f.subject_value.facet.mincount=1&facet.sort=count';
+		$facet = '&facet=true&facet.field=type&facet.field=class&facet.field=group&facet.field=subject_value_resolved&f.subject_value_resolved.facet.mincount=1&facet.sort=count';
 		
 		/*prep*/
 		$fields_string='';
