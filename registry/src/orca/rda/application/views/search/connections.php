@@ -143,7 +143,7 @@ if(isset($groups)&&$groups['numfound']>0){
 		}
 
 		echo '<li><a href="'.base_url().'view/?key='.urlencode($groups['json']->{'response'}->{'docs'}[$i]->{'key'}).'" title="'.findRelationship($groups['json']->{'response'}->{'docs'}[$i]->{'key'},$groups['relatedKey'],$groups['relationship']).' '.$autoLinkTitle.'">';
-		echo $groups['json']->{'response'}->{'docs'}[$i]->{'displayTitle'};
+		echo $groups['json']->{'response'}->{'docs'}[$i]->{'display_title'};
 		echo '</a>'.$autoLink.$logostr.'</li>';
 	}
 	echo '</ul>';	

@@ -207,8 +207,8 @@ $relation_types2));
 		$this->load->model('solr');
 		$object = $this->solr->getObjects($related,null,null,null);
 		if(isset($object->{'response'}->{'docs'}[0])){
-		$keyList = $object->{'response'}->{'docs'}[0]->{'relatedObject_key'};
-		$relationshipList = $object->{'response'}->{'docs'}[0]->{'relatedObject_relation'};
+		$keyList = $object->{'response'}->{'docs'}[0]->{'related_object_key'};
+		$relationshipList = $object->{'response'}->{'docs'}[0]->{'related_object_relation'};
 		
 		for($i=0;$i<count($keyList);$i++)
 		{
@@ -239,7 +239,7 @@ $relation_types2));
 		
 		//print_r($data['json']);
 		
-        $reverseLinks = $data['json']->{'response'}->{'docs'}[0]->{'reverseLinks'};  
+        $reverseLinks = $data['json']->{'response'}->{'docs'}[0]->{'reverse_links'};  
         $dataSourceKey = $data['json']->{'response'}->{'docs'}[0]->{'data_source_key'};
 		
 		//print_r($data['json']);
@@ -254,26 +254,26 @@ $relation_types2));
          		$relatedKeys = array();
         		foreach($data[$class]['json'][0]->{'response'}->{'docs'} as $r)
         		{
-        			$relatedNum = count($r->{'relatedObject_key'});
+        			$relatedNum = count($r->{'related_object_key'});
  
         			$relatedKeys = ''; 
         	        $data[$class]['relatedKey'] = '';      			
         			for($i = 0; $i<$relatedNum;$i++)
         			{
-        				if($r->{'relatedObject_relatedObjectClass'}[$i]==$class)
+        				if($r->{'related_object_class'}[$i]==$class)
         				{
-        					$relatedKeys[] = $r->{'relatedObject_key'}[$i];
-        					$data[$class]['relationship'][] = $r->{'relatedObject_relation'}[$i];
-         					$data[$class]['relatedKey'][] = $r->{'relatedObject_key'}[$i];       					
+        					$relatedKeys[] = $r->{'related_object_key'}[$i];
+        					$data[$class]['relationship'][] = $r->{'related_object_relation'}[$i];
+         					$data[$class]['relatedKey'][] = $r->{'related_object_key'}[$i];       					
         				}
         			}
         		} 
         		if($reverseLinks!="NONE"){
         			
         			$data[$class]['json'][1] =$this->solr->getConnections($key,$class,$types,$relatedKeys,$reverseLinks,$dataSourceKey);  
-        			$data[$class]["extrnal"] =$this->solr->getConnections($key,$class,$types,$relatedKeys,'EXT',$dataSourceKey); 
+        			$data[$class]["external"] =$this->solr->getConnections($key,$class,$types,$relatedKeys,'EXT',$dataSourceKey); 
         			 
-					if($data[$class]["extrnal"]->{'response'}->{'numFound'}>0) 
+					if($data[$class]["external"]->{'response'}->{'numFound'}>0) 
 					{
 				
         				foreach($data[$class]["extrnal"]->{'response'}->{'docs'} as $r)
@@ -313,15 +313,15 @@ $relation_types2));
         		$relatedKeys = array();
         		foreach($data[$types]['json'][0]->{'response'}->{'docs'} as $r)
         		{
-        			$relatedNum = count($r->{'relatedObject_key'});
+        			$relatedNum = count($r->{'related_object_key'});
         			$relatedKeys = '';      			
         			for($i = 0; $i<$relatedNum;$i++)
         			{
-        				if($r->{'relatedObject_relatedObjectType'}[$i]==$types)
+        				if($r->{'related_object_type'}[$i]==$types)
         				{
-        					$relatedKeys[] = $r->{'relatedObject_key'}[$i];
-        					$data[$types]['relationship'][] = $r->{'relatedObject_relation'}[$i];        					
-         					$data[$types]['relatedKey'][] = $r->{'relatedObject_key'}[$i];          				
+        					$relatedKeys[] = $r->{'related_object_key'}[$i];
+        					$data[$types]['relationship'][] = $r->{'related_object_relation'}[$i];        					
+         					$data[$types]['relatedKey'][] = $r->{'related_object_key'}[$i];          				
         				}
         			}
         		}  	
@@ -373,9 +373,9 @@ $relation_types2));
         		$relatedKeys = '';      			
         		for($i = 0; $i<$relatedNum;$i++)
         		{
-        			if($r->{'relatedObject_relatedObjectClass'}[$i]==$class)
+        			if($r->{'related_object_class'}[$i]==$class)
         			{
-        				$relatedKeys[] = $r->{'relatedObject_key'}[$i];
+        				$relatedKeys[] = $r->{'related_object_key'}[$i];
          			}
         		} 
         	} 
