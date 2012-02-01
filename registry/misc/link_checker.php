@@ -31,6 +31,16 @@ include '_includes/_functions/database_functions.php';
 include '_includes/_functions/data_functions.php';
 include '_includes/_environment/database_env.php';
 
+// Set the default context stream to emulate firefox (avoid being blitted by over-protective sysadmins)
+$default_opts = array(
+  'http'=>array(
+    'method'=>"GET",
+    'header'=>"Accept-language: en\r\n" .
+              "User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.20) Gecko/20081217 Firefox/2.0.0.20 (.NET CLR 3.5.30729)",
+  )
+);
+stream_context_set_default($default_opts);
+
 //chdir($deployementDir."orca/admin");
 // Connect to the database.
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------
