@@ -452,7 +452,7 @@
     </xsl:template> 
     
     <xsl:template match="ro:subject">   
-            <li><a href="javascript:void(0);" class="subjectFilter" id="{@extRif:resolvedValue}"><xsl:value-of select="@extRif:resolvedValue"/></a></li>       
+            <li><a href="javascript:void(0);" class="subjectFilter" id="{@extRif:resolvedValue}" title="{.}"><xsl:value-of select="@extRif:resolvedValue"/></a></li>       
     </xsl:template>
     
    <xsl:template match="ro:relatedInfo">
