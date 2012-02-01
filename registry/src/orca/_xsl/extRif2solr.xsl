@@ -335,36 +335,15 @@
 
     
     <xsl:template match="ro:coverage/ro:temporal/extRif:date[@type = 'dateFrom'] | ro:coverage/ro:temporal/extRif:date[@type = 'dateTo']">
-        <xsl:variable name="dateString"><xsl:value-of select="."/></xsl:variable>
-        <xsl:variable name="dateValue">
-            <xsl:choose>
-                <xsl:when test="contains($dateString ,'-')">
-                    <xsl:value-of select="substring-before($dateString ,'-')"/>
-                </xsl:when>
-                <xsl:when test="contains($dateString ,'/')">
-                    <xsl:value-of select="substring-before($dateString ,'/')"/>
-                </xsl:when>
-                <xsl:when test="contains($dateString ,'T')">
-                    <xsl:value-of select="substring-before($dateString ,'T')"/>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:value-of select="."/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:variable>
-		<xsl:choose>
-			<xsl:when test="number($dateValue) != 'NaN' and $dateValue != ''">
-	        	<xsl:element name="field">
-					<xsl:if test="@type = 'dateFrom'">
-						<xsl:attribute name="name">date_from</xsl:attribute>
-					</xsl:if>
-					<xsl:if test="@type = 'dateTo'">
-						<xsl:attribute name="name">date_to</xsl:attribute>
-					</xsl:if>
-		            <xsl:value-of select="$dateValue"/>           
-		        </xsl:element>     
-			</xsl:when>
-        </xsl:choose>
+	        <xsl:element name="field">	            
+				<xsl:if test="@type = 'dateFrom'">
+					<xsl:attribute name="name">date_from</xsl:attribute>
+				</xsl:if>
+				<xsl:if test="@type = 'dateTo'">
+					<xsl:attribute name="name">date_to</xsl:attribute>
+				</xsl:if>
+	            <xsl:value-of select="."/>           
+	        </xsl:element>     
     </xsl:template>
     
     <xsl:template match="ro:address | ro:electronic | ro:physical | ro:coverage | ro:temporal | extRif:spatial">
@@ -438,7 +417,9 @@
         </xsl:element>
     </xsl:template>
    
-    <xsl:template match="ro:date | ro:spatial | ro:text"/>
+
+    <xsl:template match="ro:date | ro:description | ro:spatial"/>
+
     
     <xsl:template match="ro:name"/>
    		
