@@ -75,7 +75,6 @@ limitations under the License.
 			
 			foreach($json->{'response'}->{'docs'} as $r)
 			{
-				//var_dump($r);
 				$type = $r->{'type'};
 				$ro_key = $r->{'key'};
 				$name = $r->{'list_title'};
@@ -102,6 +101,7 @@ limitations under the License.
 					$spatial = $r->{'spatial_coverage'};
 					$center = $r->{'spatial_coverage_center'}[0];
 				}
+				
 				$subjects='';
 				if(isset($r->{'subject_value_resolved'})){
 					$subjects = $r->{'subject_value_resolved'};
