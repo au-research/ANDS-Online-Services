@@ -198,6 +198,7 @@ else if($key)
 {
 	header("Content-Type: text/xml; charset=UTF-8", true);
 
+	$rifcs = '';
 	if($registryObject = getRegistryObject($key))
 	{
 		$rifcs .= getRegistryObjectXMLforSOLR($key);
