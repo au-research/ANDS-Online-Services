@@ -80,7 +80,7 @@ class View extends CI_Controller {
 			$doc = ($obj->{'response'}->{'docs'}[0]);
 		
 			
-			$data['title'] = $doc->{'displayTitle'};
+			$data['title'] = $doc->{'display_title'};
 			
 			if(isset($doc->{'description_value'}[0]))$data['description']=htmlentities($doc->{'description_value'}[0]);
 			$data['doc'] = $doc;

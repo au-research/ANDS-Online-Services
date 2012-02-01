@@ -1134,9 +1134,9 @@ function getSpatialTypesXML($location_id, $forSOLR)
 				{
 					$coordinates = trim(esc($element['value']));
 					$coordinates = preg_replace("/\s+/", " ", $coordinates);
-					
-					if( validKmlPolyCoords($coordinates) )
-					{
+					$xml .= "          <extRif:isValidCoords>".validKmlPolyCoords($coordinates)."---".$coordinates."</extRif:isValidCoords>\n";
+					//if( validKmlPolyCoords($coordinates) )
+					//{
 						// Build the coordinates string for the centre.
 						$points = explode(' ', $coordinates);
 						if( count($points) > 0 )
@@ -1157,7 +1157,7 @@ function getSpatialTypesXML($location_id, $forSOLR)
 						$centre = (($east+$west)/2).','.(($north+$south)/2);
 					    $xml .= "          <extRif:coords>$coordinates</extRif:coords>\n";
 						
-					}
+					//}
 				}
 				
 				

@@ -109,8 +109,8 @@ limitations under the License.
     	$fields = array(
 			'q'=>'key:"'.escapeSolrValue($key).'"','version'=>'2.2','start'=>'0','indent'=>'on', 'wt'=>'json'
 		);
-		$filter_query = '+relatedObject_relatedObjectClass:("'.$class.'")';
-		if($type) $filter_query = '+relatedObject_relatedObjectType:("'.$type.'")'; 
+		$filter_query = '+related_object_class:("'.$class.'")';
+		if($type) $filter_query = '+related_object_type:("'.$type.'")'; 
 		$fields['fq']=$filter_query;
 		$json = $this->fireSearch($fields, '');
 		return $json;
@@ -120,9 +120,9 @@ limitations under the License.
     public function getRelatedKeys($key, $relationType=array()){
     	$fields = array(
 			'q'=>'*:*','version'=>'2.2','start'=>'0','rows'=>'100','indent'=>'on', 'wt'=>'json',
-			'fl'=>'relatedObject_key'
+			'fl'=>'related_object_key'
 		);
-		$filter_query = '+key:("'.$key.'")+relatedObject_relation:(';
+		$filter_query = '+key:("'.$key.'")+related_object_relation:(';
 		$first = true;
 		foreach($relationType as $re){
 			if($first){
@@ -158,7 +158,7 @@ limitations under the License.
 			$excludeKeys .= ")";		
 		}
     	$fields = array(
-			'q'=>'relatedObject_key:"'.$key.'"','version'=>'2.2','rows'=>'200000','start'=>'0','indent'=>'on', 'wt'=>'json','fl'=>'key,class,type,data_source_key'
+			'q'=>'related_object_key:"'.$key.'"','version'=>'2.2','rows'=>'200000','start'=>'0','indent'=>'on', 'wt'=>'json','fl'=>'key,class,type,data_source_key'
 		);
 		$filter_query = '+class:("'.$class.'")';
 		if($type) $filter_query = '+type:("'.$type.'")'; 

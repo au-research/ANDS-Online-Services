@@ -237,7 +237,8 @@
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
-        <!--xsl:if test="number($dateValue) != NaN"-->
+        <numtest><xsl:value-of select="number($dateValue)"/></numtest>
+        <xsl:if test="number($dateValue) != 'NaN'">
 	        <xsl:element name="field">
 	            
 				<xsl:if test="@type = 'dateFrom'">
@@ -248,7 +249,7 @@
 				</xsl:if>
 	            <xsl:value-of select="$dateValue"/>           
 	        </xsl:element>     
-        <!--/xsl:if-->  
+        </xsl:if>
     </xsl:template>
     
     <xsl:template match="ro:address | ro:electronic | ro:physical | ro:coverage | ro:temporal | extRif:spatial">
