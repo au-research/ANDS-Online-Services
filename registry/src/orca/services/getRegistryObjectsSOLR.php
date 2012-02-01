@@ -132,24 +132,30 @@ if($solrUrl)
 	}	
 	else 
 	{
+		echo "<h2>Reindexing SOLR</h2>";
+		bench(0);
+		bench(1);
 		$allKeys = getAllRegistryObjectKey();
 		$arraySize = sizeof($allKeys);
-		print $arraySize . '<br/>';
+		echo "Took " . bench(1) . "s to get all keys..." . $arraySize . "<br/><hr/><br/>";
 		ob_flush();flush();
 		$chunkSize = 500;
 		$j = 1;
 		$result = 'test';
 		for($i = 0; $i < $arraySize ; $i++)
 		{				
+			
 			$key = $allKeys[$i]['registry_object_key'];		
+			bench(1);
 			$rifcsContent .= getRegistryObjectXMLforSOLR($key, true);
-///			print $key . '<br/><br/>';ob_flush();flush();
+			
 			if(($i % $chunkSize == 0 && $i != 0) || $i == ($arraySize -1))
 			{					
 					$rifcs = wrapRegistryObjects($rifcsContent);
 					$solrrifcs = transformToSolr($rifcs);
+					sprintf("%-45s", "<i>Fetching extRif for records " . $i . " to " . ($i+$chunkSize) . "... [took ".bench(1)."s]</i>"); 
 					
-					
+					bench(1);
 					if (strlen($solrrifcs) == 0)
 					{
 						echo $rifcs;
@@ -158,18 +164,17 @@ if($solrUrl)
 					{					
 						$result = curl_post($solrUrl, $solrrifcs);
 					}
-					print($j.': ('.$i.')registryObjects is sent to solr ' . $result . "<br/>");					
 					
 					$result = curl_post($solrUrl.'?commit=true', '<commit waitFlush="false" waitSearcher="false"/>');
-					print(time() . ' commit: '.$result. "<br/>");
+					sprintf("%-45s", "Sending " . $chunkSize ." records to SOLR... [took ".bench(1)."s]</i> (Commit Result: ".$result.")<br/>"); 
 					ob_flush();flush();
 					$rifcsContent = '';
 					$j++;
-					bench();
 			}
 		}
-			$result = curl_post($solrUrl.'?optimize=true', '<optimize waitFlush="false" waitSearcher="false"/>');
-			print ('optimise: '.$result. "<br/>");
+		$result = curl_post($solrUrl.'?optimize=true', '<optimize waitFlush="false" waitSearcher="false"/>');
+		print ('optimise: '.$result. "<br/>");
+		echo "<hr/>Took " . bench(0) ."s to reindex...";
 	}
 
 }
