@@ -222,6 +222,7 @@ else if($key)
 
 	$rifcs = '';
 
+
 	if($registryObject = getRegistryObject($key))
 	{
 		$rifcs .= getRegistryObjectXMLforSOLR($key);
