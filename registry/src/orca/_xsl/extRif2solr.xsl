@@ -237,15 +237,21 @@
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
-        <xsl:if test="number($dateValue) != NaN">
+        <!--xsl:if test="number($dateValue) != NaN"-->
 	        <xsl:element name="field">
-	            <xsl:attribute name="name"><xsl:value-of select="@type"/></xsl:attribute>
+	            
+				<xsl:if test="@type = 'dateFrom'">
+					<xsl:attribute name="name">date_from</xsl:attribute>
+				</xsl:if>
+				<xsl:if test="@type = 'dateTo'">
+					<xsl:attribute name="name">date_to</xsl:attribute>
+				</xsl:if>
 	            <xsl:value-of select="$dateValue"/>           
 	        </xsl:element>     
-        </xsl:if>  
+        <!--/xsl:if-->  
     </xsl:template>
     
-    <xsl:template match="ro:address | ro:electronic | ro:physical | ro:coverage | ro:temporal">
+    <xsl:template match="ro:address | ro:electronic | ro:physical | ro:coverage | ro:temporal | extRif:spatial">
             <xsl:apply-templates/>
     </xsl:template>
     
@@ -302,21 +308,21 @@
         </xsl:element>
     </xsl:template>
     <!-- ignore list -->
-    <xsl:template match="ro:location/extRif:spatial | ro:coverage/extRif:spatial">
+    <xsl:template match="ro:location/extRif:spatial/extRif:coords | ro:coverage/extRif:spatial/extRif:coords">
         <xsl:element name="field">
             <xsl:attribute name="name">spatial_coverage</xsl:attribute>
             <xsl:value-of select="."/>
         </xsl:element>
     </xsl:template>
     
-    <xsl:template match="ro:location/extRif:center | ro:coverage/extRif:center">
+    <xsl:template match="ro:location/extRif:spatial/extRif:center | ro:coverage/extRif:spatial/extRif:center">
         <xsl:element name="field">
             <xsl:attribute name="name">spatial_coverage_center</xsl:attribute>
             <xsl:value-of select="."/>
         </xsl:element>
     </xsl:template>
    
-    <xsl:template match="ro:date | ro:description"/>
+    <xsl:template match="ro:date | ro:description | ro:spatial"/>
     
     <xsl:template match="ro:name"/>
    		
