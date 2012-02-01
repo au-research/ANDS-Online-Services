@@ -75,10 +75,6 @@ limitations under the License.
 			
 			foreach($json->{'response'}->{'docs'} as $r)
 			{
-<<<<<<< HEAD
-=======
-				//var_dump($r);
->>>>>>> Fix RDA to use with caching_layer --continue
 				$type = $r->{'type'};
 				$ro_key = $r->{'key'};
 				$name = $r->{'list_title'};
