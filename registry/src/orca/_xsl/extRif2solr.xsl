@@ -59,6 +59,7 @@
       			<xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:feedType"/>
         	</xsl:otherwise>
         </xsl:choose>
+
             <xsl:element name="field">
                 <xsl:attribute name="name">group</xsl:attribute>
                 <xsl:value-of select="@group"/>
@@ -335,6 +336,7 @@
 
     
     <xsl:template match="ro:coverage/ro:temporal/extRif:date[@type = 'dateFrom'] | ro:coverage/ro:temporal/extRif:date[@type = 'dateTo']">
+
 	        <xsl:element name="field">	            
 
 				<xsl:if test="@type = 'dateFrom'">
@@ -345,6 +347,7 @@
 				</xsl:if>
 	            <xsl:value-of select="."/>           
 	        </xsl:element>     
+
     </xsl:template>
     
     <xsl:template match="ro:address | ro:electronic | ro:physical | ro:coverage | ro:temporal | extRif:spatial">
@@ -419,8 +422,7 @@
     </xsl:template>
    
 
-    <xsl:template match="ro:date | ro:description | ro:spatial"/>
-
+    <xsl:template match="ro:date | ro:description | ro:spatial | ro:text"/>
     
     <xsl:template match="ro:name"/>
    		

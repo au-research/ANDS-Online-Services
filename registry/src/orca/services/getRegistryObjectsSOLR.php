@@ -147,7 +147,6 @@ if($solrUrl)
 		{				
 			
 			$key = $allKeys[$i]['registry_object_key'];		
-			bench(1);
 			$rifcsContent .= getRegistryObjectXMLforSOLR($key, true);
 
 			
@@ -156,11 +155,8 @@ if($solrUrl)
 
 					$rifcs = wrapRegistryObjects($rifcsContent);
 					$solrrifcs = transformToSolr($rifcs);
-
 					printf("%-145s", "<i>Fetching extRif for records " . $i . " to " . ($i+$chunkSize) . "... [took ".bench(1)."s]</i>"); 
-					
 					bench(2);
-
 
 					if (strlen($solrrifcs) == 0)
 					{
@@ -186,8 +182,6 @@ if($solrUrl)
 					$rifcsContent = '';
 					$j++;
 					bench(1);
-
-
 			}
 		}
 		$result = curl_post($solrUrl.'?optimize=true', '<optimize waitFlush="false" waitSearcher="false"/>');
