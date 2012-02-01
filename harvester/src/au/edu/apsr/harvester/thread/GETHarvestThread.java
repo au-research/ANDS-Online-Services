@@ -25,6 +25,9 @@ import java.net.URL;
 import org.apache.log4j.Logger;
 
 import au.edu.apsr.harvester.dao.DAOException;
+import au.edu.apsr.harvester.thread.GETHarvestThread;
+import au.edu.apsr.harvester.thread.HarvestThread;
+import au.edu.apsr.harvester.thread.ThreadManager;
 import au.edu.apsr.harvester.to.Fragment;
 
 /**
@@ -85,14 +88,21 @@ public class GETHarvestThread extends HarvestThread
         }
         catch (IOException ioe)
         {
-            log.error("IOException", ioe);
+            log.error("IOException", ioe);            
             try
             {
                 threadManager.setThreadError(harvest);
+            	log.info("IOException: so trying no notify ORCA");
+            	postError(ioe.toString(), harvest, "application/x-www-form-urlencoded", harvest.getHarvestID());
+            	threadManager.setThreadError(harvest);
             }
             catch (DAOException daoe)
             {
                 log.error("DAOException", daoe);
+            }
+            catch (IOException ioe2)
+            {
+                log.error("IOException", ioe2);
             }
         }
         catch (DAOException daoe)

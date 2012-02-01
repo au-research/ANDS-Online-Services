@@ -45,6 +45,9 @@ import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.dom.DOMSource;
 
 import au.edu.apsr.harvester.dao.DAOException;
+import au.edu.apsr.harvester.thread.HarvestThread;
+import au.edu.apsr.harvester.thread.RIFHarvestThread;
+import au.edu.apsr.harvester.thread.ThreadManager;
 import au.edu.apsr.harvester.to.Fragment;
 import au.edu.apsr.harvester.to.Harvest;
 import au.edu.apsr.harvester.oai.Identify;
@@ -81,6 +84,7 @@ public class RIFHarvestThread extends HarvestThread
     // following fields only used when debugging
     private int numRecordsRcvd = 0;
     private int numRecordsSent = 0;
+    private String errorMsg = "";
     
     /**
      * Constructor obtains a reference to the Thread Manager
@@ -118,6 +122,7 @@ public class RIFHarvestThread extends HarvestThread
             // error is received).
             //setResumptionToken(harvest.getResumptionToken());
             
+            
             if (getResumptionToken() == null)
             {
                 Identify identify = new Identify(harvest.getSourceURL()); 
@@ -126,7 +131,9 @@ public class RIFHarvestThread extends HarvestThread
                 
                 if (identifyDoc == null)
                 {
-                    throw new IOException("Response from Identify is null");
+                	errorMsg += "Response from Identify is null\n";
+                	postError(errorMsg, harvest, "application/x-www-form-urlencoded", harvest.getHarvestID());
+                	throw new IOException("Response from Identify is null");                    
                 }
 
                 NodeList nl = identifyDoc.getElementsByTagName("granularity");
@@ -184,6 +191,7 @@ public class RIFHarvestThread extends HarvestThread
                 if (errors != null && errors.getLength() > 0)
                 {
                     log.error("Errors in ListRecords response");
+                    errorMsg += "Errors in ListRecords response\n";
                     int length = errors.getLength();
                     for (int i=0; i<length; ++i)
                     {
@@ -191,6 +199,9 @@ public class RIFHarvestThread extends HarvestThread
                         log.error(item.getTagName() + ":" + 
                                   item.getAttribute("code") + ":" + 
                                   item.getTextContent());
+                        errorMsg += item.getTagName() + ":" + 
+                        item.getAttribute("code") + ":" + 
+                        item.getTextContent();
                         
                         if (item.getAttribute("code").equals(NO_RECORDS))
                         {
@@ -213,52 +224,15 @@ public class RIFHarvestThread extends HarvestThread
                     
                     if (error)
                     {
-                        break;
+                    	postError(errorMsg, harvest, "application/x-www-form-urlencoded", harvest.getHarvestID());
+                    	break;
                     }
                 }
                 
                 Document doc = listRecords.getDocument();
-                NodeList nl = doc.getElementsByTagNameNS("http://ands.org.au/standards/rif-cs/registryObjects", "registryObject");
-                int len = nl.getLength();
-                
-                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();                
-                // create a DocumentBuilder (DOM Parser)
-                DocumentBuilder builder = factory.newDocumentBuilder();                
-                // create an EMPTY XML document for the output
-                Document records = builder.newDocument();
-                
-                Element root = records.createElement("registryObjects");
-                root.setAttributeNS("http://www.w3.org/2001/XMLSchema-instance","xsi:schemaLocation", "http://ands.org.au/standards/rif-cs/registryObjects http://pilot.apsr.edu.au/public/rif/schema/registryObjects.xsd");
-                root.setAttribute("xmlns", "http://ands.org.au/standards/rif-cs/registryObjects");
-               
-                records.appendChild(root);
-                
-                String stylesheet = System.getProperty("catalina.home") + 
-                File.separator + "webapps" + File.separator + 
-                "harvester" + File.separator + "WEB-INF" +
-                File.separator + "stylesheet" + File.separator +
-                "removeNamespaces.xsl";
+                Fragment frag = getFragment(docToString(doc), "ListRecords");
 
-                numRecordsRcvd += nl.getLength();
-                log.debug(harvest.getHarvestID() + "received:" + nl.getLength());
-                
-                for (int i = 0; i < len; i++)
-                {
-                    Node n = nl.item(i);
-                    if (n.hasChildNodes())
-                    {
-                        Document d = transform(n, stylesheet);
-                        root.appendChild(records.importNode(d.getDocumentElement(), true));
-                    }
-                }
-
-                NodeList nl2 = root.getElementsByTagName("registryObject");
-                numRecordsSent += nl2.getLength();
-                log.debug(harvest.getHarvestID() + " sent:" + nl2.getLength());
-                
-                Fragment frag = getFragment(docToString(records), "ListRecords");
-
-                if ((listRecords.getResumptionToken().length()==0) || (harvest.getMode().equals(Constants.MODE_TEST))) 
+                if ((listRecords.getResumptionToken().length()==0) || getResumptionToken() == listRecords.getResumptionToken() || (harvest.getMode().equals(Constants.MODE_TEST))) 
                 {
                     last = true;
                 }
@@ -270,9 +244,9 @@ public class RIFHarvestThread extends HarvestThread
                     threadManager.setThreadComplete(harvest);
                     return;
                 }
-                
+                log.info(harvest.getHarvestID() + " OLD resumption token = " + getResumptionToken());
                 log.info(harvest.getHarvestID() + " resumption token = " + listRecords.getResumptionToken());
-                if (listRecords.getResumptionToken().length() > 0)
+                if (listRecords.getResumptionToken().length() > 0 && getResumptionToken() != listRecords.getResumptionToken())
                 {
                     setResumptionToken(listRecords.getResumptionToken());
                 }
@@ -324,11 +298,17 @@ public class RIFHarvestThread extends HarvestThread
             log.error("IOException", ioe);
             try
             {
-                threadManager.setThreadError(harvest);
+            	log.info("IOException: so trying no notify ORCA");
+            	postError(ioe.toString(), harvest, "application/x-www-form-urlencoded", harvest.getHarvestID());
+            	threadManager.setThreadError(harvest);
             }
             catch (DAOException daoe)
             {
                 log.error("DAOException", daoe);
+            }
+            catch (IOException ioe2)
+            {
+                log.error("IOException", ioe2);
             }
         }
         catch (DAOException daoe)
@@ -370,38 +350,6 @@ public class RIFHarvestThread extends HarvestThread
     {
         harvest.setMetadataPrefix("rif");
         super.setPMHArguments();
-    }
-    
-    
-    /**
-     * run a transform over a document and return the result
-     * as a Document
-     * 
-     * @param n
-     *     the starting node for a transform
-     * @param stylesheet
-     *      full path to an XSL stylesheet
-     *      
-     * @return Document
-     *             the result of the transform as a Document
-     */
-    private Document transform(Node n,
-                               String stylesheet)
-    {
-        Source input = new DOMSource(n);
-        DOMResult output = new DOMResult();
-        try
-        {
-            TransformerFactory txFactory = TransformerFactory.newInstance();
-            Transformer tx = txFactory.newTransformer(new StreamSource(stylesheet));
-            tx.transform(input, output);
-            return (Document)output.getNode();
-        }
-        catch (TransformerException e)
-        {
-            log.error("TransformerException", e);
-            return null;
-        }
     }
     
     
