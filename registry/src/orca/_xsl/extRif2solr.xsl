@@ -336,6 +336,7 @@
     
     <xsl:template match="ro:coverage/ro:temporal/extRif:date[@type = 'dateFrom'] | ro:coverage/ro:temporal/extRif:date[@type = 'dateTo']">
 	        <xsl:element name="field">	            
+
 				<xsl:if test="@type = 'dateFrom'">
 					<xsl:attribute name="name">date_from</xsl:attribute>
 				</xsl:if>
