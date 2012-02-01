@@ -300,13 +300,14 @@ function writeCache($data_source_key, $registry_object_key, $payload)
 			return FALSE;
 		}
 		
+		/*
 		$ds_hash = getDataSourceHash($data_source_key);
 		if (!$ds_hash)
 		{
 			echo "Could not get data source hash from database - this data source isn't cached yet?? Error!";
 			return FALSE;
 		}
-		
+		*/
 		// Recompute the data_source cache file
 		//exec("cd " . eCACHE_DIRECTORY . "; cat " . $ds_hash . "/*/" . eCACHE_CURRENT_NAME . " > " . $ds_hash . ".cache");
 		// this causes issues with while loops through records!!! rather do on first load (this is quick!)

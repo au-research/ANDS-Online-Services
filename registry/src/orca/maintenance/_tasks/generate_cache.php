@@ -8,7 +8,7 @@ if (isset($_GET['hard']))
 }
 
 
-$req_datasource=getQueryValue('datasource');
+$req_datasource=getQueryValue('data_source');
 
 $ds = array();
 
@@ -27,8 +27,9 @@ flush();ob_flush();
 
 foreach($ds AS $datasource)
 {	
+	bench(1);
 	$ro = getRegistryObjectKeysForDataSource($datasource['data_source_key']);
-	
+	echo "Getting all RegistryObject keys: ". bench(1) . "<br/><hr/><br/>";
 	if (!$ro) continue;
 	echo "Caching of " . count($ro) . " records started for " . $datasource['data_source_key'] . ": ";	
 	flush();ob_flush();
@@ -39,7 +40,12 @@ foreach($ds AS $datasource)
 	foreach ($ro AS $registry_object)
 	{
 		$count++;
-		writeCache($datasource['data_source_key'], $registry_object['registry_object_key'], generateExtendedRIFCS($registry_object['registry_object_key']));
+		bench(1);
+		$extendedRIFCS = generateExtendedRIFCS($registry_object['registry_object_key']);
+		echo "<br/>Getting RIFCS for " . $registry_object['registry_object_key'] . ": " . bench(1) . "s<br/>";
+		bench(1);
+		writeCache($datasource['data_source_key'], $registry_object['registry_object_key'], $extendedRIFCS);
+		echo "Writing cache for " . $registry_object['registry_object_key'] . ": " . bench(1) . "s<br/><br/>";
 		if (ceil(count($ro)*$mult/10) == $count) { echo "."; flush();ob_flush(); $mult++; }
 	}
 		

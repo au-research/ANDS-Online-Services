@@ -598,7 +598,7 @@ function runSolrIndexForDatasource($dataSourceKey)
 	$rifcsContent = '';
 	$allKeys = getRegistryObjectKeysForDataSource($dataSourceKey);
 	$arraySize = sizeof($allKeys);
-	$result = 'Solr Indexing run';
+	$result ='';
 	$publishedRecords = 0;
 	for($i = 0; $i < $arraySize ; $i++)
 	{				
@@ -606,17 +606,27 @@ function runSolrIndexForDatasource($dataSourceKey)
 		//{
 		$key = $allKeys[$i]['registry_object_key'];	
 		$publishedRecords++;	
-		$rifcsContent .= getRegistryObjectXMLforSOLR($key, true);
+		$rifcsContent = getRegistryObjectXMLforSOLR($key, true);
+		$rifcs = wrapRegistryObjects($rifcsContent);
+		$rifcs = transformToSolr($rifcs);		
+			echo $key . '<br/>';						
+		$result .= curl_post(gSOLR_UPDATE_URL, $rifcs);					
+		$result .= curl_post(gSOLR_UPDATE_URL.'?commit=true', '<commit waitFlush="false" waitSearcher="false"/>');
+		echo $result;
+		$result ='';flush(); ob_flush();	
+	//	$result .= curl_post(gSOLR_UPDATE_URL.'?optimize=true', '<optimize waitFlush="false" waitSearcher="false"/>');
+	
 		//}	
 	}
-	if($publishedRecords > 0)
+		$result .= curl_post(gSOLR_UPDATE_URL.'?optimize=true', '<optimize waitFlush="false" waitSearcher="false"/>');
+	/*if($publishedRecords > 0)
 	{
 		$rifcs = wrapRegistryObjects($rifcsContent);
 		$rifcs = transformToSolr($rifcs);									
 		$result .= curl_post(gSOLR_UPDATE_URL, $rifcs);					
 		$result .= curl_post(gSOLR_UPDATE_URL.'?commit=true', '<commit waitFlush="false" waitSearcher="false"/>');
 		$result .= curl_post(gSOLR_UPDATE_URL.'?optimize=true', '<optimize waitFlush="false" waitSearcher="false"/>');	
-	}
+	}*/
     return $result;	
 }
 

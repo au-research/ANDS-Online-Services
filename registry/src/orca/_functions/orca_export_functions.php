@@ -108,6 +108,16 @@ function getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR = false, $inclu
 				$reverseLinks = 'EXT';
 			}
 			$xml .= "      <extRif:reverseLinks>".$reverseLinks."</extRif:reverseLinks>\n";
+			
+			
+			// Get registry date modified			
+			if (!($registryDateModified =  getRegistryObjectRegistryDateModified($registryObjectKey)))
+			{
+					$registryDateModified = time(); // default to now
+			}
+			$xml .= "      <extRif:registryDateModified>".$registryDateModified."</extRif:registryDateModified>\n";
+
+
 
 			// displayTitle
 			// -------------------------------------------------------------

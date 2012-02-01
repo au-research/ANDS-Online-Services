@@ -19,6 +19,7 @@
             <xsl:apply-templates select="extRif:extendedMetadata/extRif:status"/>
             <xsl:apply-templates select="extRif:extendedMetadata/extRif:reverseLinks"/> 
             <xsl:apply-templates select="extRif:extendedMetadata/extRif:searchBaseScore"/>
+ 			<xsl:apply-templates select="extRif:extendedMetadata/extRif:registryDateModified"/>
             <xsl:apply-templates select="ro:originatingSource"/>
             <xsl:apply-templates select="extRif:extendedMetadata/extRif:dataSourceKey"/> 
             <xsl:apply-templates select="extRif:extendedMetadata/extRif:dataSourceKeyHash"/> 
@@ -59,6 +60,14 @@
     <xsl:template match="extRif:searchBaseScore">
         <xsl:element name="field">
             <xsl:attribute name="name">search_base_score</xsl:attribute>
+            <xsl:value-of select="."/>
+        </xsl:element>       
+    </xsl:template>
+
+
+	<xsl:template match="extRif:registryDateModified">
+        <xsl:element name="field">
+            <xsl:attribute name="name">date_modified</xsl:attribute>
             <xsl:value-of select="."/>
         </xsl:element>       
     </xsl:template>
@@ -114,10 +123,10 @@
             <xsl:attribute name="name">type</xsl:attribute>
             <xsl:value-of select="@type"/>
         </xsl:element>  
-        <xsl:element name="field">
+        <!--xsl:element name="field">
             <xsl:attribute name="name">date_modified</xsl:attribute>
             <xsl:value-of select="@dateModified"/>
-        </xsl:element>  
+        </xsl:element-->  
         <xsl:apply-templates select="ro:identifier" mode="value"/>
         <xsl:apply-templates select="ro:identifier" mode="type"/>
         <xsl:apply-templates select="ro:name"/>
@@ -237,19 +246,19 @@
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
-        <numtest><xsl:value-of select="number($dateValue)"/></numtest>
-        <xsl:if test="number($dateValue) != 'NaN'">
-	        <xsl:element name="field">
-	            
-				<xsl:if test="@type = 'dateFrom'">
-					<xsl:attribute name="name">date_from</xsl:attribute>
-				</xsl:if>
-				<xsl:if test="@type = 'dateTo'">
-					<xsl:attribute name="name">date_to</xsl:attribute>
-				</xsl:if>
-	            <xsl:value-of select="$dateValue"/>           
-	        </xsl:element>     
-        </xsl:if>
+		<xsl:choose>
+			<xsl:when test="number($dateValue) != 'NaN' and $dateValue != ''">
+	        	<xsl:element name="field">
+					<xsl:if test="@type = 'dateFrom'">
+						<xsl:attribute name="name">date_from</xsl:attribute>
+					</xsl:if>
+					<xsl:if test="@type = 'dateTo'">
+						<xsl:attribute name="name">date_to</xsl:attribute>
+					</xsl:if>
+		            <xsl:value-of select="$dateValue"/>           
+		        </xsl:element>     
+			</xsl:when>
+        </xsl:choose>
     </xsl:template>
     
     <xsl:template match="ro:address | ro:electronic | ro:physical | ro:coverage | ro:temporal | extRif:spatial">
@@ -323,7 +332,7 @@
         </xsl:element>
     </xsl:template>
    
-    <xsl:template match="ro:date | ro:description | ro:spatial"/>
+    <xsl:template match="ro:date | ro:description | ro:spatial | ro:text"/>
     
     <xsl:template match="ro:name"/>
    		
