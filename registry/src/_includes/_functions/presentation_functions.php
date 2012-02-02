@@ -145,8 +145,8 @@ function formatDateTimeWithMask($datetime, $mask)
 
 	$formatDate = "";	
 	$TZpos = strpos($datetime, "+");
-	if($TZpos === false)
-		$TZpos = strpos($datetime, "-");
+	//if($TZpos === false)
+	//	$TZpos = strpos($datetime, "-");
 
 	if($TZpos > 0)
 	{
