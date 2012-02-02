@@ -41,6 +41,7 @@ import java.util.zip.InflaterInputStream;
 import java.util.zip.ZipInputStream;
 
 import au.edu.apsr.harvester.dao.DAOException;
+import au.edu.apsr.harvester.thread.HarvestThread;
 import au.edu.apsr.harvester.to.Fragment;
 import au.edu.apsr.harvester.to.Harvest;
 import au.edu.apsr.harvester.to.Request;
@@ -138,6 +139,48 @@ public abstract class HarvestThread extends TimerTask
         conn.disconnect();
     }
 
+    protected void postError(String errMsg,
+            Harvest harvest,
+            String mimetype,
+            String harvestId) throws UnsupportedEncodingException, MalformedURLException, IOException, DAOException
+		{
+		String params = "harvestid=" + URLEncoder.encode(harvestId, "UTF-8");
+		params += "&sourceurl=" + URLEncoder.encode(harvest.getSourceURL(), "UTF-8");
+		params += "&responsetargeturl=" + URLEncoder.encode(harvest.getResponseTargetURL(), "UTF-8");
+		params += "&mode=" + URLEncoder.encode(harvest.getMode(), "UTF-8");
+		params += "&method=" + URLEncoder.encode(harvest.getMethod(), "UTF-8");
+		params += "&errmsg=" + URLEncoder.encode(errMsg, "UTF-8");
+		
+		if (harvest.getFrequency() != null)
+		{
+		params += "&date=" + URLEncoder.encode(ServletSupport.getUTCString(harvest.getNextRun()), "UTF-8");            
+		}
+		int responseCode = 0;
+		HttpURLConnection conn = null;
+		URL url = new URL(harvest.getResponseTargetURL());
+		conn = (HttpURLConnection)url.openConnection();
+		conn.setConnectTimeout(10000);
+		conn.setRequestMethod("POST");
+		conn.setAllowUserInteraction(false);
+		conn.setDoOutput(true);
+		conn.setRequestProperty("User-Agent", "APSRHarvester/1.0");
+		conn.setRequestProperty( "Content-type", mimetype+";charset=UTF-8");
+		conn.setRequestProperty( "Content-length", Integer.toString(params.length()));
+		OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
+		out.write(params);
+		out.flush();
+		out.close();
+		responseCode = conn.getResponseCode();
+		log.debug(harvest.getHarvestID() + " post fragment code: " + responseCode);
+		if (responseCode < 200 || responseCode > 299)
+		{
+		conn.disconnect();
+		log.error("Unexpected response code from" + harvest.getResponseTargetURL() + ": " + responseCode);
+		throw new IOException("Unexpected response code from" + harvest.getResponseTargetURL() + ": " + responseCode);
+		}
+
+		conn.disconnect();
+}
 
     /**
      * obtain an input stream from a URL. This code is pretty much a 
