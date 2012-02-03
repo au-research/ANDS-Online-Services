@@ -55,7 +55,7 @@ limitations under the License.
 | The $active_record variables lets you determine whether or not to load
 | the active record class
 */
-require('../../global_config.php');
+global $orca_db_host, $orca_db_name;
 $active_group = 'default';
 $active_record = TRUE;
 
