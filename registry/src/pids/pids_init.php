@@ -28,9 +28,9 @@ limitations under the License.
 // -----------------------------------------------------------------------------
 
 // Service configuration.
-define('gPIDS_SERVICE_BASE_URI', "https://services.ands.org.au:8443/pids/");
+define('gPIDS_SERVICE_BASE_URI', $pids_uri);
 
-define('gPIDS_APP_ID', "e667026a228289a1aec5bd5acb757837c065dd38");
+define('gPIDS_APP_ID', $pids_fid);
 
 
 $gPIDS_PROPERTY_TYPES = array( 
