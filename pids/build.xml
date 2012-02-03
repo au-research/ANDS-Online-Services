@@ -9,10 +9,11 @@
 
 <project name="pids" default="build_wars" basedir=".">
 
+  <taskdef resource="net/sf/antcontrib/antlib.xml"/>
+
   <!-- ============================================================= -->
   <!-- Description                                                   -->
   <!-- ============================================================= -->
-
   <description>
 ===================== DSpace platform build file =====================
 
@@ -81,18 +82,53 @@ Common usage:
 <target name="build_wars"
         depends="compile"
         description="Build the .war files">
+
     <copy file="etc/web.xml"
         tofile="build/web.xml"
         preservelastmodified="true"/>
-    <replace file="build/web.xml"
-        token="@@config-dir@@"
-        value="${config-dir}" />
-    <replace file="build/web.xml"
-        token="@@na@@"
-        value="${prefix}" />
-    <replace file="build/web.xml"
-        token="@@admin-ip@@"
-        value="${admin-ip}" />
+
+	    <if>
+	      <isset property="env.PIDS_HANDLE_CONFIG" />
+	      <then>
+	        <replace file="build/web.xml"
+	       	    token="@@config-dir@@"
+	       	    value="${env.PIDS_HANDLE_CONFIG}" />
+	      </then>
+	      <else>
+	         <replace file="build/web.xml"
+	            token="@@config-dir@@"
+	       	    value="${config-dir}" />
+	      </else>
+	    </if>
+	
+	    <if>
+	      <isset property="env.PIDS_ADMIN_IP" />
+	      <then>
+	       	<replace file="build/web.xml"
+		        token="@@admin-ip@@"
+		        value="${env.PIDS_ADMIN_IP}" />
+	      </then>
+	      <else>
+	        <replace file="build/web.xml"
+		        token="@@admin-ip@@"
+		        value="${admin-ip}" />
+	      </else>
+	    </if>
+	
+	    <if>
+	      <isset property="env.PIDS_HANDLE_PREFIX" />
+	      <then>
+	       	<replace file="build/web.xml"
+		        token="@@na@@"
+		        value="${env.PIDS_HANDLE_PREFIX}" />
+	      </then>
+	      <else>
+		    <replace file="build/web.xml"
+		        token="@@na@@"
+		        value="${prefix}" />
+	      </else>
+	    </if>
+
      <copy file="etc/log4j.properties"
       	todir="build/classes"
   		preservelastmodified="true"/>
