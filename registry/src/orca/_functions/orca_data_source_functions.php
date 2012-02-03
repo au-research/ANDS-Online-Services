@@ -629,6 +629,7 @@ function runSolrIndexForDatasource($dataSourceKey)
 function updateRecordsForDataSource($dataSourceKey, $manuallyPublish,$manuallyPublishOld, $qaFlag, $qaFlagOld,$createPrimary,$oldCreatePrimary,$class_1,$class_1_old,$class_2,$class_2_old)
 {
 
+	if($createPrimary=='0') $createPrimary='f';
 	
 	if(($manuallyPublish == 0 || $manuallyPublish == 'f') && $manuallyPublishOld == 't')
 	{
