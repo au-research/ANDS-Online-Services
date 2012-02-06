@@ -822,7 +822,7 @@ $(document).ready(function(){
 		    var locationText = [];
 		    
 		    $.each(coverages, function(){
-		    	setTimeout(500);
+		    	setTimeout('500');
 		    	var coverageText = $(this).text();
 		    	if(coverageText.indexOf('northlimit')==-1){
 		    		//there is no north limit
