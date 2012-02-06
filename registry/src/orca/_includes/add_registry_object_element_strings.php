@@ -962,7 +962,7 @@ $_strings['*_relatedObject'] = <<<HTMLEND
 											if ({$has_fragment} == false) {
 												getElement('relation', [], 'object.relatedObject[%%SEQNUM1%%].', null, getNextSeq('relatedObject_%%SEQNUM1%%_relation'));
 												
-												showSearchModal("object_relatedObject_%%SEQNUM1%%_key_1");
+												//showSearchModal("object_relatedObject_%%SEQNUM1%%_key_1");
 											}
 											addRelatedObjectSearch('object_relatedObject_%%SEQNUM1%%_key_1');
 												//addRelatedObjectAutocomplete('object_relatedObject_%%SEQNUM1%%_key_1_name');		

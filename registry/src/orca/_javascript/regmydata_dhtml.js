@@ -80,8 +80,10 @@ $(document).ready(function() {
 
 	$('.relatedObjectKey').live('blur', function(){
 		var key = $(this).val();
-		var target = $(this).parents().nextAll().find('.ro_preview').first();
-		getRelatedObjectPreview(key, target);
+		if(key!=''){
+			var target = $(this).parents().nextAll().find('.ro_preview').first();
+			getRelatedObjectPreview(key, target);
+		}
 	});
 	
 
@@ -1008,8 +1010,10 @@ function advanceLoadingStatus () {
 		$('.relatedObjectKey').each(function(){
 			//console.log($(this).val());
 			var k = $(this).val();
-			var target = $(this).parents().nextAll().find('.ro_preview').first();
-			getRelatedObjectPreview(k, target);
+			if(k!=''){
+				var target = $(this).parents().nextAll().find('.ro_preview').first();
+				getRelatedObjectPreview(k, target);
+			}
 		});	
 
 	}
@@ -1627,6 +1631,11 @@ function addRelatedObjectSearch(field){
 		//doRelatedObjectSearch(field);
 	});
 	
+	$('#select_'+field+'_class, #select_'+field+'_dataSource').change(function(){
+		$(result).html('Loading...');
+		doRelatedObjectSearch(field);
+	});
+	
 	$('.selectRelatedObjectValue').live('click', function(){
 		where = $(this).attr('name');
 		$('#'+where+'_value').val($(this).attr('id'));
@@ -1638,6 +1647,7 @@ function addRelatedObjectSearch(field){
 
 function doRelatedObjectSearch(field){
 	term = $('#'+field+'_search').val();
+	if(term=="")term='*:*';
 	roClass = $('#select_'+field+'_class').val(); 
 	roDS = $('#select_'+field+'_dataSource').val(); 
 	result = '#'+field+'_result';
@@ -1650,7 +1660,7 @@ function doRelatedObjectSearch(field){
 				$(result).append('<ul></ul>');
 				$.each(data, function(){
 					var thisRecord = '';
-					thisRecord +='<li><a href="javascript:void(0);" class="selectRelatedObjectValue" name="'+field+'" id="'+this.value+'">'+this.desc+'</a></li>';
+					thisRecord +='<li><a href="javascript:void(0);" class="selectRelatedObjectValue" name="'+field+'" id="'+this.value+'" title="'+this.value+'">'+this.desc+'</a></li>';
 					$(result+' > ul').append(thisRecord);
 				});
 
