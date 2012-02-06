@@ -45,7 +45,7 @@ if (!IN_ORCA) die('No direct access to this file is permitted.');
 //NEW - use SOLR
 		$objectClass = strtolower($objectClass);
 		$q = '+displayTitle:('.$searchText.') +class:('.$objectClass.')';
-		if($dataSourcekey!='') $q.=' +ds_key:('.$dataSourcekey.')';
+		if($dataSourcekey!='') $q.=' +ds_key:("'.$dataSourcekey.'")';
 		$fields = array(
 			'q'=>$q,'version'=>'2.2','start'=>'0','rows'=>$limit, 'wt'=>'json',
 			'fl'=>'key, displayTitle, description_value, description_type, status'
@@ -78,4 +78,4 @@ if (!IN_ORCA) die('No direct access to this file is permitted.');
 		}
 	
 		echo json_encode($values);
-		
+		
