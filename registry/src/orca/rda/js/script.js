@@ -829,22 +829,40 @@ $(document).ready(function(){
 		    		if(validateLonLatText(coverageText)){//if the coverage text is resolvable (normal way)
 		    			//console.log(coverageText);
 						coverage = $(this).html();
+						
 						split = coverage.split(' ');
-						coords = [];
-						$.each(split, function(){
-							coord = stringToLatLng(this);
-							coords.push(coord);
-							bounds.extend(coord);
-						});
-						poly = new google.maps.Polygon({
-						    paths: coords,
-						    strokeColor: "#FF0000",
-						    strokeOpacity: 0.8,
-						    strokeWeight: 2,
-						    fillColor: "#FF0000",
-						    fillOpacity: 0.35
-						});
-						poly.setMap(map2);
+						//console.log(split.length);
+						
+						if(split.length>1){
+							coords = [];
+							$.each(split, function(){
+								coord = stringToLatLng(this);
+								coords.push(coord);
+								bounds.extend(coord);
+							});
+							poly = new google.maps.Polygon({
+							    paths: coords,
+							    strokeColor: "#FF0000",
+							    strokeOpacity: 0.8,
+							    strokeWeight: 2,
+							    fillColor: "#FF0000",
+							    fillOpacity: 0.35
+							});
+							poly.setMap(map2);
+						}else{
+							console.log(split);
+							
+							//MARKERSSS
+							var marker = new google.maps.Marker({
+					            map: map2,
+					            position: stringToLatLng($(this).html()),
+					            draggable: false,
+					            raiseOnDrag:false,
+					            visible:true
+					        });
+						}
+						
+						
 						//console.log(poly);
 					}else{
 						//CC-145
