@@ -312,12 +312,12 @@
 				<p><xsl:apply-templates select="ro:location/ro:address/ro:electronic"/></p>	
 	 		</xsl:if>
 	 		
-	 		 <xsl:if test="ro:rights">
+	 		 <xsl:if test="extRif:rights">
 					<h3>Rights</h3>	
 			</xsl:if>
 				
 			<!-- <xsl:apply-templates select="ro:description[@type = 'accessRights' or @type = 'rights']" mode="right"/>	 -->	
-			<xsl:apply-templates select="ro:rights"/>		
+			<xsl:apply-templates select="extRif:rights"/>		
 			
 		 	<xsl:if test="ro:location/ro:address/ro:electronic/@type='email' or ro:location/ro:address/ro:physical">
 		 		<h3>Contacts</h3>
@@ -805,7 +805,7 @@ Handle:
 			<xsl:value-of select="." disable-output-escaping="yes"/><br />
 	</xsl:template>
 		
-	<xsl:template match="ro:rights">
+	<xsl:template match="extRif:rights">
 			
 			<xsl:if test="./@type='rights'"><h4>Rights statement</h4></xsl:if>
 			<xsl:if test="./@type='accessRights'"><h4>Access rights</h4></xsl:if>
