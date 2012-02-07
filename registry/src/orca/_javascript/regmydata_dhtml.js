@@ -1610,6 +1610,7 @@ function addVocabComplete(field, type) {
 			.append( "<a><b>" + item.label + "</b> " + (item.value != item.label ? "(" + item.value + ")" : "") + "<br><i>" + item.desc + "</i></a>" )
 			.appendTo( ul );
 	};
+	$(field).css('z-index', '100');
 }
 
 
@@ -1804,6 +1805,7 @@ function addGroupAutocomplete(field) {
 			.append( "<a><b>" + item.value + "</b>" + (item.desc ? "<br><i>" + item.desc + "</i>" : "") + "</a>" )
 			.appendTo( ul );
 	};
+	$(field).css('z-index', '100');
 }
 
 function addSubjectVocabComplete(field) {
@@ -1839,6 +1841,7 @@ function addSubjectVocabComplete(field) {
 			.append( "<a>" + (item.value != "" ? "<b>" + item.name + "</b> (" + item.value + ")<br>" : "") + "<i>" + item.desc + "</i></a>" )
 			.appendTo( ul );
 	};
+	$(field).css('z-index', '100');
 }
 
 
