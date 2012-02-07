@@ -1019,7 +1019,7 @@ $_strings['*_relatedObject_relation'] = <<<HTMLEND
 															
 														</table>
 														<script>
-													
+															addVocabComplete('object_relatedObject_%%SEQNUM1%%_relation_%%SEQNUM2%%_type');
 															removeButtonIfLast('btn_relatedObject_%%SEQNUM1%%_relation_%%SEQNUM2%%_remove');
 														</script>
 
