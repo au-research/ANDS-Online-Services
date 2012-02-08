@@ -134,6 +134,7 @@ limitations under the License.
 	overflow: hidden;
 	position: relative;
 	background: #e0e0e0;
+	white-space:nowrap;
 }
 
 #table-cell ul.tabs li.error {

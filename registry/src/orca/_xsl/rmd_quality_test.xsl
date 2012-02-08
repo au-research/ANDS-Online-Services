@@ -1264,7 +1264,7 @@
     	<xsl:if test="string-length(.) = 0">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_value","A Full Citation Value must be entered. &lt;br/&gt;&lt;span&gt;E.g. 'Australian Bureau of Agricultural and Resource Economics 2001, Aquaculture development in Australia: a review of key economic issues, ABARE, Canberra.'&lt;/span&gt;");</xsl:text>
+            		<xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_value","A Full Citation Value must be entered. &lt;br/&gt;&lt;span&gt;E.g. 'Australian Bureau of Agricultural and Resource Economics 2001, &lt;br/&gt;Aquaculture development in Australia: a review of key economic issues, ABARE, Canberra.'&lt;/span&gt;");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="error">Full Citation must have a value.</span>
