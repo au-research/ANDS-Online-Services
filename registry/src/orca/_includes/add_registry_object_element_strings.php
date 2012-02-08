@@ -1807,16 +1807,16 @@ $_strings['*_location_spatial'] = <<<HTMLEND
 															<tbody class="formFields andsorange" style="font-weight:normal;"> 
 												
 																<tr id="object_location_%%SEQNUM1%%_spatial_%%SEQNUM2%%_valuerow">
-																	<td height="30px" align="left" style="padding:8px;" width="40px"><label for="object.location[%%SEQNUM1%%].spatial[%%SEQNUM2%%].value">Value:</label></td>
-																	<td align="left" style="padding:8px;" onclick="getHelpText('collection_location_spatial_value');">
+																	<td height="30px" align="left" style="padding:8px;"><label for="object.location[%%SEQNUM1%%].spatial[%%SEQNUM2%%].value">Value:</label></td>
+																	<td align="left" style="padding:8px;width:325px;" onclick="getHelpText('collection_location_spatial_value');">
 																		<input style="vertical-align:top;" align="left" type="text" value="" name="object.location[%%SEQNUM1%%].spatial[%%SEQNUM2%%].value" id="object_location_%%SEQNUM1%%_spatial_%%SEQNUM2%%_value" maxlength="512" size="40" /> 
 																		<a href="javascript:rmd_showMap('object_location_%%SEQNUM1%%_spatial_%%SEQNUM2%%');" onclick="$('#object_location_%%SEQNUM1%%_spatial_%%SEQNUM2%%_type').val('kmlPolyCoords'); $('#object_location_%%SEQNUM1%%_spatial_%%SEQNUM2%%_typerow').hide(); $('#object_location_%%SEQNUM1%%_spatial_%%SEQNUM2%%_valuerow').hide(); $('[name=btn_location_%%SEQNUM1%%_spatial_%%SEQNUM2%%_removespatial_map]').show(); $('#object_location_%%SEQNUM1%%_spatial_%%SEQNUM2%%_maprow').show(); this.style.display='none';" title="Use Map"><img src="{$eAPP_ROOT}orca/_images/usemap.png" alt="Use Map" /></a>
 																		
 																	</td>
-																	<td style="vertical-align:bottom;overflow:show;z-index:1000000;">
+																	<td align="left">
 																		<div class="fieldError" name="errors_location_%%SEQNUM1%%_spatial_%%SEQNUM2%%_value" style="font-size:1.05em;"></div>
 																	</td>
-																	<td width="100%">
+																	<td>
 																
 																		<input type="button" class="buttonSmall" name="btn_location_%%SEQNUM1%%_spatial_%%SEQNUM2%%_removespatial" value="Remove this Spatial Location" onClick="decCount('object.location[%%SEQNUM1%%].spatial'); $('#table_location_%%SEQNUM1%%_spatial_%%SEQNUM2%%').remove();" style="float:right;" />
 																	</td>
@@ -1904,15 +1904,15 @@ $_strings['*_coverage_spatial'] = <<<HTMLEND
 												
 																<tr id="table_coverage_%%SEQNUM1%%_spatial_%%SEQNUM2%%_valuerow">
 																	<td height="30px" align="left" style="padding:8px;" width="40px"><label for="object.coverage[%%SEQNUM1%%].spatial[%%SEQNUM2%%].value">Value:</label></td>
-																	<td align="left" style="padding:8px;" onclick="getHelpText('collection_coverage_spatial_value');">
+																	<td align="left" style="padding:8px;width:325px;" onclick="getHelpText('collection_coverage_spatial_value');">
 																		<input style="vertical-align:top;" align="left" type="text" value="" name="object.coverage[%%SEQNUM1%%].spatial[%%SEQNUM2%%].value" id="object_coverage_%%SEQNUM1%%_spatial_%%SEQNUM2%%_value" maxlength="512" size="40" />
 																		<input type="hidden" name="object.coverage[%%SEQNUM1%%].spatial[%%SEQNUM2%%].lang" id="object_coverage_%%SEQNUM1%%_spatial_%%SEQNUM2%%_lang" maxlength="64" /> 
 																		<a href="javascript:rmd_showMap('object_coverage_%%SEQNUM1%%_spatial_%%SEQNUM2%%');" onclick="$('#object_coverage_%%SEQNUM1%%_spatial_%%SEQNUM2%%_type').val('kmlPolyCoords');  $('#object_coverage_%%SEQNUM1%%_spatial_%%SEQNUM2%%_type').attr('readonly','readonly'); $('#button_coverage_%%SEQNUM1%%_spatial_%%SEQNUM2%%_type').hide(); this.style.display='none'; $('[name=btn_coverage_%%SEQNUM1%%_spatial_%%SEQNUM2%%_removespatial_temp]').show(); $('#table_coverage_%%SEQNUM1%%_spatial_%%SEQNUM2%%_typerow').hide(); $('#table_coverage_%%SEQNUM1%%_spatial_%%SEQNUM2%%_valuerow').hide(); $('#table_coverage_%%SEQNUM1%%_spatial_%%SEQNUM2%%_maprow').show();" title="Use Map"><img src="{$eAPP_ROOT}orca/_images/usemap.png" alt="Use Map" /></a>
 																	</td>
-																	<td style="vertical-align:middle">
+																	<td align="left">
 																		<div class="fieldError" name="errors_coverage_%%SEQNUM1%%_spatial_%%SEQNUM2%%_value" style="font-size:1.05em;"></div>
 																	</td>
-																	<td width="100%"><input type="button" class="buttonSmall" name="btn_coverage_%%SEQNUM1%%_spatial_%%SEQNUM2%%_removespatial" value="Remove this Spatial Coverage" onClick="decCount('object.coverage[%%SEQNUM1%%].spatial'); $('#table_coverage_%%SEQNUM1%%_spatial_%%SEQNUM2%%').remove();" style="float:right;" /></td>
+																	<td><input type="button" class="buttonSmall" name="btn_coverage_%%SEQNUM1%%_spatial_%%SEQNUM2%%_removespatial" value="Remove this Spatial Coverage" onClick="decCount('object.coverage[%%SEQNUM1%%].spatial'); $('#table_coverage_%%SEQNUM1%%_spatial_%%SEQNUM2%%').remove();" style="float:right;" /></td>
 																</tr>
 																
 																
@@ -1924,7 +1924,7 @@ $_strings['*_coverage_spatial'] = <<<HTMLEND
 																		<input type="text" name="object.coverage[%%SEQNUM1%%].spatial[%%SEQNUM2%%].type" id="object_coverage_%%SEQNUM1%%_spatial_%%SEQNUM2%%_type"  maxlength="512" size="37" />
 																		<img id="button_coverage_%%SEQNUM1%%_spatial_%%SEQNUM2%%_type" src="{$eAPP_ROOT}orca/_images/buttons/dropdown_in.png" onClick='toggleDropdown(this.id);' class='cursorimg' style="vertical-align:bottom; height:21px; width:21px;" />
 																	</td>
-																	<td style="vertical-align:middle">
+																	<td>
 																		<div class="fieldError" name="errors_coverage_%%SEQNUM1%%_spatial_%%SEQNUM2%%_type" style="font-size:1.05em;"></div>
 																	</td>
 																	<td></td>
