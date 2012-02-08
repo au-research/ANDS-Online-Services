@@ -207,6 +207,7 @@ addMenu($menu);
 		// =============================================================================
 		// services/getRegistryObject
 		$activity = new activity('aORCA_SERVICE_GET_REGISTRY_OBJECT', 'Get Registry Object', 'orca/services/getRegistryObject.php');
+		$activity->no_check_ssl= true;
 		addActivity($activity);
 	
 		// =============================================================================

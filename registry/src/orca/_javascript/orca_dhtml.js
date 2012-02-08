@@ -405,7 +405,7 @@ $().ready(function(){
 	});
 	
 	$('#rifcs_view').click(function(){
-		key = $('#key').html();
+		var key = $('#key').html();
 		$.get(rootAppPath + 'orca/services/getRegistryObject.php?key='+encodeURIComponent(key)+'&type=plain',
 	       function(data) {
 			$('#rifcs_plain_content').val(data);
