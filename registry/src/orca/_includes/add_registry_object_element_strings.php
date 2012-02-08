@@ -1322,7 +1322,7 @@ $_strings['*_location'] = <<<HTMLEND
 													<td onclick="getHelpText('collection_location_date_from');" style="vertical-align:middle;">
 														<input type="text" value="" id="object_location_%%SEQNUM1%%_dateFrom" name="object.location[%%SEQNUM1%%].dateFrom" onchange="checkDTF(this.id);" class="dateTimeField" maxlength="32" size="60" style="width:230px;" /> &nbsp;<span id="location_%%SEQNUM1%%_date_from_dctImage">&nbsp;</span>
 													</td>
-													<td width="100px;"><div class="fieldError" id="errors_location_%%SEQNUM1%%_dateFrom" name="errors_location_%%SEQNUM1%%_dateFrom"></div></td>
+													<td><div class="fieldError" id="errors_location_%%SEQNUM1%%_dateFrom" name="errors_location_%%SEQNUM1%%_dateFrom"></div></td>
 													<td>
 														<input type="button" class="buttonSmall" name="btn_location_%%SEQNUM1%%_remove" value="Remove this Location" onClick="decCount('object.location');$('#table_location_%%SEQNUM1%%').remove();" style="float:right;" />
 													</td>
@@ -2000,7 +2000,7 @@ $_strings['*_coverage_temporal_text'] = <<<HTMLEND
 																		<input type="text" value="" id="object_coverage_%%SEQNUM1%%_temporal_%%SEQNUM2%%_text_%%SEQNUM3%%_value" name="object.coverage[%%SEQNUM1%%].temporal[%%SEQNUM2%%].text[%%SEQNUM3%%].value" maxlength="512" size="60" style="width:240px;" />	
 																	
 																	</td>
-																	<td width="100px;"><div class="fieldError" name="errors_coverage_%%SEQNUM1%%_temporal_%%SEQNUM2%%_text[%%SEQNUM3%%_value" style="font-size:1.05em;"></div></td>
+																	<td><div class="fieldError" name="errors_coverage_%%SEQNUM1%%_temporal_%%SEQNUM2%%_text[%%SEQNUM3%%_value" style="font-size:1.05em;"></div></td>
 																	<td align="left" style="text-align:left;">
 																		<input type="button" name="btn_coverage_%%SEQNUM1%%_temporal_%%SEQNUM2%%_text_%%SEQNUM3%%_removetext" style="float:right;" value="Remove this Text" onClick="decCount('object.coverage[%%SEQNUM1%%].temporal[%%SEQNUM2%%].text'); $('#table_coverage_%%SEQNUM1%%_temporal_%%SEQNUM2%%_text_%%SEQNUM3%%').remove();"  /> 
 																	</td>
@@ -2028,7 +2028,7 @@ $_strings['*_coverage_temporal_date'] = <<<HTMLEND
 																	<td onclick="getHelpText('collection_coverage_temporal_date_value');" width="260px" style="vertical-align:middle;">
 																		<input type="text" value="" id="object_coverage_%%SEQNUM1%%_temporal_%%SEQNUM2%%_date_%%SEQNUM3%%_value" name="object.coverage[%%SEQNUM1%%].temporal[%%SEQNUM2%%].date[%%SEQNUM3%%].value" class="dateTimeField" maxlength="512" size="60" style="width:230px;" /> &nbsp;<span id="coverage_%%SEQNUM1%%_temporal_%%SEQNUM2%%_date_%%SEQNUM3%%_value_dctImage" onClick="$('#object_coverage_%%SEQNUM1%%_temporal_%%SEQNUM2%%_date_%%SEQNUM3%%_dateFormat').val('W3CDTF');">&nbsp;</span><span class="inputFormat"> YYYY-MM-DDThh:mm:ssZ</span>
 																	</td>
-																	<td width="100px;" colspan="2"><div class="fieldError" name="errors_coverage_%%SEQNUM1%%_temporal_%%SEQNUM2%%_date_%%SEQNUM3%%_value" style="font-size:1.05em;"></div></td>
+																	<td colspan="2"><div class="fieldError" name="errors_coverage_%%SEQNUM1%%_temporal_%%SEQNUM2%%_date_%%SEQNUM3%%_value" style="font-size:1.05em;"></div></td>
 																</tr>
 																
 																<tr>
@@ -2037,7 +2037,7 @@ $_strings['*_coverage_temporal_date'] = <<<HTMLEND
 																		<input type="text" name="object.coverage[%%SEQNUM1%%].temporal[%%SEQNUM2%%].date[%%SEQNUM3%%].type" id="object_coverage_%%SEQNUM1%%_temporal_%%SEQNUM2%%_date_%%SEQNUM3%%_type" maxlength="512" size="36" />
 																		<img id="button_coverage_%%SEQNUM1%%_temporal_%%SEQNUM2%%_date_%%SEQNUM3%%_type" src="{$eAPP_ROOT}orca/_images/buttons/dropdown_in.png" onClick='toggleDropdown(this.id);' class='cursorimg' style="vertical-align:bottom; height:21px; width:21px;" />
 																	</td>
-																	<td width="100px;" colspan="2"><div class="fieldError" name="errors_coverage_%%SEQNUM1%%_temporal_%%SEQNUM2%%_date_%%SEQNUM3%%_type" style="font-size:1.05em;"></div></td>
+																	<td colspan="2"><div class="fieldError" name="errors_coverage_%%SEQNUM1%%_temporal_%%SEQNUM2%%_date_%%SEQNUM3%%_type" style="font-size:1.05em;"></div></td>
 																</tr>
 												
 																<tr>
@@ -2046,7 +2046,7 @@ $_strings['*_coverage_temporal_date'] = <<<HTMLEND
 																		<input type="text" name="object.coverage[%%SEQNUM1%%].temporal[%%SEQNUM2%%].date[%%SEQNUM3%%].dateFormat" id="object_coverage_%%SEQNUM1%%_temporal_%%SEQNUM2%%_date_%%SEQNUM3%%_dateFormat"  maxlength="512" size="36" />
 																		<img id="button_coverage_%%SEQNUM1%%_temporal_%%SEQNUM2%%_date_%%SEQNUM3%%_dateFormat" src="{$eAPP_ROOT}orca/_images/buttons/dropdown_in.png" onClick='toggleDropdown(this.id);' class='cursorimg' style="vertical-align:bottom; height:21px; width:21px;" />											
 																	</td>
-																	<td width="100px;"><div class="fieldError" name="errors_coverage_%%SEQNUM1%%_temporal_%%SEQNUM2%%_date_%%SEQNUM3%%_dateFormat" style="font-size:1.05em;"></div></td>
+																	<td><div class="fieldError" name="errors_coverage_%%SEQNUM1%%_temporal_%%SEQNUM2%%_date_%%SEQNUM3%%_dateFormat" style="font-size:1.05em;"></div></td>
 																	<td align="left" style="text-align:left;">
 																		<input type="button" name="btn_coverage_%%SEQNUM1%%_temporal_%%SEQNUM2%%_date_%%SEQNUM3%%_removedate" style="float:right;" value="Remove this Date" onClick="decCount('object.coverage[%%SEQNUM1%%].temporal[%%SEQNUM2%%].date'); $('#table_coverage_%%SEQNUM1%%_temporal_%%SEQNUM2%%_date_%%SEQNUM3%%').remove();"  /> 
 																	</td>
