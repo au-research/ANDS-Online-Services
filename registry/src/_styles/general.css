@@ -332,6 +332,7 @@ img
 	border: none;
 	vertical-align: top;
 	white-space: nowrap;
+	overflow:visible;
 }
 
 .recordTable td
