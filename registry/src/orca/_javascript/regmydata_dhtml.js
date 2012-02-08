@@ -1339,8 +1339,8 @@ function SetErrors(field, text) {
 
 		var current = $("[name="+field+"]").text();
 		
-		console.log(current);
-		console.log(current.indexOf(text));
+		//console.log(current);
+		//console.log(current.indexOf(text));
 		
 		if(current.indexOf(text)==-1){//if the current value does NOT contains the text, then add it
 			$("[name="+field+"]").append(text + "<br/>");
