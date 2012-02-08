@@ -105,6 +105,29 @@ function getRemoteAddress()
 	{
 		$ip=$_SERVER["REMOTE_ADDR"];
 	} 
+	else 
+	{
+		$ip = "0.0.0.0";
+	}
+	
+	// Prevent errors when X_FORWARDED_FOR creates arbitrarily long IP strings
+	if (strlen($ip) > 15)
+	{
+		// Split header by commas - http://en.wikipedia.org/wiki/X-Forwarded-For
+		$ip = explode(",", $ip);
+		// No commas found?
+		if (count($ip) == 1)
+		{
+			// Just trim the IP and append a special symbol
+			$ip = substr($ip, 0, 14) . "X";
+		}
+		else
+		{
+			// Take the first IP in the list
+			$ip = substr($ip[0], 0, 15);
+		}
+	
+	}
 	
 	return $ip;
 }
