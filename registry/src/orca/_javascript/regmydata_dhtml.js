@@ -1580,7 +1580,7 @@ function addVocabComplete(field, type) {
 			return false;
 		},
 		close: function ( event, ui ) {
-			if (field == "#object_mandatoryInformation_type" || field == "#object_mandatoryInformation_group") {
+			if (field == "#object_mandatoryInformation_type") {
 				checkMandatoryFields(null);
 			}
 			if (field.indexOf("electronic") > 0 && field.indexOf("type") > 0)
@@ -1792,6 +1792,12 @@ function addGroupAutocomplete(field) {
 		},
 		focus: function( event, ui ) {
 			$( field ).val( ui.item.value );
+			return false;
+		},
+		close: function ( event, ui ) {
+			if (field == "#object_mandatoryInformation_group") {
+				checkMandatoryFields(null);
+			}
 			return false;
 		},
 		select: function( event, ui ) {
