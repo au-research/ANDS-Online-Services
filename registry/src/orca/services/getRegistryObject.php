@@ -64,8 +64,19 @@ if($type=='xml'){
 	print $rifc2;
 }elseif($type=='download'){
 	// Set the Content-Type header.
+	header("Cache-Control: public"); 
+	header('Pragma: public');
 	header("Content-Type: text/xml; charset=UTF-8", true);
 	header('Content-Disposition: attachment; filename='.$registryObject[0]['registry_object_key'].'-rifcs-download.xml');
+	header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+	header("Content-Transfer-Encoding: binary");
+	header("Content-Type: application/force-download"); 
+	header("Content-Type: application/octet-stream"); 
+	header("Content-Type: application/download"); 
+	header("Content-Description: File Transfer"); 
+	header('Expires: 0');
+	
+	
 	$rifcs = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
 	
 	// BEGIN: XML Response
@@ -81,6 +92,8 @@ if($type=='xml'){
 	// TODO : this is needed untill we stop having rifcs 1.0 elements in the database!!!
 	// so delete it once the green and orange is imp[lemented + all data is migrated to rifcs 1.2 placeholders!!
 	$rifc2 = transformToRif2XML($rifcs);
+	
+	header('Content-Length: ' . filesize($rifc2));
 	print $rifc2;
 	
 	// END: XML Response
