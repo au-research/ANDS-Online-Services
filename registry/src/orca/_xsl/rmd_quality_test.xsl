@@ -128,10 +128,10 @@
        <xsl:if test="not(ro:description[@type='rights']) and not(ro:description[@type='accessRights']) and not(ro:rights)">
         	<xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetWarnings("errors_description","At least one right or one description (rights or accessRights) is required for the Collection.","REQ_RIGHT");</xsl:text>
+            		<xsl:text>SetWarnings("errors_description","At least one description of the rights or licences relating to the Collection is required.","REQ_RIGHT");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
-					<span class="warning">At least  one right or one description (rights or accessRights) is required for the Collection.</span>
+					<span class="warning">At least one description of the rights or licences relating to the Collection is required.</span>
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>
