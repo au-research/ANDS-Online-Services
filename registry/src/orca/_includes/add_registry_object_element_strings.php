@@ -1813,7 +1813,7 @@ $_strings['*_location_spatial'] = <<<HTMLEND
 																		<a href="javascript:rmd_showMap('object_location_%%SEQNUM1%%_spatial_%%SEQNUM2%%');" onclick="$('#object_location_%%SEQNUM1%%_spatial_%%SEQNUM2%%_type').val('kmlPolyCoords'); $('#object_location_%%SEQNUM1%%_spatial_%%SEQNUM2%%_typerow').hide(); $('#object_location_%%SEQNUM1%%_spatial_%%SEQNUM2%%_valuerow').hide(); $('[name=btn_location_%%SEQNUM1%%_spatial_%%SEQNUM2%%_removespatial_map]').show(); $('#object_location_%%SEQNUM1%%_spatial_%%SEQNUM2%%_maprow').show(); this.style.display='none';" title="Use Map"><img src="{$eAPP_ROOT}orca/_images/usemap.png" alt="Use Map" /></a>
 																		
 																	</td>
-																	<td style="vertical-align:bottom">
+																	<td style="vertical-align:bottom;overflow:show;z-index:1000000;">
 																		<div class="fieldError" name="errors_location_%%SEQNUM1%%_spatial_%%SEQNUM2%%_value" style="font-size:1.05em;"></div>
 																	</td>
 																	<td width="100%">
