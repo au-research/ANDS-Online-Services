@@ -913,7 +913,7 @@ $_strings['*_relatedObject'] = <<<HTMLEND
 															<input type="hidden" id="object_relatedObject_%%SEQNUM1%%_key_1_roclass" name="object.relatedObject[%%SEQNUM1%%].key[1].roclass" value=""/>													
 													</td>
 													<td><div class="fieldError" name="errors_relatedObject_%%SEQNUM1%%_key_1_value" style=""></div></td>
-													<td width="100%">
+													<td>
 														<input type="button" class="buttonSmall" name="btn_relatedObject_%%SEQNUM1%%_remove" value="Remove this Related Object" onClick="decCount('object.relatedObject'); $('#table_relatedObject_%%SEQNUM1%%').remove();" style="float:right;" /><br/>
 													</td>
 													
