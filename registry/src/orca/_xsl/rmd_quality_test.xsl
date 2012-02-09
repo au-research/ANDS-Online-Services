@@ -1174,7 +1174,7 @@
         <xsl:if test="string-length(.) = 0">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_value","Spatial Coverage must have a value.");</xsl:text>
+            		<xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_value","A Spatial Coverage Value must be entered.");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="error">Spatial Coverage must have a value.</span>
@@ -1217,7 +1217,7 @@
         <xsl:if test="string-length(.) = 0">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_value","Spatial Location must have a value.");</xsl:text>
+            		<xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_value","A Spatial Location Value must be entered.");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="error">Spatial Location must have a value.</span>
