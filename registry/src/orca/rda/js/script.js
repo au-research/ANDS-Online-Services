@@ -811,6 +811,7 @@ $(document).ready(function(){
 		      streetViewControl: false,overviewMapControl: true,mapTypeId: google.maps.MapTypeId.TERRAIN
 		    };
 		    var map2 = new google.maps.Map(document.getElementById("spatial_coverage_map"),myOptions);
+		    var drawable = false;
 		    var bounds = new google.maps.LatLngBounds();
 			
 		    //draw coverages
@@ -825,11 +826,12 @@ $(document).ready(function(){
 		    	setTimeout('500');
 		    	var coverageText = $(this).text();
 		    	if(coverageText.indexOf('northlimit')==-1){
+		    		
 		    		//there is no north limit
 		    		if(validateLonLatText(coverageText)){//if the coverage text is resolvable (normal way)
 		    			//console.log(coverageText);
 						coverage = $(this).html();
-						
+						drawable = true;
 						split = coverage.split(' ');
 						//console.log(split.length);
 						
@@ -850,7 +852,7 @@ $(document).ready(function(){
 							});
 							poly.setMap(map2);
 						}else{
-							console.log(split);
+							//console.log(split);
 							
 							//MARKERSSS
 							var marker = new google.maps.Marker({
@@ -874,8 +876,10 @@ $(document).ready(function(){
 					}
 		    		
 		    	}else{
+		    		drawable = true;
 		    		//there is a northlimit in the coverage text
 		    		//console.log(coverages);
+
 			    	$.each(coverages, function(){
 			    		coverage = $(this).html();
 			    		split = coverage.split(';');
@@ -918,7 +922,7 @@ $(document).ready(function(){
 		    var next = 0;
 		    var timer = setInterval(function(){
 		    	if(next < locationText.length){
-		    		drawTheAddress(locationText[next], map2);
+		    		drawTheAddress(locationText[next], map2, drawable);
 		    		next++;
 		    	}else{
 		    		this.clearInterval();
@@ -928,6 +932,7 @@ $(document).ready(function(){
 			//draw centers
 			var centers = $('.spatial_coverage_center');
 			$.each(centers, function(){
+				drawable = true;
 				var marker = new google.maps.Marker({
 		            map: map2,
 		            position: stringToLatLng($(this).html()),
@@ -937,6 +942,7 @@ $(document).ready(function(){
 		        });
 			});
 			map2.fitBounds(bounds);
+			if(!drawable) $('#spatial_coverage_map').hide();
 		}
 	}
 	
@@ -1733,6 +1739,12 @@ $(document).ready(function(){
     	map.setZoom( map.getZoom() );
 	}
 	
+	function resetZoomByMap(theMap){
+		google.maps.event.trigger(theMap, 'resize');
+		theMap.setCenter(latlng);
+    	theMap.setZoom( map.getZoom() );
+	}
+	
 	var latlng = new google.maps.LatLng(-25.397, 133.644);
 	var drawingArrays = [];
     var myOptions = {
@@ -1945,11 +1957,12 @@ $(document).ready(function(){
     	return false;
     }
     
-    function drawTheAddress(coverageText, map2){
+    function drawTheAddress(coverageText, map2, drawable){
     	var geocoder = new google.maps.Geocoder();
 		var result = "";
     	geocoder.geocode({ 'address': coverageText}, function (results, status) {
 		    if (status == google.maps.GeocoderStatus.OK) {
+		    	drawable = true; $('#spatial_coverage_map').show(); resetZoomByMap(map2);
 		    	//console.log(results);
 			    	var geoCodeRectangle = new google.maps.Rectangle({ 
 			    		map: map2,
@@ -1969,6 +1982,7 @@ $(document).ready(function(){
 		    	return false;
 		    }
 		});
+		//if(!drawable) $('#spatial_coverage_map').hide();
     }
     
 });//END DOCUMENT READY
