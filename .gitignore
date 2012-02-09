@@ -8,5 +8,4 @@
 .DS_Store
 ._*
 /registry/src/global_config.php
-
-registry/src/orca/rda/.htaccess
+/registry/src/orca/rda/.htaccess
