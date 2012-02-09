@@ -304,7 +304,7 @@ textarea {
 #panel_container {
 	border: 1px solid #999;
 	border-top: none;
-	overflow: visible;
+	overflow:visible;
 	clear: both;
 	float: left; 
 	width: 100%;
