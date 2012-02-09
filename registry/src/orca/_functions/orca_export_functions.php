@@ -704,6 +704,9 @@ function getSpatialCoverageXMLforSOLR($coverage_id)
 					$centre = (($east+$west)/2).','.(($north+$south)/2);
 					$xml .= "        <spatial>$coordinates</spatial>\n";
 				}
+			}else{
+				$valueString =  strtolower(esc($element['value']));
+				$xml .= "        <spatial $type>$valueString</spatial>\n";	
 			}
 	        if($centre != '')
 	        {
