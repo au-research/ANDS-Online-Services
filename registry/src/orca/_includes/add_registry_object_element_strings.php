@@ -608,8 +608,8 @@ if (isset($_GET['cache_set']) || (isset($_GET['tag']) && (strpos($_GET['tag'], "
 		$ourDataSource = $key_obj[0]["data_source_key"];
 	}
 	*/
-	$ds_string = "<option></option>";
-
+	$ds_string = '<option value="">All Data Sources</option>';
+	
 	for( $i=0; $i < count($searchResults); $i++ )
 	{
 		$ds_string .= '<option value="'.$searchResults[$i]['data_source_key'].'"'.($searchResults[$i]['data_source_key'] == $ourDataSource ? ' selected' : '').'>'.$searchResults[$i]['title'].'</option>';
@@ -944,7 +944,6 @@ $_strings['*_relatedObject'] = <<<HTMLEND
 												<option value="Service">Service</option>
 												</select>
 												<select id="select_object_relatedObject_%%SEQNUM1%%_key_1_dataSource" style="width:280px;">
-													<option value="">All Data Sources</option>
 													{$ds_string}
 												</select>
 												<a href="javascript:void(0);" id="object_relatedObject_%%SEQNUM1%%_key_1_button">Search</a></p>

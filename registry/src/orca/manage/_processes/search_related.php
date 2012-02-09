@@ -44,8 +44,15 @@ if (!IN_ORCA) die('No direct access to this file is permitted.');
 
 //NEW - use SOLR
 		$objectClass = strtolower($objectClass);
+		
+		$match = array(   '\\', '&', '|',   '!',    '(',   ')',   '{',   '}',   '[',   ']',   '^',   '-',   '~',    '*',   '?',   ':',   '"',   ';');
+    	$replace = array('\\\\','&', '\\|', '\\!', '\\(', '\\)', '\\{', '\\}', '\\[', '\\]', '\\^', '\\-', '\\~', '\\*', '\\?', '\\:', '\\"', '\\;');
+    	$searchText = str_replace($match, $replace, $searchText);
+    	//$searchText = urlencode($searchText);
+    	
+    	
 		$q = '+displayTitle:('.$searchText.') +class:('.$objectClass.')';
-		if($dataSourcekey!='') $q.=' +ds_key:("'.$dataSourcekey.'")';
+		if($dataSourcekey!='') $q.=' +data_source_key:("'.$dataSourcekey.'")';
 		$fields = array(
 			'q'=>$q,'version'=>'2.2','start'=>'0','rows'=>$limit, 'wt'=>'json',
 			'fl'=>'key, displayTitle, description_value, description_type, status'
@@ -73,6 +80,7 @@ if (!IN_ORCA) die('No direct access to this file is permitted.');
 		$decoded = json_decode($content);
 		//print_r($decoded);
 	
+		//$values[] = array('value'=>$searchText, "desc"=> $fields_string);
 		foreach($decoded->response->docs as $d){
 			$values[] = array (	"value" => $d->{'key'}, "desc" => $d->{'displayTitle'}.' ('.$d->{'status'}.')');
 		}
