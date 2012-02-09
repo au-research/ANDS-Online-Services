@@ -693,7 +693,7 @@ list-style-image: url(../_images/error_icon2.png);
 .moreworkrequired{background:#6A4A3C;color:white;}
 .approved{background:#EDD155;color:white;}
 .tag{border:1px solid black;padding:1px;}
-.relatedObject_result ul{height:300px;overflow:auto;border:1px solid black;padding:0;margin:0;}
+.relatedObject_result ul{height:280px;overflow:auto;border:1px solid black;padding:0;margin:0;}
 .relatedObject_result ul li a{display:block;list-style-type:none;padding:5px;text-decoration:none;border-bottom:1px solid #ccc;}
 .relatedObject_result ul li a:hover{text-decoration:none;color:white;background:#333;}
 .ui-autocomplete{z-index: 1000 !important;}
