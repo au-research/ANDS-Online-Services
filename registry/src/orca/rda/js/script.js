@@ -1960,28 +1960,37 @@ $(document).ready(function(){
     function drawTheAddress(coverageText, map2, drawable){
     	var geocoder = new google.maps.Geocoder();
 		var result = "";
-    	geocoder.geocode({ 'address': coverageText}, function (results, status) {
-		    if (status == google.maps.GeocoderStatus.OK) {
-		    	drawable = true; $('#spatial_coverage_map').show(); resetZoomByMap(map2);
-		    	//console.log(results);
-			    	var geoCodeRectangle = new google.maps.Rectangle({ 
-			    		map: map2,
-			    		strokeColor: "#FF0000",
-					    strokeOpacity: 0.8,
-					    strokeWeight: 2,
-					    fillColor: "#FF0000",
-					    fillOpacity: 0.1 });
-					var bounds = results[0].geometry.bounds;
-			        geoCodeRectangle.setBounds(bounds);
-			        drawingArrays.push(geoCodeRectangle);
-			        map2.fitBounds(bounds);
-		        return true;
-		    } else {
-		    	//console.log(coverageText);
-		    	$('p:contains("'+coverageText+'")').show();
-		    	return false;
-		    }
-		});
+		var theCoverage = $('p:contains("'+coverageText+'")');
+		
+		if($(theCoverage).attr('name')!='text'){
+			geocoder.geocode({ 'address': coverageText}, function (results, status) {
+			    if (status == google.maps.GeocoderStatus.OK) {
+			    	drawable = true; $('#spatial_coverage_map').show(); resetZoomByMap(map2);
+			    	//console.log(results);
+				    	var geoCodeRectangle = new google.maps.Rectangle({ 
+				    		map: map2,
+				    		strokeColor: "#FF0000",
+						    strokeOpacity: 0.8,
+						    strokeWeight: 2,
+						    fillColor: "#FF0000",
+						    fillOpacity: 0.1 });
+						var bounds = results[0].geometry.bounds;
+				        geoCodeRectangle.setBounds(bounds);
+				        drawingArrays.push(geoCodeRectangle);
+				        map2.fitBounds(bounds);
+			        return true;
+			    } else {
+			    	//console.log(coverageText);
+			    	$(theCoverage).show();
+			    	return false;
+			    }
+			});
+		}else{
+			$(theCoverage).show();
+			return false;
+		}
+		
+    	
 		//if(!drawable) $('#spatial_coverage_map').hide();
     }
     
