@@ -21,8 +21,8 @@ limitations under the License.
 // There is no support for time resolution greater than minutes (ie. no seconds or fractions of seconds).
 // There is no support for years before year 0.
 var DCT_FORMAT_ISO8601_DATE          = 'YYYY-MM-DD';
-var DCT_FORMAT_ISO8601_DATE_TIME     = 'YYYY-MM-DD hh:mm';
-var DCT_FORMAT_ISO8601_DATE_TIME_UTC = 'YYYY-MM-DD hh:mmZ';
+var DCT_FORMAT_ISO8601_DATE_TIME     = 'YYYY-MM-DDThh:mm';
+var DCT_FORMAT_ISO8601_DATE_TIME_UTC = 'YYYY-MM-DDThh:mmZ';
 var DCT_FORMAT_ISO8601_TIME          = 'hh:mm';
 var DCT_FORMAT_ISO8601_TIME_UTC      = 'hh:mmZ';
 var DCT_FORMAT_ISO8601_DATETIME      = 'YYYY-MM-DDThh:mm';
@@ -108,8 +108,17 @@ function dctGetDateTimeControlSpec(inputFieldId, format, destElement)
 			dateFormat: "yy-mm-dd",
 			showOn: "button",
 			buttonImage: "../_images/dct_icon_inactive.gif",
-			buttonImageOnly: true
+			buttonImageOnly: true,
+			onSelect: function(dateText, inst) {populateFormatExistence(inputFieldId);}
 		});
+		
+		function populateFormatExistence(inputFieldId){
+			var value = inputFieldId.replace("_value","_dateFormat");
+			if($('#'+value)){
+				formatField = getObject(value);
+				formatField.value = "W3CDTF";
+			}
+		}		
 	});
 	var inputField = getObject(inputFieldId);
 	inputField.size = format.length;
