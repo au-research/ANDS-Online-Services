@@ -692,32 +692,16 @@ Handle:
             <xsl:text> </xsl:text>      
             , <xsl:value-of select="./ro:context"/>
         </xsl:if>
-        <xsl:if test="./ro:identifier != ''">    <xsl:text> </xsl:text> 
-,		<xsl:choose>
-		<xsl:when test="./ro:identifier/@type='uri' or ./ro:identifier/@type='URL' or ./ro:identifier/@type='url'" > 	
-            	<xsl:apply-templates match="./ro:identifier" mode="uri"/><br />
-      		 </xsl:when>
-      		 
-             <xsl:when test="./ro:identifier/@type='purl'">         			
-            	<xsl:apply-templates match="./ro:identifier" mode="purl"/><br />
-            </xsl:when>  
-              
-           	<xsl:when test="./ro:identifier/@type='doi'">          			
-            	<xsl:apply-templates match="./ro:identifier" mode="doi"/><br />
-            </xsl:when>     	
-             <xsl:when test="./ro:identifier/@type='handle'">          			
-            	<xsl:apply-templates match="./ro:identifier" mode="handle"/><br />
-            </xsl:when>   
-             <xsl:when test="./ro:identifier/@type='AU-ANL:PEAU'">          			
-            	<xsl:apply-templates match="./ro:identifier" mode="nla"/><br />
-            </xsl:when>  
-             <xsl:when test="./ro:identifier/@type='ark'">          			
-            	<xsl:apply-templates match="./ro:identifier" mode="ark"/><br />
-            </xsl:when>                               
-            <xsl:otherwise>           
-                 <br /><xsl:value-of select="./ro:identifier/@type"/>: <xsl:value-of select="./ro:identifier"/><br />   			
-            </xsl:otherwise>
-            		</xsl:choose>.
+        <xsl:if test="./ro:identifier != ''">,
+        	<xsl:apply-templates select="./ro:identifier[@type = 'doi']"  mode="doi"/>	
+         	<xsl:apply-templates select="./ro:identifier[@type = 'uri']"  mode="uri"/>	 
+         	<xsl:apply-templates select="./ro:identifier[@type = 'URL']"  mode="uri"/>	
+           	<xsl:apply-templates select="./ro:identifier[@type = 'url']"  mode="uri"/>	  
+            <xsl:apply-templates select="./ro:identifier[@type = 'purl']"  mode="purl"/>	  
+            <xsl:apply-templates select="./ro:identifier[@type = 'handle']"  mode="handle"/>	
+            <xsl:apply-templates select="./ro:identifier[@type = 'AU-ANL:PEAU']"  mode="nla"/>
+            <xsl:apply-templates select="./ro:identifier[@type = 'ark']"  mode="ark"/>  
+            <xsl:apply-templates select="./ro:identifier[@type != 'doi' and @type != 'uri' and @type != 'URL' and @type != 'url' and @type != 'purl' and @type != 'handle' and @type != 'AU-ANL:PEAU' and @type != 'ark']"  mode="other"/>				
         </xsl:if>
      	</p>
      	<span class="Z3988">   
