@@ -1980,7 +1980,6 @@ $(document).ready(function(){
 				        map2.fitBounds(bounds);
 			        return true;
 			    } else {
-			    	//console.log(coverageText);
 			    	$(theCoverage).show();
 			    	return false;
 			    }
