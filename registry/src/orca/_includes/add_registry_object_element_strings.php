@@ -829,7 +829,7 @@ $_strings['*_name_namePart'] = <<<HTMLEND
 																	<td onclick="getHelpText('collection_namePart_value');"> 
 																		<input type="text" value="" name="object.name[%%SEQNUM1%%].namePart[%%SEQNUM2%%].value" id="object_name_%%SEQNUM1%%_namePart_%%SEQNUM2%%_value" maxlength="512" size="40" />
 																	</td>
-																	<td><div class="fieldError" name="errors_name_%%SEQNUM1%%_namePart_%%SEQNUM2%%_value" style="font-size:1.05em;"></div></td>
+																	<td><div class="fieldError" name="errors_name_%%SEQNUM1%%_namePart_%%SEQNUM2%%_value"></div></td>
 																	<td width="100%">
 																		<input type="button" name="btn_name_%%SEQNUM1%%_namePart_%%SEQNUM2%%_remove" value="Remove this Name Part" onClick="decCount('object.name[%%SEQNUM1%%].namePart'); $('#table_name_%%SEQNUM1%%_namePart_%%SEQNUM2%%').remove();" style="float:right;" />									
 																	</td>
@@ -840,7 +840,7 @@ $_strings['*_name_namePart'] = <<<HTMLEND
 																	<td onclick="getHelpText('collection_namePart_type');" width="260px">
 																		<input type="text" id="object_name_%%SEQNUM1%%_namePart_%%SEQNUM2%%_type" name="object.name[%%SEQNUM1%%].namePart[%%SEQNUM2%%].type" maxlength="512" size="27" /><img id="button_name_%%SEQNUM1%%_namePart_%%SEQNUM2%%_type" src="{$eAPP_ROOT}orca/_images/buttons/dropdown_in.png" onClick='toggleDropdown(this.id);' class='cursorimg' style="vertical-align:bottom; height:16px; width:16px;" />
 																	</td>
-																	<td><div class="fieldError" name="errors_name_%%SEQNUM1%%_namePart_%%SEQNUM2%%_type" style="font-size:1.05em;"></div></td>
+																	<td><div class="fieldError" name="errors_name_%%SEQNUM1%%_namePart_%%SEQNUM2%%_type"></div></td>
 																	<td width="100%">
 																		
 																	</td>
@@ -2611,7 +2611,7 @@ $_strings['*_existenceDates'] = <<<HTMLEND
 																			<input type="text" name="object.existenceDates[%%SEQNUM1%%].endDate[1].dateFormat" id="object_existenceDates_%%SEQNUM1%%_endDate_1_dateFormat"  maxlength="512" size="36" />
 																			<img id="button_existenceDates_%%SEQNUM1%%_endDate_1_dateFormat" src="{$eAPP_ROOT}orca/_images/buttons/dropdown_in.png" onClick='toggleDropdown(this.id);' class='cursorimg' style="vertical-align:bottom; height:21px; width:21px;" />											
 																		</td>
-																		<td width="100%"><div class="fieldError" name="errors_existenceDates_%%SEQNUM1%%_endDate_1_dateFormat" style="font-size:1.05em;"></div></td>
+																		<td><div class="fieldError" name="errors_existenceDates_%%SEQNUM1%%_endDate_1_dateFormat"></div></td>
 																	</tr>
 																</tbody>
 															</table>

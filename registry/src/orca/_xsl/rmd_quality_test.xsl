@@ -128,10 +128,10 @@
        <xsl:if test="not(ro:description[@type='rights']) and not(ro:description[@type='accessRights']) and not(ro:rights)">
         	<xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetWarnings("errors_description","At least one description of the rights or licences relating to the Collection is required.","REQ_RIGHT");</xsl:text>
+            		<xsl:text>SetWarnings("errors_description","At least one description of the rights, licences or access rights relating to the Collection is required.","REQ_RIGHT");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
-					<span class="warning">At least one description of the rights or licences relating to the Collection is required.</span>
+					<span class="warning">At least one description of the rights, licences or access rights relating to the Collection is required.</span>
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>
@@ -147,11 +147,11 @@
         </xsl:if>  
         
         <xsl:if test="not(ro:relatedObject/ro:key[@roclass = 'Activity']) and $output = 'script'">
-            <xsl:text>SetInfos("errors_relatedObject","The Collection must be related to at least one Activity record where possible.","REC_RELATED_OBJECT_ACTIVITY");</xsl:text>
+            <xsl:text>SetInfos("errors_relatedObject","The Collection must be related to at least one Activity record where available.","REC_RELATED_OBJECT_ACTIVITY");</xsl:text>
 		</xsl:if>
 		
         <xsl:if test="not(contains($relatedObjectClassesStr, 'Activity') or ro:relatedObject/ro:key[@roclass = 'Activity'] or ro:relatedObject/ro:key[@roclass = 'activity']) and $output = 'html'">
-			<span class="info">The Collection must be related to at least one Activity record where possible.</span>
+			<span class="info">The Collection must be related to at least one Activity record where available.</span>
         </xsl:if>
         
         <xsl:if test="not(ro:relatedObject/ro:key[@roclass = 'Party']) and $output = 'script'">
@@ -619,7 +619,7 @@
             		<xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_value","A Name Part Value must be entered. &lt;br/&gt;&lt;span&gt;E.g. 'Study of bacteria growth in Lake Macquarie 2010-2011'&lt;/span&gt;");</xsl:text>
 			    </xsl:when>
 			    <xsl:when test="$output = 'script' and ancestor::ro:collection">
-            		<xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_value","A Name Part Value must be entered. &lt;br/&gt;&lt;span&gt;E.g. 'Effects of Nicotine on the Human Body'");</xsl:text>
+            		<xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_value","A Name Part Value must be entered. &lt;br/&gt;&lt;span&gt;E.g. 'Effects of Nicotine on the Human Body'&lt;/span&gt;");</xsl:text>
 			    </xsl:when>
 			    <xsl:when test="$output = 'script' and ancestor::ro:service">
             		<xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_value","A Name Part Value must be entered. &lt;br/&gt;&lt;span&gt;E.g. 'Australian Mammal Identification Portal'&lt;/span&gt;");</xsl:text>
