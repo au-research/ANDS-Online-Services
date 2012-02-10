@@ -416,7 +416,7 @@
     </xsl:template> 
     
     <xsl:template match="ro:spatial">
-        <p class="coverage"><xsl:value-of select="."/></p>
+        <p class="coverage" name="{@type}"><xsl:value-of select="."/></p>
     </xsl:template>
     
     <xsl:template match="ro:center">
