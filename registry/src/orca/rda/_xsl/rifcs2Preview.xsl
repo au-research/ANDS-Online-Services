@@ -97,11 +97,37 @@
         <xsl:if test="ro:coverage">
             <p><b>Coverage:</b></p>
         
-            <xsl:if test="ro:coverage/ro:spatial">
-                <xsl:apply-templates select="ro:coverage/ro:spatial"/>
-                <div id="spatial_coverage_map"></div>
-            </xsl:if>   
+       <xsl:if test="ro:coverage or ro:location/ro:spatial">
+            <xsl:variable name="coverageLabel">
+            <xsl:choose>
+            <xsl:when test="ro:coverage/ro:spatial and ro:location/ro:spatial">
+            <xsl:text>Coverage And Location:</xsl:text>
+            </xsl:when>
+            <xsl:when test="ro:location/ro:spatial">
+            <xsl:text>Location:</xsl:text>
+            </xsl:when>
+             <xsl:when test="ro:coverage/ro:spatial">
+            <xsl:text>Coverage:</xsl:text>
+            </xsl:when>
             
+            </xsl:choose>
+            </xsl:variable>
+            <p><b><xsl:value-of select="$coverageLabel"/></b></p>
+            <xsl:variable name="needMap">   
+                <xsl:for-each select="ro:coverage/ro:spatial"> 
+             	<xsl:if test="not(./@type) or (./@type!='text' and ./@type!='dcmiPoint')">        	
+                      <xsl:text>yes</xsl:text>
+               </xsl:if>
+               </xsl:for-each>    
+        	</xsl:variable>
+        	
+             <xsl:if test="ro:coverage/ro:spatial | ro:location/ro:spatial">
+               	 	<xsl:apply-templates select="ro:coverage/ro:spatial | ro:location/ro:spatial"/>
+               	 	<xsl:if test="$needMap!=''">
+                  		<div id="spatial_coverage_map"></div>
+                  	</xsl:if>
+            </xsl:if>  
+                      
             <xsl:if test="ro:coverage/ro:center">
                 <xsl:apply-templates select="ro:coverage/ro:center"/>
             </xsl:if>   
@@ -574,7 +600,14 @@ Handle:
     </xsl:template> 
     
     <xsl:template match="ro:spatial">
-        <p class="coverage" name="{@type}"><xsl:value-of select="."/></p>
+
+      <xsl:if test="not(./@type) or (./@type!= 'text' and ./@type!= 'dcmiPoint')">
+      	<p class="coverage" name="{@type}"><xsl:value-of select="."/></p>
+      </xsl:if>
+      <xsl:if test="./@type= 'text' or ./@type= 'dcmiPoint'">
+     	 <p class="coverage_text"><xsl:value-of select="./@type"/>: <xsl:value-of select="."/></p>
+      </xsl:if>     
+
     </xsl:template>
     
     <xsl:template match="ro:center">

@@ -427,6 +427,7 @@
     </xsl:template> 
     
     <xsl:template match="ro:spatial">
+
           <xsl:if test="not(./@type) or (./@type!= 'text' and ./@type!= 'dcmiPoint')">
 
         <p class="coverage" name="{@type}"><xsl:value-of select="."/></p>
