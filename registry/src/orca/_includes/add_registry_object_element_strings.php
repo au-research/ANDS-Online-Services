@@ -608,7 +608,7 @@ if (isset($_GET['cache_set']) || (isset($_GET['tag']) && (strpos($_GET['tag'], "
 		$ourDataSource = $key_obj[0]["data_source_key"];
 	}
 	*/
-	$ds_string = '';
+	$ds_string = '<option value=""> </option>';
 	
 	for( $i=0; $i < count($searchResults); $i++ )
 	{
@@ -840,8 +840,8 @@ $_strings['*_name_namePart'] = <<<HTMLEND
 																	<td onclick="getHelpText('collection_namePart_type');" width="260px">
 																		<input type="text" id="object_name_%%SEQNUM1%%_namePart_%%SEQNUM2%%_type" name="object.name[%%SEQNUM1%%].namePart[%%SEQNUM2%%].type" maxlength="512" size="27" /><img id="button_name_%%SEQNUM1%%_namePart_%%SEQNUM2%%_type" src="{$eAPP_ROOT}orca/_images/buttons/dropdown_in.png" onClick='toggleDropdown(this.id);' class='cursorimg' style="vertical-align:bottom; height:16px; width:16px;" />
 																	</td>
-																	<td><div class="fieldError" name="errors_name_%%SEQNUM1%%_namePart_%%SEQNUM2%%_type"></div></td>
-																	<td width="100%">
+																	<td width="100%"><div class="fieldError" name="errors_name_%%SEQNUM1%%_namePart_%%SEQNUM2%%_type"></div></td>
+																	<td>
 																		
 																	</td>
 																</tr>
