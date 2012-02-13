@@ -115,6 +115,7 @@
  		<xsl:choose>
 	        <xsl:when test="ro:displayTitle!=''">
 	        	<xsl:apply-templates select="ro:displayTitle"/>
+	        	
 	        </xsl:when>
 	         <xsl:otherwise>
 	                
@@ -180,10 +181,19 @@
             </xsl:choose>
             </xsl:variable>
             <p><b><xsl:value-of select="$coverageLabel"/></b></p>
+            <xsl:variable name="needMap">   
+                <xsl:for-each select="ro:coverage/ro:spatial"> 
+             	<xsl:if test="not(./@type) or (./@type!='text' and ./@type!='dcmiPoint')">        	
+                      <xsl:text>yes</xsl:text>
+               </xsl:if>
+               </xsl:for-each>    
+        	</xsl:variable>
         
             <xsl:if test="ro:coverage/ro:spatial | ro:location/ro:spatial">
-                <xsl:apply-templates select="ro:coverage/ro:spatial | ro:location/ro:spatial"/>
-                <div id="spatial_coverage_map"></div>
+               	 	<xsl:apply-templates select="ro:coverage/ro:spatial | ro:location/ro:spatial"/>
+               	 	<xsl:if test="$needMap!=''">
+                  		<div id="spatial_coverage_map"></div>
+                  	</xsl:if>
             </xsl:if>   
             
             <xsl:if test="ro:coverage/ro:center | ro:location/ro:center">
@@ -195,6 +205,7 @@
                 <xsl:apply-templates select="ro:coverage/ro:temporal/ro:date"/> 
                 </p>    
             </xsl:if> 
+
         </xsl:if>
             
         <xsl:if test="ro:subject">
@@ -416,7 +427,15 @@
     </xsl:template> 
     
     <xsl:template match="ro:spatial">
+          <xsl:if test="not(./@type) or (./@type!= 'text' and ./@type!= 'dcmiPoint')">
+
         <p class="coverage" name="{@type}"><xsl:value-of select="."/></p>
+
+      </xsl:if>
+      <xsl:if test="./@type= 'text' or ./@type= 'dcmiPoint'">
+     	 <p class="coverage_text"><xsl:value-of select="./@type"/>: <xsl:value-of select="."/></p>
+      </xsl:if>     
+
     </xsl:template>
     
     <xsl:template match="ro:center">
