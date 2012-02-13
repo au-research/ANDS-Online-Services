@@ -94,8 +94,7 @@
             <xsl:apply-templates select="ro:relatedInfo"/> 
          </xsl:if>
                         
-        <xsl:if test="ro:coverage">
-            <p><b>Coverage:</b></p>
+
         
        <xsl:if test="ro:coverage or ro:location/ro:spatial">
             <xsl:variable name="coverageLabel">
@@ -138,7 +137,7 @@
                 </p>    
             </xsl:if> 
         </xsl:if>
-        </xsl:if>            
+        
         <xsl:if test="ro:subject">
               <div style="position:relative;clear:both">
             <p><b>Subjects:</b>
