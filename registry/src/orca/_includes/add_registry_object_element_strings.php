@@ -900,6 +900,8 @@ $_strings['party_name_namePart'] = <<<HTMLEND
 
 HTMLEND;
 
+
+$ds_string = str_replace("<option value=\"\"> </option>", '', $ds_string);
 $_strings['*_relatedObject'] = <<<HTMLEND
 
 											<table id="table_relatedObject_%%SEQNUM1%%" class="formTable rmdElementContainer"> 
@@ -944,7 +946,7 @@ $_strings['*_relatedObject'] = <<<HTMLEND
 												<option value="Service">Service</option>
 												</select>
 												<select id="select_object_relatedObject_%%SEQNUM1%%_key_1_dataSource" style="width:280px;">
-													<option value="">All Data Sources</option>
+													<option value=''>All Data Sources</option>
 													{$ds_string}
 												</select>
 												<a href="javascript:void(0);" id="object_relatedObject_%%SEQNUM1%%_key_1_button">Search</a></p>
