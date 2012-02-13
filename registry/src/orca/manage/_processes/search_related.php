@@ -24,10 +24,14 @@ if (!IN_ORCA) die('No direct access to this file is permitted.');
 		$dataSourcekey =  rawurldecode(getQueryValue("dSourceKey"));
 		$registryObjects = array();
 		$names = array();
-		
+	
 		$limit = 100;
+		
+		$match = array(   '\\', '&', '|',   '!',    '(',   ')',   '{',   '}',   '[',   ']',   '^',   '-',   '~',    '*',   '?',   ':',   '"',  '"',   ';',   '#',   '%',   '@',    '_');
+    	$replace = array('\\\\','\\&', '\\|', '\\!', '\\(', '\\)', '\\{', '\\}', '\\[', '\\]', '\\^', '\\-', '\\~', '\\*', '\\?', '\\:', '"', '\\"',  '\\;',   '\\#', '\\%', '\\@', '\\_');
+    	$searchText = str_replace($match, $replace, $searchText);
 
-		if ($searchText == "*:*")
+		if ($searchText == "\\*\\:\\*")
 		{
 			// search for all names (untransform SOLR query syntax)
 			$names = searchDraftByName("", $objectClass , $dataSourcekey, $limit);
@@ -53,12 +57,6 @@ if (!IN_ORCA) die('No direct access to this file is permitted.');
 
 //NEW - use SOLR
 		$objectClass = strtolower($objectClass);
-		
-		$match = array(   '\\', '&', '|',   '!',    '(',   ')',   '{',   '}',   '[',   ']',   '^',   '-',   '~',    '*',   '?',   ':',   '"',   ';',   '#');
-    	$replace = array('\\\\','\\&', '\\|', '\\!', '\\(', '\\)', '\\{', '\\}', '\\[', '\\]', '\\^', '\\-', '\\~', '\\*', '\\?', '\\:', '\\"', '\\;',   '\\#');
-    	$searchText = str_replace($match, $replace, $searchText);
-    	//$searchText = urlencode($searchText);
-    	
     	
 		$q = 'displayTitle:('.strtolower($searchText).') +class:('.$objectClass.')';
 		if($dataSourcekey!='') $q.=' +data_source_key:("'.$dataSourcekey.'")';

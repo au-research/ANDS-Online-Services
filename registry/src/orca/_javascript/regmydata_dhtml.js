@@ -1679,6 +1679,7 @@ function doRelatedObjectSearch(field){
 				$(result).append('<ul></ul>');
 				$.each(data, function(){
 					var thisRecord = '';
+					this.desc = this.desc.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 					thisRecord +='<li><a href="javascript:void(0);" class="selectRelatedObjectValue" name="'+field+'" id="'+this.value+'" title="'+this.value+'">'+this.desc+'</a></li>';
 					$(result+' > ul').append(thisRecord);
 				});
