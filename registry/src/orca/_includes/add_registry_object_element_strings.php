@@ -986,7 +986,7 @@ $_strings['*_relatedObject_relation'] = <<<HTMLEND
 																		<input type="text" id="object_relatedObject_%%SEQNUM1%%_relation_%%SEQNUM2%%_type" name="object.relatedObject[%%SEQNUM1%%].relation[%%SEQNUM2%%].type" maxlength="512" size="30" />		
 																		<img id="button_relatedObject_%%SEQNUM1%%_relation_%%SEQNUM2%%_type" src="{$eAPP_ROOT}orca/_images/buttons/dropdown_in.png" onClick="addVocabComplete('object_relatedObject_%%SEQNUM1%%_relation_%%SEQNUM2%%_type','RIFCS'+ $('#elementCategory').val().charAt(0).toUpperCase() + $('#elementCategory').val().slice(1)+'RelationType');toggleDropdown(this.id);" class='cursorimg' style="vertical-align:bottom; height:16px; width:16px;" />
 																	</td>
-																	<td><div class="fieldError" name="errors_relatedObject_%%SEQNUM1%%_relation_%%SEQNUM2%%_type" style="font-size:1.05em;"></div></td>
+																	<td width="100%"><div class="fieldError" name="errors_relatedObject_%%SEQNUM1%%_relation_%%SEQNUM2%%_type" style="font-size:1.05em;"></div></td>
 																	<td rowspan="3" align="right" width="100%">
 																		<input type="button" name="btn_relatedObject_%%SEQNUM1%%_relation_%%SEQNUM2%%_remove" value="Remove this Relation" onClick="decCount('object.relatedObject[%%SEQNUM1%%].relation'); $('#table_relatedObject_%%SEQNUM1%%_relation_%%SEQNUM2%%').remove();"  /><br/>
 																	</td>
@@ -999,7 +999,7 @@ $_strings['*_relatedObject_relation'] = <<<HTMLEND
 																		<input type="text" value="" name="object.relatedObject[%%SEQNUM1%%].relation[%%SEQNUM2%%].description[1].value" id="object_relatedObject_%%SEQNUM1%%_relation_%%SEQNUM2%%_description_1_value" maxlength="512" size="40" />
 																		<input type="hidden" id="object_relatedObject_%%SEQNUM1%%_relation_%%SEQNUM2%%_description_1_lang" name="object.relatedObject[%%SEQNUM1%%].relation[%%SEQNUM2%%].description[1].lang" />															
 																	</td>
-																	<td><div class="fieldError" name="errors_relatedObject_%%SEQNUM1%%_relation_%%SEQNUM2%%_description_1_value"></div></td> 
+																	<td width="100%"><div class="fieldError" name="errors_relatedObject_%%SEQNUM1%%_relation_%%SEQNUM2%%_description_1_value"></div></td> 
 																	
 																</tr>
 																
@@ -1009,7 +1009,7 @@ $_strings['*_relatedObject_relation'] = <<<HTMLEND
 																	<td onclick="getHelpText('collection_relation_url');"> 
 																		<input type="text" value="" onChange="testAnyURI(this.id);" class="validUri" name="object.relatedObject[%%SEQNUM1%%].relation[%%SEQNUM2%%].url[1].value" id="object_relatedObject_%%SEQNUM1%%_relation_%%SEQNUM2%%_url_1_value" maxlength="512" size="40" />
 																	</td>
-																	<td><div class="fieldError" name="errors_relatedObject_%%SEQNUM1%%_relation_%%SEQNUM2%%_url_1_value"></div></td> 
+																	<td width="100%"><div class="fieldError" name="errors_relatedObject_%%SEQNUM1%%_relation_%%SEQNUM2%%_url_1_value"></div></td> 
 												
 																</tr>
 															

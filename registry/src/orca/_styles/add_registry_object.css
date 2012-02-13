@@ -131,7 +131,7 @@ limitations under the License.
 	border: 1px solid #999;
 	border-left: none;
 	margin-bottom: -1px;
-	overflow: hidden;
+	overflow: visible;
 	position: relative;
 	background: #e0e0e0;
 	white-space:nowrap;
