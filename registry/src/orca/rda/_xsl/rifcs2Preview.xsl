@@ -138,7 +138,7 @@
                 </p>    
             </xsl:if> 
         </xsl:if>
-                    
+        </xsl:if>            
         <xsl:if test="ro:subject">
               <div style="position:relative;clear:both">
             <p><b>Subjects:</b>
@@ -600,14 +600,12 @@ Handle:
     </xsl:template> 
     
     <xsl:template match="ro:spatial">
-
       <xsl:if test="not(./@type) or (./@type!= 'text' and ./@type!= 'dcmiPoint')">
       	<p class="coverage" name="{@type}"><xsl:value-of select="."/></p>
       </xsl:if>
       <xsl:if test="./@type= 'text' or ./@type= 'dcmiPoint'">
      	 <p class="coverage_text"><xsl:value-of select="./@type"/>: <xsl:value-of select="."/></p>
       </xsl:if>     
-
     </xsl:template>
     
     <xsl:template match="ro:center">
