@@ -66,10 +66,13 @@ limitations under the License.
 	setRootPath('<?php print eAPP_ROOT ?>');
 </script>
 <?php
+
+$eDeploymentName = strtok($eDeploymentStatus, " ");
+
 // Display deployment, debug and error status as required.
-if( $eDeploymentStatus != 'PROD' )
+if( $eDeploymentName != 'PROD' )
 {
-	switch( strtok($eDeploymentStatus, " ") )
+	switch( $eDeploymentName )
 	{
 		case 'DEVEL':
 			print "<div style=\"color: #ffffff; background: #ff4aaa; border: solid #be3790; border-width: 0px 0px 0px 20px; font-weight: bold; padding: 4px;\">&nbsp;".esc($eDeploymentStatus)."&nbsp;</div>";
@@ -77,7 +80,11 @@ if( $eDeploymentStatus != 'PROD' )
 			
 		case 'TEST':
 			print "<div style=\"color: #ffffff; background: #00d8ff; border: solid #0096c7; border-width: 0px 0px 0px 20px; font-weight: bold; padding: 4px;\">&nbsp;".esc($eDeploymentStatus)."&nbsp;</div>";
-			break'';
+			break;
+			
+		case 'DEMO':
+			print "<div style=\"color: #ffffff; background: #000099; border: solid #000033; border-width: 0px 0px 0px 20px; font-weight: bold; padding: 4px;\">&nbsp;".esc($eDeploymentStatus)."&nbsp;</div>";
+			break;
 			
 		default:
 			print "<div style=\"color: #ffffff; background: #9800df; border: solid #6700d1; border-width: 0px 0px 0px 20px; font-weight: bold; padding: 4px;\">&nbsp;".esc($eDeploymentStatus)."&nbsp;</div>";
