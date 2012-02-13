@@ -829,8 +829,8 @@ $_strings['*_name_namePart'] = <<<HTMLEND
 																	<td onclick="getHelpText('collection_namePart_value');"> 
 																		<input type="text" value="" name="object.name[%%SEQNUM1%%].namePart[%%SEQNUM2%%].value" id="object_name_%%SEQNUM1%%_namePart_%%SEQNUM2%%_value" maxlength="512" size="40" />
 																	</td>
-																	<td><div class="fieldError" name="errors_name_%%SEQNUM1%%_namePart_%%SEQNUM2%%_value"></div></td>
-																	<td width="100%">
+																	<td width="100%"><div class="fieldError" name="errors_name_%%SEQNUM1%%_namePart_%%SEQNUM2%%_value"></div></td>
+																	<td>
 																		<input type="button" name="btn_name_%%SEQNUM1%%_namePart_%%SEQNUM2%%_remove" value="Remove this Name Part" onClick="decCount('object.name[%%SEQNUM1%%].namePart'); $('#table_name_%%SEQNUM1%%_namePart_%%SEQNUM2%%').remove();" style="float:right;" />									
 																	</td>
 																</tr>
@@ -872,8 +872,8 @@ $_strings['party_name_namePart'] = <<<HTMLEND
 																	<td onclick="getHelpText('collection_namePart_value');"> 
 																		<input type="text" value="" name="object.name[%%SEQNUM1%%].namePart[%%SEQNUM2%%].value" id="object_name_%%SEQNUM1%%_namePart_%%SEQNUM2%%_value" maxlength="512" size="40" />
 																	</td>
-																	<td><div class="fieldError" name="errors_name_%%SEQNUM1%%_namePart_%%SEQNUM2%%_value" style="font-size:1.05em;"></div></td> 
-																	<td rowspan="2" align="right" width="100%">
+																	<td width="100%"><div class="fieldError" name="errors_name_%%SEQNUM1%%_namePart_%%SEQNUM2%%_value" style="font-size:1.05em;"></div></td> 
+																	<td rowspan="2" align="right">
 																		<input type="button" name="btn_name_%%SEQNUM1%%_namePart_%%SEQNUM2%%_remove" value="Remove this Name Part" onClick="decCount('object.name[%%SEQNUM1%%].namePart'); $('#table_name_%%SEQNUM1%%_namePart_%%SEQNUM2%%').remove();"  /><br/>
 																	</td>
 																</tr>
@@ -884,7 +884,7 @@ $_strings['party_name_namePart'] = <<<HTMLEND
 																	<td onclick="getHelpText('collection_namePart_type');" width="260px">
 																		<input type="text" id="object_name_%%SEQNUM1%%_namePart_%%SEQNUM2%%_type" name="object.name[%%SEQNUM1%%].namePart[%%SEQNUM2%%].type" maxlength="512" size="27" /><img id="button_name_%%SEQNUM1%%_namePart_%%SEQNUM2%%_type" src="{$eAPP_ROOT}orca/_images/buttons/dropdown_in.png" onClick='toggleDropdown(this.id);' class='cursorimg' style="vertical-align:bottom; height:16px; width:16px;" />
 																	</td>
-																	<td><div class="fieldError" name="errors_name_%%SEQNUM1%%_namePart_%%SEQNUM2%%_type" style="font-size:1.05em;"></div></td>
+																	<td width="100%"><div class="fieldError" name="errors_name_%%SEQNUM1%%_namePart_%%SEQNUM2%%_type" style="font-size:1.05em;"></div></td>
 																</tr>
 																
 																
