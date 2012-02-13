@@ -60,7 +60,7 @@ if (!IN_ORCA) die('No direct access to this file is permitted.');
     	//$searchText = urlencode($searchText);
     	
     	
-		$q = 'displayTitle:('.$searchText.') +class:('.$objectClass.')';
+		$q = 'displayTitle:('.strtolower($searchText).') +class:('.$objectClass.')';
 		if($dataSourcekey!='') $q.=' +data_source_key:("'.$dataSourcekey.'")';
 		$fields = array(
 			'q'=>$q,'version'=>'2.2','start'=>'0','rows'=>$limit, 'wt'=>'json',
