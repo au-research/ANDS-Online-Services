@@ -15,19 +15,28 @@ limitations under the License.
 *******************************************************************************/
 if (!IN_ORCA) die('No direct access to this file is permitted.');
 
+		$values = array();
 
 //OLD - use Search Draft By Name
 
-		$searchText = getQueryValue("sText");
-		$objectClass = getQueryValue("oClass");
-		$dataSourcekey = getQueryValue("dSourceKey");
+		$searchText = rawurldecode(getQueryValue("sText"));
+		$objectClass =  rawurldecode(getQueryValue("oClass"));
+		$dataSourcekey =  rawurldecode(getQueryValue("dSourceKey"));
 		$registryObjects = array();
 		$names = array();
 		
 		$limit = 100;
 
-		$names = searchDraftByName($searchText, $objectClass , $dataSourcekey, $limit);
-
+		if ($searchText == "*:*")
+		{
+			// search for all names (untransform SOLR query syntax)
+			$names = searchDraftByName("", $objectClass , $dataSourcekey, $limit);
+		}
+		else
+		{
+			$names = searchDraftByName($searchText, $objectClass , $dataSourcekey, $limit);
+		}
+		
 		if (isset($names) && $names) 
 		{ 		
 			foreach ($names as $i => $value) 
@@ -45,8 +54,8 @@ if (!IN_ORCA) die('No direct access to this file is permitted.');
 //NEW - use SOLR
 		$objectClass = strtolower($objectClass);
 		
-		$match = array(   '\\', '&', '|',   '!',    '(',   ')',   '{',   '}',   '[',   ']',   '^',   '-',   '~',    '*',   '?',   ':',   '"',   ';');
-    	$replace = array('\\\\','&', '\\|', '\\!', '\\(', '\\)', '\\{', '\\}', '\\[', '\\]', '\\^', '\\-', '\\~', '\\*', '\\?', '\\:', '\\"', '\\;');
+		$match = array(   '\\', '&', '|',   '!',    '(',   ')',   '{',   '}',   '[',   ']',   '^',   '-',   '~',    '*',   '?',   ':',   '"',   ';',   '#');
+    	$replace = array('\\\\','\\&', '\\|', '\\!', '\\(', '\\)', '\\{', '\\}', '\\[', '\\]', '\\^', '\\-', '\\~', '\\*', '\\?', '\\:', '\\"', '\\;',   '\\#');
     	$searchText = str_replace($match, $replace, $searchText);
     	//$searchText = urlencode($searchText);
     	
@@ -81,9 +90,12 @@ if (!IN_ORCA) die('No direct access to this file is permitted.');
 		//print_r($decoded);
 	
 		//$values[] = array('value'=>$searchText, "desc"=> $fields_string);
-		foreach($decoded->response->docs as $d){
-			$values[] = array (	"value" => $d->{'key'}, "desc" => $d->{'displayTitle'}.' ('.$d->{'status'}.')');
+		if (isset($decoded->response->docs))
+		{
+			foreach($decoded->response->docs as $d){
+				$values[] = array (	"value" => $d->{'key'}, "desc" => $d->{'displayTitle'}.' ('.$d->{'status'}.')');
+			}
 		}
-	
+		
 		echo json_encode($values);
 		

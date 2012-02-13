@@ -1664,7 +1664,14 @@ function doRelatedObjectSearch(field){
 	roDS = $('#select_'+field+'_dataSource').val(); 
 	result = '#'+field+'_result';
 	//process_registry_object.php?task=searchRelated&sText=dr berry&oClass=Party&dSourceKey=monash-test
-	$.get("process_registry_object.php?task=searchRelated&sText="+term+"&oClass="+roClass+"&dSourceKey="+roDS,
+	
+	if (term.length == 1)
+	{
+		$(result).html('Search term must contain two or more characters.');
+		return;
+	}
+	
+	$.get("process_registry_object.php?task=searchRelated&sText="+encodeURIComponent(term)+"&oClass="+encodeURIComponent(roClass)+"&dSourceKey="+encodeURIComponent(roDS),
 	   function(data){
 		   //console.log(data);
 			$(result).html('');
