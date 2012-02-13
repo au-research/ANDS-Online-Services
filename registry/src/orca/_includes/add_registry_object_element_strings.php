@@ -608,7 +608,7 @@ if (isset($_GET['cache_set']) || (isset($_GET['tag']) && (strpos($_GET['tag'], "
 		$ourDataSource = $key_obj[0]["data_source_key"];
 	}
 	*/
-	$ds_string = '<option value="">All Data Sources</option>';
+	$ds_string = '';
 	
 	for( $i=0; $i < count($searchResults); $i++ )
 	{
@@ -935,7 +935,7 @@ $_strings['*_relatedObject'] = <<<HTMLEND
 											<img src="{$eAPP_ROOT}orca/_images/error_icon.png" onClick='closeSearchModal("object_relatedObject_%%SEQNUM1%%_key_1");' style="cursor:pointer; position:absolute; top:5px; right:5px; width:16px;" />
 											
 											
-												<p><label>Search by Name: </label><input type="text" class="searchTextBox" id="object_relatedObject_%%SEQNUM1%%_key_1_search"/></p>
+												<p><label>Search by Name/Title: </label><input type="text" class="searchTextBox" id="object_relatedObject_%%SEQNUM1%%_key_1_search"/></p>
 												<p>
 												<select id="select_object_relatedObject_%%SEQNUM1%%_key_1_class">
 												<option value="Collection">Collection</option>
@@ -944,6 +944,7 @@ $_strings['*_relatedObject'] = <<<HTMLEND
 												<option value="Service">Service</option>
 												</select>
 												<select id="select_object_relatedObject_%%SEQNUM1%%_key_1_dataSource" style="width:280px;">
+													<option value="">All Data Sources</option>
 													{$ds_string}
 												</select>
 												<a href="javascript:void(0);" id="object_relatedObject_%%SEQNUM1%%_key_1_button">Search</a></p>
