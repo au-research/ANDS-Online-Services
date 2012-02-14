@@ -1,3 +1,4 @@
+#!/usr/bin/php
 <?php
 /*
 Copyright 2009 The Australian National University

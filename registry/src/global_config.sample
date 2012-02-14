@@ -22,19 +22,23 @@ limitations under the License.
 	LOCAL WEB SERVER ENVIRONMENT
 ====================================*/
 $host 			= 'devl.ands.org.au';
+$default_protocol	= 'https';
 $cosi_root 		= 'workareas/minh/ands/registry/src';
 $orca_root 		= $cosi_root.'/orca';
 $rda_root 		= $orca_root.'/rda';
 
 //======================================
 $solr_url 		= 'http://devl.ands.org.au:8080/solr/';
-$harvester_ip 	= '';
-$pids_uri		= "https://devl.ands.org.au:8443/pids/";
-$pids_fid 		= '';
+$harvester_ip 		= '';
+$pids_url		= "https://devl.ands.org.au:8443/pids/";
+$pids_app_id		= '';
 
+$harvest_url		= '';
+$harvest_ip		= '';
 
 //======================================
 $deploy_as		= 'PROD';
+$rda_environment	= 'production';
 $debug 			= false;
 $error 			= false;
 $maintenance 	= false;
