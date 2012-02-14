@@ -142,7 +142,7 @@ limitations under the License.
 
 
 <div class="box shadow">
-	<center><img src="<?php echo base_url();?>img/DIISR_logo.jpg"/></center>
+	<center><img src="<?php echo base_url();?>img/DIISRTE_stacked.jpg" style="height:200px;"/></center>
 	<p style="text-align:center">
 		ANDS is supported by the Australian Government through the <a href="http://ncris.innovation.gov.au/">National Collaborative Research Infrastructure Strategy Program</a> and the Education Investment Fund (EIF) Super Science Initiative.
 	</p>
