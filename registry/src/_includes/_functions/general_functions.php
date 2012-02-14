@@ -40,7 +40,7 @@ function checkSSL($activity_id)
 	{
 		// If the web root specifies https, but the request wasn't made via https
 		// then redirect the request to come back via https.
-		$reqIsHTTPS = false;
+		$reqIsHTTPS = true;
 		
 		if( isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON' )
 		{
