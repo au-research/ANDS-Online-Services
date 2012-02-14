@@ -1,5 +1,5 @@
 <?php
-
+require_once(dirname(__FILE__).'/../../global_config.php');
 /*
  *---------------------------------------------------------------
  * APPLICATION ENVIRONMENT
@@ -18,7 +18,7 @@
  * NOTE: If you change these, also change the error_reporting() code below
  *
  */
-	define('ENVIRONMENT', 'development');
+	define('ENVIRONMENT', $rda_environment);
 /*
  *---------------------------------------------------------------
  * ERROR REPORTING
@@ -128,7 +128,6 @@ if (defined('ENVIRONMENT'))
 // END OF USER CONFIGURABLE SETTINGS.  DO NOT EDIT BELOW THIS LINE
 // --------------------------------------------------------------------
 //DEFINE ANDS REGISTRY ONLINE SERVICE VARIABLES
-require_once(dirname(__FILE__).'/../../global_config.php');
 define('RDA_ROOT', $rda_root);
 define('HOST', $host);
 define('ORCA_ROOT', $orca_root);

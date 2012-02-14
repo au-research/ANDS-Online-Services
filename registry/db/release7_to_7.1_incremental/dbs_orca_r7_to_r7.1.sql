@@ -12,6 +12,23 @@ AND created_when <= CAST($1 AS timestamp with time zone)
   COST 100;
 ALTER FUNCTION dba.udf_get_harvest_method_count(character varying, character varying)
   OWNER TO dba;
+  
+CREATE OR REPLACE FUNCTION dba.udf_search_draft_by_name(_search_text character varying, _object_class character varying, _data_source character varying, _limit integer)
+  RETURNS SETOF dba.udt_name_search_result AS
+$BODY$
+
+SELECT draft_key AS registry_object_key, registry_object_title AS display_title, status,registry_object_type AS "type" FROM dba.tbl_draft_registry_objects
+WHERE lower(registry_object_title) like lower('%'||$1||'%')
+AND ($2 = '' OR "class" = $2)
+AND ($3 = '' OR registry_object_data_source = $3)
+LIMIT $4
+$BODY$
+  LANGUAGE sql VOLATILE
+  COST 100
+  ROWS 1000;
+ALTER FUNCTION dba.udf_search_draft_by_name(character varying, character varying, character varying, integer)
+  OWNER TO dba;
+  
 
 -- fix issues caused by migrating {timestamp(6) with timezone} from PG 8.3 to PG 9.1
 -- eg: 1844-01-01 10:04:52+10:04:52 should be 1844-01-01 10:00:00+10
@@ -31,9 +48,6 @@ ALTER FUNCTION dba.udf_get_harvest_method_count(character varying, character var
 --5771;"516811d7-cb08-207a-e0440003ba8c79dd";"1890-01-01 10:04:52+10:04:52";""
 --6003;"7848d4c6-7a0e-4e2e-87b1-9d22f27c5ce2";"2008-06-09 13:32:00+10";"2008-08-29 13:32:00+10"
 --6093;"9f14afe6-f8ec-4a61-aa4d-bc7313b06727";"2008-06-09 13:32:00+10";"2008-08-29 13:32:00+10"
-
--- test records
-select * from dba.tbl_locations where extract(minute FROM date_from) != 0 OR extract(minute FROM date_to) != 0 order by date_from ASC;
 
 -- create the temporary fields:
 alter table dba.tbl_locations add column "date_from_txt" text;
@@ -60,9 +74,6 @@ update dba.tbl_locations set date_from_txt = date_from_bkp where date_from_bkp i
 update dba.tbl_locations set date_from_txt = substr(date_from_txt,0,23) where date_from_bkp is not null;
 update dba.tbl_locations set date_to_txt = substr(date_to_txt,0,23) where date_to_bkp is not null;
 
-
-alter table dba.tbl_locations rename column "date_to" to "date_to_old";
-alter table dba.tbl_locations rename column "date_from" to "date_from_old";
 alter table dba.tbl_locations drop column "date_to_bkp";
 alter table dba.tbl_locations drop column "date_from_bkp";
 

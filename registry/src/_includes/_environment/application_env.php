@@ -24,7 +24,7 @@ require_once(dirname(__FILE__).'/../../global_config.php');
 
 define("eHOST", $host);
 define("eROOT_DIR", $cosi_root);
-define("ePROTOCOL", "https");
+define("ePROTOCOL", $default_protocol);
 define("eAPP_ROOT", ePROTOCOL.'://'.eHOST.'/'.eROOT_DIR.'/');
 define("eHTTP_APP_ROOT",  'http://'.eHOST.'/'.eROOT_DIR.'/');
 
