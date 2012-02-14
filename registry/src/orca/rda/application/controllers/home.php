@@ -158,7 +158,7 @@ class Home extends CI_Controller {
 			foreach($keys as $k){
 				//var_dump($k);
 				echo '<url>';
-				echo '<loc>'.base_url().'view/?key='.$k->{'key'}.'</loc>';
+				echo '<loc>'.base_url().'view/?key='.urlencode($k->{'key'}).'</loc>';
 				echo '<changefreq>weekly</changefreq>';
 				echo '<priority>1.0</priority>';
 				echo '<lastmod>'.$k->{'date_modified'}.'</lastmod>';
