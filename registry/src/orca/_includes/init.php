@@ -13,6 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 *******************************************************************************/
+require_once(dirname(__FILE__).'/../../global_config.php');
+
 // If not running within COSI, include COSI's environment variables
 // (needed for "lightweight" activities such as fetch_element)
 if (!defined("eHOST")) { require '../_includes/_environment/application_env.php'; }
@@ -68,8 +70,8 @@ define('gORCA_VOCABS_BASE_URI', "");
 
 // The harvester settings.
 // Use empty strings for both values if there is no harvester available.
-define('gORCA_HARVESTER_BASE_URI', $harvester_url);
-define('gORCA_HARVESTER_IP', $harvester_ip);
+define('gORCA_HARVESTER_BASE_URI', $harvest_url);
+define('gORCA_HARVESTER_IP', $harvest_ip);
 
 // Harvest methods.
 // These values are used in _javascript/data_source_forms.js
@@ -130,5 +132,3 @@ $gORCA_STATUS_INFO = array (
 define('gPIDS_SERVICE_BASE_URI', $pids_url);
 define('gPIDS_APP_ID', $pids_app_id);
 define('gSOLR_UPDATE_URL' , $solr_url . "update");
-
-
