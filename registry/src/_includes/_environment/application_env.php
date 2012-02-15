@@ -40,7 +40,7 @@ $eRequestRoot = eAPP_ROOT;
 // -----------------------------------------------------------------------------
 // URI of PIDS service (Server IP address should be added as 
 //                      trusted admin on Tomcat PID service)
-$ePIDS_RESOURCE_URI = $pids_uri;
+$ePIDS_RESOURCE_URI = $pids_url;
 
 
 // Shibboleth Settings

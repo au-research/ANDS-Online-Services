@@ -28,9 +28,9 @@ limitations under the License.
 // -----------------------------------------------------------------------------
 
 // Service configuration.
-define('gPIDS_SERVICE_BASE_URI', $pids_uri);
+define('gPIDS_SERVICE_BASE_URI', $pids_url);
 
-define('gPIDS_APP_ID', $pids_fid);
+define('gPIDS_APP_ID', $pids_app_id);
 
 
 $gPIDS_PROPERTY_TYPES = array( 
