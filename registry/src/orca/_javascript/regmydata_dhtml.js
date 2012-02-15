@@ -1159,6 +1159,7 @@ function saveAndPreview() {
 
 	$("#errors_preview").hide();	
 	$("#save_notification").remove();
+	$(".rda_preview").attr("href",$("#baseURL").val() + 'rda/preview?ds='+$('#object_mandatoryInformation_dataSource').val()+'&key=' + $('#object_mandatoryInformation_key').val());
 	
 	if (userMode != 'readOnly')
 	{
@@ -1178,7 +1179,6 @@ function saveAndPreview() {
 							"<div id='rda_preview_container'><a id='rda_preview' class='rda_preview' href='#' target='_blank'><img src='"+rootAppPath+"orca/_images/globe.png' /> Preview in Research Data Australia</a></div>"
 			);
 		
-		$(".rda_preview").attr("href",$("#baseURL").val() + 'rda/preview?ds='+$('#object_mandatoryInformation_dataSource').val()+'&key=' + $('#object_mandatoryInformation_key').val());
 	} 
 
 	/* alert(document.forms[0].length + " is the length of the form");
