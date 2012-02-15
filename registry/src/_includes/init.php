@@ -68,19 +68,7 @@ $ip=$_SERVER["HTTP_CLIENT_IP"];
 } else if ( isset($_SERVER["REMOTE_ADDR"]) )    {
 $ip=$_SERVER["REMOTE_ADDR"];
 }
-
 $requestUri = $_SERVER["REQUEST_URI"];
-//let google get the KML files
-if(!strpos($requestUri,'/orca/services/') &&  $UNDER_MAINTENANCE && $ip != "xx.xx.xx.xx") // exempt IPs 
-{
-	print("<html><body>");
-	print("<center><div style='border:1px solid #C7D7BA; width:400px;'>");
-	print("<img src='http://ands2.anu.edu.au:8080/ands_logo_white.jpg' width='60%' border='0'>");
-	print("<h3 style='font-family:\"Lucida Grande\", Verdana, Lucida, Helvetica'>Under maintenance, please check back later.</h3>");
-	print("</div></center>");
-	print("</body></html>");
-	exit;	
-}
 
 //END OF UNDER MAINETANCE
 
