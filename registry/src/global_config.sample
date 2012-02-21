@@ -75,6 +75,7 @@ define('eBOOST_RELATED_OBJECT_ADJUSTMENT', 5);
 define('eBOOST_INCOMING_RELATED_OBJECT_ADJUSTMENT', 10);
 
 
+
 //======================================
 // INDEXING OPTIONS
 define('eBOOST_DEFAULT_BASE', 100);

@@ -17,6 +17,7 @@ limitations under the License.
 **/ 
 ?>
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
 /**
 Dispatcher class will receive all requests which do not match a higher
 defined $route in config.php. The dispatcher acts as an emulator for the
@@ -60,7 +61,7 @@ class Dispatcher extends CI_Controller {
 		}
 		else
 		{
-		
+
 			$record_hash = $this->_getMappingFor($method);
 
 			if (!$record_hash)		
@@ -79,6 +80,7 @@ class Dispatcher extends CI_Controller {
 				call_user_func_array(array($view_controller, 'view_by_hash'), array($params));
 				return;
 			}
+
 		}
 	    show_404();
 	}
@@ -177,6 +179,5 @@ class Dispatcher extends CI_Controller {
 	
 
 }
-
 
 ?>

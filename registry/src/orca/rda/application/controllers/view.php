@@ -71,6 +71,7 @@ class View extends CI_Controller {
 			}
 			
 			
+
 			
 			$this->load->model('RegistryObjects', 'ro');
 			$this->load->model('solr');
@@ -93,12 +94,20 @@ class View extends CI_Controller {
 			$data['user_agent']=$this->agent->browser();
 
 
+
 			$data['activity_name'] = 'view';
+
 			
 			if($numFound>0){
 				$this->load->view('xml-view', $data);
 			}else show_404('page');
-			
+
+		
+		}
+		else 
+		{
+			show_404('page');
+
 		}
 	
 	}
