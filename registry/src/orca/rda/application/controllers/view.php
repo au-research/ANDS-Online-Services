@@ -21,13 +21,23 @@ limitations under the License.
 class View extends CI_Controller {
 
 
-	public function index()
+	public function index($params = array())
 	{
+		//var_dump($params);
 		parse_str($_SERVER['QUERY_STRING'], $_GET);
-		
+		$key = null;
 		if(isset($_GET['key'])){
-			$key = ($_GET['key']);
+			$key = ($_GET['key']);		
+		} 
+		elseif (count($params) > 0) 
+		{
+			$key = rawurldecode($params[0]);
+		} 
+		
+		if (!is_null($key))
+		{
 			//echo $key;
+			
 			$this->load->model('RegistryObjects', 'ro');
 			$this->load->model('solr');
 	       	$content = $this->ro->get($key);
@@ -37,7 +47,7 @@ class View extends CI_Controller {
 			$obj = $this->solr->getByKey($key);
 			$numFound = $obj->{'response'}->{'numFound'};
 			$doc = ($obj->{'response'}->{'docs'}[0]);
-			//echo $numFound;
+		
 			
 			$data['title'] = $doc->{'displayTitle'};
 			
@@ -47,13 +57,15 @@ class View extends CI_Controller {
 			
 			$this->load->library('user_agent');
 			$data['user_agent']=$this->agent->browser();
-			
+
 			
 			if($numFound>0){
 				$this->load->view('xml-view', $data);
 			}else show_404('page');
-			
-		}else{
+		
+		}
+		else 
+		{
 			show_404('page');
 		}
 	}
