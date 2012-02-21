@@ -43,6 +43,38 @@ $debug 			= false;
 $error 			= false;
 $maintenance 	= false;
 
+//=====================================
+// The name of the application.
+define("eAPP_TITLE", "Online Services");
+
+// The name of this installed instance of the application.
+// eINSTANCE_TITLE_SHORT will be used in the window title.
+// eINSTANCE_TITLE will be used as the logo alt/title.
+define("eINSTANCE_TITLE", "My Organisation");
+define("eINSTANCE_TITLE_SHORT", "MyORG");
+
+define("eCONTACT_EMAIL", "services@ands.org.au");
+define("eCONTACT_NAME", "Feedback");
+
+define("eCOPYRIGHT_NOTICE", "");
+
+
+//======================================
+// CACHING OPTIONS
+define('eCACHE_DIRECTORY', '/var/www/orca_' . 'cache'); // what directory do we store our cache files in? (relative)
+define('eCACHE_CURRENT_NAME','current'); // what filename do we use for the latest version symlink
+define('eCACHE_PERMISSION',0775); // octal representation of default directory permissions
+$gCacheEnabled = true; // is caching enabled?
+$gCacheExtended = true; // are we caching "extended RIFCS" (rich) or plain vanilla? (not backwards compatible)
+
+
+//======================================
+// INDEXING OPTIONS
+define('eBOOST_DEFAULT_BASE', 100);
+define('eBOOST_RELATED_OBJECT_ADJUSTMENT', 5);
+define('eBOOST_INCOMING_RELATED_OBJECT_ADJUSTMENT', 10);
+
+
 //White List IP are IPs that are allowed to access the system regardless of maitenance status
 $white_list_ip 	= array(
 	'xx.xx.xx.xx'
@@ -73,15 +105,19 @@ if($maintenance & !in_array($ip, $white_list_ip)){
 	DATABASE ENVIRONMENT
 ====================================*/
 $cosi_db_host = 'devl.ands.org.au';
+$cosi_db_port = 5432;
 $cosi_db_name = 'dbs_work_leo_cosi_2';
 //======================================
 $orca_db_host = $cosi_db_host;
+$orca_db_port = 5432;
 $orca_db_name = 'dbs_work_leo_orca_2';
 //======================================
 $pids_db_host = $cosi_db_host;
+$pids_db_port = 5432;
 $pids_db_name = 'pids';
 //======================================
 $dois_db_host = $cosi_db_host;
+$dois_db_port = 5432;
 $dois_db_name = 'dois';
 //======================================
 ?>
