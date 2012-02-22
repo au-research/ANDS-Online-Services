@@ -90,6 +90,7 @@
                     <xsl:value-of select="$base_url"/>
                     <xsl:text>img/</xsl:text>
                     <xsl:text>1313027722_print.png</xsl:text></xsl:attribute>
+                    <xsl:attribute name="alt">Print Icon</xsl:attribute>
                     </img>
                     </a>
 				</div>
@@ -129,12 +130,19 @@
 			</xsl:for-each>
 			
 			
-			</div><div class="right_icon"><img class="icon-heading">
-				<xsl:attribute name="src"><xsl:value-of select="$base_url"/>
-				<xsl:text>/img/icon/</xsl:text>
-				<xsl:value-of select="$objectClassType"/>
-				<xsl:text>_32.png</xsl:text></xsl:attribute>
-				</img></div> 
+			</div>
+			
+			<div class="right_icon">
+				<img class="icon-heading">
+					<xsl:attribute name="src"><xsl:value-of select="$base_url"/>
+						<xsl:text>/img/icon/</xsl:text>
+						<xsl:value-of select="$objectClassType"/>
+						<xsl:text>_32.png</xsl:text>
+					</xsl:attribute>
+					<xsl:attribute name="alt"><xsl:value-of select="$objectClassType"/></xsl:attribute>
+					
+				</img>
+			</div> 
 	        </xsl:otherwise> 
 	        
         </xsl:choose>    
@@ -351,6 +359,7 @@
 				<img>
 				<xsl:attribute name="src"><xsl:value-of select="$base_url"/><xsl:text>/img/ajax-loader.gif</xsl:text></xsl:attribute>
 				<xsl:attribute name="class">loading-icon</xsl:attribute>
+				<xsl:attribute name="alt">Loading…</xsl:attribute>
 				</img>
 			</div>
 			</div>	
@@ -366,6 +375,7 @@
 					<img>
 					<xsl:attribute name="src"><xsl:value-of select="$base_url"/><xsl:text>/img/ajax-loader.gif</xsl:text></xsl:attribute>
 					<xsl:attribute name="class">loading-icon</xsl:attribute>
+					<xsl:attribute name="alt">Loading…</xsl:attribute>
 					</img>
 				</div>
 				</div>
@@ -379,6 +389,7 @@
 					<img>
 					<xsl:attribute name="src"><xsl:value-of select="$base_url"/><xsl:text>/img/ajax-loader.gif</xsl:text></xsl:attribute>
 					<xsl:attribute name="class">loading-icon</xsl:attribute>
+					<xsl:attribute name="alt">Loading…</xsl:attribute>
 					</img>
 				</div>
 				</div>
@@ -404,13 +415,16 @@
 			<xsl:text>/img/icon/</xsl:text>
 			<xsl:value-of select="$objectClassType"/>
 			<xsl:text>_32.png</xsl:text></xsl:attribute>
+			<xsl:attribute name="alt"><xsl:value-of select="$objectClassType"/></xsl:attribute>
 		  </img>
 		</div>   
     </xsl:template>
     
     <xsl:template match="ro:displayLogo">   
-        <div ><img id="party_logo" style="max-width:130px;">
-        <xsl:attribute name="src"><xsl:value-of select="."/></xsl:attribute>
+        <div>
+        <img id="party_logo" style="max-width:130px;">
+        	<xsl:attribute name="src"><xsl:value-of select="."/></xsl:attribute>
+        	<xsl:attribute name="alt">Party Logo</xsl:attribute>
         </img>
 		</div>    
     </xsl:template> 

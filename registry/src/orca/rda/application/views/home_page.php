@@ -45,28 +45,28 @@ limitations under the License.
 		<div class="hp-class-items">
 		<h2>What's in Research Data Australia</h2>
 			<div class="hp-class-item clearfix" id="collection">
-				<img src="<?php echo base_url();?>img/icon/collections_64_hp.png"/>
+				<img src="<?php echo base_url();?>img/icon/collections_64_hp.png" alt="collection"/>
 				<div>
 					<p>Research datasets or collections of research materials.</p>
 					<p><a href="search#!/tab=collection">Browse All Collections <span id="hp-browse-collection"></span></a></p>
 				</div>
 			</div>
 			<div class="hp-class-item clearfix" id="party">
-				<img src="<?php echo base_url();?>img/icon/party_multi_64_hp.png"/>
+				<img src="<?php echo base_url();?>img/icon/party_multi_64_hp.png" alt="party"/>
 				<div>
 					<p>Researchers or research organisations that create or maintain research datasets or collections.</p>
 					<p><a href="search#!/tab=party">Browse All Parties <span id="hp-browse-party"></span></a></p>
 				</div>
 			</div>
 			<div class="hp-class-item clearfix" id="service">
-				<img src="<?php echo base_url();?>img/icon/services_64_hp.png"/>
+				<img src="<?php echo base_url();?>img/icon/services_64_hp.png" alt="service"/>
 				<div>
 					<p>Services that support the creation or use of research datasets or collections.</p>
 					<p><a href="search#!/tab=service">Browse All Services <span id="hp-browse-service"></span></a></p>
 				</div>
 			</div>
 			<div class="hp-class-item clearfix" id="activity">
-				<img src="<?php echo base_url();?>img/icon/activities_64_hp.png"/>
+				<img src="<?php echo base_url();?>img/icon/activities_64_hp.png" alt="activity"/>
 				<div>
 					<p>Projects or programs that create research datasets or collections.</p>
 					<p><a href="search#!/tab=activity">Browse All Activities <span id="hp-browse-activity"></span></a></p>
@@ -142,7 +142,7 @@ limitations under the License.
 
 
 <div class="box shadow">
-	<center><img src="<?php echo base_url();?>img/DIISRTE_stacked.jpg" style="height:200px;"/></center>
+	<center><img src="<?php echo base_url();?>img/DIISRTE_stacked.jpg" style="height:200px;" alt="DIISRTE Logo"/></center>
 	<p style="text-align:center">
 		ANDS is supported by the Australian Government through the <a href="http://ncris.innovation.gov.au/">National Collaborative Research Infrastructure Strategy Program</a> and the Education Investment Fund (EIF) Super Science Initiative.
 	</p>

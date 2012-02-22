@@ -113,14 +113,14 @@ limitations under the License.
 				echo '<p class="hide key">'.$ro_key.'</p>';
 				if(get_cookie('show_icons')=='yes'){
 					switch($class){
-						case "collection":echo '<img class="ro-icon" src="'.base_url().'img/icon/collections_32.png" title="Collection"/>';break;
-						case "activity":echo '<img class="ro-icon" src="'.base_url().'img/icon/activities_32.png" title="Activity"/>';break;
-						case "service":echo '<img class="ro-icon" src="'.base_url().'img/icon/services_32.png" title="Service"/>';break;
+						case "collection":echo '<img class="ro-icon" src="'.base_url().'img/icon/collections_32.png" title="Collection" alt="Collection"/>';break;
+						case "activity":echo '<img class="ro-icon" src="'.base_url().'img/icon/activities_32.png" title="Activity" alt="Activity"/>';break;
+						case "service":echo '<img class="ro-icon" src="'.base_url().'img/icon/services_32.png" title="Service" alt="Service"/>';break;
 						case "party": 
 									if($type=='person'){
-										echo '<img class="ro-icon" src="'.base_url().'img/icon/party_one_32.png" title="Person"/>';
+										echo '<img class="ro-icon" src="'.base_url().'img/icon/party_one_32.png" title="Person" alt="Person"/>';
 									}elseif($type=='group'){
-										echo '<img class="ro-icon" src="'.base_url().'img/icon/party_multi_32.png" title="Group"/>';
+										echo '<img class="ro-icon" src="'.base_url().'img/icon/party_multi_32.png" title="Group" alt="Group"/>';
 									}
 							break;
 					}
