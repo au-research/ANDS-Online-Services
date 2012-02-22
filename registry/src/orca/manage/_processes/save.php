@@ -28,10 +28,9 @@ if($json)
 	$test_array['mandatoryInformation']['key'] = trim(urldecode($test_array['mandatoryInformation']['key']));
 	$objectDataSource = urldecode($test_array['mandatoryInformation']['dataSource']);
 	$dateCreated = urldecode($test_array['mandatoryInformation']['dateAccessioned']);
+	
 	$xml__text = $a2xml->array2xml($test_array);
 	$xml__text = str_replace ('%26', '&amp;', $xml__text);
-	$xml__text = preg_replace_callback('/\\%u([0-9a-f]{4})/i','replace_unicode_escape_sequence', $xml__text );					
-	$xml__text = preg_replace_callback('/\\%([A-F0-9]{2})/i','replace_unicode_escape_sequence2', $xml__text );
 
 	$rifcs->loadXML(trim($xml__text));
 
