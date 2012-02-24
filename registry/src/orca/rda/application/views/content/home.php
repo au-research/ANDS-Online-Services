@@ -38,9 +38,9 @@ limitations under the License.
 <div id="search-result">
 
 <div class="box">
-	<div class="hp-left">
-		<h2>What's in Research Data Australia</h2>
-		<div class="hp-class">
+	<div class="hp-left" itemscope itemtype="http://schema.org/Article">
+		<h2 itemprop="name">What's in Research Data Australia</h2>
+		<div class="hp-class" itemprop="articleBody">
 		
 			<div class="hp-icons">
 				<a href="search#!/tab=collection"><img src="<?php echo base_url();?>img/icon/collections_64.png" class="active" id="collection"/></a>
@@ -50,7 +50,7 @@ limitations under the License.
 			</div>
 			
 			
-				<div id="hp-content-collection"class="hp-icon-content">
+				<div id="hp-content-collection" class="hp-icon-content">
 					<p>Research datasets or collections of research materials.</p>
 					<p><a href="search#!/tab=collection">Browse All Collections <span id="hp-browse-collection"></span></a></p>
 				</div>

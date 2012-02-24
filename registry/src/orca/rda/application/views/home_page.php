@@ -38,10 +38,10 @@ limitations under the License.
 ?>
 <div id="search-result">
 
-<div class="box shadow">
-	<h1 class="branding">Research Data Australia is a discovery service for Australian research data.</h1>
+<div class="box shadow" itemscope itemtype="http://schema.org/Article">
+	<h1 class="branding" itemprop="name">Research Data Australia is a discovery service for Australian research data.</h1>
 	<div class="clearfix"></div>
-	<div class="hp-left">
+	<div class="hp-left" itemprop="articleBody">
 		<div class="hp-class-items">
 		<h2>What's in Research Data Australia</h2>
 			<div class="hp-class-item clearfix" id="collection">
@@ -75,7 +75,7 @@ limitations under the License.
 		</div>
 	</div>
 	
-	<div class="hp-right">
+	<div class="hp-right" itemprop="articleBody">
 		<h2>Spotlight on research domains</h2>
 		<p class="alt_listTitle">More information on research data infrastructure for specific domains:</p>
 			<div id="carousel">
@@ -133,17 +133,17 @@ limitations under the License.
 </div>
 
 
-<div class="box clearfix shadow">	
-	<h2>Who contributes to Research Data Australia</h2>
-	<div id="hp-stat">
+<div class="box clearfix shadow" itemscope itemtype="http://schema.org/Article">	
+	<h2 itemprop="name">Who contributes to Research Data Australia</h2>
+	<div id="hp-stat" itemprop="articleBody">
 		Loading Stats...
 	</div>
 </div>
 
 
-<div class="box shadow">
+<div class="box shadow" itemscope itemtype="http://schema.org/Article">
 	<center><img src="<?php echo base_url();?>img/DIISRTE_stacked.jpg" style="height:200px;" alt="DIISRTE Logo"/></center>
-	<p style="text-align:center">
+	<p style="text-align:center" itemprop="articleBody">
 		ANDS is supported by the Australian Government through the <a href="http://ncris.innovation.gov.au/">National Collaborative Research Infrastructure Strategy Program</a> and the Education Investment Fund (EIF) Super Science Initiative.
 	</p>
 	

@@ -110,7 +110,7 @@
     </xsl:template>
 
     <xsl:template match="ro:collection | ro:activity | ro:party | ro:service">
-      	<div id="item-view-inner" class="clearfix">
+      	<div id="item-view-inner" class="clearfix" itemscope itemType="http://schema.org/Thing">
 	
 		<div id="left">           
  		<xsl:choose>
@@ -120,7 +120,7 @@
 	        </xsl:when>
 	         <xsl:otherwise>
 	                
-	        <div id="displaytitle"><h1><xsl:value-of select="../ro:key"/></h1>
+	        <div id="displaytitle"><h1 itemprop="name"><xsl:value-of select="../ro:key"/></h1>
 	                        	
 	            	
 	        <xsl:for-each select="//ro:existenceDates">
@@ -157,7 +157,7 @@
                 
         <div class="clearfix"></div>
         <xsl:if test="ro:description">
-            <div class="descriptions" style="position:relative;clear:both;">
+            <div class="descriptions" style="position:relative;clear:both;" itemprop="descriptions">
 				<xsl:apply-templates select="ro:description[@type= 'brief']" mode="content"/>
 				<xsl:apply-templates select="ro:description[@type= 'full']" mode="content"/>
 				<xsl:apply-templates select="ro:description[@type= 'significanceStatement']" mode="content"/>		
