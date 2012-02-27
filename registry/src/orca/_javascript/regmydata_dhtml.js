@@ -1157,6 +1157,8 @@ function saveAndPreview() {
 
 	var key = $('#object_mandatoryInformation_key').val();
 
+	$(".rda_preview").attr("href",$("#baseURL").val() + 'rda/preview?ds='+$('#object_mandatoryInformation_dataSource').val()+'&key=' + $('#object_mandatoryInformation_key').val());
+
 	$("#errors_preview").hide();	
 	$("#save_notification").remove();
 	$(".rda_preview").attr("href",$("#baseURL").val() + 'rda/preview?ds='+$('#object_mandatoryInformation_dataSource').val()+'&key=' + $('#object_mandatoryInformation_key').val());
