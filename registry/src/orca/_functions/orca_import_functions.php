@@ -1668,10 +1668,7 @@ function getAllRelatedObjectClass($RegistryObject, $dataSourceKey)
 }
 
 function getRelatedXml($dataSource,$rifcs,$objectClass){
-	//print("<pre>");
-	//print_r($rifcs);
-	//print("</pre>");
-	//print($_SERVER['PHP_SELF']);
+
 	$objectClass = strtolower($objectClass);
 	$newrifcs = '';
 	$dataSourceInfo = getDataSources($dataSource, $filter=null);
@@ -1690,6 +1687,20 @@ function getRelatedXml($dataSource,$rifcs,$objectClass){
 	{	
 		$theRels[$therelations->item($i)->firstChild->nodeValue] = $therelations->item($i)->firstChild->nodeValue;
 	}
+	
+	
+	$theDescriptions = $rifObject->getElementsByTagName('description');	
+	$descCount = $theDescriptions->length;
+	for($i=0;$i<$descCount;$i++)
+	{	
+		$value = $theDescriptions->item($i)->firstChild->nodeValue;		
+		if(str_replace("/>","",$value)==$value&&str_replace("</","",$value)==$value)
+		{
+			$value =  nl2br(str_replace("\t", "&#xA0;&#xA0;&#xA0;&#xA0;", $value));
+		}
+		$theDescriptions->item($i)->firstChild->nodeValue = $value;		
+	} 
+						
 
 	if(isset($dataSourceInfo[0]['primary_key_1'])&& $dataSourceInfo[0]['primary_key_1']!= $therealkey &&(!array_key_exists($dataSourceInfo[0]['primary_key_1'],$theRels)))
 	{
