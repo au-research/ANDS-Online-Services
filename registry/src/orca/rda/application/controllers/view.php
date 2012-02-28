@@ -20,6 +20,10 @@ limitations under the License.
 
 class View extends CI_Controller {
 
+    public function __construct()
+    {
+         parent::__construct();
+    }
 
 	public function index($params = array())
 	{
@@ -36,7 +40,34 @@ class View extends CI_Controller {
 		
 		if (!is_null($key))
 		{
-			//echo $key;
+			redirect(base_url().getSlugForRecordByKey($key));
+		
+		}
+		else 
+		{
+			show_404('page');
+		}
+	}
+
+	public function view_by_hash($params)
+	{
+		if (is_array($params) && count($params) >= 1)
+		{
+			$hash = $params[0];
+			
+			// Temporary hack to turn hash back into key XXX: Use HASH for comms with SOLR
+			$query = $this->db->select("registry_object_key")->get_where("dba.tbl_registry_objects", array("key_hash" => $hash));
+			if ($query->num_rows() == 0) 
+			{
+				 show_404('page');
+			}
+			else
+			{
+				$query = $query->row();
+				$key = $query->registry_object_key;
+			}
+			
+			
 			
 			$this->load->model('RegistryObjects', 'ro');
 			$this->load->model('solr');
@@ -58,16 +89,15 @@ class View extends CI_Controller {
 			$this->load->library('user_agent');
 			$data['user_agent']=$this->agent->browser();
 
+
+			$data['activity_name'] = 'view';
 			
 			if($numFound>0){
 				$this->load->view('xml-view', $data);
 			}else show_404('page');
-		
+			
 		}
-		else 
-		{
-			show_404('page');
-		}
+	
 	}
 
 	public function viewitem($key){
@@ -86,6 +116,8 @@ class View extends CI_Controller {
 			
 			$this->load->library('user_agent');
 			$data['user_agent']=$this->agent->browser();
+			
+			$data['activity_name'] = 'print-view';
 			
 			$this->load->view('print-view', $data);
 		}else{
