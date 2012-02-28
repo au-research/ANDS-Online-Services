@@ -208,7 +208,7 @@ $relation_types2));
 		if(isset($object->{'response'}->{'docs'}[0])){
 		$keyList = $object->{'response'}->{'docs'}[0]->{'relatedObject_key'};
 		$relationshipList = $object->{'response'}->{'docs'}[0]->{'relatedObject_relation'};
-		
+		$relationship = '';
 		for($i=0;$i<count($keyList);$i++)
 		{
 			if($keyList[$i]==$key) $relationship = $relationshipList[$i];
@@ -263,6 +263,11 @@ $relation_types2));
         				{
         					$relatedKeys[] = $r->{'relatedObject_key'}[$i];
         					$data[$class]['relationship'][] = $r->{'relatedObject_relation'}[$i];
+        					if(isset( $r->{'relatedObject_relation_description'}[$i])){
+       							$data[$class]['relationship_description'][] = $r->{'relatedObject_relation_description'}[$i];  
+        					}else{
+        						$data[$class]['relationship_description'][] = 'null';
+        					}      					
          					$data[$class]['relatedKey'][] = $r->{'relatedObject_key'}[$i];       					
         				}
         			}
@@ -319,7 +324,12 @@ $relation_types2));
         				if($r->{'relatedObject_relatedObjectType'}[$i]==$types)
         				{
         					$relatedKeys[] = $r->{'relatedObject_key'}[$i];
-        					$data[$types]['relationship'][] = $r->{'relatedObject_relation'}[$i];        					
+        					$data[$types]['relationship'][] = $r->{'relatedObject_relation'}[$i]; 
+        					if(isset($r->{'relatedObject_relation_description'}[$i])){
+       							$data[$types]['relationship_description'][] = $r->{'relatedObject_relation_description'}[$i];       
+        					}else{
+       							$data[$types]['relationship_description'][] = 'null';               					
+        					}				       					
          					$data[$types]['relatedKey'][] = $r->{'relatedObject_key'}[$i];          				
         				}
         			}
@@ -363,6 +373,7 @@ $relation_types2));
         	}        	
         }else{
         	$relatedKeys = '';
+        	$relatedDescriptions = '';
 			if($types='undefined')$types = null;
          	$data['json'] =$this->solr->getRelated($key,$class,$types); 
         	$relatedKeys = array();
@@ -375,6 +386,7 @@ $relation_types2));
         			if($r->{'relatedObject_relatedObjectClass'}[$i]==$class)
         			{
         				$relatedKeys[] = $r->{'relatedObject_key'}[$i];
+        				$relatedDescriptions[] = $r->{'relatedObject_relation_description'}[$i];
          			}
         		} 
         	} 
