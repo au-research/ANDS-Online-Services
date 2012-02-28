@@ -29,6 +29,7 @@ class Search extends CI_Controller {
 		}else{	
 			$this->load->library('user_agent');
 			$data['user_agent']=$this->agent->browser();
+			$data['activity_name'] = 'search';
 			$this->load->view('layout', $data);
 		}
 	}

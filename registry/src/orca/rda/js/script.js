@@ -14,7 +14,7 @@ $(document).ready(function(){
 	var researchGroupSort = 'index';
 	var subjectSort = 'index';
 	var typeSort = 'index';
-
+	//alert(base_url);
 	//router
 		
 	if(window.location.href.indexOf('https://')==0){
@@ -23,6 +23,7 @@ $(document).ready(function(){
 		window.location.href=thisurl;
 	}
 		
+	/*
 	if(window.location.href.indexOf('/view')>=0){
 		initViewPage();
 		if(window.location.href.indexOf('printview')>=0) initPrintViewPage();
@@ -39,6 +40,42 @@ $(document).ready(function(){
 	}else if(window.location.href.indexOf('preview')>=0){
 		initPreviewPage();
 	}
+	*/
+	if(window.location.href==secure_base_url)
+	{
+			window.location.href=base_url;
+	}
+		
+	if ($('#rda_activity_name').text() == "view")
+	{
+		initViewPage();
+	} 
+	else if ($('#rda_activity_name').text() == "print-view")
+	{
+		initPrintViewPage();
+	} 
+	else if ($('#rda_activity_name').text() == "homepage")
+	{
+		initHomePage();
+	}
+    else if ($('#rda_activity_name').text() == "search")
+   	{
+   		initSearchPage();
+   	}
+    else if ($('#rda_activity_name').text() == "contact")
+   	{
+   		initContactPage();
+   	}
+    else if ($('#rda_activity_name').text() == "help")
+   	{
+   		initHelpPage();
+   	}
+	else if ($('#rda_activity_name').text() == "preview")
+   	{
+   		initPreviewPage();
+   	}
+	
+	
 	$('#clearSearch').tipsy({live:true, gravity:'se'});
 	
 	function initSearchPage(){
@@ -397,9 +434,14 @@ $(document).ready(function(){
 	
 	function initViewPage(){
 
-		drawMap();//map drawing
-		
-		
+		try
+		{
+			drawMap();//map drawing
+		} catch (e)
+		{
+			console.log("Map could not be loaded/drawn.");
+		}
+
 		if(!$.browser.msie){
 		//hide all descriptions and headings
 		$('.descriptions div, .descriptions h3').hide();
@@ -412,6 +454,7 @@ $(document).ready(function(){
 				}
 			}
 		});
+		
 		
 		
 		//if there is no brief, brief will be the first full
