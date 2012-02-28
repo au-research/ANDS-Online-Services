@@ -1074,4 +1074,11 @@ function printHeader($months)
 		<?php 
 	}	
 }
+
+function convert_isosql_date_to_xsdatetime($date_string)
+{
+	$date_string = preg_replace("/^([-\\d]*) (.*)/", "\${1}T\${2}", $date_string);
+	return $date_string;
+}
+
 ?>

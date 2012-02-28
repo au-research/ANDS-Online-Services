@@ -168,7 +168,7 @@ function formatDateTimeWithMask($datetime, $mask)
 			//if($timeArray[$i] != null && $timeZoneArray[$i] != null)
 			//	$timeArray[$i] = $timeArray[$i] - $timeZoneArray[$i];
 			//}
-			$datetime = substr($datetime,0, $Tpos)." ".$timeArray[0].":00:00".$gmt_p_m.$timeZoneArray[0];
+			$datetime = substr($datetime,0, $Tpos)."T".$timeArray[0].":00:00".$gmt_p_m.$timeZoneArray[0];
 		}		
 	}
 	
