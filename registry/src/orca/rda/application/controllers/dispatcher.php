@@ -17,13 +17,11 @@ limitations under the License.
 **/ 
 ?>
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-
 /**
 Dispatcher class will receive all requests which do not match a higher
 defined $route in config.php. The dispatcher acts as an emulator for the
 CodeIgniter Reactor controller and dispatches requests to the appropriate
 controller/method (where it exists) based on the URL parameters.
-
 The purpose of the dispatcher is to provide logic for handling "psuedo"/
 "friendly" URLs such as URLs containing record titles or root-level view
 records (i.e. url.org.au/fish_in_the_antarctic_region).
@@ -41,7 +39,6 @@ class Dispatcher extends CI_Controller {
 
 	public function _remap($method, $params = array())
 	{		
-
 		if (file_exists(APPPATH.'controllers/'.$method.EXT))
 		{
 			include(APPPATH.'controllers/'.$method.EXT);
@@ -105,13 +102,16 @@ class Dispatcher extends CI_Controller {
 		}
 		
 	}
-	
-	function _generateInitialMappings()
-	{
-		$this->db->save_queries = false; 
 
-		/*
+	
+	function _generateInitialMappings($method)
+	{
+
+		$mapping = '';
+		if ($method == '') return false;
+		
 		$query = $this->db->select('registry_object_key, display_title')->get('dba.tbl_registry_objects');
+		$this->db->save_queries = false; 
 		foreach ($query->result() as $row)
 		{
 			
@@ -134,8 +134,7 @@ class Dispatcher extends CI_Controller {
 			$this->db->update('dba.tbl_registry_objects', $data, "registry_object_key = " . $row->registry_object_key);
 		
 		}
-		*/
-		
+
 	}
 	
 	
@@ -179,5 +178,4 @@ class Dispatcher extends CI_Controller {
 	
 
 }
-
 ?>

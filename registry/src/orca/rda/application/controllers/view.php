@@ -41,7 +41,6 @@ class View extends CI_Controller {
 		// XXX: TODO: If slug != record's expected slug, we should redirect
 		if (!is_null($key))
 		{
-
 			redirect(base_url().getSlugForRecordByKey($key));
 		
 		}
@@ -71,7 +70,6 @@ class View extends CI_Controller {
 			}
 			
 			
-
 			
 			$this->load->model('RegistryObjects', 'ro');
 			$this->load->model('solr');
@@ -93,16 +91,11 @@ class View extends CI_Controller {
 			$this->load->library('user_agent');
 			$data['user_agent']=$this->agent->browser();
 
-
-
 			$data['activity_name'] = 'view';
-
 			
 			if($numFound>0){
 				$this->load->view('xml-view', $data);
 			}else show_404('page');
-
-		
 		}
 		else 
 		{
