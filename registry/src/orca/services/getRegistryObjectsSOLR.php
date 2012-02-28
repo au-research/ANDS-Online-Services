@@ -179,7 +179,7 @@ else if($key && $foo)
 	$rifcs .='                 xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects '.gRIF2_SCHEMA_URI.'">'."\n";
 	if($registryObject = getRegistryObject($key))
 	{
-		$rifcs .= getRegistryObjectXMLforSOLR($key);
+		$rifcs .= getRegistryObjectXMLforSOLR($key, true);
 		
 	}
 	$rifcs .= "</registryObjects>\n";
@@ -200,7 +200,7 @@ else if($key)
 	$rifcs .='                 xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects '.gRIF2_SCHEMA_URI.'">'."\n";
 	if($registryObject = getRegistryObject($key))
 	{
-		$rifcs .= getRegistryObjectXMLforSOLR($key);
+		$rifcs .= getRegistryObjectXMLforSOLR($key, true);
 		
 	}
 	$rifcs .= "</registryObjects>\n";

@@ -147,6 +147,14 @@
         <xsl:attribute name="name">relatedObject_<xsl:value-of select="local-name()"/></xsl:attribute>
         <xsl:value-of select="@type"/>
     </xsl:element>  
+    <xsl:apply-templates/>
+    </xsl:template>
+
+    <xsl:template match="ro:relatedObject/ro:relation/ro:description">
+    <xsl:element name="field">
+        <xsl:attribute name="name">relatedObject_relation_<xsl:value-of select="local-name()"/></xsl:attribute>
+        <xsl:value-of select="."/>
+    </xsl:element>  
     </xsl:template>
     
     <!--temporal>

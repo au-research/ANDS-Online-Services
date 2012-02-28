@@ -221,7 +221,7 @@ $(document).ready(function(){
 		if(n!=''){
 			res+='/n='+n+'/e='+e+'/s='+s+'/w='+w;
 		}
-		if(resultSort!='score desc') res+='/resultSort='+(resultSort);
+		//if(resultSort!='score desc') res+='/resultSort='+(resultSort);
 		if(researchGroupSort!='index') res+='/researchGroupSort='+(researchGroupSort);
 		if(subjectSort!='index') res+='/subjectSort='+(subjectSort);
 		if(typeSort!='index') res+='/typeSort='+(typeSort);
