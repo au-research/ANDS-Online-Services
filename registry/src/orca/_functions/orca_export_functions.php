@@ -1640,6 +1640,12 @@ function getRelationsXMLSOLR($relation_id,$typeArray)
 					$lang = ' xml:lang="'.esc($lang).'"';
 				}
 				$description = "          <description$lang>".esc($element['description'])."</description>\n";
+			}else{
+				if( $lang = $element['lang'] )
+				{
+					$lang = ' xml:lang="'.esc($lang).'"';
+				}
+				$description = "          <description$lang>null</description>\n";
 			}
 			if( $url = $element['url'] )
 			{
