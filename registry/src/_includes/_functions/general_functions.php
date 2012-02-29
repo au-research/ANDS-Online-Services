@@ -391,6 +391,7 @@ $BENCHMARK_TIME = array(0,0,0,0,0,0,0,0,0,0);
 function bench($idx = 0)
 {
 	global $BENCHMARK_TIME;
+
 	if ($BENCHMARK_TIME[$idx] == 0) 
 	{
 		$BENCHMARK_TIME[$idx] = microtime(true);
