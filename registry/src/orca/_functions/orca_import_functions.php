@@ -1863,7 +1863,7 @@ function runQualityCheckForRegistryObject($registryObjectKey, $dataSourceKey)
 		{
 			$objectClass = "Collection";			
 		}
-		elseif(str_replace("<Servive","",$rifcs)!=$rifcs||str_replace("<service","",$rifcs)!=$rifcs)
+		elseif(str_replace("<Service","",$rifcs)!=$rifcs||str_replace("<service","",$rifcs)!=$rifcs)
 		{
 			$objectClass = "Service";			
 		}
@@ -1903,7 +1903,7 @@ function runQuagmireCheckForRegistryObject($registryObjectKey, $dataSourceKey)
 		{
 			$objectClass = "Collection";			
 		}
-		elseif(str_replace("<Servive","",$rifcs)!=$rifcs||str_replace("<service","",$rifcs)!=$rifcs)
+		elseif(str_replace("<Service","",$rifcs)!=$rifcs||str_replace("<service","",$rifcs)!=$rifcs)
 		{
 			$objectClass = "Service";			
 		}
