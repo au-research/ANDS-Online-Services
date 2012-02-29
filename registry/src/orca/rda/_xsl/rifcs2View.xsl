@@ -110,7 +110,7 @@
     </xsl:template>
 
     <xsl:template match="ro:collection | ro:activity | ro:party | ro:service">
-      	<div id="item-view-inner" class="clearfix" itemscope itemType="http://schema.org/Thing">
+      	<div id="item-view-inner" class="clearfix" itemscope="" itemType="http://schema.org/Thing">
 	
 		<div id="left">           
  		<xsl:choose>
