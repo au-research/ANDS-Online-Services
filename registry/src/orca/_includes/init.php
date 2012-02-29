@@ -30,9 +30,8 @@ define('IN_ORCA', true);
 //define('gRIF_SCHEMA_URI', 'http://'.eHOST.'/'.eROOT_DIR.'/'.'orca/schemata/registryObjects.xsd');
 
 // note: changing this will cause all reharvested records to have a "new record revision" created
-define('gRIF_SCHEMA_URI', 'http://services.ands.org.au/documentation/rifcs/1.3/schema/registryObjects.xsd'); 
-
-define('gRIF2_SCHEMA_URI', 'http://services.ands.org.au/documentation/rifcs/1.3/schema/registryObjects.xsd');
+define('gRIF_SCHEMA_URI', $cosi_root.'/orca/schemata/registryObjects.xsd'); 
+define('gRIF2_SCHEMA_URI', $cosi_root.'/orca/schemata/registryObjects.xsd');
 define('gCURRENT_SCHEMA_VERSION', '1.3');
 
 // Party identifiers to be treated to special display (NLA-specific)

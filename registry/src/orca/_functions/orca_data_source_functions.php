@@ -16,6 +16,15 @@ limitations under the License.
 
 define('gORCA_HARVEST_REQUEST_STATUS_PROCESSING', 'PROCESSING HARVESTER PUT REQUEST');
 
+$rif2solrXSL = new DomDocument();
+$rif2solrXSL->load('../_xsl/rif2solr.xsl');
+$solrXSLTProc = new XSLTProcessor();
+$solrXSLTProc->importStyleSheet($rif2solrXSL);
+
+	
+	
+	
+	
 function runImport($dataSource, $testOnly)
 {
 	$dataSourceProviderType  = $dataSource[0]['provider_type'];
@@ -583,14 +592,11 @@ return $transformResult;
 
 function transformToSolr($registryObjectsXML)
 {
-$qtestxsl = new DomDocument();
-$registryObjects = new DomDocument();
-$registryObjects->loadXML($registryObjectsXML);
-$qtestxsl->load('../_xsl/rif2solr.xsl');
-$proc = new XSLTProcessor();
-$proc->importStyleSheet($qtestxsl);
-$transformResult = $proc->transformToXML($registryObjects);	
-return $transformResult;
+    global $solrXSLTProc;
+	$registryObjects = new DomDocument();
+	$registryObjects->loadXML($registryObjectsXML);
+	$transformResult = $solrXSLTProc->transformToXML($registryObjects);	
+	return $transformResult;
 }
 
 function runSolrIndexForDatasource($dataSourceKey)
