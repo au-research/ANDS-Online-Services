@@ -1466,7 +1466,7 @@ function getUserPartyObject()
 			{
 			  unlink($tempFile);
 			}		
-			$result = $registryObjects->schemaValidate(gRIF2_SCHEMA_URI); //xxx
+			$result = $registryObjects->schemaValidate(gRIF_SCHEMA_PATH); //xxx
 			$errors = error_get_last();
 			if( $errors )
 			{
@@ -1592,7 +1592,7 @@ function updateUserPartyObject($name, $email=null)
 			{
 			  unlink($tempFile);
 			}		
-			$result = $registryObjects->schemaValidate(gRIF2_SCHEMA_URI); //xxx
+			$result = $registryObjects->schemaValidate(gRIF_SCHEMA_PATH); //xxx
 			$errors = error_get_last();
 			if( $errors )
 			{

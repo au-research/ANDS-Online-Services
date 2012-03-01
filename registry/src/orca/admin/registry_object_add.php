@@ -437,7 +437,7 @@ if ( strtoupper(getPostedValue('verb')) == "SAVE" )
 		if( !$errorMessages )
 		{
 			// Validate it against the orca schema.
-			$result = $registryObjects->schemaValidate(gRIF_SCHEMA_URI);
+			$result = $registryObjects->schemaValidate(gRIF_SCHEMA_PATH);
 			$errors = error_get_last();
 			if( $errors )
 			{

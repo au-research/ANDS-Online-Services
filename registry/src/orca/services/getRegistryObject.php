@@ -32,7 +32,7 @@ if($type=='xml'){
 	// =============================================================================
 	$rifcs .='<registryObjects xmlns="http://ands.org.au/standards/rif-cs/registryObjects" '."\n";
 	$rifcs .='                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '."\n";
-	$rifcs .='                 xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects '.gRIF2_SCHEMA_URI.'">'."\n";
+	$rifcs .='                 xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects '.gRIF_SCHEMA_URI.'">'."\n";
 	if( $registryObject )
 	{
 		$rifcs .= getRegistryObjectXML($registryObject[0]['registry_object_key']);
@@ -52,7 +52,7 @@ if($type=='xml'){
 	// =============================================================================
 	$rifcs ='<registryObjects xmlns="http://ands.org.au/standards/rif-cs/registryObjects" '."\n";
 	$rifcs .='                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '."\n";
-	$rifcs .='                 xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects '.gRIF2_SCHEMA_URI.'">'."\n";
+	$rifcs .='                 xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects '.gRIF_SCHEMA_URI.'">'."\n";
 	if( $registryObject )
 	{
 		$rifcs .= getRegistryObjectXML($registryObject[0]['registry_object_key']);
@@ -83,7 +83,7 @@ if($type=='xml'){
 	// =============================================================================
 	$rifcs .='<registryObjects xmlns="http://ands.org.au/standards/rif-cs/registryObjects" '."\n";
 	$rifcs .='                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '."\n";
-	$rifcs .='                 xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects '.gRIF2_SCHEMA_URI.'">'."\n";
+	$rifcs .='                 xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects '.gRIF_SCHEMA_URI.'">'."\n";
 	if( $registryObject )
 	{
 		$rifcs .= getRegistryObjectXML($registryObject[0]['registry_object_key']);

@@ -208,7 +208,7 @@ switch(getQueryValue('action'))
 					      unlink($tempFile);
 					    }
 					  
-						$result = $registryObject->schemaValidate(gRIF2_SCHEMA_URI); //xxx
+						$result = $registryObject->schemaValidate(gRIF_SCHEMA_PATH); //xxx
 						$errors = error_get_last();
 						//print($dataSourceKey);
 						//exit;

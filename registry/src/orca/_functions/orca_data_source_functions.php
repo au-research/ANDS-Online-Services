@@ -81,7 +81,7 @@ function runImport($dataSource, $testOnly)
 			  {
 			    unlink($tempFile);
 			  }
-			  $result = $registryObjects->schemaValidate(gRIF2_SCHEMA_URI); //xxx
+			  $result = $registryObjects->schemaValidate(gRIF_SCHEMA_PATH); //xxx
 			//print($registryObjects->saveXML());
 			//exit;
 			$errors = error_get_last();
@@ -621,7 +621,7 @@ function runSolrIndexForDatasource($dataSourceKey)
 		$rifcs = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
 		$rifcs .='<registryObjects xmlns="http://ands.org.au/standards/rif-cs/registryObjects" '."\n";
 		$rifcs .='                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '."\n";
-		$rifcs .='                 xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects '.gRIF2_SCHEMA_URI.'">'."\n";	
+		$rifcs .='                 xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects '.gRIF_SCHEMA_URI.'">'."\n";	
 		$rifcs .= $rifcsContent;			
 		$rifcs .= "</registryObjects>\n";		
 		$rifcs = transformToSolr($rifcs);									
@@ -710,7 +710,7 @@ function updateRecordsForDataSource($dataSourceKey, $manuallyPublish,$manuallyPu
 				      unlink($tempFile);
 				    }
 				  
-					$registryObject->schemaValidate(gRIF2_SCHEMA_URI); //xxx
+					$registryObject->schemaValidate(gRIF_SCHEMA_PATH); //xxx
 
 					$importErrors = importRegistryObjects($registryObject,$dataSourceKey, $resultMessage, getLoggedInUser(), $status, $owner, null, true);       
 					if( !$importErrors )
