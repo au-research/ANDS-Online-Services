@@ -18,7 +18,7 @@ $gXPath = null; // An XPATH object to use for parsing the XML.
 $xs = 'rif';    // The default namespace prefix to register for use by XPATH.
 $dataSourceKey = '';
 $rmdQualityTest = new DomDocument();
-$rmdQualityTest->load('../_xsl/rmd_quality_test.xsl');
+$rmdQualityTest->load(eAPPLICATION_ROOT.'/orca/_xsl/rmd_quality_test.xsl');
 $proc = new XSLTProcessor();
 $proc->importStyleSheet($rmdQualityTest);
 

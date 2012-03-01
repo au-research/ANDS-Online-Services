@@ -17,7 +17,7 @@ limitations under the License.
 define('gORCA_HARVEST_REQUEST_STATUS_PROCESSING', 'PROCESSING HARVESTER PUT REQUEST');
 
 $rif2solrXSL = new DomDocument();
-$rif2solrXSL->load('../_xsl/rif2solr.xsl');
+$rif2solrXSL->load(eAPPLICATION_ROOT.'/orca/_xsl/rif2solr.xsl');
 $solrXSLTProc = new XSLTProcessor();
 $solrXSLTProc->importStyleSheet($rif2solrXSL);
 
