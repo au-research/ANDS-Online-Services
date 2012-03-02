@@ -640,43 +640,23 @@ Handle:
     </xsl:template>
     
    <xsl:template match="ro:relatedInfo">
-        <p>
-       <!--     <xsl:if test="./ro:title">
-            	      <xsl:value-of select="./ro:title"/><br />
-          </xsl:if>--> 
-            	
-            <xsl:choose>
-			<xsl:when test="./ro:identifier/@type='uri'" > 			
-            	<xsl:apply-templates match="./ro:identifier" mode="uri"/><br />
-            			</xsl:when>
-      		 
-             <xsl:when test="./ro:identifier/@type='purl'">         			
-            	<xsl:apply-templates match="./ro:identifier" mode="purl"/><br />
-            	</xsl:when>
-              
-           	<xsl:when test="./ro:identifier/@type='doi'">          			
-            	<xsl:apply-templates match="./ro:identifier" mode="doi"/><br />
-            			</xsl:when>
-             <xsl:when test="./ro:identifier/@type='handle'">          			
-            	<xsl:apply-templates match="./ro:identifier" mode="handle"/><br />
-            </xsl:when>   
-             <xsl:when test="./ro:identifier/@type='AU-ANL:PEAU'">          			
-            	<xsl:apply-templates match="./ro:identifier" mode="nla"/><br />
-            </xsl:when>  
-             <xsl:when test="./ro:identifier/@type='ark'">          			
-            	<xsl:apply-templates match="./ro:identifier" mode="ark"/><br />
-            </xsl:when>                               
-            			<xsl:otherwise>
-                 <br /><xsl:value-of select="./ro:identifier/@type"/>: <xsl:value-of select="./ro:identifier"/><br />   			
-            			</xsl:otherwise>          		
-            		</xsl:choose>
-			<br />
-           
-               
-            <xsl:if test="ro:notes">
-                    <xsl:apply-templates select="ro:notes"/>
-            </xsl:if>
-        </p>        
+         <p>
+
+   		 <xsl:if test="./ro:title">
+         	<xsl:value-of select="./ro:title"/><br />
+         </xsl:if>
+   		<xsl:apply-templates select="./ro:identifier[@type='doi']" mode = "doi"/>
+    	<xsl:apply-templates select="./ro:identifier[@type='ark']" mode = "ark"/>    	
+     	<xsl:apply-templates select="./ro:identifier[@type='AU-ANL:PEAU']" mode = "nla"/>  
+     	<xsl:apply-templates select="./ro:identifier[@type='handle']" mode = "handle"/>   
+     	<xsl:apply-templates select="./ro:identifier[@type='purl']" mode = "purl"/>
+    	<xsl:apply-templates select="./ro:identifier[@type='uri']" mode = "uri"/> 
+ 		<xsl:apply-templates select="./ro:identifier[not(@type =  'doi' or @type =  'ark' or @type =  'AU-ANL:PEAU' or @type =  'handle' or @type =  'purl' or @type =  'uri')]" mode="other"/>			            	
+                         
+        <xsl:if test="./ro:notes">
+             <xsl:apply-templates select="./ro:notes"/>
+        </xsl:if>
+        </p>                
     </xsl:template>
     
     <xsl:template match="ro:citationInfo/ro:fullCitation">
