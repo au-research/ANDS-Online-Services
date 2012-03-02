@@ -19,8 +19,8 @@ $xs = 'rif';    // The default namespace prefix to register for use by XPATH.
 $dataSourceKey = '';
 $rmdQualityTest = new DomDocument();
 $rmdQualityTest->load(eAPPLICATION_ROOT.'/orca/_xsl/rmd_quality_test.xsl');
-$proc = new XSLTProcessor();
-$proc->importStyleSheet($rmdQualityTest);
+$qaProc = new XSLTProcessor();
+$qaProc->importStyleSheet($rmdQualityTest);
 
 function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMessage, $created_who=SYSTEM, $status=PUBLISHED, $record_owner=SYSTEM, $xPath=NULL, $override_qa=false)
 {
@@ -1764,25 +1764,25 @@ function getRelatedXml($dataSource,$rifcs,$objectClass){
 
 function runQualityCheck($rifcs, $objectClass, $dataSource, $output, $relatedObjectClassesStr='')
 {
-	global $proc;
+	global $qaProc;
 	$relRifcs = getRelatedXml($dataSource,$rifcs,$objectClass);
 	$registryObjects = new DomDocument();
 	$registryObjects->loadXML($relRifcs);
-	$proc->setParameter('', 'dataSource', $dataSource);
-	$proc->setParameter('', 'output', $output);
-	$proc->setParameter('', 'relatedObjectClassesStr', $relatedObjectClassesStr);
-	$result = $proc->transformToXML($registryObjects);
+	$qaProc->setParameter('', 'dataSource', $dataSource);
+	$qaProc->setParameter('', 'output', $output);
+	$qaProc->setParameter('', 'relatedObjectClassesStr', $relatedObjectClassesStr);
+	$result = $qaProc->transformToXML($registryObjects);
 	return $result;		
 }
 
 
 function runQualityCheckonDom($registryObjects, $dataSource, $output, $relatedObjectClassesStr)
 {
-	global $proc;
-	$proc->setParameter('', 'dataSource', $dataSource);
-	$proc->setParameter('', 'output', $output);
-	$proc->setParameter('', 'relatedObjectClassesStr', $relatedObjectClassesStr);
-	$result = $proc->transformToXML($registryObjects);
+	global $qaProc;
+	$qaProc->setParameter('', 'dataSource', $dataSource);
+	$qaProc->setParameter('', 'output', $output);
+	$qaProc->setParameter('', 'relatedObjectClassesStr', $relatedObjectClassesStr);
+	$result = $qaProc->transformToXML($registryObjects);
 	return $result;		
 }
 
