@@ -442,7 +442,7 @@ function displayMMRRecordTable($status, array $record_set = array(), array $butt
 			}
 			?>
 			<td><div style="overflow:hidden;white-space: nowrap; width:100px;"><a <?php echo 'onclick="'.$onClickLink.'"'; ?> class="nodecor" title="<?php echo htmlentities($record['key']);?>"><?php echo htmlentities($record['key']);?></a></div></td>
-			<td><div style="overflow:hidden; white-space: nowrap; width:200px;"><a <?php echo 'title="'.$record['title'].'" onclick="'.$onClickLink.'"'; ?> class="nodecor"><?php echo $record['title'];?></a></div></td>
+			<td><div style="overflow:hidden; white-space: nowrap; width:200px;"><a <?php echo 'title="'.htmlentities($record['title']).'" onclick="'.$onClickLink.'"'; ?> class="nodecor"><?php echo htmlentities($record['title']);?></a></div></td>
 			<td><?php echo $record['created']; if ($record['last_changed_by'] != '') { echo "<br/><span class='mmr_changed_by'>by: " . $record['last_changed_by'] . "</span>"; }?></td>
 			<td><?php echo $record['class'];?></td>
 			<td><span class="mmr_infoControl">
