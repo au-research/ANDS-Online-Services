@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 *******************************************************************************/
-require_once(eAPPLICATION_ROOT.'/global_config.php');
+require_once('../global_config.php');
 
 // If not running within COSI, include COSI's environment variables
 // (needed for "lightweight" activities such as fetch_element)
