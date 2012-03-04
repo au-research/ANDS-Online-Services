@@ -13,12 +13,12 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 *******************************************************************************/
-require_once('../global_config.php');
+
 
 // If not running within COSI, include COSI's environment variables
 // (needed for "lightweight" activities such as fetch_element)
 if (!defined("eHOST")) { require '../_includes/_environment/application_env.php'; }
-
+require_once(eAPPLICATION_ROOT.'/global_config.php');
 // Use to prevent direct access to certain scripts
 define('IN_ORCA', true);
 
