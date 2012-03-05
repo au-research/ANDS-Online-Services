@@ -1214,6 +1214,8 @@ function saveAndPreview() {
 		{
 			alert(document.forms[0].elements[i].name + " : "  +document.forms[0].elements[i].value);
 		} */
+		// Run a filter to trim spaces as appropriate
+		$('.input_filter_trim_spaces').each(function(){ $('#' + this.id).val($.trim($('#' + this.id).val())) });
 	
 	$.post(
 		'process_registry_object.php?task=save&userMode=' + userMode + '&data_source='+encodeURIComponent($('#object_mandatoryInformation_dataSource').val())+'&key=' + $.urlParam('key'),

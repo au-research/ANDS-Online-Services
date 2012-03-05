@@ -667,7 +667,7 @@ $_strings['*_mandatoryInformation'] = <<<HTMLEND
 												<tr> 
 													<td><label for="object_mandatoryInformation_key" class="mandatory">Key:</label></td> 
 													<td onclick="getHelpText('collection_key');"> 
-														<input onKeyUp="checkMandatoryFields(this.id)" onChange="checkMandatoryFields(this.id)" type="text" value="" id="object_mandatoryInformation_key" name="object.mandatoryInformation.key" maxlength="255" size="30" />
+														<input onKeyUp="checkMandatoryFields(this.id)" onChange="checkMandatoryFields(this.id)" type="text" value="" id="object_mandatoryInformation_key" name="object.mandatoryInformation.key" class="input_filter_trim_spaces" maxlength="255" size="30" />
 														<br/>
 														<span class="inputFormat">Key must be unique and is case-sensitive</span>
 													</td> 
@@ -911,7 +911,7 @@ $_strings['*_relatedObject'] = <<<HTMLEND
 												<tr>
 													<td width="39px" style="font-weight:normal;"><label class="mandatory" for="object_relatedObject_%%SEQNUM1%%_key_1_value">Key:</label></td>
 													<td style="font-size:0.9em;" width="300px" onclick="getHelpText('collection_related_object_key');">
-															<input class="relatedObjectKey" type="text" onKeyUp="getRelatedObjectClass(this.id); testRelatedKey(this.id);" onChange="getRelatedObjectClass(this.id); testRelatedKey(this.id);" id="object_relatedObject_%%SEQNUM1%%_key_1_value" name="object.relatedObject[%%SEQNUM1%%].key[1].value" maxlength="512" size="30" style="display:inline;" /><img name="relatedImg" src="{$eAPP_ROOT}orca/_images/preview.png" onClick='showSearchModal("object_relatedObject_%%SEQNUM1%%_key_1");' style="cursor:pointer; display:inline; margin-left:8px; vertical-align:bottom; height:16px; width:16px;" />	
+															<input class="relatedObjectKey input_filter_trim_spaces" type="text" onKeyUp="getRelatedObjectClass(this.id); testRelatedKey(this.id);" onChange="getRelatedObjectClass(this.id); testRelatedKey(this.id);" id="object_relatedObject_%%SEQNUM1%%_key_1_value" name="object.relatedObject[%%SEQNUM1%%].key[1].value" maxlength="512" size="30" style="display:inline;" /><img name="relatedImg" src="{$eAPP_ROOT}orca/_images/preview.png" onClick='showSearchModal("object_relatedObject_%%SEQNUM1%%_key_1");' style="cursor:pointer; display:inline; margin-left:8px; vertical-align:bottom; height:16px; width:16px;" />	
 															<input type="hidden" id="object_relatedObject_%%SEQNUM1%%_key_1_roclass" name="object.relatedObject[%%SEQNUM1%%].key[1].roclass" value=""/>													
 													</td>
 													<td><div class="fieldError" name="errors_relatedObject_%%SEQNUM1%%_key_1_value" style=""></div></td>
