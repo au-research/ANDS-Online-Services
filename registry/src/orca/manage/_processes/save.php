@@ -27,8 +27,9 @@ if($json)
 	$test_array = json_decode($json, true);
 	$objectClass = $test_array['objectClass'];
 	$test_array['mandatoryInformation']['key'] = trim(urldecode($test_array['mandatoryInformation']['key']));
-	$objectDataSource = rawurldecode($test_array['mandatoryInformation']['dataSource']);
-	$dateCreated = rawurldecode($test_array['mandatoryInformation']['dateAccessioned']);
+	$objectDataSource = urldecode($test_array['mandatoryInformation']['dataSource']);
+	$dateCreated = urldecode($test_array['mandatoryInformation']['dateAccessioned']);
+	$dateCreated = str_replace ('__THEPLUSSIGN__', '+', $dateCreated);
 	
 	$xml__text = $a2xml->array2xml($test_array);
 	$xml__text = str_replace ('__THEPLUSSIGN__', '+', $xml__text);
