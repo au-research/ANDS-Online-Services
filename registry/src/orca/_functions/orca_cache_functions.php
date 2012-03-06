@@ -1,6 +1,4 @@
 <?php
-error_reporting(E_ALL);
-
 function generateExtendedRIFCS($registry_object_key)
 {
 	// "Extended RIFCS" contains values such as number of related links, display title, etc. 

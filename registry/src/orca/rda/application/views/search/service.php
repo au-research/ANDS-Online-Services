@@ -54,7 +54,7 @@ limitations under the License.
 		//print_r($r);
 		$type = $r->{'type'};
 		$ro_key = $r->{'key'};
-		$name = $r->{'listTitle'};
+		$name = $r->{'list_title'};
 		$class = $r->{'class'};
 		$group = $r->{'group'};
 		$status = $r->{'status'};

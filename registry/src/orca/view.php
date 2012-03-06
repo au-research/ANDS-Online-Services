@@ -171,6 +171,8 @@ if( $registryObject )
 	if( userIsDataSourceRecordOwner($registryObjectDataSourceRecordOwner) || userIsORCA_ADMIN() )
 	{
 		drawRecordField("Source:",  esc($registryObjectSource));
+		// temporary
+		drawRecordField("DEBUG! URL:", esc(getRegistryObjectURLSlug($registryObjectKey)));
 	}
 	drawRecordField("Originating Source:", $originatingSourceHTML);
 	drawRecordField("Group:", esc($objectGroup));
