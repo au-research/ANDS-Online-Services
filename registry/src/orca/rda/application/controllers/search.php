@@ -149,7 +149,9 @@ $relation_types2));
 		"Participant in" => "Part of",
 		"Part of" => "Participant in",
 		"Has collector"	 => "Aggregated by",
-		"Aggregated by" => "Has collector",					
+		"Aggregated by" => "Has collector",	
+		"Enriched by" => "Enriches",
+		"Enriches" => "Enriched by"							
 		);
 		}
 		elseif($class=='collection')
@@ -168,25 +170,38 @@ $relation_types2));
 			"isOutputOf" => "Outputs",		
 			"Owned by" => "Owns",
 			"Contains" => "Part of",
-			"Supports" => "Supports",
+			"Supports" => "Supported by",
 			"Enriched by" => "Enriches",
 			"Available through" => "Makes available",
 			"Makes available" => "Available through",	
 			"Has collector"	 => "Collector of",	
+			"Derived from" => "Derived collection",
+			"Produced by" => "Produces",	
+			"Operated on by" => "Operates on",	
+			"Adds value to "=> "Value added by",	
+			"Derived collection" => "Derived from"
 		);		
 		}
 		elseif($class=='service')
 		{
 		$typeArray = array(
 			"Associated with" => "Associated with",
-			"Has part" => "Includes",
+			"Part of" => "Includes",
 			"Managed by" => "Manages",
 			"Manages" => "Managed by",			
 			"Owned by" => "Owns",
 			"Part of" => "Has part",
 			"Supported by" => "Supports",
 			"Available through" => "Makes available",
-			"Makes available" => "Available through",			
+			"Makes available" => "Available through",
+			"Includes" => "Part of",
+			"Produces" => "Produced by",
+			"Produced by" => "Produces",
+			"Presents" => "Presented by",
+			"Operates on" => "Operated on by",
+			"Operated on by" => "Operates on",	
+			"Adds value to" => "Value added by",
+			"Value added by" => "Adds value to",						
 		);
 		}
 		else
