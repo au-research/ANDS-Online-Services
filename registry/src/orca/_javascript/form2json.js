@@ -88,7 +88,8 @@
 				
 				// Populate the data field
 				if ((j+1) == nameParts.length) {
-					eval("result" + currParentArray + " = '" + escape(value) + "';");					
+				
+					eval("result" + currParentArray + " = '" + escape(value).replace(/\+/g,'__THEPLUSSIGN__') + "';");					
 				}
 				
 				if (arrIdx != null) // currParentArray.indexOf("]") && 

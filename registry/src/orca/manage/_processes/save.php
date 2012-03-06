@@ -22,14 +22,16 @@ if($json)
 
 	$a2xml = new assoc_array2xml();
 	$rifcs = new DomDocument();
-	$json2rif_xsl = new DomDocument();		
+	$json2rif_xsl = new DomDocument();
+	
 	$test_array = json_decode($json, true);
 	$objectClass = $test_array['objectClass'];
 	$test_array['mandatoryInformation']['key'] = trim(urldecode($test_array['mandatoryInformation']['key']));
-	$objectDataSource = urldecode($test_array['mandatoryInformation']['dataSource']);
-	$dateCreated = urldecode($test_array['mandatoryInformation']['dateAccessioned']);
+	$objectDataSource = rawurldecode($test_array['mandatoryInformation']['dataSource']);
+	$dateCreated = rawurldecode($test_array['mandatoryInformation']['dateAccessioned']);
 	
 	$xml__text = $a2xml->array2xml($test_array);
+	$xml__text = str_replace ('__THEPLUSSIGN__', '+', $xml__text);
 	$xml__text = str_replace ('%26', '&amp;', $xml__text);
 
 	$rifcs->loadXML(trim($xml__text));
