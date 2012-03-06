@@ -84,6 +84,7 @@ function getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR = false, $inclu
 		{
 			$xml .= "    <extRif:extendedMetadata>\n";
 
+
 			// url_slug
 			// -------------------------------------------------------------
 			$xml .= '      <extRif:urlSlug>'.esc(trim(getRegistryObjectURLSlug($registryObjectKey))).'</extRif:urlSlug>'."\n";
