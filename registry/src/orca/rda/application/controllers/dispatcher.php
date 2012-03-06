@@ -40,6 +40,7 @@ class Dispatcher extends CI_Controller {
 
 	public function _remap($method, $params = array())
 	{		
+
 		if (file_exists(APPPATH.'controllers/'.$method.EXT))
 		{
 			include(APPPATH.'controllers/'.$method.EXT);
@@ -120,9 +121,7 @@ class Dispatcher extends CI_Controller {
 			);
 			$this->db->insert('dba.tbl_url_mappings', $data); 
 		}
-		*/
-		
-		/*
+
 		$query = $this->db->select('registry_object_key')->get('dba.tbl_registry_objects');
 		foreach ($query->result() as $row)
 		{
@@ -135,6 +134,45 @@ class Dispatcher extends CI_Controller {
 		}
 		*/
 		
+	}
+	
+	
+	
+	function _generateUniqueSlug($display_title, $key)
+	{
+		
+		$slug = generateSlug($display_title);
+		//no name/title
+		if ($slug == self::NO_NAME_OR_TITLE_SLUG)
+		{
+			$slug = generateSlug($key);
+		}
+
+		$existing_mappings = $this->db
+						        ->where('url_fragment', $slug)
+						        ->where('registry_object_key != ', $key)
+						        ->count_all_results('dba.tbl_url_mappings');
+
+		if ($existing_mappings > 0)
+		{
+			$key_slug = generateSlug($key);
+			if ($slug != $key_slug)
+			{
+				$slug .= "-" . $key_slug;
+			}
+		}
+		
+		while ($existing_mappings > 0)
+		{
+			$slug .= "-";
+			$query = $this->db
+					        ->where('url_fragment', $slug)
+					        ->where('registry_object_key != ', $key)
+							->count_all_results('dba.tbl_url_mappings');
+		}
+		
+		
+		return $slug; 
 	}
 	
 

@@ -20,6 +20,10 @@ $Revision: 1633 $
 
 function getRegistryObjectXML($registryObjectKey, $forSOLR = false, $includeRelated = false)
 {
+	if (!eCACHE_ENABLED)
+	{
+		return getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR, $includeRelated);
+	}
 	
 	$data_source_key = getRegistryObjectDataSourceKey($registryObjectKey);
 	return getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR, $includeRelated);
@@ -77,6 +81,12 @@ function getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR = false, $inclu
 		if ($forSOLR)
 		{
 			$xml .= "    <extRif:extendedMetadata>\n";
+			
+			// url_slug
+			// -------------------------------------------------------------
+			$xml .= '      <extRif:urlSlug>'.esc(trim(getRegistryObjectURLSlug($registryObjectKey))).'</extRif:urlSlug>'."\n";
+			
+			
 			$hash = getRegistryObjectHash($registryObjectKey);
 			if ($hash)
 			{
@@ -131,7 +141,6 @@ function getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR = false, $inclu
 			// listTitle
 			// -------------------------------------------------------------
 			$xml .= '      <extRif:listTitle>'.esc(trim($registryObject[0]['list_title'])).'</extRif:listTitle>'."\n";
-			
 			
 			// searchBaseScore (base "boost" used to adjust search rankings)
 			$baseScore = eBOOST_DEFAULT_BASE;

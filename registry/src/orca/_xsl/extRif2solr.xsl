@@ -60,9 +60,6 @@
       			<xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:feedType"/>
         	</xsl:otherwise>
         </xsl:choose>
-
-
-
             <xsl:element name="field">
                 <xsl:attribute name="name">group</xsl:attribute>
                 <xsl:value-of select="@group"/>
