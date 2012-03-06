@@ -43,6 +43,7 @@ class Dispatcher extends CI_Controller {
 
 	public function _remap($method, $params = array())
 	{		
+
 		if (file_exists(APPPATH.'controllers/'.$method.EXT))
 		{
 			include(APPPATH.'controllers/'.$method.EXT);
@@ -105,15 +106,13 @@ class Dispatcher extends CI_Controller {
 		}
 		
 	}
-	/*
-	function _generateInitialMappings($method)
+	
+	function _generateInitialMappings()
 	{
-
-		$mapping = '';
-		if ($method == '') return false;
-		
-		$query = $this->db->select('registry_object_key, display_title')->get('dba.tbl_registry_objects');
 		$this->db->save_queries = false; 
+
+		/*
+		$query = $this->db->select('registry_object_key, display_title')->get('dba.tbl_registry_objects');
 		foreach ($query->result() as $row)
 		{
 			
@@ -125,9 +124,23 @@ class Dispatcher extends CI_Controller {
 			);
 			$this->db->insert('dba.tbl_url_mappings', $data); 
 		}
+		*/
+		
+		/*
+		$query = $this->db->select('registry_object_key')->get('dba.tbl_registry_objects');
+		foreach ($query->result() as $row)
+		{
+			$data = array(
+			   'url_slug' => getSlugForRecordByKey($row->registry_object_key)
+		    );
+		   
+			$this->db->update('dba.tbl_registry_objects', $data, "registry_object_key = " . $row->registry_object_key);
+		
+		}
+		*/
 		
 	}
-	*/
+	
 	
 	function _generateUniqueSlug($display_title, $key)
 	{

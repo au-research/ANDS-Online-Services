@@ -15,6 +15,7 @@
     <xsl:template match="ro:registryObject">
         <doc>
             <xsl:apply-templates select="ro:key"/>
+			<xsl:apply-templates select="extRif:extendedMetadata/extRif:urlSlug"/>
             <xsl:apply-templates select="extRif:extendedMetadata/extRif:keyHash"/>
             <xsl:apply-templates select="extRif:extendedMetadata/extRif:status"/>
             <xsl:apply-templates select="extRif:extendedMetadata/extRif:reverseLinks"/> 
@@ -43,6 +44,14 @@
         </xsl:element>       
     </xsl:template>
     
+    <xsl:template match="extRif:urlSlug">
+        <xsl:element name="field">
+            <xsl:attribute name="name">url_slug</xsl:attribute>
+            <xsl:value-of select="."/>
+        </xsl:element>       
+    </xsl:template>
+	
+	
     <xsl:template match="extRif:keyHash">
         <xsl:element name="field">
             <xsl:attribute name="name">key_hash</xsl:attribute>

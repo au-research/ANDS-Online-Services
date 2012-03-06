@@ -2531,6 +2531,21 @@ function getRegistryObjectRegistryDateModified($registry_object_key)
 }
 
 
+function getRegistryObjectURLSlug($registry_object_key)
+{
+	global $gCNN_DBS_ORCA;
+	$strQuery = 'SELECT url_slug FROM dba.tbl_registry_objects WHERE registry_object_key = $1';
+	$params = array($registry_object_key);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+
+	if (!isset($resultSet[0])) 
+		return false;
+	else 
+		return $resultSet[0]['url_slug'];
+	
+}
+
+
 
 
 
