@@ -112,7 +112,7 @@ if($maintenance & !in_array($ip, $white_list_ip)){
 $gSessionTimeoutMinutes = 120;
 
 /*====================================
-<<<<<<< HEAD
+
         LDAP AUTHENTICATION SERVER (optional)
 ====================================*/
 // -----------------------------------------------------------------------------
@@ -148,5 +148,32 @@ $dois_db_port = 5432;
 $dois_db_name = 'dois';
 //======================================
 
+/*====================================
+DOI ENVIRONMENT
+====================================*/
+define('gDOIS_DATACENTRE_BASE_URI', "https://mds.datacite.org/datacentre");
+define('gDOIS_DATACENTRE_USERNAME', "***");
+define('gDOIS_DATACENTRE_PASSWORD', "***");
+
+define('gDOIS_DATACENTRE_NAME_PREFIX', "ANDS");
+define('gDOIS_DATACENTRE_NAME_MIDDLE', "CENTRE");  //for production
+
+$gDOIS_PREFIX_TYPES = array( '10.4225/','10.4226/','10.4227/','10.5072/');
+
+
+// Service configuration.
+
+define('gDOIS_SERVICE_BASE_URI', "https://mds.datacite.org/");
+define('gDOIS_DATACITE_PASSWORD', "****");
+
+define('gDOIS_RESPONSE_SUCCESS', 'OK');
+
+
+$dataciteSchema['2.0'] = 'http://schema.datacite.org/meta/kernel-2.0/metadata.xsd';
+$dataciteSchema['2.1'] = 'http://schema.datacite.org/meta/kernel-2.1/metadata.xsd';
+$dataciteSchema['2.2'] = 'http://schema.datacite.org/meta/kernel-2.2/metadata.xsd';
+
+=======
+define('eAPPLICATION_ROOT', dirname(__FILE__) . "/");
 
 ?>
