@@ -143,4 +143,5 @@ $dois_db_host = $cosi_db_host;
 $dois_db_port = 5432;
 $dois_db_name = 'dois';
 //======================================
+define('eAPPLICATION_ROOT', dirname(__FILE__) . "/");
 ?>
