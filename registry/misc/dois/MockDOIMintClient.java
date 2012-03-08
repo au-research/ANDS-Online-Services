@@ -26,10 +26,10 @@ import org.xml.sax.*;
 class MockDOIMintClient {
 
 	// Location of the DOI Service
-	private static final String DOIServicePoint = "http://services.ands.org.au/home/dois/";
+	private static final String DOIServicePoint = "http://test.ands.org.au/home/dois/";
 	
 	// DOI Application ID (supplied by ANDS)
-	private static final String DOIApplicationID = ""; 
+	private static final String DOIApplicationID = "d59ed6687f81ce860088ea44d867a37d76475f56"; 
 	
 	// Suffices for certain services
 	private static final String DOIMintServiceSuffix = "doi_mint.php?app_id=<app_id>&url=<url>";
