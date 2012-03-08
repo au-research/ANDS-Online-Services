@@ -290,8 +290,8 @@
 			<xsl:if test="ro:relatedObject[ro:key/@roclass = 'Collection'] or ro:relatedObject[ro:key/@roclass = 'collection']">
 				<h3>Collections</h3>
 				<ul>
-					<xsl:apply-templates select="ro:relatedObject[ro:key/@roclass = 'Collection'] | ro:relatedObject[ro:key/@roclass = 'collection']"/>			
-				</ul>
+					<xsl:apply-templates select="ro:relatedObject[ro:key/@roclass = 'Collection'] | ro:relatedObject[ro:key/@roclass = 'collection']"/>		
+					</ul>
 			</xsl:if>	
 			<xsl:if test="ro:relatedObject[ro:key/@roclass = 'Party'] or ro:relatedObject[ro:key/@roclass = 'party']">
 				<h3>Researchers / Research Groups</h3>
@@ -353,7 +353,11 @@
         		<xsl:variable name="draftTitle" select="document($url)/draft/title"/>
         		<xsl:variable name="recordTitle" select="document($url)/record"/>
         		<xsl:variable name="relation" select="ro:relation/@type"/>
-        		
+         		<xsl:variable name="relDescription" >
+         		<xsl:if test="ro:relation/ro:description!=''">
+         		<xsl:value-of select= "ro:relation/ro:description"/>
+         		</xsl:if>
+         		</xsl:variable>    		
 				<xsl:choose>
 					<xsl:when test="$draftTitle != ''">
 					<xsl:variable name="ds" select="document($url)/draft/ds"/>	
@@ -371,7 +375,12 @@
 					<xsl:otherwise>
 						<xsl:value-of select="ro:key"/>
 					</xsl:otherwise>
-				</xsl:choose>						
+				</xsl:choose>	
+				<xsl:if test="$relDescription != '' ">
+					<xsl:if test="string-length($relDescription)&lt;64">
+						<br /><span  class='faded'><xsl:value-of select="$relDescription"/></span>
+					</xsl:if>
+				</xsl:if>				
 	</li> 
 </xsl:if>  
     </xsl:template>
