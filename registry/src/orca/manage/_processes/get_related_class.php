@@ -44,6 +44,11 @@ if ($relations)
 				print ("<script>$('#".$fieldId."').val('".$registryObject[0]['class']."');</script>");			
 				
 			}
+			else if($registryObject = getDraftRegistryObject($keyValue,null))
+			{	
+				print ("<script>$('#".$fieldId."').val('".$registryObject[0]['class']."');</script>");			
+				
+			}
 			else 
 			{
 				print ("<script>$('#".$fieldId."').val('');</script>");
