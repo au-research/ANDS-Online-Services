@@ -234,7 +234,8 @@ function service_url(){
 	$ci =& get_instance();
 	$orca = $ci->config->item('orca_url');
 	$orca_service = $ci->config->item('orca_service_point');
-	return getHTTPs($orca).$orca_service;
+	//return getHTTPs($orca).$orca_service;
+	return $orca.$orca_service;
 }
 
 /*
