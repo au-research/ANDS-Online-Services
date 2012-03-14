@@ -760,12 +760,12 @@ function getTemporalCoverageXMLforSOLR($coverage_id)
 					$type = ' type="'.esc($row['type']).'"';	
 					$dateFormat = ' dateFormat="'.esc($row['date_format']).'"';
 					$value = esc($row['value']);
-				if (preg_match('/\b\d{4}\b/', $value, $matches)) 
+					if (preg_match('/\b\d{4}\b/', $value, $matches)) 
 					{
-    				$year = $matches[0];
-					$xml .= "            <date$type$dateFormat>$year</date>\n";
+	    				$year = $matches[0];
+						$xml .= "            <date$type$dateFormat>$year</date>\n";
 					}
-				}
+					}
 				$xml .= '</temporal>';	
 			}
 		}	

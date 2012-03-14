@@ -117,15 +117,17 @@ if ( strtoupper(getPostedValue('verb')) == "ADD" )
 		//we need to insert them into the database
 		$client = addDoisClient(getPostedValue('client_name'),getPostedValue('client_contact_name'),getPostedValue('client_contact_email'),getPostedValue('ip_address'),getPostedValue('datacite_prefix'),$app_id);	
 	
-		$client_id = getDoisClient(getPostedValue('ip_address'));
+		$client_id = getDoisClient($app_id);
 
 		//we now need to create this datacentre in datacite		
 		//$addToDataCite = doisAddDatacentre("ANDS.CENTRE-".$client_id,getPostedValue('client_name'),getPostedValue('client_contact_name'),getPostedValue('client_contact_email'),getPostedValue('datacite_prefix'),$domains);
+		if($client_id<10) $client_id = "-".$client_id;
+		$addToDataCite = doisAddDatacentre("ANDS.CENTRE".$client_id,getPostedValue('client_name'),getPostedValue('client_contact_name'),getPostedValue('client_contact_email'),getPostedValue('datacite_prefix'),$domains);
 		
 		//We now need to insert the domains to be registered with this client into the db	
 		foreach($domains as $client_domain){
 		
-			if(trim($client_domain)){
+			if(trim($client_domain)!=''){
 				addDoisClientDomain($client_id,trim($client_domain));
 			}			
 			

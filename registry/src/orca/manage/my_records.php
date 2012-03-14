@@ -480,10 +480,7 @@ function displayMMRRecordTable($status, array $record_set = array(), array $butt
 		      		{
 		      			print('    <a href="'.eAPP_ROOT .'orca/manage/add_'.strtolower($record['class']).'_registry_object.php?'.($record['feed_type'] == 'Harvest' ? 'harvested=true&' : '') . 'readOnly&data_source='.rawurlencode(getQueryValue('data_source')).'&key='.esc(rawurlencode($record['key'])).'" title="View this Record in Read Only mode"><img src="'.(eAPP_ROOT . "orca/_images/preview.png").'" width="15px" height="15px" /></a>&nbsp;');
 		      			print('    <a onClick="if (confirm(\'Cannot edit a record that has already been submitted for assessment. Open in Read-Only Mode instead?\')) { window.location = \"'.eAPP_ROOT .'orca/manage/add_'.strtolower($record['class']).'_registry_object.php?'.($record['feed_type'] == 'Harvest' ? 'harvested=true&' : '') . 'readOnly&data_source='.rawurlencode(getQueryValue('data_source')).'&key='.esc(rawurlencode($record['key'])).'\"; }" title="Already submitted! View this record in Read Only mode?"><img src="'.(eAPP_ROOT . "orca/_images/edit_disabled.png").'" width="15px" height="15px" /></a>&nbsp;');
-		      			print('    <a onClick="alert(\'This record has already been submitted for assessment and cannot be deleted.\')" title="Delete this Draft" 
-style="cursor:pointer;"><img src="'.(eAPP_ROOT . "orca/_images/bin_disabled.png").'" width="15px" height="15px" /></a>');
-
-		      		
+						print('    <a onClick="alert(\'This record has already been submitted for assessment and cannot be deleted.\')" title="Delete this Draft" style="cursor:pointer;"><img src="'.(eAPP_ROOT . "orca/_images/bin_disabled.png").'" width="15px" height="15px" /></a>');
 		      		
 		      		}
 		      		
