@@ -48,6 +48,8 @@ function array_transform($array, $parent_key = null){
 		}
 		else if(!is_array($value))
 		{
+			$value = preg_replace_callback('/\\%u([0-9a-f]{4})/i','replace_unicode_escape_sequence', $value );					
+			$value = preg_replace_callback('/\\%([A-F0-9]{2})/i','replace_unicode_escape_sequence2', $value );		
 			$this->text .= "<$key>".htmlspecialchars(urldecode($value))."</$key>";
 		} 
 		else 

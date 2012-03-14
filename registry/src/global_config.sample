@@ -70,6 +70,21 @@ if($maintenance & !in_array($ip, $white_list_ip)){
 
 
 /*====================================
+	LDAP AUTHENTICATION SERVER (optional)
+====================================*/
+// -----------------------------------------------------------------------------
+// These will be used by user roles that specify AUTHENTICATION_LDAP.
+$eLDAPHost = "ldaps://ldap.anu.edu.au"; 
+$eLDAPPort = 636; //636 | 389
+// The resource distinguished name.
+// The string @@ROLE_ID@@ will be replace with the user role_id, and escaped
+// for LDAP reserved characters before the bind is attempted.
+$eLDAPBaseDN = "ou=People, o=anu.edu.au";
+$eLDAPuid = "uid=@@ROLE_ID@@";
+$eLDAPDN = "$eLDAPuid, $eLDAPBaseDN";
+
+
+/*====================================
 	DATABASE ENVIRONMENT
 ====================================*/
 $cosi_db_host = 'devl.ands.org.au';
@@ -84,4 +99,6 @@ $pids_db_name = 'pids';
 $dois_db_host = $cosi_db_host;
 $dois_db_name = 'dois';
 //======================================
+
+define('eAPPLICATION_ROOT', dirname(__FILE__) . "/");
 ?>

@@ -14,4 +14,5 @@ CKEDITOR.editorConfig = function( config )
 		[
 			['Bold', 'Italic','Underline','Subscript','Superscript','-', 'NumberedList','BulletedList', 'Blockquote', '-', 'Link', 'Unlink', '-', 'Table','HorizontalRule', 'Image','Styles', 'Format', 'Source']
 		];	
+	config.autoParagraph = false;
 };

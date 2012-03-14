@@ -30,7 +30,7 @@ date_default_timezone_set('Antarctica/Macquarie');
 openDatabaseConnection($gCNN_DBS_ORCA, eCNN_DBS_ORCA);
 
 define('gRIF_SCHEMA_URI', 'http://services.ands.org.au/documentation/rifcs/1.2.0/schema/registryObjects.xsd');
-define('gRIF2_SCHEMA_URI', 'http://services.ands.org.au/documentation/rifcs/1.2.0/schema/registryObjects.xsd');
+define('gRIF_SCHEMA_URI', 'http://services.ands.org.au/documentation/rifcs/1.2.0/schema/registryObjects.xsd');
 define('gCURRENT_SCHEMA_VERSION', '1.2.0');
 define('gDATA_SOURCE','NLA_PARTY');
 define('gNLA_SRU_URI','http://www.nla.gov.au/apps/srw/search/peopleaustralia');
@@ -125,7 +125,7 @@ if($partyIdentifiers)
 			  }
 			  
 			// Validate it against the orca schema.
-			$result = $registryObjects->schemaValidate(gRIF2_SCHEMA_URI);
+			$result = $registryObjects->schemaValidate(gRIF_SCHEMA_PATH);
 
 			$errors = error_get_last();
 			if( $errors )
@@ -232,7 +232,7 @@ elseif($setIdentifiers)
 			    unlink($tempFile);
 			  }			
 			// Validate it against the orca schema.
-				$result = $registryObjects->schemaValidate(gRIF2_SCHEMA_URI);
+				$result = $registryObjects->schemaValidate(gRIF_SCHEMA_PATH);
 				$errors = error_get_last();
 				if( $errors )
 				{

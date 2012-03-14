@@ -13,12 +13,11 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 *******************************************************************************/
-require_once(dirname(__FILE__).'/../../global_config.php');
 
 // If not running within COSI, include COSI's environment variables
 // (needed for "lightweight" activities such as fetch_element)
 if (!defined("eHOST")) { require '../_includes/_environment/application_env.php'; }
-
+require_once(eAPPLICATION_ROOT.'/global_config.php');
 // Use to prevent direct access to certain scripts
 define('IN_ORCA', true);
 
@@ -30,9 +29,10 @@ define('IN_ORCA', true);
 //define('gRIF_SCHEMA_URI', 'http://'.eHOST.'/'.eROOT_DIR.'/'.'orca/schemata/registryObjects.xsd');
 
 // note: changing this will cause all reharvested records to have a "new record revision" created
-define('gRIF_SCHEMA_URI', 'http://services.ands.org.au/documentation/rifcs/1.3/schema/registryObjects.xsd'); 
+define('gRIF_SCHEMA_PATH', eAPPLICATION_ROOT.'/orca/schemata/registryObjects.xsd'); 
 
-define('gRIF2_SCHEMA_URI', 'http://services.ands.org.au/documentation/rifcs/1.3/schema/registryObjects.xsd');
+define('gRIF_SCHEMA_URI', 'http://services.ands.org.au/documentation/rifcs/1.3/schema/registryObjects.xsd');
+
 define('gCURRENT_SCHEMA_VERSION', '1.3');
 
 // Party identifiers to be treated to special display (NLA-specific)

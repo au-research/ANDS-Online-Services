@@ -149,7 +149,7 @@ if($solrUrl)
 					$rifcs = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
 					$rifcs .='<registryObjects xmlns="http://ands.org.au/standards/rif-cs/registryObjects" '."\n";
 					$rifcs .='                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '."\n";
-					$rifcs .='                 xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects '.gRIF2_SCHEMA_URI.'">'."\n";	
+					$rifcs .='                 xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects '.gRIF_SCHEMA_URI.'">'."\n";	
 					$rifcs .= $rifcsContent;			
 					$rifcs .= "</registryObjects>\n";
 					$rifcs = transformToSolr($rifcs);									
@@ -176,10 +176,10 @@ else if($key && $foo)
 	// =============================================================================
 	$rifcs .='<registryObjects xmlns="http://ands.org.au/standards/rif-cs/registryObjects" '."\n";
 	$rifcs .='                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '."\n";
-	$rifcs .='                 xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects '.gRIF2_SCHEMA_URI.'">'."\n";
+	$rifcs .='                 xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects '.gRIF_SCHEMA_URI.'">'."\n";
 	if($registryObject = getRegistryObject($key))
 	{
-		$rifcs .= getRegistryObjectXMLforSOLR($key);
+		$rifcs .= getRegistryObjectXMLforSOLR($key, true);
 		
 	}
 	$rifcs .= "</registryObjects>\n";
@@ -197,10 +197,10 @@ else if($key)
 	// =============================================================================
 	$rifcs .='<registryObjects xmlns="http://ands.org.au/standards/rif-cs/registryObjects" '."\n";
 	$rifcs .='                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '."\n";
-	$rifcs .='                 xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects '.gRIF2_SCHEMA_URI.'">'."\n";
+	$rifcs .='                 xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects '.gRIF_SCHEMA_URI.'">'."\n";
 	if($registryObject = getRegistryObject($key))
 	{
-		$rifcs .= getRegistryObjectXMLforSOLR($key);
+		$rifcs .= getRegistryObjectXMLforSOLR($key, true);
 		
 	}
 	$rifcs .= "</registryObjects>\n";
@@ -216,7 +216,7 @@ elseif ($getRelated){
 	// =============================================================================
 	$rifcs .='<registryObjects xmlns="http://ands.org.au/standards/rif-cs/registryObjects" '."\n";
 	$rifcs .='                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '."\n";
-	$rifcs .='                 xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects '.gRIF2_SCHEMA_URI.'">'."\n";
+	$rifcs .='                 xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects '.gRIF_SCHEMA_URI.'">'."\n";
 	if($registryObject = getRegistryObject($getRelated))
 	{
 		$rifcs .= getRegistryObjectRelatedObjectsforSOLR($getRelated);		

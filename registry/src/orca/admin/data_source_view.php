@@ -20,6 +20,7 @@ require '../orca_init.php';
 // -----------------------------------------------------------------------------
 // Increase the execution timeout for the import and clear operations, as they
 // may have to deal with a large amount of data.
+set_time_limit(0);
 $executionTimeoutSeconds = 20*60;
 
 // Get the record from the database.

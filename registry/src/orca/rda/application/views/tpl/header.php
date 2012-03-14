@@ -70,7 +70,7 @@ limitations under the License.
 		
 		<div id="header" class="no_print">
 			<div class="top-menu-cover">
-				<a href="http://ands.org.au"><img src="<?php echo site_url('img/ands_logo_white.png');?>" id="ands-logo-white"/></a>
+				<a href="http://ands.org.au"><img src="<?php echo site_url('img/ands_logo_white.png');?>" id="ands-logo-white" alt="ANDS Logo"/></a>
 			<ul class="sf-menu">
 				<li><?php echo anchor('','Home');?></li>
 				<li><?php echo anchor('search/browse/All/collection', 'Collections');?></li>

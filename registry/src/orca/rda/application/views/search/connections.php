@@ -96,6 +96,9 @@ function displayConnection($groups,$externalKeys)
 if(isset($groups)&&$groups['numfound']>0){
 
 	echo $groups['heading'];
+	//echo "<pre>";
+	//print_r($groups);
+	//echo "</pre>";	
 	if($groups['numfound']>1)$title = $groups['titles']; else $title = $groups['title'];
 
 	$max = 5;
@@ -144,7 +147,7 @@ if(isset($groups)&&$groups['numfound']>0){
 
 		echo '<li><a href="'.base_url().'view/?key='.urlencode($groups['json']->{'response'}->{'docs'}[$i]->{'key'}).'" title="'.findRelationship($groups['json']->{'response'}->{'docs'}[$i]->{'key'},$groups['relatedKey'],$groups['relationship']).' '.$autoLinkTitle.'">';
 		echo $groups['json']->{'response'}->{'docs'}[$i]->{'displayTitle'};
-		echo '</a>'.$autoLink.$logostr.'</li>';
+		echo '</a>'.findRelationshipDescription($groups['json']->{'response'}->{'docs'}[$i]->{'key'},$groups['relatedKey'],$groups['relationship_description']).$autoLink.$logostr.'</li>';
 	}
 	echo '</ul>';	
 	if($seeMore)
@@ -161,6 +164,19 @@ function findRelationship($key, $relatedKeys, $relationships){
 	{
 		if($relatedKeys[$i]==$key)
 			return $relationships[$i];
+	}
+}
+function findRelationshipDescription($key, $relatedKeys, $relationshipDescriptions){
+
+	for($i=0;$i<count($relatedKeys);$i++)
+	{
+		if($relatedKeys[$i]==$key&&isset($relationshipDescriptions[$i]))
+		{
+			if($relationshipDescriptions[$i]!='null'&&strlen($relationshipDescriptions[$i])<64){
+				$return = "<br /><span class='faded'>".$relationshipDescriptions[$i]."</span>";
+				return $return;
+			}
+		}
 	}
 }
 ?>

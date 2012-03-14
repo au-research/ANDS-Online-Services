@@ -117,7 +117,13 @@
              	<xsl:if test="not(./@type) or (./@type!='text' and ./@type!='dcmiPoint')">        	
                       <xsl:text>yes</xsl:text>
                </xsl:if>
-               </xsl:for-each>    
+               </xsl:for-each>  
+                    
+             	<xsl:for-each select="ro:location/ro:spatial"> 
+             	<xsl:if test="not(./@type) or (./@type!='text' and ./@type!='dcmiPoint')">        	
+                      <xsl:text>yes</xsl:text>
+               </xsl:if>            
+               </xsl:for-each>                 
         	</xsl:variable>
         	
              <xsl:if test="ro:coverage/ro:spatial | ro:location/ro:spatial">
@@ -284,8 +290,8 @@
 			<xsl:if test="ro:relatedObject[ro:key/@roclass = 'Collection'] or ro:relatedObject[ro:key/@roclass = 'collection']">
 				<h3>Collections</h3>
 				<ul>
-					<xsl:apply-templates select="ro:relatedObject[ro:key/@roclass = 'Collection'] | ro:relatedObject[ro:key/@roclass = 'collection']"/>			
-				</ul>
+					<xsl:apply-templates select="ro:relatedObject[ro:key/@roclass = 'Collection'] | ro:relatedObject[ro:key/@roclass = 'collection']"/>		
+					</ul>
 			</xsl:if>	
 			<xsl:if test="ro:relatedObject[ro:key/@roclass = 'Party'] or ro:relatedObject[ro:key/@roclass = 'party']">
 				<h3>Researchers / Research Groups</h3>
@@ -347,7 +353,11 @@
         		<xsl:variable name="draftTitle" select="document($url)/draft/title"/>
         		<xsl:variable name="recordTitle" select="document($url)/record"/>
         		<xsl:variable name="relation" select="ro:relation/@type"/>
-        		
+         		<xsl:variable name="relDescription" >
+         		<xsl:if test="ro:relation/ro:description!=''">
+         		<xsl:value-of select= "ro:relation/ro:description"/>
+         		</xsl:if>
+         		</xsl:variable>    		
 				<xsl:choose>
 					<xsl:when test="$draftTitle != ''">
 					<xsl:variable name="ds" select="document($url)/draft/ds"/>	
@@ -365,7 +375,12 @@
 					<xsl:otherwise>
 						<xsl:value-of select="ro:key"/>
 					</xsl:otherwise>
-				</xsl:choose>						
+				</xsl:choose>	
+				<xsl:if test="$relDescription != '' ">
+					<xsl:if test="string-length($relDescription)&lt;64">
+						<br /><span  class='faded'><xsl:value-of select="$relDescription"/></span>
+					</xsl:if>
+				</xsl:if>				
 	</li> 
 </xsl:if>  
     </xsl:template>
@@ -634,43 +649,23 @@ Handle:
     </xsl:template>
     
    <xsl:template match="ro:relatedInfo">
-        <p>
-       <!--     <xsl:if test="./ro:title">
-            	      <xsl:value-of select="./ro:title"/><br />
-          </xsl:if>--> 
-            	
-            <xsl:choose>
-			<xsl:when test="./ro:identifier/@type='uri'" > 			
-            	<xsl:apply-templates match="./ro:identifier" mode="uri"/><br />
-            			</xsl:when>
-      		 
-             <xsl:when test="./ro:identifier/@type='purl'">         			
-            	<xsl:apply-templates match="./ro:identifier" mode="purl"/><br />
-            	</xsl:when>
-              
-           	<xsl:when test="./ro:identifier/@type='doi'">          			
-            	<xsl:apply-templates match="./ro:identifier" mode="doi"/><br />
-            			</xsl:when>
-             <xsl:when test="./ro:identifier/@type='handle'">          			
-            	<xsl:apply-templates match="./ro:identifier" mode="handle"/><br />
-            </xsl:when>   
-             <xsl:when test="./ro:identifier/@type='AU-ANL:PEAU'">          			
-            	<xsl:apply-templates match="./ro:identifier" mode="nla"/><br />
-            </xsl:when>  
-             <xsl:when test="./ro:identifier/@type='ark'">          			
-            	<xsl:apply-templates match="./ro:identifier" mode="ark"/><br />
-            </xsl:when>                               
-            			<xsl:otherwise>
-                 <br /><xsl:value-of select="./ro:identifier/@type"/>: <xsl:value-of select="./ro:identifier"/><br />   			
-            			</xsl:otherwise>          		
-            		</xsl:choose>
-			<br />
-           
-               
-            <xsl:if test="ro:notes">
-                    <xsl:apply-templates select="ro:notes"/>
-            </xsl:if>
-        </p>        
+         <p>
+
+   		 <xsl:if test="./ro:title">
+         	<xsl:value-of select="./ro:title"/><br />
+         </xsl:if>
+   		<xsl:apply-templates select="./ro:identifier[@type='doi']" mode = "doi"/>
+    	<xsl:apply-templates select="./ro:identifier[@type='ark']" mode = "ark"/>    	
+     	<xsl:apply-templates select="./ro:identifier[@type='AU-ANL:PEAU']" mode = "nla"/>  
+     	<xsl:apply-templates select="./ro:identifier[@type='handle']" mode = "handle"/>   
+     	<xsl:apply-templates select="./ro:identifier[@type='purl']" mode = "purl"/>
+    	<xsl:apply-templates select="./ro:identifier[@type='uri']" mode = "uri"/> 
+ 		<xsl:apply-templates select="./ro:identifier[not(@type =  'doi' or @type =  'ark' or @type =  'AU-ANL:PEAU' or @type =  'handle' or @type =  'purl' or @type =  'uri')]" mode="other"/>			            	
+                         
+        <xsl:if test="./ro:notes">
+             <xsl:apply-templates select="./ro:notes"/>
+        </xsl:if>
+        </p>                
     </xsl:template>
     
     <xsl:template match="ro:citationInfo/ro:fullCitation">

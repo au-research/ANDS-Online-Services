@@ -17,6 +17,11 @@ limitations under the License.
 $gXPath = null; // An XPATH object to use for parsing the XML.
 $xs = 'rif';    // The default namespace prefix to register for use by XPATH.
 $dataSourceKey = '';
+$rmdQualityTest = new DomDocument();
+$rmdQualityTest->load(eAPPLICATION_ROOT.'/orca/_xsl/rmd_quality_test.xsl');
+$qaProc = new XSLTProcessor();
+$qaProc->importStyleSheet($rmdQualityTest);
+
 function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMessage, $created_who=SYSTEM, $status=PUBLISHED, $record_owner=SYSTEM, $xPath=NULL, $override_qa=false)
 {
 	global $gXPath;
@@ -1461,7 +1466,7 @@ function getUserPartyObject()
 			{
 			  unlink($tempFile);
 			}		
-			$result = $registryObjects->schemaValidate(gRIF2_SCHEMA_URI); //xxx
+			$result = $registryObjects->schemaValidate(gRIF_SCHEMA_PATH); //xxx
 			$errors = error_get_last();
 			if( $errors )
 			{
@@ -1587,7 +1592,7 @@ function updateUserPartyObject($name, $email=null)
 			{
 			  unlink($tempFile);
 			}		
-			$result = $registryObjects->schemaValidate(gRIF2_SCHEMA_URI); //xxx
+			$result = $registryObjects->schemaValidate(gRIF_SCHEMA_PATH); //xxx
 			$errors = error_get_last();
 			if( $errors )
 			{
@@ -1668,10 +1673,7 @@ function getAllRelatedObjectClass($RegistryObject, $dataSourceKey)
 }
 
 function getRelatedXml($dataSource,$rifcs,$objectClass){
-	//print("<pre>");
-	//print_r($rifcs);
-	//print("</pre>");
-	//print($_SERVER['PHP_SELF']);
+
 	$objectClass = strtolower($objectClass);
 	$newrifcs = '';
 	$dataSourceInfo = getDataSources($dataSource, $filter=null);
@@ -1690,6 +1692,20 @@ function getRelatedXml($dataSource,$rifcs,$objectClass){
 	{	
 		$theRels[$therelations->item($i)->firstChild->nodeValue] = $therelations->item($i)->firstChild->nodeValue;
 	}
+	
+	
+	$theDescriptions = $rifObject->getElementsByTagName('description');	
+	$descCount = $theDescriptions->length;
+	for($i=0;$i<$descCount;$i++)
+	{	
+		$value = $theDescriptions->item($i)->firstChild->nodeValue;		
+		if(str_replace("/>","",$value)==$value&&str_replace("</","",$value)==$value)
+		{
+			$value =  nl2br(str_replace("\t", "&#xA0;&#xA0;&#xA0;&#xA0;", $value));
+		}
+		$theDescriptions->item($i)->firstChild->nodeValue = $value;		
+	} 
+						
 
 	if(isset($dataSourceInfo[0]['primary_key_1'])&& $dataSourceInfo[0]['primary_key_1']!= $therealkey &&(!array_key_exists($dataSourceInfo[0]['primary_key_1'],$theRels)))
 	{
@@ -1748,35 +1764,27 @@ function getRelatedXml($dataSource,$rifcs,$objectClass){
 
 function runQualityCheck($rifcs, $objectClass, $dataSource, $output, $relatedObjectClassesStr='')
 {
+	global $qaProc;
 	$relRifcs = getRelatedXml($dataSource,$rifcs,$objectClass);
 	$registryObjects = new DomDocument();
 	$registryObjects->loadXML($relRifcs);
-	$rmdQualityTest = new DomDocument();
-	$rmdQualityTest->load('../_xsl/rmd_quality_test.xsl');
-	$proc = new XSLTProcessor();
-	$proc->setParameter('', 'dataSource', $dataSource);
-	$proc->setParameter('', 'output', $output);
-	$proc->setParameter('', 'relatedObjectClassesStr', $relatedObjectClassesStr);
-	$proc->importStyleSheet($rmdQualityTest);
-	$result = $proc->transformToXML($registryObjects);
+	$qaProc->setParameter('', 'dataSource', $dataSource);
+	$qaProc->setParameter('', 'output', $output);
+	$qaProc->setParameter('', 'relatedObjectClassesStr', $relatedObjectClassesStr);
+	$result = $qaProc->transformToXML($registryObjects);
 	return $result;		
 }
 
 
 function runQualityCheckonDom($registryObjects, $dataSource, $output, $relatedObjectClassesStr)
 {
-
-	$rmdQualityTest = new DomDocument();
-	$rmdQualityTest->load('../_xsl/rmd_quality_test.xsl');
-	$proc = new XSLTProcessor();
-	$proc->setParameter('', 'dataSource', $dataSource);
-	$proc->setParameter('', 'output', $output);
-	$proc->setParameter('', 'relatedObjectClassesStr', $relatedObjectClassesStr);
-	$proc->importStyleSheet($rmdQualityTest);
-	$result = $proc->transformToXML($registryObjects);
+	global $qaProc;
+	$qaProc->setParameter('', 'dataSource', $dataSource);
+	$qaProc->setParameter('', 'output', $output);
+	$qaProc->setParameter('', 'relatedObjectClassesStr', $relatedObjectClassesStr);
+	$result = $qaProc->transformToXML($registryObjects);
 	return $result;		
 }
-
 
 
 function runQualityResultsforDataSource($dataSourceKey,$itemurl)
@@ -1863,7 +1871,7 @@ function runQualityCheckForRegistryObject($registryObjectKey, $dataSourceKey)
 		{
 			$objectClass = "Collection";			
 		}
-		elseif(str_replace("<Servive","",$rifcs)!=$rifcs||str_replace("<service","",$rifcs)!=$rifcs)
+		elseif(str_replace("<Service","",$rifcs)!=$rifcs||str_replace("<service","",$rifcs)!=$rifcs)
 		{
 			$objectClass = "Service";			
 		}
@@ -1903,7 +1911,7 @@ function runQuagmireCheckForRegistryObject($registryObjectKey, $dataSourceKey)
 		{
 			$objectClass = "Collection";			
 		}
-		elseif(str_replace("<Servive","",$rifcs)!=$rifcs||str_replace("<service","",$rifcs)!=$rifcs)
+		elseif(str_replace("<Service","",$rifcs)!=$rifcs||str_replace("<service","",$rifcs)!=$rifcs)
 		{
 			$objectClass = "Service";			
 		}
@@ -1938,7 +1946,7 @@ function runQualityCheckForDraftRegistryObject($registryObjectKey, $dataSourceKe
 		{
 			$objectClass = "Collection";			
 		}
-		elseif(str_replace("<Servive","",$rifcs)!=$rifcs||str_replace("<service","",$rifcs)!=$rifcs)
+		elseif(str_replace("<Service","",$rifcs)!=$rifcs||str_replace("<service","",$rifcs)!=$rifcs)
 		{
 			$objectClass = "Service";			
 		}

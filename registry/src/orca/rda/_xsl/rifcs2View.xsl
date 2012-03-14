@@ -90,6 +90,7 @@
                     <xsl:value-of select="$base_url"/>
                     <xsl:text>img/</xsl:text>
                     <xsl:text>1313027722_print.png</xsl:text></xsl:attribute>
+                    <xsl:attribute name="alt">Print Icon</xsl:attribute>
                     </img>
                     </a>
 				</div>
@@ -109,7 +110,7 @@
     </xsl:template>
 
     <xsl:template match="ro:collection | ro:activity | ro:party | ro:service">
-      	<div id="item-view-inner" class="clearfix">
+      	<div id="item-view-inner" class="clearfix" itemscope="" itemType="http://schema.org/Thing">
 	
 		<div id="left">           
  		<xsl:choose>
@@ -119,7 +120,7 @@
 	        </xsl:when>
 	         <xsl:otherwise>
 	                
-	        <div id="displaytitle"><h1><xsl:value-of select="../ro:key"/></h1>
+	        <div id="displaytitle"><h1 itemprop="name"><xsl:value-of select="../ro:key"/></h1>
 	                        	
 	            	
 	        <xsl:for-each select="//ro:existenceDates">
@@ -129,12 +130,19 @@
 			</xsl:for-each>
 			
 			
-			</div><div class="right_icon"><img class="icon-heading">
-				<xsl:attribute name="src"><xsl:value-of select="$base_url"/>
-				<xsl:text>/img/icon/</xsl:text>
-				<xsl:value-of select="$objectClassType"/>
-				<xsl:text>_32.png</xsl:text></xsl:attribute>
-				</img></div> 
+			</div>
+			
+			<div class="right_icon">
+				<img class="icon-heading">
+					<xsl:attribute name="src"><xsl:value-of select="$base_url"/>
+						<xsl:text>/img/icon/</xsl:text>
+						<xsl:value-of select="$objectClassType"/>
+						<xsl:text>_32.png</xsl:text>
+					</xsl:attribute>
+					<xsl:attribute name="alt"><xsl:value-of select="$objectClassType"/></xsl:attribute>
+					
+				</img>
+			</div> 
 	        </xsl:otherwise> 
 	        
         </xsl:choose>    
@@ -149,7 +157,7 @@
                 
         <div class="clearfix"></div>
         <xsl:if test="ro:description">
-            <div class="descriptions" style="position:relative;clear:both;">
+            <div class="descriptions" style="position:relative;clear:both;" itemprop="descriptions">
 				<xsl:apply-templates select="ro:description[@type= 'brief']" mode="content"/>
 				<xsl:apply-templates select="ro:description[@type= 'full']" mode="content"/>
 				<xsl:apply-templates select="ro:description[@type= 'significanceStatement']" mode="content"/>		
@@ -187,6 +195,11 @@
                       <xsl:text>yes</xsl:text>
                </xsl:if>
                </xsl:for-each>    
+             	<xsl:for-each select="ro:location/ro:spatial"> 
+             	<xsl:if test="not(./@type) or (./@type!='text' and ./@type!='dcmiPoint')">        	
+                      <xsl:text>yes</xsl:text>
+               </xsl:if>            
+               </xsl:for-each>               
         	</xsl:variable>
         
             <xsl:if test="ro:coverage/ro:spatial | ro:location/ro:spatial">
@@ -345,6 +358,7 @@
 				<img>
 				<xsl:attribute name="src"><xsl:value-of select="$base_url"/><xsl:text>/img/ajax-loader.gif</xsl:text></xsl:attribute>
 				<xsl:attribute name="class">loading-icon</xsl:attribute>
+				<xsl:attribute name="alt">Loading…</xsl:attribute>
 				</img>
 			</div>
 			</div>	
@@ -360,6 +374,7 @@
 					<img>
 					<xsl:attribute name="src"><xsl:value-of select="$base_url"/><xsl:text>/img/ajax-loader.gif</xsl:text></xsl:attribute>
 					<xsl:attribute name="class">loading-icon</xsl:attribute>
+					<xsl:attribute name="alt">Loading…</xsl:attribute>
 					</img>
 				</div>
 				</div>
@@ -373,6 +388,7 @@
 					<img>
 					<xsl:attribute name="src"><xsl:value-of select="$base_url"/><xsl:text>/img/ajax-loader.gif</xsl:text></xsl:attribute>
 					<xsl:attribute name="class">loading-icon</xsl:attribute>
+					<xsl:attribute name="alt">Loading…</xsl:attribute>
 					</img>
 				</div>
 				</div>
@@ -398,13 +414,16 @@
 			<xsl:text>/img/icon/</xsl:text>
 			<xsl:value-of select="$objectClassType"/>
 			<xsl:text>_32.png</xsl:text></xsl:attribute>
+			<xsl:attribute name="alt"><xsl:value-of select="$objectClassType"/></xsl:attribute>
 		  </img>
 		</div>   
     </xsl:template>
     
     <xsl:template match="ro:displayLogo">   
-        <div ><img id="party_logo" style="max-width:130px;">
-        <xsl:attribute name="src"><xsl:value-of select="."/></xsl:attribute>
+        <div>
+        <img id="party_logo" style="max-width:130px;">
+        	<xsl:attribute name="src"><xsl:value-of select="."/></xsl:attribute>
+        	<xsl:attribute name="alt">Party Logo</xsl:attribute>
         </img>
 		</div>    
     </xsl:template> 
@@ -465,43 +484,20 @@
    <xsl:template match="ro:relatedInfo">
         <p>
 
-       <!--     <xsl:if test="./ro:title">
-            	      <xsl:value-of select="./ro:title"/><br />
-          </xsl:if>--> 
-            	
-		<xsl:choose>
-			<xsl:when test="./ro:identifier/@type='uri'" > 			
-            	<xsl:apply-templates match="./ro:identifier" mode="uri"/><br />
-      		 </xsl:when>
-      		 
-             <xsl:when test="./ro:identifier/@type='purl'">         			
-            	<xsl:apply-templates match="./ro:identifier" mode="purl"/><br />
-            </xsl:when>  
-              
-           	<xsl:when test="./ro:identifier/@type='doi'">          			
-            	<xsl:apply-templates match="./ro:identifier" mode="doi"/><br />
-            </xsl:when>     	
-             <xsl:when test="./ro:identifier/@type='handle'">          			
-            	<xsl:apply-templates match="./ro:identifier" mode="handle"/><br />
-            </xsl:when>   
-             <xsl:when test="./ro:identifier/@type='AU-ANL:PEAU'">          			
-            	<xsl:apply-templates match="./ro:identifier" mode="nla"/><br />
-            </xsl:when>  
-             <xsl:when test="./ro:identifier/@type='ark'">          			
-            	<xsl:apply-templates match="./ro:identifier" mode="ark"/><br />
-            </xsl:when>                               
-            <xsl:otherwise>           
-                 <br /><xsl:value-of select="./ro:identifier/@type"/>: <xsl:value-of select="./ro:identifier"/><br /> 
-            <xsl:if test="./ro:title">
-                    <xsl:apply-templates select="./ro:title"/>
-            </xsl:if>                     			
-            </xsl:otherwise>
-            		</xsl:choose>
-		
+   		 <xsl:if test="./ro:title">
+         	<xsl:value-of select="./ro:title"/><br />
+         </xsl:if>
+   		<xsl:apply-templates select="./ro:identifier[@type='doi']" mode = "doi"/>
+    	<xsl:apply-templates select="./ro:identifier[@type='ark']" mode = "ark"/>    	
+     	<xsl:apply-templates select="./ro:identifier[@type='AU-ANL:PEAU']" mode = "nla"/>  
+     	<xsl:apply-templates select="./ro:identifier[@type='handle']" mode = "handle"/>   
+     	<xsl:apply-templates select="./ro:identifier[@type='purl']" mode = "purl"/>
+    	<xsl:apply-templates select="./ro:identifier[@type='uri']" mode = "uri"/> 
+ 		<xsl:apply-templates select="./ro:identifier[not(@type =  'doi' or @type =  'ark' or @type =  'AU-ANL:PEAU' or @type =  'handle' or @type =  'purl' or @type =  'uri')]" mode="other"/>			            	
                          
-            <xsl:if test="./ro:notes">
-                   <br /> <xsl:apply-templates select="./ro:notes"/>
-            </xsl:if>
+        <xsl:if test="./ro:notes">
+             <xsl:apply-templates select="./ro:notes"/>
+        </xsl:if>
         </p>        
     </xsl:template>
   <xsl:template match="ro:identifier" mode="ark">

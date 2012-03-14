@@ -16,6 +16,15 @@ limitations under the License.
 
 define('gORCA_HARVEST_REQUEST_STATUS_PROCESSING', 'PROCESSING HARVESTER PUT REQUEST');
 
+$rif2solrXSL = new DomDocument();
+$rif2solrXSL->load(eAPPLICATION_ROOT.'/orca/_xsl/rif2solr.xsl');
+$solrXSLTProc = new XSLTProcessor();
+$solrXSLTProc->importStyleSheet($rif2solrXSL);
+
+	
+	
+	
+	
 function runImport($dataSource, $testOnly)
 {
 	$dataSourceProviderType  = $dataSource[0]['provider_type'];
@@ -72,7 +81,7 @@ function runImport($dataSource, $testOnly)
 			  {
 			    unlink($tempFile);
 			  }
-			  $result = $registryObjects->schemaValidate(gRIF2_SCHEMA_URI); //xxx
+			  $result = $registryObjects->schemaValidate(gRIF_SCHEMA_PATH); //xxx
 			//print($registryObjects->saveXML());
 			//exit;
 			$errors = error_get_last();
@@ -583,14 +592,11 @@ return $transformResult;
 
 function transformToSolr($registryObjectsXML)
 {
-$qtestxsl = new DomDocument();
-$registryObjects = new DomDocument();
-$registryObjects->loadXML($registryObjectsXML);
-$qtestxsl->load('../_xsl/rif2solr.xsl');
-$proc = new XSLTProcessor();
-$proc->importStyleSheet($qtestxsl);
-$transformResult = $proc->transformToXML($registryObjects);	
-return $transformResult;
+    global $solrXSLTProc;
+	$registryObjects = new DomDocument();
+	$registryObjects->loadXML($registryObjectsXML);
+	$transformResult = $solrXSLTProc->transformToXML($registryObjects);	
+	return $transformResult;
 }
 
 function runSolrIndexForDatasource($dataSourceKey)
@@ -615,7 +621,7 @@ function runSolrIndexForDatasource($dataSourceKey)
 		$rifcs = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
 		$rifcs .='<registryObjects xmlns="http://ands.org.au/standards/rif-cs/registryObjects" '."\n";
 		$rifcs .='                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '."\n";
-		$rifcs .='                 xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects '.gRIF2_SCHEMA_URI.'">'."\n";	
+		$rifcs .='                 xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects '.gRIF_SCHEMA_URI.'">'."\n";	
 		$rifcs .= $rifcsContent;			
 		$rifcs .= "</registryObjects>\n";		
 		$rifcs = transformToSolr($rifcs);									
@@ -704,7 +710,7 @@ function updateRecordsForDataSource($dataSourceKey, $manuallyPublish,$manuallyPu
 				      unlink($tempFile);
 				    }
 				  
-					$registryObject->schemaValidate(gRIF2_SCHEMA_URI); //xxx
+					$registryObject->schemaValidate(gRIF_SCHEMA_PATH); //xxx
 
 					$importErrors = importRegistryObjects($registryObject,$dataSourceKey, $resultMessage, getLoggedInUser(), $status, $owner, null, true);       
 					if( !$importErrors )

@@ -1157,9 +1157,13 @@ function saveAndPreview() {
 
 	var key = $('#object_mandatoryInformation_key').val();
 
+	$(".rda_preview").attr("href",$("#baseURL").val() + 'rda/preview?ds='+$('#object_mandatoryInformation_dataSource').val()+'&key=' + $('#object_mandatoryInformation_key').val());
+
+	
+
 	$("#errors_preview").hide();	
 	$("#save_notification").remove();
-	$(".rda_preview").attr("href",$("#baseURL").val() + 'rda/preview?ds='+$('#object_mandatoryInformation_dataSource').val()+'&key=' + $('#object_mandatoryInformation_key').val());
+
 	
 	if (userMode != 'readOnly')
 	{
@@ -1176,9 +1180,73 @@ function saveAndPreview() {
 			$('#rda_preview_container').remove();	
 		}
 		$("#errors_preview").before(
-							"<div id='rda_preview_container'><a id='rda_preview' class='rda_preview' href='#' target='_blank'><img src='"+rootAppPath+"orca/_images/globe.png' /> Preview in Research Data Australia</a></div>"
+							"<div id='rda_preview_container'><a style='float:right;'id='rda_preview_xml' href='#'>View XML</a><a id='rda_preview' class='rda_preview' href='#' target='_blank'><img src='"+rootAppPath+"orca/_images/globe.png' /> Preview in Research Data Australia</a></div><div id='rifcs_plain' class='hide'><img src='"+rootAppPath+"orca/_images/delete_16.png' class='closeBlockUI' style='float:right;'/><textarea id='rifcs_plain_content'></textarea></div>"
 			);
 		
+		$(".rda_preview").attr("href",$("#baseURL").val() + 'rda/preview?ds='+$('#object_mandatoryInformation_dataSource').val()+'&key=' + $('#object_mandatoryInformation_key').val());			
+		
+		$('#rda_preview_xml').click(function(){
+			var key = $('#object_mandatoryInformation_key').val();
+			var ds = $('#object_mandatoryInformation_dataSource').val();
+			$.get(rootAppPath + 'orca/services/getRegistryObject.php?key='+encodeURIComponent(key)+'&ds='+encodeURIComponent(ds)+'&type=plain',
+		       function(data) {
+				$('#rifcs_plain_content').val(data);
+		        $.blockUI({
+		            message: $('#rifcs_plain'),
+		            css: {
+		                width: '600px',
+		                top:'20%',
+		                left:'20%',
+		                textAlign: 'left',
+		                padding: '10px'
+		                },
+		                overlayCSS: { backgroundColor: '#000', opacity:   0.6}
+	            	});
+	            $('.blockOverlay').attr('title','Click to unblock').click($.unblockUI);
+	            $('.closeBlockUI').click($.unblockUI);
+		       }
+		   );
+			$('#rifcs_popup').hide();
+		});
+		
+	}else{
+		if($('#rda_preview_container').length > 0){
+			$('#rda_preview_container').remove();	
+		}
+		
+		if(!$("#infos_preview").length){
+			//if it's not there, create it so that we can append the preview
+			$("#errors_preview").after('<div class="info_notification" id="infos_preview"></div>');
+		}
+		$("#infos_preview").before(
+							"<div id='rda_preview_container'><a style='float:right;'id='rda_preview_xml' href='#'>View XML</a><a id='rda_preview' class='rda_preview' href='#' target='_blank'><img src='"+rootAppPath+"orca/_images/globe.png' /> Preview in Research Data Australia</a></div><div id='rifcs_plain' class='hide'><img src='"+rootAppPath+"orca/_images/delete_16.png' class='closeBlockUI' style='float:right;'/><textarea id='rifcs_plain_content'></textarea></div>"
+			);
+
+		//copy and paste from above, need refactor
+		$(".rda_preview").attr("href",$("#baseURL").val() + 'rda/preview?ds='+$('#object_mandatoryInformation_dataSource').val()+'&key=' + $('#object_mandatoryInformation_key').val());
+		$('#rda_preview_xml').click(function(){
+			var key = $('#object_mandatoryInformation_key').val();
+			var ds = $('#object_mandatoryInformation_dataSource').val();
+			$.get(rootAppPath + 'orca/services/getRegistryObject.php?key='+encodeURIComponent(key)+'&ds='+encodeURIComponent(ds)+'&type=plain',
+		       function(data) {
+				$('#rifcs_plain_content').val(data);
+		        $.blockUI({
+		            message: $('#rifcs_plain'),
+		            css: {
+		                width: '600px',
+		                top:'20%',
+		                left:'20%',
+		                textAlign: 'left',
+		                padding: '10px'
+		                },
+		                overlayCSS: { backgroundColor: '#000', opacity:   0.6}
+	            	});
+	            $('.blockOverlay').attr('title','Click to unblock').click($.unblockUI);
+	            $('.closeBlockUI').click($.unblockUI);
+		       }
+		   );
+			$('#rifcs_popup').hide();
+		});
 	} 
 
 	/* alert(document.forms[0].length + " is the length of the form");
@@ -1186,6 +1254,8 @@ function saveAndPreview() {
 		{
 			alert(document.forms[0].elements[i].name + " : "  +document.forms[0].elements[i].value);
 		} */
+		// Run a filter to trim spaces as appropriate
+		$('.input_filter_trim_spaces').each(function(){ $('#' + this.id).val($.trim($('#' + this.id).val())) });
 	
 	$.post(
 		'process_registry_object.php?task=save&userMode=' + userMode + '&data_source='+encodeURIComponent($('#object_mandatoryInformation_dataSource').val())+'&key=' + $.urlParam('key'),

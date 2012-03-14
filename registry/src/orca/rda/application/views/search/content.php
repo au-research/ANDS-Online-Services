@@ -107,27 +107,27 @@ limitations under the License.
 					$subjects = $r->{'subject_value'};
 				}
 
-				echo '<div class="search_item">';
+				echo '<div class="search_item" itemscope itemType="http://schema.org/Thing">';
 				
 				//echo get_cookie('show_icons');
 				echo '<p class="hide key">'.$ro_key.'</p>';
 				if(get_cookie('show_icons')=='yes'){
 					switch($class){
-						case "collection":echo '<img class="ro-icon" src="'.base_url().'img/icon/collections_32.png" title="Collection"/>';break;
-						case "activity":echo '<img class="ro-icon" src="'.base_url().'img/icon/activities_32.png" title="Activity"/>';break;
-						case "service":echo '<img class="ro-icon" src="'.base_url().'img/icon/services_32.png" title="Service"/>';break;
+						case "collection":echo '<img itemprop="image" class="ro-icon" src="'.base_url().'img/icon/collections_32.png" title="Collection" alt="Collection"/>';break;
+						case "activity":echo '<img itemprop="image" class="ro-icon" src="'.base_url().'img/icon/activities_32.png" title="Activity" alt="Activity"/>';break;
+						case "service":echo '<img itemprop="image" class="ro-icon" src="'.base_url().'img/icon/services_32.png" title="Service" alt="Service"/>';break;
 						case "party": 
 									if($type=='person'){
-										echo '<img class="ro-icon" src="'.base_url().'img/icon/party_one_32.png" title="Person"/>';
+										echo '<img itemprop="image" class="ro-icon" src="'.base_url().'img/icon/party_one_32.png" title="Person" alt="Person"/>';
 									}elseif($type=='group'){
-										echo '<img class="ro-icon" src="'.base_url().'img/icon/party_multi_32.png" title="Group"/>';
+										echo '<img itemprop="image" class="ro-icon" src="'.base_url().'img/icon/party_multi_32.png" title="Group" alt="Group"/>';
 									}
 							break;
 					}
 				}
 				$key_url =  base_url().'view/?key='.urlencode($ro_key);
 				//echo $key_url;
-				echo '<h2><a href="'.$key_url.'">'.$name.'</a></h2>';
+				echo '<h2 itemprop="name"><a itemprop="url" href="'.$key_url.'">'.$name.'</a></h2>';
 				
 				//echo '<pre>';
 								
@@ -142,7 +142,7 @@ limitations under the License.
 				//echo '<h2><a href="#!/view/'.$ro_key.'">'.$name.'</a></h2>';
 				
 				//DESCRIPTIONS';
-				echo '<p>';
+				echo '<p itemprop="description">';
 				if($found_brief){
 					echo strip_tags(htmlspecialchars_decode($brief));
 				}elseif($found_full){

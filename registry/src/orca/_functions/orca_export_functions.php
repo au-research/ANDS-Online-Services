@@ -759,8 +759,12 @@ function getTemporalCoverageXMLforSOLR($coverage_id)
 				{
 					$type = ' type="'.esc($row['type']).'"';	
 					$dateFormat = ' dateFormat="'.esc($row['date_format']).'"';
-					$value = FormatDateTime(esc($row['value']), gDATE);
-					$xml .= "            <date$type$dateFormat>$value</date>\n";
+					$value = esc($row['value']);
+				if (preg_match('/\b\d{4}\b/', $value, $matches)) 
+					{
+    				$year = $matches[0];
+					$xml .= "            <date$type$dateFormat>$year</date>\n";
+					}
 				}
 				$xml .= '</temporal>';	
 			}
@@ -1208,8 +1212,10 @@ function getRelatedObjectTypesXMLforSolr($registryObjectKey,$registryObjectClass
 	$typeArray['collection'] = array(
 		"describes" => "Describes",
 		"hasAssociationWith" => "Associated with",
+		"hasDerivedCollection" => "Derived collection",
 		"hasCollector" => "Aggregated by",
 		"hasPart" => "Contains",
+		"isDerivedFrom" => "Derived from",	
 		"isDescribedBy" => "Described by",
 		"isLocatedIn" => "Located in",
 		"isLocationFor" => "Location for",
@@ -1218,13 +1224,20 @@ function getRelatedObjectTypesXMLforSolr($registryObjectKey,$registryObjectClass
 		"isOutputOf" => "Output of",
 		"isOwnedBy" => "Owned by",
 		"isPartOf" => "Part of",
-		"supports" => "Supports"
+		"supports" => "Supports",
+		"isAvailableThrough" => "Available through",	
+		"isProducedBy" => "Produced by",	
+		"isPresentedBy" => "Presented by",	
+		"isOperatedOnBy" => "Operated on by",	
+		"hasValueAddedBy" => "Value added by"	
+			
 	);
 	$typeArray['party'] = array(
 		"hasAssociationWith" => "Associated with",
 		"hasMember" => "Has member",
 		"hasPart" => "Has part",
 		"isCollectorOf" => "Collector of",
+		"enriches" => "Enriches",	
 		"isFundedBy" => "Funded by",
 		"isFunderOf" => "Funds",
 		"isManagedBy" => "Managed by",
@@ -1233,7 +1246,8 @@ function getRelatedObjectTypesXMLforSolr($registryObjectKey,$registryObjectClass
 		"isOwnedBy" => "Owned by",
 		"isOwnerOf" => "Owner of",
 		"isParticipantIn" => "Participant in",
-		"isPartOf" => "Part of",
+		"isPartOf" => "Part of"
+		
 	);
 	$typeArray['service'] = array(
 		"hasAssociationWith" => "Associated with",
@@ -1244,7 +1258,11 @@ function getRelatedObjectTypesXMLforSolr($registryObjectKey,$registryObjectClass
 		"isPartOf" => "Part of",
 		"isOutputOf" => "Output of",	
 		"isSupportedBy" => "Supported by",
-		"makesAvailable" => "Makes available"
+		"makesAvailable" => "Makes available",
+		"produces" => "Produces",		
+		"presents" => "Presents",	
+		"operatesOn" => "Operates on",
+		"adddsValueTo" => "Adds value to"			
 	);
 	$typeArray['activity'] = array(
 		"hasAssociationWith" => "Associated with",
@@ -1254,7 +1272,7 @@ function getRelatedObjectTypesXMLforSolr($registryObjectKey,$registryObjectClass
 		"isFundedBy" => "Funded by",
 		"isManagedBy" => "Managed by",
 		"isOwnedBy" => "Owned by",
-		"isPartOf" => "Part of",
+		"isPartOf" => "Part of"
 	);	
 
 	//we need to check if this datasource has primary relationships set up.
@@ -1377,14 +1395,15 @@ function getReverseLinkTypesXMLforSolr($registryObjectKey,$dataSourceKey,$regist
 		"isOwnedBy" => "Owner of",
 		"isPartOf" => "Has part",
 		"supports" => "Supported by",
-		"isDerivedFrom" => "Has derived collection",
-		"hasDerivedCollection" => "Is derived from",
+		"isDerivedFrom" => "Derived collection",
+		"hasDerivedCollection" => "Derived from",
 		"isEnrichedBy"	=> "Enriches",
 		"isAvailableThrough" => "Makes available",
 		"isProducedBy" => "Produces",
 		"isPresentedBy" => "Presents",
 		"isOperatedOnBy" => "OperatesOn",
-		"hasValueAddedBy" => "Adds value to"
+		"hasValueAddedBy" => "Adds value to",
+	
 	);
 	$typeArray['party'] = array(
 		"hasAssociationWith" => "Associated with",
@@ -1503,7 +1522,7 @@ function getReverseLinkTypesXMLforSolr($registryObjectKey,$dataSourceKey,$regist
 					$xml .= "		 <relatedObjectListTitle>".esc($relatedObject[0]['list_title'])."</relatedObjectListTitle>";
 					$xml .= "		 <relatedObjectDisplayTitle>".esc($relatedObject[0]['display_title'])."</relatedObjectDisplayTitle>";
 					if($relation_logo) $xml .= "		 <relatedObjectLogo>".esc($relation_logo)."</relatedObjectLogo>";					
-					$xml .= getRelationsXMLSOLR($row['relation_id'],$typeArray);
+					$xml .= getRelationsXMLSOLR($row['relation_id'],$typeArray[$registryObjectClass]);
 					$xml .= "      </$elementName>\n";			
 				}
 			}
@@ -1629,6 +1648,8 @@ function getRelationsXMLSOLR($relation_id,$typeArray)
 				}
 				else
 				{
+					$types ='';
+					
 					$type = ' type="'.changeFromCamelCase($type).'"';
 				}
 				
@@ -1640,6 +1661,12 @@ function getRelationsXMLSOLR($relation_id,$typeArray)
 					$lang = ' xml:lang="'.esc($lang).'"';
 				}
 				$description = "          <description$lang>".esc($element['description'])."</description>\n";
+			}else{
+				if( $lang = $element['lang'] )
+				{
+					$lang = ' xml:lang="'.esc($lang).'"';
+				}
+				$description = "          <description$lang>null</description>\n";
 			}
 			if( $url = $element['url'] )
 			{
@@ -2627,7 +2654,7 @@ function addSolrIndex($registryObjectKey, $commit=true)
 		$rifcs = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
 		$rifcs .='<registryObjects xmlns="http://ands.org.au/standards/rif-cs/registryObjects" '."\n";
 		$rifcs .='                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '."\n";
-		$rifcs .='                 xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects '.gRIF2_SCHEMA_URI.'">'."\n";	
+		$rifcs .='                 xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects '.gRIF_SCHEMA_URI.'">'."\n";	
 		$rifcs .= $rifcsContent;			
 		$rifcs .= "</registryObjects>\n";	
 		$rifcs = transformToSolr($rifcs);									
@@ -2646,7 +2673,7 @@ function addKeysToSolrIndex($keys, $commit=true)
 		$rifcs = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
 		$rifcs .='<registryObjects xmlns="http://ands.org.au/standards/rif-cs/registryObjects" '."\n";
 		$rifcs .='                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '."\n";
-		$rifcs .='                 xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects '.gRIF2_SCHEMA_URI.'">'."\n";	
+		$rifcs .='                 xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects '.gRIF_SCHEMA_URI.'">'."\n";	
 		foreach ($keys as $registryObjectKey)
 		{
 			$rifcs .= getRegistryObjectXMLforSOLR(rawurldecode($registryObjectKey),true);

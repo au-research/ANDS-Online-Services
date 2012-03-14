@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema version="1.0.1" 
+<xsd:schema version="1.3" 
             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
             xmlns="http://ands.org.au/standards/rif-cs/registryObjects"
             targetNamespace="http://ands.org.au/standards/rif-cs/registryObjects"
@@ -27,18 +27,29 @@
     <xsd:annotation>
         <xsd:documentation xml:lang="en">
             Change history
-            v0.1 - 7 Dec 2007
-                * Initial Draft
-            v0.2 - 4 Feb 2008 (ORCA developer meeting)
-                * enumeration values moved to external vocabularies
-                * dateCreated attribute added to all repository objects
-                * type attribute added to description element
-                * collection/service relation model applied to party, activity
-                * profile element removed
-                * type library created and imports added to object schemas
-                * type attribute added to collection element
-            v0.3 - 20 Feb 2008
-                * Added group attribute to registry objects
+            v1.3 - 12 September 2011
+                * add new rights element
+                * add new existenceDate element
+                * add new termIdentifier attribute to subject element
+                * add new publisher element to citationMetadata
+            v1.2.0 - 7 July 2010
+                * remove type attribute from location
+                * add coverage element to collection, party, service and activity
+                * change relatedInfoType content model and add type attribute
+                * add citationInfoType and citation element to collection
+            v1.0.1 - 4 June 2009
+                * added type attribute to location
+            v1.0 - 13 March 2009
+                * remove dateCreated attribute
+                * move dateModified attribute to individual object classes and make optional
+                * add dateAccessioned attribute to collection
+                * add originatingSource element under registryObject with optional type attribute
+                * change simpleNameType and complexType to a single nameType
+                * make the relation element's description element optional
+                * move date range attributes from physical and spatial up to the location element
+                * import namespace in registryTypes.xsd updated to proper XML namespace and schema location
+                * update default and target namespace to reflect ANDS ownership
+                * remove xml:lang from namePart and addressPart
             v0.4 - 29 Feb 2008 (Review feedback during ORCA redevelopment)
                 * Removed dateRangeType and converted to attribute group
                 * Registry object wrapper element and relocation of key element and common attributes
@@ -51,19 +62,18 @@
                 * Drop uri element from electronicAddressType, add value element in its place
                 * Remove args element from relatedObject
                 * Add description element and type attribute to relation element
-            v1.0 - 13 March 2009
-                * remove dateCreated attribute
-                * move dateModified attribute to individual object classes and make optional
-                * add dateAccessioned attribute to collection
-                * add originatingSource element under registryObject with optional type attribute
-                * change simpleNameType and complexType to a single nameType
-                * make the relation element's description element optional
-                * move date range attributes from physical and spatial up to the location element
-                * import namespace in registryTypes.xsd updated to proper XML namespace and schema location
-                * update default and target namespace to reflect ANDS ownership
-                * remove xml:lang from namePart and addressPart
-             v1.0.1 - 4 June 2009
-                * added type attribute to location
+            v0.3 - 20 Feb 2008
+                * Added group attribute to registry objects
+            v0.2 - 4 Feb 2008 (ORCA developer meeting)
+                * enumeration values moved to external vocabularies
+                * dateCreated attribute added to all repository objects
+                * type attribute added to description element
+                * collection/service relation model applied to party, activity
+                * profile element removed
+                * type library created and imports added to object schemas
+                * type attribute added to collection element
+            v0.1 - 7 Dec 2007
+                * Initial Draft
         </xsd:documentation>
     </xsd:annotation>
 
