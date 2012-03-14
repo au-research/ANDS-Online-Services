@@ -814,10 +814,6 @@ function getSpatialCoverageXML($coverage_id, $forSOLR)
 						$xml .= "          <extRif:coords>$coordinates</extRif:coords>\n";
 					}
 				}
-//			}else{
-//				$valueString =  strtolower(esc($element['value']));
-//				$xml .= "        <spatial $type>$valueString</spatial>\n";	
-
 		        if($centre != '')
 		        {
 		        	$xml .= "          <extRif:center>$centre</extRif:center>\n";

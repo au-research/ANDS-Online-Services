@@ -115,6 +115,7 @@
  		<xsl:choose>
 	        <xsl:when test="../extRif:extendedMetadata/extRif:displayTitle!=''">
 	        	<xsl:apply-templates select="../extRif:extendedMetadata/extRif:displayTitle"/>
+	        	
 	        </xsl:when>
 	         <xsl:otherwise>
 	                
