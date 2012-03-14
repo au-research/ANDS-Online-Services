@@ -402,7 +402,4 @@ function bench($idx = 0)
 		return $diff;
 	}
 }
-
-
-
 ?>
