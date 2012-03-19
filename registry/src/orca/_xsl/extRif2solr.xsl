@@ -8,23 +8,41 @@
     
  <xsl:template match="ro:registryObjects">
      <add>
-    <xsl:apply-templates/>
+    <xsl:apply-templates select="ro:registryObject"/>
      </add>
  </xsl:template> 
 
     <xsl:template match="ro:registryObject">
         <doc>
+        <xsl:variable name="roKey" select="ro:key"/>
             <xsl:apply-templates select="ro:key"/>
-            <xsl:apply-templates select="extRif:extendedMetadata/extRif:keyHash"/>
-            <xsl:apply-templates select="extRif:extendedMetadata/extRif:status"/>
-            <xsl:apply-templates select="extRif:extendedMetadata/extRif:reverseLinks"/> 
-            <xsl:apply-templates select="extRif:extendedMetadata/extRif:searchBaseScore"/>
- 			<xsl:apply-templates select="extRif:extendedMetadata/extRif:registryDateModified"/>
-            <xsl:apply-templates select="ro:originatingSource"/>
-            <xsl:apply-templates select="extRif:extendedMetadata/extRif:dataSourceKey"/> 
-            <xsl:apply-templates select="extRif:extendedMetadata/extRif:dataSourceKeyHash"/> 
-            <xsl:apply-templates select="extRif:extendedMetadata/extRif:displayTitle"/> 
-            <xsl:apply-templates select="extRif:extendedMetadata/extRif:listTitle"/>
+        <xsl:choose>
+        	<xsl:when test="extRif:extendedMetadata">
+	        	<xsl:apply-templates select="extRif:extendedMetadata/extRif:keyHash"/>
+	            <xsl:apply-templates select="extRif:extendedMetadata/extRif:status"/>
+	            <xsl:apply-templates select="extRif:extendedMetadata/extRif:reverseLinks"/> 
+	            <xsl:apply-templates select="extRif:extendedMetadata/extRif:searchBaseScore"/>
+	 			<xsl:apply-templates select="extRif:extendedMetadata/extRif:registryDateModified"/>
+	            <xsl:apply-templates select="ro:originatingSource"/>
+	            <xsl:apply-templates select="extRif:extendedMetadata/extRif:dataSourceKey"/> 
+	            <xsl:apply-templates select="extRif:extendedMetadata/extRif:dataSourceKeyHash"/> 
+	            <xsl:apply-templates select="extRif:extendedMetadata/extRif:displayTitle"/> 
+	            <xsl:apply-templates select="extRif:extendedMetadata/extRif:listTitle"/>       	
+        	</xsl:when>
+        	<xsl:otherwise>
+	        	<xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:keyHash"/>
+	            <xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:status"/>
+	            <xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:reverseLinks"/> 
+	            <xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:searchBaseScore"/>
+	 			<xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:registryDateModified"/>
+	            <xsl:apply-templates select="ro:originatingSource"/>
+	            <xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:dataSourceKey"/> 
+	            <xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:dataSourceKeyHash"/> 
+	            <xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:displayTitle"/> 
+	            <xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:listTitle"/>
+        	</xsl:otherwise>
+        </xsl:choose>
+
 
 
             <xsl:element name="field">
@@ -135,8 +153,17 @@
         <xsl:apply-templates select="ro:subject" mode="resolved_value"/>
         <xsl:apply-templates select="ro:subject" mode="type"/>
         
-        <xsl:apply-templates select="extRif:description" mode="value"/>
-        <xsl:apply-templates select="extRif:description" mode="type"/>
+        <xsl:choose>
+        	<xsl:when test="extRif:description">
+        	   	<xsl:apply-templates select="extRif:description" mode="value"/>
+        		<xsl:apply-templates select="extRif:description" mode="type"/>
+        	</xsl:when>
+        	<xsl:otherwise>
+        	   	<xsl:apply-templates select="ro:description" mode="value"/>
+        		<xsl:apply-templates select="ro:description" mode="type"/>
+        	</xsl:otherwise>
+        </xsl:choose>
+
         
         <xsl:apply-templates select="ro:displayTitle"/>
         <xsl:apply-templates select="ro:listTitle"/>
@@ -304,14 +331,14 @@
         </xsl:element>
     </xsl:template>
     
-    <xsl:template match="extRif:description" mode="value">
+    <xsl:template match="extRif:description | ro:description" mode="value">
         <xsl:element name="field">
             <xsl:attribute name="name">description_value</xsl:attribute>
             <xsl:value-of select="."/>
         </xsl:element>       
     </xsl:template>
     
-    <xsl:template match="extRif:description" mode="type">
+    <xsl:template match="extRif:description | ro:description" mode="type">
         <xsl:element name="field">
             <xsl:attribute name="name">description_type</xsl:attribute>
             <xsl:value-of select="@type"/>
@@ -332,7 +359,7 @@
         </xsl:element>
     </xsl:template>
    
-    <xsl:template match="ro:date | ro:description | ro:spatial | ro:text"/>
+    <xsl:template match="ro:date | ro:spatial | ro:text"/>
     
     <xsl:template match="ro:name"/>
    		
