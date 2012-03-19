@@ -1908,6 +1908,64 @@ function runQualityCheckForRegistryObject($registryObjectKey, $dataSourceKey)
 		//return $result;
 }
 
+
+function runQualityLevelCheckForRegistryObject($registryObjectKey, $dataSourceKey)
+{
+	
+		$rifcs = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
+		$rifcs .= '<registryObjects xmlns="http://ands.org.au/standards/rif-cs/registryObjects" '."\n";
+		$rifcs .= '                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '."\n";
+		$rifcs .= '                 xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects '.gRIF_SCHEMA_URI.'">'."\n";
+		$rifcs .= getRegistryObjectXML($registryObjectKey);
+		$rifcs .= '</registryObjects>'; 
+		$objectClass = "";
+		if(str_replace("<Collection","",$rifcs)!=$rifcs||str_replace("<collection","",$rifcs)!=$rifcs)
+		{
+			$objectClass = "Collection";			
+		}
+		elseif(str_replace("<Servive","",$rifcs)!=$rifcs||str_replace("<service","",$rifcs)!=$rifcs)
+		{
+			$objectClass = "Service";			
+		}
+		elseif(str_replace("<Activity","",$rifcs)!=$rifcs||str_replace("<activity","",$rifcs)!=$rifcs)
+		{
+			$objectClass = "Activity";			
+		}	
+		elseif(str_replace("<Party","",$rifcs)!=$rifcs||str_replace("<party","",$rifcs)!=$rifcs)
+		{
+			$objectClass = "Party";			
+		}
+	
+		$relRifcs = getRelatedXml($dataSourceKey,$rifcs,$objectClass);  
+
+		$RegistryObjects = new DOMDocument();
+		$RegistryObjects->loadXML($relRifcs);
+		
+		$result = getQualityLevel($RegistryObjects,$objectClass);
+		$RegistryObjects->getElementsByTagName('relatedObject');
+		                         
+		return $result;
+}
+
+
+function getQualityLevel($RegistryObjects,$objectClass)
+{
+	
+	if($objectClass == 'Collection')
+	{
+		$eRegistryObjects = $RegistryObjects->getElementsByTagName('relatedObjects');
+		$eRegistryObject = $RegistryObjects->getElementsByTagName('relatedObject');
+		
+		
+		
+	}
+	
+	
+}
+
+
+
+
 function runQuagmireCheckForRegistryObject($registryObjectKey, $dataSourceKey)
 {
 	

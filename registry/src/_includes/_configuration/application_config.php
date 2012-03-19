@@ -232,7 +232,12 @@ addMenu($menu);
 
 		// =============================================================================
 		// services/getRegistryObjectsSOLR
-		$activity = new activity('aORCA_SERVICE_GET_REGISTRY_OBJECTS_SOLR', 'Get Registry Objects', 'http://'.eHOST.'/'.eROOT_DIR.'/orca/services/getRegistryObjectsSOLR.php');
+		//$activity = new activity('aORCA_SERVICE_GET_REGISTRY_OBJECTS_SOLR', 'Get Registry Objects', 'http://'.eHOST.'/'.eROOT_DIR.'/orca/services/getRegistryObjectsSOLR.php');
+		//$activity->no_check_ssl= true;
+		//addActivity($activity);
+		
+		// services/getRegistryObjectsSOLR
+		$activity = new activity('aORCA_SERVICE_GET_REGISTRY_OBJECTS_SOLR', 'Indexer', 'http://'.eHOST.'/'.eROOT_DIR.'/orca/services/indexer.php');
 		$activity->no_check_ssl= true;
 		addActivity($activity);
 	
