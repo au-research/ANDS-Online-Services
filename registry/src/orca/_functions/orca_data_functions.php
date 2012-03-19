@@ -74,7 +74,7 @@ function insertDataSource()
 	$errors = "";
 	$strQuery = 'SELECT dba.udf_insert_data_source($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32,$33,$34)';
 	$params = getParams(array(getLoggedInUser()), $_POST, 34);
-		//print("<pre>");
+	//	print("<pre>");
 	//print_r($_POST);
 	//var_dump($params);
 	//print("</pre>");	
@@ -93,7 +93,7 @@ function insertDataSource()
 		$errors = "An error occurred when trying to insert the record.";
 	}
 	
-//	getDataSourceHashForKey($data_source_key);
+	getDataSourceHashForKey($params[1]);
 		
 	return $errors;
 }
