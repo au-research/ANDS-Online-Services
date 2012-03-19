@@ -2600,48 +2600,6 @@ function getRegistryObjectURLSlug($registry_object_key)
 }
 
 
-
-function getRegistryObjectRegistryDateModified($registry_object_key)
-{
-	global $gCNN_DBS_ORCA;
-	$strQuery = 'SELECT registry_date_modified FROM dba.tbl_registry_objects WHERE registry_object_key = $1';
-	$params = array($registry_object_key);
-	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
-
-	if (!isset($resultSet[0])) 
-		return false;
-	else 
-		return $resultSet[0]['registry_date_modified'];
-}
-
-function getRegistryObjectStatusModified($registry_object_key)
-{
-	global $gCNN_DBS_ORCA;
-	$strQuery = 'SELECT status_modified_when FROM dba.tbl_registry_objects WHERE registry_object_key = $1';
-	$params = array($registry_object_key);
-	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
-
-	if (!isset($resultSet[0])) 
-		return false;
-	else 
-		return $resultSet[0]['status_modified_when'];
-}
-
-function getRegistryObjectURLSlug($registry_object_key)
-{
-	global $gCNN_DBS_ORCA;
-	$strQuery = 'SELECT url_slug FROM dba.tbl_registry_objects WHERE registry_object_key = $1';
-	$params = array($registry_object_key);
-	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
-
-	if (!isset($resultSet[0])) 
-		return false;
-	else 
-		return $resultSet[0]['url_slug'];
-	
-}
-
-
 function updateRegistryObjectSLUG ($registry_object_key, $new_display_title, $current_slug = '')
 {
 	global $gCNN_DBS_ORCA;
@@ -2649,15 +2607,15 @@ function updateRegistryObjectSLUG ($registry_object_key, $new_display_title, $cu
 	//die(var_dump($current_slug . $updated_slug));
 	// No need to do any updates if our slug hasn't changed
 	if ($current_slug == $updated_slug) { return true; }
-	
+
 	//Otherwise update the current slug
 	$strQuery = 'UPDATE dba.tbl_registry_objects SET url_slug = $2 WHERE registry_object_key = $1';
 	$params = array($registry_object_key, $updated_slug);
 	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
-	
+
 	//Add the new SLUG mapping
 	insertSLUGMapping($updated_slug, $registry_object_key, $new_display_title);
-	
+
 	return;
 }
 
@@ -2665,7 +2623,7 @@ function insertSLUGMapping($slug, $key, $current_title)
 {
 	global $gCNN_DBS_ORCA;
 	$strQuery = 'INSERT INTO dba.tbl_url_mappings VALUES ($1, $2, $3, $4, $5)';
-	$params = array($slug, $key, time(), 0, $current_title);
+	$params = array($slug, $key, time(), '', $current_title);
 	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
 
 	return $resultSet; 	
@@ -2677,7 +2635,6 @@ function updateSLUGMapping($slug, $key, $current_title)
 	$strQuery = 'UPDATE dba.tbl_url_mappings SET registry_object_key = $2, search_title = $3, date_modified = $4 WHERE url_fragment = $1';
 	$params = array($slug, $key, $current_title, time());
 	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
-
 	return $resultSet; 	
 }
 
@@ -2687,14 +2644,12 @@ function deleteSLUGMapping($slug)
 	$strQuery = 'UPDATE dba.tbl_url_mappings SET registry_object_key = \'\', date_modified = $2 WHERE url_fragment = $1';
 	$params = array($slug, time());
 	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
-
 	return $resultSet; 	
 }
 
 
 function countOtherSLUGMappings($slug, $key)
 {
-	global $gCNN_DBS_ORCA;	
 	// if the slug doesn't point to our key count it
 	$strQuery = 'SELECT COUNT(*) as count FROM dba.tbl_url_mappings WHERE registry_object_key != $1 AND url_fragment = $2';
 	$params = array($key, $slug);
@@ -2705,6 +2660,7 @@ function countOtherSLUGMappings($slug, $key)
 	else 
 		return (int) $resultSet[0]['count'];
 }
+
 
 function getDataSourceGroups($data_source_key)
 {

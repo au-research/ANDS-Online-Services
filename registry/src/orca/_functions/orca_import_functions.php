@@ -510,18 +510,18 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 				$display_title = getOrderedNames($registryObjectKey, (isset($party) && $party), true);
 				$list_title = getOrderedNames($registryObjectKey, (isset($party) && $party), false);
 				updateRegistryObjectTitles ($registryObjectKey, $display_title, $list_title);	
+
 				
 				$hash = generateRegistryObjectHashForKey($registryObjectKey);
 				updateRegistryObjectHash($registryObjectKey, $hash);
 				
 				updateRegistryObjectSLUG($registryObjectKey, $display_title, $currentUrlSlug);
 
+
+
 				// A new record has been inserted? Update the cache
 
-
-				$extRif = generateExtendedRIFCS($registryObjectKey);
-				if (!writeCache($dataSourceKey, $registryObjectKey, $extRif))
-
+				if (eCACHE_ENABLED && !writeCache($dataSourceKey, $registryObjectKey, generateExtendedRIFCS($registryObjectKey)))
 				{
 					$runErrors .= "Could not writeCache() for key: " . $registryObjectKey ."\n";
 				} 
