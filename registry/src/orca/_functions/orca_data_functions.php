@@ -2623,7 +2623,7 @@ function insertSLUGMapping($slug, $key, $current_title)
 {
 	global $gCNN_DBS_ORCA;
 	$strQuery = 'INSERT INTO dba.tbl_url_mappings VALUES ($1, $2, $3, $4, $5)';
-	$params = array($slug, $key, time(), '', $current_title);
+	$params = array($slug, $key, time(), 0, $current_title);
 	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
 
 	return $resultSet; 	
@@ -2650,6 +2650,7 @@ function deleteSLUGMapping($slug)
 
 function countOtherSLUGMappings($slug, $key)
 {
+	global $gCNN_DBS_ORCA;	
 	// if the slug doesn't point to our key count it
 	$strQuery = 'SELECT COUNT(*) as count FROM dba.tbl_url_mappings WHERE registry_object_key != $1 AND url_fragment = $2';
 	$params = array($key, $slug);

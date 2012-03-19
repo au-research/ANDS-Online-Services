@@ -518,7 +518,6 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 				updateRegistryObjectSLUG($registryObjectKey, $display_title, $currentUrlSlug);
 
 
-
 				// A new record has been inserted? Update the cache
 
 				if (eCACHE_ENABLED && !writeCache($dataSourceKey, $registryObjectKey, generateExtendedRIFCS($registryObjectKey)))
