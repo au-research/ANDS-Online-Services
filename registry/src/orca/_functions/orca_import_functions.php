@@ -65,6 +65,7 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 	{
 		$status = APPROVED;
 	}
+	
 	// Get an xpath object to use for parsing the XML.
 	$gXPath = new DOMXpath($registryObjects);
 	// Get the default namespace of the registryObjects object.
@@ -73,7 +74,6 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 	$gXPath->registerNamespace($xs, $defaultNamespace);
 	
 	$totalElements = $gXPath->evaluate("//*")->length;
-		
 	// Registry Objects
 	// =========================================================================
 	$registryObjectList = $gXPath->evaluate("$xs:registryObject");
@@ -90,6 +90,8 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 		
 		if( $registryObjectKey )
 		{
+			$currentUrlSlug = getRegistryObjectURLSlug($registryObjectKey);
+	
 			// Check if this object exists already, and delete it if it does.
 			if( $oldRegistryObject = getRegistryObject($registryObjectKey) )
 			{
@@ -499,7 +501,11 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 				$display_title = getOrderedNames($registryObjectKey, (isset($party) && $party), true);
 				$list_title = getOrderedNames($registryObjectKey, (isset($party) && $party), false);
 				updateRegistryObjectTitles ($registryObjectKey, $display_title, $list_title);	
-				updateRegistryObjectSLUG($registryObjectKey, $display_title);
+				
+				$hash = generateRegistryObjectHashForKey($registryObjectKey);
+				updateRegistryObjectHash($registryObjectKey, $hash);
+				
+				updateRegistryObjectSLUG($registryObjectKey, $display_title, $currentUrlSlug);
 
 				// A new record has been inserted? Update the cache
 				if (eCACHE_ENABLED && !writeCache($dataSourceKey, $registryObjectKey, generateExtendedRIFCS($registryObjectKey)))

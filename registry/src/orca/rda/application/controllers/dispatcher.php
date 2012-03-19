@@ -40,7 +40,6 @@ class Dispatcher extends CI_Controller {
 
 	public function _remap($method, $params = array())
 	{		
-
 		if (file_exists(APPPATH.'controllers/'.$method.EXT))
 		{
 			include(APPPATH.'controllers/'.$method.EXT);
@@ -62,7 +61,7 @@ class Dispatcher extends CI_Controller {
 		{
 		
 			$record_hash = $this->_getMappingFor($method);
-			
+
 			if (!$record_hash)		
 			{
 				// check if it used to exist?

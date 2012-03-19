@@ -92,6 +92,9 @@ function insertDataSource()
 	{
 		$errors = "An error occurred when trying to insert the record.";
 	}
+	
+//	getDataSourceHashForKey($data_source_key);
+		
 	return $errors;
 }
 
@@ -2545,12 +2548,11 @@ function getRegistryObjectURLSlug($registry_object_key)
 	
 }
 
-function updateRegistryObjectSLUG ($registry_object_key, $new_display_title)
+function updateRegistryObjectSLUG ($registry_object_key, $new_display_title, $current_slug = '')
 {
 	global $gCNN_DBS_ORCA;
-	$current_slug = getRegistryObjectURLSlug($registry_object_key);
-	$updated_slug = generateUniqueSlug($registry_object_key, $new_display_title);
-	
+	$updated_slug = generateUniqueSlug($new_display_title, $registry_object_key);
+	//die(var_dump($current_slug . $updated_slug));
 	// No need to do any updates if our slug hasn't changed
 	if ($current_slug == $updated_slug) { return true; }
 	
@@ -2569,7 +2571,7 @@ function insertSLUGMapping($slug, $key, $current_title)
 {
 	global $gCNN_DBS_ORCA;
 	$strQuery = 'INSERT INTO dba.tbl_url_mappings VALUES ($1, $2, $3, $4, $5)';
-	$params = array($slug, $key, time(), '', $current_title);
+	$params = array($slug, $key, time(), 0, $current_title);
 	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
 
 	return $resultSet; 	
@@ -2598,6 +2600,7 @@ function deleteSLUGMapping($slug)
 
 function countOtherSLUGMappings($slug, $key)
 {
+	global $gCNN_DBS_ORCA;	
 	// if the slug doesn't point to our key count it
 	$strQuery = 'SELECT COUNT(*) as count FROM dba.tbl_url_mappings WHERE registry_object_key != $1 AND url_fragment = $2';
 	$params = array($key, $slug);
