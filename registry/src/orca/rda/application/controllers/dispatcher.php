@@ -31,9 +31,6 @@ Furthermore, this controller can be extended with any logic that is appropriate
 to the request BEFORE it is handled by the controller specified in the URL. 
 */
 class Dispatcher extends CI_Controller {
-
-	const NO_NAME_OR_TITLE_SLUG = 'no-nametitle';
-	
 	
     public function __construct()
     {
@@ -140,45 +137,6 @@ class Dispatcher extends CI_Controller {
 		*/
 		
 	}
-	
-	
-	function _generateUniqueSlug($display_title, $key)
-	{
-		
-		$slug = generateSlug($display_title);
-		//no name/title
-		if ($slug == self::NO_NAME_OR_TITLE_SLUG)
-		{
-			$slug = generateSlug($key);
-		}
-
-		$existing_mappings = $this->db
-						        ->where('url_fragment', $slug)
-						        ->where('registry_object_key != ', $key)
-						        ->count_all_results('dba.tbl_url_mappings');
-
-		if ($existing_mappings > 0)
-		{
-			$key_slug = generateSlug($key);
-			if ($slug != $key_slug)
-			{
-				$slug .= "-" . $key_slug;
-			}
-		}
-		
-		while ($existing_mappings > 0)
-		{
-			$slug .= "-";
-			$query = $this->db
-					        ->where('url_fragment', $slug)
-					        ->where('registry_object_key != ', $key)
-							->count_all_results('dba.tbl_url_mappings');
-		}
-		
-		
-		return $slug; 
-	}
-	
 	
 
 }

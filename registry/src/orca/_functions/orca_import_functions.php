@@ -496,12 +496,13 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 				} // Service
 			
 				// Add a default and list title for the registry object
-				updateRegistryObjectTitles ($registryObjectKey, 
-                						getOrderedNames($registryObjectKey, (isset($party) && $party), true), 
-                                    	getOrderedNames($registryObjectKey, (isset($party) && $party), false));	
-										
+				$display_title = getOrderedNames($registryObjectKey, (isset($party) && $party), true);
+				$list_title = getOrderedNames($registryObjectKey, (isset($party) && $party), false);
+				updateRegistryObjectTitles ($registryObjectKey, $display_title, $list_title);	
+				updateRegistryObjectSLUG($registryObjectKey, $display_title);
+
 				// A new record has been inserted? Update the cache
-				if (!writeCache($dataSourceKey, $registryObjectKey, getExtendedRIFCS($registryObjectKey)))
+				if (eCACHE_ENABLED && !writeCache($dataSourceKey, $registryObjectKey, generateExtendedRIFCS($registryObjectKey)))
 				{
 					$runErrors .= "Could not writeCache() for key: " . $registryObjectKey ."\n";
 				} 
@@ -524,7 +525,7 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 	$runResultMessage .= "  ACTIONS\n";
 	$runResultMessage .= "    $totalRegistryObjectDeletes Registry Object/s deleted.\n";
 	$runResultMessage .= "    $totalRegistryObjectInserts Registry Object/s inserted.\n";
-	$runResultMessage .= "    $recordsCached records cached.\n";
+	$runResultMessage .= "    $recordsCached records added to cache.\n";
 	$runResultMessage .= "    $totalAttemptedInserts attempted inserts.\n";
 	$runResultMessage .= "    $totalInserts inserts.\n";
 

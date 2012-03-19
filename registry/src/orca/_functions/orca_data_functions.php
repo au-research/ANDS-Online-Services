@@ -2545,8 +2545,69 @@ function getRegistryObjectURLSlug($registry_object_key)
 	
 }
 
+function updateRegistryObjectSLUG ($registry_object_key, $new_display_title)
+{
+	global $gCNN_DBS_ORCA;
+	$current_slug = getRegistryObjectURLSlug($registry_object_key);
+	$updated_slug = generateUniqueSlug($registry_object_key, $new_display_title);
+	
+	// No need to do any updates if our slug hasn't changed
+	if ($current_slug == $updated_slug) { return true; }
+	
+	//Otherwise update the current slug
+	$strQuery = 'UPDATE dba.tbl_registry_objects SET url_slug = $2 WHERE registry_object_key = $1';
+	$params = array($registry_object_key, $updated_slug);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	
+	//Add the new SLUG mapping
+	insertSLUGMapping($updated_slug, $registry_object_key, $new_display_title);
+	
+	return;
+}
+
+function insertSLUGMapping($slug, $key, $current_title)
+{
+	global $gCNN_DBS_ORCA;
+	$strQuery = 'INSERT INTO dba.tbl_url_mappings VALUES ($1, $2, $3, $4, $5)';
+	$params = array($slug, $key, time(), '', $current_title);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+
+	return $resultSet; 	
+}
+
+function updateSLUGMapping($slug, $key, $current_title)
+{
+	global $gCNN_DBS_ORCA;
+	$strQuery = 'UPDATE dba.tbl_url_mappings SET registry_object_key = $2, search_title = $3, date_modified = $4 WHERE url_fragment = $1';
+	$params = array($slug, $key, $current_title, time());
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+
+	return $resultSet; 	
+}
+
+function deleteSLUGMapping($slug)
+{
+	global $gCNN_DBS_ORCA;
+	$strQuery = 'UPDATE dba.tbl_url_mappings SET registry_object_key = \'\', date_modified = $2 WHERE url_fragment = $1';
+	$params = array($slug, time());
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+
+	return $resultSet; 	
+}
 
 
+function countOtherSLUGMappings($slug, $key)
+{
+	// if the slug doesn't point to our key count it
+	$strQuery = 'SELECT COUNT(*) as count FROM dba.tbl_url_mappings WHERE registry_object_key != $1 AND url_fragment = $2';
+	$params = array($key, $slug);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+
+	if (!isset($resultSet[0])) 
+		return 0;
+	else 
+		return (int) $resultSet[0]['count'];
+}
 
 
 

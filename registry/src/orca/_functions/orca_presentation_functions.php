@@ -1074,4 +1074,58 @@ function printHeader($months)
 		<?php 
 	}	
 }
+	
+function generateSlug($phrase, $maxLength = 255)
+{
+    $result = strtolower($phrase);
+
+    $result = preg_replace("/[^a-z0-9\s-]/", "", $result);
+    $result = trim(preg_replace("/[\s-]+/", " ", $result));
+    $result = trim(substr($result, 0, $maxLength));
+    $result = preg_replace("/\s/", "-", $result);
+
+    return $result;
+}
+	
+	
+function generateUniqueSlug($display_title, $key)
+{
+	// Get an initial slug based on title alone
+	$slug = generateSlug($display_title);
+	
+	// if no name/title, then slug the key and hope for the best
+	// these are pretty dumb records anyway...
+	if ($slug == NO_NAME_OR_TITLE_SLUG)
+	{
+		$slug = generateSlug($key);
+	}
+
+	// see if our first attempt is unique 
+	// if the existing mapping is to our own key, we can consider it unique
+	$existing_mappings = countOtherSLUGMappings($slug, $key);
+
+	// if not, lets try adding the key to the end
+	if ($existing_mappings > 0)
+	{
+		$key_slug = generateSlug($key);
+		if ($slug != $key_slug)
+		{
+			$slug .= "-" . $key_slug;
+		}
+	}
+	
+	// keys aren't entirely unique once they're slugified, so add some dashes if still conflicting
+	// (this is really unlikely!)
+	$existing_mappings = countOtherSLUGMappings($slug, $key);
+	
+	while ($existing_mappings > 0)
+	{
+		$slug .= "-";
+		$query = countOtherSLUGMappings($slug, $key);
+	}
+		
+		
+	return $slug; 
+}
+
 ?>

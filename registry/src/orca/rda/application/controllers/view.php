@@ -38,6 +38,7 @@ class View extends CI_Controller {
 			$key = rawurldecode($params[0]);
 		} 
 		
+		// XXX: TODO: If slug != record's expected slug, we should redirect
 		if (!is_null($key))
 		{
 			redirect(base_url().getSlugForRecordByKey($key));
@@ -51,6 +52,7 @@ class View extends CI_Controller {
 
 	public function view_by_hash($params)
 	{
+		// XXX: TODO: If slug != record's expected slug, we should redirect
 		if (is_array($params) && count($params) >= 1)
 		{
 			$hash = $params[0];
