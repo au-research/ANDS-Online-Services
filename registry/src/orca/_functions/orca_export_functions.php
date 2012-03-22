@@ -145,9 +145,14 @@ function getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR = false, $inclu
 			$number_of_related_objects = getIncomingRelatedObjectCount($registryObjectKey);
 			$baseScore += eBOOST_INCOMING_RELATED_OBJECT_ADJUSTMENT * (int) $number_of_related_objects;
 			
-			$xml .= "      <extRif:searchBaseScore>$baseScore</extRif:searchBaseScore>\n";
-			
-			
+			$xml .= "      <extRif:searchBaseScore>$baseScore</extRif:searchBaseScore>\n";			
+			$xml .= '      <extRif:flag>'.esc(trim($registryObject[0]['flag'])).'</extRif:flag>'."\n";
+			$xml .= '      <extRif:warning_count>'.esc(trim($registryObject[0]['warning_count'])).'</extRif:warning_count>'."\n";
+			$xml .= '      <extRif:error_count>'.esc(trim($registryObject[0]['error_count'])).'</extRif:error_count>'."\n";
+			$xml .= '      <extRif:url_slug>'.esc(trim($registryObject[0]['url_slug'])).'</extRif:url_slug>'."\n";
+			$xml .= '      <extRif:manually_assessed_flag>'.esc(trim($registryObject[0]['manually_assessed_flag'])).'</extRif:manually_assessed_flag>'."\n";
+			$xml .= '      <extRif:gold_status_flag>'.esc(trim($registryObject[0]['gold_status_flag'])).'</extRif:gold_status_flag>'."\n";
+			$xml .= '      <extRif:quality_level>'.esc(trim($registryObject[0]['list_title'])).'</extRif:quality_level>'."\n";	
 			$xml .= "    </extRif:extendedMetadata>\n";
 		}
 		

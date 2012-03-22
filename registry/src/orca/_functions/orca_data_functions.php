@@ -1868,6 +1868,68 @@ function updateRegistryObjectQualityTestResult($registry_object_key, $quality_te
 }
 
 
+
+function setRegistryObjectGoldStandardFlag($registry_object_key, $gs_flag)
+{
+	if (in_array($gs_flag, array(0,1)))
+	{
+		global $gCNN_DBS_ORCA;
+        $strQuery = 'UPDATE dba.tbl_registry_objects SET gold_status_flag = $2 WHERE registry_object_key = $1';
+        $params = array($registry_object_key, $gs_flag);
+        $resultSet = @executeQuery($gCNN_DBS_ORCA, $strQuery, $params);	  		
+	}
+}
+
+function setRegistryObjectManuallyAssessedFlag($registry_object_key)
+{
+		global $gCNN_DBS_ORCA;
+        $strQuery = 'UPDATE dba.tbl_registry_objects SET manually_assessed_flag = 1 WHERE registry_object_key = $1';
+        $params = array($registry_object_key);
+        $resultSet = @executeQuery($gCNN_DBS_ORCA, $strQuery, $params);	  		
+}
+
+function updateRegistryObjectQualityLevelResult($registry_object_key, $quality_level,  $quality_level_result)
+{	
+
+	if (in_array($quality_level, array(1,2,3,4)))
+	{
+		global $gCNN_DBS_ORCA;	
+		$errors = "";
+		$resultSet = null;
+		$strQuery = 'UPDATE dba.tbl_registry_objects SET quality_level = $2, quality_level_result = $3 WHERE registry_object_key = $1';
+		$params = array($registry_object_key, $quality_level, $quality_level_result);
+		$result = executeUpdateQuery($gCNN_DBS_ORCA, $strQuery, $params);
+		return $result;		
+	}	
+}
+
+
+function updateDraftRegistryObjectQualityLevelResult($draft_key, $registry_object_data_source, $quality_level,  $quality_level_result)
+{	
+	if (in_array($quality_level, array(1,2,3,4)))
+	{
+		global $gCNN_DBS_ORCA;	
+		$errors = "";
+		$resultSet = null;
+		$strQuery = 'UPDATE dba.tbl_registry_objects SET quality_level = $3, quality_level_result = $4 WHERE draft_key = $1 AND registry_object_data_source = $2';
+		$params = array($draft_key, $registry_object_data_source, $quality_level, $quality_level_result);
+		$result = executeUpdateQuery($gCNN_DBS_ORCA, $strQuery, $params);
+		return $result;		
+	}	
+}
+
+
+function updateDraftRegistryObjectQualityLevelResult($registryObjectKey, $dataSourceKey, $quality_level_result, $level)                           
+{
+	global $gCNN_DBS_ORCA;	
+	$errors = "";
+	$resultSet = null;
+	$strQuery = 'SELECT dba.udf_update_draft_quality_level_result($1, $2, $3, $4);';
+	$params = array($registryObjectKey, $dataSourceKey, $quality_level_result, $level);
+	$result = executeUpdateQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	return $result;		
+}
+
 function updateDraftRegistryObjectQualityTestResult($registryObjectKey, $dataSourceKey, $qualityTestResult, $errorCount, $warningCount)                           
 {
 	global $gCNN_DBS_ORCA;
