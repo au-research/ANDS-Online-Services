@@ -238,7 +238,11 @@ function addDraftSolrIndex($registryObjectKey, $commit=true)
 			// listTitle
 			// -------------------------------------------------------------
 			$xml .= '      <extRif:listTitle>'.esc(trim($allKeys[$i]['registry_object_title'])).'</extRif:listTitle>'."\n";
-			
+			$xml .= '      <extRif:flag>'.esc(trim($allKeys[$i]['flag'])).'</extRif:flag>'."\n";
+			$xml .= '      <extRif:warning_count>'.esc(trim($allKeys[$i]['warning_count'])).'</extRif:warning_count>'."\n";
+			$xml .= '      <extRif:error_count>'.esc(trim($allKeys[$i]['error_count'])).'</extRif:error_count>'."\n";
+			$xml .= '      <extRif:gold_status_flag>'.esc(trim($allKeys[$i]['gold_status_flag'])).'</extRif:gold_status_flag>'."\n";
+			$xml .= '      <extRif:quality_level>'.esc(trim($allKeys[$i]['list_title'])).'</extRif:quality_level>'."\n";	
 			$xml .= "    </extRif:extendedMetadata>\n";		
 			$rifcsContent .= unwrapRegistryObject($allKeys[$i]['rifcs']);	
 			$rifcsContent .= $xml;
