@@ -34,13 +34,14 @@ $totalCount = 0;
 $solr_update_url = $solr_url.'update';
 //echo $solr_update_url;
 switch($task){
-	case "indexAll":	index($status);				break;
-	case "indexDS": 	indexDS($dataSourceKey , $status); 	break;
-	case "indexKey":	indexKey($key);				break;
-	case "clearAll":	clearAll();					break;
-	case "clearDS":		clearDS($dataSourceKey);	break;
-	case "clearKey":	clearKey($key);				break;
-	default: print "no task defined"; 				break;
+	case "indexAll":	index($status);										break;
+	case "indexDS": 	indexDS($dataSourceKey , $status); 					break;
+	case "indexKey":	indexKey($key);										break;
+	case "clearAll":	clearAll();											break;
+	case "clearDS":		clearDS($dataSourceKey);							break;
+	case "clearKey":	clearKey($key);										break;
+	case "checkQuality":	checkQuality($key,$dataSourceKey);				break;
+	default: print "no task defined"; 										break;
 }
 
 /*FUNCTIONS*/
@@ -65,7 +66,6 @@ function index($status = 'All')
 	
 }
 
-
 function clearAll(){
 	global $solr_update_url;
 	echo "Clearing All SOLR indexes: ".$solr_update_url;
@@ -83,8 +83,13 @@ function indexDS($dataSourceKey, $status = 'All', $optimise = true){
 	{
 		addDraftSolrIndexForDatasource($dataSourceKey);
 	}
+	print "<br/>done";
+	ob_flush();flush();
+	
 	if($optimise)
 	{
+		print '...but<br/>now optimising<br/>';
+		ob_flush();flush();
 		$result = curl_post($solr_update_url.'?optimize=true', '<optimize waitFlush="false" waitSearcher="false"/>');
 		print $result;
 	}
@@ -238,11 +243,12 @@ function addDraftSolrIndex($registryObjectKey, $commit=true)
 			// listTitle
 			// -------------------------------------------------------------
 			$xml .= '      <extRif:listTitle>'.esc(trim($allKeys[$i]['registry_object_title'])).'</extRif:listTitle>'."\n";
-			$xml .= '      <extRif:flag>'.esc(trim($allKeys[$i]['flag'])).'</extRif:flag>'."\n";
+			$xml .= '      <extRif:flag>'.($allKeys[$i]['flag'] == 'f' ? '0' : '1').'</extRif:flag>'."\n";
 			$xml .= '      <extRif:warning_count>'.esc(trim($allKeys[$i]['warning_count'])).'</extRif:warning_count>'."\n";
 			$xml .= '      <extRif:error_count>'.esc(trim($allKeys[$i]['error_count'])).'</extRif:error_count>'."\n";
-			$xml .= '      <extRif:gold_status_flag>'.esc(trim($allKeys[$i]['gold_status_flag'])).'</extRif:gold_status_flag>'."\n";
-			$xml .= '      <extRif:quality_level>'.esc(trim($allKeys[$i]['list_title'])).'</extRif:quality_level>'."\n";	
+			//$xml .= '      <extRif:gold_status_flag>'.esc(trim($allKeys[$i]['gold_status_flag'])).'</extRif:gold_status_flag>'."\n";
+			$xml .= '      <extRif:quality_level>'.esc(trim($allKeys[$i]['quality_level'])).'</extRif:quality_level>'."\n";
+			$xml .= '      <extRif:feedType>'.($allKeys[$i]['draft_owner'] == 'SYSTEM' ? 'harvest' : 'manual').'</extRif:feedType>'."\n";
 			$xml .= "    </extRif:extendedMetadata>\n";		
 			$rifcsContent .= unwrapRegistryObject($allKeys[$i]['rifcs']);	
 			$rifcsContent .= $xml;
@@ -343,7 +349,7 @@ function addDraftSolrIndexForDatasource($dataSourceKey)
 			$numDots = ceil(100/ceil($arraySize/$chunkSize));
 		}
 		//$pCompleted = 100/ceil($arraySize/$chunkSize);
-		echo "pC:".$pCompleted;
+		//echo "pC:".$pCompleted;
 	for($i = 0; $i < $arraySize ; $i++)
 	{				
 		
@@ -402,17 +408,23 @@ function addDraftSolrIndexForDatasource($dataSourceKey)
 			// listTitle
 			// -------------------------------------------------------------
 			$xml .= '      <extRif:listTitle>'.esc(trim($allKeys[$i]['registry_object_title'])).'</extRif:listTitle>'."\n";
-			
+			$xml .= '      <extRif:flag>'.($allKeys[$i]['flag'] == 'f' ? '0' : '1').'</extRif:flag>'."\n";
+			$xml .= '      <extRif:warning_count>'.esc(trim($allKeys[$i]['warning_count'])).'</extRif:warning_count>'."\n";
+			$xml .= '      <extRif:error_count>'.esc(trim($allKeys[$i]['error_count'])).'</extRif:error_count>'."\n";
+			//$xml .= '      <extRif:gold_status_flag>'.esc(trim($allKeys[$i]['gold_status_flag'])).'</extRif:gold_status_flag>'."\n";
+			$xml .= '      <extRif:quality_level>'.esc(trim($allKeys[$i]['quality_level'])).'</extRif:quality_level>'."\n";
+			$xml .= '      <extRif:feedType>'.($allKeys[$i]['draft_owner'] == 'SYSTEM' ? 'harvest' : 'manual').'</extRif:feedType>'."\n";
 			$xml .= "    </extRif:extendedMetadata>\n";
 
 		
 		$rifcsContent .= unwrapRegistryObject($allKeys[$i]['rifcs']);	
 		$rifcsContent .= $xml;
+		//print $rifcsContent."\n";
 		if(($i % $chunkSize == 0 && $i != 0) || $i == ($arraySize -1))
 		{					
 				$rifcs = wrapRegistryObjects($rifcsContent);
 				$solrrifcs = transformToSolr($rifcs);
-				//echo $solrrifcs;
+				//echo $solrrifcs."\n";
 				if (strlen($solrrifcs) == 0)
 				{
 					echo "<font color='red'>".$rifcs."</font>";
@@ -442,6 +454,35 @@ function addDraftSolrIndexForDatasource($dataSourceKey)
 	echo "<hr/>Took " . bench(2) ."s to reindex...";
 	}
 }
+
+function checkQuality($key,$dataSourceKey)
+{
+	if($dataSourceKey && $key)
+	{
+		$message = runQualityLevelCheckForRegistryObject($key,$dataSourceKey);
+	}
+	elseif($dataSourceKey)
+	{
+		$message = runQualityLevelCheckforDataSource($dataSourceKey);
+	}
+	else 
+	{
+		$dataSources = getDataSources(null, null);
+		$arraySize = sizeof($dataSources);
+		bench(0);
+		for($i= 0 ; $i < $arraySize ; $i++)
+		{
+			$message = runQualityLevelCheckforDataSource($dataSources[$i]['data_source_key']);
+			print $message;
+			ob_flush();flush();
+		}
+		$message = runQualityLevelCheckforDataSource('PUBLISH_MY_DATA');
+		print $message;
+	}
+	print $message;	
+	
+}
+
 
 function unwrapRegistryObject($rifcsString)
 {

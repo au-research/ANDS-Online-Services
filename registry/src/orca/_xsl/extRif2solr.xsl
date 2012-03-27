@@ -17,7 +17,7 @@
         <xsl:variable name="roKey" select="ro:key"/>
             <xsl:apply-templates select="ro:key"/>
         <xsl:choose>
-        	<xsl:when test="extRif:extendedMetadata">
+			<xsl:when test="extRif:extendedMetadata">
 	        	<xsl:apply-templates select="extRif:extendedMetadata/extRif:keyHash"/>
 	            <xsl:apply-templates select="extRif:extendedMetadata/extRif:status"/>
 	            <xsl:apply-templates select="extRif:extendedMetadata/extRif:reverseLinks"/> 
@@ -27,7 +27,15 @@
 	            <xsl:apply-templates select="extRif:extendedMetadata/extRif:dataSourceKey"/> 
 	            <xsl:apply-templates select="extRif:extendedMetadata/extRif:dataSourceKeyHash"/> 
 	            <xsl:apply-templates select="extRif:extendedMetadata/extRif:displayTitle"/> 
-	            <xsl:apply-templates select="extRif:extendedMetadata/extRif:listTitle"/>       	
+	            <xsl:apply-templates select="extRif:extendedMetadata/extRif:listTitle"/>  
+	            <xsl:apply-templates select="extRif:extendedMetadata/extRif:flag"/>
+      			<xsl:apply-templates select="extRif:extendedMetadata/extRif:warning_count"/>
+      			<xsl:apply-templates select="extRif:extendedMetadata/extRif:error_count"/>
+     			<xsl:apply-templates select="extRif:extendedMetadata/extRif:url_slug"/>
+      			<xsl:apply-templates select="extRif:extendedMetadata/extRif:manually_assessed_flag"/>
+      			<xsl:apply-templates select="extRif:extendedMetadata/extRif:gold_status_flag"/>
+      			<xsl:apply-templates select="extRif:extendedMetadata/extRif:quality_level"/>
+      			<xsl:apply-templates select="extRif:extendedMetadata/extRif:feedType"/>           	
         	</xsl:when>
         	<xsl:otherwise>
 	        	<xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:keyHash"/>
@@ -40,6 +48,14 @@
 	            <xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:dataSourceKeyHash"/> 
 	            <xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:displayTitle"/> 
 	            <xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:listTitle"/>
+	            <xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:flag"/>
+      			<xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:warning_count"/>
+      			<xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:error_count"/>
+     			<xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:url_slug"/>
+      			<xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:manually_assessed_flag"/>
+      			<xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:gold_status_flag"/>
+      			<xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:quality_level"/>
+      			<xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:feedType"/>
         	</xsl:otherwise>
         </xsl:choose>
 
@@ -64,6 +80,63 @@
     <xsl:template match="extRif:keyHash">
         <xsl:element name="field">
             <xsl:attribute name="name">key_hash</xsl:attribute>
+            <xsl:value-of select="."/>
+        </xsl:element>       
+    </xsl:template>
+    
+
+    <xsl:template match="extRif:flag">
+        <xsl:element name="field">
+            <xsl:attribute name="name">flag</xsl:attribute>
+            <xsl:value-of select="."/>
+        </xsl:element>       
+    </xsl:template>
+
+    <xsl:template match="extRif:warning_count">
+        <xsl:element name="field">
+            <xsl:attribute name="name">warning_count</xsl:attribute>
+            <xsl:value-of select="."/>
+        </xsl:element>       
+    </xsl:template>
+
+    <xsl:template match="extRif:error_count">
+        <xsl:element name="field">
+            <xsl:attribute name="name">error_count</xsl:attribute>
+            <xsl:value-of select="."/>
+        </xsl:element>       
+    </xsl:template>
+
+    <xsl:template match="extRif:url_slug">
+        <xsl:element name="field">
+            <xsl:attribute name="name">url_slug</xsl:attribute>
+            <xsl:value-of select="."/>
+        </xsl:element>       
+    </xsl:template>
+
+    <xsl:template match="extRif:manually_assessed_flag">
+        <xsl:element name="field">
+            <xsl:attribute name="name">manually_assessed_flag</xsl:attribute>
+            <xsl:value-of select="."/>
+        </xsl:element>       
+    </xsl:template>
+    
+    <xsl:template match="extRif:gold_status_flag">
+        <xsl:element name="field">
+            <xsl:attribute name="name">gold_status_flag</xsl:attribute>
+            <xsl:value-of select="."/>
+        </xsl:element>       
+    </xsl:template>
+    
+    <xsl:template match="extRif:quality_level">
+        <xsl:element name="field">
+            <xsl:attribute name="name">quality_level</xsl:attribute>
+            <xsl:value-of select="."/>
+        </xsl:element>       
+    </xsl:template>
+
+    <xsl:template match="extRif:feedType">
+        <xsl:element name="field">
+            <xsl:attribute name="name">feed_type</xsl:attribute>
             <xsl:value-of select="."/>
         </xsl:element>       
     </xsl:template>
