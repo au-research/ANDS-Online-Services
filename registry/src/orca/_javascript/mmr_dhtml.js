@@ -20,6 +20,277 @@ var MMR_datasource_info_visible = true;
 
 $(document).ready(function() {
 	
+	$(".chzn-select").chosen(); $(".chzn-select-deselect").chosen({allow_single_deselect:true});
+	
+	//MMR Tables
+	dsKey = $('#dataSourceKey').val();
+
+	if($('#orcaQA').text()=='yes'){
+		orcaQA = true;
+	}else orcaQA = false;
+	if($('#orcaLIASON').text()=='yes'){
+		orcaLIASON = true;
+	}else orcaLIASON = false;
+
+
+	$('.mmr_table').each(function(){
+		status = $(this).attr('name');
+		count = $(this).attr('count');
+
+
+		buttons = [
+			{name: 'Select All', bclass: 'button', onpress : selectAll},
+		];
+		if(status=="DRAFT"){
+			buttons.push({name: 'Submit for Assessment', bclass: 'submit_for_assessment', onpress : doCommand});
+			buttons.push({name: 'Delete', bclass: 'delete', onpress : doCommand});
+		}else if(status=="SUBMITTED_FOR_ASSESSMENT"){
+			if(orcaQA){
+				buttons.push({name: 'Start Assessment', bclass: 'start_assessment', onpress : doCommand});
+			}
+			if(orcaLIASON){
+				buttons.push({name: 'Revert to Draft', bclass: 'revert_to_draft', onpress : doCommand})
+			}
+		}else if(status=="ASSESSMENT_IN_PROGRESS"){
+			if(orcaQA){
+				buttons.push({name: 'Approve', bclass: 'approve', onpress : doCommand});
+				buttons.push({name: 'More Work Required', bclass: 'more_work_required', onpress : doCommand});
+			}
+		}else if(status=="APPROVE"){
+			buttons.push({name: 'Publish', bclass: 'publish', onpress : doCommand});
+			buttons.push({name: 'Delete', bclass: 'delete', onpress : doCommand});
+		}else if(status=="PUBLISHED"){
+			buttons.push({name: 'Delete', bclass: 'delete', onpress : doCommand});
+		}
+		//buttons.push({separator:true});
+		
+
+		$(this).flexigrid({
+  			striped:true, 
+  			title:status,
+  			showTableToggleBtn: true,
+  			showToggleBtn: false,
+            url: 'get_view.php?view=status&status='+status+'&ds='+dsKey,
+        	dataType: 'json',
+        	usepager: true,
+        	colModel : [
+        		{display: 'recordKey', name:'key', width:70, sortable: true, align:'left'},
+                {display: 'Name/Title', name : 'list_title', width : 350, sortable : true, align: 'left'},
+                {display: 'Last Modified', name : 'date_modified', width : 100, sortable : true, align: 'left'},
+                {display: 'Class', name : 'class', width : 50, sortable : true, align: 'left'},
+                {display: 'Errors/Warnings', name : 'qa', width : 50, sortable : false, align: 'left'},
+                {display: 'Status', name : 'status', width : 150, sortable : false, align: 'left'},
+                {display: 'Options', name : 'buttons', width : 150, sortable : false, align: 'left'}
+            ],
+            buttons:buttons,
+            useRp: true,
+        	rp: 10,
+			pagestat: 'Displaying {from} to {to} of {total} records',
+            height:'auto',
+            additionalClass:status+'_table',
+            searchitems : [
+                        {display: 'Name/Title', name : 'list_title'}
+                        ]
+	  		});
+	  	
+	  	if (count==0){
+	  		//console.log(count);
+	  		$(this).parent().parent().find('.ptogtitle').click();
+	  	}
+
+	});
+
+	
+	/**
+	BUTTONS
+	**/
+	function doCommand(com, grid) {
+
+		//setup the keys
+		targetKeys = [];
+		$('.trSelected', grid).each(function() {
+			var id = $(this).attr('id');
+			id = id.substring(id.lastIndexOf('row')+3);
+			//alert("Edit row " + id);
+			targetKeys.push(id);
+		});
+		numKeys = (targetKeys).length;
+		dataSourceKey = $('#dataSourceKey').val();
+
+		//if there is none
+		if(numKeys==0){
+			alert('Please select');
+			return false;
+		}
+
+		//setup actions
+		if (com == 'Edit') {
+			
+		} else if (com == 'Delete') {
+			if(confirm('You are about to delete '+numKeys+' records')){
+				alert('Deleting');
+			}
+		}else if(com=='Submit for Assessment'){
+			action = 'SUBMIT_FOR_ASSESSMENT';
+		}else if(com=='Revert to Draft'){
+			action = 'BACK_TO_DRAFT';
+		}else if(com=='Start Assessment'){
+			action = 'START_ASSESSMENT';
+		}else if(com=='More Work Required'){
+			action = 'MORE_WORK_REQUIRED';
+		}else if(com=='Approve'){
+			action = 'APPROVE';
+		}
+		//alert($("#elementSourceURL").val());
+
+
+		//POST the stuff over to Manage My Records
+		isPreApproval = false;
+		$.post(
+			$("#elementSourceURL").val() + "task=manage_my_records&action=" + action,
+			{ 	
+				'keys[]' : targetKeys, 
+				'preapproval' : isPreApproval,
+				'dataSourceKey' : dataSourceKey
+			},
+			function(data)
+			{		
+				$('#indexDS').click();			
+				if (data['responsecode'] == 0)
+				{
+					// Error occured
+					alert("Error Occured: Access Denied.");
+					console.log(data);
+					$.unblockUI(); 
+				}
+				else if (data['responsecode'] == "MT008")
+				{
+					$('#mmr_datasource_alert_msg').html('Your records have been sent to ANDS for assessment and approval. You should contact your ANDS Client Liaison Officer to notify them that these records have been submitted.');
+				}
+				else if (data['responsecode'] == "MT014")
+				{
+					$('#mmr_datasource_alert_msg').html('An ANDS Quality Assessor has been notified of your submitted record(s)');
+				}
+				else
+				{
+					if (data['alert'])
+					{
+						$('#mmr_datasource_alert_msg').html(data['alert']);
+					}
+				}
+			},
+			'json'
+		);
+
+		//Reindex all the target Keys
+
+	}
+
+	function selectAll(com, grid){
+		if($(this).text()=='Select All'){
+			$('tbody tr', grid).click();
+			$(this).html('<a class="button smaller left">Deselect All</a>');
+		}else{
+			$('tbody tr', grid).removeClass('trSelected');
+			$(this).html('<a class="button smaller left">Select All</a>');
+		}
+		
+	}
+
+	//delete Confirm
+	$('.deleteConfirm').live('click', function(){
+		return confirm('You are about to delete 1 record. Do you want to continue?');
+	});
+	
+
+	//Tooltip for the (more details)
+	$('a.pop[title]').qtip({
+		content:{
+			text: $('#mmr_ds_moredetails'),
+			title: {
+				text: 'About Manage My Records'
+				
+			}
+		},
+		position: {
+			my: 'top center', // Use the corner...
+			at: 'bottom center' // ...and opposite corner
+		},
+		style: {
+			classes: 'ui-tooltip-shadow ui-tooltip-jtools'
+		},
+		show: {
+			event: 'click',
+			effect: function(offset) {
+				$(this).slideDown(100); // "this" refers to the tooltip
+			}
+		},
+		hide: {
+			fixed:true,
+			delay: 1000
+		}
+	});
+
+	//tooltip for everything that has class tip and has an attribute of tip
+
+	$('a.tip').live('mouseover', function(){
+		$(this).qtip({
+			content:{
+				text: $(this).attr('tip')
+			},
+			position: {
+				my: 'bottom center', // Use the corner...
+				at: 'top center' // ...and opposite corner
+			},
+			style: {
+				classes: 'ui-tooltip-shadow ui-tooltip-dark'
+			},
+			show: {
+         		ready: true // Needed to make it show on first mouseover event
+      		},
+      		overwrite: false
+		});
+	});
+
+		
+
+
+	$('.tab').live('click', function(){
+		if(!$(this).hasClass('inactive')){//only for tab that is active
+			$('.tab').removeClass('active-tab');
+			$(this).addClass('active-tab');//make this tab active and other tab not active (doesn't mean inactive)
+			name = $(this).attr('name');
+			if(name=='All'){//show everything for all tab
+				$('.tab-content').show();
+			}else{//show just the required tab content
+				$('.tab-content').hide();
+				$('#'+name).show();
+			}
+		}
+	});
+
+
+	$('#indexDS').live('click', function(){
+		$('#indexDS').html('Reindexing...');
+		dsKey = $('#dataSourceKey').val();
+		ReindexURL = $('#ReindexURL').val();
+		$('.tab-content').css('opacity',0.5);
+		$.ajax({
+		  	url: ReindexURL,
+		  	success: function(data) {
+		    	$('#indexDS').html('<span></span>');
+		    	$('.tab-content').css('opacity',1.0);
+		    	//location.reload();
+				$('.mmr_table').each(function(){
+					$(this).flexReload();
+				});
+		  	}
+		});
+	});
+
+	
+
+
 	// Help lower resolution screens by expanding the outermost page containers to the fixed-width size of the MMR table
 	$('body > div').css('min-width','1235px');
 	

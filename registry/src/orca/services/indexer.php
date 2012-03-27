@@ -352,7 +352,6 @@ function addDraftSolrIndexForDatasource($dataSourceKey)
 		//echo "pC:".$pCompleted;
 	for($i = 0; $i < $arraySize ; $i++)
 	{				
-		
 		$key = $allKeys[$i]['draft_key'];
 		//$totalCount++;
 		//echo $key;

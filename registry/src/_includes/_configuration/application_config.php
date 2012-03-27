@@ -240,6 +240,11 @@ addMenu($menu);
 		$activity = new activity('aORCA_SERVICE_GET_REGISTRY_OBJECTS_SOLR_2', 'Indexer', 'http://'.eHOST.'/'.eROOT_DIR.'/orca/services/indexer.php');
 		$activity->no_check_ssl= true;
 		addActivity($activity);
+
+
+		$activity = new activity('aORCA_SERVICE_AJAX', 'AJAX', 'http://'.eHOST.'/'.eROOT_DIR.'/orca/manage/get_view.php');
+		$activity->no_check_ssl= true;
+		addActivity($activity);
 	
 		// =============================================================================
 		// services/getRegistryObjectsKML
