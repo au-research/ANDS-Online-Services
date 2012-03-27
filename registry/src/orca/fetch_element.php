@@ -169,7 +169,8 @@ switch ($context)
 		echo json_encode( array("rawHTML" => $element_content, "cbc" => (isset($_GET['cbc'])?$_GET['cbc']:''))); // array("context" => ""),
 			
 	break;
-	
+
+	case "SOLR_get_stuff":echo "yeah";break;
 	
 	// By default, just print the element content "as is"
 	case "":
