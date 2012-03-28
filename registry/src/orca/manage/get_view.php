@@ -167,9 +167,16 @@ function searchRecords($status){
 			$date_modified = date('g:i a, j M Y', strtotime($doc->{'date_modified'}));
 		}
 
-		$error_count = $doc->{'error_count'};
-		$warning_count = $doc->{'warning_count'};
-
+		$error_count = 'N/A';
+		if(isset($doc->{'error_count'})){
+			$error_count = $doc->{'error_count'};
+		}
+		
+		$warning_count = 'N/A';
+		if(isset($doc->{'warning_count'})){
+			$warning_count = $doc->{'warning_count'};
+		}
+		
 		$entry = array(
 					'id' => $doc->{'key'},
 					'cell' => array(
