@@ -110,7 +110,7 @@ function getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR = false, $inclu
 			
 			
 			// Get registry date modified			
-			if (!($registryDateModified =  getRegistryObjectRegistryDateModified($registryObjectKey)))
+			if (!($registryDateModified =  getRegistryObjectStatusModified($registryObjectKey)))
 			{
 					$registryDateModified = time(); // default to now
 			}
