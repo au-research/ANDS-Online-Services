@@ -36,6 +36,7 @@ $solr_update_url = $solr_url.'update';
 switch($task){
 	case "indexAll":	index($status);										break;
 	case "indexDS": 	indexDS($dataSourceKey , $status); 					break;
+	case "indexDSo":	indexDS($dataSourceKey, $status, false);			break;
 	case "indexKey":	indexKey($key);										break;
 	case "clearAll":	clearAll();											break;
 	case "clearDS":		clearDS($dataSourceKey);							break;
@@ -435,8 +436,8 @@ function addDraftSolrIndexForDatasource($dataSourceKey)
 					//echo $result;
 					
 					$percent = round((($i+1)*100)/$arraySize, 0);
-					//echo $result.'<br/>';
-					//ob_flush();flush();
+					echo $result.'<br/>';
+					ob_flush();flush();
 					$rifcsContent = '';
 					 
 					for ($j=0;$j<$numDots;$j++) {

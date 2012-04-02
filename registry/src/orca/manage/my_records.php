@@ -107,8 +107,10 @@ else
 		displayMMRDataSourceSwitcher($dataSources, $data_source_key);
 		?>
 		<input type="hidden" id="dataSourceKey" value="<?php echo $data_source_key; ?>" />
-		<input type="hidden" id="ReindexURL" value="<?php echo eAPP_ROOT;?>orca/services/indexer.php?dataSourceKey=<?php echo $data_source_key?>&task=indexDS"/>
-		
+		<input type="hidden" id="reindexURL" value="<?php echo eAPP_ROOT;?>orca/services/indexer.php?dataSourceKey=<?php echo $data_source_key?>&task=indexDSo"/>
+		<input type="hidden" id="clearIndexURL" value="<?php echo eAPP_ROOT;?>orca/services/indexer.php?dataSourceKey=<?php echo $data_source_key?>&task=clearDS"/>
+		<input type="hidden" id="generateCacheURL" value="<?php echo eAPP_ROOT;?>orca/maintenance/runTasks.php?data_source=<?php echo $data_source_key?>&task=generate_cache"/>
+		<input type="hidden" id="checkQualityURL" value="<?php echo eAPP_ROOT;?>orca/services/indexer.php?dataSourceKey=<?php echo $data_source_key?>&task=checkQuality"/>
 		
 		<div id="mmr_datasource_alert" style="display:none;">
 			<div id="mmr_datasource_alert_title" class="clearfix">
@@ -176,11 +178,12 @@ else
 				 * More Work Required Records
 				 * - only visible if there are records of this status
 				 */
-				if ($status['MORE_WORK_REQUIRED'] > 0){	
-					echo '	<div id="MORE_WORK_REQUIRED" class="tab-content">
-		    					<div class="mmr_table" name="MORE_WORK_REQUIRED" count="'.$status['MORE_WORK_REQUIRED'].'">Loading...</div>
+				$MWRclass = '';
+				if ($status['MORE_WORK_REQUIRED'] == 0) $MWRclass = 'hide';
+				
+				echo '	<div id="MORE_WORK_REQUIRED" class="tab-content '.$MWRclass.'">
+								<table class="mmr_table" name="MORE_WORK_REQUIRED" count="'.$status['MORE_WORK_REQUIRED'].'"><tr><td>Loading...</td></tr></table>
 							</div>';
-				}
 
 
 		    	/*
@@ -188,29 +191,17 @@ else
 				 * - All users can delete/submit for review
 				 */
 		    	echo '	<div id="DRAFT" class="tab-content">
-		    				<div class="mmr_table" name="DRAFT" count="'.$status['DRAFT'].'">Draft Records Loading...</div>
+		    				<table class="mmr_table" name="DRAFT" count="'.$status['DRAFT'].'"><tr><td>Loading...</td></tr></table>
 						</div>';
 
 				/*
 				 * SUBMITTED FOR ASSESSMENT Records
 				 */
-				
-				$buttons = array();
-				// Minimum level of access for this action
-				if (userIsORCA_QA()) 
-				{
-					$buttons[] = "<input type='submit' name='START_ASSESSMENT' value='Start Assessment' disabled='disabled' />";
-				}
-				
-				if (userIsORCA_LIAISON())
-				{
-					$buttons[] = "<input type='submit' name='BACK_TO_DRAFT' value='Revert to Draft' disabled='disabled' />";
-				}
-						
+					
 				if ($status['SUBMITTED_FOR_ASSESSMENT'] > 0 || $dataSource['qa_flag'] == 't')
 				{
 					echo '	<div id="SUBMITTED_FOR_ASSESSMENT" class="tab-content">
-		    					<div class="mmr_table" name="SUBMITTED_FOR_ASSESSMENT" count="'.$status['SUBMITTED_FOR_ASSESSMENT'].'">SUBMITTED_FOR_ASSESSMENT Loading...</div>
+							<table class="mmr_table" name="SUBMITTED_FOR_ASSESSMENT" count="'.$status['SUBMITTED_FOR_ASSESSMENT'].'"><tr><td>Loading...</td></tr></table>
 							</div>';
 				}
 
@@ -219,16 +210,10 @@ else
 				 * ASSESSMENT IN PROGRESS Records
 				 */
 				
-				$buttons = array();
-				if (userIsORCA_QA())
-				{
-					$buttons[] = "<input type='submit' name='APPROVE' value='Approve' disabled='disabled' />";
-					$buttons[] = "<input type='submit' name='MORE_WORK_REQUIRED' value='More Work Required' disabled='disabled' />";
-				}
 				if ($status['ASSESSMENT_IN_PROGRESS'] > 0 || $dataSource['qa_flag'] == 't')
 				{
 					echo '	<div id="ASSESSMENT_IN_PROGRESS" class="tab-content">
-		    					<div class="mmr_table" name="ASSESSMENT_IN_PROGRESS" count="'.$status['ASSESSMENT_IN_PROGRESS'].'">ASSESSMENT_IN_PROGRESS Loading...</div>
+								<table class="mmr_table" name="ASSESSMENT_IN_PROGRESS" count="'.$status['ASSESSMENT_IN_PROGRESS'].'"><tr><td>Loading...</td></tr></table>
 							</div>';
 				}
 
@@ -238,24 +223,17 @@ else
 				
 				if ($status['APPROVED'] > 0 || $dataSource['auto_publish'] == 't') // manually
 				{
-					$buttons = array();
-					$buttons[] = "<input type='submit' name='PUBLISH' value='Publish' disabled='disabled' />";
-					$buttons[] = "<input type='submit' name='DELETE_RECORD' value='Delete' disabled='disabled' />";
-					
 					echo '	<div id="APPROVED" class="tab-content">
-		    					<div class="mmr_table" name="APPROVED" count="'.$status['APPROVED'].'">APPROVED Loading...</div>
+								<table class="mmr_table" name="APPROVED" count="'.$status['APPROVED'].'"><tr><td>Loading...</td></tr></table>
 							</div>';
 				}
 				
 				/*
-				 * PUBLISHED Records (last 30 days)
+				 * PUBLISHED Records
 				 */
-
-				$buttons = array();
-				$buttons[] = "<input type='submit' name='DELETE_RECORD' value='Delete' disabled='disabled' />";
-					
+				
 				echo '	<div id="PUBLISHED" class="tab-content">
-		    					<div class="mmr_table" name="PUBLISHED" count="'.$status['PUBLISHED'].'">PUBLISHED Loading...</div>
+								<table class="mmr_table" name="PUBLISHED" count="'.$status['PUBLISHED'].'"><tr><td>Loading...</td></tr></table>
 							</div>';
 
 		    ?>
@@ -265,11 +243,14 @@ else
     <div class="clearfix"></div>
 
 <?php
+	displayMMRNewRecord();
+
 		/**
 			OLD
 		**/
 
 		//echo '<hr/>';
+		/*
 		$draft_array = getDraftRegistryObject(null, $data_source_key);
 		$approved_array = searchRegistry('', '', $data_source_key, null, null, null, APPROVED, null);
 		$approved_array = record2MMRRecordSet(($approved_array ? $approved_array : array()));
@@ -308,7 +289,7 @@ else
 		/*
 		 * More Work Required Records
 		 * - only visible if there are records of this status
-		 */
+		 *
 		if (count($draft_record_set[MORE_WORK_REQUIRED]) > 0)
 		{	
 			displayMMRRecordTable(MORE_WORK_REQUIRED, $draft_record_set[MORE_WORK_REQUIRED], array("<span style='font-weight:normal;'>edit these records and resubmit them for assessment</span>"), true);
@@ -317,7 +298,7 @@ else
 		/*
 		 * DRAFT Records
 		 * - All users can delete/submit for review
-		 */
+		 *
 		
 		$buttons = array();
 		if ($dataSource['qa_flag'] == 't')
@@ -335,7 +316,7 @@ else
 		
 		/*
 		 * SUBMITTED FOR ASSESSMENT Records
-		 */
+		 *
 		
 		$buttons = array();
 		// Minimum level of access for this action
@@ -356,7 +337,7 @@ else
 		
 		/*
 		 * ASSESSMENT IN PROGRESS Records
-		 */
+		 *
 		
 		$buttons = array();
 		if (userIsORCA_QA())
@@ -371,7 +352,7 @@ else
 		
 		/*
 		 * APPROVED Records
-		 */
+		 *
 		
 		if (count($approved_array) > 0 || $dataSource['auto_publish'] == 't') // manually
 		{
@@ -384,16 +365,16 @@ else
 		
 		/*
 		 * PUBLISHED Records (last 30 days)
-		 */
+		 *
 
 		$buttons = array();
 		$buttons[] = "<input type='submit' name='DELETE_RECORD' value='Delete' disabled='disabled' />";
 			
 		displayMMRRecordTable(PUBLISHED, $published_array, $buttons, false);
+		*/
 		
 		
 		
-		displayMMRNewRecord();
 		//displayMMRRecordTable("DRAFT", $record_set, array("buttons"), true);
 		
 	}
@@ -712,9 +693,6 @@ function displayMMRNewRecord()
 }
 
 function getDataSourceStatuses($dataSourceKey){
-	/**
-	Data Source Status
-	**/
 	global $solr_url;
 	$q = 'data_source_key:("'.$dataSourceKey.'")';
 	$fields = array(

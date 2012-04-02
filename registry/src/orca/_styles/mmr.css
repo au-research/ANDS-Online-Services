@@ -377,6 +377,8 @@ a.icon6s span {background:url(button-icons-small.png) no-repeat -160px -37px;}
 a.icon187s span {background:url(button-icons-small.png) no-repeat -192px -588px;}
 a.icon100s span {background:url(button-icons-small.png) no-repeat -283px -312px;}
 a.icon2s span {background:url(button-icons-small.png) no-repeat -35px -36px;}
+a.icon28sOff span {background:url(button-icons-small.png) no-repeat -221px -98px;}
+a.icon28sOn span {background:url(button-icons-small.png) no-repeat -6px -643px;}
 
 a.borderless{
     border:none;
@@ -453,7 +455,8 @@ div.SUBMITTED_FOR_ASSESSMENT_table{border-left:10px solid #688EDE;}
 div.ASSESSMENT_IN_PROGRESS_table{border-left:10px solid #0B2E59;}
 div.PUBLISHED_table{border-left:10px solid limeGreen;}
 div.APPROVED_table{border-left:10px solid #EDD155;}
+div.MORE_WORK_REQUIRED_table{border-left:10px solid #6A4A3C;}
 
 
 
-
+.infoDiv{padding:4px 10px;clear:both;}

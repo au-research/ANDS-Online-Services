@@ -58,11 +58,11 @@ if (!IN_ORCA) die('No direct access to this file is permitted.');
 //NEW - use SOLR
 		$objectClass = strtolower($objectClass);
     	
-		$q = 'displayTitle:('.strtolower($searchText).') +class:('.$objectClass.')';
+		$q = 'display_title:('.strtolower($searchText).') +class:('.$objectClass.')';
 		if($dataSourcekey!='') $q.=' +data_source_key:("'.$dataSourcekey.'")';
 		$fields = array(
 			'q'=>$q,'version'=>'2.2','start'=>'0','rows'=>$limit, 'wt'=>'json',
-			'fl'=>'key, displayTitle, description_value, description_type, status'
+			'fl'=>'key, display_title, description_value, description_type, status'
 		);
 	
 		/*prep*/
@@ -87,11 +87,11 @@ if (!IN_ORCA) die('No direct access to this file is permitted.');
 		$decoded = json_decode($content);
 		//print_r($decoded);
 	
-		//$values[] = array('value'=>$searchText, "desc"=> $fields_string);
+		$values[] = array('value'=>$searchText, "desc"=> $fields_string);
 		if (isset($decoded->response->docs))
 		{
 			foreach($decoded->response->docs as $d){
-				$values[] = array (	"value" => $d->{'key'}, "desc" => $d->{'displayTitle'}.' ('.$d->{'status'}.')');
+				$values[] = array (	"value" => $d->{'key'}, "desc" => $d->{'display_title'}.' ('.$d->{'status'}.')');
 			}
 		}
 		

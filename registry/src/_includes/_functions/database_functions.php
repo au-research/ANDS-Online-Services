@@ -75,7 +75,6 @@ function executeQuery($cnn, $strQuery, $params=null)
     if( $result )
     {
         $resultSet = pg_fetch_all($result);
-
         pg_free_result($result);
     }
     return $resultSet;

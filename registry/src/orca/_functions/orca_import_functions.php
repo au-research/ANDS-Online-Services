@@ -14,6 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 *******************************************************************************/
 
+
+
 $gXPath = null; // An XPATH object to use for parsing the XML.
 $xs = 'rif';    // The default namespace prefix to register for use by XPATH.
 $dataSourceKey = '';
@@ -74,6 +76,7 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 	
 	$totalElements = $gXPath->evaluate("//*")->length;
 		
+
 	// Registry Objects
 	// =========================================================================
 	$registryObjectList = $gXPath->evaluate("$xs:registryObject");
@@ -82,6 +85,7 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 	{
 		// Registry Object
 		// =====================================================================
+
 		$registryObject = $registryObjectList->item($i);
 		$deleted = true;
 		// Registry Object Key
@@ -91,9 +95,11 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 		if( $registryObjectKey )
 		{
 			// Check if this object exists already, and delete it if it does.
+
 			if( $oldRegistryObject = getRegistryObject($registryObjectKey) )
 			{
 				// Delete this object and all associated records from the registry (if qaflag is true, don't delete existing one
+
 				if($dataSourceKey == $oldRegistryObject[0]['data_source_key'])
 				{
 					if ($qaFlag != 't')
@@ -118,14 +124,17 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 				/*
 				 * Check for previous revisions, compare equality and add a new revision if appropriate
 				 */
+
 				$previousRegistryObjects = getRawRecords($registryObjectKey,$dataSourceKey, NULL);
-				
+
+				//$previousRegistryObjects = null;
+				//return $previousRegistryObjects;
 				// Check if this object exists already, and delete it if it does.
 				if( $previousRegistryObjects && count ($previousRegistryObjects) > 0)
 				{
 					// Check if the object has changed since its last import
 					$currentRecordFragment = $registryObject->ownerDocument->saveXML($registryObject);
-				
+					//print $currentRecordFragment;die();
 					// Get the most recent record fragment
 					$previousRecordFragment = @array_pop($previousRegistryObjects);
 					if ($previousRecordFragment === NULL)
@@ -164,13 +173,13 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 			// =====================================================================
 			$object_group = $registryObject->getAttribute("group");
 			
-	
+		
 			// Activity
 			// =====================================================================
 			
 			if($qaFlag == 't')
 			{
-								
+						
 				if($activity = $gXPath->evaluate("$xs:activity", $registryObject)->item(0))
 				{
 				 	$draft_type = $activity->getAttribute("type");
@@ -243,7 +252,7 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 				$rifcs .= '                 xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects '.gRIF_SCHEMA_URI.'">'."\n";
 				$rifcs .= $registryObjects->saveXML($registryObject);
 				$rifcs .= '</registryObjects>';
-				
+				//return $rifcs;die();
 				if ($dataSourceKey != 'PUBLISH_MY_DATA' && getDraftCountByStatus($dataSourceKey, SUBMITTED_FOR_ASSESSMENT) == 0)
 				{
 					send_email(
@@ -501,7 +510,8 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
                                     	getOrderedNames($registryObjectKey, (isset($party) && $party), false));	
 										
 				// A new record has been inserted? Update the cache
-				if (!writeCache($dataSourceKey, $registryObjectKey, getExtendedRIFCS($registryObjectKey)))
+				$extRif = generateExtendedRIFCS($registryObjectKey);
+				if (!writeCache($dataSourceKey, $registryObjectKey, $extRif))
 				{
 					$runErrors .= "Could not writeCache() for key: " . $registryObjectKey ."\n";
 				} 
@@ -1680,10 +1690,7 @@ function getAllRelatedObjectClass($RegistryObject, $dataSourceKey)
 }
 
 function getRelatedXml($dataSource,$rifcs,$objectClass){
-	//print("<pre>");
-	//print_r($rifcs);
-	//print("</pre>");
-	//print($_SERVER['PHP_SELF']);
+
 	$objectClass = strtolower($objectClass);
 	$newrifcs = '';
 	$dataSourceInfo = getDataSources($dataSource, $filter=null);
