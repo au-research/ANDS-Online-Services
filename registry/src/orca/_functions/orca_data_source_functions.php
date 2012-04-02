@@ -583,6 +583,7 @@ return $transformResult;
 
 function transformToSolr($registryObjectsXML)
 {
+
 $qtestxsl = new DomDocument();
 $registryObjects = new DomDocument();
 $registryObjects->loadXML($registryObjectsXML);

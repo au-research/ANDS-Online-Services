@@ -2445,9 +2445,11 @@ function addKeysToSolrIndex($keys, $commit=true)
 		foreach ($keys as $registryObjectKey)
 		{
 			$rifcs .= getRegistryObjectXMLforSOLR(rawurldecode($registryObjectKey),true);
-		}					
-		wrapRegistryObjects($rifcs);
-		$rifcs = transformToSolr($rifcs);									
+		}			
+		//print $rifcs;die();		
+		$rifcs = wrapRegistryObjects($rifcs);
+		$rifcs = transformToSolr($rifcs);		
+		//print $rifcs;								
 		$result .= curl_post(gSOLR_UPDATE_URL, $rifcs);
 		if($commit)
 		{

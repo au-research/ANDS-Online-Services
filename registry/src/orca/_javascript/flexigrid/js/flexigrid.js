@@ -247,6 +247,7 @@
 				}
 				$('body').css('cursor', 'default');
 				$('body').noSelect(false);
+				this.ie9Fix();
 			},
 			toggleCol: function (cid, visible) {
 				var ncol = $("th[axis='col" + cid + "']", this.hDiv)[0];
@@ -486,7 +487,7 @@
 				$('.pPageStat', this.pDiv).html(stat);
 
 				//alert(p.title);
-				g.mDiv.innerHTML = '<div class="ftitle">'+p.title+' ('+p.total+' Records)</div>';
+				g.mDiv.innerHTML = '<div class="ftitle" count="'+p.total+'" rp="'+p.rp+'">'+p.title+' ('+p.total+' Records)</div>';
 				$(g.gDiv).prepend(g.mDiv);
 				if (p.showTableToggleBtn) {
 					$(g.mDiv).append('<div class="ptogtitle" title="Minimize/Maximize Table"><span></span></div>');
@@ -704,6 +705,18 @@
 						});
 					}
 				});
+				$('tbody tr', g.bDiv).mouseleave(function(){g.ie9Fix();})
+
+			},
+			ie9Fix: function() {
+				var bDivH = $(this.bDiv).height();
+				var bDivTH = $('table', this.bDiv).height();
+
+				if(bDivH != bDivTH && p.height=='auto') {
+				   $(".bDiv").css({height: bDivTH + 18});
+				}else{
+					//not ie9 fixing
+				}
 			},
 			pager: 0
 		};
@@ -755,6 +768,8 @@
 		}
 		g.hTable = document.createElement('table');
 		g.gDiv.className = 'flexigrid';
+		$(g.gDiv).attr('selectall', 'no');
+		$(g.gDiv).attr('status', p.title);
 		if(p.additionalClass){
 				g.gDiv.className = 'flexigrid '+ p.additionalClass;
 			}
@@ -775,7 +790,7 @@
 			g.tDiv.className = 'tDiv';
 			var tDiv2 = document.createElement('div');
 			tDiv2.className = 'tDiv2';
-			for (var i = 0; i < p.buttons.length; i++) {
+			for (i in p.buttons) {
 				var btn = p.buttons[i];
 				if (!btn.separator) {
 					var btnDiv = document.createElement('div');
@@ -801,6 +816,10 @@
 					}
 					//$(tDiv2).append(btnDiv);
 					$(tDiv2).append(btnDiv);
+
+
+					
+
 					if ($.browser.msie && $.browser.version < 7.0) {
 						$(btnDiv).hover(function () {
 							$(this).addClass('fbOver');
@@ -813,6 +832,13 @@
 				}
 			}
 			$(g.tDiv).append(tDiv2);
+
+			//info div
+			var infoDiv = document.createElement('div');
+			infoDiv.className = 'infoDiv hide';
+			infoDiv.innerHTML = "stuffs";
+			$(g.tDiv).append(infoDiv);
+
 			$(g.tDiv).append("<div style='clear:both'></div>");
 			$(g.gDiv).prepend(g.tDiv);
 		}

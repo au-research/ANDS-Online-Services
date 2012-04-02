@@ -34,6 +34,7 @@ switch($view){
 	case "all": searchAllRecords();break;
 	case "summary": summary();break;
 	case "status":searchRecords($status);break;
+	case "allKeys":allKeys($status);break;
 }
 
 
@@ -146,6 +147,7 @@ function searchRecords($status){
 					case 'DeleteRecord':
 						$btnStr.='<a href="'.eAPP_ROOT.'orca/manage/process_registry_object.php?task=delete&data_source='.rawurlencode($doc->{'data_source_key'}).'&key='.esc(rawurlencode($doc->{'key'})).'" class="smallIcon icon100s '.$pos.' tip deleteConfirm" tip="Delete This Record"><span></span></a>';
 						break;
+					
 					default:$btnStr.='Unknown';
 				}
 
@@ -159,6 +161,13 @@ function searchRecords($status){
 					<a href="#" class="smallIcon icon100s right tip" tip="Delete This Record"><span></span></a>';*/
 
 
+		$flag = $doc->{'flag'};
+		if($flag==0){
+			$flagClass = 'icon28sOff';
+		}else{
+			$flagClass = 'icon28sOn';
+		}
+		$flagButton = '<a href="javascript:void(0);" class="smallIcon '.$flagClass.' tip flagToggle" tip="Flag This Record"><span></span></a>';
 
 
 
@@ -184,15 +193,34 @@ function searchRecords($status){
 							$doc->{'list_title'},
 							$date_modified,
 							$doc->{'class'},
-							$error_count.' '.$warning_count,
-							$doc->{'status'},
-							$btnStr
+							$error_count,
+							$doc->{'quality_level'},
+							$flagButton,
+							$btnStr,
+							$doc->{'status'}
 							)
 				);
 		$jsonData['rows'][] = $entry;
 	}
 
 	echo json_encode($jsonData);
+}
+
+
+
+
+/**
+RETURN A LIST OF KEYS
+**/
+function allKeys($status){
+	global $dataSourceKey, $solr_url;
+	$q = '+data_source_key:("'.$dataSourceKey.'") +status:("'.$status.'")';
+	$fields = array(
+		'q'=>$q,'version'=>'2.2','start'=>'0','rows'=>'200', 'wt'=>'json',
+		'fl'=>'key'
+	);
+	$content = solr($solr_url, $fields);
+	echo $content;
 }
 
 function summary(){

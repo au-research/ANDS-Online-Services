@@ -23,27 +23,30 @@ $(document).ready(function() {
 	$(".chzn-select").chosen(); $(".chzn-select-deselect").chosen({allow_single_deselect:true});
 	
 	//MMR Tables
-	dsKey = $('#dataSourceKey').val();
+	var dsKey = $('#dataSourceKey').val();
 
+
+	var orcaQA = false;
 	if($('#orcaQA').text()=='yes'){
 		orcaQA = true;
-	}else orcaQA = false;
+	}
+	var orcaLIASON = false;
 	if($('#orcaLIASON').text()=='yes'){
 		orcaLIASON = true;
-	}else orcaLIASON = false;
+	}
 
 
 	$('.mmr_table').each(function(){
-		status = $(this).attr('name');
-		count = $(this).attr('count');
+		var status = $(this).attr('name');
+		var count = $(this).attr('count');
 
 
-		buttons = [
+		var buttons = [
 			{name: 'Select All', bclass: 'button', onpress : selectAll},
 		];
 		if(status=="DRAFT"){
 			buttons.push({name: 'Submit for Assessment', bclass: 'submit_for_assessment', onpress : doCommand});
-			buttons.push({name: 'Delete', bclass: 'delete', onpress : doCommand});
+			buttons.push({name: 'Delete Draft', bclass: 'delete', onpress : doCommand});
 		}else if(status=="SUBMITTED_FOR_ASSESSMENT"){
 			if(orcaQA){
 				buttons.push({name: 'Start Assessment', bclass: 'start_assessment', onpress : doCommand});
@@ -56,11 +59,11 @@ $(document).ready(function() {
 				buttons.push({name: 'Approve', bclass: 'approve', onpress : doCommand});
 				buttons.push({name: 'More Work Required', bclass: 'more_work_required', onpress : doCommand});
 			}
-		}else if(status=="APPROVE"){
+		}else if(status=="APPROVED"){
 			buttons.push({name: 'Publish', bclass: 'publish', onpress : doCommand});
-			buttons.push({name: 'Delete', bclass: 'delete', onpress : doCommand});
+			buttons.push({name: 'Delete Record', bclass: 'delete', onpress : doCommand});
 		}else if(status=="PUBLISHED"){
-			buttons.push({name: 'Delete', bclass: 'delete', onpress : doCommand});
+			buttons.push({name: 'Delete Record', bclass: 'delete', onpress : doCommand});
 		}
 		//buttons.push({separator:true});
 		
@@ -78,9 +81,11 @@ $(document).ready(function() {
                 {display: 'Name/Title', name : 'list_title', width : 350, sortable : true, align: 'left'},
                 {display: 'Last Modified', name : 'date_modified', width : 100, sortable : true, align: 'left'},
                 {display: 'Class', name : 'class', width : 50, sortable : true, align: 'left'},
-                {display: 'Errors/Warnings', name : 'qa', width : 50, sortable : false, align: 'left'},
-                {display: 'Status', name : 'status', width : 150, sortable : false, align: 'left'},
-                {display: 'Options', name : 'buttons', width : 150, sortable : false, align: 'left'}
+                {display: 'Errors', name : 'error_count', width : 50, sortable : true, align: 'left'},
+                {display: 'Quality Level', name : 'quality_level', width : 50, sortable : true, align: 'left'},
+                {display: 'Flag', name : 'flag', width : 50, sortable : false, align: 'left'},
+                {display: 'Options', name : 'buttons', width : 150, sortable : false, align: 'left'},
+                {display: 'Status', name : 'status', width : 150, sortable : false, align: 'left'}
             ],
             buttons:buttons,
             useRp: true,
@@ -90,7 +95,8 @@ $(document).ready(function() {
             additionalClass:status+'_table',
             searchitems : [
                         {display: 'Name/Title', name : 'list_title'}
-                        ]
+                        ],
+            onSuccess: hideInfo
 	  		});
 	  	
 	  	if (count==0){
@@ -100,6 +106,8 @@ $(document).ready(function() {
 
 	});
 
+	function hideInfo(com, grid){$('.infoDiv', grid).hide();}
+
 	
 	/**
 	BUTTONS
@@ -107,15 +115,42 @@ $(document).ready(function() {
 	function doCommand(com, grid) {
 
 		//setup the keys
-		targetKeys = [];
-		$('.trSelected', grid).each(function() {
-			var id = $(this).attr('id');
-			id = id.substring(id.lastIndexOf('row')+3);
-			//alert("Edit row " + id);
-			targetKeys.push(id);
-		});
-		numKeys = (targetKeys).length;
-		dataSourceKey = $('#dataSourceKey').val();
+		var targetKeys = [];
+		if($(grid).attr('selectall')=='no'){
+			$('.trSelected', grid).each(function() {
+				var id = $(this).attr('id');
+				id = id.substring(id.lastIndexOf('row')+3);
+				//alert("Edit row " + id);
+				targetKeys.push(id);
+			});
+
+			fireZaLaserz(com, targetKeys);
+
+		}else if($(grid).attr('selectall')=='yes'){
+			var status = $(grid).attr('status');
+			$.ajax({
+			  url: 'get_view.php?view=allKeys&status='+status+'&ds='+dsKey,
+			  dataType: 'json',
+			  success: function(data) {
+			    docs = data.response.docs;
+			    $(docs).each(function(){
+			    	targetKeys.push(this.key);
+			    });
+        		//console.log(targetKeys);
+        		fireZaLaserz(com, targetKeys);
+			  }
+			});
+		}else{
+			alert('No command to be executed');
+			return false;
+		}
+
+		//Reindex all the target Keys
+	}
+
+	function fireZaLaserz(com, targetKeys){
+		var numKeys = (targetKeys).length;
+		var dataSourceKey = $('#dataSourceKey').val();
 
 		//if there is none
 		if(numKeys==0){
@@ -126,9 +161,13 @@ $(document).ready(function() {
 		//setup actions
 		if (com == 'Edit') {
 			
-		} else if (com == 'Delete') {
+		}else if (com == 'Delete Record') {
 			if(confirm('You are about to delete '+numKeys+' records')){
-				alert('Deleting');
+				action = 'DELETE_RECORD';
+			}
+		}else if(com=='Delete Draft'){
+			if(confirm('You are about to delete '+numKeys+' drafts. This draft will be permanently deleted and cannot be restored. Do you want to continue?')){
+				action = 'DELETE_DRAFT';
 			}
 		}else if(com=='Submit for Assessment'){
 			action = 'SUBMIT_FOR_ASSESSMENT';
@@ -138,29 +177,32 @@ $(document).ready(function() {
 			action = 'START_ASSESSMENT';
 		}else if(com=='More Work Required'){
 			action = 'MORE_WORK_REQUIRED';
+			$('#MORE_WORK_REQUIRED').show();
 		}else if(com=='Approve'){
 			action = 'APPROVE';
+		}else if(com=='Publish'){
+			action = 'PUBLISH';
 		}
 		//alert($("#elementSourceURL").val());
 
 
 		//POST the stuff over to Manage My Records
-		isPreApproval = false;
+		var isPreApproval = false;
 		$.post(
 			$("#elementSourceURL").val() + "task=manage_my_records&action=" + action,
 			{ 	
-				'keys[]' : targetKeys, 
+				'keys[]' : targetKeys,
 				'preapproval' : isPreApproval,
 				'dataSourceKey' : dataSourceKey
 			},
 			function(data)
 			{		
-				$('#indexDS').click();			
+				//console.log(data);
 				if (data['responsecode'] == 0)
 				{
 					// Error occured
 					alert("Error Occured: Access Denied.");
-					console.log(data);
+					//console.log(data);
 					$.unblockUI(); 
 				}
 				else if (data['responsecode'] == "MT008")
@@ -175,27 +217,68 @@ $(document).ready(function() {
 				{
 					if (data['alert'])
 					{
+						console.log(data['alert']);
 						$('#mmr_datasource_alert_msg').html(data['alert']);
 					}
 				}
+				$('#indexDS').click();
 			},
 			'json'
 		);
-
-		//Reindex all the target Keys
-
 	}
+
+
 
 	function selectAll(com, grid){
 		if($(this).text()=='Select All'){
-			$('tbody tr', grid).click();
+			$('tbody tr', grid).addClass('trSelected');
+
+			//console.log($('.ftitle',grid));
+			var total = parseInt($('.ftitle', grid).attr('count'));
+			var rp = parseInt($('.ftitle', grid).attr('rp'));
+			var message = '';var showInfo = false;
+			if(rp < total){
+				message += 'All '+rp+' records on this page are selected. <a href="javascript:void(0);" class="selectAll">Select All '+total+' records</a>. ';
+				showInfo = true;
+			}
+			
+
+			flaggedRecords = $(grid).find('.icon28sOn');
+			if(flaggedRecords.length > 0){
+				message +='<a href="javascript:void(0);" class="selectFlagged">Select only flagged record </a> on this page. '; 
+				showInfo = true;
+			}
+
+			if(showInfo){
+				$('.infoDiv', grid).html(message);
+				$('.infoDiv', grid).show();
+			}
+
 			$(this).html('<a class="button smaller left">Deselect All</a>');
 		}else{
+			$(grid).attr('selectall', 'no');
 			$('tbody tr', grid).removeClass('trSelected');
+			$('.infoDiv', grid).hide();
 			$(this).html('<a class="button smaller left">Select All</a>');
 		}
-		
 	}
+
+	$('.selectAll').live('click', function(){
+		var grid = $(this).parent().parent().parent();
+		$(grid).attr('selectall', 'yes');
+		var total = parseInt($('.ftitle', grid).attr('count'));
+		$(this).parent().html('All '+total+' records are selected');
+	});
+
+	$('.selectFlagged').live('click', function(){
+		var grid = $(this).parent().parent().parent();
+		var flaggedRecords = $(grid).find('.icon28sOn');
+		$('tr', grid).removeClass('trSelected');
+		$.each(flaggedRecords, function(index){
+			$(this).parents('tr').addClass('trSelected');
+		});
+		$('.infoDiv', grid).html('All '+flaggedRecords.length+' flagged records selected');
+	});
 
 	//delete Confirm
 	$('.deleteConfirm').live('click', function(){
@@ -252,14 +335,38 @@ $(document).ready(function() {
 		});
 	});
 
-		
+	//Flag Status button
+	$('.flagToggle').live('click', function(e){
+
+		var flag;
+		if($(this).hasClass('icon28sOn')){
+			flag = false;			
+		}else{
+			flag = true;
+		}
+		$(this).toggleClass('icon28sOff');
+		$(this).toggleClass('icon28sOn');
+		e.stopPropagation()
+		var rowID = $(this).parent().parent().parent().attr('id');
+		var key = rowID.substring(rowID.lastIndexOf('row')+3);
+		var status = $('.flagToggle').parents('.flexigrid').attr('status');
+		if(status=='APPROVED' || status=='PUBLISHED'){//is not draft
+			$.get($("#elementSourceURL").val() + "task=flag_regobj&key=" + encodeURIComponent(key) + "&flag=" + flag);
+			//console.log($("#elementSourceURL").val() + "task=flag_regobj&key=" + encodeURIComponent(key) + "&flag=" + flag);
+		}else{
+			$.get($("#elementSourceURL").val() + "task=flag_draft&data_source=" + encodeURIComponent($("#dataSourceKey").val()) + "&key=" + encodeURIComponent(key) + "&flag=" + flag);	
+		}
+		//$.get($("#elementSourceURL").val() + "task=flag_draft&data_source=" + encodeURIComponent($("#dataSourceKey").val()) + "&key=" + encodeURIComponent(key) + "&flag=" + flag);
+		//$.get($("#elementSourceURL").val() + "task=flag_regobj&key=" + encodeURIComponent(key) + "&flag=" + flag);
+		//console.log('setting '+rowID+' as gold standard');
+	});
 
 
 	$('.tab').live('click', function(){
 		if(!$(this).hasClass('inactive')){//only for tab that is active
 			$('.tab').removeClass('active-tab');
 			$(this).addClass('active-tab');//make this tab active and other tab not active (doesn't mean inactive)
-			name = $(this).attr('name');
+			var name = $(this).attr('name');
 			if(name=='All'){//show everything for all tab
 				$('.tab-content').show();
 			}else{//show just the required tab content
@@ -271,24 +378,69 @@ $(document).ready(function() {
 
 
 	$('#indexDS').live('click', function(){
-		$('#indexDS').html('Reindexing...');
-		dsKey = $('#dataSourceKey').val();
-		ReindexURL = $('#ReindexURL').val();
+		$('#indexDS').html('Quality Checking...');
 		$('.tab-content').css('opacity',0.5);
 		$.ajax({
-		  	url: ReindexURL,
-		  	success: function(data) {
-		    	$('#indexDS').html('<span></span>');
-		    	$('.tab-content').css('opacity',1.0);
-		    	//location.reload();
-				$('.mmr_table').each(function(){
-					$(this).flexReload();
-				});
-		  	}
+			url:$('#checkQualityURL').val(),
+			success:function(data){
+				$('#indexDS').html('Clearing Index...')
+				$.ajax({
+					url:$('#clearIndexURL').val(),
+					success:function(data){
+						$('#indexDS').html('Generate Cache...')
+						$.ajax({
+							url:$('#generateCacheURL').val(),
+							success:function(data){
+								$('#indexDS').html('Reindexing....');
+								$.ajax({
+									url:$('#reindexURL').val(),
+									success:function(data){
+										$('#indexDS').html('<span></span>');
+								    	$('.tab-content').css('opacity',1.0);
+								    	//location.reload();
+										$('.mmr_table').each(function(){
+											$(this).flexReload();
+										});
+									}
+								});
+							}
+						});
+					}
+				});			
+			}
 		});
 	});
 
 	
+
+
+
+
+	/**
+	OLD
+	**/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 	// Help lower resolution screens by expanding the outermost page containers to the fixed-width size of the MMR table

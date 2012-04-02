@@ -90,7 +90,9 @@ if (!IN_ORCA) die('No direct access to this file is permitted.');
 		$decoded = json_decode($content);
 		//print_r($decoded);
 	
+
 	//	$values[] = array('value'=>$searchText, "desc"=> $solr_url.$fields_string);
+
 		if (isset($decoded->response->docs))
 		{
 			foreach($decoded->response->docs as $d){
