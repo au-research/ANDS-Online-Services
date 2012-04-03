@@ -1336,7 +1336,37 @@ function saveAndPreview() {
 					$("#rmd_saving").hide();
 					$("#rmd_preview").fadeIn('slow');
 					
-
+					// Resolve related objects
+					$('#rmd_preview .resolvable_key').each(function(){
+						$.getJSON(
+							'process_registry_object.php?task=related_object_preview&as_json=true&key=' + encodeURIComponent($(this).html()),
+							function(data) { 
+									$('#rmd_preview .resolvable_key').each(function(){
+										if ($(this).html() == data['key'])
+										{
+											if (data['status'] == 'NOTFOUND')
+											{
+												resolved_string = "Cannot resolve key (record may not yet exist in registry)";
+												$(this).parent().after('<tr><td class="attribute">Resolved value:</td><td class="valueAttribute">'+resolved_string+'</td></tr>');
+											}
+											else
+											{
+												if (data['status'] == 'PUBLISHED' || data['status'] == 'APPROVED')
+												{
+													$(this).html('<a href="'+rootAppPath+'orca/view.php?key='+encodeURIComponent(data['key'])+'" target="_blank">'+data['key']+'</a>');													
+												}
+												else
+												{
+													$(this).html('<a href="'+rootAppPath+'orca/manage/add_'+data['class'].toLowerCase()+'_registry_object.php?readOnly=true&data_source='+encodeURIComponent(data['data_source'])+'&key='+encodeURIComponent(data['key'])+'" target="_blank">'+data['key']+'</a>');		
+												}
+												resolved_string = "<b>" + data['title'] + "</b> (" + data['class'] + ")";
+												$(this).parent().after('<tr><td class="attribute">Resolved value:</td><td class="valueAttribute">'+resolved_string+'</td></tr>');
+											}
+										}
+									});
+							});
+					});
+					
 					
 					
 					$('.ckeditor_text').each(function(){

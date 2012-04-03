@@ -265,6 +265,17 @@
 			</td>
 		</tr>
 	</xsl:template>
+	
+	<xsl:template match="ro:relatedObject/ro:key">
+		<tr>
+			<td class="attribute">
+				<xsl:value-of select="name()"/><xsl:text>: </xsl:text></td>
+			<td class="valueAttribute resolvable_key">
+				<xsl:value-of select="."/>
+			</td>
+		</tr>
+	</xsl:template>
+	
 
 	<xsl:template match="text()">
 		<xsl:if test="not(following-sibling::node()) and not(preceding-sibling::node())">
