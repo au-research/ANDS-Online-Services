@@ -15,8 +15,21 @@ $(document).ready(function(){
 	var subjectSort = 'index';
 	var typeSort = 'index';
 
+
+	var enableWarning = false;
+	var warningMessage = 'this is DEMO <a href="javascript:void(0);" id="dismiss_warning">[x]</a>';
+	var warningDiv = $('<div id="warningDiv"></div>');
+		$(warningDiv).css('opacity','0.8');
+	$(warningDiv).html(warningMessage);
+
+	$('#dismiss_warning').live('click', function(){
+		$('#warningDiv').fadeOut();
+	});
+
+	if(enableWarning) $('body').prepend(warningDiv);
+
+
 	//router
-		
 	if(window.location.href.indexOf('https://')==0){
 		var thisurl = window.location.href;
 		thisurl = thisurl.replace('https://','http://');
@@ -41,6 +54,7 @@ $(document).ready(function(){
 	}
 	$('#clearSearch').tipsy({live:true, gravity:'se'});
 	
+
 	function initSearchPage(){
 		$('.disable-info').live('click',function(){
 			//console.log($.cookie('spatial-info'));
