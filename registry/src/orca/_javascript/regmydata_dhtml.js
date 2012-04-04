@@ -1346,7 +1346,7 @@ function saveAndPreview() {
 										{
 											if (data['status'] == 'NOTFOUND')
 											{
-												resolved_string = "Cannot resolve key (record may not yet exist in registry)";
+												resolved_string = "Cannot resolve key (record may not exist in registry)";
 												$(this).parent().after('<tr><td class="attribute">Resolved value:</td><td class="valueAttribute">'+resolved_string+'</td></tr>');
 											}
 											else
@@ -1359,7 +1359,7 @@ function saveAndPreview() {
 												{
 													$(this).html('<a href="'+rootAppPath+'orca/manage/add_'+data['class'].toLowerCase()+'_registry_object.php?readOnly=true&data_source='+encodeURIComponent(data['data_source'])+'&key='+encodeURIComponent(data['key'])+'" target="_blank">'+data['key']+'</a>');		
 												}
-												resolved_string = "<b>" + data['title'] + "</b> (" + data['class'] + ")";
+												resolved_string = "<b>" + data['title'] + "</b> (" + data['class'] + ") " + data['status_span'];
 												$(this).parent().after('<tr><td class="attribute">Resolved value:</td><td class="valueAttribute">'+resolved_string+'</td></tr>');
 											}
 										}

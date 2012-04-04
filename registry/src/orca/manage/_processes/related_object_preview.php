@@ -92,15 +92,16 @@ function formatPreviewJSON($d, $state)
 	$json_output = array();
 	
 	$json_output['status'] = $d[0]['status'];
+	$json_output['status_span'] = getRegistryObjectStatusSpan($d[0]['status']);
 	
-	switch($d[0]['status']){
+	/*switch($d[0]['status']){
 		case 'PUBLISHED': $json_output['status_html'] = '<span class="tag published">'.$d[0]['status'].'</span>';break;
 		case 'APPROVED':$json_output['status_html'] = '<span class="tag approved">'.$d[0]['status'].'</span>';break;
 		case 'DRAFT':$json_output['status_html'] =  '<span class="tag draft">'.$d[0]['status'].'</span>';break;
 		case 'ASSESSMENT_IN_PROGRESS':$json_output['status_html'] =  '<span class="tag inprogress">'.$d[0]['status'].'</span>';break;
 		case 'SUBMITTED_FOR_ASSESSMENT':$json_output['status_html'] = '<span class="tag submitted">'.$d[0]['status'].'</span>';break;
 		default:$json_output['status_html'] = '<span class="tag">'.$d[0]['status'].'</span>';
-	}
+	}*/
 	
 	if ($state == 'published')
 	{

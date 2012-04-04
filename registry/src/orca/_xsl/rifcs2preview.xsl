@@ -205,7 +205,7 @@
 					</table>
 				</td>
 			</tr>
-		</xsl:if>
+		</xsl:if>	
 		
 		 <xsl:if test="ro:rights">
 			<tr>
@@ -230,6 +230,233 @@
 		</xsl:if>
 	 	
 	</xsl:template>
+	
+    <xsl:template match="ro:identifier">
+		<tr>	
+			<td class="attribute">
+				Type<xsl:text>: </xsl:text>
+			</td>
+			<td class="valueAttribute">
+				<xsl:value-of select="@type" />
+			</td>
+		</tr>
+		<tr>	
+			<td class="attribute">
+				Value<xsl:text>: </xsl:text>
+			</td>
+			<td>
+		    	<xsl:apply-templates select="current()[@type='doi']" mode = "doi"/>
+		     	<xsl:apply-templates select="current()[@type='ark']" mode = "ark"/>    	
+		      	<xsl:apply-templates select="current()[@type='AU-ANL:PEAU']" mode = "nla"/>  
+		      	<xsl:apply-templates select="current()[@type='handle']" mode = "handle"/>   
+		      	<xsl:apply-templates select="current()[@type='purl']" mode = "purl"/>
+		     	<xsl:apply-templates select="current()[@type='uri']" mode = "uri"/> 
+		  		<xsl:apply-templates select="current()[not(@type =  'doi' or @type =  'ark' or @type =  'AU-ANL:PEAU' or @type =  'handle' or @type =  'purl' or @type =  'uri')]" mode="other"/>
+			</td>
+		</tr>
+	           
+    </xsl:template>
+	
+	
+    <xsl:template match="ro:relatedInfo">
+		<tr>	
+			<td class="attribute">
+				Type<xsl:text>: </xsl:text>
+			</td>
+			<td class="valueAttribute">
+				<xsl:value-of select="@type" />
+			</td>
+		</tr>
+		<tr>	
+			<td colspan="2">
+				<table class="subtable1">
+		
+					<xsl:if test="./ro:title">
+			         	<xsl:apply-templates select="ro:title"/>
+					</xsl:if>
+			
+					<xsl:if test="./ro:identifier">
+						<tr>	
+							<td class="attribute">
+								<xsl:text>identifier: </xsl:text>
+							</td>
+							<td>
+								<table class="subtable1">			
+							    	<xsl:apply-templates select="./ro:identifier[@type='doi']" mode = "doi"/>
+							     	<xsl:apply-templates select="./ro:identifier[@type='ark']" mode = "ark"/>    	
+							      	<xsl:apply-templates select="./ro:identifier[@type='AU-ANL:PEAU']" mode = "nla"/>  
+							      	<xsl:apply-templates select="./ro:identifier[@type='handle']" mode = "handle"/>   
+							      	<xsl:apply-templates select="./ro:identifier[@type='purl']" mode = "purl"/>
+							     	<xsl:apply-templates select="./ro:identifier[@type='uri']" mode = "uri"/> 
+							  		<xsl:apply-templates select="./ro:identifier[not(@type =  'doi' or @type =  'ark' or @type =  'AU-ANL:PEAU' or @type =  'handle' or @type =  'purl' or @type =  'uri')]" mode="other"/>			            	
+                         		</table>
+							</td>
+						</tr>
+					</xsl:if>
+					
+					<xsl:if test="./ro:notes">
+			         	<xsl:apply-templates select="ro:notes"/>
+					</xsl:if>
+				</table>
+			</td>
+		</tr>
+	           
+     </xsl:template>
+	
+	  <xsl:template match="ro:identifier" mode="ark">
+	      			    <xsl:variable name="theidentifier">    			
+	    				<xsl:choose>	
+	    			    	<xsl:when test="string-length(substring-after(.,'http://'))>0">
+	    			     		<xsl:value-of select="(substring-after(.,'http://'))"/>
+	    			     	</xsl:when>	    							
+	     	
+	    			     	<xsl:otherwise>
+	    			     		<xsl:value-of select="."/>
+	    			     	</xsl:otherwise>		
+	    				</xsl:choose>
+	 					</xsl:variable>  
+	 					<xsl:if test="string-length(substring-after(.,'/ark:/'))>0">    			     
+	    				<a>
+						<xsl:attribute name="target"><xsl:text>_blank</xsl:text></xsl:attribute>
+	    				<xsl:attribute name="href"><xsl:text>http://</xsl:text> <xsl:value-of select="$theidentifier"/></xsl:attribute>
+	    				<xsl:attribute name="title"><xsl:text>Resolve this ARK identifier</xsl:text></xsl:attribute>    				
+	    				<xsl:value-of select="."/>
+	    				</a>
+	    				</xsl:if>
+	    				<xsl:if test="string-length(substring-after(.,'/ark:/'))&lt;1">
+	    					<xsl:value-of select="."/>
+	    				</xsl:if> 
+	</xsl:template>
+	 <xsl:template match="ro:identifier" mode="nla">
+	       			    <xsl:variable name="theidentifier">    			
+	    				<xsl:choose>				
+	    			    	<xsl:when test="string-length(substring-after(.,'nla.gov.au/'))>0">
+	    			     		<xsl:value-of select="substring-after(.,'nla.gov.au/')"/>
+	    			     	</xsl:when>		     	
+	    			     	<xsl:otherwise>
+	    			     		<xsl:value-of select="."/>
+	    			     	</xsl:otherwise>		
+	    				</xsl:choose>
+	 					</xsl:variable>  
+	 					<xsl:if test="string-length(substring-after(.,'nla.party'))>0">		
+	    				<a>
+						<xsl:attribute name="target"><xsl:text>_blank</xsl:text></xsl:attribute>
+	    				<xsl:attribute name="href"><xsl:text>http://nla.gov.au/</xsl:text> <xsl:value-of select="$theidentifier"/></xsl:attribute>
+	    				<xsl:attribute name="title"><xsl:text>View the record for this party in Trove</xsl:text></xsl:attribute>    				
+	    				<xsl:value-of select="."/>
+	    				</a> 	<br />
+	  				</xsl:if> 
+	  					<xsl:if test="string-length(substring-after(.,'nla.party'))&lt;1">		
+   				
+	    				<xsl:value-of select="."/>
+	  				</xsl:if> 
+	 </xsl:template>
+	 <xsl:template match="ro:identifier" mode="doi">   					
+	        	  <xsl:variable name="theidentifier">    			
+	    				<xsl:choose>				
+	    			    	<xsl:when test="string-length(substring-after(.,'doi.org/'))>0">
+	    			     		<xsl:value-of select="substring-after(.,'doi.org/')"/>
+	    			     	</xsl:when>		     	
+	    			     	<xsl:otherwise>
+	    			     		<xsl:value-of select="."/>
+	    			     	</xsl:otherwise>		
+	    				</xsl:choose>
+	 					</xsl:variable>   	  
+	  					<xsl:if test="string-length(substring-after(.,'10.'))>0">		
+	      				<a>
+						<xsl:attribute name="target"><xsl:text>_blank</xsl:text></xsl:attribute>
+	    				<xsl:attribute name="href"><xsl:text>http://dx.doi.org/</xsl:text> <xsl:value-of select="$theidentifier"/></xsl:attribute>
+	    				<xsl:attribute name="title"><xsl:text>Resolve this DOI</xsl:text></xsl:attribute>    				
+	    				<xsl:value-of select="."/>
+	    				</a> 		 <br />
+	  				</xsl:if> 
+	  					<xsl:if test="string-length(substring-after(.,'10.'))&lt;1">		
+   				
+	    				<xsl:value-of select="."/>
+	  				</xsl:if> 					 			
+
+    			
+	 </xsl:template>
+	 <xsl:template match="ro:identifier" mode="handle">      			
+	      			    <xsl:variable name="theidentifier">    			
+	    				<xsl:choose>
+	     			    	<xsl:when test="string-length(substring-after(.,'hdl:'))>0">
+	    			     		<xsl:text>http://hdl.handle.net/</xsl:text><xsl:value-of select="substring-after(.,'hdl:')"/>
+	    			     	</xsl:when> 
+	      			    	<xsl:when test="string-length(substring-after(.,'hdl.handle.net/'))>0">
+	    			     		<xsl:text>http://hdl.handle.net/</xsl:text><xsl:value-of select="substring-after(.,'hdl.handle.net/')"/>
+	    			     	</xsl:when>   			     	     				
+	    			    	<xsl:when test="string-length(substring-after(.,'http:'))>0">
+	    			     		<xsl:text></xsl:text><xsl:value-of select="."/>
+	    			     	</xsl:when>    										     	
+	    			     	<xsl:otherwise>
+	    			     		<xsl:text>http://hdl.handle.net/</xsl:text><xsl:value-of select="."/>
+	    			     	</xsl:otherwise>		
+	    				</xsl:choose>
+	 					</xsl:variable>
+    			     
+	    				<a>
+						<xsl:attribute name="target"><xsl:text>_blank</xsl:text></xsl:attribute>
+	    				<xsl:attribute name="href"> <xsl:value-of select="$theidentifier"/></xsl:attribute>
+	    				<xsl:attribute name="title"><xsl:text>Resolve this handle</xsl:text></xsl:attribute>    				
+	    				<xsl:value-of select="."/>
+	    				</a> 	 
+	 </xsl:template>
+	 <xsl:template match="ro:identifier" mode="purl">     			
+	    <xsl:variable name="theidentifier">    			
+	    <xsl:choose>				
+	    	<xsl:when test="string-length(substring-after(.,'purl.org/'))>0">
+	    		<xsl:value-of select="substring-after(.,'purl.org/')"/>
+	    	</xsl:when>		     	
+	    	<xsl:otherwise>
+	    		<xsl:value-of select="."/>
+	    	</xsl:otherwise>		
+	    </xsl:choose>
+	 	</xsl:variable>   	   			
+	    <a>
+	    <xsl:attribute name="href"><xsl:text>http://purl.org/</xsl:text> <xsl:value-of select="$theidentifier"/></xsl:attribute>
+	    <xsl:attribute name="title"><xsl:text>Resolve this purl identifier</xsl:text></xsl:attribute>    				
+	    <xsl:value-of select="."/>
+	    </a>  
+	 </xsl:template>
+	 
+	 <xsl:template match="ro:identifier | ro:relation/ro:url" mode="uri">     			
+	   <xsl:variable name="theidentifier">    			
+	    <xsl:choose>				
+	    	<xsl:when test="string-length(substring-after(.,'http'))>0"><xsl:value-of select="."/></xsl:when>		     	
+	    	<xsl:otherwise>http://<xsl:value-of select="."/></xsl:otherwise>		
+	    </xsl:choose>
+	 	</xsl:variable>   	        			
+	    <a>
+		<xsl:attribute name="target"><xsl:text>_blank</xsl:text></xsl:attribute>			
+	    <xsl:attribute name="href"><xsl:value-of select="$theidentifier"/></xsl:attribute>
+	    <xsl:attribute name="title"><xsl:text>Resolve this uri</xsl:text></xsl:attribute>    				
+	    <xsl:value-of select="."/>  
+	    </a>   		 
+	</xsl:template> 
+	
+    <xsl:template match="ro:identifier" mode="other">     		
+		
+		<tr>	
+			<td class="attribute">
+				Type:
+			</td>
+			<td class="valueAttribute">	
+				<xsl:value-of select="./@type"/>
+			</td>
+		</tr>
+		<tr>	
+			<td class="attribute">
+				Value:
+			</td>
+			<td class="">	
+				<xsl:value-of select="."/>
+			</td>
+		</tr>
+		
+     </xsl:template>  
+	
+	
 
 	<xsl:template match="ro:relation/ro:description">
 		<tr>	
@@ -243,6 +470,18 @@
 			</td>
 		</tr>
 	</xsl:template>
+	
+	<xsl:template match="ro:relation/ro:url">
+		<tr>	
+			<td class="attribute">
+				<xsl:value-of select="local-name()"/><xsl:text>: </xsl:text>
+			</td>
+			<td>
+				<xsl:apply-templates select="." mode="uri"/>
+			</td>
+		</tr>
+	</xsl:template>
+	
 
 
 	<xsl:template match="ro:name/ro:namePart">
