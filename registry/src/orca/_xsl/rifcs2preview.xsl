@@ -231,27 +231,81 @@
 	 	
 	</xsl:template>
 	
-    <xsl:template match="ro:identifier">
+	<xsl:template match="ro:citationMetadata/ro:identifier">
+		
+		
 		<tr>	
-			<td class="attribute">
-				Type<xsl:text>: </xsl:text>
-			</td>
-			<td class="valueAttribute">
-				<xsl:value-of select="@type" />
-			</td>
-		</tr>
-		<tr>	
-			<td class="attribute">
-				Value<xsl:text>: </xsl:text>
+			<td>
+				<xsl:value-of select="local-name()"/>
 			</td>
 			<td>
-		    	<xsl:apply-templates select="current()[@type='doi']" mode = "doi"/>
-		     	<xsl:apply-templates select="current()[@type='ark']" mode = "ark"/>    	
-		      	<xsl:apply-templates select="current()[@type='AU-ANL:PEAU']" mode = "nla"/>  
-		      	<xsl:apply-templates select="current()[@type='handle']" mode = "handle"/>   
-		      	<xsl:apply-templates select="current()[@type='purl']" mode = "purl"/>
-		     	<xsl:apply-templates select="current()[@type='uri']" mode = "uri"/> 
-		  		<xsl:apply-templates select="current()[not(@type =  'doi' or @type =  'ark' or @type =  'AU-ANL:PEAU' or @type =  'handle' or @type =  'purl' or @type =  'uri')]" mode="other"/>
+				<table class="subtable1">
+		
+					<tr>	
+						<td class="attribute">
+							Type<xsl:text>: </xsl:text>
+						</td>
+						<td class="valueAttribute">
+							<xsl:value-of select="@type" />
+						</td>
+					</tr>
+					<tr>	
+						<td class="attribute">
+							Value<xsl:text>: </xsl:text>
+						</td>
+						<td>
+					    	<xsl:apply-templates select="current()[@type='doi']" mode = "doi"/>
+					     	<xsl:apply-templates select="current()[@type='ark']" mode = "ark"/>    	
+					      	<xsl:apply-templates select="current()[@type='AU-ANL:PEAU']" mode = "nla"/>  
+					      	<xsl:apply-templates select="current()[@type='handle']" mode = "handle"/>   
+					      	<xsl:apply-templates select="current()[@type='purl']" mode = "purl"/>
+					     	<xsl:apply-templates select="current()[@type='uri']" mode = "uri"/> 
+							<xsl:if test="not(@type =  'doi' or @type =  'ark' or @type =  'AU-ANL:PEAU' or @type =  'handle' or @type =  'purl' or @type =  'uri')">
+								<xsl:value-of select="." />
+							</xsl:if>
+					  		<!--<xsl:apply-templates select="current()[not(@type =  'doi' or @type =  'ark' or @type =  'AU-ANL:PEAU' or @type =  'handle' or @type =  'purl' or @type =  'uri')]" mode="other"/>-->
+						</td>
+					</tr>
+					
+				</table>
+			</td>
+		</tr>
+	</xsl:template>
+		
+	
+    <xsl:template match="ro:identifier">
+		
+		<tr>	
+			<td colspan="2">
+				<table class="subtable1">
+		
+					<tr>	
+						<td class="attribute">
+							Type<xsl:text>: </xsl:text>
+						</td>
+						<td class="valueAttribute">
+							<xsl:value-of select="@type" />
+						</td>
+					</tr>
+					<tr>	
+						<td class="attribute">
+							Value<xsl:text>: </xsl:text>
+						</td>
+						<td>
+					    	<xsl:apply-templates select="current()[@type='doi']" mode = "doi"/>
+					     	<xsl:apply-templates select="current()[@type='ark']" mode = "ark"/>    	
+					      	<xsl:apply-templates select="current()[@type='AU-ANL:PEAU']" mode = "nla"/>  
+					      	<xsl:apply-templates select="current()[@type='handle']" mode = "handle"/>   
+					      	<xsl:apply-templates select="current()[@type='purl']" mode = "purl"/>
+					     	<xsl:apply-templates select="current()[@type='uri']" mode = "uri"/> 
+							<xsl:if test="not(@type =  'doi' or @type =  'ark' or @type =  'AU-ANL:PEAU' or @type =  'handle' or @type =  'purl' or @type =  'uri')">
+								<xsl:value-of select="." />
+							</xsl:if>
+					  		<!--<xsl:apply-templates select="current()[not(@type =  'doi' or @type =  'ark' or @type =  'AU-ANL:PEAU' or @type =  'handle' or @type =  'purl' or @type =  'uri')]" mode="other"/>-->
+						</td>
+					</tr>
+					
+				</table>
 			</td>
 		</tr>
 	           
@@ -282,13 +336,17 @@
 							</td>
 							<td>
 								<table class="subtable1">			
-							    	<xsl:apply-templates select="./ro:identifier[@type='doi']" mode = "doi"/>
-							     	<xsl:apply-templates select="./ro:identifier[@type='ark']" mode = "ark"/>    	
-							      	<xsl:apply-templates select="./ro:identifier[@type='AU-ANL:PEAU']" mode = "nla"/>  
-							      	<xsl:apply-templates select="./ro:identifier[@type='handle']" mode = "handle"/>   
-							      	<xsl:apply-templates select="./ro:identifier[@type='purl']" mode = "purl"/>
-							     	<xsl:apply-templates select="./ro:identifier[@type='uri']" mode = "uri"/> 
-							  		<xsl:apply-templates select="./ro:identifier[not(@type =  'doi' or @type =  'ark' or @type =  'AU-ANL:PEAU' or @type =  'handle' or @type =  'purl' or @type =  'uri')]" mode="other"/>			            	
+							    	<xsl:apply-templates select="./ro:identifier[@type='doi']" mode="doi"/>
+							     	<xsl:apply-templates select="./ro:identifier[@type='ark']" mode="ark"/>    	
+							      	<xsl:apply-templates select="./ro:identifier[@type='AU-ANL:PEAU']" mode="nla"/>  
+							      	<xsl:apply-templates select="./ro:identifier[@type='handle']" mode="handle"/>   
+							      	<xsl:apply-templates select="./ro:identifier[@type='purl']" mode="purl"/>
+							     	<xsl:apply-templates select="./ro:identifier[@type='uri']" mode="uri"/> 
+					  				<xsl:if test="not(@type =  'doi' or @type =  'ark' or @type =  'AU-ANL:PEAU' or @type =  'handle' or @type =  'purl' or @type =  'uri')">
+					  					<xsl:value-of select="." />
+					  				</xsl:if>
+							  	  
+							  		<!--<xsl:apply-templates select="./ro:identifier[not(@type =  'doi' or @type =  'ark' or @type =  'AU-ANL:PEAU' or @type =  'handle' or @type =  'purl' or @type =  'uri')]" mode="other" />			            	-->
                          		</table>
 							</td>
 						</tr>
