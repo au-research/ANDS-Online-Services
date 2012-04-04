@@ -18,6 +18,12 @@ var STATUS_COOKIE_TTL_DAYS = 365*5;
 
 var MMR_datasource_info_visible = true;
 
+// Load the Visualization API and the piechart package.
+      google.load('visualization', '1.0', {'packages':['corechart']});
+
+      
+
+
 $(document).ready(function() {
 	
 	$(".chzn-select").chosen(); $(".chzn-select-deselect").chosen({allow_single_deselect:true});
@@ -63,6 +69,9 @@ $(document).ready(function() {
 			buttons.push({name: 'Publish', bclass: 'publish', onpress : doCommand});
 			buttons.push({name: 'Delete Record', bclass: 'delete', onpress : doCommand});
 		}else if(status=="PUBLISHED"){
+			if(orcaQA){
+				buttons.push({name: 'Mark as Gold Standard', bclass: 'mark_gold_standard', onpress : doCommand});
+			}
 			buttons.push({name: 'Delete Record', bclass: 'delete', onpress : doCommand});
 		}
 		//buttons.push({separator:true});
@@ -72,7 +81,7 @@ $(document).ready(function() {
   			striped:true, 
   			title:status,
   			showTableToggleBtn: true,
-  			showToggleBtn: false,
+  			showToggleBtn: true,
             url: 'get_view.php?view=status&status='+status+'&ds='+dsKey,
         	dataType: 'json',
         	usepager: true,
@@ -85,12 +94,14 @@ $(document).ready(function() {
                 {display: 'Quality Level', name : 'quality_level', width : 50, sortable : true, align: 'left'},
                 {display: 'Flag', name : 'flag', width : 50, sortable : false, align: 'left'},
                 {display: 'Options', name : 'buttons', width : 150, sortable : false, align: 'left'},
-                {display: 'Status', name : 'status', width : 150, sortable : false, align: 'left'}
+                {display: 'Status', name : 'status', width : 150, sortable : true, align: 'left'}
             ],
             buttons:buttons,
+            resizable:true,
             useRp: true,
         	rp: 10,
 			pagestat: 'Displaying {from} to {to} of {total} records',
+			nomsg: 'No records found',
             height:'auto',
             additionalClass:status+'_table',
             searchitems : [
@@ -106,7 +117,12 @@ $(document).ready(function() {
 
 	});
 
-	function hideInfo(com, grid){$('.infoDiv', grid).hide();}
+	function hideInfo(com, grid){
+		$('.infoDiv', grid).hide();
+		$('td[abbr=status]').each(function(){
+			$(this).addClass($(this).text()+'_status');
+		});
+	}
 
 	
 	/**
@@ -376,6 +392,14 @@ $(document).ready(function() {
 		}
 	});
 
+	$('.viewswitch').live('click', function(){
+		$('.viewswitch').removeClass('pressed');
+		$(this).addClass('pressed');
+		var name = $(this).attr('name');
+		$('.tab-content').hide();
+		$('.'+name).show();
+	})
+
 
 	$('#indexDS').live('click', function(){
 		$('#indexDS').html('Quality Checking...');
@@ -411,10 +435,36 @@ $(document).ready(function() {
 		});
 	});
 
-	
 
 
+	// Set a callback to run when the Google Visualization API is loaded.
+    google.setOnLoadCallback(drawChart);
 
+      // Callback that creates and populates a data table,
+      // instantiates the pie chart, passes in the data and
+      // draws it.
+      function drawChart() {
+
+        // Create the data table.
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Status');
+        data.addColumn('number', 'QA Level 1');
+        data.addColumn('number', 'QA Level 2');
+        data.addRows([
+          ['PUBLISHED', 3,26],
+          ['DRAFT', 1,15]
+        ]);
+
+        // Set chart options
+        var options = {'title':'All Records',
+                       'width':400,
+                       'height':300,
+                   backgroundColor: { fill:'transparent' }};
+
+        // Instantiate and draw our chart, passing in some options.
+        var chart = new google.visualization.PieChart(document.getElementById('chart'));
+        chart.draw(data, options);
+      }
 
 	/**
 	OLD
