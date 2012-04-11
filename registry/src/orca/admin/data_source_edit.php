@@ -24,7 +24,6 @@ require '../orca_init.php';
 
 $data_Source = getQueryValue('data_source_key');
 
-
 $dataSource = getDataSources(getQueryValue('data_source_key'), null);
 if( !$dataSource )
 {
@@ -50,6 +49,7 @@ if($dataSource[0]['time_zone_value']!='')
 	$harvestDate = str_replace("+10"," +10:00",str_replace("+11"," +11:00",$dataSource[0]['harvest_date']));
 }
 $harvestFrequency = $dataSource[0]['harvest_frequency'];
+$institutionalPages = $dataSource[0]['institution_pages'];
 $contactName = $dataSource[0]['contact_name'];
 $contactEmail = $dataSource[0]['contact_email'];
 $notes = $dataSource[0]['notes'];
@@ -115,6 +115,80 @@ if( strtoupper(getPostedValue('action')) == "CANCEL" )
 
 if( strtoupper(getPostedValue('action')) == "SAVE" )
 {
+	
+	//Lets deal with the three possible scenarios for institutional pages and then clear all of the excess post variables so we don't muck up the data_source update function
+	$pagesChoice = getPostedValue('institution_pages');
+	$groups = getDataSourceGroups($dataSourceKey);	
+	foreach($groups as $group)
+	{
+		deleteInstitutionalPage($group['object_group'],$dataSourceKey);
+	}	
+	switch($pagesChoice){
+		case 1:
+			foreach($groups as $group)
+			{
+				//first we need to check if this group's institutional page is being administered by someone else, and if so we just leave it alone.
+				$pageInfo = getGroupPage($group['object_group']);
+				if(!isset($pageInfo['authoritive_data_source_key']));
+				{
+					//check if the automated institutional page registry object actually already exists;
+					$key  = "Institution:".$group['object_group'];
+					$thePage = getRegistryObject($key, $overridePermissions = true);
+					print_r($thePage);
+					if(!$thePage)
+					{
+						$rifcs = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
+						$rifcs .='<registryObjects xmlns="http://ands.org.au/standards/rif-cs/registryObjects" '."\n";
+						$rifcs .='                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '."\n";
+						$rifcs .='                 xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects '.gRIF2_SCHEMA_URI.'">'."\n";	
+						$rifcs .= "  <registryObject group=\"".$group['object_group']."\">\n";
+						$rifcs .= "    <key>".$key."</key>\n";	
+						$rifcs .= "    <originatingSource>".$dataSourceKey."</originatingSource>\n";					
+						$rifcs .= "    <party type=\"group\">\n";			
+						$rifcs .= "	<name type=\"primary\">\n";		
+        				$rifcs .= "		<namePart type=\"full\">".$group['object_group']."</namePart>\n";       
+      					$rifcs .= "	</name>\n"; 		
+						$rifcs .= "    </party>\n";		
+						$rifcs .= "  </registryObject>\n";			
+						$rifcs .= "</registryObjects>\n";	
+
+			 			$registryObjects = new DOMDocument();
+			  			$registryObjects->loadXML($rifcs);				
+						$theInstitutionPage = importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMessage, $created_who=SYSTEM, $status=PUBLISHED, $record_owner=SYSTEM, $xPath=NULL, $override_qa=false	);	
+
+					}	else { 
+						//deleteRegistryObject($key);
+					}
+					$theInstitutionalPage = insertInstitutionalPage($group['object_group'],$key,$dataSourceKey);
+				}
+			}			
+
+			break;
+		case 2:			
+			for($i=1;$i<=count($groups);$i++)
+			{
+				$group = getPostedValue('group_'.$i);
+				$institutional_key = getPostedValue('institution_key_'.$i);
+				if($institutional_key!='')
+				{
+					//lets check we have a valid party group key for this datas source with the correct object group
+					$theInstitution = getRegistryObject($institutional_key);
+					if($theInstitution[0]['data_source_key']==$dataSourceKey&&$theInstitution[0]['object_group']==$group&&$theInstitution[0]['registry_object_class']=='Party'&&$theInstitution[0]['type']=='group')
+					{
+						echo "The record is valid so add it to the db <br />";
+						$theInstitutionalPage = insertInstitutionalPage($group,$institutional_key,$dataSourceKey);
+					}else{
+						echo "The record is not valid<br />";
+						$institutionPagesClass = gERROR_CLASS;
+						$errorMessages .= "You have provided an invalid key for your Institutional page.<br />The assigned registry object must be a group party originating from this datasource and object group.<br />";
+					}
+				}
+				unset($_POST['group_'.$i]);
+				unset($_POST['institution_key_'.$i]);
+				unset($_POST['object_institution_key_'.$i.'_name']);
+			}
+			break;		
+	}
 
 	$title = getPostedValue('title');
 	if( $title == '' )
@@ -148,6 +222,12 @@ if( strtoupper(getPostedValue('action')) == "SAVE" )
 	{ 
 		$pushNLALabelClass = gERROR_CLASS;
 		$errorMessages .= "You must provide an ISIL if you wish to push party records to NLA.<br />";
+	}
+	if(getPostedValue('institution_pages') == '')
+	{
+		$institutionPagesClass = gERROR_CLASS;
+		$errorMessages .= "You must select one of the options for handling your institutional pages.<br />";
+		$institutionalPages = '';		
 	}
 	$primary_key_1 = getPostedValue('primary_key_1');
 	$class_1 = getPostedValue('class_1');
@@ -585,7 +665,86 @@ require '../../_includes/header.php';
 				<input type="hidden" id="assessement_notification_email_addr" name="assessement_notification_email_addr" value="<?php printSafe($assessementNotificationEmailAddr); ?>" />
 			 <?php endif; ?>
 			</td>
-		</tr>	
+		</tr>				
+			<?php 
+			$groups = '';
+			$object_groups = getDataSourceGroups($data_Source); 
+			
+			if($object_groups)
+			{
+				foreach($object_groups as $group)
+				{
+					$groups .= ":::".$group['object_group'];
+					$groupDataSources = getGroupDataSources($group['object_group']);
+					$groupsDataSources[$group['object_group']] = '';
+					foreach($groupDataSources as $groupDataSource)
+					{
+						$groups .= "|||".$groupDataSource['data_source_key'];
+						$groupsDataSources[$group['object_group']] .= '<option value="'.$groupDataSource['data_source_key'].'">'.$groupDataSource['data_source_key'].'</option>';
+					}
+				}
+				$groups = trim($groups,":::");
+			}
+			if($groups!='')
+			{
+			?>
+			<tr>
+			<td<?php print($institutionPagesClass); ?>>Institutional Pages:</td>		
+			<td>			
+			 	<input type="radio" name="institution_pages" value="0" <?php if($institutionalPages=="0") echo " checked"?> onChange="setInstitutionalPage(this,'<?php echo $groups;?>','<?php echo $data_Source?>');"> Do not have institutional pages<br />
+				<input type="radio" name="institution_pages" value="1" <?php if($institutionalPages=="1") echo " checked"?> onChange="setInstitutionalPage(this,'<?php echo $groups;?>','<?php echo $data_Source?>');"> Auto generate Institutional Pages for all my groups<br /> 
+				<input type="radio" name="institution_pages" value="2" <?php if($institutionalPages=="2") echo " checked"?> onChange="setInstitutionalPage(this,'<?php echo $groups;?>','<?php echo $data_Source?>');"> Manually manage my Institutional Pages and groups<br /> 
+				<table id="institutionalPages" width="600" border="1">
+				<tr><td style="width:200px"><b>Group </b> </td><td> <b> Contributor Page Key</b></td></tr>
+			<?php 
+				$i=1;
+				foreach($object_groups as $group)
+				{ 
+				$thePage = getGroupPage($group['object_group']);
+				?>
+				<tr><td id="group<? echo $i;?>name" width="200"><?php  echo $group['object_group'];?>
+				<?php  if ($thePage[0]['authoritive_data_source_key'] != $data_Source && isset($thePage[0]['authoritive_data_source_key'])) 
+				{ ?>
+					<br /><span style="color:grey">Already managed by <?php echo $thePage[0]['authoritive_data_source_key']?></span><td></td> 
+					<?php  
+				} else { ?>		
+					<td id="group<?php echo $i;?>page">
+					<?php  
+					if($institutionalPages=="2") { 			
+						$searchStr = '<div id="searchDialog_object_institution_key_'.$i.'" class="window" } \' >';
+						$searchStr .= '<img src="../_images/error_icon.png" onClick=\'closeSearchModal("object_institution_key_'.$i.'");\' style="cursor:pointer; position:absolute; top:5px; right:5px; width:16px;" />';
+						$searchStr .= '<ul id="guideNotes_relatedObject" class="guideNotes" style="display: block; ">';
+						$searchStr .= '<li>The name search will only return the first 10 entries found in the database.<br/> To narrow down the returned results please ensure your text entries are as specific as possible.</li>';
+						$searchStr .= '</ul>';
+						$searchStr .= '<table class="rmdElementContainer" style="font-weight:normal;">';
+						$searchStr .= '<tbody class="formFields andsorange">';
+						$searchStr .= '<tr><td>Search by name:</td><td><input type="text" id="object_institution_key_'.($i).'_name" autocomplete="on" name="object_institution_key_'.($i).'_name" maxlength="512" size="30" /></td></tr>';
+						$searchStr .= '<tr><td>Select object class:</td><td><span style="color:#666666">Party</span><input type="hidden" id="select_institution_key_'.($i).'_class" value = "Party"/></td></tr>';
+						$searchStr .= '<tr><td>Data source:</td><td><select id="select_institution_key_'.($i).'_dataSource" >'.$groupsDataSources[$group['object_group']].'</td></tr>';
+						$searchStr .= '<tr><td><input type="button" value="Choose Selected" onClick=\'setRelatedId("object_institution_key_'.($i).'");\'/></td><td></td></tr>';
+						$searchStr .= '</table>';				
+						$searchStr .= '</div>'; 
+						$searchStr .= '<div class="mask" onclick="closeSearchModal(\'object_institution_key_'.($i).'\')" id="mask_object_institution_key_'.($i).'"></div>';		
+						$inputStr = $searchStr.'<input type="hidden" name="group_'.$i.'" value="'.$group['object_group'].'"/><input type="text" name="institution_key_'.$i.'" id="object_institution_key_'.$i.'_value" size="25" maxlength="128" value="'.$thePage[0]['registry_object_key'].'" />';
+						$inputStr .='<img name="relatedImg" src="../_images/preview.png" onClick=\'showSearchModal("object_institution_key_'.$i.'"); \' style="cursor:pointer; display:inline; margin-left:8px; vertical-align:bottom; height:16px; width:16px;" />';
+						echo $inputStr;?>
+						<script>addRelatedObjectAutocomplete("object_institution_key_<?php echo $i?>_name");</script>
+					<?php 		
+					} else { 
+						print($thePage[0]['registry_object_key']); 
+					} ?>				
+					</td> <?php  
+				} ?></tr>				
+				<?php
+				$i++; 
+				}	
+				?>			
+				</table>	
+			<?php 
+			} 
+			?>		
+			</td>
+		</tr>			
 		<tr style="border-bottom:2px solid black;">
 		<td colspan="2"><span style="float:left;">Harvester Settings</span>
 		</td>

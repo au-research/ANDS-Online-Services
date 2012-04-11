@@ -41,6 +41,7 @@ class View extends CI_Controller {
 		// XXX: TODO: If slug != record's expected slug, we should redirect
 		if (!is_null($key))
 		{
+
 			redirect(base_url().getSlugForRecordByKey($key));
 		
 		}
@@ -106,6 +107,23 @@ class View extends CI_Controller {
 		redirect('view/?key='.$key);
 	}
 	
+	public function group(){
+		parse_str($_SERVER['QUERY_STRING'], $_GET);	
+		if(isset($_GET['group'])){
+			$key = $_GET['group'];
+			$this->load->model('RegistryObjects', 'ro');
+	       	$content = $this->ro->get($key);
+	       	$data['key']= $key;  	
+			$data['content'] = $this->transform($content, 'rifcs2ViewInstitution.xsl',$key);	
+			$this->load->library('user_agent');
+			$data['user_agent']=$this->agent->browser();
+			$data['activity_name'] = 'institution-view';			
+			$this->load->view('institution-view', $data);
+		}else{
+			show_404('page');
+		}
+		
+	}	
 	public function printview(){
 		parse_str($_SERVER['QUERY_STRING'], $_GET);
 		

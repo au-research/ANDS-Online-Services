@@ -274,6 +274,64 @@ require '../../_includes/header.php';
 			<td>Assessment Notification Email:</td>
 			<td><?php printSafeWithBreaks($dataSource[0]['assessement_notification_email_addr']) ?></td>
 		</tr>	
+		<tr>
+			<td>Contributor Pages:</td>
+			<td>
+						<?php 
+			switch($dataSource[0]['institution_pages']){
+				case 0:
+					?>
+					Contributor pages are not managed.
+					<?php  
+				
+				break;
+				case 1:
+					?>
+					Contributor pages are automatically managed.
+					<?php  
+				
+				break;	
+				case 2:
+					?>
+					Contributor pages are manually managed.
+					<?php  
+				
+				break;							
+			} ?>
+			<table border="1" width="100%">
+
+			<tr><td style="width:200px"><b>Group </b> </td><td> <b> Contributor Page Key</b></td></tr>
+			<?php 
+		$object_groups = getDataSourceGroups($dataSourceKey); 
+
+		if($object_groups)
+		{
+			foreach($object_groups as $group)
+			{ 
+				$thePage = getGroupPage($group['object_group']);
+				?>
+				<tr><td id="group<? echo $i;?>name" width="200"><?php  echo $group['object_group'];?>
+				<?php  if ($thePage[0]['authoritive_data_source_key'] != $dataSourceKey && isset($thePage[0]['authoritive_data_source_key'])) 
+				{ ?>
+					<br /><span style="color:grey">Managed by <?php echo $thePage[0]['authoritive_data_source_key']?></span><td></td> 
+					<?php  
+				} else { ?>		
+					<td >
+	<?php 			if($dataSource[0]['institution_pages']=="1")	
+					{
+						?><a href="../manage/add_party_registry_object.php?key=<?php print($thePage[0]['registry_object_key']); ?>&data_source=<?php print($dataSourceKey); ?>"><?php print($thePage[0]['registry_object_key']);?></a><?php 				
+					}else{
+						print($thePage[0]['registry_object_key']); 
+					}
+			?>
+					</td> <?php  
+				} ?></tr>				
+				<?php
+			}
+		}	?>
+			</table>
+			</td>
+		</tr>		
 		<tr style="border-bottom:2px solid black;">
 		<td colspan="2"><span style="float:left;"><h3>Harvester Settings</h3></span>
 		<span style="text-align:right;">

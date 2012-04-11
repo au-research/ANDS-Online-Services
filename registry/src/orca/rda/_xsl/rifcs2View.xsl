@@ -818,7 +818,7 @@ Handle:
 			</xsl:if>	
 			</p>		
 	</xsl:template>
-	<xsl:template match="ro:description" mode="content">     
+	<xsl:template match="extRif:description" mode="content">     
         <div><xsl:attribute name="class"><xsl:value-of select="@type"/></xsl:attribute>
            <p><xsl:value-of select="." disable-output-escaping="yes"/></p>
         </div>

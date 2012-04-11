@@ -15,8 +15,8 @@ function checkModalId(form){
 function addRelatedObjectAutocomplete(field) {
 
 	field = "#" + field;
-	
-	var class_field = field.replace(/object_primary_key/,"select");
+	var class_field = field.replace(/object_/,"select_");
+
 	class_field = class_field.replace(/name/,"class");
 	
 	var cSelect = field.replace(/object/,"select");
@@ -41,10 +41,12 @@ function addRelatedObjectAutocomplete(field) {
 	})
 	.data( "autocomplete" )._renderItem = function( ul, item ) {
 		if(item.desc.indexOf("(PUBLISHED)")>0)
+			{
 		return $( "<li></li>" )
 			.data( "item.autocomplete", item )
 			.append( "<a><b>" + item.label + "</b> " + (item.value != item.label ? "(" + item.value + ")" : "") + "<br><i>" + item.desc + "</i></a>" )
 			.appendTo( ul );
+			}
 	};
 }
 function showSearchModal(id)
@@ -70,8 +72,8 @@ function showSearchModal(id)
 		//transition effect
 		$("#searchDialog_"+id).fadeIn(200); 
 
-		//$( "#" + id + "_name").val($("#" + id + "_value").val());
-		//$( "#" + id + "_name").autocomplete("search", $( "#" + id + "_value").val());
+	//	$( "#" + id + "_name").val($("#" + id + "_value").val());
+	//	$( "#" + id + "_name").autocomplete("search", $( "#" + id + "_value").val());
 
 }
 

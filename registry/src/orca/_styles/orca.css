@@ -229,7 +229,7 @@ a.search:active
   position:absolute;
   left:0;
   top:0;
-  z-index:9000;
+  z-index:999;
   background-color:#000;
   display:none;
 }
@@ -239,7 +239,7 @@ a.search:active
   width:500px;
   height:180px;
   display:none;
-  z-index:9999;
+  z-index:1000;
   padding:20px;
   border: 5px solid #555555;
   background-color: #F0F0D8;	

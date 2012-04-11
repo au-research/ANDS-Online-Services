@@ -1781,6 +1781,7 @@ function addRelatedObjectAutocomplete(field) {
 	cSelect = cSelect.replace(/name/,"class");
 	var dsSelect = cSelect.replace(/class/,"dataSource");
 	//$( field ).autocomplete({ disabled: false});
+	alert("in autocomplete");
 	$( field ).autocomplete({
 		minLength: 2,
 		source: function(request, response){

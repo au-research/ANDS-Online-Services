@@ -131,6 +131,8 @@ $relation_types2));
 
 	function getRelationship($key,$relatedKey,$class)
 	{
+	
+		$relationship = '';
 		$related[] = $relatedKey; 
 		$class= strtolower($class);
 		if($class=='party') 
@@ -143,6 +145,7 @@ $relation_types2));
 		"Funded by" => "Funds",
 		"Funds" => "Funded by",
 		"Managed by" => "Manages",
+		"isManagedby" => "Manages",				
 		"Manages" => "Managed by",
 		"Member of" => "Has member",
 		"Owned by" => "Owner of",
@@ -150,7 +153,8 @@ $relation_types2));
 		"Participant in" => "Part of",
 		"Part of" => "Participant in",
 		"Has collector"	 => "Aggregated by",
-		"Aggregated by" => "Has collector",					
+		"Aggregated by" => "Has collector",
+		"enriches"	 => "Enriched by",									
 		);
 		}
 		elseif($class=='collection')
@@ -164,6 +168,7 @@ $relation_types2));
 			"Located in" => "Location for",
 			"Location for" => "Located in",
 			"Managed by" => "Manages",
+			"isManagedby" => "Manages",		
 			"Manages" => "Managed by",		
 			"Output of" => "Outputs",
 			"isOutputOf" => "Outputs",		
@@ -173,7 +178,8 @@ $relation_types2));
 			"Enriched by" => "Enriches",
 			"Available through" => "Makes available",
 			"Makes available" => "Available through",	
-			"Has collector"	 => "Collector of",	
+			"Has collector"	 => "Collector of",
+			"enriches"	 => "Enriched by",					
 		);		
 		}
 		elseif($class=='service')
@@ -182,12 +188,14 @@ $relation_types2));
 			"Associated with" => "Associated with",
 			"Has part" => "Includes",
 			"Managed by" => "Manages",
-			"Manages" => "Managed by",			
+			"isManagedby" => "Manages",				
+			"Manages" => "Managed by",					
 			"Owned by" => "Owns",
 			"Part of" => "Has part",
 			"Supported by" => "Supports",
 			"Available through" => "Makes available",
-			"Makes available" => "Available through",			
+			"Makes available" => "Available through",
+			"enriches"	 => "Enriched by",							
 		);
 		}
 		else
@@ -199,9 +207,11 @@ $relation_types2));
 			"Undertaken by" => "Has participant",
 			"Funded by" => "Funds",
 			"Managed by" => "Manages",
+			"isManagedby" => "Manages",				
 			"Owned by" => "Owns",
 			"Part of" => "Includes",
-			"Has collector"	 => "Collector of",		
+			"Has collector"	 => "Collector of",	
+			"enriches"	 => "Enriched by",			
 		);			
 		}		
 		$this->load->model('solr');
@@ -210,11 +220,12 @@ $relation_types2));
 		$keyList = $object->{'response'}->{'docs'}[0]->{'related_object_key'};
 		$relationshipList = $object->{'response'}->{'docs'}[0]->{'related_object_relation'};
 		
+		
 		for($i=0;$i<count($keyList);$i++)
 		{
-			if($keyList[$i]==$key) $relationship = $relationshipList[$i];
+			if($keyList[$i]==$key) {$relationship = $relationshipList[$i];}
 		}
-		
+
 		if( array_key_exists($relationship, $typeArray) )
 		{
 			return  $typeArray[$relationship];

@@ -107,6 +107,9 @@ if($maintenance & !in_array($ip, $white_list_ip)){
 	exit;	
 }
 
+// Session will expire/timeout after this period of inactivity 
+// (ie if there have been no requests in that time).
+$gSessionTimeoutMinutes = 120;
 
 /*====================================
 <<<<<<< HEAD

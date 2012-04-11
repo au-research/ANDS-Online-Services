@@ -31,8 +31,36 @@ class View_part extends CI_Controller {
 		$data['classes']=$this->solr->getStat($sort);
 		$this->load->view('stat-view', $data);
 	}
-	
-
+	public function cannedText($sort = 'index',$group){
+		$this->load->model('solr');
+		$data['content']=$this->solr->getCannedContent($sort,$group);
+		$data['group']=$group;			
+		$this->load->view('cannedText-view', $data);
+	}	
+	public function contentStat($sort = 'index',$group){
+		$this->load->model('solr');
+		$data['content']=$this->solr->getContent($sort,$group);
+		$data['group']=$group;			
+		$this->load->view('content-view', $data);
+	}
+	public function subjectStat($sort = 'index',$group){
+		$this->load->model('solr');
+		$data['content']=$this->solr->getSubjects($sort,$group);
+		$data['group']=$group;			
+		$this->load->view('subject-view', $data);
+	}		
+	public function collectionStat($sort = 'dateCreated',$group){
+		$this->load->model('solr');
+		$data['collections']=$this->solr->getCollection($sort, 'collection',$group);
+		$data['group']=$group;			
+		$this->load->view('collection-view', $data);
+	}
+	public function groupStat($sort = 'dateCreated',$group){
+		$this->load->model('solr');
+		$data['collections']=$this->solr->getGroups($sort, $group);
+		$data['group']=$group;			
+		$this->load->view('group-view', $data);
+	}	
 	public function getDictionaryTerms(){
 		$q = strtolower($_GET["term"]);
 		$this->load->model('Registryobjects', 'ro');

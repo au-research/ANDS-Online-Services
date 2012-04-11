@@ -24,6 +24,8 @@ limitations under the License.
 	foreach($json->{'response'}->{'docs'} as $d){
 		$key = $d->{'key'};
 		$keys[] = $key;
+		if(isset($d->{'description_type'}))
+		{
 		foreach($d->{'description_type'} as $index=>$type){
 			if($type=='logo') $partners[$key]['logo']=$d->{'description_value'}[$index];
 			if($type=='brief') {
@@ -34,6 +36,7 @@ limitations under the License.
 			}
 			$partners[$key]['url']=$d->{'location'}[0];
 		}
+	}
 	}
 ?>
 <div id="search-result">

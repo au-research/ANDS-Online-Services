@@ -955,7 +955,7 @@ $_strings['*_relatedObject'] = <<<HTMLEND
 												
 											</div>  
 											<div class="mask" onclick="closeSearchModal('object_relatedObject_%%SEQNUM1%%_key_1')" id="mask_object_relatedObject_%%SEQNUM1%%_key_1"></div>
-										
+								
 										
 										
 										

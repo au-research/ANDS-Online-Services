@@ -31,7 +31,7 @@ if(($spatial_included_ids!='') || ($temporal!='All') || ($typeFilter!='All') || 
 		}
 		if($typeFilter!='All') displaySelectedFacet('type',$typeFilter,$json);
 		if($groupFilter!='All') displaySelectedFacet('group',$groupFilter,$json);
-		if($subjectFilter!='All') displaySelectedFacet('subject_value',$subjectFilter,$json);
+		if($subjectFilter!='All') displaySelectedFacet('subject_value_resolved',$subjectFilter,$json);
 		echo '</ul>';
 	echo '</div>';
 	echo '</div>';

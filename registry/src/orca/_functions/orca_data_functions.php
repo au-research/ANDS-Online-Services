@@ -103,8 +103,8 @@ function updateDataSource()
 	global $gCNN_DBS_ORCA;
 	
 	$errors = "";
-	$strQuery = 'SELECT dba.udf_update_data_source($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32,$33,$34)';
-	$params = getParams(array(getLoggedInUser()), $_POST, 34);
+	$strQuery = 'SELECT dba.udf_update_data_source($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32,$33,$34,$35)';
+	$params = getParams(array(getLoggedInUser()), $_POST, 35);
 	//print("<pre>");
 	//print_r($_POST);
 	//var_dump($params);
@@ -2548,6 +2548,7 @@ function getRegistryObjectURLSlug($registry_object_key)
 	
 }
 
+
 function updateRegistryObjectSLUG ($registry_object_key, $new_display_title, $current_slug = '')
 {
 	global $gCNN_DBS_ORCA;
@@ -2612,6 +2613,70 @@ function countOtherSLUGMappings($slug, $key)
 		return (int) $resultSet[0]['count'];
 }
 
+function getDataSourceGroups($data_source_key)
+{
+	global $gCNN_DBS_ORCA;
+	$strQuery = 'SELECT DISTINCT object_group FROM dba.tbl_registry_objects WHERE data_source_key = $1 ORDER BY object_group ASC ';
+	$params = array($data_source_key);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
 
+	if (!isset($resultSet[0])) 
+		return false;
+	else 
+		return $resultSet;
+	
+}
+function getGroupPage($group)
+{
+	global $gCNN_DBS_ORCA;
+	$strQuery = 'SELECT * FROM dba.tbl_institution_pages WHERE object_group = $1';
+	$params = array($group);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
 
+	if (!isset($resultSet[0])) 
+		return false;
+	else 
+		return $resultSet;
+	
+}
+
+function deleteInstitutionalPage($group,$dataSourceKey)
+{
+	global $gCNN_DBS_ORCA;
+	$strQuery = 'DELETE FROM dba.tbl_institution_pages WHERE object_group = $1 and authoritive_data_source_key = $2';
+	$params = array($group,$dataSourceKey);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+
+	if (!isset($resultSet[0])) 
+		return false;
+	else 
+		return $resultSet;
+
+}
+function insertInstitutionalPage($group,$institutionalRegistryObjectKey,$dataSourceKey)
+{
+	global $gCNN_DBS_ORCA;
+	$strQuery = 'INSERT INTO  dba.tbl_institution_pages (object_group , registry_object_key ,authoritive_data_source_key) VALUES ($1, $2, $3)';
+	$params = array($group,$institutionalRegistryObjectKey,$dataSourceKey);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+
+	if (!isset($resultSet[0])) 
+		return false;
+	else 
+		return $resultSet;
+
+}
+function getGroupDataSources($group)
+{
+	global $gCNN_DBS_ORCA;
+	$strQuery = 'SELECT DISTINCT(data_source_key) FROM dba.tbl_registry_objects WHERE object_group = $1';
+	$params = array($group);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+
+	if (!isset($resultSet[0])) 
+		return false;
+	else 
+		return $resultSet;
+
+}
 ?>
