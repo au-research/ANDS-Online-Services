@@ -41,6 +41,7 @@ class View extends CI_Controller {
 		// XXX: TODO: If slug != record's expected slug, we should redirect
 		if (!is_null($key))
 		{
+
 			redirect(base_url().getSlugForRecordByKey($key));
 		
 		}

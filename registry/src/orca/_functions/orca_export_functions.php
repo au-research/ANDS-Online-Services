@@ -26,6 +26,7 @@ function getRegistryObjectXML($registryObjectKey, $forSOLR = false, $includeRela
 		return getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR, $includeRelated);
 	}
 
+
 	$data_source_key = getRegistryObjectDataSourceKey($registryObjectKey);
 	return getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR, $includeRelated);
 	// Registry key probably doesn't exist?
@@ -83,7 +84,6 @@ function getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR = false, $inclu
 		if ($forSOLR)
 		{
 			$xml .= "    <extRif:extendedMetadata>\n";
-
 
 			// url_slug
 			// -------------------------------------------------------------

@@ -113,7 +113,6 @@ if($maintenance & !in_array($ip, $white_list_ip)){
 $gSessionTimeoutMinutes = 120;
 
 
-
 /*====================================
         LDAP AUTHENTICATION SERVER (optional)
 ====================================*/
