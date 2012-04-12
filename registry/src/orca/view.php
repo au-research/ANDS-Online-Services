@@ -97,11 +97,10 @@ getAnalyticsTrackingCode(eGOOGLE_ANALYTICS_TRACKING_CODE_ORCA);
 
 if( $registryObject )
 {
-
 	$objectGroup = $registryObject[0]['object_group'];
 	$registryObjectClass = $registryObject[0]['registry_object_class'];
 	$registryObjectType = $registryObject[0]['type'];
-	$registryObjectSource = $registryObject[0]['data_source_title'];
+	$registryObjectSource = $registryObject[0]['display_title'];
 	$originatingSourceHTML = esc($registryObject[0]['originating_source']);
 	if( $registryObject[0]['originating_source_type'] )
 	{

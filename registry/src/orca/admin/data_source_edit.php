@@ -134,7 +134,7 @@ if( strtoupper(getPostedValue('action')) == "SAVE" )
 					//check if the automated institutional page registry object actually already exists;
 					$key  = "Institution:".$group['object_group'];
 					$thePage = getRegistryObject($key, $overridePermissions = true);
-					print_r($thePage);
+				//	print_r($thePage);
 					if(!$thePage)
 					{
 						$rifcs = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
@@ -705,10 +705,10 @@ require '../../_includes/header.php';
 				<tr><td id="group<? echo $i;?>name" width="200"><?php  echo $group['object_group'];?>
 				<?php  if ($thePage[0]['authoritive_data_source_key'] != $data_Source && isset($thePage[0]['authoritive_data_source_key'])) 
 				{ ?>
-					<br /><span style="color:grey">Already managed by <?php echo $thePage[0]['authoritive_data_source_key']?></span><td></td> 
+					<br /><span style="color:grey">Already managed by <?php echo $thePage[0]['authoritive_data_source_key']?></span></td><td><?php echo $thePage[0]['registry_object_key']?></td> 
 					<?php  
 				} else { ?>		
-					<td id="group<?php echo $i;?>page">
+					</td><td id="group<?php echo $i;?>page">
 					<?php  
 					if($institutionalPages=="2") { 			
 						$searchStr = '<div id="searchDialog_object_institution_key_'.$i.'" class="window" } \' >';

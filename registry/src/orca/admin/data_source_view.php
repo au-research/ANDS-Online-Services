@@ -313,13 +313,13 @@ require '../../_includes/header.php';
 				<tr><td id="group<? echo $i;?>name" width="200"><?php  echo $group['object_group'];?>
 				<?php  if ($thePage[0]['authoritive_data_source_key'] != $dataSourceKey && isset($thePage[0]['authoritive_data_source_key'])) 
 				{ ?>
-					<br /><span style="color:grey">Managed by <?php echo $thePage[0]['authoritive_data_source_key']?></span><td></td> 
+					<br /><span style="color:grey">Managed by <?php echo $thePage[0]['authoritive_data_source_key']?></span></td><td><?php print($thePage[0]['registry_object_key']); ?></td> 
 					<?php  
 				} else { ?>		
-					<td >
+					</td><td >
 	<?php 			if($dataSource[0]['institution_pages']=="1")	
 					{
-						?><a href="../manage/add_party_registry_object.php?key=<?php print($thePage[0]['registry_object_key']); ?>&data_source=<?php print($dataSourceKey); ?>"><?php print($thePage[0]['registry_object_key']);?></a><?php 				
+						?><a href="../view.php?key=<?php print($thePage[0]['registry_object_key']); ?>&data_source=<?php print($dataSourceKey); ?>"><?php print($thePage[0]['registry_object_key']);?></a><?php 				
 					}else{
 						print($thePage[0]['registry_object_key']); 
 					}
