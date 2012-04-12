@@ -172,8 +172,20 @@ limitations under the License.
 				}
 				echo '</div>';
 			}
-			
 			echo '<div class="toolbar clearfix bottom-corner">';
+			if(displaySubscriptions() )
+			{
+			$dataSourceString = '';	
+			$q = $_POST['q'];
+				if($q=='')$q = '*:*';
+				$classFilter = $_POST['classFilter'];
+				$typeFilter = $_POST['typeFilter'];
+				$groupFilter = $_POST['groupFilter'];
+				$subjectFilter = $_POST['subjectFilter'];
+				if(isset($_POST['dataSource'])) $dataSourceString = "&dataSource=".$_POST['dataSource'];
+				$queryStr = '?q='.$q.$dataSourceString.'&classFilter='.$classFilter.'&typeFilter='.$typeFilter.'&groupFilter='.$groupFilter.'&subjectFilter='.$subjectFilter;	
+				echo "<div id='subscriptions'><div class='rss_icon'></div> Subscribe to this web feed. <a href='".base_url()."search/rss/".$queryStr."&subscriptionType=rss'>RSS</a>/<a href='".base_url()."search/atom/".$queryStr."&subscriptionType=atom'>ATOM</a></div>";	
+			}		
 			$this->load->view('search/pagination');
-			echo '</div>';
+			echo '</div>';		
 		?>

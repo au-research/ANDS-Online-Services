@@ -269,4 +269,13 @@ function getInstitutionPage($group)
 	}
 			
 }
+function displaySubscriptions(){//for now we only want to set up the subscriptions for search resluts on the collections tab
+	if($_POST['classFilter']=='collection')
+	{
+		return true;
+	}else{
+		return false;
+	}
+
+}
 ?>
