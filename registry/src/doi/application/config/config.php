@@ -1,5 +1,4 @@
 <?php  //if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-
 /*
 |--------------------------------------------------------------------------
 | Base Site URL
@@ -14,7 +13,8 @@
 | path to your installation.
 |
 */
-
+global $host, $doi_root;
+$config['base_url']	= 'http://'.$host.'/'.$doi_root.'/';
 
 /*
 |--------------------------------------------------------------------------
