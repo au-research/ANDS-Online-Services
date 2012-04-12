@@ -548,24 +548,24 @@ $(document).ready(function(){
 /////////////////////////
 	
 	function initInstitutionViewPage(){
-
+		var key = $('#key').html();
 		var group = location.href.substr(location.href.indexOf("groupName=")+10,location.href.length);
 		group = encodeURIComponent(decodeURIComponent(group));
-		initCannedText(group);
+		initCannedText(group,key);
 		initContentsBox(group);
 		initSubjectsBox(group);
-		initResearchGroupsBox(group);
+		initResearchGroupsBox(group,key);
 		initCollectionsAddedBox(group);
 		initCollectionsVisitedBox();
 		initCollectionsCitedBox();	
 	
 	}	
-	function initCannedText(group){
+	function initCannedText(group,key){
 		var sort='index';
 		function loadCannedText(sort,group){//load Institution Page Stat
 			$.ajax({
 	  			type:"GET",   
-	  			url: base_url+"/view_part/cannedText/"+sort+"/"+group,   
+	  			url: base_url+"/view_part/cannedText/"+sort+"/"+group+"/"+key,   
 	  				success:function(msg){	
 	  					if(msg!='')
 	  					{
@@ -635,12 +635,12 @@ $(document).ready(function(){
 
 	}	
 	
-	function initResearchGroupsBox(group){
+	function initResearchGroupsBox(group,key){
 		var sort='dateCreated';
 		function loadGroupStat(sort,group){//load Institution Page Stat
 			$.ajax({
 	  			type:"GET",   
-	  			url: base_url+"/view_part/groupStat/"+sort+"/"+group,   
+	  			url: base_url+"/view_part/groupStat/"+sort+"/"+group+"/"+key,   
 	  				success:function(msg){	
 	  					if(msg!=''){
 	  						$('#researchGroups').html(msg);

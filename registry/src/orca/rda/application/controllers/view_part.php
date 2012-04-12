@@ -31,9 +31,9 @@ class View_part extends CI_Controller {
 		$data['classes']=$this->solr->getStat($sort);
 		$this->load->view('stat-view', $data);
 	}
-	public function cannedText($sort = 'index',$group){
+	public function cannedText($sort = 'index',$group,$key){
 		$this->load->model('solr');
-		$data['content']=$this->solr->getCannedContent($sort,$group);
+		$data['content']=$this->solr->getCannedContent($sort,$group,$key);
 		$data['group']=$group;			
 		$this->load->view('cannedText-view', $data);
 	}	
@@ -55,9 +55,9 @@ class View_part extends CI_Controller {
 		$data['group']=$group;			
 		$this->load->view('collection-view', $data);
 	}
-	public function groupStat($sort = 'dateCreated',$group){
+	public function groupStat($sort = 'dateCreated',$group,$key){
 		$this->load->model('solr');
-		$data['collections']=$this->solr->getGroups($sort, $group);
+		$data['collections']=$this->solr->getGroups($sort, $group, $key);
 		$data['group']=$group;			
 		$this->load->view('group-view', $data);
 	}	

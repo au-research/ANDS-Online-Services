@@ -286,12 +286,12 @@ limitations under the License.
 		$json = $this->fireSearch($fields, $facet);
 		return $json;
     }    
-		function getCannedContent($sort,$group){
+		function getCannedContent($sort,$group,$key){
     	$fields = array(
 			'q'=>'*:*','version'=>'2.2','start'=>'0','rows'=>'1','indent'=>'on', 'wt'=>'json',
 			'fl'=>'key', 'q.alt'=>'*:*','fq'=>'status:PUBLISHED'
 		);
-		$fields['fq'].='+group:("'.$group.'")';
+		$fields['fq'].='+group:("'.$group.'") -key:("'.$key.'")';
 		$facet = 'facet=true&facet.field=class&facet.field=type&facet.field=subject_value_resolved&facet.mincount=1&facet.limit=-1&facet.sort=count';
 		$json = $this->fireSearch($fields, $facet);
 		return $json;
@@ -306,12 +306,12 @@ limitations under the License.
 		$json = $this->fireSearch($fields, $facet);
 		return $json;
     }
-	function getGroups($sort, $group){
+	function getGroups($sort, $group, $key){
     	$fields = array(
 			'q'=>'*:*','version'=>'2.2','start'=>'0','rows'=>'100','indent'=>'on', 'wt'=>'json',
 			'fl'=>'key,display_title', 'q.alt'=>'*:*','fq'=>'status:PUBLISHED', 'sort'=>'date_modified desc'
 		);
-		$fields['fq'].='+class:party+group:("'.$group.'")+type:group';
+		$fields['fq'].='+class:party+group:("'.$group.'")+type:group -key:("'.$key.'")';
 		$facet = 'facet=false';
 		$json = $this->fireSearch($fields, $facet);
 		return $json;
