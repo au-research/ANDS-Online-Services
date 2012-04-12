@@ -705,10 +705,17 @@ require '../../_includes/header.php';
 				<tr><td id="group<? echo $i;?>name" width="200"><?php  echo $group['object_group'];?>
 				<?php  if ($thePage[0]['authoritive_data_source_key'] != $data_Source && isset($thePage[0]['authoritive_data_source_key'])) 
 				{ ?>
+<<<<<<< Updated upstream
 					<br /><span style="color:grey">Already managed by <?php echo $thePage[0]['authoritive_data_source_key']?></span></td><td><?php echo $thePage[0]['registry_object_key']?></td> 
 					<?php  
 				} else { ?>		
 					</td><td id="group<?php echo $i;?>page">
+=======
+					<br /><span style="color:grey">Already managed by <?php echo $thePage[0]['authoritive_data_source_key']?></span><td></td> 
+					<?php  
+				} else { ?>		
+					<td id="group<?php echo $i;?>page">
+>>>>>>> Stashed changes
 					<?php  
 					if($institutionalPages=="2") { 			
 						$searchStr = '<div id="searchDialog_object_institution_key_'.$i.'" class="window" } \' >';

@@ -21,10 +21,12 @@ $Revision: 1633 $
 function getRegistryObjectXML($registryObjectKey, $forSOLR = false, $includeRelated = false)
 {
 
+
 	if (!eCACHE_ENABLED)
 	{
 		return getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR, $includeRelated);
 	}
+
 
 
 	$data_source_key = getRegistryObjectDataSourceKey($registryObjectKey);
