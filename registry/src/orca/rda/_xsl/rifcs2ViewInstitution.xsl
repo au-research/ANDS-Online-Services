@@ -55,7 +55,10 @@
     	<div id="top" class="top-corner">
 			<ul id="breadcrumb" class="top-corner">
 				<li><a href="{$base_url}" class="crumb">Home</a></li>
-				<li><a href="{$base_url}search/browse/{./@group}" class="crumb"><xsl:value-of select="$group"/></a></li>
+				<li><a class="crumb">
+					<xsl:attribute name="href">
+					<xsl:value-of select="$base_url"/>view/group/?group=<xsl:value-of select="$key"/>&amp;groupName=<xsl:value-of select="$group"/>
+					</xsl:attribute><xsl:value-of select="$group"/></a></li>
 				<li><a href="{$base_url}search/browse/{./@group}/{$objectClass}" class="crumb"><xsl:value-of select="$objectClass"/></a></li>
 				<li><xsl:value-of select="$theTitle"/></li>
 				

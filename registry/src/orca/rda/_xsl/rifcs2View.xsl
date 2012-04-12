@@ -7,6 +7,7 @@
     <xsl:param name="dateCreated"/>
     <xsl:param name="base_url" select="'https://test.ands.org.au/orca/'"/>  
     <xsl:param name="orca_view"/>  
+    <xsl:param name="theGroup"/>     
     <xsl:param name="key"/>        
     <xsl:variable name="objectClass" >
         <xsl:choose>
@@ -53,7 +54,16 @@
     	<div id="top" class="top-corner">
 			<ul id="breadcrumb" class="top-corner">
 				<li><a href="{$base_url}" class="crumb">Home</a></li>
-				<li><a href="{$base_url}search/browse/{./@group}" class="crumb"><xsl:value-of select="$group"/></a></li>
+				<xsl:if test="$theGroup">
+					<li><a class="crumb">
+					<xsl:attribute name="href">
+					<xsl:value-of select="$base_url"/>view/group/?group=<xsl:value-of select="$theGroup"/>&amp;groupName=<xsl:value-of select="$group"/>
+					</xsl:attribute><xsl:value-of select="$group"/></a></li>					
+				</xsl:if>
+				<xsl:if test="$theGroup = ''">
+				<li><a href="{$base_url}search/browse/{./@group}" class="crumb"><xsl:value-of select="$group"/></a></li>				
+				</xsl:if>
+
 				<li><a href="{$base_url}search/browse/{./@group}/{$objectClass}" class="crumb"><xsl:value-of select="$objectClass"/></a></li>
 				<li><xsl:value-of select="$theTitle"/></li>
 				

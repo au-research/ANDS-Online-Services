@@ -76,13 +76,15 @@ class View extends CI_Controller {
 			$this->load->model('solr');
 	       	$content = $this->ro->get($key);
 	       	$data['key']= $key;
-			$data['content'] = $this->transform($content, 'rifcs2View.xsl',urlencode($key));	
+
 			
 			$obj = $this->solr->getByKey($key);
 			$numFound = $obj->{'response'}->{'numFound'};
 			$doc = ($obj->{'response'}->{'docs'}[0]);
 		
-			
+			$group = $doc->{'group'};
+			$theGroup = getInstitutionPage($doc->{'group'});
+			$data['content'] = $this->transform($content, 'rifcs2View.xsl',urlencode($key),$theGroup);	
 			$data['title'] = $doc->{'display_title'};
 			
 			if(isset($doc->{'description_value'}[0]))$data['description']=htmlentities($doc->{'description_value'}[0]);
@@ -117,7 +119,7 @@ class View extends CI_Controller {
 			$this->load->model('RegistryObjects', 'ro');
 	       	$content = $this->ro->get($key);
 	       	$data['key']= $key;  	
-			$data['content'] = $this->transform($content, 'rifcs2ViewInstitution.xsl',$key);	
+			$data['content'] = $this->transform($content, 'rifcs2ViewInstitution.xsl',$key,false);	
 			$this->load->library('user_agent');
 			$data['user_agent']=$this->agent->browser();
 			$data['activity_name'] = 'institution-view';			
@@ -135,7 +137,7 @@ class View extends CI_Controller {
 			$this->load->model('RegistryObjects', 'ro');
 	       	$content = $this->ro->get($key);
 	       	$data['key']= $key;  	
-			$data['content'] = $this->transform($content, 'rifcs2View.xsl',$key);	
+			$data['content'] = $this->transform($content, 'rifcs2View.xsl',$key,false);	
 			
 			$this->load->library('user_agent');
 			$data['user_agent']=$this->agent->browser();
@@ -149,7 +151,7 @@ class View extends CI_Controller {
 		
 	}	
 	
-	private function transform($registryObjectsXML, $xslt,$key){
+	private function transform($registryObjectsXML, $xslt,$key,$group){
 		$qtestxsl = new DomDocument();
 		$registryObjects = new DomDocument();
 		$registryObjects->loadXML($registryObjectsXML);
@@ -160,6 +162,7 @@ class View extends CI_Controller {
 		$orca_view = view_url();
 		$proc->setParameter('','orca_view',$orca_view);
 		$proc->setParameter('','key',$key);
+		$proc->setParameter('','theGroup',$group);		
 		$transformResult = $proc->transformToXML($registryObjects);	
 		return $transformResult;
 	}
