@@ -29,11 +29,44 @@ class Search extends CI_Controller {
 		}else{	
 			$this->load->library('user_agent');
 			$data['user_agent']=$this->agent->browser();
-			$data['activity_name'] = 'search';
 			$this->load->view('layout', $data);
 		}
 	}
 	
+	public function rss()
+	{
+		$this->output->set_header('Content-Type: application/rss+xml');
+		parse_str($_SERVER['QUERY_STRING'], $_GET);
+		if(isset($_GET['q'])){
+			$q = $_GET['q'];
+				$classFilter = $_GET['classFilter'];
+				$typeFilter = $_GET['typeFilter'];
+				$groupFilter = $_GET['groupFilter'];
+				$subjectFilter = $_GET['subjectFilter'];
+				$queryStr = '?q='.$q.'&classFilter='.$classFilter.'&typeFilter='.$typeFilter.'&groupFilter='.$groupFilter.'&subjectFilter='.$subjectFilter;				
+			$this->load->model('Rss_channel', 'rss');
+			$result['rssArray'] = $this->rss->getRssArrayForQuery($queryStr);
+			$this->load->view('search/rss', $result);
+			
+		}
+	}
+	public function atom()
+	{
+		$this->output->set_header('Content-Type: application/atom+xml');
+		parse_str($_SERVER['QUERY_STRING'], $_GET);
+		if(isset($_GET['q'])){
+			$q = $_GET['q'];
+				$classFilter = $_GET['classFilter'];
+				$typeFilter = $_GET['typeFilter'];
+				$groupFilter = $_GET['groupFilter'];
+				$subjectFilter = $_GET['subjectFilter'];
+				$queryStr = '?q='.$q.'&classFilter='.$classFilter.'&typeFilter='.$typeFilter.'&groupFilter='.$groupFilter.'&subjectFilter='.$subjectFilter;				
+			$this->load->model('Rss_channel', 'atom');
+			$result['rssArray'] = $this->atom->getRssArrayForQuery($queryStr);
+			$this->load->view('search/atom', $result);
+			
+		}
+	}
 	public function bwredirect(){//backward redirection with list.php
 		parse_str($_SERVER['QUERY_STRING'], $_GET);
 		$class='All';$group='All';
@@ -46,6 +79,8 @@ class Search extends CI_Controller {
 		if($class!='All') $class=strtolower($class);
 		redirect(base_url().'search#!/p=1/tab='.$class.'/group='.urldecode($group).'');
 	}
+	
+
 	
 	public function updateStatistic(){//update the statistics
 		$query = $this->input->post('q');
@@ -131,8 +166,6 @@ $relation_types2));
 
 	function getRelationship($key,$relatedKey,$class)
 	{
-	
-		$relationship = '';
 		$related[] = $relatedKey; 
 		$class= strtolower($class);
 		if($class=='party') 
@@ -145,7 +178,6 @@ $relation_types2));
 		"Funded by" => "Funds",
 		"Funds" => "Funded by",
 		"Managed by" => "Manages",
-		"isManagedby" => "Manages",				
 		"Manages" => "Managed by",
 		"Member of" => "Has member",
 		"Owned by" => "Owner of",
@@ -153,8 +185,7 @@ $relation_types2));
 		"Participant in" => "Part of",
 		"Part of" => "Participant in",
 		"Has collector"	 => "Aggregated by",
-		"Aggregated by" => "Has collector",
-		"enriches"	 => "Enriched by",									
+		"Aggregated by" => "Has collector",					
 		);
 		}
 		elseif($class=='collection')
@@ -168,7 +199,6 @@ $relation_types2));
 			"Located in" => "Location for",
 			"Location for" => "Located in",
 			"Managed by" => "Manages",
-			"isManagedby" => "Manages",		
 			"Manages" => "Managed by",		
 			"Output of" => "Outputs",
 			"isOutputOf" => "Outputs",		
@@ -178,8 +208,7 @@ $relation_types2));
 			"Enriched by" => "Enriches",
 			"Available through" => "Makes available",
 			"Makes available" => "Available through",	
-			"Has collector"	 => "Collector of",
-			"enriches"	 => "Enriched by",					
+			"Has collector"	 => "Collector of",	
 		);		
 		}
 		elseif($class=='service')
@@ -188,14 +217,12 @@ $relation_types2));
 			"Associated with" => "Associated with",
 			"Has part" => "Includes",
 			"Managed by" => "Manages",
-			"isManagedby" => "Manages",				
-			"Manages" => "Managed by",					
+			"Manages" => "Managed by",			
 			"Owned by" => "Owns",
 			"Part of" => "Has part",
 			"Supported by" => "Supports",
 			"Available through" => "Makes available",
-			"Makes available" => "Available through",
-			"enriches"	 => "Enriched by",							
+			"Makes available" => "Available through",			
 		);
 		}
 		else
@@ -207,11 +234,9 @@ $relation_types2));
 			"Undertaken by" => "Has participant",
 			"Funded by" => "Funds",
 			"Managed by" => "Manages",
-			"isManagedby" => "Manages",				
 			"Owned by" => "Owns",
 			"Part of" => "Includes",
-			"Has collector"	 => "Collector of",	
-			"enriches"	 => "Enriched by",			
+			"Has collector"	 => "Collector of",		
 		);			
 		}		
 		$this->load->model('solr');
@@ -220,12 +245,11 @@ $relation_types2));
 		$keyList = $object->{'response'}->{'docs'}[0]->{'related_object_key'};
 		$relationshipList = $object->{'response'}->{'docs'}[0]->{'related_object_relation'};
 		
-		
 		for($i=0;$i<count($keyList);$i++)
 		{
-			if($keyList[$i]==$key) {$relationship = $relationshipList[$i];}
+			if($keyList[$i]==$key) $relationship = $relationshipList[$i];
 		}
-
+		
 		if( array_key_exists($relationship, $typeArray) )
 		{
 			return  $typeArray[$relationship];
@@ -247,14 +271,13 @@ $relation_types2));
         $keyArray[] = $key;   
         $data['json'] =$this->solr->getObjects($keyArray,$class,$types,null);
 		$data['externalKeys']  ='';
-
+		
+		//print_r($data['json']);
 		
         $reverseLinks = $data['json']->{'response'}->{'docs'}[0]->{'reverse_links'};  
         $dataSourceKey = $data['json']->{'response'}->{'docs'}[0]->{'data_source_key'};
 		
 		//print_r($data['json']);
-		$data['theGroup'] = $data['json']->{'response'}->{'docs'}[0]->{'group'};
-		
 		
         $data['thisClass'] = $data['json']->{'response'}->{'docs'}[0]->{'class'};
 		$data['externalKeys'] = '';
@@ -457,20 +480,20 @@ $relation_types2));
 		$spatial_included_ids = $this->input->post('spatial_included_ids');
 		$temporal = $this->input->post('temporal');
 		$sort = $this->input->post('sort');
-
 		$query = $q;
+		$ds = '';
+		$ds = $this->input->post('dataSource');
 		$extended_query = '';
 		
+		if($ds!='')	$extended_query .= '+data_source_key:("'.$ds.'")';
 		//echo '+spatial:('.$spatial_included_ids.')';
-		
 		if($spatial_included_ids!='') {
 			$extended_query .= $spatial_included_ids;
 		}
 		if($temporal!='All'){
 			$temporal_array = explode('-', $temporal);
-			$extended_query .='+dateFrom:['.$temporal_array[0].' TO *]+dateTo:[* TO '.$temporal_array[1].']';
+			$extended_query ='+dateFrom:['.$temporal_array[0].' TO *]+dateTo:[* TO '.$temporal_array[1].']';
 		}
-		
 		
 		//echo $query;
 		
@@ -520,3 +543,4 @@ $relation_types2));
 	}
 
 }
+	
