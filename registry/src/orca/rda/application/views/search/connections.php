@@ -154,7 +154,18 @@ if(isset($groups)&&$groups['numfound']>0){
 }	
 
 }
-
+showContributors($theGroup);
+function showContributors($theGroup)
+{
+	$theGroupKey = getInstitutionPage($theGroup);
+	if($theGroupKey)
+	{
+		echo '<h3><img  class="icon-heading-connections" src="'.base_url().'/img/icon/party_multi_16.png"/>Record Contributor</h3>';
+		echo '<ul>';
+		echo '<li><a href="'.base_url().'view/group/?group='.urlencode($theGroupKey).'&groupName='.$theGroup.'" title="Contributor group">'.$theGroup.'</a></li>';	
+		echo '</ul>';
+	}
+}
 function findRelationship($key, $relatedKeys, $relationships){
 
 	for($i=0;$i<count($relatedKeys);$i++)

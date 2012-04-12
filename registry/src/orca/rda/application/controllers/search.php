@@ -247,13 +247,14 @@ $relation_types2));
         $keyArray[] = $key;   
         $data['json'] =$this->solr->getObjects($keyArray,$class,$types,null);
 		$data['externalKeys']  ='';
-		
-		//print_r($data['json']);
+
 		
         $reverseLinks = $data['json']->{'response'}->{'docs'}[0]->{'reverse_links'};  
         $dataSourceKey = $data['json']->{'response'}->{'docs'}[0]->{'data_source_key'};
 		
 		//print_r($data['json']);
+		$data['theGroup'] = $data['json']->{'response'}->{'docs'}[0]->{'group'};
+		
 		
         $data['thisClass'] = $data['json']->{'response'}->{'docs'}[0]->{'class'};
 		$data['externalKeys'] = '';
