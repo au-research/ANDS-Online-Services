@@ -319,7 +319,7 @@ require '../../_includes/header.php';
 					</td><td >
 	<?php 			if($dataSource[0]['institution_pages']=="1")	
 					{
-						?><a href="../view.php?key=<?php print($thePage[0]['registry_object_key']); ?>&data_source=<?php print($dataSourceKey); ?>"><?php print($thePage[0]['registry_object_key']);?></a><?php 				
+						?><a href="../view.php?key=<?php print(urlencode($thePage[0]['registry_object_key'])); ?>&data_source=<?php print($dataSourceKey); ?>"><?php print($thePage[0]['registry_object_key']);?></a><?php 				
 					}else{
 						print($thePage[0]['registry_object_key']); 
 					}

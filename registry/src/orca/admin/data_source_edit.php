@@ -115,7 +115,7 @@ if( strtoupper(getPostedValue('action')) == "CANCEL" )
 
 if( strtoupper(getPostedValue('action')) == "SAVE" )
 {
-	
+
 	//Lets deal with the three possible scenarios for institutional pages and then clear all of the excess post variables so we don't muck up the data_source update function
 	$pagesChoice = getPostedValue('institution_pages');
 	$groups = getDataSourceGroups($dataSourceKey);	
@@ -134,7 +134,7 @@ if( strtoupper(getPostedValue('action')) == "SAVE" )
 					//check if the automated institutional page registry object actually already exists;
 					$key  = "Institution:".$group['object_group'];
 					$thePage = getRegistryObject($key, $overridePermissions = true);
-				//	print_r($thePage);
+					print_r($thePage);
 					if(!$thePage)
 					{
 						$rifcs = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
@@ -196,7 +196,7 @@ if( strtoupper(getPostedValue('action')) == "SAVE" )
 		$titleLabelClass = gERROR_CLASS;
 		$errorMessages .= "Title is a mandatory field.<br />";
 	}
-	
+
 	$uri = getPostedValue('uri');
 	if( $uri == '' )
 	{ 
@@ -217,7 +217,7 @@ if( strtoupper(getPostedValue('action')) == "SAVE" )
 		$harvestMethodLabelClass = gERROR_CLASS;
 		$errorMessages .= "Harvest Method is a mandatory field.<br />";
 	}
-	
+
 	if( trim(getPostedValue('isil_value')) == '' && getPostedValue('push_to_nla'))
 	{ 
 		$pushNLALabelClass = gERROR_CLASS;
@@ -246,20 +246,20 @@ if( strtoupper(getPostedValue('action')) == "SAVE" )
 	{
 		$_POST['create_primary_relationships'] = '0';
 	}
-	
+
 	if( getPostedValue('create_primary_relationships') && (trim(getPostedValue('class_1'))==''||trim(getPostedValue('primary_key_1'))==''||trim(getPostedValue('service_rel_1'))==''||trim(getPostedValue('activity_rel_1'))==''||trim(getPostedValue('collection_rel_1'))==''||trim(getPostedValue('party_rel_1'))==''))
 	{ 
 		//echo getPostedValue('class_1')."::".getPostedValue('pprimary_key_1')."::".getPostedValue('service_rel_1')."::".getPostedValue('activity_rel_1')."::".getPostedValue('party_rel_1')."::".getPostedValue('collection_rel_1');
 		$createPrimaryClass = gERROR_CLASS;
 		$errorMessages .= "You must provide a class ,registered key and all relationship types for the primary relationship.<br />";		
 	}	
-	
+
 	if(trim(getPostedValue('class_2'))=='' && (trim(getPostedValue('primary_key_2'))!=''||trim(getPostedValue('service_rel_2'))!=''||trim(getPostedValue('activity_rel_2'))!=''||trim(getPostedValue('collection_rel_2'))!=''||trim(getPostedValue('party_rel_2'))!=''))
 	{
 		$createPrimaryClass = gERROR_CLASS;		
 		$errorMessages .= "You must provide a class ,registered key and all relationship types for the primary relationship.<br />";	
 	}
-	
+
 	if( trim(getPostedValue('class_2'))!=''&&(trim(getPostedValue('primary_key_2'))==''||trim(getPostedValue('service_rel_2'))==''||trim(getPostedValue('activity_rel_2'))==''||trim(getPostedValue('collection_rel_2'))==''||trim(getPostedValue('party_rel_2'))==''))
 	{ 
 		//echo getPostedValue('class_2')."::".getPostedValue('pprimary_key_2')."::".getPostedValue('service_rel_2')."::".getPostedValue('activity_rel_2')."::".getPostedValue('party_rel_2')."::".getPostedValue('collection_rel_2');
@@ -316,7 +316,7 @@ if( strtoupper(getPostedValue('action')) == "SAVE" )
 	$allowReverseInternalLinks = getPostedValue('allow_reverse_internal_links');
 	$allowReverseExternalLinks = getPostedValue('allow_reverse_external_links');
 	$create_primary_relationships = getPostedValue('create_primary_relationships');
-	
+
 	$class_1 = getPostedValue('class_1');
 	$service_rel_1 =  getPostedValue('service_rel_1');
 	$activity_rel_1 =  getPostedValue('activity_rel_1');
@@ -327,7 +327,7 @@ if( strtoupper(getPostedValue('action')) == "SAVE" )
 	$activity_rel_2 =  getPostedValue('activity_rel_2');
 	$party_rel_2 =  getPostedValue('party_rel_2');
 	$collection_rel_2 =  getPostedValue('collection_rel_2');	
-	
+
 	$assessementNotificationEmailAddr = getPostedValue('assessement_notification_email_addr');
 	$autoPublishOld = $autoPublish;
 	$qaFlagOld = $qaFlag;
@@ -338,7 +338,7 @@ if( strtoupper(getPostedValue('action')) == "SAVE" )
 	{ 
 		$recordOwner = getPostedValue('record_owner');
 	}
-	
+
 	// Check the harvest method against the provider type.
 	if( $providerType && $harvestMethod && !in_array($providerType, $gORCA_HARVEST_PROVIDER_SETS[$harvestMethod], true) )
 	{
@@ -347,13 +347,13 @@ if( strtoupper(getPostedValue('action')) == "SAVE" )
 		$errorMessages .= 'This Provider Type is not supported by this Harvest Method.<br />'; 
 		$errorMessages .= 'This Harvest Method does not support this Provider Type.<br />';
 	}
-	
+
 	if( $errorMessages == '' )
 	{
 		// Update the record.
 
 		$_POST['theZone'] = $_POST['harvest_date'];
-		
+
 		unset($_POST['object_relatedObject']);
 		unset($_POST['object_primary_key_1_name']);			
 		unset($_POST['object_primary_key_2_name']);
@@ -669,7 +669,7 @@ require '../../_includes/header.php';
 			<?php 
 			$groups = '';
 			$object_groups = getDataSourceGroups($data_Source); 
-			
+
 			if($object_groups)
 			{
 				foreach($object_groups as $group)
@@ -705,17 +705,10 @@ require '../../_includes/header.php';
 				<tr><td id="group<? echo $i;?>name" width="200"><?php  echo $group['object_group'];?>
 				<?php  if ($thePage[0]['authoritive_data_source_key'] != $data_Source && isset($thePage[0]['authoritive_data_source_key'])) 
 				{ ?>
-<<<<<<< Updated upstream
-					<br /><span style="color:grey">Already managed by <?php echo $thePage[0]['authoritive_data_source_key']?></span></td><td><?php echo $thePage[0]['registry_object_key']?></td> 
-					<?php  
-				} else { ?>		
-					</td><td id="group<?php echo $i;?>page">
-=======
 					<br /><span style="color:grey">Already managed by <?php echo $thePage[0]['authoritive_data_source_key']?></span><td></td> 
 					<?php  
 				} else { ?>		
 					<td id="group<?php echo $i;?>page">
->>>>>>> Stashed changes
 					<?php  
 					if($institutionalPages=="2") { 			
 						$searchStr = '<div id="searchDialog_object_institution_key_'.$i.'" class="window" } \' >';
