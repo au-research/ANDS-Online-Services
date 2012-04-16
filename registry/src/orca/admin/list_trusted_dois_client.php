@@ -16,7 +16,7 @@ limitations under the License.
 // Include required files and initialisation.
 require '../../_includes/init.php';
 require '../orca_init.php';
-require '../../dois/dois_orcainit.php';
+require '../dois_orcainit.php';
 // Page processing
 // -----------------------------------------------------------------------------
 
@@ -69,7 +69,7 @@ require '../../_includes/header.php';
 			<tr>
 				<td><?php echo $client['client_id']; ?></td>				
 				<td>
-					<?php echo $client['app_id']; ?>
+					<a href="add_trusted_dois_client.php?app_id=<?php echo $client['app_id']; ?>"><?php echo $client['app_id']; ?></a>
 				</a></td>
 				<td><?php echo $client['ip_address']; ?></td>
 				<td><?php echo $client['client_name']; ?></td>				
