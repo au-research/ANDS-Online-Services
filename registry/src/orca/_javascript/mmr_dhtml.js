@@ -19,7 +19,9 @@ var STATUS_COOKIE_TTL_DAYS = 365*5;
 var MMR_datasource_info_visible = true;
 
 // Load the Visualization API and the piechart package.
-      google.load('visualization', '1.0', {'packages':['corechart']});
+google.load('visualization', '1.0', {'packages':['corechart']});
+
+var currentView = 'status';//can be status or quality
 
       
 
@@ -28,6 +30,9 @@ $(document).ready(function() {
 	
 	$(".chzn-select").chosen(); $(".chzn-select-deselect").chosen({allow_single_deselect:true});
 	
+	//currentView = MMR_getFromStatusCookie('currentView');
+	//console.log(currentView);
+
 	//MMR Tables
 	var dsKey = $('#dataSourceKey').val();
 
@@ -396,6 +401,7 @@ $(document).ready(function() {
 		$('.viewswitch').removeClass('pressed');
 		$(this).addClass('pressed');
 		var name = $(this).attr('name');
+		MMR_setStatusCookie('currentView',name);
 		$('.tab-content').hide();
 		$('.'+name).show();
 	})
