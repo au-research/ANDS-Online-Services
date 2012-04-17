@@ -1891,7 +1891,7 @@ function setRegistryObjectManuallyAssessedFlag($registry_object_key)
 function updateRegistryObjectQualityLevelResult($registry_object_key, $quality_level,  $quality_level_result)
 {	
 
-	if (in_array($quality_level, array(1,2,3,4)))
+	if (in_array($quality_level, array(0,1,2,3,4)))
 	{
 		global $gCNN_DBS_ORCA;	
 		$errors = "";
@@ -2650,6 +2650,7 @@ function updateSLUGMapping($slug, $key, $current_title)
 	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
 	return $resultSet; 	
 }
+
 
 function deleteSLUGMapping($slug)
 {

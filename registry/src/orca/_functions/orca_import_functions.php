@@ -19,6 +19,18 @@ limitations under the License.
 $gXPath = null; // An XPATH object to use for parsing the XML.
 $xs = 'rif';    // The default namespace prefix to register for use by XPATH.
 $dataSourceKey = '';
+
+
+$rmdQualityTest = new DomDocument();
+$rmdQualityTest->load(eAPPLICATION_ROOT.'orca/_xsl/rmd_quality_test.xsl');
+$qualityTestproc = new XSLTProcessor();
+$qualityTestproc->importStyleSheet($rmdQualityTest);
+
+$rmdQualityLevel = new DomDocument();
+$rmdQualityLevel->load(eAPPLICATION_ROOT.'orca/_xsl/gen_quality_level_report.xsl');
+$qualityLevelProc = new XSLTProcessor();
+$qualityLevelProc->importStyleSheet($rmdQualityLevel);
+
 function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMessage, $created_who=SYSTEM, $status=PUBLISHED, $record_owner=SYSTEM, $xPath=NULL, $override_qa=false)
 {
 	global $gXPath;
@@ -76,6 +88,7 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 	$gXPath->registerNamespace($xs, $defaultNamespace);
 	
 	$totalElements = $gXPath->evaluate("//*")->length;
+
 
 	// Registry Objects
 	// =========================================================================
@@ -521,6 +534,7 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 				// A new record has been inserted? Update the cache
 
 				if (eCACHE_ENABLED && !writeCache($dataSourceKey, $registryObjectKey, generateExtendedRIFCS($registryObjectKey)))
+
 				{
 					$runErrors .= "Could not writeCache() for key: " . $registryObjectKey ."\n";
 				} 
@@ -1776,17 +1790,14 @@ function getRelatedXml($dataSource,$rifcs,$objectClass){
 
 function runQualityCheck($rifcs, $objectClass, $dataSource, $output, $relatedObjectClassesStr='')
 {
+	global $qualityTestproc;
 	$relRifcs = getRelatedXml($dataSource,$rifcs,$objectClass);
 	$registryObjects = new DomDocument();
 	$registryObjects->loadXML($relRifcs);
-	$rmdQualityTest = new DomDocument();
-	$rmdQualityTest->load('../_xsl/rmd_quality_test.xsl');
-	$proc = new XSLTProcessor();
-	$proc->setParameter('', 'dataSource', $dataSource);
-	$proc->setParameter('', 'output', $output);
-	$proc->setParameter('', 'relatedObjectClassesStr', $relatedObjectClassesStr);
-	$proc->importStyleSheet($rmdQualityTest);
-	$result = $proc->transformToXML($registryObjects);
+	$qualityTestproc->setParameter('', 'dataSource', $dataSource);
+	$qualityTestproc->setParameter('', 'output', $output);
+	$qualityTestproc->setParameter('', 'relatedObjectClassesStr', $relatedObjectClassesStr);
+	$result = $qualityTestproc->transformToXML($registryObjects);
 	return $result;		
 }
 
@@ -1794,17 +1805,41 @@ function runQualityCheck($rifcs, $objectClass, $dataSource, $output, $relatedObj
 function runQualityCheckonDom($registryObjects, $dataSource, $output, $relatedObjectClassesStr)
 {
 
-	$rmdQualityTest = new DomDocument();
-	$rmdQualityTest->load('../_xsl/rmd_quality_test.xsl');
-	$proc = new XSLTProcessor();
-	$proc->setParameter('', 'dataSource', $dataSource);
-	$proc->setParameter('', 'output', $output);
-	$proc->setParameter('', 'relatedObjectClassesStr', $relatedObjectClassesStr);
-	$proc->importStyleSheet($rmdQualityTest);
-	$result = $proc->transformToXML($registryObjects);
+	global $qualityTestproc;
+	$qualityTestproc->setParameter('', 'dataSource', $dataSource);
+	$qualityTestproc->setParameter('', 'output', $output);
+	$qualityTestproc->setParameter('', 'relatedObjectClassesStr', $relatedObjectClassesStr);
+	$result = $qualityTestproc->transformToXML($registryObjects);
 	return $result;		
 }
 
+
+function runQualityLevelCheckonDom($registryObjects, $relatedObjectClassesStr, $level)
+{
+
+	global $qualityLevelProc;
+	//print $registryObjects->saveXML();
+	$qualityLevelProc->setParameter('', 'relatedObjectClassesStr', $relatedObjectClassesStr);
+	$result = $qualityLevelProc->transformToXML($registryObjects);
+	$reportDoc = new DOMDocument();
+	$reportDoc->loadXML($result);
+	$nXPath = new DOMXpath($reportDoc);
+	//print "RESULT:\n".$result."\n";
+	$errorElement = $nXPath->evaluate("//span[@class = 'qa_error']");
+	$level = 999;
+	for( $j=0; $j < $errorElement->length; $j++ )
+	{
+		if($errorElement->item($j)->getAttribute("level") < $level)
+		{
+			
+			$level = $errorElement->item($j)->getAttribute("level");
+			//print "error found".$level."\n";
+		}
+	}
+	$level = $level-1;
+	//print "lowest Error -1 is:".$level."\n";
+	return $result;		
+}
 
 
 function runQualityResultsforDataSource($dataSourceKey,$itemurl)
@@ -1938,7 +1973,7 @@ function runQualityCheckForRegistryObject($registryObjectKey, $dataSourceKey)
 	    $errorCount = substr_count($qualityTestResult, 'class="error"'); 
 		$warningCount = substr_count($qualityTestResult, 'class="warning"') + substr_count($qualityTestResult, 'class="info"');                              
         $result = updateRegistryObjectQualityTestResult($registryObjectKey, $qualityTestResult, $errorCount, $warningCount);                            
-		//return $result;
+		return $result;
 }
 
 
@@ -1969,6 +2004,690 @@ function runQualityLevelCheckForRegistryObject($registryObjectKey, $dataSourceKe
 			$objectClass = "Party";			
 		}
 	
+		$relRifcs = getRelatedXml($dataSourceKey,$rifcs,$objectClass);  
+		//print $relRifcs;
+		$RegistryObjects = new DOMDocument();
+		$RegistryObjects->loadXML($relRifcs);
+		$level = 1;
+
+		$relatedObjectClassesStr = getAllRelatedObjectClass($RegistryObjects, $dataSourceKey);
+		$qualityTestResult = runQualityCheckonDom($RegistryObjects, $dataSourceKey, 'html', $relatedObjectClassesStr);
+	    $errorCount = substr_count($qualityTestResult, 'class="error"'); 
+		$warningCount = substr_count($qualityTestResult, 'class="warning"') + substr_count($qualityTestResult, 'class="info"');                              
+        $result = updateRegistryObjectQualityTestResult($registryObjectKey, $qualityTestResult, $errorCount, $warningCount);                        
+		$qa_result = runQualityLevelCheckonDom($RegistryObjects, $relatedObjectClassesStr, &$level);
+		$result = updateRegistryObjectQualityLevelResult($registryObjectKey, $level, $qa_result);                         
+		return $result;
+}
+
+function runQualityLevelCheckForDraftRegistryObject($registryObjectKey, $dataSourceKey)
+{
+		$registryObject = getDraftRegistryObject($registryObjectKey,$dataSourceKey);
+		$relatedObjectClassesStr = '';
+		$rifcs = $registryObject[0]['rifcs'];	
+		$objectClass = "";
+		if(str_replace("<Collection","",$rifcs)!=$rifcs||str_replace("<collection","",$rifcs)!=$rifcs)
+		{
+			$objectClass = "Collection";			
+		}
+		elseif(str_replace("<Servive","",$rifcs)!=$rifcs||str_replace("<service","",$rifcs)!=$rifcs)
+		{
+			$objectClass = "Service";			
+		}
+		elseif(str_replace("<Activity","",$rifcs)!=$rifcs||str_replace("<activity","",$rifcs)!=$rifcs)
+		{
+			$objectClass = "Activity";			
+		}	
+		elseif(str_replace("<Party","",$rifcs)!=$rifcs||str_replace("<party","",$rifcs)!=$rifcs)
+		{
+			$objectClass = "Party";			
+		}	
+		
+		$relRifcs = getRelatedXml($dataSourceKey,$rifcs,$objectClass);				
+				
+		$RegistryObjects = new DOMDocument();
+		$RegistryObjects->loadXML($relRifcs);
+		//print $relRifcs;
+		$relatedObjectClassesStr = getAllRelatedObjectClass($RegistryObjects, $dataSourceKey);
+		$qualityTestResult = runQualityCheckonDom($RegistryObjects, $dataSourceKey, 'html', $relatedObjectClassesStr);
+		$errorCount = substr_count($qualityTestResult, 'class="error"');                              
+	    $warningCount = substr_count($qualityTestResult, 'class="warning"') + substr_count($qualityTestResult, 'class="info"');                              
+        $result = updateDraftRegistryObjectQualityTestResult($registryObjectKey, $dataSourceKey, $qualityTestResult, $errorCount, $warningCount);             
+		$level = 1;		
+		$qa_result = runQualityLevelCheckonDom($RegistryObjects, $relatedObjectClassesStr, &$level);
+		$result = updateDraftRegistryObjectQualityLevelResult($registryObjectKey, $dataSourceKey, $level, $qa_result);                         
+		return $result;
+}
+
+function getQualityLevel($RegistryObjects,$objectClass,$relatedObjectClassesStr,$level)
+{
+	
+	$response = "<span class='qa_ok' level='1'>registry objects</span>\n";
+	$key;	
+	if($objectClass == 'Collection')
+	{
+		//level 1 requirements
+		if($eRegistryObject = $RegistryObjects->getElementsByTagName('registryObject')->item(0))
+		{
+			$response .= "<span class='qa_ok' level='1'>registry object</span>\n";
+			$level = 1;
+		}
+		else
+		{
+			$response .= "<span class='qa_req' level='1'>registry object</span>\n";
+			$level = 0;
+		}
+		if($eOriginatingSource = $RegistryObjects->getElementsByTagName('originatingSource')->item(0))
+		{
+			$response .= "<span class='qa_ok' level='1'>originating source</span>\n";
+			$level = ($level == 1 ? 1 : $level);
+		}
+		else 
+		{
+			$response .= "<span class='qa_req' level='1'>originating source</span>\n";
+			$level = 0;
+		}
+		if($aRegistryObjectGroup = $eRegistryObject->getAttribute("group"))
+		{
+			$response .= "<span class='qa_ok' level='1'>group</span>\n";
+			$level = ($level == 1 ? 1 : $level);
+		}
+		else 
+		{
+			$response .= "<span class='qa_req' level='1'>group</span>\n";
+			$level = 0;
+		}
+		if($eKey = $eRegistryObject->getElementsByTagName('key')->item(0))
+		{
+			$response .= "<span class='qa_ok' level='1'>key</span>\n";
+			$key = $eKey->nodeValue;
+			$level = ($level == 1 ? 1 : $level);
+		}
+		else 
+		{
+			$response .= "<span class='qa_req' level='1'>key</span>\n";
+			$level = 0;
+		}
+		if($eCollection = $eRegistryObject->getElementsByTagName('collection')->item(0))
+		{
+			$response .= "<span class='qa_ok' level='1'>class type (collection)</span>\n";
+			$level = ($level == 1 ? 1 : $level);
+		}
+		else 
+		{
+			$response .= "<span class='qa_req' level='1'>class type (collection)</span>\n";
+			$level = 0;
+		}
+		if($aCollectionType = $eCollection->getAttribute("type"))
+		{
+			$response .= "<span class='qa_ok' level='1'>collection type</span>\n";
+			$level = ($level == 1 ? 1 : $level);
+		}
+		else 
+		{
+			$response .= "<span class='qa_req' level='1'>collection type</span>\n";
+			$level = 0;
+		}
+		//level 2
+		if($eName = $eCollection->getElementsByTagName('name')->item(0))
+		{
+			$response .= "<span class='qa_ok' level='2'>name</span>\n";
+			$level = ($level == 1 ? 2 : $level);
+		}
+		else 
+		{
+			$response .= "<span class='qa_req' level='2'>name</span>\n";
+		}
+		if(strpos($relatedObjectClassesStr, 'party'))
+		{
+			$response .= "<span class='qa_ok' level='2'>related object (party)</span>\n";
+			$level = ($level == 2 ? 2 : $level);
+		}
+		else 
+		{
+			$response .= "<span class='qa_req' level='2'>related object (party)</span>\n";
+			$level = ($level == 2 ? 1 : $level);
+		}
+		if($eIdentifier = $eCollection->getElementsByTagName('identifier')->item(0))
+		{
+			$response .= "<span class='qa_ok' level='2'>identifier</span>\n";
+			$level = ($level == 2 ? 2 : $level);
+		}
+		else 
+		{
+			$response .= "<span class='qa_rec' level='2'>identifier</span>\n";
+			$level = ($level == 2 ? 1 : $level);
+		}
+		//level 3
+		if($eDescription = $eCollection->getElementsByTagName('description')->item(0))
+		{
+			$response .= "<span class='qa_ok' level='3'>description</span>\n";
+			$level = ($level == 2 ? 3 : $level);
+		}
+		else 
+		{
+			$response .= "<span class='qa_req' level='3'>description</span>\n";
+		}
+		if($eLocation = $eCollection->getElementsByTagName('location')->item(0))
+		{
+			$response .= "<span class='qa_ok' level='3'>location/address</span>\n";
+			$level = ($level == 3 ? 3 : $level);
+		}
+		else 
+		{
+			$response .= "<span class='qa_req' level='3'>location/address</span>\n";
+			$level = ($level == 3 ? 2 : $level);
+		}
+		if($bRelatedActivity = strpos($relatedObjectClassesStr, 'activity'))
+		{
+			$response .= "<span class='qa_ok' level='3'>related object (activity)</span>\n";
+			$level = ($level == 3 ? 3 : $level);
+		}
+		else 
+		{
+			$response .= "<span class='qa_req' level='3'>related object (activity)</span>\n";
+			$level = ($level == 3 ? 2 : $level);
+		}
+		if($eRights = $eCollection->getElementsByTagName('rights')->item(0))
+		{
+			$response .= "<span class='qa_ok' level='3'>rights</span>\n";
+			$level = ($level == 3 ? 3 : $level);
+		}
+		else 
+		{
+			$response .= "<span class='qa_req' level='3'>rights</span>\n";
+			$level = ($level == 3 ? 2 : $level);
+		}
+		//level 4
+		if($eSubject = $eCollection->getElementsByTagName('subject')->item(0))
+		{
+			$response .= "<span class='qa_ok' level='4'>subject</span>\n";
+			$level = ($level == 3 ? 4 : $level);
+		}
+		else 
+		{
+			$response .= "<span class='qa_rec' level='4'>subject</span>\n";
+		}
+		if($eCoverage = $eCollection->getElementsByTagName('coverage')->item(0))
+		{
+			if($eSpatial = $eCoverage->getElementsByTagName('spatial')->item(0))
+			{
+				$response .= "<span class='qa_ok' level='4'>spatial coverage</span>\n";
+				$level = ($level == 4 ? 4 : $level);
+			}
+			else 
+			{
+				$response .= "<span class='qa_rec' level='4'>spatial coverage</span>\n";
+				$level = ($level == 4 ? 3 : $level);
+			}
+			if($eTemporal = $eCoverage->getElementsByTagName('temporal')->item(0))
+			{
+				$response .= "<span class='qa_ok' level='4'>temporal coverage</span>\n";
+				$level = ($level == 4 ? 4 : $level);
+			}
+			else 
+			{
+				$response .= "<span class='qa_rec' level='4'>temporal coverage</span>\n";
+				$level = ($level == 4 ? 3 : $level);
+			}
+		}
+		else 
+		{
+			$response .= "<span class='qa_rec' level='4'>spatial coverage</span>\n";
+			$response .= "<span class='qa_rec' level='4'>temporal coverage</span>\n";
+			$level = ($level == 4 ? 3 : $level);
+		}		
+		if($eCitation = $eCollection->getElementsByTagName('citationInfo')->item(0))
+		{
+			$response .= "<span class='qa_ok' level='4'>citation</span>\n";
+			$level = ($level == 4 ? 4 : $level);
+		}
+		else 
+		{
+			$response .= "<span class='qa_rec' level='4'>citation</span>\n";
+			$level = ($level == 4 ? 3 : $level);
+		}	
+	}
+	elseif($objectClass == 'Party')
+	{
+		//level 1 requirements
+		if($eRegistryObject = $RegistryObjects->getElementsByTagName('registryObject')->item(0))
+		{
+			$response .= "<span class='qa_ok' level='1'>registry object</span>\n";
+			$level = 1;
+		}
+		else
+		{
+			$response .= "<span class='qa_req' level='1'>registry object</span>\n";
+			$level = 0;
+		}
+		if($eOriginatingSource = $RegistryObjects->getElementsByTagName('originatingSource')->item(0))
+		{
+			$response .= "<span class='qa_ok' level='1'>originating source</span>\n";
+			$level = ($level == 1 ? 1 : $level);
+		}
+		else 
+		{
+			$response .= "<span class='qa_req' level='1'>originating source</span>\n";
+			$level = 0;
+		}
+		if($aRegistryObjectGroup = $eRegistryObject->getAttribute("group"))
+		{
+			$response .= "<span class='qa_ok' level='1'>group</span>\n";
+			$level = ($level == 1 ? 1 : $level);
+		}
+		else 
+		{
+			$response .= "<span class='qa_req' level='1'>group</span>\n";
+			$level = 0;
+		}
+		if($eKey = $eRegistryObject->getElementsByTagName('key')->item(0))
+		{
+			$response .= "<span class='qa_ok' level='1'>key</span>\n";
+			$key = $eKey->nodeValue;
+			$level = ($level == 1 ? 1 : $level);
+		}
+		else 
+		{
+			$response .= "<span class='qa_req' level='1'>key</span>\n";
+			$level = 0;
+		}
+		if($eParty = $eRegistryObject->getElementsByTagName('party')->item(0))
+		{
+			$response .= "<span class='qa_ok' level='1'>class type (party)</span>\n";
+			$level = ($level == 1 ? 1 : $level);
+		}
+		else 
+		{
+			$response .= "<span class='qa_req' level='1'>class type (party)</span>\n";
+			$level = 0;
+		}
+		if($aPartyType = $eParty->getAttribute("type"))
+		{
+			$response .= "<span class='qa_ok' level='1'>party type</span>\n";
+			$level = ($level == 1 ? 1 : $level);
+		}
+		else 
+		{
+			$response .= "<span class='qa_req' level='1'>party type</span>\n";
+			$level = 0;
+		}
+		//level 2
+		if($eName = $eParty->getElementsByTagName('name')->item(0))
+		{
+			$response .= "<span class='qa_ok' level='2'>name</span>\n";
+			$level = ($level == 1 ? 2 : $level);
+		}
+		else 
+		{
+			$response .= "<span class='qa_req' level='2'>name</span>\n";
+		}
+		//level 3
+		if($bRelatedCollection = strpos($relatedObjectClassesStr, 'collection'))
+		{
+			$response .= "<span class='qa_ok' level='3'>related object (collection)</span>\n";
+			$level = ($level == 2 ? 3 : $level);
+		}
+		else 
+		{
+			$response .= "<span class='qa_req' level='3'>related object (collection)</span>\n";
+		}
+		//level 4
+		if($eIdentifier = $eParty->getElementsByTagName('identifier')->item(0))
+		{
+			$response .= "<span class='qa_ok' level='4'>identifier</span>\n";
+			$level = ($level == 3 ? 4 : $level);
+		}
+		else 
+		{
+			$response .= "<span class='qa_rec' level='4'>identifier</span>\n";
+		}
+		if($eLocation = $eParty->getElementsByTagName('location')->item(0))
+		{
+			$response .= "<span class='qa_ok' level='4'>location address</span>\n";
+			$level = ($level == 4 ? 4 : $level);
+		}
+		else 
+		{
+			$response .= "<span class='qa_rec' level='4'>location address</span>\n";
+			$level = ($level == 4 ? 3 : $level);
+		}
+		if($bRelatedActivity = strpos($relatedObjectClassesStr, 'activity'))
+		{
+			$response .= "<span class='qa_ok' level='4'>related object (activity)</span>\n";
+			$level = ($level == 4 ? 4 : $level);
+		}
+		else 
+		{
+			$response .= "<span class='qa_rec' level='4'>related object (activity)</span>\n";
+			$level = ($level == 4 ? 3 : $level);
+		}
+		if($eDescription = $eParty->getElementsByTagName('description')->item(0))
+		{
+			$response .= "<span class='qa_ok' level='4'>description</span>\n";
+			$level = ($level == 4 ? 4 : $level);
+		}
+		else 
+		{
+			$response .= "<span class='qa_rec' level='4'>description</span>\n";
+			$level = ($level == 4 ? 3 : $level);
+		}
+		if($eSubject = $eParty->getElementsByTagName('subject')->item(0))
+		{
+			$response .= "<span class='qa_ok' level='4'>subject</span>\n";
+			$level = ($level == 4 ? 4 : $level);
+		}
+		else 
+		{
+			$response .= "<span class='qa_rec' level='4'>subject</span>\n";
+			$level = ($level == 4 ? 3 : $level);
+		}
+		if($eExistenceDates = $eParty->getElementsByTagName('existencedates')->item(0))
+		{
+			$response .= "<span class='qa_ok' level='4'>existencedates</span>\n";
+			$level = ($level == 4 ? 4 : $level);
+		}
+		else 
+		{
+			$response .= "<span class='qa_rec' level='4'>existencedates</span>\n";
+			$level = ($level == 4 ? 3 : $level);
+		}
+	}
+	elseif($objectClass == 'Activity')
+	{
+		//level 1 requirements
+		if($eRegistryObject = $RegistryObjects->getElementsByTagName('registryObject')->item(0))
+		{
+			$response .= "<span class='qa_ok' level='1'>registry object</span>\n";
+			$level = 1;
+		}
+		else
+		{
+			$response .= "<span class='qa_req' level='1'>registry object</span>\n";
+			$level = 0;
+		}
+		if($eOriginatingSource = $RegistryObjects->getElementsByTagName('originatingSource')->item(0))
+		{
+			$response .= "<span class='qa_ok' level='1'>originating source</span>\n";
+			$level = ($level == 1 ? 1 : $level);
+		}
+		else 
+		{
+			$response .= "<span class='qa_req' level='1'>originating source</span>\n";
+			$level = 0;
+		}
+		if($aRegistryObjectGroup = $eRegistryObject->getAttribute("group"))
+		{
+			$response .= "<span class='qa_ok' level='1'>group</span>\n";
+			$level = ($level == 1 ? 1 : $level);
+		}
+		else 
+		{
+			$response .= "<span class='qa_req' level='1'>group</span>\n";
+			$level = 0;
+		}
+		if($eKey = $eRegistryObject->getElementsByTagName('key')->item(0))
+		{
+			$response .= "<span class='qa_ok' level='1'>key</span>\n";
+			$key = $eKey->nodeValue;
+			$level = ($level == 1 ? 1 : $level);
+		}
+		else 
+		{
+			$response .= "<span class='qa_req' level='1'>key</span>\n";
+			$level = 0;
+		}
+		if($eActivity = $eRegistryObject->getElementsByTagName('activity')->item(0))
+		{
+			$response .= "<span class='qa_ok' level='1'>class type (activity)</span>\n";
+			$level = ($level == 1 ? 1 : $level);
+		}
+		else 
+		{
+			$response .= "<span class='qa_req' level='1'>class type (activity)</span>\n";
+			$level = 0;
+		}
+		if($aActivityType = $eActivity->getAttribute("type"))
+		{
+			$response .= "<span class='qa_ok' level='1'>activity type</span>\n";
+			$level = ($level == 1 ? 1 : $level);
+		}
+		else 
+		{
+			$response .= "<span class='qa_req' level='1'>activity type</span>\n";
+			$level = 0;
+		}
+		//level 2
+		if($eName = $eActivity->getElementsByTagName('name')->item(0))
+		{
+			$response .= "<span class='qa_ok' level='2'>name</span>\n";
+			$level = ($level == 1 ? 2 : $level);
+		}
+		else 
+		{
+			$response .= "<span class='qa_req' level='2'>name</span>\n";
+		}
+		//level 3
+		if($eDescription = $eActivity->getElementsByTagName('description')->item(0))
+		{
+			$response .= "<span class='qa_ok' level='3'>description</span>\n";
+			$level = ($level == 2 ? 3 : $level);
+		}
+		else 
+		{
+			$response .= "<span class='qa_rec' level='3'>description</span>\n";
+		}
+		if($bRelatedParty = strpos($relatedObjectClassesStr, 'party'))
+		{
+			$response .= "<span class='qa_ok' level='3'>related object (party)</span>\n";
+			$level = ($level == 3 ? 3 : $level);
+		}
+		else 
+		{
+			$response .= "<span class='qa_req' level='3'>related object (party)</span>\n";
+			$level = ($level == 3 ? 2 : $level);
+		}
+		//level 4
+		if($eLocation = $eActivity->getElementsByTagName('location')->item(0))
+		{
+			$response .= "<span class='qa_ok' level='4'>location address</span>\n";
+			$level = ($level == 3 ? 4 : $level);
+		}
+		else 
+		{
+			$response .= "<span class='qa_rec' level='4'>location address</span>\n";
+		}
+		if($bRelatedCollection = strpos($relatedObjectClassesStr, 'collection'))
+		{
+			$response .= "<span class='qa_ok' level='4'>related object (collection)</span>\n";
+			$level = ($level == 4 ? 4 : $level);
+		}
+		else 
+		{
+			$response .= "<span class='qa_req' level='4'>related object (collection)</span>\n";
+			$level = ($level == 4 ? 3 : $level);
+		}
+		if($eSubject = $eActivity->getElementsByTagName('subject')->item(0))
+		{
+			$response .= "<span class='qa_ok' level='4'>subject</span>\n";
+			$level = ($level == 4 ? 4 : $level);
+		}
+		else 
+		{
+			$response .= "<span class='qa_rec' level='4'>subject</span>\n";
+			$level = ($level == 4 ? 3 : $level);
+		}
+		if($eExistenceDates = $eActivity->getElementsByTagName('existencedates')->item(0))
+		{
+			$response .= "<span class='qa_ok' level='4'>existencedates</span>\n";
+			$level = ($level == 4 ? 4 : $level);
+		}
+		else 
+		{
+			$response .= "<span class='qa_rec' level='4'>existencedates</span>\n";
+			$level = ($level == 4 ? 3 : $level);
+		}
+	
+	}
+	elseif($objectClass == 'Service')
+	{
+		//level 1 requirements
+		if($eRegistryObject = $RegistryObjects->getElementsByTagName('registryObject')->item(0))
+		{
+			$response .= "<span class='qa_ok' level='1'>registry object</span>\n";
+			$level = 1;
+		}
+		else
+		{
+			$response .= "<span class='qa_req' level='1'>registry object</span>\n";
+			$level = 0;
+		}
+		if($eOriginatingSource = $RegistryObjects->getElementsByTagName('originatingSource')->item(0))
+		{
+			$response .= "<span class='qa_ok' level='1'>originating source</span>\n";
+			$level = ($level == 1 ? 1 : $level);
+		}
+		else 
+		{
+			$response .= "<span class='qa_req' level='1'>originating source</span>\n";
+			$level = 0;
+		}
+		if($aRegistryObjectGroup = $eRegistryObject->getAttribute("group"))
+		{
+			$response .= "<span class='qa_ok' level='1'>group</span>\n";
+			$level = ($level == 1 ? 1 : $level);
+		}
+		else 
+		{
+			$response .= "<span class='qa_req' level='1'>group</span>\n";
+			$level = 0;
+		}
+		if($eKey = $eRegistryObject->getElementsByTagName('key')->item(0))
+		{
+			$response .= "<span class='qa_ok' level='1'>key</span>\n";
+			$key = $eKey->nodeValue;
+			$level = ($level == 1 ? 1 : $level);
+		}
+		else 
+		{
+			$response .= "<span class='qa_req' level='1'>key</span>\n";
+			$level = 0;
+		}
+		if($eService = $eRegistryObject->getElementsByTagName('service')->item(0))
+		{
+			$response .= "<span class='qa_ok' level='1'>class type (service)</span>\n";
+			$level = ($level == 1 ? 1 : $level);
+		}
+		else 
+		{
+			$response .= "<span class='qa_req' level='1'>class type (service)</span>\n";
+			$level = 0;
+		}
+		if($aServiceType = $eService->getAttribute("type"))
+		{
+			$response .= "<span class='qa_ok' level='1'>service type</span>\n";
+			$level = ($level == 1 ? 1 : $level);
+		}
+		else 
+		{
+			$response .= "<span class='qa_req' level='1'>service type</span>\n";
+			$level = 0;
+		}
+		//level 2
+		if($eName = $eService->getElementsByTagName('name')->item(0))
+		{
+			$response .= "<span class='qa_ok' level='2'>name</span>\n";
+			$level = ($level == 1 ? 2 : $level);
+		}
+		else 
+		{
+			$response .= "<span class='qa_req' level='2'>name</span>\n";
+		}
+		//level 3
+		if($eLocation = $eService->getElementsByTagName('location')->item(0))
+		{
+			$response .= "<span class='qa_ok' level='3'>location address</span>\n";
+			$level = ($level == 2 ? 3 : $level);
+		}
+		else 
+		{
+			$response .= "<span class='qa_req' level='3'>location address</span>\n";
+		}
+		if($bRelatedCollection = strpos($relatedObjectClassesStr, 'collection'))
+		{
+			$response .= "<span class='qa_ok' level='3'>related object (collection)</span>\n";
+			$level = ($level == 3 ? 3 : $level);
+		}
+		else 
+		{
+			$response .= "<span class='qa_req' level='3'>related object (collection)</span>\n";
+			$level = ($level == 3 ? 2 : $level);
+		}
+		//level 4
+		if($bRelatedParty = strpos($relatedObjectClassesStr, 'party'))
+		{
+			$response .= "<span class='qa_ok' level='4'>related object (party)</span>\n";
+			$level = ($level == 3 ? 4 : $level);
+		}
+		else 
+		{
+			$response .= "<span class='qa_req' level='4'>related object (party)</span>\n";
+		}
+		if($eDescription = $eService->getElementsByTagName('description')->item(0))
+		{
+			$response .= "<span class='qa_ok' level='4'>description</span>\n";
+			$level = ($level == 4 ? 4 : $level);
+		}
+		else 
+		{
+			$response .= "<span class='qa_rec' level='4'>description</span>\n";
+			$level = ($level == 4 ? 3 : $level);
+		}
+		if($eAccessPolicy = $eService->getElementsByTagName('accessPolicy')->item(0))
+		{
+			$response .= "<span class='qa_ok' level='4'>access policy</span>\n";
+			$level = ($level == 4 ? 4 : $level);
+		}
+		else 
+		{
+			$response .= "<span class='qa_rec' level='4'>access policy</span>\n";
+			$level = ($level == 4 ? 3 : $level);
+		}
+	
+	}
+	$response = "<div id='quality_level_text' ro_class='".$objectClass."' ro_key='".$key."'>\n<span class='qa_level' level='".$level."'>".$level."</span>\n".$response."</div>\n";	
+	return $response;	
+}
+
+
+
+
+function runQuagmireCheckForRegistryObject($registryObjectKey, $dataSourceKey)
+{
+	
+		$rifcs = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
+		$rifcs .= '<registryObjects xmlns="http://ands.org.au/standards/rif-cs/registryObjects" '."\n";
+		$rifcs .= '                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '."\n";
+		$rifcs .= '                 xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects '.gRIF_SCHEMA_URI.'">'."\n";
+		$rifcs .= getRegistryObjectXML($registryObjectKey);
+		$rifcs .= '</registryObjects>'; 
+		$objectClass = "";
+		if(str_replace("<Collection","",$rifcs)!=$rifcs||str_replace("<collection","",$rifcs)!=$rifcs)
+		{
+			$objectClass = "Collection";			
+		}
+		elseif(str_replace("<Servive","",$rifcs)!=$rifcs||str_replace("<service","",$rifcs)!=$rifcs)
+		{
+			$objectClass = "Service";			
+		}
+		elseif(str_replace("<Activity","",$rifcs)!=$rifcs||str_replace("<activity","",$rifcs)!=$rifcs)
+		{
+			$objectClass = "Activity";			
+		}	
+		elseif(str_replace("<Party","",$rifcs)!=$rifcs||str_replace("<party","",$rifcs)!=$rifcs)
+		{
+			$objectClass = "Party";			
+		}
 		$relRifcs = getRelatedXml($dataSourceKey,$rifcs,$objectClass);  
 
 		$RegistryObjects = new DOMDocument();

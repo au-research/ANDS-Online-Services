@@ -302,6 +302,7 @@ function addPublishedSolrIndexForDatasource($dataSourceKey)
 			{					
 					$rifcs = wrapRegistryObjects($rifcsContent);
 					$solrrifcs = transformToSolr($rifcs);
+
 					if (strlen($solrrifcs) == 0)
 					{
 						echo $rifcs;
@@ -311,7 +312,8 @@ function addPublishedSolrIndexForDatasource($dataSourceKey)
 						$result = curl_post($solr_update_url, $solrrifcs);
 						$percent = round((($i+1)*100)/$arraySize, 2);
 						//echo ($percent).'% completed.<br/>';
-						echo $result.'<hr/>';
+						//echo $result.'<hr/>';
+
 						ob_flush();flush();
 						$rifcsContent = '';
 						for ($j=0;$j<$numDots;$j++) {

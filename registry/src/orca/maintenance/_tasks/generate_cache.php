@@ -50,6 +50,7 @@ foreach($ds AS $datasource)
 		bench(1);
 		$extendedRIFCS = generateExtendedRIFCS($registry_object['registry_object_key']);
 		echo "<br/>Getting RIFCS for " . $registry_object['registry_object_key'] . ": " . bench(1) . "s<br/>";
+		echo $extendedRIFCS;
 		bench(1);
 		writeCache($datasource['data_source_key'], $registry_object['registry_object_key'], $extendedRIFCS);
 		echo "Writing cache for " . $registry_object['registry_object_key'] . ": " . bench(1) . "s<br/><br/>";

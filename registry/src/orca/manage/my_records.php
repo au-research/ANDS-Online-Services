@@ -55,6 +55,9 @@ if (!$data_source_key)
 // Begin the XHTML response. Any redirects must occur before this point.
 require '../../_includes/header.php';
 
+//google chart
+echo '<script type="text/javascript" src="https://www.google.com/jsapi"></script>';
+
 echo '<script type="text/javascript" src="'. eAPP_ROOT.'orca/_javascript/orca_dhtml.js"></script>
 		<script type="text/javascript" src="'. eAPP_ROOT.'orca/_javascript/mmr_dhtml.js"></script>
 		<input type="hidden" id="elementSourceURL" value="' . eAPP_ROOT . 'orca/manage/process_registry_object.php?" />';
@@ -74,6 +77,7 @@ echo '<link rel="stylesheet" href="'. eAPP_ROOT.'/_javascript/qtip2/jquery.qtip.
 
 //Specific MMR Styles
 echo '<link rel="stylesheet" href="'. eAPP_ROOT.'orca/_styles/mmr.css" />';
+
 
 echo '<h1>Manage My Records</h1>';
 
@@ -174,6 +178,16 @@ else
 		    		if(userIsORCA_LIAISON()) echo 'yes'; else echo 'no';
 		    	echo '</div>';
 
+
+
+
+		    	/*
+				 * Charts
+				 * 
+				 */
+		    	echo '<div id="chart" class="tab-content qaview"></div>';
+
+
 				/*
 				 * More Work Required Records
 				 * - only visible if there are records of this status
@@ -181,7 +195,9 @@ else
 				$MWRclass = '';
 				if ($status['MORE_WORK_REQUIRED'] == 0) $MWRclass = 'hide';
 				
-				echo '	<div id="MORE_WORK_REQUIRED" class="tab-content '.$MWRclass.'">
+
+				echo '	<div id="MORE_WORK_REQUIRED" class="tab-content '.$MWRclass.' statusview">
+
 								<table class="mmr_table" name="MORE_WORK_REQUIRED" count="'.$status['MORE_WORK_REQUIRED'].'"><tr><td>Loading...</td></tr></table>
 							</div>';
 
@@ -190,7 +206,9 @@ else
 				 * DRAFT Records
 				 * - All users can delete/submit for review
 				 */
-		    	echo '	<div id="DRAFT" class="tab-content">
+
+		    	echo '	<div id="DRAFT" class="tab-content statusview">
+
 		    				<table class="mmr_table" name="DRAFT" count="'.$status['DRAFT'].'"><tr><td>Loading...</td></tr></table>
 						</div>';
 
@@ -200,7 +218,9 @@ else
 					
 				if ($status['SUBMITTED_FOR_ASSESSMENT'] > 0 || $dataSource['qa_flag'] == 't')
 				{
-					echo '	<div id="SUBMITTED_FOR_ASSESSMENT" class="tab-content">
+
+					echo '	<div id="SUBMITTED_FOR_ASSESSMENT" class="tab-content statusview">
+
 							<table class="mmr_table" name="SUBMITTED_FOR_ASSESSMENT" count="'.$status['SUBMITTED_FOR_ASSESSMENT'].'"><tr><td>Loading...</td></tr></table>
 							</div>';
 				}
@@ -212,7 +232,9 @@ else
 				
 				if ($status['ASSESSMENT_IN_PROGRESS'] > 0 || $dataSource['qa_flag'] == 't')
 				{
-					echo '	<div id="ASSESSMENT_IN_PROGRESS" class="tab-content">
+
+					echo '	<div id="ASSESSMENT_IN_PROGRESS" class="tab-content statusview">
+
 								<table class="mmr_table" name="ASSESSMENT_IN_PROGRESS" count="'.$status['ASSESSMENT_IN_PROGRESS'].'"><tr><td>Loading...</td></tr></table>
 							</div>';
 				}
@@ -223,7 +245,9 @@ else
 				
 				if ($status['APPROVED'] > 0 || $dataSource['auto_publish'] == 't') // manually
 				{
-					echo '	<div id="APPROVED" class="tab-content">
+
+					echo '	<div id="APPROVED" class="tab-content statusview">
+
 								<table class="mmr_table" name="APPROVED" count="'.$status['APPROVED'].'"><tr><td>Loading...</td></tr></table>
 							</div>';
 				}
@@ -231,8 +255,9 @@ else
 				/*
 				 * PUBLISHED Records
 				 */
-				
-				echo '	<div id="PUBLISHED" class="tab-content">
+
+				echo '	<div id="PUBLISHED" class="tab-content statusview">
+
 								<table class="mmr_table" name="PUBLISHED" count="'.$status['PUBLISHED'].'"><tr><td>Loading...</td></tr></table>
 							</div>';
 
@@ -740,7 +765,9 @@ function displayMMRDataSourceSwitcher(array $dataSources = array(), $selected_ke
 				
 				<div class="content_block">
 					<div class="buttons">
-						<a href="javascript:void(0);" class="button left pressed">Status</a><a href="#" class="button right">Quality</a>
+
+						<a href="javascript:void(0);" class="button left pressed viewswitch" name="statusview">Status</a><a href="javascript:void(0);" class="button right viewswitch"name = "qaview">Quality</a>
+
 					</div>
 				</div>
 				<div class="content_block">
@@ -752,7 +779,9 @@ function displayMMRDataSourceSwitcher(array $dataSources = array(), $selected_ke
 
 			<div class="clearfix"></div>
 
-			<div id="mmr_datasource_information">
+
+			<div id="mmr_datasource_information" class="hide">
+
 			 <a href="" id="mmr_information_hide">Hide Information</a>
 			 <a href="<?php echo eAPP_ROOT . "orca/admin/data_source_view.php?data_source_key=" . rawurlencode($data_source_key); ?>" id="mmr_manage_data_source">Manage this Data Source</a>
 				<div id="mmr_ds_moredetails">

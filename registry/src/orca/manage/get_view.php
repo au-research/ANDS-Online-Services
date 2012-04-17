@@ -94,6 +94,9 @@ function searchRecords($status){
 		$buttons = array();
 		$status = $doc->{'status'};
 
+		$view_link = eAPP_ROOT.'orca/view.php?key='.esc(rawurlencode($doc->{'key'}));
+
+
 		if(!in_array($status, array('PUBLISHED', 'APPROVED'))){//IS DRAFT, edit needs DS
 			if(in_array($status, array('DRAFT', 'MORE_WORK_REQUIRED'))){//DRAFT and MORE_WORK_REQUIRED
 				array_push($buttons,'ReadOnlyView');
@@ -102,11 +105,15 @@ function searchRecords($status){
 				//if harvest then alert else it's ok
 				array_push($buttons,'EditRecord');
 				array_push($buttons,'DeleteRecord');
+
+				$view_link = eAPP_ROOT.'orca/manage/add_'.$doc->{'class'}.'_registry_object.php?readOnly&data_source='.rawurlencode($doc->{'data_source_key'}).'&key='.esc(rawurlencode($doc->{'key'}));
 			}else{//SUBMITTED_FOR_ASSESSMENT and ASSESSMENT_IN_PROGRESS
 				//if feed = harvest, readonly mode in view TODO
 				array_push($buttons,'ReadOnlyView');
+				$view_link = eAPP_ROOT.'orca/manage/add_'.$doc->{'class'}.'_registry_object.php?readOnly&data_source='.rawurlencode($doc->{'data_source_key'}).'&key='.esc(rawurlencode($doc->{'key'}));
 				//cannot edit nor delete, disabled button?
-			}
+			}	
+
 		}else{//PUBLISHED and APPROVED
 			array_push($buttons,'ViewRecord');
 			//if feed = harvest, readonly mode in edit TODO
@@ -121,7 +128,9 @@ function searchRecords($status){
 		for($i=0;$i<sizeof($buttons);$i++){
 			if(sizeof($buttons)==1){//has only 1 item, just icon
 				if($buttons[$i]=='ReadOnlyView'){//the ONLY case, where the only option is to view it
-					$btnStr.='<a href="'.eAPP_ROOT.'orca/manage/add_'.$doc->{'class'}.'_registry_object.php?readOnly&data_source='.rawurlencode($doc->{'data_source_key'}).'&key='.esc(rawurlencode($doc->{'key'})).'" class="smallIcon icon6s tip" tip="View This Record in Read Only Mode"><span></span></a>';
+
+					$btnStr.='<a href="'.$view_link.'" class="smallIcon icon6s tip" tip="View This Record in Read Only Mode"><span></span></a>';
+
 				}
 			}else{
 				//button positioning
@@ -136,10 +145,12 @@ function searchRecords($status){
 				//button string
 				switch($buttons[$i]){
 					case 'ReadOnlyView':
-						$btnStr.='<a href="'.eAPP_ROOT.'orca/manage/add_'.$doc->{'class'}.'_registry_object.php?readOnly&data_source='.rawurlencode($doc->{'data_source_key'}).'&key='.esc(rawurlencode($doc->{'key'})).'" class="smallIcon icon6s '.$pos.' tip" tip="View This Record in Read Only Mode"><span></span></a>';
+
+						$btnStr.='<a href="'.$view_link.'" class="smallIcon icon6s '.$pos.' tip" tip="View This Record in Read Only Mode"><span></span></a>';
 						break;
 					case 'ViewRecord':
-						$btnStr.='<a href="'.eAPP_ROOT.'orca/view.php?key='.esc(rawurlencode($doc->{'key'})).'" class="smallIcon icon6s '.$pos.' tip" tip="View This Record"><span></span></a>';
+						$btnStr.='<a href="'.$view_link.'" class="smallIcon icon6s '.$pos.' tip" tip="View This Record"><span></span></a>';
+
 						break;
 					case 'EditRecord':
 						$btnStr.='<a href="'.eAPP_ROOT.'orca/manage/add_'.$doc->{'class'}.'_registry_object.php?data_source='.rawurlencode($doc->{'data_source_key'}).'&key='.esc(rawurlencode($doc->{'key'})).'" class="smallIcon icon187s '.$pos.' tip" tip="Edit This Record"><span></span></a>';
@@ -189,8 +200,10 @@ function searchRecords($status){
 		$entry = array(
 					'id' => $doc->{'key'},
 					'cell' => array(
-							$doc->{'key'},
-							$doc->{'list_title'},
+
+							'<a href="'.$view_link.'">'.$doc->{'key'}.'</a>',
+							'<a href="'.$view_link.'">'.$doc->{'list_title'}.'</a>',
+
 							$date_modified,
 							$doc->{'class'},
 							$error_count,

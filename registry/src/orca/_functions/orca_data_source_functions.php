@@ -16,6 +16,11 @@ limitations under the License.
 
 define('gORCA_HARVEST_REQUEST_STATUS_PROCESSING', 'PROCESSING HARVESTER PUT REQUEST');
 
+$qtestxsl = new DomDocument();
+$qtestxsl->load(eAPPLICATION_ROOT.'orca/_xsl/extRif2solr.xsl');
+$extRif2solrProc = new XSLTProcessor();
+$extRif2solrProc->importStyleSheet($qtestxsl);
+
 function runImport($dataSource, $testOnly)
 {
 	$dataSourceProviderType  = $dataSource[0]['provider_type'];
@@ -582,16 +587,13 @@ return $transformResult;
 }
 
 function transformToSolr($registryObjectsXML)
-{
 
-$qtestxsl = new DomDocument();
-$registryObjects = new DomDocument();
-$registryObjects->loadXML($registryObjectsXML);
-$qtestxsl->load('../_xsl/extRif2solr.xsl');
-$proc = new XSLTProcessor();
-$proc->importStyleSheet($qtestxsl);
-$transformResult = $proc->transformToXML($registryObjects);	
-return $transformResult;
+{	
+	global $extRif2solrProc;
+	$registryObjects = new DomDocument();
+	$registryObjects->loadXML($registryObjectsXML);
+	$transformResult = $extRif2solrProc->transformToXML($registryObjects);	
+	return $transformResult;
 }
 
 function runSolrIndexForDatasource($dataSourceKey)
@@ -610,10 +612,10 @@ function runSolrIndexForDatasource($dataSourceKey)
 		$rifcsContent = getRegistryObjectXMLforSOLR($key, true);
 		$rifcs = wrapRegistryObjects($rifcsContent);
 		$rifcs = transformToSolr($rifcs);		
-			echo $key . '<br/>';						
+		//	echo $key . '<br/>';						
 		$result .= curl_post(gSOLR_UPDATE_URL, $rifcs);					
 		$result .= curl_post(gSOLR_UPDATE_URL.'?commit=true', '<commit waitFlush="false" waitSearcher="false"/>');
-		echo $result;
+		//echo $result;
 		$result ='';flush(); ob_flush();	
 	//	$result .= curl_post(gSOLR_UPDATE_URL.'?optimize=true', '<optimize waitFlush="false" waitSearcher="false"/>');
 	

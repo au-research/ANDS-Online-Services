@@ -713,9 +713,7 @@
 				var bDivTH = $('table', this.bDiv).height();
 
 				if(bDivH != bDivTH && p.height=='auto') {
-				   $(".bDiv").css({height: bDivTH + 18});
-				}else{
-					//not ie9 fixing
+				   $(this.bDiv).css({height: bDivTH + 18});
 				}
 			},
 			pager: 0
