@@ -389,6 +389,36 @@ function doSolrSearch()
 }
 
 
+
+function getGoldRecords()
+{
+   var solrURL = $('#solrUrl').val();
+   alert(solrURL);
+
+   /*if(window.location.href.indexOf('https')==0){
+       solrURL='https'+solrURL;
+   }else{
+       solrURL='http'+solrURL;
+   }*/
+   var oPage = $('#page').val();
+   $('#search-result').hide();
+   //alert('query='+search_term+'&class='+oClass+'&page='+oPage+'&group='+oGroup+'&subject='+oSubject);
+   $.ajax({
+         type: 'POST',
+         url: solrURL,
+         data: 'query=fish&page='+oPage,
+         success: function(msg){
+             alert("response"+msg);
+             $('#search-result').html(msg);
+             $('#search-result').fadeIn();
+         },
+         error: function(msg){
+             //alert('ERROR'+msg);
+             console.log(msg);
+         }
+       });
+}
+
 $().ready(function(){
 	
 	/*

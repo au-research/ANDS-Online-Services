@@ -3,8 +3,9 @@
 xmlns:extRif="http://ands.org.au/standards/rif-cs/extendedRegistryObjects"
 	xmlns:rif="http://ands.org.au/standards/rif-cs/registryObjects"
 version="1.0">
+
 	<xsl:output indent="yes"/>
-	<!--xsl:strip-space elements="*"/-->
+	<xsl:strip-space elements="*"/>
 	<!-- copy all other nodes and attributes -->
 	
 	<xsl:template match="/">

@@ -1,6 +1,6 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteBase /workareas/minh/ands/registry/src/orca/rda/
+    RewriteBase /workareas/leo-git/ANDS-Online-Services/registry/src/orca/rda/
 
 
     #Removes access to the system folder by users.

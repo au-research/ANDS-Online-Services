@@ -862,17 +862,10 @@ function getTemporalCoverageXML($coverage_id, $forSOLR)
 					$value = esc($row['value']);
 					$xml .= "          <date$type$dateFormat>$value</date>\n";
 					
-					if ($forSOLR)
+					if ($forSOLR && preg_match('/\b\d{4}\b/', $value, $matches))
 					{
-						try 
-						{
-							$value = FormatDateTime(esc($row['value']), gDATE);
-						}
-						catch (Exception $e)
-						{
-							$value = ''; // ???? 2008-01-01 00:00:00-01-01T
-						}
-						$xml .= "          <extRif:date$type$dateFormat>$value</extRif:date>\n";
+						$year = $matches[0];
+						$xml .= "          <extRif:date$type$dateFormat>$year</extRif:date>\n";
 					}
 				}	
 			}

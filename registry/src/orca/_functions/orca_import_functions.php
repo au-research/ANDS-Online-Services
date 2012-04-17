@@ -19,6 +19,18 @@ limitations under the License.
 $gXPath = null; // An XPATH object to use for parsing the XML.
 $xs = 'rif';    // The default namespace prefix to register for use by XPATH.
 $dataSourceKey = '';
+
+
+$rmdQualityTest = new DomDocument();
+$rmdQualityTest->load(eAPPLICATION_ROOT.'orca/_xsl/rmd_quality_test.xsl');
+$qualityTestproc = new XSLTProcessor();
+$qualityTestproc->importStyleSheet($rmdQualityTest);
+
+$rmdQualityLevel = new DomDocument();
+$rmdQualityLevel->load(eAPPLICATION_ROOT.'orca/_xsl/gen_quality_level_report.xsl');
+$qualityLevelProc = new XSLTProcessor();
+$qualityLevelProc->importStyleSheet($rmdQualityLevel);
+
 function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMessage, $created_who=SYSTEM, $status=PUBLISHED, $record_owner=SYSTEM, $xPath=NULL, $override_qa=false)
 {
 	global $gXPath;
@@ -1767,17 +1779,14 @@ function getRelatedXml($dataSource,$rifcs,$objectClass){
 
 function runQualityCheck($rifcs, $objectClass, $dataSource, $output, $relatedObjectClassesStr='')
 {
+	global $qualityTestproc;
 	$relRifcs = getRelatedXml($dataSource,$rifcs,$objectClass);
 	$registryObjects = new DomDocument();
 	$registryObjects->loadXML($relRifcs);
-	$rmdQualityTest = new DomDocument();
-	$rmdQualityTest->load('../_xsl/rmd_quality_test.xsl');
-	$proc = new XSLTProcessor();
-	$proc->setParameter('', 'dataSource', $dataSource);
-	$proc->setParameter('', 'output', $output);
-	$proc->setParameter('', 'relatedObjectClassesStr', $relatedObjectClassesStr);
-	$proc->importStyleSheet($rmdQualityTest);
-	$result = $proc->transformToXML($registryObjects);
+	$qualityTestproc->setParameter('', 'dataSource', $dataSource);
+	$qualityTestproc->setParameter('', 'output', $output);
+	$qualityTestproc->setParameter('', 'relatedObjectClassesStr', $relatedObjectClassesStr);
+	$result = $qualityTestproc->transformToXML($registryObjects);
 	return $result;		
 }
 
@@ -1785,17 +1794,41 @@ function runQualityCheck($rifcs, $objectClass, $dataSource, $output, $relatedObj
 function runQualityCheckonDom($registryObjects, $dataSource, $output, $relatedObjectClassesStr)
 {
 
-	$rmdQualityTest = new DomDocument();
-	$rmdQualityTest->load('../_xsl/rmd_quality_test.xsl');
-	$proc = new XSLTProcessor();
-	$proc->setParameter('', 'dataSource', $dataSource);
-	$proc->setParameter('', 'output', $output);
-	$proc->setParameter('', 'relatedObjectClassesStr', $relatedObjectClassesStr);
-	$proc->importStyleSheet($rmdQualityTest);
-	$result = $proc->transformToXML($registryObjects);
+	global $qualityTestproc;
+	$qualityTestproc->setParameter('', 'dataSource', $dataSource);
+	$qualityTestproc->setParameter('', 'output', $output);
+	$qualityTestproc->setParameter('', 'relatedObjectClassesStr', $relatedObjectClassesStr);
+	$result = $qualityTestproc->transformToXML($registryObjects);
 	return $result;		
 }
 
+
+function runQualityLevelCheckonDom($registryObjects, $relatedObjectClassesStr, $level)
+{
+
+	global $qualityLevelProc;
+	//print $registryObjects->saveXML();
+	$qualityLevelProc->setParameter('', 'relatedObjectClassesStr', $relatedObjectClassesStr);
+	$result = $qualityLevelProc->transformToXML($registryObjects);
+	$reportDoc = new DOMDocument();
+	$reportDoc->loadXML($result);
+	$nXPath = new DOMXpath($reportDoc);
+	//print "RESULT:\n".$result."\n";
+	$errorElement = $nXPath->evaluate("//span[@class = 'qa_error']");
+	$level = 999;
+	for( $j=0; $j < $errorElement->length; $j++ )
+	{
+		if($errorElement->item($j)->getAttribute("level") < $level)
+		{
+			
+			$level = $errorElement->item($j)->getAttribute("level");
+			//print "error found".$level."\n";
+		}
+	}
+	$level = $level-1;
+	//print "lowest Error -1 is:".$level."\n";
+	return $result;		
+}
 
 
 function runQualityResultsforDataSource($dataSourceKey,$itemurl)
@@ -1929,7 +1962,7 @@ function runQualityCheckForRegistryObject($registryObjectKey, $dataSourceKey)
 	    $errorCount = substr_count($qualityTestResult, 'class="error"'); 
 		$warningCount = substr_count($qualityTestResult, 'class="warning"') + substr_count($qualityTestResult, 'class="info"');                              
         $result = updateRegistryObjectQualityTestResult($registryObjectKey, $qualityTestResult, $errorCount, $warningCount);                            
-		//return $result;
+		return $result;
 }
 
 
@@ -1961,7 +1994,7 @@ function runQualityLevelCheckForRegistryObject($registryObjectKey, $dataSourceKe
 		}
 	
 		$relRifcs = getRelatedXml($dataSourceKey,$rifcs,$objectClass);  
-
+		//print $relRifcs;
 		$RegistryObjects = new DOMDocument();
 		$RegistryObjects->loadXML($relRifcs);
 		$level = 1;
@@ -1970,10 +2003,9 @@ function runQualityLevelCheckForRegistryObject($registryObjectKey, $dataSourceKe
 		$qualityTestResult = runQualityCheckonDom($RegistryObjects, $dataSourceKey, 'html', $relatedObjectClassesStr);
 	    $errorCount = substr_count($qualityTestResult, 'class="error"'); 
 		$warningCount = substr_count($qualityTestResult, 'class="warning"') + substr_count($qualityTestResult, 'class="info"');                              
-        $result = updateRegistryObjectQualityTestResult($registryObjectKey, $qualityTestResult, $errorCount, $warningCount);                            
-		$qa_result = getQualityLevel($RegistryObjects,$objectClass,$relatedObjectClassesStr,&$level);
-		$result = updateRegistryObjectQualityLevelResult($registryObjectKey, $level, $qa_result);
-		//print $qa_result;	                         
+        $result = updateRegistryObjectQualityTestResult($registryObjectKey, $qualityTestResult, $errorCount, $warningCount);                        
+		$qa_result = runQualityLevelCheckonDom($RegistryObjects, $relatedObjectClassesStr, &$level);
+		$result = updateRegistryObjectQualityLevelResult($registryObjectKey, $level, $qa_result);                         
 		return $result;
 }
 
@@ -2004,16 +2036,15 @@ function runQualityLevelCheckForDraftRegistryObject($registryObjectKey, $dataSou
 				
 		$RegistryObjects = new DOMDocument();
 		$RegistryObjects->loadXML($relRifcs);
-		
+		//print $relRifcs;
 		$relatedObjectClassesStr = getAllRelatedObjectClass($RegistryObjects, $dataSourceKey);
 		$qualityTestResult = runQualityCheckonDom($RegistryObjects, $dataSourceKey, 'html', $relatedObjectClassesStr);
 		$errorCount = substr_count($qualityTestResult, 'class="error"');                              
 	    $warningCount = substr_count($qualityTestResult, 'class="warning"') + substr_count($qualityTestResult, 'class="info"');                              
         $result = updateDraftRegistryObjectQualityTestResult($registryObjectKey, $dataSourceKey, $qualityTestResult, $errorCount, $warningCount);             
-		$level = 1;
-		$qa_result = getQualityLevel($RegistryObjects,$objectClass,$relatedObjectClassesStr,&$level);
-		$result = updateDraftRegistryObjectQualityLevelResult($registryObjectKey, $dataSourceKey, $level, $qa_result);
-		//print $qa_result;	                         
+		$level = 1;		
+		$qa_result = runQualityLevelCheckonDom($RegistryObjects, $relatedObjectClassesStr, &$level);
+		$result = updateDraftRegistryObjectQualityLevelResult($registryObjectKey, $dataSourceKey, $level, $qa_result);                         
 		return $result;
 }
 
@@ -2646,7 +2677,6 @@ function runQuagmireCheckForRegistryObject($registryObjectKey, $dataSourceKey)
 		{
 			$objectClass = "Party";			
 		}
-	
 		$relRifcs = getRelatedXml($dataSourceKey,$rifcs,$objectClass);  
 
 		$RegistryObjects = new DOMDocument();

@@ -185,10 +185,10 @@ addMenu($menu);
 	addActivity($activity);	
 
 	// =============================================================================
-	/* Registry Index
-	$activity = new activity('aORCA_REGISTRY_INDEX', 'Browse', 'orca/registry_index.php');
+	// Gold Level Collections
+	$activity = new activity('aORCA_GOLD_INDEX', 'Gold Standard Records', 'orca/show_gold_level_collections.php');
 	$activity->menu_id = 'mORCA_CONTAINER';
-	addActivity($activity);*/
+	addActivity($activity);
 
 	// =============================================================================
 	// View
