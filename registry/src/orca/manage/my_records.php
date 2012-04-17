@@ -25,7 +25,6 @@ $this_url = eAPP_ROOT . "orca/manage/my_records.php?";
 
 $errors = array();
 
-
 // Get data sources which we have access to
 $rawResults = getDataSources(null, null);
 $dataSources = array();

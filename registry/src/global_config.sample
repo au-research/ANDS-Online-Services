@@ -76,13 +76,6 @@ define('eBOOST_INCOMING_RELATED_OBJECT_ADJUSTMENT', 10);
 
 
 
-//======================================
-// INDEXING OPTIONS
-define('eBOOST_DEFAULT_BASE', 100);
-define('eBOOST_RELATED_OBJECT_ADJUSTMENT', 5);
-define('eBOOST_INCOMING_RELATED_OBJECT_ADJUSTMENT', 10);
-
-
 //White List IP are IPs that are allowed to access the system regardless of maitenance status
 $white_list_ip 	= array(
 	'xx.xx.xx.xx'
@@ -129,15 +122,15 @@ $eLDAPDN = "$eLDAPuid, $eLDAPBaseDN";
 
 
 /*====================================
-	DATABASE ENVIRONMENT
+        DATABASE ENVIRONMENT
 ====================================*/
 $cosi_db_host = 'devl.ands.org.au';
-$orca_db_port = 5432;
-$cosi_db_name = 'dbs_work_leo_cosi_2';
+$cosi_db_port = 5433;
+$cosi_db_name = 'dbs_develop_cosi';
 //======================================
 $orca_db_host = $cosi_db_host;
-$orca_db_port = 5432;
-$orca_db_name = 'dbs_work_leo_orca_2';
+$orca_db_port = $cosi_db_port;
+$orca_db_name = 'dbs_develop_orca';
 //======================================
 $pids_db_host = $cosi_db_host;
 $pids_db_port = 5432;
