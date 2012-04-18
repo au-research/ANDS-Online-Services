@@ -337,6 +337,7 @@ function addDraftSolrIndexForDatasource($dataSourceKey)
 	global $totalCount;
 	$rifcsContent = '';
 	$allKeys = getDraftRegistryObject(null , $dataSourceKey);
+	//var_dump($allKeys);
 	ob_flush();flush();
 	$chunkSize = 49;
 	$result = '';

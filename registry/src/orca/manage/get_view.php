@@ -35,6 +35,7 @@ switch($view){
 	case "summary": summary();break;
 	case "status":searchRecords($status);break;
 	case "allKeys":allKeys($status);break;
+	case "statusCount": statusCount($status);break;
 }
 
 
@@ -210,7 +211,8 @@ function searchRecords($status){
 							$doc->{'quality_level'},
 							$flagButton,
 							$btnStr,
-							$doc->{'status'}
+							$doc->{'status'},
+							$doc->{'manually_assessed_flag'}
 							)
 				);
 		$jsonData['rows'][] = $entry;
@@ -219,6 +221,24 @@ function searchRecords($status){
 	echo json_encode($jsonData);
 }
 
+/**
+STATUS COUNT
+**/
+function statusCount($status){
+	header("Content-type: application/json");
+	global $dataSourceKey, $solr_url;
+	$q = '+data_source_key:("'.$dataSourceKey.'")';
+	if($status!='All'){
+		$q.='+status:("'.$status.'")';
+	}
+	$fields = array(
+		'q'=>$q,'version'=>'2.2','start'=>'0','rows'=>'1000', 'wt'=>'json',
+		'fl'=>'key', 'facet'=>'true', 'facet.field'=>'quality_level','facet.mincount'=>'1'
+	);
+	//Call SOLR and ask for data
+	$content = solr($solr_url, $fields);
+	echo $content;
+}
 
 
 
@@ -234,52 +254,6 @@ function allKeys($status){
 	);
 	$content = solr($solr_url, $fields);
 	echo $content;
-}
-
-function summary(){
-	global $dataSourceKey;
-	global $solr_url;
-	global $rp;
-
-	//SEARCH for everything based on that data source, but we only want 1 rows and return just the key, for optimized performace
-	$q = 'data_source_key:("'.$dataSourceKey.'")';
-	$fields = array(
-		'q'=>$q,'version'=>'2.2','start'=>'0','rows'=>'1', 'wt'=>'json',
-		'fl'=>'key'
-	);
-	$fields_string='';
-	foreach($fields as $key=>$value) { $fields_string .= $key.'='.$value.'&'; }//build the string
-	rtrim($fields_string,'&');
-
-	//because what we are looking for is the facet of the statuses
-	$fields_string .='&facet=true&facet.field=status&facet.limit=-1&facet.mincount=1';
-
-	//execute and return the stuffs in weird JSON
-	$content = executeSOLR($solr_url, $fields, $fields_string);
-	$json = json_decode($content);
-
-	//We are now extracting the valuable data out from json and put them into an array
-	//of form $status['DRAFT'] => 4 pr something
-	$i=0;$status=array();$placeholder = $json->{'facet_counts'}->{'facet_fields'}->{'status'};
-	for($i=0;$i<sizeof($placeholder);$i+=2){
-		$status[$placeholder[$i]] = $placeholder[$i+1];
-	}
-	
-	//build the html return table
-	$str = '';
-
-	$str .='<table>';
-	$str .='<th><td>Count</td></th>';
-	$str .='<tbody>';
-	foreach($status as $key=>$value){
-		$str.= '<tr><td>'.$key.'</td><td>'.$value.'</td></tr>';
-	}
-	$str .='</tbody></table>';
-
-	echo $str;
-	/*echo '<hr/>';
-	//var_dump($status);
-	var_dump($json->{'facet_counts'}->{'facet_fields'});*/
 }
 
 function executeSOLR($solr_url, $fields, $fields_string){

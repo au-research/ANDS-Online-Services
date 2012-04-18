@@ -179,12 +179,7 @@ else
 
 
 
-
-		    	/*
-				 * Charts
-				 * 
-				 */
-		    	echo '<div id="chart" class="tab-content qaview"></div>';
+		    	echo '<div id="All_qaview" class="tab-content qaview"></div>';
 
 
 				/*
@@ -196,9 +191,9 @@ else
 				
 
 				echo '	<div id="MORE_WORK_REQUIRED" class="tab-content '.$MWRclass.' statusview">
-
 								<table class="mmr_table" name="MORE_WORK_REQUIRED" count="'.$status['MORE_WORK_REQUIRED'].'"><tr><td>Loading...</td></tr></table>
 							</div>';
+				echo '<div id="MORE_WORK_REQUIRED_qaview" class="tab-content qaview"></div>';
 
 
 		    	/*
@@ -210,6 +205,7 @@ else
 
 		    				<table class="mmr_table" name="DRAFT" count="'.$status['DRAFT'].'"><tr><td>Loading...</td></tr></table>
 						</div>';
+				echo '<div id="DRAFT_qaview" class="tab-content qaview"></div>';
 
 				/*
 				 * SUBMITTED FOR ASSESSMENT Records
@@ -222,6 +218,7 @@ else
 
 							<table class="mmr_table" name="SUBMITTED_FOR_ASSESSMENT" count="'.$status['SUBMITTED_FOR_ASSESSMENT'].'"><tr><td>Loading...</td></tr></table>
 							</div>';
+					echo '<div id="SUBMITTED_FOR_ASSESSMENT_qaview" class="tab-content qaview"></div>';
 				}
 
 
@@ -236,6 +233,7 @@ else
 
 								<table class="mmr_table" name="ASSESSMENT_IN_PROGRESS" count="'.$status['ASSESSMENT_IN_PROGRESS'].'"><tr><td>Loading...</td></tr></table>
 							</div>';
+					echo '<div id="ASSESSMENT_IN_PROGRESS_qaview" class="tab-content qaview"></div>';
 				}
 
 				/*
@@ -249,6 +247,7 @@ else
 
 								<table class="mmr_table" name="APPROVED" count="'.$status['APPROVED'].'"><tr><td>Loading...</td></tr></table>
 							</div>';
+					echo '<div id="APPROVED_qaview" class="tab-content qaview"></div>';
 				}
 				
 				/*
@@ -259,6 +258,7 @@ else
 
 								<table class="mmr_table" name="PUBLISHED" count="'.$status['PUBLISHED'].'"><tr><td>Loading...</td></tr></table>
 							</div>';
+				echo '<div id="PUBLISHED_qaview" class="tab-content qaview"></div>';
 
 		    ?>
 

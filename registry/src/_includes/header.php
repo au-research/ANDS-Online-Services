@@ -59,6 +59,7 @@ limitations under the License.
 	<script type="text/javascript" src="<?php print eAPP_ROOT ?>_javascript/jquery-ui-timepicker-addon-amended.js"></script>
 	<script type="text/javascript" src="<?php print eAPP_ROOT ?>orca/_javascript/orca_dhtml.js"></script>
 
+	<script type="text/javascript" src="<?php print eAPP_ROOT ?>_javascript/jquery.cookie.js"></script>
 	
 </head>
 <body onload="initDHTML('pageContainerWithMenu'); wcDisposeWait();">

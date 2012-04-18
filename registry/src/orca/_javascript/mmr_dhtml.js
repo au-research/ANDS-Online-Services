@@ -21,15 +21,20 @@ var MMR_datasource_info_visible = true;
 // Load the Visualization API and the piechart package.
 google.load('visualization', '1.0', {'packages':['corechart']});
 
-var currentView = 'status';//can be status or quality
+var currentView;//can be status or quality
 
-      
-
-
+     
 $(document).ready(function() {
-	
+
 	$(".chzn-select").chosen(); $(".chzn-select-deselect").chosen({allow_single_deselect:true});
-	
+	if($.cookie('currentView')){
+		currentView = $.cookie('currentView');
+	}else{
+		currentView = 'statusview';
+		$.cookie('currentView', 'statusview');
+	}
+	//console.log($.cookie('currentView'));
+
 
 	//MMR Tables
 	var dsKey = $('#dataSourceKey').val();
@@ -44,11 +49,125 @@ $(document).ready(function() {
 		orcaLIASON = true;
 	}
 
+	view(currentView, 'All');
+
+
+	function view(type, status){
+		//console.log('type='+type+' status='+status);
+		$('.tab-content').hide();
+		if(type=='statusview'){
+			$('.qaview').hide();
+			$('.viewswitch').removeClass('pressed');
+			$('.viewswitch[name=statusview]').addClass('pressed');
+			if(status=='All'){//open all statuses except for more work required (if there is none)
+				$('.statusview').show();
+				if($('.MORE_WORK_REQUIRED_table').find('.ftitle').attr('count')==0){
+					$('.MORE_WORK_REQUIRED_table').hide();
+					//console.log('hiding');
+				}
+			}else{//is a specific status
+				$('.statusview').each(function(){
+					if($(this).attr('id')==status){
+						$(this).show();
+					}
+				});
+			}
+		}else if(type=='qaview'){
+			google.setOnLoadCallback(drawChart(status, dsKey));
+			$('.statusview').hide();
+			$('.viewswitch').removeClass('pressed');
+			$('.viewswitch[name=qaview]').addClass('pressed');
+			if(status=='All'){
+				$('.qaview[id=All_qaview]').show();
+			}else{//is a specific status
+				$('.qaview[id='+status+'_qaview]').show();
+			}
+		}
+	}
+
+	$('.tab').live('click', function(){
+		if(!$(this).hasClass('inactive')){//only for tab that is active
+			$('.tab').removeClass('active-tab');
+			$(this).addClass('active-tab');//make this tab active and other tab not active (doesn't mean inactive)
+			var name = $(this).attr('name');
+			view(currentView, name);
+		}
+	});
+
+
+	$('.viewswitch').live('click', function(){
+		$('.viewswitch').removeClass('pressed');
+		$(this).addClass('pressed');
+		var name = $(this).attr('name');
+		$.cookie('currentView', name);
+		$('.'+name).show();
+		view(name, 'All');
+	});
+
+
+	function drawChart(status, ds) {
+        // Create the data table.
+        var chartData = new google.visualization.DataTable();
+
+        $.ajax({
+    		url: 'get_view.php?view=statusCount&status='+status+'&ds='+ds,
+    		method: 'get',
+    		data: {},
+    		dataType:'json',
+    		success: function(data) {
+    			var qualityLevels = data.facet_counts.facet_fields.quality_level;    		
+    			//console.log(qualityLevels);
+
+    			chartData.addColumn('string', 'QA Level');
+    			chartData.addColumn('number', 'level');
+
+    			var resultArray = [];
+    			for (var i = qualityLevels.length - 2; i >= 0; i=i-2) {
+        			//console.log(qualityLevels[i]);
+        			var result = [];
+        			result.push('QA Level '+ qualityLevels[i], qualityLevels[i+1])
+        			resultArray.push(result);
+        			//chartData.addColumn('string', 'QA Level '+qualityLevels[i]);
+        		};
+
+        		
+        		
+        		//console.log(resultArray);
+        		chartData.addRows(resultArray);
+
+        		var options = {'title':status+' Records',
+                       'width':400,
+                       'height':300,
+                   		backgroundColor: { fill:'transparent' }};
+                // Instantiate and draw our chart, passing in some options.
+        		var chart = new google.visualization.PieChart(document.getElementById(status+'_qaview'));
+        		chart.draw(chartData, options);
+        	}
+        });
+        
+
+        /*data.addColumn('string', 'Status');
+        data.addColumn('number', 'QA Level 1');
+        data.addColumn('number', 'QA Level 2');
+        data.addRows([
+          ['PUBLISHED', 3,26],
+          ['DRAFT', 1,15]
+        ]);
+
+        // Set chart options
+        var options = {'title':'All Records',
+                       'width':400,
+                       'height':300,
+                   backgroundColor: { fill:'transparent' }};
+
+        // Instantiate and draw our chart, passing in some options.
+        var chart = new google.visualization.PieChart(document.getElementById(id));
+        chart.draw(data, options);*/
+      }
 
 	$('.mmr_table').each(function(){
 		var status = $(this).attr('name');
 		var count = $(this).attr('count');
-
 
 		var buttons = [
 			{name: 'Select All', bclass: 'button', onpress : selectAll}
@@ -81,18 +200,17 @@ $(document).ready(function() {
 		}
 		//buttons.push({separator:true});
 		
-
 		$(this).flexigrid({
 			striped:true,
-  			title:status,
-  			showTableToggleBtn: true,
+			title:status,
+			showTableToggleBtn: true,
 
-  			showToggleBtn: true,
+			showToggleBtn: true,
             url: 'get_view.php?view=status&status='+status+'&ds='+dsKey,
-        	dataType: 'json',
-        	usepager: true,
-        	colModel : [
-        		{display: 'recordKey', name:'key', width:70, sortable: true, align:'left'},
+			dataType: 'json',
+			usepager: true,
+			colModel : [
+			{display: 'recordKey', name:'key', width:70, sortable: true, align:'left'},
                 {display: 'Name/Title', name : 'list_title', width : 350, sortable : true, align: 'left'},
                 {display: 'Last Modified', name : 'date_modified', width : 100, sortable : true, align: 'left'},
                 {display: 'Class', name : 'class', width : 50, sortable : true, align: 'left'},
@@ -100,13 +218,13 @@ $(document).ready(function() {
                 {display: 'Quality Level', name : 'quality_level', width : 50, sortable : true, align: 'left'},
                 {display: 'Flag', name : 'flag', width : 50, sortable : false, align: 'left'},
                 {display: 'Options', name : 'buttons', width : 150, sortable : false, align: 'left'},
-
-                {display: 'Status', name : 'status', width : 150, sortable : true, align: 'left'}
+                {display: 'Status', name : 'status', width : 150, sortable : true, align: 'left'},
+                {display: 'Manually Assessed', name : 'manually_assessed_flag', width : 150, sortable : true, align: 'left', hide:true}
             ],
             buttons:buttons,
             resizable:true,
             useRp: true,
-        	rp: 10,
+			rp: 10,
 			pagestat: 'Displaying {from} to {to} of {total} records',
 			nomsg: 'No records found',
 
@@ -116,13 +234,11 @@ $(document).ready(function() {
                         {display: 'Name/Title', name : 'list_title'}
                         ],
             onSuccess: hideInfo
-	  		});
-	  	
-	  	if (count==0){
-	  		//console.log(count);
-	  		$(this).parent().parent().find('.ptogtitle').click();
-	  	}
-
+		});
+		if(count=='0'){
+			$(this).parent().parent().find('.ptogtitle').click();
+			//console.log(count);
+		}
 	});
 
 
@@ -131,6 +247,7 @@ $(document).ready(function() {
 		$('td[abbr=status]').each(function(){
 			$(this).addClass($(this).text()+'_status');
 		});
+
 	}
 
 
@@ -149,22 +266,19 @@ $(document).ready(function() {
 				//alert("Edit row " + id);
 				targetKeys.push(id);
 			});
-
 			fireZaLaserz(com, targetKeys);
-
 		}else if($(grid).attr('selectall')=='yes'){
 			var status = $(grid).attr('status');
 			$.ajax({
-			  url: 'get_view.php?view=allKeys&status='+status+'&ds='+dsKey,
-			  dataType: 'json',
-			  success: function(data) {
-			    docs = data.response.docs;
-			    $(docs).each(function(){
-			    	targetKeys.push(this.key);
-			    });
-        		//console.log(targetKeys);
-        		fireZaLaserz(com, targetKeys);
-			  }
+				url: 'get_view.php?view=allKeys&status='+status+'&ds='+dsKey,
+				dataType: 'json',
+				success: function(data) {
+					docs = data.response.docs;
+					$(docs).each(function(){
+						targetKeys.push(this.key);
+					});
+				fireZaLaserz(com, targetKeys);
+				}
 			});
 		}else{
 			alert('No command to be executed');
@@ -216,20 +330,18 @@ $(document).ready(function() {
 		var isPreApproval = false;
 		$.post(
 			$("#elementSourceURL").val() + "task=manage_my_records&action=" + action,
-			{ 	
+			{
 				'keys[]' : targetKeys,
 				'preapproval' : isPreApproval,
 				'dataSourceKey' : dataSourceKey
 			},
 			function(data)
-			{		
+			{
 				//console.log(data);
-				if (data['responsecode'] == 0)
+				if (data['responsecode'] === 0)
 				{
 					// Error occured
 					alert("Error Occured: Access Denied.");
-					//console.log(data);
-					$.unblockUI(); 
 				}
 				else if (data['responsecode'] == "MT008")
 				{
@@ -388,29 +500,10 @@ $(document).ready(function() {
 	});
 
 
-	$('.tab').live('click', function(){
-		if(!$(this).hasClass('inactive')){//only for tab that is active
-			$('.tab').removeClass('active-tab');
-			$(this).addClass('active-tab');//make this tab active and other tab not active (doesn't mean inactive)
-			var name = $(this).attr('name');
-			if(name=='All'){//show everything for all tab
-				$('.tab-content').show();
-			}else{//show just the required tab content
-				$('.tab-content').hide();
-				$('#'+name).show();
-			}
-		}
-	});
+	
 
 
-	$('.viewswitch').live('click', function(){
-		$('.viewswitch').removeClass('pressed');
-		$(this).addClass('pressed');
-		var name = $(this).attr('name');
-		MMR_setStatusCookie('currentView',name);
-		$('.tab-content').hide();
-		$('.'+name).show();
-	})
+	
 
 
 
@@ -451,34 +544,7 @@ $(document).ready(function() {
 
 
 
-	// Set a callback to run when the Google Visualization API is loaded.
-    google.setOnLoadCallback(drawChart);
 
-      // Callback that creates and populates a data table,
-      // instantiates the pie chart, passes in the data and
-      // draws it.
-      function drawChart() {
-
-        // Create the data table.
-        var data = new google.visualization.DataTable();
-        data.addColumn('string', 'Status');
-        data.addColumn('number', 'QA Level 1');
-        data.addColumn('number', 'QA Level 2');
-        data.addRows([
-          ['PUBLISHED', 3,26],
-          ['DRAFT', 1,15]
-        ]);
-
-        // Set chart options
-        var options = {'title':'All Records',
-                       'width':400,
-                       'height':300,
-                   backgroundColor: { fill:'transparent' }};
-
-        // Instantiate and draw our chart, passing in some options.
-        var chart = new google.visualization.PieChart(document.getElementById('chart'));
-        chart.draw(data, options);
-      }
 
 
 	/**

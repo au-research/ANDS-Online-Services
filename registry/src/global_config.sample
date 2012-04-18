@@ -66,7 +66,7 @@ define('eCACHE_CURRENT_NAME','current'); // what filename do we use for the late
 define('eCACHE_PERMISSION',0775); // octal representation of default directory permissions
 $gCacheEnabled = true; // is caching enabled?
 $gCacheExtended = true; // are we caching "extended RIFCS" (rich) or plain vanilla? (not backwards compatible)
-
+define('eCACHE_ENABLED', $gCacheEnabled);
 
 //======================================
 // INDEXING OPTIONS
