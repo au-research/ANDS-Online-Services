@@ -21,7 +21,7 @@ var MMR_datasource_info_visible = true;
 // Load the Visualization API and the piechart package.
 google.load('visualization', '1.0', {'packages':['corechart']});
 
-var currentView;//can be status or quality
+var currentView = 'statusview';//can be status or quality
 
      
 $(document).ready(function() {
@@ -90,7 +90,7 @@ $(document).ready(function() {
 			$('.tab').removeClass('active-tab');
 			$(this).addClass('active-tab');//make this tab active and other tab not active (doesn't mean inactive)
 			var name = $(this).attr('name');
-			view(currentView, name);
+			view($.cookie('currentView'), name);
 		}
 	});
 
@@ -109,19 +109,21 @@ $(document).ready(function() {
         // Create the data table.
         var chartData = new google.visualization.DataTable();
 
+        //console.log('hgere');
         $.ajax({
     		url: 'get_view.php?view=statusCount&status='+status+'&ds='+ds,
     		method: 'get',
-    		data: {},
     		dataType:'json',
+    		contentType: "application/json", //tell the server we're looking for json
+    		cache: false, // don't cache the result
     		success: function(data) {
+    			//console.log(data);
     			var qualityLevels = data.facet_counts.facet_fields.quality_level;    		
     			//console.log(qualityLevels);
-
     			chartData.addColumn('string', 'QA Level');
     			chartData.addColumn('number', 'level');
 
-    			var resultArray = [];
+    			var resultArray = new Array();
     			for (var i = qualityLevels.length - 2; i >= 0; i=i-2) {
         			//console.log(qualityLevels[i]);
         			var result = [];
@@ -142,27 +144,9 @@ $(document).ready(function() {
                 // Instantiate and draw our chart, passing in some options.
         		var chart = new google.visualization.PieChart(document.getElementById(status+'_qaview'));
         		chart.draw(chartData, options);
+        		//console.log('finish');
         	}
         });
-        
-
-        /*data.addColumn('string', 'Status');
-        data.addColumn('number', 'QA Level 1');
-        data.addColumn('number', 'QA Level 2');
-        data.addRows([
-          ['PUBLISHED', 3,26],
-          ['DRAFT', 1,15]
-        ]);
-
-        // Set chart options
-        var options = {'title':'All Records',
-                       'width':400,
-                       'height':300,
-                   backgroundColor: { fill:'transparent' }};
-
-        // Instantiate and draw our chart, passing in some options.
-        var chart = new google.visualization.PieChart(document.getElementById(id));
-        chart.draw(data, options);*/
       }
 
 	$('.mmr_table').each(function(){

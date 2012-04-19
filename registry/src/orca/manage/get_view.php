@@ -225,7 +225,7 @@ function searchRecords($status){
 STATUS COUNT
 **/
 function statusCount($status){
-	header("Content-type: application/json");
+	header("Content-type: application/javascript");
 	global $dataSourceKey, $solr_url;
 	$q = '+data_source_key:("'.$dataSourceKey.'")';
 	if($status!='All'){
