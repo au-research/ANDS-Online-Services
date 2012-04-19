@@ -1027,6 +1027,7 @@ function advanceLoadingStatus () {
 function getRelatedObjectPreview(key, target){
 	$.get('process_registry_object.php?task=related_object_preview&key='+key, function(data) {
 	  $(target).html(data);
+	  setRelatedObjectClasses();
 	});
 
 }
