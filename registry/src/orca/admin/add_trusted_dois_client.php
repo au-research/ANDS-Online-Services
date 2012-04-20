@@ -19,7 +19,13 @@ limitations under the License.
 require '../../_includes/init.php';
 require '../orca_init.php';
 require '../dois_orcainit.php';
-
+$client = '';
+$client_id = '';
+$client_name = '';
+$ip_address = '';
+$client_contact_name = '';
+$client_contact_email = '';
+$client_domain_list = '';
 // Page processing
 // -----------------------------------------------------------------------------
 

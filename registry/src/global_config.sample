@@ -99,6 +99,30 @@ $pids_db_name = 'pids';
 $dois_db_host = $cosi_db_host;
 $dois_db_name = 'dois';
 //======================================
+//DOI ENVIRONMENT
+//====================================*/
+define('gDOIS_DATACENTRE_BASE_URI', "https://mds.datacite.org/datacentre");
+define('gDOIS_DATACENTRE_USERNAME', "ANDS");
+define('gDOIS_DATACENTRE_PASSWORD', "and3do1p455");
+
+define('gDOIS_DATACENTRE_NAME_PREFIX', "ANDS");
+//define('gDOIS_DATACENTRE_NAME_MIDDLE', "CENTRE");  //for production
+define('gDOIS_DATACENTRE_NAME_MIDDLE', "TEST");
+$gDOIS_PREFIX_TYPES = array( '10.4225/','10.4226/','10.4227/','10.5072/');
+
+
+// Service configuration.
+
+define('gDOIS_SERVICE_BASE_URI', "https://mds.datacite.org/");
+define('gDOIS_DATACITE_PASSWORD', "and3do1p455");
+
+define('gDOIS_RESPONSE_SUCCESS', 'OK');
+
+
+$dataciteSchema['2.0'] = 'http://schema.datacite.org/meta/kernel-2.0/metadata.xsd';
+$dataciteSchema['2.1'] = 'http://schema.datacite.org/meta/kernel-2.1/metadata.xsd';
+$dataciteSchema['2.2'] = 'http://schema.datacite.org/meta/kernel-2.2/metadata.xsd';
+
 
 define('eAPPLICATION_ROOT', dirname(__FILE__) . "/");
 ?>
