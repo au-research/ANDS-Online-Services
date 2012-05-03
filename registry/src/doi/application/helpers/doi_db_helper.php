@@ -15,7 +15,7 @@
     function getDoiListxml()
     {
      	$CI =& get_instance();
-    	$result = $CI->db->query('select * from doi_objects');
+     	$result = $CI->db->query("select * from doi_objects WHERE status = 'ACTIVE'");
     	return $result;   	
     }  
     function getDoisClientDetails($client_id)

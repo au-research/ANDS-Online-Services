@@ -10,15 +10,23 @@
     }
 
 	function putxml(){
-
+		global $host, $doi_root;
+		$base_url	= 'http://'.$host.'/home/dois/';
+		$CI =& get_instance();
 		$doiList = getDoiListxml();
-		
 		foreach($doiList->result() as $doi)
 		{
-			$xml = file_get_contents("http://".eHOST.eROOT_DIR."/xml?doi=".$doi->doi_id);
+			$xml = file_get_contents($base_url."/doi_xml.php?doi=".$doi->doi_id);
 			$data = array('datacite_xml' => $xml);
 			$where = "doi_id = '".$doi->doi_id."'";
     		$query_str = $this->db->update_string('doi_objects', $data, $where);
+    		$result = $CI->db->query($query_str);
+    		if($result!=1)
+    		{
+    			echo 'Error updating object xml '.$doi->doi_id.'<br/>';
+    		}else{
+      			echo 'Updated object xml '.$doi->doi_id.'<br/>';
+    		}	
 		}
 		exit;
 	}
@@ -186,17 +194,16 @@
 					if($urlValue)
 					{
 						$response1 = $this->doisRequest("mint",$doiValue, $urlValue, $xml,$client_id);		
-		
 					}
 					
 					if($doiObjects)
 					{
-						$response2 = $this->doisRequest("update",$doiValue, $urlValue, $xml,$client_id);
+						$response2 = $this->doisRequest("update",$doiValue, $urlValue, $xml,$client_id);			
 					}
 					
 					if( $response1 && $response2 )
 					{
-						if( $response1 == gDOIS_RESPONSE_SUCCESS && $response2 == gDOIS_RESPONSE_SUCCESS)
+						if( doisGetResponseType($response1) == gDOIS_RESPONSE_SUCCESS && doisGetResponseType($response2) == gDOIS_RESPONSE_SUCCESS)
 						{
 							// We have successfully updated the doi through datacite.
 							$verbosemessage = $response1." ".$response2;
@@ -452,7 +459,9 @@
 	}
 	
 	function activate(){
-		global $api_version;		
+		global $api_version;
+		global $host, $doi_root;
+		$base_url	= 'http://'.$host.$doi_root;				
 		$errorMessages = '';
 		$notifyMessage = '';
 		$outstr = '';
@@ -523,7 +532,14 @@
 			// Update doi information
 			$status = "ACTIVE";
 			$activateResult = setDoiStatus($doiValue,$status);
-			$xml = file_get_contents("http://".eHOST.eROOT_DIR."/xml?doi=".$doiValue);
+			
+			$doidata = getxml($doiValue);		
+			if($doidata->num_rows() > 0){			
+				foreach($doidata->result() as $row)
+				{
+						$xml = $row->datacite_xml;
+				}
+			}
 			if(!$activateResult){	
 			// Activate the DOI.
 	

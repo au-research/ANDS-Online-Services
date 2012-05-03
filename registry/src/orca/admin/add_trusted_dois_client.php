@@ -30,7 +30,7 @@ $client_domain_list = '';
 // -----------------------------------------------------------------------------
 
 $errorMessages = '';
-$app_id = getQueryValue('app_id');
+$app_id = (isset($_GET['app_id']) ? $_GET['app_id'] : getPostedValue('app_id'));
 if($app_id!=''){
 	$action = 'Edit';
 	
@@ -57,12 +57,11 @@ if($app_id!=''){
 	$action = 'Add';
 }
 
-
 if ( strtoupper(getPostedValue('verb')) == "ADD" || strtoupper(getPostedValue('verb')) == "EDIT")
 {
 	if(strtoupper(getPostedValue('verb')) == "ADD") $action = "Add";
 	if(strtoupper(getPostedValue('verb')) == "EDIT") $action = "Edit";
-		
+
 	$client_name = getPostedValue('client_name');
 	$ip_address = getPostedValue('ip_address');
 	$client_contact_name = getPostedValue('client_contact_name');
@@ -163,7 +162,6 @@ if ( strtoupper(getPostedValue('verb')) == "ADD" || strtoupper(getPostedValue('v
 		{
 			$client = addDoisClient(getPostedValue('client_name'),getPostedValue('client_contact_name'),getPostedValue('client_contact_email'),getPostedValue('ip_address'),getPostedValue('datacite_prefix'),$app_id);	
 		}elseif($action == "Edit"){
-		
 			$client_id = getPostedValue('client_id');
 			deleteClientDomainList($client_id);
 			$client = updateDoisClient(getPostedValue('client_name'),getPostedValue('client_contact_name'),getPostedValue('client_contact_email'),getPostedValue('ip_address'),getPostedValue('datacite_prefix'),$app_id,$client_id);	

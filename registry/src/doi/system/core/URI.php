@@ -69,6 +69,7 @@ class CI_URI {
 			}
 
 			// Let's try the REQUEST_URI first, this will work in most situations
+
 			if ($uri = $this->_detect_uri())
 			{
 				$this->_set_uri_string($uri);
@@ -105,7 +106,6 @@ class CI_URI {
 		}
 
 		$uri = strtoupper($this->config->item('uri_protocol'));
-
 		if ($uri == 'REQUEST_URI')
 		{
 			$this->_set_uri_string($this->_detect_uri());
@@ -272,12 +272,13 @@ class CI_URI {
 		{
 			// Filter segments for security
 			$val = trim($this->_filter_uri($val));
-
 			if ($val != '')
 			{
+				if (substr($val,0,1) == "&") { $val = substr($val, 1); }
 				$this->segments[] = $val;
 			}
 		}
+		
 	}
 
 	// --------------------------------------------------------------------

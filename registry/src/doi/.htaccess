@@ -1,6 +1,6 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteBase /workareas/liz/ands/registry/src/doi
+    RewriteBase /7.3/ands/registry/src/doi/
 
 
     #Removes access to the system folder by users.
@@ -8,7 +8,7 @@
     #previously this would not have been possible.
     #'system' can be replaced if you have renamed your system folder.
     RewriteCond %{REQUEST_URI} ^system.*
-    RewriteRule ^(.*)$ /index.php?/$1 [L]
+    RewriteRule ^(.*)$ /index.php?/$1 [QSA,L]
     
     #When your application folder isn't in the system folder
     #This snippet prevents user access to the application folder
@@ -25,7 +25,7 @@
     
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule ^(.*)$ index.php?/$1 [L]
+    RewriteRule ^(.*)$ index.php?/$1 [QSA,L]
 </IfModule>
 
 <IfModule !mod_rewrite.c>

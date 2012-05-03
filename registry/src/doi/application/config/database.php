@@ -40,11 +40,11 @@
 
 $active_group = 'default';
 $active_record = TRUE;
-
-$db['default']['hostname'] = 'devl.ands.org.au';
+global $dois_db_name, $dois_db_host;
+$db['default']['hostname'] = $dois_db_host;
 $db['default']['username'] = 'webuser';
 $db['default']['password'] = '';
-$db['default']['database'] = 'dois';
+$db['default']['database'] = $dois_db_name;
 $db['default']['dbdriver'] = 'postgre';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = FALSE;

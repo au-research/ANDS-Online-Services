@@ -39,9 +39,25 @@ $harvest_ip		= '';
 //======================================
 $deploy_as		= 'PROD';
 $rda_environment	= 'production';
+$doi_environment	= 'production';
 $debug 			= false;
 $error 			= false;
 $maintenance 	= false;
+
+//=====================================
+// The name of the application.
+define("eAPP_TITLE", "Online Services");
+
+// The name of this installed instance of the application.
+// eINSTANCE_TITLE_SHORT will be used in the window title.
+// eINSTANCE_TITLE will be used as the logo alt/title.
+define("eINSTANCE_TITLE", "My Organisation");
+define("eINSTANCE_TITLE_SHORT", "MyORG");
+
+define("eCONTACT_EMAIL", "services@ands.org.au");
+define("eCONTACT_NAME", "Feedback");
+
+define("eCOPYRIGHT_NOTICE", "");
 
 //White List IP are IPs that are allowed to access the system regardless of maitenance status
 $white_list_ip 	= array(
@@ -83,21 +99,24 @@ $eLDAPBaseDN = "ou=People, o=anu.edu.au";
 $eLDAPuid = "uid=@@ROLE_ID@@";
 $eLDAPDN = "$eLDAPuid, $eLDAPBaseDN";
 
-
 /*====================================
 	DATABASE ENVIRONMENT
 ====================================*/
-$cosi_db_host = 'devl.ands.org.au';
-$cosi_db_name = 'dbs_work_leo_cosi_2';
+$cosi_db_host = 'test.ands.org.au';
+$cosi_db_name = 'dbs_test_cosi';
+$cosi_db_port = 5433;
 //======================================
 $orca_db_host = $cosi_db_host;
-$orca_db_name = 'dbs_work_leo_orca_2';
+$orca_db_name = 'dbs_test_orca';
+$orca_db_port = 5433;
 //======================================
 $pids_db_host = $cosi_db_host;
 $pids_db_name = 'pids';
+$pids_db_port = 5432;
 //======================================
 $dois_db_host = $cosi_db_host;
 $dois_db_name = 'dois';
+$dois_db_port = 5432;
 //======================================
 //DOI ENVIRONMENT
 //====================================*/
