@@ -1,0 +1,44 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<!-- Date Modified: $Date: 2010-01-19 11:22:58 +1100 (Tue, 19 Jan 2010) $ -->
+<!-- Version: $Revision -->
+</head>
+<body bgcolor="white">
+<h2>RIF-CS Java API 1.3.0</h2>
+
+<p>The RIF-CS API is an API developed by the Australian National Data Service (ANDS) to aid developers in the processing and assembly of RIF-CS Documents. It is currently in the early stages of development and enables developers to access the structures of an existing RIF-CS document for simpler processing. The model supported is a RIF-CS DOM and most RIF-CS elements are provided their own classes which essentially encapsulate commonly used w3c DOM API methods to provide convenience classes and methods for obtaining element content and attributes. This enables developers to think about a RIF-CS Document as a collection of objects rather than having to carry out repetitive XML API calls in a RIF-CS document context.</p>
+
+<p>It is intended for this API to grow as further RIF-CS development is undertaken at The Australian National University (ANU).</p>
+
+<p>Refer to the <a href="http://ands.org.au/resource/techdocs.html#rifcs">RIF-CS documentation</a> for schema, guidelines and vocabularies which must be used in conjunction with this API.</p>
+
+<h5>Change History</h5>
+<ul>
+	<li>1.3.0</li>
+	<ul>
+		<li>Added methods to support reading of existing RIF-CS documents</li>
+		<li>Minor Javadocs updates</li>
+	</ul>
+	<li>1.2.0</li>
+	<ul>
+		<li>Added methods to support reading of existing RIF-CS documents</li>
+		<li>Minor Javadocs updates</li>
+	</ul>
+	<li>1.1.0</li>
+	<ul>
+		<li>Fixed bug preventing creation of party and service</li>
+		<li>Workaround for Xerces bug where schema fragments in the same namespace cannot be used to generate a Schema object</li>
+		<li>Added methods to location to support type attribute</li>
+		<li>Minor changes to support Java 1.6 XML namespace processing</li>
+		<li>Revised Javadocs and removed out of date URLs</li>
+	</ul>
+
+	<li>1.0.0</li>
+	<ul>
+		<li>Initial release</li>
+	</ul>
+</ul>
+<p>Note: A release is numbered as <code>major.minor.patch</code> where <strong>major</strong>=API change; <strong>minor</strong>=bug fix or method(s) marked as deprecated; <strong>patch</strong>=minor code or documentation fixes.</p>
+</body>
+</html>
