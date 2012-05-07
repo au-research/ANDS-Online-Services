@@ -211,8 +211,7 @@ function searchRecords($status){
 							$doc->{'quality_level'},
 							$flagButton,
 							$btnStr,
-							$doc->{'status'},
-							$doc->{'manually_assessed_flag'}
+							$doc->{'status'}
 							)
 				);
 		$jsonData['rows'][] = $entry;
