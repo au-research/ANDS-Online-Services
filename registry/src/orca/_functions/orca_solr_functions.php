@@ -24,6 +24,9 @@ function solr($solr_url, $fields, $extras=""){
 	if($extras!="") $fields_string .= $extras;
 
 	$ch = curl_init();
+
+	echo $fields_string;
+
 	//set the url, number of POST vars, POST data
 	curl_setopt($ch,CURLOPT_URL,$solr_url.'select');//post to SOLR
 	curl_setopt($ch,CURLOPT_POST,count($fields));//number of POST var

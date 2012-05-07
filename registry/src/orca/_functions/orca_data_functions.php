@@ -1906,7 +1906,7 @@ function updateRegistryObjectQualityLevelResult($registry_object_key, $quality_l
 
 function updateDraftRegistryObjectQualityLevelResult($draft_key, $registry_object_data_source, $quality_level,  $quality_level_result)
 {	
-	if (in_array($quality_level, array(1,2,3,4)))
+	if (in_array($quality_level, array(0,1,2,3,4)))
 	{
 		global $gCNN_DBS_ORCA;	
 		$errors = "";

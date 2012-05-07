@@ -1719,6 +1719,7 @@ function getRelatedXml($dataSource,$rifcs,$objectClass){
 	$dataSourceInfo = getDataSources($dataSource, $filter=null);
 
 	$rifObject = new DomDocument();
+	//var_dump($rifcs);
 	$rifObject->loadXML($rifcs);
 	$theclasses = $rifObject->getElementsByTagName($objectClass);
 	if($theclasses->length<1) 	$theclasses = $rifObject->getElementsByTagName($objectClass = strtolower($objectClass));
@@ -1942,6 +1943,7 @@ function runQualityCheckForRegistryObject($registryObjectKey, $dataSourceKey)
 		$rifcs = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
 		$rifcs .= '<registryObjects xmlns="http://ands.org.au/standards/rif-cs/registryObjects" '."\n";
 		$rifcs .= '                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '."\n";
+		$rifcs .= '                 xmlns:extRif="http://ands.org.au/standards/rif-cs/extendedRegistryObjects"';
 		$rifcs .= '                 xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects '.gRIF_SCHEMA_URI.'">'."\n";
 		$rifcs .= getRegistryObjectXML($registryObjectKey);
 		$rifcs .= '</registryObjects>'; 
@@ -2024,7 +2026,8 @@ function runQualityLevelCheckForDraftRegistryObject($registryObjectKey, $dataSou
 {
 		$registryObject = getDraftRegistryObject($registryObjectKey,$dataSourceKey);
 		$relatedObjectClassesStr = '';
-		$rifcs = $registryObject[0]['rifcs'];	
+		$rifcs = $registryObject[0]['rifcs'];
+
 		$objectClass = "";
 		if(str_replace("<Collection","",$rifcs)!=$rifcs||str_replace("<collection","",$rifcs)!=$rifcs)
 		{
@@ -2070,6 +2073,7 @@ function runQuagmireCheckForRegistryObject($registryObjectKey, $dataSourceKey)
 		$rifcs = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
 		$rifcs .= '<registryObjects xmlns="http://ands.org.au/standards/rif-cs/registryObjects" '."\n";
 		$rifcs .= '                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '."\n";
+		$rifcs .= '                 xmlns:extRif="http://ands.org.au/standards/rif-cs/extendedRegistryObjects"';
 		$rifcs .= '                 xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects '.gRIF_SCHEMA_URI.'">'."\n";
 		$rifcs .= getRegistryObjectXML($registryObjectKey);
 		$rifcs .= '</registryObjects>'; 

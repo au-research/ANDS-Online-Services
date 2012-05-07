@@ -32,7 +32,7 @@ $draftKey = getQueryValue('draftKey');
 $dataSourceKey = getQueryValue('dataSourceKey');
 $totalCount = 0;
 $solr_update_url = $solr_url.'update';
-//echo $solr_update_url;
+echo $solr_update_url;
 switch($task){
 	case "indexAll":	index($status);										break;
 	case "indexDS": 	indexDS($dataSourceKey , $status); 					break;
@@ -308,7 +308,8 @@ function addPublishedSolrIndexForDatasource($dataSourceKey)
 						echo $rifcs;
 					}				
 					else
-					{					
+					{			
+						//echo $rifcs;		
 						$result = curl_post($solr_update_url, $solrrifcs);
 						$percent = round((($i+1)*100)/$arraySize, 2);
 						//echo ($percent).'% completed.<br/>';

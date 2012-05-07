@@ -132,15 +132,6 @@ function getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR = false, $inclu
 
 
 
-			// Get registry date modified			
-			if (!($registryDateModified =  getRegistryObjectStatusModified($registryObjectKey)))
-			{
-					$registryDateModified = time(); // default to now
-			}
-			$xml .= "      <extRif:registryDateModified>".$registryDateModified."</extRif:registryDateModified>\n";
-
-
-
 			// displayTitle
 			// -------------------------------------------------------------
 			$xml .= '      <extRif:displayTitle>'.esc(trim($registryObject[0]['display_title'])).'</extRif:displayTitle>'."\n";
@@ -238,7 +229,7 @@ function getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR = false, $inclu
 		{
 			// relatedObject
 			// -------------------------------------------------------------
-			$internalxml .= getRelatedObjectTypesXML($registryObjectKey, $dataSource, $registryObjectClass,'relatedObject');
+			$internalxml .= getRelatedObjectTypesXML($registryObjectKey, $dataSource, $registryObjectClass,'relatedObject', $forSOLR);
 		}
 		
 		// subject
@@ -1371,6 +1362,7 @@ function getRelatedObjectTypesXML($registryObjectKey, $dataSourceKey, $registryO
 {
 	global $typeArray;
 	
+	
 	$xml = '';
 	$elementName = esc($elementName);
 	
@@ -1477,7 +1469,8 @@ function getRelatedObjectTypesXML($registryObjectKey, $dataSourceKey, $registryO
 	
 				$xml .= "      <$elementName>\n";
 				$xml .= "        <key>$key</key>\n";
-				$xml .= getRelationsXML($element['relation_id'],$typeArray[$registryObjectClass], $forSOLR);
+				//$xml .= getRelationsXML($element['relation_id'],$typeArray[$registryObjectClass], $forSOLR);
+				$xml .= getRelationsXML($element['relation_id'], $forSOLR);
 				if($forSOLR)
 				{
 					$xml .= "        <extRif:relatedObjectClass>".strtolower($relatedObject[0]['registry_object_class'])."</extRif:relatedObjectClass>\n";
@@ -1516,6 +1509,8 @@ function getRelationsXML($relation_id, $forSOLR = false)
 {
 	global $typeArray;
 	$xml = '';
+
+
 	$list = getRelationDescriptions($relation_id);
 	if( $list )
 	{
