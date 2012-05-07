@@ -1765,10 +1765,19 @@ function getRelatedXml($dataSource,$rifcs,$objectClass){
 function runQualityCheck($rifcs, $objectClass, $dataSource, $output, $relatedObjectClassesStr='')
 {
 	global $qaProc;
+	$reverseLinks = 'false';
+	$dS = getDataSources($dataSource, null);
+	$allow_reverse_internal_links = $dS[0]['allow_reverse_internal_links'];
+	$allow_reverse_external_links = $dS[0]['allow_reverse_external_links'];
+	if($allow_reverse_internal_links == 't' || $allow_reverse_external_links == 't')
+	{
+		$reverseLinks = 'true';
+	}
 	$relRifcs = getRelatedXml($dataSource,$rifcs,$objectClass);
 	$registryObjects = new DomDocument();
 	$registryObjects->loadXML($relRifcs);
 	$qaProc->setParameter('', 'dataSource', $dataSource);
+	$qaProc->setParameter('', 'reverseLinks', $reverseLinks);
 	$qaProc->setParameter('', 'output', $output);
 	$qaProc->setParameter('', 'relatedObjectClassesStr', $relatedObjectClassesStr);
 	$result = $qaProc->transformToXML($registryObjects);
@@ -1779,7 +1788,16 @@ function runQualityCheck($rifcs, $objectClass, $dataSource, $output, $relatedObj
 function runQualityCheckonDom($registryObjects, $dataSource, $output, $relatedObjectClassesStr)
 {
 	global $qaProc;
+	$reverseLinks = 'false';
+	$dS = getDataSources($dataSource, null);
+	$allow_reverse_internal_links = $dS[0]['allow_reverse_internal_links'];
+	$allow_reverse_external_links = $dS[0]['allow_reverse_external_links'];
+	if($allow_reverse_internal_links == 't' || $allow_reverse_external_links == 't')
+	{
+		$reverseLinks = 'true';
+	}
 	$qaProc->setParameter('', 'dataSource', $dataSource);
+	$qaProc->setParameter('', 'reverseLinks', $reverseLinks);
 	$qaProc->setParameter('', 'output', $output);
 	$qaProc->setParameter('', 'relatedObjectClassesStr', $relatedObjectClassesStr);
 	$result = $qaProc->transformToXML($registryObjects);

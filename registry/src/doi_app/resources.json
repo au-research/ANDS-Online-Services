@@ -1,0 +1,19 @@
+{
+    "apis":[
+        {
+            "path":"/pet.{format}",
+            "description":""
+        },
+{
+            "path":"/user.{format}",
+            "description":""
+        },
+{
+            "path":"/resources.{format}",
+            "description":""
+        }
+    ],
+"basePath":"http://localhost:8002/api",
+    "swaggerVersion":"1.0",
+    "apiVersion":"0.1"
+}

@@ -1,19 +1,10 @@
 RewriteEngine On
-RewriteBase /7.3/ands/registry/src/
+RewriteBase /7.3/ands/registry/src
 
 # Remap version number and response type according to the URL structure
-RewriteRule ^dois/(.*)/(.*)\.(.*)/ doi/index.php?/$2/index/&api_version=$1&response_type=$3 [QSA,NC]
-RewriteRule ^dois/(.*)/(.*)/ doi/index.php?/$2/index/&api_version=$1&response_type=string [QSA,NC]
+RewriteRule ^dois/(.*)/(.*)\.(.*)/ doi_app/index.php?/$2/index/&api_version=$1&response_type=$3 [QSA,NC,L]
+RewriteRule ^dois/(.*)/(.*)/ doi_app/index.php?/$2/index/&api_version=$1&response_type=string [QSA,NC,L]
 
-# Remap old v1.0 API URLs to the new URL
-RewriteRule ^dois/doi_mint.php doi/index.php?/mint/index/&api_version=1.0&response_type=string [QSA,NC]
-RewriteRule ^dois/doi_mint.php doi/index.php?/mint/index/&api_version=1.0&response_type=string [QSA,NC]
-RewriteRule ^dois/doi_mint.php doi/index.php?/mint/index/&api_version=1.0&response_type=string [QSA,NC]
-RewriteRule ^dois/doi_mint.php doi/index.php?/mint/index/&api_version=1.0&response_type=string [QSA,NC]
-RewriteRule ^dois/doi_mint.php doi/index.php?/mint/index/&api_version=1.0&response_type=string [QSA,NC]
-RewriteRule ^dois/doi_mint.php doi/index.php?/mint/index/&api_version=1.0&response_type=string [QSA,NC]
-RewriteRule ^dois/doi_mint.php doi/index.php?/mint/index/&api_version=1.0&response_type=string [QSA,NC]
-
-
+RewriteRule ^dois/doi_(.*)\.php doi_app/index.php?/$1/index/&api_version=1.0 [QSA,NC,L]
 
 # TODO: ADD THE REST HERE ^^
