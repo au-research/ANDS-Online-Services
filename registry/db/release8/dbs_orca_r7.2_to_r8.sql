@@ -108,3 +108,18 @@ $BODY$
   COST 100;
 ALTER FUNCTION dba.udf_update_data_source(character varying, character varying, character varying, character varying, character varying, character varying, character varying, boolean, boolean, boolean, character varying, character varying, character varying, character varying, character varying, character varying, character varying, character varying, character varying, character varying, character varying, character varying, boolean, character varying, boolean, boolean, character varying, smallint, character varying, character varying, character varying, character varying, timestamp with time zone, character varying, character varying)
   OWNER TO dba;
+
+--We need to set up a vocal for licence types
+
+INSERT INTO dba.tbl_vocabularies (identifier, identifier_type, version, name, name_type, description, source) VALUES ('RIFCSLicenceType', 'local', '1.3','RIFCS Licence Type', 'primary', '', 'http://services.ands.org.au/documentation/rifcs/1.3.0/vocabs/vocabularies.html');
+
+
+INSERT INTO dba.tbl_terms (identifier, identifier_type, name, description, vocabulary_identifier, parent_term_identifier,type,vocabpath) VALUES ('CC-BY', 'local','CC-BY', 'CC-BY licence type','RIFCSLicenceType','Open Licence','pt','RIFCS Licence Type');
+INSERT INTO dba.tbl_terms (identifier, identifier_type, name, description, vocabulary_identifier, parent_term_identifier,type,vocabpath) VALUES ('CC-BY-SA', 'local','CC-BY-SA', 'CC-BY-SA licence type','RIFCSLicenceType','Open Licence','pt','RIFCS Licence Type');
+INSERT INTO dba.tbl_terms (identifier, identifier_type, name, description, vocabulary_identifier, parent_term_identifier,type,vocabpath) VALUES ('GPL', 'local','GPL', 'GPL licence type','RIFCSLicenceType','Open Licence','pt','RIFCS Licence Type');
+INSERT INTO dba.tbl_terms (identifier, identifier_type, name, description, vocabulary_identifier, parent_term_identifier,type,vocabpath) VALUES ('CC-BY-NC', 'local','CC-BY-NC', 'CC-BY-NC licence type','RIFCSLicenceType','Non-Commercial Licence','pt','RIFCS Licence Type');
+INSERT INTO dba.tbl_terms (identifier, identifier_type, name, description, vocabulary_identifier, parent_term_identifier,type,vocabpath) VALUES ('CC-BY-NC-SA', 'local','CC-BY-NC-NA', 'CC-BY-NC-NA licence type','RIFCSLicenceType','Non-Commercial Licence','pt','RIFCS Licence Type');
+INSERT INTO dba.tbl_terms (identifier, identifier_type, name, description, vocabulary_identifier, parent_term_identifier,type,vocabpath) VALUES ('CC-BY-ND', 'local','CC-BY-ND', 'CC-BY-ND licence type','RIFCSLicenceType','Non-Derivative Licence','pt','RIFCS Licence Type');
+INSERT INTO dba.tbl_terms (identifier, identifier_type, name, description, vocabulary_identifier, parent_term_identifier,type,vocabpath) VALUES ('CC-BY-NC-ND', 'local','CC-BY-NC-ND', 'CC-BY-NC-ND licence type','RIFCSLicenceType','Non-Derivative Licence','pt','RIFCS Licence Type');
+INSERT INTO dba.tbl_terms (identifier, identifier_type, name, description, vocabulary_identifier, parent_term_identifier,type,vocabpath) VALUES ('AusGOALRestrictive', 'local','AusGOALRestrictive', 'AusGOALRestrictive licence type','RIFCSLicenceType','Restrictive Licence','pt','RIFCS Licence Type');
+INSERT INTO dba.tbl_terms (identifier, identifier_type, name, description, vocabulary_identifier, parent_term_identifier,type,vocabpath) VALUES ('NoLicence', 'local','NoLicence', 'NoLicence licence type','RIFCSLicenceType','No Licence','pt','RIFCS Licence Type');
