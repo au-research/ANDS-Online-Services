@@ -452,7 +452,7 @@ function displayMMRRecordTable($status, array $record_set = array(), array $butt
 				<?php if ($record['error_count'] > 0):?>
 					<img src="<?php echo eAPP_ROOT . "orca/_images/error_icon.png"; ?>" /> 
 				<?php endif; ?>
-				<?php echo $record['quality_test_result']; ?></span></td>
+				<?php echo str_replace(array("&lt;i&gt;","&lt;/i&gt;"),array("<i>","</i>"),$record['quality_test_result']); ?></span></td>
 			<td>
 				<?php 
 	
