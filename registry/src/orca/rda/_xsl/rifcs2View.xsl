@@ -1,12 +1,13 @@
 <?xml version="1.0"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:ro="http://ands.org.au/standards/rif-cs/registryObjects" exclude-result-prefixes="ro">
+    xmlns:ro="http://ands.org.au/standards/rif-cs/registryObjects" xmlns:extRif="http://ands.org.au/standards/rif-cs/extendedRegistryObjects" exclude-result-prefixes="ro">
     <xsl:output method="html" encoding="UTF-8" indent="no" omit-xml-declaration="yes"/>
     <xsl:strip-space elements="*"/>
     <xsl:param name="dataSource" select="//ro:originatingSource"/>
     <xsl:param name="dateCreated"/>
     <xsl:param name="base_url" select="'https://test.ands.org.au/orca/'"/>  
     <xsl:param name="orca_view"/>  
+    <xsl:param name="theGroup"/>     
     <xsl:param name="key"/>        
     <xsl:variable name="objectClass" >
         <xsl:choose>
@@ -42,18 +43,27 @@
 
 		<xsl:variable name="theTitle">	
 		<xsl:choose>
-		<xsl:when test="string-length(//ro:displayTitle)>30">
-		<xsl:value-of select="substring(//ro:displayTitle,0,30)"/>...
+		<xsl:when test="string-length(/extRif:extendedMetadata/extRif:displayTitle)>30">
+		<xsl:value-of select="substring(/extRif:extendedMetadata/extRif:displayTitle,0,30)"/>...
 		</xsl:when>
 		<xsl:otherwise>
-		<xsl:value-of select="//ro:displayTitle"/>
+		<xsl:value-of select="/extRif:extendedMetadata/extRif:displayTitle"/>
 		</xsl:otherwise>
 		</xsl:choose>
 		</xsl:variable>			
     	<div id="top" class="top-corner">
 			<ul id="breadcrumb" class="top-corner">
 				<li><a href="{$base_url}" class="crumb">Home</a></li>
-				<li><a href="{$base_url}search/browse/{./@group}" class="crumb"><xsl:value-of select="$group"/></a></li>
+				<xsl:if test="$theGroup">
+					<li><a class="crumb">
+					<xsl:attribute name="href">
+					<xsl:value-of select="$base_url"/>view/group/?group=<xsl:value-of select="$theGroup"/>&amp;groupName=<xsl:value-of select="$group"/>
+					</xsl:attribute><xsl:value-of select="$group"/></a></li>					
+				</xsl:if>
+				<xsl:if test="$theGroup = ''">
+				<li><a href="{$base_url}search/browse/{./@group}" class="crumb"><xsl:value-of select="$group"/></a></li>				
+				</xsl:if>
+
 				<li><a href="{$base_url}search/browse/{./@group}/{$objectClass}" class="crumb"><xsl:value-of select="$objectClass"/></a></li>
 				<li><xsl:value-of select="$theTitle"/></li>
 				
@@ -114,8 +124,10 @@
 	
 		<div id="left">           
  		<xsl:choose>
-	        <xsl:when test="ro:displayTitle!=''">
-	        	<xsl:apply-templates select="ro:displayTitle"/>
+
+	        <xsl:when test="../extRif:extendedMetadata/extRif:displayTitle!=''">
+	        	<xsl:apply-templates select="../extRif:extendedMetadata/extRif:displayTitle"/>
+
 	        	
 	        </xsl:when>
 	         <xsl:otherwise>
@@ -157,12 +169,14 @@
                 
         <div class="clearfix"></div>
         <xsl:if test="ro:description">
-            <div class="descriptions" style="position:relative;clear:both;" itemprop="descriptions">
-				<xsl:apply-templates select="ro:description[@type= 'brief']" mode="content"/>
-				<xsl:apply-templates select="ro:description[@type= 'full']" mode="content"/>
-				<xsl:apply-templates select="ro:description[@type= 'significanceStatement']" mode="content"/>		
-				<xsl:apply-templates select="ro:description[@type= 'notes']" mode="content"/>	
-				<xsl:apply-templates select="ro:description[not(@type =  'notes' or @type =  'significanceStatement' or @type =  'full' or @type =  'brief' or @type =  'logo' or @type =  'rights' or @type =  'accessRights')]" mode="content"/>											
+
+            <div class="descriptions" style="position:relative;clear:both;">
+				<xsl:apply-templates select="extRif:description[@type= 'brief']" mode="content"/>
+				<xsl:apply-templates select="extRif:description[@type= 'full']" mode="content"/>
+				<xsl:apply-templates select="extRif:description[@type= 'significanceStatement']" mode="content"/>		
+				<xsl:apply-templates select="extRif:description[@type= 'notes']" mode="content"/>	
+				<xsl:apply-templates select="extRif:description[not(@type =  'notes' or @type =  'significanceStatement' or @type =  'full' or @type =  'brief' or @type =  'logo' or @type =  'rights' or @type =  'accessRights')]" mode="content"/>											
+
 				
             </div>
         </xsl:if>
@@ -173,16 +187,16 @@
             <xsl:apply-templates select="ro:relatedInfo"/> 
          </xsl:if>
                         
-        <xsl:if test="ro:coverage or ro:location/ro:spatial">
+        <xsl:if test="ro:coverage/extRif:spatial or ro:location/extRif:spatial">
             <xsl:variable name="coverageLabel">
             <xsl:choose>
-            <xsl:when test="ro:coverage/ro:spatial and ro:location/ro:spatial">
+            <xsl:when test="ro:coverage/extRif:spatial and ro:location/extRif:spatial">
             <xsl:text>Coverage And Location:</xsl:text>
             </xsl:when>
-            <xsl:when test="ro:location/ro:spatial">
+            <xsl:when test="ro:location/extRif:spatial">
             <xsl:text>Location:</xsl:text>
             </xsl:when>
-             <xsl:when test="ro:coverage/ro:spatial">
+             <xsl:when test="ro:coverage/extRif:spatial">
             <xsl:text>Coverage:</xsl:text>
             </xsl:when>
             
@@ -195,6 +209,7 @@
                       <xsl:text>yes</xsl:text>
                </xsl:if>
                </xsl:for-each>    
+
              	<xsl:for-each select="ro:location/ro:spatial"> 
              	<xsl:if test="not(./@type) or (./@type!='text' and ./@type!='dcmiPoint')">        	
                       <xsl:text>yes</xsl:text>
@@ -202,15 +217,16 @@
                </xsl:for-each>               
         	</xsl:variable>
         
-            <xsl:if test="ro:coverage/ro:spatial | ro:location/ro:spatial">
-               	 	<xsl:apply-templates select="ro:coverage/ro:spatial | ro:location/ro:spatial"/>
-               	 	<xsl:if test="$needMap!=''">
-                  		<div id="spatial_coverage_map"></div>
-                  	</xsl:if>
+            <xsl:if test="ro:coverage/extRif:spatial/extRif:coords | ro:location/extRif:spatial/extRif:coords">
+                <xsl:apply-templates select="ro:coverage/extRif:spatial/extRif:coords | ro:location/extRif:spatial/extRif:coords"/>
+                <xsl:if test="$needMap!=''">
+                    <div id="spatial_coverage_map"></div>
+                </xsl:if>
+
             </xsl:if>   
             
-            <xsl:if test="ro:coverage/ro:center | ro:location/ro:center">
-                <xsl:apply-templates select="ro:coverage/ro:center | ro:location/ro:center"/>
+            <xsl:if test="ro:coverage/extRif:spatial/extRif:center | ro:location/extRif:spatial/extRif:center">
+                <xsl:apply-templates select="ro:coverage/extRif:spatial/extRif:center | ro:location/extRif:spatial/extRif:center"/>
             </xsl:if>   
          
             <xsl:if test="ro:coverage/ro:temporal/ro:date">
@@ -326,12 +342,12 @@
 				<p><xsl:apply-templates select="ro:location/ro:address/ro:electronic"/></p>	
 	 		</xsl:if>
 	 		
-	 		 <xsl:if test="ro:rights">
+	 		 <xsl:if test="extRif:rights">
 					<h3>Rights</h3>	
 			</xsl:if>
 				
 			<!-- <xsl:apply-templates select="ro:description[@type = 'accessRights' or @type = 'rights']" mode="right"/>	 -->	
-			<xsl:apply-templates select="ro:rights"/>		
+			<xsl:apply-templates select="extRif:rights"/>		
 			
 		 	<xsl:if test="ro:location/ro:address/ro:electronic/@type='email' or ro:location/ro:address/ro:physical">
 		 		<h3>Contacts</h3>
@@ -400,7 +416,7 @@
     </xsl:template>
 
 <!--  the following templates will format the view page content -->
-    <xsl:template match="ro:displayTitle">   
+    <xsl:template match="extRif:displayTitle">   
         <div id="displaytitle">
         	<h1><xsl:value-of select="."/></h1>
         	<xsl:for-each select="//ro:existenceDates">
@@ -445,7 +461,9 @@
         <xsl:value-of select="."/>   
     </xsl:template> 
     
-    <xsl:template match="ro:spatial">
+
+    <xsl:template match="extRif:spatial/extRif:coords">
+
 
           <xsl:if test="not(./@type) or (./@type!= 'text' and ./@type!= 'dcmiPoint')">
 
@@ -458,7 +476,7 @@
 
     </xsl:template>
     
-    <xsl:template match="ro:center">
+    <xsl:template match="extRif:center">
         <p class="spatial_coverage_center"><xsl:value-of select="."/></p>
     </xsl:template>
     
@@ -473,12 +491,7 @@
     </xsl:template> 
     
     <xsl:template match="ro:subject">   
-        <xsl:if test="./@type='anzsrc-for' or ./@type='anzsrc-seo' or ./@type='anzsrc-toa'">
-            <li><a href="javascript:void(0);" class="subjectFilter" id="{.}"><xsl:value-of select="."/></a></li>
-        </xsl:if>
-        <xsl:if test="./@type != 'anzsrc-for' and ./@type != 'anzsrc-seo' and ./@type!='anzsrc-toa'">
-            <li><a href="javascript:void(0);" class="subjectFilter" id="{.}"><xsl:value-of select="."/></a></li>
-        </xsl:if>           
+            <li><a href="javascript:void(0);" class="subjectFilter" id="{@extRif:resolvedValue}" title="{.}"><xsl:value-of select="@extRif:resolvedValue"/></a></li>       
     </xsl:template>
     
    <xsl:template match="ro:relatedInfo">
@@ -808,7 +821,7 @@ Handle:
 			<xsl:value-of select="." disable-output-escaping="yes"/><br />
 	</xsl:template>
 		
-	<xsl:template match="ro:rights">
+	<xsl:template match="extRif:rights">
 			
 			<xsl:if test="./@type='rights'"><h4>Rights statement</h4></xsl:if>
 			<xsl:if test="./@type='accessRights'"><h4>Access rights</h4></xsl:if>
@@ -820,7 +833,7 @@ Handle:
 			</xsl:if>	
 			</p>		
 	</xsl:template>
-	<xsl:template match="ro:description" mode="content">     
+	<xsl:template match="extRif:description" mode="content">     
         <div><xsl:attribute name="class"><xsl:value-of select="@type"/></xsl:attribute>
            <p><xsl:value-of select="." disable-output-escaping="yes"/></p>
         </div>

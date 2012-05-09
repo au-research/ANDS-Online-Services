@@ -56,6 +56,7 @@ limitations under the License.
 | the active record class
 */
 global $orca_db_host, $orca_db_name, $orca_db_port;
+
 $active_group = 'default';
 $active_record = TRUE;
 
@@ -75,7 +76,6 @@ $db['default']['swap_pre'] = '';
 $db['default']['autoinit'] = TRUE;
 $db['default']['stricton'] = FALSE;
 $db['default']['port'] = $orca_db_port;
-
 
 /* End of file database.php */
 /* Location: ./application/config/database.php */

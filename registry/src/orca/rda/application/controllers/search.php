@@ -33,6 +33,40 @@ class Search extends CI_Controller {
 		}
 	}
 	
+	public function rss()
+	{
+		$this->output->set_header('Content-Type: application/rss+xml');
+		parse_str($_SERVER['QUERY_STRING'], $_GET);
+		if(isset($_GET['q'])){
+			$q = $_GET['q'];
+				$classFilter = $_GET['classFilter'];
+				$typeFilter = $_GET['typeFilter'];
+				$groupFilter = $_GET['groupFilter'];
+				$subjectFilter = $_GET['subjectFilter'];
+				$queryStr = '?q='.$q.'&classFilter='.$classFilter.'&typeFilter='.$typeFilter.'&groupFilter='.$groupFilter.'&subjectFilter='.$subjectFilter;				
+			$this->load->model('Rss_channel', 'rss');
+			$result['rssArray'] = $this->rss->getRssArrayForQuery($queryStr);
+			$this->load->view('search/rss', $result);
+			
+		}
+	}
+	public function atom()
+	{
+		$this->output->set_header('Content-Type: application/atom+xml');
+		parse_str($_SERVER['QUERY_STRING'], $_GET);
+		if(isset($_GET['q'])){
+			$q = $_GET['q'];
+				$classFilter = $_GET['classFilter'];
+				$typeFilter = $_GET['typeFilter'];
+				$groupFilter = $_GET['groupFilter'];
+				$subjectFilter = $_GET['subjectFilter'];
+				$queryStr = '?q='.$q.'&classFilter='.$classFilter.'&typeFilter='.$typeFilter.'&groupFilter='.$groupFilter.'&subjectFilter='.$subjectFilter;				
+			$this->load->model('Rss_channel', 'atom');
+			$result['rssArray'] = $this->atom->getRssArrayForQuery($queryStr);
+			$this->load->view('search/atom', $result);
+			
+		}
+	}
 	public function bwredirect(){//backward redirection with list.php
 		parse_str($_SERVER['QUERY_STRING'], $_GET);
 		$class='All';$group='All';
@@ -45,6 +79,8 @@ class Search extends CI_Controller {
 		if($class!='All') $class=strtolower($class);
 		redirect(base_url().'search#!/p=1/tab='.$class.'/group='.urldecode($group).'');
 	}
+	
+
 	
 	public function updateStatistic(){//update the statistics
 		$query = $this->input->post('q');
@@ -221,9 +257,11 @@ $relation_types2));
 		$this->load->model('solr');
 		$object = $this->solr->getObjects($related,null,null,null);
 		if(isset($object->{'response'}->{'docs'}[0])){
+
 		$keyList = $object->{'response'}->{'docs'}[0]->{'relatedObject_key'};
 		$relationshipList = $object->{'response'}->{'docs'}[0]->{'relatedObject_relation'};
 		$relationship = '';
+
 		for($i=0;$i<count($keyList);$i++)
 		{
 			if($keyList[$i]==$key) $relationship = $relationshipList[$i];
@@ -251,12 +289,9 @@ $relation_types2));
         $data['json'] =$this->solr->getObjects($keyArray,$class,$types,null);
 		$data['externalKeys']  ='';
 		
-		//print_r($data['json']);
-		
-        $reverseLinks = $data['json']->{'response'}->{'docs'}[0]->{'reverseLinks'};  
+        $reverseLinks = $data['json']->{'response'}->{'docs'}[0]->{'reverse_links'};  
         $dataSourceKey = $data['json']->{'response'}->{'docs'}[0]->{'data_source_key'};
-		
-		//print_r($data['json']);
+		$data['theGroup'] = $data['json']->{'response'}->{'docs'}[0]->{'group'};
 		
         $data['thisClass'] = $data['json']->{'response'}->{'docs'}[0]->{'class'};
 		$data['externalKeys'] = '';
@@ -268,31 +303,32 @@ $relation_types2));
          		$relatedKeys = array();
         		foreach($data[$class]['json'][0]->{'response'}->{'docs'} as $r)
         		{
-        			$relatedNum = count($r->{'relatedObject_key'});
+        			$relatedNum = count($r->{'related_object_key'});
  
         			$relatedKeys = ''; 
         	        $data[$class]['relatedKey'] = '';      			
         			for($i = 0; $i<$relatedNum;$i++)
         			{
-        				if($r->{'relatedObject_relatedObjectClass'}[$i]==$class)
+        				if($r->{'related_object_class'}[$i]==$class)
         				{
         					$relatedKeys[] = $r->{'relatedObject_key'}[$i];
-        					$data[$class]['relationship'][] = $r->{'relatedObject_relation'}[$i];
-        					if(isset( $r->{'relatedObject_relation_description'}[$i])){
-       							$data[$class]['relationship_description'][] = $r->{'relatedObject_relation_description'}[$i];  
+        					$data[$class]['relationship'][] = $r->{'related_object_relation'}[$i];
+        					if(isset( $r->{'related_object_relation_description'}[$i])){
+       							$data[$class]['relationship_description'][] = $r->{'related_object_relation_description'}[$i];  
         					}else{
         						$data[$class]['relationship_description'][] = 'null';
         					}      					
-         					$data[$class]['relatedKey'][] = $r->{'relatedObject_key'}[$i];       					
+         					$data[$class]['relatedKey'][] = $r->{'related_object_key'}[$i];        					
+
         				}
         			}
         		} 
         		if($reverseLinks!="NONE"){
         			
         			$data[$class]['json'][1] =$this->solr->getConnections($key,$class,$types,$relatedKeys,$reverseLinks,$dataSourceKey);  
-        			$data[$class]["extrnal"] =$this->solr->getConnections($key,$class,$types,$relatedKeys,'EXT',$dataSourceKey); 
+        			$data[$class]["external"] =$this->solr->getConnections($key,$class,$types,$relatedKeys,'EXT',$dataSourceKey); 
         			 
-					if($data[$class]["extrnal"]->{'response'}->{'numFound'}>0) 
+					if($data[$class]["external"]->{'response'}->{'numFound'}>0) 
 					{
 				
         				foreach($data[$class]["extrnal"]->{'response'}->{'docs'} as $r)
@@ -332,20 +368,21 @@ $relation_types2));
         		$relatedKeys = array();
         		foreach($data[$types]['json'][0]->{'response'}->{'docs'} as $r)
         		{
-        			$relatedNum = count($r->{'relatedObject_key'});
+        			$relatedNum = count($r->{'related_object_key'});
         			$relatedKeys = '';      			
         			for($i = 0; $i<$relatedNum;$i++)
         			{
-        				if($r->{'relatedObject_relatedObjectType'}[$i]==$types)
+        				if($r->{'related_object_type'}[$i]==$types)
         				{
-        					$relatedKeys[] = $r->{'relatedObject_key'}[$i];
-        					$data[$types]['relationship'][] = $r->{'relatedObject_relation'}[$i]; 
-        					if(isset($r->{'relatedObject_relation_description'}[$i])){
-       							$data[$types]['relationship_description'][] = $r->{'relatedObject_relation_description'}[$i];       
+        					$relatedKeys[] = $r->{'related_object_key'}[$i];
+        					$data[$types]['relationship'][] = $r->{'related_object_relation'}[$i];  
+        					if(isset($r->{'related_object_relation_description'}[$i])){
+       							$data[$types]['relationship_description'][] = $r->{'related_object_relation_description'}[$i];       
         					}else{
        							$data[$types]['relationship_description'][] = 'null';               					
         					}				       					
-         					$data[$types]['relatedKey'][] = $r->{'relatedObject_key'}[$i];          				
+         					$data[$types]['relatedKey'][] = $r->{'related_object_key'}[$i];          				
+
         				}
         			}
         		}  	
@@ -398,10 +435,10 @@ $relation_types2));
         		$relatedKeys = '';      			
         		for($i = 0; $i<$relatedNum;$i++)
         		{
-        			if($r->{'relatedObject_relatedObjectClass'}[$i]==$class)
+        			if($r->{'related_object_class'}[$i]==$class)
         			{
-        				$relatedKeys[] = $r->{'relatedObject_key'}[$i];
-        				$relatedDescriptions[] = $r->{'relatedObject_relation_description'}[$i];
+        				$relatedKeys[] = $r->{'related_object_key'}[$i];
+        				$relatedDescriptions[] = $r->{'related_object_relation_description'}[$i];
          			}
         		} 
         	} 
@@ -471,20 +508,20 @@ $relation_types2));
 		$spatial_included_ids = $this->input->post('spatial_included_ids');
 		$temporal = $this->input->post('temporal');
 		$sort = $this->input->post('sort');
-
 		$query = $q;
+		$ds = '';
+		$ds = $this->input->post('dataSource');
 		$extended_query = '';
 		
+		if($ds!='')	$extended_query .= '+data_source_key:("'.$ds.'")';
 		//echo '+spatial:('.$spatial_included_ids.')';
-		
 		if($spatial_included_ids!='') {
 			$extended_query .= $spatial_included_ids;
 		}
 		if($temporal!='All'){
 			$temporal_array = explode('-', $temporal);
-			$extended_query .='+dateFrom:['.$temporal_array[0].' TO *]+dateTo:[* TO '.$temporal_array[1].']';
+			$extended_query ='+dateFrom:['.$temporal_array[0].' TO *]+dateTo:[* TO '.$temporal_array[1].']';
 		}
-		
 		
 		//echo $query;
 		
@@ -534,3 +571,4 @@ $relation_types2));
 	}
 
 }
+	

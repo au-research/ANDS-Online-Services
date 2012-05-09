@@ -20,26 +20,72 @@ limitations under the License.
 
 class View extends CI_Controller {
 
+    public function __construct()
+    {
+         parent::__construct();
+    }
 
-	public function index()
+	public function index($params = array())
 	{
+		//var_dump($params);
 		parse_str($_SERVER['QUERY_STRING'], $_GET);
-		
+		$key = null;
 		if(isset($_GET['key'])){
-			$key = ($_GET['key']);
-			//echo $key;
+			$key = ($_GET['key']);		
+		} 
+		elseif (count($params) > 0) 
+		{
+			$key = rawurldecode($params[0]);
+		} 
+		
+		// XXX: TODO: If slug != record's expected slug, we should redirect
+		if (!is_null($key))
+		{
+
+			redirect(base_url().getSlugForRecordByKey($key));
+		
+		}
+		else 
+		{
+			show_404('page');
+		}
+	}
+
+	public function view_by_hash($params)
+	{
+		// XXX: TODO: If slug != record's expected slug, we should redirect
+		if (is_array($params) && count($params) >= 1)
+		{
+			$hash = $params[0];
+			
+			// Temporary hack to turn hash back into key XXX: Use HASH for comms with SOLR
+			$query = $this->db->select("registry_object_key")->get_where("dba.tbl_registry_objects", array("key_hash" => $hash));
+			if ($query->num_rows() == 0) 
+			{
+				 show_404('page');
+			}
+			else
+			{
+				$query = $query->row();
+				$key = $query->registry_object_key;
+			}
+			
+			
+			
 			$this->load->model('RegistryObjects', 'ro');
 			$this->load->model('solr');
 	       	$content = $this->ro->get($key);
 	       	$data['key']= $key;
-			$data['content'] = $this->transform($content, 'rifcs2View.xsl',urlencode($key));	
+
 			
 			$obj = $this->solr->getByKey($key);
 			$numFound = $obj->{'response'}->{'numFound'};
 			$doc = ($obj->{'response'}->{'docs'}[0]);
-			//echo $numFound;
-			
-			$data['title'] = $doc->{'displayTitle'};
+		
+			$group = $doc->{'group'};
+			$theGroup = getInstitutionPage($doc->{'group'});
+			$data['content'] = $this->transform($content, 'rifcs2View.xsl',urlencode($key),$theGroup);	
+			$data['title'] = $doc->{'display_title'};
 			
 			if(isset($doc->{'description_value'}[0]))$data['description']=htmlentities($doc->{'description_value'}[0]);
 			$data['doc'] = $doc;
@@ -47,21 +93,42 @@ class View extends CI_Controller {
 			
 			$this->load->library('user_agent');
 			$data['user_agent']=$this->agent->browser();
-			
+
+			$data['activity_name'] = 'view';
 			
 			if($numFound>0){
 				$this->load->view('xml-view', $data);
 			}else show_404('page');
-			
-		}else{
-			show_404('page');
 		}
+		else 
+		{
+			show_404('page');
+
+		}
+	
 	}
 
 	public function viewitem($key){
 		redirect('view/?key='.$key);
 	}
 	
+	public function group(){
+		parse_str($_SERVER['QUERY_STRING'], $_GET);	
+		if(isset($_GET['group'])){
+			$key = $_GET['group'];
+			$this->load->model('RegistryObjects', 'ro');
+	       	$content = $this->ro->get($key);
+	       	$data['key']= $key;  	
+			$data['content'] = $this->transform($content, 'rifcs2ViewInstitution.xsl',$key,false);	
+			$this->load->library('user_agent');
+			$data['user_agent']=$this->agent->browser();
+			$data['activity_name'] = 'institution-view';			
+			$this->load->view('institution-view', $data);
+		}else{
+			show_404('page');
+		}
+		
+	}	
 	public function printview(){
 		parse_str($_SERVER['QUERY_STRING'], $_GET);
 		
@@ -70,10 +137,12 @@ class View extends CI_Controller {
 			$this->load->model('RegistryObjects', 'ro');
 	       	$content = $this->ro->get($key);
 	       	$data['key']= $key;  	
-			$data['content'] = $this->transform($content, 'rifcs2View.xsl',$key);	
+			$data['content'] = $this->transform($content, 'rifcs2View.xsl',$key,false);	
 			
 			$this->load->library('user_agent');
 			$data['user_agent']=$this->agent->browser();
+			
+			$data['activity_name'] = 'print-view';
 			
 			$this->load->view('print-view', $data);
 		}else{
@@ -82,7 +151,7 @@ class View extends CI_Controller {
 		
 	}	
 	
-	private function transform($registryObjectsXML, $xslt,$key){
+	private function transform($registryObjectsXML, $xslt,$key,$group){
 		$qtestxsl = new DomDocument();
 		$registryObjects = new DomDocument();
 		$registryObjects->loadXML($registryObjectsXML);
@@ -93,6 +162,7 @@ class View extends CI_Controller {
 		$orca_view = view_url();
 		$proc->setParameter('','orca_view',$orca_view);
 		$proc->setParameter('','key',$key);
+		$proc->setParameter('','theGroup',$group);		
 		$transformResult = $proc->transformToXML($registryObjects);	
 		return $transformResult;
 	}

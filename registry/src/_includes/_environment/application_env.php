@@ -187,9 +187,7 @@ ini_set("session.cookie_httponly", "1");  // Don't allow access to the cookie
 //ini_set("session.referer_check", eHOST); // This will interfere with deep-link redirects 
                                            // after a Shibboleth login.
 
-// Session will expire/timeout after this period of inactivity 
-// (ie if there have been no requests in that time).
-$gSessionTimeoutMinutes = 120;
+
 
 // Create or resume a session.
 // This needs to happen after the settings above, so it's better off here

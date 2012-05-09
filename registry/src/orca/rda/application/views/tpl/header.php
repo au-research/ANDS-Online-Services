@@ -83,5 +83,6 @@ limitations under the License.
 			</ul>
 			</div>
 		</div>
+		<span class="hide" id="rda_activity_name"><?php echo (isset($activity_name) ? $activity_name : 'unknown'); ?></span>
 		
 

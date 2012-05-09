@@ -163,6 +163,15 @@ $menu = new menu('mORCA_CONTAINER', 'Collections Registry', gROOT_MENU_ID);
 $menu->margin_class = 'marginLeftLightYellow';
 addMenu($menu);
 
+
+	// =============================================================================
+	// Maintenance
+	$activity = new activity('aORCA_RUN_TASKS', '', 'orca/maintenance/runTasks.php');
+	$activity->menu_id = 'mORCA_CONTAINER';
+	addActivity($activity);
+	$activity->only_show_if_active= true;
+
+
 	// =============================================================================
 	// Index
 	$activity = new activity('aORCA_INDEX', '', 'orca/index.php');
@@ -176,10 +185,10 @@ addMenu($menu);
 	addActivity($activity);	
 
 	// =============================================================================
-	/* Registry Index
-	$activity = new activity('aORCA_REGISTRY_INDEX', 'Browse', 'orca/registry_index.php');
+	// Gold Level Collections
+	$activity = new activity('aORCA_GOLD_INDEX', 'Gold Standard Records', 'orca/show_gold_level_collections.php');
 	$activity->menu_id = 'mORCA_CONTAINER';
-	addActivity($activity);*/
+	addActivity($activity);
 
 	// =============================================================================
 	// View
@@ -224,6 +233,17 @@ addMenu($menu);
 		// =============================================================================
 		// services/getRegistryObjectsSOLR
 		$activity = new activity('aORCA_SERVICE_GET_REGISTRY_OBJECTS_SOLR', 'Get Registry Objects', 'http://'.eHOST.'/'.eROOT_DIR.'/orca/services/getRegistryObjectsSOLR.php');
+		$activity->no_check_ssl= true;
+
+		addActivity($activity);
+		
+		// services/getRegistryObjectsSOLR
+		$activity = new activity('aORCA_SERVICE_GET_REGISTRY_OBJECTS_SOLR_2', 'Indexer', 'http://'.eHOST.'/'.eROOT_DIR.'/orca/services/indexer.php');
+		$activity->no_check_ssl= true;
+		addActivity($activity);
+
+
+		$activity = new activity('aORCA_SERVICE_AJAX', 'AJAX', 'http://'.eHOST.'/'.eROOT_DIR.'/orca/manage/get_view.php');
 		$activity->no_check_ssl= true;
 		addActivity($activity);
 	

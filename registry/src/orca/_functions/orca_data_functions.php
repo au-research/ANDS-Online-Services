@@ -74,7 +74,7 @@ function insertDataSource()
 	$errors = "";
 	$strQuery = 'SELECT dba.udf_insert_data_source($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32,$33,$34)';
 	$params = getParams(array(getLoggedInUser()), $_POST, 34);
-		//print("<pre>");
+	//	print("<pre>");
 	//print_r($_POST);
 	//var_dump($params);
 	//print("</pre>");	
@@ -92,6 +92,9 @@ function insertDataSource()
 	{
 		$errors = "An error occurred when trying to insert the record.";
 	}
+	
+	getDataSourceHashForKey($params[1]);
+		
 	return $errors;
 }
 
@@ -100,8 +103,8 @@ function updateDataSource()
 	global $gCNN_DBS_ORCA;
 	
 	$errors = "";
-	$strQuery = 'SELECT dba.udf_update_data_source($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32,$33,$34)';
-	$params = getParams(array(getLoggedInUser()), $_POST, 34);
+	$strQuery = 'SELECT dba.udf_update_data_source($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32,$33,$34,$35)';
+	$params = getParams(array(getLoggedInUser()), $_POST, 35);
 	//print("<pre>");
 	//print_r($_POST);
 	//var_dump($params);
@@ -1006,7 +1009,7 @@ function getRegistryObject($registry_object_key, $overridePermissions = false)
 	global $gCNN_DBS_ORCA;
 	
 	$resultSet = null;
-	$strQuery = 'SELECT * FROM dba.udf_get_registry_object($1)';
+	$strQuery = 'SELECT * FROM dba.tbl_registry_objects where registry_object_key = $1';
 	$params = array($registry_object_key);
 	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
 	if( $resultSet )
@@ -1865,6 +1868,57 @@ function updateRegistryObjectQualityTestResult($registry_object_key, $quality_te
 }
 
 
+
+function setRegistryObjectGoldStandardFlag($registry_object_key, $gs_flag)
+{
+	if (in_array($gs_flag, array(0,1)))
+	{
+		global $gCNN_DBS_ORCA;
+        $strQuery = 'UPDATE dba.tbl_registry_objects SET gold_status_flag = $2 WHERE registry_object_key = $1';
+        $params = array($registry_object_key, $gs_flag);
+        $resultSet = @executeQuery($gCNN_DBS_ORCA, $strQuery, $params);	  		
+	}
+}
+
+function setRegistryObjectManuallyAssessedFlag($registry_object_key)
+{
+		global $gCNN_DBS_ORCA;
+        $strQuery = 'UPDATE dba.tbl_registry_objects SET manually_assessed_flag = 1 WHERE registry_object_key = $1';
+        $params = array($registry_object_key);
+        $resultSet = @executeQuery($gCNN_DBS_ORCA, $strQuery, $params);	  		
+}
+
+function updateRegistryObjectQualityLevelResult($registry_object_key, $quality_level,  $quality_level_result)
+{	
+
+	if (in_array($quality_level, array(0,1,2,3,4)))
+	{
+		global $gCNN_DBS_ORCA;	
+		$errors = "";
+		$resultSet = null;
+		$strQuery = 'UPDATE dba.tbl_registry_objects SET quality_level = $2, quality_level_result = $3 WHERE registry_object_key = $1';
+		$params = array($registry_object_key, $quality_level, $quality_level_result);
+		$result = executeUpdateQuery($gCNN_DBS_ORCA, $strQuery, $params);
+		return $result;		
+	}	
+}
+
+
+function updateDraftRegistryObjectQualityLevelResult($draft_key, $registry_object_data_source, $quality_level,  $quality_level_result)
+{	
+	if (in_array($quality_level, array(0,1,2,3,4)))
+	{
+		global $gCNN_DBS_ORCA;	
+		$errors = "";
+		$resultSet = null;
+		$strQuery = 'UPDATE dba.tbl_draft_registry_objects SET quality_level = $3, quality_level_result = $4 WHERE draft_key = $1 AND registry_object_data_source = $2';
+		$params = array($draft_key, $registry_object_data_source, $quality_level, $quality_level_result);
+		$result = executeUpdateQuery($gCNN_DBS_ORCA, $strQuery, $params);
+		return $result;		
+	}	
+}
+
+
 function updateDraftRegistryObjectQualityTestResult($registryObjectKey, $dataSourceKey, $qualityTestResult, $errorCount, $warningCount)                           
 {
 	global $gCNN_DBS_ORCA;
@@ -2202,6 +2256,34 @@ function getRelatedInfoTypeCount($created_when=null)
 	
 	return $resultSet;	
 }
+
+
+function getRelatedObjectCount($registry_object_key)
+{
+	global $gCNN_DBS_ORCA;
+	$strQuery = 'SELECT COUNT(*) AS "count" FROM dba.tbl_related_objects WHERE registry_object_key = $1';
+	$params = array($registry_object_key);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+
+	if (!isset($resultSet[0])) 
+		return 0;
+	else 
+		return $resultSet[0]['count']; 	
+}
+
+function getIncomingRelatedObjectCount($registry_object_key)
+{
+	global $gCNN_DBS_ORCA;
+	$strQuery = 'SELECT COUNT(*) AS "count" FROM dba.tbl_related_objects WHERE related_registry_object_key = $1';
+	$params = array($registry_object_key);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+
+	if (!isset($resultSet[0])) 
+		return 0;
+	else 
+		return $resultSet[0]['count']; 	
+}
+
 // function defined to obtain real subject values for dc xml
 //------------------------------------------------------------
 function getSubjectValue($identifier=NULL)
@@ -2372,7 +2454,293 @@ function setDraftFlag($draft_key, $data_source, $flag)
 
 
 
+function insertTaskRequest($task_type, $created_by, $param_1='', $param_2='', $param_3='', $trigger_time)
+{
+	global $gCNN_DBS_ORCA;
+	$strQuery = 'INSERT INTO dba.tbl_queued_tasks (task_type, created_by, param_1, param_2, param_3, queue_time, trigger_time) '. 
+				'VALUES ($1, $2, $3, $4, $5, $6, $7)';
+	$params = array($task_type, $created_by, $param_1, $param_2, $param_3, time(), $trigger_time);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+
+	return $resultSet; 	
+}
+
+function updateTaskRequest($task_id, $start_time, $finish_time)
+{
+	global $gCNN_DBS_ORCA;
+	$strQuery = 'UPDATE dba.tbl_queued_tasks SET start_time = $2 , finish_time = $3 WHERE task_id = $1';
+	$params = array($task_id, $start_time, $finish_time);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+
+	return $resultSet; 	
+}
+
+// Get all outstanding task requests (tasks that haven't yet been started)
+// which have a trigger time in the past ([arbitrary] default: before 1/1/2020)
+function getTaskRequests($trigger_time=1577862061)
+{
+	global $gCNN_DBS_ORCA;
+	$strQuery = 'SELECT * FROM dba.tbl_queued_tasks WHERE trigger_time <= $1 AND start_time = 0 AND finish_time = 0';
+	$params = array($trigger_time);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+
+	return $resultSet; 	
+}
 
 
+function updateDataSourceHash($data_source_key, $hash)
+{
+	global $gCNN_DBS_ORCA;
+	$strQuery = 'UPDATE dba.tbl_data_sources SET key_hash = $2 WHERE data_source_key = $1';
+	$params = array($data_source_key, $hash);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
 
+	return $resultSet; 	
+}
+
+function getDataSourceHash($data_source_key)
+{
+	global $gCNN_DBS_ORCA;
+	$strQuery = 'SELECT key_hash FROM dba.tbl_data_sources WHERE data_source_key = $1';
+	$params = array($data_source_key);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+
+	if (!isset($resultSet[0])) 
+		return false;
+	else 
+		return $resultSet[0]['key_hash']; 	
+}
+
+function getDataSourceByHash($hash)
+{
+	global $gCNN_DBS_ORCA;
+
+	$resultSet = null;
+	$strQuery = 'SELECT * FROM dba.tbl_data_sources WHERE key_hash = $1';
+	$params = array($hash);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+
+	return $resultSet;
+}
+
+function getRegistryObjectByHash($hash)
+{
+	global $gCNN_DBS_ORCA;
+
+	$resultSet = null;
+	$strQuery = 'SELECT * FROM dba.tbl_registry_objects WHERE key_hash = $1';
+	$params = array($hash);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+
+	return $resultSet;
+}
+
+function getRegistryObjectHash($registry_object_key)
+{
+	global $gCNN_DBS_ORCA;
+	$strQuery = 'SELECT key_hash FROM dba.tbl_registry_objects WHERE registry_object_key = $1';
+	$params = array($registry_object_key);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+
+	if (!isset($resultSet[0])) 
+		return false;
+	else 
+		return $resultSet[0]['key_hash']; 	
+}
+
+
+function updateRegistryObjectHash($registry_object_key, $hash)
+{
+	global $gCNN_DBS_ORCA;
+	$strQuery = 'UPDATE dba.tbl_registry_objects SET key_hash = $2 WHERE registry_object_key = $1';
+	$params = array($registry_object_key, $hash);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	return $resultSet; 	
+}
+
+function getRegistryObjectDataSourceKey($registry_object_key)
+{
+	global $gCNN_DBS_ORCA;
+	$strQuery = 'SELECT data_source_key FROM dba.tbl_registry_objects WHERE registry_object_key = $1';
+	$params = array($registry_object_key);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+
+	if (!isset($resultSet[0])) 
+		return false;
+	else 
+		return $resultSet[0]['data_source_key'];
+}
+
+function getRegistryObjectRegistryDateModified($registry_object_key)
+{
+	global $gCNN_DBS_ORCA;
+	$strQuery = 'SELECT registry_date_modified FROM dba.tbl_registry_objects WHERE registry_object_key = $1';
+	$params = array($registry_object_key);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+
+	if (!isset($resultSet[0])) 
+		return false;
+	else 
+		return $resultSet[0]['registry_date_modified'];
+}
+
+function getRegistryObjectStatusModified($registry_object_key)
+{
+	global $gCNN_DBS_ORCA;
+	$strQuery = 'SELECT status_modified_when FROM dba.tbl_registry_objects WHERE registry_object_key = $1';
+	$params = array($registry_object_key);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+
+	if (!isset($resultSet[0])) 
+		return false;
+	else 
+		return $resultSet[0]['status_modified_when'];
+}
+
+
+function getRegistryObjectURLSlug($registry_object_key)
+{
+	global $gCNN_DBS_ORCA;
+	$strQuery = 'SELECT url_slug FROM dba.tbl_registry_objects WHERE registry_object_key = $1';
+	$params = array($registry_object_key);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+
+	if (!isset($resultSet[0])) 
+		return false;
+	else 
+		return $resultSet[0]['url_slug'];
+	
+}
+
+
+function updateRegistryObjectSLUG ($registry_object_key, $new_display_title, $current_slug = '')
+{
+	global $gCNN_DBS_ORCA;
+	$updated_slug = generateUniqueSlug($new_display_title, $registry_object_key);
+	//die(var_dump($current_slug . $updated_slug));
+	// No need to do any updates if our slug hasn't changed
+	if ($current_slug == $updated_slug) { return true; }
+
+	//Otherwise update the current slug
+	$strQuery = 'UPDATE dba.tbl_registry_objects SET url_slug = $2 WHERE registry_object_key = $1';
+	$params = array($registry_object_key, $updated_slug);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+
+	//Add the new SLUG mapping
+	insertSLUGMapping($updated_slug, $registry_object_key, $new_display_title);
+
+	return;
+}
+
+function insertSLUGMapping($slug, $key, $current_title)
+{
+	global $gCNN_DBS_ORCA;
+	$strQuery = 'INSERT INTO dba.tbl_url_mappings VALUES ($1, $2, $3, $4, $5)';
+	$params = array($slug, $key, time(), 0, $current_title);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+
+	return $resultSet; 	
+}
+
+function updateSLUGMapping($slug, $key, $current_title)
+{
+	global $gCNN_DBS_ORCA;
+	$strQuery = 'UPDATE dba.tbl_url_mappings SET registry_object_key = $2, search_title = $3, date_modified = $4 WHERE url_fragment = $1';
+	$params = array($slug, $key, $current_title, time());
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	return $resultSet; 	
+}
+
+
+function deleteSLUGMapping($slug)
+{
+	global $gCNN_DBS_ORCA;
+	$strQuery = 'UPDATE dba.tbl_url_mappings SET registry_object_key = \'\', date_modified = $2 WHERE url_fragment = $1';
+	$params = array($slug, time());
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	return $resultSet; 	
+}
+
+
+function countOtherSLUGMappings($slug, $key)
+{
+	global $gCNN_DBS_ORCA;	
+	// if the slug doesn't point to our key count it
+	$strQuery = 'SELECT COUNT(*) as count FROM dba.tbl_url_mappings WHERE registry_object_key != $1 AND url_fragment = $2';
+	$params = array($key, $slug);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+
+	if (!isset($resultSet[0])) 
+		return 0;
+	else 
+		return (int) $resultSet[0]['count'];
+}
+
+
+function getDataSourceGroups($data_source_key)
+{
+	global $gCNN_DBS_ORCA;
+	$strQuery = 'SELECT DISTINCT object_group FROM dba.tbl_registry_objects WHERE data_source_key = $1 ORDER BY object_group ASC ';
+	$params = array($data_source_key);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+
+	if (!isset($resultSet[0])) 
+		return false;
+	else 
+		return $resultSet;
+	
+}
+function getGroupPage($group)
+{
+	global $gCNN_DBS_ORCA;
+	$strQuery = 'SELECT * FROM dba.tbl_institution_pages WHERE object_group = $1';
+	$params = array($group);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+
+	if (!isset($resultSet[0])) 
+		return false;
+	else 
+		return $resultSet;
+	
+}
+
+function deleteInstitutionalPage($group,$dataSourceKey)
+{
+	global $gCNN_DBS_ORCA;
+	$strQuery = 'DELETE FROM dba.tbl_institution_pages WHERE object_group = $1 and authoritive_data_source_key = $2';
+	$params = array($group,$dataSourceKey);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+
+	if (!isset($resultSet[0])) 
+		return false;
+	else 
+		return $resultSet;
+
+}
+function insertInstitutionalPage($group,$institutionalRegistryObjectKey,$dataSourceKey)
+{
+	global $gCNN_DBS_ORCA;
+	$strQuery = 'INSERT INTO  dba.tbl_institution_pages (object_group , registry_object_key ,authoritive_data_source_key) VALUES ($1, $2, $3)';
+	$params = array($group,$institutionalRegistryObjectKey,$dataSourceKey);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+
+	if (!isset($resultSet[0])) 
+		return false;
+	else 
+		return $resultSet;
+
+}
+function getGroupDataSources($group)
+{
+	global $gCNN_DBS_ORCA;
+	$strQuery = 'SELECT DISTINCT(data_source_key) FROM dba.tbl_registry_objects WHERE object_group = $1';
+	$params = array($group);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+
+	if (!isset($resultSet[0])) 
+		return false;
+	else 
+		return $resultSet;
+
+}
 ?>

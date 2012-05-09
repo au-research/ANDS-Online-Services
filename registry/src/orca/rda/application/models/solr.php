@@ -38,7 +38,7 @@ limitations under the License.
     	if($classFilter!='All') $filter_query .= constructFilterQuery('class', $classFilter);
     	if($typeFilter!='All') $filter_query .= constructFilterQuery('type', $typeFilter);
     	if($groupFilter!='All') $filter_query .= constructFilterQuery('group', $groupFilter);
-    	if($subjectFilter!='All') $filter_query .= constructFilterQuery('subject_value', $subjectFilter);
+    	if($subjectFilter!='All') $filter_query .= constructFilterQuery('subject_value_resolved', $subjectFilter);
     	if($status!='All') $filter_query .= constructFilterQuery('status', $status);
     	
     	//echo $status;
@@ -54,7 +54,9 @@ limitations under the License.
 		
 		//$r = '(fulltext:('.$q.') OR key:('.$q.')^50 OR displayTitle:('.$q.')^50 OR listTitle:('.$q.')^50 OR description_value:('.$q.')^5 OR subject_value:('.$q.')^10 OR name_part:('.$q.')^30)';
 		//$q .= $r . ' OR (fulltext:('.$q.') -data_source_key:("AU_RESEARCH_GRANTS"))^3000 OR (fulltext:('.$q.') -data_source_key:("nhmrc.gov.au"))^3000';
-		$q = '(fulltext:('.$q.') OR key:('.$q.')^50 OR displayTitle:('.$q.')^50 OR listTitle:('.$q.')^50 OR description_value:('.$q.')^5 OR subject_value:('.$q.')^10 OR name_part:('.$q.')^30 OR ((fulltext:('.$q.') -data_source_key:("AU_RESEARCH_GRANTS"))^3000 OR (fulltext:('.$q.') -data_source_key:("nhmrc.gov.au"))^3000))';
+
+		$q = '(fulltext:('.$q.') OR key:('.$q.')^50 OR display_title:('.$q.')^50 OR list_title:('.$q.')^50 OR description_value:('.$q.')^5 OR subject_value_resolved:('.$q.')^10  OR ((fulltext:('.$q.') -data_source_key:("AU_RESEARCH_GRANTS"))^3000 OR (fulltext:('.$q.') -data_source_key:("nhmrc.gov.au"))^3000))';
+
 
 		//$q .= $r;
 		//OR (fulltext:('.$q.') -data_source_key:("AU_RESEARCH_GRANTS"))^3000 OR (fulltext:('.$q.') -data_source_key:("nhmrc.gov.au"))^3000
@@ -74,7 +76,7 @@ limitations under the License.
 		//if($filter_query!='') $fields['fq']=urlencode($filter_query);
 		//print_r($fields);
 		
-		$facet = '&facet=true&facet.field=type&facet.field=class&facet.field=group&facet.field=subject_value&f.subject_value.facet.mincount=1&facet.sort=count';
+		$facet = '&facet=true&facet.field=type&facet.field=class&facet.field=group&facet.field=subject_value_resolved&f.subject_value_resolved.facet.mincount=1&facet.sort=count';
 		
 		/*prep*/
 		$fields_string='';
@@ -111,8 +113,8 @@ limitations under the License.
     	$fields = array(
 			'q'=>'key:"'.escapeSolrValue($key).'"','version'=>'2.2','start'=>'0','indent'=>'on', 'wt'=>'json'
 		);
-		$filter_query = '+relatedObject_relatedObjectClass:("'.$class.'")';
-		if($type) $filter_query = '+relatedObject_relatedObjectType:("'.$type.'")'; 
+		$filter_query = '+related_object_class:("'.$class.'")';
+		if($type) $filter_query = '+related_object_type:("'.$type.'")'; 
 		$fields['fq']=$filter_query;
 		$json = $this->fireSearch($fields, '');
 		return $json;
@@ -122,9 +124,9 @@ limitations under the License.
     public function getRelatedKeys($key, $relationType=array()){
     	$fields = array(
 			'q'=>'*:*','version'=>'2.2','start'=>'0','rows'=>'100','indent'=>'on', 'wt'=>'json',
-			'fl'=>'relatedObject_key'
+			'fl'=>'related_object_key'
 		);
-		$filter_query = '+key:("'.$key.'")+relatedObject_relation:(';
+		$filter_query = '+key:("'.$key.'")+related_object_relation:(';
 		$first = true;
 		foreach($relationType as $re){
 			if($first){
@@ -160,7 +162,7 @@ limitations under the License.
 			$excludeKeys .= ")";		
 		}
     	$fields = array(
-			'q'=>'relatedObject_key:"'.$key.'"','version'=>'2.2','rows'=>'200000','start'=>'0','indent'=>'on', 'wt'=>'json','fl'=>'key,class,type,data_source_key'
+			'q'=>'related_object_key:"'.$key.'"','version'=>'2.2','rows'=>'200000','start'=>'0','indent'=>'on', 'wt'=>'json','fl'=>'key,class,type,data_source_key'
 		);
 		$filter_query = '+class:("'.$class.'")';
 		if($type) $filter_query = '+type:("'.$type.'")'; 
@@ -215,7 +217,7 @@ limitations under the License.
     public function getNCRISPartners(){
     	$fields = array(
 			'q'=>'group:NCRIS','version'=>'2.2','start'=>'0','rows'=>'100','indent'=>'on', 'wt'=>'json',
-			'fl'=>'description_value, description_type, key, displayTitle, location'
+			'fl'=>'description_value, description_type, key, display_title, location'
 		);
 		$json = $this->fireSearch($fields, '');
 		return $json;
@@ -266,7 +268,56 @@ limitations under the License.
 		$json = $this->fireSearch($fields, $facet);
 		return $json;
     }
-    
+	 function getContent($sort,$group){
+    	$fields = array(
+			'q'=>'*:*','version'=>'2.2','start'=>'0','rows'=>'100','indent'=>'on', 'wt'=>'json',
+			'fl'=>'key', 'q.alt'=>'*:*','fq'=>'status:PUBLISHED'
+		);
+		$fields['fq'].='+group:("'.$group.'")';
+		$facet = 'facet=true&facet.field=class&facet.field=subject_value_resolved';
+		$json = $this->fireSearch($fields, $facet);
+		return $json;
+    } 
+	function getSubjects($sort,$group){
+    	$fields = array(
+			'q'=>'*:*','version'=>'2.2','start'=>'0','rows'=>'100','indent'=>'on', 'wt'=>'json',
+			'fl'=>'key', 'q.alt'=>'*:*','fq'=>'status:PUBLISHED'
+		);
+		$fields['fq'].='+group:("'.$group.'")';
+		$facet = 'facet=true&facet.field=class&facet.field=subject_value_resolved&facet.mincount=1';
+		$json = $this->fireSearch($fields, $facet);
+		return $json;
+    }    
+		function getCannedContent($sort,$group,$key){
+    	$fields = array(
+			'q'=>'*:*','version'=>'2.2','start'=>'0','rows'=>'1','indent'=>'on', 'wt'=>'json',
+			'fl'=>'key', 'q.alt'=>'*:*','fq'=>'status:PUBLISHED'
+		);
+		$fields['fq'].='+group:("'.$group.'") -key:("'.$key.'")';
+		$facet = 'facet=true&facet.field=class&facet.field=type&facet.field=subject_value_resolved&facet.mincount=1&facet.limit=-1&facet.sort=count';
+		$json = $this->fireSearch($fields, $facet);
+		return $json;
+    }   
+	 function getCollection($sort, $type='',$group){
+    	$fields = array(
+			'q'=>'*:*','version'=>'2.2','start'=>'0','rows'=>'5','indent'=>'on', 'wt'=>'json',
+			'fl'=>'key,display_title', 'q.alt'=>'*:*','fq'=>'status:PUBLISHED', 'sort'=>'date_modified desc'
+		);
+		$fields['fq'].='+class:'.$type.'+group:("'.$group.'")';
+		$facet = 'facet=false';
+		$json = $this->fireSearch($fields, $facet);
+		return $json;
+    }
+	function getGroups($sort, $group, $key){
+    	$fields = array(
+			'q'=>'*:*','version'=>'2.2','start'=>'0','rows'=>'100','indent'=>'on', 'wt'=>'json',
+			'fl'=>'key,display_title', 'q.alt'=>'*:*','fq'=>'status:PUBLISHED', 'sort'=>'date_modified desc'
+		);
+		$fields['fq'].='+class:party+group:("'.$group.'")+type:group -key:("'.$key.'")';
+		$facet = 'facet=false';
+		$json = $this->fireSearch($fields, $facet);
+		return $json;
+    }          
 	function getDictionary($sort){
     	$fields = array(
 			'q'=>'*:*','version'=>'2.2','start'=>'0','rows'=>'100','indent'=>'on', 'wt'=>'json',

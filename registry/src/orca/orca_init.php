@@ -20,6 +20,7 @@ limitations under the License.
 require '_includes/init.php';
 require '_functions/orca_constants.php';
 require '_functions/orca_access_functions.php';
+require '_functions/orca_cache_functions.php';
 require '_functions/orca_data_functions.php';
 require '_functions/orca_import_functions.php';
 require '_functions/orca_export_functions.php';
@@ -27,6 +28,7 @@ require '_functions/orca_data_source_functions.php';
 require '_functions/orca_presentation_functions.php';
 require '_functions/orca_oai_functions.php';
 require '_functions/pids_functions.php';
+require '_functions/orca_solr_functions.php';
 
 define('gORCA_IMAGE_ROOT', eAPP_ROOT.'orca/_images/');
 

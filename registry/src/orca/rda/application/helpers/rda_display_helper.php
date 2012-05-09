@@ -34,7 +34,7 @@ function displayFacet($facet_name, $facetFilter, $json, $ro_class){
 			}else $name = 'Types';				
 			$class="typeFilter";break;
 		case "group":$clear = 'clearGroup';$name='Research Groups';$class="groupFilter";break;
-		case "subject_value":$clear = 'clearSubjects';$name="Subjects";$class="subjectFilter";break;
+		case "subject_value_resolved":$clear = 'clearSubjects';$name="Subjects";$class="subjectFilter";break;
 	}
 	
 
@@ -96,7 +96,7 @@ function displaySelectedFacet($facet_name, $facetFilter, $json){
 	switch($facet_name){
 		case "type":$clear = 'clearType';$name='Types';$class="typeFilter";break;
 		case "group":$clear = 'clearGroup';$name='Research Groups';$class="groupFilter";break;
-		case "subject_value":$clear = 'clearSubjects';$name="Subjects";$class="subjectFilter";break;
+		case "subject_value_resolved":$clear = 'clearSubjects';$name="Subjects";$class="subjectFilter";break;
 	}
 	$object_type = $json->{'facet_counts'}->{'facet_fields'}->{$facet_name};
 	//print the selected
@@ -124,7 +124,7 @@ function constructFilterQuery($class, $groups){
 		case 'class':$str='+class:(';break;
 		case 'type':$str='+type:(';break;
 		case 'group':$str='+group:(';break;
-		case 'subject_value':$str='+subject_value:(';break;
+		case 'subject_value_resolved':$str='+subject_value_resolved:(';break;
 		case 'status':$str='+status:(';break;
 	}
 	
@@ -253,5 +253,30 @@ function view_url(){
 function get_http_response_code($url) {
 	$headers = get_headers($url);
 	return substr($headers[0], 9, 3);
+}
+
+/* Check to see if a given group has an assigned institutional page */
+function getInstitutionPage($group)
+{
+		
+
+	$CI =& get_instance();
+	 
+	$CI->load->database();
+	$query = $CI->db->get_where('dba.tbl_institution_pages',array('object_group'=>$group));
+	foreach($query->result() as $row)
+	{
+		return $row->registry_object_key;
+	}
+			
+}
+function displaySubscriptions(){//for now we only want to set up the subscriptions for search resluts on the collections tab
+	if($_POST['classFilter']=='collection')
+	{
+		return true;
+	}else{
+		return false;
+	}
+
 }
 ?>

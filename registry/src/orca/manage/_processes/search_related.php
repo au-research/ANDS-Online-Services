@@ -17,9 +17,13 @@ if (!IN_ORCA) die('No direct access to this file is permitted.');
 
 		$values = array();
 
+		
 //OLD - use Search Draft By Name
 
 		$searchText = rawurldecode(getQueryValue("sText"));
+	//	echo json_encode($searchText);
+	//	exit;
+
 		$objectClass =  rawurldecode(getQueryValue("oClass"));
 		$dataSourcekey =  rawurldecode(getQueryValue("dSourceKey"));
 		$registryObjects = array();
@@ -52,17 +56,20 @@ if (!IN_ORCA) die('No direct access to this file is permitted.');
 			//$values[] = array (	"value" => "", "desc" => "Sorry - No Registry Object found!");
 		}
 
-		//print json_encode($values);
+	//	print json_encode($values);
+	//	exit;
 
 
 //NEW - use SOLR
 		$objectClass = strtolower($objectClass);
     	
-		$q = 'displayTitle:('.strtolower($searchText).') +class:('.$objectClass.')';
+
+		$q = 'display_title:('.strtolower($searchText).') +class:('.$objectClass.')';
+
 		if($dataSourcekey!='') $q.=' +data_source_key:("'.$dataSourcekey.'")';
 		$fields = array(
 			'q'=>$q,'version'=>'2.2','start'=>'0','rows'=>$limit, 'wt'=>'json',
-			'fl'=>'key, displayTitle, description_value, description_type, status'
+			'fl'=>'key, display_title, description_value, description_type, status'
 		);
 	
 		/*prep*/
@@ -87,6 +94,7 @@ if (!IN_ORCA) die('No direct access to this file is permitted.');
 		$decoded = json_decode($content);
 		//print_r($decoded);
 	
+
 		//$values[] = array('value'=>$searchText, "desc"=> $fields_string);
 		if (isset($decoded->response->docs))
 		{
@@ -95,5 +103,5 @@ if (!IN_ORCA) die('No direct access to this file is permitted.');
 			}
 		}
 		
+
 		echo json_encode($values);
-		

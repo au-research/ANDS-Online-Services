@@ -117,6 +117,7 @@
              	<xsl:if test="not(./@type) or (./@type!='text' and ./@type!='dcmiPoint')">        	
                       <xsl:text>yes</xsl:text>
                </xsl:if>
+
                </xsl:for-each>  
                     
              	<xsl:for-each select="ro:location/ro:spatial"> 
@@ -124,6 +125,7 @@
                       <xsl:text>yes</xsl:text>
                </xsl:if>            
                </xsl:for-each>                 
+
         	</xsl:variable>
         	
              <xsl:if test="ro:coverage/ro:spatial | ro:location/ro:spatial">

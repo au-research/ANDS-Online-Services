@@ -24,16 +24,19 @@ limitations under the License.
 	foreach($json->{'response'}->{'docs'} as $d){
 		$key = $d->{'key'};
 		$keys[] = $key;
+		if(isset($d->{'description_type'}))
+		{
 		foreach($d->{'description_type'} as $index=>$type){
 			if($type=='logo') $partners[$key]['logo']=$d->{'description_value'}[$index];
 			if($type=='brief') {
-				$partners[$key]['full']='<h3><a href="search#!/q='.str_replace('-','',trim($d->{'displayTitle'})).'/tab=activity">'.$d->{'displayTitle'}.'</a></h3>'
+				$partners[$key]['full']='<h3><a href="search#!/q='.str_replace('-','',trim($d->{'display_title'})).'/tab=activity">'.$d->{'display_title'}.'</a></h3>'
 											.''.
-											$d->{'description_value'}[$index].''.
+											$d->{'description_value'}[$index].
 											'<p><a href="'.trim($d->{'location'}[0]).'" title="Visit Partner Portal">'.$d->{'location'}[0].'</a></p>';
 			}
 			$partners[$key]['url']=$d->{'location'}[0];
 		}
+	}
 	}
 ?>
 <div id="search-result">
@@ -139,7 +142,6 @@ limitations under the License.
 		Loading Stats...
 	</div>
 </div>
-
 
 <div class="box shadow" itemscope itemtype="http://schema.org/Article">
 	<center><img src="<?php echo base_url();?>img/DIISRTE_stacked.jpg" style="height:200px;" alt="DIISRTE Logo"/></center>

@@ -168,6 +168,7 @@ function formatDateTimeWithMask($datetime, $mask)
 			//if($timeArray[$i] != null && $timeZoneArray[$i] != null)
 			//	$timeArray[$i] = $timeArray[$i] - $timeZoneArray[$i];
 			//}
+
 			$datetime = substr($datetime,0, $Tpos)."T".$timeArray[0].":00:00".$gmt_p_m.$timeZoneArray[0];
 		}		
 	}
@@ -175,8 +176,8 @@ function formatDateTimeWithMask($datetime, $mask)
 	
 	if( $datetime != "" && $datetime != null )
 	{
-		date_create($datetime);
-		if( error_get_last() )
+
+		if(!date_create($datetime))
 		{
 			$formatDate = $datetime;
 		}

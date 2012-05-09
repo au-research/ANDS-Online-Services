@@ -14,6 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 *******************************************************************************/
 
+require_once(dirname(__FILE__).'/../../global_config.php');
+
+
 // If not running within COSI, include COSI's environment variables
 // (needed for "lightweight" activities such as fetch_element)
 if (!defined("eHOST")) { require '../_includes/_environment/application_env.php'; }

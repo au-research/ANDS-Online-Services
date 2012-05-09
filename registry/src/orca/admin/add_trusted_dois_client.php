@@ -19,6 +19,7 @@ limitations under the License.
 require '../../_includes/init.php';
 require '../orca_init.php';
 require '../dois_orcainit.php';
+
 $client = '';
 $client_id = '';
 $client_name = '';
@@ -26,11 +27,14 @@ $ip_address = '';
 $client_contact_name = '';
 $client_contact_email = '';
 $client_domain_list = '';
+
 // Page processing
 // -----------------------------------------------------------------------------
 
 $errorMessages = '';
+
 $app_id = (isset($_GET['app_id']) ? $_GET['app_id'] : getPostedValue('app_id'));
+
 if($app_id!=''){
 	$action = 'Edit';
 	
@@ -56,6 +60,7 @@ if($app_id!=''){
 }else{
 	$action = 'Add';
 }
+
 
 if ( strtoupper(getPostedValue('verb')) == "ADD" || strtoupper(getPostedValue('verb')) == "EDIT")
 {
@@ -162,6 +167,7 @@ if ( strtoupper(getPostedValue('verb')) == "ADD" || strtoupper(getPostedValue('v
 		{
 			$client = addDoisClient(getPostedValue('client_name'),getPostedValue('client_contact_name'),getPostedValue('client_contact_email'),getPostedValue('ip_address'),getPostedValue('datacite_prefix'),$app_id);	
 		}elseif($action == "Edit"){
+
 			$client_id = getPostedValue('client_id');
 			deleteClientDomainList($client_id);
 			$client = updateDoisClient(getPostedValue('client_name'),getPostedValue('client_contact_name'),getPostedValue('client_contact_email'),getPostedValue('ip_address'),getPostedValue('datacite_prefix'),$app_id,$client_id);	

@@ -148,6 +148,7 @@ if(isset($groups)&&$groups['numfound']>0){
 		echo '<li><a href="'.base_url().'view/?key='.urlencode($groups['json']->{'response'}->{'docs'}[$i]->{'key'}).'" title="'.findRelationship($groups['json']->{'response'}->{'docs'}[$i]->{'key'},$groups['relatedKey'],$groups['relationship']).' '.$autoLinkTitle.'">';
 		echo $groups['json']->{'response'}->{'docs'}[$i]->{'displayTitle'};
 		echo '</a>'.findRelationshipDescription($groups['json']->{'response'}->{'docs'}[$i]->{'key'},$groups['relatedKey'],$groups['relationship_description']).$autoLink.$logostr.'</li>';
+
 	}
 	echo '</ul>';	
 	if($seeMore)
@@ -157,7 +158,18 @@ if(isset($groups)&&$groups['numfound']>0){
 }	
 
 }
-
+showContributors($theGroup);
+function showContributors($theGroup)
+{
+	$theGroupKey = getInstitutionPage($theGroup);
+	if($theGroupKey)
+	{
+		echo '<h3><img  class="icon-heading-connections" src="'.base_url().'/img/icon/party_multi_16.png"/>Record Contributor</h3>';
+		echo '<ul>';
+		echo '<li><a href="'.base_url().'view/group/?group='.urlencode($theGroupKey).'&groupName='.$theGroup.'" title="Contributor group">'.$theGroup.'</a></li>';	
+		echo '</ul>';
+	}
+}
 function findRelationship($key, $relatedKeys, $relationships){
 
 	for($i=0;$i<count($relatedKeys);$i++)

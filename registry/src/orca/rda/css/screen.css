@@ -414,7 +414,6 @@ font-size:.9em;
 #search-left ul li a:hover{}
 #search-left ul li a.current{color:red;}
 
-
 .accordion{}
 #clearSearch{float:right;margin:5px;cursor:pointer;}
 #loading{float:right;}
@@ -637,8 +636,25 @@ display:block;
 	display:block;
 }
 
+
 #warningDiv{
     position:fixed;bottom:0;right:0;padding:5px 10px;background:#333;color:white;z-index:100;text-align:left;
     text-decoration:none;
 }
 #warningDiv a{color:white;}
+
+.rss_icon{
+    background-image:url('../img/feed-icon-14x14.png'); 
+    background-repeat:no-repeat; 
+    position:relative;
+    margin-top:7px;
+    float:left;
+    width:18px;  
+    height:14px;
+}
+#subscriptions{
+	float:left;
+	font-size:1.2em;
+	color:#333333;
+}
+

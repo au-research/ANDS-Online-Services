@@ -16,7 +16,6 @@ limitations under the License.
 if (!IN_ORCA) die('No direct access to this file is permitted.');
 
 
-
 // Default response
 $response = array("responsecode" => 0, "response" => "No Response");
 $data_source_key = getPostedValue('dataSourceKey');
@@ -165,6 +164,8 @@ switch(getQueryValue('action'))
 			{
 				error_reporting(E_ERROR | E_WARNING | E_PARSE);
 				ini_set("display_errors", 1);
+				
+
 				if ($draft = getDraftRegistryObject(rawurldecode($key), $data_source_key)) 
 				{
 					$rifcs = new DomDocument();
@@ -178,7 +179,7 @@ switch(getQueryValue('action'))
 					$dataSourceKey = $draft[0]['registry_object_data_source'];
 					$deleteErrors = "";
 			        $errors = error_get_last();
-			   
+			   		
 					if( $errors )
 					{
 						$errorMessages .= "Document Load Error";
@@ -187,8 +188,8 @@ switch(getQueryValue('action'))
 						$errorMessages .= "</div>\n";
 					}
 					
-					error_reporting(~E_ALL);
-					ini_set("display_errors", 0);
+					error_reporting(E_ALL);
+					ini_set("display_errors", 1);
 					if( !$errorMessages )
 					{
 						// Validate it against the orca schema.
@@ -220,8 +221,11 @@ switch(getQueryValue('action'))
 						}
 						else
 		               	{
+
 							$importErrors = importRegistryObjects($registryObject,$dataSourceKey, $resultMessage, getLoggedInUser(), null, ($draft[0]['draft_owner']==SYSTEM ? SYSTEM : getThisOrcaUserIdentity()), null, true);       
+							//echo $importErrors;die();
 							$importErrors .= runQualityCheckForRegistryObject(rawurldecode($key), $dataSourceKey);
+
 							//addSolrIndex(rawurldecode($key), true);
 							if( !$importErrors )
 							{

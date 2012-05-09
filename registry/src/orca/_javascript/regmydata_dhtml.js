@@ -1165,6 +1165,8 @@ function saveAndPreview() {
 	$("#errors_preview").hide();	
 	$("#save_notification").remove();
 
+	$(".rda_preview").attr("href",$("#baseURL").val() + 'rda/preview?ds='+$('#object_mandatoryInformation_dataSource').val()+'&key=' + $('#object_mandatoryInformation_key').val());
+
 	
 	if (userMode != 'readOnly')
 	{
@@ -1882,6 +1884,7 @@ function addRelatedObjectAutocomplete(field) {
 	cSelect = cSelect.replace(/name/,"class");
 	var dsSelect = cSelect.replace(/class/,"dataSource");
 	//$( field ).autocomplete({ disabled: false});
+	alert("in autocomplete");
 	$( field ).autocomplete({
 		minLength: 2,
 		source: function(request, response){

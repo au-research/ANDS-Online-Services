@@ -21,10 +21,12 @@ $rif2solrXSL->load(eAPPLICATION_ROOT.'/orca/_xsl/rif2solr.xsl');
 $solrXSLTProc = new XSLTProcessor();
 $solrXSLTProc->importStyleSheet($rif2solrXSL);
 
-	
-	
-	
-	
+$qtestxsl = new DomDocument();
+$qtestxsl->load(eAPPLICATION_ROOT.'orca/_xsl/extRif2solr.xsl');
+$extRif2solrProc = new XSLTProcessor();
+$extRif2solrProc->importStyleSheet($qtestxsl);
+
+
 function runImport($dataSource, $testOnly)
 {
 	$dataSourceProviderType  = $dataSource[0]['provider_type'];
@@ -591,11 +593,11 @@ return $transformResult;
 }
 
 function transformToSolr($registryObjectsXML)
-{
-    global $solrXSLTProc;
+{	
+	global $extRif2solrProc;
 	$registryObjects = new DomDocument();
 	$registryObjects->loadXML($registryObjectsXML);
-	$transformResult = $solrXSLTProc->transformToXML($registryObjects);	
+	$transformResult = $extRif2solrProc->transformToXML($registryObjects);	
 	return $transformResult;
 }
 
@@ -604,7 +606,7 @@ function runSolrIndexForDatasource($dataSourceKey)
 	$rifcsContent = '';
 	$allKeys = getRegistryObjectKeysForDataSource($dataSourceKey);
 	$arraySize = sizeof($allKeys);
-	$result = 'Solr Indexing run';
+	$result ='';
 	$publishedRecords = 0;
 	for($i = 0; $i < $arraySize ; $i++)
 	{				
@@ -612,23 +614,27 @@ function runSolrIndexForDatasource($dataSourceKey)
 		//{
 		$key = $allKeys[$i]['registry_object_key'];	
 		$publishedRecords++;	
-		$rifcsContent .= getRegistryObjectXMLforSOLR($key, true);
+		$rifcsContent = getRegistryObjectXMLforSOLR($key, true);
+		$rifcs = wrapRegistryObjects($rifcsContent);
+		$rifcs = transformToSolr($rifcs);		
+		//	echo $key . '<br/>';						
+		$result .= curl_post(gSOLR_UPDATE_URL, $rifcs);					
+		$result .= curl_post(gSOLR_UPDATE_URL.'?commit=true', '<commit waitFlush="false" waitSearcher="false"/>');
+		//echo $result;
+		$result ='';flush(); ob_flush();	
+	//	$result .= curl_post(gSOLR_UPDATE_URL.'?optimize=true', '<optimize waitFlush="false" waitSearcher="false"/>');
+	
 		//}	
 	}
-	if($publishedRecords > 0)
+		$result .= curl_post(gSOLR_UPDATE_URL.'?optimize=true', '<optimize waitFlush="false" waitSearcher="false"/>');
+	/*if($publishedRecords > 0)
 	{
-				
-		$rifcs = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
-		$rifcs .='<registryObjects xmlns="http://ands.org.au/standards/rif-cs/registryObjects" '."\n";
-		$rifcs .='                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '."\n";
-		$rifcs .='                 xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects '.gRIF_SCHEMA_URI.'">'."\n";	
-		$rifcs .= $rifcsContent;			
-		$rifcs .= "</registryObjects>\n";		
+		$rifcs = wrapRegistryObjects($rifcsContent);
 		$rifcs = transformToSolr($rifcs);									
 		$result .= curl_post(gSOLR_UPDATE_URL, $rifcs);					
 		$result .= curl_post(gSOLR_UPDATE_URL.'?commit=true', '<commit waitFlush="false" waitSearcher="false"/>');
 		$result .= curl_post(gSOLR_UPDATE_URL.'?optimize=true', '<optimize waitFlush="false" waitSearcher="false"/>');	
-	}
+	}*/
     return $result;	
 }
 

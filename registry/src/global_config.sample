@@ -59,6 +59,26 @@ define("eCONTACT_NAME", "Feedback");
 
 define("eCOPYRIGHT_NOTICE", "");
 
+
+
+//======================================
+// CACHING OPTIONS
+define('eCACHE_DIRECTORY', '/var/www/orca_' . 'cache'); // what directory do we store our cache files in? (relative)
+define('eCACHE_CURRENT_NAME','current'); // what filename do we use for the latest version symlink
+define('eCACHE_PERMISSION',0775); // octal representation of default directory permissions
+$gCacheEnabled = true; // is caching enabled?
+$gCacheExtended = true; // are we caching "extended RIFCS" (rich) or plain vanilla? (not backwards compatible)
+define('eCACHE_ENABLED', $gCacheEnabled);
+
+//======================================
+// INDEXING OPTIONS
+define('eBOOST_DEFAULT_BASE', 100);
+define('eBOOST_RELATED_OBJECT_ADJUSTMENT', 5);
+define('eBOOST_INCOMING_RELATED_OBJECT_ADJUSTMENT', 10);
+
+
+
+
 //White List IP are IPs that are allowed to access the system regardless of maitenance status
 $white_list_ip 	= array(
 	'xx.xx.xx.xx'
@@ -84,13 +104,16 @@ if($maintenance & !in_array($ip, $white_list_ip)){
 	exit;	
 }
 
+// Session will expire/timeout after this period of inactivity 
+// (ie if there have been no requests in that time).
+$gSessionTimeoutMinutes = 120;
 
 /*====================================
-	LDAP AUTHENTICATION SERVER (optional)
+        LDAP AUTHENTICATION SERVER (optional)
 ====================================*/
 // -----------------------------------------------------------------------------
 // These will be used by user roles that specify AUTHENTICATION_LDAP.
-$eLDAPHost = "ldaps://ldap.anu.edu.au"; 
+$eLDAPHost = "ldaps://ldap.anu.edu.au";
 $eLDAPPort = 636; //636 | 389
 // The resource distinguished name.
 // The string @@ROLE_ID@@ will be replace with the user role_id, and escaped
@@ -99,42 +122,47 @@ $eLDAPBaseDN = "ou=People, o=anu.edu.au";
 $eLDAPuid = "uid=@@ROLE_ID@@";
 $eLDAPDN = "$eLDAPuid, $eLDAPBaseDN";
 
+
 /*====================================
-	DATABASE ENVIRONMENT
+        DATABASE ENVIRONMENT
 ====================================*/
-$cosi_db_host = 'test.ands.org.au';
-$cosi_db_name = 'dbs_test_cosi';
+
+$cosi_db_host = 'devl.ands.org.au';
 $cosi_db_port = 5433;
+$cosi_db_name = 'dbs_develop_cosi';
 //======================================
 $orca_db_host = $cosi_db_host;
-$orca_db_name = 'dbs_test_orca';
-$orca_db_port = 5433;
+$orca_db_port = $cosi_db_port;
+$orca_db_name = 'dbs_develop_orca';
 //======================================
 $pids_db_host = $cosi_db_host;
-$pids_db_name = 'pids';
 $pids_db_port = 5432;
+$pids_db_name = 'pids';
 //======================================
 $dois_db_host = $cosi_db_host;
-$dois_db_name = 'dois';
 $dois_db_port = 5432;
+$dois_db_name = 'dois';
 //======================================
-//DOI ENVIRONMENT
-//====================================*/
+
+
+
+/*====================================
+DOI ENVIRONMENT
+====================================*/
 define('gDOIS_DATACENTRE_BASE_URI', "https://mds.datacite.org/datacentre");
-define('gDOIS_DATACENTRE_USERNAME', "ANDS");
-define('gDOIS_DATACENTRE_PASSWORD', "and3do1p455");
+define('gDOIS_DATACENTRE_USERNAME', "***");
+define('gDOIS_DATACENTRE_PASSWORD', "***");
 
 define('gDOIS_DATACENTRE_NAME_PREFIX', "ANDS");
-//define('gDOIS_DATACENTRE_NAME_MIDDLE', "CENTRE");  //for production
-define('gDOIS_DATACENTRE_NAME_MIDDLE', "TEST");
+define('gDOIS_DATACENTRE_NAME_MIDDLE', "CENTRE");  //for production
+
 $gDOIS_PREFIX_TYPES = array( '10.4225/','10.4226/','10.4227/','10.5072/');
 
 
 // Service configuration.
 
 define('gDOIS_SERVICE_BASE_URI', "https://mds.datacite.org/");
-define('gDOIS_DATACITE_PASSWORD', "and3do1p455");
-
+define('gDOIS_DATACITE_PASSWORD', "****");
 define('gDOIS_RESPONSE_SUCCESS', 'OK');
 
 

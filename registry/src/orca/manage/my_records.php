@@ -25,7 +25,6 @@ $this_url = eAPP_ROOT . "orca/manage/my_records.php?";
 
 $errors = array();
 
-
 // Get data sources which we have access to
 $rawResults = getDataSources(null, null);
 $dataSources = array();
@@ -55,9 +54,29 @@ if (!$data_source_key)
 // Begin the XHTML response. Any redirects must occur before this point.
 require '../../_includes/header.php';
 
+//google chart
+echo '<script type="text/javascript" src="https://www.google.com/jsapi"></script>';
+
 echo '<script type="text/javascript" src="'. eAPP_ROOT.'orca/_javascript/orca_dhtml.js"></script>
 		<script type="text/javascript" src="'. eAPP_ROOT.'orca/_javascript/mmr_dhtml.js"></script>
 		<input type="hidden" id="elementSourceURL" value="' . eAPP_ROOT . 'orca/manage/process_registry_object.php?" />';
+
+//CHOSEN Javascript library for choosing data sources
+echo '<link rel="stylesheet" href="'. eAPP_ROOT.'orca/_javascript/chosen/chosen.css" />
+		<script src="'. eAPP_ROOT.'orca/_javascript/chosen/chosen.jquery.js" type="text/javascript"></script>';
+
+
+//FLEXIGRID
+echo '<link rel="stylesheet" href="'. eAPP_ROOT.'orca/_javascript/flexigrid/css/flexigrid.css" />
+		<script src="'. eAPP_ROOT.'orca/_javascript/flexigrid/js/flexigrid.js" type="text/javascript"></script>';
+
+//QTIP at COSI level
+echo '<link rel="stylesheet" href="'. eAPP_ROOT.'/_javascript/qtip2/jquery.qtip.css" />
+		<script src="'. eAPP_ROOT.'/_javascript/qtip2/jquery.qtip.js" type="text/javascript"></script>';
+
+//Specific MMR Styles
+echo '<link rel="stylesheet" href="'. eAPP_ROOT.'orca/_styles/mmr.css" />';
+
 
 echo '<h1>Manage My Records</h1>';
 
@@ -91,29 +110,10 @@ else
 		displayMMRDataSourceSwitcher($dataSources, $data_source_key);
 		?>
 		<input type="hidden" id="dataSourceKey" value="<?php echo $data_source_key; ?>" />
-		<div id="mmr_datasource_information">
-		 <a href="" id="mmr_information_hide">Hide Information</a>
-		 <a href="<?php echo eAPP_ROOT . "orca/admin/data_source_view.php?data_source_key=" . rawurlencode($data_source_key); ?>" id="mmr_manage_data_source">Manage this Data Source</a>
-			<div>
-				<ul style="padding-left:40px;">
-					<li>
-						This tool allows you to view and manage the records which you have recently created, edited or harvested. 
-					</li>
-					<?php if (isset($dataSource['qa_flag']) && $dataSource['qa_flag'] == 't'):?>
-					<li>
-						Records entered into the ANDS registry under the data source '<?php echo (isset($dataSource['title']) ? $dataSource['title'] : $dataSource['data_source_key']); ?>' need to be assessed and approved by ANDS staff. 
-						Please contact your ANDS client liaison officer for more information. 
-					</li>
-					<?php endif; ?>
-					<?php if (isset($dataSource['auto_publish']) && $dataSource['auto_publish'] == 't'): // manually ?>
-					<li>
-						Your data source administrator currently has this data source set to 'Manually Publish Records'. Records will need to be manually published from this screen once approved by ANDS.  
-					</li>
-					<?php endif; ?>
-				</ul>
-			</div>
-			
-		</div>
+		<input type="hidden" id="reindexURL" value="<?php echo eAPP_ROOT;?>orca/services/indexer.php?dataSourceKey=<?php echo $data_source_key?>&task=indexDSo"/>
+		<input type="hidden" id="clearIndexURL" value="<?php echo eAPP_ROOT;?>orca/services/indexer.php?dataSourceKey=<?php echo $data_source_key?>&task=clearDS"/>
+		<input type="hidden" id="generateCacheURL" value="<?php echo eAPP_ROOT;?>orca/maintenance/runTasks.php?data_source=<?php echo $data_source_key?>&task=generate_cache"/>
+		<input type="hidden" id="checkQualityURL" value="<?php echo eAPP_ROOT;?>orca/services/indexer.php?dataSourceKey=<?php echo $data_source_key?>&task=checkQuality"/>
 		
 		<div id="mmr_datasource_alert" style="display:none;">
 			<div id="mmr_datasource_alert_title" class="clearfix">
@@ -127,6 +127,154 @@ else
 		
 		<?php 
 		
+
+		/**
+			NEW
+		**/
+		?>
+
+
+		<?php
+			$json = json_decode(getDataSourceStatuses($data_source_key));
+			//We are now extracting the valuable data out from json and put them into an array
+			//of form $status['DRAFT'] => 4 pr something
+			$i=0;$status=array();$placeholder = $json->{'facet_counts'}->{'facet_fields'}->{'status'};
+			for($i=0;$i<sizeof($placeholder);$i+=2){
+				$status[$placeholder[$i]] = $placeholder[$i+1];
+			}
+			$i=0;$classes=array();$placeholder = $json->{'facet_counts'}->{'facet_fields'}->{'class'};
+			for($i=0;$i<sizeof($placeholder);$i+=2){
+				$classes[$placeholder[$i]] = $placeholder[$i+1];
+			}
+			array_multisort($status,SORT_DESC);
+			//var_dump($status);
+		?>
+
+		<div id="tabs">
+		    <ul class="tab-list">
+		    	<li><a href="javascript:void(0);" title="All" class="tab active-tab" name="All">All Records</a></li>
+		    	<?php
+		    		foreach($status as $key=>$s){
+		    			if($s!=0){
+		    				echo '<li><a href="javascript:void(0);" title="'.$s.' Records" class="tab tip" name="'.$key.'">'.$key.'</a><li>';
+		    			}else{
+		    				echo '<li><a href="javascript:void(0);" title="'.$s.' Records" class="tab tip inactive" name="'.$key.'">'.$key.'</a><li>';
+		    			}
+		    		}
+		    	?>
+		    	<li class="rightTab"><a href="javascript:void(0);" id="indexDS" class="smallIcon icon2s tip borderless" tip="ReIndex"><span></span></a></li>
+		    </ul>
+
+
+		    <?php
+		    	/*
+				 * Setting up variables for button configuration in JavaScript
+				 */
+		    	echo '<div class="hide" id="orcaQA">';
+		    		if(userisORCA_QA()) echo 'yes'; else echo 'no';
+		    	echo '</div>';
+		    	echo '<div class="hide" id="orcaLIASON">';
+		    		if(userIsORCA_LIAISON()) echo 'yes'; else echo 'no';
+		    	echo '</div>';
+
+
+
+		    	echo '<div id="All_qaview" class="tab-content qaview"></div>';
+
+
+				/*
+				 * More Work Required Records
+				 * - only visible if there are records of this status
+				 */
+				$MWRclass = '';
+				if ($status['MORE_WORK_REQUIRED'] == 0) $MWRclass = 'hide';
+				
+
+				echo '	<div id="MORE_WORK_REQUIRED" class="tab-content '.$MWRclass.' statusview">
+								<table class="mmr_table" name="MORE_WORK_REQUIRED" count="'.$status['MORE_WORK_REQUIRED'].'"><tr><td>Loading...</td></tr></table>
+							</div>';
+				echo '<div id="MORE_WORK_REQUIRED_qaview" class="tab-content qaview"></div>';
+
+
+		    	/*
+				 * DRAFT Records
+				 * - All users can delete/submit for review
+				 */
+
+		    	echo '	<div id="DRAFT" class="tab-content statusview">
+
+		    				<table class="mmr_table" name="DRAFT" count="'.$status['DRAFT'].'"><tr><td>Loading...</td></tr></table>
+						</div>';
+				echo '<div id="DRAFT_qaview" class="tab-content qaview"></div>';
+
+				/*
+				 * SUBMITTED FOR ASSESSMENT Records
+				 */
+					
+				if ($status['SUBMITTED_FOR_ASSESSMENT'] > 0 || $dataSource['qa_flag'] == 't')
+				{
+
+					echo '	<div id="SUBMITTED_FOR_ASSESSMENT" class="tab-content statusview">
+
+							<table class="mmr_table" name="SUBMITTED_FOR_ASSESSMENT" count="'.$status['SUBMITTED_FOR_ASSESSMENT'].'"><tr><td>Loading...</td></tr></table>
+							</div>';
+					echo '<div id="SUBMITTED_FOR_ASSESSMENT_qaview" class="tab-content qaview"></div>';
+				}
+
+
+				/*
+				 * ASSESSMENT IN PROGRESS Records
+				 */
+				
+				if ($status['ASSESSMENT_IN_PROGRESS'] > 0 || $dataSource['qa_flag'] == 't')
+				{
+
+					echo '	<div id="ASSESSMENT_IN_PROGRESS" class="tab-content statusview">
+
+								<table class="mmr_table" name="ASSESSMENT_IN_PROGRESS" count="'.$status['ASSESSMENT_IN_PROGRESS'].'"><tr><td>Loading...</td></tr></table>
+							</div>';
+					echo '<div id="ASSESSMENT_IN_PROGRESS_qaview" class="tab-content qaview"></div>';
+				}
+
+				/*
+				 * APPROVED Records
+				 */
+				
+				if ($status['APPROVED'] > 0 || $dataSource['auto_publish'] == 't') // manually
+				{
+
+					echo '	<div id="APPROVED" class="tab-content statusview">
+
+								<table class="mmr_table" name="APPROVED" count="'.$status['APPROVED'].'"><tr><td>Loading...</td></tr></table>
+							</div>';
+					echo '<div id="APPROVED_qaview" class="tab-content qaview"></div>';
+				}
+				
+				/*
+				 * PUBLISHED Records
+				 */
+
+				echo '	<div id="PUBLISHED" class="tab-content statusview">
+
+								<table class="mmr_table" name="PUBLISHED" count="'.$status['PUBLISHED'].'"><tr><td>Loading...</td></tr></table>
+							</div>';
+				echo '<div id="PUBLISHED_qaview" class="tab-content qaview"></div>';
+
+		    ?>
+
+		</div>
+
+    <div class="clearfix"></div>
+
+<?php
+	displayMMRNewRecord();
+
+		/**
+			OLD
+		**/
+
+		//echo '<hr/>';
+		/*
 		$draft_array = getDraftRegistryObject(null, $data_source_key);
 		$approved_array = searchRegistry('', '', $data_source_key, null, null, null, APPROVED, null);
 		$approved_array = record2MMRRecordSet(($approved_array ? $approved_array : array()));
@@ -165,7 +313,7 @@ else
 		/*
 		 * More Work Required Records
 		 * - only visible if there are records of this status
-		 */
+		 *
 		if (count($draft_record_set[MORE_WORK_REQUIRED]) > 0)
 		{	
 			displayMMRRecordTable(MORE_WORK_REQUIRED, $draft_record_set[MORE_WORK_REQUIRED], array("<span style='font-weight:normal;'>edit these records and resubmit them for assessment</span>"), true);
@@ -174,7 +322,7 @@ else
 		/*
 		 * DRAFT Records
 		 * - All users can delete/submit for review
-		 */
+		 *
 		
 		$buttons = array();
 		if ($dataSource['qa_flag'] == 't')
@@ -192,7 +340,7 @@ else
 		
 		/*
 		 * SUBMITTED FOR ASSESSMENT Records
-		 */
+		 *
 		
 		$buttons = array();
 		// Minimum level of access for this action
@@ -213,7 +361,7 @@ else
 		
 		/*
 		 * ASSESSMENT IN PROGRESS Records
-		 */
+		 *
 		
 		$buttons = array();
 		if (userIsORCA_QA())
@@ -228,7 +376,7 @@ else
 		
 		/*
 		 * APPROVED Records
-		 */
+		 *
 		
 		if (count($approved_array) > 0 || $dataSource['auto_publish'] == 't') // manually
 		{
@@ -241,16 +389,16 @@ else
 		
 		/*
 		 * PUBLISHED Records (last 30 days)
-		 */
+		 *
 
 		$buttons = array();
 		$buttons[] = "<input type='submit' name='DELETE_RECORD' value='Delete' disabled='disabled' />";
 			
 		displayMMRRecordTable(PUBLISHED, $published_array, $buttons, false);
+		*/
 		
 		
 		
-		displayMMRNewRecord();
 		//displayMMRRecordTable("DRAFT", $record_set, array("buttons"), true);
 		
 	}
@@ -443,6 +591,7 @@ function displayMMRRecordTable($status, array $record_set = array(), array $butt
 			?>
 			<td><div style="overflow:hidden;white-space: nowrap; width:100px;"><a <?php echo 'onclick="'.$onClickLink.'"'; ?> class="nodecor" title="<?php echo htmlentities($record['key']);?>"><?php echo htmlentities($record['key']);?></a></div></td>
 			<td><div style="overflow:hidden; white-space: nowrap; width:200px;"><a <?php echo 'title="'.$record['title'].'" onclick="'.$onClickLink.'"'; ?> class="nodecor"><?php echo $record['title'];?></a></div></td>
+
 			<td><?php echo $record['created']; if ($record['last_changed_by'] != '') { echo "<br/><span class='mmr_changed_by'>by: " . $record['last_changed_by'] . "</span>"; }?></td>
 			<td><?php echo $record['class'];?></td>
 			<td><span class="mmr_infoControl">
@@ -566,6 +715,18 @@ function displayMMRNewRecord()
 	<?php 
 }
 
+function getDataSourceStatuses($dataSourceKey){
+	global $solr_url;
+	$q = 'data_source_key:("'.$dataSourceKey.'")';
+	$fields = array(
+		'q'=>$q,'version'=>'2.2','start'=>'0','rows'=>'1', 'wt'=>'json',
+		'fl'=>'key'
+	);
+	$extra = '&facet=true&facet.field=status&&facet.field=class&facet.limit=-1&facet.mincount=0';
+	$content = solr($solr_url, $fields, $extra);
+	return $content;
+}
+
 function displayMMRDataSourceSwitcher(array $dataSources = array(), $selected_key = '')
 {
 	if (userIsORCA_ADMIN())
@@ -574,33 +735,74 @@ function displayMMRDataSourceSwitcher(array $dataSources = array(), $selected_ke
 	}
 	
 	?>
+
 		
 		
 		<form id="data_source_history_form" name="data_source_history_form" action="my_records.php" method="get">
+			<div id="select_ds_container">
+				<?php if ($selected_key == ''):?>
+					<div class="content_block">Select the Data Source you wish to manage:</div>
+				<?php else:?>
+					<div class="content_block">Managing My Records for:</div>
+				<?php endif;?>
+				<div class="content_block">
+					<select data-placeholder="Choose a Datasource" name="data_source" id="data_source" style="width:300px;" onchange="this.form.submit();" class="chzn-select" tab-index="2">
+					<option value=""></option>
+					<?php
+						// Present the results.
+						for( $i=0; $i < count($dataSources); $i++ ){
+							$dataSourceKey = $dataSources[$i]['data_source_key'];
+							$dataSourceTitle = $dataSources[$i]['title'];	
+							print("<option value=\"".$dataSourceKey."\"" . ($selected_key == $dataSourceKey ? " selected" : "").">".esc($dataSourceTitle)."</option>\n");
+						}
 
-	<?php if ($selected_key == ''):?>
-		Select the Data Source you wish to manage:
-	<?php else:?>
-		Managing My Records for:
-	<?php endif;?>
-			<select name="data_source" id="data_source" style="width:300px;" onchange="this.form.submit();">
-			<option value=""></option>
-			<?php
+					?>
+					</select>
+				</div>
+
 				
-				// Present the results.
-				for( $i=0; $i < count($dataSources); $i++ )
-				{
-					$dataSourceKey = $dataSources[$i]['data_source_key'];
-					$dataSourceTitle = $dataSources[$i]['title'];	
-					print("<option value=\"".$dataSourceKey."\"" . ($selected_key == $dataSourceKey ? " selected" : "").">".esc($dataSourceTitle)."</option>\n");
-				}
-			
-			?>
-			</select>
+				<div class="content_block">
+					<div class="buttons">
 
-			<a href="" id="mmr_information_show">(more details)</a>
-		
+						<a href="javascript:void(0);" class="button left pressed viewswitch" name="statusview">Status</a><a href="javascript:void(0);" class="button right viewswitch"name = "qaview">Quality</a>
+
+					</div>
+				</div>
+				<div class="content_block">
+					<a class="pop" href="#" title="This tool allows you to view and manage the records which you have recently created, edited or harvested.">(more details)</a>
+					<!--a href="" id="mmr_information_show">(more details)</a-->
+				</div>
+
+			</div>
+
+			<div class="clearfix"></div>
+
+
+			<div id="mmr_datasource_information" class="hide">
+
+			 <a href="" id="mmr_information_hide">Hide Information</a>
+			 <a href="<?php echo eAPP_ROOT . "orca/admin/data_source_view.php?data_source_key=" . rawurlencode($data_source_key); ?>" id="mmr_manage_data_source">Manage this Data Source</a>
+				<div id="mmr_ds_moredetails">
+					<ul style="padding-left:40px;">
+						<li>
+							This tool allows you to view and manage the records which you have recently created, edited or harvested. 
+						</li>
+						<?php if (isset($dataSource['qa_flag']) && $dataSource['qa_flag'] == 't'):?>
+						<li>
+							Records entered into the ANDS registry under the data source '<?php echo (isset($dataSource['title']) ? $dataSource['title'] : $dataSource['data_source_key']); ?>' need to be assessed and approved by ANDS staff. 
+							Please contact your ANDS client liaison officer for more information. 
+						</li>
+						<?php endif; ?>
+						<?php if (isset($dataSource['auto_publish']) && $dataSource['auto_publish'] == 't'): // manually ?>
+						<li>
+							Your data source administrator currently has this data source set to 'Manually Publish Records'. Records will need to be manually published from this screen once approved by ANDS.  
+						</li>
+						<?php endif; ?>
+					</ul>
+				</div>
+			</div>
+
 		</form>
-		
+
 		<?php 
 }

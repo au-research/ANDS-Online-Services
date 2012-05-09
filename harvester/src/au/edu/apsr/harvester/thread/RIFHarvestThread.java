@@ -246,7 +246,7 @@ public class RIFHarvestThread extends HarvestThread
                 }
                 log.info(harvest.getHarvestID() + " OLD resumption token = " + getResumptionToken());
                 log.info(harvest.getHarvestID() + " resumption token = " + listRecords.getResumptionToken());
-                if (listRecords.getResumptionToken().length() > 0)
+                if (listRecords.getResumptionToken().length() > 0 && getResumptionToken() != listRecords.getResumptionToken())
                 {
                     if(!getResumptionToken().equals(listRecords.getResumptionToken()))
                     {

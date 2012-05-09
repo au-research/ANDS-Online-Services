@@ -132,83 +132,106 @@ if($solrUrl)
 	}	
 	else 
 	{
+		echo "<h2>Reindexing SOLR</h2>";
+		bench(0);
+		bench(1);
 		$allKeys = getAllRegistryObjectKey();
 		$arraySize = sizeof($allKeys);
-		print $arraySize . '<br/>';
+		echo "Took " . bench(1) . "s to get all keys..." . $arraySize . "<br/><hr/><br/>";
 		ob_flush();flush();
-		$chunkSize = 100;
+		$chunkSize = 500;
 		$j = 1;
 		$result = 'test';
+		bench(1);
 		for($i = 0; $i < $arraySize ; $i++)
 		{				
+			
 			$key = $allKeys[$i]['registry_object_key'];		
 			$rifcsContent .= getRegistryObjectXMLforSOLR($key, true);
-///			print $key . '<br/><br/>';ob_flush();flush();
-			if($i % $chunkSize == 0 || $i == ($arraySize -1))
+
+			
+			if(($i % $chunkSize == 0 && $i != 0) || $i == ($arraySize -1))
 			{					
-					$rifcs = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
-					$rifcs .='<registryObjects xmlns="http://ands.org.au/standards/rif-cs/registryObjects" '."\n";
-					$rifcs .='                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '."\n";
-					$rifcs .='                 xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects '.gRIF_SCHEMA_URI.'">'."\n";	
-					$rifcs .= $rifcsContent;			
-					$rifcs .= "</registryObjects>\n";
+
+
+					$rifcs = wrapRegistryObjects($rifcsContent);
+					$solrrifcs = transformToSolr($rifcs);
+					printf("%-145s", "<i>Fetching extRif for records " . $i . " to " . ($i+$chunkSize) . "... [took ".bench(1)."s]</i>"); 
+					bench(2);
+
+					if (strlen($solrrifcs) == 0)
+					{
+						echo $rifcs;
+					}				
+					else
+					{					
+						$result = curl_post($solrUrl, $solrrifcs);
+					}
+
+
+	
+					$rifcs .= wrapRegistryObjects($rifcsContent);
+
 					$rifcs = transformToSolr($rifcs);									
 					$result = curl_post($solrUrl, $rifcs);
+
 					print($j.': ('.$i.')registryObjects is sent to solr ' . $result . "<br/>");					
+
 					
 					$result = curl_post($solrUrl.'?commit=true', '<commit waitFlush="false" waitSearcher="false"/>');
-					print(time() . ' commit: '.$result. "<br/>");
+					printf("%-145s", "Sending " . $chunkSize ." records to SOLR... [took ".bench(2)."s]</i> (Commit Result: ".$result.")<br/>"); 
 					ob_flush();flush();
 					$rifcsContent = '';
 					$j++;
+					bench(1);
 			}
 		}
-			$result = curl_post($solrUrl.'?optimize=true', '<optimize waitFlush="false" waitSearcher="false"/>');
-			print ('optimise: '.$result. "<br/>");
+		$result = curl_post($solrUrl.'?optimize=true', '<optimize waitFlush="false" waitSearcher="false"/>');
+		print ('optimise: '.$result. "<br/>");
+		echo "<hr/>Took " . bench(0) ."s to reindex...";
 	}
 
 }
+
+
 else if($key && $foo)
 {
+	$result =  getRegistryObjectXMLforSOLR($key);
 	header("Content-Type: text/xml; charset=UTF-8", true);
-	$rifcs = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
 	// BEGIN: XML Response
-	// =============================================================================
-	$rifcs .='<registryObjects xmlns="http://ands.org.au/standards/rif-cs/registryObjects" '."\n";
-	$rifcs .='                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '."\n";
-	$rifcs .='                 xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects '.gRIF_SCHEMA_URI.'">'."\n";
-	if($registryObject = getRegistryObject($key))
-	{
-		$rifcs .= getRegistryObjectXMLforSOLR($key, true);
-		
-	}
-	$rifcs .= "</registryObjects>\n";
+
+
+	$rifcs = wrapRegistryObjects($result);
+
 	$rifcs = transformToSolr($rifcs);
+
 	// TODO : this is needed untill we stop having rifcs 1.0 elements in the database!!!
 	// so delete it once the green and orange is imp[lemented + all data is migrated to rifcs 1.2 placeholders!!
 
 	print $rifcs;
 }
+
+
 else if($key)
 {
 	header("Content-Type: text/xml; charset=UTF-8", true);
-	$rifcs = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
-	// BEGIN: XML Response
-	// =============================================================================
-	$rifcs .='<registryObjects xmlns="http://ands.org.au/standards/rif-cs/registryObjects" '."\n";
-	$rifcs .='                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '."\n";
-	$rifcs .='                 xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects '.gRIF_SCHEMA_URI.'">'."\n";
+
+
+
+	$rifcs = '';
+
 	if($registryObject = getRegistryObject($key))
 	{
 		$rifcs .= getRegistryObjectXMLforSOLR($key, true);
 		
 	}
-	$rifcs .= "</registryObjects>\n";
+	$rifcs = wrapRegistryObjects($rifcs);
 	// TODO : this is needed untill we stop having rifcs 1.0 elements in the database!!!
 	// so delete it once the green and orange is imp[lemented + all data is migrated to rifcs 1.2 placeholders!!
 
 	print $rifcs;
 }
+/*
 elseif ($getRelated){
 	header("Content-Type: text/xml; charset=UTF-8", true);
 	$rifcs = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
@@ -224,7 +247,7 @@ elseif ($getRelated){
 	$rifcs .= "</registryObjects>\n";	
 	print $rifcs;	
 }
-
+*/
 
 // END: XML Response
 // =============================================================================

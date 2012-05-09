@@ -1,4 +1,5 @@
 <?php
+
 function addDoisClient($client_name,$client_contact_name,$client_contact_email,$ip_address,$datacite_prefix,$app_id)
 {
 	global $gCNN_DBS_DOIS;
@@ -57,6 +58,7 @@ function addDoisClientDomain($client_id,$client_domain)
 function deleteClientDomainList($client_id)
 {
 	global $gCNN_DBS_DOIS;
+	//echo "deleting the domain list for ".$client_id."<br />";
 	$resultSet = null;
 	$strQuery = 'DELETE FROM public.doi_client_domains WHERE client_id = $1';
 	$params = array($client_id);

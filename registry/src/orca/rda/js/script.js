@@ -28,7 +28,6 @@ $(document).ready(function(){
 
 	if(enableWarning) $('body').prepend(warningDiv);
 
-
 	//router
 	if(window.location.href.indexOf('https://')==0){
 		var thisurl = window.location.href;
@@ -36,6 +35,7 @@ $(document).ready(function(){
 		window.location.href=thisurl;
 	}
 		
+	/*
 	if(window.location.href.indexOf('/view')>=0){
 		initViewPage();
 		if(window.location.href.indexOf('printview')>=0) initPrintViewPage();
@@ -52,6 +52,46 @@ $(document).ready(function(){
 	}else if(window.location.href.indexOf('preview')>=0){
 		initPreviewPage();
 	}
+	*/
+	if(window.location.href==secure_base_url)
+	{
+			window.location.href=base_url;
+	}
+		
+	if ($('#rda_activity_name').text() == "view")
+	{
+		initViewPage();
+	} 
+	else if ($('#rda_activity_name').text() == "print-view")
+	{
+		initPrintViewPage();
+	} 
+	else if ($('#rda_activity_name').text() == "institution-view")
+	{
+		initInstitutionViewPage();
+	} 	
+	else if ($('#rda_activity_name').text() == "homepage")
+	{
+		initHomePage();
+	}
+    else if ($('#rda_activity_name').text() == "search")
+   	{
+   		initSearchPage();
+   	}
+    else if ($('#rda_activity_name').text() == "contact")
+   	{
+   		initContactPage();
+   	}
+    else if ($('#rda_activity_name').text() == "help")
+   	{
+   		initHelpPage();
+   	}
+	else if ($('#rda_activity_name').text() == "preview")
+   	{
+   		initPreviewPage();
+   	}
+	
+	
 	$('#clearSearch').tipsy({live:true, gravity:'se'});
 	
 
@@ -411,9 +451,14 @@ $(document).ready(function(){
 	
 	function initViewPage(){
 
-		drawMap();//map drawing
-		
-		
+		try
+		{
+			drawMap();//map drawing
+		} catch (e)
+		{
+			console.log("Map could not be loaded/drawn.");
+		}
+
 		if(!$.browser.msie){
 		//hide all descriptions and headings
 		$('.descriptions div, .descriptions h3').hide();
@@ -426,6 +471,7 @@ $(document).ready(function(){
 				}
 			}
 		});
+		
 		
 		
 		//if there is no brief, brief will be the first full
@@ -510,6 +556,174 @@ $(document).ready(function(){
         }
         return false;
 	}
+///////////////////////
+// Set up the institutional page views by using ajax to load all the group stats
+/////////////////////////
+	
+	function initInstitutionViewPage(){
+		var key = $('#key').html();
+		var group = location.href.substr(location.href.indexOf("groupName=")+10,location.href.length);
+		group = encodeURIComponent(decodeURIComponent(group));
+		initCannedText(group,key);
+		initContentsBox(group);
+		initSubjectsBox(group);
+		initResearchGroupsBox(group,key);
+		initCollectionsAddedBox(group);
+		initCollectionsVisitedBox();
+		initCollectionsCitedBox();	
+	
+	}	
+	function initCannedText(group,key){
+		var sort='index';
+		function loadCannedText(sort,group){//load Institution Page Stat
+			$.ajax({
+	  			type:"GET",   
+	  			url: base_url+"/view_part/cannedText/"+sort+"/"+group+"/"+key,   
+	  				success:function(msg){	
+	  					if(msg!='')
+	  					{
+	  						$('#cannedShowcase').html(msg);
+	  					}
+	  				},
+	  				error:function(msg){
+	  					//$('#debug').append('doSearch error: '+msg+'<br/>');
+	  				}
+	  			});
+		}	
+		loadCannedText(sort,group);
+	}	
+	function initContentsBox(group){
+		var sort='index';
+		function loadContentStat(sort,group){//load Institution Page Stat
+			$.ajax({
+	  			type:"GET",   
+	  			url: base_url+"/view_part/contentStat/"+sort+"/"+group,   
+	  				success:function(msg){	
+	  					if(msg!='')
+	  					{
+	  						$('#contents').html(msg);
+	  					}else{
+		  					$('#contentRightBox').css('display','none');
+	  					}
+	  				},
+	  				error:function(msg){
+	  					//$('#debug').append('doSearch error: '+msg+'<br/>');
+	  				}
+	  			});
+		}	
+		loadContentStat(sort,group);
+	}
+	
+	function initSubjectsBox(group){
+
+		var sort='index';
+		function loadSubjectStat(sort,group){//load Institution Page Stat
+			$.ajax({
+	  			type:"GET",   
+	  			url: base_url+"/view_part/subjectStat/"+sort+"/"+group,   
+	  				success:function(msg){	
+	  					if(msg!='')
+	  					{
+	  						$('#subjects').html(msg);
+	  						$("ul.moreSubjects").each(function() {
+	  						    $("li:gt(5)", this).hide(); 
+	  						    $("li:nth-child(6)", this).after("<a href='#' class=\"more\">More...</a>");
+	  						});
+	  						$("a.more").live("click", function() {
+	  							//console.log($(this).parent());
+	  							$(this).parent().children().slideDown();
+	  							$(this).remove();
+	  						    return false;
+	  						});			  						
+	  					}else{
+		  					$('#subjectRightBox').css('display','none');
+	  					}
+	  				},
+	  				error:function(msg){
+	  					//$('#debug').append('doSearch error: '+msg+'<br/>');
+	  				}
+	  			});
+		}	
+		loadSubjectStat(sort,group);
+
+	}	
+	
+	function initResearchGroupsBox(group,key){
+		var sort='dateCreated';
+		function loadGroupStat(sort,group){//load Institution Page Stat
+			$.ajax({
+	  			type:"GET",   
+	  			url: base_url+"/view_part/groupStat/"+sort+"/"+group+"/"+key,   
+	  				success:function(msg){	
+	  					if(msg!=''){
+	  						$('#researchGroups').html(msg);
+	  						$("ul.moreGroups").each(function() {
+	  							$("li:gt(5)", this).hide(); 
+	  							$("li:nth-child(6)", this).after("<a href='#' class=\"more\">More...</a>");
+	  						});
+	  						$("a.more").live("click", function() {
+  							//console.log($(this).parent());
+	  							$(this).parent().children().slideDown();
+	  							$(this).remove();
+	  							return false;
+	  						});	 
+	  					}else{
+	  						$('#groupsRightBox').css('display','none');
+	  					}
+	  				},
+	  				error:function(msg){
+	  					//$('#debug').append('doSearch error: '+msg+'<br/>');
+	  				}
+	  			});
+		}	
+		loadGroupStat(sort,group);			
+	}
+	
+	function initCollectionsAddedBox(group){
+		
+			var sort='dateCreated';
+			function loadCollectionStat(sort,group){//load Institution Page Stat
+				$.ajax({
+		  			type:"GET",   
+		  			url: base_url+"/view_part/collectionStat/"+sort+"/"+group,   
+		  				success:function(msg){
+		  					if(msg!=''){
+		  						$('#addedRightBox').html();
+		  						$('#addedRightBox').html(msg);
+		  					}else{
+		  						$('#addedRightBox').css('display','none');
+		  					}
+		  				},
+		  				error:function(msg){
+		  					//$('#debug').append('doSearch error: '+msg+'<br/>');
+		  				}
+		  			});
+			}	
+			loadCollectionStat(sort,group);		
+	}	
+	
+	function initCollectionsVisitedBox(){
+		// Need to spec how this is to be determined
+		//$('#collectionsVisited').html("<p>Needs to be developed...</p>");
+		$('#visitedRightBox').css('display','none');
+	}	
+	
+	function initCollectionsCitedBox(){
+		//Need to spec how this is to be determined
+		//$('#collectionsCited').html("<p>Needs to be developed...</p>");
+		$('#citedRightBox').css('display','none');
+	}	
+///////////////////////
+//End insitutional page view functions
+/////////////////////////	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	function setupSeealsoBtns(){
 		$('.button').button();
@@ -1092,7 +1306,7 @@ $(document).ready(function(){
 
 		$('.hp-class-item').live('click', function(){
 			var id = $(this).attr('id');
-			resultSort='listTitle asc';
+			resultSort='s_list_title asc';
 			changeHashTo(formatSearch(search_term,1,id));
 		});
 		

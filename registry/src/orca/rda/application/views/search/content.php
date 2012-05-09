@@ -75,10 +75,9 @@ limitations under the License.
 			
 			foreach($json->{'response'}->{'docs'} as $r)
 			{
-				//var_dump($r->{'description_value'});
 				$type = $r->{'type'};
 				$ro_key = $r->{'key'};
-				$name = $r->{'listTitle'};
+				$name = $r->{'list_title'};
 				if($name=='')$name='(no name/title)';
 				$descriptions = array();if(isset($r->{'description_value'})) $descriptions = $r->{'description_value'};
 				$description_type=array();if(isset($r->{'description_type'})) $description_type = $r->{'description_type'};
@@ -102,9 +101,10 @@ limitations under the License.
 					$spatial = $r->{'spatial_coverage'};
 					$center = $r->{'spatial_coverage_center'}[0];
 				}
+				
 				$subjects='';
-				if(isset($r->{'subject_value'})){
-					$subjects = $r->{'subject_value'};
+				if(isset($r->{'subject_value_resolved'})){
+					$subjects = $r->{'subject_value_resolved'};
 				}
 
 				echo '<div class="search_item" itemscope itemType="http://schema.org/Thing">';
@@ -172,8 +172,20 @@ limitations under the License.
 				}
 				echo '</div>';
 			}
-			
 			echo '<div class="toolbar clearfix bottom-corner">';
+			if(displaySubscriptions() )
+			{
+			$dataSourceString = '';	
+			$q = $_POST['q'];
+				if($q=='')$q = '*:*';
+				$classFilter = $_POST['classFilter'];
+				$typeFilter = $_POST['typeFilter'];
+				$groupFilter = $_POST['groupFilter'];
+				$subjectFilter = $_POST['subjectFilter'];
+				if(isset($_POST['dataSource'])) $dataSourceString = "&dataSource=".$_POST['dataSource'];
+				$queryStr = '?q='.$q.$dataSourceString.'&classFilter='.$classFilter.'&typeFilter='.$typeFilter.'&groupFilter='.$groupFilter.'&subjectFilter='.$subjectFilter;	
+				echo "<div id='subscriptions'><div class='rss_icon'></div> Subscribe to this web feed. <a href='".base_url()."search/rss/".$queryStr."&subscriptionType=rss'>RSS</a>/<a href='".base_url()."search/atom/".$queryStr."&subscriptionType=atom'>ATOM</a></div>";	
+			}		
 			$this->load->view('search/pagination');
-			echo '</div>';
+			echo '</div>';		
 		?>

@@ -25,7 +25,7 @@ class Home extends CI_Controller {
 		$this->load->library('user_agent');
 		$data['user_agent']=$this->agent->browser();
 		//echo $data['user_agent'];
-		
+		$data['activity_name'] = 'homepage';
 		$this->load->view('home_page', $data);
 	}
 	
@@ -44,12 +44,14 @@ class Home extends CI_Controller {
 	public function help(){
 		$this->load->library('user_agent');
 		$data['user_agent']=$this->agent->browser();
+		$data['activity_name'] = 'help';
 		$this->load->view('content/help', $data);
 	}
 	
 	public function contact(){
 		$this->load->library('user_agent');
 		$data['user_agent']=$this->agent->browser();
+		$data['activity_name'] = 'contact';
 		$this->load->view('content/contact_form', $data);
 	}
 	
@@ -76,6 +78,7 @@ class Home extends CI_Controller {
 	public function homepage(){
 		$this->load->model('Solr');
 		$data['json'] = $this->Solr->getNCRISPartners();
+		$data['activity_name'] = 'homepage';
 		$this->load->view('home_page', $data);
 	}
 	
