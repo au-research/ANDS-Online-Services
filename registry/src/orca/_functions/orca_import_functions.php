@@ -1807,46 +1807,26 @@ function getRelatedXml($dataSource,$rifcs,$objectClass){
 
 function runQualityCheck($rifcs, $objectClass, $dataSource, $output, $relatedObjectClassesStr='')
 {
-
-	global $qaProc;
-	$reverseLinks = 'false';
-	$dS = getDataSources($dataSource, null);
-	$allow_reverse_internal_links = $dS[0]['allow_reverse_internal_links'];
-	$allow_reverse_external_links = $dS[0]['allow_reverse_external_links'];
-	if($allow_reverse_internal_links == 't' || $allow_reverse_external_links == 't')
-	{
-		$reverseLinks = 'true';
-	}
+	global $qualityTestproc;
 	$relRifcs = getRelatedXml($dataSource,$rifcs,$objectClass);
 	$registryObjects = new DomDocument();
 	$registryObjects->loadXML($relRifcs);
-	$qaProc->setParameter('', 'dataSource', $dataSource);
-	$qaProc->setParameter('', 'reverseLinks', $reverseLinks);
-	$qaProc->setParameter('', 'output', $output);
-	$qaProc->setParameter('', 'relatedObjectClassesStr', $relatedObjectClassesStr);
-	$result = $qaProc->transformToXML($registryObjects);
-
+	$qualityTestproc->setParameter('', 'dataSource', $dataSource);
+	$qualityTestproc->setParameter('', 'output', $output);
+	$qualityTestproc->setParameter('', 'relatedObjectClassesStr', $relatedObjectClassesStr);
+	$result = $qualityTestproc->transformToXML($registryObjects);
 	return $result;		
 }
 
 
 function runQualityCheckonDom($registryObjects, $dataSource, $output, $relatedObjectClassesStr)
 {
-	global $qaProc;
-	$reverseLinks = 'false';
-	$dS = getDataSources($dataSource, null);
-	$allow_reverse_internal_links = $dS[0]['allow_reverse_internal_links'];
-	$allow_reverse_external_links = $dS[0]['allow_reverse_external_links'];
-	if($allow_reverse_internal_links == 't' || $allow_reverse_external_links == 't')
-	{
-		$reverseLinks = 'true';
-	}
-	$qaProc->setParameter('', 'dataSource', $dataSource);
-	$qaProc->setParameter('', 'reverseLinks', $reverseLinks);
-	$qaProc->setParameter('', 'output', $output);
-	$qaProc->setParameter('', 'relatedObjectClassesStr', $relatedObjectClassesStr);
-	$result = $qaProc->transformToXML($registryObjects);
 
+	global $qualityTestproc;
+	$qualityTestproc->setParameter('', 'dataSource', $dataSource);
+	$qualityTestproc->setParameter('', 'output', $output);
+	$qualityTestproc->setParameter('', 'relatedObjectClassesStr', $relatedObjectClassesStr);
+	$result = $qualityTestproc->transformToXML($registryObjects);
 	return $result;		
 }
 
