@@ -35,6 +35,7 @@ $(document).ready(function() {
 	}
 	//console.log($.cookie('currentView'));
 
+	$('#mmr_datasource_information').hide();
 
 	//MMR Tables
 	var dsKey = $('#dataSourceKey').val();
@@ -306,6 +307,11 @@ $(document).ready(function() {
 			action = 'APPROVE';
 		}else if(com=='Publish'){
 			action = 'PUBLISH';
+		}else if(com=='Mark as Gold Standard'){
+			if(confirm('You are about to flag '+numKeys+' registry objects as gold standard. Do you want to continue?')){
+				action = 'FLAG_GOLD';
+			}
+			
 		}
 		//alert($("#elementSourceURL").val());
 
@@ -510,6 +516,7 @@ $(document).ready(function() {
 									url:$('#reindexURL').val(),
 									success:function(data){
 										$('#indexDS').html('<span></span>');
+										//console.log(data);
 								    	$('.tab-content').css('opacity',1.0);
 								    	//location.reload();
 										$('.mmr_table').each(function(){
@@ -563,9 +570,9 @@ $(document).ready(function() {
 	
 	$.blockUI.defaults.css.width = '503px';
 	
-	MMR_initStatusCookie();
+	//MMR_initStatusCookie();
 	
-	if(MMR_datasource_info_visible == "false")
+	/*if(MMR_datasource_info_visible == "false")
 	{
 		$('#mmr_datasource_information').hide();
 		$('#mmr_information_show').show();
@@ -574,7 +581,7 @@ $(document).ready(function() {
 	{
 		$('#mmr_datasource_information').show();
 		$('#mmr_information_show').hide();
-	}
+	}*/
 
 	
 	$('#mmr_information_hide').live('click', function(e){

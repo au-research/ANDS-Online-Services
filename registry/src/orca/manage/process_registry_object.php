@@ -112,6 +112,7 @@ else if($task ==  'flag_regobj')
 	{	
 		include('_processes/flag_regobj.php');
 	}
+
 	
 	
 require '../../_includes/finish.php';
@@ -187,6 +188,8 @@ function saveDraftRegistryObject($rifcs, $objectClass, $dataSource ,$keyValue, $
 	{
 		deleteDraftRegistryObject($dataSource, $keyValue);		
 	}
+
+	addSolrIndex($keyValue);
 }
 
 

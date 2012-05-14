@@ -523,6 +523,88 @@ function getComplexNameTypesXML($registryObjectKey, $elementName, $registryObjec
 	return $xml;
 }
 
+function getNamePartsXMLforSOLR($complex_name_id,$registryObjectClass)
+{
+	$display_title = '';
+	$list_title = '';
+
+	$nameParts = getNameParts($complex_name_id);		
+		if (!is_array($nameParts) || count($nameParts) == 0)
+		{
+			$display_title = "(no name/title)";
+			$list_title = "(no name/title)";
+		}
+		else if(count($nameParts) == 1)
+		{
+			$display_title = trim($nameParts[0]['value']);
+			$list_title = trim($nameParts[0]['value']);
+		}
+		else 
+		{
+			if ($registryObjectClass == 'party')
+			{
+				$partyNameParts = array();
+				$partyNameParts['title'] = array();
+				$partyNameParts['suffix'] = array();
+				$partyNameParts['initial'] = array();
+				$partyNameParts['given'] = array();
+				$partyNameParts['family'] = array();
+				$partyNameParts['user_specified_type'] = array();
+
+				foreach ($nameParts AS $namePart)
+				{
+					if (in_array(strtolower($namePart['type']), array_keys($partyNameParts)))
+					{
+						$partyNameParts[strtolower($namePart['type'])][] = trim($namePart['value']);
+					} 
+					else 
+					{
+						$partyNameParts['user_specified_type'][] = trim($namePart['value']);
+					}
+				}
+					$display_title = 	(count($partyNameParts['title']) > 0 ? implode(" ", $partyNameParts['title']) . " " : "") . 
+										(count($partyNameParts['given']) > 0 ? implode(" ", $partyNameParts['given']) . " " : "") . 
+										(count($partyNameParts['initial']) > 0 ? implode(" ", $partyNameParts['initial']) . " " : "") . 
+										(count($partyNameParts['family']) > 0 ? implode(" ", $partyNameParts['family']) . " " : "") . 
+										(count($partyNameParts['suffix']) > 0 ? implode(" ", $partyNameParts['suffix']) . " " : "") . 
+										(count($partyNameParts['user_specified_type']) > 0 ? implode(" ", $partyNameParts['user_specified_type']) . " " : ""); 
+
+					foreach ($partyNameParts['given'] AS &$givenName)
+					{
+						$givenName = (strlen($givenName) == 1 ? $givenName . "." : $givenName);
+					}
+
+					foreach ($partyNameParts['initial'] AS &$initial)
+					{
+						$initial = $initial . ".";
+					}
+
+					$list_title = 	(count($partyNameParts['family']) > 0 ? implode(" ", $partyNameParts['family']) : "") .
+										(count($partyNameParts['given']) > 0 ? ", " . implode(" ", $partyNameParts['given']) : "") . 
+										(count($partyNameParts['initial']) > 0 ? " " . implode(" ", $partyNameParts['initial']) : "") . 
+										(count($partyNameParts['title']) > 0 ? ", " . implode(" ", $partyNameParts['title']) : "") . 
+										(count($partyNameParts['suffix']) > 0 ? ", " . implode(" ", $partyNameParts['suffix']) : "") . 
+										(count($partyNameParts['user_specified_type']) > 0 ? " " . implode(" ", $partyNameParts['user_specified_type']) . " " : ""); 
+
+			}
+			else
+			{
+				$np = array();
+				foreach ($nameParts as $namePart)
+				{
+					$np[] = trim($namePart['value']);
+				}
+
+				$display_title = implode(" ", $np);
+				$list_title = implode(" ", $np);
+			}
+		}
+
+	if($list_title) {$names = "<extRif:listTitle>".esc($list_title)."</extRif:listTitle>\n";}else{$names='';}	
+	$names .= "<extRif:displayTitle>".esc($display_title)."</extRif:displayTitle>\n";
+	return $names;
+}
+
 function getNamePartsXML($complex_name_id)
 {
 	$xml = '';

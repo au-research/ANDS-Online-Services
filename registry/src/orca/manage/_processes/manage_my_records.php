@@ -313,12 +313,19 @@ switch(getQueryValue('action'))
 		
 	break;
 	
+	case "FLAG_GOLD":
+		foreach($keys as $key){
+			setGoldFlag($key);
+		}
+		$response['responsecode']="1";
+		echo json_encode($response);
+		die();
+
 	// if no action matches
 	default:
 		$response['response'] = "Invalid Action";
 		echo json_encode($response);
 		die();
-	
 }		
 
 

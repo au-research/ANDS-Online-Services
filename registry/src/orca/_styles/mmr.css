@@ -40,6 +40,8 @@ a.icon {
     -moz-transition: border .218s;
     -o-transition: border-color .218s;
     transition: border-color .218s;
+
+    text-align:center;
 }
 
 a.smallIcon{
@@ -71,6 +73,8 @@ a.smallIcon{
     -moz-transition: border .218s;
     -o-transition: border-color .218s;
     transition: border-color .218s;
+
+    text-align:center;
 }
 
 
@@ -456,6 +460,8 @@ div.ASSESSMENT_IN_PROGRESS_table{border-left:10px solid #0B2E59;}
 div.PUBLISHED_table{border-left:10px solid limeGreen;}
 div.APPROVED_table{border-left:10px solid #EDD155;}
 div.MORE_WORK_REQUIRED_table{border-left:10px solid #6A4A3C;}
+
+div.flexigrid a{text-decoration:none;}
 
 
 .DRAFT_status{background: #C60 !important; color:white;text-shadow: 0 1px 0 #000;font-weight:bold;}

@@ -197,18 +197,26 @@ function searchRecords($status){
 		if(isset($doc->{'warning_count'})){
 			$warning_count = $doc->{'warning_count'};
 		}
+
+		$qualityLevelStr = '<a href="javascript:;" class="smallIcon tip">'.$doc->{'quality_level'}.'<span></span></a>';
+
+
+		$goldFlag = '';
+		if(isset($doc->{'gold_status_flag'}) && ($doc->{'gold_status_flag'}==1)){
+			$goldFlag = ' (GOLD) ';
+		}
 		
 		$entry = array(
 					'id' => $doc->{'key'},
 					'cell' => array(
 
 							'<a href="'.$view_link.'">'.$doc->{'key'}.'</a>',
-							'<a href="'.$view_link.'">'.$doc->{'list_title'}.'</a>',
+							'<a href="'.$view_link.'">'.$doc->{'list_title'}.$goldFlag.'</a>',
 
 							$date_modified,
 							$doc->{'class'},
 							$error_count,
-							$doc->{'quality_level'},
+							$qualityLevelStr,
 							$flagButton,
 							$btnStr,
 							$doc->{'status'}

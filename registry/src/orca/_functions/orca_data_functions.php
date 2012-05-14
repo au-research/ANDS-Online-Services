@@ -2452,6 +2452,14 @@ function setDraftFlag($draft_key, $data_source, $flag)
 	}
 }
 
+function setGoldFlag($key)
+{
+	global $gCNN_DBS_ORCA;
+    $strQuery = 'UPDATE dba.tbl_registry_objects SET gold_status_flag = 1 WHERE registry_object_key = $1';
+    $params = array($key);
+    $resultSet = @executeQuery($gCNN_DBS_ORCA, $strQuery, $params);	  		
+}
+
 
 
 function insertTaskRequest($task_type, $created_by, $param_1='', $param_2='', $param_3='', $trigger_time)
