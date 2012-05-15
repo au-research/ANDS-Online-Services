@@ -87,6 +87,7 @@ $providerTypeLabelClass = '';
 $harvestMethodLabelClass = '';
 $pushNLALabelClass = '';
 $createPrimaryClass = '';
+$institutionPagesClass = '';
 $draft_array = getDraftRegistryObject(null, $dataSourceKey);
 $draft_record_set = array(
 						MORE_WORK_REQUIRED => 0,
@@ -134,14 +135,11 @@ if( strtoupper(getPostedValue('action')) == "SAVE" )
 					//check if the automated institutional page registry object actually already exists;
 					$key  = "Institution:".$group['object_group'];
 					$thePage = getRegistryObject($key, $overridePermissions = true);
-					print_r($thePage);
+					//print_r($thePage);
 					if(!$thePage)
 					{
-						$rifcs = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
-						$rifcs .='<registryObjects xmlns="http://ands.org.au/standards/rif-cs/registryObjects" '."\n";
-						$rifcs .='                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '."\n";
-						$rifcs .='                 xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects '.gRIF2_SCHEMA_URI.'">'."\n";	
-						$rifcs .= "  <registryObject group=\"".$group['object_group']."\">\n";
+
+						$rifcs = "  <registryObject group=\"".$group['object_group']."\">\n";
 						$rifcs .= "    <key>".$key."</key>\n";	
 						$rifcs .= "    <originatingSource>".$dataSourceKey."</originatingSource>\n";					
 						$rifcs .= "    <party type=\"group\">\n";			
@@ -150,10 +148,10 @@ if( strtoupper(getPostedValue('action')) == "SAVE" )
       					$rifcs .= "	</name>\n"; 		
 						$rifcs .= "    </party>\n";		
 						$rifcs .= "  </registryObject>\n";			
-						$rifcs .= "</registryObjects>\n";	
 
+						$wrappedRifcs = wrapRegistryObjects($rifcs, false);
 			 			$registryObjects = new DOMDocument();
-			  			$registryObjects->loadXML($rifcs);				
+			  			$registryObjects->loadXML($wrappedRifcs);				
 						$theInstitutionPage = importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMessage, $created_who=SYSTEM, $status=PUBLISHED, $record_owner=SYSTEM, $xPath=NULL, $override_qa=false	);	
 
 					}	else { 
