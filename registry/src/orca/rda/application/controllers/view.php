@@ -58,31 +58,35 @@ class View extends CI_Controller {
 		{
 			$hash = $params[0];
 			
-			// Temporary hack to turn hash back into key XXX: Use HASH for comms with SOLR
-			$query = $this->db->select("registry_object_key")->get_where("dba.tbl_registry_objects", array("key_hash" => $hash));
-			if ($query->num_rows() == 0) 
-			{
-				 show_404('page');
-			}
-			else
-			{
-				$query = $query->row();
-				$key = $query->registry_object_key;
-			}
-			
-			
-			
 			$this->load->model('RegistryObjects', 'ro');
 			$this->load->model('solr');
-	       	$content = $this->ro->get($key);
-	       	$data['key']= $key;
-
+	       
+			$content = $this->ro->getByHash($hash);
+			if (!$content)
+			{
+				// Temporary hack to turn hash back into key XXX: Use HASH for comms with SOLR
+				$query = $this->db->select("registry_object_key")->get_where("dba.tbl_registry_objects", array("key_hash" => $hash));
+				if ($query->num_rows() == 0) 
+				{
+					 show_404('page');
+				}
+				else
+				{
+					$query = $query->row();
+					$key = $query->registry_object_key;
+				}
+				$content = $this->ro->get($key);		
+			}
 			
-			$obj = $this->solr->getByKey($key);
+
+			$obj = $this->solr->getByHash($hash);
 			$numFound = $obj->{'response'}->{'numFound'};
 			$doc = ($obj->{'response'}->{'docs'}[0]);
-		
+			
+			$key = $doc->{'key'};
+			$data['key'] = $key;
 			$group = $doc->{'group'};
+		
 			$theGroup = getInstitutionPage($doc->{'group'});
 			$data['content'] = $this->transform($content, 'rifcs2View.xsl',urlencode($key),$theGroup);	
 			$data['title'] = $doc->{'display_title'};

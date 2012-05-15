@@ -212,6 +212,11 @@ limitations under the License.
 	public function getByKey($key){
 		return $this->getRegistryObjectSOLR($key, '*', 'json');
 	}
+	
+	public function getByHash($hash){
+		return $this->getRegistryObjectSOLRByHash($hash, '*', 'json');
+	}
+	
     
     
     public function getNCRISPartners(){
@@ -254,6 +259,21 @@ limitations under the License.
 		$result = $this->fireSearch($fields, '');//no facet
 		return $result;
     }
+    /*
+     * Takes a hash and returns the registry Object searched through SOLR
+     * hash is the registryObject hash
+     * flag is what to be returned, * for all fields
+     * wt is the write type, accepted xml and json
+     */
+    private function getRegistryObjectSOLRByHash($hash, $flag, $wt){
+    	$fields = array(
+			'q'=>'key_hash:"'.urlencode($hash).'"','version'=>'2.2','start'=>'0','rows'=>'100','indent'=>'on', 'wt'=>$wt,
+			'fl'=>$flag, 'q.alt'=>'*:*'
+		);
+		$result = $this->fireSearch($fields, '');//no facet
+		return $result;
+    }
+	
     
     /*
      * Returns the statistics with all facets

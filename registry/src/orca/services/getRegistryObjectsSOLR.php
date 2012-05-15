@@ -31,6 +31,7 @@ $draftKey = getQueryValue('draftKey');
 $dataSourceKey = getQueryValue('dataSourceKey');
 $getRelated = getQueryValue('getRelated');
 $subject = getQueryValue('subject');
+$registry_object_hash = getQueryValue('registry_object_hash');
 $vocab = getQueryValue('vocab');
 $relatedKey = getQueryValue('relatedKey');
 
@@ -230,6 +231,23 @@ else if($key)
 	// so delete it once the green and orange is imp[lemented + all data is migrated to rifcs 1.2 placeholders!!
 
 	print $rifcs;
+}
+
+else if($registry_object_hash)
+{
+
+	header("Content-Type: text/xml; charset=UTF-8", true);
+	$rifcs = '';
+	if($registryObject = getRegistryObjectByHash($registry_object_hash))
+	{
+		$rifcs .= getRegistryObjectXMLforSOLR($registryObject[0]['registry_object_key'], true);	
+	}
+	$rifcs = wrapRegistryObjects($rifcs);
+	// TODO : this is needed untill we stop having rifcs 1.0 elements in the database!!!
+	// so delete it once the green and orange is imp[lemented + all data is migrated to rifcs 1.2 placeholders!
+	print $rifcs;
+	
+
 }
 /*
 elseif ($getRelated){

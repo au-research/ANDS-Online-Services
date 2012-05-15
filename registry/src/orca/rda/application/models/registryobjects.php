@@ -44,6 +44,20 @@ limitations under the License.
 			//$json = json_decode($content);
 			return $content;
 	    }
+		
+	    function getByHash($hash){
+		  	$service_url = service_url();
+	      	$url = $service_url.'?registry_object_hash='.urlencode($hash);
+			//echo '<div class="hide">'.$url.'</div>';
+			$content='Nothing Returned';
+			if(get_http_response_code($url)!='400'){
+				$content = file_get_contents($url, 0, null, null);
+			}else echo '400 error';
+			//echo $content;
+			//$json = json_decode($content);
+			return $content;
+	    }
+		
     
 		/*
 		 * getSearchHistory
