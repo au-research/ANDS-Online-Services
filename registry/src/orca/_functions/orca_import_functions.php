@@ -1741,12 +1741,18 @@ function getRelatedXml($dataSource,$rifcs,$objectClass){
 	$descCount = $theDescriptions->length;
 	for($i=0;$i<$descCount;$i++)
 	{	
-		$value = $theDescriptions->item($i)->firstChild->nodeValue;		
-		if(str_replace("/>","",$value)==$value&&str_replace("</","",$value)==$value)
-		{
-			$value =  nl2br(str_replace("\t", "&#xA0;&#xA0;&#xA0;&#xA0;", $value));
-		}
-		$theDescriptions->item($i)->firstChild->nodeValue = $value;		
+		if($theDescriptions->item($i)->hasChildNodes()){
+			$value = $theDescriptions->item($i)->firstChild->nodeValue;
+			if(!$value){
+				var_dump($rifcs);
+				die();
+			}
+			if(str_replace("/>","",$value)==$value&&str_replace("</","",$value)==$value)
+			{
+				$value =  nl2br(str_replace("\t", "&#xA0;&#xA0;&#xA0;&#xA0;", $value));
+			}
+			$theDescriptions->item($i)->firstChild->nodeValue = $value;
+		}	
 	} 
 						
 
@@ -2035,7 +2041,7 @@ function runQualityLevelCheckForRegistryObject($registryObjectKey, $dataSourceKe
         $result = updateRegistryObjectQualityTestResult($registryObjectKey, $qualityTestResult, $errorCount, $warningCount);                        
 		$qa_result = runQualityLevelCheckonDom($RegistryObjects, $relatedObjectClassesStr, &$level);
 		$result = updateRegistryObjectQualityLevelResult($registryObjectKey, $level, $qa_result);                         
-		return $result;
+		return $level;
 }
 
 function runQualityLevelCheckForDraftRegistryObject($registryObjectKey, $dataSourceKey)
@@ -2075,7 +2081,7 @@ function runQualityLevelCheckForDraftRegistryObject($registryObjectKey, $dataSou
 		$level = 1;		
 		$qa_result = runQualityLevelCheckonDom($RegistryObjects, $relatedObjectClassesStr, &$level);
 		$result = updateDraftRegistryObjectQualityLevelResult($registryObjectKey, $dataSourceKey, $level, $qa_result);                         
-		return $result;
+		return $level;
 }
 
 
