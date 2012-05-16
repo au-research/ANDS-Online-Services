@@ -39,11 +39,11 @@ class Search extends CI_Controller {
 		parse_str($_SERVER['QUERY_STRING'], $_GET);
 		if(isset($_GET['q'])){
 			$q = $_GET['q'];
-				$classFilter = $_GET['classFilter'];
-				$typeFilter = $_GET['typeFilter'];
-				$groupFilter = $_GET['groupFilter'];
-				$subjectFilter = $_GET['subjectFilter'];
-				$queryStr = '?q='.$q.'&classFilter='.$classFilter.'&typeFilter='.$typeFilter.'&groupFilter='.$groupFilter.'&subjectFilter='.$subjectFilter;				
+			$classFilter = $_GET['classFilter'];
+			$typeFilter = $_GET['typeFilter'];
+			$groupFilter = $_GET['groupFilter'];
+			$subjectFilter = $_GET['subjectFilter'];
+			$queryStr = '?q='.$q.'&classFilter='.$classFilter.'&typeFilter='.$typeFilter.'&groupFilter='.$groupFilter.'&subjectFilter='.$subjectFilter;				
 			$this->load->model('Rss_channel', 'rss');
 			$result['rssArray'] = $this->rss->getRssArrayForQuery($queryStr);
 			$this->load->view('search/rss', $result);
@@ -56,11 +56,11 @@ class Search extends CI_Controller {
 		parse_str($_SERVER['QUERY_STRING'], $_GET);
 		if(isset($_GET['q'])){
 			$q = $_GET['q'];
-				$classFilter = $_GET['classFilter'];
-				$typeFilter = $_GET['typeFilter'];
-				$groupFilter = $_GET['groupFilter'];
-				$subjectFilter = $_GET['subjectFilter'];
-				$queryStr = '?q='.$q.'&classFilter='.$classFilter.'&typeFilter='.$typeFilter.'&groupFilter='.$groupFilter.'&subjectFilter='.$subjectFilter;				
+			$classFilter = $_GET['classFilter'];
+			$typeFilter = $_GET['typeFilter'];
+			$groupFilter = $_GET['groupFilter'];
+			$subjectFilter = $_GET['subjectFilter'];
+			$queryStr = '?q='.$q.'&classFilter='.$classFilter.'&typeFilter='.$typeFilter.'&groupFilter='.$groupFilter.'&subjectFilter='.$subjectFilter;				
 			$this->load->model('Rss_channel', 'atom');
 			$result['rssArray'] = $this->atom->getRssArrayForQuery($queryStr);
 			$this->load->view('search/atom', $result);

@@ -62,6 +62,7 @@ class View extends CI_Controller {
 			$this->load->model('solr');
 	       
 			$content = $this->ro->getByHash($hash);
+			//print_r($content);
 			if (!$content)
 			{
 				// Temporary hack to turn hash back into key XXX: Use HASH for comms with SOLR

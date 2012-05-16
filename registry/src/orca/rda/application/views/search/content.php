@@ -177,7 +177,7 @@ limitations under the License.
 			{
 			$dataSourceString = '';	
 			$q = $_POST['q'];
-				if($q=='')$q = '*:*';
+				if($q==''|| $q='*:*')$q = '*';
 				$classFilter = $_POST['classFilter'];
 				$typeFilter = $_POST['typeFilter'];
 				$groupFilter = $_POST['groupFilter'];

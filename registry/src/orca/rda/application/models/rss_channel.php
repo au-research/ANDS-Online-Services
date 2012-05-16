@@ -60,18 +60,18 @@ limitations under the License.
     		if($subjectFilter!='All') $filter_query .= constructFilterQuery('subject_value_resolved', $subjectFilter);
     		if($status!='All') $filter_query .= constructFilterQuery('status', $status);
      		if($dataGroup!='') $filter_query .= constructFilterQuery('group', $dataGroup);   		
-    	
-    		$this->query = $query;
 
+    		$this->query = $query;
 			$solrOutput = array('response'=>array('numFound'=>999));
 			while (count($this->rssArray) < $this->rssArraySize && $this->startCount + $this->rowCount <= $solrOutput['response']['numFound'])
 			{	
 				$this->recursionLevel++;
 				if ($this->recursionLevel == $this->recursionMax) break;
 				
-				$solrUrl = $this->solrInstance . "select/?q=".rawurlencode($this->query).$filter_query."&version=2.2&start=".$this->startCount."&rows=".$this->rowCount."&indent=on&fl=key,%20group%20data_source_key,%20description_value,%20list_title,%20date_modified&wt=json&sort=date_modified%20desc";
-
+				$solrUrl = $this->solrInstance . "select/?q=fulltext:".rawurlencode($this->query).$filter_query."&version=2.2&start=".$this->startCount."&rows=".$this->rowCount."&indent=on&fl=key,%20group%20data_source_key,%20description_value,%20list_title,%20date_modified&wt=json&sort=date_modified%20desc";
+				//echo $solrUrl;
 				$solrOutput = json_decode(file_get_contents($solrUrl), true);
+				//print_r($solrOutput);
 			
 				foreach ($solrOutput['response']['docs'] AS $response)
 				{
@@ -89,7 +89,6 @@ limitations under the License.
 	
 				$this->startCount += $this->rowCount;
 			}
-			
 			return $this->rssArray;
 		}
 	
@@ -102,6 +101,7 @@ limitations under the License.
 			{
 				// digest them
 				$digest_entry_index = null;
+				date_default_timezone_set('Antarctica/Macquarie' ) ;
 				$digest_entry = array('type'=>'digest', 'key'=> $response['group']."~".date("Y-m-d",strtotime($response['date_modified'])), 'group'=>$response['group'],'updated_date'=>date("m-d-Y",strtotime($response['date_modified'])), 'updated_items'=>array());
 		
 				foreach ($this->rssArray AS $index => $item)
