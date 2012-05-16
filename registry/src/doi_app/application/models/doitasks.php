@@ -42,6 +42,7 @@
 		}	
 				
 		$doi_id = $this->input->get('doi');	
+		$doi_id = rawurldecode($doi_id);
 		$response_type = $this->input->get('response_type');
 		if(!$response_type)	$response_type = 'string';		
 		$api_version = $this->input->get('api_version');
@@ -93,7 +94,9 @@
 		}		
 		$app_id = $this->input->get('app_id');		//passed as a parameter
 		$urlValue = $this->input->get('url');		//passed as a parameter
+		$urlValue = rawurldecode($urlValue);
 		$doiValue = $this->input->get('doi');		//passed as a parameter
+		$doiValue = rawurldecode($doiValue);
 		$response_type = $this->input->get('response_type');	//passed as a parameter		
 		if(!$response_type) $response_type = 'string';
 		$api_version = $this->input->get('api_version');
@@ -271,6 +274,7 @@
 		
 		$app_id = $this->input->get('app_id');		//passed as a parameter
 		$urlValue = $this->input->get('url');		//passed as a parameter
+		$urlValue = rawurldecode($doiValue);
 		$response_type = $this->input->get('response_type');
 		if(!$response_type) $response_type = 'string';		
 		$api_version = $this->input->get('api_version');
@@ -487,6 +491,7 @@
 		}
 		$app_id = $this->input->get('app_id');		//passed as a parameter
 		$doiValue = $this->input->get('doi');		//passed as a parameter	
+		$doiValue = rawurldecode($doiValue);
 		$response_type = $this->input->get('response_type');		//passed as a parameter			
 		if(!$response_type) $response_type = 'string';
 		$api_version = $this->input->get('api_version');
@@ -621,6 +626,7 @@
 		}
 		$app_id = $this->input->get('app_id');		//passed as a parameter
 		$doiValue = $this->input->get('doi');		//passed as a parameter	
+		$doiValue = rawurldecode($doiValue);
 		$response_type = $this->input->get('response_type');		//passed as a parameter			
 		if(!$response_type) $response_type = 'string';
 		$api_version = $this->input->get('api_version');
