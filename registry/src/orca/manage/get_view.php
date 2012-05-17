@@ -22,6 +22,7 @@ require '../orca_init.php';
 $dataSourceKey = getQueryValue('ds');
 $view = getQueryValue('view');
 $status = getQueryValue('status');
+$ql = getQueryValue('ql');
 
 $page = isset($_POST['page']) ? $_POST['page'] : 1;
 $rp = isset($_POST['rp']) ? $_POST['rp'] : 20;
@@ -33,7 +34,9 @@ $qtype = isset($_POST['qtype']) ? $_POST['qtype'] : false;
 switch($view){
 	case "all": searchAllRecords();break;
 	case "summary": summary();break;
-	case "status":searchRecords($status);break;
+	case "status_table":searchRecords($status);break;
+	case "as_qa_table":searchRecords($status);break;
+	case "qa_table":searchRecords($status);break;
 	case "allKeys":allKeys($status);break;
 	case "statusCount": statusCount($status);break;
 }
@@ -42,8 +45,9 @@ switch($view){
 function searchRecords($status){
 	header("Content-type: application/json");
 
-	global $dataSourceKey,$solr_url,$rp,$page,$sortname,$sortorder,$query, $qtype;
+	global $dataSourceKey,$solr_url,$rp,$page,$sortname,$sortorder,$query, $qtype, $view, $ql;
 	
+
 	/**
 	Setting Up Variables
 	**/
@@ -56,8 +60,19 @@ function searchRecords($status){
 	$start = 0;
 	if($page!=1) $start = ($page - 1) * $rp;
 
-	$q = '+data_source_key:("'.$dataSourceKey.'") +status:("'.$status.'")';
+	$add = '+status:("'.$status.'")';
+	if($view=='status_table'){
+		$add = '+status:("'.$status.'")';
+	}elseif($view=='as_qa_table'){
+		$add = '+quality_level:('.$ql.')';
+	}elseif($view=='qa_table'){
+		$add = '+status:("'.$status.'")'. ' +quality_level:('.$ql.')';
+	}
 
+	$q = '+data_source_key:("'.$dataSourceKey.'")'.$add ;
+
+
+	//echo $q;
 	if($query){
 		if($qtype!='key'){
 			$q.='+'.$qtype.':("'.$query.'")';
@@ -76,6 +91,7 @@ function searchRecords($status){
 	//Call SOLR and ask for data
 	$content = solr($solr_url, $fields);
 
+	//echo $content;
 
 	//Decode data from SOLR, put them into encoded array and send back to flexigrid
 	$json = json_decode($content);
@@ -198,7 +214,8 @@ function searchRecords($status){
 			$warning_count = $doc->{'warning_count'};
 		}
 
-		$qualityLevelStr = '<a href="javascript:;" class="smallIcon tip">'.$doc->{'quality_level'}.'<span></span></a>';
+
+		$qualityLevelStr = '<a href="javascript:;" class="smallIcon tip ql'.$doc->{'quality_level'}.'">'.$doc->{'quality_level'}.'<span></span></a>';
 
 
 		$goldFlag = '';
@@ -240,7 +257,7 @@ function statusCount($status){
 	}
 	$fields = array(
 		'q'=>$q,'version'=>'2.2','start'=>'0','rows'=>'1000', 'wt'=>'json',
-		'fl'=>'key', 'facet'=>'true', 'facet.field'=>'quality_level','facet.mincount'=>'1'
+		'fl'=>'key', 'facet'=>'true', 'facet.field'=>'quality_level','facet.mincount'=>'1','facet.sort'=>'index'
 	);
 	//Call SOLR and ask for data
 	$content = solr($solr_url, $fields);

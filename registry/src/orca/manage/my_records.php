@@ -148,6 +148,15 @@ else
 			}
 			array_multisort($status,SORT_DESC);
 			//var_dump($status);
+
+			//doing the same on quality levels
+			$json = json_decode(getQALevels($data_source_key));
+			$i=0;$qa_levels=array();$placeholder = $json->{'facet_counts'}->{'facet_fields'}->{'quality_level'};
+			for($i=0;$i<sizeof($placeholder);$i+=2){
+				$qa_levels[$placeholder[$i]] = $placeholder[$i+1];
+			}
+			//array_multisort($qa_levels,SORT_DESC);
+			//var_dump($qa_levels);
 		?>
 
 		<div id="tabs">
@@ -179,86 +188,56 @@ else
 
 
 
+
+		    	foreach($status as $status_name=>$count){
+		    		$tableClass = '';$displayTable=false;
+		    		if($status_name=='MORE_WORK_REQUIRED'){//only visible if there are records of this status
+		    			if($count==0) $tableClass='hide';
+		    			$displayTable=true;
+		    		}elseif($status_name=='DRAFT'){//all users can review their drafts
+		    			$displayTable=true;
+		    		}else if($status_name=='SUBMITTED_FOR_ASSESSMENT'){
+		    			if($count>0 || $dataSource['qa_flag'] == 't'){$displayTable=true;}
+		    		}elseif($status_name=='ASSESSMENT_IN_PROGRESS'){
+		    			if($count>0 || $dataSource['qa_flag'] == 't'){$displayTable=true;}
+		    		}elseif($status_name=='APPROVED'){
+		    			if($count>0 || $dataSource['auto_publish'] == 't'){$displayTable=true;}
+		    		}elseif($status_name=='PUBLISHED'){//anyone can see published records
+		    			$displayTable=true;
+		    		}
+
+		    		if($displayTable){
+			    		echo '	<div id="'.$status_name.'" class="tab-content '.$tableClass.' statusview">
+									<table class="mmr_table" status="'.$status_name.'" count="'.$count.'"><tr><td>Loading...</td></tr></table>
+								</div>';
+						echo '<div id="'.$status_name.'_qaview" class="tab-content qaview"></div>';
+					}
+					foreach($qa_levels as $key=>$ql){
+		    		echo '	<div class="tab-content qaview">
+							<table class="mmr_table qa_table" ql="'.$key.'" status="'.$status_name.'" count="'.$ql.'"><tr><td>Loading...</td></tr></table>
+							</div>';
+		    		}
+		    	}
+
+
+				/*
+				 * QUALITY LEVELS
+				 */
 		    	echo '<div id="All_qaview" class="tab-content qaview"></div>';
+		    	foreach($qa_levels as $key=>$l){
+		    		echo '	<div class="tab-content qaview">
+							<table class="mmr_table as_qa_table" ql="'.$key.'" status="All" count="'.$l.'"><tr><td>Loading...</td></tr></table>
+							</div>';
+		    	}
 
 
-				/*
-				 * More Work Required Records
-				 * - only visible if there are records of this status
-				 */
-				$MWRclass = '';
-				if ($status['MORE_WORK_REQUIRED'] == 0) $MWRclass = 'hide';
 				
 
-				echo '	<div id="MORE_WORK_REQUIRED" class="tab-content '.$MWRclass.' statusview">
-								<table class="mmr_table" name="MORE_WORK_REQUIRED" count="'.$status['MORE_WORK_REQUIRED'].'"><tr><td>Loading...</td></tr></table>
-							</div>';
-				echo '<div id="MORE_WORK_REQUIRED_qaview" class="tab-content qaview"></div>';
 
-
-		    	/*
-				 * DRAFT Records
-				 * - All users can delete/submit for review
-				 */
-
-		    	echo '	<div id="DRAFT" class="tab-content statusview">
-
-		    				<table class="mmr_table" name="DRAFT" count="'.$status['DRAFT'].'"><tr><td>Loading...</td></tr></table>
-						</div>';
-				echo '<div id="DRAFT_qaview" class="tab-content qaview"></div>';
-
-				/*
-				 * SUBMITTED FOR ASSESSMENT Records
-				 */
-					
-				if ($status['SUBMITTED_FOR_ASSESSMENT'] > 0 || $dataSource['qa_flag'] == 't')
-				{
-
-					echo '	<div id="SUBMITTED_FOR_ASSESSMENT" class="tab-content statusview">
-
-							<table class="mmr_table" name="SUBMITTED_FOR_ASSESSMENT" count="'.$status['SUBMITTED_FOR_ASSESSMENT'].'"><tr><td>Loading...</td></tr></table>
-							</div>';
-					echo '<div id="SUBMITTED_FOR_ASSESSMENT_qaview" class="tab-content qaview"></div>';
-				}
-
-
-				/*
-				 * ASSESSMENT IN PROGRESS Records
-				 */
 				
-				if ($status['ASSESSMENT_IN_PROGRESS'] > 0 || $dataSource['qa_flag'] == 't')
-				{
 
-					echo '	<div id="ASSESSMENT_IN_PROGRESS" class="tab-content statusview">
-
-								<table class="mmr_table" name="ASSESSMENT_IN_PROGRESS" count="'.$status['ASSESSMENT_IN_PROGRESS'].'"><tr><td>Loading...</td></tr></table>
-							</div>';
-					echo '<div id="ASSESSMENT_IN_PROGRESS_qaview" class="tab-content qaview"></div>';
-				}
-
-				/*
-				 * APPROVED Records
-				 */
 				
-				if ($status['APPROVED'] > 0 || $dataSource['auto_publish'] == 't') // manually
-				{
 
-					echo '	<div id="APPROVED" class="tab-content statusview">
-
-								<table class="mmr_table" name="APPROVED" count="'.$status['APPROVED'].'"><tr><td>Loading...</td></tr></table>
-							</div>';
-					echo '<div id="APPROVED_qaview" class="tab-content qaview"></div>';
-				}
-				
-				/*
-				 * PUBLISHED Records
-				 */
-
-				echo '	<div id="PUBLISHED" class="tab-content statusview">
-
-								<table class="mmr_table" name="PUBLISHED" count="'.$status['PUBLISHED'].'"><tr><td>Loading...</td></tr></table>
-							</div>';
-				echo '<div id="PUBLISHED_qaview" class="tab-content qaview"></div>';
 
 		    ?>
 
@@ -723,6 +702,18 @@ function getDataSourceStatuses($dataSourceKey){
 		'fl'=>'key'
 	);
 	$extra = '&facet=true&facet.field=status&&facet.field=class&facet.limit=-1&facet.mincount=0';
+	$content = solr($solr_url, $fields, $extra);
+	return $content;
+}
+
+function getQALevels($dataSourceKey){
+	global $solr_url;
+	$q = 'data_source_key:("'.$dataSourceKey.'")';
+	$fields = array(
+		'q'=>$q,'version'=>'2.2','start'=>'0','rows'=>'1', 'wt'=>'json',
+		'fl'=>'key'
+	);
+	$extra = '&facet=true&facet.field=quality_level&facet.limit=-1&facet.mincount=0';
 	$content = solr($solr_url, $fields, $extra);
 	return $content;
 }

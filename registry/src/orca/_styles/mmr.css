@@ -384,6 +384,10 @@ a.icon2s span {background:url(button-icons-small.png) no-repeat -35px -36px;}
 a.icon28sOff span {background:url(button-icons-small.png) no-repeat -221px -98px;}
 a.icon28sOn span {background:url(button-icons-small.png) no-repeat -6px -643px;}
 
+a.ql1{background:#3366cc;color:white;}
+a.ql2{background:#dc3912;color:white;}
+a.ql3{background:#ff9900;color:white;}
+
 a.borderless{
     border:none;
     background:none;

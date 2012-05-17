@@ -49,7 +49,8 @@
 			onSuccess: false,
 			onError: false,
 			onSubmit: false, //using a custom populate function
-			additionalClass: ''
+			additionalClass: '',
+			tableTitle: 'DEFAULT TITLE FOR TABLE'
 		}, p);
 		$(t).show() //show if hidden
 			.attr({
@@ -487,7 +488,7 @@
 				$('.pPageStat', this.pDiv).html(stat);
 
 				//alert(p.title);
-				g.mDiv.innerHTML = '<div class="ftitle" count="'+p.total+'" rp="'+p.rp+'">'+p.title+' ('+p.total+' Records)</div>';
+				g.mDiv.innerHTML = '<div class="ftitle" count="'+p.total+'" rp="'+p.rp+'">'+p.tableTitle+' ('+p.total+' Records)</div>';
 				$(g.gDiv).prepend(g.mDiv);
 				if (p.showTableToggleBtn) {
 					$(g.mDiv).append('<div class="ptogtitle" title="Minimize/Maximize Table"><span></span></div>');
@@ -1116,9 +1117,9 @@
 		}
 		$(g.pDiv, g.sDiv).append("<div style='clear:both'></div>");
 		// add title
-		if (p.title) {
+		if (p.tableTitle) {
 			g.mDiv.className = 'mDiv';
-			g.mDiv.innerHTML = '<div class="ftitle">' + p.title + '</div>';
+			g.mDiv.innerHTML = '<div class="ftitle">' + p.tableTitle + '</div>';
 			$(g.gDiv).prepend(g.mDiv);
 			if (p.showTableToggleBtn) {
 				$(g.mDiv).append('<div class="ptogtitle" title="Minimize/Maximize Table"><span></span></div>');

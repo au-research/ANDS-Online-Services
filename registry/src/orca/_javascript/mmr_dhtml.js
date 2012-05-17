@@ -80,8 +80,10 @@ $(document).ready(function() {
 			$('.viewswitch[name=qaview]').addClass('pressed');
 			if(status=='All'){
 				$('.qaview[id=All_qaview]').show();
+				$('.as_qa_table').parents('.tab-content').show();
 			}else{//is a specific status
 				$('.qaview[id='+status+'_qaview]').show();
+				$('.qa_table[status='+status+']').parents('.tab-content').show();
 			}
 		}
 	}
@@ -125,7 +127,7 @@ $(document).ready(function() {
     			chartData.addColumn('number', 'level');
 
     			var resultArray = new Array();
-    			for (var i = qualityLevels.length - 2; i >= 0; i=i-2) {
+    			for (var i = 0; i < qualityLevels.length - 1; i=i+2) {
         			//console.log(qualityLevels[i]);
         			var result = [];
         			result.push('QA Level '+ qualityLevels[i], qualityLevels[i+1])
@@ -133,10 +135,17 @@ $(document).ready(function() {
         			//chartData.addColumn('string', 'QA Level '+qualityLevels[i]);
         		};
 
-        		
-        		
         		//console.log(resultArray);
         		chartData.addRows(resultArray);
+
+        		function selectHandler() {
+			    	var selectedItem = chart.getSelection()[0];
+				    if (selectedItem) {
+				    	//console.log(chartData);
+				      	var value = chartData.getValue(selectedItem.row, 0);
+				      	//console.log(value);
+				    }
+			  	}
 
         		var options = {'title':status+' Records',
                        'width':400,
@@ -145,13 +154,16 @@ $(document).ready(function() {
                 // Instantiate and draw our chart, passing in some options.
         		var chart = new google.visualization.PieChart(document.getElementById(status+'_qaview'));
         		chart.draw(chartData, options);
+        		google.visualization.events.addListener(chart, 'select', selectHandler);
+        		
         		//console.log('finish');
         	}
         });
       }
 
 	$('.mmr_table').each(function(){
-		var status = $(this).attr('name');
+		var status = $(this).attr('status');
+		var ql = $(this).attr('ql');
 		var count = $(this).attr('count');
 
 		var buttons = [
@@ -176,14 +188,27 @@ $(document).ready(function() {
 			buttons.push({name: 'Publish', bclass: 'publish', onpress : doCommand});
 			buttons.push({name: 'Delete Record', bclass: 'delete', onpress : doCommand});
 		}else if(status=="PUBLISHED"){
-
 			if(orcaQA){
 				buttons.push({name: 'Mark as Gold Standard', bclass: 'mark_gold_standard', onpress : doCommand});
 			}
-
 			buttons.push({name: 'Delete Record', bclass: 'delete', onpress : doCommand});
 		}
 		//buttons.push({separator:true});
+
+		var table_type='status_table';
+		if($(this).hasClass('as_qa_table')) table_type='as_qa_table';
+		if($(this).hasClass('qa_table')) table_type='qa_table';
+
+
+		var tableTitle ='';
+		if(table_type=='status_table'){
+			theTableTitle=status;
+		}else if(table_type=='as_qa_table' || table_type=='qa_table'){
+			theTableTitle='Quality Level '+ql;
+		}
+
+		//service URL
+		var viewURL = 'get_view.php?view='+table_type+'&status='+status+'&ds='+dsKey+'&ql='+ql;
 		
 		$(this).flexigrid({
 			striped:true,
@@ -191,7 +216,7 @@ $(document).ready(function() {
 			showTableToggleBtn: true,
 
 			showToggleBtn: true,
-            url: 'get_view.php?view=status&status='+status+'&ds='+dsKey,
+            url: viewURL,
 			dataType: 'json',
 			usepager: true,
 			colModel : [
@@ -215,6 +240,7 @@ $(document).ready(function() {
 
             height:'auto',
             additionalClass:status+'_table',
+            tableTitle:theTableTitle,
             searchitems : [
                         {display: 'Name/Title', name : 'list_title'}
                         ],
