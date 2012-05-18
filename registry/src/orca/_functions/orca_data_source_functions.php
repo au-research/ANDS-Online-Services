@@ -684,6 +684,7 @@ function updateRecordsForDataSource($dataSourceKey, $manuallyPublish,$manuallyPu
 		{
 			for( $i=0; $i < count($registryObjectKeys); $i++ )
 			{
+				$actions = '';
 				if($registryObjectKeys[$i]['status'] == MORE_WORK_REQUIRED)
 				{
 					$actions .= $registryObjectKeys[$i]['draft_key'].' Changed Status to DRAFT';

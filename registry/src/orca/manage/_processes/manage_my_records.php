@@ -154,114 +154,10 @@ switch(getQueryValue('action'))
 	break;
 	
 	case "APPROVE":
-		
 		$returnErrors = "";
 		foreach($keys AS $key)
 		{
-			$draft = getDraftRegistryObject(rawurldecode($key), $data_source_key);
-			$errorMessages = "";
-			if ($draft[0]['error_count'] == 0)
-			{
-				error_reporting(E_ERROR | E_WARNING | E_PARSE);
-				ini_set("display_errors", 1);
-				
-
-				if ($draft = getDraftRegistryObject(rawurldecode($key), $data_source_key)) 
-				{
-					$rifcs = new DomDocument();
-					$rifcs->loadXML($draft[0]['rifcs']);
-					$stripFromData = new DomDocument();
-					$stripFromData->load('../_xsl/stripFormData.xsl');
-					$proc = new XSLTProcessor();
-					$proc->importStyleSheet($stripFromData);
-					$registryObject = $proc->transformToDoc($rifcs);
-					//print_pre($draft);
-					$dataSourceKey = $draft[0]['registry_object_data_source'];
-					$deleteErrors = "";
-			        $errors = error_get_last();
-			   		
-					if( $errors )
-					{
-						$errorMessages .= "Document Load Error";
-						$errorMessages .= "<div style=\"margin-top: 8px; color: #880000; height: 100px; width: 500px; padding: 0px; white-space: pre-wrap; overflow: auto; font-family: courier new, courier, monospace; font-size:9pt;\">";
-						$errorMessages .= esc($errors['message']);
-						$errorMessages .= "</div>\n";
-					}
-					
-					error_reporting(E_ALL);
-					ini_set("display_errors", 1);
-					if( !$errorMessages )
-					{
-						// Validate it against the orca schema.
-					    // libxml2.6 workaround (Save to local filesystem before validating)
-					  
-					    // Create temporary file and save manually created DOMDocument.
-					    $tempFile = "/tmp/" . time() . '-' . rand() . '-document.tmp';
-					    $registryObject->save($tempFile);
-					 
-					    // Create temporary DOMDocument and re-load content from file.
-					    $registryObject = new DOMDocument();
-					    $registryObject->load($tempFile);
-					    
-					    // Delete temporary file.
-					    if (is_file($tempFile))
-					    {
-					      unlink($tempFile);
-					    }
-					  
-						$result = $registryObject->schemaValidate(gRIF_SCHEMA_PATH); //xxx
-						$errors = error_get_last();
-						//print($dataSourceKey);
-						//exit;
-			
-						if( $errors )
-						{
-							$errorMessages .= "Document Validation Error\n";
-							$errorMessages .= esc($errors['message']);
-						}
-						else
-		               	{
-
-							$importErrors = importRegistryObjects($registryObject,$dataSourceKey, $resultMessage, getLoggedInUser(), null, ($draft[0]['draft_owner']==SYSTEM ? SYSTEM : getThisOrcaUserIdentity()), null, true);       
-							//echo $importErrors;die();
-							$importErrors .= runQualityCheckForRegistryObject(rawurldecode($key), $dataSourceKey);
-
-							//addSolrIndex(rawurldecode($key), true);
-							if( !$importErrors )
-							{
-								$deleteErrors = deleteDraftRegistryObject($dataSourceKey , rawurldecode($key));
-							}            
-
-							
-							if( $deleteErrors || $importErrors )
-							{
-								$errorMessages .= "$deleteErrors \n\n $importErrors";
-							}
-							else
-							{
-								//print("<script>$(window.location).attr('href','".eAPP_ROOT."orca/view.php?key=".esc($_GET['key'])."');</script>");
-							}
-						}
-					}
-	
-				}
-				else
-				{       
-					$errorMessages .= "This Draft Key does not exist!";
-				}
-			
-
-			}
-			else 
-			{
-				$errorMessages .= "This record contains errors and cannot be published.";	
-			}
-			
-			
-			$returnErrors .= (strlen($errorMessages) > 0 ? 	"\nERROR (key: $key): \n" . 
-															"------------------ \n" . 
-															$errorMessages . "\n" . 
-															"------------------" : "");
+			approveDraft($key, $data_source_key);
 		}
 		addKeysToSolrIndex($keys, true);
 		$response['alert'] = $returnErrors;
@@ -273,15 +169,25 @@ switch(getQueryValue('action'))
 	
 	
 	case "PUBLISH":
-
-		foreach($keys AS $key)
-		{
-			updateRegistryObjectStatus(rawurldecode($key), PUBLISHED);
+		foreach($keys AS $key){
+			//is it a draft
+			$isDraft = getDraftRegistryObject(rawurldecode($key), $data_source_key);
+			if($isDraft){
+				//is a draft, have to approve and do all the jazz with it first
+				approveDraft($key, $data_source_key);
+				updateRegistryObjectStatus(rawurldecode($key), PUBLISHED);
+				$response['responsecode'] = "1";
+				echo json_encode($response);
+			}else{
+				//is not draft
+				updateRegistryObjectStatus(rawurldecode($key), PUBLISHED);
+				$response['responsecode'] = "1";
+				echo json_encode($response);
+			}
+			
 		}
-		addKeysToSolrIndex($keys, true);
+		//addKeysToSolrIndex($keys, true);
 		
-		$response['responsecode'] = "1";
-		echo json_encode($response);
 		die();
 		
 	break;

@@ -185,10 +185,18 @@ else
 		    	echo '<div class="hide" id="orcaLIASON">';
 		    		if(userIsORCA_LIAISON()) echo 'yes'; else echo 'no';
 		    	echo '</div>';
+		    	echo '<div class="hide" id="DS_QA_flag">';
+		    		if($dataSource['qa_flag']=='t') echo 'yes'; else echo 'no';
+		    	echo '</div>';
 
 
+		    	//Sort it by this order
+		    	$order = array('MORE_WORK_REQUIRED', 'DRAFT','SUBMITTED_FOR_ASSESSMENT', 'ASSESSMENT_IN_PROGRESS', 'APPROVED', 'PUBLISHED');
+		    	$sorted = array();
+		    	foreach($order as $o) $sorted[$o]=$status[$o];
+				$status = $sorted;
 
-
+				//display 2 tables and 1 graph for each of the status
 		    	foreach($status as $status_name=>$count){
 		    		$tableClass = '';$displayTable=false;
 		    		if($status_name=='MORE_WORK_REQUIRED'){//only visible if there are records of this status
@@ -208,35 +216,27 @@ else
 
 		    		if($displayTable){
 			    		echo '	<div id="'.$status_name.'" class="tab-content '.$tableClass.' statusview">
-									<table class="mmr_table" status="'.$status_name.'" count="'.$count.'"><tr><td>Loading...</td></tr></table>
+									<table class="mmr_table" status="'.$status_name.'" count="'.$count.'"><tr><td>Loading Table...</td></tr></table>
 								</div>';
-						echo '<div id="'.$status_name.'_qaview" class="tab-content qaview"></div>';
+						echo '<div id="'.$status_name.'_qaview" class="tab-content qaview">Loading Graph...</div>';
 					}
 					foreach($qa_levels as $key=>$ql){
-		    		echo '	<div class="tab-content qaview">
-							<table class="mmr_table qa_table" ql="'.$key.'" status="'.$status_name.'" count="'.$ql.'"><tr><td>Loading...</td></tr></table>
-							</div>';
+		    			echo '	<div class="tab-content qaview">
+								<table class="mmr_table qa_table" ql="'.$key.'" status="'.$status_name.'" count="'.$ql.'"><tr><td>Loading Table...</td></tr></table>
+								</div>';
 		    		}
 		    	}
 
 
 				/*
-				 * QUALITY LEVELS
+				 * All of em
 				 */
 		    	echo '<div id="All_qaview" class="tab-content qaview"></div>';
 		    	foreach($qa_levels as $key=>$l){
 		    		echo '	<div class="tab-content qaview">
-							<table class="mmr_table as_qa_table" ql="'.$key.'" status="All" count="'.$l.'"><tr><td>Loading...</td></tr></table>
+							<table class="mmr_table as_qa_table" ql="'.$key.'" status="All" count="'.$l.'"><tr><td>Loading Graph...</td></tr></table>
 							</div>';
 		    	}
-
-
-				
-
-
-				
-
-				
 
 
 		    ?>
@@ -754,16 +754,16 @@ function displayMMRDataSourceSwitcher(array $dataSources = array(), $selected_ke
 				
 				<div class="content_block">
 					<div class="buttons">
-
 						<a href="javascript:void(0);" class="button left pressed viewswitch" name="statusview">Status</a><a href="javascript:void(0);" class="button right viewswitch"name = "qaview">Quality</a>
-
 					</div>
+				</div>
+				<div class="content_block">
+					<a href="<?php echo eAPP_ROOT . "orca/admin/data_source_view.php?data_source_key=" . rawurlencode($dataSourceKey); ?>">Manage this Data Source</a>
 				</div>
 				<div class="content_block">
 					<a class="pop" href="#" title="This tool allows you to view and manage the records which you have recently created, edited or harvested.">(more details)</a>
 					<!--a href="" id="mmr_information_show">(more details)</a-->
 				</div>
-
 			</div>
 
 			<div class="clearfix"></div>
@@ -772,8 +772,7 @@ function displayMMRDataSourceSwitcher(array $dataSources = array(), $selected_ke
 			<div id="mmr_datasource_information" class="hide">
 
 			 <a href="" id="mmr_information_hide">Hide Information</a>
-			 <a href="<?php echo eAPP_ROOT . "orca/admin/data_source_view.php?data_source_key=" . rawurlencode($data_source_key); ?>" id="mmr_manage_data_source">Manage this Data Source</a>
-				<div id="mmr_ds_moredetails">
+			 	<div id="mmr_ds_moredetails">
 					<ul style="padding-left:40px;">
 						<li>
 							This tool allows you to view and manage the records which you have recently created, edited or harvested. 

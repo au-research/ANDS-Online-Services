@@ -1862,8 +1862,11 @@ function updateRegistryObjectQualityTestResult($registry_object_key, $quality_te
 	$resultSet = null;
 	$strQuery = 'SELECT dba.udf_update_registry_quality_test_result($1, $2, $3, $4);';
 	$params = array($registry_object_key, $quality_test_result, $error_count, $warning_count);
-	$result = executeUpdateQuery($gCNN_DBS_ORCA, $strQuery, $params);
-	return $result;	
+	$resultSet = executeUpdateQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	if(!$resultSet){
+		$errors = 'An Error Occurred When Updating Quality Test Result';
+	}
+	return $errors;	
 	
 }
 

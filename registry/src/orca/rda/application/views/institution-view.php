@@ -18,7 +18,7 @@ limitations under the License.
 ?>
 <?php $this->load->view('tpl/header');?>
 <?php $this->load->view('tpl/mid');?>
-<div id="item-view" class="shadow-and-corner">
+<div id="item-view" class="top-corner">
 	<?php print_r($content) ;?>
 </div>
 <?php $this->load->view('tpl/footer');?>

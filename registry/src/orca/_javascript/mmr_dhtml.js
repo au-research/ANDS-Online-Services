@@ -49,9 +49,12 @@ $(document).ready(function() {
 	if($('#orcaLIASON').text()=='yes'){
 		orcaLIASON = true;
 	}
+	var DS_QA_flag = false;
+	if($('#DS_QA_flag').text()=='yes'){
+		DS_QA_flag = true;
+	}
 
 	view(currentView, 'All');
-
 
 	function view(type, status){
 		//console.log('type='+type+' status='+status);
@@ -74,14 +77,16 @@ $(document).ready(function() {
 				});
 			}
 		}else if(type=='qaview'){
-			google.setOnLoadCallback(drawChart(status, dsKey));
+			
 			$('.statusview').hide();
 			$('.viewswitch').removeClass('pressed');
 			$('.viewswitch[name=qaview]').addClass('pressed');
 			if(status=='All'){
+				google.setOnLoadCallback(drawChartAllStatus(dsKey));
 				$('.qaview[id=All_qaview]').show();
 				$('.as_qa_table').parents('.tab-content').show();
 			}else{//is a specific status
+				google.setOnLoadCallback(drawChart(status, dsKey));
 				$('.qaview[id='+status+'_qaview]').show();
 				$('.qa_table[status='+status+']').parents('.tab-content').show();
 			}
@@ -104,7 +109,7 @@ $(document).ready(function() {
 		var name = $(this).attr('name');
 		$.cookie('currentView', name);
 		$('.'+name).show();
-		view(name, 'All');
+		view(name, $('.tab-list li a.active-tab').attr('name'));
 	});
 
 
@@ -150,16 +155,92 @@ $(document).ready(function() {
         		var options = {'title':status+' Records',
                        'width':400,
                        'height':300,
-                   		backgroundColor: { fill:'transparent' }};
-                // Instantiate and draw our chart, passing in some options.
-        		var chart = new google.visualization.PieChart(document.getElementById(status+'_qaview'));
-        		chart.draw(chartData, options);
-        		google.visualization.events.addListener(chart, 'select', selectHandler);
-        		
+                   		backgroundColor: { fill:'transparent' },
+                   		is3D:true,
+                   		colors:['#dc3912', '#ff9900','#3366cc']
+                   	};
+
+				var chart = new google.visualization.PieChart(document.getElementById(status+'_qaview'));
+				chart.draw(chartData, options);
+    			google.visualization.events.addListener(chart, 'select', selectHandler);
+
         		//console.log('finish');
         	}
+       	});
+    }
+
+	function drawChartAllStatus(dsKey){
+		var chartData = new google.visualization.DataTable();
+		$.ajax({
+    		url: 'get_view.php?view=AllStatusAllQA&ds='+dsKey,
+    		method: 'get',
+    		dataType:'json',
+    		contentType: "application/json", //tell the server we're looking for json
+    		cache: false, // don't cache the result
+    		success: function(data) {
+
+    			//console.log(data);
+
+    			var realData = [];
+    			var classList = [];
+    			var QAList = [];
+    			classList.push('Quality Levels');
+    			var num = 1;
+    			$.each(data, function(i, item) {
+    				classList.push('Quality level '+num);
+    				var QA = [];
+    				QA.push(item.label);
+    				$.each(item.qa, function(i, qa_i) {
+    					for(j=0;j<5;j++){
+    						if(j!=i && !QA[j]){
+    							QA[j]=0;
+    							//console.log(j + ' > '+ '0');
+    						}else{
+    							QA[i]=((qa_i*100)/item.num)/100;
+    						}
+    					}
+					});
+					//console.log(QA);
+					
+					QAList.push(QA);
+
+					num++;
+					//console.log('====');
+				});
+				realData.push(classList);
+
+				$.each(QAList, function(i, item) {
+					realData.push(item);
+				});
+
+  				var realData = google.visualization.arrayToDataTable(realData);
+
+  				console.log(realData);
+    			// Create and draw the visualization.
+    			var barsVisualization = new google.visualization.BarChart(document.getElementById('All_qaview'));
+			  	barsVisualization.draw(realData,
+			           {title:"All Registry Objects",
+			            width:750, height:400,
+			            vAxis: {title: "Status"},
+			            isStacked:true,
+			            'tooltip': {trigger: 'none'},
+			            colors:['#dc3912', '#ff9900','#3366cc', 'green'],
+			            hAxis: {title: "Quality Levels Percentage",format:'##%'}}
+			      );
+			      google.visualization.events.addListener(barsVisualization, 'onmouseover', over);
+			      google.visualization.events.addListener(barsVisualization, 'onmouseout', over);
+			      google.visualization.events.addListener(barsVisualization, 'click', clickBar);
+
+			      function over(){}
+			      function clickBar(e){
+			      	var a = barsVisualization.getSelection([e]);
+			      	//console.log(a);
+			      	console.log(realData.getValue(a[0].row, a[0].column));
+			      	console.log(realData.getColumnLabel(a[0].column));
+			      }
+        	}
         });
-      }
+	}
 
 	$('.mmr_table').each(function(){
 		var status = $(this).attr('status');
@@ -170,7 +251,11 @@ $(document).ready(function() {
 			{name: 'Select All', bclass: 'button', onpress : selectAll}
 		];
 		if(status=="DRAFT"){
-			buttons.push({name: 'Submit for Assessment', bclass: 'submit_for_assessment', onpress : doCommand});
+			if(!DS_QA_flag){
+				buttons.push({name: 'Publish', bclass: 'publish', onpress : doCommand});
+			}else{
+				buttons.push({name: 'Submit for Assessment', bclass: 'submit_for_assessment', onpress : doCommand});
+			}
 			buttons.push({name: 'Delete Draft', bclass: 'delete', onpress : doCommand});
 		}else if(status=="SUBMITTED_FOR_ASSESSMENT"){
 			if(orcaQA){
@@ -207,6 +292,11 @@ $(document).ready(function() {
 			theTableTitle='Quality Level '+ql;
 		}
 
+		var tClass = status+'_table';
+		if(table_type=='as_qa_table' || table_type=='qa_table'){
+			tClass='';
+		}
+
 		//service URL
 		var viewURL = 'get_view.php?view='+table_type+'&status='+status+'&ds='+dsKey+'&ql='+ql;
 		
@@ -222,14 +312,14 @@ $(document).ready(function() {
 			colModel : [
 			{display: 'recordKey', name:'key', width:70, sortable: true, align:'left'},
                 {display: 'Name/Title', name : 'list_title', width : 350, sortable : true, align: 'left'},
-                {display: 'Last Modified', name : 'date_modified', width : 100, sortable : true, align: 'left'},
-                {display: 'Class', name : 'class', width : 50, sortable : true, align: 'left'},
-                {display: 'Errors', name : 'error_count', width : 50, sortable : true, align: 'left'},
-                {display: 'Quality Level', name : 'quality_level', width : 50, sortable : true, align: 'left'},
-                {display: 'Flag', name : 'flag', width : 50, sortable : false, align: 'left'},
-                {display: 'Options', name : 'buttons', width : 150, sortable : false, align: 'left'},
-                {display: 'Status', name : 'status', width : 150, sortable : true, align: 'left'},
-                {display: 'Manually Assessed', name : 'manually_assessed_flag', width : 150, sortable : true, align: 'left', hide:true}
+                {display: 'Last Modified', name : 'date_modified', width : 150, sortable : true, align: 'left'},
+                {display: 'Class', name : 'class', width : 70, sortable : true, align: 'left'},
+                {display: 'Errors', name : 'error_count', width : 30, sortable : true, align: 'left'},
+                {display: 'Quality Level', name : 'quality_level', width : 70, sortable : true, align: 'left'},
+                {display: 'Flag', name : 'flag', width : 30, sortable : true, align: 'left'},
+                {display: 'Options', name : 'buttons', width : 100, sortable : false, align: 'left'},
+                {display: 'Status', name : 'status', width : 50, sortable : true, align: 'left'},
+                {display: 'Manually Assessed', name : 'manually_assessed_flag', width : 50, sortable : true, align: 'left', hide:true}
             ],
             buttons:buttons,
             resizable:true,
@@ -239,7 +329,7 @@ $(document).ready(function() {
 			nomsg: 'No records found',
 
             height:'auto',
-            additionalClass:status+'_table',
+            additionalClass:tClass,
             tableTitle:theTableTitle,
             searchitems : [
                         {display: 'Name/Title', name : 'list_title'}
@@ -343,29 +433,28 @@ $(document).ready(function() {
 
 
 		//POST the stuff over to Manage My Records
-		var isPreApproval = false;
+		$('.tab-content').css('opacity',0.5);
 		$.post(
 			$("#elementSourceURL").val() + "task=manage_my_records&action=" + action,
 			{
 				'keys[]' : targetKeys,
-				'preapproval' : isPreApproval,
 				'dataSourceKey' : dataSourceKey
 			},
 			function(data)
 			{
 				//console.log(data);
-				if (data['responsecode'] === 0)
+				if (data['responsecode'] == '0')
 				{
 					// Error occured
 					alert("Error Occured: Access Denied.");
 				}
 				else if (data['responsecode'] == "MT008")
 				{
-					$('#mmr_datasource_alert_msg').html('Your records have been sent to ANDS for assessment and approval. You should contact your ANDS Client Liaison Officer to notify them that these records have been submitted.');
+					//$('#mmr_datasource_alert_msg').html('Your records have been sent to ANDS for assessment and approval. You should contact your ANDS Client Liaison Officer to notify them that these records have been submitted.');
 				}
 				else if (data['responsecode'] == "MT014")
 				{
-					$('#mmr_datasource_alert_msg').html('An ANDS Quality Assessor has been notified of your submitted record(s)');
+					//$('#mmr_datasource_alert_msg').html('An ANDS Quality Assessor has been notified of your submitted record(s)');
 				}
 				else
 				{
@@ -498,8 +587,8 @@ $(document).ready(function() {
 		}else{
 			flag = true;
 		}
-		$(this).toggleClass('icon28sOff');
-		$(this).toggleClass('icon28sOn');
+		$(this).toggleClass('icon59sOff');
+		$(this).toggleClass('icon59sOn');
 		e.stopPropagation()
 		var rowID = $(this).parent().parent().parent().attr('id');
 		var key = rowID.substring(rowID.lastIndexOf('row')+3);
@@ -558,7 +647,7 @@ $(document).ready(function() {
 		});
 	});
 
-
+});
 
 
 
@@ -569,413 +658,5 @@ $(document).ready(function() {
 	**/
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	// Help lower resolution screens by expanding the outermost page containers to the fixed-width size of the MMR table
 	$('body > div').css('min-width','1235px');
-	
-	$.blockUI.defaults.css.width = '503px';
-	
-	//MMR_initStatusCookie();
-	
-	/*if(MMR_datasource_info_visible == "false")
-	{
-		$('#mmr_datasource_information').hide();
-		$('#mmr_information_show').show();
-	}
-	else
-	{
-		$('#mmr_datasource_information').show();
-		$('#mmr_information_show').hide();
-	}*/
-
-	
-	$('#mmr_information_hide').live('click', function(e){
-		e.preventDefault();
-		MMR_toggleInfoVisible();
-	});
-	
-	$("#mmr_information_show").live("click", function (e) {
-		e.preventDefault();
-		MMR_toggleInfoVisible();
-	});
-	
-	
-	$(".mmr_expandable_table > tbody").each(function() {
-		$("tr:gt(7)", this).hide(); 
-	   	$("tr:nth-child(9)", this).after("<tr class='mmr_more_records_link'><td colspan='10'></td><td><a href='#'>Show more..</a></td></tr>");
-	});
-	$(".mmr_more_records_link").live("click", function() {
-		var tr = $(this).parent();
-	   	tr.children(".record_row").show();
-	   	$(this).remove();
-	   	$("tr:last", tr).after("<tr class='mmr_less_records_link'><td colspan='10'></td><td><a href='#'>Show less..</a></td></tr>");
-	   	return false;
-	});
-	$(".mmr_less_records_link").live("click", function() {
-		var tr = $(this).parent();
-	   	$(this).remove();
-	   	$("tr:gt(7)", tr).hide(); 
-	   	$("tr:nth-child(9)",tr).after("<tr class='mmr_more_records_link'><td colspan='10'></td><td><a href='#'>Show more..</a></td></tr>");
-	   	tr.animate({ scrollTop: 0 }, 'slow');
-	   	return false;
-	});
-	
-	$("tr.record_row > td:not(.rowSelector):not(.mmr_flag)").live("click", function() {
-		
-		var select = $(".mmr_select_box", $(this).parent());
-
-		
-		if (select.attr("checked") == false)
-		{		
-			//select.attr("checked", true);
-			select.click();
-			select.parent().parent().children("td:not(.mmr_nohighlight)").css("background-color","#e2e2e2");
-		}
-		else
-		{
-			//select.attr("checked",false);
-			select.click();
-			select.parent().parent().children("td:not(.mmr_nohighlight)").css("background-color","#F0EDEA");
-		}
-
-	});
-	
-
-	$(".mmr_flag > .not_flagged").live("click", function() {
-		
-		if ($(this).parent().hasClass("is_draft"))
-		{
-			$(this).parent().children().removeClass("hide");
-			MMR_setDraftFlag($(this).parent().parent().attr("name"), "true");
-			$(this).addClass("hide");
-		}
-		else
-		{
-			$(this).parent().children().removeClass("hide");
-			MMR_setRegObjFlag($(this).parent().parent().attr("name"), "true");
-			$(this).addClass("hide");
-		}
-	});
-
-	$(".mmr_flag > .flagged").live("click", function(e) {
-		if ($(this).parent().hasClass("is_draft"))
-		{
-			$(this).parent().children().removeClass("hide");
-			MMR_setDraftFlag($(this).parent().parent().attr("name"), "false");
-			$(this).addClass("hide");
-		}
-		else
-		{
-			$(this).parent().children().removeClass("hide");
-			MMR_setRegObjFlag($(this).parent().parent().attr("name"), "false");
-			$(this).addClass("hide");
-		}
-		
-	});
-	
-	$(".mmr_select_all_button").live("click", function() {
-		var tbl = $(this).parent().parent().parent();
-		if ($(this).val()=="deselect all")
-		{
-			$(".mmr_select_banner", tbl).hide();
-			var selectedRows = $(".mmr_select_box", tbl).filter(":checked").click().parent().parent();
-			selectedRows.children("td:not(.mmr_nohighlight)").css("background-color","#F0EDEA");
-			$(".mmr_button_row > input:enabled", $(this).parents("table.mmr_expandable_table")).attr("disabled","disabled");
-			$(this).val("select all");
-		}
-		else
-		{
-			var flaggedRecordsExist = ($("tr", tbl).has("td.mmr_flag > .flagged:not(.hide)").length > 0);
-			var unshownRecords = $("tr.record_row:not(:visible)", tbl).length;
-			if (unshownRecords > 0)
-			{
-				$(".mmr_select_banner", tbl).children("td").html("There are " + unshownRecords + " more record(s) in this status category that are not visible. Do you want to <a class='mmr_select_all_link'>select these records too</a>?" + (flaggedRecordsExist ? " Alternatively, you could <a class='mmr_select_flagged_link'>only select flagged records</a>?" : ""));
-				$(".mmr_select_banner", tbl).show();
-			}
-			else if (flaggedRecordsExist)
-			{
-				$(".mmr_select_banner", tbl).children("td").html("Do you want to <a class='mmr_select_flagged_link'>only select flagged records</a>?");
-				$(".mmr_select_banner", tbl).show();
-			}
-			$(".mmr_select_box", $("tr:visible", tbl)).filter(":not(:checked)").click().parent().parent().children("td:not(.mmr_nohighlight)").css("background-color","#e2e2e2");
-			$(this).val("deselect all");
-		}
-		
-	});
-	
-	
-	
-	$(".mmr_button_row > input").live("click", function() {
-		
-		if ($(this).attr('disabled')){return;}
-		var targetKeys = new Array();
-		var action = $(this).attr("name");
-		var isPreApproval = $(this).parent().hasClass("preapproval");
-		var dataSourceKey = $('#dataSourceKey').val();
-
-		var canContinue = true;
-		
-		if (action == "DELETE_RECORD" || action == "DELETE_DRAFT")
-		{
-			$(".mmr_select_box:checked", $(this).parents("table.mmr_expandable_table")).parents(".record_row").each(function() {
-				targetKeys.push($(this).attr("name"));
-			});
-			
-			if (!confirm("You are about to delete " + targetKeys.length + " record(s). "+(action == "DELETE_DRAFT" ? "These records will be permanently deleted and cannot be restored. " : "") + "Do you want to continue?"))
-			{
-				return;
-			}
-		}
-		else 
-		{
-		
-			$(".mmr_select_box:checked", $(this).parents("table.mmr_expandable_table")).parents(".record_row").each(function() {
-				targetKeys.push($(this).attr("name"));
-	
-				if ($(this).hasClass("erroneous"))
-				{
-					canContinue = false;
-				}
-			});
-			
-		}
-		
-		if (!canContinue && (action != 'BACK_TO_DRAFT'))
-		{
-			$('#mmr_datasource_alert_msg').html("One or more of the records selected contain errors. <br/><br/>Please correct these errors before continuing.");
-			$.blockUI({ message: $('#mmr_datasource_alert') });
-			return;
-		}
-		
-		blockLoading();
-		$.post(
-			$("#elementSourceURL").val() + "task=manage_my_records&action=" + $(this).attr("name"),
-			{ 	
-				'keys[]' : targetKeys, 
-				'preapproval' : isPreApproval,
-				'dataSourceKey' : dataSourceKey
-			},
-			function(data)
-			{					
-				if (data['responsecode'] == 0)
-				{
-					// Error occured
-					alert("Error Occured: Access Denied.");
-					$.unblockUI(); 
-				}
-				else if (data['responsecode'] == "MT008")
-				{
-					$('#mmr_datasource_alert_msg').html('Your records have been sent to ANDS for assessment and approval. You should contact your ANDS Client Liaison Officer to notify them that these records have been submitted.');
-				}
-				else if (data['responsecode'] == "MT014")
-				{
-					$('#mmr_datasource_alert_msg').html('An ANDS Quality Assessor has been notified of your submitted record(s)');
-				}
-				else
-				{
-					if (data['alert'])
-					{
-						$('#mmr_datasource_alert_msg').html(data['alert']);
-					}
-					location.reload(); 
-				}
-			},
-			'json'
-		);
-		
-		
-	});
-	
-	$(".mmr_select_all_link").live("click", function() {
-		var tbl = $(this).parents("table.mmr_expandable_table");
-		var checkBoxes = $(".mmr_select_box", $("tr", tbl));
-		$(".mmr_select_banner", tbl).children("td").html("All " + checkBoxes.length + " records selected...").parent().delay(1000).fadeOut();
-		checkBoxes.filter(":not(:checked)").click().parent().parent().children("td:not(.mmr_nohighlight)").css("background-color","#e2e2e2");
-	});
-	
-	$(".mmr_select_flagged_link").live("click", function() {
-		var tbl = $(this).parents("table.mmr_expandable_table");
-		
-		// Clear all checkboxes
-		var checkBoxes = $(".mmr_select_box", $("tr", tbl));
-		checkBoxes.filter(":checked").click().parent().parent().children("td:not(.mmr_nohighlight)").css("background-color","#F0EDEA");
-		
-		$(".mmr_more_records_link", tbl).click();
-		
-		var flaggedRows = $("tr", tbl).has("td.mmr_flag > .flagged:not(.hide)").has("td.rowSelector > input");
-		$("td.rowSelector > input", flaggedRows).filter(":not(:checked)").click().parent().parent().children("td:not(.mmr_nohighlight)").css("background-color","#e2e2e2");
-		$(".mmr_select_banner", tbl).children("td").html(flaggedRows.length + " flagged record(s) selected...").parent().delay(1000).fadeOut();
-		if (flaggedRows.length == 0)
-		{
-			$(".mmr_select_all_button", tbl).val("select all");
-		}
-	});
-	
-	
-	$(".mmr_select_box").live("click", function(e) {
-
-		if (e.originalEvent != undefined)
-		{
-			if ($(this).val() == "checked")
-			{
-				$(this).parent().parent().children("td:not(.mmr_nohighlight)").css("background-color","#F0EDEA");
-			}
-			else
-			{
-				$(this).parent().parent().children("td:not(.mmr_nohighlight)").css("background-color","#e2e2e2");
-			}
-		}
-		
-		if ($(this).val() == "checked")
-		{
-			$(this).val("unchecked");
-		}
-		else
-		{
-			$(this).val("checked");
-		}
-		
-		if ($(".mmr_select_box[value=checked]", $(this).parents("table.mmr_expandable_table")).length > 0)
-		{
-			$(".mmr_button_row > input:disabled", $(this).parents("table.mmr_expandable_table")).removeAttr("disabled");
-		}
-		else
-		{
-			$(".mmr_button_row > input:enabled", $(this).parents("table.mmr_expandable_table")).attr("disabled","disabled");
-		}
-	});
-	
-	
-	
-});
-
-function MMR_setDraftFlag(key, flag)
-{
-	$.get($("#elementSourceURL").val() + "task=flag_draft&data_source=" + encodeURIComponent($("#dataSourceKey").val()) + "&key=" + encodeURIComponent(key) + "&flag=" + flag);
-}
-
-function MMR_setRegObjFlag(key, flag)
-{
-	$.get($("#elementSourceURL").val() + "task=flag_regobj&key=" + encodeURIComponent(key) + "&flag=" + flag);
-}
-
-
-
-function MMR_toggleInfoVisible()
-{
-	if (MMR_datasource_info_visible == "true")
-	{
-		$('#mmr_datasource_information').hide();
-		$('#mmr_information_show').show();
-		MMR_setStatusCookie('info','false');
-	}
-	else
-	{
-		$('#mmr_datasource_information').show();
-		$('#mmr_information_show').hide();
-		MMR_setStatusCookie('info','true');
-	}
-}
-
-function MMR_initStatusCookie()
-{
-	var currentState = '';
-	if( (currentState = getCookie(STATUS_COOKIE_NAME)) == '' )
-	{
-		// Status Cookie format:
-		// bool||bool||bool
-		//   ^     ^     ^
-		// info    |     |
-		//       unused  |
-		//             unused
-		
-		setCookie(STATUS_COOKIE_NAME, "true||false||false", STATUS_COOKIE_TTL_DAYS);
-		MMR_initStatusCookie();
-	} else {
-		MMR_datasource_info_visible = currentState.split("||")[0];
-	}		
-}
-
-function MMR_setStatusCookie(field, value) {
-	
-	// Check cookie exists and get its current state
-	var currentState = '';
-	if( (currentState = getCookie(STATUS_COOKIE_NAME)) == '' )
-	{	
-		RMD_initStatusCookie();
-		currentState = getCookie(STATUS_COOKIE_NAME);
-	} 
-		
-	// Update the appropriate value
-	curVals = currentState.split("||");
-		
-	if (field == "info") {
-		curVals[0] = value;
-	} 
-	
-	MMR_datasource_info_visible = curVals[0];
-		
-	// Reset the cookie
-	setCookie(	STATUS_COOKIE_NAME, 
-				curVals.join("||"), 
-				STATUS_COOKIE_TTL_DAYS);
-	
-}
-
-
-function MMR_getFromStatusCookie(field) {
-	
-	// Check cookie exists and get its current state
-	var currentState = '';
-	if( (currentState = getCookie(STATUS_COOKIE_NAME)) == '' )
-	{	
-		RMD_initStatusCookie();
-		currentState = getCookie(STATUS_COOKIE_NAME);
-	} 
-		
-	// Update the appropriate value
-	curVals = currentState.split("||");
-		
-	if (field == "info") {
-		return curVals[0];
-	} 
-	
-}
-
-
-function blockLoading()
-{
-	// change this is regmydata too
-	$('#mmr_datasource_alert_msg').html("Sending message to server. Please wait...<br/><br/>" +
-										"<div style='text-align:center'>" +
-											"<img src='../../_images/_icons/ajax_loading.gif' />" +
-										"</div>"); 
-	$.blockUI({ message: $('#mmr_datasource_alert') });
-}
-
-function blockWithMessage(msg)
-{
-	$('#mmr_datasource_alert_msg').html(msg);
-	$.blockUI({ message: $('#mmr_datasource_alert') });
-}

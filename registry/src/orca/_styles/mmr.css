@@ -383,10 +383,12 @@ a.icon100s span {background:url(button-icons-small.png) no-repeat -283px -312px;
 a.icon2s span {background:url(button-icons-small.png) no-repeat -35px -36px;}
 a.icon28sOff span {background:url(button-icons-small.png) no-repeat -221px -98px;}
 a.icon28sOn span {background:url(button-icons-small.png) no-repeat -6px -643px;}
+a.icon59sOff span {background: url(button-icons-small.png) no-repeat -254px -189px;}
+a.icon59sOn span {background: url(button-icons-small.png) no-repeat -70px -645px;}
 
-a.ql1{background:#3366cc;color:white;}
-a.ql2{background:#dc3912;color:white;}
-a.ql3{background:#ff9900;color:white;}
+a.ql3{background:#3366cc;color:white;}
+a.ql2{background:#ff9900;color:white;}
+a.ql1{background:#dc3912;color:white;}
 
 a.borderless{
     border:none;
@@ -473,7 +475,7 @@ div.flexigrid a{text-decoration:none;}
 .ASSESSMENT_IN_PROGRESS_status{background: #0B2E59 !important;color:white;text-shadow: 0 1px 0 #000;font-weight:bold;}
 .PUBLISHED_status{background: limeGreen !important;color:white;text-shadow: 0 1px 0 #000;font-weight:bold;}
 .APPROVED_status{background: #EDD155 !important;color:white;text-shadow: 0 1px 0 #000;font-weight:bold;}
-
+.MORE_WORK_REQUIRED_status{background: #6A4A3C !important;color:white;text-shadow: 0 1px 0 #000;font-weight:bold;}
 
 
 

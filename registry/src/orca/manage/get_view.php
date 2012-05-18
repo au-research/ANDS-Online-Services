@@ -39,6 +39,7 @@ switch($view){
 	case "qa_table":searchRecords($status);break;
 	case "allKeys":allKeys($status);break;
 	case "statusCount": statusCount($status);break;
+	case "AllStatusAllQA": AllStatusAllQA($dataSourceKey);break;
 }
 
 
@@ -191,11 +192,11 @@ function searchRecords($status){
 
 		$flag = $doc->{'flag'};
 		if($flag==0){
-			$flagClass = 'icon28sOff';
+			$flagClass = 'icon59sOff';
 		}else{
-			$flagClass = 'icon28sOn';
+			$flagClass = 'icon59sOn';
 		}
-		$flagButton = '<a href="javascript:void(0);" class="smallIcon '.$flagClass.' tip flagToggle" tip="Flag This Record"><span></span></a>';
+		$flagButton = '<a href="javascript:void(0);" class="smallIcon '.$flagClass.' tip flagToggle borderless" tip="Flag This Record"><span></span></a>';
 
 
 
@@ -220,7 +221,7 @@ function searchRecords($status){
 
 		$goldFlag = '';
 		if(isset($doc->{'gold_status_flag'}) && ($doc->{'gold_status_flag'}==1)){
-			$goldFlag = ' (GOLD) ';
+			$goldFlag = '<a href="javascript:void(0);" class="smallIcon icon28sOn tip borderless" tip="Gold Standard" style="float:right"><span></span></a>';
 		}
 		
 		$entry = array(
@@ -228,7 +229,7 @@ function searchRecords($status){
 					'cell' => array(
 
 							'<a href="'.$view_link.'">'.$doc->{'key'}.'</a>',
-							'<a href="'.$view_link.'">'.$doc->{'list_title'}.$goldFlag.'</a>',
+							$goldFlag.' '.$doc->{'list_title'},
 
 							$date_modified,
 							$doc->{'class'},
@@ -264,6 +265,53 @@ function statusCount($status){
 	echo $content;
 }
 
+function AllStatusAllQA($dataSourceKey){
+	header("Content-type: application/javascript");
+	global $dataSourceKey, $solr_url;
+	$q = '+data_source_key:("'.$dataSourceKey.'")';
+	$fields = array(
+		'q'=>$q,'version'=>'2.2','start'=>'0','rows'=>'1', 'wt'=>'json',
+		'fl'=>'key', 'facet'=>'true', 'facet.field'=>'class','facet.mincount'=>'1','facet.sort'=>'index'
+	);
+	//Call SOLR and ask for data
+	$status_result = solr($solr_url, $fields);
+
+	$status_result = json_decode($status_result);
+
+	$statuses = $status_result->{'facet_counts'}->{'facet_fields'}->{'class'};
+
+	$result = array();
+	for($i=0;$i<sizeof($statuses)-1;$i=$i+2){
+		$s = $statuses[$i];
+		$s_num = $statuses[$i+1];
+		$status_qa = getQAforClass($dataSourceKey, $s);
+		$status_qa_array = array();
+		for($j=0;$j<sizeof($status_qa)-1;$j=$j+2){
+			$status_qa_array[$status_qa[$j]]=$status_qa[$j+1];
+		}
+		$result[$s]['label']=$s;
+		$result[$s]['num']=$s_num;
+		$result[$s]['qa']=$status_qa_array;
+	}
+	$result = json_encode($result);
+	echo $result;
+
+}
+
+function getQAforClass($dataSourceKey, $class){
+	global $dataSourceKey, $solr_url;
+	$q = '+data_source_key:("'.$dataSourceKey.'") +class:("'.$class.'")';
+	$fields = array(
+		'q'=>$q,'version'=>'2.2','start'=>'0','rows'=>'1', 'wt'=>'json',
+		'fl'=>'key', 'facet'=>'true', 'facet.field'=>'quality_level','facet.mincount'=>'1','facet.sort'=>'index'
+	);
+	//Call SOLR and ask for data
+
+	//echo $q;
+	$qa_result = json_decode(solr($solr_url, $fields));
+
+	return $qa_result->{'facet_counts'}->{'facet_fields'}->{'quality_level'};
+}
 
 
 /**
@@ -280,15 +328,6 @@ function allKeys($status){
 	echo $content;
 }
 
-function executeSOLR($solr_url, $fields, $fields_string){
-	$ch = curl_init();
-	//set the url, number of POST vars, POST data
-	curl_setopt($ch,CURLOPT_URL,$solr_url.'select');//post to SOLR
-	curl_setopt($ch,CURLOPT_POST,count($fields));//number of POST var
-	curl_setopt($ch,CURLOPT_POSTFIELDS,$fields_string);//post the field strings
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);//return to variable
-	$content = curl_exec($ch);//execute the curl
-	return $content;
-}
+
 
 ?>

@@ -530,7 +530,7 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 				$hash = generateRegistryObjectHashForKey($registryObjectKey);
 				updateRegistryObjectHash($registryObjectKey, $hash);
 				
-				updateRegistryObjectSLUG($registryObjectKey, $display_title, $currentUrlSlug);
+				//updateRegistryObjectSLUG($registryObjectKey, $display_title, $currentUrlSlug);
 
 
 				// A new record has been inserted? Update the cache
@@ -572,6 +572,118 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 	
 	return $runErrors;
 }
+
+
+//APPROVE A record
+function approveDraft($key, $data_source_key){
+	$returnErrors='';
+	$draft = getDraftRegistryObject(rawurldecode($key), $data_source_key);
+	$errorMessages = "";
+	if ($draft[0]['error_count'] == 0)
+	{
+		error_reporting(E_ERROR | E_WARNING | E_PARSE);
+		ini_set("display_errors", 1);
+		
+
+		if ($draft = getDraftRegistryObject(rawurldecode($key), $data_source_key)) 
+		{
+			$rifcs = new DomDocument();
+			$rifcs->loadXML($draft[0]['rifcs']);
+			$stripFromData = new DomDocument();
+			$stripFromData->load('../_xsl/stripFormData.xsl');
+			$proc = new XSLTProcessor();
+			$proc->importStyleSheet($stripFromData);
+			$registryObject = $proc->transformToDoc($rifcs);
+			//print_pre($draft);
+			$dataSourceKey = $draft[0]['registry_object_data_source'];
+			$deleteErrors = "";
+	        $errors = error_get_last();
+	   		
+			if( $errors )
+			{
+				$errorMessages .= "Document Load Error";
+				$errorMessages .= "<div style=\"margin-top: 8px; color: #880000; height: 100px; width: 500px; padding: 0px; white-space: pre-wrap; overflow: auto; font-family: courier new, courier, monospace; font-size:9pt;\">";
+				$errorMessages .= esc($errors['message']);
+				$errorMessages .= "</div>\n";
+			}
+			
+			error_reporting(E_ALL);
+			ini_set("display_errors", 1);
+			if( !$errorMessages )
+			{
+				// Validate it against the orca schema.
+			    // libxml2.6 workaround (Save to local filesystem before validating)
+			  
+			    // Create temporary file and save manually created DOMDocument.
+			    $tempFile = "/tmp/" . time() . '-' . rand() . '-document.tmp';
+			    $registryObject->save($tempFile);
+			 
+			    // Create temporary DOMDocument and re-load content from file.
+			    $registryObject = new DOMDocument();
+			    $registryObject->load($tempFile);
+			    
+			    // Delete temporary file.
+			    if (is_file($tempFile))
+			    {
+			      unlink($tempFile);
+			    }
+			  
+				$result = $registryObject->schemaValidate(gRIF_SCHEMA_PATH); //xxx
+				$errors = error_get_last();
+				//print($dataSourceKey);
+				//exit;
+	
+				if( $errors )
+				{
+					$errorMessages .= "Document Validation Error\n";
+					$errorMessages .= esc($errors['message']);
+				}
+				else
+               	{
+
+					$importErrors = importRegistryObjects($registryObject,$dataSourceKey, $resultMessage, getLoggedInUser(), null, ($draft[0]['draft_owner']==SYSTEM ? SYSTEM : getThisOrcaUserIdentity()), null, true);       
+					//echo $importErrors;die();
+					$QAErrors = runQualityCheckForRegistryObject(rawurldecode($key), $dataSourceKey);
+
+					//addSolrIndex(rawurldecode($key), true);
+					if( !$importErrors )
+					{
+						$deleteErrors = deleteDraftRegistryObject($dataSourceKey , rawurldecode($key));
+					}            
+
+					
+					if( $deleteErrors || $importErrors || ($QAErrors!=''))
+					{
+						$errorMessages .= "Delete Error: $deleteErrors \n\n Import Error: $importErrors \n\n Quality Check Error: $QAErrors";
+					}
+					else
+					{
+						//print("<script>$(window.location).attr('href','".eAPP_ROOT."orca/view.php?key=".esc($_GET['key'])."');</script>");
+					}
+				}
+			}
+
+		}
+		else
+		{       
+			$errorMessages .= "This Draft Key does not exist!";
+		}
+	
+
+	}
+	else 
+	{
+		$errorMessages .= "This record contains errors and cannot be published.";	
+	}
+	
+	$returnErrors .= (strlen($errorMessages) > 0 ? 	"\nERROR (key: $key): \n" . 
+													"------------------ \n" . 
+													$errorMessages . "\n" . 
+													"------------------" : "");
+
+	return $returnErrors;
+}
+
 
 // Datatype handlers
 // =============================================================================
@@ -1961,7 +2073,6 @@ function runQualityLevelCheckforDataSource($dataSourceKey)
 
 function runQualityCheckForRegistryObject($registryObjectKey, $dataSourceKey)
 {
-	
 		$rifcs = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
 		$rifcs .= '<registryObjects xmlns="http://ands.org.au/standards/rif-cs/registryObjects" '."\n";
 		$rifcs .= '                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '."\n";
