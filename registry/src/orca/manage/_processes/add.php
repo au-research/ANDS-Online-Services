@@ -74,6 +74,7 @@ error_reporting(E_ERROR | E_WARNING | E_PARSE);
 				else
                	{
 					$importErrors = importRegistryObjects($registryObject,$dataSourceKey, $resultMessage, getLoggedInUser(), PUBLISHED, getThisOrcaUserIdentity(), null, true);       
+					runQualityLevelCheckForRegistryObject($_GET['key'], $dataSourceKey);
 					$result = addSolrIndex($_GET['key']);
 					if( !$importErrors )
 					{
@@ -85,6 +86,7 @@ error_reporting(E_ERROR | E_WARNING | E_PARSE);
 					}
 					else
 					{
+						//print("<p>RESULT OF SOLR INDEXING:.$result.ENDRSULT</p>");
 						print("<script>$(window.location).attr('href','".eAPP_ROOT."orca/view.php?key=".esc($_GET['key'])."');</script>");
 					}
 				}
