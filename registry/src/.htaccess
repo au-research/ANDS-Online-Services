@@ -1,5 +1,5 @@
 RewriteEngine On
-RewriteBase /7.3/ands/registry/src
+RewriteBase /workarea/leo/ands/registry/src
 
 # Remap version number and response type according to the URL structure
 
