@@ -279,7 +279,7 @@ addMenu($menu);
 		// =============================================================================
 		//http://svcs.services.ands.org.au/home/orca/services
 		// services/putHarvestData
-		$activity = new activity('aORCA_SERVICE_PUT_HARVEST_DATA', 'Put Harvest Data', 'http://svcs.services.ands.org.au/home/orca/services/putHarvestData.php');
+		$activity = new activity('aORCA_SERVICE_PUT_HARVEST_DATA', 'Put Harvest Data', 'http://'.eHOST.'/'.eROOT_DIR.'/orca/services/putHarvestData.php');
 		$activity->no_check_ssl= true;
 		addActivity($activity);
 
