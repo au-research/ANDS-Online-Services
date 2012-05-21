@@ -2754,4 +2754,16 @@ function getGroupDataSources($group)
 		return $resultSet;
 
 }
+function isContributorPage($page)
+{
+	global $gCNN_DBS_ORCA;
+	$strQuery = 'SELECT object_group FROM dba.tbl_institution_pages WHERE registry_object_key = $1';
+	$params = array($page);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	if (!isset($resultSet[0])) 
+		return false;
+	else 
+		return $resultSet[0];
+
+}
 ?>

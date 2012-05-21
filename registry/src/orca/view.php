@@ -125,7 +125,11 @@ if( $registryObject )
 	{
 		$rdaLinkPrefix = 'Preview';
 	}
-	$rdaLink = '<br /><a style="font-size:0.8em; font-weight: normal;" href="'.eHTTP_APP_ROOT.'orca/rda/view/?key='.urlencode($registryObjectKey).'">'.$rdaLinkPrefix.' this record in Research Data Australia</a>'."\n";
+	if(isContributorPage($registryObjectKey)) {
+		$rdaLink = '<br /><a style="font-size:0.8em; font-weight: normal;" href="'.eHTTP_APP_ROOT.'orca/rda/view/group/?group='.urlencode($registryObjectKey). '&groupName='.esc($objectGroup).'">'.$rdaLinkPrefix.' this record in Research Data Australia</a>'."\n";	
+	} else {
+		$rdaLink = '<br /><a style="font-size:0.8em; font-weight: normal;" href="'.eHTTP_APP_ROOT.'orca/rda/view/?key='.urlencode($registryObjectKey).'">'.$rdaLinkPrefix.' this record in Research Data Australia</a>'."\n";
+	}
 	
 	$recordHistory = "";
 	if( userIsDataSourceRecordOwner($registryObjectDataSourceRecordOwner) || userIsORCA_ADMIN() )

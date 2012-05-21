@@ -19,7 +19,8 @@ limitations under the License.
 <p>
 
 <?php
-if($person['numfound']==0&&$group['numfound']==0&&$collection['numfound']==0&&$service['numfound']==0&&$activity['numfound']==0)
+$theContributor =  getInstitutionPage($theGroup);
+if($person['numfound']==0&&$group['numfound']==0&&$collection['numfound']==0&&$service['numfound']==0&&$activity['numfound']==0&&!$theContributor)
 {
  echo '<span id="connections-realnumfound">0</span>';	
 }
@@ -97,8 +98,9 @@ if(isset($groups)&&$groups['numfound']>0){
 
 	echo $groups['heading'];
 	//echo "<pre>";
-	//print_r($groups);
+	//print_r($groups['json']);
 	//echo "</pre>";	
+	//exit();
 	if($groups['numfound']>1)$title = $groups['titles']; else $title = $groups['title'];
 
 	$max = 5;
@@ -146,7 +148,7 @@ if(isset($groups)&&$groups['numfound']>0){
 		}
 
 		echo '<li><a href="'.base_url().'view/?key='.urlencode($groups['json']->{'response'}->{'docs'}[$i]->{'key'}).'" title="'.findRelationship($groups['json']->{'response'}->{'docs'}[$i]->{'key'},$groups['relatedKey'],$groups['relationship']).' '.$autoLinkTitle.'">';
-		echo $groups['json']->{'response'}->{'docs'}[$i]->{'displayTitle'};
+		echo $groups['json']->{'response'}->{'docs'}[$i]->{'display_title'};
 		echo '</a>'.findRelationshipDescription($groups['json']->{'response'}->{'docs'}[$i]->{'key'},$groups['relatedKey'],$groups['relationship_description']).$autoLink.$logostr.'</li>';
 
 	}

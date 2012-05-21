@@ -156,9 +156,7 @@ class Search extends CI_Controller {
                foreach($relatedObjectsKeys->{'response'}->{'docs'} as $index=>$r){
                        $relation_types2 = array('custodian', 'isManagedBy');
                        echo '<pre>';
-                       print_r($relation =
-$this->getRelatedObjects($r->{'relatedObject_key'}[$index],
-$relation_types2));
+                       print_r($relation =$this->getRelatedObjects($r->{'relatedObject_key'}[$index],$relation_types2));
                        echo '</pre>';
                }
        }
@@ -257,9 +255,9 @@ $relation_types2));
 		$this->load->model('solr');
 		$object = $this->solr->getObjects($related,null,null,null);
 		if(isset($object->{'response'}->{'docs'}[0])){
-
-		$keyList = $object->{'response'}->{'docs'}[0]->{'relatedObject_key'};
-		$relationshipList = $object->{'response'}->{'docs'}[0]->{'relatedObject_relation'};
+//print_r(($object->{'response'}->{'docs'}[0]));
+		$keyList = $object->{'response'}->{'docs'}[0]->{'related_object_key'};
+		$relationshipList = $object->{'response'}->{'docs'}[0]->{'related_object_relation'};
 		$relationship = '';
 
 		for($i=0;$i<count($keyList);$i++)
@@ -279,6 +277,7 @@ $relation_types2));
 	}
 	public function connections($type="count",$class=null,$types=null){//for rda connections
         $this->load->model('solr');
+        $relatedKeys = array();
         $query = $this->input->post('q');
         $classArray = array('collection','service','activity');
         $typeArray = array('person', 'group');
@@ -287,6 +286,7 @@ $relation_types2));
        	$key = $this->input->post('key'); 
         $keyArray[] = $key;   
         $data['json'] =$this->solr->getObjects($keyArray,$class,$types,null);
+      //print_r($data['json']);
 		$data['externalKeys']  ='';
 		
         $reverseLinks = $data['json']->{'response'}->{'docs'}[0]->{'reverse_links'};  
@@ -294,6 +294,7 @@ $relation_types2));
 		$data['theGroup'] = $data['json']->{'response'}->{'docs'}[0]->{'group'};
 		
         $data['thisClass'] = $data['json']->{'response'}->{'docs'}[0]->{'class'};
+
 		$data['externalKeys'] = '';
         if(!$types and !$class)
         { 
@@ -301,33 +302,37 @@ $relation_types2));
         	{          		
         		$data[$class]['json'][0] =$this->solr->getRelated($key,$class,$types); 
          		$relatedKeys = array();
-        		foreach($data[$class]['json'][0]->{'response'}->{'docs'} as $r)
-        		{
-        			$relatedNum = count($r->{'related_object_key'});
- 
-        			$relatedKeys = ''; 
-        	        $data[$class]['relatedKey'] = '';      			
-        			for($i = 0; $i<$relatedNum;$i++)
+         		$numFound = $data[$class]['json'][0]->{'response'}->{'numFound'};
+         		if($numFound>0){
+        			foreach($data[$class]['json'][0]->{'response'}->{'docs'} as $r)
         			{
-        				if($r->{'related_object_class'}[$i]==$class)
+        				$relatedNum = count($r->{'related_object_key'});
+ 
+        				$relatedKeys = ''; 
+        	        	$data[$class]['relatedKey'] = '';      			
+        				for($i = 0; $i<$relatedNum;$i++)
         				{
-        					$relatedKeys[] = $r->{'relatedObject_key'}[$i];
-        					$data[$class]['relationship'][] = $r->{'related_object_relation'}[$i];
-        					if(isset( $r->{'related_object_relation_description'}[$i])){
-       							$data[$class]['relationship_description'][] = $r->{'related_object_relation_description'}[$i];  
-        					}else{
-        						$data[$class]['relationship_description'][] = 'null';
-        					}      					
-         					$data[$class]['relatedKey'][] = $r->{'related_object_key'}[$i];        					
+        					if($r->{'related_object_class'}[$i]==$class)
+        					{
+        						$relatedKeys[] = $r->{'related_object_key'}[$i];
+        						$data[$class]['relationship'][] = $r->{'related_object_relation'}[$i];
+        						if(isset( $r->{'related_object_relation_description'}[$i])){
+       								$data[$class]['relationship_description'][] = $r->{'related_object_relation_description'}[$i];  
+        						}else{
+        							$data[$class]['relationship_description'][] = 'null';
+        						}      					
+         						$data[$class]['relatedKey'][] = $r->{'related_object_key'}[$i];        					
 
+        					}
         				}
         			}
-        		} 
+         		} 
         		if($reverseLinks!="NONE"){
-        			
+        		//	echo "we are here<br/>";
         			$data[$class]['json'][1] =$this->solr->getConnections($key,$class,$types,$relatedKeys,$reverseLinks,$dataSourceKey);  
+        		//	print_r($data[$class]['json'][1]);
         			$data[$class]["external"] =$this->solr->getConnections($key,$class,$types,$relatedKeys,'EXT',$dataSourceKey); 
-        			 
+        			
 					if($data[$class]["external"]->{'response'}->{'numFound'}>0) 
 					{
 				
@@ -346,20 +351,30 @@ $relation_types2));
 
       				foreach($data[$class]['json'][1]->{'response'}->{'docs'} as $r)
         			{
+        				//echo count($r->{'key'});
         				$connectedNum = count($r->{'key'});
         				for($i = 0; $i<$connectedNum;$i++)
         				{
+        					//echo $r->{'class'}."==".$class."<br />";
         					if($r->{'class'}==$class)
         					{
         						$relatedKeys[] = $r->{'key'};
         						$data[$class]['relationship'][] = $this->getRelationship($key,$r->{'key'},$class);
+        						//echo $this->getRelationship($key,$r->{'key'},$class)."<br />";
          						$data[$class]['relatedKey'][] = $r->{'key'};       					
         					}
         				}
         			}  
         		}          		   		
   				$data[$class]['json'] = $this->solr->getObjects($relatedKeys,$class,$types,$page=null);
-  				$data[$class]['numfound'] = $data[$class]['json']->{'response'}->{'numFound'};
+  			//	print_r($relatedKeys);
+  			//	echo "<br />";
+  				
+  			//	echo $class."<br />";
+  			//	if($class=="collection") print_r($relatedKeys);
+  				//print_r($data[$class]['json']);
+   			//	echo "<br />Found:".$data[$class]['json']->{'response'}->{'numFound'}."<br />-------------------<br />"; 				
+  				$data[$class]['numfound'] = $data[$class]['json']->{'response'}->{'numFound'};	
         	}
             foreach($typeArray as $types)
         	{
@@ -388,11 +403,17 @@ $relation_types2));
         		}  	
         		if($reverseLinks!="NONE"){    		
             		$data[$types]['json'][1] =$this->solr->getConnections($key,'party',$types,$relatedKeys,$reverseLinks,$dataSourceKey); 
-        			$data[$class]["extrnal"] =$this->solr->getConnections($key,'party',$types,$relatedKeys,'EXT',$dataSourceKey);  
-					if($data[$class]["extrnal"]->{'response'}->{'numFound'}>0) 
+           			//echo $types."------------------<br />";
+        			//print_r($data[$types]['json'][1]) ;
+           			//echo "------------------<br />";          		
+        			$data[$types]["extrnal"] =$this->solr->getConnections($key,'party',$types,$relatedKeys,'EXT',$dataSourceKey); 
+        			//echo $types."+++++++++++++<br />";
+        			//print_r($data[$types]["extrnal"]) ;
+           			//echo "+++++++++++++<br />";     			
+       				if($data[$types]["extrnal"]->{'response'}->{'numFound'}>0) 
 					{
 
-        				foreach($data[$class]["extrnal"]->{'response'}->{'docs'} as $r)
+        				foreach($data[$types]["extrnal"]->{'response'}->{'docs'} as $r)
         				{
         					$extrnalNum = count($r->{'key'});
         					for($i = 0; $i<$extrnalNum;$i++)
@@ -408,6 +429,7 @@ $relation_types2));
         			foreach($data[$types]['json'][1]->{'response'}->{'docs'} as $r)
         			{
         				$connectedNum = count($r->{'key'});
+        				//echo $connectedNum."<br />";
         				for($i = 0; $i<$connectedNum;$i++)
         				{
          					if($r->{'type'}==$types)
@@ -431,14 +453,15 @@ $relation_types2));
         	$relatedKeys = array();
         	foreach($data['json']->{'response'}->{'docs'} as $r)
         	{
-        		$relatedNum = count($r->{'relatedObject_key'});
+        		$relatedNum = count($r->{'related_object_key'});
         		$relatedKeys = '';      			
         		for($i = 0; $i<$relatedNum;$i++)
         		{
         			if($r->{'related_object_class'}[$i]==$class)
         			{
         				$relatedKeys[] = $r->{'related_object_key'}[$i];
-        				$relatedDescriptions[] = $r->{'related_object_relation_description'}[$i];
+        				//print_r($r);
+        				$relatedDescriptions[] = $r->{'related_object_relation'}[$i];
          			}
         		} 
         	} 

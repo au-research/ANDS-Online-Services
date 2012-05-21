@@ -142,12 +142,14 @@ limitations under the License.
     }
     
 	public function getConnections($key, $class, $type, $exclude,$reverseLinks,$dataSourceKey){	
-		//echo $key."<br />";
+
 		$excludeKeys = '';
-		if(count($exclude)>1)
+
+		if(count($exclude)>0)
 		{		
 		
 			$excludes = array_keys($exclude);
+			//return $exclude;
 			$excludeKeys = '(';
 
 			for($i=0;$i<count($exclude);$i++)
@@ -156,10 +158,11 @@ limitations under the License.
 			}
 			$excludeKeys = trim($excludeKeys,'OR ');
 			$excludeKeys .= ")";
-		}else{
+		}elseif(implode($exclude)!=''){
 			$excludeKeys = '(';
-			$excludeKeys .= '"'.$exclude.'"';	
-			$excludeKeys .= ")";		
+			$excludeKeys .= '"'.implode($exclude).'"';	
+			$excludeKeys .= ")";	
+
 		}
     	$fields = array(
 			'q'=>'related_object_key:"'.$key.'"','version'=>'2.2','rows'=>'200000','start'=>'0','indent'=>'on', 'wt'=>'json','fl'=>'key,class,type,data_source_key'
@@ -167,8 +170,9 @@ limitations under the License.
 		$filter_query = '+class:("'.$class.'")';
 		if($type) $filter_query = '+type:("'.$type.'")'; 
 		if($reverseLinks=="INT")$filter_query .= '+data_source_key:("'.$dataSourceKey.'")';
-		if($reverseLinks=="EXT")$filter_query .= '-data_source_key:("'.$dataSourceKey.'")';		
-		if($excludeKeys)$filter_query .= '-key: '.escapeSolrValue($excludeKeys);  
+		if($reverseLinks=="EXT")$filter_query .= '-data_source_key:("'.$dataSourceKey.'")';	
+		
+		if($excludeKeys!='')$filter_query .= '-key: '.escapeSolrValue($excludeKeys);  
 
 		$fields['fq']=$filter_query;
 		$json = $this->fireSearch($fields, '');
@@ -176,8 +180,11 @@ limitations under the License.
 		return $json;
     } 
     
-	public function getObjects($keys, $class, $type, $page){	
-		//echo $keys[0];
+	public function getObjects($keys, $class, $type, $page){
+	//	if (count($keys)>1){	echo count($keys)," is the count of the getObjects keys<br />";		}	
+		//print_r($keys);
+		//echo "<br />++++++++++++++++++++++++++<br/>";
+		//}
 		if($page!=null){
 			$start = 0;
 			$rows = 10;
@@ -186,11 +193,11 @@ limitations under the License.
 			$start = 0;
 			$rows = 2000;			
 		}
-	
+
 		$getkeys = '(';
 		if(count($keys)>0)
  		{
-			for($i=0;$i<count($keys);$i++)
+ 		for($i=0;$i<count($keys);$i++)
 			{
 				$getkeys .= '"'.escapeSolrValue($keys[$i]).'" OR ';
 			}
@@ -200,12 +207,13 @@ limitations under the License.
 		}
 		$getkeys = trim($getkeys,'OR ');
 		$getkeys .= ")";
-
+//if(count($keys)>2 ){echo $getkeys;}
     	$fields = array(
 			'q'=>'key:'.$getkeys.' +status:(PUBLISHED)','version'=>'2.2','rows'=>$rows,'start'=>$start,'indent'=>'on', 'wt'=>'json'
 		);
 
 		$json = $this->fireSearch($fields, '');
+	//	if(count($keys)>3){print_r($json);}
 		return $json;
     }  
        
@@ -355,11 +363,10 @@ limitations under the License.
 		$fields_string='';
 		//foreach($fields as $key=>$value) { $fields_string .= $key.'='.str_replace("+","%2B",$value).'&'; }//build the string
 		foreach($fields as $key=>$value) { 
-		//echo $value."<br />";
 			$fields_string .= $key.'='.$value.'&'; 				
 		}//build the string
     	$fields_string .= $facet;//add the facet bits
-    	rtrim($fields_string,'&');
+    	$fields_string = rtrim($fields_string,'&');
 	
 	//echo $fields_string."....<br />";
 	
@@ -378,6 +385,7 @@ limitations under the License.
 		
 		
 		$json = json_decode($content);
+		//echo  "*********".$content;
 		return $json;
     }
 }

@@ -27,7 +27,7 @@ limitations under the License.
 
 	for($i=0;$i<count($class);$i++)
 	{
-		if($class[$i]=="collection") $collectionCount = $class[$i+1];
+		if($class[$i]=="collection") {$collectionCount = $class[$i+1];}else{$collectionCount = 0;};
 
 		$i++;
 	}
