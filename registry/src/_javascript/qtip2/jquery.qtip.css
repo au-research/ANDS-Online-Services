@@ -26,6 +26,12 @@
 	line-height: 12px;
 }
 
+.ui-tooltip-big{
+	font-size:14px;
+	max-width: 400px;
+	line-height: 18px;
+}
+
 	/* Fluid class for determining actual width in IE */
 	.ui-tooltip-fluid{
 		display: block;

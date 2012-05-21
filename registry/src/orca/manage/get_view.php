@@ -23,6 +23,7 @@ $dataSourceKey = getQueryValue('ds');
 $view = getQueryValue('view');
 $status = getQueryValue('status');
 $ql = getQueryValue('ql');
+$key = getQueryValue('key');
 
 $page = isset($_POST['page']) ? $_POST['page'] : 1;
 $rp = isset($_POST['rp']) ? $_POST['rp'] : 20;
@@ -40,6 +41,7 @@ switch($view){
 	case "allKeys":allKeys($status);break;
 	case "statusCount": statusCount($status);break;
 	case "AllStatusAllQA": AllStatusAllQA($dataSourceKey);break;
+	case "tipQA": tipQA($key, $ql);
 }
 
 
@@ -216,7 +218,7 @@ function searchRecords($status){
 		}
 
 
-		$qualityLevelStr = '<a href="javascript:;" class="smallIcon tip ql'.$doc->{'quality_level'}.'">'.$doc->{'quality_level'}.'<span></span></a>';
+		$qualityLevelStr = '<a href="javascript:;" dsKey="'.$doc->{'data_source_key'}.'" status="'.$doc->{'status'}.'" level="'.$doc->{'quality_level'}.'" key="'.$doc->{'key'}.'" class="smallIcon tipQA ql'.$doc->{'quality_level'}.'">'.$doc->{'quality_level'}.'<span></span></a>';
 
 
 		$goldFlag = '';
@@ -291,11 +293,18 @@ function AllStatusAllQA($dataSourceKey){
 		}
 		$result[$s]['label']=$s;
 		$result[$s]['num']=$s_num;
+
+		for($j=0;$j<=4;$j++){
+			if(!isset($status_qa_array[$j]))$status_qa_array[$j]=0;
+		}
+		ksort($status_qa_array);
+		//$status_qa_array = json_encode($status_qa_array);
 		$result[$s]['qa']=$status_qa_array;
 	}
+	//echo '<hr/>';
+	//var_dump($result);
 	$result = json_encode($result);
 	echo $result;
-
 }
 
 function getQAforClass($dataSourceKey, $class){
@@ -328,6 +337,11 @@ function allKeys($status){
 	echo $content;
 }
 
-
+function tipQA($key, $level){
+	global $dataSourceKey, $status;
+	$t = getQualityTestResult($key, $dataSourceKey, $status);
+	echo $t;
+	//echo 'getting qa for key='.$key.' and level='.$level.'<a href="">asdfadsfasd</a>';
+}
 
 ?>

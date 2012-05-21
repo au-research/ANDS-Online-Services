@@ -2013,6 +2013,7 @@ function getTemporalCoverage($coverage_id)
 	return $resultSet;
 }
 
+
 function getTemporalCoverageText($temporal_coverage_id)
 {
 	global $gCNN_DBS_ORCA;
@@ -2107,6 +2108,35 @@ function searchForNameParts($searchText, $objectClass, $dataSourceKey, $limit)
 	
 	
 	return $values;
+}
+
+function getQualityTestResult($registry_object_key, $dataSourceKey, $status){
+
+	if($status!='PUBLISHED' && $status!='APPROVED'){
+		//it is a draft
+		$strQuery = 'SELECT * FROM dba.tbl_draft_registry_objects WHERE draft_key = $1 AND registry_object_data_source = $2';
+		$params = array($registry_object_key, $dataSourceKey);
+	}else{
+		//is not a draft
+		$strQuery = 'SELECT * FROM dba.tbl_registry_objects WHERE registry_object_key = $1';
+		$params = array($registry_object_key);
+	}
+
+	global $gCNN_DBS_ORCA;
+	
+	
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	
+	
+	if( $resultSet )
+	{
+		$result = $resultSet[0]['quality_level_result'];
+	}else{
+		//
+		$result = "No QA for key $registry_object_key";
+	}
+	
+	return $result;
 }
 
 function searchByName($searchText, $objectClass, $dataSourceKey, $limit)

@@ -181,7 +181,7 @@ $(document).ready(function() {
 
     			//console.log(data);
 
-    			var realData = [];
+    			/*var realData = [];
     			var classList = [];
     			var QAList = [];
     			classList.push('Quality Levels');
@@ -191,7 +191,7 @@ $(document).ready(function() {
     				var QA = [];
     				QA.push(item.label);
     				$.each(item.qa, function(i, qa_i) {
-    					for(j=0;j<5;j++){
+    					for(j=0;j<=num;j++){
     						if(j!=i && !QA[j]){
     							QA[j]=0;
     							//console.log(j + ' > '+ '0');
@@ -201,9 +201,7 @@ $(document).ready(function() {
     					}
 					});
 					//console.log(QA);
-					
 					QAList.push(QA);
-
 					num++;
 					//console.log('====');
 				});
@@ -213,21 +211,88 @@ $(document).ready(function() {
 					realData.push(item);
 				});
 
-  				var realData = google.visualization.arrayToDataTable(realData);
+				console.log(realData);
+  				var realData = google.visualization.arrayToDataTable(realData);*/
 
-  				console.log(realData);
+  				var chartData = new google.visualization.DataTable();
+  				chartData.addColumn('string', 'Status');
+  				chartData.addColumn('number', 'Quality Level 0');
+  				chartData.addColumn('number', 'Quality Level 1');
+  				chartData.addColumn('number', 'Quality Level 2');
+  				chartData.addColumn('number', 'Quality Level 3');
+  				chartData.addColumn('number', 'Quality Level 4');
+
+  				var chartDataPercent = new google.visualization.DataTable();
+  				chartDataPercent.addColumn('string', 'Status');
+  				chartDataPercent.addColumn('number', 'Quality Level 0');
+  				chartDataPercent.addColumn('number', 'Quality Level 1');
+  				chartDataPercent.addColumn('number', 'Quality Level 2');
+  				chartDataPercent.addColumn('number', 'Quality Level 3');
+  				chartDataPercent.addColumn('number', 'Quality Level 4');
+
+  				$.each(data, function(i, item){
+  					var row = [];
+  					var rowPercent = [];
+  					row.push(item.label);
+  					rowPercent.push(item.label);
+  					$.each(item.qa, function(j, qa_i){
+  						row.push(qa_i);
+  						rowPercent.push(((qa_i*100)/item.num)/100);
+  					});
+  					//console.log(row);
+  					chartData.addRow(row);
+  					chartDataPercent.addRow(rowPercent);
+  				});
+
+  				//console.log(realData);
     			// Create and draw the visualization.
     			var barsVisualization = new google.visualization.BarChart(document.getElementById('All_qaview'));
-			  	barsVisualization.draw(realData,
-			           {title:"All Registry Objects",
-			            width:750, height:400,
-			            vAxis: {title: "Status"},
-			            isStacked:true,
-			            'tooltip': {trigger: 'none'},
-			            colors:['#dc3912', '#ff9900','#3366cc', 'green'],
-			            hAxis: {title: "Quality Levels Percentage",format:'##%'}}
-			      );
-			      google.visualization.events.addListener(barsVisualization, 'onmouseover', over);
+    			//var formatter = new google.visualization.BarFormat({showValue: true});
+    			//formatter.format(realData, 0);
+			  	
+
+    			var optionPercent = {title:"All Registry Objects",
+			        	width:800, height:400,
+			        	vAxis: {title: "Status"},
+			        	isStacked:true,
+			        	'tooltip': {trigger: 'none'},
+			        	colors:['#89CEDE', '#4f81bd','#c0504c', '#9bbb59', '#8064a2'],
+			        	animation:{
+        					duration: 1500,
+        					easing: 'out'
+      					},
+      					sliceVisibilityThreshold:0,
+			        	hAxis: {title: "Quality Levels Percentage",format:'##%'}};
+		        var option = {title:"All Registry Objects",
+		        	width:800, height:400,
+		        	vAxis: {title: "Status"},
+		        	isStacked:true,
+		        	animation:{
+        				duration: 1500,
+        				easing: 'out'
+      				},
+      				sliceVisibilityThreshold:0,
+		        	colors:['#89CEDE', '#4f81bd','#c0504c', '#9bbb59', '#8064a2'],
+		        	hAxis: {title: "Registry Objects"}};
+
+			  	function drawThisChart(dataToDraw,optionToDraw){
+			  		barsVisualization.draw(dataToDraw,optionToDraw);
+			  	}
+
+			  	var dataToDraw = chartDataPercent;		
+			  	var optionToDraw = optionPercent;	  	
+			  	$('#switchChartType').live('click', function(){
+			  		if(dataToDraw==chartDataPercent){
+			  			dataToDraw=chartData;
+			  			optionToDraw=option;
+			  		}else{
+			  			dataToDraw=chartDataPercent;
+			  			optionToDraw=optionPercent;
+			  		}
+			  		drawThisChart(dataToDraw, optionToDraw);
+			  	});
+			  	drawThisChart(dataToDraw, optionToDraw);
+			     /* google.visualization.events.addListener(barsVisualization, 'onmouseover', over);
 			      google.visualization.events.addListener(barsVisualization, 'onmouseout', over);
 			      google.visualization.events.addListener(barsVisualization, 'click', clickBar);
 
@@ -235,9 +300,11 @@ $(document).ready(function() {
 			      function clickBar(e){
 			      	var a = barsVisualization.getSelection([e]);
 			      	//console.log(a);
-			      	console.log(realData.getValue(a[0].row, a[0].column));
-			      	console.log(realData.getColumnLabel(a[0].column));
-			      }
+			      	//console.log(realData.getValue(a[0].row, a[0].column));
+			      	//console.log(realData.getColumnLabel(a[0].column));
+			      	$('#switchChartType').click();
+			      	drawThisChart(dataToDraw, optionToDraw);
+			      }*/
         	}
         });
 	}
@@ -461,7 +528,6 @@ $(document).ready(function() {
 					if (data['alert'])
 					{
 						console.log(data['alert']);
-						$('#mmr_datasource_alert_msg').html(data['alert']);
 					}
 				}
 				$('#indexDS').click();
@@ -578,9 +644,81 @@ $(document).ready(function() {
 		});
 	});
 
+	$('a.tipQA').live('mouseover', function(){
+		$(this).qtip({
+			content: {
+				text: 'Loading...', // The text to use whilst the AJAX request is loading
+				ajax: {
+					url: 'get_view.php?view=tipQA&ql='+$(this).attr('level')+'&key='+$(this).attr('key')+'&status='+$(this).attr('status')+'&ds='+$(this).attr('dsKey'), // URL to the local file
+					type: 'GET', // POST or GET
+					data: {}, // Data to pass along with your request
+					loading:false,
+					success: function(data, status) {
+						this.set('content.text', data);
+						formatTip(this);
+					}
+				}
+			},
+			position: {
+				my: 'right center', // Use the corner...
+				at: 'left center' // ...and opposite corner
+			},
+			show: {
+         		ready: true, // Needed to make it show on first mouseover event
+         		effect: function(offset) {
+					$(this).show(); // "this" refers to the tooltip
+				}
+      		},
+      		hide: {
+				fixed:true,
+				delay: 100
+			},
+			style: {
+				classes: 'ui-tooltip-shadow ui-tooltip-light'
+			},
+      		overwrite: false
+		});
+	});
+
+	function formatTip(tt){
+		var tooltip = $('#ui-tooltip-'+tt.id+'-content');
+		//wrap around the current tooltip with a div
+		for(var i=0;i<=4;i++){
+			$('*[level='+i+']', tooltip).wrapAll('<div class="qa_container" qld="'+i+'"></div>');
+		}
+		//add the toggle header
+		$('.qa_container', tooltip).prepend('<div class="toggleQAtip"></div>');
+		$('.toggleQAtip', tooltip).each(function(){
+			$(this).text('Quality Level ' +$(this).parent().attr('qld'));
+		});
+		//hide all qa
+		$('.qa_container', tooltip).each(function(){
+			$(this).children('.qa_ok, .qa_error').hide();
+		});
+		//show the first qa that has error
+		var showThisQA = $('.qa_error:first', tooltip).parent();
+		$(showThisQA).children().show();
+		//coloring the qa that has error, the one that doesn't have error will be the default one
+		$('.qa_container', tooltip).each(function(){
+			if($(this).children('.qa_error').length>0){//has an error
+				//$(this).children('.toggleQAtip').addClass('hasError');
+				$(this).addClass('warning');
+			}else{
+				$(this).addClass('success');
+			}
+		});
+		//bind the toggle header to open all the qa inside
+		$('.toggleQAtip', tooltip).click(function(){
+			$(this).parent().children('.qa_ok, .qa_error').slideToggle('fast', function(){
+				tt.reposition();//fix the positioning
+			});
+		});
+		$('.qa_ok').addClass('success');
+		$('.qa_error').addClass('warning');
+	}
+
 	//Flag Status button
 	$('.flagToggle').live('click', function(e){
-
 		var flag;
 		if($(this).hasClass('icon28sOn')){
 			flag = false;			
@@ -595,15 +733,13 @@ $(document).ready(function() {
 		var status = $('.flagToggle').parents('.flexigrid').attr('status');
 		if(status=='APPROVED' || status=='PUBLISHED'){//is not draft
 			$.get($("#elementSourceURL").val() + "task=flag_regobj&key=" + encodeURIComponent(key) + "&flag=" + flag);
-			//console.log($("#elementSourceURL").val() + "task=flag_regobj&key=" + encodeURIComponent(key) + "&flag=" + flag);
 		}else{
 			$.get($("#elementSourceURL").val() + "task=flag_draft&data_source=" + encodeURIComponent($("#dataSourceKey").val()) + "&key=" + encodeURIComponent(key) + "&flag=" + flag);	
 		}
-		//$.get($("#elementSourceURL").val() + "task=flag_draft&data_source=" + encodeURIComponent($("#dataSourceKey").val()) + "&key=" + encodeURIComponent(key) + "&flag=" + flag);
-		//$.get($("#elementSourceURL").val() + "task=flag_regobj&key=" + encodeURIComponent(key) + "&flag=" + flag);
-		//console.log('setting '+rowID+' as gold standard');
 	});
 
+
+	
 
 	
 
