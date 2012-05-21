@@ -23,7 +23,8 @@
 			<xsl:when test="//ro:party/@type='group'">party_multi</xsl:when>
 			<xsl:when test="//ro:party/@type='person'">party_one</xsl:when>	
 			<xsl:when test="//ro:party">party_multi</xsl:when>		
-			<xsl:when test="//ro:service">services</xsl:when>			
+			<xsl:when test="//ro:service">services</xsl:when>	
+			<xsl:otherwise>collections</xsl:otherwise>			
 		</xsl:choose>		
 	</xsl:variable>		                    
     <xsl:template match="ro:registryObject">
