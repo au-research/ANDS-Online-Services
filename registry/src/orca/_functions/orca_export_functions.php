@@ -17,6 +17,7 @@ limitations under the License.
 $Date: 2011-11-25 14:26:15 +1100 (Fri, 25 Nov 2011) $
 $Revision: 1633 $
 *******************************************************************************/
+$vocabBroaderTerms = Array();
 
 function getRegistryObjectXML($registryObjectKey, $forSOLR = false, $includeRelated = false)
 {
@@ -27,7 +28,7 @@ function getRegistryObjectXML($registryObjectKey, $forSOLR = false, $includeRela
 		return getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR, $includeRelated);
 	}
 
-
+	
 
 	$data_source_key = getRegistryObjectDataSourceKey($registryObjectKey);
 	return getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR, $includeRelated);
@@ -1329,6 +1330,8 @@ function getRelationsXML($relation_id, $forSOLR = false)
 
 function getSubjectTypesXML($registryObjectKey, $elementName, $forSOLR=false)
 {
+	global $gVOCAB_RESOLVER_SERVICE;
+	global $vocabBroaderTerms;
 	$xml = '';
 	$elementName = esc($elementName);
 	$list = getSubjects($registryObjectKey);
@@ -1336,6 +1339,7 @@ function getSubjectTypesXML($registryObjectKey, $elementName, $forSOLR=false)
 	{
 		foreach( $list as $element )
 		{
+			$vocabType = esc($element['type']);
 			if( $type = $element['type'] )
 			{
 				$type = ' type="'.esc($type).'"';
@@ -1353,21 +1357,30 @@ function getSubjectTypesXML($registryObjectKey, $elementName, $forSOLR=false)
 			$term = '';
 			if ($forSOLR)
 			{
-				$resolvedName = '';
-				if(($value != '') && (strlen($value) < 7) && is_numeric($value))
-				{
-					$valueLength = strlen($value);
-					if($valueLength < 6){
-						for($i = 0; $i < (6 - $valueLength) ; $i++){
-							$value .= '0';
-						}				
-					}
-					$resolvedName = getTermsForVocabByIdentifier(null, $value);
-				}
-				if($resolvedName && $resolvedName[0]['name'] != '')
-				{
+//$gVOCAB_RESOLVER_SERVICE = array(
+//'anzsrc-for' => 
+//array('resolvingService' => 'http://devl.ands.org.au:8080/sissvoc/api/anzsrc-for/',
+// 'uriprefix' => 'http://purl.org/au-research/vocabulary/anzsrc-for/2008/'));
 
-					$term = " extRif:resolvedValue=\"" . $resolvedName[0]['name'] . "\"";
+$resourceUrlComp = 'resource.json?uri=';
+				
+				$resolvedName='';
+				if(array_key_exists($vocabType, $gVOCAB_RESOLVER_SERVICE))
+				{
+					$resolvingService = $gVOCAB_RESOLVER_SERVICE[$vocabType]['resolvingService'];
+					$uriprefix = $gVOCAB_RESOLVER_SERVICE[$vocabType]['uriprefix'];
+					$data = json_decode(file_get_contents($resolvingService.$resourceUrlComp.$uriprefix.$rawvalue));
+					//var_dump($data['response']);
+					//var_dump($data);
+					$broader = $data->{'result'}->{'primaryTopic'}->{'broader'}->{'_about'};
+					populateBroaderTerms($broader, $resolvingService, $vocabType);
+					$resolvedName = $data->{'result'}->{'primaryTopic'}->{'prefLabel'}->{'_value'};
+					
+					//$xml .= $data->{'response'};				
+				}
+				if($resolvedName)
+				{	
+					$term = " extRif:resolvedValue=\"" . $resolvedName . "\"";
 				}
 				else 
 				{
@@ -1377,8 +1390,51 @@ function getSubjectTypesXML($registryObjectKey, $elementName, $forSOLR=false)
 
 			$xml .= "      <$elementName$type$lang$term>$rawvalue</$elementName>\n";
 		}
+		//var_dump($vocabBroaderTerms);
+		if ($forSOLR)
+		{
+			$xml .= broaderTermsXML('broader-subject');
+		}
 	}
 	return $xml;
+}
+
+function populateBroaderTerms($broaderTerm, $resolvingService, $vocabType){
+	global $vocabBroaderTerms;
+	$resourceUrlComp = 'resource.json?uri=';
+	if(!array_key_exists($broaderTerm, $vocabBroaderTerms))
+	{
+		$resourceUrlComp = 'resource.json?uri=';
+		$data = json_decode(file_get_contents($resolvingService.$resourceUrlComp.$broaderTerm));
+		$resolvedName = $data->{'result'}->{'primaryTopic'}->{'prefLabel'}->{'_value'};	
+		$notation = $data->{'result'}->{'primaryTopic'}->{'notation'};		
+		//var_dump($data);		
+		$vocabBroaderTerms[$broaderTerm] = array('broaderTerm' => $broaderTerm, 'resolvingService' => $resolvingService, 'resolvedName' => $resolvedName, 'notation' => $notation, 'vocabType' => $vocabType);
+		if(isset($data->{'result'}->{'primaryTopic'}->{'broader'}->{'_about'})){
+			$broader = $data->{'result'}->{'primaryTopic'}->{'broader'}->{'_about'};
+		}else{
+			$broader = false;
+		}	
+	    
+	    if($broader)
+	    {
+			populateBroaderTerms($broader, $resolvingService, $vocabType);
+		}
+	}
+}
+
+function broaderTermsXML($elementName)
+{
+	global $vocabBroaderTerms;
+	$xml = "";
+	foreach( $vocabBroaderTerms as $term )
+	{
+		$type = ' type="'.$term['vocabType'].'"';
+		$eTerm = " extRif:resolvedValue=\"" . $term['resolvedName'] . "\"";
+		$xml .= "      <$elementName$type$eTerm>".$term['notation']."</$elementName>\n";			
+	}
+	return $xml;
+	
 }
 
 function purify($dirty_html){

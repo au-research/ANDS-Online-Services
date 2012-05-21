@@ -170,6 +170,10 @@ $dataciteSchema['2.0'] = 'http://schema.datacite.org/meta/kernel-2.0/metadata.xs
 $dataciteSchema['2.1'] = 'http://schema.datacite.org/meta/kernel-2.1/metadata.xsd';
 $dataciteSchema['2.2'] = 'http://schema.datacite.org/meta/kernel-2.2/metadata.xsd';
 
+/*
+ * VOCABS ENVIRONMENT
+ */
+$gVOCAB_RESOLVER_SERVICE = array('anzsrc-for' => 'http://devl.ands.org.au:8080/sissvoc/api/anzsrc-for/');
 
 define('eAPPLICATION_ROOT', dirname(__FILE__) . "/");
 ?>
