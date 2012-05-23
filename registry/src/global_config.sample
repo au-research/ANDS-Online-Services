@@ -173,7 +173,7 @@ $dataciteSchema['2.2'] = 'http://schema.datacite.org/meta/kernel-2.2/metadata.xs
 /*
  * VOCABS ENVIRONMENT
  */
-$gVOCAB_RESOLVER_SERVICE = array('anzsrc-for' => 'http://devl.ands.org.au:8080/sissvoc/api/anzsrc-for/');
+$gVOCAB_RESOLVER_SERVICE =  array('anzsrc-for' => array('resolvingService' => 'http://devl.ands.org.au:8080/sissvoc/api/anzsrc-for/', 'uriprefix' => 'http://purl.org/au-research/vocabulary/anzsrc-for/2008/'));
 
 define('eAPPLICATION_ROOT', dirname(__FILE__) . "/");
 ?>
