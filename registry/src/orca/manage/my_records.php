@@ -230,7 +230,7 @@ else
 				/*
 				 * All of em
 				 */
-		    	echo '<div id="All_qaview" class="tab-content qaview"></div><a href="javascript:;" id="switchChartType">switch</a>';
+		    	echo '<div id="All_qaview" class="tab-content qaview"></div>';
 		    	foreach($qa_levels as $key=>$l){
 		    		echo '	<div class="tab-content qaview">
 							<table class="mmr_table as_qa_table" ql="'.$key.'" status="All" count="'.$l.'"><tr><td>Loading Graph...</td></tr></table>

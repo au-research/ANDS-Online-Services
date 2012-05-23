@@ -339,14 +339,7 @@
 			</xsl:otherwise>
 	    </xsl:choose>    
 
-        <xsl:choose>
-	       	<xsl:when test="not(ro:location/ro:address/ro:electronic)">
-     			<span class="qa_error" level="4" field_id="errors_location" qa_id="REC_LOCATION_ADDRESS_ELECTRONIC">At least one electronic address is required for the Service if available.</span>
-			</xsl:when>
-			<xsl:otherwise>
-     			<span class="qa_ok" level="4" field_id="errors_location" qa_id="REC_LOCATION_ADDRESS_ELECTRONIC">At least one electronic address is required for the Service if available.</span>
-			</xsl:otherwise>
-	   </xsl:choose>
+        
   
 	    <xsl:choose>
 	       	<xsl:when test="not(contains($relatedObjectClassesStr, 'Collection') or ro:relatedObject/ro:key[@roclass = 'Collection'] or ro:relatedObject/ro:key[@roclass = 'collection'])">
@@ -355,7 +348,17 @@
 			<xsl:otherwise>
 				<span class="qa_ok" level="3" field_id="errors_relatedObject" qa_id="REQ_RELATED_OBJECT_COLLECTION">The Service must be related to at least one Collection record.</span>
 			</xsl:otherwise>
-	   </xsl:choose>      
+	   </xsl:choose>     
+
+	   <xsl:choose>
+	       	<xsl:when test="not(ro:location/ro:address/ro:electronic)">
+     			<span class="qa_error" level="4" field_id="errors_location" qa_id="REC_LOCATION_ADDRESS_ELECTRONIC">At least one electronic address is required for the Service if available.</span>
+			</xsl:when>
+			<xsl:otherwise>
+     			<span class="qa_ok" level="4" field_id="errors_location" qa_id="REC_LOCATION_ADDRESS_ELECTRONIC">At least one electronic address is required for the Service if available.</span>
+			</xsl:otherwise>
+	   </xsl:choose>
+	    
        <xsl:choose>
 	       	<xsl:when test="not(contains($relatedObjectClassesStr, 'Party') or ro:relatedObject/ro:key[@roclass = 'Party'] or ro:relatedObject/ro:key[@roclass = 'party'])">
 				<span class="qa_error" level="4" field_id="errors_relatedObject" qa_id="REC_RELATED_OBJECT_PARTY">It is recommended that the Service be related to at least one Party record.</span>

@@ -222,13 +222,13 @@ $(document).ready(function() {
   				chartData.addColumn('number', 'Quality Level 3');
   				chartData.addColumn('number', 'Quality Level 4');
 
-  				var chartDataPercent = new google.visualization.DataTable();
-  				chartDataPercent.addColumn('string', 'Status');
-  				chartDataPercent.addColumn('number', 'Quality Level 0');
-  				chartDataPercent.addColumn('number', 'Quality Level 1');
-  				chartDataPercent.addColumn('number', 'Quality Level 2');
-  				chartDataPercent.addColumn('number', 'Quality Level 3');
-  				chartDataPercent.addColumn('number', 'Quality Level 4');
+  				var chartData2 = new google.visualization.DataTable();
+  				chartData2.addColumn('string', 'Status');
+  				chartData2.addColumn('number', 'Quality Level 0');
+  				chartData2.addColumn('number', 'Quality Level 1');
+  				chartData2.addColumn('number', 'Quality Level 2');
+  				chartData2.addColumn('number', 'Quality Level 3');
+  				chartData2.addColumn('number', 'Quality Level 4');
 
   				$.each(data, function(i, item){
   					var row = [];
@@ -237,11 +237,12 @@ $(document).ready(function() {
   					rowPercent.push(item.label);
   					$.each(item.qa, function(j, qa_i){
   						row.push(qa_i);
+  						chartData2
   						rowPercent.push(((qa_i*100)/item.num)/100);
   					});
   					//console.log(row);
   					chartData.addRow(row);
-  					chartDataPercent.addRow(rowPercent);
+  					chartData2.addRow(rowPercent);
   				});
 
   				//console.log(realData);
@@ -255,35 +256,89 @@ $(document).ready(function() {
 			        	width:800, height:400,
 			        	vAxis: {title: "Status"},
 			        	isStacked:true,
-			        	'tooltip': {trigger: 'none'},
 			        	colors:['#89CEDE', '#4f81bd','#c0504c', '#9bbb59', '#8064a2'],
 			        	animation:{
-        					duration: 1500,
+        					duration: 1000,
         					easing: 'out'
       					},
       					sliceVisibilityThreshold:0,
 			        	hAxis: {title: "Quality Levels Percentage",format:'##%'}};
-		        var option = {title:"All Registry Objects",
+				var option = {title:"All Registry Objects",
 		        	width:800, height:400,
 		        	vAxis: {title: "Status"},
 		        	isStacked:true,
 		        	animation:{
-        				duration: 1500,
+        				duration: 1000,
         				easing: 'out'
       				},
       				sliceVisibilityThreshold:0,
-		        	colors:['#89CEDE', '#4f81bd','#c0504c', '#9bbb59', '#8064a2'],
-		        	hAxis: {title: "Registry Objects"}};
+					colors:['#89CEDE', '#4f81bd','#c0504c', '#9bbb59', '#8064a2'],
+					hAxis: {title: "Registry Objects Percentage"}};
+
+		        var view = new google.visualization.DataView(chartData);
+
+		        view.setColumns([0,
+		        	{
+			        	label:'Quality Level 0',
+			        	type:'number',
+			        	calc:function(dt,row){
+			        		var sum = 0;var level = 0;
+			        		var value = dt.getValue(row, level+1);
+			        		for (var c=1;c<=5;c++){sum = sum + dt.getValue(row, c);}
+			        		return {v: value/sum,f:value.toString()};
+			        	}
+			        },
+			        {
+			        	label:'Quality Level 1',
+			        	type:'number',
+			        	calc:function(dt,row){
+			        		var sum = 0;var level = 1;
+			        		var value = dt.getValue(row, level+1);
+			        		for (var c=1;c<=5;c++){sum = sum + dt.getValue(row, c);}
+			        		return {v: value/sum,f:value.toString()};
+			        	}
+			        },
+			        {
+			        	label:'Quality Level 2',
+			        	type:'number',
+			        	calc:function(dt,row){
+			        		var sum = 0;var level = 2;
+			        		var value = dt.getValue(row, level+1);
+			        		for (var c=1;c<=5;c++){sum = sum + dt.getValue(row, c);}
+			        		return {v: value/sum,f:value.toString()};
+			        	}
+			        },
+			        {
+			        	label:'Quality Level 3',
+			        	type:'number',
+			        	calc:function(dt,row){
+			        		var sum = 0;var level = 3;
+			        		var value = dt.getValue(row, level+1);
+			        		for (var c=1;c<=5;c++){sum = sum + dt.getValue(row, c);}
+			        		return {v: value/sum,f:value.toString()};
+			        	}
+			        },
+			        {
+			        	label:'Quality Level 4',
+			        	type:'number',
+			        	calc:function(dt,row){
+			        		var sum = 0;var level = 4;
+			        		var value = dt.getValue(row, level+1);
+			        		for (var c=1;c<=5;c++){sum = sum + dt.getValue(row, c);}
+			        		return {v: value/sum,f:value.toString()};
+			        	}
+			        },
+		        ]);
 
 			  	function drawThisChart(dataToDraw,optionToDraw){
 			  		barsVisualization.draw(dataToDraw,optionToDraw);
 			  	}
 
-			  	var dataToDraw = chartDataPercent;		
+			  	var dataToDraw = view;		
 			  	var optionToDraw = optionPercent;	  	
 			  	$('#switchChartType').live('click', function(){
 			  		if(dataToDraw==chartDataPercent){
-			  			dataToDraw=chartData;
+			  			dataToDraw=view;
 			  			optionToDraw=option;
 			  		}else{
 			  			dataToDraw=chartDataPercent;
@@ -649,9 +704,15 @@ $(document).ready(function() {
 			content: {
 				text: 'Loading...', // The text to use whilst the AJAX request is loading
 				ajax: {
-					url: 'get_view.php?view=tipQA&ql='+$(this).attr('level')+'&key='+$(this).attr('key')+'&status='+$(this).attr('status')+'&ds='+$(this).attr('dsKey'), // URL to the local file
+					url: 'get_view.php', // URL to the local file
 					type: 'GET', // POST or GET
-					data: {}, // Data to pass along with your request
+					data: {
+						view: 'tipQA',
+						ql: $(this).attr('level'),
+						key: $(this).attr('key'),
+						status: $(this).attr('status'),
+						ds: $(this).attr('dsKey')
+					}, // Data to pass along with your request
 					loading:false,
 					success: function(data, status) {
 						this.set('content.text', data);
