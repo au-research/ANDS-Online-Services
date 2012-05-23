@@ -1328,6 +1328,7 @@ function getRelationsXML($relation_id, $forSOLR = false)
 	return $xml;
 }
 
+
 function getSubjectTypesXML($registryObjectKey, $elementName, $forSOLR=false)
 {
 	global $gVOCAB_RESOLVER_SERVICE;
