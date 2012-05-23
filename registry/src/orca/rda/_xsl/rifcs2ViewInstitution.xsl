@@ -139,7 +139,7 @@
         </xsl:choose>    
         <div class="clearfix"></div>  
 
-        <xsl:apply-templates select="ro:displayLogo"/>
+        <xsl:apply-templates select="../extRif:extendedMetadata/extRif:displayLogo"/>
 
         <div class="clearfix"></div>  
 
@@ -296,7 +296,7 @@
 		</div>   
     </xsl:template>
     
-    <xsl:template match="ro:displayLogo">   
+    <xsl:template match="extRif:displayLogo">   
         <div ><img id="party_logo" style="max-width:130px;">
         <xsl:attribute name="src"><xsl:value-of select="."/></xsl:attribute>
         </img>

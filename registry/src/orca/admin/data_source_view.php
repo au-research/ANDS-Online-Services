@@ -318,7 +318,7 @@ require '../../_includes/header.php';
 					<?php  
 				} else { ?>		
 					</td><td >
-	<?php 			if($dataSource[0]['institution_pages']=="1")	
+	<?php 			if($dataSource[0]['institution_pages']=="1"||$dataSource[0]['institution_pages']=="2")	
 					{
 						?><a href="../view.php?key=<?php print(urlencode($thePage[0]['registry_object_key'])); ?>&data_source=<?php print($dataSourceKey); ?>"><?php print($thePage[0]['registry_object_key']);?></a><?php 				
 					}else{

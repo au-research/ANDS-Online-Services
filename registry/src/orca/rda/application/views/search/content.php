@@ -175,9 +175,9 @@ limitations under the License.
 			echo '<div class="toolbar clearfix bottom-corner">';
 			if(displaySubscriptions() )
 			{
-			$dataSourceString = '';	
-			$q = $_POST['q'];
-				if($q==''|| $q='*:*')$q = '*';
+				$dataSourceString = '';	
+				$q = $_POST['q'];
+				if($q=='')$q = '*:*';
 				$classFilter = $_POST['classFilter'];
 				$typeFilter = $_POST['typeFilter'];
 				$groupFilter = $_POST['groupFilter'];

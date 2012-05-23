@@ -23,11 +23,12 @@ function addRelatedObjectAutocomplete(field) {
 	cSelect = cSelect.replace(/name/,"class");
 	
 	var dsSelect = cSelect.replace(/class/,"dataSource");
-
+	var groupSelect = cSelect.replace(/class/,"group");
+//alert($( groupSelect ).val() + " thegroup");
 	$( field ).autocomplete({
 		minLength: 2,
 		source: function(request, response){
-			$.getJSON( "../manage/process_registry_object.php?task=searchRelated", {sText:$.trim(request.term), oClass:$( cSelect ).val() ,dSourceKey:$( dsSelect ).val()}, response );
+			$.getJSON( "../manage/process_registry_object.php?task=searchRelated", {sText:$.trim(request.term), oClass:$( cSelect ).val() ,dSourceKey:$( dsSelect ).val(), oGroup:$( groupSelect ).val()}, response );
 		},
 		focus: function( event, ui ) {
 			$( field ).val( ui.item.value );

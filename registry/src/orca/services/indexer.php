@@ -172,7 +172,7 @@ function clearAllSolrIndex()
 	return $result;	
 }
 
-function addPublishedSolrIndex($registryObjectKey, $commit=true)
+function addPublishedToSolrIndex($registryObjectKey, $commit=true)
 {
 		global $solr_update_url;
 		$rifcsContent = getRegistryObjectXMLforSOLR($registryObjectKey,true);
@@ -182,7 +182,7 @@ function addPublishedSolrIndex($registryObjectKey, $commit=true)
 		return $result;	
 }
 
-function addDraftSolrIndex($registryObjectKey, $commit=true)
+function addDraftToSolrIndex($registryObjectKey, $commit=true)
 {
 	$allKeys = getDraftRegistryObject($registryObjectKey , null);
 	$arraySize = sizeof($allKeys);

@@ -42,6 +42,8 @@ limitations under the License.
 			$dataSource = '';
 			$dataGroup = '';
 			$query = $this->input->get('q');
+			//$query = str_replace(' -group:(Belvedere Walkthrough)','',$query);
+			//echo $query. "is the query<br />";
 			$classFilter = $this->input->get('classFilter');
 			$groupFilter = $this->input->get('groupFilter');
 			$typeFilter = $this->input->get('typeFilter');		
@@ -68,8 +70,20 @@ limitations under the License.
 				$this->recursionLevel++;
 				if ($this->recursionLevel == $this->recursionMax) break;
 				
-				$solrUrl = $this->solrInstance . "select/?q=fulltext:".rawurlencode($this->query).$filter_query."&version=2.2&start=".$this->startCount."&rows=".$this->rowCount."&indent=on&fl=key,%20group%20data_source_key,%20description_value,%20list_title,%20date_modified&wt=json&sort=date_modified%20desc";
-				//echo $solrUrl;
+				// This crazy bit of code is a work around for missing qotes on a 'magically' inserted bit of query	which attempts to eliminate any results back from the Belvedere Walkthrough group 
+				$this->query = str_replace('Belvedere Walkthrough','"Belvedere Walkthrough"',$this->query);
+				
+				
+				// This is to cater for the new solar not having a default search field so if our query comes in with *:* we don't have to set up the now required default filed.
+				if(str_replace('*:*','',$this->query)!=$this->query)
+				{
+					$start = '';
+				}else{
+					$start = 'fulltext:';
+				}
+				
+				$solrUrl = $this->solrInstance . "select/?q=".$start.rawurlencode($this->query).$filter_query."&version=2.2&start=".$this->startCount."&rows=".$this->rowCount."&indent=on&fl=key,%20group%20data_source_key,%20description_value,%20list_title,%20date_modified&wt=json&sort=date_modified%20desc";
+				//echo $solrUrl."<br />";
 				$solrOutput = json_decode(file_get_contents($solrUrl), true);
 				//print_r($solrOutput);
 			

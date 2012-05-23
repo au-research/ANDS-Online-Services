@@ -44,11 +44,10 @@ limitations under the License.
 	//echo '<div><a href="javascript:void(0);" id="hp-atoz">A to Z</a> | <a href="javascript:void(0);" id="hp-count">Count</a></div>';
 	echo '<div><ul id="hp-groups">';
 	foreach($groups as $index=>$g){
-	
 		$theGroup = getInstitutionPage($index);
 		if($theGroup){
 			echo '<li><a href="view/group/?group='.rawurlencode($theGroup). '&groupName='.$index.'" class="hp-minibrowse-item">'.$index.' ('.number_format($g).')</a></li>';
-		}else{
+		}elseif(number_format($g)>0){
 			echo '<li><a href="search#!/group='.$index.'/tab=collection" class="hp-minibrowse-item">'.$index.' ('.number_format($g).')</a></li>';			
 		}
 	}

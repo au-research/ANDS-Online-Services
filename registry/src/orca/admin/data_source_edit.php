@@ -173,10 +173,10 @@ if( strtoupper(getPostedValue('action')) == "SAVE" )
 					$theInstitution = getRegistryObject($institutional_key);
 					if($theInstitution[0]['data_source_key']==$dataSourceKey&&$theInstitution[0]['object_group']==$group&&$theInstitution[0]['registry_object_class']=='Party'&&$theInstitution[0]['type']=='group')
 					{
-						echo "The record is valid so add it to the db <br />";
+						//echo "The record is valid so add it to the db <br />";
 						$theInstitutionalPage = insertInstitutionalPage($group,$institutional_key,$dataSourceKey);
 					}else{
-						echo "The record is not valid<br />";
+						//echo "The record is not valid<br />";
 						$institutionPagesClass = gERROR_CLASS;
 						$errorMessages .= "You have provided an invalid key for your Institutional page.<br />The assigned registry object must be a group party originating from this datasource and object group.<br />";
 					}
@@ -718,7 +718,7 @@ require '../../_includes/header.php';
 						$searchStr .= '<tbody class="formFields andsorange">';
 						$searchStr .= '<tr><td>Search by name:</td><td><input type="text" id="object_institution_key_'.($i).'_name" autocomplete="on" name="object_institution_key_'.($i).'_name" maxlength="512" size="30" /></td></tr>';
 						$searchStr .= '<tr><td>Select object class:</td><td><span style="color:#666666">Party</span><input type="hidden" id="select_institution_key_'.($i).'_class" value = "Party"/></td></tr>';
-						$searchStr .= '<tr><td>Data source:</td><td><select id="select_institution_key_'.($i).'_dataSource" >'.$groupsDataSources[$group['object_group']].'</td></tr>';
+						$searchStr .= '<tr><td>Data source:<input type="hidden" id="select_institution_key_'.($i).'_group" value="'.$group['object_group'].'"/></td><td><select id="select_institution_key_'.($i).'_dataSource" >'.$groupsDataSources[$group['object_group']].'</td></tr>';
 						$searchStr .= '<tr><td><input type="button" value="Choose Selected" onClick=\'setRelatedId("object_institution_key_'.($i).'");\'/></td><td></td></tr>';
 						$searchStr .= '</table>';				
 						$searchStr .= '</div>'; 

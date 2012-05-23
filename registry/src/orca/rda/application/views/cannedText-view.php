@@ -17,18 +17,15 @@ limitations under the License.
 **/ 
 ?>
 <?php
-	//print("<pre>");
-	//print_r($content);
-	//print("</pre>");	
-	
+
 	$class = $content->{'facet_counts'}->{'facet_fields'}->{'class'};
 	$types = $content->{'facet_counts'}->{'facet_fields'}->{'type'};	
 	$subjects = $content->{'facet_counts'}->{'facet_fields'}->{'subject_value_resolved'};	
-
+	
+	$collectionCount = 0;
 	for($i=0;$i<count($class);$i++)
 	{
-		if($class[$i]=="collection") {$collectionCount = $class[$i+1];}else{$collectionCount = 0;};
-
+		if($class[$i]=="collection") {$collectionCount = $class[$i+1];}
 		$i++;
 	}
 	
@@ -75,6 +72,7 @@ limitations under the License.
 	{
 		$subjectStr = ' including <a href="'.base_url().'search#!/tab=All/group='.urlencode($group).'/subject='.$subject[0].'">'.$subject[0].'</a>, <a href="'.base_url().'search#!/tab=All/group='.urlencode($group).'/subject='.$subject[1].'">'.$subject[1].'</a> and <a href="'.base_url().'search#!/tab=All/group='.urlencode($group).'/subject='.$subject[2].'">'.$subject[2].'</a>.';	
 	}
+	
 	echo '<p>Up to date, ' .urldecode($group). ' has <a id="hp-count-collection" href="'.base_url().'search#!/tab=collection/group='.urlencode($group).'">' .$collectionCount .'  collections</a> in RDA, which covers 
 	'.$subjectNum.' subject areas'.$subjectStr.' ' .$groupCount. ' 
 	 research groups have been actively involved in collecting data and creating metadata records for the data.</p>';

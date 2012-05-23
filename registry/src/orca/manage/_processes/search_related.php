@@ -26,6 +26,7 @@ if (!IN_ORCA) die('No direct access to this file is permitted.');
 
 		$objectClass =  rawurldecode(getQueryValue("oClass"));
 		$dataSourcekey =  rawurldecode(getQueryValue("dSourceKey"));
+		$group = rawurldecode(getQueryValue("oGroup"));
 		$registryObjects = array();
 		$names = array();
 	
@@ -38,11 +39,11 @@ if (!IN_ORCA) die('No direct access to this file is permitted.');
 		if ($searchText == "\\*\\:\\*")
 		{
 			// search for all names (untransform SOLR query syntax)
-			$names = searchDraftByName("", $objectClass , $dataSourcekey, $limit);
+			//$names = searchDraftByName("", $objectClass , $dataSourcekey, $limit);
 		}
 		else
 		{
-			$names = searchDraftByName($searchText, $objectClass , $dataSourcekey, $limit);
+			//$names = searchDraftByName($searchText, $objectClass , $dataSourcekey, $limit);
 		}
 		
 		if (isset($names) && $names) 
@@ -62,9 +63,10 @@ if (!IN_ORCA) die('No direct access to this file is permitted.');
 
 //NEW - use SOLR
 		$objectClass = strtolower($objectClass);
-    	
+		$groupStr = '';
+    	if($group)$groupStr =' +group:("'.$group.'")';
 
-		$q = 'display_title:('.strtolower($searchText).') +class:('.$objectClass.')';
+		$q = 'display_title:('.strtolower($searchText).'*) +class:('.$objectClass.')'.$groupStr;
 
 		if($dataSourcekey!='') $q.=' +data_source_key:("'.$dataSourcekey.'")';
 		$fields = array(
@@ -99,7 +101,7 @@ if (!IN_ORCA) die('No direct access to this file is permitted.');
 		if (isset($decoded->response->docs))
 		{
 			foreach($decoded->response->docs as $d){
-				$values[] = array (	"value" => $d->{'key'}, "desc" => $d->{'displayTitle'}.' ('.$d->{'status'}.')');
+				$values[] = array (	"value" => $d->{'key'}, "desc" => $d->{'display_title'}.' ('.$d->{'status'}.')');
 			}
 		}
 		
