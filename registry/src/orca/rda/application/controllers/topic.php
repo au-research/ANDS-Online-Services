@@ -33,7 +33,18 @@ class Topic extends CI_Controller {
 		$this->topics = $this->t->getTopics();
 
 		parse_str($_SERVER['QUERY_STRING'], $_GET);
-		if (!$topic || !$this->topics[$topic])
+
+		if (!$topic)
+		{
+			// needed to load page
+			$this->load->library('user_agent');
+			$data['user_agent']=$this->agent->browser();
+			$data['topics'] = $this->topics;
+			$data['content'] = $this->load->view('topic-list',$data,true);
+			$this->load->view('xml-view', $data);
+			return;
+		}
+		else if (!$this->topics[$topic])
 		{
 			show_404("");
 		}

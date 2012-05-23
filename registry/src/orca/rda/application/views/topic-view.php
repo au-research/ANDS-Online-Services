@@ -3,7 +3,7 @@
 	<ul id="breadcrumb" class="top-corner">
 
 		<li><a href="<?php echo base_url(); ?>" class="crumb">Home</a></li>
-		<li><a href="<?php echo base_url(); ?>" class="crumb">Topic</a></li>
+		<li><a href="<?php echo base_url(); ?>topic/" class="crumb">Topics</a></li>
 		<li><a class="crumb">
 			<?php echo $topic_name; ?>
 		</li>

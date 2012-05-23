@@ -15,13 +15,13 @@ $req_datasource=getQueryValue('data_source');
 
 $ds = array();
 
-if ($req_datasource) 
+if ($req_datasource)
 {
 	$ds[] = array("data_source_key"=>$req_datasource);
 }
-elseif (isset($_GET['cache_all'])) 
+elseif (isset($_GET['cache_all']))
 {
-	$ds = getDataSources(null, null); //add publish my data
+	$ds = getDataSources(null, null); // XXX: add publish my data
 }
 
 
@@ -29,7 +29,7 @@ echo "<h3>Caching registryObjects for " . count($ds) . " datasource(s)</h3><br/>
 flush();ob_flush();
 
 foreach($ds AS $datasource)
-{	
+{
 
 
 	bench(1);
@@ -38,9 +38,9 @@ foreach($ds AS $datasource)
 
 
 	if (!$ro) continue;
-	echo "Caching of " . count($ro) . " records started for " . $datasource['data_source_key'] . ": ";	
+	echo "Caching of " . count($ro) . " records started for " . $datasource['data_source_key'] . ": ";
 	flush();ob_flush();
-	
+
 	bench();
 	$count = 0;
 	$mult = 1;
@@ -56,7 +56,7 @@ foreach($ds AS $datasource)
 		//echo "Writing cache for " . $registry_object['registry_object_key'] . ": " . bench(1) . "s<br/><br/>";
 		if (ceil(count($ro)*$mult/10) == $count) { echo "."; flush();ob_flush(); $mult++; }
 	}
-		
+
 	echo " complete! [ ".bench()."s ]<br/>";
 	flush();ob_flush();
 }

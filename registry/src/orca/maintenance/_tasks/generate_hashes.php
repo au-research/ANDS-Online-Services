@@ -12,13 +12,13 @@ echo "<h3>Recaching registryObjects for " . count($ds) . " datasource(s)</h3><br
 flush();ob_flush();
 
 foreach($ds AS $datasource)
-{	
+{
 	$ro = getRegistryObjectKeysForDataSource($datasource['data_source_key']);
-	
+
 	if (!$ro) continue;
-	echo "Caching of " . count($ro) . " records started for " . $datasource['data_source_key'] . ": ";	
+	echo "Caching of " . count($ro) . " records started for " . $datasource['data_source_key'] . ": ";
 	flush();ob_flush();
-	
+
 	bench();
 	$count = 0;
 	$mult = 1;
@@ -28,7 +28,7 @@ foreach($ds AS $datasource)
 		writeCache($datasource['data_source_key'], $registry_object['registry_object_key'], generateExtendedRIFCS($registry_object['registry_object_key']));
 		if (ceil(count($ro)*$mult/10) == $count) { echo "."; flush();ob_flush(); $mult++; }
 	}
-		
+
 	echo " complete! [ ".bench()."s ]<br/>";
 	flush();ob_flush();
 }
