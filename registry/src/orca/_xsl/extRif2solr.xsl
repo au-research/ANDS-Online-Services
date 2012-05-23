@@ -233,6 +233,11 @@
         <xsl:apply-templates select="ro:subject" mode="value"/>
         <xsl:apply-templates select="ro:subject" mode="resolved_value"/>
         <xsl:apply-templates select="ro:subject" mode="type"/>
+        <xsl:apply-templates select="ro:subject" mode="vocab_uri"/>
+        <xsl:apply-templates select="extRif:broaderSubject" mode="value"/>
+        <xsl:apply-templates select="extRif:broaderSubject" mode="resolved_value"/>
+        <xsl:apply-templates select="extRif:broaderSubject" mode="type"/>
+        <xsl:apply-templates select="extRif:broaderSubject" mode="vocab_uri"/>
         
         <xsl:choose>
         	<xsl:when test="extRif:description">
@@ -391,6 +396,41 @@
         <xsl:element name="field">
             <xsl:attribute name="name">subject_type</xsl:attribute>
             <xsl:value-of select="@type"/>
+        </xsl:element>
+    </xsl:template>
+    
+    <xsl:template match="ro:subject" mode="vocab_uri">
+        <xsl:element name="field">
+            <xsl:attribute name="name">subject_vocab_uri</xsl:attribute>
+            <xsl:value-of select="@extRif:vocabUri"/>
+        </xsl:element>
+    </xsl:template>
+    
+    <xsl:template match="extRif:broaderSubject" mode="value">
+        <xsl:element name="field">
+            <xsl:attribute name="name">broader_subject_value_unresolved</xsl:attribute>
+            <xsl:value-of select="."/>
+        </xsl:element>       
+    </xsl:template>
+    
+    <xsl:template match="extRif:broaderSubject" mode="resolved_value">
+        <xsl:element name="field">
+            <xsl:attribute name="name">broader_subject_value_resolved</xsl:attribute>
+            <xsl:value-of select="@extRif:resolvedValue"/>
+        </xsl:element>       
+    </xsl:template>
+       
+    <xsl:template match="extRif:broaderSubject" mode="type">
+        <xsl:element name="field">
+            <xsl:attribute name="name">broader_subject_type</xsl:attribute>
+            <xsl:value-of select="@type"/>
+        </xsl:element>
+    </xsl:template>
+    
+    <xsl:template match="extRif:broaderSubject" mode="vocab_uri">
+        <xsl:element name="field">
+            <xsl:attribute name="name">broader_subject_vocab_uri</xsl:attribute>
+            <xsl:value-of select="@extRif:vocabUri"/>
         </xsl:element>
     </xsl:template>
     

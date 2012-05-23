@@ -18,7 +18,7 @@ $Date: 2011-11-25 14:26:15 +1100 (Fri, 25 Nov 2011) $
 $Revision: 1633 $
 *******************************************************************************/
 $vocabBroaderTerms = Array();
-
+$vocabByLabels = Array();
 function getRegistryObjectXML($registryObjectKey, $forSOLR = false, $includeRelated = false)
 {
 
@@ -1331,6 +1331,7 @@ function getRelationsXML($relation_id, $forSOLR = false)
 function getSubjectTypesXML($registryObjectKey, $elementName, $forSOLR=false)
 {
 	global $gVOCAB_RESOLVER_SERVICE;
+	global $gVOCAB_RESOLVER_RESULTS;
 	global $vocabBroaderTerms;
 	$xml = '';
 	$elementName = esc($elementName);
@@ -1362,30 +1363,53 @@ function getSubjectTypesXML($registryObjectKey, $elementName, $forSOLR=false)
 //array('resolvingService' => 'http://devl.ands.org.au:8080/sissvoc/api/anzsrc-for/',
 // 'uriprefix' => 'http://purl.org/au-research/vocabulary/anzsrc-for/2008/'));
 
-$resourceUrlComp = 'resource.json?uri=';
-				
-				$resolvedName='';
+				$resourceUrlComp = 'resource.json?uri=';
+				$resolvedName = $rawvalue;
+				$vocabUri = 'null';
 				if(array_key_exists($vocabType, $gVOCAB_RESOLVER_SERVICE))
 				{
 					$resolvingService = $gVOCAB_RESOLVER_SERVICE[$vocabType]['resolvingService'];
 					$uriprefix = $gVOCAB_RESOLVER_SERVICE[$vocabType]['uriprefix'];
-					$data = json_decode(file_get_contents($resolvingService.$resourceUrlComp.$uriprefix.$rawvalue));
-					//var_dump($data['response']);
-					//var_dump($data);
-					$broader = $data->{'result'}->{'primaryTopic'}->{'broader'}->{'_about'};
-					populateBroaderTerms($broader, $resolvingService, $vocabType);
-					$resolvedName = $data->{'result'}->{'primaryTopic'}->{'prefLabel'}->{'_value'};
+					if(is_numeric($rawvalue))
+					{
+						$vocabUri = $uriprefix.$rawvalue;
+					}
+					else 
+					{
+						$vocabUri = resolveVocabByLabel($resolvingService, $rawvalue);
+					}
+					if(array_key_exists($vocabUri, $gVOCAB_RESOLVER_RESULTS))
+					{
+						$resolvedName = $gVOCAB_RESOLVER_RESULTS[$vocabUri]['resolvedName'];
+						$rawvalue = $gVOCAB_RESOLVER_RESULTS[$vocabUri]['notation'];
+						// sometimes it's not resolving... so set it to null
+						$vocabUri = $gVOCAB_RESOLVER_RESULTS[$vocabUri]['vocabUri'];
+					}
+					else if($vocabUri != 'null')
+					{
+						$sissVocResponse = file_get_contents($resolvingService.$resourceUrlComp.$vocabUri);
+						if($http_response_header[0] == 'HTTP/1.1 200 OK')
+						{
+							$data = json_decode($sissVocResponse);
+							if(isset($data->{'result'}->{'primaryTopic'}->{'broader'}->{'_about'}))
+							{
+								$broader = $data->{'result'}->{'primaryTopic'}->{'broader'}->{'_about'};
+								populateBroaderTerms($broader, $resolvingService, $vocabType);
+							}	
+							$resolvedName = $data->{'result'}->{'primaryTopic'}->{'prefLabel'}->{'_value'};
+							$vocabUri = $data->{'result'}->{'primaryTopic'}->{'_about'};
+							$rawvalue = $data->{'result'}->{'primaryTopic'}->{'notation'};	
+							$gVOCAB_RESOLVER_RESULTS[$vocabUri] = array('broaderTerm' => $vocabUri, 'resolvingService' => $resolvingService, 'resolvedName' => $resolvedName, 'notation' => $rawvalue, 'vocabType' => $vocabType, 'vocabUri' => $vocabUri);									
+						}
+						else 
+						{// if not resolvable set $vocabUri to null
+							$gVOCAB_RESOLVER_RESULTS[$vocabUri] = array('broaderTerm' => $vocabUri, 'resolvingService' => $resolvingService, 'resolvedName' => $rawvalue, 'notation' => $rawvalue, 'vocabType' => $vocabType, 'vocabUri' => 'null');									
+						}
+						
+					}
 					
-					//$xml .= $data->{'response'};				
 				}
-				if($resolvedName)
-				{	
-					$term = " extRif:resolvedValue=\"" . $resolvedName . "\"";
-				}
-				else 
-				{
-					$term = " extRif:resolvedValue=\"" . $value . "\"";
-				}
+				$term = " extRif:resolvedValue=\"" . $resolvedName . "\" extRif:vocabUri=\"" . $vocabUri . "\"";
 			}
 
 			$xml .= "      <$elementName$type$lang$term>$rawvalue</$elementName>\n";
@@ -1393,10 +1417,43 @@ $resourceUrlComp = 'resource.json?uri=';
 		//var_dump($vocabBroaderTerms);
 		if ($forSOLR)
 		{
-			$xml .= broaderTermsXML('broader-subject');
+			$xml .= broaderTermsXML('extRif:broaderSubject');
 		}
 	}
 	return $xml;
+}
+
+
+function resolveVocabByLabel($resolvingService, $rawvalue)
+{
+	global $vocabByLabels;
+	$vocabUri = 'null';
+	if(!array_key_exists($rawvalue, $vocabByLabels))
+	{
+		
+		$resourcePrefLabelComp = 'concept.json?prefLabel=';
+		$sissVocResponse = file_get_contents($resolvingService.$resourcePrefLabelComp.urlencode($rawvalue));
+		if($http_response_header[0] == 'HTTP/1.1 200 OK')
+		{
+			$data = json_decode($sissVocResponse);
+			//var_dump($data->{'result'}->{'items'});
+			foreach($data->{'result'}->{'items'} as $item){
+				//echo $item->{'prefLabel'}->{'_value'};
+				if($item->{'prefLabel'}->{'_value'} == $rawvalue){
+					//echo $item->{'_about'};
+					$vocabUri = $item->{'_about'};
+					$vocabByLabels[$rawvalue] = $vocabUri;
+					return $vocabUri;
+				}
+			}
+		}		
+	}
+	else
+	{
+		return $vocabByLabels[$rawvalue];
+	}
+	$vocabByLabels[$rawvalue] = 'null';
+	return $vocabByLabels[$rawvalue];	
 }
 
 function populateBroaderTerms($broaderTerm, $resolvingService, $vocabType){
@@ -1405,20 +1462,24 @@ function populateBroaderTerms($broaderTerm, $resolvingService, $vocabType){
 	if(!array_key_exists($broaderTerm, $vocabBroaderTerms))
 	{
 		$resourceUrlComp = 'resource.json?uri=';
-		$data = json_decode(file_get_contents($resolvingService.$resourceUrlComp.$broaderTerm));
-		$resolvedName = $data->{'result'}->{'primaryTopic'}->{'prefLabel'}->{'_value'};	
-		$notation = $data->{'result'}->{'primaryTopic'}->{'notation'};		
-		//var_dump($data);		
-		$vocabBroaderTerms[$broaderTerm] = array('broaderTerm' => $broaderTerm, 'resolvingService' => $resolvingService, 'resolvedName' => $resolvedName, 'notation' => $notation, 'vocabType' => $vocabType);
-		if(isset($data->{'result'}->{'primaryTopic'}->{'broader'}->{'_about'})){
-			$broader = $data->{'result'}->{'primaryTopic'}->{'broader'}->{'_about'};
-		}else{
-			$broader = false;
-		}	
-	    
-	    if($broader)
-	    {
-			populateBroaderTerms($broader, $resolvingService, $vocabType);
+		$sissVocResponse = file_get_contents($resolvingService.$resourceUrlComp.$broaderTerm);	
+		if($http_response_header[0] == 'HTTP/1.1 200 OK')
+		{
+			$data = json_decode($sissVocResponse);
+			$resolvedName = $data->{'result'}->{'primaryTopic'}->{'prefLabel'}->{'_value'};	
+			$notation = $data->{'result'}->{'primaryTopic'}->{'notation'};	
+			$vocabUri = $data->{'result'}->{'primaryTopic'}->{'_about'};	
+			$vocabBroaderTerms[$broaderTerm] = array('broaderTerm' => $broaderTerm, 'resolvingService' => $resolvingService, 'resolvedName' => $resolvedName, 'notation' => $notation, 'vocabType' => $vocabType, 'vocabUri' => $vocabUri);
+			if(isset($data->{'result'}->{'primaryTopic'}->{'broader'}->{'_about'})){
+				$broader = $data->{'result'}->{'primaryTopic'}->{'broader'}->{'_about'};
+			}else{
+				$broader = false;
+			}	
+		    
+		    if($broader)
+		    {
+				populateBroaderTerms($broader, $resolvingService, $vocabType);
+			}
 		}
 	}
 }
@@ -1430,7 +1491,7 @@ function broaderTermsXML($elementName)
 	foreach( $vocabBroaderTerms as $term )
 	{
 		$type = ' type="'.$term['vocabType'].'"';
-		$eTerm = " extRif:resolvedValue=\"" . $term['resolvedName'] . "\"";
+		$eTerm = " extRif:resolvedValue=\"" . $term['resolvedName'] . "\" extRif:vocabUri=\"" . $term['vocabUri'] . "\"";
 		$xml .= "      <$elementName$type$eTerm>".$term['notation']."</$elementName>\n";			
 	}
 	return $xml;
@@ -2601,7 +2662,7 @@ function getSpatialCoverageXMLforSOLR($coverage_id)
 				}
 			}
 	        if($centre != '')
-	        {
+	        {strpos($mystring, $findme)
 	        	$xml .= "        <center>$centre</center>\n";
 	        }			
 		}
@@ -2751,7 +2812,7 @@ function getTemporalCoverageXMLforSOLR($coverage_id)
 		"isManagedBy" => "Managed by",
 		"isOwnedBy" => "Owned by",
 		"isPartOf" => "Part of",
-		"isSupportedBy" => "Supported by",
+		"isSupportedBy" => "Supported by",strpos($mystring, $findme)
 	);
 	$typeArray['activity'] = array(
 		"hasAssociationWith" => "Associated with",
