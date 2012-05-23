@@ -1388,25 +1388,29 @@ function getSubjectTypesXML($registryObjectKey, $elementName, $forSOLR=false)
 					}
 					else if($vocabUri != 'null')
 					{
-						$sissVocResponse = file_get_contents($resolvingService.$resourceUrlComp.$vocabUri);
-						if($http_response_header[0] == 'HTTP/1.1 200 OK')
-						{
-							$data = json_decode($sissVocResponse);
-							if(isset($data->{'result'}->{'primaryTopic'}->{'broader'}->{'_about'}))
+						$uri = $resolvingService.$resourceUrlComp.$vocabUri;
+						$header = get_headers($uri);
+
+						if($header[0]=='HTTP/1.1 200 OK'){
+							$sissVocResponse = file_get_contents($uri);
+							if($http_response_header[0] == 'HTTP/1.1 200 OK')
 							{
-								$broader = $data->{'result'}->{'primaryTopic'}->{'broader'}->{'_about'};
-								populateBroaderTerms($broader, $resolvingService, $vocabType);
-							}	
-							$resolvedName = $data->{'result'}->{'primaryTopic'}->{'prefLabel'}->{'_value'};
-							$vocabUri = $data->{'result'}->{'primaryTopic'}->{'_about'};
-							$rawvalue = $data->{'result'}->{'primaryTopic'}->{'notation'};	
-							$gVOCAB_RESOLVER_RESULTS[$vocabUri] = array('broaderTerm' => $vocabUri, 'resolvingService' => $resolvingService, 'resolvedName' => $resolvedName, 'notation' => $rawvalue, 'vocabType' => $vocabType, 'vocabUri' => $vocabUri);									
+								$data = json_decode($sissVocResponse);
+								if(isset($data->{'result'}->{'primaryTopic'}->{'broader'}->{'_about'}))
+								{
+									$broader = $data->{'result'}->{'primaryTopic'}->{'broader'}->{'_about'};
+									populateBroaderTerms($broader, $resolvingService, $vocabType);
+								}	
+								$resolvedName = $data->{'result'}->{'primaryTopic'}->{'prefLabel'}->{'_value'};
+								$vocabUri = $data->{'result'}->{'primaryTopic'}->{'_about'};
+								$rawvalue = $data->{'result'}->{'primaryTopic'}->{'notation'};	
+								$gVOCAB_RESOLVER_RESULTS[$vocabUri] = array('broaderTerm' => $vocabUri, 'resolvingService' => $resolvingService, 'resolvedName' => $resolvedName, 'notation' => $rawvalue, 'vocabType' => $vocabType, 'vocabUri' => $vocabUri);									
+							}
+							else 
+							{// if not resolvable set $vocabUri to null
+								$gVOCAB_RESOLVER_RESULTS[$vocabUri] = array('broaderTerm' => $vocabUri, 'resolvingService' => $resolvingService, 'resolvedName' => $rawvalue, 'notation' => $rawvalue, 'vocabType' => $vocabType, 'vocabUri' => 'null');									
+							}
 						}
-						else 
-						{// if not resolvable set $vocabUri to null
-							$gVOCAB_RESOLVER_RESULTS[$vocabUri] = array('broaderTerm' => $vocabUri, 'resolvingService' => $resolvingService, 'resolvedName' => $rawvalue, 'notation' => $rawvalue, 'vocabType' => $vocabType, 'vocabUri' => 'null');									
-						}
-						
 					}
 					
 				}
@@ -1433,9 +1437,12 @@ function resolveVocabByLabel($resolvingService, $rawvalue)
 	{
 		
 		$resourcePrefLabelComp = 'concept.json?prefLabel=';
-		$sissVocResponse = file_get_contents($resolvingService.$resourcePrefLabelComp.urlencode($rawvalue));
-		if($http_response_header[0] == 'HTTP/1.1 200 OK')
-		{
+		$uri = $resolvingService.$resourcePrefLabelComp.urlencode($rawvalue);
+		$header = get_headers($uri);
+
+		if($header[0]=='HTTP/1.1 200 OK'){
+			$sissVocResponse = file_get_contents($uri);
+			
 			$data = json_decode($sissVocResponse);
 			//var_dump($data->{'result'}->{'items'});
 			foreach($data->{'result'}->{'items'} as $item){
@@ -1447,7 +1454,8 @@ function resolveVocabByLabel($resolvingService, $rawvalue)
 					return $vocabUri;
 				}
 			}
-		}		
+			
+		}	
 	}
 	else
 	{
