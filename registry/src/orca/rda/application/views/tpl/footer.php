@@ -1,5 +1,5 @@
 <?php
-/** 
+/**
 Copyright 2011 The Australian National University
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,40 +14,41 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ***************************************************************************
 *
-**/ 
+**/
 ?>
 </div>
 
 
-	
+
 	</div>
-	
+
 <div id="footer" class="no_print">
-	<?php echo anchor('','Home');?> | 
-	<?php echo anchor('home/about', 'About');?> | 
-	<?php echo anchor('home/contact', 'Contact');?> | 
+	<?php echo anchor('','Home');?> |
+	<?php echo anchor('home/about', 'About');?> |
+	<?php echo anchor('home/contact', 'Contact');?> |
 	<?php echo anchor('home/disclaimer', 'Disclaimer');?> |
 	<?php echo anchor('search/browse/All/collection', 'All Collections');?> |
 	<?php echo anchor('search/browse/All/party', 'All Parties');?> |
 	<?php echo anchor('search/browse/All/activity', 'All Activities');?> |
 	<?php echo anchor('search/browse/All/service', 'All Services');?> |
+	<?php echo anchor('topic', 'All Topics');?> |
 	<?php
 		if(isset($key)){
 			echo anchor(getHTTPs($this->config->item('orca_url')).'view.php?key='.$key, 'ANDS Online Services(current key)');
 		}else echo anchor($this->config->item('orca_url'), 'ANDS Online Services');
 	?>
 </div>
-	
+
 	<script type="text/javascript">
   		var base_url = "<?php echo base_url(); ?>";
   		var secure_base_url = "<?php echo getHTTPs(base_url());?>";
 		var service_url = "<?php echo service_url();?>";
 	</script>
-	
+
 
 	<script type="text/javascript" src="<?php echo base_url();?>js/jquery-1.5.2.min.js"></script> <!-- jQuery -->
 	<script type="text/javascript" src="<?php echo base_url();?>js/multicol.js"></script> <!-- jQuery Multi Column-->
-	
+
 	<script type="text/javascript" src="<?php echo base_url();?>js/jquery.tools.min.js"></script> <!-- jQuery Tools-->
 	<!--  <script src="http://cdn.jquerytools.org/1.2.5/all/jquery.tools.min.js"></script>JQuery Tools -->
 	<script type="text/javascript" src="<?php echo base_url();?>js/jquery.ba-hashchange.min.js"></script> <!-- Monitoring on Hash Change-->
@@ -58,9 +59,9 @@ limitations under the License.
 	<script type="text/javascript" src="<?php echo base_url();?>js/jquery.cookie.js"></script> <!-- jQuery UI-->
 
 	<script type="text/javascript" src="<?php echo base_url();?>js/script.js"></script> <!-- DHTML and Searching -->
-	<script type="text/javascript" src="<?php echo base_url();?>js/superfish.js"></script> <!-- Top menu -->	
-	
-	
+	<script type="text/javascript" src="<?php echo base_url();?>js/superfish.js"></script> <!-- Top menu -->
+
+
 	<?php if ($user_agent=='Internet Explorer'):?>
 		<!-- Rounded Corners for IE -->
     	<script type="text/javascript" src="<?php echo base_url();?>js/DD_roundies_0.0.2a-min.js"></script>
@@ -70,7 +71,7 @@ limitations under the License.
     		DD_roundies.addRules('.shadow-and-corner', '10px');
     	</script>
 	 <?php endif;?>
-	
+
 
 </body>
 </html>
