@@ -128,7 +128,7 @@ if( userIsORCA_ADMIN() )
 <?php setChosenFromValue($activities, 'activity', gITEM_CHECK) ?>
 <input type="checkbox" id="activities" name="activities" value="activity;"<?php print $gChosen ?> /><label for="activities">Activities</label><br />
 <input type="text" size="45" maxlength="255" name="search" value="<?php printSafe(getQueryValue('search')) ?>" id="search"/>&nbsp;<input type="button" value="Search" id="solr-input"/>
-<input type="hidden" id="solrUrl" value="rda/search/service"/>
+<input type="hidden" id="solrUrl" value="<?php echo $default_protocol;?>://<?php echo $host;?>/<?php echo $rda_root;?>/search/service"/>
 <input type="hidden" value="1" id="page"/>
 <br />
 </div>
