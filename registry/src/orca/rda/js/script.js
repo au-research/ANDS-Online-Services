@@ -57,43 +57,68 @@ $(document).ready(function(){
 	{
 			window.location.href=base_url;
 	}
-		
-	if ($('#rda_activity_name').text() == "view")
-	{
-		initViewPage();
-	} 
-	else if ($('#rda_activity_name').text() == "print-view")
-	{
-		initPrintViewPage();
-	} 
-	else if ($('#rda_activity_name').text() == "institution-view")
-	{
-		initInstitutionViewPage();
-	} 	
-	else if ($('#rda_activity_name').text() == "homepage")
-	{
-		initHomePage();
+	
+
+
+	var rda_activity_name = $('#rda_activity_name').text();
+	switch(rda_activity_name){
+		case 'view':initViewPage();break;
+		case 'print-view':initPrintViewPage();break;
+		case 'institution-view':initInstitutionViewPage();break;
+		case 'homepage':initHomePage();break;
+		case 'search':initSearchPage();break;
+		case 'contact':initContactPage();break;
+		case 'help':initHelpPage();break;
+		case 'preview':initPreviewPage();break;
+		case 'vocab':initVocabPage();break;
 	}
-    else if ($('#rda_activity_name').text() == "search")
-   	{
-   		initSearchPage();
-   	}
-    else if ($('#rda_activity_name').text() == "contact")
-   	{
-   		initContactPage();
-   	}
-    else if ($('#rda_activity_name').text() == "help")
-   	{
-   		initHelpPage();
-   	}
-	else if ($('#rda_activity_name').text() == "preview")
-   	{
-   		initPreviewPage();
-   	}
 	
 	
 	$('#clearSearch').tipsy({live:true, gravity:'se'});
 	
+
+	function initVocabPage(){
+		$("#vocab-browser").jstree({
+			"plugins" : ["themes","html_data","ui","crrm", "types"],
+			"core" : { "initially_open" : [ "rootNode" ] },
+            "types" : { 
+                "types" : { 
+                    "default" : { 
+                        "select_node" : 
+                        	function(e) {
+                                this.toggle_node(e);
+                                return false;
+                            }
+                    }
+                }
+             },
+             "themes" : {
+				"theme" : "default",
+				"dots" : true,
+				"icons" : false
+			},
+			"ui": {
+				"select_limit": 1
+			}
+		});
+
+		$('.getConcept').live('click', function(){
+			//console.log($(this).attr('notation'));
+			var thisTree = $(this).parent().children('ul');
+			$.ajax({
+       			type:"GET",
+				url: base_url+"/vocab/getConcept/"+$(this).attr('notation')+'/'+$(this).attr('vocab'),
+		        success:function(data){ 
+					$(thisTree).html(data);
+					var tree = jQuery.jstree._reference("#vocab-browser");
+					tree.refresh();
+
+
+		        },
+		        error:function(msg){}
+			});
+		});
+	}
 
 	function initSearchPage(){
 		$('.disable-info').live('click',function(){
@@ -157,7 +182,7 @@ $(document).ready(function(){
 		}
 		//console.log('term='+search_term+'page='+page+'tab='+classFilter);
 		search_term = decodeURIComponent(search_term);
-		if(window.location.href.indexOf('search')>=0) {
+		if(window.location.href.indexOf('/search/')>=0) {
 			//console.log('yea');
 			search_term = search_term.replace(/ or /g, " OR ");//uppercase the ORs
 			search_term = search_term.replace(/ and /g, " AND ");//uppercase the ANDS
@@ -1255,6 +1280,8 @@ $(document).ready(function(){
   		});	
 	}
 	
+
+
 	/*
 	 * Execute the functions only available in home page
 	 */
@@ -1335,7 +1362,7 @@ $(document).ready(function(){
 		}
 		$('#clearSearch').hide();
 	}
-	
+
 	function sortAlpha(mylist){
 		var listitems = mylist.children('li').get();
 		listitems.sort(function(a, b) {
