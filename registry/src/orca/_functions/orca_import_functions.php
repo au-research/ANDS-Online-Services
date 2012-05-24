@@ -1962,7 +1962,7 @@ function runQualityLevelCheckonDom($registryObjects, $relatedObjectClassesStr, $
 	$nXPath = new DOMXpath($reportDoc);
 	//print "RESULT:\n".$result."\n";
 	$errorElement = $nXPath->evaluate("//span[@class = 'qa_error']");
-	$level = 999;
+	$level = 5;
 	for( $j=0; $j < $errorElement->length; $j++ )
 	{
 		if($errorElement->item($j)->getAttribute("level") < $level)
