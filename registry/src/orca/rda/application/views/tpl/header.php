@@ -1,5 +1,5 @@
 <?php
-/** 
+/**
 Copyright 2011 The Australian National University
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ***************************************************************************
 *
-**/ 
+**/
 ?>
 <?php
 	$md_title = 'Research Data Australia';
@@ -29,20 +29,20 @@ limitations under the License.
 	<meta property="og:title" content="<?php echo $md_title;?>" />
 	<meta property="og:description" content="<?php echo $md_description;?>" />
 	<meta property="og:image" content="<?php echo $md_image;?>"/>
-	
+
 	<meta name="title" content="<?php echo $md_title;?>"/>
 	<meta name="description" content="<?php echo $md_description;?>"/>
-	
+
 	<?php if ($user_agent!='Internet Explorer'):?>
     	<link href="<?php echo base_url();?>css/superfish.css" media="screen" type="text/css" rel="stylesheet">
 	<?php endif;?>
-	 
-	
+
+
 	<link href="<?php echo base_url();?>css/reset.css" media="reset" type="text/css" rel="stylesheet">
 	<link type="text/css" href="<?php echo base_url();?>css/smoothness/jquery-ui-1.8.14.custom.css" rel="stylesheet" />
 	<link type="text/css" href="<?php echo base_url();?>css/tipsy.css" rel="stylesheet" />
 	<link href="<?php echo base_url();?>css/screen.css" type="text/css" rel="stylesheet">
-	<link href="<?php echo base_url();?>css/print.css" media="print" type="text/css" rel="stylesheet">	
+	<link href="<?php echo base_url();?>css/print.css" media="print" type="text/css" rel="stylesheet">
 	<?php if ($user_agent=='Internet Explorer'):?>
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url();?>css/ie.superfish.css" />
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url();?>css/ie.screen.css" />
@@ -53,7 +53,7 @@ limitations under the License.
 	  var _gaq = _gaq || [];
 	  _gaq.push(['_setAccount', 'UA-8380487-7']);
 	  _gaq.push(['_trackPageview']);
-	
+
 	  (function() {
 	    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
 	    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
@@ -61,13 +61,13 @@ limitations under the License.
 	  })();
 	</script>
 	<?php endif;?>
-	
+
 </head>
 
 <body>
 <div class="hide">Research Data Australia</div>
 	<div id="container">
-		
+
 		<div id="header" class="no_print">
 			<div class="top-menu-cover">
 				<a href="http://ands.org.au"><img src="<?php echo site_url('img/ands_logo_white.png');?>" id="ands-logo-white" alt="ANDS Logo"/></a>
@@ -76,7 +76,8 @@ limitations under the License.
 				<li><?php echo anchor('search/browse/All/collection', 'Collections');?></li>
 				<li><?php echo anchor('search/browse/All/party', 'Parties');?></li>
 				<li><?php echo anchor('search/browse/All/activity', 'Activities');?></li>
-				<li><?php echo anchor('search/browse/All/service', 'Services');?></li>	
+				<li><?php echo anchor('search/browse/All/service', 'Services');?></li>
+				<li><?php echo anchor('topic', 'Topics');?></li>
 				</li>
 				<li><?php echo anchor('home/about','About');?></li>
 				<li><?php echo anchor('home/contact','Contact');?></li>
@@ -84,5 +85,5 @@ limitations under the License.
 			</div>
 		</div>
 		<span class="hide" id="rda_activity_name"><?php echo (isset($activity_name) ? $activity_name : 'unknown'); ?></span>
-		
+
 
