@@ -432,7 +432,7 @@ $(document).ready(function() {
 			dataType: 'json',
 			usepager: true,
 			colModel : [
-			{display: 'recordKey', name:'key', width:70, sortable: true, align:'left'},
+			{display: 'recordKey', name:'key', width:120, sortable: true, align:'left'},
                 {display: 'Name/Title', name : 'list_title', width : 350, sortable : true, align: 'left'},
                 {display: 'Last Modified', name : 'date_modified', width : 150, sortable : true, align: 'left'},
                 {display: 'Class', name : 'class', width : 70, sortable : true, align: 'left'},
@@ -440,7 +440,7 @@ $(document).ready(function() {
                 {display: 'Quality Level', name : 'quality_level', width : 70, sortable : true, align: 'left'},
                 {display: 'Flag', name : 'flag', width : 30, sortable : true, align: 'left'},
                 {display: 'Options', name : 'buttons', width : 100, sortable : false, align: 'left'},
-                {display: 'Status', name : 'status', width : 50, sortable : true, align: 'left'},
+                {display: 'Status', name : 'status', width : 200, sortable : true, align: 'left'},
                 {display: 'Manually Assessed', name : 'manually_assessed_flag', width : 50, sortable : true, align: 'left', hide:true}
             ],
             buttons:buttons,

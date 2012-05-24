@@ -61,7 +61,6 @@ limitations under the License.
 	  })();
 	</script>
 	<?php endif;?>
-
 </head>
 
 <body>
@@ -78,7 +77,6 @@ limitations under the License.
 				<li><?php echo anchor('search/browse/All/activity', 'Activities');?></li>
 				<li><?php echo anchor('search/browse/All/service', 'Services');?></li>
 				<li><?php echo anchor('topic', 'Topics');?></li>
-				</li>
 				<li><?php echo anchor('home/about','About');?></li>
 				<li><?php echo anchor('home/contact','Contact');?></li>
 			</ul>

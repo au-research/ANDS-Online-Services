@@ -18,6 +18,7 @@ limitations under the License.
 ?>
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+global $gVOCAB_RESOLVER_SERVICE;
 
 /*
  * Change me
@@ -25,6 +26,7 @@ limitations under the License.
 $config['base_url']	= 'http://'.HOST.'/'.RDA_ROOT.'/';
 $config['orca_url'] = 'http://'.HOST.'/'.ORCA_ROOT.'/';
 $config['solr_url'] = SOLR_URL;
+$config['vocab_resolver_service'] = $gVOCAB_RESOLVER_SERVICE;
 
 
 /*

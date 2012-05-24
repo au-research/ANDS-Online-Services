@@ -182,7 +182,7 @@ $(document).ready(function(){
 		}
 		//console.log('term='+search_term+'page='+page+'tab='+classFilter);
 		search_term = decodeURIComponent(search_term);
-		if(window.location.href.indexOf('/search/')>=0) {
+		if(window.location.href.indexOf('/q=')>=0) {
 			//console.log('yea');
 			search_term = search_term.replace(/ or /g, " OR ");//uppercase the ORs
 			search_term = search_term.replace(/ and /g, " AND ");//uppercase the ANDS
