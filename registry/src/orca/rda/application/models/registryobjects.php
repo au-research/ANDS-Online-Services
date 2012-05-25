@@ -35,7 +35,7 @@ limitations under the License.
 	       	if($dataSourceKey==''){
 	       		$url = $service_url.'?key='.urlencode($key);
 			}else $url = $service_url.'?draftKey='.$key.'&dataSourceKey='.$dataSourceKey;
-			echo '<div>'.$url.'</div>';
+			// echo '<div>'.$url.'</div>';
 			$content='Nothing Returned';
 			if(get_http_response_code($url)!='400'){
 				$content = file_get_contents($url, 0, null, null);
@@ -48,7 +48,7 @@ limitations under the License.
 	    function getByHash($hash){
 		  	$service_url = service_url();
 	      	$url = $service_url.'?registry_object_hash='.urlencode($hash);
-			echo '<div>'.$url.'</div>';
+			//echo '<div>'.$url.'</div>';
 			$content='Nothing Returned';
 			if(get_http_response_code($url)!='400'){
 				$content = file_get_contents($url, 0, null, null);
