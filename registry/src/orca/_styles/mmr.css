@@ -386,10 +386,10 @@ a.icon28sOn span {background:url(button-icons-small.png) no-repeat -6px -643px;}
 a.icon59sOff span {background: url(button-icons-small.png) no-repeat -254px -189px;}
 a.icon59sOn span {background: url(button-icons-small.png) no-repeat -70px -645px;}
 
-a.ql4{background:#8064a2;color:white;}
-a.ql3{background:#9bbb59;color:white;}
-a.ql2{background:#c0504c;color:white;}
-a.ql1{background:#4f81bd;color:white;}
+a.ql4{background:#4491AB;color:white;}
+a.ql3{background:#6DA539;color:white;}
+a.ql2{background:#F2CE3B;color:white;}
+a.ql1{background:#F06533;color:white;}
 a.ql0{background:#89CEDE;color:black;}
 
 a.borderless{
@@ -485,33 +485,35 @@ div.flexigrid a{text-decoration:none;}
 
 
 
-.qa_ok{display:block;padding:10px;border:1px solid;margin:7px 0;}
-.qa_error{display:block;padding:10px;border:1px solid;margin:7px 0;}
+.qa_ok{display:block;border:1px solid;}
+.qa_error{display:block;border:1px solid;}
 .qa_container{border:1px solid black;margin:4px 1px;padding:7px;}
 .toggleQAtip{font-size:16px;padding:10px 2px;cursor:pointer;}
 .hasError{background:#C92020; color:white;}
 .info, .success, .warning, .error, .validation {
     border: 1px solid;
     background-repeat: no-repeat;
-    background-position: 10px center;
+    background-position: 97% 15px;
+    margin: 7px auto;
+    padding: 10px 20px 15px 10px;
 }
 .info {
     color: #00529B;
     background-color: #BDE5F8;
-    background-image: url('info.png');
+    background-image: url('../_images/info.png');
 }
 .success {
     color: #4F8A10;
     background-color: #DFF2BF;
-    background-image:url('success.png');
+    background-image:url('../_images/check_16.png');
 }
 .warning {
     color: #9F6000;
     background-color: #FEEFB3;
-    background-image: url('warning.png');
+    background-image: url('../_images/delete_16.png');
 }
 .error {
     color: #D8000C;
     background-color: #FFBABA;
-    background-image: url('error.png');
+    background-image: url('../_images/error.png');
 }

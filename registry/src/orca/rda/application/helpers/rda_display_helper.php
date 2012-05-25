@@ -245,7 +245,7 @@ function service_url(){
  */
 function view_url(){
 	$ci =& get_instance();
-	return ($ci->config->item('orca_url')).$ci->config->item('orca_view_point');
+	return $ci->config->item('orca_url').$ci->config->item('orca_view_point');
 }
 
 

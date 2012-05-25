@@ -77,16 +77,14 @@ $(document).ready(function() {
 				});
 			}
 		}else if(type=='qaview'){
-			
 			$('.statusview').hide();
 			$('.viewswitch').removeClass('pressed');
 			$('.viewswitch[name=qaview]').addClass('pressed');
+			google.setOnLoadCallback(drawBarChart(status, dsKey));
 			if(status=='All'){
-				google.setOnLoadCallback(drawChartAllStatus(dsKey));
 				$('.qaview[id=All_qaview]').show();
 				$('.as_qa_table').parents('.tab-content').show();
 			}else{//is a specific status
-				google.setOnLoadCallback(drawChart(status, dsKey));
 				$('.qaview[id='+status+'_qaview]').show();
 				$('.qa_table[status='+status+']').parents('.tab-content').show();
 			}
@@ -113,7 +111,7 @@ $(document).ready(function() {
 	});
 
 
-	function drawChart(status, ds) {
+	function drawPieChart(status, ds) {
         // Create the data table.
         var chartData = new google.visualization.DataTable();
 
@@ -169,10 +167,10 @@ $(document).ready(function() {
        	});
     }
 
-	function drawChartAllStatus(dsKey){
-		var chartData = new google.visualization.DataTable();
+    function drawBarChart(status, ds){
+    	var chartData = new google.visualization.DataTable();
 		$.ajax({
-    		url: 'get_view.php?view=AllStatusAllQA&ds='+dsKey,
+    		url: 'get_view.php?view=StatusAllQA&status='+status+'&ds='+ds,
     		method: 'get',
     		dataType:'json',
     		contentType: "application/json", //tell the server we're looking for json
@@ -180,39 +178,6 @@ $(document).ready(function() {
     		success: function(data) {
 
     			//console.log(data);
-
-    			/*var realData = [];
-    			var classList = [];
-    			var QAList = [];
-    			classList.push('Quality Levels');
-    			var num = 1;
-    			$.each(data, function(i, item) {
-    				classList.push('Quality level '+num);
-    				var QA = [];
-    				QA.push(item.label);
-    				$.each(item.qa, function(i, qa_i) {
-    					for(j=0;j<=num;j++){
-    						if(j!=i && !QA[j]){
-    							QA[j]=0;
-    							//console.log(j + ' > '+ '0');
-    						}else{
-    							QA[i]=((qa_i*100)/item.num)/100;
-    						}
-    					}
-					});
-					//console.log(QA);
-					QAList.push(QA);
-					num++;
-					//console.log('====');
-				});
-				realData.push(classList);
-
-				$.each(QAList, function(i, item) {
-					realData.push(item);
-				});
-
-				console.log(realData);
-  				var realData = google.visualization.arrayToDataTable(realData);*/
 
   				var chartData = new google.visualization.DataTable();
   				chartData.addColumn('string', 'Status');
@@ -247,22 +212,22 @@ $(document).ready(function() {
 
   				//console.log(realData);
     			// Create and draw the visualization.
-    			var barsVisualization = new google.visualization.BarChart(document.getElementById('All_qaview'));
+    			var barsVisualization = new google.visualization.BarChart(document.getElementById(status+'_qaview'));
     			//var formatter = new google.visualization.BarFormat({showValue: true});
     			//formatter.format(realData, 0);
 			  	
 
     			var optionPercent = {title:"All Registry Objects",
-			        	width:800, height:400,
-			        	vAxis: {title: "Status"},
-			        	isStacked:true,
-			        	colors:['#89CEDE', '#4f81bd','#c0504c', '#9bbb59', '#8064a2'],
-			        	animation:{
-        					duration: 1000,
-        					easing: 'out'
-      					},
-      					sliceVisibilityThreshold:0,
-			        	hAxis: {title: "Quality Levels Percentage",format:'##%'}};
+		        	width:800, height:400,
+		        	vAxis: {title: "Status"},
+		        	isStacked:true,
+		        	colors:['#89CEDE', '#F06533','#F2CE3B', '#6DA539', '#4491AB'],
+		        	animation:{
+    					duration: 1000,
+    					easing: 'out'
+  					},
+  					sliceVisibilityThreshold:0,
+		        	hAxis: {title: "Quality Levels Percentage",format:'##%'}};
 				var option = {title:"All Registry Objects",
 		        	width:800, height:400,
 		        	vAxis: {title: "Status"},
@@ -272,7 +237,7 @@ $(document).ready(function() {
         				easing: 'out'
       				},
       				sliceVisibilityThreshold:0,
-					colors:['#89CEDE', '#4f81bd','#c0504c', '#9bbb59', '#8064a2'],
+					colors:['#89CEDE', '#F06533','#F2CE3B', '#6DA539', '#4491AB'],
 					hAxis: {title: "Registry Objects Percentage"}};
 
 		        var view = new google.visualization.DataView(chartData);
@@ -347,22 +312,10 @@ $(document).ready(function() {
 			  		drawThisChart(dataToDraw, optionToDraw);
 			  	});
 			  	drawThisChart(dataToDraw, optionToDraw);
-			     /* google.visualization.events.addListener(barsVisualization, 'onmouseover', over);
-			      google.visualization.events.addListener(barsVisualization, 'onmouseout', over);
-			      google.visualization.events.addListener(barsVisualization, 'click', clickBar);
-
-			      function over(){}
-			      function clickBar(e){
-			      	var a = barsVisualization.getSelection([e]);
-			      	//console.log(a);
-			      	//console.log(realData.getValue(a[0].row, a[0].column));
-			      	//console.log(realData.getColumnLabel(a[0].column));
-			      	$('#switchChartType').click();
-			      	drawThisChart(dataToDraw, optionToDraw);
-			      }*/
         	}
         });
-	}
+    }
+
 
 	$('.mmr_table').each(function(){
 		var status = $(this).attr('status');
@@ -409,7 +362,7 @@ $(document).ready(function() {
 
 		var tableTitle ='';
 		if(table_type=='status_table'){
-			theTableTitle=status;
+			theTableTitle=status.replace(/_/g," ");;
 		}else if(table_type=='as_qa_table' || table_type=='qa_table'){
 			theTableTitle='Quality Level '+ql;
 		}
@@ -450,7 +403,7 @@ $(document).ready(function() {
 			pagestat: 'Displaying {from} to {to} of {total} records',
 			nomsg: 'No records found',
 
-            height:'auto',
+            height:'200px',
             additionalClass:tClass,
             tableTitle:theTableTitle,
             searchitems : [
@@ -718,6 +671,10 @@ $(document).ready(function() {
 						this.set('content.text', data);
 						formatTip(this);
 					}
+				},
+				title: {
+					text: 'Quality Level',
+					button: true
 				}
 			},
 			position: {
@@ -725,15 +682,12 @@ $(document).ready(function() {
 				at: 'left center' // ...and opposite corner
 			},
 			show: {
-         		ready: true, // Needed to make it show on first mouseover event
+				event: 'click',
          		effect: function(offset) {
 					$(this).show(); // "this" refers to the tooltip
 				}
       		},
-      		hide: {
-				fixed:true,
-				delay: 100
-			},
+      		hide: false,
 			style: {
 				classes: 'ui-tooltip-shadow ui-tooltip-light'
 			},

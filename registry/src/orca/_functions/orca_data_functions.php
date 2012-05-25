@@ -2118,6 +2118,8 @@ function getQualityTestResult($registry_object_key, $dataSourceKey, $status){
 		$params = array($registry_object_key, $dataSourceKey);
 	}else{
 		//is not a draft
+
+
 		$strQuery = 'SELECT * FROM dba.tbl_registry_objects WHERE registry_object_key = $1';
 		$params = array($registry_object_key);
 	}
@@ -2128,16 +2130,25 @@ function getQualityTestResult($registry_object_key, $dataSourceKey, $status){
 	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
 	
 	
-	if( $resultSet )
-	{
-		$result = $resultSet[0]['quality_level_result'];
+	if( $resultSet ){
+
+		if($resultSet[0]['gold_status_flag']==1){
+			return  'This record is marked as gold standard';
+		}
+
+		if($resultSet[0]['quality_level_result']){
+			$result = $resultSet[0]['quality_level_result'];
+			
+		}else{
+			$result= "No QA for key $registry_object_key in Data Source $dataSourceKey";
+		}
 	}else{
-		//
-		$result = "No QA for key $registry_object_key";
+		$result = "No QA for key $registry_object_key in Data Source $dataSourceKey";
 	}
 	
 	return $result;
 }
+
 
 function searchByName($searchText, $objectClass, $dataSourceKey, $limit)
 {

@@ -121,6 +121,7 @@
 						ow: ow,
 						n: n
 					};
+					this.fixHeight();
 					$('body').css('cursor', 'col-resize');
 				} else if (dragtype == 'vresize') {//table resize
 					var hgo = false;
@@ -248,7 +249,7 @@
 				}
 				$('body').css('cursor', 'default');
 				$('body').noSelect(false);
-				this.ie9Fix();
+				//this.ie9Fix();
 			},
 			toggleCol: function (cid, visible) {
 				var ncol = $("th[axis='col" + cid + "']", this.hDiv)[0];
@@ -499,6 +500,9 @@
 				}
 
 			},
+			refresh: function() {
+				this.rePosDrag();
+			},
 			populate: function () { //get latest data
 				if (this.loading) {
 					return true;
@@ -706,7 +710,8 @@
 						});
 					}
 				});
-				$('tbody tr', g.bDiv).mouseleave(function(){g.ie9Fix();})
+				// /$('tbody tr', g.bDiv).mouseleave(function(){g.ie9Fix();})
+				$('tbody tr', g.bDiv).mouseleave(function(){g.fixHeight();g.refresh();})
 
 			},
 			ie9Fix: function() {
@@ -988,9 +993,9 @@
 					g.fixHeight($(g.gDiv).height());
 					$(cgDiv).hover(function () {
 						g.fixHeight();
-						$(this).addClass('dragging')
+						$(this).addClass('dragging');
 					}, function () {
-						if (!g.colresize) $(this).removeClass('dragging')
+						if (!g.colresize) $(this).removeClass('dragging');
 					});
 				}
 			});
@@ -1233,6 +1238,7 @@
 		}
 		g.rePosDrag();
 		g.fixHeight();
+		//g.ie9Fix();
 		//make grid functions accessible
 		t.p = p;
 		t.grid = g;
