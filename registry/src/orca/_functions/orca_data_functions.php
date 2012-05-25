@@ -2132,13 +2132,12 @@ function getQualityTestResult($registry_object_key, $dataSourceKey, $status){
 	
 	if( $resultSet ){
 
-		if($resultSet[0]['gold_status_flag']==1){
+		if(isset($resultSet[0]['gold_status_flag']) && $resultSet[0]['gold_status_flag']==1){
 			return  'This record is marked as gold standard';
 		}
 
 		if($resultSet[0]['quality_level_result']){
 			$result = $resultSet[0]['quality_level_result'];
-			
 		}else{
 			$result= "No QA for key $registry_object_key in Data Source $dataSourceKey";
 		}
