@@ -34,7 +34,7 @@ limitations under the License.
 	<?php echo anchor('topic', 'All Topics');?> |
 	<?php
 		if(isset($key)){
-			echo anchor(getHTTPs($this->config->item('orca_url')).'view.php?key='.$key, 'ANDS Online Services(current key)');
+			echo anchor($this->config->item('orca_url').'view.php?key='.$key, 'ANDS Online Services(current key)');
 		}else echo anchor($this->config->item('orca_url'), 'ANDS Online Services');
 	?>
 </div>
@@ -58,7 +58,7 @@ limitations under the License.
 	<script type="text/javascript" src="<?php echo base_url();?>js/jquery.tipsy.js"></script> <!-- jQuery Tooltip-->
 	<script type="text/javascript" src="<?php echo base_url();?>js/jquery.cookie.js"></script> <!-- jQuery Cookie-->
 
-	<script type="text/javascript" src="<?php echo base_url();?>js/treeview/jquery.treeview.js"></script><!-- jQuery treeview -->
+	
 	<script type="text/javascript" src="<?php echo base_url();?>js/jstree/jquery.jstree.js"></script><!-- jQuery treeview -->
 
 	<script type="text/javascript" src="<?php echo base_url();?>js/script.js"></script> <!-- DHTML and Searching -->

@@ -1,4 +1,5 @@
 $(document).ready(function(){
+
 	var search_term = $('#search-box').val();
 	var page = 1;
 	var classFilter = $('#classSelect').val();
@@ -1288,7 +1289,6 @@ $(document).ready(function(){
 	function initHomePage(){
 
 		loadHPStat('score');
-		
 		//$('#content').sortable();
 		$('.hp-icons img').hover(function(){
 			id = $(this).attr('id');
