@@ -60,8 +60,22 @@ foreach($topic_boxes AS $box)
 	echo '<script type="text/javascript"';
 	echo ' src="http://devl.ands.org.au/workareas/ben/misc/jswidget/script.js">';
 	echo '</script>';
+}
 
+foreach($manual_boxes AS $box)
+{
 
+	echo "<div class='right-box'>" .
+			"<h2>".$box['heading']."</h2>" .
+			"<ul>";
+	foreach ($box['items'] AS $item):
+
+			echo "<li><a href='" . $item['url'] . "'>" . $item['title'] . "</a></li>";
+
+	endforeach;
+
+	echo 	"</ul>" .
+		 "</div>";
 }
 ?>
 

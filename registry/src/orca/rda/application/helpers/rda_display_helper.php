@@ -1,5 +1,5 @@
 <?php
-/** 
+/**
 Copyright 2011 The Australian National University
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ***************************************************************************
 *
-**/ 
+**/
 ?>
 <?php
 
@@ -24,24 +24,24 @@ limitations under the License.
  * used in facet view
  */
 function displayFacet($facet_name, $facetFilter, $json, $ro_class){
-	
+
 	$clear ='';$name = '';$class='';
 	//echo $ro_class;
 	switch($facet_name){
 		case "type":$clear = 'clearType';
 			if($ro_class!='All'){
 				$name=ucfirst($ro_class).' Types';
-			}else $name = 'Types';				
+			}else $name = 'Types';
 			$class="typeFilter";break;
 		case "group":$clear = 'clearGroup';$name='Research Groups';$class="groupFilter";break;
 		case "subject_value_resolved":$clear = 'clearSubjects';$name="Subjects";$class="subjectFilter";break;
 	}
-	
 
-	
+
+
 	echo '<div class="right-box shadow">';
-	
-	
+
+
 	echo '<h2>'.$name;
 	/*echo '<span class="toggle-facet-field">
 			<img src="'.base_url().'img/sort-alpha.png" id="'.$facet_name.'-facetSort" class="toggle-facet-sort"/>
@@ -51,18 +51,18 @@ function displayFacet($facet_name, $facetFilter, $json, $ro_class){
 
 	echo '<ul class="more" id="'.$facet_name.'-facet">';
 	$object_type = $json->{'facet_counts'}->{'facet_fields'}->{$facet_name};
-	
+
 	//print the others
 	for($i=0;$i< sizeof($object_type)-1 ;$i=$i+2){
 		if($object_type[$i+1]>0){
 			if($object_type[$i]!=$facetFilter){
 				echo '<li class="limit">
-					<a href="javascript:void(0);" 
-						title="'.$object_type[$i].' ('.number_format($object_type[$i+1]).''.' results)" 
+					<a href="javascript:void(0);"
+						title="'.$object_type[$i].' ('.number_format($object_type[$i+1]).''.' results)"
 						class="'.$class.'" id="'.$object_type[$i].'">'.
 						''.$object_type[$i].' ('.number_format($object_type[$i+1]).')'.'
 						</a></li>';
-			} 
+			}
 		}
 	}
 	echo '</ul>';
@@ -73,7 +73,7 @@ function displayFacet($facet_name, $facetFilter, $json, $ro_class){
 /*
  * displayCustomiseOptions
  * Used in the display customise dialog box
- */ 
+ */
 function displayCustomiseOptions($cookie){
 	$CI =& get_instance();
 	if($CI->input->cookie($cookie)!=''){
@@ -90,7 +90,7 @@ function displayCustomiseOptions($cookie){
 /*
  * displaySelectedFacet
  * Used in facet view
- */ 
+ */
 function displaySelectedFacet($facet_name, $facetFilter, $json){
 	$clear ='';$name = '';$class='';
 	switch($facet_name){
@@ -104,8 +104,8 @@ function displaySelectedFacet($facet_name, $facetFilter, $json){
 		if($object_type[$i+1]>0){
 			if($object_type[$i]==$facetFilter){
 				echo '<li class="limit">
-					<a href="javascript:void(0);" 
-						title="'.$object_type[$i].' ('.number_format($object_type[$i+1]).''.' results)" 
+					<a href="javascript:void(0);"
+						title="'.$object_type[$i].' ('.number_format($object_type[$i+1]).''.' results)"
 						class="clearFilter '.$clear.'" id="'.$object_type[$i].'">'.
 						''.$object_type[$i].' ('.number_format($object_type[$i+1]).')'.'
 						</a></li>';
@@ -117,7 +117,7 @@ function displaySelectedFacet($facet_name, $facetFilter, $json){
 /*
  * Construct a SOLR based filter query
  * Used in SOLR model
- */ 
+ */
 function constructFilterQuery($class, $groups){
 	$str='';
 	switch($class){
@@ -127,7 +127,7 @@ function constructFilterQuery($class, $groups){
 		case 'subject_value_resolved':$str='+subject_value_resolved:(';break;
 		case 'status':$str='+status:(';break;
 	}
-	
+
 	$classes = explode(';',$groups);
 	$first = true;
 	foreach($classes as $c){
@@ -146,7 +146,7 @@ function constructFilterQuery($class, $groups){
  * escapeSolrValue
  * escaping sensitive items in a solr query
  * encode afterwards (need check)
- */ 
+ */
 function escapeSolrValue($string){
 	//$string = urldecode($string);
     $match = array('\\','&', '|', '!', '(', ')', '{', '}', '[', ']', '^', '~', '*', '?', ':', '"', ';');
@@ -159,7 +159,7 @@ function escapeSolrValue($string){
  * getDidYouMean
  * given a term, spits out didyoumean term
  * Used when no search result is being returned
- */ 
+ */
 function getDidYouMean($term){
 	$CI =& get_instance();
 	$CI->load->model('Registryobjects', 'ro');
@@ -170,7 +170,7 @@ function getDidYouMean($term){
  * array_to_json
  * Spits out a json object given a php array
  * Used in search suggestion
- */ 
+ */
 /* following function obtained from http://jqueryui.com */
 function  array_to_json( $array ){
   if( !is_array( $array ) ){
@@ -248,6 +248,11 @@ function view_url(){
 	return $ci->config->item('orca_url').$ci->config->item('orca_view_point');
 }
 
+function assets_url()
+{
+	$CI=&get_instance();
+	return $CI->config->item('asset_url');
+}
 
 /*Get response from a http request*/
 function get_http_response_code($url) {
@@ -258,17 +263,17 @@ function get_http_response_code($url) {
 /* Check to see if a given group has an assigned institutional page */
 function getInstitutionPage($group)
 {
-		
+
 
 	$CI =& get_instance();
-	 
+
 	$CI->load->database();
 	$query = $CI->db->get_where('dba.tbl_institution_pages',array('object_group'=>$group));
 	foreach($query->result() as $row)
 	{
 		return $row->registry_object_key;
 	}
-			
+
 }
 function displaySubscriptions(){//for now we only want to set up the subscriptions for search resluts on the collections tab
 	if($_POST['classFilter']=='collection')

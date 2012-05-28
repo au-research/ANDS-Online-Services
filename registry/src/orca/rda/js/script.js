@@ -16,7 +16,9 @@ $(document).ready(function(){
 	var subjectSort = 'index';
 	var typeSort = 'index';
 
-
+	// Load up fancybox image browser
+	$(".fancybox").fancybox();
+	
 	var enableWarning = false;
 	var warningMessage = 'this is DEMO <a href="javascript:void(0);" id="dismiss_warning">[x]</a>';
 	var warningDiv = $('<div id="warningDiv"></div>');

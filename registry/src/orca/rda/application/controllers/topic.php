@@ -53,7 +53,8 @@ class Topic extends CI_Controller {
 
 		// improve? dynamic?
 		$data['topic_name'] = $this->topics[$topic]['name'];
-		$data['topic_boxes'] = $this->topics[$topic]['boxes'];
+		$data['topic_boxes'] = $this->topics[$topic]['auto_boxes'];
+		$data['manual_boxes'] = $this->topics[$topic]['manual_boxes'];
 
 		// XXX; error checking?
 		$data['html'] = $this->load->view('topics/' . $topic,array(),true);

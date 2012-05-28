@@ -48,6 +48,9 @@ limitations under the License.
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url();?>css/ie.screen.css" />
 	<?php endif;?>
 
+	<link rel="stylesheet" href="<?php echo base_url();?>css/jquery.fancybox.css?v=2.0.6" type="text/css" media="screen" />
+
+
 	<?php if($this->config->item('GA_enabled')):?>
 	<script type="text/javascript">
 	  var _gaq = _gaq || [];
