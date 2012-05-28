@@ -10,11 +10,13 @@
 		</ul>
 	</div>
 
+
 	<div id="vocab-container">
-		<?php
-			//var_dump($tree);
-			echo $bigTree;
-		?>
+		<div id="left-vocab">
+			<div id="tree-vocab"></div>
+		</div>
+		<div id="right-vocab">right</div>
+		<div class="clearfix"></div>
 	</div>
 </div>
 <?php $this->load->view('tpl/footer');?>

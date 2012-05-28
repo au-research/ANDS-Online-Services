@@ -358,7 +358,7 @@ limitations under the License.
     /*
      * Fire a search, given an array of fields and a string of facets
      */
-	private function fireSearch($fields, $facet){
+	function fireSearch($fields, $facet){
 		/*prep*/
 		$fields_string='';
 		//foreach($fields as $key=>$value) { $fields_string .= $key.'='.str_replace("+","%2B",$value).'&'; }//build the string

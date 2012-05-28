@@ -27,9 +27,7 @@ class Vocab extends CI_Controller {
 
 		$this->load->model('vocabularies', 'vmodel');
 
-		//var_dump($this->config->item('vocab_resolver_service'));
-
-		$data['bigTree']=$this->vmodel->getBigTree($this->config->item('vocab_resolver_service'));
+		//$data['bigTree']=$this->vmodel->getBigTree($this->config->item('vocab_resolver_service'));
 		$this->load->view('vocab/index', $data);
 	}
 
@@ -38,6 +36,40 @@ class Vocab extends CI_Controller {
 		$this->load->model('vocabularies', 'vmodel');
 		$tree = $this->vmodel->getConceptTree($this->config->item('vocab_resolver_service'), $num, $vocab);
 		echo $tree;
+	}
+
+	function getConceptDetail($num, $vocab){
+		$this->load->model('vocabularies', 'vmodel');
+		$data['r'] = $this->vmodel->getConcept($this->config->item('vocab_resolver_service'), $num, $vocab);
+		$data['notation'] = $num;
+		$data['vocab'] = $vocab;
+
+		//var_dump($data['r']);
+
+		$this->load->model('solr');
+		$fields = array(
+			'q'=>'broader_subject_value_unresolved:("'.$num.'")','version'=>'2.2','start'=>'0','rows'=>'100','indent'=>'on', 'wt'=>'json',
+			'fl'=>'key', 'q.alt'=>'*:*'
+		);
+		$json = $this->solr->fireSearch($fields, '');
+		$data['narrower_search_result'] = $json;
+
+		$this->load->model('solr');
+		$fields = array(
+			'q'=>'subject_value_unresolved:("'.$num.'")','version'=>'2.2','start'=>'0','rows'=>'100','indent'=>'on', 'wt'=>'json',
+			'fl'=>'key', 'q.alt'=>'*:*'
+		);
+		$json = $this->solr->fireSearch($fields, '');
+		$data['search_result'] = $json;
+
+		$data['prefLabel'] = $data['r']->{'result'}->{'primaryTopic'}->{'prefLabel'}->{'_value'};
+		$this->load->view('vocab/conceptDetail', $data);
+	}
+
+	function loadBigTree(){
+		$this->load->model('vocabularies', 'vmodel');
+		$data['bigTree']=$this->vmodel->getBigTree($this->config->item('vocab_resolver_service'));
+		echo $data['bigTree'];
 	}
 
 }

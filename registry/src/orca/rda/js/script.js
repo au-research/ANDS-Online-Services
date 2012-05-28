@@ -79,20 +79,22 @@ $(document).ready(function(){
 	
 
 	function initVocabPage(){
+		$.ajax({
+   			type:"GET",
+			url: base_url+"/vocab/loadBigTree/",
+	        success:function(data){
+				$('#tree-vocab').html(data);
+				initTree();
+	        },
+	        error:function(msg){ }
+		});	
+	}
+
+	function initTree(){
 		$("#vocab-browser").jstree({
 			"plugins" : ["themes","html_data","ui","crrm", "types"],
 			"core" : { "initially_open" : [ "rootNode" ] },
-            "types" : { 
-                "types" : { 
-                    "default" : { 
-                        "select_node" : 
-                        	function(e) {
-                                this.toggle_node(e);
-                                return false;
-                            }
-                    }
-                }
-             },
+   
              "themes" : {
 				"theme" : "default",
 				"dots" : true,
@@ -103,21 +105,45 @@ $(document).ready(function(){
 			}
 		});
 
-		$('.getConcept').live('click', function(){
-			//console.log($(this).attr('notation'));
-			var thisTree = $(this).parent().children('ul');
-			$.ajax({
+		$("#vocab-browser").bind("select_node.jstree", function(event, data) {
+  			// data.inst is the tree object, and data.rslt.obj is the node
+  			var theNode = data.rslt.obj;
+  			var theLink = $(theNode).children('.getConcept');
+  			$('#right-vocab').html('Loading...');
+  			$.ajax({
        			type:"GET",
-				url: base_url+"/vocab/getConcept/"+$(this).attr('notation')+'/'+$(this).attr('vocab'),
-		        success:function(data){ 
-					$(thisTree).html(data);
-					var tree = jQuery.jstree._reference("#vocab-browser");
-					tree.refresh();
-
-
+				url: base_url+"/vocab/getConceptDetail/"+$(theLink).attr('notation')+'/'+$(theLink).attr('vocab'),
+		        success:function(data){
+					$('#right-vocab').html(data);
 		        },
 		        error:function(msg){}
 			});
+  			return data.inst.toggle_node(data.rslt.obj);
+		});
+
+		$("#vocab-browser").bind("open_node.jstree", function(event, data) {
+  			// data.inst is the tree object, and data.rslt.obj is the node
+  			//return data.inst.toggle_node(data.rslt.obj);
+  			//console.log($(this).attr('notation'));
+  			var theNode = data.rslt.obj;
+  			
+  			if($(theNode).attr('id')!='rootNode'){
+  				if(!$(theNode).hasClass('conceptRoot')){
+	  				var thisTree = $(theNode).children('ul');
+	  				console.log(theNode);
+	  				var theLink = $(theNode).children('.getConcept');
+					$.ajax({
+		       			type:"GET",
+						url: base_url+"/vocab/getConcept/"+$(theLink).attr('notation')+'/'+$(theLink).attr('vocab'),
+				        success:function(data){
+							$(thisTree).html(data);
+							var tree = jQuery.jstree._reference("#vocab-browser");
+							tree.refresh();
+				        },
+				        error:function(msg){}
+					});
+  				}
+  			}
 		});
 	}
 

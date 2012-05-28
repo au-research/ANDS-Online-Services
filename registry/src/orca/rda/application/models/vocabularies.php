@@ -35,8 +35,13 @@ class Vocabularies extends CI_Model {
 		    	$order = 1; //additional parameter to add to each tree for identification purpose
 		    	foreach($vocabs as $key=>$vocab){
 		    		//var_dump($vocab);
-		    		$bigTree .= $this->getTree($key, $vocab, $order);
-		    		$order++;
+		    		if($tree = $this->getTree($key, $vocab, $order)){
+		    			$bigTree .= $tree;
+		    			$order++;
+		    		}else{
+		    			$bigTree .='<li><a>Invalid Vocabulary URL</a></li>';
+		    		}
+		    		
 		    	}
 		    	$bigTree.='</ul>';
 		    	$bigTree.='</li>';
@@ -48,11 +53,12 @@ class Vocabularies extends CI_Model {
     //secondary function to get the HTML representation of a single tree
 	function getTree($vocab, $vocab_uri, $order){
 		//echo $vocab_uri;
-		$json = json_decode($this->getResource($vocab_uri));
-		$tree = $this->getVocabTree($json, $vocab_uri);
-
-		//var_dump($tree);
-		return $this->formatVocabTree($tree, $order, $vocab);
+		//$json = json_decode($this->getResource($vocab_uri));
+		if($json=json_decode($this->getResource($vocab_uri))){
+			$tree = $this->getVocabTree($json, $vocab_uri);
+			//var_dump($tree);
+			return $this->formatVocabTree($tree, $order, $vocab);
+		}else return false;
 	}
 
 	function getConceptTree($vocabs, $num, $vocab){
@@ -83,6 +89,17 @@ class Vocabularies extends CI_Model {
 		echo $r;
 	}
 
+	function getConcept($vocabs, $num, $vocab){
+		$vocab_uri = $vocabs[$vocab]['resolvingService'];
+		//echo $vocab_uri;
+		$concept_uri = $vocabs[$vocab]['uriprefix'].$num;
+		$uri['resolvingService'] = $vocab_uri;
+		$uri['uriprefix'] = $concept_uri;
+		$content = $this->getResource($uri);
+		$json = json_decode($content);
+		return $json;
+	}
+
 	//determine if a concept as a narrower
 	function hasNarrower($vocab_uri, $about){
 		$content = $this->getNarrower($vocab_uri['resolvingService'], $about);
@@ -99,7 +116,7 @@ class Vocabularies extends CI_Model {
 			$class='jstree-open';
 		}else $class='jstree-closed';
 		$r='';
-		$r.='<li class="'.$class.'" order="'.$order.'"><a href="#">'.$tree['topLabel'].'</a>';
+		$r.='<li class="'.$class.' conceptRoot" order="'.$order.'"><a href="#">'.$tree['topLabel'].'</a>';
 		$r.='<ul>';
 		foreach($tree['topConcepts'] as $topConcept){
 			$r.='<li class="closed"><a href="javascript:void(0);" class="getConcept" notation="'.$topConcept['notation'].'" vocab="'.$vocab.'">'.$topConcept['prefLabel'].'</a>';
@@ -144,6 +161,7 @@ class Vocabularies extends CI_Model {
 	//execute the get resources, this is to resolve a single concept
 	function getResource($vocab_uri){
 		$curl_uri = $vocab_uri['resolvingService'].'resource.json?uri='.$vocab_uri['uriprefix'];
+		//echo $curl_uri;
 		$ch = curl_init();
     	//set the url, number of POST vars, POST data
 		curl_setopt($ch,CURLOPT_URL,$curl_uri);//post to SOLR

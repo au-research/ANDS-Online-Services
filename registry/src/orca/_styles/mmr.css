@@ -510,7 +510,7 @@ div.flexigrid a{text-decoration:none;}
 .warning {
     color: #9F6000;
     background-color: #FEEFB3;
-    background-image: url('../_images/delete_16.png');
+    background-image: url('../_images/required_small.png');
 }
 .error {
     color: #D8000C;
