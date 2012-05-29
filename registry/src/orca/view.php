@@ -128,7 +128,7 @@ if( $registryObject )
 	if(isContributorPage($registryObjectKey)) {
 		$rdaLink = '<br /><a style="font-size:0.8em; font-weight: normal;" href="'.eHTTP_APP_ROOT.'orca/rda/view/group/?group='.urlencode($registryObjectKey). '&groupName='.esc($objectGroup).'">'.$rdaLinkPrefix.' this record in Research Data Australia</a>'."\n";
 	} else {
-		$rdaLink = '<br /><a style="font-size:0.8em; font-weight: normal;" href="'.eHTTP_APP_ROOT.$url_slug.'">'.$rdaLinkPrefix.' this record in Research Data Australia</a>'."\n";
+		$rdaLink = '<br /><a style="font-size:0.8em; font-weight: normal;" href="'.$rda_root . '/' . $url_slug.'">'.$rdaLinkPrefix.' this record in Research Data Australia</a>'."\n";
 	}
 
 	$recordHistory = "";
