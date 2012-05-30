@@ -32,7 +32,7 @@ class Topics extends CI_Model {
 									"items"=> array(
 												array("url" => "https://eresearch.jcu.edu.au/tdh", "title"=>"The Tropical Data Hub"),
 												array("url" => "http://www.nccarf.edu.au/", "title"=>"The National Climate Change Adaptation Research Facility"),
-												array("url" => "http://www.rrrc.org.au/", "title"=>"The Australian Centre for Tropical Freshwater Research"),
+												array("url" => "http://www-public.jcu.edu.au/actfr/", "title"=>"The Australian Centre for Tropical Freshwater Research"),
 												array("url" => "http://www.wettropics.gov.au/", "title"=>"Wet Tropics Management Authority"),
 												array("url" => "http://www.rrrc.org.au/mtsrf/", "title"=>"Marine and Tropical Sciences Research Facility "),
 												array("url" => "http://www.csiro.au/Organisation-Structure/Divisions/Ecosystem-Sciences/Tropical-Arid-Systems.aspx", "title"=>"CSIRO Tropical and Arid Systems Research Program"),
