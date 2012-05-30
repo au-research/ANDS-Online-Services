@@ -127,7 +127,7 @@ ul.sf-menu li li li.sfHover ul {
 }
 .sf-menu a {
 	color:white;
-	padding:11px 15px;
+	padding:12px 14px;
 	text-decoration:none;
 }
 .sf-menu a, .sf-menu a:visited  { /* visited pseudo selector so IE6 applies text colour*/
@@ -135,7 +135,7 @@ ul.sf-menu li li li.sfHover ul {
 	color:white;
 	text-decoration:none;
 	font-variant: small-caps;
-	font-size: 18px;
+	font-size: 17px;
 	
 	/*Text Shadow*/
 	text-shadow: 0px 1px 5px #000000; /*Modern*/
