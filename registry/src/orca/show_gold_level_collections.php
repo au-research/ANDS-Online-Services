@@ -30,8 +30,8 @@ if(!$page){
 // =============================================================================
 
 
-	
-	$q = 'gold_status_flag:0';
+
+	$q = 'gold_status_flag:1';
 	$fields = array(
 		'q'=>$q,'version'=>'2.2','start'=>$start,'rows'=>$rows, 'wt'=>'json',
 		'fl'=>'*'
@@ -52,7 +52,7 @@ if(!$page){
 <h5>The following records have been verified as examplary records by the ANDS Metadata Assessement Group.</h5>
 <div>
 
-	<?php 
+	<?php
 	if($numFound > $rows)
 	{
 		$pagiDiv = doPagination($json);
@@ -68,17 +68,17 @@ if(!$page){
 		$group = $r->{'group'};
 		$status = $r->{'status'};
 		$ds = $r->{'data_source_key'};
-		
+
 		echo '<a href="view.php?key='.urlencode($ro_key).'">'.$name.'</a> <br/>';
 		echo '<span class="resultListItemLabel">Status: </span><span style="color: #ffffff; background-color: #32CD32; border: 1px solid #888888; padding-left: 2px; padding-right: 2px;">'.$status.' </span><br/>';
 		//echo '<span class="resultListItemLabel">Class: </span>'.$class.' <br/>';
 		echo '<span class="resultListItemLabel">Type: </span>'.$type.' <br/>';
 		echo '<span class="resultListItemLabel">Data Source Key: </span>'.$ds.' <br/>';
 		echo '<span class="resultListItemLabel">Group: </span>'.$group.' <br/>';
-		
+
 		$descriptions = array();if(isset($r->{'description_value'})) $descriptions = $r->{'description_value'};
 		$description_type=array();if(isset($r->{'description_type'})) $description_type = $r->{'description_type'};
-		
+
 		$relations = array();
 		if(isset($r->{'relatedObject_relation'})){
 			$relations = $r->{'relatedObject_relation'};
@@ -90,7 +90,7 @@ if(!$page){
 			}
 			echo '<br/>';
 		}
-		
+
 		$subjects=array();$subjects_type=array();
 		if(isset($r->{'subject_value'})){
 			$subjects = $r->{'subject_value'};
@@ -101,10 +101,10 @@ if(!$page){
 			}
 			echo '<br/>';
 		}
-		
-		
-		echo '<span class="resultListItemLabel">Descriptions: </span>';		
-		
+
+
+		echo '<span class="resultListItemLabel">Descriptions: </span>';
+
 		foreach($description_type as $key=>$t){
 			echo '<span class="attribute">'.$t.'</span>:'.strip_tags(htmlspecialchars_decode(($descriptions[$key]))).'<br/>';
 		}
@@ -129,36 +129,36 @@ require '../_includes/finish.php';
 
 function doPagination($json)
 {
-	
-	
+
+
 	$numFound = $json->{'response'}->{'numFound'};
 	$timeTaken = $json->{'responseHeader'}->{'QTime'};
 	$timeTaken = $timeTaken / 1000;
-	
+
 	$row = $json->{'responseHeader'}->{'params'}->{'rows'};
 	$start = $json->{'responseHeader'}->{'params'}->{'start'};
 	//$query = $json->{'responseHeader'}->{'params'}->{'q'};
 	$end = $start + $row;
-	
+
 	$h_start = $start + 1;
 	$h_end = $end + 1;
-	
+
 	if ($h_end > $numFound) $h_end = $numFound;
-	
+
 	$totalPage = ceil($numFound / $row);
 	$currentPage = ceil($start / $row)+1;
-	
+
 	$range = 3;
 
 	$pagiDiv = '<br/><div class="pagination">';
 	$pagiDiv .= 'Page: '.$currentPage.'/'.$totalPage.'   |  ';
-	
+
 	//if not on page 1, show Previous
 	$pagiDiv .= '<a href="show_gold_level_collections.php?page=1" class="gotoPage">First</a>';
 	if($currentPage > 1){
 		$pagiDiv .= '<a href="show_gold_level_collections.php?page='.($currentPage-1).'" class="pagination-page"> &lt;</a>';
 	}
-	
+
 	for ($x = ($currentPage - $range); $x < (($currentPage + $range) + 1); $x++) {
 		if (($x > 0) && ($x <= $totalPage)) { //if it's valid
 			if($x==$currentPage){//if we're on currentPage
@@ -168,16 +168,16 @@ function doPagination($json)
 			}
 		}
 	}
-	
+
 	//if not on last page, show Next
 	if($currentPage < $totalPage){
 		$pagiDiv .= '<a href="show_gold_level_collections.php?page='.($currentPage+1).'" class="pagination-page">&gt;</a>';
 	}
-	
+
 	$pagiDiv .= '<a href="show_gold_level_collections.php?page='.$totalPage.'" class="gotoPage">Last</a>';
-	
+
 	//echo '<a href="javascript:void(0);" id="prev">Previous Page</a> <a href="javascript:void(0);" id="next">Next Page</a>';
 	$pagiDiv .= '</div><br/>';
- return $pagiDiv;	
+ return $pagiDiv;
 }
 ?>

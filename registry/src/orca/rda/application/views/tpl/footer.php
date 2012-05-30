@@ -34,7 +34,7 @@ limitations under the License.
 	<?php echo anchor('topic', 'All Topics');?> |
 	<?php
 		if(isset($key)){
-			echo anchor(getHTTPs($this->config->item('orca_url')).'view.php?key='.$key, 'ANDS Online Services(current key)');
+			echo anchor($this->config->item('orca_url').'view.php?key='.$key, 'ANDS Online Services(current key)');
 		}else echo anchor($this->config->item('orca_url'), 'ANDS Online Services');
 	?>
 </div>
@@ -55,12 +55,15 @@ limitations under the License.
 	<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script> <!--Google Map v3 from Google-->
 
 	<script type="text/javascript" src="<?php echo base_url();?>js/jquery-ui-1.8.14.custom.min.js"></script> <!-- jQuery UI-->
-	<script type="text/javascript" src="<?php echo base_url();?>js/jquery.tipsy.js"></script> <!-- jQuery UI-->
-	<script type="text/javascript" src="<?php echo base_url();?>js/jquery.cookie.js"></script> <!-- jQuery UI-->
+	<script type="text/javascript" src="<?php echo base_url();?>js/jquery.tipsy.js"></script> <!-- jQuery Tooltip-->
+	<script type="text/javascript" src="<?php echo base_url();?>js/jquery.cookie.js"></script> <!-- jQuery Cookie-->
+
+	
+	<script type="text/javascript" src="<?php echo base_url();?>js/jstree/jquery.jstree.js"></script><!-- jQuery treeview -->
 
 	<script type="text/javascript" src="<?php echo base_url();?>js/script.js"></script> <!-- DHTML and Searching -->
 	<script type="text/javascript" src="<?php echo base_url();?>js/superfish.js"></script> <!-- Top menu -->
-
+	<script type="text/javascript" src="<?php echo base_url();?>js/jquery.fancybox.pack.js?v=2.0.6"></script> <!-- FancyBox Image Lightbox -->
 
 	<?php if ($user_agent=='Internet Explorer'):?>
 		<!-- Rounded Corners for IE -->

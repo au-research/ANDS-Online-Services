@@ -165,9 +165,9 @@ else
 		    	<?php
 		    		foreach($status as $key=>$s){
 		    			if($s!=0){
-		    				echo '<li><a href="javascript:void(0);" title="'.$s.' Records" class="tab tip" name="'.$key.'">'.$key.'</a><li>';
+		    				echo '<li><a href="javascript:void(0);" title="'.$s.' Records" class="tab tip" name="'.$key.'">'.str_replace('_', ' ', $key).'</a><li>';
 		    			}else{
-		    				echo '<li><a href="javascript:void(0);" title="'.$s.' Records" class="tab tip inactive" name="'.$key.'">'.$key.'</a><li>';
+		    				echo '<li><a href="javascript:void(0);" title="'.$s.' Records" class="tab tip inactive" name="'.$key.'">'.str_replace('_', ' ', $key).'</a><li>';
 		    			}
 		    		}
 		    	?>

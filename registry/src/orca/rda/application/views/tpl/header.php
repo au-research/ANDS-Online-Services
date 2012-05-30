@@ -48,6 +48,9 @@ limitations under the License.
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url();?>css/ie.screen.css" />
 	<?php endif;?>
 
+	<link rel="stylesheet" href="<?php echo base_url();?>css/jquery.fancybox.css?v=2.0.6" type="text/css" media="screen" />
+
+
 	<?php if($this->config->item('GA_enabled')):?>
 	<script type="text/javascript">
 	  var _gaq = _gaq || [];
@@ -61,7 +64,6 @@ limitations under the License.
 	  })();
 	</script>
 	<?php endif;?>
-
 </head>
 
 <body>
@@ -78,7 +80,6 @@ limitations under the License.
 				<li><?php echo anchor('search/browse/All/activity', 'Activities');?></li>
 				<li><?php echo anchor('search/browse/All/service', 'Services');?></li>
 				<li><?php echo anchor('topic', 'Topics');?></li>
-				</li>
 				<li><?php echo anchor('home/about','About');?></li>
 				<li><?php echo anchor('home/contact','Contact');?></li>
 			</ul>

@@ -1,5 +1,5 @@
 <?php
-/** 
+/**
 Copyright 2011 The Australian National University
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,10 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ***************************************************************************
 *
-**/ 
+**/
 ?>
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+global $gVOCAB_RESOLVER_SERVICE;
 
 /*
  * Change me
@@ -25,6 +26,8 @@ limitations under the License.
 $config['base_url']	= 'http://'.HOST.'/'.RDA_ROOT.'/';
 $config['orca_url'] = 'http://'.HOST.'/'.ORCA_ROOT.'/';
 $config['solr_url'] = SOLR_URL;
+$config['asset_url'] = $config['base_url'] . 'assets/';
+$config['vocab_resolver_service'] = $gVOCAB_RESOLVER_SERVICE;
 
 
 /*

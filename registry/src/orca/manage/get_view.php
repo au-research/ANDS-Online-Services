@@ -41,6 +41,7 @@ switch($view){
 	case "allKeys":allKeys($status);break;
 	case "statusCount": statusCount($status);break;
 	case "AllStatusAllQA": AllStatusAllQA($dataSourceKey);break;
+	case "StatusAllQA":StatusAllQA($status, $dataSourceKey);break;
 	case "tipQA": tipQA($key, $ql);
 }
 
@@ -223,15 +224,16 @@ function searchRecords($status){
 
 		$goldFlag = '';
 		if(isset($doc->{'gold_status_flag'}) && ($doc->{'gold_status_flag'}==1)){
-			$goldFlag = '<a href="javascript:void(0);" class="smallIcon icon28sOn tip borderless" tip="Gold Standard" style="float:right"><span></span></a>';
+			//$goldFlag = '<a href="javascript:void(0);" class="smallIcon icon28sOn tip borderless" tip="Gold Standard" style="float:right"><span></span></a>';
+			$qualityLevelStr = '<a href="javascript:;" dsKey="'.$doc->{'data_source_key'}.'" status="'.$doc->{'status'}.'" level="'.$doc->{'quality_level'}.'" key="'.$doc->{'key'}.'" class="smallIcon tipQA icon28sOn borderless"><span></span></a>';
 		}
 		
 		$entry = array(
 					'id' => $doc->{'key'},
 					'cell' => array(
 
-							'<a href="'.$view_link.'">'.$doc->{'key'}.'</a>',
-							$goldFlag.' '.$doc->{'list_title'},
+							'<a href="'.$view_link.'" class="tip" tip="'.$doc->{'key'}.'">'.$doc->{'key'}.'</a>',
+							$doc->{'list_title'},
 
 							$date_modified,
 							$doc->{'class'},
@@ -267,10 +269,11 @@ function statusCount($status){
 	echo $content;
 }
 
-function AllStatusAllQA($dataSourceKey){
+function StatusAllQA($status, $dataSourceKey){
 	header("Content-type: application/javascript");
 	global $dataSourceKey, $solr_url;
 	$q = '+data_source_key:("'.$dataSourceKey.'")';
+	if($status!='All') $q.='+status:("'.$status.'")';
 	$fields = array(
 		'q'=>$q,'version'=>'2.2','start'=>'0','rows'=>'1', 'wt'=>'json',
 		'fl'=>'key', 'facet'=>'true', 'facet.field'=>'class','facet.mincount'=>'1','facet.sort'=>'index'
@@ -280,26 +283,26 @@ function AllStatusAllQA($dataSourceKey){
 
 	$status_result = json_decode($status_result);
 
-	$statuses = $status_result->{'facet_counts'}->{'facet_fields'}->{'class'};
+	$classes = $status_result->{'facet_counts'}->{'facet_fields'}->{'class'};
 
 	$result = array();
-	for($i=0;$i<sizeof($statuses)-1;$i=$i+2){
-		$s = $statuses[$i];
-		$s_num = $statuses[$i+1];
-		$status_qa = getQAforClass($dataSourceKey, $s);
-		$status_qa_array = array();
-		for($j=0;$j<sizeof($status_qa)-1;$j=$j+2){
-			$status_qa_array[$status_qa[$j]]=$status_qa[$j+1];
+	for($i=0;$i<sizeof($classes)-1;$i=$i+2){
+		$c = $classes[$i];
+		$c_num = $classes[$i+1];
+		$class_qa = getQAforClass($dataSourceKey, $c, $status);
+		$class_qa_array = array();
+		for($j=0;$j<sizeof($class_qa)-1;$j=$j+2){
+			$class_qa_array[$class_qa[$j]]=$class_qa[$j+1];
 		}
-		$result[$s]['label']=$s;
-		$result[$s]['num']=$s_num;
+		$result[$c]['label']=$c;
+		$result[$c]['num']=$c_num;
 
 		for($j=0;$j<=4;$j++){
-			if(!isset($status_qa_array[$j]))$status_qa_array[$j]=0;
+			if(!isset($class_qa_array[$j]))$class_qa_array[$j]=0;
 		}
-		ksort($status_qa_array);
-		//$status_qa_array = json_encode($status_qa_array);
-		$result[$s]['qa']=$status_qa_array;
+		ksort($class_qa_array);
+		//$class_qa_array = json_encode($class_qa_array);
+		$result[$c]['qa']=$class_qa_array;
 	}
 	//echo '<hr/>';
 	//var_dump($result);
@@ -307,9 +310,11 @@ function AllStatusAllQA($dataSourceKey){
 	echo $result;
 }
 
-function getQAforClass($dataSourceKey, $class){
+
+function getQAforClass($dataSourceKey, $class, $status='All'){
 	global $dataSourceKey, $solr_url;
 	$q = '+data_source_key:("'.$dataSourceKey.'") +class:("'.$class.'")';
+	if($status!='All') $q.=' +status:("'.$status.'")';
 	$fields = array(
 		'q'=>$q,'version'=>'2.2','start'=>'0','rows'=>'1', 'wt'=>'json',
 		'fl'=>'key', 'facet'=>'true', 'facet.field'=>'quality_level','facet.mincount'=>'1','facet.sort'=>'index'
