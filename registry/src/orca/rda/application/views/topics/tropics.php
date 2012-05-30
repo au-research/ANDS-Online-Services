@@ -9,7 +9,7 @@
 		</td>
 		<td rowspan="2">
 			<a class="fancybox" rel="group" href="<?php echo assets_url();?>topics/tropics/word_cloud_tropical.jpg" title="Wordle created at wordle.net">
-				<img src="<?php echo assets_url();?>topics/tropics/word_cloud_tropical_tmb.jpg" style="height:200px;width:320px;" alt="Wordle created at wordle.net" />
+				<img src="<?php echo assets_url();?>topics/tropics/word_cloud_tropical_tmb.jpg" style="width:320px;" alt="Wordle created at wordle.net" />
 			</a>
 		</td>
 		<td>
