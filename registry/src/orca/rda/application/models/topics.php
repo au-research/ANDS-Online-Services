@@ -5,7 +5,7 @@ class Topics extends CI_Model {
 
 			"tropics" =>
 			array(
-					"name"=>"Tropical Sciences",
+					"name"=>"Tropical Research",
 					"html"=>"",
 					"auto_boxes" => array(
 							array ("id"=>"collections",
@@ -15,7 +15,7 @@ class Topics extends CI_Model {
 							array ("id"=>"groups",
 									"query"=>'-data_source_key:("www.qfab.org/qfab2") class:("collection") fulltext:tropics',
 									"query_facet"=>"group",
-									"heading"=>"Research Groups",
+									"heading"=>"Data Contributors",
 									"record_limit"=>3),
 							array ("id"=>"services",
 									"query"=>'class:("service") (key:("fb5b093a-1ef1-453d-80fb-124ae1776e82") OR key:("http://imosmest.aodn.org.au/2009101401440ND"))',
