@@ -173,7 +173,7 @@ if( $registryObject )
 	drawRecordField("Key:",  esc($registryObjectKey));
 	if( userIsDataSourceRecordOwner($registryObjectDataSourceRecordOwner) || userIsORCA_ADMIN() )
 	{
-		drawRecordField("Source:",  esc($registryObjectSource));
+		drawRecordField("Title:",  esc($registryObjectSource));
 		// temporary
 		drawRecordField("URL \"SLUG\":", esc($url_slug));
 	}
