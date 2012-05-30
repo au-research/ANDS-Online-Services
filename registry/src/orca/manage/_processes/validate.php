@@ -21,14 +21,15 @@ if (($keyValue && $firstLoad) && $draft = getDraftRegistryObject($keyValue, $dat
 {
 	
 	$jQueryMessages = '';
+	
 	$thisDataSource = getDataSources($dataSourceValue, null);
 	if ($thisDataSource[0]['qa_flag'] == "t")
 	{
-		$jQueryMessages = "<script>qaRequired = true;</script>";		
+		$jQueryMessages .= "<script>qaRequired = true;</script>";		
 	}
 	else
 	{
-		$jQueryMessages = "<script>qaRequired = false;</script>";
+		$jQueryMessages .= "<script>qaRequired = false;</script>";
 	}
 
 	$jQueryMessages .= runQualityCheck($draft[0]['rifcs'], $draft[0]['class'],$draft[0]['registry_object_data_source'], 'script');
@@ -94,17 +95,21 @@ else if ($keyValue && $draft = getDraftRegistryObject($keyValue, $dataSourceValu
 {
 	$jQueryMessages = '';
 	$thisDataSource = getDataSources($dataSourceValue, null);
+
 	if ($thisDataSource[0]['qa_flag'] == "t")
 	{
-		$jQueryMessages = "<script>qaRequired = true;</script>";		
+		$jQueryMessages .= "<script>qaRequired = true;</script>";		
 	}
 	else
 	{
-		$jQueryMessages = "<script>qaRequired = false;</script>";
+		$jQueryMessages .= "<script>qaRequired = false;</script>";
 	}
 	$jQueryMessages .= runQualityCheck($draft[0]['rifcs'], $draft[0]['class'], $draft[0]['registry_object_data_source'], 'script');
+	runQualityLevelCheckForDraftRegistryObject($keyValue, $dataSourceValue);
+	$draft = getDraftRegistryObject($keyValue, $dataSourceValue);
+	$jQueryMessages .= "<script>qualityLevel = ". $draft[0]['quality_level']. ";</script>";
 	$jQueryMessages .= "<script>setStatusSpan('" . getRegistryObjectStatusSpan($draft[0]['status']) . "'); </script>";
-	
+	$jQueryMessages .= "<script>qualityLevel = ". $draft[0]['quality_level'] .";</script>";
 	print($jQueryMessages);	
 	
 }
@@ -132,17 +137,17 @@ else if($json)
 	$proc->importStyleSheet($json2rif_xsl);
 	$transformResult = $proc->transformToXML($rifcs);
 	
-	
 	$thisDataSource = getDataSources($objectDataSource, null);
+	$jQueryMessages = "<script>qualityLevel = 999;</script>";
 	if ($thisDataSource[0]['qa_flag'] == "t")
 	{
-		$jQueryMessages = "<script>qaRequired = true;</script>";		
+		$jQueryMessages .= "<script>qaRequired = true;</script>";		
 	}
 	else
 	{
-		$jQueryMessages = "<script>qaRequired = false;</script>";
+		$jQueryMessages .= "<script>qaRequired = false;</script>";
 	}
-	$jQueryMessages = runQualityCheck($transformResult, $objectClass, $objectDataSource, 'script');
+	$jQueryMessages .= runQualityCheck($transformResult, $objectClass, $objectDataSource, 'script');
 	$jQueryMessages .= "<script>setStatusSpan('" . getRegistryObjectStatusSpan('DRAFT') . " (unsaved)'); </script>";
 	print($jQueryMessages);				
 } 

@@ -31,9 +31,9 @@ Common usage:
 
   <property environment="env"/>
 	
-  <property name="config-dir" value="/usr/local/apps/handle/config" />
-  <property name="prefix" value="123456789" />
-  <property name="admin-ip" value="0.0.0.0" />
+  <property name="config-dir" value="/usr/local/handle_server/svr_config/" />
+  <property name="prefix" value="10378.2" />
+  <property name="admin-ip" value="130.56.60.128" />
 
   <path id="build.class.path">
     <pathelement path="${env.CLASSPATH}"/>

@@ -585,7 +585,11 @@ $_strings['*_preview'] = <<<HTMLEND
 			<table class="inner-table">
 					<tr>
 						<td>
-							<div style="height:22px;">&nbsp;</div>				
+							<div id="qa_level_notification">								
+						</td>
+					</tr>
+					<tr>
+						<td>	
 							<div id="errors_preview"></div>						
 						</td>
 					</tr>
@@ -596,9 +600,11 @@ $_strings['*_preview'] = <<<HTMLEND
 								<br/><br/>Saving &amp; Validating...
 								<br/><br/><br/>
 							</div>
+
 							<div id="rmd_preview" style="display:inline-block; width:100%;">
-							</div>
 							
+							</div>
+
 							<a style="float:right; font-size:10px; font-weight:bold;" class="rda_preview" href="" target="_blank"><img src="{$orcaImgRoot}globe.png" />Preview in Research Data Australia</a>
 							</form>
 						</td>

@@ -34,7 +34,7 @@ var pageStatus = 'PRELOADING';  // PRELOADING -> LOADING_INTERFACE -> LOADING_EL
 var readyToAdvance = true;
 var qaRequired = false;
 var elementCache = { 'element': {}, 'tab': {}};
-
+var qualityLevel = 0;
 var STATUS_COOKIE_NAME = 'ORCA_REGISTRY_MANAGE_STATUS';
 var STATUS_COOKIE_TTL_DAYS = 365*5;
 
@@ -1170,21 +1170,20 @@ function saveAndPreview() {
 	
 	if (userMode != 'readOnly')
 	{
-	
-		$("#errors_preview").before(
-							"<div id='save_notification' class='success_notification'>This draft has been saved successfully.<br/>" +
-							"<span style=\"font-size:10px;\"><b>Note:</b> Draft records are not added to the ANDS Registry but are saved and can be accessed through the <a href=\""+ rootAppPath + "orca/manage/my_records.php\" title=\"Manage my Records\" style=\"color:#336600\">Manage my Records</a> tool in the Register My Data menu.</span>" +
-							"</div>"
-		);
-		
-		
-		
+		var ds = $('#object_mandatoryInformation_dataSource').val();
+		$("#qa_level_notification").before("<div id='save_notification' class='save_notification'>This draft has been saved successfully.</div>");
+			
 		if($('#rda_preview_container').length > 0){
 			$('#rda_preview_container').remove();	
 		}
-		$("#errors_preview").before(
-							"<div id='rda_preview_container'><a style='float:right;'id='rda_preview_xml' href='#'>View XML</a><a id='rda_preview' class='rda_preview' href='#' target='_blank'><img src='"+rootAppPath+"orca/_images/globe.png' /> Preview in Research Data Australia</a></div><div id='rifcs_plain' class='hide'><img src='"+rootAppPath+"orca/_images/delete_16.png' class='closeBlockUI' style='float:right;'/><textarea id='rifcs_plain_content'></textarea></div>"
-			);
+		$("#qa_level_notification").after(
+							"<div style='border:none;' id='rda_preview_container'>" +
+							"<a style='margin-left:10px;float:right;' id='rda_preview_xml' href='#'>View RIF-CS </a>" +
+							"<a style='float:right;' id='rda_preview' class='rda_preview' href='#' target='_blank'>" +
+							"<img style='padding: 0px 3px;float: left;' src='"+rootAppPath+"orca/_images/globe.png' /> Preview in Research Data Australia</a></div>" +
+									"<div id='rifcs_plain' class='hide'><img src='"+rootAppPath+"orca/_images/delete_16.png' class='closeBlockUI' style='float:right;'/>" +
+											"<textarea id='rifcs_plain_content'></textarea>" +
+											"</div>");
 		
 		$(".rda_preview").attr("href",$("#baseURL").val() + 'rda/preview?ds='+$('#object_mandatoryInformation_dataSource').val()+'&key=' + $('#object_mandatoryInformation_key').val());			
 		
@@ -1221,9 +1220,14 @@ function saveAndPreview() {
 			//if it's not there, create it so that we can append the preview
 			$("#errors_preview").after('<div class="info_notification" id="infos_preview"></div>');
 		}
-		$("#infos_preview").before(
-							"<div id='rda_preview_container'><a style='float:right;'id='rda_preview_xml' href='#'>View XML</a><a id='rda_preview' class='rda_preview' href='#' target='_blank'><img src='"+rootAppPath+"orca/_images/globe.png' /> Preview in Research Data Australia</a></div><div id='rifcs_plain' class='hide'><img src='"+rootAppPath+"orca/_images/delete_16.png' class='closeBlockUI' style='float:right;'/><textarea id='rifcs_plain_content'></textarea></div>"
-			);
+		$("#qa_level_notification").after(
+				"<div style='border:none;' id='rda_preview_container'>" +
+				"<a style='margin-left:10px;float:right;' id='rda_preview_xml' href='#'>View RIF-CS </a>" +
+				"<a style='float:right;' id='rda_preview' class='rda_preview' href='#' target='_blank'>" +
+				"<img style='padding: 0px 3px;float: left;' src='"+rootAppPath+"orca/_images/globe.png' /> Preview in Research Data Australia</a></div>" +
+						"<div id='rifcs_plain' class='hide'><img src='"+rootAppPath+"orca/_images/delete_16.png' class='closeBlockUI' style='float:right;'/>" +
+								"<textarea id='rifcs_plain_content'></textarea>" +
+								"</div>");
 
 		//copy and paste from above, need refactor
 		$(".rda_preview").attr("href",$("#baseURL").val() + 'rda/preview?ds='+$('#object_mandatoryInformation_dataSource').val()+'&key=' + $('#object_mandatoryInformation_key').val());
@@ -1300,14 +1304,10 @@ function saveAndPreview() {
 					
 					// execute the error script from server
 					$("#rmd_scripts").html( data );
-					
 					if (!$("#errors_preview").hasClass("warning_notification") && !$("#errors_preview").hasClass("error_notification"))
 					{
 ////console.log("qaRequired: " + qaRequired);						
-							$("#errors_preview").html(	'<div style="float:left;">' +
-								'Congratulations! This draft represents a valid RIFCS record which adheres to the ANDS Metadata Content Requirements. '+
-								'</div>' +
-								(userMode != 'readOnly' ?
+							$("#errors_preview").html((userMode != 'readOnly' ?
 										'<br/><span style="font-size:10px;"><b>Note:</b> This record has been saved in <u>DRAFT state</u>. ' +
 										(qaRequired == false ? 
 											'<div style="display:block; padding-left:10px;">' +
@@ -1324,7 +1324,32 @@ function saveAndPreview() {
 										) : '') 			
 								+ '<br/><br/>').addClass("success_notification");	
 					}
-	
+					if(qualityLevel == 4)
+					{
+						$("#qa_level_notification").html('<div class="ql'+ qualityLevel +'" style="float:left;">' +
+						'Level 4 Record - Congratulations! This record exceeds the Minimum Metadata Content Requirements  and provides enough information to enable reuse.'+
+						'</div>');
+					
+					}
+					else if(qualityLevel == 3)
+					{
+						$("#qa_level_notification").html('<div class="ql'+ qualityLevel +'" style="float:left;">' +
+								'Level 3 Record - Congratulations! This record satisfies the Minimum  Metadata Content Requirements  enabling discovery and access to collections.'+
+								'</div>');
+					}
+					else if(qualityLevel == 2)
+					{
+						$("#qa_level_notification").html('<div class="ql'+ qualityLevel +'" style="float:left;">' +
+								'Level 2 Record - This record meets some of the Metadata Content Requirements. The record may facilitate discovery, but does not comply with the Minimum  Metadata Content Requirements.'+
+								'</div>');
+						
+					}
+					else
+					{
+						$("#qa_level_notification").html('<div class="ql'+ qualityLevel +'" style="float:left;">' +
+								'Level '+ qualityLevel +' Record - This record does not meet any of the Metadata Content Requirements. The record does not contain enough information for discovery, and will be considered a placeholder or test.'+
+								'</div>');
+					}
 					// Validate DateTime strings
 					$('.dateTimeField').each(function(){
 
@@ -1496,10 +1521,7 @@ function SetWarnings(field, text, qCheck) {
 ////console.log("qaRequiredWWW: " + qaRequired);	
 		$("#errors_preview").removeClass('success_notification');
 		$("#errors_preview").addClass('warning_notification');
-		$("#errors_preview").html(	'<div>' +
-				'<span style="font-size:1.2em">This draft does not meet the ANDS Metadata Content Requirements.</span>'+
-				'<div id="quagmire_list">' +
-				'</div>' +		
+		$("#errors_preview").html(	'<div><div id="quagmire_list"></div>' +		
 				(userMode != 'readOnly' ?
 				'<br/><span style="font-size:10px;"><b>Note:</b> This record has been saved in <u>DRAFT state</u>. ' +
 				(qaRequired == false ? 
@@ -1634,7 +1656,7 @@ function getHelpText(helpSection)
 		
 		sURL += "tag=" + tag + "&";
 	
-		var help_button = '<img style=\"float:right; cursor:pointer;\" src=\"' + orcaImageRoot + 'help_button.png\" />';
+		var help_button = '<img style=\"float:right; cursor:pointer;\" src=\"' + orcaImageRoot + '/help_button.png\" />';
 
 		
 		$.get(sURL, function(data) {
@@ -2370,7 +2392,7 @@ function displayQuagmireSummary()
 		var reqArray = quagmire_getTriggered(REQUIRED);
 		var okReqArray = quagmire_getNotTriggered(REQUIRED);
 
-		req_message = "<br/><a onclick=\"toggleList('reqWarningList')\" style=\"cursor:pointer\">You have met " + (allReqCount - reqCount) + " of the " + allReqCount + " required Metadata Content Requirements.</a>&nbsp;&nbsp;&nbsp;<input type=\"button\" id=\"reqWarningList_btn\" class=\"buttonSmall\" value=\"Show Details\" onclick=\"toggleList('reqWarningList')\">";
+		req_message = "<br/><a onclick=\"toggleList('reqWarningList')\" style=\"cursor:pointer\">You have met " + (allReqCount - reqCount) + " of the " + allReqCount + " required Metadata Content Requirements. Required elements are indicated on the above tabs by the <img src=\"" + orcaImageRoot + "/required_icon.png\"/> warning icon.</a><br/><br/><input type=\"button\" id=\"reqWarningList_btn\" class=\"buttonSmall\" value=\"Show Details\" onclick=\"toggleList('reqWarningList')\">";
 		req_message += "<div id=\"reqWarningList\" style=\"display:none;\">";
 		if(okReqArray.length>0)
 		{
@@ -2390,7 +2412,7 @@ function displayQuagmireSummary()
 	    }
 		req_message += "</ul>";
 		req_message += "</div>";
-		req_message += "<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Refer to the tabs above as indicated by the <img src=\"" + orcaImageRoot + "required_icon.png\"/> Warning Icon.";
+		
 	}
 	
 	var rec_message = "";
@@ -2400,7 +2422,7 @@ function displayQuagmireSummary()
 		var recArray = quagmire_getTriggered(RECOMMENDED);
 		var okRecArray = quagmire_getNotTriggered(RECOMMENDED);		
 		
-		rec_message += "<br/><a onclick=\"toggleList('recWarningList')\" style=\"cursor:pointer\">You have met " + (allRecCount - recCount) + " of the " + allRecCount + " recommended Metadata Content Requirements.</a>&nbsp;&nbsp;&nbsp;<input type=\"button\" id=\"recWarningList_btn\" class=\"buttonSmall\" value=\"Show Details\" onclick=\"toggleList('recWarningList')\">";
+		rec_message += "<br/><a onclick=\"toggleList('recWarningList')\" style=\"cursor:pointer\">You have met " + (allRecCount - recCount) + " of the " + allRecCount + " recommended Metadata Content Requirements. Reccomended elements are indicated on the above tabs by the <img src=\"" + orcaImageRoot + "/message_icon.png\"/> warning icon.</a><br/><br/><input type=\"button\" id=\"recWarningList_btn\" class=\"buttonSmall\" value=\"Show Details\" onclick=\"toggleList('recWarningList')\">";
 		rec_message += "<div id=\"recWarningList\" style=\"display:none;\">";
 		if(okRecArray.length)
 		{
@@ -2421,8 +2443,6 @@ function displayQuagmireSummary()
 	    }
 	    rec_message += "</ul>";
 	    rec_message += "</div>";
-	    rec_message += "<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Refer to the tabs above as indicated by the <img src=\"" + orcaImageRoot + "message_icon.png\"/> Warning Icon.";
-
 	}
 		
 	if(req_message != "")
@@ -2435,7 +2455,7 @@ function displayQuagmireSummary()
 	{
 		// Create the infos DIV if appropriate
 		if (!$("#infos_preview").length) {
-			$("#errors_preview").after('<div class="info_notification" id="infos_preview"></div>');
+			$("#quagmire_list").after('<div class="save_info_notification" id="infos_preview"></div>');
 		}
 		
 		$("#infos_preview").html(rec_message).show();
@@ -2622,7 +2642,7 @@ function toggleList(list_id)
 		}	else {	 
 				$('#' + list_id).slideUp();
 		}
-		$('#' + list_id + '_img').attr("src" , orcaImageRoot + "expand_icon.png");
+		$('#' + list_id + '_img').attr("src" , orcaImageRoot + "/expand_icon.png");
 		$('#' + list_id + '_btn').attr("value" , "Show Details");
 	 }
 	 else
@@ -2633,7 +2653,7 @@ function toggleList(list_id)
 		}	else {	 		 
 				$('#' + list_id).slideDown(); 
 		}
-		$('#' + list_id + '_img').attr("src" , orcaImageRoot + "colapse_icon.png");
+		$('#' + list_id + '_img').attr("src" , orcaImageRoot + "/colapse_icon.png");
 		$('#' + list_id + '_btn').attr("value" , "Hide  Details");
 	 }
 }
@@ -2663,7 +2683,7 @@ $('#enableBtn').live('click', function(){
 			userMode = 'edit';
 			activeTab = '#mandatoryInformation';
 			activateTab(activeTab);
-			$('#preview_tab > a').html("<img id=\"saveButton\" src=\"" +orcaImageRoot+ "save.png\" style=\"padding-top:4px;\" alt=\"Save and Preview this Draft\" /> Save Draft");
+			$('#preview_tab > a').html("<img id=\"saveButton\" src=\"" +orcaImageRoot+ "/save.png\" style=\"padding-top:4px;\" alt=\"Save and Preview this Draft\" /> Save Draft");
 			$(this).parent().hide();
 		}
 	}

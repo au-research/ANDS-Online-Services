@@ -274,7 +274,7 @@ textarea {
     margin:10px;
 }
 
-.info_notification, #rda_preview_container {
+#rda_preview_container {
 	background-color: #ffffff;
     /*background-image: url("../_images/message_icon.png"); */
     color: #00529B;
@@ -284,11 +284,51 @@ textarea {
     background-repeat: no-repeat; */
     margin:10px;
 }
-#rda_preview{
-	text-decoration:none;
-	color:blue;
+
+.save_info_notification{
+	background-color: #ffffff;
+    /*background-image: url("../_images/message_icon.png"); */
+    color: #00529B;
+    border: 1px solid;
+    padding: 15px 10px 15px 15px;
+   /* background-position: 10px 10px;
+    background-repeat: no-repeat; */
+    margin-left:-16px;
+    margin-right: -11px;
+    margin-top: 10px;
+    margin-bottom: 6px;
 }
-#rda_preview:hover{text-decoration:underline;}
+
+
+.info_notification{
+	background-color: #ffffff;
+    /*background-image: url("../_images/message_icon.png"); */
+    color: #00529B;
+    border: 1px solid;
+    padding: 15px 10px 15px 15px;
+   /* background-position: 10px 10px;
+    background-repeat: no-repeat; */
+    margin:10px;
+}
+    
+
+div.ql4{background:#8064a2;color:white; border: 1px solid; padding: 15px 10px 15px 15px; margin:10px;}
+div.ql3{background:#9bbb59;color:white; border: 1px solid; padding: 15px 10px 15px 15px; margin:10px;}
+div.ql2{background:#c0504c;color:white; border: 1px solid; padding: 15px 10px 15px 15px; margin:10px;}
+div.ql1{background:#4f81bd;color:white; border: 1px solid; padding: 15px 10px 15px 15px; margin:10px;}
+div.ql0{background:#89CEDE;color:black; border: 1px solid; padding: 15px 10px 15px 15px; margin:10px;}
+
+#rda_preview, #rda_preview_xml{
+ border: 2px outset;
+ border-color: #dcdcdc;
+ padding: 2px;
+ background-color: #dddddd;
+ color: #111111;
+ text-decoration: none;
+ }
+
+
+#rda_preview:hover, #rda_preview_xml:hover{border: 2px inset;background-color: #d0d0d0;}
 
 .success_notification {
     background-color: #DFF2BF;
@@ -298,6 +338,16 @@ textarea {
     padding: 15px 10px 15px 50px;
     background-position: 10px 10px;
     background-repeat: no-repeat;
+    margin:10px;
+}
+
+.save_notification {
+    background-image: url("../_images/success_icon.png");
+    color: #4F8A10;
+    padding: 15px 10px 15px 50px;
+    background-position: 10px 10px;
+    background-repeat: no-repeat;
+    font-size: 1.1em;
     margin:10px;
 }
 
