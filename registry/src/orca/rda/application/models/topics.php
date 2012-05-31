@@ -31,11 +31,11 @@ class Topics extends CI_Model {
 							array("heading"=>"Other Related Links",
 									"items"=> array(
 												array("url" => "https://eresearch.jcu.edu.au/tdh", "title"=>"The Tropical Data Hub"),
-												array("url" => "http://www.nccarf.edu.au/", "title"=>"The National Climate Change Adaptation Research Facility"),
-												array("url" => "http://www-public.jcu.edu.au/actfr/", "title"=>"The Australian Centre for Tropical Freshwater Research"),
-												array("url" => "http://www.wettropics.gov.au/", "title"=>"Wet Tropics Management Authority"),
-												array("url" => "http://www.rrrc.org.au/mtsrf/", "title"=>"Marine and Tropical Sciences Research Facility "),
+												array("url" => "http://www.nerptropical.edu.au/", "title"=>"NERP Tropical Ecosystems Hub"),
+												array("url" => "http://www.gbrmpa.gov.au/", "title"=>"Great Barrier Reef Marine Park Authority"),
+												array("url" => "http://www.rrrc.org.au/", "title"=>"Reef & Rainforest Research Centre"),
 												array("url" => "http://www.csiro.au/Organisation-Structure/Divisions/Ecosystem-Sciences/Tropical-Arid-Systems.aspx", "title"=>"CSIRO Tropical and Arid Systems Research Program"),
+												array("url" => "http://www.ath.org.au/", "title"=>"Australian Tropical Herbarium"),
 												array("url" => "http://www.track.gov.au/", "title"=>"Tropical Rivers and Coastal Knowledge (TRaCK) hub"),
 												array("url" => "http://www.aims.gov.au/docs/data/data.html", "title"=>"AIMS Data Centre"),
 
