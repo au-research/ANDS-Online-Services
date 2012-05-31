@@ -9,7 +9,7 @@ class Topics extends CI_Model {
 					"html"=>"",
 					"auto_boxes" => array(
 							array ("id"=>"collections",
-									"query"=>'fulltext:tropics -data_source_key:("www.qfab.org/qfab2") class:("collection")',
+									"query"=>'fulltext:tropics -key:("http://esrc.unimelb.edu.au/OHRM#E000849") -data_source_key:("www.qfab.org/qfab2") class:("collection")',
 									"heading"=>"Collections",
 									"record_limit"=>3),
 							array ("id"=>"groups",
