@@ -29,6 +29,7 @@ $rda_root 		= $orca_root.'/rda';
 
 //======================================
 $solr_url 		= 'http://devl.ands.org.au:8080/solr/';
+$datacite_solr_url = 'http://search.datacite.org/api';
 $harvester_ip 		= '';
 $pids_url		= "https://devl.ands.org.au:8443/pids/";
 $pids_app_id		= '';

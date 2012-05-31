@@ -565,12 +565,14 @@ $(document).ready(function(){
 		
 		var key = $('#key').html();
 		var itemClass = $('#class').text();
+
 		//console.log(key);
 		
 		initConnectionsBox();//setup the connections Box
 		
 		if(itemClass=='Collection') {
 			initSubjectsSEEALSO();
+			initDataCiteSEEALSO();
 		}else if(itemClass=='Party') {
 			initIdentifiersSEEALSO();
 		}
@@ -783,7 +785,10 @@ $(document).ready(function(){
 		$('.button').button();
         $("#status").html($('#seeAlsoCurrentPage').html() + '/'+$('#seeAlsoTotalPage').html());
     }
-	
+	function setupSeealsoDataCiteBtns(){
+		$('.button').button();
+        $("#status").html($('#seeAlsoDataCiteCurrentPage').html() + '/'+$('#seeAlsoDataCiteTotalPage').html());
+    }	
 	function initConnectionsBox(){
 
 		   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -857,6 +862,88 @@ $(document).ready(function(){
 	        return false;
         });
 	}
+	function initDataCiteSEEALSO(){
+		var displayTitle = $('#displaytitle').text();
+	       $.ajax({
+               type:"POST",
+               url: base_url+"search/seeAlsoDataCite/count/title",data:"q="+ displayTitle+"&page=1",
+                       success:function(msg){
+                               $("#seeAlsoDataCite").html(msg);
+                                //console.log(msg);
+                               if(parseInt($('#seealso-realnumfound').html())==0&&(parseInt($('#seealsodatacite-realnumfound').html()))==0){
+	                            	//$('#seeAlsoDataCiteRightBox').hide();
+	                            }
+                               if(parseInt($('#seealsodatacite-realnumfound').html())==0){
+	                            	//$('#seeAlsoDataCite').hide();
+	                            }
+                               
+                       },
+                       error:function(msg){
+                              // console.log("error" + msg);
+                       }
+       });
+	   var seeAlsoDataCitePage = 1;
+	   $('#seeAlso_DataCiteNumFound').live('click',function(){   
+		   // Set up the loading modal for the first click through
+		   var loadingHTML = '<img src="'+base_url+'/img/ajax-loader.gif" class="loading-icon" alt="Loading..."/> Retrieving DataCite Links...';
+		   $('#infoBox').html(loadingHTML);
+		   $('#infoBox').dialog( {
+			   		modal: true,minWidth:700,position:'center',draggable:false,resizable:false,
+			   		title:"ANDS Suggested Links from DataCite",
+			   			open: function(){
+                            $(".ui-dialog-buttonset").append("<span id='status'></span>");
+                            return false;
+                        }
+			   		}).height('auto');
+		   $.ajax({
+                type:"POST",
+                url: base_url+"search/seeAlsoDataCite/content",data:"q="+ displayTitle +"&page=1",
+                    success:function(msg){
+ 
+                            $("#infoBox").html(msg);
+
+                    		$(".accordion").accordion({autoHeight:false, collapsible:true,active:false});
+      
+                            
+                            $("#infoBox").dialog({
+                                    modal: true,minWidth:700,position:'center',draggable:false,resizable:false,
+                            		title:"ANDS Suggested Links from DataCite",
+                                    buttons: {
+                                        '<': function() {
+                                                if(seeAlsoDataCitePage > 1){
+                                                        seeAlsoDataCitePage = seeAlsoDataCitePage - 1;
+                                                         $('.accordion').html(loadingHTML);
+                                                        getSeeAlsoDataCiteAjax(displayTitle, seeAlsoDataCitePage)
+                                                }
+                                        },
+                                        '>': function() {
+                                                if(seeAlsoDataCitePage < parseInt($('#seeAlsoDataCiteTotalPage').html())){
+                                                        seeAlsoDataCitePage = seeAlsoDataCitePage + 1;
+                                                        $('.accordion').html(loadingHTML);
+                                                        getSeeAlsoDataCiteAjax(displayTitle, seeAlsoDataCitePage)
+                                                }
+                                        }
+                                    },
+                                    open: function(){
+                                        $(".ui-dialog-buttonset").append("<span id='status'></span>");
+                                        setupSeealsoDataCiteBtns();
+                                        return false;
+                                    }
+                            }).height('auto');
+                            $(".ui-dialog-buttonset").append("<span id='status'></span>");
+                            setupSeealsoDataCiteBtns();
+                    
+                           return false;   
+                    },
+                    error:function(msg){
+                    	//alert(msg)
+                            //console.log("error" + msg);
+                    }
+	         });
+	        return false;
+	   });
+	}
+	
 	
 	function initSubjectsSEEALSO(){
 		//SEE ALSO FOR SUBJECTS
@@ -877,9 +964,9 @@ $(document).ready(function(){
                         success:function(msg){
                                 $("#seeAlso").html(msg);
                                 //console.log(msg);
-                                if(parseInt($('#seealso-realnumfound').html())==0){
-	                            	$('#seeAlsoRightBox').hide();
-	                            }
+                               if(parseInt($('#seealso-realnumfound').html())==0){
+	                            	//$('#seeAlso').hide();
+	                           }
                         },
                         error:function(msg){
                                 //console.log("error" + msg);
@@ -1072,7 +1159,21 @@ $(document).ready(function(){
                      error:function(msg){}
              });
 	}
-	
+	function getSeeAlsoDataCiteAjax(displayTitle, seeAlsoDataCitePage){
+		//alert('hit this now ' + displayTitle + ' the page ' + seeAlsoDataCitePage);
+		 $.ajax({
+            type:"POST",
+            url: base_url+"search/seeAlsoDataCite/content",data:"q="+ displayTitle +"&page="+seeAlsoDataCitePage,
+                    success:function(msg){
+                            $(".accordion").html(msg);
+                            $(".accordion").accordion({autoHeight:false, collapsible:true,active:false});
+                            setupSeealsoDataCiteBtns();
+                    },
+                    error:function(msg){
+                    	//alert(msg);
+                    }
+            });
+	}	
 	function getConnectionsAjax(classes,types,connectionsPage, key_value){
 		 $.ajax({
             type:"POST",
