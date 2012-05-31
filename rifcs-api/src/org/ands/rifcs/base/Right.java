@@ -74,7 +74,7 @@ public class Right extends RIFCSElement {
 	 */
 	public void setRightsStatement(String value, String rightsUri) throws RIFCSException {
 		RightsInfo rightsStatement = new RightsInfo(this.newElement(Constants.ELEMENT_RIGHTS_STATEMENT));
-		rightsStatement.setRightsUri(value);
+		rightsStatement.setValue(value);
 		if (rightsUri != null)
 			rightsStatement.setRightsUri(rightsUri);
 		setRightsStatement(rightsStatement);
