@@ -38,7 +38,7 @@
 <div id="item-view-inner" class="clearfix" itemscope="" itemType="http://schema.org/Thing">
 
 <div id="left">
- 	<div id="displaytitle"><h1 itemprop="name"><?php echo $topic_name; ?></h1></div>
+ 	<div id="displaytitle" style="width:100%;"><h1 itemprop="name"><?php echo $topic_name; ?></h1></div>
  	<div class="clearfix"></div>
  	<?php echo $html; ?>
 </div>

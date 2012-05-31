@@ -10,7 +10,7 @@
 <div id="item-view-inner" class="clearfix">
 
 <div id="left">
- 	<div id="displaytitle"><h1 itemprop="name">Topics listed in Research Data Australia</h1></div>
+ 	<div id="displaytitle" style="width:100%;"><h1 itemprop="name">Topics listed in Research Data Australia</h1></div>
  	<div class="clearfix"></div>
 
  	<ul>

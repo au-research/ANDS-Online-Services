@@ -66,9 +66,9 @@ limitations under the License.
 		<!-- Rounded Corners for IE -->
     	<script type="text/javascript" src="<?php echo base_url();?>js/DD_roundies_0.0.2a-min.js"></script>
     	<script>
-    		DD_roundies.addRule('.box', '10px');
-    		DD_roundies.addRule('.hp-class-item', '10px');
-    		DD_roundies.addRules('.shadow-and-corner', '10px');
+    		//DD_roundies.addRule('.box', '10px');
+    		//DD_roundies.addRule('.hp-class-item', '10px');
+    		//DD_roundies.addRules('.shadow-and-corner', '10px');
     	</script>
 	 <?php endif;?>
 

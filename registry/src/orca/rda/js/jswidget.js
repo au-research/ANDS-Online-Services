@@ -26,7 +26,7 @@
 		ands_search_desc:"",
 		ands_search_heading:"Search Results",
 		ands_search_bg:"#fff",
-		ands_search_border:"#999",		
+		ands_search_border:"#999"		
 	}
 	
 	function makeWidget(ands_widget_reference_id)
