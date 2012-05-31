@@ -9,7 +9,7 @@
 		ands_search_query_facet:"",
 		ands_search_query_facet_incl_count:"",
 		
-		ands_search_sort:"search_base_score desc",
+		ands_search_sort:"",
 		
 		ands_search_service_point:"http://services.ands.org.au/home/orca/rda/api",
 		ands_search_portal_url:"http://services.ands.org.au/home/orca/rda/",
@@ -133,7 +133,7 @@
 							widget_results.append("<li><a href='" 
 									+ ands.ands_search_portal_url 
 									+ "view/?key=" + encodeURIComponent(doc['key'])
-									+ "'>" + doc['list_title'] + "</a></li>");
+									+ "'>" + doc['listTitle'] + "</a></li>");
 						}
 						
 					});
