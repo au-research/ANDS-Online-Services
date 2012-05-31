@@ -254,6 +254,13 @@ function assets_url()
 	return $CI->config->item('asset_url');
 }
 
+function solr_url()
+{
+	$CI=&get_instance();
+	return $CI->config->item('solr_url');
+}
+
+
 /*Get response from a http request*/
 function get_http_response_code($url) {
 	$headers = get_headers($url);

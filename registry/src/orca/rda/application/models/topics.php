@@ -13,7 +13,7 @@ class Topics extends CI_Model {
 									"heading"=>"Collections",
 									"record_limit"=>3),
 							array ("id"=>"groups",
-									"query"=>'-data_source_key:("www.qfab.org/qfab2") class:("collection") fulltext:tropics',
+									"query"=>'-data_source_key:("www.qfab.org/qfab2") -data_source_key:("PUBLISH_MY_DATA") class:("collection") fulltext:tropics',
 									"query_facet"=>"group",
 									"heading"=>"Data Contributors",
 									"record_limit"=>3),

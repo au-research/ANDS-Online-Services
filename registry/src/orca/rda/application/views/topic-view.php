@@ -56,9 +56,11 @@ foreach($topic_boxes AS $box)
 	{
 		echo "ands_search_" . $name . " = \"" . rawurlencode($param) . "\";\n";
 	}
+	echo 'ands_search_service_point = "'.solr_url().'"'."\n";
+	echo 'ands_search_portal_url = "'.base_url().'"'."\n";
 	echo "\n//--></script>";
 	echo '<script type="text/javascript"';
-	echo ' src="http://devl.ands.org.au/workareas/ben/misc/jswidget/script.js">';
+	echo ' src="' . base_url() . 'js/jswidget.js">';
 	echo '</script>';
 }
 
