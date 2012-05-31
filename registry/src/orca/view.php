@@ -171,11 +171,14 @@ if( $registryObject )
 
 	drawRecordField("Type:",  esc($registryObjectType));
 	drawRecordField("Key:",  esc($registryObjectKey));
-	if( userIsDataSourceRecordOwner($registryObjectDataSourceRecordOwner) || userIsORCA_ADMIN() )
+	if( userIsORCA_ADMIN() )
 	{
-		drawRecordField("Title:",  esc($registryObjectSource));
-		// temporary
+		echo "<span color='#ccc'>";
+		drawRecordField("Originating Source:",  esc($registryObjectSource));
 		drawRecordField("URL \"SLUG\":", esc($url_slug));
+		drawRecordField("DS Key Hash:", getDataSourceHashForKey($dataSourceKey));
+		drawRecordField("Record Key Hash:", getRegistryObjectHashForKey($registryObjectKey));
+		echo "</span>";
 	}
 	drawRecordField("Originating Source:", $originatingSourceHTML);
 	drawRecordField("Group:", esc($objectGroup));
