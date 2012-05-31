@@ -56,7 +56,7 @@ foreach($topic_boxes AS $box)
 	{
 		echo "ands_search_" . $name . " = \"" . rawurlencode($param) . "\";\n";
 	}
-	echo 'ands_search_service_point = "'.solr_url().'"'."\n";
+	echo 'ands_search_service_point = "'.base_url().'api"'."\n";
 	echo 'ands_search_portal_url = "'.base_url().'"'."\n";
 	echo "\n//--></script>";
 	echo '<script type="text/javascript"';

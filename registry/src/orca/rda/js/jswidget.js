@@ -11,7 +11,7 @@
 		
 		ands_search_sort:"search_base_score desc",
 		
-		ands_search_service_point:"http://services.ands.org.au:8080/solr/",
+		ands_search_service_point:"http://services.ands.org.au/home/orca/rda/api",
 		ands_search_portal_url:"http://services.ands.org.au/home/orca/rda/",
 		
 		ands_search_widget_type:"right-box",
@@ -54,7 +54,7 @@
 
 		doc.write(g);
 		
-		var search_params = 'select/?';
+		var search_params = '?';
 		if (ands.ands_search_query_facet != "")
 		{
 			search_params += 'q='+encodeURIComponent(ands.ands_search_query);
@@ -66,7 +66,7 @@
 		}
 		else
 		{
-			search_params = 'select/?q='+encodeURIComponent(ands.ands_search_query)
+			search_params = '?q='+encodeURIComponent(ands.ands_search_query)
 								+ '&version=2.2&start=0&rows='+(parseInt(ands.ands_search_record_limit)+1)
 								+ '&indent=on&wt=json'
 								+ (ands.ands_search_sort != "" ? '&sort='+encodeURIComponent(ands.ands_search_sort) : '');					
