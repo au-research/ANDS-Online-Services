@@ -210,8 +210,7 @@ $(document).ready(function(){
 			url: base_url+"/vocab/reloadTree/",
 			data:{selected_uri:uri,selected_vocab:vocab},
 	        success:function(data){
-				//console.log(data);
-				var list = $('.conceptRoot[vocab=anzsrc-for]').children('ul');
+				var list = $('.conceptRoot[vocab='+vocab+']').children('ul');
 				$(list).html(data);
 				bindTree();
 				var tree = jQuery.jstree._reference("#vocab-browser");

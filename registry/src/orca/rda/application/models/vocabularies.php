@@ -258,7 +258,10 @@ class Vocabularies extends CI_Model {
 		//var_dump($tree);
 		if($order==1){
 			$class='jstree-open';
-		}else $class='jstree-closed';
+		}else{
+			//$class='jstree-open';
+			$class='jstree-closed';
+		}
 		$r='';
 		$r.='<li class="'.$class.' conceptRoot" order="'.$order.'" vocab="'.$vocab.'"><a href="#">'.$tree['topLabel'].'</a>';
 		$r.='<ul>';
