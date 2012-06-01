@@ -996,11 +996,15 @@ $(document).ready(function(){
                                $("#seeAlsoDataCite").html(msg);
                                 //console.log(msg);
                                if(parseInt($('#seealso-realnumfound').html())==0&&(parseInt($('#seealsodatacite-realnumfound').html()))==0){
-	                            	$('#seeAlsoDataCiteRightBox').hide();
+	                            	$('#seeAlsoRightBox').hide();
 	                            }
                                if(parseInt($('#seealsodatacite-realnumfound').html())==0){
 	                            	$('#seeAlsoDataCite').hide();
 	                            }
+                               if(parseInt($('#seealso-realnumfound').html())==0){
+                                  	$('#dashed').hide();	
+	                            }                               
+
                                
                        },
                        error:function(msg){
@@ -1102,7 +1106,8 @@ $(document).ready(function(){
                                 $("#seeAlso").html(msg);
                                 //console.log(msg);
                                if(parseInt($('#seealso-realnumfound').html())==0){
-	                            	//$('#seeAlso').hide();
+	                            	$('#seeAlso').hide();
+                            	
 	                           }
                         },
                         error:function(msg){

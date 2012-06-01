@@ -15,7 +15,7 @@ limitations under the License.
 ***************************************************************************
 *
 **/ 
-echo "<h3> <img src='".base_url()."img/icon/link_64.jpg' style='width:16px;'> Internal Websites:</h3>";
+echo "<h3> <img src='".base_url()."img/icon/link_64.jpg' style='width:16px;'> Internal Records:</h3>";
 ?>
 <p>
 <?php
