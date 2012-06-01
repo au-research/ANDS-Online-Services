@@ -19,7 +19,7 @@ limitations under the License.
 <p>
 <?php
 //echo "<hr style='margin:10px;'/>";
-echo "<h3 style='margin:10px;border-top:1px dashed #333333;padding-top:10px;'> <img src='".base_url()."img/icon/link_64.png' style='width:16px;'> External Websites:</h3>";
+echo "<h3 style='margin:10px;border-top:1px dashed #333333;padding-top:10px;'> <img src='".base_url()."img/icon/link_64.jpg' style='width:16px;'> External Websites:</h3>";
 echo '<p><a href="javascript:void(0);" id="seeAlso_DataCiteNumFound"><span id="seealsodatacite-realnumfound">'.$numfound.'</span> Collections </a> from <span id="seeAlso_dataciteInfo">DataCite</span></p>';
 
 //echo 'Also related from Subjects: <a href="javascript:void(0);" id="seeAlso_subjectNumFound">'. $activityNumFound.' Collections</a>';

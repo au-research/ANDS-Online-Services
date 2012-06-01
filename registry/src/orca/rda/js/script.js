@@ -871,10 +871,10 @@ $(document).ready(function(){
                                $("#seeAlsoDataCite").html(msg);
                                 //console.log(msg);
                                if(parseInt($('#seealso-realnumfound').html())==0&&(parseInt($('#seealsodatacite-realnumfound').html()))==0){
-	                            	//$('#seeAlsoDataCiteRightBox').hide();
+	                            	$('#seeAlsoDataCiteRightBox').hide();
 	                            }
                                if(parseInt($('#seealsodatacite-realnumfound').html())==0){
-	                            	//$('#seeAlsoDataCite').hide();
+	                            	$('#seeAlsoDataCite').hide();
 	                            }
                                
                        },
@@ -885,12 +885,12 @@ $(document).ready(function(){
 	   var seeAlsoDataCitePage = 1;
 		$('#seeAlso_dataciteInfo').live('mouseenter',function(event){
 			$("<div class='tooltip' style='background-color:#FFFFFF;border:1px #666666 solid;padding:15px' align='left'><h3>About DataCite</h3><p>Datacite is a not-for-profit orginisation formed in London on 1 December 2009.</p><p>DataCite's aim is to: </p><ul><li>Establish easier access to research data on the internet</li><li>Increase acceptance of research data as legitimate, citable contributions to the scholarly record<li>Support data archiving that will permit results to be verified and re-purposed for further study.</li></ul><p>For more information about DataCite, visit <a href='http://datacite.org' target='_blank'>http://datacite.org</a></p><hr /> <p>Disclaimer required</p></div>").appendTo('body');
-			var tPosX = event.pageX - 700;
-		    var tPosY = event.pageY - 300;
+			var tPosX = event.pageX - 650;
+		    var tPosY = event.pageY - 200;
 			 $('div.tooltip').css({'position': 'absolute', 'top': tPosY, 'left': tPosX});
 		
 		})
-		$('#seeAlso_dataciteInfo').live('mouseleave',function(){
+		$('.tooltip').live('mouseleave',function(){
 			$('.tooltip').hide();
 			
 		})		
