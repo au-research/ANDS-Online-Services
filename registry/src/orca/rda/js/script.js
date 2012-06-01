@@ -81,15 +81,54 @@ $(document).ready(function(){
 	
 
 	function initVocabPage(){
+		loadBigTree('http://purl.org/au-research/vocabulary/anzsrc-for/2008/0102', 'anzsrc-for');
+		$("#search-vocab-field" ).autocomplete( {
+			source: base_url+"vocab/vocabAutoComplete/",
+			minLength: 2,
+			delimiter:/(,|;)\s*/,
+			select: function( event, ui ) {
+				$('#search-vocab-field').val(ui.item.label);
+				vocabLoadConcept(ui.item.uri, ui.item.vocab);
+				vocabLoadTree(ui.item.uri, ui.item.vocab);
+			}
+		});
+	}
+
+	function loadBigTree(selected_node, selected_vocab){
 		$.ajax({
    			type:"GET",
 			url: base_url+"/vocab/loadBigTree/",
+			data:{selected_node:selected_node,selected_vocab:selected_vocab},
 	        success:function(data){
 				$('#tree-vocab').html(data);
 				initTree();
+				$('#left-vocab').resizable({
+						handles: "e",
+						resize: function(event, ui){
+							//console.log(ui.size.width);
+							var fullwidth = $('#item-view').width();
+							var w = fullwidth - ui.size.width - 30;
+							$('#right-vocab').width(w);
+				            $('#right-vocab').css("width",w+'px');
+				        }
+			    	}
+				).bind("resize", function () {
+			        $(this).css("top", "auto"); //To handle the issue with top
+			    });
 	        },
-	        error:function(msg){ }
-		});	
+	        error:function(msg){}
+		});
+
+		$("#search-vocab-field" ).autocomplete( {
+			source: base_url+"vocab/vocabAutoComplete/",
+			minLength: 2,
+			delimiter:/(,|;)\s*/,
+			select: function( event, ui ) {
+				$('#search-vocab-field').val(ui.item.label);
+				vocabLoadConcept(ui.item.uri, ui.item.vocab);
+				vocabLoadTree(ui.item.uri, ui.item.vocab);
+			}
+		});
 	}
 
 	function initTree(){
@@ -106,20 +145,20 @@ $(document).ready(function(){
 				"select_limit": 1
 			}
 		});
+		bindTree();
+	}
 
+	function bindTree(){
 		$("#vocab-browser").bind("select_node.jstree", function(event, data) {
   			// data.inst is the tree object, and data.rslt.obj is the node
   			var theNode = data.rslt.obj;
   			var theLink = $(theNode).children('.getConcept');
-  			$('#right-vocab').html('Loading...');
-  			$.ajax({
-       			type:"GET",
-				url: base_url+"/vocab/getConceptDetail/"+$(theLink).attr('notation')+'/'+$(theLink).attr('vocab'),
-		        success:function(data){
-					$('#right-vocab').html(data);
-		        },
-		        error:function(msg){}
-			});
+  			$('#right-vocab').html('Select a Field of Research');
+  			if($(theNode).attr('id')!='rootNode'){
+  				if(!$(theNode).hasClass('conceptRoot')){
+		  			vocabLoadConcept($(theLink).attr('uri'), $(theLink).attr('vocab'));
+		  		}
+		  	}
   			return data.inst.toggle_node(data.rslt.obj);
 		});
 
@@ -132,11 +171,13 @@ $(document).ready(function(){
   			if($(theNode).attr('id')!='rootNode'){
   				if(!$(theNode).hasClass('conceptRoot')){
 	  				var thisTree = $(theNode).children('ul');
-	  				console.log(theNode);
 	  				var theLink = $(theNode).children('.getConcept');
+	  				var uri = $(theLink).attr('uri');
+	  				var vocab = $(theLink).attr('vocab');
 					$.ajax({
 		       			type:"GET",
-						url: base_url+"/vocab/getConcept/"+$(theLink).attr('notation')+'/'+$(theLink).attr('vocab'),
+						url: base_url+"/vocab/getConcept/",
+						data:{uri:uri,vocab:vocab},
 				        success:function(data){
 							$(thisTree).html(data);
 							var tree = jQuery.jstree._reference("#vocab-browser");
@@ -149,6 +190,88 @@ $(document).ready(function(){
 		});
 	}
 
+
+	function vocabLoadConcept(uri, vocab){
+		$.ajax({
+   			type:"GET",
+			url: base_url+"/vocab/getConceptDetail/",
+			data:{uri:uri,vocab:vocab},
+	        success:function(data){
+				$('#right-vocab').html(data);
+				VocabLoadMiniSearch();
+	        },
+	        error:function(msg){}
+		});
+	}
+
+	function vocabLoadTree(uri, vocab){
+		$.ajax({
+   			type:"GET",
+			url: base_url+"/vocab/reloadTree/",
+			data:{selected_uri:uri,selected_vocab:vocab},
+	        success:function(data){
+				//console.log(data);
+				var list = $('.conceptRoot[vocab=anzsrc-for]').children('ul');
+				$(list).html(data);
+				bindTree();
+				var tree = jQuery.jstree._reference("#vocab-browser");
+				tree.refresh();
+	        },
+	        error:function(msg){
+	        	console.log('ERROR'+msg);
+	        }
+		});
+	}
+
+	function VocabLoadMiniSearch(){
+		var vocab_uri = $('#vocab_uri').text();
+		var page = 1;
+		$.ajax({
+   			type:"POST",
+   			data:{uri:vocab_uri},
+			url: base_url+"/vocab/vocabSearchResult/exact",
+	        success:function(data){
+				$('#exact_search_result').html(data);
+				$(".accordion").accordion({autoHeight:false, collapsible:true,active:false});
+	        },
+	        error:function(msg){}
+		});
+		$.ajax({
+   			type:"POST",
+   			data:{uri:vocab_uri},
+			url: base_url+"/vocab/vocabSearchResult/narrower",
+	        success:function(data){
+				$('#narrower_search_result').html(data);
+				$(".accordion").accordion({autoHeight:false, collapsible:true,active:false});
+	        },
+	        error:function(msg){}
+		});
+
+		$('.gotoPage, .next, .prev').live('click', function(){
+			var parent = $(this).parents('.miniSearch');
+			var currentPage = parseInt($(parent).attr('page'));
+			
+			if($(this).hasClass('gotoPage')){
+				page = $(this).attr('id');
+			}else if($(this).hasClass('next')){
+				page = currentPage + 1;
+			}else if($(this).hasClass('prev')){
+				page = currentPage - 1 ;
+			}
+			var type = $(parent).attr('type');
+			$.ajax({
+	   			type:"POST",
+	   			data:{uri:vocab_uri},
+				url: base_url+"/vocab/vocabSearchResult/"+type+'/'+page,
+		        success:function(data){
+					$('#'+type+'_search_result').html(data);
+					$(".accordion").accordion({autoHeight:false, collapsible:true,active:false});
+		        },
+		        error:function(msg){}
+			});
+		});
+	}
+
 	function initSearchPage(){
 		$('.disable-info').live('click',function(){
 			//console.log($.cookie('spatial-info'));
@@ -156,6 +279,7 @@ $(document).ready(function(){
 			if(info=='spatial-info') $.cookie('spatial-info','read');
 			$(this).parent().parent().fadeOut();
 		});
+		
 	}
 	
 	var hash = window.location.hash;
@@ -384,6 +508,8 @@ $(document).ready(function(){
 	$('#clearSearch').live('click', function(){	//clearing search box, also clears everything
 		clearEverything();
 	});
+
+	
 	
 	function clearEverything(){
 		//clearing the values
@@ -1358,17 +1484,41 @@ $(document).ready(function(){
 	 * Used in initSearchPage()
 	 * */
 	function doSearch(){
-			//$('#advanced, #mid').css('opacity','0.5');
-			$('#result-placeholder').html('Loading...');
-			$('#loading').show();$('#clearSearch').hide();
-			$('#map-stuff').hide();
-			$('.ui-autocomplete').hide();
-			$('#map-help-stuff').html('Please wait...');
-			if(n!=''){
-				doSpatialSearch();
-			}else{
-				doNormalSearch();
-			}
+		//$('#advanced, #mid').css('opacity','0.5');
+		$('#result-placeholder').html('Loading...');
+		$('#loading').show();$('#clearSearch').hide();
+		$('#map-stuff').hide();
+		$('.ui-autocomplete').hide();
+		$('#map-help-stuff').html('Please wait...');
+		if(n!=''){
+			doSpatialSearch();
+		}else{
+			doNormalSearch();
+		}
+
+		/*PAGINATION*/
+		$('.next').live('click', function(){
+			var current_page = parseInt(page);
+			var next_page =  current_page + 1;
+			changeHashTo(formatSearch(search_term, next_page, classFilter));
+			page = next_page;
+		});
+		
+		$('.prev').live('click', function(){
+			var current_page = parseInt(page);
+			var next_page =  current_page - 1;
+			var term = '#'+search_term+'/p'+next_page;
+			changeHashTo(formatSearch(search_term, next_page, classFilter));
+			page = next_page;
+		});
+		
+		$('.gotoPage').live('click', function(){
+			var id = $(this).attr('id');
+			var term = '#'+search_term+'/p'+id;
+			changeHashTo(formatSearch(search_term, id, classFilter));
+			page = id;
+		});
+
 	}
 	
 	function doSpatialSearch(){
@@ -2036,28 +2186,7 @@ $(document).ready(function(){
 		}
 	}
 	
-	/*PAGINATION*/
-	$('#next').live('click', function(){
-		var current_page = parseInt(page);
-		var next_page =  current_page + 1;
-		changeHashTo(formatSearch(search_term, next_page, classFilter));
-		page = next_page;
-	});
 	
-	$('#prev').live('click', function(){
-		var current_page = parseInt(page);
-		var next_page =  current_page - 1;
-		var term = '#'+search_term+'/p'+next_page;
-		changeHashTo(formatSearch(search_term, next_page, classFilter));
-		page = next_page;
-	});
-	
-	$('.gotoPage').live('click', function(){
-		var id = $(this).attr('id');
-		var term = '#'+search_term+'/p'+id;
-		changeHashTo(formatSearch(search_term, id, classFilter));
-		page = id;
-	});
 
 	
 	/*GOOGLE MAP*/

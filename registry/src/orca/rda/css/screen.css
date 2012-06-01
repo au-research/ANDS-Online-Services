@@ -662,7 +662,14 @@ display:block;
 /*
  * Vocab styles
  */
- #vocab-container{clear:both;max-height:700px;position:relative;}
- #left-vocab{float:left;width:350px;overflow:auto;border-right:1px solid #ccc;position:relative;}
- #tree-vocab{overflow:auto;height:90%;padding:10px;}
+ #vocab-container{clear:both;position:relative;}
+ #left-vocab{float:left;width:350px;overflow:hidden;border-right:1px solid #ccc;position:relative;}
+ #tree-vocab{overflow:auto;padding:10px;font-size:12px;max-height:750px;}
  #right-vocab{float:left;width:580px;overflow:auto;padding:10px;}
+ #search-vocab{padding:10px;border-bottom:1px solid #ccc;}
+ #search-vocab-field{width:200px;padding:3px}
+ .vocab-info-table{font-size:12px;vertical-align:top;border-collapse:collapse;}
+ .vocab-info-table td, th{border:1px solid #bbb;padding:5px;}
+ .vocab-info-table tbody{vertical-align:top;}
+ .vocab-info-table td{min-width:120px;}
+ #exact_search_result, #narrower_search_result{margin: 15px auto;}

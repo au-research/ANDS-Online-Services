@@ -13,9 +13,14 @@
 
 	<div id="vocab-container">
 		<div id="left-vocab">
-			<div id="tree-vocab"></div>
+			<div id="search-vocab">
+				<input type="text" id="search-vocab-field"/> <button>Lookup</button>
+			</div>
+			<div id="tree-vocab">
+				Loading Tree
+			</div>
 		</div>
-		<div id="right-vocab">right</div>
+		<div id="right-vocab"></div>
 		<div class="clearfix"></div>
 	</div>
 </div>

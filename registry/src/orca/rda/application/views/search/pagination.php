@@ -48,7 +48,7 @@ limitations under the License.
 	//if not on page 1, show Previous
 	echo '<a href="javascript:void(0);" id="1" class="gotoPage">First</a>';
 	if($currentPage > 1){
-		echo '<a href="javascript:void(0);" id="prev" class="pagination-page"> &lt;</a>';
+		echo '<a href="javascript:void(0);" class="pagination-page prev"> &lt;</a>';
 	}
 	
 	for ($x = ($currentPage - $range); $x < (($currentPage + $range) + 1); $x++) {
@@ -63,7 +63,7 @@ limitations under the License.
 	
 	//if not on last page, show Next
 	if($currentPage < $totalPage){
-		echo '<a href="javascript:void(0);" id="next" class="pagination-page">&gt;</a>';
+		echo '<a href="javascript:void(0);" class="pagination-page next">&gt;</a>';
 	}
 	
 	echo '<a href="javascript:void(0);" id="'.$totalPage.'" class="gotoPage">Last</a>';
