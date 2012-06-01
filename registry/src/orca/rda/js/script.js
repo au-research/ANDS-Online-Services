@@ -32,11 +32,11 @@ $(document).ready(function(){
 	if(enableWarning) $('body').prepend(warningDiv);
 
 	//router
-	if(window.location.href.indexOf('https://')==0){
+	/*if(window.location.href.indexOf('https://')==0){
 		var thisurl = window.location.href;
 		thisurl = thisurl.replace('https://','http://');
 		window.location.href=thisurl;
-	}
+	}*/
 		
 	/*
 	if(window.location.href.indexOf('/view')>=0){
