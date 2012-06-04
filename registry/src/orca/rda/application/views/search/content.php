@@ -125,7 +125,12 @@ limitations under the License.
 							break;
 					}
 				}
-				$key_url =  base_url().'view/?key='.urlencode($ro_key);
+				$theGroup = getInstitutionPage($r->{'group'});
+				if($theGroup==$ro_key){
+					$key_url = base_url().'view/group/?group='.rawurlencode($theGroup). '&groupName='.urlencode($r->{'group'});
+				}else{
+					$key_url =  base_url().'view/?key='.urlencode($ro_key);
+				}
 				//echo $key_url;
 				echo '<h2 itemprop="name"><a itemprop="url" href="'.$key_url.'">'.$name.'</a></h2>';
 				

@@ -23,9 +23,8 @@ class Vocabularies extends CI_Model {
     }
 
     //primary function to get the tree containing everything
-    function getBigTree($vocabs){
-
-    	$bigTree = '';
+    function getBigTree($vocabs, $broader=array()){
+		$bigTree = '';
     	$bigTree .='<div id="vocab-browser">';
 			$bigTree .='<ul>';
 				$bigTree .='<li id="rootNode">';
@@ -33,15 +32,14 @@ class Vocabularies extends CI_Model {
 				$bigTree .='<ul>';
 		    	//var_dump($vocabs);
 		    	$order = 1; //additional parameter to add to each tree for identification purpose
-		    	foreach($vocabs as $key=>$vocab){
+		    	foreach($vocabs as $vocab=>$vocab_uri){
 		    		//var_dump($vocab);
-		    		if($tree = $this->getTree($key, $vocab, $order)){
+		    		if($tree = $this->getTree($vocab, $vocab_uri, $order)){
 		    			$bigTree .= $tree;
 		    			$order++;
 		    		}else{
 		    			$bigTree .='<li><a>Invalid Vocabulary URL</a></li>';
 		    		}
-		    		
 		    	}
 		    	$bigTree.='</ul>';
 		    	$bigTree.='</li>';
@@ -56,14 +54,13 @@ class Vocabularies extends CI_Model {
 		//$json = json_decode($this->getResource($vocab_uri));
 		if($json=json_decode($this->getResource($vocab_uri))){
 			$tree = $this->getVocabTree($json, $vocab_uri);
-			//var_dump($tree);
 			return $this->formatVocabTree($tree, $order, $vocab);
 		}else return false;
 	}
 
-	function getConceptTree($vocabs, $num, $vocab){
+	function getConceptTree($vocabs, $uri, $vocab){
 		$vocab_uri = $vocabs[$vocab];
-		$concept_uri = $vocab_uri['uriprefix'].$num;
+		$concept_uri = $uri;
 		$content = $this->getNarrower($vocab_uri['resolvingService'], $concept_uri);
 		$json = json_decode($content);
 		//var_dump($json);
@@ -78,7 +75,7 @@ class Vocabularies extends CI_Model {
 			if(!$hasNarrower){
 				$class = 'jstree-leaf';
 			}else $class = 'jstree-closed';
-			$r.='<li><a href="javascript:void(0);" class="getConcept" notation="'.$notation.'" vocab="'.$vocab.'">'.$item->{'prefLabel'}->{'_value'}.'</a>';
+			$r.='<li><a href="javascript:void(0);" class="getConcept" uri="'.$item->{'_about'}.'" notation="'.$notation.'" vocab="'.$vocab.'">'.$item->{'prefLabel'}->{'_value'}.'</a>';
 				if($hasNarrower){
 					$r.='<ul>';
 					$r.='<li><a class="jstree-loading">Loading...</a></li>';
@@ -89,10 +86,157 @@ class Vocabularies extends CI_Model {
 		echo $r;
 	}
 
-	function getConcept($vocabs, $num, $vocab){
+	//this function spits out a tree, drill down to the selected node
+	function sloadTree($vocabs, $selected, $broader){
+		$vocab = $selected['vocab'];
+		$vocab_uri = $vocabs[$vocab];
+
+		$json = json_decode($this->getResource($vocab_uri));
+		//var_dump($broader);
+		$tree = array();
+		foreach($json->{'result'}->{'primaryTopic'}->{'hasTopConcept'} as $concept){
+			//$tree['topConcept'][] = $concept->{'_about'};
+			$concept_uri = $concept->{'_about'};
+			$uri['resolvingService']=$vocab_uri['resolvingService'];
+			$uri['uriprefix']=$concept->{'_about'};
+			$resolved_concept = json_decode($this->getResource($uri));
+			//var_dump($resolved_concept);
+			//echo($resolved_concept->{'result'}->{'primaryTopic'}->{'notation'});
+			$notation = $resolved_concept->{'result'}->{'primaryTopic'}->{'notation'};
+			$c['notation'] = $resolved_concept->{'result'}->{'primaryTopic'}->{'notation'};
+			$c['prefLabel'] = $resolved_concept->{'result'}->{'primaryTopic'}->{'prefLabel'}->{'_value'};
+			$c['uri'] = $resolved_concept->{'result'}->{'primaryTopic'}->{'_about'};
+			
+			if($broader){
+				if(in_array($c['uri'], $broader)){
+					$broader = array_diff($broader, array($c['uri']));
+					$c['narrower'] = $this->drilldown($vocab_uri, $c['uri'], $broader, $selected['uri']);
+				}else $c['narrower']=false;
+			}else{
+				$c['narrower']=false;
+			}
+			
+
+			$tree['topConcepts'][] = $c;
+		}
+		//var_dump($tree);
+		$r='';
+		foreach($tree['topConcepts'] as $key=>$concept){
+			if($concept['narrower']){
+				$hasNarrower = true;
+				$class = 'jstree-open';
+			}else{
+				$hasNarrower = false;
+				$hasNarrowerConcepts = $this->hasNarrower($vocab_uri, $concept['uri']);
+				if(!$hasNarrowerConcepts){
+					$class = 'jstree-leaf';
+				}else $class = 'jstree-closed';
+			}
+			$selected_class ='';
+			if($selected['uri']==$concept['uri']){
+				$selected_class.=' jstree-clicked';
+			}else $selected_class = '';
+			$r.='<li class="'.$class.'"><a href="javascript:void(0);" class="getConcept'.$selected_class.'"  uri="'.$concept['uri'].'" vocab="'.$vocab.'">'.$concept['prefLabel'].'</a>';
+			if($hasNarrower){
+				$r.= '<ul>'.$this->htmlDrillDown($vocab, $concept['narrower'], $selected, $vocab_uri).'</ul>';
+			}else{
+				if($hasNarrowerConcepts){
+					$r.='<ul><li><a class="jstree-loading">Loading...</a></li></ul>';
+				}
+			}
+			$r.='</li>';
+		}
+		echo $r;
+	}
+//jstree-clicked
+	function htmlDrillDown($vocab, $concept_tree, $selected, $vocab_uri){
+		//var_dump($concept_tree);
+		if(sizeof($concept_tree)==0) return false;
+		$r='';
+		foreach($concept_tree as $concept){
+			if($concept['narrower']){
+				$hasNarrower = true;
+				$class = 'jstree-open';
+			}else{
+				$hasNarrower = false;
+				$hasNarrowerConcepts = $this->hasNarrower($vocab_uri, $concept['uri']);
+				if(!$hasNarrowerConcepts){
+					$class = 'jstree-leaf';
+				}else $class = 'jstree-closed';
+			}
+			$selected_class ='';
+			if($selected['uri']==$concept['uri']){
+				$selected_class.=' jstree-clicked';
+			}else $selected_class = '';
+			$r.='<li class="'.$class.'"><a href="javascript:void(0);" class="getConcept '.$selected_class.'"  uri="'.$concept['uri'].'" vocab="'.$vocab.'">'.$concept['prefLabel'].'</a>';
+			if($hasNarrower){
+				$r.= '<ul>'.$this->htmlDrillDown($vocab, $concept['narrower'], $selected, $vocab_uri).'</ul>';
+			}else{
+				if($hasNarrowerConcepts){
+					$r.='<ul><li><a class="jstree-loading">Loading...</a></li></ul>';
+				}
+				
+			}
+			$r.='</li>';
+		}
+		return $r;
+	}
+
+	function drilldown($vocab_uri, $concept_to_drill, $broader, $selected_uri){
+		if(sizeof($broader)==0){
+			return false;
+		}
+		$tree = array();
+		$broader = array_diff($broader, array($concept_to_drill));
+		$uri['resolvingService'] = $vocab_uri['resolvingService'];
+		$uri['uriprefix'] = $concept_to_drill;
+		$json = json_decode($this->getNarrower($uri['resolvingService'], $concept_to_drill));
+		foreach($json->{'result'}->{'items'} as $key=>$item){
+			$i['prefLabel'] = $item->{'prefLabel'}->{'_value'};
+			$i['uri'] = $item->{'_about'};
+			if($i['uri']==$selected_uri){
+				$i['selected'] = true;
+			}else $i['selected'] = false;
+			$tree[$key] = $i;
+			if(in_array($i['uri'], $broader)){
+				if($this->drilldown($vocab_uri, $i['uri'], $broader, $selected_uri)){
+					$tree[$key]['narrower'] = $this->drilldown($vocab_uri, $i['uri'], $broader, $selected_uri);
+				}else{
+					$tree[$key]['narrower'] = false;
+				}
+			}else{
+				$tree[$key]['narrower'] = false;
+			}
+		}
+		//var_dump($tree);
+		return $tree;
+	}
+
+
+	function getBroader($vocabs, $concept_uri, $vocab, $parents=array()){
 		$vocab_uri = $vocabs[$vocab]['resolvingService'];
 		//echo $vocab_uri;
-		$concept_uri = $vocabs[$vocab]['uriprefix'].$num;
+		$uri['resolvingService'] = $vocab_uri;
+		$uri['uriprefix'] = $concept_uri;
+		$content = $this->getResource($uri);
+		$json = json_decode($content);
+		
+		if(isset($json->{'result'}->{'primaryTopic'}->{'broader'}->{'_about'})){
+			$broader_uri = $json->{'result'}->{'primaryTopic'}->{'broader'}->{'_about'};
+			array_push($parents, $broader_uri);
+			if($this->getBroader($vocabs, $broader_uri, $vocab, $parents)){
+				$parents = $this->getBroader($vocabs, $broader_uri, $vocab, $parents);
+			}
+			return $parents;
+		}else{
+			return false;
+		}
+	}
+
+	//returns the resources of a certain concept
+	function getConcept($vocabs, $concept_uri, $vocab){
+		$vocab_uri = $vocabs[$vocab]['resolvingService'];
+		//echo $vocab_uri;
 		$uri['resolvingService'] = $vocab_uri;
 		$uri['uriprefix'] = $concept_uri;
 		$content = $this->getResource($uri);
@@ -114,12 +258,15 @@ class Vocabularies extends CI_Model {
 		//var_dump($tree);
 		if($order==1){
 			$class='jstree-open';
-		}else $class='jstree-closed';
+		}else{
+			//$class='jstree-open';
+			$class='jstree-closed';
+		}
 		$r='';
-		$r.='<li class="'.$class.' conceptRoot" order="'.$order.'"><a href="#">'.$tree['topLabel'].'</a>';
+		$r.='<li class="'.$class.' conceptRoot" order="'.$order.'" vocab="'.$vocab.'"><a href="#">'.$tree['topLabel'].'</a>';
 		$r.='<ul>';
 		foreach($tree['topConcepts'] as $topConcept){
-			$r.='<li class="closed"><a href="javascript:void(0);" class="getConcept" notation="'.$topConcept['notation'].'" vocab="'.$vocab.'">'.$topConcept['prefLabel'].'</a>';
+			$r.='<li class="closed"><a href="javascript:void(0);" class="getConcept"  uri="'.$topConcept['uri'].'" notation="'.$topConcept['notation'].'" vocab="'.$vocab.'">'.$topConcept['prefLabel'].'</a>';
 				$r.='<ul>';
 				$r.='<li><a class="jstree-loading">Loading...</a></li>';
 				$r.='</ul>';
@@ -145,11 +292,7 @@ class Vocabularies extends CI_Model {
 			$notation = $resolved_concept->{'result'}->{'primaryTopic'}->{'notation'};
 			$c['notation'] = $resolved_concept->{'result'}->{'primaryTopic'}->{'notation'};
 			$c['prefLabel'] = $resolved_concept->{'result'}->{'primaryTopic'}->{'prefLabel'}->{'_value'};
-			if(isset($resolved_concept->{'result'}->{'primaryTopic'}->{'narrower'})){
-				$c['narrower'] = $resolved_concept->{'result'}->{'primaryTopic'}->{'narrower'};
-			}else{
-				$c['narrower'] = 'noNarrower';
-			}
+			$c['uri'] = $resolved_concept->{'result'}->{'primaryTopic'}->{'_about'};
 			
 			//var_dump($c);
 			$tree['topConcepts'][] = $c;
@@ -157,6 +300,8 @@ class Vocabularies extends CI_Model {
 		//var_dump($json->{'result'}->{'primaryTopic'}->{'hasTopConcept'});
 		return $tree;
 	}
+
+	
 
 	//execute the get resources, this is to resolve a single concept
 	function getResource($vocab_uri){
@@ -184,6 +329,37 @@ class Vocabularies extends CI_Model {
     	//echo 'json received+<pre>'.$content.'</pre>';
 		curl_close($ch);//close the curl
 		return $content;
+	}
+
+	//execute the get labelcontain to search for all concept has a preflabel equals
+	//this searches all available vocabs and returns a big array
+	function labelContain($vocabs, $term){
+		$result = array();
+		foreach($vocabs as $key=>$vocab){
+			$vocab_uri = $vocab['resolvingService'];
+			$resolve_uri = $vocab_uri.'concept.json?labelcontains='.$term;
+			//echo $resolve_uri;
+			$ch = curl_init();
+	    	//set the url, number of POST vars, POST data
+			curl_setopt($ch,CURLOPT_URL,$resolve_uri);//post to SOLR
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);//return to variable
+	    	$content = curl_exec($ch);//execute the curl
+	    	//echo 'json received+<pre>'.$content.'</pre>';
+			curl_close($ch);//close the curl
+			//var_dump($content);
+
+			$results = array();
+			$content = json_decode($content);
+			//var_dump($content->{'result'}->{'items'});
+			foreach($content->{'result'}->{'items'} as $item){
+				$r['prefLabel'] = $item->{'prefLabel'}->{'_value'};
+				$r['uri']=$item->{'_about'};
+				array_push($results, $r);
+			}
+			//var_dump($results);
+			$result[$key] = $results;
+		}
+		return $result;
 	}
 }
 ?>

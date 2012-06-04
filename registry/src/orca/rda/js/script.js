@@ -81,15 +81,54 @@ $(document).ready(function(){
 	
 
 	function initVocabPage(){
+		loadBigTree('http://purl.org/au-research/vocabulary/anzsrc-for/2008/0102', 'anzsrc-for');
+		$("#search-vocab-field" ).autocomplete( {
+			source: base_url+"vocab/vocabAutoComplete/",
+			minLength: 2,
+			delimiter:/(,|;)\s*/,
+			select: function( event, ui ) {
+				$('#search-vocab-field').val(ui.item.label);
+				vocabLoadConcept(ui.item.uri, ui.item.vocab);
+				vocabLoadTree(ui.item.uri, ui.item.vocab);
+			}
+		});
+	}
+
+	function loadBigTree(selected_node, selected_vocab){
 		$.ajax({
    			type:"GET",
 			url: base_url+"/vocab/loadBigTree/",
+			data:{selected_node:selected_node,selected_vocab:selected_vocab},
 	        success:function(data){
 				$('#tree-vocab').html(data);
 				initTree();
+				$('#left-vocab').resizable({
+						handles: "e",
+						resize: function(event, ui){
+							//console.log(ui.size.width);
+							var fullwidth = $('#item-view').width();
+							var w = fullwidth - ui.size.width - 30;
+							$('#right-vocab').width(w);
+				            $('#right-vocab').css("width",w+'px');
+				        }
+			    	}
+				).bind("resize", function () {
+			        $(this).css("top", "auto"); //To handle the issue with top
+			    });
 	        },
-	        error:function(msg){ }
-		});	
+	        error:function(msg){}
+		});
+
+		$("#search-vocab-field" ).autocomplete( {
+			source: base_url+"vocab/vocabAutoComplete/",
+			minLength: 2,
+			delimiter:/(,|;)\s*/,
+			select: function( event, ui ) {
+				$('#search-vocab-field').val(ui.item.label);
+				vocabLoadConcept(ui.item.uri, ui.item.vocab);
+				vocabLoadTree(ui.item.uri, ui.item.vocab);
+			}
+		});
 	}
 
 	function initTree(){
@@ -106,20 +145,20 @@ $(document).ready(function(){
 				"select_limit": 1
 			}
 		});
+		bindTree();
+	}
 
+	function bindTree(){
 		$("#vocab-browser").bind("select_node.jstree", function(event, data) {
   			// data.inst is the tree object, and data.rslt.obj is the node
   			var theNode = data.rslt.obj;
   			var theLink = $(theNode).children('.getConcept');
-  			$('#right-vocab').html('Loading...');
-  			$.ajax({
-       			type:"GET",
-				url: base_url+"/vocab/getConceptDetail/"+$(theLink).attr('notation')+'/'+$(theLink).attr('vocab'),
-		        success:function(data){
-					$('#right-vocab').html(data);
-		        },
-		        error:function(msg){}
-			});
+  			$('#right-vocab').html('Select a Field of Research');
+  			if($(theNode).attr('id')!='rootNode'){
+  				if(!$(theNode).hasClass('conceptRoot')){
+		  			vocabLoadConcept($(theLink).attr('uri'), $(theLink).attr('vocab'));
+		  		}
+		  	}
   			return data.inst.toggle_node(data.rslt.obj);
 		});
 
@@ -132,11 +171,13 @@ $(document).ready(function(){
   			if($(theNode).attr('id')!='rootNode'){
   				if(!$(theNode).hasClass('conceptRoot')){
 	  				var thisTree = $(theNode).children('ul');
-	  				console.log(theNode);
 	  				var theLink = $(theNode).children('.getConcept');
+	  				var uri = $(theLink).attr('uri');
+	  				var vocab = $(theLink).attr('vocab');
 					$.ajax({
 		       			type:"GET",
-						url: base_url+"/vocab/getConcept/"+$(theLink).attr('notation')+'/'+$(theLink).attr('vocab'),
+						url: base_url+"/vocab/getConcept/",
+						data:{uri:uri,vocab:vocab},
 				        success:function(data){
 							$(thisTree).html(data);
 							var tree = jQuery.jstree._reference("#vocab-browser");
@@ -149,6 +190,87 @@ $(document).ready(function(){
 		});
 	}
 
+
+	function vocabLoadConcept(uri, vocab){
+		$.ajax({
+   			type:"GET",
+			url: base_url+"/vocab/getConceptDetail/",
+			data:{uri:uri,vocab:vocab},
+	        success:function(data){
+				$('#right-vocab').html(data);
+				VocabLoadMiniSearch();
+	        },
+	        error:function(msg){}
+		});
+	}
+
+	function vocabLoadTree(uri, vocab){
+		$.ajax({
+   			type:"GET",
+			url: base_url+"/vocab/reloadTree/",
+			data:{selected_uri:uri,selected_vocab:vocab},
+	        success:function(data){
+				var list = $('.conceptRoot[vocab='+vocab+']').children('ul');
+				$(list).html(data);
+				bindTree();
+				var tree = jQuery.jstree._reference("#vocab-browser");
+				tree.refresh();
+	        },
+	        error:function(msg){
+	        	console.log('ERROR'+msg);
+	        }
+		});
+	}
+
+	function VocabLoadMiniSearch(){
+		var vocab_uri = $('#vocab_uri').text();
+		var page = 1;
+		$.ajax({
+   			type:"POST",
+   			data:{uri:vocab_uri},
+			url: base_url+"/vocab/vocabSearchResult/exact",
+	        success:function(data){
+				$('#exact_search_result').html(data);
+				$(".accordion").accordion({autoHeight:false, collapsible:true,active:false});
+	        },
+	        error:function(msg){}
+		});
+		$.ajax({
+   			type:"POST",
+   			data:{uri:vocab_uri},
+			url: base_url+"/vocab/vocabSearchResult/narrower",
+	        success:function(data){
+				$('#narrower_search_result').html(data);
+				$(".accordion").accordion({autoHeight:false, collapsible:true,active:false});
+	        },
+	        error:function(msg){}
+		});
+
+		$('.gotoPage, .next, .prev').live('click', function(){
+			var parent = $(this).parents('.miniSearch');
+			var currentPage = parseInt($(parent).attr('page'));
+			
+			if($(this).hasClass('gotoPage')){
+				page = $(this).attr('id');
+			}else if($(this).hasClass('next')){
+				page = currentPage + 1;
+			}else if($(this).hasClass('prev')){
+				page = currentPage - 1 ;
+			}
+			var type = $(parent).attr('type');
+			$.ajax({
+	   			type:"POST",
+	   			data:{uri:vocab_uri},
+				url: base_url+"/vocab/vocabSearchResult/"+type+'/'+page,
+		        success:function(data){
+					$('#'+type+'_search_result').html(data);
+					$(".accordion").accordion({autoHeight:false, collapsible:true,active:false});
+		        },
+		        error:function(msg){}
+			});
+		});
+	}
+
 	function initSearchPage(){
 		$('.disable-info').live('click',function(){
 			//console.log($.cookie('spatial-info'));
@@ -156,6 +278,7 @@ $(document).ready(function(){
 			if(info=='spatial-info') $.cookie('spatial-info','read');
 			$(this).parent().parent().fadeOut();
 		});
+		
 	}
 	
 	var hash = window.location.hash;
@@ -384,6 +507,8 @@ $(document).ready(function(){
 	$('#clearSearch').live('click', function(){	//clearing search box, also clears everything
 		clearEverything();
 	});
+
+	
 	
 	function clearEverything(){
 		//clearing the values
@@ -565,12 +690,14 @@ $(document).ready(function(){
 		
 		var key = $('#key').html();
 		var itemClass = $('#class').text();
+
 		//console.log(key);
 		
 		initConnectionsBox();//setup the connections Box
 		
 		if(itemClass=='Collection') {
 			initSubjectsSEEALSO();
+			initDataCiteSEEALSO();
 		}else if(itemClass=='Party') {
 			initIdentifiersSEEALSO();
 		}
@@ -783,7 +910,10 @@ $(document).ready(function(){
 		$('.button').button();
         $("#status").html($('#seeAlsoCurrentPage').html() + '/'+$('#seeAlsoTotalPage').html());
     }
-	
+	function setupSeealsoDataCiteBtns(){
+		$('.button').button();
+        $("#status").html($('#seeAlsoDataCiteCurrentPage').html() + '/'+$('#seeAlsoDataCiteTotalPage').html());
+    }	
 	function initConnectionsBox(){
 
 		   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -857,6 +987,104 @@ $(document).ready(function(){
 	        return false;
         });
 	}
+	function initDataCiteSEEALSO(){
+		var displayTitle = $('#displaytitle').text();
+	       $.ajax({
+               type:"POST",
+               url: base_url+"search/seeAlsoDataCite/count/title",data:"q="+ displayTitle+"&page=1",
+                       success:function(msg){
+                               $("#seeAlsoDataCite").html(msg);
+                                //console.log(msg);
+                               if(parseInt($('#seealso-realnumfound').html())==0&&(parseInt($('#seealsodatacite-realnumfound').html()))==0){
+	                            	$('#seeAlsoRightBox').hide();
+	                            }
+                               if(parseInt($('#seealsodatacite-realnumfound').html())==0){
+	                            	$('#seeAlsoDataCite').hide();
+	                            }
+                               if(parseInt($('#seealso-realnumfound').html())==0){
+                                  	$('#dashed').hide();	
+	                            }                               
+
+                               
+                       },
+                       error:function(msg){
+                              // console.log("error" + msg);
+                       }
+       });
+	   var seeAlsoDataCitePage = 1;
+		$('#seeAlso_dataciteInfo').live('mouseenter',function(event){
+			$("<div class='tooltip' style='background-color:#FFFFFF;border:1px #666666 solid;padding:15px' align='left'><h3>About DataCite</h3><p>Datacite is a not-for-profit orginisation formed in London on 1 December 2009.</p><p>DataCite's aim is to: </p><ul><li>Establish easier access to research data on the internet</li><li>Increase acceptance of research data as legitimate, citable contributions to the scholarly record<li>Support data archiving that will permit results to be verified and re-purposed for further study.</li></ul><p>For more information about DataCite, visit <a href='http://datacite.org' target='_blank'>http://datacite.org</a></p><hr /> <p>Disclaimer required</p></div>").appendTo('body');
+			var tPosX = event.pageX - 650;
+		    var tPosY = event.pageY - 200;
+			 $('div.tooltip').css({'position': 'absolute', 'top': tPosY, 'left': tPosX});
+		
+		})
+		$('.tooltip').live('mouseleave',function(){
+			$('.tooltip').hide();
+			
+		})		
+		
+	   $('#seeAlso_DataCiteNumFound').live('click',function(){   
+		   // Set up the loading modal for the first click through
+		   var loadingHTML = '<img src="'+base_url+'/img/ajax-loader.gif" class="loading-icon" alt="Loading..."/> Retrieving DataCite Links...';
+		   $('#infoBox').html(loadingHTML);
+		   $('#infoBox').dialog( {
+			   		modal: true,minWidth:700,position:'center',draggable:false,resizable:false,
+			   		title:"ANDS Suggested Links from DataCite",
+			   			open: function(){
+                            $(".ui-dialog-buttonset").append("<span id='status'></span>");
+                            return false;
+                        }
+			   		}).height('auto');
+		   $.ajax({
+                type:"POST",
+                url: base_url+"search/seeAlsoDataCite/content",data:"q="+ displayTitle +"&page=1",
+                    success:function(msg){
+ 
+                            $("#infoBox").html(msg);
+
+                    		$(".accordion").accordion({autoHeight:false, collapsible:true,active:false});
+      
+                            
+                            $("#infoBox").dialog({
+                                    modal: true,minWidth:700,position:'center',draggable:false,resizable:false,
+                            		title:"ANDS Suggested Links from DataCite",
+                                    buttons: {
+                                        '<': function() {
+                                                if(seeAlsoDataCitePage > 1){
+                                                        seeAlsoDataCitePage = seeAlsoDataCitePage - 1;
+                                                         $('.accordion').html(loadingHTML);
+                                                        getSeeAlsoDataCiteAjax(displayTitle, seeAlsoDataCitePage)
+                                                }
+                                        },
+                                        '>': function() {
+                                                if(seeAlsoDataCitePage < parseInt($('#seeAlsoDataCiteTotalPage').html())){
+                                                        seeAlsoDataCitePage = seeAlsoDataCitePage + 1;
+                                                        $('.accordion').html(loadingHTML);
+                                                        getSeeAlsoDataCiteAjax(displayTitle, seeAlsoDataCitePage)
+                                                }
+                                        }
+                                    },
+                                    open: function(){
+                                        $(".ui-dialog-buttonset").append("<span id='status'></span>");
+                                        setupSeealsoDataCiteBtns();
+                                        return false;
+                                    }
+                            }).height('auto');
+                            $(".ui-dialog-buttonset").append("<span id='status'></span>");
+                            setupSeealsoDataCiteBtns();
+                    
+                           return false;   
+                    },
+                    error:function(msg){
+                    	//alert(msg)
+                            //console.log("error" + msg);
+                    }
+	         });
+	        return false;
+	   });
+	}
+	
 	
 	function initSubjectsSEEALSO(){
 		//SEE ALSO FOR SUBJECTS
@@ -877,15 +1105,17 @@ $(document).ready(function(){
                         success:function(msg){
                                 $("#seeAlso").html(msg);
                                 //console.log(msg);
-                                if(parseInt($('#seealso-realnumfound').html())==0){
-	                            	$('#seeAlsoRightBox').hide();
-	                            }
+                               if(parseInt($('#seealso-realnumfound').html())==0){
+	                            	$('#seeAlso').hide();
+                            	
+	                           }
                         },
                         error:function(msg){
                                 //console.log("error" + msg);
                         }
         });
 		var seeAlsoPage = 1;
+
         $('#seeAlso_subjectNumFound').live('click', function(){
 	        $.ajax({
                 type:"POST",
@@ -1072,7 +1302,21 @@ $(document).ready(function(){
                      error:function(msg){}
              });
 	}
-	
+	function getSeeAlsoDataCiteAjax(displayTitle, seeAlsoDataCitePage){
+		//alert('hit this now ' + displayTitle + ' the page ' + seeAlsoDataCitePage);
+		 $.ajax({
+            type:"POST",
+            url: base_url+"search/seeAlsoDataCite/content",data:"q="+ displayTitle +"&page="+seeAlsoDataCitePage,
+                    success:function(msg){
+                            $(".accordion").html(msg);
+                            $(".accordion").accordion({autoHeight:false, collapsible:true,active:false});
+                            setupSeealsoDataCiteBtns();
+                    },
+                    error:function(msg){
+                    	//alert(msg);
+                    }
+            });
+	}	
 	function getConnectionsAjax(classes,types,connectionsPage, key_value){
 		 $.ajax({
             type:"POST",
@@ -1244,17 +1488,41 @@ $(document).ready(function(){
 	 * Used in initSearchPage()
 	 * */
 	function doSearch(){
-			//$('#advanced, #mid').css('opacity','0.5');
-			$('#result-placeholder').html('Loading...');
-			$('#loading').show();$('#clearSearch').hide();
-			$('#map-stuff').hide();
-			$('.ui-autocomplete').hide();
-			$('#map-help-stuff').html('Please wait...');
-			if(n!=''){
-				doSpatialSearch();
-			}else{
-				doNormalSearch();
-			}
+		//$('#advanced, #mid').css('opacity','0.5');
+		$('#result-placeholder').html('Loading...');
+		$('#loading').show();$('#clearSearch').hide();
+		$('#map-stuff').hide();
+		$('.ui-autocomplete').hide();
+		$('#map-help-stuff').html('Please wait...');
+		if(n!=''){
+			doSpatialSearch();
+		}else{
+			doNormalSearch();
+		}
+
+		/*PAGINATION*/
+		$('.next').live('click', function(){
+			var current_page = parseInt(page);
+			var next_page =  current_page + 1;
+			changeHashTo(formatSearch(search_term, next_page, classFilter));
+			page = next_page;
+		});
+		
+		$('.prev').live('click', function(){
+			var current_page = parseInt(page);
+			var next_page =  current_page - 1;
+			var term = '#'+search_term+'/p'+next_page;
+			changeHashTo(formatSearch(search_term, next_page, classFilter));
+			page = next_page;
+		});
+		
+		$('.gotoPage').live('click', function(){
+			var id = $(this).attr('id');
+			var term = '#'+search_term+'/p'+id;
+			changeHashTo(formatSearch(search_term, id, classFilter));
+			page = id;
+		});
+
 	}
 	
 	function doSpatialSearch(){
@@ -1922,28 +2190,7 @@ $(document).ready(function(){
 		}
 	}
 	
-	/*PAGINATION*/
-	$('#next').live('click', function(){
-		var current_page = parseInt(page);
-		var next_page =  current_page + 1;
-		changeHashTo(formatSearch(search_term, next_page, classFilter));
-		page = next_page;
-	});
 	
-	$('#prev').live('click', function(){
-		var current_page = parseInt(page);
-		var next_page =  current_page - 1;
-		var term = '#'+search_term+'/p'+next_page;
-		changeHashTo(formatSearch(search_term, next_page, classFilter));
-		page = next_page;
-	});
-	
-	$('.gotoPage').live('click', function(){
-		var id = $(this).attr('id');
-		var term = '#'+search_term+'/p'+id;
-		changeHashTo(formatSearch(search_term, id, classFilter));
-		page = id;
-	});
 
 	
 	/*GOOGLE MAP*/

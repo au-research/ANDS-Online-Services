@@ -32,44 +32,95 @@ class Vocab extends CI_Controller {
 	}
 
 	//ajax 
-	function getConcept($num, $vocab){
+	function getConcept(){
 		$this->load->model('vocabularies', 'vmodel');
-		$tree = $this->vmodel->getConceptTree($this->config->item('vocab_resolver_service'), $num, $vocab);
+		$uri = strtolower($_GET["uri"]);
+		$vocab = strtolower($_GET["vocab"]);
+		$tree = $this->vmodel->getConceptTree($this->config->item('vocab_resolver_service'), $uri, $vocab);
 		echo $tree;
 	}
 
-	function getConceptDetail($num, $vocab){
+
+	function getConceptDetail(){
+		$uri = strtolower($_GET["uri"]);
+		$vocab = strtolower($_GET["vocab"]);
 		$this->load->model('vocabularies', 'vmodel');
-		$data['r'] = $this->vmodel->getConcept($this->config->item('vocab_resolver_service'), $num, $vocab);
-		$data['notation'] = $num;
+		$data['r'] = $this->vmodel->getConcept($this->config->item('vocab_resolver_service'), $uri, $vocab);
+		$data['notation'] = $data['prefLabel'] = $data['r']->{'result'}->{'primaryTopic'}->{'notation'};
 		$data['vocab'] = $vocab;
 
-		//var_dump($data['r']);
-
-		$this->load->model('solr');
-		$fields = array(
-			'q'=>'broader_subject_value_unresolved:("'.$num.'")','version'=>'2.2','start'=>'0','rows'=>'100','indent'=>'on', 'wt'=>'json',
-			'fl'=>'key', 'q.alt'=>'*:*'
-		);
-		$json = $this->solr->fireSearch($fields, '');
-		$data['narrower_search_result'] = $json;
-
-		$this->load->model('solr');
-		$fields = array(
-			'q'=>'subject_value_unresolved:("'.$num.'")','version'=>'2.2','start'=>'0','rows'=>'100','indent'=>'on', 'wt'=>'json',
-			'fl'=>'key', 'q.alt'=>'*:*'
-		);
-		$json = $this->solr->fireSearch($fields, '');
-		$data['search_result'] = $json;
-
 		$data['prefLabel'] = $data['r']->{'result'}->{'primaryTopic'}->{'prefLabel'}->{'_value'};
+		$data['uri']=$data['r']->{'result'}->{'primaryTopic'}->{'_about'};
 		$this->load->view('vocab/conceptDetail', $data);
 	}
 
 	function loadBigTree(){
 		$this->load->model('vocabularies', 'vmodel');
-		$data['bigTree']=$this->vmodel->getBigTree($this->config->item('vocab_resolver_service'));
+		$selected['uri'] = strtolower($_GET["selected_node"]);
+		$selected['vocab'] = strtolower($_GET["selected_vocab"]);
+		if($selected['uri']!='root'){
+			$broaders = $this->getBroader($selected);
+			$data['bigTree']=$this->vmodel->getBigTree($this->config->item('vocab_resolver_service'),$broaders);
+		}else{
+			$data['bigTree']=$this->vmodel->getBigTree($this->config->item('vocab_resolver_service'));
+		}
+		
 		echo $data['bigTree'];
+	}
+
+	function vocabSearchResult($type, $page=1){
+		$q = '';
+		$row = 5;$start=0;
+		if($page!=1) $start = ($page - 1) * $row;
+		$uri = $this->input->post('uri');
+		//echo $uri;
+		if($type=='exact'){
+			$q = 'subject_vocab_uri:("'.$uri.'")';
+		}elseif($type=='narrower'){
+			$q = 'broader_subject_vocab_uri:("'.$uri.'")';
+		}
+		$q.=' +class:collection';
+		$this->load->model('solr');
+		$fields = array(
+			'q'=>$q,'version'=>'2.2','start'=>$start,'rows'=>$row,'indent'=>'on', 'wt'=>'json',
+			'fl'=>'key, list_title, url_slug, description_value', 'q.alt'=>'*:*'
+		);
+		$json = $this->solr->fireSearch($fields, '');
+		$data['search_result'] = $json;
+		$data['type']= $type;
+		$data['page']= $page;
+		$this->load->view('vocab/minisearch', $data);
+	}
+
+	function vocabAutoComplete(){
+		$term = strtolower($_GET["term"]);
+		$this->load->model('vocabularies', 'vmodel');
+		$data['result']=$this->vmodel->labelContain($this->config->item('vocab_resolver_service'), $term);
+
+		$json_result = array();
+		foreach($data['result'] as $key=>$vocab_result){
+			foreach($vocab_result as $item){
+				array_push($json_result, array('label'=>$item['prefLabel'], 'uri'=>$item['uri'], 'vocab'=>$key));
+			}
+		}
+		echo array_to_json($json_result);
+	}
+
+	function getBroader($selected){
+		$this->load->model('vocabularies', 'vmodel');
+		$parents = array();
+		array_push($parents, $selected['uri']);
+		$parents = $this->vmodel->getBroader($this->config->item('vocab_resolver_service'), $selected['uri'], $selected['vocab'], $parents);
+		return $parents;
+	}
+
+	function reloadTree(){
+		$selected['uri'] = strtolower($_GET["selected_uri"]);
+		$selected['vocab'] = strtolower($_GET["selected_vocab"]);
+		$this->load->model('vocabularies', 'vmodel');
+		$broaders = $this->getBroader($selected);
+		$data['tree'] = $this->vmodel->sloadTree($this->config->item('vocab_resolver_service'), $selected, $broaders);
+		echo $data['tree'];
 	}
 
 }

@@ -393,7 +393,14 @@
 					<xsl:attribute name="class">loading-icon</xsl:attribute>
 					<xsl:attribute name="alt">Loading…</xsl:attribute>
 					</img>
-				</div>
+					</div>
+				<div id="seeAlsoDataCite">
+					<img>
+					<xsl:attribute name="src"><xsl:value-of select="$base_url"/><xsl:text>/img/ajax-loader.gif</xsl:text></xsl:attribute>
+					<xsl:attribute name="class">loading-icon</xsl:attribute>
+					<xsl:attribute name="alt">Loading…</xsl:attribute>
+					</img>
+				</div>				
 				</div>
 			</xsl:if>
 			

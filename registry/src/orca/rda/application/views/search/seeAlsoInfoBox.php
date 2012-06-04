@@ -24,7 +24,7 @@ limitations under the License.
 <?php
 foreach($json->{'response'}->{'docs'} as $r)
 {
-	echo '<h3><a href="#">'.$r->{'listTitle'}.'</a></h3>';
+	echo '<h3><a href="#">'.$r->{'list_title'}.'</a></h3>';
 	$something = '';
 	echo '<div>';
 	if(isset($r->{'description_type'})){
@@ -44,7 +44,7 @@ foreach($json->{'response'}->{'docs'} as $r)
 	if(isset($r->{'subject_type'})){
 		echo '<ul class="subjects">';
 		foreach($r->{'subject_type'} as $index=>$subject_type){
-			echo '<li><a href="javascript:void(0);" class="subjectFilter" id="'.$r->{'subject_value'}[$index].'">'.$r->{'subject_value'}[$index].'</a></li>';
+			echo '<li><a href="javascript:void(0);" class="subjectFilter" id="'.$r->{'subject_value_resolved'}[$index].'">'.$r->{'subject_value_resolved'}[$index].'</a></li>';
 		}
 		echo '</ul>';
 		echo '<hr/>';

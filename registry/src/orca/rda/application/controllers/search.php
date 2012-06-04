@@ -145,6 +145,25 @@ class Search extends CI_Controller {
         	$this->load->view('search/seeAlsoInfoBox', $data);
         }
 	}
+	public function seeAlsoDataCite($type="count", $seeAlsoTitle='title'){//for rda see also
+
+        $this->load->model('datacitesolr');
+        $query = $this->input->post('q');
+        $page = $this->input->post('page');
+        $data['json']=$this->datacitesolr->search($query, 'json', $page);
+	
+		$data['numfound']=0;		
+		if(isset($data['json']->{'response'}->{'numFound'}))$data['numfound'] = $data['json']->{'response'}->{'numFound'};
+      	//$data['seeAlsoType'] = $seeAlsoTitle;
+      	//echo "a hit <br />";
+
+        if($type=='count'){
+        	$this->load->view('search/seeAlsoDataCite', $data);
+        }elseif($type=='content'){
+        	$this->load->view('search/seeAlsoDataCiteInfoBox', $data);
+        }
+	}	
+	
 	
 	public function seeAlsoOLD(){
 		echo 'testing';
