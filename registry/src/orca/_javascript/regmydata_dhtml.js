@@ -1205,7 +1205,7 @@ function saveAndPreview() {
 		   );
 			$('#rifcs_popup').hide();
 		});
-		
+	
 	}else{
 		if($('#rda_preview_container').length > 0){
 			$('#rda_preview_container').remove();	
@@ -1319,32 +1319,18 @@ function saveAndPreview() {
 										) : '') 			
 								+ '<br/><br/>').addClass("success_notification");	
 					}
-					if(qualityLevel == 4)
-					{
-						$("#qa_level_notification").html('<div class="ql'+ qualityLevel +'" style="float:left;">' +
-						'Level 4 Record - Congratulations! This record exceeds the Minimum Metadata Content Requirements  and provides enough information to enable reuse.'+
-						'</div>');
-					
-					}
-					else if(qualityLevel == 3)
-					{
-						$("#qa_level_notification").html('<div class="ql'+ qualityLevel +'" style="float:left;">' +
-								'Level 3 Record - Congratulations! This record satisfies the Minimum  Metadata Content Requirements  enabling discovery and access to collections.'+
-								'</div>');
-					}
-					else if(qualityLevel == 2)
-					{
-						$("#qa_level_notification").html('<div class="ql'+ qualityLevel +'" style="float:left;">' +
-								'Level 2 Record - This record meets some of the Metadata Content Requirements. The record may facilitate discovery, but does not comply with the Minimum  Metadata Content Requirements.'+
-								'</div>');
+
+					var qualityLevelText = new Array();
+					qualityLevelText[1] = 'This record does not meet any of the Metadata Content Requirements. The record does not contain enough information for discovery, and will be considered a placeholder or test.';
+					qualityLevelText[2] = 'This record meets some of the Metadata Content Requirements. The record may facilitate discovery, but does not comply with the Minimum  Metadata Content Requirements.';
+					qualityLevelText[3] = 'Congratulations! This record satisfies the Minimum  Metadata Content Requirements  enabling discovery and access to collections.';
+					qualityLevelText[4] = 'Congratulations! This record exceeds the Minimum Metadata Content Requirements  and provides enough information to enable reuse.';
+
+				
+					var ql_result = '<div id="ql_result"><div class="ql_num ql'+qualityLevel+'">Level '+qualityLevel+' Record</div><div class="ql_explain">'+qualityLevelText[qualityLevel]+'</div><div class="clearfix"></div></div>';
+					$('#qa_level_notification').html(ql_result);
 						
-					}
-					else
-					{
-						$("#qa_level_notification").html('<div class="ql'+ qualityLevel +'" style="float:left;">' +
-								'Level '+ qualityLevel +' Record - This record does not meet any of the Metadata Content Requirements. The record does not contain enough information for discovery, and will be considered a placeholder or test.'+
-								'</div>');
-					}
+					
 					// Validate DateTime strings
 					$('.dateTimeField').each(function(){
 
@@ -1406,7 +1392,8 @@ function saveAndPreview() {
 					//alert($('#object_mandatoryInformation_dataSource').val());
 					$.get(rootAppPath + "orca/manage/get_view.php?view=tipQA&key=&status="+ encodeURIComponent($('#status_span').val()) +"&ds="+encodeURIComponent($('#object_mandatoryInformation_dataSource').val())+"&key="+ encodeURIComponent($('#object_mandatoryInformation_key').val()),
 							function(data) {
-									$("#qa_preview").html(data);						
+									$("#qa_preview").html(data);		
+									initQADisplay();				
 								},
 							'html');
 					//displayQuagmireSummary();
@@ -1420,6 +1407,48 @@ function saveAndPreview() {
 		}
 	);
 
+}
+
+function initQADisplay(){
+	//stupid import registry objects
+	$('.qa_ok').addClass('aro_qa_ok');
+	$('.aro_qa_ok').removeClass('qa_ok');
+	$('.qa_error').addClass('aro_qa_error');
+	$('.aro_qa_error').removeClass('qa_error');
+
+	//wrap around the current QL with a div
+	var qa = $('#qa_level_results');
+	for(var i=0;i<=4;i++){
+		$('*[level='+i+']', qa).wrapAll('<div class="aro_qa_container" qld="'+i+'"></div>');
+	}
+	//add the toggle header
+	$('.aro_qa_container', qa).prepend('<div class="toggleQAtip"></div>');
+	$('.toggleQAtip', qa).each(function(){
+		$(this).text('Quality Level ' +$(this).parent().attr('qld'));
+	});
+	//hide all qa
+	$('.aro_qa_container', qa).each(function(){
+		$(this).children('.aro_qa_ok, .aro_qa_error').hide();
+	});
+	//show the first qa that has error
+	var showThisQA = $('.aro_qa_error:first', qa).parent();
+	$(showThisQA).children().show();
+	//coloring the qa that has error, the one that doesn't have error will be the default one
+	$('.aro_qa_container', qa).each(function(){
+		if($(this).children('.aro_qa_error').length>0){//has an error
+			$(this).addClass('aro_error');
+		}else{
+			$(this).addClass('aro_success');
+		}
+	});
+	//bind the toggle header to open all the qa inside
+	$('.toggleQAtip', qa).click(function(){
+		$(this).parent().children('.aro_qa_ok, .aro_qa_error').slideToggle('fast', function(){
+			
+		});
+	});
+	$('.aro_qa_ok').addClass('aro_success');
+	$('.aro_qa_error').addClass('aro_error');
 }
 
 function saveRegistryObject(){

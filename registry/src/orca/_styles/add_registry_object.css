@@ -304,39 +304,23 @@ textarea {
     margin:10px;
 }
 
-.qa_ok
-{
-display:block;
-padding-left:30px;
-color:white;
-}
+#ql_result{border:1px solid #ccc;}
+.ql_num{float:left;width:15%;height:40px;line-height:40px;padding:5px;text-align:center;}
+.ql_explain{float:left;width:80%;height:40px;padding:5px;}
+.aro_qa_container{border:1px solid black;margin:4px 1px;padding:7px;}
+.aro_qa_ok, .aro_qa_error{display:block;border:1px solid;margin: 3px auto;padding: 12px 1px 12px 25px;}
+.aro_error{color: #9F6000;background: #FEEFB3 url('../_images/delete_16.png') no-repeat 5px 14px;}
+.aro_success{color: #4F8A10;background: #DFF2BF url('../_images/check_16.png') no-repeat 5px 14px;}
+.toggleQAtip{cursor:pointer;padding: 7px 3px 7px 15px;}
 
-.qa_error 
-{
-display:block;
-padding-left:30px;
-color:white;
-}
-
-.qa_error[level='0'] {background:#89CEDE url(../_images/error_icon2.png) no-repeat;}
-.qa_error[level='1'] {background:#F06533 url(../_images/error_icon2.png) no-repeat;}
-.qa_error[level='2'] {background:#F2CE3B url(../_images/error_icon2.png) no-repeat;}
-.qa_error[level='3'] {background:#6DA539 url(../_images/error_icon2.png) no-repeat;}
-.qa_error[level='4'] {background:#4491AB url(../_images/error_icon2.png) no-repeat;}
-
-.qa_ok[level='0'] {background:#89CEDE url(../_images/tick-icon.png) no-repeat;}
-.qa_ok[level='1'] {background:#F06533 url(../_images/tick-icon.png) no-repeat;}
-.qa_ok[level='2'] {background:#F2CE3B url(../_images/tick-icon.png) no-repeat;}
-.qa_ok[level='3'] {background:#6DA539 url(../_images/tick-icon.png) no-repeat;}
-.qa_ok[level='4'] {background:#4491AB url(../_images/tick-icon.png) no-repeat;}
 
 #qa_level_results{margin:4px 1px;padding:7px;}
 
-div.ql4{background:#4491AB;color:white; border: 1px solid; padding: 15px 10px 15px 15px; margin:10px;}
-div.ql3{background:#6DA539;color:white; border: 1px solid; padding: 15px 10px 15px 15px; margin:10px;}
-div.ql2{background:#F2CE3B;color:white; border: 1px solid; padding: 15px 10px 15px 15px; margin:10px;}
-div.ql1{background:#F06533;color:white; border: 1px solid; padding: 15px 10px 15px 15px; margin:10px;}
-div.ql0{background:#89CEDE;color:black; border: 1px solid; padding: 15px 10px 15px 15px; margin:10px;}
+div.ql4{background:#4491AB;color:white;}
+div.ql3{background:#6DA539;color:white;}
+div.ql2{background:#F2CE3B;color:white;}
+div.ql1{background:#F06533;color:white;}
+div.ql0{background:#89CEDE;color:black;}
 
 #rda_preview, #rda_preview_xml{
  border: 2px outset;
