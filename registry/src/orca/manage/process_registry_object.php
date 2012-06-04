@@ -115,12 +115,16 @@ else if($task ==  'flag_regobj')
 		include('_processes/flag_regobj.php');
 	}
 
-if($task ==  'flag_draft' || $task ==  'recover_record' || $task == 'save' || $task == 'validate')
+if($task ==  'flag_draft' || $task ==  'recover_record' || $task == 'validate')
 {
 	$result = addDraftToSolrIndex($keyValue);
-	//echo "INDEXED";
-	//exit();	
-}	
+}
+	
+if($task ==  'delete' || $task ==  'add')
+{
+	$hash = sha1($keyValue.$dataSourceValue);
+	$result = deleteSolrHashKey($hash);
+}
 	
 require '../../_includes/finish.php';
 
@@ -331,6 +335,12 @@ function addDraftToSolrIndex($registryObjectKey, $commit=true)
 	}
 	return $result;
 }
+
+function deleteSolrHashKey($hashkey)
+{
+	return curl_post(gSOLR_UPDATE_URL.'?commit=true', '<delete><id>'.$hashkey.'</id></delete>');
+}
+
 
 function unwrapRegistryObject($rifcsString)
 {
