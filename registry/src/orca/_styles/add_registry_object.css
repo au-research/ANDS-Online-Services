@@ -275,13 +275,6 @@ textarea {
 }
 
 #rda_preview_container {
-	background-color: #ffffff;
-    /*background-image: url("../_images/message_icon.png"); */
-    color: #00529B;
-    border: 1px solid;
-    padding: 15px 10px 15px 15px;
-   /* background-position: 10px 10px;
-    background-repeat: no-repeat; */
     margin:10px;
 }
 
@@ -310,12 +303,39 @@ textarea {
     background-repeat: no-repeat; */
     margin:10px;
 }
-    
 
-div.ql4{background:#8064a2;color:white; border: 1px solid; padding: 15px 10px 15px 15px; margin:10px;}
-div.ql3{background:#9bbb59;color:white; border: 1px solid; padding: 15px 10px 15px 15px; margin:10px;}
-div.ql2{background:#c0504c;color:white; border: 1px solid; padding: 15px 10px 15px 15px; margin:10px;}
-div.ql1{background:#4f81bd;color:white; border: 1px solid; padding: 15px 10px 15px 15px; margin:10px;}
+.qa_ok
+{
+display:block;
+padding-left:30px;
+color:white;
+}
+
+.qa_error 
+{
+display:block;
+padding-left:30px;
+color:white;
+}
+
+.qa_error[level='0'] {background:#89CEDE url(../_images/error_icon2.png) no-repeat;}
+.qa_error[level='1'] {background:#F06533 url(../_images/error_icon2.png) no-repeat;}
+.qa_error[level='2'] {background:#F2CE3B url(../_images/error_icon2.png) no-repeat;}
+.qa_error[level='3'] {background:#6DA539 url(../_images/error_icon2.png) no-repeat;}
+.qa_error[level='4'] {background:#4491AB url(../_images/error_icon2.png) no-repeat;}
+
+.qa_ok[level='0'] {background:#89CEDE url(../_images/tick-icon.png) no-repeat;}
+.qa_ok[level='1'] {background:#F06533 url(../_images/tick-icon.png) no-repeat;}
+.qa_ok[level='2'] {background:#F2CE3B url(../_images/tick-icon.png) no-repeat;}
+.qa_ok[level='3'] {background:#6DA539 url(../_images/tick-icon.png) no-repeat;}
+.qa_ok[level='4'] {background:#4491AB url(../_images/tick-icon.png) no-repeat;}
+
+#qa_level_results{margin:4px 1px;padding:7px;}
+
+div.ql4{background:#4491AB;color:white; border: 1px solid; padding: 15px 10px 15px 15px; margin:10px;}
+div.ql3{background:#6DA539;color:white; border: 1px solid; padding: 15px 10px 15px 15px; margin:10px;}
+div.ql2{background:#F2CE3B;color:white; border: 1px solid; padding: 15px 10px 15px 15px; margin:10px;}
+div.ql1{background:#F06533;color:white; border: 1px solid; padding: 15px 10px 15px 15px; margin:10px;}
 div.ql0{background:#89CEDE;color:black; border: 1px solid; padding: 15px 10px 15px 15px; margin:10px;}
 
 #rda_preview, #rda_preview_xml{

@@ -166,10 +166,8 @@ $(document).ready(function() {
 								$('#mmr_datasource_alert_msg').html(data['alert']);
 								$.blockUI({ message: $('#mmr_datasource_alert') }); 
 							}
-							
-							window.location.href = $("#baseURL").val() + "manage/my_records.php?data_source=" + encodeURIComponent($('#object_mandatoryInformation_dataSource').val());
 						}
-						
+						window.location.href = $("#baseURL").val() + "manage/my_records.php?data_source=" + encodeURIComponent($('#object_mandatoryInformation_dataSource').val());
 					},
 					'json'
 			);
@@ -1163,7 +1161,7 @@ function saveAndPreview() {
 	
 
 	$("#errors_preview").hide();	
-	$("#save_notification").remove();
+	//$("#save_notification").remove();
 
 	$(".rda_preview").attr("href",$("#baseURL").val() + 'rda/preview?ds='+$('#object_mandatoryInformation_dataSource').val()+'&key=' + $('#object_mandatoryInformation_key').val());
 
@@ -1171,20 +1169,17 @@ function saveAndPreview() {
 	if (userMode != 'readOnly')
 	{
 		var ds = $('#object_mandatoryInformation_dataSource').val();
-		$("#qa_level_notification").before("<div id='save_notification' class='save_notification'>This draft has been saved successfully.</div>");
-			
-		if($('#rda_preview_container').length > 0){
-			$('#rda_preview_container').remove();	
-		}
-		$("#qa_level_notification").after(
-							"<div style='border:none;' id='rda_preview_container'>" +
-							"<a style='margin-left:10px;float:right;' id='rda_preview_xml' href='#'>View RIF-CS </a>" +
-							"<a style='float:right;' id='rda_preview' class='rda_preview' href='#' target='_blank'>" +
-							"<img style='padding: 0px 3px;float: left;' src='"+rootAppPath+"orca/_images/globe.png' /> Preview in Research Data Australia</a></div>" +
-									"<div id='rifcs_plain' class='hide'><img src='"+rootAppPath+"orca/_images/delete_16.png' class='closeBlockUI' style='float:right;'/>" +
-											"<textarea id='rifcs_plain_content'></textarea>" +
-											"</div>");
+		$("#save_notification").html("<div>This draft has been saved successfully.</div>");
 		
+		$("#rda_preview_container").html("<a style='margin-left:10px;float:right;' id='rda_preview_xml' href='#'>View RIF-CS </a>" +
+				"<a style='float:right;' id='rda_preview' class='rda_preview' href='#' target='_blank'>" +
+				"<img style='padding: 0px 3px;float: left;' src='"+rootAppPath+"orca/_images/globe.png' /> Preview in Research Data Australia</a>" +
+						"<div id='rifcs_plain' class='hide'><img src='"+rootAppPath+"orca/_images/delete_16.png' class='closeBlockUI' style='float:right;'/>" +
+								"<textarea id='rifcs_plain_content'></textarea>" +
+								"</div>");
+			
+
+
 		$(".rda_preview").attr("href",$("#baseURL").val() + 'rda/preview?ds='+$('#object_mandatoryInformation_dataSource').val()+'&key=' + $('#object_mandatoryInformation_key').val());			
 		
 		$('#rda_preview_xml').click(function(){
@@ -1220,7 +1215,7 @@ function saveAndPreview() {
 			//if it's not there, create it so that we can append the preview
 			$("#errors_preview").after('<div class="info_notification" id="infos_preview"></div>');
 		}
-		$("#qa_level_notification").after(
+		$("#save_notification").after(
 				"<div style='border:none;' id='rda_preview_container'>" +
 				"<a style='margin-left:10px;float:right;' id='rda_preview_xml' href='#'>View RIF-CS </a>" +
 				"<a style='float:right;' id='rda_preview' class='rda_preview' href='#' target='_blank'>" +
@@ -1408,8 +1403,13 @@ function saveAndPreview() {
 					$('.relatedObjectKey').each(function(){
 						testRelatedKey(this.id);
 					});
-					
-					displayQuagmireSummary();
+					//alert($('#object_mandatoryInformation_dataSource').val());
+					$.get(rootAppPath + "orca/manage/get_view.php?view=tipQA&key=&status="+ encodeURIComponent($('#status_span').val()) +"&ds="+encodeURIComponent($('#object_mandatoryInformation_dataSource').val())+"&key="+ encodeURIComponent($('#object_mandatoryInformation_key').val()),
+							function(data) {
+									$("#qa_preview").html(data);						
+								},
+							'html');
+					//displayQuagmireSummary();
 ////console.log("qaRequired2: " + qaRequired);
 					
 				}
@@ -2381,6 +2381,8 @@ function quagmire_trigger (name, msg)
 
 function displayQuagmireSummary()
 {	
+	
+	
 	var reqCount = quagmire_getNumTriggered(REQUIRED);
     var recCount = quagmire_getNumTriggered(RECOMMENDED);
 
