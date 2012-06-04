@@ -948,11 +948,21 @@
 		//set bDiv
 		g.bDiv.className = 'bDiv';
 		$(t).before(g.bDiv);
-		$(g.bDiv).css({
+		
+		if ($.browser.msie) {
+			$(g.bDiv).css({
+				height: (p.height == 'auto') ? 'auto' : p.height
+			}).scroll(function (e) {
+				g.scroll()
+			}).append(t);
+		}else{
+			$(g.bDiv).css({
 			height: (p.height == 'auto') ? 'auto' : p.height + "px"
-		}).scroll(function (e) {
-			g.scroll()
-		}).append(t);
+			}).scroll(function (e) {
+				g.scroll()
+			}).append(t);
+		}
+
 		if (p.height == 'auto') {
 			$('table', g.bDiv).addClass('autoht');
 		}

@@ -85,6 +85,7 @@ class Vocab extends CI_Controller {
 			'q'=>$q,'version'=>'2.2','start'=>$start,'rows'=>$row,'indent'=>'on', 'wt'=>'json',
 			'fl'=>'key, list_title, url_slug, description_value', 'q.alt'=>'*:*'
 		);
+		//var_dump($fields);
 		$json = $this->solr->fireSearch($fields, '');
 		$data['search_result'] = $json;
 		$data['type']= $type;

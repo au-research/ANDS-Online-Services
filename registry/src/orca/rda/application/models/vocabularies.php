@@ -75,7 +75,7 @@ class Vocabularies extends CI_Model {
 			if(!$hasNarrower){
 				$class = 'jstree-leaf';
 			}else $class = 'jstree-closed';
-			$r.='<li><a href="javascript:void(0);" class="getConcept" uri="'.$item->{'_about'}.'" notation="'.$notation.'" vocab="'.$vocab.'">'.$item->{'prefLabel'}->{'_value'}.'</a>';
+			$r.='<li><a href="javascript:void(0);" class="getConcept" uri="'.$item->{'_about'}.'" notation="'.$notation.'" vocab="'.$vocab.'">'.$item->{'prefLabel'}->{'_value'}.' ('.$this->getNumCollections($item->{'_about'}).')'.'</a>';
 				if($hasNarrower){
 					$r.='<ul>';
 					$r.='<li><a class="jstree-loading">Loading...</a></li>';
@@ -136,7 +136,7 @@ class Vocabularies extends CI_Model {
 			if($selected['uri']==$concept['uri']){
 				$selected_class.=' jstree-clicked';
 			}else $selected_class = '';
-			$r.='<li class="'.$class.'"><a href="javascript:void(0);" class="getConcept'.$selected_class.'"  uri="'.$concept['uri'].'" vocab="'.$vocab.'">'.$concept['prefLabel'].'</a>';
+			$r.='<li class="'.$class.'"><a href="javascript:void(0);" class="getConcept'.$selected_class.'"  uri="'.$concept['uri'].'" vocab="'.$vocab.'">'.$concept['prefLabel'].' ('.$this->getNumCollections($concept['uri']).')'.'</a>';
 			if($hasNarrower){
 				$r.= '<ul>'.$this->htmlDrillDown($vocab, $concept['narrower'], $selected, $vocab_uri).'</ul>';
 			}else{
@@ -168,7 +168,7 @@ class Vocabularies extends CI_Model {
 			if($selected['uri']==$concept['uri']){
 				$selected_class.=' jstree-clicked';
 			}else $selected_class = '';
-			$r.='<li class="'.$class.'"><a href="javascript:void(0);" class="getConcept '.$selected_class.'"  uri="'.$concept['uri'].'" vocab="'.$vocab.'">'.$concept['prefLabel'].'</a>';
+			$r.='<li class="'.$class.'"><a href="javascript:void(0);" class="getConcept '.$selected_class.'"  uri="'.$concept['uri'].'" vocab="'.$vocab.'">'.$concept['prefLabel'].' ('.$this->getNumCollections($concept['uri']).')'.'</a>';
 			if($hasNarrower){
 				$r.= '<ul>'.$this->htmlDrillDown($vocab, $concept['narrower'], $selected, $vocab_uri).'</ul>';
 			}else{
@@ -266,7 +266,7 @@ class Vocabularies extends CI_Model {
 		$r.='<li class="'.$class.' conceptRoot" order="'.$order.'" vocab="'.$vocab.'"><a href="#">'.$tree['topLabel'].'</a>';
 		$r.='<ul>';
 		foreach($tree['topConcepts'] as $topConcept){
-			$r.='<li class="closed"><a href="javascript:void(0);" class="getConcept"  uri="'.$topConcept['uri'].'" notation="'.$topConcept['notation'].'" vocab="'.$vocab.'">'.$topConcept['prefLabel'].'</a>';
+			$r.='<li class="closed"><a href="javascript:void(0);" class="getConcept"  uri="'.$topConcept['uri'].'" notation="'.$topConcept['notation'].'" vocab="'.$vocab.'">'.$topConcept['prefLabel'].' ('.$topConcept['collectionNum'].')'.'</a>';
 				$r.='<ul>';
 				$r.='<li><a class="jstree-loading">Loading...</a></li>';
 				$r.='</ul>';
@@ -293,6 +293,7 @@ class Vocabularies extends CI_Model {
 			$c['notation'] = $resolved_concept->{'result'}->{'primaryTopic'}->{'notation'};
 			$c['prefLabel'] = $resolved_concept->{'result'}->{'primaryTopic'}->{'prefLabel'}->{'_value'};
 			$c['uri'] = $resolved_concept->{'result'}->{'primaryTopic'}->{'_about'};
+			$c['collectionNum'] = $this->getNumCollections($c['uri']);
 			
 			//var_dump($c);
 			$tree['topConcepts'][] = $c;
@@ -360,6 +361,42 @@ class Vocabularies extends CI_Model {
 			$result[$key] = $results;
 		}
 		return $result;
+	}
+
+	//get the total number of collection that has this subject_vocab_uri
+	//this is from SOLR
+	function getNumCollections($uri){
+		$fields = array(
+			'q'=>'+subject_vocab_uri:("'.$uri.'") +class:collection','version'=>'2.2','start'=>'0','rows'=>'1', 'wt'=>'json',
+			'fl'=>'hash_key'
+		);
+		/*prep*/
+		$fields_string='';
+		//foreach($fields as $key=>$value) { $fields_string .= $key.'='.str_replace("+","%2B",$value).'&'; }//build the string
+		foreach($fields as $key=>$value) { 
+			$fields_string .= $key.'='.$value.'&'; 				
+		}//build the string
+    	$fields_string .= '&facet=true&facet.field=class';//add the facet bits
+    	$fields_string = rtrim($fields_string,'&');
+	
+    	$ch = curl_init();
+    	$solr_url = $this->config->item('solr_url');
+    	//set the url, number of POST vars, POST data
+		curl_setopt($ch,CURLOPT_URL,$solr_url.'select');//post to SOLR
+		curl_setopt($ch,CURLOPT_POST,count($fields));//number of POST var
+		curl_setopt($ch,CURLOPT_POSTFIELDS,$fields_string);//post the field strings
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);//return to variable
+    	$content = curl_exec($ch);//execute the curl
+    	
+    	//echo 'json received+<pre>'.$content.'</pre>';
+		curl_close($ch);//close the curl
+		
+		
+		
+		$json = json_decode($content);
+		$num = $json->{'response'}->{'numFound'};
+		//echo  "*********".$content;
+		return $num;
 	}
 }
 ?>

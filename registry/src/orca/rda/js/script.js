@@ -32,11 +32,11 @@ $(document).ready(function(){
 	if(enableWarning) $('body').prepend(warningDiv);
 
 	//router
-	/*if(window.location.href.indexOf('https://')==0){
+	if(window.location.href.indexOf('https://')==0){
 		var thisurl = window.location.href;
 		thisurl = thisurl.replace('https://','http://');
 		window.location.href=thisurl;
-	}*/
+	}
 		
 	/*
 	if(window.location.href.indexOf('/view')>=0){
@@ -82,7 +82,20 @@ $(document).ready(function(){
 
 	function initVocabPage(){
 		loadBigTree('http://purl.org/au-research/vocabulary/anzsrc-for/2008/0102', 'anzsrc-for');
-		$("#search-vocab-field" ).autocomplete( {
+		$.widget( "custom.vocabcomplete", $.ui.autocomplete, {
+			_renderMenu: function( ul, items ) {
+				var self = this,
+					currentVocab = "";
+				$.each( items, function( index, item ) {
+					if ( item.vocab != currentVocab ) {
+						ul.append( "<li class='ui-autocomplete-category'>" + item.vocab + "</li>" );
+						currentVocab = item.vocab;
+					}
+					self._renderItem( ul, item );
+				});
+			}
+		});
+		$("#search-vocab-field" ).vocabcomplete( {
 			source: base_url+"vocab/vocabAutoComplete/",
 			minLength: 2,
 			delimiter:/(,|;)\s*/,

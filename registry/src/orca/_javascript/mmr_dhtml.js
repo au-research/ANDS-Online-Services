@@ -169,11 +169,11 @@ $(document).ready(function() {
 
     function drawBarChart(status, ds){
     	var chartData = new google.visualization.DataTable();
+    	var get_view = 'get_view.php?view=StatusAllQA&status='+status+'&ds='+ds;
+    	
 		$.ajax({
-    		url: 'get_view.php?view=StatusAllQA&status='+status+'&ds='+ds,
+    		url: get_view,
     		method: 'get',
-    		dataType:'json',
-    		contentType: "application/json", //tell the server we're looking for json
     		cache: false, // don't cache the result
     		success: function(data) {
 
@@ -316,7 +316,6 @@ $(document).ready(function() {
         });
     }
 
-
 	$('.mmr_table').each(function(){
 		var status = $(this).attr('status');
 		var ql = $(this).attr('ql');
@@ -412,8 +411,7 @@ $(document).ready(function() {
             onSuccess: hideInfo
 		});
 		if(count=='0'){
-			$(this).parent().parent().find('.ptogtitle').click();
-			//console.log(count);
+			$(this).parent().parent().find('.ptogtitle').click();	
 		}
 	});
 

@@ -254,7 +254,7 @@ function searchRecords($status){
 STATUS COUNT
 **/
 function statusCount($status){
-	header("Content-type: application/javascript");
+	header("Content-type: application/json; charset=UTF-8");
 	global $dataSourceKey, $solr_url;
 	$q = '+data_source_key:("'.$dataSourceKey.'")';
 	if($status!='All'){
@@ -270,7 +270,7 @@ function statusCount($status){
 }
 
 function StatusAllQA($status, $dataSourceKey){
-	header("Content-type: application/javascript");
+	header("Content-type: application/json; charset=UTF-8");
 	global $dataSourceKey, $solr_url;
 	$q = '+data_source_key:("'.$dataSourceKey.'")';
 	if($status!='All') $q.='+status:("'.$status.'")';

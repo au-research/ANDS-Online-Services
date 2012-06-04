@@ -673,3 +673,11 @@ display:block;
  .vocab-info-table tbody{vertical-align:top;}
  .vocab-info-table td{min-width:120px;}
  #exact_search_result, #narrower_search_result{margin: 15px auto;}
+ .ui-autocomplete-category { font-weight: bold;padding: .2em .4em;margin: .8em 0 .2em;line-height: 1.5;}
+ .ui-autocomplete {max-height: 200px;overflow-y: auto; overflow-x: hidden;padding-right: 20px;}
+/* IE 6 doesn't support max-height
+ * we use height instead, but this forces the menu to always be this tall
+ */
+* html .ui-autocomplete {
+    height: 200px;
+}
