@@ -16,9 +16,11 @@ limitations under the License.
 // Include required files and initialisation.
 //session_start();
 //$_SESSION["timeout"] += 30000;
+
 require '../../_includes/init.php';
 require '../orca_init.php';
 require '../_functions/assoc_array2xml.php';
+
 
 
 $task = getQueryValue('task');
@@ -113,7 +115,12 @@ else if($task ==  'flag_regobj')
 		include('_processes/flag_regobj.php');
 	}
 
-	
+if($task ==  'flag_draft' || $task ==  'recover_record' || $task == 'save' || $task == 'validate')
+{
+	$result = addDraftToSolrIndex($keyValue);
+	//echo "INDEXED";
+	//exit();	
+}	
 	
 require '../../_includes/finish.php';
 
@@ -173,11 +180,11 @@ function saveDraftRegistryObject($rifcs, $objectClass, $dataSource ,$keyValue, $
 	}
 	
 	
-	$qualityTestResult = runQualityCheck($rifcs,$objectClass, $draft_data_source, 'html');
-	$errorCount = substr_count($qualityTestResult, 'class="error"');                              
-	$warningCount = substr_count($qualityTestResult, 'class="warning"') + substr_count($qualityTestResult, 'class="info"');   
+	$qualityTestResult = '';
+	$errorCount = '0';                              
+	$warningCount = '0';   
 	insertDraftRegistryObject($draft_owner, $draft_key, $draft_class, $draft_group, $draft_type, $title, $draft_data_source, $date_created, $date_modified, $rifcs, $qualityTestResult, $errorCount, $warningCount, $status);
-	
+	runQualityLevelCheckForDraftRegistryObject($draft_key, $draft_data_source);
 	// Maintain the flagged status
 	if ($flagged) 
 	{
@@ -188,8 +195,7 @@ function saveDraftRegistryObject($rifcs, $objectClass, $dataSource ,$keyValue, $
 	{
 		deleteDraftRegistryObject($dataSource, $keyValue);		
 	}
-
-	addSolrIndex($keyValue);
+    
 }
 
 
@@ -236,6 +242,107 @@ function rmdGetName($registryObjectKey)
 		}
 	}
 	return $name;
+}
+
+function addDraftToSolrIndex($registryObjectKey, $commit=true)
+{
+	$allKeys = getDraftRegistryObject($registryObjectKey , null);
+	$arraySize = sizeof($allKeys);
+	$result = '';
+	if($allKeys)
+	{
+		for($i = 0; $i < $arraySize ; $i++)
+		{				
+			$key = $allKeys[$i]['draft_key'];
+			$dataSourceKey = $allKeys[$i]['registry_object_data_source'];
+			$xml = "    <extRif:extendedMetadata key=\"".esc($key)."\">\n";			
+			$hash = sha1($key.$dataSourceKey);
+			if ($hash)
+			{
+				$xml .= "      <extRif:keyHash>".esc($hash)."</extRif:keyHash>\n";
+			}
+			$dataSource = getDataSources($dataSourceKey, null);
+			$allow_reverse_internal_links = $dataSource[0]['allow_reverse_internal_links'];
+			$allow_reverse_external_links = $dataSource[0]['allow_reverse_external_links'];
+			$hash = sha1($dataSourceKey);
+			if ($hash)
+			{
+				$xml .= "      <extRif:dataSourceKeyHash>".esc($hash)."</extRif:dataSourceKeyHash>\n";
+			}
+			$xml .= "      <extRif:status>".esc($allKeys[$i]['status'])."</extRif:status>\n";
+			$xml .= "      <extRif:dataSourceKey>".esc($dataSourceKey)."</extRif:dataSourceKey>\n";		
+			$reverseLinks = 'NONE';
+	
+			if($allow_reverse_internal_links == 't' && $allow_reverse_external_links == 't')
+			{
+				$reverseLinks = 'BOTH';
+			}
+			else if($allow_reverse_internal_links == 't')
+			{
+				$reverseLinks = 'INT';
+				
+			}
+			else if($allow_reverse_external_links == 't')
+			{
+				$reverseLinks = 'EXT';
+			}
+			$xml .= "      <extRif:reverseLinks>".$reverseLinks."</extRif:reverseLinks>\n";
+			
+			
+			// Get registry date modified			
+			if (!($registryDateModified =  $allKeys[$i]['date_modified']))
+			{
+					$registryDateModified = time(); // default to now
+			}
+			$xml .= "      <extRif:registryDateModified>".$registryDateModified."</extRif:registryDateModified>\n";
+	
+	
+	
+			// displayTitle
+			// -------------------------------------------------------------
+			$xml .= '      <extRif:displayTitle>'.esc(trim($allKeys[$i]['registry_object_title'])).'</extRif:displayTitle>'."\n";
+			
+			
+			// listTitle
+			// -------------------------------------------------------------
+			$xml .= '      <extRif:listTitle>'.esc(trim($allKeys[$i]['registry_object_title'])).'</extRif:listTitle>'."\n";
+			$xml .= '      <extRif:flag>'.($allKeys[$i]['flag'] == 'f' ? '0' : '1').'</extRif:flag>'."\n";
+			$xml .= '      <extRif:warning_count>'.esc(trim($allKeys[$i]['warning_count'])).'</extRif:warning_count>'."\n";
+			$xml .= '      <extRif:error_count>'.esc(trim($allKeys[$i]['error_count'])).'</extRif:error_count>'."\n";
+			//$xml .= '      <extRif:gold_status_flag>'.esc(trim($allKeys[$i]['gold_status_flag'])).'</extRif:gold_status_flag>'."\n";
+			$xml .= '      <extRif:quality_level>'.esc(trim($allKeys[$i]['quality_level'])).'</extRif:quality_level>'."\n";
+			$xml .= '      <extRif:feedType>'.($allKeys[$i]['draft_owner'] == 'SYSTEM' ? 'harvest' : 'manual').'</extRif:feedType>'."\n";
+			$xml .= "    </extRif:extendedMetadata>\n";		
+			$rifcsContent = unwrapRegistryObject($allKeys[$i]['rifcs']);	
+			$rifcsContent .= $xml;
+		}
+		$rifcs = wrapRegistryObjects($rifcsContent);
+		$solrrifcs = transformToSolr($rifcs);
+		//echo $solrrifcs;
+		if (strlen($solrrifcs) == 0)
+		{
+			echo "<font style='color:red'>".$rifcs."</font>";
+		}				
+		else
+		{					
+			$result = curl_post(gSOLR_UPDATE_URL, $solrrifcs);
+			$result .= curl_post(gSOLR_UPDATE_URL.'?commit=true', '<commit waitFlush="false" waitSearcher="false"/>');
+		}
+	}
+	return $result;
+}
+
+function unwrapRegistryObject($rifcsString)
+{
+	$registryObjects = new DOMDocument();
+	$result = $registryObjects->loadXML($rifcsString);
+	if(!$result)
+	{
+	$error = error_get_last();
+	echo "<font style='color:red'>".$error['message']."</font>";
+	}
+	$ro = $registryObjects->getElementsByTagName("registryObject")->item(0);
+    return $registryObjects->saveXML($ro);
 }
 
 ?>

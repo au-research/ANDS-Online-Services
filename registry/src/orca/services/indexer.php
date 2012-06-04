@@ -251,7 +251,7 @@ function addDraftToSolrIndex($registryObjectKey, $commit=true)
 			$xml .= '      <extRif:quality_level>'.esc(trim($allKeys[$i]['quality_level'])).'</extRif:quality_level>'."\n";
 			$xml .= '      <extRif:feedType>'.($allKeys[$i]['draft_owner'] == 'SYSTEM' ? 'harvest' : 'manual').'</extRif:feedType>'."\n";
 			$xml .= "    </extRif:extendedMetadata>\n";		
-			$rifcsContent .= unwrapRegistryObject($allKeys[$i]['rifcs']);	
+			$rifcsContent = unwrapRegistryObject($allKeys[$i]['rifcs']);	
 			$rifcsContent .= $xml;
 		}
 		$rifcs = wrapRegistryObjects($rifcsContent);
