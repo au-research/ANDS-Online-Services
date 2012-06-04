@@ -30,7 +30,7 @@ class Topics extends CI_Model {
 					"manual_boxes" => array(
 							array("heading"=>"Other Related Links",
 									"items"=> array(
-												array("url" => "https://eresearch.jcu.edu.au/tdh", "title"=>"The Tropical Data Hub"),
+												array("url" => "http://tropicaldatahub.org/", "title"=>"The Tropical Data Hub"),
 												array("url" => "http://www.nerptropical.edu.au/", "title"=>"NERP Tropical Ecosystems Hub"),
 												array("url" => "http://www.gbrmpa.gov.au/", "title"=>"Great Barrier Reef Marine Park Authority"),
 												array("url" => "http://www.rrrc.org.au/", "title"=>"Reef & Rainforest Research Centre"),

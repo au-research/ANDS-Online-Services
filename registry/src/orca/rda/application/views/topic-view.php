@@ -72,7 +72,7 @@ foreach($manual_boxes AS $box)
 			"<ul>";
 	foreach ($box['items'] AS $item):
 
-			echo "<li><a href='" . $item['url'] . "'>" . $item['title'] . "</a></li>";
+			echo "<li><a target='_blank' href='" . $item['url'] . "'>" . $item['title'] . "</a></li>";
 
 	endforeach;
 
