@@ -19,50 +19,30 @@ $(document).ready(function(){
 	// Load up fancybox image browser
 	$(".fancybox").fancybox();
 	
-	var enableWarning = false;
-	var warningMessage = 'this is DEMO <a href="javascript:void(0);" id="dismiss_warning">[x]</a>';
+	//================================
+	//		WARNING MESSAGE
+	//================================
+	var enableWarning = enable_warning_notices;
+	var warningMessage = warning_notices+' <a href="javascript:void(0);" id="dismiss_warning">[x]</a>';
 	var warningDiv = $('<div id="warningDiv"></div>');
 		$(warningDiv).css('opacity','0.8');
 	$(warningDiv).html(warningMessage);
-
 	$('#dismiss_warning').live('click', function(){
 		$('#warningDiv').fadeOut();
 	});
 
 	if(enableWarning) $('body').prepend(warningDiv);
 
-	//router
+	//RDA only uses http
+	if(window.location.href==secure_base_url){
+		window.location.href=base_url;
+	}
 	if(window.location.href.indexOf('https://')==0){
 		var thisurl = window.location.href;
 		thisurl = thisurl.replace('https://','http://');
 		window.location.href=thisurl;
 	}
 		
-	/*
-	if(window.location.href.indexOf('/view')>=0){
-		initViewPage();
-		if(window.location.href.indexOf('printview')>=0) initPrintViewPage();
-	}else if((window.location.href==base_url) || (window.location.href==base_url+'index.php')){
-		initHomePage();
-	}else if(window.location.href==secure_base_url){
-		window.location.href=base_url;
-	}else if(window.location.href.indexOf('search')>=0){
-		initSearchPage();
-	}else if(window.location.href.indexOf('contact')>=0){
-		initContactPage();
-	}else if(window.location.href.indexOf('help')>=0){
-		initHelpPage();
-	}else if(window.location.href.indexOf('preview')>=0){
-		initPreviewPage();
-	}
-	*/
-	if(window.location.href==secure_base_url)
-	{
-			window.location.href=base_url;
-	}
-	
-
-
 	var rda_activity_name = $('#rda_activity_name').text();
 	switch(rda_activity_name){
 		case 'view':initViewPage();break;
@@ -79,7 +59,6 @@ $(document).ready(function(){
 	
 	$('#clearSearch').tipsy({live:true, gravity:'se'});
 	
-
 	function initVocabPage(){
 		loadBigTree('http://purl.org/au-research/vocabulary/anzsrc-for/2008/0102', 'anzsrc-for');
 		$.widget( "custom.vocabcomplete", $.ui.autocomplete, {

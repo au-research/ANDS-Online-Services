@@ -17,10 +17,7 @@ limitations under the License.
 **/
 ?>
 </div>
-
-
-
-	</div>
+</div>
 
 <div id="footer" class="no_print">
 	<?php echo anchor('','Home');?> |
@@ -43,6 +40,8 @@ limitations under the License.
   		var base_url = "<?php echo base_url(); ?>";
   		var secure_base_url = "<?php echo getHTTPs(base_url());?>";
 		var service_url = "<?php echo service_url();?>";
+		var enable_warning_notices = "<?php echo $this->config->item('enable_warning_notices');?>";
+		var warning_notices = "<?php echo $this->config->item('warning_notices');?>";
 	</script>
 
 

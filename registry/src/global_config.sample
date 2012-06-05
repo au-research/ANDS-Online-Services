@@ -15,71 +15,79 @@ limitations under the License.
 */
 /*======================================
 	- Modify This File
-	- And the .htaccess file inside the RDA folder
 ======================================*/
 
 /*====================================
 	LOCAL WEB SERVER ENVIRONMENT
 ====================================*/
-$host 			= 'devl.ands.org.au';
-$default_protocol	= 'https';
-$cosi_root 		= 'workareas/minh/ands/registry/src';
-$orca_root 		= $cosi_root.'/orca';
-$rda_root 		= $orca_root.'/rda';
+$host 				= 'devl.ands.org.au';
+$default_protocol	= 'http';
+$cosi_root 			= 'workareas/minh/ands/registry/src';
+$orca_root 			= $cosi_root.'/orca';
+$rda_root 			= $orca_root.'/rda';
 
 //======================================
-$solr_url 		= 'http://devl.ands.org.au:8080/solr/';
-$datacite_solr_url = 'http://search.datacite.org/api';
+$solr_url 			= 'http://devl.ands.org.au:8080/solr1/';
+$datacite_solr_url 	= 'http://search.datacite.org/api';
+$harvest_url		= '';
 $harvester_ip 		= '';
-$pids_url		= "https://devl.ands.org.au:8443/pids/";
+$harvest_ip			= $harvester_ip;
+$pids_url			= "https://devl.ands.org.au:8443/pids/";
 $pids_app_id		= '';
 
-$harvest_url		= '';
-$harvest_ip		= '';
-
 //======================================
-$deploy_as		= 'PROD';
-$rda_environment	= 'production';
-$doi_environment	= 'production';
-$debug 			= false;
-$error 			= false;
-$maintenance 	= false;
+$deploy_as			= 'DEVELOPMENT';
+$rda_environment	= 'development';
+$doi_environment	= 'development';
+$debug 				= false;
+$error 				= false;
+
+/*====================================
+        DATABASE ENVIRONMENT
+====================================*/
+$cosi_db_host = 'devl.ands.org.au';
+$cosi_db_port = 5432;
+$cosi_db_name = 'dbs_develop_cosi';
+//======================================
+$orca_db_host = $cosi_db_host;
+$orca_db_port = $cosi_db_port;
+$orca_db_name = 'dbs_develop_orca';
+//======================================
+$pids_db_host = $cosi_db_host;
+$pids_db_port = $cosi_db_port;
+$pids_db_name = 'pids';
+//======================================
+$dois_db_host = $cosi_db_host;
+$dois_db_port = $cosi_db_port;
+$dois_db_name = 'dois';
+//======================================
+
 
 //=====================================
-// The name of the application.
-define("eAPP_TITLE", "Online Services");
-
+// APPLICATION VARIABLES
+//=====================================
+define("eAPP_TITLE", "Minh Workarea");
 // The name of this installed instance of the application.
 // eINSTANCE_TITLE_SHORT will be used in the window title.
 // eINSTANCE_TITLE will be used as the logo alt/title.
-define("eINSTANCE_TITLE", "My Organisation");
-define("eINSTANCE_TITLE_SHORT", "MyORG");
-
-define("eCONTACT_EMAIL", "services@ands.org.au");
+define("eINSTANCE_TITLE", "Minh");
+define("eINSTANCE_TITLE_SHORT", "Minh");
+define("eCONTACT_EMAIL", "minh.nguyen@ands.org.au");
 define("eCONTACT_NAME", "Feedback");
+define("eCOPYRIGHT_NOTICE", "copyright notice goes here");
+// Session will expire/timeout after this period of inactivity 
+// (ie if there have been no requests in that time).
+$gSessionTimeoutMinutes = 120;
+//Application ROOT defines the current directory of COSI
+define('eAPPLICATION_ROOT', dirname(__FILE__) . "/");
 
-define("eCOPYRIGHT_NOTICE", "");
 
 
 
 //======================================
-// CACHING OPTIONS
-define('eCACHE_DIRECTORY', '/var/www/orca_' . 'cache'); // what directory do we store our cache files in? (relative)
-define('eCACHE_CURRENT_NAME','current'); // what filename do we use for the latest version symlink
-define('eCACHE_PERMISSION',0775); // octal representation of default directory permissions
-$gCacheEnabled = true; // is caching enabled?
-$gCacheExtended = true; // are we caching "extended RIFCS" (rich) or plain vanilla? (not backwards compatible)
-define('eCACHE_ENABLED', $gCacheEnabled);
-
+// MAINTENANCE & IP FILTER
+$maintenance = false;
 //======================================
-// INDEXING OPTIONS
-define('eBOOST_DEFAULT_BASE', 100);
-define('eBOOST_RELATED_OBJECT_ADJUSTMENT', 5);
-define('eBOOST_INCOMING_RELATED_OBJECT_ADJUSTMENT', 10);
-
-
-
-
 //White List IP are IPs that are allowed to access the system regardless of maitenance status
 $white_list_ip 	= array(
 	'xx.xx.xx.xx'
@@ -87,7 +95,7 @@ $white_list_ip 	= array(
 //Black List IP are IPs that are not allowed to access the system
 $black_list_ip 	= array();
 
-
+//Find the IP
 if ( isset($_SERVER["HTTP_X_FORWARDED_FOR"]) )    {
 $ip=$_SERVER["HTTP_X_FORWARDED_FOR"];
 } else if ( isset($_SERVER["HTTP_CLIENT_IP"]) )    {
@@ -95,7 +103,8 @@ $ip=$_SERVER["HTTP_CLIENT_IP"];
 } else if ( isset($_SERVER["REMOTE_ADDR"]) )    {
 $ip=$_SERVER["REMOTE_ADDR"];
 } 
-	
+
+//Filter the IP
 if($maintenance & !in_array($ip, $white_list_ip)){
 	print("<html><body>");
 	print("<center><div style='border:1px solid #C7D7BA; width:400px;'>");
@@ -105,17 +114,15 @@ if($maintenance & !in_array($ip, $white_list_ip)){
 	exit;	
 }
 
-// Session will expire/timeout after this period of inactivity 
-// (ie if there have been no requests in that time).
-$gSessionTimeoutMinutes = 120;
+
 
 /*====================================
         LDAP AUTHENTICATION SERVER (optional)
 ====================================*/
 // -----------------------------------------------------------------------------
 // These will be used by user roles that specify AUTHENTICATION_LDAP.
-$eLDAPHost = "ldaps://ldap.anu.edu.au";
-$eLDAPPort = 636; //636 | 389
+$eLDAPHost = "ldap://ldap.anu.edu.au";
+$eLDAPPort = 389; //636 | 389
 // The resource distinguished name.
 // The string @@ROLE_ID@@ will be replace with the user role_id, and escaped
 // for LDAP reserved characters before the bind is attempted.
@@ -124,58 +131,65 @@ $eLDAPuid = "uid=@@ROLE_ID@@";
 $eLDAPDN = "$eLDAPuid, $eLDAPBaseDN";
 
 
-/*====================================
-        DATABASE ENVIRONMENT
-====================================*/
-
-$cosi_db_host = 'devl.ands.org.au';
-$cosi_db_port = 5433;
-$cosi_db_name = 'dbs_develop_cosi';
-//======================================
-$orca_db_host = $cosi_db_host;
-$orca_db_port = $cosi_db_port;
-$orca_db_name = 'dbs_develop_orca';
-//======================================
-$pids_db_host = $cosi_db_host;
-$pids_db_port = 5432;
-$pids_db_name = 'pids';
-//======================================
-$dois_db_host = $cosi_db_host;
-$dois_db_port = 5432;
-$dois_db_name = 'dois';
-//======================================
-
-
 
 /*====================================
-DOI ENVIRONMENT
+			DOI ENVIRONMENTS
 ====================================*/
 define('gDOIS_DATACENTRE_BASE_URI', "https://mds.datacite.org/datacentre");
 define('gDOIS_DATACENTRE_USERNAME', "***");
 define('gDOIS_DATACENTRE_PASSWORD', "***");
-
 define('gDOIS_DATACENTRE_NAME_PREFIX', "ANDS");
 define('gDOIS_DATACENTRE_NAME_MIDDLE', "CENTRE");  //for production
-
 $gDOIS_PREFIX_TYPES = array( '10.4225/','10.4226/','10.4227/','10.5072/');
 
-
 // Service configuration.
-
 define('gDOIS_SERVICE_BASE_URI', "https://mds.datacite.org/");
 define('gDOIS_DATACITE_PASSWORD', "****");
 define('gDOIS_RESPONSE_SUCCESS', 'OK');
-
-
 $dataciteSchema['2.0'] = 'http://schema.datacite.org/meta/kernel-2.0/metadata.xsd';
 $dataciteSchema['2.1'] = 'http://schema.datacite.org/meta/kernel-2.1/metadata.xsd';
 $dataciteSchema['2.2'] = 'http://schema.datacite.org/meta/kernel-2.2/metadata.xsd';
 
-/*
- * VOCABS ENVIRONMENT
- */
-$gVOCAB_RESOLVER_SERVICE =  array('anzsrc-for' => array('resolvingService' => 'http://devl.ands.org.au:8080/sissvoc/api/anzsrc-for/', 'uriprefix' => 'http://purl.org/au-research/vocabulary/anzsrc-for/2008/'));
-$gVOCAB_RESOLVER_RESULTS = array();
 
-define('eAPPLICATION_ROOT', dirname(__FILE__) . "/");
+
+/*====================================
+			VOCAB ENVIRONMENTS
+====================================*/
+$gVOCAB_RESOLVER_SERVICE =  array(
+	'anzsrc-for' => array('resolvingService' => 'http://devl.ands.org.au:8080/sissvoc/api/anzsrc-for/', 'uriprefix' => 'http://purl.org/au-research/vocabulary/anzsrc-for/2008/'),
+	'anzsrc-for2' => array('resolvingService' => 'http://devl.ands.org.au:8080/sissvoc/api/anzsrc-for/', 'uriprefix' => 'http://purl.org/au-research/vocabulary/anzsrc-for/2008/')
+);
+$gVOCAB_RESOLVER_RESULTS = array();
+// maybe one day :-) 'local' => array('resolvingService' => 'http://devl.ands.org.au:8080/sissvoc/api/anzsrc-for/', 'uriprefix' => 'http://purl.org/au-research/vocabulary/anzsrc-for/2008/'));
+
+
+
+//======================================
+// CACHING OPTIONS
+$gCacheEnabled = false; // is caching enabled?
+//======================================
+define('eCACHE_DIRECTORY', '/var/www/orca_' . 'cache'); // what directory do we store our cache files in? (relative)
+define('eCACHE_CURRENT_NAME','current'); // what filename do we use for the latest version symlink
+define('eCACHE_PERMISSION',0775); // octal representation of default directory permissions
+$gCacheExtended = true; // are we caching "extended RIFCS" (rich) or plain vanilla? (not backwards compatible)
+define('eCACHE_ENABLED', $gCacheEnabled);
+
+
+
+//======================================
+// INDEXING OPTIONS
+define('eBOOST_DEFAULT_BASE', 100);
+define('eBOOST_RELATED_OBJECT_ADJUSTMENT', 5);
+define('eBOOST_INCOMING_RELATED_OBJECT_ADJUSTMENT', 10);
+
+//======================================
+// WARNING NOTICES
+$enable_warning_notices		= true;
+$warning_notices 			= 'Demonstration Environment ONLY';
+
+//======================================
+// GOOGLE ANALYTICS (enable FOR PRODUCTION ONLY)
+$enable_google_analytic		= false;
+$google_analytic_code		= 'UA-8380487-7'; //FOR PRODUCTION ONLY
+
 ?>
