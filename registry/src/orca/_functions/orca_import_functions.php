@@ -1224,6 +1224,7 @@ function importRights($registryObjectKey, $node, $elementName, $runErrors, $tota
 
 		if( $licenceElement = $gXPath->evaluate("$xs:licence", $list->item($j))->item(0) )
 		{
+			//echo "in here<br />";
 			$licence = $licenceElement->nodeValue;
 			$licence_uri = $licenceElement->getAttribute("rightsUri");
 			$licence_type = $licenceElement->getAttribute("type");
@@ -1236,8 +1237,8 @@ function importRights($registryObjectKey, $node, $elementName, $runErrors, $tota
 			$access_rights_type = $accessRights->getAttribute("type");
 		}
 
-		$errors = insertRights($id, $registryObjectKey, $rights_statement, $rights_statement_uri, $licence, $licence_uri, $access_rights, $access_rights_uri);
-
+		$errors = insertRights($id, $registryObjectKey, $rights_statement, $rights_statement_uri, $licence, $licence_uri, $access_rights, $access_rights_uri, $licence_type, $access_rights_type);
+		//$errors = 
 		$totalAttemptedInserts++;
 		if( !$errors ) { $totalInserts++; } else { $runErrors .= "Failed to insert rights for key $registryObjectKey\n"; }
 	}

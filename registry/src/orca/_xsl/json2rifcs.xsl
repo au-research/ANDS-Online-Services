@@ -155,9 +155,14 @@
 			</xsl:attribute>
 		</xsl:if>
 	</xsl:template>
-	
-	
 
+	<xsl:template match="licence" mode="attribute">
+		<xsl:if test=". != ''">
+			<xsl:attribute name="type">
+				<xsl:value-of select="."/>
+			</xsl:attribute>
+		</xsl:if>
+	</xsl:template>
 
 	<xsl:template match="node() | value[parent::electronic]">
 		<xsl:param name="id"/>
@@ -175,7 +180,7 @@
 			<xsl:apply-templates select="roclass" mode="attribute"/>
 			<xsl:apply-templates select="seq" mode="attribute"/>
 			<xsl:apply-templates select="rightsUri" mode="attribute"/>
-			
+			<xsl:apply-templates select="rights/licence" mode="attribute"/>			
 			<xsl:variable name="tabId">
 				<xsl:choose>
 					<xsl:when test="$tab_id = '' and id != '' ">
@@ -251,9 +256,9 @@
 	<xsl:template match="startDate[not(value/text()) and not(dateFormat/text())]"/>
 	<xsl:template match="endDate[not(value/text()) and not(dateFormat/text())]"/>
 	<xsl:template match="accessRights[not(value/text()) and not(rightsUri/text())]"/>
-	<xsl:template match="licence[not(value/text()) and not(rightsUri/text())]"/>
+	<xsl:template match="licence[not(value/text()) and not(rightsUri/text()) and not(type/text())]"/>
 	<xsl:template match="rightsStatement[not(value/text()) and not(rightsUri/text())]"/>
-	<xsl:template match="rights[not(rightsStatement/value/text()) and not(rightsStatement/rightsUri/text()) and not(licence/value/text()) and not(licence/rightsUri/text()) and not(accessRights/value/text()) and not(accessRights/rightsUri/text())]"/>
+	<xsl:template match="rights[not(rightsStatement/value/text()) and not(rightsStatement/rightsUri/text()) and not(licence/value/text()) and not(licence/rightsUri/text()) and not(accessRights/value/text()) and not(accessRights/rightsUri/text()) and not(licence/type/text())]"/>
 	<xsl:template match="accessPolicy[not(value/text())]"/>
 
 	<xsl:template

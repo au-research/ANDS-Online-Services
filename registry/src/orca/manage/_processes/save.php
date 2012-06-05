@@ -25,6 +25,7 @@ if($json)
 	$json2rif_xsl = new DomDocument();
 	
 	$test_array = json_decode($json, true);
+
 	$objectClass = $test_array['objectClass'];
 	$test_array['mandatoryInformation']['key'] = trim(urldecode($test_array['mandatoryInformation']['key']));
 	$objectDataSource = urldecode($test_array['mandatoryInformation']['dataSource']);
@@ -32,6 +33,8 @@ if($json)
 	$dateCreated = str_replace ('__THEPLUSSIGN__', '+', $dateCreated);
 	
 	$xml__text = $a2xml->array2xml($test_array);
+//	print_r($xml__text);
+//	exit();
 	$xml__text = str_replace ('__THEPLUSSIGN__', '+', $xml__text);
 	$xml__text = str_replace ('%26', '&amp;', $xml__text);
 

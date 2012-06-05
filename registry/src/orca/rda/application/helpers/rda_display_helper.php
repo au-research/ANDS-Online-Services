@@ -271,7 +271,17 @@ function getInstitutionPage($group)
 	$query = $CI->db->get_where('dba.tbl_institution_pages',array('object_group'=>$group));
 	foreach($query->result() as $row)
 	{
-		return $row->registry_object_key;
+		if($row->registry_object_key)
+		{
+			$query = $CI->db->get_where('dba.tbl_registry_objects',array('registry_object_key'=>$row->registry_object_key,'status'=>'PUBLISHED'));		
+			foreach($query->result() as $row)
+			{
+				return $row->registry_object_key;
+			}
+		}else{
+			return false;
+		}
+		//return $row->registry_object_key;
 	}
 
 }
