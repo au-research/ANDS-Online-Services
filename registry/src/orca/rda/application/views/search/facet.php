@@ -17,7 +17,7 @@ limitations under the License.
 **/ 
 ?>
 <?php 
-if(($spatial_included_ids!='') || ($temporal!='All') || ($typeFilter!='All') || ($groupFilter!='All')||($subjectFilter!='All'))
+if(($spatial_included_ids!='') || ($temporal!='All') || ($typeFilter!='All') || ($groupFilter!='All')||($subjectFilter!='All')||($licenceFilter!='All'))
 {
 	echo '<div class="right-box shadow">';
 	echo '<h2>Selected</h2>';
@@ -32,6 +32,7 @@ if(($spatial_included_ids!='') || ($temporal!='All') || ($typeFilter!='All') || 
 		if($typeFilter!='All') displaySelectedFacet('type',$typeFilter,$json);
 		if($groupFilter!='All') displaySelectedFacet('group',$groupFilter,$json);
 		if($subjectFilter!='All') displaySelectedFacet('subject_value_resolved',$subjectFilter,$json);
+		if($licenceFilter!='All') displaySelectedFacet('licence_group',$licenceFilter,$json);
 		echo '</ul>';
 	echo '</div>';
 	echo '</div>';
@@ -49,4 +50,5 @@ if(($spatial_included_ids!='') || ($temporal!='All') || ($typeFilter!='All') || 
 	displayFacet('group', $groupFilter, $json, $classFilter);
 	displayFacet('subject_value_resolved', $subjectFilter, $json, $classFilter);
 	displayFacet('type', $typeFilter, $json, $classFilter);
+	displayFacet('licence_group', $licenceFilter, $json, $classFilter);
 ?>

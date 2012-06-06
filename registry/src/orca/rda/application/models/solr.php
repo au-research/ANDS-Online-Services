@@ -25,7 +25,7 @@ limitations under the License.
         parent::__construct();
     }
     
-	function search($query, $extended_query, $write_type='json', $page, $classFilter ='All', $groupFilter ='All', $typeFilter ='All', $subjectFilter = 'All', $status='All', $sort='score desc')
+	function search($query, $extended_query, $write_type='json', $page, $classFilter ='All', $groupFilter ='All', $typeFilter ='All', $subjectFilter = 'All', $licenceFilter='All', $status='All', $sort='score desc')
     {
         $q=$query;
 		$q=rawurlencode($q);$q=str_replace("%5C%22", "\"", $q);//silly encoding
@@ -39,6 +39,7 @@ limitations under the License.
     	if($typeFilter!='All') $filter_query .= constructFilterQuery('type', $typeFilter);
     	if($groupFilter!='All') $filter_query .= constructFilterQuery('group', $groupFilter);
     	if($subjectFilter!='All') $filter_query .= constructFilterQuery('subject_value_resolved', $subjectFilter);
+    	if($licenceFilter!='All') $filter_query .= constructFilterQuery('licence_group', $licenceFilter);
     	if($status!='All') $filter_query .= constructFilterQuery('status', $status);
     	
     	//echo $status;
@@ -76,7 +77,7 @@ limitations under the License.
 		//if($filter_query!='') $fields['fq']=urlencode($filter_query);
 		//print_r($fields);
 		
-		$facet = '&facet=true&facet.field=type&facet.field=class&facet.field=group&facet.field=subject_value_resolved&f.subject_value_resolved.facet.mincount=1&facet.sort=count';
+		$facet = '&facet=true&facet.field=type&facet.field=class&facet.field=group&facet.field=subject_value_resolved&facet.field=licence_group&f.subject_value_resolved.facet.mincount=1&facet.sort=count';
 		
 		/*prep*/
 		$fields_string='';

@@ -859,8 +859,24 @@ Handle:
 			<xsl:attribute name="href"><xsl:value-of select="./ro:rightsStatement/@rightsUri"/></xsl:attribute><xsl:value-of select="./ro:rightsStatement/@rightsUri"/></a></p>
 			</xsl:if>	
 			<xsl:if test="./ro:licence">
-			<p class="rights"><strong>	Licence </strong><br />		<xsl:value-of select="./ro:licence"/><br /><a target="_blank">
-			<xsl:attribute name="href"><xsl:value-of select="./ro:licence/@rightsUri"/></xsl:attribute><xsl:value-of select="./ro:licence/@rightsUri"/></a></p>
+				<p class="rights"><strong>	Licence </strong>
+				<xsl:if test="./ro:licence/@type">
+					<xsl:if test="string-length(substring-after(./ro:licence/@type,'CC-'))>0">
+    			 		<br />
+    			 		<img id="licence_logo" style="max-width:130px;">
+						<xsl:attribute name="src"><xsl:value-of select="$base_url"/>
+						<xsl:text>/img/</xsl:text>
+						<xsl:value-of select="./ro:licence/@type"/>
+						<xsl:text>.png</xsl:text></xsl:attribute>
+						<xsl:attribute name="alt"><xsl:value-of select="./ro:licence/@type"/></xsl:attribute>
+		  				</img>
+    				</xsl:if>	   
+					<br />
+					<xsl:value-of select="./ro:licence/@type"/>
+				</xsl:if>
+				<br />
+				<xsl:value-of select="./ro:licence"/><br /><a target="_blank">
+				<xsl:attribute name="href"><xsl:value-of select="./ro:licence/@rightsUri"/></xsl:attribute><xsl:value-of select="./ro:licence/@rightsUri"/></a></p>
 			</xsl:if>					
 
 	

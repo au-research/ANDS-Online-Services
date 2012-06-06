@@ -835,6 +835,18 @@ Handle:
 			<xsl:if test="./@type='accessRights'"><h4>Access rights</h4></xsl:if>
 			<xsl:if test="./@type='licence'"><h4>Licence</h4></xsl:if>				
 			<p class="rights"><xsl:value-of select="." disable-output-escaping="yes"/>
+			<xsl:if test="./@licence_type">
+			<xsl:if test="string-length(substring-after(./@licence_type,'CC-'))>0">
+    			     	        <img id="licence_logo" style="max-width:130px;">
+			<xsl:attribute name="src"><xsl:value-of select="$base_url"/>
+			<xsl:text>/img/</xsl:text>
+			<xsl:value-of select="./@licence_type"/>
+			<xsl:text>.png</xsl:text></xsl:attribute>
+			<xsl:attribute name="alt"><xsl:value-of select="./@licence_type"/></xsl:attribute>
+		  </img>
+    		</xsl:if>	   
+			<br /><xsl:value-of select="./@licence_type"/>
+			</xsl:if>
 			<xsl:if test="./@rightsUri"><br />
 			<a target="_blank">
 			<xsl:attribute name="href"><xsl:value-of select="./@rightsUri"/></xsl:attribute><xsl:value-of select="./@rightsUri"/></a>
