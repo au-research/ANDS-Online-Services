@@ -53,8 +53,9 @@ limitations under the License.
 
 	<?php if($this->config->item('GA_enabled')):?>
 	<script type="text/javascript">
+	  var ga_code = "<?php echo $this->config->item('GA_code');?>";
 	  var _gaq = _gaq || [];
-	  _gaq.push(['_setAccount', 'UA-8380487-7']);
+	  _gaq.push(['_setAccount', ga_code]);
 	  _gaq.push(['_trackPageview']);
 
 	  (function() {

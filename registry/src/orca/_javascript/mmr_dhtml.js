@@ -81,6 +81,7 @@ $(document).ready(function() {
 			$('.viewswitch').removeClass('pressed');
 			$('.viewswitch[name=qaview]').addClass('pressed');
 			google.setOnLoadCallback(drawBarChart(status, dsKey));
+			//drawBarChart(status, dsKey);
 			if(status=='All'){
 				$('.qaview[id=All_qaview]').show();
 				$('.as_qa_table').parents('.tab-content').show();
@@ -88,6 +89,7 @@ $(document).ready(function() {
 				$('.qaview[id='+status+'_qaview]').show();
 				$('.qa_table[status='+status+']').parents('.tab-content').show();
 			}
+
 		}
 	}
 
@@ -170,7 +172,18 @@ $(document).ready(function() {
     function drawBarChart(status, ds){
     	var chartData = new google.visualization.DataTable();
     	var get_view = 'get_view.php?view=StatusAllQA&status='+status+'&ds='+ds;
-    	
+
+    	/*console.log('begin');
+    	$.ajax({
+    		url: get_view,
+    		method: 'get',
+    		cache: false, // don't cache the result
+    		success: function(data) {
+    			console.log(data);
+    		}
+    	});
+    	console.log('end');*/
+
 		$.ajax({
     		url: get_view,
     		method: 'get',
@@ -180,12 +193,12 @@ $(document).ready(function() {
     			//console.log(data);
 
   				var chartData = new google.visualization.DataTable();
-  				chartData.addColumn('string', 'Status');
-  				chartData.addColumn('number', 'Quality Level 0');
-  				chartData.addColumn('number', 'Quality Level 1');
-  				chartData.addColumn('number', 'Quality Level 2');
-  				chartData.addColumn('number', 'Quality Level 3');
-  				chartData.addColumn('number', 'Quality Level 4');
+  				chartData.addColumn("string", "Status");
+  				chartData.addColumn("number", "Quality Level 0");
+  				chartData.addColumn("number", "Quality Level 1");
+  				chartData.addColumn("number", "Quality Level 2");
+  				chartData.addColumn("number", "Quality Level 3");
+  				chartData.addColumn("number", "Quality Level 4");
 
   				var chartData2 = new google.visualization.DataTable();
   				chartData2.addColumn('string', 'Status');
@@ -194,6 +207,8 @@ $(document).ready(function() {
   				chartData2.addColumn('number', 'Quality Level 2');
   				chartData2.addColumn('number', 'Quality Level 3');
   				chartData2.addColumn('number', 'Quality Level 4');
+
+  				//console.log(chartData);
 
   				$.each(data, function(i, item){
   					var row = [];
@@ -209,6 +224,9 @@ $(document).ready(function() {
   					chartData.addRow(row);
   					chartData2.addRow(rowPercent);
   				});
+
+  				/*var jsonText = JSON.stringify(chartData);
+    			console.log(jsonText);*/
 
   				//console.log(realData);
     			// Create and draw the visualization.

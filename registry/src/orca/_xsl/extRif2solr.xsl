@@ -58,6 +58,7 @@
       			<xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:gold_status_flag"/>
       			<xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:quality_level"/>
       			<xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:feedType"/>
+      			
         	</xsl:otherwise>
         </xsl:choose>
 
@@ -243,7 +244,7 @@
         <xsl:apply-templates select="extRif:broaderSubject" mode="resolved_value"/>
         <xsl:apply-templates select="extRif:broaderSubject" mode="type"/>
         <xsl:apply-templates select="extRif:broaderSubject" mode="vocab_uri"/>
-        
+        <xsl:apply-templates select="extRif:rights[@licence_group!='']" mode="licence_group"/>        
         <xsl:choose>
         	<xsl:when test="extRif:description">
         	   	<xsl:apply-templates select="extRif:description" mode="value"/>
@@ -466,7 +467,13 @@
             <xsl:value-of select="."/>
         </xsl:element>
     </xsl:template>
-   
+    
+     <xsl:template match="extRif:rights[@licence_group!='']" mode="licence_group">
+        <xsl:element name="field">
+            <xsl:attribute name="name">licence_group</xsl:attribute>
+            <xsl:value-of select="@licence_group"/>
+        </xsl:element>
+    </xsl:template> 
 
 
     <xsl:template match="ro:date | ro:description | ro:spatial | ro:text"/>

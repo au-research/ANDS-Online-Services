@@ -6,6 +6,7 @@ $(document).ready(function(){
 	var typeFilter = 'All';
 	var groupFilter = 'All';
 	var subjectFilter = 'All';
+	var licenceFilter = 'All';
 	var advanced_search_term = '';
 	var spatial_included_ids = '';
 	var temporal = 'All';
@@ -19,50 +20,30 @@ $(document).ready(function(){
 	// Load up fancybox image browser
 	$(".fancybox").fancybox();
 	
-	var enableWarning = false;
-	var warningMessage = 'this is DEMO <a href="javascript:void(0);" id="dismiss_warning">[x]</a>';
+	//================================
+	//		WARNING MESSAGE
+	//================================
+	var enableWarning = enable_warning_notices;
+	var warningMessage = warning_notices+' <a href="javascript:void(0);" id="dismiss_warning">[x]</a>';
 	var warningDiv = $('<div id="warningDiv"></div>');
 		$(warningDiv).css('opacity','0.8');
 	$(warningDiv).html(warningMessage);
-
 	$('#dismiss_warning').live('click', function(){
 		$('#warningDiv').fadeOut();
 	});
 
 	if(enableWarning) $('body').prepend(warningDiv);
 
-	//router
+	//RDA only uses http
+	if(window.location.href==secure_base_url){
+		window.location.href=base_url;
+	}
 	if(window.location.href.indexOf('https://')==0){
 		var thisurl = window.location.href;
 		thisurl = thisurl.replace('https://','http://');
 		window.location.href=thisurl;
 	}
 		
-	/*
-	if(window.location.href.indexOf('/view')>=0){
-		initViewPage();
-		if(window.location.href.indexOf('printview')>=0) initPrintViewPage();
-	}else if((window.location.href==base_url) || (window.location.href==base_url+'index.php')){
-		initHomePage();
-	}else if(window.location.href==secure_base_url){
-		window.location.href=base_url;
-	}else if(window.location.href.indexOf('search')>=0){
-		initSearchPage();
-	}else if(window.location.href.indexOf('contact')>=0){
-		initContactPage();
-	}else if(window.location.href.indexOf('help')>=0){
-		initHelpPage();
-	}else if(window.location.href.indexOf('preview')>=0){
-		initPreviewPage();
-	}
-	*/
-	if(window.location.href==secure_base_url)
-	{
-			window.location.href=base_url;
-	}
-	
-
-
 	var rda_activity_name = $('#rda_activity_name').text();
 	switch(rda_activity_name){
 		case 'view':initViewPage();break;
@@ -79,7 +60,6 @@ $(document).ready(function(){
 	
 	$('#clearSearch').tipsy({live:true, gravity:'se'});
 	
-
 	function initVocabPage(){
 		loadBigTree('http://purl.org/au-research/vocabulary/anzsrc-for/2008/0102', 'anzsrc-for');
 		$.widget( "custom.vocabcomplete", $.ui.autocomplete, {
@@ -331,6 +311,7 @@ $(document).ready(function(){
 				case 'group':groupFilter=encodeURIComponent(decodeURIComponent(value));break;
 				case 'type':typeFilter=encodeURIComponent(decodeURIComponent(value));break;
 				case 'subject':subjectFilter=encodeURIComponent(decodeURIComponent(value));break;
+				case 'licence':licenceFilter=encodeURIComponent(decodeURIComponent(value));break;
 				case 'temporal':temporal=value;break;
 				case 'n':n=value;break;
 				case 'e':e=value;break;
@@ -340,6 +321,7 @@ $(document).ready(function(){
 				case 'researchGroupSort':researchGroupSort=value;break;
 				case 'subjectSort':subjectSort=value;break;
 				case 'typeSort':typeSort=value;break;
+				case 'licenceSort':typeSort=value;break;
 			}
 		});
 		if(classFilter!=$('#classSelect').val()) {
@@ -461,6 +443,7 @@ $(document).ready(function(){
 		if(typeFilter!='All') res+='/type='+(typeFilter);
 		if(groupFilter!='All') res+='/group='+(groupFilter);
 		if(subjectFilter!='All') res+='/subject='+(subjectFilter);
+		if(licenceFilter!='All') res+='/licence='+(licenceFilter);
 		if(temporal!='All') res+='/temporal='+(temporal);
 		if(n!=''){
 			res+='/n='+n+'/e='+e+'/s='+s+'/w='+w;
@@ -554,7 +537,7 @@ $(document).ready(function(){
 	
 	function clearFilter(){
 		search_term='';$('#search-box').val('');page = 1;
-		classFilter = $('#classSelect').val();typeFilter = 'All';groupFilter = 'All';subjectFilter = 'All';
+		classFilter = $('#classSelect').val();typeFilter = 'All';groupFilter = 'All';subjectFilter = 'All';licenceFilter= 'All';
 		advanced_search_term = '';spatial_included_ids = '';temporal = 'All';
 		$('#clearSearch').hide();
 		if(doTemporalSearch){
@@ -1114,10 +1097,10 @@ $(document).ready(function(){
         subjectSearchstr = encodeURIComponent(subjectSearchstr);
         $.ajax({
                 type:"POST",
-                url: base_url+"search/seeAlso/count/subjects",data:"q=*:*&classFilter=collection&typeFilter=All&groupFilter=All&subjectFilter="+subjectSearchstr+"&page=1&spatial_included_ids=&temporal=All&excluded_key="+key_value,
+                url: base_url+"search/seeAlso/count/subjects",data:"q=*:*&classFilter=collection&typeFilter=All&groupFilter=All&subjectFilter="+subjectSearchstr+"&licenceFilter=All&page=1&spatial_included_ids=&temporal=All&excluded_key="+key_value,
                         success:function(msg){
                                 $("#seeAlso").html(msg);
-                                //console.log(msg);
+                                console.log(msg);
                                if(parseInt($('#seealso-realnumfound').html())==0){
 	                            	$('#seeAlso').hide();
                             	
@@ -1132,7 +1115,7 @@ $(document).ready(function(){
         $('#seeAlso_subjectNumFound').live('click', function(){
 	        $.ajax({
                 type:"POST",
-                url: base_url+"search/seeAlso/content/subjects",data:"q=*:*&classFilter=collection&typeFilter=All&groupFilter=All&subjectFilter="+subjectSearchstr+"&page="+seeAlsoPage+"&spatial_included_ids=&temporal=All&excluded_key="+key_value,
+                url: base_url+"search/seeAlso/content/subjects",data:"q=*:*&classFilter=collection&typeFilter=All&groupFilter=All&subjectFilter="+subjectSearchstr+"&licenceFilter=All&page="+seeAlsoPage+"&spatial_included_ids=&temporal=All&excluded_key="+key_value,
                     success:function(msg){
                             //console.log("success" + msg);
                             $("#infoBox").html(msg);
@@ -1243,7 +1226,7 @@ $(document).ready(function(){
 	        $.ajax({
 	            type:"POST",
 	            url: base_url+"search/seeAlso/count/identifiers"+relatedClass,
-	            data:"q=*:*&classFilter=party;activity&typeFilter=All&groupFilter=All&subjectFilter=All&page=1&spatial_included_ids=&temporal=All&excluded_key="+key_value+'&extended='+identifierSearchString,
+	            data:"q=*:*&classFilter=party;activity&typeFilter=All&groupFilter=All&subjectFilter=All&licenceFilter=All&page=1&spatial_included_ids=&temporal=All&excluded_key="+key_value+'&extended='+identifierSearchString,
 	                    success:function(msg){
 	                            $("#seeAlso-IdentifierBox").html(msg);
 	                            if(parseInt($('#seealso-realnumfound').html())==0){
@@ -1259,7 +1242,7 @@ $(document).ready(function(){
 		        $.ajax({
 	                type:"POST",
 	                url: base_url+"search/seeAlso/content/identifiers",
-	                data:"q=*:*&classFilter=party;activity&typeFilter=All&groupFilter=All&subjectFilter=All&page=1&spatial_included_ids=&temporal=All&excluded_key="+key_value+'&extended='+identifierSearchString,
+	                data:"q=*:*&classFilter=party;activity&typeFilter=All&groupFilter=All&subjectFilter=All&licenceFilter=All&page=1&spatial_included_ids=&temporal=All&excluded_key="+key_value+'&extended='+identifierSearchString,
 	                    success:function(msg){
 	                            $("#infoBox").html(msg);
 	                            $(".accordion").accordion({autoHeight:false, collapsible:true,active:false});
@@ -1306,7 +1289,7 @@ $(document).ready(function(){
 	function getSeeAlsoAjax(group_value, subjectSearchstr, seeAlsoPage, key_value){
 		 $.ajax({
              type:"POST",
-             url: base_url+"search/seeAlso/content",data:"q=*:*&classFilter=collection&typeFilter=All&groupFilter=All&subjectFilter="+subjectSearchstr+"&page="+seeAlsoPage+"&spatial_included_ids=&temporal=All&excluded_key="+key_value,
+             url: base_url+"search/seeAlso/content",data:"q=*:*&classFilter=collection&typeFilter=All&groupFilter=All&subjectFilter="+subjectSearchstr+"&licenceFilter="+licenceFilter+"&page="+seeAlsoPage+"&spatial_included_ids=&temporal=All&excluded_key="+key_value,
                      success:function(msg){
                              $(".accordion").html(msg);
                              $(".accordion").accordion({autoHeight:false, collapsible:true,active:false});
@@ -1564,7 +1547,7 @@ $(document).ready(function(){
 		$.ajax({
   			type:"POST",
   			url: base_url+"search/filter/",
-  			data:"q="+decodeURIComponent(search_term)+"&classFilter="+classFilter+"&typeFilter="+typeFilter+"&groupFilter="+groupFilter+"&subjectFilter="+subjectFilter+"&page="+page+"&spatial_included_ids="+spatial_included_ids+"&temporal="+temporal+'&sort='+resultSort,   
+  			data:"q="+decodeURIComponent(search_term)+"&classFilter="+classFilter+"&typeFilter="+typeFilter+"&groupFilter="+groupFilter+"&subjectFilter="+subjectFilter+"&licenceFilter="+licenceFilter+"&page="+page+"&spatial_included_ids="+spatial_included_ids+"&temporal="+temporal+'&sort='+resultSort,   
   				success:function(msg){
   					$("#search-result").html(msg);
   					$('#loading').hide();
@@ -1578,7 +1561,7 @@ $(document).ready(function(){
   						$.ajax({
   				  			type:"POST",
   				  			url: base_url+"search/updateStatistic/",
-  				  			data:"q="+decodeURIComponent(search_term)+"&classFilter="+classFilter+"&typeFilter="+typeFilter+"&groupFilter="+groupFilter+"&subjectFilter="+subjectFilter+"&page="+page+"&spatial_included_ids="+spatial_included_ids+"&temporal="+temporal,   
+  				  			data:"q="+decodeURIComponent(search_term)+"&classFilter="+classFilter+"&typeFilter="+typeFilter+"&groupFilter="+groupFilter+"&subjectFilter="+subjectFilter+"&licenceFilter="+licenceFilter+"&page="+page+"&spatial_included_ids="+spatial_included_ids+"&temporal="+temporal,   
   				  				success:function(msg){},
   				  				error:function(msg){}
   				  			});
@@ -1748,7 +1731,7 @@ $(document).ready(function(){
 	 * TYPE FACETS
 	 * This is called everywhere there is a type, group or subjects that needs to fire a search based on their ID
 	 */
-	$('.typeFilter, .groupFilter, .subjectFilter').live('click', function(event){
+	$('.typeFilter, .groupFilter, .subjectFilter, .licenceFilter').live('click', function(event){
 		if(event.type=='click'){
 			page = 1;
 			if($(this).hasClass('typeFilter')){
@@ -1760,7 +1743,10 @@ $(document).ready(function(){
 			}else if($(this).hasClass('subjectFilter')){
 				subjectFilter = encodeURIComponent($(this).attr('id'));
 				changeHashTo(formatSearch(search_term, 1, classFilter));
-			}
+			}else if($(this).hasClass('licenceFilter')){
+				licenceFilter = encodeURIComponent($(this).attr('id'));
+				changeHashTo(formatSearch(search_term, 1, classFilter));
+			}			
 			scrollToTop();
 		}
 	});
@@ -1972,7 +1958,7 @@ $(document).ready(function(){
 		//$('#result-placeholder').html($('.result').html());
 		//$('.result').hide();
 		$('#show-facets').hide();
-		$('.typeFilter, .groupFilter, .subjectFilter, .ro-icon, .clearFilter, .toggle-facets').tipsy({live:true, gravity:'sw'});
+		$('.typeFilter, .groupFilter, .subjectFilter, .licenceFilter, .ro-icon, .clearFilter, .toggle-facets').tipsy({live:true, gravity:'sw'});
 		$('#customise-dialog').tipsy({live:true, gravity:'se'});
 		$('#search-tabs li a').tipsy({live:true, gravity:'s'});
 		refreshTemporalSearch();
@@ -1989,6 +1975,8 @@ $(document).ready(function(){
 			groupFilter = 'All';
 		}else if($(this).hasClass('clearSubjects')){
 			subjectFilter = 'All';
+		}else if($(this).hasClass('clearLicence')){
+			licenceFilter = 'All';
 		}
 		changeHashTo(formatSearch(search_term,1,classFilter));
 	});
@@ -2182,6 +2170,7 @@ $(document).ready(function(){
 		subjectFilter = 'All';
 		classFilter= $('#classSelect').val();
 		groupFilter= 'All';
+		licenceFilter = 'All';
 	}
 	
 	/*

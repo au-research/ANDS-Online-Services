@@ -2807,6 +2807,7 @@ function isContributorPage($page)
 		return $resultSet[0];
 
 }
+
 //bacground tasks
 function getNextTask($status, $dependent = null)
 {
@@ -2903,5 +2904,15 @@ function setTaskCompleted($taskId)
 	return $result;
 }
 
+function getParentType($licence_type){
+	global $gCNN_DBS_ORCA;
+	$strQuery = 'SELECT parent_term_identifier FROM dba.tbl_terms WHERE identifier = $1';	
+	$params = array($licence_type);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	if (!isset($resultSet[0])) 
+		return false;
+	else 
+		return $resultSet[0]['parent_term_identifier'];
+}
 
 ?>

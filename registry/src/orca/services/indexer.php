@@ -32,7 +32,7 @@ $draftKey = getQueryValue('draftKey');
 $dataSourceKey = getQueryValue('dataSourceKey');
 $totalCount = 0;
 $solr_update_url = $solr_url.'update';
-echo $solr_update_url;
+//echo $solr_update_url;
 switch($task){
 	case "indexAll":	index($status);										break;
 	case "indexDS": 	indexDS($dataSourceKey , $status); 					break;
@@ -184,6 +184,7 @@ function addPublishedToSolrIndex($registryObjectKey, $commit=true)
 
 function addDraftToSolrIndex($registryObjectKey, $commit=true)
 {
+	global $solr_update_url;
 	$allKeys = getDraftRegistryObject($registryObjectKey , null);
 	$arraySize = sizeof($allKeys);
 	$result = '';

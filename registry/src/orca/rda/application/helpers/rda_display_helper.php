@@ -35,6 +35,7 @@ function displayFacet($facet_name, $facetFilter, $json, $ro_class){
 			$class="typeFilter";break;
 		case "group":$clear = 'clearGroup';$name='Research Groups';$class="groupFilter";break;
 		case "subject_value_resolved":$clear = 'clearSubjects';$name="Subjects";$class="subjectFilter";break;
+		case "licence_group":$clear = 'clearLicence';$name="Licence";$class="licenceFilter";break;
 	}
 
 
@@ -97,6 +98,7 @@ function displaySelectedFacet($facet_name, $facetFilter, $json){
 		case "type":$clear = 'clearType';$name='Types';$class="typeFilter";break;
 		case "group":$clear = 'clearGroup';$name='Research Groups';$class="groupFilter";break;
 		case "subject_value_resolved":$clear = 'clearSubjects';$name="Subjects";$class="subjectFilter";break;
+		case "licence_group":$clear = 'clearLicence';$name="Licence";$class="licenceFilter";break;
 	}
 	$object_type = $json->{'facet_counts'}->{'facet_fields'}->{$facet_name};
 	//print the selected
@@ -125,6 +127,7 @@ function constructFilterQuery($class, $groups){
 		case 'type':$str='+type:(';break;
 		case 'group':$str='+group:(';break;
 		case 'subject_value_resolved':$str='+subject_value_resolved:(';break;
+		case 'licence_group':$str='+licence_group:(';break;
 		case 'status':$str='+status:(';break;
 	}
 
@@ -271,7 +274,17 @@ function getInstitutionPage($group)
 	$query = $CI->db->get_where('dba.tbl_institution_pages',array('object_group'=>$group));
 	foreach($query->result() as $row)
 	{
-		return $row->registry_object_key;
+		if($row->registry_object_key)
+		{
+			$query = $CI->db->get_where('dba.tbl_registry_objects',array('registry_object_key'=>$row->registry_object_key,'status'=>'PUBLISHED'));		
+			foreach($query->result() as $row)
+			{
+				return $row->registry_object_key;
+			}
+		}else{
+			return false;
+		}
+		//return $row->registry_object_key;
 	}
 
 }

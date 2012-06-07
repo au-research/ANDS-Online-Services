@@ -43,7 +43,8 @@ class Search extends CI_Controller {
 			$typeFilter = $_GET['typeFilter'];
 			$groupFilter = $_GET['groupFilter'];
 			$subjectFilter = $_GET['subjectFilter'];
-			$queryStr = '?q='.$q.'&classFilter='.$classFilter.'&typeFilter='.$typeFilter.'&groupFilter='.$groupFilter.'&subjectFilter='.$subjectFilter;				
+			$licenceFilter = $_GET['licenceFilter'];
+			$queryStr = '?q='.$q.'&classFilter='.$classFilter.'&typeFilter='.$typeFilter.'&groupFilter='.$groupFilter.'&subjectFilter='.$subjectFilter.'&licenceFilter='.$licenceFilter;				
 			$this->load->model('Rss_channel', 'rss');
 			$result['rssArray'] = $this->rss->getRssArrayForQuery($queryStr);
 			$this->load->view('search/rss', $result);
@@ -60,7 +61,8 @@ class Search extends CI_Controller {
 			$typeFilter = $_GET['typeFilter'];
 			$groupFilter = $_GET['groupFilter'];
 			$subjectFilter = $_GET['subjectFilter'];
-			$queryStr = '?q='.$q.'&classFilter='.$classFilter.'&typeFilter='.$typeFilter.'&groupFilter='.$groupFilter.'&subjectFilter='.$subjectFilter;				
+			$licenceFilter = $_GET['licenceFilter'];
+			$queryStr = '?q='.$q.'&classFilter='.$classFilter.'&typeFilter='.$typeFilter.'&groupFilter='.$groupFilter.'&subjectFilter='.$subjectFilter.'&licenceFilter='.$licenceFilter;				
 			$this->load->model('Rss_channel', 'atom');
 			$result['rssArray'] = $this->atom->getRssArrayForQuery($queryStr);
 			$this->load->view('search/atom', $result);
@@ -125,6 +127,7 @@ class Search extends CI_Controller {
         $class = $this->input->post('classFilter');
         $group = $this->input->post('groupFilter');
         $subject = $this->input->post('subjectFilter');
+        $licence = $this->input->post('licenceFilter');
         $page = $this->input->post('page');
         $extended = $this->input->post('extended');
         $excluded_key = $this->input->post('excluded_key');
@@ -133,7 +136,7 @@ class Search extends CI_Controller {
         //$extended_query='';
         //$extended_query .=constructFilterQuery('subject_value', $subject).'^100';
 
-        $data['json']=$this->solr->search($query,$extended_query,'json',$page,$class, $group, 'All', $subject, 'PUBLISHED');
+        $data['json']=$this->solr->search($query,$extended_query,'json',$page,$class, $group, 'All', $subject, $licence, 'PUBLISHED');
 	
 		$data['numfound']=0;		
 		if(isset($data['json']->{'response'}->{'numFound'}))$data['numfound'] = $data['json']->{'response'}->{'numFound'};
@@ -546,6 +549,7 @@ class Search extends CI_Controller {
 		$typeFilter = urldecode($this->input->post('typeFilter'));
 		$groupFilter = urldecode($this->input->post('groupFilter'));
 		$subjectFilter = urldecode($this->input->post('subjectFilter'));
+		$licenceFilter = urldecode($this->input->post('licenceFilter'));
 		$page = $this->input->post('page');
 		$spatial_included_ids = $this->input->post('spatial_included_ids');
 		$temporal = $this->input->post('temporal');
@@ -569,13 +573,13 @@ class Search extends CI_Controller {
 		
 		/*Search Part*/
 		$this->load->model('solr');
-		$data['json']=$this->solr->search($query, $extended_query, 'json', $page, $classFilter, $groupFilter, $typeFilter, $subjectFilter,'PUBLISHED', $sort);
+		$data['json']=$this->solr->search($query, $extended_query, 'json', $page, $classFilter, $groupFilter, $typeFilter, $subjectFilter,$licenceFilter,'PUBLISHED', $sort);
 		
 		//print_r($data['json']);
 		
 		/**getting the tabbing right**/
 		$query_tab = $q;
-		$data['json_tab']=$this->solr->search($query, $extended_query, 'json', $page, 'All', $groupFilter, $typeFilter, $subjectFilter,'PUBLISHED', $sort);//just for the tabbing mechanism (getting the numbers right)
+		$data['json_tab']=$this->solr->search($query, $extended_query, 'json', $page, 'All', $groupFilter, $typeFilter, $subjectFilter,$licenceFilter,'PUBLISHED', $sort);//just for the tabbing mechanism (getting the numbers right)
 		/*just that! and json_tab is used in tab view*/
 		
 		/**getting the facet right**/
@@ -589,6 +593,7 @@ class Search extends CI_Controller {
 		$data['typeFilter']=$typeFilter;
 		$data['groupFilter']=$groupFilter;
 		$data['subjectFilter']=$subjectFilter;
+		$data['licenceFilter']=$licenceFilter;
 		$data['page']=$page;
 		$data['spatial_included_ids']=$spatial_included_ids;
 		$data['temporal']=$temporal;

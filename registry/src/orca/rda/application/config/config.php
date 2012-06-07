@@ -18,20 +18,21 @@ limitations under the License.
 ?>
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-global $gVOCAB_RESOLVER_SERVICE;
+global $gVOCAB_RESOLVER_SERVICE, $enable_warning_notices, $warning_notices, $enable_google_analytic, $google_analytic_code;
 
-/*
- * Change me
- */
+
+
+//==============================
+//CONFIGURATION
+//==============================
 $config['base_url']	= 'http://'.HOST.'/'.RDA_ROOT.'/';
 $config['orca_url'] = 'http://'.HOST.'/'.ORCA_ROOT.'/';
 $config['solr_url'] = SOLR_URL;
-
 $config['asset_url'] = $config['base_url'] . 'assets/';
 $config['vocab_resolver_service'] = $gVOCAB_RESOLVER_SERVICE;
-
 $config['datacite_solr_url'] = DATACITE_SOLR_URL;
-
+$config['enable_warning_notices'] = $enable_warning_notices;
+$config['warning_notices'] = $warning_notices;
 
 
 /*
@@ -39,11 +40,12 @@ $config['datacite_solr_url'] = DATACITE_SOLR_URL;
  * Used in the helper to return the real URLs
  */
 
-$config['orca_service_point'] = 'services/getRegistryObjectsSOLR.php';
-$config['orca_view_point'] = 'view.php';
+$config['orca_service_point'] 	= 'services/getRegistryObjectsSOLR.php';
+$config['orca_view_point'] 		= 'view.php';
 
-$config['GA_enabled'] = false;
-$config['GA_code']='';
+
+$config['GA_enabled'] 		= $enable_google_analytic;
+$config['GA_code']			= $google_analytic_code;
 
 
 /*
