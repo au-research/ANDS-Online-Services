@@ -820,33 +820,22 @@ function setInstitutionalPage(theValue, theGroups, theDataSource)
 				for(i=0;i<groups.length;i++)
 		{
 			var thePage = document.getElementById("group"+(i+1)+"page");
-			thePage.innerHTML = '';
+			if(thePage)
+			{
+				thePage.innerHTML = '';
+			}
 		}
 	}
 	else if(theValue.value=='1')
 	{
-/*
-			var theTable = document.getElementById("institutionalPages");
-			theTable.style.display = "inline";
-			$.ajax({
-				type: 'POST',
-				url: rootAppPath + 'orca/manage/_processes/setInstitutionalPages.php',
-				data: 'task=auto&data_source_key='+theDataSource+'&groups='+theGroups,
-				success: function(msg){
-	        	   alert(msg);
-	               console.log(msg);
-	              // $('#search-result').html(msg);
-				},
-				error: function(msg){
-	               alert('ERROR'+msg);
-				}
-	         	});
- */
 
 		for(i=0;i<groups.length;i++)
 		{
 			var thePage = document.getElementById("group"+(i+1)+"page");
-			thePage.innerHTML = '';
+			if(thePage)
+			{
+				thePage.innerHTML = '';
+			}
 		}
 	}
 	else
@@ -866,7 +855,8 @@ function setInstitutionalPage(theValue, theGroups, theDataSource)
 			}
 			
 			var thePage = document.getElementById("group"+(i+1)+"page");
-			
+			var theValue = document.getElementById('object_institution_key_'+(i+1)+'_current');
+			if(!theValue){theValue='';}
 			var searchStr = '<div id="searchDialog_object_institution_key_'+(i+1)+'" class="window" } \' > ';
 			searchStr += '<img src="../_images/error_icon.png" onClick=\'closeSearchModal("object_institution_key_'+(i+1)+'");\' style="cursor:pointer; position:absolute; top:5px; right:5px; width:16px;" />';
 			searchStr += '<ul id="guideNotes_relatedObject" class="guideNotes" style="display: block; ">';
@@ -874,7 +864,7 @@ function setInstitutionalPage(theValue, theGroups, theDataSource)
 			searchStr += '</ul>';
 			searchStr += '<table class="rmdElementContainer" style="font-weight:normal;">';
 			searchStr += '<tbody class="formFields andsorange">';
-			searchStr += '<tr><td>Search by name:</td><td><input type="text" id="object_institution_key_'+(i+1)+'_name" autocomplete="on" name="object_institution_key_'+(i+1)+'_name" maxlength="512" size="30" /></td></tr>';
+			searchStr += '<tr><td>Search by name:</td><td><input type="text" id="object_institution_key_'+(i+1)+'_name" autocomplete="on" name="object_institution_key_'+(i+1)+'_name" maxlength="512" size="30"/></td></tr>';
 			searchStr += '<tr><td>Select object class:</td><td><span style="color:#666666">Party</span><input type="hidden" id="select_institution_key_'+(i+1)+'_class" value = "Party"/></td></tr>';
 			searchStr += '<tr><td>Data source:<input type="hidden" id="select_institution_key_'+(i+1)+'_group" value="'+datasources[0]+'"/></td><td><select id="select_institution_key_'+(i+1)+'_dataSource">'+datasourceStr+'</select></td></tr>';
 			searchStr += '<tr><td><input type="button" value="Choose Selected" onClick=\'setRelatedId("object_institution_key_'+(i+1)+'");\'/></td><td></td></tr>';
@@ -882,10 +872,13 @@ function setInstitutionalPage(theValue, theGroups, theDataSource)
 			searchStr += '</div>'; 
 			searchStr += '<div class="mask" onclick="closeSearchModal(\'object_institution_key_'+(i+1)+'\')" id="mask_object_institution_key_'+(i+1)+'"></div>';
 			
-			var inputStr = searchStr + '<input type="hidden" name="group_'+(i+1)+'" value="'+groups[i]+'"><input type="text" name="institution_key_'+(i+1)+'" id="object_institution_key_'+(i+1)+'_value" size="25" maxlength="128" value="" />';
+			var inputStr = searchStr + '<input type="hidden" name="group_'+(i+1)+'" value="'+groups[i]+'"><input type="text" name="institution_key_'+(i+1)+'" id="object_institution_key_'+(i+1)+'_value" size="25" maxlength="128" value="'+theValue.value+'" />';
 			inputStr +='<img name="relatedImg" src="../_images/preview.png" onClick=\'showSearchModal("object_institution_key_'+(i+1)+'"); \' style="cursor:pointer; display:inline; margin-left:8px; vertical-align:bottom; height:16px; width:16px;" />';
-			thePage.innerHTML = inputStr;	
-			addRelatedObjectAutocomplete("object_institution_key_"+(i+1)+"_name");
+			if(thePage){
+				thePage.innerHTML = inputStr;
+				addRelatedObjectAutocomplete("object_institution_key_"+(i+1)+"_name");
+			}
+			
 		}
 	
 	}

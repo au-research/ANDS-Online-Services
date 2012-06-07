@@ -14,10 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 *******************************************************************************/
 // Include required files and initialisation.
-require '../../_includes/init.php';
+//require '../../_includes/init.php';
 //ini_set('display_errors',1); 
 //error_reporting(E_ALL);
-require '../orca_init.php';
+//require '../orca_init.php';
+require '../manage/process_registry_object.php';
 // Page processing
 // -----------------------------------------------------------------------------
 
@@ -122,7 +123,8 @@ if( strtoupper(getPostedValue('action')) == "SAVE" )
 	$groups = getDataSourceGroups($dataSourceKey);	
 	foreach($groups as $group)
 	{
-		deleteInstitutionalPage($group['object_group'],$dataSourceKey);
+		$theResult = deleteInstitutionalPage($group['object_group'],$dataSourceKey);
+		
 	}	
 	switch($pagesChoice){
 		case 1:
@@ -130,32 +132,45 @@ if( strtoupper(getPostedValue('action')) == "SAVE" )
 			{
 				//first we need to check if this group's institutional page is being administered by someone else, and if so we just leave it alone.
 				$pageInfo = getGroupPage($group['object_group']);
-				if(!isset($pageInfo['authoritive_data_source_key']));
+				if(!isset($pageInfo[0]['authoritive_data_source_key']))
 				{
+				
 					//check if the automated institutional page registry object actually already exists;
-					$key  = "Institution:".$group['object_group'];
+					$key  = "Contributor:".$group['object_group'];
 					$thePage = getRegistryObject($key, $overridePermissions = true);
-					//print_r($thePage);
 					if(!$thePage)
 					{
 
-						$rifcs = "  <registryObject group=\"".$group['object_group']."\">\n";
-						$rifcs .= "    <key>".$key."</key>\n";	
-						$rifcs .= "    <originatingSource>".$dataSourceKey."</originatingSource>\n";					
-						$rifcs .= "    <party type=\"group\">\n";			
-						$rifcs .= "	<name type=\"primary\">\n";		
-        				$rifcs .= "		<namePart type=\"full\">".$group['object_group']."</namePart>\n";       
-      					$rifcs .= "	</name>\n"; 		
-						$rifcs .= "    </party>\n";		
-						$rifcs .= "  </registryObject>\n";			
+						$thePage = getDraftRegistryObject($key, $dataSourceKey);
+						if(!$thePage)
+						{					
+						
+							$rifcs = "  <registryObject group=\"".$group['object_group']."\">\n";
+							$rifcs .= "    <key>".$key."</key>\n";	
+							$rifcs .= "    <originatingSource>".$dataSourceKey."</originatingSource>\n";					
+							$rifcs .= "    <party type=\"group\">\n";			
+							$rifcs .= "	<name type=\"primary\">\n";		
+        					$rifcs .= "		<namePart type=\"full\">".$group['object_group']."</namePart>\n";       
+      						$rifcs .= "	</name>\n"; 		
+							$rifcs .= "    </party>\n";		
+							$rifcs .= "  </registryObject>\n";			
 
-						$wrappedRifcs = wrapRegistryObjects($rifcs, false);
-			 			$registryObjects = new DOMDocument();
-			  			$registryObjects->loadXML($wrappedRifcs);				
-						$theInstitutionPage = importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMessage, $created_who=SYSTEM, $status=PUBLISHED, $record_owner=SYSTEM, $xPath=NULL, $override_qa=false	);	
-
-					}	else { 
-						//deleteRegistryObject($key);
+							$wrappedRifcs = wrapRegistryObjects($rifcs, false);
+			 				$registryObjects = new DOMDocument();
+			  				$registryObjects->loadXML($wrappedRifcs);				
+							//$theInstitutionPage = importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMessage, $created_who=SYSTEM, $status=PUBLISHED, $record_owner=SYSTEM, $xPath=NULL, $override_qa=false	);	
+							$theInstitutionPage =  insertDraftRegistryObject('SYSTEM', $key, 'Party', $group['object_group'], 'group', $group['object_group'], $dataSourceKey, date('Y-m-d H:i:s'), date('Y-m-d H:i:s') , $wrappedRifcs, '', 0, 0, 'DRAFT');
+							runQualityLevelCheckForDraftRegistryObject($key,$dataSourceKey);
+							addDraftToSolrIndex($key);
+							
+							/* now send an email to services to let them know that the record has been ceated */
+							
+							send_email(
+							eCONTACT_EMAIL,
+							"Automatically generated Contributor record has been created for data source".$dataSourceKey,
+							$key . " registry object has been created and is currently in draft status\n\n"
+							);							
+						}	
 					}
 					$theInstitutionalPage = insertInstitutionalPage($group['object_group'],$key,$dataSourceKey);
 				}
@@ -170,7 +185,14 @@ if( strtoupper(getPostedValue('action')) == "SAVE" )
 				if($institutional_key!='')
 				{
 					//lets check we have a valid party group key for this datas source with the correct object group
-					$theInstitution = getRegistryObject($institutional_key);
+					$theInstitution = getRegistryObject($institutional_key,$overridePermissions = true);
+				//	print("<pre>");
+				//	print_r($theInstitution);
+				//	print("</pre>");
+				//	echo $theInstitution[0]['data_source_key']."== ".$dataSourceKey."<br />";
+				//	echo $theInstitution[0]['object_group']." == ".$group."<br />";
+				//	echo $theInstitution[0]['registry_object_class']. " == Party<br />";
+				//	echo $theInstitution[0]['type']." == group<br />";
 					if($theInstitution[0]['data_source_key']==$dataSourceKey&&$theInstitution[0]['object_group']==$group&&$theInstitution[0]['registry_object_class']=='Party'&&$theInstitution[0]['type']=='group')
 					{
 						//echo "The record is valid so add it to the db <br />";
@@ -178,7 +200,7 @@ if( strtoupper(getPostedValue('action')) == "SAVE" )
 					}else{
 						//echo "The record is not valid<br />";
 						$institutionPagesClass = gERROR_CLASS;
-						$errorMessages .= "You have provided an invalid key for your Institutional page.<br />The assigned registry object must be a group party originating from this datasource and object group.<br />";
+						$errorMessages .= "You have provided an invalid key for your Institutional page.<br />The assigned registry object must be a PUBLISHED group party originating from this datasource and object group.<br />";
 					}
 				}
 				unset($_POST['group_'.$i]);
@@ -675,11 +697,13 @@ require '../../_includes/header.php';
 					$groups .= ":::".$group['object_group'];
 					$groupDataSources = getGroupDataSources($group['object_group']);
 					$groupsDataSources[$group['object_group']] = '';
-					foreach($groupDataSources as $groupDataSource)
-					{
-						$groups .= "|||".$groupDataSource['data_source_key'];
-						$groupsDataSources[$group['object_group']] .= '<option value="'.$groupDataSource['data_source_key'].'">'.$groupDataSource['data_source_key'].'</option>';
-					}
+				//	foreach($groupDataSources as $groupDataSource)
+				//	{
+				//		$groups .= "|||".$groupDataSource['data_source_key'];
+				//		$groupsDataSources[$group['object_group']] .= '<option value="'.$groupDataSource['data_source_key'].'">'.$groupDataSource['data_source_key'].'</option>';
+				//	}
+						$groups .= "|||".$dataSourceKey;
+						$groupsDataSources[$group['object_group']] .= '<option value="'.$dataSourceKey.'">'.$dataSourceKey.'</option>';				
 				}
 				$groups = trim($groups,":::");
 			}
@@ -703,7 +727,7 @@ require '../../_includes/header.php';
 				<tr><td id="group<? echo $i;?>name" width="200"><?php  echo $group['object_group'];?>
 				<?php  if ($thePage[0]['authoritive_data_source_key'] != $data_Source && isset($thePage[0]['authoritive_data_source_key'])) 
 				{ ?>
-					<br /><span style="color:grey">Already managed by <?php echo $thePage[0]['authoritive_data_source_key']?></span><td></td> 
+					<br /><span style="color:grey">Already managed by <?php echo $thePage[0]['authoritive_data_source_key']?></span><td><?php print($thePage[0]['registry_object_key'])?></td> 
 					<?php  
 				} else { ?>		
 					<td id="group<?php echo $i;?>page">
@@ -730,8 +754,9 @@ require '../../_includes/header.php';
 					<?php 		
 					} else { 
 						print($thePage[0]['registry_object_key']); 
-					} ?>				
-					</td> <?php  
+					} 
+					?>		
+					</td> <input type="hidden" id="object_institution_key_<?php echo $i?>_current" value="<?php print($thePage[0]['registry_object_key'])?>"/>	<?php  
 				} ?></tr>				
 				<?php
 				$i++; 

@@ -298,7 +298,8 @@ require '../../_includes/header.php';
 					<?php  
 				
 				break;							
-			} ?>
+			} 
+			if($dataSource[0]['institution_pages']!=0){?>
 			<table border="1" width="100%">
 
 			<tr><td style="width:200px"><b>Group </b> </td><td> <b> Contributor Page Key</b></td></tr>
@@ -320,7 +321,7 @@ require '../../_includes/header.php';
 					</td><td >
 	<?php 			if($dataSource[0]['institution_pages']=="1"||$dataSource[0]['institution_pages']=="2")	
 					{
-						?><a href="../view.php?key=<?php print(urlencode($thePage[0]['registry_object_key'])); ?>&data_source=<?php print($dataSourceKey); ?>"><?php print($thePage[0]['registry_object_key']);?></a><?php 				
+						?><a href="../view.php?key=<?php print(($thePage[0]['registry_object_key'])); ?>"><?php print($thePage[0]['registry_object_key']);?></a><?php 				
 					}else{
 						print($thePage[0]['registry_object_key']); 
 					}
@@ -330,7 +331,7 @@ require '../../_includes/header.php';
 				<?php
 			}
 		}	?>
-			</table>
+			</table> <?php }?>
 			</td>
 		</tr>		
 		<tr style="border-bottom:2px solid black;">
