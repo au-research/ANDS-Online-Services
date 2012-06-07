@@ -536,7 +536,8 @@ addMenu($menu);
 		$menu = new menu('mORCA_REGISTRY_OBJECTS', 'My Registry Objects', 'mORCA_ADMINISTRATION');
 		addMenu($menu);		
 		
-		
+		$activity = new activity('mORCA_TASK_MANAGER', 'background Tasks', 'orca/maintenance/show_tasks.php');	
+		addActivity($activity);
 		
 			// =============================================================================
 			// List All Records

@@ -2794,6 +2794,7 @@ function getGroupDataSources($group)
 		return $resultSet;
 
 }
+
 function isContributorPage($page)
 {
 	global $gCNN_DBS_ORCA;
@@ -2806,4 +2807,101 @@ function isContributorPage($page)
 		return $resultSet[0];
 
 }
+//bacground tasks
+function getNextTask($status, $dependent = null)
+{
+	global $gCNN_DBS_ORCA;
+	$resultSet = null;
+	if($dependent != null && $status != null)
+	{
+		$strQuery = 'SELECT * FROM dba.tbl_background_tasks where status = $1 and dependent_task = CAST( $2 AS numeric ) order by added ASC limit 1';
+	    $params = array($status, $dependent);
+	}
+	else if($dependent == null)
+	{
+		$strQuery = 'SELECT * FROM dba.tbl_background_tasks where status = $1 order by added ASC limit 1';
+	    $params = array($status);
+	}
+	else if($status == null)
+	{
+		$strQuery = 'SELECT * FROM dba.tbl_background_tasks where dependent_task = CAST( $1 AS numeric ) order by added ASC limit 1';
+	    $params = array($dependent);
+	}
+
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	return $resultSet;
+}
+
+function getTask($taskId, $status)
+{
+	global $gCNN_DBS_ORCA;
+	$resultSet = null;
+	if($taskId != null)
+	{
+		$strQuery = 'SELECT * FROM dba.tbl_background_tasks where task_id = CAST( $1 AS numeric )';
+	    $params = array($taskId);
+	}
+	else if($status != null)
+	{
+		$strQuery = 'SELECT * FROM dba.tbl_background_tasks where status = $1';
+	    $params = array($status);
+	}
+	else
+	{
+		$strQuery = 'SELECT * FROM dba.tbl_background_tasks order by added';
+	    $params = array();
+	}
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	return $resultSet;
+}
+
+
+function addNewTask($method, $params = '', $key_hash = '', $data_source_key_hash = '', $dependent_task = null)
+{
+	$taskId = null;
+	global $gCNN_DBS_ORCA;
+	$strQuery = 'INSERT INTO  dba.tbl_background_tasks (method, params, key_hash, data_source_key_hash, dependent_task) VALUES ($1, $2, $3, $4, $5)';
+	$params = array($method, $params, $key_hash, $data_source_key_hash, $dependent_task);
+	$resultSet = executeUpdateQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	$strQuery = 'SELECT CURRVAL(pg_get_serial_sequence($1,$2))';
+	$params = array('dba.tbl_background_tasks', 'task_id');
+	$taskId = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);		
+	return $taskId[0]['currval'];
+}
+
+/*
+ * 
+  task_id bigserial NOT NULL,
+  method character varying(64),
+  started timestamp without time zone,
+  added timestamp without time zone NOT NULL DEFAULT now(),
+  completed timestamp without time zone,
+  dependent_task bigint,
+  params character varying(1024),
+  key_hash text,
+  data_source_key_hash text,
+  status character varying(32) NOT NULL DEFAULT 'WAITING'::character varying,
+  CONSTRAINT tbl_background_tasks_pkey PRIMARY KEY (task_id )
+ * 
+ */
+
+function setTaskStarted($taskId)
+{
+	global $gCNN_DBS_ORCA;
+    $strQuery = 'update dba.tbl_background_tasks set status = $2, started = now() where task_id = $1';
+	$params = array($taskId, 'STARTED');
+	$result = executeUpdateQuery($gCNN_DBS_ORCA, $strQuery, $params);	
+	return $result;
+}
+
+function setTaskCompleted($taskId)
+{
+	global $gCNN_DBS_ORCA;
+	$strQuery = 'update dba.tbl_background_tasks set status = $2, completed = now() where task_id = $1';
+	$params = array($taskId, 'COMPLETED');
+	$result = executeUpdateQuery($gCNN_DBS_ORCA, $strQuery, $params);	
+	return $result;
+}
+
+
 ?>
