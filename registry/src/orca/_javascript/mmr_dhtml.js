@@ -89,7 +89,6 @@ $(document).ready(function() {
 				$('.qaview[id='+status+'_qaview]').show();
 				$('.qa_table[status='+status+']').parents('.tab-content').show();
 			}
-
 		}
 	}
 

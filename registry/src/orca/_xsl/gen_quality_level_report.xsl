@@ -142,12 +142,13 @@
 			</xsl:otherwise>
 	   </xsl:choose>
 
-        <xsl:choose>
+        
+	    <xsl:choose>
 	       	<xsl:when test="not(ro:citationInfo)">
 	       		<span class="qa_error" level="4" field_id="errors_citationInfo" qa_id="REC_CITATION">Citation data for the collection is recommended.</span>
 			</xsl:when>
 			<xsl:otherwise>
-	       		<span class="qa_error" level="4" field_id="errors_citationInfo" qa_id="REC_CITATION">Citation data for the collection is recommended.</span>
+	       		<span class="qa_ok" level="4" field_id="errors_citationInfo" qa_id="REC_CITATION">Citation data for the collection is recommended.</span>
 			</xsl:otherwise>
 	    </xsl:choose>
 	 </xsl:template>

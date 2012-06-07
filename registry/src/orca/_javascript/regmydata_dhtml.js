@@ -1321,10 +1321,20 @@ function saveAndPreview() {
 					}
 
 					var qualityLevelText = new Array();
+					var roStatus = $('#elementCategory').val();
 					qualityLevelText[1] = 'This record does not meet any of the Metadata Content Requirements. The record does not contain enough information for discovery, and will be considered a placeholder or test.';
 					qualityLevelText[2] = 'This record meets some of the Metadata Content Requirements. The record may facilitate discovery, but does not comply with the Minimum  Metadata Content Requirements.';
-					qualityLevelText[3] = 'Congratulations! This record satisfies the Minimum  Metadata Content Requirements  enabling discovery and access to collections.';
-					qualityLevelText[4] = 'Congratulations! This record exceeds the Minimum Metadata Content Requirements  and provides enough information to enable reuse.';
+					if(roStatus=='collection'){
+						qualityLevelText[3] = 'Congratulations! This record satisfies the Minimum  Metadata Content Requirements  enabling discovery and access to collections.';
+					}else{
+						qualityLevelText[3] = 'Congratulations! This record satisfies the Minimum  Metadata Content Requirements';
+					}
+					if(roStatus=='collection'){
+						qualityLevelText[4] = 'Congratulations! This record exceeds the Minimum Metadata Content Requirements  and provides enough information to enable reuse.';
+					}else{
+						qualityLevelText[4] = 'Congratulations! This record exceeds the Minimum Metadata Content Requirements';
+					}
+					
 
 				
 					var ql_result = '<div id="ql_result"><div class="ql_num ql'+qualityLevel+'">Level '+qualityLevel+' Record</div><div class="ql_explain">'+qualityLevelText[qualityLevel]+'</div><div class="clearfix"></div></div>';

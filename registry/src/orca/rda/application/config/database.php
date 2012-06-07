@@ -76,6 +76,7 @@ $db['default']['swap_pre'] = '';
 $db['default']['autoinit'] = TRUE;
 $db['default']['stricton'] = FALSE;
 $db['default']['port'] = $orca_db_port;
+$db['default']['active_r'] = TRUE;
 
 /* End of file database.php */
 /* Location: ./application/config/database.php */

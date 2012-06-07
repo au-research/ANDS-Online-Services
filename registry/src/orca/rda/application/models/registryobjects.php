@@ -21,6 +21,7 @@ limitations under the License.
 		
 	    function __construct() {
 	        parent::__construct();
+	        parent::Model(); 
 	    }
     
 	  	
