@@ -1100,7 +1100,7 @@ $(document).ready(function(){
                 url: base_url+"search/seeAlso/count/subjects",data:"q=*:*&classFilter=collection&typeFilter=All&groupFilter=All&subjectFilter="+subjectSearchstr+"&licenceFilter=All&page=1&spatial_included_ids=&temporal=All&excluded_key="+key_value,
                         success:function(msg){
                                 $("#seeAlso").html(msg);
-                                console.log(msg);
+                                //console.log(msg);
                                if(parseInt($('#seealso-realnumfound').html())==0){
 	                            	$('#seeAlso').hide();
                             	

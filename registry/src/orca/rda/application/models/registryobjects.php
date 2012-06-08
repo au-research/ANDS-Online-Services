@@ -97,7 +97,7 @@ limitations under the License.
 					//echo 'inserted '.$t.' ';
 	    		}
 	    	}
-	    	//echo 'search stat updated';
+	    	echo 'search stat updated';
 	    }
 		
 		
