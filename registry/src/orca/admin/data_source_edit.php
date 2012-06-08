@@ -121,11 +121,14 @@ if( strtoupper(getPostedValue('action')) == "SAVE" )
 	//Lets deal with the three possible scenarios for institutional pages and then clear all of the excess post variables so we don't muck up the data_source update function
 	$pagesChoice = getPostedValue('institution_pages');
 	$groups = getDataSourceGroups($dataSourceKey);	
-	foreach($groups as $group)
+	if($groups)
 	{
-		$theResult = deleteInstitutionalPage($group['object_group'],$dataSourceKey);
+		foreach($groups as $group)
+		{
+			$theResult = deleteInstitutionalPage($group['object_group'],$dataSourceKey);
 		
-	}	
+		}	
+	}
 	switch($pagesChoice){
 		case 1:
 			foreach($groups as $group)
@@ -707,15 +710,17 @@ require '../../_includes/header.php';
 				}
 				$groups = trim($groups,":::");
 			}
-			if($groups!='')
-			{
+			if($groups=='')
+			{  $groupClass= ' style="display:none;"';} else {$groupClass= ' style="display:block;"';}
 			?>
-			<tr>
+			<tr <?php echo $groupClass;?>">
 			<td<?php print($institutionPagesClass); ?>>Institutional Pages:</td>		
 			<td>			
 			 	<input type="radio" name="institution_pages" value="0" <?php if($institutionalPages=="0") echo " checked"?> onChange="setInstitutionalPage(this,'<?php echo $groups;?>','<?php echo $data_Source?>');"> Do not have institutional pages<br />
 				<input type="radio" name="institution_pages" value="1" <?php if($institutionalPages=="1") echo " checked"?> onChange="setInstitutionalPage(this,'<?php echo $groups;?>','<?php echo $data_Source?>');"> Auto generate Institutional Pages for all my groups<br /> 
 				<input type="radio" name="institution_pages" value="2" <?php if($institutionalPages=="2") echo " checked"?> onChange="setInstitutionalPage(this,'<?php echo $groups;?>','<?php echo $data_Source?>');"> Manually manage my Institutional Pages and groups<br /> 
+				<?php if($groups!='')
+				{?>
 				<table id="institutionalPages" width="600" border="1">
 				<tr><td style="width:200px"><b>Group </b> </td><td> <b> Contributor Page Key</b></td></tr>
 			<?php 

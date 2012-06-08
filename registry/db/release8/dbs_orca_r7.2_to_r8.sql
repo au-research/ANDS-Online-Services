@@ -26,7 +26,11 @@ ALTER TABLE dba.tbl_registry_objects ADD COLUMN slug character varying(512);
 -- UPDATE dba.tbl_registry_objects ro SET url_slug = (SELECT url_fragment FROM dba.tbl_url_mappings url WHERE ro.registry_object_key = url.registry_object_key ORDER BY date_created DESC LIMIT 1)
 
 
+-- Column: value
 
+-- ALTER TABLE dba.tbl_descriptions DROP COLUMN value;
+
+ALTER TABLE dba.tbl_descriptions ADD COLUMN value character varying(12000);
 
 
 

@@ -184,18 +184,34 @@
 	      
  
                          	
-		<xsl:if test="ro:location/ro:address/ro:electronic/@type='url' 
+			<xsl:if test="ro:location/ro:address/ro:electronic/@type='url' 
 		or ro:rights or ro:location/ro:address/ro:electronic/@type='email'  or ro:location/ro:address/ro:physical">		
 		<div class="right-box">
-			<h2>Contact:</h2>
+			<h2>Contact</h2>
 			<div class="limitHeight300">
 		 	<xsl:if test="ro:location/ro:address/ro:electronic/@type='url'">
 				<p><xsl:apply-templates select="ro:location/ro:address/ro:electronic"/></p>	
 	 		</xsl:if>
 	 		
-
+	 		 <xsl:if test="extRif:rights">
+					<h3>Rights</h3>	
+			</xsl:if>
 				
-		
+			<!-- <xsl:apply-templates select="ro:description[@type = 'accessRights' or @type = 'rights']" mode="right"/>	 -->	
+			<xsl:apply-templates select="extRif:rights"/>		
+			
+		 	<xsl:if test="ro:location/ro:address/ro:electronic/@type='email' or ro:location/ro:address/ro:physical">
+		 		<h3>Contacts</h3>
+		 		<xsl:if test="ro:location/ro:address/ro:electronic/@type='email'">
+					<p><xsl:apply-templates select="ro:location/ro:address/ro:electronic/@type"/></p>	
+				</xsl:if>
+			 	<xsl:if test="ro:location/ro:address/ro:physical/@type='telephoneNumber'">
+					<p><xsl:apply-templates select="ro:location/ro:address/ro:physical"/></p>	
+				</xsl:if>				
+		 		<xsl:if test="ro:location/ro:address/ro:physical">
+					<p><xsl:apply-templates select="ro:location/ro:address/ro:physical"/></p>	
+				</xsl:if>				
+	 		</xsl:if>			
 			                        
 			</div>
 		</div>					

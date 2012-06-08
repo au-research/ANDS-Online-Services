@@ -28,6 +28,18 @@ limitations under the License.
 		if($class[$i]=="collection") {$collectionCount = $class[$i+1];}
 		$i++;
 	}
+	if($collectionCount==1)
+	{
+		$collectionWord = 'collection';
+	}else{
+		$collectionWord = 'collections';
+	}
+	if($collectionCount==0)
+	{
+		$collectionCount = 'no';
+		//$collectionLink =
+	}
+	
 	
 	$groupCount = 0;
 	for($i=0;$i<count($types);$i++)
@@ -37,6 +49,17 @@ limitations under the License.
 			$groupCount = $types[$i+1];
 		}
 		$i++;
+	}	
+		
+	if($groupCount==1)
+	{
+		$groupWord = 'group';
+	}else{
+		$groupWord = 'groups';
+	}
+	if($groupCount==0)
+	{
+		$groupCount = 'No';
 	}	
 
 	$subjectNum = count($subjects)/2;
@@ -56,6 +79,7 @@ limitations under the License.
 		$counter++;
 	}	
 	$subjectStr='';
+	$subjectWord = 'areas';
 	if($subjectNum<1)
 	{
 		$subjectStr = ".";
@@ -63,6 +87,7 @@ limitations under the License.
 	elseif($subjectNum==1)
 	{
 		$subjectStr = ' including <a href="'.base_url().'search#!/tab=All/group='.urlencode($group).'/subject='.$subject[0].'">'.$subject[0].'</a>.';
+		$subjectWord = 'areas';
 	}
 	elseif($subjectNum==2)
 	{
@@ -73,7 +98,12 @@ limitations under the License.
 		$subjectStr = ' including <a href="'.base_url().'search#!/tab=All/group='.urlencode($group).'/subject='.$subject[0].'">'.$subject[0].'</a>, <a href="'.base_url().'search#!/tab=All/group='.urlencode($group).'/subject='.$subject[1].'">'.$subject[1].'</a> and <a href="'.base_url().'search#!/tab=All/group='.urlencode($group).'/subject='.$subject[2].'">'.$subject[2].'</a>.';	
 	}
 	
-	echo '<p>Up to date, ' .urldecode($group). ' has <a id="hp-count-collection" href="'.base_url().'search#!/tab=collection/group='.urlencode($group).'">' .$collectionCount .'  collections</a> in RDA, which covers 
-	'.$subjectNum.' subject areas'.$subjectStr.' ' .$groupCount. ' 
-	 research groups have been actively involved in collecting data and creating metadata records for the data.</p>';
+	echo '<p>Up to date, ' .urldecode($group). ' has ';
+	if($collectionCount!='no'){
+		echo '<a id="hp-count-collection" href="'.base_url().'search#!/tab=collection/group='.urlencode($group).'">' .$collectionCount .' '.$collectionWord.'</a> ';
+	}else{
+		echo  ' '.$collectionCount .' '.$collectionWord.' ';
+	}
+	echo 'in RDA, which covers 	'.$subjectNum.' subject '.$subjectWord.' '.$subjectStr.' ' .$groupCount. ' 
+	 research '.$groupWord.' have been actively involved in collecting data and creating metadata records for the data.</p>';
 ?>
