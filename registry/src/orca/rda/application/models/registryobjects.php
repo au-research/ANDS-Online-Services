@@ -65,6 +65,7 @@ limitations under the License.
 		 * Normally use for search suggestion
 		 */ 
 	    function getSearchHistory(){
+	    	$this->load->database();
 	    	return $this->db->get('dba.tbl_search_statistics');
 	    }
     
@@ -73,6 +74,7 @@ limitations under the License.
 		 * update the statistics from searches
 		 */ 
 	    function updateStatistic($query, $class, $group, $subject, $type, $temporal){
+	    	$this->load->database();
 	    	$terms = array($query, 'class:'.$class, 'type:'.$type, 'subject:'.$subject, 'group:'.$group, 'type:'.$type, 'temporal:'.$temporal);
 	    	foreach($terms as $t){
 	    		//check if term exists
@@ -170,9 +172,11 @@ limitations under the License.
 
 	    function spatial($north, $east, $south, $west)
 	    {
-	    	return $this->db->query('select distinct rs.registry_object_key from dba.tbl_registry_objects rs, dba.tbl_spatial_extents se
+	    	$query = 'select distinct rs.registry_object_key from dba.tbl_registry_objects rs, dba.tbl_spatial_extents se
 	where rs.registry_object_key = se.registry_object_key 
-	and se.bound_box && box ((point('.$north.','.$west.')),(point('.$south.','.$east.')))');
+	and se.bound_box && box ((point('.$north.','.$west.')),(point('.$south.','.$east.')))';
+			return $query;
+	    	return $this->db->query($query);
 	    }
     
     

@@ -612,9 +612,14 @@ class Search extends CI_Controller {
 		$east = $this->input->post('east');
 		$west = $this->input->post('west');
 		
-		$this->load->model('registryobjects');
-		$data['registryObjects']=$this->registryobjects->spatial($north, $east, $south, $west);
+		//echo $north;
+		$query = 'select distinct rs.registry_object_key from dba.tbl_registry_objects rs, dba.tbl_spatial_extents se
+	where rs.registry_object_key = se.registry_object_key 
+	and se.bound_box && box ((point('.$north.','.$west.')),(point('.$south.','.$east.')))';
+		$this->load->database();
+		$data['registryObjects'] = $this->db->query($query);
 		$this->load->view('search/listIDs', $data);
+		//var_dump($keys);
 	}
 
 }
