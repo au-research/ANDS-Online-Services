@@ -1168,6 +1168,8 @@ function saveAndPreview() {
 	
 	if (userMode != 'readOnly')
 	{
+		$('#save_notification').show();
+		$('#errors_preview').show();
 		var ds = $('#object_mandatoryInformation_dataSource').val();
 		$("#save_notification").html("<div>This draft has been saved successfully.</div>");
 		
@@ -1210,6 +1212,7 @@ function saveAndPreview() {
 		if($('#rda_preview_container').length > 0){
 			$('#rda_preview_container').remove();	
 		}
+		$("#errors_preview").hide();
 		
 		if(!$("#infos_preview").length){
 			//if it's not there, create it so that we can append the preview
@@ -1223,6 +1226,7 @@ function saveAndPreview() {
 						"<div id='rifcs_plain' class='hide'><img src='"+rootAppPath+"orca/_images/delete_16.png' class='closeBlockUI' style='float:right;'/>" +
 								"<textarea id='rifcs_plain_content'></textarea>" +
 								"</div>");
+
 
 		//copy and paste from above, need refactor
 		$(".rda_preview").attr("href",$("#baseURL").val() + 'rda/preview?ds='+$('#object_mandatoryInformation_dataSource').val()+'&key=' + $('#object_mandatoryInformation_key').val());
@@ -1249,6 +1253,7 @@ function saveAndPreview() {
 		   );
 			$('#rifcs_popup').hide();
 		});
+		
 	} 
 
 	/* alert(document.forms[0].length + " is the length of the form");
@@ -1406,6 +1411,14 @@ function saveAndPreview() {
 									initQADisplay();				
 								},
 							'html');
+					if(userMode!='readOnly'){
+						$('#save_notification').show();
+						$('#errors_preview').show();
+					}else{
+						$('#save_notification').hide();
+						$('#errors_preview').hide();
+					}
+					
 					//displayQuagmireSummary();
 ////console.log("qaRequired2: " + qaRequired);
 					
@@ -1416,6 +1429,8 @@ function saveAndPreview() {
 		//	$('#rmb_formNotes').html('<pre>'+data+'</pre>'); 
 		}
 	);
+
+	
 
 }
 

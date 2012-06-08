@@ -757,7 +757,7 @@ function displayMMRDataSourceSwitcher(array $dataSources = array(), $selected_ke
 					</div>
 				</div>
 				<div class="content_block">
-					<a href="<?php echo eAPP_ROOT . "orca/admin/data_source_view.php?data_source_key=" . rawurlencode($dataSourceKey); ?>">Manage this Data Source</a>
+					<a href="<?php echo eAPP_ROOT . "orca/admin/data_source_view.php?data_source_key=" . rawurlencode($selected_key); ?>">Manage this Data Source</a>
 				</div>
 				<div class="content_block">
 					<a class="pop" href="#" title="This tool allows you to view and manage the records which you have recently created, edited or harvested.">(more details)</a>

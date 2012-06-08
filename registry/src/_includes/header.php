@@ -104,7 +104,7 @@ if( $eDisplayErrors )
 }
 // The link to Research Data Australia
 $rdaLink = '';
-$rdaLink = '<a href="'.esc(eHTTP_APP_ROOT.'orca/rda/index.php').'">Research Data Australia</a>';
+$rdaLink = '<a href="'.$default_protocol.'://'.$host.'/'.$rda_root.'">Research Data Australia</a>';
 ?>
 <div class="<?php print $gAppMarginClass ?>">
 	<div id="topNav"><script type="text/javascript">writeMenuControls()</script><a href="#menuStart">Skip to Menus</a><a href="#contentStart">Skip to Content</a><?php print $rdaLink ?><?php //print getActivityLink('aCOSI_ABOUT') ?></div>
