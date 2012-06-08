@@ -132,19 +132,19 @@ if(isset($groups)&&$groups['numfound']>0){
 		$logostr = '';
 		if(isset($groups['json']->{'response'}->{'docs'}[$i]->{'description_type'}))
 		{
-		if($description_types = $groups['json']->{'response'}->{'docs'}[$i]->{'description_type'})
-		{
-			$description_value =  $groups['json']->{'response'}->{'docs'}[$i]->{'description_value'};
-			$logostr = '';
-			for($j=0;$j<count($description_types);$j++)
+			if($description_types = $groups['json']->{'response'}->{'docs'}[$i]->{'description_type'})
 			{
-				if($description_types[$j]=='logo')
+				$description_value =  $groups['json']->{'response'}->{'docs'}[$i]->{'description_value'};
+				$logostr = '';
+				for($j=0;$j<count($description_types);$j++)
 				{
-					$logostr = '<div><img id="party_logo"  style="max-width:130px;max-height:63px;" src="'.$description_value[$j].'"/></div>';
+					if($description_types[$j]=='logo')
+					{
+						$logostr = '<div><img id="party_logo"  style="max-width:130px;max-height:63px;" src="'.$description_value[$j].'"/></div>';
+					}
 				}
-			}
 
-		}
+			}
 		}
 
 		echo '<li><a href="'.base_url().'view/?key='.urlencode($groups['json']->{'response'}->{'docs'}[$i]->{'key'}).'" title="'.findRelationship($groups['json']->{'response'}->{'docs'}[$i]->{'key'},$groups['relatedKey'],$groups['relationship']).' '.$autoLinkTitle.'">';
@@ -164,11 +164,16 @@ showContributors($theGroup);
 function showContributors($theGroup)
 {
 	$theGroupKey = getInstitutionPage($theGroup);
+
 	if($theGroupKey)
 	{
+		$theLogo='';
+		if($logoStr = getPageLogo($theGroupKey)){
+	     $theLogo ='   <br /><img id="party_logo" style="max-width:130px;" src="'.$logoStr.'" alt="Party Logo" />';
+		}
 		echo '<h3><img  class="icon-heading-connections" src="'.base_url().'/img/icon/party_multi_16.png"/>Record Contributor</h3>';
 		echo '<ul>';
-		echo '<li><a href="'.base_url().'view/group/?group='.urlencode($theGroupKey).'&groupName='.$theGroup.'" title="Contributor group">'.$theGroup.'</a></li>';	
+		echo '<li><a href="'.base_url().'view/group/?group='.urlencode($theGroupKey).'&groupName='.$theGroup.'" title="Contributor group">'.$theGroup.'</a>'.$theLogo.'</li>';	
 		echo '</ul>';
 	}
 }

@@ -424,7 +424,7 @@ require '../../_includes/header.php';
 	<?php } ?>
 	<tbody class="formFields">
 	<tr style="border-bottom:2px solid black;">
-		<td colspan="2"><span style="float:left;">Account Administration Information</span>
+		<td colspan="2" style="border-bottom:2px solid black;"><span style="float:left;">Account Administration Information</span>
 		</td>
 		</tr>
 		<tr>
@@ -474,7 +474,7 @@ require '../../_includes/header.php';
 			<td><textarea name="notes" id="notes" cols="50" rows="5"><?php printSafe($notes) ?></textarea></td>
 		</tr>
 		<tr style="border-bottom:2px solid black;">
-		<td colspan="2"><span style="float:left;">Records Management Settings</span>
+		<td colspan="2" style="border-bottom:2px solid black;"><span style="float:left;">Records Management Settings</span>
 		</td>
 		</tr>
 		<tr>
@@ -711,14 +711,19 @@ require '../../_includes/header.php';
 				$groups = trim($groups,":::");
 			}
 			if($groups=='')
-			{  $groupClass= ' style="display:none;"';} else {$groupClass= ' style="display:block;"';}
+			{  
+				$groupClass= ' style="display:none;"';
+			} else {
+				$groupClass= '';
+			}
 			?>
-			<tr <?php echo $groupClass;?>">
+			<tr <?php echo $groupClass;?>>
 			<td<?php print($institutionPagesClass); ?>>Institutional Pages:</td>		
 			<td>			
 			 	<input type="radio" name="institution_pages" value="0" <?php if($institutionalPages=="0") echo " checked"?> onChange="setInstitutionalPage(this,'<?php echo $groups;?>','<?php echo $data_Source?>');"> Do not have institutional pages<br />
 				<input type="radio" name="institution_pages" value="1" <?php if($institutionalPages=="1") echo " checked"?> onChange="setInstitutionalPage(this,'<?php echo $groups;?>','<?php echo $data_Source?>');"> Auto generate Institutional Pages for all my groups<br /> 
 				<input type="radio" name="institution_pages" value="2" <?php if($institutionalPages=="2") echo " checked"?> onChange="setInstitutionalPage(this,'<?php echo $groups;?>','<?php echo $data_Source?>');"> Manually manage my Institutional Pages and groups<br /> 
+				<span id="currentPage" style="display:none"><?php echo $institutionalPages?></span>
 				<?php if($groups!='')
 				{?>
 				<table id="institutionalPages" width="600" border="1">
@@ -774,7 +779,7 @@ require '../../_includes/header.php';
 			</td>
 		</tr>			
 		<tr style="border-bottom:2px solid black;">
-		<td colspan="2"><span style="float:left;">Harvester Settings</span>
+		<td colspan="2" style="border-bottom:2px solid black;"><span style="float:left;">Harvester Settings</span>
 		</td>
 		</tr>	
 		

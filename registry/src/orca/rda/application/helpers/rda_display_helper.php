@@ -288,6 +288,21 @@ function getInstitutionPage($group)
 	}
 
 }
+
+function getPageLogo($key){
+	$CI =& get_instance();
+	$CI->load->database();
+	$query = $CI->db->select("value")->get_where("dba.tbl_descriptions", array("registry_object_key" => $key,"type" => 'logo'));
+	if ($query->num_rows() == 0) 
+	{
+		return false;
+	}else{
+		$query = $query->row();
+		$value  = $query->value;
+		return strip_tags($value);
+	}
+
+}
 function displaySubscriptions(){//for now we only want to set up the subscriptions for search resluts on the collections tab
 	if($_POST['classFilter']=='collection')
 	{

@@ -64,16 +64,28 @@ function nlaPushCheck()
 				" See http://ands.org.au/guides/ardc-party-infrastructure-awareness.html.")
 		if(!answer){
 			return false;
-		}else{
-			return true;
 		}
 		
 	}
-	else
-	{
-		return true
+	// This submit check will now also check if the contributor pages have been reset from non to either auto or manual
+	var theOld = document.getElementById('currentPage').innerHTML;
+	var theNew = '5';
+	for (i=0;i<document.forms[0].institution_pages.length;i++) {
+		if (document.forms[0].institution_pages[i].checked) {
+			theNew = document.forms[0].institution_pages[i].value;
+		}
 	}
-	
+
+	if(theOld  == '0' && (theNew == '1' || theNew == '2'))
+	{
+		var answer = confirm("The Contributor home page will be a public web document representing your organisation.\nANDS advises that you should use only approved text and consult apprpriate authorities within your organisation.")
+		if(!answer){
+			return false;
+		}
+		
+	}
+
+	return true;
 }
 
 function toggle_checkbox(id)
