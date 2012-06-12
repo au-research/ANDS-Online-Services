@@ -324,7 +324,7 @@ function addDraftSolrIndexForDatasource($dataSourceKey)
 		
 		$rifcsContent .= unwrapRegistryObject($allKeys[$i]['rifcs']);	
 		$rifcsContent .= $xml;
-		print $rifcsContent."\n";
+		//print $rifcsContent."\n";
 		if(($i % $chunkSize == 0 && $i != 0) || $i == ($arraySize -1))
 		{					
 				$rifcs = wrapRegistryObjects($rifcsContent);
