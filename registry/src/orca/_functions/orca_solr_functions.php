@@ -131,8 +131,9 @@ function addPublishedToSolrIndex($registryObjectKey, $commit=true)
 	//global $solr_update_url;
 	$rifcsContent = getRegistryObjectXMLforSOLR($registryObjectKey,true);
 	$rifcsContent = wrapRegistryObjects($rifcsContent);
-	$rifcs = transformToSolr($rifcsContent);									
+	$rifcs = transformToSolr($rifcsContent);							
 	$result = curl_post(gSOLR_UPDATE_URL, $rifcs);
+	if($commit) $result .= curl_post(gSOLR_UPDATE_URL.'?commit=true', '<commit waitFlush="false" waitSearcher="false"/>');
 	return $result;
 }
 
@@ -162,7 +163,7 @@ function unwrapRegistryObject($rifcsString)
 
 function syncDraftKey($draft_key, $data_source_key){
 	deleteSolrDraft($draft_key, $data_source_key);
-	runQualityLevelCheckForDraftRegistryObject($draft_key, $draft_data_source);
+	runQualityLevelCheckForDraftRegistryObject($draft_key, $data_source_key);
 	addDraftToSolrIndex($draft_key, $data_source_key);
 }
 
@@ -170,7 +171,7 @@ function syncKey($key, $data_source_key){
 	deleteSolrHashKey(sha1($key));
 
 	//qa
-	runQualityCheckForRegistryObject($key, $dataSourceKey);
+	runQualityLevelCheckForRegistryObject($key, $data_source_key);
 
 	//cache
 	$extendedRIFCS = generateExtendedRIFCS($key);

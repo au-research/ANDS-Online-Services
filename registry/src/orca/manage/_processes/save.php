@@ -99,6 +99,7 @@ if($json)
 	{
 		// Keep the status and modification details, just resave (possibly to add field_id information?)
 		saveDraftRegistryObject($transformResult , $objectClass, $objectDataSource,$keyValue, $title, null, true);
+		//syncDraftKey($keyValue, $objectDataSource);
 	}
 
 	$preview = createPreview($transformResult, $objectClass, $objectDataSource, $dateCreated);

@@ -535,22 +535,18 @@ $(document).ready(function() {
 			},
 			function(data)
 			{
-				//console.log(data);
-				if (data['responsecode'] == '0'){
-					// Error occured
-					alert("Error Occured: Access Denied.");
-				}
-				else if (data['responsecode'] == "MT008"){
-					//$('#mmr_datasource_alert_msg').html('Your records have been sent to ANDS for assessment and approval. You should contact your ANDS Client Liaison Officer to notify them that these records have been submitted.');
-				}
-				else if (data['responsecode'] == "MT014")
-				{
-					//$('#mmr_datasource_alert_msg').html('An ANDS Quality Assessor has been notified of your submitted record(s)');
-				}
-				else
-				{
-					if (data['alert']){
-						console.log(data['alert']);
+				
+
+
+				if(data.responsecode=='0'){
+					alert('Error Occured: Access Denied');
+				}else if(data.responsecode=='MT008'){
+					alert('Your records have been sent to ANDS for assessment and approval. You should contact your ANDS Client Liaison Officer to notify them that these records have been submitted.');
+				}else if(data.responsecode=='MT014'){
+					alert('An ANDS Quality Assessor has been notified of your submitted record(s)');
+				}else{
+					if(data.alert){
+						alert(data.alert);
 					}
 				}
 				//$('#indexDS').click();

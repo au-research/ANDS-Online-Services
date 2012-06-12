@@ -366,6 +366,8 @@ function deleteRegistryObject($registry_object_key)
 	global $gCNN_DBS_ORCA;
 	//deleteSolrIndex($registryObjectkey); 
 	$result = deleteSolrIndex($registry_object_key);
+	//$slug = getRegistryObjectURLSlug($registry_object_key);
+	//deleteSLUGMapping($slug);
 	$errors = "";
 	$strQuery = 'SELECT dba.udf_delete_registry_object($1)';
 	$params = array($registry_object_key);
@@ -2668,19 +2670,43 @@ function updateRegistryObjectSLUG ($registry_object_key, $new_display_title, $cu
 {
 	global $gCNN_DBS_ORCA;
 	$updated_slug = generateUniqueSlug($new_display_title, $registry_object_key);
-	//die(var_dump($current_slug . $updated_slug));
+	//die(var_dump($current_slug .'====='. $updated_slug));
+	//echo $current_slug . '======' . $updated_slug;
 	// No need to do any updates if our slug hasn't changed
-	if ($current_slug == $updated_slug) { return true; }
+	if ($current_slug == $updated_slug) {
+		//echo 'is equal';
+		return true;
+	}
+
+	if(slugExist($updated_slug, $registry_object_key)){
+		$updated_slug = $updated_slug .'-'.rand(1, 99);
+	}
 
 	//Otherwise update the current slug
 	$strQuery = 'UPDATE dba.tbl_registry_objects SET url_slug = $2 WHERE registry_object_key = $1';
 	$params = array($registry_object_key, $updated_slug);
 	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
 
+	
+
 	//Add the new SLUG mapping
 	insertSLUGMapping($updated_slug, $registry_object_key, $new_display_title);
+	
+	//echo 'updated slug correctly:'. $updated_slug;
 
 	return;
+}
+
+function slugExist($slug){
+	global $gCNN_DBS_ORCA;
+	$strQuery = 'SELECT * FROM dba.tbl_url_mappings where url_fragment = $1';
+	$params = array($slug);
+	$existingSlug = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	if($existingSlug){
+		return true;			
+	}else{
+		return false;
+	}
 }
 
 function insertSLUGMapping($slug, $key, $current_title)
@@ -2688,6 +2714,7 @@ function insertSLUGMapping($slug, $key, $current_title)
 	global $gCNN_DBS_ORCA;
 	$strQuery = 'INSERT INTO dba.tbl_url_mappings VALUES ($1, $2, $3, $4, $5)';
 	$params = array($slug, $key, time(), 0, $current_title);
+	//var_dump($params);
 	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
 
 	return $resultSet; 	

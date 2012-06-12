@@ -110,7 +110,7 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 		if( $registryObjectKey )
 		{
 			$currentUrlSlug = getRegistryObjectURLSlug($registryObjectKey);
-
+			//echo $currentUrlSlug;
 			// Check if this object exists already, and delete it if it does.
 
 			if( $oldRegistryObject = getRegistryObject($registryObjectKey) )
@@ -527,11 +527,16 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 				updateRegistryObjectTitles ($registryObjectKey, $display_title, $list_title);
 
 
+
 				$hash = generateRegistryObjectHashForKey($registryObjectKey);
+
 				updateRegistryObjectHash($registryObjectKey, $hash);
+				//echo 'currentUrlSlug:'.$currentUrlSlug.'//end//';
+				//echo 'displayTitle:'.$display_title.'//end//';
+				//echo 'key:'.$registryObjectKey.'//end//';
 
 				updateRegistryObjectSLUG($registryObjectKey, $display_title, $currentUrlSlug);
-
+				//echo 'after slug';die();
 
 				// A new record has been inserted? Update the cache
 
@@ -643,18 +648,20 @@ function approveDraft($key, $data_source_key){
 
 					$importErrors = importRegistryObjects($registryObject,$dataSourceKey, $resultMessage, getLoggedInUser(), null, ($draft[0]['draft_owner']==SYSTEM ? SYSTEM : getThisOrcaUserIdentity()), null, true);
 					//echo $importErrors;die();
-					$QAErrors = runQualityCheckForRegistryObject(rawurldecode($key), $dataSourceKey);
+					//$QAErrors = runQualityCheckForRegistryObject(rawurldecode($key), $dataSourceKey);
 
 					//addSolrIndex(rawurldecode($key), true);
+					
+
 					if( !$importErrors )
 					{
 						$deleteErrors = deleteDraftRegistryObject($dataSourceKey , rawurldecode($key));
 					}
 
 
-					if( $deleteErrors || $importErrors || ($QAErrors!=''))
+					if( $deleteErrors || $importErrors)
 					{
-						$errorMessages .= "Delete Error: $deleteErrors \n\n Import Error: $importErrors \n\n Quality Check Error: $QAErrors";
+						$errorMessages .= "Delete Error: $deleteErrors \n\n Import Error: $importErrors \n\n";
 					}
 					else
 					{
@@ -682,6 +689,7 @@ function approveDraft($key, $data_source_key){
 													"------------------" : "");
 
 	return $returnErrors;
+//return true;
 }
 
 
@@ -2074,7 +2082,7 @@ function runQualityLevelCheckforDataSourceDIEDIEDIE($dataSourceKey)
 
 
 
-function runQualityCheckForRegistryObjectDIEDIEDIE($registryObjectKey, $dataSourceKey)
+/*function runQualityCheckForRegistryObject($registryObjectKey, $dataSourceKey)
 {
 		$rifcs = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
 		$rifcs .= '<registryObjects xmlns="http://ands.org.au/standards/rif-cs/registryObjects" '."\n";
@@ -2111,8 +2119,9 @@ function runQualityCheckForRegistryObjectDIEDIEDIE($registryObjectKey, $dataSour
 	    $errorCount = substr_count($qualityTestResult, 'class="error"');
 		$warningCount = substr_count($qualityTestResult, 'class="warning"') + substr_count($qualityTestResult, 'class="info"');
         $result = updateRegistryObjectQualityTestResult($registryObjectKey, $qualityTestResult, $errorCount, $warningCount);
+        //var_dump($result);
 		return $result;
-}
+}*/
 
 
 function runQualityLevelCheckForRegistryObject($registryObjectKey, $dataSourceKey)

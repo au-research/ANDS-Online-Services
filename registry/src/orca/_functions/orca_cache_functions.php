@@ -427,7 +427,7 @@ function deleteCacheItem($data_source_key, $registry_object_key)
 	$directory_path = checkCacheStructure($data_source_key, $registry_object_key);
 	if ($directory_path)
 	{
-		exec("cd ".$path_relative_to_cache."; rm -rf ".eCACHE_CURRENT_NAME.";");
+		exec("cd ".$directory_path."; rm -rf ".eCACHE_CURRENT_NAME.";");
 	}
 
 	regenerateDataSourceCache($data_source_key);

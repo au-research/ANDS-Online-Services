@@ -159,6 +159,7 @@ function clearKey($key, $status = 'All'){
 }
 
 
+
 function clearAllSolrIndex()
 {
 	global $solr_update_url;
@@ -166,9 +167,6 @@ function clearAllSolrIndex()
 	$result .= curl_post($solr_update_url.'?optimize=true', '<optimize waitFlush="false" waitSearcher="false"/>');
 	return $result;	
 }
-
-
-
 
 
 function addPublishedSolrIndexForDatasource($dataSourceKey)
@@ -370,7 +368,7 @@ function checkQuality($key,$dataSourceKey)
 	}
 	elseif($dataSourceKey)
 	{
-		$message = runQualityLevelCheckforDataSource($dataSourceKey);
+		$message = runQualityCheckforDataSource($dataSourceKey);
 	}
 	else 
 	{
@@ -389,6 +387,7 @@ function checkQuality($key,$dataSourceKey)
 	print $message;	
 	
 }
+
 
 
 

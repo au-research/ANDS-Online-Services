@@ -162,10 +162,10 @@ switch(getQueryValue('action'))
 		$returnErrors = "";
 		foreach($keys AS $key)
 		{
-			approveDraft($key, $data_source_key);
+			$returnErrors .= approveDraft(rawurldecode($key), $data_source_key);
+			deleteSolrHashKey(sha1($key.$data_source_key));//delete the draft
 			syncKey(rawurldecode($key), $data_source_key);
 		}
-		addPublishedToSolrIndex($keys, true);
 		$response['alert'] = $returnErrors;
 		$response['responsecode'] = "1";
 		echo json_encode($response);
@@ -190,13 +190,10 @@ switch(getQueryValue('action'))
 				updateRegistryObjectStatus(rawurldecode($key), PUBLISHED);
 				syncKey(rawurldecode($key), $data_source_key);
 				$response['responsecode'] = "1";
-
 				echo json_encode($response);
 			}
 			
 		}
-		addPublishedToSolrIndex($keys, true);
-		
 		die();
 		
 	break;
@@ -205,9 +202,9 @@ switch(getQueryValue('action'))
 		
 		foreach($keys AS $key)
 		{
-			deleteRegistryObject(rawurldecode($key));
-			deleteSolrHashKey(sha1($key));
-			deleteCacheItem($data_source_key, $key);
+			deleteSolrHashKey(sha1($key));//solr
+			deleteCacheItem($data_source_key, $key);//cache
+			deleteRegistryObject(rawurldecode($key));//db
 			queueSyncDataSource($data_source_key);
 		}
 		

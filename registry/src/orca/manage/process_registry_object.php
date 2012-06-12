@@ -117,7 +117,8 @@ else if($task ==  'flag_regobj')
 
 if($task ==  'flag_draft' || $task ==  'recover_record' || $task == 'validate')
 {
-	$result = addDraftToSolrIndex($keyValue);
+	//$result = addDraftToSolrIndex($keyValue);
+	syncDraftKey($keyValue, $dataSourceValue);
 }
 	
 if($task ==  'delete' || $task ==  'add')
@@ -188,7 +189,7 @@ function saveDraftRegistryObject($rifcs, $objectClass, $dataSource ,$keyValue, $
 	$errorCount = '0';                              
 	$warningCount = '0';   
 	insertDraftRegistryObject($draft_owner, $draft_key, $draft_class, $draft_group, $draft_type, $title, $draft_data_source, $date_created, $date_modified, $rifcs, $qualityTestResult, $errorCount, $warningCount, $status);
-	runQualityLevelCheckForDraftRegistryObject($draft_key, $draft_data_source);
+
 	// Maintain the flagged status
 	if ($flagged) 
 	{
@@ -199,7 +200,8 @@ function saveDraftRegistryObject($rifcs, $objectClass, $dataSource ,$keyValue, $
 	{
 		deleteDraftRegistryObject($dataSource, $keyValue);		
 	}
-    
+	//syncDraftKey($keyValue, $objectDataSource);
+
 }
 
 
