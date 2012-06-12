@@ -1496,11 +1496,11 @@ function getDescriptionLogo($registry_object_key, $random=true)
 	{
 		if ($random)
 		{
-			return $logos[array_rand($logos)];
+			return strip_tags($logos[array_rand($logos)]);
 		}
 		else 
 		{
-			return array_pop($logos);
+			return strip_tags(array_pop($logos));
 		}
 	} 
 	else

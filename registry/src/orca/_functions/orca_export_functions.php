@@ -140,7 +140,7 @@ function getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR = false, $inclu
 			$logoStr = getDescriptionLogo($registryObjectKey);
 			if ($logoStr !== false)
 			{
-				$xml .= '      <extRif:displayLogo>'.esc($logoStr).'</extRif:displayLogo>'."\n";
+				$xml .= '      <extRif:displayLogo>'.strip_tags(esc($logoStr)).'</extRif:displayLogo>'."\n";
 			}	
 			
 			// listTitle
@@ -1552,6 +1552,7 @@ function getDescriptionTypesXML($registryObjectKey, $elementName, $forSOLR)
 				$lang = ' xml:lang="'.esc($lang).'"';
 			}
 			$value = trim($element['value']);
+			if($type = ' type="logo"') $value=strip_tags($value);
 			$xml .= "      <$elementName$type$lang>".esc($value)."</$elementName>\n";
 			
 			if ($forSOLR)
