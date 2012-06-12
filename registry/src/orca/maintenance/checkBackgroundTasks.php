@@ -12,6 +12,7 @@ $cosi_root = "/var/www/htdocs/workareas/leo/ands/registry/src/";
 set_include_path(get_include_path() . PATH_SEPARATOR . $cosi_root);
 $eDebugOnStatus = false;
 include 'global_config.php';
+$runningInBackgroundTask = true;
 $cosi_root = "/var/www/htdocs/workareas/leo/ands/registry/src/";
 define('gRIF_SCHEMA_PATH', eAPPLICATION_ROOT.'/orca/schemata/registryObjects.xsd'); 
 define('gRIF_SCHEMA_URI', 'http://services.ands.org.au/documentation/rifcs/1.3/schema/registryObjects.xsd');
@@ -77,7 +78,7 @@ else{
 }
 
 
-
+/*
 echo "\naddNewTask('RUN_QUALITY_CHECK', '', '', 'ansto.gov.au')\n";
 $result = addNewTask('RUN_QUALITY_CHECK', '', '', 'ansto.gov.au');
 var_dump($result);
@@ -89,7 +90,7 @@ var_dump($result);
 echo "\naddNewTask('INDEX_RECORDS', '', '', 'ansto.gov.au',".$result.")\n";
 $result = addNewTask('INDEX_RECORDS', '', '', 'ansto.gov.au',$result);
 var_dump($result);
-
+*/
 
 
 require '_includes/finish.php';

@@ -192,4 +192,7 @@ $warning_notices 			= 'Demonstration Environment ONLY';
 $enable_google_analytic		= false;
 $google_analytic_code		= 'UA-8380487-7'; //FOR PRODUCTION ONLY
 
+// BACKGROUND TASK VARIABLE
+$runningInBackgroundTask = false;
+
 ?>

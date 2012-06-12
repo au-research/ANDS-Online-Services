@@ -1503,8 +1503,16 @@ function broaderTermsXML($elementName)
 }
 
 function purify($dirty_html){
-	global $cosi_root;
-	require_once $cosi_root."/orca/htmlpurifier/library/HTMLPurifier.auto.php";
+	global $runningInBackgroundTask;
+	if($runningInBackgroundTask)
+	{
+	    global $cosi_root;
+	    require_once $cosi_root."/orca/htmlpurifier/library/HTMLPurifier.auto.php";
+	}
+	else 
+	{
+		require_once "../htmlpurifier/library/HTMLPurifier.auto.php";
+	}
 	
 	// Allowed Elements in HTML
 	$HTML_Allowed_Elms = 'a, abbr, acronym, b, blockquote, br, caption, cite, code, dd, del, dfn, div, dl, dt, em, h1, h2, h3, h4, h5, h6, i, img, ins, kbd, li, ol, p, pre, s, span, strike, strong, sub, sup, table, tbody, td, tfoot, th, thead, tr, tt, u, ul, var';
