@@ -1736,7 +1736,11 @@ function getRightsTypesXML($registryObjectKey, $elementName, $forSOLR)
 								$licence_type = ' licence_type="'.esc($licence_type).'"';
 								if($licence_group = getParentType($element['licence_type'])){
 									$licence_group = ' licence_group="'.esc($licence_group).'"';
-								}else{$licence_group=' licence_group="Unknown"';}
+								}else{						
+									$licence_group=' licence_group="Unknown"';						
+								}
+							}else{
+								$licence_group=' licence_group="Unknown"';					
 							}							
 							$value = esc($element['licence']);
 							$xml .= "      <$elementName$type$uri$licence_type$licence_group>$value</$elementName>\n";										
