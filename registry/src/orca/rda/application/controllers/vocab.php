@@ -75,9 +75,9 @@ class Vocab extends CI_Controller {
 		$uri = $this->input->post('uri');
 		//echo $uri;
 		if($type=='exact'){
-			$q = 'subject_vocab_uri:("'.$uri.'")';
+			$q = '+subject_vocab_uri:("'.$uri.'")';
 		}elseif($type=='narrower'){
-			$q = 'broader_subject_vocab_uri:("'.$uri.'")';
+			$q = '+broader_subject_vocab_uri:("'.$uri.'")';
 		}
 		$q.=' +class:collection';
 		$this->load->model('solr');
