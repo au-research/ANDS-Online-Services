@@ -536,13 +536,11 @@ $(document).ready(function() {
 			function(data)
 			{
 				//console.log(data);
-				if (data['responsecode'] == '0')
-				{
+				if (data['responsecode'] == '0'){
 					// Error occured
 					alert("Error Occured: Access Denied.");
 				}
-				else if (data['responsecode'] == "MT008")
-				{
+				else if (data['responsecode'] == "MT008"){
 					//$('#mmr_datasource_alert_msg').html('Your records have been sent to ANDS for assessment and approval. You should contact your ANDS Client Liaison Officer to notify them that these records have been submitted.');
 				}
 				else if (data['responsecode'] == "MT014")
@@ -551,12 +549,15 @@ $(document).ready(function() {
 				}
 				else
 				{
-					if (data['alert'])
-					{
+					if (data['alert']){
 						console.log(data['alert']);
 					}
 				}
-				$('#indexDS').click();
+				//$('#indexDS').click();
+				$('.tab-content').css('opacity',1.0);
+				$('.mmr_table').each(function(){
+					$(this).flexReload();
+				});
 			},
 			'json'
 		);
@@ -578,7 +579,7 @@ $(document).ready(function() {
 			}
 			
 
-			flaggedRecords = $(grid).find('.icon28sOn');
+			flaggedRecords = $(grid).find('.icon59sOn');
 			if(flaggedRecords.length > 0){
 				message +='<a href="javascript:void(0);" class="selectFlagged">Select only flagged record </a> on this page. '; 
 				showInfo = true;
@@ -607,7 +608,7 @@ $(document).ready(function() {
 
 	$('.selectFlagged').live('click', function(){
 		var grid = $(this).parent().parent().parent();
-		var flaggedRecords = $(grid).find('.icon28sOn');
+		var flaggedRecords = $(grid).find('.icon59sOn');
 		$('tr', grid).removeClass('trSelected');
 		$.each(flaggedRecords, function(index){
 			$(this).parents('tr').addClass('trSelected');

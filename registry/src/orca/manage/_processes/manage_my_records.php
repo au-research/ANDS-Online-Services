@@ -84,12 +84,14 @@ switch(getQueryValue('action'))
 		
 		foreach($keys AS $key)
 		{
-			updateDraftRegistryObjectStatus(rawurldecode($key), $data_source_key, SUBMITTED_FOR_ASSESSMENT);
+			$response['response']=updateDraftRegistryObjectStatus(rawurldecode($key), $data_source_key, SUBMITTED_FOR_ASSESSMENT);
+			syncDraftKey(rawurldecode($key), $data_source_key);
 		}
 
 		$target_data_source = getDataSources($data_source_key, null);
 		
 		$response['responsecode'] = "MT008";
+
 		if ($send_email)
 		{			
 			if (isset($target_data_source[0]['assessement_notification_email_addr']) && $target_data_source[0]['assessement_notification_email_addr'] != "")
@@ -119,6 +121,7 @@ switch(getQueryValue('action'))
 		foreach($keys AS $key)
 		{
 			updateDraftRegistryObjectStatus(rawurldecode($key), $data_source_key, ASSESSMENT_IN_PROGRESS);
+			syncDraftKey(rawurldecode($key), $data_source_key);
 		}
 		
 		$response['responsecode'] = "1";
@@ -132,6 +135,7 @@ switch(getQueryValue('action'))
 		foreach($keys AS $key)
 		{
 			updateDraftRegistryObjectStatus(rawurldecode($key), $data_source_key, MORE_WORK_REQUIRED);
+			syncDraftKey(rawurldecode($key), $data_source_key);
 		}
 		
 		$response['responsecode'] = "1";
@@ -145,6 +149,7 @@ switch(getQueryValue('action'))
 		foreach($keys AS $key)
 		{
 			updateDraftRegistryObjectStatus(rawurldecode($key), $data_source_key, DRAFT);
+			syncDraftKey(rawurldecode($key), $data_source_key);
 		}
 		
 		$response['responsecode'] = "1";
@@ -158,6 +163,7 @@ switch(getQueryValue('action'))
 		foreach($keys AS $key)
 		{
 			approveDraft($key, $data_source_key);
+			syncKey(rawurldecode($key), $data_source_key);
 		}
 		addPublishedToSolrIndex($keys, true);
 		$response['alert'] = $returnErrors;
@@ -176,12 +182,15 @@ switch(getQueryValue('action'))
 				//is a draft, have to approve and do all the jazz with it first
 				approveDraft($key, $data_source_key);
 				updateRegistryObjectStatus(rawurldecode($key), PUBLISHED);
+				syncDraftKey(rawurldecode($key), $data_source_key);
 				$response['responsecode'] = "1";
 				echo json_encode($response);
 			}else{
 				//is not draft
 				updateRegistryObjectStatus(rawurldecode($key), PUBLISHED);
+				syncKey(rawurldecode($key), $data_source_key);
 				$response['responsecode'] = "1";
+
 				echo json_encode($response);
 			}
 			
@@ -197,7 +206,9 @@ switch(getQueryValue('action'))
 		foreach($keys AS $key)
 		{
 			deleteRegistryObject(rawurldecode($key));
-			deleteSolrIndex(rawurldecode($key));
+			deleteSolrHashKey(sha1($key));
+			deleteCacheItem($data_source_key, $key);
+			queueSyncDataSource($data_source_key);
 		}
 		
 		$response['responsecode'] = "1";
@@ -210,7 +221,9 @@ switch(getQueryValue('action'))
 		
 		foreach($keys AS $key)
 		{
-			deleteDraftRegistryObject($data_source_key, rawurldecode($key));
+			deleteDraftRegistryObject($data_source_key, rawurldecode($key));//delete from db
+			deleteSolrDraft($key, $data_source_key);//delete from solr
+			queueSyncDataSource($data_source_key);
 		}
 		
 		$response['responsecode'] = "1";
@@ -222,6 +235,7 @@ switch(getQueryValue('action'))
 	case "FLAG_GOLD":
 		foreach($keys as $key){
 			setGoldFlag($key);
+			syncKey($key, $data_source_key);
 		}
 		$response['responsecode']="1";
 		echo json_encode($response);

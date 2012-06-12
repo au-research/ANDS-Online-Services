@@ -35,4 +35,155 @@ function solr($solr_url, $fields, $extras=""){
 	$content = curl_exec($ch);//execute the curl
 	return $content;
 }
+
+function addDraftToSolrIndex($registryObjectKey, $data_source_key, $commit=true)
+{
+	$allKeys = getDraftRegistryObject($registryObjectKey , $data_source_key);
+	$arraySize = sizeof($allKeys);
+	$result = '';
+	$rifcs='';
+	if($allKeys)
+	{
+		for($i = 0; $i < $arraySize ; $i++)
+		{				
+			$key = $allKeys[$i]['draft_key'];
+			$dataSourceKey = $allKeys[$i]['registry_object_data_source'];
+			$xml = "    <extRif:extendedMetadata key=\"".esc($key)."\">\n";			
+			$hash = sha1($key.$dataSourceKey);
+			if ($hash)
+			{
+				$xml .= "      <extRif:keyHash>".esc($hash)."</extRif:keyHash>\n";
+			}
+			$dataSource = getDataSources($dataSourceKey, null);
+			$allow_reverse_internal_links = $dataSource[0]['allow_reverse_internal_links'];
+			$allow_reverse_external_links = $dataSource[0]['allow_reverse_external_links'];
+			$hash = sha1($dataSourceKey);
+			if ($hash)
+			{
+				$xml .= "      <extRif:dataSourceKeyHash>".esc($hash)."</extRif:dataSourceKeyHash>\n";
+			}
+			$xml .= "      <extRif:status>".esc($allKeys[$i]['status'])."</extRif:status>\n";
+			$xml .= "      <extRif:dataSourceKey>".esc($dataSourceKey)."</extRif:dataSourceKey>\n";		
+			$reverseLinks = 'NONE';
+	
+			if($allow_reverse_internal_links == 't' && $allow_reverse_external_links == 't')
+			{
+				$reverseLinks = 'BOTH';
+			}
+			else if($allow_reverse_internal_links == 't')
+			{
+				$reverseLinks = 'INT';
+				
+			}
+			else if($allow_reverse_external_links == 't')
+			{
+				$reverseLinks = 'EXT';
+			}
+			$xml .= "      <extRif:reverseLinks>".$reverseLinks."</extRif:reverseLinks>\n";
+			
+			
+			// Get registry date modified			
+			if (!($registryDateModified =  $allKeys[$i]['date_modified']))
+			{
+					$registryDateModified = time(); // default to now
+			}
+			$xml .= "      <extRif:registryDateModified>".$registryDateModified."</extRif:registryDateModified>\n";
+	
+	
+	
+			// displayTitle
+			// -------------------------------------------------------------
+			$xml .= '      <extRif:displayTitle>'.esc(trim($allKeys[$i]['registry_object_title'])).'</extRif:displayTitle>'."\n";
+			
+			
+			// listTitle
+			// -------------------------------------------------------------
+			$xml .= '      <extRif:listTitle>'.esc(trim($allKeys[$i]['registry_object_title'])).'</extRif:listTitle>'."\n";
+			$xml .= '      <extRif:flag>'.($allKeys[$i]['flag'] == 'f' ? '0' : '1').'</extRif:flag>'."\n";
+			$xml .= '      <extRif:warning_count>'.esc(trim($allKeys[$i]['warning_count'])).'</extRif:warning_count>'."\n";
+			$xml .= '      <extRif:error_count>'.esc(trim($allKeys[$i]['error_count'])).'</extRif:error_count>'."\n";
+			//$xml .= '      <extRif:gold_status_flag>'.esc(trim($allKeys[$i]['gold_status_flag'])).'</extRif:gold_status_flag>'."\n";
+			$xml .= '      <extRif:quality_level>'.esc(trim($allKeys[$i]['quality_level'])).'</extRif:quality_level>'."\n";
+			$xml .= '      <extRif:feedType>'.($allKeys[$i]['draft_owner'] == 'SYSTEM' ? 'harvest' : 'manual').'</extRif:feedType>'."\n";
+			$xml .= "    </extRif:extendedMetadata>\n";		
+			$rifcsContent = unwrapRegistryObject($allKeys[$i]['rifcs']);	
+			$rifcsContent .= $xml;
+			$rifcs .=$rifcsContent;
+		}
+		$rifcs = wrapRegistryObjects($rifcs);
+		$solrrifcs = transformToSolr($rifcs);
+		//echo $solrrifcs;
+		if (strlen($solrrifcs) == 0)
+		{
+			echo "<font style='color:red'>".$rifcs."</font>";
+		}				
+		else
+		{					
+			$result = curl_post(gSOLR_UPDATE_URL, $solrrifcs);
+			$result .= curl_post(gSOLR_UPDATE_URL.'?commit=true', '<commit waitFlush="false" waitSearcher="false"/>');
+		}
+	}
+	return sizeof($allKeys).$solrrifcs.$result;
+}
+
+function addPublishedToSolrIndex($registryObjectKey, $commit=true)
+{
+	//global $solr_update_url;
+	$rifcsContent = getRegistryObjectXMLforSOLR($registryObjectKey,true);
+	$rifcsContent = wrapRegistryObjects($rifcsContent);
+	$rifcs = transformToSolr($rifcsContent);									
+	$result = curl_post(gSOLR_UPDATE_URL, $rifcs);
+	return $result;
+}
+
+function deleteSolrDraft($draft_key, $data_source_key){
+	$hash = sha1($draft_key.$data_source_key);
+	return deleteSolrHashKey($hash);
+}
+
+function deleteSolrHashKey($hashkey)
+{
+	return curl_post(gSOLR_UPDATE_URL.'?commit=true', '<delete><id>'.$hashkey.'</id></delete>');
+}
+
+
+function unwrapRegistryObject($rifcsString)
+{
+	$registryObjects = new DOMDocument();
+	$result = $registryObjects->loadXML($rifcsString);
+	if(!$result)
+	{
+	$error = error_get_last();
+	echo "<font style='color:red'>".$error['message']."</font>";
+	}
+	$ro = $registryObjects->getElementsByTagName("registryObject")->item(0);
+    return $registryObjects->saveXML($ro);
+}
+
+function syncDraftKey($draft_key, $data_source_key){
+	deleteSolrDraft($draft_key, $data_source_key);
+	runQualityLevelCheckForDraftRegistryObject($draft_key, $draft_data_source);
+	addDraftToSolrIndex($draft_key, $data_source_key);
+}
+
+function syncKey($key, $data_source_key){
+	deleteSolrHashKey(sha1($key));
+
+	//qa
+	runQualityCheckForRegistryObject($key, $dataSourceKey);
+
+	//cache
+	$extendedRIFCS = generateExtendedRIFCS($key);
+	writeCache($data_source_key,$key, $extendedRIFCS);
+
+	//index
+	addPublishedToSolrIndex($key);
+}
+
+function queueSyncDataSource($data_source_key){
+	$result = addNewTask('RUN_QUALITY_CHECK', '', '', $data_source_key);
+	$result = addNewTask('GENERATE_CACHE', '', '', $data_source_key,$result);
+	$result = addNewTask('INDEX_RECORDS', '', '', $data_source_key,$result);
+}
+
 ?>

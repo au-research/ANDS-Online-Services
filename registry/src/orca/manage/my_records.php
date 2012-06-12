@@ -184,7 +184,6 @@ else
 		    	<li class="rightTab"><a href="javascript:void(0);" id="indexDS" class="smallIcon icon2s tip borderless" tip="ReIndex"><span></span></a></li>
 		    </ul>
 
-
 		    <?php
 		    	/*
 				 * Setting up variables for button configuration in JavaScript
@@ -217,7 +216,7 @@ else
 				echo '<tr><td></td>';//empty
 				foreach($status as $status_name=>$array){
 					if($array['count']>0){
-						echo '<td>'.$status_name.'</td>';
+						echo '<td>'.str_replace('_', ' ', $status_name).'</td>';
 					}
 					
 				}
