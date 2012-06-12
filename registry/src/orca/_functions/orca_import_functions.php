@@ -2031,7 +2031,7 @@ function runQualityResultsforDataSourceDIEDIEDIE($dataSourceKey,$itemurl)
 
 
 
-function runQualityCheckforDataSource($dataSourceKey)
+function runQualityLevelCheckforDataSource($dataSourceKey)
 {
 	$dataSource = getDataSources($dataSourceKey, null);
 	$message = 'Quality check run for '.$dataSourceKey."\n";
