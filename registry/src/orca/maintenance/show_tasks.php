@@ -42,24 +42,39 @@ $numFound=(sizeof($allTasks));
 
 <h5>this list contains all jobs submitted to run in the background.</h5>
 <div>
-
+<table>
+<tbody>
+<tr>
+<th>task_id</th>
+<th>prerequisite_task</th>
+<th>status</th>
+<th>method</th>
+<th>added</th>
+<th>started</th>
+<th>completed</th>
+<th>data_source_key</th>
+<th>registry_object_keys</th>
+<th>log_msg</th>
+</tr>
 	<?php
 	foreach($allTasks as $task)
 	{
-		//print_r($r);
-		echo $task['task_id'];
-		echo $task['status'];
-		echo $task['method'];
-		echo $task['started'];
-		echo $task['added'];
-		echo $task['completed'];
-		echo $task['dependent_task']; 
-		echo $task['params'];
-		echo $task['key_hash'];
-		echo $task['data_source_key_hash'];
-		echo '<hr/>';
+		print("<tr>");
+		print("<td>".$task['task_id']."</td>");
+		print("<td>".$task['prerequisite_task']."</td>"); 
+		print("<td>".$task['status']."</td>");
+		print("<td>".$task['method']."</td>");
+		print("<td>".$task['added']."</td>");
+		print("<td>".$task['started']."</td>");
+		print("<td>".$task['completed']."</td>");
+		print("<td>".$task['data_source_key']."</td>");
+		print("<td>".$task['registry_object_keys']."</td>");
+		print("<td>".$task['log_msg']."</td>");
+		print("</tr>");
 	}
      ?>
+</tbody>
+</table>
 </div>
 
 <?php

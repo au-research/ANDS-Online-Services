@@ -1503,7 +1503,8 @@ function broaderTermsXML($elementName)
 }
 
 function purify($dirty_html){
-	require_once "../htmlpurifier/library/HTMLPurifier.auto.php";
+	global $cosi_root;
+	require_once $cosi_root."/orca/htmlpurifier/library/HTMLPurifier.auto.php";
 	
 	// Allowed Elements in HTML
 	$HTML_Allowed_Elms = 'a, abbr, acronym, b, blockquote, br, caption, cite, code, dd, del, dfn, div, dl, dt, em, h1, h2, h3, h4, h5, h6, i, img, ins, kbd, li, ol, p, pre, s, span, strike, strong, sub, sup, table, tbody, td, tfoot, th, thead, tr, tt, u, ul, var';
@@ -2378,17 +2379,7 @@ function addKeysToSolrIndex($keys, $commit=true)
 
 		foreach ($keys as $registryObjectKey)
 		{
-			$rifcs .= getRegistryObjectXMLforSOLR(rawurldecode($registryObjectKey),true);
-		}			
-		//print $rifcs;die();		
-		$rifcs = wrapRegistryObjects($rifcs);
-		$rifcs = transformToSolr($rifcs);		
-		//print $rifcs;								
-		$result .= curl_post(gSOLR_UPDATE_URL, $rifcs);
-		if($commit)
-		{
-			$result .= curl_post(gSOLR_UPDATE_URL.'?commit=true', '<commit waitFlush="false" waitSearcher="false"/>');
-			$result .= curl_post(gSOLR_UPDATE_URL.'?optimize=true', '<optimize waitFlush="false" waitSearcher="false"/>');
+		  $result = addPublishedToSolrIndex($registryObjectKey);
 		}
 		return $result;	
 }

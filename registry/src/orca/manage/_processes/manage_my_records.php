@@ -159,7 +159,7 @@ switch(getQueryValue('action'))
 		{
 			approveDraft($key, $data_source_key);
 		}
-		addKeysToSolrIndex($keys, true);
+		addPublishedToSolrIndex($keys, true);
 		$response['alert'] = $returnErrors;
 		$response['responsecode'] = "1";
 		echo json_encode($response);
@@ -186,7 +186,7 @@ switch(getQueryValue('action'))
 			}
 			
 		}
-		//addKeysToSolrIndex($keys, true);
+		addPublishedToSolrIndex($keys, true);
 		
 		die();
 		

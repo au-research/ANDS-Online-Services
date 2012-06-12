@@ -2809,26 +2809,12 @@ function isContributorPage($page)
 }
 
 //bacground tasks
-function getNextTask($status, $dependent = null)
+function getNextWaitingTask()
 {
 	global $gCNN_DBS_ORCA;
 	$resultSet = null;
-	if($dependent != null && $status != null)
-	{
-		$strQuery = 'SELECT * FROM dba.tbl_background_tasks where status = $1 and dependent_task = CAST( $2 AS numeric ) order by added ASC limit 1';
-	    $params = array($status, $dependent);
-	}
-	else if($dependent == null)
-	{
-		$strQuery = 'SELECT * FROM dba.tbl_background_tasks where status = $1 order by added ASC limit 1';
-	    $params = array($status);
-	}
-	else if($status == null)
-	{
-		$strQuery = 'SELECT * FROM dba.tbl_background_tasks where dependent_task = CAST( $1 AS numeric ) order by added ASC limit 1';
-	    $params = array($dependent);
-	}
-
+	$strQuery = 'select * from dba.tbl_background_tasks bgt where bgt.status = $1 and (bgt.prerequisite_task is null or ((select bg.status from dba.tbl_background_tasks bg where bg.task_id = bgt.prerequisite_task) = $2)) ORDER BY added ASC LIMIT 1';
+	$params = array('WAITING','COMPLETED');
 	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
 	return $resultSet;
 }
@@ -2857,12 +2843,12 @@ function getTask($taskId, $status)
 }
 
 
-function addNewTask($method, $params = '', $key_hash = '', $data_source_key_hash = '', $dependent_task = null)
+function addNewTask($method, $log_msg = '', $ro_key = '', $ds_key = '', $prerequisite_task = null)
 {
 	$taskId = null;
 	global $gCNN_DBS_ORCA;
-	$strQuery = 'INSERT INTO  dba.tbl_background_tasks (method, params, key_hash, data_source_key_hash, dependent_task) VALUES ($1, $2, $3, $4, $5)';
-	$params = array($method, $params, $key_hash, $data_source_key_hash, $dependent_task);
+	$strQuery = 'INSERT INTO  dba.tbl_background_tasks (method, log_msg, registry_object_keys, data_source_key, prerequisite_task) VALUES ($1, $2, $3, $4, $5)';
+	$params = array($method, $log_msg, $ro_key, $ds_key, $prerequisite_task);
 	$resultSet = executeUpdateQuery($gCNN_DBS_ORCA, $strQuery, $params);
 	$strQuery = 'SELECT CURRVAL(pg_get_serial_sequence($1,$2))';
 	$params = array('dba.tbl_background_tasks', 'task_id');
@@ -2877,13 +2863,11 @@ function addNewTask($method, $params = '', $key_hash = '', $data_source_key_hash
   started timestamp without time zone,
   added timestamp without time zone NOT NULL DEFAULT now(),
   completed timestamp without time zone,
-  dependent_task bigint,
-  params character varying(1024),
-  key_hash text,
-  data_source_key_hash text,
-  status character varying(32) NOT NULL DEFAULT 'WAITING'::character varying,
-  CONSTRAINT tbl_background_tasks_pkey PRIMARY KEY (task_id )
- * 
+  prerequisite_task bigint,
+  log_msg character varying(1024),
+  registry_object_keys text,
+  data_source_key text,
+  status character varying(32) NOT NULL DEFAULT 'WAITING'::character
  */
 
 function setTaskStarted($taskId)
@@ -2895,11 +2879,11 @@ function setTaskStarted($taskId)
 	return $result;
 }
 
-function setTaskCompleted($taskId)
+function setTaskCompleted($taskId, $log_msg)
 {
 	global $gCNN_DBS_ORCA;
-	$strQuery = 'update dba.tbl_background_tasks set status = $2, completed = now() where task_id = $1';
-	$params = array($taskId, 'COMPLETED');
+	$strQuery = 'update dba.tbl_background_tasks set status = $2, completed = now(), log_msg = $3 where task_id = $1';
+	$params = array($taskId, 'COMPLETED', $log_msg);
 	$result = executeUpdateQuery($gCNN_DBS_ORCA, $strQuery, $params);	
 	return $result;
 }

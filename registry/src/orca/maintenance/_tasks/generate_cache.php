@@ -1,4 +1,25 @@
 <?php
+if($nextTask)
+{
+	$taskId = $nextTask[0]['task_id'];
+    setTaskStarted($taskId);
+	$dataSourceKey = $nextTask[0]['data_source_key'];
+	$registryObjectKeys = getRegistryObjectKeysForDataSource($dataSourceKey);
+	$message = "Caching of " . count($registryObjectKeys) . " records started for " . $dataSourceKey . ": ";
+	if($registryObjectKeys)
+	{
+		
+		foreach ($registryObjectKeys AS $registry_object)
+		{
+			$extendedRIFCS = generateExtendedRIFCS($registry_object['registry_object_key']);
+			writeCache($dataSourceKey, $registry_object['registry_object_key'], $extendedRIFCS);
+		}
+	}
+	$message .= "\ncompleted!";
+    setTaskCompleted($taskId, $message);	
+}
+else 
+{
 echo "<h1>Regenerating registryObjects cache</h1>";
 
 if (isset($_GET['hard']))
@@ -60,3 +81,9 @@ foreach($ds AS $datasource)
 	echo " complete! [ ".bench()."s ]<br/>";
 	flush();ob_flush();
 }
+	
+	
+}
+
+
+

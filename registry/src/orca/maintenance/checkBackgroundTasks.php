@@ -12,9 +12,17 @@ $cosi_root = "/var/www/htdocs/workareas/leo/ands/registry/src/";
 set_include_path(get_include_path() . PATH_SEPARATOR . $cosi_root);
 $eDebugOnStatus = false;
 include 'global_config.php';
+$cosi_root = "/var/www/htdocs/workareas/leo/ands/registry/src/";
+define('gRIF_SCHEMA_PATH', eAPPLICATION_ROOT.'/orca/schemata/registryObjects.xsd'); 
+define('gRIF_SCHEMA_URI', 'http://services.ands.org.au/documentation/rifcs/1.3/schema/registryObjects.xsd');
+date_default_timezone_set('Australia/Sydney'); 
+define("eDCT_FORMAT_ISO8601_DATETIMESEC_UTC" , 'YYYY-MM-DDThh:mm:ssZ');
+define("eIMAGE_ROOT", "");
+
 include 'orca/_functions/orca_data_functions.php';
 include '_includes/_functions/database_functions.php';
 include '_includes/_functions/data_functions.php';
+include '_includes/_functions/presentation_functions.php';
 include '_includes/_environment/database_env.php';
 
 //chdir($deployementDir."orca/admin");
@@ -26,64 +34,66 @@ openDatabaseConnection($gCNN_DBS_ORCA, eCNN_DBS_ORCA);
 $executionTimeoutSeconds = 0;
 ini_set("max_execution_time", "$executionTimeoutSeconds");
 
-$nextTask = getNextTask('WAITING');
+$nextTask = getNextWaitingTask();
 if($nextTask)
 {
 	$method = $nextTask[0]['method'];	
 	switch ($method){
 		case 'RUN_QUALITY_CHECK':
-			echo $method."\n";
-			include('_tasks/run_quality_test.php');
+			echo $method." for  ".$method = $nextTask[0]['data_source_key']."\n";
+			include('orca/_functions/orca_access_functions.php');
+			include('orca/_functions/orca_import_functions.php');
+			include('orca/_functions/orca_export_functions.php');
+			include('orca/maintenance/_tasks/run_quality_test.php');
 			break;
 		case 'GENERATE_HASH':
 			echo $method."\n";
-			include('_tasks/generate_hashes.php');
+			include('orca/maintenance/_tasks/generate_hashes.php');
 			break;
 		case 'INDEX_RECORDS':
 			echo $method."\n";
-			include('_tasks/index_records.php');
+			include('orca/_functions/orca_access_functions.php');
+			include('orca/_functions/orca_data_source_functions.php');
+			include('orca/_functions/orca_export_functions.php');
+			include('orca/_functions/orca_cache_functions.php');
+			include('orca/_functions/orca_constants.php');
+			include('orca/maintenance/_tasks/index_records.php');
 			break;
 		case 'GENERATE_CACHE':
 			echo $method."\n";
-			include('_tasks/generate_cache.php');
+			include('orca/_functions/orca_access_functions.php');
+			include('orca/_functions/orca_export_functions.php');
+			include('orca/_functions/orca_cache_functions.php');
+			include('orca/_functions/orca_constants.php');
+			include('orca/maintenance/_tasks/generate_cache.php');
 			break;
 		case 'RUN_HARVEST':
 			echo $method."\n";
 			break;
 	}
 }
+else{
+	echo "NO TASK TO RUN\n";
+}
 
 
 
-echo "\naddNewTask('RUN_QUALITY_CHECK', '', '', 'anu.edu.au')";
-$result = addNewTask('RUN_QUALITY_CHECK', '', '', 'anu.edu.au');
+echo "\naddNewTask('RUN_QUALITY_CHECK', '', '', 'ansto.gov.au')\n";
+$result = addNewTask('RUN_QUALITY_CHECK', '', '', 'ansto.gov.au');
 var_dump($result);
 
-echo "\ngetNextTask('WAITING')";
-$result = getNextTask('WAITING');
+echo "\naddNewTask('GENERATE_CACHE', '', '', 'ansto.gov.au',".$result.")\n";
+$result = addNewTask('GENERATE_CACHE', '', '', 'ansto.gov.au',$result);
 var_dump($result);
 
-echo "\naddNewTask('RUN_QUALITY_CHECK', '', '', 'anu.edu.au', '1')";
-$result = addNewTask('RUN_QUALITY_CHECK', '', '', 'anu.edu.au', '1');
-var_dump($result);
-
-echo "\ngetNextTask(null, '20')";
-$result = getNextTask(null, '20');
-var_dump($result);
-
-echo "\ngetTask('3')";
-$result = getTask('3', null);
-var_dump($result);
-
-echo "\ngetNextTask('WAITING', '1')";
-$result = getNextTask('WAITING', '1');
+echo "\naddNewTask('INDEX_RECORDS', '', '', 'ansto.gov.au',".$result.")\n";
+$result = addNewTask('INDEX_RECORDS', '', '', 'ansto.gov.au',$result);
 var_dump($result);
 
 
-echo "\ngetTask(null,'WAITING')";
-$result = getTask(null,'WAITING');
-var_dump($result);
 
 require '_includes/finish.php';
+
+
 
 ?>

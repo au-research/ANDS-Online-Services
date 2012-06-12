@@ -89,7 +89,7 @@ function indexDS($dataSourceKey, $status = 'All', $optimise = true){
 	
 	if($optimise)
 	{
-		print '...but<br/>now optimising<br/>';
+		print '...but<br/>DDDDDDDnow optimising<br/>';
 		ob_flush();flush();
 		$result = curl_post($solr_update_url.'?optimize=true', '<optimize waitFlush="false" waitSearcher="false"/>');
 		print $result;
@@ -255,16 +255,17 @@ function addDraftToSolrIndex($registryObjectKey, $commit=true)
 			$rifcsContent = unwrapRegistryObject($allKeys[$i]['rifcs']);	
 			$rifcsContent .= $xml;
 		}
+		print ($rifcsContent);
 		$rifcs = wrapRegistryObjects($rifcsContent);
 		$solrrifcs = transformToSolr($rifcs);
-		//echo $solrrifcs;
+		$result .= $solrrifcs;
 		if (strlen($solrrifcs) == 0)
 		{
 			echo "<font style='color:red'>".$rifcs."</font>";
 		}				
 		else
 		{					
-			$result = curl_post($solr_update_url, $solrrifcs);
+			$result .= curl_post($solr_update_url, $solrrifcs);
 		}
 	}
 	return $result;
@@ -314,7 +315,7 @@ function addPublishedSolrIndexForDatasource($dataSourceKey)
 						$result = curl_post($solr_update_url, $solrrifcs);
 						$percent = round((($i+1)*100)/$arraySize, 2);
 						//echo ($percent).'% completed.<br/>';
-						//echo $result.'<hr/>';
+						echo $result.'published ';
 
 						ob_flush();flush();
 						$rifcsContent = '';
@@ -425,12 +426,12 @@ function addDraftSolrIndexForDatasource($dataSourceKey)
 		
 		$rifcsContent .= unwrapRegistryObject($allKeys[$i]['rifcs']);	
 		$rifcsContent .= $xml;
-		//print $rifcsContent."\n";
+		print $rifcsContent."\n";
 		if(($i % $chunkSize == 0 && $i != 0) || $i == ($arraySize -1))
 		{					
 				$rifcs = wrapRegistryObjects($rifcsContent);
 				$solrrifcs = transformToSolr($rifcs);
-				//echo $solrrifcs."\n";
+				echo $solrrifcs."\n";
 				if (strlen($solrrifcs) == 0)
 				{
 					echo "<font color='red'>".$rifcs."</font>";
