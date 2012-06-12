@@ -471,6 +471,9 @@ div.MORE_WORK_REQUIRED_table{border-left:10px solid #6A4A3C;}
 
 div.flexigrid a{text-decoration:none;}
 
+#summaryTable{border-collapse:collapse;}
+#summaryTable td{border:1px solid #ccc;}
+
 
 .DRAFT_status{background: #C60 !important; color:white;text-shadow: 0 1px 0 #000;font-weight:bold;}
 .SUBMITTED_FOR_ASSESSMENT_status{background: #688EDE !important;color:white;text-shadow: 0 1px 0 #000;font-weight:bold;}

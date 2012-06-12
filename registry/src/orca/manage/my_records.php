@@ -137,15 +137,25 @@ else
 		<?php
 			$json = json_decode(getDataSourceStatuses($data_source_key));
 			//We are now extracting the valuable data out from json and put them into an array
-			//of form $status['DRAFT'] => 4 pr something
+			//of form $status['DRAFT'] => 4 or something
 			$i=0;$status=array();$placeholder = $json->{'facet_counts'}->{'facet_fields'}->{'status'};
 			for($i=0;$i<sizeof($placeholder);$i+=2){
-				$status[$placeholder[$i]] = $placeholder[$i+1];
+				//placeholder[$i]='status'
+				$status_class_json = json_decode(getClassesByStatus($data_source_key, $placeholder[$i]));
+				//var_dump($status_class_json);
+				$status_class_facet = $status_class_json->{'facet_counts'}->{'facet_fields'}->{'class'};
+				for($j=0;$j<sizeof($status_class_facet);$j+=2){
+					$status[$placeholder[$i]][$status_class_facet[$j]] = $status_class_facet[$j+1];
+
+				}
+				//var_dump($status_class_facet);
+				$status[$placeholder[$i]]['count'] = $placeholder[$i+1];
 			}
 			$i=0;$classes=array();$placeholder = $json->{'facet_counts'}->{'facet_fields'}->{'class'};
 			for($i=0;$i<sizeof($placeholder);$i+=2){
 				$classes[$placeholder[$i]] = $placeholder[$i+1];
 			}
+			//var_dump($classes);
 			array_multisort($status,SORT_DESC);
 			//var_dump($status);
 
@@ -164,10 +174,10 @@ else
 		    	<li><a href="javascript:void(0);" title="All" class="tab active-tab" name="All">All Records</a></li>
 		    	<?php
 		    		foreach($status as $key=>$s){
-		    			if($s!=0){
-		    				echo '<li><a href="javascript:void(0);" title="'.$s.' Records" class="tab tip" name="'.$key.'">'.str_replace('_', ' ', $key).'</a><li>';
+		    			if($s['count']!=0){
+		    				echo '<li><a href="javascript:void(0);" title="'.$s['count'].' Records" class="tab tip" name="'.$key.'">'.str_replace('_', ' ', $key).'</a><li>';
 		    			}else{
-		    				echo '<li><a href="javascript:void(0);" title="'.$s.' Records" class="tab tip inactive" name="'.$key.'">'.str_replace('_', ' ', $key).'</a><li>';
+		    				echo '<li><a href="javascript:void(0);" title="'.$s['count'].' Records" class="tab tip inactive" name="'.$key.'">'.str_replace('_', ' ', $key).'</a><li>';
 		    			}
 		    		}
 		    	?>
@@ -196,8 +206,44 @@ else
 		    	foreach($order as $o) $sorted[$o]=$status[$o];
 				$status = $sorted;
 
+				
+				//summary
+				//var_dump($status);
+				$class_names = array('collection', 'party', 'activity', 'service');
+				
+				echo '<div class="tab-content statusview"><h3><button id="toggleSummaryTable">-</button> Summary</h3></div>';
+				echo '<div id="All_statusview" class="tab-content statusview">';
+				echo '<table id="summaryTable">';
+				echo '<tr><td></td>';//empty
+				foreach($status as $status_name=>$array){
+					if($array['count']>0){
+						echo '<td>'.$status_name.'</td>';
+					}
+					
+				}
+				echo '</tr>';
+				
+				foreach($class_names as $class_name){
+					echo '<tr>';
+					echo '<td>'.$class_name.'</td>';
+					foreach($status as $status_name=>$array){
+						if($array['count']>0){
+							echo '<td>'.$array[$class_name].'</td>';
+						}
+						
+					}
+					echo '</tr>';
+				}
+
+				echo '</table>';
+				echo '</div>';
+
+
+				echo '<div class="tab-content statusview"><h3><button id="toggleDetailTables">-</button> Details</h3></div>';
+				echo '<div id="detailTables">';
 				//display 2 tables and 1 graph for each of the status
-		    	foreach($status as $status_name=>$count){
+		    	foreach($status as $status_name=>$array){
+		    		$count = $status_name['count'];
 		    		$tableClass = '';$displayTable=false;
 		    		if($status_name=='MORE_WORK_REQUIRED'){//only visible if there are records of this status
 		    			if($count==0) $tableClass='hide';
@@ -226,11 +272,12 @@ else
 								</div>';
 		    		}
 		    	}
-
+		    	echo '</div>';
 				/*
 				 * All of em
 				 */
 		    	echo '<div id="All_qaview" class="tab-content qaview"></div>';
+
 		    	foreach($qa_levels as $key=>$l){
 		    		echo '	<div class="tab-content qaview">
 							<table class="mmr_table as_qa_table" ql="'.$key.'" status="All" count="'.$l.'"><tr><td>Loading Graph...</td></tr></table>
@@ -693,6 +740,9 @@ function displayMMRNewRecord()
 	<?php 
 }
 
+/*
+ * function that I used (Minh)
+ */
 function getDataSourceStatuses($dataSourceKey){
 	global $solr_url;
 	$q = 'data_source_key:("'.$dataSourceKey.'")';
@@ -717,6 +767,20 @@ function getQALevels($dataSourceKey){
 	return $content;
 }
 
+
+
+
+function getClassesByStatus($data_source_key, $status){
+	global $solr_url;
+	$q = '+data_source_key:("'.$data_source_key.'") +status:("'.$status.'")';
+	$fields = array(
+		'q'=>$q,'version'=>'2.2','start'=>'0','rows'=>'1', 'wt'=>'json',
+		'fl'=>'key'
+	);
+	$extra = '&facet=true&facet.field=class&facet.limit=-1&facet.mincount=0';
+	$content = solr($solr_url, $fields, $extra);
+	return $content;
+}
 function displayMMRDataSourceSwitcher(array $dataSources = array(), $selected_key = '')
 {
 	if (userIsORCA_ADMIN())

@@ -59,6 +59,7 @@ $(document).ready(function() {
 	function view(type, status){
 		//console.log('type='+type+' status='+status);
 		$('.tab-content').hide();
+		$('#toggleSummaryTable, #toggleDetailTables').text('-');
 		if(type=='statusview'){
 			$('.qaview').hide();
 			$('.viewswitch').removeClass('pressed');
@@ -108,6 +109,7 @@ $(document).ready(function() {
 		var name = $(this).attr('name');
 		$.cookie('currentView', name);
 		$('.'+name).show();
+
 		view(name, $('.tab-list li a.active-tab').attr('name'));
 	});
 
@@ -412,6 +414,7 @@ $(document).ready(function() {
                 {display: 'Status', name : 'status', width : 200, sortable : true, align: 'left'},
                 {display: 'Manually Assessed', name : 'manually_assessed_flag', width : 50, sortable : true, align: 'left', hide:true}
             ],
+            sortname:'date_modified',
             buttons:buttons,
             resizable:true,
             useRp: true,
@@ -813,7 +816,21 @@ $(document).ready(function() {
 		});
 	});
 
-});
+	$('#toggleSummaryTable, #toggleDetailTables').live('click', function(){
+		if($(this).attr('id')=='toggleSummaryTable'){
+			$('#All_statusview').slideToggle('fast');
+		}else{
+			$('#detailTables .statusview').slideToggle('fast');
+		}
+		
+		if($(this).text()=='-'){
+			$(this).text('+');
+		}else{
+			$(this).text('-');
+		}
+	});
+
+});//end
 
 
 
