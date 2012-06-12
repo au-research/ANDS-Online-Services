@@ -1165,7 +1165,18 @@ $_strings['*_rights'] = <<<HTMLEND
 														<table id="table_rights_%%SEQNUM1%%_licence_1" class="formTable rmdElementContainer"> 
 															
 															<tbody class="formFields andsorange"> 
-														
+																	<tr>
+																		<td width="39px" style="font-weight:normal; padding-left:8px; padding-top:8px;"><label for="object_rights_%%SEQNUM1%%_licence_1_type">Type:</label></td>
+																		<td style="font-size:0.9em;">
+																		<input type="text" name="object.rights[%%SEQNUM1%%].licence[1].type" id="object_rights_%%SEQNUM1%%_licence_1_type" size="37" maxlength="512" onChange="alert('a prob');"/>
+																		<img id="button_rights_%%SEQNUM1%%_licence_1_type" src="{$eAPP_ROOT}orca/_images/buttons/dropdown_in.png" onClick='toggleDropdown(this.id);' class='cursorimg' style="vertical-align:bottom; height:21px; width:21px;" />
+																	</td>
+																	<td><div class="fieldError" name="errors_description_%%SEQNUM1%%_type"></div></td>
+																	<td width="100%"></td>
+																	</tr>
+																	<script>
+																				addVocabComplete('object_rights_%%SEQNUM1%%_licence_1_type','RIFCSLicenceType');
+																	</script>														
 																	<tr>
 																		<td width="39px" style="font-weight:normal; padding-left:8px; padding-top:8px;"><label for="object_rights_%%SEQNUM1%%_licence_1_value">Value:</label></td>
 																		<td style="font-size:0.9em;" onclick="getHelpText('collection_rights_licence');">
@@ -1174,18 +1185,7 @@ $_strings['*_rights'] = <<<HTMLEND
 																		<td><div class="fieldError" name="errors_rights_%%SEQNUM1%%_licence_1_value"></div></td>
 																		<td width="100%"></td>
 																	</tr>
-																	<tr>
-																		<td width="39px" style="font-weight:normal; padding-left:8px; padding-top:8px;"><label for="object_rights_%%SEQNUM1%%_licence_1_type">Type:</label></td>
-																		<td style="font-size:0.9em;">
-																		<input type="text" name="object.rights[%%SEQNUM1%%].licence[1].type" id="object_rights_%%SEQNUM1%%_licence_1_type" size="37" maxlength="512" />
-																		<img id="button_rights_%%SEQNUM1%%_licence_1_type" src="{$eAPP_ROOT}orca/_images/buttons/dropdown_in.png" onClick='toggleDropdown(this.id);' class='cursorimg' style="vertical-align:bottom; height:21px; width:21px;" />
-																	</td>
-																	<td><div class="fieldError" name="errors_description_%%SEQNUM1%%_type"></div></td>
-																	<td width="100%"></td>
-																	</tr>
-																	<script>
-																				addVocabComplete('object_rights_%%SEQNUM1%%_licence_1_type','RIFCSLicenceType');
-																	</script>
+
 												
 																	<tr>
 																		<td width="39px" style="font-weight:normal; padding-left:8px; padding-top:8px;"><label for="object_rights_%%SEQNUM1%%_licence_1_rightsUri">Rights URI:</label></td>

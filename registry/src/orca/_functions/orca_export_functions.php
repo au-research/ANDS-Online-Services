@@ -1552,7 +1552,7 @@ function getDescriptionTypesXML($registryObjectKey, $elementName, $forSOLR)
 				$lang = ' xml:lang="'.esc($lang).'"';
 			}
 			$value = trim($element['value']);
-			if($type = ' type="logo"') $value=strip_tags($value);
+			//if($type = ' type="logo"') $value=strip_tags($value);
 			$xml .= "      <$elementName$type$lang>".esc($value)."</$elementName>\n";
 			
 			if ($forSOLR)

@@ -1790,6 +1790,8 @@ function addVocabComplete(field, type) {
 		},
 		select: function( event, ui ) {
 			$( field ).val( ui.item.value );
+	
+		//	alert(ui.item.value + " :: " + field);
 			return false;
 		}
 	})
@@ -2830,3 +2832,8 @@ $("#button_bar > input").live("click", function(e) {
 	
 	
 });
+
+function showLicenceWarning(theSelect){
+	
+	alert(theSelect.value());
+}
