@@ -164,7 +164,7 @@ if( strtoupper(getPostedValue('action')) == "SAVE" )
 							//$theInstitutionPage = importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMessage, $created_who=SYSTEM, $status=PUBLISHED, $record_owner=SYSTEM, $xPath=NULL, $override_qa=false	);	
 							$theInstitutionPage =  insertDraftRegistryObject('SYSTEM', $key, 'Party', $group['object_group'], 'group', $group['object_group'], $dataSourceKey, date('Y-m-d H:i:s'), date('Y-m-d H:i:s') , $wrappedRifcs, '', 0, 0, 'DRAFT');
 							runQualityLevelCheckForDraftRegistryObject($key,$dataSourceKey);
-							addDraftToSolrIndex($key);
+							addDraftToSolrIndex($key,addDraftToSolrIndex);
 							
 							/* now send an email to services to let them know that the record has been ceated */
 							
