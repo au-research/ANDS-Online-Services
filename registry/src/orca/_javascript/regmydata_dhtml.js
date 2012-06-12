@@ -2850,7 +2850,7 @@ function checkTypeValue(theSelect){
 		var errorDiv = theSelect.replace("object","errors");
 		var theDiv = document.getElementById(errorDiv);
 		theDiv.style.display='inline';
-		document.getElementById(errorDiv).innerHTML = 'You have not selected a licence type , if you would like to have an additional licence type included within this service, please contact services@ands.org.au'
+		document.getElementById(errorDiv).innerHTML = 'You have not selected a licence type. Please select licence type of "Unknown/Other" if your licence type is not listed. '
 		//alert("we have a prob");
 	};
 }

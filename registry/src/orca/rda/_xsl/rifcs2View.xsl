@@ -837,15 +837,17 @@ Handle:
 			<p class="rights"><xsl:value-of select="." disable-output-escaping="yes"/>
 			<xsl:if test="./@licence_type">
 			<xsl:if test="string-length(substring-after(./@licence_type,'CC-'))>0">
-    			     	        <img id="licence_logo" style="max-width:130px;">
+    		 <img id="licence_logo" style="max-width:130px;">
 			<xsl:attribute name="src"><xsl:value-of select="$base_url"/>
 			<xsl:text>/img/</xsl:text>
 			<xsl:value-of select="./@licence_type"/>
 			<xsl:text>.png</xsl:text></xsl:attribute>
 			<xsl:attribute name="alt"><xsl:value-of select="./@licence_type"/></xsl:attribute>
-		  </img>
-    		</xsl:if>	   
-			<br /><xsl:value-of select="./@licence_type"/>
+		  	</img>
+    		</xsl:if>
+    		<xsl:if test="string-length(substring-after(./@licence_type,'CC-'))=0">	   
+				<br /><xsl:value-of select="./@licence_type"/>
+			</xsl:if>
 			</xsl:if>
 			<xsl:if test="./@rightsUri"><br />
 			<a target="_blank">

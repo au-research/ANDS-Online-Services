@@ -1168,7 +1168,7 @@ $_strings['*_rights'] = <<<HTMLEND
 																	<tr>
 																		<td width="39px" style="font-weight:normal; padding-left:8px; padding-top:8px;"><label for="object_rights_%%SEQNUM1%%_licence_1_type">Type:</label></td>
 																		<td style="font-size:0.9em;">
-																		<input type="text" name="object.rights[%%SEQNUM1%%].licence[1].type" id="object_rights_%%SEQNUM1%%_licence_1_type" size="37" maxlength="512" onChange="alert('a prob');"/>
+																		<input type="text" name="object.rights[%%SEQNUM1%%].licence[1].type" id="object_rights_%%SEQNUM1%%_licence_1_type" size="37" maxlength="512"/>
 																		<img id="button_rights_%%SEQNUM1%%_licence_1_type" src="{$eAPP_ROOT}orca/_images/buttons/dropdown_in.png" onClick='toggleDropdown(this.id);' class='cursorimg' style="vertical-align:bottom; height:21px; width:21px;" />
 																	</td>
 																	<td></td>
@@ -1180,7 +1180,7 @@ $_strings['*_rights'] = <<<HTMLEND
 																	<tr>
 																		<td width="39px" style="font-weight:normal; padding-left:8px; padding-top:8px;"><label for="object_rights_%%SEQNUM1%%_licence_1_value">Value:</label></td>
 																		<td style="font-size:0.9em;" onclick="getHelpText('collection_rights_licence');">
-																			<textarea name="object.rights[%%SEQNUM1%%].licence[1].value" id="object_rights_%%SEQNUM1%%_licence_1_value" rows="3" cols="38" onclick="checkTypeValue('object_rights_1_licence_1_type');"></textarea>
+																			<textarea name="object.rights[%%SEQNUM1%%].licence[1].value" id="object_rights_%%SEQNUM1%%_licence_1_value" rows="3" cols="38" onclick="checkTypeValue('object_rights_%%SEQNUM1%%_licence_1_type');"></textarea>
 																		</td>
 																		<td><div class="fieldError" name="errors_rights_%%SEQNUM1%%_licence_1_value"></div><div  name="errors_rights_%%SEQNUM1%%_licence_1_type" id="errors_rights_%%SEQNUM1%%_licence_1_type"></div></td>
 																		<td width="100%"></td>
