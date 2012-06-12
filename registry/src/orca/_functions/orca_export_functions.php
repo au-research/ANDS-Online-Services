@@ -140,7 +140,7 @@ function getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR = false, $inclu
 			$logoStr = getDescriptionLogo($registryObjectKey);
 			if ($logoStr !== false)
 			{
-				$xml .= '      <extRif:displayLogo>'.$logoStr.'</extRif:displayLogo>'."\n";
+				$xml .= '      <extRif:displayLogo>'.esc($logoStr).'</extRif:displayLogo>'."\n";
 			}	
 			
 			// listTitle
