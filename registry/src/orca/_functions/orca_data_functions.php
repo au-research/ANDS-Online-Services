@@ -2847,13 +2847,35 @@ function addNewTask($method, $log_msg = '', $ro_key = '', $ds_key = '', $prerequ
 {
 	$taskId = null;
 	global $gCNN_DBS_ORCA;
-	$strQuery = 'INSERT INTO  dba.tbl_background_tasks (method, log_msg, registry_object_keys, data_source_key, prerequisite_task) VALUES ($1, $2, $3, $4, $5)';
-	$params = array($method, $log_msg, $ro_key, $ds_key, $prerequisite_task);
-	$resultSet = executeUpdateQuery($gCNN_DBS_ORCA, $strQuery, $params);
-	$strQuery = 'SELECT CURRVAL(pg_get_serial_sequence($1,$2))';
-	$params = array('dba.tbl_background_tasks', 'task_id');
-	$taskId = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);		
-	return $taskId[0]['currval'];
+	if($ds_key != '')//if a task already exist for the datasource just return the task id of the existing task
+	{
+		$strQuery = 'SELECT * FROM dba.tbl_background_tasks where method = $1 AND data_source_key = $2 AND status = $3 ORDER BY added ASC LIMIT 1';
+		$params = array($method, $ds_key, 'WAITING');
+		$existingTask = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+		if($existingTask)
+		{
+			return $existingTask[0]['task_id']; 			
+		}
+		else{
+			$strQuery = 'INSERT INTO  dba.tbl_background_tasks (method, log_msg, registry_object_keys, data_source_key, prerequisite_task) VALUES ($1, $2, $3, $4, $5)';
+			$params = array($method, $log_msg, $ro_key, $ds_key, $prerequisite_task);
+			$resultSet = executeUpdateQuery($gCNN_DBS_ORCA, $strQuery, $params);
+			$strQuery = 'SELECT CURRVAL(pg_get_serial_sequence($1,$2))';
+			$params = array('dba.tbl_background_tasks', 'task_id');
+			$taskId = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);		
+			return $taskId[0]['currval'];			
+		}		
+	}
+	else
+	{
+		$strQuery = 'INSERT INTO  dba.tbl_background_tasks (method, log_msg, registry_object_keys, data_source_key, prerequisite_task) VALUES ($1, $2, $3, $4, $5)';
+		$params = array($method, $log_msg, $ro_key, $ds_key, $prerequisite_task);
+		$resultSet = executeUpdateQuery($gCNN_DBS_ORCA, $strQuery, $params);
+		$strQuery = 'SELECT CURRVAL(pg_get_serial_sequence($1,$2))';
+		$params = array('dba.tbl_background_tasks', 'task_id');
+		$taskId = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);		
+		return $taskId[0]['currval'];
+	}
 }
 
 /*

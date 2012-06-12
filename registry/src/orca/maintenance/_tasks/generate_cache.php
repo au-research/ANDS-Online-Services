@@ -5,6 +5,7 @@ if($nextTask)
     setTaskStarted($taskId);
 	$dataSourceKey = $nextTask[0]['data_source_key'];
 	$registryObjectKeys = getRegistryObjectKeysForDataSource($dataSourceKey);
+	echo "Caching of " . count($registryObjectKeys) . " records started for " . $dataSourceKey;
 	$message = "Caching of " . count($registryObjectKeys) . " records started for " . $dataSourceKey . ": ";
 	if($registryObjectKeys)
 	{
