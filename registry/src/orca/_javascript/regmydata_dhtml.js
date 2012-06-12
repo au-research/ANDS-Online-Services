@@ -1790,8 +1790,17 @@ function addVocabComplete(field, type) {
 		},
 		select: function( event, ui ) {
 			$( field ).val( ui.item.value );
-	
-		//	alert(ui.item.value + " :: " + field);
+			if(ui.item.value=="Unknown/Other"){
+				var errorDiv = field.replace("#object","errors");
+				var theDiv = document.getElementById(errorDiv);
+				theDiv.style.display='inline';
+				document.getElementById(errorDiv).innerHTML = 'You have selected the licence type of "Unknown/Other", if you would like to have an additional licence type included within this service, please contact services@ands.org.au'
+			}
+			if(ui.item.value!="Unknown/Other"){
+				var errorDiv = field.replace("#object","errors");
+				var theDiv = document.getElementById(errorDiv);
+				theDiv.style.display='none';				
+			}
 			return false;
 		}
 	})
@@ -2833,7 +2842,15 @@ $("#button_bar > input").live("click", function(e) {
 	
 });
 
-function showLicenceWarning(theSelect){
+function checkTypeValue(theSelect){
 	
-	alert(theSelect.value());
+	theDiv = document.getElementById(theSelect);
+	
+	if(theDiv.value==''){
+		var errorDiv = theSelect.replace("object","errors");
+		var theDiv = document.getElementById(errorDiv);
+		theDiv.style.display='inline';
+		document.getElementById(errorDiv).innerHTML = 'You have not selected a licence type , if you would like to have an additional licence type included within this service, please contact services@ands.org.au'
+		//alert("we have a prob");
+	};
 }

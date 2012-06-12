@@ -87,7 +87,7 @@ limitations under the License.
 	elseif($subjectNum==1)
 	{
 		$subjectStr = ' including <a href="'.base_url().'search#!/tab=All/group='.urlencode($group).'/subject='.$subject[0].'">'.$subject[0].'</a>.';
-		$subjectWord = 'areas';
+		$subjectWord = 'area';
 	}
 	elseif($subjectNum==2)
 	{
