@@ -368,8 +368,8 @@ function deleteRegistryObject($registry_object_key)
 	//deleteSolrIndex($registryObjectkey);
 	//$result = deleteSolrIndex($registry_object_key);
 
-	//$slug = getRegistryObjectURLSlug($registry_object_key);
-	//deleteSLUGMapping($slug);
+	// Unreference the SLUG (set the mapping to a null registry object)
+	deleteSLUGMapping($slug);
 	$errors = "";
 	$strQuery = 'SELECT dba.udf_delete_registry_object($1)';
 	$params = array($registry_object_key);
@@ -2674,10 +2674,32 @@ function updateRegistryObjectSLUG ($registry_object_key, $new_display_title, $cu
 
 	if ($current_slug != '')
 	{
-		// update the registry object to re-use the "current slug"
+		// Update the previous mapping (in case the key has been dereferenced?)
+		updateSLUGMapping($current_slug, $registry_object_key, $new_display_title);
+
+		// Now we should check whether the new title warrants a new SLUG
+		// if so, we should maintain a new SLUG for it too...
+		$updated_slug = generateUniqueSlug($new_display_title, $registry_object_key);
+
+		// title has changed, use the updated slug as primary
+		if ($current_slug != $updated_slug)
+		{
+			// If we're going *back* to a SLUG we used previously
+			if (slugExist($updated_slug))
+			{
+				updateSLUGMapping($updated_slug, $registry_object_key, $new_display_title);
+			}
+			else
+			{
+				insertSLUGMapping($updated_slug, $registry_object_key, $new_display_title);
+			}
+		}
+
+		// update the registry object to point to the latest slug (which will be the same as $current slug, if unchanged)
 		$strQuery = 'UPDATE dba.tbl_registry_objects SET url_slug = $2 WHERE registry_object_key = $1';
-		$params = array($registry_object_key, $current_slug);
+		$params = array($registry_object_key, $updated_slug);
 		$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+
 		return;
 	}
 	else

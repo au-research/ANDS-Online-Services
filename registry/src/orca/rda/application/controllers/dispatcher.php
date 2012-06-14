@@ -1,5 +1,5 @@
 <?php
-/** 
+/**
 Copyright 2011 The Australian National University
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ***************************************************************************
 *
-**/ 
+**/
 ?>
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
@@ -27,10 +27,10 @@ The purpose of the dispatcher is to provide logic for handling "psuedo"/
 records (i.e. url.org.au/fish_in_the_antarctic_region).
 
 Furthermore, this controller can be extended with any logic that is appropriate
-to the request BEFORE it is handled by the controller specified in the URL. 
+to the request BEFORE it is handled by the controller specified in the URL.
 */
 class Dispatcher extends CI_Controller {
-	
+
     public function __construct()
     {
          parent::__construct();
@@ -38,12 +38,12 @@ class Dispatcher extends CI_Controller {
     }
 
 	public function _remap($method, $params = array())
-	{		
+	{
 		if (file_exists(APPPATH.'controllers/'.$method.EXT))
 		{
 			include(APPPATH.'controllers/'.$method.EXT);
 			$controller = new $method();
-			
+
 		    if (count($params) > 0 && method_exists($controller, $params[0]))
 		    {
 				$method = array_shift($params);
@@ -61,10 +61,27 @@ class Dispatcher extends CI_Controller {
 
 			$record_hash = $this->_getMappingFor($method);
 
-			if (!$record_hash)		
+			if (!$record_hash)
 			{
-				// check if it used to exist?
-				// display soft error
+
+				// Check for previous URL mappings on this SLUG
+				$query = $this->db
+						->select('date_created, date_modified, search_title')
+						->get_where('dba.tbl_url_mappings', array('url_fragment' => $method), 1);
+
+				if ($query->num_rows() > 0)
+				{
+					$result = $query->row();
+					$data = array('date_created'=>$result->date_created, 'date_modified'=>$result->date_modified, 'search_title'=>$result->search_title);
+					$this->load->view('soft404', $data);
+				}
+				else
+				{
+					// No previous mapping recorded for this SLUG -- must be a genuine 404
+					show_404();
+				}
+				return;
+
 			}
 			else
 			{
@@ -73,7 +90,7 @@ class Dispatcher extends CI_Controller {
 				$view_controller->db = $this->db;
 				array_unshift($params, $method);
 				array_unshift($params, $record_hash);
-			
+
 				call_user_func_array(array($view_controller, 'view_by_hash'), array($params));
 				return;
 			}
@@ -100,84 +117,8 @@ class Dispatcher extends CI_Controller {
 		{
 			return false;
 		}
-		
-	}
-
-	
-	function _generateInitialMappings()
-
-	{
-		$this->db->save_queries = false; 
-
-		/*
-		$query = $this->db->select('registry_object_key, display_title')->get('dba.tbl_registry_objects');
-		foreach ($query->result() as $row)
-		{
-			
-			$data = array(
-			   'url_fragment' => $this->_generateUniqueSlug($row->display_title, $row->registry_object_key),
-			   'registry_object_key' =>  $row->registry_object_key,
-			   'date_created' => time(),
-			   'search_title' => $row->display_title
-			);
-			$this->db->insert('dba.tbl_url_mappings', $data); 
-		}
-
-		$query = $this->db->select('registry_object_key')->get('dba.tbl_registry_objects');
-		foreach ($query->result() as $row)
-		{
-			$data = array(
-			   'url_slug' => getSlugForRecordByKey($row->registry_object_key)
-		    );
-		   
-			$this->db->update('dba.tbl_registry_objects', $data, "registry_object_key = " . $row->registry_object_key);
-
-		
-		}*/
 
 	}
-	
-
-	
-	
-	function _generateUniqueSlug($display_title, $key)
-	{
-		
-		$slug = generateSlug($display_title);
-		//no name/title
-		if ($slug == self::NO_NAME_OR_TITLE_SLUG)
-		{
-			$slug = generateSlug($key);
-		}
-
-		$existing_mappings = $this->db
-						        ->where('url_fragment', $slug)
-						        ->where('registry_object_key != ', $key)
-						        ->count_all_results('dba.tbl_url_mappings');
-
-		if ($existing_mappings > 0)
-		{
-			$key_slug = generateSlug($key);
-			if ($slug != $key_slug)
-			{
-				$slug .= "-" . $key_slug;
-			}
-		}
-		
-		while ($existing_mappings > 0)
-		{
-			$slug .= "-";
-			$query = $this->db
-					        ->where('url_fragment', $slug)
-					        ->where('registry_object_key != ', $key)
-							->count_all_results('dba.tbl_url_mappings');
-		}
-		
-		
-		return $slug; 
-	}
-	
-
 
 }
 ?>

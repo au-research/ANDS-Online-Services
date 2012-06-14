@@ -20,7 +20,7 @@ define('gORCA_HTML_LIST_NO_TYPES', 0);
 define('gORCA_HTML_LIST', 1);
 define('gORCA_HTML_TABLE', 2);
 
-function print_pre($variable, $ret = false) 
+function print_pre($variable, $ret = false)
 {
 	if (!$ret)
 	{
@@ -41,7 +41,7 @@ function getRegistryObjectStatusColor($status)
 	{
 		return $gORCA_STATUS_INFO[$status]['colour'];
 	}
-	else 
+	else
 	{
 		return $defaultColor;
 	}
@@ -51,12 +51,12 @@ function getRegistryObjectStatusInfo($status)
 {
 	global $gORCA_STATUS_INFO;
 	$defaultStatus = array("span"=>$status, "display"=>"Unknown Status: $status");
-	
+
 	if (isset($gORCA_STATUS_INFO[$status]))
 	{
 		return $gORCA_STATUS_INFO[$status];
 	}
-	else 
+	else
 	{
 		return $defaultStatus;
 	}
@@ -65,16 +65,16 @@ function getRegistryObjectStatusInfo($status)
 
 function getRegistryObjectStatusSpan($status, $short=false)
 {
-	
+
 	$status = trim($status); // get rid of stupid fixed length char field padding
-	
+
 	$statusColour = getRegistryObjectStatusColor($status);
 	$statusText = getRegistryObjectStatusInfo($status);
-	if ($short) 
-	{ 
-		$statusText = $statusText['short_span']; 
+	if ($short)
+	{
+		$statusText = $statusText['short_span'];
 	}
-	else 
+	else
 	{
 		$statusText = $statusText['span'];
 	}
@@ -98,17 +98,17 @@ function getColspan()
 {
 	global $rowsPrinted, $logo;
 	if (!isset($rowsPrinted) || !isset($logo) || $logo === false)
-	{ 
-		return "1"; 
+	{
+		return "1";
 	}
-	
+
 	$rowsPrinted++;
 	if ($rowsPrinted > 4)
 	{
 		return "2";
 	}
 	else
-	{ 
+	{
 		return "1";
 	}
 }
@@ -158,9 +158,9 @@ function getNameHTML($registryObjectKey, $queryText='')
 			$hasPrimary = false;
 			$alsoKnownAs = array();
 
-			foreach ( $ComplexNames as $row ) 
-			{	
-				if (strtolower($row['type']) == "primary") 
+			foreach ( $ComplexNames as $row )
+			{
+				if (strtolower($row['type']) == "primary")
 				{
 					if($rdaName == '')
 					{
@@ -173,20 +173,20 @@ function getNameHTML($registryObjectKey, $queryText='')
 					//{
 						$altRdaName = " ".rdaGetNameParts2($row['complex_name_id']);
 					//}
-					
+
 				} // end type check
-				
+
 			} // end loop
 			//$rdaName = $altRdaName;
 			//$rdaName = trim($rdaName,' '.gCHAR_MIDDOT.' ');
-			
+
 		if($rdaName != '')
 		{
 			$altRdaName = $rdaName;
 		}
 	}
-	
-	
+
+
 	if( $queryText )
 	{
 		$html .= highlightQuery($altRdaName, $queryText);
@@ -194,7 +194,7 @@ function getNameHTML($registryObjectKey, $queryText='')
 	else
 	{
 		$html .= esc($altRdaName);
-	}			
+	}
 
 	return $html;
 }
@@ -217,9 +217,9 @@ function getComplexNamesHTML($registryObjectKey)
 				{
 					$html .= '<span class="majorAttribute" title="complex name type">'.esc($complexNames[$i]['type']).':</span> ';
 				}
-				$html .= $dates."</td></tr>\n";	
+				$html .= $dates."</td></tr>\n";
 			}
-			
+
 			$nameParts = getNameParts($complexNames[$i]['complex_name_id']);
 			if( $nameParts )
 			{
@@ -238,11 +238,11 @@ function getComplexNamesHTML($registryObjectKey)
 					}
 					$html .= "</td>";
 					$html .= '<td'.$style.'><a class="search" title="Search for this name" href="'.$searchBaseURI.esc(urlencode($nameParts[$j]['value'])).'">'.escWithBreaks($nameParts[$j]['value']).'</a></td>';
-					$html .= "</tr>\n";		
+					$html .= "</tr>\n";
 				}
 			}
 		}
-		$html .= '</table>'."\n";		
+		$html .= '</table>'."\n";
 	}
 	return $html;
 }
@@ -250,11 +250,11 @@ function getComplexNamesHTML($registryObjectKey)
 function getIdentifiersHTML($registryObjectKey, $HTMLtype, $queryText='')
 {
 	$searchBaseURI = 'search.php?collections=collection&amp;services=service&amp;parties=party&amp;activities=activity&amp;action=Search&amp;search=';
-	
-	$table = false;		
+
+	$table = false;
 	if( $HTMLtype == gORCA_HTML_TABLE )
 	{
-		$table = true;		
+		$table = true;
 	}
 	$html = '';
 	$identifiers = getIdentifiers($registryObjectKey);
@@ -274,7 +274,7 @@ function getIdentifiersHTML($registryObjectKey, $HTMLtype, $queryText='')
 				$html .= "</tr>\n";
 			}
 			else
-			{			
+			{
 				if( $i != 0 )
 				{
 					$html .= ' '.gCHAR_MIDDOT.' ';
@@ -326,7 +326,7 @@ function getRelationsHTML($registryObjectKey, $HTMLtype)
 				{
 					$relation = esc($relationDescription['description'])." ";
 				}
-				
+
 				if( $relatedObject=getRegistryObject($relatedRegistryObjectKey) )
 				{
 					if( trim($relatedObject[0]['status']) == PUBLISHED || userIsORCA_ADMIN() )
@@ -350,22 +350,22 @@ function getRelationsHTML($registryObjectKey, $HTMLtype)
 				{
 					$relation .= $relatedRegistryObjectKey;
 				}
-	
-		
+
+
 				if( $table )
 				{
 					$url = '';
 					if( $relationDescription['url'] )
-					{	
+					{
 						$url = '&nbsp;&nbsp;<span class="attribute">url:</span>&nbsp;';
-						
+
 						// Fix relative URLs.
 						$href = $relationDescription['url'];
 						if( !preg_match('/^[a-zA-Z]{0,5}:\/\/.*/', $href) )
 						{
 							$href = 'http://'.$href;
-						}					
-						
+						}
+
 						$url .= '<a href="'.esc($href).'" class="external" title="'.esc($href).'">'.esc($href).'<img class="external" src="'.gORCA_IMAGE_ROOT.'external_link.gif" alt="" /></a>';
 					}
 					$html .= '<tr>';
@@ -374,7 +374,7 @@ function getRelationsHTML($registryObjectKey, $HTMLtype)
 					$html .= "</tr>\n";
 				}
 				else
-				{			
+				{
 					$html .= $relation.";&nbsp;";
 				}
 			}
@@ -394,11 +394,11 @@ function getRelationsHTML($registryObjectKey, $HTMLtype)
 function getSubjectsHTML($registryObjectKey, $HTMLtype, $queryText='')
 {
 	$searchBaseURI = 'search.php?collections=collection&amp;services=service&amp;parties=party&amp;activities=activity&amp;action=Search&amp;search=';
-	
-	$table = false;		
+
+	$table = false;
 	if( $HTMLtype == gORCA_HTML_TABLE )
 	{
-		$table = true;		
+		$table = true;
 	}
 	$html = '';
 	$subjects = getSubjects($registryObjectKey);
@@ -418,7 +418,7 @@ function getSubjectsHTML($registryObjectKey, $HTMLtype, $queryText='')
 				$html .= "</tr>\n";
 			}
 			else
-			{			
+			{
 				if( $i != 0 )
 				{
 					$html .= ' '.gCHAR_MIDDOT.' ';
@@ -444,10 +444,10 @@ function getSubjectsHTML($registryObjectKey, $HTMLtype, $queryText='')
 
 function getDescriptionsHTML($registryObjectKey, $HTMLtype, $queryText='', $suppressLogos=true)
 {
-	$table = false;		
+	$table = false;
 	if( $HTMLtype == gORCA_HTML_TABLE )
 	{
-		$table = true;		
+		$table = true;
 	}
 	$html = '';
 	$descriptions = getDescriptions($registryObjectKey);
@@ -463,7 +463,7 @@ function getDescriptionsHTML($registryObjectKey, $HTMLtype, $queryText='', $supp
 			{
 				continue;
 			}
-			
+
 			if( $table )
 			{
 				$html .= '<tr>';
@@ -511,10 +511,10 @@ function highlightSearchTerm($safeText, $safeTerm, $location)
 	$reTerm = $safeTerm;
 	$reTerm = str_replace("\\", "\\\\", $reTerm);
 	$reTerm = str_replace("/", "\/", $reTerm);
-	
+
 	$prefix = '<span style="background-color: #ffe84a; border: 1px solid #888888; padding-left: 2px; padding-right: 2px;">';
 	$suffix = '</span>';
-	
+
 	if( $safeText && $safeTerm )
 	{
 		switch( $location )
@@ -526,9 +526,9 @@ function highlightSearchTerm($safeText, $safeTerm, $location)
 					$text = substr($html, $pos, $len);
 					$after = substr($html, $pos+$len, strlen($html)-($pos+$len));
 					$html = "$before$prefix$text$suffix$after";
-				}			
+				}
 				break;
-				
+
 			case gORCA_HIGHLIGHT_ENDS_WITH:
 				if( ($pos = strpos(strtoupper($html), strtoupper($safeTerm), 0)) === strlen($safeText)-$len )
 				{
@@ -536,9 +536,9 @@ function highlightSearchTerm($safeText, $safeTerm, $location)
 					$text = substr($html, $pos, $len);
 					$after = substr($html, $pos+$len, strlen($html)-($pos+$len));
 					$html = "$before$prefix$text$suffix$after";
-				}				
+				}
 				break;
-				
+
 			case gORCA_HIGHLIGHT_ALL:
 				while( ($pos = strpos(strtoupper($html), strtoupper($safeTerm), $offset)) !== false  )
 				{
@@ -546,7 +546,7 @@ function highlightSearchTerm($safeText, $safeTerm, $location)
 					$text = substr($html, $pos, $len);
 					$after = substr($html, $pos+$len, strlen($html)-($pos+$len));
 					$offset = $pos+strlen($text);
-				
+
 					if( !preg_match("/^$reTerm"."[^<>]*>/is", substr($html, $pos), $matches) )
 					{
 						$before = $before.$prefix;
@@ -556,7 +556,7 @@ function highlightSearchTerm($safeText, $safeTerm, $location)
 					$html = $before.$text.$after;
 				}
 				break;
-		}		
+		}
 	}
 
 	return $html;
@@ -567,13 +567,13 @@ function highlightQuery($text, $queryText)
 	$html = '';
 	$prefix = '<span style="background-color: #ffe84a; border: 1px solid #888888; padding-left: 2px; padding-right: 2px;">';
 	$suffix = '</span>';
-	
+
 	$markedText = getHighlightedQueryText($text, $queryText);
-	
+
 	$html = esc($markedText);
 	$html = str_replace("@@@@", $prefix, $html);
 	$html = str_replace("$$$$", $suffix, $html);
-	
+
 	return $html;
 }
 
@@ -605,7 +605,7 @@ $gORCA_VOCABS_OPTION_HTML = Array();
 function getVocabularyHTML($vocabId, $termId=null)
 {
 	global $gORCA_VOCABS_OPTION_HTML;
-	
+
 	$vocabHTML = '';
 	// Check to see if we've already retrieved this vocab.
 	if( isset($gORCA_VOCABS_OPTION_HTML[$vocabId]) )
@@ -638,10 +638,10 @@ function getVocabularyHTML($vocabId, $termId=null)
 			$defaultNamespace = $XPath->evaluate('/*')->item(0)->namespaceURI;
 			// Register a prefix for the default namespace so that we can actually use the xpath object.
 			$XPath->registerNamespace('vc', $defaultNamespace);
-			
+
 			if( $XPath->evaluate("//vc:vocabulary[vc:identifier=\"$vocabId\"]")->item(0) )
 			{
-				$vocabNode = $XPath->evaluate("//vc:vocabulary[vc:identifier=\"$vocabId\"]")->item(0);			
+				$vocabNode = $XPath->evaluate("//vc:vocabulary[vc:identifier=\"$vocabId\"]")->item(0);
 				if( $termId )
 				{
 					if( $XPath->evaluate(".//vc:term[vc:identifier[@type=\"local\"]=\"$termId\"]", $vocabNode)->item(0) )
@@ -653,7 +653,7 @@ function getVocabularyHTML($vocabId, $termId=null)
 						$vocabNode = null;
 					}
 				}
-				
+
 				if( $vocabNode )
 				{
 					$name = $XPath->evaluate("vc:name", $vocabNode)->item(0)->nodeValue;
@@ -687,7 +687,7 @@ function getTermsHTML($XPath, $termNode, $vocabHTML)
 			$type = $term->getAttribute("type");
 			$name = $XPath->evaluate("vc:name", $term)->item(0)->nodeValue;
 			$identifier = $XPath->evaluate("vc:identifier", $term)->item(0)->nodeValue;
-			
+
 			if( $type == 'nl' )
 			{
 				$vocabHTML .= '<b>'.esc($name)."</b><br />\n";
@@ -709,8 +709,8 @@ function getTermsHTML($XPath, $termNode, $vocabHTML)
 function rdaGetNameParts2($namePartId)
 {
 	$name = '';
-	$names = getNameParts($namePartId);	
-	
+	$names = getNameParts($namePartId);
+
 	$initial = '';
 	$given = '';
 	$family = '';
@@ -723,7 +723,7 @@ function rdaGetNameParts2($namePartId)
 		$name = '';
 		for( $i = 0; $i < count($names); $i++ )
 		{
-			switch($names[$i]['type']) 
+			switch($names[$i]['type'])
 				{
 					case "initial":
 						$initial .= $names[$i]['value'].' '.gCHAR_MIDDOT.' ';
@@ -733,27 +733,27 @@ function rdaGetNameParts2($namePartId)
 					break;
 					case "given":
 						$given .= $names[$i]['value'].' '.gCHAR_MIDDOT.' ';
-					break;	
+					break;
 					case "suffix":
 						$suffix .= ' '.gCHAR_MIDDOT.' '.$names[$i]['value'];
-					break;	
+					break;
 					case "title":
 						$title .= $names[$i]['value'];
-					break;																	
+					break;
 					default:
 						$fullname .= $names[$i]['value'];
-					break;								
-							
-				}			
+					break;
+
+				}
 
 				if($fullname)
 				{
 					$name = $fullname;
 				}
-					else 
-				{	
-					$name = $family.$given.$initial.$title.$suffix;	
-				}		
+					else
+				{
+					$name = $family.$given.$initial.$title.$suffix;
+				}
 		}
 	}
 	return $name;
@@ -763,15 +763,15 @@ function drawStatTable($typeStats=null){
 	$dateFrom = date("Ym",mktime($hour=null,$minute=null,$second=null,$month=getQueryValue('monthFrom'),$day="2",$year=getQueryValue('yearFrom')));
 	$periodDisplayFrom = date("M Y",mktime($hour=null,$minute=null,$second=null,$month=getQueryValue('monthFrom'),$day="1",$year=getQueryValue('yearFrom')));
 	$dateFromMonth = date("Y-m-d",mktime($hour=null,$minute=null,$second=null,$month=getQueryValue('monthFrom'),$day="2",$year=getQueryValue('yearFrom')));
-	$dateTo = date("Ym",mktime($hour=null,$minute=null,$second=null,$month=getQueryValue('monthTo'),$day="2",$year=getQueryValue('yearTo')));	
-	$periodDisplayTo = date("M Y",mktime($hour=null,$minute=null,$second=null,$month=getQueryValue('monthTo'),$day="1",$year=getQueryValue('yearTo'))); 
-	$dateToMonth = date("Y-m-d",mktime($hour=null,$minute=null,$second=null,$month=getQueryValue('monthTo'),$day="1",$year=getQueryValue('yearTo'))); 
-	
+	$dateTo = date("Ym",mktime($hour=null,$minute=null,$second=null,$month=getQueryValue('monthTo'),$day="2",$year=getQueryValue('yearTo')));
+	$periodDisplayTo = date("M Y",mktime($hour=null,$minute=null,$second=null,$month=getQueryValue('monthTo'),$day="1",$year=getQueryValue('yearTo')));
+	$dateToMonth = date("Y-m-d",mktime($hour=null,$minute=null,$second=null,$month=getQueryValue('monthTo'),$day="1",$year=getQueryValue('yearTo')));
+
 	if($periodDisplayFrom==$periodDisplayTo)
 	{
 		$periodDisplay = $periodDisplayTo;
 	}
-	else 
+	else
 	{
 		$periodDisplay = $periodDisplayFrom." - ".$periodDisplayTo;
 	}
@@ -790,17 +790,17 @@ function drawStatTable($typeStats=null){
 		<tr><td>Trusted SW Agreement</td><?php printStatistics($months,"M2M");?></tr>
 		<tr><td bgcolor="#99FFFF">DOI Service:</td><?php printHeader($months);?></tr>
 		<tr><td>DOIs Minted</td><?php printStatistics($months, "dois");?></tr>
-		<tr><td>Registered Publisher Agents</td><?php printStatistics($months,"doiClient");?></tr>	
-		<tr><td>DOI Minting failures</td><?php printStatistics($months,"doiMintFail");?></tr>			
+		<tr><td>Registered Publisher Agents</td><?php printStatistics($months,"doiClient");?></tr>
+		<tr><td>DOI Minting failures</td><?php printStatistics($months,"doiMintFail");?></tr>
 		<tr><td bgcolor="#99FFFF">Registry:</td><?php printHeader($months);?></tr>
 		<tr><td>Organisations</td><?php printStatistics($months, "Organisations");?></tr>
-		<tr><td>Users</td><?php printStatistics($months, "Users");?></tr>				
+		<tr><td>Users</td><?php printStatistics($months, "Users");?></tr>
 		<tr><td>Data Source Admins</td><?php printStatistics($months, "Data");?></tr>
 		<tr><td>Provider Org</td><?php printStatistics($months, "Provider");?></tr>
 		<tr><td>Publish my Data</td><?php printStatistics($months, "Publish");?></tr>
 		<tr><td>DIRECT</td><?php printStatistics($months, "DIRECT");?></tr>
-		<tr><td>Harvestor DIRECT</td><?php printStatistics($months, "GET");?></tr>	
-		<tr><td>Harvestor OAI-PMH</td><?php printStatistics($months, "RIF");?></tr>						
+		<tr><td>Harvestor DIRECT</td><?php printStatistics($months, "GET");?></tr>
+		<tr><td>Harvestor OAI-PMH</td><?php printStatistics($months, "RIF");?></tr>
 		<tr><td>Total records</td><?php printStatistics($months, "Total");?></tr>
 		<tr><td>&nbsp;&nbsp;&nbsp;&nbsp;Collections</td><?php printStatistics($months, "Collections");?></tr>
 		<?php if($typeStats) printSubStats($months,'Collection')?>
@@ -808,23 +808,23 @@ function drawStatTable($typeStats=null){
 		<?php if($typeStats) printSubStats($months,'Party')?>
 		<tr><td>&nbsp;&nbsp;&nbsp;&nbsp;Services</td><?php printStatistics($months, "Services");?></tr>
 		<?php if($typeStats) printSubStats($months,'Service')?>
-		<tr><td>&nbsp;&nbsp;&nbsp;&nbsp;Activities</td><?php printStatistics($months, "Activities");?></tr>	
-		<?php if($typeStats) printSubStats($months,'Activity')?>	
+		<tr><td>&nbsp;&nbsp;&nbsp;&nbsp;Activities</td><?php printStatistics($months, "Activities");?></tr>
+		<?php if($typeStats) printSubStats($months,'Activity')?>
 		<?php if($typeStats) { ?>
-			<tr><td>&nbsp;&nbsp;&nbsp;&nbsp;Descriptions</td><td>&nbsp;</td></tr>			
+			<tr><td>&nbsp;&nbsp;&nbsp;&nbsp;Descriptions</td><td>&nbsp;</td></tr>
 		<?php 	printDescriptionStats($months);
 		}?>
 		<?php if($typeStats) { ?>
-			<tr><td>&nbsp;&nbsp;&nbsp;&nbsp;Related_info</td><td>&nbsp;</td></tr>			
+			<tr><td>&nbsp;&nbsp;&nbsp;&nbsp;Related_info</td><td>&nbsp;</td></tr>
 		<?php 	printRelatedInfoStats($months);
-		} ?>		
+		} ?>
 		<tr><td bgcolor="#99FFFF">Research Data Australia:</td><?php printHeader($months);?></tr>
-		<tr><td>Page Views</td><?php printStatistics($months, "Page");?></tr>	
-		<tr><td>Site Visits</td><?php printStatistics($months, "Visit");?></tr>																				
+		<tr><td>Page Views</td><?php printStatistics($months, "Page");?></tr>
+		<tr><td>Site Visits</td><?php printStatistics($months, "Visit");?></tr>
 	</table>
-	
-<?php  
-} 
+
+<?php
+}
 
 function printStatistics($months,$statType){
 
@@ -833,186 +833,186 @@ function printStatistics($months,$statType){
 		$theMonth = date("Y-m-d",(strtotime($theMonth.'+1 month')));
 		switch ($statType)
 		{
-			case "handles": 
+			case "handles":
 				?>
-			<td><?php echo getPidsCount(strtotime($theMonth));?></td><?php 
+			<td><?php echo getPidsCount(strtotime($theMonth));?></td><?php
 			break
 			;
-			case "M2M": 
+			case "M2M":
 				?>
 			<td>
-			<?php 
+			<?php
 			if($theMonth<date("Y-m-d"))
 			{
 					echo getStoredStatCount($theMonth,'trusted_sw_agreements_count');
 			}
-			else 
-			{		
+			else
+			{
 				echo getM2MCount(strtotime($theMonth));
-			}?></td><?php 
-			break
-			;	
-			case "dois": 
-				?>
-			<td><?php echo getDoisCount($theMonth);?></td><?php 
+			}?></td><?php
 			break
 			;
-			case "doiClient": 
+			case "dois":
 				?>
-			<td><?php echo getDoiClientCount($theMonth);?></td><?php 
+			<td><?php echo getDoisCount($theMonth);?></td><?php
 			break
 			;
-			case "doiMintFail": 
+			case "doiClient":
 				?>
-			<td><?php echo getDoiMintFailCount($theMonth);?></td><?php 
-			break
-			;									
-			case "Provider": 
-				?>
-			<td><?php echo getDataSourceCount($theMonth);?></td><?php 
+			<td><?php echo getDoiClientCount($theMonth);?></td><?php
 			break
 			;
-			case "Organisations": 
+			case "doiMintFail":
 				?>
-			<td><?php echo getOrganisationCount($theMonth);?></td><?php 
+			<td><?php echo getDoiMintFailCount($theMonth);?></td><?php
 			break
 			;
-			case "Users": 
+			case "Provider":
 				?>
-			<td><?php echo getUserCount($theMonth);?></td><?php 
-			break
-			;						
-			case "Publish": 
-				?>
-			<td><?php echo getPublishMyDataCount($theMonth);?></td><?php 
-			break
-			;	
-			case "DIRECT": 
-				?>
-			<td><?php echo getHarvestMethodCount($theMonth, 'DIRECT');?></td><?php 
+			<td><?php echo getDataSourceCount($theMonth);?></td><?php
 			break
 			;
-			case "GET": 
+			case "Organisations":
 				?>
-			<td><?php echo getHarvestMethodCount($theMonth, 'GET');?></td><?php 
+			<td><?php echo getOrganisationCount($theMonth);?></td><?php
 			break
 			;
-			case "RIF": 
+			case "Users":
 				?>
-			<td><?php getHarvestMethodCount($theMonth, 'RIF');?></td><?php 
+			<td><?php echo getUserCount($theMonth);?></td><?php
 			break
-			;					
-			case "Total": 
-				
+			;
+			case "Publish":
+				?>
+			<td><?php echo getPublishMyDataCount($theMonth);?></td><?php
+			break
+			;
+			case "DIRECT":
+				?>
+			<td><?php echo getHarvestMethodCount($theMonth, 'DIRECT');?></td><?php
+			break
+			;
+			case "GET":
+				?>
+			<td><?php echo getHarvestMethodCount($theMonth, 'GET');?></td><?php
+			break
+			;
+			case "RIF":
+				?>
+			<td><?php getHarvestMethodCount($theMonth, 'RIF');?></td><?php
+			break
+			;
+			case "Total":
+
 				?>
 			<td>
-			<?php 
+			<?php
 			if($theMonth<date("Y-m-d"))
 			{
 				echo getStoredStatCount($theMonth,'registry_object_count');
-	
+
 			}
-			else 
+			else
 			{
-				echo getRegistryObjectStatCount($theMonth,$registryObjectClass=null);			
-			}	
+				echo getRegistryObjectStatCount($theMonth,$registryObjectClass=null);
+			}
 			?>
-			</td><?php 
+			</td><?php
 			break
 			;
-			case "Collections": 
+			case "Collections":
 				?>
 			<td>
-			<?php 
+			<?php
 			if($theMonth<date("Y-m-d"))
 			{
 				echo getStoredStatCount($theMonth,'collection_object_count');
 			}
-			else 
-			{			
+			else
+			{
 				echo getRegistryObjectStatCount($theMonth,$registryObjectClass='Collection');
 			}
 			?>
-			</td><?php 
+			</td><?php
 			break
 			;
-			case "Parties": 
+			case "Parties":
 				?>
 			<td>
-			<?php 
+			<?php
 			if($theMonth<date("Y-m-d"))
 			{
 				echo getStoredStatCount($theMonth,'party_object_count');
 			}
-			else 
-			{		
+			else
+			{
 				echo getRegistryObjectStatCount($theMonth,$registryObjectClass='Party');
-			}?></td><?php 
+			}?></td><?php
 			break
-			;	
-			case "Activities": 
+			;
+			case "Activities":
 				?>
 			<td>
-			<?php 
+			<?php
 			if($theMonth<date("Y-m-d"))
 			{
 				echo getStoredStatCount($theMonth,'activity_object_count');
 			}
-			else 
-			{		
+			else
+			{
 				echo getRegistryObjectStatCount($theMonth,$registryObjectClass='Activity');
-			}?></td><?php 
+			}?></td><?php
 			break
 			;
-			case "Services": 
+			case "Services":
 				?>
 			<td>
-			<?php 
+			<?php
 			if($theMonth<date("Y-m-d"))
 			{
 				echo getStoredStatCount($theMonth,'service_object_count');
 			}
-			else 
-			{		
+			else
+			{
 				echo getRegistryObjectStatCount($theMonth,$registryObjectClass='Service');
-			}?></td><?php 
-			break
-			;	
-			case "Data": 
-				?>
-			<td><?php echo getDataSorceAdminCount($theMonth,$registryObjectClass=null);?></td><?php 
+			}?></td><?php
 			break
 			;
-			case "Page": 
+			case "Data":
 				?>
-			<td valign="top"><?php echo getPageAccessCounts($theMonth); ?></td><?php 
+			<td><?php echo getDataSorceAdminCount($theMonth,$registryObjectClass=null);?></td><?php
 			break
-			;	
-			case "Visit": 
+			;
+			case "Page":
 				?>
-			<td valign="top"><?php echo getVisitorCounts($theMonth); ?></td><?php 
+			<td valign="top"><?php echo getPageAccessCounts($theMonth); ?></td><?php
 			break
-			;										
+			;
+			case "Visit":
+				?>
+			<td valign="top"><?php echo getVisitorCounts($theMonth); ?></td><?php
+			break
+			;
 			default:
-				$thetype=explode("::",$statType); 
-				$theStats = getRegistryObjectTypeCount($theMonth,$thetype[0],$thetype[1]);			
+				$thetype=explode("::",$statType);
+				$theStats = getRegistryObjectTypeCount($theMonth,$thetype[0],$thetype[1]);
 				?>
-			<td style="color:#666666"><?php 
+			<td style="color:#666666"><?php
 				if($theStats)
 				{
 					$the_count = explode(",",trim(trim($theStats[0]["count"],")"),"("));
 					$count = $the_count[1];
 				}
-				else 
+				else
 				{
 					$count = 0;
-				}					
-				print($count);	
+				}
+				print($count);
 			?></td>
-			<?php	
+			<?php
 		}
-				 		 
-	}	
+
+	}
 
 }
 function printSubStats($months,$theClass)
@@ -1023,11 +1023,11 @@ function printSubStats($months,$theClass)
 
 		foreach($theStats as $theStat) {
 			$the_type = explode(",",trim(trim($theStat["count"],")"),"("));
-		
+
 ?>
-				<tr><td style="color:#666666">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $the_type[0];?></td><?php printStatistics($months, $theClass."::".$the_type[0]);?></tr> 
+				<tr><td style="color:#666666">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $the_type[0];?></td><?php printStatistics($months, $theClass."::".$the_type[0]);?></tr>
 		<?php }
-	}		
+	}
 }
 function printDescriptionStats($months)
 {
@@ -1037,11 +1037,11 @@ function printDescriptionStats($months)
 
 		foreach($theStats as $theStat) {
 			$the_type = explode(",",trim(trim($theStat["count"],")"),"("));
-		
+
 ?>
-				<tr><td style="color:#666666">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $the_type[0]?></td><td style="color:#666666"><?php echo $the_type[1];?></td></tr> 
+				<tr><td style="color:#666666">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $the_type[0]?></td><td style="color:#666666"><?php echo $the_type[1];?></td></tr>
 		<?php }
-	}		
+	}
 }
 function printRelatedInfoStats($months)
 {
@@ -1051,11 +1051,11 @@ function printRelatedInfoStats($months)
 
 		foreach($theStats as $theStat) {
 			$the_type = explode(",",trim(trim($theStat["count"],")"),"("));
-		
+
 ?>
-				<tr><td style="color:#666666">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $the_type[0]?></td><td style="color:#666666"><?php echo $the_type[1];?></td></tr> 
+				<tr><td style="color:#666666">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $the_type[0]?></td><td style="color:#666666"><?php echo $the_type[1];?></td></tr>
 		<?php }
-	}		
+	}
 }
 function printMonths($months)
 {
@@ -1063,8 +1063,8 @@ function printMonths($months)
 	{
 		?>
 		<td bgcolor="#CCCCCC"><?php echo $theMonth;?></td>
-		<?php 
-	}	
+		<?php
+	}
 }
 function printHeader($months)
 {
@@ -1072,8 +1072,8 @@ function printHeader($months)
 	{
 		?>
 		<td bgcolor="#CCCCCC"></td>
-		<?php 
-	}	
+		<?php
+	}
 }
 
 function convert_isosql_date_to_xsdatetime($date_string)
@@ -1094,13 +1094,13 @@ function generateSlug($phrase, $maxLength = 255)
 
     return $result;
 }
-	
-	
+
+
 function generateUniqueSlug($display_title, $key)
 {
 	// Get an initial slug based on title alone
 	$slug = generateSlug($display_title);
-	
+
 	// if no name/title, then slug the key and hope for the best
 	// these are pretty dumb records anyway...
 	if ($slug == NO_NAME_OR_TITLE_SLUG)
@@ -1108,7 +1108,7 @@ function generateUniqueSlug($display_title, $key)
 		$slug = generateSlug($key);
 	}
 
-	// see if our first attempt is unique 
+	// see if our first attempt is unique
 	// if the existing mapping is to our own key, we can consider it unique
 	$existing_mappings = countOtherSLUGMappings($slug, $key);
 
@@ -1121,19 +1121,19 @@ function generateUniqueSlug($display_title, $key)
 			$slug .= "-" . $key_slug;
 		}
 	}
-	
+
 	// keys aren't entirely unique once they're slugified, so add some dashes if still conflicting
 	// (this is really unlikely!)
 	$existing_mappings = countOtherSLUGMappings($slug, $key);
-	
+
 	while ($existing_mappings > 0)
 	{
 		$slug .= "-";
-		$query = countOtherSLUGMappings($slug, $key);
+		$existing_mappings = countOtherSLUGMappings($slug, $key);
 	}
-		
-		
-	return $slug; 
+
+
+	return $slug;
 }
 
 ?>
