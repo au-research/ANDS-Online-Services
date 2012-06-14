@@ -191,7 +191,7 @@ else
 		// We're done processing the put request.
 		updateHarvestRequest($harvestRequestId, 'ORCA', '');
 		
-		if( $done == 'TRUE' && !$nextHarvestDate )
+		if( $done == 'TRUE' && $mode == 'HARVEST' && !$nextHarvestDate )
 		{
 			// The harvester is done servicing this harvest request so...
 
@@ -205,8 +205,7 @@ else
 		}
 		if( $done == 'TRUE' && $mode == 'HARVEST' && !$runErrors)
 		{
-			runQualityCheckforDataSource($dataSourceKey);
-			runSolrIndexForDatasource($dataSourceKey);
+		    queueSyncDataSource($dataSourceKey);
 		}
 	}
 	

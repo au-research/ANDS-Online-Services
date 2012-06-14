@@ -107,8 +107,7 @@ function runImport($dataSource, $testOnly)
 				$runErrors = importRegistryObjects($registryObjects, $dataSourceKey, $runResultMessage);
 				$timeTaken = substr((string)(microtime(true) - $startTime), 0, 5);
 				$actions  .= "Time Taken: $timeTaken seconds\n";
-				runQualityCheckforDataSource($dataSourceKey);
-				runSolrIndexForDatasource($dataSourceKey);
+				queueSyncDataSource($dataSourceKey);
 			}
 
 
@@ -268,6 +267,7 @@ function runClear($dataSource, $action)
 	}
 	
 	// Log the activity.
+	queueSyncDataSource($dataSourceKey);
 	insertDataSourceEvent($dataSourceKey, $actions, $log_type);
 
 }
@@ -652,19 +652,17 @@ function updateRecordsForDataSource($dataSourceKey, $manuallyPublish,$manuallyPu
 			for( $i=0; $i < count($registryObjectKeys); $i++ )
 			{
 				updateRegistryObjectStatus($registryObjectKeys[$i]['registry_object_key'], PUBLISHED);
-				optimiseSolrIndex();
 				//$actions .= $registryObjectKeys[$i]['registry_object_key'].' changed status to PUBLISHED';
 			}
 		}
-		runSolrIndexForDatasource($dataSourceKey);
+		queueSyncDataSource($dataSourceKey);
 		insertDataSourceEvent($dataSourceKey, $actions);
 	}
 	//echo $createPrimary." = new :: ".$oldCreatePrimary." = old ";
-	if($createPrimary!=$oldCreatePrimary||$class_1!=$class_1_old||$class_2!=$class_2_old)
-	{
-		runSolrIndexForDatasource($dataSourceKey);			
-		runQualityCheckforDataSource($dataSourceKey);
-	}
+	//if($createPrimary!=$oldCreatePrimary||$class_1!=$class_1_old||$class_2!=$class_2_old)
+	//{
+		
+	//}
 	if(($qaFlag == 0 || $qaFlag == 'f') && $qaFlagOld == 't')
 	{
 			
@@ -730,7 +728,7 @@ function updateRecordsForDataSource($dataSourceKey, $manuallyPublish,$manuallyPu
 			}
 						
 		}
-		runSolrIndexForDatasource($dataSourceKey);	
+
 		insertDataSourceEvent($dataSourceKey, $actions);	
 	}
 	

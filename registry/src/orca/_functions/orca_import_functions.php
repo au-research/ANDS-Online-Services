@@ -2173,39 +2173,43 @@ function runQualityLevelCheckForDraftRegistryObject($registryObjectKey, $dataSou
 {
 		$registryObject = getDraftRegistryObject($registryObjectKey,$dataSourceKey);
 		$relatedObjectClassesStr = '';
+		$rifcs = '';
 		$rifcs = $registryObject[0]['rifcs'];
-
-		$objectClass = "";
-		if(str_replace("<Collection","",$rifcs)!=$rifcs||str_replace("<collection","",$rifcs)!=$rifcs)
-		{
-			$objectClass = "Collection";
-		}
-		elseif(str_replace("<Servive","",$rifcs)!=$rifcs||str_replace("<service","",$rifcs)!=$rifcs)
-		{
-			$objectClass = "Service";
-		}
-		elseif(str_replace("<Activity","",$rifcs)!=$rifcs||str_replace("<activity","",$rifcs)!=$rifcs)
-		{
-			$objectClass = "Activity";
-		}
-		elseif(str_replace("<Party","",$rifcs)!=$rifcs||str_replace("<party","",$rifcs)!=$rifcs)
-		{
-			$objectClass = "Party";
-		}
-
-		$relRifcs = getRelatedXml($dataSourceKey,$rifcs,$objectClass);
-
-		$RegistryObjects = new DOMDocument();
-		$RegistryObjects->loadXML($relRifcs);
-		//print $relRifcs;
-		$relatedObjectClassesStr = getAllRelatedObjectClass($RegistryObjects, $dataSourceKey);
-		$qualityTestResult = runQualityCheckonDom($RegistryObjects, $dataSourceKey, 'html', $relatedObjectClassesStr);
-		$errorCount = substr_count($qualityTestResult, 'class="error"');
-	    $warningCount = substr_count($qualityTestResult, 'class="warning"') + substr_count($qualityTestResult, 'class="info"');
-        $result = updateDraftRegistryObjectQualityTestResult($registryObjectKey, $dataSourceKey, $qualityTestResult, $errorCount, $warningCount);
 		$level = 1;
-		$qa_result = runQualityLevelCheckonDom($RegistryObjects, $relatedObjectClassesStr, &$level);
-		$result = updateDraftRegistryObjectQualityLevelResult($registryObjectKey, $dataSourceKey, $level, $qa_result);
+        if($rifcs != '')
+        {
+			$objectClass = "";
+			if(str_replace("<Collection","",$rifcs)!=$rifcs||str_replace("<collection","",$rifcs)!=$rifcs)
+			{
+				$objectClass = "Collection";
+			}
+			elseif(str_replace("<Servive","",$rifcs)!=$rifcs||str_replace("<service","",$rifcs)!=$rifcs)
+			{
+				$objectClass = "Service";
+			}
+			elseif(str_replace("<Activity","",$rifcs)!=$rifcs||str_replace("<activity","",$rifcs)!=$rifcs)
+			{
+				$objectClass = "Activity";
+			}
+			elseif(str_replace("<Party","",$rifcs)!=$rifcs||str_replace("<party","",$rifcs)!=$rifcs)
+			{
+				$objectClass = "Party";
+			}
+	
+			$relRifcs = getRelatedXml($dataSourceKey,$rifcs,$objectClass);
+	
+			$RegistryObjects = new DOMDocument();
+			$RegistryObjects->loadXML($relRifcs);
+			//print $relRifcs;
+			$relatedObjectClassesStr = getAllRelatedObjectClass($RegistryObjects, $dataSourceKey);
+			$qualityTestResult = runQualityCheckonDom($RegistryObjects, $dataSourceKey, 'html', $relatedObjectClassesStr);
+			$errorCount = substr_count($qualityTestResult, 'class="error"');
+		    $warningCount = substr_count($qualityTestResult, 'class="warning"') + substr_count($qualityTestResult, 'class="info"');
+	        $result = updateDraftRegistryObjectQualityTestResult($registryObjectKey, $dataSourceKey, $qualityTestResult, $errorCount, $warningCount);
+
+			$qa_result = runQualityLevelCheckonDom($RegistryObjects, $relatedObjectClassesStr, &$level);
+			$result = updateDraftRegistryObjectQualityLevelResult($registryObjectKey, $dataSourceKey, $level, $qa_result);
+        }
 		return $level;
 }
 

@@ -49,7 +49,7 @@ if(!$page){
 
 	$orca = eAPPLICATION_ROOT.'orca/';
 ?>
-<h5>The following records have been verified as examplary records by the ANDS Metadata Assessement Group.</h5>
+<h5>The following records have been verified as exemplary records by the ANDS Metadata Assessement Group.</h5>
 <div>
 
 	<?php
