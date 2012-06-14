@@ -321,7 +321,13 @@ require '../../_includes/header.php';
 					</td><td >
 	<?php 			if($dataSource[0]['institution_pages']=="1"||$dataSource[0]['institution_pages']=="2")	
 					{
-						?><a href="../view.php?key=<?php print(($thePage[0]['registry_object_key'])); ?>"><?php print($thePage[0]['registry_object_key']);?></a><?php 				
+						if(getRegistryObject($thePage[0]['registry_object_key'], $overridePermissions = true))
+						{
+						?>	<a href="../view.php?key=<?php print(($thePage[0]['registry_object_key'])); ?>"><?php print($thePage[0]['registry_object_key']);?></a><?php 
+						}else{
+						?>
+							<a href="../manage/add_party_registry_object.php?readOnly&data_source=<?php echo $dataSourceKey;?>&key=<?php echo $thePage[0]['registry_object_key']; ?>"><?php print($thePage[0]['registry_object_key']);?></a><?php 
+						}				
 					}else{
 						print($thePage[0]['registry_object_key']); 
 					}
