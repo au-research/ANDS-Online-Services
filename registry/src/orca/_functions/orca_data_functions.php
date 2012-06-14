@@ -2134,9 +2134,9 @@ function getQualityTestResult($registry_object_key, $dataSourceKey, $status){
 	
 	if( $resultSet ){
 
-		if(isset($resultSet[0]['gold_status_flag']) && $resultSet[0]['gold_status_flag']==1){
-			return  'This record is marked as gold standard';
-		}
+		//if(isset($resultSet[0]['gold_status_flag']) && $resultSet[0]['gold_status_flag']==1){
+		//	return  'This record is marked as gold standard';
+		//}
 
 		if($resultSet[0]['quality_level_result']){
 			$result = $resultSet[0]['quality_level_result'];
@@ -2500,7 +2500,7 @@ function setDraftFlag($draft_key, $data_source, $flag)
 function setGoldFlag($key)
 {
 	global $gCNN_DBS_ORCA;
-    $strQuery = 'UPDATE dba.tbl_registry_objects SET gold_status_flag = 1 WHERE registry_object_key = $1';
+    $strQuery = 'UPDATE dba.tbl_registry_objects SET gold_status_flag = 1 , quality_level = 5 WHERE registry_object_key = $1';
     $params = array($key);
     $resultSet = @executeQuery($gCNN_DBS_ORCA, $strQuery, $params);	  		
 }
