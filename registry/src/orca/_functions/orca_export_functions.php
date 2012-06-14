@@ -1647,7 +1647,12 @@ function getRightsTypesXML($registryObjectKey, $elementName, $forSOLR)
 			
 				$test = $element['type'];
 				$value = esc($element['value']);
-				$xml .= "      <extRif:$elementName$type>$value</extRif:$elementName>\n";
+				$licence_group = '';
+				if($group = checkRightsText($value))
+				{
+					$licence_group=' licence_group="'.$group.'"';		
+				}
+				$xml .= "      <extRif:$elementName$type$licence_group>$value</extRif:$elementName>\n";
 				$type = '';
 				}
 			}
@@ -3166,6 +3171,25 @@ function getRightsTypesXMLforSOLR($registryObjectKey, $elementName)
 	}
 	return $xml;
 }*/
-
+function checkRightsText($value)
+{
+	
+	if((str_replace("http://creativecommons.org/licenses/by/","",$value)!=$value)||(str_replace("http://creativecommons.org/licenses/by-sa/","",$value)!=$value))
+	{
+		return "Open Licence";
+	}
+	elseif((str_replace("http://creativecommons.org/licenses/by-nc/","",$value)!=$value)||(str_replace("http://creativecommons.org/licenses/by-nc-sa/","",$value)!=$value))
+	{
+		return "Non-Commercial Licence";
+	}
+	elseif((str_replace("http://creativecommons.org/licenses/by-nd/","",$value)!=$value)||(str_replace("http://creativecommons.org/licenses/by-nc-nd/","",$value)!=$value))
+	{
+		return "Non-Derivative Licence";
+	}
+	else 
+	{
+		return false;
+	}
+}
 
 ?>
