@@ -89,7 +89,7 @@ function indexDS($dataSourceKey, $status = 'All', $optimise = true){
 	
 	if($optimise)
 	{
-		print '...but<br/>DDDDDDDnow optimising<br/>';
+		print '...but<br/>now optimising<br/>';
 		ob_flush();flush();
 		$result = curl_post($solr_update_url.'?optimize=true', '<optimize waitFlush="false" waitSearcher="false"/>');
 		print $result;
@@ -329,7 +329,7 @@ function addDraftSolrIndexForDatasource($dataSourceKey)
 		{					
 				$rifcs = wrapRegistryObjects($rifcsContent);
 				$solrrifcs = transformToSolr($rifcs);
-				echo $solrrifcs."\n";
+				//echo $solrrifcs."\n";
 				if (strlen($solrrifcs) == 0)
 				{
 					echo "<font color='red'>".$rifcs."</font>";
@@ -340,7 +340,7 @@ function addDraftSolrIndexForDatasource($dataSourceKey)
 					//echo $result;
 					
 					$percent = round((($i+1)*100)/$arraySize, 0);
-					echo $result.'<br/>';
+					//echo $result.'<br/>';
 					ob_flush();flush();
 					$rifcsContent = '';
 					 

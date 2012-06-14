@@ -498,6 +498,10 @@
 						$(this).toggleClass('vsble');
 					});
 				}
+				if(p.total==0){
+					$(g.gDiv).toggleClass('hideBody');
+					$('div.ptogtitle', g.mDiv).toggleClass('vsble');
+				}
 
 			},
 			refresh: function() {

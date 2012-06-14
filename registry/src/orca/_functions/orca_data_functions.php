@@ -365,7 +365,7 @@ function deleteRegistryObject($registry_object_key)
 {
 	global $gCNN_DBS_ORCA;
 	//deleteSolrIndex($registryObjectkey); 
-	$result = deleteSolrIndex($registry_object_key);
+	//$result = deleteSolrIndex($registry_object_key);
 	//$slug = getRegistryObjectURLSlug($registry_object_key);
 	//deleteSLUGMapping($slug);
 	$errors = "";

@@ -1928,8 +1928,8 @@ function getRelatedXml($dataSource,$rifcs,$objectClass){
 
 	}
 
-		$newrifcs = $rifObject->saveXML();
-		return $newrifcs;
+	$newrifcs = $rifObject->saveXML();
+	return $newrifcs;
 }
 
 function runQualityCheck($rifcs, $objectClass, $dataSource, $output, $relatedObjectClassesStr='')

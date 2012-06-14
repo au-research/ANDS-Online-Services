@@ -66,10 +66,6 @@ $(document).ready(function() {
 			$('.viewswitch[name=statusview]').addClass('pressed');
 			if(status=='All'){//open all statuses except for more work required (if there is none)
 				$('.statusview').show();
-				if($('.MORE_WORK_REQUIRED_table').find('.ftitle').attr('count')==0){
-					$('.MORE_WORK_REQUIRED_table').hide();
-					//console.log('hiding');
-				}
 			}else{//is a specific status
 				$('.statusview').each(function(){
 					if($(this).attr('id')==status){
@@ -339,10 +335,29 @@ $(document).ready(function() {
 		var status = $(this).attr('status');
 		var ql = $(this).attr('ql');
 		var count = $(this).attr('count');
+		var buttons = [];
 
-		var buttons = [
-			{name: 'Select All', bclass: 'button', onpress : selectAll}
-		];
+		var table_type='status_table';
+		if($(this).hasClass('as_qa_table')) table_type='as_qa_table';
+		if($(this).hasClass('qa_table')) table_type='qa_table';
+
+
+		var tableTitle ='';
+		if(table_type=='status_table'){
+			theTableTitle=status.replace(/_/g," ");;
+		}else if(table_type=='as_qa_table' || table_type=='qa_table'){
+			theTableTitle='Quality Level '+ql;
+		}
+
+		var tClass = status+'_table';
+		if(table_type=='as_qa_table' || table_type=='qa_table'){
+			tClass='';
+		}
+
+		if(table_type=='status_table'){
+			buttons.push({name: 'Select All', bclass: 'button', onpress : selectAll});
+		}
+
 		if(status=="DRAFT"){
 			if(!DS_QA_flag){
 				buttons.push({name: 'Publish', bclass: 'publish', onpress : doCommand});
@@ -415,6 +430,7 @@ $(document).ready(function() {
                 {display: 'Manually Assessed', name : 'manually_assessed_flag', width : 50, sortable : true, align: 'left', hide:true}
             ],
             sortname:'date_modified',
+            sortorder:'desc',
             buttons:buttons,
             resizable:true,
             useRp: true,
@@ -428,20 +444,27 @@ $(document).ready(function() {
             searchitems : [
                         {display: 'Name/Title', name : 'list_title'}
                         ],
-            onSuccess: hideInfo
+            onSuccess: formatTable
 		});
-		if(count=='0'){
-			$(this).parent().parent().find('.ptogtitle').click();	
+		var grid = $(this).parent().parent();
+		//console.log(grid);
+		
+		console.log(count);
+		if(count==0){
+			$(this).parent().parent().find('.ftitle').click();
 		}
 	});
 
 
-	function hideInfo(com, grid){
+	function formatTable(com, grid){
+
+		//console.log(grid);
+
+		//hide info
 		$('.infoDiv', grid).hide();
 		$('td[abbr=status]').each(function(){
 			$(this).addClass($(this).text()+'_status');
 		});
-
 	}
 
 
@@ -450,15 +473,17 @@ $(document).ready(function() {
 	BUTTONS
 	**/
 	function doCommand(com, grid) {
-
 		//setup the keys
 		var targetKeys = [];
 		if($(grid).attr('selectall')=='no'){
 			$('.trSelected', grid).each(function() {
 				var id = $(this).attr('id');
 				id = id.substring(id.lastIndexOf('row')+3);
-				//alert("Edit row " + id);
-				targetKeys.push(id);
+				
+				if(id){
+					//alert(id);
+					targetKeys.push(id);
+				}
 			});
 			fireZaLaserz(com, targetKeys);
 		}else if($(grid).attr('selectall')=='yes'){
@@ -483,6 +508,7 @@ $(document).ready(function() {
 	}
 
 	function fireZaLaserz(com, targetKeys){
+		loading();
 		var numKeys = (targetKeys).length;
 		var dataSourceKey = $('#dataSourceKey').val();
 
@@ -493,15 +519,22 @@ $(document).ready(function() {
 		}
 
 		//setup actions
+		var AllSystemGo = true;
 		if (com == 'Edit') {
 			
 		}else if (com == 'Delete Record') {
 			if(confirm('You are about to delete '+numKeys+' records')){
 				action = 'DELETE_RECORD';
+			}else {
+				release();
+				AllSystemGo = false;
 			}
 		}else if(com=='Delete Draft'){
 			if(confirm('You are about to delete '+numKeys+' drafts. This draft will be permanently deleted and cannot be restored. Do you want to continue?')){
 				action = 'DELETE_DRAFT';
+			}else {
+				release();
+				AllSystemGo = false;
 			}
 		}else if(com=='Submit for Assessment'){
 			action = 'SUBMIT_FOR_ASSESSMENT';
@@ -519,46 +552,53 @@ $(document).ready(function() {
 		}else if(com=='Mark as Gold Standard'){
 			if(confirm('You are about to flag '+numKeys+' registry objects as gold standard. Do you want to continue?')){
 				action = 'FLAG_GOLD';
+			}else {
+				release();
+				AllSystemGo = false;
 			}
 			
 		}
 		//alert($("#elementSourceURL").val());
 
-
 		//POST the stuff over to Manage My Records
-		$('.tab-content').css('opacity',0.5);
-		$.post(
-			$("#elementSourceURL").val() + "task=manage_my_records&action=" + action,
-			{
-				'keys[]' : targetKeys,
-				'dataSourceKey' : dataSourceKey
-			},
-			function(data)
-			{
-				
-
-
-				if(data.responsecode=='0'){
-					alert('Error Occured: Access Denied');
-				}else if(data.responsecode=='MT008'){
-					alert('Your records have been sent to ANDS for assessment and approval. You should contact your ANDS Client Liaison Officer to notify them that these records have been submitted.');
-				}else if(data.responsecode=='MT014'){
-					alert('An ANDS Quality Assessor has been notified of your submitted record(s)');
-				}else{
-					if(data.alert){
-						alert(data.alert);
+		if(AllSystemGo){
+			$.post(
+				$("#elementSourceURL").val() + "task=manage_my_records&action=" + action,
+				{
+					'keys[]' : targetKeys,
+					'dataSourceKey' : dataSourceKey
+				},
+				function(data)
+				{
+					if(data.responsecode=='0'){
+						alert('Error Occured: Access Denied');
+					}else if(data.responsecode=='MT008'){
+						alert('Your records have been sent to ANDS for assessment and approval. You should contact your ANDS Client Liaison Officer to notify them that these records have been submitted.');
+					}else if(data.responsecode=='MT014'){
+						alert('An ANDS Quality Assessor has been notified of your submitted record(s)');
+					}else{
+						if(data.alert){
+							alert(data.alert);
+						}
 					}
-				}
-				//$('#indexDS').click();
-				$('.tab-content').css('opacity',1.0);
-				$('.mmr_table').each(function(){
-					$(this).flexReload();
-				});
-			},
-			'json'
-		);
+					
+					release();
+					$('.mmr_table').each(function(){
+						$(this).flexReload();
+					});
+				},
+				'json'
+			);
+		}
 	}
 
+	function loading(){
+		$('.tab-content').css('opacity', 0.5);
+	}
+
+	function release(){
+		$('.tab-content').css('opacity', 1.0);
+	}
 
 
 	function selectAll(com, grid){
@@ -612,7 +652,7 @@ $(document).ready(function() {
 		$('.infoDiv', grid).html('All '+flaggedRecords.length+' flagged records selected');
 	});
 
-	//delete Confirm
+	//delete record button
 	$('.deleteConfirm').live('click', function(){
 		return confirm('You are about to delete 1 record. Do you want to continue?');
 	});

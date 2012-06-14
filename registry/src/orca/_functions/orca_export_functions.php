@@ -87,6 +87,9 @@ function getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR = false, $inclu
 		
 		if ($forSOLR)
 		{
+
+			
+
 			$xml .= "    <extRif:extendedMetadata>\n";
 
 			// url_slug
@@ -1484,22 +1487,24 @@ function populateBroaderTerms($broaderTerm, $resolvingService, $vocabType, $loca
 		    if($broader)
 		    {
 				populateBroaderTerms($broader, $resolvingService, $vocabType, &$localBroaderTerms);
-				if(array_key_exists($broader, $vocabBroaderTerms)) $localBroaderTerms[$broader] = $vocabBroaderTerms[$broader];
+				//if(array_key_exists($broader, $vocabBroaderTerms)) $localBroaderTerms[$broader] = $vocabBroaderTerms[$broader];
 			}
 		}
 	}
-	if(!array_key_exists($broaderTerm, $vocabBroaderTerms)) $localBroaderTerms[$broaderTerm] = $vocabBroaderTerms[$broaderTerm];
+	//if(!array_key_exists($broaderTerm, $vocabBroaderTerms)) $localBroaderTerms[$broaderTerm] = $vocabBroaderTerms[$broaderTerm];
 }
 
 function broaderTermsXML($elementName, $localBroaderTerms)
 {
+	global $vocabBroaderTerms;
 	$xml = "";
-	foreach( $localBroaderTerms as $term )
+	foreach( $vocabBroaderTerms as $term )
 	{
 		$type = ' type="'.$term['vocabType'].'"';
 		$eTerm = " extRif:resolvedValue=\"" . $term['resolvedName'] . "\" extRif:vocabUri=\"" . $term['vocabUri'] . "\"";
 		$xml .= "      <$elementName$type$eTerm>".$term['notation']."</$elementName>\n";			
 	}
+	$vocabBroaderTerms = array();
 	return $xml;
 }
 
