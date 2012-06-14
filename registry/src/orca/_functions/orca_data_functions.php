@@ -369,7 +369,8 @@ function deleteRegistryObject($registry_object_key)
 	//$result = deleteSolrIndex($registry_object_key);
 
 	// Unreference the SLUG (set the mapping to a null registry object)
-	deleteSLUGMapping($slug);
+
+	deleteSLUGMapping(getRegistryObjectURLSlug($registry_object_key));
 	$errors = "";
 	$strQuery = 'SELECT dba.udf_delete_registry_object($1)';
 	$params = array($registry_object_key);
