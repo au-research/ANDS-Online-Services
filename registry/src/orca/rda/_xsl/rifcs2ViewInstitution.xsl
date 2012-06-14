@@ -660,7 +660,7 @@ Handle:
             <xsl:text>,</xsl:text>
         </xsl:if>       
         <xsl:value-of select="."/> 
-    </xsl:template> 
+    </xsl:template> --> 
     
 	<xsl:template match="ro:location/ro:address/ro:electronic">
 		<xsl:if test="./@type='url'">
@@ -677,7 +677,7 @@ Handle:
 		</xsl:variable>	
 			<a><xsl:attribute name="href"><xsl:value-of select="."/></xsl:attribute><xsl:attribute name="target">_blank</xsl:attribute><xsl:value-of select="$url"/></a><br />
 		</xsl:if>		
-	</xsl:template>--> 
+	</xsl:template>
 	
 	<xsl:template match="ro:location/ro:address/ro:physical">
 		<p>
