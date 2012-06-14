@@ -2835,7 +2835,7 @@ function isContributorPage($page)
 
 }
 
-//bacground tasks
+//background tasks
 function getNextWaitingTask()
 {
 	global $gCNN_DBS_ORCA;

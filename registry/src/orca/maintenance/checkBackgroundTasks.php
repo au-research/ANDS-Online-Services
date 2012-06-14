@@ -80,15 +80,15 @@ else{
 
 /*
 echo "\naddNewTask('RUN_QUALITY_CHECK', '', '', 'ansto.gov.au')\n";
-$result = addNewTask('RUN_QUALITY_CHECK', '', '', 'ansto.gov.au');
+$result = addNewTask('RUN_QUALITY_CHECK', '', '', 'ansto.gov.au'); 
 
 echo "\naddNewTask('GENERATE_CACHE', '', '', 'ansto.gov.au',".$result.")\n";
 $result = addNewTask('GENERATE_CACHE', '', '', 'ansto.gov.au',$result);
 
 echo "\naddNewTask('INDEX_RECORDS', '', '', 'ansto.gov.au',".$result.")\n";
 $result = addNewTask('INDEX_RECORDS', '', '', 'ansto.gov.au',$result);
+<<<<<<< Updated upstream
 */
-
 
 
 require '_includes/finish.php';
