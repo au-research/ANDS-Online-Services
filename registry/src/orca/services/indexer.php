@@ -368,7 +368,7 @@ function checkQuality($key,$dataSourceKey)
 	}
 	elseif($dataSourceKey)
 	{
-		$message = runQualityCheckforDataSource($dataSourceKey);
+		$message = runQualityLevelCheckforDataSource($dataSourceKey);
 	}
 	else 
 	{

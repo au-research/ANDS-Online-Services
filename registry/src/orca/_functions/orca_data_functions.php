@@ -367,10 +367,9 @@ function deleteRegistryObject($registry_object_key)
 
 	//deleteSolrIndex($registryObjectkey);
 	//$result = deleteSolrIndex($registry_object_key);
-
 	// Unreference the SLUG (set the mapping to a null registry object)
-
-	deleteSLUGMapping(getRegistryObjectURLSlug($registry_object_key));
+	$slug = getRegistryObjectURLSlug($registry_object_key);
+	deleteSLUGMapping($slug);
 	$errors = "";
 	$strQuery = 'SELECT dba.udf_delete_registry_object($1)';
 	$params = array($registry_object_key);
@@ -2506,6 +2505,21 @@ function setGoldFlag($key)
     $strQuery = 'UPDATE dba.tbl_registry_objects SET gold_status_flag = 1 , quality_level = 5 WHERE registry_object_key = $1';
     $params = array($key);
     $resultSet = @executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+}
+
+
+function getGoldFlag($key)
+{
+	global $gCNN_DBS_ORCA;
+	$r='';
+	$strQuery = 'SELECT gold_status_flag FROM dba.tbl_registry_objects WHERE registry_object_key = $1';
+	$params = array($key);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	if( $resultSet )
+	{
+		$r = $resultSet[0]['gold_status_flag'];
+	}
+	return $r;
 }
 
 

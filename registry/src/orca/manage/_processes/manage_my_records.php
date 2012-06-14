@@ -181,9 +181,11 @@ switch(getQueryValue('action'))
 			if($isDraft){
 				//is a draft, have to approve and do all the jazz with it first
 				approveDraft($key, $data_source_key);
+				deleteSolrHashKey(sha1($key.$data_source_key));//delete the draft
 				updateRegistryObjectStatus(rawurldecode($key), PUBLISHED);
-				syncDraftKey(rawurldecode($key), $data_source_key);
+				syncKey(rawurldecode($key), $data_source_key);
 				$response['responsecode'] = "1";
+				$response['alert'] = $error;
 				echo json_encode($response);
 			}else{
 				//is not draft

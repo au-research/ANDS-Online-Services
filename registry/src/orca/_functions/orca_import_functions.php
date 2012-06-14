@@ -2128,45 +2128,50 @@ function runQualityLevelCheckforDataSourceDIEDIEDIE($dataSourceKey)
 
 function runQualityLevelCheckForRegistryObject($registryObjectKey, $dataSourceKey)
 {
+	$rifcs = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
+	$rifcs .= '<registryObjects xmlns="http://ands.org.au/standards/rif-cs/registryObjects" '."\n";
+	$rifcs .= '                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '."\n";
+	$rifcs .= '                 xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects '.gRIF_SCHEMA_URI.'">'."\n";
+	$rifcs .= getRegistryObjectXML($registryObjectKey);
+	$rifcs .= '</registryObjects>';
+	$objectClass = "";
+	if(str_replace("<Collection","",$rifcs)!=$rifcs||str_replace("<collection","",$rifcs)!=$rifcs)
+	{
+		$objectClass = "Collection";
+	}
+	elseif(str_replace("<Servive","",$rifcs)!=$rifcs||str_replace("<service","",$rifcs)!=$rifcs)
+	{
+		$objectClass = "Service";
+	}
+	elseif(str_replace("<Activity","",$rifcs)!=$rifcs||str_replace("<activity","",$rifcs)!=$rifcs)
+	{
+		$objectClass = "Activity";
+	}
+	elseif(str_replace("<Party","",$rifcs)!=$rifcs||str_replace("<party","",$rifcs)!=$rifcs)
+	{
+		$objectClass = "Party";
+	}
 
-		$rifcs = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
-		$rifcs .= '<registryObjects xmlns="http://ands.org.au/standards/rif-cs/registryObjects" '."\n";
-		$rifcs .= '                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '."\n";
-		$rifcs .= '                 xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects '.gRIF_SCHEMA_URI.'">'."\n";
-		$rifcs .= getRegistryObjectXML($registryObjectKey);
-		$rifcs .= '</registryObjects>';
-		$objectClass = "";
-		if(str_replace("<Collection","",$rifcs)!=$rifcs||str_replace("<collection","",$rifcs)!=$rifcs)
-		{
-			$objectClass = "Collection";
-		}
-		elseif(str_replace("<Servive","",$rifcs)!=$rifcs||str_replace("<service","",$rifcs)!=$rifcs)
-		{
-			$objectClass = "Service";
-		}
-		elseif(str_replace("<Activity","",$rifcs)!=$rifcs||str_replace("<activity","",$rifcs)!=$rifcs)
-		{
-			$objectClass = "Activity";
-		}
-		elseif(str_replace("<Party","",$rifcs)!=$rifcs||str_replace("<party","",$rifcs)!=$rifcs)
-		{
-			$objectClass = "Party";
-		}
+	$relRifcs = getRelatedXml($dataSourceKey,$rifcs,$objectClass);
+	//print $relRifcs;
+	$RegistryObjects = new DOMDocument();
+	$RegistryObjects->loadXML($relRifcs);
+	$level = 1;
 
-		$relRifcs = getRelatedXml($dataSourceKey,$rifcs,$objectClass);
-		//print $relRifcs;
-		$RegistryObjects = new DOMDocument();
-		$RegistryObjects->loadXML($relRifcs);
-		$level = 1;
+	$gold_standard_flag = getGoldFlag($registryObjectKey);
 
-		$relatedObjectClassesStr = getAllRelatedObjectClass($RegistryObjects, $dataSourceKey);
-		$qualityTestResult = runQualityCheckonDom($RegistryObjects, $dataSourceKey, 'html', $relatedObjectClassesStr);
-	    $errorCount = substr_count($qualityTestResult, 'class="error"');
-		$warningCount = substr_count($qualityTestResult, 'class="warning"') + substr_count($qualityTestResult, 'class="info"');
-        $result = updateRegistryObjectQualityTestResult($registryObjectKey, $qualityTestResult, $errorCount, $warningCount);
-		$qa_result = runQualityLevelCheckonDom($RegistryObjects, $relatedObjectClassesStr, &$level);
-		$result = updateRegistryObjectQualityLevelResult($registryObjectKey, $level, $qa_result);
-		return $level;
+	$relatedObjectClassesStr = getAllRelatedObjectClass($RegistryObjects, $dataSourceKey);
+	$qualityTestResult = runQualityCheckonDom($RegistryObjects, $dataSourceKey, 'html', $relatedObjectClassesStr);
+    $errorCount = substr_count($qualityTestResult, 'class="error"');
+	$warningCount = substr_count($qualityTestResult, 'class="warning"') + substr_count($qualityTestResult, 'class="info"');
+    $result = updateRegistryObjectQualityTestResult($registryObjectKey, $qualityTestResult, $errorCount, $warningCount);
+
+
+
+	$qa_result = runQualityLevelCheckonDom($RegistryObjects, $relatedObjectClassesStr, &$level);
+	if($gold_standard_flag==1) $level = 5;
+	$result = updateRegistryObjectQualityLevelResult($registryObjectKey, $level, $qa_result);
+	return $level;
 }
 
 function runQualityLevelCheckForDraftRegistryObject($registryObjectKey, $dataSourceKey)

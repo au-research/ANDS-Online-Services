@@ -123,7 +123,7 @@ function addDraftToSolrIndex($registryObjectKey, $data_source_key, $commit=true)
 			$result .= curl_post(gSOLR_UPDATE_URL.'?commit=true', '<commit waitFlush="false" waitSearcher="false"/>');
 		}
 	}
-	return sizeof($allKeys).$solrrifcs.$result;
+	return $result;
 }
 
 function addPublishedToSolrIndex($registryObjectKey, $commit=true)

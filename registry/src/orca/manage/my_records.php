@@ -181,7 +181,9 @@ else
 		    			}
 		    		}
 		    	?>
-		    	<li class="rightTab"><a href="javascript:void(0);" id="indexDS" class="smallIcon icon2s tip borderless" tip="ReIndex"><span></span></a></li>
+		    	<li class="rightTab">
+		    		<a href="<?php echo eAPP_ROOT . "orca/admin/data_source_view.php?data_source_key=" . rawurlencode($data_source_key); ?>" class="smallIcon borderless">Manage this Data Source</a>
+		    	</li>
 		    </ul>
 
 		    <?php
@@ -197,6 +199,9 @@ else
 		    	echo '<div class="hide" id="DS_QA_flag">';
 		    		if($dataSource['qa_flag']=='t') echo 'yes'; else echo 'no';
 		    	echo '</div>';
+		    	echo '<div class="hide" id="MANUAL_PUBLISH">';
+		    		if($dataSource['auto_publish']=='t') echo 'yes'; else echo 'no';
+		    	echo '</div>';
 
 
 		    	//Sort it by this order
@@ -208,6 +213,7 @@ else
 				
 				//summary
 				//var_dump($status);
+				
 				$class_names = array('collection', 'party', 'activity', 'service');
 				
 				echo '<div class="tab-content statusview"><h3><button id="toggleSummaryTable">-</button> Summary</h3></div>';
@@ -236,7 +242,8 @@ else
 
 				echo '</table>';
 				echo '</div>';
-
+				
+				//echo '<div id="All_statusview" class="tab-content statusview"></div>';
 
 				echo '<div class="tab-content statusview"><h3><button id="toggleDetailTables">-</button> Details</h3></div>';
 				echo '<div id="detailTables">';
@@ -246,7 +253,7 @@ else
 		    		$tableClass = '';$displayTable=false;
 		    		if($status_name=='MORE_WORK_REQUIRED'){//only visible if there are records of this status
 		    			if($count==0) $tableClass='hide';
-		    			$displayTable=true;
+		    			if($dataSource['qa_flag']=='t') $displayTable = true;
 		    		}elseif($status_name=='DRAFT'){//all users can review their drafts
 		    			$displayTable=true;
 		    		}else if($status_name=='SUBMITTED_FOR_ASSESSMENT'){
@@ -254,7 +261,7 @@ else
 		    		}elseif($status_name=='ASSESSMENT_IN_PROGRESS'){
 		    			if($count>0 || $dataSource['qa_flag'] == 't'){$displayTable=true;}
 		    		}elseif($status_name=='APPROVED'){
-		    			if($count>0 || $dataSource['auto_publish'] == 't'){$displayTable=true;}
+		    			if($count>0 || $dataSource['auto_publish'] == 't'){$displayTable=true;}//if manual publish is on, then have approve table
 		    		}elseif($status_name=='PUBLISHED'){//anyone can see published records
 		    			$displayTable=true;
 		    		}
@@ -819,9 +826,7 @@ function displayMMRDataSourceSwitcher(array $dataSources = array(), $selected_ke
 						<a href="javascript:void(0);" class="button left pressed viewswitch" name="statusview">Status</a><a href="javascript:void(0);" class="button right viewswitch"name = "qaview">Quality</a>
 					</div>
 				</div>
-				<div class="content_block">
-					<a href="<?php echo eAPP_ROOT . "orca/admin/data_source_view.php?data_source_key=" . rawurlencode($selected_key); ?>">Manage this Data Source</a>
-				</div>
+				
 				<div class="content_block">
 					<a class="pop" href="#" title="This tool allows you to view and manage the records which you have recently created, edited or harvested.">(more details)</a>
 					<!--a href="" id="mmr_information_show">(more details)</a-->

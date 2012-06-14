@@ -53,6 +53,10 @@ $(document).ready(function() {
 	if($('#DS_QA_flag').text()=='yes'){
 		DS_QA_flag = true;
 	}
+	var MANUAL_PUBLISH = false;
+	if($('#MANUAL_PUBLISH').text()=='yes'){
+		MANUAL_PUBLISH = true;
+	}
 
 	view(currentView, 'All');
 
@@ -162,6 +166,7 @@ $(document).ready(function() {
     			google.visualization.events.addListener(chart, 'select', selectHandler);
 
         		//console.log('finish');
+
         	}
        	});
     }
@@ -360,8 +365,12 @@ $(document).ready(function() {
 
 		if(status=="DRAFT"){
 			if(!DS_QA_flag){
-				buttons.push({name: 'Publish', bclass: 'publish', onpress : doCommand});
-			}else{
+				if(MANUAL_PUBLISH){//is manual
+					buttons.push({name: 'Approve', bclass: 'approve', onpress : doCommand});
+				}else{//auto publish
+					buttons.push({name: 'Publish', bclass: 'publish', onpress : doCommand});
+				}
+			}else{//required assessment
 				buttons.push({name: 'Submit for Assessment', bclass: 'submit_for_assessment', onpress : doCommand});
 			}
 			buttons.push({name: 'Delete Draft', bclass: 'delete', onpress : doCommand});
@@ -374,7 +383,11 @@ $(document).ready(function() {
 			}
 		}else if(status=="ASSESSMENT_IN_PROGRESS"){
 			if(orcaQA){
-				buttons.push({name: 'Approve', bclass: 'approve', onpress : doCommand});
+				if(MANUAL_PUBLISH){
+					buttons.push({name: 'Approve', bclass: 'approve', onpress : doCommand});
+				}else{//auto publish
+					buttons.push({name: 'Publish', bclass: 'publish', onpress : doCommand});
+				}
 				buttons.push({name: 'More Work Required', bclass: 'more_work_required', onpress : doCommand});
 			}
 		}else if(status=="APPROVED"){
@@ -442,29 +455,23 @@ $(document).ready(function() {
             additionalClass:tClass,
             tableTitle:theTableTitle,
             searchitems : [
-                        {display: 'Name/Title', name : 'list_title'}
-                        ],
+            		{display: 'Name/Title', name : 'list_title'}
+            ],
             onSuccess: formatTable
 		});
-		var grid = $(this).parent().parent();
-		//console.log(grid);
-		
-		console.log(count);
-		if(count==0){
-			$(this).parent().parent().find('.ftitle').click();
-		}
 	});
 
 
 	function formatTable(com, grid){
-
-		//console.log(grid);
-
 		//hide info
 		$('.infoDiv', grid).hide();
 		$('td[abbr=status]').each(function(){
 			$(this).addClass($(this).text()+'_status');
 		});
+
+		if($('#MORE_WORK_REQUIRED').find('.ftitle').attr('count')=='0'){
+			$('#MORE_WORK_REQUIRED').hide();
+		}
 	}
 
 
@@ -562,6 +569,41 @@ $(document).ready(function() {
 
 		//POST the stuff over to Manage My Records
 		if(AllSystemGo){
+			
+
+			var req_url = $("#elementSourceURL").val() + "task=manage_my_records&action=" + action;
+			$.ajax({
+				url:req_url,
+				data:{'keys[]' : targetKeys,'dataSourceKey' : dataSourceKey},
+				dataType:'json',
+				type:'POST',
+				success:function(data){
+					if(data.responsecode=='0'){
+						alert('Error Occured: Access Denied');
+					}else if(data.responsecode=='MT008'){
+						alert('Your records have been sent to ANDS for assessment and approval. You should contact your ANDS Client Liaison Officer to notify them that these records have been submitted.');
+					}else if(data.responsecode=='MT014'){
+						alert('An ANDS Quality Assessor has been notified of your submitted record(s)');
+					}else{
+						if(data.alert){
+							alert(data.alert);
+						}
+					}
+					
+					release();
+					$('.mmr_table').each(function(){
+						$(this).flexReload();
+					});
+				},
+				error:function(data){
+					//console.log(data);
+					release();
+					$('.mmr_table').each(function(){
+						$(this).flexReload();
+					});
+				}
+			});
+			/*
 			$.post(
 				$("#elementSourceURL").val() + "task=manage_my_records&action=" + action,
 				{
@@ -588,7 +630,7 @@ $(document).ready(function() {
 					});
 				},
 				'json'
-			);
+			);*/
 		}
 	}
 
