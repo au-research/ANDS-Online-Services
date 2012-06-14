@@ -449,6 +449,8 @@
 				if (p.onSuccess) {
 					p.onSuccess(this);
 				}
+
+
 			},
 			changeSort: function (th) { //change sortorder
 				if (this.loading) {
@@ -499,8 +501,8 @@
 					});
 				}
 				if(p.total==0){
-					$(g.gDiv).toggleClass('hideBody');
-					$('div.ptogtitle', g.mDiv).toggleClass('vsble');
+					$(g.gDiv).addClass('hideBody');
+					$('div.ptogtitle', g.mDiv).removeClass('vsble');
 				}
 
 			},

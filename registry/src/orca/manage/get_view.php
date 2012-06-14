@@ -118,6 +118,7 @@ function searchRecords($status){
 		$view_link = eAPP_ROOT.'orca/view.php?key='.esc(rawurlencode($doc->{'key'}));
 
 
+		$draftStatus = '';
 		if(!in_array($status, array('PUBLISHED', 'APPROVED'))){//IS DRAFT, edit needs DS
 			if(in_array($status, array('DRAFT', 'MORE_WORK_REQUIRED'))){//DRAFT and MORE_WORK_REQUIRED
 				array_push($buttons,'ReadOnlyView');
@@ -134,12 +135,13 @@ function searchRecords($status){
 				$view_link = eAPP_ROOT.'orca/manage/add_'.$doc->{'class'}.'_registry_object.php?readOnly&data_source='.rawurlencode($doc->{'data_source_key'}).'&key='.esc(rawurlencode($doc->{'key'}));
 				//cannot edit nor delete, disabled button?
 			}	
-
+			$draftStatus = 'draft';
 		}else{//PUBLISHED and APPROVED
 			array_push($buttons,'ViewRecord');
 			//if feed = harvest, readonly mode in edit TODO
 			array_push($buttons,'EditRecord');
 			array_push($buttons,'DeleteRecord');
+			$draftStatus = 'not-draft';
 		}
 
 		
@@ -177,7 +179,7 @@ function searchRecords($status){
 						$btnStr.='<a href="'.eAPP_ROOT.'orca/manage/add_'.$doc->{'class'}.'_registry_object.php?data_source='.rawurlencode($doc->{'data_source_key'}).'&key='.esc(rawurlencode($doc->{'key'})).'" class="smallIcon icon187s '.$pos.' tip" tip="Edit This Record"><span></span></a>';
 						break;
 					case 'DeleteRecord':
-						$btnStr.='<a href="javascript:;" class="smallIcon icon100s '.$pos.' tip deleteConfirm" tip="Delete This Record" key="'.rawurlencode($doc->{'key'}).'"><span></span></a>';
+						$btnStr.='<a href="javascript:;" class="smallIcon icon100s '.$pos.' tip deleteConfirm" tip="Delete This Record" key="'.rawurlencode($doc->{'key'}).'" ds="'.rawurlencode($doc->{'data_source_key'}).'" draftStatus="'.$draftStatus.'"><span></span></a>';
 						//$btnStr.='<a href="'.eAPP_ROOT.'orca/manage/process_registry_object.php?task=delete&data_source='.rawurlencode($doc->{'data_source_key'}).'&key='.esc(rawurlencode($doc->{'key'})).'" class="smallIcon icon100s '.$pos.' tip deleteConfirm" tip="Delete This Record"><span></span></a>';
 						break;
 					

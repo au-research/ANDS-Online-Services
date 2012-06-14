@@ -521,7 +521,8 @@ $(document).ready(function() {
 
 		//if there is none
 		if(numKeys==0){
-			alert('Please select');
+			alert('Please select record');
+			release();
 			return false;
 		}
 
@@ -696,7 +697,22 @@ $(document).ready(function() {
 
 	//delete record button
 	$('.deleteConfirm').live('click', function(){
-		return confirm('You are about to delete 1 record. Do you want to continue?');
+		var row = $(this).parents('tr');
+		var targetKeys = [];
+		var id = $(row).attr('id');
+		id = id.substring(id.lastIndexOf('row')+3);
+		if(id) targetKeys.push(id);
+
+		var draftStatus = $(this).attr('draftStatus');
+		var com = 'Delete Record';
+		if(draftStatus=='draft'){
+			var com = 'Delete Draft';
+		}
+
+		//console.log(com);
+		//console.log(targetKeys);
+		fireZaLaserz(com, targetKeys);
+		
 	});
 	
 
