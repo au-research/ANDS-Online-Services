@@ -1708,56 +1708,52 @@ function getRightsTypesXML($registryObjectKey, $elementName, $forSOLR)
 			
 			if ($forSOLR)
 			{
-				$elementName = "extRif:rights";
-				if( $list )
+				$elementName2 = "extRif:rights";
+
+				if( $type = $element['access_rights'] || $type = $element['access_rights_uri'])
 				{
-					foreach( $list as $element )
+					$type = ' type="accessRights"';
+					if($uri = $element['access_rights_uri'])
 					{
-						if( $type = $element['access_rights'] || $type = $element['access_rights_uri'])
-						{
-							$type = ' type="accessRights"';
-							if($uri = $element['access_rights_uri'])
-							{
-								$uri = ' rightsUri = "'.esc($uri).'"';
-							}
-							$value = esc($element['access_rights']);
-							$xml .= "      <$elementName$type$uri>$value</$elementName>\n";				
-						}
-						
-						if( $type = $element['rights_statement'] || $type = $element['rights_statement_uri'])
-						{
-							$type = ' type="rights"';
-							if($uri = $element['rights_statement_uri'])
-							{
-								$uri = ' rightsUri = "'.esc($uri).'"';
-							}
-							$value = esc($element['rights_statement']);
-							$xml .= "      <$elementName$type$uri>$value</$elementName>\n";								
-						}
-						$licence_group='';
-						if( $type = $element['licence'] || $type = $element['licence_uri']|| $type = $element['licence_type'])
-						{
-							$type = ' type="licence"';
-							if($uri = $element['licence_uri'])
-							{
-								$uri = ' rightsUri = "'.esc($uri).'"';
-							}
-							if($licence_type = $element['licence_type'])
-							{
-								$licence_type = ' licence_type="'.esc($licence_type).'"';
-								if($licence_group = getParentType($element['licence_type'])){
-									$licence_group = ' licence_group="'.esc($licence_group).'"';
-								}else{						
-									$licence_group=' licence_group="Unknown"';						
-								}
-							}else{
-								$licence_group=' licence_group="Unknown"';					
-							}							
-							$value = esc($element['licence']);
-							$xml .= "      <$elementName$type$uri$licence_type$licence_group>$value</$elementName>\n";										
-						}			
+						$uri = ' rightsUri = "'.esc($uri).'"';
 					}
-				}	
+					$value = esc($element['access_rights']);
+					$xml .= "      <$elementName$type$uri>$value</$elementName>\n";				
+				}
+						
+				if( $type = $element['rights_statement'] || $type = $element['rights_statement_uri'])
+				{
+					$type = ' type="rights"';
+					if($uri = $element['rights_statement_uri'])
+					{
+						$uri = ' rightsUri = "'.esc($uri).'"';
+					}
+					$value = esc($element['rights_statement']);
+					$xml .= "      <$elementName$type$uri>$value</$elementName>\n";								
+				}
+				$licence_group='';
+				if( $type = $element['licence'] || $type = $element['licence_uri']|| $type = $element['licence_type'])
+				{
+					$type = ' type="licence"';
+					if($uri = $element['licence_uri'])
+					{
+						$uri = ' rightsUri = "'.esc($uri).'"';
+					}
+					if($licence_type = $element['licence_type'])
+					{
+						$licence_type = ' licence_type="'.esc($licence_type).'"';
+						if($licence_group = getParentType($element['licence_type'])){
+							$licence_group = ' licence_group="'.esc($licence_group).'"';
+						}else{						
+							$licence_group=' licence_group="Unknown"';						
+						}
+					}else{
+						$licence_group=' licence_group="Unknown"';					
+					}							
+					$value = esc($element['licence']);
+					$xml .= "      <$elementName2$type$uri$licence_type$licence_group>$value</$elementName2>\n";										
+				}			
+	
 			}
 		}	
 	}	
