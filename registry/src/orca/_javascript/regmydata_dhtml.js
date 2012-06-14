@@ -1794,7 +1794,7 @@ function addVocabComplete(field, type) {
 				var errorDiv = field.replace("#object","errors");
 				var theDiv = document.getElementById(errorDiv);
 				theDiv.style.display='inline';
-				document.getElementById(errorDiv).innerHTML = 'You have selected the licence type of "Unknown/Other", if you would like to have an additional licence type included within this service, please contact services@ands.org.au'
+				document.getElementById(errorDiv).innerHTML = 'You have selected the licence type of "Unknown/Other", if you would like to have an additional licence type included within this service, please contact <a href="mailto:services@ands.org.au">services@ands.org.au</a>';
 			}
 			if(ui.item.value!="Unknown/Other"){
 				var errorDiv = field.replace("#object","errors");
