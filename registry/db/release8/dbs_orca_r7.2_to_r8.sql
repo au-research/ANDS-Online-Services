@@ -131,3 +131,6 @@ INSERT INTO dba.tbl_terms (identifier, identifier_type, name, description, vocab
 INSERT INTO dba.tbl_terms (identifier, identifier_type, name, description, vocabulary_identifier, parent_term_identifier,type,vocabpath) VALUES ('researchAreas', 'local','researchAreas', 'Contributor research areas','RIFCSDescriptionType','','pt','RIFCS Description Type');
 INSERT INTO dba.tbl_terms (identifier, identifier_type, name, description, vocabulary_identifier, parent_term_identifier,type,vocabpath) VALUES ('researchShowcase', 'local','researchShowcase', 'Contributor research showcase','RIFCSDescriptionType','','pt','RIFCS Description Type');
 INSERT INTO dba.tbl_terms (identifier, identifier_type, name, description, vocabulary_identifier, parent_term_identifier,type,vocabpath) VALUES ('eResearchSupport', 'local','eResearchSupport', 'Contributor eResearch support','RIFCSDescriptionType','','pt','RIFCS Description Type');
+
+
+

@@ -82,6 +82,8 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 		$status = APPROVED;
 	}
 
+	$currentUrlSlug = '';
+
 	// Get an xpath object to use for parsing the XML.
 	$gXPath = new DOMXpath($registryObjects);
 	// Get the default namespace of the registryObjects object.
@@ -109,10 +111,10 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 
 		if( $registryObjectKey )
 		{
+			// Get hold of the currentUrlSlug and re-use it!!
 			$currentUrlSlug = getRegistryObjectURLSlug($registryObjectKey);
-			//echo $currentUrlSlug;
-			// Check if this object exists already, and delete it if it does.
 
+			// Check if this object exists already, and delete it if it does.
 			if( $oldRegistryObject = getRegistryObject($registryObjectKey) )
 			{
 				// Delete this object and all associated records from the registry (if qaflag is true, don't delete existing one
@@ -531,12 +533,12 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 				$hash = generateRegistryObjectHashForKey($registryObjectKey);
 
 				updateRegistryObjectHash($registryObjectKey, $hash);
-				//echo 'currentUrlSlug:'.$currentUrlSlug.'//end//';
-				//echo 'displayTitle:'.$display_title.'//end//';
-				//echo 'key:'.$registryObjectKey.'//end//';
 
+				// Update the registry object SLUG here
+				// if the currentUrlSlug already exists (from above), means we are replacing
+				// a record that already existed, so we re-use its slug...otherwise we generate
+				// a new SLUG for the record based on its key and title
 				updateRegistryObjectSLUG($registryObjectKey, $display_title, $currentUrlSlug);
-				//echo 'after slug';die();
 
 				// A new record has been inserted? Update the cache
 
@@ -651,7 +653,7 @@ function approveDraft($key, $data_source_key){
 					//$QAErrors = runQualityCheckForRegistryObject(rawurldecode($key), $dataSourceKey);
 
 					//addSolrIndex(rawurldecode($key), true);
-					
+
 
 					if( !$importErrors )
 					{
@@ -1246,7 +1248,7 @@ function importRights($registryObjectKey, $node, $elementName, $runErrors, $tota
 		}
 
 		$errors = insertRights($id, $registryObjectKey, $rights_statement, $rights_statement_uri, $licence, $licence_uri, $access_rights, $access_rights_uri, $licence_type, $access_rights_type);
-		//$errors = 
+		//$errors =
 		$totalAttemptedInserts++;
 		if( !$errors ) { $totalInserts++; } else { $runErrors .= "Failed to insert rights for key $registryObjectKey\n"; }
 	}
@@ -2048,7 +2050,7 @@ function runQualityLevelCheckforDataSource($dataSourceKey)
 	{
 		for( $i=0; $i < count($draftRegistryObjectKeys); $i++ )
 		{
-			runQualityLevelCheckForDraftRegistryObject($draftRegistryObjectKeys[$i]['draft_key'], $dataSourceKey);			
+			runQualityLevelCheckForDraftRegistryObject($draftRegistryObjectKeys[$i]['draft_key'], $dataSourceKey);
 		}
 		$message .= count($draftRegistryObjectKeys). " Draft Regsitry Objects";
 	}
