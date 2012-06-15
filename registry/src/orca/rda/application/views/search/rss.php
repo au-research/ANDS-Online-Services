@@ -24,9 +24,10 @@ $q = $_GET['q'];
 $class = $_GET['classFilter'];
 $group = $_GET['groupFilter'];
 $subject = $_GET['subjectFilter'];
+$licence = $_GET['licenceFilter'];
 if($group!="All")$filter .= "/group=".$group;
 if($subject!="All")$filter .= "/subject=".$subject;
-
+if($licence!="All")$filter .= "/licence=".$licence;
 $rss_channel_header = '
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 	<channel>
@@ -45,7 +46,7 @@ echo $rss_channel_header;
 
 foreach ($rssArray AS $item)
 {
-print(strtotime("2012-1-6"));
+//print(strtotime("2012-1-6"));
 	if($item['type'] == "digest")
 	{
 

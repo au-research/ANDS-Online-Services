@@ -48,6 +48,7 @@ limitations under the License.
 			$groupFilter = $this->input->get('groupFilter');
 			$typeFilter = $this->input->get('typeFilter');		
 			$subjectFilter = $this->input->get('subjectFilter');
+			$licenceFilter = $this->input->get('licenceFilter');
 			$dataSource = $this->input->get('dataSource');
 			$digest = $this->input->get('digest');
 			//echo $digest." is the digest<br />";
@@ -60,6 +61,7 @@ limitations under the License.
     		if($typeFilter!='All') $filter_query .= constructFilterQuery('type', $typeFilter);
     		if($groupFilter!='All') $filter_query .= constructFilterQuery('group', $groupFilter);
     		if($subjectFilter!='All') $filter_query .= constructFilterQuery('subject_value_resolved', $subjectFilter);
+    		if($licenceFilter!='All')$filter_query .= constructFilterQuery('licence_group', $licenceFilter);
     		if($status!='All') $filter_query .= constructFilterQuery('status', $status);
      		if($dataGroup!='') $filter_query .= constructFilterQuery('group', $dataGroup);   		
 
