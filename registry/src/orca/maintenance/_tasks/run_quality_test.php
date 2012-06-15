@@ -22,6 +22,7 @@ if($dataSourceKey != '' && $registryObjectKeys != '')
 else if($dataSourceKey != '')
 {
 	$message .= runQualityLevelCheckforDataSource($dataSourceKey);
+	echo $message;
 }
 
 

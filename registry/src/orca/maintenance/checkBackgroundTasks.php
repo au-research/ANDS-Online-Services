@@ -31,28 +31,26 @@ include '_includes/_environment/database_env.php';
 // ----------------------------------------------------------------------------------------------------------------------------------------------------------
 openDatabaseConnection($gCNN_DBS_ORCA, eCNN_DBS_ORCA);
 
-// Increase the execution timeout as we may have to deal with a large amount of data.
+// Increase the execution timeout as we may have to deal with a large amount of data. date("Y:m:d H:i")
 $executionTimeoutSeconds = 0;
 ini_set("max_execution_time", "$executionTimeoutSeconds");
 
 $nextTask = getNextWaitingTask();
 if($nextTask)
 {
-	$method = $nextTask[0]['method'];	
+	$method = $nextTask[0]['method'];
+	echo "\n".$method." for  ".$nextTask[0]['data_source_key']." ".date("d-m-Y H:i")."\n";	
 	switch ($method){
 		case 'RUN_QUALITY_CHECK':
-			echo $method." for  ".$method = $nextTask[0]['data_source_key']."\n";
 			include('orca/_functions/orca_access_functions.php');
 			include('orca/_functions/orca_import_functions.php');
 			include('orca/_functions/orca_export_functions.php');
 			include('orca/maintenance/_tasks/run_quality_test.php');
 			break;
 		case 'GENERATE_HASH':
-			echo $method."\n";
 			include('orca/maintenance/_tasks/generate_hashes.php');
 			break;
 		case 'INDEX_RECORDS':
-			echo $method."\n";
 			include('orca/_functions/orca_access_functions.php');
 			include('orca/_functions/orca_data_source_functions.php');
 			include('orca/_functions/orca_export_functions.php');
@@ -60,8 +58,7 @@ if($nextTask)
 			include('orca/_functions/orca_constants.php');
 			include('orca/maintenance/_tasks/index_records.php');
 			break;
-		case 'GENERATE_CACHE':
-			echo $method."\n";
+		case 'GENERATE_CACHE':			
 			include('orca/_functions/orca_access_functions.php');
 			include('orca/_functions/orca_export_functions.php');
 			include('orca/_functions/orca_cache_functions.php');
@@ -69,13 +66,12 @@ if($nextTask)
 			include('orca/maintenance/_tasks/generate_cache.php');
 			break;
 		case 'RUN_HARVEST':
-			echo $method."\n";
 			break;
 	}
 }
-else{
-	echo "NO TASK TO RUN\n";
-}
+//else{
+//	echo "\nNO TASK TO RUN";
+//}
 
 
 /*

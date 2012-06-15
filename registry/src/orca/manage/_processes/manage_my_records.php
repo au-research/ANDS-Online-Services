@@ -85,9 +85,8 @@ switch(getQueryValue('action'))
 		foreach($keys AS $key)
 		{
 			$response['response']=updateDraftRegistryObjectStatus(rawurldecode($key), $data_source_key, SUBMITTED_FOR_ASSESSMENT);
-			syncDraftKey(rawurldecode($key), $data_source_key);
 		}
-
+		syncDraftKeys($keys, $data_source_key);
 		$target_data_source = getDataSources($data_source_key, null);
 		
 		$response['responsecode'] = "MT008";
@@ -121,9 +120,8 @@ switch(getQueryValue('action'))
 		foreach($keys AS $key)
 		{
 			updateDraftRegistryObjectStatus(rawurldecode($key), $data_source_key, ASSESSMENT_IN_PROGRESS);
-			syncDraftKey(rawurldecode($key), $data_source_key);
 		}
-		
+		syncDraftKeys($keys, $data_source_key);
 		$response['responsecode'] = "1";
 		echo json_encode($response);
 		die();
@@ -135,9 +133,8 @@ switch(getQueryValue('action'))
 		foreach($keys AS $key)
 		{
 			updateDraftRegistryObjectStatus(rawurldecode($key), $data_source_key, MORE_WORK_REQUIRED);
-			syncDraftKey(rawurldecode($key), $data_source_key);
 		}
-		
+		syncDraftKeys($keys, $data_source_key);
 		$response['responsecode'] = "1";
 		echo json_encode($response);
 		die();
@@ -148,10 +145,9 @@ switch(getQueryValue('action'))
 		
 		foreach($keys AS $key)
 		{
-			updateDraftRegistryObjectStatus(rawurldecode($key), $data_source_key, DRAFT);
-			syncDraftKey(rawurldecode($key), $data_source_key);
+			updateDraftRegistryObjectStatus(rawurldecode($key), $data_source_key, DRAFT);			
 		}
-		
+		syncDraftKeys($keys, $data_source_key);
 		$response['responsecode'] = "1";
 		echo json_encode($response);
 		die();
@@ -162,10 +158,11 @@ switch(getQueryValue('action'))
 		$returnErrors = "";
 		foreach($keys AS $key)
 		{
-			$returnErrors .= approveDraft(rawurldecode($key), $data_source_key);
-			deleteSolrHashKey(sha1($key.$data_source_key));//delete the draft
+			$returnErrors .= approveDraft(rawurldecode($key), $data_source_key);			
 			syncKey(rawurldecode($key), $data_source_key);
 		}
+		//deleteSolrHashKeys(sha1($key.$data_source_key));//delete the draft
+		deleteSetofSolrDrafts($keys, $data_source_key);
 		$response['alert'] = $returnErrors;
 		$response['responsecode'] = "1";
 		echo json_encode($response);
@@ -175,6 +172,7 @@ switch(getQueryValue('action'))
 	
 	
 	case "PUBLISH":
+		deleteSetofSolrDrafts($keys, $data_source_key);
 		foreach($keys AS $key){
 			//is it a draft
 			$isDraft = getDraftRegistryObject(rawurldecode($key), $data_source_key);
@@ -196,6 +194,7 @@ switch(getQueryValue('action'))
 			}
 			
 		}
+				syncDraftKeys($keys, $data_source_key);
 		die();
 		
 	break;
@@ -221,10 +220,10 @@ switch(getQueryValue('action'))
 		foreach($keys AS $key)
 		{
 			deleteDraftRegistryObject($data_source_key, rawurldecode($key));//delete from db
-			deleteSolrDraft($key, $data_source_key);//delete from solr
+			//deleteSolrDraft($key, $data_source_key);//delete from solr
 			queueSyncDataSource($data_source_key);
 		}
-		
+		deleteSetofSolrDrafts($keys, $data_source_key);
 		$response['responsecode'] = "1";
 		echo json_encode($response);
 		die();
