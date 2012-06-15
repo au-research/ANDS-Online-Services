@@ -219,15 +219,16 @@ else
 				echo '<div class="tab-content statusview"><h3><button id="toggleSummaryTable">-</button> Summary</h3></div>';
 				echo '<div id="All_statusview" class="tab-content statusview">';
 				echo '<table id="summaryTable">';
-				echo '<tr><td></td>';//empty
+				echo '<thead><tr><th width="100"></th>';//empty
 				foreach($status as $status_name=>$array){
 					if($array['count']>0){
-						echo '<td>'.str_replace('_', ' ', $status_name).'</td>';
+						echo '<th width="100">'.str_replace('_', ' ', $status_name).'</th>';
 					}
 					
 				}
-				echo '</tr>';
+				echo '</tr></thead>';
 				
+				echo '<tbody>';
 				foreach($class_names as $class_name){
 					echo '<tr>';
 					echo '<td>'.$class_name.'</td>';
@@ -239,6 +240,7 @@ else
 					}
 					echo '</tr>';
 				}
+				echo '</tbody>';
 
 				echo '</table>';
 				echo '</div>';

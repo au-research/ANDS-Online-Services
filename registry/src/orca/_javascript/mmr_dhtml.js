@@ -337,6 +337,15 @@ $(document).ready(function() {
         });
     }
 
+    $('#summaryTable').flexigrid({
+    	striped:true,
+    	title:'Summary',
+    	resizable:false,
+    	showTableToggleBtn: true,
+    	height:'auto',
+    	width:'auto'
+
+    });
 	$('.mmr_table').each(function(){
 		var status = $(this).attr('status');
 		var ql = $(this).attr('ql');
@@ -466,7 +475,7 @@ $(document).ready(function() {
 	function formatTable(com, grid){
 		//hide info
 		$('.infoDiv', grid).hide();
-		$('td[abbr=status]').each(function(){
+		$('td[abbr=status]', grid).each(function(){
 			$(this).addClass($(this).text()+'_status');
 		});
 
@@ -586,7 +595,6 @@ $(document).ready(function() {
 		//POST the stuff over to Manage My Records
 		if(AllSystemGo && !hasError){
 			
-
 			var req_url = $("#elementSourceURL").val() + "task=manage_my_records&action=" + action;
 			$.ajax({
 				url:req_url,
@@ -601,9 +609,7 @@ $(document).ready(function() {
 					}else if(data.responsecode=='MT014'){
 						alert('An ANDS Quality Assessor has been notified of your submitted record(s)');
 					}else{
-						if(data.alert){
-							alert(data.alert);
-						}
+						//if(data.alert) alert(data.alert);
 					}
 					
 					release();
