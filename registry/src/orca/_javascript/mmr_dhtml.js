@@ -201,14 +201,8 @@ $(document).ready(function() {
   				chartData.addColumn("number", "Quality Level 2");
   				chartData.addColumn("number", "Quality Level 3");
   				chartData.addColumn("number", "Quality Level 4");
-
-  				var chartData2 = new google.visualization.DataTable();
-  				chartData2.addColumn('string', 'Status');
-  				chartData2.addColumn('number', 'Quality Level 0');
-  				chartData2.addColumn('number', 'Quality Level 1');
-  				chartData2.addColumn('number', 'Quality Level 2');
-  				chartData2.addColumn('number', 'Quality Level 3');
-  				chartData2.addColumn('number', 'Quality Level 4');
+  				chartData.addColumn("number", "Gold Standard");
+  				
 
   				//console.log(chartData);
 
@@ -219,12 +213,9 @@ $(document).ready(function() {
   					rowPercent.push(item.label);
   					$.each(item.qa, function(j, qa_i){
   						row.push(qa_i);
-  						chartData2
-  						rowPercent.push(((qa_i*100)/item.num)/100);
   					});
   					//console.log(row);
   					chartData.addRow(row);
-  					chartData2.addRow(rowPercent);
   				});
 
   				/*var jsonText = JSON.stringify(chartData);
@@ -237,7 +228,7 @@ $(document).ready(function() {
     			//formatter.format(realData, 0);
 			  	
 
-    			var optionPercent = {title:"All Registry Objects",
+    			var optionPercent = {title:status + " Records",
 		        	width:800, height:400,
 		        	vAxis: {title: "Status"},
 		        	isStacked:true,
@@ -313,6 +304,16 @@ $(document).ready(function() {
 			        		return {v: value/sum,f:value.toString()};
 			        	}
 			        },
+			        {
+			        	label:'Gold Standard',
+			        	type:'number',
+			        	calc:function(dt,row){
+			        		var sum = 0;var level = 5;
+			        		var value = dt.getValue(row, level+1);
+			        		for (var c=1;c<=5;c++){sum = sum + dt.getValue(row, c);}
+			        		return {v: value/sum,f:value.toString()};
+			        	}
+			        }
 		        ]);
 
 			  	function drawThisChart(dataToDraw,optionToDraw){
@@ -482,17 +483,20 @@ $(document).ready(function() {
 	function doCommand(com, grid) {
 		//setup the keys
 		var targetKeys = [];
+		var hasError = false;
 		if($(grid).attr('selectall')=='no'){
 			$('.trSelected', grid).each(function() {
 				var id = $(this).attr('id');
 				id = id.substring(id.lastIndexOf('row')+3);
 				
+				var numError = $('td[abbr=error_count]', this).text();
+				if(numError!='0') hasError = true;
+
 				if(id){
-					//alert(id);
 					targetKeys.push(id);
 				}
 			});
-			fireZaLaserz(com, targetKeys);
+			fireZaLaserz(com, targetKeys, hasError);
 		}else if($(grid).attr('selectall')=='yes'){
 			var status = $(grid).attr('status');
 			$.ajax({
@@ -502,8 +506,9 @@ $(document).ready(function() {
 					docs = data.response.docs;
 					$(docs).each(function(){
 						targetKeys.push(this.key);
+						if(this.error_count!=0) hasError = true;
 					});
-				fireZaLaserz(com, targetKeys);
+					fireZaLaserz(com, targetKeys, hasError);
 				}
 			});
 		}else{
@@ -514,7 +519,7 @@ $(document).ready(function() {
 		//Reindex all the target Keys
 	}
 
-	function fireZaLaserz(com, targetKeys){
+	function fireZaLaserz(com, targetKeys, hasError){
 		loading();
 		var numKeys = (targetKeys).length;
 		var dataSourceKey = $('#dataSourceKey').val();
@@ -554,8 +559,18 @@ $(document).ready(function() {
 			action = 'MORE_WORK_REQUIRED';
 			$('#MORE_WORK_REQUIRED').show();
 		}else if(com=='Approve'){
+			if(hasError) {
+				alert('Selected Record(s) contains record with error');
+				release();
+				AllSystemGo = false;
+			}
 			action = 'APPROVE';
 		}else if(com=='Publish'){
+			if (hasError) {
+				alert('Selected Record(s) contains record with error');
+				release();
+				AllSystemGo = false;
+			}
 			action = 'PUBLISH';
 		}else if(com=='Mark as Gold Standard'){
 			if(confirm('You are about to flag '+numKeys+' registry objects as gold standard. Do you want to continue?')){
@@ -569,7 +584,7 @@ $(document).ready(function() {
 		//alert($("#elementSourceURL").val());
 
 		//POST the stuff over to Manage My Records
-		if(AllSystemGo){
+		if(AllSystemGo && !hasError){
 			
 
 			var req_url = $("#elementSourceURL").val() + "task=manage_my_records&action=" + action;
@@ -711,7 +726,7 @@ $(document).ready(function() {
 
 		//console.log(com);
 		//console.log(targetKeys);
-		fireZaLaserz(com, targetKeys);
+		fireZaLaserz(com, targetKeys, false);
 		
 	});
 	

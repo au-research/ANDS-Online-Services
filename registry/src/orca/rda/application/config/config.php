@@ -26,7 +26,7 @@ global $gVOCAB_RESOLVER_SERVICE, $enable_warning_notices, $warning_notices, $ena
 //CONFIGURATION
 //==============================
 $config['base_url']	= 'http://'.HOST.'/'.RDA_ROOT.'/';
-$config['orca_url'] = 'http://'.HOST.'/'.ORCA_ROOT.'/';
+$config['orca_url'] = ''.ORCA_PROTOCOL.'://'.HOST.'/'.ORCA_ROOT.'/';
 $config['solr_url'] = SOLR_URL;
 $config['asset_url'] = $config['base_url'] . 'assets/';
 $config['vocab_resolver_service'] = $gVOCAB_RESOLVER_SERVICE;

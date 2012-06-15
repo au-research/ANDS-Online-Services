@@ -320,7 +320,7 @@ function getQAforClass($dataSourceKey, $class, $status='All'){
 	if($status!='All') $q.=' +status:("'.$status.'")';
 	$fields = array(
 		'q'=>$q,'version'=>'2.2','start'=>'0','rows'=>'1', 'wt'=>'json',
-		'fl'=>'key', 'facet'=>'true', 'facet.field'=>'quality_level','facet.mincount'=>'1','facet.sort'=>'index'
+		'fl'=>'key', 'facet'=>'true', 'facet.field'=>'quality_level','facet.mincount'=>'0','facet.sort'=>'index'
 	);
 	//Call SOLR and ask for data
 
@@ -339,7 +339,7 @@ function allKeys($status){
 	$q = '+data_source_key:("'.$dataSourceKey.'") +status:("'.$status.'")';
 	$fields = array(
 		'q'=>$q,'version'=>'2.2','start'=>'0','rows'=>'200', 'wt'=>'json',
-		'fl'=>'key'
+		'fl'=>'key, error_count'
 	);
 	$content = solr($solr_url, $fields);
 	echo $content;

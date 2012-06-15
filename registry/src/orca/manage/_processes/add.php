@@ -79,6 +79,7 @@ error_reporting(E_ERROR | E_WARNING | E_PARSE);
 					if( !$importErrors )
 					{
 						$deleteErrors = deleteDraftRegistryObject($dataSourceValue, esc($_GET['key']));
+						//deleteSolrHashKey(sha1($esc($_GET['key'].$dataSourceValue));
 					}                                       
 					if( $deleteErrors || $importErrors )
 					{

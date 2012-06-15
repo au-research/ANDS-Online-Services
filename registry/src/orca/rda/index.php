@@ -129,6 +129,7 @@ if (defined('ENVIRONMENT'))
 // END OF USER CONFIGURABLE SETTINGS.  DO NOT EDIT BELOW THIS LINE
 // --------------------------------------------------------------------
 //DEFINE ANDS REGISTRY ONLINE SERVICE VARIABLES
+define('ORCA_PROTOCOL', $default_protocol);
 define('RDA_ROOT', $rda_root);
 define('HOST', $host);
 define('ORCA_ROOT', $orca_root);
