@@ -294,8 +294,8 @@ public class RIFHarvestThread extends HarvestThread
             {
                 //end of harvest - set next from/until dates
                 //uncomment the following lines for incremental harvesting
-                //harvest.setFrom(getNextFromDate());
-                //harvest.setUntil(null);
+                harvest.setFrom(getNextFromDate());
+                harvest.setUntil(null);
                 threadManager.setThreadComplete(harvest);
                 log.info("harvest id completed: " + harvest.getHarvestID());
                 log.debug(harvest.getHarvestID() + " total records received:" + numRecordsRcvd);
