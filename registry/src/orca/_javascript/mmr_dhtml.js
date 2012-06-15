@@ -232,24 +232,14 @@ $(document).ready(function() {
 		        	width:800, height:400,
 		        	vAxis: {title: "Status"},
 		        	isStacked:true,
-		        	colors:['#89CEDE', '#F06533','#F2CE3B', '#6DA539', '#4491AB'],
+		        	colors:['#89CEDE', '#F06533','#F2CE3B', '#6DA539', '#4491AB', '#FFD700'],
 		        	animation:{
     					duration: 1000,
     					easing: 'out'
   					},
   					sliceVisibilityThreshold:0,
 		        	hAxis: {title: "Quality Levels Percentage",format:'##%'}};
-				var option = {title:"All Registry Objects",
-		        	width:800, height:400,
-		        	vAxis: {title: "Status"},
-		        	isStacked:true,
-		        	animation:{
-        				duration: 1000,
-        				easing: 'out'
-      				},
-      				sliceVisibilityThreshold:0,
-					colors:['#89CEDE', '#F06533','#F2CE3B', '#6DA539', '#4491AB'],
-					hAxis: {title: "Registry Objects Percentage"}};
+				
 
 		        var view = new google.visualization.DataView(chartData);
 
@@ -260,7 +250,7 @@ $(document).ready(function() {
 			        	calc:function(dt,row){
 			        		var sum = 0;var level = 0;
 			        		var value = dt.getValue(row, level+1);
-			        		for (var c=1;c<=5;c++){sum = sum + dt.getValue(row, c);}
+			        		for (var c=1;c<=6;c++){sum = sum + dt.getValue(row, c);}
 			        		return {v: value/sum,f:value.toString()};
 			        	}
 			        },
@@ -270,7 +260,7 @@ $(document).ready(function() {
 			        	calc:function(dt,row){
 			        		var sum = 0;var level = 1;
 			        		var value = dt.getValue(row, level+1);
-			        		for (var c=1;c<=5;c++){sum = sum + dt.getValue(row, c);}
+			        		for (var c=1;c<=6;c++){sum = sum + dt.getValue(row, c);}
 			        		return {v: value/sum,f:value.toString()};
 			        	}
 			        },
@@ -280,7 +270,7 @@ $(document).ready(function() {
 			        	calc:function(dt,row){
 			        		var sum = 0;var level = 2;
 			        		var value = dt.getValue(row, level+1);
-			        		for (var c=1;c<=5;c++){sum = sum + dt.getValue(row, c);}
+			        		for (var c=1;c<=6;c++){sum = sum + dt.getValue(row, c);}
 			        		return {v: value/sum,f:value.toString()};
 			        	}
 			        },
@@ -290,7 +280,7 @@ $(document).ready(function() {
 			        	calc:function(dt,row){
 			        		var sum = 0;var level = 3;
 			        		var value = dt.getValue(row, level+1);
-			        		for (var c=1;c<=5;c++){sum = sum + dt.getValue(row, c);}
+			        		for (var c=1;c<=6;c++){sum = sum + dt.getValue(row, c);}
 			        		return {v: value/sum,f:value.toString()};
 			        	}
 			        },
@@ -300,7 +290,7 @@ $(document).ready(function() {
 			        	calc:function(dt,row){
 			        		var sum = 0;var level = 4;
 			        		var value = dt.getValue(row, level+1);
-			        		for (var c=1;c<=5;c++){sum = sum + dt.getValue(row, c);}
+			        		for (var c=1;c<=6;c++){sum = sum + dt.getValue(row, c);}
 			        		return {v: value/sum,f:value.toString()};
 			        	}
 			        },
@@ -310,7 +300,7 @@ $(document).ready(function() {
 			        	calc:function(dt,row){
 			        		var sum = 0;var level = 5;
 			        		var value = dt.getValue(row, level+1);
-			        		for (var c=1;c<=5;c++){sum = sum + dt.getValue(row, c);}
+			        		for (var c=1;c<=6;c++){sum = sum + dt.getValue(row, c);}
 			        		return {v: value/sum,f:value.toString()};
 			        	}
 			        }
