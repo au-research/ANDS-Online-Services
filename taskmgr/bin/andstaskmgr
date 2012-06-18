@@ -1,16 +1,13 @@
 #!/bin/bash
-### BEGIN INIT INFO
-#
-# Provides : andstaskmgr
-# Default-Start     : 2 3 4 5
-# Default-Stop     : 0 1 6
-# Short-Description : This script will load the ANDS task manager
-#
+# chkconfig: 45 30 80
+# description: This service provides a wrapper around \
+#              worker tasks provided by ANDS Task Mgr
 ### END INIT INFO
+
 ## Fill in name of program here.
 PROG_WRAPPER="andstaskmgr"
-PROG_NAME="dynamic_task_worker.php"
-PROG_PATH="/var/www/taskmgr" 
+PROG_NAME="worker.php"
+PROG_PATH="/var/www/htdocs/workareas/ben/misc/taskmgr" 
 PID_PATH="/tmp"
 
 start() {
