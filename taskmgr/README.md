@@ -22,6 +22,7 @@ On CentOS systems, Gearman can be installed by:
 The PHP library for interfacing with the task manager is installed by:
 
 	yum install php-pecl-gearman
+	service httpd restart
 	
 This will provide a Gearman background daemon which listens for tasks on localhost (127.0.0.1). Ensure that your server is properly protected (i.e. firewall) as the task server runs without any form of authentication to minimise overhead. 
 

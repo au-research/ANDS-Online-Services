@@ -6,8 +6,8 @@
 
 ## Fill in name of program here.
 PROG_WRAPPER="andstaskmgr"
-PROG_NAME="worker.php"
-PROG_PATH="/var/www/htdocs/workareas/ben/misc/taskmgr" 
+PROG_NAME="dynamic_task_worker.php"
+PROG_PATH="/var/www/taskmgr" 
 PID_PATH="/tmp"
 
 start() {
