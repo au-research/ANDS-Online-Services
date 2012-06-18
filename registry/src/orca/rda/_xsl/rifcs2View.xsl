@@ -857,9 +857,10 @@ Handle:
     		<xsl:if test="string-length(substring-after(./@licence_type,'CC-'))=0">	   
 				<xsl:value-of select="./@licence_type"/>
 			</xsl:if>
-			<xsl:if test="./@rightsUri"><br />
+			<xsl:if test="."><p><xsl:value-of select="."/></p></xsl:if>
+			<xsl:if test="./@rightsUri"><p>
 				<a target="_blank">
-				<xsl:attribute name="href"><xsl:value-of select="./@rightsUri"/></xsl:attribute><xsl:value-of select="./@rightsUri"/></a>
+				<xsl:attribute name="href"><xsl:value-of select="./@rightsUri"/></xsl:attribute><xsl:value-of select="./@rightsUri"/></a></p>
 			</xsl:if>						
 		</p>		
 	</xsl:template>
