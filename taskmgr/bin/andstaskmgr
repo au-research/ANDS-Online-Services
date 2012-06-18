@@ -1,0 +1,86 @@
+#!/bin/bash
+### BEGIN INIT INFO
+#
+# Provides : andstaskmgr
+# Default-Start     : 2 3 4 5
+# Default-Stop     : 0 1 6
+# Short-Description : This script will load the ANDS task manager
+#
+### END INIT INFO
+## Fill in name of program here.
+PROG_WRAPPER="andstaskmgr"
+PROG_NAME="dynamic_task_worker.php"
+PROG_PATH="/var/www/taskmgr" 
+PID_PATH="/tmp"
+
+start() {
+    if [ -e "$PID_PATH/$PROG_WRAPPER.pid" ]; then
+        ## Program is running, exit with error.
+        echo "Error! $PROG_NAME is currently running!" 1>&2
+	echo "Try rm -r $PID_PATH/$PROG_WRAPPER.pid"
+        exit 1
+    else
+        $PROG_PATH/$PROG_NAME 2>&1 >/var/log/$PROG_WRAPPER.log  &
+        echo "$PROG_NAME started (logging to /var/log/$PROG_WRAPPER.log)"
+        touch "$PID_PATH/$PROG_WRAPPER.pid"
+    fi
+}
+
+status() {
+    if [ -e "$PID_PATH/$PROG_WRAPPER.pid" ]; then
+	echo "$PROG_NAME is running..."
+    else
+	echo "$PROG_NAME is not running..."
+    fi
+}
+
+stop() {
+    if [ -e "$PID_PATH/$PROG_WRAPPER.pid" ]; then
+        ## Program is running, so stop it
+        killall $PROG_NAME
+
+        rm "$PID_PATH/$PROG_WRAPPER.pid"
+        
+        echo "$PROG_NAME stopped"
+    else
+        ## Program is not running, exit with error.
+        echo "Error! $PROG_NAME not started!" 1>&2
+        exit 1
+    fi
+}
+
+### Check to see if we are running as root first.
+if [ "$(id -u)" != "0" ]; then
+    echo "This script must be run as root" 1>&2
+    exit 1
+fi
+
+case "$1" in
+    start)
+        start
+        exit 0
+    ;;
+    stop)
+        stop
+        exit 0
+    ;;
+    status)
+        status
+        exit 0
+    ;;
+    log)
+        tail /var/log/$PROG_WRAPPER.log
+    ;;
+    loglive)
+        tail -f /var/log/$PROG_WRAPPER.log
+    ;;
+    reload|restart|force-reload)
+        stop
+        start
+        exit 0
+    ;;
+    **)
+        echo "Usage: $0 {start|stop|status|restart|log|loglive}" 1>&2
+        exit 1
+    ;;
+esac

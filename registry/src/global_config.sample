@@ -174,7 +174,9 @@ define('eCACHE_PERMISSION',0775); // octal representation of default directory p
 $gCacheExtended = true; // are we caching "extended RIFCS" (rich) or plain vanilla? (not backwards compatible)
 define('eCACHE_ENABLED', $gCacheEnabled);
 
-
+//======================================
+// TASK MANAGEMENT
+$gearman_server = 'localhost';
 
 //======================================
 // INDEXING OPTIONS

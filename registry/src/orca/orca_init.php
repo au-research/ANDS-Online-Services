@@ -29,6 +29,7 @@ require '_functions/orca_presentation_functions.php';
 require '_functions/orca_oai_functions.php';
 require '_functions/pids_functions.php';
 require '_functions/orca_solr_functions.php';
+require '_functions/orca_taskmgr_functions.php';
 
 define('gORCA_IMAGE_ROOT', eAPP_ROOT.'orca/_images/');
 

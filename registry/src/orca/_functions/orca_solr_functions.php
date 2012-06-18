@@ -45,10 +45,10 @@ function addDraftToSolrIndex($registryObjectKey, $data_source_key, $commit=true)
 	if($allKeys)
 	{
 		for($i = 0; $i < $arraySize ; $i++)
-		{				
+		{
 			$key = $allKeys[$i]['draft_key'];
 			$dataSourceKey = $allKeys[$i]['registry_object_data_source'];
-			$xml = "    <extRif:extendedMetadata key=\"".esc($key)."\">\n";			
+			$xml = "    <extRif:extendedMetadata key=\"".esc($key)."\">\n";
 			$hash = sha1($key.$dataSourceKey);
 			if ($hash)
 			{
@@ -63,9 +63,9 @@ function addDraftToSolrIndex($registryObjectKey, $data_source_key, $commit=true)
 				$xml .= "      <extRif:dataSourceKeyHash>".esc($hash)."</extRif:dataSourceKeyHash>\n";
 			}
 			$xml .= "      <extRif:status>".esc($allKeys[$i]['status'])."</extRif:status>\n";
-			$xml .= "      <extRif:dataSourceKey>".esc($dataSourceKey)."</extRif:dataSourceKey>\n";		
+			$xml .= "      <extRif:dataSourceKey>".esc($dataSourceKey)."</extRif:dataSourceKey>\n";
 			$reverseLinks = 'NONE';
-	
+
 			if($allow_reverse_internal_links == 't' && $allow_reverse_external_links == 't')
 			{
 				$reverseLinks = 'BOTH';
@@ -73,29 +73,29 @@ function addDraftToSolrIndex($registryObjectKey, $data_source_key, $commit=true)
 			else if($allow_reverse_internal_links == 't')
 			{
 				$reverseLinks = 'INT';
-				
+
 			}
 			else if($allow_reverse_external_links == 't')
 			{
 				$reverseLinks = 'EXT';
 			}
 			$xml .= "      <extRif:reverseLinks>".$reverseLinks."</extRif:reverseLinks>\n";
-			
-			
-			// Get registry date modified			
+
+
+			// Get registry date modified
 			if (!($registryDateModified =  $allKeys[$i]['date_modified']))
 			{
 					$registryDateModified = time(); // default to now
 			}
 			$xml .= "      <extRif:registryDateModified>".$registryDateModified."</extRif:registryDateModified>\n";
-	
-	
-	
+
+
+
 			// displayTitle
 			// -------------------------------------------------------------
 			$xml .= '      <extRif:displayTitle>'.esc(trim($allKeys[$i]['registry_object_title'])).'</extRif:displayTitle>'."\n";
-			
-			
+
+
 			// listTitle
 			// -------------------------------------------------------------
 			$xml .= '      <extRif:listTitle>'.esc(trim($allKeys[$i]['registry_object_title'])).'</extRif:listTitle>'."\n";
@@ -105,8 +105,8 @@ function addDraftToSolrIndex($registryObjectKey, $data_source_key, $commit=true)
 			//$xml .= '      <extRif:gold_status_flag>'.esc(trim($allKeys[$i]['gold_status_flag'])).'</extRif:gold_status_flag>'."\n";
 			$xml .= '      <extRif:quality_level>'.esc(trim($allKeys[$i]['quality_level'])).'</extRif:quality_level>'."\n";
 			$xml .= '      <extRif:feedType>'.($allKeys[$i]['draft_owner'] == 'SYSTEM' ? 'harvest' : 'manual').'</extRif:feedType>'."\n";
-			$xml .= "    </extRif:extendedMetadata>\n";		
-			$rifcsContent = unwrapRegistryObject($allKeys[$i]['rifcs']);	
+			$xml .= "    </extRif:extendedMetadata>\n";
+			$rifcsContent = unwrapRegistryObject($allKeys[$i]['rifcs']);
 			$rifcsContent .= $xml;
 			$rifcs .=$rifcsContent;
 		}
@@ -116,9 +116,9 @@ function addDraftToSolrIndex($registryObjectKey, $data_source_key, $commit=true)
 		if (strlen($solrrifcs) == 0)
 		{
 			echo "<font style='color:red'>".$rifcs."</font>";
-		}				
+		}
 		else
-		{					
+		{
 			$result = curl_post(gSOLR_UPDATE_URL, $solrrifcs);
 			$result .= curl_post(gSOLR_UPDATE_URL.'?commit=true', '<commit waitFlush="false" waitSearcher="false"/>');
 		}
@@ -129,7 +129,7 @@ function addDraftToSolrIndex($registryObjectKey, $data_source_key, $commit=true)
 
 function addSetofDraftsToSolrIndex($registryObjectKeys, $data_source_key, $commit=true)
 {
-	
+
 	$keySize = sizeof($registryObjectKeys);
 	$result = '';
 	$rifcs='';
@@ -141,10 +141,10 @@ function addSetofDraftsToSolrIndex($registryObjectKeys, $data_source_key, $commi
 		if($allKeys)
 		{
 			for($i = 0; $i < $arraySize ; $i++)
-			{				
+			{
 				$key = $allKeys[$i]['draft_key'];
 				$dataSourceKey = $allKeys[$i]['registry_object_data_source'];
-				$xml = "    <extRif:extendedMetadata key=\"".esc($key)."\">\n";			
+				$xml = "    <extRif:extendedMetadata key=\"".esc($key)."\">\n";
 				$hash = sha1($key.$dataSourceKey);
 				if ($hash)
 				{
@@ -159,9 +159,9 @@ function addSetofDraftsToSolrIndex($registryObjectKeys, $data_source_key, $commi
 					$xml .= "      <extRif:dataSourceKeyHash>".esc($hash)."</extRif:dataSourceKeyHash>\n";
 				}
 				$xml .= "      <extRif:status>".esc($allKeys[$i]['status'])."</extRif:status>\n";
-				$xml .= "      <extRif:dataSourceKey>".esc($dataSourceKey)."</extRif:dataSourceKey>\n";		
+				$xml .= "      <extRif:dataSourceKey>".esc($dataSourceKey)."</extRif:dataSourceKey>\n";
 				$reverseLinks = 'NONE';
-		
+
 				if($allow_reverse_internal_links == 't' && $allow_reverse_external_links == 't')
 				{
 					$reverseLinks = 'BOTH';
@@ -169,29 +169,29 @@ function addSetofDraftsToSolrIndex($registryObjectKeys, $data_source_key, $commi
 				else if($allow_reverse_internal_links == 't')
 				{
 					$reverseLinks = 'INT';
-					
+
 				}
 				else if($allow_reverse_external_links == 't')
 				{
 					$reverseLinks = 'EXT';
 				}
 				$xml .= "      <extRif:reverseLinks>".$reverseLinks."</extRif:reverseLinks>\n";
-				
-				
-				// Get registry date modified			
+
+
+				// Get registry date modified
 				if (!($registryDateModified =  $allKeys[$i]['date_modified']))
 				{
 						$registryDateModified = time(); // default to now
 				}
 				$xml .= "      <extRif:registryDateModified>".$registryDateModified."</extRif:registryDateModified>\n";
-		
-		
-		
+
+
+
 				// displayTitle
 				// -------------------------------------------------------------
 				$xml .= '      <extRif:displayTitle>'.esc(trim($allKeys[$i]['registry_object_title'])).'</extRif:displayTitle>'."\n";
-				
-				
+
+
 				// listTitle
 				// -------------------------------------------------------------
 				$xml .= '      <extRif:listTitle>'.esc(trim($allKeys[$i]['registry_object_title'])).'</extRif:listTitle>'."\n";
@@ -201,8 +201,8 @@ function addSetofDraftsToSolrIndex($registryObjectKeys, $data_source_key, $commi
 				//$xml .= '      <extRif:gold_status_flag>'.esc(trim($allKeys[$i]['gold_status_flag'])).'</extRif:gold_status_flag>'."\n";
 				$xml .= '      <extRif:quality_level>'.esc(trim($allKeys[$i]['quality_level'])).'</extRif:quality_level>'."\n";
 				$xml .= '      <extRif:feedType>'.($allKeys[$i]['draft_owner'] == 'SYSTEM' ? 'harvest' : 'manual').'</extRif:feedType>'."\n";
-				$xml .= "    </extRif:extendedMetadata>\n";		
-				$rifcsContent = unwrapRegistryObject($allKeys[$i]['rifcs']);	
+				$xml .= "    </extRif:extendedMetadata>\n";
+				$rifcsContent = unwrapRegistryObject($allKeys[$i]['rifcs']);
 				$rifcsContent .= $xml;
 				$rifcs .=$rifcsContent;
 			}
@@ -214,9 +214,9 @@ function addSetofDraftsToSolrIndex($registryObjectKeys, $data_source_key, $commi
 	if (strlen($solrrifcs) == 0)
 	{
 		echo "<font style='color:red'>".$rifcs."</font>";
-	}				
+	}
 	else
-	{					
+	{
 		$result = curl_post(gSOLR_UPDATE_URL, $solrrifcs);
 		$result .= curl_post(gSOLR_UPDATE_URL.'?commit=true', '<commit waitFlush="false" waitSearcher="false"/>');
 	}
@@ -229,7 +229,7 @@ function addPublishedToSolrIndex($registryObjectKey, $commit=true)
 	//global $solr_update_url;
 	$rifcsContent = getRegistryObjectXMLforSOLR($registryObjectKey,true);
 	$rifcsContent = wrapRegistryObjects($rifcsContent);
-	$rifcs = transformToSolr($rifcsContent);							
+	$rifcs = transformToSolr($rifcsContent);
 	$result = curl_post(gSOLR_UPDATE_URL, $rifcs);
 	if($commit) $result .= curl_post(gSOLR_UPDATE_URL.'?commit=true', '<commit waitFlush="false" waitSearcher="false"/>');
 	return $result;
@@ -286,7 +286,7 @@ function syncDraftKeys($draft_keys, $data_source_key){
 	foreach($draft_keys AS $key)
 	{
 		runQualityLevelCheckForDraftRegistryObject($key, $data_source_key);
-	}	
+	}
 	addSetofDraftsToSolrIndex($draft_keys, $data_source_key); //done
 }
 
@@ -309,6 +309,7 @@ function queueSyncDataSource($data_source_key){
 	$result = addNewTask('RUN_QUALITY_CHECK', '', '', $data_source_key);
 	$result = addNewTask('GENERATE_CACHE', '', '', $data_source_key,$result);
 	$result = addNewTask('INDEX_RECORDS', '', '', $data_source_key,$result);
+	triggerAsyncTasks();
 }
 
 ?>

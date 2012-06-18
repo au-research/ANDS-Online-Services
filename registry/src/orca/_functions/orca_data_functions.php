@@ -2963,11 +2963,20 @@ function setTaskStarted($taskId)
 	return $result;
 }
 
-function setTaskCompleted($taskId, $log_msg)
+function setTaskCompleted($taskId, $log_msg='')
 {
 	global $gCNN_DBS_ORCA;
 	$strQuery = 'update dba.tbl_background_tasks set status = $2, completed = now(), log_msg = $3 where task_id = $1';
 	$params = array($taskId, 'COMPLETED', $log_msg);
+	$result = executeUpdateQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	return $result;
+}
+
+function setTaskFailed($taskId, $log_msg='')
+{
+	global $gCNN_DBS_ORCA;
+	$strQuery = 'update dba.tbl_background_tasks set status = $2, completed = now(), log_msg = $3 where task_id = $1';
+	$params = array($taskId, 'FAILED', $log_msg);
 	$result = executeUpdateQuery($gCNN_DBS_ORCA, $strQuery, $params);
 	return $result;
 }
