@@ -4,12 +4,10 @@ set_time_limit(0);
 
 // Get our global config path
 $APPLICATION_BASE = "CHANGEME";
-
-
+$ip = '';
 
 set_include_path(get_include_path() . PATH_SEPARATOR . $APPLICATION_BASE);
 include 'global_config.php';
-
 
 $runningInBackgroundTask = true; // what is this?!?
 $cosi_root = $APPLICATION_BASE; //"/var/www/htdocs/workareas/ben/registry/src/";
