@@ -31,7 +31,7 @@ if( strtoupper(getPostedValue('action')) == 'EDIT' )
 {
 	responseRedirect('publisher_edit.php');
 }
-	
+
 // -----------------------------------------------------------------------------
 // Begin the XHTML response. Any redirects must occur before this point.
 require '../../_includes/header.php';
@@ -46,8 +46,8 @@ if( !$registryObject )
 	Help for this application is available from the <b><a href="<?php print eAPP_ROOT.'help.php?id='.$gThisActivityID.'&amp;page='.urlencode($_SERVER['REQUEST_URI']) ?>" title="Help for this page">Help</a></b> link at the top right hand corner of the page.<br />
 </p>
 <p>You do not have any Publisher Details recorded in the registry as you have not added any collections to the registry.
-Once you have added a collection to the registry you will be able to view and edit your Publisher Details. 
-To add a collection and submit it for approval use the <i><a href="collection_add.php">Publish a Collection</a></i> link available from the menu at left.</p>	
+Once you have added a collection to the registry you will be able to view and edit your Publisher Details.
+To add a collection and submit it for approval use the <i><a href="collection_add.php">Publish a Collection</a></i> link available from the menu at left.</p>
 </div>
 <?php
 }
@@ -57,7 +57,7 @@ else
 	$objectGroup = $registryObject[0]['object_group'];
 	$registryObjectClass = $registryObject[0]['registry_object_class'];
 	$registryObjectType = $registryObject[0]['type'];
-	
+
 	$originatingSourceHTML = esc($registryObject[0]['originating_source']);
 	if( $registryObject[0]['originating_source_type'] )
 	{
@@ -65,29 +65,29 @@ else
 	}
 
 	$objectGroup = $registryObject[0]['object_group'];
-	
+
 	$createdWhen = formatDateTime($registryObject[0]['created_when']);
 	$createdWho = $registryObject[0]['created_who'];
 
 	print('<table class="recordTable" summary="Data Source">'."\n");
-	print("	<thead>\n"); 
-	
+	print("	<thead>\n");
+
 	$rdaLink = '';
-	
+
 	// The link to the RDA
 	$rdaLinkPrefix = 'View';
-	$rdaLink = '<br /><a style="font-size:0.8em; font-weight: normal;" rel="preview" href="'.eHTTP_APP_ROOT.'orca/rda/view.php?key='.esc(urlencode($registryObjectKey)).'">'.$rdaLinkPrefix.' this record in Research Data Australia (new window)</a>'."\n";
-	
+	$rdaLink = '<br /><a style="font-size:0.8em; font-weight: normal;" rel="preview" href="http://'.$host.'/'.$rda_root . '/view.php?key='.esc(urlencode($registryObjectKey)).'">'.$rdaLinkPrefix.' this record in Research Data Australia (new window)</a>'."\n";
+
 	drawRecordField("<a href=\"../services/getRegistryObject.php?key=".esc(urlencode($registryObjectKey))."\"><img title=\"Get RIF-CS XML for this record\" src=\"".gORCA_IMAGE_ROOT."rifcs.gif\" alt=\"\" /></a>", esc($registryObjectClass).$rdaLink);
-	
+
 	print("	</thead>\n");
 	print('	<tbody class="recordFields">'."\n");
-	
+
 	drawRecordField("Type:",  esc($registryObjectType));
 	drawRecordField("Key:",  esc($registryObjectKey));
 	drawRecordField("Originating Source:", $originatingSourceHTML);
-	drawRecordField("Group:", esc($objectGroup));	
-	
+	drawRecordField("Group:", esc($objectGroup));
+
 	if( $array = getComplexNames($registryObjectKey) )
 	{
 		print("\n<!-- NAMES -->\n");
@@ -101,8 +101,8 @@ else
 		}
 		print("			</td>\n");
 		print("		</tr>\n");
-	}	
-	
+	}
+
 	if( $array = getLocations($registryObjectKey) )
 	{
 		print("\n<!-- LOCATIONS -->\n");
@@ -132,7 +132,7 @@ else
 		print("			</td>\n");
 		print("		</tr>\n");
 	}
-	
+
 	drawRecordField("Created When:",  $createdWhen);
 	drawRecordField("Created Who:",  $createdWho);
 
@@ -149,8 +149,8 @@ else
 	print("	      </form>\n");
 	print("	    </td>\n");
 	print("	  </tr>\n");
-	print("	</tbody>\n");	
-	
+	print("	</tbody>\n");
+
 	print("</table>\n");
 }
 // =============================================================================
@@ -278,7 +278,7 @@ function drawAddress($id, $row=null)
 	print("\n<!-- ADDRESS -->\n");
 	print('<table class="subtable1">'."\n");
 	if( $array = getElectronicAddresses($id) )
-	{	
+	{
 		print('		<tr>'."\n");
 		print('			<td class="attribute">Electronic:</td>'."\n");
 		print('			<td>'."\n");
@@ -321,15 +321,15 @@ function drawElectronicAddress($id, $row=null)
 						$electronicAddress = esc($value);
 					}
 					break;
-		    		
+
 				case 'EMAIL':
 					$electronicAddress = '<a href="mailto:'.esc($value).'" class="external" title="mailto:'.esc($value).'">'.esc($value).'</a>';
 		    		break;
-				
+
 		    	default:
 		    		$electronicAddress = esc($value);
 		    		break;
-			}	
+			}
 		}
 		else
 		{
@@ -338,7 +338,7 @@ function drawElectronicAddress($id, $row=null)
 		print('		<tr>'."\n");
 		print('			<td class="attribute">Value:</td>'."\n");
 		print('			<td class="value">'.$electronicAddress.'</td>'."\n");
-		print('		</tr>'."\n");	
+		print('		</tr>'."\n");
 	}
 	if( $value = $row['type'] )
 	{
@@ -347,7 +347,7 @@ function drawElectronicAddress($id, $row=null)
 		print('			<td class="valueAttribute">'.esc($value).'</td>'."\n");
 		print('		</tr>'."\n");
 	}
-	print('	</table>'."\n");	
+	print('	</table>'."\n");
 }
 
 function drawRelatedObject($id, $row=null)
@@ -376,7 +376,7 @@ function drawRelatedObject($id, $row=null)
 		{
 			print('		<tr>'."\n");
 			print('			<td></td><td>'.$link.'</td>'."\n");
-			print('		</tr>'."\n");	
+			print('		</tr>'."\n");
 		}
 		print('		<tr>'."\n");
 		print('			<td class="attribute">Key:</td>'."\n");
@@ -431,7 +431,7 @@ function drawRelation($id, $row=null)
 		if( !preg_match('/^[a-zA-Z]{0,5}:\/\/.*/', $href) )
 		{
 			$href = 'http://'.$href;
-		}					
+		}
 		$url = '<a href="'.esc($href).'" class="external" title="'.esc($href).'">'.esc($href).'<img class="external" src="'.gORCA_IMAGE_ROOT.'external_link.gif" alt="" /></a>';
 		print('		<tr>'."\n");
 		print('			<td class="attribute">URL:</td>'."\n");

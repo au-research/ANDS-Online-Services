@@ -38,16 +38,16 @@ else
 	// Get the values that we'll need to check for conditional display and access.
 	$registryObjectRecordOwner = $registryObject[0]['record_owner'];
 	$registryObjectStatus = trim($registryObject[0]['status']);
-	
+
 	// Check access.
 	if( !userIsRegistryObjectRecordOwner($registryObjectRecordOwner) )
 	{
 		responseRedirect('index.php');
 	}
-	
+
 	// Get any action that may have been posted.
 	$action = strtoupper(getPostedValue('action'));
-	
+
 	// Action the action.
 	switch( $action )
 	{
@@ -58,16 +58,16 @@ else
 			responseRedirect('collection_delete.php?key='.urlencode(getQueryValue('key')));
 			break;
 	}
-	
+
 	$registryObjectClass = $registryObject[0]['registry_object_class'];
 	$registryObjectType = $registryObject[0]['type'];
-	
+
 	$registryObjectName = getNameHTML($registryObjectKey, '');
 	if( trim($registryObjectName) == '' )
 	{
 		$registryObjectName = esc($registryObjectKey);
 	}
-	
+
 	$pageTitle = $registryObjectClass.' ('.$registryObjectType.'): '.$registryObjectName;
 }
 
@@ -84,7 +84,7 @@ if( $registryObject )
 	$objectGroup = $registryObject[0]['object_group'];
 	$registryObjectClass = $registryObject[0]['registry_object_class'];
 	$registryObjectType = $registryObject[0]['type'];
-	
+
 	$originatingSourceHTML = esc($registryObject[0]['originating_source']);
 	if( $registryObject[0]['originating_source_type'] )
 	{
@@ -92,39 +92,39 @@ if( $registryObject )
 	}
 
 	$objectGroup = $registryObject[0]['object_group'];
-	
+
 	$createdWhen = formatDateTime($registryObject[0]['created_when']);
 	$createdWho = $registryObject[0]['created_who'];
 
 	print('<table class="recordTable" summary="Data Source">'."\n");
-	print("	<thead>\n"); 
-	
+	print("	<thead>\n");
+
 	$rdaLink = '';
-	
+
 	if ($registryObjectStatus == APPROVED)
 	{
 		$registryObjectStatus = SUBMITTED_FOR_ASSESSMENT;
 	}
-	
+
 	// The link to the RDA
 	$rdaLinkPrefix = 'View';
 	if( $registryObjectStatus != PUBLISHED )
 	{
 		$rdaLinkPrefix = 'Preview';
 	}
-	$rdaLink = '<br /><a style="font-size:0.8em; font-weight: normal;" rel="preview" href="'.eHTTP_APP_ROOT.'orca/rda/view.php?key='.esc(urlencode($registryObjectKey)).'">'.$rdaLinkPrefix.' this record in Research Data Australia (new window)</a>'."\n";
-	
+	$rdaLink = '<br /><a style="font-size:0.8em; font-weight: normal;" rel="preview" href="http://'.$host.'/'.$rda_root . '/view.php?key='.esc(urlencode($registryObjectKey)).'">'.$rdaLinkPrefix.' this record in Research Data Australia (new window)</a>'."\n";
+
 	drawRecordField("<a href=\"../services/getRegistryObject.php?key=".esc(urlencode($registryObjectKey))."\"><img title=\"Get RIF-CS XML for this record\" src=\"".gORCA_IMAGE_ROOT."rifcs.gif\" alt=\"\" /></a>", esc($registryObjectClass).$rdaLink);
-	
+
 	print("	</thead>\n");
 	print('	<tbody class="recordFields">'."\n");
-	
+
 	drawRecordField("Status:",  getRegistryObjectStatusSpan($registryObjectStatus));
 	drawRecordField("Type:",  esc($registryObjectType));
 	drawRecordField("Key:",  esc($registryObjectKey));
 	drawRecordField("Originating Source:", $originatingSourceHTML);
-	drawRecordField("Group:", esc($objectGroup));	
-	
+	drawRecordField("Group:", esc($objectGroup));
+
 	if( $array = getComplexNames($registryObjectKey) )
 	{
 		print("\n<!-- NAMES -->\n");
@@ -138,8 +138,8 @@ if( $registryObject )
 		}
 		print("			</td>\n");
 		print("		</tr>\n");
-	}	
-	
+	}
+
 	if( $array = getLocations($registryObjectKey) )
 	{
 		print("\n<!-- LOCATIONS -->\n");
@@ -147,7 +147,7 @@ if( $registryObject )
 		print("			<td>Locations:");
 		if( getRegistryObjectKML($registryObjectKey) )
 		{
-			print("<br /><a href=\"http://".eHOST."/".eROOT_DIR."/orca/services/getRegistryObjectKML.php?key=".esc(urlencode($registryObjectKey))."\"><img title=\"Get any KML that can be derived from coverage information in this record\" src=\"".gORCA_IMAGE_ROOT."kml.gif\" alt=\"\" /></a>");	
+			print("<br /><a href=\"http://".eHOST."/".eROOT_DIR."/orca/services/getRegistryObjectKML.php?key=".esc(urlencode($registryObjectKey))."\"><img title=\"Get any KML that can be derived from coverage information in this record\" src=\"".gORCA_IMAGE_ROOT."kml.gif\" alt=\"\" /></a>");
 		}
 		print("</td>\n");
 		print("			<td>\n");
@@ -159,7 +159,7 @@ if( $registryObject )
 		print("			</td>\n");
 		print("		</tr>\n");
 	}
-	
+
 	if( $array = getCoverage($registryObjectKey) )
 	{
 		print("\n<!-- COVERAGE-->\n");
@@ -167,7 +167,7 @@ if( $registryObject )
 		print("			<td>Coverage:");
 		if( hasSpatialKMLData($registryObjectKey, 'coverage') )
 		{
-			print("<br /><a href=\"http://".eHOST."/".eROOT_DIR."/orca/services/getRegistryObjectKML.php?key=".esc(urlencode($registryObjectKey))."\"><img title=\"Get any KML that can be derived from coverage information in this record\" src=\"".gORCA_IMAGE_ROOT."kml.gif\" alt=\"\" /></a>");	
+			print("<br /><a href=\"http://".eHOST."/".eROOT_DIR."/orca/services/getRegistryObjectKML.php?key=".esc(urlencode($registryObjectKey))."\"><img title=\"Get any KML that can be derived from coverage information in this record\" src=\"".gORCA_IMAGE_ROOT."kml.gif\" alt=\"\" /></a>");
 		}
 		print("</td>\n");
 		print("			<td>\n");
@@ -194,7 +194,7 @@ if( $registryObject )
 		print("			</td>\n");
 		print("		</tr>\n");
 	}
-	
+
 	if( $array = getSubjects($registryObjectKey) )
 	{
 		print("\n<!-- SUBJECTS -->\n");
@@ -209,7 +209,7 @@ if( $registryObject )
 		print("			</td>\n");
 		print("		</tr>\n");
 	}
-	
+
 	if( $array = getDescriptions($registryObjectKey) )
 	{
 		print("\n<!-- DESCRIPTIONS -->\n");
@@ -224,7 +224,7 @@ if( $registryObject )
 		print("			</td>\n");
 		print("		</tr>\n");
 	}
-	
+
 	if( $array = getCitationInformation($registryObjectKey) )
 	{
 		print("\n<!-- CITATION INFO -->\n");
@@ -240,14 +240,14 @@ if( $registryObject )
 		print('			</table>'."\n");
 		print("			</td>\n");
 		print("		</tr>\n");
-	}	
+	}
 
-	
+
 	drawRecordField("Created When:",  $createdWhen);
 	drawRecordField("Created Who:",  $createdWho);
-	
+
 	$statusWhen = formatDateTime($registryObject[0]['status_modified_when']);
-	
+
 	drawRecordField("Status Set:",  $statusWhen);
 
 	print("	</tbody>\n");
@@ -264,8 +264,8 @@ if( $registryObject )
 	print("	      </form>\n");
 	print("	    </td>\n");
 	print("	  </tr>\n");
-	print("	</tbody>\n");	
-	
+	print("	</tbody>\n");
+
 	print("</table>\n");
 }
 
@@ -407,7 +407,7 @@ function drawAddress($id, $row=null)
 	print("\n<!-- ADDRESS -->\n");
 	print('<table class="subtable1">'."\n");
 	if( $array = getElectronicAddresses($id) )
-	{	
+	{
 		print('		<tr>'."\n");
 		print('			<td class="attribute">Electronic:</td>'."\n");
 		print('			<td>'."\n");
@@ -450,15 +450,15 @@ function drawElectronicAddress($id, $row=null)
 						$electronicAddress = esc($value);
 					}
 					break;
-		    		
+
 				case 'EMAIL':
 					$electronicAddress = '<a href="mailto:'.esc($value).'" class="external">'.esc($value).'</a>';
 		    		break;
-				
+
 		    	default:
 		    		$electronicAddress = esc($value);
 		    		break;
-			}	
+			}
 		}
 		else
 		{
@@ -467,7 +467,7 @@ function drawElectronicAddress($id, $row=null)
 		print('		<tr>'."\n");
 		print('			<td class="attribute">Value:</td>'."\n");
 		print('			<td class="value">'.$electronicAddress.'</td>'."\n");
-		print('		</tr>'."\n");	
+		print('		</tr>'."\n");
 	}
 	if( $value = $row['type'] )
 	{
@@ -476,7 +476,7 @@ function drawElectronicAddress($id, $row=null)
 		print('			<td class="valueAttribute">'.esc($value).'</td>'."\n");
 		print('		</tr>'."\n");
 	}
-	print('	</table>'."\n");	
+	print('	</table>'."\n");
 }
 
 function drawSpatial($id, $row=null)
@@ -495,7 +495,7 @@ function drawSpatial($id, $row=null)
 		print('		<tr>'."\n");
 		print('			<td class="attribute">Type:</td>'."\n");
 		print('			<td class="valueAttribute">'.esc($value).'</td>'."\n");
-		print('		</tr>'."\n");	
+		print('		</tr>'."\n");
 	}
 	if( $value = $row['lang'] )
 	{
@@ -504,7 +504,7 @@ function drawSpatial($id, $row=null)
 		print('			<td class="valueAttribute">'.esc($value).'</td>'."\n");
 		print('		</tr>'."\n");
 	}
-	print('	</table>'."\n");	
+	print('	</table>'."\n");
 }
 
 function drawRelatedObject($id, $row=null)
@@ -530,7 +530,7 @@ function drawRelatedObject($id, $row=null)
 		{
 			print('		<tr>'."\n");
 			print('			<td></td><td>'.$link.'</td>'."\n");
-			print('		</tr>'."\n");	
+			print('		</tr>'."\n");
 		}
 		print('		<tr>'."\n");
 		print('			<td class="attribute">Key:</td>'."\n");
@@ -585,7 +585,7 @@ function drawRelation($id, $row=null)
 		if( !preg_match('/^[a-zA-Z]{0,5}:\/\/.*/', $href) )
 		{
 			$href = 'http://'.$href;
-		}					
+		}
 		$url = '<a href="'.esc($href).'" class="external" title="'.esc($href).'">'.esc($href).'<img class="external" src="'.gORCA_IMAGE_ROOT.'external_link.gif" alt="" /></a>';
 		print('		<tr>'."\n");
 		print('			<td class="attribute">URL:</td>'."\n");
@@ -669,7 +669,7 @@ function drawCoverage($id, $row=null)
 			drawSpatialCoverage($row['coverage_id'], $row);
 		}
 		print('         </td>'."\n");
-		print('		</tr>'."\n");		
+		print('		</tr>'."\n");
 	}
 	if($array = getTemporalCoverage($id))
 	{
@@ -682,9 +682,9 @@ function drawCoverage($id, $row=null)
 			drawTemporalCoverage($row['temporal_coverage_id'], $row);
 		}
 		print('         </td>'."\n");
-		print('		</tr>'."\n");		
+		print('		</tr>'."\n");
 	}
-	print('	</table>'."\n");	
+	print('	</table>'."\n");
 }
 function drawSpatialCoverage($id, $row=null)
 {
@@ -701,7 +701,7 @@ print('<table class="subtable1">'."\n");
 		print('		<tr>'."\n");
 		print('			<td class="attribute">Type:</td>'."\n");
 		print('			<td class="valueAttribute">'.esc($value).'</td>'."\n");
-		print('		</tr>'."\n");	
+		print('		</tr>'."\n");
 	}
 	if( $value = $row['lang'] )
 	{
@@ -710,7 +710,7 @@ print('<table class="subtable1">'."\n");
 		print('			<td class="valueAttribute">'.esc($value).'</td>'."\n");
 		print('		</tr>'."\n");
 	}
-	print('	</table>'."\n");	
+	print('	</table>'."\n");
 }
 
 function drawTemporalCoverage($id, $row=null)
@@ -722,7 +722,7 @@ function drawTemporalCoverage($id, $row=null)
 		foreach( $array as $row )
 		{
 			drawTemporalCoverageText($row['coverage_text_id'], $row);
-		}	
+		}
 	}
 	if($array = getTemporalCoverageDate($id))
 	{
@@ -730,9 +730,9 @@ function drawTemporalCoverage($id, $row=null)
 		foreach( $array as $row )
 		{
 			drawTemporalCoverageDate($row['coverage_date_id'], $row);
-		}	
+		}
 	}
-	print('	</table>'."\n");	
+	print('	</table>'."\n");
 }
 
 function drawTemporalCoverageDate($id, $row=null)
@@ -754,7 +754,7 @@ function drawTemporalCoverageDate($id, $row=null)
 		print('		<tr>'."\n");
 		print('			<td class="attribute">Type:</td>'."\n");
 		print('			<td class="valueAttribute">'.esc($value).'</td>'."\n");
-		print('		</tr>'."\n");	
+		print('		</tr>'."\n");
 	}
 	if( $value = $row['date_format'] )
 	{
@@ -788,17 +788,17 @@ function drawTemporalCoverageText($id, $row=null)
 }
 function drawCitationInfo($id, $row=null)
 {
-	
+
 	if($row['full_citation'] != '' || $row['style'] != '')
 	{
 		print('		<tr>'."\n");
 		print('			<td class="attribute">Full Citation:</td>'."\n");
 		print('			<td>'."\n");
-		print('			<table class="subtable1">'."\n");		
+		print('			<table class="subtable1">'."\n");
 		print('		<tr>'."\n");
 		print('			<td class="attribute">Value:</td>'."\n");
 		print('			<td class="value">'.esc($row['full_citation']).'</td>'."\n");
-		print('		</tr>'."\n");	
+		print('		</tr>'."\n");
 		if( $value = $row['style'] )
 		{
 			print('		<tr>'."\n");
@@ -809,7 +809,7 @@ function drawCitationInfo($id, $row=null)
 		print('		</table>'."\n");
 		print('     </td>'."\n");
 		print('		</tr>'."\n");
-			
+
 	}
 	else if($row['metadata_identifier'] != '')
 	{
@@ -834,7 +834,7 @@ function drawCitationInfo($id, $row=null)
 		print('				</tr>'."\n");
 		print('		<tr>'."\n");
 		print('			<td class="attribute">Contributor(s):</td>'."\n");
-		print('			<td>'."\n");			
+		print('			<td>'."\n");
 		print('				<table class="subtable">'."\n");
 		if($array2 = getCitationContributors($row['citation_info_id']))
 		{
@@ -846,12 +846,12 @@ function drawCitationInfo($id, $row=null)
 					print('							<td class="attribute">Sequence No.:</td>'."\n");
 					print('							<td class="valueAttribute">'.esc($seq).'</td>'."\n");
 					print('						</tr>'."\n");
-				}				
+				}
 				drawContributorNameParts($row2['citation_contributor_id'], $row2);
 			}
 		}
 		print('				</table>'."\n");
-		print('     		</td>'."\n");		
+		print('     		</td>'."\n");
 		print('				<tr>'."\n");
 		print('					<td class="attribute">Title:</td>'."\n");
 		print('					<td class="value">'.esc($row['metadata_title']).'</td>'."\n");
@@ -872,13 +872,13 @@ function drawCitationInfo($id, $row=null)
 		print('					<td class="attribute">Context:</td>'."\n");
 		print('					<td class="value">'.esc($row['metadata_context']).'</td>'."\n");
 		print('				</tr>'."\n");
-		
+
 		if($array = getCitationDates($row['citation_info_id']))
 		{
 			print('				<tr>'."\n");
 			print('				<td class="attribute">Date(s):</td>'."\n");
 			print('				<td>'."\n");
-			print('				<table class="subtable">'."\n");		
+			print('				<table class="subtable">'."\n");
 			foreach( $array as $row )
 			{
 				print('				<tr>'."\n");
@@ -889,16 +889,16 @@ function drawCitationInfo($id, $row=null)
 				print('					<td class="attribute">Type:</td>'."\n");
 				print('					<td class="valueAttribute">'.esc($row['type']).'</td>'."\n");
 				print('				</tr>'."\n");
-			}	
+			}
 			print('				</table>'."\n");
 			print('     		</td>'."\n");
 			print('				</tr>'."\n");
 		}
-		
+
 		print('			</table>'."\n");
 		print('         </td>'."\n");
 		print('		</tr>'."\n");
-	}	
+	}
 }
 
 function drawContributorNameParts($id, $row=null)
@@ -907,14 +907,14 @@ function drawContributorNameParts($id, $row=null)
 	{
 		print('		<tr>'."\n");
 		print('			<td class="attribute">NamePart(s):</td>'."\n");
-		print('				<td>'."\n");			
+		print('				<td>'."\n");
 		print('					<table class="subtable1">'."\n");
 		foreach( $array as $row )
 				{
 					print('				<tr>'."\n");
 					print('					<td class="attribute">Value:</td>'."\n");
 					print('					<td class="value">'.esc($row['value']).'</td>'."\n");
-					print('				</tr>'."\n");					
+					print('				</tr>'."\n");
 					if( $type = $row['type'] )
 					{
 						print('				<tr>'."\n");
@@ -925,7 +925,7 @@ function drawContributorNameParts($id, $row=null)
 				}
 		print('					</table>'."\n");
 		print('     	</td>'."\n");
-		print('		</tr>'."\n");	
+		print('		</tr>'."\n");
 	}
 }
 
