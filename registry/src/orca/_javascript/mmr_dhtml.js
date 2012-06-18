@@ -519,7 +519,7 @@ $(document).ready(function() {
 	}
 
 	function fireZaLaserz(com, targetKeys, hasError){
-		loading();
+		
 		var numKeys = (targetKeys).length;
 		var dataSourceKey = $('#dataSourceKey').val();
 
@@ -558,33 +558,26 @@ $(document).ready(function() {
 			action = 'MORE_WORK_REQUIRED';
 			$('#MORE_WORK_REQUIRED').show();
 		}else if(com=='Approve'){
-			if(hasError) {
-				alert('Selected Record(s) contains record with error');
-				release();
-				AllSystemGo = false;
-			}
 			action = 'APPROVE';
 		}else if(com=='Publish'){
-			if (hasError) {
-				alert('Selected Record(s) contains record with error');
-				release();
-				AllSystemGo = false;
-			}
+			
 			action = 'PUBLISH';
 		}else if(com=='Mark as Gold Standard'){
 			if(confirm('You are about to flag '+numKeys+' registry objects as gold standard. Do you want to continue?')){
 				action = 'FLAG_GOLD';
-			}else {
-				release();
-				AllSystemGo = false;
 			}
-			
 		}
 		//alert($("#elementSourceURL").val());
 
+		if(hasError){
+			alert('Selected Record(s) contains record with error');
+			//release();
+			AllSystemGo = false;
+		}
+
 		//POST the stuff over to Manage My Records
 		if(AllSystemGo && !hasError){
-			
+			loading();
 			var req_url = $("#elementSourceURL").val() + "task=manage_my_records&action=" + action;
 			$.ajax({
 				url:req_url,
@@ -601,7 +594,6 @@ $(document).ready(function() {
 					}else{
 						//if(data.alert) alert(data.alert);
 					}
-					
 					release();
 					$('.mmr_table').each(function(){
 						$(this).flexReload();
@@ -647,11 +639,15 @@ $(document).ready(function() {
 	}
 
 	function loading(){
-		$('.tab-content').css('opacity', 0.5);
+		//$('.tab-content').css('opacity', 0.5);
+		$.blockUI({
+			message: '<img src="../_images/ui-anim_basic_16x16.gif"/>',
+			css: { width:'auto'}
+		});
 	}
 
 	function release(){
-		$('.tab-content').css('opacity', 1.0);
+		$.unblockUI();
 	}
 
 

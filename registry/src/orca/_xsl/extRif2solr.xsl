@@ -37,7 +37,8 @@
       			<xsl:apply-templates select="extRif:extendedMetadata/extRif:manually_assessed_flag"/>
       			<xsl:apply-templates select="extRif:extendedMetadata/extRif:gold_status_flag"/>
       			<xsl:apply-templates select="extRif:extendedMetadata/extRif:quality_level"/>
-      			<xsl:apply-templates select="extRif:extendedMetadata/extRif:feedType"/>           	
+      			<xsl:apply-templates select="extRif:extendedMetadata/extRif:feedType"/>   
+                <xsl:apply-templates select="extRif:extendedMetadata/extRif:lastModifiedBy"/>             	
         	</xsl:when>
         	<xsl:otherwise>
 	        	<xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:keyHash"/>
@@ -58,6 +59,7 @@
       			<xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:gold_status_flag"/>
       			<xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:quality_level"/>
       			<xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:feedType"/>
+                <xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:lastModifiedBy"/>
       			
         	</xsl:otherwise>
         </xsl:choose>
@@ -152,6 +154,18 @@
         <xsl:element name="field">
             <xsl:attribute name="name">feed_type</xsl:attribute>
             <xsl:value-of select="."/>
+        </xsl:element>       
+    </xsl:template>
+
+    <xsl:template match="extRif:lastModifiedBy">
+        <xsl:element name="field">
+            <xsl:attribute name="name">last_modified_by</xsl:attribute>
+            <xsl:choose>
+                <xsl:when test=". = 'SYSTEM'">Harvester</xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="."/>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:element>       
     </xsl:template>
     

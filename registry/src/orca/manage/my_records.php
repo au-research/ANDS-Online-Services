@@ -80,7 +80,6 @@ echo '<link rel="stylesheet" href="'. eAPP_ROOT.'orca/_styles/mmr.css" />';
 
 echo '<h1>Manage My Records</h1>';
 
-
 if (!$data_source_key)
 {
 		displayMMRDataSourceSwitcher($dataSources);

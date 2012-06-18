@@ -173,6 +173,7 @@ function getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR = false, $inclu
 			$xml .= '      <extRif:quality_level>'.esc(trim($registryObject[0]['quality_level'])).'</extRif:quality_level>'."\n";	
 			$owner = ($registryObject[0]['created_who'] == 'SYSTEM' ? 'harvest' : 'manual');
 			$xml .= '      <extRif:feedType>'.$owner.'</extRif:feedType>'."\n";	
+			$xml .= '      <extRif:lastModifiedBy>'.$registryObject[0]['created_who'].'</extRif:lastModifiedBy>'."\n";	
 
 			$xml .= "    </extRif:extendedMetadata>\n";
 		}

@@ -50,31 +50,33 @@
 	        	<span class="qa_ok" level="1" field_id="errors_mandatoryInformation_type">Type must be specified</span>
 	        </xsl:otherwise>
         </xsl:choose>
+
+    	<span class="qa_ok" level="2" field_id="errors_name" qa_id="REQ_PRIMARY_NAME">You have met all level 1 elements plus some elements from level 3, 4 OR both.</span>
     	
 		<xsl:choose>
 	        <xsl:when test="not(ro:name[@type='primary'])">
-            		<span class="qa_error" level="2" field_id="errors_name" qa_id="REQ_PRIMARY_NAME">At least one primary name is required for the Collection record.</span>
+            		<span class="qa_error" level="3" field_id="errors_name" qa_id="REQ_PRIMARY_NAME">At least one primary name is required for the Collection record.</span>
 			</xsl:when>
 			<xsl:otherwise>
-					<span class="qa_ok" level="2" field_id="errors_name" qa_id="REQ_PRIMARY_NAME">At least one primary name is required for the Collection record.</span>
+					<span class="qa_ok" level="3" field_id="errors_name" qa_id="REQ_PRIMARY_NAME">At least one primary name is required for the Collection record.</span>
 			</xsl:otherwise>
 	    </xsl:choose>
 	    
 	    <xsl:choose>
 	       	<xsl:when test="not(contains($relatedObjectClassesStr, 'Party') or ro:relatedObject/ro:key[@roclass = 'Party'] or ro:relatedObject/ro:key[@roclass = 'party'])">
-				<span class="qa_error" level="2" field_id="errors_relatedObject" qa_id="REQ_RELATED_OBJECT_PARTY">The Collection must be related to at least one Party record.</span>
+				<span class="qa_error" level="3" field_id="errors_relatedObject" qa_id="REQ_RELATED_OBJECT_PARTY">The Collection must be related to at least one Party record.</span>
 			</xsl:when>
 			<xsl:otherwise>
-				<span class="qa_ok" level="2" field_id="errors_relatedObject" qa_id="REQ_RELATED_OBJECT_PARTY">The Collection must be related to at least one Party record.</span>
+				<span class="qa_ok" level="3" field_id="errors_relatedObject" qa_id="REQ_RELATED_OBJECT_PARTY">The Collection must be related to at least one Party record.</span>
 			</xsl:otherwise>
 	   </xsl:choose>
  	
         <xsl:choose>
 	       	<xsl:when test="not(ro:identifier)">
-				<span class="qa_error" level="2" field_id="errors_identifier" qa_id="REC_IDENTIFIER">At least one identifier is recommended for the Collection.</span>
+				<span class="qa_error" level="3" field_id="errors_identifier" qa_id="REC_IDENTIFIER">At least one identifier is recommended for the Collection.</span>
 			</xsl:when>
 			<xsl:otherwise>
-				<span class="qa_ok" level="2" field_id="errors_identifier" qa_id="REC_IDENTIFIER">At least one identifier is recommended for the Collection.</span>
+				<span class="qa_ok" level="3" field_id="errors_identifier" qa_id="REC_IDENTIFIER">At least one identifier is recommended for the Collection.</span>
 			</xsl:otherwise>
         </xsl:choose>
         
@@ -167,10 +169,10 @@
    
     	<xsl:choose>
 	        <xsl:when test="not(ro:name[@type='primary'])">
-            		<span class="qa_error" level="2" field_id="errors_name" qa_id="REQ_PRIMARY_NAME">At least one primary name is required for the Party record.</span>
+            		<span class="qa_error" level="3" field_id="errors_name" qa_id="REQ_PRIMARY_NAME">At least one primary name is required for the Party record.</span>
 			</xsl:when>
 			<xsl:otherwise>
-					<span class="qa_ok" level="2" field_id="errors_name" qa_id="REQ_PRIMARY_NAME">At least one primary name is required for the Party record.</span>
+					<span class="qa_ok" level="3" field_id="errors_name" qa_id="REQ_PRIMARY_NAME">At least one primary name is required for the Party record.</span>
 			</xsl:otherwise>
 	    </xsl:choose>
 	    
@@ -253,10 +255,10 @@
     
     	<xsl:choose>
 	        <xsl:when test="not(ro:name[@type='primary'])">
-            		<span class="qa_error" level="2" field_id="errors_name" qa_id="REQ_PRIMARY_NAME">At least one primary name is required for the Activity record.</span>
+            		<span class="qa_error" level="3" field_id="errors_name" qa_id="REQ_PRIMARY_NAME">At least one primary name is required for the Activity record.</span>
 			</xsl:when>
 			<xsl:otherwise>
-					<span class="qa_ok" level="2" field_id="errors_name" qa_id="REQ_PRIMARY_NAME">At least one primary name is required for the Activity record.</span>
+					<span class="qa_ok" level="3" field_id="errors_name" qa_id="REQ_PRIMARY_NAME">At least one primary name is required for the Activity record.</span>
 			</xsl:otherwise>
 	    </xsl:choose>
         
@@ -333,10 +335,10 @@
     	
     	<xsl:choose>
 	        <xsl:when test="not(ro:name[@type='primary'])">
-            		<span class="qa_error" level="2" field_id="errors_name" qa_id="REQ_PRIMARY_NAME">At least one primary name is required for the Service record.</span>
+            		<span class="qa_error" level="3" field_id="errors_name" qa_id="REQ_PRIMARY_NAME">At least one primary name is required for the Service record.</span>
 			</xsl:when>
 			<xsl:otherwise>
-					<span class="qa_ok" level="2" field_id="errors_name" qa_id="REQ_PRIMARY_NAME">At least one primary name is required for the Service record.</span>
+					<span class="qa_ok" level="3" field_id="errors_name" qa_id="REQ_PRIMARY_NAME">At least one primary name is required for the Service record.</span>
 			</xsl:otherwise>
 	    </xsl:choose>    
 
