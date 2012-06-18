@@ -23,7 +23,7 @@ require '/var/www/home/orca/_functions/orca_data_source_functions.php';
 require '/var/www/home/orca/_functions/orca_export_functions.php';
 require '/var/www/home/orca/_functions/orca_access_functions.php';
 require '/var/www/home/orca/_functions/orca_import_functions.php';
-date_default_timezone_set('Antarctica/Macquarie'); 
+date_default_timezone_set('Antarctica/Macquarie');
 
 // Open a connection to the database.
 // This will be closed automatically by the framework.
@@ -66,18 +66,18 @@ if($partyIdentifiers)
 		$startTime = microtime(true);
 
 	foreach($partyIdentifiers as $partyIdentifier){
-	
-		$partyId = trim(str_replace("http://nla.gov.au/","",$partyIdentifier["partyIdentifier"]));		
-			
+
+		$partyId = trim(str_replace("http://nla.gov.au/","",$partyIdentifier["partyIdentifier"]));
+
 		$requestURI =  gNLA_SRU_URI."?query=rec.identifier=%22".$partyId."%22&version=1.1&operation=searchRetrieve&recordSchema=http%3A%2F%2Fands.org.au%2Fstandards%2Frif-cs%2FregistryObjects";
-	
+
 		$get = curl_init();
 		curl_setopt($get, CURLOPT_URL, $requestURI);
-		curl_setopt($get, CURLOPT_RETURNTRANSFER, true);	
+		curl_setopt($get, CURLOPT_RETURNTRANSFER, true);
 		$ch = curl_exec($get);
 		$curlinfo = curl_getinfo($get);
 		curl_close($get);
-	
+
 
 
 		// Get the xml data.
@@ -87,43 +87,43 @@ if($partyIdentifiers)
 		if(isset($domObjects[1])){
 		$result = $registryObjects->loadXML(str_replace("</registryObjects></","</registryObjects>",($domObjects[1])));
 		$registryObjects->xinclude();
-		
+
 		$errors = error_get_last();
 		if( $errors )
 		{
 			$runErrors = "Document Load Error: ".$errors['message']."\n";
 		}
-	
+
 		if( !$runErrors )
 		{
-		// run an XSLT transformation 			
+		// run an XSLT transformation
 			$registryObjects = transformToRif2($registryObjects);
 			if($registryObjects == null)
 			{
-				$runErrors = "There was an error transforming the document to RIF-CS v1.2";				
+				$runErrors = "There was an error transforming the document to RIF-CS v1.2";
 			}
 		}
-		
+
 		if( !$runErrors )
 		{
-		
+
 			 // Validate it against the orca schema.
 			  // XXX: libxml2.6 workaround (Save to local filesystem before validating)
-			  
+
 			  // Create temporary file and save manually created DOMDocument.
 			  $tempFile = "/tmp/" . time() . '-' . rand() . '-document.tmp';
 			  $registryObjects->save($tempFile);
-			 
+
 			  // Create temporary DOMDocument and re-load content from file.
 			  $registryObjects = new DOMDocument();
 			  $registryObjects->load($tempFile);
-			  
+
 			  // Delete temporary file.
 			  if (is_file($tempFile))
 			  {
 			    unlink($tempFile);
 			  }
-			  
+
 			// Validate it against the orca schema.
 			$result = $registryObjects->schemaValidate(gRIF_SCHEMA_PATH);
 
@@ -133,19 +133,19 @@ if($partyIdentifiers)
 				$runErrors .= "Document Validation Error: ".$errors['message']."\n";
 			}
 		}
-					
+
 		if( !$runErrors )
-		{	
+		{
 			// Import the data.
 			$runErrors = importRegistryObjects($registryObjects, gDATA_SOURCE, $runResultMessage,'SYSTEM','PUBLISHED');
 
 			if(!$runErrors)
 			{
 				$actions .= ">>SUCCESS nla party imported with key ".$partyId."\n";
-			}		
+			}
 		}
 
-		
+
 		if( $runErrors )
 		{
 			$actions .= ">>ERRORS\n";
@@ -156,7 +156,7 @@ if($partyIdentifiers)
 	$timeTaken = substr((string)(microtime(true) - $startTime), 0, 5);
 	$actions  .= "Time Taken: $timeTaken seconds\n";
 	}
-	//echo $actions; 
+	//echo $actions;
 }
 elseif($setIdentifiers)
 {
@@ -165,31 +165,31 @@ elseif($setIdentifiers)
 	$runErrors = '';
 	$runResultMessage = "";
 	$actions = "";
-	$errors = null;	
-	
+	$errors = null;
+
 	foreach($setIdentifiers as $identifiers)
 	{
 		//this time we are querying NLA to see if a record has been matched. ie we are looking for an NLA record that has our local key as an identifier
 		$requestURI =  gNLA_SRU_URI."?query=cql.anywhere+%3D+%22".urlencode($identifiers["registry_object_key"])."%22&version=1.1&operation=searchRetrieve&recordSchema=http%3A%2F%2Fands.org.au%2Fstandards%2Frif-cs%2FregistryObjects";
-		
+
 		$get = curl_init();
 		curl_setopt($get, CURLOPT_URL, $requestURI);
-		curl_setopt($get, CURLOPT_RETURNTRANSFER, true);	
+		curl_setopt($get, CURLOPT_RETURNTRANSFER, true);
 		$ch = curl_exec($get);
 		$curlinfo = curl_getinfo($get);
-		curl_close($get);			
-		
+		curl_close($get);
+
 		$numrecords = explode("numberOfRecords",$ch);
 		$recordNum = str_replace("</","",str_replace(">","",$numrecords[1]));
-		// Lets find out if there is a match made 
+		// Lets find out if there is a match made
 		if($recordNum!="0"){
 			// "we have found an NLA record with our local identifier we now need to see of it exists as a party record in our registry with the nla identifier as the key<br />";
-		
-	
-	
+
+
+
 			$returnObject = new DOMDocument();
 			$object = $returnObject->loadXML($ch);
-	
+
 			// Get the xml data.
 			$registryObjects = new DOMDocument();
 
@@ -202,35 +202,35 @@ elseif($setIdentifiers)
 			{
 				$runErrors .= "Document Load Error: ".$errors['message']."\n";
 			}
-	
+
 			if( !$runErrors )
 			{
-			// run an XSLT transformation 			
+			// run an XSLT transformation
 				$registryObjects = transformToRif2($registryObjects);
 				if($registryObjects == null)
 				{
-					$runErrors = "There was an error transforming the document to RIF-CS v1.2";				
+					$runErrors = "There was an error transforming the document to RIF-CS v1.2";
 				}
 			}
-		
+
 			if( !$runErrors )
 			{
 			  // Validate it against the orca schema.
 			  // XXX: libxml2.6 workaround (Save to local filesystem before validating)
-			  
+
 			  // Create temporary file and save manually created DOMDocument.
 			  $tempFile = "/tmp/" . time() . '-' . rand() . '-document.tmp';
 			  $registryObjects->save($tempFile);
-			 
+
 			  // Create temporary DOMDocument and re-load content from file.
 			  $registryObjects = new DOMDocument();
 			  $registryObjects->load($tempFile);
-			  
+
 			  // Delete temporary file.
 			  if (is_file($tempFile))
 			  {
 			    unlink($tempFile);
-			  }			
+			  }
 			// Validate it against the orca schema.
 				$result = $registryObjects->schemaValidate(gRIF_SCHEMA_PATH);
 				$errors = error_get_last();
@@ -239,23 +239,23 @@ elseif($setIdentifiers)
 					$runErrors .= "Document Validation Error: ".$errors['message']."\n";
 				}
 			}
-					
+
 			if( !$runErrors )
-			{	
-			
+			{
+
 				$key = $registryObjects->getElementsByTagName("key")->item(0)->nodeValue;
 				//check if this nla identifier is already imported as a part record
 				$isthere = getRegistryObject($key);
 				//if its not there already then lets import it
-				if(!$isthere){	
-					$runErrors = importRegistryObjects($registryObjects, 'NLA', $runResultMessage,'SYSTEM','PUBLISHED');	
+				if(!$isthere){
+					$runErrors = importRegistryObjects($registryObjects, 'NLA', $runResultMessage,'SYSTEM','PUBLISHED');
 					if(!$runErrors)
 					{
 						$actions .= ">>SUCCESS nla party imported with key".$key."\n";
-					}			
+					}
 				}
 			}
-			
+
 			if( $runErrors )
 			{
 				$actions .= ">>ERRORS\n";
@@ -269,7 +269,7 @@ elseif($setIdentifiers)
 }
 else
 {
-	$actions = "No ".str_replace("NLA"," NLA",$services)." Party identifiers to insert \n";	
+	$actions = "No ".str_replace("NLA"," NLA",$services)." Party identifiers to insert \n";
 }
 date_default_timezone_set('Antarctica/Macquarie');
 $actions .= date("d/m/Y h:m:s")."\n";

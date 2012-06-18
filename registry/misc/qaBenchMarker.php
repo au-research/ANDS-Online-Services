@@ -49,7 +49,7 @@ $dataSources = getDataSources(null, null);
 echo "loaded All Datasources\n";
 
 $i = 0;
-date_default_timezone_set('Australia/Melbourne');
+
 $dateString = date('d-m-y',time());
 $subject = "Quality check Benchmarking";
 $fileContent = "<html><body><h2>".$subject."</h2>\n";
@@ -78,7 +78,7 @@ if($dataSources)
 				$totalRecords++;
 				bench(1);
 				$fileContent .= benchQualityCheckForRegistryObject($registryObjectKeys[$i]['registry_object_key'], $dataSourceKey);
-				print ("QA:".bench(1)."\n"); 
+				print ("QA:".bench(1)."\n");
 			}
 		}
 		if($draftRegistryObjectKeys = getDraftRegistryObject(null, $dataSourceKey))
@@ -91,7 +91,7 @@ if($dataSources)
 				print ("QA:".bench(1)."\n");
 			}
 		}
-		print ("total DS:".bench(0)."\n");  
+		print ("total DS:".bench(0)."\n");
 		//echo $fileContent;
 	}
 
@@ -103,46 +103,46 @@ if($dataSources)
 
 function benchQualityCheckForRegistryObject($registryObjectKey, $dataSourceKey)
 {
-	
+
 		$rifcs = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
 		$rifcs .= '<registryObjects xmlns="http://ands.org.au/standards/rif-cs/registryObjects" '."\n";
 		$rifcs .= '                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '."\n";
 		$rifcs .= '                 xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects '.SCHEMA_URI.'">'."\n";
 		$rifcs .= getRegistryObjectXML($registryObjectKey);
-		$rifcs .= '</registryObjects>'; 
+		$rifcs .= '</registryObjects>';
 		$objectClass = "";
 		if(str_replace("<Collection","",$rifcs)!=$rifcs||str_replace("<collection","",$rifcs)!=$rifcs)
 		{
-			$objectClass = "Collection";			
+			$objectClass = "Collection";
 		}
 		elseif(str_replace("<Servive","",$rifcs)!=$rifcs||str_replace("<service","",$rifcs)!=$rifcs)
 		{
-			$objectClass = "Service";			
+			$objectClass = "Service";
 		}
 		elseif(str_replace("<Activity","",$rifcs)!=$rifcs||str_replace("<activity","",$rifcs)!=$rifcs)
 		{
-			$objectClass = "Activity";			
-		}	
+			$objectClass = "Activity";
+		}
 		elseif(str_replace("<Party","",$rifcs)!=$rifcs||str_replace("<party","",$rifcs)!=$rifcs)
 		{
-			$objectClass = "Party";			
+			$objectClass = "Party";
 		}
-	
-		$relRifcs = getRelatedXml($dataSourceKey,$rifcs,$objectClass);  
+
+		$relRifcs = getRelatedXml($dataSourceKey,$rifcs,$objectClass);
 
 		$RegistryObjects = new DOMDocument();
 		$RegistryObjects->loadXML($relRifcs);
 		$relatedObjectClassesStr = '';
 		//bench(1);
 		$relatedObjectClassesStr = getAllRelatedObjectClass($RegistryObjects, $dataSourceKey);
-		//print ("Related fetch (PUBLISHED):".bench(1)."\n");  
+		//print ("Related fetch (PUBLISHED):".bench(1)."\n");
 		//bench(2);
 		//$qualityTestResult = benchQualityCheckonDom($RegistryObjects, $dataSourceKey, 'html', $relatedObjectClassesStr);
 		$qualityTestResult = benchQualityCheckonDomOld($RegistryObjects, $dataSourceKey, 'html', $relatedObjectClassesStr);
-		//print ("QA transform:".bench(2)."\n");  
-	    $errorCount = substr_count($qualityTestResult, 'class="error"'); 
-		$warningCount = substr_count($qualityTestResult, 'class="warning"') + substr_count($qualityTestResult, 'class="info"');                              
-        //$result = updateRegistryObjectQualityTestResult($registryObjectKey, $qualityTestResult, $errorCount, $warningCount);                            
+		//print ("QA transform:".bench(2)."\n");
+	    $errorCount = substr_count($qualityTestResult, 'class="error"');
+		$warningCount = substr_count($qualityTestResult, 'class="warning"') + substr_count($qualityTestResult, 'class="info"');
+        //$result = updateRegistryObjectQualityTestResult($registryObjectKey, $qualityTestResult, $errorCount, $warningCount);
 		//return $result;
 }
 
@@ -151,40 +151,40 @@ function benchQualityCheckForDraftRegistryObject($registryObjectKey, $dataSource
 {
 		$registryObject = getDraftRegistryObject($registryObjectKey,$dataSourceKey);
 		$relatedObjectClassesStr = '';
-		$rifcs = $registryObject[0]['rifcs'];	
+		$rifcs = $registryObject[0]['rifcs'];
 		$objectClass = "";
 		if(str_replace("<Collection","",$rifcs)!=$rifcs||str_replace("<collection","",$rifcs)!=$rifcs)
 		{
-			$objectClass = "Collection";			
+			$objectClass = "Collection";
 		}
 		elseif(str_replace("<Service","",$rifcs)!=$rifcs||str_replace("<service","",$rifcs)!=$rifcs)
 		{
-			$objectClass = "Service";			
+			$objectClass = "Service";
 		}
 		elseif(str_replace("<Activity","",$rifcs)!=$rifcs||str_replace("<activity","",$rifcs)!=$rifcs)
 		{
-			$objectClass = "Activity";			
-		}	
+			$objectClass = "Activity";
+		}
 		elseif(str_replace("<Party","",$rifcs)!=$rifcs||str_replace("<party","",$rifcs)!=$rifcs)
 		{
-			$objectClass = "Party";			
-		}	
-		
-		$relRifcs = getRelatedXml($dataSourceKey,$rifcs,$objectClass);				
-				
+			$objectClass = "Party";
+		}
+
+		$relRifcs = getRelatedXml($dataSourceKey,$rifcs,$objectClass);
+
 		$RegistryObjects = new DOMDocument();
 		$RegistryObjects->loadXML($relRifcs);
 		//bench(1);
 		$relatedObjectClassesStr = getAllRelatedObjectClass($RegistryObjects, $dataSourceKey);
-		//print ("Related fetch (Draft):".bench(1)."\n");  
+		//print ("Related fetch (Draft):".bench(1)."\n");
 		//bench(2);
 		//$qualityTestResult = benchQualityCheckonDom($RegistryObjects, $dataSourceKey, 'html', $relatedObjectClassesStr);
 		$qualityTestResult = benchQualityCheckonDomOld($RegistryObjects, $dataSourceKey, 'html', $relatedObjectClassesStr);
-		$errorCount = substr_count($qualityTestResult, 'class="error"');                              
-	    $warningCount = substr_count($qualityTestResult, 'class="warning"') + substr_count($qualityTestResult, 'class="info"');   
-	   // print ("QA transform:".bench(2)."\n");                           
-        //$result = updateDraftRegistryObjectQualityTestResult($registryObjectKey, $dataSourceKey, $qualityTestResult, $errorCount, $warningCount);     
-        //return $result;// $registryObjectKey.','.$dataSourceKey.','.$qualityTestResult.','.$errorCount.','.$warningCount.'<br/>';                    		
+		$errorCount = substr_count($qualityTestResult, 'class="error"');
+	    $warningCount = substr_count($qualityTestResult, 'class="warning"') + substr_count($qualityTestResult, 'class="info"');
+	   // print ("QA transform:".bench(2)."\n");
+        //$result = updateDraftRegistryObjectQualityTestResult($registryObjectKey, $dataSourceKey, $qualityTestResult, $errorCount, $warningCount);
+        //return $result;// $registryObjectKey.','.$dataSourceKey.','.$qualityTestResult.','.$errorCount.','.$warningCount.'<br/>';
 }
 
 
@@ -197,7 +197,7 @@ function benchQualityCheckonDom($registryObjects, $dataSource, $output, $related
 	$proc->setParameter('', 'output', $output);
 	$proc->setParameter('', 'relatedObjectClassesStr', $relatedObjectClassesStr);
 	$result = $proc->transformToXML($registryObjects);
-	return $result;		
+	return $result;
 }
 
 function benchQualityCheckonDomOld($registryObjects, $dataSource, $output, $relatedObjectClassesStr)
@@ -210,11 +210,11 @@ function benchQualityCheckonDomOld($registryObjects, $dataSource, $output, $rela
 	$proc->setParameter('', 'output', $output);
 	$proc->setParameter('', 'relatedObjectClassesStr', $relatedObjectClassesStr);
 	$result = $proc->transformToXML($registryObjects);
-	return $result;		
+	return $result;
 }
 
 
-	
+
 
 function bench($idx = 0)
 {
@@ -234,7 +234,7 @@ function bench($idx = 0)
 		{
 		 $total += $BENCH_AVERAGE[$idx][$i];
 		}
-		$average = $total / sizeof($BENCH_AVERAGE[$idx]); 
+		$average = $total / sizeof($BENCH_AVERAGE[$idx]);
 		$BENCHMARK_TIME[$idx] = 0;
 		return $diff." average ". $average. " for ".sizeof($BENCH_AVERAGE[$idx]);
 	}

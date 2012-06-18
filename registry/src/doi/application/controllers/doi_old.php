@@ -604,7 +604,7 @@ class Doi extends CI_Controller {
 			}	
 		}
 		
-		date_default_timezone_set('Antarctica/Macquarie');
+		
 		$message .= "There are ".$unavailableCount." doi urls unavailable on ".date("d/m/Y h:m:s")."\n"; 
 		$message .= $notifyMessage;
 		mail($recipient,$subject,$message);	

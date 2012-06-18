@@ -53,7 +53,7 @@ $SCHEMA_URI = '/var/www/htdocs/rifcs-schema/registryObjects.xsd';
 $searchResults = array();
 $validationResults = Array();
 $i = 0;
-date_default_timezone_set('Australia/Melbourne');
+
 $dateString = date('d-m-y',time());
 $subject = "Validator Benchmarking";
 $fileContent = "<html><body><h2>".$subject."</h2>\n";
@@ -71,7 +71,7 @@ if($dataSources)
 		if($registryObjects)
 		{
 			foreach($registryObjects as $registryObject)
-			{				
+			{
 				$totalRecords++;
 				bench(2);
 				$rifCsXML = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
@@ -84,7 +84,7 @@ if($dataSources)
 				//{
 				print($registryObject['registry_object_key']."\n");
 				//}
-				
+
 				//print " finished generating ".$registryObject['registry_object_key']." time ".bench(2)."\n";
 				$rObject = new DOMDocument();
 				$rObject->loadXML($rifCsXML);
@@ -92,31 +92,31 @@ if($dataSources)
 				//exit();
 				$tempFile = "/tmp/" . time() . '-' . rand() . '-document.tmp';
 			    $rObject->save($tempFile);
-				 
+
 			// Create temporary DOMDocument and re-load content from file.
 			    $rObject = new DOMDocument();
 			    $rObject->load($tempFile);
-				  
+
 			// Delete temporary file.
 				if (is_file($tempFile))
 				{
 				  unlink($tempFile);
 				}
-				
-				
-				
-				
+
+
+
+
 				bench(3);
 			  	$result = $rObject->schemaValidate($SCHEMA_URI); //xxx
 			  	if($result != 1)
 			  	{
 			  		$numValidError++;
-			  		$errors = error_get_last();			  		
-			  		$fileContent .= " <p>finished validating <b>".$registryObject['registry_object_key']."</b> time ".bench(3)." <br/><font color='red'>result ".$errors['message']."</font></p>";	
+			  		$errors = error_get_last();
+			  		$fileContent .= " <p>finished validating <b>".$registryObject['registry_object_key']."</b> time ".bench(3)." <br/><font color='red'>result ".$errors['message']."</font></p>";
 			  		//$fileContent .= "<p>".$rifCsXML."</p>";
 			  	}
 			  	else{bench(3);}
-				//print " finished validating ".$registryObject['registry_object_key']." time ".bench(3)." result ".$result."\n";	
+				//print " finished validating ".$registryObject['registry_object_key']." time ".bench(3)." result ".$result."\n";
 			}
 	}
 }
@@ -149,7 +149,7 @@ function bench($idx = 0)
 		{
 		 $total += $BENCH_AVERAGE[$idx][$i];
 		}
-		$average = $total / sizeof($BENCH_AVERAGE[$idx]); 
+		$average = $total / sizeof($BENCH_AVERAGE[$idx]);
 		$BENCHMARK_TIME[$idx] = 0;
 		return $diff." average ". $average. " for ".sizeof($BENCH_AVERAGE[$idx]);
 	}

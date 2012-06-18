@@ -14,9 +14,8 @@ $eDebugOnStatus = false;
 include 'global_config.php';
 $runningInBackgroundTask = true;
 $cosi_root = "/var/www/htdocs/workareas/leo/ands/registry/src/";
-define('gRIF_SCHEMA_PATH', eAPPLICATION_ROOT.'/orca/schemata/registryObjects.xsd'); 
+define('gRIF_SCHEMA_PATH', eAPPLICATION_ROOT.'/orca/schemata/registryObjects.xsd');
 define('gRIF_SCHEMA_URI', 'http://services.ands.org.au/documentation/rifcs/1.3/schema/registryObjects.xsd');
-date_default_timezone_set('Australia/Sydney'); 
 define("eDCT_FORMAT_ISO8601_DATETIMESEC_UTC" , 'YYYY-MM-DDThh:mm:ssZ');
 define("eIMAGE_ROOT", "");
 
@@ -39,7 +38,7 @@ $nextTask = getNextWaitingTask();
 if($nextTask)
 {
 	$method = $nextTask[0]['method'];
-	echo "\n".$method." for  ".$nextTask[0]['data_source_key']." ".date("d-m-Y H:i")."\n";	
+	echo "\n".$method." for  ".$nextTask[0]['data_source_key']." ".date("d-m-Y H:i")."\n";
 	switch ($method){
 		case 'RUN_QUALITY_CHECK':
 			include('orca/_functions/orca_access_functions.php');
@@ -58,7 +57,7 @@ if($nextTask)
 			include('orca/_functions/orca_constants.php');
 			include('orca/maintenance/_tasks/index_records.php');
 			break;
-		case 'GENERATE_CACHE':			
+		case 'GENERATE_CACHE':
 			include('orca/_functions/orca_access_functions.php');
 			include('orca/_functions/orca_export_functions.php');
 			include('orca/_functions/orca_cache_functions.php');
@@ -76,7 +75,7 @@ if($nextTask)
 
 /*
 echo "\naddNewTask('RUN_QUALITY_CHECK', '', '', 'ansto.gov.au')\n";
-$result = addNewTask('RUN_QUALITY_CHECK', '', '', 'ansto.gov.au'); 
+$result = addNewTask('RUN_QUALITY_CHECK', '', '', 'ansto.gov.au');
 
 echo "\naddNewTask('GENERATE_CACHE', '', '', 'ansto.gov.au',".$result.")\n";
 $result = addNewTask('GENERATE_CACHE', '', '', 'ansto.gov.au',$result);

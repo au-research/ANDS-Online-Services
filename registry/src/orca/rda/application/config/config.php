@@ -48,6 +48,8 @@ $config['GA_enabled'] 		= $enable_google_analytic;
 $config['GA_code']			= $google_analytic_code;
 
 
+date_default_timezone_set('Australia/Canberra');
+
 /*
 |--------------------------------------------------------------------------
 | Index File

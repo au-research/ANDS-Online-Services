@@ -41,7 +41,7 @@ $dataSources = array(array("data_source_key"=>"deakin.edu.au","data_source_name"
 $searchResults = array();
 $validationResults = Array();
 $i = 0;
-date_default_timezone_set('Australia/Melbourne');
+
 $dateString = date('d-m-y',time());
 $subject = "Link Check Result for: ".$orca_db_name." on: ".$dateString;
 $fileContent = "<html><body><h2>".$subject."</h2>\n";
@@ -55,7 +55,7 @@ if($dataSources)
 	foreach( $dataSources as $dataSource )
 	{
         echo $dataSource['data_source_key'];
-	
+
 	$registryObjects = getRegistryObjectKeysForDataSource($dataSource['data_source_key']);
 		if($registryObjects)
 		{

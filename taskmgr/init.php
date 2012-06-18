@@ -22,7 +22,6 @@ $chunkSize = 50;
 
 define('gRIF_SCHEMA_PATH', eAPPLICATION_ROOT.'/orca/schemata/registryObjects.xsd');
 define('gRIF_SCHEMA_URI', 'http://services.ands.org.au/documentation/rifcs/1.3/schema/registryObjects.xsd');
-date_default_timezone_set('Australia/Sydney');
 define("eDCT_FORMAT_ISO8601_DATETIMESEC_UTC" , 'YYYY-MM-DDThh:mm:ssZ');
 define("eIMAGE_ROOT", "");
 

@@ -52,7 +52,7 @@ $dataSources = getDataSources(null, null);
 $searchResults = array();
 $validationResults = Array();
 $i = 0;
-date_default_timezone_set('Australia/Melbourne');
+
 $dateString = date('d-m-y',time());
 $subject = "Link Check Result for: ".$orca_db_name." on: ".$dateString;
 $fileContent = "<html><body><h2>".$subject."</h2>\n";
@@ -82,16 +82,16 @@ if($dataSources)
 	    						$httpCode = substr($headers[0], 9, 1);
 								if($httpCode == 4 || $httpCode == 5)
 								{
-									$validationResults[$i++] = Array("identifier" => $relatedInfo['identifier'],"registry_object_key" => $registryObject['registry_object_key'], "response_code" => $headers[0]); 
+									$validationResults[$i++] = Array("identifier" => $relatedInfo['identifier'],"registry_object_key" => $registryObject['registry_object_key'], "response_code" => $headers[0]);
 								}
 							}
 							else
 							{
-								$validationResults[$i++] = Array("identifier" => $relatedInfo['identifier'],"registry_object_key" => $registryObject['registry_object_key'], "response_code" => 'request timed out'); 								
+								$validationResults[$i++] = Array("identifier" => $relatedInfo['identifier'],"registry_object_key" => $registryObject['registry_object_key'], "response_code" => 'request timed out');
 							}
 						}
 					}
-				}	
+				}
 			}
 
 			if($i > 0)
@@ -99,7 +99,7 @@ if($dataSources)
 				$fileContent .= "<h3>Datasource :" .$dataSource['data_source_key']." has ". $i . " invalid link(s)</h3>\n";
 				$fileContent .= "<ul>\n";
 				for($j=0; $j < sizeof($validationResults) ; $j++)
-				{	
+				{
 					$fileContent .="<li>uri: ".$validationResults[$j]['identifier']." for registry_object_key: ".$validationResults[$j]['registry_object_key']." response code: ".$validationResults[$j]['response_code']."</li>\n";
 				}
 				$fileContent .="</ul><br/>\n";
@@ -109,8 +109,8 @@ if($dataSources)
 		$registryObjects = null;
 		$relatedInfos = null;
 		$totalErrors += $i;
-		$i = 0;			
-	
+		$i = 0;
+
 	}
 }
 if($totalErrors > 0 || !$emalOnErrorOnly)

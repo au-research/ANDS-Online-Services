@@ -15,7 +15,7 @@
 */
 global $host, $doi_root;
 $config['base_url']	= 'http://'.$host.'/'.$doi_root.'/';
-
+date_default_timezone_set('Australia/Canberra');
 /*
 |--------------------------------------------------------------------------
 | Index File

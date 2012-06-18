@@ -47,7 +47,7 @@ openDatabaseConnection($gCNN_DBS_DOIS, eCNN_DBS_DOIS);
 // Authorisation and Access.
 // -----------------------------------------------------------------------------
 	global $gCNN_DBS_ORCA;
-	date_default_timezone_set('Antarctica/Macquarie');
+	
 	$theMonth = date("2012-01-01");
 	$object_count = getRegistryObjectStatCount($theMonth,$registryObjectClass=null);
 	$collection_count = getRegistryObjectStatCount($theMonth,$registryObjectClass='Collection');

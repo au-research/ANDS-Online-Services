@@ -28,7 +28,7 @@ $licence = $_GET['licenceFilter'];
 if($group!="All")$filter .= "/group=".$group;
 if($subject!="All")$filter .= "/subject=".$subject;
 if($licence!="All")$filter .= "/licence=".$licence;
-date_default_timezone_set('Antarctica/Macquarie');
+
 $atom_feed_header = '
 	<feed xmlns="http://www.w3.org/2005/Atom">
   	<id>'.str_replace("&","",str_replace("=","",$rdaInstance.$_SERVER['REQUEST_URI'])).'</id>
