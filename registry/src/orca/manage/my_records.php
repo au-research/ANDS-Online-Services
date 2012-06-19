@@ -91,7 +91,7 @@ else
 	{
 		die("<font color='red'>Error: Access Denied for Datasource</font>");
 	}
-	if (($dataSource && count($dataSource) === 1) || $data_source_key == "PUBLISH_MY_DATA" )
+	if (($dataSource && count($dataSource) === 1) || $data_source_key == "PUBLISH_MY_DATA")
 	{
 		if (!$dataSource)
 		{
@@ -793,6 +793,7 @@ function displayMMRDataSourceSwitcher(array $dataSources = array(), $selected_ke
 	if (userIsORCA_ADMIN())
 	{
 		$dataSources[] = array('data_source_key'=>'PUBLISH_MY_DATA', 'title'=>'Publish My Data (ORCA Admin View)');
+		//$dataSources[] = array('data_source_key'=>'*', 'title'=>'All Data Sources (ORCA Admin View)');
 	}
 	
 	?>
