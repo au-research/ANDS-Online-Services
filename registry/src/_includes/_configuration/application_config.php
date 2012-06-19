@@ -112,6 +112,10 @@ addMenu($menu);
 	$activity->only_show_if_active= true;
 	addActivity($activity);
 
+	$activity = new activity('mORCA_TASK_MANAGER', 'Background Task Manager', 'orca/maintenance/show_tasks.php');
+	$activity->menu_id = 'mCOSI_ADMIN';
+	addActivity($activity);
+
 	// =============================================================================
 	// Documentation
 	$menu = new menu('mCOSI_DOCUMENTATION', 'Styles Documentation', 'mCOSI_ADMIN');
@@ -183,6 +187,8 @@ addMenu($menu);
 	$activity = new activity('aORCA_SEARCH', 'Search', 'orca/search.php');
 	$activity->menu_id = 'mORCA_CONTAINER';
 	addActivity($activity);
+
+
 
 	// =============================================================================
 	// Gold Level Collections
@@ -490,9 +496,6 @@ addMenu($menu);
 		// Registry Object Administration
 		$menu = new menu('mORCA_REGISTRY_OBJECTS', 'My Registry Objects', 'mORCA_ADMINISTRATION');
 		addMenu($menu);
-
-		$activity = new activity('mORCA_TASK_MANAGER', 'background Tasks', 'orca/maintenance/show_tasks.php');
-		addActivity($activity);
 
 			// =============================================================================
 			// List All Records
