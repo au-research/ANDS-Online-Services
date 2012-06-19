@@ -3,6 +3,11 @@ $start_execution = microtime(true);
 require '../../_includes/init.php';
 require '../orca_init.php';
 
+//////////
+die ('This task is deprecated - use the task manager instead');
+//////////
+
+
 // Increase the execution timeout as we may have to deal with a large amount of data.
 $executionTimeoutSeconds = 0;
 ini_set("max_execution_time", "$executionTimeoutSeconds");
