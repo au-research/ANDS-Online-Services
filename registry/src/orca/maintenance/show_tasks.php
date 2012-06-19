@@ -95,7 +95,7 @@ $("#queuedTaskGrid").flexigrid({
 	    {display: '', name : 'opts', width : 60, sortable : false, align: 'center'},
 		{display: 'Task ID', name : 'task_id', width : 40, sortable : false, align: 'center'},
 		{display: 'Pre-Req', name : 'prereq_task', width : 40, sortable :false, align: 'center'},
-		{display: 'Name', name : 'method', width : 90, sortable : false, align: 'left'},
+		{display: 'Name', name : 'method', width : 120, sortable : false, align: 'left'},
 		{display: 'Added', name : 'added', width : 70, sortable : false, align: 'left'},
 		{display: 'Waiting for', name : 'time_waiting', width : 75, sortable : false, align: 'right'},
 		{display: 'Scheduled For', name : 'scheduled_for', width : 85, sortable : false, align: 'right'},
@@ -107,7 +107,7 @@ $("#queuedTaskGrid").flexigrid({
 	buttons : [
 	   	{name: 'Refresh', onpress : refreshQueued},
 	   	{name: 'Trigger Worker', onpress : triggerWorker},
-	   	{name: 'add', onpress : addNewTaskDialog}
+	   	{name: 'Add New Task', onpress : addNewTaskDialog}
 		],
 	sortname: "task_id",
 	sortorder: "desc",
