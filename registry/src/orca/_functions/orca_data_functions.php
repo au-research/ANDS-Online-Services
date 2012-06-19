@@ -2896,7 +2896,7 @@ function getTask($taskId, $status)
 	}
 	else if($status != null)
 	{
-		$strQuery = 'SELECT * FROM dba.tbl_background_tasks where status = $1';
+		$strQuery = 'SELECT * FROM dba.tbl_background_tasks where status = $1 ORDER BY completed, task_id DESC';
 	    $params = array($status);
 	}
 	else
@@ -2914,7 +2914,7 @@ function getPendingTasks()
 	global $gCNN_DBS_ORCA;
 	$resultSet = null;
 
-	$strQuery = 'SELECT * FROM dba.tbl_background_tasks WHERE status <> \'COMPLETED\' and status <> \'FAILED\' order by scheduled_for, completed, added DESC';
+	$strQuery = 'SELECT * FROM dba.tbl_background_tasks WHERE status <> \'COMPLETED\' and status <> \'FAILED\' order by scheduled_for, added, completed DESC';
 	$params = array();
 
 	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
@@ -2926,7 +2926,7 @@ function getFailedTasks()
 	global $gCNN_DBS_ORCA;
 	$resultSet = null;
 
-	$strQuery = 'SELECT * FROM dba.tbl_background_tasks WHERE status = \'FAILED\' order by added DESC';
+	$strQuery = 'SELECT * FROM dba.tbl_background_tasks WHERE status = \'FAILED\' order by completed DESC';
 	$params = array();
 
 	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);

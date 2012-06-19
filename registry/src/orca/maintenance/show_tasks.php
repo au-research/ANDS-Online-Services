@@ -118,7 +118,7 @@ $("#queuedTaskGrid").flexigrid({
 	showTableToggleBtn: true,
 	hideOnNoRows: false,
 	width: 1050,
-	height: 250
+	height: 130
 });
 
 $("#completedTaskGrid").flexigrid({

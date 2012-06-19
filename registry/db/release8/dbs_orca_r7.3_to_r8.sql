@@ -16,9 +16,12 @@ varying,
 WITH (
  OIDS=FALSE
 );
+ALTER TABLE dba.tbl_background_tasks ADD COLUMN scheduled_for timestamp without time zone DEFAULT NOW();
 ALTER TABLE tbl_background_tasks
  OWNER TO dba;
 GRANT ALL ON TABLE tbl_background_tasks TO dba;
 GRANT SELECT, UPDATE, INSERT ON TABLE tbl_background_tasks TO webuser;
+GRANT DELETE ON TABLE dba.tbl_background_tasks TO webuser;
 --IMPORTANT
-GRANT SELECT, USAGE ON TABLE tbl_background_tasks_task_id_seq TO webuser
+GRANT SELECT, USAGE ON TABLE tbl_background_tasks_task_id_seq TO webuser;
+
