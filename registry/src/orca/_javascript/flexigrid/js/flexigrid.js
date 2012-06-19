@@ -50,7 +50,8 @@
 			onError: false,
 			onSubmit: false, //using a custom populate function
 			additionalClass: '',
-			tableTitle: 'DEFAULT TITLE FOR TABLE'
+			tableTitle: 'DEFAULT TITLE FOR TABLE',
+			hideOnNoRows: true
 		}, p);
 		$(t).show() //show if hidden
 			.attr({
@@ -500,7 +501,7 @@
 						$(this).toggleClass('vsble');
 					});
 				}
-				if(p.total==0){
+				if(p.total==0 && p.hideOnNoRows){
 					$(g.gDiv).addClass('hideBody');
 					$('div.ptogtitle', g.mDiv).removeClass('vsble');
 				}

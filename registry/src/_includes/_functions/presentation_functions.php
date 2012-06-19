@@ -42,7 +42,7 @@ $gApplicationStylesheets = array();
 function setTheme($theme)
 {
 	global $eThemes;
-	
+
 	global $gAppLogoImagePath;
 	global $gAppMarginClass;
 	global $gAppTitleTextColour;
@@ -61,7 +61,7 @@ function importApplicationStylesheet($uri)
 function printApplicationStylesheets()
 {
 		global $gApplicationStylesheets;
-		
+
 		foreach($gApplicationStylesheets as $uri)
 		{
 			print("@import url(\"$uri\");\n");
@@ -78,18 +78,18 @@ function drawDateTimeInput($fieldNameAndID, $unsafeValue, $format)
 }
 
 function drawDateTimeZoneInput($fieldNameAndID, $unsafeValue, $format)
-{	
+{
 	print '<script>
 	$(function() {
 		$( "#'.$fieldNameAndID.'" ).datetimepicker({
 			changeMonth: true,
-			changeYear: true,			
+			changeYear: true,
 		    showOtherMonths: true,
 		    useTimeSelects: true,
 		    selectOtherMonths: true,
 		    showButtonPanel: false,
 		    showTimezone: true,
-		    timeFormat: "hh:mm:ss z",		    
+		    timeFormat: "hh:mm:ss z",
 		    yearRange: "c-100:c+100",
 			dateFormat: "yy-mm-dd",
 			showOn: "button",
@@ -107,27 +107,27 @@ function drawMonthYearInput($field1NameAndID, $unsafeValue1,$field2NameAndID, $u
 {
 	if(!$unsafeValue1) $unsafeValue1=date("m");
 	if(!$unsafeValue2) $unsafeValue2=date("Y");
-		
+
 	print '<select name="'.$field1NameAndID.'" id="'.$field1NameAndID.'"  />';
 	 for($i=1;$i<13;$i++)
-	{ 
+	{
 		print('<option value="'.$i.'"');
-		if($i==intval($unsafeValue1)) print(" selected"); 
+		if($i==intval($unsafeValue1)) print(" selected");
 		print('>'.date("M",mktime($hour=null,$minute=null,$second=null,$month=$i,$day=date("d"),$year=date("Y"))).'</option>');
-	
+
 	}
 	print'</select>'."\n";
-	
+
 	print '<select name="'.$field2NameAndID.'" id="'.$field2NameAndID.'"  />';
 	for($i=(date("Y")-100);$i<(date("Y")+100);$i++)
-	{ 
+	{
 		print('<option value="'.$i.'"');
 		if($i==$unsafeValue2) print(" selected");
 		print('>'.$i.'</option>');
-	
-	} 
-	
-	print'</select>'."\n";	
+
+	}
+
+	print'</select>'."\n";
 	print '&nbsp;<span class="inputFormat">MM -YYYY</span>';
 }
 function getFormattedDatetimeWithMask($datetime, $mask)
@@ -143,7 +143,7 @@ function getFormattedDatetimeWithMask($datetime, $mask)
 function formatDateTimeWithMask($datetime, $mask)
 {
 
-	$formatDate = "";	
+	$formatDate = "";
 	$TZpos = strpos($datetime, "+");
 	//if($TZpos === false)
 	//	$TZpos = strpos($datetime, "-");
@@ -158,7 +158,7 @@ function formatDateTimeWithMask($datetime, $mask)
 			$Tpos = strpos($datetime, " ");
 		if($Tpos > 0 && sizeof($timeZoneArray) > 2)
 		{
-			// these are the buggy timestamps!!			
+			// these are the buggy timestamps!!
 			$time = substr($datetime,$Tpos+1, ($TZpos - $Tpos -1));
 			$timeArray = explode(":", $time);
 
@@ -170,10 +170,10 @@ function formatDateTimeWithMask($datetime, $mask)
 			//}
 
 			$datetime = substr($datetime,0, $Tpos)."T".$timeArray[0].":00:00".$gmt_p_m.$timeZoneArray[0];
-		}		
+		}
 	}
-	
-	
+
+
 	if( $datetime != "" && $datetime != null )
 	{
 
@@ -184,10 +184,10 @@ function formatDateTimeWithMask($datetime, $mask)
 		else
 		{
 			$maskFragments = array("YYYY", "MM", "DD", "hh", "mm", "ss", "OOOO", "AM");
-			
+
 			// Default to 24 hour time.
 			$hoursFormat = 'H';
-			
+
 			if( strpos($mask, "AM") > 0 ){
 				// Use 12 hour time.
 				$hoursFormat = 'h';
@@ -195,15 +195,15 @@ function formatDateTimeWithMask($datetime, $mask)
 
 			// Get the local timezone as set in application_env.php.
 			$timezone = new DateTimeZone(date_default_timezone_get());
-			
+
 			// Parse the string into a date.
 			// If no timezone offset is supplied in the datetime string
 			// then the local timezone will be used by the function (as set in the previous step).
 			// Otherwise, if the datetime string includes a timezone offset, then the local timezone will be ignored and overridden.
 			$objDate = new DateTime($datetime, $timezone);
-			
-			// If the mask has a "Z" in it, then the output will be representing a UTC/GMT date, 
-			// and we need to convert the date to UTC. 
+
+			// If the mask has a "Z" in it, then the output will be representing a UTC/GMT date,
+			// and we need to convert the date to UTC.
 			// The conversion will be done by setting the timezone so...
 			if( strpos($mask, "Z") > 0 )
 			{
@@ -213,10 +213,10 @@ function formatDateTimeWithMask($datetime, $mask)
 			// So, we now set the timezone to convert the date to local time,
 			// or to UTC, as has been determined in the previous steps.
 			$objDate->setTimezone($timezone);
-			
+
 			// Get the values for each component of the date.
 			$fragmentValues = array($objDate->format("Y"), $objDate->format("m"), $objDate->format("d"), $objDate->format($hoursFormat), $objDate->format("i"), $objDate->format("s"), $objDate->format("O"), $objDate->format("A"));
-			
+
 			// Replace all of the fragments in the mask with the values for each fragment that we calculated in the last step.
 			$formatDate = str_replace($maskFragments, $fragmentValues, $mask);
 		}
@@ -235,25 +235,25 @@ function formatDateTime($datetime, $type=gDATETIME)
 	if (preg_match("/^[0-9]{4}$/",$datetime))
 	{
 		return $datetime;
-	} 
+	}
 	elseif (preg_match("/^[0-9]{4}[\/\-]{1}[0-9]{2}$/",$datetime))
 	{
 		return $datetime;
 	}
-	
+
 	$formatDate = "";
 	if( $datetime != "" && $datetime != null )
 	{
-		
+
 		try {
 			$formatDate = new DateTime($datetime);
 		}
-		catch (Exception $e) 
+		catch (Exception $e)
 		{
 			// Return the plain text representation
 			return $datetime;
 		}
-		
+
 		switch( $type )
 		{
 			case gDATE:
@@ -266,11 +266,11 @@ function formatDateTime($datetime, $type=gDATETIME)
 				$mask = $eDateTimeFormat;
 				break;
 		}
-		
-		
+
+
 		$formatDate = formatDateTimeWithMask($datetime, $mask);
 	}
-	
+
 	return $formatDate;
 }
 
@@ -361,7 +361,7 @@ function isChosen($name, $value)
 			{
 				$chosen = true;
 			}
-		} 
+		}
 		else
 		{
 			if( getPostedValue($name) == $value )
@@ -370,7 +370,7 @@ function isChosen($name, $value)
 			}
 		}
 	}
-	
+
 	if( isset($_GET[$name]) )
 	{
 		if( is_array(getQueryValue($name)) )
@@ -379,7 +379,7 @@ function isChosen($name, $value)
 			{
 				$chosen = true;
 			}
-		} 
+		}
 		else
 		{
 			if( getQueryValue($name) == $value )
@@ -395,7 +395,7 @@ function getNumPages($numItems, $itemsPerPage, &$pageNumber=0)
 {
 	$numPages =  (int)(($numItems+$itemsPerPage-1)/$itemsPerPage);
 	if( $pageNumber > $numPages )
-	{ 
+	{
 		$pageNumber = $numPages;
 	}
 	return $numPages;
@@ -440,8 +440,8 @@ function drawResultsFooter($numPages, $pageNumber, $startPage, $endPage, $uri)
 	{
 		print("<p class=\"resultListFooter\">");
 		drawPagination($numPages, $pageNumber, $startPage, $endPage, $uri);
-		print("</p>\n");			
-	}		
+		print("</p>\n");
+	}
 }
 
 function drawPagination($numPages, $pageNumber, $startPage, $endPage, $uri)
@@ -481,7 +481,7 @@ function drawPagination($numPages, $pageNumber, $startPage, $endPage, $uri)
 			print("<span style=\"color: #cccccc;\"><img src=\"".gPAG_CONTROL_PATH."last_disabled.gif\" alt=\"Last page\" width=\"14\" height=\"12\" /></span>\n");
 		}
 		print("&nbsp;");
-	}	
+	}
 }
 
 
@@ -489,34 +489,71 @@ function drawPagination($numPages, $pageNumber, $startPage, $endPage, $uri)
 // Only display if we tracking ID is specified
 function getAnalyticsTrackingCode($trackingID)
 {
-	
+
 	if ($trackingID != "") {
-		
+
 		// Asynchronous tracking snippet
 		// from http://code.google.com/apis/analytics/docs/tracking/asyncTracking.html
-			
+
 		echo "
-		
+
 		 	<!-- Begin Google Analytics tracking code -->
 			<script type=\"text/javascript\">
-	
+
 			  var _gaq = _gaq || [];
 			  _gaq.push(['_setAccount', '".$trackingID."']);
 			  _gaq.push(['_trackPageview']);
-			
+
 			  (function() {
 			    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
 			    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
 			    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 			  })();
-			
+
 			</script>
 			<!-- End Google Analytics tracking code -->
-			
+
 			";
-	
+
 	}
-	
+
+}
+
+
+function time_elapsed_string($ptime, $fromNow = true) {
+	if ($fromNow)
+	{
+		$etime = time() - $ptime;
+	}
+	else
+	{
+		$etime = $ptime;
+	}
+
+	if ($etime < 1 && $fromNow ) {
+		return 'less than 1 second';
+	}
+	else if ($etime < 1)
+	{
+		return 'any time now';
+	}
+
+	$a = array( 12 * 30 * 24 * 60 * 60  =>  'year',
+			30 * 24 * 60 * 60       =>  'month',
+			7 * 24 * 60 * 60 		=> 'week',
+			24 * 60 * 60            =>  'day',
+			60 * 60                 =>  'hour',
+			60                      =>  'minute',
+			1                       =>  'second'
+	);
+
+	foreach ($a as $secs => $str) {
+		$d = $etime / $secs;
+		if ($d >= 1) {
+			$r = round($d);
+			return $r . ' ' . $str . ($r > 1 ? 's' : '');
+		}
+	}
 }
 
 

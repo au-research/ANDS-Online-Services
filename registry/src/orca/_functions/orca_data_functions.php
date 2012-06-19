@@ -2875,7 +2875,11 @@ function getNextWaitingTask()
 {
 	global $gCNN_DBS_ORCA;
 	$resultSet = null;
-	$strQuery = 'select * from dba.tbl_background_tasks bgt where bgt.status = $1 and (bgt.prerequisite_task is null or ((select bg.status from dba.tbl_background_tasks bg where bg.task_id = bgt.prerequisite_task) = $2)) ORDER BY added ASC LIMIT 1';
+	$strQuery = 'select * from dba.tbl_background_tasks bgt
+						 where
+								 bgt.status = $1
+								 and (bgt.scheduled_for is null or bgt.scheduled_for < now())
+								 and (bgt.prerequisite_task is null or ((select bg.status from dba.tbl_background_tasks bg where bg.task_id = bgt.prerequisite_task) = $2)) ORDER BY added ASC LIMIT 1';
 	$params = array('WAITING','COMPLETED');
 	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
 	return $resultSet;
@@ -2905,8 +2909,35 @@ function getTask($taskId, $status)
 }
 
 
-function addNewTask($method, $log_msg = '', $ro_key = '', $ds_key = '', $prerequisite_task = null)
+function getPendingTasks()
 {
+	global $gCNN_DBS_ORCA;
+	$resultSet = null;
+
+	$strQuery = 'SELECT * FROM dba.tbl_background_tasks WHERE status <> \'COMPLETED\' and status <> \'FAILED\' order by scheduled_for, completed, added DESC';
+	$params = array();
+
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	return $resultSet;
+}
+
+function getFailedTasks()
+{
+	global $gCNN_DBS_ORCA;
+	$resultSet = null;
+
+	$strQuery = 'SELECT * FROM dba.tbl_background_tasks WHERE status = \'FAILED\' order by added DESC';
+	$params = array();
+
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	return $resultSet;
+}
+
+function addNewTask($method, $log_msg = '', $ro_key = '', $ds_key = '', $prerequisite_task = null, $scheduled_for = null)
+{
+	// scheduled_for must be a valid interval (i.e. "30 seconds" or "1 day"
+	if (is_null($scheduled_for)) { $scheduled_for = '0 seconds'; }
+
 	$taskId = null;
 	global $gCNN_DBS_ORCA;
 	if($ds_key != '')//if a task already exist for the datasource just return the task id of the existing task
@@ -2919,7 +2950,7 @@ function addNewTask($method, $log_msg = '', $ro_key = '', $ds_key = '', $prerequ
 			return $existingTask[0]['task_id'];
 		}
 		else{
-			$strQuery = 'INSERT INTO  dba.tbl_background_tasks (method, log_msg, registry_object_keys, data_source_key, prerequisite_task) VALUES ($1, $2, $3, $4, $5)';
+			$strQuery = 'INSERT INTO  dba.tbl_background_tasks (method, log_msg, registry_object_keys, data_source_key, prerequisite_task, scheduled_for) VALUES ($1, $2, $3, $4, $5, (NOW() + interval \''.$scheduled_for.'\'))';
 			$params = array($method, $log_msg, $ro_key, $ds_key, $prerequisite_task);
 			$resultSet = executeUpdateQuery($gCNN_DBS_ORCA, $strQuery, $params);
 			$strQuery = 'SELECT CURRVAL(pg_get_serial_sequence($1,$2))';
@@ -2930,7 +2961,7 @@ function addNewTask($method, $log_msg = '', $ro_key = '', $ds_key = '', $prerequ
 	}
 	else
 	{
-		$strQuery = 'INSERT INTO  dba.tbl_background_tasks (method, log_msg, registry_object_keys, data_source_key, prerequisite_task) VALUES ($1, $2, $3, $4, $5)';
+		$strQuery = 'INSERT INTO  dba.tbl_background_tasks (method, log_msg, registry_object_keys, data_source_key, prerequisite_task, scheduled_for) VALUES ($1, $2, $3, $4, $5, (NOW() + interval \''.$scheduled_for.'\'))';
 		$params = array($method, $log_msg, $ro_key, $ds_key, $prerequisite_task);
 		$resultSet = executeUpdateQuery($gCNN_DBS_ORCA, $strQuery, $params);
 		$strQuery = 'SELECT CURRVAL(pg_get_serial_sequence($1,$2))';
@@ -2977,6 +3008,33 @@ function setTaskFailed($taskId, $log_msg='')
 	global $gCNN_DBS_ORCA;
 	$strQuery = 'update dba.tbl_background_tasks set status = $2, completed = now(), log_msg = $3 where task_id = $1';
 	$params = array($taskId, 'FAILED', $log_msg);
+	$result = executeUpdateQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	return $result;
+}
+
+function deleteTask($task_id)
+{
+	global $gCNN_DBS_ORCA;
+	$strQuery = "DELETE FROM dba.tbl_background_tasks WHERE task_id = $1;";
+	$params = array($task_id);
+	$result = executeUpdateQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	return $result;
+}
+
+function deleteCompletedTasksBefore($interval="1 day")
+{
+	global $gCNN_DBS_ORCA;
+	$strQuery = "DELETE FROM dba.tbl_background_tasks WHERE status='COMPLETED' and completed < (now() - interval '".$interval."');";
+	$params = array();
+	$result = executeUpdateQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	return $result;
+}
+
+function deleteFailedTasks()
+{
+	global $gCNN_DBS_ORCA;
+	$strQuery = "DELETE FROM dba.tbl_background_tasks WHERE status='FAILED';";
+	$params = array();
 	$result = executeUpdateQuery($gCNN_DBS_ORCA, $strQuery, $params);
 	return $result;
 }

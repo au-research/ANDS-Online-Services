@@ -128,7 +128,7 @@ function executeNextPendingTask($job=null)
 			echo "[SYSTEM] Task failed/exception thrown" . NL;
 			echo $e->getMessage()  . NL;
 			setTaskFailed($task['task_id'], $e->getMessage());
-			return false;
+			//return false; dont return here, else other waiting tasks don't get executed!!
 		}
 		flush();
 	}

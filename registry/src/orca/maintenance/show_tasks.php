@@ -17,6 +17,8 @@ limitations under the License.
 require '../../_includes/init.php';
 require '../orca_init.php';
 require '../../_includes/header.php';
+if(!userIsORCA_ADMIN()){die('Permission Override: ORCA Admins ONLY');}
+
 $page = getQueryValue('page');
 $taskId = getQueryValue('taskId');
 $dsKey = getQueryValue('ds');
@@ -34,50 +36,292 @@ if(!$page){
 // =============================================================================
 // TODO: get queries based on params
 // but for now... show all tasks
-$allTasks = getTask(null, null);
-$numFound=(sizeof($allTasks));
+//$allTasks = getTask(null, null);
+//$numFound=(sizeof($allTasks));
 
+echo '<link rel="stylesheet" href="'. eAPP_ROOT.'orca/_styles/taskmgr.css" />';
+
+// Include the Flexigrid styles & other info
+echo '<link rel="stylesheet" href="'. eAPP_ROOT.'orca/_javascript/flexigrid/css/flexigrid.css" />
+<script src="'. eAPP_ROOT.'orca/_javascript/flexigrid/js/flexigrid.js" type="text/javascript"></script>';
 ?>
-<h2><?php print 'Background Task:s ('.$numFound.' jobs)'?></h2>
 
-<h5>this list contains all jobs submitted to run in the background.</h5>
+
+<h2><?php print 'Background Tasks'?></h2>
+
 <div>
-<table>
-<tbody>
-<tr>
-<th>task_id</th>
-<th>prerequisite_task</th>
-<th>status</th>
-<th>method</th>
-<th>added</th>
-<th>started</th>
-<th>completed</th>
-<th>data_source_key</th>
-<th>registry_object_keys</th>
-<th>log_msg</th>
-</tr>
-	<?php
-	foreach($allTasks as $task)
-	{
-		print("<tr>");
-		print("<td>".$task['task_id']."</td>");
-		print("<td>".$task['prerequisite_task']."</td>"); 
-		print("<td>".$task['status']."</td>");
-		print("<td>".$task['method']."</td>");
-		print("<td>".$task['added']."</td>");
-		print("<td>".$task['started']."</td>");
-		print("<td>".$task['completed']."</td>");
-		print("<td>".$task['data_source_key']."</td>");
-		print("<td>".$task['registry_object_keys']."</td>");
-		print("<td>".$task['log_msg']."</td>");
-		print("</tr>");
-	}
-     ?>
-</tbody>
-</table>
+<table id="queuedTaskGrid"></table>
+
+<br/><hr/><br/>
+
+<table id="completedTaskGrid"></table>
+
+<br/><hr/><br/>
+
+<table id="failedTaskGrid"></table>
+
 </div>
 
+<div id="taskAddDialog" style="display:none; cursor: default; text-align:left; padding:8px;">
+        <h3>Add New Task</h3>
+
+        <div style="width:375px;padding:5px;">
+        	<label>
+		        <span>Choose a Method:</span> <?php echo task_chooser(); ?>
+		    </label><br/>
+		    <label>
+		        <span>Data Source: </span> <?php echo ds_chooser(); ?>
+		    </label><br/>
+		    <label>
+		        <span>Reg Obj Keys: </span> <input type="text" id="registry_object_keys" />
+		    </label><br/>
+
+		    <label>
+		        <span>Schedule Delay (time from now): </span> <?php echo schedule_chooser(); ?>
+		    </label><br/>
+		</div>
+
+        <input type="button" id="taskAddConfirm" value="Add Task" style="cursor:pointer;" />
+        <input type="button" id="taskAddCancel" value="Cancel" style="cursor:pointer;" />
+</div>
+
+<script type="text/javascript">
+var taskListResourcePoint = "<?php echo eAPP_ROOT;?>orca/manage/process_registry_object.php?task=getRegistryTasks";
+
+$("#queuedTaskGrid").flexigrid({
+	url: taskListResourcePoint+'&subset=pending',
+	dataType: 'json',
+	colModel : [
+	    {display: '', name : 'opts', width : 60, sortable : false, align: 'center'},
+		{display: 'Task ID', name : 'task_id', width : 40, sortable : false, align: 'center'},
+		{display: 'Pre-Req', name : 'prereq_task', width : 40, sortable :false, align: 'center'},
+		{display: 'Name', name : 'method', width : 90, sortable : false, align: 'left'},
+		{display: 'Added', name : 'added', width : 70, sortable : false, align: 'left'},
+		{display: 'Waiting for', name : 'time_waiting', width : 75, sortable : false, align: 'right'},
+		{display: 'Scheduled For', name : 'scheduled_for', width : 85, sortable : false, align: 'right'},
+		{display: 'Status', name : 'status', width : 80, sortable : false, align: 'right'},
+		{display: 'Data Source', name : 'data_source_key', width : 80, sortable : false, align: 'right'},
+		{display: 'Reg Obj Keys', name : 'reg_obj_keys', width : 80, sortable : false, align: 'right'},
+		{display: 'Log Message', name : 'log_msg', width : 280, sortable : false, align: 'left'}
+		],
+	buttons : [
+	   	{name: 'Refresh', onpress : refreshQueued},
+	   	{name: 'Trigger Worker', onpress : triggerWorker},
+	   	{name: 'add', onpress : addNewTaskDialog}
+		],
+	sortname: "task_id",
+	sortorder: "desc",
+	usepager: true,
+	tableTitle: 'Queued/Pending Tasks',
+	useRp: true,
+	rp: 15,
+	showTableToggleBtn: true,
+	hideOnNoRows: false,
+	width: 1050,
+	height: 250
+});
+
+$("#completedTaskGrid").flexigrid({
+	url: taskListResourcePoint+'&subset=completed',
+	dataType: 'json',
+	colModel : [
+		{display: 'Task ID', name : 'task_id', width : 40, sortable : false, align: 'center'},
+		{display: 'Pre-Req', name : 'prereq_task', width : 40, sortable :false, align: 'center'},
+		{display: 'Name', name : 'method', width : 120, sortable : false, align: 'left'},
+		{display: 'Executed', name : 'executed', width : 100, sortable : false, align: 'left'},
+		{display: 'Duration', name : 'duration', width : 65, sortable : false, align: 'right'},
+		{display: 'Status', name : 'status', width : 80, sortable : false, align: 'right'},
+		{display: 'Data Source', name : 'data_source_key', width : 80, sortable : false, align: 'right'},
+		{display: 'Reg Obj Keys', name : 'reg_obj_keys', width : 80, sortable : false, align: 'right'},
+		{display: 'Log Message', name : 'log_msg', width : 280, sortable : false, align: 'left'}
+		],
+	buttons : [
+	   	{name: 'Refresh', onpress : refreshCompleted},
+		{name: 'Flush tasks older than 24hrs', onpress : flushCompleted}
+		],
+	sortname: "task_id",
+	sortorder: "desc",
+	usepager: true,
+	tableTitle: 'Completed Tasks',
+	useRp: true,
+	rp: 15,
+	showTableToggleBtn: true,
+	hideOnNoRows: false,
+	width: 1050,
+	height: 250
+});
+
+$("#failedTaskGrid").flexigrid({
+	url: taskListResourcePoint+'&subset=failed',
+	dataType: 'json',
+	colModel : [
+	    {display: '', name : 'opts', width : 60, sortable : false, align: 'center'},
+		{display: 'Task ID', name : 'task_id', width : 40, sortable : false, align: 'center'},
+		{display: 'Pre-Req', name : 'prereq_task', width : 40, sortable :false, align: 'center'},
+		{display: 'Name', name : 'method', width : 90, sortable : false, align: 'left'},
+		{display: 'Queued', name : 'added', width : 70, sortable : false, align: 'left'},
+		{display: 'Started', name : 'started', width : 65, sortable : false, align: 'right'},
+		{display: 'Completed', name : 'completed', width : 65, sortable : false, align: 'right'},
+		{display: 'Duration', name : 'duration', width : 65, sortable : false, align: 'right'},
+		{display: 'Status', name : 'status', width : 80, sortable : false, align: 'right'},
+		{display: 'Data Source', name : 'data_source_key', width : 80, sortable : false, align: 'right'},
+		{display: 'Reg Obj Keys', name : 'reg_obj_keys', width : 80, sortable : false, align: 'right'},
+		{display: 'Log Message', name : 'log_msg', width : 280, sortable : false, align: 'left'}
+		],
+	buttons : [
+	   	{name: 'Refresh', onpress : refreshFailed },
+	   	{name: 'Flush failed tasks', onpress : flushFailed}
+		],
+	sortname: "task_id",
+	sortorder: "desc",
+	usepager: true,
+	tableTitle: 'Failed/Stalled Tasks',
+	useRp: true,
+	rp: 15,
+	showTableToggleBtn: true,
+	hideOnNoRows: true,
+	width: 1050,
+	height: 250
+});
+
+function addNewTaskDialog()
+{
+	$.blockUI({ message: $("#taskAddDialog"), css: { width: '400px' } });
+
+	setTimeout(function() {$('#queuedTaskGrid').flexReload();}, 150);
+}
+
+$('#taskAddCancel').click(function() {
+    $.unblockUI();
+    return false;
+});
+
+$('#taskAddConfirm').click(function() {
+
+	addNewTask();
+    return false;
+});
+
+
+function addNewTask()
+{
+	var taskString = taskListResourcePoint+'&subset=taskAdd';
+	taskString += '&method=' + $('#method').val();
+	taskString += '&data_source_key=' + $('#data_source_key').val();
+	taskString += '&registry_object_keys=' + encodeURIComponent($('#registry_object_keys').val());
+	taskString += '&schedule_for=' + encodeURIComponent($('#schedule_for').val());
+
+	$.get(taskString);
+	$.unblockUI();
+
+	reloadAllGrids(500);
+}
+
+function flushCompleted()
+{
+	$.get(taskListResourcePoint+'&subset=flushCompleted');
+	$('#completedTaskGrid').flexReload();
+}
+function refreshCompleted()
+{
+	$('#completedTaskGrid').flexReload();
+}
+
+function triggerWorker()
+{
+	$.get(taskListResourcePoint+'&subset=triggerWorker');
+	reloadAllGrids(1500);
+}
+function refreshQueued()
+{
+	$('#queuedTaskGrid').flexReload();
+}
+
+function deleteTask(task_id)
+{
+	$.get(taskListResourcePoint+'&subset=deleteTask&task_id='+task_id);
+	reloadAllGrids(500);
+}
+function rescheduleTask(task_id)
+{
+	$.get(taskListResourcePoint+'&subset=rescheduleTask&task_id='+task_id);
+	reloadAllGrids(500);
+}
+function refreshFailed()
+{
+	$('#failedTaskGrid').flexReload();
+}
+function flushFailed()
+{
+	$.get(taskListResourcePoint+'&subset=flushFailed');
+	$('#failedTaskGrid').flexReload();
+}
+
+function reloadAllGrids(delay)
+{
+	setTimeout(function() {$('#queuedTaskGrid').flexReload();$('#completedTaskGrid').flexReload();$('#failedTaskGrid').flexReload();} , delay);
+}
+</script>
 <?php
+function task_chooser()
+{
+	$tasks = array('');
+	$tasks = scandir('_tasks/');
+	$return = '<select id="method" style="width:150px;">';
+	foreach ($tasks AS $t)
+	{
+		if (substr($t,0,1) == '.' || substr($t,0,1) == '_') continue;
+
+		$t = substr(strtoupper($t),0,-4);
+		$return .= "<option value=\"".$t."\">".$t."</option>\n";
+
+	}
+
+	$return .= '</select>';
+
+	return $return;
+
+}
+
+function ds_chooser()
+{
+
+	// Execute the search.
+	$rawResults = getDataSources(null, null);
+
+	$return = '<select id="data_source_key" style="width:300px;">
+			<option value=""></option>';
+
+	// Present the results.
+	for( $i=0; $i < count($rawResults); $i++ )
+	{
+		$dataSourceKey =$rawResults[$i]['data_source_key'];
+		$dataSourceTitle = $rawResults[$i]['title'];
+		$return .= "<option value=\"".rawurlencode($dataSourceKey)."\">".esc($dataSourceTitle)."</option>\n";
+	}
+	$return .= '</select>';
+
+	return $return;
+}
+
+function schedule_chooser()
+{
+
+	// Execute the search.
+	$opts = array('', '15 seconds', '1 minute', '5 minutes', '30 minutes',
+					'1 hour','6 hours','12 hours','24 hours');
+
+	$return = '<select id="schedule_for" style="width:300px;">';
+
+	// Present the results.
+	foreach ( $opts AS $opt )
+	{
+		$return .= "<option value=\"".$opt."\">".esc($opt)."</option>\n";
+	}
+	$return .= '</select>';
+
+	return $return;
+}
 require '../../_includes/footer.php';
 require '../../_includes/finish.php';
 ?>
