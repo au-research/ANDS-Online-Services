@@ -32,13 +32,13 @@ $rss_channel_header = '
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 	<channel>
 		<atom:link href="'.$rdaInstance.rawurlencode($_SERVER['QUERY_STRING']).'" rel="self" type="application/rss+xml" />
-		<title>Research Data Australia search results for "'.$_GET['q'].'"</title>
+		<title>Research Data Australia search results for collections matching "'.$_GET['q'].'"</title>
 		<link>'.$rdaInstance.rawurlencode($_SERVER['QUERY_STRING']).'</link>
-		<description>The following items reflect search results obtained from Research Data Australia when the search term "'.$_GET['q'].'" was used.</description>
+		<description>The following items represent new/updated collection records added to Research Data Australia which match the search query  "'.$_GET['q'].'".</description>
 		<language>en</language>
 		<image>
-			<url>http://services.ands.org.au:8080/ands_logo_white.jpg</url>
-			<title>Research Data Australia search results for "'.$_GET['q'].'</title>
+			<url>'.$rdaInstance.'/img/icon/ands_boxes.jpg</url>
+			<title>Research Data Australia search results for collections matching "'.$_GET['q'].'"</title>
 			<link>'.$rdaInstance.rawurlencode($_SERVER['QUERY_STRING']).'</link>
 		</image>
 ';
@@ -51,16 +51,16 @@ foreach ($rssArray AS $item)
 	{
 
 		echo "			<item>\n";
-		echo "				<title>Digest: " . $item['group'] . " updated multiple records on ".$item['updated_date']."</title>\n";			
-		echo "				<description>The registry has had multiple records updated in data source: " . $item['key'] . "${NL}${NL}Updated Records include:${NL}${NL}"; 
+		echo "				<title>Multiple Collections were added to Research Data Australia by  " . $item['key'] . " on ".$item['updated_date']."</title>\n";			
+		echo "				<description>" . $item['key'] . " added more than 5 records to Research Data Australia on ".$item['updated_date'].". These records have been rolled into a single digest entry for convenience.{$NL}Please navigate to
+		&lt;a href='".$rdaInstance . "search#!/q=" . $q ."/group=".urlencode($item['key'])."/p=1/tab=" . $class . $filter."/resultSort=date_modified%20desc'>	search results&lt;/a> to see the full listing of the records in Research Data Australia {$NL}"; 
 			foreach ($item['updated_items'] AS $i) 
 			{
-
-				echo "&lt;a href='".$rdaInstance . "view/?key=" . rawurlencode($i['key']) ."'>&lt;b>".$i['list_title']."&lt;/b>&lt;/a>${NL}${NL}";
+				echo "&lt;a href='".$rdaInstance . "view/?key=" . rawurlencode($i['key']) ."'>&lt;b>".$i['list_title']."&lt;/b>&lt;/a>${NL}";
 			}
 		echo "				</description>\n";
-		echo "				<link>" . $rdaInstance . "search#!/q=" . $q ."/group=".urlencode($item['group'])."/p=1/tab=" . $class . $filter."/resultSort=date_modified%20desc</link>\n";	
-		echo "				<guid>" . $rdaInstance . "search#!/q=" . $q ."/group=".urlencode($item['group'])."/p=1/tab=" . $class . $filter."/resultSort=date_modified%20desc</guid>\n";		
+		echo "				<link>" . $rdaInstance . "search#!/q=" . $q ."/group=".urlencode($item['key'])."/p=1/tab=" . $class . $filter."/resultSort=date_modified%20desc</link>\n";	
+		echo "				<guid>" . $rdaInstance . "search#!/q=" . $q ."/group=".urlencode($item['key'])."/p=1/tab=" . $class . $filter."/resultSort=date_modified%20desc</guid>\n";		
 		echo "				<author>" . $item['key'] . "</author>\n";									
 		echo "				<pubDate>".date('r', strtotime($item['updated_items'][0]['date_modified']))."</pubDate>\n";
 		echo "			</item>\n";
@@ -69,7 +69,7 @@ foreach ($rssArray AS $item)
 	{
 
 		echo "			<item>\n";
-		echo "				<title>" . $item['list_title'] . "</title>\n";			
+		echo "				<title>".$item['list_title'] . "</title>\n";			
 		echo "				<description>" . (isset($item['description_value'][0]) ? str_replace("<","&lt;",$item['description_value'][0]) : "No description")  . "${NL}${NL}";
 		echo "				</description>\n";		
 		echo "				<link>" . $rdaInstance . "view/?key=" . rawurlencode($item['key']) . "</link>\n";	

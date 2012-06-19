@@ -191,9 +191,9 @@ function getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR = false, $inclu
 		}
 		
 		$dateModified = '';
-		if( $registryObject[0]['date_modified'] )
+		if( $registryObject[0]['status_modified_when'] )
 		{
-			$dateModified = ' dateModified="'.esc(getXMLDateTime($registryObject[0]['date_modified'])).'"';
+			$dateModified = ' dateModified="'.esc(getXMLDateTime($registryObject[0]['status_modified_when'])).'"';
 		}	
 			
 		

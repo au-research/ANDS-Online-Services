@@ -32,7 +32,7 @@ if($licence!="All")$filter .= "/licence=".$licence;
 $atom_feed_header = '
 	<feed xmlns="http://www.w3.org/2005/Atom">
   	<id>'.str_replace("&","",str_replace("=","",$rdaInstance.$_SERVER['REQUEST_URI'])).'</id>
-  	<title>Research Data Australia search results for "'.$_GET['q'].'"</title>
+  	<title>Research Data Australia search results for collections matching "'.$_GET['q'].'"</title>
   	<updated>'.date('Y-m-d',time()). "T" .date('h:s:i', time()).'Z</updated>
   	<link rel="self" href="'.$rdaInstance.rawurlencode($_SERVER['QUERY_STRING']).'" type="application/atom+xml" />
   	<author>
@@ -48,13 +48,14 @@ foreach ($rssArray AS $item)
 	if($item['type'] == "digest")
 	{
 		echo "			<entry>\n";
-		echo "				<title>Digest: " . $item['key'] . " updated multiple records</title>\n";	
+		echo "				<title>Multiple Collections were added to Research Data Australia by  " . $item['key'] . " on ".$item['updated_date']."</title>\n";	
 		echo "				<id>" . $rdaInstance . "search#!/q=" . $q ."/dataSource=".urlencode($item['key'])."/p=1/tab=" . $class . $filter."/resultSort=date_modified%20desc</id>\n";	
     	echo "				<updated>".date("c",strtotime($item['updated_items'][0]['date_modified']))."</updated>\n";							
-		echo "				<content type='html'>The registry has had multiple records updated in data source: ".$item['key']."${NL}${NL}Updated Records include:${NL}${NL}";
+		echo "				<content type='html'>" . $item['key'] . " added more than 5 records to Research Data Australia on ".$item['updated_date'].". These records have been rolled into a single digest entry for convenience.{$NL}Please navigate to
+		&lt;a href='".$rdaInstance . "search#!/q=" . $q ."/group=".urlencode($item['key'])."/p=1/tab=" . $class . $filter."/resultSort=date_modified%20desc'>	search results&lt;/a> to see the full listing of the records in Research Data Australia {$NL}";
 				foreach ($item['updated_items'] AS $i) 
 			{
-				echo "&lt;a href='".$rdaInstance . "view/?key=" . rawurlencode($i['key']) ."'>&lt;b>".$i['list_title']."&lt;/b>&lt;/a>${NL}${NL}";
+				echo "&lt;a href='".$rdaInstance . "view/?key=" . rawurlencode($i['key']) ."'>&lt;b>".$i['list_title']."&lt;/b>&lt;/a>${NL}";
 			}	
 		echo "				</content>\n";
 		echo "				<link href='".$rdaInstance . "search#!/q=" . $q ."/dataSource=".urlencode($item['key'])."/p=1/tab=" . $class . $filter."/resultSort=date_modified%20desc'></link>\n";		

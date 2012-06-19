@@ -20,9 +20,9 @@ limitations under the License.
 	class Rss_channel extends CI_Model {
 
 		private $startCount = 0;
-		private $rowCount = 6;
+		private $rowCount = 5;
 		private	$rssArraySize = 20;
-		private $maxEntriesPerDataSource = 3;
+		private $maxEntriesPerDataSource = 5;
 		private $recursionLevel = 0;
 		private $recursionMax = 21;
 		private $query = "";
@@ -38,12 +38,11 @@ limitations under the License.
 
 		function getRssArrayForQuery($query)
 		{
+			date_default_timezone_set('Antarctica/Macquarie');
 			parse_str($_SERVER['QUERY_STRING'], $_GET);
 			$dataSource = '';
 			$dataGroup = '';
 			$query = $this->input->get('q');
-			//$query = str_replace(' -group:(Belvedere Walkthrough)','',$query);
-			//echo $query. "is the query<br />";
 			$classFilter = $this->input->get('classFilter');
 			$groupFilter = $this->input->get('groupFilter');
 			$typeFilter = $this->input->get('typeFilter');
@@ -51,7 +50,6 @@ limitations under the License.
 			$licenceFilter = $this->input->get('licenceFilter');
 			$dataSource = $this->input->get('dataSource');
 			$digest = $this->input->get('digest');
-			//echo $digest." is the digest<br />";
 			if(!$digest) $digest = 'true';
 
 			$status = 'PUBLISHED';
@@ -67,8 +65,9 @@ limitations under the License.
 
     		$this->query = $query;
 			$solrOutput = array('response'=>array('numFound'=>999));
-			while (count($this->rssArray) < $this->rssArraySize && $this->startCount + $this->rowCount <= $solrOutput['response']['numFound'])
-			{
+
+			while (count($this->rssArray) < $this->rssArraySize && $this->startCount <= $solrOutput['response']['numFound'])
+			{	
 				$this->recursionLevel++;
 				if ($this->recursionLevel == $this->recursionMax) break;
 
@@ -85,21 +84,23 @@ limitations under the License.
 				}
 
 				$solrUrl = $this->solrInstance . "select/?q=".$start.rawurlencode($this->query).$filter_query."&version=2.2&start=".$this->startCount."&rows=".$this->rowCount."&indent=on&fl=key,%20group%20data_source_key,%20description_value,%20list_title,%20date_modified&wt=json&sort=date_modified%20desc";
-				//echo $solrUrl."<br />";
+
 				$solrOutput = json_decode(file_get_contents($solrUrl), true);
-				//print_r($solrOutput);
+
+
+			
 
 				foreach ($solrOutput['response']['docs'] AS $response)
 				{
-					//print_r($response);
-					if (!$this->isDigested($response['group']) or $groupFilter !="All" or $dataGroup !='' or $digest=='false')
+							
+					if (!$this->isDigested($response['group'].":".date("Y-m-d",strtotime($response['date_modified']))) or $digest=='false')
 					{
-						//echo "we don't want digest";
-						$this->addToRssArray($response,$groupFilter,$dataGroup,$digest);
+						// "we don't want digest";
+						$this->addToRssArray($response,$groupFilter,$dataGroup,$digest);				
 					}
 					else
 					{
-						$this->addToDigest($response['data_source_key'], $response);
+						$this->addToDigest($response['group'].":".date("Y-m-d",strtotime($response['date_modified'])), $response);
 					}
 				}
 
@@ -113,17 +114,20 @@ limitations under the License.
 		function addToRssArray($response,$groupFilter,$dataSource,$digest)
 		{
 
-			if ($this->getCountByDataSource($response['group'])+1 >= $this->maxEntriesPerDataSource && $groupFilter == 'All' && $dataSource == '' && $digest!="false")
+			if ($this->getCountByDataSource($response['group'].":".date("Y-m-d",strtotime($response['date_modified'])))+1 >= $this->maxEntriesPerDataSource  && $digest!="false")
 			{
 				// digest them
 				$digest_entry_index = null;
 
-				$digest_entry = array('type'=>'digest', 'key'=> $response['group']."~".date("Y-m-d",strtotime($response['date_modified'])), 'group'=>$response['group'],'updated_date'=>date("m-d-Y",strtotime($response['date_modified'])), 'updated_items'=>array());
-
+				$digest_entry = array('type'=>'digest', 'key'=> $response['group'], 'group'=>$response['group'].":".date("Y-m-d",strtotime($response['date_modified'])),'updated_date'=>date("Y-m-d",strtotime($response['date_modified'])), 'updated_items'=>array());
+		
 				foreach ($this->rssArray AS $index => $item)
 				{
-
-					if ($item['group']== $response['group'] && $item['date_modified'] = $response['date_modified'])
+					$dateStr = '';
+					if(isset($item['date_modified'])) $dateStr = ":".date("Y-m-d",strtotime($item['date_modified'])) ;
+					if (isset($item['updated_date'])) $dateStr = ":".date("Y-m-d",strtotime($item['updated_date'])) ;
+					
+					if ($item['group'].$dateStr== $response['group'].":".date("Y-m-d",strtotime($response['date_modified'])))
 					{
 						if (!$digest_entry_index)
 						{
@@ -139,8 +143,8 @@ limitations under the License.
 
 				$this->rssArray[$digest_entry_index] = $digest_entry;
 				$this->rssArray = array_values($this->rssArray);
-				$this->query .= " -group:(".$response['group'].")";
-				$this->startCount = -$this->rowCount;
+				$this->query .= ' -(group:("'.$response['group'].'") +date_modified:["'.date("Y-m-d",strtotime($response['date_modified'])).'" TO "'.date("Y-m-d",strtotime($response['date_modified'])).' 00"])';
+				$this->startCount += $this->rowCount;
 			}
 			else
 			{
@@ -161,10 +165,14 @@ limitations under the License.
 
 			foreach ($this->rssArray AS $item)
 			{
-				if ($item['group'] == $group)
+
+				$dateStr = '';
+				if(isset($item['date_modified'])) $dateStr = ":".date("Y-m-d",strtotime($item['date_modified'])) ;
+				if ($item['group'].$dateStr == $group)
 				{
 					$count++;
 				}
+				//echo $count." is the count<br />";
 			}
 			return $count;
 		}
@@ -184,18 +192,19 @@ limitations under the License.
 
 		function addToDigest($group, $response)
 		{
-			$target_id = null;
+
 
 			foreach ($this->rssArray AS $index => $item)
 			{
+	
+				if ($item['type'] == 'digest' && $item['group']  == $group)
 
-				if ($item['type'] == 'digest' && $item['group'] == $group)
 				{
 					$target_id = $index;
 				}
 			}
 
-			if (!is_null($target_id))
+			if (!is_null($target_id) && count($this->rssArray[$target_id]['updated_items'])<$this->rowCount)
 			{
 				$this->rssArray[$target_id]['updated_items'][] = $response;
 				return true;
