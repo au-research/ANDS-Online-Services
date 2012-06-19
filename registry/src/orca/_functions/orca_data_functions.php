@@ -2896,12 +2896,12 @@ function getTask($taskId, $status)
 	}
 	else if($status != null)
 	{
-		$strQuery = 'SELECT * FROM dba.tbl_background_tasks where status = $1 ORDER BY completed, task_id DESC';
+		$strQuery = 'SELECT * FROM dba.tbl_background_tasks where status = $1 ORDER BY completed DESC';
 	    $params = array($status);
 	}
 	else
 	{
-		$strQuery = 'SELECT * FROM dba.tbl_background_tasks order by added';
+		$strQuery = 'SELECT * FROM dba.tbl_background_tasks order by added ASC';
 	    $params = array();
 	}
 	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
