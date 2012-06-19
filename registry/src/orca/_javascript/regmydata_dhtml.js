@@ -1419,7 +1419,7 @@ function saveAndPreview() {
 						$('#errors_preview').hide();
 					}
 					
-					displayQuagmireSummary();
+					//displayQuagmireSummary();
 ////console.log("qaRequired2: " + qaRequired);
 					
 				}

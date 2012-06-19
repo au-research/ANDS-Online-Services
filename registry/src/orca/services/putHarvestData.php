@@ -1,3 +1,4 @@
+
 <?php
 /*
 Copyright 2009 The Australian National University
@@ -191,7 +192,7 @@ else
 		// We're done processing the put request.
 		updateHarvestRequest($harvestRequestId, 'ORCA', '');
 		
-		if( $done == 'TRUE' && $mode == 'HARVEST' && !$nextHarvestDate )
+		if( $done == 'TRUE' && !$nextHarvestDate )
 		{
 			// The harvester is done servicing this harvest request so...
 

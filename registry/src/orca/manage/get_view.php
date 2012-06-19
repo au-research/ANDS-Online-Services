@@ -233,6 +233,16 @@ function searchRecords($status){
 			//$goldFlag = '<a href="javascript:void(0);" class="smallIcon icon28sOn tip borderless" tip="Gold Standard" style="float:right"><span></span></a>';
 			$qualityLevelStr = '<a href="javascript:;" dsKey="'.$doc->{'data_source_key'}.'" status="'.$doc->{'status'}.'" level="'.$doc->{'quality_level'}.'" key="'.$doc->{'key'}.'" class="smallIcon tipQA icon28sOn borderless"><span></span></a>';
 		}
+
+		//manually assessed
+		$manually_assessed_flag = '';
+		if(isset($doc->{'manually_assessed_flag'})){
+			if($doc->{'manually_assessed_flag'}=='1'){
+				$manually_assessed_flag = 'yes';
+			}else $manually_assessed_flag = 'no';
+		}else{
+			$manually_assessed_flag = 'no';
+		}
 		
 		$entry = array(
 					'id' => $doc->{'key'},
@@ -247,7 +257,8 @@ function searchRecords($status){
 							$qualityLevelStr,
 							$flagButton,
 							$btnStr,
-							$doc->{'status'}
+							$doc->{'status'},
+							$manually_assessed_flag
 							)
 				);
 		$jsonData['rows'][] = $entry;
@@ -296,9 +307,13 @@ function StatusAllQA($status, $dataSourceKey){
 		$c = $classes[$i];
 		$c_num = $classes[$i+1];
 		$class_qa = getQAforClass($dataSourceKey, $c, $status);
+		//var_dump($class_qa);
 		$class_qa_array = array();
 		for($j=0;$j<sizeof($class_qa)-1;$j=$j+2){
 			$class_qa_array[$class_qa[$j]]=$class_qa[$j+1];
+
+			//if result >
+
 		}
 		$result[$c]['label']=$c;
 		$result[$c]['num']=$c_num;

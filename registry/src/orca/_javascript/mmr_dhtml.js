@@ -13,27 +13,23 @@ See the License for the specific language governing permissions and
 limitations under the License.
 *******************************************************************************/
 
-var STATUS_COOKIE_NAME = 'ORCA_MMR_STATUS';
-var STATUS_COOKIE_TTL_DAYS = 365*5;
-
-var MMR_datasource_info_visible = true;
 
 // Load the Visualization API and the piechart package.
 google.load('visualization', '1.0', {'packages':['corechart']});
 
 var currentView = 'statusview';//can be status or quality
-
      
 $(document).ready(function() {
 
 	$(".chzn-select").chosen(); $(".chzn-select-deselect").chosen({allow_single_deselect:true});
+
 	if($.cookie('currentView')){
 		currentView = $.cookie('currentView');
 	}else{
 		currentView = 'statusview';
 		$.cookie('currentView', 'statusview');
 	}
-	//console.log($.cookie('currentView'));
+
 
 	$('#mmr_datasource_information').hide();
 
@@ -175,7 +171,8 @@ $(document).ready(function() {
     	var chartData = new google.visualization.DataTable();
     	var get_view = 'get_view.php?view=StatusAllQA&status='+status+'&ds='+ds;
 
-    	/*console.log('begin');
+
+    	/*console.log(get_view);
     	$.ajax({
     		url: get_view,
     		method: 'get',
@@ -183,8 +180,8 @@ $(document).ready(function() {
     		success: function(data) {
     			console.log(data);
     		}
-    	});
-    	console.log('end');*/
+    	});*/
+
 
 		$.ajax({
     		url: get_view,
@@ -193,7 +190,6 @@ $(document).ready(function() {
     		success: function(data) {
 
     			//console.log(data);
-
   				var chartData = new google.visualization.DataTable();
   				chartData.addColumn("string", "Status");
   				chartData.addColumn("number", "Quality Level 0");
@@ -205,6 +201,9 @@ $(document).ready(function() {
   				
 
   				//console.log(chartData);
+
+
+
 
   				$.each(data, function(i, item){
   					var row = [];
@@ -218,8 +217,8 @@ $(document).ready(function() {
   					chartData.addRow(row);
   				});
 
-  				/*var jsonText = JSON.stringify(chartData);
-    			console.log(jsonText);*/
+  				//var jsonText = JSON.stringify(chartData);
+    			//console.log(jsonText);
 
   				//console.log(realData);
     			// Create and draw the visualization.

@@ -113,6 +113,7 @@ else if($task ==  'flag_draft')
 else if($task ==  'flag_regobj')
 	{
 		include('_processes/flag_regobj.php');
+		syncKey($keyValue, $dataSourceValue);
 	}
 else if($task ==  'getRegistryTasks')
 	{
