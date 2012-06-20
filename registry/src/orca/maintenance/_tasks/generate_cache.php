@@ -3,8 +3,22 @@ function task_generate_cache($task)
 {
 	$taskId = $task['task_id'];
 	$dataSourceKey = $task['data_source_key'];
-	$registryObjectKeys = getRegistryObjectKeysForDataSource($dataSourceKey);
-	$message = "Caching of " . count($registryObjectKeys) . " records started for " . $dataSourceKey . ": ";
+	if (!$dataSourceKey) {
+		$registryObjectKeys = array();
+		$dataSources = getDataSources(null,null);
+		foreach($dataSources AS $dataSource)
+		{
+			$ds_keys = getRegistryObjectKeysForDataSource($dataSource['data_source_key']);
+			if (is_array($ds_keys)) {
+				array_merge($registryObjectKeys, $ds_keys);
+			}
+		}
+	}
+	else
+	{
+		$registryObjectKeys = getRegistryObjectKeysForDataSource($dataSourceKey);
+	}
+	$message = "Caching of " . count($registryObjectKeys) . " records started for " . ($dataSourceKey ? $dataSourceKey : "all data sources") . ": ";
 	if($registryObjectKeys)
 	{
 
