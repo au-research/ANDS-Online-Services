@@ -80,7 +80,7 @@ define("eCOPYRIGHT_NOTICE", "copyright notice goes here");
 $gSessionTimeoutMinutes = 120;
 //Application ROOT defines the current directory of COSI
 define('eAPPLICATION_ROOT', dirname(__FILE__) . "/");
-
+date_default_timezone_set('Australia/Canberra');
 
 
 
