@@ -511,7 +511,7 @@ $().ready(function(){
    });
 
    //chosen on data source;
-   $('select[name=data_source_key]').chosen();
+   if($('select[name=data_source_key]').length>0)$('select[name=data_source_key]').chosen();
 
 });
 
