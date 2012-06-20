@@ -17,7 +17,15 @@ $dataSource = array_pop($dataSource);
 
 $drafts = getDraftsByDataSource($data_source_key);
 $records = searchRegistry('', '', $data_source_key, null, null, null);
-array_merge($records, searchRegistry('', '', $data_source_key, null, null, null,'APPROVED'));
+
+
+$approved_records = searchRegistry('', '', $data_source_key, null, null, null,'APPROVED');
+if ($approved_records)
+{
+	array_merge($records, $approved_records);
+}
+
+
 foreach ($records AS &$record)
 {
 	$record = array_pop(getRegistryObject($record['registry_object_key']));
