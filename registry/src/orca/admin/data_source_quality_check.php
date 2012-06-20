@@ -64,7 +64,7 @@ else
 ?>
 <script type="text/javascript" src="<?php print eAPP_ROOT ?>orca/_javascript/orca_dhtml.js"></script>
 <h1>Data Source Quality Check</h1>
-<p><a href="http://www.ands.org.au/partner/data-source-quality-check.html">Limitations</a> of the Data Quality Check</p>
+<p><a href="http://www.ands.org.au/partner/data-source-quality-check.html" target="_blank">About the Data Source Quality Check tool</a></p>
 <h3>Data Sources</h3>
 <div>
 <select name="data_source_key" id="data_source_key">

@@ -33,7 +33,7 @@ body { font-family: verdana, sans-serif; }
 {
 	border: 1px #666 solid;
 	width:100%;
-	
+	page-break-inside: avoid; 
 }
 
 .qualityReportTable tr {

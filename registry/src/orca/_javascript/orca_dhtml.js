@@ -235,7 +235,7 @@ function runQualityCheck()
    
    $.get($('#quality_report_url').val() + '&data_source=' + $('#data_source_key').val(), function(data){
 	   $('#qualityCheckresult').html(data).fadeIn(100);
-	   $('#printableReportContainer').html('<a id="printable_report" href="data_source_report.php?type=quality&standalone=true&data_source=' + $('#data_source_key').val()  +'" class="right">printable report</a>');
+	   $('#printableReportContainer').html('<a target="_blank" id="printable_report" href="data_source_report.php?type=quality&standalone=true&data_source=' + $('#data_source_key').val()  +'" class="right">printable report</a>');
 	   
    })
 }

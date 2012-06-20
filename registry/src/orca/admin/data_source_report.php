@@ -92,11 +92,11 @@ if (getQueryValue('type') == "quality"):
 		<?php echo getRegistryObjectStatusSpan($record['status']);?><br/>
 		<?php echo $record['registry_object_class']; ?>
 		</td>
-		<td class="regObjTitleInfo">
+		<td class="regObjTitleInfo" style="width:350px;">
 		<b><?php echo $record['display_title'];?></b><br/>
-		<i><?php echo elipsesLimit($record['registry_object_key'], 90);?></i>
+		<i><?php echo elipsesLimit($record['registry_object_key'], 70);?></i>
 		</td>
-		<td style="width:550px;">
+		<td style="min-width:550px;">
 		<b>Quality Level: <?php echo $record['quality_level'];?></b> ( <?php echo $qa_string;?>)<br/>
 		<?php echo $record['quality_test_result'];?>
 		</td>
@@ -127,12 +127,12 @@ if (getQueryValue('type') == "quality"):
 		<?php echo $draft['class']; ?>
 		</td>
 		<td>
-		<div class="regObjTitleInfo">
+		<div class="regObjTitleInfo" style="width:350px;">
 			<b><?php echo $draft['registry_object_title'];?></b><br/>
-			<i><?php echo elipsesLimit($draft['draft_key'], 90);?></i>
+			<i><?php echo elipsesLimit($draft['draft_key'], 70);?></i>
 		</div>
 		</td>
-		<td style="width:550px;">
+		<td style="min-width:550px;">
 		<b>Quality Level: <?php echo $draft['quality_level'];?></b> ( <?php echo $qa_string;?>)<br/>
 		<?php echo $draft['quality_test_result'];?>
 		</td>
