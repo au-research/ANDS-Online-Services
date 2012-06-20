@@ -1,4 +1,5 @@
 <?php
+global $solr_url;
 $solr_update_url = $solr_url.'update';
 function task_index_records($task)
 {
