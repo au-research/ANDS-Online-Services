@@ -1,6 +1,8 @@
 <?php
 global $solr_url;
 $solr_update_url = $solr_url.'update';
+$totalCount = 0;
+$chunkSize = 49;
 function task_index_records($task)
 {
 	global $solr_url;
