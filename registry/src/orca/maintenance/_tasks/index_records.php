@@ -5,7 +5,7 @@ $totalCount = 0;
 $chunkSize = 49;
 function task_index_records($task)
 {
-	global $solr_url;
+	global $solr_url, $solr_update_url;
 	$taskId = $task['task_id'];
 	$message = '';
 	$dataSourceKey = $task['data_source_key'];
@@ -13,23 +13,10 @@ function task_index_records($task)
 	$totalCount = 0;
 	$chunkSize = 49;
 	$solr_update_url = $solr_url.'update';
-	if($dataSourceKey != '' && $registryObjectKeys != '')
+	if($dataSourceKey != '')
 	{
-		$registryObjectKeysArray = processList($registryObjectKeys);
-		if($registryObjectKeysArray)
-		{
-			for( $i=0; $i < count($registryObjectKeysArray); $i++ )
-			{
-				$message .= runQualityLevelCheckForRegistryObject($registryObjectKeysArray[i], $dataSourceKey)."\n";
-				$message .= runQualityLevelCheckForDraftRegistryObject($registryObjectKeysArray[i], $dataSourceKey)."\n";
-			}
-		}
-	}
-	else if($dataSourceKey != '')
-	{
-
+		$message .= "clearing Datasource Index\n";
 		$result =  clearDS($dataSourceKey);
-		$message .= "clearing Datasource Index".$result."\n";
 		$message .= addPublishedSolrIndexForDatasource($dataSourceKey);
 		$message .= addDraftSolrIndexForDatasource($dataSourceKey);
 	}

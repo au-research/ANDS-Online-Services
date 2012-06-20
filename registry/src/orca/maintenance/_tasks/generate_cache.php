@@ -3,31 +3,40 @@ function task_generate_cache($task)
 {
 	$taskId = $task['task_id'];
 	$dataSourceKey = $task['data_source_key'];
+	$message = '';
 	if (!$dataSourceKey) {
 		$registryObjectKeys = array();
-		$dataSources = getDataSources(null,null);
-		foreach($dataSources AS $dataSource)
+		$ds = getDataSources(null, null); //add publish my data
+		foreach($ds AS $datasource)
 		{
-			$ds_keys = getRegistryObjectKeysForDataSource($dataSource['data_source_key']);
-			if (is_array($ds_keys)) {
-				array_merge($registryObjectKeys, $ds_keys);
+
+			$ro = getRegistryObjectKeysForDataSource($datasource['data_source_key']);
+			$message .= "Caching of " . count($ro) . " records started for " . ($datasource['data_source_key']) . ": \n";
+			if($ro)
+			{
+				foreach ($ro AS $registry_object)
+				{
+					flush();ob_flush();
+					$extendedRIFCS = generateExtendedRIFCS($registry_object['registry_object_key']);
+					writeCache($datasource['data_source_key'], $registry_object['registry_object_key'], $extendedRIFCS);
+				}
 			}
+			$message .= "completed!\n";
 		}
 	}
 	else
 	{
 		$registryObjectKeys = getRegistryObjectKeysForDataSource($dataSourceKey);
-	}
-	$message = "Caching of " . count($registryObjectKeys) . " records started for " . ($dataSourceKey ? $dataSourceKey : "all data sources") . ": ";
-	if($registryObjectKeys)
-	{
-
-		foreach ($registryObjectKeys AS $registry_object)
+		$message = "Caching of " . count($registryObjectKeys) . " records started for " . ($dataSourceKey) . ": \n";
+		if($registryObjectKeys)
 		{
-			$extendedRIFCS = generateExtendedRIFCS($registry_object['registry_object_key']);
-			writeCache($dataSourceKey, $registry_object['registry_object_key'], $extendedRIFCS);
+			foreach ($registryObjectKeys AS $registry_object)
+			{
+				$extendedRIFCS = generateExtendedRIFCS($registry_object['registry_object_key']);
+				writeCache($dataSourceKey, $registry_object['registry_object_key'], $extendedRIFCS);
+			}
 		}
+		$message .= "\ncompleted!";
 	}
-	$message .= "\ncompleted!";
     return $message;
 }
