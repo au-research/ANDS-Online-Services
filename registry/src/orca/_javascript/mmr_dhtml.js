@@ -919,6 +919,7 @@ $(document).ready(function() {
 
 	function formatTip(tt){
 		var tooltip = $('#ui-tooltip-'+tt.id+'-content');
+		
 		//wrap around the current tooltip with a div
 		for(var i=0;i<=4;i++){
 			$('*[level='+i+']', tooltip).wrapAll('<div class="qa_container" qld="'+i+'"></div>');
@@ -926,7 +927,14 @@ $(document).ready(function() {
 		//add the toggle header
 		$('.qa_container', tooltip).prepend('<div class="toggleQAtip"></div>');
 		$('.toggleQAtip', tooltip).each(function(){
-			$(this).text('Quality Level ' +$(this).parent().attr('qld'));
+			if ($(this).parent().attr('qld') == 5)
+			{
+				$(this).text('Gold Standard Record');
+			}
+			else
+			{
+				$(this).text('Quality Level ' + $(this).parent().attr('qld'));
+			}
 		});
 		//hide all qa
 		$('.qa_container', tooltip).each(function(){

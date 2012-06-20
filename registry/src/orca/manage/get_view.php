@@ -103,8 +103,8 @@ function summary($dataSourceKey){
 
 	$statuses = getAllStatus($dataSourceKey);
 	//$result = array('PUBLISHED'=>0, 'APPROVED'=>0, 'ASSESSMENT_IN_PROGRESS'=>0, 'SUBMITTED_FOR_ASSESSMENT'=>0, 'DRAFT'=>0, 'MORE_WORK_REQUIRED'=>0);
-	
- 	
+
+
 
 	foreach($statuses as $status=>$num){
 		foreach($result as $index=>$r){
@@ -198,7 +198,7 @@ function searchRecords($status){
 	header("Content-type: application/json");
 
 	global $dataSourceKey,$solr_url,$rp,$page,$sortname,$sortorder,$query, $qtype, $view, $ql;
-	
+
 
 	/**
 	Setting Up Variables
@@ -285,7 +285,7 @@ function searchRecords($status){
 				array_push($buttons,'ReadOnlyView');
 				$view_link = eAPP_ROOT.'orca/manage/add_'.$doc->{'class'}.'_registry_object.php?readOnly&data_source='.rawurlencode($doc->{'data_source_key'}).'&key='.esc(rawurlencode($doc->{'key'}));
 				//cannot edit nor delete, disabled button?
-			}	
+			}
 			$draftStatus = 'draft';
 		}else{//PUBLISHED and APPROVED
 			array_push($buttons,'ViewRecord');
@@ -295,7 +295,7 @@ function searchRecords($status){
 			$draftStatus = 'not-draft';
 		}
 
-		
+
 
 
 		$btnStr='';$btnStrStr='';
@@ -333,12 +333,12 @@ function searchRecords($status){
 						$btnStr.='<a href="javascript:;" class="smallIcon icon100s '.$pos.' tip deleteConfirm" tip="Delete This Record" key="'.rawurlencode($doc->{'key'}).'" ds="'.rawurlencode($doc->{'data_source_key'}).'" draftStatus="'.$draftStatus.'"><span></span></a>';
 						//$btnStr.='<a href="'.eAPP_ROOT.'orca/manage/process_registry_object.php?task=delete&data_source='.rawurlencode($doc->{'data_source_key'}).'&key='.esc(rawurlencode($doc->{'key'})).'" class="smallIcon icon100s '.$pos.' tip deleteConfirm" tip="Delete This Record"><span></span></a>';
 						break;
-					
+
 					default:$btnStr.='Unknown';
 				}
 
 			}
-			$btnStrStr .=$buttons[$i];			
+			$btnStrStr .=$buttons[$i];
 		}
 
 		/*$viewButton ='<a href="#" class="smallIcon icon6s left tip" tip="View This Record In Read Only Mode"><span></span></a>';
@@ -369,7 +369,7 @@ function searchRecords($status){
 		if(isset($doc->{'error_count'})){
 			$error_count = $doc->{'error_count'};
 		}
-		
+
 		$warning_count = 'N/A';
 		if(isset($doc->{'warning_count'})){
 			$warning_count = $doc->{'warning_count'};
@@ -394,7 +394,7 @@ function searchRecords($status){
 		}else{
 			$manually_assessed_flag = 'no';
 		}
-		
+
 		$entry = array(
 					'id' => $doc->{'key'},
 					'cell' => array(
@@ -530,7 +530,15 @@ function allKeys($status){
 
 function tipQA($key, $level){
 	global $dataSourceKey, $status;
-	$t = getQualityTestResult($key, $dataSourceKey, $status);
+	// Don't show QA for Gold Standard records
+	if ($level == 5)
+	{
+		$t = '<div class="qa_container success" qld="5"><div class="">The following record has been verified as an exemplary record by the ANDS Metadata Assessment Group.</div></div>';
+	}
+	else
+	{
+		$t = getQualityTestResult($key, $dataSourceKey, $status);
+	}
 	echo $t;
 	//echo 'getting qa for key='.$key.' and level='.$level.'<a href="">asdfadsfasd</a>';
 }
