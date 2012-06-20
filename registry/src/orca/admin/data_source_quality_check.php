@@ -62,7 +62,17 @@ if( !$searchResults )
 else
 {
 ?>
+
+
+<?php
+//CHOSEN Javascript library for choosing data sources
+echo '<link rel="stylesheet" href="'. eAPP_ROOT.'orca/_javascript/chosen/chosen.css" />
+		<script src="'. eAPP_ROOT.'orca/_javascript/chosen/chosen.jquery.js" type="text/javascript"></script>';
+?>
 <script type="text/javascript" src="<?php print eAPP_ROOT ?>orca/_javascript/orca_dhtml.js"></script>
+
+
+
 <h1>Data Source Quality Check</h1>
 <p><a href="http://www.ands.org.au/partner/data-source-quality-check.html" target="_blank">About the Data Source Quality Check tool</a></p>
 <h3>Data Sources</h3>

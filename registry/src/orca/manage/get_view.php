@@ -34,9 +34,9 @@ if($manual_publish=='false')$manual_publish=false;
 $result = array();
 if($ds_qa_flag){
 	if($manual_publish){
-		$result = array('PUBLISHED'=>0, 'APPROVED'=>0, 'ASSESSMENT_IN_PROGRESS'=>0, 'SUBMITTED_FOR_ASSESSMENT'=>0, 'DRAFT'=>0, 'MORE_WORK_REQUIRED'=>0);
+		$result = array('PUBLISHED'=>0, 'APPROVED'=>0,  'SUBMITTED_FOR_ASSESSMENT'=>0, 'ASSESSMENT_IN_PROGRESS'=>0,'DRAFT'=>0, 'MORE_WORK_REQUIRED'=>0);
 	}else{//auto publish
-		$result = array('PUBLISHED'=>0, 'ASSESSMENT_IN_PROGRESS'=>0, 'SUBMITTED_FOR_ASSESSMENT'=>0, 'DRAFT'=>0, 'MORE_WORK_REQUIRED'=>0);
+		$result = array('PUBLISHED'=>0,  'SUBMITTED_FOR_ASSESSMENT'=>0, 'ASSESSMENT_IN_PROGRESS'=>0,'DRAFT'=>0, 'MORE_WORK_REQUIRED'=>0);
 	}
 }else{
 	if($manual_publish){

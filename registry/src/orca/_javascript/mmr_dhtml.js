@@ -673,18 +673,19 @@ $(document).ready(function() {
 
 	function reloadData(){
 		var viewURL = 'get_view.php?view=summary&ds='+dsKey+'&ds_qa_flag='+DS_QA_flag+'&manual_publish='+MANUAL_PUBLISH;
-		console.log(viewURL);
+		//console.log(viewURL);
 		var columns = [];
 		columns.push({display:'', name:'', width:120, sortable:false,align:'left'});
 
 		//Sort it by this order
     	//var order = array('MORE_WORK_REQUIRED', 'DRAFT','SUBMITTED_FOR_ASSESSMENT', 'ASSESSMENT_IN_PROGRESS', 'APPROVED', 'PUBLISHED');
-    	var order = ['PUBLISHED', 'APPROVED', 'ASSESSMENT_IN_PROGRESS', 'SUBMITTED_FOR_ASSESSMENT', 'DRAFT', 'MORE_WORK_REQUIRED'];
+    	//var order = ['PUBLISHED', 'APPROVED', 'SUBMITTED_FOR_ASSESSMENT', , 'ASSESSMENT_IN_PROGRESS''DRAFT', 'MORE_WORK_REQUIRED'];
+    	var order = [];
     	if(DS_QA_flag){
 			if(MANUAL_PUBLISH){
-    			var order = ['PUBLISHED', 'APPROVED', 'ASSESSMENT_IN_PROGRESS', 'SUBMITTED_FOR_ASSESSMENT', 'DRAFT', 'MORE_WORK_REQUIRED'];
+    			var order = ['PUBLISHED', 'APPROVED', 'SUBMITTED_FOR_ASSESSMENT', 'ASSESSMENT_IN_PROGRESS', 'DRAFT', 'MORE_WORK_REQUIRED'];
     		}else{//auto publish
-				var order = ['PUBLISHED', 'ASSESSMENT_IN_PROGRESS', 'SUBMITTED_FOR_ASSESSMENT', 'DRAFT', 'MORE_WORK_REQUIRED'];
+				var order = ['PUBLISHED', 'SUBMITTED_FOR_ASSESSMENT', 'ASSESSMENT_IN_PROGRESS', 'DRAFT', 'MORE_WORK_REQUIRED'];
     		}
     	}else{
     		if(MANUAL_PUBLISH){

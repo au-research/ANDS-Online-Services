@@ -509,6 +509,10 @@ $().ready(function(){
        });
        $('.blockOverlay').attr('title','Click to unblock').click($.unblockUI);
    });
+
+   //chosen on data source;
+   $('select[name=data_source_key]').chosen();
+
 });
 
 function formatErrorDesciption(description, title)
