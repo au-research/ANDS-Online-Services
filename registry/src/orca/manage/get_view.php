@@ -73,8 +73,11 @@ function searchRecords($status){
 		$add = '+status:("'.$status.'")'. ' +quality_level:('.$ql.')';
 	}
 
-	$q = '+data_source_key:("'.$dataSourceKey.'")'.$add ;
-
+	if($dataSourceKey!='ALL_DS_ORCA'){
+		$q = '+data_source_key:("'.$dataSourceKey.'")'.$add ;
+	}else{
+		$q = $add;
+	}
 
 	//echo $q;
 	if($query){
@@ -273,7 +276,12 @@ STATUS COUNT
 function statusCount($status){
 	header("Content-type: application/json; charset=UTF-8");
 	global $dataSourceKey, $solr_url;
-	$q = '+data_source_key:("'.$dataSourceKey.'")';
+	if($dataSourceKey!='ALL_DS_ORCA'){
+		$q = '+data_source_key:("'.$dataSourceKey.'")';
+	}else{
+		$q = '';
+	}
+	//$q = '+data_source_key:("'.$dataSourceKey.'")';
 	if($status!='All'){
 		$q.='+status:("'.$status.'")';
 	}
@@ -289,7 +297,11 @@ function statusCount($status){
 function StatusAllQA($status, $dataSourceKey){
 	header("Content-type: application/json; charset=UTF-8");
 	global $dataSourceKey, $solr_url;
-	$q = '+data_source_key:("'.$dataSourceKey.'")';
+	if($dataSourceKey!='ALL_DS_ORCA'){
+		$q = '+data_source_key:("'.$dataSourceKey.'")';
+	}else{
+		$q = '*:*';
+	}
 	if($status!='All') $q.='+status:("'.$status.'")';
 	$fields = array(
 		'q'=>$q,'version'=>'2.2','start'=>'0','rows'=>'1', 'wt'=>'json',
@@ -299,6 +311,7 @@ function StatusAllQA($status, $dataSourceKey){
 	$status_result = solr($solr_url, $fields);
 
 	$status_result = json_decode($status_result);
+	//var_dump($status_result);
 
 	$classes = $status_result->{'facet_counts'}->{'facet_fields'}->{'class'};
 
@@ -334,7 +347,11 @@ function StatusAllQA($status, $dataSourceKey){
 
 function getQAforClass($dataSourceKey, $class, $status='All'){
 	global $dataSourceKey, $solr_url;
-	$q = '+data_source_key:("'.$dataSourceKey.'") +class:("'.$class.'")';
+	if($dataSourceKey!='ALL_DS_ORCA'){
+		$q = '+data_source_key:("'.$dataSourceKey.'") +class:("'.$class.'")';
+	}else{
+		$q = '+class:("'.$class.'")';
+	}
 	if($status!='All') $q.=' +status:("'.$status.'")';
 	$fields = array(
 		'q'=>$q,'version'=>'2.2','start'=>'0','rows'=>'1', 'wt'=>'json',

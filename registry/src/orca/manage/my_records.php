@@ -91,28 +91,33 @@ else
 	{
 		die("<font color='red'>Error: Access Denied for Datasource</font>");
 	}
-	if (($dataSource && count($dataSource) === 1) || $data_source_key == "PUBLISH_MY_DATA")
+	if (($dataSource && count($dataSource) === 1) || $data_source_key == "PUBLISH_MY_DATA" || $data_source_key =='ALL_DS_ORCA')
 	{
-		if (!$dataSource)
-		{
-			$dataSource = array(
-								'data_source_key' => 'PUBLISH_MY_DATA',
-								'qa_flag' => 't',
-								'auto_publish' => 'f',
-			);
+		if (!$dataSource){
+			if($data_source_key=='PUBLISH_MY_DATA'){
+				$dataSource = array(
+					'data_source_key' => 'PUBLISH_MY_DATA',
+					'qa_flag' => 't',
+					'auto_publish' => 'f',
+				);
+			}else if($data_source_key=='ALL_DS_ORCA'){
+				$dataSource = array(
+					'data_source_key' => 'ALL_DS_ORCA',
+					'qa_flag' => 't',
+					'auto_publish' => 'f',
+					'title' => 'All Data Sources'
+				);
+			}
 		}
-		else 
-		{
+		else{
 			$dataSource = array_pop($dataSource);	
 		}
 			
 		displayMMRDataSourceSwitcher($dataSources, $data_source_key);
 		?>
 		<input type="hidden" id="dataSourceKey" value="<?php echo $data_source_key; ?>" />
-		<input type="hidden" id="reindexURL" value="<?php echo eAPP_ROOT;?>orca/services/indexer.php?dataSourceKey=<?php echo $data_source_key?>&task=indexDSo"/>
-		<input type="hidden" id="clearIndexURL" value="<?php echo eAPP_ROOT;?>orca/services/indexer.php?dataSourceKey=<?php echo $data_source_key?>&task=clearDS"/>
-		<input type="hidden" id="generateCacheURL" value="<?php echo eAPP_ROOT;?>orca/maintenance/runTasks.php?data_source=<?php echo $data_source_key?>&task=generate_cache"/>
-		<input type="hidden" id="checkQualityURL" value="<?php echo eAPP_ROOT;?>orca/services/indexer.php?dataSourceKey=<?php echo $data_source_key?>&task=checkQuality"/>
+		<input type="hidden" id="dataSourceName" value="<?php echo $dataSource['title']; ?>" />
+		
 		
 		<div id="mmr_datasource_alert" style="display:none;">
 			<div id="mmr_datasource_alert_title" class="clearfix">
@@ -215,7 +220,7 @@ else
 				
 				$class_names = array('collection', 'party', 'activity', 'service');
 				
-				echo '<div class="tab-content statusview"><h3><button id="toggleSummaryTable">-</button> Summary</h3></div>';
+				echo '<div class="tab-content statusview"><h3>Summary</h3></div>';
 				echo '<div id="All_statusview" class="tab-content statusview">';
 				echo '<table id="summaryTable">';
 				echo '<thead><tr><th width="100"></th>';//empty
@@ -246,7 +251,8 @@ else
 				
 				//echo '<div id="All_statusview" class="tab-content statusview"></div>';
 
-				echo '<div class="tab-content statusview"><h3><button id="toggleDetailTables">-</button> Details</h3></div>';
+				//echo '<hr class="tab-content statusview"/>';
+				echo '<div class="tab-content statusview"><h3>Details</h3></div>';
 				echo '<div id="detailTables">';
 				//display 2 tables and 1 graph for each of the status
 		    	foreach($status as $status_name=>$array){
@@ -284,7 +290,7 @@ else
 				 * All of em
 				 */
 		    	echo '<div id="All_qaview" class="tab-content qaview"></div>';
-
+		    	//echo '<hr class="tab-content qaview"/>';
 		    	foreach($qa_levels as $key=>$l){
 		    		echo '	<div class="tab-content qaview">
 							<table class="mmr_table as_qa_table" ql="'.$key.'" status="All" count="'.$l.'"><tr><td>Loading Graph...</td></tr></table>
@@ -793,7 +799,7 @@ function displayMMRDataSourceSwitcher(array $dataSources = array(), $selected_ke
 	if (userIsORCA_ADMIN())
 	{
 		$dataSources[] = array('data_source_key'=>'PUBLISH_MY_DATA', 'title'=>'Publish My Data (ORCA Admin View)');
-		//$dataSources[] = array('data_source_key'=>'*', 'title'=>'All Data Sources (ORCA Admin View)');
+		$dataSources[] = array('data_source_key'=>'ALL_DS_ORCA', 'title'=>'All Data Sources (ORCA Admin View)');
 	}
 	
 	?>

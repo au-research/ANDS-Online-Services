@@ -35,6 +35,7 @@ $(document).ready(function() {
 
 	//MMR Tables
 	var dsKey = $('#dataSourceKey').val();
+	var dsName = $('#dataSourceName').val();
 
 
 	var orcaQA = false;
@@ -329,6 +330,7 @@ $(document).ready(function() {
     $('#summaryTable').flexigrid({
     	striped:true,
     	title:'Summary',
+    	tableTitle: 'Registry Content Summary for '+dsName,
     	resizable:false,
     	showTableToggleBtn: true,
     	height:'auto',
@@ -792,8 +794,8 @@ $(document).ready(function() {
 					}
 				},
 				title: {
-					text: 'Quality Level',
-					button: true
+					text: 'Quality Level'
+					//button: true
 				}
 			},
 			position: {
@@ -801,12 +803,17 @@ $(document).ready(function() {
 				at: 'left center' // ...and opposite corner
 			},
 			show: {
-				event: 'click',
+				//event: 'click',
+				ready: true,
+				solo:true,
          		effect: function(offset) {
 					$(this).show(); // "this" refers to the tooltip
 				}
       		},
-      		hide: false,
+      		hide: {
+      			fixed:true,
+				delay: 1500
+			},
 			style: {
 				classes: 'ui-tooltip-shadow ui-tooltip-light'
 			},
