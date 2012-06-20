@@ -407,7 +407,7 @@ $(document).ready(function() {
 		}
 
 		if(table_type=='status_table'){
-			buttons.push({name: 'Select All', bclass: 'button', onpress : selectAll});
+			if(status!='MORE_WORK_REQUIRED') buttons.push({name: 'Select All', bclass: 'button', onpress : selectAll});
 		}
 
 		if(status=="DRAFT"){
@@ -535,10 +535,13 @@ $(document).ready(function() {
 				var id = $(this).attr('id');
 				id = id.substring(id.lastIndexOf('row')+3);
 				
-				var numError = $('td[abbr=error_count]', this).text();
-				if(numError!='0') hasError = true;
-
+			
 				if(id){
+					var numError = $('td[abbr=error_count]', this).text();
+					if(numError!='0'){
+						console.log(numError);
+						hasError = true;
+					}
 					targetKeys.push(id);
 				}
 			});
