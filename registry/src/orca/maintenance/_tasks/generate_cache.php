@@ -4,9 +4,12 @@ function task_generate_cache($task)
 	$taskId = $task['task_id'];
 	$dataSourceKey = $task['data_source_key'];
 	$message = '';
+
+	// No specific data source, cache the whole registry!
 	if (!$dataSourceKey) {
 		$registryObjectKeys = array();
-		$ds = getDataSources(null, null); //add publish my data
+		$ds = getDataSources(null, null);
+		$ds[] = array('data_source_key'=>'PUBLISH_MY_DATA');
 		foreach($ds AS $datasource)
 		{
 
@@ -16,7 +19,6 @@ function task_generate_cache($task)
 			{
 				foreach ($ro AS $registry_object)
 				{
-					flush();ob_flush();
 					$extendedRIFCS = generateExtendedRIFCS($registry_object['registry_object_key']);
 					writeCache($datasource['data_source_key'], $registry_object['registry_object_key'], $extendedRIFCS);
 				}
