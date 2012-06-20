@@ -31,13 +31,13 @@ limitations under the License.
 	if($collectionCount==1)
 	{
 		$collectionWord = 'collection';
+		$collectionCount = 'one';
 	}else{
 		$collectionWord = 'collections';
 	}
-	if($collectionCount==0)
+	if($collectionCount!='one' && $collectionCount==0)
 	{
 		$collectionCount = 'no';
-		//$collectionLink =
 	}
 	
 	
@@ -51,16 +51,13 @@ limitations under the License.
 		$i++;
 	}	
 		
-	if($groupCount==1)
+	if($groupCount==1 || $groupCount==0)
 	{
-		$groupWord = 'group';
+		$groupStr = '';
 	}else{
-		$groupWord = 'groups';
+		$groupStr = $groupCount. '	 research groups have been actively involved in collecting data and creating metadata records for the data.';
 	}
-	if($groupCount==0)
-	{
-		$groupCount = 'No';
-	}	
+
 
 	$subjectNum = count($subjects)/2;
 	
@@ -86,24 +83,23 @@ limitations under the License.
 	}
 	elseif($subjectNum==1)
 	{
-		$subjectStr = ' including <a href="'.base_url().'search#!/tab=All/group='.urlencode($group).'/subject='.$subject[0].'">'.$subject[0].'</a>.';
-		$subjectWord = 'area';
+		$subjectWord = 'area';		
+		$subjectStr = ', which covers the subject '.$subjectWord.' <a href="'.base_url().'search#!/tab=All/group='.urlencode($group).'/subject='.$subject[0].'">'.$subject[0].'</a>.';
 	}
 	elseif($subjectNum==2)
 	{
-		$subjectStr = ' including <a href="'.base_url().'search#!/tab=All/group='.urlencode($group).'/subject='.$subject[0].'">'.$subject[0].'</a> and <a href="'.base_url().'search#!/tab=All/group='.urlencode($group).'/subject='.$subject[1].'">'.$subject[1].'</a>.';
+		$subjectStr = ', which covers 	'.$subjectNum.' subject '.$subjectWord.' including <a href="'.base_url().'search#!/tab=All/group='.urlencode($group).'/subject='.$subject[0].'">'.$subject[0].'</a> and <a href="'.base_url().'search#!/tab=All/group='.urlencode($group).'/subject='.$subject[1].'">'.$subject[1].'</a>.';
 	}	
 	else 
 	{
-		$subjectStr = ' including <a href="'.base_url().'search#!/tab=All/group='.urlencode($group).'/subject='.$subject[0].'">'.$subject[0].'</a>, <a href="'.base_url().'search#!/tab=All/group='.urlencode($group).'/subject='.$subject[1].'">'.$subject[1].'</a> and <a href="'.base_url().'search#!/tab=All/group='.urlencode($group).'/subject='.$subject[2].'">'.$subject[2].'</a>.';	
+		$subjectStr = ', which covers 	'.$subjectNum.' subject '.$subjectWord.' including <a href="'.base_url().'search#!/tab=All/group='.urlencode($group).'/subject='.$subject[0].'">'.$subject[0].'</a>, <a href="'.base_url().'search#!/tab=All/group='.urlencode($group).'/subject='.$subject[1].'">'.$subject[1].'</a> and <a href="'.base_url().'search#!/tab=All/group='.urlencode($group).'/subject='.$subject[2].'">'.$subject[2].'</a>.';	
 	}
 	
-	echo '<p>Up to date, ' .urldecode($group). ' has ';
+	echo '<p>To date, ' .urldecode($group). ' has ';
 	if($collectionCount!='no'){
-		echo '<a id="hp-count-collection" href="'.base_url().'search#!/tab=collection/group='.urlencode($group).'">' .$collectionCount .' '.$collectionWord.'</a> ';
+		echo '<a id="hp-count-collection" href="'.base_url().'search#!/tab=collection/group='.urlencode($group).'">' .$collectionCount .' '.$collectionWord.'</a> in RDA ';
 	}else{
-		echo  ' '.$collectionCount .' '.$collectionWord.' ';
+		echo  ' '.$collectionCount .' '.$collectionWord.' in RDA';
 	}
-	echo 'in RDA, which covers 	'.$subjectNum.' subject '.$subjectWord.' '.$subjectStr.' ' .$groupCount. ' 
-	 research '.$groupWord.' have been actively involved in collecting data and creating metadata records for the data.</p>';
+	echo $subjectStr.' ' .$groupStr. ' All the Collections, Parties, Activities and Services associated with ' .urldecode($group). '  can be accessed from the Registry Contents box on the right hand side of this page.</p>';
 ?>

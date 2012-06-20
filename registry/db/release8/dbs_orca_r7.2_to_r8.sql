@@ -129,7 +129,7 @@ INSERT INTO dba.tbl_terms (identifier, identifier_type, name, description, vocab
 INSERT INTO dba.tbl_terms (identifier, identifier_type, name, description, vocabulary_identifier, parent_term_identifier,type,vocabpath) VALUES ('NoLicence', 'local','NoLicence', 'NoLicence licence type','RIFCSLicenceType','No Licence','pt','RIFCS Licence Type');
 INSERT INTO dba.tbl_terms (identifier, identifier_type, name, description, vocabulary_identifier, parent_term_identifier,type,vocabpath) VALUES ('Unknown/Other', 'local','Unknown/Other', 'Unknown/Other licence type','RIFCSLicenceType','Unknown','pt','RIFCS Licence Type');
 INSERT INTO dba.tbl_terms (identifier, identifier_type, name, description, vocabulary_identifier, parent_term_identifier,type,vocabpath) VALUES ('researchAreas', 'local','researchAreas', 'Contributor research areas','RIFCSDescriptionType','','pt','RIFCS Description Type');
-INSERT INTO dba.tbl_terms (identifier, identifier_type, name, description, vocabulary_identifier, parent_term_identifier,type,vocabpath) VALUES ('researchShowcase', 'local','researchShowcase', 'Contributor research showcase','RIFCSDescriptionType','','pt','RIFCS Description Type');
+INSERT INTO dba.tbl_terms (identifier, identifier_type, name, description, vocabulary_identifier, parent_term_identifier,type,vocabpath) VALUES ('researchDataProflie', 'local','researchDataProflie', 'Contributor research data profile','RIFCSDescriptionType','','pt','RIFCS Description Type');
 INSERT INTO dba.tbl_terms (identifier, identifier_type, name, description, vocabulary_identifier, parent_term_identifier,type,vocabpath) VALUES ('eResearchSupport', 'local','eResearchSupport', 'Contributor eResearch support','RIFCSDescriptionType','','pt','RIFCS Description Type');
 
 

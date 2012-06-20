@@ -37,9 +37,10 @@ class View_part extends CI_Controller {
 		$data['group']=$group;			
 		$this->load->view('cannedText-view', $data);
 	}	
-	public function contentStat($sort = 'index',$group){
+	public function contentStat($sort = 'index',$group,$key){
 		$this->load->model('solr');
-		$data['content']=$this->solr->getContent($sort,$group);
+		$data['content']=$this->solr->getContent($sort,$group,$key);
+		//print_r($data['content']);
 		$data['group']=$group;			
 		$this->load->view('content-view', $data);
 	}

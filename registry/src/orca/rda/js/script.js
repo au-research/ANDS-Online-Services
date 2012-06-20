@@ -743,7 +743,7 @@ $(document).ready(function(){
 		var group = location.href.substr(location.href.indexOf("groupName=")+10,location.href.length);
 		group = encodeURIComponent(decodeURIComponent(group));
 		initCannedText(group,key);
-		initContentsBox(group);
+		initContentsBox(group,key);
 		initSubjectsBox(group);
 		initResearchGroupsBox(group,key);
 		initCollectionsAddedBox(group);
@@ -770,12 +770,12 @@ $(document).ready(function(){
 		}	
 		loadCannedText(sort,group);
 	}	
-	function initContentsBox(group){
+	function initContentsBox(group,key){
 		var sort='index';
 		function loadContentStat(sort,group){//load Institution Page Stat
 			$.ajax({
 	  			type:"GET",   
-	  			url: base_url+"/view_part/contentStat/"+sort+"/"+group,   
+	  			url: base_url+"/view_part/contentStat/"+sort+"/"+group+"/"+key,   
 	  				success:function(msg){	
 	  					if(msg!='')
 	  					{
