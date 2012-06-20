@@ -51,7 +51,9 @@
 			onSubmit: false, //using a custom populate function
 			additionalClass: '',
 			tableTitle: 'DEFAULT TITLE FOR TABLE',
-			hideOnNoRows: true
+			hideOnNoRows: true,
+			cookies: true, //yay, cookies for Minh
+			tableId: 'dagrid' //needed for cookie, must be defined differently for different tables
 		}, p);
 		$(t).show() //show if hidden
 			.attr({
@@ -225,6 +227,7 @@
 					this.rePosDrag();
 					this.fixHeight();
 					this.colresize = false;
+					if (p.cookies) $.cookie(p.tableId+'_col'+n, nw);
 				} else if (this.vresize) {
 					this.vresize = false;
 				} else if (this.colCopy) {
@@ -496,7 +499,7 @@
 				$(g.gDiv).prepend(g.mDiv);
 				if (p.showTableToggleBtn) {
 					$(g.mDiv).append('<div class="ptogtitle" title="Minimize/Maximize Table"><span></span></div>');
-					$(g.mDiv).click(function () {
+					$('.ftitle', g.mDiv).click(function () {
 						$(g.gDiv).toggleClass('hideBody');
 						$(this).toggleClass('vsble');
 					});
@@ -755,6 +758,8 @@
 				if (cm.width) {
 					$(th).attr('width', cm.width);
 				}
+
+				if($.cookie(p.tableId+'_col'+i)) $(th).attr('width',$.cookie(p.tableId+'_col'+i));
 				if ($(cm).attr('hide')) {
 					th.hidden = true;
 				}

@@ -506,7 +506,9 @@ $(document).ready(function() {
             searchitems : [
             		{display: 'Name/Title', name : 'list_title'}
             ],
-            onSuccess: formatTable
+            onSuccess: formatTable,
+            cookies: true,
+            tableId:theTableTitle
 		});
 	});
 
