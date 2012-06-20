@@ -180,9 +180,9 @@ else
 		    	<?php
 		    		foreach($status as $key=>$s){
 		    			if($s['count']!=0){
-		    				echo '<li><a href="javascript:void(0);" title="'.$s['count'].' Records" class="tab tip" name="'.$key.'">'.str_replace('_', ' ', $key).'</a><li>';
+		    				//echo '<li><a href="javascript:void(0);" title="'.$s['count'].' Records" class="tab tip" name="'.$key.'">'.str_replace('_', ' ', $key).'</a><li>';
 		    			}else{
-		    				echo '<li><a href="javascript:void(0);" title="'.$s['count'].' Records" class="tab tip inactive" name="'.$key.'">'.str_replace('_', ' ', $key).'</a><li>';
+		    				//echo '<li><a href="javascript:void(0);" title="'.$s['count'].' Records" class="tab tip inactive" name="'.$key.'">'.str_replace('_', ' ', $key).'</a><li>';
 		    			}
 		    		}
 		    	?>
@@ -221,7 +221,7 @@ else
 				
 				$class_names = array('collection', 'party', 'activity', 'service');
 				
-				echo '<div class="tab-content statusview"><h3>Summary</h3></div>';
+				/*echo '<div class="tab-content statusview"><h3>Summary</h3></div>';
 				echo '<div id="All_statusview" class="tab-content statusview">';
 				echo '<table id="summaryTable">';
 				echo '<thead><tr><th width="100"></th>';//empty
@@ -248,7 +248,10 @@ else
 				echo '</tbody>';
 
 				echo '</table>';
-				echo '</div>';
+				echo '</div>';*/
+				echo '	<div class="tab-content statusview">
+							<table class="summary_table"><tr><td>Loading Summary Table...</td></tr></table>
+						</div>';
 				
 				//echo '<div id="All_statusview" class="tab-content statusview"></div>';
 

@@ -34,7 +34,8 @@ $qtype = isset($_POST['qtype']) ? $_POST['qtype'] : false;
 
 switch($view){
 	case "all": searchAllRecords();break;
-	case "summary": summary();break;
+	case "summary": summary($dataSourceKey);break;
+	case "AllStatus": allStatus($dataSourceKey);break;
 	case "status_table":searchRecords($status);break;
 	case "as_qa_table":searchRecords($status);break;
 	case "qa_table":searchRecords($status);break;
@@ -45,6 +46,110 @@ switch($view){
 	case "tipQA": tipQA($key, $ql);
 }
 
+function summary($dataSourceKey){
+	global $solr_url;
+
+	if($dataSourceKey!='ALL_DS_ORCA'){
+		$q = '+data_source_key:("'.$dataSourceKey.'")';
+	}else{
+		$q = '*:*';
+	}
+
+	//Construct the Query
+	$fields = array(
+		'q'=>$q,'version'=>'2.2','start'=>'0','rows'=>'1', 'wt'=>'json',
+		'fl'=>'key', 'facet'=>'true', 'facet.field'=>'class','facet.mincount'=>'1','facet.sort'=>'index'
+	);
+	//$fields['facet']=$sort;
+
+	//Call SOLR and ask for data
+	$classes = solr($solr_url, $fields);
+	$classes_json = json_decode($classes);
+
+	$numFound = $classes_json->{'response'}->{'numFound'};
+	$classes_json = $classes_json->{'facet_counts'}->{'facet_fields'}->{'class'};
+	$classes = array();
+	for($i=0;$i<sizeof($classes_json);$i=$i+2){
+		$classes[$classes_json[$i]] = $classes_json[$i+1];
+	}
+	//var_dump($classes);
+
+	$jsonData = array('page'=>'1','total'=>$numFound,'rows'=>array());
+
+
+	$statuses = getAllStatus($dataSourceKey);
+	//var_dump($statuses);
+	foreach($classes as $class=>$num){
+		$entry = array(
+					'id' => $class,
+					'cell' => array($class)
+				);
+		foreach($statuses as $status=>$num){
+			$entry['cell'][] = getStatusCountForClass($status, $class, $dataSourceKey);
+		}
+		$jsonData['rows'][] = $entry;
+	}
+
+	$jsonData = json_encode($jsonData);
+	echo $jsonData;
+}
+
+function AllStatus($dataSourceKey){
+	header("Content-type: application/json; charset=UTF-8");
+	global $solr_url;
+	$statuses = getAllStatus($dataSourceKey);
+	$statuses = json_encode($statuses);
+	echo $statuses;
+}
+
+function getStatusCountForClass($status, $class, $dataSourceKey){
+	global $solr_url;
+	if($dataSourceKey!='ALL_DS_ORCA'){
+		$q = '+data_source_key:("'.$dataSourceKey.'")';
+	}else{
+		$q = '*:*';
+	}
+	$q.=' +status:("'.$status.'") +class:("'.$class.'")';
+	//Construct the Query
+	$fields = array(
+		'q'=>$q,'version'=>'2.2','start'=>'0','rows'=>'1', 'wt'=>'json',
+		'fl'=>'key'
+	);
+	//$fields['facet']='&facet=true&facet.field=status';
+
+	//Call SOLR and ask for data
+	$content = solr($solr_url, $fields);
+	$json = json_decode($content);
+	$numFound = $json->{'response'}->{'numFound'};
+	return $numFound;
+}
+
+function getAllStatus($dataSourceKey){
+	global $solr_url;
+
+	if($dataSourceKey!='ALL_DS_ORCA'){
+		$q = '+data_source_key:("'.$dataSourceKey.'")';
+	}else{
+		$q = '*:*';
+	}
+
+	//Construct the Query
+	$fields = array(
+		'q'=>$q,'version'=>'2.2','start'=>'0','rows'=>'1', 'wt'=>'json',
+		'fl'=>'key', 'facet'=>'true', 'facet.field'=>'status','facet.mincount'=>'1','facet.sort'=>'index'
+	);
+	//$fields['facet']='&facet=true&facet.field=status';
+
+	//Call SOLR and ask for data
+	$content = solr($solr_url, $fields);
+	$json = json_decode($content);
+	$statuses_json = $json->{'facet_counts'}->{'facet_fields'}->{'status'};
+	$statuses = array();
+	for($i=0;$i<sizeof($statuses_json);$i=$i+2){
+		$statuses[$statuses_json[$i]] = $statuses_json[$i+1];
+	}
+	return $statuses;
+}
 
 function searchRecords($status){
 	header("Content-type: application/json");

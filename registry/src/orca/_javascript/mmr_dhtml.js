@@ -42,12 +42,14 @@ $(document).ready(function() {
 			$.cookie('dsKey', dsKey);
 			$.cookie('dsName', dsKey);
 		}
+		reloadData();
 	}else{
 		if($('#dataSourceKey').val()){
 			dsKey = $('#dataSourceKey').val();
 			dsName = $('#dataSourceName').val();
 			$.cookie('dsKey', dsKey);
 			$.cookie('dsName', dsKey);
+			reloadData();
 		}else{
 			//console.log('Select a data source');
 		}
@@ -373,7 +375,7 @@ $(document).ready(function() {
 
 		var tableTitle ='';
 		if(table_type=='status_table'){
-			theTableTitle=status.replace(/_/g," ");;
+			theTableTitle=status.replace(/_/g," ");
 		}else if(table_type=='as_qa_table' || table_type=='qa_table'){
 			theTableTitle='Quality Level '+ql;
 		}
@@ -629,36 +631,9 @@ $(document).ready(function() {
 					$('.mmr_table').each(function(){
 						$(this).flexReload();
 					});
+					reloadData();
 				}
 			});
-			/*
-			$.post(
-				$("#elementSourceURL").val() + "task=manage_my_records&action=" + action,
-				{
-					'keys[]' : targetKeys,
-					'dataSourceKey' : dataSourceKey
-				},
-				function(data)
-				{
-					if(data.responsecode=='0'){
-						alert('Error Occured: Access Denied');
-					}else if(data.responsecode=='MT008'){
-						alert('Your records have been sent to ANDS for assessment and approval. You should contact your ANDS Client Liaison Officer to notify them that these records have been submitted.');
-					}else if(data.responsecode=='MT014'){
-						alert('An ANDS Quality Assessor has been notified of your submitted record(s)');
-					}else{
-						if(data.alert){
-							alert(data.alert);
-						}
-					}
-					
-					release();
-					$('.mmr_table').each(function(){
-						$(this).flexReload();
-					});
-				},
-				'json'
-			);*/
 		}
 	}
 
@@ -672,6 +647,83 @@ $(document).ready(function() {
 
 	function release(){
 		$.unblockUI();
+	}
+
+	function reloadData(){
+		var viewURL = 'get_view.php?view=summary&ds='+dsKey;
+		var columns = [];
+		columns.push({display:'', name:'', width:120, sortable:false,align:'left'});
+		$.ajax({
+    		url: 'get_view.php?view=AllStatus&ds='+dsKey,
+    		method: 'get',
+    		dataType:'json',
+    		contentType: "application/json", //tell the server we're looking for json
+    		success: function(data) {
+    			$('.tab').remove();
+    			$('.tab-list').append('<li><a href="javascript:void(0);" title="All" class="tab active-tab" name="All">All Records</a></li>');
+    			$.each(data, function(i, num){
+    				columns.push({display:i.replace(/_/g," "), name:i, width:120, sortable:false, align:'left'});
+    				$('.tab-list').append('<li><a href="javascript:void(0);" title="'+num+' Records" class="tab tip" name="'+i+'">'+i.replace(/_/g," ")+'</a><li>');
+    			});
+    			//console.log(columns);
+
+    			$('.summary_table').flexigrid({
+					striped:true,
+					title:status,
+					showTableToggleBtn: true,
+					showToggleBtn: true,
+		            url: viewURL,
+					dataType: 'json',
+					//usepager: true,
+					colModel :columns,
+		            resizable:true,
+		            //useRp: true,
+					rp: 10,
+					pagestat: 'Displaying {from} to {to} of {total} records',
+					nomsg: 'No records found',
+
+		            height:'200px',
+		            //additionalClass:tClass,
+		            tableTitle:'Registry Content Summary for '+dsName
+				});
+				//console.log(viewURL);
+        	}
+       	});
+		//console.log(viewURL);
+		/*$('summary_table').flexigrid({
+			striped:true,
+			title:status,
+			//showTableToggleBtn: true,
+			showToggleBtn: true,
+            url: viewURL,
+			dataType: 'json',
+			usepager: true,
+			colModel : [
+			{display: 'recordKey', name:'key', width:120, sortable: true, align:'left'},
+                {display: 'Name/Title', name : 'list_title', width : 350, sortable : true, align: 'left'},
+                {display: 'Last Modified', name : 'date_modified', width : 150, sortable : true, align: 'left'},
+                {display: 'Class', name : 'class', width : 70, sortable : true, align: 'left'},
+                {display: 'Errors', name : 'error_count', width : 30, sortable : true, align: 'left'},
+                {display: 'Quality Level', name : 'quality_level', width : 70, sortable : true, align: 'left'},
+                {display: 'Flag', name : 'flag', width : 30, sortable : true, align: 'left'},
+                {display: 'Options', name : 'buttons', width : 100, sortable : false, align: 'left'},
+                {display: 'Status', name : 'status', width : 200, sortable : true, align: 'left'},
+                {display: 'Manually Assessed', name : 'manually_assessed_flag', width : 50, sortable : true, align: 'left', hide:true}
+            ],
+            sortname:'date_modified',
+            sortorder:'desc',
+            buttons:buttons,
+            resizable:true,
+            useRp: true,
+			rp: 10,
+			pagestat: 'Displaying {from} to {to} of {total} records',
+			nomsg: 'No records found',
+
+            height:'200px',
+            //additionalClass:tClass,
+            tableTitle:'Registry Content Summary for '+dsName
+            onSuccess: formatTable
+		});*/
 	}
 
 
@@ -899,65 +951,6 @@ $(document).ready(function() {
 			$.get($("#elementSourceURL").val() + "task=flag_regobj&key=" + encodeURIComponent(key) + "&flag=" + flag);
 		}else{
 			$.get($("#elementSourceURL").val() + "task=flag_draft&data_source=" + encodeURIComponent($("#dataSourceKey").val()) + "&key=" + encodeURIComponent(key) + "&flag=" + flag);	
-		}
-	});
-
-
-	
-
-	
-
-
-	
-
-
-
-	$('#indexDS').live('click', function(){
-		$('#indexDS').html('Quality Checking...');
-		$('.tab-content').css('opacity',0.5);
-		$.ajax({
-			url:$('#checkQualityURL').val(),
-			success:function(data){
-				$('#indexDS').html('Clearing Index...')
-				$.ajax({
-					url:$('#clearIndexURL').val(),
-					success:function(data){
-						$('#indexDS').html('Generate Cache...')
-						$.ajax({
-							url:$('#generateCacheURL').val(),
-							success:function(data){
-								$('#indexDS').html('Reindexing....');
-								$.ajax({
-									url:$('#reindexURL').val(),
-									success:function(data){
-										$('#indexDS').html('<span></span>');
-										//console.log(data);
-								    	$('.tab-content').css('opacity',1.0);
-								    	//location.reload();
-										$('.mmr_table').each(function(){
-											$(this).flexReload();
-										});
-									}
-								});
-							}
-						});
-					}
-				});			
-			}
-		});
-	});
-
-	$('#toggleSummaryTable, #toggleDetailTables').live('click', function(){
-		if($(this).attr('id')=='toggleSummaryTable'){
-			$('#All_statusview').slideToggle('fast');
-		}else{
-			$('#detailTables .statusview').slideToggle('fast');
-		}
-		
-		if($(this).text()=='-'){
-			$(this).text('+');
-		}else{
-			$(this).text('-');
 		}
 	});
 
