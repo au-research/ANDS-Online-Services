@@ -115,7 +115,7 @@ require '../../_includes/header.php';
 	</div>
 	<div id="mmr_datasource_alert_msg">
 	</div>
-	<input type="button" onclick="location.reload();" value="Continue" style="vertical-align:bottom;"/>
+	<!-- input type="button" onclick="location.reload();" value="Continue" style="vertical-align:bottom;"/-->
 </div>
 
 <input type="hidden" id="object.objectClass" name="object.objectClass" value="Party" />
