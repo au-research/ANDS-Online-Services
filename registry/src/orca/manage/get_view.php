@@ -67,6 +67,7 @@ switch($view){
 	case "AllStatusAllQA": AllStatusAllQA($dataSourceKey);break;
 	case "StatusAllQA":StatusAllQA($status, $dataSourceKey);break;
 	case "tipQA": tipQA($key, $ql);
+	case "getAllStat": getAllStat();break;
 }
 
 function summary($dataSourceKey){
@@ -532,6 +533,18 @@ function tipQA($key, $level){
 	$t = getQualityTestResult($key, $dataSourceKey, $status);
 	echo $t;
 	//echo 'getting qa for key='.$key.' and level='.$level.'<a href="">asdfadsfasd</a>';
+}
+
+function getAllStat(){
+	global $dataSourceKey;
+	$stats = getDataSourceStats($dataSourceKey);
+	$dsStat = array();
+	$dsStat[$dataSourceKey]['total'] = 0;
+	foreach($stats as $stat){
+		$dsStat[$stat['ds_key']]['total'] += $stat['count'];
+	}
+	var_dump($dsStat);
+	var_dump($stats);
 }
 
 ?>

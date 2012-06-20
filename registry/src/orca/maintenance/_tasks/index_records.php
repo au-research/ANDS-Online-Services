@@ -1,5 +1,5 @@
 <?php
-
+$solr_update_url = $solr_url.'update';
 function task_index_records($task)
 {
 	global $solr_url;
@@ -32,7 +32,7 @@ function task_index_records($task)
 	}
 
 
-	$message .= "\ncompleted!";
+	$message .= "\ncompleted! update to ".$solr_update_url;
 	return $message;
 }
 

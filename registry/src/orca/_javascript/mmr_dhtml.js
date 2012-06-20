@@ -448,6 +448,8 @@ $(document).ready(function() {
 		}
 		//buttons.push({separator:true});
 
+		if(dsKey=='ALL_DS_ORCA') buttons = [];
+
 		var table_type='status_table';
 		if($(this).hasClass('as_qa_table')) table_type='as_qa_table';
 		if($(this).hasClass('qa_table')) table_type='qa_table';
@@ -535,11 +537,10 @@ $(document).ready(function() {
 				var id = $(this).attr('id');
 				id = id.substring(id.lastIndexOf('row')+3);
 				
-			
 				if(id){
 					var numError = $('td[abbr=error_count]', this).text();
 					if(numError!='0'){
-						console.log(numError);
+						//console.log(numError);
 						hasError = true;
 					}
 					targetKeys.push(id);
