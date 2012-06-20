@@ -360,7 +360,7 @@ function searchRecords($status){
 		if($date_modified = date_parse($doc->{'date_modified'})){
 			$date_modified = date('g:i a, j M Y', strtotime($doc->{'date_modified'}));
 			if(isset($doc->{'last_modified_by'})){
-				$date_modified .= 'Modified By: '.$doc->{'last_modified_by'};
+				$date_modified .= '<br/><small>'.$doc->{'last_modified_by'}.'</small>';
 			}
 		}
 
