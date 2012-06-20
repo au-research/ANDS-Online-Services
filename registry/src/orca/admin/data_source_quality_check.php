@@ -85,8 +85,7 @@ echo '<link rel="stylesheet" href="'. eAPP_ROOT.'orca/_javascript/chosen/chosen.
 	{
 		$dataSourceKey = $searchResults[$i]['data_source_key'];
 		$dataSourceTitle = $searchResults[$i]['title'];
-		$numRegistryObjects = getRegistryObjectCount($dataSourceKey);
-		print("<option value=\"".urlencode($dataSourceKey)."\">".esc($dataSourceTitle)."(".esc($numRegistryObjects).")</option>\n");
+		print("<option value=\"".urlencode($dataSourceKey)."\">".esc($dataSourceTitle)."</option>\n");
 	}
 
 print("</select>\n");

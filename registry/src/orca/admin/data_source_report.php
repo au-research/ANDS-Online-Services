@@ -94,7 +94,7 @@ if (getQueryValue('type') == "quality"):
 		</td>
 		<td class="regObjTitleInfo" style="width:350px;">
 		<b><?php echo $record['display_title'];?></b><br/>
-		<i><?php echo elipsesLimit($record['registry_object_key'], 70);?></i>
+		<i><a href="<?php echo eAPP_ROOT . "orca/view.php?key=" . rawurlencode($record['registry_object_key']); ?>" target="_blank"><?php echo elipsesLimit($record['registry_object_key'], 60);?></a></i>
 		</td>
 		<td style="min-width:550px;">
 		<b>Quality Level: <?php echo $record['quality_level'];?></b> ( <?php echo $qa_string;?>)<br/>
@@ -129,7 +129,7 @@ if (getQueryValue('type') == "quality"):
 		<td>
 		<div class="regObjTitleInfo" style="width:350px;">
 			<b><?php echo $draft['registry_object_title'];?></b><br/>
-			<i><?php echo elipsesLimit($draft['draft_key'], 70);?></i>
+			<i><a href="<?php echo eAPP_ROOT . "orca/manage/add_".strtolower($draft['class'])."_registry_object.php?data_source=".rawurlencode($data_source_key)."&key=" . rawurlencode($draft['draft_key']); ?>" target="_blank"><?php echo elipsesLimit($draft['draft_key'], 60);?></a></i>
 		</div>
 		</td>
 		<td style="min-width:550px;">
