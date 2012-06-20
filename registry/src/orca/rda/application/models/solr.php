@@ -28,7 +28,8 @@ limitations under the License.
 	function search($query, $extended_query, $write_type='json', $page, $classFilter ='All', $groupFilter ='All', $typeFilter ='All', $subjectFilter = 'All', $licenceFilter='All', $status='All', $sort='score desc')
     {
         $q=$query;
-		$q=rawurlencode($q);$q=str_replace("%5C%22", "\"", $q);//silly encoding
+
+		$q=rawurlencode($q);$q=str_replace("%5C%22","\"", $q);//silly encoding
 		$start = 0;$row = 10;
 		if($page!=1) $start = ($page - 1) * $row;
 
@@ -54,6 +55,11 @@ limitations under the License.
 
 
 		$q = urldecode($q);
+		// Workaround for ! in last char of query resulting in error (XXX: possibly everything should be quoted??)
+		if (strpos($q,"!") !== FALSE)
+		{
+			$q = '"'.$q.'"';
+		}
 
 		//if($q!='*:*')$q = escapeSolrValue($q);
 

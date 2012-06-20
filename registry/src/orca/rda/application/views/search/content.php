@@ -1,5 +1,5 @@
 <?php
-/** 
+/**
 Copyright 2011 The Australian National University
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,39 +14,38 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ***************************************************************************
 *
-**/ 
+**/
 ?>
 <?php
-	
 	//$numFound = $json->{'response'}->{'numFound'};
 	$realNumFound = $json->{'response'}->{'numFound'};
 	$numFound = $json_tab->{'response'}->{'numFound'};
 	$timeTaken = $json->{'responseHeader'}->{'QTime'};
 	$timeTaken = $timeTaken / 1000;
-	
+
 	//print_r($json->{'responseHeader'}->{'params'});
-	
+
 	$row = $json->{'responseHeader'}->{'params'}->{'rows'};
 	$start = $json->{'responseHeader'}->{'params'}->{'start'};
 	$end = $start + $row;
-	
+
 	$h_start = $start + 1;//human start
 	$h_end = $end + 1;//human end
-	
+
 	if ($h_end > $numFound) $h_end = $numFound;
-	
+
 	$totalPage = ceil($numFound / $row);
 	$currentPage = ceil($start / $row)+1;
 ?>
 		<?php
 			echo '<div class="toolbar clearfix">';
-			
+
 			echo '<div id="realNumFound" class="hide">'.($realNumFound).'</div>';
-			
-			
-			
+
+
+
 			//echo $this->input->cookie('facets');
-			
+
 			$class='';
 			if($this->input->cookie('facets')!=''){
 				if($this->input->cookie('facets')=='yes'){
@@ -57,22 +56,22 @@ limitations under the License.
 			}else{
 				$class='ui-icon-arrowthickstop-1-w';
 			}
-			
+
 			echo '<div class="ui-state-default ui-corner-all show-hide-facet"><span class="ui-icon '.$class.'" id="toggle-facets" title="Show/Hide Facet"></span></div>';
 			//echo '<a href="JavaScript:void(0);" id="hide-facets">Expand</a><a href="JavaScript:void(0);" id="show-facets">Collapse (Show Filters)</a>';
-			
+
 			echo '<div class="result">';
 			echo ''.number_format($realNumFound).' results ('.$timeTaken.' seconds)';
 			echo '</div>';
-			
+
 			$this->load->view('search/pagination');
-			
+
 			echo '</div>';
-			
+
 			if($realNumFound==0){
 				$this->load->view('search/no_result');
 			}
-			
+
 			foreach($json->{'response'}->{'docs'} as $r)
 			{
 				$type = $r->{'type'};
@@ -83,7 +82,7 @@ limitations under the License.
 				$description_type=array();if(isset($r->{'description_type'})) $description_type = $r->{'description_type'};
 				$class = '';if(isset($r->{'class'})) $class = $r->{'class'};
 				$type = '';if(isset($r->{'type'})) $type = strtolower($r->{'type'});
-				
+
 				$brief = '';$found_brief = false;
 				$full = '';$found_full = false;
 				foreach($description_type as $key=>$t){
@@ -95,20 +94,20 @@ limitations under the License.
 						$found_full = true;
 					}
 				}
-				
+
 				$spatial ='';$center = '';
 				if(isset($r->{'spatial_coverage'})){
 					$spatial = $r->{'spatial_coverage'};
 					$center = $r->{'spatial_coverage_center'}[0];
 				}
-				
+
 				$subjects='';
 				if(isset($r->{'subject_value_resolved'})){
 					$subjects = $r->{'subject_value_resolved'};
 				}
 
 				echo '<div class="search_item" itemscope itemType="http://schema.org/Thing">';
-				
+
 				//echo get_cookie('show_icons');
 				echo '<p class="hide key">'.$ro_key.'</p>';
 				if(get_cookie('show_icons')=='yes'){
@@ -116,7 +115,7 @@ limitations under the License.
 						case "collection":echo '<img itemprop="image" class="ro-icon" src="'.base_url().'img/icon/collections_32.png" title="Collection" alt="Collection"/>';break;
 						case "activity":echo '<img itemprop="image" class="ro-icon" src="'.base_url().'img/icon/activities_32.png" title="Activity" alt="Activity"/>';break;
 						case "service":echo '<img itemprop="image" class="ro-icon" src="'.base_url().'img/icon/services_32.png" title="Service" alt="Service"/>';break;
-						case "party": 
+						case "party":
 									if($type=='person'){
 										echo '<img itemprop="image" class="ro-icon" src="'.base_url().'img/icon/party_one_32.png" title="Person" alt="Person"/>';
 									}elseif($type=='group'){
@@ -133,9 +132,9 @@ limitations under the License.
 				}
 				//echo $key_url;
 				echo '<h2 itemprop="name"><a itemprop="url" href="'.$key_url.'">'.$name.'</a></h2>';
-				
+
 				//echo '<pre>';
-								
+
 				if(isset($r->{'alt_listTitle'})){
 					echo '<div class="alternatives">';
 					foreach($r->{'alt_listTitle'} as $listTitle){
@@ -145,7 +144,7 @@ limitations under the License.
 				}
 				//echo '</pre>';
 				//echo '<h2><a href="#!/view/'.$ro_key.'">'.$name.'</a></h2>';
-				
+
 				//DESCRIPTIONS';
 				echo '<p itemprop="description">';
 				if($found_brief){
@@ -154,7 +153,7 @@ limitations under the License.
 					echo strip_tags(htmlspecialchars_decode($full));
 				}
 				echo '</p>';
-				
+
 				if($spatial){
 					echo '<ul class="spatial">';
 						foreach($spatial as $s){
@@ -163,7 +162,7 @@ limitations under the License.
 					echo '</ul>';
 					echo '<a class="spatial_center">'.$center.'</a>';
 				}
-				
+
 				if(get_cookie('show_subjects')=='yes'){
 					if($subjects){
 						echo '<div class="subject-container">';
@@ -180,7 +179,7 @@ limitations under the License.
 			echo '<div class="toolbar clearfix bottom-corner">';
 			if(displaySubscriptions() )
 			{
-				$dataSourceString = '';	
+				$dataSourceString = '';
 				$q = $_POST['q'];
 				if($q=='')$q = '*:*';
 				$classFilter = $_POST['classFilter'];
@@ -189,9 +188,9 @@ limitations under the License.
 				$subjectFilter = $_POST['subjectFilter'];
 				$licenceFilter = $_POST['licenceFilter'];
 				if(isset($_POST['dataSource'])) $dataSourceString = "&dataSource=".$_POST['dataSource'];
-				$queryStr = '?q='.$q.$dataSourceString.'&classFilter='.$classFilter.'&typeFilter='.$typeFilter.'&groupFilter='.$groupFilter.'&subjectFilter='.$subjectFilter.'&licenceFilter='.$licenceFilter;	
-				echo "<div id='subscriptions'><div class='rss_icon'></div> Subscribe to this web feed. <a href='".base_url()."search/rss/".$queryStr."&subscriptionType=rss'>RSS</a>/<a href='".base_url()."search/atom/".$queryStr."&subscriptionType=atom'>ATOM</a></div>";	
-			}		
+				$queryStr = '?q='.$q.$dataSourceString.'&classFilter='.$classFilter.'&typeFilter='.$typeFilter.'&groupFilter='.$groupFilter.'&subjectFilter='.$subjectFilter.'&licenceFilter='.$licenceFilter;
+				echo "<div id='subscriptions'><div class='rss_icon'></div> Subscribe to this web feed. <a href='".base_url()."search/rss/".$queryStr."&subscriptionType=rss'>RSS</a>/<a href='".base_url()."search/atom/".$queryStr."&subscriptionType=atom'>ATOM</a></div>";
+			}
 			$this->load->view('search/pagination');
-			echo '</div>';		
+			echo '</div>';
 		?>

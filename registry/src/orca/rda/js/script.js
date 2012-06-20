@@ -279,6 +279,7 @@ $(document).ready(function(){
 	
 	/*GET HASH TAG*/
 	$(window).hashchange(function(){
+		console.log('hc!');
 		//var hash = window.location.hash;
 		var hash = location.href.substr(location.href.indexOf("#"));
 		//console.log('Hash Change: '+ hash + '<br/>');
