@@ -13,6 +13,8 @@ function task_index_records($task)
 	$totalCount = 0;
 	$chunkSize = 49;
 	$solr_update_url = $solr_url.'update';
+
+	// Single data source
 	if($dataSourceKey != '')
 	{
 		$message .= "clearing Datasource Index\n";
@@ -20,7 +22,20 @@ function task_index_records($task)
 		$message .= addPublishedSolrIndexForDatasource($dataSourceKey);
 		$message .= addDraftSolrIndexForDatasource($dataSourceKey);
 	}
-
+	else
+	{
+		// Index all data sources
+		$ds = getDataSources(null, null);
+		$ds[] = array('data_source_key'=>'PUBLISH_MY_DATA');
+		foreach($ds AS $datasource)
+		{
+			$dataSourceKey = $datasource['data_source_key'];
+			$message .= "clearing Datasource Index\n";
+			$result =  clearDS($dataSourceKey);
+			$message .= addPublishedSolrIndexForDatasource($dataSourceKey);
+			$message .= addDraftSolrIndexForDatasource($dataSourceKey);
+		}
+	}
 
 	$message .= "\ncompleted! update to ".$solr_update_url;
 	return $message;

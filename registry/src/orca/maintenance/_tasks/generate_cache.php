@@ -40,5 +40,7 @@ function task_generate_cache($task)
 		}
 		$message .= "\ncompleted!";
 	}
+
+
     return $message;
 }
