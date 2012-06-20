@@ -621,6 +621,7 @@ $(document).ready(function(){
 		$('.descriptions div').height('auto');
 		$('.showall_descriptions').hide();
 		$('.tipsy').hide();
+		initViewPage();
 		window.print();
 	}
 	
