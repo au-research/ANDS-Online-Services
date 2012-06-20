@@ -29,14 +29,16 @@ function task_generate_cache($task)
 	else
 	{
 		$registryObjectKeys = getRegistryObjectKeysForDataSource($dataSourceKey);
-		$message = "Caching of " . count($registryObjectKeys) . " records started for " . ($dataSourceKey) . ": \n";
-		if($registryObjectKeys)
+
+	}
+	$message = "Caching of " . count($registryObjectKeys) . " records started for " . ($dataSourceKey ? $dataSourceKey : "all data sources") . ": \n";
+	if($registryObjectKeys)
+	{
+		foreach ($registryObjectKeys AS $registry_object)
 		{
-			foreach ($registryObjectKeys AS $registry_object)
-			{
-				$extendedRIFCS = generateExtendedRIFCS($registry_object['registry_object_key']);
-				writeCache($dataSourceKey, $registry_object['registry_object_key'], $extendedRIFCS);
-			}
+			echo ".";
+			$extendedRIFCS = generateExtendedRIFCS($registry_object['registry_object_key']);
+			writeCache($dataSourceKey, $registry_object['registry_object_key'], $extendedRIFCS);
 		}
 		$message .= "\ncompleted!";
 	}
