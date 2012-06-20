@@ -557,7 +557,39 @@ function time_elapsed_string($ptime, $fromNow = true) {
 }
 
 
+function dePluralise($word, $related_array)
+{
+	if (is_array($related_array))
+	{
+		$count = count($related_array);
+	}
+	else
+	{
+		// passed a number directly
+		$count = $related_array;
+	}
 
+	if ($count == 1 && substr($word, -1) == "s")
+	{
+		return substr($word, 0, -1);
+	}
+	else
+	{
+		return $word;
+	}
+}
+
+function elipsesLimit($string, $maxlen)
+{
+	if (strlen($string) > $maxlen)
+	{
+		return substr($string, 0, ($maxlen-3)) . "...";
+	}
+	else
+	{
+		return $string;
+	}
+}
 
 
 ?>

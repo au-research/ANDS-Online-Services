@@ -636,6 +636,12 @@ addMenu($menu);
 			addActivity($activity);
 
 			// =============================================================================
+			// Data Source Report
+			$activity = new activity('aORCA_DATA_SOURCE_REPORT', 'Data Source Reports', 'orca/admin/data_source_report.php');
+			addActivity($activity);
+
+
+			// =============================================================================
 			// Export from a Data Source
 			$activity = new activity('aORCA_DATA_SOURCE_EXPORT', 'Export from Data Source', 'orca/admin/data_source_export.php');
 			$activity->menu_id = 'mORCA_DATA_SOURCE_ADMIN';

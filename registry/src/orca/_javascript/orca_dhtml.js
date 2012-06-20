@@ -232,46 +232,12 @@ function setClear()
 
 function runQualityCheck()
 {
-   var dataSourceKey = document.getElementById("data_source_key").value;
-   var dataurl = document.getElementById("data-url").value;
-   var itemurl = document.getElementById("item-url").value;
-   var qTestURL = document.getElementById("qTestURL").value;
-   var xmlhttp;
-   var qURL = qTestURL + "?dataSourceKey=" + dataSourceKey + "&item-url=" + itemurl;
-   var qualityCheckresultDiv = getObject('qualityCheckresult');
-
-       if( window.XMLHttpRequest )
-       {
-           xmlhttp=new XMLHttpRequest();
-       }
-       else if( window.ActiveXObject )
-       {
-           xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-       }
-
-       if( xmlhttp )
-       {
-           qualityCheckresultDiv.innerHTML = '<div class="rs-header" style="color: #aaaaaa;">Loading...</div>';
-           xmlhttp.open("GET", qURL ,true);
-           xmlhttp.onreadystatechange = function()
-           {
-               if( xmlhttp.readyState == 4 )
-               {
-                   if( xmlhttp.status == 200 )
-                   {
-                       qualityCheckresultDiv.innerHTML = xmlhttp.responseText;
-                   }
-               }
-           };
-           if( window.XMLHttpRequest )
-           {
-               xmlhttp.send(null);
-           }
-           else
-           {
-               xmlhttp.send();
-           }
-       }
+   
+   $.get($('#quality_report_url').val() + '&data_source=' + $('#data_source_key').val(), function(data){
+	   $('#qualityCheckresult').html(data).fadeIn(100);
+	   $('#printableReportContainer').html('<a id="printable_report" href="data_source_report.php?type=quality&standalone=true&data_source=' + $('#data_source_key').val()  +'" class="right">printable report</a>');
+	   
+   })
 }
 
 function showDeleteModal()

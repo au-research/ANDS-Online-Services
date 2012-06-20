@@ -2114,7 +2114,10 @@ function searchForNameParts($searchText, $objectClass, $dataSourceKey, $limit)
 	return $values;
 }
 
-function getQualityTestResult($registry_object_key, $dataSourceKey, $status){
+function getQualityLevel($registry_object_key, $dataSourceKey, $status)
+{
+	// getLevelsResult uses quality_level_result, otherwise use quality_test_result
+	$field = 'quality_level';
 
 	if($status!='PUBLISHED' && $status!='APPROVED'){
 		//it is a draft
@@ -2122,8 +2125,6 @@ function getQualityTestResult($registry_object_key, $dataSourceKey, $status){
 		$params = array($registry_object_key, $dataSourceKey);
 	}else{
 		//is not a draft
-
-
 		$strQuery = 'SELECT * FROM dba.tbl_registry_objects WHERE registry_object_key = $1';
 		$params = array($registry_object_key);
 	}
@@ -2140,8 +2141,48 @@ function getQualityTestResult($registry_object_key, $dataSourceKey, $status){
 		//	return  'This record is marked as gold standard';
 		//}
 
-		if($resultSet[0]['quality_level_result']){
-			$result = $resultSet[0]['quality_level_result'];
+		if($resultSet[0][$field]){
+			$result = $resultSet[0][$field];
+		}else{
+			$result= null;
+		}
+	}else{
+		$result = null;
+	}
+
+	return $result;
+}
+
+
+function getQualityTestResult($registry_object_key, $dataSourceKey, $status, $getLevelsResult = true){
+
+	// getLevelsResult uses quality_level_result, otherwise use quality_test_result
+	$field = ($getLevelsResult ? 'quality_level_result' : 'quality_test_result');
+
+	if($status!='PUBLISHED' && $status!='APPROVED'){
+		//it is a draft
+		$strQuery = 'SELECT * FROM dba.tbl_draft_registry_objects WHERE draft_key = $1 AND registry_object_data_source = $2';
+		$params = array($registry_object_key, $dataSourceKey);
+	}else{
+		//is not a draft
+		$strQuery = 'SELECT * FROM dba.tbl_registry_objects WHERE registry_object_key = $1';
+		$params = array($registry_object_key);
+	}
+
+	global $gCNN_DBS_ORCA;
+
+
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+
+
+	if( $resultSet ){
+
+		//if(isset($resultSet[0]['gold_status_flag']) && $resultSet[0]['gold_status_flag']==1){
+		//	return  'This record is marked as gold standard';
+		//}
+
+		if($resultSet[0][$field]){
+			$result = $resultSet[0][$field];
 		}else{
 			$result= "No QA for key $registry_object_key in Data Source $dataSourceKey";
 		}
@@ -2151,6 +2192,8 @@ function getQualityTestResult($registry_object_key, $dataSourceKey, $status){
 
 	return $result;
 }
+
+
 
 
 function searchByName($searchText, $objectClass, $dataSourceKey, $limit)

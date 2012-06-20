@@ -1,0 +1,72 @@
+@CHARSET "UTF-8";
+
+body { font-family: verdana, sans-serif; }
+
+#dataSourceNameTitle { }
+
+#headerContainer { width: 100%; display:inline; }
+
+.left { float:left; }
+.right { float:right; }
+.clear { clear:both; }
+
+#qualityCheckresult {
+	background-color:white;
+	border:1px solid black;
+	margin-top:20px;
+	padding:10px;
+	display:none;
+}
+
+.regObjTitleInfo
+{
+	text-align:left;
+	overflow:auto;
+}
+
+.regObjTitleInfo i
+{
+	font-size:0.8em;
+}
+
+.qualityReportTable
+{
+	border: 1px #666 solid;
+	width:100%;
+	
+}
+
+.qualityReportTable tr {
+	
+}
+
+.quality-test-results {
+	
+	font-size:0.85em;
+	margin-bottom:8px;
+}
+
+.quality-test-results span {
+	display:block;
+	padding: 4 4 0 0px;
+}
+
+.quality-test-results span.warning {
+	color:#990033;
+	
+}
+
+.quality-test-results span.info {
+	color:#003399;
+	
+}
+
+.qualityReportTable td { 
+	vertical-align:top;
+	page-break-inside: avoid; 
+	font-size:0.8em;
+}
+
+
+
+.blackRule { border:none; border-top: 1px solid #000; }
