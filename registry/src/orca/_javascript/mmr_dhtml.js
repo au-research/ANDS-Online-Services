@@ -18,7 +18,9 @@ limitations under the License.
 google.load('visualization', '1.0', {'packages':['corechart']});
 
 var currentView = 'statusview';//can be status or quality
-     
+var dsKey;
+var dsName;
+ 
 $(document).ready(function() {
 
 	$(".chzn-select").chosen(); $(".chzn-select-deselect").chosen({allow_single_deselect:true});
@@ -28,6 +30,27 @@ $(document).ready(function() {
 	}else{
 		currentView = 'statusview';
 		$.cookie('currentView', 'statusview');
+	}
+
+	if($.cookie('dsKey')){
+		dsKey = $.cookie('dsKey');
+		dsName = $.cookie('dsName');
+		$('#last_ds').html('Last accessed data source: <a href="my_records.php?data_source='+dsKey+'">'+dsName+'</a>');
+		if($('#dataSourceKey').val()){
+			dsKey = $('#dataSourceKey').val();
+			dsName = $('#dataSourceName').val();
+			$.cookie('dsKey', dsKey);
+			$.cookie('dsName', dsKey);
+		}
+	}else{
+		if($('#dataSourceKey').val()){
+			dsKey = $('#dataSourceKey').val();
+			dsName = $('#dataSourceName').val();
+			$.cookie('dsKey', dsKey);
+			$.cookie('dsName', dsKey);
+		}else{
+			//console.log('Select a data source');
+		}
 	}
 
 
@@ -78,7 +101,7 @@ $(document).ready(function() {
 			$('.statusview').hide();
 			$('.viewswitch').removeClass('pressed');
 			$('.viewswitch[name=qaview]').addClass('pressed');
-			google.setOnLoadCallback(drawBarChart(status, dsKey));
+			if(dsKey) google.setOnLoadCallback(drawBarChart(status, dsKey));
 			//drawBarChart(status, dsKey);
 			if(status=='All'){
 				$('.qaview[id=All_qaview]').show();

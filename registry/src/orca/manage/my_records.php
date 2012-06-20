@@ -82,7 +82,8 @@ echo '<h1>Manage My Records</h1>';
 
 if (!$data_source_key)
 {
-		displayMMRDataSourceSwitcher($dataSources);
+	displayMMRDataSourceSwitcher($dataSources);
+	echo '<div id="last_ds"></div>';
 }
 else
 {
