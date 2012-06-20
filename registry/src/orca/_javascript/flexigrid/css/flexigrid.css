@@ -527,6 +527,7 @@ a.borderless{
 	overflow: hidden;
 	white-space: nowrap;
 	position: relative;
+    cursor:pointer;
 }
 
 .flexigrid div.mDiv div {
@@ -856,6 +857,9 @@ div.colCopy {
 .flexigrid div.bDiv td div {
 	border-top: 0px solid #fff;
 	padding-bottom: 4px;
+}
+.flexigrid tr{
+    cursor:pointer;
 }
 
 .flexigrid tr td.sorted {

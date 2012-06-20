@@ -496,6 +496,10 @@
 				$(g.gDiv).prepend(g.mDiv);
 				if (p.showTableToggleBtn) {
 					$(g.mDiv).append('<div class="ptogtitle" title="Minimize/Maximize Table"><span></span></div>');
+					$(g.mDiv).click(function () {
+						$(g.gDiv).toggleClass('hideBody');
+						$(this).toggleClass('vsble');
+					});
 					$('div.ptogtitle', g.mDiv).click(function () {
 						$(g.gDiv).toggleClass('hideBody');
 						$(this).toggleClass('vsble');

@@ -298,6 +298,7 @@ else
 				/*
 				 * All of em
 				 */
+				echo '<div id="quality_view_explain" class="tab-content qaview">Here here</div>';
 		    	echo '<div id="All_qaview" class="tab-content qaview"></div>';
 		    	//echo '<hr class="tab-content qaview"/>';
 		    	foreach($qa_levels as $key=>$l){
@@ -305,8 +306,6 @@ else
 							<table class="mmr_table as_qa_table" ql="'.$key.'" status="All" count="'.$l.'"><tr><td>Loading Graph...</td></tr></table>
 							</div>';
 		    	}
-
-
 		    ?>
 
 		</div>
