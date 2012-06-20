@@ -105,7 +105,7 @@ else
 				$dataSource = array(
 					'data_source_key' => 'ALL_DS_ORCA',
 					'qa_flag' => 't',
-					'auto_publish' => 'f',
+					'auto_publish' => 't',
 					'title' => 'All Data Sources'
 				);
 			}

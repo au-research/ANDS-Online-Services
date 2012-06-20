@@ -24,6 +24,27 @@ var dsName;
 $(document).ready(function() {
 
 	$(".chzn-select").chosen(); $(".chzn-select-deselect").chosen({allow_single_deselect:true});
+	var dsKey = $('#dataSourceKey').val();
+	var dsName = $('#dataSourceName').val();
+
+
+	var orcaQA = false;
+	if($('#orcaQA').text()=='yes'){
+		orcaQA = true;
+	}
+	var orcaLIASON = false;
+	if($('#orcaLIASON').text()=='yes'){
+		orcaLIASON = true;
+	}
+	var DS_QA_flag = false;
+	if($('#DS_QA_flag').text()=='yes'){
+		DS_QA_flag = true;
+	}
+	var MANUAL_PUBLISH = false;
+	if($('#MANUAL_PUBLISH').text()=='yes'){
+		MANUAL_PUBLISH = true;
+	}
+
 
 	if($.cookie('currentView')){
 		currentView = $.cookie('currentView');
@@ -253,7 +274,7 @@ $(document).ready(function() {
     			//formatter.format(realData, 0);
 			  	
 
-    			var optionPercent = {title:status + " Records",
+    			var optionPercent = {title:status.replace(/_/g," ") + " Records",
 		        	width:800, height:400,
 		        	vAxis: {title: "Status"},
 		        	isStacked:true,
@@ -624,6 +645,7 @@ $(document).ready(function() {
 					$('.mmr_table').each(function(){
 						$(this).flexReload();
 					});
+					reloadData();
 				},
 				error:function(data){
 					//console.log(data);
@@ -650,11 +672,33 @@ $(document).ready(function() {
 	}
 
 	function reloadData(){
-		var viewURL = 'get_view.php?view=summary&ds='+dsKey;
+		var viewURL = 'get_view.php?view=summary&ds='+dsKey+'&ds_qa_flag='+DS_QA_flag+'&manual_publish='+MANUAL_PUBLISH;
+		console.log(viewURL);
 		var columns = [];
 		columns.push({display:'', name:'', width:120, sortable:false,align:'left'});
+
+		//Sort it by this order
+    	//var order = array('MORE_WORK_REQUIRED', 'DRAFT','SUBMITTED_FOR_ASSESSMENT', 'ASSESSMENT_IN_PROGRESS', 'APPROVED', 'PUBLISHED');
+    	var order = ['PUBLISHED', 'APPROVED', 'ASSESSMENT_IN_PROGRESS', 'SUBMITTED_FOR_ASSESSMENT', 'DRAFT', 'MORE_WORK_REQUIRED'];
+    	if(DS_QA_flag){
+			if(MANUAL_PUBLISH){
+    			var order = ['PUBLISHED', 'APPROVED', 'ASSESSMENT_IN_PROGRESS', 'SUBMITTED_FOR_ASSESSMENT', 'DRAFT', 'MORE_WORK_REQUIRED'];
+    		}else{//auto publish
+				var order = ['PUBLISHED', 'ASSESSMENT_IN_PROGRESS', 'SUBMITTED_FOR_ASSESSMENT', 'DRAFT', 'MORE_WORK_REQUIRED'];
+    		}
+    	}else{
+    		if(MANUAL_PUBLISH){
+    			var order = ['PUBLISHED', 'APPROVED', 'DRAFT'];
+    		}else{//auto publish
+				var order = ['PUBLISHED', 'DRAFT'];
+    		}
+    	}
+    	$.each(order, function(pos, i){
+    		columns.push({display:i.replace(/_/g," "), name:i, width:120, sortable:false, align:'left'});
+    	});
+
 		$.ajax({
-    		url: 'get_view.php?view=AllStatus&ds='+dsKey,
+    		url: 'get_view.php?view=AllStatus&ds='+dsKey+'&ds_qa_flag='+DS_QA_flag+'&manual_publish='+MANUAL_PUBLISH,
     		method: 'get',
     		dataType:'json',
     		contentType: "application/json", //tell the server we're looking for json
@@ -662,68 +706,40 @@ $(document).ready(function() {
     			$('.tab').remove();
     			$('.tab-list').append('<li><a href="javascript:void(0);" title="All" class="tab active-tab" name="All">All Records</a></li>');
     			$.each(data, function(i, num){
-    				columns.push({display:i.replace(/_/g," "), name:i, width:120, sortable:false, align:'left'});
-    				$('.tab-list').append('<li><a href="javascript:void(0);" title="'+num+' Records" class="tab tip" name="'+i+'">'+i.replace(/_/g," ")+'</a><li>');
+    				//columns.push({display:i.replace(/_/g," "), name:i, width:120, sortable:false, align:'left'});
+    				if(num>0){
+    					$('.tab-list').append('<li><a href="javascript:void(0);" title="'+num+' Records" class="tab tip" name="'+i+'">'+i.replace(/_/g," ")+'</a><li>');
+    				}else{
+    					$('.tab-list').append('<li><a href="javascript:void(0);" title="'+num+' Records" class="tab tip inactive" name="'+i+'">'+i.replace(/_/g," ")+'</a><li>');
+    				}
+    				
     			});
     			//console.log(columns);
-
-    			$('.summary_table').flexigrid({
-					striped:true,
-					title:status,
-					showTableToggleBtn: true,
-					showToggleBtn: true,
-		            url: viewURL,
-					dataType: 'json',
-					//usepager: true,
-					colModel :columns,
-		            resizable:true,
-		            //useRp: true,
-					rp: 10,
-					pagestat: 'Displaying {from} to {to} of {total} records',
-					nomsg: 'No records found',
-
-		            height:'200px',
-		            //additionalClass:tClass,
-		            tableTitle:'Registry Content Summary for '+dsName
-				});
+    			$('.summary_table').flexReload();
+    			
 				//console.log(viewURL);
         	}
        	});
-		//console.log(viewURL);
-		/*$('summary_table').flexigrid({
+
+       	$('.summary_table').flexigrid({
 			striped:true,
 			title:status,
-			//showTableToggleBtn: true,
+			showTableToggleBtn: true,
 			showToggleBtn: true,
-            url: viewURL,
+	        url: viewURL,
 			dataType: 'json',
-			usepager: true,
-			colModel : [
-			{display: 'recordKey', name:'key', width:120, sortable: true, align:'left'},
-                {display: 'Name/Title', name : 'list_title', width : 350, sortable : true, align: 'left'},
-                {display: 'Last Modified', name : 'date_modified', width : 150, sortable : true, align: 'left'},
-                {display: 'Class', name : 'class', width : 70, sortable : true, align: 'left'},
-                {display: 'Errors', name : 'error_count', width : 30, sortable : true, align: 'left'},
-                {display: 'Quality Level', name : 'quality_level', width : 70, sortable : true, align: 'left'},
-                {display: 'Flag', name : 'flag', width : 30, sortable : true, align: 'left'},
-                {display: 'Options', name : 'buttons', width : 100, sortable : false, align: 'left'},
-                {display: 'Status', name : 'status', width : 200, sortable : true, align: 'left'},
-                {display: 'Manually Assessed', name : 'manually_assessed_flag', width : 50, sortable : true, align: 'left', hide:true}
-            ],
-            sortname:'date_modified',
-            sortorder:'desc',
-            buttons:buttons,
-            resizable:true,
-            useRp: true,
+			//usepager: true,
+			colModel :columns,
+	        resizable:true,
+	        //useRp: true,
 			rp: 10,
 			pagestat: 'Displaying {from} to {to} of {total} records',
 			nomsg: 'No records found',
 
-            height:'200px',
-            //additionalClass:tClass,
-            tableTitle:'Registry Content Summary for '+dsName
-            onSuccess: formatTable
-		});*/
+	        height:'200px',
+	        //additionalClass:tClass,
+	        tableTitle:'Registry Content Summary for '+dsName
+		});
 	}
 
 

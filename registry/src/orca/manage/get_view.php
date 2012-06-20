@@ -25,12 +25,35 @@ $status = getQueryValue('status');
 $ql = getQueryValue('ql');
 $key = getQueryValue('key');
 
+$manual_publish = getQueryValue('manual_publish');
+$ds_qa_flag = getQueryValue('ds_qa_flag');
+
+if($ds_qa_flag=='false')$ds_qa_flag=false;
+if($manual_publish=='false')$manual_publish=false;
+
+$result = array();
+if($ds_qa_flag){
+	if($manual_publish){
+		$result = array('PUBLISHED'=>0, 'APPROVED'=>0, 'ASSESSMENT_IN_PROGRESS'=>0, 'SUBMITTED_FOR_ASSESSMENT'=>0, 'DRAFT'=>0, 'MORE_WORK_REQUIRED'=>0);
+	}else{//auto publish
+		$result = array('PUBLISHED'=>0, 'ASSESSMENT_IN_PROGRESS'=>0, 'SUBMITTED_FOR_ASSESSMENT'=>0, 'DRAFT'=>0, 'MORE_WORK_REQUIRED'=>0);
+	}
+}else{
+	if($manual_publish){
+		$result = array('PUBLISHED'=>0, 'APPROVED'=>0, 'DRAFT'=>0);
+	}else{//auto publish
+		$result = array('PUBLISHED'=>0, 'DRAFT'=>0);
+	}
+}
+
 $page = isset($_POST['page']) ? $_POST['page'] : 1;
 $rp = isset($_POST['rp']) ? $_POST['rp'] : 20;
 $sortname = isset($_POST['sortname']) ? $_POST['sortname'] : 'date_modified';
 $sortorder = isset($_POST['sortorder']) ? $_POST['sortorder'] : 'desc';
 $query = isset($_POST['query']) ? $_POST['query'] : false;
 $qtype = isset($_POST['qtype']) ? $_POST['qtype'] : false;
+
+
 
 switch($view){
 	case "all": searchAllRecords();break;
@@ -47,7 +70,7 @@ switch($view){
 }
 
 function summary($dataSourceKey){
-	global $solr_url;
+	global $solr_url, $ds_qa_flag, $manual_publish, $result;
 
 	if($dataSourceKey!='ALL_DS_ORCA'){
 		$q = '+data_source_key:("'.$dataSourceKey.'")';
@@ -78,13 +101,24 @@ function summary($dataSourceKey){
 
 
 	$statuses = getAllStatus($dataSourceKey);
+	//$result = array('PUBLISHED'=>0, 'APPROVED'=>0, 'ASSESSMENT_IN_PROGRESS'=>0, 'SUBMITTED_FOR_ASSESSMENT'=>0, 'DRAFT'=>0, 'MORE_WORK_REQUIRED'=>0);
+	
+ 	
+
+	foreach($statuses as $status=>$num){
+		foreach($result as $index=>$r){
+			if($index==$status) $result[$index] = $num;
+		}
+	}
+	//var_dump($result);
+
 	//var_dump($statuses);
 	foreach($classes as $class=>$num){
 		$entry = array(
-					'id' => $class,
-					'cell' => array($class)
+					'id' => ucfirst($class),
+					'cell' => array(ucfirst($class))
 				);
-		foreach($statuses as $status=>$num){
+		foreach($result as $status=>$num){
 			$entry['cell'][] = getStatusCountForClass($status, $class, $dataSourceKey);
 		}
 		$jsonData['rows'][] = $entry;
@@ -96,10 +130,18 @@ function summary($dataSourceKey){
 
 function AllStatus($dataSourceKey){
 	header("Content-type: application/json; charset=UTF-8");
-	global $solr_url;
+	global $solr_url, $ds_qa_flag, $manual_publish, $result;
 	$statuses = getAllStatus($dataSourceKey);
-	$statuses = json_encode($statuses);
-	echo $statuses;
+	//var_dump($statuses);
+
+	foreach($statuses as $status=>$num){
+		foreach($result as $index=>$r){
+			if($index==$status) $result[$index] = $num;
+		}
+	}
+	//var_dump($result);
+	$result = json_encode($result);
+	echo $result;
 }
 
 function getStatusCountForClass($status, $class, $dataSourceKey){
@@ -360,7 +402,7 @@ function searchRecords($status){
 							$doc->{'list_title'},
 
 							$date_modified,
-							$doc->{'class'},
+							ucfirst($doc->{'class'}),
 							$error_count,
 							$qualityLevelStr,
 							$flagButton,
@@ -433,7 +475,7 @@ function StatusAllQA($status, $dataSourceKey){
 			//if result >
 
 		}
-		$result[$c]['label']=$c;
+		$result[$c]['label']=ucfirst($c);
 		$result[$c]['num']=$c_num;
 
 		for($j=0;$j<=4;$j++){

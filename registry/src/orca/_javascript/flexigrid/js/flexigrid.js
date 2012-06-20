@@ -504,6 +504,9 @@
 				if(p.total==0 && p.hideOnNoRows){
 					$(g.gDiv).addClass('hideBody');
 					$('div.ptogtitle', g.mDiv).removeClass('vsble');
+				}else if(p.total > 0 || !p.hideOnNoRows){
+					$(g.gDiv).removeClass('hideBody');
+					$('div.ptogtitle', g.mDiv).addClass('vsble');
 				}
 
 			},
