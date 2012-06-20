@@ -66,7 +66,7 @@ switch($view){
 	case "statusCount": statusCount($status);break;
 	case "AllStatusAllQA": AllStatusAllQA($dataSourceKey);break;
 	case "StatusAllQA":StatusAllQA($status, $dataSourceKey);break;
-	case "tipQA": tipQA($key, $ql);
+	case "tipQA": tipQA($key, $ql);break;
 	case "getAllStat": getAllStat();break;
 }
 
@@ -530,6 +530,7 @@ function allKeys($status){
 
 function tipQA($key, $level){
 	global $dataSourceKey, $status;
+
 	// Don't show QA for Gold Standard records
 	if ($level == 5)
 	{
@@ -540,6 +541,7 @@ function tipQA($key, $level){
 		$t = getQualityTestResult($key, $dataSourceKey, $status);
 	}
 	echo $t;
+	return;
 	//echo 'getting qa for key='.$key.' and level='.$level.'<a href="">asdfadsfasd</a>';
 }
 
@@ -551,8 +553,8 @@ function getAllStat(){
 	foreach($stats as $stat){
 		$dsStat[$stat['ds_key']]['total'] += $stat['count'];
 	}
-	var_dump($dsStat);
-	var_dump($stats);
+	//var_dump($dsStat);
+	//var_dump($stats);
 }
 
 ?>
