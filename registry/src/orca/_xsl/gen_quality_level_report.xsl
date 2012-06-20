@@ -81,11 +81,11 @@
         </xsl:choose>
         
         <xsl:choose>
-	        <xsl:when test="not(ro:description[@type='brief'][string-length(.) &gt; 9]) and not(ro:description[@type='full'][string-length(.) &gt; 9])">
-				<span class="qa_error" level="3" field_id="errors_description" qa_id="REQ_DESCRIPTION_FULL">At least one description (brief and/or full) is required for the Collection. The description must be longer than 9 characters.</span>
+	        <xsl:when test="not(ro:description[@type='brief'][string-length(.) &gt; 0]) and not(ro:description[@type='full'][string-length(.) &gt; 0])">
+				<span class="qa_error" level="3" field_id="errors_description" qa_id="REQ_DESCRIPTION_FULL">At least one description (brief and/or full) is required for the Collection. </span>
 			</xsl:when>
 			<xsl:otherwise>
-				<span class="qa_ok" level="3" field_id="errors_description" qa_id="REQ_DESCRIPTION_FULL">At least one description (brief and/or full) is required for the Collection. The description must be longer than 9 characters.</span>
+				<span class="qa_ok" level="3" field_id="errors_description" qa_id="REQ_DESCRIPTION_FULL">At least one description (brief and/or full) is required for the Collection. </span>
 			</xsl:otherwise>
 	    </xsl:choose>
 
@@ -213,11 +213,11 @@
 	   </xsl:choose>
 
         <xsl:choose>
-	        <xsl:when test="not(ro:description[@type='brief'][string-length(.) &gt; 9]) and not(ro:description[@type='full'][string-length(.) &gt; 9])">
-				<span class="qa_error" level="4" field_id="errors_description" qa_id="REQ_DESCRIPTION_FULL">At least one description (brief and/or full) is recommended for the Party. The description must be longer than 9 characters.</span>
+	        <xsl:when test="not(ro:description[@type='brief'][string-length(.) &gt; 0]) and not(ro:description[@type='full'][string-length(.) &gt; 0])">
+				<span class="qa_error" level="4" field_id="errors_description" qa_id="REQ_DESCRIPTION_FULL">At least one description (brief and/or full) is recommended for the Party.</span>
 			</xsl:when>
 			<xsl:otherwise>
-				<span class="qa_ok" level="4" field_id="errors_description" qa_id="REQ_DESCRIPTION_FULL">At least one description (brief and/or full) is recommended for the Party. The description must be longer than 9 characters.</span>
+				<span class="qa_ok" level="4" field_id="errors_description" qa_id="REQ_DESCRIPTION_FULL">At least one description (brief and/or full) is recommended for the Party.</span>
 			</xsl:otherwise>
 	    </xsl:choose>
 
@@ -263,11 +263,11 @@
 	    </xsl:choose>
         
 		<xsl:choose>
-	        <xsl:when test="not(ro:description[@type='brief'][string-length(.) &gt; 9]) and not(ro:description[@type='full'][string-length(.) &gt; 9])">
-				<span class="qa_error" level="3" field_id="errors_description" qa_id="REQ_DESCRIPTION_FULL">At least one description (brief and/or full) is required for the Activity. The description must be longer than 9 characters.</span>
+	        <xsl:when test="not(ro:description[@type='brief'][string-length(.) &gt; 0]) and not(ro:description[@type='full'][string-length(.) &gt; 0])">
+				<span class="qa_error" level="3" field_id="errors_description" qa_id="REQ_DESCRIPTION_FULL">At least one description (brief and/or full) is required for the Activity.</span>
 			</xsl:when>
 			<xsl:otherwise>
-				<span class="qa_ok" level="3" field_id="errors_description" qa_id="REQ_DESCRIPTION_FULL">At least one description (brief and/or full) is required for the Activity. The description must be longer than 9 characters.</span>
+				<span class="qa_ok" level="3" field_id="errors_description" qa_id="REQ_DESCRIPTION_FULL">At least one description (brief and/or full) is required for the Activity.</span>
 			</xsl:otherwise>
 	    </xsl:choose>
 
@@ -372,11 +372,11 @@
 	   </xsl:choose> 
 	   
 		<xsl:choose>
-	        <xsl:when test="not(ro:description[@type='brief'][string-length(.) &gt; 9]) and not(ro:description[@type='full'][string-length(.) &gt; 9])">
-				<span class="qa_error" level="4" field_id="errors_description" qa_id="REC_DESCRIPTION_FULL">At least one description (brief and/or full) is recommended for the Service. The description must be longer than 9 characters.</span>
+	        <xsl:when test="not(ro:description[@type='brief'][string-length(.) &gt; 0]) and not(ro:description[@type='full'][string-length(.) &gt; 0])">
+				<span class="qa_error" level="4" field_id="errors_description" qa_id="REC_DESCRIPTION_FULL">At least one description (brief and/or full) is recommended for the Service.</span>
 			</xsl:when>
 			<xsl:otherwise>
-				<span class="qa_ok" level="4" field_id="errors_description" qa_id="REC_DESCRIPTION_FULL">At least one description (brief and/or full) is recommended for the Service. The description must be longer than 9 characters.</span>
+				<span class="qa_ok" level="4" field_id="errors_description" qa_id="REC_DESCRIPTION_FULL">At least one description (brief and/or full) is recommended for the Service.</span>
 			</xsl:otherwise>
 	    </xsl:choose>
 	    

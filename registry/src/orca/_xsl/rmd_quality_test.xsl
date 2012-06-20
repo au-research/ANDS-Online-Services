@@ -127,10 +127,10 @@
         <xsl:if test="not(ro:description[@type='brief']) and not(ro:description[@type='full'])">
         	<xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetWarnings("errors_description","At least one description (brief and/or full) is required for the Collection. The description must be longer than 9 characters.","REQ_DESCRIPTION_FULL");</xsl:text>
+            		<xsl:text>SetWarnings("errors_description","At least one description (brief and/or full) is required for the Collection.","REQ_DESCRIPTION_FULL");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
-					<span class="warning">At least one description (brief and/or full) is required for the Collection. The description must be longer than 9 characters.</span>
+					<span class="warning">At least one description (brief and/or full) is required for the Collection.</span>
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>
@@ -291,10 +291,10 @@
         <xsl:if test="not(ro:description[@type='brief']) and not(ro:description[@type='full'])">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetInfos("errors_description","At least one description (brief and/or full) is recommended for the Party. The description must be longer than 9 characters.","REC_DESCRIPTION_FULL");</xsl:text>
+            		<xsl:text>SetInfos("errors_description","At least one description (brief and/or full) is recommended for the Party.","REC_DESCRIPTION_FULL");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
-					<span class="info">At least one description (brief and/or full) is recommended for the Party. The description must be longer than 9 characters.</span>
+					<span class="info">At least one description (brief and/or full) is recommended for the Party.</span>
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>
@@ -348,10 +348,10 @@
         <xsl:if test="not(ro:description[@type='brief']) and not(ro:description[@type='full'])">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetWarnings("errors_description","At least one description (brief and/or full) is required for the Activity. The description must be longer than 9 characters.","REQ_DESCRIPTION_FULL");</xsl:text>
+            		<xsl:text>SetWarnings("errors_description","At least one description (brief and/or full) is required for the Activity.","REQ_DESCRIPTION_FULL");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
-					<span class="warning">At least one description (brief and/or full) is required for the Activity. The description must be longer than 9 characters.</span>
+					<span class="warning">At least one description (brief and/or full) is required for the Activity.</span>
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>
@@ -447,10 +447,10 @@
         <xsl:if test="not(ro:description[@type='brief']) and not(ro:description[@type='full'])">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetInfos("errors_description","At least one description (brief and/or full) is recommended for the Service. The description must be longer than 9 characters.","REC_DESCRIPTION_FULL");</xsl:text>
+            		<xsl:text>SetInfos("errors_description","At least one description (brief and/or full) is recommended for the Service.","REC_DESCRIPTION_FULL");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
-					<span class="info">At least one description (brief and/or full) is recommended for the Service. The description must be longer than 9 characters.</span>
+					<span class="info">At least one description (brief and/or full) is recommended for the Service.</span>
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>
@@ -588,7 +588,7 @@
 				    </xsl:otherwise>
 		    	</xsl:choose>
             </xsl:when>
-            <xsl:when test="string-length(.) &lt; 9">
+            <!-- xsl:when test="string-length(.) &lt; 9">
                 <xsl:choose>
 				    <xsl:when test="$output = 'script'">
                 		<xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_value","Description Value must be 9 characters or more.");</xsl:text>
@@ -597,7 +597,7 @@
 						<span class="error">Description must be 9 characters or more.</span>
 				    </xsl:otherwise>
 		    	</xsl:choose>
-            </xsl:when>
+            </xsl:when-->
         </xsl:choose>
     </xsl:template>
     
