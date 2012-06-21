@@ -19,7 +19,7 @@ start() {
 	echo "Try rm -r $PID_PATH/$PROG_WRAPPER.pid"
         exit 1
     else
-        sudo -u $PROG_USER $PROG_PATH/$PROG_NAME &> /var/log/$PROG_WRAPPER.log &
+        su -s /bin/bash $PROG_USER -c $PROG_PATH/$PROG_NAME &> /var/log/$PROG_WRAPPER.log &
         echo "$PROG_NAME started (logging to /var/log/$PROG_WRAPPER.log)"
         touch "$PID_PATH/$PROG_WRAPPER.pid"
     fi
