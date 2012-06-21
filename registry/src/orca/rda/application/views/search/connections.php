@@ -1,5 +1,5 @@
 <?php
-/** 
+/**
 Copyright 2011 The Australian National University
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ***************************************************************************
 *
-**/ 
+**/
 ?>
 <p>
 
@@ -22,7 +22,7 @@ limitations under the License.
 $theContributor =  getInstitutionPage($theGroup);
 if($person['numfound']==0&&$group['numfound']==0&&$collection['numfound']==0&&$service['numfound']==0&&$activity['numfound']==0&&!$theContributor)
 {
- echo '<span id="connections-realnumfound">0</span>';	
+ echo '<span id="connections-realnumfound">0</span>';
 }
 
 // display the researcher connections
@@ -67,28 +67,28 @@ if($thisClass=='party' or $thisClass=='group')
 	displayConnection($service,$externalKeys);
 	displayConnection($activity,$externalKeys);
 	displayConnection($person,$externalKeys);
-	displayConnection($group,$externalKeys);	
+	displayConnection($group,$externalKeys);
 }elseif($thisClass=='collection')
 {
 	displayConnection($person,$externalKeys);
-	displayConnection($group,$externalKeys);	
+	displayConnection($group,$externalKeys);
 	displayConnection($service,$externalKeys);
-	displayConnection($activity,$externalKeys);	
+	displayConnection($activity,$externalKeys);
 	displayConnection($collection,$externalKeys);
 }elseif($thisClass=='service')
 {
 	displayConnection($person,$externalKeys);
 	displayConnection($group,$externalKeys);
-	displayConnection($collection,$externalKeys);	
-	displayConnection($activity,$externalKeys);	
-	displayConnection($service,$externalKeys);	
+	displayConnection($collection,$externalKeys);
+	displayConnection($activity,$externalKeys);
+	displayConnection($service,$externalKeys);
 }elseif($thisClass=='activity')
 {
 	displayConnection($person,$externalKeys);
 	displayConnection($group,$externalKeys);
 	displayConnection($collection,$externalKeys);
-	displayConnection($service,$externalKeys);	
-	displayConnection($activity,$externalKeys);		
+	displayConnection($service,$externalKeys);
+	displayConnection($activity,$externalKeys);
 }
 
 function displayConnection($groups,$externalKeys)
@@ -99,21 +99,21 @@ if(isset($groups)&&$groups['numfound']>0){
 	echo $groups['heading'];
 	//echo "<pre>";
 	//print_r($groups['json']);
-	//echo "</pre>";	
+	//echo "</pre>";
 	//exit();
 	if($groups['numfound']>1)$title = $groups['titles']; else $title = $groups['title'];
 
 	$max = 5;
 	$seeMore = '';
 	if($groups['numfound']<6)
-	{ 
+	{
 		$max =$groups['numfound'];
 	}else{
 		$seeMore = "See More...";
 	}
 	echo '<ul class="connection_list">';
 	for($i=0;$i<$max;$i++)
-	{	
+	{
 		$autoLink = '';
 		$autoLinkTitle = '';
 		if($externalKeys)
@@ -125,10 +125,10 @@ if(isset($groups)&&$groups['numfound']>0){
 					$autoLink = '<br /><span class="faded">(Automatic link)</span>';
 					$autoLinkTitle = '(Automatic link)';
 				}
-				
+
 			}
 		}
-		
+
 		$logostr = '';
 		if(isset($groups['json']->{'response'}->{'docs'}[$i]->{'description_type'}))
 		{
@@ -146,18 +146,18 @@ if(isset($groups)&&$groups['numfound']>0){
 
 			}
 		}
-
-		echo '<li><a href="'.base_url().'view/?key='.urlencode($groups['json']->{'response'}->{'docs'}[$i]->{'key'}).'" title="'.findRelationship($groups['json']->{'response'}->{'docs'}[$i]->{'key'},$groups['relatedKey'],$groups['relationship']).' '.$autoLinkTitle.'">';
+		$rda_link = ($groups['json']->{'response'}->{'docs'}[$i]->{'url_slug'} ? $groups['json']->{'response'}->{'docs'}[$i]->{'url_slug'} : 'view/?key='.urlencode($groups['json']->{'response'}->{'docs'}[$i]->{'key'}));
+		echo '<li><a href="'.base_url().$rda_link.'" title="'.findRelationship($groups['json']->{'response'}->{'docs'}[$i]->{'key'},$groups['relatedKey'],$groups['relationship']).' '.$autoLinkTitle.'">';
 		echo $groups['json']->{'response'}->{'docs'}[$i]->{'display_title'};
 		echo '</a>'.findRelationshipDescription($groups['json']->{'response'}->{'docs'}[$i]->{'key'},$groups['relatedKey'],$groups['relationship_description']).$autoLink.$logostr.'</li>';
 
 	}
-	echo '</ul>';	
+	echo '</ul>';
 	if($seeMore)
-	{			
+	{
 		echo '<a href="javascript:void(0);" class="connections_NumFound" '.$groups["action_id"].'>View All <span id="collectionconnections-realnumfound"> '. ($groups['numfound']).'</span> connected '.$title.'</a>';
 	}
-}	
+}
 
 }
 showContributors($theGroup);
@@ -173,7 +173,7 @@ function showContributors($theGroup)
 		}
 		echo '<h3><img  class="icon-heading-connections" src="'.base_url().'/img/icon/party_multi_16.png"/>Record Contributor</h3>';
 		echo '<ul>';
-		echo '<li><a href="'.base_url().'view/group/?group='.urlencode($theGroupKey).'&groupName='.$theGroup.'" title="Contributor group">'.$theGroup.'</a>'.$theLogo.'</li>';	
+		echo '<li><a href="'.base_url().'view/group/?group='.urlencode($theGroupKey).'&groupName='.$theGroup.'" title="Contributor group">'.$theGroup.'</a>'.$theLogo.'</li>';
 		echo '</ul>';
 	}
 }

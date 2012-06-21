@@ -124,6 +124,9 @@ function updateDataSource()
 	{
 		$errors = "An error occurred when trying to update the record.";
 	}
+
+	getDataSourceHashForKey($params[1]);
+
 	return $errors;
 }
 function deleteDataSource($key)
@@ -3095,21 +3098,21 @@ function getParentType($licence_type){
 
 function getDataSourceStats($data_source_key = '')
 {
-	
+
 	global $gCNN_DBS_ORCA;
 	$resultSet = null;
-	$strQuery = "SELECT data_source_key as ds_key, registry_object_class as ro_class, status, quality_level as qa_level, count(quality_level) 
+	$strQuery = "SELECT data_source_key as ds_key, registry_object_class as ro_class, status, quality_level as qa_level, count(quality_level)
 				FROM dba.tbl_registry_objects where $1 = '' OR data_source_key = $1
 				GROUP BY data_source_key, registry_object_class, quality_level,status
 				UNION
-				SELECT registry_object_data_source as ds_key, class as ro_class, status, quality_level as qa_level, count(quality_level) 
+				SELECT registry_object_data_source as ds_key, class as ro_class, status, quality_level as qa_level, count(quality_level)
 				FROM dba.tbl_draft_registry_objects  where $1 = '' OR registry_object_data_source = $1
 				GROUP BY registry_object_data_source, class, quality_level,status
 				ORDER BY 1,2,3,4";
 	$params = array($data_source_key);
 	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
 	return $resultSet;
-	
+
 }
 
 ?>
