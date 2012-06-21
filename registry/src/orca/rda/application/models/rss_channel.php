@@ -114,7 +114,7 @@ limitations under the License.
 		function addToRssArray($response,$groupFilter,$dataSource,$digest)
 		{
 
-			if ($this->getCountByDataSource($response['group'].":".date("Y-m-d",strtotime($response['date_modified'])))+1 >= $this->maxEntriesPerDataSource  && $digest!="false")
+			if ($this->getCountByDataSource($response['group'].":".date("Y-m-d",strtotime($response['date_modified'])))+1 > $this->maxEntriesPerDataSource  && $digest!="false")
 			{
 				// digest them
 				$digest_entry_index = null;
