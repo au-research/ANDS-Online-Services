@@ -1815,7 +1815,7 @@ function getRelatedObjectClass($relatedRegistryObjectKey, $dataSourceKey)
 }
 
 
-function getAllRelatedObjectClass($RegistryObject, $dataSourceKey)
+function getAllRelatedObjectClass($RegistryObject, $dataSourceKey, $registryObjectKey)
 {
 
 	$list = $RegistryObject->getElementsByTagName("key");
@@ -1828,12 +1828,28 @@ function getAllRelatedObjectClass($RegistryObject, $dataSourceKey)
 	}
 
 	$dataSourceInfo = getDataSources($dataSourceKey, $filter=null);
+	$allow_reverse_internal_links = $dataSourceInfo[0]['allow_reverse_internal_links'];
+	$allow_reverse_external_links = $dataSourceInfo[0]['allow_reverse_external_links'];
+    if($allow_reverse_internal_links == 't' && $reverseRelatedArrayInt = getInternalReverseRelatedObjects($registryObjectKey, $dataSourceKey))   
+	{
 
+		foreach( $reverseRelatedArrayInt as $row )
+			{
+			$relatedObjectClassesStr .= 'A###'.getRelatedObjectClass($row['registry_object_key'], $dataSourceKey);
+			}
+	}
+	if($allow_reverse_external_links == 't' && $reverseRelatedArrayExt = getExternalReverseRelatedObjects($registryObjectKey, $dataSourceKey))
+	{
+		foreach( $reverseRelatedArrayExt as $row )
+		{
+			$relatedObjectClassesStr .= 'B###'.getRelatedObjectClass($row['registry_object_key'], $dataSourceKey);
+		}
+	}
+		
 	if(isset($dataSourceInfo[0]['class_1']))
 		$relatedObjectClassesStr .= '###'.$dataSourceInfo[0]['class_1'];
 	if(isset($dataSourceInfo[0]['class_2']))
 		$relatedObjectClassesStr .= '###'.$dataSourceInfo[0]['class_2'];
-
 	return $relatedObjectClassesStr;
 }
 
@@ -2171,7 +2187,7 @@ function runQualityLevelCheckForRegistryObject($registryObjectKey, $dataSourceKe
 
 	$gold_standard_flag = getGoldFlag($registryObjectKey);
 
-	$relatedObjectClassesStr = getAllRelatedObjectClass($RegistryObjects, $dataSourceKey);
+	$relatedObjectClassesStr = getAllRelatedObjectClass($RegistryObjects, $dataSourceKey, $registryObjectKey);
 	$qualityTestResult = runQualityCheckonDom($RegistryObjects, $dataSourceKey, 'html', $relatedObjectClassesStr);
     $errorCount = substr_count($qualityTestResult, 'class="error"');
 	$warningCount = substr_count($qualityTestResult, 'class="warning"') + substr_count($qualityTestResult, 'class="info"');
@@ -2217,7 +2233,7 @@ function runQualityLevelCheckForDraftRegistryObject($registryObjectKey, $dataSou
 			$RegistryObjects = new DOMDocument();
 			$RegistryObjects->loadXML($relRifcs);
 			//print $relRifcs;
-			$relatedObjectClassesStr = getAllRelatedObjectClass($RegistryObjects, $dataSourceKey);
+			$relatedObjectClassesStr = getAllRelatedObjectClass($RegistryObjects, $dataSourceKey, $registryObjectKey);
 			$qualityTestResult = runQualityCheckonDom($RegistryObjects, $dataSourceKey, 'html', $relatedObjectClassesStr);
 			$errorCount = substr_count($qualityTestResult, 'class="error"');
 		    $warningCount = substr_count($qualityTestResult, 'class="warning"') + substr_count($qualityTestResult, 'class="info"');
