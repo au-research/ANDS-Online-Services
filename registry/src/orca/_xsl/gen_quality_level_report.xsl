@@ -109,10 +109,10 @@
          
         <xsl:choose>
 	       	<xsl:when test="not(contains($relatedObjectClassesStr, 'Activity') or ro:relatedObject/ro:key[@roclass = 'Activity'] or ro:relatedObject/ro:key[@roclass = 'activity'])">
-				<span class="qa_error" level="3" field_id="errors_relatedObject" qa_id="REC_RELATED_OBJECT_ACTIVITY">The Collection must be related to at least one Activity record where available.</span>
+				<span class="qa_error" level="4" field_id="errors_relatedObject" qa_id="REC_RELATED_OBJECT_ACTIVITY">The Collection must be related to at least one Activity record where available.</span>
 			</xsl:when>
 			<xsl:otherwise>
-				<span class="qa_ok" level="3" field_id="errors_relatedObject" qa_id="REC_RELATED_OBJECT_ACTIVITY">The Collection must be related to at least one Activity record where available.</span>
+				<span class="qa_ok" level="4" field_id="errors_relatedObject" qa_id="REC_RELATED_OBJECT_ACTIVITY">The Collection must be related to at least one Activity record where available.</span>
 			</xsl:otherwise>
 	   </xsl:choose>
         
