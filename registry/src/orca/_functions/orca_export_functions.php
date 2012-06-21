@@ -3195,7 +3195,7 @@ function getSearchBaseScore($registry_object_key)
 	$baseScore += eBOOST_INCOMING_RELATED_OBJECT_ADJUSTMENT * (int) $number_of_related_objects;
 
 	return $baseScore;
-}
+
 }
 
 ?>
