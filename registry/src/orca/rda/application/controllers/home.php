@@ -122,7 +122,7 @@ class Home extends CI_Controller {
 			for($i=0;$i<sizeof($dsfacet);$i+=2){
 				echo '<sitemap>';
 				echo '<loc>'.base_url().'home/sitemap/?ds='.$dsfacet[$i].'</loc>';
-				echo '<lastmod></lastmod>';
+				echo '<lastmod>'.date('Y m d').'</lastmod>';
 				echo '</sitemap>';
 			}
 
@@ -170,8 +170,7 @@ class Home extends CI_Controller {
 					echo '<loc>'.base_url().'view/?key='.urlencode($k->{'key'}).'</loc>';
 				}
 				echo '<changefreq>weekly</changefreq>';
-				echo '<priority>1.0</priority>';
-				echo '<lastmod>'.$k->{'date_modified'}.'</lastmod>';
+				echo '<lastmod>'.date('Y-m-d', strtotime($k->{'date_modified'})).'</lastmod>';
 				echo '</url>';
 			}
 
