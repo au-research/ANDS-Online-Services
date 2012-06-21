@@ -99,21 +99,36 @@
     <xsl:template match="extRif:flag">
         <xsl:element name="field">
             <xsl:attribute name="name">flag</xsl:attribute>
-            <xsl:value-of select="."/>
+            <xsl:choose>
+            	<xsl:when test=". = ''">0</xsl:when>
+            	<xsl:otherwise>
+            		<xsl:value-of select="."/>
+            	</xsl:otherwise>
+            </xsl:choose>
         </xsl:element>       
     </xsl:template>
 
     <xsl:template match="extRif:warning_count">
         <xsl:element name="field">
             <xsl:attribute name="name">warning_count</xsl:attribute>
-            <xsl:value-of select="."/>
+            <xsl:choose>
+            	<xsl:when test=". = ''">0</xsl:when>
+            	<xsl:otherwise>
+            		<xsl:value-of select="."/>
+            	</xsl:otherwise>
+            </xsl:choose>
         </xsl:element>       
     </xsl:template>
 
     <xsl:template match="extRif:error_count">
         <xsl:element name="field">
             <xsl:attribute name="name">error_count</xsl:attribute>
-            <xsl:value-of select="."/>
+            <xsl:choose>
+            	<xsl:when test=". = ''">0</xsl:when>
+            	<xsl:otherwise>
+            		<xsl:value-of select="."/>
+            	</xsl:otherwise>
+            </xsl:choose>
         </xsl:element>       
     </xsl:template>
 
@@ -127,14 +142,24 @@
     <xsl:template match="extRif:manually_assessed_flag">
         <xsl:element name="field">
             <xsl:attribute name="name">manually_assessed_flag</xsl:attribute>
-            <xsl:value-of select="."/>
+			<xsl:choose>
+            	<xsl:when test=". = ''">0</xsl:when>
+            	<xsl:otherwise>
+            		<xsl:value-of select="."/>
+            	</xsl:otherwise>
+            </xsl:choose>
         </xsl:element>       
     </xsl:template>
     
     <xsl:template match="extRif:gold_status_flag">
         <xsl:element name="field">
             <xsl:attribute name="name">gold_status_flag</xsl:attribute>
-            <xsl:value-of select="."/>
+			<xsl:choose>
+            	<xsl:when test=". = ''">0</xsl:when>
+            	<xsl:otherwise>
+            		<xsl:value-of select="."/>
+            	</xsl:otherwise>
+            </xsl:choose>
         </xsl:element>       
     </xsl:template>
     
