@@ -53,12 +53,18 @@ body { font-family: verdana, sans-serif; }
 
 .quality-test-results span.warning {
 	color:#990033;
-	
+}
+
+span.metadatawarning {
+	color:#990033;
 }
 
 .quality-test-results span.info {
 	color:#003399;
-	
+}
+
+span.metadatainfo {
+	color:#003399;
 }
 
 .qualityReportTable td { 

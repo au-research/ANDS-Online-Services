@@ -82,8 +82,8 @@ if (getQueryValue('type') == "quality"):
 	foreach($records AS $record):
 	$metadata_required_errors = substr_count($record['quality_test_result'], "<span class=\"warning\">");
 	$metadata_recommended_errors = substr_count($record['quality_test_result'], "<span class=\"info\">");
-	$qa_string =  $metadata_required_errors . " " . depluralise("required fields", $metadata_required_errors) . "  missing  " .
-					" / " . $metadata_recommended_errors . " " . depluralise("recommended fields", $metadata_recommended_errors) . " missing ";
+	$qa_string =  "<span class='metadatawarning'>" . $metadata_required_errors . " " . depluralise("required fields", $metadata_required_errors) . "  missing </span> " .
+					" / <span class='metadatainfo'>" . $metadata_recommended_errors . " " . depluralise("recommended fields", $metadata_recommended_errors) . " missing </span>";
 	?>
 		<table class="qualityReportTable">
 
@@ -116,8 +116,8 @@ if (getQueryValue('type') == "quality"):
 	foreach($drafts AS $draft):
 	$metadata_required_errors = substr_count($draft['quality_test_result'], "<span class=\"warning\">");
 	$metadata_recommended_errors = substr_count($draft['quality_test_result'], "<span class=\"info\">");
-	$qa_string =  $metadata_required_errors . " " . depluralise("required fields", $metadata_required_errors) . "  missing  " .
-					" / " . $metadata_recommended_errors . " " . depluralise("recommended fields", $metadata_recommended_errors) . " missing ";
+	$qa_string =  "<span class='metadatawarning'>" . $metadata_required_errors . " " . depluralise("required fields", $metadata_required_errors) . "  missing </span> " .
+					" / <span class='metadatainfo'>" . $metadata_recommended_errors . " " . depluralise("recommended fields", $metadata_recommended_errors) . " missing </span>";
 	?>
 		<table class="qualityReportTable">
 
