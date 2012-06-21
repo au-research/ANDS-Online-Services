@@ -3192,6 +3192,7 @@ function getSearchBaseScore($registry_object_key)
 
 	// number of INCOMING related objects (objects that relate to us):
 	$number_of_related_objects = getIncomingRelatedObjectCount($registry_object_key);
+	$number_of_related_objects -= (int) getMinorImpactInboundRelatedObjectCount($registry_object_key); //remove close relationships ("isPartOf")
 	$baseScore += eBOOST_INCOMING_RELATED_OBJECT_ADJUSTMENT * (int) $number_of_related_objects;
 
 	return $baseScore;
