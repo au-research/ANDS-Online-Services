@@ -2364,6 +2364,19 @@ function getRelatedObjectCount($registry_object_key)
 		return $resultSet[0]['count'];
 }
 
+function getMinorImpactRelatedObjectCount($registry_object_key)
+{
+	global $gCNN_DBS_ORCA;
+	$strQuery = 'SELECT COUNT(*) AS "count" FROM dba.tbl_related_objects r JOIN dba.tbl_relation_description rd ON r.relation_id = rd.relation_id WHERE r.registry_object_key = $1 AND rd.type IN (\'hasPart\');';
+	$params = array($registry_object_key);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+
+	if (!isset($resultSet[0]))
+		return 0;
+	else
+		return $resultSet[0]['count'];
+}
+
 function getIncomingRelatedObjectCount($registry_object_key)
 {
 	global $gCNN_DBS_ORCA;
