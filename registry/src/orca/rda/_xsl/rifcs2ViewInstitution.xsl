@@ -218,15 +218,14 @@
 				<p><xsl:apply-templates select="ro:location/ro:address/ro:electronic"/></p>	
 	 		</xsl:if>
 	 		
-	 		 <xsl:if test="extRif:rights">
+	<!--  	 <xsl:if test="extRif:rights">
 					<h3>Rights</h3>	
-			</xsl:if>
+			</xsl:if> --> 	
 				
 			<!-- <xsl:apply-templates select="ro:description[@type = 'accessRights' or @type = 'rights']" mode="right"/>	 -->	
-			<xsl:apply-templates select="extRif:rights"/>		
+			<!-- 	<xsl:apply-templates select="extRif:rights"/>	--> 
 			
 		 	<xsl:if test="ro:location/ro:address/ro:electronic/@type='email' or ro:location/ro:address/ro:physical">
-		 		<h3>Contacts</h3>
 		 		<xsl:if test="ro:location/ro:address/ro:electronic/@type='email'">
 					<p><xsl:apply-templates select="ro:location/ro:address/ro:electronic/@type"/></p>	
 				</xsl:if>
@@ -322,9 +321,9 @@
     <xsl:template match="extRif:displayTitle">   
         <div id="displaytitle">
         	<h1><xsl:value-of select="."/></h1>
-        	<xsl:for-each select="//ro:existenceDates">
+        <!--  <xsl:for-each select="//ro:existenceDates">
         		<xsl:if test="./ro:startDate"><xsl:value-of select="./ro:startDate"/></xsl:if> - <xsl:if test="./ro:endDate"><xsl:value-of select="./ro:endDate"/></xsl:if><br/>
-			</xsl:for-each>     
+			</xsl:for-each>    -->	 
 		</div>			
 		
 		<div class="right_icon">
