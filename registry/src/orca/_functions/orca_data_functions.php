@@ -2380,7 +2380,7 @@ function getMinorImpactRelatedObjectCount($registry_object_key)
 function getMinorImpactInboundRelatedObjectCount($registry_object_key)
 {
 	global $gCNN_DBS_ORCA;
-	$strQuery = 'SELECT COUNT(*) AS "count" FROM dba.tbl_related_objects r JOIN dba.tbl_relation_descriptions rd ON r.relation_id = rd.relation_id WHERE r.registry_object_key = $1 AND rd.type IN (\'isPartOf\');';
+	$strQuery = 'SELECT COUNT(*) AS "count" FROM dba.tbl_related_objects r JOIN dba.tbl_relation_descriptions rd ON r.relation_id = rd.relation_id WHERE r.related_registry_object_key = $1 AND rd.type IN (\'isPartOf\');';
 	$params = array($registry_object_key);
 	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
 
