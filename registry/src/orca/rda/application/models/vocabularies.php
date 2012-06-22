@@ -367,7 +367,7 @@ class Vocabularies extends CI_Model {
 	//this is from SOLR
 	function getNumCollections($uri){
 		$fields = array(
-			'q'=>'+subject_vocab_uri:("'.$uri.'") +class:collection','version'=>'2.2','start'=>'0','rows'=>'1', 'wt'=>'json',
+			'q'=>'(+subject_vocab_uri:("'.$uri.'") OR +broader_subject_vocab_uri:("'.$uri.'"))+class:collection','version'=>'2.2','start'=>'0','rows'=>'1', 'wt'=>'json',
 			'fl'=>'hash_key'
 		);
 		/*prep*/
