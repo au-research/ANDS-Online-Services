@@ -70,7 +70,7 @@ class Browse extends CI_Controller {
 
 	function vocabSearchResult($type, $page=1){
 		$q = '';
-		$row = 5;$start=0;
+		$row = 15;$start=0;
 		if($page!=1) $start = ($page - 1) * $row;
 		$uri = $this->input->post('uri');
 		//echo $uri;
@@ -78,6 +78,9 @@ class Browse extends CI_Controller {
 			$q = '+subject_vocab_uri:("'.$uri.'")';
 		}elseif($type=='narrower'){
 			$q = '+broader_subject_vocab_uri:("'.$uri.'")';
+		}elseif($type=='both'){
+			// exact matches to the top
+			$q = '(+subject_vocab_uri:("'.$uri.'")^2000 OR +broader_subject_vocab_uri:("'.$uri.'"))';
 		}
 		$q.=' +class:collection';
 		$this->load->model('solr');
@@ -85,11 +88,13 @@ class Browse extends CI_Controller {
 			'q'=>$q,'version'=>'2.2','start'=>$start,'rows'=>$row,'indent'=>'on', 'wt'=>'json',
 			'fl'=>'key, list_title, url_slug, description_value', 'q.alt'=>'*:*'
 		);
+
 		//var_dump($fields);
 		$json = $this->solr->fireSearch($fields, '');
 		$data['search_result'] = $json;
 		$data['type']= $type;
 		$data['page']= $page;
+		$data['vocab_uri']=$uri;
 		$this->load->view('browse/minisearch', $data);
 	}
 

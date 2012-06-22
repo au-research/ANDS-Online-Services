@@ -5,8 +5,7 @@
 	<!--Breadcrumb-->
 	<div id="top" class="top-corner">
 		<ul id="breadcrumb" class="top-corner">
-			<li><?php echo anchor('vocab/index', 'Vocab Home', array('class'=>'crumb'))?></li>
-			<li><?php echo anchor('vocab/index', 'anzsrc-for', array('class'=>'crumb', 'id'=>'vocabID'))?></li>
+			<li><?php echo anchor('browse/', 'Browse Research Data Australia', array('class'=>'crumb'))?></li>
 		</ul>
 	</div>
 
@@ -20,7 +19,17 @@
 				Loading Tree
 			</div>
 		</div>
-		<div id="right-vocab"></div>
+		<div id="right-vocab">
+
+			<div>
+				<h3>Browse Research Data Australia</h3>
+				Use the tree tool on the left to explore Research Data Australia by subject area. For more refined search functionality, use the <?php echo anchor('search#!/tab=All', 'Search Tool');?>.
+				<br/><br/>
+				<i>Note: Only collections with subjects from a recognised vocabulary are listed here. Use the tabs above to locate other types of records in RDA</i>
+			</div>
+
+
+		</div>
 		<div class="clearfix"></div>
 	</div>
 </div>

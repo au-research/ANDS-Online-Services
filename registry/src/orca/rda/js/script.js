@@ -85,6 +85,10 @@ $(document).ready(function(){
 				vocabLoadTree(ui.item.uri, ui.item.vocab);
 			}
 		});
+		$("#show_vocab_metadata_link").live('click', function() {
+			$(this).hide();
+			$('.vocabulary_metadata').show();
+		});
 	}
 
 	function loadBigTree(selected_node, selected_vocab){
@@ -221,6 +225,17 @@ $(document).ready(function(){
 		$.ajax({
    			type:"POST",
    			data:{uri:vocab_uri},
+			url: base_url+"/browse/vocabSearchResult/both",
+	        success:function(data){
+				$('#vocab_search_result').html(data);
+				$(".accordion").accordion({autoHeight:false, collapsible:true,active:false});
+	        },
+	        error:function(msg){}
+		});
+/*
+		$.ajax({
+   			type:"POST",
+   			data:{uri:vocab_uri},
 			url: base_url+"/browse/vocabSearchResult/exact",
 	        success:function(data){
 				$('#exact_search_result').html(data);
@@ -238,7 +253,7 @@ $(document).ready(function(){
 	        },
 	        error:function(msg){}
 		});
-
+*/
 		$('.gotoPage, .next, .prev').live('click', function(){
 			var parent = $(this).parents('.miniSearch');
 			var currentPage = parseInt($(parent).attr('page'));

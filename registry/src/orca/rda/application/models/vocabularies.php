@@ -1,5 +1,5 @@
 <?php
-/** 
+/**
 Copyright 2011 The Australian National University
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ***************************************************************************
 *
-**/ 
+**/
 ?>
 <?php
 class Vocabularies extends CI_Model {
@@ -28,7 +28,7 @@ class Vocabularies extends CI_Model {
     	$bigTree .='<div id="vocab-browser">';
 			$bigTree .='<ul>';
 				$bigTree .='<li id="rootNode">';
-				$bigTree .='<a href="#">ANDS Vocab Service</a>';
+				$bigTree .='<a href="#">ANDS Vocabulary Service</a>';
 				$bigTree .='<ul>';
 		    	//var_dump($vocabs);
 		    	$order = 1; //additional parameter to add to each tree for identification purpose
@@ -106,7 +106,7 @@ class Vocabularies extends CI_Model {
 			$c['notation'] = $resolved_concept->{'result'}->{'primaryTopic'}->{'notation'};
 			$c['prefLabel'] = $resolved_concept->{'result'}->{'primaryTopic'}->{'prefLabel'}->{'_value'};
 			$c['uri'] = $resolved_concept->{'result'}->{'primaryTopic'}->{'_about'};
-			
+
 			if($broader){
 				if(in_array($c['uri'], $broader)){
 					$broader = array_diff($broader, array($c['uri']));
@@ -115,7 +115,7 @@ class Vocabularies extends CI_Model {
 			}else{
 				$c['narrower']=false;
 			}
-			
+
 
 			$tree['topConcepts'][] = $c;
 		}
@@ -175,7 +175,7 @@ class Vocabularies extends CI_Model {
 				if($hasNarrowerConcepts){
 					$r.='<ul><li><a class="jstree-loading">Loading...</a></li></ul>';
 				}
-				
+
 			}
 			$r.='</li>';
 		}
@@ -220,7 +220,7 @@ class Vocabularies extends CI_Model {
 		$uri['uriprefix'] = $concept_uri;
 		$content = $this->getResource($uri);
 		$json = json_decode($content);
-		
+
 		if(isset($json->{'result'}->{'primaryTopic'}->{'broader'}->{'_about'})){
 			$broader_uri = $json->{'result'}->{'primaryTopic'}->{'broader'}->{'_about'};
 			array_push($parents, $broader_uri);
@@ -294,7 +294,7 @@ class Vocabularies extends CI_Model {
 			$c['prefLabel'] = $resolved_concept->{'result'}->{'primaryTopic'}->{'prefLabel'}->{'_value'};
 			$c['uri'] = $resolved_concept->{'result'}->{'primaryTopic'}->{'_about'};
 			$c['collectionNum'] = $this->getNumCollections($c['uri']);
-			
+
 			//var_dump($c);
 			$tree['topConcepts'][] = $c;
 		}
@@ -302,7 +302,7 @@ class Vocabularies extends CI_Model {
 		return $tree;
 	}
 
-	
+
 
 	//execute the get resources, this is to resolve a single concept
 	function getResource($vocab_uri){
@@ -373,12 +373,12 @@ class Vocabularies extends CI_Model {
 		/*prep*/
 		$fields_string='';
 		//foreach($fields as $key=>$value) { $fields_string .= $key.'='.str_replace("+","%2B",$value).'&'; }//build the string
-		foreach($fields as $key=>$value) { 
-			$fields_string .= $key.'='.$value.'&'; 				
+		foreach($fields as $key=>$value) {
+			$fields_string .= $key.'='.$value.'&';
 		}//build the string
     	$fields_string .= '&facet=true&facet.field=class';//add the facet bits
     	$fields_string = rtrim($fields_string,'&');
-	
+
     	$ch = curl_init();
     	$solr_url = $this->config->item('solr_url');
     	//set the url, number of POST vars, POST data
@@ -387,12 +387,12 @@ class Vocabularies extends CI_Model {
 		curl_setopt($ch,CURLOPT_POSTFIELDS,$fields_string);//post the field strings
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);//return to variable
     	$content = curl_exec($ch);//execute the curl
-    	
+
     	//echo 'json received+<pre>'.$content.'</pre>';
 		curl_close($ch);//close the curl
-		
-		
-		
+
+
+
 		$json = json_decode($content);
 		$num = $json->{'response'}->{'numFound'};
 		//echo  "*********".$content;

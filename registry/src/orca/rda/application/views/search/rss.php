@@ -30,16 +30,18 @@ if($subject!="All")$filter .= "/subject=".$subject;
 if($licence!="All")$filter .= "/licence=".$licence;
 
 $feed_title = "Research Data Australia search results for collections matching " . $_GET['q'];
+$feed_title_suffix = '';
 if ($subjectSearchTitleSuffix) {
-	$feed_title .= " with subject(s): " . $subjectSearchTitleSuffix;
+	$feed_title_suffix = " with subject(s): " . $subjectSearchTitleSuffix;
 }
+$feed_title .= $feed_title_suffix;
 
 $rss_channel_header = '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 	<channel>
 		<atom:link href="'.$rdaInstance.rawurlencode($_SERVER['QUERY_STRING']).'" rel="self" type="application/rss+xml" />
 		<title>'.$feed_title.'</title>
 		<link>'.$rdaInstance.rawurlencode($_SERVER['QUERY_STRING']).'</link>
-		<description>The following items represent new/updated collection records added to Research Data Australia which match the search query  "'.$_GET['q'].'".</description>
+		<description>The following items represent new/updated collection records added to Research Data Australia which match the search query  "'.$_GET['q'].$feed_title_suffix.'".</description>
 		<language>en</language>
 		<image>
 			<url>'.$rdaInstance.'/img/icon/ands_boxes.jpg</url>
