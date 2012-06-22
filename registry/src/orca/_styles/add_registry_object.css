@@ -322,7 +322,7 @@ div.ql2{background:#F2CE3B;color:white;}
 div.ql1{background:#F06533;color:white;}
 div.ql0{background:#89CEDE;color:black;}
 
-#rda_preview, #rda_preview_xml{
+#rda_preview, #rda_preview_xml, #print_preview{
  border: 2px outset;
  border-color: #dcdcdc;
  padding: 2px;

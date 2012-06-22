@@ -187,7 +187,7 @@ if( strtoupper(getPostedValue('verb')) == "SAVE" )
 			}
 			else
 			{
-				$errorMessages = "Identifier error. ".pidsGetUserMessage($response);
+				$errorMessages = "Identifier error. ".$response;
 				if( stristr($errorMessages, 'URL') )
 				{
 					$urlLabelClass = gERROR_CLASS;
@@ -371,8 +371,8 @@ if( strtoupper(getPostedValue('verb')) == "SAVE" )
 					//updateDraftRegistryObjectStatus($registryObjectKey, $dataSourceKey, ASSESSMENT_IN_PROGRESS);
 					// Add a relation for this collection to the user party object.
 					//addCollectionRelationToUserParty($partyObjectKey, $registryObjectKey);
-					runQualityCheckforDataSource('PUBLISH_MY_DATA');
-					
+					//runQualityCheckforDataSource('PUBLISH_MY_DATA');
+					syncKey($registryObjectKey, 'PUBLISH_MY_DATA');
 					// Log the datasource activity.
 					insertDataSourceEvent($dataSourceKey, "ADD REGISTRY OBJECT\nKey: ".$registryObjectKey."\n".$resultMessage);
 					

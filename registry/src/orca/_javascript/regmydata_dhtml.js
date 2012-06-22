@@ -1173,7 +1173,7 @@ function saveAndPreview() {
 		var ds = $('#object_mandatoryInformation_dataSource').val();
 		$("#save_notification").html("<div>This draft has been saved successfully.</div>");
 		
-		$("#rda_preview_container").html("<a style='margin-left:10px;float:right;' id='rda_preview_xml' href='#'>View RIF-CS </a>" +
+		$("#rda_preview_container").html("<a style='margin-left:10px;float:right;' id='print_preview' href='#'>Print Record</a>&nbsp;&nbsp;<a style='margin-left:10px;float:right;' id='rda_preview_xml' href='#'>View RIF-CS </a>" +
 				"<a style='float:right;' id='rda_preview' class='rda_preview' href='#' target='_blank'>" +
 				"<img style='padding: 0px 3px;float: left;' src='"+rootAppPath+"orca/_images/globe.png' /> Preview in Research Data Australia</a>" +
 						"<div id='rifcs_plain' class='hide'><img src='"+rootAppPath+"orca/_images/delete_16.png' class='closeBlockUI' style='float:right;'/>" +
@@ -1182,8 +1182,12 @@ function saveAndPreview() {
 			
 
 
-		$(".rda_preview").attr("href",$("#baseURL").val() + 'rda/preview?ds='+$('#object_mandatoryInformation_dataSource').val()+'&key=' + $('#object_mandatoryInformation_key').val());			
-		
+		$(".rda_preview").attr("href",$("#baseURL").val() + 'rda/preview?ds='+$('#object_mandatoryInformation_dataSource').val()+'&key=' + $('#object_mandatoryInformation_key').val());
+		$("#print_preview").click(function()
+		{
+			var win = window.open('process_registry_object.php?task=preview&data_source='+$('#object_mandatoryInformation_dataSource').val()+'&key=' + $('#object_mandatoryInformation_key').val());		
+		});
+
 		$('#rda_preview_xml').click(function(){
 			var key = $('#object_mandatoryInformation_key').val();
 			var ds = $('#object_mandatoryInformation_dataSource').val();
@@ -1230,7 +1234,7 @@ function saveAndPreview() {
 
 		//copy and paste from above, need refactor
 		$(".rda_preview").attr("href",$("#baseURL").val() + 'rda/preview?ds='+$('#object_mandatoryInformation_dataSource').val()+'&key=' + $('#object_mandatoryInformation_key').val());
-		$('#rda_preview_xml').click(function(){
+		$('#rda_preview').click(function(){
 			var key = $('#object_mandatoryInformation_key').val();
 			var ds = $('#object_mandatoryInformation_dataSource').val();
 			$.get(rootAppPath + 'orca/services/getRegistryObject.php?key='+encodeURIComponent(key)+'&ds='+encodeURIComponent(ds)+'&type=plain',
@@ -2841,6 +2845,7 @@ $("#button_bar > input").live("click", function(e) {
 	
 	
 });
+
 
 function checkTypeValue(theSelect){
 	

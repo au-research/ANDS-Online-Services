@@ -39,6 +39,7 @@ limitations under the License.
 	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
 	<title><?php if( $eDeploymentStatus != 'PROD' ){ print "$eDeploymentStatus&mdash;"; }
     print($pageTitle) ?></title>
+
 	<style type="text/css">
 		@import url("<?php print eAPP_ROOT ?>_styles/general.css");
 		@import url("<?php print eAPP_ROOT ?>_styles/layout.css");
@@ -49,6 +50,7 @@ limitations under the License.
 		<?php printApplicationStyleSheets(); ?>
 
 	</style>
+	<link rel="stylesheet" media="print" title="Printer-Friendly Style" type="text/css" href="<?php print eAPP_ROOT ?>_styles/print_style.css">
 	<script type="text/javascript" src="<?php print eAPP_ROOT ?>_javascript/general.js"></script>
 	<script type="text/javascript" src="<?php print eAPP_ROOT ?>_javascript/dhtml.js"></script>
 

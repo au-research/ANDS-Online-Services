@@ -36,7 +36,10 @@ else if($task == 'save')
 	{
 		include('_processes/save.php');
 	}
-
+else if($task == 'preview')
+	{
+		include('_processes/preview.php');
+	}
 	// AJAX responses to the manage my records screen
 else if ($task == 'manage_my_records')
 	{
