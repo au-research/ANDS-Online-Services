@@ -176,6 +176,7 @@ if( $registryObject )
 		echo "<span color='#ccc'>";
 		drawRecordField("Originating Source:",  esc($registryObjectSource));
 		drawRecordField("URL \"SLUG\":", esc($url_slug));
+		drawRecordField("DS Key:", $dataSourceKey);
 		drawRecordField("DS Key Hash:", getDataSourceHashForKey($dataSourceKey));
 		drawRecordField("Record Key Hash:", getRegistryObjectHashForKey($registryObjectKey));
 		echo "</span>";
