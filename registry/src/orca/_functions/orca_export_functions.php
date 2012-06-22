@@ -1356,10 +1356,6 @@ function getSubjectTypesXML($registryObjectKey, $elementName, $localBroaderTerms
 			$term = '';
 			if ($forSOLR)
 			{
-//$gVOCAB_RESOLVER_SERVICE = array(
-//'anzsrc-for' =>
-//array('resolvingService' => 'http://devl.ands.org.au:8080/sissvoc/api/anzsrc-for/',
-// 'uriprefix' => 'http://purl.org/au-research/vocabulary/anzsrc-for/2008/'));
 
 				$resourceUrlComp = 'resource.json?uri=';
 				$resolvedName = $rawvalue;
@@ -1382,6 +1378,7 @@ function getSubjectTypesXML($registryObjectKey, $elementName, $localBroaderTerms
 						$rawvalue = $gVOCAB_RESOLVER_RESULTS[$vocabUri]['notation'];
 						// sometimes it's not resolving... so set it to null
 						$vocabUri = $gVOCAB_RESOLVER_RESULTS[$vocabUri]['vocabUri'];
+						populateBroaderTerms( $gVOCAB_RESOLVER_RESULTS[$vocabUri]['broaderTerm'], $resolvingService, $vocabType, &$localBroaderTerms);
 					}
 					else if($vocabUri != 'null')
 					{
