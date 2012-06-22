@@ -132,5 +132,36 @@ INSERT INTO dba.tbl_terms (identifier, identifier_type, name, description, vocab
 INSERT INTO dba.tbl_terms (identifier, identifier_type, name, description, vocabulary_identifier, parent_term_identifier,type,vocabpath) VALUES ('researchDataProflie', 'local','researchDataProflie', 'Contributor research data profile','RIFCSDescriptionType','','pt','RIFCS Description Type');
 INSERT INTO dba.tbl_terms (identifier, identifier_type, name, description, vocabulary_identifier, parent_term_identifier,type,vocabpath) VALUES ('eResearchSupport', 'local','eResearchSupport', 'Contributor eResearch support','RIFCSDescriptionType','','pt','RIFCS Description Type');
 
+-- Function: dba.udf_get_nla_set(character varying)
+
+-- DROP FUNCTION dba.udf_get_nla_set(character varying);
+
+CREATE OR REPLACE FUNCTION dba.udf_get_nla_set(class character varying)
+  RETURNS SETOF dba.nlapartyset AS
+$BODY$SELECT 
+ro.registry_object_key,
+ro.originating_source,
+ro.data_source_key,
+ds.title as data_source_title,
+ro.object_group,
+ro.date_accessioned,
+ro.date_modified,
+ro.created_when,
+ro.registry_object_class,
+ro.type,
+ro.status,
+ro.record_owner,
+ds.isil_value
+FROM dba.tbl_registry_objects AS ro, dba.tbl_data_sources AS ds
+WHERE upper(ro.registry_object_class)=upper($1)
+AND ro.data_source_key = ds.data_source_key
+AND push_to_nla
+AND ro.registry_object_key NOT IN (SELECT registry_object_key FROM dba.tbl_institution_pages)$BODY$
+  LANGUAGE sql VOLATILE
+  COST 100
+  ROWS 1000;
+ALTER FUNCTION dba.udf_get_nla_set(character varying)
+  OWNER TO dba;
+
 
 
