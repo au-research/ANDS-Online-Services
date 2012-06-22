@@ -150,7 +150,7 @@ $(document).ready(function(){
   			// data.inst is the tree object, and data.rslt.obj is the node
   			var theNode = data.rslt.obj;
   			var theLink = $(theNode).children('.getConcept');
-  			$('#right-vocab').html('Select a Field of Research');
+  			$('#right-vocab').html('Select a concept from the vocabulary browser on the left');
   			if($(theNode).attr('id')!='rootNode'){
   				if(!$(theNode).hasClass('conceptRoot')){
 		  			vocabLoadConcept($(theLink).attr('uri'), $(theLink).attr('vocab'));
