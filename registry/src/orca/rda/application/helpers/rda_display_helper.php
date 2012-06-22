@@ -126,7 +126,28 @@ function constructFilterQuery($class, $groups){
 		case 'class':$str='+class:(';break;
 		case 'type':$str='+type:(';break;
 		case 'group':$str='+group:(';break;
-		case 'subject_value_resolved':$str='+subject_value_resolved:(';break;
+		case 'subject_value_resolved':
+			// ~ include narrower terms (drill-down mode)
+			if (strpos($groups, "~") !== FALSE)
+			{
+				$str='+broader_subject_value_resolved:(';
+			}
+			else
+			{
+				$str='+subject_value_resolved:(';
+			}
+		break;
+		case 'subject_vocab_uri':
+			// ~ include narrower terms (drill-down mode)
+			if (strpos($groups, "~") !== FALSE)
+			{
+				$str='+broader_subject_vocab_uri:(';
+			}
+			else
+			{
+				$str='+subject_vocab_uri:(';
+			}
+			break;
 		case 'licence_group':$str='+licence_group:(';break;
 		case 'status':$str='+status:(';break;
 	}
@@ -134,6 +155,7 @@ function constructFilterQuery($class, $groups){
 	$classes = explode(';',$groups);
 	$first = true;
 	foreach($classes as $c){
+		$c = str_replace("~","",$c);
 		if(!$first){
 			$str.=' OR "'.escapeSolrValue($c).'"';
 		}else{
@@ -276,7 +298,7 @@ function getInstitutionPage($group)
 	{
 		if($row->registry_object_key)
 		{
-			$query = $CI->db->get_where('dba.tbl_registry_objects',array('registry_object_key'=>$row->registry_object_key,'status'=>'PUBLISHED'));		
+			$query = $CI->db->get_where('dba.tbl_registry_objects',array('registry_object_key'=>$row->registry_object_key,'status'=>'PUBLISHED'));
 			foreach($query->result() as $row)
 			{
 				return $row->registry_object_key;
@@ -293,7 +315,7 @@ function getPageLogo($key){
 	$CI =& get_instance();
 	$CI->load->database();
 	$query = $CI->db->select("value")->get_where("dba.tbl_descriptions", array("registry_object_key" => $key,"type" => 'logo'));
-	if ($query->num_rows() == 0) 
+	if ($query->num_rows() == 0)
 	{
 		return false;
 	}else{
@@ -311,5 +333,48 @@ function displaySubscriptions(){//for now we only want to set up the subscriptio
 		return false;
 	}
 
+}
+
+
+/*
+ * Take a vocab term uri (http://purl.org/au-research/vocab/...)
+ * and try to resolve it back to a prefLabel (& optional notation)
+ * the mapped vocabulary services in global_config.php
+ */
+function resolveLabelFromVocabTermURI($vocabTermUri)
+{
+	global $gVOCAB_RESOLVER_SERVICE;
+	$resolution_target = false;
+
+	$return_string = rawurlencode($vocabTermUri); // if no results, return the URI
+
+	foreach ($gVOCAB_RESOLVER_SERVICE AS $resolver)
+	{
+		if (strpos($vocabTermUri, $resolver['uriprefix']) === 0)
+		{
+			$resolution_target = $resolver['resolvingService'] . "resource.json?uri=" . rawurlencode($vocabTermUri);
+		}
+	}
+
+	if ($resolution_target)
+	{
+		$contents = file_get_contents($resolution_target);
+		if ($contents)
+		{
+			$contents = json_decode($contents,true);
+			if ($contents)
+			{
+				if (isset($contents['result']['primaryTopic']['prefLabel']['_value']))
+				{
+					$return_string = $contents['result']['primaryTopic']['prefLabel']['_value'];
+				}
+				if (isset($contents['result']['primaryTopic']['notation']))
+				{
+					$return_string .= " (" . $contents['result']['primaryTopic']['notation'] . ")";
+				}
+			}
+		}
+	}
+	return $return_string;
 }
 ?>

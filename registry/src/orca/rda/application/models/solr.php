@@ -39,7 +39,18 @@ limitations under the License.
     	if($classFilter!='All') $filter_query .= constructFilterQuery('class', $classFilter);
     	if($typeFilter!='All') $filter_query .= constructFilterQuery('type', $typeFilter);
     	if($groupFilter!='All') $filter_query .= constructFilterQuery('group', $groupFilter);
-    	if($subjectFilter!='All') $filter_query .= constructFilterQuery('subject_value_resolved', $subjectFilter);
+
+    	if($subjectFilter!='All') {
+    		// treat http://-style subject searches as URI searches
+    		if (strpos("http://", rawurldecode($subjectFilter)) !== FALSE)
+    		{
+    			$filter_query .= constructFilterQuery('subject_vocab_uri', rawurldecode($subjectFilter));
+    		}
+    		else
+    		{
+    			$filter_query .= constructFilterQuery('subject_value_resolved', $subjectFilter);
+    		}
+    	}
 
     	// Fix: if there is no subject to match against (i.e. blank subject) suitably random string will prevent any matches
     	if($subjectFilter == '') $filter_query .= constructFilterQuery('subject_value_resolved', "nr3kl90u3asd");

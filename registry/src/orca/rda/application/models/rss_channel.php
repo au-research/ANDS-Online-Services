@@ -38,7 +38,6 @@ limitations under the License.
 
 		function getRssArrayForQuery($query)
 		{
-			date_default_timezone_set('Antarctica/Macquarie');
 			parse_str($_SERVER['QUERY_STRING'], $_GET);
 			$dataSource = '';
 			$dataGroup = '';
@@ -58,7 +57,25 @@ limitations under the License.
     		if($classFilter!='All') $filter_query .= constructFilterQuery('class', $classFilter);
     		if($typeFilter!='All') $filter_query .= constructFilterQuery('type', $typeFilter);
     		if($groupFilter!='All') $filter_query .= constructFilterQuery('group', $groupFilter);
-    		if($subjectFilter!='All') $filter_query .= constructFilterQuery('subject_value_resolved', $subjectFilter);
+
+
+    		if($subjectFilter!='All')
+    		{
+	    		// treat http://-style subject searches as URI searches
+	    		if (strpos(rawurldecode($subjectFilter), "http://") !== FALSE)
+	    		{
+
+	    			$filter_query .= constructFilterQuery('subject_vocab_uri', rawurldecode($subjectFilter));
+	    		}
+	    		else
+	    		{
+	    			$filter_query .= constructFilterQuery('subject_value_resolved', $subjectFilter);
+	    		}
+    		}
+    		// Fix: if there is no subject to match against (i.e. blank subject) suitably random string will prevent any matches
+    		if($subjectFilter == '') $filter_query .= constructFilterQuery('subject_value_resolved', "nr3kl90u3asd");
+
+
     		if($licenceFilter!='All')$filter_query .= constructFilterQuery('licence_group', $licenceFilter);
     		if($status!='All') $filter_query .= constructFilterQuery('status', $status);
      		if($dataGroup!='') $filter_query .= constructFilterQuery('group', $dataGroup);
@@ -67,7 +84,7 @@ limitations under the License.
 			$solrOutput = array('response'=>array('numFound'=>999));
 
 			while (count($this->rssArray) < $this->rssArraySize && $this->startCount <= $solrOutput['response']['numFound'])
-			{	
+			{
 				$this->recursionLevel++;
 				if ($this->recursionLevel == $this->recursionMax) break;
 
@@ -88,15 +105,15 @@ limitations under the License.
 				$solrOutput = json_decode(file_get_contents($solrUrl), true);
 
 
-			
+
 
 				foreach ($solrOutput['response']['docs'] AS $response)
 				{
-							
+
 					if (!$this->isDigested($response['group'].":".date("Y-m-d",strtotime($response['date_modified']))) or $digest=='false')
 					{
 						// "we don't want digest";
-						$this->addToRssArray($response,$groupFilter,$dataGroup,$digest);				
+						$this->addToRssArray($response,$groupFilter,$dataGroup,$digest);
 					}
 					else
 					{
@@ -120,13 +137,13 @@ limitations under the License.
 				$digest_entry_index = null;
 
 				$digest_entry = array('type'=>'digest', 'key'=> $response['group'], 'group'=>$response['group'].":".date("Y-m-d",strtotime($response['date_modified'])),'updated_date'=>date("Y-m-d",strtotime($response['date_modified'])), 'updated_items'=>array());
-		
+
 				foreach ($this->rssArray AS $index => $item)
 				{
 					$dateStr = '';
 					if(isset($item['date_modified'])) $dateStr = ":".date("Y-m-d",strtotime($item['date_modified'])) ;
 					if (isset($item['updated_date'])) $dateStr = ":".date("Y-m-d",strtotime($item['updated_date'])) ;
-					
+
 					if ($item['group'].$dateStr== $response['group'].":".date("Y-m-d",strtotime($response['date_modified'])))
 					{
 						if (!$digest_entry_index)
@@ -196,7 +213,7 @@ limitations under the License.
 
 			foreach ($this->rssArray AS $index => $item)
 			{
-	
+
 				if ($item['type'] == 'digest' && $item['group']  == $group)
 
 				{
