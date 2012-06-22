@@ -836,7 +836,7 @@ function setInstitutionalPage(theValue, theGroups, theDataSource)
 			searchStr += '<tbody class="formFields andsorange">';
 			searchStr += '<tr><td>Search by name:</td><td><input type="text" id="object_institution_key_'+(i+1)+'_name" autocomplete="on" name="object_institution_key_'+(i+1)+'_name" maxlength="512" size="30"/></td></tr>';
 			searchStr += '<tr><td>Select object class:</td><td><span style="color:#666666">Party</span><input type="hidden" id="select_institution_key_'+(i+1)+'_class" value = "Party"/></td></tr>';
-			searchStr += '<tr><td>Data source:<input type="hidden" id="select_institution_key_'+(i+1)+'_group" value="'+datasources[0]+'"/></td><td><select id="select_institution_key_'+(i+1)+'_dataSource">'+datasourceStr+'</select></td></tr>';
+			searchStr += '<tr><td>Data source:<input type="hidden" id="select_institution_key_'+(i+1)+'_group" value="'+datasources[0]+'"/><input type="hidden" id="select_institution_key_'+(i+1)+'_dataSource" value="'+theDataSource+'"/></td><td>'+theDataSource+'</td></tr>';
 			searchStr += '<tr><td><input type="button" value="Choose Selected" onClick=\'setRelatedId("object_institution_key_'+(i+1)+'");\'/></td><td></td></tr>';
 			searchStr += '</table>';				
 			searchStr += '</div>'; 

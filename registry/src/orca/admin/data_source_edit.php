@@ -758,7 +758,7 @@ require '../../_includes/header.php';
 						$searchStr .= '<tbody class="formFields andsorange">';
 						$searchStr .= '<tr><td>Search by name:</td><td><input type="text" id="object_institution_key_'.($i).'_name" autocomplete="on" name="object_institution_key_'.($i).'_name" maxlength="512" size="30" /></td></tr>';
 						$searchStr .= '<tr><td>Select object class:</td><td><span style="color:#666666">Party</span><input type="hidden" id="select_institution_key_'.($i).'_class" value = "Party"/></td></tr>';
-						$searchStr .= '<tr><td>Data source:<input type="hidden" id="select_institution_key_'.($i).'_group" value="'.$group['object_group'].'"/></td><td><select id="select_institution_key_'.($i).'_dataSource" >'.$groupsDataSources[$group['object_group']].'</td></tr>';
+						$searchStr .= '<tr><td>Data source:<input type="hidden" id="select_institution_key_'.($i).'_group" value="'.$group['object_group'].'"/><input type="hidden" id="select_institution_key_'.($i).'_dataSource" value="'.$data_Source.'"/></td><td>'.$data_Source.'</td></tr>';
 						$searchStr .= '<tr><td><input type="button" value="Choose Selected" onClick=\'setRelatedId("object_institution_key_'.($i).'");\'/></td><td></td></tr>';
 						$searchStr .= '</table>';				
 						$searchStr .= '</div>'; 

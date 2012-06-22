@@ -49,6 +49,9 @@ function addRelatedObjectAutocomplete(field) {
 			.appendTo( ul );
 			}
 	};
+	$(field).keypress(function(event){
+		if(event.which == 13) event.preventDefault();
+	});
 }
 function showSearchModal(id)
 {
@@ -128,6 +131,9 @@ function addVocabComplete(field, type) {
 			.append( "<a><b>" + item.label + "</b> " + (item.value != item.label ? "(" + item.value + ")" : "") + "<br><i>" + item.desc + "</i></a>" )
 			.appendTo( ul );
 	};
+	$(field).keypress(function(event){
+		if(event.which == 13) event.preventDefault();event.stopPropagation();
+	});
 }
 
 

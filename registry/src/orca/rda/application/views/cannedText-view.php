@@ -28,6 +28,10 @@ limitations under the License.
 		if($class[$i]=="collection") {$collectionCount = $class[$i+1];}
 		$i++;
 	}
+		if($collectionCount==0)
+	{
+		$collectionCount = 'no';
+	}	
 	if($collectionCount==1)
 	{
 		$collectionWord = 'collection';
@@ -35,10 +39,7 @@ limitations under the License.
 	}else{
 		$collectionWord = 'collections';
 	}
-	if($collectionCount!='one' && $collectionCount==0)
-	{
-		$collectionCount = 'no';
-	}
+
 	
 	
 	$groupCount = 0;
@@ -97,7 +98,7 @@ limitations under the License.
 	
 	echo '<p>To date, ' .urldecode($group). ' has ';
 	if($collectionCount!='no'){
-		echo '<a id="hp-count-collection" href="'.base_url().'search#!/tab=collection/group='.urlencode($group).'">' .$collectionCount .' '.$collectionWord.'</a> in RDA ';
+		echo '<a id="hp-count-collection" href="'.base_url().'search#!/tab=collection/group='.urlencode($group).'">' .$collectionCount .' '.$collectionWord.'</a> in RDA';
 	}else{
 		echo  ' '.$collectionCount .' '.$collectionWord.' in RDA';
 	}
