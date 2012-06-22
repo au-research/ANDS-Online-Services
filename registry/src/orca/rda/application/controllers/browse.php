@@ -1,5 +1,5 @@
 <?php
-/** 
+/**
 Copyright 2011 The Australian National University
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,11 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ***************************************************************************
 *
-**/ 
+**/
 ?>
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Vocab extends CI_Controller {
+class Browse extends CI_Controller {
 
 	public function index(){
 		$this->load->library('user_agent');
@@ -28,10 +28,10 @@ class Vocab extends CI_Controller {
 		$this->load->model('vocabularies', 'vmodel');
 
 		//$data['bigTree']=$this->vmodel->getBigTree($this->config->item('vocab_resolver_service'));
-		$this->load->view('vocab/index', $data);
+		$this->load->view('browse/index', $data);
 	}
 
-	//ajax 
+	//ajax
 	function getConcept(){
 		$this->load->model('vocabularies', 'vmodel');
 		$uri = strtolower($_GET["uri"]);
@@ -51,7 +51,7 @@ class Vocab extends CI_Controller {
 
 		$data['prefLabel'] = $data['r']->{'result'}->{'primaryTopic'}->{'prefLabel'}->{'_value'};
 		$data['uri']=$data['r']->{'result'}->{'primaryTopic'}->{'_about'};
-		$this->load->view('vocab/conceptDetail', $data);
+		$this->load->view('browse/conceptDetail', $data);
 	}
 
 	function loadBigTree(){
@@ -64,7 +64,7 @@ class Vocab extends CI_Controller {
 		}else{
 			$data['bigTree']=$this->vmodel->getBigTree($this->config->item('vocab_resolver_service'));
 		}
-		
+
 		echo $data['bigTree'];
 	}
 
@@ -90,7 +90,7 @@ class Vocab extends CI_Controller {
 		$data['search_result'] = $json;
 		$data['type']= $type;
 		$data['page']= $page;
-		$this->load->view('vocab/minisearch', $data);
+		$this->load->view('browse/minisearch', $data);
 	}
 
 	function vocabAutoComplete(){

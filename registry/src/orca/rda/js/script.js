@@ -76,7 +76,7 @@ $(document).ready(function(){
 			}
 		});
 		$("#search-vocab-field" ).vocabcomplete( {
-			source: base_url+"vocab/vocabAutoComplete/",
+			source: base_url+"browse/vocabAutoComplete/",
 			minLength: 2,
 			delimiter:/(,|;)\s*/,
 			select: function( event, ui ) {
@@ -90,7 +90,7 @@ $(document).ready(function(){
 	function loadBigTree(selected_node, selected_vocab){
 		$.ajax({
    			type:"GET",
-			url: base_url+"/vocab/loadBigTree/",
+			url: base_url+"/browse/loadBigTree/",
 			data:{selected_node:selected_node,selected_vocab:selected_vocab},
 	        success:function(data){
 				$('#tree-vocab').html(data);
@@ -113,7 +113,7 @@ $(document).ready(function(){
 		});
 
 		$("#search-vocab-field" ).autocomplete( {
-			source: base_url+"vocab/vocabAutoComplete/",
+			source: base_url+"browse/vocabAutoComplete/",
 			minLength: 2,
 			delimiter:/(,|;)\s*/,
 			select: function( event, ui ) {
@@ -169,7 +169,7 @@ $(document).ready(function(){
 	  				var vocab = $(theLink).attr('vocab');
 					$.ajax({
 		       			type:"GET",
-						url: base_url+"/vocab/getConcept/",
+						url: base_url+"/browse/getConcept/",
 						data:{uri:uri,vocab:vocab},
 				        success:function(data){
 							$(thisTree).html(data);
@@ -187,7 +187,7 @@ $(document).ready(function(){
 	function vocabLoadConcept(uri, vocab){
 		$.ajax({
    			type:"GET",
-			url: base_url+"/vocab/getConceptDetail/",
+			url: base_url+"/browse/getConceptDetail/",
 			data:{uri:uri,vocab:vocab},
 	        success:function(data){
 				$('#right-vocab').html(data);
@@ -200,7 +200,7 @@ $(document).ready(function(){
 	function vocabLoadTree(uri, vocab){
 		$.ajax({
    			type:"GET",
-			url: base_url+"/vocab/reloadTree/",
+			url: base_url+"/browse/reloadTree/",
 			data:{selected_uri:uri,selected_vocab:vocab},
 	        success:function(data){
 				var list = $('.conceptRoot[vocab='+vocab+']').children('ul');
@@ -221,7 +221,7 @@ $(document).ready(function(){
 		$.ajax({
    			type:"POST",
    			data:{uri:vocab_uri},
-			url: base_url+"/vocab/vocabSearchResult/exact",
+			url: base_url+"/browse/vocabSearchResult/exact",
 	        success:function(data){
 				$('#exact_search_result').html(data);
 				$(".accordion").accordion({autoHeight:false, collapsible:true,active:false});
@@ -231,7 +231,7 @@ $(document).ready(function(){
 		$.ajax({
    			type:"POST",
    			data:{uri:vocab_uri},
-			url: base_url+"/vocab/vocabSearchResult/narrower",
+			url: base_url+"/browse/vocabSearchResult/narrower",
 	        success:function(data){
 				$('#narrower_search_result').html(data);
 				$(".accordion").accordion({autoHeight:false, collapsible:true,active:false});
@@ -254,7 +254,7 @@ $(document).ready(function(){
 			$.ajax({
 	   			type:"POST",
 	   			data:{uri:vocab_uri},
-				url: base_url+"/vocab/vocabSearchResult/"+type+'/'+page,
+				url: base_url+"/browse/vocabSearchResult/"+type+'/'+page,
 		        success:function(data){
 					$('#'+type+'_search_result').html(data);
 					$(".accordion").accordion({autoHeight:false, collapsible:true,active:false});

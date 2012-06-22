@@ -76,6 +76,7 @@ limitations under the License.
 				<a href="http://ands.org.au"><img src="<?php echo site_url('img/ands_logo_white.png');?>" id="ands-logo-white" alt="ANDS Logo"/></a>
 			<ul class="sf-menu">
 				<li><?php echo anchor('','Home');?></li>
+				<li><?php echo anchor('browse/', 'Browse');?></li>
 				<li><?php echo anchor('search/browse/All/collection', 'Collections');?></li>
 				<li><?php echo anchor('search/browse/All/party', 'Parties');?></li>
 				<li><?php echo anchor('search/browse/All/activity', 'Activities');?></li>
