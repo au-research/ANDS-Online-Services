@@ -730,9 +730,15 @@ require '../../_includes/header.php';
 				<tr><td style="width:200px"><b>Group </b> </td><td> <b> Contributor Page Key</b></td></tr>
 			<?php 
 				$i=1;
+				$noAutoPage = "no";
 				foreach($object_groups as $group)
 				{ 
 				$thePage = getGroupPage($group['object_group']);
+
+				if($institutionalPages=='1'&&!$thePage)
+				{
+					$noAutoPage = "yes";
+				}
 				?>
 				<tr><td id="group<? echo $i;?>name" width="200"><?php  echo $group['object_group'];?>
 				<?php  if ($thePage[0]['authoritive_data_source_key'] != $data_Source && isset($thePage[0]['authoritive_data_source_key'])) 
@@ -771,6 +777,12 @@ require '../../_includes/header.php';
 				<?php
 				$i++; 
 				}	
+				if($noAutoPage=="yes")
+				{
+					?>
+					<span id="noAutoPage" style="display:none">1</span>
+					<?php 
+				}
 				?>			
 				</table>	
 			<?php 

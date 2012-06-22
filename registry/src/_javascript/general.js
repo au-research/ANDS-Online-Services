@@ -75,7 +75,7 @@ function nlaPushCheck()
 			theNew = document.forms[0].institution_pages[i].value;
 		}
 	}
-
+	var noAutoPage = document.getElementById("noAutoPage");
 	if(theOld  == '0' && (theNew == '1' || theNew == '2'))
 	{
 		var answer = confirm("The Contributor home page will be a public web document representing your organisation.\nANDS advises that you should use only approved text and consult apprpriate authorities within your organisation.")
@@ -84,7 +84,14 @@ function nlaPushCheck()
 		}
 		
 	}
-
+	if(theOld  == '1' && theNew == '1' && noAutoPage)
+	{
+		var answer = confirm("Contributor pages will be generated for the new group(s) located in this data source.\nThe contributor home page will be a public web document representing your organisatio.\nANDS advises that you should use only approved text and consult apprpriate authorities within your organisation.")
+		if(!answer){
+			return false;
+		}
+		
+	}
 	return true;
 }
 
