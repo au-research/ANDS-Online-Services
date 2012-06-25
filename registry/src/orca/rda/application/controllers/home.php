@@ -54,7 +54,12 @@ class Home extends CI_Controller {
 		$data['activity_name'] = 'contact';
 		$this->load->view('content/contact_form', $data);
 	}
-
+	public function feeds(){
+		$this->load->library('user_agent');
+		$data['user_agent']=$this->agent->browser();
+		$data['activity_name'] = 'feeds';
+		$this->load->view('content/feeds', $data);
+	}
 	public function send(){
 		$this->load->library('user_agent');
 		$data['user_agent']=$this->agent->browser();

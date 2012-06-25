@@ -108,6 +108,11 @@ limitations under the License.
 	</div>
 	
 	<div class="clearfix"></div>
+	<div style="float:left;">
+	<p>
+	<div style="float:left;margin-top:-12px;margin-left:15px;margin-right:5px"><img src="<?php echo base_url();?>img/feed_icon.png"/> <img src="<?php echo base_url();?>img/twitter_icon.png"/> </div> <strong>RSS,ATOM and Twitter feeds are now avaiable. <?php echo anchor('home/feeds','Learn more here....');?></strong>
+	</p>
+	</div>
 	<div style="float:right;">
 		 <!-- AddToAny BEGIN -->   
         <p>
