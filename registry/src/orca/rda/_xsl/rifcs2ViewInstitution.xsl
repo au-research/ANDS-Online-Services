@@ -158,8 +158,8 @@
 				 <h2>Research Data Profile</h2>
                  <div id="cannedShowcase"></div>
 				<xsl:apply-templates select="extRif:description[@type= 'researchDataProfile']" mode="content"/>	
-	            <xsl:if test="extRif:description/@type='eResearchSupport'"><h2>eResearchSupport</h2></xsl:if>						
-				<xsl:apply-templates select="extRif:description[@type= 'eResearchSupport']" mode="content"/>							
+	            <xsl:if test="extRif:description/@type='researchSupport'"><h2>Research Support</h2></xsl:if>						
+				<xsl:apply-templates select="extRif:description[@type= 'researchSupport']" mode="content"/>							
             </div>
 
 

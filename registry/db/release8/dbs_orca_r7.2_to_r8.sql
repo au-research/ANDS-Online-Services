@@ -130,7 +130,7 @@ INSERT INTO dba.tbl_terms (identifier, identifier_type, name, description, vocab
 INSERT INTO dba.tbl_terms (identifier, identifier_type, name, description, vocabulary_identifier, parent_term_identifier,type,vocabpath) VALUES ('Unknown/Other', 'local','Unknown/Other', 'Unknown/Other licence type','RIFCSLicenceType','Unknown','pt','RIFCS Licence Type');
 INSERT INTO dba.tbl_terms (identifier, identifier_type, name, description, vocabulary_identifier, parent_term_identifier,type,vocabpath) VALUES ('researchAreas', 'local','researchAreas', 'Contributor research areas','RIFCSDescriptionType','','pt','RIFCS Description Type');
 INSERT INTO dba.tbl_terms (identifier, identifier_type, name, description, vocabulary_identifier, parent_term_identifier,type,vocabpath) VALUES ('researchDataProflie', 'local','researchDataProflie', 'Contributor research data profile','RIFCSDescriptionType','','pt','RIFCS Description Type');
-INSERT INTO dba.tbl_terms (identifier, identifier_type, name, description, vocabulary_identifier, parent_term_identifier,type,vocabpath) VALUES ('eResearchSupport', 'local','eResearchSupport', 'Contributor eResearch support','RIFCSDescriptionType','','pt','RIFCS Description Type');
+INSERT INTO dba.tbl_terms (identifier, identifier_type, name, description, vocabulary_identifier, parent_term_identifier,type,vocabpath) VALUES ('researchSupport', 'local','researchSupport', 'Contributor research support','RIFCSDescriptionType','','pt','RIFCS Description Type');
 
 -- Function: dba.udf_get_nla_set(character varying)
 

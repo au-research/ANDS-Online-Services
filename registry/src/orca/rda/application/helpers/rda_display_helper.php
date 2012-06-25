@@ -33,7 +33,7 @@ function displayFacet($facet_name, $facetFilter, $json, $ro_class){
 				$name=ucfirst($ro_class).' Types';
 			}else $name = 'Types';
 			$class="typeFilter";break;
-		case "group":$clear = 'clearGroup';$name='Research Groups';$class="groupFilter";break;
+		case "group":$clear = 'clearGroup';$name='Contributed by';$class="groupFilter";break;
 		case "subject_value_resolved":$clear = 'clearSubjects';$name="Subjects";$class="subjectFilter";break;
 		case "licence_group":$clear = 'clearLicence';$name="Licence";$class="licenceFilter";break;
 	}

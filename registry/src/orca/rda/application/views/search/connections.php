@@ -171,7 +171,7 @@ function showContributors($theGroup)
 		if($logoStr = getPageLogo($theGroupKey)){
 	     $theLogo ='   <br /><img id="party_logo" style="max-width:130px;" src="'.$logoStr.'" alt="Party Logo" />';
 		}
-		echo '<h3><img  class="icon-heading-connections" src="'.base_url().'/img/icon/party_multi_16.png"/>Record Contributor</h3>';
+		echo '<h3><img  class="icon-heading-connections" src="'.base_url().'/img/icon/party_multi_16.png"/>Contributed by</h3>';
 		echo '<ul>';
 		echo '<li><a href="'.base_url().'view/group/?group='.urlencode($theGroupKey).'&groupName='.$theGroup.'" title="Contributor group">'.$theGroup.'</a>'.$theLogo.'</li>';
 		echo '</ul>';
