@@ -133,7 +133,11 @@ function getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR = false, $inclu
 			{
 					$registryDateModified = time(); // default to now
 			}
-			$xml .= "      <extRif:registryDateModified>".$registryDateModified."</extRif:registryDateModified>\n";
+			else 
+			{
+				$registryDateModified = strtotime($registryDateModified); // parse the SQL timestamp
+			}
+			$xml .= "      <extRif:registryDateModified>".date("c",$registryDateModified)."</extRif:registryDateModified>\n";
 
 
 
