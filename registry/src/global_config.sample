@@ -166,7 +166,7 @@ $gVOCAB_RESOLVER_RESULTS = array();
 
 //======================================
 // CACHING OPTIONS
-$gCacheEnabled = false; // is caching enabled?
+$gCacheEnabled = true; // is caching enabled?
 //======================================
 define('eCACHE_DIRECTORY', '/var/www/orca_' . 'cache'); // what directory do we store our cache files in? (relative)
 define('eCACHE_CURRENT_NAME','current'); // what filename do we use for the latest version symlink

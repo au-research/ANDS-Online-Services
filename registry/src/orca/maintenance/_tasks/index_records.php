@@ -53,12 +53,12 @@ function clearDS($dataSourceKey){
 
 function addPublishedToSolrIndex($registryObjectKey, $commit=true)
 {
-		global $solr_update_url;
-		$rifcsContent = getRegistryObjectXMLforSOLR($registryObjectKey,true);
-		$rifcsContent = wrapRegistryObjects($rifcsContent);
-		$rifcs = transformToSolr($rifcsContent);
-		$result = curl_post($solr_update_url, $rifcs);
-		return $result;
+	global $solr_update_url;
+	$rifcsContent = getRegistryObjectXMLforSOLR($registryObjectKey,true);
+	$rifcsContent = wrapRegistryObjects($rifcsContent);
+	$rifcs = transformToSolr($rifcsContent);
+	$result = curl_post($solr_update_url, $rifcs);
+	return $result;
 }
 
 function addDraftToSolrIndex($registryObjectKey, $commit=true)

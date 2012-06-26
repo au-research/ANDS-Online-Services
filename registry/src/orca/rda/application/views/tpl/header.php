@@ -49,6 +49,7 @@ limitations under the License.
 	<?php endif;?>
 
 	<link rel="stylesheet" href="<?php echo base_url();?>css/jquery.fancybox.css?v=2.0.6" type="text/css" media="screen" />
+	<link rel="stylesheet" href="<?php echo base_url();?>js/qtip/jquery.qtip.css" type="text/css" media="screen" />
 
 
 	<?php if($this->config->item('GA_enabled')):?>

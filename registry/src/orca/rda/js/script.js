@@ -61,7 +61,7 @@ $(document).ready(function(){
 	$('#clearSearch').tipsy({live:true, gravity:'se'});
 	
 	function initVocabPage(){
-		loadBigTree('http://purl.org/au-research/vocabulary/anzsrc-for/2008/0102', 'anzsrc-for');
+		loadBigTree('http://purl.org/au-research/vocabulary/anzsrc-for/2008/01', 'anzsrc-for');
 		$.widget( "custom.vocabcomplete", $.ui.autocomplete, {
 			_renderMenu: function( ul, items ) {
 				var self = this,
@@ -99,6 +99,7 @@ $(document).ready(function(){
 	        success:function(data){
 				$('#tree-vocab').html(data);
 				initTree();
+				bindTree(false);
 				$('#left-vocab').resizable({
 						handles: "e",
 						resize: function(event, ui){
@@ -142,10 +143,9 @@ $(document).ready(function(){
 				"select_limit": 1
 			}
 		});
-		bindTree();
 	}
 
-	function bindTree(){
+	function bindTree(forSearch){
 		$("#vocab-browser").bind("select_node.jstree", function(event, data) {
   			// data.inst is the tree object, and data.rslt.obj is the node
   			var theNode = data.rslt.obj;
@@ -153,7 +153,12 @@ $(document).ready(function(){
   			$('#right-vocab').html('Select a concept from the vocabulary browser on the left');
   			if($(theNode).attr('id')!='rootNode'){
   				if(!$(theNode).hasClass('conceptRoot')){
-		  			vocabLoadConcept($(theLink).attr('uri'), $(theLink).attr('vocab'));
+		  			if(forSearch){
+		  				if($(theLink).attr('total')>0){//do Search only if there are numbers
+		  					subjectFilter = encodeURIComponent($(theLink).attr('uri'));
+		  				changeHashTo(formatSearch(search_term, page, classFilter));
+		  				}
+		  			}else vocabLoadConcept($(theLink).attr('uri'), $(theLink).attr('vocab'));
 		  		}
 		  	}
   			return data.inst.toggle_node(data.rslt.obj);
@@ -171,8 +176,21 @@ $(document).ready(function(){
 	  				var theLink = $(theNode).children('.getConcept');
 	  				var uri = $(theLink).attr('uri');
 	  				var vocab = $(theLink).attr('vocab');
-					$.ajax({
-		       			type:"GET",
+	  				if(forSearch){
+	  					$.ajax({
+		       			type:"POST",
+						url: base_url+"/browse/getConcept/",
+						data:{uri:uri,vocab:vocab,params:JSONParams()},
+				        success:function(data){
+							$(thisTree).html(data);
+							var tree = jQuery.jstree._reference("#vocab-browser");
+							tree.refresh();
+				        },
+				        error:function(msg){}
+						});
+	  				}else{
+	  					$.ajax({
+		       			type:"POST",
 						url: base_url+"/browse/getConcept/",
 						data:{uri:uri,vocab:vocab},
 				        success:function(data){
@@ -181,12 +199,14 @@ $(document).ready(function(){
 							tree.refresh();
 				        },
 				        error:function(msg){}
-					});
+						});
+	  				}
+					
+					//console.log(uri);
   				}
   			}
 		});
 	}
-
 
 	function vocabLoadConcept(uri, vocab){
 		$.ajax({
@@ -209,7 +229,7 @@ $(document).ready(function(){
 	        success:function(data){
 				var list = $('.conceptRoot[vocab='+vocab+']').children('ul');
 				$(list).html(data);
-				bindTree();
+				bindTree(false);
 				var tree = jQuery.jstree._reference("#vocab-browser");
 				tree.refresh();
 	        },
@@ -326,6 +346,7 @@ $(document).ready(function(){
 				case 'group':groupFilter=encodeURIComponent(decodeURIComponent(value));break;
 				case 'type':typeFilter=encodeURIComponent(decodeURIComponent(value));break;
 				case 'subject':subjectFilter=encodeURIComponent(decodeURIComponent(value));break;
+				case 'vocabUriFilter':vocabUriFilter=encodeURIComponent(decodeURIComponent(value));break;
 				case 'licence':licenceFilter=encodeURIComponent(decodeURIComponent(value));break;
 				case 'temporal':temporal=value;break;
 				case 'n':n=value;break;
@@ -1797,6 +1818,12 @@ $(document).ready(function(){
 			changeHashTo(formatSearch(search_term,1,classFilter));
 			//doSearch();
 		}
+
+
+		//Subjects Facet
+		initSubjectBrowse();
+		
+		
 		
 		
 		/*
@@ -1979,6 +2006,80 @@ $(document).ready(function(){
 		$('#search-tabs li a').tipsy({live:true, gravity:'s'});
 		refreshTemporalSearch();
 		
+	}//end initFormat
+
+	function initSubjectBrowse(){
+		SubjectBrowseLoad('anzsrcfor');
+		$('#subject_category').live('change', function(){
+			SubjectBrowseLoad($(this).val());
+		});
+		$('#browse_more_subject').qtip({
+			content:{
+				text: $('#anzsrc-subject-facet-result'),
+				title: {
+					text: 'Browse More Subjects'
+				}
+			},
+			position: {
+				my: 'top left', // Use the corner...
+				at: 'bottom right' // ...and opposite corner
+			},
+			style: {
+				classes: 'ui-tooltip-shadow ui-tooltip-light',
+				width: 500
+			},
+			show: {
+				event: 'click',
+				effect: function(offset) {
+					$(this).slideDown(100); // "this" refers to the tooltip
+				}
+			},
+			hide:"unfocus"
+		});
+
+		var params = JSONParams();
+
+		$.ajax({
+   			type:"POST",
+			url: base_url+"/search/toplevelfacet/",
+			data:{params:params},
+	        success:function(data){
+				$('#anzsrc-toplevelfacet').html(data);
+	        },
+	        error:function(msg){}
+		});
+	}
+
+	function SubjectBrowseLoad(view){
+		$('#anzsrc-subject-facet-result').html('Loading...');
+		var params = JSONParams();
+
+		$.ajax({
+   			type:"POST",
+			url: base_url+"/search/subjectfacet/"+view,
+			data:{params:params},
+	        success:function(data){
+				$('#anzsrc-subject-facet-result').html(data);
+				initTree();
+				bindTree(true);
+	        },
+	        error:function(msg){}
+		});
+	}
+
+	function JSONParams(){
+		var params = {
+			search_term:search_term, 
+			page:page,
+			classFilter: classFilter,
+			typeFilter: typeFilter,
+			groupFilter: groupFilter,
+			subjectFilter: subjectFilter,
+			licenceFilter: licenceFilter,
+			spatial_included_ids: spatial_included_ids,
+			temporal: temporal
+		};
+		return params;
 	}
 
 	/*

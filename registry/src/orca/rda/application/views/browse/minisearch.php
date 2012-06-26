@@ -43,7 +43,7 @@
 	}
 
 	$queryStr = '?q='.$q.'&classFilter='.$classFilter.'&typeFilter='.$typeFilter.'&groupFilter='.$groupFilter.'&subjectFilter='.$subjectFilter.'&licenceFilter='.$licenceFilter;
-	echo "<div class='subscriptions' style='color:#555;'><div class='rss_icon'></div> Subscribe to this web feed. <a href='".base_url()."search/rss/".$queryStr."&subscriptionType=rss'>RSS</a>/<a href='".base_url()."search/atom/".$queryStr."&subscriptionType=atom'>ATOM</a></div>";
+	echo "<div class='subscriptions' style='color:#555;float:left;'><div class='rss_icon'></div> Subscribe to this web feed. <a href='".base_url()."search/rss/".$queryStr."&subscriptionType=rss'>RSS</a>/<a href='".base_url()."search/atom/".$queryStr."&subscriptionType=atom'>ATOM</a></div>";
 
 
 	?></span>

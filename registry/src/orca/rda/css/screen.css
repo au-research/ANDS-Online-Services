@@ -658,6 +658,7 @@ display:block;
 	font-size:1.2em;
 	color:#333333;
 }
+.subscriptions{float:left;}
 
 /*
  * Vocab styles
@@ -677,6 +678,11 @@ display:block;
  #exact_search_result, #narrower_search_result{margin: 15px auto;}
  .ui-autocomplete-category { font-weight: bold;padding: .2em .4em;margin: .8em 0 .2em;line-height: 1.5;}
  .ui-autocomplete {max-height: 200px;overflow-y: auto; overflow-x: hidden;padding-right: 20px;}
+.disabled-link{color:#ccc;}
+
+/*search vocab*/
+#browse_more_subject{margin:5px;padding:10px;display:block;border-bottom:1px solid #ccc;}
+
 /* IE 6 doesn't support max-height
  * we use height instead, but this forces the menu to always be this tall
  */

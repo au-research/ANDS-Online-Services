@@ -64,6 +64,8 @@ limitations under the License.
 	<script type="text/javascript" src="<?php echo base_url();?>js/superfish.js"></script> <!-- Top menu -->
 	<script type="text/javascript" src="<?php echo base_url();?>js/jquery.fancybox.pack.js?v=2.0.6"></script> <!-- FancyBox Image Lightbox -->
 
+	<script type="text/javascript" src="<?php echo base_url();?>js/qtip/jquery.qtip.min.js"></script> <!-- FancyBox Image Lightbox -->
+
 	<?php if ($user_agent=='Internet Explorer'):?>
 		<!-- Rounded Corners for IE -->
     	<script type="text/javascript" src="<?php echo base_url();?>js/DD_roundies_0.0.2a-min.js"></script>

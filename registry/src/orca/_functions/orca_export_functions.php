@@ -1390,6 +1390,8 @@ function getSubjectTypesXML($registryObjectKey, $elementName, $localBroaderTerms
 						$uri = $resolvingService.$resourceUrlComp.$vocabUri;
 						$header = get_headers($uri);
 
+						//var_dump($header);
+
 						if($header[0]=='HTTP/1.1 200 OK')
 						{
 							$sissVocResponse = file_get_contents($uri);
@@ -1406,7 +1408,7 @@ function getSubjectTypesXML($registryObjectKey, $elementName, $localBroaderTerms
 						}
 						else
 						{// if not resolvable set $vocabUri to null
-							$gVOCAB_RESOLVER_RESULTS[$vocabUri] = array('broaderTerm' => $vocabUri, 'resolvingService' => $resolvingService, 'resolvedName' => $rawvalue, 'notation' => $rawvalue, 'vocabType' => $vocabType, 'vocabUri' => 'null');
+							//$gVOCAB_RESOLVER_RESULTS[$vocabUri] = array('broaderTerm' => $vocabUri, 'resolvingService' => $resolvingService, 'resolvedName' => $rawvalue, 'notation' => $rawvalue, 'vocabType' => $vocabType, 'vocabUri' => 'null');
 						}
 					}
 				}
@@ -1414,6 +1416,7 @@ function getSubjectTypesXML($registryObjectKey, $elementName, $localBroaderTerms
 			}
 			$xml .= "      <$elementName$type$lang$term>$rawvalue</$elementName>\n";
 		}
+		//var_dump($registryObjectKey)
 		//var_dump($vocabBroaderTerms);
 		if ($forSOLR)
 		{

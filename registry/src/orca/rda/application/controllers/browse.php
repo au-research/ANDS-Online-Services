@@ -34,9 +34,14 @@ class Browse extends CI_Controller {
 	//ajax
 	function getConcept(){
 		$this->load->model('vocabularies', 'vmodel');
-		$uri = strtolower($_GET["uri"]);
-		$vocab = strtolower($_GET["vocab"]);
-		$tree = $this->vmodel->getConceptTree($this->config->item('vocab_resolver_service'), $uri, $vocab);
+		$uri = strtolower($this->input->post('uri'));
+		$vocab = strtolower($this->input->post('vocab'));
+		$params = $this->input->post('params');
+		if($params) {
+			$this->load->model('solr');
+			$params = $this->solr->constructQuery($params);
+		}
+		$tree = $this->vmodel->getConceptTree($this->config->item('vocab_resolver_service'), $uri, $vocab, $params);
 		echo $tree;
 	}
 

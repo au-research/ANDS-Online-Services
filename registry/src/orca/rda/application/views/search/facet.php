@@ -31,7 +31,18 @@ if(($spatial_included_ids!='') || ($temporal!='All') || ($typeFilter!='All') || 
 		}
 		if($typeFilter!='All') displaySelectedFacet('type',$typeFilter,$json);
 		if($groupFilter!='All') displaySelectedFacet('group',$groupFilter,$json);
-		if($subjectFilter!='All') displaySelectedFacet('subject_value_resolved',$subjectFilter,$json);
+		if($subjectFilter!='All') {
+			//echo $subjectFilter;
+			echo '<li class="limit">
+					<a href="javascript:void(0);"
+						title="'.resolveLabelFromVocabTermURI($subjectFilter,false).'"
+						class="clearFilter clearSubjects" id="'.$subjectFilter.'">'.
+						''.resolveLabelFromVocabTermURI($subjectFilter, false).'
+						</a></li>';
+			
+    		//displaySelectedFacet('subject_value_resolved',$subjectFilter,$json);
+		}
+		//if($subjectFilter!='All') displaySelectedFacet('subject_vocab_uri',$subjectFilter,$json);
 		if($licenceFilter!='All') displaySelectedFacet('licence_group',$licenceFilter,$json);
 		echo '</ul>';
 	echo '</div>';
@@ -39,6 +50,14 @@ if(($spatial_included_ids!='') || ($temporal!='All') || ($typeFilter!='All') || 
 }
 
 ?>
+<div class="right-box shadow">
+	<h2>Subjects</h2>
+	<div id="facet-content">
+		<a href="javascript:;" id="browse_more_subject">Browse more subjects</a>
+		<div id="anzsrc-toplevelfacet"></div>
+		<div id="anzsrc-subject-facet-result" class="hide"></div>
+	</div>
+</div>
 
 <?php
 	/*
@@ -47,8 +66,10 @@ if(($spatial_included_ids!='') || ($temporal!='All') || ($typeFilter!='All') || 
 	echo '</pre>';
 	 * displayFacet is in helpers
 	*/
+	//displayFacet('subject_value_resolved', $subjectFilter, $json_subject_facet, $classFilter);
+	//displayFacet('subject_vocab_uri', $subjectFilter, $json, $classFilter);
 	displayFacet('group', $groupFilter, $json, $classFilter);
-	displayFacet('subject_value_resolved', $subjectFilter, $json, $classFilter);
+	//displayFacet('subject_value_resolved', $subjectFilter, $json, $classFilter);
 	displayFacet('type', $typeFilter, $json, $classFilter);
 	displayFacet('licence_group', $licenceFilter, $json, $classFilter);
 ?>

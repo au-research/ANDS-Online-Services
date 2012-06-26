@@ -42,27 +42,19 @@ limitations under the License.
 
     	if($subjectFilter!='All') {
     		// treat http://-style subject searches as URI searches
-    		if (strpos("http://", rawurldecode($subjectFilter)) !== FALSE)
-    		{
-    			$filter_query .= constructFilterQuery('subject_vocab_uri', rawurldecode($subjectFilter));
+    		//if (strpos("http://", ($subjectFilter)) !== FALSE)
+    		if (substr(rawurldecode($subjectFilter), 0, 7) === 'http://'){
+    			$filter_query .= '(+subject_vocab_uri:("'.rawurldecode($subjectFilter).'") OR +broader_subject_vocab_uri:("'.rawurldecode($subjectFilter).'"))';
     		}
-    		else
-    		{
+    		else{
     			$filter_query .= constructFilterQuery('subject_value_resolved', $subjectFilter);
     		}
     	}
 
     	// Fix: if there is no subject to match against (i.e. blank subject) suitably random string will prevent any matches
     	if($subjectFilter == '') $filter_query .= constructFilterQuery('subject_value_resolved', "nr3kl90u3asd");
-
     	if($licenceFilter!='All') $filter_query .= constructFilterQuery('licence_group', $licenceFilter);
     	if($status!='All') $filter_query .= constructFilterQuery('status', $status);
-
-    	//echo $status;
-
-		//echo $extended_query;
-
-		//echo urldecode($q).'<br/>';
 
 
 		$q = urldecode($q);
@@ -100,7 +92,7 @@ limitations under the License.
 		//if($filter_query!='') $fields['fq']=urlencode($filter_query);
 		//print_r($fields);
 
-		$facet = '&facet=true&facet.field=type&facet.field=class&facet.field=group&facet.field=subject_value_resolved&facet.field=licence_group&f.subject_value_resolved.facet.mincount=1&facet.sort=count';
+		$facet = '&facet=true&facet.field=type&facet.field=class&facet.field=group&facet.field=subject_value_resolved&facet.field=licence_group&facet.field=subject_vocab_uri&f.subject_value_resolved.facet.mincount=1&facet.sort=count';
 
 		/*prep*/
 		$fields_string='';
@@ -130,6 +122,149 @@ limitations under the License.
 		}elseif($write_type=='xml'){
 			return $content;
 		}
+    }
+
+    //WORK IN PROGRESS
+    public function constructQuery($params){
+
+    	//constructing filter query
+    	$filter_query = '';
+
+    	if($params['search_term']=='') $params['search_term']='*:*';
+
+    	if($params['classFilter']!='All') $filter_query .= constructFilterQuery('class', $params['classFilter']);
+    	if($params['typeFilter']!='All') $filter_query .= constructFilterQuery('type', $params['typeFilter']);
+    	if($params['groupFilter']!='All') $filter_query .= constructFilterQuery('group', $params['groupFilter']);
+    	if($params['subjectFilter']!='All') {
+    		// treat http://-style subject searches as URI searches
+    		if (substr(rawurldecode($params['subjectFilter']), 0, 7) === 'http://'){
+    			$filter_query .= '(+subject_vocab_uri:("'.rawurldecode($params['subjectFilter']).'") OR +broader_subject_vocab_uri:("'.rawurldecode($params['subjectFilter']).'"))';
+    		}
+    		else{
+    			$filter_query .= constructFilterQuery('subject_value_resolved', $params['subjectFilter']);
+    		}
+    	}
+    	// Fix: if there is no subject to match against (i.e. blank subject) suitably random string will prevent any matches
+    	if($params['subjectFilter'] == '') $filter_query .= constructFilterQuery('subject_value_resolved', "nr3kl90u3asd");
+    	if($params['licenceFilter']!='All') $filter_query .= constructFilterQuery('licence_group', $params['licenceFilter']);
+
+    	//constructing query
+    	$rankings = array(//will be positive
+    		'fulltext' => 1,
+    		'key' => 50,
+    		'display_title' => 50,
+    		'list_title' => 50,
+    		'description_value' => 5,
+    		'subject_value_resolved' => 10,
+    	);
+
+    	$suppressed = array(//will be negative
+			'data_source_key:("AU_RESEARCH_GRANTS")' => 3000,
+			'data_source_key:("nhmrc.gov.au")' => 3000 
+    	);
+	
+		$ranking = '(';
+		foreach($rankings as $s=>$rank){
+			$ranking .= $s.':('.$params['search_term'].')^'.$rank;
+
+			if($s != 'subject_value_resolved') $ranking .=' OR ';
+		}
+		$ranking .=')';
+
+		return $ranking.' '.$filter_query.' +status:PUBLISHED';
+    	//var_dump($params);
+    }
+
+    //WORK IN PROGRESS
+    public function RDA($search_term, $params, $page){
+    	
+    	$facetFields = array('type', 'class', 'group', 'subject_value_resolved', 'licence_group', 'subject_vocab_uri');
+    	$facet = '&facet=true';
+    	foreach($facetFields as $f){
+    		$facet .='&facet.field='.$f;
+    	}
+
+		//will be positive
+    	$rankings = array(
+    		'fulltext' => 1,
+    		'key' => 50,
+    		'display_title' => 50,
+    		'list_title' => 50,
+    		'description_value' => 5,
+    		'subject_value_resolved' => 10,
+    	);
+
+    	//will be negative
+    	$suppressed = array(
+			'data_source_key:("AU_RESEARCH_GRANTS")' => 3000,
+			'data_source_key:("nhmrc.gov.au")' => 3000 
+    	);
+
+    	$start = 0;$row = 10;//defaults
+		if($page!=1) $start = ($page - 1) * $row;
+
+		echo $q;
+    }
+
+    function getSubjectFacet($subject_category, $params){
+    	//default categories
+    	$categories = array(
+    		'keywords' => array ('anzlic-theme', 'australia', 'caab', 'external_territories', 'cultural_group', 'DEEDI eResearch Archive Subjects', 'ISO Keywords', 'iso639-3', 'keyword', 'Local', 'local', 'marlin_regions', 'marlin_subjects', 'ocean_and_sea_regions', 'person_org', 'states/territories', 'Subject Keywords'),
+    	);
+    	$set = $categories[$subject_category];
+    	//$q = $this->constructQuery($params);
+
+    	//add the restrictions on these subjects
+    	$restrictions = ' AND (';
+    	foreach($set as $s){
+    		$restrictions .= 'subject_type:("'.$s.'")';
+    		if($s!=end($set)) $restrictions .= ' OR ';
+    	}
+    	$restrictions .=')';
+
+		$q = $params.$restrictions;
+		$fields = array(
+			'q'=>$q,'version'=>'2.2','start'=>'0','indent'=>'on', 'wt'=>'json', 'fl'=>'key', 'rows'=>1
+		);
+		//$facet = '&facet=true&facet.field=subject_value_resolved&facet.limit=-1';
+
+		$facet = '&facet=true';
+		foreach (range('A', 'z') as $i){
+			if(ctype_alnum($i)){
+				$facet.='&facet.query=subject_value_resolved:('.$i.'*)';
+			}
+		}
+		$json = $this->fireSearch($fields, $facet);
+
+		$azTree = array();
+		foreach(range('A', 'Z') as $i){$azTree[$i] = 0;}
+
+		foreach($json->{'facet_counts'}->{'facet_queries'} as $key=>$num){
+			$letter = $key[24];
+			$letter = strtoupper($letter);
+			$azTree[$letter] += $num;
+		}
+		//var_dump($azTree);
+
+		//formatting the tree
+		$bigTree = '';
+    	$bigTree .='<div id="vocab-browser">';
+			$bigTree .='<ul>';
+				$bigTree .='<li id="rootNode">';
+				$bigTree .='<a href="#">Keywords</a>';
+				$bigTree .='<ul>';
+		    	foreach($azTree as $alpha=>$num){
+		    		if($num!=0){
+		    			$bigTree.='<li class=""><a href="javascript:;">'.$alpha.' ('.$num.')</a>';
+		    			//$bigTree.='<ul><li><a class="jstree-loading">Loading</a><li></ul>';
+		    			$bigTree.='</li>';
+		    		}
+		    	}
+		    	$bigTree.='</ul>';
+		    	$bigTree.='</li>';
+	    	$bigTree.='</ul>';
+    	$bigTree.='</div>';
+    	return $bigTree;
     }
 
 

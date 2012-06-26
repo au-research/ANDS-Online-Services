@@ -236,7 +236,7 @@ $(document).ready(function() {
     		cache: false, // don't cache the result
     		success: function(data) {
 
-    			//console.log(data);
+    			console.log(data);
   				var chartData = new google.visualization.DataTable();
   				chartData.addColumn("string", "Status");
   				chartData.addColumn("number", "Quality Level 0");

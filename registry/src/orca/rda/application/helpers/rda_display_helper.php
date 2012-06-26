@@ -98,6 +98,7 @@ function displaySelectedFacet($facet_name, $facetFilter, $json){
 		case "type":$clear = 'clearType';$name='Types';$class="typeFilter";break;
 		case "group":$clear = 'clearGroup';$name='Research Groups';$class="groupFilter";break;
 		case "subject_value_resolved":$clear = 'clearSubjects';$name="Subjects";$class="subjectFilter";break;
+		case "subject_vocab_uri":$clear = 'clearSubjects';$name="Subjects";$class="subjectFilter";break;
 		case "licence_group":$clear = 'clearLicence';$name="Licence";$class="licenceFilter";break;
 	}
 	$object_type = $json->{'facet_counts'}->{'facet_fields'}->{$facet_name};
@@ -341,7 +342,7 @@ function displaySubscriptions(){//for now we only want to set up the subscriptio
  * and try to resolve it back to a prefLabel (& optional notation)
  * the mapped vocabulary services in global_config.php
  */
-function resolveLabelFromVocabTermURI($vocabTermUri)
+function resolveLabelFromVocabTermURI($vocabTermUri, $withNotation=true)
 {
 	global $gVOCAB_RESOLVER_SERVICE;
 	$resolution_target = false;
@@ -368,7 +369,7 @@ function resolveLabelFromVocabTermURI($vocabTermUri)
 				{
 					$return_string = $contents['result']['primaryTopic']['prefLabel']['_value'];
 				}
-				if (isset($contents['result']['primaryTopic']['notation']))
+				if (isset($contents['result']['primaryTopic']['notation']) && $withNotation)
 				{
 					$return_string .= " (" . $contents['result']['primaryTopic']['notation'] . ")";
 				}
@@ -376,5 +377,12 @@ function resolveLabelFromVocabTermURI($vocabTermUri)
 		}
 	}
 	return $return_string;
+}
+
+function cmpTopLevelFacet($a, $b) {
+    if ($a['prefLabel'] == $b['prefLabel']) {
+        return 0;
+    }
+    return ($a['prefLabel'] < $b['prefLabel']) ? -1 : 1;
 }
 ?>

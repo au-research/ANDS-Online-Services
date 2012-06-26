@@ -18,47 +18,70 @@ limitations under the License.
 ?>
 <?php
 class Vocabularies extends CI_Model {
+
+	var $search_params = '';
     function __construct() {
         parent::__construct();
     }
 
     //primary function to get the tree containing everything
-    function getBigTree($vocabs, $broader=array()){
-		$bigTree = '';
-    	$bigTree .='<div id="vocab-browser">';
-			$bigTree .='<ul>';
-				$bigTree .='<li id="rootNode">';
-				$bigTree .='<a href="#">ANDS Vocabulary Service</a>';
+    function getBigTree($vocabs, $broader=array(), $params='', $for='browse'){
+    	//var_dump($params);
+    	if($for=='browse'){
+    		$bigTree = '';
+	    	$bigTree .='<div id="vocab-browser">';
 				$bigTree .='<ul>';
-		    	//var_dump($vocabs);
-		    	$order = 1; //additional parameter to add to each tree for identification purpose
-		    	foreach($vocabs as $vocab=>$vocab_uri){
-		    		//var_dump($vocab);
-		    		if($tree = $this->getTree($vocab, $vocab_uri, $order)){
-		    			$bigTree .= $tree;
-		    			$order++;
-		    		}else{
-		    			$bigTree .='<li><a>Invalid Vocabulary URL</a></li>';
-		    		}
-		    	}
+					$bigTree .='<li id="rootNode">';
+					$bigTree .='<a href="#">ANDS Vocabulary Service</a>';
+					$bigTree .='<ul>';
+			    	//var_dump($vocabs);
+			    	$order = 1; //additional parameter to add to each tree for identification purpose
+			    	foreach($vocabs as $vocab=>$vocab_uri){
+			    		//var_dump($vocab);
+			    		if($tree = $this->getTree($vocab, $vocab_uri, $order, $params)){
+			    			$bigTree .= $tree;
+			    			$order++;
+			    		}else{
+			    			$bigTree .='<li><a>Invalid Vocabulary URL</a></li>';
+			    		}
+			    	}
+			    	$bigTree.='</ul>';
+			    	$bigTree.='</li>';
 		    	$bigTree.='</ul>';
-		    	$bigTree.='</li>';
-	    	$bigTree.='</ul>';
-    	$bigTree.='</div>';
-    	return $bigTree;
+	    	$bigTree.='</div>';
+	    	return $bigTree;
+    	}else{
+    		$bigTree = '';
+	    	$bigTree .='<div id="vocab-browser">';
+	    	$bigTree .='<ul>';
+	    	foreach($vocabs as $vocab=>$vocab_uri){
+	    		//var_dump($vocab);
+	    		if($tree = $this->getTree($vocab, $vocab_uri, 1, $params)){
+	    			$bigTree .= $tree;
+	    		}else{
+	    			$bigTree .='<li><a>Invalid Vocabulary URL</a></li>';
+	    		}
+	    	}
+	    	$bigTree .='</ul>';
+	    	$bigTree.='</div>';
+    		return $bigTree;
+    	}
+		
     }
 
+
+
     //secondary function to get the HTML representation of a single tree
-	function getTree($vocab, $vocab_uri, $order){
+	function getTree($vocab, $vocab_uri, $order, $params){
 		//echo $vocab_uri;
 		//$json = json_decode($this->getResource($vocab_uri));
 		if($json=json_decode($this->getResource($vocab_uri))){
 			$tree = $this->getVocabTree($json, $vocab_uri);
-			return $this->formatVocabTree($tree, $order, $vocab);
+			return $this->formatVocabTree($tree, $order, $vocab, $params);
 		}else return false;
 	}
 
-	function getConceptTree($vocabs, $uri, $vocab){
+	function getConceptTree($vocabs, $uri, $vocab, $search_params=''){
 		$vocab_uri = $vocabs[$vocab];
 		$concept_uri = $uri;
 		$content = $this->getNarrower($vocab_uri['resolvingService'], $concept_uri);
@@ -75,7 +98,16 @@ class Vocabularies extends CI_Model {
 			if(!$hasNarrower){
 				$class = 'jstree-leaf';
 			}else $class = 'jstree-closed';
-			$r.='<li><a href="javascript:void(0);" class="getConcept" uri="'.$item->{'_about'}.'" notation="'.$notation.'" vocab="'.$vocab.'">'.$item->{'prefLabel'}->{'_value'}.' ('.$this->getNumCollections($item->{'_about'}).')'.'</a>';
+			$param = array(
+				'selected_class' => '',
+				'vocab_uri' => $item->{'_about'},
+				'notation' => $notation,
+				'vocab' => $vocab,
+				'prefLabel' => $item->{'prefLabel'}->{'_value'},
+				'num' => $this->getNumCollections($item->{'_about'}, $search_params)
+			);
+			
+			$r.='<li class="'.$class.'">'.$this->htmlListItem($param);
 				if($hasNarrower){
 					$r.='<ul>';
 					$r.='<li><a class="jstree-loading">Loading...</a></li>';
@@ -84,6 +116,18 @@ class Vocabularies extends CI_Model {
 			$r.='</li>';
 		}
 		echo $r;
+	}
+
+	function getTopConceptsFacet($vocabs, $params){
+		//business rules: only get it from anzsrc-for
+		$vocab_uri = $vocabs['anzsrc-for'];
+		if($json=json_decode($this->getResource($vocab_uri))){
+			$tree = $this->getVocabTree($json, $vocab_uri, $params);
+
+			//var_dump($tree);
+			return $tree;
+			//return $this->formatVocabTree($tree, $order, $vocab, $params);
+		}else return false;
 	}
 
 	//this function spits out a tree, drill down to the selected node
@@ -136,7 +180,17 @@ class Vocabularies extends CI_Model {
 			if($selected['uri']==$concept['uri']){
 				$selected_class.=' jstree-clicked';
 			}else $selected_class = '';
-			$r.='<li class="'.$class.'"><a href="javascript:void(0);" class="getConcept'.$selected_class.'"  uri="'.$concept['uri'].'" vocab="'.$vocab.'">'.$concept['prefLabel'].' ('.$this->getNumCollections($concept['uri']).')'.'</a>';
+
+			$param = array(
+				'selected_class' => $selected_class,
+				'vocab_uri' => $concept['uri'],
+				'notation' => $concept['notation'],
+				'vocab' => $vocab,
+				'prefLabel' => $concept['prefLabel'],
+				'num' => $this->getNumCollections($concept['uri'])
+			);
+			
+			$r.='<li class="'.$class.'">'.$this->htmlListItem($param);
 			if($hasNarrower){
 				$r.= '<ul>'.$this->htmlDrillDown($vocab, $concept['narrower'], $selected, $vocab_uri).'</ul>';
 			}else{
@@ -148,6 +202,38 @@ class Vocabularies extends CI_Model {
 		}
 		echo $r;
 	}
+
+	//This function takes in an array of stuff to be printed, and then spits out the html representation of a list item
+	function htmlListItem($params){
+		/*
+			$param = array(
+				'selected_class' => '',
+				'vocab_uri' => $concept['uri'],
+				'notation' => $concept['notation'],
+				'vocab' => $vocab,
+				'prefLabel' => $concept['prefLabel'],
+				'num' => $this->getNumCollections($concept['uri'])
+			)
+			htmlListItem($param);
+		*/
+		$disableClass = '';
+		if($params['num']==0){
+			$disableClass = 'disabled-link';
+		}
+		$r = '';
+		$r.='	<a href="javascript:void(0);" 
+					class="getConcept '.$params['selected_class'].' '.$disableClass.'"  
+					uri="'.$params['vocab_uri'].'" 
+					notation="'.$params['notation'].'"
+					vocab="'.$params['vocab'].'"
+					total="'.$params['num'].'"
+					prefLabel="'.$params['prefLabel'].'"
+					>
+					'.$params['prefLabel'].' ('.$params['num'].')'.'
+				</a>';
+		return $r;
+	}
+
 //jstree-clicked
 	function htmlDrillDown($vocab, $concept_tree, $selected, $vocab_uri){
 		//var_dump($concept_tree);
@@ -168,7 +254,17 @@ class Vocabularies extends CI_Model {
 			if($selected['uri']==$concept['uri']){
 				$selected_class.=' jstree-clicked';
 			}else $selected_class = '';
-			$r.='<li class="'.$class.'"><a href="javascript:void(0);" class="getConcept '.$selected_class.'"  uri="'.$concept['uri'].'" vocab="'.$vocab.'">'.$concept['prefLabel'].' ('.$this->getNumCollections($concept['uri']).')'.'</a>';
+
+			$param = array(
+				'selected_class' => $selected_class,
+				'vocab_uri' => $concept['uri'],
+				'notation' => $concept['notation'],
+				'vocab' => $vocab,
+				'prefLabel' => $concept['prefLabel'],
+				'num' => $this->getNumCollections($concept['uri'])
+			);
+
+			$r.='<li class="'.$class.'">'.$this->htmlListItem($param);
 			if($hasNarrower){
 				$r.= '<ul>'.$this->htmlDrillDown($vocab, $concept['narrower'], $selected, $vocab_uri).'</ul>';
 			}else{
@@ -254,7 +350,8 @@ class Vocabularies extends CI_Model {
 	}
 
 	//returns the HTML formatting of an array tree (returns by the function getVocabTree)
-	function formatVocabTree($tree, $order, $vocab){
+	function formatVocabTree($tree, $order, $vocab, $search_params){
+		//var_dump($search_params);
 		//var_dump($tree);
 		if($order==1){
 			$class='jstree-open';
@@ -266,7 +363,16 @@ class Vocabularies extends CI_Model {
 		$r.='<li class="'.$class.' conceptRoot" order="'.$order.'" vocab="'.$vocab.'"><a href="#">'.$tree['topLabel'].'</a>';
 		$r.='<ul>';
 		foreach($tree['topConcepts'] as $topConcept){
-			$r.='<li class="closed"><a href="javascript:void(0);" class="getConcept"  uri="'.$topConcept['uri'].'" notation="'.$topConcept['notation'].'" vocab="'.$vocab.'">'.$topConcept['prefLabel'].' ('.$topConcept['collectionNum'].')'.'</a>';
+			$param = array(
+				'selected_class' => '',
+				'vocab_uri' => $topConcept['uri'],
+				'notation' => $topConcept['notation'],
+				'vocab' => $vocab,
+				'prefLabel' => $topConcept['prefLabel'],
+				'num' => $this->getNumCollections($topConcept['uri'], $search_params)
+			);
+			
+			$r.='<li class="closed">'.$this->htmlListItem($param);
 				$r.='<ul>';
 				$r.='<li><a class="jstree-loading">Loading...</a></li>';
 				$r.='</ul>';
@@ -277,7 +383,7 @@ class Vocabularies extends CI_Model {
 	}
 
 	//returns an array (the tree, ready for formatting of all the top concepts)
-	function getVocabTree($json, $vocab_uri){
+	function getVocabTree($json, $vocab_uri, $params=''){
 		$tree = array();
 		$tree['topLabel']= $json->{'result'}->{'primaryTopic'}->{'altLabel'}->{'_value'};
 
@@ -293,7 +399,7 @@ class Vocabularies extends CI_Model {
 			$c['notation'] = $resolved_concept->{'result'}->{'primaryTopic'}->{'notation'};
 			$c['prefLabel'] = $resolved_concept->{'result'}->{'primaryTopic'}->{'prefLabel'}->{'_value'};
 			$c['uri'] = $resolved_concept->{'result'}->{'primaryTopic'}->{'_about'};
-			$c['collectionNum'] = $this->getNumCollections($c['uri']);
+			$c['collectionNum'] = $this->getNumCollections($c['uri'], $params);
 
 			//var_dump($c);
 			$tree['topConcepts'][] = $c;
@@ -365,9 +471,14 @@ class Vocabularies extends CI_Model {
 
 	//get the total number of collection that has this subject_vocab_uri
 	//this is from SOLR
-	function getNumCollections($uri){
+	function getNumCollections($uri, $search_params=''){
+		if($search_params!=''){
+			$q = $search_params. '(+subject_vocab_uri:("'.$uri.'") OR +broader_subject_vocab_uri:("'.$uri.'")) +status:PUBLISHED';
+		}else{
+			$q = '(+subject_vocab_uri:("'.$uri.'") OR +broader_subject_vocab_uri:("'.$uri.'")) +class:collection +status:PUBLISHED';
+		}
 		$fields = array(
-			'q'=>'(+subject_vocab_uri:("'.$uri.'") OR +broader_subject_vocab_uri:("'.$uri.'"))+class:collection','version'=>'2.2','start'=>'0','rows'=>'1', 'wt'=>'json',
+			'q'=>$q,'version'=>'2.2','start'=>'0','rows'=>'1', 'wt'=>'json',
 			'fl'=>'hash_key'
 		);
 		/*prep*/
@@ -378,6 +489,8 @@ class Vocabularies extends CI_Model {
 		}//build the string
     	$fields_string .= '&facet=true&facet.field=class';//add the facet bits
     	$fields_string = rtrim($fields_string,'&');
+
+    	//echo $fields_string;
 
     	$ch = curl_init();
     	$solr_url = $this->config->item('solr_url');

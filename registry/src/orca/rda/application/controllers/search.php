@@ -558,10 +558,10 @@ class Search extends CI_Controller {
 
 
     public function getRelatedObjects($key, $relation_types){
-               $this->load->model('solr');
-               $relatedObject_keys = $this->solr->getRelatedKeys($key,$relation_types);
-               return $relatedObject_keys;
-       }
+    	$this->load->model('solr');
+    	$relatedObject_keys = $this->solr->getRelatedKeys($key,$relation_types);
+    	return $relatedObject_keys;
+   	}
 
 	public function filter(){//AJAX CALL, VERY IMPORTANT, this thing is called on every search
 	    $this->benchmark->mark('search_start');
@@ -608,10 +608,6 @@ class Search extends CI_Controller {
 		$data['json_tab']=$this->solr->search($query, $extended_query, 'json', $page, 'All', $groupFilter, $typeFilter, $subjectFilter,$licenceFilter,'PUBLISHED', $sort);//just for the tabbing mechanism (getting the numbers right)
 		/*just that! and json_tab is used in tab view*/
 
-		/**getting the facet right**/
-		//$query_tab = $q;
-		//$data['json_facet']=$this->solr->search($query, $page, $classFilter);//just for the tabbing mechanism (getting the numbers right)
-
 		/*Passing Variables down to the view*/
 		if($q=='*:*') $q = 'All Records';
 		$data['query']=$q;
@@ -631,6 +627,40 @@ class Search extends CI_Controller {
 
 		$this->load->view('search/search_result', $data);//load the view
 	}
+
+	public function subjectfacet($view){
+		$data['view']=$view;
+		$params = $this->input->post('params');
+		$this->load->model('solr');
+		$params = $this->solr->constructQuery($params);
+		//echo $params;
+		if($view=='anzsrcfor'){
+			$this->load->model('vocabularies', 'vmodel');
+			$data['bigTree']=$this->vmodel->getBigTree($this->config->item('vocab_resolver_service'), array(), $params, 'searchfacet');
+			
+		}else if($view=='keywords'){
+			$this->load->model('solr');
+			$data['bigTree']=$this->solr->getSubjectFacet($view, $params);
+		}
+		$this->load->view('search/subjectfacet', $data);
+	}
+
+	public function toplevelfacet(){
+		$params = $this->input->post('params');
+		$this->load->model('solr');
+		$params = $this->solr->constructQuery($params);
+		$this->load->model('vocabularies', 'vmodel');
+		$toplevelfacets=$this->vmodel->getTopConceptsFacet($this->config->item('vocab_resolver_service'), $params);
+
+		uasort($toplevelfacets['topConcepts'], 'cmpTopLevelFacet');//cmp function is in rda_display_helper
+		echo '<ul class="more">';
+		foreach($toplevelfacets['topConcepts'] as $f){
+			if($f['collectionNum']>0) echo '<li class="limit">'.'<a href="javascript:;" id="'.$f['uri'].'" class="subjectFilter">'.$f['prefLabel'].' ('.$f['collectionNum'].')</a>'.'</li>';
+		}
+		echo '</ul>';
+	}
+
+	
 
 	public function spatial() {//AJAX CALL
 		$north = $this->input->post('north');
