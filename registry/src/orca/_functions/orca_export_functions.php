@@ -137,7 +137,8 @@ function getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR = false, $inclu
 			{
 				$registryDateModified = strtotime($registryDateModified); // parse the SQL timestamp
 			}
-			$xml .= "      <extRif:registryDateModified>".date("c",$registryDateModified)."</extRif:registryDateModified>\n";
+			// SOLR requires the date in ISO8601, restricted to zulu time (why, I don't know...)
+			$xml .= "      <extRif:registryDateModified>".gmdate('Y-m-d\TH:i:s\Z',$registryDateModified)."</extRif:registryDateModified>\n";
 
 
 
