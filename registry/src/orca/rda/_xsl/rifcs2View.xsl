@@ -343,7 +343,7 @@
 				<p><xsl:apply-templates select="ro:location/ro:address/ro:electronic"/></p>	
 	 		</xsl:if>
 	 		
-	 		 <xsl:if test="extRif:rights">
+	 		 <xsl:if test="extRif:rights or ro:rights">
 					<h3>Rights</h3>	
 			</xsl:if>
 	 		 <xsl:if test="extRif:rights[@type='licence']">
@@ -352,7 +352,7 @@
 			<!-- <xsl:apply-templates select="ro:description[@type = 'accessRights' or @type = 'rights']" mode="right"/>	 -->	
 			<xsl:apply-templates select="extRif:rights[@type='licence']"/>	
 							
-			<xsl:apply-templates select="extRif:rights[not(@type='licence')]"/>		
+			<xsl:apply-templates select="ro:rights"/>		
 			
 		 	<xsl:if test="ro:location/ro:address/ro:electronic/@type='email' or ro:location/ro:address/ro:physical">
 		 		<h3>Contacts</h3>
@@ -831,16 +831,17 @@ Handle:
 
 	<xsl:template match="ro:addressPart">			
 			<xsl:value-of select="." disable-output-escaping="yes"/><br />
-	</xsl:template>
+	</xsl:template> 
 		
-	<xsl:template match="extRif:rights[not(@type='licence')]">
-	
+	<xsl:template match="ro:rights">
+		<xsl:if test="./@type!='rights'">
 			<xsl:if test="./@type='rights'"><h4>Rights statement</h4></xsl:if>
 			<xsl:if test="./@type='accessRights'"><h4>Access rights</h4></xsl:if>
 			<!-- ><xsl:if test="./@type='licence'"><h4>Licence</h4></xsl:if>	-->			
 			<p class="rights"><xsl:value-of select="." disable-output-escaping="yes"/>
 
-			</p>		
+			</p>	
+			</xsl:if>	
 	</xsl:template>
 	
 	<xsl:template match="extRif:rights[@type='licence']">
@@ -855,7 +856,8 @@ Handle:
 		  		</img>
     		</xsl:if>
     		<xsl:if test="string-length(substring-after(./@licence_type,'CC-'))=0">	   
-				<xsl:value-of select="./@licence_type"/>
+    			<xsl:if test="./@licence_type='Unknown/Other' and .=''"><p>Unknown</p></xsl:if>
+				<!--  <xsl:value-of select="./@licence_type"/> -->
 			</xsl:if>
 			<xsl:if test="."><p><xsl:value-of select="."/></p></xsl:if>
 			<xsl:if test="./@rightsUri"><p>
