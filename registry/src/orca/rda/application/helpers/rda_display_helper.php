@@ -385,4 +385,30 @@ function cmpTopLevelFacet($a, $b) {
     }
     return ($a['prefLabel'] < $b['prefLabel']) ? -1 : 1;
 }
+
+/*
+ * Take a vocab term uri (http://purl.org/au-research/vocab/...)
+ * and try to resolve it back to a prefLabel (& optional notation)
+ * the mapped vocabulary services in global_config.php
+ */
+function resolveLabelFromVocabNotation($vocabNotation)
+{
+	global $gVOCAB_RESOLVER_SERVICE;
+
+	foreach ($gVOCAB_RESOLVER_SERVICE AS $resolver)
+	{
+		$resolution_target = $resolver['resolvingService'] . "concept.json?notation=" . rawurlencode($vocabNotation);
+		$contents = json_decode(file_get_contents($resolution_target),true);
+		if ($contents)
+		{
+			if (isset($contents['result']['items']) && count($contents['result']['items']) > 0 && isset($contents['result']['items'][0]['prefLabel']['_value']))
+			{
+				return $contents['result']['items'][0]['prefLabel']['_value'];
+			}
+		}
+				
+	}
+
+	return false;
+}
 ?>

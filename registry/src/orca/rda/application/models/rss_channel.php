@@ -231,6 +231,42 @@ limitations under the License.
 				return false;
 			}
 		}
+		
+		
+		function getTwitterArray()
+		{
+			// Get the subject count of items resolved in the past 24 hours
+			$filter_query = 'date_modified:[NOW/DAY-1DAY%20TO%20NOW-0DAY]%20status:("PUBLISHED")%20class:("collection")';
+			$solrUrl = $this->solrInstance . "select/?q=".$filter_query.rawurlencode($this->query)."&version=2.2&rows=0&wt=json&facet=on&facet.field=broader_subject_value_unresolved&facet.mincount=1";
+
+			$solrOutput = json_decode(file_get_contents($solrUrl), true);
+			if (isset($solrOutput['facet_counts']['facet_fields']['broader_subject_value_unresolved']))
+			{
+				$subject_list = $solrOutput['facet_counts']['facet_fields']['broader_subject_value_unresolved'];
+				$subjects = array();
+				for ($i=0; $i<count($subject_list); $i+=2)
+				{
+					if (is_numeric($subject_list[$i]))
+					{
+						$subjects[$subject_list[$i]] = $subject_list[$i+1];
+					}
+				}
+				foreach ($subjects AS $code => $count)
+				{
+					$resolvedSubject = resolveLabelFromVocabNotation($code);
+					if ($resolvedSubject)
+					{
+						$this->rssArray[] = array(
+											"count"=>$count, 
+											"code"=>$code, 
+											"resolved_subject"=>$resolvedSubject, 
+											"type"=>"twitter");
+					}
+				}
+				
+			}
+			return $this->rssArray;
+		}
 
 }
 ?>

@@ -46,7 +46,15 @@ class Search extends CI_Controller {
 			$licenceFilter = $_GET['licenceFilter'];
 			$queryStr = '?q='.$q.'&classFilter='.$classFilter.'&typeFilter='.$typeFilter.'&groupFilter='.$groupFilter.'&subjectFilter='.$subjectFilter.'&licenceFilter='.$licenceFilter;
 			$this->load->model('Rss_channel', 'rss');
-			$result['rssArray'] = $this->rss->getRssArrayForQuery($queryStr);
+			
+			if(isset($_GET['forTwitter']))
+			{
+				$result['rssArray'] = $this->rss->getTwitterArray($queryStr);
+			}
+			else 
+			{
+				$result['rssArray'] = $this->rss->getRssArrayForQuery($queryStr);
+			}
 
 			// Prepare a friendly name for the RSS feed if it contains subject search
 			$result['subjectSearchTitleSuffix'] = '';
@@ -72,8 +80,15 @@ class Search extends CI_Controller {
 					$result['subjectSearchTitleSuffix'] .= str_replace(",", " AND ",  $subjectFilter);
 				}
 			}
-
-			$this->load->view('search/rss', $result);
+			
+			if (isset($_GET['forTwitter']))
+			{
+				$this->load->view('search/rss_twitter', $result);
+			}
+			else 
+			{
+				$this->load->view('search/rss', $result);
+			}
 
 		}
 	}

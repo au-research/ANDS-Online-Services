@@ -13,6 +13,7 @@ $(document).ready(function(){
 	var doTemporalSearch = false;
 	var n = '';var e = '';var s='';var w='';
 	var resultSort = 'score desc';
+	var limitRows = '100';
 	var researchGroupSort = 'index';
 	var subjectSort = 'index';
 	var typeSort = 'index';
@@ -354,6 +355,7 @@ $(document).ready(function(){
 				case 's':s=value;break;
 				case 'w':w=value;break;
 				case 'resultSort':resultSort=value;break;
+				case 'limitRows':limitRows=value;break;
 				case 'researchGroupSort':researchGroupSort=value;break;
 				case 'subjectSort':subjectSort=value;break;
 				case 'typeSort':typeSort=value;break;
