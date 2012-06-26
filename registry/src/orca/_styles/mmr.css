@@ -37,7 +37,7 @@ div.flexigrid a{text-decoration:none;}
 .qa_ok{display:block;border:1px solid;}
 .qa_error{display:block;border:1px solid;}
 .qa_container{border:1px solid black;margin:4px 1px;padding:7px;}
-.toggleQAtip{font-size:16px;padding:10px 2px;cursor:pointer;}
+.toggleQAtip{font-size:16px;padding:10px 2px;cursor:pointer;line-height: 20px;}
 .hasError{background:#C92020; color:white;}
 .info, .success, .warning, .error, .validation {
     border: 1px solid;

@@ -312,7 +312,8 @@ textarea {
 .aro_error{color: #9F6000;background: #FEEFB3 url('../_images/delete_16.png') no-repeat 5px 14px;}
 .aro_success{color: #4F8A10;background: #DFF2BF url('../_images/check_16.png') no-repeat 5px 14px;}
 .toggleQAtip{cursor:pointer;padding: 7px 3px 7px 15px;}
-
+/*.aro_error[level="3"]{background: #FEEFB3 url('../_images/message_small.png') no-repeat 5px 14px;}
+.aro_error[level="2"]{background: #FEEFB3 url('../_images/required_small.png') no-repeat 5px 14px;}*/
 
 #qa_level_results{margin:4px 1px;padding:7px;}
 

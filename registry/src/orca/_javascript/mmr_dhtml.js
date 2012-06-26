@@ -923,20 +923,20 @@ $(document).ready(function() {
 		var tooltip = $('#ui-tooltip-'+tt.id+'-content');
 		
 		//wrap around the current tooltip with a div
-		for(var i=0;i<=4;i++){
+		for(var i=1;i<=3;i++){
 			$('*[level='+i+']', tooltip).wrapAll('<div class="qa_container" qld="'+i+'"></div>');
 		}
 		//add the toggle header
 		$('.qa_container', tooltip).prepend('<div class="toggleQAtip"></div>');
 		$('.toggleQAtip', tooltip).each(function(){
 			if ($(this).parent().attr('qld') == 5)
-			{
 				$(this).text('Gold Standard Record');
-			}
-			else
-			{
-				$(this).text('Quality Level ' + $(this).parent().attr('qld'));
-			}
+			else if($(this).parent().attr('qld') == 1)
+				$(this).text('Quality Level 1 - Mandatory RIF-CS Elements');
+			else if($(this).parent().attr('qld') == 2)
+				$(this).html('Quality Level 2 - required Metadata Content Requirements.' );
+			else if($(this).parent().attr('qld') == 3)
+				 $(this).html('Quality Level 3 - recommended Metadata Content Requirements.' );
 		});
 		//hide all qa
 		$('.qa_container', tooltip).each(function(){

@@ -1991,16 +1991,6 @@ function runQualityLevelCheckonDom($registryObjects, $relatedObjectClassesStr, $
 	$okElement = $nXPath->evaluate("//span[@class='qa_ok']");
 	$errorElement = $nXPath->evaluate("//span[@class = 'qa_error']");
 	$level = 5;
-	$min_ok = 1;
-	for( $j=0; $j < $okElement->length; $j++ )
-	{
-		if($okElement->item($j)->getAttribute("level") > $min_ok)
-		{
-			$min_ok = $okElement->item($j)->getAttribute("level");
-			//print "error found".$level."\n";
-		}
-	}
-
 	for( $j=0; $j < $errorElement->length; $j++ )
 	{
 		if($errorElement->item($j)->getAttribute("level") < $level)
@@ -2010,8 +2000,6 @@ function runQualityLevelCheckonDom($registryObjects, $relatedObjectClassesStr, $
 		}
 	}
 	$level = $level-1;
-	if($level==1 && $min_ok>2) $level = 2;
-	//print "lowest Error -1 is:".$level."\n";
 	return $result;
 }
 

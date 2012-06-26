@@ -547,14 +547,11 @@ function tipQA($key, $level){
 
 function getAllStat(){
 	global $dataSourceKey;
+	global $status;
 	$stats = getDataSourceStats($dataSourceKey);
-	$dsStat = array();
-	$dsStat[$dataSourceKey]['total'] = 0;
-	foreach($stats as $stat){
-		$dsStat[$stat['ds_key']]['total'] += $stat['count'];
-	}
-	//var_dump($dsStat);
-	//var_dump($stats);
+	
+	$result = json_encode($stats);
+	echo $result;
 }
 
 ?>

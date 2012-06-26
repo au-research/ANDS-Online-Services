@@ -50,10 +50,8 @@ limitations under the License.
 		<?php printApplicationStyleSheets(); ?>
 
 	</style>
-	<link rel="stylesheet" media="print" title="Printer-Friendly Style" type="text/css" href="<?php print eAPP_ROOT ?>_styles/print_style.css">
 	<script type="text/javascript" src="<?php print eAPP_ROOT ?>_javascript/general.js"></script>
 	<script type="text/javascript" src="<?php print eAPP_ROOT ?>_javascript/dhtml.js"></script>
-
 	<script type="text/javascript" src="<?php print eAPP_ROOT ?>_javascript/datetime_control.js"></script>
 	<script type="text/javascript" src="<?php print eAPP_ROOT ?>_javascript/wait_control.js"></script>
 	<script type="text/javascript" src="<?php print eAPP_ROOT ?>_javascript/jquery.js"></script>
