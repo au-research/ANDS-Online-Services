@@ -212,7 +212,13 @@ else
 		    	//Sort it by this order
 		    	$order = array('MORE_WORK_REQUIRED', 'DRAFT','SUBMITTED_FOR_ASSESSMENT', 'ASSESSMENT_IN_PROGRESS', 'APPROVED', 'PUBLISHED');
 		    	$sorted = array();
-		    	foreach($order as $o) $sorted[$o]=$status[$o];
+		    	foreach($order as $o)
+		    	{
+		    		if(array_key_exists($o,$status))
+		    		$sorted[$o]=$status[$o];
+		    		else 
+		    		$sorted[$o] = null;
+		    	}
 				$status = $sorted;
 
 
