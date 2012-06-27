@@ -1,7 +1,7 @@
 <?php
 if (!defined('eTWITTER_ENABLED')) { define ('eTWITTER_ENABLED', true); }
-global $rda_root;
-$twitter_feed_rss = $rda_root . "search/rss/?q=*:*&forTwitter=true&subscriptionType=rss";
+global $rda_root, $default_protocol, $host;
+$twitter_feed_rss = $default_protocol . "://" . $host . "/" . $rda_root . "/search/rss/?q=*:*&forTwitter=true&subscriptionType=rss";
 
 function task_weekly_twitter_digest($task)
 {
