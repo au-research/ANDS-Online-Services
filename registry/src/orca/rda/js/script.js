@@ -848,7 +848,9 @@ $(document).ready(function(){
 	  						});
 	  						$("ul.moreSubjects2").each(function() {
 	  						    $("li:gt(4)", this).hide(); 
-	  						    $("li:nth-child(5)", this).after("<a href='#' class=\"more\">More...</a>");
+	  						    if($("li:nth-child(6)",this).html()!=null){
+	  						    	$("li:nth-child(5)", this).after("<a href='#' class=\"more\">More...</a>");
+	  							}
 	  						});	  						
 	  						$("a.more").live("click", function() {
 	  							//console.log($(this).parent());
