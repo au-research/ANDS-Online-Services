@@ -120,6 +120,24 @@ else
 		?>
 		<input type="hidden" id="dataSourceKey" value="<?php echo $data_source_key; ?>" />
 		<input type="hidden" id="dataSourceName" value="<?php echo $dataSource['title']; ?>" />
+		<div id="mmr_ds_moredetails" class="hide">
+			<ul style="padding-left:40px;">
+				<li>
+					This tool allows you to view and manage the records which you have recently created, edited or harvested.
+				</li>
+				<?php if (isset($dataSource['qa_flag']) && $dataSource['qa_flag'] == 't'):?>
+				<li>
+					Records entered into the ANDS registry under the data source '<?php echo (isset($dataSource['title']) ? $dataSource['title'] : $dataSource['data_source_key']); ?>' need to be assessed and approved by ANDS staff.
+					Please contact your ANDS client liaison officer for more information.
+				</li>
+				<?php endif; ?>
+				<?php if (isset($dataSource['auto_publish']) && $dataSource['auto_publish'] == 't'): // manually ?>
+				<li>
+					Your data source administrator currently has this data source set to 'Manually Publish Records'. Records will need to be manually published from this screen once approved by ANDS.
+				</li>
+				<?php endif; ?>
+			</ul>
+		</div>
 		<div id="mmr_datasource_alert" style="display:none;">
 			<div id="mmr_datasource_alert_title" class="clearfix">
 				<div style="float:left;"><img src="<?php echo eAPP_ROOT; ?>_images/_logos/logo_ANDS.gif" alt="Australian National Data Service Online Services"></div>
@@ -836,24 +854,6 @@ function displayMMRDataSourceSwitcher(array $dataSources = array(), $selected_ke
 			<div id="mmr_datasource_information" class="hide">
 
 			 <a href="" id="mmr_information_hide">Hide Information</a>
-			 	<div id="mmr_ds_moredetails">
-					<ul style="padding-left:40px;">
-						<li>
-							This tool allows you to view and manage the records which you have recently created, edited or harvested.
-						</li>
-						<?php if (isset($dataSource['qa_flag']) && $dataSource['qa_flag'] == 't'):?>
-						<li>
-							Records entered into the ANDS registry under the data source '<?php echo (isset($dataSource['title']) ? $dataSource['title'] : $dataSource['data_source_key']); ?>' need to be assessed and approved by ANDS staff.
-							Please contact your ANDS client liaison officer for more information.
-						</li>
-						<?php endif; ?>
-						<?php if (isset($dataSource['auto_publish']) && $dataSource['auto_publish'] == 't'): // manually ?>
-						<li>
-							Your data source administrator currently has this data source set to 'Manually Publish Records'. Records will need to be manually published from this screen once approved by ANDS.
-						</li>
-						<?php endif; ?>
-					</ul>
-				</div>
 			</div>
 
 		</form>
