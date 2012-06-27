@@ -25,7 +25,7 @@ limitations under the License.
 <p>With the almost infinite amount of information on the web and the lack of time we have as users to explore it, 
 staying informed of new information is becoming an exceedingly difficult task. RSS and ATOM syndication feeds assist 
 in this task by allowing users to easily stay informed of changes to multiple websites in a single location. 
-For more information on the formats please navigate to the following external links <a href="http://http://www.whatisrss.com/" target="_blank">RSS</a> <a href="http://www.atomenabled.org/" target="_blank">ATOM</a>.</p>
+For more information on the formats please navigate to the following external links <a href="http://www.whatisrss.com/" target="_blank">RSS</a> <a href="http://www.atomenabled.org/" target="_blank">ATOM</a>.</p>
 <p>The RSS and ATOM feeds within Research Data Australia are customisable and allow you to generate feeds based on the searches you conduct in Research Data Australia. Once subscribed to a feed, you will be notified when any new collections are published to Research Data Australia which matches your search query.  </p>
 <p>To subscribe to a feed, conduct a search (or browse) for collections within Research Data Australia. Shown at the bottom of the list of search results are links to the RSS and ATOM feeds for the search. Simply click on the preferred format and you will be navigated to the feed. In most cases you will need to copy and paste the URL of the feed into your feed reader to subscribe to it.  Refer to your feed reader's user documentation for more information.</p>
 <h2 style="text-decoration:underline;">Twitter</h2>
