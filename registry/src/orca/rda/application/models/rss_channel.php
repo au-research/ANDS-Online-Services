@@ -160,7 +160,7 @@ limitations under the License.
 
 				$this->rssArray[$digest_entry_index] = $digest_entry;
 				$this->rssArray = array_values($this->rssArray);
-				$this->query .= ' -(group:("'.$response['group'].'") +date_modified:['.date("Y-m-d\T00:00:00\Z",strtotime($response['date_modified'])).'" TO "'.date("Y-m-d\T23:59:59\Z",strtotime($response['date_modified'])).'])';
+				$this->query .= ' -(group:("'.$response['group'].'") +date_modified:['.date("Y-m-d\T00:00:00\Z",strtotime($response['date_modified'])).' TO '.date("Y-m-d\T23:59:59\Z",strtotime($response['date_modified'])).'])';
 				$this->startCount += $this->rowCount;
 			}
 			else
