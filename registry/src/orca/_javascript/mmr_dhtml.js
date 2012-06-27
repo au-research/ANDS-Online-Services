@@ -236,18 +236,28 @@ $(document).ready(function() {
     		cache: false, // don't cache the result
     		success: function(data) {
 
-    			console.log(data);
+    			//console.log(data);
   				var chartData = new google.visualization.DataTable();
+  				
+  				var itemList = [];
   				chartData.addColumn("string", "Status");
-  				chartData.addColumn("number", "Quality Level 0");
-  				chartData.addColumn("number", "Quality Level 1");
-  				chartData.addColumn("number", "Quality Level 2");
-  				chartData.addColumn("number", "Quality Level 3");
-  				chartData.addColumn("number", "Quality Level 4");
-  				chartData.addColumn("number", "Gold Standard");
+  				$.each(data, function(i, item){
+  					$.each(item.qa, function(j, qa_i){
+  						//row.push(qa_i);//ql
+  						if($.inArray(j, itemList)==-1)
+  						{
+  							itemList.push(j);
+  							
+  	  	  				    chartData.addColumn("number", "Quality Level "+j);
+  						}
+  						//console.log(itemList);
+  					});
+  				});
   				
 
-  				//console.log(chartData);
+  				
+
+  				console.log(chartData);
 
 
 
@@ -255,10 +265,10 @@ $(document).ready(function() {
   				$.each(data, function(i, item){
   					var row = [];
   					var rowPercent = [];
-  					row.push(item.label);
+  					row.push(item.label);//status
   					rowPercent.push(item.label);
   					$.each(item.qa, function(j, qa_i){
-  						row.push(qa_i);
+  						row.push(qa_i);//ql
   					});
   					//console.log(row);
   					chartData.addRow(row);

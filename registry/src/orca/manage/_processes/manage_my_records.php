@@ -156,13 +156,13 @@ switch(getQueryValue('action'))
 	
 	case "APPROVE":
 		$returnErrors = "";
+		deleteSetofSolrDrafts($keys, $data_source_key);
 		foreach($keys AS $key)
 		{
 			$returnErrors .= approveDraft(rawurldecode($key), $data_source_key);			
 			syncKey(rawurldecode($key), $data_source_key);
 		}
-		//deleteSolrHashKeys(sha1($key.$data_source_key));//delete the draft
-		deleteSetofSolrDrafts($keys, $data_source_key);
+		//deleteSolrHashKeys(sha1($key.$data_source_key));//delete the draft		
 		$response['alert'] = $returnErrors;
 		$response['responsecode'] = "1";
 		echo json_encode($response);
@@ -179,7 +179,7 @@ switch(getQueryValue('action'))
 			if($isDraft){
 				//is a draft, have to approve and do all the jazz with it first
 				approveDraft($key, $data_source_key);
-				deleteSolrHashKey(sha1($key.$data_source_key));//delete the draft
+				//deleteSolrHashKey(sha1($key.$data_source_key));//delete the draft
 				updateRegistryObjectStatus(rawurldecode($key), PUBLISHED);
 				syncKey(rawurldecode($key), $data_source_key);
 				$response['responsecode'] = "1";
@@ -194,7 +194,7 @@ switch(getQueryValue('action'))
 			}
 			
 		}
-				syncDraftKeys($keys, $data_source_key);
+				//syncDraftKeys($keys, $data_source_key);
 		die();
 		
 	break;
