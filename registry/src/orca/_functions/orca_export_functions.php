@@ -1387,7 +1387,7 @@ function getSubjectTypesXML($registryObjectKey, $elementName, $localBroaderTerms
 					// Check if we already have a cached result for this type-value pair, no need for any further search! :-)			
 					if(isset($gVOCAB_RESOLVER_RESULTS[$vocabType][$rawvalue]) && $gVOCAB_RESOLVER_RESULTS[$vocabType][$rawvalue]['vocabUri'] != 'null')
 					{
-						$resolvedName = $gVOCAB_RESOLVER_RESULTS[$vocabType][$rawvalue]['resolvedName'];
+						$resolvedName = $gVOCAB_RESOLVER_RESULTS[$vocabType][$rawvalue]['resolvedLabel'];
 						$rawvalue = $gVOCAB_RESOLVER_RESULTS[$vocabType][$rawvalue]['notation'];
 						$vocabUri = $gVOCAB_RESOLVER_RESULTS[$vocabType][$rawvalue]['vocabUri'];
 						
@@ -1563,7 +1563,7 @@ function populateBroaderTerms($broaderTerm, $resolvingService, $vocabType)
 					// Populate global array
 					$vocabUri = $item['_about'];
 					$gVOCAB_RESOLVER_RESULTS[$vocabType][$vocabUri] = array();
-					$gVOCAB_RESOLVER_RESULTS[$vocabType][$vocabUri]['resolvedName'] = $item['prefLabel']['_value'];
+					$gVOCAB_RESOLVER_RESULTS[$vocabType][$vocabUri]['resolvedLabel'] = $item['prefLabel']['_value'];
 					$gVOCAB_RESOLVER_RESULTS[$vocabType][$vocabUri]['notation'] = $item['notation'];
 					$gVOCAB_RESOLVER_RESULTS[$vocabType][$vocabUri]['vocabUri'] = $vocabUri;
 					
@@ -1571,9 +1571,18 @@ function populateBroaderTerms($broaderTerm, $resolvingService, $vocabType)
 					if (isset($item['broader']))
 					{
 						$gVOCAB_RESOLVER_RESULTS[$vocabType][$vocabUri]['broaderTerms'] = array();
-						foreach ($item['broader'] AS $brd)
+						
+						if (is_array($item['broader']))
 						{
-							$gVOCAB_RESOLVER_RESULTS[$vocabType][$vocabUri]['broaderTerms'][] = $brd['_about'];
+							$gVOCAB_RESOLVER_RESULTS[$vocabType][$vocabUri]['broaderTerms'] = array();
+							foreach($item['broader'] AS $b)
+							{
+								$gVOCAB_RESOLVER_RESULTS[$vocabType][$vocabUri]['broaderTerms'][] = $b['_about'];
+							}	
+						}
+						else
+						{
+							$gVOCAB_RESOLVER_RESULTS[$vocabType][$vocabUri]['broaderTerms'] = array($item['broader']);
 						}
 					}
 				}
@@ -1590,6 +1599,12 @@ function populateBroaderTerms($broaderTerm, $resolvingService, $vocabType)
 
 function rollUpBroaderTerms($targetTerm, $vocabType, &$localBroaderTerms)
 {
+	global $gVOCAB_RESOLVER_RESULTS;
+	if (!isset($gVOCAB_RESOLVER_RESULTS[$vocabType][$targetTerm]['broaderTerms']))
+	{
+		return;
+	}
+	
 	foreach ($gVOCAB_RESOLVER_RESULTS[$vocabType][$targetTerm]['broaderTerms'] AS $broaderTerm)
 	{
 		// Add the broader term to our localBroaderTerms array
@@ -1619,7 +1634,7 @@ function broaderTermsXML($elementName, $localBroaderTerms)
 	foreach( $localBroaderTerms as $term )
 	{
 		$type = ' type="'.$term['vocabType'].'"';
-		$eTerm = " extRif:resolvedValue=\"" . $term['resolvedName'] . "\" extRif:vocabUri=\"" . $term['vocabUri'] . "\"";
+		$eTerm = " extRif:resolvedValue=\"" . $term['resolvedLabel'] . "\" extRif:vocabUri=\"" . $term['vocabUri'] . "\"";
 		$xml .= "      <$elementName$type$eTerm>".$term['notation']."</$elementName>\n";
 	}
 	return $xml;
