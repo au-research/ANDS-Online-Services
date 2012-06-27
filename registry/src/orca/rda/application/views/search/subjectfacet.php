@@ -2,7 +2,16 @@
 	<input id="subject_search_filter"/>
 	<select id="subject_category">
 		<option value="anzsrcfor" <?php if($view=='anzsrcfor') echo 'selected="selected"';?>>ANZSRC-FOR</option>
-		<option value="keywords" <?php if($view=='keywords') echo 'selected="selected"';?>>Keywords</option>
+		<?php
+			$categories = $this->config->item('subjects_categories');
+			foreach($categories as $key=>$subj){
+				echo '<option value="'.$key.'" ';
+				if($view==$key) echo 'selected="selected"';
+				echo '>';
+				echo $subj['display'];
+				echo '</option>';
+			}
+		?>
 	</select>
 </div>
 <div id="subject_content"><?php echo $bigTree;?></div>

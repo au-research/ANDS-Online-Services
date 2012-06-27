@@ -208,9 +208,200 @@ limitations under the License.
 
     function getSubjectFacet($subject_category, $params){
     	//default categories
-    	$categories = array(
-    		'keywords' => array ('anzlic-theme', 'australia', 'caab', 'external_territories', 'cultural_group', 'DEEDI eResearch Archive Subjects', 'ISO Keywords', 'iso639-3', 'keyword', 'Local', 'local', 'marlin_regions', 'marlin_subjects', 'ocean_and_sea_regions', 'person_org', 'states/territories', 'Subject Keywords'),
-    	);
+    	$categories = $this->config->item('subjects_categories');
+    	$set = $categories[$subject_category]['list'];
+
+    	//add the restrictions on these subjects
+    	$restrictions = '';
+    	foreach($set as $s){
+    		$restrictions .= "type = '$s' ";
+    		if($s!=end($set)) $restrictions .= ' OR ';
+    	}
+    	//echo $restrictions;
+
+		$azTree = array();
+		$azTree['0-9']=array('totalDB'=>0, 'subjects'=>array(), 'totalSOLR'=>0);
+		foreach(range('A', 'Z') as $i){$azTree[$i]=array('totalDB'=>0, 'subjects'=>array(), 'totalSOLR'=>0);}
+		
+
+    	$this->load->database();
+    	$query = 'select distinct(value), count(value) from dba.tbl_subjects where '.$restrictions.' group by value';
+    	//echo $query;
+		$all_subjects = $this->db->query($query);
+
+
+		foreach($all_subjects->result() as $s){
+			if($s->value!=""){
+				if(ctype_alnum($s->value[0])){
+					$first = strtoupper($s->value[0]);
+					if(is_numeric($first)){$first='0-9';}
+					$azTree[$first]['totalDB']++;
+					array_push($azTree[$first]['subjects'], $s->value);
+				}
+			}
+		}
+		
+
+		foreach($azTree as $alpha=>$array){
+			$azTree[$alpha]['totalSOLR'] = $this->getSOLRCountForSubjects($params, $azTree[$alpha]['subjects']);
+			//echo $alpha.'>'.$azTree[$alpha]['totalDB'].'>'.$azTree[$alpha]['totalSOLR'].'<br/>';
+			if(!is_numeric($azTree[$alpha]['totalSOLR'])){
+				var_dump($azTree[$alpha]['totalSOLR']);
+			}
+		}
+		//var_dump($azTree);
+
+		//formatting the tree
+		$bigTree = '';
+    	$bigTree .='<div id="vocab-browser">';
+			$bigTree .='<ul>';
+				$bigTree .='<li id="rootNode">';
+				$bigTree .='<a href="#">'.$subject_category.'</a>';
+				$bigTree .='<ul>';
+		    	foreach($azTree as $alpha=>$array){
+		    		if($array['totalSOLR']>0){
+		    			$bigTree.='<li class=""><a href="javascript:;" startsWith="'.$alpha.'">'.$alpha.' ('.$array['totalSOLR'].')</a>';
+		    			$bigTree.='<ul><li><a class="jstree-loading">Loading</a><li></ul>';
+		    			$bigTree.='</li>';
+		    		}
+		    	}
+		    	$bigTree.='</ul>';
+		    	$bigTree.='</li>';
+	    	$bigTree.='</ul>';
+    	$bigTree.='</div>';
+    	return $bigTree;
+    }
+
+
+    function getSOLRCountForSubjects($params, $subject_list){
+    	if(sizeof($subject_list)>0){
+    		$filter_query = ' AND (';
+	    	foreach($subject_list as $s){
+	    		$filter_query .= '+subject_value_resolved:("'.escapeSolrValue($s).'")';
+	    		if($s!=end($subject_list)) $filter_query .= ' OR ';
+	    	}
+	    	$filter_query .= ')';
+		}else return 0;
+    	
+		$q = $params.$filter_query;
+		$fields = array(
+			'q'=>$q,'version'=>'2.2','start'=>'0','indent'=>'on', 'wt'=>'json', 'fl'=>'key', 'rows'=>'1'
+		);
+		//echo $q.'<hr/>';
+		$json = $this->fireSearch($fields, '');
+		if($json){
+			return $json->{'response'}->{'numFound'};
+		}else return $json;
+    }
+
+    public function getSubjectFacetTree($params, $subject_category, $startsWith){
+    	$params = $this->constructQuery($params);
+    	$categories = $this->config->item('subjects_categories');
+    	$set = $categories[$subject_category]['list'];
+
+    	//add the restrictions on these subjects
+    	$restrictions = '';
+    	foreach($set as $s){
+    		$restrictions .= "type = '$s' ";
+    		if($s!=end($set)) $restrictions .= ' OR ';
+    	}
+
+    	//get all subjects in this set that starts with startswith
+    	$this->load->database();
+    	if($startsWith!='0-9'){
+    		$query = "select distinct(value), count(value) from dba.tbl_subjects where (value LIKE '".$startsWith."%' or value LIKE '".strtolower($startsWith)."%') and (".$restrictions.") group by value";
+    	}else{
+    		$startsWith='';
+    		foreach(range(0,9) as $i){
+    			$startsWith .= "value LIKE '".$i."%' ";
+    			if($i!=9) $startsWith.=" OR ";
+    		}
+    		$query = "select distinct(value), count(value) from dba.tbl_subjects where (".$startsWith.") and (".$restrictions.") group by value";
+    	}
+    	//echo $query;
+		$all_subjects = $this->db->query($query);
+
+		$subjects = array();
+		foreach($all_subjects->result() as $s){
+			$subjects[$s->value]=0;
+		}
+		
+		//
+
+		
+		foreach($subjects as $key=>$count){
+			$solrCount = $this->getSOLRCountForSubjects($params, array($key));
+			$subjects[$key]=$solrCount;
+		}
+		arsort($subjects);
+		//var_dump($subjects);
+		$r='';
+		$limit = 15;$showMore=true;
+		foreach($subjects as $key=>$count){
+			if($count>0){
+				if($limit<0){
+					$r.='<li class="hide"><a href="javascript:;" id="'.$key.'" class="subjectFilter">'.$key.' ('.$count.')</a></li>';
+				}else if($limit > 0){
+					$r.='<li><a href="javascript:;" id="'.$key.'" class="subjectFilter">'.$key.' ('.$count.')</a></li>';
+					$limit--;
+				}else if($limit==0){
+					if($showMore){
+						$r.='<li><a href="javascript:;" class="show_more_list" current="15" per="15">Show More...</a></li>';
+						$showMore=false;
+					}
+					$limit--;
+				}
+			}
+		}
+		return $r;
+		
+
+		/*$filter_query = '(';
+    	foreach($subjects as $s){
+    		$filter_query .= '+subject_value_resolved:("'.$s.'")';
+    		if($s!=end($subjects)) $filter_query .= ' OR ';
+    	}
+    	$filter_query .= ')';
+		$q = $filter_query;
+		$fields = array(
+			'q'=>$q,'version'=>'2.2','start'=>'0','indent'=>'on', 'wt'=>'json', 'fl'=>'key', 'rows'=>'1'
+		);
+		$facet = '&facet=true&facet.field=subject_value_resolved&facet.mincount=1';
+		//echo $q.'<hr/>';
+		$json = $this->fireSearch($fields, $facet);
+
+		$facets = ($json->{'facet_counts'}->{'facet_fields'}->{'subject_value_resolved'});
+
+		$r = '';
+		for($i=0;$i<sizeof($facets);$i=$i+2){
+			$r.='<li><a href="javascript:;" id="'.$facets[$i].'" class="subjectFilter">'.$facets[$i].' ('.$facets[$i+1].')</a></li>';
+		}
+		return $r;*/
+		//var_dump($json->{'facet_counts'}->{'facet_fields'}->{'subject_value_resolved'});
+
+
+    	/*$q = $params.$restrictions;
+		$fields = array(
+			'q'=>$q,'version'=>'2.2','start'=>'0','indent'=>'on', 'wt'=>'json', 'fl'=>'key', 'rows'=>1
+		);
+		//$facet = '&facet=true&facet.field=subject_value_resolved&facet.limit=-1';
+
+		//echo $q;
+
+		$facet = '&facet=true&facet.field=subject_value_resolved&facet.prefix='.$startsWith.'&facet.mincount=1&facet.limit=50';
+		$json = $this->fireSearch($fields, $facet);
+		$facets = ($json->{'facet_counts'}->{'facet_fields'}->{'subject_value_resolved'});
+
+		$r = '';
+		for($i=0;$i<sizeof($facets);$i=$i+2){
+			$r.='<li><a href="javascript:;" id="'.$facets[$i].'" class="subjectFilter">'.$facets[$i].' ('.$facets[$i+1].')</a></li>';
+		}
+		return $r;*/
+    }
+
+    function getSubjectFacet_old($subject_category, $params){
+    	//default categories
+    	$categories = $this->config->item('subjects_categories');
     	$set = $categories[$subject_category];
     	//$q = $this->constructQuery($params);
 
@@ -228,12 +419,15 @@ limitations under the License.
 		);
 		//$facet = '&facet=true&facet.field=subject_value_resolved&facet.limit=-1';
 
+		//echo $q;
+
 		$facet = '&facet=true';
 		foreach (range('A', 'z') as $i){
 			if(ctype_alnum($i)){
-				$facet.='&facet.query=subject_value_resolved:('.$i.'*)';
+				$facet.='&facet.query=subject_value_resolved:('.$i.'*) '.$restrictions;
 			}
 		}
+		//echo $facet;
 		$json = $this->fireSearch($fields, $facet);
 
 		$azTree = array();
@@ -251,12 +445,12 @@ limitations under the License.
     	$bigTree .='<div id="vocab-browser">';
 			$bigTree .='<ul>';
 				$bigTree .='<li id="rootNode">';
-				$bigTree .='<a href="#">Keywords</a>';
+				$bigTree .='<a href="#">'.$subject_category.'</a>';
 				$bigTree .='<ul>';
 		    	foreach($azTree as $alpha=>$num){
 		    		if($num!=0){
-		    			$bigTree.='<li class=""><a href="javascript:;">'.$alpha.' ('.$num.')</a>';
-		    			//$bigTree.='<ul><li><a class="jstree-loading">Loading</a><li></ul>';
+		    			$bigTree.='<li class=""><a href="javascript:;" startsWith="'.$alpha.'">'.$alpha.' ('.$num.')</a>';
+		    			$bigTree.='<ul><li><a class="jstree-loading">Loading</a><li></ul>';
 		    			$bigTree.='</li>';
 		    		}
 		    	}
@@ -265,6 +459,40 @@ limitations under the License.
 	    	$bigTree.='</ul>';
     	$bigTree.='</div>';
     	return $bigTree;
+    }
+
+
+
+    public function getSubjectFacetTree_old($params, $subject_category, $startsWith){
+    	$params = $this->constructQuery($params);
+    	$categories = $this->config->item('subjects_categories');
+    	$set = $categories[$subject_category];
+
+    	//add the restrictions on these subjects
+    	$restrictions = ' AND (';
+    	foreach($set as $s){
+    		$restrictions .= 'subject_type:("'.$s.'")';
+    		if($s!=end($set)) $restrictions .= ' OR ';
+    	}
+    	$restrictions .=')';
+
+    	$q = $params.$restrictions;
+		$fields = array(
+			'q'=>$q,'version'=>'2.2','start'=>'0','indent'=>'on', 'wt'=>'json', 'fl'=>'key', 'rows'=>1
+		);
+		//$facet = '&facet=true&facet.field=subject_value_resolved&facet.limit=-1';
+
+		//echo $q;
+
+		$facet = '&facet=true&facet.field=subject_value_resolved&facet.prefix='.$startsWith.'&facet.mincount=1&facet.limit=50';
+		$json = $this->fireSearch($fields, $facet);
+		$facets = ($json->{'facet_counts'}->{'facet_fields'}->{'subject_value_resolved'});
+
+		$r = '';
+		for($i=0;$i<sizeof($facets);$i=$i+2){
+			$r.='<li><a href="javascript:;" id="'.$facets[$i].'" class="subjectFilter">'.$facets[$i].' ('.$facets[$i+1].')</a></li>';
+		}
+		return $r;
     }
 
 
@@ -545,6 +773,11 @@ limitations under the License.
 
 
 		$json = json_decode($content);
+		if($json){
+			return $json;
+		}else{
+			echo 'ERROR:'.$content.'<br/> QUERY: '.$fields_string;
+		}
 		//echo  "*********".$content;
 		return $json;
     }

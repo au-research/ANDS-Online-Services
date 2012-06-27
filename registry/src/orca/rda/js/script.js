@@ -101,7 +101,7 @@ $(document).ready(function(){
 	        success:function(data){
 				$('#tree-vocab').html(data);
 				initTree();
-				bindTree(false);
+				bindTree('vocab-browser');
 				$('#left-vocab').resizable({
 						handles: "e",
 						resize: function(event, ui){
@@ -147,7 +147,8 @@ $(document).ready(function(){
 		});
 	}
 
-	function bindTree(forSearch){
+	function bindTree(purpose){
+		//purpose = anzsrc-for-search | vocab-browser | keyword-search
 		$("#vocab-browser").bind("select_node.jstree", function(event, data) {
   			// data.inst is the tree object, and data.rslt.obj is the node
   			var theNode = data.rslt.obj;
@@ -155,12 +156,17 @@ $(document).ready(function(){
   			$('#right-vocab').html('Select a concept from the vocabulary browser on the left');
   			if($(theNode).attr('id')!='rootNode'){
   				if(!$(theNode).hasClass('conceptRoot')){
-		  			if(forSearch){
+		  			if(purpose=='anzsrcfor'){
 		  				if($(theLink).attr('total')>0){//do Search only if there are numbers
 		  					subjectFilter = encodeURIComponent($(theLink).attr('uri'));
 		  				changeHashTo(formatSearch(search_term, page, classFilter));
 		  				}
-		  			}else vocabLoadConcept($(theLink).attr('uri'), $(theLink).attr('vocab'));
+		  			}else if(purpose=='vocab-browser'){
+		  				vocabLoadConcept($(theLink).attr('uri'), $(theLink).attr('vocab'));
+		  			}else if(purpose=='keywords'){
+		  				//alert('purpose = keywords');
+		  				//console.log(theNode);
+		  			}
 		  		}
 		  	}
   			return data.inst.toggle_node(data.rslt.obj);
@@ -171,42 +177,63 @@ $(document).ready(function(){
   			//return data.inst.toggle_node(data.rslt.obj);
   			//console.log($(this).attr('notation'));
   			var theNode = data.rslt.obj;
+
+  			data.rslt.obj.siblings(".jstree-open").each(function (){ 
+  				data.inst.close_node(this, true); 
+  			}); 
+ 
   			
   			if($(theNode).attr('id')!='rootNode'){
   				if(!$(theNode).hasClass('conceptRoot')){
 	  				var thisTree = $(theNode).children('ul');
 	  				var theLink = $(theNode).children('.getConcept');
+	  				var theListItem = $(theNode).children('li');
 	  				var uri = $(theLink).attr('uri');
 	  				var vocab = $(theLink).attr('vocab');
-	  				if(forSearch){
-	  					$.ajax({
+
+					var ajaxURL = base_url+"/browse/getConcept/";
+		  			var ajaxDATA = {uri:uri,vocab:vocab};
+
+	  				if(purpose=='anzsrcfor'){
+		  				var ajaxURL = base_url+"/browse/getConcept/";
+		  				var ajaxDATA = {uri:uri,vocab:vocab,params:JSONParams()};
+		  			}else if(purpose=='vocab-browser'){
+		  				var ajaxURL = base_url+"/browse/getConcept/";
+		  				var ajaxDATA = {uri:uri,vocab:vocab};
+		  			}else{//keywords and stuff
+		  				var startsWith = $(theNode).children('li a').attr('startsWith');
+		  				var ajaxURL = base_url+'/search/subjectfacettree/'+purpose;
+		  				var ajaxDATA = {params:JSONParams(),startsWith:startsWith};
+		  			}
+
+		  			$.ajax({
 		       			type:"POST",
-						url: base_url+"/browse/getConcept/",
-						data:{uri:uri,vocab:vocab,params:JSONParams()},
+						url: ajaxURL,
+						data: ajaxDATA,
 				        success:function(data){
 							$(thisTree).html(data);
 							var tree = jQuery.jstree._reference("#vocab-browser");
 							tree.refresh();
+							var vocabBrowser = $('#vocab-browser');
+  							$('li.hide', vocabBrowser).hide();
 				        },
 				        error:function(msg){}
-						});
-	  				}else{
-	  					$.ajax({
-		       			type:"POST",
-						url: base_url+"/browse/getConcept/",
-						data:{uri:uri,vocab:vocab},
-				        success:function(data){
-							$(thisTree).html(data);
-							var tree = jQuery.jstree._reference("#vocab-browser");
-							tree.refresh();
-				        },
-				        error:function(msg){}
-						});
-	  				}
-					
+					});
 					//console.log(uri);
   				}
   			}
+		});
+
+		$('.show_more_list').live('click', function(){
+			var current = parseInt($(this).attr('current'));
+			var per = parseInt($(this).attr('per'));
+			var next = current+per;
+			var theList = $(this).parent().parent('ul');
+			$('li:lt('+next+')', theList).show();
+			if(next < $('li', theList).length-1) $(theList).append('<li><a href="javascript:;" class="show_more_list" current="'+next+'" per="'+per+'">Show More...</a></li>')
+			$(this).parent().remove();
+			var tree = jQuery.jstree._reference("#vocab-browser");
+			tree.refresh();
 		});
 	}
 
@@ -231,7 +258,7 @@ $(document).ready(function(){
 	        success:function(data){
 				var list = $('.conceptRoot[vocab='+vocab+']').children('ul');
 				$(list).html(data);
-				bindTree(false);
+				bindTree('vocab-browser');
 				var tree = jQuery.jstree._reference("#vocab-browser");
 				tree.refresh();
 	        },
@@ -2060,6 +2087,12 @@ $(document).ready(function(){
 			data:{params:params},
 	        success:function(data){
 				$('#anzsrc-toplevelfacet').html(data);
+				$('#anzsrc-toplevelfacet li:gt(9)').hide();
+				$('#anzsrc-toplevelfacet ul').append('<a href="javascript:;" id="show_all_toplevel">Show all...</a>');
+				$('#show_all_toplevel').click(function(){
+					$('#anzsrc-toplevelfacet li').slideDown();
+					$(this).remove();
+				});
 	        },
 	        error:function(msg){}
 		});
@@ -2076,7 +2109,7 @@ $(document).ready(function(){
 	        success:function(data){
 				$('#anzsrc-subject-facet-result').html(data);
 				initTree();
-				bindTree(true);
+				bindTree(view);
 	        },
 	        error:function(msg){}
 		});

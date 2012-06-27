@@ -682,6 +682,7 @@ display:block;
 
 /*search vocab*/
 #browse_more_subject{margin:5px;padding:10px;display:block;border-bottom:1px solid #ccc;}
+#subject_content{overflow:auto;height:550px;}
 
 /* IE 6 doesn't support max-height
  * we use height instead, but this forces the menu to always be this tall

@@ -33,13 +33,21 @@ if(($spatial_included_ids!='') || ($temporal!='All') || ($typeFilter!='All') || 
 		if($groupFilter!='All') displaySelectedFacet('group',$groupFilter,$json);
 		if($subjectFilter!='All') {
 			//echo $subjectFilter;
-			echo '<li class="limit">
+			if (substr(rawurldecode($subjectFilter), 0, 7) === 'http://'){
+				echo '<li class="limit">
 					<a href="javascript:void(0);"
 						title="'.resolveLabelFromVocabTermURI($subjectFilter,false).'"
 						class="clearFilter clearSubjects" id="'.$subjectFilter.'">'.
 						''.resolveLabelFromVocabTermURI($subjectFilter, false).'
 						</a></li>';
-			
+			}else{
+				echo '<li class="limit">
+					<a href="javascript:void(0);"
+						title="'.($subjectFilter).'"
+						class="clearFilter clearSubjects" id="'.$subjectFilter.'">'.
+						''.($subjectFilter).'
+						</a></li>';
+			}
     		//displaySelectedFacet('subject_value_resolved',$subjectFilter,$json);
 		}
 		//if($subjectFilter!='All') displaySelectedFacet('subject_vocab_uri',$subjectFilter,$json);

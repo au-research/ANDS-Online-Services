@@ -676,11 +676,20 @@ class Search extends CI_Controller {
 			$this->load->model('vocabularies', 'vmodel');
 			$data['bigTree']=$this->vmodel->getBigTree($this->config->item('vocab_resolver_service'), array(), $params, 'searchfacet');
 			
-		}else if($view=='keywords'){
+		}else{
 			$this->load->model('solr');
 			$data['bigTree']=$this->solr->getSubjectFacet($view, $params);
 		}
 		$this->load->view('search/subjectfacet', $data);
+	}
+
+	public function subjectfacettree($view){
+		$data['view'] = $view;
+		$params = $this->input->post('params');
+		$startsWith = $this->input->post('startsWith');
+		$this->load->model('solr');
+		$data['tree'] = $this->solr->getSubjectFacetTree($params, $view, $startsWith);
+		echo $data['tree'];
 	}
 
 	public function toplevelfacet(){
