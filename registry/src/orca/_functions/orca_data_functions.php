@@ -941,7 +941,7 @@ function insertDescription($description_id, $registry_object_key, $value, $type,
 
 	$errors = "";
 	$strQuery = 'SELECT dba.udf_insert_description($1, $2, $3, $4, $5)';
-	$params = array($description_id, $registry_object_key, substr($value, 0, 4000), substr($type, 0, 512), substr($lang, 0, 64));
+	$params = array($description_id, $registry_object_key, substr($value, 0, 12000), substr($type, 0, 512), substr($lang, 0, 64));
 	$resultSet = executeUpdateQuery($gCNN_DBS_ORCA, $strQuery, $params);
 
 	if( !$resultSet )
