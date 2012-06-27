@@ -1155,16 +1155,23 @@ function saveAndPreview() {
 	}
 
 	var key = $('#object_mandatoryInformation_key').val();
+	var contributorPage = document.getElementById("contributor_page").value;
 
-	$(".rda_preview").attr("href",$("#baseURL").val() + 'rda/preview?ds='+$('#object_mandatoryInformation_dataSource').val()+'&key=' + $('#object_mandatoryInformation_key').val());
-
-	
+	if(contributorPage!='')
+	{
+		$(".rda_preview").attr("href",$("#baseURL").val() + 'rda/view/group/?ds_key='+$('#object_mandatoryInformation_dataSource').val()+'&group=' + $('#object_mandatoryInformation_key').val() +'&groupName='+contributorPage);
+	}else {
+		$(".rda_preview").attr("href",$("#baseURL").val() + 'rda/preview?ds='+$('#object_mandatoryInformation_dataSource').val()+'&key=' + $('#object_mandatoryInformation_key').val());
+	}
 
 	$("#errors_preview").hide();	
-	//$("#save_notification").remove();
 
-	$(".rda_preview").attr("href",$("#baseURL").val() + 'rda/preview?ds='+$('#object_mandatoryInformation_dataSource').val()+'&key=' + $('#object_mandatoryInformation_key').val());
-
+	if(contributorPage!='')
+	{
+		$(".rda_preview").attr("href",$("#baseURL").val() + 'rda/view/group/?ds_key='+$('#object_mandatoryInformation_dataSource').val()+'&group=' + $('#object_mandatoryInformation_key').val() +'&groupName='+contributorPage);
+	}else{
+		$(".rda_preview").attr("href",$("#baseURL").val() + 'rda/preview?ds='+$('#object_mandatoryInformation_dataSource').val()+'&key=' + $('#object_mandatoryInformation_key').val());
+	}
 	
 	if (userMode != 'readOnly')
 	{
@@ -1181,8 +1188,14 @@ function saveAndPreview() {
 								"</div>");
 			
 
+		if(contributorPage!='')
+		{
+			$(".rda_preview").attr("href",$("#baseURL").val() + 'rda/view/group/?ds_key='+$('#object_mandatoryInformation_dataSource').val()+'&group=' + $('#object_mandatoryInformation_key').val() +'&groupName='+contributorPage);
+		}else{
+			$(".rda_preview").attr("href",$("#baseURL").val() + 'rda/preview?ds='+$('#object_mandatoryInformation_dataSource').val()+'&key=' + $('#object_mandatoryInformation_key').val());
+		}
 
-		$(".rda_preview").attr("href",$("#baseURL").val() + 'rda/preview?ds='+$('#object_mandatoryInformation_dataSource').val()+'&key=' + $('#object_mandatoryInformation_key').val());
+	//	$(".rda_preview").attr("href",$("#baseURL").val() + 'rda/preview?ds='+$('#object_mandatoryInformation_dataSource').val()+'&key=' + $('#object_mandatoryInformation_key').val());
 		$("#print_preview").click(function()
 		{
 			var win = window.open('process_registry_object.php?task=preview&data_source='+$('#object_mandatoryInformation_dataSource').val()+'&key=' + $('#object_mandatoryInformation_key').val());		
@@ -1233,8 +1246,14 @@ function saveAndPreview() {
 
 
 		//copy and paste from above, need refactor
-		$(".rda_preview").attr("href",$("#baseURL").val() + 'rda/preview?ds='+$('#object_mandatoryInformation_dataSource').val()+'&key=' + $('#object_mandatoryInformation_key').val());
-		$('#rda_preview').click(function(){
+		
+		if(contributorPage!='')
+		{
+			$(".rda_preview").attr("href",$("#baseURL").val() + 'rda/view/group/?ds_key='+$('#object_mandatoryInformation_dataSource').val()+'&group=' + $('#object_mandatoryInformation_key').val() +'&groupName='+contributorPage);
+		}else{
+			$(".rda_preview").attr("href",$("#baseURL").val() + 'rda/preview?ds='+$('#object_mandatoryInformation_dataSource').val()+'&key=' + $('#object_mandatoryInformation_key').val());
+		}
+		$('#rda_preview_xml').click(function(){
 			var key = $('#object_mandatoryInformation_key').val();
 			var ds = $('#object_mandatoryInformation_dataSource').val();
 			$.get(rootAppPath + 'orca/services/getRegistryObject.php?key='+encodeURIComponent(key)+'&ds='+encodeURIComponent(ds)+'&type=plain',

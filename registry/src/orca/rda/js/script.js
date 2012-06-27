@@ -50,6 +50,7 @@ $(document).ready(function(){
 		case 'view':initViewPage();break;
 		case 'print-view':initPrintViewPage();break;
 		case 'institution-view':initInstitutionViewPage();break;
+		case 'institution-preview':initInstitutionViewPage();break;		
 		case 'homepage':initHomePage();break;
 		case 'search':initSearchPage();break;
 		case 'contact':initContactPage();break;

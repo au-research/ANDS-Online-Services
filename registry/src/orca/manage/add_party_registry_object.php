@@ -25,6 +25,8 @@ importApplicationStylesheet(eAPP_ROOT.'orca/_styles/jquery-ui-1.8.9.custom.css')
 // Page processing
 // -----------------------------------------------------------------------------
 $keyValue = getQueryValue('key');
+$contributorGroup = isContributorPage($keyValue);
+
 $readOnly = isset($_GET['readOnly']);
 
 if ($readOnly)
@@ -101,7 +103,16 @@ require '../../_includes/header.php';
 <input type="hidden" id="baseURL" value="<?php print eAPP_ROOT . "orca/" ?>" />
 <input type="hidden" id="elementSourceURL" value="<?php print eAPP_ROOT . "orca/fetch_element.php" ?>" />
 <input type="hidden" id="elementCategory" value="party" />
-
+<input type="hidden" id="contributor_page" value="" />
+<?php 
+	$contributorPage=getGroupPage($contributorGroup['object_group']);
+	if($contributorPage[0]['registry_object_key']==$keyValue)
+	{
+		echo '<script  type="text/javascript">document.getElementById("contributor_page").value = "'.$contributorPage[0]['object_group'].'";</script>';
+	}else{
+		echo '<script  type="text/javascript">document.getElementById("contributor_page").value = "";</script>';	
+	}
+?>
 
 <form id="registry_object_add" action="registry_object_add.php" method="post">
 
