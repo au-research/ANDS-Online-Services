@@ -18,13 +18,14 @@ function task_weekly_twitter_digest($task)
 	
 	$batch_count = 0;
 	$size_per_batch = 3;
-	$delay_per_batch = 2; // in minutes (should be greater than 1)
+	$delay_per_batch = 10; // in minutes (should be greater than 1)
 	foreach ($tweets AS $tweet)
 	{
 		$batch_count++;
 		addNewTask('MAKE_TWEET', "Queued Tweet from task #" . $task['task_id'], $tweet, '', null, ($batch_count/$size_per_batch) * $delay_per_batch . " minutes");
 	}
 	
+	addNewTask($task['method_name'], "Requeued weekly RDA tweets from #" . $task['task_id'], '', '', null, "7 days");
 	return $message;
 }
 

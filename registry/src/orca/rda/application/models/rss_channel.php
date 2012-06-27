@@ -236,7 +236,7 @@ limitations under the License.
 		function getTwitterArray()
 		{
 			// Get the subject count of items resolved in the past 24 hours
-			$filter_query = 'date_modified:[NOW/DAY-1DAY%20TO%20NOW-0DAY]%20status:("PUBLISHED")%20class:("collection")';
+			$filter_query = 'date_modified:[NOW-7DAY%20TO%20NOW]%20status:("PUBLISHED")%20class:("collection")';
 			$solrUrl = $this->solrInstance . "select/?q=".$filter_query.rawurlencode($this->query)."&version=2.2&rows=0&wt=json&facet=on&facet.field=broader_subject_value_unresolved&facet.mincount=1";
 
 			$solrOutput = json_decode(file_get_contents($solrUrl), true);

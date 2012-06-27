@@ -28,7 +28,7 @@ $rss_channel_header = '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Ato
 		<atom:link href="'.$rdaInstance.rawurlencode($_SERVER['QUERY_STRING']).'" rel="self" type="application/rss+xml" />
 		<title>'.$feed_title.'</title>
 		<link>'.$rdaInstance.rawurlencode($_SERVER['QUERY_STRING']).'</link>
-		<description>The following items represent collection records added to Research Data Australia with ANZSRC-FOR codes (within the past 24 hours)</description>
+		<description>The following items represent collection records added to Research Data Australia with ANZSRC-FOR codes (within the past 7 days)</description>
 		<language>en</language>
 		<image>
 			<url>'.$rdaInstance.'/img/icon/ands_boxes.jpg</url>
@@ -43,10 +43,11 @@ foreach ($rssArray AS $item)
 
 	if($item['type'] == "twitter")
 	{
-
+		// depluralise
+		$collection_count = $item['count'] . ($item['count'] > 1 ? " collections have " : " collection has ");
 		echo "			<item>\n";
-		echo "				<title>".$item['count']." collection(s) have been added to Research Data Australia with subject #ANZSRC-".$item['code']."</title>\n";
-		echo "				<description>".$item['count']." collection(s) have been added to Research Data Australia with subject #ANZSRC-".$item['code'] ."</description>\n";
+		echo "				<title>".$collection_count."been added to Research Data Australia with subject #ANZSRC".$item['code']."</title>\n";
+		echo "				<description>".$collection_count."been added to Research Data Australia with subject #ANZSRC".$item['code'] ."</description>\n";
 		echo "				<link>" . $rdaInstance . "search#!/q=*:*/p=1/tab=collection/subject=".rawurlencode($item['resolved_subject'])."/resultSort=date_modified%20desc</link>\n";
 		echo "				<guid>" . $rdaInstance . "search#!/q=*:*/p=1/tab=collection/subject=".rawurlencode($item['resolved_subject'])."/resultSort=date_modified%20desc</guid>\n";
 		echo "				<author>".$item['resolved_subject']."</author>\n";
