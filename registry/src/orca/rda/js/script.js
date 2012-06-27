@@ -884,6 +884,12 @@ $(document).ready(function(){
 	  							$("li:gt(5)", this).hide(); 
 	  							$("li:nth-child(6)", this).after("<a href='#' class=\"more\">More...</a>");
 	  						});
+	  						$("ul.moreGroups2").each(function() {
+	  						    $("li:gt(4)", this).hide(); 
+	  						    if($("li:nth-child(6)",this).html()!=null){
+	  						    	$("li:nth-child(5)", this).after("<a href='#' class=\"more\">More...</a>");
+	  							}
+	  						});	 	  						
 	  						$("a.more").live("click", function() {
   							//console.log($(this).parent());
 	  							$(this).parent().children().slideDown();
