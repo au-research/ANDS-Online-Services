@@ -1438,7 +1438,7 @@ function getSubjectTypesXML($registryObjectKey, $elementName, $forSOLR=false)
 						else
 						{
 							// No match found, lets instantiate this cached result to null
-							$gVOCAB_RESOLVER_RESULTS[$vocabType][$rawvalue] = array('vocabUri' => null);
+							$gVOCAB_RESOLVER_RESULTS[$vocabType][$rawvalue] = array('vocabUri' => 'null');
 						}
 						unset($resolved_by_label_array);
 					}
