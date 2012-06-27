@@ -62,11 +62,11 @@ function getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR = false, $inclu
 	// go ahead and rebuild by hand (fallback)
 	$xml = '';
 	$localBroaderTerms = array();
-	bench(6);
-		$registryObject = getRegistryObject($registryObjectKey);
-	echo "getRegistryObject() " . bench(6) . PHP_EOL;
+
+	$registryObject = getRegistryObject($registryObjectKey);
+
 	
-	bench(6);
+
 	if ($forSOLR)
 	{
 		$dataSourceKey = $registryObject[0]["data_source_key"];
@@ -75,9 +75,8 @@ function getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR = false, $inclu
 		$allow_reverse_internal_links = $dataSource[0]['allow_reverse_internal_links'];
 		$allow_reverse_external_links = $dataSource[0]['allow_reverse_external_links'];
 	}
-	echo "get reverse link status " . bench(6) . PHP_EOL;
+	
 
-	bench(6);
 	if( $registryObject )
 	{
 		// Registry Object
@@ -179,8 +178,7 @@ function getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR = false, $inclu
 
 			$xml .= "    </extRif:extendedMetadata>\n";
 		}
-		echo "generate extRif:extendedMetadata: " . bench(6) . PHP_EOL;
-		
+
 		
 		// Registry Object Class
 		// =====================================================================
@@ -216,7 +214,7 @@ function getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR = false, $inclu
 		// To prevent empty XML elements, we append to blank string and check that it actually
 		// contains data
 		$internalxml = "";
-		bench(6);
+
 		// identifier
 		// -------------------------------------------------------------
 		$internalxml .= getIdentifierTypesXML($registryObjectKey, 'identifier');
@@ -228,8 +226,8 @@ function getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR = false, $inclu
 		// location
 		// -------------------------------------------------------------
 		$internalxml .= getLocationTypesXML($registryObjectKey, 'location', $forSOLR);
-	echo "get identifiers, names,locations " . bench(6) . PHP_EOL;
-	bench(6);
+
+
 		if($forSOLR && $includeRelated)
 		{
 			// relatedObject
@@ -242,13 +240,13 @@ function getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR = false, $inclu
 			// -------------------------------------------------------------
 			$internalxml .= getRelatedObjectTypesXML($registryObjectKey, $dataSource, $registryObjectClass,'relatedObject', $forSOLR);
 		}
-	echo "getRelatedObjectTypes " . bench(6) . PHP_EOL;
+
 	bench(6);
 		// subject
 		// -------------------------------------------------------------
 		$internalxml .= getSubjectTypesXML($registryObjectKey, 'subject', $localBroaderTerms, $forSOLR);
 	echo "get subjects " . bench(6) . PHP_EOL;
-	bench(6);
+
 		// description
 		// -------------------------------------------------------------
 		$internalxml .= getDescriptionTypesXML($registryObjectKey, 'description', $forSOLR);
@@ -292,7 +290,7 @@ function getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR = false, $inclu
 		}
 
 		$xml .= "  </registryObject>\n";
-		echo "get the rest... " . bench(6) . PHP_EOL;
+
 	}
 
 	return $xml;
@@ -1372,63 +1370,78 @@ function getSubjectTypesXML($registryObjectKey, $elementName, $localBroaderTerms
 			$term = '';
 			if ($forSOLR)
 			{
-
+				// If we are generating extended RIFCS, lets query the vocabulary service (if available)
 				$resourceUrlComp = 'resource.json?uri=';
-				$resolvedName = $rawvalue;
-				$vocabUri = 'null';
+				
+				$resolvedName = $rawvalue; // the resolved name (default to the value of the subject)
+				$vocabUri = 'null'; // the URI of the concept (if identified)
+				$localBroaderTerms = array();
+				
+				// Check whether we have a resolver defined for this subject type
 				if(array_key_exists($vocabType, $gVOCAB_RESOLVER_SERVICE))
 				{
 					$resolvingService = $gVOCAB_RESOLVER_SERVICE[$vocabType]['resolvingService'];
 					$uriprefix = $gVOCAB_RESOLVER_SERVICE[$vocabType]['uriprefix'];
-					if(is_numeric($rawvalue))
+					$vocabType = strtolower($vocabType);
+					
+					// Check if we already have a cached result for this type-value pair, no need for any further search! :-)			
+					if(isset($gVOCAB_RESOLVER_RESULTS[$vocabType][$rawvalue]) && $gVOCAB_RESOLVER_RESULTS[$vocabType][$rawvalue]['vocabUri'] != 'null')
 					{
-						$vocabUri = $uriprefix.$rawvalue;
+						$resolvedName = $gVOCAB_RESOLVER_RESULTS[$vocabType][$rawvalue]['resolvedName'];
+						$rawvalue = $gVOCAB_RESOLVER_RESULTS[$vocabType][$rawvalue]['notation'];
+						$vocabUri = $gVOCAB_RESOLVER_RESULTS[$vocabType][$rawvalue]['vocabUri'];
+						
+						// Fill up our localBroaderTerms array
+						foreach ($gVOCAB_RESOLVER_RESULTS[$vocabType][$vocabUri]['broaderTerms'] AS $broaderTerm) {
+							rollUpBroaderTerms($broaderTerm, $vocabType, $localBroaderTerms);
+						}
 					}
-					else
+					
+					else if (!isset($gVOCAB_RESOLVER_RESULTS[$vocabType][$rawvalue])) // 
 					{
-						$vocabUri = resolveVocabByLabel($resolvingService, $rawvalue);
-					}
-					if(array_key_exists($vocabUri, $gVOCAB_RESOLVER_RESULTS))
-					{
-						$resolvedName = $gVOCAB_RESOLVER_RESULTS[$vocabUri]['resolvedName'];
-						$rawvalue = $gVOCAB_RESOLVER_RESULTS[$vocabUri]['notation'];
-						// sometimes it's not resolving... so set it to null
-						$vocabUri = $gVOCAB_RESOLVER_RESULTS[$vocabUri]['vocabUri'];
-						populateBroaderTerms( $gVOCAB_RESOLVER_RESULTS[$vocabUri]['broaderTerm'], $resolvingService, $vocabType, &$localBroaderTerms);
-					}
-					else if($vocabUri != 'null')
-					{
-						$uri = $resolvingService.$resourceUrlComp.$vocabUri;
-						$header = get_headers($uri);
-
-						//var_dump($header);
-
-						if($header[0]=='HTTP/1.1 200 OK')
+						// If its a Field of Research Code and numeric, just append the value to determine URI (naive assumption, but save one service call)
+						if(is_numeric($rawvalue) && $vocabType=='anzsrc-for')
 						{
-							$sissVocResponse = file_get_contents($uri);
-							$data = json_decode($sissVocResponse);
-							if(isset($data->{'result'}->{'primaryTopic'}->{'broader'}->{'_about'}))
-							{
-								$broader = $data->{'result'}->{'primaryTopic'}->{'broader'}->{'_about'};
-								populateBroaderTerms($broader, $resolvingService, $vocabType, &$localBroaderTerms);
-							}
-							$resolvedName = $data->{'result'}->{'primaryTopic'}->{'prefLabel'}->{'_value'};
-							$vocabUri = $data->{'result'}->{'primaryTopic'}->{'_about'};
-							$rawvalue = $data->{'result'}->{'primaryTopic'}->{'notation'};
-							$gVOCAB_RESOLVER_RESULTS[$vocabUri] = array('broaderTerm' => $vocabUri, 'resolvingService' => $resolvingService, 'resolvedName' => $resolvedName, 'notation' => $rawvalue, 'vocabType' => $vocabType, 'vocabUri' => $vocabUri);
+							$vocabUri = $uriprefix.$rawvalue;
+							// Hit the vocab service once to try and resolve the vocab according to its URI
+							$resolved_by_label_array = resolveVocabByURI($resolvingService, $vocabUri);
+						}
+						else if ($vocabUri == 'null')
+						{
+							// Hit the vocab service once to try and resolve the vocab according to its label
+							$resolved_by_label_array = resolveVocabByLabel($resolvingService, $rawvalue);
+						}
+						
+						// Vocab service returned a match
+						if (isset($resolved_by_label_array['vocabUri']) && $resolved_by_label_array['vocabUri'] != 'null')
+						{
+								$vocabUri = $resolved_by_label_array['vocabUri'];
+								$gVOCAB_RESOLVER_RESULTS[$vocabType][$vocabUri] = $resolved_by_label_array;
+								$gVOCAB_RESOLVER_RESULTS[$vocabType][$rawvalue] = &$gVOCAB_RESOLVER_RESULTS[$vocabType][$vocabUri];
+								
+								foreach ($gVOCAB_RESOLVER_RESULTS[$vocabType][$vocabUri]['broaderTerms'] AS $broaderTerm) {
+									// Populate these broader terms!
+									populateBroaderTerms($broaderTerm, $resolvingService, $vocabType);
+									
+									// Roll anything broader up into $localBroaderTerms
+									rollUpBroaderTerms($broaderTerm, $vocabType, $localBroaderTerms);
+								}
 						}
 						else
-						{// if not resolvable set $vocabUri to null
-							//$gVOCAB_RESOLVER_RESULTS[$vocabUri] = array('broaderTerm' => $vocabUri, 'resolvingService' => $resolvingService, 'resolvedName' => $rawvalue, 'notation' => $rawvalue, 'vocabType' => $vocabType, 'vocabUri' => 'null');
+						{
+							// No match found, lets instantiate this cached result to null
+							$gVOCAB_RESOLVER_RESULTS[$vocabType][$rawvalue] = array('vocabUri' => null);
 						}
+						unset($resolved_by_label_array);
 					}
 				}
 				$term = " extRif:resolvedValue=\"" . $resolvedName . "\" extRif:vocabUri=\"" . $vocabUri . "\"";
+				
 			}
 			$xml .= "      <$elementName$type$lang$term>$rawvalue</$elementName>\n";
 		}
 		//var_dump($registryObjectKey)
-		//var_dump($vocabBroaderTerms);
+		var_dump($localBroaderTerms);
 		if ($forSOLR)
 		{
 			$xml .= broaderTermsXML('extRif:broaderSubject', $localBroaderTerms);
@@ -1437,83 +1450,178 @@ function getSubjectTypesXML($registryObjectKey, $elementName, $localBroaderTerms
 	return $xml;
 }
 
-
 function resolveVocabByLabel($resolvingService, $rawvalue)
 {
-	global $vocabByLabels;
-	$vocabUri = 'null';
-	if(!array_key_exists($rawvalue, $vocabByLabels))
+	$resolved_vocab = array('vocabUri' => 'null');
+	
+	$resourcePrefLabelComp = 'concept.json?anylabel=';
+	$uri = $resolvingService.$resourcePrefLabelComp.urlencode($rawvalue);
+	$header = get_headers($uri);
+	if($header[0]=='HTTP/1.1 200 OK')
 	{
-		$resourcePrefLabelComp = 'concept.json?prefLabel=';
-		$uri = $resolvingService.$resourcePrefLabelComp.urlencode($rawvalue);
-		$header = get_headers($uri);
-		if($header[0]=='HTTP/1.1 200 OK')
+		$data = json_decode(file_get_contents($uri), true);
+
+		if (isset($data['result']['items']))
 		{
-			$sissVocResponse = file_get_contents($uri);
-			$data = json_decode($sissVocResponse);
-			//var_dump($data->{'result'}->{'items'});
-			foreach($data->{'result'}->{'items'} as $item){
-				//echo $item->{'prefLabel'}->{'_value'};
-				if($item->{'prefLabel'}->{'_value'} == $rawvalue){
-					//echo $item->{'_about'};
-					$vocabUri = $item->{'_about'};
-					$vocabByLabels[$rawvalue] = $vocabUri;
-					return $vocabUri;
+		
+			foreach($data['result']['items'] AS $item)
+			{
+				$resolved_vocab = array(
+									'vocabUri' => $item['_about'], 
+									'resolvedLabel' => $item['prefLabel']['_value'],
+									'notation' => $item['notation'],
+									);
+				
+				// This is a string now, not an array??
+				if (isset($item['broader']))
+				{
+					if (is_array($item['broader']))
+					{
+						$resolved_vocab['broaderTerms'] = array();
+						foreach($item['broader'] AS $b)
+						{
+							$resolved_vocab['broaderTerms'][] = $b['_about'];
+						}	
+					}
+					else
+					{
+						$resolved_vocab['broaderTerms'] = array($item['broader']);
+					}
 				}
 			}
+		
 		}
+		
 	}
-	else
-	{
-		return $vocabByLabels[$rawvalue];
-	}
-	$vocabByLabels[$rawvalue] = 'null';
-	return $vocabByLabels[$rawvalue];
+
+	return $resolved_vocab;
 }
 
-function populateBroaderTerms($broaderTerm, $resolvingService, $vocabType, $localBroaderTerms){
-	global $vocabBroaderTerms;
-	$resourceUrlComp = 'resource.json?uri=';
-	if(!array_key_exists($broaderTerm, $vocabBroaderTerms))
+
+function resolveVocabByURI($resolvingService, $rawvalue)
+{
+	$resolved_vocab = array('vocabUri' => 'null');
+	
+	$resourcePrefLabelComp = 'resource.json?uri=';
+	$uri = $resolvingService.$resourcePrefLabelComp.urlencode($rawvalue);
+	$header = get_headers($uri);
+	if($header[0]=='HTTP/1.1 200 OK')
 	{
-		$resourceUrlComp = 'resource.json?uri=';
+		$data = json_decode(file_get_contents($uri), true);
+
+		if (isset($data['result']['primaryTopic']))
+		{
+			$item = $data['result']['primaryTopic'];
+			
+			$resolved_vocab = array(
+								'vocabUri' => $item['_about'], 
+								'resolvedLabel' => $item['prefLabel']['_value'],
+								'notation' => $item['notation'],
+								);
+			
+			// This is a string now, not an array??
+			if (isset($item['broader']))
+			{
+				if (is_array($item['broader']))
+				{
+					$resolved_vocab['broaderTerms'] = array();
+					foreach($item['broader'] AS $b)
+					{
+						$resolved_vocab['broaderTerms'][] = $b['_about'];
+					}	
+				}
+				else
+				{
+					$resolved_vocab['broaderTerms'] = array($item['broader']);
+				}
+			}
+		
+		}
+		
+	}
+	return $resolved_vocab;
+}
+
+
+function populateBroaderTerms($broaderTerm, $resolvingService, $vocabType)
+{
+	global $gVOCAB_RESOLVER_RESULTS;
+	$resourceUrlComp = 'allBroader.json?uri=';
+	if(!array_key_exists($broaderTerm, $gVOCAB_RESOLVER_RESULTS[$vocabType]))
+	{
+		
 		$uri = $resolvingService.$resourceUrlComp.$broaderTerm;
 		$header = get_headers($uri);
 		if($header[0]=='HTTP/1.1 200 OK')
 		{
-			$sissVocResponse = file_get_contents($uri);
-			$data = json_decode($sissVocResponse);
-			$resolvedName = $data->{'result'}->{'primaryTopic'}->{'prefLabel'}->{'_value'};
-			$notation = $data->{'result'}->{'primaryTopic'}->{'notation'};
-			$vocabUri = $data->{'result'}->{'primaryTopic'}->{'_about'};
-			$vocabBroaderTerms[$broaderTerm] = array('broaderTerm' => $broaderTerm, 'resolvingService' => $resolvingService, 'resolvedName' => $resolvedName, 'notation' => $notation, 'vocabType' => $vocabType, 'vocabUri' => $vocabUri);
-			if(isset($data->{'result'}->{'primaryTopic'}->{'broader'}->{'_about'})){
-				$broader = $data->{'result'}->{'primaryTopic'}->{'broader'}->{'_about'};
-			}else{
-				$broader = false;
+			$data = json_decode(file_get_contents($uri), true);
+			
+			if (isset($data['result']['items']))
+			{
+				foreach($data['result']['items'] AS $item)
+				{
+					// Populate global array
+					$vocabUri = $item['_about'];
+					$gVOCAB_RESOLVER_RESULTS[$vocabType][$vocabUri] = array();
+					$gVOCAB_RESOLVER_RESULTS[$vocabType][$vocabUri]['resolvedName'] = $item['prefLabel']['_value'];
+					$gVOCAB_RESOLVER_RESULTS[$vocabType][$vocabUri]['notation'] = $item['notation'];
+					$gVOCAB_RESOLVER_RESULTS[$vocabType][$vocabUri]['vocabUri'] = $vocabUri;
+					
+					// If there are broader terms listed, add their URIs to the broaderTerms for this item
+					if (isset($item['broader']))
+					{
+						$gVOCAB_RESOLVER_RESULTS[$vocabType][$vocabUri]['broaderTerms'] = array();
+						foreach ($item['broader'] AS $brd)
+						{
+							$gVOCAB_RESOLVER_RESULTS[$vocabType][$vocabUri]['broaderTerms'][] = $brd['_about'];
+						}
+					}
+				}
 			}
+		
+		}
+		else
+		{
+			// Nullify this vocab item
+			$gVOCAB_RESOLVER_RESULTS[$vocabType][$broaderTerm] = array("vocabUri" => 'null');
+		}
+	}
+}
 
-		    if($broader)
-		    {
-				populateBroaderTerms($broader, $resolvingService, $vocabType, &$localBroaderTerms);
-				//if(array_key_exists($broader, $vocabBroaderTerms)) $localBroaderTerms[$broader] = $vocabBroaderTerms[$broader];
+function rollUpBroaderTerms($targetTerm, $vocabType, &$localBroaderTerms)
+{
+	foreach ($gVOCAB_RESOLVER_RESULTS[$vocabType][$targetTerm]['broaderTerms'] AS $broaderTerm)
+	{
+		// Add the broader term to our localBroaderTerms array
+		if (isset($gVOCAB_RESOLVER_RESULTS[$vocabType][$broaderTerm]))
+		{
+			$localBroaderTerms[$broaderTerm] = $gVOCAB_RESOLVER_RESULTS[$vocabType][$broaderTerm];
+		} 
+		else 
+		{
+			echo "Error...rolling up subjects through an unfinished tree...";	
+		}
+		
+		// Recurse into this subject's broader terms again if there are any
+		if (isset($gVOCAB_RESOLVER_RESULTS[$vocabType][$broaderTerm]['broaderTerms']))
+		{
+			foreach ($gVOCAB_RESOLVER_RESULTS[$vocabType][$broaderTerm] AS $furtherBroaderTerms)
+			{
+				rollUpBroaderTerms($targetTerm, $vocabType, &$localBroaderTerms);
 			}
 		}
 	}
-	//if(!array_key_exists($broaderTerm, $vocabBroaderTerms)) $localBroaderTerms[$broaderTerm] = $vocabBroaderTerms[$broaderTerm];
 }
 
 function broaderTermsXML($elementName, $localBroaderTerms)
 {
-	global $vocabBroaderTerms;
 	$xml = "";
-	foreach( $vocabBroaderTerms as $term )
+	foreach( $localBroaderTerms as $term )
 	{
 		$type = ' type="'.$term['vocabType'].'"';
 		$eTerm = " extRif:resolvedValue=\"" . $term['resolvedName'] . "\" extRif:vocabUri=\"" . $term['vocabUri'] . "\"";
 		$xml .= "      <$elementName$type$eTerm>".$term['notation']."</$elementName>\n";
 	}
-	$vocabBroaderTerms = array();
 	return $xml;
 }
 
