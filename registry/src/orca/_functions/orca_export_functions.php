@@ -61,8 +61,7 @@ function getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR = false, $inclu
 {
 	// go ahead and rebuild by hand (fallback)
 	$xml = '';
-	$localBroaderTerms = array();
-
+	
 	$registryObject = getRegistryObject($registryObjectKey);
 
 	
@@ -241,11 +240,9 @@ function getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR = false, $inclu
 			$internalxml .= getRelatedObjectTypesXML($registryObjectKey, $dataSource, $registryObjectClass,'relatedObject', $forSOLR);
 		}
 
-	bench(6);
 		// subject
 		// -------------------------------------------------------------
-		$internalxml .= getSubjectTypesXML($registryObjectKey, 'subject', $localBroaderTerms, $forSOLR);
-	echo "get subjects " . bench(6) . PHP_EOL;
+		$internalxml .= getSubjectTypesXML($registryObjectKey, 'subject', $forSOLR);
 
 		// description
 		// -------------------------------------------------------------
@@ -1340,11 +1337,10 @@ function getRelationsXML($relation_id, $forSOLR = false)
 }
 
 
-function getSubjectTypesXML($registryObjectKey, $elementName, $localBroaderTerms, $forSOLR=false)
+function getSubjectTypesXML($registryObjectKey, $elementName, $forSOLR=false)
 {
 	global $gVOCAB_RESOLVER_SERVICE;
 	global $gVOCAB_RESOLVER_RESULTS;
-	global $vocabBroaderTerms;
 	$xml = '';
 	$elementName = esc($elementName);
 	$list = getSubjects($registryObjectKey);
@@ -1390,14 +1386,16 @@ function getSubjectTypesXML($registryObjectKey, $elementName, $localBroaderTerms
 						$resolvedName = $gVOCAB_RESOLVER_RESULTS[$vocabType][$rawvalue]['resolvedLabel'];
 						$rawvalue = $gVOCAB_RESOLVER_RESULTS[$vocabType][$rawvalue]['notation'];
 						$vocabUri = $gVOCAB_RESOLVER_RESULTS[$vocabType][$rawvalue]['vocabUri'];
-						
+			
 						// Fill up our localBroaderTerms array
+						$localBroaderTerms[$vocabUri] = $gVOCAB_RESOLVER_RESULTS[$vocabType][$vocabUri];
+ 						$localBroaderTerms[$vocabUri]['vocabType'] = $vocabType;
 						foreach ($gVOCAB_RESOLVER_RESULTS[$vocabType][$vocabUri]['broaderTerms'] AS $broaderTerm) {
 							rollUpBroaderTerms($broaderTerm, $vocabType, $localBroaderTerms);
 						}
 					}
 					
-					else if (!isset($gVOCAB_RESOLVER_RESULTS[$vocabType][$rawvalue])) // 
+					else if (!isset($gVOCAB_RESOLVER_RESULTS[$vocabType][$rawvalue]))
 					{
 						// If its a Field of Research Code and numeric, just append the value to determine URI (naive assumption, but save one service call)
 						if(is_numeric($rawvalue) && $vocabType=='anzsrc-for')
@@ -1419,12 +1417,19 @@ function getSubjectTypesXML($registryObjectKey, $elementName, $localBroaderTerms
 								$gVOCAB_RESOLVER_RESULTS[$vocabType][$vocabUri] = $resolved_by_label_array;
 								$gVOCAB_RESOLVER_RESULTS[$vocabType][$rawvalue] = &$gVOCAB_RESOLVER_RESULTS[$vocabType][$vocabUri];
 								
-								foreach ($gVOCAB_RESOLVER_RESULTS[$vocabType][$vocabUri]['broaderTerms'] AS $broaderTerm) {
+								if (isset($gVOCAB_RESOLVER_RESULTS[$vocabType][$vocabUri]['broaderTerms'])) {
 									// Populate these broader terms!
-									populateBroaderTerms($broaderTerm, $resolvingService, $vocabType);
+									populateBroaderTerms($vocabUri, $resolvingService, $vocabType);
 									
 									// Roll anything broader up into $localBroaderTerms
-									rollUpBroaderTerms($broaderTerm, $vocabType, $localBroaderTerms);
+									$localBroaderTerms[$vocabUri] = $gVOCAB_RESOLVER_RESULTS[$vocabType][$vocabUri];
+ 									$localBroaderTerms[$vocabUri]['vocabType'] = $vocabType;
+ 									foreach ($gVOCAB_RESOLVER_RESULTS[$vocabType][$vocabUri]['broaderTerms'] AS $broaderTerm)
+									{
+ 										// Roll anything broader up into $localBroaderTerms
+										rollUpBroaderTerms($broaderTerm, $vocabType, $localBroaderTerms);
+									}
+									
 								}
 						}
 						else
@@ -1475,12 +1480,20 @@ function resolveVocabByLabel($resolvingService, $rawvalue)
 				// This is a string now, not an array??
 				if (isset($item['broader']))
 				{
+					
 					if (is_array($item['broader']))
 					{
 						$resolved_vocab['broaderTerms'] = array();
-						foreach($item['broader'] AS $b)
+						foreach($item['broader'] AS $k => $b)
 						{
-							$resolved_vocab['broaderTerms'][] = $b['_about'];
+							if (is_array($b))
+							{
+								$resolved_vocab['broaderTerms'][] = $b['_about'];
+							}
+							else if ($k == "_about") 
+							{
+								$resolved_vocab['broaderTerms'][] = $b;
+							}
 						}	
 					}
 					else
@@ -1525,9 +1538,16 @@ function resolveVocabByURI($resolvingService, $rawvalue)
 				if (is_array($item['broader']))
 				{
 					$resolved_vocab['broaderTerms'] = array();
-					foreach($item['broader'] AS $b)
+					foreach($item['broader'] AS $k => $b)
 					{
-						$resolved_vocab['broaderTerms'][] = $b['_about'];
+						if (is_array($b))
+						{
+							$resolved_vocab['broaderTerms'][] = $b['_about'];
+						}
+						else if ($k == "_about") 
+						{
+							$resolved_vocab['broaderTerms'][] = $b;
+						}
 					}	
 				}
 				else
@@ -1547,7 +1567,7 @@ function populateBroaderTerms($broaderTerm, $resolvingService, $vocabType)
 {
 	global $gVOCAB_RESOLVER_RESULTS;
 	$resourceUrlComp = 'allBroader.json?uri=';
-	if(!array_key_exists($broaderTerm, $gVOCAB_RESOLVER_RESULTS[$vocabType]))
+	if(array_key_exists($broaderTerm, $gVOCAB_RESOLVER_RESULTS[$vocabType]))
 	{
 		
 		$uri = $resolvingService.$resourceUrlComp.$broaderTerm;
@@ -1575,10 +1595,8 @@ function populateBroaderTerms($broaderTerm, $resolvingService, $vocabType)
 						if (is_array($item['broader']))
 						{
 							$gVOCAB_RESOLVER_RESULTS[$vocabType][$vocabUri]['broaderTerms'] = array();
-							foreach($item['broader'] AS $b)
-							{
-								$gVOCAB_RESOLVER_RESULTS[$vocabType][$vocabUri]['broaderTerms'][] = $b['_about'];
-							}	
+							$gVOCAB_RESOLVER_RESULTS[$vocabType][$vocabUri]['broaderTerms'][] = $item['broader']['_about'];
+
 						}
 						else
 						{
@@ -1604,13 +1622,15 @@ function rollUpBroaderTerms($targetTerm, $vocabType, &$localBroaderTerms)
 	{
 		return;
 	}
-	
+	$localBroaderTerms[$targetTerm] = $gVOCAB_RESOLVER_RESULTS[$vocabType][$targetTerm];
+ 	$localBroaderTerms[$targetTerm]['vocabType'] = $vocabType;
 	foreach ($gVOCAB_RESOLVER_RESULTS[$vocabType][$targetTerm]['broaderTerms'] AS $broaderTerm)
 	{
 		// Add the broader term to our localBroaderTerms array
 		if (isset($gVOCAB_RESOLVER_RESULTS[$vocabType][$broaderTerm]))
 		{
 			$localBroaderTerms[$broaderTerm] = $gVOCAB_RESOLVER_RESULTS[$vocabType][$broaderTerm];
+			$localBroaderTerms[$broaderTerm]['vocabType'] = $vocabType;
 		} 
 		else 
 		{
