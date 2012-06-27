@@ -2364,30 +2364,20 @@ function getRelatedObjectCount($registry_object_key)
 		return $resultSet[0]['count'];
 }
 
-function getMinorImpactRelatedObjectCount($registry_object_key)
+function getRelatedObjectSearchBaseScoreAdjustment($registry_object_key)
 {
 	global $gCNN_DBS_ORCA;
-	$strQuery = 'SELECT COUNT(*) AS "count" FROM dba.tbl_related_objects r JOIN dba.tbl_relation_descriptions rd ON r.relation_id = rd.relation_id WHERE r.registry_object_key = $1 AND rd.type IN (\'hasPart\');';
-	$params = array($registry_object_key);
+	
+	$strQuery = 'SELECT * FROM
+		(SELECT COUNT(*) AS "countInboundScore" FROM dba.tbl_related_objects r JOIN dba.tbl_relation_descriptions rd ON r.relation_id = rd.relation_id WHERE r.registry_object_key = $1 AND rd.type <> \'hasPart\') AS a,
+		(SELECT COUNT(*) AS "countOutboundScore" FROM dba.tbl_related_objects r JOIN dba.tbl_relation_descriptions rd ON r.relation_id = rd.relation_id WHERE r.related_registry_object_key = $2 AND rd.type <> \'isPartOf\') AS b';
+	$params = array($registry_object_key,$registry_object_key);
 	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
 
 	if (!isset($resultSet[0]))
 		return 0;
 	else
-		return $resultSet[0]['count'];
-}
-
-function getMinorImpactInboundRelatedObjectCount($registry_object_key)
-{
-	global $gCNN_DBS_ORCA;
-	$strQuery = 'SELECT COUNT(*) AS "count" FROM dba.tbl_related_objects r JOIN dba.tbl_relation_descriptions rd ON r.relation_id = rd.relation_id WHERE r.related_registry_object_key = $1 AND rd.type IN (\'isPartOf\');';
-	$params = array($registry_object_key);
-	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
-
-	if (!isset($resultSet[0]))
-		return 0;
-	else
-		return $resultSet[0]['count'];
+		return ((int)$resultSet[0]['countInboundScore']*eBOOST_RELATED_OBJECT_ADJUSTMENT) + ((int)$resultSet[0]['countOutboundScore']*eBOOST_INCOMING_RELATED_OBJECT_ADJUSTMENT);
 }
 
 function getIncomingRelatedObjectCount($registry_object_key)

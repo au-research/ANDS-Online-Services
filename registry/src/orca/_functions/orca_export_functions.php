@@ -3199,8 +3199,10 @@ function checkRightsText($value)
 
 function getSearchBaseScore($registry_object_key)
 {
-	$baseScore = eBOOST_DEFAULT_BASE;
-
+	
+	$baseScore = eBOOST_DEFAULT_BASE + getRelatedObjectSearchBaseScoreAdjustment($registry_object_key);
+	return $baseScore;
+	/* performance enhancement...
 	// number of related objects:
 	$number_of_related_objects = (int) getRelatedObjectCount($registry_object_key);
 	$number_of_related_objects -= (int) getMinorImpactRelatedObjectCount($registry_object_key); //remove close relationships ("hasPart")
@@ -3210,8 +3212,7 @@ function getSearchBaseScore($registry_object_key)
 	$number_of_related_objects = getIncomingRelatedObjectCount($registry_object_key);
 	$number_of_related_objects -= (int) getMinorImpactInboundRelatedObjectCount($registry_object_key); //remove close relationships ("isPartOf")
 	$baseScore += eBOOST_INCOMING_RELATED_OBJECT_ADJUSTMENT * (int) $number_of_related_objects;
-
-	return $baseScore;
+	*/
 
 }
 
