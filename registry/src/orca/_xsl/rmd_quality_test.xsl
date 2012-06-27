@@ -568,13 +568,13 @@
             </xsl:when>
         </xsl:choose>
         <xsl:choose>
-            <xsl:when test="string-length(.) &gt; 4000">
+            <xsl:when test="string-length(.) &gt; 12000">
                 <xsl:choose>
 				    <xsl:when test="$output = 'script'">
-               			 <xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_value","Description Value must be less than 4000 characters.");</xsl:text>
+               			 <xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_value","Description Value must be less than 12000 characters.");</xsl:text>
 				    </xsl:when>
 				    <xsl:otherwise>
-						<span class="error">Description must be less than 4000 characters.</span>
+						<span class="error">Description must be less than 12000 characters.</span>
 				    </xsl:otherwise>
 		    	</xsl:choose>
             </xsl:when>
@@ -1429,13 +1429,13 @@
     </xsl:template>
         
     <xsl:template match="ro:rights/ro:rightsStatement">
-        <xsl:if test="string-length(.) &gt; 4000">
+        <xsl:if test="string-length(.) &gt; 12000">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_value","Rights Statement must be less than 4000 characters.");</xsl:text>
+            		<xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_value","Rights Statement must be less than 12000 characters.");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
-					<span class="error">Rights Statement must be less than 4000 characters.</span>
+					<span class="error">Rights Statement must be less than 12000 characters.</span>
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>
@@ -1452,13 +1452,13 @@
     </xsl:template>
     
     <xsl:template match="ro:rights/ro:licence">
-        <xsl:if test="string-length(.) &gt; 4000">
+        <xsl:if test="string-length(.) &gt; 12000">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_value","Licence must be less than 4000 characters.");</xsl:text>
+            		<xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_value","Licence must be less than 12000 characters.");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
-					<span class="error">Licence must be less than 4000 characters.</span>
+					<span class="error">Licence must be less than 12000 characters.</span>
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>
@@ -1475,13 +1475,13 @@
     </xsl:template>
     
     <xsl:template match="ro:rights/ro:accessRights">
-        <xsl:if test="string-length(.) &gt; 4000">
+        <xsl:if test="string-length(.) &gt; 12000">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_value","Access Rights must be less than 4000 characters.");</xsl:text>
+            		<xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_value","Access Rights must be less than 12000 characters.");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
-					<span class="error">Access Rights must be less than 4000 characters.</span>
+					<span class="error">Access Rights must be less than 12000 characters.</span>
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>
