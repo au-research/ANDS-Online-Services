@@ -229,14 +229,22 @@
 		 		<xsl:if test="ro:location/ro:address/ro:electronic/@type='email'">
 					<p><xsl:apply-templates select="ro:location/ro:address/ro:electronic/@type"/></p>	
 				</xsl:if>
-			 	<xsl:if test="ro:location/ro:address/ro:physical/@type='telephoneNumber'">
-					<p>Ph:<xsl:apply-templates select="ro:location/ro:address/ro:physical"/></p>	
-				</xsl:if>	
-				<xsl:if test="ro:location/ro:address/ro:physical/@type='faxNumber'">
-					<p>Fax:<xsl:apply-templates select="ro:location/ro:address/ro:physical"/></p>	
-				</xsl:if>			
+		
 		 		<xsl:if test="ro:location/ro:address/ro:physical">
-					<p><xsl:apply-templates select="ro:location/ro:address/ro:physical"/></p>	
+					<p>
+					<xsl:if test="ro:location/ro:address/ro:physical/ro:addressPart/@type='telephoneNumber'">
+						<xsl:for-each select="ro:location/ro:address/ro:physical/ro:addressPart[@type='telephoneNumber']">
+							<p>Ph:	<xsl:value-of select="."></xsl:value-of></p>
+						</xsl:for-each>
+					</xsl:if>
+						
+					<xsl:if test="ro:location/ro:address/ro:physical/ro:addressPart/@type='faxNumber'">
+						<xsl:for-each select="ro:location/ro:address/ro:physical/ro:addressPart[@type='faxNumber']">
+							<p>Fax:<xsl:value-of select="."></xsl:value-of></p>
+						</xsl:for-each>
+					</xsl:if>	
+					
+					<xsl:apply-templates select="ro:location/ro:address/ro:physical"/></p>	
 				</xsl:if>				
 	 		</xsl:if>			
 			                        
@@ -729,7 +737,8 @@ Handle:
 						<xsl:apply-templates select="./ro:addressPart[@type='country']"/>		
 						<xsl:apply-templates select="./ro:addressPart[@type='locationdescriptor']"/>
 						<xsl:apply-templates select="./ro:addressPart[@type='deliverypointidentifier']"/>	
-						<xsl:apply-templates select="./ro:addressPart[not(@type='organizationname' or @type='fullname' or @type='buildingorpropertyname' or @type='flatorunitnumber' or @type='floororlevelnumber' or @type='lotnumber' or @type='housenumber' or @type='streetname' or @type='postaldeliverynumberprefix' or @type='postaldeliverynumbervalue' or @type='postaldeliverynumbersuffix' or @type='addressline' or @type='suburborplaceorlocality' or @type='stateorterritory' or @type='country' or @type='locationdescriptor' or @type='deliverypointidentifier' or @type='postcode')]"/>	
+												
+						<xsl:apply-templates select="./ro:addressPart[not(@type='organizationname' or @type='fullname' or @type='buildingorpropertyname' or @type='flatorunitnumber' or @type='floororlevelnumber' or @type='lotnumber' or @type='housenumber' or @type='streetname' or @type='postaldeliverynumberprefix' or @type='postaldeliverynumbervalue' or @type='postaldeliverynumbersuffix' or @type='addressline' or @type='suburborplaceorlocality' or @type='stateorterritory' or @type='country' or @type='locationdescriptor' or @type='deliverypointidentifier' or @type='postcode' or @type='telephoneNumber' or @type='faxNumber' )]"/>	
 						<!--xsl:apply-templates select="./ro:addressPart[not(@type='addressLine') or @type!='deliveryPointIdentifier' or @type='locationDescriptor' or @type='country' or @type='stateOrTerritory' or @type='suburbOrPlaceOrLocality' or @type='suburbOrPlaceOrLocality' or @type='addressLine' or @type='postalDeliveryNumberSuffix])"/-->
 				</xsl:when>
 				<xsl:otherwise>
