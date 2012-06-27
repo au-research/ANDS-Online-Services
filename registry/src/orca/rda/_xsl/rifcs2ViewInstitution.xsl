@@ -230,8 +230,11 @@
 					<p><xsl:apply-templates select="ro:location/ro:address/ro:electronic/@type"/></p>	
 				</xsl:if>
 			 	<xsl:if test="ro:location/ro:address/ro:physical/@type='telephoneNumber'">
-					<p><xsl:apply-templates select="ro:location/ro:address/ro:physical"/></p>	
-				</xsl:if>				
+					<p>Ph:<xsl:apply-templates select="ro:location/ro:address/ro:physical"/></p>	
+				</xsl:if>	
+				<xsl:if test="ro:location/ro:address/ro:physical/@type='faxNumber'">
+					<p>Fax:<xsl:apply-templates select="ro:location/ro:address/ro:physical"/></p>	
+				</xsl:if>			
 		 		<xsl:if test="ro:location/ro:address/ro:physical">
 					<p><xsl:apply-templates select="ro:location/ro:address/ro:physical"/></p>	
 				</xsl:if>				
