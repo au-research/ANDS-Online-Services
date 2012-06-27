@@ -663,6 +663,7 @@ label.mandatory:before {
 	margin-top:10px;
 	border:none; 
 	width:100%; 
+	border-collapse:collapse;
 }
 
 
