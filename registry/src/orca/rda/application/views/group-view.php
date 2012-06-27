@@ -23,7 +23,7 @@ limitations under the License.
 
 	if(count($theCollections)>0)
 	{
-		echo '<div class="facet-content"><ul class="moreGroups">';	
+		echo '<div class="facet-content"><ul class="moreGroups2">';	
 		foreach($theCollections as $collection)
 		{
 			echo '<li class="limit"><a href="'.base_url().'view/?key='.urlencode($collection->{'key'}).'">'.$collection->{'display_title'}.'</a></li>';
