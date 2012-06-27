@@ -1159,19 +1159,21 @@ function saveAndPreview() {
 
 	if(contributorPage!='')
 	{
-		$(".rda_preview").attr("href",$("#baseURL").val() + 'rda/view/group/?ds_key='+$('#object_mandatoryInformation_dataSource').val()+'&group=' + $('#object_mandatoryInformation_key').val() +'&groupName='+contributorPage);
+		$(".rda_preview").attr("href",$("#baseRDAURL").val() + '/view/group/?ds_key='+$('#object_mandatoryInformation_dataSource').val()+'&group=' + $('#object_mandatoryInformation_key').val() +'&groupName='+contributorPage);
 	}else {
-		$(".rda_preview").attr("href",$("#baseURL").val() + 'rda/preview?ds='+$('#object_mandatoryInformation_dataSource').val()+'&key=' + $('#object_mandatoryInformation_key').val());
+		$(".rda_preview").attr("href",$("#baseRDAURL").val() + '/preview?ds='+$('#object_mandatoryInformation_dataSource').val()+'&key=' + $('#object_mandatoryInformation_key').val());
 	}
 
 	$("#errors_preview").hide();	
 
+	/* don't understand why this is duplicated here?? 
 	if(contributorPage!='')
 	{
-		$(".rda_preview").attr("href",$("#baseURL").val() + 'rda/view/group/?ds_key='+$('#object_mandatoryInformation_dataSource').val()+'&group=' + $('#object_mandatoryInformation_key').val() +'&groupName='+contributorPage);
+		$(".rda_preview").attr("href",$("#baseRDAURL").val() + '/view/group/?ds_key='+$('#object_mandatoryInformation_dataSource').val()+'&group=' + $('#object_mandatoryInformation_key').val() +'&groupName='+contributorPage);
 	}else{
-		$(".rda_preview").attr("href",$("#baseURL").val() + 'rda/preview?ds='+$('#object_mandatoryInformation_dataSource').val()+'&key=' + $('#object_mandatoryInformation_key').val());
+		$(".rda_preview").attr("href",$("#baseRDAURL").val() + '/preview?ds='+$('#object_mandatoryInformation_dataSource').val()+'&key=' + $('#object_mandatoryInformation_key').val());
 	}
+	*/
 	
 	if (userMode != 'readOnly')
 	{

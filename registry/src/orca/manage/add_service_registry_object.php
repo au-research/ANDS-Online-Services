@@ -93,9 +93,20 @@ require '../../_includes/header.php';
 	quagmire_reset();
 </script>
 
+<input type="hidden" id="baseRDAURL" value="<?php print $default_protocol . "://" . $host . "/" . $rda_root; ?>" />
 <input type="hidden" id="baseURL" value="<?php print eAPP_ROOT . "orca/" ?>" />
 <input type="hidden" id="elementSourceURL" value="<?php print eAPP_ROOT . "orca/fetch_element.php" ?>" />
 <input type="hidden" id="elementCategory" value="service" />
+
+<?php 
+	$contributorPage=getGroupPage($contributorGroup['object_group']);
+	if($contributorPage[0]['registry_object_key']==$keyValue)
+	{
+		echo '<input type="hidden" id="contributor_page" value="'.$contributorPage[0]['object_group'].'" name="contributor_page"/>';
+	}else{
+		echo '<input type="hidden" id="contributor_page" value="" name="contributor_page"/>';
+	}
+?>
 
 <div id="mmr_datasource_alert" style="display:none;">
 	<div id="mmr_datasource_alert_title" class="clearfix">
