@@ -296,14 +296,18 @@ function addDraftSolrIndexForDatasource($dataSourceKey)
 			$xml .= "      <extRif:reverseLinks>".$reverseLinks."</extRif:reverseLinks>\n";
 			
 			
-			// Get registry date modified			
+			// Get registry date modified
 			if (!($registryDateModified =  $allKeys[$i]['date_modified']))
 			{
 					$registryDateModified = time(); // default to now
 			}
-			$xml .= "      <extRif:registryDateModified>".$registryDateModified."</extRif:registryDateModified>\n";
-
-
+			else 
+			{
+				$registryDateModified = strtotime($registryDateModified); // parse the SQL timestamp
+			}
+			// SOLR requires the date in ISO8601, restricted to zulu time (why, I don't know...)
+			$xml .= "      <extRif:registryDateModified>".gmdate('Y-m-d\TH:i:s\Z',$registryDateModified)."</extRif:registryDateModified>\n";
+			
 
 			// displayTitle
 			// -------------------------------------------------------------

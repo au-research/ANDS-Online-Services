@@ -123,7 +123,7 @@ else if($task ==  'getRegistryTasks')
 		include('_processes/get_registry_tasks.php');
 	}
 
-if($task ==  'flag_draft' || $task ==  'recover_record' || $task == 'validate' || $task == 'save')
+if($task ==  'flag_draft' || $task ==  'recover_record' || $task == 'validate')
 {
 	//$result = addDraftToSolrIndex($keyValue);
 	syncDraftKey($keyValue, $dataSourceValue);
@@ -206,9 +206,9 @@ function saveDraftRegistryObject($rifcs, $objectClass, $dataSource ,$keyValue, $
 
 	if($keyValue != '' && $keyValue != $draft_key)
 	{
-		deleteDraftRegistryObject($dataSource, $keyValue);
-		deleteSetofSolrDrafts($keys, $data_source_key);
-		queueSyncDataSource($data_source_key);
+		//deleteDraftRegistryObject($dataSource, $keyValue);
+		//deleteSetofSolrDrafts($keys, $data_source_key);
+		//queueSyncDataSource($data_source_key);
 	}
 
 }
