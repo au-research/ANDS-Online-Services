@@ -1341,11 +1341,13 @@ function getSubjectTypesXML($registryObjectKey, $elementName, $forSOLR=false)
 {
 	global $gVOCAB_RESOLVER_SERVICE;
 	global $gVOCAB_RESOLVER_RESULTS;
+	$localBroaderTerms = array();
 	$xml = '';
 	$elementName = esc($elementName);
 	$list = getSubjects($registryObjectKey);
 	if( $list )
 	{
+
 		foreach( $list as $element )
 		{
 			$vocabType = esc($element['type']);
@@ -1371,7 +1373,6 @@ function getSubjectTypesXML($registryObjectKey, $elementName, $forSOLR=false)
 				
 				$resolvedName = $rawvalue; // the resolved name (default to the value of the subject)
 				$vocabUri = 'null'; // the URI of the concept (if identified)
-				$localBroaderTerms = array();
 				
 				// Check whether we have a resolver defined for this subject type
 				if(array_key_exists($vocabType, $gVOCAB_RESOLVER_SERVICE))
