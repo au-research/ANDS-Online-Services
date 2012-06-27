@@ -103,6 +103,32 @@ class Search extends CI_Controller {
 			$queryStr = '?q='.$q.'&classFilter='.$classFilter.'&typeFilter='.$typeFilter.'&groupFilter='.$groupFilter.'&subjectFilter='.$subjectFilter.'&licenceFilter='.$licenceFilter;
 			$this->load->model('Rss_channel', 'atom');
 			$result['rssArray'] = $this->atom->getRssArrayForQuery($queryStr);
+			
+			// Prepare a friendly name for the RSS feed if it contains subject search
+			$result['subjectSearchTitleSuffix'] = '';
+			if($subjectFilter!='All')
+			{
+				// treat http://-style subject searches as URI searches
+				if (strpos(rawurldecode($subjectFilter), "http://") !== FALSE)
+				{
+					$resolvedTitles = array();
+					foreach (explode(",", $subjectFilter) AS $uri)
+					{
+						if (strpos($uri,"~") !== FALSE)
+						{
+							$uri = str_replace("~","",$uri);
+						}
+						$resolvedTitles[] = resolveLabelFromVocabTermURI($uri);
+					}
+
+					$result['subjectSearchTitleSuffix'] .= implode(" AND ", $resolvedTitles);
+				}
+				else
+				{
+					$result['subjectSearchTitleSuffix'] .= str_replace(",", " AND ",  $subjectFilter);
+				}
+			}
+			
 			$this->load->view('search/atom', $result);
 
 		}

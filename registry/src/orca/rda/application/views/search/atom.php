@@ -29,10 +29,18 @@ if($group!="All")$filter .= "/group=".$group;
 if($subject!="All")$filter .= "/subject=".$subject;
 if($licence!="All")$filter .= "/licence=".$licence;
 
+$feed_title = "Research Data Australia search results for collections matching " . $_GET['q'];
+$feed_title_suffix = '';
+if ($subjectSearchTitleSuffix) {
+	$feed_title_suffix = " with subject(s): " . $subjectSearchTitleSuffix;
+}
+$feed_title .= $feed_title_suffix;
+
+
 $atom_feed_header = '
 	<feed xmlns="http://www.w3.org/2005/Atom">
   	<id>'.str_replace("&","",str_replace("=","",$rdaInstance.$_SERVER['REQUEST_URI'])).'</id>
-  	<title>Research Data Australia search results for collections matching "'.$_GET['q'].'"</title>
+  	<title>'.$feed_title.'</title>
   	<updated>'.date('Y-m-d',time()). "T" .date('h:s:i', time()).'Z</updated>
   	<link rel="self" href="'.$rdaInstance.rawurlencode($_SERVER['QUERY_STRING']).'" type="application/atom+xml" />
   	<author>
