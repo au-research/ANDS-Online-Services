@@ -62,8 +62,11 @@ function getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR = false, $inclu
 	// go ahead and rebuild by hand (fallback)
 	$xml = '';
 	$localBroaderTerms = array();
-	$registryObject = getRegistryObject($registryObjectKey);
-
+	bench(6);
+		$registryObject = getRegistryObject($registryObjectKey);
+	echo "getRegistryObject() " . bench(6) . PHP_EOL;
+	
+	bench(6);
 	if ($forSOLR)
 	{
 		$dataSourceKey = $registryObject[0]["data_source_key"];
@@ -72,7 +75,9 @@ function getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR = false, $inclu
 		$allow_reverse_internal_links = $dataSource[0]['allow_reverse_internal_links'];
 		$allow_reverse_external_links = $dataSource[0]['allow_reverse_external_links'];
 	}
+	echo "get reverse link status " . bench(6) . PHP_EOL;
 
+	bench(6);
 	if( $registryObject )
 	{
 		// Registry Object
@@ -174,7 +179,9 @@ function getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR = false, $inclu
 
 			$xml .= "    </extRif:extendedMetadata>\n";
 		}
-
+		echo "generate extRif:extendedMetadata: " . bench(6) . PHP_EOL;
+		
+		
 		// Registry Object Class
 		// =====================================================================
 		$registryObjectClass = strtolower($registryObject[0]['registry_object_class']);
@@ -209,7 +216,7 @@ function getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR = false, $inclu
 		// To prevent empty XML elements, we append to blank string and check that it actually
 		// contains data
 		$internalxml = "";
-
+		bench(6);
 		// identifier
 		// -------------------------------------------------------------
 		$internalxml .= getIdentifierTypesXML($registryObjectKey, 'identifier');
@@ -221,7 +228,8 @@ function getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR = false, $inclu
 		// location
 		// -------------------------------------------------------------
 		$internalxml .= getLocationTypesXML($registryObjectKey, 'location', $forSOLR);
-
+	echo "get identifiers, names,locations " . bench(6) . PHP_EOL;
+	bench(6);
 		if($forSOLR && $includeRelated)
 		{
 			// relatedObject
@@ -234,11 +242,13 @@ function getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR = false, $inclu
 			// -------------------------------------------------------------
 			$internalxml .= getRelatedObjectTypesXML($registryObjectKey, $dataSource, $registryObjectClass,'relatedObject', $forSOLR);
 		}
-
+	echo "getRelatedObjectTypes " . bench(6) . PHP_EOL;
+	bench(6);
 		// subject
 		// -------------------------------------------------------------
 		$internalxml .= getSubjectTypesXML($registryObjectKey, 'subject', $localBroaderTerms, $forSOLR);
-
+	echo "get subjects " . bench(6) . PHP_EOL;
+	bench(6);
 		// description
 		// -------------------------------------------------------------
 		$internalxml .= getDescriptionTypesXML($registryObjectKey, 'description', $forSOLR);
@@ -282,6 +292,7 @@ function getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR = false, $inclu
 		}
 
 		$xml .= "  </registryObject>\n";
+		echo "get the rest... " . bench(6) . PHP_EOL;
 	}
 
 	return $xml;
