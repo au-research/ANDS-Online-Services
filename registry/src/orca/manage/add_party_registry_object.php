@@ -103,7 +103,7 @@ require '../../_includes/header.php';
 <input type="hidden" id="baseURL" value="<?php print eAPP_ROOT . "orca/" ?>" />
 <input type="hidden" id="elementSourceURL" value="<?php print eAPP_ROOT . "orca/fetch_element.php" ?>" />
 <input type="hidden" id="elementCategory" value="party" />
-<input type="hidden" id="contributor_page" value="" />
+<input type="hidden" id="contributor_page" value="" name="contributor_page"/>
 <?php 
 	$contributorPage=getGroupPage($contributorGroup['object_group']);
 	if($contributorPage[0]['registry_object_key']==$keyValue)

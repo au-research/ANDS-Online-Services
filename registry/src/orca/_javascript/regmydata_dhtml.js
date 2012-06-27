@@ -1155,7 +1155,7 @@ function saveAndPreview() {
 	}
 
 	var key = $('#object_mandatoryInformation_key').val();
-	var contributorPage = document.getElementById("contributor_page").value;
+	var contributorPage = $("#contributor_page").val();
 
 	if(contributorPage!='')
 	{
