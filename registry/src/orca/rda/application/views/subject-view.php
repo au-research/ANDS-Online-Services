@@ -25,7 +25,7 @@ limitations under the License.
 
 if($output>0)
 {
-	echo '<div class="facet-content"><ul class="moreSubjects">';
+	echo '<div class="facet-content"><ul class="moreSubjects2">';
 	for($i=0;$i<$output;$i=$i+2)
 	{		
 		if($subjects[$i+1]>0) echo '<li class="limit"><a href="'.base_url().'search#!/tab=All/group='.urlencode($group).'/subject='.$subjects[$i].'">'.$subjects[$i].'('.number_format($subjects[$i+1]).')</a></li>';
