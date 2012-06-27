@@ -1,11 +1,11 @@
 <?php
 if (!defined('eTWITTER_ENABLED')) { define ('eTWITTER_ENABLED', true); }
-global $rda_root, $default_protocol, $host;
+global $rda_root, $default_protocol, $host, $twitter_feed_rss;
 $twitter_feed_rss = $default_protocol . "://" . $host . "/" . $rda_root . "/search/rss/?q=*:*&forTwitter=true&subscriptionType=rss";
 
 function task_weekly_twitter_digest($task)
 {
-	
+	$message = '';
 	if (!eTWITTER_ENABLED)
 	{
 		throw new Exception("Twitter is not enabled in maintenance/_tasks/weekly_twitter_digest.php");
@@ -22,10 +22,10 @@ function task_weekly_twitter_digest($task)
 	foreach ($tweets AS $tweet)
 	{
 		$batch_count++;
-		addNewTask('MAKE_TWEET', "Queued Tweet from task #" . $task['task_id'], $tweet, '', null, ($batch_count/$size_per_batch) * $delay_per_batch . " minutes");
+		addNewTask('MAKE_TWEET', "Queued Tweet from task #" . $task['task_id'], $tweet, '', null, floor(($batch_count-1)/$size_per_batch) * $delay_per_batch . " minutes");
 	}
 	
-	addNewTask($task['method_name'], "Requeued weekly RDA tweets from #" . $task['task_id'], '', '', null, "7 days");
+	addNewTask($task['method'], "Requeued weekly RDA tweets from #" . $task['task_id'], '', '', null, "7 days");
 	return $message;
 }
 
