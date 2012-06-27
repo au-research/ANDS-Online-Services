@@ -1625,12 +1625,14 @@ function populateBroaderTerms($broaderTerm, $resolvingService, $vocabType)
 function rollUpBroaderTerms($targetTerm, $vocabType, &$localBroaderTerms)
 {
 	global $gVOCAB_RESOLVER_RESULTS;
+	$localBroaderTerms[$targetTerm] = $gVOCAB_RESOLVER_RESULTS[$vocabType][$targetTerm];
+ 	$localBroaderTerms[$targetTerm]['vocabType'] = $vocabType;
+	
 	if (!isset($gVOCAB_RESOLVER_RESULTS[$vocabType][$targetTerm]['broaderTerms']))
 	{
 		return;
 	}
-	$localBroaderTerms[$targetTerm] = $gVOCAB_RESOLVER_RESULTS[$vocabType][$targetTerm];
- 	$localBroaderTerms[$targetTerm]['vocabType'] = $vocabType;
+	
 	foreach ($gVOCAB_RESOLVER_RESULTS[$vocabType][$targetTerm]['broaderTerms'] AS $broaderTerm)
 	{
 		// Add the broader term to our localBroaderTerms array
@@ -1649,7 +1651,7 @@ function rollUpBroaderTerms($targetTerm, $vocabType, &$localBroaderTerms)
 		{
 			foreach ($gVOCAB_RESOLVER_RESULTS[$vocabType][$broaderTerm] AS $furtherBroaderTerms)
 			{
-				rollUpBroaderTerms($targetTerm, $vocabType, &$localBroaderTerms);
+				rollUpBroaderTerms($targetTerm, $vocabType, $localBroaderTerms);
 			}
 		}
 	}
