@@ -1414,8 +1414,11 @@ function getSubjectTypesXML($registryObjectKey, $elementName, $forSOLR=false)
 						if (isset($resolved_by_label_array['vocabUri']) && $resolved_by_label_array['vocabUri'] != 'null')
 						{
 								$vocabUri = $resolved_by_label_array['vocabUri'];
+
 								$gVOCAB_RESOLVER_RESULTS[$vocabType][$vocabUri] = $resolved_by_label_array;
 								$gVOCAB_RESOLVER_RESULTS[$vocabType][$rawvalue] = &$gVOCAB_RESOLVER_RESULTS[$vocabType][$vocabUri];
+								$resolvedName = $gVOCAB_RESOLVER_RESULTS[$vocabType][$vocabUri]['resolvedLabel'];
+								$rawvalue = $gVOCAB_RESOLVER_RESULTS[$vocabType][$vocabUri]['notation'];
 								
 								if (isset($gVOCAB_RESOLVER_RESULTS[$vocabType][$vocabUri]['broaderTerms'])) {
 									// Populate these broader terms!
