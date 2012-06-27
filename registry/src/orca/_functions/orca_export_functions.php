@@ -1390,8 +1390,12 @@ function getSubjectTypesXML($registryObjectKey, $elementName, $forSOLR=false)
 						// Fill up our localBroaderTerms array
 						$localBroaderTerms[$vocabUri] = $gVOCAB_RESOLVER_RESULTS[$vocabType][$vocabUri];
  						$localBroaderTerms[$vocabUri]['vocabType'] = $vocabType;
-						foreach ($gVOCAB_RESOLVER_RESULTS[$vocabType][$vocabUri]['broaderTerms'] AS $broaderTerm) {
-							rollUpBroaderTerms($broaderTerm, $vocabType, $localBroaderTerms);
+						
+						if(isset($gVOCAB_RESOLVER_RESULTS[$vocabType][$vocabUri]['broaderTerms']))
+						{
+							foreach ($gVOCAB_RESOLVER_RESULTS[$vocabType][$vocabUri]['broaderTerms'] AS $broaderTerm) {
+								rollUpBroaderTerms($broaderTerm, $vocabType, $localBroaderTerms);
+							}
 						}
 					}
 					
@@ -1449,7 +1453,7 @@ function getSubjectTypesXML($registryObjectKey, $elementName, $forSOLR=false)
 			$xml .= "      <$elementName$type$lang$term>$rawvalue</$elementName>\n";
 		}
 		//var_dump($registryObjectKey)
-		var_dump($localBroaderTerms);
+		//var_dump($localBroaderTerms);
 		if ($forSOLR)
 		{
 			$xml .= broaderTermsXML('extRif:broaderSubject', $localBroaderTerms);
