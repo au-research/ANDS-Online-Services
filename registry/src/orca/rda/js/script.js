@@ -2087,12 +2087,14 @@ $(document).ready(function(){
 			data:{params:params},
 	        success:function(data){
 				$('#anzsrc-toplevelfacet').html(data);
-				$('#anzsrc-toplevelfacet li:gt(9)').hide();
-				$('#anzsrc-toplevelfacet ul').append('<a href="javascript:;" id="show_all_toplevel">Show all...</a>');
-				$('#show_all_toplevel').click(function(){
-					$('#anzsrc-toplevelfacet li').slideDown();
-					$(this).remove();
-				});
+				if($('#anzsrc-toplevelfacet li').length > 1){
+					$('#anzsrc-toplevelfacet li:gt(9)').hide();
+					$('#anzsrc-toplevelfacet ul').append('<a href="javascript:;" id="show_all_toplevel">Show all...</a>');
+					$('#show_all_toplevel').click(function(){
+						$('#anzsrc-toplevelfacet li').slideDown();
+						$(this).remove();
+					});
+				}
 	        },
 	        error:function(msg){}
 		});

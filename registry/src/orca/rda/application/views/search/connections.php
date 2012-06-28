@@ -150,7 +150,6 @@ if(isset($groups)&&$groups['numfound']>0){
 		echo '<li><a href="'.base_url().$rda_link.'" title="'.findRelationship($groups['json']->{'response'}->{'docs'}[$i]->{'key'},$groups['relatedKey'],$groups['relationship']).' '.$autoLinkTitle.'">';
 		echo $groups['json']->{'response'}->{'docs'}[$i]->{'display_title'};
 		echo '</a>'.findRelationshipDescription($groups['json']->{'response'}->{'docs'}[$i]->{'key'},$groups['relatedKey'],$groups['relationship_description']).$autoLink.$logostr.'</li>';
-
 	}
 	echo '</ul>';
 	if($seeMore)

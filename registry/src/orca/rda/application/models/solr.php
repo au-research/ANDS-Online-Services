@@ -256,7 +256,7 @@ limitations under the License.
     	$bigTree .='<div id="vocab-browser">';
 			$bigTree .='<ul>';
 				$bigTree .='<li id="rootNode">';
-				$bigTree .='<a href="#">'.$subject_category.'</a>';
+				$bigTree .='<a href="#">'.$categories[$subject_category]['display'].'</a>';
 				$bigTree .='<ul>';
 		    	foreach($azTree as $alpha=>$array){
 		    		if($array['totalSOLR']>0){

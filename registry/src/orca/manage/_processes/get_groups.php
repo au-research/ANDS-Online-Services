@@ -26,7 +26,7 @@ if( $rawResults )
 	{
 		if( (userIsDataSourceRecordOwner($dataSource['record_owner']) || userIsORCA_ADMIN()) )
 		{
-			$dataSources[] = $dataSource["data_source_key"];
+			$dataSources[] = esc($dataSource["data_source_key"]);
 		}		
 	}
 }
