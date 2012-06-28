@@ -2096,6 +2096,8 @@ $(document).ready(function(){
 	        },
 	        error:function(msg){}
 		});
+
+
 	}
 
 	function SubjectBrowseLoad(view){
@@ -2110,6 +2112,29 @@ $(document).ready(function(){
 				$('#anzsrc-subject-facet-result').html(data);
 				initTree();
 				bindTree(view);
+				$.widget( "custom.vocabcomplete", $.ui.autocomplete, {
+					_renderMenu: function( ul, items ) {
+						var self = this,
+							currentVocab = "";
+						$.each( items, function( index, item ) {
+							if ( item.vocab != currentVocab ) {
+								ul.append( "<li class='ui-autocomplete-category'>" + item.vocab + "</li>" );
+								currentVocab = item.vocab;
+							}
+							self._renderItem( ul, item );
+						});
+					}
+				});
+				$("#subject_search_filter" ).vocabcomplete( {
+					source: base_url+"browse/vocabAutoComplete/",
+					minLength: 2,
+					delimiter:/(,|;)\s*/,
+					select: function( event, ui ) {
+						$('#search-vocab-field').val(ui.item.label);
+						vocabLoadConcept(ui.item.uri, ui.item.vocab);
+						vocabLoadTree(ui.item.uri, ui.item.vocab);
+					}
+				});
 	        },
 	        error:function(msg){}
 		});

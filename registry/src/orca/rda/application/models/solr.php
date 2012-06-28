@@ -326,8 +326,6 @@ limitations under the License.
 			$subjects[$s->value]=0;
 		}
 		
-		//
-
 		
 		foreach($subjects as $key=>$count){
 			$solrCount = $this->getSOLRCountForSubjects($params, array($key));
