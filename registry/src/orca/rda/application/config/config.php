@@ -71,7 +71,7 @@ $config['subjects_categories'] = array(
 		
 	'psychit' 
 		=> array(
-			'display' => 'Powerhouse Museum Object Name Thesaurus',
+			'display' => 'Thesaurus of psychological index terms',
 			'list' => array('Psychit', 'psychit')
 			),
 	'anzsrc' 
