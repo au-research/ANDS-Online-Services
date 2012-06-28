@@ -54,10 +54,14 @@ function displayFacet($facet_name, $facetFilter, $json, $ro_class){
 	$object_type = $json->{'facet_counts'}->{'facet_fields'}->{$facet_name};
 
 	//print the others
+	
+	$order['licence_group'] = array("Open Licence", "Non-Commercial Licence", "Non-Derivative Licence", "Restrictive Licence", "No Licence", "Unknown");
+	
+	$result = array();
 	for($i=0;$i< sizeof($object_type)-1 ;$i=$i+2){
 		if($object_type[$i+1]>0){
 			if($object_type[$i]!=$facetFilter){
-				echo '<li class="limit">
+				$result[$object_type[$i]] = '<li class="limit">
 					<a href="javascript:void(0);"
 						title="'.$object_type[$i].' ('.number_format($object_type[$i+1]).''.' results)"
 						class="'.$class.'" id="'.$object_type[$i].'">'.
@@ -66,6 +70,19 @@ function displayFacet($facet_name, $facetFilter, $json, $ro_class){
 			}
 		}
 	}
+
+
+	if($facet_name=='licence_group'){
+		foreach($order[$facet_name] as $o){
+			if(isset($result[$o])) echo $result[$o];
+		}
+	}else{
+		foreach($result as $r){
+			echo $r;
+		}
+	}
+
+	
 	echo '</ul>';
 	echo '</div>';
 	echo '</div>';
