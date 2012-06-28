@@ -101,6 +101,7 @@ ul.sf-menu li li li.sfHover ul {
 
 .sf-menu li a{
     color:white;
+    font-size:18px;
 }
 
 .sf-menu li a:focus{
