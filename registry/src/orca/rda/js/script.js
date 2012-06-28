@@ -2131,8 +2131,10 @@ $(document).ready(function(){
 					delimiter:/(,|;)\s*/,
 					select: function( event, ui ) {
 						$('#search-vocab-field').val(ui.item.label);
-						vocabLoadConcept(ui.item.uri, ui.item.vocab);
-						vocabLoadTree(ui.item.uri, ui.item.vocab);
+						subjectFilter = ui.item.uri;
+						changeHashTo(formatSearch(search_term,1,classFilter));
+						//vocabLoadConcept(ui.item.uri, ui.item.vocab);
+						//vocabLoadTree(ui.item.uri, ui.item.vocab);
 					}
 				});
 	        },
