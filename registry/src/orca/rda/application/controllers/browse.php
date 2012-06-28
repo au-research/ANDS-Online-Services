@@ -87,7 +87,7 @@ class Browse extends CI_Controller {
 			// exact matches to the top
 			$q = '(+subject_vocab_uri:("'.$uri.'")^2000 OR +broader_subject_vocab_uri:("'.$uri.'"))';
 		}
-		$q.=' +class:collection';
+		$q.=' +class:collection +status:PUBLISHED';
 		$this->load->model('solr');
 		$fields = array(
 			'q'=>$q,'version'=>'2.2','start'=>$start,'rows'=>$row,'indent'=>'on', 'wt'=>'json',
