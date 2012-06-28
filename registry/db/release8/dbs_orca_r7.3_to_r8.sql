@@ -25,3 +25,23 @@ GRANT DELETE ON TABLE dba.tbl_background_tasks TO webuser;
 --IMPORTANT
 GRANT SELECT, USAGE ON TABLE tbl_background_tasks_task_id_seq TO webuser;
 
+CREATE OR REPLACE FUNCTION dba.udf_delete_data_source(_data_source_key character varying)
+  RETURNS void AS
+$BODY$
+
+DELETE FROM dba.tbl_data_source_logs
+WHERE data_source_key = $1;
+
+DELETE FROM dba.tbl_harvest_requests
+WHERE data_source_key = $1;
+
+DELETE FROM dba.tbl_institution_pages
+WHERE authoritive_data_source_key = $1;
+
+DELETE FROM dba.tbl_data_sources
+WHERE data_source_key = $1 AND data_source_key <> 'SYSTEM';
+$BODY$
+  LANGUAGE sql VOLATILE
+  COST 100;
+ALTER FUNCTION dba.udf_delete_data_source(character varying)
+  OWNER TO dba; 

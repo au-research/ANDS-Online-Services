@@ -167,12 +167,14 @@ if( strtoupper(getPostedValue('action')) == "SAVE" )
 							addDraftToSolrIndex($key,addDraftToSolrIndex);
 							
 							/* now send an email to services to let them know that the record has been ceated */
-							
-							send_email(
-							eCONTACT_EMAIL,
-							"Automatically generated Contributor record has been created for data source".$dataSourceKey,
-							$key . " registry object has been created and is currently in draft status\n\n"
-							);							
+						//if(getRegistryObject($thePage[0]['registry_object_key'], $overridePermissions = true))
+						//	{
+							//	$mailBody = '<a href="http://'.$host.$orca_root.'/view.php?key='.$thePage[0]['registry_object_key'].'">'.$thePage[0]['registry_object_key'].'</a>';
+						//	}else{
+
+							$mailBody	= 'http://'.$host.'/'.$orca_root.'/manage/add_party_registry_object.php?readOnly&data_source='.$dataSourceKey.'&key='.urlencode($key);
+						//	}							
+							send_email(eCONTACT_EMAIL,$key . " contributor page has been generated under data source ".$dataSourceKey,$mailBody);							
 						}	
 					}
 					$theInstitutionalPage = insertInstitutionalPage($group['object_group'],$key,$dataSourceKey);
