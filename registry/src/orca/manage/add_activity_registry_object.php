@@ -94,7 +94,7 @@ require '../../_includes/header.php';
 	quagmire_reset();
 </script>
 
-<input type="hidden" id="baseRDAURL" value="<?php print $default_protocol . "://" . $host . "/" . $rda_root; ?>" />
+<input type="hidden" id="baseRDAURL" value="<?php print "http://" . $host . "/" . $rda_root; ?>" />
 <input type="hidden" id="baseURL" value="<?php print eAPP_ROOT . "orca/" ?>" />
 <input type="hidden" id="elementSourceURL" value="<?php print eAPP_ROOT . "orca/fetch_element.php" ?>" />
 <input type="hidden" id="elementCategory" value="activity" />
