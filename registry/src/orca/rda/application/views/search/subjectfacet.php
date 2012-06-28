@@ -1,5 +1,5 @@
-<div id="subject_toolbar" class="toolbar">
-	<input id="subject_search_filter"/>
+<div id="subject_toolbar" class="toolbar" style="border-bottom:1px solid #ccc">
+	<input id="subject_search_filter" size="35"/>
 	<select id="subject_category">
 		<option value="anzsrcfor" <?php if($view=='anzsrcfor') echo 'selected="selected"';?>>ANZSRC-FOR</option>
 		<?php

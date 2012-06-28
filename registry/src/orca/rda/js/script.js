@@ -145,6 +145,7 @@ $(document).ready(function(){
 				"select_limit": 1
 			}
 		});
+
 	}
 
 	function bindTree(purpose){
@@ -171,6 +172,8 @@ $(document).ready(function(){
 		  	}
   			return data.inst.toggle_node(data.rslt.obj);
 		});
+
+		
 
 		$("#vocab-browser").bind("open_node.jstree", function(event, data) {
   			// data.inst is the tree object, and data.rslt.obj is the node
@@ -213,9 +216,11 @@ $(document).ready(function(){
 				        success:function(data){
 							$(thisTree).html(data);
 							var tree = jQuery.jstree._reference("#vocab-browser");
-							tree.refresh();
 							var vocabBrowser = $('#vocab-browser');
   							$('li.hide', vocabBrowser).hide();
+  							//
+  							
+  							tree.refresh();
 				        },
 				        error:function(msg){}
 					});
@@ -1575,21 +1580,7 @@ $(document).ready(function(){
 			doNormalSearch();
 		}
 
-		/*PAGINATION*/
-		$('.next').live('click', function(){
-			var current_page = parseInt(page);
-			var next_page =  current_page + 1;
-			changeHashTo(formatSearch(search_term, next_page, classFilter));
-			page = next_page;
-		});
 		
-		$('.prev').live('click', function(){
-			var current_page = parseInt(page);
-			var next_page =  current_page - 1;
-			var term = '#'+search_term+'/p'+next_page;
-			changeHashTo(formatSearch(search_term, next_page, classFilter));
-			page = next_page;
-		});
 		
 		$('.gotoPage').live('click', function(){
 			var id = $(this).attr('id');
@@ -2059,7 +2050,7 @@ $(document).ready(function(){
 			content:{
 				text: $('#anzsrc-subject-facet-result'),
 				title: {
-					text: 'Browse More Subjects'
+					text: 'Subjects'
 				}
 			},
 			position: {
@@ -2089,11 +2080,12 @@ $(document).ready(function(){
 				$('#anzsrc-toplevelfacet').html(data);
 				if($('#anzsrc-toplevelfacet li').length > 1){
 					$('#anzsrc-toplevelfacet li:gt(9)').hide();
-					$('#anzsrc-toplevelfacet ul').append('<a href="javascript:;" id="show_all_toplevel">Show all...</a>');
+					$('#anzsrc-toplevelfacet ul').append('<a href="javascript:;" id="show_all_toplevel">More...</a>');
 					$('#show_all_toplevel').click(function(){
 						$('#anzsrc-toplevelfacet li').slideDown();
 						$(this).remove();
 					});
+					$('#anzsrc-toplevelfacet li').tipsy({live:true, gravity:'s'});
 				}
 	        },
 	        error:function(msg){}
@@ -2137,6 +2129,24 @@ $(document).ready(function(){
 						changeHashTo(formatSearch(search_term,1,classFilter));
 						//vocabLoadConcept(ui.item.uri, ui.item.vocab);
 						//vocabLoadTree(ui.item.uri, ui.item.vocab);
+					}
+				});
+				var watermark = 'Search for a subject';
+				$('#subject_search_filter').val(watermark);
+				$('#subject_search_filter').css('color', '#888');
+				if($('#subject_search_filter').val()=='watermark'){
+					$('#subject_search_filter').css('color', '#ddd');
+				}
+				$('#subject_search_filter').live('click', function(){
+					if($(this).val()==watermark){
+						$(this).val('');
+						$(this).css('color', 'black');
+					}
+				});
+				$('#subject_search_filter').live('blur', function(){
+					if($(this).val()==''){
+						$(this).val(watermark);
+						$(this).css('color', '#888');
 					}
 				});
 	        },

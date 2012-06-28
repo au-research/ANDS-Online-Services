@@ -702,7 +702,7 @@ class Search extends CI_Controller {
 		uasort($toplevelfacets['topConcepts'], 'cmpTopLevelFacet');//cmp function is in rda_display_helper
 		echo '<ul class="more">';
 		foreach($toplevelfacets['topConcepts'] as $f){
-			if($f['collectionNum']>0) echo '<li class="limit">'.'<a href="javascript:;" id="'.$f['uri'].'" class="subjectFilter">'.$f['prefLabel'].' ('.$f['collectionNum'].')</a>'.'</li>';
+			if($f['collectionNum']>0) echo '<li class="limit">'.'<a href="javascript:;" id="'.$f['uri'].'" class="subjectFilter" title="'.$f['prefLabel'].' ('.$f['collectionNum'].' results)">'.$f['prefLabel'].' ('.$f['collectionNum'].')</a>'.'</li>';
 		}
 		echo '</ul>';
 	}

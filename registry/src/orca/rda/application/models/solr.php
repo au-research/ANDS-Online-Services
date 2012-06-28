@@ -241,9 +241,11 @@ limitations under the License.
 			}
 		}
 		
-
+		$hasAny = false;
 		foreach($azTree as $alpha=>$array){
-			$azTree[$alpha]['totalSOLR'] = $this->getSOLRCountForSubjects($params, $azTree[$alpha]['subjects']);
+			$totalSOLR = $this->getSOLRCountForSubjects($params, $azTree[$alpha]['subjects']);
+			$azTree[$alpha]['totalSOLR'] = $totalSOLR;
+			if($totalSOLR>0) $hasAny = true;
 			//echo $alpha.'>'.$azTree[$alpha]['totalDB'].'>'.$azTree[$alpha]['totalSOLR'].'<br/>';
 			if(!is_numeric($azTree[$alpha]['totalSOLR'])){
 				var_dump($azTree[$alpha]['totalSOLR']);
@@ -265,6 +267,7 @@ limitations under the License.
 		    			$bigTree.='</li>';
 		    		}
 		    	}
+		    	if(!$hasAny) $bigTree .='<li><a class="disabled-link">No related subjects</a></li>';
 		    	$bigTree.='</ul>';
 		    	$bigTree.='</li>';
 	    	$bigTree.='</ul>';
