@@ -263,11 +263,14 @@ $(document).ready(function() {
   					sum[i] = miniSum;
   				});
   				//console.log('sum='+sum);
-  				
-  				
+  				var fullColorArray = ['#F06533','#F06533','#F2CE3B', '#6DA539', '#4491AB', '#4491AB'];
+  				var colorArray = [];
+  				$.each(colNumber, function(i, item){
+  					colorArray.push(fullColorArray[item]);
+  				});
   				
 
-  				//console.log(chartData);
+  				//console.log(colorArray);
     			// Create and draw the visualization.
     			var barsVisualization = new google.visualization.BarChart(document.getElementById(status+'_qaview'));
     			//var formatter = new google.visualization.BarFormat({showValue: true});
@@ -284,7 +287,7 @@ $(document).ready(function() {
 		        	width:1000, height:optionHeight,
 		        	vAxis: {title:optionTitle},
 		        	isStacked:true,
-		        	colors:['#F06533','#F2CE3B', '#6DA539', '#4491AB'],
+		        	colors:colorArray,
 		        	animation:{
     					duration: 1000,
     					easing: 'out'
