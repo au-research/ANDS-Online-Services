@@ -284,7 +284,7 @@ $(document).ready(function() {
 		        	width:1000, height:optionHeight,
 		        	vAxis: {title:optionTitle},
 		        	isStacked:true,
-		        	colors:['#89CEDE', '#F06533','#F2CE3B', '#6DA539', '#4491AB', '#FFD700'],
+		        	colors:['#F06533','#F2CE3B', '#6DA539', '#4491AB'],
 		        	animation:{
     					duration: 1000,
     					easing: 'out'

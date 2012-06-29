@@ -308,7 +308,7 @@ a.icon {
 a.smallIcon{
     color: #484848;
     text-decoration: none;
-    text-shadow: 0 1px 0 #fff;
+
     font: bold 12px Helvetica, Arial, sans-serif;
     line-height: 20px;
     height: 20px;
@@ -328,14 +328,22 @@ a.smallIcon{
     -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
     -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
     box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
-    -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=1, Direction=90, Color='#ffffff')";
-    filter: progid:DXImageTransform.Microsoft.Shadow(Strength=1, Direction=90, Color='#ffffff');
-    -webkit-transition: border-color .218s;
-    -moz-transition: border .218s;
-    -o-transition: border-color .218s;
-    transition: border-color .218s;
+    
 
     text-align:center;
+}
+
+a.smallLink{
+    color: #484848;
+    text-decoration: none;
+
+    font: bold 12px Helvetica, Arial, sans-serif;
+    line-height: 20px;
+    height: 20px;
+    display: block;
+    float: left;
+    
+    padding:4px 2px 2px 5px;
 }
 
 
