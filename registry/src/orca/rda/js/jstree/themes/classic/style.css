@@ -14,6 +14,7 @@
 
 .jstree-classic .jstree-hovered { background:#e7f4f9; border:1px solid #e7f4f9; padding:0 2px 0 1px; }
 .jstree-classic .jstree-clicked { background:navy; border:1px solid navy; padding:0 2px 0 1px; color:white; }
+.jstree-classic .disabled-link { color:#888;font-style:italic;}
 .jstree-classic a .jstree-icon { background-position:-56px -19px; }
 .jstree-classic .jstree-open > a .jstree-icon { background-position:-56px -36px; }
 .jstree-classic a.jstree-loading .jstree-icon { background:url("throbber.gif") center center no-repeat !important; }

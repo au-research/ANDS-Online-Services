@@ -137,7 +137,7 @@ $(document).ready(function(){
 			"core" : { "initially_open" : [ "rootNode" ] },
    
              "themes" : {
-				"theme" : "default",
+				"theme" : "classic",
 				"dots" : true,
 				"icons" : false
 			},

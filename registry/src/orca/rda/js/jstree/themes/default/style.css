@@ -3,6 +3,7 @@
  * Supported features: dots/no-dots, icons/no-icons, focused, loading
  * Supported plugins: ui (hovered, clicked), checkbox, contextmenu, search
  */
+ 
 .jstree-default li, 
 .jstree-default ins { background-image:url("d.png"); background-repeat:no-repeat; background-color:transparent; }
 .jstree-default li { background-position:-90px 0; background-repeat:repeat-y; }
