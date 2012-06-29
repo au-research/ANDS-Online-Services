@@ -534,8 +534,7 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 
 				updateRegistryObjectHash($registryObjectKey, $hash);
 				// this rule might change...
-				if($override_qa  && $manuallyPublish == 't')
-				{
+				if($override_qa){
 					setRegistryObjectManuallyAssessedFlag($registryObjectKey);
 				}
 				// Update the registry object SLUG here
