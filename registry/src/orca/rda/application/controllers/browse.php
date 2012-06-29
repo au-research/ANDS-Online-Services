@@ -103,18 +103,54 @@ class Browse extends CI_Controller {
 		$this->load->view('browse/minisearch', $data);
 	}
 
-	function vocabAutoComplete(){
+	function vocabAutoComplete($where='anzsrcfor'){
 		$term = strtolower($_GET["term"]);
 		$this->load->model('vocabularies', 'vmodel');
-		$data['result']=$this->vmodel->labelContain($this->config->item('vocab_resolver_service'), $term);
-
-		$json_result = array();
-		foreach($data['result'] as $key=>$vocab_result){
-			foreach($vocab_result as $item){
-				array_push($json_result, array('label'=>$item['prefLabel'], 'uri'=>$item['uri'], 'vocab'=>$key));
+		if($where=='anzsrcfor'){
+			$data['result']=$this->vmodel->labelContain($this->config->item('vocab_resolver_service'), $term);
+			$json_result = array();
+			foreach($data['result'] as $key=>$vocab_result){
+				foreach($vocab_result as $item){
+					array_push($json_result, array('label'=>$item['prefLabel'], 'uri'=>$item['uri'], 'vocab'=>$key));
+				}
 			}
+			echo array_to_json($json_result);
+		}else{
+			$data['result'] = $this->vocabKeywords($where, $term);
+			$result = array();
+			$categories = $this->config->item('subjects_categories');
+			foreach($data['result'] as $r){
+				array_push($result, array('label'=>$r, 'vocab'=>$categories[$where]['display']));
+			}
+			echo array_to_json($result);
 		}
-		echo array_to_json($json_result);
+		
+	}
+
+	function vocabKeywords($subject_category, $term){
+		//default categories
+    	$categories = $this->config->item('subjects_categories');
+    	$set = $categories[$subject_category]['list'];
+
+    	//add the restrictions on these subjects
+    	$restrictions = '(';
+    	foreach($set as $s){
+    		$restrictions .= "type = '$s' ";
+    		if($s!=end($set)) $restrictions .= ' OR ';
+    	}
+    	$restrictions .= ')';
+    	//echo $restrictions;
+    	$restrictions .= " AND value LIKE '%$term%'";
+
+    	$this->load->database();
+    	$query = 'select distinct(value), count(value) from dba.tbl_subjects where '.$restrictions.' group by value';
+    	//echo $query;
+		$all_subjects = $this->db->query($query);
+		$result = array();
+		foreach($all_subjects->result() as $s){
+			array_push($result, $s->value);
+		}
+		return $result;
 	}
 
 	function getBroader($selected){

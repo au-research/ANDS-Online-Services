@@ -444,7 +444,7 @@ class Vocabularies extends CI_Model {
 		$result = array();
 		foreach($vocabs as $key=>$vocab){
 			$vocab_uri = $vocab['resolvingService'];
-			$resolve_uri = $vocab_uri.'concept.json?labelcontains='.$term;
+			$resolve_uri = $vocab_uri.'concept.json?anycontains='.$term;
 			//echo $resolve_uri;
 			$ch = curl_init();
 	    	//set the url, number of POST vars, POST data
