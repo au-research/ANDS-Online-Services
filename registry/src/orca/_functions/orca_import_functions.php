@@ -551,6 +551,14 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 				{
 					$recordsCached++;
 				}
+				
+				if(isContributorPage($registryObjectKey)&&$status=='PUBLISHED')
+				{
+					$mailSubject = $list_title.' contributor page was published on '.date("d-m-Y h:m:s");						
+					$mailBody = eHTTP_APP_ROOT.'orca/view.php?key='.urlencode($registryObjectKey);	
+					send_email(eCONTACT_EMAIL,$mailSubject,$mailBody);				
+		
+				}
 			}
 		}
 		else

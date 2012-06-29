@@ -191,8 +191,15 @@ switch(getQueryValue('action'))
 				syncKey(rawurldecode($key), $data_source_key);
 				$response['responsecode'] = "1";
 				echo json_encode($response);
+				if(isContributorPage(rawurldecode($key)))
+				{
+				$theObject = getRegistryObject(rawurldecode($key), $overridePermissions = true);
+				$mailSubject = $theObject[0]['list_title'].' contributor page was published on '.date("d-m-Y h:m:s");						
+				$mailBody = eHTTP_APP_ROOT.'orca/view.php?key='.urlencode($key);	
+				send_email(eCONTACT_EMAIL,$mailSubject,$mailBody);	
+				}	
 			}
-			
+					
 		}
 				//syncDraftKeys($keys, $data_source_key);
 		die();
