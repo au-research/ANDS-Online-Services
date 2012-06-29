@@ -234,13 +234,13 @@
 					<p>
 					<xsl:if test="ro:location/ro:address/ro:physical/ro:addressPart/@type='telephoneNumber'">
 						<xsl:for-each select="ro:location/ro:address/ro:physical/ro:addressPart[@type='telephoneNumber']">
-							<p>Ph:	<xsl:value-of select="."></xsl:value-of></p>
+							<p>Ph:	<xsl:value-of select="."  disable-output-escaping="yes"></xsl:value-of></p>
 						</xsl:for-each>
 					</xsl:if>
 						
 					<xsl:if test="ro:location/ro:address/ro:physical/ro:addressPart/@type='faxNumber'">
 						<xsl:for-each select="ro:location/ro:address/ro:physical/ro:addressPart[@type='faxNumber']">
-							<p>Fax:<xsl:value-of select="."></xsl:value-of></p>
+							<p>Fax:<xsl:value-of select="."  disable-output-escaping="yes"></xsl:value-of></p>
 						</xsl:for-each>
 					</xsl:if>	
 					

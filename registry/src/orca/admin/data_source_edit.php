@@ -125,6 +125,7 @@ if( strtoupper(getPostedValue('action')) == "SAVE" )
 	{
 		foreach($groups as $group)
 		{
+			$alreadyMapped[$group['object_group']] = getGroupPage($group['object_group']);
 			$theResult = deleteInstitutionalPage($group['object_group'],$dataSourceKey);
 		
 		}	
@@ -160,20 +161,16 @@ if( strtoupper(getPostedValue('action')) == "SAVE" )
 
 							$wrappedRifcs = wrapRegistryObjects($rifcs, false);
 			 				$registryObjects = new DOMDocument();
-			  				$registryObjects->loadXML($wrappedRifcs);				
-							//$theInstitutionPage = importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMessage, $created_who=SYSTEM, $status=PUBLISHED, $record_owner=SYSTEM, $xPath=NULL, $override_qa=false	);	
+			  				$registryObjects->loadXML($wrappedRifcs);
+			  								
 							$theInstitutionPage =  insertDraftRegistryObject('SYSTEM', $key, 'Party', $group['object_group'], 'group', $group['object_group'], $dataSourceKey, date('Y-m-d H:i:s'), date('Y-m-d H:i:s') , $wrappedRifcs, '', 0, 0, 'DRAFT');
-							runQualityLevelCheckForDraftRegistryObject($key,$dataSourceKey);
-							addDraftToSolrIndex($key,addDraftToSolrIndex);
 							
-							/* now send an email to services to let them know that the record has been ceated */
-						//if(getRegistryObject($thePage[0]['registry_object_key'], $overridePermissions = true))
-						//	{
-							//	$mailBody = '<a href="http://'.$host.$orca_root.'/view.php?key='.$thePage[0]['registry_object_key'].'">'.$thePage[0]['registry_object_key'].'</a>';
-						//	}else{
-
+							runQualityLevelCheckForDraftRegistryObject($key,$dataSourceKey);
+							
+							addDraftToSolrIndex($key,addDraftToSolrIndex);
+														
 							$mailBody	= 'http://'.$host.'/'.$orca_root.'/manage/add_party_registry_object.php?readOnly&data_source='.$dataSourceKey.'&key='.urlencode($key);
-						//	}							
+						
 							send_email(eCONTACT_EMAIL,$key . " contributor page has been generated under data source ".$dataSourceKey,$mailBody);							
 						}	
 					}
@@ -182,38 +179,45 @@ if( strtoupper(getPostedValue('action')) == "SAVE" )
 			}			
 
 			break;
-		case 2:			
+		case 2:	
+
 			for($i=1;$i<=count($groups);$i++)
 			{
 				$group = getPostedValue('group_'.$i);
+	
 				$institutional_key = getPostedValue('institution_key_'.$i);
 				if($institutional_key!='')
 				{
 					//lets check we have a valid party group key for this datas source with the correct object group
 					$theInstitution = getRegistryObject($institutional_key,$overridePermissions = true);
 					$theContributorDraft =  getDraftRegistryObject($institutional_key, $dataSourceKey);
-					print("<pre>");
-					print_r($theContributorDraft);
-					print("</pre>");
-				//	echo $theInstitution[0]['data_source_key']."== ".$dataSourceKey."<br />";
-				//	echo $theInstitution[0]['object_group']." == ".$group."<br />";
-				//	echo $theInstitution[0]['registry_object_class']. " == Party<br />";
-				//	echo $theInstitution[0]['type']." == group<br />";
+
 					if($theInstitution[0]['data_source_key']==$dataSourceKey&&$theInstitution[0]['object_group']==$group&&$theInstitution[0]['registry_object_class']=='Party'&&$theInstitution[0]['type']=='group')
 					{
-						//echo "The record is valid so add it to the db <br />";
+						//echo "The record is valid so add it to the db";
 						$theInstitutionalPage = insertInstitutionalPage($group,$institutional_key,$dataSourceKey);
+						$mailSubject = $theInstitution[0]['list_title'].' has been mapped as a contributor page for group '.$group.' under data source '.$dataSourceKey;						
+						$mailBody = 'http://'.$host.'/'.$orca_root.'/view.php?key='.urlencode($institutional_key);			
 					}
 					elseif ($theContributorDraft[0]['registry_object_data_source']==$dataSourceKey&&$theContributorDraft[0]['registry_object_group']==$group&&$theContributorDraft[0]['class']=='Party'&&$theContributorDraft[0]['registry_object_type']=='group')
 					{
-						$theInstitutionalPage = insertInstitutionalPage($group,$institutional_key,$dataSourceKey);				
-					
+						//echo "The record is valid so add it to the db";
+						$theInstitutionalPage = insertInstitutionalPage($group,$institutional_key,$dataSourceKey);	
+						$mailSubject = $theContributorDraft[0]['registry_object_title'].' has been mapped as a contributor page for group '.$group.' under data source '.$dataSourceKey;									
+						$mailBody	= 'http://'.$host.'/'.$orca_root.'/manage/add_party_registry_object.php?readOnly&data_source='.$dataSourceKey.'&key='.urlencode($institutional_key);				
 					}
 					else
 					{
+						//echo "The record is not valid so show error";					
 						$institutionPagesClass = gERROR_CLASS;
 						$errorMessages .= "You have provided an invalid key for your Institutional page.<br />The assigned registry object must be a group party originating from this datasource and object group.<br />";
+					}	
+
+					if($alreadyMapped[$group][0]['registry_object_key']!=$institutional_key&&$alreadyMapped[$group][0]['registry_object_key']!='')
+					{
+						send_email(eCONTACT_EMAIL,$mailSubject,$mailBody);	
 					}
+					
 				}
 				unset($_POST['group_'.$i]);
 				unset($_POST['institution_key_'.$i]);
