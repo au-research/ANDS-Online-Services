@@ -61,9 +61,14 @@ foreach ($rssArray AS $item)
 		echo "				<title>Multiple Collections were added to Research Data Australia by  " . $item['key'] . " on ".$item['updated_date']."</title>\n";
 		echo "				<description>" . $item['key'] . " added more than 5 records to Research Data Australia on ".$item['updated_date'].". These records have been rolled into a single digest entry for convenience.{$NL}Please navigate to
 		&lt;a href='".$rdaInstance . "search#!/q=" . $q ."/group=".urlencode($item['key'])."/p=1/tab=" . $class . $filter."/resultSort=date_modified%20desc'>	search results&lt;/a> to see the full listing of the records in Research Data Australia {$NL}";
+			$count=1;
 			foreach ($item['updated_items'] AS $i)
 			{
-				echo "&lt;a href='".$rdaInstance . "view/?key=" . rawurlencode($i['key']) ."'>&lt;b>".$i['list_title']."&lt;/b>&lt;/a>${NL}";
+				if($count<4)
+				{
+					echo "&lt;a href='".$rdaInstance . "view/?key=" . rawurlencode($i['key']) ."'>&lt;b>".$i['list_title']."&lt;/b>&lt;/a>${NL}";
+				}
+				$count++;
 			}
 		echo "				</description>\n";
 		echo "				<link>" . $rdaInstance . "search#!/q=" . $q ."/group=".urlencode($item['key'])."/p=1/tab=" . $class . $filter."/resultSort=date_modified%20desc</link>\n";
