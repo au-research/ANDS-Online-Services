@@ -533,7 +533,11 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 				$hash = generateRegistryObjectHashForKey($registryObjectKey);
 
 				updateRegistryObjectHash($registryObjectKey, $hash);
-
+				// this rule might change...
+				if($override_qa  && $manuallyPublish == 't')
+				{
+					setRegistryObjectManuallyAssessedFlag($registryObjectKey);
+				}
 				// Update the registry object SLUG here
 				// if the currentUrlSlug already exists (from above), means we are replacing
 				// a record that already existed, so we re-use its slug...otherwise we generate
