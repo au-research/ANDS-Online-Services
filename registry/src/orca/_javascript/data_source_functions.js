@@ -15,6 +15,12 @@ function checkModalId(form){
 function addRelatedObjectAutocomplete(field) {
 
 	field = "#" + field;
+	if(field.indexOf("object_institution_key")>0)
+		{
+			var showDraft="yes";
+		}else{
+			var showDraft="no";
+		}
 	var class_field = field.replace(/object_/,"select_");
 
 	class_field = class_field.replace(/name/,"class");
@@ -41,13 +47,23 @@ function addRelatedObjectAutocomplete(field) {
 		}
 	})
 	.data( "autocomplete" )._renderItem = function( ul, item ) {
-		if(item.desc.indexOf("(PUBLISHED)")>0)
-			{
-		return $( "<li></li>" )
+		if(showDraft=='yes')
+		{
+			return $( "<li></li>" )
 			.data( "item.autocomplete", item )
 			.append( "<a><b>" + item.label + "</b> " + (item.value != item.label ? "(" + item.value + ")" : "") + "<br><i>" + item.desc + "</i></a>" )
 			.appendTo( ul );
-			}
+
+		}	else {
+			if(item.desc.indexOf("(PUBLISHED)")>0)
+				{
+				return $( "<li></li>" )
+				.data( "item.autocomplete", item )
+				.append( "<a><b>" + item.label + "</b> " + (item.value != item.label ? "(" + item.value + ")" : "") + "<br><i>" + item.desc + "</i></a>" )
+				.appendTo( ul );
+				}
+		}
+
 	};
 	$(field).keypress(function(event){
 		if(event.which == 13) event.preventDefault();

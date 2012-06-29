@@ -191,9 +191,10 @@ if( strtoupper(getPostedValue('action')) == "SAVE" )
 				{
 					//lets check we have a valid party group key for this datas source with the correct object group
 					$theInstitution = getRegistryObject($institutional_key,$overridePermissions = true);
-				//	print("<pre>");
-				//	print_r($theInstitution);
-				//	print("</pre>");
+					$theContributorDraft =  getDraftRegistryObject($institutional_key, $dataSourceKey);
+					print("<pre>");
+					print_r($theContributorDraft);
+					print("</pre>");
 				//	echo $theInstitution[0]['data_source_key']."== ".$dataSourceKey."<br />";
 				//	echo $theInstitution[0]['object_group']." == ".$group."<br />";
 				//	echo $theInstitution[0]['registry_object_class']. " == Party<br />";
@@ -202,10 +203,16 @@ if( strtoupper(getPostedValue('action')) == "SAVE" )
 					{
 						//echo "The record is valid so add it to the db <br />";
 						$theInstitutionalPage = insertInstitutionalPage($group,$institutional_key,$dataSourceKey);
-					}else{
-						//echo "The record is not valid<br />";
+					}
+					elseif ($theContributorDraft[0]['registry_object_data_source']==$dataSourceKey&&$theContributorDraft[0]['registry_object_group']==$group&&$theContributorDraft[0]['class']=='Party'&&$theContributorDraft[0]['registry_object_type']=='group')
+					{
+						$theInstitutionalPage = insertInstitutionalPage($group,$institutional_key,$dataSourceKey);				
+					
+					}
+					else
+					{
 						$institutionPagesClass = gERROR_CLASS;
-						$errorMessages .= "You have provided an invalid key for your Institutional page.<br />The assigned registry object must be a PUBLISHED group party originating from this datasource and object group.<br />";
+						$errorMessages .= "You have provided an invalid key for your Institutional page.<br />The assigned registry object must be a group party originating from this datasource and object group.<br />";
 					}
 				}
 				unset($_POST['group_'.$i]);
