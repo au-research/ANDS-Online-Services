@@ -409,7 +409,8 @@ function searchRecords($status){
 							$flagButton,
 							$btnStr,
 							$doc->{'status'},
-							$manually_assessed_flag
+							ucfirst($doc->{'feed_type'}),
+							ucfirst($manually_assessed_flag)
 							)
 				);
 		$jsonData['rows'][] = $entry;
