@@ -455,7 +455,7 @@ $(document).ready(function() {
 			usepager: true,
 			colModel : [
 			{display: 'recordKey', name:'key', width:120, sortable: true, align:'left'},
-                {display: 'Name/Title', name : 'list_title', width : 350, sortable : true, align: 'left'},
+                {display: 'Name/Title', name : 's_list_title', width : 350, sortable : true, align: 'left'},
                 {display: 'Last Modified', name : 'date_modified', width : 150, sortable : true, align: 'left'},
                 {display: 'Class', name : 'class', width : 70, sortable : true, align: 'left'},
                 {display: 'Errors', name : 'error_count', width : 30, sortable : true, align: 'left'},
@@ -523,7 +523,7 @@ $(document).ready(function() {
 					targetKeys.push(id);
 				}
 			});
-			fireZaLaserz(com, targetKeys, hasError);
+			fireZaLaserz(com, targetKeys, hasError, grid);
 		}else if($(grid).attr('selectall')=='yes'){
 			var status = $(grid).attr('status');
 			$.ajax({
@@ -535,7 +535,7 @@ $(document).ready(function() {
 						targetKeys.push(this.key);
 						if(this.error_count!=0) hasError = true;
 					});
-					fireZaLaserz(com, targetKeys, hasError);
+					fireZaLaserz(com, targetKeys, hasError, grid);
 				}
 			});
 		}else{
@@ -546,7 +546,7 @@ $(document).ready(function() {
 		//Reindex all the target Keys
 	}
 
-	function fireZaLaserz(com, targetKeys, hasError){
+	function fireZaLaserz(com, targetKeys, hasError, grid){
 		
 		var numKeys = (targetKeys).length;
 		var dataSourceKey = $('#dataSourceKey').val();
@@ -637,6 +637,10 @@ $(document).ready(function() {
 					reloadData();
 				}
 			});
+			$(grid).attr('selectall', 'no');
+			$('tbody tr', grid).removeClass('trSelected');
+			$('.infoDiv', grid).hide();
+			$('.button[text=Deselect All]', grid).html('<a class="button smaller left">Select All</a>');
 		}
 	}
 
