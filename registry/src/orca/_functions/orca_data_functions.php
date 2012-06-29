@@ -3112,19 +3112,31 @@ function getParentType($licence_type){
 		return $resultSet[0]['parent_term_identifier'];
 }
 
-function getDataSourceStats($data_source_key = '')
+function getDataSourceStats($data_source_key = '', $status = 'All')
 {
 
 	global $gCNN_DBS_ORCA;
 	$resultSet = null;
 	$strQuery = "SELECT data_source_key as ds_key, registry_object_class as ro_class, status, quality_level as qa_level, count(quality_level)
-				FROM dba.tbl_registry_objects where $1 = '' OR data_source_key = $1
+				FROM dba.tbl_registry_objects where ($1 = '' OR data_source_key = $1) AND ($2 = 'All' OR status = $2)
 				GROUP BY data_source_key, registry_object_class, quality_level,status
 				UNION
 				SELECT registry_object_data_source as ds_key, class as ro_class, status, quality_level as qa_level, count(quality_level)
-				FROM dba.tbl_draft_registry_objects  where $1 = '' OR registry_object_data_source = $1
+				FROM dba.tbl_draft_registry_objects  where ($1 = '' OR registry_object_data_source = $1) AND ($2 = 'All' OR status = $2)
 				GROUP BY registry_object_data_source, class, quality_level,status
 				ORDER BY 1,2,3,4";
+	$params = array($data_source_key, $status);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	return $resultSet;
+
+}
+
+function getDataSourceTitle($data_source_key)
+{
+
+	global $gCNN_DBS_ORCA;
+	$resultSet = null;
+	$strQuery = "SELECT title from dba.tbl_data_sources where data_source_key = $1";
 	$params = array($data_source_key);
 	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
 	return $resultSet;

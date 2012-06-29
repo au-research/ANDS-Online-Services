@@ -546,12 +546,84 @@ function tipQA($key, $level){
 }
 
 function getAllStat(){
+	header("Content-type: application/json; charset=UTF-8");
 	global $dataSourceKey;
 	global $status;
-	$stats = getDataSourceStats($dataSourceKey);
+	$result = array();
+	if($dataSourceKey=='ALL_DS_ORCA') $dataSourceKey='';
+	$stats = getDataSourceStats($dataSourceKey, $status);
+
+	$qa_levels = array();
+	foreach($stats as $item){
+		//foreach($stat_item as $item){
+			//var_dump($item);
+			$ds_key = $item['ds_key'];
+			$ds_title = getDataSourceTitle($ds_key);
+			$title = $ds_title[0]['title'];
+			$ro_class = $item['ro_class'];
+			$ro_status = $item['status'];
+			$qa_level = $item['qa_level'];
+			if(!in_array($qa_level, $qa_levels)){
+				array_push($qa_levels, intval($qa_level));
+				asort($qa_levels);
+			}
+			
+			$count = $item['count'];
+			if($dataSourceKey==''){
+				if(isset($result[$title][$qa_level])){
+					$result[$title][$qa_level] += $count;
+				}else{
+					$result[$title][$qa_level] = $count;
+				}
+			}else{
+				if(isset($result[$ro_class][$qa_level])){
+					$result[$ro_class][$qa_level] += $count;
+				}else{
+					$result[$ro_class][$qa_level] = $count;
+				}
+			}
+		//}
+	}
+	/*
+	 * $result['columns'] = ['dskey', 'qa1, 'qa2', qa3']
+	 * $result['rows] = ['uni1', '1', '23', '1']
+	 * $result['rows] = ['uni2', '0', '12', '0']
+	 */
 	
-	$result = json_encode($stats);
-	echo $result;
+	//var_dump($qa_levels);
+	
+	
+	$rows = array();
+	foreach($result as $class=>$qa){
+		$qa_array = array();
+		array_push($qa_array, $class);
+		foreach($qa_levels as $qa_level){
+			if(isset($result[$class][$qa_level])){
+				array_push($qa_array, intval($result[$class][$qa_level]));
+			}else{
+				array_push($qa_array, 0);
+			}
+		}
+		array_push($rows, $qa_array);
+	}
+	
+	
+	$qa_levels = array_reverse($qa_levels);
+	if($dataSourceKey!=''){
+		array_push($qa_levels, 'class');
+	}else array_push($qa_levels, 'data source title');
+	$qa_levels = array_reverse($qa_levels);
+	
+	$columns = $qa_levels;
+	
+	//var_dump($columns);
+	//var_dump($rows);
+	
+	$real_result['columns']=$columns;
+	$real_result['rows']= $rows;
+	
+	$real_result = json_encode($real_result);
+	echo $real_result;
 }
 
 ?>

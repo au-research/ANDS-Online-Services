@@ -216,9 +216,9 @@ $(document).ready(function() {
 
     function drawBarChart(status, ds){
     	var chartData = new google.visualization.DataTable();
-    	var get_view = 'get_view.php?view=StatusAllQA&status='+status+'&ds='+ds;
-
-
+    	//var get_view = 'get_view.php?view=StatusAllQA&status='+status+'&ds='+ds;
+       var get_view = 'get_view.php?view=getAllStat&status='+status+'&ds='+ds;
+       //console.log(get_view);
     	/*console.log(get_view);
     	$.ajax({
     		url: get_view,
@@ -229,7 +229,8 @@ $(document).ready(function() {
     		}
     	});*/
 
-
+        var colNumber = [];
+        var rowCount = 0;
 		$.ajax({
     		url: get_view,
     		method: 'get',
@@ -239,54 +240,49 @@ $(document).ready(function() {
     			//console.log(data);
   				var chartData = new google.visualization.DataTable();
   				
-  				var itemList = [];
-  				chartData.addColumn("string", "Status");
-  				$.each(data, function(i, item){
-  					$.each(item.qa, function(j, qa_i){
-  						//row.push(qa_i);//ql
-  						if($.inArray(j, itemList)==-1)
-  						{
-  							itemList.push(j);
-  							
-  	  	  				    chartData.addColumn("number", "Quality Level "+j);
-  						}
-  						//console.log(itemList);
-  					});
+  				var first = true;
+  				$.each(data.columns, function(i, item){
+  					//console.log(item);
+  					if(first){
+  						chartData.addColumn("string", item);
+  						first = false;
+  					}else{
+  						chartData.addColumn("number", item);
+  						colNumber.push(item);
+  					}
   				});
   				
-
+  				var sum = [];
+  				$.each(data.rows, function(i, item){
+  					rowCount++;
+  					var miniSum=0;
+  					chartData.addRow(item);
+  					$.each(item, function(j, qa_i){
+  						if(!isNaN(qa_i)) miniSum = miniSum+ qa_i;
+  					});
+  					sum[i] = miniSum;
+  				});
+  				//console.log('sum='+sum);
+  				
+  				
   				
 
-  				console.log(chartData);
-
-
-
-
-  				$.each(data, function(i, item){
-  					var row = [];
-  					var rowPercent = [];
-  					row.push(item.label);//status
-  					rowPercent.push(item.label);
-  					$.each(item.qa, function(j, qa_i){
-  						row.push(qa_i);//ql
-  					});
-  					//console.log(row);
-  					chartData.addRow(row);
-  				});
-
-  				//var jsonText = JSON.stringify(chartData);
-    			//console.log(jsonText);
-
-  				//console.log(realData);
+  				//console.log(chartData);
     			// Create and draw the visualization.
     			var barsVisualization = new google.visualization.BarChart(document.getElementById(status+'_qaview'));
     			//var formatter = new google.visualization.BarFormat({showValue: true});
     			//formatter.format(realData, 0);
 			  	
-
+    			var optionTitle = 'Class';
+    			var optionHeight = (rowCount * 50) + 100;
+    			if(dsKey=='ALL_DS_ORCA'){
+    				optionTitle = 'Data Source Key';
+        			
+    			}
+    			
     			var optionPercent = {title:status.replace(/_/g," ") + " Records",
-		        	width:800, height:400,
-		        	vAxis: {title: "Status"},
+		        	width:1000, height:optionHeight,
+		        	vAxis: {title:optionTitle},
 		        	isStacked:true,
 		        	colors:['#89CEDE', '#F06533','#F2CE3B', '#6DA539', '#4491AB', '#FFD700'],
 		        	animation:{
@@ -299,68 +295,33 @@ $(document).ready(function() {
 
 		        var view = new google.visualization.DataView(chartData);
 
-		        view.setColumns([0,
-		        	{
-			        	label:'Quality Level 0',
-			        	type:'number',
-			        	calc:function(dt,row){
-			        		var sum = 0;var level = 0;
-			        		var value = dt.getValue(row, level+1);
-			        		for (var c=1;c<=6;c++){sum = sum + dt.getValue(row, c);}
-			        		return {v: value/sum,f:value.toString()};
-			        	}
-			        },
-			        {
-			        	label:'Quality Level 1',
-			        	type:'number',
-			        	calc:function(dt,row){
-			        		var sum = 0;var level = 1;
-			        		var value = dt.getValue(row, level+1);
-			        		for (var c=1;c<=6;c++){sum = sum + dt.getValue(row, c);}
-			        		return {v: value/sum,f:value.toString()};
-			        	}
-			        },
-			        {
-			        	label:'Quality Level 2',
-			        	type:'number',
-			        	calc:function(dt,row){
-			        		var sum = 0;var level = 2;
-			        		var value = dt.getValue(row, level+1);
-			        		for (var c=1;c<=6;c++){sum = sum + dt.getValue(row, c);}
-			        		return {v: value/sum,f:value.toString()};
-			        	}
-			        },
-			        {
-			        	label:'Quality Level 3',
-			        	type:'number',
-			        	calc:function(dt,row){
-			        		var sum = 0;var level = 3;
-			        		var value = dt.getValue(row, level+1);
-			        		for (var c=1;c<=6;c++){sum = sum + dt.getValue(row, c);}
-			        		return {v: value/sum,f:value.toString()};
-			        	}
-			        },
-			        {
-			        	label:'Quality Level 4',
-			        	type:'number',
-			        	calc:function(dt,row){
-			        		var sum = 0;var level = 4;
-			        		var value = dt.getValue(row, level+1);
-			        		for (var c=1;c<=6;c++){sum = sum + dt.getValue(row, c);}
-			        		return {v: value/sum,f:value.toString()};
-			        	}
-			        },
-			        {
-			        	label:'Gold Standard',
-			        	type:'number',
-			        	calc:function(dt,row){
-			        		var sum = 0;var level = 5;
-			        		var value = dt.getValue(row, level+1);
-			        		for (var c=1;c<=6;c++){sum = sum + dt.getValue(row, c);}
-			        		return {v: value/sum,f:value.toString()};
-			        	}
-			        }
-		        ]);
+		        var theRest = [];
+		        theRest.push(0);
+		        var colLength = colNumber.length;
+		       // console.log('colNumber='+colNumber);
+		        $.each(colNumber, function(i, item){
+  					var labelValue = 'Gold Standard';
+  					if(item < 4)
+  					labelValue = 'Quality Level '+item;
+  					//if(i!=0){
+  						var theThing = {
+  	  				        	label:labelValue,
+  	  				        	type:'number',
+  	  				        	calc:function(dt,row){
+  	  				        		var value = dt.getValue(row, i+1);
+  	  				        		//console.log('at '+i+' = '+value/sum[row]);
+  	  				        		return {v: value/sum[row],f:value.toString()};
+  	  				        	}
+  	  				        };
+  	  					theRest.push(theThing);
+  					//}
+  					
+  				});
+		       // console.log(theRest);
+		        
+		        view.setColumns(theRest);
+		      //  console.log(view);
+		        
 
 			  	function drawThisChart(dataToDraw,optionToDraw){
 			  		barsVisualization.draw(dataToDraw,optionToDraw);
