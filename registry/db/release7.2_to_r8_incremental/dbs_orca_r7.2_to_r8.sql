@@ -17,7 +17,7 @@ WITH (
 ALTER TABLE dba.tbl_url_mappings
   OWNER TO dba;
 GRANT ALL ON TABLE dba.tbl_url_mappings TO dba;
-GRANT SELECT, INSERT, DELETE ON TABLE dba.tbl_url_mappings TO webuser;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE dba.tbl_url_mappings TO webuser;
 
 -- Add SLUG column to ro table
 ALTER TABLE dba.tbl_registry_objects ADD COLUMN slug character varying(512);
@@ -27,10 +27,7 @@ ALTER TABLE dba.tbl_registry_objects ADD COLUMN slug character varying(512);
 
 
 -- Column: value
-
--- ALTER TABLE dba.tbl_descriptions DROP COLUMN value;
-
-ALTER TABLE dba.tbl_descriptions ADD COLUMN value character varying(12000);
+ALTER TABLE dba.tbl_descriptions ALTER COLUMN value character varying(12000);
 
 
 
@@ -40,7 +37,6 @@ ALTER TABLE dba.tbl_descriptions ADD COLUMN value character varying(12000);
 
 ALTER TABLE dba.tbl_data_sources ADD COLUMN institution_pages smallint;
 ALTER TABLE dba.tbl_data_sources ALTER COLUMN institution_pages SET DEFAULT 0;
-UPDATE dba.tbl_data_sources SET institution_pages = 0;
 
 
 
@@ -164,4 +160,64 @@ ALTER FUNCTION dba.udf_get_nla_set(character varying)
   OWNER TO dba;
 
 
+CREATE TABLE tbl_background_tasks
+(
+ task_id bigserial NOT NULL,
+ method character varying(64),
+ started timestamp without time zone,
+ added timestamp without time zone NOT NULL DEFAULT now(),
+ completed timestamp without time zone,
+ prerequisite_task bigint,
+ log_msg text,
+ registry_object_keys text,
+ data_source_key text,
+ status character varying(32) NOT NULL DEFAULT 'WAITING'::character
+varying,
+ CONSTRAINT tbl_background_tasks_pkey PRIMARY KEY (task_id )
+)
+WITH (
+ OIDS=FALSE
+);
+ALTER TABLE dba.tbl_background_tasks ADD COLUMN scheduled_for timestamp without time zone DEFAULT NOW();
+ALTER TABLE tbl_background_tasks
+ OWNER TO dba;
+GRANT ALL ON TABLE tbl_background_tasks TO dba;
+GRANT SELECT, UPDATE, INSERT ON TABLE tbl_background_tasks TO webuser;
+GRANT DELETE ON TABLE dba.tbl_background_tasks TO webuser;
+--IMPORTANT
+GRANT SELECT, USAGE ON TABLE tbl_background_tasks_task_id_seq TO webuser;
 
+
+ALTER TABLE dba.tbl_registry_objects ADD manually_assessed_flag smallint NOT NULL DEFAULT 0
+ALTER TABLE dba.tbl_registry_objects ADD gold_status_flag smallint NOT NULL DEFAULT 0;
+ALTER TABLE dba.tbl_registry_objects ADD quality_level smallint;
+ALTER TABLE dba.tbl_registry_objects ADD quality_level_result text;
+
+ALTER TABLE dba.tbl_draft_registry_objects ADD quality_level smallint;
+ALTER TABLE dba.tbl_draft_registry_objects ADD quality_level_result text;
+
+
+
+CREATE OR REPLACE FUNCTION dba.udf_delete_data_source(_data_source_key character varying)
+  RETURNS void AS
+$BODY$
+
+DELETE FROM dba.tbl_data_source_logs
+WHERE data_source_key = $1;
+
+DELETE FROM dba.tbl_harvest_requests
+WHERE data_source_key = $1;
+
+DELETE FROM dba.tbl_institution_pages
+WHERE authoritive_data_source_key = $1;
+
+DELETE FROM dba.tbl_data_sources
+WHERE data_source_key = $1 AND data_source_key <> 'SYSTEM';
+$BODY$
+  LANGUAGE sql VOLATILE
+  COST 100;
+ALTER FUNCTION dba.udf_delete_data_source(character varying)
+  OWNER TO dba; 
+  
+-- Queue up the first registry maintenance to generate some SLUGs and hashes
+INSERT INTO dba.tbl_background_tasks ("method", "status") VALUES ('HOURLY_REGISTRY_MAINTENANCE','WAITING');

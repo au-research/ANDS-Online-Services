@@ -1,2 +1,0 @@
-INSERT INTO dba.tbl_activities (activity_id, created_who, modified_who) VALUES ('aORCA_RUN_TASKS','SYSTEM','SYSTEM');
-INSERT INTO dba.tbl_role_activities (role_id, activity_id, created_who, modified_who) VALUES ('COSI_ADMIN','aORCA_RUN_TASKS','SYSTEM','SYSTEM');
