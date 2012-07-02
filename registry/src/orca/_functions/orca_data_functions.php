@@ -3129,7 +3129,28 @@ function getDataSourceStats($data_source_key = '', $status = 'All')
 	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
 	return $resultSet;
 
+} 
+
+function getDataSourceSummary($data_source_key = '', $status = 'All')
+{
+
+	global $gCNN_DBS_ORCA;
+	$resultSet = null;
+	$strQuery = "SELECT data_source_key as ds_key, registry_object_class as ro_class, status, count(status)
+				FROM dba.tbl_registry_objects where ($1 = '' OR data_source_key = $1) AND ($2 = 'All' OR status = $2)
+				GROUP BY data_source_key, registry_object_class, quality_level, status
+				UNION
+				SELECT registry_object_data_source as ds_key, class as ro_class, status, count(status)
+				FROM dba.tbl_draft_registry_objects  where ($1 = '' OR registry_object_data_source = $1) AND ($2 = 'All' OR status = $2)
+				GROUP BY registry_object_data_source, class, status
+				ORDER BY 1,2,3";
+	$params = array($data_source_key, $status);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	return $resultSet;
+
 }
+
+
 
 function getDataSourceTitle($data_source_key)
 {

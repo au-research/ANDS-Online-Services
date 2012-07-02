@@ -31,6 +31,13 @@ $ds_qa_flag = getQueryValue('ds_qa_flag');
 if($ds_qa_flag=='false')$ds_qa_flag=false;
 if($manual_publish=='false')$manual_publish=false;
 
+if($dataSourceKey == 'ALL_DS_ORCA')
+{
+	$ds_qa_flag = true;	
+	$manual_publish = true;	
+}
+
+
 $result = array();
 if($ds_qa_flag){
 	if($manual_publish){
@@ -68,6 +75,7 @@ switch($view){
 	case "StatusAllQA":StatusAllQA($status, $dataSourceKey);break;
 	case "tipQA": tipQA($key, $ql);break;
 	case "getAllStat": getAllStat();break;
+	case "getSummary": getSummary();break;
 }
 
 function summary($dataSourceKey){
@@ -633,4 +641,75 @@ function getAllStat(){
 	echo $real_result;
 }
 
+function getSummary()
+{
+	header("Content-type: application/json; charset=UTF-8");
+	global $dataSourceKey;
+	global $status;
+	global $result;
+	if($dataSourceKey=='ALL_DS_ORCA') $dataSourceKey='';
+	$stats = getDataSourceSummary($dataSourceKey, $status);
+	
+	
+	//var_dump($stats);
+	$statColumns = array();
+	$total = 0;
+	if($stats)
+	{
+	foreach($stats as $item){
+		//foreach($stat_item as $item){
+			//var_dump($item);
+			$ds_key = $item['ds_key'];
+			$ds_title = getDataSourceTitle($ds_key);
+			$title = $ds_title[0]['title'];
+			$ro_class = $item['ro_class'];
+			$status = $item['status'];
+			$count = $item['count'];
+			$total += $count;
+			if($dataSourceKey==''){
+				if(isset($statResult[$title])){
+					$statResult[$title][$status] += $count;
+				}
+				else{
+					$statResult[$title] = $result;
+					$statResult[$title][$status] = $count;
+				}
+			}else{
+				if(isset($statResult[$ro_class])){
+					$statResult[$ro_class][$status] += $count;
+				}else{
+					$statResult[$ro_class] = $result;
+					$statResult[$ro_class][$status] = $count;
+				}
+			}
+		}	
+		$jsonData = array('page'=>'1','total'=>$total,'rows'=>array());
+		foreach($statResult as $title=>$array){
+	
+			$entry = array(
+						'id' => ucfirst($title),
+						'cell' => array(ucfirst($title))
+					);
+			
+			foreach($array as $a){
+				$entry['cell'][] = $a;
+			}
+					
+			
+			$jsonData['rows'][] = $entry;
+			//var_dump($array);
+			
+		}
+		
+		$jsonData = json_encode($jsonData);
+		echo $jsonData;
+	}
+	else
+	{
+		$jsonData = array('page'=>'1','total'=>$total,'rows'=>array());
+		$jsonData = json_encode($jsonData);
+		echo $jsonData;
+	}
+	
+}
 ?>

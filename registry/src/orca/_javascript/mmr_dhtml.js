@@ -659,7 +659,7 @@ $(document).ready(function() {
 	}
 
 	function reloadData(){
-		var viewURL = 'get_view.php?view=summary&ds='+dsKey+'&ds_qa_flag='+DS_QA_flag+'&manual_publish='+MANUAL_PUBLISH;
+		var viewURL = 'get_view.php?view=getSummary&ds='+dsKey+'&ds_qa_flag='+DS_QA_flag+'&manual_publish='+MANUAL_PUBLISH+'&status=All';
 		//console.log(viewURL);
 		var columns = [];
 		columns.push({display:'', name:'', width:120, sortable:false,align:'left'});
