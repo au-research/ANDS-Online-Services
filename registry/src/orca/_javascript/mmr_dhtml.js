@@ -433,7 +433,9 @@ $(document).ready(function() {
 		if(table_type=='status_table'){
 			theTableTitle=status.replace(/_/g," ");;
 		}else if(table_type=='as_qa_table' || table_type=='qa_table'){
-			theTableTitle='Quality Level '+ql;
+			theTableTitle = 'Gold Standard ';
+			if(ql < 4)
+				theTableTitle = 'Quality Level '+ ql;
 		}
 
 		var tClass = status+'_table';
