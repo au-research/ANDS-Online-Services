@@ -469,13 +469,13 @@ $(document).ready(function() {
             sortname:'date_modified',
             sortorder:'desc',
             buttons:buttons,
+            height: 'auto',
             resizable:true,
             useRp: true,
 			rp: 10,
 			pagestat: 'Displaying {from} to {to} of {total} records',
 			nomsg: 'No records found',
 
-            height:'200px',
             additionalClass:tClass,
             tableTitle:theTableTitle,
             searchitems : [
@@ -486,6 +486,8 @@ $(document).ready(function() {
             tableId:theTableTitle
 		});
 	});
+
+
 
 
 	function formatTable(com, grid){

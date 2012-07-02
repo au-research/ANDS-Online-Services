@@ -1967,8 +1967,8 @@ $(document).ready(function(){
 		
 		//LIMIT 5
 		$("ul.more").each(function() {
-		    $("li:gt(5)", this).hide(); 
-		    $("li:nth-child(6)", this).after("<a href='#' class=\"more\">More...</a>");
+		    $("li:gt(4)", this).hide(); 
+		    if($('li', this).length>5)$("li:nth-child(5)", this).after("<a href='#' class=\"more\">More...</a>");
 		});
 		$("a.more").live("click", function() {
 			//console.log($(this).parent());
