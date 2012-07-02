@@ -36,7 +36,7 @@ limitations under the License.
 		
 		$datacite_solr_url = $this->config->item('datacite_solr_url');
 		
-		$url = $datacite_solr_url.'?q='.$q.'%20+resourceTypeGeneral:("Collection","Dataset")^9999%20+resourceTypeGeneral:("Film","Image","Sound","PhysicalObject","InteractiveResource")^5555%20+resourceTypeGeneral:("Model","Software","Service")^1777%20+resourceTypeGeneral:("Event","Text")^111%20+resourceTypeGeneral:""^1&fl=*,score&start='.$start.'&rows='.$row.'&version=2.2&wt='.$write_type;
+		$url = $datacite_solr_url.'?q='.$q.'&defType=disMax&qf=resourceTypeGeneral:("Collection","Dataset")^9999%20+resourceTypeGeneral:("Film","Image","Sound","PhysicalObject","InteractiveResource")^5555%20+resourceTypeGeneral:("Model","Software","Service")^1777%20+resourceTypeGeneral:("Event","Text")^111%20+resourceTypeGeneral:""^1&fl=*,score&start='.$start.'&rows='.$row.'&version=2.2&wt='.$write_type;
 
    		$ch = curl_init();
 
