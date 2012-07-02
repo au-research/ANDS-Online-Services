@@ -304,9 +304,10 @@ textarea {
     margin:10px;
 }
 
-#ql_result{border:1px solid #ccc;}
-.ql_num{float:left;width:15%;height:40px;line-height:40px;padding:5px;text-align:center;}
-.ql_explain{float:left;width:80%;height:40px;padding:5px;}
+#ql_result{border:1px solid #ccc;display:table;}
+.ql_num{float:left;width:15%;height:40px;line-height:40px;padding:5px;text-align:center;display:table-cell;}
+.ql_explain{float:left;width:80%;height:40px;padding:5px;position:relative;display:table-cell;}
+.ql_explain p{margin:0;}
 .aro_qa_container{border:1px solid black;margin:4px 1px;padding:7px;}
 .aro_qa_ok, .aro_qa_error{display:block;border:1px solid;margin: 3px auto;padding: 12px 1px 12px 25px;}
 .aro_error{color: #9F6000;background: #FEEFB3 url('../_images/delete_16.png') no-repeat 5px 14px;}

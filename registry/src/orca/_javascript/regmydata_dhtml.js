@@ -1356,7 +1356,7 @@ function saveAndPreview() {
 					qualityLevelText[2] = 'Congratulations! This record satisfies the minimum Metadata Content Requirements.';
 					qualityLevelText[3] = 'Congratulations! This record exceeds the minimum Metadata Content Requirements.';
 				
-					var ql_result = '<div id="ql_result"><div class="ql_num ql'+qualityLevel+'">Level '+qualityLevel+' Record</div><div class="ql_explain">'+qualityLevelText[qualityLevel]+'</div><div class="clearfix"></div></div>';
+					var ql_result = '<div id="ql_result"><div class="ql_num ql'+qualityLevel+'">Level '+qualityLevel+' Record</div><div class="ql_explain"><p>'+qualityLevelText[qualityLevel]+'</p></div><div class="clearfix"></div></div>';
 					$('#qa_level_notification').html(ql_result);
 						
 					
