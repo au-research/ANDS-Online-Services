@@ -25,9 +25,9 @@ $class = $_GET['classFilter'];
 $group = $_GET['groupFilter'];
 $subject = $_GET['subjectFilter'];
 $licence = $_GET['licenceFilter'];
-if($group!="All")$filter .= "/group=".$group;
-if($subject!="All")$filter .= "/subject=".$subject;
-if($licence!="All")$filter .= "/licence=".$licence;
+if($group!="All")$filter .= "/group=".urlencode($group);
+if($subject!="All")$filter .= "/subject=".urlencode($subject);
+if($licence!="All")$filter .= "/licence=".urlencode($licence);
 
 $feed_title = "Research Data Australia search results for collections matching " . $_GET['q'];
 $feed_title_suffix = '';
@@ -42,10 +42,10 @@ $atom_feed_header = '
   	<id>'.str_replace("&","",str_replace("=","",$rdaInstance.$_SERVER['REQUEST_URI'])).'</id>
   	<title>'.$feed_title.'</title>
   	<updated>'.date('Y-m-d',time()). "T" .date('h:s:i', time()).'Z</updated>
-  	<link rel="self" href="'.$rdaInstance.rawurlencode($_SERVER['QUERY_STRING']).'" type="application/atom+xml" />
+  	<link rel="self" href="'.$rdaInstance.'search#!/q='.rawurlencode($q).'/p=1/tab=collection'.$filter.'" />
   	<author>
-    	<name>ANDS</name>
-    	<uri>http://www.ands.org.au</uri>
+    	<name>Research Data Australia</name>
+    	<uri>http://researchdata.ands.org.au</uri>
     	<email>services@ands.org.au</email>
   	</author>
 ';
