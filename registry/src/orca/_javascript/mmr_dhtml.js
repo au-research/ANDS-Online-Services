@@ -119,6 +119,7 @@ $(document).ready(function() {
 						$(this).show();
 					}
 				});
+		   //$('#quality_view_explain').show();
 			}
 		}else if(type=='qaview'){
 			$('.statusview').hide();
@@ -133,6 +134,8 @@ $(document).ready(function() {
 				$('.qaview[id='+status+'_qaview]').show();
 				$('.qa_table[status='+status+']').parents('.tab-content').show();
 			}
+			$('#quality_view_explain').show();
+			
 		}
 	}
 
