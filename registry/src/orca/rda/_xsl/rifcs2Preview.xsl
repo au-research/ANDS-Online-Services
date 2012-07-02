@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:ro="http://ands.org.au/standards/rif-cs/registryObjects" exclude-result-prefixes="ro">
+    xmlns:ro="http://ands.org.au/standards/rif-cs/registryObjects" xmlns:extRif="http://ands.org.au/standards/rif-cs/extendedRegistryObjects" exclude-result-prefixes="ro extRif">
     <xsl:output method="html" encoding="UTF-8" indent="yes" omit-xml-declaration="yes"/>
     <xsl:strip-space elements="*"/>
     <xsl:param name="dataSource" select="//ro:originatingSource"/>
@@ -267,9 +267,9 @@
 					<h3>Licence</h3>	
 			</xsl:if>
 				
-			<xsl:apply-templates select="extRif:rights[@type='licence']"/>	
+			<xsl:apply-templates select="extRif:rights[@type='licence'] | ro:rights[@type='licence']"/>	
 	
-			<xsl:apply-templates select="extRif:rights[@type!='licence']"/>				
+			<xsl:apply-templates select="extRif:rights[@type!='licence' or (not(@type))] | ro:rights[@type!='licence' or (not(@type))]"/>				
 			
 		 	<xsl:if test="ro:location/ro:address/ro:electronic/@type='email' or ro:location/ro:address/ro:physical">
 		 		<h3>Contacts</h3>
@@ -850,17 +850,16 @@ Handle:
 		<p><xsl:if test="./ro:startDate"><xsl:value-of select="./ro:startDate"/></xsl:if> - <xsl:if test="./ro:endDate"><xsl:value-of select="./ro:endDate"/></xsl:if></p>		
 	</xsl:template>	 
 
-	<xsl:template match="extRif:rights[@type!='licence']">
+	<xsl:template match="ro:rights | ro:rights[@type!='licence']">
 
 			<xsl:if test="./@type='rights'"><h4>Rights statement</h4></xsl:if>
 			<xsl:if test="./@type='accessRights'"><h4>Access rights</h4></xsl:if>
 			<!-- ><xsl:if test="./@type='licence'"><h4>Licence</h4></xsl:if>	-->			
 			<p class="rights"><xsl:value-of select="." disable-output-escaping="yes"/>
-
 			</p>	
-
 	</xsl:template>	
-	<xsl:template match="extRif:rights[@type='licence']">
+	
+	<xsl:template match="ro:rights[@type='licence']">
 		<p class="rights">
 			<xsl:if test="string-length(substring-after(./@licence_type,'CC-'))>0">
     		 	<img id="licence_logo" style="max-width:130px;">
@@ -880,12 +879,8 @@ Handle:
 			<xsl:if test="./@rightsUri"><p>
 				<a target="_blank">
 				<xsl:attribute name="href"><xsl:value-of select="./@rightsUri"/></xsl:attribute><xsl:value-of select="./@rightsUri"/></a></p>
-			</xsl:if>						
+			</xsl:if>			
 		</p>		
 	</xsl:template>				
-
-	
-		
-					
-	</xsl:template>     
+    
 </xsl:stylesheet>
