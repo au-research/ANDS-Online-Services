@@ -315,7 +315,7 @@ a.smallIcon{
     display: block;
     float: left;
     
-    padding:4px 2px 2px 5px;
+    padding:5px 2px 3px 5px;
     background: #f0f0f0;
     background: -webkit-linear-gradient(top, #f7f7f7, #d1d1d1);
     background: -moz-linear-gradient(top, #f7f7f7, #d1d1d1);

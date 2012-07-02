@@ -458,7 +458,7 @@ $(document).ready(function() {
                 {display: 'Name/Title', name : 's_list_title', width : 350, sortable : true, align: 'left'},
                 {display: 'Last Modified', name : 'date_modified', width : 150, sortable : true, align: 'left'},
                 {display: 'Class', name : 'class', width : 70, sortable : true, align: 'left'},
-                {display: 'Errors', name : 'error_count', width : 30, sortable : true, align: 'left'},
+                {display: 'Errors', name : 'error_count', width : 35, sortable : true, align: 'left'},
                 {display: 'Quality Level', name : 'quality_level', width : 70, sortable : true, align: 'left'},
                 {display: 'Flag', name : 'flag', width : 30, sortable : true, align: 'left'},
                 {display: 'Options', name : 'buttons', width : 100, sortable : false, align: 'left'},

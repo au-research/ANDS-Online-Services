@@ -370,6 +370,12 @@ function searchRecords($status){
 			$error_count = $doc->{'error_count'};
 		}
 
+		if($error_count==0){
+			$error_count = '';
+		}else{
+			$error_count = '<img src="'.eAPP_ROOT.'orca/_images/error_icon.png"/>';
+		}
+
 		$warning_count = 'N/A';
 		if(isset($doc->{'warning_count'})){
 			$warning_count = $doc->{'warning_count'};
