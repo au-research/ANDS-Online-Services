@@ -263,7 +263,7 @@ $(document).ready(function() {
   					sum[i] = miniSum;
   				});
   				//console.log('sum='+sum);
-  				var fullColorArray = ['#F06533','#F06533','#F2CE3B', '#6DA539', '#4491AB', '#4491AB'];
+  				var fullColorArray = ['#89CEDE','#F06533','#F2CE3B', '#6DA539', '#4491AB', '#4491AB'];
   				var colorArray = [];
   				$.each(colNumber, function(i, item){
   					colorArray.push(fullColorArray[item]);
