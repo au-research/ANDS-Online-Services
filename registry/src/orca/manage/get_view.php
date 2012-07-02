@@ -373,7 +373,7 @@ function searchRecords($status){
 		if($error_count==0){
 			$error_count = '';
 		}else{
-			$error_count = '<img src="'.eAPP_ROOT.'orca/_images/error_icon.png"/>';
+			$error_count = '<span class="hide">'.$doc->{'error_count'}.'</span><img src="'.eAPP_ROOT.'orca/_images/error_icon.png"/>';
 		}
 
 		$warning_count = 'N/A';

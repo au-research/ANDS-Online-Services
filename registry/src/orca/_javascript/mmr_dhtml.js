@@ -517,9 +517,9 @@ $(document).ready(function() {
 				id = id.substring(id.lastIndexOf('row')+3);
 				
 				if(id){
-					var numError = $('td[abbr=error_count]', this).text();
-					if(numError!='0'){
-						//console.log(numError);
+					var numError = jQuery.trim($('td[abbr=error_count]', this).text());
+					//console.log(numError);
+					if(numError!=''){
 						hasError = true;
 					}
 					targetKeys.push(id);
