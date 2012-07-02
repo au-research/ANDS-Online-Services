@@ -43,6 +43,7 @@ $atom_feed_header = '
   	<title>'.$feed_title.'</title>
   	<updated>'.date('Y-m-d',time()). "T" .date('h:s:i', time()).'Z</updated>
   	<link rel="self" href="'.$rdaInstance.'search#!/q='.rawurlencode($q).'/p=1/tab=collection'.$filter.'" />
+    <logo>'.$rdaInstance.'/img/icon/ands_boxes.jpg</logo>
   	<author>
     	<name>Research Data Australia</name>
     	<uri>http://researchdata.ands.org.au</uri>
