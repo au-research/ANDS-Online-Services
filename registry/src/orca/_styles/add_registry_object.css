@@ -304,7 +304,7 @@ textarea {
     margin:10px;
 }
 
-#ql_result{border:1px solid #ccc;display:table;}
+#ql_result{border:1px solid #ccc;display:table;border-collapse:collapse;}
 .ql_num{float:left;width:15%;height:40px;line-height:40px;padding:5px;text-align:center;display:table-cell;}
 .ql_explain{float:left;width:80%;height:40px;padding:5px;position:relative;display:table-cell;}
 .ql_explain p{margin:0;}
@@ -587,6 +587,7 @@ margin: 0;
 .dynamic_panel 
 {
 	display:none;
+	min-width:1137px;
 }
 
 .guideNotes li
