@@ -277,7 +277,7 @@ $(document).ready(function() {
     			//formatter.format(realData, 0);
 			  	
     			var optionTitle = 'Class';
-    			var optionHeight = (rowCount * 50) + 50;
+    			var optionHeight = (rowCount * 50) + 150;
     			if(dsKey=='ALL_DS_ORCA'){
     				optionTitle = 'Data Source Key';
         			
