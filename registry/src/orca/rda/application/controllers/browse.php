@@ -156,7 +156,7 @@ class Browse extends CI_Controller {
 
 		$this->load->model('solr');
 		$params = $this->solr->constructQuery($params);
-		$limit = 15;
+		$limit = 25;
 		$real_result = array();
 		foreach($result as $r){
 			if($limit > 0){

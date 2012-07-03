@@ -23,6 +23,8 @@ limitations under the License.
 	if(isset($title))$md_title = $title .' - Research Data Australia';
 	if(isset($description))$md_description = htmlentities($description);
 ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns:og="http://ogp.me/ns#" xmlns:fb="http://www.facebook.com/2008/fbml">
 <head>
 	<title><?php echo $md_title;?></title>

@@ -2060,7 +2060,8 @@ $(document).ready(function(){
 			content:{
 				text: $('#anzsrc-subject-facet-result'),
 				title: {
-					text: 'Subjects'
+					text: 'Subjects',
+					button: true
 				}
 			},
 			position: {
@@ -2077,7 +2078,8 @@ $(document).ready(function(){
 					$(this).slideDown(100); // "this" refers to the tooltip
 				}
 			},
-			hide:"unfocus"
+			//hide:"unfocus"
+			hide:false
 		});
 
 		var params = JSONParams();
