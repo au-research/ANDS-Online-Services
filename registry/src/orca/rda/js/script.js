@@ -2136,8 +2136,10 @@ $(document).ready(function(){
 				});
 			}
 		});
+		var params = encodeURIComponent($.param(JSONParams()));
+
 		$("#subject_search_filter" ).vocabcomplete( {
-			source: base_url+"browse/vocabAutoComplete/"+view,
+			source: base_url+"browse/vocabAutoComplete/"+view+"/?params="+params,
 			minLength: 2,
 			delimiter:/(,|;)\s*/,
 			select: function( event, ui ) {

@@ -105,6 +105,8 @@ class Browse extends CI_Controller {
 
 	function vocabAutoComplete($where='anzsrcfor'){
 		$term = strtolower($_GET["term"]);
+		$params = urldecode($this->input->get('params'));
+		parse_str($params, $params);
 		$this->load->model('vocabularies', 'vmodel');
 		if($where=='anzsrcfor'){
 			$data['result']=$this->vmodel->labelContain($this->config->item('vocab_resolver_service'), $term);
@@ -116,7 +118,7 @@ class Browse extends CI_Controller {
 			}
 			echo array_to_json($json_result);
 		}else{
-			$data['result'] = $this->vocabKeywords($where, $term);
+			$data['result'] = $this->vocabKeywords($where, $term, $params);
 			$result = array();
 			$categories = $this->config->item('subjects_categories');
 			foreach($data['result'] as $r){
@@ -127,7 +129,7 @@ class Browse extends CI_Controller {
 		
 	}
 
-	function vocabKeywords($subject_category, $term){
+	function vocabKeywords($subject_category, $term, $params){
 		//default categories
     	$categories = $this->config->item('subjects_categories');
     	$set = $categories[$subject_category]['list'];
@@ -143,14 +145,30 @@ class Browse extends CI_Controller {
     	$restrictions .= " AND value LIKE '%$term%'";
 
     	$this->load->database();
-    	$query = 'select distinct(value), count(value) from dba.tbl_subjects where '.$restrictions.' group by value';
+    	$query = 'select distinct(value), count(value) from dba.tbl_subjects where '.$restrictions.' group by value order by value';
     	//echo $query;
 		$all_subjects = $this->db->query($query);
 		$result = array();
 		foreach($all_subjects->result() as $s){
 			array_push($result, $s->value);
 		}
-		return $result;
+		//$result = array_slice($result, 0, 200);
+
+		$this->load->model('solr');
+		$params = $this->solr->constructQuery($params);
+		$limit = 15;
+		$real_result = array();
+		foreach($result as $r){
+			if($limit > 0){
+				$count = $this->solr->getSOLRCountForSubjects($params, array($r));
+				if($count>0){
+					array_push($real_result, $r);
+					$limit--;
+				}
+			}
+			
+		}
+		return $real_result;
 	}
 
 	function getBroader($selected){
