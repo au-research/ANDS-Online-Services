@@ -171,7 +171,40 @@ class View extends CI_Controller {
 		}
 		
 	}	
+	public function printcontributor(){
+		parse_str($_SERVER['QUERY_STRING'], $_GET);
 	
+		
+			if(isset($_GET['group'])){
+			$key = $_GET['group'];
+			if(isset($_GET['ds_key']))
+			{
+				$ds_key = $_GET['ds_key'];
+				$this->load->model('RegistryObjects', 'ro');
+	       		$content = $this->ro->get(urlencode($key),$ds_key);
+	       		$data['key']= urlencode($key);  	
+				$data['content'] = $this->transform($content, 'rifcs2ContributorPreview.xsl',$key,false);	
+				$this->load->library('user_agent');
+				$data['user_agent']=$this->agent->browser();
+				$data['activity_name'] = 'print-contributor';			
+				$this->load->view('institution-view', $data);		       			
+	
+			}else{
+				$this->load->model('RegistryObjects', 'ro');
+	       		$content = $this->ro->get($key);
+	       		$data['key']= $key;  	
+				$data['content'] = $this->transform($content, 'rifcs2ViewInstitution.xsl',$key,false);	
+				$this->load->library('user_agent');
+				$data['user_agent']=$this->agent->browser();
+				$data['activity_name'] = 'print-contributor';			
+				$this->load->view('institution-view', $data);	       		
+			}
+
+		}else{
+			show_404('page');
+		}
+		
+	}
 	private function transform($registryObjectsXML, $xslt,$key,$group){
 		$qtestxsl = new DomDocument();
 		$registryObjects = new DomDocument();

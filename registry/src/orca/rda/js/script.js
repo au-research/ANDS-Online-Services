@@ -49,6 +49,7 @@ $(document).ready(function(){
 	switch(rda_activity_name){
 		case 'view':initViewPage();break;
 		case 'print-view':initPrintViewPage();break;
+		case 'print-contributor':initPrintContributorPage();break;
 		case 'institution-view':initInstitutionViewPage();break;
 		case 'institution-preview':initInstitutionViewPage();break;		
 		case 'homepage':initHomePage();break;
@@ -695,7 +696,16 @@ $(document).ready(function(){
 		initViewPage();
 		window.print();
 	}
-	
+	function initPrintContributorPage(){
+		//alert('init');
+		$('#header').hide();
+		$('.descriptions div').show();
+		$('.descriptions div').height('auto');
+		$('.showall_descriptions').hide();
+		$('.tipsy').hide();
+		initInstitutionViewPage();
+		window.print();
+	}	
 	function initViewPage(){
 
 		try

@@ -86,10 +86,9 @@
 	        		</script>
 	        		<script type="text/javascript" src="http://static.addtoany.com/menu/page.js"></script>
 	      
-	        		<!-- AddToAny END -->  
-     		
+	        		<!-- AddToAny END -->    		
 					<a target="_blank">
-                    <xsl:attribute name="href"><xsl:value-of select="$base_url"/>view/printview/?key=<xsl:value-of select="ro:key"/></xsl:attribute>                    
+                   	<xsl:attribute name="href"><xsl:value-of select="$base_url"/>view/printcontributor/?group=<xsl:value-of select="$key"/>&amp;groupName=<xsl:value-of select="./@group"/></xsl:attribute>                 
                     <img id="print_icon">
                     <xsl:attribute name="src">
                     <xsl:value-of select="$base_url"/>
