@@ -56,9 +56,9 @@ you can filter the notification tweets from @ResearchDataAU by the ANZSRC codes 
 
 <p>To filter the tweets in <a href="http://www.tweetdeck.com" target="_blank">TweetDeck</a>,  <a href="http://hootsuite.com" target="_blank">Hootsuite</a> or  <a href="http://monitter.com" target="_blank">Monitter</a>, 
 simply add a new column/stream by conducting a search for </p>
-<p><strong>#ANZSRC-&lt;code&gt; from:ResearchDataAustralia </strong></p>
+<p><strong>#ANZSRC-&lt;code&gt; from:ResearchDataAU </strong></p>
 <p>Where &lt;code&gt; is replaced with the ANZSRC code you'd like to filter by. </p>
-<p>E.g. <strong>#ANZSRC-010102 from:ResearchDataAustralia </strong></p>
+<p>E.g. <strong>#ANZSRC010102 from:ResearchDataAU </strong></p>
 <p>To find the ANZSRC code for a specific subject you can now use the <a href="http://researchdata.ands.org.au/browse" target="_blank">Research Data Australia Vocabulary Browser</a>.</p>
 <h2 style="text-decoration:underline;">Support</h2>
 <p><em>If you have any feedback on these services or require further assistance please contact services@ands.org.au.</em></p>
