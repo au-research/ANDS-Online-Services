@@ -287,7 +287,7 @@ $(document).ready(function() {
     			}
     			
     			var optionPercent = {title:status.replace(/_/g," ") + " Records",
-		        	width:1000, height:optionHeight,
+		        	width:1400, height:optionHeight,
 		        	vAxis: {title:optionTitle},
 		        	isStacked:true,
 		        	colors:colorArray,

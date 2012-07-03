@@ -328,7 +328,7 @@ function deleteDataSourceRegistryObjects($dataSourceKey, &$resultMessage, $actio
 	$resultMessage .= "    $registryObjectCount Registry Object/s from this source.\n";
 	$resultMessage .= "  ACTIONS\n";
 	$resultMessage .= "    $successfulDeletes Registry Object/s deleted.\n";
-	
+	queueSyncDataSource($dataSourceKey);
 	return $errors;
 }
 
@@ -641,6 +641,7 @@ function runSolrIndexForDatasource($dataSourceKey)
 function updateRecordsForDataSource($dataSourceKey, $manuallyPublish,$manuallyPublishOld, $qaFlag, $qaFlagOld,$createPrimary,$oldCreatePrimary,$class_1,$class_1_old,$class_2,$class_2_old)
 {
 
+	$actions = '';
 	if($createPrimary=='0') $createPrimary='f';
 	
 	if(($manuallyPublish == 0 || $manuallyPublish == 'f') && $manuallyPublishOld == 't')
@@ -655,7 +656,7 @@ function updateRecordsForDataSource($dataSourceKey, $manuallyPublish,$manuallyPu
 				//$actions .= $registryObjectKeys[$i]['registry_object_key'].' changed status to PUBLISHED';
 			}
 		}
-		queueSyncDataSource($dataSourceKey);
+		
 		insertDataSourceEvent($dataSourceKey, $actions);
 	}
 	//echo $createPrimary." = new :: ".$oldCreatePrimary." = old ";
@@ -682,7 +683,7 @@ function updateRecordsForDataSource($dataSourceKey, $manuallyPublish,$manuallyPu
 		{
 			for( $i=0; $i < count($registryObjectKeys); $i++ )
 			{
-				$actions = '';
+				
 				if($registryObjectKeys[$i]['status'] == MORE_WORK_REQUIRED)
 				{
 					$actions .= $registryObjectKeys[$i]['draft_key'].' Changed Status to DRAFT';
@@ -731,7 +732,7 @@ function updateRecordsForDataSource($dataSourceKey, $manuallyPublish,$manuallyPu
 
 		insertDataSourceEvent($dataSourceKey, $actions);	
 	}
-	
+	queueSyncDataSource($dataSourceKey);
 	
 }
 
@@ -749,6 +750,7 @@ function deleteDataSourceDrafts($dataSourceKey , $message)
 		}
 	}
 	$message = "DELETED ".count($drafts)." DARFTS\n";
+	queueSyncDataSource($dataSourceKey);
 	return $errors;	
 }
 

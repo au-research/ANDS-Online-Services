@@ -68,16 +68,7 @@
 				<span class="qa_ok" level="2" field_id="errors_relatedObject" qa_id="REQ_RELATED_OBJECT_PARTY">The Collection must be related to at least one Party record.</span>
 			</xsl:otherwise>
 	   </xsl:choose>
- 	
-        <xsl:choose>
-	       	<xsl:when test="not(ro:identifier)">
-				<span class="qa_error" level="2" field_id="errors_identifier" qa_id="REC_IDENTIFIER">At least one identifier is recommended for the Collection.</span>
-			</xsl:when>
-			<xsl:otherwise>
-				<span class="qa_ok" level="2" field_id="errors_identifier" qa_id="REC_IDENTIFIER">At least one identifier is recommended for the Collection.</span>
-			</xsl:otherwise>
-        </xsl:choose>
-        
+ 	        
         <xsl:choose>
 	        <xsl:when test="not(ro:description[@type='brief'][string-length(.) &gt; 0]) and not(ro:description[@type='full'][string-length(.) &gt; 0])">
 				<span class="qa_error" level="2" field_id="errors_description" qa_id="REQ_DESCRIPTION_FULL">At least one description (brief and/or full) is required for the Collection. </span>
@@ -104,6 +95,15 @@
      			<span class="qa_ok" level="2" field_id="errors_location" qa_id="REQ_LOCATION_ADDRESS">At least one location address is required for the Collection.</span>
 			</xsl:otherwise>
 	   </xsl:choose>
+         
+        <xsl:choose>
+	       	<xsl:when test="not(ro:identifier)">
+				<span class="qa_error" level="3" field_id="errors_identifier" qa_id="REC_IDENTIFIER">At least one identifier is recommended for the Collection.</span>
+			</xsl:when>
+			<xsl:otherwise>
+				<span class="qa_ok" level="3" field_id="errors_identifier" qa_id="REC_IDENTIFIER">At least one identifier is recommended for the Collection.</span>
+			</xsl:otherwise>
+        </xsl:choose>
          
         <xsl:choose>
 	       	<xsl:when test="not(contains($relatedObjectClassesStr, 'Activity') or ro:relatedObject/ro:key[@roclass = 'Activity'] or ro:relatedObject/ro:key[@roclass = 'activity'])">

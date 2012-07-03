@@ -860,6 +860,17 @@ require '../../_includes/header.php';
 
 		<tr id="harvest_date_row">
 			<td class="">Harvest Date:</td>
+			<?php 		
+				$origin_dt = new DateTime(date("y-m-d h:s",time())) ;
+			    $remote_dtz = new DateTimeZone('GMT');
+			    $origin_dtz = new DateTimeZone(timezone_name_get(date_timezone_get($origin_dt)));			    
+    			$remote_dt = new DateTime("now",$remote_dtz);
+    			$offset = $origin_dtz->getOffset($origin_dt) - $remote_dtz->getOffset($remote_dt);
+    			$current = $offset/60/60;	
+    			if($current>0)$current = "+".$current;
+				$currentZone = "&nbsp;&nbsp;(GMT ".$current.")";
+				$currentNum = number_format($current);
+			?>
 		<!-- 			<td><?php drawDateTimeZoneInput('harvest_date', $harvestDate, eDCT_FORMAT_ISO8601_DATE_TIME."X") ?>
 			<span id="gmtZone" class="inputFormat"><?php if(isset($theString)){ echo $theString;} else { echo $currentZone ;} ?> </span>
 			<input name="theZone" id="theZone" type="hidden" value="<?php if(isset($newNum)){echo $newNum;}else { echo $currentNum ; }?>"/>

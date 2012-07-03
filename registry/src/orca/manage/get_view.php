@@ -567,7 +567,8 @@ function getAllStat(){
 	$result = array();
 	if($dataSourceKey=='ALL_DS_ORCA') $dataSourceKey='';
 	$stats = getDataSourceStats($dataSourceKey, $status);
-
+    if($stats)
+    {
 	$qa_levels = array();
 	foreach($stats as $item){
 		//foreach($stat_item as $item){
@@ -639,6 +640,10 @@ function getAllStat(){
 	
 	$real_result = json_encode($real_result);
 	echo $real_result;
+    }
+    else {
+    	return '';
+    }
 }
 
 function getSummary()
