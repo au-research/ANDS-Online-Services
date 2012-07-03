@@ -104,7 +104,7 @@ class Browse extends CI_Controller {
 	}
 
 	function vocabAutoComplete($where='anzsrcfor'){
-		$term = strtolower($_GET["term"]);
+		$term = $_GET["term"];
 		$params = urldecode($this->input->get('params'));
 		parse_str($params, $params);
 		$this->load->model('vocabularies', 'vmodel');
@@ -142,10 +142,10 @@ class Browse extends CI_Controller {
     	}
     	$restrictions .= ')';
     	//echo $restrictions;
-    	$restrictions .= " AND value LIKE '%$term%'";
+    	$restrictions .= " AND value ILIKE '%$term%'";
 
     	$this->load->database();
-    	$query = 'select distinct(value), count(value) from dba.tbl_subjects where '.$restrictions.' group by value order by value';
+    	$query = 'select distinct(value), count(value) from dba.tbl_subjects where '.$restrictions.' group by value order by value asc';
     	//echo $query;
 		$all_subjects = $this->db->query($query);
 		$result = array();
@@ -156,7 +156,7 @@ class Browse extends CI_Controller {
 
 		$this->load->model('solr');
 		$params = $this->solr->constructQuery($params);
-		$limit = 25;
+		$limit = 50;
 		$real_result = array();
 		foreach($result as $r){
 			if($limit > 0){
