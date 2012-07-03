@@ -1,5 +1,5 @@
 /.buildpath
-.gitignore
+/.gitignore
 /.project
 /registry/src/ckeditor
 /registry/src/dois/
@@ -15,3 +15,5 @@ rifcs-api/build/
 /registry/src/global_config.php
 /registry/src/orca/rda/.htaccess
 /registry/src/.htaccess
+/doco/
+/misc/
