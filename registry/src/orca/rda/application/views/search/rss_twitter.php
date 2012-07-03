@@ -48,8 +48,8 @@ foreach ($rssArray AS $item)
 		echo "			<item>\n";
 		echo "				<title>".$collection_count."been added to Research Data Australia with subject #ANZSRC".$item['code']."</title>\n";
 		echo "				<description>".$collection_count."been added to Research Data Australia with subject #ANZSRC".$item['code'] ."</description>\n";
-		echo "				<link>" . $rdaInstance . "search#!/q=*:*/p=1/tab=collection/subject=".rawurlencode($item['resolved_subject'])."/resultSort=date_modified%20desc</link>\n";
-		echo "				<guid>" . $rdaInstance . "search#!/q=*:*/p=1/tab=collection/subject=".rawurlencode($item['resolved_subject'])."/resultSort=date_modified%20desc</guid>\n";
+		echo "				<link>" . $rdaInstance . "search#!/q=*:*/p=1/tab=collection/subject=".rawurlencode($item['resolved_uri'])."/resultSort=date_modified%20desc</link>\n";
+		echo "				<guid>" . $rdaInstance . "search#!/q=*:*/p=1/tab=collection/subject=".rawurlencode($item['resolved_uri'])."/resultSort=date_modified%20desc</guid>\n";
 		echo "				<author>".$item['resolved_subject']."</author>\n";
 		echo "				<pubDate>".date('r')."</pubDate>\n";
 		echo "			</item>\n";

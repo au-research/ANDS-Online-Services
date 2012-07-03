@@ -410,6 +410,19 @@ function cmpTopLevelFacet($a, $b) {
  */
 function resolveLabelFromVocabNotation($vocabNotation)
 {
+	$resolvedVocab = resolveFromVocabNotation($vocabNotation);
+	if (isset($resolvedVocab['prefLabel']['_value']))
+	{
+		return $resolvedVocab['prefLabel']['_value'];
+	}
+	else
+	{
+		return false;
+	}
+}
+
+function resolveFromVocabNotation($vocabNotation)
+{
 	global $gVOCAB_RESOLVER_SERVICE;
 
 	foreach ($gVOCAB_RESOLVER_SERVICE AS $resolver)
@@ -418,9 +431,9 @@ function resolveLabelFromVocabNotation($vocabNotation)
 		$contents = json_decode(file_get_contents($resolution_target),true);
 		if ($contents)
 		{
-			if (isset($contents['result']['items']) && count($contents['result']['items']) > 0 && isset($contents['result']['items'][0]['prefLabel']['_value']))
+			if (isset($contents['result']['items']) && count($contents['result']['items']) > 0)
 			{
-				return $contents['result']['items'][0]['prefLabel']['_value'];
+				return $contents['result']['items'][0];
 			}
 		}
 				

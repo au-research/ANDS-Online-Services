@@ -253,13 +253,14 @@ limitations under the License.
 				}
 				foreach ($subjects AS $code => $count)
 				{
-					$resolvedSubject = resolveLabelFromVocabNotation($code);
+					$resolvedSubject = resolveFromVocabNotation($code);
 					if ($resolvedSubject)
 					{
 						$this->rssArray[] = array(
 											"count"=>$count, 
 											"code"=>$code, 
-											"resolved_subject"=>$resolvedSubject, 
+											"resolved_subject"=>(isset($resolvedSubject['prefLabel']['_value']) ? $resolvedSubject['prefLabel']['_value'] : $code),
+											"resolved_uri"=>(isset($resolvedSubject['_about']) ? $resolvedSubject['_about'] : $code), 
 											"type"=>"twitter");
 					}
 				}
