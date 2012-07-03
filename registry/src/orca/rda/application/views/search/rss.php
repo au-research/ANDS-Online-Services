@@ -79,7 +79,28 @@ foreach ($rssArray AS $item)
 	}
 	else
 	{
-
+		$brief = 'no';
+		for($i=0;$i<count($item['description_type']);$i++)
+		{
+			if($item['description_type'][$i]=='brief') 
+			{ 
+				$item['description_value'][0] = $item['description_value'][$i];
+				$brief = 'yes';
+			}
+			
+		}
+		if($brief == 'no')
+		{
+			for($i=0;$i<count($item['description_type']);$i++)
+			{
+				if($item['description_type'][$i]=='full') 
+				{ 
+					$item['description_value'][0] = $item['description_value'][$i];
+				}
+			
+			}		
+		}
+		
 		echo "			<item>\n";
 		echo "				<title>".$item['list_title'] . "</title>\n";
 		echo "				<description>" . (isset($item['description_value'][0]) ? str_replace("<","&lt;",$item['description_value'][0]) : "No description")  . "${NL}${NL}";

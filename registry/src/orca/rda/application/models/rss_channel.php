@@ -100,7 +100,7 @@ limitations under the License.
 					$start = 'fulltext:';
 				}
 
-				$solrUrl = $this->solrInstance . "select/?q=".$start.rawurlencode($this->query).$filter_query."&version=2.2&start=".$this->startCount."&rows=".$this->rowCount."&indent=on&fl=key,%20group%20data_source_key,%20description_value,%20list_title,%20date_modified&wt=json&sort=date_modified%20desc";
+				$solrUrl = $this->solrInstance . "select/?q=".$start.rawurlencode($this->query).$filter_query."&version=2.2&start=".$this->startCount."&rows=".$this->rowCount."&indent=on&fl=key,%20group%20data_source_key,%20description_value,,%20description_type,%20list_title,%20date_modified&wt=json&sort=date_modified%20desc";
 
 				$solrOutput = json_decode(file_get_contents($solrUrl), true);
 
