@@ -218,6 +218,9 @@ $BODY$
   COST 100;
 ALTER FUNCTION dba.udf_delete_data_source(character varying)
   OWNER TO dba; 
+ 
+-- Some maintenance on uninitialised fields! 
+UPDATE dba.tbl_registry_objects SET registry_date_modified = (CAST ( date_part('epoch', status_modified_when) AS integer )) WHERE registry_date_modified IS NULL;
   
 -- Queue up the first registry maintenance to generate some SLUGs and hashes
 INSERT INTO dba.tbl_background_tasks ("method", "status") VALUES ('HOURLY_REGISTRY_MAINTENANCE','WAITING');
