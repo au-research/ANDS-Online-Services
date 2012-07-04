@@ -34,6 +34,31 @@ function task_hourly_registry_maintenance($task)
 	// Don't forget PMD!
 	getDataSourceHashForKey('PUBLISH_MY_DATA');
 
+	/*
+	 *  Check for null registry object hashes
+	 */ 
+	if ($emptyRegistryObjectsList = getEmptyRegistryObjectHashes())
+	{
+		foreach ($emptyRegistryObjectsList AS $registry_object)
+		{
+			getRegistryObjectHashForKey($registry_object['registry_object_key'])
+		}
+	}
+
+
+	/*
+	 * Check for null url_slugs
+	 */
+	if ($emptyRegistryObjectsList = getEmptyRegistryObjectURLSlugs())
+	{
+		foreach ($emptyRegistryObjectsList AS $registry_object)
+		{
+			updateRegistryObjectSLUG(getRegistryObjectHashForKey($registry_object['registry_object_key']), $registry_object['display_title']);
+		}
+	}
+	
+	
+	
 
 	/*
 	 * Requeue for next time...

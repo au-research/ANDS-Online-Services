@@ -2742,6 +2742,32 @@ function getRegistryObjectURLSlug($registry_object_key)
 }
 
 
+function getEmptyRegistryObjectURLSlugs()
+{
+	global $gCNN_DBS_ORCA;
+	$strQuery = 'SELECT * FROM dba.tbl_registry_objects WHERE url_slug = \'\' OR url_slug IS NULL';
+	$params = array();
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+
+	if (!isset($resultSet[0]))
+		return false;
+	else
+		return $resultSet;
+}
+function getEmptyRegistryObjectHashes()
+{
+	global $gCNN_DBS_ORCA;
+	$strQuery = 'SELECT * FROM dba.tbl_registry_objects WHERE key_hash = \'\' OR key_hash IS NULL';
+	$params = array();
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+
+	if (!isset($resultSet[0]))
+		return false;
+	else
+		return $resultSet;
+}
+
+
 function updateRegistryObjectSLUG ($registry_object_key, $new_display_title, $current_slug = '')
 {
 	global $gCNN_DBS_ORCA;
