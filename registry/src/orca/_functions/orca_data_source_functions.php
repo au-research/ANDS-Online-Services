@@ -592,6 +592,18 @@ $transformResult = $proc->transformToXML($registryObjects);
 return $transformResult;
 }
 
+function transformToStripFormData($registryObjectsXML)
+{
+$qtestxsl = new DomDocument();
+$registryObjects = new DomDocument();
+$registryObjects->loadXML($registryObjectsXML);
+$qtestxsl->load('../_xsl/stripFormData.xsl');
+$proc = new XSLTProcessor();
+$proc->importStyleSheet($qtestxsl);
+$transformResult = $proc->transformToXML($registryObjects);	
+return $transformResult;
+}
+
 function transformToSolr($registryObjectsXML)
 {	
 	global $extRif2solrProc;

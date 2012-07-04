@@ -1206,7 +1206,7 @@ function saveAndPreview() {
 		$('#rda_preview_xml').click(function(){
 			var key = $('#object_mandatoryInformation_key').val();
 			var ds = $('#object_mandatoryInformation_dataSource').val();
-			$.get(rootAppPath + 'orca/services/getRegistryObject.php?key='+encodeURIComponent(key)+'&ds='+encodeURIComponent(ds)+'&type=plain',
+			$.get(rootAppPath + 'orca/services/getRegistryObject.php?key='+encodeURIComponent(key)+'&ds='+encodeURIComponent(ds)+'&type=plain&stripped=true',
 		       function(data) {
 				$('#rifcs_plain_content').val(data);
 		        $.blockUI({

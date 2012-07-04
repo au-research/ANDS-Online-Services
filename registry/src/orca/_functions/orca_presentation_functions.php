@@ -1136,4 +1136,23 @@ function generateUniqueSlug($display_title, $key)
 	return $slug;
 }
 
+
+function stripExtendedRIFCS($payload)
+{
+	return preg_replace("/[ \\n+]*<extRif:(.*)( [^>]*|)>.*<\/extRif:\\1>([ ]*\\n+)?|[ ]*<extRif:.*\/>([ ]*\\n+)?| extRif:.*=\"[^\"]*\"|[ ]*xmlns:extRif=\".*\"[ ]*\\n+/imsU","", $payload);
+	//|[ ]*<extRif:.*\/>([ ]*\\n+)?| extRif:.*=\"[^\"]*\"
+}
+
+function stripRegistryObjectsWrapper($payload)
+{
+	// strip the wrapper elements of a cached registry object
+	return preg_replace("/[ ]*<registryObjects(.*)>[ ]*\\n*|[ ]*<\/registryObjects>[ ]*\\n*|\\n*[ ]*<\?xml(.*)?>[ ]*\\n*/imsU","", $payload);
+}
+
+function stripFormData($payload)
+{
+	// note: this function is untested -- might not work! also, doesn't remove @roclass !
+	return preg_replace("/[ ]*field_id=\".*?\"[ ]*\\n+tab_id=\".*?\"/i","", $payload);
+}
+
 ?>

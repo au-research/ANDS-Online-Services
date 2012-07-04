@@ -102,8 +102,16 @@ if($type=='xml'){
 		// =============================================================================
 		require '../../_includes/finish.php';
 	}elseif($dataSource){
+		header("Content-Type: text/xml; charset=UTF-8", true);
 		$registryObject = getDraftRegistryObject(getQueryValue('key'), getQueryValue('ds'));
-		print($registryObject[0]['rifcs']);
+		if (getQueryValue('stripped'))
+		{
+			echo transformToStripFormData($registryObject[0]['rifcs']);
+		}
+		else
+		{
+			echo $registryObject[0]['rifcs'];
+		}
 	}
 }
 ?>

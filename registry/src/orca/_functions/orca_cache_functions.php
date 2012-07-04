@@ -449,18 +449,6 @@ function regenerateDataSourceCache($data_source_key)
 	}
 }
 
-function stripExtendedRIFCS($payload)
-{
-	return preg_replace("/[ \\n+]*<extRif:(.*)( [^>]*|)>.*<\/extRif:\\1>([ ]*\\n+)?|[ ]*<extRif:.*\/>([ ]*\\n+)?| extRif:.*=\"[^\"]*\"|[ ]*xmlns:extRif=\".*\"[ ]*\\n+/imsU","", $payload);
-	//|[ ]*<extRif:.*\/>([ ]*\\n+)?| extRif:.*=\"[^\"]*\"
-}
-
-function stripRegistryObjectsWrapper($payload)
-{
-	// strip the wrapper elements of a cached registry object
-	return preg_replace("/[ ]*<registryObjects(.*)>[ ]*\\n*|[ ]*<\/registryObjects>[ ]*\\n*|\\n*[ ]*<\?xml(.*)?>[ ]*\\n*/imsU","", $payload);
-}
-
 function wrapRegistryObjects($payload, $include_extRif = true)
 {
 	global $gORCA_REGISTRY_OBJECT_WRAPPER, $gORCA_REGISTRY_OBJECT_WRAPPER_END;
