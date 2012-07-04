@@ -315,8 +315,8 @@ $(document).ready(function() {
   	  				        	type:'number',
   	  				        	calc:function(dt,row){
   	  				        		var value = dt.getValue(row, i+1);
-  	  				        		//console.log('at '+i+' = '+value/sum[row]);
-  	  				        		return {v: value/sum[row],f:value.toString()};
+  	  				        		//console.log('at '+i+' = '+value.toString());
+  	  				        		return {v: value/sum[row],f:value.toString()+' record(s)'};
   	  				        	}
   	  				        };
   	  					theRest.push(theThing);
@@ -363,6 +363,8 @@ $(document).ready(function() {
 	$('.mmr_table').each(function(){
 		var status = $(this).attr('status');
 		var ql = $(this).attr('ql');
+		if(ql==0) ql="0";
+
 		var count = $(this).attr('count');
 		var buttons = [];
 
@@ -504,7 +506,14 @@ $(document).ready(function() {
 
 		if($('#MORE_WORK_REQUIRED').find('.ftitle').attr('count')=='0'){
 			$('#MORE_WORK_REQUIRED').hide();
-		}
+		}	
+		
+		if($('#as_qa_table_ql5').find('.ftitle').attr('count') == 0){
+			$('#as_qa_table_ql5').remove();
+			}
+		if($('#as_qa_table_ql0').find('.ftitle').attr('count') == 0){
+			$('#as_qa_table_ql0').remove();
+			}
 	}
 
 
@@ -549,6 +558,7 @@ $(document).ready(function() {
 			alert('No command to be executed');
 			return false;
 		}
+
 	}
 
 	function fireZaLaserz(com, targetKeys, hasError, grid){
@@ -731,6 +741,7 @@ $(document).ready(function() {
 	        //additionalClass:tClass,
 	        tableTitle:'Registry Content Summary for '+dsName
 		});
+       	
 	}
 
 

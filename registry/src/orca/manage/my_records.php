@@ -315,8 +315,8 @@ else
 						echo '<div id="'.$status_name.'_qaview" class="tab-content qaview">Loading Graph...</div>';
 					}
 					foreach($qa_levels as $key=>$ql){
-		    			echo '	<div class="tab-content qaview">
-								<table class="mmr_table qa_table" ql="'.$key.'" status="'.$status_name.'" count="'.$ql.'"><tr><td>Loading Table...</td></tr></table>
+		    			echo '	<div class="tab-content qaview" id="as_qa_table_ql'.$key.'">
+								<table id="qa_table_ql'.$key.'" class="mmr_table qa_table" ql="'.$key.'" status="'.$status_name.'" count="'.$ql.'"><tr><td>Loading Table...</td></tr></table>
 								</div>';
 		    		}
 		    	}
@@ -328,7 +328,7 @@ else
 		    	echo '<div id="All_qaview" class="tab-content qaview"></div>';
 		    	//echo '<hr class="tab-content qaview"/>';
 		    	foreach($qa_levels as $key=>$l){
-		    		echo '	<div class="tab-content qaview">
+		    		echo '	<div class="tab-content qaview" id="as_qa_table_ql'.$key.'">
 							<table class="mmr_table as_qa_table" ql="'.$key.'" status="All" count="'.$l.'"><tr><td>Loading Graph...</td></tr></table>
 							</div>';
 		    	}
