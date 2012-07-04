@@ -283,7 +283,7 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 					);
 				}
 				$runResultMessage .=  insertDraftRegistryObject(($dataSourceKey == 'PUBLISH_MY_DATA' ? $record_owner : $created_who), $registryObjectKey, $draft_class, $object_group, $draft_type, $title, $dataSourceKey, date('Y-m-d H:i:s'), $date_modified , $rifcs, '', 0, 0, SUBMITTED_FOR_ASSESSMENT);
-				$runResultMessage  .= "\nRegistry Object with key $registryObjectKey is SUBMITTED_FOR_ASSESSMENT";
+				//$runResultMessage  .= "\nRegistry Object with key $registryObjectKey is SUBMITTED_FOR_ASSESSMENT";
 			}
 			else
 			{
