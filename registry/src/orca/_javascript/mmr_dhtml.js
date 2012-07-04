@@ -923,6 +923,63 @@ $(document).ready(function() {
 		});
 	});
 
+	$('.tipError').live('mouseover', function(){
+		$(this).qtip({
+			content: {
+				text: 'Loading...', // The text to use whilst the AJAX request is loading
+				ajax: {
+					url: 'get_view.php', // URL to the local file
+					type: 'GET', // POST or GET
+					data: {
+						view: 'tipError',
+						key: $(this).attr('key'),
+						status: $(this).attr('status'),
+						ds: $(this).attr('dsKey')
+					}, // Data to pass along with your request
+					loading:false,
+					success: function(data, status) {
+						//console.log(data);
+						var errorData = $('.error', data).text();
+						this.set('content.text', errorData);
+						formatTipError(this);
+					}
+				},
+				title: {
+					text: 'Errors'
+					//button: true
+				}
+			},
+			position: {
+				my: 'right center', // Use the corner...
+				at: 'left center' // ...and opposite corner
+			},
+			show: {
+				//event: 'click',
+				ready: true,
+				solo:true,
+         		effect: function(offset) {
+					$(this).show(); // "this" refers to the tooltip
+				}
+      		},
+      		hide: {
+      			fixed:true,
+				delay: 1500
+			},
+			style: {
+				classes: 'ui-tooltip-shadow ui-tooltip-light'
+			},
+      		overwrite: false
+		});
+	});
+
+	function formatTipError(tt){
+		var tooltip = $('#ui-tooltip-'+tt.id+'-content');
+		$('.quality-test-results', tooltip).show();
+		$('.warning', tooltip).hide();
+		$('.info', tooltip).hide();
+		$('.error', tooltip).show();
+	}
+
 	function formatTip(tt){
 		var tooltip = $('#ui-tooltip-'+tt.id+'-content');
 		

@@ -2196,9 +2196,6 @@ function getQualityTestResult($registry_object_key, $dataSourceKey, $status, $ge
 	return $result;
 }
 
-
-
-
 function searchByName($searchText, $objectClass, $dataSourceKey, $limit)
 {
 	global $gCNN_DBS_ORCA;

@@ -74,6 +74,7 @@ switch($view){
 	case "AllStatusAllQA": AllStatusAllQA($dataSourceKey);break;
 	case "StatusAllQA":StatusAllQA($status, $dataSourceKey);break;
 	case "tipQA": tipQA($key, $ql);break;
+	case "tipError": tipError($key, $dataSourceKey);break;
 	case "getAllStat": getAllStat();break;
 	case "getSummary": getSummary();break;
 }
@@ -381,7 +382,7 @@ function searchRecords($status){
 		if($error_count==0){
 			$error_count = '';
 		}else{
-			$error_count = '<span class="hide">'.$doc->{'error_count'}.'</span><img src="'.eAPP_ROOT.'orca/_images/error_icon.png"/>';
+			$error_count = '<span class="hide">'.$doc->{'error_count'}.'</span><img src="'.eAPP_ROOT.'orca/_images/error_icon.png" key="'.$doc->{'key'}.'" dsKey="'.$doc->{'data_source_key'}.'" status="'.$doc->{'status'}.'" class="tipError"/>';
 		}
 
 		$warning_count = 'N/A';
@@ -545,19 +546,21 @@ function allKeys($status){
 
 function tipQA($key, $level){
 	global $dataSourceKey, $status;
-
 	// Don't show QA for Gold Standard records
-	if ($level == 5)
-	{
+	if ($level == 5){
 		$t = '<div class="qa_container success" qld="5"><div class="">The following record has been verified as an exemplary record by the ANDS Metadata Assessment Group.</div></div>';
 	}
-	else
-	{
+	else{
 		$t = getQualityTestResult($key, $dataSourceKey, $status);
 	}
 	echo $t;
 	return;
 	//echo 'getting qa for key='.$key.' and level='.$level.'<a href="">asdfadsfasd</a>';
+}
+
+function tipError($key, $dataSourceKey){
+	global $status;
+	echo getQualityTestResult($key, $dataSourceKey, $status, false);
 }
 
 function getAllStat(){
