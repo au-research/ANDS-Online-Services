@@ -107,7 +107,7 @@ function runImport($dataSource, $testOnly)
 				$runErrors = importRegistryObjects($registryObjects, $dataSourceKey, $runResultMessage);
 				$timeTaken = substr((string)(microtime(true) - $startTime), 0, 5);
 				$actions  .= "Time Taken: $timeTaken seconds\n";
-				queueSyncDataSource($dataSourceKey);
+				
 			}
 
 
@@ -120,6 +120,7 @@ function runImport($dataSource, $testOnly)
 			{
 				$actions .= ">>SUCCESS\n".$runResultMessage."\n";
 			}
+			queueSyncDataSource($dataSourceKey);
 		}
 		else
 		{
