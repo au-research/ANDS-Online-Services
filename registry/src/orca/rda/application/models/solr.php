@@ -680,7 +680,7 @@ limitations under the License.
 			'fl'=>'key', 'q.alt'=>'*:*','fq'=>'status:PUBLISHED'
 		);
 		if($type=='collection') $fields['fq'].='+class:collection';
-		$facet = 'facet=true&facet.field=type&facet.field=class&facet.field=group&facet.field=subject_value_resolved&facet.sort=index&facet.mincount=0';
+		$facet = 'facet=true&facet.field=type&facet.field=class&facet.field=group&facet.field=subject_value_resolved&facet.sort=index&facet.mincount=0&facet.limit=-1';
 		$json = $this->fireSearch($fields, $facet);
 		return $json;
     }

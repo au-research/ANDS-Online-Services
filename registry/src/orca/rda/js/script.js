@@ -175,7 +175,7 @@ $(document).ready(function(){
 		});
 
 		
-
+$('.getConcept').tipsy({live:true, gravity:'sw'});
 		$("#vocab-browser").bind("open_node.jstree", function(event, data) {
   			// data.inst is the tree object, and data.rslt.obj is the node
   			//return data.inst.toggle_node(data.rslt.obj);
@@ -215,12 +215,13 @@ $(document).ready(function(){
 						url: ajaxURL,
 						data: ajaxDATA,
 				        success:function(data){
+				        	$('.tipsy').hide();
 							$(thisTree).html(data);
 							var tree = jQuery.jstree._reference("#vocab-browser");
 							var vocabBrowser = $('#vocab-browser');
   							$('li.hide', vocabBrowser).hide();
   							//
-  							
+  							$('.getConcept').tipsy({live:true, gravity:'sw'});
   							tree.refresh();
 				        },
 				        error:function(msg){}
@@ -241,6 +242,8 @@ $(document).ready(function(){
 			var tree = jQuery.jstree._reference("#vocab-browser");
 			tree.refresh();
 		});
+
+
 	}
 
 	function vocabLoadConcept(uri, vocab){
@@ -1729,7 +1732,7 @@ $(document).ready(function(){
 	  					$("#hp-browse-activity").html('('+$('#hp-count-activity').html()+')');
 	  					$("#hp-browse-service").html('('+$('#hp-count-service').html()+')');
 
-	  					$('#hp-groups').makeacolumnlists({cols:4,colWidth:0,equalHeight:false,startN:1});
+	  					$('#hp-groups').makeacolumnlists({cols:4,colWidth:0,equalHeight:'ul',startN:1});
 	  				},
 	  				error:function(msg){
 	  					//$('#debug').append('doSearch error: '+msg+'<br/>');

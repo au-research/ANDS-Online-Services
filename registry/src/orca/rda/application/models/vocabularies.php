@@ -216,9 +216,10 @@ class Vocabularies extends CI_Model {
 			)
 			htmlListItem($param);
 		*/
-		$disableClass = '';
+		$disableClass = '';$title = $params['prefLabel'].' ('.$params['num'].')';
 		if($params['num']==0){
 			$disableClass = 'disabled-link';
+			$title = "There's no collection associated with this subject";
 		}
 		$r = '';
 		$r.='	<a href="javascript:void(0);" 
@@ -228,6 +229,7 @@ class Vocabularies extends CI_Model {
 					vocab="'.$params['vocab'].'"
 					total="'.$params['num'].'"
 					prefLabel="'.$params['prefLabel'].'"
+					title="'.$title.'"
 					>
 					'.$params['prefLabel'].' ('.$params['num'].')'.'
 				</a>';
