@@ -22,6 +22,7 @@ limitations under the License.
 
 	for($i=0;$i<count($contents);$i++)
 	{
+		$tab =$contents[$i];
 		if($contents[$i]=="collection" && $contents[$i+1]=='1')
 		{
 			$contents[$i]="Collection";
@@ -51,7 +52,7 @@ limitations under the License.
 				
 		if($contents[$i+1]>0)
 		{					
-			echo '<li><a id="hp-count-collection" href="'.base_url().'search#!/tab='.$contents[$i].'/group='.urlencode($group).'">'.number_format($contents[$i+1])." ".$contents[$i].'</a></li>';
+			echo '<li><a id="hp-count-collection" href="'.base_url().'search#!/tab='.$tab.'/group='.urlencode($group).'">'.number_format($contents[$i+1])." ".$contents[$i].'</a></li>';
 		}else{
 			echo '<li>'.number_format($contents[$i+1])." ".$contents[$i].'</li>';			
 		}

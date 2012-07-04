@@ -955,7 +955,7 @@ $(document).ready(function(){
 	}
 	
 	function initCollectionsAddedBox(group){
-			var url = base_url+"/view_part/subjectStat/index/?sort=dateCreated&group="+group;		
+			var url = base_url+"/view_part/collectionStat/index/?sort=dateCreated&group="+group;		
 			var sort= 'dateCreated';
 			function loadCollectionStat(sort,group){//load Institution Page Stat
 				$.ajax({
