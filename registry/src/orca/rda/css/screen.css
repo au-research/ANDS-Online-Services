@@ -78,7 +78,7 @@ a:hover{text-decoration:underline;}
 */
 #mid{width:100%;margin:15px 0 10px 0;position:relative;text-align:center;padding:0;}
 #logo{ width:235px;float:left;}
-#ands-logo-white{float:right;margin-right:30px;}
+#ands-logo-white{float:right;margin-right:10px;}
 #logo h1{
 	color:#0a450a;margin:0;padding:0;font-weight:bold;text-shadow: 2px 2px 2px #fff;font-size:23px;
 }
@@ -455,7 +455,7 @@ img.arrow{position:absolute;top:-54px;left:100px;z-index:999;display:inline-bloc
 .hp-class-item div{display:block;float:left;width:300px;}
 
 .hp-left{width:450px;float:left;}
-.hp-right{float:left;width:450px;margin:0 15px 0px 25px;}
+.hp-right{float:left;width:450px;margin:0px 0px 0px 25px;}
 .hp-styled-box{padding:5px;margin:5px;border:1px solid black;-moz-border-radius: 7px;border-radius: 7px;}
 .limitHeight300{max-height:300px;overflow:auto;}
 .limitHeight200{max-height:200px;overflow:auto;}
@@ -683,7 +683,8 @@ display:block;
 /*search vocab*/
 #browse_more_subject{margin:5px;padding:10px;display:block;border-bottom:1px solid #ccc;}
 #subject_content{overflow:auto;max-height:550px;margin-top:15px;}
-#subject_category{width:190px;float:right;}
+#subject_dropdown{float:right;overflow:auto;color:#555;}
+#subject_category{width:190px;}
 
 /* IE 6 doesn't support max-height
  * we use height instead, but this forces the menu to always be this tall

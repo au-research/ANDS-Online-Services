@@ -543,7 +543,8 @@ $(document).ready(function(){
 		delimiter:/(,|;)\s*/,
 		select: function( event, ui ) {
 			$('#search-box').val = ui.item.value;
-			doSearch();
+			search_term = ui.item.value;
+			changeHashTo(formatSearch(search_term, page, classFilter));
 		}
 	});
 
@@ -2156,7 +2157,7 @@ $(document).ready(function(){
 		});
 		var watermark = 'Search for a subject';
 		$('#subject_search_filter').val(watermark);
-		$('#subject_search_filter').css('color', '#888');
+		$('#subject_search_filter').css('color', '#555');
 		if($('#subject_search_filter').val()=='watermark'){
 			$('#subject_search_filter').css('color', '#ddd');
 		}
@@ -2169,7 +2170,7 @@ $(document).ready(function(){
 		$('#subject_search_filter').live('blur', function(){
 			if($(this).val()==''){
 				$(this).val(watermark);
-				$(this).css('color', '#888');
+				$(this).css('color', '#555');
 			}
 		});
 	}

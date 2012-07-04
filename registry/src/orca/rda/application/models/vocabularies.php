@@ -32,7 +32,7 @@ class Vocabularies extends CI_Model {
 	    	$bigTree .='<div id="vocab-browser">';
 				$bigTree .='<ul>';
 					$bigTree .='<li id="rootNode">';
-					$bigTree .='<a href="#">ANDS Vocabulary Service</a>';
+					$bigTree .='<a href="#">Vocabularies</a>';
 					$bigTree .='<ul>';
 			    	//var_dump($vocabs);
 			    	$order = 1; //additional parameter to add to each tree for identification purpose

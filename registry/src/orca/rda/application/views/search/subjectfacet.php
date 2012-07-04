@@ -1,6 +1,8 @@
 <div id="subject_toolbar" class="toolbar" style="border-bottom:1px solid #ccc">
 	<input id="subject_search_filter"/>
-	<select id="subject_category">
+	
+	<div id="subject_dropdown">
+	Label: <select id="subject_category">
 		<option value="anzsrcfor" <?php if($view=='anzsrcfor') echo 'selected="selected"';?>>ANZSRC-FOR</option>
 		<?php
 			$categories = $this->config->item('subjects_categories');
@@ -13,5 +15,6 @@
 			}
 		?>
 	</select>
+	</div>
 </div>
 <div id="subject_content"><?php echo $bigTree;?></div>

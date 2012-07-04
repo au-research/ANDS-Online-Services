@@ -66,13 +66,12 @@ limitations under the License.
 
 	<script type="text/javascript" src="<?php echo base_url();?>js/qtip/jquery.qtip.min.js"></script> <!-- FancyBox Image Lightbox -->
 
-	<?php if ($user_agent=='Internet Explorer'):?>
+	<?php if ($this->agent->browser()=='Internet Explorer' && $this->agent->version() < 9):?>
 		<!-- Rounded Corners for IE -->
     	<script type="text/javascript" src="<?php echo base_url();?>js/DD_roundies_0.0.2a-min.js"></script>
     	<script>
     		DD_roundies.addRule('.box', '10px');
     		DD_roundies.addRule('.hp-class-item', '10px');
-    		DD_roundies.addRules('.shadow-and-corner', '10px');
     	</script>
 	 <?php endif;?>
 

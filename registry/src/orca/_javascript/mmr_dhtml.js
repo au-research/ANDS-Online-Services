@@ -549,8 +549,6 @@ $(document).ready(function() {
 			alert('No command to be executed');
 			return false;
 		}
-
-		//Reindex all the target Keys
 	}
 
 	function fireZaLaserz(com, targetKeys, hasError, grid){
@@ -738,7 +736,7 @@ $(document).ready(function() {
 
 	function selectAll(com, grid){
 		if($(this).text()=='Select All'){
-			$('tbody tr', grid).addClass('trSelected');
+			$('.bDiv tr', grid).addClass('trSelected');
 
 			//console.log($('.ftitle',grid));
 			var total = parseInt($('.ftitle', grid).attr('count'));
@@ -768,11 +766,20 @@ $(document).ready(function() {
 			$('.infoDiv', grid).hide();
 			$(this).html('<a class="button smaller left">Select All</a>');
 		}
+
+		$('.trSelected', grid).click(function(){
+			$(grid).attr('selectall', 'no');
+			var numSelected = $('.bDiv tr.trSelected', grid).length;
+			message = ''+numSelected+' records on this page are selected. <a href="javascript:void(0);" class="selectAll">Select All '+total+' records</a>. ';
+			$('.infoDiv', grid).html(message);
+			$('.infoDiv', grid).show();
+		});
 	}
 
 	$('.selectAll').live('click', function(){
 		var grid = $(this).parent().parent().parent();
 		$(grid).attr('selectall', 'yes');
+		$('.bDiv tr', grid).addClass('trSelected');
 		var total = parseInt($('.ftitle', grid).attr('count'));
 		$(this).parent().html('All '+total+' records are selected');
 	});
