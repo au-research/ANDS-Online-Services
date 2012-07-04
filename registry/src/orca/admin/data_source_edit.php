@@ -731,11 +731,11 @@ require '../../_includes/header.php';
 			}
 			?>
 			<tr <?php echo $groupClass;?>>
-			<td<?php print($institutionPagesClass); ?>>Institutional Pages:</td>		
+			<td<?php print($institutionPagesClass); ?>>Contributor Pages:</td>		
 			<td>			
-			 	<input type="radio" name="institution_pages" value="0" <?php if($institutionalPages=="0") echo " checked"?> onChange="setInstitutionalPage(this,'<?php echo $groups;?>','<?php echo $data_Source?>');"> Do not have institutional pages<br />
-				<input type="radio" name="institution_pages" value="1" <?php if($institutionalPages=="1") echo " checked"?> onChange="setInstitutionalPage(this,'<?php echo $groups;?>','<?php echo $data_Source?>');"> Auto generate Institutional Pages for all my groups<br /> 
-				<input type="radio" name="institution_pages" value="2" <?php if($institutionalPages=="2") echo " checked"?> onChange="setInstitutionalPage(this,'<?php echo $groups;?>','<?php echo $data_Source?>');"> Manually manage my Institutional Pages and groups<br /> 
+			 	<input type="radio" name="institution_pages" value="0" <?php if($institutionalPages=="0") echo " checked"?> onChange="setInstitutionalPage(this,'<?php echo $groups;?>','<?php echo $data_Source?>');"> Do not have Contributor Pages<br />
+				<input type="radio" name="institution_pages" value="1" <?php if($institutionalPages=="1") echo " checked"?> onChange="setInstitutionalPage(this,'<?php echo $groups;?>','<?php echo $data_Source?>');"> Auto generate Contributor Pages for all my groups<br /> 
+				<input type="radio" name="institution_pages" value="2" <?php if($institutionalPages=="2") echo " checked"?> onChange="setInstitutionalPage(this,'<?php echo $groups;?>','<?php echo $data_Source?>');"> Manually manage my Contributor Pages and groups<br /> 
 				<span id="currentPage" style="display:none"><?php echo $institutionalPages?></span>
 				<?php if($groups!='')
 				{?>

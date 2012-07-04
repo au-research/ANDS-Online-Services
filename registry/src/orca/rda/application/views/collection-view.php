@@ -27,14 +27,14 @@ limitations under the License.
 	}
 	if($theNum == 1) 
 	{
-		$theStr = $theNum." collection ";
+		$theStr = $theNum." Collection ";
 	} else {
 	
-		$theStr = $theNum." collections ";
+		$theStr = $theNum." Collections ";
 	}
 	if($theNum>0)
 	{
-		echo  '		<h2>Last '.$theStr.' Added:</h2>
+		echo  '		<h2>Last '.$theStr.' Added</h2>
 			<div id="collectionsAdded">';
 				
 			

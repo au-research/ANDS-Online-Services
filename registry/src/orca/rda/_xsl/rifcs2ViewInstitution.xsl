@@ -181,8 +181,9 @@
         </xsl:if>   
 
 		<div style="position:relative;clear:both;">
+		<hr />
 		<p>
-			<div class='rss_icon' style="margin-top:2px;"></div> Subscribe to this web feed. 
+			<div class='rss_icon' style="margin-top:2px;"></div> Subscribe to a feed of collections from this contributor. 
 			<a>
 			<xsl:attribute name="href">
 				<xsl:value-of select="$base_url"/>
@@ -253,7 +254,7 @@
 				
 			<!-- Registry Content -->
 			<div class="right-box" id="contentRightBox">
-			<h2>Registry Content:</h2>
+			<h2>Registry Content</h2>
 			<div id="contents">
 				<img>
 				<xsl:attribute name="src"><xsl:value-of select="$base_url"/><xsl:text>/img/ajax-loader.gif</xsl:text></xsl:attribute>
@@ -266,7 +267,7 @@
 			<!-- Subjects Covered -->
 			<div class="right-box" id="subjectRightBox">
 			<div id="subjectInfoBox" class="hide"></div>			
-			<h2>Subjects Covered:</h2>
+			<h2>Subjects Covered</h2>
 			<div id="subjects">
 				<img>
 				<xsl:attribute name="src"><xsl:value-of select="$base_url"/><xsl:text>/img/ajax-loader.gif</xsl:text></xsl:attribute>
@@ -278,7 +279,7 @@
 			<!-- Research Groups: -->
 			<div class="right-box" id="groupsRightBox">
 			<div id="groupInfoBox" class="hide"></div>			
-			<h2>Research Groups:</h2>
+			<h2>Research Groups</h2>
 			<div id="researchGroups">
 				<img>
 				<xsl:attribute name="src"><xsl:value-of select="$base_url"/><xsl:text>/img/ajax-loader.gif</xsl:text></xsl:attribute>
@@ -290,7 +291,7 @@
 			<!-- Last 5 Collections Added: -->
 			<div class="right-box" id="addedRightBox">
 	
-			<h2>Last 5 Collections Added:</h2>
+			<h2>Last 5 Collections Added</h2>
 			<div id="collectionsAdded">
 				<img>
 				<xsl:attribute name="src"><xsl:value-of select="$base_url"/><xsl:text>/img/ajax-loader.gif</xsl:text></xsl:attribute>
@@ -302,7 +303,7 @@
 			<!-- Top 5 Most Visited Collections: -->
 			<div class="right-box" id="visitedRightBox">
 	
-			<h2>Top 5 Most Visited Collections:</h2>
+			<h2>Top 5 Most Visited Collections</h2>
 			<div id="collectionsVisited">
 				<img>
 				<xsl:attribute name="src"><xsl:value-of select="$base_url"/><xsl:text>/img/ajax-loader.gif</xsl:text></xsl:attribute>
@@ -314,7 +315,7 @@
 				<!-- Top 5 Most Cited Collections: -->
 			<div class="right-box" id="citedRightBox">
 	
-			<h2>Top 5 Most Cited Collections:</h2>
+			<h2>Top 5 Most Cited Collections</h2>
 			<div id="collectionsCited">
 				<img>
 				<xsl:attribute name="src"><xsl:value-of select="$base_url"/><xsl:text>/img/ajax-loader.gif</xsl:text></xsl:attribute>

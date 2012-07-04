@@ -19,14 +19,41 @@ limitations under the License.
 <?php
 	$contents = $content->{'facet_counts'}->{'facet_fields'}->{'class'};
 	echo "<ul>";
+
 	for($i=0;$i<count($contents);$i++)
 	{
-		
-		if($contents[$i+1]>0)
+		if($contents[$i]=="collection" && $contents[$i+1]=='1')
 		{
-			echo '<li><a id="hp-count-collection" href="'.base_url().'search#!/tab='.$contents[$i].'/group='.urlencode($group).'">'.$contents[$i].'('.number_format($contents[$i+1]).')</a></li>';
+			$contents[$i]="Collection";
+		}elseif($contents[$i]=="collection" && $contents[$i+1]!='1'){
+			$contents[$i]="Collections";
+		}
+			
+		if($contents[$i]=="party" && $contents[$i+1]=='1')
+		{
+			$contents[$i]="Party";
+		}elseif($contents[$i]=="party" && $contents[$i+1]!='1'){
+			$contents[$i]="Parties";
+		}
+		if($contents[$i]=="service" && $contents[$i+1]=='1')
+		{
+			$contents[$i]="Service";
+		}elseif($contents[$i]=="service" && $contents[$i+1]!='1'){
+			$contents[$i]="Services";
+		}
+				
+		if($contents[$i]=="activity" && $contents[$i+1]=='1')
+		{
+			$contents[$i]="Activity";
+		}elseif($contents[$i]=="activity" && $contents[$i+1]!='1'){
+			$contents[$i]="Activities";
+		}
+				
+		if($contents[$i+1]>0)
+		{					
+			echo '<li><a id="hp-count-collection" href="'.base_url().'search#!/tab='.$contents[$i].'/group='.urlencode($group).'">'.number_format($contents[$i+1])." ".$contents[$i].'</a></li>';
 		}else{
-			echo '<li>'.$contents[$i].'('.number_format($contents[$i+1]).')</li>';			
+			echo '<li>'.number_format($contents[$i+1])." ".$contents[$i].'</li>';			
 		}
 		$i++;
 	}
