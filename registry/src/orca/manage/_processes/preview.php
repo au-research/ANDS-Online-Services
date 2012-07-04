@@ -57,7 +57,7 @@ limitations under the License.
 	<title><?php $keyValue ?></title>
 	<script type="text/javascript" src="<?php print eAPP_ROOT ?>_javascript/jquery.js"></script>
 	<script type="text/javascript" src="<?php print eAPP_ROOT ?>_javascript/jquery-ui-1.8.17.custom.min.js"></script>
-    <style type="text/css">body{font-size:80%;} table{border-collapse:collapse !important;} td{border:1px solid #ccc;} </style>
+    <style type="text/css">body{font-family:Courier; font-size:0.7em;} table{border-collapse:collapse !important;width:100%;} .attribute{width:auto;} td{border:1px solid #ccc; padding:7px; width:100%;} </style>
 <script type='text/javascript'>
 	 function loadRelatedTitles()
 	 {
