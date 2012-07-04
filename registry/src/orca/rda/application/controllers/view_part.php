@@ -31,32 +31,45 @@ class View_part extends CI_Controller {
 		$data['classes']=$this->solr->getStat($sort);
 		$this->load->view('stat-view', $data);
 	}
-	public function cannedText($sort = 'index',$group,$key){
+	public function cannedText(){
+		$sort = $this->input->get('sort');
+		$group = $this->input->get('group');	
+		$key = $this->input->get('key');		
 		$this->load->model('solr');
 		$data['content']=$this->solr->getCannedContent($sort,$group,$key);
 		$data['group']=$group;			
 		$this->load->view('cannedText-view', $data);
 	}	
-	public function contentStat($sort = 'index',$group,$key){
+	public function contentStat(){
+		$sort = $this->input->get('sort');
+		$group = $this->input->get('group');	
+		$key = $this->input->get('key');	
 		$this->load->model('solr');
 		$data['content']=$this->solr->getContent($sort,$group,$key);
 		//print_r($data['content']);
 		$data['group']=$group;			
 		$this->load->view('content-view', $data);
 	}
-	public function subjectStat($sort = 'index',$group){
+	public function subjectStat(){
+		$sort = $this->input->get('sort');
+		$group = $this->input->get('group');	
 		$this->load->model('solr');
 		$data['content']=$this->solr->getSubjects($sort,$group);
 		$data['group']=$group;			
 		$this->load->view('subject-view', $data);
 	}		
-	public function collectionStat($sort = 'dateCreated',$group){
+	public function collectionStat(){
+		$sort = $this->input->get('sort');
+		$group = $this->input->get('group');	
 		$this->load->model('solr');
 		$data['collections']=$this->solr->getCollection($sort, 'collection',$group);
 		$data['group']=$group;			
 		$this->load->view('collection-view', $data);
 	}
-	public function groupStat($sort = 'dateCreated',$group,$key){
+	public function groupStat(){
+		$sort = $this->input->get('sort');
+		$group = $this->input->get('group');	
+		$key = $this->input->get('key');	
 		$this->load->model('solr');
 		$data['collections']=$this->solr->getGroups($sort, $group, $key);
 		$data['group']=$group;			

@@ -823,7 +823,7 @@ $(document).ready(function(){
 	function initInstitutionViewPage(){
 		var key = $('#key').html();
 		var group = location.href.substr(location.href.indexOf("groupName=")+10,location.href.length);
-		group = encodeURIComponent(decodeURIComponent(group));
+		group = encodeURI(decodeURIComponent(group));
 		initCannedText(group,key);
 		initContentsBox(group,key);
 		initSubjectsBox(group);
@@ -834,11 +834,12 @@ $(document).ready(function(){
 	
 	}	
 	function initCannedText(group,key){
+		var url = base_url+"/view_part/cannedText/index/?sort=index&group="+group+"&key="+key;
 		var sort='index';
 		function loadCannedText(sort,group){//load Institution Page Stat
 			$.ajax({
 	  			type:"GET",   
-	  			url: base_url+"/view_part/cannedText/"+sort+"/"+group+"/"+key,   
+	  			url: url,   
 	  				success:function(msg){	
 	  					if(msg!='')
 	  					{
@@ -853,11 +854,12 @@ $(document).ready(function(){
 		loadCannedText(sort,group);
 	}	
 	function initContentsBox(group,key){
+		var url = base_url+"/view_part/contentStat/index/?sort=index&group="+group+"&key="+key;
 		var sort='index';
 		function loadContentStat(sort,group){//load Institution Page Stat
 			$.ajax({
 	  			type:"GET",   
-	  			url: base_url+"/view_part/contentStat/"+sort+"/"+group+"/"+key,   
+	  			url: url,   
 	  				success:function(msg){	
 	  					if(msg!='')
 	  					{
@@ -875,12 +877,12 @@ $(document).ready(function(){
 	}
 	
 	function initSubjectsBox(group){
-
+		var url = base_url+"/view_part/subjectStat/index/?sort=index&group="+group;
 		var sort='index';
 		function loadSubjectStat(sort,group){//load Institution Page Stat
 			$.ajax({
 	  			type:"GET",   
-	  			url: base_url+"/view_part/subjectStat/"+sort+"/"+group,   
+	  			url: url,   
 	  				success:function(msg){	
 	  					if(msg!='')
 	  					{
@@ -915,11 +917,12 @@ $(document).ready(function(){
 	}	
 	
 	function initResearchGroupsBox(group,key){
-		var sort='dateCreated';
+		var url = base_url+"/view_part/groupStat/index/?sort=dateCreated&group="+group+"&key="+key;		
+		var sort= 'dateCreated';
 		function loadGroupStat(sort,group){//load Institution Page Stat
 			$.ajax({
 	  			type:"GET",   
-	  			url: base_url+"/view_part/groupStat/"+sort+"/"+group+"/"+key,   
+	  			url: url,   
 	  				success:function(msg){	
 	  					if(msg!=''){
 	  						$('#researchGroups').html(msg);
@@ -952,12 +955,12 @@ $(document).ready(function(){
 	}
 	
 	function initCollectionsAddedBox(group){
-		
-			var sort='dateCreated';
+			var url = base_url+"/view_part/subjectStat/index/?sort=dateCreated&group="+group;		
+			var sort= 'dateCreated';
 			function loadCollectionStat(sort,group){//load Institution Page Stat
 				$.ajax({
 		  			type:"GET",   
-		  			url: base_url+"/view_part/collectionStat/"+sort+"/"+group,   
+		  			url:url,   
 		  				success:function(msg){
 		  					if(msg!=''){
 		  						$('#addedRightBox').html();
