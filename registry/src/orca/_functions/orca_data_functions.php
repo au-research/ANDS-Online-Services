@@ -1884,7 +1884,7 @@ function setRegistryObjectGoldStandardFlag($registry_object_key, $gs_flag)
 	if (in_array($gs_flag, array(0,1)))
 	{
 		global $gCNN_DBS_ORCA;
-        $strQuery = 'UPDATE dba.tbl_registry_objects SET gold_status_flag = $2 WHERE registry_object_key = $1';
+        $strQuery = 'UPDATE dba.tbl_registry_objects SET gold_status_flag = $2 , quality_level = 5 WHERE registry_object_key = $1';
         $params = array($registry_object_key, $gs_flag);
         $resultSet = @executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
 	}
@@ -2195,6 +2195,9 @@ function getQualityTestResult($registry_object_key, $dataSourceKey, $status, $ge
 
 	return $result;
 }
+
+
+
 
 function searchByName($searchText, $objectClass, $dataSourceKey, $limit)
 {

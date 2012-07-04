@@ -423,7 +423,8 @@ $(document).ready(function() {
 			buttons.push({name: 'Delete Record', bclass: 'delete', onpress : doCommand});
 		}else if(status=="PUBLISHED"){
 			if(orcaQA){
-				buttons.push({name: 'Mark as Gold Standard', bclass: 'mark_gold_standard', onpress : doCommand});
+				buttons.push({name: 'Mark as Gold Standard', bclass: 'mark_gold_standard', onpress : doCommand});	
+				buttons.push({name: 'Remove Gold Standard', bclass: 'unset_gold_standard', onpress : doCommand});
 			}
 			buttons.push({name: 'Delete Record', bclass: 'delete', onpress : doCommand});
 		}
@@ -440,9 +441,14 @@ $(document).ready(function() {
 		if(table_type=='status_table'){
 			theTableTitle=status.replace(/_/g," ");;
 		}else if(table_type=='as_qa_table' || table_type=='qa_table'){
-			theTableTitle = 'Gold Standard ';
-			if(ql < 4)
-				theTableTitle = 'Quality Level '+ ql;
+			buttons = [];
+			theTableTitle = 'Quality Level '+ ql;
+			if(ql == 5){
+				theTableTitle = 'Gold Standard ';
+				buttons.push({name: 'Select All', bclass: 'button', onpress : selectAll});
+				buttons.push({name: 'Remove Gold Standard', bclass: 'unset_gold_standard', onpress : doCommand});
+			}
+				
 		}
 
 		var tClass = status+'_table';
@@ -499,10 +505,10 @@ $(document).ready(function() {
 
 
 
-	function formatTable(com, grid){
+	function formatTable(){
 		//hide info
-		$('.infoDiv', grid).hide();
-		$('td[abbr=status]', grid).each(function(){
+		$('.infoDiv').hide();
+		$('td[abbr=status]').each(function(){
 			$(this).addClass($(this).text()+'_status');
 		});
 
@@ -513,7 +519,6 @@ $(document).ready(function() {
 		$('.qaview[ql=0], .qaview[ql=5]').each(function(){
 			if($(this).find('.ftitle').attr('count') == '0') $(this).hide();
 		});
-
 	}
 
 
@@ -610,6 +615,11 @@ $(document).ready(function() {
 				action = 'FLAG_GOLD';
 			}
 		}
+		else if(com=='Remove Gold Standard'){
+			if(confirm('You are about to unflag '+numKeys+' registry objects as normal. Do you want to continue?')){
+				action = 'UNSET_GOLD';
+			}
+		}
 		//alert($("#elementSourceURL").val());
 
 		if(hasError){
@@ -681,19 +691,26 @@ $(document).ready(function() {
     	//var order = array('MORE_WORK_REQUIRED', 'DRAFT','SUBMITTED_FOR_ASSESSMENT', 'ASSESSMENT_IN_PROGRESS', 'APPROVED', 'PUBLISHED');
     	//var order = ['PUBLISHED', 'APPROVED', 'SUBMITTED_FOR_ASSESSMENT', , 'ASSESSMENT_IN_PROGRESS''DRAFT', 'MORE_WORK_REQUIRED'];
     	var order = [];
-    	if(DS_QA_flag){
-			if(MANUAL_PUBLISH){
-    			var order = ['PUBLISHED', 'APPROVED', 'SUBMITTED_FOR_ASSESSMENT', 'ASSESSMENT_IN_PROGRESS', 'DRAFT', 'MORE_WORK_REQUIRED'];
-    		}else{//auto publish
-				var order = ['PUBLISHED', 'SUBMITTED_FOR_ASSESSMENT', 'ASSESSMENT_IN_PROGRESS', 'DRAFT', 'MORE_WORK_REQUIRED'];
+    	if(dsKey != 'ALL_DS_ORCA')
+    		{
+	    	if(DS_QA_flag){
+				if(MANUAL_PUBLISH){
+	    			var order = ['PUBLISHED', 'APPROVED', 'SUBMITTED_FOR_ASSESSMENT', 'ASSESSMENT_IN_PROGRESS', 'DRAFT', 'MORE_WORK_REQUIRED'];
+	    		}else{//auto publish
+					var order = ['PUBLISHED', 'SUBMITTED_FOR_ASSESSMENT', 'ASSESSMENT_IN_PROGRESS', 'DRAFT', 'MORE_WORK_REQUIRED'];
+	    		}
+	    	}else{
+	    		if(MANUAL_PUBLISH){
+	    			var order = ['PUBLISHED', 'APPROVED', 'DRAFT'];
+	    		}else{//auto publish
+					var order = ['PUBLISHED', 'DRAFT'];
+	    		}
+	    	}
     		}
-    	}else{
-    		if(MANUAL_PUBLISH){
-    			var order = ['PUBLISHED', 'APPROVED', 'DRAFT'];
-    		}else{//auto publish
-				var order = ['PUBLISHED', 'DRAFT'];
-    		}
-    	}
+    	else{
+    			var order = ['Collections','Parties','Services','Activities'];	    		
+	    	}
+
     	$.each(order, function(pos, i){
     		columns.push({display:i.replace(/_/g," "), name:i, width:120, sortable:false, align:'left'});
     	});
@@ -747,6 +764,7 @@ $(document).ready(function() {
 	        //additionalClass:tClass,
 	        tableTitle:'Registry Content Summary for '+dsName
 		});
+       	
        	
 	}
 

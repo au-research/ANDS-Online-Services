@@ -826,6 +826,7 @@
 						btnDiv.innerHTML = "<a class=\"button middle smaller\">" + btn.name + "</a>";
 					}
 					
+					if (btn.bclass) $(btnDiv).addClass(btn.bclass);
 					if (btn.bclass) $('span', btnDiv).addClass(btn.bclass).css({
 						//paddingLeft: 20
 					});

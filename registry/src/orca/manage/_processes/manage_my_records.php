@@ -239,7 +239,16 @@ switch(getQueryValue('action'))
 	
 	case "FLAG_GOLD":
 		foreach($keys as $key){
-			setGoldFlag($key);
+			setRegistryObjectGoldStandardFlag($key,1);
+			syncKey($key, $data_source_key);
+		}
+		$response['responsecode']="1";
+		echo json_encode($response);
+		die();
+		
+	case "UNSET_GOLD":
+		foreach($keys as $key){
+			setRegistryObjectGoldStandardFlag($key,0);
 			syncKey($key, $data_source_key);
 		}
 		$response['responsecode']="1";

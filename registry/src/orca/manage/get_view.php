@@ -663,7 +663,10 @@ function getSummary()
 	global $dataSourceKey;
 	global $status;
 	global $result;
-	if($dataSourceKey=='ALL_DS_ORCA') $dataSourceKey='';
+	if($dataSourceKey=='ALL_DS_ORCA'){
+		$dataSourceKey='';
+		$result = array('Collections'=>0, 'Parties'=>0, 'Activities'=>0, 'Services'=>0);
+	}
 	$stats = getDataSourceSummary($dataSourceKey, $status);
 	
 	
@@ -672,6 +675,7 @@ function getSummary()
 	$total = 0;
 	if($stats)
 	{
+
 	foreach($stats as $item){
 		//foreach($stat_item as $item){
 			//var_dump($item);
@@ -692,11 +696,11 @@ function getSummary()
 			$total += $count;
 			if($dataSourceKey==''){
 				if(isset($statResult[$title])){
-					$statResult[$title][$status] += $count;
+					$statResult[$title][$ro_class] += $count;
 				}
 				else{
 					$statResult[$title] = $result;
-					$statResult[$title][$status] = $count;
+					$statResult[$title][$ro_class] = $count;
 				}
 			}else{
 				if(isset($statResult[$ro_class])){
@@ -708,6 +712,7 @@ function getSummary()
 			}
 		}	
 		$jsonData = array('page'=>'1','total'=>$total,'rows'=>array());
+		ksort($statResult);
 		foreach($statResult as $title=>$array){
 	
 			$entry = array(
