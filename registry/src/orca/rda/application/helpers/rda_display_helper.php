@@ -35,7 +35,7 @@ function displayFacet($facet_name, $facetFilter, $json, $ro_class){
 			$class="typeFilter";break;
 		case "group":$clear = 'clearGroup';$name='Contributed by';$class="groupFilter";break;
 		case "subject_value_resolved":$clear = 'clearSubjects';$name="Subjects";$class="subjectFilter";break;
-		case "licence_group":$clear = 'clearLicence';$name="Licence";$class="licenceFilter";break;
+		case "licence_group":$clear = 'clearLicence';$name="Licence&nbsp;<a href='#'><img src='".base_url()."img/question_mark.png' style='position:absolute;margin-top:7px;'/></a>";$class="licenceFilter";break;
 	}
 
 

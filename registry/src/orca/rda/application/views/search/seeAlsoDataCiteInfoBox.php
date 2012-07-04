@@ -49,7 +49,7 @@ foreach($json->{'response'}->{'docs'} as $r)
 	}
 	
 	echo '<a href="http://data.datacite.org/'.$r->{'doi'}.'" class="button" target="_blank">View DataCite Metadata</a>';
-	echo '<div style="float:right;position:relative;"><a href="http://dx.doi.org/'.$r->{'doi'}.'" class="button" target="_blank">View Resolved record page</a></div>';
+	echo '<div style="float:right;position:relative;"><a href="http://dx.doi.org/'.$r->{'doi'}.'" class="button" target="_blank">View record webpage</a></div>';
 	echo '</div>';
 	
 }
