@@ -80,6 +80,8 @@ echo '<link rel="stylesheet" href="'. eAPP_ROOT.'orca/_javascript/flexigrid/css/
 		        <span>Schedule Delay (time from now): </span> <?php echo schedule_chooser(); ?>
 		    </label><br/>
 		</div>
+		
+			<div><input type="checkbox" checked="checked" id="automatically_trigger_on_submit" style="display:inline; width:auto;" /> Automatically trigger on submit</div>
 
         <input type="button" id="taskAddConfirm" value="Add Task" style="cursor:pointer;" />
         <input type="button" id="taskAddCancel" value="Cancel" style="cursor:pointer;" />
@@ -214,6 +216,11 @@ function addNewTask()
 	$.get(taskString);
 	$.unblockUI();
 
+	if ($('#automatically_trigger_on_submit').is(':checked'))
+	{
+		triggerWorker();
+	}
+
 	reloadAllGrids(500);
 }
 
@@ -268,6 +275,7 @@ function task_chooser()
 	$tasks = array('');
 	$tasks = scandir('_tasks/');
 	$return = '<select id="method" style="width:150px;">';
+	$return .= '<option></option>';
 	foreach ($tasks AS $t)
 	{
 		if (substr($t,0,1) == '.' || substr($t,0,1) == '_') continue;
