@@ -273,6 +273,8 @@ $(document).ready(function() {
   				});
   				
 
+  				
+
   				//console.log(colorArray);
     			// Create and draw the visualization.
     			var barsVisualization = new google.visualization.BarChart(document.getElementById(status+'_qaview'));
@@ -280,21 +282,19 @@ $(document).ready(function() {
     			//formatter.format(realData, 0);
 			  	
     			var optionTitle = 'Class';
-    			var optionHeight = (rowCount * 50) + 150;
+    			var optionHeight = (rowCount * 40);
+    			var chartAreaArray = {left:"10%", right:"20%", width:600, top:50, height:optionHeight};
     			if(dsKey=='ALL_DS_ORCA'){
     				optionTitle = 'Data Source Key';
-        			
+    				chartAreaArray = {left:"30%", right:"20%", width:600, top:50, height:optionHeight};
     			}
     			
-    			var optionPercent = {title:status.replace(/_/g," ") + " Records",
-		        	width:1400, height:optionHeight,
+    			var optionPercent = {title:status.replace(/_/g," ") + " Records",		        	
 		        	vAxis: {title:optionTitle},
+		        	height:optionHeight+150,
 		        	isStacked:true,
 		        	colors:colorArray,
-		        	animation:{
-    					duration: 1000,
-    					easing: 'out'
-  					},
+		        	chartArea: chartAreaArray,
   					sliceVisibilityThreshold:0,
 		        	hAxis: {title: "Quality Levels Percentage",format:'##%'}};
 				

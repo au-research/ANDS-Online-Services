@@ -577,6 +577,14 @@ function getAllStat(){
 			$ds_title = getDataSourceTitle($ds_key);
 			$title = $ds_title[0]['title'];
 			$ro_class = $item['ro_class'];
+			if($ro_class == 'Collection')
+				$ro_class = "Collections";
+			elseif($ro_class == 'Party')
+				$ro_class = "Parties";
+			elseif($ro_class == 'Activity')
+				$ro_class = "Activities";
+			elseif($ro_class == 'Service')
+				$ro_class = "Services";
 			$ro_status = $item['status'];
 			$qa_level = $item['qa_level'];
 			if(!in_array($qa_level, $qa_levels)){
@@ -668,6 +676,14 @@ function getSummary()
 			$ds_title = getDataSourceTitle($ds_key);
 			$title = $ds_title[0]['title'];
 			$ro_class = $item['ro_class'];
+			if($ro_class == 'Collection')
+				$ro_class = "Collections";
+			elseif($ro_class == 'Party')
+				$ro_class = "Parties";
+			elseif($ro_class == 'Activity')
+				$ro_class = "Activities";
+			elseif($ro_class == 'Service')
+				$ro_class = "Services";		
 			$status = $item['status'];
 			$count = $item['count'];
 			$total += $count;
