@@ -41,7 +41,7 @@ function task_hourly_registry_maintenance($task)
 	{
 		foreach ($emptyRegistryObjectsList AS $registry_object)
 		{
-			getRegistryObjectHashForKey($registry_object['registry_object_key'])
+			getRegistryObjectHashForKey($registry_object['registry_object_key']);
 		}
 	}
 
@@ -53,7 +53,7 @@ function task_hourly_registry_maintenance($task)
 	{
 		foreach ($emptyRegistryObjectsList AS $registry_object)
 		{
-			updateRegistryObjectSLUG(getRegistryObjectHashForKey($registry_object['registry_object_key']), $registry_object['display_title']);
+			updateRegistryObjectSLUG($registry_object['registry_object_key'], $registry_object['display_title']);
 		}
 	}
 	
