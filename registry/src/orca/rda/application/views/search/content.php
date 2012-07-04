@@ -193,7 +193,7 @@ limitations under the License.
 				$licenceFilter = $_POST['licenceFilter'];
 				if(isset($_POST['dataSource'])) $dataSourceString = "&dataSource=".$_POST['dataSource'];
 				$queryStr = '?q='.$q.$dataSourceString.'&classFilter='.$classFilter.'&typeFilter='.$typeFilter.'&groupFilter='.$groupFilter.'&subjectFilter='.$subjectFilter.'&licenceFilter='.$licenceFilter;
-				echo "<div id='subscriptions'><div class='rss_icon'></div> Subscribe to this web feed. <a href='".base_url()."search/rss/".$queryStr."&subscriptionType=rss'>RSS</a>/<a href='".base_url()."search/atom/".$queryStr."&subscriptionType=atom'>ATOM</a></div>";
+				echo "<div id='subscriptions'><div class='rss_icon'></div>Subscribe to this web feed. <a href='".base_url()."search/rss/".$queryStr."&subscriptionType=rss' title='Stay informed with RSS when any updates are made to this search query.' class='licenceFilter'>RSS</a>/<a href='".base_url()."search/atom/".$queryStr."&subscriptionType=atom' title='Stay informed with ATOM when any updates are made to this search query.' class='licenceFilter'>ATOM</a></div>";
 			}
 			$this->load->view('search/pagination');
 			echo '</div>';
