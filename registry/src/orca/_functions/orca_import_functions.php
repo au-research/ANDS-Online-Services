@@ -53,6 +53,7 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 	$totalRegistryObjectDeletes = 0;
 	$totalRegistryObjectChanges = 0;
 	$totalAttemptedInserts = 0;
+	$SUBMITTED_FOR_ASSESSMENT_Inserts = 0;
 	$totalInserts = 0;
 
 	$runErrors = '';
@@ -283,6 +284,7 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 					);
 				}
 				$runResultMessage .=  insertDraftRegistryObject(($dataSourceKey == 'PUBLISH_MY_DATA' ? $record_owner : $created_who), $registryObjectKey, $draft_class, $object_group, $draft_type, $title, $dataSourceKey, date('Y-m-d H:i:s'), $date_modified , $rifcs, '', 0, 0, SUBMITTED_FOR_ASSESSMENT);
+				$SUBMITTED_FOR_ASSESSMENT_Inserts++;
 				//$runResultMessage  .= "\nRegistry Object with key $registryObjectKey is SUBMITTED_FOR_ASSESSMENT";
 			}
 			else
@@ -575,11 +577,17 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 	$runResultMessage .= "    $totalRegistryObjectElements registryObject element/s.\n";
 	$runResultMessage .= "    $totalElements elements.\n";
 	$runResultMessage .= "  ACTIONS\n";
+	if($SUBMITTED_FOR_ASSESSMENT_Inserts > 0)
+	{
+	$runResultMessage .= "    $SUBMITTED_FOR_ASSESSMENT_Inserts records Submitted for assessement.\n";
+	}
+	else {
 	$runResultMessage .= "    $totalRegistryObjectDeletes Registry Object/s deleted.\n";
 	$runResultMessage .= "    $totalRegistryObjectInserts Registry Object/s inserted.\n";
 	$runResultMessage .= "    $recordsCached records added to cache.\n";
 	$runResultMessage .= "    $totalAttemptedInserts attempted inserts.\n";
 	$runResultMessage .= "    $totalInserts inserts.\n";
+	}
 
 
 	// Reset the old xPath variable
