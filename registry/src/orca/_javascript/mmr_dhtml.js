@@ -125,7 +125,7 @@ $(document).ready(function() {
 			$('.statusview').hide();
 			$('.viewswitch').removeClass('pressed');
 			$('.viewswitch[name=qaview]').addClass('pressed');
-			if(dsKey) google.setOnLoadCallback(drawBarChart(status, dsKey));
+			
 			//drawBarChart(status, dsKey);
 			if(status=='All'){
 				$('.qaview[id=All_qaview]').show();
@@ -135,9 +135,14 @@ $(document).ready(function() {
 				$('.qa_table[status='+status+']').parents('.tab-content').show();
 			}
 			$('#quality_view_explain').show();
+
 			$('.qaview[ql=0], .qaview[ql=5]').each(function(){
 				if($(this).find('.ftitle').attr('count') == '0') $(this).hide();
 			});
+
+			google.load('visualization', '1.0', {'packages':['corechart']});
+			//if(dsKey) google.setOnLoadCallback(drawBarChart(status, dsKey));
+			if(dsKey) drawBarChart(status, dsKey);
 		}
 	}
 
@@ -236,13 +241,16 @@ $(document).ready(function() {
 
         var colNumber = [];
         var rowCount = 0;
+
 		$.ajax({
     		url: get_view,
     		method: 'get',
     		cache: false, // don't cache the result
     		success: function(data) {
 
-    			//console.log(data);
+    			
+    			//var data = eval("(" + data + ')');
+
   				var chartData = new google.visualization.DataTable();
   				
   				var first = true;
@@ -252,7 +260,7 @@ $(document).ready(function() {
   						chartData.addColumn("string", item);
   						first = false;
   					}else{
-  						chartData.addColumn("number", item);
+  						chartData.addColumn("number", parseInt(item));
   						colNumber.push(item);
   					}
   				});
@@ -325,12 +333,14 @@ $(document).ready(function() {
   					//}
   					
   				});
-		       // console.log(theRest);
+		       //console.log(theRest);
 		        
 		        view.setColumns(theRest);
 		      //  console.log(view);
 		        
+		      	barsVisualization.draw(view,optionPercent);
 
+		      	/*
 			  	function drawThisChart(dataToDraw,optionToDraw){
 			  		barsVisualization.draw(dataToDraw,optionToDraw);
 			  	}
@@ -347,8 +357,13 @@ $(document).ready(function() {
 			  		}
 			  		drawThisChart(dataToDraw, optionToDraw);
 			  	});
-			  	drawThisChart(dataToDraw, optionToDraw);
-        	}
+			  	drawThisChart(dataToDraw, optionToDraw);*/
+        	},
+        	error: function(request, status, error){
+		      alert(request);
+		      alert(status);
+		      alert(error);
+		    }
         });
     }
 
