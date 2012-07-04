@@ -699,12 +699,12 @@ function updateRecordsForDataSource($dataSourceKey, $manuallyPublish,$manuallyPu
 				
 				if($registryObjectKeys[$i]['status'] == MORE_WORK_REQUIRED)
 				{
-					$actions .= $registryObjectKeys[$i]['draft_key'].' Changed Status to DRAFT';
+					$actions .= $registryObjectKeys[$i]['draft_key']." Changed Status to DRAFT\n";
 					updateDraftRegistryObjectStatus($registryObjectKeys[$i]['draft_key'],$dataSourceKey,DRAFT);
 				}
 				else if($registryObjectKeys[$i]['status'] == ASSESSMENT_IN_PROGRESS || $registryObjectKeys[$i]['status'] == SUBMITTED_FOR_ASSESSMENT)
 				{
-					$actions .= 'PUBLISHING records\n';
+					$actions .= "PUBLISHING records\n";
 					$rifcs = new DomDocument();
 					$rifcs->loadXML($registryObjectKeys[$i]['rifcs']);
 					$stripFromData = new DomDocument();
@@ -735,7 +735,7 @@ function updateRecordsForDataSource($dataSourceKey, $manuallyPublish,$manuallyPu
 					if( !$importErrors )
 					{
 						$deleteErrors = deleteDraftRegistryObject($dataSourceKey,$registryObjectKey);
-						$actions .= $registryObjectKeys[$i]['draft_key'].' Imported to Registry as '.$status.'\n';
+						$actions .= $registryObjectKeys[$i]['draft_key'].' Imported to Registry as '.$status."\n";
 					}
 										
 				}
