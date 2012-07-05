@@ -479,7 +479,7 @@ $(document).ready(function() {
 			title:status,
 			showTableToggleBtn: true,
 
-			showToggleBtn: true,
+			showToggleBtn: false,
             url: viewURL,
 			dataType: 'json',
 			usepager: true,
@@ -493,8 +493,8 @@ $(document).ready(function() {
                 {display: 'Flag', name : 'flag', width : 30, sortable : true, align: 'left'},
                 {display: 'Options', name : 'buttons', width : 100, sortable : false, align: 'left'},
                 {display: 'Status', name : 'status', width : 200, sortable : true, align: 'left'},
-                {display: 'Feed Type', name : 'feed_type', width : 50, sortable : true, align: 'left', hide:true},
-                {display: 'Manually Assessed', name : 'manually_assessed_flag', width : 50, sortable : true, align: 'left', hide:true}
+                {display: 'Feed Type', name : 'feed_type', width : 50, sortable : true, align: 'left', hide:false},
+                {display: 'Manually Assessed', name : 'manually_assessed_flag', width : 50, sortable : true, align: 'left', hide:false}
             ],
             sortname:'date_modified',
             sortorder:'desc',

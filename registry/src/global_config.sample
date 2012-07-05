@@ -114,6 +114,15 @@ if($maintenance & !in_array($ip, $white_list_ip)){
 	exit;	
 }
 
+//DEBUG SET (USEFUL WHEN DEBUGGING PRODUCTION ENVIRONMENT
+$testers_list_ip 	= array(
+	'xx.xx.xx.xx'
+);
+
+if(in_array($ip, $testers_list_ip)){
+	$debug 				= true;
+	$error 				= true;	
+}  
 
 
 /*====================================

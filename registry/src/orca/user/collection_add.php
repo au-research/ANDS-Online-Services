@@ -372,7 +372,8 @@ if( strtoupper(getPostedValue('verb')) == "SAVE" )
 					// Add a relation for this collection to the user party object.
 					//addCollectionRelationToUserParty($partyObjectKey, $registryObjectKey);
 					//runQualityCheckforDataSource('PUBLISH_MY_DATA');
-					syncKey($registryObjectKey, 'PUBLISH_MY_DATA');
+
+					syncDraftKey($registryObjectKey, 'PUBLISH_MY_DATA');
 					// Log the datasource activity.
 					insertDataSourceEvent($dataSourceKey, "ADD REGISTRY OBJECT\nKey: ".$registryObjectKey."\n".$resultMessage);
 					
