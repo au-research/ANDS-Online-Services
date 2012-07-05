@@ -42,7 +42,8 @@ $atom_feed_header = '
   	<id>'.str_replace("&","",str_replace("=","",$rdaInstance.$_SERVER['REQUEST_URI'])).'</id>
   	<title>'.$feed_title.'</title>
   	<updated>'.date('Y-m-d',time()). "T" .date('h:s:i', time()).'Z</updated>
-  	<link rel="self" href="'.$rdaInstance.'search#!/q='.rawurlencode($q).'/p=1/tab=collection'.$filter.'" />
+  	<link rel="alternate" href="'.$rdaInstance.'search#!/q='.rawurlencode($q).'/p=1/tab=collection'.$filter.'" />
+  	<link rel="self" type="application/atom+xml" href="'.$rdaInstance.'search/atom/?q='.rawurlencode($q).urlencode('&classFilter='.$class.'&typeFilter=All&groupFilter='.$group.'&subjectFilter='.$subject.'&licenceFilter='.$licence.'&subscriptionType=atom').'" />
     <logo>'.$rdaInstance.'/img/icon/ands_boxes.jpg</logo>
   	<author>
     	<name>Research Data Australia</name>
