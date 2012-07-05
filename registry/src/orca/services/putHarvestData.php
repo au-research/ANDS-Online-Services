@@ -204,7 +204,7 @@ else
 			// Update the status
 			getHarvestRequestStatus($harvestRequestId, $dataSourceKey);
 		}
-		if( $done == 'TRUE' && $mode == 'HARVEST' && !$runErrors)
+		if( $done == 'TRUE' && $mode == 'HARVEST')
 		{
 		    queueSyncDataSource($dataSourceKey);
 		}
