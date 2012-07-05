@@ -78,7 +78,7 @@
         <xsl:apply-templates select="ro:description[@type = 'logo']"/>
 
         <xsl:if test="ro:description">
-            <div class="descriptions" style="position:relative;clear:both;">
+            <div class="descriptions" style="position:relative;clear:both;">    				
 				<xsl:apply-templates select="ro:description[@type= 'brief']" mode="content"/>
 				<xsl:apply-templates select="ro:description[@type= 'full']" mode="content"/>
 				<xsl:apply-templates select="ro:description[@type= 'significanceStatement']" mode="content"/>		
@@ -250,27 +250,47 @@
         <script type="text/javascript" src="http://static.addtoany.com/menu/page.js"></script>
         </p>
         < AddToAny END -->  
-        
+
                          	
 		<xsl:if test="ro:location/ro:address/ro:electronic/@type='url' 
 		or ro:rights or ro:location/ro:address/ro:electronic/@type='email'  or ro:location/ro:address/ro:physical">		
 		<div class="right-box">
 			<h2>Access</h2>
 			<div class="limitHeight300">
+				 	 <xsl:if test="ro:rights/ro:accessrights">
+				<h3>Access Rights</h3>	
+			</xsl:if>	
+			<xsl:apply-templates select="ro:rights/ro:accessrights"/>
 		 	<xsl:if test="ro:location/ro:address/ro:electronic/@type='url'">
 				<p><xsl:apply-templates select="ro:location/ro:address/ro:electronic"/></p>	
 	 		</xsl:if>
-	 		 <xsl:if test="extRif:rights or ro:rights">
+	 		 <xsl:if test="ro:description/@type='accessRights' or ro:rights or ro:description/@type='rights'">
 					<h3>Rights</h3>	
 			</xsl:if>
-	 		 <xsl:if test="extRif:rights[@type='licence']">
-					<h3>Licence</h3>	
-			</xsl:if>
 				
-			<xsl:apply-templates select="extRif:rights[@type='licence'] | ro:rights[@type='licence']"/>	
-	
-			<xsl:apply-templates select="extRif:rights[@type!='licence' or (not(@type))] | ro:rights[@type!='licence' or (not(@type))]"/>				
+		
+				
+	 		 <xsl:if test="ro:rights/ro:licence">
+				<h3>Licence</h3>	
+			</xsl:if>		
+			<xsl:apply-templates select="ro:rights/ro:licence"/>	
 			
+	 		<xsl:if test="ro:rights/ro:rightsStatement">
+				<h3>Rights statement</h3>	
+			</xsl:if>
+			<xsl:apply-templates select="ro:rights/ro:rightsStatement"/>
+					
+			<xsl:if test="ro:rights/ro:accessRights">
+				<h3>Access Rights</h3>	
+			</xsl:if>
+			<xsl:apply-templates select="ro:rights/ro:accessRights"/>
+			
+        	<xsl:if test="ro:description">	
+				<xsl:apply-templates select="ro:description[@type= 'accessRights']" mode="right"/>
+				<xsl:apply-templates select="ro:description[@type= 'rights']" mode="right"/>
+			</xsl:if>
+			
+							
 		 	<xsl:if test="ro:location/ro:address/ro:electronic/@type='email' or ro:location/ro:address/ro:physical">
 		 		<h3>Contacts</h3>
 		 		<xsl:if test="ro:location/ro:address/ro:electronic/@type='email'">
@@ -828,7 +848,7 @@ Handle:
 						<xsl:if test="./@type='rightsStatement'"><strong>Rights statement</strong><br /></xsl:if>
 						<xsl:if test="./@type='rights'"><strong>Rights</strong><br /></xsl:if>
 			<xsl:if test="./@type='accessRights'"><strong>Access rights</strong><br /></xsl:if>
-			<xsl:if test="./@type='licence'"><strong>Licence</strong> <br /></xsl:if>		<xsl:value-of select="." disable-output-escaping="yes"/></p>		
+	<xsl:value-of select="." disable-output-escaping="yes"/></p>		
 	</xsl:template>
 	
 	<xsl:template match="ro:description" mode="content">     
@@ -850,29 +870,38 @@ Handle:
 		<p><xsl:if test="./ro:startDate"><xsl:value-of select="./ro:startDate"/></xsl:if> - <xsl:if test="./ro:endDate"><xsl:value-of select="./ro:endDate"/></xsl:if></p>		
 	</xsl:template>	 
 
-	<xsl:template match="ro:rights | ro:rights[@type!='licence']">
-
-			<xsl:if test="./@type='rights'"><h4>Rights statement</h4></xsl:if>
-			<xsl:if test="./@type='accessRights'"><h4>Access rights</h4></xsl:if>
-			<!-- ><xsl:if test="./@type='licence'"><h4>Licence</h4></xsl:if>	-->			
+	<xsl:template match="ro:rights/ro:accessRights">
 			<p class="rights"><xsl:value-of select="." disable-output-escaping="yes"/>
+						<xsl:if test="./@rightsUri"><p>
+				<a target="_blank">
+				<xsl:attribute name="href"><xsl:value-of select="./@rightsUri"/></xsl:attribute><xsl:value-of select="./@rightsUri"/></a></p>
+			</xsl:if>	
 			</p>	
 	</xsl:template>	
-	
-	<xsl:template match="ro:rights[@type='licence']">
+	<xsl:template match="ro:rights/ro:rightsStatement">
+			<p class="rights"><xsl:value-of select="." disable-output-escaping="yes"/>
+			<xsl:if test="./@rightsUri">
+				<p>
+				<a target="_blank">
+				<xsl:attribute name="href"><xsl:value-of select="./@rightsUri"/></xsl:attribute><xsl:value-of select="./@rightsUri"/></a>
+				</p>
+			</xsl:if>	
+			</p>	
+	</xsl:template>		
+	<xsl:template match="ro:rights/ro:licence">
 		<p class="rights">
-			<xsl:if test="string-length(substring-after(./@licence_type,'CC-'))>0">
+			<xsl:if test="string-length(substring-after(./@type,'CC-'))>0">
     		 	<img id="licence_logo" style="max-width:130px;">
 				<xsl:attribute name="src"><xsl:value-of select="$base_url"/>
 				<xsl:text>/img/</xsl:text>
-				<xsl:value-of select="./@licence_type"/>
+				<xsl:value-of select="./@type"/>
 				<xsl:text>.png</xsl:text></xsl:attribute>
-				<xsl:attribute name="alt"><xsl:value-of select="./@licence_type"/></xsl:attribute>
+				<xsl:attribute name="alt"><xsl:value-of select="./@type"/></xsl:attribute>
 		  		</img>
     		</xsl:if>
-    		<xsl:if test="string-length(substring-after(./@licence_type,'CC-'))=0">	   
-    			<xsl:if test="./@licence_type='Unknown/Other' and .=''"><p>Unknown</p></xsl:if>
-    			<xsl:if test="./@licence_type!='Unknown/Other'"><p><xsl:value-of select="./@licence_type"/></p></xsl:if>
+    		<xsl:if test="string-length(substring-after(./@type,'CC-'))=0">	   
+    			<xsl:if test="./@type='Unknown/Other' and .=''"><p>Unknown</p></xsl:if>
+    			<xsl:if test="./@type!='Unknown/Other'"><p><xsl:value-of select="./@type"/></p></xsl:if>
 				<!--  <xsl:value-of select="./@licence_type"/> -->
 			</xsl:if>
 			<xsl:if test="."><p><xsl:value-of select="."/></p></xsl:if>

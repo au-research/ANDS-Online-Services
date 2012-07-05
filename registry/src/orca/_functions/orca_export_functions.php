@@ -1880,7 +1880,7 @@ function getRightsTypesXML($registryObjectKey, $elementName, $forSOLR)
 						$uri = ' rightsUri = "'.esc($uri).'"';
 					}
 					$value = esc($element['access_rights']);
-					$xml .= "      <$elementName$type$uri>$value</$elementName>\n";
+					$xml .= "      <$elementName2$type$uri>$value</$elementName2>\n";
 				}
 
 				if( $type = $element['rights_statement'] || $type = $element['rights_statement_uri'])
@@ -1891,7 +1891,7 @@ function getRightsTypesXML($registryObjectKey, $elementName, $forSOLR)
 						$uri = ' rightsUri = "'.esc($uri).'"';
 					}
 					$value = esc($element['rights_statement']);
-					$xml .= "      <$elementName$type$uri>$value</$elementName>\n";
+					$xml .= "      <$elementName2$type$uri>$value</$elementName2>\n";
 				}
 				$licence_group='';
 				if( $type = $element['licence'] || $type = $element['licence_uri']|| $type = $element['licence_type'])
