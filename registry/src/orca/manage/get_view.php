@@ -238,10 +238,10 @@ function searchRecords($status){
 
 	//echo $q;
 	if($query){
-		if($qtype!='key'){
-			$q.='+'.$qtype.':("'.$query.'")';
-		}else{
-			$q.='+'.$qtype.':('.$query.')';
+		if($qtype!='key'){//not key
+			$q .= "($qtype:($query) OR $qtype:($query*) OR $qtype:($query~)) ";
+		}else{//key search
+			$q .= "($qtype:($query) OR $qtype:($query*) OR $qtype:($query~)) ";
 		}
 	}
 

@@ -509,7 +509,8 @@ $(document).ready(function() {
             additionalClass:tClass,
             tableTitle:theTableTitle,
             searchitems : [
-            		{display: 'Name/Title', name : 'list_title'}
+            		{display: 'Name/Title', name : 'list_title'},
+            		{display: 'Key', name:'key'}
             ],
             onSuccess: formatTable,
             cookies: true,

@@ -507,10 +507,13 @@
 						$('div.ptogtitle', g.mDiv).click();
 					});
 				}
-				if(p.total==0 && p.hideOnNoRows){
+				if(p.total==0 && p.hideOnNoRows && p.query==''){
 					$(g.gDiv).addClass('hideBody');
 					$('div.ptogtitle', g.mDiv).removeClass('vsble');
 				}else if(p.total > 0 || !p.hideOnNoRows){
+					$(g.gDiv).removeClass('hideBody');
+					$('div.ptogtitle', g.mDiv).addClass('vsble');
+				}else if(p.query!=''){
 					$(g.gDiv).removeClass('hideBody');
 					$('div.ptogtitle', g.mDiv).addClass('vsble');
 				}
