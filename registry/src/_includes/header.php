@@ -36,7 +36,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <head>
-	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+	<meta http-equiv="X-UA-Compatible" content="chrome=1">
 	<title><?php if( $eDeploymentStatus != 'PROD' ){ print "$eDeploymentStatus&mdash;"; }
     print($pageTitle) ?></title>
 
@@ -50,6 +50,8 @@ limitations under the License.
 		<?php printApplicationStyleSheets(); ?>
 
 	</style>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js"></script>
+
 	<script type="text/javascript" src="<?php print eAPP_ROOT ?>_javascript/general.js"></script>
 	<script type="text/javascript" src="<?php print eAPP_ROOT ?>_javascript/dhtml.js"></script>
 	<script type="text/javascript" src="<?php print eAPP_ROOT ?>_javascript/datetime_control.js"></script>
@@ -61,8 +63,13 @@ limitations under the License.
 
 	<script type="text/javascript" src="<?php print eAPP_ROOT ?>_javascript/jquery.cookie.js"></script>
 
+	
+
 </head>
 <body onload="initDHTML('pageContainerWithMenu'); wcDisposeWait();">
+
+
+
 <script type="text/javascript">
 	dctInit('<?php print eIMAGE_ROOT ?>_controls/_datetime_control/');
 	wcInit('<?php print eIMAGE_ROOT ?>_controls/_wait_control/');
@@ -71,6 +78,7 @@ limitations under the License.
 <?php
 
 $eDeploymentName = strtok($eDeploymentStatus, " ");
+
 
 // Display deployment, debug and error status as required.
 if( $eDeploymentName != 'PROD' )
@@ -93,7 +101,9 @@ if( $eDeploymentName != 'PROD' )
 			print "<div style=\"color: #ffffff; background: #9800df; border: solid #6700d1; border-width: 0px 0px 0px 20px; font-weight: bold; padding: 4px;\">&nbsp;".esc($eDeploymentStatus)."&nbsp;</div>";
 			break;
 	}
-}
+}   
+
+
 if( $eDebugOnStatus )
 {
 	print "<div style=\"color: #ffffff; background: #a61d1d; border: solid #7f2016; border-width: 0px 0px 0px 20px; font-weight: bold; padding: 4px;\">&nbsp;DEBUG&nbsp;</div>";

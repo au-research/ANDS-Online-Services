@@ -5,6 +5,8 @@ $Revision: 1665 $
 var clearPressed = false;
 var cosiImageRoot = rootAppPath + "_images/";
 var orcaImageRoot = rootAppPath + "orca/_images/";
+
+
 function setHarvestMethodDependents()
 {
    var tableRow = 'table-row';

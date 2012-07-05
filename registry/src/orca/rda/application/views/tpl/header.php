@@ -28,6 +28,7 @@ limitations under the License.
 <html xmlns:og="http://ogp.me/ns#" xmlns:fb="http://www.facebook.com/2008/fbml">
 <head>
 	<title><?php echo $md_title;?></title>
+	<meta http-equiv="X-UA-Compatible" content="chrome=1">
 	<meta property="og:title" content="<?php echo $md_title;?>" />
 	<meta property="og:description" content="<?php echo $md_description;?>" />
 	<meta property="og:image" content="<?php echo $md_image;?>"/>

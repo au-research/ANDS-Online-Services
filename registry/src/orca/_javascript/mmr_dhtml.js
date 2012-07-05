@@ -45,6 +45,11 @@ $(document).ready(function() {
 		MANUAL_PUBLISH = true;
 	}
 
+	if ($.browser.msie  && parseInt($.browser.version, 10) === 8) {
+		$('body').css('font-family', 'Verdana');
+		$('.chzn-container-single').css('font-family', 'Verdana');
+	}
+
 
 	if($.cookie('currentView')){
 		currentView = $.cookie('currentView');
@@ -306,6 +311,7 @@ $(document).ready(function() {
 		        	colors:colorArray,
 		        	chartArea: chartAreaArray,
   					sliceVisibilityThreshold:0,
+  					fontName: '"Arial"',
 		        	hAxis: {title: "Quality Levels Percentage",format:'##%'}};
 				
 
@@ -535,6 +541,12 @@ $(document).ready(function() {
 		$('.qaview[ql=0], .qaview[ql=5]').each(function(){
 			if($(this).find('.ftitle').attr('count') == '0') $(this).hide();
 		});
+
+		//IE hack, stewpidd ie8
+		if ($.browser.msie  && parseInt($.browser.version, 10) === 8) {
+			//$('.rightTab a').removeClass('smallIcon').removeClass('borderless');
+			$('.rightTab a, .tab-list a, .fbutton a, .viewswitch').css('font-family', 'Verdana');
+		}
 	}
 
 
@@ -979,9 +991,12 @@ $(document).ready(function() {
 					loading:false,
 					success: function(data, status) {
 						//console.log(data);
-						var errorData = $('.error', data).text();
-						this.set('content.text', errorData);
-						formatTipError(this);
+						var html = '<ul>';
+						$('.error', data).each(function(){
+							html += '<li>'+$(this).text()+'</li>';
+						});
+						html += '</ul>';
+						this.set('content.text', html);
 					}
 				},
 				title: {
@@ -1012,13 +1027,7 @@ $(document).ready(function() {
 		});
 	});
 
-	function formatTipError(tt){
-		var tooltip = $('#ui-tooltip-'+tt.id+'-content');
-		$('.quality-test-results', tooltip).show();
-		$('.warning', tooltip).hide();
-		$('.info', tooltip).hide();
-		$('.error', tooltip).show();
-	}
+
 
 	function formatTip(tt){
 		var tooltip = $('#ui-tooltip-'+tt.id+'-content');

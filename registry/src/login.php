@@ -249,6 +249,7 @@ require '_includes/header.php';
 			</form>
 		<?php } ?>	
 <?php } else { ?>
+	<!-- WHY is even a TABLLEEE?!-->
 	<table class="formTable" summary="layout" style="margin: 0px;">
 		<tbody>
 			<tr>
@@ -257,6 +258,31 @@ require '_includes/header.php';
 				using the authentication provider's identifier of <b><?php printSafe(getSessionVar(sROLE_ID)) ?></b>.</p>
 				
 				<p>You can <i>Logout</i> using the link at the upper left.</p></td>
+			</tr>
+			<tr>
+				<td style="width:100px"></td>
+				<td>
+					<?php 
+//Chrome Frame message
+// We test the user browser and the presence of the Chrome Frame plug-in
+$message = '<div>
+			ANDS Registry is optimized for modern browsers (Mozilla Firefox 4+, Internet Explorer 9+, Chrome, Safari and Opera...)<br/>
+			We have detected that you are using an <b>older</b> version browser.<br/>
+			To improve your browsing experience, please use the <a href="http://www.google.com/chromeframe/?user=true&quickenable=true?redirect=true">Chrome Frame</a> extension
+			</div>';
+if ( stristr($_SERVER['HTTP_USER_AGENT'], 'chromeframe') ) {
+	//chrome frame is installed
+} elseif ( strstr($_SERVER['HTTP_USER_AGENT'], '; MSIE 7') ) {
+	print $message;
+} elseif ( strstr($_SERVER['HTTP_USER_AGENT'], '; MSIE 8' ) ) {
+	print $message;
+} elseif ( strstr($_SERVER['HTTP_USER_AGENT'], '; MSIE 9' ) ) {
+	print $message;
+} else {//good browser
+	//nothing to do here, move along
+}
+					?>
+				</td>
 			</tr>
 		</tbody>
 	</table>	

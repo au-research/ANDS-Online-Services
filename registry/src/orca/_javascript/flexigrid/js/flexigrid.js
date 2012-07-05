@@ -253,7 +253,7 @@
 				}
 				$('body').css('cursor', 'default');
 				$('body').noSelect(false);
-				//this.ie9Fix();
+				this.ie9Fix();
 			},
 			toggleCol: function (cid, visible) {
 				var ncol = $("th[axis='col" + cid + "']", this.hDiv)[0];
