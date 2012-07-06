@@ -284,10 +284,10 @@ if ( stristr($_SERVER['HTTP_USER_AGENT'], 'chromeframe') ) {
 } elseif ( strstr($_SERVER['HTTP_USER_AGENT'], '; MSIE 8' ) ) {
 	print $message;
 } elseif ( strstr($_SERVER['HTTP_USER_AGENT'], '; MSIE 9' ) ) {
-	print $message;
+	//print $message;
 } else {//good browser
 	//nothing to do here, move along
-	print $message;
+	//print $message;
 }
 					?>
 				</td>
