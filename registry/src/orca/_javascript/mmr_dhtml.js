@@ -373,16 +373,7 @@ $(document).ready(function() {
         });
     }
 
-    $('#summaryTable').flexigrid({
-    	striped:true,
-    	title:'Summary',
-    	tableTitle: 'Registry Content Summary for '+dsName,
-    	resizable:false,
-    	showTableToggleBtn: true,
-    	height:'auto',
-    	width:'auto'
-
-    });
+    
 	$('.mmr_table').each(function(){
 		var status = $(this).attr('status');
 		var ql = $(this).attr('ql');
@@ -490,7 +481,8 @@ $(document).ready(function() {
 			dataType: 'json',
 			usepager: true,
 			colModel : [
-			{display: 'recordKey', name:'key', width:120, sortable: true, align:'left'},
+				{display: '', name:'check_box', width:20, sortable: false, align:'left',hide:true},
+				{display: 'recordKey', name:'key', width:120, sortable: true, align:'left'},
                 {display: 'Name/Title', name : 's_list_title', width : 350, sortable : true, align: 'left'},
                 {display: 'Last Modified', name : 'date_modified', width : 150, sortable : true, align: 'left'},
                 {display: 'Class', name : 'class', width : 70, sortable : true, align: 'left'},
@@ -524,7 +516,13 @@ $(document).ready(function() {
 		});
 	});
 
+	$('.selectMe').live('click', function(){
+		$(this).parents('tr').toggleClass('trSelected');
+	});
 
+	$('.trSelected').live('click', function(){
+
+	});
 
 
 	function formatTable(){
@@ -780,15 +778,13 @@ $(document).ready(function() {
 			showToggleBtn: true,
 	        url: viewURL,
 			dataType: 'json',
-			//usepager: true,
 			colModel :columns,
+			collapseByDefault:true,
 	        resizable:true,
-	        //useRp: true,
-			rp: 10,
 			pagestat: 'Displaying {from} to {to} of {total} records',
 			nomsg: 'No records found',
 
-	        height:'200px',
+	        height:100,
 	        //additionalClass:tClass,
 	        tableTitle:'Registry Content Summary for '+dsName
 		});

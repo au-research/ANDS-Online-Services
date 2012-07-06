@@ -53,7 +53,9 @@
 			tableTitle: 'DEFAULT TITLE FOR TABLE',
 			hideOnNoRows: true,
 			cookies: true, //yay, cookies for Minh
+			collapseByDefault: false,
 			tableId: 'dagrid' //needed for cookie, must be defined differently for different tables
+
 		}, p);
 		$(t).show() //show if hidden
 			.attr({
@@ -516,6 +518,10 @@
 				}else if(p.query!=''){
 					$(g.gDiv).removeClass('hideBody');
 					$('div.ptogtitle', g.mDiv).addClass('vsble');
+				}
+				if(p.collapseByDefault){
+					$(g.gDiv).addClass('hideBody');
+					$('div.ptogtitle', g.mDiv).removeClass('vsble');
 				}
 
 			},

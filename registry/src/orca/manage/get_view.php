@@ -413,7 +413,7 @@ function searchRecords($status){
 		$entry = array(
 					'id' => $doc->{'key'},
 					'cell' => array(
-
+							'<input type="checkbox" class="selectMe"/>',
 							'<a href="'.$view_link.'" class="tip" tip="'.$doc->{'key'}.'">'.$doc->{'key'}.'</a>',
 							$doc->{'list_title'},
 
