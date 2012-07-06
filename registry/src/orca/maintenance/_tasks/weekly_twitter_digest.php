@@ -36,7 +36,7 @@ function getUpdatedSubjectsForTwitter()
 
        	$queued_tweets = array();
        	foreach ($twitter_feed->channel->item as $rss_item) {
-               	$queued_tweets[] = $rss_item->title . " " . $rss_item->link;
+               	$queued_tweets[] = $rss_item->title; //. " " . $rss_item->link;   // link currently disabled, twitter doesn't like us!!
        	}
 
        	return $queued_tweets;

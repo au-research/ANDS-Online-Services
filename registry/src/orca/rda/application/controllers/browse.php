@@ -91,7 +91,7 @@ class Browse extends CI_Controller {
 		$this->load->model('solr');
 		$fields = array(
 			'q'=>$q,'version'=>'2.2','start'=>$start,'rows'=>$row,'indent'=>'on', 'wt'=>'json',
-			'fl'=>'key, list_title, url_slug, description_value', 'q.alt'=>'*:*'
+			'fl'=>'key, list_title, url_slug, description_value', 'q.alt'=>'*:*', 'sort'=>'date_modified desc',
 		);
 
 		//var_dump($fields);
