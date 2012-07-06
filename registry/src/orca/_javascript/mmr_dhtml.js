@@ -521,14 +521,9 @@ $(document).ready(function() {
 		});
 	});
 
-	$('.selectMe').live('click', function(){
+	$('.selectMe').live('click', function(e){
 		$(this).parents('tr').toggleClass('trSelected');
 	});
-
-	$('.trSelected').live('click', function(){
-
-	});
-
 
 	function formatTable(){
 		//hide info
@@ -800,7 +795,7 @@ $(document).ready(function() {
 
 	function selectAll(com, grid){
 		if($(this).text()=='Select All'){
-			$('.bDiv tr', grid).addClass('trSelected');
+			$('.bDiv tr', grid).click();
 
 			//console.log($('.ftitle',grid));
 			var total = parseInt($('.ftitle', grid).attr('count'));
@@ -826,14 +821,15 @@ $(document).ready(function() {
 			$(this).html('<a class="button smaller left">Deselect All</a>');
 		}else{
 			$(grid).attr('selectall', 'no');
-			$('tbody tr', grid).removeClass('trSelected');
+			$('tbody tr', grid).click();
 			$('.infoDiv', grid).hide();
 			$(this).html('<a class="button smaller left">Select All</a>');
 		}
 
-		$('.trSelected', grid).click(function(){
+		$('.trSelected, .checkMe', grid).click(function(){
 			$(grid).attr('selectall', 'no');
-			var numSelected = $('.bDiv tr.trSelected', grid).length;
+			var numSelected = parseInt($('.bDiv tr.trSelected', grid).length);
+			var total = parseInt($('.ftitle', grid).attr('count'));
 			message = ''+numSelected+' records on this page are selected. <a href="javascript:void(0);" class="selectAll">Select All '+total+' records</a>. ';
 			$('.infoDiv', grid).html(message);
 			$('.infoDiv', grid).show();

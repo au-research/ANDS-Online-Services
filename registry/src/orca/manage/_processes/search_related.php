@@ -66,7 +66,7 @@ if (!IN_ORCA) die('No direct access to this file is permitted.');
 		$groupStr = '';
     	if($group)$groupStr =' +group:("'.$group.'")';
 
-		$q = '(list_title:('.($searchText).'*) OR list_title:('.($searchText).') OR list_title:('.($searchText).'~0.8)) +class:('.$objectClass.')'.$groupStr;
+		$q = '(list_title:('.($searchText).'*) OR list_title:('.($searchText).') OR list_title:('.($searchText).'~0.3)) +class:('.$objectClass.')'.$groupStr;
 		
 		if($dataSourcekey!='') $q.=' +data_source_key:("'.$dataSourcekey.'")';
 		$fields = array(
