@@ -154,9 +154,10 @@ class Search extends CI_Controller {
 		$group = $this->input->post('groupFilter');
 		$subject = $this->input->post('subjectFilter');
 		$type = $this->input->post('typeFilter');
+		$licence = $this->input->post('licenceFilter');
 		$temporal = $this->input->post('temporal');
 		$this->load->model('Registryobjects','ro');
-		$this->ro->updateStatistic($query, $class, $group, $subject, $type, $temporal);
+		$this->ro->updateStatistic($query, $class, $group, $subject, $type, $temporal,$licence);
 	}
 
 	public function service_front(){//front    end for orca search service
@@ -169,6 +170,7 @@ class Search extends CI_Controller {
 		$class = $this->input->post('class');
 		$group = $this->input->post('group');
 		$subject = $this->input->post('subject');
+		$licence = $this->input->post('licence');
 		$page = $this->input->post('page');
 		$status = $this->input->post('status');
 		$source_key = $this->input->post('source_key');
@@ -607,6 +609,7 @@ class Search extends CI_Controller {
 		$q = trim($q); //remove spaces
 
 		if($q=='') $q="*:*";
+		$qrss = $q;
 		//echo $q;
 		//Filtering if there is any
 		$classFilter = $this->input->post('classFilter');
@@ -657,8 +660,9 @@ class Search extends CI_Controller {
 		$data['page']=$page;
 		$data['spatial_included_ids']=$spatial_included_ids;
 		$data['temporal']=$temporal;
-
-
+		$dataSourceString ='';
+		if($ds!='') $dataSourceString = "&dataSource=".$ds;
+		$data['queryStr'] = '?q='.$qrss.$dataSourceString.'&classFilter='.$classFilter.'&typeFilter='.$typeFilter.'&groupFilter='.$groupFilter.'&subjectFilter='.$subjectFilter.'&licenceFilter='.$licenceFilter;
 
 		$this->benchmark->mark('search_end');
 		//echo $this->benchmark->elapsed_time('search_start', 'search_end');
