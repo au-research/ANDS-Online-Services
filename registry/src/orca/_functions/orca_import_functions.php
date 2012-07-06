@@ -1577,7 +1577,10 @@ function getUserPartyObject()
 
 	// Check to see if we have a party object already.
 	$partyObject = getRegistryObject($partyObjectKey);
-
+	if( !$partyObject )
+	{
+		$partyObject = getDraftRegistryObject($partyObjectKey,'PUBLISH_MY_DATA');
+	}
 	if( !$partyObject )
 	{
 		$dataSourceKey = 'PUBLISH_MY_DATA';
@@ -1661,19 +1664,23 @@ function getUserPartyObject()
 			}
 			else
 			{
-				$runErrors = importRegistryObjects($registryObjects, $dataSourceKey, $resultMessage, getLoggedInUser(), PENDING, getThisOrcaUserIdentity());
+				$runErrors = importRegistryObjects($registryObjects, $dataSourceKey, $resultMessage, getLoggedInUser(), SUBMITTED_FOR_ASSESSMENT, getThisOrcaUserIdentity());
 				if( $runErrors )
 				{
 					$errorMessages .= "Import Errors";
 				}
-
+				syncDraftKey($partyObjectKey, 'PUBLISH_MY_DATA');
 				// Log the datasource activity.
-				insertDataSourceEvent($dataSourceKey, "ADD REGISTRY OBJECT\nKey: ".getPostedValue('key')."\n".$resultMessage);
+				insertDataSourceEvent($dataSourceKey, "ADD REGISTRY OBJECT\nKey: ".$partyObjectKey."\n".$resultMessage);
 			}
 		}
 
 		// Get the pary object so we can display it.
 		$partyObject = getRegistryObject($partyObjectKey);
+		if( !$partyObject )
+		{
+			$partyObject = getDraftRegistryObject($partyObjectKey,'PUBLISH_MY_DATA');
+		}
 	}
 	return $partyObject;
 }

@@ -160,14 +160,17 @@ if( strtoupper(getPostedValue('verb')) == "SAVE" )
 	}
 	
 	
-	if( !$errorMessages )
+	if( !$errorMessages ) 
 	{
 		$dataSourceKey = 'PUBLISH_MY_DATA';
 		$objectGroup = 'Publish My Data';
 				
 		// Get the party object.
 		$partyObject = getUserPartyObject();
-		$partyObjectKey = $partyObject[0]['registry_object_key'];
+		if(isset($partyObject[0]['registry_object_key']))
+				$partyObjectKey = $partyObject[0]['registry_object_key'];
+		else
+				$partyObjectKey = $partyObject[0]['draft_key'];
 		
 		$registryObjectKey = null;
 		$handle = null;	
