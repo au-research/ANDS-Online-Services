@@ -275,10 +275,16 @@ $message = '<div style="padding: 10px;border: 1px solid #444;margin: 0px -10px;"
 			ANDS continues to support Internet Explorer 7 & 8,0 however some features may degrade in performance when using these browsers.<br/>
 			<br/>
 			Please contact <a href="mailto:services@ands.org.au">services@ands.org.au</a> for further information.<br/>
+			<br/>
+			<sub>[1] Google Chrome Frame is a free extension that seamlessly brings many features of modern browsers to Internet Explorer. <br/>
+			Google Chrome Frame can usually be enabled on systems where upgrading to a modern browser is not possible (such as corporate networks). <br/>
+			Google Chrome is used by more than 30% of the world\'s internet users and provides state-of-the-art web technologies and improved browser security. <br/></sub>
 
 			</div>';
 if ( stristr($_SERVER['HTTP_USER_AGENT'], 'chromeframe') ) {
 	//chrome frame is installed
+}elseif ( strstr($_SERVER['HTTP_USER_AGENT'], '; MSIE 6') ) {
+	print $message;
 } elseif ( strstr($_SERVER['HTTP_USER_AGENT'], '; MSIE 7') ) {
 	print $message;
 } elseif ( strstr($_SERVER['HTTP_USER_AGENT'], '; MSIE 8' ) ) {
