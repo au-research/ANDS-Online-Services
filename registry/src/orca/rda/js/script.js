@@ -83,9 +83,12 @@ $(document).ready(function(){
 			minLength: 2,
 			delimiter:/(,|;)\s*/,
 			select: function( event, ui ) {
-				$('#search-vocab-field').val(ui.item.label);
-				vocabLoadConcept(ui.item.uri, ui.item.vocab);
-				vocabLoadTree(ui.item.uri, ui.item.vocab);
+				
+				if (ui.item.vocab != ''){
+					$('#search-vocab-field').val(ui.item.label);
+					vocabLoadConcept(ui.item.uri, ui.item.vocab);
+					vocabLoadTree(ui.item.uri, ui.item.vocab);
+				}
 			}
 		});
 		$("#show_vocab_metadata_link").live('click', function() {
@@ -125,9 +128,13 @@ $(document).ready(function(){
 			minLength: 2,
 			delimiter:/(,|;)\s*/,
 			select: function( event, ui ) {
-				$('#search-vocab-field').val(ui.item.label);
-				vocabLoadConcept(ui.item.uri, ui.item.vocab);
-				vocabLoadTree(ui.item.uri, ui.item.vocab);
+				if (ui.item.vocab != ''){
+					
+					$('#search-vocab-field').val(ui.item.label);
+					vocabLoadConcept(ui.item.uri, ui.item.vocab);
+					vocabLoadTree(ui.item.uri, ui.item.vocab);
+				
+				}
 			}
 		});
 	}
@@ -334,6 +341,7 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 		        },
 		        error:function(msg){}
 			});
+			
 		});
 	}
 
@@ -1604,6 +1612,7 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 			var term = '#'+search_term+'/p'+id;
 			changeHashTo(formatSearch(search_term, id, classFilter));
 			page = id;
+			$("html, body").animate({ scrollTop: 0 }, "slow");
 		});
 
 	}
@@ -2152,13 +2161,15 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 			minLength: 2,
 			delimiter:/(,|;)\s*/,
 			select: function( event, ui ) {
-				$('#search-vocab-field').val(ui.item.label);
-				if(view=='anzsrcfor'){
-					subjectFilter = encodeURIComponent(ui.item.uri);
-				}else subjectFilter = ui.item.label;
-				changeHashTo(formatSearch(search_term,1,classFilter));
-				//vocabLoadConcept(ui.item.uri, ui.item.vocab);
-				//vocabLoadTree(ui.item.uri, ui.item.vocab);
+				if (ui.item.vocab != ''){
+					$('#search-vocab-field').val(ui.item.label);
+					if(view=='anzsrcfor'){
+						subjectFilter = encodeURIComponent(ui.item.uri);
+					}else subjectFilter = ui.item.label;
+					changeHashTo(formatSearch(search_term,1,classFilter));
+					//vocabLoadConcept(ui.item.uri, ui.item.vocab);
+					//vocabLoadTree(ui.item.uri, ui.item.vocab);
+				}
 			}
 		});
 		var watermark = 'Search for a subject';

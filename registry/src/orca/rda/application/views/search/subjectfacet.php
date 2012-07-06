@@ -2,7 +2,7 @@
 	<input id="subject_search_filter"/>
 	
 	<div id="subject_dropdown">
-	Label: <select id="subject_category">
+	Type: <select id="subject_category">
 		<option value="anzsrcfor" <?php if($view=='anzsrcfor') echo 'selected="selected"';?>>ANZSRC-FOR</option>
 		<?php
 			$categories = $this->config->item('subjects_categories');

@@ -491,8 +491,8 @@ $(document).ready(function() {
                 {display: 'Name/Title', name : 's_list_title', width : 350, sortable : true, align: 'left'},
                 {display: 'Last Modified', name : 'date_modified', width : 150, sortable : true, align: 'left'},
                 {display: 'Class', name : 'class', width : 70, sortable : true, align: 'left'},
-                {display: 'Errors', name : 'error_count', width : 35, sortable : true, align: 'left'},
-                {display: 'Quality Level', name : 'quality_level', width : 70, sortable : true, align: 'left'},
+                {display: 'Errors', name : 'error_count', width : 35, sortable : true, align: 'center'},
+                {display: 'Quality Level', name : 'quality_level', width : 70, sortable : true, align: 'center'},
                 {display: 'Flag', name : 'flag', width : 30, sortable : true, align: 'left'},
                 {display: 'Options', name : 'buttons', width : 100, sortable : false, align: 'left'},
                 {display: 'Status', name : 'status', width : 200, sortable : true, align: 'left'},
@@ -899,7 +899,7 @@ $(document).ready(function() {
 		},
 		hide: {
 			fixed:true,
-			delay: 1000
+			delay: 400
 		}
 	});
 
@@ -963,7 +963,7 @@ $(document).ready(function() {
       		},
       		hide: {
       			fixed:true,
-				delay: 1500
+				delay: 400
 			},
 			style: {
 				classes: 'ui-tooltip-shadow ui-tooltip-light'
@@ -1015,7 +1015,7 @@ $(document).ready(function() {
       		},
       		hide: {
       			fixed:true,
-				delay: 1500
+				delay: 400
 			},
 			style: {
 				classes: 'ui-tooltip-shadow ui-tooltip-light'

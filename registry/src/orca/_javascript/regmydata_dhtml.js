@@ -1471,9 +1471,26 @@ function initQADisplay(){
 		if($(this).parent().attr('qld') == 1)
 		   $(this).text('Quality Level 1 - Mandatory RIF-CS Elements');
 		if($(this).parent().attr('qld') == 2)
-		   $(this).html('Quality Level 2 - You have met '+ okReqArray + ' of the ' + allReqCount +' required Metadata Content Requirements. Refer to the tabs above as indicated by the <img src=\''+rootAppPath+'orca/_images/required_small.png\' /> Warning Icon' );
+		{
+			if ( okReqArray == allReqCount ) {
+				$(this).html('Quality Level 2 - You have met all of the ' + allReqCount +' required Metadata Content Requirements.' );
+			} 
+			else
+			{
+				$(this).html('Quality Level 2 - You have met '+ okReqArray + ' of the ' + allReqCount +' required Metadata Content Requirements. Refer to the tabs above as indicated by the <img src=\''+rootAppPath+'orca/_images/required_small.png\' /> Warning Icon' );
+			}
+		}
 		if($(this).parent().attr('qld') == 3)
-		   $(this).html('Quality Level 3 - You have met '+ okRecArray + ' of the ' + allRecCount +' recommended Metadata Content Requirements. Refer to the tabs above as indicated by the <img src=\''+rootAppPath+'orca/_images/message_small.png\' /> Warning Icon' );
+		{
+			if ( okRecArray == allRecCount )	
+			{
+				 $(this).html('Quality Level 3 - You have met all of the ' + allRecCount +' recommended Metadata Content Requirements.' );				
+			}
+			else
+			{
+			 	$(this).html('Quality Level 3 - You have met '+ okRecArray + ' of the ' + allRecCount +' recommended Metadata Content Requirements. Refer to the tabs above as indicated by the <img src=\''+rootAppPath+'orca/_images/message_small.png\' /> Warning Icon' );	
+			}
+		}
 	});
 	//hide all qa
 	$('.aro_qa_container', qa).each(function(){

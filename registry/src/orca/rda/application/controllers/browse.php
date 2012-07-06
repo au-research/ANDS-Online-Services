@@ -110,13 +110,12 @@ class Browse extends CI_Controller {
 		$this->load->model('vocabularies', 'vmodel');
 		if($where=='anzsrcfor'){
 			$data['result']=$this->vmodel->labelContain($this->config->item('vocab_resolver_service'), $term);
-			$json_result = array();
+			$result = array();
 			foreach($data['result'] as $key=>$vocab_result){
 				foreach($vocab_result as $item){
-					array_push($json_result, array('label'=>$item['prefLabel'], 'uri'=>$item['uri'], 'vocab'=>$key));
+					array_push($result, array('label'=>$item['prefLabel'], 'uri'=>$item['uri'], 'vocab'=>$key));
 				}
 			}
-			echo array_to_json($json_result);
 		}else{
 			$data['result'] = $this->vocabKeywords($where, $term, $params);
 			$result = array();
@@ -124,8 +123,15 @@ class Browse extends CI_Controller {
 			foreach($data['result'] as $r){
 				array_push($result, array('label'=>$r, 'vocab'=>$categories[$where]['display']));
 			}
-			echo array_to_json($result);
 		}
+		
+		// no result? oh dear!
+		if (count($result) == 0)
+		{
+			array_push($result, array('label'=>"No matches found", 'vocab'=>"", "nomatches"=>"true"));
+		}
+			
+		echo array_to_json($result);
 		
 	}
 

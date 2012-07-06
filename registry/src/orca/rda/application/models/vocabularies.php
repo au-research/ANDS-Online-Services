@@ -229,7 +229,8 @@ class Vocabularies extends CI_Model {
 					vocab="'.$params['vocab'].'"
 					total="'.$params['num'].'"
 					prefLabel="'.$params['prefLabel'].'"
-					title="'.$title.'"
+					'//title="'.$title.'"
+					.'
 					>
 					'.$params['prefLabel'].' ('.$params['num'].')'.'
 				</a>';

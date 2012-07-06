@@ -19,7 +19,7 @@
 		<div>
 			<?php echo $doc->{'description_value'}[0];?>
 			<hr/>
-			<?php echo '<a href="'.base_url().$doc->{'url_slug'}.'" class="button">View Record</a>';?>
+			<?php echo '<a href="'.base_url().$doc->{'url_slug'}.'" target="_blank" class="button">View Record</a>';?>
 		</div>
 		<?php endforeach;?>
 	</div>

@@ -391,13 +391,13 @@ function searchRecords($status){
 		}
 
 
-		$qualityLevelStr = '<a href="javascript:;" dsKey="'.$doc->{'data_source_key'}.'" status="'.$doc->{'status'}.'" level="'.$doc->{'quality_level'}.'" key="'.$doc->{'key'}.'" class="smallIcon tipQA ql'.$doc->{'quality_level'}.'">'.$doc->{'quality_level'}.'<span></span></a>';
+		$qualityLevelStr = '<center><a href="javascript:;" dsKey="'.$doc->{'data_source_key'}.'" status="'.$doc->{'status'}.'" level="'.$doc->{'quality_level'}.'" key="'.$doc->{'key'}.'" class="smallIcon tipQA ql'.$doc->{'quality_level'}.'" style="float:none; width:24px; padding:4px 2px 2px 3px;">'.$doc->{'quality_level'}.'<span></span></a></center>';
 
 
 		$goldFlag = '';
 		if(isset($doc->{'gold_status_flag'}) && ($doc->{'gold_status_flag'}==1)){
 			//$goldFlag = '<a href="javascript:void(0);" class="smallIcon icon28sOn tip borderless" tip="Gold Standard" style="float:right"><span></span></a>';
-			$qualityLevelStr = '<a href="javascript:;" dsKey="'.$doc->{'data_source_key'}.'" status="'.$doc->{'status'}.'" level="'.$doc->{'quality_level'}.'" key="'.$doc->{'key'}.'" class="smallIcon tipQA icon28sOn borderless"><span></span></a>';
+			$qualityLevelStr = '<center><a href="javascript:;" dsKey="'.$doc->{'data_source_key'}.'" status="'.$doc->{'status'}.'" level="'.$doc->{'quality_level'}.'" key="'.$doc->{'key'}.'" class="smallIcon tipQA icon28sOn borderless" style="float:none; width:20px;"><span></span></a></center>';
 		}
 
 		//manually assessed
