@@ -486,7 +486,7 @@ $(document).ready(function() {
 			dataType: 'json',
 			usepager: true,
 			colModel : [
-				{display: '', name:'check_box', width:20, sortable: false, align:'left',hide:true},
+				{display: '', name:'check_box', width:20, sortable: false, align:'left',hide:false},
 				{display: 'recordKey', name:'key', width:120, sortable: true, align:'left'},
                 {display: 'Name/Title', name : 's_list_title', width : 350, sortable : true, align: 'left'},
                 {display: 'Last Modified', name : 'date_modified', width : 150, sortable : true, align: 'left'},
