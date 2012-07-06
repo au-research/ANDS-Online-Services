@@ -18,6 +18,7 @@ limitations under the License.
 google.load('visualization', '1.0', {'packages':['corechart']});
 
 var currentView = 'statusview';//can be status or quality
+var currentStatus = 'All';
 var dsKey;
 var dsName;
  
@@ -111,7 +112,7 @@ $(document).ready(function() {
 	function view(type, status){
 		//console.log('type='+type+' status='+status);
 		$('.tab-content').hide();
-		$('#toggleSummaryTable, #toggleDetailTables').text('-');
+		currentStatus = status;
 		if(type=='statusview'){
 			$('.qaview').hide();
 			$('.viewswitch').removeClass('pressed');
@@ -169,6 +170,10 @@ $(document).ready(function() {
 		$('.'+name).show();
 
 		view(name, $('.tab-list li a.active-tab').attr('name'));
+	});
+
+	$('#toggleChart').live('click', function(){
+		$('#'+currentStatus+'_qaview').toggle();
 	});
 
 

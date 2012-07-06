@@ -285,7 +285,10 @@ else
 				//echo '<div id="All_statusview" class="tab-content statusview"></div>';
 
 				//echo '<hr class="tab-content statusview"/>';
-				echo '<div id="quality_view_explain" class="tab-content qaview"><a href="http://ands.org.au/resource/metadata-content-requirements.html" target="_blank">Quality Level Definitions</a></div>';
+				echo '	<div id="quality_view_explain" class="tab-content qaview">
+							<a href="http://ands.org.au/resource/metadata-content-requirements.html" target="_blank">Quality Level Definitions</a>
+							<div class="buttons" style="float:right"><a href="javascript:;" class="smallIcon borderless" id="toggleChart">[Show|Hide] Chart</a></div>
+						</div>';
 				
 				echo '<div class="tab-content statusview"><h3>Details</h3></div>';
 				echo '<div id="detailTables">';
@@ -324,7 +327,7 @@ else
 				/*
 				 * All of em
 				 */
-				//echo '<div id="quality_view_explain" class="tab-content qaview">Here here</div>';
+
 		    	echo '<div id="All_qaview" class="tab-content qaview"></div>';
 		    	//echo '<hr class="tab-content qaview"/>';
 		    	foreach($qa_levels as $key=>$l){
