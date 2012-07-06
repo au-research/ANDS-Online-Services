@@ -265,10 +265,17 @@ require '_includes/header.php';
 					<?php 
 //Chrome Frame message
 // We test the user browser and the presence of the Chrome Frame plug-in
-$message = '<div>
-			ANDS Registry is optimized for modern browsers (Mozilla Firefox 4+, Internet Explorer 9+, Chrome, Safari and Opera...)<br/>
-			We have detected that you are using an <b>older</b> version browser.<br/>
-			To improve your browsing experience, please use the <a href="http://www.google.com/chromeframe/?user=true&quickenable=true?redirect=true">Chrome Frame</a> extension
+$message = '<div style="padding: 10px;border: 1px solid #444;margin: 0px -10px;">
+			The ANDS Registry is optimised for use in modern web browsers (such as <a href="http://www.mozilla.org/en-US/firefox/new/" target="_blank">Firefox</a>, <a href="https://www.google.com/intl/en/chrome/browser/" target="_blank">Google Chrome</a> and <a href="http://windows.microsoft.com/en-AU/internet-explorer/products/ie/home" target="_blank">Internet Explorer 9+</a>).<br/>
+			We have detected that you may be using an <b>older</b> browser. <br/>
+			<br/>
+			Whilst we strongly recommend upgrading to one of the modern browsers listed above, <br/>
+			you can also experience similar performance by enabling the <a href="http://www.google.com/chromeframe/?user=true&quickenable=true?redirect=true" target="_blank">Google Chrome extension for Internet Explorer</a><sub>[1]</sub>.<br/> 
+			<br/>
+			ANDS continues to support Internet Explorer 7 & 8,0 however some features may degrade in performance when using these browsers.<br/>
+			<br/>
+			Please contact <a href="mailto:services@ands.org.au">services@ands.org.au</a> for further information.<br/>
+
 			</div>';
 if ( stristr($_SERVER['HTTP_USER_AGENT'], 'chromeframe') ) {
 	//chrome frame is installed
@@ -280,6 +287,7 @@ if ( stristr($_SERVER['HTTP_USER_AGENT'], 'chromeframe') ) {
 	print $message;
 } else {//good browser
 	//nothing to do here, move along
+	print $message;
 }
 					?>
 				</td>

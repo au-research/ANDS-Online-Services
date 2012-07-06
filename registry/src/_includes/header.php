@@ -50,7 +50,6 @@ limitations under the License.
 		<?php printApplicationStyleSheets(); ?>
 
 	</style>
-	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js"></script>
 
 	<script type="text/javascript" src="<?php print eAPP_ROOT ?>_javascript/general.js"></script>
 	<script type="text/javascript" src="<?php print eAPP_ROOT ?>_javascript/dhtml.js"></script>
