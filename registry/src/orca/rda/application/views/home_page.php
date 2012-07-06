@@ -113,7 +113,7 @@ limitations under the License.
 			<img src="<?php echo base_url();?>img/feed_icon.png"/><img src="<?php echo base_url();?>img/twitter_icon.png"/>
 		</div>
 		<div style="float:left;line-height:32px">
-			<strong>RSS,ATOM and Twitter feeds are now available. <?php echo anchor('home/feeds','Learn more here....');?></strong>
+			<h4 style="margin-top:3px;">RSS,ATOM and Twitter feeds are now available. <?php echo anchor('home/feeds','Learn more here....');?></h4>
 		</div>
 	</div>
 	<div style="float:right;">

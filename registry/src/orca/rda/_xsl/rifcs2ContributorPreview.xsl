@@ -182,6 +182,7 @@
         </xsl:if>   
 
 		<div style="position:relative;clear:both;">
+				<hr class="grey"/>
 		<p>
 			<div class='rss_icon' style="margin-top:2px;"></div> Subscribe to this web feed. 
 			<a>

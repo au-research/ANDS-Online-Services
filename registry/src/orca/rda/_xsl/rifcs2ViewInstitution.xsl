@@ -181,7 +181,7 @@
         </xsl:if>   
 
 		<div style="position:relative;clear:both;">
-		<hr />
+		<hr class="grey"/>
 		<p>
 			<div class='rss_icon' style="margin-top:2px;"></div> Subscribe to a feed of collections from this contributor. 
 			<a>
