@@ -2092,6 +2092,7 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 				event: 'click',
 				effect: function(offset) {
 					$(this).slideDown(100); // "this" refers to the tooltip
+					$(this).resizable();
 				}
 			},
 			//hide:"unfocus"
@@ -2167,8 +2168,6 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 						subjectFilter = encodeURIComponent(ui.item.uri);
 					}else subjectFilter = ui.item.label;
 					changeHashTo(formatSearch(search_term,1,classFilter));
-					//vocabLoadConcept(ui.item.uri, ui.item.vocab);
-					//vocabLoadTree(ui.item.uri, ui.item.vocab);
 				}
 			}
 		});
