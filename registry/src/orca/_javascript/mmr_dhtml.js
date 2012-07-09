@@ -1056,10 +1056,10 @@ $(document).ready(function() {
 	//Flag Status button
 	$('.flagToggle').live('click', function(e){
 		var flag;
-		if($(this).hasClass('icon28sOn')){
-			flag = false;			
+		if($(this).hasClass('icon59sOn')){
+			flag = 'false';			
 		}else{
-			flag = true;
+			flag = 'true';
 		}
 		$(this).toggleClass('icon59sOff');
 		$(this).toggleClass('icon59sOn');
