@@ -715,11 +715,7 @@
 							$(this).addClass('trSelected');
 							$('td[abbr=check_box] img', this).attr('src', rootAppPath+'orca/_images/checkbox_yes.png');
 						}
-						$(this).toggleClass('trSelected');
 						if (p.singleSelect) $(this).siblings().removeClass('trSelected');
-
-						/*var $checkbox = $('.selectMe', this);
-						$checkbox.attr('checked', !$checkbox[0].checked);*/
 					}).mousedown(function (e) {
 						if (e.shiftKey) {
 							$(this).toggleClass('trSelected');
