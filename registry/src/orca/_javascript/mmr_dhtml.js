@@ -827,9 +827,11 @@ $(document).ready(function() {
 	$('.selectFlagged').live('click', function(){
 		var grid = $(this).parent().parent().parent();
 		var flaggedRecords = $(grid).find('.icon59sOn');
-		$('tr', grid).removeClass('trSelected');
+		$('tr', grid).each(function(){
+			deSelectRow(this);
+		});
 		$.each(flaggedRecords, function(index){
-			$(this).parents('tr').addClass('trSelected');
+			selectRow($(this).parents('tr'));
 		});
 		$('.infoDiv', grid).html('All '+flaggedRecords.length+' flagged records selected');
 	});
