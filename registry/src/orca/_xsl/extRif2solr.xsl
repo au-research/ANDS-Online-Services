@@ -381,7 +381,14 @@
     <xsl:template match="ro:relatedObject/ro:relation">
     <xsl:element name="field">
         <xsl:attribute name="name">related_object_relation</xsl:attribute>
-        <xsl:value-of select="@type"/>
+        <xsl:choose>
+        	<xsl:when test="@extRif:type">
+        		 <xsl:value-of select="@extRif:type"/>
+        	</xsl:when>
+        	<xsl:otherwise>
+        		<xsl:value-of select="@type"/>
+        	</xsl:otherwise>
+        </xsl:choose>       
     </xsl:element>  
     </xsl:template>
 
