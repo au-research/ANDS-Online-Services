@@ -413,7 +413,7 @@ function searchRecords($status){
 		$entry = array(
 					'id' => $doc->{'key'},
 					'cell' => array(
-							'<input type="checkbox" class="selectMe"/>',
+							'<img class="check_box_img" src="'.eAPP_ROOT.'orca/_images/checkbox_no.png"/>',
 							'<a href="'.$view_link.'" class="tip" tip="'.$doc->{'key'}.'">'.$doc->{'key'}.'</a>',
 							$doc->{'list_title'},
 

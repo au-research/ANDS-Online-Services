@@ -207,15 +207,6 @@ $(document).ready(function() {
         		//console.log(resultArray);
         		chartData.addRows(resultArray);
 
-        		function selectHandler() {
-			    	var selectedItem = chart.getSelection()[0];
-				    if (selectedItem) {
-				    	//console.log(chartData);
-				      	var value = chartData.getValue(selectedItem.row, 0);
-				      	//console.log(value);
-				    }
-			  	}
-
         		var options = {'title':status+' Records',
                        'width':400,
                        'height':300,
@@ -226,9 +217,6 @@ $(document).ready(function() {
 
 				var chart = new google.visualization.PieChart(document.getElementById(status+'_qaview'));
 				chart.draw(chartData, options);
-    			google.visualization.events.addListener(chart, 'select', selectHandler);
-
-        		//console.log('finish');
 
         	}
        	});
@@ -237,18 +225,7 @@ $(document).ready(function() {
     function drawBarChart(status, ds){
     	var chartData = new google.visualization.DataTable();
     	//var get_view = 'get_view.php?view=StatusAllQA&status='+status+'&ds='+ds;
-       var get_view = 'get_view.php?view=getAllStat&status='+status+'&ds='+ds;
-       //console.log(get_view);
-    	/*console.log(get_view);
-    	$.ajax({
-    		url: get_view,
-    		method: 'get',
-    		cache: false, // don't cache the result
-    		success: function(data) {
-    			console.log(data);
-    		}
-    	});*/
-
+    	var get_view = 'get_view.php?view=getAllStat&status='+status+'&ds='+ds;
         var colNumber = [];
         var rowCount = 0;
 
@@ -486,7 +463,7 @@ $(document).ready(function() {
 			dataType: 'json',
 			usepager: true,
 			colModel : [
-				{display: '', name:'check_box', width:20, sortable: false, align:'left',hide:true},
+				{display: '', name:'check_box', width:20, sortable: false, align:'left'},
 				{display: 'recordKey', name:'key', width:120, sortable: true, align:'left'},
                 {display: 'Name/Title', name : 's_list_title', width : 350, sortable : true, align: 'left'},
                 {display: 'Last Modified', name : 'date_modified', width : 150, sortable : true, align: 'left'},
@@ -519,10 +496,6 @@ $(document).ready(function() {
             cookies: true,
             tableId:theTableTitle
 		});
-	});
-
-	$('.selectMe').live('click', function(e){
-		$(this).parents('tr').toggleClass('trSelected');
 	});
 
 	function formatTable(){
@@ -788,14 +761,21 @@ $(document).ready(function() {
 	        //additionalClass:tClass,
 	        tableTitle:'Registry Content Summary for '+dsName
 		});
-       	
-       	
 	}
 
+	function selectRow(row){
+		$(row).addClass('trSelected');
+		$('td[abbr=check_box] img', row).attr('src', rootAppPath+'orca/_images/checkbox_yes.png');
+	}
+
+	function deSelectRow(row){
+		$(row).removeClass('trSelected');
+		$('td[abbr=check_box] img', row).attr('src', rootAppPath+'orca/_images/checkbox_no.png');
+	}
 
 	function selectAll(com, grid){
 		if($(this).text()=='Select All'){
-			$('.bDiv tr', grid).click();
+			$('.bDiv tr', grid).each(function(){selectRow(this);});
 
 			//console.log($('.ftitle',grid));
 			var total = parseInt($('.ftitle', grid).attr('count'));
@@ -821,7 +801,7 @@ $(document).ready(function() {
 			$(this).html('<a class="button smaller left">Deselect All</a>');
 		}else{
 			$(grid).attr('selectall', 'no');
-			$('tbody tr', grid).click();
+			$('.bDiv tr', grid).each(function(){deSelectRow(this);});
 			$('.infoDiv', grid).hide();
 			$(this).html('<a class="button smaller left">Select All</a>');
 		}

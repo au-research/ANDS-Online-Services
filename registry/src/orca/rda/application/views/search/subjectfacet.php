@@ -15,6 +15,7 @@
 			}
 		?>
 	</select>
+	<div class="clearfix"></div>
 	</div>
 </div>
 <div id="subject_content"><?php echo $bigTree;?></div>

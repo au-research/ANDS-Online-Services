@@ -708,11 +708,18 @@
 					$(this).click(function (e) {
 						var obj = (e.target || e.srcElement);
 						if (obj.href || obj.type) return true;
+						if($(this).hasClass('trSelected')){
+							$(this).removeClass('trSelected');
+							$('td[abbr=check_box] img', this).attr('src', rootAppPath+'orca/_images/checkbox_no.png');
+						}else{
+							$(this).addClass('trSelected');
+							$('td[abbr=check_box] img', this).attr('src', rootAppPath+'orca/_images/checkbox_yes.png');
+						}
 						$(this).toggleClass('trSelected');
 						if (p.singleSelect) $(this).siblings().removeClass('trSelected');
 
-						var $checkbox = $('.selectMe', this);
-						$checkbox.attr('checked', !$checkbox[0].checked);
+						/*var $checkbox = $('.selectMe', this);
+						$checkbox.attr('checked', !$checkbox[0].checked);*/
 					}).mousedown(function (e) {
 						if (e.shiftKey) {
 							$(this).toggleClass('trSelected');
@@ -759,7 +766,10 @@
 				var cm = p.colModel[i];
 				var th = document.createElement('th');
 				th.innerHTML = cm.display;
-				if (cm.name && cm.sortable) {
+				/*if (cm.name && cm.sortable) {
+					$(th).attr('abbr', cm.name);
+				}*/
+				if (cm.name) {
 					$(th).attr('abbr', cm.name);
 				}
 				$(th).attr('axis', 'col' + i);
