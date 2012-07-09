@@ -17,7 +17,10 @@ $(document).ready(function(){
 	var researchGroupSort = 'index';
 	var subjectSort = 'index';
 	var typeSort = 'index';
-
+	
+	//set up the tooltip for the rss link
+	$('.tiprss').tipsy({live:true, gravity:'s'});
+	
 	// Load up fancybox image browser
 	$(".fancybox").fancybox();
 	
