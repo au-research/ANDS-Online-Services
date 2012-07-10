@@ -150,16 +150,16 @@
 
 
             <div class="descriptions" style="position:relative;clear:both;">
-            	<xsl:if test="extRif:description/@type='brief'"><h2>Overview</h2></xsl:if>
-				<xsl:apply-templates select="extRif:description[@type= 'brief']" mode="content"/>
-				<xsl:apply-templates select="extRif:description[@type= 'full']" mode="content"/>
-            	<xsl:if test="extRif:description/@type='researchAreas'"><h2>Research and Key Research Areas</h2></xsl:if>				
-				<xsl:apply-templates select="extRif:description[@type= 'researchAreas']" mode="content"/>
+            	<xsl:if test="ro:description/@type= 'brief'"><h2>Overview</h2></xsl:if>
+				<xsl:apply-templates select="ro:description[@type= 'brief']" mode="content"/>
+				<xsl:apply-templates select="ro:description[@type= 'full']" mode="content"/>
+            	<xsl:if test="ro:description/@type='researchAreas'"><h2>Research and Key Research Areas</h2></xsl:if>				
+				<xsl:apply-templates select="ro:description[@type= 'researchAreas']" mode="content"/>
 				 <h2>Research Data Profile</h2>
                  <div id="cannedShowcase"></div>
-				<xsl:apply-templates select="extRif:description[@type= 'researchDataProfile']" mode="content"/>	
-	            <xsl:if test="extRif:description/@type='researchSupport'"><h2>Research Support</h2></xsl:if>						
-				<xsl:apply-templates select="extRif:description[@type= 'researchSupport']" mode="content"/>							
+				<xsl:apply-templates select="ro:description[@type= 'researchDataProfile']" mode="content"/>	
+	            <xsl:if test="ro:description/@type='researchSupport'"><h2>Research Support</h2></xsl:if>						
+				<xsl:apply-templates select="ro:description[@type= 'researchSupport']" mode="content"/>							
             </div>
 
 
@@ -765,7 +765,7 @@ Handle:
 			</xsl:if>	
 			</p>		
 	</xsl:template>-->
-	<xsl:template match="extRif:description" mode="content">     
+	<xsl:template match="ro:description" mode="content">     
         <div><xsl:attribute name="class"><xsl:value-of select="@type"/></xsl:attribute>
 
            <p><xsl:value-of select="." disable-output-escaping="yes"/></p>
