@@ -537,7 +537,7 @@ function allKeys($status){
 	global $dataSourceKey, $solr_url;
 	$q = '+data_source_key:("'.$dataSourceKey.'") +status:("'.$status.'")';
 	$fields = array(
-		'q'=>$q,'version'=>'2.2','start'=>'0','rows'=>'200', 'wt'=>'json',
+		'q'=>$q,'version'=>'2.2','start'=>'0','rows'=>'20000', 'wt'=>'json',
 		'fl'=>'key, error_count'
 	);
 	$content = solr($solr_url, $fields);
