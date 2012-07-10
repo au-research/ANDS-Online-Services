@@ -49,7 +49,14 @@ $(document).ready(function() {
 	if ($.browser.msie  && parseInt($.browser.version, 10) === 8) {
 		$('body').css('font-family', 'Verdana');
 		$('.chzn-container-single').css('font-family', 'Verdana');
+		
 	}
+	if($.browser.msie){
+		$('.check_box_img').live('click', function(){
+			$(this).parents('tr').click();
+		});
+	}
+
 
 
 	if($.cookie('currentView')){
@@ -806,7 +813,7 @@ $(document).ready(function() {
 			$(this).html('<a class="button smaller left">Select All</a>');
 		}
 
-		$('.trSelected, .checkMe', grid).click(function(){
+		$('.trSelected, .check_box_img', grid).click(function(){
 			$(grid).attr('selectall', 'no');
 			var numSelected = parseInt($('.bDiv tr.trSelected', grid).length);
 			var total = parseInt($('.ftitle', grid).attr('count'));
@@ -815,6 +822,7 @@ $(document).ready(function() {
 			$('.infoDiv', grid).show();
 		});
 	}
+
 
 	$('.selectAll').live('click', function(){
 		var grid = $(this).parent().parent().parent();
