@@ -286,7 +286,7 @@ else
 
 				//echo '<hr class="tab-content statusview"/>';
 				echo '	<div id="quality_view_explain" class="tab-content qaview">
-							<a href="http://ands.org.au/resource/metadata-content-requirements.html" target="_blank">Quality Level Definitions</a>
+							<a href="http://ands.org.au/resource/metadata-content-requirements.html#qualitylevels" target="_blank">Quality Level Definitions</a>
 							<div class="buttons" style="float:right"><a href="javascript:;" class="smallIcon borderless" id="toggleChart">[Show|Hide] Chart</a></div>
 						</div>';
 				
