@@ -1029,7 +1029,7 @@ $(document).ready(function() {
 			if ($(this).parent().attr('qld') == 5)
 				$(this).text('Gold Standard Record');
 			else if($(this).parent().attr('qld') == 1)
-				$(this).text('Quality Level 1 - Mandatory RIF-CS Elements');
+				$(this).text('Quality Level 1 - Required RIF-CS Schema Elements');
 			else if($(this).parent().attr('qld') == 2)
 				$(this).html('Quality Level 2 - required Metadata Content Requirements.' );
 			else if($(this).parent().attr('qld') == 3)

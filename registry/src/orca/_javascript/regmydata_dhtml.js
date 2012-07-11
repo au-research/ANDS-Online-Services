@@ -1354,7 +1354,7 @@ function saveAndPreview() {
 					var roStatus = $('#elementCategory').val();
 					qualityLevelText[1] = 'This record meets some of the Metadata Content Requirements  satisfying  minimal requirements for discovery, but does not comply with the Minimum Metadata Content Requirements.';
 					qualityLevelText[2] = 'Congratulations! This record satisfies the minimum Metadata Content Requirements.';
-					qualityLevelText[3] = 'Congratulations! This record exceeds the minimum Metadata Content Requirements.';
+					qualityLevelText[3] = 'Congratulations! This record meets and exceeds the minimum Metadata Content Requirements.';
 				
 					var ql_result = '<div id="ql_result"><div class="ql_num ql'+qualityLevel+'">Level '+qualityLevel+' Record</div><div class="ql_explain"><p>'+qualityLevelText[qualityLevel]+'</p></div><div class="clearfix"></div></div>';
 					$('#qa_level_notification').html(ql_result);
@@ -1469,7 +1469,7 @@ function initQADisplay(){
 	$('.aro_qa_container', qa).prepend('<div class="toggleQAtip"></div>');
 	$('.toggleQAtip', qa).each(function(){
 		if($(this).parent().attr('qld') == 1)
-		   $(this).text('Quality Level 1 - Mandatory RIF-CS Elements');
+		   $(this).text('Quality Level 1 - Required RIF-CS Schema Elements');
 		if($(this).parent().attr('qld') == 2)
 		{
 			if ( okReqArray == allReqCount ) {

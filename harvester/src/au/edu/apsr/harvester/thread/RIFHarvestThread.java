@@ -232,7 +232,7 @@ public class RIFHarvestThread extends HarvestThread
                 Document doc = listRecords.getDocument();
                 Fragment frag = getFragment(docToString(doc), "ListRecords");
 
-                if ((listRecords.getResumptionToken().length()==0) || getResumptionToken() == listRecords.getResumptionToken() || (harvest.getMode().equals(Constants.MODE_TEST))) 
+                if ((listRecords.getResumptionToken().length()==0)  || (harvest.getMode().equals(Constants.MODE_TEST))) 
                 {
                     last = true;
                 }
