@@ -246,22 +246,14 @@ public class RIFHarvestThread extends HarvestThread
                 }
                 log.info(harvest.getHarvestID() + " OLD resumption token = " + getResumptionToken());
                 log.info(harvest.getHarvestID() + " resumption token = " + listRecords.getResumptionToken());
-                if (listRecords.getResumptionToken().length() > 0 && getResumptionToken() != listRecords.getResumptionToken())
+                if (listRecords.getResumptionToken().length() > 0)
                 {
-                    if(!getResumptionToken().equals(listRecords.getResumptionToken()))
-                    {
-                    	setResumptionToken(listRecords.getResumptionToken());
-                    }
-                    else
-                    {
-                    	setResumptionToken(null);
-                    	log.info("harvest " + harvest.getHarvestID() + " resumption token same as previous so no more records will be retrieved.");
-                    }
+                	log.info("setting resumption token");
+                	setResumptionToken(listRecords.getResumptionToken());
                 }
                 else
                 {
-                    
-                	setResumptionToken(null);
+                    setResumptionToken(null);
                 }
                                 
                 if (threadManager.isStopped(harvest))
@@ -272,7 +264,7 @@ public class RIFHarvestThread extends HarvestThread
                 
                 harvest.setResumptionToken(getResumptionToken());
                 harvest.update();
-                
+                log.info("harvester is updated");
                 if (getResumptionToken() == null || getResumptionToken().length() == 0)
                 {
                     log.info("harvest " + harvest.getHarvestID() + " has no ListRecords resumption token, no more records will be retrieved.");
