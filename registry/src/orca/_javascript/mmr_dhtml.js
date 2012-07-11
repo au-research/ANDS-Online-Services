@@ -389,7 +389,7 @@ $(document).ready(function() {
 		}
 
 		if(table_type=='status_table'){
-			if(status!='MORE_WORK_REQUIRED') buttons.push({name: 'Select All', bclass: 'button', onpress : selectAll});
+			if(status!='MORE_WORK_REQUIRED') buttons.push({name: 'Select All', bclass: 'select_all_button', onpress : selectAll});
 		}
 
 		if(status=="DRAFT"){
@@ -671,7 +671,7 @@ $(document).ready(function() {
 			$(grid).attr('selectall', 'no');
 			$('tbody tr', grid).removeClass('trSelected');
 			$('.infoDiv', grid).hide();
-			$('.button[text=Deselect All]', grid).html('<a class="button smaller left">Select All</a>');
+			$('.select_all_button', grid).html('<a class="button smaller left">Select All</a>');
 		}
 	}
 
