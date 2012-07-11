@@ -61,13 +61,16 @@ function displayFacet($facet_name, $facetFilter, $json, $ro_class){
 	for($i=0;$i< sizeof($object_type)-1 ;$i=$i+2){
 		if($object_type[$i+1]>0){
 			if($object_type[$i]!=$facetFilter){
+
 				$result[$object_type[$i]] = '<li class="limit">
+
 					<a href="javascript:void(0);"
 						title="'.$object_type[$i].' ('.number_format($object_type[$i+1]).''.' results)"
 						class="'.$class.'" id="'.$object_type[$i].'">'.
 						''.$object_type[$i].' ('.number_format($object_type[$i+1]).')'.'
 						</a></li>';
 			}
+
 		}
 	}
 
@@ -79,6 +82,7 @@ function displayFacet($facet_name, $facetFilter, $json, $ro_class){
 	}else{
 		foreach($result as $r){
 			echo $r;
+
 		}
 	}
 
@@ -297,6 +301,15 @@ function assets_url()
 	return $CI->config->item('asset_url');
 }
 
+
+function solr_url()
+{
+	$CI=&get_instance();
+	return $CI->config->item('solr_url');
+}
+
+
+
 /*Get response from a http request*/
 function get_http_response_code($url) {
 	$headers = get_headers($url);
@@ -340,6 +353,7 @@ function getPageLogo($key){
 		$query = $query->row();
 		$value  = $query->value;
 		return strip_tags($value);
+
 	}
 
 }
@@ -352,7 +366,6 @@ function displaySubscriptions(){//for now we only want to set up the subscriptio
 	}
 
 }
-
 
 /*
  * Take a vocab term uri (http://purl.org/au-research/vocab/...)
@@ -441,4 +454,5 @@ function resolveFromVocabNotation($vocabNotation)
 
 	return false;
 }
+
 ?>

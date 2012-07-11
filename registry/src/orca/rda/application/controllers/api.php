@@ -34,8 +34,8 @@ class Api extends CI_Controller {
     	
     	//echo 'json received+<pre>'.$content.'</pre>';
 		curl_close($ch);//close the curl
-		
 		echo $content;	
+
 	}
 }
 ?>

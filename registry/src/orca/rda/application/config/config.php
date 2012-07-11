@@ -35,6 +35,7 @@ $config['enable_warning_notices'] = $enable_warning_notices;
 $config['warning_notices'] = $warning_notices;
 
 
+
 /*
  * Default Values
  * Used in the helper to return the real URLs

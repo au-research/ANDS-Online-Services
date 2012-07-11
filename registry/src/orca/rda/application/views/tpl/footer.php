@@ -19,6 +19,12 @@ limitations under the License.
 </div>
 </div>
 
+
+
+
+	</div>
+
+
 <div id="footer" class="no_print">
 	<?php echo anchor('','Home');?> |
 	<?php echo anchor('home/about', 'About');?> |
@@ -64,6 +70,7 @@ limitations under the License.
 	<script type="text/javascript" src="<?php echo base_url();?>js/superfish.js"></script> <!-- Top menu -->
 	<script type="text/javascript" src="<?php echo base_url();?>js/jquery.fancybox.pack.js?v=2.0.6"></script> <!-- FancyBox Image Lightbox -->
 
+
 	<script type="text/javascript" src="<?php echo base_url();?>js/qtip/jquery.qtip.min.js"></script> <!-- FancyBox Image Lightbox -->
 
 	<?php if ($this->agent->browser()=='Internet Explorer' && $this->agent->version() < 9):?>
@@ -72,6 +79,7 @@ limitations under the License.
     	<script>
     		DD_roundies.addRule('.box', '10px');
     		DD_roundies.addRule('.hp-class-item', '10px');
+
     	</script>
 	 <?php endif;?>
 

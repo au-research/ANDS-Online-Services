@@ -25,6 +25,13 @@ class Topic extends CI_Controller {
          parent::__construct();
     }
 
+
+	public function _remap($method, $params = array())
+	{
+	    return call_user_func_array(array($this, "index"), array($method));
+	}
+
+
 	public function index($topic="")
 	{
 
@@ -34,7 +41,8 @@ class Topic extends CI_Controller {
 
 		parse_str($_SERVER['QUERY_STRING'], $_GET);
 
-		if (!$topic)
+
+		if (!$topic || $topic == "topic" || $topic == "index")
 		{
 			// needed to load page
 			$this->load->library('user_agent');

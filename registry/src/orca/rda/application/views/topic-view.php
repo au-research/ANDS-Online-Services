@@ -38,7 +38,8 @@
 <div id="item-view-inner" class="clearfix" itemscope="" itemType="http://schema.org/Thing">
 
 <div id="left">
- 	<div id="displaytitle"><h1 itemprop="name"><?php echo $topic_name; ?></h1></div>
+
+ 	<div id="displaytitle" style="width:100%;"><h1 itemprop="name"><?php echo $topic_name; ?></h1></div>
  	<div class="clearfix"></div>
  	<?php echo $html; ?>
 </div>
@@ -56,9 +57,11 @@ foreach($topic_boxes AS $box)
 	{
 		echo "ands_search_" . $name . " = \"" . rawurlencode($param) . "\";\n";
 	}
+	echo 'ands_search_service_point = "'.base_url().'api"'."\n";
+	echo 'ands_search_portal_url = "'.base_url().'"'."\n";
 	echo "\n//--></script>";
 	echo '<script type="text/javascript"';
-	echo ' src="http://devl.ands.org.au/workareas/ben/misc/jswidget/script.js">';
+	echo ' src="' . base_url() . 'js/jswidget.js">';
 	echo '</script>';
 }
 
@@ -69,9 +72,7 @@ foreach($manual_boxes AS $box)
 			"<h2>".$box['heading']."</h2>" .
 			"<ul>";
 	foreach ($box['items'] AS $item):
-
-			echo "<li><a href='" . $item['url'] . "'>" . $item['title'] . "</a></li>";
-
+			echo "<li><a target='_blank' href='" . $item['url'] . "'>" . $item['title'] . "</a></li>";
 	endforeach;
 
 	echo 	"</ul>" .

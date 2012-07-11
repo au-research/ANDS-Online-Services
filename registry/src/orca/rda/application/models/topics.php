@@ -9,11 +9,13 @@ class Topics extends CI_Model {
 					"html"=>"",
 					"auto_boxes" => array(
 							array ("id"=>"collections",
-									"query"=>'fulltext:tropics -data_source_key:("www.qfab.org/qfab2") class:("collection")',
+
+									"query"=>'fulltext:tropics -key:("http://esrc.unimelb.edu.au/OHRM#E000849") -data_source_key:("www.qfab.org/qfab2") class:("collection")',
 									"heading"=>"Collections",
 									"record_limit"=>3),
 							array ("id"=>"groups",
-									"query"=>'-data_source_key:("www.qfab.org/qfab2") class:("collection") fulltext:tropics',
+									"query"=>'-data_source_key:("www.qfab.org/qfab2") -data_source_key:("PUBLISH_MY_DATA") class:("collection") fulltext:tropics',
+
 									"query_facet"=>"group",
 									"heading"=>"Data Contributors",
 									"record_limit"=>3),
@@ -30,7 +32,8 @@ class Topics extends CI_Model {
 					"manual_boxes" => array(
 							array("heading"=>"Other Related Links",
 									"items"=> array(
-												array("url" => "https://eresearch.jcu.edu.au/tdh", "title"=>"The Tropical Data Hub"),
+
+												array("url" => "http://tropicaldatahub.org/", "title"=>"The Tropical Data Hub"),
 												array("url" => "http://www.nerptropical.edu.au/", "title"=>"NERP Tropical Ecosystems Hub"),
 												array("url" => "http://www.gbrmpa.gov.au/", "title"=>"Great Barrier Reef Marine Park Authority"),
 												array("url" => "http://www.rrrc.org.au/", "title"=>"Reef & Rainforest Research Centre"),

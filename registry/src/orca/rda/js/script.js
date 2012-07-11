@@ -17,6 +17,7 @@ $(document).ready(function(){
 	var researchGroupSort = 'index';
 	var subjectSort = 'index';
 	var typeSort = 'index';
+
 	
 	//set up the tooltip for the rss link
 	$('.tiprss').tipsy({live:true, gravity:'s'});
@@ -29,6 +30,10 @@ $(document).ready(function(){
 	//================================
 	var enableWarning = enable_warning_notices;
 	var warningMessage = warning_notices+' <a href="javascript:void(0);" id="dismiss_warning">[x]</a>';
+
+	// Load up fancybox image browser
+	$(".fancybox").fancybox();
+	
 	var warningDiv = $('<div id="warningDiv"></div>');
 		$(warningDiv).css('opacity','0.8');
 	$(warningDiv).html(warningMessage);
