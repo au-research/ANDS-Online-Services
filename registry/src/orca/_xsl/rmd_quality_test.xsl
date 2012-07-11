@@ -633,7 +633,7 @@
     </xsl:template>
     
     <xsl:template match="ro:namePart">
-        <xsl:if test="string-length(@type) = 0 and ancestor::ro:party[@type = 'person']">
+        <!--xsl:if test="string-length(@type) = 0 and ancestor::ro:party[@type = 'person']">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
             		<xsl:text>SetWarnings("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_type","A Name Part Type must be specified.");</xsl:text>
@@ -642,7 +642,7 @@
 					<span class="warning">Name Part must have a type.</span>
 			    </xsl:otherwise>
 	    	</xsl:choose>
-        </xsl:if>
+        </xsl:if-->
         <xsl:if test="string-length(@type) &gt; 512">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
