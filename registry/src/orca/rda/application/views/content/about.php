@@ -28,7 +28,7 @@ limitations under the License.
 
 <div class="box" id="contact">
 	<h1>More Information</h1>
-	<p><a href="http://services.ands.org.au/documentation/ANDS_Brochure.pdf">Download the ANDS Brochure</a></p>
+	<p><a href="http://services.ands.org.au/documentation/andsbrochure.pdf">Download the ANDS Brochure</a></p>
 	<p>If you are interested in contributing to Research Data Australia please email <a href="mailto:services@ands.org.au">services@ands.org.au</a></p>
 </div>
 
