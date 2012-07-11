@@ -639,7 +639,7 @@
             		<xsl:text>SetWarnings("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_type","A Name Part Type must be specified.");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
-					<span class="error">Name Part must have a type.</span>
+					<span class="warning">Name Part must have a type.</span>
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>
