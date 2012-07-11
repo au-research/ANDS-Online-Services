@@ -268,6 +268,10 @@
 		<xsl:value-of select="."/>
 	</xsl:template>
 	
+	<xsl:template match="value[ancestor::electronic and parent::value]">
+		<xsl:value-of select="translate(. ,' ', '+')"/>
+	</xsl:template>
+	
 
 	
 
