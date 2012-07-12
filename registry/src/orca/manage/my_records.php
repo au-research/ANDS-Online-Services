@@ -850,8 +850,11 @@ function displayMMRDataSourceSwitcher(array $dataSources = array(), $selected_ke
 
 				<div class="content_block">
 					<a class="pop" href="#" title="This tool allows you to view and manage the records which you have recently created, edited or harvested.">(more details)</a>
-					<a href="http://ands.org.au/resource/mmr-help-r8.pdf">Help</a>
+					
 					<!--a href="" id="mmr_information_show">(more details)</a-->
+				</div>
+				<div class="content_block" style="float:right;">
+					<a href="http://ands.org.au/resource/mmr-help-r8.pdf" id="cpgHelpButton"></a>
 				</div>
 			</div>
 
