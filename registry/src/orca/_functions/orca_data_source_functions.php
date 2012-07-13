@@ -40,6 +40,7 @@ function runImport($dataSource, $testOnly)
 	$errors = null;
 	$log_type = "INFO";
 	$startTime = microtime(true);
+	$advancedHarvestingMethod = $dataSource[0]['advanced_harvesting_mode'];
 	$mode = 'harvest'; if( $testOnly ){ $mode = 'test'; }
 	
 	// DIRECT HARVEST
@@ -216,6 +217,7 @@ function runImport($dataSource, $testOnly)
 			$harvestRequest .= '&date='.urlencode($harvestDate);
 			$harvestRequest .= '&frequency='.urlencode($harvestFrequency);
 			$harvestRequest .= '&mode='.urlencode($mode);
+			$harvestRequest .= '&ahm='.urlencode($advancedHarvestingMethod);
 			
 			// Submit the request.
 			$runErrors = submitHarvestRequest(gORCA_HARVESTER_BASE_URI.$harvestRequest);
