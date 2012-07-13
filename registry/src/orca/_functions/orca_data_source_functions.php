@@ -242,6 +242,29 @@ function runImport($dataSource, $testOnly)
 	}
 }
 
+function getRecordCountsByStatusForDataSource($data_source_key)
+{
+	global $solr_url;
+	$statuses = array();
+	$statuses["PUBLISHED"] = 0;
+	
+	$result = json_decode(file_get_contents($solr_url."select/?wt=json&q=data_source_key:(\"".rawurlencode($data_source_key)."\")&facet=true&facet.field=status&facet.mincount=1&rows=0"), true);
+
+	if (isset($result['facet_counts']['facet_fields']['status']))
+	{
+		
+		for ( $i = 0; $i<count($result['facet_counts']['facet_fields']['status']); $i+=2)
+		{
+			$statuses[$result['facet_counts']['facet_fields']['status'][$i]] = $result['facet_counts']['facet_fields']['status'][$i+1];
+		}
+	}
+
+	
+	return $statuses;
+	
+}
+
+
 function runClear($dataSource, $action)
 {
 	$actions = "";

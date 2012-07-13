@@ -23,6 +23,7 @@ require '../orca_init.php';
 set_time_limit(0);
 $executionTimeoutSeconds = 20*60;
 
+
 // Get the record from the database.
 $dataSource = getDataSources(getQueryValue('data_source_key'), null);
 if( !$dataSource )
@@ -161,7 +162,19 @@ require '../../_includes/header.php';
 	<tbody class="recordFields">
 		<tr>
 			<td>Records From Source:</td>
-			<td><?php if($numRegistryObjects > 0) printSafe('Published: ('.$numRegistryObjects.')');  if($numRegistryObjectsApproved > 0) printSafe(' Approved: ('.$numRegistryObjectsApproved.')'); print(' <a href="../search.php?source_key='.esc(urlencode($dataSourceKey)).'&amp;collections=collection&amp;services=service&amp;parties=party&amp;activities=activity&amp;search=&amp;action=Search">List Records</a> / <a href="../manage/my_records.php?data_source='.esc(urlencode($dataSourceKey)).'">Manage Records</a>'); ?></td>
+			<td>
+				<?php 
+					$statuses = array();
+					foreach (getRecordCountsByStatusForDataSource($dataSourceKey) AS $status => $count)
+					{
+						$status = getRegistryObjectStatusInfo($status);
+						$statuses[] = $status['display'] . ": ($count)";	
+					}
+					echo implode($statuses, ", ");
+			//if($numRegistryObjects > 0) printSafe('Published: ('.$numRegistryObjects.')');  if($numRegistryObjectsApproved > 0) printSafe(' Approved: ('.$numRegistryObjectsApproved.')');
+				 print(' <a href="../manage/my_records.php?data_source='.esc(urlencode($dataSourceKey)).'">Manage Records</a>');
+				 ?>
+			 </td>
 		</tr>
 		<tr style="border-bottom:2px solid black;">
 		<td colspan="2"><span style="float:left;"><h3>Account Administration Information</h3></span>
