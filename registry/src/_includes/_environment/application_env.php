@@ -46,7 +46,7 @@ $ePIDS_RESOURCE_URI = $pids_url;
 // Shibboleth Settings
 // -----------------------------------------------------------------------------
 // The Shibboleth Session Initiator '/Login?xxxx' | '/WAYF/{idp or WAYF location}' | '/DS?xxxx'
-$eShibbolethSessionInitiator = 'DS';
+//$eShibbolethSessionInitiator = 'DS';
 //$eShibbolethSessionInitiator = '';
 // The domain over which the Shibboleth identity is unique.
 $eShibbolethAuthDomain = 'aaf.edu.au';

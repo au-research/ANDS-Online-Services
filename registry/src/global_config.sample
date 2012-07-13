@@ -138,6 +138,8 @@ $eLDAPPort = 389; //636 | 389
 $eLDAPBaseDN = "ou=People, o=anu.edu.au";
 $eLDAPuid = "uid=@@ROLE_ID@@";
 $eLDAPDN = "$eLDAPuid, $eLDAPBaseDN";
+$eShibbolethSessionInitiator = "Login";
+
 
 
 
