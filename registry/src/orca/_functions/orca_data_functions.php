@@ -73,7 +73,54 @@ function insertDataSource()
 
 	$errors = "";
 	$strQuery = 'SELECT dba.udf_insert_data_source($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32,$33,$34)';
-	$params = getParams(array(getLoggedInUser()), $_POST, 34);
+	
+	$params = 
+		array(
+			getPostedValue("data_source_key"),
+			getPostedValue("title"),
+			getPostedValue("record_owner"),
+			getPostedValue("contact_name"),
+			getPostedValue("contact_email"),
+			getPostedValue("notes"),
+			
+			getPostedValue("allow_reverse_internal_links"),
+			getPostedValue("allow_reverse_external_links"),
+			getPostedValue("create_primary_relationships"),
+			
+			
+			getPostedValue("class_1"),
+			getPostedValue("primary_key_1"),
+			getPostedValue("collection_rel_1"),
+			getPostedValue("service_rel_1"),
+			getPostedValue("activity_rel_1"),
+			getPostedValue("party_rel_1"),
+			getPostedValue("class_2"),
+			getPostedValue("primary_key_2"),
+			getPostedValue("collection_rel_2"),
+			getPostedValue("service_rel_2"),
+			getPostedValue("activity_rel_2"),
+			getPostedValue("party_rel_2"),
+			
+			
+			getPostedValue("push_to_nla"),
+			getPostedValue("isil_value"),
+			
+			getPostedValue("auto_publish"),
+			getPostedValue("qa_flag"),
+			getPostedValue("assessment_notification_email_addr"),
+			getPostedValue("institution_pages"),
+			
+			getPostedValue("uri"),
+			getPostedValue("provider_type"),
+			getPostedValue("harvest_method"),
+			getPostedValue("oai_set"),
+			
+			getPostedValue("harvest_date"),
+			getPostedValue("theZone"),
+			getPostedValue("harvest_frequency")			
+		);
+	
+	//$params = getParams(array(getLoggedInUser()), $_POST, 34);
 	//	print("<pre>");
 	//print_r($_POST);
 	//var_dump($params);
@@ -104,12 +151,53 @@ function updateDataSource()
 
 	$errors = "";
 	$strQuery = 'SELECT dba.udf_update_data_source($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32,$33,$34,$35)';
-	$params = getParams(array(getLoggedInUser()), $_POST, 35);
-	//print("<pre>");
-	//print_r($_POST);
-	//var_dump($params);
-	//print("</pre>");
-	//exit();
+	$params = 
+		array(
+			getLoggedInUser(), //modified_who
+			getPostedValue("data_source_key"),
+			getPostedValue("title"),
+			getPostedValue("record_owner"),
+			getPostedValue("contact_name"),
+			getPostedValue("contact_email"),
+			getPostedValue("notes"),
+			
+			getPostedValue("allow_reverse_internal_links"),
+			getPostedValue("allow_reverse_external_links"),
+			getPostedValue("create_primary_relationships"),
+			
+			
+			getPostedValue("class_1"),
+			getPostedValue("primary_key_1"),
+			getPostedValue("collection_rel_1"),
+			getPostedValue("service_rel_1"),
+			getPostedValue("activity_rel_1"),
+			getPostedValue("party_rel_1"),
+			getPostedValue("class_2"),
+			getPostedValue("primary_key_2"),
+			getPostedValue("collection_rel_2"),
+			getPostedValue("service_rel_2"),
+			getPostedValue("activity_rel_2"),
+			getPostedValue("party_rel_2"),
+			
+			
+			getPostedValue("push_to_nla"),
+			getPostedValue("isil_value"),
+			
+			getPostedValue("auto_publish"),
+			getPostedValue("qa_flag"),
+			getPostedValue("assessment_notification_email_addr"),
+			getPostedValue("institution_pages"),
+			
+			getPostedValue("uri"),
+			getPostedValue("provider_type"),
+			getPostedValue("harvest_method"),
+			getPostedValue("oai_set"),
+			
+			getPostedValue("harvest_date"),
+			getPostedValue("theZone"),
+			getPostedValue("harvest_frequency")			
+		);
+	
 	foreach($params as &$param)
 	{
 		if( $param == '' )
@@ -3189,5 +3277,14 @@ function getDataSourceTitle($data_source_key)
 	return $resultSet;
 
 }
+
+function updateAdvancedHarvestingModeForDataSource($dataSourceKey, $advancedHarvestingMode)
+{
+	global $gCNN_DBS_ORCA;
+    $strQuery = 'UPDATE dba.tbl_data_sources SET advanced_harvesting_mode = $2 WHERE data_source_key = $1';
+	$params = array($dataSourceKey, $advancedHarvestingMode);
+	$result = executeUpdateQuery($gCNN_DBS_ORCA, $strQuery, $params);
+}
+
 
 ?>

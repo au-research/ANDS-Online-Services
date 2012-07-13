@@ -16,15 +16,16 @@ limitations under the License.
 // Required Files
 // -----------------------------------------------------------------------------
 // Include environment settings.
+require '../../global_config.php';
 require '_environment/application_env.php';
 
 // Help content access checking.
 // -----------------------------------------------------------------------------
 // Make sure that the request came from this instance's help page
-if( !isset($_SERVER['HTTP_REFERER']) || $_SERVER['HTTP_REFERER'] !== eAPP_ROOT.'help.php' )
+/*if( !isset($_SERVER['HTTP_REFERER']) || $_SERVER['HTTP_REFERER'] !== eAPP_ROOT.'help.php' )
 {
 	// Build an empty string and stop execution.
 	print '';
 	exit;
-}
+}*/
 ?>

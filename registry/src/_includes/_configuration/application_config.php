@@ -515,6 +515,8 @@ addMenu($menu);
 			// Manage My Records
 			$activity = new activity('aORCA_REGISTRY_OBJECT_ADMIN_MY_RECORDS', 'Manage My Records', 'orca/manage/my_records.php');
 			$activity->menu_id = 'mORCA_REGISTRY_OBJECTS';
+			$activity->help_content_uri = eAPP_ROOT.'orca/_helpcontent/hc_manage_my_records.php';
+			$activity->help_content_fragment_id = 'mmr';
 			addActivity($activity);
 
 

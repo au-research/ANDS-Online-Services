@@ -79,6 +79,9 @@ $party_rel_2 = $dataSource[0]['party_rel_2'];
 $assessementNotificationEmailAddr = $dataSource[0]['assessement_notification_email_addr'];
 $autoPublish = $dataSource[0]['auto_publish'];
 $qaFlag = $dataSource[0]['qa_flag'];
+$advancedHarvestingMode = $dataSource[0]['advanced_harvesting_mode'];
+
+
 
 $errorMessages = '';
 $dataSourceKeyLabelClass = '';
@@ -86,6 +89,7 @@ $titleLabelClass = '';
 $uriLabelClass = '';
 $providerTypeLabelClass = '';
 $harvestMethodLabelClass = '';
+$advancedHarvestingModeLabelClass = '';
 $pushNLALabelClass = '';
 $createPrimaryClass = '';
 $institutionPagesClass = '';
@@ -370,6 +374,8 @@ if( strtoupper(getPostedValue('action')) == "SAVE" )
 	$autoPublish = getPostedValue('auto_publish');
 	$qaFlag = getPostedValue('qa_flag');
 
+	$advancedHarvestingMode = getPostedValue('advanced_harvesting_mode');
+
 	if( getPostedValue('record_owner') )
 	{ 
 		$recordOwner = getPostedValue('record_owner');
@@ -382,6 +388,14 @@ if( strtoupper(getPostedValue('action')) == "SAVE" )
 		$harvestMethodLabelClass = gERROR_CLASS;
 		$errorMessages .= 'This Provider Type is not supported by this Harvest Method.<br />'; 
 		$errorMessages .= 'This Harvest Method does not support this Provider Type.<br />';
+	}
+	
+	
+	// Check the advanced harvest mode compatibility
+	if( $providerType && $harvestMethod && $advancedHarvestingMode == "INCREMENTAL" && $providerType != "OAI_RIF")
+	{
+		$advancedHarvestingModeLabelClass = gERROR_CLASS;
+		$errorMessages .= 'This advanced harvesting mode is not compatible with your harvest type <br/>Note: Incremental harvesting only available in OAI-PMH providers.<br />'; 
 	}
 
 	if( $errorMessages == '' )
@@ -398,7 +412,8 @@ if( strtoupper(getPostedValue('action')) == "SAVE" )
 
 		$errors = updateDataSource();
 		$errors .= updateRecordsForDataSource($dataSourceKey, $autoPublish, $autoPublishOld , $qaFlag , $qaFlagOld,$create_primary_relationships, $create_primary_relationships_old,$class_1,$class_1_old,$class_2,$class_2_old);
-
+		$errors .= updateAdvancedHarvestingModeForDataSource($dataSourceKey, $advancedHarvestingMode);
+		
 		if( $errors == "" )
 		{
 			responseRedirect('data_source_view.php?data_source_key='.urlencode($dataSourceKey));
@@ -857,6 +872,21 @@ require '../../_includes/header.php';
 			<td class="">OAI Set:</td>
 			<td><input type="text" name="oai_set" id="oai_set" size="30" maxlength="128" value="<?php printSafe($oaiSet) ?>" /></td>
 		</tr>
+		
+		<tr id="advanced_harvesting_options_row">
+			<td <?php echo $advancedHarvestingModeLabelClass; ?>>Advanced Harvest Mode:</td>
+			<td>
+				<a onclick="javascript: $(this).hide(); $('#advanced_harvesting_options').show();">show advanced options</a>
+				
+				<div id="advanced_harvesting_options" class="hide">
+					<input type="radio" name="advanced_harvesting_mode" value="STANDARD"<?=($advancedHarvestingMode=="STANDARD" ? ' checked="checked"' : '');?> /> Standard Mode<br/>
+					<input type="radio" name="advanced_harvesting_mode" value="INCREMENTAL"<?=($advancedHarvestingMode=="INCREMENTAL" ? ' checked="checked"' : '');?> /> Incremental Mode<br/>
+					<input type="radio" name="advanced_harvesting_mode" value="REFRESH"<?=($advancedHarvestingMode=="REFRESH" ? ' checked="checked"' : '');?> /> Full Refresh Mode
+				</div>
+				
+				
+			</td>
+		</tr>
 
 		<tr id="harvest_date_row">
 			<td class="">Harvest Date:</td>
@@ -914,7 +944,7 @@ require '../../_includes/header.php';
 	<tbody>
 		<tr>
 			<td width="128"></td>
-			<td><input type="submit" name="action" value="Cancel" />&nbsp;&nbsp;<input type="submit" name="action" value="Save"  onClick="return nlaPushCheck();"/>&nbsp;&nbsp;</td>
+			<td><input type="submit" name="action" value="Cancel" />&nbsp;&nbsp;<input type="submit" name="action" value="Save" onClick="return nlaPushCheck();"/>&nbsp;&nbsp;</td>
 		</tr>
 		<tr>
 			<td></td>

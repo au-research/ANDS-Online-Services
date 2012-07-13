@@ -358,7 +358,15 @@ require '../../_includes/header.php';
 		</tr>
 		<tr>
 			<td>Harvest Method:</td>
-			<td><?php printSafe($gORCA_HARVEST_METHODS[$dataSource[0]['harvest_method']]) ?></td>
+			<td><?php 
+			
+					printSafe($gORCA_HARVEST_METHODS[$dataSource[0]['harvest_method']]);
+				
+					if ($dataSource[0]['advanced_harvesting_mode'] != 'STANDARD') {
+						echo " (" . $dataSource[0]['advanced_harvesting_mode'] . ")";	
+					}
+				
+				?></td>
 		</tr>
 		<tr>
 			<td>Harvest Date:</td>
