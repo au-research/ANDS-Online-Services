@@ -144,6 +144,7 @@ public class ListRecords extends HarvesterVerb
         if (until != null) requestURL.append("&until=").append(until);
         if (set != null) requestURL.append("&set=").append(set);
         requestURL.append("&metadataPrefix=").append(metadataPrefix);
+        log.info("REQUEST URL IS HERE: "+requestURL.toString());
         return requestURL.toString();
     }
     

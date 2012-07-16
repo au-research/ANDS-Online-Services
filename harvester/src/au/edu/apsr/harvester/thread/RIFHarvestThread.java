@@ -159,6 +159,8 @@ public class RIFHarvestThread extends HarvestThread
             setPMHArguments();
 
             ListRecords listRecords;
+
+
             
             if (getResumptionToken() == null || getResumptionToken().length() == 0)
             {
@@ -171,11 +173,15 @@ public class RIFHarvestThread extends HarvestThread
                     setSet(harvest.getSet());
                 }
                 log.info("first ListRecords call for " + harvest.getHarvestID());
-                log.debug("source="+harvest.getSourceURL() + " from=" + getFrom() + " until=" + getUntil() + " set=" + getSet() + " mp=" + getMetadataPrefix());                
-                if(!harvest.getAHM().equals("INCREMENTAL")){//if the harvest is not incremental, remove datefrom and dateuntil from list records
+                log.debug("source="+harvest.getSourceURL() + " from=" + getFrom() + " until=" + getUntil() + " set=" + getSet() + " mp=" + getMetadataPrefix());       
+
+                //if the harvest is not incremental, remove datefrom and dateuntil from list records
+                //log.info("HARVEST AHM: "+harvest.getAHM());
+                if(!harvest.getAHM().equals("INCREMENTAL")){
                     setFrom(null);
                     setUntil(null);
                 }
+
                 log.info("source="+harvest.getSourceURL() + " from=" + getFrom() + " until=" + getUntil() + " set=" + getSet() + " mp=" + getMetadataPrefix());
                 listRecords = 
                     new ListRecords(harvest.getSourceURL(), getFrom(), getUntil(), getSet(), getMetadataPrefix());
