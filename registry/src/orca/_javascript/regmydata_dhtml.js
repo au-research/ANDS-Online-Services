@@ -1890,7 +1890,7 @@ function addRelatedObjectSearch(field){
 
 function doRelatedObjectSearch(field){
 	term = $('#'+field+'_search').val();
-	if(term=="")term='*:*';
+	//if(term=="")term='*:*';
 	roClass = $('#select_'+field+'_class').val(); 
 	roDS = $('#select_'+field+'_dataSource').val(); 
 	result = '#'+field+'_result';
