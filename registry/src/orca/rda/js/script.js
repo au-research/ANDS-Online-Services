@@ -2139,7 +2139,6 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 	function SubjectBrowseLoad(view){
 		$('#anzsrc-subject-facet-result').html('Loading...');
 		var params = JSONParams();
-
 		$.ajax({
    			type:"POST",
 			url: base_url+"/search/subjectfacet/"+view,

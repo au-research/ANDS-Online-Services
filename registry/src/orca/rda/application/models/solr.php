@@ -132,9 +132,9 @@ limitations under the License.
 
     	if($params['search_term']=='') $params['search_term']='*:*';
 
-    	if($params['classFilter']!='All') $filter_query .= constructFilterQuery('class', $params['classFilter']);
-    	if($params['typeFilter']!='All') $filter_query .= constructFilterQuery('type', $params['typeFilter']);
-    	if($params['groupFilter']!='All') $filter_query .= constructFilterQuery('group', $params['groupFilter']);
+    	if($params['classFilter']!='All') $filter_query .= constructFilterQuery('class', rawurldecode($params['classFilter']));
+    	if($params['typeFilter']!='All') $filter_query .= constructFilterQuery('type', rawurldecode($params['typeFilter']));
+    	if($params['groupFilter']!='All') $filter_query .= constructFilterQuery('group', rawurldecode($params['groupFilter']));
     	if($params['subjectFilter']!='All') {
     		// treat http://-style subject searches as URI searches
     		if (substr(rawurldecode($params['subjectFilter']), 0, 7) === 'http://'){
@@ -146,7 +146,7 @@ limitations under the License.
     	}
     	// Fix: if there is no subject to match against (i.e. blank subject) suitably random string will prevent any matches
     	if($params['subjectFilter'] == '') $filter_query .= constructFilterQuery('subject_value_resolved', "nr3kl90u3asd");
-    	if($params['licenceFilter']!='All') $filter_query .= constructFilterQuery('licence_group', $params['licenceFilter']);
+    	if($params['licenceFilter']!='All') $filter_query .= constructFilterQuery('licence_group', rawurldecode($params['licenceFilter']));
 
     	//constructing query
     	$rankings = array(//will be positive
@@ -170,9 +170,10 @@ limitations under the License.
 			if($s != 'subject_value_resolved') $ranking .=' OR ';
 		}
 		$ranking .=')';
-
+		//var_dump($params);
+		//echo $ranking.' '.$filter_query.' +status:PUBLISHED';
 		return $ranking.' '.$filter_query.' +status:PUBLISHED';
-    	//var_dump($params);
+    	
     }
 
     //WORK IN PROGRESS
