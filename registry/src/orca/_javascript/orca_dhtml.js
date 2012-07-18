@@ -387,12 +387,15 @@ function getGoldRecords()
        });
 }
 
+var dsIsBGTaskQueued = false;
+
 function checkDataSourceScheduleTask(){
-    var content = 'A background task is currently in progress for this data source. Please try reloading the screen again shortly..';
+    var content = 'A background task is currently in progress for this data source. Please try reloading the screen again shortly.';
     var dataSourcekey = $('#dataSourceKey').length;
     var dsKey = $('#dataSourceKey').val();
     //console.log(dataSourcekey);
     if(dataSourcekey==1){
+     
       //console.log(rootAppPath+"orca/manage/process_registry_object.php?task=dataSourceBackgroundStatus&data_source="+dsKey);
       $.ajax({
         type:"POST",   
@@ -400,9 +403,14 @@ function checkDataSourceScheduleTask(){
         success:function(msg){
           
           if(msg=='1'){
+          	dsIsBGTaskQueued = true;
             $('#dataSourceStatus').show();
             $('#dataSourceStatus').html(content);
           }else{
+          	if (dsIsBGTaskQueued == true)
+          	{
+          		location.reload();	
+          	}
             $('#dataSourceStatus').hide();
           }
         }
@@ -412,10 +420,6 @@ function checkDataSourceScheduleTask(){
 
 $().ready(function(){
 
-	checkDataSourceScheduleTask();
-  setInterval(checkDataSourceScheduleTask, 5000);
-
-  
   
 
 	/*
