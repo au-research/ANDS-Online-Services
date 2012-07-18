@@ -3190,4 +3190,27 @@ function getDataSourceTitle($data_source_key)
 
 }
 
+
+function updateAdvancedHarvestingModeForDataSource($dataSourceKey, $advancedHarvestingMode)
+{
+	global $gCNN_DBS_ORCA;
+    $strQuery = 'UPDATE dba.tbl_data_sources SET advanced_harvesting_mode = $2 WHERE data_source_key = $1';
+	$params = array($dataSourceKey, $advancedHarvestingMode);
+	$result = executeUpdateQuery($gCNN_DBS_ORCA, $strQuery, $params);
+}
+
+
+
+function scheduledTaskCheck($dataSourceKey)
+{
+	global $gCNN_DBS_ORCA;
+	$resultSet = null;
+	$strQuery = "SELECT * from dba.tbl_background_tasks WHERE  data_source_key = $1 AND (status = 'WAITING' OR status = 'STARTED')";
+	$params = array($dataSourceKey);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	if (!isset($resultSet[0]))
+		return false;
+	else
+		return true;
+}
 ?>
