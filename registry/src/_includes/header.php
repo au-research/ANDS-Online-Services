@@ -111,6 +111,7 @@ if( $eDisplayErrors )
 {
 	print "<div style=\"color: #ffffff; background: #e20000; border: solid #be0400; border-width: 0px 0px 0px 20px; font-weight: bold; padding: 4px;\">&nbsp;ERRORS&nbsp;</div>";
 }
+print "<div style=\"color: #ffffff; background: #e20000; border: solid #be0400; border-width: 0px 0px 0px 20px; font-weight: bold; padding: 4px;\" id=\"dataSourceStatus\" class=\"hide\"></div>";
 // The link to Research Data Australia
 $rdaLink = '';
 $rdaLink = '<a href="http://'.$host.'/'.$rda_root.'">Research Data Australia</a>';
