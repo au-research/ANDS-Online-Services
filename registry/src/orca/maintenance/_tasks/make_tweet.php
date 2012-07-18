@@ -11,7 +11,7 @@ function task_make_tweet($task)
 	}
 	catch (TwitterException $e)
 	{
-		$message .= "Unable to send Tweet to Twitter API (perhaps duplicate?): " . $e->getMessage() . PHP_EOL;
+		echo "Unable to send Tweet to Twitter API (perhaps duplicate?): " . $e->getMessage() . PHP_EOL;
 	}
 	
 	return "";
