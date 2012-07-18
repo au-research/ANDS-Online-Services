@@ -25,7 +25,7 @@ require '../_functions/assoc_array2xml.php';
 
 $task = getQueryValue('task');
 $keyValue = trim(getQueryValue('key'));
-$dataSourceValue = urldecode(getQueryValue('data_source'));
+$dataSourceValue = rawurldecode(getQueryValue('data_source'));
 $firstLoad = getQueryValue('firstLoad');
 $defaultKeys = array('collection','party','activity','service');
 if($task == 'get')
@@ -121,6 +121,10 @@ else if($task ==  'flag_regobj')
 else if($task ==  'getRegistryTasks')
 	{
 		include('_processes/get_registry_tasks.php');
+	}
+else if($task ==  'dataSourceBackgroundStatus')
+	{
+		include('_processes/get_ds_background_status.php');
 	}
 
 if($task ==  'flag_draft' || $task ==  'recover_record' || $task == 'validate')
