@@ -24,6 +24,8 @@ require '../manage/process_registry_object.php';
 
 
 $data_Source = getQueryValue('data_source_key');
+$taskWaiting = '';
+$taskWaiting = scheduledTaskCheck($data_Source);
 
 $dataSource = getDataSources(getQueryValue('data_source_key'), null);
 if( !$dataSource )
@@ -441,6 +443,16 @@ require '../../_includes/header.php';
 			<td>&nbsp;</td>
 			<td>Edit Data Source.</td>
 		</tr>
+		<?php 
+		if($taskWaiting)
+		{
+		?>
+		<tr>
+			<td></td>
+			<td>Their is a task scheduled for this data source</td>
+		</tr>				<?php 
+		}
+		?>		
 	</thead>	
 	<?php if( $errorMessages ) { ?>
 	<tbody>

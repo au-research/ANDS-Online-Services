@@ -22,6 +22,8 @@ require '../orca_init.php';
 // may have to deal with a large amount of data.
 set_time_limit(0);
 $executionTimeoutSeconds = 20*60;
+$taskWaiting = '';
+$taskWaiting = scheduledTaskCheck(getQueryValue('data_source_key'));
 
 // Get the record from the database.
 $dataSource = getDataSources(getQueryValue('data_source_key'), null);
@@ -157,6 +159,16 @@ require '../../_includes/header.php';
 			<td></td>
 			<td>Data Source</td>
 		</tr>
+		<?php 
+		if($taskWaiting)
+		{
+		?>
+		<tr>
+			<td></td>
+			<td>Their is a task scheduled for this data source</td>
+		</tr>				<?php 
+		}
+		?>
 	</thead>
 	<tbody class="recordFields">
 		<tr>
