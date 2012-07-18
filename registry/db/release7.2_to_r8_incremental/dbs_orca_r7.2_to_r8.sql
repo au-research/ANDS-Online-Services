@@ -219,6 +219,12 @@ $BODY$
 ALTER FUNCTION dba.udf_delete_data_source(character varying)
   OWNER TO dba; 
  
+
+ALTER TABLE dba.tbl_registry_objects ADD COLUMN registry_date_modified bigint DEFAULT NULL;
+ALTER TABLE dba.tbl_registry_objects ADD COLUMN key_hash character varying(255) DEFAULT ''::character varying;
+ALTER TABLE dba.tbl_data_sources ADD COLUMN key_hash character varying(255) DEFAULT ''::character varying;
+
+
 -- Some maintenance on uninitialised fields! 
 UPDATE dba.tbl_registry_objects SET registry_date_modified = (CAST ( date_part('epoch', status_modified_when) AS integer )) WHERE registry_date_modified IS NULL;
   

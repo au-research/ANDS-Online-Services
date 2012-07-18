@@ -86,8 +86,3 @@ alter table dba.tbl_locations rename column "date_from_txt" to "date_from";
 -- alter table dba.tbl_locations drop column "date_to_old";
 -- alter table dba.tbl_locations drop column "date_from_old";
 
-
-ALTER TABLE dba.tbl_registry_objects ADD COLUMN key_hash character varying(255) DEFAULT ''::character varying;
-ALTER TABLE dba.tbl_data_sources ADD COLUMN key_hash character varying(255) DEFAULT ''::character varying;
-
-ALTER TABLE dba.tbl_registry_objects ADD COLUMN registry_date_modified bigint DEFAULT NULL;
