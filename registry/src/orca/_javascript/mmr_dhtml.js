@@ -24,6 +24,9 @@ var dsName;
  
 $(document).ready(function() {
 
+	checkDataSourceScheduleTask();
+  	setInterval(checkDataSourceScheduleTask, 5000);
+
 	$(".chzn-select").chosen(); $(".chzn-select-deselect").chosen({allow_single_deselect:true});
 	var dsKey = $('#dataSourceKey').val();
 	var dsName = $('#dataSourceName').val();

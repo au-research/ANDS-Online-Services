@@ -122,6 +122,7 @@ class Home extends CI_Controller {
 	    	$dsfacet = $res->{'facet_counts'}->{'facet_fields'}->{'data_source_key'};
 
 			header("Content-Type: text/xml");
+			$this->output->set_content_type('text/xml');
 			echo '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
 
 			for($i=0;$i<sizeof($dsfacet);$i+=2){
@@ -161,6 +162,7 @@ class Home extends CI_Controller {
 	    	//var_dump($keys);
 
 			header("Content-Type: text/xml");
+			$this->output->set_content_type('text/xml');
 			echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
 
 			foreach($keys as $k){

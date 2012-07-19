@@ -151,6 +151,10 @@ require '../../_includes/header.php';
 ?>
 
 <script type="text/javascript" src="<?php print eAPP_ROOT ?>orca/_javascript/orca_dhtml.js"></script>
+<script type="text/javascript">
+		checkDataSourceScheduleTask();
+  	setInterval(checkDataSourceScheduleTask, 5000);
+</script>
 <script type="text/javascript" src="<?php print eAPP_ROOT ?>orca/_javascript/jquery-ui-1.8.9.custom.min.js"></script>	
 <input type="hidden" id="dataSourceKey" value="<?php echo $dataSource[0]['data_source_key']; ?>" />
 <form id="datasourceFrom" action="data_source_view.php?data_source_key=<?php printSafe(urlencode(getQueryValue('data_source_key'))); ?>" method="post">
@@ -160,16 +164,7 @@ require '../../_includes/header.php';
 			<td></td>
 			<td>Data Source</td>
 		</tr>
-		<?php 
-		if($taskWaiting)
-		{
-		?>
-		<tr>
-			<td></td>
-			<td>Their is a task scheduled for this data source</td>
-		</tr>				<?php 
-		}
-		?>
+	
 	</thead>
 	<tbody class="recordFields">
 		<tr>

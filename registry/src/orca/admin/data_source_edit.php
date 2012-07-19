@@ -443,16 +443,7 @@ require '../../_includes/header.php';
 			<td>&nbsp;</td>
 			<td>Edit Data Source.</td>
 		</tr>
-		<?php 
-		if($taskWaiting)
-		{
-		?>
-		<tr>
-			<td></td>
-			<td>Their is a task scheduled for this data source</td>
-		</tr>				<?php 
-		}
-		?>		
+	
 	</thead>	
 	<?php if( $errorMessages ) { ?>
 	<tbody>

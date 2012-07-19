@@ -244,13 +244,16 @@ limitations under the License.
 			{
 				$subject_list = $solrOutput['facet_counts']['facet_fields']['broader_subject_value_unresolved'];
 				$subjects = array();
-				for ($i=0; $i<count($subject_list); $i+=2)
+				
+				// Count backwards in steps of 2
+				for ($i=count($subject_list)-2; $i>=0; $i-=2)
 				{
 					if (is_numeric($subject_list[$i]))
 					{
 						$subjects[$subject_list[$i]] = $subject_list[$i+1];
 					}
 				}
+				
 				foreach ($subjects AS $code => $count)
 				{
 					$resolvedSubject = resolveFromVocabNotation($code);

@@ -11,7 +11,7 @@ function task_make_tweet($task)
 	}
 	catch (TwitterException $e)
 	{
-		$message .= "Unable to send Tweet to Twitter API (perhaps duplicate?): " . $e->getMessage() . PHP_EOL;
+		echo "Unable to send Tweet to Twitter API (perhaps duplicate?): " . $e->getMessage() . PHP_EOL;
 	}
 	
 	return "";
@@ -20,9 +20,9 @@ function task_make_tweet($task)
 	
 function makeTweet($tweet_content)
 {
-       	$twitter_client = new Twitter('A28fRaEFTNdgadyosvraqg', '3W7wJK4xKklOi3VVhj2x9WsQdyK2Uh1iuEOlryjsX6I');
-		$twitter_client->setOAuthToken('618889999-2bDxhcuKvccysE3qOK2zBDGiWNTuoyqPvjCOZGRu');
-		$twitter_client->setOAuthTokenSecret('oD5gsdTT0MexnDJDFdB99tA797DGWvApMj2jKZaDb8');
+       	$twitter_client = new Twitter(TWITTER_CONS_KEY,TWITTER_CONS_SECRET);
+		$twitter_client->setOAuthToken(TWITTER_OAUTH_TOKEN);
+		$twitter_client->setOAuthTokenSecret(TWITTER_OAUTH_SECRET);
 
        	$twitter_client->statusesUpdate($tweet_content);
 }
