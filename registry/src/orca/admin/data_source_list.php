@@ -110,7 +110,7 @@ else
 		print("<!-- Data Source -->\n");
 		print("<p class=\"resultListItem\">\n");
 		print("<a href=\"data_source_view.php?data_source_key=".urlencode($dataSourceKey)."\" title=\"Click to view details\">".esc($dataSourceTitle).'</a>'."\n");
-		print('<br />'."<span class=\"resultListItemLabel\">Records From Source:</span> ".esc($numRegistryObjects).' <a href="../search.php?source_key='.esc(urlencode($dataSourceKey)).'&amp;collections=collection&amp;services=service&amp;parties=party&amp;activities=activity&amp;search=&amp;action=Search">List Records</a>'."\n");
+		print('<br />'."<span class=\"resultListItemLabel\">Published Records:</span> ".esc($numRegistryObjects).' <a href="../search.php?source_key='.esc(urlencode($dataSourceKey)).'&amp;collections=collection&amp;services=service&amp;parties=party&amp;activities=activity&amp;search=&amp;action=Search">List Records</a>'."\n");
 		print('<br />'."<span class=\"resultListItemLabel\">Key:</span> ".esc($dataSourceKey)."\n");
 		print('<br />'."<span class=\"resultListItemLabel\">URI:</span> ".esc($uri)."\n");
 		print('<br />'."<span class=\"resultListItemLabel\">Provider Type:</span> ".esc($providerType)."\n");

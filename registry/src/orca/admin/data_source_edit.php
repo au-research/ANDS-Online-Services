@@ -434,7 +434,7 @@ require '../../_includes/header.php';
 ?>
 <script type="text/javascript" src="<?php print eAPP_ROOT ?>orca/_javascript/orca_dhtml.js"></script>
 <script type="text/javascript" src="<?php print eAPP_ROOT ?>orca/_javascript/data_source_functions.js"></script>
-
+<input type="hidden" id="dataSourceKey" value="<?php echo $dataSourceKey; ?>" />
 <form id="data_source_edit" action="data_source_edit.php?data_source_key=<?php print(urlencode($dataSourceKey)); ?>" method="post" onSubmit="return checkModalId(this)">
 <div  style="width:1000px;overflow:auto">
 <table class="formTable" summary="Edit Data Source">

@@ -114,13 +114,13 @@ $gORCA_HARVESTER_FREQUENCIES = array('daily', 'weekly', 'fortnightly', 'monthly'
 $gRDA_RIGHTSURL_RIGHTSLOGO = array( 'https://df.arcs.org.au/ARCS/projects/PICCLOUD' => 'http://polarcommons.org/images/PIC_print_small.png');
 
 $gORCA_STATUS_INFO = array (	
-							"PUBLISHED"=>array("colour"=>"#32CD32", "span"=>"PUBLISHED", "short_span"=>"PUBLISHED", "display"=>"Records Published in the last 7 days"),
-							"APPROVED"=>array("colour"=>"#EDD155", "span"=>"APPROVED", "short_span"=>"APPROVED", "display"=>"Approved Records"),
-							"ASSESSMENT_IN_PROGRESS"=>array("colour"=>"#0B2E59", "span"=>"ASSESSMENT IN PROGRESS", "short_span"=>"IN PROGRESS", "display"=>"Record Assessment in Progress"),
-							"SUBMITTED_FOR_ASSESSMENT"=>array("colour"=>"#688EDE", "span"=>"SUBMITTED FOR ASSESSMENT", "short_span"=>"SUBMITTED","display"=>"Records Submitted for Assessment"),
+							"PUBLISHED"=>array("colour"=>"#32CD32", "span"=>"PUBLISHED", "short_span"=>"PUBLISHED", "display"=>"Published"),
+							"APPROVED"=>array("colour"=>"#EDD155", "span"=>"APPROVED", "short_span"=>"APPROVED", "display"=>"Approved"),
+							"ASSESSMENT_IN_PROGRESS"=>array("colour"=>"#0B2E59", "span"=>"ASSESSMENT IN PROGRESS", "short_span"=>"IN PROGRESS", "display"=>"Assessment in Progress"),
+							"SUBMITTED_FOR_ASSESSMENT"=>array("colour"=>"#688EDE", "span"=>"SUBMITTED FOR ASSESSMENT", "short_span"=>"SUBMITTED","display"=>"Submitted for Assessment"),
 							"MORE_WORK_REQUIRED"=>array("colour"=>"#6A4A3C", "span"=>"MORE WORK REQUIRED", "short_span"=>"WORK REQUIRED", "display"=>"More Work Required"),
-							"DRAFT"=>array("colour"=>"#cc6600", "span"=>"DRAFT", "short_span"=> "DRAFT", "display"=>"Draft Records"),
-							"DELETED"=>array("colour"=>"#D64040", "span"=>"DELETED", "short_span"=>"DELETED", "display"=>"Deleted Records"),
+							"DRAFT"=>array("colour"=>"#cc6600", "span"=>"DRAFT", "short_span"=> "DRAFT", "display"=>"Draft"),
+							"DELETED"=>array("colour"=>"#D64040", "span"=>"DELETED", "short_span"=>"DELETED", "display"=>"Deleted"),
 );
 
 

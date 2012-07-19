@@ -152,6 +152,7 @@ require '../../_includes/header.php';
 
 <script type="text/javascript" src="<?php print eAPP_ROOT ?>orca/_javascript/orca_dhtml.js"></script>
 <script type="text/javascript" src="<?php print eAPP_ROOT ?>orca/_javascript/jquery-ui-1.8.9.custom.min.js"></script>	
+<input type="hidden" id="dataSourceKey" value="<?php echo $dataSource[0]['data_source_key']; ?>" />
 <form id="datasourceFrom" action="data_source_view.php?data_source_key=<?php printSafe(urlencode(getQueryValue('data_source_key'))); ?>" method="post">
 <table class="recordTable" summary="Data Source">
 	<thead>
@@ -173,7 +174,19 @@ require '../../_includes/header.php';
 	<tbody class="recordFields">
 		<tr>
 			<td>Records From Source:</td>
-			<td><?php if($numRegistryObjects > 0) printSafe('Published: ('.$numRegistryObjects.')');  if($numRegistryObjectsApproved > 0) printSafe(' Approved: ('.$numRegistryObjectsApproved.')'); print(' <a href="../search.php?source_key='.esc(urlencode($dataSourceKey)).'&amp;collections=collection&amp;services=service&amp;parties=party&amp;activities=activity&amp;search=&amp;action=Search">List Records</a> / <a href="../manage/my_records.php?data_source='.esc(urlencode($dataSourceKey)).'">Manage Records</a>'); ?></td>
+			<td>
+				<?php 
+					$statuses = array();
+					foreach (getRecordCountsByStatusForDataSource($dataSourceKey) AS $status => $count)
+					{
+						$status = getRegistryObjectStatusInfo($status);
+						$statuses[] = $status['display'] . ": ($count)";	
+					}
+					echo implode($statuses, ", ");
+			//if($numRegistryObjects > 0) printSafe('Published: ('.$numRegistryObjects.')');  if($numRegistryObjectsApproved > 0) printSafe(' Approved: ('.$numRegistryObjectsApproved.')');
+				 print(' <a href="../manage/my_records.php?data_source='.esc(urlencode($dataSourceKey)).'">Manage Records</a>');
+				 ?>
+			 </td>
 		</tr>
 		<tr style="border-bottom:2px solid black;">
 		<td colspan="2"><span style="float:left;"><h3>Account Administration Information</h3></span>

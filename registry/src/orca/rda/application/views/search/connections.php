@@ -140,7 +140,7 @@ if(isset($groups)&&$groups['numfound']>0){
 				{
 					if($description_types[$j]=='logo')
 					{
-						$logostr = '<div><img id="party_logo"  style="max-width:130px;max-height:63px;" src="'.$description_value[$j].'"/></div>';
+						$logostr = '<div><img id="party_logo"  style="max-width:130px;max-height:63px;" src="'.strip_tags($description_value[$j]).'"/></div>';
 					}
 				}
 
@@ -168,7 +168,7 @@ function showContributors($theGroup)
 	{
 		$theLogo='';
 		if($logoStr = getPageLogo($theGroupKey)){
-	     $theLogo ='   <br /><img id="party_logo" style="max-width:130px;" src="'.$logoStr.'" alt="Party Logo" />';
+	     $theLogo ='   <br /><img id="party_logo" style="max-width:130px;" src="'.strip_tags($logoStr).'" alt="Party Logo" />';
 		}
 		echo '<h3><img  class="icon-heading-connections" src="'.base_url().'/img/icon/party_multi_16.png"/>Contributed by</h3>';
 		echo '<ul>';

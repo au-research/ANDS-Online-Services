@@ -1285,7 +1285,6 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 		//SEE ALSO FOR IDENTIFIERS
         var identifiers = [];
         $.each($('#identifiers p'), function(){//find in every identifiers
-        	identifiers.push($(this).html());
         	var ident = $(this).html();
         	if(ident.indexOf('nla.party-')>=0){
         		if(ident.indexOf('http://')==0){
@@ -1296,8 +1295,13 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 					$('#endlink').prepend('<a href="http://'+ident+'">View the record for this Party in Trove</a><br/>');
         		}
         	}
+        	//identifiers.push($(this).html());
         });
-        
+
+        $.each($('#identifiers a'), function(){//find in every identifiers
+        	identifiers.push($(this).text());
+        });
+    
         $.each($('.descriptions p'), function(){//find in every descriptions that contains the identifier some where for NLA parties
         	if($(this).html().indexOf('nla.party-') > 0){
         		var foundit = $(this).html();
@@ -1322,7 +1326,7 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
         	}
         });
 
-        //console.log(identifiers);
+        console.log(identifiers);
         if (identifiers.length > 0){
 	        var identifierSearchString = '+fulltext:(';
 	        var first = true;
@@ -1345,6 +1349,7 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 	            url: base_url+"search/seeAlso/count/identifiers"+relatedClass,
 	            data:"q=*:*&classFilter=party;activity&typeFilter=All&groupFilter=All&subjectFilter=All&licenceFilter=All&page=1&spatial_included_ids=&temporal=All&excluded_key="+key_value+'&extended='+identifierSearchString,
 	                    success:function(msg){
+	                    	//console.log(msg);
 	                            $("#seeAlso-IdentifierBox").html(msg);
 	                            if(parseInt($('#seealso-realnumfound').html())==0){
 	                            	$('#seeAlso-Identifier').hide();
@@ -2134,7 +2139,6 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 	function SubjectBrowseLoad(view){
 		$('#anzsrc-subject-facet-result').html('Loading...');
 		var params = JSONParams();
-
 		$.ajax({
    			type:"POST",
 			url: base_url+"/search/subjectfacet/"+view,

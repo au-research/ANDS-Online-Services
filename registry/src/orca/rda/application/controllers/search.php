@@ -25,7 +25,7 @@ class Search extends CI_Controller {
 		if(isset($_GET['q'])){
 			$q = $_GET['q'];
 			//echo $q;
-			redirect(base_url().'search/#!/q='.$q);
+			redirect(base_url().'search#!/q='.$q);
 		}else{
 			$this->load->library('user_agent');
 			$data['user_agent']=$this->agent->browser();

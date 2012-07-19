@@ -3301,5 +3301,4 @@ function scheduledTaskCheck($dataSourceKey)
 	else
 		return true;
 }
-
 ?>

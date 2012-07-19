@@ -20,14 +20,14 @@ GRANT ALL ON TABLE dba.tbl_url_mappings TO dba;
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE dba.tbl_url_mappings TO webuser;
 
 -- Add SLUG column to ro table
-ALTER TABLE dba.tbl_registry_objects ADD COLUMN slug character varying(512);
+ALTER TABLE dba.tbl_registry_objects ADD COLUMN url_slug character varying(512);
 
 --
 -- UPDATE dba.tbl_registry_objects ro SET url_slug = (SELECT url_fragment FROM dba.tbl_url_mappings url WHERE ro.registry_object_key = url.registry_object_key ORDER BY date_created DESC LIMIT 1)
 
 
 -- Column: value
-ALTER TABLE dba.tbl_descriptions ALTER COLUMN value character varying(12000);
+ALTER TABLE dba.tbl_descriptions ALTER COLUMN value TYPE character varying(12000);
 
 
 
@@ -160,7 +160,7 @@ ALTER FUNCTION dba.udf_get_nla_set(character varying)
   OWNER TO dba;
 
 
-CREATE TABLE tbl_background_tasks
+CREATE TABLE dba.tbl_background_tasks
 (
  task_id bigserial NOT NULL,
  method character varying(64),
@@ -179,16 +179,16 @@ WITH (
  OIDS=FALSE
 );
 ALTER TABLE dba.tbl_background_tasks ADD COLUMN scheduled_for timestamp without time zone DEFAULT NOW();
-ALTER TABLE tbl_background_tasks
+ALTER TABLE dba.tbl_background_tasks
  OWNER TO dba;
-GRANT ALL ON TABLE tbl_background_tasks TO dba;
-GRANT SELECT, UPDATE, INSERT ON TABLE tbl_background_tasks TO webuser;
+GRANT ALL ON TABLE dba.tbl_background_tasks TO dba;
+GRANT SELECT, UPDATE, INSERT ON TABLE dba.tbl_background_tasks TO webuser;
 GRANT DELETE ON TABLE dba.tbl_background_tasks TO webuser;
 --IMPORTANT
-GRANT SELECT, USAGE ON TABLE tbl_background_tasks_task_id_seq TO webuser;
+GRANT SELECT, USAGE ON TABLE dba.tbl_background_tasks_task_id_seq TO webuser;
 
 
-ALTER TABLE dba.tbl_registry_objects ADD manually_assessed_flag smallint NOT NULL DEFAULT 0
+ALTER TABLE dba.tbl_registry_objects ADD manually_assessed_flag smallint NOT NULL DEFAULT 0;
 ALTER TABLE dba.tbl_registry_objects ADD gold_status_flag smallint NOT NULL DEFAULT 0;
 ALTER TABLE dba.tbl_registry_objects ADD quality_level smallint;
 ALTER TABLE dba.tbl_registry_objects ADD quality_level_result text;
@@ -219,8 +219,15 @@ $BODY$
 ALTER FUNCTION dba.udf_delete_data_source(character varying)
   OWNER TO dba; 
  
+
+ALTER TABLE dba.tbl_registry_objects ADD COLUMN registry_date_modified bigint DEFAULT NULL;
+ALTER TABLE dba.tbl_registry_objects ADD COLUMN key_hash character varying(255) DEFAULT ''::character varying;
+ALTER TABLE dba.tbl_data_sources ADD COLUMN key_hash character varying(255) DEFAULT ''::character varying;
+
+
 -- Some maintenance on uninitialised fields! 
 UPDATE dba.tbl_registry_objects SET registry_date_modified = (CAST ( date_part('epoch', status_modified_when) AS integer )) WHERE registry_date_modified IS NULL;
   
 -- Queue up the first registry maintenance to generate some SLUGs and hashes
 INSERT INTO dba.tbl_background_tasks ("method", "status") VALUES ('HOURLY_REGISTRY_MAINTENANCE','WAITING');
+INSERT INTO dba.tbl_background_tasks ("method", "status") VALUES ('SYNC_DATASOURCE','WAITING');
