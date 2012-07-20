@@ -1463,7 +1463,7 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 		    //console.log(coverages.html());
 		    //console.log(coverages.text());
 		    
-		    
+		    var mapContainsOnlyMarkers = true; // if there is only marker, then zoom out to a default depth (markers get "bounded" at max zoom level)
 		    var locationText = [];
 		    
 		    $.each(coverages, function(){
@@ -1480,6 +1480,7 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 						//console.log(split.length);
 						
 						if(split.length>1){
+							mapContainsOnlyMarkers = false;
 							coords = [];
 							$.each(split, function(){
 								coord = stringToLatLng(this);
@@ -1506,6 +1507,8 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 					            raiseOnDrag:false,
 					            visible:true
 					        });
+					        // CC-197/CC-304 - Center map on markers
+					        bounds.extend(stringToLatLng($(this).html()));
 						}
 						
 						
@@ -1521,6 +1524,7 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 		    		
 		    	}else{
 		    		drawable = true;
+		    		mapContainsOnlyMarkers = false;
 		    		//there is a northlimit in the coverage text
 		    		//console.log(coverages);
 
@@ -1585,7 +1589,20 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 		            visible:true
 		        });
 			});
+			
 			map2.fitBounds(bounds);
+			
+			if (mapContainsOnlyMarkers) 
+			{
+				// CC-197/CC-304 - Center map on markers
+				// fitBounds tends to wrap to max zoom level on markers
+				// we still want a "good" fit if there are multiple markers, but 
+				// if we're zoomed to close, lets zoom out once the map loads!
+				var listener = google.maps.event.addListenerOnce(map2, "idle", function() { 
+					  if (map2.getZoom() > 3) map2.setZoom(3); 
+					});
+			}
+			
 			if(!drawable) $('#spatial_coverage_map').hide();
 		}
 	}
