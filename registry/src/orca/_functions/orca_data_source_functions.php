@@ -787,9 +787,30 @@ function deleteDataSourceDrafts($dataSourceKey , $message)
 			$errors .= deleteDraftRegistryObject($dataSourceKey, $draft_key);
 		}
 	}
-	$message = "DELETED ".count($drafts)." DARFTS\n";
+	$message = "DELETED ".count($drafts)." DRAFTS\n";
 	queueSyncDataSource($dataSourceKey);
 	return $errors;	
 }
 
+/*
+   Delete all records that are in the database and have a different HarvestID to the current Harvest 
+   (NB: manually created records should be excluded -- they should stay, even if REFRESH is on)	
+*/
+function purgeDataSource($dataSourceKey, $harvestRequestId){
+	$ahm = getDataSourceAdvancedHarvestingMode($dataSourceKey);
+	if($ahm=='REFRESH'){//only if the advanced harvesting mode is REFRESH
+		$errors = '';
+		$keys = getRegistryObjectKeysForPurge($dataSourceKey, $harvestRequestId);
+		if($keys){
+			for( $i=0; $i < count($keys); $i++ ){
+				$key  = $keys[$i]['registry_object_key'];
+				$errors .= deleteRegistryObject($key);
+			}
+		}
+		$message = "DELETED ".count($drafts)." REGISTRY OBJECTS NOT IN HARVEST: $harvestRequestId\n";
+		return $errors;
+	}else{
+		return false;
+	}
+}
 ?>
