@@ -106,6 +106,7 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 
 		$registryObject = $registryObjectList->item($i);
 		$deleted = true;
+		$overwritten = false;
 		// Registry Object Key
 		// =====================================================================
 		$registryObjectKey = substr($gXPath->evaluate("$xs:key", $registryObject)->item(0)->nodeValue, 0, 512);
@@ -124,9 +125,11 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 				{
 					if ($qaFlag != 't')
 					{
+						$old_registry_date_modified = $oldRegistryObject[0]['registry_date_modified'];
 						$errors = deleteRegistryObject($registryObjectKey);
 						if( !$errors )
 						{
+							$overwritten = true;
 							$totalRegistryObjectDeletes++;
 						}
 						else
@@ -530,7 +533,8 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 				$list_title = getOrderedNames($registryObjectKey, (isset($party) && $party), false);
 				updateRegistryObjectTitles ($registryObjectKey, $display_title, $list_title);
 
-
+				//if there's an old Registry Object that has already been overwritten, update the registry_date_modified to the old one
+				if($overwritten) updateRegistryObjectDateModified($registryObjectKey, $old_registry_date_modified);
 
 				$hash = generateRegistryObjectHashForKey($registryObjectKey);
 

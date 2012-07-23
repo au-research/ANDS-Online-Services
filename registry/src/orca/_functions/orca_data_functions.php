@@ -519,6 +519,19 @@ function updateRegistryObjectStatus($registry_object_key, $status)
 	return $errors;
 }
 
+
+function updateRegistryObjectDateModified($registry_object_key, $new_date_modified)
+{
+
+	global $gCNN_DBS_ORCA;
+	$errors = "";
+	$resultSet = null;
+	$strQuery = 'UPDATE dba.tbl_registry_objects SET registry_date_modified = $2 WHERE registry_object_key = $1';
+	$params = array($registry_object_key, $quality_level, $new_date_modified);
+	$result = executeUpdateQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	return $result;
+}
+
 function insertIdentifier($identifier_id, $registry_object_key, $value, $type)
 {
 	global $gCNN_DBS_ORCA;
