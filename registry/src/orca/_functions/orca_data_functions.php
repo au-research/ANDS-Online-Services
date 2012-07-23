@@ -459,7 +459,7 @@ function getRegistryObjectKeysForPurge($data_source_key, $harvest_id)
 	global $gCNN_DBS_ORCA;
 
 	$resultSet = null;
-	$strQuery = 'SELECT * FROM dba.tbl_registry_objects WHERE data_source_key = $1 AND record_owner = $2;';
+	$strQuery = 'SELECT * FROM dba.tbl_registry_objects WHERE data_source_key = $1 AND record_owner != $2;';
 	$params = array($data_source_key, $harvest_id);
 	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
 
