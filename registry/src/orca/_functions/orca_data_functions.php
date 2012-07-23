@@ -452,6 +452,20 @@ function getRegistryObjectKeysForDataSource($key)
 	return $resultSet;
 }
 
+
+
+function getRegistryObjectKeysForPurge($data_source_key, $harvest_id)
+{
+	global $gCNN_DBS_ORCA;
+
+	$resultSet = null;
+	$strQuery = 'SELECT * FROM dba.tbl_registry_objects WHERE data_source_key = $1 AND record_owner = $2;';
+	$params = array($data_source_key, $harvest_id);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+
+	return $resultSet;
+}
+
 function deleteRegistryObject($registry_object_key)
 {
 	global $gCNN_DBS_ORCA;
@@ -2742,6 +2756,19 @@ function getDataSourceHash($data_source_key)
 		return false;
 	else
 		return $resultSet[0]['key_hash'];
+}
+
+function getDataSourceAdvancedHarvestingMode($data_source_key)
+{
+	global $gCNN_DBS_ORCA;
+	$strQuery = 'SELECT advanced_harvesting_mode FROM dba.tbl_data_sources WHERE data_source_key = $1';
+	$params = array($data_source_key);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+
+	if (!isset($resultSet[0]))
+		return false;
+	else
+		return $resultSet[0]['advanced_harvesting_mode'];
 }
 
 function getDataSourceByHash($hash)
