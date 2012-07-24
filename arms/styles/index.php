@@ -13,6 +13,8 @@
     <link href="css/base.css" rel="stylesheet">
     <link href="css/bootstrap-responsive.css" rel="stylesheet">
 
+    <link href="css/arms.css" rel="stylesheet">
+
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -28,92 +30,51 @@
 
   <body>
 
-    <div class="navbar navbar-fixed-top">
-  <div class="navbar-inner">
-      <div class="container-fluid">
-        <a data-target=".nav-collapse" data-toggle="collapse" class="btn btn-navbar">
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </a>
-        <a href="#" class="brand">ARMS</a>
-        <div class="nav-collapse">
-          <ul class="nav">
-            <li class="active"><a href="#">Home</a></li>
-            <li><a href="#">Link</a></li>
-            <li><a href="#">Link</a></li>
-            <li><a href="#">Link</a></li>
-            <li class="dropdown">
-              <a data-toggle="dropdown" class="dropdown-toggle" href="#">Dropdown <b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <li>
-                    <a href="#">2-level Dropdown <i class="icon-arrow-right"></i></a>
-                    <ul class="dropdown-menu sub-menu">
-                        <li><a href="#">Action</a></li>
-                        <li><a href="#">Another action</a></li>
-                        <li><a href="#">Something else here</a></li>
-                        <li class="divider"></li>
-                        <li class="nav-header">Nav header</li>
-                        <li><a href="#">Separated link</a></li>
-                        <li><a href="#">One more separated link</a></li>
-                    </ul>
-                </li>
-                <li><a href="#">Another action</a></li>
-                <li><a href="#">Something else here</a></li>
-                <li class="divider"></li>
-                <li class="nav-header">Nav header</li>
-                <li><a href="#">Separated link</a></li>
-                <li><a href="#">One more separated link</a></li>
-              </ul>
-            </li>
-          </ul>
-          <form action="" class="navbar-search pull-left">
-            <input type="text" placeholder="Search" class="search-query span2">
-          </form>
-          <ul class="nav pull-right">
-            <li><a href="#">Help Link</a></li>
-            <li class="divider-vertical"></li>
-            <li class="dropdown">
-              <a data-toggle="dropdown" class="dropdown-toggle" href="#">Logged in as Minh Duc Nguyen (u4297901)<b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <li>
-                    <a href="#">2-level Dropdown <i class="icon-arrow-right"></i></a>
-                    <ul class="dropdown-menu sub-menu">
-                        <li><a href="#">Action</a></li>
-                        <li><a href="#">Another action</a></li>
-                        <li><a href="#">Something else here</a></li>
-                        <li class="divider"></li>
-                        <li class="nav-header">Nav header</li>
-                        <li><a href="#">Separated link</a></li>
-                        <li><a href="#">One more separated link</a></li>
-                    </ul>
-                </li>
-                <li><a href="#">Another action</a></li>
-                <li><a href="#">Something else here</a></li>
-                <li class="divider"></li>
-                <li class="nav-header">Nav header</li>
-                <li><a href="#">Separated link</a></li>
-                <li><a href="#">One more separated link</a></li>
-              </ul>
-            </li>
-          </ul>
-        </div><!-- /.nav-collapse -->
+  <div class="container-fluid" id="topbar">
+    <div class="row-fluid">
+      <div class="span12" style="text-align:right;">
+        Logged in as: Minh Duc Nguyen (u4297901) <a href="javascript:;">Logout</a>
       </div>
+   </div>
+ </div>
+
+  <div class="container-fluid" id="banner">
+    <div class="row-fluid page-header">
+      <div class="span5">
+          <h1>ARMS <br/><small>ANDS Registry Management System</small></h1>
+      </div>
+      <div class="span7">
+        <ul class="nav nav-pills pilnav" id="main-nav">
+          <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Styles Demo <b class="caret"></b></a>
+            <ul class="dropdown-menu sub-menu">
+              <li class=""><a href="#buttonGroups">Base CSS</a></li>
+              <li class=""><a href="#buttonDropdowns">Javascripts</a></li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">My Records <b class="caret"></b></a>
+            <ul class="dropdown-menu sub-menu">
+              <li class=""><a href="#buttonGroups">Manage My Records</a></li>
+              <li class=""><a href="#buttonDropdowns">Add My Records</a></li>
+              <li class=""><a href="#buttonDropdowns">Publish My Records</a></li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">My Datasources <b class="caret"></b></a>
+            <ul class="dropdown-menu sub-menu">
+              <li class=""><a href="#navs">Manage My Datasources</a></li>
+              <li class=""><a href="#navbar">Datasources Tools</a></li>
+            </ul>
+          </li>
+          <li><a href="#misc">My Identifiers</a></li>
+          <li><a href="#misc">Help</a></li>
+        </ul>
+      </div>
+    </div>
   </div>
-</div>
-<!-- end nav bar-->
-  <div class="container-fluid">
-    <div class="page-header"><h1>Page Titles <small>Some small text to describe the page</small></h1></div>
-    <ul class="breadcrumb">
-  <li>
-    <a href="#">Home</a> <span class="divider">/</span>
-  </li>
-  <li>
-    <a href="#">Breadcrumb</a> <span class="divider">/</span>
-  </li>
-  <li class="active">Page Title</li>
-</ul>
-  </div>
+
+
 
   
     <!-- The javascripts Libraries
