@@ -168,6 +168,7 @@ if($partyIdentifiers)
 			if(!$runErrors)
 			{
 				$actions .= ">>SUCCESS nla party imported with key ".$partyId."\n";
+				
 			}
 		}
 
@@ -299,7 +300,7 @@ else
 }
 date_default_timezone_set('Antarctica/Macquarie');
 $actions .= date("d/m/Y h:m:s")."\n";
-exec("wget 'https://services.ands.org.au/home/orca/services/getRegistryObjectsSOLR.php?dataSourceKey=NLA_PARTY&solrUrl=yep' -q");
+queueSyncDataSource('NLA_PARTY');
 mail("lizwoods.ands@gmail.com","NLA Party imports",$actions);
 //echo $actions;
 // END: XML Response
