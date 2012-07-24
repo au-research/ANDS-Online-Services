@@ -61,14 +61,11 @@ function esc($unsafeString, $forJavascript=false)
         return $safeString;
 }
 
-// Open a connection to the database.
-// This will be closed automatically by the framework.
-openDatabaseConnection($gCNN_DBS_ORCA, eCNN_DBS_ORCA);
-
 
 // Open a connection to the database.
 // This will be closed automatically by the framework.
 openDatabaseConnection($gCNN_DBS_ORCA, eCNN_DBS_ORCA);
+
 
 $services = $argv[1];
 $actions ='';
