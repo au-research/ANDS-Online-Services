@@ -343,6 +343,10 @@ function getInstitutionPage($group)
 
 	}else{
 		return false;
+<<<<<<< HEAD
+=======
+
+>>>>>>> bugfix. instituition page db call
 	}
 }
 
