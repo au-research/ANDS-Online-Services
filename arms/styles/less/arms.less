@@ -1,0 +1,62 @@
+@navColor: #464646;
+@navColorAlt: #0088cc;
+@bannerColor: #F4F4F4;
+@accentColor: #0088cc;
+@fontColor: #454545;
+
+@numColumnMMR: 3;
+
+body{
+	font-family: 'Open Sans',Arial,sans-serif;
+	color: @fontColor;
+	font-weight:400;
+	line-height:22px;
+	padding-bottom: 40px;
+}
+#topbar{
+	border-top:4px solid @accentColor;
+	padding-top:5px;
+	font-size:85%;
+	background:@bannerColor;
+	text-align:right;
+}
+
+#banner{
+	background:@bannerColor;
+	border-bottom:1px solid #ccc;
+	.page-header{
+		margin:0;border-bottom:none;
+		padding-bottom:10px;
+	}
+}
+
+
+#main-nav{
+	padding-top:15px;
+	font-size:15px;
+	float:right;
+	a {
+		color: @navColor;
+		&:hover{
+			background: @navColorAlt;
+			color: white;
+			.caret{
+				border-top-color: white;border-bottom-color: white;
+			}
+		}
+	}
+	.caret{
+		border-top-color: @navColor;border-bottom-color: @navColor;
+	}
+}
+
+#main-content{
+	padding-top:15px;
+}
+
+h1 small{font-size:16px;}
+
+
+/**
+ * Manage My Records styles
+**/
