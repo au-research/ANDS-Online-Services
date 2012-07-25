@@ -125,7 +125,7 @@
   </div>
 
   <h2>Table markup</h2>
-  <div class="row">
+  <div class="row-fluid">
     <div class="span8">
       <table class="table table-bordered table-striped">
         <colgroup>
@@ -254,7 +254,7 @@
   <h2>Example tables</h2>
 
   <h3>1. Default table styles</h3>
-  <div class="row">
+  <div class="row-fluid">
     <div class="span4">
       <p>Tables are automatically styled with only a few borders to ensure readability and maintain structure. With 2.0, the <code>.table</code> class is required.</p>
 <pre class="prettyprint linenums"><ol class="linenums"><li class="L0"><span class="tag">&lt;table</span><span class="pln"> </span><span class="atn">class</span><span class="pun">=</span><span class="atv">"table"</span><span class="tag">&gt;</span></li><li class="L1"><span class="pln">  …</span></li><li class="L2"><span class="tag">&lt;/table&gt;</span></li></ol></pre>
@@ -295,7 +295,7 @@
 
 
   <h3>2. Striped table</h3>
-  <div class="row">
+  <div class="row-fluid">
     <div class="span4">
       <p>Get a little fancy with your tables by adding zebra-striping—just add the <code>.table-striped</code> class.</p>
       <p class="muted"><strong>Note:</strong> Striped tables use the <code>:nth-child</code> CSS selector and is not available in IE7-IE8.</p>
@@ -337,7 +337,7 @@
 
 
   <h3>3. Bordered table</h3>
-  <div class="row">
+  <div class="row-fluid">
     <div class="span4">
       <p>Add borders around the entire table and rounded corners for aesthetic purposes.</p>
 <pre class="prettyprint linenums"><ol class="linenums"><li class="L0"><span class="tag">&lt;table</span><span class="pln"> </span><span class="atn">class</span><span class="pun">=</span><span class="atv">"table table-bordered"</span><span class="tag">&gt;</span></li><li class="L1"><span class="pln">  …</span></li><li class="L2"><span class="tag">&lt;/table&gt;</span></li></ol></pre>
@@ -382,7 +382,7 @@
 
 
   <h3>4. Condensed table</h3>
-  <div class="row">
+  <div class="row-fluid">
     <div class="span4">
       <p>Make your tables more compact by adding the <code>.table-condensed</code> class to cut table cell padding in half (from 8px to 4px).</p>
 <pre class="prettyprint linenums" style="margin-bottom: 18px;"><ol class="linenums"><li class="L0"><span class="tag">&lt;table</span><span class="pln"> </span><span class="atn">class</span><span class="pun">=</span><span class="atv">"table table-condensed"</span><span class="tag">&gt;</span></li><li class="L1"><span class="pln">  …</span></li><li class="L2"><span class="tag">&lt;/table&gt;</span></li></ol></pre>
@@ -423,7 +423,7 @@
 
 
   <h3>5. Combine them all!</h3>
-  <div class="row">
+  <div class="row-fluid">
     <div class="span4">
       <p>Feel free to combine any of the table classes to achieve different looks by utilizing any of the available classes.</p>
 <pre class="prettyprint linenums" style="margin-bottom: 18px;"><ol class="linenums"><li class="L0"><span class="tag">&lt;table</span><span class="pln"> </span><span class="atn">class</span><span class="pun">=</span><span class="atv">"table table-striped table-bordered table-condensed"</span><span class="tag">&gt;</span></li><li class="L1"><span class="pln">  ...</span></li><li class="L2"><span class="tag">&lt;/table&gt;</span></li></ol></pre>
@@ -473,7 +473,7 @@
   <div class="page-header">
     <h1>Forms</h1>
   </div>
-  <div class="row">
+  <div class="row-fluid">
     <div class="span4">
       <h2>Flexible HTML and CSS</h2>
       <p>The best part about forms in Bootstrap is that all your inputs and controls look great no matter how you build them in your markup. No superfluous HTML is required, but we provide the patterns for those who require it.</p>
@@ -533,7 +533,7 @@
 
 
   <h2>Example forms <small>using just form controls, no extra markup</small></h2>
-  <div class="row">
+  <div class="row-fluid">
     <div class="span6">
       <h3>Basic form</h3>
       <p>Smart and lightweight defaults without extra markup.</p>
@@ -574,7 +574,7 @@
   <br>
 
   <h2>Horizontal forms</h2>
-  <div class="row">
+  <div class="row-fluid">
     <div class="span4">
       <p></p>
       <p>Shown on the right are all the default form controls we support. Here's the bulleted list:</p>
@@ -658,7 +658,7 @@
   <br>
 
   <h2>Form control states</h2>
-  <div class="row">
+  <div class="row-fluid">
     <div class="span4">
       <p>Bootstrap features styles for browser-supported focused and <code>disabled</code> states. We remove the default Webkit <code>outline</code> and apply a <code>box-shadow</code> in its place for <code>:focus</code>.</p>
       <hr>
@@ -742,7 +742,7 @@
   <br>
 
   <h2>Extending form controls</h2>
-  <div class="row">
+  <div class="row-fluid">
     <div class="span4">
       <h3>Prepend &amp; append inputs</h3>
       <p>Input groups—with appended or prepended text—provide an easy way to give more context for your inputs. Great examples include the @ sign for Twitter usernames or $ for finances.</p>
@@ -947,7 +947,7 @@
     </tbody>
   </table>
 
-  <div class="row">
+  <div class="row-fluid">
     <div class="span4">
       <h3>Buttons for actions</h3>
       <p>As a convention, buttons should only be used for actions while hyperlinks are to be used for objects. For instance, "Download" should be a button while "recent activity" should be a link.</p>
@@ -1005,7 +1005,7 @@
   <div class="page-header">
     <h1>Icons <small>Graciously provided by <a href="http://glyphicons.com" target="_blank">Glyphicons</a></small></h1>
   </div>
-  <div class="row">
+  <div class="row-fluid">
     <div class="span3">
       <ul class="the-icons">
         <li><i class="icon-glass"></i> icon-glass</li>
@@ -1166,7 +1166,7 @@
 
   <br>
 
-  <div class="row">
+  <div class="row-fluid">
     <div class="span4">
       <h3>Built as a sprite</h3>
       <p>Instead of making every icon an extra request, we've compiled them into a sprite—a bunch of images in one file that uses CSS to position the images with <code>background-position</code>. This is the same method we use on Twitter.com and it has worked well for us.</p>
@@ -1200,7 +1200,7 @@
 
   <h3>Examples</h3>
   <p>Use them in buttons, button groups for a toolbar, navigation, or prepended form inputs.</p>
-  <div class="row">
+  <div class="row-fluid">
     <div class="span4">
       <div class="btn-toolbar" style="margin-bottom: 9px">
         <div class="btn-group">

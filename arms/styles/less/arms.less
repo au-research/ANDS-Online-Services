@@ -4,8 +4,6 @@
 @accentColor: #0088cc;
 @fontColor: #454545;
 
-@numColumnMMR: 3;
-
 body{
 	font-family: 'Open Sans',Arial,sans-serif;
 	color: @fontColor;
@@ -60,3 +58,37 @@ h1 small{font-size:16px;}
 /**
  * Manage My Records styles
 **/
+
+.thumbnail{
+	cursor:pointer;
+	position:relative;
+}
+.btn-group{
+	display:none;
+}
+.thumbnails{
+	.thumbnail{
+		padding:10px;
+		height:150px;
+	}
+	.btn-group{
+		position: absolute;
+		top: 134px;
+		right: 7px;
+	}
+}
+
+.lists{
+	li {
+		width:auto;
+		float:none;
+		margin:8px 4px;
+		list-style:none;
+	}
+	margin:0;
+	.btn-group{
+		position: absolute;
+		top: 5px;
+		right: 5px;
+	}
+}
