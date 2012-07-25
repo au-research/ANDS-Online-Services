@@ -10,15 +10,23 @@
     }
 
 	function putxml(){
-
+		global $host, $doi_root;
+		$base_url	= 'http://'.$host.'/home/dois/';
+		$CI =& get_instance();
 		$doiList = getDoiListxml();
-		
 		foreach($doiList->result() as $doi)
 		{
-			$xml = file_get_contents("http://".eHOST.eROOT_DIR."/xml?doi=".$doi->doi_id);
+			$xml = file_get_contents($base_url."/doi_xml.php?doi=".$doi->doi_id);
 			$data = array('datacite_xml' => $xml);
 			$where = "doi_id = '".$doi->doi_id."'";
     		$query_str = $this->db->update_string('doi_objects', $data, $where);
+    		$result = $CI->db->query($query_str);
+    		if($result!=1)
+    		{
+    			echo 'Error updating object xml '.$doi->doi_id.'<br/>';
+    		}else{
+      			echo 'Updated object xml '.$doi->doi_id.'<br/>';
+    		}	
 		}
 		exit;
 	}
@@ -34,6 +42,7 @@
 		}	
 				
 		$doi_id = $this->input->get('doi');	
+		$doi_id = rawurldecode($doi_id);
 		$response_type = $this->input->get('response_type');
 		if(!$response_type)	$response_type = 'string';		
 		$api_version = $this->input->get('api_version');
@@ -75,7 +84,8 @@
 		$outstr = '';
 		$doiObjects = null;
 		$response1 = "OK";
-		$response2 = "OK";	
+		$response2 = "OK";
+		$testing = 'no';	
 
 		$debug = $this->input->get('debug');
 		
@@ -84,8 +94,15 @@
 			$this->debugOn();
 		}		
 		$app_id = $this->input->get('app_id');		//passed as a parameter
+		if(substr($app_id,0,4)=='TEST')
+		{
+			$app_id = substr($app_id,4,strlen($app_id));
+			$testing = 'yes';
+		}
 		$urlValue = $this->input->get('url');		//passed as a parameter
+		$urlValue = rawurldecode($urlValue);
 		$doiValue = $this->input->get('doi');		//passed as a parameter
+		$doiValue = rawurldecode($doiValue);
 		$response_type = $this->input->get('response_type');	//passed as a parameter		
 		if(!$response_type) $response_type = 'string';
 		$api_version = $this->input->get('api_version');
@@ -186,17 +203,16 @@
 					if($urlValue)
 					{
 						$response1 = $this->doisRequest("mint",$doiValue, $urlValue, $xml,$client_id);		
-		
 					}
 					
 					if($doiObjects)
 					{
-						$response2 = $this->doisRequest("update",$doiValue, $urlValue, $xml,$client_id);
+						$response2 = $this->doisRequest("update",$doiValue, $urlValue, $xml,$client_id);			
 					}
 					
 					if( $response1 && $response2 )
 					{
-						if( $response1 == gDOIS_RESPONSE_SUCCESS && $response2 == gDOIS_RESPONSE_SUCCESS)
+						if( doisGetResponseType($response1) == gDOIS_RESPONSE_SUCCESS && doisGetResponseType($response2) == gDOIS_RESPONSE_SUCCESS)
 						{
 							// We have successfully updated the doi through datacite.
 							$verbosemessage = $response1." ".$response2;
@@ -230,7 +246,8 @@
 	
 	function mint(){
 		global $dataciteSchema;
-		global $api_version;				
+		global $api_version;	
+		global $gDOIS_PREFIX_TYPES;			
 		if ( isset($_SERVER["HTTP_X_FORWARDED_FOR"]) )    {
 			$ip=$_SERVER["HTTP_X_FORWARDED_FOR"];
 		} else if ( isset($_SERVER["HTTP_CLIENT_IP"]) )    {
@@ -252,6 +269,7 @@
 		$doiValue = '';
 		$verbosemessage = '';
 		$errors = '';
+		$testing = 'no';
 		$doiObjects = null;
 		$response1 = "OK";
 		$response2 = "OK";	
@@ -263,7 +281,13 @@
 		}
 		
 		$app_id = $this->input->get('app_id');		//passed as a parameter
+		if(substr($app_id,0,4)=='TEST')
+		{
+			$app_id = substr($app_id,4,strlen($app_id));
+			$testing = 'yes';
+		}
 		$urlValue = $this->input->get('url');		//passed as a parameter
+		$urlValue = rawurldecode($urlValue);
 		$response_type = $this->input->get('response_type');
 		if(!$response_type) $response_type = 'string';		
 		$api_version = $this->input->get('api_version');
@@ -313,7 +337,13 @@
 					$client_id2 = $clientDetail->client_id;
 				}
 			}
-			$datacite_prefix = $clientDetail->datacite_prefix;
+			if($testing=='yes')
+			{
+				$datacite_prefix = $gDOIS_PREFIX_TYPES[3];
+			}else{
+				$datacite_prefix = $clientDetail->datacite_prefix;
+			}
+
 				
 			$doiValue = strtoupper($datacite_prefix.$client_id2.'/'.uniqid());	//generate a unique suffix for this doi for this client 
 			
@@ -452,7 +482,9 @@
 	}
 	
 	function activate(){
-		global $api_version;		
+		global $api_version;
+		global $host, $doi_root;
+		$base_url	= 'http://'.$host.$doi_root;				
 		$errorMessages = '';
 		$notifyMessage = '';
 		$outstr = '';
@@ -477,7 +509,13 @@
 			$this->debugOn();
 		}
 		$app_id = $this->input->get('app_id');		//passed as a parameter
+		if(substr($app_id,0,4)=='TEST')
+		{
+			$app_id = substr($app_id,4,strlen($app_id));
+			$testing = 'yes';
+		}
 		$doiValue = $this->input->get('doi');		//passed as a parameter	
+		$doiValue = rawurldecode($doiValue);
 		$response_type = $this->input->get('response_type');		//passed as a parameter			
 		if(!$response_type) $response_type = 'string';
 		$api_version = $this->input->get('api_version');
@@ -523,7 +561,14 @@
 			// Update doi information
 			$status = "ACTIVE";
 			$activateResult = setDoiStatus($doiValue,$status);
-			$xml = file_get_contents("http://".eHOST.eROOT_DIR."/xml?doi=".$doiValue);
+			
+			$doidata = getxml($doiValue);		
+			if($doidata->num_rows() > 0){			
+				foreach($doidata->result() as $row)
+				{
+						$xml = $row->datacite_xml;
+				}
+			}
 			if(!$activateResult){	
 			// Activate the DOI.
 	
@@ -604,7 +649,13 @@
 			$this->debugOn();
 		}
 		$app_id = $this->input->get('app_id');		//passed as a parameter
+		if(substr($app_id,0,4)=='TEST')
+		{
+			$app_id = substr($app_id,4,strlen($app_id));
+			$testing = 'yes';
+		}
 		$doiValue = $this->input->get('doi');		//passed as a parameter	
+		$doiValue = rawurldecode($doiValue);
 		$response_type = $this->input->get('response_type');		//passed as a parameter			
 		if(!$response_type) $response_type = 'string';
 		$api_version = $this->input->get('api_version');

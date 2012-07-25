@@ -84,7 +84,8 @@
 		$outstr = '';
 		$doiObjects = null;
 		$response1 = "OK";
-		$response2 = "OK";	
+		$response2 = "OK";
+		$testing = 'no';	
 
 		$debug = $this->input->get('debug');
 		
@@ -93,6 +94,11 @@
 			$this->debugOn();
 		}		
 		$app_id = $this->input->get('app_id');		//passed as a parameter
+		if(substr($app_id,0,4)=='TEST')
+		{
+			$app_id = substr($app_id,4,strlen($app_id));
+			$testing = 'yes';
+		}
 		$urlValue = $this->input->get('url');		//passed as a parameter
 		$urlValue = rawurldecode($urlValue);
 		$doiValue = $this->input->get('doi');		//passed as a parameter
@@ -240,7 +246,8 @@
 	
 	function mint(){
 		global $dataciteSchema;
-		global $api_version;				
+		global $api_version;	
+		global $gDOIS_PREFIX_TYPES;			
 		if ( isset($_SERVER["HTTP_X_FORWARDED_FOR"]) )    {
 			$ip=$_SERVER["HTTP_X_FORWARDED_FOR"];
 		} else if ( isset($_SERVER["HTTP_CLIENT_IP"]) )    {
@@ -262,6 +269,7 @@
 		$doiValue = '';
 		$verbosemessage = '';
 		$errors = '';
+		$testing = 'no';
 		$doiObjects = null;
 		$response1 = "OK";
 		$response2 = "OK";	
@@ -273,8 +281,13 @@
 		}
 		
 		$app_id = $this->input->get('app_id');		//passed as a parameter
+		if(substr($app_id,0,4)=='TEST')
+		{
+			$app_id = substr($app_id,4,strlen($app_id));
+			$testing = 'yes';
+		}
 		$urlValue = $this->input->get('url');		//passed as a parameter
-		$urlValue = rawurldecode($doiValue);
+		$urlValue = rawurldecode($urlValue);
 		$response_type = $this->input->get('response_type');
 		if(!$response_type) $response_type = 'string';		
 		$api_version = $this->input->get('api_version');
@@ -324,7 +337,13 @@
 					$client_id2 = $clientDetail->client_id;
 				}
 			}
-			$datacite_prefix = $clientDetail->datacite_prefix;
+			if($testing=='yes')
+			{
+				$datacite_prefix = $gDOIS_PREFIX_TYPES[3];
+			}else{
+				$datacite_prefix = $clientDetail->datacite_prefix;
+			}
+
 				
 			$doiValue = strtoupper($datacite_prefix.$client_id2.'/'.uniqid());	//generate a unique suffix for this doi for this client 
 			
@@ -490,6 +509,11 @@
 			$this->debugOn();
 		}
 		$app_id = $this->input->get('app_id');		//passed as a parameter
+		if(substr($app_id,0,4)=='TEST')
+		{
+			$app_id = substr($app_id,4,strlen($app_id));
+			$testing = 'yes';
+		}
 		$doiValue = $this->input->get('doi');		//passed as a parameter	
 		$doiValue = rawurldecode($doiValue);
 		$response_type = $this->input->get('response_type');		//passed as a parameter			
@@ -625,6 +649,11 @@
 			$this->debugOn();
 		}
 		$app_id = $this->input->get('app_id');		//passed as a parameter
+		if(substr($app_id,0,4)=='TEST')
+		{
+			$app_id = substr($app_id,4,strlen($app_id));
+			$testing = 'yes';
+		}
 		$doiValue = $this->input->get('doi');		//passed as a parameter	
 		$doiValue = rawurldecode($doiValue);
 		$response_type = $this->input->get('response_type');		//passed as a parameter			
