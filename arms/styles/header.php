@@ -44,14 +44,6 @@
       <div class="span7">
         <ul class="nav nav-pills pilnav" id="main-nav">
           <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Styles Demo <b class="caret"></b></a>
-            <ul class="dropdown-menu sub-menu">
-              <li class=""><a href="index.php">Base CSS</a></li>
-              <li class=""><a href="javascripts.php">Javascripts</a></li>
-              <li class=""><a href="manage.php">Management</a></li>
-            </ul>
-          </li>
-          <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">My Records <b class="caret"></b></a>
             <ul class="dropdown-menu sub-menu">
               <li class=""><a href="#">Manage My Records</a></li>
@@ -66,8 +58,13 @@
               <li class=""><a href="#">Datasources Tools</a></li>
             </ul>
           </li>
-          <li><a href="#">My Identifiers</a></li>
-          <li><a href="#">Help</a></li>
+          <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">My Identifiers <b class="caret"></b></a>
+            <ul class="dropdown-menu sub-menu">
+              <li class=""><a href="#">DOI</a></li>
+              <li class=""><a href="#">PID</a></li>
+            </ul>
+          </li>
         </ul>
       </div>
     </div>

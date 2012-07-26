@@ -62,6 +62,10 @@ h1 small{font-size:16px;}
 .thumbnail{
 	cursor:pointer;
 	position:relative;
+	border:1px solid #ccc;
+	&:hover{
+		border:1px solid @accentColor;
+	}
 }
 .btn-group{
 	display:none;
@@ -92,3 +96,22 @@ h1 small{font-size:16px;}
 		right: 5px;
 	}
 }
+
+
+.selection{
+	position: absolute;
+	border: 1px solid #89B;
+	background: #BCE;
+	background-color: #BEC;
+	border-color: #8B9;
+}
+
+.selected{
+	background-color: #EBC;
+	border-color: #B89;
+}	
+.active{  
+	background-color: #CEB;
+	border-color: #9B8;
+}
+
