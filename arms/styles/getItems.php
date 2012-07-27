@@ -10,6 +10,7 @@
 		$item = array();
 		$item['class'] = 'collection';
 		$item['title'] = 'Sample Collection';
+		$item['status'] = 'DRAFT';
 		$item['id'] = 123;
 		$item['key'] = 'http://sample.collection.org';
 		$item['brief'] = 'Lorem ipsum in Duis anim voluptate pariatur dolor eu pariatur aliquip et fugiat magna in in et labore aliquip proident officia culpa pariatur commodo. ';

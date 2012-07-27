@@ -42,6 +42,7 @@
     <div class="row-fluid page-header">
       <div class="span5"><h1>ARMS <br/><small>ANDS Registry Management System</small></h1></div>
       <div class="span7">
+        <div id="show_responsive"><button class="btn show_nav" data-toggle="button">Show Menu</button></div>
         <ul class="nav nav-pills pilnav" id="main-nav">
           <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">My Records <b class="caret"></b></a>

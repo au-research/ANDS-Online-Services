@@ -2,7 +2,10 @@
 @navColorAlt: #0088cc;
 @bannerColor: #F4F4F4;
 @accentColor: #0088cc;
+@softAccentColor: #cceeff;
 @fontColor: #454545;
+
+@MMRitemHeight:150px;
 
 body{
 	font-family: 'Open Sans',Arial,sans-serif;
@@ -18,6 +21,7 @@ body{
 	background:@bannerColor;
 	text-align:right;
 }
+#show_responsive{display:none;}
 
 #banner{
 	background:@bannerColor;
@@ -26,6 +30,7 @@ body{
 		margin:0;border-bottom:none;
 		padding-bottom:10px;
 	}
+	padding:10px;
 }
 
 
@@ -59,30 +64,55 @@ h1 small{font-size:16px;}
  * Manage My Records styles
 **/
 
-.thumbnail{
+.item{
 	cursor:pointer;
 	position:relative;
 	border:1px solid #ccc;
 	&:hover{
 		border:1px solid @accentColor;
 	}
+	background-color: @bannerColor;
 }
 .btn-group{
 	display:none;
+	.text-group{
+		padding:4px 10px 4px;
+	}
 }
 .thumbnails{
-	.thumbnail{
-		padding:10px;
-		height:150px;
+	.item{
+		height:@MMRitemHeight;
+		margin:0px;
+		.item-info{
+			position:absolute;
+			height:100%;
+			background: @accentColor;
+			width: 10px;
+			z-index:100;
+			overflow:hidden;
+		}
+		.medium-info{
+			width: 30px;
+		}
+		.large-info{
+			width: 80px;
+		}
+		.item-snippet{
+			padding:10px 10px 10px 50px;
+			overflow:hidden;
+		}
 	}
 	.btn-group{
 		position: absolute;
-		top: 134px;
+		top: @MMRitemHeight - 40px;
 		right: 7px;
 	}
 }
 
 .lists{
+	.item{
+		padding:10px;
+	}
 	li {
 		width:auto;
 		float:none;
@@ -107,11 +137,50 @@ h1 small{font-size:16px;}
 }
 
 .selected{
-	background-color: #EBC;
-	border-color: #B89;
+	background: @softAccentColor;
+	border-color: @accentColor;
 }	
 .active{  
-	background-color: #CEB;
+	background: #CEB;
 	border-color: #9B8;
 }
 
+
+#mmr_toolbar > .span4:nth-child(2){
+	text-align:center;
+}
+#mmr_toolbar > .span4:nth-child(3){
+	text-align:right;
+	.dropdown-menu{
+		text-align:left;
+	}
+}
+@media (max-width: 767px) {
+	#mmr_toolbar > .span4:nth-child(2){
+		text-align:left;
+	}
+	#mmr_toolbar > .span4:nth-child(3){
+		text-align:left;
+	}
+	#mmr_toolbar{
+
+	}
+	#show_responsive{display:block;}
+	#main-nav{
+		display:none;
+		float:left;
+		li{
+			float:none;
+		}
+		.dropdown-menu{
+			display:block;
+			position:relative;
+			border:none;
+			float:none;
+			margin:none;
+			background:none;
+			box-shadow:none;
+			-webkit-box-shadow:none;
+		}
+	}
+}
