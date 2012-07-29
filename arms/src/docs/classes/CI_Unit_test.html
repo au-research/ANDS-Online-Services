@@ -1,0 +1,350 @@
+<!DOCTYPE html><html xmlns:date="http://exslt.org/dates-and-times" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>phpDocumentor » \CI_Unit_test</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../css/template.css" rel="stylesheet" media="all">
+<script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../js/bootstrap.js" type="text/javascript"></script><script src="../js/template.js" type="text/javascript"></script><script src="../js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../img/favicon.ico">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">phpDocumentor</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Packages</a></li>
+<li><a href="../packages/CodeIgniter.html"><i class="icon-folder-open"></i> CodeIgniter</a></li>
+<li><a href="../packages/Default.html"><i class="icon-folder-open"></i> Default</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">1170</span></a></li>
+<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul><li>todo 
+                <span class="label label-info">1</span>
+</li></ul></a></li>
+<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">0</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods</li>
+<li class="method public "><a href="#__construct" title="__construct :: "><span class="description">__construct()
+        </span><pre>__construct()</pre></a></li>
+<li class="method public "><a href="#_backtrace" title="_backtrace :: Generate a backtrace"><span class="description">Generate a backtrace</span><pre>_backtrace()</pre></a></li>
+<li class="method public "><a href="#_default_template" title="_default_template :: Get Default Template"><span class="description">Get Default Template</span><pre>_default_template()</pre></a></li>
+<li class="method public "><a href="#_parse_template" title="_parse_template :: Parse Template"><span class="description">Parse Template</span><pre>_parse_template()</pre></a></li>
+<li class="method public "><a href="#active" title="active :: Make Unit testing active"><span class="description">Make Unit testing active</span><pre>active()</pre></a></li>
+<li class="method public "><a href="#report" title="report :: Generate a report"><span class="description">Generate a report</span><pre>report()</pre></a></li>
+<li class="method public "><a href="#result" title="result :: Result Array"><span class="description">Result Array</span><pre>result()</pre></a></li>
+<li class="method public "><a href="#run" title="run :: Run the tests"><span class="description">Run the tests</span><pre>run()</pre></a></li>
+<li class="method public "><a href="#set_template" title="set_template :: Set the template"><span class="description">Set the template</span><pre>set_template()</pre></a></li>
+<li class="method public "><a href="#set_test_items" title="set_test_items :: Run the tests"><span class="description">Run the tests</span><pre>set_test_items()</pre></a></li>
+<li class="method public "><a href="#use_strict" title="use_strict :: Use strict comparison"><span class="description">Use strict comparison</span><pre>use_strict()</pre></a></li>
+<li class="nav-header">
+<i class="icon-custom icon-property"></i> Properties</li>
+<li class="property public "><a href="#%24_template" title="$_template :: "><span class="description">$_template</span><pre>$_template</pre></a></li>
+<li class="property public "><a href="#%24_template_rows" title="$_template_rows :: "><span class="description">$_template_rows</span><pre>$_template_rows</pre></a></li>
+<li class="property public "><a href="#%24_test_items_visible" title="$_test_items_visible :: "><span class="description">$_test_items_visible</span><pre>$_test_items_visible</pre></a></li>
+<li class="property public "><a href="#%24active" title="$active :: "><span class="description">$active</span><pre>$active</pre></a></li>
+<li class="property public "><a href="#%24results" title="$results :: "><span class="description">$results</span><pre>$results</pre></a></li>
+<li class="property public "><a href="#%24strict" title="$strict :: "><span class="description">$strict</span><pre>$strict</pre></a></li>
+</ul>
+</div>
+<div class="span8">
+<a name="%5CCI_Unit_test" id="\CI_Unit_test"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/global.html">global</a></li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/CI_Unit_test.html">CI_Unit_test</a>
+</li>
+</ul>
+<div href="../classes/CI_Unit_test.html" class="element class">
+<p class="short_description">Unit Testing Class</p>
+<div class="details">
+<p class="long_description"><p>Simple testing class</p></p>
+<table class="table table-bordered">
+<tr>
+<th>package</th>
+<td><a href="../packages/CodeIgniter.Libraries.html">CodeIgniter</a></td>
+</tr>
+<tr>
+<th>subpackage</th>
+<td>Libraries</td>
+</tr>
+<tr>
+<th>category</th>
+<td>UnitTesting</td>
+</tr>
+<tr>
+<th>author</th>
+<td><a href="">ExpressionEngine Dev Team</a></td>
+</tr>
+<tr>
+<th>link</th>
+<td><a href="http://codeigniter.com/user_guide/libraries/uri.html">http://codeigniter.com/user_guide/libraries/uri.html</a></td>
+</tr>
+</table>
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a name="__construct" id="__construct"></a><div class="element clickable method public __construct" data-toggle="collapse" data-target=".__construct .collapse">
+<h2>__construct()
+        </h2>
+<pre>__construct() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="_backtrace" id="_backtrace"></a><div class="element clickable method public _backtrace" data-toggle="collapse" data-target="._backtrace .collapse">
+<h2>Generate a backtrace</h2>
+<pre>_backtrace() : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>This lets us show file names and line numbers</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>array</code></div>
+</div></div>
+</div>
+<a name="_default_template" id="_default_template"></a><div class="element clickable method public _default_template" data-toggle="collapse" data-target="._default_template .collapse">
+<h2>Get Default Template</h2>
+<pre>_default_template() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_parse_template" id="_parse_template"></a><div class="element clickable method public _parse_template" data-toggle="collapse" data-target="._parse_template .collapse">
+<h2>Parse Template</h2>
+<pre>_parse_template() : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Harvests the data within the template {pseudo-variables}</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+</div></div>
+</div>
+<a name="active" id="active"></a><div class="element clickable method public active" data-toggle="collapse" data-target=".active .collapse">
+<h2>Make Unit testing active</h2>
+<pre>active($state) : null</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Enables/disables unit testing</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$state</h4>
+<code></code><p>bool</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>null</code></div>
+</div></div>
+</div>
+<a name="report" id="report"></a><div class="element clickable method public report" data-toggle="collapse" data-target=".report .collapse">
+<h2>Generate a report</h2>
+<pre>report($result) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Displays a table with the test data</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$result</h4>
+<code></code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="result" id="result"></a><div class="element clickable method public result" data-toggle="collapse" data-target=".result .collapse">
+<h2>Result Array</h2>
+<pre>result($results) : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Returns the raw result data</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$results</h4>
+<code></code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>array</code></div>
+</div></div>
+</div>
+<a name="run" id="run"></a><div class="element clickable method public run" data-toggle="collapse" data-target=".run .collapse">
+<h2>Run the tests</h2>
+<pre>run($test, $expected, $test_name, $notes) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Runs the supplied tests</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$test</h4>
+<code></code><p>mixed</p></div>
+<div class="subelement argument">
+<h4>$expected</h4>
+<code></code><p>mixed</p></div>
+<div class="subelement argument">
+<h4>$test_name</h4>
+<code></code><p>string</p></div>
+<div class="subelement argument">
+<h4>$notes</h4>
+<code></code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="set_template" id="set_template"></a><div class="element clickable method public set_template" data-toggle="collapse" data-target=".set_template .collapse">
+<h2>Set the template</h2>
+<pre>set_template($template) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>This lets us set the template to be used to display results</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$template</h4>
+<code></code><p>string</p></div>
+</div></div>
+</div>
+<a name="set_test_items" id="set_test_items"></a><div class="element clickable method public set_test_items" data-toggle="collapse" data-target=".set_test_items .collapse">
+<h2>Run the tests</h2>
+<pre>set_test_items($items) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Runs the supplied tests</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$items</h4>
+<code></code><p>array</p></div>
+</div></div>
+</div>
+<a name="use_strict" id="use_strict"></a><div class="element clickable method public use_strict" data-toggle="collapse" data-target=".use_strict .collapse">
+<h2>Use strict comparison</h2>
+<pre>use_strict($state) : null</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Causes the evaluation to use === rather than ==</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$state</h4>
+<code></code><p>bool</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>null</code></div>
+</div></div>
+</div>
+<h3>
+<i class="icon-custom icon-property"></i> Properties</h3>
+<a name="%24_template" id="$_template"> </a><div class="element clickable property public $_template" data-toggle="collapse" data-target=".$_template .collapse">
+<h2>$_template</h2>
+<pre>$_template </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24_template_rows" id="$_template_rows"> </a><div class="element clickable property public $_template_rows" data-toggle="collapse" data-target=".$_template_rows .collapse">
+<h2>$_template_rows</h2>
+<pre>$_template_rows </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24_test_items_visible" id="$_test_items_visible"> </a><div class="element clickable property public $_test_items_visible" data-toggle="collapse" data-target=".$_test_items_visible .collapse">
+<h2>$_test_items_visible</h2>
+<pre>$_test_items_visible </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24active" id="$active"> </a><div class="element clickable property public $active" data-toggle="collapse" data-target=".$active .collapse">
+<h2>$active</h2>
+<pre>$active </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24results" id="$results"> </a><div class="element clickable property public $results" data-toggle="collapse" data-target=".$results .collapse">
+<h2>$results</h2>
+<pre>$results </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24strict" id="$strict"> </a><div class="element clickable property public $strict" data-toggle="collapse" data-target=".$strict .collapse">
+<h2>$strict</h2>
+<pre>$strict </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a8</a> and<br>
+            generated on 2012-07-27T12:29:21+10:00.<br></footer></div>
+</div>
+</body>
+</html>

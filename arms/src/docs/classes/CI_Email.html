@@ -1,0 +1,1387 @@
+<!DOCTYPE html><html xmlns:date="http://exslt.org/dates-and-times" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>phpDocumentor » \CI_Email</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../css/template.css" rel="stylesheet" media="all">
+<script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../js/bootstrap.js" type="text/javascript"></script><script src="../js/template.js" type="text/javascript"></script><script src="../js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../img/favicon.ico">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">phpDocumentor</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Packages</a></li>
+<li><a href="../packages/CodeIgniter.html"><i class="icon-folder-open"></i> CodeIgniter</a></li>
+<li><a href="../packages/Default.html"><i class="icon-folder-open"></i> Default</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">1170</span></a></li>
+<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul><li>todo 
+                <span class="label label-info">1</span>
+</li></ul></a></li>
+<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">0</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods</li>
+<li class="method public "><a href="#__construct" title="__construct :: Constructor - Sets Email Preferences"><span class="description">Constructor - Sets Email Preferences</span><pre>__construct()</pre></a></li>
+<li class="method public "><a href="#attach" title="attach :: Assign file attachments"><span class="description">Assign file attachments</span><pre>attach()</pre></a></li>
+<li class="method public "><a href="#batch_bcc_send" title="batch_bcc_send :: Batch Bcc Send."><span class="description">Batch Bcc Send.</span><pre>batch_bcc_send()</pre></a></li>
+<li class="method public "><a href="#bcc" title="bcc :: Set BCC"><span class="description">Set BCC</span><pre>bcc()</pre></a></li>
+<li class="method public "><a href="#cc" title="cc :: Set CC"><span class="description">Set CC</span><pre>cc()</pre></a></li>
+<li class="method public "><a href="#clean_email" title="clean_email :: Clean Extended Email Address: Joe Smith &lt;joe@smith.com&gt;"><span class="description">Clean Extended Email Address: Joe Smith &lt;joe@smith.com&gt;</span><pre>clean_email()</pre></a></li>
+<li class="method public "><a href="#clear" title="clear :: Initialize the Email Data"><span class="description">Initialize the Email Data</span><pre>clear()</pre></a></li>
+<li class="method public "><a href="#from" title="from :: Set FROM"><span class="description">Set FROM</span><pre>from()</pre></a></li>
+<li class="method public "><a href="#initialize" title="initialize :: Initialize preferences"><span class="description">Initialize preferences</span><pre>initialize()</pre></a></li>
+<li class="method public "><a href="#message" title="message :: Set Body"><span class="description">Set Body</span><pre>message()</pre></a></li>
+<li class="method public "><a href="#print_debugger" title="print_debugger :: Get Debug Message"><span class="description">Get Debug Message</span><pre>print_debugger()</pre></a></li>
+<li class="method public "><a href="#reply_to" title="reply_to :: Set Reply-to"><span class="description">Set Reply-to</span><pre>reply_to()</pre></a></li>
+<li class="method public "><a href="#send" title="send :: Send Email"><span class="description">Send Email</span><pre>send()</pre></a></li>
+<li class="method public "><a href="#set_alt_message" title="set_alt_message :: Set Multipart Value"><span class="description">Set Multipart Value</span><pre>set_alt_message()</pre></a></li>
+<li class="method public "><a href="#set_crlf" title="set_crlf :: Set CRLF"><span class="description">Set CRLF</span><pre>set_crlf()</pre></a></li>
+<li class="method public "><a href="#set_mailtype" title="set_mailtype :: Set Mailtype"><span class="description">Set Mailtype</span><pre>set_mailtype()</pre></a></li>
+<li class="method public "><a href="#set_newline" title="set_newline :: Set Newline Character"><span class="description">Set Newline Character</span><pre>set_newline()</pre></a></li>
+<li class="method public "><a href="#set_priority" title="set_priority :: Set Priority"><span class="description">Set Priority</span><pre>set_priority()</pre></a></li>
+<li class="method public "><a href="#set_protocol" title="set_protocol :: Set Protocol"><span class="description">Set Protocol</span><pre>set_protocol()</pre></a></li>
+<li class="method public "><a href="#set_wordwrap" title="set_wordwrap :: Set Wordwrap"><span class="description">Set Wordwrap</span><pre>set_wordwrap()</pre></a></li>
+<li class="method public "><a href="#subject" title="subject :: Set Email Subject"><span class="description">Set Email Subject</span><pre>subject()</pre></a></li>
+<li class="method public "><a href="#to" title="to :: Set Recipients"><span class="description">Set Recipients</span><pre>to()</pre></a></li>
+<li class="method public "><a href="#valid_email" title="valid_email :: Email Validation"><span class="description">Email Validation</span><pre>valid_email()</pre></a></li>
+<li class="method public "><a href="#validate_email" title="validate_email :: Validate Email Address"><span class="description">Validate Email Address</span><pre>validate_email()</pre></a></li>
+<li class="method public "><a href="#word_wrap" title="word_wrap :: Word Wrap"><span class="description">Word Wrap</span><pre>word_wrap()</pre></a></li>
+<li class="nav-header protected">» Protected</li>
+<li class="method protected "><a href="#_build_headers" title="_build_headers :: Build final headers"><span class="description">Build final headers</span><pre>_build_headers()</pre></a></li>
+<li class="method protected "><a href="#_build_message" title="_build_message :: Build Final Body and attachments"><span class="description">Build Final Body and attachments</span><pre>_build_message()</pre></a></li>
+<li class="method protected "><a href="#_get_alt_message" title="_get_alt_message :: Build alternative plain text message"><span class="description">Build alternative plain text message</span><pre>_get_alt_message()</pre></a></li>
+<li class="method protected "><a href="#_get_content_type" title="_get_content_type :: Get content type (text/html/attachment)"><span class="description">Get content type (text/html/attachment)</span><pre>_get_content_type()</pre></a></li>
+<li class="method protected "><a href="#_get_encoding" title="_get_encoding :: Get Mail Encoding"><span class="description">Get Mail Encoding</span><pre>_get_encoding()</pre></a></li>
+<li class="method protected "><a href="#_get_hostname" title="_get_hostname :: Get Hostname"><span class="description">Get Hostname</span><pre>_get_hostname()</pre></a></li>
+<li class="method protected "><a href="#_get_ip" title="_get_ip :: Get IP"><span class="description">Get IP</span><pre>_get_ip()</pre></a></li>
+<li class="method protected "><a href="#_get_message_id" title="_get_message_id :: Get the Message ID"><span class="description">Get the Message ID</span><pre>_get_message_id()</pre></a></li>
+<li class="method protected "><a href="#_get_mime_message" title="_get_mime_message :: Mime message"><span class="description">Mime message</span><pre>_get_mime_message()</pre></a></li>
+<li class="method protected "><a href="#_get_protocol" title="_get_protocol :: Get Mail Protocol"><span class="description">Get Mail Protocol</span><pre>_get_protocol()</pre></a></li>
+<li class="method protected "><a href="#_get_smtp_data" title="_get_smtp_data :: Get SMTP data"><span class="description">Get SMTP data</span><pre>_get_smtp_data()</pre></a></li>
+<li class="method protected "><a href="#_mime_types" title="_mime_types :: Mime Types"><span class="description">Mime Types</span><pre>_mime_types()</pre></a></li>
+<li class="method protected "><a href="#_prep_q_encoding" title="_prep_q_encoding :: Prep Q Encoding"><span class="description">Prep Q Encoding</span><pre>_prep_q_encoding()</pre></a></li>
+<li class="method protected "><a href="#_prep_quoted_printable" title="_prep_quoted_printable :: Prep Quoted Printable"><span class="description">Prep Quoted Printable</span><pre>_prep_quoted_printable()</pre></a></li>
+<li class="method protected "><a href="#_remove_nl_callback" title="_remove_nl_callback :: Strip line-breaks via callback"><span class="description">Strip line-breaks via callback</span><pre>_remove_nl_callback()</pre></a></li>
+<li class="method protected "><a href="#_send_command" title="_send_command :: Send SMTP command"><span class="description">Send SMTP command</span><pre>_send_command()</pre></a></li>
+<li class="method protected "><a href="#_send_data" title="_send_data :: Send SMTP data"><span class="description">Send SMTP data</span><pre>_send_data()</pre></a></li>
+<li class="method protected "><a href="#_send_with_mail" title="_send_with_mail :: Send using mail()"><span class="description">Send using mail()</span><pre>_send_with_mail()</pre></a></li>
+<li class="method protected "><a href="#_send_with_sendmail" title="_send_with_sendmail :: Send using Sendmail"><span class="description">Send using Sendmail</span><pre>_send_with_sendmail()</pre></a></li>
+<li class="method protected "><a href="#_send_with_smtp" title="_send_with_smtp :: Send using SMTP"><span class="description">Send using SMTP</span><pre>_send_with_smtp()</pre></a></li>
+<li class="method protected "><a href="#_set_boundaries" title="_set_boundaries :: Set Message Boundary"><span class="description">Set Message Boundary</span><pre>_set_boundaries()</pre></a></li>
+<li class="method protected "><a href="#_set_date" title="_set_date :: Set RFC 822 Date"><span class="description">Set RFC 822 Date</span><pre>_set_date()</pre></a></li>
+<li class="method protected "><a href="#_set_error_message" title="_set_error_message :: Set Message"><span class="description">Set Message</span><pre>_set_error_message()</pre></a></li>
+<li class="method protected "><a href="#_set_header" title="_set_header :: Add a Header Item"><span class="description">Add a Header Item</span><pre>_set_header()</pre></a></li>
+<li class="method protected "><a href="#_smtp_authenticate" title="_smtp_authenticate :: SMTP Authenticate"><span class="description">SMTP Authenticate</span><pre>_smtp_authenticate()</pre></a></li>
+<li class="method protected "><a href="#_smtp_connect" title="_smtp_connect :: SMTP Connect"><span class="description">SMTP Connect</span><pre>_smtp_connect()</pre></a></li>
+<li class="method protected "><a href="#_spool_email" title="_spool_email :: Spool mail to the mail server"><span class="description">Spool mail to the mail server</span><pre>_spool_email()</pre></a></li>
+<li class="method protected "><a href="#_str_to_array" title="_str_to_array :: Convert a String to an Array"><span class="description">Convert a String to an Array</span><pre>_str_to_array()</pre></a></li>
+<li class="method protected "><a href="#_unwrap_specials" title="_unwrap_specials :: Unwrap special elements"><span class="description">Unwrap special elements</span><pre>_unwrap_specials()</pre></a></li>
+<li class="method protected "><a href="#_write_headers" title="_write_headers :: Write Headers as a string"><span class="description">Write Headers as a string</span><pre>_write_headers()</pre></a></li>
+<li class="nav-header">
+<i class="icon-custom icon-property"></i> Properties</li>
+<li class="property public "><a href="#%24_IP" title="$_IP :: "><span class="description">$_IP</span><pre>$_IP</pre></a></li>
+<li class="property public "><a href="#%24_alt_boundary" title="$_alt_boundary :: "><span class="description">$_alt_boundary</span><pre>$_alt_boundary</pre></a></li>
+<li class="property public "><a href="#%24_atc_boundary" title="$_atc_boundary :: "><span class="description">$_atc_boundary</span><pre>$_atc_boundary</pre></a></li>
+<li class="property public "><a href="#%24_attach_disp" title="$_attach_disp :: "><span class="description">$_attach_disp</span><pre>$_attach_disp</pre></a></li>
+<li class="property public "><a href="#%24_attach_name" title="$_attach_name :: "><span class="description">$_attach_name</span><pre>$_attach_name</pre></a></li>
+<li class="property public "><a href="#%24_attach_type" title="$_attach_type :: "><span class="description">$_attach_type</span><pre>$_attach_type</pre></a></li>
+<li class="property public "><a href="#%24_base_charsets" title="$_base_charsets :: "><span class="description">$_base_charsets</span><pre>$_base_charsets</pre></a></li>
+<li class="property public "><a href="#%24_bcc_array" title="$_bcc_array :: "><span class="description">$_bcc_array</span><pre>$_bcc_array</pre></a></li>
+<li class="property public "><a href="#%24_bit_depths" title="$_bit_depths :: "><span class="description">$_bit_depths</span><pre>$_bit_depths</pre></a></li>
+<li class="property public "><a href="#%24_body" title="$_body :: "><span class="description">$_body</span><pre>$_body</pre></a></li>
+<li class="property public "><a href="#%24_cc_array" title="$_cc_array :: "><span class="description">$_cc_array</span><pre>$_cc_array</pre></a></li>
+<li class="property public "><a href="#%24_debug_msg" title="$_debug_msg :: "><span class="description">$_debug_msg</span><pre>$_debug_msg</pre></a></li>
+<li class="property public "><a href="#%24_encoding" title="$_encoding :: "><span class="description">$_encoding</span><pre>$_encoding</pre></a></li>
+<li class="property public "><a href="#%24_finalbody" title="$_finalbody :: "><span class="description">$_finalbody</span><pre>$_finalbody</pre></a></li>
+<li class="property public "><a href="#%24_header_str" title="$_header_str :: "><span class="description">$_header_str</span><pre>$_header_str</pre></a></li>
+<li class="property public "><a href="#%24_headers" title="$_headers :: "><span class="description">$_headers</span><pre>$_headers</pre></a></li>
+<li class="property public "><a href="#%24_priorities" title="$_priorities :: "><span class="description">$_priorities</span><pre>$_priorities</pre></a></li>
+<li class="property public "><a href="#%24_protocols" title="$_protocols :: "><span class="description">$_protocols</span><pre>$_protocols</pre></a></li>
+<li class="property public "><a href="#%24_recipients" title="$_recipients :: "><span class="description">$_recipients</span><pre>$_recipients</pre></a></li>
+<li class="property public "><a href="#%24_replyto_flag" title="$_replyto_flag :: "><span class="description">$_replyto_flag</span><pre>$_replyto_flag</pre></a></li>
+<li class="property public "><a href="#%24_safe_mode" title="$_safe_mode :: "><span class="description">$_safe_mode</span><pre>$_safe_mode</pre></a></li>
+<li class="property public "><a href="#%24_smtp_auth" title="$_smtp_auth :: "><span class="description">$_smtp_auth</span><pre>$_smtp_auth</pre></a></li>
+<li class="property public "><a href="#%24_smtp_connect" title="$_smtp_connect :: "><span class="description">$_smtp_connect</span><pre>$_smtp_connect</pre></a></li>
+<li class="property public "><a href="#%24_subject" title="$_subject :: "><span class="description">$_subject</span><pre>$_subject</pre></a></li>
+<li class="property public "><a href="#%24alt_message" title="$alt_message :: "><span class="description">$alt_message</span><pre>$alt_message</pre></a></li>
+<li class="property public "><a href="#%24bcc_batch_mode" title="$bcc_batch_mode :: "><span class="description">$bcc_batch_mode</span><pre>$bcc_batch_mode</pre></a></li>
+<li class="property public "><a href="#%24bcc_batch_size" title="$bcc_batch_size :: "><span class="description">$bcc_batch_size</span><pre>$bcc_batch_size</pre></a></li>
+<li class="property public "><a href="#%24charset" title="$charset :: "><span class="description">$charset</span><pre>$charset</pre></a></li>
+<li class="property public "><a href="#%24crlf" title="$crlf :: "><span class="description">$crlf</span><pre>$crlf</pre></a></li>
+<li class="property public "><a href="#%24mailpath" title="$mailpath :: "><span class="description">$mailpath</span><pre>$mailpath</pre></a></li>
+<li class="property public "><a href="#%24mailtype" title="$mailtype :: "><span class="description">$mailtype</span><pre>$mailtype</pre></a></li>
+<li class="property public "><a href="#%24multipart" title="$multipart :: "><span class="description">$multipart</span><pre>$multipart</pre></a></li>
+<li class="property public "><a href="#%24newline" title="$newline :: "><span class="description">$newline</span><pre>$newline</pre></a></li>
+<li class="property public "><a href="#%24priority" title="$priority :: "><span class="description">$priority</span><pre>$priority</pre></a></li>
+<li class="property public "><a href="#%24protocol" title="$protocol :: "><span class="description">$protocol</span><pre>$protocol</pre></a></li>
+<li class="property public "><a href="#%24send_multipart" title="$send_multipart :: "><span class="description">$send_multipart</span><pre>$send_multipart</pre></a></li>
+<li class="property public "><a href="#%24smtp_crypto" title="$smtp_crypto :: "><span class="description">$smtp_crypto</span><pre>$smtp_crypto</pre></a></li>
+<li class="property public "><a href="#%24smtp_host" title="$smtp_host :: "><span class="description">$smtp_host</span><pre>$smtp_host</pre></a></li>
+<li class="property public "><a href="#%24smtp_pass" title="$smtp_pass :: "><span class="description">$smtp_pass</span><pre>$smtp_pass</pre></a></li>
+<li class="property public "><a href="#%24smtp_port" title="$smtp_port :: "><span class="description">$smtp_port</span><pre>$smtp_port</pre></a></li>
+<li class="property public "><a href="#%24smtp_timeout" title="$smtp_timeout :: "><span class="description">$smtp_timeout</span><pre>$smtp_timeout</pre></a></li>
+<li class="property public "><a href="#%24smtp_user" title="$smtp_user :: "><span class="description">$smtp_user</span><pre>$smtp_user</pre></a></li>
+<li class="property public "><a href="#%24useragent" title="$useragent :: "><span class="description">$useragent</span><pre>$useragent</pre></a></li>
+<li class="property public "><a href="#%24validate" title="$validate :: "><span class="description">$validate</span><pre>$validate</pre></a></li>
+<li class="property public "><a href="#%24wordwrap" title="$wordwrap :: "><span class="description">$wordwrap</span><pre>$wordwrap</pre></a></li>
+<li class="property public "><a href="#%24wrapchars" title="$wrapchars :: "><span class="description">$wrapchars</span><pre>$wrapchars</pre></a></li>
+</ul>
+</div>
+<div class="span8">
+<a name="%5CCI_Email" id="\CI_Email"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/global.html">global</a></li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/CI_Email.html">CI_Email</a>
+</li>
+</ul>
+<div href="../classes/CI_Email.html" class="element class">
+<p class="short_description">CodeIgniter Email Class</p>
+<div class="details">
+<p class="long_description"><p>Permits email to be sent using Mail, Sendmail, or SMTP.</p></p>
+<table class="table table-bordered">
+<tr>
+<th>package</th>
+<td><a href="../packages/CodeIgniter.Libraries.html">CodeIgniter</a></td>
+</tr>
+<tr>
+<th>subpackage</th>
+<td>Libraries</td>
+</tr>
+<tr>
+<th>category</th>
+<td>Libraries</td>
+</tr>
+<tr>
+<th>author</th>
+<td><a href="">ExpressionEngine Dev Team</a></td>
+</tr>
+<tr>
+<th>link</th>
+<td><a href="http://codeigniter.com/user_guide/libraries/email.html">http://codeigniter.com/user_guide/libraries/email.html</a></td>
+</tr>
+</table>
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a name="__construct" id="__construct"></a><div class="element clickable method public __construct" data-toggle="collapse" data-target=".__construct .collapse">
+<h2>Constructor - Sets Email Preferences</h2>
+<pre>__construct($config) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>The constructor can be passed an array of config values</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$config</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="attach" id="attach"></a><div class="element clickable method public attach" data-toggle="collapse" data-target=".attach .collapse">
+<h2>Assign file attachments</h2>
+<pre>attach($filename, $disposition) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$filename</h4>
+<code></code><p>string</p></div>
+<div class="subelement argument">
+<h4>$disposition</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="batch_bcc_send" id="batch_bcc_send"></a><div class="element clickable method public batch_bcc_send" data-toggle="collapse" data-target=".batch_bcc_send .collapse">
+<h2>Batch Bcc Send.</h2>
+<pre>batch_bcc_send() : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Sends groups of BCCs in batches</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="bcc" id="bcc"></a><div class="element clickable method public bcc" data-toggle="collapse" data-target=".bcc .collapse">
+<h2>Set BCC</h2>
+<pre>bcc($bcc, $limit) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$bcc</h4>
+<code></code><p>string</p></div>
+<div class="subelement argument">
+<h4>$limit</h4>
+<code></code><p>string</p></div>
+</div></div>
+</div>
+<a name="cc" id="cc"></a><div class="element clickable method public cc" data-toggle="collapse" data-target=".cc .collapse">
+<h2>Set CC</h2>
+<pre>cc($cc) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$cc</h4>
+<code></code><p>string</p></div>
+</div></div>
+</div>
+<a name="clean_email" id="clean_email"></a><div class="element clickable method public clean_email" data-toggle="collapse" data-target=".clean_email .collapse">
+<h2>Clean Extended Email Address: Joe Smith &lt;joe@smith.com&gt;</h2>
+<pre>clean_email($email) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$email</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="clear" id="clear"></a><div class="element clickable method public clear" data-toggle="collapse" data-target=".clear .collapse">
+<h2>Initialize the Email Data</h2>
+<pre>clear($clear_attachments) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$clear_attachments</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="from" id="from"></a><div class="element clickable method public from" data-toggle="collapse" data-target=".from .collapse">
+<h2>Set FROM</h2>
+<pre>from($from, $name) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$from</h4>
+<code></code><p>string</p></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code></code><p>string</p></div>
+</div></div>
+</div>
+<a name="initialize" id="initialize"></a><div class="element clickable method public initialize" data-toggle="collapse" data-target=".initialize .collapse">
+<h2>Initialize preferences</h2>
+<pre>initialize($config) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$config</h4>
+<code></code><p>array</p></div>
+</div></div>
+</div>
+<a name="message" id="message"></a><div class="element clickable method public message" data-toggle="collapse" data-target=".message .collapse">
+<h2>Set Body</h2>
+<pre>message($body) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$body</h4>
+<code></code><p>string</p></div>
+</div></div>
+</div>
+<a name="print_debugger" id="print_debugger"></a><div class="element clickable method public print_debugger" data-toggle="collapse" data-target=".print_debugger .collapse">
+<h2>Get Debug Message</h2>
+<pre>print_debugger() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="reply_to" id="reply_to"></a><div class="element clickable method public reply_to" data-toggle="collapse" data-target=".reply_to .collapse">
+<h2>Set Reply-to</h2>
+<pre>reply_to($replyto, $name) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$replyto</h4>
+<code></code><p>string</p></div>
+<div class="subelement argument">
+<h4>$name</h4>
+<code></code><p>string</p></div>
+</div></div>
+</div>
+<a name="send" id="send"></a><div class="element clickable method public send" data-toggle="collapse" data-target=".send .collapse">
+<h2>Send Email</h2>
+<pre>send() : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="set_alt_message" id="set_alt_message"></a><div class="element clickable method public set_alt_message" data-toggle="collapse" data-target=".set_alt_message .collapse">
+<h2>Set Multipart Value</h2>
+<pre>set_alt_message($str) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$str</h4>
+<code></code><p>string</p></div>
+</div></div>
+</div>
+<a name="set_crlf" id="set_crlf"></a><div class="element clickable method public set_crlf" data-toggle="collapse" data-target=".set_crlf .collapse">
+<h2>Set CRLF</h2>
+<pre>set_crlf($crlf) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$crlf</h4>
+<code></code><p>string</p></div>
+</div></div>
+</div>
+<a name="set_mailtype" id="set_mailtype"></a><div class="element clickable method public set_mailtype" data-toggle="collapse" data-target=".set_mailtype .collapse">
+<h2>Set Mailtype</h2>
+<pre>set_mailtype($type) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$type</h4>
+<code></code><p>string</p></div>
+</div></div>
+</div>
+<a name="set_newline" id="set_newline"></a><div class="element clickable method public set_newline" data-toggle="collapse" data-target=".set_newline .collapse">
+<h2>Set Newline Character</h2>
+<pre>set_newline($newline) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$newline</h4>
+<code></code><p>string</p></div>
+</div></div>
+</div>
+<a name="set_priority" id="set_priority"></a><div class="element clickable method public set_priority" data-toggle="collapse" data-target=".set_priority .collapse">
+<h2>Set Priority</h2>
+<pre>set_priority($n) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$n</h4>
+<code></code><p>integer</p></div>
+</div></div>
+</div>
+<a name="set_protocol" id="set_protocol"></a><div class="element clickable method public set_protocol" data-toggle="collapse" data-target=".set_protocol .collapse">
+<h2>Set Protocol</h2>
+<pre>set_protocol($protocol) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$protocol</h4>
+<code></code><p>string</p></div>
+</div></div>
+</div>
+<a name="set_wordwrap" id="set_wordwrap"></a><div class="element clickable method public set_wordwrap" data-toggle="collapse" data-target=".set_wordwrap .collapse">
+<h2>Set Wordwrap</h2>
+<pre>set_wordwrap($wordwrap) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$wordwrap</h4>
+<code></code><p>string</p></div>
+</div></div>
+</div>
+<a name="subject" id="subject"></a><div class="element clickable method public subject" data-toggle="collapse" data-target=".subject .collapse">
+<h2>Set Email Subject</h2>
+<pre>subject($subject) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$subject</h4>
+<code></code><p>string</p></div>
+</div></div>
+</div>
+<a name="to" id="to"></a><div class="element clickable method public to" data-toggle="collapse" data-target=".to .collapse">
+<h2>Set Recipients</h2>
+<pre>to($to) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$to</h4>
+<code></code><p>string</p></div>
+</div></div>
+</div>
+<a name="valid_email" id="valid_email"></a><div class="element clickable method public valid_email" data-toggle="collapse" data-target=".valid_email .collapse">
+<h2>Email Validation</h2>
+<pre>valid_email($address) : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$address</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="validate_email" id="validate_email"></a><div class="element clickable method public validate_email" data-toggle="collapse" data-target=".validate_email .collapse">
+<h2>Validate Email Address</h2>
+<pre>validate_email($email) : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$email</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="word_wrap" id="word_wrap"></a><div class="element clickable method public word_wrap" data-toggle="collapse" data-target=".word_wrap .collapse">
+<h2>Word Wrap</h2>
+<pre>word_wrap($str, $charlim) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$str</h4>
+<code></code><p>string</p></div>
+<div class="subelement argument">
+<h4>$charlim</h4>
+<code></code><p>integer</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_build_headers" id="_build_headers"></a><div class="element clickable method protected _build_headers" data-toggle="collapse" data-target="._build_headers .collapse">
+<h2>Build final headers</h2>
+<pre>_build_headers() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>protected</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_build_message" id="_build_message"></a><div class="element clickable method protected _build_message" data-toggle="collapse" data-target="._build_message .collapse">
+<h2>Build Final Body and attachments</h2>
+<pre>_build_message() : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>protected</td>
+</tr></table>
+</div></div>
+</div>
+<a name="_get_alt_message" id="_get_alt_message"></a><div class="element clickable method protected _get_alt_message" data-toggle="collapse" data-target="._get_alt_message .collapse">
+<h2>Build alternative plain text message</h2>
+<pre>_get_alt_message() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>This public function provides the raw message for use
+in plain-text headers of HTML-formatted emails.
+If the user hasn't specified his own alternative message
+it creates one by stripping the HTML</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>protected</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_get_content_type" id="_get_content_type"></a><div class="element clickable method protected _get_content_type" data-toggle="collapse" data-target="._get_content_type .collapse">
+<h2>Get content type (text/html/attachment)</h2>
+<pre>_get_content_type() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>protected</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_get_encoding" id="_get_encoding"></a><div class="element clickable method protected _get_encoding" data-toggle="collapse" data-target="._get_encoding .collapse">
+<h2>Get Mail Encoding</h2>
+<pre>_get_encoding($return) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>protected</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$return</h4>
+<code></code><p>bool</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_get_hostname" id="_get_hostname"></a><div class="element clickable method protected _get_hostname" data-toggle="collapse" data-target="._get_hostname .collapse">
+<h2>Get Hostname</h2>
+<pre>_get_hostname() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>protected</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_get_ip" id="_get_ip"></a><div class="element clickable method protected _get_ip" data-toggle="collapse" data-target="._get_ip .collapse">
+<h2>Get IP</h2>
+<pre>_get_ip() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>protected</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_get_message_id" id="_get_message_id"></a><div class="element clickable method protected _get_message_id" data-toggle="collapse" data-target="._get_message_id .collapse">
+<h2>Get the Message ID</h2>
+<pre>_get_message_id() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>protected</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_get_mime_message" id="_get_mime_message"></a><div class="element clickable method protected _get_mime_message" data-toggle="collapse" data-target="._get_mime_message .collapse">
+<h2>Mime message</h2>
+<pre>_get_mime_message() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>protected</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_get_protocol" id="_get_protocol"></a><div class="element clickable method protected _get_protocol" data-toggle="collapse" data-target="._get_protocol .collapse">
+<h2>Get Mail Protocol</h2>
+<pre>_get_protocol($return) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>protected</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$return</h4>
+<code></code><p>bool</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_get_smtp_data" id="_get_smtp_data"></a><div class="element clickable method protected _get_smtp_data" data-toggle="collapse" data-target="._get_smtp_data .collapse">
+<h2>Get SMTP data</h2>
+<pre>_get_smtp_data() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>protected</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_mime_types" id="_mime_types"></a><div class="element clickable method protected _mime_types" data-toggle="collapse" data-target="._mime_types .collapse">
+<h2>Mime Types</h2>
+<pre>_mime_types($ext) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>protected</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$ext</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_prep_q_encoding" id="_prep_q_encoding"></a><div class="element clickable method protected _prep_q_encoding" data-toggle="collapse" data-target="._prep_q_encoding .collapse">
+<h2>Prep Q Encoding</h2>
+<pre>_prep_q_encoding($str, bool $from) : \str</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Performs "Q Encoding" on a string for use in email headers.  It's related
+but not identical to quoted-printable, so it has its own method</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$str</h4>
+<code></code><p>str</p></div>
+<div class="subelement argument">
+<h4>$from</h4>
+<code>bool</code><p>// set to TRUE for processing From: headers</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>\str</code></div>
+</div></div>
+</div>
+<a name="_prep_quoted_printable" id="_prep_quoted_printable"></a><div class="element clickable method protected _prep_quoted_printable" data-toggle="collapse" data-target="._prep_quoted_printable .collapse">
+<h2>Prep Quoted Printable</h2>
+<pre>_prep_quoted_printable($str, $charlim) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Prepares string for Quoted-Printable Content-Transfer-Encoding
+Refer to RFC 2045 http://www.ietf.org/rfc/rfc2045.txt</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>protected</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$str</h4>
+<code></code><p>string</p></div>
+<div class="subelement argument">
+<h4>$charlim</h4>
+<code></code><p>integer</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_remove_nl_callback" id="_remove_nl_callback"></a><div class="element clickable method protected _remove_nl_callback" data-toggle="collapse" data-target="._remove_nl_callback .collapse">
+<h2>Strip line-breaks via callback</h2>
+<pre>_remove_nl_callback($matches) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>protected</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$matches</h4>
+<code></code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_send_command" id="_send_command"></a><div class="element clickable method protected _send_command" data-toggle="collapse" data-target="._send_command .collapse">
+<h2>Send SMTP command</h2>
+<pre>_send_command($cmd, $data) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>protected</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$cmd</h4>
+<code></code><p>string</p></div>
+<div class="subelement argument">
+<h4>$data</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_send_data" id="_send_data"></a><div class="element clickable method protected _send_data" data-toggle="collapse" data-target="._send_data .collapse">
+<h2>Send SMTP data</h2>
+<pre>_send_data($data) : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>protected</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$data</h4>
+<code></code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="_send_with_mail" id="_send_with_mail"></a><div class="element clickable method protected _send_with_mail" data-toggle="collapse" data-target="._send_with_mail .collapse">
+<h2>Send using mail()</h2>
+<pre>_send_with_mail() : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>protected</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="_send_with_sendmail" id="_send_with_sendmail"></a><div class="element clickable method protected _send_with_sendmail" data-toggle="collapse" data-target="._send_with_sendmail .collapse">
+<h2>Send using Sendmail</h2>
+<pre>_send_with_sendmail() : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>protected</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="_send_with_smtp" id="_send_with_smtp"></a><div class="element clickable method protected _send_with_smtp" data-toggle="collapse" data-target="._send_with_smtp .collapse">
+<h2>Send using SMTP</h2>
+<pre>_send_with_smtp() : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>protected</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="_set_boundaries" id="_set_boundaries"></a><div class="element clickable method protected _set_boundaries" data-toggle="collapse" data-target="._set_boundaries .collapse">
+<h2>Set Message Boundary</h2>
+<pre>_set_boundaries() : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>protected</td>
+</tr></table>
+</div></div>
+</div>
+<a name="_set_date" id="_set_date"></a><div class="element clickable method protected _set_date" data-toggle="collapse" data-target="._set_date .collapse">
+<h2>Set RFC 822 Date</h2>
+<pre>_set_date() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>protected</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_set_error_message" id="_set_error_message"></a><div class="element clickable method protected _set_error_message" data-toggle="collapse" data-target="._set_error_message .collapse">
+<h2>Set Message</h2>
+<pre>_set_error_message($msg, $val) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>protected</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$msg</h4>
+<code></code><p>string</p></div>
+<div class="subelement argument">
+<h4>$val</h4>
+<code></code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_set_header" id="_set_header"></a><div class="element clickable method protected _set_header" data-toggle="collapse" data-target="._set_header .collapse">
+<h2>Add a Header Item</h2>
+<pre>_set_header($header, $value) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>protected</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$header</h4>
+<code></code><p>string</p></div>
+<div class="subelement argument">
+<h4>$value</h4>
+<code></code><p>string</p></div>
+</div></div>
+</div>
+<a name="_smtp_authenticate" id="_smtp_authenticate"></a><div class="element clickable method protected _smtp_authenticate" data-toggle="collapse" data-target="._smtp_authenticate .collapse">
+<h2>SMTP Authenticate</h2>
+<pre>_smtp_authenticate() : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>protected</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="_smtp_connect" id="_smtp_connect"></a><div class="element clickable method protected _smtp_connect" data-toggle="collapse" data-target="._smtp_connect .collapse">
+<h2>SMTP Connect</h2>
+<pre>_smtp_connect() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>protected</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_spool_email" id="_spool_email"></a><div class="element clickable method protected _spool_email" data-toggle="collapse" data-target="._spool_email .collapse">
+<h2>Spool mail to the mail server</h2>
+<pre>_spool_email() : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>protected</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="_str_to_array" id="_str_to_array"></a><div class="element clickable method protected _str_to_array" data-toggle="collapse" data-target="._str_to_array .collapse">
+<h2>Convert a String to an Array</h2>
+<pre>_str_to_array($email) : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>protected</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$email</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>array</code></div>
+</div></div>
+</div>
+<a name="_unwrap_specials" id="_unwrap_specials"></a><div class="element clickable method protected _unwrap_specials" data-toggle="collapse" data-target="._unwrap_specials .collapse">
+<h2>Unwrap special elements</h2>
+<pre>_unwrap_specials() : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>protected</td>
+</tr></table>
+</div></div>
+</div>
+<a name="_write_headers" id="_write_headers"></a><div class="element clickable method protected _write_headers" data-toggle="collapse" data-target="._write_headers .collapse">
+<h2>Write Headers as a string</h2>
+<pre>_write_headers() : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>protected</td>
+</tr></table>
+</div></div>
+</div>
+<h3>
+<i class="icon-custom icon-property"></i> Properties</h3>
+<a name="%24_IP" id="$_IP"> </a><div class="element clickable property public $_IP" data-toggle="collapse" data-target=".$_IP .collapse">
+<h2>$_IP</h2>
+<pre>$_IP </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24_alt_boundary" id="$_alt_boundary"> </a><div class="element clickable property public $_alt_boundary" data-toggle="collapse" data-target=".$_alt_boundary .collapse">
+<h2>$_alt_boundary</h2>
+<pre>$_alt_boundary </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24_atc_boundary" id="$_atc_boundary"> </a><div class="element clickable property public $_atc_boundary" data-toggle="collapse" data-target=".$_atc_boundary .collapse">
+<h2>$_atc_boundary</h2>
+<pre>$_atc_boundary </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24_attach_disp" id="$_attach_disp"> </a><div class="element clickable property public $_attach_disp" data-toggle="collapse" data-target=".$_attach_disp .collapse">
+<h2>$_attach_disp</h2>
+<pre>$_attach_disp </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24_attach_name" id="$_attach_name"> </a><div class="element clickable property public $_attach_name" data-toggle="collapse" data-target=".$_attach_name .collapse">
+<h2>$_attach_name</h2>
+<pre>$_attach_name </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24_attach_type" id="$_attach_type"> </a><div class="element clickable property public $_attach_type" data-toggle="collapse" data-target=".$_attach_type .collapse">
+<h2>$_attach_type</h2>
+<pre>$_attach_type </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24_base_charsets" id="$_base_charsets"> </a><div class="element clickable property public $_base_charsets" data-toggle="collapse" data-target=".$_base_charsets .collapse">
+<h2>$_base_charsets</h2>
+<pre>$_base_charsets </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24_bcc_array" id="$_bcc_array"> </a><div class="element clickable property public $_bcc_array" data-toggle="collapse" data-target=".$_bcc_array .collapse">
+<h2>$_bcc_array</h2>
+<pre>$_bcc_array </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24_bit_depths" id="$_bit_depths"> </a><div class="element clickable property public $_bit_depths" data-toggle="collapse" data-target=".$_bit_depths .collapse">
+<h2>$_bit_depths</h2>
+<pre>$_bit_depths </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24_body" id="$_body"> </a><div class="element clickable property public $_body" data-toggle="collapse" data-target=".$_body .collapse">
+<h2>$_body</h2>
+<pre>$_body </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24_cc_array" id="$_cc_array"> </a><div class="element clickable property public $_cc_array" data-toggle="collapse" data-target=".$_cc_array .collapse">
+<h2>$_cc_array</h2>
+<pre>$_cc_array </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24_debug_msg" id="$_debug_msg"> </a><div class="element clickable property public $_debug_msg" data-toggle="collapse" data-target=".$_debug_msg .collapse">
+<h2>$_debug_msg</h2>
+<pre>$_debug_msg </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24_encoding" id="$_encoding"> </a><div class="element clickable property public $_encoding" data-toggle="collapse" data-target=".$_encoding .collapse">
+<h2>$_encoding</h2>
+<pre>$_encoding </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24_finalbody" id="$_finalbody"> </a><div class="element clickable property public $_finalbody" data-toggle="collapse" data-target=".$_finalbody .collapse">
+<h2>$_finalbody</h2>
+<pre>$_finalbody </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24_header_str" id="$_header_str"> </a><div class="element clickable property public $_header_str" data-toggle="collapse" data-target=".$_header_str .collapse">
+<h2>$_header_str</h2>
+<pre>$_header_str </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24_headers" id="$_headers"> </a><div class="element clickable property public $_headers" data-toggle="collapse" data-target=".$_headers .collapse">
+<h2>$_headers</h2>
+<pre>$_headers </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24_priorities" id="$_priorities"> </a><div class="element clickable property public $_priorities" data-toggle="collapse" data-target=".$_priorities .collapse">
+<h2>$_priorities</h2>
+<pre>$_priorities </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24_protocols" id="$_protocols"> </a><div class="element clickable property public $_protocols" data-toggle="collapse" data-target=".$_protocols .collapse">
+<h2>$_protocols</h2>
+<pre>$_protocols </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24_recipients" id="$_recipients"> </a><div class="element clickable property public $_recipients" data-toggle="collapse" data-target=".$_recipients .collapse">
+<h2>$_recipients</h2>
+<pre>$_recipients </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24_replyto_flag" id="$_replyto_flag"> </a><div class="element clickable property public $_replyto_flag" data-toggle="collapse" data-target=".$_replyto_flag .collapse">
+<h2>$_replyto_flag</h2>
+<pre>$_replyto_flag </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24_safe_mode" id="$_safe_mode"> </a><div class="element clickable property public $_safe_mode" data-toggle="collapse" data-target=".$_safe_mode .collapse">
+<h2>$_safe_mode</h2>
+<pre>$_safe_mode </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24_smtp_auth" id="$_smtp_auth"> </a><div class="element clickable property public $_smtp_auth" data-toggle="collapse" data-target=".$_smtp_auth .collapse">
+<h2>$_smtp_auth</h2>
+<pre>$_smtp_auth </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24_smtp_connect" id="$_smtp_connect"> </a><div class="element clickable property public $_smtp_connect" data-toggle="collapse" data-target=".$_smtp_connect .collapse">
+<h2>$_smtp_connect</h2>
+<pre>$_smtp_connect </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24_subject" id="$_subject"> </a><div class="element clickable property public $_subject" data-toggle="collapse" data-target=".$_subject .collapse">
+<h2>$_subject</h2>
+<pre>$_subject </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24alt_message" id="$alt_message"> </a><div class="element clickable property public $alt_message" data-toggle="collapse" data-target=".$alt_message .collapse">
+<h2>$alt_message</h2>
+<pre>$alt_message </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24bcc_batch_mode" id="$bcc_batch_mode"> </a><div class="element clickable property public $bcc_batch_mode" data-toggle="collapse" data-target=".$bcc_batch_mode .collapse">
+<h2>$bcc_batch_mode</h2>
+<pre>$bcc_batch_mode </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24bcc_batch_size" id="$bcc_batch_size"> </a><div class="element clickable property public $bcc_batch_size" data-toggle="collapse" data-target=".$bcc_batch_size .collapse">
+<h2>$bcc_batch_size</h2>
+<pre>$bcc_batch_size </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24charset" id="$charset"> </a><div class="element clickable property public $charset" data-toggle="collapse" data-target=".$charset .collapse">
+<h2>$charset</h2>
+<pre>$charset </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24crlf" id="$crlf"> </a><div class="element clickable property public $crlf" data-toggle="collapse" data-target=".$crlf .collapse">
+<h2>$crlf</h2>
+<pre>$crlf </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24mailpath" id="$mailpath"> </a><div class="element clickable property public $mailpath" data-toggle="collapse" data-target=".$mailpath .collapse">
+<h2>$mailpath</h2>
+<pre>$mailpath </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24mailtype" id="$mailtype"> </a><div class="element clickable property public $mailtype" data-toggle="collapse" data-target=".$mailtype .collapse">
+<h2>$mailtype</h2>
+<pre>$mailtype </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24multipart" id="$multipart"> </a><div class="element clickable property public $multipart" data-toggle="collapse" data-target=".$multipart .collapse">
+<h2>$multipart</h2>
+<pre>$multipart </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24newline" id="$newline"> </a><div class="element clickable property public $newline" data-toggle="collapse" data-target=".$newline .collapse">
+<h2>$newline</h2>
+<pre>$newline </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24priority" id="$priority"> </a><div class="element clickable property public $priority" data-toggle="collapse" data-target=".$priority .collapse">
+<h2>$priority</h2>
+<pre>$priority </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24protocol" id="$protocol"> </a><div class="element clickable property public $protocol" data-toggle="collapse" data-target=".$protocol .collapse">
+<h2>$protocol</h2>
+<pre>$protocol </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24send_multipart" id="$send_multipart"> </a><div class="element clickable property public $send_multipart" data-toggle="collapse" data-target=".$send_multipart .collapse">
+<h2>$send_multipart</h2>
+<pre>$send_multipart </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24smtp_crypto" id="$smtp_crypto"> </a><div class="element clickable property public $smtp_crypto" data-toggle="collapse" data-target=".$smtp_crypto .collapse">
+<h2>$smtp_crypto</h2>
+<pre>$smtp_crypto </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24smtp_host" id="$smtp_host"> </a><div class="element clickable property public $smtp_host" data-toggle="collapse" data-target=".$smtp_host .collapse">
+<h2>$smtp_host</h2>
+<pre>$smtp_host </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24smtp_pass" id="$smtp_pass"> </a><div class="element clickable property public $smtp_pass" data-toggle="collapse" data-target=".$smtp_pass .collapse">
+<h2>$smtp_pass</h2>
+<pre>$smtp_pass </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24smtp_port" id="$smtp_port"> </a><div class="element clickable property public $smtp_port" data-toggle="collapse" data-target=".$smtp_port .collapse">
+<h2>$smtp_port</h2>
+<pre>$smtp_port </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24smtp_timeout" id="$smtp_timeout"> </a><div class="element clickable property public $smtp_timeout" data-toggle="collapse" data-target=".$smtp_timeout .collapse">
+<h2>$smtp_timeout</h2>
+<pre>$smtp_timeout </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24smtp_user" id="$smtp_user"> </a><div class="element clickable property public $smtp_user" data-toggle="collapse" data-target=".$smtp_user .collapse">
+<h2>$smtp_user</h2>
+<pre>$smtp_user </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24useragent" id="$useragent"> </a><div class="element clickable property public $useragent" data-toggle="collapse" data-target=".$useragent .collapse">
+<h2>$useragent</h2>
+<pre>$useragent </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24validate" id="$validate"> </a><div class="element clickable property public $validate" data-toggle="collapse" data-target=".$validate .collapse">
+<h2>$validate</h2>
+<pre>$validate </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24wordwrap" id="$wordwrap"> </a><div class="element clickable property public $wordwrap" data-toggle="collapse" data-target=".$wordwrap .collapse">
+<h2>$wordwrap</h2>
+<pre>$wordwrap </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24wrapchars" id="$wrapchars"> </a><div class="element clickable property public $wrapchars" data-toggle="collapse" data-target=".$wrapchars .collapse">
+<h2>$wrapchars</h2>
+<pre>$wrapchars </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a8</a> and<br>
+            generated on 2012-07-27T12:29:22+10:00.<br></footer></div>
+</div>
+</body>
+</html>

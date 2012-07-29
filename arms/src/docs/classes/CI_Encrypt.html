@@ -1,0 +1,573 @@
+<!DOCTYPE html><html xmlns:date="http://exslt.org/dates-and-times" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>phpDocumentor » \CI_Encrypt</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../css/template.css" rel="stylesheet" media="all">
+<script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../js/bootstrap.js" type="text/javascript"></script><script src="../js/template.js" type="text/javascript"></script><script src="../js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../img/favicon.ico">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">phpDocumentor</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Packages</a></li>
+<li><a href="../packages/CodeIgniter.html"><i class="icon-folder-open"></i> CodeIgniter</a></li>
+<li><a href="../packages/Default.html"><i class="icon-folder-open"></i> Default</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">1170</span></a></li>
+<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul><li>todo 
+                <span class="label label-info">1</span>
+</li></ul></a></li>
+<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">0</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods</li>
+<li class="method public "><a href="#__construct" title="__construct :: Constructor"><span class="description">Constructor</span><pre>__construct()</pre></a></li>
+<li class="method public "><a href="#_add_cipher_noise" title="_add_cipher_noise :: Adds permuted noise to the IV + encrypted data to protect
+against Man-in-the-middle attacks on CBC mode ciphers
+http://www.ciphersbyritter.com/GLOSSARY.HTM#IV"><span class="description">Adds permuted noise to the IV + encrypted data to protect
+against Man-in-the-middle attacks on CBC mode ciphers
+http://www.ciphersbyritter.com/GLOSSARY.HTM#IV</span><pre>_add_cipher_noise()</pre></a></li>
+<li class="method public "><a href="#_get_cipher" title="_get_cipher :: Get Mcrypt cipher Value"><span class="description">Get Mcrypt cipher Value</span><pre>_get_cipher()</pre></a></li>
+<li class="method public "><a href="#_get_mode" title="_get_mode :: Get Mcrypt Mode Value"><span class="description">Get Mcrypt Mode Value</span><pre>_get_mode()</pre></a></li>
+<li class="method public "><a href="#_remove_cipher_noise" title="_remove_cipher_noise :: Removes permuted noise from the IV + encrypted data, reversing
+_add_cipher_noise()"><span class="description">Removes permuted noise from the IV + encrypted data, reversing
+_add_cipher_noise()</span><pre>_remove_cipher_noise()</pre></a></li>
+<li class="method public "><a href="#_xor_decode" title="_xor_decode :: XOR Decode"><span class="description">XOR Decode</span><pre>_xor_decode()</pre></a></li>
+<li class="method public "><a href="#_xor_encode" title="_xor_encode :: XOR Encode"><span class="description">XOR Encode</span><pre>_xor_encode()</pre></a></li>
+<li class="method public "><a href="#_xor_merge" title="_xor_merge :: XOR key + string Combiner"><span class="description">XOR key + string Combiner</span><pre>_xor_merge()</pre></a></li>
+<li class="method public "><a href="#decode" title="decode :: Decode"><span class="description">Decode</span><pre>decode()</pre></a></li>
+<li class="method public "><a href="#encode" title="encode :: Encode"><span class="description">Encode</span><pre>encode()</pre></a></li>
+<li class="method public "><a href="#encode_from_legacy" title="encode_from_legacy :: Encode from Legacy"><span class="description">Encode from Legacy</span><pre>encode_from_legacy()</pre></a></li>
+<li class="method public "><a href="#get_key" title="get_key :: Fetch the encryption key"><span class="description">Fetch the encryption key</span><pre>get_key()</pre></a></li>
+<li class="method public "><a href="#hash" title="hash :: Hash encode a string"><span class="description">Hash encode a string</span><pre>hash()</pre></a></li>
+<li class="method public "><a href="#mcrypt_decode" title="mcrypt_decode :: Decrypt using Mcrypt"><span class="description">Decrypt using Mcrypt</span><pre>mcrypt_decode()</pre></a></li>
+<li class="method public "><a href="#mcrypt_encode" title="mcrypt_encode :: Encrypt using Mcrypt"><span class="description">Encrypt using Mcrypt</span><pre>mcrypt_encode()</pre></a></li>
+<li class="method public "><a href="#set_cipher" title="set_cipher :: Set the Mcrypt Cipher"><span class="description">Set the Mcrypt Cipher</span><pre>set_cipher()</pre></a></li>
+<li class="method public "><a href="#set_hash" title="set_hash :: Set the Hash type"><span class="description">Set the Hash type</span><pre>set_hash()</pre></a></li>
+<li class="method public "><a href="#set_key" title="set_key :: Set the encryption key"><span class="description">Set the encryption key</span><pre>set_key()</pre></a></li>
+<li class="method public "><a href="#set_mode" title="set_mode :: Set the Mcrypt Mode"><span class="description">Set the Mcrypt Mode</span><pre>set_mode()</pre></a></li>
+<li class="method public "><a href="#sha1" title="sha1 :: Generate an SHA1 Hash"><span class="description">Generate an SHA1 Hash</span><pre>sha1()</pre></a></li>
+<li class="nav-header">
+<i class="icon-custom icon-property"></i> Properties</li>
+<li class="property public "><a href="#%24CI" title="$CI :: "><span class="description">$CI</span><pre>$CI</pre></a></li>
+<li class="property public "><a href="#%24_hash_type" title="$_hash_type :: "><span class="description">$_hash_type</span><pre>$_hash_type</pre></a></li>
+<li class="property public "><a href="#%24_mcrypt_cipher" title="$_mcrypt_cipher :: "><span class="description">$_mcrypt_cipher</span><pre>$_mcrypt_cipher</pre></a></li>
+<li class="property public "><a href="#%24_mcrypt_exists" title="$_mcrypt_exists :: "><span class="description">$_mcrypt_exists</span><pre>$_mcrypt_exists</pre></a></li>
+<li class="property public "><a href="#%24_mcrypt_mode" title="$_mcrypt_mode :: "><span class="description">$_mcrypt_mode</span><pre>$_mcrypt_mode</pre></a></li>
+<li class="property public "><a href="#%24encryption_key" title="$encryption_key :: "><span class="description">$encryption_key</span><pre>$encryption_key</pre></a></li>
+</ul>
+</div>
+<div class="span8">
+<a name="%5CCI_Encrypt" id="\CI_Encrypt"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/global.html">global</a></li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/CI_Encrypt.html">CI_Encrypt</a>
+</li>
+</ul>
+<div href="../classes/CI_Encrypt.html" class="element class">
+<p class="short_description">CodeIgniter Encryption Class</p>
+<div class="details">
+<p class="long_description"><p>Provides two-way keyed encoding using XOR Hashing and Mcrypt</p></p>
+<table class="table table-bordered">
+<tr>
+<th>package</th>
+<td><a href="../packages/CodeIgniter.Libraries.html">CodeIgniter</a></td>
+</tr>
+<tr>
+<th>subpackage</th>
+<td>Libraries</td>
+</tr>
+<tr>
+<th>category</th>
+<td>Libraries</td>
+</tr>
+<tr>
+<th>author</th>
+<td><a href="">ExpressionEngine Dev Team</a></td>
+</tr>
+<tr>
+<th>link</th>
+<td><a href="http://codeigniter.com/user_guide/libraries/encryption.html">http://codeigniter.com/user_guide/libraries/encryption.html</a></td>
+</tr>
+</table>
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a name="__construct" id="__construct"></a><div class="element clickable method public __construct" data-toggle="collapse" data-target=".__construct .collapse">
+<h2>Constructor</h2>
+<pre>__construct() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"><p>Simply determines whether the mcrypt library exists.</p></p></div></div>
+</div>
+<a name="_add_cipher_noise" id="_add_cipher_noise"></a><div class="element clickable method public _add_cipher_noise" data-toggle="collapse" data-target="._add_cipher_noise .collapse">
+<h2>Adds permuted noise to the IV + encrypted data to protect
+against Man-in-the-middle attacks on CBC mode ciphers
+http://www.ciphersbyritter.com/GLOSSARY.HTM#IV</h2>
+<pre>_add_cipher_noise($data, $key) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Function description</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$data</h4>
+<code></code><p>string</p></div>
+<div class="subelement argument">
+<h4>$key</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_get_cipher" id="_get_cipher"></a><div class="element clickable method public _get_cipher" data-toggle="collapse" data-target="._get_cipher .collapse">
+<h2>Get Mcrypt cipher Value</h2>
+<pre>_get_cipher() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_get_mode" id="_get_mode"></a><div class="element clickable method public _get_mode" data-toggle="collapse" data-target="._get_mode .collapse">
+<h2>Get Mcrypt Mode Value</h2>
+<pre>_get_mode() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_remove_cipher_noise" id="_remove_cipher_noise"></a><div class="element clickable method public _remove_cipher_noise" data-toggle="collapse" data-target="._remove_cipher_noise .collapse">
+<h2>Removes permuted noise from the IV + encrypted data, reversing
+_add_cipher_noise()</h2>
+<pre>_remove_cipher_noise($data, $key) : \type</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Function description</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$data</h4>
+<code></code><p>type</p></div>
+<div class="subelement argument">
+<h4>$key</h4>
+<code></code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>\type</code></div>
+</div></div>
+</div>
+<a name="_xor_decode" id="_xor_decode"></a><div class="element clickable method public _xor_decode" data-toggle="collapse" data-target="._xor_decode .collapse">
+<h2>XOR Decode</h2>
+<pre>_xor_decode($string, $key) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Takes an encoded string and key as input and generates the
+plain-text original message</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$string</h4>
+<code></code><p>string</p></div>
+<div class="subelement argument">
+<h4>$key</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_xor_encode" id="_xor_encode"></a><div class="element clickable method public _xor_encode" data-toggle="collapse" data-target="._xor_encode .collapse">
+<h2>XOR Encode</h2>
+<pre>_xor_encode($string, $key) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Takes a plain-text string and key as input and generates an
+encoded bit-string using XOR</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$string</h4>
+<code></code><p>string</p></div>
+<div class="subelement argument">
+<h4>$key</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_xor_merge" id="_xor_merge"></a><div class="element clickable method public _xor_merge" data-toggle="collapse" data-target="._xor_merge .collapse">
+<h2>XOR key + string Combiner</h2>
+<pre>_xor_merge($string, $key) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Takes a string and key as input and computes the difference using XOR</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$string</h4>
+<code></code><p>string</p></div>
+<div class="subelement argument">
+<h4>$key</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="decode" id="decode"></a><div class="element clickable method public decode" data-toggle="collapse" data-target=".decode .collapse">
+<h2>Decode</h2>
+<pre>decode($string, $key) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Reverses the above process</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$string</h4>
+<code></code><p>string</p></div>
+<div class="subelement argument">
+<h4>$key</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="encode" id="encode"></a><div class="element clickable method public encode" data-toggle="collapse" data-target=".encode .collapse">
+<h2>Encode</h2>
+<pre>encode(string $string, string $key) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Encodes the message string using bitwise XOR encoding.
+The key is combined with a random hash, and then it
+too gets converted using XOR. The whole thing is then run
+through mcrypt (if supported) using the randomized key.
+The end result is a double-encrypted message string
+that is randomized with each call to this function,
+even if the supplied message and key are the same.</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$string</h4>
+<code>string</code><p>the string to encode</p></div>
+<div class="subelement argument">
+<h4>$key</h4>
+<code>string</code><p>the key</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="encode_from_legacy" id="encode_from_legacy"></a><div class="element clickable method public encode_from_legacy" data-toggle="collapse" data-target=".encode_from_legacy .collapse">
+<h2>Encode from Legacy</h2>
+<pre>encode_from_legacy($string, int $legacy_mode, $key) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Takes an encoded string from the original Encryption class algorithms and
+returns a newly encoded string using the improved method added in 2.0.0
+This allows for backwards compatibility and a method to transition to the
+new encryption algorithms.</p>
+
+<p>For more details, see http://codeigniter.com/user_guide/installation/upgrade_200.html#encryption</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$string</h4>
+<code></code><p>string</p></div>
+<div class="subelement argument">
+<h4>$legacy_mode</h4>
+<code>int</code><p>(mcrypt mode constant)</p>
+</div>
+<div class="subelement argument">
+<h4>$key</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="get_key" id="get_key"></a><div class="element clickable method public get_key" data-toggle="collapse" data-target=".get_key .collapse">
+<h2>Fetch the encryption key</h2>
+<pre>get_key($key) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Returns it as MD5 in order to have an exact-length 128 bit key.
+Mcrypt is sensitive to keys that are not the correct length</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$key</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="hash" id="hash"></a><div class="element clickable method public hash" data-toggle="collapse" data-target=".hash .collapse">
+<h2>Hash encode a string</h2>
+<pre>hash($str) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$str</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="mcrypt_decode" id="mcrypt_decode"></a><div class="element clickable method public mcrypt_decode" data-toggle="collapse" data-target=".mcrypt_decode .collapse">
+<h2>Decrypt using Mcrypt</h2>
+<pre>mcrypt_decode($data, $key) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$data</h4>
+<code></code><p>string</p></div>
+<div class="subelement argument">
+<h4>$key</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="mcrypt_encode" id="mcrypt_encode"></a><div class="element clickable method public mcrypt_encode" data-toggle="collapse" data-target=".mcrypt_encode .collapse">
+<h2>Encrypt using Mcrypt</h2>
+<pre>mcrypt_encode($data, $key) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$data</h4>
+<code></code><p>string</p></div>
+<div class="subelement argument">
+<h4>$key</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="set_cipher" id="set_cipher"></a><div class="element clickable method public set_cipher" data-toggle="collapse" data-target=".set_cipher .collapse">
+<h2>Set the Mcrypt Cipher</h2>
+<pre>set_cipher($cipher) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$cipher</h4>
+<code></code><p>constant</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="set_hash" id="set_hash"></a><div class="element clickable method public set_hash" data-toggle="collapse" data-target=".set_hash .collapse">
+<h2>Set the Hash type</h2>
+<pre>set_hash($type) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$type</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="set_key" id="set_key"></a><div class="element clickable method public set_key" data-toggle="collapse" data-target=".set_key .collapse">
+<h2>Set the encryption key</h2>
+<pre>set_key($key) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$key</h4>
+<code></code><p>string</p></div>
+</div></div>
+</div>
+<a name="set_mode" id="set_mode"></a><div class="element clickable method public set_mode" data-toggle="collapse" data-target=".set_mode .collapse">
+<h2>Set the Mcrypt Mode</h2>
+<pre>set_mode($mode) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$mode</h4>
+<code></code><p>constant</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="sha1" id="sha1"></a><div class="element clickable method public sha1" data-toggle="collapse" data-target=".sha1 .collapse">
+<h2>Generate an SHA1 Hash</h2>
+<pre>sha1($str) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$str</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<h3>
+<i class="icon-custom icon-property"></i> Properties</h3>
+<a name="%24CI" id="$CI"> </a><div class="element clickable property public $CI" data-toggle="collapse" data-target=".$CI .collapse">
+<h2>$CI</h2>
+<pre>$CI </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24_hash_type" id="$_hash_type"> </a><div class="element clickable property public $_hash_type" data-toggle="collapse" data-target=".$_hash_type .collapse">
+<h2>$_hash_type</h2>
+<pre>$_hash_type </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24_mcrypt_cipher" id="$_mcrypt_cipher"> </a><div class="element clickable property public $_mcrypt_cipher" data-toggle="collapse" data-target=".$_mcrypt_cipher .collapse">
+<h2>$_mcrypt_cipher</h2>
+<pre>$_mcrypt_cipher </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24_mcrypt_exists" id="$_mcrypt_exists"> </a><div class="element clickable property public $_mcrypt_exists" data-toggle="collapse" data-target=".$_mcrypt_exists .collapse">
+<h2>$_mcrypt_exists</h2>
+<pre>$_mcrypt_exists </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24_mcrypt_mode" id="$_mcrypt_mode"> </a><div class="element clickable property public $_mcrypt_mode" data-toggle="collapse" data-target=".$_mcrypt_mode .collapse">
+<h2>$_mcrypt_mode</h2>
+<pre>$_mcrypt_mode </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24encryption_key" id="$encryption_key"> </a><div class="element clickable property public $encryption_key" data-toggle="collapse" data-target=".$encryption_key .collapse">
+<h2>$encryption_key</h2>
+<pre>$encryption_key </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a8</a> and<br>
+            generated on 2012-07-27T12:29:21+10:00.<br></footer></div>
+</div>
+</body>
+</html>

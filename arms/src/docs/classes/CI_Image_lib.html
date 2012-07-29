@@ -1,0 +1,880 @@
+<!DOCTYPE html><html xmlns:date="http://exslt.org/dates-and-times" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>phpDocumentor » \CI_Image_lib</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../css/template.css" rel="stylesheet" media="all">
+<script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../js/bootstrap.js" type="text/javascript"></script><script src="../js/template.js" type="text/javascript"></script><script src="../js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../img/favicon.ico">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">phpDocumentor</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Packages</a></li>
+<li><a href="../packages/CodeIgniter.html"><i class="icon-folder-open"></i> CodeIgniter</a></li>
+<li><a href="../packages/Default.html"><i class="icon-folder-open"></i> Default</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">1170</span></a></li>
+<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul><li>todo 
+                <span class="label label-info">1</span>
+</li></ul></a></li>
+<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">0</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods</li>
+<li class="method public "><a href="#__construct" title="__construct :: Constructor"><span class="description">Constructor</span><pre>__construct()</pre></a></li>
+<li class="method public "><a href="#clear" title="clear :: Initialize image properties"><span class="description">Initialize image properties</span><pre>clear()</pre></a></li>
+<li class="method public "><a href="#crop" title="crop :: Image Crop"><span class="description">Image Crop</span><pre>crop()</pre></a></li>
+<li class="method public "><a href="#display_errors" title="display_errors :: Show error messages"><span class="description">Show error messages</span><pre>display_errors()</pre></a></li>
+<li class="method public "><a href="#explode_name" title="explode_name :: Explode source_image"><span class="description">Explode source_image</span><pre>explode_name()</pre></a></li>
+<li class="method public "><a href="#gd_loaded" title="gd_loaded :: Is GD Installed?"><span class="description">Is GD Installed?</span><pre>gd_loaded()</pre></a></li>
+<li class="method public "><a href="#gd_version" title="gd_version :: Get GD version"><span class="description">Get GD version</span><pre>gd_version()</pre></a></li>
+<li class="method public "><a href="#get_image_properties" title="get_image_properties :: Get image properties"><span class="description">Get image properties</span><pre>get_image_properties()</pre></a></li>
+<li class="method public "><a href="#image_create_gd" title="image_create_gd :: Create Image - GD"><span class="description">Create Image - GD</span><pre>image_create_gd()</pre></a></li>
+<li class="method public "><a href="#image_display_gd" title="image_display_gd :: Dynamically outputs an image"><span class="description">Dynamically outputs an image</span><pre>image_display_gd()</pre></a></li>
+<li class="method public "><a href="#image_mirror_gd" title="image_mirror_gd :: Create Mirror Image using GD"><span class="description">Create Mirror Image using GD</span><pre>image_mirror_gd()</pre></a></li>
+<li class="method public "><a href="#image_process_gd" title="image_process_gd :: Image Process Using GD/GD2"><span class="description">Image Process Using GD/GD2</span><pre>image_process_gd()</pre></a></li>
+<li class="method public "><a href="#image_process_imagemagick" title="image_process_imagemagick :: Image Process Using ImageMagick"><span class="description">Image Process Using ImageMagick</span><pre>image_process_imagemagick()</pre></a></li>
+<li class="method public "><a href="#image_process_netpbm" title="image_process_netpbm :: Image Process Using NetPBM"><span class="description">Image Process Using NetPBM</span><pre>image_process_netpbm()</pre></a></li>
+<li class="method public "><a href="#image_reproportion" title="image_reproportion :: Re-proportion Image Width/Height"><span class="description">Re-proportion Image Width/Height</span><pre>image_reproportion()</pre></a></li>
+<li class="method public "><a href="#image_rotate_gd" title="image_rotate_gd :: Image Rotate Using GD"><span class="description">Image Rotate Using GD</span><pre>image_rotate_gd()</pre></a></li>
+<li class="method public "><a href="#image_save_gd" title="image_save_gd :: Write image file to disk - GD"><span class="description">Write image file to disk - GD</span><pre>image_save_gd()</pre></a></li>
+<li class="method public "><a href="#initialize" title="initialize :: initialize image preferences"><span class="description">initialize image preferences</span><pre>initialize()</pre></a></li>
+<li class="method public "><a href="#overlay_watermark" title="overlay_watermark :: Watermark - Graphic Version"><span class="description">Watermark - Graphic Version</span><pre>overlay_watermark()</pre></a></li>
+<li class="method public "><a href="#resize" title="resize :: Image Resize"><span class="description">Image Resize</span><pre>resize()</pre></a></li>
+<li class="method public "><a href="#rotate" title="rotate :: Image Rotate"><span class="description">Image Rotate</span><pre>rotate()</pre></a></li>
+<li class="method public "><a href="#set_error" title="set_error :: Set error message"><span class="description">Set error message</span><pre>set_error()</pre></a></li>
+<li class="method public "><a href="#size_calculator" title="size_calculator :: Size calculator"><span class="description">Size calculator</span><pre>size_calculator()</pre></a></li>
+<li class="method public "><a href="#text_watermark" title="text_watermark :: Watermark - Text Version"><span class="description">Watermark - Text Version</span><pre>text_watermark()</pre></a></li>
+<li class="method public "><a href="#watermark" title="watermark :: Image Watermark"><span class="description">Image Watermark</span><pre>watermark()</pre></a></li>
+<li class="nav-header">
+<i class="icon-custom icon-property"></i> Properties</li>
+<li class="property public "><a href="#%24copy_fnc" title="$copy_fnc :: "><span class="description">$copy_fnc</span><pre>$copy_fnc</pre></a></li>
+<li class="property public "><a href="#%24create_fnc" title="$create_fnc :: "><span class="description">$create_fnc</span><pre>$create_fnc</pre></a></li>
+<li class="property public "><a href="#%24create_thumb" title="$create_thumb :: "><span class="description">$create_thumb</span><pre>$create_thumb</pre></a></li>
+<li class="property public "><a href="#%24dest_folder" title="$dest_folder :: "><span class="description">$dest_folder</span><pre>$dest_folder</pre></a></li>
+<li class="property public "><a href="#%24dynamic_output" title="$dynamic_output :: "><span class="description">$dynamic_output</span><pre>$dynamic_output</pre></a></li>
+<li class="property public "><a href="#%24error_msg" title="$error_msg :: "><span class="description">$error_msg</span><pre>$error_msg</pre></a></li>
+<li class="property public "><a href="#%24full_dst_path" title="$full_dst_path :: "><span class="description">$full_dst_path</span><pre>$full_dst_path</pre></a></li>
+<li class="property public "><a href="#%24full_src_path" title="$full_src_path :: "><span class="description">$full_src_path</span><pre>$full_src_path</pre></a></li>
+<li class="property public "><a href="#%24height" title="$height :: "><span class="description">$height</span><pre>$height</pre></a></li>
+<li class="property public "><a href="#%24image_library" title="$image_library :: "><span class="description">$image_library</span><pre>$image_library</pre></a></li>
+<li class="property public "><a href="#%24image_type" title="$image_type :: "><span class="description">$image_type</span><pre>$image_type</pre></a></li>
+<li class="property public "><a href="#%24library_path" title="$library_path :: "><span class="description">$library_path</span><pre>$library_path</pre></a></li>
+<li class="property public "><a href="#%24maintain_ratio" title="$maintain_ratio :: "><span class="description">$maintain_ratio</span><pre>$maintain_ratio</pre></a></li>
+<li class="property public "><a href="#%24master_dim" title="$master_dim :: "><span class="description">$master_dim</span><pre>$master_dim</pre></a></li>
+<li class="property public "><a href="#%24mime_type" title="$mime_type :: "><span class="description">$mime_type</span><pre>$mime_type</pre></a></li>
+<li class="property public "><a href="#%24new_image" title="$new_image :: "><span class="description">$new_image</span><pre>$new_image</pre></a></li>
+<li class="property public "><a href="#%24orig_height" title="$orig_height :: "><span class="description">$orig_height</span><pre>$orig_height</pre></a></li>
+<li class="property public "><a href="#%24orig_width" title="$orig_width :: "><span class="description">$orig_width</span><pre>$orig_width</pre></a></li>
+<li class="property public "><a href="#%24quality" title="$quality :: "><span class="description">$quality</span><pre>$quality</pre></a></li>
+<li class="property public "><a href="#%24rotation_angle" title="$rotation_angle :: "><span class="description">$rotation_angle</span><pre>$rotation_angle</pre></a></li>
+<li class="property public "><a href="#%24size_str" title="$size_str :: "><span class="description">$size_str</span><pre>$size_str</pre></a></li>
+<li class="property public "><a href="#%24source_folder" title="$source_folder :: "><span class="description">$source_folder</span><pre>$source_folder</pre></a></li>
+<li class="property public "><a href="#%24source_image" title="$source_image :: "><span class="description">$source_image</span><pre>$source_image</pre></a></li>
+<li class="property public "><a href="#%24thumb_marker" title="$thumb_marker :: "><span class="description">$thumb_marker</span><pre>$thumb_marker</pre></a></li>
+<li class="property public "><a href="#%24width" title="$width :: "><span class="description">$width</span><pre>$width</pre></a></li>
+<li class="property public "><a href="#%24wm_font_color" title="$wm_font_color :: "><span class="description">$wm_font_color</span><pre>$wm_font_color</pre></a></li>
+<li class="property public "><a href="#%24wm_font_path" title="$wm_font_path :: "><span class="description">$wm_font_path</span><pre>$wm_font_path</pre></a></li>
+<li class="property public "><a href="#%24wm_font_size" title="$wm_font_size :: "><span class="description">$wm_font_size</span><pre>$wm_font_size</pre></a></li>
+<li class="property public "><a href="#%24wm_hor_alignment" title="$wm_hor_alignment :: "><span class="description">$wm_hor_alignment</span><pre>$wm_hor_alignment</pre></a></li>
+<li class="property public "><a href="#%24wm_hor_offset" title="$wm_hor_offset :: "><span class="description">$wm_hor_offset</span><pre>$wm_hor_offset</pre></a></li>
+<li class="property public "><a href="#%24wm_opacity" title="$wm_opacity :: "><span class="description">$wm_opacity</span><pre>$wm_opacity</pre></a></li>
+<li class="property public "><a href="#%24wm_overlay_path" title="$wm_overlay_path :: "><span class="description">$wm_overlay_path</span><pre>$wm_overlay_path</pre></a></li>
+<li class="property public "><a href="#%24wm_padding" title="$wm_padding :: "><span class="description">$wm_padding</span><pre>$wm_padding</pre></a></li>
+<li class="property public "><a href="#%24wm_shadow_color" title="$wm_shadow_color :: "><span class="description">$wm_shadow_color</span><pre>$wm_shadow_color</pre></a></li>
+<li class="property public "><a href="#%24wm_shadow_distance" title="$wm_shadow_distance :: "><span class="description">$wm_shadow_distance</span><pre>$wm_shadow_distance</pre></a></li>
+<li class="property public "><a href="#%24wm_text" title="$wm_text :: "><span class="description">$wm_text</span><pre>$wm_text</pre></a></li>
+<li class="property public "><a href="#%24wm_type" title="$wm_type :: "><span class="description">$wm_type</span><pre>$wm_type</pre></a></li>
+<li class="property public "><a href="#%24wm_use_drop_shadow" title="$wm_use_drop_shadow :: "><span class="description">$wm_use_drop_shadow</span><pre>$wm_use_drop_shadow</pre></a></li>
+<li class="property public "><a href="#%24wm_use_truetype" title="$wm_use_truetype :: "><span class="description">$wm_use_truetype</span><pre>$wm_use_truetype</pre></a></li>
+<li class="property public "><a href="#%24wm_vrt_alignment" title="$wm_vrt_alignment :: "><span class="description">$wm_vrt_alignment</span><pre>$wm_vrt_alignment</pre></a></li>
+<li class="property public "><a href="#%24wm_vrt_offset" title="$wm_vrt_offset :: "><span class="description">$wm_vrt_offset</span><pre>$wm_vrt_offset</pre></a></li>
+<li class="property public "><a href="#%24wm_x_transp" title="$wm_x_transp :: "><span class="description">$wm_x_transp</span><pre>$wm_x_transp</pre></a></li>
+<li class="property public "><a href="#%24wm_y_transp" title="$wm_y_transp :: "><span class="description">$wm_y_transp</span><pre>$wm_y_transp</pre></a></li>
+<li class="property public "><a href="#%24x_axis" title="$x_axis :: "><span class="description">$x_axis</span><pre>$x_axis</pre></a></li>
+<li class="property public "><a href="#%24y_axis" title="$y_axis :: "><span class="description">$y_axis</span><pre>$y_axis</pre></a></li>
+</ul>
+</div>
+<div class="span8">
+<a name="%5CCI_Image_lib" id="\CI_Image_lib"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/global.html">global</a></li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/CI_Image_lib.html">CI_Image_lib</a>
+</li>
+</ul>
+<div href="../classes/CI_Image_lib.html" class="element class">
+<p class="short_description">Image Manipulation class</p>
+<div class="details">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>package</th>
+<td><a href="../packages/CodeIgniter.Libraries.html">CodeIgniter</a></td>
+</tr>
+<tr>
+<th>subpackage</th>
+<td>Libraries</td>
+</tr>
+<tr>
+<th>category</th>
+<td>Image_lib</td>
+</tr>
+<tr>
+<th>author</th>
+<td><a href="">ExpressionEngine Dev Team</a></td>
+</tr>
+<tr>
+<th>link</th>
+<td><a href="http://codeigniter.com/user_guide/libraries/image_lib.html">http://codeigniter.com/user_guide/libraries/image_lib.html</a></td>
+</tr>
+</table>
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a name="__construct" id="__construct"></a><div class="element clickable method public __construct" data-toggle="collapse" data-target=".__construct .collapse">
+<h2>Constructor</h2>
+<pre>__construct($props) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$props</h4>
+<code></code><p>string</p></div>
+</div></div>
+</div>
+<a name="clear" id="clear"></a><div class="element clickable method public clear" data-toggle="collapse" data-target=".clear .collapse">
+<h2>Initialize image properties</h2>
+<pre>clear() : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Resets values in case this class is used in a loop</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="crop" id="crop"></a><div class="element clickable method public crop" data-toggle="collapse" data-target=".crop .collapse">
+<h2>Image Crop</h2>
+<pre>crop() : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>This is a wrapper function that chooses the proper
+cropping function based on the protocol specified</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="display_errors" id="display_errors"></a><div class="element clickable method public display_errors" data-toggle="collapse" data-target=".display_errors .collapse">
+<h2>Show error messages</h2>
+<pre>display_errors($open, $close) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$open</h4>
+<code></code><p>string</p></div>
+<div class="subelement argument">
+<h4>$close</h4>
+<code></code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="explode_name" id="explode_name"></a><div class="element clickable method public explode_name" data-toggle="collapse" data-target=".explode_name .collapse">
+<h2>Explode source_image</h2>
+<pre>explode_name($source_image) : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>This is a helper function that extracts the extension
+from the source_image.  This function lets us deal with
+source_images with multiple periods, like:  my.cool.jpg
+It returns an associative array with two elements:
+$array['ext']  = '.jpg';
+$array['name'] = 'my.cool';</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$source_image</h4>
+<code></code><p>array</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>array</code></div>
+</div></div>
+</div>
+<a name="gd_loaded" id="gd_loaded"></a><div class="element clickable method public gd_loaded" data-toggle="collapse" data-target=".gd_loaded .collapse">
+<h2>Is GD Installed?</h2>
+<pre>gd_loaded() : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="gd_version" id="gd_version"></a><div class="element clickable method public gd_version" data-toggle="collapse" data-target=".gd_version .collapse">
+<h2>Get GD version</h2>
+<pre>gd_version() : mixed</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>mixed</code></div>
+</div></div>
+</div>
+<a name="get_image_properties" id="get_image_properties"></a><div class="element clickable method public get_image_properties" data-toggle="collapse" data-target=".get_image_properties .collapse">
+<h2>Get image properties</h2>
+<pre>get_image_properties($path, $return) : mixed</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>A helper function that gets info about the file</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$path</h4>
+<code></code><p>string</p></div>
+<div class="subelement argument">
+<h4>$return</h4>
+<code></code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>mixed</code></div>
+</div></div>
+</div>
+<a name="image_create_gd" id="image_create_gd"></a><div class="element clickable method public image_create_gd" data-toggle="collapse" data-target=".image_create_gd .collapse">
+<h2>Create Image - GD</h2>
+<pre>image_create_gd($path, $image_type) : resource</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>This simply creates an image resource handle
+based on the type of image being processed</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$path</h4>
+<code></code><p>string</p></div>
+<div class="subelement argument">
+<h4>$image_type</h4>
+<code></code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>resource</code></div>
+</div></div>
+</div>
+<a name="image_display_gd" id="image_display_gd"></a><div class="element clickable method public image_display_gd" data-toggle="collapse" data-target=".image_display_gd .collapse">
+<h2>Dynamically outputs an image</h2>
+<pre>image_display_gd($resource) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$resource</h4>
+<code></code><p>resource</p></div>
+</div></div>
+</div>
+<a name="image_mirror_gd" id="image_mirror_gd"></a><div class="element clickable method public image_mirror_gd" data-toggle="collapse" data-target=".image_mirror_gd .collapse">
+<h2>Create Mirror Image using GD</h2>
+<pre>image_mirror_gd() : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>This function will flip horizontal or vertical</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="image_process_gd" id="image_process_gd"></a><div class="element clickable method public image_process_gd" data-toggle="collapse" data-target=".image_process_gd .collapse">
+<h2>Image Process Using GD/GD2</h2>
+<pre>image_process_gd($action) : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>This function will resize or crop</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$action</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="image_process_imagemagick" id="image_process_imagemagick"></a><div class="element clickable method public image_process_imagemagick" data-toggle="collapse" data-target=".image_process_imagemagick .collapse">
+<h2>Image Process Using ImageMagick</h2>
+<pre>image_process_imagemagick($action) : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>This function will resize, crop or rotate</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$action</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="image_process_netpbm" id="image_process_netpbm"></a><div class="element clickable method public image_process_netpbm" data-toggle="collapse" data-target=".image_process_netpbm .collapse">
+<h2>Image Process Using NetPBM</h2>
+<pre>image_process_netpbm($action) : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>This function will resize, crop or rotate</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$action</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="image_reproportion" id="image_reproportion"></a><div class="element clickable method public image_reproportion" data-toggle="collapse" data-target=".image_reproportion .collapse">
+<h2>Re-proportion Image Width/Height</h2>
+<pre>image_reproportion() : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>When creating thumbs, the desired width/height
+can end up warping the image due to an incorrect
+ratio between the full-sized image and the thumb.</p>
+
+<p>This function lets us re-proportion the width/height
+if users choose to maintain the aspect ratio when resizing.</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="image_rotate_gd" id="image_rotate_gd"></a><div class="element clickable method public image_rotate_gd" data-toggle="collapse" data-target=".image_rotate_gd .collapse">
+<h2>Image Rotate Using GD</h2>
+<pre>image_rotate_gd() : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="image_save_gd" id="image_save_gd"></a><div class="element clickable method public image_save_gd" data-toggle="collapse" data-target=".image_save_gd .collapse">
+<h2>Write image file to disk - GD</h2>
+<pre>image_save_gd($resource) : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Takes an image resource as input and writes the file
+to the specified destination</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$resource</h4>
+<code></code><p>resource</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="initialize" id="initialize"></a><div class="element clickable method public initialize" data-toggle="collapse" data-target=".initialize .collapse">
+<h2>initialize image preferences</h2>
+<pre>initialize($props) : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$props</h4>
+<code></code><p>array</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="overlay_watermark" id="overlay_watermark"></a><div class="element clickable method public overlay_watermark" data-toggle="collapse" data-target=".overlay_watermark .collapse">
+<h2>Watermark - Graphic Version</h2>
+<pre>overlay_watermark() : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="resize" id="resize"></a><div class="element clickable method public resize" data-toggle="collapse" data-target=".resize .collapse">
+<h2>Image Resize</h2>
+<pre>resize() : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>This is a wrapper function that chooses the proper
+resize function based on the protocol specified</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="rotate" id="rotate"></a><div class="element clickable method public rotate" data-toggle="collapse" data-target=".rotate .collapse">
+<h2>Image Rotate</h2>
+<pre>rotate() : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>This is a wrapper function that chooses the proper
+rotation function based on the protocol specified</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="set_error" id="set_error"></a><div class="element clickable method public set_error" data-toggle="collapse" data-target=".set_error .collapse">
+<h2>Set error message</h2>
+<pre>set_error($msg) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$msg</h4>
+<code></code><p>string</p></div>
+</div></div>
+</div>
+<a name="size_calculator" id="size_calculator"></a><div class="element clickable method public size_calculator" data-toggle="collapse" data-target=".size_calculator .collapse">
+<h2>Size calculator</h2>
+<pre>size_calculator($vals) : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>This function takes a known width x height and
+recalculates it to a new size.  Only one
+new variable needs to be known</p>
+
+<p>$props = array(
+                'width'         => $width,
+                'height'        => $height,
+                'new_width'     => 40,
+                'new_height'    => ''
+              );</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$vals</h4>
+<code></code><p>array</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>array</code></div>
+</div></div>
+</div>
+<a name="text_watermark" id="text_watermark"></a><div class="element clickable method public text_watermark" data-toggle="collapse" data-target=".text_watermark .collapse">
+<h2>Watermark - Text Version</h2>
+<pre>text_watermark() : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="watermark" id="watermark"></a><div class="element clickable method public watermark" data-toggle="collapse" data-target=".watermark .collapse">
+<h2>Image Watermark</h2>
+<pre>watermark() : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>This is a wrapper function that chooses the type
+of watermarking based on the specified preference.</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<h3>
+<i class="icon-custom icon-property"></i> Properties</h3>
+<a name="%24copy_fnc" id="$copy_fnc"> </a><div class="element clickable property public $copy_fnc" data-toggle="collapse" data-target=".$copy_fnc .collapse">
+<h2>$copy_fnc</h2>
+<pre>$copy_fnc </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24create_fnc" id="$create_fnc"> </a><div class="element clickable property public $create_fnc" data-toggle="collapse" data-target=".$create_fnc .collapse">
+<h2>$create_fnc</h2>
+<pre>$create_fnc </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24create_thumb" id="$create_thumb"> </a><div class="element clickable property public $create_thumb" data-toggle="collapse" data-target=".$create_thumb .collapse">
+<h2>$create_thumb</h2>
+<pre>$create_thumb </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24dest_folder" id="$dest_folder"> </a><div class="element clickable property public $dest_folder" data-toggle="collapse" data-target=".$dest_folder .collapse">
+<h2>$dest_folder</h2>
+<pre>$dest_folder </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24dynamic_output" id="$dynamic_output"> </a><div class="element clickable property public $dynamic_output" data-toggle="collapse" data-target=".$dynamic_output .collapse">
+<h2>$dynamic_output</h2>
+<pre>$dynamic_output </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24error_msg" id="$error_msg"> </a><div class="element clickable property public $error_msg" data-toggle="collapse" data-target=".$error_msg .collapse">
+<h2>$error_msg</h2>
+<pre>$error_msg </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24full_dst_path" id="$full_dst_path"> </a><div class="element clickable property public $full_dst_path" data-toggle="collapse" data-target=".$full_dst_path .collapse">
+<h2>$full_dst_path</h2>
+<pre>$full_dst_path </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24full_src_path" id="$full_src_path"> </a><div class="element clickable property public $full_src_path" data-toggle="collapse" data-target=".$full_src_path .collapse">
+<h2>$full_src_path</h2>
+<pre>$full_src_path </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24height" id="$height"> </a><div class="element clickable property public $height" data-toggle="collapse" data-target=".$height .collapse">
+<h2>$height</h2>
+<pre>$height </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24image_library" id="$image_library"> </a><div class="element clickable property public $image_library" data-toggle="collapse" data-target=".$image_library .collapse">
+<h2>$image_library</h2>
+<pre>$image_library </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24image_type" id="$image_type"> </a><div class="element clickable property public $image_type" data-toggle="collapse" data-target=".$image_type .collapse">
+<h2>$image_type</h2>
+<pre>$image_type </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24library_path" id="$library_path"> </a><div class="element clickable property public $library_path" data-toggle="collapse" data-target=".$library_path .collapse">
+<h2>$library_path</h2>
+<pre>$library_path </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24maintain_ratio" id="$maintain_ratio"> </a><div class="element clickable property public $maintain_ratio" data-toggle="collapse" data-target=".$maintain_ratio .collapse">
+<h2>$maintain_ratio</h2>
+<pre>$maintain_ratio </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24master_dim" id="$master_dim"> </a><div class="element clickable property public $master_dim" data-toggle="collapse" data-target=".$master_dim .collapse">
+<h2>$master_dim</h2>
+<pre>$master_dim </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24mime_type" id="$mime_type"> </a><div class="element clickable property public $mime_type" data-toggle="collapse" data-target=".$mime_type .collapse">
+<h2>$mime_type</h2>
+<pre>$mime_type </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24new_image" id="$new_image"> </a><div class="element clickable property public $new_image" data-toggle="collapse" data-target=".$new_image .collapse">
+<h2>$new_image</h2>
+<pre>$new_image </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24orig_height" id="$orig_height"> </a><div class="element clickable property public $orig_height" data-toggle="collapse" data-target=".$orig_height .collapse">
+<h2>$orig_height</h2>
+<pre>$orig_height </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24orig_width" id="$orig_width"> </a><div class="element clickable property public $orig_width" data-toggle="collapse" data-target=".$orig_width .collapse">
+<h2>$orig_width</h2>
+<pre>$orig_width </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24quality" id="$quality"> </a><div class="element clickable property public $quality" data-toggle="collapse" data-target=".$quality .collapse">
+<h2>$quality</h2>
+<pre>$quality </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24rotation_angle" id="$rotation_angle"> </a><div class="element clickable property public $rotation_angle" data-toggle="collapse" data-target=".$rotation_angle .collapse">
+<h2>$rotation_angle</h2>
+<pre>$rotation_angle </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24size_str" id="$size_str"> </a><div class="element clickable property public $size_str" data-toggle="collapse" data-target=".$size_str .collapse">
+<h2>$size_str</h2>
+<pre>$size_str </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24source_folder" id="$source_folder"> </a><div class="element clickable property public $source_folder" data-toggle="collapse" data-target=".$source_folder .collapse">
+<h2>$source_folder</h2>
+<pre>$source_folder </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24source_image" id="$source_image"> </a><div class="element clickable property public $source_image" data-toggle="collapse" data-target=".$source_image .collapse">
+<h2>$source_image</h2>
+<pre>$source_image </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24thumb_marker" id="$thumb_marker"> </a><div class="element clickable property public $thumb_marker" data-toggle="collapse" data-target=".$thumb_marker .collapse">
+<h2>$thumb_marker</h2>
+<pre>$thumb_marker </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24width" id="$width"> </a><div class="element clickable property public $width" data-toggle="collapse" data-target=".$width .collapse">
+<h2>$width</h2>
+<pre>$width </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24wm_font_color" id="$wm_font_color"> </a><div class="element clickable property public $wm_font_color" data-toggle="collapse" data-target=".$wm_font_color .collapse">
+<h2>$wm_font_color</h2>
+<pre>$wm_font_color </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24wm_font_path" id="$wm_font_path"> </a><div class="element clickable property public $wm_font_path" data-toggle="collapse" data-target=".$wm_font_path .collapse">
+<h2>$wm_font_path</h2>
+<pre>$wm_font_path </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24wm_font_size" id="$wm_font_size"> </a><div class="element clickable property public $wm_font_size" data-toggle="collapse" data-target=".$wm_font_size .collapse">
+<h2>$wm_font_size</h2>
+<pre>$wm_font_size </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24wm_hor_alignment" id="$wm_hor_alignment"> </a><div class="element clickable property public $wm_hor_alignment" data-toggle="collapse" data-target=".$wm_hor_alignment .collapse">
+<h2>$wm_hor_alignment</h2>
+<pre>$wm_hor_alignment </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24wm_hor_offset" id="$wm_hor_offset"> </a><div class="element clickable property public $wm_hor_offset" data-toggle="collapse" data-target=".$wm_hor_offset .collapse">
+<h2>$wm_hor_offset</h2>
+<pre>$wm_hor_offset </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24wm_opacity" id="$wm_opacity"> </a><div class="element clickable property public $wm_opacity" data-toggle="collapse" data-target=".$wm_opacity .collapse">
+<h2>$wm_opacity</h2>
+<pre>$wm_opacity </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24wm_overlay_path" id="$wm_overlay_path"> </a><div class="element clickable property public $wm_overlay_path" data-toggle="collapse" data-target=".$wm_overlay_path .collapse">
+<h2>$wm_overlay_path</h2>
+<pre>$wm_overlay_path </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24wm_padding" id="$wm_padding"> </a><div class="element clickable property public $wm_padding" data-toggle="collapse" data-target=".$wm_padding .collapse">
+<h2>$wm_padding</h2>
+<pre>$wm_padding </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24wm_shadow_color" id="$wm_shadow_color"> </a><div class="element clickable property public $wm_shadow_color" data-toggle="collapse" data-target=".$wm_shadow_color .collapse">
+<h2>$wm_shadow_color</h2>
+<pre>$wm_shadow_color </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24wm_shadow_distance" id="$wm_shadow_distance"> </a><div class="element clickable property public $wm_shadow_distance" data-toggle="collapse" data-target=".$wm_shadow_distance .collapse">
+<h2>$wm_shadow_distance</h2>
+<pre>$wm_shadow_distance </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24wm_text" id="$wm_text"> </a><div class="element clickable property public $wm_text" data-toggle="collapse" data-target=".$wm_text .collapse">
+<h2>$wm_text</h2>
+<pre>$wm_text </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24wm_type" id="$wm_type"> </a><div class="element clickable property public $wm_type" data-toggle="collapse" data-target=".$wm_type .collapse">
+<h2>$wm_type</h2>
+<pre>$wm_type </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24wm_use_drop_shadow" id="$wm_use_drop_shadow"> </a><div class="element clickable property public $wm_use_drop_shadow" data-toggle="collapse" data-target=".$wm_use_drop_shadow .collapse">
+<h2>$wm_use_drop_shadow</h2>
+<pre>$wm_use_drop_shadow </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24wm_use_truetype" id="$wm_use_truetype"> </a><div class="element clickable property public $wm_use_truetype" data-toggle="collapse" data-target=".$wm_use_truetype .collapse">
+<h2>$wm_use_truetype</h2>
+<pre>$wm_use_truetype </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24wm_vrt_alignment" id="$wm_vrt_alignment"> </a><div class="element clickable property public $wm_vrt_alignment" data-toggle="collapse" data-target=".$wm_vrt_alignment .collapse">
+<h2>$wm_vrt_alignment</h2>
+<pre>$wm_vrt_alignment </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24wm_vrt_offset" id="$wm_vrt_offset"> </a><div class="element clickable property public $wm_vrt_offset" data-toggle="collapse" data-target=".$wm_vrt_offset .collapse">
+<h2>$wm_vrt_offset</h2>
+<pre>$wm_vrt_offset </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24wm_x_transp" id="$wm_x_transp"> </a><div class="element clickable property public $wm_x_transp" data-toggle="collapse" data-target=".$wm_x_transp .collapse">
+<h2>$wm_x_transp</h2>
+<pre>$wm_x_transp </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24wm_y_transp" id="$wm_y_transp"> </a><div class="element clickable property public $wm_y_transp" data-toggle="collapse" data-target=".$wm_y_transp .collapse">
+<h2>$wm_y_transp</h2>
+<pre>$wm_y_transp </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24x_axis" id="$x_axis"> </a><div class="element clickable property public $x_axis" data-toggle="collapse" data-target=".$x_axis .collapse">
+<h2>$x_axis</h2>
+<pre>$x_axis </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24y_axis" id="$y_axis"> </a><div class="element clickable property public $y_axis" data-toggle="collapse" data-target=".$y_axis .collapse">
+<h2>$y_axis</h2>
+<pre>$y_axis </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a8</a> and<br>
+            generated on 2012-07-27T12:29:21+10:00.<br></footer></div>
+</div>
+</body>
+</html>

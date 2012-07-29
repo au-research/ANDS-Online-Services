@@ -1,0 +1,566 @@
+<!DOCTYPE html><html xmlns:date="http://exslt.org/dates-and-times" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>phpDocumentor » \CI_Session</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../css/template.css" rel="stylesheet" media="all">
+<script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../js/bootstrap.js" type="text/javascript"></script><script src="../js/template.js" type="text/javascript"></script><script src="../js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../img/favicon.ico">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">phpDocumentor</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Packages</a></li>
+<li><a href="../packages/CodeIgniter.html"><i class="icon-folder-open"></i> CodeIgniter</a></li>
+<li><a href="../packages/Default.html"><i class="icon-folder-open"></i> Default</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">1170</span></a></li>
+<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul><li>todo 
+                <span class="label label-info">1</span>
+</li></ul></a></li>
+<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">0</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods</li>
+<li class="method public "><a href="#__construct" title="__construct :: Session Constructor"><span class="description">Session Constructor</span><pre>__construct()</pre></a></li>
+<li class="method public "><a href="#_flashdata_mark" title="_flashdata_mark :: Identifies flashdata as 'old' for removal
+when _flashdata_sweep() runs."><span class="description">Identifies flashdata as 'old' for removal
+when _flashdata_sweep() runs.</span><pre>_flashdata_mark()</pre></a></li>
+<li class="method public "><a href="#_flashdata_sweep" title="_flashdata_sweep :: Removes all flashdata marked as 'old'"><span class="description">Removes all flashdata marked as 'old'</span><pre>_flashdata_sweep()</pre></a></li>
+<li class="method public "><a href="#_get_time" title='_get_time :: Get the "now" time'><span class="description">Get the "now" time</span><pre>_get_time()</pre></a></li>
+<li class="method public "><a href="#_serialize" title="_serialize :: Serialize an array"><span class="description">Serialize an array</span><pre>_serialize()</pre></a></li>
+<li class="method public "><a href="#_sess_gc" title="_sess_gc :: Garbage collection"><span class="description">Garbage collection</span><pre>_sess_gc()</pre></a></li>
+<li class="method public "><a href="#_set_cookie" title="_set_cookie :: Write the session cookie"><span class="description">Write the session cookie</span><pre>_set_cookie()</pre></a></li>
+<li class="method public "><a href="#_unserialize" title="_unserialize :: Unserialize"><span class="description">Unserialize</span><pre>_unserialize()</pre></a></li>
+<li class="method public "><a href="#all_userdata" title="all_userdata :: Fetch all session data"><span class="description">Fetch all session data</span><pre>all_userdata()</pre></a></li>
+<li class="method public "><a href="#flashdata" title="flashdata :: Fetch a specific flashdata item from the session array"><span class="description">Fetch a specific flashdata item from the session array</span><pre>flashdata()</pre></a></li>
+<li class="method public "><a href="#keep_flashdata" title="keep_flashdata :: Keeps existing flashdata available to next request."><span class="description">Keeps existing flashdata available to next request.</span><pre>keep_flashdata()</pre></a></li>
+<li class="method public "><a href="#sess_create" title="sess_create :: Create a new session"><span class="description">Create a new session</span><pre>sess_create()</pre></a></li>
+<li class="method public "><a href="#sess_destroy" title="sess_destroy :: Destroy the current session"><span class="description">Destroy the current session</span><pre>sess_destroy()</pre></a></li>
+<li class="method public "><a href="#sess_read" title="sess_read :: Fetch the current session data if it exists"><span class="description">Fetch the current session data if it exists</span><pre>sess_read()</pre></a></li>
+<li class="method public "><a href="#sess_update" title="sess_update :: Update an existing session"><span class="description">Update an existing session</span><pre>sess_update()</pre></a></li>
+<li class="method public "><a href="#sess_write" title="sess_write :: Write the session data"><span class="description">Write the session data</span><pre>sess_write()</pre></a></li>
+<li class="method public "><a href="#set_flashdata" title="set_flashdata :: Add or change flashdata, only available
+until the next request"><span class="description">Add or change flashdata, only available
+until the next request</span><pre>set_flashdata()</pre></a></li>
+<li class="method public "><a href="#set_userdata" title='set_userdata :: Add or change data in the "userdata" array'><span class="description">Add or change data in the "userdata" array</span><pre>set_userdata()</pre></a></li>
+<li class="method public "><a href="#userdata" title="userdata :: Fetch a specific item from the session array"><span class="description">Fetch a specific item from the session array</span><pre>userdata()</pre></a></li>
+<li class="nav-header">
+<i class="icon-custom icon-property"></i> Properties</li>
+<li class="property public "><a href="#%24CI" title="$CI :: "><span class="description">$CI</span><pre>$CI</pre></a></li>
+<li class="property public "><a href="#%24cookie_domain" title="$cookie_domain :: "><span class="description">$cookie_domain</span><pre>$cookie_domain</pre></a></li>
+<li class="property public "><a href="#%24cookie_path" title="$cookie_path :: "><span class="description">$cookie_path</span><pre>$cookie_path</pre></a></li>
+<li class="property public "><a href="#%24cookie_prefix" title="$cookie_prefix :: "><span class="description">$cookie_prefix</span><pre>$cookie_prefix</pre></a></li>
+<li class="property public "><a href="#%24cookie_secure" title="$cookie_secure :: "><span class="description">$cookie_secure</span><pre>$cookie_secure</pre></a></li>
+<li class="property public "><a href="#%24encryption_key" title="$encryption_key :: "><span class="description">$encryption_key</span><pre>$encryption_key</pre></a></li>
+<li class="property public "><a href="#%24flashdata_key" title="$flashdata_key :: "><span class="description">$flashdata_key</span><pre>$flashdata_key</pre></a></li>
+<li class="property public "><a href="#%24gc_probability" title="$gc_probability :: "><span class="description">$gc_probability</span><pre>$gc_probability</pre></a></li>
+<li class="property public "><a href="#%24now" title="$now :: "><span class="description">$now</span><pre>$now</pre></a></li>
+<li class="property public "><a href="#%24sess_cookie_name" title="$sess_cookie_name :: "><span class="description">$sess_cookie_name</span><pre>$sess_cookie_name</pre></a></li>
+<li class="property public "><a href="#%24sess_encrypt_cookie" title="$sess_encrypt_cookie :: "><span class="description">$sess_encrypt_cookie</span><pre>$sess_encrypt_cookie</pre></a></li>
+<li class="property public "><a href="#%24sess_expiration" title="$sess_expiration :: "><span class="description">$sess_expiration</span><pre>$sess_expiration</pre></a></li>
+<li class="property public "><a href="#%24sess_expire_on_close" title="$sess_expire_on_close :: "><span class="description">$sess_expire_on_close</span><pre>$sess_expire_on_close</pre></a></li>
+<li class="property public "><a href="#%24sess_match_ip" title="$sess_match_ip :: "><span class="description">$sess_match_ip</span><pre>$sess_match_ip</pre></a></li>
+<li class="property public "><a href="#%24sess_match_useragent" title="$sess_match_useragent :: "><span class="description">$sess_match_useragent</span><pre>$sess_match_useragent</pre></a></li>
+<li class="property public "><a href="#%24sess_table_name" title="$sess_table_name :: "><span class="description">$sess_table_name</span><pre>$sess_table_name</pre></a></li>
+<li class="property public "><a href="#%24sess_time_to_update" title="$sess_time_to_update :: "><span class="description">$sess_time_to_update</span><pre>$sess_time_to_update</pre></a></li>
+<li class="property public "><a href="#%24sess_use_database" title="$sess_use_database :: "><span class="description">$sess_use_database</span><pre>$sess_use_database</pre></a></li>
+<li class="property public "><a href="#%24time_reference" title="$time_reference :: "><span class="description">$time_reference</span><pre>$time_reference</pre></a></li>
+<li class="property public "><a href="#%24userdata" title="$userdata :: "><span class="description">$userdata</span><pre>$userdata</pre></a></li>
+</ul>
+</div>
+<div class="span8">
+<a name="%5CCI_Session" id="\CI_Session"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/global.html">global</a></li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/CI_Session.html">CI_Session</a>
+</li>
+</ul>
+<div href="../classes/CI_Session.html" class="element class">
+<p class="short_description">Session Class</p>
+<div class="details">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>package</th>
+<td><a href="../packages/CodeIgniter.Libraries.html">CodeIgniter</a></td>
+</tr>
+<tr>
+<th>subpackage</th>
+<td>Libraries</td>
+</tr>
+<tr>
+<th>category</th>
+<td>Sessions</td>
+</tr>
+<tr>
+<th>author</th>
+<td><a href="">ExpressionEngine Dev Team</a></td>
+</tr>
+<tr>
+<th>link</th>
+<td><a href="http://codeigniter.com/user_guide/libraries/sessions.html">http://codeigniter.com/user_guide/libraries/sessions.html</a></td>
+</tr>
+</table>
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a name="__construct" id="__construct"></a><div class="element clickable method public __construct" data-toggle="collapse" data-target=".__construct .collapse">
+<h2>Session Constructor</h2>
+<pre>__construct($params) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>The constructor runs the session routines automatically
+whenever the class is instantiated.</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$params</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="_flashdata_mark" id="_flashdata_mark"></a><div class="element clickable method public _flashdata_mark" data-toggle="collapse" data-target="._flashdata_mark .collapse">
+<h2>Identifies flashdata as 'old' for removal
+when _flashdata_sweep() runs.</h2>
+<pre>_flashdata_mark() : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+</div></div>
+</div>
+<a name="_flashdata_sweep" id="_flashdata_sweep"></a><div class="element clickable method public _flashdata_sweep" data-toggle="collapse" data-target="._flashdata_sweep .collapse">
+<h2>Removes all flashdata marked as 'old'</h2>
+<pre>_flashdata_sweep() : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+</div></div>
+</div>
+<a name="_get_time" id="_get_time"></a><div class="element clickable method public _get_time" data-toggle="collapse" data-target="._get_time .collapse">
+<h2>Get the "now" time</h2>
+<pre>_get_time() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_serialize" id="_serialize"></a><div class="element clickable method public _serialize" data-toggle="collapse" data-target="._serialize .collapse">
+<h2>Serialize an array</h2>
+<pre>_serialize($data) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>This function first converts any slashes found in the array to a temporary
+marker, so when it gets unserialized the slashes will be preserved</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$data</h4>
+<code></code><p>array</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_sess_gc" id="_sess_gc"></a><div class="element clickable method public _sess_gc" data-toggle="collapse" data-target="._sess_gc .collapse">
+<h2>Garbage collection</h2>
+<pre>_sess_gc() : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>This deletes expired session rows from database
+if the probability percentage is met</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="_set_cookie" id="_set_cookie"></a><div class="element clickable method public _set_cookie" data-toggle="collapse" data-target="._set_cookie .collapse">
+<h2>Write the session cookie</h2>
+<pre>_set_cookie($cookie_data) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$cookie_data</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="_unserialize" id="_unserialize"></a><div class="element clickable method public _unserialize" data-toggle="collapse" data-target="._unserialize .collapse">
+<h2>Unserialize</h2>
+<pre>_unserialize($data) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>This function unserializes a data string, then converts any
+temporary slash markers back to actual slashes</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$data</h4>
+<code></code><p>array</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="all_userdata" id="all_userdata"></a><div class="element clickable method public all_userdata" data-toggle="collapse" data-target=".all_userdata .collapse">
+<h2>Fetch all session data</h2>
+<pre>all_userdata() : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>array</code></div>
+</div></div>
+</div>
+<a name="flashdata" id="flashdata"></a><div class="element clickable method public flashdata" data-toggle="collapse" data-target=".flashdata .collapse">
+<h2>Fetch a specific flashdata item from the session array</h2>
+<pre>flashdata($key) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$key</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="keep_flashdata" id="keep_flashdata"></a><div class="element clickable method public keep_flashdata" data-toggle="collapse" data-target=".keep_flashdata .collapse">
+<h2>Keeps existing flashdata available to next request.</h2>
+<pre>keep_flashdata($key) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$key</h4>
+<code></code><p>string</p></div>
+</div></div>
+</div>
+<a name="sess_create" id="sess_create"></a><div class="element clickable method public sess_create" data-toggle="collapse" data-target=".sess_create .collapse">
+<h2>Create a new session</h2>
+<pre>sess_create() : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="sess_destroy" id="sess_destroy"></a><div class="element clickable method public sess_destroy" data-toggle="collapse" data-target=".sess_destroy .collapse">
+<h2>Destroy the current session</h2>
+<pre>sess_destroy() : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="sess_read" id="sess_read"></a><div class="element clickable method public sess_read" data-toggle="collapse" data-target=".sess_read .collapse">
+<h2>Fetch the current session data if it exists</h2>
+<pre>sess_read() : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="sess_update" id="sess_update"></a><div class="element clickable method public sess_update" data-toggle="collapse" data-target=".sess_update .collapse">
+<h2>Update an existing session</h2>
+<pre>sess_update() : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="sess_write" id="sess_write"></a><div class="element clickable method public sess_write" data-toggle="collapse" data-target=".sess_write .collapse">
+<h2>Write the session data</h2>
+<pre>sess_write() : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="set_flashdata" id="set_flashdata"></a><div class="element clickable method public set_flashdata" data-toggle="collapse" data-target=".set_flashdata .collapse">
+<h2>Add or change flashdata, only available
+until the next request</h2>
+<pre>set_flashdata($newdata, $newval) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$newdata</h4>
+<code></code><p>mixed</p></div>
+<div class="subelement argument">
+<h4>$newval</h4>
+<code></code><p>string</p></div>
+</div></div>
+</div>
+<a name="set_userdata" id="set_userdata"></a><div class="element clickable method public set_userdata" data-toggle="collapse" data-target=".set_userdata .collapse">
+<h2>Add or change data in the "userdata" array</h2>
+<pre>set_userdata($newdata, $newval) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$newdata</h4>
+<code></code><p>mixed</p></div>
+<div class="subelement argument">
+<h4>$newval</h4>
+<code></code><p>string</p></div>
+</div></div>
+</div>
+<a name="userdata" id="userdata"></a><div class="element clickable method public userdata" data-toggle="collapse" data-target=".userdata .collapse">
+<h2>Fetch a specific item from the session array</h2>
+<pre>userdata($item) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$item</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<h3>
+<i class="icon-custom icon-property"></i> Properties</h3>
+<a name="%24CI" id="$CI"> </a><div class="element clickable property public $CI" data-toggle="collapse" data-target=".$CI .collapse">
+<h2>$CI</h2>
+<pre>$CI </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24cookie_domain" id="$cookie_domain"> </a><div class="element clickable property public $cookie_domain" data-toggle="collapse" data-target=".$cookie_domain .collapse">
+<h2>$cookie_domain</h2>
+<pre>$cookie_domain </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24cookie_path" id="$cookie_path"> </a><div class="element clickable property public $cookie_path" data-toggle="collapse" data-target=".$cookie_path .collapse">
+<h2>$cookie_path</h2>
+<pre>$cookie_path </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24cookie_prefix" id="$cookie_prefix"> </a><div class="element clickable property public $cookie_prefix" data-toggle="collapse" data-target=".$cookie_prefix .collapse">
+<h2>$cookie_prefix</h2>
+<pre>$cookie_prefix </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24cookie_secure" id="$cookie_secure"> </a><div class="element clickable property public $cookie_secure" data-toggle="collapse" data-target=".$cookie_secure .collapse">
+<h2>$cookie_secure</h2>
+<pre>$cookie_secure </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24encryption_key" id="$encryption_key"> </a><div class="element clickable property public $encryption_key" data-toggle="collapse" data-target=".$encryption_key .collapse">
+<h2>$encryption_key</h2>
+<pre>$encryption_key </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24flashdata_key" id="$flashdata_key"> </a><div class="element clickable property public $flashdata_key" data-toggle="collapse" data-target=".$flashdata_key .collapse">
+<h2>$flashdata_key</h2>
+<pre>$flashdata_key </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24gc_probability" id="$gc_probability"> </a><div class="element clickable property public $gc_probability" data-toggle="collapse" data-target=".$gc_probability .collapse">
+<h2>$gc_probability</h2>
+<pre>$gc_probability </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24now" id="$now"> </a><div class="element clickable property public $now" data-toggle="collapse" data-target=".$now .collapse">
+<h2>$now</h2>
+<pre>$now </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24sess_cookie_name" id="$sess_cookie_name"> </a><div class="element clickable property public $sess_cookie_name" data-toggle="collapse" data-target=".$sess_cookie_name .collapse">
+<h2>$sess_cookie_name</h2>
+<pre>$sess_cookie_name </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24sess_encrypt_cookie" id="$sess_encrypt_cookie"> </a><div class="element clickable property public $sess_encrypt_cookie" data-toggle="collapse" data-target=".$sess_encrypt_cookie .collapse">
+<h2>$sess_encrypt_cookie</h2>
+<pre>$sess_encrypt_cookie </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24sess_expiration" id="$sess_expiration"> </a><div class="element clickable property public $sess_expiration" data-toggle="collapse" data-target=".$sess_expiration .collapse">
+<h2>$sess_expiration</h2>
+<pre>$sess_expiration </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24sess_expire_on_close" id="$sess_expire_on_close"> </a><div class="element clickable property public $sess_expire_on_close" data-toggle="collapse" data-target=".$sess_expire_on_close .collapse">
+<h2>$sess_expire_on_close</h2>
+<pre>$sess_expire_on_close </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24sess_match_ip" id="$sess_match_ip"> </a><div class="element clickable property public $sess_match_ip" data-toggle="collapse" data-target=".$sess_match_ip .collapse">
+<h2>$sess_match_ip</h2>
+<pre>$sess_match_ip </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24sess_match_useragent" id="$sess_match_useragent"> </a><div class="element clickable property public $sess_match_useragent" data-toggle="collapse" data-target=".$sess_match_useragent .collapse">
+<h2>$sess_match_useragent</h2>
+<pre>$sess_match_useragent </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24sess_table_name" id="$sess_table_name"> </a><div class="element clickable property public $sess_table_name" data-toggle="collapse" data-target=".$sess_table_name .collapse">
+<h2>$sess_table_name</h2>
+<pre>$sess_table_name </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24sess_time_to_update" id="$sess_time_to_update"> </a><div class="element clickable property public $sess_time_to_update" data-toggle="collapse" data-target=".$sess_time_to_update .collapse">
+<h2>$sess_time_to_update</h2>
+<pre>$sess_time_to_update </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24sess_use_database" id="$sess_use_database"> </a><div class="element clickable property public $sess_use_database" data-toggle="collapse" data-target=".$sess_use_database .collapse">
+<h2>$sess_use_database</h2>
+<pre>$sess_use_database </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24time_reference" id="$time_reference"> </a><div class="element clickable property public $time_reference" data-toggle="collapse" data-target=".$time_reference .collapse">
+<h2>$time_reference</h2>
+<pre>$time_reference </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24userdata" id="$userdata"> </a><div class="element clickable property public $userdata" data-toggle="collapse" data-target=".$userdata .collapse">
+<h2>$userdata</h2>
+<pre>$userdata </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a8</a> and<br>
+            generated on 2012-07-27T12:29:21+10:00.<br></footer></div>
+</div>
+</body>
+</html>
