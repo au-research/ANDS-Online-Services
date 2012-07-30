@@ -106,475 +106,473 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 
 		$registryObject = $registryObjectList->item($i);
 		$deleted = true;
-		$overwritten = false;
 		// Registry Object Key
 		// =====================================================================
 		$registryObjectKey = substr($gXPath->evaluate("$xs:key", $registryObject)->item(0)->nodeValue, 0, 512);
-
-		if( $registryObjectKey )
+		$oldRegistryObject = getRegistryObject($registryObjectKey);
+		if(!$oldRegistryObject || $oldRegistryObject[0]['created_who'] != $created_who)
 		{
-			// Get hold of the currentUrlSlug and re-use it!!
-			$currentUrlSlug = getRegistryObjectURLSlug($registryObjectKey);
-
-			// Check if this object exists already, and delete it if it does.
-			if( $oldRegistryObject = getRegistryObject($registryObjectKey) )
+			if( $registryObjectKey)
 			{
-				// Delete this object and all associated records from the registry (if qaflag is true, don't delete existing one
-
-				if($dataSourceKey == $oldRegistryObject[0]['data_source_key'])
-				{
-					if ($qaFlag != 't')
-					{
-						$old_registry_date_modified = $oldRegistryObject[0]['registry_date_modified'];
-						$errors = deleteRegistryObject($registryObjectKey);
-						if( !$errors )
-						{
-							$overwritten = true;
-							$totalRegistryObjectDeletes++;
-						}
-						else
-						{
-							$runErrors .= "Failed to delete Registry Object with key $registryObjectKey\n";
-						}
-					}
-				}
-				else
-				{
-					$deleted = false;
-					$runErrors .= "Registry Object with key $registryObjectKey already exists in a different datasource\n";
-				}
-
-				/*
-				 * Check for previous revisions, compare equality and add a new revision if appropriate
-				 */
-
-				$previousRegistryObjects = getRawRecords($registryObjectKey,$dataSourceKey, NULL);
-
-				//$previousRegistryObjects = null;
-				//return $previousRegistryObjects;
+				// Get hold of the currentUrlSlug and re-use it!!
+				$currentUrlSlug = getRegistryObjectURLSlug($registryObjectKey);
+	
 				// Check if this object exists already, and delete it if it does.
-				if( $previousRegistryObjects && count ($previousRegistryObjects) > 0)
+				if($oldRegistryObject)
 				{
-					// Check if the object has changed since its last import
-					$currentRecordFragment = $registryObject->ownerDocument->saveXML($registryObject);
-					//print $currentRecordFragment;die();
-					// Get the most recent record fragment
-					$previousRecordFragment = @array_pop($previousRegistryObjects);
-					if ($previousRecordFragment === NULL)
+					// Delete this object and all associated records from the registry (if qaflag is true, don't delete existing one
+	
+					if($dataSourceKey == $oldRegistryObject[0]['data_source_key'])
 					{
-						$runErrors .= "Failed to find comparable Raw Record Fragment for $registryObjectKey\n";
+						if ($qaFlag != 't')
+						{
+							$errors = deleteRegistryObject($registryObjectKey);
+							if( !$errors )
+							{
+								$totalRegistryObjectDeletes++;
+							}
+							else
+							{
+								$runErrors .= "Failed to delete Registry Object with key $registryObjectKey\n";
+							}
+						}
 					}
 					else
 					{
-
-						// Wrap registryObject in the XML wrappers (this will cause records to mismatch if gRIF_SCHEMA_URI is changed
-						// in orca/_includes/init.php
-						if (!compareLooseXMLEquivalent($currentRecordFragment, $previousRecordFragment['rifcs_fragment']))
-						{
-							insertRawRecord($registryObjectKey, $dataSourceKey, date('Y-m-d H:i:s'), $created_who, $currentRecordFragment);
-							$totalRegistryObjectChanges++;
-						}
+						$deleted = false;
+						$runErrors .= "Registry Object with key $registryObjectKey already exists in a different datasource\n";
 					}
-				}
-			}
-			else
-			{
-				$currentRecordFragment = $registryObject->ownerDocument->saveXML($registryObject);
-				insertRawRecord($registryObjectKey, $dataSourceKey, date('Y-m-d H:i:s'), $created_who, $currentRecordFragment);
-			}
-
-			// Registry Object Originating Source
-			// =====================================================================
-			$originatingSource = $gXPath->evaluate("$xs:originatingSource", $registryObject)->item(0);
-			$originatingSourceValue = $originatingSource->nodeValue;
-			$originatingSourceType = $originatingSource->getAttribute("type");
-
-
-
-			// We're all set to insert the new/replacement registry object.
-			// Registry Object
-			// =====================================================================
-			$object_group = $registryObject->getAttribute("group");
-
-
-			// Activity
-			// =====================================================================
-
-			if($qaFlag == 't')
-			{
-
-				if($activity = $gXPath->evaluate("$xs:activity", $registryObject)->item(0))
-				{
-				 	$draft_type = $activity->getAttribute("type");
-				 	//$date_modified = $activity->getAttribute("dateModified");
-				 	$eClass = 'activity';
-				 	$draft_class = 'Activity';
-				}
-				else if($collection = $gXPath->evaluate("$xs:collection", $registryObject)->item(0))
-				{
-					$draft_type= $collection->getAttribute("type");
-					//$date_modified = $collection->getAttribute("dateModified");
-					$eClass = 'collection';
-					$draft_class = 'Collection';
-				}
-				else if($party = $gXPath->evaluate("$xs:party", $registryObject)->item(0))
-				{
-					$draft_type = $party->getAttribute("type");
-					//$date_modified = $party->getAttribute("dateModified");
-					$eClass = 'party';
-					$draft_class = 'Party';
-				}
-				else if($service = $gXPath->evaluate("$xs:service", $registryObject)->item(0))
-				{
-					$draft_type = $service->getAttribute("type");
-					//$date_modified = $service->getAttribute("dateModified");
-					$eClass = 'service';
-					$draft_class = 'Service';
-				}
-				$date_modified = date('Y-m-d H:i:s');
-				$title = '';
-				$possibleNames = null;
-				$possibleNames = $gXPath->evaluate("$xs:$eClass/$xs:name[@type='primary']", $registryObject);
-				if ($possibleNames->length > 0)
-				{
-
-					$parts = $gXPath->evaluate("$xs:$eClass/$xs:name[@type='primary']/$xs:namePart", $registryObject);
-					if ($parts->length > 0)
+	
+					/*
+					 * Check for previous revisions, compare equality and add a new revision if appropriate
+					 */
+	
+					$previousRegistryObjects = getRawRecords($registryObjectKey,$dataSourceKey, NULL);
+	
+					//$previousRegistryObjects = null;
+					//return $previousRegistryObjects;
+					// Check if this object exists already, and delete it if it does.
+					if( $previousRegistryObjects && count ($previousRegistryObjects) > 0)
 					{
-						$title = "";
-						for($k=0; $k<$parts->length; $k++)
+						// Check if the object has changed since its last import
+						$currentRecordFragment = $registryObject->ownerDocument->saveXML($registryObject);
+						//print $currentRecordFragment;die();
+						// Get the most recent record fragment
+						$previousRecordFragment = @array_pop($previousRegistryObjects);
+						if ($previousRecordFragment === NULL)
 						{
-							$title .= $parts->item($k)->nodeValue . " ";
+							$runErrors .= "Failed to find comparable Raw Record Fragment for $registryObjectKey\n";
 						}
-						$title = trim($title);
+						else
+						{
+	
+							// Wrap registryObject in the XML wrappers (this will cause records to mismatch if gRIF_SCHEMA_URI is changed
+							// in orca/_includes/init.php
+							if (!compareLooseXMLEquivalent($currentRecordFragment, $previousRecordFragment['rifcs_fragment']))
+							{
+								insertRawRecord($registryObjectKey, $dataSourceKey, date('Y-m-d H:i:s'), $created_who, $currentRecordFragment);
+								$totalRegistryObjectChanges++;
+							}
+						}
 					}
 				}
 				else
 				{
-					$possibleNames = $gXPath->evaluate("$xs:$eClass/$xs:name/$xs:namePart", $registryObject);
-
+					$currentRecordFragment = $registryObject->ownerDocument->saveXML($registryObject);
+					insertRawRecord($registryObjectKey, $dataSourceKey, date('Y-m-d H:i:s'), $created_who, $currentRecordFragment);
+				}
+	
+				// Registry Object Originating Source
+				// =====================================================================
+				$originatingSource = $gXPath->evaluate("$xs:originatingSource", $registryObject)->item(0);
+				$originatingSourceValue = $originatingSource->nodeValue;
+				$originatingSourceType = $originatingSource->getAttribute("type");
+	
+	
+	
+				// We're all set to insert the new/replacement registry object.
+				// Registry Object
+				// =====================================================================
+				$object_group = $registryObject->getAttribute("group");
+	
+	
+				if($qaFlag == 't')
+				{
+	
+					if($activity = $gXPath->evaluate("$xs:activity", $registryObject)->item(0))
+					{
+					 	$draft_type = $activity->getAttribute("type");
+					 	//$date_modified = $activity->getAttribute("dateModified");
+					 	$eClass = 'activity';
+					 	$draft_class = 'Activity';
+					}
+					else if($collection = $gXPath->evaluate("$xs:collection", $registryObject)->item(0))
+					{
+						$draft_type= $collection->getAttribute("type");
+						//$date_modified = $collection->getAttribute("dateModified");
+						$eClass = 'collection';
+						$draft_class = 'Collection';
+					}
+					else if($party = $gXPath->evaluate("$xs:party", $registryObject)->item(0))
+					{
+						$draft_type = $party->getAttribute("type");
+						//$date_modified = $party->getAttribute("dateModified");
+						$eClass = 'party';
+						$draft_class = 'Party';
+					}
+					else if($service = $gXPath->evaluate("$xs:service", $registryObject)->item(0))
+					{
+						$draft_type = $service->getAttribute("type");
+						//$date_modified = $service->getAttribute("dateModified");
+						$eClass = 'service';
+						$draft_class = 'Service';
+					}
+					$date_modified = date('Y-m-d H:i:s');
+					$title = '';
+					$possibleNames = null;
+					$possibleNames = $gXPath->evaluate("$xs:$eClass/$xs:name[@type='primary']", $registryObject);
 					if ($possibleNames->length > 0)
 					{
-						$title = "";
-						for($k=0; $k<$possibleNames->length; $k++)
+	
+						$parts = $gXPath->evaluate("$xs:$eClass/$xs:name[@type='primary']/$xs:namePart", $registryObject);
+						if ($parts->length > 0)
 						{
-							$title .= $possibleNames->item($k)->nodeValue . " ";
+							$title = "";
+							for($k=0; $k<$parts->length; $k++)
+							{
+								$title .= $parts->item($k)->nodeValue . " ";
+							}
+							$title = trim($title);
 						}
-						$title = trim($title);
 					}
-				}
-
-				if (strlen($title) === 0)
-				{
-					$title = '(no name/title)';
-				}
-
-				$rifcs = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
-				$rifcs .= '<registryObjects xmlns="http://ands.org.au/standards/rif-cs/registryObjects" '."\n";
-				$rifcs .= '                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '."\n";
-				$rifcs .= '                 xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects '.gRIF_SCHEMA_URI.'">'."\n";
-				$rifcs .= $registryObjects->saveXML($registryObject);
-				$rifcs .= '</registryObjects>';
-
-				if ($dataSourceKey != 'PUBLISH_MY_DATA' && getDraftCountByStatus($dataSourceKey, SUBMITTED_FOR_ASSESSMENT) == 0)
-				{
-					send_email(
-						$dataSource[0]['assessement_notification_email_addr'],
-						"Records from " . $dataSource[0]['title'] . " are ready for your assessment",
-						$dataSource[0]['title'] . " has submitted " . count($totalRegistryObjectElements) . " record(s) for your assessment by Harvest. \n\n" .
-						"Your action is required to review these records by visiting the Manage My Records screen or accessing the Data Source directly by the following link:\n" .
-						eHTTP_APP_ROOT . "orca/manage/my_records.php?data_source=" . $dataSourceKey . "\n\n"
-					);
-				}
-				$runResultMessage .=  insertDraftRegistryObject(($dataSourceKey == 'PUBLISH_MY_DATA' ? $record_owner : $created_who), $registryObjectKey, $draft_class, $object_group, $draft_type, $title, $dataSourceKey, date('Y-m-d H:i:s'), $date_modified , $rifcs, '', 0, 0, SUBMITTED_FOR_ASSESSMENT);
-				$SUBMITTED_FOR_ASSESSMENT_Inserts++;
-				//$runResultMessage  .= "\nRegistry Object with key $registryObjectKey is SUBMITTED_FOR_ASSESSMENT";
-			}
-			else
-			{
-				if($deleted && !$errors && $activity = $gXPath->evaluate("$xs:activity", $registryObject)->item(0) )
-				{
-					$activityType = $activity->getAttribute("type");
-					$date_modified = $activity->getAttribute("dateModified");
-
-					$errors = insertRegistryObject($registryObjectKey, 'Activity', $activityType, $originatingSourceValue, $originatingSourceType, $dataSourceKey, $object_group, null, $date_modified, $created_who, $status, $record_owner);
-					$totalAttemptedInserts++;
-					if( !$errors ) { $totalRegistryObjectInserts++; $totalInserts++; } else { $runErrors .= "Failed to insert Activity with key $registryObjectKey\n"; }
-
-					// identifier
-					// -----------------------------------------------------------------
-					importIdentifierTypes($registryObjectKey, $activity, "identifier", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
-
-					// name
-					// -----------------------------------------------------------------
-					importComplexNameTypes($registryObjectKey, $activity, "name", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
-
-					// location
-					// -----------------------------------------------------------------
-					importLocations($registryObjectKey, $activity, "location", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
-
-					// relatedObject
-					// -----------------------------------------------------------------
-					importRelatedObjectTypes($registryObjectKey, $activity, "relatedObject", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
-
-					// subject
-					// -----------------------------------------------------------------
-					importSubjectTypes($registryObjectKey, $activity, "subject", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
-
-					// description
-					// -----------------------------------------------------------------
-					importDescriptionTypes($registryObjectKey, $activity, "description", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
-
-					// coverage
-					// -----------------------------------------------------------------
-					importCoverage($registryObjectKey, $activity, "coverage", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
-
-					// citationInfo
-					// -----------------------------------------------------------------
-					importCitationInfo($registryObjectKey, $activity, "citationInfo", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
-
-					// rights
-					// -----------------------------------------------------------------
-					importRights($registryObjectKey, $activity, "rights", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
-
-					// existenceDates
-					// -----------------------------------------------------------------
-					importExistenceDates($registryObjectKey, $activity, "existenceDates", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
-
-					// relatedInfo
-					// -----------------------------------------------------------------
-					importRelatedInfo($registryObjectKey, $activity, "relatedInfo", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
-
-				} // Activity
-
-				// Collection
-				// =====================================================================
-				if($deleted && !$errors && $collection = $gXPath->evaluate("$xs:collection", $registryObject)->item(0) )
-				{
-					$collectionType = $collection->getAttribute("type");
-
-					$date_accessioned = $collection->getAttribute("dateAccessioned");
-					$date_modified = $collection->getAttribute("dateModified");
-
-					$errors = insertRegistryObject($registryObjectKey, 'Collection', $collectionType, $originatingSourceValue, $originatingSourceType, $dataSourceKey, $object_group, $date_accessioned, $date_modified, $created_who, $status, $record_owner);
-					$totalAttemptedInserts++;
-					if( !$errors ) { $totalRegistryObjectInserts++; $totalInserts++; } else { $runErrors .= "Failed to insert Collection with key $registryObjectKey\n(aaa".$errors; }
-
-					// identifier
-					// -----------------------------------------------------------------
-					importIdentifierTypes($registryObjectKey, $collection, "identifier", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
-
-					// name
-					// -----------------------------------------------------------------
-					importComplexNameTypes($registryObjectKey, $collection, "name", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
-
-					// location
-					// -----------------------------------------------------------------
-					importLocations($registryObjectKey, $collection, "location", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
-
-					// relatedObject
-					// -----------------------------------------------------------------
-					importRelatedObjectTypes($registryObjectKey, $collection, "relatedObject", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
-
-					// subject
-					// -----------------------------------------------------------------
-					importSubjectTypes($registryObjectKey, $collection, "subject", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
-
-					// description
-					// -----------------------------------------------------------------
-					importDescriptionTypes($registryObjectKey, $collection, "description", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
-
-					// coverage
-					// -----------------------------------------------------------------
-					importCoverage($registryObjectKey, $collection, "coverage", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
-
-					// citationInfo
-					// -----------------------------------------------------------------
-					importCitationInfo($registryObjectKey, $collection, "citationInfo", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
-
-					// rights
-					// -----------------------------------------------------------------
-					importRights($registryObjectKey, $collection, "rights", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
-
-					// existenceDates
-					// -----------------------------------------------------------------
-					importExistenceDates($registryObjectKey, $collection, "existenceDates", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
-
-
-					// relatedInfo
-					// -----------------------------------------------------------------
-					importRelatedInfo($registryObjectKey, $collection, "relatedInfo", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
-
-				} // Collection
-
-				// Party
-				// =====================================================================
-				if($deleted && !$errors && $party = $gXPath->evaluate("$xs:party", $registryObject)->item(0) )
-				{
-					$partyType = $party->getAttribute("type");
-					$date_modified = $party->getAttribute("dateModified");
-
-					//echo $registryObjectKey.' Party '.$partyType.' '.$originatingSourceValue.' '.$originatingSourceType.' '.$dataSourceKey.' '.$object_group.' '.$date_modified.' '.$created_who.' '.$status.' '.$record_owner;
-					$errors = insertRegistryObject($registryObjectKey, 'Party', $partyType, $originatingSourceValue, $originatingSourceType, $dataSourceKey, $object_group, null, $date_modified, $created_who, $status, $record_owner);
-					//echo $errors;
-					//exit;
-					$totalAttemptedInserts++;
-					if( !$errors ) { $totalRegistryObjectInserts++; $totalInserts++; } else { $runErrors .= "Failed to insert Party with key $registryObjectKey\n"; }
-
-					// identifier
-					// -----------------------------------------------------------------
-					importIdentifierTypes($registryObjectKey, $party, "identifier", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
-
-					// name
-					// -----------------------------------------------------------------
-					importComplexNameTypes($registryObjectKey, $party, "name", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
-
-					// location
-					// -----------------------------------------------------------------
-					importLocations($registryObjectKey, $party, "location", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
-
-					// relatedObject
-					// -----------------------------------------------------------------
-					importRelatedObjectTypes($registryObjectKey, $party, "relatedObject", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
-
-					// subject
-					// -----------------------------------------------------------------
-					importSubjectTypes($registryObjectKey, $party, "subject", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
-
-					// description
-					// -----------------------------------------------------------------
-					importDescriptionTypes($registryObjectKey, $party, "description", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
-
-					// coverage
-					// -----------------------------------------------------------------
-					importCoverage($registryObjectKey, $party, "coverage", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
-
-					// citationInfo
-					// -----------------------------------------------------------------
-					importCitationInfo($registryObjectKey, $party, "citationInfo", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
-
-					// rights
-					// -----------------------------------------------------------------
-					importRights($registryObjectKey, $party, "rights", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
-
-					// existenceDates
-					// -----------------------------------------------------------------
-					importExistenceDates($registryObjectKey, $party, "existenceDates", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
-
-					// relatedInfo
-					// -----------------------------------------------------------------
-					importRelatedInfo($registryObjectKey, $party, "relatedInfo", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
-
-				} // Party
-
-				// Service
-				// =====================================================================
-				if($deleted && !$errors && $service = $gXPath->evaluate("$xs:service", $registryObject)->item(0) )
-				{
-					$serviceType = $service->getAttribute("type");
-					$date_modified = $service->getAttribute("dateModified");
-
-					$errors = insertRegistryObject($registryObjectKey, 'Service', $serviceType, $originatingSourceValue, $originatingSourceType, $dataSourceKey, $object_group, null, $date_modified, $created_who, $status, $record_owner);
-					$totalAttemptedInserts++;
-					if( !$errors ) { $totalRegistryObjectInserts++; $totalInserts++; } else { $runErrors .= "Failed to insert Service with key $registryObjectKey\n"; }
-
-					// identifier
-					// -----------------------------------------------------------------
-					importIdentifierTypes($registryObjectKey, $service, "identifier", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
-
-					// name
-					// -----------------------------------------------------------------
-					importComplexNameTypes($registryObjectKey, $service, "name", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
-
-					// location
-					// -----------------------------------------------------------------
-					importLocations($registryObjectKey, $service, "location", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
-
-					// relatedObject
-					// -----------------------------------------------------------------
-					importRelatedObjectTypes($registryObjectKey, $service, "relatedObject", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
-
-					// subject
-					// -----------------------------------------------------------------
-					importSubjectTypes($registryObjectKey, $service, "subject", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
-
-					// description
-					// -----------------------------------------------------------------
-					importDescriptionTypes($registryObjectKey, $service, "description", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
-
-					// coverage
-					// -----------------------------------------------------------------
-					importCoverage($registryObjectKey, $service, "coverage", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
-
-					// citationInfo
-					// -----------------------------------------------------------------
-					importCitationInfo($registryObjectKey, $service, "citationInfo", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
-
-					// accessPolicy
-					// -----------------------------------------------------------------
-					importAccessPolicy($registryObjectKey, $service, "accessPolicy", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
-
-					// rights
-					// -----------------------------------------------------------------
-					importRights($registryObjectKey, $service, "rights", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
-
-					// existenceDates
-					// -----------------------------------------------------------------
-					importExistenceDates($registryObjectKey, $service, "existenceDates", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
-
-					// relatedInfo
-					// -----------------------------------------------------------------
-					importRelatedInfo($registryObjectKey, $service, "relatedInfo", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
-
-				} // Service
-
-				// Add a default and list title for the registry object
-				$display_title = getOrderedNames($registryObjectKey, (isset($party) && $party), true);
-				$list_title = getOrderedNames($registryObjectKey, (isset($party) && $party), false);
-				updateRegistryObjectTitles ($registryObjectKey, $display_title, $list_title);
-
-				//if there's an old Registry Object that has already been overwritten, update the registry_date_modified to the old one
-				if($overwritten) updateRegistryObjectDateModified($registryObjectKey, $old_registry_date_modified);
-
-				$hash = generateRegistryObjectHashForKey($registryObjectKey);
-
-				updateRegistryObjectHash($registryObjectKey, $hash);
-				// this rule might change...
-				if($override_qa){
-					setRegistryObjectManuallyAssessedFlag($registryObjectKey);
-				}
-				// Update the registry object SLUG here
-				// if the currentUrlSlug already exists (from above), means we are replacing
-				// a record that already existed, so we re-use its slug...otherwise we generate
-				// a new SLUG for the record based on its key and title
-				updateRegistryObjectSLUG($registryObjectKey, $display_title, $currentUrlSlug);
-
-				// A new record has been inserted? Update the cache
-
-				if (eCACHE_ENABLED && !writeCache($dataSourceKey, $registryObjectKey, generateExtendedRIFCS($registryObjectKey)))
-
-				{
-					$runErrors .= "Could not writeCache() for key: " . $registryObjectKey ."\n";
+					else
+					{
+						$possibleNames = $gXPath->evaluate("$xs:$eClass/$xs:name/$xs:namePart", $registryObject);
+	
+						if ($possibleNames->length > 0)
+						{
+							$title = "";
+							for($k=0; $k<$possibleNames->length; $k++)
+							{
+								$title .= $possibleNames->item($k)->nodeValue . " ";
+							}
+							$title = trim($title);
+						}
+					}
+	
+					if (strlen($title) === 0)
+					{
+						$title = '(no name/title)';
+					}
+	
+					$rifcs = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
+					$rifcs .= '<registryObjects xmlns="http://ands.org.au/standards/rif-cs/registryObjects" '."\n";
+					$rifcs .= '                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '."\n";
+					$rifcs .= '                 xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects '.gRIF_SCHEMA_URI.'">'."\n";
+					$rifcs .= $registryObjects->saveXML($registryObject);
+					$rifcs .= '</registryObjects>';
+	
+					if ($dataSourceKey != 'PUBLISH_MY_DATA' && getDraftCountByStatus($dataSourceKey, SUBMITTED_FOR_ASSESSMENT) == 0)
+					{
+						send_email(
+							$dataSource[0]['assessement_notification_email_addr'],
+							"Records from " . $dataSource[0]['title'] . " are ready for your assessment",
+							$dataSource[0]['title'] . " has submitted " . count($totalRegistryObjectElements) . " record(s) for your assessment by Harvest. \n\n" .
+							"Your action is required to review these records by visiting the Manage My Records screen or accessing the Data Source directly by the following link:\n" .
+							eHTTP_APP_ROOT . "orca/manage/my_records.php?data_source=" . $dataSourceKey . "\n\n"
+						);
+					}
+					$runResultMessage .=  insertDraftRegistryObject(($dataSourceKey == 'PUBLISH_MY_DATA' ? $record_owner : $created_who), $registryObjectKey, $draft_class, $object_group, $draft_type, $title, $dataSourceKey, date('Y-m-d H:i:s'), $date_modified , $rifcs, '', 0, 0, SUBMITTED_FOR_ASSESSMENT);
+					$SUBMITTED_FOR_ASSESSMENT_Inserts++;
+					//$runResultMessage  .= "\nRegistry Object with key $registryObjectKey is SUBMITTED_FOR_ASSESSMENT";
 				}
 				else
 				{
-					$recordsCached++;
-				}
-				
-				if(isContributorPage($registryObjectKey)&&$status=='PUBLISHED')
-				{
-					$mailSubject = $list_title.' contributor page was published on '.date("d-m-Y h:m:s");						
-					$mailBody = eHTTP_APP_ROOT.'orca/view.php?key='.urlencode($registryObjectKey);	
-					send_email(eCONTACT_EMAIL,$mailSubject,$mailBody);				
-		
+					if($deleted && !$errors && $activity = $gXPath->evaluate("$xs:activity", $registryObject)->item(0) )
+					{
+						$activityType = $activity->getAttribute("type");
+						$date_modified = $activity->getAttribute("dateModified");
+	
+						$errors = insertRegistryObject($registryObjectKey, 'Activity', $activityType, $originatingSourceValue, $originatingSourceType, $dataSourceKey, $object_group, null, $date_modified, $created_who, $status, $record_owner);
+						$totalAttemptedInserts++;
+						if( !$errors ) { $totalRegistryObjectInserts++; $totalInserts++; } else { $runErrors .= "Failed to insert Activity with key $registryObjectKey\n"; }
+	
+						// identifier
+						// -----------------------------------------------------------------
+						importIdentifierTypes($registryObjectKey, $activity, "identifier", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+	
+						// name
+						// -----------------------------------------------------------------
+						importComplexNameTypes($registryObjectKey, $activity, "name", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+	
+						// location
+						// -----------------------------------------------------------------
+						importLocations($registryObjectKey, $activity, "location", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+	
+						// relatedObject
+						// -----------------------------------------------------------------
+						importRelatedObjectTypes($registryObjectKey, $activity, "relatedObject", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+	
+						// subject
+						// -----------------------------------------------------------------
+						importSubjectTypes($registryObjectKey, $activity, "subject", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+	
+						// description
+						// -----------------------------------------------------------------
+						importDescriptionTypes($registryObjectKey, $activity, "description", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+	
+						// coverage
+						// -----------------------------------------------------------------
+						importCoverage($registryObjectKey, $activity, "coverage", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+	
+						// citationInfo
+						// -----------------------------------------------------------------
+						importCitationInfo($registryObjectKey, $activity, "citationInfo", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+	
+						// rights
+						// -----------------------------------------------------------------
+						importRights($registryObjectKey, $activity, "rights", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+	
+						// existenceDates
+						// -----------------------------------------------------------------
+						importExistenceDates($registryObjectKey, $activity, "existenceDates", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+	
+						// relatedInfo
+						// -----------------------------------------------------------------
+						importRelatedInfo($registryObjectKey, $activity, "relatedInfo", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+	
+					} // Activity
+	
+					// Collection
+					// =====================================================================
+					if($deleted && !$errors && $collection = $gXPath->evaluate("$xs:collection", $registryObject)->item(0) )
+					{
+						$collectionType = $collection->getAttribute("type");
+	
+						$date_accessioned = $collection->getAttribute("dateAccessioned");
+						$date_modified = $collection->getAttribute("dateModified");
+	
+						$errors = insertRegistryObject($registryObjectKey, 'Collection', $collectionType, $originatingSourceValue, $originatingSourceType, $dataSourceKey, $object_group, $date_accessioned, $date_modified, $created_who, $status, $record_owner);
+						$totalAttemptedInserts++;
+						if( !$errors ) { $totalRegistryObjectInserts++; $totalInserts++; } else { $runErrors .= "Failed to insert Collection with key $registryObjectKey\n(aaa".$errors; }
+	
+						// identifier
+						// -----------------------------------------------------------------
+						importIdentifierTypes($registryObjectKey, $collection, "identifier", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+	
+						// name
+						// -----------------------------------------------------------------
+						importComplexNameTypes($registryObjectKey, $collection, "name", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+	
+						// location
+						// -----------------------------------------------------------------
+						importLocations($registryObjectKey, $collection, "location", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+	
+						// relatedObject
+						// -----------------------------------------------------------------
+						importRelatedObjectTypes($registryObjectKey, $collection, "relatedObject", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+	
+						// subject
+						// -----------------------------------------------------------------
+						importSubjectTypes($registryObjectKey, $collection, "subject", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+	
+						// description
+						// -----------------------------------------------------------------
+						importDescriptionTypes($registryObjectKey, $collection, "description", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+	
+						// coverage
+						// -----------------------------------------------------------------
+						importCoverage($registryObjectKey, $collection, "coverage", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+	
+						// citationInfo
+						// -----------------------------------------------------------------
+						importCitationInfo($registryObjectKey, $collection, "citationInfo", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+	
+						// rights
+						// -----------------------------------------------------------------
+						importRights($registryObjectKey, $collection, "rights", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+	
+						// existenceDates
+						// -----------------------------------------------------------------
+						importExistenceDates($registryObjectKey, $collection, "existenceDates", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+	
+	
+						// relatedInfo
+						// -----------------------------------------------------------------
+						importRelatedInfo($registryObjectKey, $collection, "relatedInfo", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+	
+					} // Collection
+	
+					// Party
+					// =====================================================================
+					if($deleted && !$errors && $party = $gXPath->evaluate("$xs:party", $registryObject)->item(0) )
+					{
+						$partyType = $party->getAttribute("type");
+						$date_modified = $party->getAttribute("dateModified");
+	
+						//echo $registryObjectKey.' Party '.$partyType.' '.$originatingSourceValue.' '.$originatingSourceType.' '.$dataSourceKey.' '.$object_group.' '.$date_modified.' '.$created_who.' '.$status.' '.$record_owner;
+						$errors = insertRegistryObject($registryObjectKey, 'Party', $partyType, $originatingSourceValue, $originatingSourceType, $dataSourceKey, $object_group, null, $date_modified, $created_who, $status, $record_owner);
+						//echo $errors;
+						//exit;
+						$totalAttemptedInserts++;
+						if( !$errors ) { $totalRegistryObjectInserts++; $totalInserts++; } else { $runErrors .= "Failed to insert Party with key $registryObjectKey\n"; }
+	
+						// identifier
+						// -----------------------------------------------------------------
+						importIdentifierTypes($registryObjectKey, $party, "identifier", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+	
+						// name
+						// -----------------------------------------------------------------
+						importComplexNameTypes($registryObjectKey, $party, "name", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+	
+						// location
+						// -----------------------------------------------------------------
+						importLocations($registryObjectKey, $party, "location", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+	
+						// relatedObject
+						// -----------------------------------------------------------------
+						importRelatedObjectTypes($registryObjectKey, $party, "relatedObject", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+	
+						// subject
+						// -----------------------------------------------------------------
+						importSubjectTypes($registryObjectKey, $party, "subject", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+	
+						// description
+						// -----------------------------------------------------------------
+						importDescriptionTypes($registryObjectKey, $party, "description", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+	
+						// coverage
+						// -----------------------------------------------------------------
+						importCoverage($registryObjectKey, $party, "coverage", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+	
+						// citationInfo
+						// -----------------------------------------------------------------
+						importCitationInfo($registryObjectKey, $party, "citationInfo", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+	
+						// rights
+						// -----------------------------------------------------------------
+						importRights($registryObjectKey, $party, "rights", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+	
+						// existenceDates
+						// -----------------------------------------------------------------
+						importExistenceDates($registryObjectKey, $party, "existenceDates", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+	
+						// relatedInfo
+						// -----------------------------------------------------------------
+						importRelatedInfo($registryObjectKey, $party, "relatedInfo", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+	
+					} // Party
+	
+					// Service
+					// =====================================================================
+					if($deleted && !$errors && $service = $gXPath->evaluate("$xs:service", $registryObject)->item(0) )
+					{
+						$serviceType = $service->getAttribute("type");
+						$date_modified = $service->getAttribute("dateModified");
+	
+						$errors = insertRegistryObject($registryObjectKey, 'Service', $serviceType, $originatingSourceValue, $originatingSourceType, $dataSourceKey, $object_group, null, $date_modified, $created_who, $status, $record_owner);
+						$totalAttemptedInserts++;
+						if( !$errors ) { $totalRegistryObjectInserts++; $totalInserts++; } else { $runErrors .= "Failed to insert Service with key $registryObjectKey\n"; }
+	
+						// identifier
+						// -----------------------------------------------------------------
+						importIdentifierTypes($registryObjectKey, $service, "identifier", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+	
+						// name
+						// -----------------------------------------------------------------
+						importComplexNameTypes($registryObjectKey, $service, "name", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+	
+						// location
+						// -----------------------------------------------------------------
+						importLocations($registryObjectKey, $service, "location", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+	
+						// relatedObject
+						// -----------------------------------------------------------------
+						importRelatedObjectTypes($registryObjectKey, $service, "relatedObject", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+	
+						// subject
+						// -----------------------------------------------------------------
+						importSubjectTypes($registryObjectKey, $service, "subject", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+	
+						// description
+						// -----------------------------------------------------------------
+						importDescriptionTypes($registryObjectKey, $service, "description", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+	
+						// coverage
+						// -----------------------------------------------------------------
+						importCoverage($registryObjectKey, $service, "coverage", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+	
+						// citationInfo
+						// -----------------------------------------------------------------
+						importCitationInfo($registryObjectKey, $service, "citationInfo", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+	
+						// accessPolicy
+						// -----------------------------------------------------------------
+						importAccessPolicy($registryObjectKey, $service, "accessPolicy", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+	
+						// rights
+						// -----------------------------------------------------------------
+						importRights($registryObjectKey, $service, "rights", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+	
+						// existenceDates
+						// -----------------------------------------------------------------
+						importExistenceDates($registryObjectKey, $service, "existenceDates", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+	
+						// relatedInfo
+						// -----------------------------------------------------------------
+						importRelatedInfo($registryObjectKey, $service, "relatedInfo", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+	
+					} // Service
+	
+					// Add a default and list title for the registry object
+					$display_title = getOrderedNames($registryObjectKey, (isset($party) && $party), true);
+					$list_title = getOrderedNames($registryObjectKey, (isset($party) && $party), false);
+					updateRegistryObjectTitles ($registryObjectKey, $display_title, $list_title);
+	
+	
+	
+					$hash = generateRegistryObjectHashForKey($registryObjectKey);
+	
+					updateRegistryObjectHash($registryObjectKey, $hash);
+					// this rule might change...
+					if($override_qa){
+						setRegistryObjectManuallyAssessedFlag($registryObjectKey);
+					}
+					// Update the registry object SLUG here
+					// if the currentUrlSlug already exists (from above), means we are replacing
+					// a record that already existed, so we re-use its slug...otherwise we generate
+					// a new SLUG for the record based on its key and title
+					updateRegistryObjectSLUG($registryObjectKey, $display_title, $currentUrlSlug);
+	
+					// A new record has been inserted? Update the cache
+	
+					if (eCACHE_ENABLED && !writeCache($dataSourceKey, $registryObjectKey, generateExtendedRIFCS($registryObjectKey)))
+	
+					{
+						$runErrors .= "Could not writeCache() for key: " . $registryObjectKey ."\n";
+					}
+					else
+					{
+						$recordsCached++;
+					}
+					
+					if(isContributorPage($registryObjectKey)&&$status=='PUBLISHED')
+					{
+						$mailSubject = $list_title.' contributor page was published on '.date("d-m-Y h:m:s");						
+						$mailBody = eHTTP_APP_ROOT.'orca/view.php?key='.urlencode($registryObjectKey);	
+						send_email(eCONTACT_EMAIL,$mailSubject,$mailBody);				
+			
+					}
 				}
 			}
+			else
+			{
+				$runErrors .= "Couldn't create Registry Object without key.\n";
+			}// registryObjectKey
 		}
-		else
-		{
-			$runErrors .= "Couldn't create Registry Object without key.\n";
-		}// registryObjectKey
-
+		else{
+		$ignoredRegistryObjectCount++;	
+		}// END checking for duplicates in the same harvest!!
 	} // Next registryObject.
 	// Useful result information.
 	$runResultMessage .= "  SOURCE DATA\n";
@@ -591,6 +589,10 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 	$runResultMessage .= "    $recordsCached records added to cache.\n";
 	$runResultMessage .= "    $totalAttemptedInserts attempted inserts.\n";
 	$runResultMessage .= "    $totalInserts inserts.\n";
+		if($ignoredRegistryObjectCount > 0)
+		{
+			$runResultMessage .= "    $ignoredRegistryObjectCount records were already received in this harvest.\n";
+		}	
 	}
 
 
