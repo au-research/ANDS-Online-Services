@@ -37,6 +37,26 @@ class Data_sources extends CI_Model {
 	} 	
 	
 	/**
+	 * Returns exactly one data source by ID (or NULL)
+	 * 
+	 * @param the data source ID
+	 * @return _data_source object or NULL
+	 */
+	function getByID($id)
+	{
+		$query = $this->db->select("data_source_id")->get_where('data_sources', array('data_source_id'=>$id));
+		if ($query->num_rows() == 0)
+		{
+			return NULL;
+		}
+		else
+		{
+			$id = $query->result_array();
+			return new _data_source($id[0]['data_source_id']);
+		}
+	} 	
+
+	/**
 	 * Returns exactly one data source by URL slug (or NULL)
 	 * 
 	 * @param the data source slug
@@ -78,16 +98,21 @@ class Data_sources extends CI_Model {
 	} 	
 	
 	/**
-	 * Get a number of datasources that match the attribute requirement (or an empty array)
+	 * Get all datasources
 	 * 
-	 * @param the name of the attribute to match by
-	 * @param the value that the attribute must match
-	 * @return array(_data_source) or NULL
+	 * @param limit by value
+	 * @param the offset value
+	 * @return array(_data_source) or empty array
 	 */
-	function getAll()
+	function getAll($limit = 16, $offset =0)
 	{
 		$matches = array();
-		$query = $this->db->select("data_source_id")->get('data_sources');
+		if($limit==0){
+			$query = $this->db->select("data_source_id")->get('data_sources');
+		}else{
+			$query = $this->db->select("data_source_id")->get('data_sources', $limit, $offset);
+		}
+		
 		
 		if ($query->num_rows() > 0)
 		{

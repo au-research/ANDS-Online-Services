@@ -14,10 +14,26 @@ class Data_source extends MX_Controller {
 
 	public function index()
 	{
-		$this->output->enable_profiler(TRUE);
-		$this->load->model("data_sources","ds");
+		//$this->output->enable_profiler(TRUE);
+		
+		$data['title'] = 'Manage My Datasources';
+		$data['small_title'] = '';
 
-		echo "<pre>";
+		$this->load->model("data_sources","ds");
+		$dataSources = $this->ds->getAll(0,0);//get everything
+
+		$items = array();
+		foreach($dataSources as $ds){
+			$item = array();
+			$item['title'] = $ds->title;
+			$item['id'] = $ds->id;
+			array_push($items, $item);
+		}
+		$data['dataSources'] = $items;
+
+		$this->load->view("data_source_index", $data);
+
+		//echo "<pre>";
 		//$ds = $this->ds->getBySlug('abctb');
 		//$ds->append_log("This is a test log message...TESTING!", "debug");
 		
@@ -28,13 +44,67 @@ class Data_source extends MX_Controller {
 		//echo modules::run('test/test/index');
 	//	$this->ds->
 	}
+
+
+	public function getDataSources($page=1)
+	{
+		//$this->output->enable_profiler(TRUE);
+		header('Cache-Control: no-cache, must-revalidate');
+		header('Content-type: application/json');
+
+		$jsonData = array();
+		$jsonData['status'] = 'OK';
+
+		$this->load->model("data_sources","ds");
+		$limit = 16;
+		$offset = ($page-1) * $limit;
+
+		$dataSources = $this->ds->getAll($limit, $offset);
+
+		$this->load->model("registry_object/registry_objects", "ro");
+
+		$items = array();
+		foreach($dataSources as $ds){
+			$item = array();
+			$item['title'] = $ds->title;
+			$item['id'] = $ds->id;
+
+			$item['counts'] = array();
+			foreach ($this->ro->valid_status AS $status){
+				array_push($item['counts'], $ds->getAttribute("count_$status"));
+			}
+			array_push($items, $item);
+		}
+		
+		$jsonData['items'] = $items;
+		$jsonData = json_encode($jsonData);
+		echo $jsonData;
+	}
+
+	public function getDataSource($id){
+		header('Cache-Control: no-cache, must-revalidate');
+		header('Content-type: application/json');
+
+		$jsonData = array();
+		$jsonData['status'] = 'OK';
+
+		$this->load->model("data_sources","ds");
+		$dataSource = $this->ds->getByID($id);
+
+		foreach($dataSource->attributes as $attrib=>$value){
+			$jsonData['item'][$attrib] = $value->value;
+		}
+		
+		$jsonData = json_encode($jsonData);
+		echo $jsonData;
+	}
 	
 	/**
 	 * @ignore
 	 */
 	public function __construct()
 	{
-		parent::__construct();	
+		parent::__construct();
 	}
 	
 }
