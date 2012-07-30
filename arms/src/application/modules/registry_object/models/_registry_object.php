@@ -1,4 +1,5 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+include_once("_xml.php");
 
 /**
  * Registry Object PHP object
@@ -9,21 +10,22 @@
  * @package ands/datasource
  * @subpackage helpers
  */
-class _data_source {
+class _registry_object {
 	
 	private $id; 	// the unique ID for this data source
 	private $_CI; 	// an internal reference to the CodeIgniter Engine 
 	private $db; 	// another internal reference to save typing!
+	private $_xml;	// internal pointer for RIFCS XML
 	
 	public $attributes = array();		// An array of attributes for this Data Source
 	const MAX_NAME_LEN = 32;
 	const MAX_VALUE_LEN = 255;
 	
 	function __construct($id = NULL, $core_attributes_only = FALSE)
-	{
+	{		
 		if (!is_numeric($id) && !is_null($id)) 
 		{
-			throw new Exception("Data Source Wrapper must be initialised with a numeric Identifier");
+			throw new Exception("Registry Object Wrapper must be initialised with a numeric Identifier");
 		}
 		
 		$this->id = $id;				// Set this object's ID
@@ -34,6 +36,7 @@ class _data_source {
 		{
 			$this->init($core_attributes_only);
 		}
+		
 	}
 	
 	
@@ -47,7 +50,7 @@ class _data_source {
 	
 	
 		/* Initialise the "core" attributes */
-		$query = $this->db->get_where("data_sources", array('data_source_id' => $this->id));
+		$query = $this->db->get_where("registry_objects", array('registry_object_id' => $this->id));
 		
 		if ($query->num_rows() == 1)
 		{
@@ -59,14 +62,14 @@ class _data_source {
 		}
 		else 
 		{
-			throw new Exception("Unable to select Data Source from database");
+			throw new Exception("Unable to select Registry Object from database");
 		}
 			
 		// If we just want more than the core attributes
 		if (!$core_attributes_only)
 		{
 			// Lets get all the rest of the data source attributes
-			$query = $this->db->get_where("data_source_attributes", array('data_source_id' => $this->id));
+			$query = $this->db->get_where("registry_object_attributes", array('registry_object_id' => $this->id));
 			if ($query->num_rows() > 0)
 			{
 				foreach ($query->result() AS $row)
@@ -101,7 +104,7 @@ class _data_source {
 			else 
 			{
 				// This is a new attribute that needs to be created when we save
-				$this->attributes[$name] = new _data_source_attribute($name, $value);
+				$this->attributes[$name] = new _registry_object_attribute($name, $value);
 				$this->attributes[$name]->dirty = TRUE;
 				$this->attributes[$name]->new = TRUE;
 			}
@@ -120,7 +123,14 @@ class _data_source {
 	
 	function create()
 	{
-		$this->db->insert("data_sources", array("data_source_id" => $this->id, "key" => $this->getAttribute("key"), "slug" => $this->getAttribute("slug")));
+		$this->db->insert("registry_objects", array("data_source_id" => $this->getAttribute("data_source_id"), 
+													"key" => (string) $this->getAttribute("key"), 
+													"class" => $this->getAttribute("class"),
+													"title" => $this->getAttribute("title"),
+													"status" => $this->getAttribute("status"),
+													"slug" => $this->getAttribute("slug"),
+													"record_owner" => $this->getAttribute("record_owner")								
+													));
 		$this->id = $this->db->insert_id();
 		$this->save();
 		return $this;
@@ -137,8 +147,8 @@ class _data_source {
 			{
 				if ($attribute->core)
 				{
-					$this->db->where("data_source_id", $this->id);
-					$this->db->update("data_sources", array($attribute->name, $atttribute->value));
+					$this->db->where("registry_object_id", $this->id);
+					$this->db->update("registry_objects", array($attribute->name => $attribute->value));
 					$attribute->dirty = FALSE;
 				}
 				else
@@ -148,21 +158,21 @@ class _data_source {
 					{
 						if ($attribute->new)
 						{
-							$this->db->insert("data_source_attributes", array("data_source_id" => $this->id, "attribute" => $attribute->name, "value"=>$attribute->value));
+							$this->db->insert("registry_object_attributes", array("registry_object_id" => $this->id, "attribute" => $attribute->name, "value"=>$attribute->value));
 							$attribute->dirty = FALSE;
 							$attribute->new = FALSE;
 						}
 						else
 						{
-							$this->db->where(array("data_source_id" => $this->id, "attribute" => $attribute->name));
-							$this->db->update("data_source_attributes", array("value"=>$attribute->value));
+							$this->db->where(array("registry_object_id" => $this->id, "attribute" => $attribute->name));
+							$this->db->update("registry_object_attributes", array("value"=>$attribute->value));
 							$attribute->dirty = FALSE;
 						}
 					}
 					else
 					{
-						$this->db->where(array("data_source_id" => $this->id, "attribute" => $attribute->name));
-						$this->db->delete("data_source_attributes");
+						$this->db->where(array("registry_object_id" => $this->id, "attribute" => $attribute->name));
+						$this->db->delete("registry_object_attributes");
 						unset($this->attributes[$attribute->name]);
 					}
 						
@@ -198,42 +208,85 @@ class _data_source {
 		
 	function _initAttribute($name, $value, $core=FALSE)
 	{
-		$this->attributes[$name] = new _data_source_attribute($name, $value);
+		$this->attributes[$name] = new _registry_object_attribute($name, $value);
 		if ($core)
 		{
 			$this->attributes[$name]->core = TRUE;
 		}
 	}
 	
+	/*
+	 * 	Metadata operations
+	 */
+	function get_metadata($name, $graceful = TRUE)
+	{
+		$query = $this->db->get_where("registry_object_metadata", array('registry_object_id' => $this->id, 'attribute' => $name));
+		if ($query->num_rows() == 1)
+		{
+			return $query->result_array();
+		}
+		else if (!$graceful)
+		{
+			throw new Exception("Unknown/NULL metadata attribute requested by get_metadata($name) method");
+		}
+		else
+		{
+			return NULL;
+		}
+	}
+	
+	function set_metadata($name, $value = '')
+	{
+		$query = $this->db->get_where("registry_object_metadata", array('registry_object_id' => $this->id, 'attribute' => $name));
+		if ($query->num_rows() == 1)
+		{
+			$this->db->where(array('registry_object_id'=>$this->id, 'attribute'=>$name));
+			$this->db->update('registry_object_metadata', array('value'=>$value));
+		}
+		else
+		{
+			$this->db->insert('registry_object_metadata', array('registry_object_id'=>$this->id, 'attribute'=>$name, 'value'=>$value));
+		}
+	}
+	
 	
 	/*
-	 * LOGS
+	 * Record data methods
 	 */
-	function append_log($log_message, $log_type = "message")
+	 
+	function getXML($record_data_id = NULL)
 	{
-		$this->db->insert("data_source_logs", array("data_source_id" => $this->id, "date_modified" => time(), "type" => $log_type, "log" => $log_message));
-		return true;
+		if (!is_null($_xml) && $_xml->record_data_id == $record_data_id)
+		{
+			return $_xml->xml;
+		}
+		else
+		{
+			$_xml = new _xml($this->id, $record_data_id);
+			return $_xml->xml;
+		}
 	}
 	
-	function get_logs($count = 10, $offset = 0)
+		 
+	function updateXML($data, $current = TRUE, $scheme = NULL)
 	{
-		$logs = array();
-		$query = $this->db->get_where("data_source_logs", array("data_source_id"=>$this->id), $count, $offset);
-		if ($query->num_rows() > 0)
+			$_xml = new _xml($this->id);
+			$_xml->update($data, $current, $scheme); 
+	}
+	
+	
+	function getXMLVersions()
+	{
+		$versions = array();
+		$result = $this->db->select('id, timestamp, scheme, current')->get_where('record_data', array('registry_object_id'=>$this->id));
+		if ($result->num_rows() > 0)
 		{
-			foreach ($query->result_array() AS $row)
+			foreach($result->result_array() AS $row)
 			{
-				$logs[] = $row;		
+				$versions[] = $row;
 			}
 		}
-		return $logs;
-	}
-	
-	function clear_logs()
-	{
-		$this->db->where(array("data_source_id" => $this->id));
-		$this->db->delete("data_source_logs");
-		return;
+		return $versions;
 	}
 	
 	
@@ -243,7 +296,7 @@ class _data_source {
 	 */
 	function __toString()
 	{
-		$return = sprintf("%s (%s) [%d]", $this->getAttribute("key", TRUE), $this->getAttribute("slug", TRUE), $this->id) . BR;
+		$return = sprintf("%s (%s) [%d]", $this->getAttribute("key", TRUE), $this->getAttribute("status", TRUE), $this->id) . BR;
 		foreach ($this->attributes AS $attribute)
 		{
 			$return .= sprintf("%s", $attribute) . BR;
@@ -288,19 +341,19 @@ class _data_source {
 
 
 /**
- * Data Source Attribute
+ * Registry Object Attribute
  * 
- * A representation of attributes of a data source, allowing
+ * A representation of attributes of a Registry Object, allowing
  * the state of the attribute to be mainted, so that calls
  * to ->save() only write dirty data to the database.
  * 
  * @author Ben Greenwood <ben.greenwood@ands.org.au>
  * @version 0.1
- * @package ands/datasource
+ * @package ands/registryobject
  * @subpackage helpers
  * 
  */
-class _data_source_attribute 
+class _registry_object_attribute 
 {
 	public $name;
 	public $value;

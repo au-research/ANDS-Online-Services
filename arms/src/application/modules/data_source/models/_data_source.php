@@ -265,6 +265,21 @@ class _data_source {
 	}
 	
 	
+	/*
+	 * 	STATS
+	 */
+	
+	function updateStats()
+	{
+		$this->_CI->load->model("registry_object/registry_objects", "ro");
+		foreach ($this->_CI->ro->valid_status AS $status)
+		{
+			$this->db->where(array('data_source_id'=>$this->id, 'status'=>$status));
+			$this->setAttribute("count_$status", $this->db->count_all_results('registry_objects'));
+		}
+		$this->save();
+		return $this;
+	}
 	
 	/*
 	 * magic methods

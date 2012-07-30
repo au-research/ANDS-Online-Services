@@ -12,7 +12,10 @@
 
 class Registry_objects extends CI_Model {
 		
-
+	public $valid_classes = array("collection","activity","party","service");
+	public $valid_status  = array("DRAFT"=>"DRAFT", "PUBLISHED"=>"PUBLISHED");
+	
+	
 	/**
 	 * Returns exactly one data source by Key (or NULL)
 	 * 
@@ -21,7 +24,7 @@ class Registry_objects extends CI_Model {
 	 */
 	function getByKey($key)
 	{
-		$query = $this->db->select("data_source_id")->get_where('data_sources', array('key'=>$key));
+		$query = $this->db->select("registry_object_id")->get_where('registry_objects', array('key'=>$key));
 		if ($query->num_rows() == 0)
 		{
 			return NULL;
@@ -29,7 +32,7 @@ class Registry_objects extends CI_Model {
 		else
 		{
 			$id = $query->result_array();
-			return new _data_source($id[0]['data_source_id']);
+			return new _registry_object($id[0]['registry_object_id']);
 		}
 	} 	
 	
@@ -39,9 +42,9 @@ class Registry_objects extends CI_Model {
 	 * @param the data source slug
 	 * @return _data_source object or NULL
 	 */
-	function getBySlug($key)
+	function getBySlug($slug)
 	{
-		$query = $this->db->select("data_source_id")->get_where('data_sources', array('slug'=>$key));
+		$query = $this->db->select("registry_object_id")->get_where('registry_objects', array('slug'=>$slug));
 		if ($query->num_rows() == 0)
 		{
 			return NULL;
@@ -49,72 +52,116 @@ class Registry_objects extends CI_Model {
 		else
 		{
 			$id = $query->result_array();
-			return new _data_source($id[0]['data_source_id']);
+			return new _registry_object($id[0]['registry_object_id']);
 		}
 	} 	
 	
+	
 	/**
-	 * Get a number of datasources that match the attribute requirement (or an empty array)
+	 * Get a number of registry_objects that match the attribute requirement (or an empty array)
 	 * 
 	 * @param the name of the attribute to match by
 	 * @param the value that the attribute must match
-	 * @return array(_data_source)
+	 * @return array(_registry_object)
 	 */
 	function getByAttribute($attribute_name, $value)
 	{
 		$matches = array();
-		$query = $this->db->select("data_source_id")->get_where('data_source_attributes', array("attribute"=>$attribute_name, "value"=>$value));
+		$query = $this->db->select("registry_object_id")->get_where('registry_object_attributes', array("attribute"=>$attribute_name, "value"=>$value));
 		if ($query->num_rows() > 0)
 		{
 			foreach ($query->result_array() AS $result)
 			{
-				$matches[] = new _data_source($result['data_source_id']);
+				$matches[] = new _registry_object($result['registry_object_id']);
 			}
 		}
 		return $matches;
 	} 	
 	
 	/**
-	 * Get a number of datasources that match the attribute requirement (or an empty array)
+	 * Get a number of registry_objects that match the attribute requirement (or an empty array)
 	 * 
-	 * @param the name of the attribute to match by
-	 * @param the value that the attribute must match
-	 * @return array(_data_source) or NULL
+	 * @param the data source ID to match by
+	 * @return array(_registry_object)
 	 */
-	function getAll()
+	function getByDataSourceID($data_source_id)
 	{
 		$matches = array();
-		$query = $this->db->select("data_source_id")->get('data_sources');
-		
+		$query = $this->db->select("registry_object_id")->get_where('registry_objects', array("data_source_id"=>$data_source_id));
 		if ($query->num_rows() > 0)
 		{
 			foreach ($query->result_array() AS $result)
 			{
-				$matches[] = new _data_source($result['data_source_id']);
+				$matches[] = new _registry_object($result['registry_object_id']);
 			}
 		}
-		
 		return $matches;
+	} 	
+	
+	
+	/**
+	 * XXX: 
+	 * @return array(_data_source) or NULL
+	 */
+	function create($data_source_key, $registry_object_key, $class, $title, $status, $slug, $record_owner)
+	{
+		if (is_null($this->getByKey($registry_object_key)))
+		{
+			
+			$ro = new _registry_object();
+			
+			// Get the data_source_id for this data source key		
+			$this->load->model('data_source/data_sources','ds');
+			$ds = $this->ds->getByKey($data_source_key);
+			$ro->_initAttribute("data_source_id", $ds->getAttribute('data_source_id'), TRUE);
+	
+	
+			$ro->_initAttribute("key",$registry_object_key, TRUE);
+			$ro->_initAttribute("class",$class, TRUE);
+			$ro->_initAttribute("title",$title, TRUE);
+			$ro->_initAttribute("status",$status, TRUE);
+			$ro->_initAttribute("slug",$slug, TRUE);
+			$ro->_initAttribute("record_owner",$record_owner, TRUE);
+			
+			// Some extras
+			$ro->setAttribute("created",time());
+	
+			$ro->create();
+			return $ro;
+			
+		}
+		else
+		{
+			return $this->update($registry_object_key, $class, $title, $status, $slug, $record_owner);
+		}
 	} 	
 	
 	/**
 	 * XXX: 
 	 * @return array(_data_source) or NULL
 	 */
-	function create($key, $slug)
+	function update($registry_object_key, $class, $title, $status, $slug, $record_owner)
 	{
-		$ds = new _data_source();
-		
-		// Compulsory attributes
-		$ds->_initAttribute("key",$key, TRUE);
-		$ds->_initAttribute("slug",$slug, TRUE);
-		
-		// Some extras
-		$ds->setAttribute("created",time());
+		$ro = $this->getByKey($registry_object_key);
+		if (!is_null($ro))
+		{
 
-		$ds->create();
-		return $ds;
+			$ro->setAttribute("class",$class);
+			$ro->setAttribute("title",$title);
+			$ro->setAttribute("status",$status);
+			$ro->setAttribute("slug",$slug);
+			$ro->setAttribute("record_owner",$record_owner);
+
+			$ro->save();		
+			return $ro;	
+		}
+		else
+		{
+			throw new Exception ("Unable to update registry object (this registry object key does not exist in the registry)");	
+		}
 	} 	
+	
+	
 	
 	/**
 	 * @ignore
@@ -122,7 +169,7 @@ class Registry_objects extends CI_Model {
 	function __construct()
 	{
 		parent::__construct();
-		include_once("_data_source.php");
+		include_once("_registry_object.php");
 	}	
 		
 }
