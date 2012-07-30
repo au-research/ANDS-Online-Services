@@ -113,7 +113,7 @@ function doisGetUserMessage($responseCode, $doi_id,$response_type="string",$app_
 			$response['responsecode'] = $responseCode;
 			$response['message'] = $message;
 			$response['doi'] = $doi_id;			
-			$response['url'] = $urlvalue;
+			$response['url'] = $urlValue;
 			$response['app_id'] = $app_id;
 			$response['verbosemessage'] = $verbosemessage;
 			return '{"response" :'.json_encode($response).'}';
