@@ -1,18 +1,59 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
- /**
- * Registry Object Attribute
- * 
- * A representation of attributes of a Registry Object, allowing
- * the state of the attribute to be mainted, so that calls
- * to ->save() only write dirty data to the database.
- * 
- * @author Ben Greenwood <ben.greenwood@ands.org.au>
- * @version 0.1
- * @package ands/registryobject
- * @subpackage helpers
- * 
- */
+class XML_Extension extends ExtensionBase
+{
+	
+	private $_xml;	// internal pointer for RIFCS XML
+	function __construct($ro_pointer)
+	{
+		parent::__construct($ro_pointer);
+	}		
+	
+	
+	/*
+	 * Record data methods
+	 */
+	 
+	function getXML($record_data_id = NULL)
+	{
+		if (!is_null($this->_xml) && $this->_xml->record_data_id == $record_data_id)
+		{
+			return $this->_xml->xml;
+		}
+		else
+		{
+			$this->_xml = new _xml($this->id, $record_data_id);
+			return $this->_xml->xml;
+		}
+	}
+	
+		 
+	function updateXML($data, $current = TRUE, $scheme = NULL)
+	{
+			$_xml = new _xml($this->id);
+			$_xml->update($data, $current, $scheme); 
+	}
+	
+	
+	function getXMLVersions()
+	{
+		$versions = array();
+		$result = $this->db->select('id, timestamp, scheme, current')->get_where('record_data', array('registry_object_id'=>$this->id));
+		if ($result->num_rows() > 0)
+		{
+			foreach($result->result_array() AS $row)
+			{
+				$versions[] = $row;
+			}
+		}
+		return $versions;
+	}
+	
+	
+}
+
+
+
 class _xml
 {
 	const DEFAULT_SCHEME = "rif";
@@ -40,14 +81,15 @@ class _xml
 		
 		if (!is_null($registry_object_id))
 		{
-			$this->init($record_data_id);
+			return $this->init($record_data_id);
 		}
+		return $this;
 	}	
 	
 	
 	function init($record_data_id)
 	{
-		if (!is_null($record_data_id))
+		if (is_null($record_data_id))
 		{
 			$result = $this->db->get_where('record_data', array('registry_object_id' => $this->registry_object_id, 'current' => 'TRUE'), 1);
 		}
@@ -55,15 +97,16 @@ class _xml
 		{
 			$result = $this->db->get_where('record_data', array('id' => $record_data_id), 1);
 		}
-		
+	
 		if ($result->num_rows() == 1)
 		{
-			$result = $result->result_array();
-			$this->xml = $result['data'];
+			$result = array_pop($result->result_array());
+			$this->xml = "<registryObject>" . $result['data'] . "</registryObject>";
 			$this->timestamp = $result['timestamp'];
 			$this->scheme = $result['scheme'];	
 			$this->record_data_id = $result['id'];
 		}
+		return $this;
 	}
 	
 	function update($xml, $current = TRUE, $scheme = NULL)
@@ -84,4 +127,5 @@ class _xml
 													
 	}
 }
+	
 	

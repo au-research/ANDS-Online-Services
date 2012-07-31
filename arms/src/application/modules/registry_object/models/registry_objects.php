@@ -64,10 +64,18 @@ class Registry_objects extends CI_Model {
 	 * @param the value that the attribute must match
 	 * @return array(_registry_object)
 	 */
-	function getByAttribute($attribute_name, $value)
+	function getByAttribute($attribute_name, $value, $core = FALSE)
 	{
 		$matches = array();
-		$query = $this->db->select("registry_object_id")->get_where('registry_object_attributes', array("attribute"=>$attribute_name, "value"=>$value));
+		$this->db->save_queries = FALSE;
+		if ($core)
+		{
+			$query = $this->db->select("registry_object_id")->get_where('registry_objects', array($attribute_name=>$value));
+		}
+		else
+		{
+			$query = $this->db->select("registry_object_id")->get_where('registry_object_attributes', array("attribute"=>$attribute_name, "value"=>$value));
+		}
 		if ($query->num_rows() > 0)
 		{
 			foreach ($query->result_array() AS $result)
@@ -75,6 +83,7 @@ class Registry_objects extends CI_Model {
 				$matches[] = new _registry_object($result['registry_object_id']);
 			}
 		}
+		//var_dump($matches);
 		return $matches;
 	} 	
 	

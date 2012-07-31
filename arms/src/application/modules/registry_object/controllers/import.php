@@ -11,6 +11,21 @@
  */
 class Import extends MX_Controller {
 
+	function test()
+	{
+		
+		$this->load->model('registry_objects', 'ro');
+		//$registry_objects = $this->ro->getByAttribute('status','DRAFT', TRUE);
+		$registry_objects = array($this->ro->getByKey('http://museumex.org/oai/nma/3022'));
+		foreach ($registry_objects AS $ro)
+		{
+			$ro->updateTitles();	
+			$ro->generateSlug();
+			print $ro->key .  " => " . $ro->display_title .  ' ('.$ro->slug.')'.BR;
+		}
+	
+	}
+
 	function show()
 	{
 		$this->load->model('registry_objects', 'ro');
@@ -18,7 +33,7 @@ class Import extends MX_Controller {
 		
 		foreach($registry_objects AS $ro)
 		{
-			print $ro .BR.BR.BR;	
+			print $ro->getXML();	
 		}
 	
 		
