@@ -110,7 +110,9 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 		// =====================================================================
 		$registryObjectKey = substr($gXPath->evaluate("$xs:key", $registryObject)->item(0)->nodeValue, 0, 512);
 		$oldRegistryObject = getRegistryObject($registryObjectKey);
-		if(!$oldRegistryObject || $oldRegistryObject[0]['created_who'] != $created_who)
+		$oldHarvestID = $oldRegistryObject[0]['created_who'];
+
+		if(!$oldRegistryObject || $oldHarvestID != $created_who)
 		{
 			if( $registryObjectKey)
 			{
@@ -282,8 +284,13 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 							eHTTP_APP_ROOT . "orca/manage/my_records.php?data_source=" . $dataSourceKey . "\n\n"
 						);
 					}
-					$runResultMessage .=  insertDraftRegistryObject(($dataSourceKey == 'PUBLISH_MY_DATA' ? $record_owner : $created_who), $registryObjectKey, $draft_class, $object_group, $draft_type, $title, $dataSourceKey, date('Y-m-d H:i:s'), $date_modified , $rifcs, '', 0, 0, SUBMITTED_FOR_ASSESSMENT);
-					$SUBMITTED_FOR_ASSESSMENT_Inserts++;
+					$oldDraft = getDraftRegistryObject($registryObjectKey, $dataSourceKey);
+					if(!$oldDraft || $oldDraft[0]['draft_owner'] == $created_who){
+						$runResultMessage .=  insertDraftRegistryObject(($dataSourceKey == 'PUBLISH_MY_DATA' ? $record_owner : $created_who), $registryObjectKey, $draft_class, $object_group, $draft_type, $title, $dataSourceKey, date('Y-m-d H:i:s'), $date_modified , $rifcs, '', 0, 0, SUBMITTED_FOR_ASSESSMENT);
+						$SUBMITTED_FOR_ASSESSMENT_Inserts++;
+					}else{
+						$ignoredRegistryObjectCount++;
+					}
 					//$runResultMessage  .= "\nRegistry Object with key $registryObjectKey is SUBMITTED_FOR_ASSESSMENT";
 				}
 				else
@@ -571,7 +578,7 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 			}// registryObjectKey
 		}
 		else{
-		$ignoredRegistryObjectCount++;	
+			$ignoredRegistryObjectCount++;	
 		}// END checking for duplicates in the same harvest!!
 	} // Next registryObject.
 	// Useful result information.
