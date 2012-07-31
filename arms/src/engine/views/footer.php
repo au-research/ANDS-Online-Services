@@ -10,6 +10,10 @@
  */
 ?>
 
+    <!-- Mustache Template that should be used everywhere-->
+    <div id="error-template" class="hide">
+        <div class="alert alert-error"><button type="button" class="close" data-dismiss="alert">×</button>{{.}}</div>
+    </div>
   
     <!-- The javascripts Libraries
     ================================================== -->
@@ -24,6 +28,7 @@
 	<script src="<?php echo base_url();?>assets/lib/mustache.js"></script>
     <script src="<?php echo base_url();?>assets/lib/chosen/chosen.jquery.js" type="text/javascript"></script>
     <script src="<?php echo base_url();?>assets/lib/jquery.ba-hashchange.js" type="text/javascript"></script>
+    <script src="<?php echo base_url();?>assets/lib/bootstrap_toggle_button/jquery.toggle.buttons.js" type="text/javascript"></script>
 
 
 	<!-- ARMS scripts -->

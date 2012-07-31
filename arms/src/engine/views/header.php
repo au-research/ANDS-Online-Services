@@ -28,6 +28,7 @@
 
     <!-- Libraries Styles-->
     <link rel="stylesheet" href="<?php echo base_url();?>assets/lib/chosen/chosen.css">
+    <link rel="stylesheet" href="<?php echo base_url();?>assets/lib/bootstrap_toggle_button/jquery.toggle.buttons.css">
 
     
 

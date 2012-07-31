@@ -7,9 +7,6 @@
  * @package ands/datasource
  * 
  */
-$(".chzn-select").chosen();
-$(".chzn-select-deselect").chosen({allow_single_deselect:true});
-
 
 $(function(){
 
@@ -27,10 +24,11 @@ $(function(){
 			var words = hash.substring(suffix.length, hash.length).split('/');
 			var action = words[0];//action will be the first word found
 			try{
+				$('section').hide();
 				switch(action){
 					case 'browse' : browse(words[1]);break;
 					case 'view': load_datasource(words[1]);break;
-					case 'edit': load_datasource_edit(words[1]);break;
+					case 'edit': load_datasource_edit(words[1], words[2]);break;
 					case 'delete': load_datasource_delete(words[1]);break;
 					default: browse('thumbnails');break;
 				}
@@ -40,6 +38,8 @@ $(function(){
 				$('#main-content').append(output);
 				$('section').hide();
 			}
+		}else{//there is no hash suffix
+			browse('thumbnails');
 		}
 	});
 	$(window).hashchange();
@@ -52,11 +52,9 @@ function browse(view){
 		$('#items').addClass(view);
 		$('#browse-datasources').slideDown();
 	}else{
-		var template = $('#error-template').html();
-		var output = Mustache.render(template, 'Invalid Argument');
-		$('#main-content').append(output);
-		$('section').hide();
+		logErrorOnScreen('invalid View Argument');
 	}
+	$("#datasource-chooser").chosen();
 }
 
 var currentView = 'thumbnails';
@@ -72,11 +70,10 @@ function load_more(page){
 		contentType: 'application/json; charset=utf-8',
 		dataType: 'json',
 		success: function(data){
-			//console.log(data);
 			var itemsTemplate = $('#items-template').html();
 			var output = Mustache.render(itemsTemplate, data);
 			//console.log(output);
-			$('#items').append('<div id="loading">Loading...</div>')
+			//$('#items').append('<div id="loading">Loading...</div>')
 			setTimeout(function(){
 				$('#loading').remove();
 				$('#items').append(output);
@@ -95,8 +92,7 @@ function load_more(page){
 					});
 				$.drop({ multi: true });
 			}, 0);
-		},
-		error: function(data){}
+		}
 	});
 }
 load_more(1);
@@ -123,18 +119,39 @@ $('.item').live({
 	}
 });
 
-$('#datasource-chooser').live({
-	change: function(e){
-		load_datasource($(this).val());
+$('.item-control .btn').live({
+	click: function(e){
+		e.preventDefault();
+		var data_source_id = $(this).parent().parent().attr('data_source_id');
+		if($(this).hasClass('view')){
+			changeHashTo('view/'+data_source_id);
+		}else if($(this).hasClass('edit')){
+			changeHashTo('edit/'+data_source_id);
+		}else if($(this).hasClass('delete')){
+			changeHashTo('delete/'+data_source_id);
+		}
 	}
 });
 
-$('.close').live({
+$('#datasource-chooser').live({
+	change: function(e){
+		changeHashTo('view/'+$(this).val());
+	}
+});
+
+$('.return-to-browse').live({
 	click: function(e){
 		changeHashTo('browse/'+currentView);
 	}
 });
 
+/*
+ * Load a datasource view
+ * With animation, slide the view into place, 
+ * hide the browse section and hide other section in progress
+ * @params data_source_id
+ * @return false
+ */
 function load_datasource(data_source_id){
 	$('#view-datasource').html('Loading');
 	$('#browse-datasources').slideUp(500);
@@ -144,12 +161,87 @@ function load_datasource(data_source_id){
 		contentType: 'application/json; charset=utf-8',
 		dataType: 'json',
 		success: function(data){
-			console.log(data);
 			var template = $('#data-source-view-template').html();
 			var output = Mustache.render(template, data);
 			$('#view-datasource').html(output);
 			$('#view-datasource').fadeIn(500);
-		},
-		error: function(data){}
+		}
 	});
+	return false;
 }
+
+/*
+ * Load a datasource edit view (redundancy)
+ * @TODO: refactor
+ * With animation, slide the view into place, 
+ * hide the browse section and hide other section in progress
+ * @params data_source_id
+ * @return false
+ */
+function load_datasource_edit(data_source_id, active_tab){
+	$('#edit-datasource').html('Loading');
+	$('#browse-datasources').slideUp(500);
+	$('#view-datasources').slideUp(500);
+	$.ajax({
+		url: 'getDataSource/'+data_source_id,
+		type: 'GET',
+		contentType: 'application/json; charset=utf-8',
+		dataType: 'json',
+		success: function(data){
+			console.log(data);
+			var template = $('#data-source-edit-template').html();
+			var output = Mustache.render(template, data);
+			$('#edit-datasource').html(output);
+			$('#edit-datasource').fadeIn(500);
+			if(active_tab && $('#'+active_tab).length > 0){//if an active tab is specified and exists
+				$('.nav-tabs li a[href=#'+active_tab+']').click();
+			}
+			
+			$('#edit-datasource .normal-toggle-button').toggleButtons({
+				width: 75,
+				onChange: function($el, status, e){
+					$('input', $el).attr('value', status);
+				}
+			});
+			$('#edit-datasource  .normal-toggle-button input[type=checkbox]').each(function(){
+				var input = $('#'+$(this).attr('for'));
+				if($(input).val()=='t'){
+					$(this).parent().click();
+				}else{
+					//do nothing for now
+				}
+			});
+
+			$("#edit-datasource .chzn-select").chosen().change(function(){
+				var input = $('#'+$(this).attr('for'));
+				$(input).val($(this).val());
+			});
+			$('#edit-datasource .chzn-select').each(function(){
+				var input = $('#'+$(this).attr('for'));
+				$(this).val($(input).val());
+				$(this).chosen().trigger("liszt:updated");
+			});
+		}
+	});
+	return false;
+}
+$('#save-edit-form').live({
+	click: function(e){
+		e.preventDefault();
+		var jsonData = [];
+		$(this).button('loading');
+
+		$('#edit-datasource #edit-form input, #edit-datasource #edit-form textarea').each(function(){
+			var label = $(this).attr('id');
+			var value = $(this).val();
+			if(value!=''){
+				jsonData.push({name:label, value:value});
+			}
+		});
+
+		var jsonString = ""+JSON.stringify(jsonData);
+		$('#myModal .modal-body').html('<pre>'+jsonString+'</pre>');
+		$('#myModal').modal();
+		//$(this).button('reset');
+	}
+});

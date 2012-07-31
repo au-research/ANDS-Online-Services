@@ -71,7 +71,9 @@ class Data_source extends MX_Controller {
 
 			$item['counts'] = array();
 			foreach ($this->ro->valid_status AS $status){
-				array_push($item['counts'], $ds->getAttribute("count_$status"));
+				if($ds->getAttribute("count_$status")>0){
+					array_push($item['counts'], array('status' => $status, 'count' =>$ds->getAttribute("count_$status")));
+				}
 			}
 			array_push($items, $item);
 		}

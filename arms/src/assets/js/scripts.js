@@ -69,6 +69,13 @@ function updateItemsInfo(){
 	}
 }
 
+function logErrorOnScreen(error){
+	var template = $('#error-template').html();
+	var output = Mustache.render(template, error);
+	$('#main-content').append(output);
+	$('section').hide();
+}
+
 jQuery.fn.extend({
   slideRightShow: function(duration) {
     return this.each(function() {
@@ -91,3 +98,35 @@ jQuery.fn.extend({
     });
   }
 });
+
+
+$.ajaxSetup({
+    error: function(err) {
+        //do stuff when things go wrong
+        console.error(err);
+        logErrorOnScreen(err.responseText);
+    }
+});
+
+// implement JSON.stringify serialization
+JSON.stringify = JSON.stringify || function (obj) {
+    var t = typeof (obj);
+    if (t != "object" || obj === null) {
+        // simple data type
+        if (t == "string") obj = '"'+obj+'"';
+        return String(obj);
+    }
+    else {
+        // recurse array or object
+        var n, v, json = [], arr = (obj && obj.constructor == Array);
+        for (n in obj) {
+            v = obj[n]; t = typeof(v);
+            if (t == "string") v = '"'+v+'"';
+            else if (t == "object" && v !== null) v = JSON.stringify(v);
+            json.push((arr ? "" : '"' + n + '":') + String(v));
+        }
+        return (arr ? "[" : "{") + String(json) + (arr ? "]" : "}");
+    }
+};
+
+
