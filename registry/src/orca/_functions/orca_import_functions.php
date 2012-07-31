@@ -285,7 +285,7 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 						);
 					}
 					$oldDraft = getDraftRegistryObject($registryObjectKey, $dataSourceKey);
-					if(!$oldDraft || $oldDraft[0]['draft_owner'] == $created_who){
+					if(!$oldDraft || $oldDraft[0]['draft_owner'] != $created_who){
 						$runResultMessage .=  insertDraftRegistryObject(($dataSourceKey == 'PUBLISH_MY_DATA' ? $record_owner : $created_who), $registryObjectKey, $draft_class, $object_group, $draft_type, $title, $dataSourceKey, date('Y-m-d H:i:s'), $date_modified , $rifcs, '', 0, 0, SUBMITTED_FOR_ASSESSMENT);
 						$SUBMITTED_FOR_ASSESSMENT_Inserts++;
 					}else{
@@ -596,10 +596,12 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 	$runResultMessage .= "    $recordsCached records added to cache.\n";
 	$runResultMessage .= "    $totalAttemptedInserts attempted inserts.\n";
 	$runResultMessage .= "    $totalInserts inserts.\n";
-		if($ignoredRegistryObjectCount > 0)
-		{
-			$runResultMessage .= "    $ignoredRegistryObjectCount records were already received in this harvest.\n";
-		}	
+			
+	}
+
+	if($ignoredRegistryObjectCount > 0)
+	{
+		$runResultMessage .= "    $ignoredRegistryObjectCount records were already received in this harvest.\n";
 	}
 
 
