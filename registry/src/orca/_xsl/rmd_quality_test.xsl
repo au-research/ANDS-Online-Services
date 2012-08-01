@@ -2,9 +2,9 @@
 <xsl:stylesheet xmlns:ro="http://ands.org.au/standards/rif-cs/registryObjects" xmlns:extRif="http://ands.org.au/standards/rif-cs/extendedRegistryObjects" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0" exclude-result-prefixes="ro extRif">
     <xsl:output method="html" encoding="UTF-8" indent="no" omit-xml-declaration="yes"/>
     <xsl:param name="dataSource"/>
-    <xsl:param name="reverseLinks"/>
+    <xsl:param name="reverseLinks" select ="'true'"/>
     <xsl:param name="output" select="'script'"/>
-    <xsl:param name="relatedObjectClassesStr" select="''"/>
+    <xsl:param name="relatedObjectClassesStr" select="'true'"/>
     <xsl:template match="/">
         <xsl:apply-templates/>
     </xsl:template>
@@ -164,7 +164,7 @@
         </xsl:if>
         
         <xsl:if test="not(ro:relatedObject/ro:key[@roclass = 'Party']) and $output = 'script'">
-            <xsl:text>SetWarnings("errors_relatedObject","The Collection must be related to at least one Party record.</xsl:text><xsl:value-of select="$CP_roError_cont"/><xsl:text>","REQ_RELATED_OBJECT_PARTY");</xsl:text>
+            <xsl:text>SetWarnings("errors_relatedObject","The Collection must be related to at least one Party record</xsl:text><xsl:value-of select="$CP_roError_cont"/><xsl:text>","REQ_RELATED_OBJECT_PARTY");</xsl:text>
         </xsl:if>
         
         <xsl:if test="not(contains($relatedObjectClassesStr, 'Party') or ro:relatedObject/ro:key[@roclass = 'Party'] or ro:relatedObject/ro:key[@roclass = 'party']) and $output = 'html'">
