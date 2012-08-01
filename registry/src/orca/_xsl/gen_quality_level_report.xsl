@@ -2,6 +2,7 @@
 <xsl:stylesheet xmlns:ro="http://ands.org.au/standards/rif-cs/registryObjects" xmlns:extRif="http://ands.org.au/standards/rif-cs/extendedRegistryObjects" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0" exclude-result-prefixes="ro extRif">
     <xsl:output method="html" encoding="UTF-8" indent="no" omit-xml-declaration="yes"/>
     <xsl:param name="relatedObjectClassesStr" select="'PartyCollectionActivityService'"/>
+    <xsl:param name="reverseLinks" select ="'true'"/>
     <xsl:template match="/">   
     	<div id="qa_level_results" roKey="{ro:registryObjects/ro:registryObject/ro:key}">
 			<xsl:apply-templates select="ro:registryObjects"/>
@@ -41,6 +42,18 @@
     
     <!--  COLLECTION/PARTY/ACTIVITY LEVEL CHECKS -->
     <xsl:template match="ro:collection">
+    
+    <xsl:variable name="CP_roError_cont">
+	<xsl:if test="$reverseLinks = 'true'">
+	<xsl:text> If you have created the relationship from the Party to the Collection, please ignore this message.</xsl:text>
+	</xsl:if>
+    </xsl:variable>
+    <xsl:variable name="CA_roError_cont">
+	<xsl:if test="$reverseLinks = 'true'">
+	<xsl:text>If you have created the relationship from the Activity to the Collection, please ignore this message.</xsl:text>
+	</xsl:if>
+    </xsl:variable>   
+    
     	<span class="qa_ok" level="1">Collection</span>
     	<xsl:choose>
 	        <xsl:when test="string-length(@type) = 0 or string-length(@type) &gt; 32">
@@ -62,10 +75,10 @@
 	    
 	    <xsl:choose>
 	       	<xsl:when test="not(contains($relatedObjectClassesStr, 'Party') or ro:relatedObject/ro:key[@roclass = 'Party'] or ro:relatedObject/ro:key[@roclass = 'party'])">
-				<span class="qa_error" level="2" field_id="errors_relatedObject" qa_id="REQ_RELATED_OBJECT_PARTY">The Collection must be related to at least one Party record.</span>
+				<span class="qa_error" level="2" field_id="errors_relatedObject" qa_id="REQ_RELATED_OBJECT_PARTY">The Collection must be related to at least one Party record. <i><xsl:value-of select="$CP_roError_cont"/></i></span>
 			</xsl:when>
 			<xsl:otherwise>
-				<span class="qa_ok" level="2" field_id="errors_relatedObject" qa_id="REQ_RELATED_OBJECT_PARTY">The Collection must be related to at least one Party record.</span>
+				<span class="qa_ok" level="2" field_id="errors_relatedObject" qa_id="REQ_RELATED_OBJECT_PARTY">The Collection must be related to at least one Party record. <i><xsl:value-of select="$CP_roError_cont"/></i></span>
 			</xsl:otherwise>
 	   </xsl:choose>
  	        
@@ -107,10 +120,10 @@
          
         <xsl:choose>
 	       	<xsl:when test="not(contains($relatedObjectClassesStr, 'Activity') or ro:relatedObject/ro:key[@roclass = 'Activity'] or ro:relatedObject/ro:key[@roclass = 'activity'])">
-				<span class="qa_error" level="3" field_id="errors_relatedObject" qa_id="REC_RELATED_OBJECT_ACTIVITY">The Collection must be related to at least one Activity record where available.</span>
+				<span class="qa_error" level="3" field_id="errors_relatedObject" qa_id="REC_RELATED_OBJECT_ACTIVITY">The Collection must be related to at least one Activity record where available. <i><xsl:value-of select="$CA_roError_cont"/></i></span>
 			</xsl:when>
 			<xsl:otherwise>
-				<span class="qa_ok" level="3" field_id="errors_relatedObject" qa_id="REC_RELATED_OBJECT_ACTIVITY">The Collection must be related to at least one Activity record where available.</span>
+				<span class="qa_ok" level="3" field_id="errors_relatedObject" qa_id="REC_RELATED_OBJECT_ACTIVITY">The Collection must be related to at least one Activity record where available. <i><xsl:value-of select="$CA_roError_cont"/></i></span>
 			</xsl:otherwise>
 	   </xsl:choose>
         
@@ -154,6 +167,16 @@
 	 </xsl:template>
     
     <xsl:template match="ro:party">
+     <xsl:variable name="PC_roError_cont">
+	<xsl:if test="$reverseLinks = 'true'">
+	<xsl:text>If you have created the relationship from the Collection to the Party, please ignore this message.</xsl:text>
+	</xsl:if>
+    </xsl:variable>
+    <xsl:variable name="PA_roError_cont">
+	<xsl:if test="$reverseLinks = 'true'">
+	<xsl:text>If you have created the relationship from the Activity to the Party, please ignore this message.</xsl:text>
+	</xsl:if>
+    </xsl:variable>   
         <span class="qa_ok" level="1">Party</span>
         	
     	<xsl:choose>
@@ -176,10 +199,10 @@
 	    
 	    <xsl:choose>
 	       	<xsl:when test="not(contains($relatedObjectClassesStr, 'Collection') or ro:relatedObject/ro:key[@roclass = 'Collection'] or ro:relatedObject/ro:key[@roclass = 'collection'])">
-				<span class="qa_error" level="2" field_id="errors_relatedObject" qa_id="REC_RELATED_OBJECT_COLLECTION">The Party must be related to at least one Collection record.</span>
+				<span class="qa_error" level="2" field_id="errors_relatedObject" qa_id="REC_RELATED_OBJECT_COLLECTION">The Party must be related to at least one Collection record. <i><xsl:value-of select="$PC_roError_cont"/></i></span>
 			</xsl:when>
 			<xsl:otherwise>
-				<span class="qa_ok" level="2" field_id="errors_relatedObject" qa_id="REC_RELATED_OBJECT_COLLECTION">The Party must be related to at least one Collection record.</span>
+				<span class="qa_ok" level="2" field_id="errors_relatedObject" qa_id="REC_RELATED_OBJECT_COLLECTION">The Party must be related to at least one Collection record. <i><xsl:value-of select="$PC_roError_cont"/></i></span>
 			</xsl:otherwise>
 	   </xsl:choose>
 	          
@@ -203,10 +226,10 @@
          
        <xsl:choose>
 	       	<xsl:when test="not(contains($relatedObjectClassesStr, 'Activity') or ro:relatedObject/ro:key[@roclass = 'Activity'] or ro:relatedObject/ro:key[@roclass = 'activity'])">
-				<span class="qa_error" level="3" field_id="errors_relatedObject" qa_id="REC_RELATED_OBJECT_ACTIVITY">It is recommended that the Party be related to at least one Activity record.</span>
+				<span class="qa_error" level="3" field_id="errors_relatedObject" qa_id="REC_RELATED_OBJECT_ACTIVITY">It is recommended that the Party be related to at least one Activity record. <i><xsl:value-of select="$PA_roError_cont"/></i></span>
 			</xsl:when>
 			<xsl:otherwise>
-				<span class="qa_ok" level="3" field_id="errors_relatedObject" qa_id="REC_RELATED_OBJECT_ACTIVITY">It is recommended that the Party be related to at least one Activity record.</span>
+				<span class="qa_ok" level="3" field_id="errors_relatedObject" qa_id="REC_RELATED_OBJECT_ACTIVITY">It is recommended that the Party be related to at least one Activity record. <i><xsl:value-of select="$PA_roError_cont"/></i></span>
 			</xsl:otherwise>
 	   </xsl:choose>
 
@@ -240,6 +263,16 @@
     
     
     <xsl:template match="ro:activity">
+    <xsl:variable name="AC_roError_cont">
+	<xsl:if test="$reverseLinks = 'true'">
+	<xsl:text>If you have created the relationship from the Collection to the Activity, please ignore this message.</xsl:text>
+	</xsl:if>
+    </xsl:variable>
+    <xsl:variable name="AP_roError_cont">
+	<xsl:if test="$reverseLinks = 'true'">
+	<xsl:text>If you have created the relationship from the Party to the Activity, please ignore this message.</xsl:text>
+	</xsl:if>
+    </xsl:variable>  
         <span class="qa_ok" level="1">Activity</span>
         	
     	<xsl:choose>
@@ -273,10 +306,10 @@
            
         <xsl:choose>
 	       	<xsl:when test="not(contains($relatedObjectClassesStr, 'Party') or ro:relatedObject/ro:key[@roclass = 'Party'] or ro:relatedObject/ro:key[@roclass = 'party'])">
-				<span class="qa_error" level="2" field_id="errors_relatedObject" qa_id="REQ_RELATED_OBJECT_PARTY">The Activity must be related to at least one Party record.</span>
+				<span class="qa_error" level="2" field_id="errors_relatedObject" qa_id="REQ_RELATED_OBJECT_PARTY">The Activity must be related to at least one Party record. <i><xsl:value-of select="$AP_roError_cont"/></i></span>
 			</xsl:when>
 			<xsl:otherwise>
-				<span class="qa_ok" level="2" field_id="errors_relatedObject" qa_id="REQ_RELATED_OBJECT_PARTY">The Activity must be related to at least one Party record.</span>
+				<span class="qa_ok" level="2" field_id="errors_relatedObject" qa_id="REQ_RELATED_OBJECT_PARTY">The Activity must be related to at least one Party record. <i><xsl:value-of select="$AP_roError_cont"/></i></span>
 			</xsl:otherwise>
 	   </xsl:choose>
 	   
@@ -291,10 +324,10 @@
 	   
 	    <xsl:choose>
 	       	<xsl:when test="not(contains($relatedObjectClassesStr, 'Collection') or ro:relatedObject/ro:key[@roclass = 'Collection'] or ro:relatedObject/ro:key[@roclass = 'collection'])">
-				<span class="qa_error" level="3" field_id="errors_relatedObject" qa_id="REC_RELATED_OBJECT_COLLECTION">The Activity must be related to at least one Collection record if available.</span>
+				<span class="qa_error" level="3" field_id="errors_relatedObject" qa_id="REC_RELATED_OBJECT_COLLECTION">The Activity must be related to at least one Collection record if available. <i><xsl:value-of select="$AC_roError_cont"/></i></span>
 			</xsl:when>
 			<xsl:otherwise>
-				<span class="qa_ok" level="3" field_id="errors_relatedObject" qa_id="REC_RELATED_OBJECT_COLLECTION">The Activity must be related to at least one Collection record if available.</span>
+				<span class="qa_ok" level="3" field_id="errors_relatedObject" qa_id="REC_RELATED_OBJECT_COLLECTION">The Activity must be related to at least one Collection record if available. <i><xsl:value-of select="$AC_roError_cont"/></i></span>
 			</xsl:otherwise>
 	   </xsl:choose>
 	   
@@ -319,7 +352,16 @@
     
     
     <xsl:template match="ro:service">
-    
+     <xsl:variable name="SC_roError_cont">
+	<xsl:if test="$reverseLinks = 'true'">
+	<xsl:text>If you have created the relationship from the Collection to the Service, please ignore this message.</xsl:text>
+	</xsl:if>
+    </xsl:variable>
+    <xsl:variable name="SP_roError_cont">
+	<xsl:if test="$reverseLinks = 'true'">
+	<xsl:text> If you have created the relationship from the Party to the Service, please ignore this message.</xsl:text>
+	</xsl:if>
+    </xsl:variable>  
         <span class="qa_ok" level="1">Service</span>
         	
     	<xsl:choose>
@@ -344,10 +386,10 @@
   
 	    <xsl:choose>
 	       	<xsl:when test="not(contains($relatedObjectClassesStr, 'Collection') or ro:relatedObject/ro:key[@roclass = 'Collection'] or ro:relatedObject/ro:key[@roclass = 'collection'])">
-				<span class="qa_error" level="2" field_id="errors_relatedObject" qa_id="REQ_RELATED_OBJECT_COLLECTION">The Service must be related to at least one Collection record.</span>
+				<span class="qa_error" level="2" field_id="errors_relatedObject" qa_id="REQ_RELATED_OBJECT_COLLECTION">The Service must be related to at least one Collection record. <i><xsl:value-of select="$SC_roError_cont"/></i></span>
 			</xsl:when>
 			<xsl:otherwise>
-				<span class="qa_ok" level="2" field_id="errors_relatedObject" qa_id="REQ_RELATED_OBJECT_COLLECTION">The Service must be related to at least one Collection record.</span>
+				<span class="qa_ok" level="2" field_id="errors_relatedObject" qa_id="REQ_RELATED_OBJECT_COLLECTION">The Service must be related to at least one Collection record. <i><xsl:value-of select="$SC_roError_cont"/></i></span>
 			</xsl:otherwise>
 	   </xsl:choose>     
 
@@ -362,10 +404,10 @@
 	    
        <xsl:choose>
 	       	<xsl:when test="not(contains($relatedObjectClassesStr, 'Party') or ro:relatedObject/ro:key[@roclass = 'Party'] or ro:relatedObject/ro:key[@roclass = 'party'])">
-				<span class="qa_error" level="3" field_id="errors_relatedObject" qa_id="REC_RELATED_OBJECT_PARTY">It is recommended that the Service be related to at least one Party record.</span>
+				<span class="qa_error" level="3" field_id="errors_relatedObject" qa_id="REC_RELATED_OBJECT_PARTY">It is recommended that the Service be related to at least one Party record. <i><xsl:value-of select="$SP_roError_cont"/></i></span>
 			</xsl:when>
 			<xsl:otherwise>
-				<span class="qa_ok" level="3" field_id="errors_relatedObject" qa_id="REC_RELATED_OBJECT_PARTY">It is recommended that the Service be related to at least one Party record.</span>
+				<span class="qa_ok" level="3" field_id="errors_relatedObject" qa_id="REC_RELATED_OBJECT_PARTY">It is recommended that the Service be related to at least one Party record. <i><xsl:value-of select="$SP_roError_cont"/></i></span>
 			</xsl:otherwise>
 	   </xsl:choose> 
 	   

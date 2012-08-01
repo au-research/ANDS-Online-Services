@@ -1991,7 +1991,7 @@ function getRelatedXml($dataSource,$rifcs,$objectClass){
 	return $newrifcs;
 }
 
-function runQualityCheck($rifcs, $objectClass, $dataSource, $output, $relatedObjectClassesStr='')
+function runQualityCheck($rifcs, $objectClass, $dataSource, $output,$reverseLinks, $relatedObjectClassesStr='')
 {
 	global $qualityTestproc;
 	$relRifcs = getRelatedXml($dataSource,$rifcs,$objectClass);
@@ -2000,30 +2000,33 @@ function runQualityCheck($rifcs, $objectClass, $dataSource, $output, $relatedObj
 	$qualityTestproc->setParameter('', 'dataSource', $dataSource);
 	$qualityTestproc->setParameter('', 'output', $output);
 	$qualityTestproc->setParameter('', 'relatedObjectClassesStr', $relatedObjectClassesStr);
+	$qualityTestproc->setParameter('', 'reverseLinks', $reverseLinks);	
 	$result = $qualityTestproc->transformToXML($registryObjects);
 	return $result;
 }
 
 
-function runQualityCheckonDom($registryObjects, $dataSource, $output, $relatedObjectClassesStr)
+function runQualityCheckonDom($registryObjects, $dataSource, $output, $relatedObjectClassesStr,$reverseLinks)
 {
 
 	global $qualityTestproc;
 	$qualityTestproc->setParameter('', 'dataSource', $dataSource);
 	$qualityTestproc->setParameter('', 'output', $output);
 	$qualityTestproc->setParameter('', 'relatedObjectClassesStr', $relatedObjectClassesStr);
+	$qualityTestproc->setParameter('', 'reverseLinks', $reverseLinks);		
 	$result = $qualityTestproc->transformToXML($registryObjects);
 	return $result;
 }
 
 
 
-function runQualityLevelCheckonDom($registryObjects, $relatedObjectClassesStr, $level)
+function runQualityLevelCheckonDom($registryObjects, $relatedObjectClassesStr,$reverseLinks, $level)
 {
 
 	global $qualityLevelProc;
 	//print $registryObjects->saveXML();
 	$qualityLevelProc->setParameter('', 'relatedObjectClassesStr', $relatedObjectClassesStr);
+	$qualityLevelProc->setParameter('', 'reverseLinks', $reverseLinks);	
 	$result = $qualityLevelProc->transformToXML($registryObjects);
 	$reportDoc = new DOMDocument();
 	$reportDoc->loadXML($result);
@@ -2184,6 +2187,11 @@ function runQualityLevelCheckforDataSourceDIEDIEDIE($dataSourceKey)
 
 function runQualityLevelCheckForRegistryObject($registryObjectKey, $dataSourceKey)
 {
+	$reverseLinks='true';
+	$dataSourceInfo = getDataSources($dataSourceKey, $filter=null);
+	$allow_reverse_internal_links = $dataSourceInfo[0]['allow_reverse_internal_links'];
+	$allow_reverse_external_links = $dataSourceInfo[0]['allow_reverse_external_links'];
+	if($allow_reverse_internal_links!='t' && $allow_reverse_external_links!='t') $reverseLinks='false';
 	$rifcs = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
 	$rifcs .= '<registryObjects xmlns="http://ands.org.au/standards/rif-cs/registryObjects" '."\n";
 	$rifcs .= '                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '."\n";
@@ -2217,14 +2225,14 @@ function runQualityLevelCheckForRegistryObject($registryObjectKey, $dataSourceKe
 	$gold_standard_flag = getGoldFlag($registryObjectKey);
 
 	$relatedObjectClassesStr = getAllRelatedObjectClass($RegistryObjects, $dataSourceKey, $registryObjectKey);
-	$qualityTestResult = runQualityCheckonDom($RegistryObjects, $dataSourceKey, 'html', $relatedObjectClassesStr);
+	$qualityTestResult = runQualityCheckonDom($RegistryObjects, $dataSourceKey, 'html', $relatedObjectClassesStr,$reverseLinks);
     $errorCount = substr_count($qualityTestResult, 'class="error"');
 	$warningCount = substr_count($qualityTestResult, 'class="warning"') + substr_count($qualityTestResult, 'class="info"');
     $result = updateRegistryObjectQualityTestResult($registryObjectKey, $qualityTestResult, $errorCount, $warningCount);
 
 
 
-	$qa_result = runQualityLevelCheckonDom($RegistryObjects, $relatedObjectClassesStr, &$level);
+	$qa_result = runQualityLevelCheckonDom($RegistryObjects, $relatedObjectClassesStr, $reverseLinks, &$level);
 	if($gold_standard_flag==1) $level = 5;
 	$result = updateRegistryObjectQualityLevelResult($registryObjectKey, $level, $qa_result);
 	return $level;
@@ -2232,7 +2240,13 @@ function runQualityLevelCheckForRegistryObject($registryObjectKey, $dataSourceKe
 
 function runQualityLevelCheckForDraftRegistryObject($registryObjectKey, $dataSourceKey)
 {
-		$registryObject = getDraftRegistryObject($registryObjectKey,$dataSourceKey);
+		$reverseLinks='true';
+		$dataSourceInfo = getDataSources($dataSourceKey, $filter=null);
+		$allow_reverse_internal_links = $dataSourceInfo[0]['allow_reverse_internal_links'];
+		$allow_reverse_external_links = $dataSourceInfo[0]['allow_reverse_external_links'];
+		if($allow_reverse_internal_links!='t' && $allow_reverse_external_links!='t') $reverseLinks='false';
+        $registryObject = getDraftRegistryObject($registryObjectKey,$dataSourceKey);
+        
 		$relatedObjectClassesStr = '';
 		$rifcs = '';
 		$rifcs = $registryObject[0]['rifcs'];
@@ -2263,12 +2277,12 @@ function runQualityLevelCheckForDraftRegistryObject($registryObjectKey, $dataSou
 			$RegistryObjects->loadXML($relRifcs);
 			//print $relRifcs;
 			$relatedObjectClassesStr = getAllRelatedObjectClass($RegistryObjects, $dataSourceKey, $registryObjectKey);
-			$qualityTestResult = runQualityCheckonDom($RegistryObjects, $dataSourceKey, 'html', $relatedObjectClassesStr);
+			$qualityTestResult = runQualityCheckonDom($RegistryObjects, $dataSourceKey, 'html', $relatedObjectClassesStr,$reverseLinks);
 			$errorCount = substr_count($qualityTestResult, 'class="error"');
 		    $warningCount = substr_count($qualityTestResult, 'class="warning"') + substr_count($qualityTestResult, 'class="info"');
 	        $result = updateDraftRegistryObjectQualityTestResult($registryObjectKey, $dataSourceKey, $qualityTestResult, $errorCount, $warningCount);
 
-			$qa_result = runQualityLevelCheckonDom($RegistryObjects, $relatedObjectClassesStr, &$level);
+			$qa_result = runQualityLevelCheckonDom($RegistryObjects, $relatedObjectClassesStr,$reverseLinks, &$level);
 			$result = updateDraftRegistryObjectQualityLevelResult($registryObjectKey, $dataSourceKey, $level, $qa_result);
         }
 		return $level;
@@ -2282,6 +2296,11 @@ function runQualityLevelCheckForDraftRegistryObject($registryObjectKey, $dataSou
 function runQuagmireCheckForRegistryObjectDIEDIEDIE($registryObjectKey, $dataSourceKey)
 {
 
+	$reverseLinks='true';
+	$dataSourceInfo = getDataSources($dataSourceKey, $filter=null);
+	$allow_reverse_internal_links = $dataSourceInfo[0]['allow_reverse_internal_links'];
+	$allow_reverse_external_links = $dataSourceInfo[0]['allow_reverse_external_links'];
+	if($allow_reverse_internal_links!='t' && $allow_reverse_external_links!='t') $reverseLinks='false';
 		$rifcs = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
 		$rifcs .= '<registryObjects xmlns="http://ands.org.au/standards/rif-cs/registryObjects" '."\n";
 		$rifcs .= '                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '."\n";
@@ -2313,7 +2332,7 @@ function runQuagmireCheckForRegistryObjectDIEDIEDIE($registryObjectKey, $dataSou
 		$level = 1;
 
 		$relatedObjectClassesStr = getAllRelatedObjectClass($RegistryObjects, $dataSourceKey);
-		$qualityTestResult = runQualityCheckonDom($RegistryObjects, $dataSourceKey, 'html', $relatedObjectClassesStr);
+		$qualityTestResult = runQualityCheckonDom($RegistryObjects, $dataSourceKey, 'html', $relatedObjectClassesStr, $reverseLinks);
 	    $errorCount = substr_count($qualityTestResult, 'class="error"');
 		$warningCount = substr_count($qualityTestResult, 'class="warning"') + substr_count($qualityTestResult, 'class="info"');
         $result = updateRegistryObjectQualityTestResult($registryObjectKey, $qualityTestResult, $errorCount, $warningCount);
@@ -2325,6 +2344,12 @@ function runQuagmireCheckForRegistryObjectDIEDIEDIE($registryObjectKey, $dataSou
 
 function runQualityCheckForDraftRegistryObjectDIEDIEDIE($registryObjectKey, $dataSourceKey)
 {
+		$reverseLinks='true';
+		$dataSourceInfo = getDataSources($dataSourceKey, $filter=null);
+		$allow_reverse_internal_links = $dataSourceInfo[0]['allow_reverse_internal_links'];
+		$allow_reverse_external_links = $dataSourceInfo[0]['allow_reverse_external_links'];
+		if($allow_reverse_internal_links!='t' && $allow_reverse_external_links!='t') $reverseLinks='false';
+		
 		$registryObject = getDraftRegistryObject($registryObjectKey,$dataSourceKey);
 		$relatedObjectClassesStr = '';
 		$rifcs = $registryObject[0]['rifcs'];
@@ -2351,7 +2376,7 @@ function runQualityCheckForDraftRegistryObjectDIEDIEDIE($registryObjectKey, $dat
 		$RegistryObjects = new DOMDocument();
 		$RegistryObjects->loadXML($relRifcs);
 		$relatedObjectClassesStr = getAllRelatedObjectClass($RegistryObjects, $dataSourceKey);
-		$qualityTestResult = runQualityCheckonDom($RegistryObjects, $dataSourceKey, 'html', $relatedObjectClassesStr);
+		$qualityTestResult = runQualityCheckonDom($RegistryObjects, $dataSourceKey, 'html', $relatedObjectClassesStr, $reverseLinks);
 		$errorCount = substr_count($qualityTestResult, 'class="error"');
 	    $warningCount = substr_count($qualityTestResult, 'class="warning"') + substr_count($qualityTestResult, 'class="info"');
         $result = updateDraftRegistryObjectQualityTestResult($registryObjectKey, $dataSourceKey, $qualityTestResult, $errorCount, $warningCount);
