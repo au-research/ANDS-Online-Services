@@ -50,10 +50,10 @@
 
 <div class="container-fluid" id="topbar">
     <div class="row-fluid">
-      <div class="span4" id="logo">
+      <div class="span2" id="logo">
         <img src="<?php echo base_url();?>/assets/img/ands_logo_white.png" alt="ANDS Logo White"/>
       </div>
-      <div class="span8" id="main-nav">
+      <div class="span10" id="main-nav">
         <ul>
           <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">My Records <b class="caret"></b></a>
@@ -85,6 +85,7 @@
           </li>
         </ul>
       </div>
+
       <div class="hide" id="user-account-info">
         Logged in as Minh Duc Nguyen(u4297901) Logout
       </div>

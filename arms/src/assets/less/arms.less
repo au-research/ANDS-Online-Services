@@ -1,7 +1,8 @@
 @navColor: #464646;
 @navColorAlt: #0088cc;
 @bannerColor: #F4F4F4;
-@accentColor: #EB7F05;
+@accentColor:#0088cc;
+@altAccentColor:  #EB7F05;
 @softAccentColor: #cceeff;
 @fontColor: #454545;
 @MMRitemHeight:150px;
@@ -18,7 +19,7 @@ body{
 	background: #dddddd;
 }
 #topbar{
-	border-top:2px solid @accentColor;
+	border-top:4px solid @altAccentColor;
 	font-size:85%;
 	//background:@bannerColor;
 	.ands-background();
@@ -330,6 +331,13 @@ h1{.text-shadow}
 	}
 }
 @media (max-width: 767px) {
+	.dl-horizontal{
+		dt{}
+		dd{margin-left:10px;}
+	}
+	.form-horizontal .controls{
+		margin-left:10px;
+	}
 	#mmr_toolbar > .span4:nth-child(2){
 		text-align:left;
 	}
@@ -339,14 +347,16 @@ h1{.text-shadow}
 	#mmr_toolbar{
 
 	}
-	#show_responsive{display:block;}
+	#topbar{
+		height:auto;
+	}
 	#main-nav{
-		display:none;
+		width:auto;
 		float:left;
 		li{
 			float:none;
 		}
-		.dropdown-menu{
+		.submenu{
 			display:block;
 			position:relative;
 			border:none;
@@ -356,5 +366,33 @@ h1{.text-shadow}
 			box-shadow:none;
 			-webkit-box-shadow:none;
 		}
+	}
+}
+@media (max-width: 575px) {
+	#main-nav{
+		text-align:left;
+		ul{
+			height:auto;
+		}
+		li{
+			height:auto;
+			display:block;
+			a{
+				height:auto;
+				float:none;
+				width:200px;
+			}
+			.sub-menu{
+				display:block;
+				position:relative;
+				border:none;
+				float:none;
+				margin:none;
+				background:none;
+				box-shadow:none;
+				-webkit-box-shadow:none;
+			}
+		}
+		
 	}
 }
