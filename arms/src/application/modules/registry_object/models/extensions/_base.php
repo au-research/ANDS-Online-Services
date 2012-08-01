@@ -12,7 +12,7 @@ abstract class ExtensionBase {
 		$this->ro = $ro_pointer;
 		$this->_CI =& get_instance();
 		$this->db = $this->_CI->db;
-		$this->id = $this->ro->id;
+		$this->id = &$this->ro->id;
 	}
 		
 }

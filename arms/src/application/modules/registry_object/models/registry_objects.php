@@ -14,6 +14,7 @@ class Registry_objects extends CI_Model {
 		
 	public $valid_classes = array("collection","activity","party","service");
 	public $valid_status  = array("DRAFT"=>"DRAFT", "PUBLISHED"=>"PUBLISHED");
+	public $valid_levels  = array("level_1"=>"1", "level_2"=>"2", "level_3"=>"3", "level_4"=>"4" );
 	
 	
 	/**

@@ -92,7 +92,8 @@ class Core_extension extends ExtensionBase
 													"slug" => $this->getAttribute("slug"),
 													"record_owner" => $this->getAttribute("record_owner")								
 													));
-		$this->id = $this->db->insert_id();
+		$this->ro->id = $this->db->insert_id();
+		$this->id = $this->ro->id;
 		$this->save();
 		return $this;
 	}

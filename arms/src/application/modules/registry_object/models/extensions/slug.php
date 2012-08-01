@@ -18,7 +18,7 @@ class Slug_Extension extends ExtensionBase
 			$this->ro->updateTitles();
 		}
 	
-		$result = strtolower($this->ro->display_title);
+		$result = strtolower($this->ro->title);
 		
 		$result = preg_replace("/[^a-z0-9\s-]/", "", $result);
 		$result = trim(preg_replace("/[\s-]+/", " ", $result));

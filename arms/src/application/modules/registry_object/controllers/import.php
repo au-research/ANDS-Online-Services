@@ -16,12 +16,15 @@ class Import extends MX_Controller {
 		
 		$this->load->model('registry_objects', 'ro');
 		//$registry_objects = $this->ro->getByAttribute('status','DRAFT', TRUE);
-		$registry_objects = array($this->ro->getByKey('http://museumex.org/oai/nma/3022'));
+		$registry_objects = array($this->ro->getByKey('abctb.org.au 20'));
 		foreach ($registry_objects AS $ro)
 		{
-			$ro->updateTitles();	
-			$ro->generateSlug();
+			//$ro->updateTitles();	
+			//$ro->generateSlug();
 			print $ro->key .  " => " . $ro->display_title .  ' ('.$ro->slug.')'.BR;
+			$ro->update_quality_metadata();
+			echo $ro; 
+			echo $ro->getMetadata('level_html');
 		}
 	
 	}
@@ -38,7 +41,7 @@ class Import extends MX_Controller {
 	
 		
 	}
-
+	
 	function index()
 	{
 		$this->load->model('registry_objects', 'ro');
@@ -52,8 +55,10 @@ class Import extends MX_Controller {
 			echo BR.BR."<h1>" . $ds->title . "</h1>" . BR.BR;
 			try
 			{
-				//$this->ingestForDataSource($ds->key);
+				$this->ingestForDataSource($ds->key);
+				
 				print $ds->updateStats();
+				die();
 			}
 			catch (Exception $e)
 			{
@@ -97,15 +102,20 @@ class Import extends MX_Controller {
 					
 					// Dummy, get record status
 					$status = $this->ro->valid_status['DRAFT'];
-					
-					// Make up a SLUG
-					$slug = rand(12412,5318611) . "a_random_slug_" . rand(0,12412412545);
-					
 					$record_owner = "SYSTEM";
 					
-					$ro = $this->ro->create($data_source_key, (string)$registryObject->key, $ro_class, $title, $status, $slug, $record_owner);
+					$ro = $this->ro->create($data_source_key, (string)$registryObject->key, $ro_class, "", $status, "", $record_owner);
+					$ro->data_source_key = $data_source_key;
 					$ro->group = (string) $registryObject['group'];
-					$ro->updateXML($ro_xml->asXML());
+					
+					// Order is important here!
+					$ro->updateXML($registryObject->asXML());
+					
+					$ro->updateTitles();
+					$ro->generateSlug();
+					
+					$ro->update_quality_metadata();
+					
 					$ro->save();
 					print $ro;
 

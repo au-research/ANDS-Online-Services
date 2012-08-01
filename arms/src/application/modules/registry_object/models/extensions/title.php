@@ -111,7 +111,7 @@ class Title_Extension extends ExtensionBase
 			
 		}
 
-		$this->ro->display_title = $display_title;
+		$this->ro->title = $display_title;
 		$this->ro->list_title = $list_title;
 		$this->ro->save();
 	}

@@ -11,12 +11,13 @@ class Metadata_Extension extends ExtensionBase
 	/*
 	 * 	Metadata operations
 	 */
-	function get_metadata($name, $graceful = TRUE)
+	function getMetadata($name, $graceful = TRUE)
 	{
 		$query = $this->db->get_where("registry_object_metadata", array('registry_object_id' => $this->id, 'attribute' => $name));
 		if ($query->num_rows() == 1)
 		{
-			return $query->result_array();
+			$result_array = $query->result_array();
+			return $result_array[0]['value'];
 		}
 		else if (!$graceful)
 		{
@@ -28,7 +29,7 @@ class Metadata_Extension extends ExtensionBase
 		}
 	}
 	
-	function set_metadata($name, $value = '')
+	function setMetadata($name, $value = '')
 	{
 		$query = $this->db->get_where("registry_object_metadata", array('registry_object_id' => $this->id, 'attribute' => $name));
 		if ($query->num_rows() == 1)

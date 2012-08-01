@@ -277,6 +277,13 @@ class _data_source {
 			$this->db->where(array('data_source_id'=>$this->id, 'status'=>$status));
 			$this->setAttribute("count_$status", $this->db->count_all_results('registry_objects'));
 		}
+		foreach ($this->_CI->ro->valid_levels AS $attribute_name => $level)
+		{
+			// SO MUCH repetitiveness ;-(
+			$this->db->join('registry_object_attributes', 'registry_object_attributes.registry_object_id = registry_objects.registry_object_id');
+			$this->db->where(array('data_source_id'=>$this->id, 'attribute'=>'quality_level', 'value'=>$level));
+			$this->setAttribute("count_$attribute_name", $this->db->count_all_results('registry_objects'));
+		}
 		$this->save();
 		return $this;
 	}

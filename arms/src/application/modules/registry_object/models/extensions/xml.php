@@ -22,7 +22,7 @@ class XML_Extension extends ExtensionBase
 		}
 		else
 		{
-			$this->_xml = new _xml($this->id, $record_data_id);
+			$this->_xml = new _xml($this->ro->id, $record_data_id);
 			return $this->_xml->xml;
 		}
 	}
@@ -30,7 +30,7 @@ class XML_Extension extends ExtensionBase
 		 
 	function updateXML($data, $current = TRUE, $scheme = NULL)
 	{
-			$_xml = new _xml($this->id);
+			$_xml = new _xml($this->ro->id);
 			$_xml->update($data, $current, $scheme); 
 	}
 	
@@ -38,7 +38,7 @@ class XML_Extension extends ExtensionBase
 	function getXMLVersions()
 	{
 		$versions = array();
-		$result = $this->db->select('id, timestamp, scheme, current')->get_where('record_data', array('registry_object_id'=>$this->id));
+		$result = $this->db->select('id, timestamp, scheme, current')->get_where('record_data', array('registry_object_id'=>$this->ro->id));
 		if ($result->num_rows() > 0)
 		{
 			foreach($result->result_array() AS $row)
@@ -91,17 +91,17 @@ class _xml
 	{
 		if (is_null($record_data_id))
 		{
-			$result = $this->db->get_where('record_data', array('registry_object_id' => $this->registry_object_id, 'current' => 'TRUE'), 1);
+			$result = $this->db->order_by('timestamp','DESC')->get_where('record_data', array('registry_object_id' => $this->registry_object_id), 1);
 		}
 		else 
 		{
-			$result = $this->db->get_where('record_data', array('id' => $record_data_id), 1);
+			$result = $this->db->order_by('timestamp','DESC')->get_where('record_data', array('id' => $record_data_id), 1);
 		}
 	
 		if ($result->num_rows() == 1)
 		{
 			$result = array_pop($result->result_array());
-			$this->xml = "<registryObject>" . $result['data'] . "</registryObject>";
+			$this->xml = $result['data'];
 			$this->timestamp = $result['timestamp'];
 			$this->scheme = $result['scheme'];	
 			$this->record_data_id = $result['id'];
