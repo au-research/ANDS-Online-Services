@@ -9,6 +9,12 @@
  * 
  */
 ?>
+<div class="row-fluid">
+    <div class="span12" id="page-footer">
+        Footer
+    </div>
+</div>
+
 
     <!-- Mustache Template that should be used everywhere-->
     <div id="error-template" class="hide">
@@ -29,6 +35,7 @@
     <script src="<?php echo base_url();?>assets/lib/chosen/chosen.jquery.js" type="text/javascript"></script>
     <script src="<?php echo base_url();?>assets/lib/jquery.ba-hashchange.js" type="text/javascript"></script>
     <script src="<?php echo base_url();?>assets/lib/bootstrap_toggle_button/jquery.toggle.buttons.js" type="text/javascript"></script>
+    <script src="<?php echo base_url();?>assets/lib/qtip2/jquery.qtip.min.js" type="text/javascript"></script>
 
 
 	<!-- ARMS scripts -->

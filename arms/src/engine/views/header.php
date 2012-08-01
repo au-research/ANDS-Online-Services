@@ -29,6 +29,7 @@
     <!-- Libraries Styles-->
     <link rel="stylesheet" href="<?php echo base_url();?>assets/lib/chosen/chosen.css">
     <link rel="stylesheet" href="<?php echo base_url();?>assets/lib/bootstrap_toggle_button/jquery.toggle.buttons.css">
+    <link rel="stylesheet" href="<?php echo base_url();?>assets/lib/qtip2/jquery.qtip.min.css">
 
     
 
@@ -49,20 +50,14 @@
 
 <div class="container-fluid" id="topbar">
     <div class="row-fluid">
-      <div class="span12" style="text-align:right;" id="logged_in_user">
-        <i class="icon-user"></i> Logged in as: Minh Duc Nguyen (u4297901) <a href="javascript:;">Logout</a>
+      <div class="span4" id="logo">
+        <img src="<?php echo base_url();?>/assets/img/ands_logo_white.png" alt="ANDS Logo White"/>
       </div>
-    </div>
-</div>
-<div class="container-fluid" id="banner">
-    <div class="row-fluid page-header">
-      <div class="span5"><h1>ARMS <br/><small>ANDS Registry Management System</small></h1></div>
-      <div class="span7">
-        <div id="show_responsive"><button class="btn show_nav" data-toggle="button">Show Menu</button></div>
-        <ul class="nav nav-pills pilnav" id="main-nav">
+      <div class="span8" id="main-nav">
+        <ul>
           <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">My Records <b class="caret"></b></a>
-            <ul class="dropdown-menu sub-menu">
+            <ul class="dropdown-menu sub-menu pull-right">
               <li class=""><a href="#">Manage My Records</a></li>
               <li class=""><a href="#">Add My Records</a></li>
               <li class=""><a href="#">Publish My Records</a></li>
@@ -70,19 +65,29 @@
           </li>
           <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">My Datasources <b class="caret"></b></a>
-            <ul class="dropdown-menu sub-menu">
+            <ul class="dropdown-menu sub-menu pull-right">
               <li class=""><a href="#">Manage My Datasources</a></li>
               <li class=""><a href="#">Datasources Tools</a></li>
             </ul>
           </li>
           <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">My Identifiers <b class="caret"></b></a>
-            <ul class="dropdown-menu sub-menu">
+            <ul class="dropdown-menu sub-menu pull-right">
               <li class=""><a href="#">DOI</a></li>
               <li class=""><a href="#">PID</a></li>
             </ul>
           </li>
+          <li>
+            <a href="javascript:;" id="main-nav-search"><i class="icon-search icon-white"></i></a>
+          </li>
+          <li>
+            <a href="javascript:;" id="main-nav-user-account" title="aaa"><i class="icon-user icon-white"></i></a>
+          </li>
         </ul>
       </div>
+      <div class="hide" id="user-account-info">
+        Logged in as Minh Duc Nguyen(u4297901) Logout
+      </div>
+      
     </div>
 </div>

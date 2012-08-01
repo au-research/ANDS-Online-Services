@@ -91,10 +91,21 @@ class Data_source extends MX_Controller {
 		$jsonData['status'] = 'OK';
 
 		$this->load->model("data_sources","ds");
+		$this->load->model("registry_object/registry_objects", "ro");
 		$dataSource = $this->ds->getByID($id);
 
 		foreach($dataSource->attributes as $attrib=>$value){
 			$jsonData['item'][$attrib] = $value->value;
+		}
+
+		$jsonData['item']['statuscounts'] = array();
+		foreach ($this->ro->valid_status AS $status){
+			array_push($jsonData['item']['statuscounts'], array('status' => $status, 'count' =>$dataSource->getAttribute("count_$status")));
+		}
+
+		$jsonData['item']['qlcounts'] = array();
+		foreach ($this->ro->valid_levels AS $level){
+			array_push($jsonData['item']['qlcounts'], array('level' => $level, 'count' =>$dataSource->getAttribute("count_level_$level")));
 		}
 		
 		$jsonData = json_encode($jsonData);

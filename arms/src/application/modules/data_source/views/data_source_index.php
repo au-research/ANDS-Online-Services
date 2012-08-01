@@ -43,7 +43,9 @@
 
 
     <!-- List of items will be displayed here, in this ul -->
+
 	<ul class="thumbnails" id="items"></ul>
+
 
 	<!-- Load More Link -->
 	<div class="row-fluid">
@@ -101,92 +103,143 @@
 ?>
 
 	{{#item}}
-	<div class="page-header">
-        <h1>{{title}}<small><a href="javascript:;" class="close return-to-browse">&times;</a></small></h1>
-    </div>
-    <div class="row-fluid">
-    	<div class="">
+<div class="container">
+<div class="row">
 
-		<h3>Account Administration Information</h3>
-		<dl class="dl-horizontal">
-			<?php 
-			foreach($data_source_view_fields as $key=>$name){
-				echo '{{#'.$key.'}}';
-				echo '<dt>'.$name.'</dt>';
-				echo '<dd>{{'.$key.'}}</dd>';
-				echo '{{/'.$key.'}}';
-			}
-			?>
-	 	</dl>
-	 	<h3>Records Management Settings</h3>
-	 	<dl class="dl-horizontal">
-			<dt>Reverse Links</dt>
-			<dd>1<br/>2</dd>
+	
+	<div class="span8">
+		<div class="box">
+		<div class="box-header">
+	        <h1>{{title}}<small><a href="javascript:;" class="close return-to-browse">&times;</a></small></h1>
+	    </div>
+	    <div class="row-fluid">
+	    	
+	 		<div class="well">
+				<div class="btn-group" data_source_id="{{data_source_id}}">
+			  		<button class="btn edit"><i class="icon-edit"></i> Edit Data Source</button>
+			  		<button class="btn history"><i class="icon-hdd"></i> View History</button>
+			  		<button class="btn deleteRecord"><i class="icon-trash"></i> Delete Record</button>
+				</div>
+			</div>
+	 
+	    	
 
-			{{#create_primary_relationships}}
-			<dt>Create Primary Relationships</dt>
-			<dd>{{create_primary_relationships}}</dd>
-			{{/create_primary_relationships}}
+	    	<div class="">
 
-			{{#push_to_nla}}
-			<dt>Push To NLA</dt>
-			<dd>{{push_to_nla}}</dd>
-			{{/push_to_nla}}
+			<h3>Account Administration Information</h3>
+			<dl class="dl-horizontal">
+				<?php 
+				foreach($data_source_view_fields as $key=>$name){
+					echo '{{#'.$key.'}}';
+					echo '<dt>'.$name.'</dt>';
+					echo '<dd>{{'.$key.'}}</dd>';
+					echo '{{/'.$key.'}}';
+				}
+				?>
+		 	</dl>
+		 	<h3>Records Management Settings</h3>
+		 	<dl class="dl-horizontal">
+				<dt>Reverse Links</dt>
+				<dd>1<br/>2</dd>
 
-			{{#auto_publish}}
-			<dt>Auto Publish</dt>
-			<dd>{{auto_publish}}</dd>
-			{{/auto_publish}}
+				{{#create_primary_relationships}}
+				<dt>Create Primary Relationships</dt>
+				<dd>{{create_primary_relationships}}</dd>
+				{{/create_primary_relationships}}
 
-			{{#qa_flag}}
-			<dt>Quality Assessment Required</dt>
-			<dd>{{qa_flag}}</dd>
-			{{/qa_flag}}
+				{{#push_to_nla}}
+				<dt>Push To NLA</dt>
+				<dd>{{push_to_nla}}</dd>
+				{{/push_to_nla}}
 
-			{{#assessement_notification_email}}
-			<dt>Assessment Notification Email</dt>
-			<dd>{{assessement_notification_email}}</dd>
-			{{/assessement_notification_email}}
+				{{#auto_publish}}
+				<dt>Auto Publish</dt>
+				<dd>{{auto_publish}}</dd>
+				{{/auto_publish}}
 
-	 	</dl>
-	 	<h3>Harvester Settings</h3>
-	 	<dl class="dl-horizontal">
-	 		{{#uri}}
-			<dt>URI</dt>
-			<dd>{{uri}}</dd>
-			{{/uri}}
+				{{#qa_flag}}
+				<dt>Quality Assessment Required</dt>
+				<dd>{{qa_flag}}</dd>
+				{{/qa_flag}}
 
-			{{#provider_type}}
-			<dt>Provider Type</dt>
-			<dd>{{provider_type}}</dd>
-			{{/provider_type}}
+				{{#assessement_notification_email}}
+				<dt>Assessment Notification Email</dt>
+				<dd>{{assessement_notification_email}}</dd>
+				{{/assessement_notification_email}}
 
-			{{#harvest_method}}
-			<dt>Harvest Method</dt>
-			<dd>{{harvest_method}}</dd>
-			{{/harvest_method}}
+		 	</dl>
+		 	<h3>Harvester Settings</h3>
+		 	<dl class="dl-horizontal">
+		 		{{#uri}}
+				<dt>URI</dt>
+				<dd>{{uri}}</dd>
+				{{/uri}}
 
-			{{#harvest_date}}
-			<dt>Harvest Date</dt>
-			<dd>{{harvest_date}}</dd>
-			{{/harvest_date}}
+				{{#provider_type}}
+				<dt>Provider Type</dt>
+				<dd>{{provider_type}}</dd>
+				{{/provider_type}}
 
-			{{#oai_set}}
-			<dt>OAI-PMH Set</dt>
-			<dd>{{oai_set}}</dd>
-			{{/oai_set}}
-	 	</dl>
-	 	<h3>Activity Log</h3>
-	 	<div class="well">Loading ...</div>
-	 	</div>
-    </div>
+				{{#harvest_method}}
+				<dt>Harvest Method</dt>
+				<dd>{{harvest_method}}</dd>
+				{{/harvest_method}}
+
+				{{#harvest_date}}
+				<dt>Harvest Date</dt>
+				<dd>{{harvest_date}}</dd>
+				{{/harvest_date}}
+
+				{{#oai_set}}
+				<dt>OAI-PMH Set</dt>
+				<dd>{{oai_set}}</dd>
+				{{/oai_set}}
+		 	</dl>
+		 	<h3>Activity Log</h3>
+		 	<div class="well">Loading ...</div>
+		 	</div>
+	    </div>
+		</div>
+	</div>
+
+	<div class="span4">
+		<div class="box">
+			<div class="box-header"><h3>Data Source Status Summary</h3></div>
+			<div class="box-content">
+				<ul class="ro-list">
+					{{#statuscounts}}
+				  		{{#status}}
+				  			<li class="status_{{status}}">{{status}} : {{count}}</li>
+				  		{{/status}}
+			  		{{/statuscounts}}
+				</ul>
+			</div>
+		</div>
+
+		<div class="box">
+			<div class="box-header"><h3>Data Source Quality Summary</h3></div>
+			<div class="box-content">
+				<ul class="ro-list">
+					{{#qlcounts}}
+				  		{{#level}}
+				  			<li class="ql_{{level}}">Quality Level {{level}} : {{count}}</li>
+				  		{{/level}}
+			  		{{/qlcounts}}
+				</ul>
+			</div>
+		</div>
+	</div>
+
+</div>
+</div>
 	{{/item}}
 </div>
 
 <!-- mustache template for data source edit single-->
 <div class="hide" id="data-source-edit-template">
 {{#item}}
-	<div class="page-header">
+	<div class="box">
+	<div class="box-header">
 	    <h1>Edit: {{title}}<small><a href="javascript:;" class="close return-to-browse">&times;</a></small></h1>
 	</div>
 	<div class="">
@@ -417,6 +470,7 @@
 
 		
 	</div>
+</div>
 {{/item}}
 </div>
 </section>

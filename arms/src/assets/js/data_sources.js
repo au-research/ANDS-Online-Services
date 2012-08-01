@@ -139,9 +139,10 @@ $('#datasource-chooser').live({
 	}
 });
 
-$('.return-to-browse').live({
+$('.close').live({
 	click: function(e){
-		changeHashTo('browse/'+currentView);
+		//changeHashTo('browse/'+currentView);
+		window.history.back();
 	}
 });
 
@@ -161,10 +162,24 @@ function load_datasource(data_source_id){
 		contentType: 'application/json; charset=utf-8',
 		dataType: 'json',
 		success: function(data){
+			//console.log(data);
 			var template = $('#data-source-view-template').html();
 			var output = Mustache.render(template, data);
+			var view = $('#view-datasource');
 			$('#view-datasource').html(output);
 			$('#view-datasource').fadeIn(500);
+
+			$('.btn-group button', view).click(function(){
+				var data_source_id = $(this).parent().attr('data_source_id');
+				if($(this).hasClass('edit')){
+					changeHashTo('edit/'+data_source_id);
+				}else if($(this).hasClass('history')){
+					changeHashTo('history/'+data_source_id);
+				}else if($(this).hasClass('delete')){
+					changeHashTo('deleteRecord/'+data_source_id);
+				}
+			});
+
 		}
 	});
 	return false;
@@ -188,7 +203,7 @@ function load_datasource_edit(data_source_id, active_tab){
 		contentType: 'application/json; charset=utf-8',
 		dataType: 'json',
 		success: function(data){
-			console.log(data);
+			//console.log(data);
 			var template = $('#data-source-edit-template').html();
 			var output = Mustache.render(template, data);
 			$('#edit-datasource').html(output);
