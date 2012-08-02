@@ -95,8 +95,8 @@ $(document).ready(function(){
 		}
 	});
 
-//jgrowl
-	
+
+	//jgrowl
 	window.createGrowl = function(persistent) {
 	    // Use the last visible jGrowl qtip as our positioning target
 	    var target = $('.qtip.jgrowl:visible:last');
@@ -210,12 +210,12 @@ $(document).ready(function(){
             api.timer = setTimeout(api.hide, lifespan);
         }
     }
-	/*createGrowl(false);
 	createGrowl(false);
 	createGrowl(false);
 	createGrowl(false);
 	createGrowl(false);
-	updateGrowls();*/
+	createGrowl(false);
+	updateGrowls();
 });
 
 jQuery.fn.extend({

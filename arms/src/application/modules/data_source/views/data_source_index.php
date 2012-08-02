@@ -140,13 +140,16 @@
 		 	<h3>Records Management Settings</h3>
 		 	<dl class="dl-horizontal">
 				<dt>Reverse Links</dt>
-				<dd>1<br/>2</dd>
+				<dd>
+					{{allow_reverse_internal_links}} Allow Reverse Internal Links <br/>
+					{{allow_reverse_external_links}} Allow Reverse External Links <br/>
+				</dd>
 
 				{{#create_primary_relationships}}
 				<dt>Create Primary Relationships</dt>
 				<dd>{{create_primary_relationships}}</dd>
 				{{/create_primary_relationships}}
-
+				
 				{{#push_to_nla}}
 				<dt>Push To NLA</dt>
 				<dd>{{push_to_nla}}</dd>
