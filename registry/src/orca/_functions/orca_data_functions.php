@@ -76,18 +76,16 @@ function insertDataSource()
 	
 	$params = 
 		array(
+			getLoggedInUser(), //modified_who
 			getPostedValue("data_source_key"),
 			getPostedValue("title"),
 			getPostedValue("record_owner"),
 			getPostedValue("contact_name"),
 			getPostedValue("contact_email"),
-			getPostedValue("notes"),
-			
+			getPostedValue("notes"),		
 			getPostedValue("allow_reverse_internal_links"),
 			getPostedValue("allow_reverse_external_links"),
 			getPostedValue("create_primary_relationships"),
-			
-			
 			getPostedValue("class_1"),
 			getPostedValue("primary_key_1"),
 			getPostedValue("collection_rel_1"),
@@ -99,22 +97,16 @@ function insertDataSource()
 			getPostedValue("collection_rel_2"),
 			getPostedValue("service_rel_2"),
 			getPostedValue("activity_rel_2"),
-			getPostedValue("party_rel_2"),
-			
-			
+			getPostedValue("party_rel_2"),	
 			getPostedValue("push_to_nla"),
-			getPostedValue("isil_value"),
-			
+			getPostedValue("isil_value"),	
 			getPostedValue("auto_publish"),
 			getPostedValue("qa_flag"),
 			getPostedValue("assessment_notification_email_addr"),
-			getPostedValue("institution_pages"),
-			
 			getPostedValue("uri"),
 			getPostedValue("provider_type"),
 			getPostedValue("harvest_method"),
-			getPostedValue("oai_set"),
-			
+			getPostedValue("oai_set"),	
 			getPostedValue("harvest_date"),
 			getPostedValue("theZone"),
 			getPostedValue("harvest_frequency")			
