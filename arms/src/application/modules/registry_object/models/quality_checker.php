@@ -10,10 +10,9 @@ class Quality_checker extends CI_Model {
 		
 		$dom = new DOMDocument();
 		$dom->loadXML(wrap_xml($registry_object->getXML()));
-		 
 		$xslt_processor->setParameter('', 'dataSource', $registry_object->data_source_key);
 		$xslt_processor->setParameter('', 'output', $output_mode);
-		$xslt_processor->setParameter('', 'relatedObjectClassesStr', ""); // XXX: TODO!!!
+		$xslt_processor->setParameter('', 'relatedObjectClassesStr', $registry_object->getRelatedClassesString()); // XXX: TODO!!!
 		return $xslt_processor->transformToXML($dom);
 	}
 	
@@ -24,7 +23,7 @@ class Quality_checker extends CI_Model {
 		$dom = new DOMDocument();
 		$dom->loadXML(wrap_xml($registry_object->getXML()));
 		 
-		$xslt_processor->setParameter('', 'relatedObjectClassesStr', ""); // XXX: TODO!!!
+		$xslt_processor->setParameter('', 'relatedObjectClassesStr', $registry_object->getRelatedClassesString()); // XXX: TODO!!!
 		return $xslt_processor->transformToXML($dom);
 	}
 	

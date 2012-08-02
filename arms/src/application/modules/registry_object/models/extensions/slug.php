@@ -30,6 +30,7 @@ class Slug_Extension extends ExtensionBase
 		if ($query->num_rows() > 0)
 		{
 			$existing_slug = array_pop($query->result_array());
+			$query->free_result();
 			if ($existing_slug['registry_object_id'] == $this->id)
 			{
 				// XXX: Updated?
@@ -79,6 +80,8 @@ class Slug_Extension extends ExtensionBase
 				$slugs[] = $row;	
 			}
 		}
+		$query->free_result();
+		return $slugs;
 	}
 }
 	

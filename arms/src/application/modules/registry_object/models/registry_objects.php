@@ -13,7 +13,7 @@
 class Registry_objects extends CI_Model {
 		
 	public $valid_classes = array("collection","activity","party","service");
-	public $valid_status  = array("DRAFT"=>"DRAFT", "PUBLISHED"=>"PUBLISHED");
+	public $valid_status  = array("DRAFT"=>"DRAFT", "PUBLISHED"=>"PUBLISHED", "APPROVED"=>"APPROVED", "SUBMITTED_FOR_ASSESSMENT"=>"SUBMITTED_FOR_ASSESSMENT");
 	public $valid_levels  = array("level_1"=>"1", "level_2"=>"2", "level_3"=>"3", "level_4"=>"4" );
 	
 	
@@ -28,14 +28,28 @@ class Registry_objects extends CI_Model {
 		$query = $this->db->select("registry_object_id")->get_where('registry_objects', array('key'=>$key));
 		if ($query->num_rows() == 0)
 		{
+			$query->free_result();
 			return NULL;
 		}
 		else
 		{
 			$id = $query->result_array();
+			$query->free_result();
 			return new _registry_object($id[0]['registry_object_id']);
 		}
 	} 	
+	
+	/**
+	 * Returns exactly one data source by Key (or NULL)
+	 * 
+	 * @param the data source key
+	 * @return _data_source object or NULL
+	 */
+	function getByID($id)
+	{
+		return new _registry_object($id);
+	} 	
+	
 	
 	/**
 	 * Returns exactly one data source by URL slug (or NULL)
@@ -48,11 +62,13 @@ class Registry_objects extends CI_Model {
 		$query = $this->db->select("registry_object_id")->get_where('registry_objects', array('slug'=>$slug));
 		if ($query->num_rows() == 0)
 		{
+			$query->free_result();
 			return NULL;
 		}
 		else
 		{
 			$id = $query->result_array();
+			$query->free_result();
 			return new _registry_object($id[0]['registry_object_id']);
 		}
 	} 	
@@ -84,6 +100,7 @@ class Registry_objects extends CI_Model {
 				$matches[] = new _registry_object($result['registry_object_id']);
 			}
 		}
+		$query->free_result();
 		//var_dump($matches);
 		return $matches;
 	} 	
@@ -94,7 +111,7 @@ class Registry_objects extends CI_Model {
 	 * @param the data source ID to match by
 	 * @return array(_registry_object)
 	 */
-	function getByDataSourceID($data_source_id)
+	function getIDsByDataSourceID($data_source_id)
 	{
 		$matches = array();
 		$query = $this->db->select("registry_object_id")->get_where('registry_objects', array("data_source_id"=>$data_source_id));
@@ -102,9 +119,31 @@ class Registry_objects extends CI_Model {
 		{
 			foreach ($query->result_array() AS $result)
 			{
+				$matches[] = $result['registry_object_id'];
+			}
+		}
+		$query->free_result();
+		return $matches;
+	} 	
+
+	/**
+	 * Get a number of registry_objects that match the attribute requirement (or an empty array)
+	 * 
+	 * @param the data source ID to match by
+	 * @return array(_registry_object)
+	 */
+	function getByDataSourceKey($data_source_key)
+	{
+		$matches = array();
+		$query = $this->db->select("registry_object_id")->join('data_sources', 'data_sources.data_source_id = registry_objects.data_source_id')->get_where('registry_objects', array("data_sources.key"=>$data_source_key));
+		if ($query->num_rows() > 0)
+		{
+			foreach ($query->result_array() AS $result)
+			{
 				$matches[] = new _registry_object($result['registry_object_id']);
 			}
 		}
+		$query->free_result();
 		return $matches;
 	} 	
 	

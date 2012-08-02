@@ -63,6 +63,7 @@ $db['registry']['dbcollat'] = 'utf8_general_ci';
 $db['registry']['swap_pre'] = '';
 $db['registry']['autoinit'] = TRUE;
 $db['registry']['stricton'] = FALSE;
+$db['registry']['save_queries'] = FALSE; 
 
 
 /* End of file database.php */

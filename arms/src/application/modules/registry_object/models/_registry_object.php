@@ -62,19 +62,18 @@ class _registry_object extends ExtensionBoilerplate {
 		}
 		
 	}
-	
 
 }
 
 // BEN'S WITCHCRAFT
 abstract class ExtensionBoilerplate
 {
-	private $extended_objects = array();
+	public $extended_objects = array();
     
     public function __construct() {
     
     }
-    
+	
     protected function _extends($class) { //the $class is put to enforce passing class name (otherwise class name can be ommited and no error would be rased)
         $args = func_get_args();
         $class = array_shift($args);

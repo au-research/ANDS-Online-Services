@@ -14,6 +14,6 @@ abstract class ExtensionBase {
 		$this->db = $this->_CI->db;
 		$this->id = &$this->ro->id;
 	}
-		
+	
 }
 	

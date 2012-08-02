@@ -189,7 +189,6 @@ class Core_extension extends ExtensionBase
 		parent::__construct($ro_pointer);
 	}
 	
-	
 }
 
 

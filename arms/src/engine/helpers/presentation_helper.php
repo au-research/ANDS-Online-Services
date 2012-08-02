@@ -23,3 +23,34 @@ function wrap_xml($xml, $scheme = 'rif')
 	return $return;		
 }
 	
+	
+$BENCHMARK_TIME = array();
+function bench($idx = 0)
+{
+	global $BENCHMARK_TIME;
+	if (!isset($BENCHMARK_TIME[$idx])) { $BENCHMARK_TIME[$idx] = 0; }
+	
+	if ($BENCHMARK_TIME[$idx] == 0) 
+	{
+		$BENCHMARK_TIME[$idx] = microtime(true);
+	}
+	else
+	{
+		$diff = sprintf ("%.3f", (float) (microtime(true) - $BENCHMARK_TIME[$idx]));
+		$BENCHMARK_TIME[$idx] = 0;
+		return $diff;
+	}
+}
+
+
+$cycles = 0;
+function clean_cycles()
+{
+	global $cycles;
+	$cycles++;
+	if ($cycles > 100)
+	{
+		gc_collect_cycles();
+		$cycles = 0;
+	}
+}

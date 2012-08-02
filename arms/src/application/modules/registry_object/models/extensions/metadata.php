@@ -17,6 +17,7 @@ class Metadata_Extension extends ExtensionBase
 		if ($query->num_rows() == 1)
 		{
 			$result_array = $query->result_array();
+			$query->free_result();
 			return $result_array[0]['value'];
 		}
 		else if (!$graceful)

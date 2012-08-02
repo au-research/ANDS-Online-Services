@@ -4,6 +4,8 @@ class XML_Extension extends ExtensionBase
 {
 	
 	private $_xml;	// internal pointer for RIFCS XML
+	private $_simplexml;
+	
 	function __construct($ro_pointer)
 	{
 		parent::__construct($ro_pointer);
@@ -27,6 +29,20 @@ class XML_Extension extends ExtensionBase
 		}
 	}
 	
+	function getSimpleXML($record_data_id = NULL)
+	{
+		if (!is_null($this->_simplexml) && $this->_xml->record_data_id == $record_data_id)
+		{
+			return $this->_simplexml;
+		}
+		else
+		{
+			$xml = $this->getXML($record_data_id);
+			$this->_simplexml = simplexml_load_string($xml);
+			return $this->_simplexml;
+		}
+	}
+	
 		 
 	function updateXML($data, $current = TRUE, $scheme = NULL)
 	{
@@ -46,6 +62,7 @@ class XML_Extension extends ExtensionBase
 				$versions[] = $row;
 			}
 		}
+		$result->free_result();
 		return $versions;
 	}
 	
@@ -91,16 +108,17 @@ class _xml
 	{
 		if (is_null($record_data_id))
 		{
-			$result = $this->db->order_by('timestamp','DESC')->get_where('record_data', array('registry_object_id' => $this->registry_object_id), 1);
+			$query = $this->db->order_by('timestamp','DESC')->get_where('record_data', array('registry_object_id' => $this->registry_object_id), 1);
 		}
 		else 
 		{
-			$result = $this->db->order_by('timestamp','DESC')->get_where('record_data', array('id' => $record_data_id), 1);
+			$query = $this->db->order_by('timestamp','DESC')->get_where('record_data', array('id' => $record_data_id), 1);
 		}
 	
-		if ($result->num_rows() == 1)
+		if ($query->num_rows() == 1)
 		{
-			$result = array_pop($result->result_array());
+			$result = array_pop($query->result_array());
+			$query->free_result();
 			$this->xml = $result['data'];
 			$this->timestamp = $result['timestamp'];
 			$this->scheme = $result['scheme'];	

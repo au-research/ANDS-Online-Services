@@ -272,6 +272,12 @@ class _data_source {
 	function updateStats()
 	{
 		$this->_CI->load->model("registry_object/registry_objects", "ro");
+		foreach ($this->_CI->ro->valid_classes AS $class)
+		{
+			$this->db->where(array('data_source_id'=>$this->id, 'class'=>$class));
+			$this->setAttribute("count_$class", $this->db->count_all_results('registry_objects'));
+		}
+		
 		foreach ($this->_CI->ro->valid_status AS $status)
 		{
 			$this->db->where(array('data_source_id'=>$this->id, 'status'=>$status));
