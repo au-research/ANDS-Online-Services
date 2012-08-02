@@ -48,6 +48,8 @@ class XML_Extension extends ExtensionBase
 	{
 			$_xml = new _xml($this->ro->id);
 			$_xml->update($data, $current, $scheme); 
+			$this->_xml = $_xml;
+			$this->_simplexml = simplexml_load_string($_xml->xml);
 	}
 	
 	

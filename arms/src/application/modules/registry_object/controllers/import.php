@@ -15,11 +15,18 @@ class Import extends MX_Controller {
 	{
 		
 		$this->load->model('registry_objects', 'ro');
+		$this->load->model('data_source/data_sources', 'ds');
 		//$registry_objects = $this->ro->getByAttribute('status','DRAFT', TRUE);
-		$registry_objects = $this->ro->getByDataSourceKey('arrow.monash.edu.au');
-		foreach ($registry_objects AS $ro)
+		$data_sources = array_slice($this->ds->getAll(18),0,3);
+		foreach ($data_sources AS $ds)
 		{
-			echo $ro .BR.BR.BR;
+			foreach ($this->ro->getIDsByDataSourceID($ds->data_source_id) AS $ro_id)
+			{
+				$ro = $this->ro->getByID($ro_id);
+				echo "<pre>";
+				echo str_replace("&lt;field","\n&lt;field", htmlentities($ro->transformForSOLR()));
+				
+			}
 		}
 	
 	}
@@ -45,7 +52,7 @@ class Import extends MX_Controller {
 		$this->load->model('rifcs', 'rifcs');
 		
 		$this->load->model('data_source/data_sources', 'ds');
-		$data_sources = array_slice($this->ds->getAll(18),14,1);
+		$data_sources = array_slice($this->ds->getAll(18),0,3);
 		
 		bench(0);
 		$timewaiting = 0;
@@ -88,7 +95,9 @@ class Import extends MX_Controller {
 					// spatial center resooultion
 					// vocab indexing resolution
 					
-					// enrich XML
+					// Generate extrif
+					$ro->enrich();
+					
 					unset($ro);
 					clean_cycles();
 				}
@@ -139,6 +148,7 @@ class Import extends MX_Controller {
 					$record_owner = "SYSTEM";
 					
 					$ro = $this->ro->create($data_source->key, (string)$registryObject->key, $ro_class, "", $status, "", $record_owner);
+					$ro->created_who = "SYSTEM";
 					$ro->data_source_key = $data_source->key;
 					$ro->group = (string) $registryObject['group'];
 					

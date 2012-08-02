@@ -45,5 +45,11 @@ define('TAB',"\t");
 define('DB_TRUE',"t");
 define('DB_FALSE',"f");
 
+
+define('EXTRIF_NAMESPACE', "http://ands.org.au/standards/rif-cs/extendedRegistryObjects");
+define('RIFCS_NAMESPACE', "http://ands.org.au/standards/rif-cs/registryObjects");
+
+
+
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */
