@@ -30,6 +30,7 @@ class Data_source extends MX_Controller {
 			array_push($items, $item);
 		}
 		$data['dataSources'] = $items;
+		
 
 		$this->load->view("data_source_index", $data);
 

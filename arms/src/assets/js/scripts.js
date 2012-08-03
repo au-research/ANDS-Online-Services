@@ -82,7 +82,9 @@ $(document).ready(function(){
 		},
 		position:{
 			my:'top right',
-			at: 'left bottom'
+			at: 'left bottom',
+			target: 'mouse',
+			adjust: { mouse: false }
 		},
 		show: {
 			event: 'click'
@@ -210,12 +212,12 @@ $(document).ready(function(){
             api.timer = setTimeout(api.hide, lifespan);
         }
     }
+	/*createGrowl(false);
 	createGrowl(false);
 	createGrowl(false);
 	createGrowl(false);
 	createGrowl(false);
-	createGrowl(false);
-	updateGrowls();
+	updateGrowls();*/
 });
 
 jQuery.fn.extend({

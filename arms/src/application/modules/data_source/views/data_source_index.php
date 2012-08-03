@@ -66,7 +66,7 @@
 <!-- mustache template for list of items-->
 <div class="hide" id="items-template">
 	{{#items}}
-		<li class="span3">
+		<li class="span4">
 		  	<div class="item" data_source_id="{{id}}">
 		  		<div class="item-info"></div>
 		  		<div class="item-snippet">
@@ -126,80 +126,80 @@
 
 	    	<div class="">
 
-			<h3>Account Administration Information</h3>
-			<dl class="dl-horizontal">
-				<?php 
-				foreach($data_source_view_fields as $key=>$name){
-					echo '{{#'.$key.'}}';
-					echo '<dt>'.$name.'</dt>';
-					echo '<dd>{{'.$key.'}}</dd>';
-					echo '{{/'.$key.'}}';
-				}
-				?>
-		 	</dl>
-		 	<h3>Records Management Settings</h3>
-		 	<dl class="dl-horizontal">
-				<dt>Reverse Links</dt>
-				<dd>
-					{{allow_reverse_internal_links}} Allow Reverse Internal Links <br/>
-					{{allow_reverse_external_links}} Allow Reverse External Links <br/>
-				</dd>
+				<h3>Account Administration Information</h3>
+				<dl class="dl-horizontal">
+					<?php 
+					foreach($data_source_view_fields as $key=>$name){
+						echo '{{#'.$key.'}}';
+						echo '<dt>'.$name.'</dt>';
+						echo '<dd>{{'.$key.'}}</dd>';
+						echo '{{/'.$key.'}}';
+					}
+					?>
+			 	</dl>
+			 	<h3>Records Management Settings</h3>
+			 	<dl class="dl-horizontal">
+					<dt>Reverse Links</dt>
+					<dd>
+						{{allow_reverse_internal_links}} Allow Reverse Internal Links <br/>
+						{{allow_reverse_external_links}} Allow Reverse External Links <br/>
+					</dd>
 
-				{{#create_primary_relationships}}
-				<dt>Create Primary Relationships</dt>
-				<dd>{{create_primary_relationships}}</dd>
-				{{/create_primary_relationships}}
-				
-				{{#push_to_nla}}
-				<dt>Push To NLA</dt>
-				<dd>{{push_to_nla}}</dd>
-				{{/push_to_nla}}
+					{{#create_primary_relationships}}
+					<dt>Create Primary Relationships</dt>
+					<dd>{{create_primary_relationships}}</dd>
+					{{/create_primary_relationships}}
+					
+					{{#push_to_nla}}
+					<dt>Push To NLA</dt>
+					<dd>{{push_to_nla}}</dd>
+					{{/push_to_nla}}
 
-				{{#auto_publish}}
-				<dt>Auto Publish</dt>
-				<dd>{{auto_publish}}</dd>
-				{{/auto_publish}}
+					{{#auto_publish}}
+					<dt>Auto Publish</dt>
+					<dd>{{auto_publish}}</dd>
+					{{/auto_publish}}
 
-				{{#qa_flag}}
-				<dt>Quality Assessment Required</dt>
-				<dd>{{qa_flag}}</dd>
-				{{/qa_flag}}
+					{{#qa_flag}}
+					<dt>Quality Assessment Required</dt>
+					<dd>{{qa_flag}}</dd>
+					{{/qa_flag}}
 
-				{{#assessement_notification_email}}
-				<dt>Assessment Notification Email</dt>
-				<dd>{{assessement_notification_email}}</dd>
-				{{/assessement_notification_email}}
+					{{#assessement_notification_email}}
+					<dt>Assessment Notification Email</dt>
+					<dd>{{assessement_notification_email}}</dd>
+					{{/assessement_notification_email}}
 
-		 	</dl>
-		 	<h3>Harvester Settings</h3>
-		 	<dl class="dl-horizontal">
-		 		{{#uri}}
-				<dt>URI</dt>
-				<dd>{{uri}}</dd>
-				{{/uri}}
+			 	</dl>
+			 	<h3>Harvester Settings</h3>
+			 	<dl class="dl-horizontal">
+			 		{{#uri}}
+					<dt>URI</dt>
+					<dd>{{uri}}</dd>
+					{{/uri}}
 
-				{{#provider_type}}
-				<dt>Provider Type</dt>
-				<dd>{{provider_type}}</dd>
-				{{/provider_type}}
+					{{#provider_type}}
+					<dt>Provider Type</dt>
+					<dd>{{provider_type}}</dd>
+					{{/provider_type}}
 
-				{{#harvest_method}}
-				<dt>Harvest Method</dt>
-				<dd>{{harvest_method}}</dd>
-				{{/harvest_method}}
+					{{#harvest_method}}
+					<dt>Harvest Method</dt>
+					<dd>{{harvest_method}}</dd>
+					{{/harvest_method}}
 
-				{{#harvest_date}}
-				<dt>Harvest Date</dt>
-				<dd>{{harvest_date}}</dd>
-				{{/harvest_date}}
+					{{#harvest_date}}
+					<dt>Harvest Date</dt>
+					<dd>{{harvest_date}}</dd>
+					{{/harvest_date}}
 
-				{{#oai_set}}
-				<dt>OAI-PMH Set</dt>
-				<dd>{{oai_set}}</dd>
-				{{/oai_set}}
-		 	</dl>
-		 	<h3>Activity Log</h3>
-		 	<div class="well">Loading ...</div>
+					{{#oai_set}}
+					<dt>OAI-PMH Set</dt>
+					<dd>{{oai_set}}</dd>
+					{{/oai_set}}
+			 	</dl>
+			 	<h3>Activity Log</h3>
+			 	<div class="well">Loading ...</div>
 		 	</div>
 	    </div>
 		</div>
@@ -212,7 +212,7 @@
 				<ul class="ro-list">
 					{{#statuscounts}}
 				  		{{#status}}
-				  			<li class="status_{{status}}">{{status}} : {{count}}</li>
+				  			<li class="status_{{status}}"><span class="name">{{status}}</span> <span class="num">{{count}}</span></li>
 				  		{{/status}}
 			  		{{/statuscounts}}
 				</ul>
@@ -225,7 +225,7 @@
 				<ul class="ro-list">
 					{{#qlcounts}}
 				  		{{#level}}
-				  			<li class="ql_{{level}}">Quality Level {{level}} : {{count}}</li>
+				  			<li class="ql_{{level}}"><span class="name">Quality Level {{level}}</span> <span class="num">{{count}}</span></li>
 				  		{{/level}}
 			  		{{/qlcounts}}
 				</ul>
