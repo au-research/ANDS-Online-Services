@@ -1086,6 +1086,7 @@ function getOAIErrorXML($code, $description)
 // =============================================================================
 function getRegistryObjectOAIDCXMLElements($registryObjectKey)
 {
+	global $host, $rda_root;
 	$xml = '';
 	$registryObject = getRegistryObject($registryObjectKey);
 
