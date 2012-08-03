@@ -188,7 +188,7 @@
             <xsl:apply-templates select="ro:relatedInfo"/> 
          </xsl:if>
                         
-        <xsl:if test="ro:coverage/extRif:spatial or ro:location/extRif:spatial">
+        <xsl:if test="ro:coverage/extRif:spatial or ro:location/extRif:spatial or ro:coverage/ro:temporal">
             <xsl:variable name="coverageLabel">
             <xsl:choose>
             <xsl:when test="ro:coverage/extRif:spatial and ro:location/extRif:spatial">
@@ -197,7 +197,7 @@
             <xsl:when test="ro:location/extRif:spatial">
             <xsl:text>Location:</xsl:text>
             </xsl:when>
-             <xsl:when test="ro:coverage/extRif:spatial">
+             <xsl:when test="ro:coverage/extRif:spatial or ro:coverage/ro:temporal">
             <xsl:text>Coverage:</xsl:text>
             </xsl:when>
             
