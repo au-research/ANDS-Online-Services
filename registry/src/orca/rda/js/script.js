@@ -1036,13 +1036,13 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 		key_value = key_value.replace(/[+]/gi,"%2B");
         $.ajax({
                 type:"POST",
-                url: base_url+"search/connections/count",data:"q=relatedObject_key:"+key_value+"&key="+key_value,
+                url: base_url+"view/viewConnections/",data:"key="+key_value,
                         success:function(msg){ 
                         	//alert(key_value);
                                 $("#connections").html(msg);
                                 $('ul.connection_list li a').tipsy({live:true, gravity:'s'});
-                                if(parseInt($('#connections-realnumfound').html())==0){
-	                            	$('#connectionsRightBox').hide();
+                               if(parseInt($('#connections-realnumfound').html())==0){
+	                           	$('#connectionsRightBox').hide();
 	                            }
                                 
                         },
