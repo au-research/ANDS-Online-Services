@@ -240,7 +240,7 @@ require '../../_includes/header.php';
 		<td colspan="2"><span style="float:left;"><h3>Records Management Settings</h3></span>
 		<span style="text-align:right;">
 					<input type="button" onclick="window.location='<?php print eAPP_ROOT ?>orca/manage/view_history.php?action=data_source_view&data_source_key=<?php print urlencode($dataSourceKey); ?>'" value="View History"></input>
-					<input type="button" value="Delete Records" title="Delete Registry Objects from this source" onclick="showDeleteModal();"/>
+				<?php if( userIsORCA_ADMIN() ) { ?>	<input type="button" value="Delete Records" title="Delete Registry Objects from this source" onclick="showDeleteModal();"/><?php } ?>
 				<input type="hidden" name="delete_flag" id="delete_flag" value="ALL"/>
 		</span>
 		</td>
