@@ -37,6 +37,7 @@ $typeArray['collection'] = array(
 	"isPartOf" => array("Part of","Contains"),
 	"supports" => array("Supports", "Supported by"),
 	"enriches" =>array("Enriches", "Enriched by"),
+	"makesAvailable" =>array("Makes available", "Available through"),
 );
 $typeArray['party'] = array(
 	"hasAssociationWith" => array("Associated with", "Associated with"),
@@ -53,6 +54,7 @@ $typeArray['party'] = array(
 	"isParticipantIn" => array("Participant in","Part of"),
 	"isPartOf" => array("Part of","Participant in"),
 	"enriches" =>array("Enriches", "Enriched by"),
+	"makesAvailable" =>array("Makes available", "Available through"),
 );
 $typeArray['service'] = array(
 	"hasAssociationWith" =>  array("Associated with", "Associated with"),
@@ -62,6 +64,7 @@ $typeArray['service'] = array(
 	"isPartOf" => array("Part of","Has part"),
 	"isSupportedBy" => array("Supported by","Supports"),
 	"enriches" =>array("Enriches", "Enriched by"),
+	"makesAvailable" =>array("Makes available", "Available through"),
 );
 $typeArray['activity'] = array(
 	"hasAssociationWith" =>   array("Associated with", "Associated with"),
@@ -73,6 +76,7 @@ $typeArray['activity'] = array(
 	"isOwnedBy" => array("Owned by","Owns"),
 	"isPartOf" => array("Part of","Includes"),
 	"enriches" =>array("Enriches", "Enriched by"),
+	"makesAvailable" =>array("Makes available", "Available through"),
 );	
 // Slug defaults
 define('NO_NAME_OR_TITLE_SLUG', 'no-nametitle');
