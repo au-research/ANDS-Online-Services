@@ -205,6 +205,23 @@ class View extends CI_Controller {
 		}
 		
 	}
+	
+	
+	public function viewConnections()
+	{
+			$key = $_POST['key'];
+			
+			$this->load->model('RegistryObjects', 'ro');
+
+			$content = $this->ro->get($key);	
+							
+			$data['key'] = $key;
+			$data['content'] = $this->transform($content, 'connectionsView.xsl',urlencode($key),false);	
+			
+			$this->load->view('connections', $data);
+			
+	}
+	
 	private function transform($registryObjectsXML, $xslt,$key,$group){
 		$qtestxsl = new DomDocument();
 		$registryObjects = new DomDocument();
