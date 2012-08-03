@@ -85,7 +85,6 @@ else if($type=='download')
 		$rifcs = transformToRif2XML($rifcs);
 		
 		header('Content-Length: ' . filesize($rifcs));
-		print $rifcs;
 		
 		// END: XML Response
 		// =============================================================================
