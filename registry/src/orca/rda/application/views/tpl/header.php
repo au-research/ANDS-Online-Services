@@ -16,7 +16,11 @@ limitations under the License.
 *
 **/
 ?>
+
 <?php
+	if(isset($_SERVER['HTTPS'])){
+		redirect(current_url());
+	}
 	$md_title = 'Research Data Australia';
 	$md_description = 'Research Data Australia is a mesh of searchable web pages describing (and where possible linking to) Australian research data collections. Research Data Australia is provided by the Australian National Data Service (ANDS).';
 	$md_image = base_url() . 'img/rda-design.png';
