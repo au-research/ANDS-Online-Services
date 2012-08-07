@@ -37,7 +37,16 @@ $typeArray['collection'] = array(
 	"isPartOf" => array("Part of","Contains"),
 	"supports" => array("Supports", "Supported by"),
 	"enriches" =>array("Enriches", "Enriched by"),
+	"isEnrichedBy" =>array("Enriched by", "Enriches"),
 	"makesAvailable" =>array("Makes available", "Available through"),
+	"isPresentedBy" =>array("Presented by", "Presents"),
+	"presents" =>array("Presents", "Presented by"),
+	"isDerivedFrom" =>array("Derived from", "Derives"),
+	"hasDerivedCollection" =>array("Derives", "Derived From"),
+	"supports" =>array("Supports", "Supported by"),	
+	"isAvaiableThrough" =>array("Available through", "Makes available"),	
+	"isProducedBy" =>array("Produced by", "Produces"),
+	"isOperatedOn" =>array("Operated on", "Operates on"),	
 );
 $typeArray['party'] = array(
 	"hasAssociationWith" => array("Associated with", "Associated with"),
@@ -55,6 +64,7 @@ $typeArray['party'] = array(
 	"isPartOf" => array("Part of","Participant in"),
 	"enriches" =>array("Enriches", "Enriched by"),
 	"makesAvailable" =>array("Makes available", "Available through"),
+	"isEnrichedBy" =>array("Enriched by", "Enriches"),
 );
 $typeArray['service'] = array(
 	"hasAssociationWith" =>  array("Associated with", "Associated with"),
@@ -65,6 +75,11 @@ $typeArray['service'] = array(
 	"isSupportedBy" => array("Supported by","Supports"),
 	"enriches" =>array("Enriches", "Enriched by"),
 	"makesAvailable" =>array("Makes available", "Available through"),
+	"isPresentedBy" =>array("Presented by", "Presents"),
+	"presents" =>array("Presents", "Presented by"),
+	"produces" =>array("Produces", "Produced by"),
+	"operatesOn" =>array("Operates on", "Operated by"),
+	"addsValueTo" =>array("Adds value to", "Value added by"),
 );
 $typeArray['activity'] = array(
 	"hasAssociationWith" =>   array("Associated with", "Associated with"),
