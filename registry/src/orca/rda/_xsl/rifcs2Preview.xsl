@@ -144,6 +144,12 @@
                 <xsl:apply-templates select="ro:coverage/ro:temporal/ro:date"/> 
                 </p>    
             </xsl:if> 
+            
+              <xsl:if test="ro:coverage/ro:temporal/ro:text">
+                <p>Time Period:<br />
+                <xsl:apply-templates select="ro:coverage/ro:temporal/ro:text"/> 
+                </p>    
+            </xsl:if>           
         </xsl:if>
         
         <xsl:if test="ro:subject">
@@ -660,7 +666,10 @@ Handle:
         </xsl:if>       
         <xsl:value-of select="."/>          
     </xsl:template> 
-    
+    <xsl:template match="ro:text">  
+     
+        <xsl:value-of select="."/>          
+    </xsl:template>     
     <xsl:template match="ro:subject">   
         <xsl:if test="./@type='anzsrc-for' or ./@type='anzsrc-seo' or ./@type='anzsrc-toa'">
         <!--  xsl:variable name="subject" select="."/>
