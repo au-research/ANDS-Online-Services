@@ -205,13 +205,13 @@
             </xsl:variable>
             <p><b><xsl:value-of select="$coverageLabel"/></b></p>
             <xsl:variable name="needMap">   
-                <xsl:for-each select="ro:coverage/ro:spatial"> 
+                <xsl:for-each select="ro:coverage/extRif:spatial"> 
              	<xsl:if test="not(./@type) or (./@type!='text' and ./@type!='dcmiPoint')">        	
                       <xsl:text>yes</xsl:text>
                </xsl:if>
                </xsl:for-each>    
 
-             	<xsl:for-each select="ro:location/ro:spatial"> 
+             	<xsl:for-each select="ro:location/extRif:spatial"> 
              	<xsl:if test="not(./@type) or (./@type!='text' and ./@type!='dcmiPoint')">        	
                       <xsl:text>yes</xsl:text>
                </xsl:if>            
@@ -219,23 +219,30 @@
         	</xsl:variable>
         
             <xsl:if test="ro:coverage/extRif:spatial/extRif:coords | ro:location/extRif:spatial/extRif:coords">
-                <xsl:apply-templates select="ro:coverage/extRif:spatial/extRif:coords | ro:location/extRif:spatial/extRif:coords"/>
-                <xsl:if test="$needMap!=''">
+              <xsl:apply-templates select="ro:coverage/extRif:spatial/extRif:coords | ro:location/extRif:spatial/extRif:coords"/>
+              <xsl:if test="$needMap!=''">
                     <div id="spatial_coverage_map"></div>
-                </xsl:if>
-
+              </xsl:if>
             </xsl:if>   
-            
+                    
             <xsl:if test="ro:coverage/extRif:spatial/extRif:center | ro:location/extRif:spatial/extRif:center">
                 <xsl:apply-templates select="ro:coverage/extRif:spatial/extRif:center | ro:location/extRif:spatial/extRif:center"/>
-            </xsl:if>   
-         
+            </xsl:if> 
+            
+           	<xsl:for-each select="ro:coverage/extRif:spatial[@type!='iso19139dcmiBox' and @type!='gmlKmlPolyCoords' and @type!='kmlPolyCoords']">
+     	 		<p class="coverage_text"><xsl:value-of select="./@type"/>: <xsl:value-of select="."/></p>
+      		</xsl:for-each>
+      		
             <xsl:if test="ro:coverage/ro:temporal/ro:date">
                 <p>Time Period:<br />
                 <xsl:apply-templates select="ro:coverage/ro:temporal/ro:date"/> 
                 </p>    
             </xsl:if> 
-
+            <xsl:if test="ro:coverage/ro:temporal/ro:text">
+                <p>Time Period:<br />
+                <xsl:apply-templates select="ro:coverage/ro:temporal/ro:text"/> 
+                </p>    
+            </xsl:if> 
         </xsl:if>
             
         <xsl:if test="ro:subject">
@@ -468,12 +475,7 @@
     <xsl:template match="ro:name[@type='alternative']/ro:displayTitle">   
         <p class="alt_displayTitle"><xsl:value-of select="."/></p>
     </xsl:template> 
-  
- 
         	    	 	 	
-
-
-
     <xsl:template match="ro:title">
         <xsl:value-of select="."/>    
     </xsl:template>
@@ -483,18 +485,10 @@
     </xsl:template> 
     
 
-    <xsl:template match="extRif:spatial/extRif:coords">
-
-
-          <xsl:if test="not(./@type) or (./@type!= 'text' and ./@type!= 'dcmiPoint')">
-
+    <xsl:template match="ro:coverage/extRif:spatial/extRif:coords">
+      <xsl:if test="not(./@type) or (./@type!= 'text' and ./@type!= 'dcmiPoint')">
         <p class="coverage" name="{@type}"><xsl:value-of select="."/></p>
-
       </xsl:if>
-      <xsl:if test="./@type= 'text' or ./@type= 'dcmiPoint'">
-     	 <p class="coverage_text"><xsl:value-of select="./@type"/>: <xsl:value-of select="."/></p>
-      </xsl:if>     
-
     </xsl:template>
     
     <xsl:template match="extRif:center">
