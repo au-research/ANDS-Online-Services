@@ -72,26 +72,7 @@ function load_more(page){
 		success: function(data){
 			var itemsTemplate = $('#items-template').html();
 			var output = Mustache.render(itemsTemplate, data);
-			//console.log(output);
-			//$('#items').append('<div id="loading">Loading...</div>')
-			setTimeout(function(){
-				$('#loading').remove();
-				$('#items').append(output);
-
-				//bind the drag and drop
-				$('#items .item')
-					.drop("start",function(){
-						//$( this ).addClass("active");
-					})
-					.drop(function( ev, dd ){
-						$( this ).addClass("selected");
-						updateItemsInfo();
-					})
-					.drop("end",function(){
-						//$( this ).removeClass("active");
-					});
-				$.drop({ multi: true });
-			}, 0);
+			$('#items').append(output);
 		}
 	});
 }

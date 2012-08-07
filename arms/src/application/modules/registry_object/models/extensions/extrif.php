@@ -26,12 +26,13 @@ class Extrif_Extension extends ExtensionBase
 			if (count($xml->key) == 1)
 			{
 				/* EXTENDED METADATA CONTAINER */
+				
 				$extendedMetadata = $xml->addChild("extRif:extendedMetadata", NULL, EXTRIF_NAMESPACE);
 				
 				$extendedMetadata->addChild("extRif:status", $this->ro->status, EXTRIF_NAMESPACE);
 				$extendedMetadata->addChild("extRif:slug", $this->ro->slug, EXTRIF_NAMESPACE);
 				
-				$extendedMetadata->addChild("extRif:registryObjectID", $this->ro->id, EXTRIF_NAMESPACE);
+				$extendedMetadata->addChild("extRif:id", $this->ro->id, EXTRIF_NAMESPACE);
 				$extendedMetadata->addChild("extRif:dataSourceTitle", $ds->title, EXTRIF_NAMESPACE);
 				$extendedMetadata->addChild("extRif:dataSourceKey", $this->ro->data_source_key, EXTRIF_NAMESPACE);
 				$extendedMetadata->addChild("extRif:dataSourceID", $this->ro->data_source_id, EXTRIF_NAMESPACE);
@@ -76,12 +77,11 @@ class Extrif_Extension extends ExtensionBase
 				{
 					$extrifDescription = $xml->addChild("extRif:description", (string)$description, EXTRIF_NAMESPACE);
 					$extrifDescription->addAttribute("type", (string) $description['type']);
-				
 					// XXX: TODO: CLEAN UP HTML (PURIFY)
 				}	
 					
 				$this->ro->updateXML($xml->asXML(),TRUE,'extrif');
-				return$this;
+				return $this;
 			}
 			else
 			{
@@ -92,11 +92,17 @@ class Extrif_Extension extends ExtensionBase
 	
 	function transformForSOLR()
 	{
-		$xslt_processor = Transforms::get_extrif_to_solr_transformer();
-		
-		$dom = new DOMDocument();
-		$dom->loadXML($this->ro->getXML());
-		return $xslt_processor->transformToXML($dom);
+		try{
+			$xslt_processor = Transforms::get_extrif_to_solr_transformer();
+			$dom = new DOMDocument();
+			//$dom->loadXML($this->ro->getXML());
+			$dom->loadXML($this->ro->getExtRif());
+			return $xslt_processor->transformToXML($dom);
+		}catch (Exception $e)
+		{
+			echo "UNABLE TO TRANSFORM" . BR;	
+			echo "<pre>" . nl2br($e->getMessage()) . "</pre>" . BR;
+		}
 	}
 	
 	

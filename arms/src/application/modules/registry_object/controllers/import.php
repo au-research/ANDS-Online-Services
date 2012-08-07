@@ -24,11 +24,125 @@ class Import extends MX_Controller {
 			{
 				$ro = $this->ro->getByID($ro_id);
 				echo "<pre>";
-				echo str_replace("&lt;field","\n&lt;field", htmlentities($ro->transformForSOLR()));
-				
+				$solrXML =  str_replace("&lt;field","\n&lt;field", htmlentities($ro->transformForSOLR()));
+				echo $solrXML;
+				echo "</pre>";				
 			}
 		}
-	
+	}
+
+	function testIndex(){
+		$solrUrl = 'http://ands3.anu.edu.au:8080/solr1/';
+		$solrUpdateUrl = $solrUrl.'update/?wt=json';
+		$this->load->model('registry_objects', 'ro');
+		$this->load->model('data_source/data_sources', 'ds');
+		//$registry_objects = $this->ro->getByAttribute('status','DRAFT', TRUE);
+		$data_sources = array_slice($this->ds->getAll(18),0,15);
+		foreach ($data_sources AS $ds)
+		{
+			foreach ($this->ro->getIDsByDataSourceID($ds->data_source_id) AS $ro_id)
+			{
+				$ro = $this->ro->getByID($ro_id);
+				//echo $ro->getExtRif();
+				$solrXML =  str_replace("&lt;field","\n&lt;field", htmlentities($ro->transformForSOLR()));
+				$solrXML = $ro->transformForSOLR();
+				//echo $solrXML;
+				$result = curl_post($solrUpdateUrl, $solrXML);$result .= curl_post($solrUpdateUrl.'?commit=true', '<commit waitSearcher="false"/>');
+				$result = json_decode($result);
+			}
+		}
+	}
+
+	function indexDS($data_source_id){
+		$solrUrl = 'http://ands3.anu.edu.au:8080/solr1/';
+		$solrUpdateUrl = $solrUrl.'update/?wt=json';
+		$this->load->model('registry_objects', 'ro');
+		$this->load->model('data_source/data_sources', 'ds');
+
+		$ids = $this->ro->getIDsByDataSourceID($data_source_id);
+		echo 'total='.sizeof($ids).BR;
+		$i = 1;
+		foreach($ids as $ro_id){
+			try{
+				$ro = $this->ro->getByID($ro_id);
+				//echo $ro->getExtRif();
+				$solrXML =  str_replace("&lt;field","\n&lt;field", htmlentities($ro->transformForSOLR()));
+				$solrXML = $ro->transformForSOLR();
+				//echo $solrXML;
+				$result = curl_post($solrUpdateUrl, $solrXML);
+				$result = json_decode($result);
+				if($result->{'responseHeader'}->{'status'}==0){
+					echo $i. ' - id:'.$ro_id.' indexed'.BR;
+					$i++;
+				}
+			}catch (Exception $e){
+				echo "UNABLE TO Index this registry object id = ".$ro_id . BR;	
+				echo "<pre>" . nl2br($e->getMessage()) . "</pre>" . BR;
+			}
+		}
+		$result = curl_post($solrUpdateUrl.'?commit=true', '<commit waitSearcher="false"/>');
+	}
+
+	function importDS($data_source_id){
+		ob_start();
+		$this->output->enable_profiler(FALSE);
+		$this->load->model('registry_objects', 'ro');
+		$this->load->model('rifcs', 'rifcs');
+		
+		$this->load->model('data_source/data_sources', 'ds');
+		$data_sources = array_slice($this->ds->getAll(18),0,2);
+		
+		bench(0);
+		$timewaiting = 0;
+		gc_enable();
+
+		$ds = $this->ds->getByID($data_source_id);
+		try
+		{
+			bench(1);
+			$xml = $this->getRIFCSFromURI("http://demo.ands.org.au/registry/orca/services/getRegistryObjects.php?parties=party&activities=activity&services=service&collections=collection&source_key=".rawurlencode($ds->key));
+			$bench = bench(1);
+			echo $ds->key . " => " . $bench . BR;
+			
+			$timewaiting += (float) $bench;
+			$this->ingestXMLForDataSource($ds, $xml);
+			unset($xml);
+			gc_collect_cycles();
+		}
+		catch (Exception $e)
+		{
+			echo "UNABLE TO HARVEST FROM THIS DATA SOURCE" . BR;	
+			echo "<pre>" . nl2br($e->getMessage()) . "</pre>" . BR;
+		}
+
+		try
+		{
+			foreach ($this->ro->getIDsByDataSourceID($ds->data_source_id) AS $ro_id)
+			{
+				$ro = $this->ro->getByID($ro_id);
+				// add reverse relationships
+				$ro->addRelationships();
+				$ro->update_quality_metadata();
+				// spatial center resooultion
+				// vocab indexing resolution
+				
+				// Generate extrif
+				$ro->enrich();
+				
+				unset($ro);
+				clean_cycles();
+			}
+			// index data source
+			$ds->updateStats();
+			gc_collect_cycles();
+			
+		}
+		catch (Exception $e)
+		{
+			echo "UNABLE TO HARVEST FROM THIS DATA SOURCE" . BR;	
+			echo "<pre>" . nl2br($e->getMessage()) . "</pre>" . BR;
+		}
+		echo ((float) bench(0) - (float) $timewaiting) . " seconds to execute" . BR;
 	}
 
 	function show()
@@ -40,8 +154,8 @@ class Import extends MX_Controller {
 		{
 			print $ro->getXML();	
 		}
-	
-		
+
+
 	}
 	
 	function index()
@@ -52,7 +166,7 @@ class Import extends MX_Controller {
 		$this->load->model('rifcs', 'rifcs');
 		
 		$this->load->model('data_source/data_sources', 'ds');
-		$data_sources = array_slice($this->ds->getAll(18),0,3);
+		$data_sources = array_slice($this->ds->getAll(18),0,2);
 		
 		bench(0);
 		$timewaiting = 0;
@@ -147,7 +261,7 @@ class Import extends MX_Controller {
 			
 					$record_owner = "SYSTEM";
 					
-					$ro = $this->ro->create($data_source->key, (string)$registryObject->key, $ro_class, "", $status, "", $record_owner);
+					$ro = $this->ro->create($data_source->key, (string)$registryObject->key, $ro_class, "", $status, "defaultSlug", $record_owner);
 					$ro->created_who = "SYSTEM";
 					$ro->data_source_key = $data_source->key;
 					$ro->group = (string) $registryObject['group'];

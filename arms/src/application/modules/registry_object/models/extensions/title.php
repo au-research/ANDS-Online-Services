@@ -46,7 +46,7 @@ class Title_Extension extends ExtensionBase
 			
 		}
 		
-		return getTitlesForFragment($name, $this->ro->class);
+		return $this->getTitlesForFragment($name, $this->ro->class);
 	}	
 	
 	function getTitlesForFragment (SimpleXMLElement $name, $class)

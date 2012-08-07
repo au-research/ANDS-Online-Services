@@ -54,3 +54,33 @@ function clean_cycles()
 		$cycles = 0;
 	}
 }
+
+function curl_post($url, $post)
+{
+    $header = array("Content-type:text/xml; charset=utf-8");
+
+    $ch = curl_init();
+
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+    curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
+    curl_setopt($ch, CURLINFO_HEADER_OUT, 1);
+
+    $data = curl_exec($ch);
+	
+	
+    /*if (curl_errno($ch)) {
+       print "curl_error:" . curl_error($ch).'<br/>';
+    } else {
+       curl_close($ch);
+       print "curl exited okay\n";
+       echo "Data returned...\n";
+       echo "------------------------------------\n";
+       echo $data;
+       echo "------------------------------------\n";
+    } */
+    return $data;
+}

@@ -44,7 +44,12 @@
         var suffix = '#!/';
     </script>
 	<script src="<?php echo base_url();?>assets/js/scripts.js"></script>
-    <script src="<?php echo base_url();?>assets/js/data_sources.js"></script>
+
+    <?php foreach($scripts as $script):?>
+        <script src="<?php echo base_url();?>assets/js/<?php echo $script;?>.js"></script>
+    <?php endforeach;?>
+
+    
 
 	<!-- Bootstrap javascripts, need to be placed after all else -->
     <script src="<?php echo base_url();?>assets/lib/twitter_bootstrap/js/bootstrap.min.js"></script>

@@ -1,26 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <xsl:stylesheet xmlns:ro="http://ands.org.au/standards/rif-cs/registryObjects" xmlns:extRif="http://ands.org.au/standards/rif-cs/extendedRegistryObjects" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0" exclude-result-prefixes="ro extRif">
 
     <xsl:output indent="yes" />
     <xsl:strip-space elements="*"/>
+
 <xsl:template match="/">
     <xsl:apply-templates/>
 </xsl:template>   
     
  <xsl:template match="registryObjects">
-     <add>
     <xsl:apply-templates select="registryObject"/>
-     </add>
  </xsl:template> 
 
     <xsl:template match="registryObject">
+        <add>
         <doc>
         <xsl:variable name="roKey" select="key"/>
             <xsl:apply-templates select="key"/>
 
         <xsl:choose>
 			<xsl:when test="extRif:extendedMetadata">
-	        	<xsl:apply-templates select="extRif:extendedMetadata/extRif:keyHash"/>
+	        	<xsl:apply-templates select="extRif:extendedMetadata/extRif:id"/>
+                <xsl:apply-templates select="extRif:extendedMetadata/extRif:dataSourceID"/>
 	            <xsl:apply-templates select="extRif:extendedMetadata/extRif:status"/>
 	            <xsl:apply-templates select="extRif:extendedMetadata/extRif:reverseLinks"/> 
 	            <xsl:apply-templates select="extRif:extendedMetadata/extRif:searchBaseScore"/>
@@ -40,28 +42,6 @@
       			<xsl:apply-templates select="extRif:extendedMetadata/extRif:feedType"/>   
                 <xsl:apply-templates select="extRif:extendedMetadata/extRif:lastModifiedBy"/>             	
         	</xsl:when>
-        	<xsl:otherwise>
-	        	<xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:keyHash"/>
-	            <xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:status"/>
-	            <xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:reverseLinks"/> 
-	            <xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:searchBaseScore"/>
-	 			<xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:registryDateModified"/>
-	            <xsl:apply-templates select="originatingSource"/>
-	            <xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:dataSourceKey"/> 
-	            <xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:dataSourceKeyHash"/> 
-	            <xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:displayTitle"/> 
-	            <xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:listTitle"/>
-	            <xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:flag"/>
-      			<xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:warning_count"/>
-      			<xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:error_count"/>
-     			<xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:url_slug"/>
-      			<xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:manually_assessed_flag"/>
-      			<xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:gold_status_flag"/>
-      			<xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:quality_level"/>
-      			<xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:feedType"/>
-                <xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:lastModifiedBy"/>
-      			
-        	</xsl:otherwise>
         </xsl:choose>
 
             <xsl:element name="field">
@@ -71,6 +51,7 @@
             <xsl:apply-templates select="collection | party | activity | service"/>
 
         </doc>
+        </add>
     </xsl:template> 
    
     <xsl:template match="key">
@@ -88,9 +69,16 @@
     </xsl:template>
 	
 	
-    <xsl:template match="extRif:keyHash">
+    <xsl:template match="extRif:id">
         <xsl:element name="field">
-            <xsl:attribute name="name">key_hash</xsl:attribute>
+            <xsl:attribute name="name">id</xsl:attribute>
+            <xsl:value-of select="."/>
+        </xsl:element>       
+    </xsl:template>
+
+    <xsl:template match="extRif:dataSourceID">
+        <xsl:element name="field">
+            <xsl:attribute name="name">data_source_id</xsl:attribute>
             <xsl:value-of select="."/>
         </xsl:element>       
     </xsl:template>

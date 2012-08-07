@@ -66,7 +66,7 @@
 <!-- mustache template for list of items-->
 <div class="hide" id="items-template">
 	{{#items}}
-		<li class="span4">
+		<li class="span3">
 		  	<div class="item" data_source_id="{{id}}">
 		  		<div class="item-info"></div>
 		  		<div class="item-snippet">
@@ -110,7 +110,11 @@
 	<div class="span8">
 		<div class="box">
 		<div class="box-header">
-	        <h1>{{title}}<small><a href="javascript:;" class="close return-to-browse">&times;</a></small></h1>
+	        <h1>{{title}}</h1>
+	        <span class="right-widget">
+	        	<small><a href="javascript:;" class="close return-to-browse">&times;</a></small>
+	        </span>
+	        <div class="clearfix"></div>
 	    </div>
 	    <div class="row-fluid">
 	    	
@@ -243,7 +247,11 @@
 {{#item}}
 	<div class="box">
 	<div class="box-header">
-	    <h1>Edit: {{title}}<small><a href="javascript:;" class="close return-to-browse">&times;</a></small></h1>
+	    <h1>Edit: {{title}}</h1>
+	    <span class="right-widget">
+        	<small><a href="javascript:;" class="close return-to-browse">&times;</a></small>
+        </span>
+        <div class="clearfix"></div>
 	</div>
 	<div class="">
 		<ul class="nav nav-tabs">
