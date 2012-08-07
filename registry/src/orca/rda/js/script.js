@@ -1295,7 +1295,7 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 					$('#endlink').prepend('<a href="http://'+ident+'">View the record for this Party in Trove</a><br/>');
         		}
         	}
-        	//identifiers.push($(this).html());
+        	
         });
 
         $.each($('#identifiers a'), function(){//find in every identifiers
@@ -1326,7 +1326,7 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
         	}
         });
 
-        console.log(identifiers);
+        //console.log(identifiers);
         if (identifiers.length > 0){
 	        var identifierSearchString = '+fulltext:(';
 	        var first = true;
@@ -1347,7 +1347,7 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 	        $.ajax({
 	            type:"POST",
 	            url: base_url+"search/seeAlso/count/identifiers"+relatedClass,
-	            data:"q=*:*&classFilter=party;activity&typeFilter=All&groupFilter=All&subjectFilter=All&licenceFilter=All&page=1&spatial_included_ids=&temporal=All&excluded_key="+key_value+'&extended='+identifierSearchString,
+	            data:"q=*:*&classFilter=party&typeFilter=All&groupFilter=All&subjectFilter=All&licenceFilter=All&page=1&spatial_included_ids=&temporal=All&excluded_key="+key_value+'&extended='+identifierSearchString,
 	                    success:function(msg){
 	                    	//console.log(msg);
 	                            $("#seeAlso-IdentifierBox").html(msg);
@@ -1364,7 +1364,7 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 		        $.ajax({
 	                type:"POST",
 	                url: base_url+"search/seeAlso/content/identifiers",
-	                data:"q=*:*&classFilter=party;activity&typeFilter=All&groupFilter=All&subjectFilter=All&licenceFilter=All&page=1&spatial_included_ids=&temporal=All&excluded_key="+key_value+'&extended='+identifierSearchString,
+	                data:"q=*:*&classFilter=party&typeFilter=All&groupFilter=All&subjectFilter=All&licenceFilter=All&page=1&spatial_included_ids=&temporal=All&excluded_key="+key_value+'&extended='+identifierSearchString,
 	                    success:function(msg){
 	                            $("#infoBox").html(msg);
 	                            $(".accordion").accordion({autoHeight:false, collapsible:true,active:false});
