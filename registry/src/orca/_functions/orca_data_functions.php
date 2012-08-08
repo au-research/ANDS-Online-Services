@@ -3319,6 +3319,15 @@ function updateAdvancedHarvestingModeForDataSource($dataSourceKey, $advancedHarv
 	$result = executeUpdateQuery($gCNN_DBS_ORCA, $strQuery, $params);
 }
 
+function updatePostCodeForDataSource($dataSourceKey, $post_code)
+{
+	global $gCNN_DBS_ORCA;
+    $strQuery = 'UPDATE dba.tbl_data_sources SET post_code = $2 WHERE data_source_key = $1';
+	$params = array($dataSourceKey, $post_code);
+	$result = executeUpdateQuery($gCNN_DBS_ORCA, $strQuery, $params);
+}
+
+
 
 
 function scheduledTaskCheck($dataSourceKey)

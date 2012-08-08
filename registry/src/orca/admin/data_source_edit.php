@@ -83,6 +83,7 @@ $autoPublish = $dataSource[0]['auto_publish'];
 $qaFlag = $dataSource[0]['qa_flag'];
 $advancedHarvestingMode = $dataSource[0]['advanced_harvesting_mode'];
 
+$post_code = $dataSource[0]['post_code'];
 
 
 $errorMessages = '';
@@ -238,6 +239,8 @@ if( strtoupper(getPostedValue('action')) == "SAVE" )
 		$titleLabelClass = gERROR_CLASS;
 		$errorMessages .= "Title is a mandatory field.<br />";
 	}
+
+	$post_code = getPostedValue('post_code');
 
 	$uri = getPostedValue('uri');
 	if( $uri == '' )
@@ -415,6 +418,7 @@ if( strtoupper(getPostedValue('action')) == "SAVE" )
 		$errors = updateDataSource();
 		$errors .= updateRecordsForDataSource($dataSourceKey, $autoPublish, $autoPublishOld , $qaFlag , $qaFlagOld,$create_primary_relationships, $create_primary_relationships_old,$class_1,$class_1_old,$class_2,$class_2_old);
 		$errors .= updateAdvancedHarvestingModeForDataSource($dataSourceKey, $advancedHarvestingMode);
+		$errors .= updatePostCodeForDataSource( $dataSourceKey, $post_code );
 		
 		if( $errors == "" )
 		{
@@ -504,6 +508,14 @@ require '../../_includes/header.php';
 			<td class="">Notes:</td>
 			<td><textarea name="notes" id="notes" cols="50" rows="5"><?php printSafe($notes) ?></textarea></td>
 		</tr>
+		
+		<tr>
+			<td class="">Post Code:</td>
+			<td><input type="text" name="post_code" id="post_code" size="15" maxlength="6" value="<?php printSafe($post_code) ?>" /><br/>
+				<span style="font-size:0.7em; color:#333;">Note: This optional field is used to indicate your data source's origin in spatial reporting tools.</span>
+			</td>
+		</tr>
+		
 		<tr style="border-bottom:2px solid black;">
 		<td colspan="2" style="border-bottom:2px solid black;"><span style="float:left;">Records Management Settings</span>
 		</td>
