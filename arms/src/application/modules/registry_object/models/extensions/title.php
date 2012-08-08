@@ -32,6 +32,7 @@ class Title_Extension extends ExtensionBase
 		
 		// Pick a name, given preference to the primary name
 		$name = '';
+
 		$names = $sxml->xpath('//'.$this->ro->class.'/name[@type="primary"]');
 		if (count($names) == 0)
 		{
@@ -63,6 +64,7 @@ class Title_Extension extends ExtensionBase
 			{
 				$parts_accumulator[] = (string) $np;
 			}
+	
 			$name = trim(implode(" ", $parts_accumulator));
 			if ($name != '')
 			{
@@ -122,12 +124,13 @@ class Title_Extension extends ExtensionBase
 							(count($partyNameParts['suffix']) > 0 ? ", " . implode(" ", $partyNameParts['suffix']) : "") .
 							(count($partyNameParts['user_specified_type']) > 0 ? " " . implode(" ", $partyNameParts['user_specified_type']) . " " : ""));
 			
-			// Some length checking...
-			if (strlen($display_title) > 255) { $display_title = substr($display_title,0,252) . "..."; }
-			if (strlen($list_title) > 255) { $list_title = substr($list_title,0,252) . "..."; }
-			
-			return array("display_title"=>$display_title, "list_title" => $list_title);
-		}		
+		
+		}
+		
+		// Some length checking...
+		if (strlen($display_title) > 255) { $display_title = substr($display_title,0,252) . "..."; }
+		if (strlen($list_title) > 255) { $list_title = substr($list_title,0,252) . "..."; }
+		return array("display_title"=>$display_title, "list_title" => $list_title);		
 	}	
 		
 }

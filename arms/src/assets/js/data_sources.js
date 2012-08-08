@@ -32,6 +32,7 @@ $(function(){
 					case 'delete': load_datasource_delete(words[1]);break;
 					default: browse('thumbnails');break;
 				}
+				$('#data_source_view_container').attr('data_source_id', words[1]);
 			}catch(error){
 				var template = $('#error-template').html();
 				var output = Mustache.render(template, error);
@@ -120,7 +121,7 @@ $('#datasource-chooser').live({
 	}
 });
 
-$('.close').live({
+$('.box-header .close').live({
 	click: function(e){
 		//changeHashTo('browse/'+currentView);
 		window.history.back();
@@ -226,7 +227,9 @@ $('#save-edit-form').live({
 		e.preventDefault();
 		var jsonData = [];
 		$(this).button('loading');
-
+		
+		jsonData.push({name:'data_source_id', value:$('#data_source_view_container').attr('data_source_id')});
+		
 		$('#edit-datasource #edit-form input, #edit-datasource #edit-form textarea').each(function(){
 			var label = $(this).attr('id');
 			var value = $(this).val();
@@ -234,10 +237,105 @@ $('#save-edit-form').live({
 				jsonData.push({name:label, value:value});
 			}
 		});
+		
+		$.ajax({
+			url:'updateDataSource', 
+			type: 'POST',
+			data: jsonData,
+			success: function(data){
+				
+					if (!data.status == "OK")
+					{
+						$('#myModal').modal();
+						logErrorOnScreen("An error occured whilst saving your changes!", $('#myModal .modal-body'));
+						$('#myModal .modal-body').append("<br/><pre>" + data + "</pre>");
+					}
+					else
+					{
+						changeHashTo('view/'+$('#data_source_view_container').attr('data_source_id'));
+						createGrowl("Your Data Source was successfully updated");
+						updateGrowls();
+					}
+			},
+			error: function()
+			{
+				$('#myModal').modal();
+				logErrorOnScreen("An error occured whilst saving your changes!", $('#myModal .modal-body'));
+				$('#myModal .modal-body').append("<br/><pre>" + data + "</pre>");
+			}
+		});
 
-		var jsonString = ""+JSON.stringify(jsonData);
+		/*var jsonString = ""+JSON.stringify(jsonData);
 		$('#myModal .modal-body').html('<pre>'+jsonString+'</pre>');
-		$('#myModal').modal();
-		//$(this).button('reset');
+		$('#myModal').modal();*/
+		$(this).button('reset');
+	}
+});
+
+$('#importRecordsFromURLModal .doImportRecords').live({
+	click: function(e){
+		var thisForm = $('#importRecordsFromURLModal');
+		$('#remoteSourceURLDisplay', thisForm).html($('form input[name="url"]').val());
+		/* fire off the ajax request */
+		$.ajax({
+			url:'importFromURLtoDataSource', 
+			type: 'POST',
+			data:	{ 
+				url: $('form input[name="url"]').val(), 
+				data_source_id: $('#data_source_view_container').attr('data_source_id') 
+			}, 
+			success: function(data)
+					{
+						var thisForm = $('#importRecordsFromURLModal');
+						thisForm.attr('loaded','true');
+						var output = '';
+				
+						if(data.response == "success")
+						{
+							output = Mustache.render($('#import-screen-success-report-template').html(), data);
+							$('.modal-body', thisForm).hide();
+							$('div[name=resultScreen]', thisForm).html(output).fadeIn();
+						}
+						else
+						{
+								$('.modal-body', thisForm).hide();
+								logErrorOnScreen(data.message, $('div[name=resultScreen]', thisForm));
+								$('div[name=resultScreen]', thisForm).fadeIn();
+						}
+						$('.modal-footer a').toggle();
+
+					}, 
+			error: function(data)
+					{
+						$('.modal-body', thisForm).hide();
+						logErrorOnScreen(data.responseText, $('div[name=resultScreen]', thisForm));
+						$('div[name=resultScreen]', thisForm).fadeIn();
+						$('.modal-footer a').toggle();
+					},
+			dataType: 'json'
+		});
+		
+		$(this).button('loading');
+		
+		if (thisForm.attr('loaded') != 'true')
+		{
+			$('.modal-body', thisForm).hide();
+			$('div[name=loadingScreen]', thisForm).fadeIn();
+		}
+		
+		$('#importRecordsFromURLModal').on('hide',
+			function()
+			{
+				load_datasource($('#data_source_view_container').attr('data_source_id'));
+				thisForm.attr('loaded','false');
+				$('.modal-footer a').hide();
+				$('#importRecordsFromURLModal .doImportRecords').button('reset').show();
+				$('.modal-body', thisForm).hide();
+				$('div[name=selectionScreen]', thisForm).show();
+			}
+				
+		);
+						
+		
 	}
 });

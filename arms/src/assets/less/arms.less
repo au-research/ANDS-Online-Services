@@ -32,6 +32,8 @@ body{
 	line-height:22px;
 	background: #dddddd;
 }
+
+
 #topbar{
 	border-top:4px solid @altAccentColor;
 	font-size:85%;
@@ -73,6 +75,19 @@ body{
 
 h1 small{font-size:16px;}
 h1{.text-shadow}
+
+.ellipsis{
+ text-overflow: ellipsis; 
+ -o-text-overflow: ellipsis; 
+ -icab-text-overflow: ellipsis; 
+ -khtml-text-overflow: ellipsis; 
+ -moz-text-overflow: ellipsis; 
+ -webkit-text-overflow: ellipsis;  
+ overflow:hidden;
+ overflow-wrap:none;
+ word-wrap:none;
+ word-break: keep-all;
+}
 
 .box{
 	border:1px solid @borderColor;
@@ -273,6 +288,27 @@ h1{.text-shadow}
 	.controls{
 		margin-left:210px;
 	}
+}
+
+
+
+#importRecordsFromURLModal{
+  .modal-screen-container{
+      min-height:240px;
+      max-height:450px;
+      overflow:auto;
+  }
+  .modal-body{
+      #remoteSourceURLDisplay{
+        width:380px;
+        font-style:italic;
+        padding:15px 0px 15px 15px;
+        .ellipsis(); 
+      }
+      input[name="url"]{
+        width:90%;
+      } 
+   }
 }
 
 .tab-content{overflow:visible;}

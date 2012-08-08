@@ -25,10 +25,17 @@ function updateItemsInfo(){
 	}
 }
 
-function logErrorOnScreen(error){
+function logErrorOnScreen(error, target){
 	var template = $('#error-template').html();
-	var output = Mustache.render(template, error);
-	$('#main-content').prepend(output);
+	var output = Mustache.render(template, $("<div/>").html(error).text());
+	if (!target)
+	{
+		$('#main-content').prepend(output);
+	}
+	else
+	{
+		target.html(output);
+	}
 }
 $(document).ready(function(){
 	$('#main-nav-user-account').qtip({
@@ -173,6 +180,8 @@ $(document).ready(function(){
 	createGrowl(false);
 	createGrowl(false);
 	updateGrowls();*/
+
+
 });
 
 jQuery.fn.extend({

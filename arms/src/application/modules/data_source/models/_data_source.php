@@ -223,6 +223,16 @@ class _data_source {
 		setAttribute($name, NULL);
 	}
 	
+	
+	function attributes()
+	{
+		$attributes = array();
+		foreach ($this->attributes AS $attribute)
+		{
+			$attributes[$attribute->name] = $attribute->value;
+		}
+		return $attributes;
+	}
 		
 	function _initAttribute($name, $value, $core=FALSE)
 	{

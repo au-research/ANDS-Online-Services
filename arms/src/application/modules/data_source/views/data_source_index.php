@@ -62,6 +62,7 @@
 </div>
 <!-- end of main content container -->
 
+
 <section id="datasource-templates">
 <!-- mustache template for list of items-->
 <div class="hide" id="items-template">
@@ -87,6 +88,11 @@
 	{{/items}}
 </div>
 
+
+
+
+
+
 <!-- mustache template for data source view single-->
 <div class="hide" id="data-source-view-template">
 <?php
@@ -107,7 +113,7 @@
 <div class="row">
 
 	
-	<div class="span8">
+	<div class="span8" id="data_source_view_container" data_source_id="">
 		<div class="box">
 		<div class="box-header">
 	        <h1>{{title}}</h1>
@@ -118,11 +124,24 @@
 	    </div>
 	    <div class="row-fluid">
 	    	
-	 		<div class="well">
-				<div class="btn-group" data_source_id="{{data_source_id}}">
-			  		<button class="btn edit"><i class="icon-edit"></i> Edit Data Source</button>
-			  		<button class="btn history"><i class="icon-hdd"></i> View History</button>
-			  		<button class="btn deleteRecord"><i class="icon-trash"></i> Delete Record</button>
+	 		<div>
+	 			<div class="btn-toolbar">
+					<div class="btn-group" data_source_id="{{data_source_id}}">
+				  		<button class="btn edit"><i class="icon-edit"></i> Edit Data Source</button>
+				  		<button class="btn history"><i class="icon-hdd"></i> View History</button>
+				  		<button class="btn deleteRecord"><i class="icon-trash"></i> Delete Record</button>
+					</div>
+
+					<div class="btn-group pull-right">
+						<a class="btn dropdown-toggle importRecords" data-toggle="dropdown" href="javascript:;">
+							<i class="icon-download-alt"></i> Import Records <span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a data-toggle="modal" href="#importRecordsFromURLModal" id="importFromURLLink">From a URL</a></li>
+							<li><a href="#">From an XML File</a></li>
+							<li><a href="#">From the Harvester</a></li>
+						</ul>
+					</div>
 				</div>
 			</div>
 	 
@@ -239,7 +258,64 @@
 
 </div>
 </div>
+
+<!-- Modal form for importing records from a URL -->
+<div class="modal hide fade" id="importRecordsFromURLModal">
+	
+	<div class="modal-header">
+		<a href="javascript:;" class="close" data-dismiss="modal">×</a>
+		<h3>Import Registry Objects from a URL</h3>
+	</div>
+	
+	<div class="modal-screen-container">
+		<div name="selectionScreen" class="modal-body">
+			
+			<div class="alert alert-info">
+				Import registry objects from a test feed or backup.
+			</div>
+			
+			
+				<form class="form-horizontal">
+					<label class="control-label">URL to import records from: </label>
+					<div class="controls"><input type="text" name="url" placeholder="http://" /><p class="help-block"><small>Use full URL format (including http://)</small></p></div>
+				</form>
+				
+			<p><span class="label label-info">Note</span> <small>This tool does not support OAI-PMH. You must use the Harvester to import from an OAI-PMH feed.</small></p>
+		</div>
+		
+		<!-- A hidden loading screen -->
+		<div name="loadingScreen" class="modal-body hide loading">
+				<b>Loading XML from: </b><div id="remoteSourceURLDisplay"></div>
+				<div class="progress progress-striped active">
+				  <div class="bar" style="width: 100%;"></div>
+				</div>
+		</div>
+		
+		<!-- A hidden loading screen -->
+		<div name="resultScreen" class="modal-body hide loading">
+		</div>
+	</div>
+	
+	
+	<div class="modal-footer">
+		<a href="javascript:;" class="btn btn-primary doImportRecords" data-loading-text="Importing records...">Import Records</a>
+		<a href="#" class="btn hide" data-dismiss="modal">Close</a>
+	</div>
+	
+</div>
+
 	{{/item}}
+</div>
+
+<!-- Successful import screen mustache template -->
+<div class="hide" id="import-screen-success-report-template">
+	<div class="alert alert-success">
+		{{message}}
+	</div>
+	
+	{{#log}}
+		<pre class="well linenums">{{log}}</pre>
+	{{/log}}
 </div>
 
 <!-- mustache template for data source edit single-->
@@ -484,6 +560,8 @@
 </div>
 {{/item}}
 </div>
+
+
 </section>
 
 

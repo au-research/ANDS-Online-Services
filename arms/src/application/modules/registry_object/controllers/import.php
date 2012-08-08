@@ -273,6 +273,7 @@ class Import extends MX_Controller {
 					$ro->generateSlug();
 					
 					$ro->save();
+					print $ro;
 					//@$ro->free();
 					unset($ro);
 

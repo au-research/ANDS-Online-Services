@@ -13,7 +13,7 @@ class Quality_Extension extends ExtensionBase
 	 */
 	function update_quality_metadata()
 	{
-		$this->_CI->load->model('quality_checker', 'qa');
+		$this->_CI->load->model('registry_object/quality_checker', 'qa');
 		
 		// Get and update our quality metadata 
 		$quality_metadata = $this->_CI->qa->get_quality_test_result($this->ro);
