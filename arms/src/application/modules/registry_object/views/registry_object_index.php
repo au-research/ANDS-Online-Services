@@ -12,7 +12,7 @@
 ?>
 <?php $this->load->view('header');?>
 
-<input type="hidden" class="hide" id="ds_id" value="<?php echo $data_source->id;?>"/>
+<input type="hidden" class="hide" id="ds_id" value="<?php echo $data_source_id;?>"/>
 
 <div class="container" id="main-content">
 <div class="modal hide" id="myModal">
@@ -25,13 +25,13 @@
     
   </div>
 </div>
-	
+
 <section id="browse-ro">
 
 	<div class="row">
 		<div class="box">
 			<div class="box-header clearfix">
-				<h1><?php echo $data_source->title;?> <small>Manage My Records</small></h1>
+				<h1><?php echo $data_source_title;?> <small>Manage My Records</small></h1>
 				<span class="right-widget">
 					<h1><small><?php echo anchor('data_source/#!/view/40', 'Manage This Datasource', array('class'=>'manage_ds_link'));?></small></h1>
 				</span>
@@ -49,11 +49,14 @@
 					  </ul>
 					</span>
 					<a class="btn" id="filter">Filter</a>
+
+
+					
 				</div>
 				<div class="span4 centered">
 					<span>
 						<form class="form-search" id="search-records">
-						  <input type="text" class="input-medium" placeholder="Search..." name="list_title">
+						  <input type="text" class="input-medium" placeholder="Search..." name="fulltext">
 						  <button class="btn btn-primary">Search</button>
 						</form>
 					</span>
@@ -61,53 +64,59 @@
 		    	<div class="span4 right-aligned">
 		    		<span class="btn-toolbar">
 		    			<div class="btn-group">
-						  <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-						    Batch
-						    <span class="caret"></span>
-						  </a>
-						  <ul class="dropdown-menu pull-right" id="switch_view">
-						    <li><a href="javascript:;" name="thumbnails">Enable Drag and Drop Select</a></li>
-						  </ul>
+		    				<a class="btn" id="select_all" name="select_all">Select All</a>
+						  
+						  	<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+						    	Options<span class="caret"></span>
+						  	</a>
+							<ul class="dropdown-menu pull-right">
+								<li><a href="javascript:;" name="thumbnails">Enable Drag and Drop Select</a></li>
+								<li><a href="javascript:;" name="thumbnails">Hide minibar</a></li>
+							</ul>
 						</div>
-			    		<div class="btn-group">
-						  <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-						    Options
-						    <span class="caret"></span>
-						  </a>
-						  <ul class="dropdown-menu pull-right" id="switch_view">
-						    <li><a href="javascript:;" name="thumbnails">Enable Drag and Drop Select</a></li>
-						    <li><a href="javascript:;" name="thumbnails">Hide minibar</a></li>
-						  </ul>
-						</div>
+			    		
 					</span>
 		    	</div>
 		    </div>
 
 		    <!-- Middle bar for filtering and item display -->
-		    <div class="row-fluid hide" id="filter_fields">
-		    	<div class="span12">
-		    		<div class="span3">
-		    			<h4>Sort</h4>
-		    			<ul>
-		    				<li><a href="">Date Modified</a></li>
-		    				<li><a href="">Quality Level</a></li>
-		    				<li><a href="">Title</a></li>
-		    			</ul>
+		    <div class="well hide" id="filter_container">
+			    <div class="row-fluid" id="filter_fields">
+			    	<div class="span12">
+			    		<div class="span3">
+			    			<h3>Sort</h3>
+			    			<ul>
+			    				<li><a href="javascript:;" class="sort" name="date_modified">Date Modified</a> <span></span></li>
+			    				<li><a href="javascript:;" class="sort" name="quality_level">Quality Level</a> <span></span></li>
+			    				<li><a href="javascript:;" class="sort" name="s_list_title">Title</a> <span></span></li>
+			    			</ul>
+			    		</div>
+			    		<div class="span3 facets" name="class">
+			    			<h3>Class</h3>
+			    			<ul></ul>
+			    		</div>
+			    		<div class="span3 facets" name="status">
+			    			<h3>Status</h3>
+			    			<ul></ul>
+			    		</div>
+			    		<div class="span3 facets" name="quality_level">
+			    			<h3>Quality Levels</h3>
+			    			<ul></ul>
+			    		</div>
+			    	</div>
+			    </div>
+			    <div class="clear"></div>
+			    <div class="row-fluid">
+			    	<div class="span12">
+		    			<div id="applied_filters"></div>
 		    		</div>
-		    		<div class="span3">
-		    			Class
-		    		</div>
-		    		<div class="span3">
-		    			Status
-		    		</div>
-		    		<div class="span3">
-		    			Quality level
-		    		</div>
-		    	</div>
-	    		<div class="span12">
-	    			<a class="btn">Add Custom Filter</a>
-	    		</div>
-		    </div>
+			    </div>
+			</div>
+
+			
+		    <div class="well hide" id="items_info"></div>
+
+
 
 		    <!-- List of items will be displayed here, in this ul -->
 			 	<ul class="lists" id="items"></ul>
@@ -118,11 +127,14 @@
 					<div class="well"><a href="javascript:;" id="load_more" page="1">Show More...</a></div>
 				</div>
 			</div>
-</div>
+		</div>
 	</div>
-
-</section>
 </div><!-- end main content container -->
+</section>
+
+<!-- end template section-->
+<?php $this->load->view('footer');?>
+
 
 <section id="view-ro" class="hide">Loading...</section>
 <section id="edit-ro" class="hide">Loading...</section>
@@ -136,11 +148,16 @@
 	{{#items}}
 		<li class="span4">
 		  	<div class="item" ro_id="{{id}}">
-		  		<div class="item-info status_{{status}}"></div>
+		  		<div class="item-info"></div>
 		  		<div class="item-snippet">
-			  		<h3><small>{{class}}</small> {{list_title}} <small>{{status}}</small></h3>
-			  		<p>Last Modified: {{date_modified}} by {{last_modified_by}}</p>
-			  		<p>{{last_modified_by}}{{quality_level}}{{flag}}</p>
+	  				<h3><span class="ands_class_icon icon_{{class}}"></span>{{list_title}}</h3>
+	  				<div class="item-description">
+	  					{{{description}}}
+	  				</div>
+			  		
+			  		<span class="tag ql_{{quality_level}}">{{quality_level}}</span>
+			  		<span class="tag status_{{status}}">{{status}}</span>
+			  		<span class="tag"><i class="icon-time"></i>Last modified {{date_modified}} by {{last_modified_by}}</span>
 			  	</div>
 		  		<div class="btn-group item-control">
 		  			<button class="btn view"><i class="icon-eye-open"></i></button>
@@ -148,9 +165,7 @@
 			  		<button class="btn delete"><i class="icon-trash"></i></button>
 				</div>
 		  	</div>
-		  </li>
+		</li>
 	{{/items}}
 </div>
 </section>
-<!-- end template section-->
-<?php $this->load->view('footer');?>

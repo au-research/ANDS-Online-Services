@@ -9,11 +9,13 @@
  * 
  */
 ?>
-<div class="row-fluid">
-    <div class="span12" id="page-footer">
-        Footer
-    </div>
+
+<div id="page-footer">
+    Footer
 </div>
+
+
+
 
 
     <!-- Mustache Template that should be used everywhere-->

@@ -31,6 +31,7 @@ body{
 	font-weight:400;
 	line-height:22px;
 	background: #dddddd;
+	position:relative;
 }
 
 
@@ -69,6 +70,10 @@ body{
 
 #main-content{
 	padding-top:15px;
+	min-height:100%;
+	height: auto !important;
+    min-height: 100%;
+    height: 100%;
 }
 
 #view-datasource h3{margin-left:20px;}
@@ -87,6 +92,7 @@ h1{.text-shadow}
  overflow-wrap:none;
  word-wrap:none;
  word-break: keep-all;
+ white-space: nowrap;
 }
 
 .box{
@@ -146,43 +152,44 @@ h1{.text-shadow}
 			border-radius: 9px;
 		}
 	}
+}
 
-	li.status_DRAFT{
-		border-left:10px solid @status_DRAFT;
-	}
-	li.status_PUBLISHED{
-		border-left:10px solid @status_PUBLISHED;
-	}
-	li.status_SUBMITTED_FOR_ASSESSMENT{
-		border-left:10px solid @status_SUBMITTED_FOR_ASSESSMENT;
-	}
-	li.status_ASSESSMENT_IN_PROGRESS{
-		border-left:10px solid @status_ASSESSMENT_IN_PROGRESS;
-	}
-	li.status_APPROVED{
-		border-left:10px solid @status_APPROVED;
-	}
-	li.status_MORE_WORK_REQUIRED{
-		border-left:10px solid @status_MORE_WORK_REQUIRED;
-	}
-	li.ql_1{
-		border-left:10px solid @ql_1;
-	}
-	li.ql_2{
-		border-left:10px solid @ql_2;
-	}
-	li.ql_3{
-		border-left:10px solid @ql_3;
-	}
-	li.ql_4{
-		border-left:10px solid @ql_4;
-	}
+.status_DRAFT{
+	border-left:10px solid @status_DRAFT;
+}
+.status_PUBLISHED{
+	border-left:10px solid @status_PUBLISHED;
+}
+.status_SUBMITTED_FOR_ASSESSMENT{
+	border-left:10px solid @status_SUBMITTED_FOR_ASSESSMENT;
+}
+.status_ASSESSMENT_IN_PROGRESS{
+	border-left:10px solid @status_ASSESSMENT_IN_PROGRESS;
+}
+.status_APPROVED{
+	border-left:10px solid @status_APPROVED;
+}
+.status_MORE_WORK_REQUIRED{
+	border-left:10px solid @status_MORE_WORK_REQUIRED;
+}
+.ql_1{
+	border-left:10px solid @ql_1;
+}
+.ql_2{
+	border-left:10px solid @ql_2;
+}
+.ql_3{
+	border-left:10px solid @ql_3;
+}
+.ql_4{
+	border-left:10px solid @ql_4;
 }
 
 #page-footer{
 	background:#454545;
 	margin-top:25px;
 	padding:10px;
+	width:100%;
 }
 
 #main-nav{
@@ -322,7 +329,6 @@ h1{.text-shadow}
 		
 	}
 	background-color: @bannerColor;
-	.text-shadow();
 	.btn-group{
 		display:none;
 		.text-group{
@@ -340,16 +346,18 @@ a.manage_ds_link{
 
 .thumbnails{
 	padding-top:10px;
-
+	margin-left:-15px;
 	.item{
 		height:@MMRitemHeight;
 		margin:0px;
+		position:relative;
 		.item-info{
 			position:absolute;
 			height:100%;
-			width: 10px;
+			width: 5px;
 			z-index:100;
 			overflow:hidden;
+			background-color: #ddd;
 			p{
 				.rotate();
 				line-height:100%;
@@ -357,30 +365,81 @@ a.manage_ds_link{
 				bottom: 25px;
 				right: -25px;
 				color:white;
+
 				.no-text-shadow();
 			}
 		}
-		.status_DRAFT{
-			background-color: @status_DRAFT;
-		}
-		.status_PUBLISHED{
-			background-color: @status_PUBLISHED;
-		}
-		.status_SUBMITTED_FOR_ASSESSMENT{
-			background-color: @status_SUBMITTED_FOR_ASSESSMENT;
-		}
-		.status_ASSESSMENT_IN_PROGRESS{
-			background-color: @status_ASSESSMENT_IN_PROGRESS;
-		}
-		.status_APPROVED{
-			background-color: @status_APPROVED;
-		}
-		.status_MORE_WORK_REQUIRED{
-			background-color: @status_MORE_WORK_REQUIRED;
-		}
 		.item-snippet{
-			padding:10px 10px 10px 20px;
+			margin:5px 5px 5px 20px;
 			overflow:hidden;
+			height:95%;
+			position:relative;
+			h3{
+				.text-shadow();
+				.ellipsis();
+				height: 32px;
+				line-height:32px;
+				.ands_class_icon{
+					height:32px; width:32px;
+					margin-right:8px;
+					content:"";
+					float:left;
+					background-repeat:no-repeat;
+				}
+				.icon_activity{background-image:url("../img/ands_icon/activities_32.png");}
+				.icon_collection{background-image:url("../img/ands_icon/collections_32.png");}
+				.icon_service{background-image:url("../img/ands_icon/services_32.png");}
+				.icon_party{background-image:url("../img/ands_icon/party_multi_32.png");}
+			}
+			.tag{
+				font-size:10px;
+				padding:5px 8px;
+				border:1px solid #ccc;
+				.light-gradient();
+				color:black;
+			}
+			.item-description{
+				height:75px;
+				overflow:hidden;
+				margin-bottom:5px;
+			}
+			.status_DRAFT{
+				border-left:5px solid @status_DRAFT;
+			}
+			.status_PUBLISHED{
+				border-left:5px solid @status_PUBLISHED;
+			}
+			.status_SUBMITTED_FOR_ASSESSMENT{
+				border-left:5px solid @status_SUBMITTED_FOR_ASSESSMENT;
+			}
+			.status_ASSESSMENT_IN_PROGRESS{
+				border-left:5px solid @status_ASSESSMENT_IN_PROGRESS;
+			}
+			.status_APPROVED{
+				border-left:5px solid @status_APPROVED;
+			}
+			.status_MORE_WORK_REQUIRED{
+				border-left:5px solid @status_MORE_WORK_REQUIRED;
+			}
+			.ql_1{
+				background: @ql_1;
+				color:white;
+			}
+			.ql_2{
+				background: @ql_2;
+			}
+			.ql_3{
+				background: @ql_3;
+			}
+			.ql_4{
+				background: @ql_4;
+			}
+		}
+
+	}
+	.selected{
+		.item-info{
+			background:@accentColor;
 		}
 	}
 	.btn-group{
@@ -390,10 +449,27 @@ a.manage_ds_link{
 	}
 }
 
+#applied_filters{
+	margin-top:10px;
+	.tag{
+		border:1px solid #ccc;
+		padding: 2px 5px;
+		margin:2px 5px;
+		&:hover{
+			text-decoration:none;
+		}
+	}
+}
 
-#filter-box{
-	padding:0px;
-	border:1px solid #ccc;
+#filter_fields{
+	position:relative;
+	.span3{
+		border-right: 1px solid #ccc;
+		height:120px;
+	}
+	.span3:last-child{
+		border:none;
+	}
 }
 
 .well{
