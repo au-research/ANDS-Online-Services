@@ -84,6 +84,7 @@ setTheme($eTheme);
 openDatabaseConnection($gCNN_DBS_COSI, eCNN_DBS_COSI);
 if($pids_db_host!='') openDatabaseConnection($gCNN_DBS_PIDS, eCNN_DBS_PIDS);
 if($dois_db_host!='') openDatabaseConnection($gCNN_DBS_DOIS, eCNN_DBS_DOIS);
+
 // Authorisation and Access.
 // -----------------------------------------------------------------------------
 checkActivityAccess($gThisActivityID);
