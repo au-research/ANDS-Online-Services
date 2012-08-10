@@ -1410,12 +1410,13 @@ function getRelatedObjectTypesXML($registryObjectKey, $dataSourceKey, $registryO
 			}
 		}
 	} 
-	
-	$xml .= "<extRif:relatedObjectPersonCount>".$connectionsNum['person']."</extRif:relatedObjectPersonCount>";
-	$xml .= "<extRif:relatedObjectGroupCount>".$connectionsNum['group']."</extRif:relatedObjectGroupCount>";	
-	$xml .= "<extRif:relatedObjectCollectionCount>".$connectionsNum['collection']."</extRif:relatedObjectCollectionCount>";
-	$xml .= "<extRif:relatedObjectServiceCount>".$connectionsNum['service']."</extRif:relatedObjectServiceCount>";
-	$xml .= "<extRif:relatedObjectActivityCount>".$connectionsNum['activity']."</extRif:relatedObjectActivityCount>";			
+	if($forSOLR){
+		$xml .= "<extRif:relatedObjectPersonCount>".$connectionsNum['person']."</extRif:relatedObjectPersonCount>";
+		$xml .= "<extRif:relatedObjectGroupCount>".$connectionsNum['group']."</extRif:relatedObjectGroupCount>";	
+		$xml .= "<extRif:relatedObjectCollectionCount>".$connectionsNum['collection']."</extRif:relatedObjectCollectionCount>";
+		$xml .= "<extRif:relatedObjectServiceCount>".$connectionsNum['service']."</extRif:relatedObjectServiceCount>";
+		$xml .= "<extRif:relatedObjectActivityCount>".$connectionsNum['activity']."</extRif:relatedObjectActivityCount>";	
+	}		
 	return $xml;
 } 
 
