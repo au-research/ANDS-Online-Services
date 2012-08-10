@@ -1853,6 +1853,7 @@ function purify($dirty_html){
 	//$config->set('Cache.SerializerPath', '/tmp/htmlfilter/');
 	$config->set('HTML.AllowedElements', $HTML_Allowed_Elms); // sets allowed html elements that can be used.
 	$config->set('HTML.AllowedAttributes', $HTML_Allowed_Attr); // sets allowed html attributes that can be used.
+	$config->set('Cache.DefinitionImpl', null); // disable caching, who cares about performance
 
 
 

@@ -94,6 +94,7 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 
 	$totalElements = $gXPath->evaluate("//*")->length;
 
+	$ignoredRegistryObjectCount=0;
 
 	// Registry Objects
 	// =========================================================================

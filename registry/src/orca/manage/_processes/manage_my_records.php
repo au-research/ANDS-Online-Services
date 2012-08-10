@@ -173,10 +173,12 @@ switch(getQueryValue('action'))
 	
 	case "PUBLISH":
 		deleteSetofSolrDrafts($keys, $data_source_key);
+		var_dump($keys);
 		foreach($keys AS $key){
 			//is it a draft
 			$isDraft = getDraftRegistryObject(rawurldecode($key), $data_source_key);
 			if($isDraft){
+
 				//is a draft, have to approve and do all the jazz with it first
 				approveDraft($key, $data_source_key);
 				//deleteSolrHashKey(sha1($key.$data_source_key));//delete the draft
@@ -193,13 +195,12 @@ switch(getQueryValue('action'))
 				echo json_encode($response);
 				if(isContributorPage(rawurldecode($key)))
 				{
-				$theObject = getRegistryObject(rawurldecode($key), $overridePermissions = true);
-				$mailSubject = $theObject[0]['list_title'].' contributor page was published on '.date("d-m-Y h:m:s");						
-				$mailBody = eHTTP_APP_ROOT.'orca/view.php?key='.urlencode($key);	
-				send_email(eCONTACT_EMAIL,$mailSubject,$mailBody);	
-				}	
+					$theObject = getRegistryObject(rawurldecode($key), $overridePermissions = true);
+					$mailSubject = $theObject[0]['list_title'].' contributor page was published on '.date("d-m-Y h:m:s");						
+					$mailBody = eHTTP_APP_ROOT.'orca/view.php?key='.urlencode($key);	
+					send_email(eCONTACT_EMAIL,$mailSubject,$mailBody);	
+				}
 			}
-					
 		}
 				//syncDraftKeys($keys, $data_source_key);
 		die();

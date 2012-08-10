@@ -647,6 +647,7 @@ $(document).ready(function() {
 				dataType:'json',
 				type:'POST',
 				success:function(data){
+					//console.log(data);
 					if(data.responsecode=='0'){
 						alert('Error Occured: Access Denied');
 					}else if(data.responsecode=='MT008'){
