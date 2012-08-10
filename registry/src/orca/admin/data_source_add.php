@@ -55,7 +55,6 @@ if ( strtoupper(getPostedValue('action')) == "SAVE" )
 	//we need to set up the values to reset the time zone variables and display to be the selected values
 	if(getPostedValue('harvest_date')){
 		$newNum = getPostedValue('theZone');
-	
 		if($newNum>0)
 		{
 			$theString = '&nbsp;&nbsp;&nbsp;(GMT +'.str_replace(".",":",number_format($newNum,2)).')';
@@ -64,7 +63,7 @@ if ( strtoupper(getPostedValue('action')) == "SAVE" )
 			$theString = '&nbsp;&nbsp;&nbsp;(GMT '.str_replace(".",":",number_format($newNum,2)).')';
 			$theNum=$newNum;			
 		}
-		$newDateTimeZone = getPostedValue('harvest_date').":00 ".str_replace(".",":",$theNum);
+		$newDateTimeZone = str_replace("Z",$theNum,getPostedValue('harvest_date'));
 	}
 	if( getPostedValue('data_source_key') == '' )
 	{ 
@@ -412,7 +411,8 @@ require '../../_includes/header.php';
 				$currentZone = "&nbsp;&nbsp;(GMT ".$current.")";
 				$currentNum = number_format($current);
 			?>			
-			<td><?php drawDateTimeZoneInput('harvest_date', getPostedValue('harvest_date'), eDCT_FORMAT_ISO8601_DATE_TIME."X") ?>
+		<!-- <td><?php drawDateTimeZoneInput('harvest_date', getPostedValue('harvest_date'), eDCT_FORMAT_ISO8601_DATE_TIME."X") ?> -->	
+				<td><?php drawDateTimeZoneInput('harvest_date', getPostedValue('harvest_date'), eDCT_FORMAT_ISO8601_DATETIMESEC_UTC) ?></p>		
 			<span id="gmtZone" class="inputFormat"><?php if(isset($theString)){ echo $theString;} else { echo $currentZone; } ?></span>
 			<input name="theZone" id="theZone" type="hidden" value="<?php if(isset($newNum)){echo $newNum;}else { echo $currentNum; }?>"/>
 			</td>
