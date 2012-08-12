@@ -278,7 +278,7 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 					if ($dataSourceKey != 'PUBLISH_MY_DATA' && getDraftCountByStatus($dataSourceKey, SUBMITTED_FOR_ASSESSMENT) == 0)
 					{
 						send_email(
-							$dataSource[0]['assessement_notification_email_addr'],
+							$dataSource[0]['assessment_notification_email_addr'],
 							"Records from " . $dataSource[0]['title'] . " are ready for your assessment",
 							$dataSource[0]['title'] . " has submitted " . count($totalRegistryObjectElements) . " record(s) for your assessment by Harvest. \n\n" .
 							"Your action is required to review these records by visiting the Manage My Records screen or accessing the Data Source directly by the following link:\n" .
@@ -589,7 +589,7 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 	$runResultMessage .= "  ACTIONS\n";
 	if($SUBMITTED_FOR_ASSESSMENT_Inserts > 0)
 	{
-	$runResultMessage .= "    $SUBMITTED_FOR_ASSESSMENT_Inserts records Submitted for assessement.\n";
+	$runResultMessage .= "    $SUBMITTED_FOR_ASSESSMENT_Inserts records Submitted for assessment.\n";
 	}
 	else {
 	$runResultMessage .= "    $totalRegistryObjectDeletes Registry Object/s deleted.\n";

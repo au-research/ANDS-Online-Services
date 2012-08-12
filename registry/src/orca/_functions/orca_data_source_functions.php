@@ -808,7 +808,7 @@ function purgeDataSource($dataSourceKey, $harvestRequestId){
 			}
 		}
 		$message = "DELETED ".count($drafts)." REGISTRY OBJECTS NOT IN HARVEST: $harvestRequestId\n";
-		return $errors;
+		return $message;
 	}else{
 		return false;
 	}

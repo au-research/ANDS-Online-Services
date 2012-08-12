@@ -592,14 +592,24 @@ $(document).ready(function() {
 		if (com == 'Edit') {
 			
 		}else if (com == 'Delete Record') {
-			if(confirm('You are about to delete '+numKeys+' records')){
+			if(numKeys>1){
+				var confirm_message = 'You are about to delete '+numKeys+' records';
+			}else{
+				var confirm_message = 'You are about to delete '+numKeys+' record';
+			}
+			if(confirm(confirm_message)){
 				action = 'DELETE_RECORD';
 			}else {
 				release();
 				AllSystemGo = false;
 			}
 		}else if(com=='Delete Draft'){
-			if(confirm('You are about to delete '+numKeys+' drafts. This draft will be permanently deleted and cannot be restored. Do you want to continue?')){
+			if(numKeys>1){
+				var confirm_message = 'You are about to delete '+numKeys+' drafts. These drafts will be permanently deleted and cannot be restored. Do you want to continue?'
+			}else{
+				var confirm_message = 'You are about to delete '+numKeys+' draft. This draft will be permanently deleted and cannot be restored. Do you want to continue?'
+			}
+			if(confirm(confirm_message)){
 				action = 'DELETE_DRAFT';
 			}else {
 				release();
