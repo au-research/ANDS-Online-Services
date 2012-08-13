@@ -2394,7 +2394,7 @@ $('body').click(function() {
 
 function showClearAlert()
 {
-		var userChoice = confirm("**WARNING**\nAny changes since your last save will be lost\nAre you sure??");
+		var userChoice = confirm("**WARNING**\nAny changes since your last save will be lost.\nAre you sure?");
 		if(userChoice == true)
 		{
 			$(window.location).attr('href','my_records.php');
