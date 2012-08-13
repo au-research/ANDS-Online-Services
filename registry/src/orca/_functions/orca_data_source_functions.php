@@ -812,8 +812,10 @@ function purgeDataSource($dataSourceKey, $harvestRequestId){
 		if($keys){
 			for( $i=0; $i < count($keys); $i++ ){
 				$key  = $keys[$i]['registry_object_key'];
-				$message .= deleteRegistryObject($key);
-				$total++;
+				if(ctype_alnum($keys[$i]['record_owner'])){
+					$message .= deleteRegistryObject($key);
+					$total++;
+				}
 			}
 		}
 
@@ -821,8 +823,10 @@ function purgeDataSource($dataSourceKey, $harvestRequestId){
 		if($drafts){
 			for( $i=0; $i < count($drafts); $i++ ){
 				$key  = $drafts[$i]['draft_key'];
-				$message .= deleteDraftRegistryObject($dataSourceKey, $key);
-				$total_drafts++;
+				if(ctype_alnum($drafts[$i]['draft_owner'])){
+					$message .= deleteDraftRegistryObject($dataSourceKey, $key);
+					$total_drafts++;
+				}
 			}
 		}
 
