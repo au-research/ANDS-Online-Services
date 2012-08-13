@@ -1299,7 +1299,13 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
         });
 
         $.each($('#identifiers a'), function(){//find in every identifiers
+        	var ident = $(this).text();
+        	if(ident.indexOf('nla.party-')>=0){//special case for nla identifiers
+        		var nla_ident = ident.split('nla.gov.au/')[1];
+        		identifiers.push(nla_ident);
+        	}
         	identifiers.push($(this).text());
+
         });
     
         $.each($('.descriptions p'), function(){//find in every descriptions that contains the identifier some where for NLA parties
@@ -1326,7 +1332,7 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
         	}
         });
 
-        //console.log(identifiers);
+        console.log(identifiers);
         if (identifiers.length > 0){
 	        var identifierSearchString = '+fulltext:(';
 	        var first = true;
