@@ -458,6 +458,18 @@ function getRegistryObjectKeysForPurge($data_source_key, $harvest_id)
 	return $resultSet;
 }
 
+function getDraftsForPurge($data_source_key, $harvest_id)
+{
+	global $gCNN_DBS_ORCA;
+
+	$resultSet = null;
+	$strQuery = 'SELECT * FROM dba.tbl_draft_registry_objects WHERE registry_object_data_source = $1 AND draft_owner != $2;';
+	$params = array($data_source_key, $harvest_id);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+
+	return $resultSet;
+}
+
 function deleteRegistryObject($registry_object_key)
 {
 	global $gCNN_DBS_ORCA;

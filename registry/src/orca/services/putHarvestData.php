@@ -207,15 +207,15 @@ else
 		if( $done == 'TRUE' && $mode == 'HARVEST')
 		{
 			//Delete all records that are in the database and have a different HarvestID to the current Harvest
-			$message .= purgeDataSource($dataSourceKey, $harvestRequestId);//checking for REFRESH is done inside this function as well
+			$actions .= purgeDataSource($dataSourceKey, $harvestRequestId);//checking for REFRESH is done inside this function as well
 		    queueSyncDataSource($dataSourceKey);
-		    $message .= 'SYNCING data source. Please wait...';
+		    $actions .= 'SYNCING data source. Please wait...';
 		}
 	}
 	
 	if( $runErrors )
 	{
-		$message .= $runErrors;
+		$actions .= $runErrors;
 		//insertDataSourceEvent($dataSourceKey, $runErrors, $log_type);
 	}
 

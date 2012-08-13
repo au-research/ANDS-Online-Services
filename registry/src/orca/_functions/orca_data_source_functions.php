@@ -812,7 +812,18 @@ function purgeDataSource($dataSourceKey, $harvestRequestId){
 				$errors .= deleteRegistryObject($key);
 			}
 		}
-		$message = "DELETED ".count($drafts)." REGISTRY OBJECTS NOT IN HARVEST: $harvestRequestId\n";
+
+
+		$drafts = getDraftsForPurge($dataSourceKey, $harvestRequestId);
+		if($drafts){
+			for( $i=0; $i < count($drafts); $i++ ){
+				$key  = $drafts[$i]['draft_key'];
+				$errors .= deleteDraftRegistryObject($dataSourceKey, $key);
+			}
+		}
+
+		$total = count($keys) + count($drafts);
+		$message = "DELETED ".$total." REGISTRY OBJECTS NOT IN HARVEST: $harvestRequestId\n";
 		return $message;
 	}else{
 		return false;
