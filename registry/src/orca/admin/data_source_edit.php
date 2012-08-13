@@ -430,6 +430,11 @@ if( strtoupper(getPostedValue('action')) == "SAVE" )
 		$advancedHarvestingModeLabelClass = gERROR_CLASS;
 		$errorMessages .= 'This advanced harvesting mode is not compatible with your harvest type <br/>Note: Incremental harvesting only available in OAI-PMH providers.<br />'; 
 	}
+	if( $providerType && $harvestMethod && $advancedHarvestingMode == "REFRESH" && $harvestMethod == "DIRECT")
+	{
+		$advancedHarvestingModeLabelClass = gERROR_CLASS;
+		$errorMessages .= 'This advanced harvesting mode is not compatible with your harvest method <br/>Note: Full Refresh harvesting only available in harvested feeds (consider Harvester DIRECT instead).<br />'; 
+	}
 
 	if( $errorMessages == '' )
 	{
