@@ -51,6 +51,11 @@ function runImport($dataSource, $testOnly)
 		$registryObjects = new DOMDocument();
 		$result = $registryObjects->load($dataSourceURI);
 		$errors = error_get_last();
+		if(!filter_var($dataSourceURI, FILTER_VALIDATE_URL, FILTER_FLAG_HOST_REQUIRED))
+  		{
+  			 $errors['message'] =  " I/O warning : failed to load external entity . URI \"".$dataSourceURI."\" is not a valid URI";
+  		}
+
 		if( $errors )
 		{
 			$runErrors .= "Document Load Error: ".$errors['message']."\n";

@@ -76,7 +76,7 @@ if ( strtoupper(getPostedValue('action')) == "SAVE" )
 	}
 	if(getPostedValue('harvest_method')=='DIRECT')
 	{
-		$newDateTimeZone =='';
+		$newDateTimeZone ='';
 	}
 	if( getPostedValue('data_source_key') == '' )
 	{ 
@@ -105,7 +105,12 @@ if ( strtoupper(getPostedValue('action')) == "SAVE" )
 		$uriLabelClass = gERROR_CLASS;
 		$errorMessages .= "URI is a mandatory field.<br />";
 	}	
-
+	
+	if(!filter_var(getPostedValue('uri'), FILTER_VALIDATE_URL, FILTER_FLAG_HOST_REQUIRED)&&getPostedValue('uri')!='')
+  	{
+		$uriLabelClass = gERROR_CLASS;
+		$errorMessages .= "URI <em>".filter_var(getPostedValue('uri'))."</em> is not a valid URI.<br />";
+  	}
 	if( getPostedValue('provider_type') == '' )
 	{ 
 		$providerTypeLabelClass = gERROR_CLASS;

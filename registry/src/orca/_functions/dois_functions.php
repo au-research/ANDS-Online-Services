@@ -74,7 +74,7 @@ function doisAddDatacentre($symbol,$client_name,$client_contact_name,$client_con
 
 function doisValidDomain($domain)
 {
-	if (preg_match ("/^[a-z0-9][a-z0-9\-]+[a-z0-9](\.[a-z]{2,4})+$/i", $domain)) 
+	if (preg_match ("/^[a-z0-9][a-z0-9\-]+[a-z0-9](\.[a-z]{2,11})+$/i", $domain)) 
 	{
    		return true;
 	} else {
