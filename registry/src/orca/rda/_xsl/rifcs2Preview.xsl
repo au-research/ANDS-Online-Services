@@ -383,7 +383,18 @@
         		<xsl:variable name="url" select="concat($orca_home, 'services/getRegistryObjectsSOLR.php?task=getTitle&amp;relatedKey=',ro:key)"/>
         		<xsl:variable name="draftTitle" select="document($url)/draft/title"/>
         		<xsl:variable name="recordTitle" select="document($url)/record"/>
-        		<xsl:variable name="relation" select="ro:relation/@type"/>
+        		<xsl:variable name="relation">
+        		<xsl:for-each select="ro:relation/@type">
+					 <xsl:choose>	 		
+					 	<xsl:when test="position()=1">		
+					 	<xsl:value-of select="."/>
+					 	</xsl:when>
+					 	<xsl:otherwise>
+					 	, <xsl:value-of select="."/>
+					 	</xsl:otherwise>
+					 </xsl:choose>
+        		</xsl:for-each>
+        		</xsl:variable>
          		<xsl:variable name="relDescription" >
          		<xsl:if test="ro:relation/ro:description!=''">
          		<xsl:value-of select= "ro:relation/ro:description"/>
