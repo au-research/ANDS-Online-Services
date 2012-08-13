@@ -202,7 +202,8 @@ switch(getQueryValue('action'))
 				}
 			}
 		}
-				//syncDraftKeys($keys, $data_source_key);
+		queueSyncDataSource($data_source_key);
+		//syncDraftKeys($keys, $data_source_key);
 		die();
 		
 	break;
