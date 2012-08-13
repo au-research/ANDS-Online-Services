@@ -173,7 +173,7 @@ switch(getQueryValue('action'))
 	
 	case "PUBLISH":
 		deleteSetofSolrDrafts($keys, $data_source_key);
-		var_dump($keys);
+		//var_dump($keys);
 		foreach($keys AS $key){
 			//is it a draft
 			$isDraft = getDraftRegistryObject(rawurldecode($key), $data_source_key);
