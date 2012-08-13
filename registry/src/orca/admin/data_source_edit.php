@@ -259,7 +259,8 @@ if( strtoupper(getPostedValue('action')) == "SAVE" )
 		$uriLabelClass = gERROR_CLASS;
 		$errorMessages .= "URI is a mandatory field.<br />";
 	}	
-	if(!filter_var(getPostedValue('uri'), FILTER_VALIDATE_URL, FILTER_FLAG_HOST_REQUIRED)&&getPostedValue('uri')!='')
+	
+	if(getPostedValue('uri')!='' && (!filter_var(getPostedValue('uri'), FILTER_VALIDATE_URL, FILTER_FLAG_HOST_REQUIRED) || strpos(getPostedValue('uri'), "file://")===0))
   	{
 		$uriLabelClass = gERROR_CLASS;
 		$errorMessages .= "URI <em>".filter_var(getPostedValue('uri'))."</em> is not a valid URI.<br />";
