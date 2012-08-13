@@ -141,7 +141,7 @@ else
 			{	
 				// Import the data.
 				$deletedRegistryObjectCount = checkforOAIdeletes($OAIPMHDocument);
-				$runErrors = importRegistryObjects($registryObjects, $dataSourceKey, $runResultMessage, $harvestRequestId);
+				$runErrors = importRegistryObjects($registryObjects, $dataSourceKey, $runResultMessage, $harvestRequestId, NULL,  $harvestRequestId);
 			}
 
 			$timeTaken = substr((string)(microtime(true) - $startTime), 0, 5);
