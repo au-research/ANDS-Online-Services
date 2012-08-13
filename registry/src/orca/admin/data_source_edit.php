@@ -99,6 +99,7 @@ $advancedHarvestingModeLabelClass = '';
 $pushNLALabelClass = '';
 $createPrimaryClass = '';
 $institutionPagesClass = '';
+$dateLabelClass = '';
 $draft_array = getDraftRegistryObject(null, $dataSourceKey);
 $draft_record_set = array(
 						MORE_WORK_REQUIRED => 0,
@@ -360,6 +361,12 @@ if( strtoupper(getPostedValue('action')) == "SAVE" )
 	}	
 	$oaiSet = getPostedValue('oai_set');
 	$harvestDate = getPostedValue('harvest_date');
+	$pattern = "/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})(:(\d{2}))?(?:([-+])(\d{2}):?(\d{2})|(Z))?/";
+	if (! preg_match( $pattern, getPostedValue('harvest_date') ) ) 
+	{
+		$dateLabelClass = gERROR_CLASS;
+		$errorMessages .= "Date format must be W3CDTF.<br />";
+	}	
 	$harvestFrequency = getPostedValue('harvest_frequency');
 	$contactName = getPostedValue('contact_name');
 	$contactEmail = getPostedValue('contact_email');
@@ -929,7 +936,7 @@ require '../../_includes/header.php';
 		</tr>
 
 		<tr id="harvest_date_row">
-			<td class="">Harvest Date:</td>
+			<td <?php echo $dateLabelClass; ?>>Harvest Date:</td>
 			<?php 		
 				$origin_dt = new DateTime(date("y-m-d h:s",time())) ;
 			    $remote_dtz = new DateTimeZone('GMT');

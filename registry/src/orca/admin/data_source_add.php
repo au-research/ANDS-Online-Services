@@ -28,6 +28,7 @@ $harvestMethodLabelClass = '';
 $primaryRelationshipClass = '';
 $createPrimaryClass = '';
 $pushNLALabelClass ='';
+$dateLabelClass='';
 
 if(getPostedValue('action'))
 {	
@@ -55,6 +56,14 @@ if ( strtoupper(getPostedValue('action')) == "SAVE" )
 	//we need to set up the values to reset the time zone variables and display to be the selected values
 	if(getPostedValue('harvest_date')){
 		$newNum = getPostedValue('theZone');
+		$pattern = "/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})(:(\d{2}))?(?:([-+])(\d{2}):?(\d{2})|(Z))?/";
+		if ( preg_match( $pattern, getPostedValue('harvest_date') ) ) 
+		{
+			$formatOK = true;
+		}else{
+			$dateLabelClass = gERROR_CLASS;
+			$errorMessages .= "Date format must be W3CDTF.<br />";
+		}		
 		if($newNum>0)
 		{
 			$theString = '&nbsp;&nbsp;&nbsp;(GMT +'.str_replace(".",":",number_format($newNum,2)).')';
@@ -399,7 +408,7 @@ require '../../_includes/header.php';
 			<td><input type="text" name="oai_set" id="oai_set" size="30" maxlength="128" value="<?php printSafe(getPostedValue('oai_set')) ?>" /></td>
 		</tr>
 		<tr id="harvest_date_row">
-			<td class="">Harvest Date:</td>
+			<td <?php print($dateLabelClass); ?>>Harvest Date:</td>
 			<?php 		
 				$origin_dt = new DateTime(date("y-m-d h:s",time())) ;
 			    $remote_dtz = new DateTimeZone('GMT');
@@ -412,7 +421,7 @@ require '../../_includes/header.php';
 				$currentNum = number_format($current);
 			?>			
 		<!-- <td><?php drawDateTimeZoneInput('harvest_date', getPostedValue('harvest_date'), eDCT_FORMAT_ISO8601_DATE_TIME."X") ?> -->	
-				<td><?php drawDateTimeZoneInput('harvest_date', getPostedValue('harvest_date'), eDCT_FORMAT_ISO8601_DATETIMESEC_UTC) ?></p>		
+				<td ><?php drawDateTimeZoneInput('harvest_date', getPostedValue('harvest_date'), eDCT_FORMAT_ISO8601_DATETIMESEC_UTC) ?></p>		
 			<span id="gmtZone" class="inputFormat"><?php if(isset($theString)){ echo $theString;} else { echo $currentZone; } ?></span>
 			<input name="theZone" id="theZone" type="hidden" value="<?php if(isset($newNum)){echo $newNum;}else { echo $currentNum; }?>"/>
 			</td>
