@@ -1332,7 +1332,7 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
         	}
         });
 
-        console.log(identifiers);
+        //console.log(identifiers);
         if (identifiers.length > 0){
 	        var identifierSearchString = '+fulltext:(';
 	        var first = true;
