@@ -372,10 +372,6 @@ if( strtoupper(getPostedValue('action')) == "SAVE" )
 	}else{
 		$_POST['harvest_date']='';
 	}
-	print("<pre>");
-
-	print_r($_POST);
-	print("</pre>");	
 
 	$harvestFrequency = getPostedValue('harvest_frequency');
 	$contactName = getPostedValue('contact_name');
