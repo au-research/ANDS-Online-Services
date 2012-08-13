@@ -370,10 +370,10 @@ if( strtoupper(getPostedValue('action')) == "SAVE" )
 	if($harvestMethod!='DIRECT')
 	{
 		$pattern = "/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})(:(\d{2}))?(?:([-+])(\d{2}):?(\d{2})|(Z))?/";
-		if (! preg_match( $pattern, getPostedValue('harvest_date') ) ) 
+		if (getPostedValue('harvest_date')!='' && !preg_match( $pattern, getPostedValue('harvest_date') ) ) 
 		{
 			$dateLabelClass = gERROR_CLASS;
-			$errorMessages .= "Date format must be W3CDTF.<br />";
+			$errorMessages .= "Harvester date format must be W3CDTF.<br />";
 		}	
 	}else{
 		$_POST['harvest_date']='';
