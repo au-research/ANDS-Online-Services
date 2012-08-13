@@ -361,12 +361,22 @@ if( strtoupper(getPostedValue('action')) == "SAVE" )
 	}	
 	$oaiSet = getPostedValue('oai_set');
 	$harvestDate = getPostedValue('harvest_date');
-	$pattern = "/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})(:(\d{2}))?(?:([-+])(\d{2}):?(\d{2})|(Z))?/";
-	if (! preg_match( $pattern, getPostedValue('harvest_date') ) ) 
+	if($harvestMethod!='DIRECT')
 	{
-		$dateLabelClass = gERROR_CLASS;
-		$errorMessages .= "Date format must be W3CDTF.<br />";
-	}	
+		$pattern = "/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})(:(\d{2}))?(?:([-+])(\d{2}):?(\d{2})|(Z))?/";
+		if (! preg_match( $pattern, getPostedValue('harvest_date') ) ) 
+		{
+			$dateLabelClass = gERROR_CLASS;
+			$errorMessages .= "Date format must be W3CDTF.<br />";
+		}	
+	}else{
+		$_POST['harvest_date']='';
+	}
+	print("<pre>");
+
+	print_r($_POST);
+	print("</pre>");	
+
 	$harvestFrequency = getPostedValue('harvest_frequency');
 	$contactName = getPostedValue('contact_name');
 	$contactEmail = getPostedValue('contact_email');

@@ -1840,7 +1840,7 @@ function addVocabComplete(field, type) {
 			if(ui.item.value!="Unknown/Other"){
 				var errorDiv = field.replace("#object","errors");
 				var theDiv = document.getElementById(errorDiv);
-				theDiv.style.display='none';				
+				if(theDiv!=null) theDiv.style.display='none';				
 			}
 			return false;
 		}

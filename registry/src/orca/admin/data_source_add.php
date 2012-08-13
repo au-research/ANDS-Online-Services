@@ -54,7 +54,7 @@ $allow_reverse_external_links = 0;
 if ( strtoupper(getPostedValue('action')) == "SAVE" )
 {
 	//we need to set up the values to reset the time zone variables and display to be the selected values
-	if(getPostedValue('harvest_date')){
+	if(getPostedValue('harvest_date')&&getPostedValue('harvest_method')!='DIRECT'&&getPostedValue('harvest_method')!=''){
 		$newNum = getPostedValue('theZone');
 		$pattern = "/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})(:(\d{2}))?(?:([-+])(\d{2}):?(\d{2})|(Z))?/";
 		if ( preg_match( $pattern, getPostedValue('harvest_date') ) ) 
@@ -73,6 +73,10 @@ if ( strtoupper(getPostedValue('action')) == "SAVE" )
 			$theNum=$newNum;			
 		}
 		$newDateTimeZone = str_replace("Z",$theNum,getPostedValue('harvest_date'));
+	}
+	if(getPostedValue('harvest_method')=='DIRECT')
+	{
+		$newDateTimeZone =='';
 	}
 	if( getPostedValue('data_source_key') == '' )
 	{ 
