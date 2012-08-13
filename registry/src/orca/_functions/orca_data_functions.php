@@ -3327,6 +3327,12 @@ function updatePostCodeForDataSource($dataSourceKey, $post_code)
 	$result = executeUpdateQuery($gCNN_DBS_ORCA, $strQuery, $params);
 }
 
+function updateAddressForDataSource($dataSourceKey, $address_line_1, $address_line_2, $city){
+	global $gCNN_DBS_ORCA;
+    $strQuery = 'UPDATE dba.tbl_data_sources SET address_line_1 = $2, address_line_2 = $3, city = $4 WHERE data_source_key = $1';
+	$params = array($dataSourceKey, $address_line_1, $address_line_2, $city);
+	$result = executeUpdateQuery($gCNN_DBS_ORCA, $strQuery, $params);
+}
 
 
 

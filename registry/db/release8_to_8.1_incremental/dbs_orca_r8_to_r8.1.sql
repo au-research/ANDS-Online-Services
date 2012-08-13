@@ -1,2 +1,5 @@
 ALTER TABLE dba.tbl_data_sources ADD COLUMN advanced_harvesting_mode CHARACTER VARYING (512) DEFAULT 'STANDARD';
 ALTER TABLE dba.tbl_data_sources ADD COLUMN post_code character varying(32);
+ALTER TABLE dba.tbl_data_sources ADD COLUMN address_line_1 character varying(128);
+ALTER TABLE dba.tbl_data_sources ADD COLUMN address_line_2 character varying(128);
+ALTER TABLE dba.tbl_data_sources ADD COLUMN city character varying(32);

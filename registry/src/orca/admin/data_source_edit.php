@@ -84,6 +84,9 @@ $qaFlag = $dataSource[0]['qa_flag'];
 $advancedHarvestingMode = $dataSource[0]['advanced_harvesting_mode'];
 
 $post_code = $dataSource[0]['post_code'];
+$address_line_1 = $dataSource[0]['address_line_1'];
+$address_line_2 = $dataSource[0]['address_line_2'];
+$city = $dataSource[0]['city'];
 
 
 $errorMessages = '';
@@ -115,6 +118,8 @@ if($draft_array)
 }
 $numRegistryObjects = getRegistryObjectCount($dataSourceKey);
 $numRegistryObjectsApproved = getRegistryObjectCount($dataSourceKey, null, null, APPROVED);
+
+
 
 
 if( strtoupper(getPostedValue('action')) == "CANCEL" )
@@ -241,6 +246,9 @@ if( strtoupper(getPostedValue('action')) == "SAVE" )
 	}
 
 	$post_code = getPostedValue('post_code');
+	$address_line_1 = getPostedValue('address_line_1');
+	$address_line_2 = getPostedValue('address_line_2');
+	$city = getPostedValue('city');
 
 	$uri = getPostedValue('uri');
 	if( $uri == '' )
@@ -419,6 +427,7 @@ if( strtoupper(getPostedValue('action')) == "SAVE" )
 		$errors .= updateRecordsForDataSource($dataSourceKey, $autoPublish, $autoPublishOld , $qaFlag , $qaFlagOld,$create_primary_relationships, $create_primary_relationships_old,$class_1,$class_1_old,$class_2,$class_2_old);
 		$errors .= updateAdvancedHarvestingModeForDataSource($dataSourceKey, $advancedHarvestingMode);
 		$errors .= updatePostCodeForDataSource( $dataSourceKey, $post_code );
+		$errors .= updateAddressForDataSource( $dataSourceKey, $address_line_1, $address_line_2, $city );
 		
 		if( $errors == "" )
 		{
@@ -507,6 +516,22 @@ require '../../_includes/header.php';
 		<tr>
 			<td class="">Notes:</td>
 			<td><textarea name="notes" id="notes" cols="50" rows="5"><?php printSafe($notes) ?></textarea></td>
+		</tr>
+
+		<tr>
+			<td class="">Address Line 1:</td>
+			<td><input type="text" name="address_line_1" id="address_line_1" size="60" maxlength="128" value="<?php printSafe($address_line_1) ?>" /></td>
+		</tr>
+
+		<tr>
+			<td class="">Address Line 2:</td>
+			<td><input type="text" name="address_line_2" id="address_line_2" size="60" maxlength="128" value="<?php printSafe($address_line_2) ?>" /></td>
+		</tr>
+
+		<tr>
+			<td class="">City:</td>
+			<td><input type="text" name="city" id="city" size="15" maxlength="15" value="<?php printSafe($city) ?>" />
+			</td>
 		</tr>
 		
 		<tr>
@@ -958,8 +983,8 @@ require '../../_includes/header.php';
 	</tbody>
 	<tbody>
 		<tr>
-			<td width="128"></td>
-			<td><input type="submit" name="action" value="Cancel" />&nbsp;&nbsp;<input type="submit" name="action" value="Save" onClick="return nlaPushCheck();"/>&nbsp;&nbsp;</td>
+			<td width="175"></td>
+			<td><input type="submit" name="action" value="Save" onClick="return nlaPushCheck();"/>&nbsp;&nbsp;<input type="submit" name="action" value="Cancel" />&nbsp;&nbsp;</td>
 		</tr>
 		<tr>
 			<td></td>

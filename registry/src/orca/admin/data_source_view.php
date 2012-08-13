@@ -220,6 +220,24 @@ require '../../_includes/header.php';
 			<td>Notes:</td>
 			<td><?php printSafeWithBreaks($dataSource[0]['notes']) ?></td>
 		</tr>
+		<?php if (isset($dataSource[0]['address_line_1']) && $dataSource[0]['address_line_1'] != ''): ?>
+			<tr>
+				<td>Address Line 1:</td>
+				<td><?php printSafeWithBreaks($dataSource[0]['address_line_1']) ?></td>
+			</tr>
+		<?php endif; ?>
+		<?php if (isset($dataSource[0]['address_line_2']) && $dataSource[0]['address_line_2'] != ''): ?>
+			<tr>
+				<td>Address Line 2:</td>
+				<td><?php printSafeWithBreaks($dataSource[0]['address_line_2']) ?></td>
+			</tr>
+		<?php endif; ?>
+		<?php if (isset($dataSource[0]['city']) && $dataSource[0]['city'] != ''): ?>
+			<tr>
+				<td>City:</td>
+				<td><?php printSafeWithBreaks($dataSource[0]['city']) ?></td>
+			</tr>
+		<?php endif; ?>
 		<?php if (isset($dataSource[0]['post_code']) && $dataSource[0]['post_code'] != ''): ?>
 			<tr>
 				<td>Post Code:</td>
