@@ -244,6 +244,12 @@ require '../../_includes/header.php';
 				<td><?php printSafeWithBreaks($dataSource[0]['post_code']) ?></td>
 			</tr>
 		<?php endif; ?>
+		<?php if (isset($dataSource[0]['state']) && $dataSource[0]['state'] != ''): ?>
+			<tr>
+				<td>State:</td>
+				<td><?php printSafeWithBreaks($dataSource[0]['state']) ?></td>
+			</tr>
+		<?php endif; ?>
 		<tr>
 			<td>Created When:</td>
 			<td><?php printSafe(formatDateTime($dataSource[0]['created_when'], gDATETIME)) ?></td>

@@ -87,6 +87,7 @@ $post_code = $dataSource[0]['post_code'];
 $address_line_1 = $dataSource[0]['address_line_1'];
 $address_line_2 = $dataSource[0]['address_line_2'];
 $city = $dataSource[0]['city'];
+$state = $dataSource[0]['state'];
 
 
 $errorMessages = '';
@@ -250,6 +251,7 @@ if( strtoupper(getPostedValue('action')) == "SAVE" )
 	$address_line_1 = getPostedValue('address_line_1');
 	$address_line_2 = getPostedValue('address_line_2');
 	$city = getPostedValue('city');
+	$state = getPostedValue('state');
 
 	$uri = getPostedValue('uri');
 	if( $uri == '' )
@@ -440,7 +442,7 @@ if( strtoupper(getPostedValue('action')) == "SAVE" )
 		$errors .= updateRecordsForDataSource($dataSourceKey, $autoPublish, $autoPublishOld , $qaFlag , $qaFlagOld,$create_primary_relationships, $create_primary_relationships_old,$class_1,$class_1_old,$class_2,$class_2_old);
 		$errors .= updateAdvancedHarvestingModeForDataSource($dataSourceKey, $advancedHarvestingMode);
 		$errors .= updatePostCodeForDataSource( $dataSourceKey, $post_code );
-		$errors .= updateAddressForDataSource( $dataSourceKey, $address_line_1, $address_line_2, $city );
+		$errors .= updateAddressForDataSource( $dataSourceKey, $address_line_1, $address_line_2, $city, $state );
 		
 		if( $errors == "" )
 		{
@@ -532,27 +534,66 @@ require '../../_includes/header.php';
 		</tr>
 
 		<tr>
-			<td class="">Address Line 1:</td>
-			<td><input type="text" name="address_line_1" id="address_line_1" size="60" maxlength="128" value="<?php printSafe($address_line_1) ?>" /></td>
+			<td></td>
+			<td class="label" style="text-align:left;border-bottom:2px solid black;">Reference Address <span style="font-size:0.7em; color:#333;">Note: These optional fields are used to indicate your data source's origin in spatial reporting tools.</span></td>
 		</tr>
-
 		<tr>
-			<td class="">Address Line 2:</td>
-			<td><input type="text" name="address_line_2" id="address_line_2" size="60" maxlength="128" value="<?php printSafe($address_line_2) ?>" /></td>
-		</tr>
+			<td></td>
+			<td>
+				<table>
+					<tr>
+						<td class="label">Address Line 1:</td>
+						<td><input type="text" name="address_line_1" id="address_line_1" size="60" maxlength="128" value="<?php printSafe($address_line_1) ?>" /></td>
+					</tr>
 
-		<tr>
-			<td class="">City:</td>
-			<td><input type="text" name="city" id="city" size="15" maxlength="15" value="<?php printSafe($city) ?>" />
+					<tr>
+						<td class="label">Address Line 2:</td>
+						<td><input type="text" name="address_line_2" id="address_line_2" size="60" maxlength="128" value="<?php printSafe($address_line_2) ?>" /></td>
+					</tr>
+
+					<tr>
+						<td class="label">City:</td>
+						<td><input type="text" name="city" id="city" size="15" maxlength="15" value="<?php printSafe($city) ?>" /></td>
+					</tr>
+					
+					<tr>
+						<td class="label">Post Code:</td>
+						<td><input type="text" name="post_code" id="post_code" size="15" maxlength="6" value="<?php printSafe($post_code) ?>" /><br/></td>
+					</tr>
+
+					<tr>
+						<td class="label">State:</td>
+						<td>
+							<?php
+								$states = array(
+									'ACT'=>'Australian Capital Territory',
+									'NSW'=>'New South Wales',
+									'NT'=>'Northern Territory',
+									'QLD'=>'Queensland',
+									'SA'=>'South Australia',
+									'TAS'=>'Tasmania',
+									'VIC'=>'Victoria',
+									'WA'=>'Western Australia',
+								);
+							?>
+							<select name="state" id="state">
+								<option value=""></option>
+								<?php 
+									foreach($states as $sh=>$full){
+										if($state==$sh){
+											echo '<option value="'.$sh.'" selected=selected>'.$full.'</option>';
+										}else{
+											echo '<option value="'.$sh.'">'.$full.'</option>';
+										}
+									}
+								?>
+							</select>
+						</td>
+					</tr>
+				</table>
 			</td>
 		</tr>
-		
-		<tr>
-			<td class="">Post Code:</td>
-			<td><input type="text" name="post_code" id="post_code" size="15" maxlength="6" value="<?php printSafe($post_code) ?>" /><br/>
-				<span style="font-size:0.7em; color:#333;">Note: This optional field is used to indicate your data source's origin in spatial reporting tools.</span>
-			</td>
-		</tr>
+
 		
 		<tr style="border-bottom:2px solid black;">
 		<td colspan="2" style="border-bottom:2px solid black;"><span style="float:left;">Records Management Settings</span>

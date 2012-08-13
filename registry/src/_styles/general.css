@@ -269,7 +269,7 @@ img
 	border-bottom: 1px solid #dddddd;
 }
 
-.formTable > .formFields > tr > td:first-child
+.formTable > .formFields > tr > td:first-child, td.label
 {
 	padding-top: 6px;
 	text-align: right;
@@ -278,6 +278,10 @@ img
 	font-weight: bold;
 	white-space: nowrap;
 }
+
+
+
+
 
 .recordTable > .recordFields > tr > td:first-child
 {
