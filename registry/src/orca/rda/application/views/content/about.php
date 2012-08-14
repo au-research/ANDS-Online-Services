@@ -26,7 +26,7 @@ limitations under the License.
 <p>ANDS is supported by the Australian Government through the <a href="http://ncris.innovation.gov.au/">National Collaborative Research Infrastructure Strategy Program</a> and the Education Investment Fund (EIF) Super Science Initiative.</p> -->
 
 <p>Research Data Australia, the flagship service of the Australian National
-Data Service <ands.org.au> (ANDS), provides a comprehensive window into the
+Data Service  (<a href="http://ands.org.au" target="_blank">ANDS</a>), provides a comprehensive window into the
 Australian Research Data Commons.</p>
 
 <p>Research Data Australia is an Internet-based discovery service designed to
@@ -42,8 +42,7 @@ support better, more efficient and defensible research, and improved policy
 input.</p>
 
 <p>ANDS is funded by the Australian Government through the National
-Collaborative Research Infrastructure Strategy
-(NCRIS&lt;<a href="http://ncris.innovation.gov.au" target="_blank">http://ncris.innovation.gov.au</a>&gt;)
+Collaborative Research Infrastructure Strategy (<a href="http://ncris.innovation.gov.au" target="_blank">NCRIS</a>)
 and the Education Investment Fund (EIF) Super Science Initiative. </p>
 </div>
 
