@@ -42,7 +42,7 @@
     <xsl:template match="ro:collection | ro:activity | ro:party | ro:service">
 		<xsl:choose>
 			<!--  we want to check if there are any related objects or a contributor page to see if we need to set tp the connections box -->
-	    	<xsl:when test="ro:relatedObject or ../extRif:extendedMetadata/extRif:contributorPage!=''">
+	    	<xsl:when test="../extRif:extendedMetadata/extRif:contributorPage!='' or extRif:relatedObjectPersonCount!='0' or extRif:relatedObjectGroupCount!='0' or extRif:relatedObjectCollectionCount!='0' or extRif:relatedObjectServiceCount!='0' or extRif:relatedObjectActivityCount!='0'">
 				<span id="connections-realnumfound" class="hide">1</span>	
 	
 				<!-- for each record class or type determine if it goes into the lists of connections -->	
