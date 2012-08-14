@@ -111,9 +111,9 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 		// =====================================================================
 		$registryObjectKey = substr($gXPath->evaluate("$xs:key", $registryObject)->item(0)->nodeValue, 0, 512);
 		$oldRegistryObject = getRegistryObject($registryObjectKey);
-		$oldHarvestID = $oldRegistryObject[0]['created_who'];
 
-		if(!$oldRegistryObject || $oldHarvestID != $created_who)
+		$oldHarvestID = $oldRegistryObject[0]['created_who'];
+		if($oldRegistryObject || $oldHarvestID != $created_who )
 		{
 			if( $registryObjectKey)
 			{
@@ -124,7 +124,6 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 				if($oldRegistryObject)
 				{
 					// Delete this object and all associated records from the registry (if qaflag is true, don't delete existing one
-	
 					if($dataSourceKey == $oldRegistryObject[0]['data_source_key'])
 					{
 						if ($qaFlag != 't')
@@ -682,9 +681,12 @@ function approveDraft($key, $data_source_key){
 				}
 				else
                	{
-
+               		$oldRegistryObject = getRegistryObject($key);
+               		if($oldRegistryObject){
+               			
+               		}
 					$importErrors = importRegistryObjects($registryObject,$dataSourceKey, $resultMessage, getLoggedInUser(), null, ($draft[0]['draft_owner']==SYSTEM ? SYSTEM : getThisOrcaUserIdentity()), null, true);
-					//echo $importErrors;die();
+					//return $importErrors;
 					//$QAErrors = runQualityCheckForRegistryObject(rawurldecode($key), $dataSourceKey);
 
 					//addSolrIndex(rawurldecode($key), true);
@@ -706,7 +708,6 @@ function approveDraft($key, $data_source_key){
 					}
 				}
 			}
-
 		}
 		else
 		{

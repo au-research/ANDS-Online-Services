@@ -160,9 +160,9 @@ switch(getQueryValue('action'))
 		foreach($keys AS $key)
 		{
 			$returnErrors .= approveDraft(rawurldecode($key), $data_source_key);			
-			syncKey(rawurldecode($key), $data_source_key);
+			$returnErrors .= syncKey(rawurldecode($key), $data_source_key);
 		}
-		//deleteSolrHashKeys(sha1($key.$data_source_key));//delete the draft		
+		//deleteSolrHashKeys(sha1($key.$data_source_key));//delete the draft
 		$response['alert'] = $returnErrors;
 		$response['responsecode'] = "1";
 		echo json_encode($response);
@@ -178,12 +178,11 @@ switch(getQueryValue('action'))
 			//is it a draft
 			$isDraft = getDraftRegistryObject(rawurldecode($key), $data_source_key);
 			if($isDraft){
-
 				//is a draft, have to approve and do all the jazz with it first
-				approveDraft($key, $data_source_key);
+				$error = approveDraft($key, $data_source_key);
 				//deleteSolrHashKey(sha1($key.$data_source_key));//delete the draft
-				updateRegistryObjectStatus(rawurldecode($key), PUBLISHED);
-				syncKey(rawurldecode($key), $data_source_key);
+				$error .= updateRegistryObjectStatus(rawurldecode($key), PUBLISHED);
+				$error .= syncKey(rawurldecode($key), $data_source_key);
 				$response['responsecode'] = "1";
 				$response['alert'] = $error;
 				echo json_encode($response);
