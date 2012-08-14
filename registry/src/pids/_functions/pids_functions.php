@@ -100,6 +100,8 @@ function pidsRequest($serviceName, $parameters)
 
 	//return the transfer as a string
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+	curl_setopt($ch, CURLOPT_POST, TRUE);
+	curl_setopt($ch, CURLOPT_POSTFIELDS, $requestBody);
 	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);//VERY IMPORTANT, skip SSL
 
 	// $output contains the output string
