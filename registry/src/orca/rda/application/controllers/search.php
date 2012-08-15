@@ -416,7 +416,6 @@ class Search extends CI_Controller {
         			}
          		}
         		if($reverseLinks!="NONE"){
-        			echo "we are here<br/>";
         			$data[$class]['json'][1] =$this->solr->getConnections($key,$class,$types,$relatedKeys,$reverseLinks,$dataSourceKey);
         		//	print_r($data[$class]['json'][1]);
         			$data[$class]["external"] =$this->solr->getConnections($key,$class,$types,$relatedKeys,'EXT',$dataSourceKey);
