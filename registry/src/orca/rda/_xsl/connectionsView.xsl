@@ -79,8 +79,8 @@
 							</xsl:attribute>											
 							<xsl:value-of select="../extRif:relatedObjectDisplayTitle"/>
 							</a>	
-							<xsl:if test="../ro:relation!=''">					 		
-					 			<br /><xsl:value-of select="../ro:relation"/>
+							<xsl:if test="../ro:relation!='' and string-length(../ro:relation)&lt;64">					 		
+					 			<br /><span class="faded"><xsl:value-of select="../ro:relation"/></span>
 					 		</xsl:if>						
 							</li>					    	
 						</xsl:if>
@@ -128,8 +128,8 @@
 							</xsl:attribute>											
 							<xsl:value-of select="../extRif:relatedObjectDisplayTitle"/>
 							</a>	
-							<xsl:if test="../ro:relation!=''">					 		
-					 			<br /><xsl:value-of select="../ro:relation"/>
+							<xsl:if test="../ro:relation!='' and string-length(../ro:relation)&lt;64">					 		
+					 			<br /><span class="faded"><xsl:value-of select="../ro:relation"/></span>
 					 		</xsl:if>						
 							</li>					    	
 						</xsl:if>
@@ -177,8 +177,8 @@
 							</xsl:attribute>											
 							<xsl:value-of select="../extRif:relatedObjectDisplayTitle"/>
 							</a>	
-							<xsl:if test="../ro:relation!=''">					 		
-					 			<br /><xsl:value-of select="../ro:relation"/>
+							<xsl:if test="../ro:relation!='' and string-length(../ro:relation)&lt;64">					 		
+					 			<br /><span class="faded"><xsl:value-of select="../ro:relation"/></span>
 					 		</xsl:if>						
 							</li>					    	
 						</xsl:if>
@@ -226,8 +226,8 @@
 							</xsl:attribute>											
 							<xsl:value-of select="../extRif:relatedObjectDisplayTitle"/>
 							</a>	
-							<xsl:if test="../ro:relation!=''">					 		
-					 			<br /><xsl:value-of select="../ro:relation"/>
+							<xsl:if test="../ro:relation!='' and string-length(../ro:relation)&lt;64">					 		
+					 			<br /><span class="faded"><xsl:value-of select="../ro:relation"/></span>
 					 		</xsl:if>						
 							</li>					    	
 						</xsl:if>
@@ -275,8 +275,8 @@
 							</xsl:attribute>											
 							<xsl:value-of select="../extRif:relatedObjectDisplayTitle"/>
 							</a>	
-							<xsl:if test="../ro:relation!=''">					 		
-					 			<br /><xsl:value-of select="../ro:relation"/>
+							<xsl:if test="../ro:relation!='' and string-length(../ro:relation)&lt;64">					 		
+					 			<br /><span class="faded"><xsl:value-of select="../ro:relation"/></span>
 					 		</xsl:if>						
 							</li>					    	
 						</xsl:if>
