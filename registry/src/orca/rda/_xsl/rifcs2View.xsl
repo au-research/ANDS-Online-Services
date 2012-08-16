@@ -58,7 +58,7 @@
 				<xsl:if test="$theGroup">
 					<li><a class="crumb">
 					<xsl:attribute name="href">
-					<xsl:value-of select="$base_url"/>view/group/?group=<xsl:value-of select="$theGroup"/>&amp;groupName=<xsl:value-of select="$group"/>
+					<xsl:value-of select="$base_url"/>view/group/?group=<xsl:value-of select="$theGroup"/>&amp;groupName=<xsl:value-of select="./@group"/>
 					</xsl:attribute><xsl:value-of select="$group"/></a></li>					
 				</xsl:if>
 				<xsl:if test="$theGroup = ''">
