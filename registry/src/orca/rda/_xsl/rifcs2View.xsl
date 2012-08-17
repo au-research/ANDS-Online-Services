@@ -191,7 +191,7 @@
         <xsl:if test="ro:coverage/extRif:spatial or ro:location/extRif:spatial or ro:coverage/ro:temporal">
             <xsl:variable name="coverageLabel">
             <xsl:choose>
-            <xsl:when test="ro:coverage/extRif:spatial and ro:location/extRif:spatial">
+            <xsl:when test="(ro:coverage/extRif:spatial or ro:location[@type='coverage']) and ro:location/extRif:spatial">
             <xsl:text>Coverage And Location:</xsl:text>
             </xsl:when>
             <xsl:when test="ro:location/extRif:spatial">
@@ -233,11 +233,19 @@
      	 		<p class="coverage_text"><xsl:value-of select="./@type"/>: <xsl:value-of select="."/></p>
       		</xsl:for-each>
       		
-            <xsl:if test="ro:coverage/ro:temporal/ro:date">
-                <p>Time Period:<br />
-                <xsl:apply-templates select="ro:coverage/ro:temporal/ro:date"/> 
-                </p>    
-            </xsl:if> 
+            <xsl:if test="ro:coverage/ro:temporal/ro:date | ro:location[@dateFrom!=''] | ro:location[@dateTo!='']">
+             	<br/><br/>   Time Period:
+             </xsl:if>
+             
+    		<xsl:if test="ro:coverage/ro:temporal/ro:date">
+               <br />  <xsl:apply-templates select="ro:coverage/ro:temporal/ro:date"/> 
+             </xsl:if> 
+             
+             <xsl:if test="ro:location[@dateFrom!=''] | ro:location[@dateTo!='']">
+             	<br /> <xsl:apply-templates select="ro:location[@dateFrom!=''] | ro:location[@dateTo!='']"/>   
+             </xsl:if>           
+             
+    
             <xsl:if test="ro:coverage/ro:temporal/ro:text">
                 <p>Time Period:<br />
                 <xsl:apply-templates select="ro:coverage/ro:temporal/ro:text"/> 
@@ -490,7 +498,11 @@
         <p class="coverage" name="{@type}"><xsl:value-of select="."/></p>
       </xsl:if>
     </xsl:template>
-    
+     <xsl:template match="ro:location/extRif:spatial/extRif:coords">
+      <xsl:if test="not(./@type) or (./@type!= 'text' and ./@type!= 'dcmiPoint')">
+        <p class="coverage" name="{@type}"><xsl:value-of select="."/></p>
+      </xsl:if>
+    </xsl:template>   
     <xsl:template match="extRif:center">
         <p class="spatial_coverage_center"><xsl:value-of select="."/></p>
     </xsl:template>
@@ -504,7 +516,15 @@
         </xsl:if>       
         <xsl:value-of select="."/>          
     </xsl:template> 
-    
+      <xsl:template match="ro:location[@dateFrom!=''] | ro:location[@dateTo!='']">  
+        <xsl:if test="./@dateFrom != ''">
+            From         <xsl:value-of select="./@dateFrom"/>     
+        </xsl:if>
+        <xsl:if test="./@dateTo != ''">
+            To         <xsl:value-of select="./@dateTo"/>   
+        </xsl:if>       
+     
+    </xsl:template>   
     <xsl:template match="ro:subject">   
             <li><a href="javascript:void(0);" class="subjectFilter" id="{@extRif:resolvedValue}" title="{.}"><xsl:value-of select="@extRif:resolvedValue"/></a></li>       
     </xsl:template>
