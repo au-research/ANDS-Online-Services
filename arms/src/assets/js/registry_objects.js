@@ -88,7 +88,7 @@ $(function(){
 		updateSelected();
 	});
 
-	$('#filter').live({
+	$('.toggleFilter').live({
 		click: function(){
 			$('#filter_container').slideToggle();
 		}
@@ -305,6 +305,6 @@ function updateSelected(){
 		var message = '<b>'+totalSelected + '</b> registry objects has been selected';
 		$('#items_info').html(message);
 	}else{
-		//$('#items_info').slideUp();
+		$('#items_info').slideUp();
 	}
 }

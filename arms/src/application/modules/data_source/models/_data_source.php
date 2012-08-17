@@ -193,8 +193,6 @@ class _data_source {
 						$this->db->delete("data_source_attributes");
 						unset($this->attributes[$attribute->name]);
 					}
-						
-					
 				}
 			}
 		}

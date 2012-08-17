@@ -40,7 +40,7 @@ $(function(){
 				$('section').hide();
 			}
 		}else{//there is no hash suffix
-			browse('thumbnails');
+			browse('lists');
 		}
 	});
 	$(window).hashchange();
@@ -139,7 +139,7 @@ function load_datasource(data_source_id){
 	$('#view-datasource').html('Loading');
 	$('#browse-datasources').slideUp(500);
 	$.ajax({
-		url: 'getDataSource/'+data_source_id,
+		url: 'data_source/getDataSource/'+data_source_id,
 		type: 'GET',
 		contentType: 'application/json; charset=utf-8',
 		dataType: 'json',
@@ -162,9 +162,24 @@ function load_datasource(data_source_id){
 				}
 			});
 
+			drawCharts();
+
+			$('#view-datasource  .normal-toggle-button').each(function(){
+				if($(this).attr('value')=='t' || $(this).attr('value')=='1' || $(this).attr('value')=='true' ){
+					$(this).find('input').attr('checked', 'checked');
+				}
+				$(this).toggleButtons({
+					width:75,enable:false
+				});
+			});
 		}
 	});
 	return false;
+}
+
+function drawCharts(){
+	$('#ro-progression').height('350').html('');
+	$.jqplot('ro-progression',  [[[1, 2],[3,5.12],[5,13.1],[7,33.6],[9,85.9],[11,219.9]]]);
 }
 
 /*
@@ -194,21 +209,18 @@ function load_datasource_edit(data_source_id, active_tab){
 				$('.nav-tabs li a[href=#'+active_tab+']').click();
 			}
 			
-			$('#edit-datasource .normal-toggle-button').toggleButtons({
-				width: 75,
-				onChange: function($el, status, e){
-					$('input', $el).attr('value', status);
+			$('#edit-datasource  .normal-toggle-button').each(function(){
+				if($(this).attr('value')=='t' || $(this).attr('value')=='1' || $(this).attr('value')=='true' ){
+					$(this).find('input').attr('checked', 'checked');
 				}
+				$(this).toggleButtons({
+					width:75,enable:true,
+					onChange:function(){
+						$(this).find('input').attr('checked', 'checked');
+					}
+				});
 			});
-			$('#edit-datasource  .normal-toggle-button input[type=checkbox]').each(function(){
-				var input = $('#'+$(this).attr('for'));
-				if($(input).val()=='t'){
-					$(this).parent().click();
-				}else{
-					//do nothing for now
-				}
-			});
-
+			
 			$("#edit-datasource .chzn-select").chosen().change(function(){
 				var input = $('#'+$(this).attr('for'));
 				$(input).val($(this).val());
@@ -231,15 +243,19 @@ $('#save-edit-form').live({
 		jsonData.push({name:'data_source_id', value:$('#data_source_view_container').attr('data_source_id')});
 		
 		$('#edit-datasource #edit-form input, #edit-datasource #edit-form textarea').each(function(){
-			var label = $(this).attr('id');
+			var label = $(this).attr('name');
 			var value = $(this).val();
-			if(value!=''){
+			if($(this).attr('type')=='checkbox'){
+				var label = $(this).attr('for');
+				var value = $(this).is(':checked');
+			}
+			if(value!='' && value){
 				jsonData.push({name:label, value:value});
 			}
 		});
-		
+
 		$.ajax({
-			url:'updateDataSource', 
+			url:'data_source/updateDataSource', 
 			type: 'POST',
 			data: jsonData,
 			success: function(data){

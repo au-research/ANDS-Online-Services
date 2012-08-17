@@ -48,7 +48,7 @@
 					    <li><a href="javascript:;" name="lists"><i class="icon-th-list"></i> List View</a></li>
 					  </ul>
 					</span>
-					<a class="btn" id="filter">Filter</a>
+					<a class="btn toggleFilter">Filter</a>
 
 
 					
@@ -81,7 +81,9 @@
 
 		    <!-- Middle bar for filtering and item display -->
 		    <div class="well hide" id="filter_container">
+
 			    <div class="row-fluid" id="filter_fields">
+			    	<small><a href="javascript:;" class="close toggleFilter">&times;</a></small>
 			    	<div class="span12">
 			    		<div class="span3">
 			    			<h3>Sort</h3>
@@ -119,7 +121,7 @@
 
 
 		    <!-- List of items will be displayed here, in this ul -->
-			 	<ul class="lists" id="items"></ul>
+			<ul class="thumbnails" id="items"></ul>
 
 			<!-- Load More Link -->
 			<div class="row-fluid">
@@ -157,7 +159,8 @@
 			  		
 			  		<span class="tag ql_{{quality_level}}">{{quality_level}}</span>
 			  		<span class="tag status_{{status}}">{{status}}</span>
-			  		<span class="tag"><i class="icon-time"></i>Last modified {{date_modified}} by {{last_modified_by}}</span>
+			  		<i class="icon-time"></i>
+			  		Last modified {{date_modified}} by {{last_modified_by}}
 			  	</div>
 		  		<div class="btn-group item-control">
 		  			<button class="btn view"><i class="icon-eye-open"></i></button>

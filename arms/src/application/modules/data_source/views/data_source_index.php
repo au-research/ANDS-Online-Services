@@ -13,46 +13,58 @@
 <?php $this->load->view('header');?>
 <div class="container" id="main-content">
 <section id="browse-datasources" class="hide">
-	<div class="page-header">
-        <h1><?php echo $title;?><small><?php echo $small_title;?></small></h1>
-    </div>
-
-    <!-- Toolbar -->
-    <div class="row-fluid" id="mmr_toolbar">
-    	<div class="span4">
-    		<span class="dropdown" id="switch_menu">
-    		<a class="btn dropdown-toggle" data-toggle="dropdown" data-target="#switch_menu" href="#switch_menu">Switch View <span class="caret"></span></a>
-			  <ul class="dropdown-menu" id="switch_view">
-			    <li><a href="javascript:;" name="thumbnails"><i class="icon-th"></i> Thumbnails View</a></li>
-			    <li><a href="javascript:;" name="lists"><i class="icon-th-list"></i> List View</a></li>
-			  </ul>
-			</span>
+<div class="row">
+	<div class="box">
+		<div class="box-header clearfix">
+			<h1><?php echo $title;?><small><?php echo $small_title;?></small></h1>
 		</div>
-		<div class="span4"></div>
-    	<div class="span4">
-    		<select data-placeholder="Choose a Datasource to View" tabindex="1" class="chzn-select" id="datasource-chooser">
-				<option value=""></option>
-				<?php
-					foreach($dataSources as $ds){
-						echo '<option value="'.$ds['id'].'">'.$ds['title'].'</option>';
-					}
-				?>
-			</select>
-    	</div>
-    </div>
+		<div class="box-content">
 
+			<!-- Toolbar -->
+		    <div class="row-fluid" id="mmr_toolbar">
+		    	<div class="span4">
+		    		<span class="dropdown" id="switch_menu">
+		    		<a class="btn dropdown-toggle" data-toggle="dropdown" data-target="#switch_menu" href="#switch_menu">Switch View <span class="caret"></span></a>
+					  <ul class="dropdown-menu" id="switch_view">
+					    <li><a href="javascript:;" name="thumbnails"><i class="icon-th"></i> Thumbnails View</a></li>
+					    <li><a href="javascript:;" name="lists"><i class="icon-th-list"></i> List View</a></li>
+					  </ul>
+					</span>
+				</div>
+				<div class="span4"></div>
+		    	<div class="span4 right-aligned">
+		    		<select data-placeholder="Choose a Datasource to View" tabindex="1" class="chzn-select" id="datasource-chooser">
+						<option value=""></option>
+						<?php
+							foreach($dataSources as $ds){
+								echo '<option value="'.$ds['id'].'">'.$ds['title'].'</option>';
+							}
+						?>
+					</select>
+		    	</div>
+		    </div>
 
-    <!-- List of items will be displayed here, in this ul -->
+		    <!-- List of items will be displayed here, in this ul -->
+		    <ul class="lists" id="items"></ul>
 
-	<ul class="thumbnails" id="items"></ul>
+		    <div class="row-fluid">
+				<div class="span12">
+					<div class="well"><a href="javascript:;" id="load_more" page="1">Show More...</a></div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div>
+	
+	
+
+    
+
 
 
 	<!-- Load More Link -->
-	<div class="row-fluid">
-		<div class="span12">
-			<div class="well"><a href="javascript:;" id="load_more" page="1">Show More...</a></div>
-		</div>
-	</div>
+	
 
 </section>
 
@@ -164,33 +176,71 @@
 			 	<dl class="dl-horizontal">
 					<dt>Reverse Links</dt>
 					<dd>
-						{{allow_reverse_internal_links}} Allow Reverse Internal Links <br/>
-						{{allow_reverse_external_links}} Allow Reverse External Links <br/>
+						<p>
+							<div class="normal-toggle-button" value="{{allow_reverse_internal_links}}">
+								<input type="checkbox" for="allow_reverse_internal_links" >
+							</div>
+							Allow Reverse Internal Links
+						</p>
+						<p>
+							<div class="normal-toggle-button" value="{{allow_reverse_external_links}}">
+								<input type="checkbox" for="allow_reverse_external_links" >
+							</div>
+							Allow Reverse External Links
+						</p>
 					</dd>
 
 					{{#create_primary_relationships}}
 					<dt>Create Primary Relationships</dt>
-					<dd>{{create_primary_relationships}}</dd>
+					<dd>
+						<p>
+							<div class="normal-toggle-button" value="{{create_primary_relationships}}">
+								<input type="checkbox" for="create_primary_relationships" >
+							</div>
+						</p>
+					</dd>
 					{{/create_primary_relationships}}
 					
 					{{#push_to_nla}}
 					<dt>Push To NLA</dt>
-					<dd>{{push_to_nla}}</dd>
+					<dd>
+						<p>
+							<div class="normal-toggle-button" value="{{push_to_nla}}">
+								<input type="checkbox" for="push_to_nla" >
+							</div>
+						</p>
+					</dd>
 					{{/push_to_nla}}
 
 					{{#auto_publish}}
 					<dt>Auto Publish</dt>
-					<dd>{{auto_publish}}</dd>
+					<dd>
+						<p>
+							<div class="normal-toggle-button" value="{{auto_publish}}">
+								<input type="checkbox" for="auto_publish" >
+							</div>
+						</p>
+					</dd>
 					{{/auto_publish}}
 
 					{{#qa_flag}}
 					<dt>Quality Assessment Required</dt>
-					<dd>{{qa_flag}}</dd>
+					<dd>
+						<p>
+							<div class="normal-toggle-button" value="{{qa_flag}}">
+								<input type="checkbox" for="qa_flag" >
+							</div>
+						</p>
+					</dd>
 					{{/qa_flag}}
 
 					{{#assessement_notification_email}}
 					<dt>Assessment Notification Email</dt>
-					<dd>{{assessement_notification_email}}</dd>
+					<dd>
+						<p>
+							{{assessement_notification_email}}
+						</p>
+					</dd>
 					{{/assessement_notification_email}}
 
 			 	</dl>
@@ -254,6 +304,12 @@
 				</ul>
 			</div>
 		</div>
+
+		<div class="box">
+			<div class="box-header"><h3>Registry Objects Progression</h3></div>
+			<div class="box-content" id="ro-progression">Loading...</div>
+		</div>
+
 	</div>
 
 </div>
@@ -351,7 +407,7 @@
 						<div class="control-group">
 							<label class="control-label" for="title">Title</label>
 							<div class="controls">
-								<input type="text" class="input-xlarge" id="title" value="{{title}}">
+								<input type="text" class="input-xlarge" name="title" value="{{title}}">
 								<p class="help-inline"><small>Help</small></p>
 							</div>
 						</div>
@@ -359,28 +415,28 @@
 						<div class="control-group">
 							<label class="control-label" for="record_owner">Record Owner</label>
 							<div class="controls">
-								<input type="text" class="input-xlarge" id="record_owner" value="{{record_owner}}">
+								<input type="text" class="input-xlarge" name="record_owner" value="{{record_owner}}">
 							</div>
 						</div>
 
 						<div class="control-group">
 							<label class="control-label" for="contact_name">Contact Name</label>
 							<div class="controls">
-								<input type="text" class="input-xlarge" id="contact_name" value="{{contact_name}}">
+								<input type="text" class="input-xlarge" name="contact_name" value="{{contact_name}}">
 							</div>
 						</div>
 
 						<div class="control-group">
 							<label class="control-label" for="contact_email">Contact Email</label>
 							<div class="controls">
-								<input type="text" class="input-xlarge" id="contact_email" value="{{contact_email}}">
+								<input type="text" class="input-xlarge" name="contact_email" value="{{contact_email}}">
 							</div>
 						</div>
 
 						<div class="control-group">
 							<label class="control-label" for="notes">Notes</label>
 							<div class="controls">
-								<textarea class="input-xlarge" id="notes">{{notes}}</textarea>
+								<textarea class="input-xlarge" name="notes">{{notes}}</textarea>
 							</div>
 						</div>
 						
@@ -393,18 +449,16 @@
 							<label class="control-label">Reverse Links</label>
 							<div class="controls">
 								<p class="help-inline">
-								<div class="normal-toggle-button">
+								<div class="normal-toggle-button" value="{{allow_reverse_internal_links}}">
     								<input type="checkbox" for="allow_reverse_internal_links">
 								</div>
-								<input type="text" class="input-small hide" id="allow_reverse_internal_links" value="{{allow_reverse_internal_links}}">
 								<p class="help-inline">Allow reverse internal Links</p>
 								</p>
 
 								<p class="help-inline">
-								<div class="normal-toggle-button">
+								<div class="normal-toggle-button" value="{{allow_reverse_external_links}}">
     								<input type="checkbox" for="allow_reverse_external_links">
 								</div>
-								<input type="text" class="input-small hide" id="allow_reverse_external_links" value="{{allow_reverse_external_links}}">
 								<p class="help-inline">Allow reverse external Links</p>
 								</p>
 							</div>
@@ -414,10 +468,9 @@
 							<label class="control-label">Create Primary Relationships</label>
 							<div class="controls">
 								<p class="help-inline">
-								<div class="normal-toggle-button">
-    								<input type="checkbox" for="create_primary_relationships">
+								<div class="normal-toggle-button" value="{{create_primary_relationships}}">
+    								<input type="checkbox" for="create_primary_relationships" >
 								</div>
-								<input type="text" class="input-small hide" id="create_primary_relationships" value="{{create_primary_relationships}}">
 								</p>
 							</div>
 						</div>
@@ -426,10 +479,9 @@
 							<label class="control-label">Party Records to NLA</label>
 							<div class="controls">
 								<p class="help-inline">
-								<div class="normal-toggle-button">
+								<div class="normal-toggle-button" value="{{push_to_nla}}">
     								<input type="checkbox" for="push_to_nla">
 								</div>
-								<input type="text" class="input-small hide" id="push_to_nla" value="{{push_to_nla}}">
 								</p>
 							</div>
 						</div>
@@ -438,10 +490,9 @@
 							<label class="control-label">Auto Publish Records</label>
 							<div class="controls">
 								<p class="help-inline">
-								<div class="normal-toggle-button">
+								<div class="normal-toggle-button" value="{{auto_publish}}">
     								<input type="checkbox" for="auto_publish">
 								</div>
-								<input type="text" class="input-small hide" id="auto_publish" value="{{auto_publish}}">
 								</p>								
 							</div>
 						</div>
@@ -450,10 +501,9 @@
 							<label class="control-label">Quality Assessment Required</label>
 							<div class="controls">
 								<p class="help-inline">
-								<div class="normal-toggle-button">
+								<div class="normal-toggle-button" value="{{qa_flag}}">
     								<input type="checkbox" for="qa_flag">
 								</div>
-								<input type="text" class="input-small hide" id="qa_flag" value="{{qa_flag}}">
 								</p>
 							</div>
 						</div>
@@ -461,7 +511,7 @@
 						<div class="control-group">
 							<label class="control-label" for="assessement_notification_email">Assessment Notification Email</label>
 							<div class="controls">
-								<input type="text" class="input-xlarge" id="assessement_notification_email" value="{{assessement_notification_email}}">
+								<input type="text" class="input-xlarge" name="assessement_notification_email" value="{{assessement_notification_email}}">
 							</div>
 						</div>
 					</fieldset>
@@ -472,7 +522,7 @@
 						<div class="control-group">
 							<label class="control-label" for="uri">URI</label>
 							<div class="controls">
-								<input type="text" class="input-xlarge" id="uri" value="{{uri}}">
+								<input type="text" class="input-xlarge" name="uri" value="{{uri}}">
 							</div>
 						</div>
 
@@ -484,7 +534,7 @@
 									<option value="RIF">RIF</option>
 									<option value="OAI_RIF">RIF OAI-PMH</option>
 								</select>
-								<input type="text" class="input-small hide" id="provider_type" value="{{provider_type}}">
+								<input type="text" class="input-small hide" name="provider_type" value="{{provider_type}}">
 							</div>
 						</div>
 
@@ -496,14 +546,14 @@
 									<option value="GET">Harvester DIRECT</option>
 									<option value="RIF">Harvester OAI-PMH</option>
 								</select>
-								<input type="text" class="input-small hide" id="harvest_method" value="{{harvest_method}}">
+								<input type="text" class="input-small hide" name="harvest_method" value="{{harvest_method}}">
 							</div>
 						</div>
 
 						<div class="control-group">
 							<label class="control-label" for="oai_set">OAI Set</label>
 							<div class="controls">
-								<input type="text" class="input-xlarge" id="oai_set" value="{{oai_set}}">
+								<input type="text" class="input-xlarge" name="oai_set" value="{{oai_set}}">
 							</div>
 						</div>
 
@@ -515,14 +565,14 @@
 									<option value="INCREMENTAL">Incremental Mode</option>
 									<option value="REFRESH">Full Refresh Mode</option>
 								</select>
-								<input type="text" class="input-small hide" id="advanced_harvest_mode" value="{{advanced_harvest_mode}}">
+								<input type="text" class="input-small hide" name="advanced_harvest_mode" value="{{advanced_harvest_mode}}">
 							</div>
 						</div>
 
 						<div class="control-group">
 							<label class="control-label" for="harvest_date">Harvest Date</label>
 							<div class="controls">
-								<input type="text" class="input-xlarge" id="harvest_date" value="{{harvest_date}}">
+								<input type="text" class="input-xlarge" name="harvest_date" value="{{harvest_date}}">
 							</div>
 						</div>
 
@@ -536,7 +586,7 @@
 									<option value="fortnightly">fortnightly</option>
 									<option value="monthly">monthly</option>
 								</select>
-								<input type="text" class="input-small hide" id="harvest_date" value="{{harvest_frequency}}">
+								<input type="text" class="input-small hide" name="harvest_date" value="{{harvest_frequency}}">
 							</div>
 						</div>
 					</fieldset>

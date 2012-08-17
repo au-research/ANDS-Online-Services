@@ -31,6 +31,7 @@ class Data_source extends MX_Controller {
 		}
 		$data['dataSources'] = $items;
 		$data['scripts'] = array('data_sources');
+		$data['js_lib'] = array('core', 'graph');
 
 		$this->load->view("data_source_index", $data);
 
@@ -119,11 +120,10 @@ class Data_source extends MX_Controller {
 		$dataSource = NULL;
 		$id = NULL; 
 		
-		$jsonData['status'] = 'OK';
 		
+		$jsonData['status'] = 'OK';
 		$POST = $this->input->post();
-		if (isset($POST['data_source_id']))
-		{
+		if (isset($POST['data_source_id'])){
 			$id = (int) $this->input->post('data_source_id');
 		}
 		
@@ -138,11 +138,13 @@ class Data_source extends MX_Controller {
 			$dataSource = $this->ds->getByID($id);
 		}
 
-		// XXX: This doesn't handle "new" attribute creation? Probably need a whilelist to allow new values to be posted.
+		// XXX: This doesn't handle "new" attribute creation? Probably need a whilelist to allow new values to be posted. //**whitelist**//
 		if ($dataSource)
 		{
 			foreach($dataSource->attributes() as $attrib=>$value){
 				if ($new_value = $this->input->post($attrib)) {
+					if($new_value=='true') $new_value=DB_TRUE;
+					if($new_value=='false') $new_value=DB_FALSE;
 					$dataSource->setAttribute($attrib, $new_value);
 				}
 			}

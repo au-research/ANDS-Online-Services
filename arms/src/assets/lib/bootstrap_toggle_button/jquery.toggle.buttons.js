@@ -2,7 +2,7 @@
   "use strict";
 
   $.fn.toggleButtons = function (opt) {
-    var $element, $labelEnabled, options, active, styleActive, styleDisabled;
+    var $element, $labelEnabled, options, active, styleActive, styleDisabled, enable;
     this.each(function () {
       $element = $(this);
 
@@ -29,6 +29,7 @@
 
       styleActive = options.style.enabled === undefined ? "" : options.style.enabled;
       styleDisabled = options.style.disabled === undefined ? "" : options.style.disabled;
+      enable = options.enable;
 
       if (active && styleActive !== undefined)
         $element.addClass(styleActive);
@@ -50,15 +51,17 @@
 
         $element = $(this).parent();
 
-        $element
-          .toggleClass('disabled')
-          .toggleClass(styleActive)
-          .toggleClass(styleDisabled);
+        if(enable){
+          $element
+            .toggleClass('disabled')
+            .toggleClass(styleActive)
+            .toggleClass(styleDisabled);
 
-        active = !($element.find('input').is(':checked'));
-        $element.find('input').attr('checked', active);
+          active = !($element.find('input').is(':checked'));
+          $element.find('input').attr('checked', active);
 
-        options.onChange($element, active, e);
+          options.onChange($element, active, e);
+        }
       });
 
     });
@@ -67,6 +70,7 @@
   $.fn.toggleButtons.defaults = {
     onChange: function () {
     },
+    enable: true,
     width: 100,
     animated: true,
     label: {

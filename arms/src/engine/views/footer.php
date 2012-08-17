@@ -26,18 +26,30 @@
     <!-- The javascripts Libraries
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="<?php echo base_url();?>assets/lib/jquery-1.7.2.min.js"></script>
-    <script src="<?php echo base_url();?>assets/lib/less-1.3.0.min.js" type="text/javascript"></script>
-    <script src="<?php echo base_url();?>assets/lib/jquery-ui-1.8.22.custom.min.js" type="text/javascript"></script>
-    <script src="<?php echo base_url();?>assets/lib/dragdrop/jquery.event.drag-2.2.js"></script>
-	<script src="<?php echo base_url();?>assets/lib/dragdrop/jquery.event.drag.live-2.2.js"></script>
-	<script src="<?php echo base_url();?>assets/lib/dragdrop/jquery.event.drop-2.2.js"></script>
-	<script src="<?php echo base_url();?>assets/lib/dragdrop/jquery.event.drop.live-2.2.js"></script>
-	<script src="<?php echo base_url();?>assets/lib/mustache.js"></script>
-    <script src="<?php echo base_url();?>assets/lib/chosen/chosen.jquery.js" type="text/javascript"></script>
-    <script src="<?php echo base_url();?>assets/lib/jquery.ba-hashchange.js" type="text/javascript"></script>
-    <script src="<?php echo base_url();?>assets/lib/bootstrap_toggle_button/jquery.toggle.buttons.js" type="text/javascript"></script>
-    <script src="<?php echo base_url();?>assets/lib/qtip2/jquery.qtip.min.js" type="text/javascript"></script>
+    <?php foreach($js_lib as $lib):?>
+        <?php if($lib=='core'):?>
+            <script src="<?php echo base_url();?>assets/lib/jquery-1.7.2.min.js"></script>
+            <script src="<?php echo base_url();?>assets/lib/less-1.3.0.min.js" type="text/javascript"></script>
+            <script src="<?php echo base_url();?>assets/lib/jquery-ui-1.8.22.custom.min.js" type="text/javascript"></script>
+            <script src="<?php echo base_url();?>assets/lib/dragdrop/jquery.event.drag-2.2.js"></script>
+            <script src="<?php echo base_url();?>assets/lib/dragdrop/jquery.event.drag.live-2.2.js"></script>
+            <script src="<?php echo base_url();?>assets/lib/dragdrop/jquery.event.drop-2.2.js"></script>
+            <script src="<?php echo base_url();?>assets/lib/dragdrop/jquery.event.drop.live-2.2.js"></script>
+            <script src="<?php echo base_url();?>assets/lib/mustache.js"></script>
+            <script src="<?php echo base_url();?>assets/lib/chosen/chosen.jquery.js" type="text/javascript"></script>
+            <script src="<?php echo base_url();?>assets/lib/jquery.ba-hashchange.js" type="text/javascript"></script>
+            <script src="<?php echo base_url();?>assets/lib/bootstrap_toggle_button/jquery.toggle.buttons.js" type="text/javascript"></script>
+            <script src="<?php echo base_url();?>assets/lib/qtip2/jquery.qtip.min.js" type="text/javascript"></script>
+        <?php endif;?>
+
+        <?php if($lib=='graph'):?>
+            <!--[if lt IE 9]><script language="javascript" type="text/javascript" src="excanvas.js"></script><![endif]-->
+            <script language="javascript" type="text/javascript" src="<?php echo base_url();?>assets/lib/jqplot/jquery.jqplot.min.js"></script>
+            <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/lib/jqplot/jquery.jqplot.css" />
+        <?php endif;?>
+    <?php endforeach;?>
+
+    
 
 
 	<!-- ARMS scripts -->
