@@ -34,6 +34,24 @@ class Registry_object extends MX_Controller {
 		}
 	}
 
+	public function get_record($id){
+		$this->load->model('registry_objects', 'ro');
+		$ro = $this->ro->getByID($id);
+
+		$data['xml'] = $ro->getXML();
+		$data['extrif'] = $ro->getExtRif();
+		$data['id'] = $ro->id;
+		$data['title'] = $ro->getAttribute('list_title');
+		$data['attributes'] = $ro->getAttributes();
+
+		$jsonData = array();
+		$jsonData['status'] = 'OK';
+		$jsonData['ro'] = $data;
+
+		$jsonData = json_encode($jsonData);
+		echo $jsonData;
+	}
+
 	//AJAX function for MMR to search
 	public function get_records(){
 		$fields = $this->input->post('fields');

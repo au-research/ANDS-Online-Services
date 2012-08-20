@@ -81,6 +81,10 @@ class Core_extension extends ExtensionBase
 		
 		return $this;
 	}
+
+	function getAttributes(){
+		return $this->attributes;
+	}
 	
 	function create()
 	{

@@ -54,6 +54,7 @@
 
 	<!-- ARMS scripts -->
     <script>
+        localStorage.clear();
         var base_url = '<?php echo base_url();?>';
         var suffix = '<?php echo url_suffix();?>';
     </script>

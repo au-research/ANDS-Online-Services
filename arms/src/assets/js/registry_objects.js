@@ -34,10 +34,11 @@ $(function(){
 				$('section').hide();
 				switch(action){
 					case 'browse' : browse(words[1], words[2]);break;
-					case 'view': load_ro(words[1]);break;
-					case 'edit': load_ro_edit(words[1], words[2]);break;
+					case 'view': load_ro(words[1], 'view');break;
+					case 'preview': load_ro(words[1], 'preview');break;
+					case 'edit': load_ro(words[1], 'edit');break;
 					case 'delete': load_ro_delete(words[1]);break;
-					default: browse('thumbnails');break;
+					default: logErrorOnScreen('Invalid Operation: '+hash);break;
 				}
 			}catch(error){
 				var template = $('#error-template').html();
@@ -187,6 +188,16 @@ $(function(){
 		});
 	//bind the drag and drop
 	
+
+	//bind viewing screen
+	$('.tab-view-list li a').live({
+		click:function(e){
+			e.preventDefault();
+			var view = $(this).attr('name');
+			var id = $(this).attr('ro_id');
+			changeHashTo(view+'/'+id);
+		}
+	});
 	
 });
 
@@ -214,6 +225,36 @@ function browse(view, filter){
 	}else{
 		logErrorOnScreen('invalid View Argument');
 	}
+}
+
+function load_ro(ro_id, view){
+	$.ajax({
+		type: 'GET',
+		url: base_url+'registry_object/get_record/'+ro_id,
+		dataType: 'json',
+		success: function(data){
+			console.log(data);
+			var itemsTemplate = $('#item-template').html();
+			var output = Mustache.render(itemsTemplate, data);
+			$('#view-ro').html(output);
+
+
+			//tab binding
+			$('.tab-content').hide();
+			$('.tab-view-list a').removeClass('active');
+			$('.tab-view-list a[name='+view+']').addClass('active');
+			$('.tab-content[name='+view+']').fadeIn();
+
+			if(view=='view'){
+				//set the active tab
+
+			}else if(view=='edit'){
+				//set the active tab
+			}
+
+			$('#view-ro').show();
+		}
+	});
 }
 
 function getRecords(fields, sorts, page){

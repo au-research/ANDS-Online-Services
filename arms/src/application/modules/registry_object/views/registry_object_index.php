@@ -132,16 +132,21 @@
 		</div>
 	</div>
 </div><!-- end main content container -->
-</section>
 
-<!-- end template section-->
-<?php $this->load->view('footer');?>
-
-
-<section id="view-ro" class="hide">Loading...</section>
+<div id="view-ro" class="hide">Loading...</div>
 <section id="edit-ro" class="hide">Loading...</section>
 <section id="expand-ro" class="hide">Loading...</section>
 <section id="delete-ro" class="hide">Loading...</section>
+
+</section>
+
+
+
+
+
+
+<!-- end template section-->
+<?php $this->load->view('footer');?>
 
 
 <!-- template section -->
@@ -171,5 +176,46 @@
 		  	</div>
 		</li>
 	{{/items}}
+</div>
+
+
+<div class="hide" id="item-template">
+{{#ro}}
+<div class="container">
+<div class="row">
+	<div class="box" ro_id="{{id}}">
+		<div class="box-header clearfix">
+			<h1>{{title}}</h1>
+			<span class="right-widget">
+				<ul class="tab-view-list">
+					<li><a href="javascript:;" name="view" ro_id="{{id}}">View</a></li>
+					<li><a href="javascript:;" name="edit" ro_id="{{id}}">Edit</a></li>
+					<li><a href="javascript:;" name="preview" ro_id="{{id}}">Preview</a></li>
+				</ul>
+			</span>
+			<div class="clearfix"></div>
+		</div>
+		<div class="box-content tab-content tab-view-content" name="view">
+			<h1>XML</h1>
+			<pre class="prettyprint">
+				{{xml}}
+			</pre>
+			<h1>ExtRif</h1>
+			<pre class="prettyprint">
+				{{extrif}}
+			</pre>
+		</div>
+
+		<div class="box-content tab-content tab-view-content" name="preview">
+			Preview in RDA iframe
+		</div>
+
+		<div class="box-content tab-content tab-view-content" name="edit">
+			Edit Screen
+		</div>
+	</div>
+</div>
+{{/ro}}
+</div>
 </div>
 </section>
