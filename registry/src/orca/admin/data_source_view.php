@@ -25,7 +25,6 @@ $executionTimeoutSeconds = 20*60;
 $taskWaiting = '';
 $taskWaiting = scheduledTaskCheck(getQueryValue('data_source_key'));
 
-
 // Get the record from the database.
 $dataSource = getDataSources(getQueryValue('data_source_key'), null);
 if( !$dataSource )
@@ -221,6 +220,36 @@ require '../../_includes/header.php';
 			<td>Notes:</td>
 			<td><?php printSafeWithBreaks($dataSource[0]['notes']) ?></td>
 		</tr>
+		<?php if (isset($dataSource[0]['address_line_1']) && $dataSource[0]['address_line_1'] != ''): ?>
+			<tr>
+				<td>Address Line 1:</td>
+				<td><?php printSafeWithBreaks($dataSource[0]['address_line_1']) ?></td>
+			</tr>
+		<?php endif; ?>
+		<?php if (isset($dataSource[0]['address_line_2']) && $dataSource[0]['address_line_2'] != ''): ?>
+			<tr>
+				<td>Address Line 2:</td>
+				<td><?php printSafeWithBreaks($dataSource[0]['address_line_2']) ?></td>
+			</tr>
+		<?php endif; ?>
+		<?php if (isset($dataSource[0]['city']) && $dataSource[0]['city'] != ''): ?>
+			<tr>
+				<td>City:</td>
+				<td><?php printSafeWithBreaks($dataSource[0]['city']) ?></td>
+			</tr>
+		<?php endif; ?>
+		<?php if (isset($dataSource[0]['post_code']) && $dataSource[0]['post_code'] != ''): ?>
+			<tr>
+				<td>Post Code:</td>
+				<td><?php printSafeWithBreaks($dataSource[0]['post_code']) ?></td>
+			</tr>
+		<?php endif; ?>
+		<?php if (isset($dataSource[0]['state']) && $dataSource[0]['state'] != ''): ?>
+			<tr>
+				<td>State:</td>
+				<td><?php printSafeWithBreaks($dataSource[0]['state']) ?></td>
+			</tr>
+		<?php endif; ?>
 		<tr>
 			<td>Created When:</td>
 			<td><?php printSafe(formatDateTime($dataSource[0]['created_when'], gDATETIME)) ?></td>
@@ -241,7 +270,7 @@ require '../../_includes/header.php';
 		<td colspan="2"><span style="float:left;"><h3>Records Management Settings</h3></span>
 		<span style="text-align:right;">
 					<input type="button" onclick="window.location='<?php print eAPP_ROOT ?>orca/manage/view_history.php?action=data_source_view&data_source_key=<?php print urlencode($dataSourceKey); ?>'" value="View History"></input>
-					<input type="button" value="Delete Records" title="Delete Registry Objects from this source" onclick="showDeleteModal();"/>
+				<?php if( userIsORCA_ADMIN() ) { ?>	<input type="button" value="Delete Records" title="Delete Registry Objects from this source" onclick="showDeleteModal();"/><?php } ?>
 				<input type="hidden" name="delete_flag" id="delete_flag" value="ALL"/>
 		</span>
 		</td>
@@ -379,7 +408,15 @@ require '../../_includes/header.php';
 		</tr>
 		<tr>
 			<td>Harvest Method:</td>
-			<td><?php printSafe($gORCA_HARVEST_METHODS[$dataSource[0]['harvest_method']]) ?></td>
+			<td><?php 
+			
+					printSafe($gORCA_HARVEST_METHODS[$dataSource[0]['harvest_method']]);
+				
+					if ($dataSource[0]['advanced_harvesting_mode'] != 'STANDARD') {
+						echo " (" . $dataSource[0]['advanced_harvesting_mode'] . ")";	
+					}
+				
+				?></td>
 		</tr>
 		<tr>
 			<td>Harvest Date:</td>

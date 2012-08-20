@@ -49,6 +49,7 @@ public class Harvest
     private String from = null;
     private String until = null;
     private String set = null;
+    private String ahm = null;
     
     private int status = -1;
 
@@ -513,6 +514,26 @@ public class Harvest
     public void setSet(String setSpec)
     {
         this.set = setSpec;
+    }
+
+    /**
+     * set the advanced harvesting mode
+     * 
+     * 
+     */
+    public void setAHM(String ahm)
+    {
+        this.ahm = ahm;
+    }
+
+    /**
+     * Get the advanced harvesting mode
+     * 
+     * 
+     */
+    public String getAHM()
+    {
+        return this.ahm;
     }
     
     

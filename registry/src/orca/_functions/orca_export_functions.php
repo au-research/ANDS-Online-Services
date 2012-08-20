@@ -174,7 +174,16 @@ function getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR = false, $inclu
 			$owner = ($registryObject[0]['created_who'] == 'SYSTEM' ? 'harvest' : 'manual');
 			$xml .= '      <extRif:feedType>'.$owner.'</extRif:feedType>'."\n";
 			$xml .= '      <extRif:lastModifiedBy>'.$registryObject[0]['created_who'].'</extRif:lastModifiedBy>'."\n";
-
+			if($contributorPage = getGroupPage($group))
+			{
+				$contributorPageTitle = getRegistryObject($contributorPage[0]['registry_object_key'], $overridePermissions = true);
+				$xml .= '      <extRif:contributorPage>'.rawurlencode($contributorPage[0]['registry_object_key']).'</extRif:contributorPage>'."\n";
+				$contributorLogoStr = getDescriptionLogo($contributorPage[0]['registry_object_key']);
+				if ($contributorLogoStr !== false)
+				{
+					$xml .= '      <extRif:contributorDisplayLogo>'.strip_tags(esc($contributorLogoStr)).'</extRif:contributorDisplayLogo>'."\n";
+				}		
+			}
 			$xml .= "    </extRif:extendedMetadata>\n";
 		}
 
@@ -765,6 +774,10 @@ function getSpatialCoverageXML($coverage_id, $forSOLR)
 						$xml .= "          <extRif:coords>$coordinates</extRif:coords>\n";
 					}
 				}
+				else 
+				{
+					$xml .= $value;
+				}
 		        if($centre != '')
 		        {
 		        	$xml .= "          <extRif:center>$centre</extRif:center>\n";
@@ -1152,7 +1165,14 @@ function getRelatedObjectTypesXML($registryObjectKey, $dataSourceKey, $registryO
 	//we need to check if this has related primary keys
 	$dataSource = getDataSources($dataSourceKey, null);
 	$create_primary_relationships = $dataSource[0]['create_primary_relationships'];
+	$connectionsNum = array();
+	$connectionsNum['person']= 0;
+	$connectionsNum['group']= 0;
+	$connectionsNum['activity']= 0;
+	$connectionsNum['service']= 0;
+	$connectionsNum['collection']= 0;
 
+	
 	$pkey1 = '';
 	$pkey2 = '';
 
@@ -1190,10 +1210,15 @@ function getRelatedObjectTypesXML($registryObjectKey, $dataSourceKey, $registryO
 			$xml .= "        <relation$type></relation>\n";
 			if ($forSOLR)
 			{
+				
+				if(strtolower($relatedObject[0]['type'])=='person') $connectionsNum['person']++;
+				elseif(strtolower($relatedObject[0]['type'])=='group') $connectionsNum['group']++;
+				else $connectionsNum[strtolower($relatedObject[0]['registry_object_class'])]++;					
 				$xml .= "        <extRif:relatedObjectClass>".strtolower($relatedObject[0]['registry_object_class'])."</extRif:relatedObjectClass>\n";
 				$xml .= "        <extRif:relatedObjectType>".strtolower($relatedObject[0]['type'])."</extRif:relatedObjectType>\n";
 				$xml .= "        <extRif:relatedObjectListTitle>".esc($relatedObject[0]['list_title'])."</extRif:relatedObjectListTitle>\n";
 				$xml .= "        <extRif:relatedObjectDisplayTitle>".esc($relatedObject[0]['display_title'])."</extRif:relatedObjectDisplayTitle>\n";
+				$xml .= "        <extRif:relatedObjectSlug>".esc($relatedObject[0]['url_slug'])."</extRif:relatedObjectSlug>\n";				
 				if($relation_logo)
 					$xml .= "        <extRif:relatedObjectLogo>".esc($relation_logo)."</extRif:relatedObjectLogo>\n";
 			}
@@ -1223,10 +1248,14 @@ function getRelatedObjectTypesXML($registryObjectKey, $dataSourceKey, $registryO
 			$xml .= "        <relation$type></relation>\n";
 			if ($forSOLR)
 			{
+				if(strtolower($relatedObject[0]['type'])=='person') $connectionsNum['person']++;
+				elseif(strtolower($relatedObject[0]['type'])=='group') $connectionsNum['group']++;
+				else $connectionsNum[strtolower($relatedObject[0]['registry_object_class'])]++;				
 				$xml .= "        <extRif:relatedObjectClass>".strtolower($relatedObject[0]['registry_object_class'])."</extRif:relatedObjectClass>\n";
 				$xml .= "        <extRif:relatedObjectType>".strtolower($relatedObject[0]['type'])."</extRif:relatedObjectType>\n";
 				$xml .= "        <extRif:relatedObjectListTitle>".esc($relatedObject[0]['list_title'])."</extRif:relatedObjectListTitle>\n";
 				$xml .= "        <extRif:relatedObjectDisplayTitle>".esc($relatedObject[0]['display_title'])."</extRif:relatedObjectDisplayTitle>\n";
+				$xml .= "        <extRif:relatedObjectSlug>".esc($relatedObject[0]['url_slug'])."</extRif:relatedObjectSlug>\n";				
 				if($relation_logo)
 					$xml .= "        <extRif:relatedObjectLogo>".esc($relation_logo)."</extRif:relatedObjectLogo>\n";
 			}
@@ -1234,16 +1263,30 @@ function getRelatedObjectTypesXML($registryObjectKey, $dataSourceKey, $registryO
 		}
 	}
 	$list = getRelatedObjects($registryObjectKey);
+	$repeatList = array();
 	if( $list )
 	{
 	foreach( $list as $element )
 		{
 			$key = esc($element['related_registry_object_key']);
+			$repeatKey =false;
+			foreach($repeatList as $keyseen)
+			{
+				if($keyseen==$key) {$repeatKey = true;}
+			}
+			$repeatList[]=$key;
 			if($key!=$pkey1 && $key!=$pkey2)
 			{
 				$relatedObject = getRegistryObject($element['related_registry_object_key'],true);
 				$relation_logo = false;
 				$relationType = getRelationType($element['relation_id']);
+				if(isset($relatedObject[0]['type']) && strtolower($relatedObject[0]['registry_object_class'])!=''){
+					$relatedObject[0]['registry_object_class'] = strtolower($relatedObject[0]['registry_object_class']);
+					if(strtolower($relatedObject[0]['type'])=='person') { $connectionsNum['person']++; }
+					elseif(strtolower($relatedObject[0]['type'])=='group') { $connectionsNum['group']++;}
+					elseif(isset($relatedObject[0]['registry_object_class'])) {$connectionsNum[$relatedObject[0]['registry_object_class']]++;}	
+				}
+											
 				if (isset($element) &&	$relatedObject[0]['registry_object_class'] == 'Party' && strtolower($relatedObject[0]['type']) != 'person' )
 				{
 					$relation_logo = getDescriptionLogo($key);
@@ -1252,24 +1295,130 @@ function getRelatedObjectTypesXML($registryObjectKey, $dataSourceKey, $registryO
 
 				$xml .= "      <$elementName>\n";
 				$xml .= "        <key>$key</key>\n";
-				//$xml .= getRelationsXML($element['relation_id'],$typeArray[$registryObjectClass], $forSOLR);
-				$xml .= getRelationsXML($element['relation_id'], $forSOLR);
-				if($forSOLR)
+				$xml .= getRelationsXML($element['relation_id'], $typeArray[$registryObjectClass],$forSOLR);
+				if($forSOLR && ! $repeatKey)
 				{
 					$xml .= "        <extRif:relatedObjectClass>".strtolower($relatedObject[0]['registry_object_class'])."</extRif:relatedObjectClass>\n";
 					$xml .= "        <extRif:relatedObjectType>".strtolower($relatedObject[0]['type'])."</extRif:relatedObjectType>\n";
 					$xml .= "        <extRif:relatedObjectListTitle>".esc($relatedObject[0]['list_title'])."</extRif:relatedObjectListTitle>\n";
 					$xml .= "        <extRif:relatedObjectDisplayTitle>".esc($relatedObject[0]['display_title'])."</extRif:relatedObjectDisplayTitle>\n";
+					$xml .= "        <extRif:relatedObjectSlug>".esc($relatedObject[0]['url_slug'])."</extRif:relatedObjectSlug>\n";					
 					if($relation_logo) $xml .= "        <extRif:relatedObjectLogo>".esc($relation_logo)."</extRif:relatedObjectLogo>\n";
 				}
 				$xml .= "      </$elementName>\n";
 			}
 		}
 	}
+	
+	$listInt = getInternalReverseRelatedObjects($registryObjectKey, $dataSourceKey);
+	if( $listInt && $forSOLR)
+	{
+	foreach( $listInt as $element )
+		{
+			$key = esc($element['registry_object_key']);
+			$notAlreadyGot = false;
+			if($list){
+				foreach($list as $alreadyGot)
+				{
+					if($alreadyGot['related_registry_object_key']==$key) {$notAlreadyGot = true;}
+				}
+			}
+			$repeatKey =false;
+			foreach($repeatList as $keyseen)
+			{
+				if($keyseen==$key) {$repeatKey = true;}
+			}
+			$repeatList[]=$key;
+			if($key!=$pkey1 && $key!=$pkey2 && !$notAlreadyGot)
+			{
+				$relatedObject = getRegistryObject($element['registry_object_key'],true);
+				$relation_logo = false;
+				$addThisRelation = true;
+			
+					$relationType = getRelationType($element['relation_id']);
+					if (isset($element) &&	$relatedObject[0]['registry_object_class'] == 'Party' && strtolower($relatedObject[0]['type']) != 'person' )
+					{
+						$relation_logo = getDescriptionLogo($key);
+					}
+		
+					$xml .= "      <$elementName>\n";
+					$xml .= "        <key>$key</key>\n";
+					//$xml .= getRelationsXML($element['relation_id'],$typeArray[$registryObjectClass], $forSOLR);
+					$xml .= getRelationsXML($element['relation_id'], $typeArray[$registryObjectClass],$forSOLR,$getReverse=true);
+					if($forSOLR && !$repeatKey)
+					{
+					$relatedclass= strtolower($relatedObject[0]['registry_object_class']);
+					$relatedObject[0]['registry_object_class'] = strtolower($relatedObject[0]['registry_object_class']);
+					if(strtolower($relatedObject[0]['type'])=='person') { $connectionsNum['person']++; if($connectionsNum['person']>6) $addThisRelation = false;}
+					elseif(strtolower($relatedObject[0]['type'])=='group') { $connectionsNum['group']++; if($connectionsNum['group']>6) $addThisRelation = false;}
+					elseif(isset($relatedObject[0]['registry_object_class'])) {$connectionsNum[$relatedObject[0]['registry_object_class']]++;	 if($connectionsNum[$relatedObject[0]['registry_object_class']]>6) $addThisRelation = false;}		
+						$xml .= "        <extRif:relatedObjectClass>".strtolower($relatedObject[0]['registry_object_class'])."</extRif:relatedObjectClass>\n";
+						$xml .= "        <extRif:relatedObjectType>".strtolower($relatedObject[0]['type'])."</extRif:relatedObjectType>\n";
+						$xml .= "        <extRif:relatedObjectListTitle>".esc($relatedObject[0]['list_title'])."</extRif:relatedObjectListTitle>\n";
+						$xml .= "        <extRif:relatedObjectDisplayTitle>".esc($relatedObject[0]['display_title'])."</extRif:relatedObjectDisplayTitle>\n";
+						$xml .= "        <extRif:relatedObjectSlug>".esc($relatedObject[0]['url_slug'])."</extRif:relatedObjectSlug>\n";						
+						$xml .= "        <extRif:relatedObjectReverseType>INTERNAL</extRif:relatedObjectReverseType>\n";							
+						if($relation_logo) $xml .= "        <extRif:relatedObjectLogo>".esc($relation_logo)."</extRif:relatedObjectLogo>\n";
+					}
+					$xml .= "      </$elementName>\n";
+		
+			}
+		}
+	} 
+	$listExt = getExternalReverseRelatedObjects($registryObjectKey, $dataSourceKey);
+	if( $listExt && $forSOLR)
+	{
+	foreach( $listExt as $element )
+		{
+			$key = esc($element['registry_object_key']);
+			$repeatKey =false;
+			foreach($repeatList as $keyseen)
+			{
+				if($keyseen==$key) {$repeatKey = true;}
+			}
+			$repeatList[]=$key;
+			if($key!=$pkey1 && $key!=$pkey2)
+			{
+					$relatedObject = getRegistryObject($element['registry_object_key'],true);
+					$relation_logo = false;
+					$addThisRelation = true;
+					if (isset($element) &&	$relatedObject[0]['registry_object_class'] == 'Party' && strtolower($relatedObject[0]['type']) != 'person' )
+					{
+						$relation_logo = getDescriptionLogo($key);
+					}
+					$relatedclass= strtolower($relatedObject[0]['registry_object_class']);
 
-
+					$xml .= "      <$elementName>\n";
+					$xml .= "        <key>$key</key>\n";
+					$xml .= getRelationsXML($element['relation_id'],$typeArray[$registryObjectClass], $forSOLR, $getReverse=true);
+					if($forSOLR&& !$repeatKey)
+					{
+						$relatedObject[0]['registry_object_class'] = strtolower($relatedObject[0]['registry_object_class']);
+						if(strtolower($relatedObject[0]['type'])=='person') { $connectionsNum['person']++; if($connectionsNum['person']>6) $addThisRelation = false;}
+						elseif(strtolower($relatedObject[0]['type'])=='group') { $connectionsNum['group']++; if($connectionsNum['group']>6) $addThisRelation = false;}
+						elseif(isset($relatedObject[0]['registry_object_class'])) {$connectionsNum[$relatedObject[0]['registry_object_class']]++;	 if($connectionsNum[$relatedObject[0]['registry_object_class']]>6) $addThisRelation = false;}				
+						$xml .= "        <extRif:relatedObjectClass>".strtolower($relatedObject[0]['registry_object_class'])."</extRif:relatedObjectClass>\n";
+						$xml .= "        <extRif:relatedObjectType>".strtolower($relatedObject[0]['type'])."</extRif:relatedObjectType>\n";
+						$xml .= "        <extRif:relatedObjectListTitle>".esc($relatedObject[0]['list_title'])."</extRif:relatedObjectListTitle>\n";
+						$xml .= "        <extRif:relatedObjectDisplayTitle>".esc($relatedObject[0]['display_title'])."</extRif:relatedObjectDisplayTitle>\n";
+						$xml .= "        <extRif:relatedObjectSlug>".esc($relatedObject[0]['url_slug'])."</extRif:relatedObjectSlug>\n";						
+						$xml .= "        <extRif:relatedObjectReverseType>EXTERNAL</extRif:relatedObjectReverseType>\n";										
+						if($relation_logo) $xml .= "        <extRif:relatedObjectLogo>".esc($relation_logo)."</extRif:relatedObjectLogo>\n";
+					}
+					$xml .= "      </$elementName>\n";
+		
+			}
+		}
+	} 
+	if($forSOLR){
+		$xml .= "<extRif:relatedObjectPersonCount>".$connectionsNum['person']."</extRif:relatedObjectPersonCount>";
+		$xml .= "<extRif:relatedObjectGroupCount>".$connectionsNum['group']."</extRif:relatedObjectGroupCount>";	
+		$xml .= "<extRif:relatedObjectCollectionCount>".$connectionsNum['collection']."</extRif:relatedObjectCollectionCount>";
+		$xml .= "<extRif:relatedObjectServiceCount>".$connectionsNum['service']."</extRif:relatedObjectServiceCount>";
+		$xml .= "<extRif:relatedObjectActivityCount>".$connectionsNum['activity']."</extRif:relatedObjectActivityCount>";	
+	}		
 	return $xml;
-}
+} 
 
 function getRelationType($relation_id)
 {
@@ -1288,11 +1437,10 @@ function getRelationType($relation_id)
 	}
 	return $type;
 }
-function getRelationsXML($relation_id, $forSOLR = false)
+function getRelationsXML($relation_id, $typeArray, $forSOLR = false, $getReverse = false)
 {
-	global $typeArray;
-	$xml = '';
 
+	$xml = '';
 
 	$list = getRelationDescriptions($relation_id);
 	if( $list )
@@ -1303,18 +1451,28 @@ function getRelationsXML($relation_id, $forSOLR = false)
 			if( $etype = $element['type'] )
 			{
 
-				if ($forSOLR)
+				if ($forSOLR && !$getReverse)
 				{
 					if( array_key_exists($etype, $typeArray) )
 					{
-						$type .= ' extRif:type="'.$typeArray[$etype].'"';
+						$type .= ' extRif:type="'.$typeArray[$etype][0].'"';
 					}
 					else
 					{
 						$type .= ' extRif:type="'.changeFromCamelCase($etype).'"';
 					}
 				}
-
+				if ($forSOLR && $getReverse)
+				{
+					if( array_key_exists($etype, $typeArray) )
+					{
+						$type .= ' extRif:type="'.$typeArray[$etype][1].'"';
+					}
+					else
+					{
+						$type .= ' extRif:type="'.changeFromCamelCase($etype).'"';
+					}
+				}
 				$type .= ' type="'.esc($etype).'"';
 
 			}
@@ -1331,6 +1489,7 @@ function getRelationsXML($relation_id, $forSOLR = false)
 				$url = "          <url>".esc($element['url'])."</url>\n";
 			}
 			$xml .= "        <relation$type>$description$url</relation>\n";
+
 		}
 	}
 	return $xml;
@@ -1694,6 +1853,7 @@ function purify($dirty_html){
 	//$config->set('Cache.SerializerPath', '/tmp/htmlfilter/');
 	$config->set('HTML.AllowedElements', $HTML_Allowed_Elms); // sets allowed html elements that can be used.
 	$config->set('HTML.AllowedAttributes', $HTML_Allowed_Attr); // sets allowed html attributes that can be used.
+	$config->set('Cache.DefinitionImpl', null); // disable caching, who cares about performance
 
 
 

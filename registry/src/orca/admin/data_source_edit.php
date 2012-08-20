@@ -81,6 +81,14 @@ $party_rel_2 = $dataSource[0]['party_rel_2'];
 $assessementNotificationEmailAddr = $dataSource[0]['assessement_notification_email_addr'];
 $autoPublish = $dataSource[0]['auto_publish'];
 $qaFlag = $dataSource[0]['qa_flag'];
+$advancedHarvestingMode = $dataSource[0]['advanced_harvesting_mode'];
+
+$post_code = $dataSource[0]['post_code'];
+$address_line_1 = $dataSource[0]['address_line_1'];
+$address_line_2 = $dataSource[0]['address_line_2'];
+$city = $dataSource[0]['city'];
+$state = $dataSource[0]['state'];
+
 
 $errorMessages = '';
 $dataSourceKeyLabelClass = '';
@@ -88,9 +96,11 @@ $titleLabelClass = '';
 $uriLabelClass = '';
 $providerTypeLabelClass = '';
 $harvestMethodLabelClass = '';
+$advancedHarvestingModeLabelClass = '';
 $pushNLALabelClass = '';
 $createPrimaryClass = '';
 $institutionPagesClass = '';
+$dateLabelClass = '';
 $draft_array = getDraftRegistryObject(null, $dataSourceKey);
 $draft_record_set = array(
 						MORE_WORK_REQUIRED => 0,
@@ -110,6 +120,8 @@ if($draft_array)
 }
 $numRegistryObjects = getRegistryObjectCount($dataSourceKey);
 $numRegistryObjectsApproved = getRegistryObjectCount($dataSourceKey, null, null, APPROVED);
+
+
 
 
 if( strtoupper(getPostedValue('action')) == "CANCEL" )
@@ -235,13 +247,24 @@ if( strtoupper(getPostedValue('action')) == "SAVE" )
 		$errorMessages .= "Title is a mandatory field.<br />";
 	}
 
+	$post_code = getPostedValue('post_code');
+	$address_line_1 = getPostedValue('address_line_1');
+	$address_line_2 = getPostedValue('address_line_2');
+	$city = getPostedValue('city');
+	$state = getPostedValue('state');
+
 	$uri = getPostedValue('uri');
 	if( $uri == '' )
 	{ 
 		$uriLabelClass = gERROR_CLASS;
 		$errorMessages .= "URI is a mandatory field.<br />";
 	}	
-
+	
+	if(getPostedValue('uri')!='' && (!filter_var(getPostedValue('uri'), FILTER_VALIDATE_URL, FILTER_FLAG_HOST_REQUIRED) || strpos(getPostedValue('uri'), "file://")===0))
+  	{
+		$uriLabelClass = gERROR_CLASS;
+		$errorMessages .= "URI <em>".filter_var(getPostedValue('uri'))."</em> is not a valid URI.<br />";
+  	}
 	$providerType = getPostedValue('provider_type');
 	if( $providerType == '' )
 	{ 
@@ -345,6 +368,18 @@ if( strtoupper(getPostedValue('action')) == "SAVE" )
 	}	
 	$oaiSet = getPostedValue('oai_set');
 	$harvestDate = getPostedValue('harvest_date');
+	if($harvestMethod!='DIRECT')
+	{
+		$pattern = "/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})(:(\d{2}))?(?:([-+])(\d{2}):?(\d{2})|(Z))?/";
+		if (getPostedValue('harvest_date')!='' && !preg_match( $pattern, getPostedValue('harvest_date') ) ) 
+		{
+			$dateLabelClass = gERROR_CLASS;
+			$errorMessages .= "Harvester date format must be W3CDTF.<br />";
+		}	
+	}else{
+		$_POST['harvest_date']='';
+	}
+
 	$harvestFrequency = getPostedValue('harvest_frequency');
 	$contactName = getPostedValue('contact_name');
 	$contactEmail = getPostedValue('contact_email');
@@ -372,6 +407,8 @@ if( strtoupper(getPostedValue('action')) == "SAVE" )
 	$autoPublish = getPostedValue('auto_publish');
 	$qaFlag = getPostedValue('qa_flag');
 
+	$advancedHarvestingMode = getPostedValue('advanced_harvesting_mode');
+
 	if( getPostedValue('record_owner') )
 	{ 
 		$recordOwner = getPostedValue('record_owner');
@@ -384,6 +421,19 @@ if( strtoupper(getPostedValue('action')) == "SAVE" )
 		$harvestMethodLabelClass = gERROR_CLASS;
 		$errorMessages .= 'This Provider Type is not supported by this Harvest Method.<br />'; 
 		$errorMessages .= 'This Harvest Method does not support this Provider Type.<br />';
+	}
+	
+	
+	// Check the advanced harvest mode compatibility
+	if( $providerType && $harvestMethod && $advancedHarvestingMode == "INCREMENTAL" && $providerType != "OAI_RIF")
+	{
+		$advancedHarvestingModeLabelClass = gERROR_CLASS;
+		$errorMessages .= 'This advanced harvesting mode is not compatible with your harvest type <br/>Note: Incremental harvesting only available in OAI-PMH providers.<br />'; 
+	}
+	if( $providerType && $harvestMethod && $advancedHarvestingMode == "REFRESH" && $harvestMethod == "DIRECT")
+	{
+		$advancedHarvestingModeLabelClass = gERROR_CLASS;
+		$errorMessages .= 'This advanced harvesting mode is not compatible with your harvest method <br/>Note: Full Refresh harvesting only available in harvested feeds (consider Harvester DIRECT instead).<br />'; 
 	}
 
 	if( $errorMessages == '' )
@@ -400,7 +450,10 @@ if( strtoupper(getPostedValue('action')) == "SAVE" )
 
 		$errors = updateDataSource();
 		$errors .= updateRecordsForDataSource($dataSourceKey, $autoPublish, $autoPublishOld , $qaFlag , $qaFlagOld,$create_primary_relationships, $create_primary_relationships_old,$class_1,$class_1_old,$class_2,$class_2_old);
-
+		$errors .= updateAdvancedHarvestingModeForDataSource($dataSourceKey, $advancedHarvestingMode);
+		$errors .= updatePostCodeForDataSource( $dataSourceKey, $post_code );
+		$errors .= updateAddressForDataSource( $dataSourceKey, $address_line_1, $address_line_2, $city, $state );
+		
 		if( $errors == "" )
 		{
 			responseRedirect('data_source_view.php?data_source_key='.urlencode($dataSourceKey));
@@ -489,6 +542,69 @@ require '../../_includes/header.php';
 			<td class="">Notes:</td>
 			<td><textarea name="notes" id="notes" cols="50" rows="5"><?php printSafe($notes) ?></textarea></td>
 		</tr>
+
+		<tr>
+			<td></td>
+			<td class="label" style="text-align:left;border-bottom:2px solid black;">Reference Address <span style="font-size:0.7em; color:#333;">Note: These optional fields are used to indicate your data source's origin in spatial reporting tools.</span></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td>
+				<table>
+					<tr>
+						<td class="label">Address Line 1:</td>
+						<td><input type="text" name="address_line_1" id="address_line_1" size="60" maxlength="128" value="<?php printSafe($address_line_1) ?>" /></td>
+					</tr>
+
+					<tr>
+						<td class="label">Address Line 2:</td>
+						<td><input type="text" name="address_line_2" id="address_line_2" size="60" maxlength="128" value="<?php printSafe($address_line_2) ?>" /></td>
+					</tr>
+
+					<tr>
+						<td class="label">City:</td>
+						<td><input type="text" name="city" id="city" size="15" maxlength="15" value="<?php printSafe($city) ?>" /></td>
+					</tr>
+					
+					<tr>
+						<td class="label">Post Code:</td>
+						<td><input type="text" name="post_code" id="post_code" size="15" maxlength="6" value="<?php printSafe($post_code) ?>" /><br/></td>
+					</tr>
+
+					<tr>
+						<td class="label">State:</td>
+						<td>
+							<?php
+								$states = array(
+									'ACT'=>'Australian Capital Territory',
+									'NSW'=>'New South Wales',
+									'NT'=>'Northern Territory',
+									'QLD'=>'Queensland',
+									'SA'=>'South Australia',
+									'TAS'=>'Tasmania',
+									'VIC'=>'Victoria',
+									'WA'=>'Western Australia',
+								);
+							?>
+							<select name="state" id="state">
+								<option value=""></option>
+								<?php 
+									foreach($states as $sh=>$full){
+										if($state==$sh){
+											echo '<option value="'.$sh.'" selected=selected>'.$full.'</option>';
+										}else{
+											echo '<option value="'.$sh.'">'.$full.'</option>';
+										}
+									}
+								?>
+							</select>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+
+		
 		<tr style="border-bottom:2px solid black;">
 		<td colspan="2" style="border-bottom:2px solid black;"><span style="float:left;">Records Management Settings</span>
 		</td>
@@ -860,9 +976,24 @@ require '../../_includes/header.php';
 			<td class="">OAI Set:</td>
 			<td><input type="text" name="oai_set" id="oai_set" size="30" maxlength="128" value="<?php printSafe($oaiSet) ?>" /></td>
 		</tr>
+		
+		<tr id="advanced_harvesting_options_row">
+			<td <?php echo $advancedHarvestingModeLabelClass; ?>>Advanced Harvest Mode:</td>
+			<td>
+				<a onclick="javascript: $(this).hide(); $('#advanced_harvesting_options').show();">show advanced options</a>
+				
+				<div id="advanced_harvesting_options" class="hide">
+					<input type="radio" name="advanced_harvesting_mode" value="STANDARD"<?=($advancedHarvestingMode=="STANDARD" ? ' checked="checked"' : '');?> /> Standard Mode<br/>
+					<input type="radio" name="advanced_harvesting_mode" value="INCREMENTAL"<?=($advancedHarvestingMode=="INCREMENTAL" ? ' checked="checked"' : '');?> /> Incremental Mode<br/>
+					<input type="radio" name="advanced_harvesting_mode" value="REFRESH"<?=($advancedHarvestingMode=="REFRESH" ? ' checked="checked"' : '');?> /> Full Refresh Mode
+				</div>
+				
+				
+			</td>
+		</tr>
 
 		<tr id="harvest_date_row">
-			<td class="">Harvest Date:</td>
+			<td <?php echo $dateLabelClass; ?>>Harvest Date:</td>
 			<?php 		
 				$origin_dt = new DateTime(date("y-m-d h:s",time())) ;
 			    $remote_dtz = new DateTimeZone('GMT');
@@ -916,8 +1047,8 @@ require '../../_includes/header.php';
 	</tbody>
 	<tbody>
 		<tr>
-			<td width="128"></td>
-			<td><input type="submit" name="action" value="Cancel" />&nbsp;&nbsp;<input type="submit" name="action" value="Save"  onClick="return nlaPushCheck();"/>&nbsp;&nbsp;</td>
+			<td width="175"></td>
+			<td><input type="submit" name="action" value="Save" onClick="return nlaPushCheck();"/>&nbsp;&nbsp;<input type="submit" name="action" value="Cancel" />&nbsp;&nbsp;</td>
 		</tr>
 		<tr>
 			<td></td>

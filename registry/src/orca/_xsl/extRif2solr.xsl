@@ -340,9 +340,14 @@
     <xsl:template match="ro:relatedObject">
 
             <xsl:apply-templates/>
-       
+      
     </xsl:template>
-    
+     <xsl:template match="ro:relatedObject/ro:relation/ro:description">
+    <xsl:element name="field">
+        <xsl:attribute name="name">related_object_relation_description</xsl:attribute>
+            <xsl:value-of select="."/>.....      
+    </xsl:element>  
+    </xsl:template>      
     <xsl:template match="ro:relatedObject/ro:key">
         <xsl:element name="field">
             <xsl:attribute name="name">related_object_key</xsl:attribute>
@@ -390,9 +395,13 @@
         	</xsl:otherwise>
         </xsl:choose>       
     </xsl:element>  
+    <xsl:element name="field">
+        <xsl:attribute name="name">related_object_relation_description</xsl:attribute>
+            <xsl:value-of select="."/>      
+    </xsl:element>    
     </xsl:template>
-
     
+ 
     <xsl:template match="ro:coverage/ro:temporal/extRif:date[@type = 'dateFrom'] | ro:coverage/ro:temporal/extRif:date[@type = 'dateTo']">
 
 	        <xsl:element name="field">	            

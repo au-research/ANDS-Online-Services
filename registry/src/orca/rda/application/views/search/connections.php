@@ -17,8 +17,8 @@ limitations under the License.
 **/
 ?>
 <p>
-
-<?php
+<span id="connections-realnumfound">1</span>
+<?php /*
 $theContributor =  getInstitutionPage($theGroup);
 if($person['numfound']==0&&$group['numfound']==0&&$collection['numfound']==0&&$service['numfound']==0&&$activity['numfound']==0&&!$theContributor)
 {
@@ -197,5 +197,5 @@ function findRelationshipDescription($key, $relatedKeys, $relationshipDescriptio
 		}
 	}
 }
-?>
+*/ ?>
 </p>

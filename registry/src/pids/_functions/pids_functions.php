@@ -91,7 +91,22 @@ function pidsRequest($serviceName, $parameters)
 	$requestBody .= '</request>';
 	
 	$context  = stream_context_create(array('http' => array('method' => 'POST', 'header' => 'Content-Type: text/plain', 'content' => $requestBody)));
-	$result = file_get_contents($requestURI, false, $context);
+	//$result = file_get_contents($requestURI, false, $context);
+	// create curl resource
+	$ch = curl_init();
+
+	// set url
+	curl_setopt($ch, CURLOPT_URL, $requestURI);
+
+	//return the transfer as a string
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+	curl_setopt($ch, CURLOPT_POST, TRUE);
+	curl_setopt($ch, CURLOPT_POSTFIELDS, $requestBody);
+	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);//VERY IMPORTANT, skip SSL
+
+	// $output contains the output string
+	$result = curl_exec($ch);
+	//var_dump($output);
 	if( $result )
 	{
 		$resultXML = $result;

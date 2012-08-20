@@ -477,8 +477,8 @@ CREATE TABLE tbl_registry_objects (
 ALTER TABLE dba.tbl_registry_objects OWNER TO dba;
 ALTER TABLE dba.tbl_registry_objects ADD COLUMN key_hash character varying(255) DEFAULT ''::character varying;
 ALTER TABLE dba.tbl_registry_objects ADD COLUMN registry_date_modified bigint DEFAULT NULL;
-ALTER TABLE dba.tbl_registry_objects ADD COLUMN slug character varying(512);
-ALTER TABLE dba.tbl_registry_objects ADD manually_assessed_flag smallint NOT NULL DEFAULT 0
+ALTER TABLE dba.tbl_registry_objects ADD COLUMN url_slug character varying(512);
+ALTER TABLE dba.tbl_registry_objects ADD manually_assessed_flag smallint NOT NULL DEFAULT 0;
 ALTER TABLE dba.tbl_registry_objects ADD gold_status_flag smallint NOT NULL DEFAULT 0;
 ALTER TABLE dba.tbl_registry_objects ADD quality_level smallint;
 ALTER TABLE dba.tbl_registry_objects ADD quality_level_result text;

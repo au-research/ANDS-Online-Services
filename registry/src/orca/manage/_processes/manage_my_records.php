@@ -160,9 +160,9 @@ switch(getQueryValue('action'))
 		foreach($keys AS $key)
 		{
 			$returnErrors .= approveDraft(rawurldecode($key), $data_source_key);			
-			syncKey(rawurldecode($key), $data_source_key);
+			$returnErrors .= syncKey(rawurldecode($key), $data_source_key);
 		}
-		//deleteSolrHashKeys(sha1($key.$data_source_key));//delete the draft		
+		//deleteSolrHashKeys(sha1($key.$data_source_key));//delete the draft
 		$response['alert'] = $returnErrors;
 		$response['responsecode'] = "1";
 		echo json_encode($response);
@@ -173,15 +173,16 @@ switch(getQueryValue('action'))
 	
 	case "PUBLISH":
 		deleteSetofSolrDrafts($keys, $data_source_key);
+		//var_dump($keys);
 		foreach($keys AS $key){
 			//is it a draft
 			$isDraft = getDraftRegistryObject(rawurldecode($key), $data_source_key);
 			if($isDraft){
 				//is a draft, have to approve and do all the jazz with it first
-				approveDraft($key, $data_source_key);
+				$error = approveDraft($key, $data_source_key);
 				//deleteSolrHashKey(sha1($key.$data_source_key));//delete the draft
-				updateRegistryObjectStatus(rawurldecode($key), PUBLISHED);
-				syncKey(rawurldecode($key), $data_source_key);
+				$error .= updateRegistryObjectStatus(rawurldecode($key), PUBLISHED);
+				$error .= syncKey(rawurldecode($key), $data_source_key);
 				$response['responsecode'] = "1";
 				$response['alert'] = $error;
 				echo json_encode($response);
@@ -193,15 +194,15 @@ switch(getQueryValue('action'))
 				echo json_encode($response);
 				if(isContributorPage(rawurldecode($key)))
 				{
-				$theObject = getRegistryObject(rawurldecode($key), $overridePermissions = true);
-				$mailSubject = $theObject[0]['list_title'].' contributor page was published on '.date("d-m-Y h:m:s");						
-				$mailBody = eHTTP_APP_ROOT.'orca/view.php?key='.urlencode($key);	
-				send_email(eCONTACT_EMAIL,$mailSubject,$mailBody);	
-				}	
+					$theObject = getRegistryObject(rawurldecode($key), $overridePermissions = true);
+					$mailSubject = $theObject[0]['list_title'].' contributor page was published on '.date("d-m-Y h:m:s");						
+					$mailBody = eHTTP_APP_ROOT.'orca/view.php?key='.urlencode($key);	
+					send_email(eCONTACT_EMAIL,$mailSubject,$mailBody);	
+				}
 			}
-					
 		}
-				//syncDraftKeys($keys, $data_source_key);
+		queueSyncDataSource($data_source_key);
+		//syncDraftKeys($keys, $data_source_key);
 		die();
 		
 	break;

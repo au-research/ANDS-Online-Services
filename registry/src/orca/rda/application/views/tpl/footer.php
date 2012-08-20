@@ -37,7 +37,7 @@ limitations under the License.
 	<?php echo anchor('topic', 'All Topics');?> |
 	<?php
 		if(isset($key)){
-			echo anchor($this->config->item('orca_url').'view.php?key='.$key, 'ANDS Online Services(current key)');
+			echo anchor($this->config->item('orca_url').'view.php?key='.urlencode($key), 'ANDS Online Services(current key)');
 		}else echo anchor($this->config->item('orca_url'), 'ANDS Online Services');
 	?>
 </div>

@@ -73,7 +73,46 @@ function insertDataSource()
 
 	$errors = "";
 	$strQuery = 'SELECT dba.udf_insert_data_source($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32,$33,$34)';
-	$params = getParams(array(getLoggedInUser()), $_POST, 34);
+	
+	$params = 
+		array(
+			getLoggedInUser(), //modified_who
+			getPostedValue("data_source_key"),
+			getPostedValue("title"),
+			getPostedValue("record_owner"),
+			getPostedValue("contact_name"),
+			getPostedValue("contact_email"),
+			getPostedValue("notes"),		
+			getPostedValue("allow_reverse_internal_links"),
+			getPostedValue("allow_reverse_external_links"),
+			getPostedValue("create_primary_relationships"),
+			getPostedValue("class_1"),
+			getPostedValue("primary_key_1"),
+			getPostedValue("collection_rel_1"),
+			getPostedValue("service_rel_1"),
+			getPostedValue("activity_rel_1"),
+			getPostedValue("party_rel_1"),
+			getPostedValue("class_2"),
+			getPostedValue("primary_key_2"),
+			getPostedValue("collection_rel_2"),
+			getPostedValue("service_rel_2"),
+			getPostedValue("activity_rel_2"),
+			getPostedValue("party_rel_2"),	
+			getPostedValue("push_to_nla"),
+			getPostedValue("isil_value"),	
+			getPostedValue("auto_publish"),
+			getPostedValue("qa_flag"),
+			getPostedValue("assessment_notification_email_addr"),
+			getPostedValue("uri"),
+			getPostedValue("provider_type"),
+			getPostedValue("harvest_method"),
+			getPostedValue("oai_set"),	
+			getPostedValue("harvest_date"),
+			getPostedValue("theZone"),
+			getPostedValue("harvest_frequency")			
+		);
+	
+	//$params = getParams(array(getLoggedInUser()), $_POST, 34);
 	//	print("<pre>");
 	//print_r($_POST);
 	//var_dump($params);
@@ -104,12 +143,53 @@ function updateDataSource()
 
 	$errors = "";
 	$strQuery = 'SELECT dba.udf_update_data_source($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32,$33,$34,$35)';
-	$params = getParams(array(getLoggedInUser()), $_POST, 35);
-	//print("<pre>");
-	//print_r($_POST);
-	//var_dump($params);
-	//print("</pre>");
-	//exit();
+	$params = 
+		array(
+			getLoggedInUser(), //modified_who
+			getPostedValue("data_source_key"),
+			getPostedValue("title"),
+			getPostedValue("record_owner"),
+			getPostedValue("contact_name"),
+			getPostedValue("contact_email"),
+			getPostedValue("notes"),
+			
+			getPostedValue("allow_reverse_internal_links"),
+			getPostedValue("allow_reverse_external_links"),
+			getPostedValue("create_primary_relationships"),
+			
+			
+			getPostedValue("class_1"),
+			getPostedValue("primary_key_1"),
+			getPostedValue("collection_rel_1"),
+			getPostedValue("service_rel_1"),
+			getPostedValue("activity_rel_1"),
+			getPostedValue("party_rel_1"),
+			getPostedValue("class_2"),
+			getPostedValue("primary_key_2"),
+			getPostedValue("collection_rel_2"),
+			getPostedValue("service_rel_2"),
+			getPostedValue("activity_rel_2"),
+			getPostedValue("party_rel_2"),
+			
+			
+			getPostedValue("push_to_nla"),
+			getPostedValue("isil_value"),
+			
+			getPostedValue("auto_publish"),
+			getPostedValue("qa_flag"),
+			getPostedValue("assessment_notification_email_addr"),
+			getPostedValue("institution_pages"),
+			
+			getPostedValue("uri"),
+			getPostedValue("provider_type"),
+			getPostedValue("harvest_method"),
+			getPostedValue("oai_set"),
+			
+			getPostedValue("harvest_date"),
+			getPostedValue("theZone"),
+			getPostedValue("harvest_frequency")			
+		);
+	
 	foreach($params as &$param)
 	{
 		if( $param == '' )
@@ -364,6 +444,32 @@ function getRegistryObjectKeysForDataSource($key)
 	return $resultSet;
 }
 
+
+
+function getRegistryObjectKeysForPurge($data_source_key, $harvest_id)
+{
+	global $gCNN_DBS_ORCA;
+
+	$resultSet = null;
+	$strQuery = 'SELECT * FROM dba.tbl_registry_objects WHERE data_source_key = $1 AND record_owner != $2;';
+	$params = array($data_source_key, $harvest_id);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+
+	return $resultSet;
+}
+
+function getDraftsForPurge($data_source_key, $harvest_id)
+{
+	global $gCNN_DBS_ORCA;
+
+	$resultSet = null;
+	$strQuery = 'SELECT * FROM dba.tbl_draft_registry_objects WHERE registry_object_data_source = $1 AND draft_owner != $2;';
+	$params = array($data_source_key, $harvest_id);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+
+	return $resultSet;
+}
+
 function deleteRegistryObject($registry_object_key)
 {
 	global $gCNN_DBS_ORCA;
@@ -429,6 +535,19 @@ function updateRegistryObjectStatus($registry_object_key, $status)
 		$errors = "An error occurred when trying to update the record.";
 	}
 	return $errors;
+}
+
+
+function updateRegistryObjectDateModified($registry_object_key, $new_date_modified)
+{
+
+	global $gCNN_DBS_ORCA;
+	$errors = "";
+	$resultSet = null;
+	$strQuery = 'UPDATE dba.tbl_registry_objects SET registry_date_modified = $2 WHERE registry_object_key = $1';
+	$params = array($registry_object_key, $new_date_modified);
+	$result = executeUpdateQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	return $result;
 }
 
 function insertIdentifier($identifier_id, $registry_object_key, $value, $type)
@@ -2643,6 +2762,19 @@ function getDataSourceHash($data_source_key)
 		return $resultSet[0]['key_hash'];
 }
 
+function getDataSourceAdvancedHarvestingMode($data_source_key)
+{
+	global $gCNN_DBS_ORCA;
+	$strQuery = 'SELECT advanced_harvesting_mode FROM dba.tbl_data_sources WHERE data_source_key = $1';
+	$params = array($data_source_key);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+
+	if (!isset($resultSet[0]))
+		return false;
+	else
+		return $resultSet[0]['advanced_harvesting_mode'];
+}
+
 function getDataSourceByHash($hash)
 {
 	global $gCNN_DBS_ORCA;
@@ -3196,6 +3328,21 @@ function updateAdvancedHarvestingModeForDataSource($dataSourceKey, $advancedHarv
 	global $gCNN_DBS_ORCA;
     $strQuery = 'UPDATE dba.tbl_data_sources SET advanced_harvesting_mode = $2 WHERE data_source_key = $1';
 	$params = array($dataSourceKey, $advancedHarvestingMode);
+	$result = executeUpdateQuery($gCNN_DBS_ORCA, $strQuery, $params);
+}
+
+function updatePostCodeForDataSource($dataSourceKey, $post_code)
+{
+	global $gCNN_DBS_ORCA;
+    $strQuery = 'UPDATE dba.tbl_data_sources SET post_code = $2 WHERE data_source_key = $1';
+	$params = array($dataSourceKey, $post_code);
+	$result = executeUpdateQuery($gCNN_DBS_ORCA, $strQuery, $params);
+}
+
+function updateAddressForDataSource($dataSourceKey, $address_line_1, $address_line_2, $city, $state){
+	global $gCNN_DBS_ORCA;
+    $strQuery = 'UPDATE dba.tbl_data_sources SET address_line_1 = $2, address_line_2 = $3, city = $4, state = $5 WHERE data_source_key = $1';
+	$params = array($dataSourceKey, $address_line_1, $address_line_2, $city, $state);
 	$result = executeUpdateQuery($gCNN_DBS_ORCA, $strQuery, $params);
 }
 

@@ -1036,13 +1036,13 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 		key_value = key_value.replace(/[+]/gi,"%2B");
         $.ajax({
                 type:"POST",
-                url: base_url+"search/connections/count",data:"q=relatedObject_key:"+key_value+"&key="+key_value,
+                url: base_url+"view/viewConnections/",data:"key="+key_value,
                         success:function(msg){ 
                         	//alert(key_value);
                                 $("#connections").html(msg);
                                 $('ul.connection_list li a').tipsy({live:true, gravity:'s'});
-                                if(parseInt($('#connections-realnumfound').html())==0){
-	                            	$('#connectionsRightBox').hide();
+                               if(parseInt($('#connections-realnumfound').html())==0){
+	                           	$('#connectionsRightBox').hide();
 	                            }
                                 
                         },
@@ -1295,11 +1295,17 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 					$('#endlink').prepend('<a href="http://'+ident+'">View the record for this Party in Trove</a><br/>');
         		}
         	}
-        	//identifiers.push($(this).html());
+        	
         });
 
         $.each($('#identifiers a'), function(){//find in every identifiers
+        	var ident = $(this).text();
+        	if(ident.indexOf('nla.party-')>=0){//special case for nla identifiers
+        		var nla_ident = ident.split('nla.gov.au/')[1];
+        		identifiers.push(nla_ident);
+        	}
         	identifiers.push($(this).text());
+
         });
     
         $.each($('.descriptions p'), function(){//find in every descriptions that contains the identifier some where for NLA parties
@@ -1326,7 +1332,7 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
         	}
         });
 
-        console.log(identifiers);
+        //console.log(identifiers);
         if (identifiers.length > 0){
 	        var identifierSearchString = '+fulltext:(';
 	        var first = true;
@@ -1347,7 +1353,7 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 	        $.ajax({
 	            type:"POST",
 	            url: base_url+"search/seeAlso/count/identifiers"+relatedClass,
-	            data:"q=*:*&classFilter=party;activity&typeFilter=All&groupFilter=All&subjectFilter=All&licenceFilter=All&page=1&spatial_included_ids=&temporal=All&excluded_key="+key_value+'&extended='+identifierSearchString,
+	            data:"q=*:*&classFilter=party&typeFilter=All&groupFilter=All&subjectFilter=All&licenceFilter=All&page=1&spatial_included_ids=&temporal=All&excluded_key="+key_value+'&extended='+identifierSearchString,
 	                    success:function(msg){
 	                    	//console.log(msg);
 	                            $("#seeAlso-IdentifierBox").html(msg);
@@ -1364,7 +1370,7 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 		        $.ajax({
 	                type:"POST",
 	                url: base_url+"search/seeAlso/content/identifiers",
-	                data:"q=*:*&classFilter=party;activity&typeFilter=All&groupFilter=All&subjectFilter=All&licenceFilter=All&page=1&spatial_included_ids=&temporal=All&excluded_key="+key_value+'&extended='+identifierSearchString,
+	                data:"q=*:*&classFilter=party&typeFilter=All&groupFilter=All&subjectFilter=All&licenceFilter=All&page=1&spatial_included_ids=&temporal=All&excluded_key="+key_value+'&extended='+identifierSearchString,
 	                    success:function(msg){
 	                            $("#infoBox").html(msg);
 	                            $(".accordion").accordion({autoHeight:false, collapsible:true,active:false});
@@ -1463,7 +1469,7 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 		    //console.log(coverages.html());
 		    //console.log(coverages.text());
 		    
-		    
+		    var mapContainsOnlyMarkers = true; // if there is only marker, then zoom out to a default depth (markers get "bounded" at max zoom level)
 		    var locationText = [];
 		    
 		    $.each(coverages, function(){
@@ -1480,6 +1486,7 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 						//console.log(split.length);
 						
 						if(split.length>1){
+							mapContainsOnlyMarkers = false;
 							coords = [];
 							$.each(split, function(){
 								coord = stringToLatLng(this);
@@ -1506,6 +1513,8 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 					            raiseOnDrag:false,
 					            visible:true
 					        });
+					        // CC-197/CC-304 - Center map on markers
+					        bounds.extend(stringToLatLng($(this).html()));
 						}
 						
 						
@@ -1521,6 +1530,7 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 		    		
 		    	}else{
 		    		drawable = true;
+		    		mapContainsOnlyMarkers = false;
 		    		//there is a northlimit in the coverage text
 		    		//console.log(coverages);
 
@@ -1585,7 +1595,20 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 		            visible:true
 		        });
 			});
+			
 			map2.fitBounds(bounds);
+			
+			if (mapContainsOnlyMarkers) 
+			{
+				// CC-197/CC-304 - Center map on markers
+				// fitBounds tends to wrap to max zoom level on markers
+				// we still want a "good" fit if there are multiple markers, but 
+				// if we're zoomed to close, lets zoom out once the map loads!
+				var listener = google.maps.event.addListenerOnce(map2, "idle", function() { 
+					  if (map2.getZoom() > 3) map2.setZoom(3); 
+					});
+			}
+			
 			if(!drawable) $('#spatial_coverage_map').hide();
 		}
 	}

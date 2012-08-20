@@ -556,12 +556,12 @@ limitations under the License.
     	$fields = array(
 			'q'=>'related_object_key:"'.$key.'"','version'=>'2.2','rows'=>'200000','start'=>'0','indent'=>'on', 'wt'=>'json','fl'=>'key,class,type,data_source_key'
 		);
-		$filter_query = '+class:("'.$class.'")';
+		$filter_query = '+class:("'.$class.'") +status:(PUBLISHED)';
 		if($type) $filter_query = '+type:("'.$type.'")';
 		if($reverseLinks=="INT")$filter_query .= '+data_source_key:("'.$dataSourceKey.'")';
 		if($reverseLinks=="EXT")$filter_query .= '-data_source_key:("'.$dataSourceKey.'")';
 
-		if($excludeKeys!='')$filter_query .= '-key: '.escapeSolrValue($excludeKeys);
+		if($excludeKeys!='')$filter_query .= '-key: '.escapeSolrValue($excludeKeys).' -key: '.escapeSolrValue($key);
 
 		$fields['fq']=$filter_query;
 		$json = $this->fireSearch($fields, '');

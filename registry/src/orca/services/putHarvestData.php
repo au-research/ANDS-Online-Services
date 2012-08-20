@@ -141,7 +141,7 @@ else
 			{	
 				// Import the data.
 				$deletedRegistryObjectCount = checkforOAIdeletes($OAIPMHDocument);
-				$runErrors = importRegistryObjects($registryObjects, $dataSourceKey, $runResultMessage);
+				$runErrors = importRegistryObjects($registryObjects, $dataSourceKey, $runResultMessage, $harvestRequestId, NULL,  $harvestRequestId);
 			}
 
 			$timeTaken = substr((string)(microtime(true) - $startTime), 0, 5);
@@ -206,13 +206,16 @@ else
 		}
 		if( $done == 'TRUE' && $mode == 'HARVEST')
 		{
+			//Delete all records that are in the database and have a different HarvestID to the current Harvest
+			$actions .= purgeDataSource($dataSourceKey, $harvestRequestId);//checking for REFRESH is done inside this function as well
 		    queueSyncDataSource($dataSourceKey);
+		    $actions .= 'SYNCING data source. Please wait...';
 		}
 	}
 	
 	if( $runErrors )
 	{
-		$message .= $runErrors;
+		$actions .= $runErrors;
 		//insertDataSourceEvent($dataSourceKey, $runErrors, $log_type);
 	}
 

@@ -40,6 +40,7 @@ function runImport($dataSource, $testOnly)
 	$errors = null;
 	$log_type = "INFO";
 	$startTime = microtime(true);
+	$advancedHarvestingMethod = $dataSource[0]['advanced_harvesting_mode'];
 	$mode = 'harvest'; if( $testOnly ){ $mode = 'test'; }
 	
 	// DIRECT HARVEST
@@ -50,6 +51,11 @@ function runImport($dataSource, $testOnly)
 		$registryObjects = new DOMDocument();
 		$result = $registryObjects->load($dataSourceURI);
 		$errors = error_get_last();
+		if(!filter_var($dataSourceURI, FILTER_VALIDATE_URL, FILTER_FLAG_HOST_REQUIRED))
+  		{
+  			 $errors['message'] =  " I/O warning : failed to load external entity . URI \"".$dataSourceURI."\" is not a valid URI";
+  		}
+
 		if( $errors )
 		{
 			$runErrors .= "Document Load Error: ".$errors['message']."\n";
@@ -216,6 +222,7 @@ function runImport($dataSource, $testOnly)
 			$harvestRequest .= '&date='.urlencode($harvestDate);
 			$harvestRequest .= '&frequency='.urlencode($harvestFrequency);
 			$harvestRequest .= '&mode='.urlencode($mode);
+			$harvestRequest .= '&ahm='.urlencode($advancedHarvestingMethod);
 			
 			// Submit the request.
 			$runErrors = submitHarvestRequest(gORCA_HARVESTER_BASE_URI.$harvestRequest);
@@ -785,9 +792,50 @@ function deleteDataSourceDrafts($dataSourceKey , $message)
 			$errors .= deleteDraftRegistryObject($dataSourceKey, $draft_key);
 		}
 	}
-	$message = "DELETED ".count($drafts)." DARFTS\n";
+	$message = "DELETED ".count($drafts)." DRAFTS\n";
 	queueSyncDataSource($dataSourceKey);
 	return $errors;	
 }
 
+/*
+   Delete all records that are in the database and have a different HarvestID to the current Harvest 
+   (NB: manually created records should be excluded -- they should stay, even if REFRESH is on)	
+*/
+function purgeDataSource($dataSourceKey, $harvestRequestId){
+	$ahm = getDataSourceAdvancedHarvestingMode($dataSourceKey);
+	if($ahm=='REFRESH'){//only if the advanced harvesting mode is REFRESH
+		$message = '';
+		$total = 0;
+		$total_drafts = 0;
+
+		$keys = getRegistryObjectKeysForPurge($dataSourceKey, $harvestRequestId);
+		if($keys){
+			for( $i=0; $i < count($keys); $i++ ){
+				$key  = $keys[$i]['registry_object_key'];
+				if(ctype_alnum($keys[$i]['record_owner'])){
+					$message .= deleteRegistryObject($key);
+					$total++;
+				}
+			}
+		}
+
+		$drafts = getDraftsForPurge($dataSourceKey, $harvestRequestId);
+		if($drafts){
+			for( $i=0; $i < count($drafts); $i++ ){
+				$key  = $drafts[$i]['draft_key'];
+				if(ctype_alnum($drafts[$i]['draft_owner'])){
+					$message .= deleteDraftRegistryObject($dataSourceKey, $key);
+					$total_drafts++;
+				}
+			}
+		}
+
+		//$total = count($keys) + count($drafts);
+		if($total>0)$message .= "DELETED ".$total." REGISTRY OBJECTS NOT IN HARVEST: $harvestRequestId\n";
+		if($total_drafts>0)$message .= "DELETED ".$total_drafts." DRAFTS NOT IN HARVEST: $harvestRequestId\n";
+		return $message;
+	}else{
+		return false;
+	}
+}
 ?>

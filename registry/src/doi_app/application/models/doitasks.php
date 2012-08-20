@@ -33,7 +33,7 @@
 
 	function xml(){	
 		global $api_version;		
-		$xml = '';
+		$xml = ''; $error = '';
 		$debug = $this->input->get('debug');
 		
 		if($debug && $debug == 'true')	
@@ -47,11 +47,12 @@
 		if(!$response_type)	$response_type = 'string';		
 		$api_version = $this->input->get('api_version');
 		if(!$api_version)	$api_version = '1.0';	
+		
 		if(!$doi_id)
 		{
-			$xml = doisGetUserMessage("MT010", $doi_id ,$response_type,$app_id=NULL, "You must provide the doi value to obtain it's xml",$urlValue=NULL);
+			$error = doisGetUserMessage("MT010", $doi_id ,$response_type,$app_id=NULL, "You must provide the doi value to obtain it's xml",$urlValue=NULL);
 		}	
-		if($xml=='')
+		if(!$error)
 		{
 			$doidata = getxml($doi_id);		
 			if($doidata->num_rows() > 0){			
@@ -59,18 +60,39 @@
 				{
 					if($row->status=='ACTIVE')
 					{
-						$xml = $row->datacite_xml;
-						header('Content-type: text/xml');											
+						$xml = $row->datacite_xml;							
 					}else{				
-						$xml = doisGetUserMessage("MT012", $doi_id, $response_type,$app_id=NULL, "",$urlValue=NULL);
+						$error = doisGetUserMessage("MT012", $doi_id, $response_type,$app_id=NULL, "",$urlValue=NULL);
 					}
 				}
 
 			}else{			
-				$xml = doisGetUserMessage("MT011", $doi_id, $response_type,$app_id=NULL, "",$urlValue=NULL);		
+				$error = doisGetUserMessage("MT011", $doi_id, $response_type,$app_id=NULL, "",$urlValue=NULL);		
 			}	
 		}
-		echo $xml;
+		
+		if ($error)
+		{
+			echo $error;
+		}
+		elseif ($response_type == "json")
+		{
+			// Backwards compatible fix for CC-213 to address XML geting returned as unwrapped XML (even when JSON requested)
+			header('Content-type: application/json');
+			echo doisGetUserMessage("MT013", $doi_id, $response_type, NULL, $xml, NULL);
+		}
+		elseif ($response_type == "xml")
+		{
+			// Keep existing behaviour for backwards compatibility
+			header('Content-type: text/xml');
+			echo $xml;
+		}
+		elseif ($response_type == "string")
+		{
+			echo $xml;
+		}
+		
+		
 	}
 	
 	function update(){

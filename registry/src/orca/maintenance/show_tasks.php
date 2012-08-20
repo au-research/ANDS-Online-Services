@@ -307,6 +307,7 @@ function ds_chooser()
 		$dataSourceTitle = $rawResults[$i]['title'];
 		$return .= "<option value=\"".rawurlencode($dataSourceKey)."\">".esc($dataSourceTitle)."</option>\n";
 	}
+	$return .='<option value="PUBLISH_MY_DATA">PUBLISH MY DATA</option>';
 	$return .= '</select>';
 
 	return $return;

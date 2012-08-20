@@ -4,7 +4,7 @@ function doisGetResponseType($response)
 	$responses = explode(" ", $response);
 	return $responses[0];
 }							
-function doisGetUserMessage($responseCode, $doi_id,$response_type="string",$app_id=NULL,$verbosemessage=NULL,$urlValue=NULL)
+function doisGetUserMessage($responseCode, $doi_id,$response_type="string",$app_id="",$verbosemessage="",$urlValue="")
 {
 	$message = '';
 	$htmlHeader = '';
@@ -72,7 +72,12 @@ function doisGetUserMessage($responseCode, $doi_id,$response_type="string",$app_
 		case "MT012":
 			$message = "No metadata exists in the Cite My Data service for DOI ".$doi_id;
 			$type = "failure";					
-			break;						
+			break;		
+		case "MT013":
+			$message = $verbosemessage;
+			$verbosemessage = strlen($verbosemessage) . " bytes";
+			$type = "success";					
+			break;			
 		default:
 			$message = "There has been an unidentified error processing your doi request. For more information please contact services@ands.org.au.";
 			$type = "failure";

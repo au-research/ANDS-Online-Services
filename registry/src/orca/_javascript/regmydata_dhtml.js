@@ -1258,7 +1258,7 @@ function saveAndPreview() {
 		$('#rda_preview_xml').click(function(){
 			var key = $('#object_mandatoryInformation_key').val();
 			var ds = $('#object_mandatoryInformation_dataSource').val();
-			$.get(rootAppPath + 'orca/services/getRegistryObject.php?key='+encodeURIComponent(key)+'&ds='+encodeURIComponent(ds)+'&type=plain',
+			$.get(rootAppPath + 'orca/services/getRegistryObject.php?key='+encodeURIComponent(key)+'&ds='+encodeURIComponent(ds)+'&type=plain&stripped=true',
 		       function(data) {
 				$('#rifcs_plain_content').val(data);
 		        $.blockUI({
@@ -1840,7 +1840,7 @@ function addVocabComplete(field, type) {
 			if(ui.item.value!="Unknown/Other"){
 				var errorDiv = field.replace("#object","errors");
 				var theDiv = document.getElementById(errorDiv);
-				theDiv.style.display='none';				
+				if(theDiv!=null) theDiv.style.display='none';				
 			}
 			return false;
 		}
@@ -2394,7 +2394,7 @@ $('body').click(function() {
 
 function showClearAlert()
 {
-		var userChoice = confirm("**WARNING**\nAny changes since your last save will be lost\nAre you sure??");
+		var userChoice = confirm("**WARNING**\nAny changes since your last save will be lost.\nAre you sure?");
 		if(userChoice == true)
 		{
 			$(window.location).attr('href','my_records.php');

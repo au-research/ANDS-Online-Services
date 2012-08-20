@@ -57,8 +57,8 @@ public class HarvestDAO
     protected static final String CREATE_HARVEST_SQL =
         "INSERT INTO harvest(harvest_id, provider_id, response_url, " +
         "method, mode, date_started, date_completed, resumption_token, " +
-        "status, date_from, date_until, metadata_prefix, set)" +
-        " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        "status, date_from, date_until, metadata_prefix, set, advanced_harvesting_mode)" +
+        " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     
     protected static final String SELECT_PROVIDER_SQL =
         "SELECT * FROM provider WHERE source_url = ?";
@@ -71,7 +71,7 @@ public class HarvestDAO
         "harvest.harvest_id, harvest.status, harvest.response_url, " +
         "harvest.method, harvest.mode, harvest.date_started, " +
         "harvest.date_completed, harvest.resumption_token, harvest.date_from, " + 
-        "harvest.date_until, harvest.metadata_prefix, provider.provider_id, " +
+        "harvest.date_until, harvest.advanced_harvesting_mode, harvest.metadata_prefix, provider.provider_id, " +
         "harvest.set, schedule.last_run, schedule.next_run, schedule.frequency " + 
         "FROM provider, harvest, schedule " +
         "WHERE provider.provider_id=harvest.provider_id " +
@@ -82,7 +82,7 @@ public class HarvestDAO
         "harvest.harvest_id, harvest.status, harvest.response_url, " +
         "harvest.method, harvest.mode, harvest.date_started, " +
         "harvest.date_completed, harvest.resumption_token, harvest.date_from, " +
-        "harvest.date_until, harvest.metadata_prefix, provider.provider_id, " +
+        "harvest.date_until, harvest.advanced_harvesting_mode, harvest.metadata_prefix, provider.provider_id, " +
         "harvest.set, schedule.last_run, schedule.next_run, schedule.frequency " + 
         "FROM provider, harvest, schedule " +
         "WHERE provider.provider_id=harvest.provider_id " +
@@ -230,6 +230,7 @@ public class HarvestDAO
             ps.setString(11, harvest.getUntil());
             ps.setString(12, harvest.getMetadataPrefix());
             ps.setString(13, harvest.getSet());
+            ps.setString(14, harvest.getAHM());
             ps.executeUpdate();
             ps.close();
             ps = null;
@@ -467,6 +468,7 @@ public class HarvestDAO
                 h.setUntil(rs.getString("date_until"));
                 h.setMetadataPrefix(rs.getString("metadata_prefix"));
                 h.setSet(rs.getString("set"));
+                h.setAHM(rs.getString("advanced_harvesting_mode"));
                 h.setProviderID();
                 if (rs.getTimestamp("last_run") != null)
                 {
@@ -648,6 +650,7 @@ public class HarvestDAO
                 h.setUntil(rs.getString("date_until"));
                 h.setMetadataPrefix(rs.getString("metadata_prefix"));
                 h.setSet(rs.getString("set"));
+                h.setAHM(rs.getString("advanced_harvesting_mode"));
                 h.setProviderID();
                 if (rs.getTimestamp("last_run") != null)
                 {

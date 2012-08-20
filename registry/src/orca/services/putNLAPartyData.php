@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 *******************************************************************************/
 // Include required files and initialisation.
+
 require '/var/www/htdocs/registry/global_config.php';
 
 define('gRIF_SCHEMA_PATH', eAPPLICATION_ROOT.'/orca/schemata/registryObjects.xsd');
@@ -59,6 +60,11 @@ function esc($unsafeString, $forJavascript=false)
         $safeString = str_replace("\n", "&#xA;", $safeString);
         return $safeString;
 }
+
+// Open a connection to the database.
+// This will be closed automatically by the framework.
+openDatabaseConnection($gCNN_DBS_ORCA, eCNN_DBS_ORCA);
+
 
 // Open a connection to the database.
 // This will be closed automatically by the framework.

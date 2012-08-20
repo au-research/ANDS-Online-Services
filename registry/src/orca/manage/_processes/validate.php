@@ -21,6 +21,7 @@ if (($keyValue && $firstLoad) && $draft = getDraftRegistryObject($keyValue, $dat
 {
 	
 	$jQueryMessages = '';
+	$reverseLinks = 'true';
 	
 	$thisDataSource = getDataSources($dataSourceValue, null);
 	if ($thisDataSource[0]['qa_flag'] == "t")
@@ -31,8 +32,12 @@ if (($keyValue && $firstLoad) && $draft = getDraftRegistryObject($keyValue, $dat
 	{
 		$jQueryMessages .= "<script>qaRequired = false;</script>";
 	}
+	
+	$allow_reverse_internal_links = $thisDataSource[0]['allow_reverse_internal_links'];
+	$allow_reverse_external_links = $thisDataSource[0]['allow_reverse_external_links'];
+	if($allow_reverse_internal_links!='t' && $allow_reverse_external_links!='t') $reverseLinks='false';	
 
-	$jQueryMessages .= runQualityCheck($draft[0]['rifcs'], $draft[0]['class'],$draft[0]['registry_object_data_source'], 'script');
+	$jQueryMessages .= runQualityCheck($draft[0]['rifcs'], $draft[0]['class'],$draft[0]['registry_object_data_source'], 'script',$reverseLinks);
 	
 	// Enable/disable editing FOR UNPRIVILEGED users in readOnly states
 	if (!userIsORCA_LIAISON() && (in_array($draft[0]['status'], array(SUBMITTED_FOR_ASSESSMENT, ASSESSMENT_IN_PROGRESS))) )
@@ -94,6 +99,7 @@ if (($keyValue && $firstLoad) && $draft = getDraftRegistryObject($keyValue, $dat
 else if ($keyValue && $draft = getDraftRegistryObject($keyValue, $dataSourceValue)) 
 {
 	$jQueryMessages = '';
+	$reverseLinks='true';		
 	$thisDataSource = getDataSources($dataSourceValue, null);
 
 	if ($thisDataSource[0]['qa_flag'] == "t")
@@ -104,7 +110,12 @@ else if ($keyValue && $draft = getDraftRegistryObject($keyValue, $dataSourceValu
 	{
 		$jQueryMessages .= "<script>qaRequired = false;</script>";
 	}
-	$jQueryMessages .= runQualityCheck($draft[0]['rifcs'], $draft[0]['class'], $draft[0]['registry_object_data_source'], 'script');
+	
+	$allow_reverse_internal_links = $thisDataSource[0]['allow_reverse_internal_links'];
+	$allow_reverse_external_links = $thisDataSource[0]['allow_reverse_external_links'];
+	if($allow_reverse_internal_links!='t' && $allow_reverse_external_links!='t') $reverseLinks='false';		
+	
+	$jQueryMessages .= runQualityCheck($draft[0]['rifcs'], $draft[0]['class'], $draft[0]['registry_object_data_source'], 'script',$reverseLinks);
 	runQualityLevelCheckForDraftRegistryObject($keyValue, $dataSourceValue);
 	$draft = getDraftRegistryObject($keyValue, $dataSourceValue);
 	$jQueryMessages .= "<script>qualityLevel = ". $draft[0]['quality_level']. ";</script>";
@@ -138,6 +149,7 @@ else if($json)
 	$transformResult = $proc->transformToXML($rifcs);
 	
 	$thisDataSource = getDataSources($objectDataSource, null);
+	$reverseLinks = 'true';
 	$jQueryMessages = "<script>qualityLevel = 999;</script>";
 	if ($thisDataSource[0]['qa_flag'] == "t")
 	{
@@ -147,7 +159,11 @@ else if($json)
 	{
 		$jQueryMessages .= "<script>qaRequired = false;</script>";
 	}
-	$jQueryMessages .= runQualityCheck($transformResult, $objectClass, $objectDataSource, 'script');
+	$allow_reverse_internal_links = $thisDataSource[0]['allow_reverse_internal_links'];
+	$allow_reverse_external_links = $thisDataSource[0]['allow_reverse_external_links'];
+	if($allow_reverse_internal_links!='t' && $allow_reverse_external_links!='t') $reverseLinks='false';	
+		
+	$jQueryMessages .= runQualityCheck($transformResult, $objectClass, $objectDataSource, 'script', $reverseLinks);
 	$jQueryMessages .= "<script>setStatusSpan('" . getRegistryObjectStatusSpan('DRAFT') . " (unsaved)'); </script>";
 	print($jQueryMessages);				
 } 
