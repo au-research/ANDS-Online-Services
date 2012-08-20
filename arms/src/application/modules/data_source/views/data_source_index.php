@@ -285,7 +285,7 @@
 				<ul class="ro-list">
 					{{#statuscounts}}
 				  		{{#status}}
-				  			<li class="status_{{status}}"><span class="name">{{status}}</span> <span class="num">{{count}}</span></li>
+				  			<li class="status_{{status}}" name="{{status}}" type="status"><span class="name">{{status}}</span><span class="num">{{count}}</span></li>
 				  		{{/status}}
 			  		{{/statuscounts}}
 				</ul>
@@ -298,7 +298,7 @@
 				<ul class="ro-list">
 					{{#qlcounts}}
 				  		{{#level}}
-				  			<li class="ql_{{level}}"><span class="name">Quality Level {{level}}</span> <span class="num">{{count}}</span></li>
+				  			<li class="ql_{{level}}" name="{{level}}" type="quality_level"><span class="name">Quality Level {{level}}</span> <span class="num">{{count}}</span></li>
 				  		{{/level}}
 			  		{{/qlcounts}}
 				</ul>

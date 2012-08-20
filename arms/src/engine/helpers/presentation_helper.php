@@ -84,3 +84,7 @@ function curl_post($url, $post)
     } */
     return $data;
 }
+
+function url_suffix(){
+	return '#!/';
+}

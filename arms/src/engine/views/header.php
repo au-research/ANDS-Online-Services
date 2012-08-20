@@ -58,7 +58,7 @@
           <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">My Records <b class="caret"></b></a>
             <ul class="dropdown-menu sub-menu pull-right">
-              <li class=""><a href="#">Manage My Records</a></li>
+              <li class=""><?php echo anchor('registry_object/manage', 'Manage My Records');?></li>
               <li class=""><a href="#">Add My Records</a></li>
               <li class=""><a href="#">Publish My Records</a></li>
             </ul>
@@ -66,7 +66,7 @@
           <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">My Datasources <b class="caret"></b></a>
             <ul class="dropdown-menu sub-menu pull-right">
-              <li class=""><a href="#">Manage My Datasources</a></li>
+              <li class=""><?php echo anchor('data_source/manage', 'Manage My Datasources');?></li>
               <li class=""><a href="#">Datasources Tools</a></li>
             </ul>
           </li>

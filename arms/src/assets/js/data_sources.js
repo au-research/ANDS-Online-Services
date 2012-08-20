@@ -172,6 +172,13 @@ function load_datasource(data_source_id){
 					width:75,enable:false
 				});
 			});
+
+			$('.ro-list li').click(function(){
+				var type = $(this).attr('type');
+				var name = $(this).attr('name');
+				var url_to = base_url+'registry_object/manage/'+data_source_id+'/'+suffix+'browse/thumbnails/'+type+'='+name;
+				window.location = url_to;
+			});
 		}
 	});
 	return false;

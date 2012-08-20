@@ -55,7 +55,7 @@
 	<!-- ARMS scripts -->
     <script>
         var base_url = '<?php echo base_url();?>';
-        var suffix = '#!/';
+        var suffix = '<?php echo url_suffix();?>';
     </script>
 	<script src="<?php echo base_url();?>assets/js/scripts.js"></script>
 

@@ -21,6 +21,7 @@ class Registry_object extends MX_Controller {
 			$data['data_source_title'] = $data_source->title;
 			$data['data_source_id'] = $data_source->id;
 			$data['scripts'] = array('registry_objects');
+			$data['js_lib'] = array('core');
 			$this->load->view("registry_object_index", $data);
 		}else{
 			//showing all registry objects for all datasource
