@@ -47,6 +47,10 @@ class Data_source extends MX_Controller {
 	//	$this->ds->
 	}
 
+	public function manage(){
+		$this->index();
+	}
+
 
 	public function getDataSources($page=1)
 	{

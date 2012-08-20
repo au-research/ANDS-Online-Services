@@ -153,14 +153,15 @@
 		  		<div class="item-info"></div>
 		  		<div class="item-snippet">
 	  				<h3><span class="ands_class_icon icon_{{class}}"></span>{{list_title}}</h3>
+	  				<span class="tag ql_{{quality_level}}">{{quality_level}}</span>
+			  		<span class="tag status_{{status}}">{{status}}</span>
+			  		<i class="icon-time"></i>
+			  		Last modified {{date_modified}} by {{last_modified_by}}
 	  				<div class="item-description">
 	  					{{{description}}}
 	  				</div>
 			  		
-			  		<span class="tag ql_{{quality_level}}">{{quality_level}}</span>
-			  		<span class="tag status_{{status}}">{{status}}</span>
-			  		<i class="icon-time"></i>
-			  		Last modified {{date_modified}} by {{last_modified_by}}
+			  		
 			  	</div>
 		  		<div class="btn-group item-control">
 		  			<button class="btn view"><i class="icon-eye-open"></i></button>

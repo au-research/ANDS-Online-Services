@@ -1,0 +1,86 @@
+.light-gradient{
+	background: #F8F8F8;
+	background: -moz-linear-gradient(top, #F8F8F8 0%, #E3E3E3 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#F8F8F8), color-stop(100%, #E3E3E3));
+	background: -webkit-linear-gradient(top, #F8F8F8 0%, #E3E3E3 100%);
+	background: -o-linear-gradient(top, #F8F8F8 0%, #E3E3E3 100%);
+	background: -ms-linear-gradient(top, #F8F8F8 0%, #E3E3E3 100%);
+	background: linear-gradient(top, #F8F8F8 0%, #E3E3E3 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f8f8f8', endColorstr='#e3e3e3',GradientType=0 );
+}
+
+.ellipsis{
+	text-overflow: ellipsis; 
+	-o-text-overflow: ellipsis; 
+	-icab-text-overflow: ellipsis; 
+	-khtml-text-overflow: ellipsis; 
+	-moz-text-overflow: ellipsis; 
+	-webkit-text-overflow: ellipsis;  
+	overflow:hidden;
+	overflow-wrap:none;
+	word-wrap:none;
+	word-break: keep-all;
+	white-space: nowrap;
+}
+
+.status_DRAFT{
+	border-left:10px solid @status_DRAFT;
+}
+.status_PUBLISHED{
+	border-left:10px solid @status_PUBLISHED;
+}
+.status_SUBMITTED_FOR_ASSESSMENT{
+	border-left:10px solid @status_SUBMITTED_FOR_ASSESSMENT;
+}
+.status_ASSESSMENT_IN_PROGRESS{
+	border-left:10px solid @status_ASSESSMENT_IN_PROGRESS;
+}
+.status_APPROVED{
+	border-left:10px solid @status_APPROVED;
+}
+.status_MORE_WORK_REQUIRED{
+	border-left:10px solid @status_MORE_WORK_REQUIRED;
+}
+.ql_1{
+	border-left:10px solid @ql_1;
+}
+.ql_2{
+	border-left:10px solid @ql_2;
+}
+.ql_3{
+	border-left:10px solid @ql_3;
+}
+.ql_4{
+	border-left:10px solid @ql_4;
+}
+
+.text-shadow{
+	text-shadow: 2px 2px 1px #ffffff;
+    filter: dropshadow(color=#ffffff, offx=2, offy=2);
+}
+
+.text-shadow-black{
+	text-shadow: 2px 2px 1px #000000;
+    filter: dropshadow(color=#000000, offx=2, offy=2);
+}
+.no-text-shadow{
+	text-shadow: 0px 0px 0px;
+	filter: dropshadow(color=#ffffff, offx=0, offy=0);
+}
+
+.box-shadow{
+	-webkit-box-shadow:  0px 0px 1px 1px black;
+}
+
+.rotate {
+	/* Safari */
+	-webkit-transform: rotate(-90deg);
+	/* Firefox */
+	-moz-transform: rotate(-90deg);
+	/* IE */
+	-ms-transform: rotate(-90deg);
+	/* Opera */
+	-o-transform: rotate(-90deg);
+	/* Internet Explorer */
+	filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+}
