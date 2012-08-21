@@ -194,3 +194,70 @@ a.manage_ds_link{
 		}
 	}
  }
+
+/* TABLE STYLES -------------------------------------------------------- */
+.recordTable{
+	
+	border-collapse:collapse;
+	margin:0;
+	border:1px solid @gray;
+	td{
+		padding: 4px;
+		border: none;
+		vertical-align: top;
+		white-space: nowrap;
+		overflow:visible;
+		word-wrap:word-wrap;
+		text-align:left;
+	}
+	tr{
+		border-bottom:1px solid @gray;
+	}
+	.subtable, .subtable1{width:100%;}
+	.subtable{
+		margin: 2px;
+		background: #f5f2f0;
+		table-layout: fixed;
+		border:1px solid #aaa;
+		tr{
+			border-bottom:none;
+		}
+		td:first-child{
+			width:100px;
+		}
+		.subtable1{
+			background: #faf9f8;
+			border:1px solid #aaa;
+			background: ;
+		}
+	}
+	tr > td:first-child, td.label{
+		padding-top: 6px;
+		text-align: right;
+		font-style: italic;
+		font-weight: bold;
+		white-space: nowrap;
+		width:150px;
+	}
+	.formEmptyCell{
+		border: none;
+	}
+	.inputFormat{
+		color: #888888;
+		font-size: 0.8em;
+		font-style: italic;
+	}
+	.formNotes{
+		color: #666666;
+		font-size: 0.8em;
+	}
+	.valueAttribute, .value{
+		padding-top: 6px;
+		font-weight:normal;
+		text-align:left;
+	}
+	.valueAttribute{
+		font-style:italic;
+	}
+
+}

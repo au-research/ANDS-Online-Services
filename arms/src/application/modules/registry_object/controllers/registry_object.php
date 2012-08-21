@@ -141,8 +141,6 @@ class Registry_object extends MX_Controller {
 			}
 		}
 		
-
-		
 		$jsonData['status'] = 'OK';
 		$jsonData['q'] = $solr_header;
 		$jsonData['items'] = $items;
