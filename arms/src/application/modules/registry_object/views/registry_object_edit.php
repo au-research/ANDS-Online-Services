@@ -1,7 +1,7 @@
 <div class="">
 	<!-- tabs -->
 	<ul class="nav nav-tabs">
-	  <li><a href="#admin" data-toggle="tab">Record Administration</a></li>
+	  <li class="active"><a href="#admin" data-toggle="tab">Record Administration</a></li>
 	  <li><a href="#names" data-toggle="tab">Names</a></li>
 	  <li><a href="#descriptions" data-toggle="tab">Descriptions/Rights</a></li>
 	  <li><a href="#descriptions" data-toggle="tab">Identifiers</a></li>

@@ -131,11 +131,16 @@
 			</div>
 		</div>
 	</div>
+</section>
+
+<section id="view-ro" class="hide">Loading...</section>
+
+
 </div><!-- end main content container -->
 
-<div id="view-ro" class="hide">Loading...</div>
 
-</section>
+
+
 
 
 
