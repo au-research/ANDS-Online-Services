@@ -211,7 +211,7 @@
 		</div>
 
 		<div class="box-content tab-content tab-view-content" name="edit">
-			Edit Screen
+			Loading RIFCS
 		</div>
 	</div>
 </div>

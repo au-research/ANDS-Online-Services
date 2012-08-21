@@ -233,23 +233,30 @@ function load_ro(ro_id, view){
 		url: base_url+'registry_object/get_record/'+ro_id,
 		dataType: 'json',
 		success: function(data){
-			console.log(data);
+			//console.log(data);
 			var itemsTemplate = $('#item-template').html();
 			var output = Mustache.render(itemsTemplate, data);
 			$('#view-ro').html(output);
 
 
 			//tab binding
-			$('.tab-content').hide();
-			$('.tab-view-list a').removeClass('active');
-			$('.tab-view-list a[name='+view+']').addClass('active');
-			$('.tab-content[name='+view+']').fadeIn();
+			$('#view-ro .tab-content').hide();
+			$('#view-ro .tab-view-list a').removeClass('active');
+			$('#view-ro .tab-view-list a[name='+view+']').addClass('active');
+			$('#view-ro .tab-content[name='+view+']').fadeIn();
 
 			if(view=='view'){
-				//set the active tab
-
+				//magic?
 			}else if(view=='edit'){
 				//set the active tab
+				//console.log(data.ro.xml);
+				/*var content = $('#view-ro .tab-content[name=edit]');
+				var xmlDoc = $.parseXML(data.ro.xml);
+				console.log($(xmlDoc).find('*').length);
+				console.log($(xmlDoc).length);
+				$(xmlDoc).children('key').each(function(){
+ 					console.log($(this).text());
+				});*/
 			}
 
 			$('#view-ro').show();

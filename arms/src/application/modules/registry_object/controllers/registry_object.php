@@ -38,7 +38,7 @@ class Registry_object extends MX_Controller {
 		$this->load->model('registry_objects', 'ro');
 		$ro = $this->ro->getByID($id);
 
-		$data['xml'] = $ro->getXML();
+		$data['xml'] = $ro->getRif();
 		$data['extrif'] = $ro->getExtRif();
 		$data['id'] = $ro->id;
 		$data['title'] = $ro->getAttribute('list_title');

@@ -82,6 +82,19 @@ class XML_Extension extends ExtensionBase
 		$result->free_result();
 		return $data;
 	}
+
+	function getRif(){
+		$result = $this->db->select('data')->order_by('timestamp','desc')->limit(1)->get_where('record_data', array('registry_object_id'=>$this->ro->id, 'scheme'=>'rif'));
+		if ($result->num_rows() > 0)
+		{
+			foreach($result->result_array() AS $row)
+			{
+				$data = $row['data'];
+			}
+		}
+		$result->free_result();
+		return $data;
+	}
 	
 	
 }
