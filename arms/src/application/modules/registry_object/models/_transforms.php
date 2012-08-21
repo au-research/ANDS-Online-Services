@@ -7,6 +7,7 @@ class Transforms {
 	static $qa_transformer = NULL;
 	static $qa_level_transformer = NULL;
 	static $extrif_to_solr_transformer = NULL;
+	static $extrif_to_html_transformer = NULL;
 	
 	static function get_qa_transformer()
 	{
@@ -48,5 +49,19 @@ class Transforms {
 		}
 
 		return self::$extrif_to_solr_transformer;
+	}
+	
+	static function get_extrif_to_html_transformer()
+	{
+		if (is_null(self::$extrif_to_html_transformer))
+		{
+			$extRifToHtml = new DomDocument();
+			$extRifToHtml->load('application/modules/registry_object/transforms/extrif_to_html.xsl');
+			$extRifToHtmlproc = new XSLTProcessor();
+			$extRifToHtmlproc->importStyleSheet($extRifToHtml);
+			self::$extrif_to_html_transformer =	$extRifToHtmlproc;
+		}
+
+		return self::$extrif_to_html_transformer;
 	}
 }		

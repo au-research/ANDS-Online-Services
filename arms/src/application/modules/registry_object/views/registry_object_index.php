@@ -196,6 +196,8 @@
 			<div class="clearfix"></div>
 		</div>
 		<div class="box-content tab-content tab-view-content" name="view">
+			<h1>LEO'S VIEW HTML</h1>
+			<div class="html-view"></div>
 			<h1>XML</h1>
 			<pre class="prettyprint">
 				{{xml}}

@@ -40,6 +40,7 @@ class Registry_object extends MX_Controller {
 
 		$data['xml'] = $ro->getRif();
 		$data['extrif'] = $ro->getExtRif();
+		$data['view'] = $ro->transformForHtml();
 		$data['id'] = $ro->id;
 		$data['title'] = $ro->getAttribute('list_title');
 		$data['attributes'] = $ro->getAttributes();

@@ -233,7 +233,7 @@ function load_ro(ro_id, view){
 		url: base_url+'registry_object/get_record/'+ro_id,
 		dataType: 'json',
 		success: function(data){
-			//console.log(data);
+			console.log(data);
 			var itemsTemplate = $('#item-template').html();
 			var output = Mustache.render(itemsTemplate, data);
 			$('#view-ro').html(output);
@@ -247,6 +247,7 @@ function load_ro(ro_id, view){
 
 			if(view=='view'){
 				//magic?
+				$('#view-ro .html-view').html(data.ro.view);
 			}else if(view=='edit'){
 				//set the active tab
 				//console.log(data.ro.xml);
