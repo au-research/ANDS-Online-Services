@@ -44,6 +44,7 @@ class Registry_object extends MX_Controller {
 		$data['id'] = $ro->id;
 		$data['title'] = $ro->getAttribute('list_title');
 		$data['attributes'] = $ro->getAttributes();
+		$data['revisions'] = $ro->getAllRevisions();
 
 		$jsonData = array();
 		$jsonData['status'] = 'OK';
@@ -51,6 +52,10 @@ class Registry_object extends MX_Controller {
 
 		$jsonData = json_encode($jsonData);
 		echo $jsonData;
+	}
+
+	public function get_edit_form($id){
+		$this->load->view('registry_object_edit');
 	}
 
 	//AJAX function for MMR to search

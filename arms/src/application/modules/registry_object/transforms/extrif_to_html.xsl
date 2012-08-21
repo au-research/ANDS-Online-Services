@@ -10,7 +10,7 @@
 	</xsl:template>
 
 	<xsl:template match="registryObject">
-		<table class="recordTable" summary="Preview of Draft Registry Object" style="width:100%;">
+		<table class="recordTable" summary="Preview of Draft Registry Object">
 			<tbody class="recordFields">
 				<tr>
 					<td>Type: </td>

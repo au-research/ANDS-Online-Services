@@ -134,9 +134,6 @@
 </div><!-- end main content container -->
 
 <div id="view-ro" class="hide">Loading...</div>
-<section id="edit-ro" class="hide">Loading...</section>
-<section id="expand-ro" class="hide">Loading...</section>
-<section id="delete-ro" class="hide">Loading...</section>
 
 </section>
 
@@ -196,16 +193,32 @@
 			<div class="clearfix"></div>
 		</div>
 		<div class="box-content tab-content tab-view-content" name="view">
-			<h1>LEO'S VIEW HTML</h1>
-			<div class="html-view"></div>
-			<h1>XML</h1>
-			<pre class="prettyprint">
-				{{xml}}
-			</pre>
-			<h1>ExtRif</h1>
-			<pre class="prettyprint">
-				{{extrif}}
-			</pre>
+			<div class="row">
+				<div class="span8">
+					<h1>LEO'S VIEW HTML</h1>
+					<div class="html-view"></div>
+				</div>
+				<div class="span4">
+					<div class="box">
+						<div class="box-header clearfix">
+							<h1>Revisions</h1>
+						</div>
+						<div class="box-content" id="ro-revisions">
+
+						</div>
+					</div>
+
+					<div class="box">
+						<div class="box-header clearfix"><h1>XML</h1></div>
+						<div class="box-content">
+							<h2>RIFCS</h2>
+							<textarea>{{xml}}</textarea>
+							<h2>ExtRif</h2>
+							<textarea>{{extrif}}</textarea>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 
 		<div class="box-content tab-content tab-view-content" name="preview">

@@ -36,7 +36,7 @@ $(function(){
 					case 'browse' : browse(words[1], words[2]);break;
 					case 'view': load_ro(words[1], 'view');break;
 					case 'preview': load_ro(words[1], 'preview');break;
-					case 'edit': load_ro(words[1], 'edit');break;
+					case 'edit': load_ro(words[1], 'edit', words[2]);break;
 					case 'delete': load_ro_delete(words[1]);break;
 					default: logErrorOnScreen('Invalid Operation: '+hash);break;
 				}
@@ -227,7 +227,7 @@ function browse(view, filter){
 	}
 }
 
-function load_ro(ro_id, view){
+function load_ro(ro_id, view, active_tab){
 	$.ajax({
 		type: 'GET',
 		url: base_url+'registry_object/get_record/'+ro_id,
@@ -248,6 +248,12 @@ function load_ro(ro_id, view){
 			if(view=='view'){
 				//magic?
 				$('#view-ro .html-view').html(data.ro.view);
+
+				var revisions = '';
+				$.each(data.ro.revisions, function(time, id){
+					revisions += '<li>'+time+'</li>';
+				});
+				$('#view-ro #ro-revisions').html(revisions);
 			}else if(view=='edit'){
 				//set the active tab
 				//console.log(data.ro.xml);
@@ -258,6 +264,24 @@ function load_ro(ro_id, view){
 				$(xmlDoc).children('key').each(function(){
  					console.log($(this).text());
 				});*/
+				$.ajax({
+					type: 'GET',
+					url: base_url+'registry_object/get_edit_form/'+ro_id,
+					success:function(data){
+						$('#view-ro .tab-content[name=edit]').html(data);
+						if(active_tab && $('#'+active_tab).length > 0){//if an active tab is specified and exists
+							$('.nav-tabs li a[href=#'+active_tab+']').click();
+						}
+
+						$('#edit-form .aro_box_display').live({
+							click: function(e){
+								e.preventDefault();
+								$(this).parent().children('.aro_box_part').slideToggle();
+							}
+						});
+
+					}
+				})
 			}
 
 			$('#view-ro').show();

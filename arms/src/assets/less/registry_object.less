@@ -195,20 +195,26 @@ a.manage_ds_link{
 	}
  }
 
+ .box-header h1{
+ 	.ellipsis();
+ 	max-width:970px;
+ 	overflow:hidden;
+ }
+
 /* TABLE STYLES -------------------------------------------------------- */
 .recordTable{
 	
 	border-collapse:collapse;
 	margin:0;
 	border:1px solid @gray;
+	width:100%;
 	td{
 		padding: 4px;
 		border: none;
 		vertical-align: top;
-		white-space: nowrap;
 		overflow:visible;
-		word-wrap:word-wrap;
 		text-align:left;
+		word-wrap: break-word;
 	}
 	tr{
 		border-bottom:1px solid @gray;
@@ -236,7 +242,6 @@ a.manage_ds_link{
 		text-align: right;
 		font-style: italic;
 		font-weight: bold;
-		white-space: nowrap;
 		width:150px;
 	}
 	.formEmptyCell{
@@ -259,5 +264,48 @@ a.manage_ds_link{
 	.valueAttribute{
 		font-style:italic;
 	}
+}
 
+
+/* EDIT STYLES -------------------------------------------------------- */
+.nav-tabs{
+	margin-bottom:0px;
+}
+
+form{
+	background: white;
+	margin:0;
+}
+
+	
+
+.aro_box{
+	border:1px solid @darkGray;
+	padding:5px 10px;
+	margin:5px 0px;
+	background:#f4f4f4;
+	cursor:pointer;
+	h1{
+		font-size:16px;
+		small{
+			font-size:12px;
+		}
+	}
+	.aro_box_part{
+		display:none;
+	}
+}
+
+.aro_toolbar{
+	margin: 10px -10px -10px -10px;
+	padding:0px 10px;
+	.light-gradient();
+	border-top:1px solid @borderColor;
+	.message{
+		float:left;
+		line-height:52px;
+	}
+	.aro_controls{
+		float:right;
+	}
 }
