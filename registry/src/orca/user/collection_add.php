@@ -383,15 +383,15 @@ if( strtoupper(getPostedValue('verb')) == "SAVE" )
 
 					
 					$this_user = $_SESSION['name'];
-				
-					send_email(
-						eCONTACT_EMAIL,
-						"Records from " . $dataSourceKey . " are ready for your assessment",
-						$this_user . " has submitted a record for your assessment. \n\n" .
+
+					$subject	=	"Records from " . $dataSourceKey . " are ready for your assessment";
+					$mailBody =	$this_user . " has submitted a record for your assessment. \n\n" .
 						"Your action is required to review these records be visiting the Manage My Records screen or accessing the Data Source directly by the following link:\n" .
-						eHTTP_APP_ROOT . "orca/manage/my_records.php?data_source=" . $dataSourceKey . "\n\n"
-					);
-					
+						eHTTP_APP_ROOT . "orca/manage/my_records.php?data_source=" . $dataSourceKey . "\n\n";
+					$headers  = 'MIME-Version: 1.0' . "\r\n";
+					$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+					$headers .= 'From:'.eCONTACT_EMAIL_FROM."\r\n";
+					mail(eCONTACT_EMAIL, $subject, $mailBody, $headers);					
 				}
 			}
 			

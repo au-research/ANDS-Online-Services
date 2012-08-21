@@ -184,8 +184,11 @@ if( strtoupper(getPostedValue('action')) == "SAVE" )
 							addDraftToSolrIndex($key,addDraftToSolrIndex);
 														
 							$mailBody	= 'http://'.$host.'/'.$orca_root.'/manage/add_party_registry_object.php?readOnly&data_source='.$dataSourceKey.'&key='.urlencode($key);
-						
-							send_email(eCONTACT_EMAIL,$key . " contributor page has been generated under data source ".$dataSourceKey,$mailBody);							
+							$subject = $key . " contributor page has been generated under data source ".$dataSourceKey;
+							$headers  = 'MIME-Version: 1.0' . "\r\n";
+							$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+							$headers .= 'From:'.eCONTACT_EMAIL_FROM."\r\n";
+							mail(eCONTACT_EMAIL, $subject, $mailBody, $headers);
 						}	
 					}
 					$theInstitutionalPage = insertInstitutionalPage($group['object_group'],$key,$dataSourceKey);

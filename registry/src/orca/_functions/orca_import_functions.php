@@ -565,10 +565,13 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 					
 					if(isContributorPage($registryObjectKey)&&$status=='PUBLISHED')
 					{
-						$mailSubject = $list_title.' contributor page was published on '.date("d-m-Y h:m:s");						
+						$subject = $list_title.' contributor page was published on '.date("d-m-Y h:m:s");						
 						$mailBody = eHTTP_APP_ROOT.'orca/view.php?key='.urlencode($registryObjectKey);	
-						send_email(eCONTACT_EMAIL,$mailSubject,$mailBody);				
-			
+						$headers  = 'MIME-Version: 1.0' . "\r\n";
+						$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+						$headers .= 'From:'.eCONTACT_EMAIL_FROM."\r\n";
+						mail(eCONTACT_EMAIL, $subject, $mailBody, $headers);						
+		
 					}
 				}
 			}

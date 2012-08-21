@@ -117,6 +117,7 @@ if($totalErrors > 0 || !$emalOnErrorOnly)
 {
 	$headers  = 'MIME-Version: 1.0' . "\r\n";
 	$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+	$headers .= 'From:'.eCONTACT_EMAIL_FROM."\r\n";
 	$footer = "<p>links checked: ".$linkChecked."<br/>number of bad links: ".$totalErrors."</body></html>";
 	mail(eCONTACT_EMAIL, $subject, $fileContent.$footer, $headers);
 }

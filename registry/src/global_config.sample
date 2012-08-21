@@ -73,6 +73,7 @@ define("eAPP_TITLE", "Minh Workarea");
 define("eINSTANCE_TITLE", "Minh");
 define("eINSTANCE_TITLE_SHORT", "Minh");
 define("eCONTACT_EMAIL", "minh.nguyen@ands.org.au");
+define("eCONTACT_EMAIL_FROM", "ands.orca@gmail.com");
 define("eCONTACT_NAME", "Feedback");
 define("eCOPYRIGHT_NOTICE", "copyright notice goes here");
 // Session will expire/timeout after this period of inactivity 

@@ -195,9 +195,12 @@ switch(getQueryValue('action'))
 				if(isContributorPage(rawurldecode($key)))
 				{
 					$theObject = getRegistryObject(rawurldecode($key), $overridePermissions = true);
-					$mailSubject = $theObject[0]['list_title'].' contributor page was published on '.date("d-m-Y h:m:s");						
-					$mailBody = eHTTP_APP_ROOT.'orca/view.php?key='.urlencode($key);	
-					send_email(eCONTACT_EMAIL,$mailSubject,$mailBody);	
+					$subject = $theObject[0]['list_title'].' contributor page was published on '.date("d-m-Y h:m:s");						
+					$mailBody = eHTTP_APP_ROOT.'orca/view.php?key='.urlencode($key);
+					$headers  = 'MIME-Version: 1.0' . "\r\n";
+					$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+					$headers .= 'From:'.eCONTACT_EMAIL_FROM."\r\n";
+					mail(eCONTACT_EMAIL, $subject, $mailBody, $headers);					
 				}
 			}
 		}
