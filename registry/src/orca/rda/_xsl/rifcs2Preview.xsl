@@ -831,25 +831,44 @@ Handle:
 		<p>
 			<xsl:choose>
 				<xsl:when test = "./ro:addressPart or ./ro:addressPart!=''">
-						<xsl:apply-templates select="./ro:addressPart[@type='fullname']"/>	
-						<xsl:apply-templates select="./ro:addressPart[@type='organizationname']"/>	
-						<xsl:apply-templates select="./ro:addressPart[@type='buildingorpropertyname']"/>		
-						<xsl:apply-templates select="./ro:addressPart[@type='flatorunitnumber']"/>		
-						<xsl:apply-templates select="./ro:addressPart[@type='floororlevelnumber']"/>	
-						<xsl:apply-templates select="./ro:addressPart[@type='lotnumber']"/>	
-						<xsl:apply-templates select="./ro:addressPart[@type='housenumber']"/>		
-						<xsl:apply-templates select="./ro:addressPart[@type='streetname']"/>		
-						<xsl:apply-templates select="./ro:addressPart[@type='postaldeliverynumberprefix']"/>		
-						<xsl:apply-templates select="./ro:addressPart[@type='postaldeliverynumbervalue']"/>		
-						<xsl:apply-templates select="./ro:addressPart[@type='postaldeliverynumbersuffix']"/>	
-						<xsl:apply-templates select="./ro:addressPart[@type='addressline']"/>		
-						<xsl:apply-templates select="./ro:addressPart[@type='suburborplaceorlocality']"/>		
-						<xsl:apply-templates select="./ro:addressPart[@type='stateorterritory']"/>	
-						<xsl:apply-templates select="./ro:addressPart[@type='postcode']"/>	
-						<xsl:apply-templates select="./ro:addressPart[@type='country']"/>		
-						<xsl:apply-templates select="./ro:addressPart[@type='locationdescriptor']"/>
-						<xsl:apply-templates select="./ro:addressPart[@type='deliverypointidentifier']"/>	
-						<xsl:apply-templates select="./ro:addressPart[not(@type='organizationname' or @type='fullname' or @type='buildingorpropertyname' or @type='flatorunitnumber' or @type='floororlevelnumber' or @type='lotnumber' or @type='housenumber' or @type='streetname' or @type='postaldeliverynumberprefix' or @type='postaldeliverynumbervalue' or @type='postaldeliverynumbersuffix' or @type='addressline' or @type='suburborplaceorlocality' or @type='stateorterritory' or @type='country' or @type='locationdescriptor' or @type='deliverypointidentifier' or @type='postcode')]"/>	
+						<xsl:apply-templates select="./ro:addressPart[@type='fullname']"/>    
+                        <xsl:apply-templates select="./ro:addressPart[@type='fullName']"/>  
+                        <xsl:apply-templates select="./ro:addressPart[@type='organizationname']"/>  
+                        <xsl:apply-templates select="./ro:addressPart[@type='organizationName']"/>  
+                        <xsl:apply-templates select="./ro:addressPart[@type='buildingorpropertyname']"/>        
+                        <xsl:apply-templates select="./ro:addressPart[@type='buildingOrPropertyName']"/>    
+                        <xsl:apply-templates select="./ro:addressPart[@type='flatorunitnumber']"/>      
+                        <xsl:apply-templates select="./ro:addressPart[@type='flatOrUnitNumber']"/>  
+                        <xsl:apply-templates select="./ro:addressPart[@type='floororlevelnumber']"/>    
+                        <xsl:apply-templates select="./ro:addressPart[@type='floorOrLevelNumber']"/>
+                        <xsl:apply-templates select="./ro:addressPart[@type='lotnumber']"/> 
+                        <xsl:apply-templates select="./ro:addressPart[@type='lotNumber']"/> 
+                        <xsl:apply-templates select="./ro:addressPart[@type='housenumber']"/>   
+                        <xsl:apply-templates select="./ro:addressPart[@type='houseNumber']"/>       
+                        <xsl:apply-templates select="./ro:addressPart[@type='streetname']"/>    
+                        <xsl:apply-templates select="./ro:addressPart[@type='streetName']"/>        
+                        <xsl:apply-templates select="./ro:addressPart[@type='postaldeliverynumberprefix']"/>    
+                        <xsl:apply-templates select="./ro:addressPart[@type='postalDeliveryNumberPrefix']"/>        
+                        <xsl:apply-templates select="./ro:addressPart[@type='postaldeliverynumbervalue']"/>   
+                        <xsl:apply-templates select="./ro:addressPart[@type='postalDeliveryNumberValue']"/>     
+                        <xsl:apply-templates select="./ro:addressPart[@type='postaldeliverynumbersuffix']"/>  
+                        <xsl:apply-templates select="./ro:addressPart[@type='postalDeliveryNumberSuffix']"/>    
+                        <xsl:apply-templates select="./ro:addressPart[@type='addressline']"/>   
+                        <xsl:apply-templates select="./ro:addressPart[@type='addressLine']"/>       
+                        <xsl:apply-templates select="./ro:addressPart[@type='suburborplaceorlocality']"/>   
+                        <xsl:apply-templates select="./ro:addressPart[@type='suburbOrPlaceOrLocality']"/>       
+                        <xsl:apply-templates select="./ro:addressPart[@type='stateorterritory']"/>  
+                        <xsl:apply-templates select="./ro:addressPart[@type='stateOrTerritory']"/>  
+                        <xsl:apply-templates select="./ro:addressPart[@type='postcode']"/>  
+                        <xsl:apply-templates select="./ro:addressPart[@type='postCode']"/>  
+                        <xsl:apply-templates select="./ro:addressPart[@type='country']"/>   
+                        <xsl:apply-templates select="./ro:addressPart[@type='Country']"/>       
+                        <xsl:apply-templates select="./ro:addressPart[@type='locationdescriptor']"/>
+                        <xsl:apply-templates select="./ro:addressPart[@type='locationDescriptor']"/>
+                        <xsl:apply-templates select="./ro:addressPart[@type='deliverypointidentifier']"/> 
+                        <xsl:apply-templates select="./ro:addressPart[@type='deliveryPointIdentifier']"/>   
+                                                
+                        <xsl:apply-templates select="./ro:addressPart[not(@type='organizationname' or @type='fullname' or @type='buildingorpropertyname' or @type='flatorunitnumber' or @type='floororlevelnumber' or @type='lotnumber' or @type='housenumber' or @type='streetname' or @type='postaldeliverynumberprefix' or @type='postaldeliverynumbervalue' or @type='postaldeliverynumbersuffix' or @type='addressline' or @type='suburborplaceorlocality' or @type='stateorterritory' or @type='country' or @type='locationdescriptor' or @type='deliverypointidentifier' or @type='postcode' or @type='telephoneNumber' or @type='faxNumber' or @type='organizationName' or @type='fullName' or @type='buildingOrPropertyName' or @type='flatOrUnitNumber' or @type='floorOrLevelNumber' or @type='lotNumber' or @type='houseNumber' or @type='streetName' or @type='postalDeliveryNumberPrefix' or @type='postalDeliveryNumberValue' or @type='postalDeliveryNumberSuffix' or @type='addressLine' or @type='suburbOrPlaceOrLocality' or @type='stateOrTerritory' or @type='Country' or @type='locationDescriptor' or @type='deliveryPointIdentifier' or @type='postCode' or @type='telephoneNumber' or @type='faxNumber' )]"/>  
 						<!--xsl:apply-templates select="./ro:addressPart[not(@type='addressLine') or @type!='deliveryPointIdentifier' or @type='locationDescriptor' or @type='country' or @type='stateOrTerritory' or @type='suburbOrPlaceOrLocality' or @type='suburbOrPlaceOrLocality' or @type='addressLine' or @type='postalDeliveryNumberSuffix])"/-->
 				</xsl:when>
 				<xsl:otherwise>
