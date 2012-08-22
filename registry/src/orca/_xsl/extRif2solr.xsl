@@ -15,7 +15,7 @@
 
     <xsl:template match="ro:registryObject">
         <doc>
-        <xsl:variable name="roKey" select="ro:key"/>
+        <xsl:variable name="roKey" select="normalize-space(ro:key)"/>
             <xsl:apply-templates select="ro:key"/>
 
         <xsl:choose>
