@@ -145,8 +145,6 @@
 
 
 
-
-
 <!-- end template section-->
 <?php $this->load->view('footer');?>
 

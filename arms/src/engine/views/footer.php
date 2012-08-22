@@ -10,7 +10,7 @@
  */
 ?>
 
-<div id="page-footer">
+<div id="page-footer" class="clearfix">
     Footer
 </div>
 

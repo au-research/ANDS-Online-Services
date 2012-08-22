@@ -276,7 +276,7 @@ function load_ro(ro_id, view, active_tab){
 						$('#edit-form .aro_box_display').live({
 							click: function(e){
 								e.preventDefault();
-								$(this).parent().children('.aro_box_part').slideToggle();
+								$(this).parent().children('.aro_box_part').toggle();
 							}
 						});
 
