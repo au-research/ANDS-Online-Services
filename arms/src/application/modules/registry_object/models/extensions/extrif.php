@@ -121,6 +121,22 @@ class Extrif_Extension extends ExtensionBase
 	}
 	
 	
+	function transformForFORM()
+	{
+		try{
+			$xslt_processor = Transforms::get_extrif_to_form_transformer();
+			$dom = new DOMDocument();
+			//$dom->loadXML($this->ro->getXML());
+			$dom->loadXML($this->ro->getExtRif());
+			return $xslt_processor->transformToXML($dom);
+		}catch (Exception $e)
+		{
+			echo "UNABLE TO TRANSFORM" . BR;	
+			echo "<pre>" . nl2br($e->getMessage()) . "</pre>" . BR;
+		}
+	}
+	
+	
 	
 	function getReverseLinksStatusforEXTRIF($ds) 
 	{

@@ -198,7 +198,6 @@
 		<div class="box-content tab-content tab-view-content" name="view">
 			<div class="row">
 				<div class="span8">
-					<h1>LEO'S VIEW HTML</h1>
 					<div class="html-view"></div>
 				</div>
 				<div class="span4">

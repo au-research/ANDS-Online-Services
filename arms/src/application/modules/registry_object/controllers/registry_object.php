@@ -58,7 +58,14 @@ class Registry_object extends MX_Controller {
 	}
 
 	public function get_edit_form($id){
-		$this->load->view('registry_object_edit');
+		// ro is the alias for the registry object model
+		$this->load->model('registry_objects', 'ro');
+		$ro = $this->ro->getByID($id);
+		$data['extrif'] = $ro->getExtRif();
+		
+		$data['transform'] = $ro->transformForFORM();
+		echo $data['transform'];
+		//$this->load->view('registry_object_edit', $data);
 	}
 
 	//AJAX function for MMR to search
