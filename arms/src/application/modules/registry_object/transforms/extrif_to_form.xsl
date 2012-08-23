@@ -41,6 +41,7 @@
 				<div class="tab-content">
 					<xsl:call-template name="recordAdminTab"/>
 					<xsl:call-template name="namesTab"/>
+					<xsl:call-template name="descriptionRightsTab"/>
 
 					<div class="modal hide" id="myModal">
 						<div class="modal-header">
@@ -227,6 +228,66 @@
 				<p class="help-inline"><small></small></p>
 			</div>
 		</div>
+	</xsl:template>
+
+
+	<xsl:template name="descriptionRightsTab">
+		<div id="descriptions" class="tab-pane">
+			<fieldset>
+				<legend>Descriptions / Rights</legend>
+				<xsl:apply-templates select="collection/description | activity/description | party/description  | service/description"/>
+				<xsl:apply-templates select="collection/rights | activity/rights | party/rights  | service/rights"/>
+				<div class="aro_box template">
+					<div class="aro_box_display">
+						<label class="control-label" for="title"><input type="text" class="input-small" name="type" value=""/></label>
+						<h1></h1>
+					</div>
+					<div class="aro_box_part">
+						<textarea class="input-xlarge" name="value"></textarea>
+					</div>
+				</div>
+				<button class="btn btn-primary">
+					<i class="icon-plus icon-white"></i> Add Description
+				</button>
+				<div class="aro_box template">
+					<div class="aro_box_display">
+						<label class="control-label" for="title"><input type="text" class="input-small" name="type" value=""/></label>
+						<h1></h1>
+					</div>
+					<div class="aro_box_part">
+						<textarea class="input-xlarge" name="value"></textarea>
+					</div>
+				</div>
+				<button class="btn btn-primary">
+					<i class="icon-plus icon-white"></i> Add Rights
+				</button>
+			</fieldset>
+		</div>
+	</xsl:template>
+
+
+	<xsl:template match="collection/description | activity/description | party/description  | service/description">
+		<div class="aro_box">
+			<div class="aro_box_display">
+				<label class="control-label" for="description"><input type="text" class="input-small" name="type" value="{@type}"/></label>
+				<h1></h1>
+			</div>
+			<div class="aro_box_part">
+				<textarea class="input-xlarge" name="value"><xsl:apply-templates select="text()"/></textarea>
+			</div>
+		</div>	
+	</xsl:template>
+	
+	<xsl:template match="collection/rights | activity/rights | party/rights  | service/rights">
+		<div class="aro_box">
+			<div class="aro_box_display">
+				<label class="control-label" for="rights"><input type="text" class="input-small" name="type" value="{@type}"/></label>
+				<h1></h1>
+			</div>
+			<div class="aro_box_part">
+					<textarea class="input-xlarge" name="value"><xsl:apply-templates select="text()"/></textarea>			
+			</div>
+		</div>	
 	</xsl:template>
 
 
