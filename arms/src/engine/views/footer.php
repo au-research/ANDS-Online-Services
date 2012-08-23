@@ -49,8 +49,6 @@
         <?php endif;?>
     <?php endforeach;?>
 
-    
-
 
 	<!-- ARMS scripts -->
     <script>

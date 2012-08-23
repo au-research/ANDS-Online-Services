@@ -30,7 +30,7 @@ $(function(){
 					case 'view': load_datasource(words[1]);break;
 					case 'edit': load_datasource_edit(words[1], words[2]);break;
 					case 'delete': load_datasource_delete(words[1]);break;
-					default: browse('thumbnails');break;
+					default: logErrorOnScreen('this functionality is currently being worked on');break;
 				}
 				$('#data_source_view_container').attr('data_source_id', words[1]);
 			}catch(error){
@@ -112,6 +112,15 @@ $('.item-control .btn').live({
 		}else if($(this).hasClass('delete')){
 			changeHashTo('delete/'+data_source_id);
 		}
+	}
+});
+
+$('#toggle_side_bar_btn').live({
+	click: function(e){
+		e.preventDefault();
+		$('#browse-datasources-left').toggleClass('span8', 200).toggleClass('span12', 100);
+		$('#browse-datasources-right').toggle();
+		$(this).qtip().hide();
 	}
 });
 

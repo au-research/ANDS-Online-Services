@@ -29,5 +29,4 @@ class Revisions_extension extends ExtensionBase
 		$result->free_result();
 		return $revisions;
 	}
-	
 }

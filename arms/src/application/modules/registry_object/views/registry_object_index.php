@@ -153,7 +153,7 @@
 <section class="hide" id="ro-templates">
 <div class="hide" id="items-template">
 	{{#items}}
-		<li class="span4">
+		<li>
 		  	<div class="item" ro_id="{{id}}">
 		  		<div class="item-info"></div>
 		  		<div class="item-snippet">
@@ -225,7 +225,7 @@
 		</div>
 
 		<div class="box-content tab-content tab-view-content" name="preview">
-			Preview in RDA iframe
+			<iframe src="{{preview_link}}" width="100%" height="100%"></iframe>
 		</div>
 
 		<div class="box-content tab-content tab-view-content" name="edit">

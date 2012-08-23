@@ -14,46 +14,73 @@
 <div class="container" id="main-content">
 <section id="browse-datasources" class="hide">
 <div class="row">
-	<div class="box">
-		<div class="box-header clearfix">
-			<h1><?php echo $title;?><small><?php echo $small_title;?></small></h1>
-		</div>
-		<div class="box-content">
-
-			<!-- Toolbar -->
-		    <div class="row-fluid" id="mmr_toolbar">
-		    	<div class="span4">
-		    		<span class="dropdown" id="switch_menu">
-		    		<a class="btn dropdown-toggle" data-toggle="dropdown" data-target="#switch_menu" href="#switch_menu">Switch View <span class="caret"></span></a>
-					  <ul class="dropdown-menu" id="switch_view">
-					    <li><a href="javascript:;" name="thumbnails"><i class="icon-th"></i> Thumbnails View</a></li>
-					    <li><a href="javascript:;" name="lists"><i class="icon-th-list"></i> List View</a></li>
-					  </ul>
-					</span>
-				</div>
-				<div class="span4"></div>
-		    	<div class="span4 right-aligned">
-		    		<select data-placeholder="Choose a Datasource to View" tabindex="1" class="chzn-select" id="datasource-chooser">
-						<option value=""></option>
-						<?php
-							foreach($dataSources as $ds){
-								echo '<option value="'.$ds['id'].'">'.$ds['title'].'</option>';
-							}
-						?>
-					</select>
-		    	</div>
-		    </div>
-
-		    <!-- List of items will be displayed here, in this ul -->
-		    <ul class="lists" id="items"></ul>
-
-		    <div class="row-fluid">
-				<div class="span12">
-					<div class="well"><a href="javascript:;" id="load_more" page="1">Show More...</a></div>
-				</div>
+	<div class="span8" id="browse-datasources-left">
+		<div class="box">
+			<div class="box-header clearfix">
+				<h1><?php echo $title;?><small><?php echo $small_title;?></small></h1>
+				<span class="right-widget">
+					<a href="javascript:;" tip="Show/Hide side bar" my="right center" at="left center" id="toggle_side_bar_btn"><i class="icon-tasks"></i></a>
+				</span>
 			</div>
+			<div class="box-content">
 
+				<!-- Toolbar -->
+			    <div class="row-fluid" id="mmr_toolbar">
+			    	<div class="span6">
+			    		<span class="dropdown" id="switch_menu">
+			    		<a class="btn dropdown-toggle" data-toggle="dropdown" data-target="#switch_menu" href="#switch_menu">Switch View <span class="caret"></span></a>
+						  <ul class="dropdown-menu" id="switch_view">
+						    <li><a href="javascript:;" name="thumbnails"><i class="icon-th"></i> Thumbnails View</a></li>
+						    <li><a href="javascript:;" name="lists"><i class="icon-th-list"></i> List View</a></li>
+						  </ul>
+						</span>
+					</div>
+					
+			    	<div class="span6 right-aligned">
+			    		<select data-placeholder="Choose a Datasource to View" tabindex="1" class="chzn-select" id="datasource-chooser">
+							<option value=""></option>
+							<?php
+								foreach($dataSources as $ds){
+									echo '<option value="'.$ds['id'].'">'.$ds['title'].'</option>';
+								}
+							?>
+						</select>
+			    	</div>
+			    </div>
+
+			    <!-- List of items will be displayed here-->
+			    <ul class="lists" id="items"></ul>
+			    
+			    <!-- View More Link -->
+			    <div class="row-fluid">
+					<div class="span12">
+						<div class="well"><a href="javascript:;" id="load_more" page="1">Show More...</a></div>
+					</div>
+				</div>
+
+			</div>
 		</div>
+	</div>
+
+	<div class="span4" id="browse-datasources-right">
+		<div class="box">
+			<div class="box-header clearfix">
+				<h1>Datasources statistics</h1>
+			</div>
+			<div class="box-content">
+				Lorem ipsum tempor Duis Ut non ea voluptate. 
+			</div>
+		</div>
+
+		<div class="box">
+			<div class="box-header clearfix">
+				<h1>Datasources statistics 2</h1>
+			</div>
+			<div class="box-content">
+				Lorem ipsum tempor Duis Ut non ea voluptate. 
+			</div>
+		</div>
+		
 	</div>
 </div>
 	
@@ -79,14 +106,14 @@
 <!-- mustache template for list of items-->
 <div class="hide" id="items-template">
 	{{#items}}
-		<li class="span3">
+		<li>
 		  	<div class="item" data_source_id="{{id}}">
 		  		<div class="item-info"></div>
 		  		<div class="item-snippet">
 			  		<h3>{{title}}</h3>
 			  		{{#counts}}
 				  		{{#status}}
-				  			{{status}} : {{count}}
+				  			<span class="tag status_{{status}}">{{status}} ({{count}})</span>
 				  		{{/status}}
 			  		{{/counts}}
 			  	</div>
@@ -280,7 +307,7 @@
 
 	<div class="span4">
 		<div class="box">
-			<div class="box-header"><h3>Data Source Status Summary</h3></div>
+			<div class="box-header clearfix"><h3>Data Source Status Summary</h3></div>
 			<div class="box-content">
 				<ul class="ro-list">
 					{{#statuscounts}}
@@ -293,7 +320,7 @@
 		</div>
 
 		<div class="box">
-			<div class="box-header"><h3>Data Source Quality Summary</h3></div>
+			<div class="box-header clearfix"><h3>Data Source Quality Summary</h3></div>
 			<div class="box-content">
 				<ul class="ro-list">
 					{{#qlcounts}}
@@ -306,7 +333,7 @@
 		</div>
 
 		<div class="box">
-			<div class="box-header"><h3>Registry Objects Progression</h3></div>
+			<div class="box-header clearfix"><h3>Registry Objects Progression</h3></div>
 			<div class="box-content" id="ro-progression">Loading...</div>
 		</div>
 

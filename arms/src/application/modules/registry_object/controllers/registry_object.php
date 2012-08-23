@@ -46,6 +46,9 @@ class Registry_object extends MX_Controller {
 		$data['attributes'] = $ro->getAttributes();
 		$data['revisions'] = $ro->getAllRevisions();
 
+		//preview link for iframe in preview, show published view if published, show draft preview if in draft
+		$data['preview_link'] = 'http://demo.ands.org.au/'.$ro->slug;
+
 		$jsonData = array();
 		$jsonData['status'] = 'OK';
 		$jsonData['ro'] = $data;

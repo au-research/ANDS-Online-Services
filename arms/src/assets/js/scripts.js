@@ -59,6 +59,35 @@ $(document).ready(function(){
 		}
 	});
 
+	//catch all tip, bad practice, but useful nonetheless
+	$('a[tip]').live('mouseover', function(event) {
+		// Bind the qTip within the event handler
+		var my = $(this).attr('my');
+		var at = $(this).attr('at');
+		if(!my){
+			my = 'bottom center';
+		}
+		if(!at){
+			at = 'top center';
+		}
+		console.log(my, at);
+		$(this).qtip({
+			overwrite: false, // Make sure the tooltip won't be overridden once created
+			content: $(this).attr('tip'),
+			show: {
+				event: event.type, // Use the same show event as the one that triggered the event handler
+				ready: true // Show the tooltip as soon as it's bound, vital so it shows up the first time you hover!
+			},
+			position: {
+				my: my, // Use the corner...
+				at: at// ...and opposite corner
+			},
+			style: {
+				classes: 'ui-tooltip-jtools ui-tooltip-shadow'
+			}
+		}, event); // Pass through our original event to qTip
+	});
+
 
 	//jgrowl
 	window.createGrowl = function(persistent) {

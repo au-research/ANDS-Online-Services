@@ -36,7 +36,17 @@ class Preview extends CI_Controller {
 			$data['user_agent']=$this->agent->browser();	
 			$data['activity_name'] = 'preview';
 			$this->load->view('xml-view', $data);
-		}else{
+		}else if(isset($_GET['id'])){
+			$this->load->model('RegistryObjects', 'ro');
+	       	$content = $this->ro->get_by_id($id);
+	       	$data['key']= 'preview-key';
+			$data['content'] = $this->transform($content, 'rifcs2Preview.xsl', $ds);	
+			$this->load->library('user_agent');
+			$data['user_agent']=$this->agent->browser();	
+			$data['activity_name'] = 'preview';
+			$this->load->view('xml-view', $data);
+		}
+		else{
 			show_404('Preview Draft');
 		}
 	}

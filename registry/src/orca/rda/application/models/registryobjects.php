@@ -44,6 +44,17 @@ limitations under the License.
 			//$json = json_decode($content);
 			return $content;
 	    }
+
+	    function get_by_id($id){
+	    	$url = 'http://ands3.anu.edu.au/workareas/minh/ands/arms/src/services/get_registry_object/'.$id.'/raw-xml';
+	    	$content='Nothing Returned';
+			if(get_http_response_code($url)!='400'){
+				$content = file_get_contents($url, 0, null, null);
+			}else echo '400 error';
+			//echo $content;
+			//$json = json_decode($content);
+			return $content;
+	    }
 		
 	    function getByHash($hash){
 		  	$service_url = service_url();

@@ -34,17 +34,6 @@ class Data_source extends MX_Controller {
 		$data['js_lib'] = array('core', 'graph');
 
 		$this->load->view("data_source_index", $data);
-
-		//echo "<pre>";
-		//$ds = $this->ds->getBySlug('abctb');
-		//$ds->append_log("This is a test log message...TESTING!", "debug");
-		
-		//$ds2 = $this->ds->getBySlug('abctb');
-		
-		
-		
-		//echo modules::run('test/test/index');
-	//	$this->ds->
 	}
 
 	public function manage(){

@@ -18,10 +18,10 @@ class Registry_objects extends CI_Model {
 	
 	
 	/**
-	 * Returns exactly one data source by Key (or NULL)
+	 * Returns exactly one registry object by Key (or NULL)
 	 * 
-	 * @param the data source key
-	 * @return _data_source object or NULL
+	 * @param the registry object key
+	 * @return _registry_object object or NULL
 	 */
 	function getByKey($key)
 	{
@@ -40,10 +40,10 @@ class Registry_objects extends CI_Model {
 	} 	
 	
 	/**
-	 * Returns exactly one data source by Key (or NULL)
+	 * Returns exactly one registry object by Key (or NULL)
 	 * 
-	 * @param the data source key
-	 * @return _data_source object or NULL
+	 * @param the registry object key
+	 * @return _registry_object object or NULL
 	 */
 	function getByID($id)
 	{
@@ -52,10 +52,10 @@ class Registry_objects extends CI_Model {
 	
 	
 	/**
-	 * Returns exactly one data source by URL slug (or NULL)
+	 * Returns exactly one registry object by URL slug (or NULL)
 	 * 
-	 * @param the data source slug
-	 * @return _data_source object or NULL
+	 * @param the registry object slug
+	 * @return _registry_object object or NULL
 	 */
 	function getBySlug($slug)
 	{
