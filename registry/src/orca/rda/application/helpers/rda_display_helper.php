@@ -341,12 +341,6 @@ function getInstitutionPage($group)
 			//return $row->registry_object_key;
 		}
 
-	}else{
-		return false;
-<<<<<<< HEAD
-=======
-
->>>>>>> bugfix. instituition page db call
 	}
 }
 
