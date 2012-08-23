@@ -268,26 +268,42 @@
 
 	<xsl:template match="collection/description | activity/description | party/description  | service/description">
 		<div class="aro_box">
-			<div class="aro_box_display">
-				<label class="control-label" for="description"><input type="text" class="input-small" name="type" value="{@type}"/></label>
+			<div class="aro_box_display clearfix">
+				<a href="javascript:;" class="toggle"><i class="icon-plus"></i></a>
 				<h1></h1>
-			</div>
-			<div class="aro_box_part">
-				<textarea class="input-xlarge" name="value"><xsl:apply-templates select="text()"/></textarea>
+				<div class="control-group">
+					<label class="control-label" for="title">Type: </label>
+					<div class="controls">
+						<input type="text" class="input-small" name="type" placeholder="Type" value="{@type}"/>
+						<textarea class="input-xlarge" name="value"><xsl:apply-templates select="text()"/></textarea>
+						<button class="btn btn-mini btn-danger removeName">
+							<i class="icon-remove icon-white"></i>
+						</button>
+						<p class="help-inline"><small></small></p>
+					</div>
+				</div>
 			</div>
 		</div>	
 	</xsl:template>
 	
 	<xsl:template match="collection/rights | activity/rights | party/rights  | service/rights">
 		<div class="aro_box">
-			<div class="aro_box_display">
-				<label class="control-label" for="rights"><input type="text" class="input-small" name="type" value="{@type}"/></label>
+			<div class="aro_box_display clearfix">
+				<a href="javascript:;" class="toggle"><i class="icon-plus"></i></a>
 				<h1></h1>
+				<div class="control-group">
+					<label class="control-label" for="title">Type: </label>
+					<div class="controls">
+						<input type="text" class="input-small" name="type" placeholder="Type" value="{@type}"/>
+						<textarea class="input-xlarge" name="value"><xsl:apply-templates select="text()"/></textarea>
+						<button class="btn btn-mini btn-danger removeName">
+							<i class="icon-remove icon-white"></i>
+						</button>
+						<p class="help-inline"><small></small></p>
+					</div>
+				</div>
 			</div>
-			<div class="aro_box_part">
-					<textarea class="input-xlarge" name="value"><xsl:apply-templates select="text()"/></textarea>			
-			</div>
-		</div>	
+		</div>
 	</xsl:template>
 
 
