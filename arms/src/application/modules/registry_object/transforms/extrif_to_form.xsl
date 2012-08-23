@@ -135,20 +135,34 @@
 		<div id="names" class="tab-pane">
 			<fieldset>
 				<legend>Names</legend>
-				<xsl:apply-templates select="collection/name | activity/name | party/name  | service/name"/>
-				<div class="aro_box template">
-					<div class="aro_box_display">
+				<div class="main">
+					<xsl:apply-templates select="collection/name | activity/name | party/name  | service/name"/>
+				</div>
+				<div class="aro_box template" type="name">
+					<div class="aro_box_display clearfix">
+						<a href="javascript:;" class="toggle"><i class="icon-plus"></i></a>
 						<h1></h1>
+						<div class="control-group">
+							<label class="control-label" for="title">Type: </label>
+							<div class="controls">
+								<input type="text" class="input-small" name="type" placeholder="Type" value="{@type}"/>
+								<button class="btn btn-mini btn-danger removeName">
+									<i class="icon-remove icon-white"></i>
+								</button>
+								<p class="help-inline"><small></small></p>
+							</div>
+						</div>
 					</div>
 					<div class="aro_box_part">
 						<div class="control-group">
-							<label class="control-label" for="title"><input type="text" class="input-small" name="type" value=""/></label>
+							<label class="control-label" for="title">Name Part: </label>
 							<div class="controls">
-								<input type="text" class="input-xlarge" name="value" value=""/>
-									<button class="btn btn-mini btn-danger">
-										<i class="icon-remove icon-white"></i>
-									</button>
-									<p class="help-inline"><small></small></p>
+								<input type="text" class="input-small" name="type" placeholder="Type" value=""/>
+								<input type="text" class="input-xlarge" name="value" placeholder="Value" value=""/>
+								<button class="btn btn-mini btn-danger removeNamePart">
+									<i class="icon-remove icon-white"></i>
+								</button>
+								<p class="help-inline"><small></small></p>
 							</div>
 						</div>
 						<div class="control-group">
@@ -160,7 +174,7 @@
 						</div>
 					</div>
 				</div>
-				<button class="btn btn-primary">
+				<button class="btn btn-primary addNew">
 					<i class="icon-plus icon-white"></i> Add Name
 				</button>
 			</fieldset>
@@ -173,10 +187,20 @@
 	</xsl:template>
 	
 	<xsl:template match="collection/name | activity/name | party/name  | service/name">
-		<div class="aro_box">
-			<div class="aro_box_display">
-				<label class="control-label" for="title"><input type="text" class="input-small" name="type" value="{@type}"/></label>
+		<div class="aro_box" type="name">
+			<div class="aro_box_display clearfix">
+				<a href="javascript:;" class="toggle"><i class="icon-plus"></i></a>
 				<h1></h1>
+				<div class="control-group">
+					<label class="control-label" for="title">Type: </label>
+					<div class="controls">
+						<input type="text" class="input-small" name="type" placeholder="Type" value="{@type}"/>
+						<button class="btn btn-mini btn-danger removeName">
+							<i class="icon-remove icon-white"></i>
+						</button>
+						<p class="help-inline"><small></small></p>
+					</div>
+				</div>
 			</div>
 			<div class="aro_box_part">
 				<xsl:apply-templates select="namePart"/>
@@ -188,15 +212,16 @@
 					</div>
 				</div>
 			</div>
-		</div>	
+		</div>
 	</xsl:template>
 	
 	<xsl:template match="namePart">
 		<div class="control-group">
-			<label class="control-label" for="title"><input type="text" class="input-small" name="type" value="{@type}"/></label>
+			<label class="control-label" for="title">Name Part: </label>
 			<div class="controls">
+				<input type="text" class="input-small" name="type" placeholder="Type" value="{@type}"/>
 				<input type="text" class="input-xlarge" name="value" value="{text()}"/>
-				<button class="btn btn-mini btn-danger">
+				<button class="btn btn-mini btn-danger removeNamePart">
 					<i class="icon-remove icon-white"></i>
 				</button>
 				<p class="help-inline"><small></small></p>

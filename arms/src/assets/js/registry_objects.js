@@ -273,10 +273,19 @@ function load_ro(ro_id, view, active_tab){
 							$('.nav-tabs li a[href=#'+active_tab+']').click();
 						}
 
-						$('#edit-form .aro_box_display').live({
+						initEditForm();
+
+						$('#edit-form .toggle').live({
 							click: function(e){
 								e.preventDefault();
-								$(this).parent().children('.aro_box_part').toggle();
+								$('i', this).toggleClass('icon-plus').toggleClass('icon-minus');
+								$(this).parent().parent().children('.aro_box_part').toggle();
+							}
+						});
+
+						$('#edit-form button').live({
+							click: function(e){
+								e.preventDefault();
 							}
 						});
 
@@ -288,6 +297,68 @@ function load_ro(ro_id, view, active_tab){
 		}
 	});
 }
+
+function initEditForm(){
+	initNames();
+}
+
+function initNames(){
+	var names = $('#names .aro_box[type=name]');
+	$.each(names, function(){
+		if(!$(this).hasClass('template')){
+			initName(this);
+		}
+	});
+	$('#names .addNew').click(function(e){
+		var main = $(this).parent().children('.main');
+		var template = $(this).parent().children('.template');
+		$(template).clone().removeClass('template').appendTo(main);
+	});
+
+	$('#names input').live({
+		blur:function(e){
+			var thisName = $(this).parents('.aro_box[type=name]');
+			initName(thisName);
+		}
+	});
+
+	$('#names .removeName').live({
+		click:function(e){
+			e.preventDefault();
+			var target = $(this).parents('.aro_box[type=name]');
+			$(target).remove();
+		}
+	});
+
+	$('#names .removeNamePart').live({
+		click:function(e){
+			e.preventDefault();
+			var target = $(this).parents('.aro_box_part');
+			$(target).remove();
+		}
+	});
+}
+
+function initName(name){
+	var display = $(name).children('.aro_box_display').find('h1');
+	var type = $(name).children('.aro_box_display').find('input[name=type]').val();
+	var parts = $(name).children('.aro_box_part');
+	var display_name = '';
+	var temp_name = '';
+	$.each(parts, function(){
+		var thisPart = [];
+		var type = $(name).find('input[name=type]').val();
+		var value = $(name).find('input[name=value]').val();
+		//logic here
+		temp_name = value;
+		if(type=='primary'){
+			display_name = value;
+		}
+	});
+	if(display_name=='') display_name=temp_name;
+	$(display).html(display_name);
+}
+
 
 function getRecords(fields, sorts, page){
 	if(!page) page = 1;

@@ -58,14 +58,41 @@ h1{.text-shadow}
 	margin:0 -10px;
 	.box-header{
 		margin: -10px -10px 10px -10px;
-		padding:0px 15px;
+		padding:0px 10px;
 		.light-gradient();
 		border-bottom:1px solid @borderColor;
+		.breadcrumbs{
+			font-size:12px;
+			.text-shadow();
+			float:left;
+			line-height:38px;
+			margin:0;padding:0;
+			height:38px;
+			li{
+				list-style:none;
+				display:inline-block;
+				overflow:hide;
+				line-height:38px;
+				background:url('../img/breadcrumb_arrow.png') no-repeat right scroll;
+				a{
+					padding:10px;
+				}
+				a.active{
+					font-size:18px;
+					color:@darkGray;
+					font-weight:bold;
+					.ellipsis();
+				}
+				&:last-child{
+					background:none;
+				}
+			}
+		}
 		h1, h2, h3{
 			font-size:22px;
 			float:left;
 			margin:0px;
-			padding:5px 0px;
+			padding:0px;
 		}
 		h2{
 			font-size:20px;

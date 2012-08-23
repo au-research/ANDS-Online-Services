@@ -155,10 +155,12 @@
 	<div class="span8" id="data_source_view_container" data_source_id="">
 		<div class="box">
 		<div class="box-header">
-	        <h1>{{title}}</h1>
-	        <span class="right-widget">
-	        	<small><a href="javascript:;" class="close return-to-browse">&times;</a></small>
-	        </span>
+			<ul class="breadcrumbs">
+				<li><a href="javascript:;"><i class="icon-home"></i></a></li>
+				<li><?php echo anchor('data_source/manage', 'Manage My Datasources');?></li>
+				<li><a href="javascript:;" class="active">{{title}}</a></li>
+			</ul>
+	        <!--h1>{{title}}</h1-->
 	        <div class="clearfix"></div>
 	    </div>
 	    <div class="row-fluid">
