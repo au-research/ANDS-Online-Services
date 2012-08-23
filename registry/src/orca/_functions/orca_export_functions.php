@@ -177,11 +177,14 @@ function getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR = false, $inclu
 			if($contributorPage = getGroupPage($group))
 			{
 				$contributorPageTitle = getRegistryObject($contributorPage[0]['registry_object_key'], $overridePermissions = true);
-				$xml .= '      <extRif:contributorPage>'.rawurlencode($contributorPage[0]['registry_object_key']).'</extRif:contributorPage>'."\n";
-				$contributorLogoStr = getDescriptionLogo($contributorPage[0]['registry_object_key']);
-				if ($contributorLogoStr !== false)
+				if($contributorPageTitle)
 				{
-					$xml .= '      <extRif:contributorDisplayLogo>'.strip_tags(esc($contributorLogoStr)).'</extRif:contributorDisplayLogo>'."\n";
+					$xml .= '      <extRif:contributorPage>'.rawurlencode($contributorPage[0]['registry_object_key']).'</extRif:contributorPage>'."\n";
+					$contributorLogoStr = getDescriptionLogo($contributorPage[0]['registry_object_key']);
+					if ($contributorLogoStr !== false)
+					{
+						$xml .= '      <extRif:contributorDisplayLogo>'.strip_tags(esc($contributorLogoStr)).'</extRif:contributorDisplayLogo>'."\n";
+					}
 				}		
 			}
 			$xml .= "    </extRif:extendedMetadata>\n";
