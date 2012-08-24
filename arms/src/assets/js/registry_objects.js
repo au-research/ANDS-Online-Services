@@ -290,7 +290,7 @@ function load_ro(ro_id, view, active_tab){
 						});
 
 					}
-				})
+				});
 			}
 
 			$('#view-ro').show();
@@ -299,6 +299,27 @@ function load_ro(ro_id, view, active_tab){
 }
 
 function initEditForm(){
+
+	$('.input-large').typeahead({
+		source: function(typeahead,query){
+			$.ajax({
+				type: 'GET',
+				dataType : 'json',
+				url: base_url+'services/registry/get_vocab/type',
+				success:function(data){
+					return typeahead.process(data);
+				}
+			});
+		},
+		minLength:0
+	});
+
+	$('.triggerTypeAhead').live({
+		click: function(e){
+			$(this).parent().children('input').focus()
+		}
+	});
+
 	initNames();
 }
 

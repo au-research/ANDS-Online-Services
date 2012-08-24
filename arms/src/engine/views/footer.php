@@ -65,7 +65,7 @@
     
 
 	<!-- Bootstrap javascripts, need to be placed after all else -->
-    <script src="<?php echo base_url();?>assets/lib/twitter_bootstrap/js/bootstrap.min.js"></script>
+    <script src="<?php echo base_url();?>assets/lib/twitter_bootstrap/js/bootstrap.js"></script>
 
   </body>
 </html>

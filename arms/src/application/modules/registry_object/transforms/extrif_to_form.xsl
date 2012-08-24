@@ -19,19 +19,19 @@
 					<a href="#descriptions" data-toggle="tab">Descriptions/Rights</a>
 				</li>
 				<li>
-					<a href="#descriptions" data-toggle="tab">Identifiers</a>
+					<a href="#a" data-toggle="tab">Identifiers</a>
 				</li>
 				<li>
-					<a href="#descriptions" data-toggle="tab">Locations</a>
+					<a href="#a" data-toggle="tab">Locations</a>
 				</li>
 				<li>
-					<a href="#descriptions" data-toggle="tab">Related Objects</a>
+					<a href="#a" data-toggle="tab">Related Objects</a>
 				</li>
 				<li>
-					<a href="#descriptions" data-toggle="tab">Subjects</a>
+					<a href="#a" data-toggle="tab">Subjects</a>
 				</li>
 				<li>
-					<a href="#descriptions" data-toggle="tab">Related Info</a>
+					<a href="#a" data-toggle="tab">Related Info</a>
 				</li>
 			</ul>
 
@@ -78,7 +78,10 @@
 				<div class="control-group">
 					<label class="control-label" for="title">Type</label>
 					<div class="controls">
-						<input type="text" class="input-xlarge" name="title" value="{$ro_type}"/>
+						<div class="input-prepend">
+							<button class="btn triggerTypeAhead" type="button"><i class="icon-chevron-down"></i></button>
+						  	<input type="text" class="input-large" name="title" value="{$ro_type}"/>
+						</div>
 						<p class="help-inline">
 							<small/>
 						</p>
@@ -98,7 +101,10 @@
 				<div class="control-group">
 					<label class="control-label" for="title">Group</label>
 					<div class="controls">
-						<input type="text" class="input-xlarge" name="title" value="{@group}"/>
+						<div class="input-prepend">
+							<button class="btn triggerTypeAhead" type="button"><i class="icon-chevron-down"></i></button>
+						  	<input type="text" class="input-large" name="title" value="{@group}"/>
+						</div>
 						<p class="help-inline">
 							<small/>
 						</p>
@@ -120,10 +126,13 @@
 				<div class="control-group">
 					<label class="control-label" for="title">Date Modified</label>
 					<div class="controls">
-						<input type="text" class="input-xlarge" name="title" value="{$dateModified}"/>
-						<p class="help-inline">
-							<small/>
-						</p>
+						<div class="input-append">
+						  <input type="text" class="input-large" name="title" value="{$dateModified}"/>
+						  <button class="btn" type="button"><i class="icon-calendar"></i></button>
+						  <p class="help-inline">
+								<small/>
+							</p>
+						</div>
 					</div>
 				</div>
 
@@ -237,27 +246,39 @@
 				<legend>Descriptions / Rights</legend>
 				<xsl:apply-templates select="collection/description | activity/description | party/description  | service/description"/>
 				<xsl:apply-templates select="collection/rights | activity/rights | party/rights  | service/rights"/>
+
 				<div class="aro_box template">
-					<div class="aro_box_display">
-						<label class="control-label" for="title"><input type="text" class="input-small" name="type" value=""/></label>
-						<h1></h1>
-					</div>
-					<div class="aro_box_part">
-						<textarea class="input-xlarge" name="value"></textarea>
-					</div>
-				</div>
+					<h1>Description</h1>
+					<p>
+						<input type="text" class="input-xlarge" name="type" placeholder="Type" value="{@type}"/>
+						<button class="btn btn-mini btn-danger removeDescription">
+							<i class="icon-remove icon-white"></i>
+						</button>
+					</p>
+					<p>
+						<textarea name="value"><xsl:apply-templates select="text()"/></textarea>
+					</p>
+					
+					<p class="help-inline"><small></small></p>
+				</div>	
 				<button class="btn btn-primary">
 					<i class="icon-plus icon-white"></i> Add Description
 				</button>
+
 				<div class="aro_box template">
-					<div class="aro_box_display">
-						<label class="control-label" for="title"><input type="text" class="input-small" name="type" value=""/></label>
-						<h1></h1>
-					</div>
-					<div class="aro_box_part">
-						<textarea class="input-xlarge" name="value"></textarea>
-					</div>
-				</div>
+					<h1>Rights</h1>
+					<p>
+						<input type="text" class="input-xlarge" name="type" placeholder="Type" value="{@type}"/>
+						<button class="btn btn-mini btn-danger removeDescription">
+							<i class="icon-remove icon-white"></i>
+						</button>
+					</p>
+					<p>
+						<textarea name="value"><xsl:apply-templates select="text()"/></textarea>
+					</p>
+					
+					<p class="help-inline"><small></small></p>
+				</div>	
 				<button class="btn btn-primary">
 					<i class="icon-plus icon-white"></i> Add Rights
 				</button>
@@ -265,45 +286,38 @@
 		</div>
 	</xsl:template>
 
-
 	<xsl:template match="collection/description | activity/description | party/description  | service/description">
 		<div class="aro_box">
-			<div class="aro_box_display clearfix">
-				<a href="javascript:;" class="toggle"><i class="icon-plus"></i></a>
-				<h1></h1>
-				<div class="control-group">
-					<label class="control-label" for="title">Type: </label>
-					<div class="controls">
-						<input type="text" class="input-small" name="type" placeholder="Type" value="{@type}"/>
-						<textarea class="input-xlarge" name="value"><xsl:apply-templates select="text()"/></textarea>
-						<button class="btn btn-mini btn-danger removeName">
-							<i class="icon-remove icon-white"></i>
-						</button>
-						<p class="help-inline"><small></small></p>
-					</div>
-				</div>
-			</div>
+			<h1>Description</h1>
+			<p>
+				<input type="text" class="input-xlarge" name="type" placeholder="Type" value="{@type}"/>
+				<button class="btn btn-mini btn-danger removeDescription">
+					<i class="icon-remove icon-white"></i>
+				</button>
+			</p>
+			<p>
+				<textarea name="value"><xsl:apply-templates select="text()"/></textarea>
+			</p>
+			
+			<p class="help-inline"><small></small></p>
 		</div>	
 	</xsl:template>
 	
 	<xsl:template match="collection/rights | activity/rights | party/rights  | service/rights">
 		<div class="aro_box">
-			<div class="aro_box_display clearfix">
-				<a href="javascript:;" class="toggle"><i class="icon-plus"></i></a>
-				<h1></h1>
-				<div class="control-group">
-					<label class="control-label" for="title">Type: </label>
-					<div class="controls">
-						<input type="text" class="input-small" name="type" placeholder="Type" value="{@type}"/>
-						<textarea class="input-xlarge" name="value"><xsl:apply-templates select="text()"/></textarea>
-						<button class="btn btn-mini btn-danger removeName">
-							<i class="icon-remove icon-white"></i>
-						</button>
-						<p class="help-inline"><small></small></p>
-					</div>
-				</div>
-			</div>
-		</div>
+			<h1>Rights</h1>
+			<p>
+				<input type="text" class="input-xlarge" name="type" placeholder="Type" value="{@type}"/>
+				<button class="btn btn-mini btn-danger removeDescription">
+					<i class="icon-remove icon-white"></i>
+				</button>
+			</p>
+			<p>
+				<textarea name="value"><xsl:apply-templates select="text()"/></textarea>
+			</p>
+			
+			<p class="help-inline"><small></small></p>
+		</div>	
 	</xsl:template>
 
 

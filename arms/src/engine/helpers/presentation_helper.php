@@ -88,3 +88,23 @@ function curl_post($url, $post)
 function url_suffix(){
 	return '#!/';
 }
+
+function formatResponse($response, $format='xml'){
+	header('Cache-Control: no-cache, must-revalidate');
+	if($format=='xml'){
+		header ("content-type: text/xml");
+		$xml = new SimpleXMLELement('<root/>');
+		$response = array_flip($response);
+		array_walk_recursive($response, array ($xml, 'addChild'));
+		print $xml->asXML();
+	}elseif($format=='json'){
+		header('Content-type: application/json');
+		$response = json_encode($response);
+		echo $response;
+	}elseif($format=='raw'){
+		print $response['message'];
+	}elseif($format=='raw-xml'){
+		header ("content-type: text/xml");
+		print($response['message']);
+	}
+}
