@@ -50,17 +50,25 @@ class Registry extends MX_Controller {
 	 * @param 	vocab identifier
 	 * prints out the requested json fragment for the autocomplete
 	 */
-	public function get_vocab($vocab){
+	public function get_vocab($vocabIdentifier){
+		$this->load->database();
+		$this->db->select('vocabpath, name, identifier, description, id');
+		$this->db->from('tbl_terms');
+		$this->db->where(array('vocabulary_identifier'=>$vocabIdentifier));
+		$query = $this->db->get();
+
 		$vocab_results = array();
-		if($vocab=='type'){
-			$vocab_results = array(
-				array('value'=>'collection', 'subtext'=>'this is a subtext of a collection'),
-				array('value'=>'project', 'subtext'=>'this is a subtext of a collection'),
-				array('value'=>'party', 'subtext'=>'this is a subtext of a collection'),
-				array('value'=>'some long name', 'subtext'=>'this is a subtext of a collection')
-				//'collection', 'party', 'some long name', 'project'
-			);
+		foreach($query->result() as $row){
+			$description = $row->vocabpath;
+			/*if($row->description){
+				$description = $row->description;
+			} else{
+				$description = $row->name;
+			}*/
+			$item = array('value'=>$row->identifier, 'subtext'=>$description);
+			array_push($vocab_results, $item);
 		}
+
 		$vocab_results = json_encode($vocab_results);
 		echo $vocab_results;
 	}

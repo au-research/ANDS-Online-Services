@@ -279,7 +279,7 @@ function load_ro(ro_id, view, active_tab){
 							click: function(e){
 								e.preventDefault();
 								$('i', this).toggleClass('icon-plus').toggleClass('icon-minus');
-								$(this).parent().parent().children('.aro_box_part, .control-group').toggle();
+								$(this).parent().parent().children('.aro_box_part, button.addNew').toggle();
 							}
 						});
 
@@ -305,7 +305,7 @@ function initEditForm(){
 			$.ajax({
 				type: 'GET',
 				dataType : 'json',
-				url: base_url+'services/registry/get_vocab/type',
+				url: base_url+'services/registry/get_vocab/RIFCSCollectionType',
 				success:function(data){
 					return typeahead.process(data);
 				}
@@ -356,19 +356,6 @@ function initEditForm(){
 		}
 	});
 
-	if(editor=='tinymce'){
-		tinyMCE.init({
-		    theme : "advanced",
-		    mode : "specific_textareas",
-		    editor_selector : "editor",
-		    theme_advanced_toolbar_location : "top",
-		    theme_advanced_buttons1 : "bold,italic,underline,separator,link,separator,justifyleft,justifycenter,justifyright,justifyfull,separator,outdent,indent,separator,undo,redo,code",
-		    theme_advanced_buttons2 : "",
-		    theme_advanced_buttons3 : "",
-		    height:"250px",
-		    width:"600px"
-		});
-	}
 
 	$('.datepicker').datepicker({
 		format: 'yyyy-mm-dd'
@@ -383,7 +370,62 @@ function initEditForm(){
 		}
 	});
 
+	$('.addNew').live({
+		click:function(e){
+			e.preventDefault();
+			var what = $(this).attr('type');
+			//var templates = $('#templates');
+			var template = $('.template[type='+what+']');
+			var where = $(this).prevAll('.separate_line');
+			$(template).clone().removeClass('template').insertBefore(where).hide().slideDown();
+			if(what=='description' || what=='rights'){
+				$('#edit-form textarea').addClass('editor');
+				initEditor();
+			}
+		}
+	});
+
+	$('.export_xml').live({
+		click: function(e){
+			e.preventDefault();
+			tinyMCE.triggerSave();//so that we can get the tinymce textarea.value without using tinymce.getContents
+			var currentTab = $(this).parents('.tab-pane');
+			var boxes = $('.aro_box', currentTab);
+			var xml = '';
+			$.each(boxes, function(){
+				if(!$(this).hasClass('template')){
+					var fragment ='';
+					var fragment_type = '';
+					if($('.aro_box_display input', this).length>0){
+						fragment_type = $('.aro_box_display input', this).val();
+					}else{
+						fragment_type = $('input[name=type]', this).val();
+					}
+					fragment +='<'+$(this).attr('type')+' type="'+fragment_type+'">';
+					var parts = $('.aro_box_part', this);
+					if(parts.length > 0){//if there is a part
+						$.each(parts, function(){
+							fragment += '<'+$(this).attr('type')+' type="'+$('input[name=type]', this).val()+'">'+$('input[name=value]', this).val()+'</'+$(this).attr('type')+'>';
+						});
+					}else{//there is no part, the data is right at this level
+						//check if there's a text area
+						if($('textarea', this).length>0){
+							fragment += htmlEntities($('textarea', this).val());
+						}else{
+							//there's no textarea, just normal input
+						}
+					}
+					fragment +='</'+$(this).attr('type')+'>';
+					xml += fragment;
+				}
+			});
+			$('#myModal .modal-body').html('<pre>' + htmlEntities(xml) + '</pre>');
+			$('#myModal').modal();
+		}
+	});
+
 	initNames();
+	initDescriptions();
 }
 
 function initNames(){
@@ -393,19 +435,6 @@ function initNames(){
 			initName(this);
 		}
 	});
-	$('#names .addNew').click(function(e){
-		var main = $(this).parent().children('.separate_line');
-		var template = $(this).parent().children('.template');
-		$(template).clone().removeClass('template').prependTo(main);
-	});
-
-	$('#names .addNewPart').click(function(e){
-		var main = $(this).parents('.aro_box').children('.separate_line');
-		var template = $(this).parents('.aro_box').children('.template');
-		console.log(template);
-		$(template).clone().removeClass('template').prependTo(main);
-	});
-
 
 	$('#names input').live({
 		blur:function(e){
@@ -414,6 +443,8 @@ function initNames(){
 		}
 	});
 }
+
+
 
 function initName(name){
 	var display = $(name).children('.aro_box_display').find('h1');
@@ -433,6 +464,27 @@ function initName(name){
 	});
 	if(display_name=='') display_name=temp_name;
 	$(display).html(display_name);
+}
+
+function initDescriptions(){
+	initEditor();
+
+}
+
+function initEditor(){
+	if(editor=='tinymce'){
+		tinyMCE.init({
+		    theme : "advanced",
+		    mode : "specific_textareas",
+		    editor_selector : "editor",
+		    theme_advanced_toolbar_location : "top",
+		    theme_advanced_buttons1 : "bold,italic,underline,separator,link,separator,justifyleft,justifycenter,justifyright,justifyfull,separator,outdent,indent,separator,undo,redo,code",
+		    theme_advanced_buttons2 : "",
+		    theme_advanced_buttons3 : "",
+		    height:"250px",
+		    width:"600px"
+		});
+	}
 }
 
 

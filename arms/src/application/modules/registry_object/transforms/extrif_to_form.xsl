@@ -51,8 +51,11 @@
 						<div class="modal-body"/>
 						<div class="modal-footer"> </div>
 					</div>
+
+					
 				</div>
 			</form>
+			<xsl:call-template name="blankTemplate"/>
 		</div>
 	</xsl:template>
 
@@ -147,46 +150,15 @@
 		<div id="names" class="tab-pane">
 			<fieldset>
 				<legend>Names</legend>
+
 				<xsl:apply-templates select="collection/name | activity/name | party/name  | service/name"/>
 				<div class="separate_line"/>
-				<div class="aro_box template" type="name">
-					<div class="aro_box_display clearfix">
-						<a href="javascript:;" class="toggle"><i class="icon-plus"></i></a>
-						<h1></h1>
-						<div class="control-group">
-							<label class="control-label" for="title">Type: </label>
-							<div class="controls">
-								<input type="text" class="input-small" name="type" placeholder="Type" value="{@type}"/>
-								<button class="btn btn-mini btn-danger remove">
-									<i class="icon-remove icon-white"></i>
-								</button>
-								<p class="help-inline"><small></small></p>
-							</div>
-						</div>
-					</div>
-					<div class="aro_box_part">
-						<div class="control-group">
-							<label class="control-label" for="title">Name Part: </label>
-							<div class="controls">
-								<input type="text" class="input-small" name="type" placeholder="Type" value=""/>
-								<input type="text" class="input-xlarge" name="value" placeholder="Value" value=""/>
-								<button class="btn btn-mini btn-danger remove">
-									<i class="icon-remove icon-white"></i>
-								</button>
-								<p class="help-inline"><small></small></p>
-							</div>
-						</div>
-					</div>
-					<div class="control-group">
-						<div class="controls">
-							<button class="btn btn-primary addNewPart">
-								<i class="icon-plus icon-white"></i> Add Name Part
-							</button>
-						</div>
-					</div>
-				</div>
-				<button class="btn btn-primary addNew">
+				
+				<button class="btn btn-primary addNew" type="name">
 					<i class="icon-plus icon-white"></i> Add Name
+				</button>
+				<button class="btn export_xml btn-info">
+					Export XML fragment
 				</button>
 			</fieldset>
 		</div>
@@ -213,20 +185,16 @@
 					</div>
 				</div>
 			</div>
-			<div class="separate_line"/>
 			<xsl:apply-templates select="namePart"/>
-			<div class="control-group hide">
-				<div class="controls">
-					<button class="btn btn-primary addNewPart">
-						<i class="icon-plus icon-white"></i> Add Name Part
-					</button>
-				</div>
-			</div>			
+			<div class="separate_line"/>
+			<button class="btn btn-primary addNew hide" type="namePart">
+				<i class="icon-plus icon-white"></i> Add Name Part
+			</button>
 		</div>
 	</xsl:template>
 	
 	<xsl:template match="namePart">
-		<div class="aro_box_part hide">
+		<div class="aro_box_part hide" type="namePart">
 			<div class="control-group">
 				<label class="control-label" for="title">Name Part: </label>
 				<div class="controls">
@@ -249,47 +217,23 @@
 				<xsl:apply-templates select="collection/description | activity/description | party/description  | service/description"/>
 				<xsl:apply-templates select="collection/rights | activity/rights | party/rights  | service/rights"/>
 
-				<div class="aro_box template">
-					<h1>Description</h1>
-					<p>
-						<input type="text" class="input-xlarge" name="type" placeholder="Type" value="{@type}"/>
-						<button class="btn btn-mini btn-danger remove">
-							<i class="icon-remove icon-white"></i>
-						</button>
-					</p>
-					<p>
-						<textarea name="value" class="editor"><xsl:apply-templates select="text()"/></textarea>
-					</p>
-					
-					<p class="help-inline"><small></small></p>
-				</div>	
-				<button class="btn btn-primary">
+				
+				<div class="separate_line"/>
+				<button class="btn btn-primary addNew" type="description">
 					<i class="icon-plus icon-white"></i> Add Description
 				</button>
-
-				<div class="aro_box template">
-					<h1>Rights</h1>
-					<p>
-						<input type="text" class="input-xlarge" name="type" placeholder="Type" value="{@type}"/>
-						<button class="btn btn-mini btn-danger remove">
-							<i class="icon-remove icon-white"></i>
-						</button>
-					</p>
-					<p>
-						<textarea name="value" class="editor"><xsl:apply-templates select="text()"/></textarea>
-					</p>
-					
-					<p class="help-inline"><small></small></p>
-				</div>	
-				<button class="btn btn-primary">
+				<button class="btn btn-primary addNew" type="rights">
 					<i class="icon-plus icon-white"></i> Add Rights
+				</button>
+				<button class="btn export_xml btn-info">
+					Export XML fragment
 				</button>
 			</fieldset>
 		</div>
 	</xsl:template>
 
 	<xsl:template match="collection/description | activity/description | party/description  | service/description">
-		<div class="aro_box">
+		<div class="aro_box" type="description">
 			<h1>Description</h1>
 			<p>
 				<input type="text" class="input-xlarge" name="type" placeholder="Type" value="{@type}"/>
@@ -321,6 +265,92 @@
 			<p class="help-inline"><small></small></p>
 		</div>
 	</xsl:template>
+
+
+
+	<!-- BLANK TEMPLATE -->
+	<xsl:template name="blankTemplate">
+
+		<div class="aro_box template" type="name">
+			<div class="aro_box_display clearfix">				
+				<a href="javascript:;" class="toggle"><i class="icon-minus"></i></a>
+				<h1></h1>
+				<div class="control-group">
+					<label class="control-label" for="title">Type: </label>
+					<div class="controls">
+						<input type="text" class="input-small" name="type" placeholder="Type" value="{@type}"/>
+						<button class="btn btn-mini btn-danger remove">
+							<i class="icon-remove icon-white"></i>
+						</button>
+						<p class="help-inline"><small></small></p>
+					</div>
+				</div>
+			</div>
+			<div class="aro_box_part" type="namePart">
+				<div class="control-group">
+					<label class="control-label" for="title">Name Part: </label>
+					<div class="controls">
+						<input type="text" class="input-small" name="type" placeholder="Type" value=""/>
+						<input type="text" class="input-xlarge" name="value" placeholder="Value" value=""/>
+						<button class="btn btn-mini btn-danger remove">
+							<i class="icon-remove icon-white"></i>
+						</button>
+						<p class="help-inline"><small></small></p>
+					</div>
+				</div>
+			</div>
+			<div class="separate_line"/>
+			<button class="btn btn-primary addNew" type="namePart">
+				<i class="icon-plus icon-white"></i> Add Name Part
+			</button>
+		</div>
+
+		<div class="aro_box_part template" type="namePart">
+			<div class="control-group">
+				<label class="control-label" for="title">Name Part: </label>
+				<div class="controls">
+					<input type="text" class="input-small" name="type" placeholder="Type" value=""/>
+					<input type="text" class="input-xlarge" name="value" placeholder="Value" value=""/>
+					<button class="btn btn-mini btn-danger remove">
+						<i class="icon-remove icon-white"></i>
+					</button>
+					<p class="help-inline"><small></small></p>
+				</div>
+			</div>
+		</div>
+
+		<div class="aro_box template" type="description">
+			<h1>Description</h1>
+			<p>
+				<input type="text" class="input-xlarge" name="type" placeholder="Type" value="{@type}"/>
+				<button class="btn btn-mini btn-danger remove">
+					<i class="icon-remove icon-white"></i>
+				</button>
+			</p>
+			<p>
+				<textarea name="value" class=""><xsl:apply-templates select="text()"/></textarea>
+			</p>
+			
+			<p class="help-inline"><small></small></p>
+		</div>
+
+		<div class="aro_box template" type="rights">
+			<h1>Rights</h1>
+			<p>
+				<input type="text" class="input-xlarge" name="type" placeholder="Type" value="{@type}"/>
+				<button class="btn btn-mini btn-danger remove">
+					<i class="icon-remove icon-white"></i>
+				</button>
+			</p>
+			<p>
+				<textarea name="value" class=""><xsl:apply-templates select="text()"/></textarea>
+			</p>
+			
+			<p class="help-inline"><small></small></p>
+		</div>
+
+	</xsl:template>
+	
 
 
 </xsl:stylesheet>
