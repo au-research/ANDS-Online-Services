@@ -1737,6 +1737,7 @@
 
 }(window.jQuery);
 
+
 /* =============================================================
  * bootstrap-typeahead.js v2.0.0
  * http://twitter.github.com/bootstrap/javascript.html#typeahead
@@ -1840,9 +1841,10 @@
 
       this.query = this.$element.val()
 
-      if (!this.query) {
+
+      /*if (!this.query) {
         return this.shown ? this.hide() : this
-      }
+      }*/
 
       items = $.grep(results, function (item) {
         if (!that.strings)
@@ -1860,7 +1862,12 @@
     }
 
   , matcher: function (item) {
-      return ~item.toLowerCase().indexOf(this.query.toLowerCase())
+      //return item;
+      if(this.query){
+        return ~item.toLowerCase().indexOf(this.query.toLowerCase())
+      }else{
+        return item;
+      }
     }
 
   , sorter: function (items) {
@@ -2008,11 +2015,11 @@
       $(e.currentTarget).addClass('active')
     }
   , focus: function(e){
-    e.stopPropagation()
-    e.preventDefault()
-    this.lookup()
-    return false
-    }
+      e.stopPropagation()
+      e.preventDefault()
+      this.lookup()
+      return false
+  }
 
   }
 
