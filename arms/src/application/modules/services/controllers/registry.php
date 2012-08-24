@@ -53,13 +53,22 @@ class Registry extends MX_Controller {
 	public function get_vocab($vocab){
 		$vocab_results = array();
 		if($vocab=='type'){
-			$vocab_results = array('collection', 'party', 'some long name', 'project');
+			$vocab_results = array(
+				array('value'=>'collection', 'subtext'=>'this is a subtext of a collection')
+				//'collection', 'party', 'some long name', 'project'
+			);
 		}
 		$vocab_results = json_encode($vocab_results);
 		echo $vocab_results;
 	}
 
-
+	/*
+	 * get_random_key
+	 * 
+	 * @author 	Minh Duc Nguyen <minh.nguyen@ands.org.au>
+	 * @param 	length of the key
+	 * prints out a random key that is unique
+	 */
 	public function get_random_key($length=52){
 		$chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";	
 		$str='';
@@ -67,6 +76,38 @@ class Registry extends MX_Controller {
 		for( $i = 0; $i < $length; $i++ ) {
 			$str .= $chars[ rand( 0, $size - 1 ) ];
 		}
+
+		//@TODO: need some db checking
 		echo $str;
+	}
+
+	/*
+	 * get_datasources_list
+	 * 
+	 * @author 	Minh Duc Nguyen <minh.nguyen@ands.org.au>
+	 * @param 	
+	 * prints out the list of datasources the user has access to @TODO: needs ACL
+	 */
+	public function get_datasources_list(){
+		//$this->output->enable_profiler(TRUE);
+		header('Cache-Control: no-cache, must-revalidate');
+		header('Content-type: application/json');
+
+		$jsonData = array();
+		$jsonData['status'] = 'OK';
+		$this->load->model("data_source/data_sources","ds");
+		$dataSources = $this->ds->getAll(0, 0);//get All
+
+		$items = array();
+		foreach($dataSources as $ds){
+			$item = array();
+			$item['title'] = $ds->title;
+			$item['id'] = $ds->id;
+			array_push($items, $item);
+		}
+		
+		$jsonData['items'] = $items;
+		$jsonData = json_encode($jsonData);
+		echo $jsonData;
 	}
 }	

@@ -334,6 +334,27 @@ function initEditForm(){
 		}
 	});
 
+	var selected_data_source = $('#data_source_id_value').val();
+	$.ajax({
+		type: 'GET',
+		dataType : 'json',
+		url: base_url+'services/registry/get_datasources_list/',
+		success:function(data){
+			var data_sources = data.items;
+			$('#data_sources_select').append('<option value="0"></option>');
+			$.each(data.items, function(e){
+				var id = this.id;
+				var title = this.title;
+				var selected = '';
+				if(id==selected_data_source){
+					selected='selected=selected';
+				}
+				$('#data_sources_select').append('<option value="'+id+'" '+selected+'>'+title+'</option>');
+			});
+			//284 is the default width for input-xlarge + padding
+			$('#data_sources_select').width('284').chosen();
+		}
+	});
 	initNames();
 }
 

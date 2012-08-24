@@ -91,7 +91,8 @@
 				<div class="control-group">
 					<label class="control-label" for="title">Data Source</label>
 					<div class="controls">
-						<input type="text" class="input-xlarge" name="title" value="{$dataSourceID}"/>
+						<select id="data_sources_select"/>
+						<input type="text" id="data_source_id_value" class="input-small hide" name="title" value="{$dataSourceID}"/>
 						<p class="help-inline">
 							<small/>
 						</p>

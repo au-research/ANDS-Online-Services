@@ -1847,10 +1847,13 @@
       }*/
 
       items = $.grep(results, function (item) {
-        if (!that.strings)
+        if (!that.strings){
           item = item[that.options.property]
+        }
+        
         if (that.matcher(item)) return item
       })
+
 
       items = this.sorter(items)
 
@@ -1862,7 +1865,6 @@
     }
 
   , matcher: function (item) {
-      //return item;
       if(this.query){
         return ~item.toLowerCase().indexOf(this.query.toLowerCase())
       }else{
@@ -1898,11 +1900,15 @@
   , render: function (items) {
       var that = this
 
+
       items = $(items).map(function (i, item) {
         i = $(that.options.item).attr('data-value', JSON.stringify(item))
-        if (!that.strings)
-            item = item[that.options.property]
-        i.find('a').html(that.highlighter(item))
+        if (!that.strings){
+          var subtext = item[that.options.subtext]
+          item = item[that.options.property]
+        }
+            
+        i.find('a').html(that.highlighter(item)).append('<div>'+subtext+'</div>')
         return i[0]
       })
 
@@ -2044,6 +2050,7 @@
   , item: '<li><a href="#"></a></li>'
   , onselect: null
   , property: 'value'
+  , subtext: 'subtext'
   }
 
   $.fn.typeahead.Constructor = Typeahead
