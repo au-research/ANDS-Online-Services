@@ -26,6 +26,12 @@
     <!-- The javascripts Libraries
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
+    <script>
+        localStorage.clear();
+        var base_url = '<?php echo base_url();?>';
+        var suffix = '<?php echo url_suffix();?>';
+        var editor = '';
+    </script>
     <?php foreach($js_lib as $lib):?>
         <?php if($lib=='core'):?>
             <script src="<?php echo base_url();?>assets/lib/jquery-1.7.2.min.js"></script>
@@ -40,6 +46,8 @@
             <script src="<?php echo base_url();?>assets/lib/jquery.ba-hashchange.js" type="text/javascript"></script>
             <script src="<?php echo base_url();?>assets/lib/bootstrap_toggle_button/jquery.toggle.buttons.js" type="text/javascript"></script>
             <script src="<?php echo base_url();?>assets/lib/qtip2/jquery.qtip.min.js" type="text/javascript"></script>
+
+
         <?php endif;?>
 
         <?php if($lib=='graph'):?>
@@ -47,15 +55,18 @@
             <script language="javascript" type="text/javascript" src="<?php echo base_url();?>assets/lib/jqplot/jquery.jqplot.min.js"></script>
             <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/lib/jqplot/jquery.jqplot.css" />
         <?php endif;?>
+
+        <?php if($lib=='tinymce'):?>
+            <script type="text/javascript" src="<?php echo base_url();?>assets/lib/tiny_mce/tiny_mce.js"></script>
+            <script>
+               var editor = 'tinymce';
+            </script>
+        <?php endif;?>
     <?php endforeach;?>
 
 
 	<!-- ARMS scripts -->
-    <script>
-        localStorage.clear();
-        var base_url = '<?php echo base_url();?>';
-        var suffix = '<?php echo url_suffix();?>';
-    </script>
+    
 	<script src="<?php echo base_url();?>assets/js/scripts.js"></script>
 
     <?php foreach($scripts as $script):?>

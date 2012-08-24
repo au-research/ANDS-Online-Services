@@ -8,7 +8,7 @@
 	<xsl:template match="registryObject">
 		<div class="">
 			<!-- tabs -->
-			<ul class="nav nav-tabs">
+			<ul class="nav nav-tabs" data-spy="affix">
 				<li class="active">
 					<a href="#admin" data-toggle="tab">Record Administration</a>
 				</li>
@@ -258,7 +258,7 @@
 						</button>
 					</p>
 					<p>
-						<textarea name="value"><xsl:apply-templates select="text()"/></textarea>
+						<textarea name="value" class="editor"><xsl:apply-templates select="text()"/></textarea>
 					</p>
 					
 					<p class="help-inline"><small></small></p>
@@ -276,7 +276,7 @@
 						</button>
 					</p>
 					<p>
-						<textarea name="value"><xsl:apply-templates select="text()"/></textarea>
+						<textarea name="value" class="editor"><xsl:apply-templates select="text()"/></textarea>
 					</p>
 					
 					<p class="help-inline"><small></small></p>
@@ -298,7 +298,7 @@
 				</button>
 			</p>
 			<p>
-				<textarea name="value"><xsl:apply-templates select="text()"/></textarea>
+				<textarea name="value" class="editor"><xsl:apply-templates select="text()"/></textarea>
 			</p>
 			
 			<p class="help-inline"><small></small></p>
@@ -315,7 +315,7 @@
 				</button>
 			</p>
 			<p>
-				<textarea name="value"><xsl:apply-templates select="text()"/></textarea>
+				<textarea name="value" class="editor"><xsl:apply-templates select="text()"/></textarea>
 			</p>
 			
 			<p class="help-inline"><small></small></p>
