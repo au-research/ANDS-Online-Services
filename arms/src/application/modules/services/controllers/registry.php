@@ -54,7 +54,10 @@ class Registry extends MX_Controller {
 		$vocab_results = array();
 		if($vocab=='type'){
 			$vocab_results = array(
-				array('value'=>'collection', 'subtext'=>'this is a subtext of a collection')
+				array('value'=>'collection', 'subtext'=>'this is a subtext of a collection'),
+				array('value'=>'project', 'subtext'=>'this is a subtext of a collection'),
+				array('value'=>'party', 'subtext'=>'this is a subtext of a collection'),
+				array('value'=>'some long name', 'subtext'=>'this is a subtext of a collection')
 				//'collection', 'party', 'some long name', 'project'
 			);
 		}
