@@ -320,6 +320,20 @@ function initEditForm(){
 		}
 	});
 
+	$('#generate_random_key').live({
+		click:function(e){
+			e.preventDefault();
+			var input = $(this).prev('input');
+			$.ajax({
+				type: 'GET',
+				url: base_url+'services/registry/get_random_key/',
+				success:function(data){
+					$(input).val(data)
+				}
+			});
+		}
+	});
+
 	initNames();
 }
 

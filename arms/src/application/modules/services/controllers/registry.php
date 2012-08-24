@@ -58,4 +58,15 @@ class Registry extends MX_Controller {
 		$vocab_results = json_encode($vocab_results);
 		echo $vocab_results;
 	}
+
+
+	public function get_random_key($length=52){
+		$chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";	
+		$str='';
+		$size = strlen( $chars );
+		for( $i = 0; $i < $length; $i++ ) {
+			$str .= $chars[ rand( 0, $size - 1 ) ];
+		}
+		echo $str;
+	}
 }	

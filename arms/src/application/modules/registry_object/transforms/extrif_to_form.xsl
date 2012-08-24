@@ -115,8 +115,9 @@
 					<label class="control-label" for="title">Key</label>
 					<div class="controls">
 						<input type="text" class="input-xlarge" name="title" value="{key}"/>
-						<button class="btn btn">
-							<i class="icon-refresh"/> Generate Random Key </button>
+						<button class="btn btn" id="generate_random_key">
+							<i class="icon-refresh"/> Generate Random Key
+						</button>
 						<p class="help-inline">
 							<small>Key must be unique and is case sensitive</small>
 						</p>
