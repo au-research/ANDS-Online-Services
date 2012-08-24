@@ -62,6 +62,12 @@
                var editor = 'tinymce';
             </script>
         <?php endif;?>
+
+        <?php if($lib=='datepicker'):?>
+            <script type="text/javascript" src="<?php echo base_url();?>assets/lib/bootstrap_datepicker/js/bootstrap-datepicker.js"></script>
+            <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/lib/bootstrap_datepicker/css/datepicker.css" />
+        <?php endif;?>
+
     <?php endforeach;?>
 
 

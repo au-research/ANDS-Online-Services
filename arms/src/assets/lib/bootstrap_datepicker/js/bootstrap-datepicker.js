@@ -269,6 +269,8 @@
 				this.viewMode = Math.max(0, Math.min(2, this.viewMode + dir));
 			}
 			this.picker.find('>div').hide().filter('.datepicker-'+DPGlobal.modes[this.viewMode].clsName).show();
+			this.picker.find('.datepicker-time').show();
+			this.picker.find('.datepicker-timezone').show();
 		}
 	};
 	
@@ -395,6 +397,12 @@
 									DPGlobal.headTemplate+
 									DPGlobal.contTemplate+
 								'</table>'+
+							'</div>'+
+							'<div class="datepicker-time">'+
+								'Timepicker feature coming...'+
+							'</div>'+
+							'<div class="datepicker-timezone">'+
+								'Timezone picker feature coming...'+
 							'</div>'+
 						'</div>';
 

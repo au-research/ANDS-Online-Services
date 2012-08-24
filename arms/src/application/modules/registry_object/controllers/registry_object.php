@@ -28,7 +28,7 @@ class Registry_object extends MX_Controller {
 			$data['data_source_title'] = 'Viewing All Registry Objects';
 			$data['data_source_id'] = 0;
 			$data['scripts'] = array('registry_objects');
-			$data['js_lib'] = array('core', 'tinymce');
+			$data['js_lib'] = array('core', 'tinymce', 'datepicker');
 			$this->load->view("registry_object_index", $data);
 			//show_error('No Data Source ID provided. use all data source view for relevant roles');
 		}

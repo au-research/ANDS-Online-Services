@@ -279,7 +279,7 @@ function load_ro(ro_id, view, active_tab){
 							click: function(e){
 								e.preventDefault();
 								$('i', this).toggleClass('icon-plus').toggleClass('icon-minus');
-								$(this).parent().parent().children('.aro_box_part').toggle();
+								$(this).parent().parent().children('.aro_box_part, .control-group').toggle();
 							}
 						});
 
@@ -362,13 +362,26 @@ function initEditForm(){
 		    mode : "specific_textareas",
 		    editor_selector : "editor",
 		    theme_advanced_toolbar_location : "top",
-		    theme_advanced_buttons1 : "bold,italic,underline,separator,justifyleft,justifycenter,justifyright,justifyfull,separator,outdent,indent,separator,undo,redo,code,preview",
+		    theme_advanced_buttons1 : "bold,italic,underline,separator,link,separator,justifyleft,justifycenter,justifyright,justifyfull,separator,outdent,indent,separator,undo,redo,code",
 		    theme_advanced_buttons2 : "",
 		    theme_advanced_buttons3 : "",
 		    height:"250px",
 		    width:"600px"
 		});
 	}
+
+	$('.datepicker').datepicker({
+		format: 'yyyy-mm-dd'
+	});
+
+	$('.remove').live({
+		click:function(){
+			var target = $(this).parents('.aro_box_part');
+			if($(target).length==0) target = $(this).parents('.aro_box');
+			//console.log(target);
+			$(target).remove();
+		}
+	});
 
 	initNames();
 }
@@ -381,31 +394,23 @@ function initNames(){
 		}
 	});
 	$('#names .addNew').click(function(e){
-		var main = $(this).parent().children('.main');
+		var main = $(this).parent().children('.separate_line');
 		var template = $(this).parent().children('.template');
-		$(template).clone().removeClass('template').appendTo(main);
+		$(template).clone().removeClass('template').prependTo(main);
 	});
+
+	$('#names .addNewPart').click(function(e){
+		var main = $(this).parents('.aro_box').children('.separate_line');
+		var template = $(this).parents('.aro_box').children('.template');
+		console.log(template);
+		$(template).clone().removeClass('template').prependTo(main);
+	});
+
 
 	$('#names input').live({
 		blur:function(e){
 			var thisName = $(this).parents('.aro_box[type=name]');
 			initName(thisName);
-		}
-	});
-
-	$('#names .removeName').live({
-		click:function(e){
-			e.preventDefault();
-			var target = $(this).parents('.aro_box[type=name]');
-			$(target).remove();
-		}
-	});
-
-	$('#names .removeNamePart').live({
-		click:function(e){
-			e.preventDefault();
-			var target = $(this).parents('.aro_box_part');
-			$(target).remove();
 		}
 	});
 }

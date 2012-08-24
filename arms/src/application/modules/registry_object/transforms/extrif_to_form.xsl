@@ -129,7 +129,7 @@
 					<label class="control-label" for="title">Date Modified</label>
 					<div class="controls">
 						<div class="input-append">
-						  <input type="text" class="input-large" name="title" value="{$dateModified}"/>
+						  <input type="text" class="input-large datepicker" name="title" value="{$dateModified}"/>
 						  <button class="btn" type="button"><i class="icon-calendar"></i></button>
 						  <p class="help-inline">
 								<small/>
@@ -147,9 +147,8 @@
 		<div id="names" class="tab-pane">
 			<fieldset>
 				<legend>Names</legend>
-				<div class="main">
-					<xsl:apply-templates select="collection/name | activity/name | party/name  | service/name"/>
-				</div>
+				<xsl:apply-templates select="collection/name | activity/name | party/name  | service/name"/>
+				<div class="separate_line"/>
 				<div class="aro_box template" type="name">
 					<div class="aro_box_display clearfix">
 						<a href="javascript:;" class="toggle"><i class="icon-plus"></i></a>
@@ -158,7 +157,7 @@
 							<label class="control-label" for="title">Type: </label>
 							<div class="controls">
 								<input type="text" class="input-small" name="type" placeholder="Type" value="{@type}"/>
-								<button class="btn btn-mini btn-danger removeName">
+								<button class="btn btn-mini btn-danger remove">
 									<i class="icon-remove icon-white"></i>
 								</button>
 								<p class="help-inline"><small></small></p>
@@ -171,18 +170,18 @@
 							<div class="controls">
 								<input type="text" class="input-small" name="type" placeholder="Type" value=""/>
 								<input type="text" class="input-xlarge" name="value" placeholder="Value" value=""/>
-								<button class="btn btn-mini btn-danger removeNamePart">
+								<button class="btn btn-mini btn-danger remove">
 									<i class="icon-remove icon-white"></i>
 								</button>
 								<p class="help-inline"><small></small></p>
 							</div>
 						</div>
-						<div class="control-group">
-							<div class="controls">
-								<button class="btn btn-primary">
-									<i class="icon-plus icon-white"></i> Add Name Part
-								</button>
-							</div>
+					</div>
+					<div class="control-group">
+						<div class="controls">
+							<button class="btn btn-primary addNewPart">
+								<i class="icon-plus icon-white"></i> Add Name Part
+							</button>
 						</div>
 					</div>
 				</div>
@@ -207,36 +206,37 @@
 					<label class="control-label" for="title">Type: </label>
 					<div class="controls">
 						<input type="text" class="input-small" name="type" placeholder="Type" value="{@type}"/>
-						<button class="btn btn-mini btn-danger removeName">
+						<button class="btn btn-mini btn-danger remove">
 							<i class="icon-remove icon-white"></i>
 						</button>
 						<p class="help-inline"><small></small></p>
 					</div>
 				</div>
 			</div>
-			<div class="aro_box_part">
-				<xsl:apply-templates select="namePart"/>
-				<div class="control-group">
-					<div class="controls">
-						<button class="btn btn-primary">
-							<i class="icon-plus icon-white"></i> Add Name Part
-						</button>
-					</div>
+			<div class="separate_line"/>
+			<xsl:apply-templates select="namePart"/>
+			<div class="control-group hide">
+				<div class="controls">
+					<button class="btn btn-primary addNewPart">
+						<i class="icon-plus icon-white"></i> Add Name Part
+					</button>
 				</div>
-			</div>
+			</div>			
 		</div>
 	</xsl:template>
 	
 	<xsl:template match="namePart">
-		<div class="control-group">
-			<label class="control-label" for="title">Name Part: </label>
-			<div class="controls">
-				<input type="text" class="input-small" name="type" placeholder="Type" value="{@type}"/>
-				<input type="text" class="input-xlarge" name="value" value="{text()}"/>
-				<button class="btn btn-mini btn-danger removeNamePart">
-					<i class="icon-remove icon-white"></i>
-				</button>
-				<p class="help-inline"><small></small></p>
+		<div class="aro_box_part hide">
+			<div class="control-group">
+				<label class="control-label" for="title">Name Part: </label>
+				<div class="controls">
+					<input type="text" class="input-small" name="type" placeholder="Type" value="{@type}"/>
+					<input type="text" class="input-xlarge" name="value" value="{text()}"/>
+					<button class="btn btn-mini btn-danger remove">
+						<i class="icon-remove icon-white"></i>
+					</button>
+					<p class="help-inline"><small></small></p>
+				</div>
 			</div>
 		</div>
 	</xsl:template>
@@ -253,7 +253,7 @@
 					<h1>Description</h1>
 					<p>
 						<input type="text" class="input-xlarge" name="type" placeholder="Type" value="{@type}"/>
-						<button class="btn btn-mini btn-danger removeDescription">
+						<button class="btn btn-mini btn-danger remove">
 							<i class="icon-remove icon-white"></i>
 						</button>
 					</p>
@@ -271,7 +271,7 @@
 					<h1>Rights</h1>
 					<p>
 						<input type="text" class="input-xlarge" name="type" placeholder="Type" value="{@type}"/>
-						<button class="btn btn-mini btn-danger removeDescription">
+						<button class="btn btn-mini btn-danger remove">
 							<i class="icon-remove icon-white"></i>
 						</button>
 					</p>
@@ -293,7 +293,7 @@
 			<h1>Description</h1>
 			<p>
 				<input type="text" class="input-xlarge" name="type" placeholder="Type" value="{@type}"/>
-				<button class="btn btn-mini btn-danger removeDescription">
+				<button class="btn btn-mini btn-danger remove">
 					<i class="icon-remove icon-white"></i>
 				</button>
 			</p>
@@ -302,7 +302,7 @@
 			</p>
 			
 			<p class="help-inline"><small></small></p>
-		</div>	
+		</div>
 	</xsl:template>
 	
 	<xsl:template match="collection/rights | activity/rights | party/rights  | service/rights">
@@ -310,7 +310,7 @@
 			<h1>Rights</h1>
 			<p>
 				<input type="text" class="input-xlarge" name="type" placeholder="Type" value="{@type}"/>
-				<button class="btn btn-mini btn-danger removeDescription">
+				<button class="btn btn-mini btn-danger remove">
 					<i class="icon-remove icon-white"></i>
 				</button>
 			</p>
@@ -319,7 +319,7 @@
 			</p>
 			
 			<p class="help-inline"><small></small></p>
-		</div>	
+		</div>
 	</xsl:template>
 
 
