@@ -38,7 +38,7 @@
 				//focus: $.proxy(this.show, this),
 				//blur: $.proxy(this.hide, this),
 				//dblclick: $.proxy(this.show, this),
-				dblclick: $.proxy(this.toggle, this),
+				focus: $.proxy(this.toggle, this),
 				keyup: $.proxy(this.update, this)
 			});
 			
@@ -421,12 +421,9 @@
 			return {separator: separator, parts: parts};
 		},
 		parseDate: function(date, format) {
-
-			time = date.substring(date.indexOf('T')+1, date.indexOf('Z'));
-
-			var timeParts = time.split(':');
 			
-
+			time = date.substring(date.indexOf('T')+1, date.indexOf('Z'));
+			var timeParts = time.split(':');
 			date = date.substring(0, date.indexOf('T'));//kill everything after T
 
 			var parts = date.split(format.separator),
@@ -457,6 +454,9 @@
 				date.setSeconds(timeParts[2]);
 			}
 			return date;
+			
+
+			
 		},
 		formatDate: function(date, format){
 			var val = {

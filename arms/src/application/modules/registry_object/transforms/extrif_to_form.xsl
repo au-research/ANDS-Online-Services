@@ -392,16 +392,34 @@
 	<xsl:template match="collection/relatedObject | activity/relatedObject | party/relatedObject  | service/relatedObject">
 		<div class="aro_box" type="relatedobject">
 			<div class="aro_box_display clearfix">
-				<div class="controls">
-					<input type="text" class="input-xlarge" name="key" value="{key}"/>
-					<xsl:apply-templates select="relation"/>
-					<button class="btn btn-mini btn-danger remove">
-						<i class="icon-remove icon-white"></i>
-					</button>
-					
-					<p class="help-inline"><small></small></p>
+				<a href="javascript:;" class="toggle"><i class="icon-minus"></i></a>
+				<h1>Related Object Title goes here <small>relation</small></h1>
+				<div class="control-group">
+					<div class="controls">
+						<button class="btn btn-mini btn-danger remove">
+							<i class="icon-remove icon-white"></i>
+						</button>
+						<p class="help-inline"><small></small></p>
+					</div>
 				</div>
 			</div>
+			
+			<div class="aro_box_part">
+				<div class="control-group">
+					<label class="control-label" for="title">Key: </label>
+					<div class="controls">
+						<input type="text" class="input-xlarge" name="key" value="{key}"/>
+					</div>
+				</div>
+			</div>
+					
+			<xsl:apply-templates select="relation"/>
+			<div class="separate_line"/>
+			<button class="btn btn-primary addNew" type="relation">
+				<i class="icon-plus icon-white"></i> Add Relation
+			</button>
+				
+			
 		</div>
 	</xsl:template>
 	
@@ -412,8 +430,8 @@
 				<label class="control-label" for="title">Relation: </label>
 				<div class="controls">
 					<input type="text" class="input-small" name="type" placeholder="Type" value="{@type}"/>
-					<input type="text" class="input-xlarge" name="value" placeholder="Description" value="{description}"/>
-					<input type="text" class="input-xlarge" name="value" placeholder="Url" value="{url}"/>
+					<input type="text" class="input-xlarge" name="description" placeholder="Description" value="{description}"/>
+					<input type="text" class="input-xlarge" name="url" placeholder="Url" value="{url}"/>
 					<button class="btn btn-mini btn-danger remove">
 						<i class="icon-remove icon-white"></i>
 					</button>
@@ -421,10 +439,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="separate_line"/>
-		<button class="btn btn-primary addNew" type="relation">
-			<i class="icon-plus icon-white"></i> Add Relation
-		</button>
+		
 	</xsl:template>
 
 	<!-- BLANK TEMPLATE -->
@@ -535,32 +550,29 @@
 		</div>
 		
 		<div class="aro_box template" type="relatedobject">
-			<div class="aro_box_display clearfix">				
+			<div class="aro_box_display clearfix">
+				<a href="javascript:;" class="toggle"><i class="icon-minus"></i></a>
+				<h1>Related Object Title goes here <small>relation</small></h1>
+				<div class="control-group">
+					<div class="controls">
+						<button class="btn btn-mini btn-danger remove">
+							<i class="icon-remove icon-white"></i>
+						</button>
+						<p class="help-inline"><small></small></p>
+					</div>
+				</div>
+			</div>
+			
+			<div class="aro_box_part">
 				<div class="control-group">
 					<label class="control-label" for="title">Key: </label>
 					<div class="controls">
-						<input type="text" class="input-small" name="key" placeholder="Key" value=""/>
-						<button class="btn btn-mini btn-danger remove">
-							<i class="icon-remove icon-white"></i>
-						</button>
-						<p class="help-inline"><small></small></p>
+						<input type="text" class="input-xlarge" name="key" value=""/>
 					</div>
 				</div>
 			</div>
-			<div class="aro_box_part" type="relation">
-				<div class="control-group">
-					<label class="control-label" for="title">Relation: </label>
-					<div class="controls">
-						<input type="text" class="input-small" name="type" placeholder="Type" value=""/>
-						<input type="text" class="input-xlarge" name="value" placeholder="Description" value=""/>
-						<input type="text" class="input-xlarge" name="value" placeholder="Url" value=""/>
-						<button class="btn btn-mini btn-danger remove">
-							<i class="icon-remove icon-white"></i>
-						</button>
-						<p class="help-inline"><small></small></p>
-					</div>
-				</div>
-			</div>
+					
+			
 			<div class="separate_line"/>
 			<button class="btn btn-primary addNew" type="relation">
 				<i class="icon-plus icon-white"></i> Add Relation
@@ -572,8 +584,8 @@
 				<label class="control-label" for="title">Relation: </label>
 				<div class="controls">
 					<input type="text" class="input-small" name="type" placeholder="Type" value=""/>
-					<input type="text" class="input-xlarge" name="value" placeholder="Description" value=""/>
-					<input type="text" class="input-xlarge" name="value" placeholder="Url" value=""/>
+					<input type="text" class="input-xlarge" name="description" placeholder="Description" value=""/>
+					<input type="text" class="input-xlarge" name="url" placeholder="Url" value=""/>
 					<button class="btn btn-mini btn-danger remove">
 						<i class="icon-remove icon-white"></i>
 					</button>

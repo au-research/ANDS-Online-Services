@@ -124,6 +124,8 @@ h1{.text-shadow}
 		list-style-type:none;
 		li{
 			display:inline-block;
+			*display: inline;
+			zoom: 1;
 			&:hover{
 				background:#4f4f4f;
 				a{
@@ -181,10 +183,7 @@ h1{.text-shadow}
 	border-color: #8B9;
 }
 
-.selected{
-	background: @softAccentColor;
-	border-color: @accentColor;
-}	
+
 /*.active{  
 	background: #CEB;
 	border-color: #9B8;

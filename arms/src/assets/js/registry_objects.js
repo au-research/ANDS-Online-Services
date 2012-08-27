@@ -264,6 +264,7 @@ function load_ro(ro_id, view, active_tab){
 				$(xmlDoc).children('key').each(function(){
  					console.log($(this).text());
 				});*/
+				$('#view-ro .tab-content[name=edit]').html('Loading...');
 				$.ajax({
 					type: 'GET',
 					url: base_url+'registry_object/get_edit_form/'+ro_id,
@@ -272,33 +273,32 @@ function load_ro(ro_id, view, active_tab){
 						if(active_tab && $('#'+active_tab).length > 0){//if an active tab is specified and exists
 							$('.nav-tabs li a[href=#'+active_tab+']').click();
 						}
-
+						
 						initEditForm();
-
-						$('#edit-form .toggle').live({
-							click: function(e){
-								e.preventDefault();
-								$('i', this).toggleClass('icon-plus').toggleClass('icon-minus');
-								$(this).parent().parent().children('.aro_box_part, button.addNew').toggle();
-							}
-						});
-
-						$('#edit-form button').live({
-							click: function(e){
-								e.preventDefault();
-							}
-						});
 
 					}
 				});
 			}
-
 			$('#view-ro').show();
 		}
 	});
 }
 
 function initEditForm(){
+
+	$('#edit-form .toggle').live({
+		click: function(e){
+			e.preventDefault();
+			$('i', this).toggleClass('icon-plus').toggleClass('icon-minus');
+			$(this).parent().parent().children('.aro_box_part, button.addNew').toggle();
+		}
+	});
+
+	$('#edit-form button').live({
+		click: function(e){
+			e.preventDefault();
+		}
+	});
 
 	$('.input-large').typeahead({
 		source: function(typeahead,query){
@@ -356,23 +356,16 @@ function initEditForm(){
 		}
 	});
 
-
-	$('.datepicker').datepicker({
-		format: 'yyyy-mm-dd'
-	});
-
-	$('.triggerDatePicker').live({
-		click: function(e){
-			$(this).parent().children('input').dblclick();
-		}
-	});
+	
 
 	$('.remove').live({
 		click:function(){
 			var target = $(this).parents('.aro_box_part');
 			if($(target).length==0) target = $(this).parents('.aro_box');
 			//console.log(target);
-			$(target).remove();
+			$(target).fadeOut(500, function(){
+				$(target).remove();
+			});
 		}
 	});
 
@@ -417,6 +410,16 @@ function initEditForm(){
 			$('#myModal .modal-body').html('<pre class="prettyprint"><code class="language-xml">' + htmlEntities(formatXml(xml)) + '</code></pre>');
 			prettyPrint();
 			$('#myModal').modal();
+		}
+	});
+
+	$('#view-ro .tab-content[name=edit] input.datepicker').datepicker({
+		format: 'yyyy-mm-dd'
+	});
+
+	$('.triggerDatePicker').live({
+		click: function(e){
+			$(this).parent().children('input').focus();
 		}
 	});
 
@@ -492,15 +495,39 @@ function getRIFCSforTab(tab){
 			var fragment ='';
 			var fragment_type = '';
 			if($('.aro_box_display input', this).length>0){
-				fragment_type = $('.aro_box_display input', this).val();
+				fragment_type = $('.aro_box_display input[name=type]', this).val();
 			}else{
-				fragment_type = $('input[name=type]', this).val();
+				fragment_type = $('.aro_box_display input[name=type]', this).val();
 			}
-			fragment +='<'+$(this).attr('type')+' type="'+fragment_type+'">';
+			if(fragment_type){
+				fragment +='<'+$(this).attr('type')+' type="'+fragment_type+'">';
+			}else{
+				fragment +='<'+$(this).attr('type')+'>';
+			}
+			
 			var parts = $('.aro_box_part', this);
-			if(parts.length > 0){//if there is a part
+			console.log(parts);
+			if(parts.length > 0){//if there is a part, data is spread out in parts
 				$.each(parts, function(){
-					fragment += '<'+$(this).attr('type')+' type="'+$('input[name=type]', this).val()+'">'+$('input[name=value]', this).val()+'</'+$(this).attr('type')+'>';
+					if($(this).attr('type')){//if type is there for this part
+						//deal with the type
+						type = $(this).attr('type');
+						if(type=='relation'){//special case for related object relation
+							fragment += '<'+type+' type="'+$('input[name=type]',this).val()+'">';
+							if($('input[name=description]', this).val()!=''){//if the relation has a description
+								fragment += '<description>'+$('input[name=description]', this).val()+'</description>';
+							}
+							if($('input[name=url]', this).val()!=''){//if the relation has a url
+								fragment += '<url>'+$('input[name=url]', this).val()+'</url>';
+							}
+							fragment += '</'+type+'>';
+						}else{
+							fragment += '<'+$(this).attr('type')+' type="'+$('input[name=type]', this).val()+'">'+$('input[name=value]', this).val()+'</'+$(this).attr('type')+'>';
+						}
+						
+					}else{//it's an element
+						fragment += '<'+$('input', this).attr('name')+'>'+$('input', this).val()+'</'+$('input', this).attr('name')+'>';
+					}
 				});
 			}else{//there is no part, the data is right at this level
 				//check if there's a text area
@@ -508,7 +535,13 @@ function getRIFCSforTab(tab){
 					fragment += htmlEntities($('textarea', this).val());
 				}else{
 					//there's no textarea, just normal input
+					fragment += $('input[name=value]', this).val();
 				}
+
+				//check if there's more parts
+
+
+				
 			}
 			fragment +='</'+$(this).attr('type')+'>';
 			xml += fragment;
