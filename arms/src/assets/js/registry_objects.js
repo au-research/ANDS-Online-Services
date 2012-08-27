@@ -409,8 +409,10 @@ function initEditForm(){
 			tinyMCE.triggerSave();
 			var allTabs = $('.tab-pane');
 			var xml = '';
+
 			$.each(allTabs, function(){
 				xml += getRIFCSforTab(this);
+
 			});
 			$('#myModal .modal-body').html('<pre class="prettyprint"><code class="language-xml">' + htmlEntities(formatXml(xml)) + '</code></pre>');
 			prettyPrint();
