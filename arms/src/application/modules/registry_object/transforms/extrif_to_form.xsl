@@ -25,7 +25,7 @@
 					<a href="#a" data-toggle="tab">Locations</a>
 				</li>
 				<li>
-					<a href="#a" data-toggle="tab">Related Objects</a>
+					<a href="#relatedobjects" data-toggle="tab">Related Objects</a>
 				</li>
 				<li>
 					<a href="#subjects" data-toggle="tab">Subjects</a>
@@ -44,6 +44,7 @@
 					<xsl:call-template name="descriptionRightsTab"/>
 					<xsl:call-template name="subjectsTab"/>
 					<xsl:call-template name="identifiersTab"/>
+					<xsl:call-template name="relatedobjectsTab"/>
 
 					<div class="modal hide" id="myModal">
 						<div class="modal-header">
@@ -339,8 +340,26 @@
 		</div>
 	</xsl:template>
 	
+	<xsl:template name="relatedobjectsTab">
+		<div id="relatedobjects" class="tab-pane">
+			<fieldset>
+				<legend>Related Objects</legend>
+				
+				<xsl:apply-templates select="collection/relatedObject | activity/relatedObject | party/relatedObject  | service/relatedObject"/>
+				<div class="separate_line"/>
+				
+				<button class="btn btn-primary addNew" type="relatedobject">
+					<i class="icon-plus icon-white"></i> Add Related Object
+				</button>
+				<button class="btn export_xml btn-info">
+					Export XML fragment
+				</button>
+			</fieldset>
+		</div>
+	</xsl:template>
 	
-	<xsl:template match="collection/subject  | activity/subject  | party/subject   | service/subject ">
+	
+	<xsl:template match="collection/subject  | activity/subject  | party/subject   | service/subject">
 		<div class="aro_box" type="subject">
 			<div class="aro_box_display clearfix">
 				<div class="controls">
@@ -355,7 +374,7 @@
 		</div>
 	</xsl:template>
 	
-	<xsl:template match="collection/identifier  | activity/identifier  | party/identifier   | service/identifier ">
+	<xsl:template match="collection/identifier  | activity/identifier  | party/identifier   | service/identifier">
 		<div class="aro_box" type="identifier">
 			<div class="aro_box_display clearfix">
 				<div class="controls">
@@ -368,6 +387,44 @@
 				</div>
 			</div>
 		</div>
+	</xsl:template>
+	
+	<xsl:template match="collection/relatedObject | activity/relatedObject | party/relatedObject  | service/relatedObject">
+		<div class="aro_box" type="relatedobject">
+			<div class="aro_box_display clearfix">
+				<div class="controls">
+					<input type="text" class="input-xlarge" name="key" value="{key}"/>
+					<xsl:apply-templates select="relation"/>
+					<button class="btn btn-mini btn-danger remove">
+						<i class="icon-remove icon-white"></i>
+					</button>
+					
+					<p class="help-inline"><small></small></p>
+				</div>
+			</div>
+		</div>
+	</xsl:template>
+	
+	
+	<xsl:template match="relation">
+		<div class="aro_box_part" type="relation">
+			<div class="control-group">
+				<label class="control-label" for="title">Relation: </label>
+				<div class="controls">
+					<input type="text" class="input-small" name="type" placeholder="Type" value="{@type}"/>
+					<input type="text" class="input-xlarge" name="value" placeholder="Description" value="{description}"/>
+					<input type="text" class="input-xlarge" name="value" placeholder="Url" value="{url}"/>
+					<button class="btn btn-mini btn-danger remove">
+						<i class="icon-remove icon-white"></i>
+					</button>
+					<p class="help-inline"><small></small></p>
+				</div>
+			</div>
+		</div>
+		<div class="separate_line"/>
+		<button class="btn btn-primary addNew" type="relation">
+			<i class="icon-plus icon-white"></i> Add Relation
+		</button>
 	</xsl:template>
 
 	<!-- BLANK TEMPLATE -->
@@ -469,6 +526,54 @@
 				<div class="controls">
 					<input type="text" class="input-small" name="type" placeholder="Type" value=""/>
 					<input type="text" class="input-xlarge" name="value" value=""/>
+					<button class="btn btn-mini btn-danger remove">
+						<i class="icon-remove icon-white"></i>
+					</button>
+					<p class="help-inline"><small></small></p>
+				</div>
+			</div>
+		</div>
+		
+		<div class="aro_box template" type="relatedobject">
+			<div class="aro_box_display clearfix">				
+				<div class="control-group">
+					<label class="control-label" for="title">Key: </label>
+					<div class="controls">
+						<input type="text" class="input-small" name="key" placeholder="Key" value=""/>
+						<button class="btn btn-mini btn-danger remove">
+							<i class="icon-remove icon-white"></i>
+						</button>
+						<p class="help-inline"><small></small></p>
+					</div>
+				</div>
+			</div>
+			<div class="aro_box_part" type="relation">
+				<div class="control-group">
+					<label class="control-label" for="title">Relation: </label>
+					<div class="controls">
+						<input type="text" class="input-small" name="type" placeholder="Type" value=""/>
+						<input type="text" class="input-xlarge" name="value" placeholder="Description" value=""/>
+						<input type="text" class="input-xlarge" name="value" placeholder="Url" value=""/>
+						<button class="btn btn-mini btn-danger remove">
+							<i class="icon-remove icon-white"></i>
+						</button>
+						<p class="help-inline"><small></small></p>
+					</div>
+				</div>
+			</div>
+			<div class="separate_line"/>
+			<button class="btn btn-primary addNew" type="relation">
+				<i class="icon-plus icon-white"></i> Add Relation
+			</button>
+		</div>
+		
+		<div class="aro_box_part template" type="relation">
+			<div class="control-group">
+				<label class="control-label" for="title">Relation: </label>
+				<div class="controls">
+					<input type="text" class="input-small" name="type" placeholder="Type" value=""/>
+					<input type="text" class="input-xlarge" name="value" placeholder="Description" value=""/>
+					<input type="text" class="input-xlarge" name="value" placeholder="Url" value=""/>
 					<button class="btn btn-mini btn-danger remove">
 						<i class="icon-remove icon-white"></i>
 					</button>
