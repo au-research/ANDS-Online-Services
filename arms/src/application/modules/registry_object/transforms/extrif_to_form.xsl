@@ -51,10 +51,36 @@
 						<div class="modal-body"/>
 						<div class="modal-footer"> </div>
 					</div>
-
-					
 				</div>
+
+
 			</form>
+			<div class="aro_toolbar">
+					<div class="message">
+						Auto-saved: 5 seconds ago...
+					</div>
+					<div class="aro_controls">
+						
+
+						<div class="btn-toolbar">		
+							<button class="btn btn-info" id="master_export_xml">
+							  <i class="icon-download-alt icon-white"></i> Export XML
+							</button>		  
+							<div class="btn-group">
+								<button class="btn btn-primary">
+									<i class="icon-download-alt icon-white"></i> Save
+								</button>
+							</div>
+
+						  <div class="btn-group">
+						  	<a class="btn"><i class="icon-chevron-left"></i></a>
+						  	<a class="btn"><i class="icon-chevron-right"></i></a>
+						  </div>
+
+						</div>
+					</div>		
+					<div class="clearfix"></div>	
+				</div>
 			<xsl:call-template name="blankTemplate"/>
 		</div>
 	</xsl:template>
@@ -133,7 +159,7 @@
 					<div class="controls">
 						<div class="input-append">
 						  <input type="text" class="input-large datepicker" name="title" value="{$dateModified}"/>
-						  <button class="btn" type="button"><i class="icon-calendar"></i></button>
+						  <button class="btn triggerDatePicker" type="button"><i class="icon-calendar"></i></button>
 						  <p class="help-inline">
 								<small/>
 							</p>

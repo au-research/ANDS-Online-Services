@@ -361,6 +361,12 @@ function initEditForm(){
 		format: 'yyyy-mm-dd'
 	});
 
+	$('.triggerDatePicker').live({
+		click: function(e){
+			$(this).parent().children('input').dblclick();
+		}
+	});
+
 	$('.remove').live({
 		click:function(){
 			var target = $(this).parents('.aro_box_part');
@@ -390,36 +396,24 @@ function initEditForm(){
 			e.preventDefault();
 			tinyMCE.triggerSave();//so that we can get the tinymce textarea.value without using tinymce.getContents
 			var currentTab = $(this).parents('.tab-pane');
-			var boxes = $('.aro_box', currentTab);
+			var xml = getRIFCSforTab(currentTab);
+			$('#myModal .modal-body').html('<pre class="prettyprint"><code class="language-xml">' + htmlEntities(formatXml(xml)) + '</code></pre>');
+			prettyPrint();
+			$('#myModal').modal();
+		}
+	});
+
+	$('#master_export_xml').live({
+		click: function(e){
+			e.preventDefault();
+			tinyMCE.triggerSave();
+			var allTabs = $('.tab-pane');
 			var xml = '';
-			$.each(boxes, function(){
-				if(!$(this).hasClass('template')){
-					var fragment ='';
-					var fragment_type = '';
-					if($('.aro_box_display input', this).length>0){
-						fragment_type = $('.aro_box_display input', this).val();
-					}else{
-						fragment_type = $('input[name=type]', this).val();
-					}
-					fragment +='<'+$(this).attr('type')+' type="'+fragment_type+'">';
-					var parts = $('.aro_box_part', this);
-					if(parts.length > 0){//if there is a part
-						$.each(parts, function(){
-							fragment += '<'+$(this).attr('type')+' type="'+$('input[name=type]', this).val()+'">'+$('input[name=value]', this).val()+'</'+$(this).attr('type')+'>';
-						});
-					}else{//there is no part, the data is right at this level
-						//check if there's a text area
-						if($('textarea', this).length>0){
-							fragment += htmlEntities($('textarea', this).val());
-						}else{
-							//there's no textarea, just normal input
-						}
-					}
-					fragment +='</'+$(this).attr('type')+'>';
-					xml += fragment;
-				}
+			$.each(allTabs, function(){
+				xml += getRIFCSforTab(this);
 			});
-			$('#myModal .modal-body').html('<pre>' + htmlEntities(xml) + '</pre>');
+			$('#myModal .modal-body').html('<pre class="prettyprint"><code class="language-xml">' + htmlEntities(formatXml(xml)) + '</code></pre>');
+			prettyPrint();
 			$('#myModal').modal();
 		}
 	});
@@ -485,6 +479,40 @@ function initEditor(){
 		    width:"600px"
 		});
 	}
+}
+
+function getRIFCSforTab(tab){
+	var currentTab = $(tab);
+	var boxes = $('.aro_box', currentTab);
+	var xml = '';
+	$.each(boxes, function(){
+		if(!$(this).hasClass('template')){
+			var fragment ='';
+			var fragment_type = '';
+			if($('.aro_box_display input', this).length>0){
+				fragment_type = $('.aro_box_display input', this).val();
+			}else{
+				fragment_type = $('input[name=type]', this).val();
+			}
+			fragment +='<'+$(this).attr('type')+' type="'+fragment_type+'">';
+			var parts = $('.aro_box_part', this);
+			if(parts.length > 0){//if there is a part
+				$.each(parts, function(){
+					fragment += '<'+$(this).attr('type')+' type="'+$('input[name=type]', this).val()+'">'+$('input[name=value]', this).val()+'</'+$(this).attr('type')+'>';
+				});
+			}else{//there is no part, the data is right at this level
+				//check if there's a text area
+				if($('textarea', this).length>0){
+					fragment += htmlEntities($('textarea', this).val());
+				}else{
+					//there's no textarea, just normal input
+				}
+			}
+			fragment +='</'+$(this).attr('type')+'>';
+			xml += fragment;
+		}
+	});
+	return xml;
 }
 
 
