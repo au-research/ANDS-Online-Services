@@ -8,7 +8,7 @@
 	<xsl:template match="registryObject">
 		<div class="">
 			<!-- tabs -->
-			<ul class="nav nav-tabs" data-spy="affix">
+			<ul class="nav nav-tabs">
 				<li class="active">
 					<a href="#admin" data-toggle="tab">Record Administration</a>
 				</li>

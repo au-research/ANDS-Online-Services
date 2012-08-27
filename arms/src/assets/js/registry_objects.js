@@ -390,7 +390,7 @@ function initEditForm(){
 			tinyMCE.triggerSave();//so that we can get the tinymce textarea.value without using tinymce.getContents
 			var currentTab = $(this).parents('.tab-pane');
 			var xml = getRIFCSforTab(currentTab);
-			$('#myModal .modal-body').html('<pre class="prettyprint"><code class="language-xml">' + htmlEntities(formatXml(xml)) + '</code></pre>');
+			$('#myModal .modal-body').html('<pre class="prettyprint linenums"><code class="language-xml">' + htmlEntities(formatXml(xml)) + '</code></pre>');
 			prettyPrint();
 			$('#myModal').modal();
 		}
@@ -407,7 +407,7 @@ function initEditForm(){
 				xml += getRIFCSforTab(this);
 
 			});
-			$('#myModal .modal-body').html('<pre class="prettyprint"><code class="language-xml">' + htmlEntities(formatXml(xml)) + '</code></pre>');
+			$('#myModal .modal-body').html('<pre class="prettyprint linenums"><code class="language-xml">' + htmlEntities(formatXml(xml)) + '</code></pre>');
 			prettyPrint();
 			$('#myModal').modal();
 		}
