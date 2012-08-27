@@ -66,10 +66,18 @@
 							<button class="btn btn-info" id="master_export_xml">
 							  <i class="icon-download-alt icon-white"></i> Export XML
 							</button>		  
-							<div class="btn-group">
-								<button class="btn btn-primary">
-									<i class="icon-download-alt icon-white"></i> Save
+
+							<div class="btn-group dropup">
+							<button class="btn btn-primary"> <i class="icon-download-alt icon-white"></i> Save &amp; Validate</button>
+								<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+									<span class="caret"></span>
 								</button>
+								<ul class="dropdown-menu">
+									<li><a href="javascript:;">Save &amp; Publish</a></li>
+									<li><a href="javascript:;">Save &amp; Exit</a></li>
+									<li><a href="javascript:;">Save &amp; Validate</a></li>
+									<li><a href="javascript:;">Quick Save</a></li>
+								</ul>
 							</div>
 
 						  <div class="btn-group">
