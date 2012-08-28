@@ -362,7 +362,7 @@
 	<xsl:template name="relatedinfosTab">
 		<div id="relatedinfos" class="tab-pane">
 			<fieldset>
-				<legend>Relatedinfos</legend>			
+				<legend>Related Infos</legend>			
 				<xsl:apply-templates select="collection/relatedinfo | activity/relatedinfo | party/relatedinfo  | service/relatedinfo"/>
 				<div class="separate_line"/>			
 				<button class="btn btn-primary addNew" type="relatedinfo">
@@ -401,8 +401,8 @@
 		<div class="aro_box" type="subject">
 			<div class="aro_box_display clearfix">
 				<div class="controls">
-					<input type="text" class="input-small" name="type" placeholder="Type" value="{@type}"/>
-					<input type="text" class="input-xlarge" name="value" value="{text()}"/>
+					Type: <input type="text" class="input-small" name="type" placeholder="Type" value="{@type}"/>
+					Value: <input type="text" class="input-xlarge" name="value" value="{text()}"/>
 					<button class="btn btn-mini btn-danger remove">
 						<i class="icon-remove icon-white"></i>
 					</button>

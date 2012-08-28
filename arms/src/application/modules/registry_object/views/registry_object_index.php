@@ -182,6 +182,7 @@
 <div class="hide" id="item-template">
 {{#ro}}
 <div class="container">
+
 <div class="row">
 	<div class="box" ro_id="{{id}}">
 		<div class="box-header clearfix">
@@ -195,21 +196,9 @@
 			</span>
 			<div class="clearfix"></div>
 		</div>
-		<div class="box-content tab-content tab-view-content" name="view">
+		<div class="box-content tab-content tab-view-content container" name="view">
 			<div class="row">
-				<div class="span8">
-					<div class="html-view"></div>
-				</div>
-				<div class="span4">
-					<div class="box">
-						<div class="box-header clearfix">
-							<h1>Revisions</h1>
-						</div>
-						<div class="box-content" id="ro-revisions">
-
-						</div>
-					</div>
-
+				<div class="span8 eqheight">
 					<div class="box">
 						<div class="box-header clearfix"><h1>XML</h1></div>
 						<div class="box-content">
@@ -219,6 +208,21 @@
 							<textarea>{{extrif}}</textarea>
 						</div>
 					</div>
+				</div>
+				<div class="span4 eqheight">
+					<div class="box">
+						<div class="box-header clearfix">
+							<h1>Revisions</h1>
+						</div>
+						<div class="box-content" id="ro-revisions">
+
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="span12">
+					<div class="html-view"></div>
 				</div>
 			</div>
 		</div>

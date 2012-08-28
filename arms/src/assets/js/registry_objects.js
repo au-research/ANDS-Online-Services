@@ -254,6 +254,17 @@ function load_ro(ro_id, view, active_tab){
 					revisions += '<li>'+time+'</li>';
 				});
 				$('#view-ro #ro-revisions').html(revisions);
+
+				//equal heights
+				var highest=0;
+				$('#view-ro').show();
+				$('#view-ro .eqheight').each(function(){
+					if($(this).height() > highest) highest = $(this).height();
+				});
+				$('#view-ro .eqheight .box').each(function(){
+					$(this).height(highest);
+				});
+				console.log(highest);
 			}else if(view=='edit'){
 				//set the active tab
 				//console.log(data.ro.xml);
@@ -290,7 +301,7 @@ function initEditForm(){
 		click: function(e){
 			e.preventDefault();
 			$('i', this).toggleClass('icon-plus').toggleClass('icon-minus');
-			$(this).parent().parent().children('.aro_box_part, button.addNew').toggle();
+			$(this).parent().parent().children('.aro_box_part, button.addNew').slideToggle();
 		}
 	});
 
@@ -494,19 +505,17 @@ function getRIFCSforTab(tab){
 		if(!$(this).hasClass('template')){
 			var fragment ='';
 			var fragment_type = '';
-			if($('.aro_box_display input', this).length>0){
+			if($('.aro_box_display input', this).length>0){//if there's a type in the heading, use it
 				fragment_type = $('.aro_box_display input[name=type]', this).val();
-			}else{
-				fragment_type = $('.aro_box_display input[name=type]', this).val();
+			}else{//then there has to be a type in the element itself
+				fragment_type = $('input[name=type]', this).val();
 			}
 			if(fragment_type){
 				fragment +='<'+$(this).attr('type')+' type="'+fragment_type+'">';
-			}else{
+			}else{//if there's absolutely no type, then there's none, stop finding it
 				fragment +='<'+$(this).attr('type')+'>';
 			}
-			
 			var parts = $('.aro_box_part', this);
-			console.log(parts);
 			if(parts.length > 0){//if there is a part, data is spread out in parts
 				$.each(parts, function(){
 					if($(this).attr('type')){//if type is there for this part
@@ -524,7 +533,6 @@ function getRIFCSforTab(tab){
 						}else{
 							fragment += '<'+$(this).attr('type')+' type="'+$('input[name=type]', this).val()+'">'+$('input[name=value]', this).val()+'</'+$(this).attr('type')+'>';
 						}
-						
 					}else{//it's an element
 						fragment += '<'+$('input', this).attr('name')+'>'+$('input', this).val()+'</'+$('input', this).attr('name')+'>';
 					}
@@ -537,11 +545,6 @@ function getRIFCSforTab(tab){
 					//there's no textarea, just normal input
 					fragment += $('input[name=value]', this).val();
 				}
-
-				//check if there's more parts
-
-
-				
 			}
 			fragment +='</'+$(this).attr('type')+'>';
 			xml += fragment;
