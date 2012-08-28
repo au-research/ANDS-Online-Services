@@ -31,7 +31,7 @@
 					<a href="#subjects" data-toggle="tab">Subjects</a>
 				</li>
 				<li>
-					<a href="#a" data-toggle="tab">Related Info</a>
+					<a href="#relatedinfos" data-toggle="tab">Related Info</a>
 				</li>
 			</ul>
 
@@ -45,6 +45,7 @@
 					<xsl:call-template name="subjectsTab"/>
 					<xsl:call-template name="identifiersTab"/>
 					<xsl:call-template name="relatedobjectsTab"/>
+					<xsl:call-template name="relatedinfosTab"/>
 
 					<div class="modal hide" id="myModal">
 						<div class="modal-header">
@@ -358,6 +359,43 @@
 		</div>
 	</xsl:template>
 	
+	<xsl:template name="relatedinfosTab">
+		<div id="relatedinfos" class="tab-pane">
+			<fieldset>
+				<legend>Relatedinfos</legend>			
+				<xsl:apply-templates select="collection/relatedinfo | activity/relatedinfo | party/relatedinfo  | service/relatedinfo"/>
+				<div class="separate_line"/>			
+				<button class="btn btn-primary addNew" type="relatedinfo">
+					<i class="icon-plus icon-white"></i> Add related Info
+				</button>
+				<button class="btn export_xml btn-info">
+					Export XML fragment
+				</button>
+			</fieldset>
+		</div>
+		
+	</xsl:template>
+	
+	<xsl:template match="collection/relatedinfo | activity/relatedinfo | party/relatedinfo  | service/relatedinfo">
+		<div class="aro_box" type="relatedInfo">
+			<div class="aro_box_display clearfix">
+				<div class="controls">
+					<div class="controls">
+						<input type="text" class="input-small" name="type" placeholder="Type" value="{@type}"/>
+						<input type="text" class="input-xlarge" name="identifier" value="{identifier/text()}"/>
+						<input type="text" class="input-xlarge" name="identifier_type" value="{identifier/@type}"/>
+						<input type="text" class="input-xlarge" name="title" value="{title/text()}"/>
+						<input type="text" class="input-xlarge" name="notes" value="{notes/text()}"/>
+						<button class="btn btn-mini btn-danger remove">
+							<i class="icon-remove icon-white"></i>
+						</button>
+						<p class="help-inline"><small></small></p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</xsl:template>
+	
 	
 	<xsl:template match="collection/subject  | activity/subject  | party/subject   | service/subject">
 		<div class="aro_box" type="subject">
@@ -590,6 +628,24 @@
 						<i class="icon-remove icon-white"></i>
 					</button>
 					<p class="help-inline"><small></small></p>
+				</div>
+			</div>
+		</div>
+		
+		<div class="aro_box template" type="relatedInfo">
+			<div class="aro_box_display clearfix">
+				<div class="controls">
+					<div class="controls">
+						<input type="text" class="input-small" name="type" placeholder="Type" value=""/>
+						<input type="text" class="input-xlarge" name="identifier" placeholder="Identifier" value=""/>
+						<input type="text" class="input-xlarge" name="identifier_type" placeholder="Identifier Type" value=""/>
+						<input type="text" class="input-xlarge" name="title" placeholder="Title" value=""/>
+						<input type="text" class="input-xlarge" name="notes" placeholder="Notes" value=""/>
+						<button class="btn btn-mini btn-danger remove">
+							<i class="icon-remove icon-white"></i>
+						</button>
+						<p class="help-inline"><small></small></p>
+					</div>
 				</div>
 			</div>
 		</div>
