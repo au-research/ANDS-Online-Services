@@ -3,8 +3,6 @@
 	xmlns:extRif="http://ands.org.au/standards/rif-cs/extendedRegistryObjects"
 	exclude-result-prefixes="extRif">
 	<xsl:output method="xml" encoding="UTF-8" indent="yes" omit-xml-declaration="yes"/>
-	<xsl:param name="dataSource"/>
-	<xsl:param name="dateCreated"/>
 	<xsl:template match="registryObject">
 		<div class="">
 			<!-- tabs -->
@@ -22,7 +20,7 @@
 					<a href="#identifiers" data-toggle="tab">Identifiers</a>
 				</li>
 				<li>
-					<a href="#a" data-toggle="tab">Locations</a>
+					<a href="#locations" data-toggle="tab">Locations</a>
 				</li>
 				<li>
 					<a href="#relatedobjects" data-toggle="tab">Related Objects</a>
@@ -42,9 +40,10 @@
 					<xsl:call-template name="recordAdminTab"/>
 					<xsl:call-template name="namesTab"/>
 					<xsl:call-template name="descriptionRightsTab"/>
-					<xsl:call-template name="subjectsTab"/>
 					<xsl:call-template name="identifiersTab"/>
+					<xsl:call-template name="locationsTab"/>
 					<xsl:call-template name="relatedobjectsTab"/>
+					<xsl:call-template name="subjectsTab"/>
 					<xsl:call-template name="relatedinfosTab"/>
 
 					<div class="modal hide" id="myModal">
@@ -95,6 +94,14 @@
 				</div>
 			<xsl:call-template name="blankTemplate"/>
 		</div>
+		<xsl:variable name="ro_class">
+			<xsl:apply-templates select="collection | activity | party  | service" mode="getClass"/>
+		</xsl:variable>
+		<input type="hidden" class="hide" id="ro_class" value="{$ro_class}"/>
+	</xsl:template>
+
+	<xsl:template match="collection | activity | party  | service"  mode="getClass">
+		<xsl:value-of select="name()"/>
 	</xsl:template>
 
 
@@ -372,8 +379,23 @@
 					Export XML fragment
 				</button>
 			</fieldset>
-		</div>
-		
+		</div>		
+	</xsl:template>
+	
+	<xsl:template name="locationsTab">
+		<div id="locations" class="tab-pane">
+			<fieldset>
+				<legend>Locations</legend>			
+				<xsl:apply-templates select="collection/location | activity/location | party/location  | service/location"/>
+				<div class="separate_line"/>			
+				<button class="btn btn-primary addNew" type="location">
+					<i class="icon-plus icon-white"></i> Add Location
+				</button>
+				<button class="btn export_xml btn-info">
+					Export XML fragment
+				</button>
+			</fieldset>
+		</div>		
 	</xsl:template>
 	
 	<xsl:template match="collection/relatedInfo | activity/relatedInfo | party/relatedInfo | service/relatedInfo">
@@ -474,18 +496,48 @@
 						<input type="text" class="input-xlarge" name="key" value="{key}"/>
 					</div>
 				</div>
-			</div>
-					
+			</div>					
 			<xsl:apply-templates select="relation"/>
 			<div class="separate_line"/>
 			<button class="btn btn-primary addNew" type="relation">
 				<i class="icon-plus icon-white"></i> Add Relation
-			</button>
-				
-			
+			</button>			
 		</div>
 	</xsl:template>
 	
+	<xsl:template match="collection/location | activity/location | party/location  | service/locationt">
+		<div class="aro_box" type="location">
+			<div class="aro_box_display clearfix">
+				<a href="javascript:;" class="toggle"><i class="icon-minus"></i></a>
+				<h1>Location Summary goes here</h1>
+				<div class="control-group">
+					<div class="controls">
+						<button class="btn btn-mini btn-danger remove">
+							<i class="icon-remove icon-white"></i>
+						</button>
+						<p class="help-inline"><small></small></p>
+					</div>
+				</div>
+			</div>
+			
+			<div class="aro_box_part">
+				<div class="control-group">
+					<div class="controls">
+						<input type="text" class="input-xlarge" name="location_dateFrom" placeholder="dateFrom" value="{@dateFrom}"/>
+						<input type="text" class="input-xlarge" name="location_dateFrom" placeholder="dateTo" value="{@dateTo}"/>
+					</div>
+				</div>
+			</div>					
+			<xsl:apply-templates select="address | spatial"/>
+			<div class="separate_line"/>
+			<button class="btn btn-primary addNew" type="address">
+				<i class="icon-plus icon-white"></i> Add Address
+			</button>
+			<button class="btn btn-primary addNew" type="spatial">
+				<i class="icon-plus icon-white"></i> Add Spatial Location
+			</button>			
+		</div>
+	</xsl:template>
 	
 	<xsl:template match="relation">
 		<div class="aro_box_part" type="relation">
@@ -501,8 +553,89 @@
 					<p class="help-inline"><small></small></p>
 				</div>
 			</div>
-		</div>
-		
+		</div>		
+	</xsl:template>
+	
+	
+	<xsl:template match="spatial">
+		<div class="aro_box_part" type="spatial">
+			<div class="control-group">
+				<label class="control-label" for="title">Spatial: </label>
+				<div class="controls">
+					<input type="text" class="input-small" name="type" value="{@type}"/>
+					<input type="text" class="input-xlarge" name="value"  value="{text()}"/>
+					<button class="btn btn-mini btn-danger remove">
+						<i class="icon-remove icon-white"></i>
+					</button>
+					<p class="help-inline"><small></small></p>
+				</div>
+			</div>
+		</div>		
+	</xsl:template>
+	
+	<xsl:template match="address">
+		<div class="aro_box_part" type="address">
+			<div class="control-group">
+				<xsl:apply-templates select="electronic | physical"/>
+				<div class="separate_line"/>
+				<button class="btn btn-primary addNew" type="electronic">
+					<i class="icon-plus icon-white"></i> Add Electronic Address
+				</button>
+				<button class="btn btn-primary addNew" type="physical">
+					<i class="icon-plus icon-white"></i> Add Physical Address
+				</button>
+			</div>
+		</div>		
+	</xsl:template>
+	
+	<xsl:template match="electronic">
+		<div class="aro_box_part" type="electronic">
+			<label class="control-label" for="title">Electronic Address: </label>
+			<div class="control-group">
+				<input type="text" class="input-small" name="type" placeholder="Type" value="{@type}"/>
+				<input type="text" class="input-xlarge" name="value"  placeholder="Value" value="{value}"/>
+				<xsl:apply-templates select="arg"/>
+				<div class="separate_line"/>
+				<button class="btn btn-primary addNew" type="arg">
+					<i class="icon-plus icon-white"></i> Add Args
+				</button>
+			</div>
+		</div>		
+	</xsl:template>
+	
+	<xsl:template match="physical">
+		<div class="aro_box_part" type="physical">
+			<label class="control-label" for="title">Physical Address: </label>
+			<div class="control-group">
+				<input type="text" class="input-small" name="type" placeholder="Type" value="{@type}"/>
+				<xsl:apply-templates select="addressPart"/>
+				<div class="separate_line"/>
+				<button class="btn btn-primary addNew" type="addressPart">
+					<i class="icon-plus icon-white"></i> Add Address Part
+				</button>
+			</div>
+		</div>		
+	</xsl:template>
+	
+	<xsl:template match="arg">
+		<div class="aro_box_part" type="arg">
+			<label class="control-label" for="title">Arg: </label>
+			<div class="control-group">
+				<input type="text" class="input-small" name="type" placeholder="Type" value="{@type}"/>
+				<input type="text" class="input-xlarge" name="required"  placeholder="Required" value="{@required}"/>
+				<input type="text" class="input-xlarge" name="use"  placeholder="Use" value="{@use}"/>
+				<input type="text" class="input-xlarge" name="value"  placeholder="Value" value="{text()}"/>
+			</div>
+		</div>		
+	</xsl:template>
+	
+	<xsl:template match="addressPart">
+		<div class="aro_box_part" type="addressPart">
+			<div class="control-group">
+				<input type="text" class="input-small" name="type" placeholder="Type" value="{@type}"/>
+				<input type="text" class="input-xlarge" name="value"  placeholder="value" value="{text()}"/>
+			</div>
+		</div>		
 	</xsl:template>
 
 	<!-- BLANK TEMPLATE -->
@@ -699,6 +832,104 @@
 				</div>
 			</div>
 		</div>
+
+		<div class="aro_box template" type="location">
+				<div class="aro_box_display clearfix">
+					<a href="javascript:;" class="toggle"><i class="icon-minus"></i></a>
+					<h1>Location Summary goes here</h1>
+					<div class="control-group">
+						<div class="controls">
+							<button class="btn btn-mini btn-danger remove">
+								<i class="icon-remove icon-white"></i>
+							</button>
+							<p class="help-inline"><small></small></p>
+						</div>
+					</div>
+				</div>
+				
+				<div class="aro_box_part">
+					<div class="control-group">
+						<div class="controls">
+							<input type="text" class="input-xlarge" name="location_dateFrom" placeholder="dateFrom" value=""/>
+							<input type="text" class="input-xlarge" name="location_dateFrom" placeholder="dateTo" value=""/>
+						</div>
+					</div>
+				</div>					
+				<div class="separate_line"/>
+				<button class="btn btn-primary addNew" type="address">
+					<i class="icon-plus icon-white"></i> Add Address
+				</button>
+				<button class="btn btn-primary addNew" type="spatial">
+					<i class="icon-plus icon-white"></i> Add Spatial Location
+				</button>			
+			</div>
+
+
+		<div class="aro_box_part template" type="spatial">
+			<div class="control-group">
+				<label class="control-label" for="title">Spatial: </label>
+				<div class="controls">
+					<input type="text" class="input-small" name="type" placeholder="Type" value=""/>
+					<input type="text" class="input-xlarge" name="value" placeholder="Value" value=""/>
+					<button class="btn btn-mini btn-danger remove">
+						<i class="icon-remove icon-white"></i>
+					</button>
+					<p class="help-inline"><small></small></p>
+				</div>
+			</div>
+		</div>		
+	
+		<div class="aro_box_part template" type="address">
+			<div class="control-group">
+				<div class="separate_line"/>
+				<button class="btn btn-primary addNew" type="electronic">
+					<i class="icon-plus icon-white"></i> Add Electronic Address
+				</button>
+				<button class="btn btn-primary addNew" type="physical">
+					<i class="icon-plus icon-white"></i> Add Physical Address
+				</button>
+			</div>
+		</div>		
+	
+		<div class="aro_box_part template" type="electronic">
+			<label class="control-label" for="title">Electronic Address: </label>
+			<div class="control-group">
+				<input type="text" class="input-small" name="type" placeholder="Type" value=""/>
+				<input type="text" class="input-xlarge" name="value"  placeholder="Value" value=""/>
+				<div class="separate_line"/>
+				<button class="btn btn-primary addNew" type="arg">
+					<i class="icon-plus icon-white"></i> Add Args
+				</button>
+			</div>
+		</div>		
+	
+		<div class="aro_box_part template" type="physical">
+			<label class="control-label" for="title">Physical Address: </label>
+			<div class="control-group">
+				<input type="text" class="input-small" name="type" placeholder="Type" value=""/>
+				<div class="separate_line"/>
+				<button class="btn btn-primary addNew" type="addressPart">
+					<i class="icon-plus icon-white"></i> Add Address Part
+				</button>
+			</div>
+		</div>		
+	
+		<div class="aro_box_part template" type="arg">
+			<label class="control-label" for="title">Arg: </label>
+			<div class="control-group">
+				<input type="text" class="input-small" name="type" placeholder="Type" value=""/>
+				<input type="text" class="input-xlarge" name="required"  placeholder="Required" value=""/>
+				<input type="text" class="input-xlarge" name="use"  placeholder="Use" value=""/>
+				<input type="text" class="input-xlarge" name="value"  placeholder="Value" value=""/>
+			</div>
+		</div>		
+	
+		<div class="aro_box_part template" type="addressPart">
+			<div class="control-group">
+				<input type="text" class="input-small" name="type" placeholder="Type" value=""/>
+				<input type="text" class="input-xlarge" name="value"  placeholder="value" value=""/>
+			</div>
+		</div>		
 
 	</xsl:template>
 	
