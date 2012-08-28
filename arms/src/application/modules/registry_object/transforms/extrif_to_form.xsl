@@ -4,6 +4,9 @@
 	exclude-result-prefixes="extRif">
 	<xsl:output method="xml" encoding="UTF-8" indent="yes" omit-xml-declaration="yes"/>
 	<xsl:template match="registryObject">
+		<xsl:variable name="ro_class">
+			<xsl:apply-templates select="collection | activity | party  | service" mode="getClass"/>
+		</xsl:variable>
 		<div class="">
 			<!-- tabs -->
 			<ul class="nav nav-tabs">
@@ -31,6 +34,11 @@
 				<li>
 					<a href="#relatedinfos" data-toggle="tab">Related Info</a>
 				</li>
+				<xsl:if test="$ro_class = 'service'">
+					<li>
+						<a href="#accesspolicies" data-toggle="tab">Accesspolicy</a>
+					</li>	
+				</xsl:if>
 			</ul>
 
 			<!-- form-->
@@ -45,7 +53,9 @@
 					<xsl:call-template name="relatedobjectsTab"/>
 					<xsl:call-template name="subjectsTab"/>
 					<xsl:call-template name="relatedinfosTab"/>
-
+					<xsl:if test="$ro_class = 'service'">
+						<xsl:call-template name="accesspolicyTab"/>
+					</xsl:if>
 					<div class="modal hide" id="myModal">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal">×</button>
@@ -94,9 +104,6 @@
 				</div>
 			<xsl:call-template name="blankTemplate"/>
 		</div>
-		<xsl:variable name="ro_class">
-			<xsl:apply-templates select="collection | activity | party  | service" mode="getClass"/>
-		</xsl:variable>
 		<input type="hidden" class="hide" id="ro_class" value="{$ro_class}"/>
 	</xsl:template>
 
@@ -276,6 +283,23 @@
 			</fieldset>
 		</div>
 	</xsl:template>
+
+	<xsl:template name="accesspolicyTab">
+		<div id="accesspolicies" class="tab-pane">
+			<fieldset>
+				<legend>Access Policy</legend>
+				<xsl:apply-templates select="service/accessPolicy"/>			
+				<div class="separate_line"/>
+				<button class="btn btn-primary addNew" type="accesspolicy">
+					<i class="icon-plus icon-white"></i> Add Access Policy
+				</button>
+				<button class="btn export_xml btn-info">
+					Export XML fragment
+				</button>
+			</fieldset>
+		</div>		
+	</xsl:template>
+
 
 	<xsl:template match="collection/description | activity/description | party/description  | service/description">
 		<div class="aro_box" type="description">
@@ -637,6 +661,14 @@
 			</div>
 		</div>		
 	</xsl:template>
+	
+	<xsl:template match="accessPolicy">
+		<div class="aro_box_part" type="accessPolicy">
+			<div class="control-group">
+				<input type="text" class="input-xlarge" name="value"  placeholder="value" value="{text()}"/>
+			</div>
+		</div>		
+	</xsl:template>
 
 	<!-- BLANK TEMPLATE -->
 	<xsl:template name="blankTemplate">
@@ -930,6 +962,12 @@
 				<input type="text" class="input-xlarge" name="value"  placeholder="value" value=""/>
 			</div>
 		</div>		
+		
+		<div class="aro_box_part template" type="accessPolicy">
+			<div class="control-group">
+				<input type="text" class="input-xlarge" name="value"  placeholder="value" value=""/>
+			</div>
+		</div>	
 
 	</xsl:template>
 	
