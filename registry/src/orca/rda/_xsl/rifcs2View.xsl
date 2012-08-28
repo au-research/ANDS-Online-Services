@@ -3,7 +3,7 @@
     xmlns:ro="http://ands.org.au/standards/rif-cs/registryObjects" xmlns:extRif="http://ands.org.au/standards/rif-cs/extendedRegistryObjects" exclude-result-prefixes="ro">
     <xsl:output method="html" encoding="UTF-8" indent="no" omit-xml-declaration="yes"/>
     <xsl:strip-space elements="*"/>
-    <xsl:param name="dataSource" select="//ro:originatingSource"/>
+    <xsl:param name="dataSource" select="//extRif:extendedMetadata/extRif:dataSourceKey"/>
     <xsl:param name="dateCreated"/>
     <xsl:param name="base_url" select="'https://test.ands.org.au/orca/'"/>  
     <xsl:param name="orca_view"/>  
@@ -80,12 +80,13 @@
 	       			 <a class="a2a_button_linkedin"></a>
 	        		<a class="a2a_button_facebook"></a>
 	        		<a class="a2a_button_twitter"></a>
-	        		<a class="a2a_button_wordpress"></a>
+	        			        		<span class="a2a_divider"></span>
+	        	<!--  	<a class="a2a_button_wordpress"></a>
 	        		<a class="a2a_button_stumbleupon"></a>
 	        		<a class="a2a_button_delicious"></a>
 	        		<a class="a2a_button_digg"></a>
 	        		<a class="a2a_button_reddit"></a>
-	        		<a class="a2a_button_email"></a>
+	        		<a class="a2a_button_email"></a>   -->    		
 	        		</div>
 	        		<script type="text/javascript">
 	        		var a2a_config = a2a_config || {};
@@ -93,7 +94,17 @@
 	        		<script type="text/javascript" src="http://static.addtoany.com/menu/page.js"></script>
 	      
 	        		<!-- AddToAny END -->  
-     		
+   				<a id="tag_show">
+                    <xsl:attribute name="href">javascript:void(0);</xsl:attribute>                    
+                    <img id="tag_icon">
+                    <xsl:attribute name="src">
+                    <xsl:value-of select="$base_url"/>
+                    <xsl:text>img/</xsl:text>
+                    <xsl:text>tag_16_icon.png</xsl:text></xsl:attribute>
+                    <xsl:attribute name="alt">Tag Icon</xsl:attribute>
+                    </img>
+                    </a>  	
+                   
 					<a target="_blank">
                     <xsl:attribute name="href"><xsl:value-of select="$base_url"/>view/printview/?key=<xsl:value-of select="ro:key"/></xsl:attribute>                    
                     <img id="print_icon">
@@ -111,19 +122,37 @@
 			
 		<!--  the following hidden elements dfine content to be used in further ajax calls --> 
         <div id="group_value" class="hide"><xsl:value-of select="@group"/></div>
-        <div id="datasource_key" class="hide"><xsl:value-of select="@originatingSource"/></div>
+        <div id="datasource_key" class="hide"><xsl:value-of select="$dataSource"/></div>
         <div id="key_value" class="hide"></div>
          <div id="class" class="hide"><xsl:value-of select="$objectClass"/></div>       
         <span id="key" class="hide"><xsl:value-of select="ro:key"/></span>
-             
+        <span id="keyHash" class="hide"><xsl:value-of select="//extRif:extendedMetadata/extRif:keyHash"/></span>            
         <xsl:apply-templates select="ro:collection | ro:activity | ro:party | ro:service"/>
     
     </xsl:template>
 
     <xsl:template match="ro:collection | ro:activity | ro:party | ro:service">
       	<div id="item-view-inner" class="clearfix" itemscope="" itemType="http://schema.org/Thing">
-	
-		<div id="left">           
+      	
+	 	<div id="tag_view" class="hide">
+	 	<span id="tag_lists">
+			<xsl:for-each select="//extRif:tags/extRif:tag">
+				<xsl:if test="position()&gt;1">	| </xsl:if>
+		 		<span class="tag_text"> <xsl:value-of select="."/></span>
+			</xsl:for-each>
+			</span>
+		<div id="add_tag_button"><input type="button" id="tag_add" value="Add Tag"/></div> 
+			<div id="add_tag_form">
+			<div id='tag_close'> <br /></div>
+				<p><input type="text" name="new_tag" id="new_tag" value=""/><br />
+				<span id='tagError' class='tagFormError'><br /></span></p>
+				 <div id="captcha_id"></div>
+				<p><input type="button" id="tag_submit" name="tag_submit" value="Submit"/></p>
+			</div>
+		</div>   
+		
+		<div id="left">  
+        
  		<xsl:choose>
 
 	        <xsl:when test="../extRif:extendedMetadata/extRif:displayTitle!=''">

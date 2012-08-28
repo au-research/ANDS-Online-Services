@@ -3360,4 +3360,13 @@ function scheduledTaskCheck($dataSourceKey)
 	else
 		return true;
 }
+function getTags($keyhash)
+{
+	 global $gCNN_DBS_ORCA;
+	 $resultSet = null;
+	$strQuery = "SELECT * from dba.tbl_tags where ro_hash = $1";
+	$params = array($keyhash);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	return $resultSet; 
+}
 ?>

@@ -43,6 +43,7 @@ $config['warning_notices'] = $warning_notices;
 
 $config['orca_service_point'] 	= 'services/getRegistryObjectsSOLR.php';
 $config['orca_view_point'] 		= 'view.php';
+$config['orca_service_rda'] 	= $config['orca_url'].'services/rda.php';
 
 
 $config['GA_enabled'] 		= $enable_google_analytic;

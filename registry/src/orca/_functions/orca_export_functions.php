@@ -217,6 +217,10 @@ function getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR = false, $inclu
 		}
 
 		$xml .= "    <originatingSource$originatingSourceType>$originatingSource</originatingSource>\n";
+		if($forSOLR)
+		{
+			$xml .= getTagsXml(esc(trim($registryObject[0]['key_hash'])),'extRif:tags');
+		}
 
 
 		// To prevent empty XML elements, we append to blank string and check that it actually
@@ -3529,4 +3533,23 @@ function getSearchBaseScore($registry_object_key)
 
 }
 
+function getTagsXML($keyHash, $elementName)
+{
+$xml = '';
+	$list = getTags($keyHash);
+
+ 	if( $list )
+	{ 
+		$xml =	"		<$elementName>\n";		
+		foreach( $list as $element )
+		{
+
+			$xml .= "<extRif:tag>".$element['tag']."</extRif:tag>";
+
+		}
+		$xml .= "      </$elementName>\n";
+	} 
+	return $xml; 
+	
+}
 ?>

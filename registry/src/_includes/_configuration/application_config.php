@@ -242,7 +242,14 @@ addMenu($menu);
 		$activity->no_check_ssl= true;
 
 		addActivity($activity);
+		
+		// =============================================================================
+		// services/rda
+		$activity = new activity('aORCA_SERVICE_RDA', 'ORCA services to RDA', 'http://'.eHOST.'/'.eROOT_DIR.'/orca/services/rda.php');
+		$activity->no_check_ssl= true;
 
+		addActivity($activity);
+		
 		// services/getRegistryObjectsSOLR
 		$activity = new activity('aORCA_SERVICE_GET_REGISTRY_OBJECTS_SOLR_2', 'Indexer', 'http://'.eHOST.'/'.eROOT_DIR.'/orca/services/indexer.php');
 		$activity->no_check_ssl= true;

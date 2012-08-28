@@ -70,6 +70,7 @@ $(document).ready(function(){
 	
 	
 	$('#clearSearch').tipsy({live:true, gravity:'se'});
+
 	
 	function initVocabPage(){
 		loadBigTree('http://purl.org/au-research/vocabulary/anzsrc-for/2008/01', 'anzsrc-for');
@@ -366,6 +367,7 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 	var hash = window.location.hash;
 	//console.log(hash);
 	
+
 	/*GET HASH TAG*/
 	$(window).hashchange(function(){
 		//var hash = window.location.hash;
@@ -787,11 +789,150 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 
 		
 		var key = $('#key').html();
+		var keyHash = $('#keyHash').html();		
 		var itemClass = $('#class').text();
 
 		//console.log(key);
 		
 		initConnectionsBox();//setup the connections Box
+		
+	//init the tag info div
+		$('#tag_close').click(function()
+				{
+			$('#add_tag_form').hide();
+				})
+		var contributed_by = '';
+		var captchaOK = '';		
+		$('#tag_show').click(function(){
+
+			var disp = $('#tag_view').css('display');
+			if(disp=='none')
+			{ 
+				$('#tag_view').show();
+
+			}
+			if(disp=='block')
+			{ 
+				$('#tag_view').hide();
+				$('#add_tag_form').hide();
+			}			
+		});	
+		
+		$('#tag_add').click(function(){
+			captchaOK = '';
+			$.ajax({
+	  			type:"POST",   
+	  			url: orca_service_rda, 
+	  			data: {task:'getUser'},   
+	  				success:function(msg){	
+	  					contributed_by = msg;
+	  					if(contributed_by.indexOf('Logged in')>0)
+	  					{
+	  						captchaOK = 'OK';
+	  					}else{
+	  						resetCaptcha();
+
+	  					}
+	  				},
+	  				error:function(msg){
+	  					alert(msg);
+	  				}
+	  			});	
+			$('#add_tag_form').show();
+		});	
+		
+		$('#tag_submit').click(function(){
+			var theTag = $('#new_tag').val();
+			var keyHash = $('#keyHash').html();	
+			var key = $('#key').html();		
+			var datasource_key = $('#originating_source').html();
+			var capture_img = $('#img').val();
+			var capture_response = $('#code').val();
+
+			$('#captchaError').html('<br />')
+			$('#tagError').html('<br />');
+			if(theTag=='') 
+			{
+				$('#tagError').html('You must provide a tag');
+				resetCaptcha(captchaOK);					
+			}else{	
+				$.ajax({
+		  		type:"GET",   
+		  		url: orca_service_rda, 
+		  		data: {task:'checkTheCaptcha',img:capture_img,response:capture_response},   
+		  			success:function(msg){	
+		  			if(msg=='FAILED' && captchaOK!='OK')
+		  				{
+		  					captchaOK = msg
+	  						resetCaptcha('FAILED');
+		  				}	else {
+		  					captchaOK = 'OK';
+		  					var url = base_url+"tag/addRecordTag";
+							$.ajax({
+								type:"POST",   
+								url: url, 
+								data:"tag="+theTag+"&keyHash="+keyHash+"&contributed_by="+contributed_by,   
+				  					success:function(msg){	
+				  						if(msg==1)
+				  						{
+				  							$.ajax({
+				  								type:"GET",   
+				  								url: orca_service_rda,
+				  								data: {task:'resync',key:key,datasource_key:datasource_key},
+				  				  					success:function(msg){	
+				  				  						//alert(msg);
+				  				  					},
+				  				  					error:function(msg){
+				  				  					}
+				  				  				});	
+				  							var tagList = $('#tag_lists').html();
+				  							if($('.tag_text').length)
+				  								{
+				  									tagList = tagList + ' | <span class="tag_text"> ' + theTag + '</span>';	
+				  								}else{
+				  									tagList = ' <span class="tag_text"> ' + theTag + '</span>';
+				  								}
+				  							$('#tag_lists').html(tagList);
+				  						}
+				  						$('#new_tag').val('');
+				  						$('#add_tag_form').hide();
+				  					},
+				  					error:function(msg){
+				  					//alert(msg);
+				  					}
+				  				});		  					
+		  				}					
+		  			},
+		  			error:function(msg){
+		  				
+		  			}
+		  		});	
+	  	
+				}
+			});		
+
+		function resetCaptcha(REASON)
+		{
+			if(REASON!='OK')
+				{
+				$.ajax({
+					type:"POST",   
+					url: orca_service_rda, 
+					data: {task:'getTheCaptcha'},   
+						success:function(msg){
+							$('#captcha_id').html(msg)
+							if(REASON=='FAILED')
+			  				{
+									$('#captchaError').html('Code entered incorrectly<br />');
+									$('#code').val('');
+			  				}
+						},
+						error:function(msg){
+							//alert("Error: " + msg);
+						}
+					});	
+				}
+		}
 		
 		if(itemClass=='Collection') {
 			initSubjectsSEEALSO();
@@ -838,7 +979,7 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 ///////////////////////
 // Set up the institutional page views by using ajax to load all the group stats
 /////////////////////////
-	
+
 	function initInstitutionViewPage(){
 		var key = $('#key').html();
 		var group = location.href.substr(location.href.indexOf("groupName=")+10,location.href.length);
