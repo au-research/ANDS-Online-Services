@@ -44,3 +44,50 @@ body,html{
   border-top-color: #ffffff;
   border-bottom-color: #ffffff;
 }
+
+.navbar-inner{
+	background:transparent;
+	border:none;
+}
+
+#arms-nav{
+	color:white;
+	text-align:right;
+	.ands-background();
+	.brand{
+		line-height:67px;
+		padding:0px 0px 0px 20px;
+	}
+	ul{
+		li{
+			a{
+				color:white;
+				line-height:67px;
+				font-size:16px;
+				.caret{
+					margin-top:32px;
+				}
+				&:hover{
+					background:#4f4f4f;
+				}
+			}
+			ul.dropdown-menu{
+				height:auto;
+				li{
+					a{
+						color:black;
+						line-height:20px;
+					}
+				}
+			}
+		}
+	}
+	.navbar-search{
+		margin-top:25px;
+	}
+	.divider-vertical{
+		border-left-color:#4f4f4f;
+		border-right-color:#4f4f4f;
+		height:100%;
+	}
+}
