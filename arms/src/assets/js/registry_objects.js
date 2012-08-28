@@ -530,6 +530,16 @@ function getRIFCSforTab(tab){
 								fragment += '<url>'+$('input[name=url]', this).val()+'</url>';
 							}
 							fragment += '</'+type+'>';
+						}else if(type=='relatedInfo'){
+							//identifier is required
+							fragment += '<identifier type="'+$('input[name=identifier_type]', this).val()+'">'+$('input[name=identifier]', this).val()+'</identifier>';
+							//title and notes are not required, but useful nonetheless
+							if($('input[name=title]', this).val()!=''){
+								fragment += '<title>'+$('input[name=title]', this).val()+'</title>';
+							}
+							if($('input[name=notes]', this).val()!=''){
+								fragment += '<notes>'+$('input[name=notes]', this).val()+'</notes>';
+							}
 						}else{
 							fragment += '<'+$(this).attr('type')+' type="'+$('input[name=type]', this).val()+'">'+$('input[name=value]', this).val()+'</'+$(this).attr('type')+'>';
 						}

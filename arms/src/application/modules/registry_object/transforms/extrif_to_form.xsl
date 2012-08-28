@@ -363,7 +363,7 @@
 		<div id="relatedinfos" class="tab-pane">
 			<fieldset>
 				<legend>Related Infos</legend>			
-				<xsl:apply-templates select="collection/relatedinfo | activity/relatedinfo | party/relatedinfo  | service/relatedinfo"/>
+				<xsl:apply-templates select="collection/relatedInfo | activity/relatedInfo | party/relatedInfo | service/relatedInfo"/>
 				<div class="separate_line"/>			
 				<button class="btn btn-primary addNew" type="relatedinfo">
 					<i class="icon-plus icon-white"></i> Add related Info
@@ -376,7 +376,7 @@
 		
 	</xsl:template>
 	
-	<xsl:template match="collection/relatedinfo | activity/relatedinfo | party/relatedinfo  | service/relatedinfo">
+	<xsl:template match="collection/relatedInfo | activity/relatedInfo | party/relatedInfo | service/relatedInfo">
 		<div class="aro_box" type="relatedInfo">
 			<div class="aro_box_display clearfix">
 				<a href="javascript:;" class="toggle"><i class="icon-minus"></i></a>
@@ -392,11 +392,11 @@
 					</div>
 				</div>
 			</div>
-			<div class="aro_box_part">
+			<div class="aro_box_part" type="relatedInfo">
 				<div class="control-group">
 					<label class="control-label" for="title">Title: </label>
 					<div class="controls">
-						<input type="text" class="input-xlarge" name="type" placeholder="Title" value="{title/text()}"/>
+						<input type="text" class="input-xlarge" name="title" placeholder="Title" value="{title/text()}"/>
 						<button class="btn btn-mini btn-danger remove">
 							<i class="icon-remove icon-white"></i>
 						</button>
@@ -414,7 +414,7 @@
 				<div class="control-group">
 					<label class="control-label" for="title">Notes: </label>
 					<div class="controls">
-						<input type="text" class="input-xlarge" name="type" placeholder="Title" value="{notes/text()}"/><p class="help-inline"><small></small></p>
+						<input type="text" class="input-xlarge" name="notes" placeholder="Notes" value="{notes/text()}"/><p class="help-inline"><small></small></p>
 					</div>
 				</div>
 			</div>
@@ -672,7 +672,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="aro_box_part">
+			<div class="aro_box_part" type="relatedInfo">
 				<div class="control-group">
 					<label class="control-label" for="title">Title: </label>
 					<div class="controls">
@@ -694,7 +694,7 @@
 				<div class="control-group">
 					<label class="control-label" for="title">Notes: </label>
 					<div class="controls">
-						<input type="text" class="input-xlarge" name="type" placeholder="Title" value=""/><p class="help-inline"><small></small></p>
+						<input type="text" class="input-xlarge" name="notes" placeholder="Notes" value=""/><p class="help-inline"><small></small></p>
 					</div>
 				</div>
 			</div>
