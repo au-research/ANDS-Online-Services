@@ -525,7 +525,7 @@
 			<div class="separate_line"/>
 			<button class="btn btn-primary addNew" type="relation">
 				<i class="icon-plus icon-white"></i> Add Relation
-			</button>			
+			</button>
 		</div>
 	</xsl:template>
 	

@@ -386,7 +386,7 @@ function initEditForm(){
 			var what = $(this).attr('type');
 			//var templates = $('#templates');
 			var template = $('.template[type='+what+']');
-			var where = $(this).prev('.separate_line');
+			var where = $(this).prevAll('.separate_line')[0];
 			$(template).clone().removeClass('template').insertBefore(where).hide().slideDown();
 			if(what=='description' || what=='rights'){
 				$('#edit-form textarea').addClass('editor');
