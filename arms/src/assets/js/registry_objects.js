@@ -386,7 +386,7 @@ function initEditForm(){
 			var what = $(this).attr('type');
 			//var templates = $('#templates');
 			var template = $('.template[type='+what+']');
-			var where = $(this).prevAll('.separate_line');
+			var where = $(this).prev('.separate_line');
 			$(template).clone().removeClass('template').insertBefore(where).hide().slideDown();
 			if(what=='description' || what=='rights'){
 				$('#edit-form textarea').addClass('editor');
@@ -418,11 +418,44 @@ function initEditForm(){
 				xml += getRIFCSforTab(this);
 
 			});
+			$('#myModal .modal-header h3').html('<h3>Export RIFCS</h3>');
 			$('#myModal .modal-body').html('<pre class="prettyprint linenums"><code class="language-xml">' + htmlEntities(formatXml(xml)) + '</code></pre>');
+			$('#myModal .modal-footer').html('<button class="btn btn-primary">Download</button>');
 			prettyPrint();
 			$('#myModal').modal();
 		}
 	});
+
+	$('#load_xml').live({
+		click: function(e){
+			e.preventDefault();
+			$('#myModal .modal-header h3').html('<h3>Paste RIFCS Here</h3>');
+			$('#myModal .modal-body').html('<textarea id="load_xml_rifcs"></textarea>');
+			$('#myModal .modal-footer').html('<button id="load_edit_xml" class="btn btn-primary">Load</button>');
+			$('#myModal').modal();
+		}
+	});
+
+	$('#load_edit_xml').live({
+		click: function(e){
+			var rifcs = $('textarea#load_xml_rifcs').val();
+			var ro_id = $('#ro_id').val();
+			console.log(ro_id);
+			if(rifcs!=''){
+				$('#view-ro .tab-content[name=edit]').html('Loading...');
+				$.ajax({
+					type: 'POST',
+					data: {rifcs:rifcs},
+					url: base_url+'registry_object/get_edit_form_custom/'+ro_id,
+					success:function(data){
+						$('#view-ro .tab-content[name=edit]').html(data);						
+						initEditForm();
+						$('#myModal').modal('hide');
+					}
+				});
+			}
+		}
+	})
 
 	$('#view-ro .tab-content[name=edit] input.datepicker').datepicker({
 		format: 'yyyy-mm-dd'

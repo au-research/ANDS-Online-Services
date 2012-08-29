@@ -194,6 +194,7 @@
 					<li><a href="javascript:;" name="preview" ro_id="{{id}}">Preview</a></li>
 				</ul>
 			</span>
+			<input type="hidden" class="hide" id="ro_id" value="{{id}}"/>
 			<div class="clearfix"></div>
 		</div>
 		<div class="box-content tab-content tab-view-content container" name="view">

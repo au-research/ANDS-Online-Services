@@ -76,6 +76,9 @@
 						
 
 						<div class="btn-toolbar">		
+							<button class="btn btn-info" id="load_xml">
+							  <i class="icon-download-alt icon-white"></i> Load XML
+							</button>	
 							<button class="btn btn-info" id="master_export_xml">
 							  <i class="icon-download-alt icon-white"></i> Export XML
 							</button>		  
@@ -443,9 +446,6 @@
 					<label class="control-label" for="title">Title: </label>
 					<div class="controls">
 						<input type="text" class="input-xlarge" name="title" placeholder="Title" value="{title/text()}"/>
-						<button class="btn btn-mini btn-danger remove">
-							<i class="icon-remove icon-white"></i>
-						</button>
 						<p class="help-inline"><small></small></p>
 					</div>
 				</div>
@@ -453,7 +453,7 @@
 				<div class="control-group">
 					<label class="control-label" for="title">Identifier: </label>
 					<div class="controls">
-						<input type="text" class="input-small" name="identifier_type" placeholder="Identifier Type" value="{identifier/@type}"/><input type="text" class="input-xlarge" name="identifier" placeholder="Identifier" value="{identifier/@type}"/><p class="help-inline"><small></small></p>
+						<input type="text" class="input-small" name="identifier_type" placeholder="Identifier Type" value="{identifier/@type}"/><input type="text" class="input-xlarge" name="identifier" placeholder="Identifier" value="{identifier/text()}"/><p class="help-inline"><small></small></p>
 					</div>
 				</div>
 
@@ -529,13 +529,16 @@
 		</div>
 	</xsl:template>
 	
-	<xsl:template match="collection/location | activity/location | party/location  | service/locationt">
+	<xsl:template match="collection/location | activity/location | party/location  | service/location">
 		<div class="aro_box" type="location">
 			<div class="aro_box_display clearfix">
 				<a href="javascript:;" class="toggle"><i class="icon-minus"></i></a>
-				<h1>Location Summary goes here</h1>
+				<h1></h1>
 				<div class="control-group">
+
 					<div class="controls">
+						<input type="text" class="input-small" name="location_dateFrom" placeholder="dateFrom" value="{@dateFrom}"/>
+						<input type="text" class="input-small" name="location_dateFrom" placeholder="dateTo" value="{@dateTo}"/>
 						<button class="btn btn-mini btn-danger remove">
 							<i class="icon-remove icon-white"></i>
 						</button>
@@ -543,15 +546,7 @@
 					</div>
 				</div>
 			</div>
-			
-			<div class="aro_box_part">
-				<div class="control-group">
-					<div class="controls">
-						<input type="text" class="input-xlarge" name="location_dateFrom" placeholder="dateFrom" value="{@dateFrom}"/>
-						<input type="text" class="input-xlarge" name="location_dateFrom" placeholder="dateTo" value="{@dateTo}"/>
-					</div>
-				</div>
-			</div>					
+							
 			<xsl:apply-templates select="address | spatial"/>
 			<div class="separate_line"/>
 			<button class="btn btn-primary addNew" type="address">
@@ -559,7 +554,7 @@
 			</button>
 			<button class="btn btn-primary addNew" type="spatial">
 				<i class="icon-plus icon-white"></i> Add Spatial Location
-			</button>			
+			</button>
 		</div>
 	</xsl:template>
 	
@@ -842,9 +837,6 @@
 					<label class="control-label" for="title">Title: </label>
 					<div class="controls">
 						<input type="text" class="input-xlarge" name="type" placeholder="Title" value=""/>
-						<button class="btn btn-mini btn-danger remove">
-							<i class="icon-remove icon-white"></i>
-						</button>
 						<p class="help-inline"><small></small></p>
 					</div>
 				</div>
@@ -971,6 +963,4 @@
 
 	</xsl:template>
 	
-
-
 </xsl:stylesheet>

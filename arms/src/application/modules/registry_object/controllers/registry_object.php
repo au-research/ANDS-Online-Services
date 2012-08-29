@@ -68,6 +68,15 @@ class Registry_object extends MX_Controller {
 		//$this->load->view('registry_object_edit', $data);
 	}
 
+	public function get_edit_form_custom($id){
+		$this->load->model('registry_objects', 'ro');
+		$ro = $this->ro->getByID($id);
+		$rifcs = $this->input->post('rifcs');
+		
+		$data['transform'] = $ro->transformCustomForFORM($rifcs);
+		echo $data['transform'];
+	}
+
 	//AJAX function for MMR to search
 	public function get_records(){
 		$fields = $this->input->post('fields');

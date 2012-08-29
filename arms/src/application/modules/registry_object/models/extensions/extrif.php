@@ -135,6 +135,20 @@ class Extrif_Extension extends ExtensionBase
 			echo "<pre>" . nl2br($e->getMessage()) . "</pre>" . BR;
 		}
 	}
+
+	function transformCustomForFORM($rifcs){
+		try{
+			$xslt_processor = Transforms::get_extrif_to_form_transformer();
+			$dom = new DOMDocument();
+			//$dom->loadXML($this->ro->getXML());
+			$dom->loadXML($rifcs);
+			return $xslt_processor->transformToXML($dom);
+		}catch (Exception $e)
+		{
+			echo "UNABLE TO TRANSFORM" . BR;	
+			echo "<pre>" . nl2br($e->getMessage()) . "</pre>" . BR;
+		}
+	}
 	
 	
 	
