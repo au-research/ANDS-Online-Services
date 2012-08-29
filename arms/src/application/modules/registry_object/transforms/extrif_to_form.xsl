@@ -84,7 +84,7 @@
 							</button>		  
 
 							<div class="btn-group dropup">
-							<button class="btn btn-primary"> <i class="icon-download-alt icon-white"></i> Save &amp; Validate</button>
+								<button class="btn btn-primary"> <i class="icon-download-alt icon-white"></i> Save &amp; Validate</button>
 								<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
 									<span class="caret"></span>
 								</button>
@@ -546,15 +546,31 @@
 					</div>
 				</div>
 			</div>
-							
-			<xsl:apply-templates select="address | spatial"/>
-			<div class="separate_line"/>
-			<button class="btn btn-primary addNew" type="address">
-				<i class="icon-plus icon-white"></i> Add Address
-			</button>
-			<button class="btn btn-primary addNew" type="spatial">
-				<i class="icon-plus icon-white"></i> Add Spatial Location
-			</button>
+			
+			<div class="aro_box_subcontent">
+				<h1>Address</h1>
+				<xsl:apply-templates select="address"/>
+				<div class="separate_line"/>
+				<div class="btn-group dropup">
+					<button class="btn btn-primary"> <i class="icon-envelope icon-white"></i> Add Address</button>
+					<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+						<span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu">
+						<li><a href="javascript:;" class="addNew" type="electronic">Add Electronic Address</a></li>
+						<li><a href="javascript:;" class="addNew" type="physical">Add Physical Address</a></li>
+					</ul>
+				</div>
+			</div>
+
+			<div class="aro_box_subcontent">
+				<h1>Spatial Location</h1>
+				<xsl:apply-templates select="spatial"/>
+				<div class="separate_line"/>
+				<button class="btn btn-primary addNew" type="spatial">
+					<i class="icon-map-marker icon-white"></i> Add Spatial Location
+				</button>
+			</div>
 		</div>
 	</xsl:template>
 	
@@ -597,12 +613,8 @@
 			<div class="control-group">
 				<xsl:apply-templates select="electronic | physical"/>
 				<div class="separate_line"/>
-				<button class="btn btn-primary addNew" type="electronic">
-					<i class="icon-plus icon-white"></i> Add Electronic Address
-				</button>
-				<button class="btn btn-primary addNew" type="physical">
-					<i class="icon-plus icon-white"></i> Add Physical Address
-				</button>
+
+				
 			</div>
 		</div>		
 	</xsl:template>
@@ -613,11 +625,11 @@
 			<div class="control-group">
 				<input type="text" class="input-small" name="type" placeholder="Type" value="{@type}"/>
 				<input type="text" class="input-xlarge" name="value"  placeholder="Value" value="{value}"/>
-				<xsl:apply-templates select="arg"/>
-				<div class="separate_line"/>
-				<button class="btn btn-primary addNew" type="arg">
-					<i class="icon-plus icon-white"></i> Add Args
-				</button>
+				<button class="btn btn-primary showArgs">Args</button>
+				<div class="args hide">
+					<h1>Args</h1>
+					<xsl:apply-templates select="arg"/>
+				</div>
 			</div>
 		</div>		
 	</xsl:template>
@@ -903,17 +915,7 @@
 			</div>
 		</div>		
 	
-		<div class="aro_box_part template" type="address">
-			<div class="control-group">
-				<div class="separate_line"/>
-				<button class="btn btn-primary addNew" type="electronic">
-					<i class="icon-plus icon-white"></i> Add Electronic Address
-				</button>
-				<button class="btn btn-primary addNew" type="physical">
-					<i class="icon-plus icon-white"></i> Add Physical Address
-				</button>
-			</div>
-		</div>		
+		
 	
 		<div class="aro_box_part template" type="electronic">
 			<label class="control-label" for="title">Electronic Address: </label>

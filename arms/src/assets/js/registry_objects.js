@@ -23,8 +23,6 @@ $(function(){
 	ds_id = $('#ds_id').val();
 	if(ds_id!=0) fields.data_source_id = ds_id;
 
-	
-
 	$(window).hashchange(function(){
 		var hash = location.hash;
 		if(hash.indexOf(suffix)==0){//if the hash starts with a particular suffix
@@ -387,6 +385,16 @@ function initEditForm(){
 			//var templates = $('#templates');
 			var template = $('.template[type='+what+']');
 			var where = $(this).prevAll('.separate_line')[0];
+			if(!where){//if there is no separate line found, go out 1 layer and find it
+				where = $(this).parent().prevAll('.separate_line')[0];
+				if(!where){
+					where = $(this).parent().parent().prevAll('.separate_line')[0];
+					if(!where){
+						where = $(this).parent().parent().parent().prevAll('.separate_line')[0];
+					}
+				}
+			}
+
 			$(template).clone().removeClass('template').insertBefore(where).hide().slideDown();
 			if(what=='description' || what=='rights'){
 				$('#edit-form textarea').addClass('editor');
@@ -394,6 +402,23 @@ function initEditForm(){
 			}
 		}
 	});
+
+	$('.showArgs').each(function(){
+		var args = $(this).next('.args')[0];
+		$(this).qtip({
+			content:{text:$(args)},
+			position:{
+				my:'center left',
+				at: 'center right'
+			},
+			show: {event: 'click'},
+			hide: {event: 'unfocus'},
+			style: {classes: 'ui-tooltip-shadow ui-tooltip-bootstrap'}
+		});
+	});
+
+
+
 
 	$('.export_xml').live({
 		click: function(e){

@@ -26,7 +26,7 @@
   </div>
 </div>
 
-<section id="browse-ro">
+<section id="browse-ro" class="hide">
 
 	<div class="row">
 		<div class="box">
