@@ -654,11 +654,17 @@
 				<input type="text" class="input-small" name="type" placeholder="Type" value="{@type}"/>
 				<input type="text" class="input-xlarge" name="value"  placeholder="Value" value="{value}"/>
 				<xsl:if test="ancestor::service">
-					<xsl:apply-templates select="arg"/>
-					<div class="separate_line"/>
-					<button class="btn btn-primary addNew" type="arg">
-						<i class="icon-plus icon-white"></i> Add Args
-					</button>
+
+					<button class="btn btn-primary showParts"><i class="icon-chevron-right icon-white"></i></button>
+					<div class="parts hide">
+						<xsl:apply-templates select="arg"/>
+						<div class="separate_line"/>
+						<button class="btn btn-primary addNew" type="arg">
+							<i class="icon-plus icon-white"></i> Add Args
+						</button>
+					</div>
+					
+					
 				</xsl:if>
 			</div>
 		</div>
