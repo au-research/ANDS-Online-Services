@@ -692,6 +692,9 @@
 			<div class="control-group">
 				<input type="text" class="input-small" name="type" placeholder="Type" value="{@type}"/>
 				<input type="text" class="input-xlarge" name="value"  placeholder="value" value="{text()}"/>
+				<button class="btn btn-mini btn-danger remove">
+					<i class="icon-remove icon-white"></i>
+				</button>
 			</div>
 		</div>		
 	</xsl:template>
@@ -893,38 +896,47 @@
 				</div>
 			</div>
 		</div>
-
+		
 		<div class="aro_box template" type="location">
-				<div class="aro_box_display clearfix">
-					<a href="javascript:;" class="toggle"><i class="icon-minus"></i></a>
-					<h1>Location Summary goes here</h1>
-					<div class="control-group">
-						<div class="controls">
-							<button class="btn btn-mini btn-danger remove">
-								<i class="icon-remove icon-white"></i>
-							</button>
-							<p class="help-inline"><small></small></p>
-						</div>
+			<div class="aro_box_display clearfix">
+				<a href="javascript:;" class="toggle"><i class="icon-minus"></i></a>
+				<h1></h1>
+				<div class="control-group">
+					
+					<div class="controls">
+						<input type="text" class="input-small" name="location_dateFrom" placeholder="dateFrom" value=""/>
+						<input type="text" class="input-small" name="location_dateFrom" placeholder="dateTo" value=""/>
+						<button class="btn btn-mini btn-danger remove">
+							<i class="icon-remove icon-white"></i>
+						</button>
+						<p class="help-inline"><small></small></p>
 					</div>
 				</div>
-				
-				<div class="aro_box_part">
-					<div class="control-group">
-						<div class="controls">
-							<input type="text" class="input-xlarge" name="location_dateFrom" placeholder="dateFrom" value=""/>
-							<input type="text" class="input-xlarge" name="location_dateFrom" placeholder="dateTo" value=""/>
-						</div>
-					</div>
-				</div>					
+			</div>			
+			<div class="aro_box_subcontent">
+				<h1>Address</h1>
+				<xsl:apply-templates select="address"/>
 				<div class="separate_line"/>
-				<button class="btn btn-primary addNew" type="address">
-					<i class="icon-plus icon-white"></i> Add Address
-				</button>
+				<div class="btn-group dropup">
+					<button class="btn btn-primary"> <i class="icon-envelope icon-white"></i> Add Address</button>
+					<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+						<span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu">
+						<li><a href="javascript:;" class="addNew" type="electronic">Add Electronic Address</a></li>
+						<li><a href="javascript:;" class="addNew" type="physical">Add Physical Address</a></li>
+					</ul>
+				</div>
+			</div>		
+			<div class="aro_box_subcontent">
+				<h1>Spatial Location</h1>
+				<xsl:apply-templates select="spatial"/>
+				<div class="separate_line"/>
 				<button class="btn btn-primary addNew" type="spatial">
-					<i class="icon-plus icon-white"></i> Add Spatial Location
-				</button>			
+					<i class="icon-map-marker icon-white"></i> Add Spatial Location
+				</button>
 			</div>
-
+		</div>
 
 		<div class="aro_box_part template" type="spatial">
 			<div class="control-group">
@@ -939,9 +951,7 @@
 				</div>
 			</div>
 		</div>		
-	
-		
-	
+
 		<div class="aro_box_part template" type="electronic">
 			<label class="control-label" for="title">Electronic Address: </label>
 			<div class="control-group">
@@ -981,7 +991,11 @@
 			<div class="control-group">
 				<input type="text" class="input-small" name="type" placeholder="Type" value=""/>
 				<input type="text" class="input-xlarge" name="value"  placeholder="value" value=""/>
+				<button class="btn btn-mini btn-danger remove">
+					<i class="icon-remove icon-white"></i>
+				</button>
 			</div>
+
 		</div>		
 		
 		<div class="aro_box template" type="accessPolicy">
