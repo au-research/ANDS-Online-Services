@@ -198,6 +198,7 @@
 			<div class="clearfix"></div>
 		</div>
 		<div class="box-content tab-content tab-view-content container" name="view">
+			
 			<div class="row">
 				<div class="span8 eqheight">
 					<div class="box">

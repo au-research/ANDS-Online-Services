@@ -631,7 +631,7 @@
 					<xsl:apply-templates select="arg"/>
 				</div>
 			</div>
-		</div>		
+		</div>
 	</xsl:template>
 	
 	<xsl:template match="physical">
@@ -670,11 +670,9 @@
 	</xsl:template>
 	
 	<xsl:template match="accessPolicy">
-		<div class="aro_box_part" type="accessPolicy">
-			<div class="control-group">
-				<input type="text" class="input-xlarge" name="value"  placeholder="value" value="{text()}"/>
-			</div>
-		</div>		
+		<div class="aro_box" type="accessPolicy">
+			<input type="text" class="input-xlarge" name="value"  placeholder="value" value="{text()}"/>
+		</div>
 	</xsl:template>
 
 	<!-- BLANK TEMPLATE -->
@@ -957,10 +955,8 @@
 			</div>
 		</div>		
 		
-		<div class="aro_box_part template" type="accessPolicy">
-			<div class="control-group">
-				<input type="text" class="input-xlarge" name="value"  placeholder="value" value=""/>
-			</div>
+		<div class="aro_box template" type="accessPolicy">
+			<input type="text" class="input-xlarge" name="value"  placeholder="value" value=""/>
 		</div>	
 
 	</xsl:template>

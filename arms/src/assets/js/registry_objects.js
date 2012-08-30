@@ -50,7 +50,7 @@ $(function(){
 	});
 	$(window).hashchange();
 
-	$('.item').live({
+	$('.item').die().live({
 		mouseenter: function(e){
 			$('.btn-group', this).show();
 		},
@@ -87,7 +87,7 @@ $(function(){
 		updateSelected();
 	});
 
-	$('.toggleFilter').live({
+	$('.toggleFilter').die().live({
 		click: function(){
 			$('#filter_container').slideToggle();
 		}
@@ -117,7 +117,7 @@ $(function(){
 		getRecords(fields);
 	});
 
-	$('.filter').live({
+	$('.filter').die().live({
 		click: function(e){
 			e.preventDefault();
 			var filtername = $(this).attr('name');
@@ -127,7 +127,7 @@ $(function(){
 			changeHashTo('browse/'+currentView+'/'+filters);
 		}
 	});
-	$('.remove_filter').live({
+	$('.remove_filter').die().live({
 		click: function(e){
 			e.preventDefault();
 			var field = $(this).attr('name');
@@ -137,7 +137,7 @@ $(function(){
 		}
 	});
 
-	$('.sort').live({
+	$('.sort').die().live({
 		click: function(){
 			var field = $(this).attr('name');
 			var span = $(this).next('span');
@@ -188,7 +188,7 @@ $(function(){
 	
 
 	//bind viewing screen
-	$('.tab-view-list li a').live({
+	$('.tab-view-list li a').die().live({
 		click:function(e){
 			e.preventDefault();
 			var view = $(this).attr('name');
@@ -226,6 +226,7 @@ function browse(view, filter){
 }
 
 function load_ro(ro_id, view, active_tab){
+	$('#view-ro').html('Loading...');
 	$.ajax({
 		type: 'GET',
 		url: base_url+'registry_object/get_record/'+ro_id,
@@ -262,7 +263,6 @@ function load_ro(ro_id, view, active_tab){
 				$('#view-ro .eqheight .box').each(function(){
 					$(this).height(highest);
 				});
-				console.log(highest);
 			}else if(view=='edit'){
 				//set the active tab
 				//console.log(data.ro.xml);
@@ -282,9 +282,7 @@ function load_ro(ro_id, view, active_tab){
 						if(active_tab && $('#'+active_tab).length > 0){//if an active tab is specified and exists
 							$('.nav-tabs li a[href=#'+active_tab+']').click();
 						}
-						
 						initEditForm();
-
 					}
 				});
 			}
@@ -295,7 +293,7 @@ function load_ro(ro_id, view, active_tab){
 
 function initEditForm(){
 
-	$('#edit-form .toggle').live({
+	$('#edit-form .toggle').die().live({
 		click: function(e){
 			e.preventDefault();
 			$('i', this).toggleClass('icon-plus').toggleClass('icon-minus');
@@ -303,7 +301,7 @@ function initEditForm(){
 		}
 	});
 
-	$('#edit-form button').live({
+	$('#edit-form button').die().live({
 		click: function(e){
 			e.preventDefault();
 		}
@@ -323,13 +321,13 @@ function initEditForm(){
 		minLength:0
 	});
 
-	$('.triggerTypeAhead').live({
+	$('.triggerTypeAhead').die().live({
 		click: function(e){
 			$(this).parent().children('input').focus()
 		}
 	});
 
-	$('#generate_random_key').live({
+	$('#generate_random_key').die().live({
 		click:function(e){
 			e.preventDefault();
 			var input = $(this).prev('input');
@@ -367,7 +365,7 @@ function initEditForm(){
 
 	
 
-	$('.remove').live({
+	$('.remove').die().live({
 		click:function(){
 			var target = $(this).parents('.aro_box_part');
 			if($(target).length==0) target = $(this).parents('.aro_box');
@@ -378,12 +376,12 @@ function initEditForm(){
 		}
 	});
 
-	$('.addNew').live({
+	$('.addNew').die().live({
 		click:function(e){
+			e.stopPropagation();
 			e.preventDefault();
 			var what = $(this).attr('type');
-			//var templates = $('#templates');
-			var template = $('.template[type='+what+']');
+			var template = $('.template[type='+what+']')[0];
 			var where = $(this).prevAll('.separate_line')[0];
 			if(!where){//if there is no separate line found, go out 1 layer and find it
 				where = $(this).parent().prevAll('.separate_line')[0];
@@ -420,7 +418,7 @@ function initEditForm(){
 
 
 
-	$('.export_xml').live({
+	$('.export_xml').die().live({
 		click: function(e){
 			e.preventDefault();
 			tinyMCE.triggerSave();//so that we can get the tinymce textarea.value without using tinymce.getContents
@@ -432,7 +430,7 @@ function initEditForm(){
 		}
 	});
 
-	$('#master_export_xml').live({
+	$('#master_export_xml').die().live({
 		click: function(e){
 			e.preventDefault();
 			tinyMCE.triggerSave();
@@ -451,7 +449,7 @@ function initEditForm(){
 		}
 	});
 
-	$('#load_xml').live({
+	$('#load_xml').die().live({
 		click: function(e){
 			e.preventDefault();
 			$('#myModal .modal-header h3').html('<h3>Paste RIFCS Here</h3>');
@@ -461,7 +459,7 @@ function initEditForm(){
 		}
 	});
 
-	$('#load_edit_xml').live({
+	$('#load_edit_xml').die().live({
 		click: function(e){
 			var rifcs = $('textarea#load_xml_rifcs').val();
 			var ro_id = $('#ro_id').val();
@@ -486,7 +484,7 @@ function initEditForm(){
 		format: 'yyyy-mm-dd'
 	});
 
-	$('.triggerDatePicker').live({
+	$('.triggerDatePicker').die().live({
 		click: function(e){
 			$(this).parent().children('input').focus();
 		}
@@ -494,17 +492,33 @@ function initEditForm(){
 
 	initNames();
 	initDescriptions();
+	initRelatedInfos();
 }
 
 function initNames(){
 	var names = $('#names .aro_box[type=name]');
 	$.each(names, function(){
-		if(!$(this).hasClass('template')){
-			initName(this);
-		}
+		var name = this;
+		var display = $(name).children('.aro_box_display').find('h1');
+		var type = $(name).children('.aro_box_display').find('input[name=type]').val();
+		var parts = $(name).children('.aro_box_part');
+		var display_name = '';
+		var temp_name = '';
+		$.each(parts, function(){
+			var thisPart = [];
+			var type = $(name).find('input[name=type]').val();
+			var value = $(name).find('input[name=value]').val();
+			//logic here
+			temp_name = value;
+			if(type=='primary'){
+				display_name = value;
+			}
+		});
+		if(display_name=='') display_name=temp_name;
+		$(display).html(display_name);
 	});
 
-	$('#names input').live({
+	$('#names input').die().live({
 		blur:function(e){
 			var thisName = $(this).parents('.aro_box[type=name]');
 			initName(thisName);
@@ -514,29 +528,24 @@ function initNames(){
 
 
 
-function initName(name){
-	var display = $(name).children('.aro_box_display').find('h1');
-	var type = $(name).children('.aro_box_display').find('input[name=type]').val();
-	var parts = $(name).children('.aro_box_part');
-	var display_name = '';
-	var temp_name = '';
-	$.each(parts, function(){
-		var thisPart = [];
-		var type = $(name).find('input[name=type]').val();
-		var value = $(name).find('input[name=value]').val();
-		//logic here
-		temp_name = value;
-		if(type=='primary'){
-			display_name = value;
-		}
-	});
-	if(display_name=='') display_name=temp_name;
-	$(display).html(display_name);
-}
-
 function initDescriptions(){
 	initEditor();
+}
 
+function initRelatedInfos(){
+	var relatedInfos = $('#relatedinfos .aro_box[type=relatedInfo]');
+	$.each(relatedInfos, function(){
+		var ri = this;
+		var display = $('.aro_box_display h1', ri);
+		var todisplay = $('input[name=title]', ri).val();
+		if(!todisplay){
+			todisplay = $('input[name=notes]', ri).val();
+		}
+		if(!todisplay){
+			todisplay = $('input[name=identifier]', ri).val();
+		}
+		$(display).html(todisplay);
+	});
 }
 
 function initEditor(){
@@ -570,9 +579,10 @@ function getRIFCSforTab(tab){
 			}
 			if(fragment_type){
 				fragment +='<'+$(this).attr('type')+' type="'+fragment_type+'">';
-			}else{//if there's absolutely no type, then there's none, stop finding it
+			}else{//if there's absolutely no fragment type, then there's none, stop finding it, just put the element in
 				fragment +='<'+$(this).attr('type')+'>';
 			}
+
 			var parts = $('.aro_box_part', this);
 			if(parts.length > 0){//if there is a part, data is spread out in parts
 				$.each(parts, function(){
@@ -612,9 +622,13 @@ function getRIFCSforTab(tab){
 				}else{
 					//there's no textarea, just normal input
 					fragment += $('input[name=value]', this).val();
+
 				}
 			}
 			fragment +='</'+$(this).attr('type')+'>';
+
+			//SCENARIO on Access Policies
+
 			xml += fragment;
 		}
 	});
