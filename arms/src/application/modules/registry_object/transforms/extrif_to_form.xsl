@@ -39,6 +39,12 @@
 						<a href="#accesspolicies" data-toggle="tab">Accesspolicy</a>
 					</li>	
 				</xsl:if>
+				<xsl:if test="$ro_class = 'collection'">
+					<li>
+						<a href="#citationinfos" data-toggle="tab">Citation Info</a>
+					</li>	
+				</xsl:if>
+				
 			</ul>
 
 			<!-- form-->
@@ -55,6 +61,9 @@
 					<xsl:call-template name="relatedinfosTab"/>
 					<xsl:if test="$ro_class = 'service'">
 						<xsl:call-template name="accesspolicyTab"/>
+					</xsl:if>
+					<xsl:if test="$ro_class = 'collection'">
+						<xsl:call-template name="citationinfoTab"/>
 					</xsl:if>
 					<div class="modal hide" id="myModal">
 						<div class="modal-header">
@@ -303,6 +312,22 @@
 		</div>		
 	</xsl:template>
 
+
+	<xsl:template name="citationinfoTab">
+		<div id="citationinfos" class="tab-pane">
+			<fieldset>
+				<legend>Citation Info</legend>
+				<xsl:apply-templates select="collection/citationInfo"/>			
+				<div class="separate_line"/>
+				<button class="btn btn-primary addNew" type="citationInfo">
+					<i class="icon-plus icon-white"></i> Add Citation Info
+				</button>
+				<button class="btn export_xml btn-info">
+					Export XML fragment
+				</button>
+			</fieldset>
+		</div>		
+	</xsl:template>
 
 	<xsl:template match="collection/description | activity/description | party/description  | service/description">
 		<div class="aro_box" type="description">
@@ -625,11 +650,13 @@
 			<div class="control-group">
 				<input type="text" class="input-small" name="type" placeholder="Type" value="{@type}"/>
 				<input type="text" class="input-xlarge" name="value"  placeholder="Value" value="{value}"/>
-				<button class="btn btn-primary showArgs">Args</button>
-				<div class="args hide">
-					<h1>Args</h1>
+				<xsl:if test="ancestor::service">
 					<xsl:apply-templates select="arg"/>
-				</div>
+					<div class="separate_line"/>
+					<button class="btn btn-primary addNew" type="arg">
+						<i class="icon-plus icon-white"></i> Add Args
+					</button>
+				</xsl:if>
 			</div>
 		</div>
 	</xsl:template>
@@ -920,10 +947,12 @@
 			<div class="control-group">
 				<input type="text" class="input-small" name="type" placeholder="Type" value=""/>
 				<input type="text" class="input-xlarge" name="value"  placeholder="Value" value=""/>
+				<xsl:if test="service">
 				<div class="separate_line"/>
 				<button class="btn btn-primary addNew" type="arg">
 					<i class="icon-plus icon-white"></i> Add Args
 				</button>
+				</xsl:if>
 			</div>
 		</div>		
 	
@@ -958,6 +987,28 @@
 		<div class="aro_box template" type="accessPolicy">
 			<input type="text" class="input-xlarge" name="value"  placeholder="value" value=""/>
 		</div>	
+		
+		<div class="aro_box_part template" type="fullCitation">
+			<label class="control-label" for="title">Full Citation: </label>
+			<div class="aro_box_part">
+				<div class="control-group">
+					<input type="text" class="input-xlarge" name="style"  placeholder="Style" value=""/>
+					<input type="text" class="input-xlarge" name="value"  placeholder="value" value=""/>
+				</div>
+			</div>
+		</div>
+		
+		<div class="aro_box_part template" type="citationInfo">
+			<div class="control-group">
+				<div class="separate_line"/>
+				<button class="btn btn-primary addNew" type="fullCitation">
+					<i class="icon-plus icon-white"></i> Add Full Citation
+				</button>
+				<button class="btn btn-primary addNew" type="citationMetadata">
+					<i class="icon-plus icon-white"></i> Add Citation Metadata
+				</button>
+			</div>
+		</div>
 
 	</xsl:template>
 	
