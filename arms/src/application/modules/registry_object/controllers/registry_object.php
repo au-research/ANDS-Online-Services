@@ -20,18 +20,16 @@ class Registry_object extends MX_Controller {
 			if(!$data_source) show_error("Unable to retrieve data source id = ".$data_source_id, 404);
 			$data['data_source_title'] = $data_source->title;
 			$data['data_source_id'] = $data_source->id;
-			$data['scripts'] = array('registry_objects');
-			$data['js_lib'] = array('core');
-			$this->load->view("registry_object_index", $data);
+			
 		}else{
 			//showing all registry objects for all datasource
 			$data['data_source_title'] = 'Viewing All Registry Objects';
 			$data['data_source_id'] = 0;
-			$data['scripts'] = array('registry_objects');
-			$data['js_lib'] = array('core', 'tinymce', 'datepicker');
-			$this->load->view("registry_object_index", $data);
 			//show_error('No Data Source ID provided. use all data source view for relevant roles');
 		}
+		$data['scripts'] = array('registry_objects');
+		$data['js_lib'] = array('core', 'tinymce', 'datepicker');
+		$this->load->view("registry_object_index", $data);
 	}
 
 	public function get_record($id){

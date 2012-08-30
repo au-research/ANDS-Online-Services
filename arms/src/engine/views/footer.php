@@ -54,9 +54,6 @@
             <script>
                 prettyPrint();
             </script>
-
-
-
         <?php endif;?>
 
         <?php if($lib=='graph'):?>

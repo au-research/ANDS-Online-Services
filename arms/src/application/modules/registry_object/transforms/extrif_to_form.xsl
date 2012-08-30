@@ -249,11 +249,15 @@
 					</div>
 				</div>
 			</div>
+			
 			<xsl:apply-templates select="namePart"/>
 			<div class="separate_line"/>
-			<button class="btn btn-primary addNew hide" type="namePart">
-				<i class="icon-plus icon-white"></i> Add Name Part
-			</button>
+			<div class="controls hide">
+				<button class="btn btn-primary addNew" type="namePart">
+					<i class="icon-plus icon-white"></i> Add Name Part
+				</button>
+			</div>
+			
 		</div>
 	</xsl:template>
 	
@@ -560,7 +564,6 @@
 				<a href="javascript:;" class="toggle"><i class="icon-minus"></i></a>
 				<h1></h1>
 				<div class="control-group">
-
 					<div class="controls">
 						<input type="text" class="input-small" name="location_dateFrom" placeholder="dateFrom" value="{@dateFrom}"/>
 						<input type="text" class="input-small" name="location_dateFrom" placeholder="dateTo" value="{@dateTo}"/>
@@ -572,7 +575,7 @@
 				</div>
 			</div>
 			
-			<div class="aro_box_subcontent">
+			<div class="aro_subbox">
 				<h1>Address</h1>
 				<xsl:apply-templates select="address"/>
 				<div class="separate_line"/>
@@ -588,7 +591,7 @@
 				</div>
 			</div>
 
-			<div class="aro_box_subcontent">
+			<div class="aro_subbox">
 				<h1>Spatial Location</h1>
 				<xsl:apply-templates select="spatial"/>
 				<div class="separate_line"/>
@@ -666,11 +669,15 @@
 			<label class="control-label" for="title">Physical Address: </label>
 			<div class="control-group">
 				<input type="text" class="input-small" name="type" placeholder="Type" value="{@type}"/>
-				<xsl:apply-templates select="addressPart"/>
-				<div class="separate_line"/>
-				<button class="btn btn-primary addNew" type="addressPart">
-					<i class="icon-plus icon-white"></i> Add Address Part
-				</button>
+				<button class="btn btn-primary showParts"><i class="icon-chevron-right icon-white"></i></button>
+				<div class="parts hide" type="addressParts">
+					<xsl:apply-templates select="addressPart"/>
+					<div class="separate_line"/>
+					<button class="btn btn-primary addNew" type="addressPart">
+						<i class="icon-plus icon-white"></i> Add Address Part
+					</button>
+				</div>
+				
 			</div>
 		</div>		
 	</xsl:template>

@@ -297,7 +297,8 @@ function initEditForm(){
 		click: function(e){
 			e.preventDefault();
 			$('i', this).toggleClass('icon-plus').toggleClass('icon-minus');
-			$(this).parent().parent().children('.aro_box_part, button.addNew').slideToggle();
+			//$(this).parent().parent().children('*').show();
+			$(this).parent().parent().children('.aro_box_part, button.addNew, .controls').slideToggle();
 		}
 	});
 
@@ -367,9 +368,8 @@ function initEditForm(){
 
 	$('.remove').die().live({
 		click:function(){
-			var target = $(this).parents('.aro_box_part');
-			if($(target).length==0) target = $(this).parents('.aro_box');
-			//console.log(target);
+			var target = $(this).parents('.aro_box_part')[0];
+			if($(target).length==0) target = $(this).parents('.aro_box')[0];
 			$(target).fadeOut(500, function(){
 				$(target).remove();
 			});
@@ -415,13 +415,35 @@ function initEditForm(){
 		});
 	});
 
+	$('.showParts').each(function(){
+		var parts = $(this).next('.parts')[0];
+		$(this).qtip({
+			content:{text:$(parts)},
+			position:{
+				my:'center left',
+				at: 'center right'
+			},
+			show: {event: 'click'},
+			hide: {event: 'unfocus'},
+			render: function(event, api) {
+				// Grab the tooltip element from the API
+				var tt = api.elements.tooltip;
+				var tooltip = $('#ui-tooltip-'+tt.id+'-content');
+				$('button', tooltip).click(function(){
+					tt.reposition();//fix the positioning
+				});
+			},
+			style: {classes: 'ui-tooltip-shadow ui-tooltip-bootstrap ui-tooltip-large'}
+		});
+
+	});
 
 
 
 	$('.export_xml').die().live({
 		click: function(e){
 			e.preventDefault();
-			tinyMCE.triggerSave();//so that we can get the tinymce textarea.value without using tinymce.getContents
+			if(editor=='tinymce') tinyMCE.triggerSave();//so that we can get the tinymce textarea.value without using tinymce.getContents
 			var currentTab = $(this).parents('.tab-pane');
 			var xml = getRIFCSforTab(currentTab);
 			$('#myModal .modal-body').html('<pre class="prettyprint linenums"><code class="language-xml">' + htmlEntities(formatXml(xml)) + '</code></pre>');
@@ -433,7 +455,7 @@ function initEditForm(){
 	$('#master_export_xml').die().live({
 		click: function(e){
 			e.preventDefault();
-			tinyMCE.triggerSave();
+			if(editor=='tinymce') tinyMCE.triggerSave();//so that we can get the tinymce textarea.value without using tinymce.getContents
 			var allTabs = $('.tab-pane');
 			var xml = '';
 
@@ -521,7 +543,7 @@ function initNames(){
 	$('#names input').die().live({
 		blur:function(e){
 			var thisName = $(this).parents('.aro_box[type=name]');
-			initName(thisName);
+			initNames();
 		}
 	});
 }
@@ -685,6 +707,19 @@ function getRecords(fields, sorts, page){
 					$( this ).removeClass("active");
 				});
 			$.drop({ multi: true });
+
+			$('.item .item-control button').die().live({
+				click: function(e){
+					e.preventDefault();
+					if($(this).hasClass('view')){
+						changeHashTo('view/'+$(this).attr('ro_id'));
+					}else if($(this).hasClass('edit')){
+						changeHashTo('edit/'+$(this).attr('ro_id'));
+					}else if($(this).hasClass('delete')){
+						changeHashTo('delete/'+$(this).attr('ro_id'));
+					}
+				}
+			})
 
 			updateSelected();
 		}

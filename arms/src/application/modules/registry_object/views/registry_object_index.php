@@ -169,9 +169,9 @@
 			  		
 			  	</div>
 		  		<div class="btn-group item-control">
-		  			<button class="btn view"><i class="icon-eye-open"></i></button>
-			  		<button class="btn edit"><i class="icon-edit"></i></button>
-			  		<button class="btn delete"><i class="icon-trash"></i></button>
+		  			<button class="btn view" ro_id="{{id}}"><i class="icon-eye-open"></i></button>
+			  		<button class="btn edit" ro_id="{{id}}"><i class="icon-edit"></i></button>
+			  		<button class="btn delete" ro_id="{{id}}"><i class="icon-trash"></i></button>
 				</div>
 		  	</div>
 		</li>
