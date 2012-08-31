@@ -398,6 +398,7 @@ function initEditForm(){
 				$('#edit-form textarea').addClass('editor');
 				initEditor();
 			}
+			bindPartsTooltip();
 		}
 	});
 
@@ -415,28 +416,9 @@ function initEditForm(){
 		});
 	});
 
-	$('.showParts').each(function(){
-		var parts = $(this).next('.parts')[0];
-		$(this).qtip({
-			content:{text:$(parts)},
-			position:{
-				my:'center left',
-				at: 'center right'
-			},
-			show: {event: 'click'},
-			hide: {event: 'unfocus'},
-			render: function(event, api) {
-				// Grab the tooltip element from the API
-				var tt = api.elements.tooltip;
-				var tooltip = $('#ui-tooltip-'+tt.id+'-content');
-				$('button', tooltip).click(function(){
-					tt.reposition();//fix the positioning
-				});
-			},
-			style: {classes: 'ui-tooltip-shadow ui-tooltip-bootstrap ui-tooltip-large'}
-		});
 
-	});
+
+	
 
 
 
@@ -515,6 +497,44 @@ function initEditForm(){
 	initNames();
 	initDescriptions();
 	initRelatedInfos();
+
+	bindPartsTooltip();
+}
+
+function bindPartsTooltip(){
+
+	/*$('.showParts').each(function(){
+		var parts = $(this).next('.parts')[0];
+		$(this).popover({
+			html:true,
+			content: function(){
+				return $(parts).html();
+			}
+		});
+	});*/
+
+	
+	$('.showParts').each(function(){
+		var parts = $(this).next('.parts')[0];
+		if(parts){
+			var button = this;
+			$(this).qtip({
+				content:{text:$(parts)},
+				position:{
+					my:'center left',
+					at: 'center right'
+				},
+				show: {event: 'click'},
+				hide: {event: 'unfocus'},
+				events: {
+					show: function(event, api) {
+						console.log(api.id, button);
+					}
+				},
+				style: {classes: 'ui-tooltip-shadow ui-tooltip-bootstrap ui-tooltip-large'}
+			});
+		}
+	});
 }
 
 function initNames(){
@@ -591,68 +611,128 @@ function getRIFCSforTab(tab){
 	var boxes = $('.aro_box', currentTab);
 	var xml = '';
 	$.each(boxes, function(){
-		if(!$(this).hasClass('template')){
-			var fragment ='';
-			var fragment_type = '';
-			if($('.aro_box_display input', this).length>0){//if there's a type in the heading, use it
-				fragment_type = $('.aro_box_display input[name=type]', this).val();
-			}else{//then there has to be a type in the element itself
-				fragment_type = $('input[name=type]', this).val();
-			}
-			if(fragment_type){
-				fragment +='<'+$(this).attr('type')+' type="'+fragment_type+'">';
-			}else{//if there's absolutely no fragment type, then there's none, stop finding it, just put the element in
-				fragment +='<'+$(this).attr('type')+'>';
-			}
+		var fragment ='';
+		var fragment_type = '';
 
-			var parts = $('.aro_box_part', this);
-			if(parts.length > 0){//if there is a part, data is spread out in parts
-				$.each(parts, function(){
-					if($(this).attr('type')){//if type is there for this part
-						//deal with the type
-						type = $(this).attr('type');
-						if(type=='relation'){//special case for related object relation
-							fragment += '<'+type+' type="'+$('input[name=type]',this).val()+'">';
-							if($('input[name=description]', this).val()!=''){//if the relation has a description
-								fragment += '<description>'+$('input[name=description]', this).val()+'</description>';
-							}
-							if($('input[name=url]', this).val()!=''){//if the relation has a url
-								fragment += '<url>'+$('input[name=url]', this).val()+'</url>';
-							}
-							fragment += '</'+type+'>';
-						}else if(type=='relatedInfo'){
-							//identifier is required
-							fragment += '<identifier type="'+$('input[name=identifier_type]', this).val()+'">'+$('input[name=identifier]', this).val()+'</identifier>';
-							//title and notes are not required, but useful nonetheless
-							if($('input[name=title]', this).val()!=''){
-								fragment += '<title>'+$('input[name=title]', this).val()+'</title>';
-							}
-							if($('input[name=notes]', this).val()!=''){
-								fragment += '<notes>'+$('input[name=notes]', this).val()+'</notes>';
-							}
-						}else{
-							fragment += '<'+$(this).attr('type')+' type="'+$('input[name=type]', this).val()+'">'+$('input[name=value]', this).val()+'</'+$(this).attr('type')+'>';
+		fragment +='<'+$(this).attr('type')+'';
+		var valid_fragment_meta = ['type', 'dateFrom', 'dateTo'];
+		var this_box = this;
+		$.each(valid_fragment_meta, function(index, value){
+			var fragment_meta = '';
+			var input_field = $('.aro_box_display input[name='+value+']',this_box);
+			if($(input_field).length>0 && $(input_field).val()!=''){
+				fragment_meta += ' '+value+'="'+$(input_field).val()+'"';
+			}
+			fragment +=fragment_meta;
+		});
+		fragment +='>';
+
+		var parts = $(this).children('.aro_box_part');
+		if(parts.length > 0){//if there is a part, data is spread out in parts
+			$.each(parts, function(){
+				if($(this).attr('type')){//if type is there for this part
+					//deal with the type
+					var type = $(this).attr('type');
+					if(type=='relation'){//special case for related object relation
+						fragment += '<'+type+' type="'+$('input[name=type]',this).val()+'">';
+						if($('input[name=description]', this).val()!=''){//if the relation has a description
+							fragment += '<description>'+$('input[name=description]', this).val()+'</description>';
 						}
-					}else{//it's an element
-						fragment += '<'+$('input', this).attr('name')+'>'+$('input', this).val()+'</'+$('input', this).attr('name')+'>';
+						if($('input[name=url]', this).val()!=''){//if the relation has a url
+							fragment += '<url>'+$('input[name=url]', this).val()+'</url>';
+						}
+						fragment += '</'+type+'>';
+					}else if(type=='relatedInfo'){
+						//identifier is required
+						fragment += '<identifier type="'+$('input[name=identifier_type]', this).val()+'">'+$('input[name=identifier]', this).val()+'</identifier>';
+						//title and notes are not required, but useful nonetheless
+						if($('input[name=title]', this).val()!=''){
+							fragment += '<title>'+$('input[name=title]', this).val()+'</title>';
+						}
+						if($('input[name=notes]', this).val()!=''){
+							fragment += '<notes>'+$('input[name=notes]', this).val()+'</notes>';
+						}
+					}else{
+						fragment += '<'+$(this).attr('type')+' type="'+$('input[name=type]', this).val()+'">'+$('input[name=value]', this).val()+'</'+$(this).attr('type')+'>';
 					}
+				}else{//it's an element
+					fragment += '<'+$('input', this).attr('name')+'>'+$('input', this).val()+'</'+$('input', this).attr('name')+'>';
+				}
+			});
+		}else{//there is no part
+
+			//check if there is any subbox content
+			var sub_content = $(this).children('.aro_subbox');
+			if(sub_content.length >0){
+				//there are subcontent, for location
+				$.each(sub_content, function(){
+					var subbox_type = $(this).attr('type');
+					var subbox_fragment ='';
+
+					subbox_fragment +='<'+subbox_type+'>';
+					var parts = $(this).children('.aro_box_part');
+					if(parts.length>0){
+						$.each(parts, function(){
+							var this_fragment = '';
+							this_fragment +='<'+$(this).attr('type')+' type="'+$('input[name=type]', this).val()+'">';
+							if($(this).attr('type')=='electronic'){
+								this_fragment +='<value>'+$('input[name=value]',this).val()+'</value>';
+								//deal with args here
+								var args = $('.aro_box_part', this);
+								if($('button.showParts', this).attr('aria-describedby')!=''){//tooltip has been init
+									var args = $('#'+$('button.showParts', this).attr('aria-describedby')+' .ui-tooltip-content .aro_box_part');
+								}
+								$.each(args, function(){
+									this_fragment += '<'+$(this).attr('type')+' type="'+$('input[name=type]', this).val()+'" required="'+$('input[name=required]', this).val()+'" use="'+$('input[name=use]', this).val()+'">';
+									this_fragment += $('input[name=value]', this).val();
+									this_fragment +='</'+$(this).attr('type')+'>';
+								});
+							}else if($(this).attr('type')=='physical'){
+								//deal with address parts here
+								var address_parts = $('.aro_box_part', this);
+								if($('button.showParts', this).attr('aria-describedby')!=''){//tooltip has been init
+									var address_parts = $('#'+$('button.showParts', this).attr('aria-describedby')+' .ui-tooltip-content .aro_box_part');
+								}
+								$.each(address_parts, function(){
+									this_fragment += '<'+$(this).attr('type')+' type="'+$('input[name=type]', this).val()+'">';
+									this_fragment += $('input[name=value]', this).val();
+									this_fragment +='</'+$(this).attr('type')+'>';
+								});
+								
+							}else{
+								//duh
+							}
+							this_fragment +='</'+$(this).attr('type')+'>';
+							subbox_fragment+=this_fragment;
+						});
+					}else{
+						//there is no parts, spatial?
+
+					}
+						
+					subbox_fragment +='</'+subbox_type+'>';
+
+					fragment+=subbox_fragment;
 				});
-			}else{//there is no part, the data is right at this level
+				
+			//no subbox content	
+			}else{//data is right at this level, grab it!
 				//check if there's a text area
 				if($('textarea', this).length>0){
 					fragment += htmlEntities($('textarea', this).val());
 				}else{
 					//there's no textarea, just normal input
 					fragment += $('input[name=value]', this).val();
-
 				}
 			}
-			fragment +='</'+$(this).attr('type')+'>';
-
-			//SCENARIO on Access Policies
-
-			xml += fragment;
+			
 		}
+		fragment +='</'+$(this).attr('type')+'>';
+
+		//SCENARIO on Access Policies
+
+		xml += fragment;
+		
 	});
 	return xml;
 }
