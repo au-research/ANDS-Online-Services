@@ -1,4 +1,3 @@
-<?php echo $transform;?>
 <div class="">
 	<!-- tabs -->
 	<ul class="nav nav-tabs">

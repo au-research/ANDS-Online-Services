@@ -37,14 +37,19 @@
 				<xsl:if test="$ro_class = 'service'">
 					<li>
 						<a href="#accesspolicies" data-toggle="tab">Accesspolicy</a>
-					</li>	
+					</li>
 				</xsl:if>
 				<xsl:if test="$ro_class = 'collection'">
 					<li>
 						<a href="#citationinfos" data-toggle="tab">Citation Info</a>
-					</li>	
+					</li>
 				</xsl:if>
-				
+				<xsl:if test="$ro_class != 'collection'">
+					<li>
+						<a href="#existencedates" data-toggle="tab">Existence Dates</a>
+					</li>
+				</xsl:if>
+
 			</ul>
 
 			<!-- form-->
@@ -65,6 +70,9 @@
 					<xsl:if test="$ro_class = 'collection'">
 						<xsl:call-template name="citationinfoTab"/>
 					</xsl:if>
+					<xsl:if test="$ro_class != 'collection'">
+						<xsl:call-template name="ExistenceDatesTab"/>
+					</xsl:if>
 					<div class="modal hide" id="myModal">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal">×</button>
@@ -78,48 +86,58 @@
 
 			</form>
 			<div class="aro_toolbar">
-					<div class="message">
-						Auto-saved: 5 seconds ago...
-					</div>
-					<div class="aro_controls">
-						
+				<div class="message"> Auto-saved: 5 seconds ago... </div>
+				<div class="aro_controls">
 
-						<div class="btn-toolbar">		
-							<button class="btn btn-info" id="load_xml">
-							  <i class="icon-download-alt icon-white"></i> Load XML
-							</button>	
-							<button class="btn btn-info" id="master_export_xml">
-							  <i class="icon-download-alt icon-white"></i> Export XML
-							</button>		  
 
-							<div class="btn-group dropup">
-								<button class="btn btn-primary"> <i class="icon-download-alt icon-white"></i> Save &amp; Validate</button>
-								<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-									<span class="caret"></span>
-								</button>
-								<ul class="dropdown-menu">
-									<li><a href="javascript:;">Save &amp; Publish</a></li>
-									<li><a href="javascript:;">Save &amp; Exit</a></li>
-									<li><a href="javascript:;">Save &amp; Validate</a></li>
-									<li><a href="javascript:;">Quick Save</a></li>
-								</ul>
-							</div>
+					<div class="btn-toolbar">
+						<button class="btn btn-info" id="load_xml">
+							<i class="icon-download-alt icon-white"/> Load XML </button>
+						<button class="btn btn-info" id="master_export_xml">
+							<i class="icon-download-alt icon-white"/> Export XML </button>
 
-						  <div class="btn-group">
-						  	<a class="btn"><i class="icon-chevron-left"></i></a>
-						  	<a class="btn"><i class="icon-chevron-right"></i></a>
-						  </div>
-
+						<div class="btn-group dropup">
+							<button class="btn btn-primary">
+								<i class="icon-download-alt icon-white"/> Save &amp;
+								Validate</button>
+							<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+								<span class="caret"/>
+							</button>
+							<ul class="dropdown-menu">
+								<li>
+									<a href="javascript:;">Save &amp; Publish</a>
+								</li>
+								<li>
+									<a href="javascript:;">Save &amp; Exit</a>
+								</li>
+								<li>
+									<a href="javascript:;">Save &amp; Validate</a>
+								</li>
+								<li>
+									<a href="javascript:;">Quick Save</a>
+								</li>
+							</ul>
 						</div>
-					</div>		
-					<div class="clearfix"></div>	
+
+						<div class="btn-group">
+							<a class="btn">
+								<i class="icon-chevron-left"/>
+							</a>
+							<a class="btn">
+								<i class="icon-chevron-right"/>
+							</a>
+						</div>
+
+					</div>
 				</div>
+				<div class="clearfix"/>
+			</div>
 			<xsl:call-template name="blankTemplate"/>
 		</div>
 		<input type="hidden" class="hide" id="ro_class" value="{$ro_class}"/>
 	</xsl:template>
 
-	<xsl:template match="collection | activity | party  | service"  mode="getClass">
+	<xsl:template match="collection | activity | party  | service" mode="getClass">
 		<xsl:value-of select="name()"/>
 	</xsl:template>
 
@@ -146,8 +164,10 @@
 					<label class="control-label" for="title">Type</label>
 					<div class="controls">
 						<div class="input-prepend">
-							<button class="btn triggerTypeAhead" type="button"><i class="icon-chevron-down"></i></button>
-						  	<input type="text" class="input-large" name="title" value="{$ro_type}"/>
+							<button class="btn triggerTypeAhead" type="button">
+								<i class="icon-chevron-down"/>
+							</button>
+							<input type="text" class="input-large" name="title" value="{$ro_type}"/>
 						</div>
 						<p class="help-inline">
 							<small/>
@@ -159,7 +179,8 @@
 					<label class="control-label" for="title">Data Source</label>
 					<div class="controls">
 						<select id="data_sources_select"/>
-						<input type="text" id="data_source_id_value" class="input-small hide" name="title" value="{$dataSourceID}"/>
+						<input type="text" id="data_source_id_value" class="input-small hide"
+							name="title" value="{$dataSourceID}"/>
 						<p class="help-inline">
 							<small/>
 						</p>
@@ -170,8 +191,10 @@
 					<label class="control-label" for="title">Group</label>
 					<div class="controls">
 						<div class="input-prepend">
-							<button class="btn triggerTypeAhead" type="button"><i class="icon-chevron-down"></i></button>
-						  	<input type="text" class="input-large" name="title" value="{@group}"/>
+							<button class="btn triggerTypeAhead" type="button">
+								<i class="icon-chevron-down"/>
+							</button>
+							<input type="text" class="input-large" name="title" value="{@group}"/>
 						</div>
 						<p class="help-inline">
 							<small/>
@@ -184,8 +207,7 @@
 					<div class="controls">
 						<input type="text" class="input-xlarge" name="title" value="{key}"/>
 						<button class="btn btn" id="generate_random_key">
-							<i class="icon-refresh"/> Generate Random Key
-						</button>
+							<i class="icon-refresh"/> Generate Random Key </button>
 						<p class="help-inline">
 							<small>Key must be unique and is case sensitive</small>
 						</p>
@@ -196,14 +218,24 @@
 					<label class="control-label" for="title">Date Modified</label>
 					<div class="controls">
 						<div class="input-append">
-						  <input type="text" class="input-large datepicker" name="title" value="{$dateModified}"/>
-						  <button class="btn triggerDatePicker" type="button"><i class="icon-calendar"></i></button>
-						  <p class="help-inline">
+							<input type="text" class="input-large datepicker" name="title"
+								value="{$dateModified}"/>
+							<button class="btn triggerDatePicker" type="button">
+								<i class="icon-calendar"/>
+							</button>
+							<p class="help-inline">
 								<small/>
 							</p>
 						</div>
 					</div>
 				</div>
+
+				<xsl:if test="collection">
+					<xsl:apply-templates select="arg"/>
+					<div class="separate_line"/>
+					<button class="btn btn-primary addNew" type="arg">
+						<i class="icon-plus icon-white"/> Add Args </button>
+				</xsl:if>
 
 			</fieldset>
 		</div>
@@ -215,15 +247,13 @@
 			<fieldset>
 				<legend>Names</legend>
 
-				<xsl:apply-templates select="collection/name | activity/name | party/name  | service/name"/>
+				<xsl:apply-templates
+					select="collection/name | activity/name | party/name  | service/name"/>
 				<div class="separate_line"/>
-				
+
 				<button class="btn btn-primary addNew" type="name">
-					<i class="icon-plus icon-white"></i> Add Name
-				</button>
-				<button class="btn export_xml btn-info">
-					Export XML fragment
-				</button>
+					<i class="icon-plus icon-white"/> Add Name </button>
+				<button class="btn export_xml btn-info"> Export XML fragment </button>
 			</fieldset>
 		</div>
 	</xsl:template>
@@ -232,20 +262,25 @@
 		match="collection/@type | activity/@type | party/@type  | service/@type | collection/@dateModified | activity/@dateModified | party/@dateModified  | service/@dateModified">
 		<xsl:value-of select="."/>
 	</xsl:template>
-	
+
 	<xsl:template match="collection/name | activity/name | party/name  | service/name">
 		<div class="aro_box" type="name">
 			<div class="aro_box_display clearfix">
-				<a href="javascript:;" class="toggle"><i class="icon-plus"></i></a>
-				<h1></h1>
+				<a href="javascript:;" class="toggle">
+					<i class="icon-plus"/>
+				</a>
+				<h1/>
 				<div class="control-group">
 					<label class="control-label" for="title">Type: </label>
 					<div class="controls">
-						<input type="text" class="input-small" name="type" placeholder="Type" value="{@type}"/>
+						<input type="text" class="input-small" name="type" placeholder="Type"
+							value="{@type}"/>
 						<button class="btn btn-mini btn-danger remove">
-							<i class="icon-remove icon-white"></i>
+							<i class="icon-remove icon-white"/>
 						</button>
-						<p class="help-inline"><small></small></p>
+						<p class="help-inline">
+							<small/>
+						</p>
 					</div>
 				</div>
 			</div>
@@ -257,21 +292,23 @@
 					<i class="icon-plus icon-white"></i> Add Name Part
 				</button>
 			</div>
-			
 		</div>
 	</xsl:template>
-	
+
 	<xsl:template match="namePart">
 		<div class="aro_box_part hide" type="namePart">
 			<div class="control-group">
 				<label class="control-label" for="title">Name Part: </label>
 				<div class="controls">
-					<input type="text" class="input-small" name="type" placeholder="Type" value="{@type}"/>
+					<input type="text" class="input-small" name="type" placeholder="Type"
+						value="{@type}"/>
 					<input type="text" class="input-xlarge" name="value" value="{text()}"/>
 					<button class="btn btn-mini btn-danger remove">
-						<i class="icon-remove icon-white"></i>
+						<i class="icon-remove icon-white"/>
 					</button>
-					<p class="help-inline"><small></small></p>
+					<p class="help-inline">
+						<small/>
+					</p>
 				</div>
 			</div>
 		</div>
@@ -282,20 +319,18 @@
 		<div id="descriptions" class="tab-pane">
 			<fieldset>
 				<legend>Descriptions / Rights</legend>
-				<xsl:apply-templates select="collection/description | activity/description | party/description  | service/description"/>
-				<xsl:apply-templates select="collection/rights | activity/rights | party/rights  | service/rights"/>
+				<xsl:apply-templates
+					select="collection/description | activity/description | party/description  | service/description"/>
+				<xsl:apply-templates
+					select="collection/rights | activity/rights | party/rights  | service/rights"/>
 
-				
+
 				<div class="separate_line"/>
 				<button class="btn btn-primary addNew" type="description">
-					<i class="icon-plus icon-white"></i> Add Description
-				</button>
+					<i class="icon-plus icon-white"/> Add Description </button>
 				<button class="btn btn-primary addNew" type="rights">
-					<i class="icon-plus icon-white"></i> Add Rights
-				</button>
-				<button class="btn export_xml btn-info">
-					Export XML fragment
-				</button>
+					<i class="icon-plus icon-white"/> Add Rights </button>
+				<button class="btn export_xml btn-info"> Export XML fragment </button>
 			</fieldset>
 		</div>
 	</xsl:template>
@@ -304,16 +339,13 @@
 		<div id="accesspolicies" class="tab-pane">
 			<fieldset>
 				<legend>Access Policy</legend>
-				<xsl:apply-templates select="service/accessPolicy"/>			
+				<xsl:apply-templates select="service/accessPolicy"/>
 				<div class="separate_line"/>
 				<button class="btn btn-primary addNew" type="accesspolicy">
-					<i class="icon-plus icon-white"></i> Add Access Policy
-				</button>
-				<button class="btn export_xml btn-info">
-					Export XML fragment
-				</button>
+					<i class="icon-plus icon-white"/> Add Access Policy </button>
+				<button class="btn export_xml btn-info"> Export XML fragment </button>
 			</fieldset>
-		</div>		
+		</div>
 	</xsl:template>
 
 
@@ -321,49 +353,57 @@
 		<div id="citationinfos" class="tab-pane">
 			<fieldset>
 				<legend>Citation Info</legend>
-				<xsl:apply-templates select="collection/citationInfo"/>			
+				<xsl:apply-templates select="collection/citationInfo"/>
 				<div class="separate_line"/>
 				<button class="btn btn-primary addNew" type="citationInfo">
-					<i class="icon-plus icon-white"></i> Add Citation Info
-				</button>
-				<button class="btn export_xml btn-info">
-					Export XML fragment
-				</button>
+					<i class="icon-plus icon-white"/> Add Citation Info </button>
+				<button class="btn export_xml btn-info"> Export XML fragment </button>
 			</fieldset>
-		</div>		
+		</div>
 	</xsl:template>
 
-	<xsl:template match="collection/description | activity/description | party/description  | service/description">
+	<xsl:template
+		match="collection/description | activity/description | party/description  | service/description">
 		<div class="aro_box" type="description">
 			<h1>Description</h1>
 			<p>
-				<input type="text" class="input-xlarge" name="type" placeholder="Type" value="{@type}"/>
+				<input type="text" class="input-xlarge" name="type" placeholder="Type"
+					value="{@type}"/>
 				<button class="btn btn-mini btn-danger remove">
-					<i class="icon-remove icon-white"></i>
+					<i class="icon-remove icon-white"/>
 				</button>
 			</p>
 			<p>
-				<textarea name="value" class="editor"><xsl:apply-templates select="text()"/></textarea>
+				<textarea name="value" class="editor">
+					<xsl:apply-templates select="text()"/>
+				</textarea>
 			</p>
-			
-			<p class="help-inline"><small></small></p>
+
+			<p class="help-inline">
+				<small/>
+			</p>
 		</div>
 	</xsl:template>
-	
+
 	<xsl:template match="collection/rights | activity/rights | party/rights  | service/rights">
 		<div class="aro_box">
 			<h1>Rights</h1>
 			<p>
-				<input type="text" class="input-xlarge" name="type" placeholder="Type" value="{@type}"/>
+				<input type="text" class="input-xlarge" name="type" placeholder="Type"
+					value="{@type}"/>
 				<button class="btn btn-mini btn-danger remove">
-					<i class="icon-remove icon-white"></i>
+					<i class="icon-remove icon-white"/>
 				</button>
 			</p>
 			<p>
-				<textarea name="value" class="editor"><xsl:apply-templates select="text()"/></textarea>
+				<textarea name="value" class="editor">
+					<xsl:apply-templates select="text()"/>
+				</textarea>
 			</p>
-			
-			<p class="help-inline"><small></small></p>
+
+			<p class="help-inline">
+				<small/>
+			</p>
 		</div>
 	</xsl:template>
 
@@ -371,102 +411,131 @@
 		<div id="subjects" class="tab-pane">
 			<fieldset>
 				<legend>Subjects</legend>
-				
-				<xsl:apply-templates select="collection/subject | activity/subject | party/subject  | service/subject"/>
+
+				<xsl:apply-templates
+					select="collection/subject | activity/subject | party/subject  | service/subject"/>
 				<div class="separate_line"/>
-				
+
 				<button class="btn btn-primary addNew" type="subject">
-					<i class="icon-plus icon-white"></i> Add Subject
-				</button>
-				<button class="btn export_xml btn-info">
-					Export XML fragment
-				</button>
+					<i class="icon-plus icon-white"/> Add Subject </button>
+				<button class="btn export_xml btn-info"> Export XML fragment </button>
 			</fieldset>
 		</div>
 	</xsl:template>
-	
-	
+
+
 	<xsl:template name="identifiersTab">
 		<div id="identifiers" class="tab-pane">
 			<fieldset>
 				<legend>Identifiers</legend>
-				
-				<xsl:apply-templates select="collection/identifier | activity/identifier | party/identifier  | service/identifier"/>
+
+				<xsl:apply-templates
+					select="collection/identifier | activity/identifier | party/identifier  | service/identifier"/>
 				<div class="separate_line"/>
-				
+
 				<button class="btn btn-primary addNew" type="identifier">
-					<i class="icon-plus icon-white"></i> Add Identifier
-				</button>
-				<button class="btn export_xml btn-info">
-					Export XML fragment
-				</button>
+					<i class="icon-plus icon-white"/> Add Identifier </button>
+				<button class="btn export_xml btn-info"> Export XML fragment </button>
 			</fieldset>
 		</div>
 	</xsl:template>
-	
+
 	<xsl:template name="relatedobjectsTab">
 		<div id="relatedobjects" class="tab-pane">
 			<fieldset>
 				<legend>Related Objects</legend>
-				
-				<xsl:apply-templates select="collection/relatedObject | activity/relatedObject | party/relatedObject  | service/relatedObject"/>
+
+				<xsl:apply-templates
+					select="collection/relatedObject | activity/relatedObject | party/relatedObject  | service/relatedObject"/>
 				<div class="separate_line"/>
-				
+
 				<button class="btn btn-primary addNew" type="relatedobject">
-					<i class="icon-plus icon-white"></i> Add Related Object
-				</button>
-				<button class="btn export_xml btn-info">
-					Export XML fragment
-				</button>
+					<i class="icon-plus icon-white"/> Add Related Object </button>
+				<button class="btn export_xml btn-info"> Export XML fragment </button>
+			</fieldset>
+		</div>
+	</xsl:template>
+
+	<xsl:template name="relatedinfosTab">
+		<div id="relatedinfos" class="tab-pane">
+			<fieldset>
+				<legend>Related Infos</legend>
+				<xsl:apply-templates
+					select="collection/relatedInfo | activity/relatedInfo | party/relatedInfo | service/relatedInfo"/>
+				<div class="separate_line"/>
+				<button class="btn btn-primary addNew" type="relatedinfo">
+					<i class="icon-plus icon-white"/> Add related Info </button>
+				<button class="btn export_xml btn-info"> Export XML fragment </button>
+			</fieldset>
+		</div>
+	</xsl:template>
+
+	<xsl:template name="locationsTab">
+		<div id="locations" class="tab-pane">
+			<fieldset>
+				<legend>Locations</legend>
+				<xsl:apply-templates
+					select="collection/location | activity/location | party/location  | service/location"/>
+				<div class="separate_line"/>
+				<button class="btn btn-primary addNew" type="location">
+					<i class="icon-plus icon-white"/> Add Location </button>
+				<button class="btn export_xml btn-info"> Export XML fragment </button>
 			</fieldset>
 		</div>
 	</xsl:template>
 	
-	<xsl:template name="relatedinfosTab">
-		<div id="relatedinfos" class="tab-pane">
+	<xsl:template name="ExistenceDatesTab">
+		<div id="existencedates" class="tab-pane">
 			<fieldset>
-				<legend>Related Infos</legend>			
-				<xsl:apply-templates select="collection/relatedInfo | activity/relatedInfo | party/relatedInfo | service/relatedInfo"/>
-				<div class="separate_line"/>			
-				<button class="btn btn-primary addNew" type="relatedinfo">
-					<i class="icon-plus icon-white"></i> Add related Info
-				</button>
-				<button class="btn export_xml btn-info">
-					Export XML fragment
-				</button>
+				<legend>Existence dates</legend>
+				<xsl:apply-templates select="activity/existenceDates | party/existenceDates  | service/existenceDates"/>
+				<div class="separate_line"/>
+				<button class="btn btn-primary addNew" type="existenceDate">
+					<i class="icon-plus icon-white"/> Add Existence Date </button>
+				<button class="btn export_xml btn-info"> Export XML fragment </button>
 			</fieldset>
-		</div>		
+		</div>
 	</xsl:template>
-	
-	<xsl:template name="locationsTab">
-		<div id="locations" class="tab-pane">
-			<fieldset>
-				<legend>Locations</legend>			
-				<xsl:apply-templates select="collection/location | activity/location | party/location  | service/location"/>
-				<div class="separate_line"/>			
-				<button class="btn btn-primary addNew" type="location">
-					<i class="icon-plus icon-white"></i> Add Location
-				</button>
-				<button class="btn export_xml btn-info">
-					Export XML fragment
-				</button>
-			</fieldset>
-		</div>		
+
+
+	<xsl:template match="activity/existenceDates | party/existenceDates  | service/existenceDates">
+		<div class="aro_box" type="existenceDate">
+			<div class="aro_box_display clearfix">
+				<div class="controls">
+					<input type="text" class="input-small" name="startDate_type" placeholder="startDate Type" value="{startDate/@type}"/>
+					<input type="text" class="input-xlarge" name="startDate_value" placeholder="startDate Value" value="{startDate/text()}"/>
+					<input type="text" class="input-small" name="endDate_type" placeholder="sendDate Type" value="{endDate/@type}"/>
+						<input type="text" class="input-xlarge" name="endDate_value" placeholder="endDate Value" value="{endDate/text()}"/>
+					<button class="btn btn-mini btn-danger remove">
+						<i class="icon-remove icon-white"/>
+					</button>
+					<p class="help-inline">
+						<small/>
+					</p>
+				</div>
+			</div>
+		</div>
 	</xsl:template>
-	
+
+
 	<xsl:template match="collection/relatedInfo | activity/relatedInfo | party/relatedInfo | service/relatedInfo">
 		<div class="aro_box" type="relatedInfo">
 			<div class="aro_box_display clearfix">
-				<a href="javascript:;" class="toggle"><i class="icon-minus"></i></a>
-				<h1></h1>
+				<a href="javascript:;" class="toggle">
+					<i class="icon-minus"/>
+				</a>
+				<h1/>
 				<div class="control-group">
 					<label class="control-label" for="title">Type: </label>
 					<div class="controls">
-						<input type="text" class="input-small" name="type" placeholder="Type" value="{@type}"/>
+						<input type="text" class="input-small" name="type" placeholder="Type"
+							value="{@type}"/>
 						<button class="btn btn-mini btn-danger remove">
-							<i class="icon-remove icon-white"></i>
+							<i class="icon-remove icon-white"/>
 						</button>
-						<p class="help-inline"><small></small></p>
+						<p class="help-inline">
+							<small/>
+						</p>
 					</div>
 				</div>
 			</div>
@@ -474,74 +543,97 @@
 				<div class="control-group">
 					<label class="control-label" for="title">Title: </label>
 					<div class="controls">
-						<input type="text" class="input-xlarge" name="title" placeholder="Title" value="{title/text()}"/>
-						<p class="help-inline"><small></small></p>
+						<input type="text" class="input-xlarge" name="title" placeholder="Title"
+							value="{title/text()}"/>
+						<p class="help-inline">
+							<small/>
+						</p>
 					</div>
 				</div>
 
 				<div class="control-group">
 					<label class="control-label" for="title">Identifier: </label>
 					<div class="controls">
-						<input type="text" class="input-small" name="identifier_type" placeholder="Identifier Type" value="{identifier/@type}"/><input type="text" class="input-xlarge" name="identifier" placeholder="Identifier" value="{identifier/text()}"/><p class="help-inline"><small></small></p>
+						<input type="text" class="input-small" name="identifier_type"
+							placeholder="Identifier Type" value="{identifier/@type}"/>
+						<input type="text" class="input-xlarge" name="identifier"
+							placeholder="Identifier" value="{identifier/text()}"/>
+						<p class="help-inline">
+							<small/>
+						</p>
 					</div>
 				</div>
 
 				<div class="control-group">
 					<label class="control-label" for="title">Notes: </label>
 					<div class="controls">
-						<input type="text" class="input-xlarge" name="notes" placeholder="Notes" value="{notes/text()}"/><p class="help-inline"><small></small></p>
+						<input type="text" class="input-xlarge" name="notes" placeholder="Notes"
+							value="{notes/text()}"/>
+						<p class="help-inline">
+							<small/>
+						</p>
 					</div>
 				</div>
 			</div>
 		</div>
 	</xsl:template>
-	
-	
-	<xsl:template match="collection/subject  | activity/subject  | party/subject   | service/subject">
+
+
+	<xsl:template
+		match="collection/subject  | activity/subject  | party/subject   | service/subject">
 		<div class="aro_box" type="subject">
 			<div class="aro_box_display clearfix">
-				<div class="controls">
-					Type: <input type="text" class="input-small" name="type" placeholder="Type" value="{@type}"/>
-					Value: <input type="text" class="input-xlarge" name="value" value="{text()}"/>
+				<div class="controls"> Type: <input type="text" class="input-small" name="type"
+						placeholder="Type" value="{@type}"/> Value: <input type="text"
+						class="input-xlarge" name="value" value="{text()}"/>
 					<button class="btn btn-mini btn-danger remove">
-						<i class="icon-remove icon-white"></i>
+						<i class="icon-remove icon-white"/>
 					</button>
-					<p class="help-inline"><small></small></p>
+					<p class="help-inline"><small/></p>
 				</div>
 			</div>
 		</div>
 	</xsl:template>
-	
-	<xsl:template match="collection/identifier  | activity/identifier  | party/identifier   | service/identifier">
+
+	<xsl:template
+		match="collection/identifier  | activity/identifier  | party/identifier   | service/identifier">
 		<div class="aro_box" type="identifier">
 			<div class="aro_box_display clearfix">
 				<div class="controls">
-					<input type="text" class="input-small" name="type" placeholder="Type" value="{@type}"/>
+					<input type="text" class="input-small" name="type" placeholder="Type"
+						value="{@type}"/>
 					<input type="text" class="input-xlarge" name="value" value="{text()}"/>
 					<button class="btn btn-mini btn-danger remove">
-						<i class="icon-remove icon-white"></i>
+						<i class="icon-remove icon-white"/>
 					</button>
-					<p class="help-inline"><small></small></p>
+					<p class="help-inline">
+						<small/>
+					</p>
 				</div>
 			</div>
 		</div>
 	</xsl:template>
-	
-	<xsl:template match="collection/relatedObject | activity/relatedObject | party/relatedObject  | service/relatedObject">
+
+	<xsl:template
+		match="collection/relatedObject | activity/relatedObject | party/relatedObject  | service/relatedObject">
 		<div class="aro_box" type="relatedobject">
 			<div class="aro_box_display clearfix">
-				<a href="javascript:;" class="toggle"><i class="icon-minus"></i></a>
+				<a href="javascript:;" class="toggle">
+					<i class="icon-minus"/>
+				</a>
 				<h1>Related Object Title goes here <small>relation</small></h1>
 				<div class="control-group">
 					<div class="controls">
 						<button class="btn btn-mini btn-danger remove">
-							<i class="icon-remove icon-white"></i>
+							<i class="icon-remove icon-white"/>
 						</button>
-						<p class="help-inline"><small></small></p>
+						<p class="help-inline">
+							<small/>
+						</p>
 					</div>
 				</div>
 			</div>
-			
+
 			<div class="aro_box_part">
 				<div class="control-group">
 					<label class="control-label" for="title">Key: </label>
@@ -549,32 +641,35 @@
 						<input type="text" class="input-xlarge" name="key" value="{key}"/>
 					</div>
 				</div>
-			</div>					
+			</div>
 			<xsl:apply-templates select="relation"/>
 			<div class="separate_line"/>
 			<button class="btn btn-primary addNew" type="relation">
-				<i class="icon-plus icon-white"></i> Add Relation
-			</button>
+				<i class="icon-plus icon-white"/> Add Relation </button>
 		</div>
 	</xsl:template>
-	
-	<xsl:template match="collection/location | activity/location | party/location  | service/location">
+
+	<xsl:template
+		match="collection/location | activity/location | party/location  | service/location">
 		<div class="aro_box" type="location">
 			<div class="aro_box_display clearfix">
-				<a href="javascript:;" class="toggle"><i class="icon-minus"></i></a>
-				<h1></h1>
+				<a href="javascript:;" class="toggle">
+					<i class="icon-minus"/>
+				</a>
+				<h1/>
 				<div class="control-group">
 					<div class="controls">
 						<input type="text" class="input-small" name="dateFrom" placeholder="dateFrom" value="{@dateFrom}"/>
 						<input type="text" class="input-small" name="dateTo" placeholder="dateTo" value="{@dateTo}"/>
 						<button class="btn btn-mini btn-danger remove">
-							<i class="icon-remove icon-white"></i>
+							<i class="icon-remove icon-white"/>
 						</button>
-						<p class="help-inline"><small></small></p>
+						<p class="help-inline">
+							<small/>
+						</p>
 					</div>
 				</div>
 			</div>
-			
 			<div class="aro_subbox" type="address">
 				<h1>Address</h1>
 				<xsl:apply-templates select="address"/>
@@ -583,11 +678,17 @@
 				<div class="btn-group dropup">
 					<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"> <i class="icon-envelope icon-white"></i> Add Address</button>
 					<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-						<span class="caret"></span>
+						<span class="caret"/>
 					</button>
 					<ul class="dropdown-menu">
-						<li><a href="javascript:;" class="addNew" type="electronic">Add Electronic Address</a></li>
-						<li><a href="javascript:;" class="addNew" type="physical">Add Physical Address</a></li>
+						<li>
+							<a href="javascript:;" class="addNew" type="electronic">Add Electronic
+								Address</a>
+						</li>
+						<li>
+							<a href="javascript:;" class="addNew" type="physical">Add Physical
+								Address</a>
+						</li>
 					</ul>
 				</div>
 
@@ -598,59 +699,66 @@
 				<xsl:apply-templates select="spatial"/>
 				<div class="separate_line"/>
 				<button class="btn btn-primary addNew" type="spatial">
-					<i class="icon-map-marker icon-white"></i> Add Spatial Location
-				</button>
+					<i class="icon-map-marker icon-white"/> Add Spatial Location </button>
 			</div>
 		</div>
 	</xsl:template>
-	
+
 	<xsl:template match="relation">
 		<div class="aro_box_part" type="relation">
 			<div class="control-group">
 				<label class="control-label" for="title">Relation: </label>
 				<div class="controls">
-					<input type="text" class="input-small" name="type" placeholder="Type" value="{@type}"/>
-					<input type="text" class="input-xlarge" name="description" placeholder="Description" value="{description}"/>
-					<input type="text" class="input-xlarge" name="url" placeholder="Url" value="{url}"/>
+					<input type="text" class="input-small" name="type" placeholder="Type"
+						value="{@type}"/>
+					<input type="text" class="input-xlarge" name="description"
+						placeholder="Description" value="{description}"/>
+					<input type="text" class="input-xlarge" name="url" placeholder="Url"
+						value="{url}"/>
 					<button class="btn btn-mini btn-danger remove">
-						<i class="icon-remove icon-white"></i>
+						<i class="icon-remove icon-white"/>
 					</button>
-					<p class="help-inline"><small></small></p>
+					<p class="help-inline">
+						<small/>
+					</p>
 				</div>
 			</div>
-		</div>		
+		</div>
 	</xsl:template>
-	
-	
+
+
 	<xsl:template match="spatial">
 		<div class="aro_box_part" type="spatial">
 			<div class="control-group">
 				<label class="control-label" for="title">Spatial: </label>
 				<div class="controls">
 					<input type="text" class="input-small" name="type" value="{@type}"/>
-					<input type="text" class="input-xlarge" name="value"  value="{text()}"/>
+					<input type="text" class="input-xlarge" name="value" value="{text()}"/>
 					<button class="btn btn-mini btn-danger remove">
-						<i class="icon-remove icon-white"></i>
+						<i class="icon-remove icon-white"/>
 					</button>
-					<p class="help-inline"><small></small></p>
+					<p class="help-inline">
+						<small/>
+					</p>
 				</div>
 			</div>
-		</div>		
+		</div>
 	</xsl:template>
-	
+
 	<xsl:template match="address">
 		<xsl:apply-templates select="electronic | physical"/>
 		<div class="separate_line"/>
 	</xsl:template>
-	
+
 	<xsl:template match="electronic">
 		<div class="aro_box_part" type="electronic">
 			<label class="control-label" for="title">Electronic Address: </label>
 			<div class="control-group">
-				<input type="text" class="input-small" name="type" placeholder="Type" value="{@type}"/>
-				<input type="text" class="input-xlarge" name="value"  placeholder="Value" value="{value}"/>
+				<input type="text" class="input-small" name="type" placeholder="Type"
+					value="{@type}"/>
+				<input type="text" class="input-xlarge" name="value" placeholder="Value"
+					value="{value}"/>
 				<xsl:if test="ancestor::service">
-
 					<button class="btn btn-primary showParts"><i class="icon-chevron-right icon-white"></i></button>
 					<div class="parts hide">
 						<xsl:apply-templates select="arg"/>
@@ -663,7 +771,7 @@
 			</div>
 		</div>
 	</xsl:template>
-	
+
 	<xsl:template match="physical">
 		<div class="aro_box_part" type="physical">
 			<label class="control-label" for="title">Physical Address: </label>
@@ -677,11 +785,10 @@
 						<i class="icon-plus icon-white"></i> Add Address Part
 					</button>
 				</div>
-				
 			</div>
-		</div>		
+		</div>
 	</xsl:template>
-	
+
 	<xsl:template match="arg">
 		<div class="aro_box_part" type="arg">
 			<label class="control-label" for="title">Arg: </label>
@@ -694,24 +801,27 @@
 					<i class="icon-remove icon-white"></i>
 				</button>
 			</div>
-		</div>		
+		</div>
 	</xsl:template>
-	
+
 	<xsl:template match="addressPart">
 		<div class="aro_box_part" type="addressPart">
 			<div class="control-group">
-				<input type="text" class="input-small" name="type" placeholder="Type" value="{@type}"/>
-				<input type="text" class="input-xlarge" name="value"  placeholder="value" value="{text()}"/>
+				<input type="text" class="input-small" name="type" placeholder="Type"
+					value="{@type}"/>
+				<input type="text" class="input-xlarge" name="value" placeholder="value"
+					value="{text()}"/>
 				<button class="btn btn-mini btn-danger remove">
-					<i class="icon-remove icon-white"></i>
+					<i class="icon-remove icon-white"/>
 				</button>
 			</div>
-		</div>		
+		</div>
 	</xsl:template>
-	
+
 	<xsl:template match="accessPolicy">
 		<div class="aro_box" type="accessPolicy">
-			<input type="text" class="input-xlarge" name="value"  placeholder="value" value="{text()}"/>
+			<input type="text" class="input-xlarge" name="value" placeholder="value"
+				value="{text()}"/>
 		</div>
 	</xsl:template>
 
@@ -719,17 +829,22 @@
 	<xsl:template name="blankTemplate">
 
 		<div class="aro_box template" type="name">
-			<div class="aro_box_display clearfix">				
-				<a href="javascript:;" class="toggle"><i class="icon-minus"></i></a>
-				<h1></h1>
+			<div class="aro_box_display clearfix">
+				<a href="javascript:;" class="toggle">
+					<i class="icon-minus"/>
+				</a>
+				<h1/>
 				<div class="control-group">
 					<label class="control-label" for="title">Type: </label>
 					<div class="controls">
-						<input type="text" class="input-small" name="type" placeholder="Type" value="{@type}"/>
+						<input type="text" class="input-small" name="type" placeholder="Type"
+							value="{@type}"/>
 						<button class="btn btn-mini btn-danger remove">
-							<i class="icon-remove icon-white"></i>
+							<i class="icon-remove icon-white"/>
 						</button>
-						<p class="help-inline"><small></small></p>
+						<p class="help-inline">
+							<small/>
+						</p>
 					</div>
 				</div>
 			</div>
@@ -737,19 +852,22 @@
 				<div class="control-group">
 					<label class="control-label" for="title">Name Part: </label>
 					<div class="controls">
-						<input type="text" class="input-small" name="type" placeholder="Type" value=""/>
-						<input type="text" class="input-xlarge" name="value" placeholder="Value" value=""/>
+						<input type="text" class="input-small" name="type" placeholder="Type"
+							value=""/>
+						<input type="text" class="input-xlarge" name="value" placeholder="Value"
+							value=""/>
 						<button class="btn btn-mini btn-danger remove">
-							<i class="icon-remove icon-white"></i>
+							<i class="icon-remove icon-white"/>
 						</button>
-						<p class="help-inline"><small></small></p>
+						<p class="help-inline">
+							<small/>
+						</p>
 					</div>
 				</div>
 			</div>
 			<div class="separate_line"/>
 			<button class="btn btn-primary addNew" type="namePart">
-				<i class="icon-plus icon-white"></i> Add Name Part
-			</button>
+				<i class="icon-plus icon-white"/> Add Name Part </button>
 		</div>
 
 		<div class="aro_box_part template" type="namePart">
@@ -757,11 +875,14 @@
 				<label class="control-label" for="title">Name Part: </label>
 				<div class="controls">
 					<input type="text" class="input-small" name="type" placeholder="Type" value=""/>
-					<input type="text" class="input-xlarge" name="value" placeholder="Value" value=""/>
+					<input type="text" class="input-xlarge" name="value" placeholder="Value"
+						value=""/>
 					<button class="btn btn-mini btn-danger remove">
-						<i class="icon-remove icon-white"></i>
+						<i class="icon-remove icon-white"/>
 					</button>
-					<p class="help-inline"><small></small></p>
+					<p class="help-inline">
+						<small/>
+					</p>
 				</div>
 			</div>
 		</div>
@@ -771,14 +892,16 @@
 			<p>
 				<input type="text" class="input-xlarge" name="type" placeholder="Type" value=""/>
 				<button class="btn btn-mini btn-danger remove">
-					<i class="icon-remove icon-white"></i>
+					<i class="icon-remove icon-white"/>
 				</button>
 			</p>
 			<p>
-				<textarea name="value" class=""></textarea>
+				<textarea name="value" class=""/>
 			</p>
-			
-			<p class="help-inline"><small></small></p>
+
+			<p class="help-inline">
+				<small/>
+			</p>
 		</div>
 
 		<div class="aro_box template" type="rights">
@@ -786,56 +909,66 @@
 			<p>
 				<input type="text" class="input-xlarge" name="type" placeholder="Type" value=""/>
 				<button class="btn btn-mini btn-danger remove">
-					<i class="icon-remove icon-white"></i>
+					<i class="icon-remove icon-white"/>
 				</button>
 			</p>
 			<p>
-				<textarea name="value" class=""></textarea>
+				<textarea name="value" class=""/>
 			</p>
-			
-			<p class="help-inline"><small></small></p>
+
+			<p class="help-inline">
+				<small/>
+			</p>
 		</div>
-		
+
 		<div class="aro_box template" type="subject">
 			<div class="aro_box_display  clearfix">
 				<div class="controls">
 					<input type="text" class="input-small" name="type" placeholder="Type" value=""/>
 					<input type="text" class="input-xlarge" name="value" value=""/>
 					<button class="btn btn-mini btn-danger remove">
-						<i class="icon-remove icon-white"></i>
+						<i class="icon-remove icon-white"/>
 					</button>
-					<p class="help-inline"><small></small></p>
+					<p class="help-inline">
+						<small/>
+					</p>
 				</div>
 			</div>
 		</div>
-		
+
 		<div class="aro_box template" type="identifier">
 			<div class="aro_box_display  clearfix">
 				<div class="controls">
 					<input type="text" class="input-small" name="type" placeholder="Type" value=""/>
 					<input type="text" class="input-xlarge" name="value" value=""/>
 					<button class="btn btn-mini btn-danger remove">
-						<i class="icon-remove icon-white"></i>
+						<i class="icon-remove icon-white"/>
 					</button>
-					<p class="help-inline"><small></small></p>
+					<p class="help-inline">
+						<small/>
+					</p>
 				</div>
 			</div>
 		</div>
-		
+
 		<div class="aro_box template" type="relatedobject">
 			<div class="aro_box_display clearfix">
-				<a href="javascript:;" class="toggle"><i class="icon-minus"></i></a>
+				<a href="javascript:;" class="toggle">
+					<i class="icon-minus"/>
+				</a>
 				<h1>Related Object Title goes here <small>relation</small></h1>
 				<div class="control-group">
 					<div class="controls">
 						<button class="btn btn-mini btn-danger remove">
-							<i class="icon-remove icon-white"></i>
+							<i class="icon-remove icon-white"/>
 						</button>
-						<p class="help-inline"><small></small></p>
+						<p class="help-inline">
+							<small/>
+						</p>
 					</div>
 				</div>
 			</div>
-			
+
 			<div class="aro_box_part">
 				<div class="control-group">
 					<label class="control-label" for="title">Key: </label>
@@ -844,41 +977,48 @@
 					</div>
 				</div>
 			</div>
-					
-			
+
+
 			<div class="separate_line"/>
 			<button class="btn btn-primary addNew" type="relation">
-				<i class="icon-plus icon-white"></i> Add Relation
-			</button>
+				<i class="icon-plus icon-white"/> Add Relation </button>
 		</div>
-		
+
 		<div class="aro_box_part template" type="relation">
 			<div class="control-group">
 				<label class="control-label" for="title">Relation: </label>
 				<div class="controls">
 					<input type="text" class="input-small" name="type" placeholder="Type" value=""/>
-					<input type="text" class="input-xlarge" name="description" placeholder="Description" value=""/>
+					<input type="text" class="input-xlarge" name="description"
+						placeholder="Description" value=""/>
 					<input type="text" class="input-xlarge" name="url" placeholder="Url" value=""/>
 					<button class="btn btn-mini btn-danger remove">
-						<i class="icon-remove icon-white"></i>
+						<i class="icon-remove icon-white"/>
 					</button>
-					<p class="help-inline"><small></small></p>
+					<p class="help-inline">
+						<small/>
+					</p>
 				</div>
 			</div>
 		</div>
-		
+
 		<div class="aro_box template" type="relatedInfo">
 			<div class="aro_box_display clearfix">
-				<a href="javascript:;" class="toggle"><i class="icon-minus"></i></a>
-				<h1></h1>
+				<a href="javascript:;" class="toggle">
+					<i class="icon-minus"/>
+				</a>
+				<h1/>
 				<div class="control-group">
 					<label class="control-label" for="title">Type: </label>
 					<div class="controls">
-						<input type="text" class="input-small" name="type" placeholder="Type" value=""/>
+						<input type="text" class="input-small" name="type" placeholder="Type"
+							value=""/>
 						<button class="btn btn-mini btn-danger remove">
-							<i class="icon-remove icon-white"></i>
+							<i class="icon-remove icon-white"/>
 						</button>
-						<p class="help-inline"><small></small></p>
+						<p class="help-inline">
+							<small/>
+						</p>
 					</div>
 				</div>
 			</div>
@@ -886,40 +1026,57 @@
 				<div class="control-group">
 					<label class="control-label" for="title">Title: </label>
 					<div class="controls">
-						<input type="text" class="input-xlarge" name="type" placeholder="Title" value=""/>
-						<p class="help-inline"><small></small></p>
+						<input type="text" class="input-xlarge" name="type" placeholder="Title"
+							value=""/>
+						<p class="help-inline">
+							<small/>
+						</p>
 					</div>
 				</div>
 
 				<div class="control-group">
 					<label class="control-label" for="title">Identifier: </label>
 					<div class="controls">
-						<input type="text" class="input-small" name="identifier_type" placeholder="Identifier Type" value=""/><input type="text" class="input-xlarge" name="identifier" placeholder="Identifier" value=""/><p class="help-inline"><small></small></p>
+						<input type="text" class="input-small" name="identifier_type"
+							placeholder="Identifier Type" value=""/>
+						<input type="text" class="input-xlarge" name="identifier"
+							placeholder="Identifier" value=""/>
+						<p class="help-inline">
+							<small/>
+						</p>
 					</div>
 				</div>
 
 				<div class="control-group">
 					<label class="control-label" for="title">Notes: </label>
 					<div class="controls">
-						<input type="text" class="input-xlarge" name="notes" placeholder="Notes" value=""/><p class="help-inline"><small></small></p>
+						<input type="text" class="input-xlarge" name="notes" placeholder="Notes"
+							value=""/>
+						<p class="help-inline">
+							<small/>
+						</p>
 					</div>
 				</div>
 			</div>
 		</div>
-		
+
 		<div class="aro_box template" type="location">
 			<div class="aro_box_display clearfix">
-				<a href="javascript:;" class="toggle"><i class="icon-minus"></i></a>
-				<h1></h1>
+				<a href="javascript:;" class="toggle">
+					<i class="icon-minus"/>
+				</a>
+				<h1/>
 				<div class="control-group">
-					
+
 					<div class="controls">
 						<input type="text" class="input-small" name="dateFrom" placeholder="dateFrom" value=""/>
 						<input type="text" class="input-small" name="dateTo" placeholder="dateTo" value=""/>
 						<button class="btn btn-mini btn-danger remove">
-							<i class="icon-remove icon-white"></i>
+							<i class="icon-remove icon-white"/>
 						</button>
-						<p class="help-inline"><small></small></p>
+						<p class="help-inline">
+							<small/>
+						</p>
 					</div>
 				</div>
 			</div>			
@@ -930,11 +1087,17 @@
 				<div class="btn-group dropup">
 					<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"> <i class="icon-envelope icon-white"></i> Add Address</button>
 					<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-						<span class="caret"></span>
+						<span class="caret"/>
 					</button>
 					<ul class="dropdown-menu">
-						<li><a href="javascript:;" class="addNew" type="electronic">Add Electronic Address</a></li>
-						<li><a href="javascript:;" class="addNew" type="physical">Add Physical Address</a></li>
+						<li>
+							<a href="javascript:;" class="addNew" type="electronic">Add Electronic
+								Address</a>
+						</li>
+						<li>
+							<a href="javascript:;" class="addNew" type="physical">Add Physical
+								Address</a>
+						</li>
 					</ul>
 				</div>
 			</div>		
@@ -943,8 +1106,7 @@
 				<xsl:apply-templates select="spatial"/>
 				<div class="separate_line"/>
 				<button class="btn btn-primary addNew" type="spatial">
-					<i class="icon-map-marker icon-white"></i> Add Spatial Location
-				</button>
+					<i class="icon-map-marker icon-white"/> Add Spatial Location </button>
 			</div>
 		</div>
 
@@ -953,20 +1115,23 @@
 				<label class="control-label" for="title">Spatial: </label>
 				<div class="controls">
 					<input type="text" class="input-small" name="type" placeholder="Type" value=""/>
-					<input type="text" class="input-xlarge" name="value" placeholder="Value" value=""/>
+					<input type="text" class="input-xlarge" name="value" placeholder="Value"
+						value=""/>
 					<button class="btn btn-mini btn-danger remove">
-						<i class="icon-remove icon-white"></i>
+						<i class="icon-remove icon-white"/>
 					</button>
-					<p class="help-inline"><small></small></p>
+					<p class="help-inline">
+						<small/>
+					</p>
 				</div>
 			</div>
-		</div>		
+		</div>
 
 		<div class="aro_box_part template" type="electronic">
 			<label class="control-label" for="title">Electronic Address: </label>
 			<div class="control-group">
 				<input type="text" class="input-small" name="type" placeholder="Type" value=""/>
-				<input type="text" class="input-xlarge" name="value"  placeholder="Value" value=""/>
+				<input type="text" class="input-xlarge" name="value" placeholder="Value" value=""/>
 				<xsl:if test="service">
 					<button class="btn btn-primary showParts"><i class="icon-chevron-right icon-white"></i></button>
 					<div class="parts hide">
@@ -978,7 +1143,6 @@
 				</xsl:if>
 			</div>
 		</div>
-	
 		<div class="aro_box_part template" type="physical">
 			<label class="control-label" for="title">Physical Address: </label>
 			<div class="control-group">
@@ -991,8 +1155,8 @@
 					</button>
 				</div>
 			</div>
-		</div>		
-	
+		</div>
+
 		<div class="aro_box_part template" type="arg">
 			<label class="control-label" for="title">Arg: </label>
 			<div class="control-group">
@@ -1004,45 +1168,150 @@
 					<i class="icon-remove icon-white"></i>
 				</button>
 			</div>
-		</div>		
-	
+		</div>
+
 		<div class="aro_box_part template" type="addressPart">
 			<div class="control-group">
 				<input type="text" class="input-small" name="type" placeholder="Type" value=""/>
-				<input type="text" class="input-xlarge" name="value"  placeholder="value" value=""/>
+				<input type="text" class="input-xlarge" name="value" placeholder="value" value=""/>
 				<button class="btn btn-mini btn-danger remove">
-					<i class="icon-remove icon-white"></i>
+					<i class="icon-remove icon-white"/>
 				</button>
 			</div>
 
-		</div>		
-		
+		</div>
+
 		<div class="aro_box template" type="accessPolicy">
-			<input type="text" class="input-xlarge" name="value"  placeholder="value" value=""/>
-		</div>	
-		
+			<input type="text" class="input-xlarge" name="value" placeholder="value" value=""/>
+		</div>
+
 		<div class="aro_box_part template" type="fullCitation">
 			<label class="control-label" for="title">Full Citation: </label>
 			<div class="aro_box_part">
 				<div class="control-group">
-					<input type="text" class="input-xlarge" name="style"  placeholder="Style" value=""/>
-					<input type="text" class="input-xlarge" name="value"  placeholder="value" value=""/>
+					<input type="text" class="input-xlarge" name="style" placeholder="Style"
+						value=""/>
+					<input type="text" class="input-xlarge" name="value" placeholder="value"
+						value=""/>
 				</div>
 			</div>
 		</div>
-		
+
+
+
+		<div class="aro_box_part template" type="citationMetadata">
+			<label class="control-label" for="title">Full Citation: </label>
+			<div class="aro_box_part">
+				<div class="control-group">
+					<input type="text" class="input-xlarge" name="identifier" placeholder="Identifier" value=""/>
+					<div class="aro_box_part" type="contributor">
+						<input type="text" class="input-xlarge" name="seq" placeholder="Sequence" value=""/>
+						<div class="control-group">
+							<label class="control-label" for="title">Name Part: </label>
+							<div class="controls">
+								<input type="text" class="input-small" name="type" placeholder="Type" value=""/>
+								<input type="text" class="input-xlarge" name="value" placeholder="Value"
+									value=""/>
+								<button class="btn btn-mini btn-danger remove">
+									<i class="icon-remove icon-white"/>
+								</button>
+								<p class="help-inline">
+									<small/>
+								</p>
+							</div>
+							<div class="separate_line"/>
+							<button class="btn btn-primary addNew" type="namePart">
+								<i class="icon-plus icon-white"/> Add NamePart </button>
+						</div>
+						<button class="btn btn-mini btn-danger remove">
+							<i class="icon-remove icon-white"/>
+						</button>
+					</div>
+					<div class="separate_line"/>
+					<button class="btn btn-primary addNew" type="contributor">
+						<i class="icon-plus icon-white"/> Add Contributor </button>
+					<input type="text" class="input-xlarge" name="title" placeholder="Title" value=""/>
+					<input type="text" class="input-xlarge" name="edition" placeholder="Edition" value=""/>
+					<input type="text" class="input-xlarge" name="publisher" placeholder="Publisher" value=""/>
+					<input type="text" class="input-xlarge" name="placePublished" placeholder="Place Published" value=""/>
+					<div class="control-group" type="date">
+						<input type="text" class="input-xlarge" name="date_type" placeholder="date type" value=""/>
+						<input type="text" class="input-xlarge" name="dvalue" placeholder="date value" value=""/>
+						<button class="btn btn-mini btn-danger remove">
+							<i class="icon-remove icon-white"/>
+						</button>
+					</div>
+					<div class="separate_line"/>
+					<button class="btn btn-primary addNew" type="date">
+						<i class="icon-plus icon-white"/> Add Date </button>
+					<input type="text" class="input-xlarge" name="url" placeholder="url" value=""/>
+					<input type="text" class="input-xlarge" name="context" placeholder="context" value=""/>
+				</div>				
+			</div>
+		</div>
+
+
+		<div class="aro_box_part template" type="contributor">
+			<div class="aro_box_part" type="contributor">
+				<input type="text" class="input-xlarge" name="seq" placeholder="Sequence" value=""/>
+				<div class="control-group">
+					<label class="control-label" for="title">Name Part: </label>
+					<div class="controls">
+						<input type="text" class="input-small" name="type" placeholder="Type" value=""/>
+						<input type="text" class="input-xlarge" name="value" placeholder="Value"
+							value=""/>
+						<button class="btn btn-mini btn-danger remove">
+							<i class="icon-remove icon-white"/>
+						</button>
+						<p class="help-inline">
+							<small/>
+						</p>
+					</div>
+					<div class="separate_line"/>
+					<button class="btn btn-primary addNew" type="namePart">
+						<i class="icon-plus icon-white"/> Add NamePart </button>
+				</div>
+				<button class="btn btn-mini btn-danger remove">
+					<i class="icon-remove icon-white"/>
+				</button>
+			</div>
+		</div>	
+			
+		<div class="aro_box template" type="date">
+			<input type="text" class="input-xlarge" name="date_type" placeholder="date type" value=""/>
+			<input type="text" class="input-xlarge" name="dvalue" placeholder="date value" value=""/>
+			<button class="btn btn-mini btn-danger remove">
+				<i class="icon-remove icon-white"/>
+			</button>
+		</div>
+			
 		<div class="aro_box_part template" type="citationInfo">
 			<div class="control-group">
 				<div class="separate_line"/>
 				<button class="btn btn-primary addNew" type="fullCitation">
-					<i class="icon-plus icon-white"></i> Add Full Citation
-				</button>
+					<i class="icon-plus icon-white"/> Add Full Citation </button>
 				<button class="btn btn-primary addNew" type="citationMetadata">
-					<i class="icon-plus icon-white"></i> Add Citation Metadata
-				</button>
+					<i class="icon-plus icon-white"/> Add Citation Metadata </button>
+			</div>
+		</div>
+		
+		<div class="aro_box template" type="existenceDate">
+			<div class="aro_box_display clearfix">
+				<div class="controls">
+					<input type="text" class="input-small" name="startDate_type" placeholder="startDate Type" value=""/>
+					<input type="text" class="input-xlarge" name="startDate_value" placeholder="startDate Value" value=""/>
+					<input type="text" class="input-small" name="endDate_type" placeholder="sendDate Type" value=""/>
+					<input type="text" class="input-xlarge" name="endDate_value" placeholder="endDate Value" value=""/>
+					<button class="btn btn-mini btn-danger remove">
+						<i class="icon-remove icon-white"/>
+					</button>
+					<p class="help-inline">
+						<small/>
+					</p>
+				</div>
 			</div>
 		</div>
 
 	</xsl:template>
-	
+
 </xsl:stylesheet>
