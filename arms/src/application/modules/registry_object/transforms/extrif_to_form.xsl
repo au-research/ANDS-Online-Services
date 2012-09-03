@@ -258,8 +258,7 @@
 		</div>
 	</xsl:template>
 
-	<xsl:template
-		match="collection/@type | activity/@type | party/@type  | service/@type | collection/@dateModified | activity/@dateModified | party/@dateModified  | service/@dateModified">
+	<xsl:template match="collection/@type | activity/@type | party/@type  | service/@type | collection/@dateModified | activity/@dateModified | party/@dateModified  | service/@dateModified">
 		<xsl:value-of select="."/>
 	</xsl:template>
 
@@ -355,15 +354,23 @@
 				<legend>Citation Info</legend>
 				<xsl:apply-templates select="collection/citationInfo"/>
 				<div class="separate_line"/>
-				<button class="btn btn-primary addNew" type="citationInfo">
-					<i class="icon-plus icon-white"/> Add Citation Info </button>
-				<button class="btn export_xml btn-info"> Export XML fragment </button>
+				<div class="btn-group dropup">
+					<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"> <i class="icon-pencil icon-white"></i> Add Citation Info</button>
+					<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+						<span class="caret"/>
+					</button>
+					<ul class="dropdown-menu">
+						<li><a href="javascript:;" class="addNew" type="fullCitation">Add Full Citation</a></li>
+						<li><a href="javascript:;" class="addNew" type="citationMetadata">Add Citation Metadata</a></li>
+					</ul>
+					<button class="btn export_xml btn-info"> Export XML fragment </button>
+				</div>
+				
 			</fieldset>
 		</div>
 	</xsl:template>
 
-	<xsl:template
-		match="collection/description | activity/description | party/description  | service/description">
+	<xsl:template match="collection/description | activity/description | party/description  | service/description">
 		<div class="aro_box" type="description">
 			<h1>Description</h1>
 			<p>
@@ -504,7 +511,7 @@
 				<div class="controls">
 					<input type="text" class="input-small" name="startDate_type" placeholder="startDate Type" value="{startDate/@type}"/>
 					<input type="text" class="input-xlarge" name="startDate_value" placeholder="startDate Value" value="{startDate/text()}"/>
-					<input type="text" class="input-small" name="endDate_type" placeholder="sendDate Type" value="{endDate/@type}"/>
+					<input type="text" class="input-small" name="endDate_type" placeholder="endDate Type" value="{endDate/@type}"/>
 						<input type="text" class="input-xlarge" name="endDate_value" placeholder="endDate Value" value="{endDate/text()}"/>
 					<button class="btn btn-mini btn-danger remove">
 						<i class="icon-remove icon-white"/>
@@ -579,8 +586,7 @@
 	</xsl:template>
 
 
-	<xsl:template
-		match="collection/subject  | activity/subject  | party/subject   | service/subject">
+	<xsl:template match="collection/subject  | activity/subject  | party/subject   | service/subject">
 		<div class="aro_box" type="subject">
 			<div class="aro_box_display clearfix">
 				<div class="controls"> Type: <input type="text" class="input-small" name="type"
@@ -595,8 +601,7 @@
 		</div>
 	</xsl:template>
 
-	<xsl:template
-		match="collection/identifier  | activity/identifier  | party/identifier   | service/identifier">
+	<xsl:template match="collection/identifier  | activity/identifier  | party/identifier   | service/identifier">
 		<div class="aro_box" type="identifier">
 			<div class="aro_box_display clearfix">
 				<div class="controls">
@@ -614,8 +619,7 @@
 		</div>
 	</xsl:template>
 
-	<xsl:template
-		match="collection/relatedObject | activity/relatedObject | party/relatedObject  | service/relatedObject">
+	<xsl:template match="collection/relatedObject | activity/relatedObject | party/relatedObject  | service/relatedObject">
 		<div class="aro_box" type="relatedobject">
 			<div class="aro_box_display clearfix">
 				<a href="javascript:;" class="toggle">
@@ -649,8 +653,7 @@
 		</div>
 	</xsl:template>
 
-	<xsl:template
-		match="collection/location | activity/location | party/location  | service/location">
+	<xsl:template match="collection/location | activity/location | party/location  | service/location">
 		<div class="aro_box" type="location">
 			<div class="aro_box_display clearfix">
 				<a href="javascript:;" class="toggle">
@@ -1185,101 +1188,143 @@
 			<input type="text" class="input-xlarge" name="value" placeholder="value" value=""/>
 		</div>
 
-		<div class="aro_box_part template" type="fullCitation">
-			<label class="control-label" for="title">Full Citation: </label>
-			<div class="aro_box_part">
+		<div class="aro_box template" type="fullCitation">
+			<div class="aro_box_display clearfix">
+				<a href="javascript:;" class="toggle"><i class="icon-minus"></i></a><h1>Full Citation</h1>
 				<div class="control-group">
-					<input type="text" class="input-xlarge" name="style" placeholder="Style"
-						value=""/>
-					<input type="text" class="input-xlarge" name="value" placeholder="value"
-						value=""/>
+					<label class="control-label">Style: </label>
+					<div class="controls">
+						<input type="text" class="input-small" name="style" placeholder="style" value=""/>
+						<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
+					</div>
 				</div>
 			</div>
+			<textarea name="value" place-holder="value" class="input-xlarge"></textarea>
 		</div>
 
 
 
-		<div class="aro_box_part template" type="citationMetadata">
-			<label class="control-label" for="title">Full Citation: </label>
-			<div class="aro_box_part">
-				<div class="control-group">
-					<input type="text" class="input-xlarge" name="identifier" placeholder="Identifier" value=""/>
-					<div class="aro_box_part" type="contributor">
-						<input type="text" class="input-xlarge" name="seq" placeholder="Sequence" value=""/>
-						<div class="control-group">
-							<label class="control-label" for="title">Name Part: </label>
-							<div class="controls">
-								<input type="text" class="input-small" name="type" placeholder="Type" value=""/>
-								<input type="text" class="input-xlarge" name="value" placeholder="Value"
-									value=""/>
-								<button class="btn btn-mini btn-danger remove">
-									<i class="icon-remove icon-white"/>
-								</button>
-								<p class="help-inline">
-									<small/>
-								</p>
-							</div>
-							<div class="separate_line"/>
-							<button class="btn btn-primary addNew" type="namePart">
-								<i class="icon-plus icon-white"/> Add NamePart </button>
-						</div>
-						<button class="btn btn-mini btn-danger remove">
-							<i class="icon-remove icon-white"/>
-						</button>
-					</div>
-					<div class="separate_line"/>
-					<button class="btn btn-primary addNew" type="contributor">
-						<i class="icon-plus icon-white"/> Add Contributor </button>
-					<input type="text" class="input-xlarge" name="title" placeholder="Title" value=""/>
-					<input type="text" class="input-xlarge" name="edition" placeholder="Edition" value=""/>
-					<input type="text" class="input-xlarge" name="publisher" placeholder="Publisher" value=""/>
-					<input type="text" class="input-xlarge" name="placePublished" placeholder="Place Published" value=""/>
-					<div class="control-group" type="date">
-						<input type="text" class="input-xlarge" name="date_type" placeholder="date type" value=""/>
-						<input type="text" class="input-xlarge" name="dvalue" placeholder="date value" value=""/>
-						<button class="btn btn-mini btn-danger remove">
-							<i class="icon-remove icon-white"/>
-						</button>
-					</div>
-					<div class="separate_line"/>
-					<button class="btn btn-primary addNew" type="date">
-						<i class="icon-plus icon-white"/> Add Date </button>
-					<input type="text" class="input-xlarge" name="url" placeholder="url" value=""/>
-					<input type="text" class="input-xlarge" name="context" placeholder="context" value=""/>
-				</div>				
+		<div class="aro_box template" type="citationMetadata">
+			<div class="aro_box_display clearfix">
+				<a href="javascript:;" class="toggle"><i class="icon-minus"></i></a><h1>Citation Metadata</h1>
 			</div>
+			<div class="aro_box_part" type="identifier">
+				<div class="control-group">
+				<label class="control-label">Identifier:</label>
+					<div class="controls">
+						<input type="text" class="input-small" name="type" placeholder="Type" value=""/>
+						<input type="text" class="input-xlarge" name="value" placeholder="Identifier" value=""/>
+					</div>
+				</div>
+			</div>
+
+			<div class="aro_box_part" type="title">
+				<div class="control-group">
+				<label class="control-label">Title:</label>
+					<div class="controls">
+						<input type="text" class="input-xlarge" name="value" placeholder="Title" value=""/>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="aro_box_part" type="edition">
+				<div class="control-group">
+				<label class="control-label">Edition:</label>
+					<div class="controls">
+						<input type="text" class="input-xlarge" name="value" placeholder="Edition" value=""/>
+					</div>
+				</div>
+			</div>
+
+			<div class="aro_box_part" type="placePublished">
+				<div class="control-group">
+				<label class="control-label">Place Published:</label>
+					<div class="controls">
+						<input type="text" class="input-xlarge" name="value" placeholder="Place Published" value=""/>
+					</div>
+				</div>
+			</div>
+
+			<div class="aro_box_part" type="publisher">
+				<div class="control-group">
+				<label class="control-label">Publisher:</label>
+					<div class="controls">
+						<input type="text" class="input-xlarge" name="value" placeholder="Publisher" value=""/>
+					</div>
+				</div>
+			</div>
+
+			<div class="aro_box_part" type="url">
+				<div class="control-group">
+				<label class="control-label">URL:</label>
+					<div class="controls">
+						<input type="text" class="input-xlarge" name="value" placeholder="URL" value=""/>
+					</div>
+				</div>
+			</div>
+
+			<div class="aro_box_part" type="context">
+				<div class="control-group">
+				<label class="control-label">Context:</label>
+					<div class="controls">
+						<input type="text" class="input-xlarge" name="value" placeholder="Context" value=""/>
+					</div>
+				</div>
+			</div>
+
+			<div class="aro_box_part" type="contributor">
+				<div class="control-group"><div class="controls">
+					<button class="btn btn-primary showParts">Contributors <i class="icon-chevron-right icon-white"></i></button>
+					<div class="parts hide">
+						<div class="separate_line"/>
+						<button class="btn btn-primary addNew" type="contributor">
+							<i class="icon-plus icon-white"></i> Add Contributor
+						</button>
+					</div>
+				</div></div>
+			</div>
+
+			<div class="aro_box_part" type="date">
+				<div class="control-group"><div class="controls">
+					<button class="btn btn-primary showParts">Date <i class="icon-chevron-right icon-white"></i></button>
+					<div class="parts hide">
+						<div class="separate_line"/>
+						<button class="btn btn-primary addNew" type="date">
+							<i class="icon-plus icon-white"></i> Add Date
+						</button>
+					</div>
+				</div></div>
+			</div>
+
 		</div>
 
 
-		<div class="aro_box_part template" type="contributor">
-			<div class="aro_box_part" type="contributor">
-				<input type="text" class="input-xlarge" name="seq" placeholder="Sequence" value=""/>
+		<div class="aro_box template" type="contributor">
+			<div class="aro_box_display clearfix">
+				Seq: <input type="text" class="input-small" name="seq" placeholder="Seq" value=""/>
+					<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
+			</div>
+
+			<div class="aro_box_part" type="namePart">
 				<div class="control-group">
 					<label class="control-label" for="title">Name Part: </label>
 					<div class="controls">
 						<input type="text" class="input-small" name="type" placeholder="Type" value=""/>
-						<input type="text" class="input-xlarge" name="value" placeholder="Value"
-							value=""/>
-						<button class="btn btn-mini btn-danger remove">
-							<i class="icon-remove icon-white"/>
-						</button>
-						<p class="help-inline">
-							<small/>
-						</p>
+						<input type="text" class="input-xlarge" name="value" placeholder="Value" value=""/>
+						<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
 					</div>
-					<div class="separate_line"/>
-					<button class="btn btn-primary addNew" type="namePart">
-						<i class="icon-plus icon-white"/> Add NamePart </button>
 				</div>
-				<button class="btn btn-mini btn-danger remove">
-					<i class="icon-remove icon-white"/>
-				</button>
 			</div>
+
+			<div class="separate_line"/>
+			<button class="btn btn-primary addNew" type="namePart"><i class="icon-plus icon-white"/> Add NamePart </button>
+		
 		</div>	
 			
 		<div class="aro_box template" type="date">
-			<input type="text" class="input-xlarge" name="date_type" placeholder="date type" value=""/>
-			<input type="text" class="input-xlarge" name="dvalue" placeholder="date value" value=""/>
+			<input type="text" class="input-xlarge" name="type" placeholder="Date Type" value=""/>
+			<input type="text" class="input-xlarge" name="value" placeholder="Date Value" value=""/>
 			<button class="btn btn-mini btn-danger remove">
 				<i class="icon-remove icon-white"/>
 			</button>
@@ -1300,7 +1345,7 @@
 				<div class="controls">
 					<input type="text" class="input-small" name="startDate_type" placeholder="startDate Type" value=""/>
 					<input type="text" class="input-xlarge" name="startDate_value" placeholder="startDate Value" value=""/>
-					<input type="text" class="input-small" name="endDate_type" placeholder="sendDate Type" value=""/>
+					<input type="text" class="input-small" name="endDate_type" placeholder="endDate Type" value=""/>
 					<input type="text" class="input-xlarge" name="endDate_value" placeholder="endDate Value" value=""/>
 					<button class="btn btn-mini btn-danger remove">
 						<i class="icon-remove icon-white"/>

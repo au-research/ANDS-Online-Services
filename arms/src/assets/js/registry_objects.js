@@ -297,8 +297,8 @@ function initEditForm(){
 		click: function(e){
 			e.preventDefault();
 			$('i', this).toggleClass('icon-plus').toggleClass('icon-minus');
-			//$(this).parent().parent().children('*').show();
-			$(this).parent().parent().children('.aro_box_part, button.addNew, .controls').slideToggle();
+			var aro_box = $(this).parents('.aro_box');
+			$(aro_box).children('*:not(.aro_box_display)').slideToggle();
 		}
 	});
 
@@ -373,6 +373,7 @@ function initEditForm(){
 			$(target).fadeOut(500, function(){
 				$(target).remove();
 			});
+			//check if it's inside a tooltip
 		}
 	});
 
@@ -389,11 +390,23 @@ function initEditForm(){
 					where = $(this).parent().parent().prevAll('.separate_line')[0];
 					if(!where){
 						where = $(this).parent().parent().parent().prevAll('.separate_line')[0];
+						if(!where){
+							where= $(this).parent().parent().parent().parent().prevAll('.separate_line')[0];
+						}
 					}
 				}
 			}
 
+
 			$(template).clone().removeClass('template').insertBefore(where).hide().slideDown();
+
+			//check if it's inside a tooltip
+			/*if($(this).parents('.ui-tooltip').length>0){
+				var tooltip_dom = $(this).parents('.ui-tooltip');
+				var tooltipID = $(tooltip_dom).attr('id');
+				var tooltip = $('#'+tooltipID).qtip('api');
+				tooltip.reposition();
+			}*/
 			if(what=='description' || what=='rights'){
 				$('#edit-form textarea').addClass('editor');
 				initEditor();
@@ -528,7 +541,7 @@ function bindPartsTooltip(){
 				hide: {event: 'unfocus'},
 				events: {
 					show: function(event, api) {
-						console.log(api.id, button);
+						//console.log(api.id, button);
 					}
 				},
 				style: {classes: 'ui-tooltip-shadow ui-tooltip-bootstrap ui-tooltip-large'}
@@ -615,7 +628,7 @@ function getRIFCSforTab(tab){
 		var fragment_type = '';
 
 		fragment +='<'+$(this).attr('type')+'';
-		var valid_fragment_meta = ['type', 'dateFrom', 'dateTo'];
+		var valid_fragment_meta = ['type', 'dateFrom', 'dateTo', 'style'];
 		var this_box = this;
 		$.each(valid_fragment_meta, function(index, value){
 			var fragment_meta = '';
@@ -652,10 +665,45 @@ function getRIFCSforTab(tab){
 						if($('input[name=notes]', this).val()!=''){
 							fragment += '<notes>'+$('input[name=notes]', this).val()+'</notes>';
 						}
-					}else{
-						fragment += '<'+$(this).attr('type')+' type="'+$('input[name=type]', this).val()+'">'+$('input[name=value]', this).val()+'</'+$(this).attr('type')+'>';
+					}else{//generic
+						//if it has a type input
+						var type = $('input[name=type]', this).val();
+						if(type){
+							fragment += '<'+$(this).attr('type')+' type="'+$('input[name=type]', this).val()+'">'+$('input[name=value]', this).val()+'</'+$(this).attr('type')+'>';	
+						}else{
+							var type = $(this).attr('type');
+							if(type=='date'){
+								var dates = $('.aro_box', this);
+								if($('button.showParts', this).attr('aria-describedby')){//tooltip has been init
+									var dates = $('#'+$('button.showParts', this).attr('aria-describedby')+' .ui-tooltip-content .aro_box');
+								}
+								$.each(dates, function(){
+									fragment += '<'+$(this).attr('type')+' type="'+$('input[name=type]', this).val()+'" >';
+									fragment += $('input[name=value]', this).val();
+									fragment +='</'+$(this).attr('type')+'>';
+								});
+							}else if(type=='contributor'){
+								var contributors = $('.aro_box', this);
+								if($('button.showParts', this).attr('aria-describedby')){//tooltip has been init
+									var contributors = $('#'+$('button.showParts', this).attr('aria-describedby')+' .ui-tooltip-content .aro_box');
+								}
+								$.each(contributors, function(){
+									fragment += '<'+$(this).attr('type')+' seq="'+$('input[name=seq]', this).val()+'" >';
+									var contrib_name_part = $('.aro_box_part', this);
+									$.each(contrib_name_part, function(){
+										fragment += '<'+$(this).attr('type')+' type="'+$('input[name=type]', this).val()+'" >';
+										fragment += $('input[name=value]', this).val();
+										fragment +='</'+$(this).attr('type')+'>';
+									});
+									fragment +='</'+$(this).attr('type')+'>';
+								});
+							}else{
+								fragment += '<'+type+'>'+$('input[name=value]', this).val()+'</'+type+'>';
+							}
+						}
 					}
 				}else{//it's an element
+
 					fragment += '<'+$('input', this).attr('name')+'>'+$('input', this).val()+'</'+$('input', this).attr('name')+'>';
 				}
 			});
@@ -679,7 +727,7 @@ function getRIFCSforTab(tab){
 								this_fragment +='<value>'+$('input[name=value]',this).val()+'</value>';
 								//deal with args here
 								var args = $('.aro_box_part', this);
-								if($('button.showParts', this).attr('aria-describedby')!=''){//tooltip has been init
+								if($('button.showParts', this).attr('aria-describedby')){//tooltip has been init
 									var args = $('#'+$('button.showParts', this).attr('aria-describedby')+' .ui-tooltip-content .aro_box_part');
 								}
 								$.each(args, function(){
@@ -690,7 +738,7 @@ function getRIFCSforTab(tab){
 							}else if($(this).attr('type')=='physical'){
 								//deal with address parts here
 								var address_parts = $('.aro_box_part', this);
-								if($('button.showParts', this).attr('aria-describedby')!=''){//tooltip has been init
+								if($('button.showParts', this).attr('aria-describedby')){//tooltip has been init
 									var address_parts = $('#'+$('button.showParts', this).attr('aria-describedby')+' .ui-tooltip-content .aro_box_part');
 								}
 								$.each(address_parts, function(){
@@ -720,7 +768,7 @@ function getRIFCSforTab(tab){
 				//check if there's a text area
 				if($('textarea', this).length>0){
 					fragment += htmlEntities($('textarea', this).val());
-				}else{
+				}else if($('input[name=value]', this).length>0){
 					//there's no textarea, just normal input
 					fragment += $('input[name=value]', this).val();
 				}

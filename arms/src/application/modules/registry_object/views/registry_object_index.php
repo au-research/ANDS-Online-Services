@@ -230,7 +230,9 @@
 		</div>
 
 		<div class="box-content tab-content tab-view-content" name="preview">
-			<iframe src="{{preview_link}}" width="100%" height="100%"></iframe>
+			{{#preview_link}}
+				<!--iframe src="{{preview_link}}" width="100%" height="100%"></iframe-->
+			{{/preview_link}}
 		</div>
 
 		<div class="box-content tab-content tab-view-content" name="edit">

@@ -61,6 +61,7 @@ class Registry_object extends MX_Controller {
 		$ro = $this->ro->getByID($id);
 		$data['extrif'] = $ro->getExtRif();
 		
+		$data['preview_link'] = 'http://demo.ands.org.au/'.$ro->slug;
 		$data['transform'] = $ro->transformForFORM();
 		echo $data['transform'];
 		//$this->load->view('registry_object_edit', $data);
