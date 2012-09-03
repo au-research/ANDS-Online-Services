@@ -48,8 +48,9 @@ $(function(){
 			browse('lists');
 		}
 	});
-	$(window).hashchange();
+	$(window).hashchange();//initial hashchange event
 
+	//event on item level
 	$('.item').die().live({
 		mouseenter: function(e){
 			$('.btn-group', this).show();
@@ -67,13 +68,14 @@ $(function(){
 		}
 	});
 
+	//switch view button
 	var currentView = 'thumbnails';
 	$('#switch_view a').click(function(){
 		changeHashTo('browse/'+$(this).attr('name'));
 		currentView = $(this).attr('name');
 	});
 
-
+	//select all button
 	$('#select_all').click(function(){
 		if($(this).attr('name')=='select_all'){
 			$(this).attr('name', 'deselect_all');
@@ -87,12 +89,14 @@ $(function(){
 		updateSelected();
 	});
 
+	//toggling the filter chooser button
 	$('.toggleFilter').die().live({
 		click: function(){
 			$('#filter_container').slideToggle();
 		}
 	});
 
+	//load more button, this will init the get next 
 	$('#load_more').click(function(){
 		var page = parseInt($(this).attr('page'));
 		page++;
@@ -100,6 +104,7 @@ $(function(){
 		$(this).attr('page', page++);
 	});
 
+	//Search Form
 	$('#search-records').submit(function(e){
 		e.preventDefault();
 		var query = $('input', this).val();
@@ -110,13 +115,10 @@ $(function(){
 			delete fields[name];
 		}
 		clearItems();
-
-		/*var jsonString = ""+JSON.stringify(fields);
-		$('#myModal .modal-body').html('<pre>'+jsonString+'</pre>');
-		$('#myModal').modal();*/
 		getRecords(fields);
 	});
 
+	//individual filters, construct the global fields[]
 	$('.filter').die().live({
 		click: function(e){
 			e.preventDefault();
@@ -127,6 +129,8 @@ $(function(){
 			changeHashTo('browse/'+currentView+'/'+filters);
 		}
 	});
+
+	//destroying the fields[key] and do a browse based on currentView and current Filters
 	$('.remove_filter').die().live({
 		click: function(e){
 			e.preventDefault();
@@ -137,6 +141,7 @@ $(function(){
 		}
 	});
 
+	//sorting
 	$('.sort').die().live({
 		click: function(){
 			var field = $(this).attr('name');
@@ -167,6 +172,7 @@ $(function(){
 		}
 	});
 
+	//bind the drag and drop
 	$('#items')
 		.drag("start",function( ev, dd ){
 			return $('<div class="selection" />')
@@ -184,9 +190,8 @@ $(function(){
 		.drag("end",function( ev, dd ){
 			$( dd.proxy ).remove();
 		});
-	//bind the drag and drop
 	
-
+	
 	//bind viewing screen
 	$('.tab-view-list li a').die().live({
 		click:function(e){
@@ -225,6 +230,16 @@ function browse(view, filter){
 	}
 }
 
+/*
+ * Initialize the view
+ * This opens the view for viewing ro, editing ro and possibly deleting ro
+ * @TODO: view for deleting Registry Objects
+ * 
+ * @author: Minh Duc Nguyen (minh.nguyen@ands.org.au)
+ * @param: [int] registry object id, [string] view mode, [string|optional] tab to be init on
+ * @returns: [void]
+ */
+
 function load_ro(ro_id, view, active_tab){
 	$('#view-ro').html('Loading...');
 	$.ajax({
@@ -232,7 +247,7 @@ function load_ro(ro_id, view, active_tab){
 		url: base_url+'registry_object/get_record/'+ro_id,
 		dataType: 'json',
 		success: function(data){
-			console.log(data);
+			//console.log(data);
 			var itemsTemplate = $('#item-template').html();
 			var output = Mustache.render(itemsTemplate, data);
 			$('#view-ro').html(output);
@@ -250,11 +265,12 @@ function load_ro(ro_id, view, active_tab){
 
 				var revisions = '';
 				$.each(data.ro.revisions, function(time, id){
+					//display the revisions
 					revisions += '<li>'+time+'</li>';
 				});
 				$('#view-ro #ro-revisions').html(revisions);
 
-				//equal heights
+				//equal heights?
 				var highest=0;
 				$('#view-ro').show();
 				$('#view-ro .eqheight').each(function(){
@@ -291,8 +307,23 @@ function load_ro(ro_id, view, active_tab){
 	});
 }
 
+/*
+ * Initialize the edit form, ready to be use upon completion
+ * @TODO: 
+ * 
+ * 
+ * @author: Minh Duc Nguyen (minh.nguyen@ands.org.au)
+ * @param: [void]
+ * @returns: [void]
+ */
+
 function initEditForm(){
 
+	/*
+	 * Toggle button
+	 * toggle the plus and minus
+	 * slidetoggle everything except div.aro_box_display
+	 */
 	$('#edit-form .toggle').die().live({
 		click: function(e){
 			e.preventDefault();
@@ -302,12 +333,23 @@ function initEditForm(){
 		}
 	});
 
+	/*
+	 * Prevents the form from submitting when hit any button
+	 */
 	$('#edit-form button').die().live({
 		click: function(e){
 			e.preventDefault();
 		}
 	});
 
+	/*
+	 * Enable typeahead on input of class.[something]
+	 * Documentation of typeahead is on twitter bootstrap
+	 * @TODO: 
+	 		- write a service that takes in a vocab_type, vocab_class and vocab_scheme eg: RIFCSCollectionType
+	 			-> returns a json array of results
+	 *
+	 */
 	$('.input-large').typeahead({
 		source: function(typeahead,query){
 			$.ajax({
@@ -322,12 +364,19 @@ function initEditForm(){
 		minLength:0
 	});
 
+	/*
+	 * icon-chevron-down button that triggers the typeahead by focusing into the input
+	 */
 	$('.triggerTypeAhead').die().live({
 		click: function(e){
 			$(this).parent().children('input').focus()
 		}
 	});
 
+	/*
+	 * Generate the random key based on the services/registry/get_random_key dynamically on the server
+	 * @TODO: make sure the key is unique accross system, returns error message if fails
+	 */
 	$('#generate_random_key').die().live({
 		click:function(e){
 			e.preventDefault();
@@ -342,6 +391,10 @@ function initEditForm(){
 		}
 	});
 
+	/*
+	 * Replace the data source text input field with a chosen() select
+	 * @TODO: ACL on which data source is accessible on services/registry/get_datasources_list
+	 */
 	var selected_data_source = $('#data_source_id_value').val();
 	$.ajax({
 		type: 'GET',
@@ -366,6 +419,12 @@ function initEditForm(){
 
 	
 
+	/*
+	 * Remove the parent element
+	 * If a part is found, remove the part
+	 * If no part is found, remove the box
+	 * 
+	 */
 	$('.remove').die().live({
 		click:function(){
 			var target = $(this).parents('.aro_box_part')[0];
@@ -373,10 +432,15 @@ function initEditForm(){
 			$(target).fadeOut(500, function(){
 				$(target).remove();
 			});
-			//check if it's inside a tooltip
+			//@TODO: check if it's inside a tooltip and perform reposition
 		}
 	});
 
+	/*
+	 * Add a new Element
+	 * find a div.separate_line among the parents previous divs
+	 * template is a div.template[type=] where type is defined in the @type attribute of the button itself
+	 */
 	$('.addNew').die().live({
 		click:function(e){
 			e.stopPropagation();
@@ -384,6 +448,8 @@ function initEditForm(){
 			var what = $(this).attr('type');
 			var template = $('.template[type='+what+']')[0];
 			var where = $(this).prevAll('.separate_line')[0];
+
+			//FIND THE SEPARATE LINE!!!
 			if(!where){//if there is no separate line found, go out 1 layer and find it
 				where = $(this).parent().prevAll('.separate_line')[0];
 				if(!where){
@@ -396,45 +462,33 @@ function initEditForm(){
 					}
 				}
 			}
+			//found it, geez
 
-
+			//add the DOM
 			$(template).clone().removeClass('template').insertBefore(where).hide().slideDown();
 
-			//check if it's inside a tooltip
-			/*if($(this).parents('.ui-tooltip').length>0){
-				var tooltip_dom = $(this).parents('.ui-tooltip');
-				var tooltipID = $(tooltip_dom).attr('id');
-				var tooltip = $('#'+tooltipID).qtip('api');
-				tooltip.reposition();
-			}*/
+			//@TODO: check if it's inside a tooltip and perform reposition
+
+
+			/*
+			 * Reason for this:
+			 	- We don't want to init the editor onto hidden template element
+			 	- We keep template element without the class editor
+			 		And only add the class editor upon addition of the element
+			 */
 			if(what=='description' || what=='rights'){
-				$('#edit-form textarea').addClass('editor');
+				$('#descriptions_rights textarea').addClass('editor');
 				initEditor();
 			}
+
+			//bind the tooltip parts UI in case of adding a new element with show Elements
 			bindPartsTooltip();
 		}
 	});
 
-	$('.showArgs').each(function(){
-		var args = $(this).next('.args')[0];
-		$(this).qtip({
-			content:{text:$(args)},
-			position:{
-				my:'center left',
-				at: 'center right'
-			},
-			show: {event: 'click'},
-			hide: {event: 'unfocus'},
-			style: {classes: 'ui-tooltip-shadow ui-tooltip-bootstrap'}
-		});
-	});
-
-
-
 	
 
-
-
+	//Export XML button for currentTab in pretty print and modal
 	$('.export_xml').die().live({
 		click: function(e){
 			e.preventDefault();
@@ -447,6 +501,7 @@ function initEditForm(){
 		}
 	});
 
+	//Export XML button for ALL TABS in pretty print and modal
 	$('#master_export_xml').die().live({
 		click: function(e){
 			e.preventDefault();
@@ -456,7 +511,6 @@ function initEditForm(){
 
 			$.each(allTabs, function(){
 				xml += getRIFCSforTab(this);
-
 			});
 			$('#myModal .modal-header h3').html('<h3>Export RIFCS</h3>');
 			$('#myModal .modal-body').html('<pre class="prettyprint linenums"><code class="language-xml">' + htmlEntities(formatXml(xml)) + '</code></pre>');
@@ -466,6 +520,8 @@ function initEditForm(){
 		}
 	});
 
+
+	//Load external XML modal dialog
 	$('#load_xml').die().live({
 		click: function(e){
 			e.preventDefault();
@@ -476,6 +532,8 @@ function initEditForm(){
 		}
 	});
 
+	//This button stays inside the Load xml modal dialog
+	//This will post the input rifcs to the server and replace the current edit form with the response
 	$('#load_edit_xml').die().live({
 		click: function(e){
 			var rifcs = $('textarea#load_xml_rifcs').val();
@@ -495,38 +553,40 @@ function initEditForm(){
 				});
 			}
 		}
-	})
+	});
 
+	//initalize the datepicker, format is optional
 	$('#view-ro .tab-content[name=edit] input.datepicker').datepicker({
 		format: 'yyyy-mm-dd'
 	});
-
+	//triggering the datepicker by focusing on it
 	$('.triggerDatePicker').die().live({
 		click: function(e){
 			$(this).parent().children('input').focus();
 		}
 	});
 
+	//Various calls to initialize different tabs
 	initNames();
 	initDescriptions();
 	initRelatedInfos();
-
 	bindPartsTooltip();
 }
 
+
+/*
+ * Binds .showParts to display a qtip element
+ * @TODO: #fix reposition issue when interacting with the DOM inside a tooltip (eg addNew, remove)
+ * finds the next div.parts and use that as content
+ * The content will be removed from the DOM and append to the body with the id of ui-tooltip-x
+ * This target will be defined at the button level by the attribute aria-describedby
+ * 
+ * @author: Minh Duc Nguyen (minh.nguyen@ands.org.au)
+ * @param: [void]
+ * @returns: [void]
+ */
+
 function bindPartsTooltip(){
-
-	/*$('.showParts').each(function(){
-		var parts = $(this).next('.parts')[0];
-		$(this).popover({
-			html:true,
-			content: function(){
-				return $(parts).html();
-			}
-		});
-	});*/
-
-	
 	$('.showParts').each(function(){
 		var parts = $(this).next('.parts')[0];
 		if(parts){
@@ -549,6 +609,17 @@ function bindPartsTooltip(){
 		}
 	});
 }
+
+/*
+ * Initialize the names tab (aro_box_display)
+ * the heading takes values from name Parts
+ * @TODO: write a service that takes in a list of name part & class => spits out the display_title
+ * Currently this function gives the primary name, or the first name part
+ * 
+ * @author: Minh Duc Nguyen (minh.nguyen@ands.org.au)
+ * @param: [void]
+ * @returns: [void]
+ */
 
 function initNames(){
 	var names = $('#names .aro_box[type=name]');
@@ -582,26 +653,56 @@ function initNames(){
 }
 
 
+/*
+ * Initialize the descriptions tab (aro_box_display)
+ * only init the editor for now (@see:editor)
+ * 
+ * @author: Minh Duc Nguyen (minh.nguyen@ands.org.au)
+ * @param: [void]
+ * @returns: [void]
+ */
 
 function initDescriptions(){
 	initEditor();
 }
 
+/*
+ * Initialize all related Info heading (aro_box_display)
+ * the heading takes values from title > notes and then identifier
+ * 
+ * @author: Minh Duc Nguyen (minh.nguyen@ands.org.au)
+ * @param: [void]
+ * @returns: [void]
+ */
+
 function initRelatedInfos(){
 	var relatedInfos = $('#relatedinfos .aro_box[type=relatedInfo]');
 	$.each(relatedInfos, function(){
-		var ri = this;
+		var ri = this;//ri is the current related info
 		var display = $('.aro_box_display h1', ri);
 		var todisplay = $('input[name=title]', ri).val();
-		if(!todisplay){
+		if(!todisplay){//if there is none, grab the notes
 			todisplay = $('input[name=notes]', ri).val();
 		}
-		if(!todisplay){
+		if(!todisplay){//if there is none, grab the identifier
 			todisplay = $('input[name=identifier]', ri).val();
 		}
 		$(display).html(todisplay);
 	});
 }
+
+/*
+ * Initialize all the Editors on screen
+ * Cater for multiple types of wysiwyg html editor
+ * The editor value is set as tinymce and will be able to change dynamically
+ * @see: registry_object/controllers/registry_object
+ * @see: registry_object/views/registry_object_index
+ * @see: engine/views/footer
+ * 
+ * @author: Minh Duc Nguyen (minh.nguyen@ands.org.au)
+ * @param: [void]
+ * @returns: [void] > affecting all textarea.editor on screen
+ */
 
 function initEditor(){
 	if(editor=='tinymce'){
@@ -619,6 +720,14 @@ function initEditor(){
 	}
 }
 
+/*
+ * Minh's Black Magic
+ * Getting the RIFCS fragment for the given tab
+ * @author: Minh Duc Nguyen (minh.nguyen@ands.org.au)
+ * @param: [object] tab
+ * @returns: [string] RIFCS fragment ready for validation
+ */
+
 function getRIFCSforTab(tab){
 	var currentTab = $(tab);
 	var boxes = $('.aro_box', currentTab);
@@ -627,22 +736,40 @@ function getRIFCSforTab(tab){
 		var fragment ='';
 		var fragment_type = '';
 
+
+		/*
+		 * Getting the fragment header
+		 * In the form of <name> or <name type="sometype">
+		 * The name => the "type" attribute of the box
+		 * The type => the input[name=type] of the box display (heading)
+		 */
 		fragment +='<'+$(this).attr('type')+'';
-		var valid_fragment_meta = ['type', 'dateFrom', 'dateTo', 'style'];
+		var valid_fragment_meta = ['type', 'dateFrom', 'dateTo', 'style', 'rightsURI'];//valid input type to be put as attributes
 		var this_box = this;
 		$.each(valid_fragment_meta, function(index, value){
 			var fragment_meta = '';
-			var input_field = $('.aro_box_display input[name='+value+']',this_box);
+			var input_field = $('input[name='+value+']',this_box);
 			if($(input_field).length>0 && $(input_field).val()!=''){
 				fragment_meta += ' '+value+'="'+$(input_field).val()+'"';
 			}
 			fragment +=fragment_meta;
 		});
 		fragment +='>';
+		//finish fragment header
 
+		//onto the body of the fragment
 		var parts = $(this).children('.aro_box_part');
 		if(parts.length > 0){//if there is a part, data is spread out in parts
 			$.each(parts, function(){
+
+				/*
+				 * If there is a part
+				 * Usually there will be a type attribute for these part
+				 * Special cases are dealt with using else ifs
+				 * Generic case have 2 outcome, a tag with type attribute and no type attribute
+				 * If there is no type attribute for the part itself, it's an element <name>value</name> thing
+				 */
+
 				if($(this).attr('type')){//if type is there for this part
 					//deal with the type
 					var type = $(this).attr('type');
@@ -655,7 +782,7 @@ function getRIFCSforTab(tab){
 							fragment += '<url>'+$('input[name=url]', this).val()+'</url>';
 						}
 						fragment += '</'+type+'>';
-					}else if(type=='relatedInfo'){
+					}else if(type=='relatedInfo'){//special case for relatedInfo
 						//identifier is required
 						fragment += '<identifier type="'+$('input[name=identifier_type]', this).val()+'">'+$('input[name=identifier]', this).val()+'</identifier>';
 						//title and notes are not required, but useful nonetheless
@@ -665,51 +792,47 @@ function getRIFCSforTab(tab){
 						if($('input[name=notes]', this).val()!=''){
 							fragment += '<notes>'+$('input[name=notes]', this).val()+'</notes>';
 						}
+					}else if(type=='date'){
+						var dates = $('.aro_box', this);//tooltip not init
+						if($('button.showParts', this).attr('aria-describedby')){//tooltip has been init
+							var dates = $('#'+$('button.showParts', this).attr('aria-describedby')+' .ui-tooltip-content .aro_box');
+						}
+						$.each(dates, function(){
+							fragment += '<'+$(this).attr('type')+' type="'+$('input[name=type]', this).val()+'" >';
+							fragment += $('input[name=value]', this).val();
+							fragment +='</'+$(this).attr('type')+'>';
+						});
+					}else if(type=='contributor'){
+						var contributors = $('.aro_box', this);//tooltip not init
+						if($('button.showParts', this).attr('aria-describedby')){//tooltip has been init
+							var contributors = $('#'+$('button.showParts', this).attr('aria-describedby')+' .ui-tooltip-content .aro_box');
+						}
+						$.each(contributors, function(){
+							fragment += '<'+$(this).attr('type')+' seq="'+$('input[name=seq]', this).val()+'" >';
+							var contrib_name_part = $('.aro_box_part', this);
+							$.each(contrib_name_part, function(){
+								fragment += '<'+$(this).attr('type')+' type="'+$('input[name=type]', this).val()+'" >';
+								fragment += $('input[name=value]', this).val();
+								fragment +='</'+$(this).attr('type')+'>';
+							});
+							fragment +='</'+$(this).attr('type')+'>';
+						});
 					}else{//generic
-						//if it has a type input
+						//check if there is an input[name="type"] in this box_part so that we can use as a type attribute
 						var type = $('input[name=type]', this).val();
 						if(type){
 							fragment += '<'+$(this).attr('type')+' type="'+$('input[name=type]', this).val()+'">'+$('input[name=value]', this).val()+'</'+$(this).attr('type')+'>';	
 						}else{
 							var type = $(this).attr('type');
-							if(type=='date'){
-								var dates = $('.aro_box', this);
-								if($('button.showParts', this).attr('aria-describedby')){//tooltip has been init
-									var dates = $('#'+$('button.showParts', this).attr('aria-describedby')+' .ui-tooltip-content .aro_box');
-								}
-								$.each(dates, function(){
-									fragment += '<'+$(this).attr('type')+' type="'+$('input[name=type]', this).val()+'" >';
-									fragment += $('input[name=value]', this).val();
-									fragment +='</'+$(this).attr('type')+'>';
-								});
-							}else if(type=='contributor'){
-								var contributors = $('.aro_box', this);
-								if($('button.showParts', this).attr('aria-describedby')){//tooltip has been init
-									var contributors = $('#'+$('button.showParts', this).attr('aria-describedby')+' .ui-tooltip-content .aro_box');
-								}
-								$.each(contributors, function(){
-									fragment += '<'+$(this).attr('type')+' seq="'+$('input[name=seq]', this).val()+'" >';
-									var contrib_name_part = $('.aro_box_part', this);
-									$.each(contrib_name_part, function(){
-										fragment += '<'+$(this).attr('type')+' type="'+$('input[name=type]', this).val()+'" >';
-										fragment += $('input[name=value]', this).val();
-										fragment +='</'+$(this).attr('type')+'>';
-									});
-									fragment +='</'+$(this).attr('type')+'>';
-								});
-							}else{
-								fragment += '<'+type+'>'+$('input[name=value]', this).val()+'</'+type+'>';
-							}
+							fragment += '<'+type+'>'+$('input[name=value]', this).val()+'</'+type+'>';
 						}
 					}
 				}else{//it's an element
-
 					fragment += '<'+$('input', this).attr('name')+'>'+$('input', this).val()+'</'+$('input', this).attr('name')+'>';
 				}
 			});
 		}else{//there is no part
-
-			//check if there is any subbox content
+			//check if there is any subbox content, this is a special case for LOCATION
 			var sub_content = $(this).children('.aro_subbox');
 			if(sub_content.length >0){
 				//there are subcontent, for location
@@ -722,7 +845,7 @@ function getRIFCSforTab(tab){
 					if(parts.length>0){
 						$.each(parts, function(){
 							var this_fragment = '';
-							this_fragment +='<'+$(this).attr('type')+' type="'+$('input[name=type]', this).val()+'">';
+							this_fragment +='<'+$(this).attr('type')+' type="'+$('input[name=type]', this).val()+'">';//opening tag
 							if($(this).attr('type')=='electronic'){
 								this_fragment +='<value>'+$('input[name=value]',this).val()+'</value>';
 								//deal with args here
@@ -748,9 +871,9 @@ function getRIFCSforTab(tab){
 								});
 								
 							}else{
-								//duh
+								//duh, if the type of this fragment being neither physical nor electronic, we have a problem here
 							}
-							this_fragment +='</'+$(this).attr('type')+'>';
+							this_fragment +='</'+$(this).attr('type')+'>';//closing tag
 							subbox_fragment+=this_fragment;
 						});
 					}else{
@@ -758,19 +881,16 @@ function getRIFCSforTab(tab){
 
 					}
 						
-					subbox_fragment +='</'+subbox_type+'>';
-
-					fragment+=subbox_fragment;
+					subbox_fragment +='</'+subbox_type+'>';//closing tag
+					fragment+=subbox_fragment;//add the sub box fragments to the main fragment
 				});
 				
-			//no subbox content	
 			}else{//data is right at this level, grab it!
 				//check if there's a text area
 				if($('textarea', this).length>0){
 					fragment += htmlEntities($('textarea', this).val());
 				}else if($('input[name=value]', this).length>0){
-					//there's no textarea, just normal input
-					fragment += $('input[name=value]', this).val();
+					fragment += $('input[name=value]', this).val();//there's no textarea, just normal input
 				}
 			}
 			
@@ -836,6 +956,7 @@ function getRecords(fields, sorts, page){
 				});
 			$.drop({ multi: true });
 
+			//binds the button within the item
 			$('.item .item-control button').die().live({
 				click: function(e){
 					e.preventDefault();
@@ -854,10 +975,12 @@ function getRecords(fields, sorts, page){
 	});
 }
 
+//clear every items on screen
 function clearItems(){
 	$('#items').html('');
 }
 
+//delete all current filters
 function clearFilters(fields){
 	$.each(fields, function(key, value){
 		if(key!='data_source_id'){
@@ -866,6 +989,7 @@ function clearFilters(fields){
 	});
 }
 
+//helper function: returns the filter string
 function constructFilters(fields){
 	var inc = 0;
 	var filters = '';
@@ -881,6 +1005,8 @@ function constructFilters(fields){
 	return filters;
 }
 
+
+//unuse: update how many registry objects have been selected
 function updateSelected(){
 	var totalSelected = $('#items .selected').length;
 	if(totalSelected > 0){

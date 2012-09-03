@@ -892,7 +892,7 @@
 				</button>
 			</p>
 			<p>
-				<textarea name="value" class="editor"/>
+				<textarea name="value" class=""/>
 			</p>
 
 			<p class="help-inline">
@@ -912,7 +912,7 @@
 					</button>
 				</p>
 				<p>
-					<textarea name="value" class="editor"/>				
+					<textarea name="value" class=""/>				
 				</p>
 				<p class="help-inline">
 					<small/>
