@@ -411,7 +411,7 @@
 				</button>
 			</p>
 			<p>
-				<textarea name="value" class="">
+				<textarea name="value" class="editor">
 					<xsl:apply-templates select="text()"/>
 				</textarea>
 			</p>

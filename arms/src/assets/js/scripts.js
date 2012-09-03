@@ -14,16 +14,6 @@ function changeHashTo(hash){
 	window.location.hash = suffix+hash;
 }
 
-function updateItemsInfo(){
-	var totalSelected = $('#items .selected').length;
-	if(totalSelected > 1){
-		$('#items_info').slideDown();
-		var message = '<b>'+totalSelected + '</b> registry objects has been selected';
-		$('#items_info').html(message);
-	}else{
-		$('#items_info').slideUp();
-	}
-}
 
 function logErrorOnScreen(error, target){
 	var template = $('#error-template').html();
@@ -70,7 +60,6 @@ $(document).ready(function(){
 		if(!at){
 			at = 'top center';
 		}
-		console.log(my, at);
 		$(this).qtip({
 			overwrite: false, // Make sure the tooltip won't be overridden once created
 			content: $(this).attr('tip'),
@@ -80,7 +69,7 @@ $(document).ready(function(){
 			},
 			position: {
 				my: my, // Use the corner...
-				at: at// ...and opposite corner
+				at: at
 			},
 			style: {
 				classes: 'ui-tooltip-jtools ui-tooltip-shadow'
@@ -152,7 +141,7 @@ $(document).ready(function(){
 	            }
 	        },
 	        style: {
-	            classes: 'jgrowl ui-tooltip-bootstrap ui-tooltip-rounded',
+	            classes: 'jgrowl ui-tooltip-jtools ui-tooltip-rounded',
 	            // Some nice visual classes
 	            tip: false // No tips for this one (optional ofcourse)
 	        },

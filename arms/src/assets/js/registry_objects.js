@@ -567,6 +567,14 @@ function initEditForm(){
 	});
 
 	//Various calls to initialize different tabs
+	/*
+	 	@TODO: 
+	 		- Related object resolving
+			- Resolve subject with sissvoc
+			- Resolve identifier (based on types)
+			- short (1 line) for locations
+			- short (1 line) for descriptions / rights
+	 */
 	initNames();
 	initDescriptions();
 	initRelatedInfos();
