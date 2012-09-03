@@ -26,6 +26,9 @@
 					<a href="#locations" data-toggle="tab">Locations</a>
 				</li>
 				<li>
+					<a href="#coverages" data-toggle="tab">Coverage</a>
+				</li>
+				<li>
 					<a href="#relatedobjects" data-toggle="tab">Related Objects</a>
 				</li>
 				<li>
@@ -61,6 +64,7 @@
 					<xsl:call-template name="descriptionRightsTab"/>
 					<xsl:call-template name="identifiersTab"/>
 					<xsl:call-template name="locationsTab"/>
+					<xsl:call-template name="coverageTab"/>
 					<xsl:call-template name="relatedobjectsTab"/>
 					<xsl:call-template name="subjectsTab"/>
 					<xsl:call-template name="relatedinfosTab"/>
@@ -515,6 +519,20 @@
 		</div>
 	</xsl:template>
 	
+	<xsl:template name="coverageTab">
+		<div id="coverages" class="tab-pane">
+			<fieldset>
+				<legend>Coverage</legend>
+				<xsl:apply-templates
+					select="collection/coverage | activity/coverage | party/coverage  | service/coverage"/>
+				<div class="separate_line"/>
+				<button class="btn btn-primary addNew" type="coverage">
+					<i class="icon-plus icon-white"/> Add Coverage </button>
+				<button class="btn export_xml btn-info"> Export XML fragment </button>
+			</fieldset>
+		</div>
+	</xsl:template>
+	
 	<xsl:template name="ExistenceDatesTab">
 		<div id="existencedates" class="tab-pane">
 			<fieldset>
@@ -730,6 +748,30 @@
 			</div>
 		</div>
 	</xsl:template>
+
+	<xsl:template match="collection/coverage | activity/coverage | party/coverage  | service/coverage">
+		<div class="aro_box" type="coverage">
+			<xsl:apply-templates select="temporal"/>
+			<xsl:apply-templates select="spatial"/>
+			<div class="separate_line"/>	
+			<div class="btn-group dropup">
+				<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"> <i class="icon-envelope icon-white"></i> Add Coverage</button>
+				<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+					<span class="caret"/>
+				</button>
+				<ul class="dropdown-menu">
+					<li>
+						<a href="javascript:;" class="addNew" type="temporal">Add Temporal Coverage</a>
+					</li>
+					<li>
+						<a href="javascript:;" class="addNew" type="spatial">Add Spatial Coverage</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</xsl:template>
+
+
 
 	<xsl:template match="relation">
 		<div class="aro_box_part" type="relation">
@@ -1361,6 +1403,22 @@
 				<i class="icon-remove icon-white"/>
 			</button>
 		</div>
+		
+		<div class="aro_box template" type="coverage_date">
+			<input type="text" class="input-xlarge" name="type" placeholder="Date Type" value=""/>
+			<input type="text" class="input-xlarge" name="dateFormat" placeholder="Date Format" value=""/>
+			<input type="text" class="input-xlarge" name="value" placeholder="Date Value" value=""/>
+			<button class="btn btn-mini btn-danger remove">
+				<i class="icon-remove icon-white"/>
+			</button>
+		</div>
+		
+		<div class="aro_box template" type="text">
+			<input type="text" class="input-xlarge" name="value" placeholder="Date Value" value=""/>
+			<button class="btn btn-mini btn-danger remove">
+				<i class="icon-remove icon-white"/>
+			</button>
+		</div>
 			
 		<div class="aro_box_part template" type="citationInfo">
 			<div class="control-group">
@@ -1386,6 +1444,42 @@
 						<small/>
 					</p>
 				</div>
+			</div>
+		</div>
+		
+		<div class="aro_box template" type="temporal">
+			<div class="separate_line"/>	
+			<div class="btn-group dropup">
+				<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"> <i class="icon-envelope icon-white"></i> Add Date Value</button>
+				<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+					<span class="caret"/>
+				</button>
+				<ul class="dropdown-menu">
+					<li>
+						<a href="javascript:;" class="addNew" type="coverage_date">Date</a>
+					</li>
+					<li>
+						<a href="javascript:;" class="addNew" type="text">Text</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		
+		<div class="aro_box template" type="coverage">
+			<div class="separate_line"/>	
+			<div class="btn-group dropup">
+				<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"> <i class="icon-envelope icon-white"></i> Add Coverage</button>
+				<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+					<span class="caret"/>
+				</button>
+				<ul class="dropdown-menu">
+					<li>
+						<a href="javascript:;" class="addNew" type="temporal">Add Temporal Coverage</a>
+					</li>
+					<li>
+						<a href="javascript:;" class="addNew" type="spatial">Add Spatial Coverage</a>
+					</li>
+				</ul>
 			</div>
 		</div>
 
