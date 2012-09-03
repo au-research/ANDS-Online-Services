@@ -3,8 +3,7 @@
  * 
  * 
  * @author Minh Duc Nguyen <minh.nguyen@ands.org.au>
- * @see ands/datasource/_data_source
- * @package ands/datasource
+ * @package ands/registry_object
  * 
  */
 var ds_id;
@@ -21,7 +20,7 @@ $(function(){
 	 *			#!/delete/115
 	 */
 	ds_id = $('#ds_id').val();
-	if(ds_id!=0) fields.data_source_id = ds_id;
+	if(ds_id!=0) fields.data_source_id = ds_id;//0 is for all data sources
 
 	$(window).hashchange(function(){
 		var hash = location.hash;
@@ -450,6 +449,7 @@ function initEditForm(){
 			var where = $(this).prevAll('.separate_line')[0];
 
 			//FIND THE SEPARATE LINE!!!
+			//@TODO: badly need an algorithm | refactor | or an easier way
 			if(!where){//if there is no separate line found, go out 1 layer and find it
 				where = $(this).parent().prevAll('.separate_line')[0];
 				if(!where){
@@ -481,7 +481,7 @@ function initEditForm(){
 				initEditor();
 			}
 
-			//bind the tooltip parts UI in case of adding a new element with show Elements
+			//bind the tooltip parts UI in case of adding a new element with show Parts Elements
 			bindPartsTooltip();
 		}
 	});

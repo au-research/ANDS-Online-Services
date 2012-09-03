@@ -11,6 +11,16 @@
  */
 class Registry_object extends MX_Controller {
 
+
+	/**
+	 * Manage My Records (MMR Screen)
+	 * 
+	 * 
+	 * @author Minh Duc Nguyen <minh.nguyen@ands.org.au>
+	 * @package ands/registryobject
+	 * @param data_source_id | optional
+	 * @return [HTML] output
+	 */
 	public function manage($data_source_id = false){
 		$data['title'] = 'Manage My Records';
 
@@ -32,6 +42,17 @@ class Registry_object extends MX_Controller {
 		$this->load->view("registry_object_index", $data);
 	}
 
+
+	/**
+	 * Get A Record
+	 * 
+	 * 
+	 * @author Minh Duc Nguyen <minh.nguyen@ands.org.au>
+	 * @package ands/registryobject
+	 * @param registry object ID
+	 * @return [JSON] of a single registry object
+	 * 
+	 */
 	public function get_record($id){
 		$this->load->model('registry_objects', 'ro');
 		$ro = $this->ro->getByID($id);
@@ -55,6 +76,17 @@ class Registry_object extends MX_Controller {
 		echo $jsonData;
 	}
 
+	/**
+	 * Get the edit form of a Record
+	 * 
+	 * 
+	 * @author Minh Duc Nguyen <minh.nguyen@ands.org.au>
+	 * @package ands/registryobject
+	 * @param registry object ID
+	 * @return [HTML] transformed form from extrif
+	 * 
+	 */
+
 	public function get_edit_form($id){
 		// ro is the alias for the registry object model
 		$this->load->model('registry_objects', 'ro');
@@ -67,6 +99,17 @@ class Registry_object extends MX_Controller {
 		//$this->load->view('registry_object_edit', $data);
 	}
 
+
+	/**
+	 * Get the edit form of a Record
+	 * 
+	 * 
+	 * @author Minh Duc Nguyen <minh.nguyen@ands.org.au>
+	 * @package ands/registryobject
+	 * @param registry object ID, [POST] custom RIFCS
+	 * @return [HTML] transformed form from extrif
+	 * 
+	 */
 	public function get_edit_form_custom($id){
 		$this->load->model('registry_objects', 'ro');
 		$ro = $this->ro->getByID($id);
@@ -76,13 +119,22 @@ class Registry_object extends MX_Controller {
 		echo $data['transform'];
 	}
 
-	//AJAX function for MMR to search
+	/**
+	 * Get a list of records based on the filters
+	 * 
+	 * 
+	 * @author Minh Duc Nguyen <minh.nguyen@ands.org.au>
+	 * @package ands/registryobject
+	 * @param [POST] Filters(Fields), [POST] sorts, [POST] page
+	 * @return [JSON] results of the search
+	 * @todo ACL, reponse error handling
+	 */
 	public function get_records(){
 		$fields = $this->input->post('fields');
 		$sorts = $this->input->post('sorts');
 		$page = $this->input->post('page');
 
-		
+		//Construct the search query
 		$q = '';$i = 0;//counter
 		if($fields){
 			foreach($fields as $field=>$val){
@@ -98,10 +150,11 @@ class Registry_object extends MX_Controller {
 		}
 		if($q=='')$q='*:*';
 
-
+		//Calculate the start and row based on the page, row will be 15 by default
 		$start = 0; $row = 15;
 		if($page!=1) $start = ($page - 1) * $row;
 
+		//Fire the SOLR search
 		$this->load->model('solr');
 		$fields = array(
 			'q'=>$q,'start'=>$start,'indent'=>'on', 'wt'=>'json', 'fl'=>'*', 'rows'=>$row
@@ -112,12 +165,14 @@ class Registry_object extends MX_Controller {
 		$facets = '&facet=true&facet.sort=index&facet.mincount=1&facet.field=class&facet.field=status&facet.field=quality_level';
 		$solr_search_result = $this->solr->fireSearch($fields, $facets);
 
+		//Analyze the result
 		$solr_header = $solr_search_result->{'responseHeader'};
 		$solr_response = $solr_search_result->{'response'};
 		$num_found = $solr_response->{'numFound'};
 		$facet_fields = $solr_search_result->{'facet_counts'}->{'facet_fields'};
 
 
+		//Construct the return [JSON] array
 		$jsonData = array();
 
 		$items = array();
@@ -152,9 +207,10 @@ class Registry_object extends MX_Controller {
 			}
 			//var_dump($items);
 		}else{
-			$jsonData['no_more'] = true;
+			$jsonData['no_more'] = true;//there is no more data, tell the client that
 		}
 
+		//Construct the Facet JSON bit
 		$facets = array();
 		foreach($facet_fields as $field=>$array){
 			for($i=0;$i<sizeof($array)-1;$i=$i+2){
@@ -164,6 +220,7 @@ class Registry_object extends MX_Controller {
 			}
 		}
 		
+		//Putting them all together and return
 		$jsonData['status'] = 'OK';
 		$jsonData['q'] = $solr_header;
 		$jsonData['items'] = $items;

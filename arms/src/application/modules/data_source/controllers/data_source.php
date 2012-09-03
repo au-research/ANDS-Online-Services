@@ -12,8 +12,16 @@
  */
 class Data_source extends MX_Controller {
 
-	public function index()
-	{
+	/**
+	 * Manage My Datasources (MMR version for Data sources)
+	 * 
+	 * 
+	 * @author Minh Duc Nguyen <minh.nguyen@ands.org.au>
+	 * @param 
+	 * @todo ACL on which data source you have access to
+	 * @return [HTML] output
+	 */
+	public function index(){
 		//$this->output->enable_profiler(TRUE);
 		
 		$data['title'] = 'Manage My Datasources';
@@ -36,13 +44,24 @@ class Data_source extends MX_Controller {
 		$this->load->view("data_source_index", $data);
 	}
 
+	/**
+	 * Same as index
+	 */
 	public function manage(){
 		$this->index();
 	}
 
 
-	public function getDataSources($page=1)
-	{
+	/**
+	 * Get a list of data sources
+	 * 
+	 * 
+	 * @author Minh Duc Nguyen <minh.nguyen@ands.org.au>
+	 * @param [INT] page
+	 * @todo ACL on which data source you have access to, error handling
+	 * @return [JSON] results of the search
+	 */
+	public function getDataSources($page=1){
 		//$this->output->enable_profiler(TRUE);
 		header('Cache-Control: no-cache, must-revalidate');
 		header('Content-type: application/json');
@@ -51,6 +70,8 @@ class Data_source extends MX_Controller {
 		$jsonData['status'] = 'OK';
 
 		$this->load->model("data_sources","ds");
+
+		//Limit and Offset calculated based on the page
 		$limit = 16;
 		$offset = ($page-1) * $limit;
 
@@ -78,6 +99,15 @@ class Data_source extends MX_Controller {
 		echo $jsonData;
 	}
 
+	/**
+	 * Get a single data source
+	 * 
+	 * 
+	 * @author Minh Duc Nguyen <minh.nguyen@ands.org.au>
+	 * @param [INT] Data Source ID
+	 * @todo ACL on which data source you have access to, error handling
+	 * @return [JSON] of a single data source
+	 */
 	public function getDataSource($id){
 		header('Cache-Control: no-cache, must-revalidate');
 		header('Content-type: application/json');
@@ -107,6 +137,15 @@ class Data_source extends MX_Controller {
 		echo $jsonData;
 	}
 	
+	/**
+	 * Save a data source
+	 * 
+	 * 
+	 * @author Minh Duc Nguyen <minh.nguyen@ands.org.au>
+	 * @param [POST] Data Source ID [POST] attributes
+	 * @todo ACL on which data source you have access to, error handling, new attributes
+	 * @return [JSON] result of the saving [VOID] 
+	 */
 	public function updateDataSource(){
 		
 		$jsonData = array();
@@ -148,7 +187,15 @@ class Data_source extends MX_Controller {
 		echo $jsonData;
 	}
 	
-	
+	/**
+	 * Importing (Ben's import from URL)
+	 * 
+	 * 
+	 * @author Minh Duc Nguyen <minh.nguyen@ands.org.au>
+	 * @param [POST] URL to the source
+	 * @todo ACL on which data source you have access to, error handling
+	 * @return [JSON] result of the saving [VOID] 
+	 */
 	function importFromURLtoDataSource()
 	{
 		$this->load->model('data_source/import','importer');
