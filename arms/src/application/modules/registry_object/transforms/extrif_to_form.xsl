@@ -772,6 +772,48 @@
 	</xsl:template>
 
 
+	<xsl:template match="temporal">
+		<div class="aro_box_part" type="temporal">
+			<xsl:apply-templates select="date" mode="coverage"/>
+			<xsl:apply-templates select="text"/>
+			<button class="btn btn-mini btn-danger remove">
+				<i class="icon-remove icon-white"/>
+			</button>
+		</div>
+	</xsl:template>
+
+	<xsl:template match="date" mode="coverage">
+		<div class="aro_box_part" type="coverage_date">
+			<label class="control-label" for="title">Date: </label>
+			<input type="text" class="input-xlarge" name="type" placeholder="Date Type" value="{@type}"/>
+			<input type="text" class="input-xlarge" name="dateFormat" placeholder="Date Format" value="{@dateFormat}"/>
+			<input type="text" class="input-xlarge" name="value" placeholder="Date Value" value="{text()}"/>
+			<button class="btn btn-mini btn-danger remove">
+				<i class="icon-remove icon-white"/>
+			</button>
+		</div>
+	</xsl:template>
+	
+	<xsl:template match="date">
+		<div class="aro_box_part" type="date">
+			<label class="control-label" for="title">Date: </label>
+			<input type="text" class="input-xlarge" name="type" placeholder="Date Type" value="{@type}"/>
+			<input type="text" class="input-xlarge" name="value" placeholder="Date Value" value="{text()}"/>
+			<button class="btn btn-mini btn-danger remove">
+				<i class="icon-remove icon-white"/>
+			</button>
+		</div>
+	</xsl:template>
+	
+	<xsl:template match="text">
+		<div class="aro_box_part" type="text">
+			<label class="control-label" for="title">Text: </label>
+			<input type="text" class="input-xlarge" name="value" placeholder="Date Value" value="{text()}"/>
+			<button class="btn btn-mini btn-danger remove">
+				<i class="icon-remove icon-white"/>
+			</button>
+		</div>
+	</xsl:template>
 
 	<xsl:template match="relation">
 		<div class="aro_box_part" type="relation">
@@ -1404,21 +1446,7 @@
 			</button>
 		</div>
 		
-		<div class="aro_box template" type="coverage_date">
-			<input type="text" class="input-xlarge" name="type" placeholder="Date Type" value=""/>
-			<input type="text" class="input-xlarge" name="dateFormat" placeholder="Date Format" value=""/>
-			<input type="text" class="input-xlarge" name="value" placeholder="Date Value" value=""/>
-			<button class="btn btn-mini btn-danger remove">
-				<i class="icon-remove icon-white"/>
-			</button>
-		</div>
-		
-		<div class="aro_box template" type="text">
-			<input type="text" class="input-xlarge" name="value" placeholder="Date Value" value=""/>
-			<button class="btn btn-mini btn-danger remove">
-				<i class="icon-remove icon-white"/>
-			</button>
-		</div>
+	
 			
 		<div class="aro_box_part template" type="citationInfo">
 			<div class="control-group">
@@ -1482,6 +1510,34 @@
 				</ul>
 			</div>
 		</div>
+		
+		<div class="aro_box_part template" type="date">
+			<label class="control-label" for="title">Date: </label>
+			<input type="text" class="input-xlarge" name="type" placeholder="Date Type" value=""/>
+			<input type="text" class="input-xlarge" name="value" placeholder="Date Value" value=""/>
+			<button class="btn btn-mini btn-danger remove">
+				<i class="icon-remove icon-white"/>
+			</button>
+		</div>
+		
+		<div class="aro_box_part template" type="coverage_date">
+			<label class="control-label" >Date: </label>
+			<input type="text" class="input-xlarge" name="type" placeholder="Date Type" value=""/>
+			<input type="text" class="input-xlarge" name="dateFormat" placeholder="Date Format" value=""/>
+			<input type="text" class="input-xlarge" name="value" placeholder="Date Value" value=""/>
+			<button class="btn btn-mini btn-danger remove">
+				<i class="icon-remove icon-white"/>
+			</button>
+		</div>
+		
+		<div class="aro_box_part template" type="text">
+			<label class="control-label" for="title">Text: </label>
+			<input type="text" class="input-xlarge" name="value" placeholder="Date Value" value=""/>
+			<button class="btn btn-mini btn-danger remove">
+				<i class="icon-remove icon-white"/>
+			</button>
+		</div>
+		
 
 	</xsl:template>
 
