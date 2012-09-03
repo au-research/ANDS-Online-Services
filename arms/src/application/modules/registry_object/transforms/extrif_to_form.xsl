@@ -135,6 +135,7 @@
 			<xsl:call-template name="blankTemplate"/>
 		</div>
 		<input type="hidden" class="hide" id="ro_class" value="{$ro_class}"/>
+		<input type="hidden" class="hide" id="originatingSource" value="{$ro_class}"/>
 	</xsl:template>
 
 	<xsl:template match="collection | activity | party  | service" mode="getClass">
@@ -156,8 +157,7 @@
 				</xsl:variable>
 				<xsl:variable name="dateModified">
 					<xsl:apply-templates
-						select="collection/@dateModified | activity/@dateModified | party/@dateModified  | service/@dateModified"
-					/>
+						select="collection/@dateModified | activity/@dateModified | party/@dateModified  | service/@dateModified"/>
 				</xsl:variable>
 
 				<div class="control-group">
@@ -186,6 +186,19 @@
 						</p>
 					</div>
 				</div>
+				
+				
+				<div class="control-group">
+					<label class="control-label" for="title">Originating Source</label>
+					<div class="controls">
+						<input type="text" id="originatingSource" name="value" placeholder="Value" value="{originatingSource/text()}"/>
+						<input type="text" id="originatingSource" name="type" placeholder="Type"  value="{originatingSource/@type}"/>
+						<p class="help-inline">
+							<small/>
+						</p>
+					</div>
+				</div>
+				
 
 				<div class="control-group">
 					<label class="control-label" for="title">Group</label>
@@ -231,12 +244,22 @@
 				</div>
 
 				<xsl:if test="collection">
-					<xsl:apply-templates select="arg"/>
-					<div class="separate_line"/>
-					<button class="btn btn-primary addNew" type="arg">
-						<i class="icon-plus icon-white"/> Add Args </button>
+					<div class="control-group">
+						<label class="control-label" for="title">Date Accessioned</label>
+						<div class="controls">
+							<div class="input-append">
+								<input type="text" class="input-large datepicker" name="title"
+									value="{collection/@dateAccessioned}"/>
+								<button class="btn triggerDatePicker" type="button">
+									<i class="icon-calendar"/>
+								</button>
+								<p class="help-inline">
+									<small/>
+								</p>
+							</div>
+						</div>
+					</div>
 				</xsl:if>
-
 			</fieldset>
 		</div>
 	</xsl:template>
@@ -258,9 +281,14 @@
 		</div>
 	</xsl:template>
 
-	<xsl:template match="collection/@type | activity/@type | party/@type  | service/@type | collection/@dateModified | activity/@dateModified | party/@dateModified  | service/@dateModified">
+	<xsl:template match="collection/@type | activity/@type | party/@type  | service/@type">
 		<xsl:value-of select="."/>
 	</xsl:template>
+	
+	<xsl:template match="collection/@dateModified | activity/@dateModified | party/@dateModified  | service/@dateModified">
+		<xsl:value-of select="."/>
+	</xsl:template>
+	
 
 	<xsl:template match="collection/name | activity/name | party/name  | service/name">
 		<div class="aro_box" type="name">

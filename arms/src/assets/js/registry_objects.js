@@ -802,21 +802,23 @@ function getRIFCSforTab(tab){
 							fragment += $('input[name=value]', this).val();
 							fragment +='</'+$(this).attr('type')+'>';
 						});
+					}else if(type=='rightsStatement' || type=='licence' || type=='accessRights' ){
+						 	fragment += '<'+$(this).attr('type')+' rightsUri="'+$('input[name=rightsUri]', this).val()+'">'+$('input[name=value]', this).val()+'</'+$(this).attr('type')+'>';	
 					}else if(type=='contributor'){
-						var contributors = $('.aro_box', this);//tooltip not init
-						if($('button.showParts', this).attr('aria-describedby')){//tooltip has been init
-							var contributors = $('#'+$('button.showParts', this).attr('aria-describedby')+' .ui-tooltip-content .aro_box');
-						}
-						$.each(contributors, function(){
-							fragment += '<'+$(this).attr('type')+' seq="'+$('input[name=seq]', this).val()+'" >';
-							var contrib_name_part = $('.aro_box_part', this);
-							$.each(contrib_name_part, function(){
-								fragment += '<'+$(this).attr('type')+' type="'+$('input[name=type]', this).val()+'" >';
-								fragment += $('input[name=value]', this).val();
+							var contributors = $('.aro_box', this);//tooltip not init
+							if($('button.showParts', this).attr('aria-describedby')){//tooltip has been init
+								var contributors = $('#'+$('button.showParts', this).attr('aria-describedby')+' .ui-tooltip-content .aro_box');
+							}
+							$.each(contributors, function(){
+								fragment += '<'+$(this).attr('type')+' seq="'+$('input[name=seq]', this).val()+'" >';
+								var contrib_name_part = $('.aro_box_part', this);
+								$.each(contrib_name_part, function(){
+									fragment += '<'+$(this).attr('type')+' type="'+$('input[name=type]', this).val()+'" >';
+									fragment += $('input[name=value]', this).val();
+									fragment +='</'+$(this).attr('type')+'>';
+								});
 								fragment +='</'+$(this).attr('type')+'>';
 							});
-							fragment +='</'+$(this).attr('type')+'>';
-						});
 					}else{//generic
 						//check if there is an input[name="type"] in this box_part so that we can use as a type attribute
 						var type = $('input[name=type]', this).val();
