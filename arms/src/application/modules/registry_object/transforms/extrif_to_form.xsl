@@ -17,7 +17,7 @@
 					<a href="#names" data-toggle="tab">Names</a>
 				</li>
 				<li>
-					<a href="#descriptions" data-toggle="tab">Descriptions/Rights</a>
+					<a href="#descriptions_rights" data-toggle="tab">Descriptions/Rights</a>
 				</li>
 				<li>
 					<a href="#identifiers" data-toggle="tab">Identifiers</a>
@@ -315,15 +315,13 @@
 
 
 	<xsl:template name="descriptionRightsTab">
-		<div id="descriptions" class="tab-pane">
+		<div id="descriptions_rights" class="tab-pane">
 			<fieldset>
 				<legend>Descriptions / Rights</legend>
 				<xsl:apply-templates
 					select="collection/description | activity/description | party/description  | service/description"/>
 				<xsl:apply-templates
 					select="collection/rights | activity/rights | party/rights  | service/rights"/>
-
-
 				<div class="separate_line"/>
 				<button class="btn btn-primary addNew" type="description">
 					<i class="icon-plus icon-white"/> Add Description </button>
@@ -393,11 +391,13 @@
 	</xsl:template>
 
 	<xsl:template match="collection/rights | activity/rights | party/rights  | service/rights">
-		<div class="aro_box">
+		<div class="aro_box" type="rights">
 			<h1>Rights</h1>
 			<p>
 				<input type="text" class="input-xlarge" name="type" placeholder="Type"
 					value="{@type}"/>
+				<input type="text" class="input-xlarge" name="rightsURI" placeholder="Rights URI"
+					value="{@rightsURI}"/>
 				<button class="btn btn-mini btn-danger remove">
 					<i class="icon-remove icon-white"/>
 				</button>
@@ -407,7 +407,6 @@
 					<xsl:apply-templates select="text()"/>
 				</textarea>
 			</p>
-
 			<p class="help-inline">
 				<small/>
 			</p>
@@ -418,11 +417,9 @@
 		<div id="subjects" class="tab-pane">
 			<fieldset>
 				<legend>Subjects</legend>
-
 				<xsl:apply-templates
 					select="collection/subject | activity/subject | party/subject  | service/subject"/>
 				<div class="separate_line"/>
-
 				<button class="btn btn-primary addNew" type="subject">
 					<i class="icon-plus icon-white"/> Add Subject </button>
 				<button class="btn export_xml btn-info"> Export XML fragment </button>
@@ -435,11 +432,9 @@
 		<div id="identifiers" class="tab-pane">
 			<fieldset>
 				<legend>Identifiers</legend>
-
 				<xsl:apply-templates
 					select="collection/identifier | activity/identifier | party/identifier  | service/identifier"/>
 				<div class="separate_line"/>
-
 				<button class="btn btn-primary addNew" type="identifier">
 					<i class="icon-plus icon-white"/> Add Identifier </button>
 				<button class="btn export_xml btn-info"> Export XML fragment </button>
@@ -451,11 +446,9 @@
 		<div id="relatedobjects" class="tab-pane">
 			<fieldset>
 				<legend>Related Objects</legend>
-
 				<xsl:apply-templates
 					select="collection/relatedObject | activity/relatedObject | party/relatedObject  | service/relatedObject"/>
 				<div class="separate_line"/>
-
 				<button class="btn btn-primary addNew" type="relatedobject">
 					<i class="icon-plus icon-white"/> Add Related Object </button>
 				<button class="btn export_xml btn-info"> Export XML fragment </button>
@@ -512,7 +505,7 @@
 					<input type="text" class="input-small" name="startDate_type" placeholder="startDate Type" value="{startDate/@type}"/>
 					<input type="text" class="input-xlarge" name="startDate_value" placeholder="startDate Value" value="{startDate/text()}"/>
 					<input type="text" class="input-small" name="endDate_type" placeholder="endDate Type" value="{endDate/@type}"/>
-						<input type="text" class="input-xlarge" name="endDate_value" placeholder="endDate Value" value="{endDate/text()}"/>
+					<input type="text" class="input-xlarge" name="endDate_value" placeholder="endDate Value" value="{endDate/text()}"/>
 					<button class="btn btn-mini btn-danger remove">
 						<i class="icon-remove icon-white"/>
 					</button>
@@ -899,7 +892,7 @@
 				</button>
 			</p>
 			<p>
-				<textarea name="value" class=""/>
+				<textarea name="value" class="editor"/>
 			</p>
 
 			<p class="help-inline">
@@ -908,20 +901,22 @@
 		</div>
 
 		<div class="aro_box template" type="rights">
-			<h1>Rights</h1>
-			<p>
-				<input type="text" class="input-xlarge" name="type" placeholder="Type" value=""/>
-				<button class="btn btn-mini btn-danger remove">
-					<i class="icon-remove icon-white"/>
-				</button>
-			</p>
-			<p>
-				<textarea name="value" class=""/>
-			</p>
-
-			<p class="help-inline">
-				<small/>
-			</p>
+				<h1>Rights</h1>
+				<p>
+					<input type="text" class="input-xlarge" name="type" placeholder="Type"
+						value=""/>
+					<input type="text" class="input-xlarge" name="rightsURI" placeholder="Rights URI"
+						value=""/>
+					<button class="btn btn-mini btn-danger remove">
+						<i class="icon-remove icon-white"/>
+					</button>
+				</p>
+				<p>
+					<textarea name="value" class="editor"/>				
+				</p>
+				<p class="help-inline">
+					<small/>
+				</p>		
 		</div>
 
 		<div class="aro_box template" type="subject">
