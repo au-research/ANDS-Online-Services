@@ -379,7 +379,7 @@
 				</button>
 			</p>
 			<p>
-				<textarea name="value" class="editor">
+				<textarea name="value" class="">
 					<xsl:apply-templates select="text()"/>
 				</textarea>
 			</p>
@@ -394,19 +394,22 @@
 		<div class="aro_box" type="rights">
 			<h1>Rights</h1>
 			<p>
-				<input type="text" class="input-xlarge" name="type" placeholder="Type"
-					value="{@type}"/>
-				<input type="text" class="input-xlarge" name="rightsURI" placeholder="Rights URI"
-					value="{@rightsURI}"/>
-				<button class="btn btn-mini btn-danger remove">
-					<i class="icon-remove icon-white"/>
-				</button>
+				<div class="aro_box_part" type="rightStatement">
+					<input type="text" class="input-xlarge" name="rightsUri" placeholder="Rights Uri" value="{rightStatement/@rightsURI}"/>
+					<input type="text" class="input-xlarge" name="value" placeholder="Value" value="{rightStatement/text()}"/>
+				</div>
+				<div class="aro_box_part" type="licence">
+					<input type="text" class="input-xlarge" name="rightsUri" placeholder="Rights Uri" value="{licence/@rightsURI}"/>
+					<input type="text" class="input-xlarge" name="value" placeholder="Value" value="{licence/text()}"/>
+				</div>			
+				<div class="aro_box_part" type="accessRights">
+					<input type="text" class="input-xlarge" name="rightsUri" placeholder="Rights Uri" value="{accessRights/@rightsURI}"/>
+					<input type="text" class="input-xlarge" name="value" placeholder="Value" value="{accessRights/text()}"/>
+				</div>
 			</p>
-			<p>
-				<textarea name="value" class="editor">
-					<xsl:apply-templates select="text()"/>
-				</textarea>
-			</p>
+			<button class="btn btn-mini btn-danger remove">
+				<i class="icon-remove icon-white"/>
+			</button>
 			<p class="help-inline">
 				<small/>
 			</p>
@@ -900,23 +903,29 @@
 			</p>
 		</div>
 
-		<div class="aro_box template" type="rights">
+		<div class="aro_box template" type="rights">	
 				<h1>Rights</h1>
 				<p>
-					<input type="text" class="input-xlarge" name="type" placeholder="Type"
-						value=""/>
-					<input type="text" class="input-xlarge" name="rightsURI" placeholder="Rights URI"
-						value=""/>
-					<button class="btn btn-mini btn-danger remove">
-						<i class="icon-remove icon-white"/>
-					</button>
-				</p>
-				<p>
-					<textarea name="value" class=""/>				
+					<div class="aro_box_part" type="rightsStatement">
+						<input type="text" class="input-xlarge" name="rightsUri" placeholder="Rights Uri" value=""/>
+						<input type="text" class="input-xlarge" name="value" placeholder="value" value=""/>
+					</div>
+					<div class="aro_box_part" type="licence">
+						<input type="text" class="input-xlarge" name="rightsUri" placeholder="Rights Uri" value=""/>
+						<input type="text" class="input-xlarge" name="value" placeholder="Value" value=""/>
+					</div>			
+					<div class="aro_box_part" type="accessRights">
+						<input type="text" class="input-xlarge" name="rightsUri" placeholder="Rights Uri" value=""/>
+						<input type="text" class="input-xlarge" name="value" placeholder="Value" value=""/>
+					</div>
 				</p>
 				<p class="help-inline">
 					<small/>
-				</p>		
+				</p>
+
+			<button class="btn btn-mini btn-danger remove">
+				<i class="icon-remove icon-white"/>
+			</button>
 		</div>
 
 		<div class="aro_box template" type="subject">
