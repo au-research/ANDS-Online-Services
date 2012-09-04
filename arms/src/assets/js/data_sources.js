@@ -43,9 +43,80 @@ $(function(){
 			browse('lists');
 		}
 	});
-	$(window).hashchange();
+	$(window).hashchange();//initial hashchange event
+
+	//switch view button binding
+	var currentView = 'thumbnails';
+	$('#switch_view a').click(function(){
+		changeHashTo('browse/'+$(this).attr('name'));
+		currentView = $(this).attr('name');
+	});
+
+	load_more(1);//init the load_more function | load the first page
+
+	//load_more button binding, once clicked will increment the page value
+	$('#load_more').click(function(){
+		var page = parseInt($(this).attr('page'));
+		page++;
+		load_more(page);
+		$(this).attr('page', page++);
+	});
+
+	//item level binding
+	$('.item').live({
+		mouseenter: function(e){
+			$('.btn-group', this).show();
+		},
+		mouseleave: function(e){
+			$('.btn-group', this).hide();
+		},
+		dblclick: function(e){
+			e.preventDefault();
+			changeHashTo('view/'+$(this).attr('data_source_id'));
+		},
+		click: function(){
+			
+		}
+	});
+
+	//item button binding
+	$('.item-control .btn').live({
+		click: function(e){
+			e.preventDefault();
+			var data_source_id = $(this).parent().parent().attr('data_source_id');
+			if($(this).hasClass('view')){
+				changeHashTo('view/'+data_source_id);
+			}else if($(this).hasClass('edit')){
+				changeHashTo('edit/'+data_source_id);
+			}else if($(this).hasClass('delete')){
+				changeHashTo('delete/'+data_source_id);
+			}
+		}
+	});
+
+	//data source chooser event
+	$('#datasource-chooser').live({
+		change: function(e){
+			changeHashTo('view/'+$(this).val());
+		}
+	});
+
+	//closing box header will go back in history
+	$('.box-header .close').live({
+		click: function(e){
+			//changeHashTo('browse/'+currentView);
+			window.history.back();
+		}
+	});
 });
 
+/*
+ * Initialize the View
+ * 
+ * @author: Minh Duc Nguyen (minh.nguyen@ands.org.au)
+ * @param: [string] view ENUM thumbnails|lists
+ * @returns: [void]
+ */
 function browse(view){
 	if(view=='thumbnails' || view=='lists'){
 		$('section').hide();
@@ -58,12 +129,15 @@ function browse(view){
 	$("#datasource-chooser").chosen();
 }
 
-var currentView = 'thumbnails';
-$('#switch_view a').click(function(){
-	changeHashTo('browse/'+$(this).attr('name'));
-	currentView = $(this).attr('name');
-});
-
+/*
+ * Initialize the view
+ * This load the view for the next page, append that to the main #items container
+ * @TODO: remove the next page div when there is no_more
+ * 
+ * @author: Minh Duc Nguyen (minh.nguyen@ands.org.au)
+ * @param: [int] page value
+ * @returns: [void]
+ */
 function load_more(page){
 	$.ajax({
 		url: 'data_source/getDataSources/'+page,
@@ -77,65 +151,6 @@ function load_more(page){
 		}
 	});
 }
-load_more(1);
-$('#load_more').click(function(){
-	var page = parseInt($(this).attr('page'));
-	page++;
-	load_more(page);
-	$(this).attr('page', page++);
-});
-
-$('.item').live({
-	mouseenter: function(e){
-		$('.btn-group', this).show();
-	},
-	mouseleave: function(e){
-		$('.btn-group', this).hide();
-	},
-	dblclick: function(e){
-		e.preventDefault();
-		changeHashTo('view/'+$(this).attr('data_source_id'));
-	},
-	click: function(){
-		
-	}
-});
-
-$('.item-control .btn').live({
-	click: function(e){
-		e.preventDefault();
-		var data_source_id = $(this).parent().parent().attr('data_source_id');
-		if($(this).hasClass('view')){
-			changeHashTo('view/'+data_source_id);
-		}else if($(this).hasClass('edit')){
-			changeHashTo('edit/'+data_source_id);
-		}else if($(this).hasClass('delete')){
-			changeHashTo('delete/'+data_source_id);
-		}
-	}
-});
-
-$('#toggle_side_bar_btn').live({
-	click: function(e){
-		e.preventDefault();
-		$('#browse-datasources-left').toggleClass('span8', 200).toggleClass('span12', 100);
-		$('#browse-datasources-right').toggle();
-		$(this).qtip().hide();
-	}
-});
-
-$('#datasource-chooser').live({
-	change: function(e){
-		changeHashTo('view/'+$(this).val());
-	}
-});
-
-$('.box-header .close').live({
-	click: function(e){
-		//changeHashTo('browse/'+currentView);
-		window.history.back();
-	}
-});
 
 /*
  * Load a datasource view
@@ -160,6 +175,7 @@ function load_datasource(data_source_id){
 			$('#view-datasource').html(output);
 			$('#view-datasource').fadeIn(500);
 
+			//bind the data source action button
 			$('.btn-group button', view).click(function(){
 				var data_source_id = $(this).parent().attr('data_source_id');
 				if($(this).hasClass('edit')){
@@ -171,8 +187,10 @@ function load_datasource(data_source_id){
 				}
 			});
 
+			//draw the charts
 			drawCharts();
 
+			//button toggling at edit level
 			$('#view-datasource  .normal-toggle-button').each(function(){
 				if($(this).attr('value')=='t' || $(this).attr('value')=='1' || $(this).attr('value')=='true' ){
 					$(this).find('input').attr('checked', 'checked');
@@ -182,6 +200,7 @@ function load_datasource(data_source_id){
 				});
 			});
 
+			//list on the right hand side will take you to the manage my records screen with pre-filled filters
 			$('.ro-list li').click(function(){
 				var type = $(this).attr('type');
 				var name = $(this).attr('name');
@@ -193,6 +212,16 @@ function load_datasource(data_source_id){
 	return false;
 }
 
+/*
+ * Draw Charts
+ * Use the jqplot library, currently a dud
+ *
+ * @TODO: refactor
+ *
+ * 
+ * @params [void]
+ * @return [void]
+ */
 function drawCharts(){
 	$('#ro-progression').height('350').html('');
 	$.jqplot('ro-progression',  [[[1, 2],[3,5.12],[5,13.1],[7,33.6],[9,85.9],[11,219.9]]]);
@@ -204,7 +233,7 @@ function drawCharts(){
  * With animation, slide the view into place, 
  * hide the browse section and hide other section in progress
  * @params data_source_id
- * @return false
+ * @return [void]
  */
 function load_datasource_edit(data_source_id, active_tab){
 	$('#edit-datasource').html('Loading');
@@ -250,6 +279,7 @@ function load_datasource_edit(data_source_id, active_tab){
 	});
 	return false;
 }
+
 $('#save-edit-form').live({
 	click: function(e){
 		e.preventDefault();
