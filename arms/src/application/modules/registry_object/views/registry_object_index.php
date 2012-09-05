@@ -199,7 +199,7 @@
 		</div>
 		<div class="box-content tab-content tab-view-content container" name="view">
 			
-			<div class="row">
+			<!--div class="row">
 				<div class="span8 eqheight">
 					<div class="box">
 						<div class="box-header clearfix"><h1>XML</h1></div>
@@ -221,7 +221,7 @@
 						</div>
 					</div>
 				</div>
-			</div>
+			</div-->
 			<div class="row">
 				<div class="span12">
 					<div class="html-view"></div>

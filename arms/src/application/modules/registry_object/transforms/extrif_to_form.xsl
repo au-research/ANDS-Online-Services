@@ -29,7 +29,7 @@
 					<a href="#coverages" data-toggle="tab">Coverage</a>
 				</li>
 				<li>
-					<a href="#relatedobjects" data-toggle="tab">Related Objects</a>
+					<a href="#relatedObjects" data-toggle="tab">Related Objects</a>
 				</li>
 				<li>
 					<a href="#subjects" data-toggle="tab">Subjects</a>
@@ -65,7 +65,7 @@
 					<xsl:call-template name="identifiersTab"/>
 					<xsl:call-template name="locationsTab"/>
 					<xsl:call-template name="coverageTab"/>
-					<xsl:call-template name="relatedobjectsTab"/>
+					<xsl:call-template name="relatedObjectsTab"/>
 					<xsl:call-template name="subjectsTab"/>
 					<xsl:call-template name="relatedinfosTab"/>
 					<xsl:if test="$ro_class = 'service'">
@@ -477,8 +477,8 @@
 		</div>
 	</xsl:template>
 
-	<xsl:template name="relatedobjectsTab">
-		<div id="relatedobjects" class="tab-pane">
+	<xsl:template name="relatedObjectsTab">
+		<div id="relatedObjects" class="tab-pane">
 			<fieldset>
 				<legend>Related Objects</legend>
 				<xsl:apply-templates

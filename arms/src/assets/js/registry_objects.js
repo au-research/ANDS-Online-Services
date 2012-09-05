@@ -340,7 +340,7 @@ function initEditForm(){
 			e.preventDefault();
 		}
 	});
-
+	
 	/*
 	 * Enable typeahead on input of class.[something]
 	 * Documentation of typeahead is on twitter bootstrap
