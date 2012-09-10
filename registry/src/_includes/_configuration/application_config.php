@@ -655,7 +655,17 @@ addMenu($menu);
 			$activity = new activity('aORCA_DATA_SOURCE_EXPORT', 'Export from Data Source', 'orca/admin/data_source_export.php');
 			$activity->menu_id = 'mORCA_DATA_SOURCE_ADMIN';
 			addActivity($activity);
-
+			
+		// =============================================================================
+		// Registry Object Reporting by datasource/group
+		$menu = new menu('mORCA_REPORTING', 'Reporting', 'mORCA_ADMINISTRATION');
+		addMenu($menu);
+			// =============================================================================
+			// View Draft Records
+			$activity = new activity('aORCA_DATA_SOURCE_REPORT', 'Organisational & Data Source', 'orca/admin/data_source_reporting.php');
+			$activity->menu_id = 'mORCA_REPORTING';
+			//$activity->only_show_if_active= true;
+			addActivity($activity);		
 	// =============================================================================
 	// PIDS IP Administration
 	$menu = new menu('mORCA_PIDS_ADMINISTRATION', 'PIDS IP Administration', gROOT_MENU_ID);

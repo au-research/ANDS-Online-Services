@@ -205,6 +205,8 @@ $warning_notices 			= 'Demonstration Environment ONLY';
 // GOOGLE ANALYTICS (enable FOR PRODUCTION ONLY)
 $enable_google_analytic		= false;
 $google_analytic_code		= 'UA-8380487-7'; //FOR PRODUCTION ONLY
+define('ga_email','services.ands@gmail.com');
+define('ga_password','ands2010');
 
 // BACKGROUND TASK VARIABLE
 $runningInBackgroundTask = false;

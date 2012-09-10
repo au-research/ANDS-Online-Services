@@ -156,10 +156,19 @@ class Search extends CI_Controller {
 		$type = $this->input->post('typeFilter');
 		$licence = $this->input->post('licenceFilter');
 		$temporal = $this->input->post('temporal');
+		$numFound = $this->input->post('numFound');
 		$this->load->model('Registryobjects','ro');
-		$this->ro->updateStatistic($query, $class, $group, $subject, $type, $temporal,$licence);
+		$this->ro->updateStatistic($query, $class, $group, $subject, $type, $temporal,$licence,$numFound);
 	}
-
+	
+	public function updateSearchStatistics(){
+		$query = $this->input->post('query');
+		$slug = $this->input->post('slug'); 
+		$this->load->model('Registryobjects','ro');
+		$this->ro->updateSearchStatistics($query,$slug);
+		//echo "we are back\n";
+		//return ;
+	}
 	public function service_front(){//front    end for orca search service
 		$this->load->view('service_front');
 	}

@@ -73,7 +73,6 @@ function insertDataSource()
 
 	$errors = "";
 	$strQuery = 'SELECT dba.udf_insert_data_source($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32,$33,$34)';
-	
 	$params = 
 		array(
 			getLoggedInUser(), //modified_who
@@ -3362,11 +3361,71 @@ function scheduledTaskCheck($dataSourceKey)
 }
 function getTags($keyhash)
 {
-	 global $gCNN_DBS_ORCA;
-	 $resultSet = null;
+	global $gCNN_DBS_ORCA;
+	$resultSet = null;
 	$strQuery = "SELECT * from dba.tbl_tags where ro_hash = $1";
 	$params = array($keyhash);
 	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
 	return $resultSet; 
+}
+function insertDailyStats($slug, $key, $group, $data_source, $day, $page_views,$unique_page_views,$display_title)
+{
+	global $gCNN_DBS_ORCA;
+	$resultSet = null;
+	$strQuery = 'INSERT INTO  dba.tbl_google_statistics ("slug", "key", "data_source","group", "day", "page_views","unique_page_views","display_title") VALUES ($1, $2, $3, $4, $5, $6,$7,$8)';
+	$params = array($slug, $key, $group, $data_source, $day, $page_views,$unique_page_views,$display_title);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	$strQuery = "SELECT CURRVAL(pg_get_serial_sequence($1,$2))";
+	$params = array('dba.tbl_google_statistics', 'id');
+	$dayStatId = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	return $dayStatId[0]['currval'];
+}
+
+function getDataFromSlug($slug)
+{
+	global $gCNN_DBS_ORCA_PROD;	 
+	$resultSet = null;
+	$strQuery = "SELECT object.registry_object_key, object.object_group, object.data_source_key, object.display_title from dba.tbl_registry_objects as object, dba.tbl_url_mappings as slugs where object.registry_object_key = slugs.registry_object_key AND slugs.url_fragment = $1";
+	$params = array($slug);
+	$resultSet = executeQuery($gCNN_DBS_ORCA_PROD, $strQuery, $params);
+	if($resultSet)
+	{
+		return $resultSet[0]; 
+	}
+	else {
+		return false;
+	}
+}
+
+function getCollectionsViewed($groupingType,$groupingValue,$dateFrom,$dateTo,$sortOrder)
+{
+	global $gCNN_DBS_ORCA;	 
+	$resultSet = null;
+	$strQuery = 'SELECT slug, "key", "group",data_source, display_title, SUM('.$sortOrder.') as '.$sortOrder.'  from dba.tbl_google_statistics where "'.$groupingType.'" = \''.$groupingValue.'\' and  day >= \''.$dateFrom.'\' and day <= \''.$dateTo.'\' GROUP BY slug,key,"group",data_source,display_title ORDER BY '.$sortOrder.' DESC';
+	$params = array();
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	if($resultSet)
+	{
+		return $resultSet; 
+	}
+	else {
+		return false;
+	}
+}
+
+function getRegistryObjectKeysForGroup($object_group)
+{
+	global $gCNN_DBS_ORCA;	 
+	$resultSet = null;
+	$strQuery = "SELECT registry_object_key from dba.tbl_registry_objects where object_group = $1";
+	$params = array($object_group);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	if($resultSet)
+	{
+		return $resultSet; 
+	}
+	else {
+		return false;
+	}
 }
 ?>

@@ -725,3 +725,49 @@ a.borderless{
     height:auto;
 }
 
+.reportDate{
+	color: #877c70;
+	font-style: italic;
+	font-weight: 300;
+}
+.reportText{
+	color: #000000;
+	font-size:0.9em;
+	font-weight: 600;
+}
+.reportDiv{
+	padding-left:40px;	
+	padding-bottom:40px
+}
+.reportMauve{
+	background-color:#BCA9F5;
+	color: #000000;
+	font-size:0.9em;
+	font-weight: 600;	
+	padding:8px;
+	border:1px solid #000000;	
+}
+
+.reportBlue{
+	background-color:#2E9AFE;
+	color: #000000;
+	font-size:0.9em;
+	font-weight: 600;	
+	padding:8px;
+	border:1px solid #000000;		
+}
+
+.reportTable{
+	cell-spacing:0px;	
+	border-spacing:0;
+  	border-collapse:collapse;
+	
+}
+.reportResultCell{
+	background-color:#FFFFFF;
+	color: #000000;
+	font-size:0.9em;
+	padding:8px;
+	border:1px solid #000000;	
+}
+	

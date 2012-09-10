@@ -598,7 +598,25 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 		clearEverything();
 	});
 
-	
+	$('a.fromQuery').live('click', function(e){	//determine if someone has viewed a record as a result of a search query
+		e.preventDefault();
+		var theurl = $(this).attr('href');				
+		var theslug = $(this).attr('theSlug');		
+		var stat_url = base_url+"search/updateSearchStatistics";
+			$.ajax({
+		  			type:"POST",
+		  			url: stat_url,
+		  			data: {query:decodeURIComponent(search_term), slug:theslug},
+		  			success: function(msg){
+		  				window.location = theurl;
+		  			},
+		  			error: function(request,error) 
+		  				{
+		  				 console.error(request);
+		  				 console.log(arguments);
+		  				}
+		  			});	
+	});	
 	
 	function clearEverything(){
 		//clearing the values
@@ -835,7 +853,7 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 	  					}
 	  				},
 	  				error:function(msg){
-	  					alert(msg);
+	  					//alert(msg);
 	  				}
 	  			});	
 			$('#add_tag_form').show();
@@ -1829,16 +1847,17 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
   					$('#map-help-stuff').html('');
   					//$('#search-result').css('opacity','1.0');
   					initFormat();
-  					if($('#realNumFound').html() !='0'){//only update statistic when there is a result
+  				//	if($('#realNumFound').html() !='0'){//only update statistic when there is a result
+  						var numFound = $('#realNumFound').html();
   						//update search statistics
   						$.ajax({
   				  			type:"POST",
   				  			url: base_url+"search/updateStatistic/",
-  				  			data:"q="+decodeURIComponent(search_term)+"&classFilter="+classFilter+"&typeFilter="+typeFilter+"&groupFilter="+groupFilter+"&subjectFilter="+subjectFilter+"&licenceFilter="+licenceFilter+"&page="+page+"&spatial_included_ids="+spatial_included_ids+"&temporal="+temporal,   
+  				  			data:"q="+decodeURIComponent(search_term)+"&classFilter="+classFilter+"&typeFilter="+typeFilter+"&groupFilter="+groupFilter+"&subjectFilter="+subjectFilter+"&licenceFilter="+licenceFilter+"&page="+page+"&spatial_included_ids="+spatial_included_ids+"&temporal="+temporal+"&numFound="+numFound,   
   				  				success:function(msg){},
   				  				error:function(msg){}
   				  			});
-  					}
+  				//	}
   				},
   				error:function(msg){
   					console.log('error');

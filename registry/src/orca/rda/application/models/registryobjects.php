@@ -73,33 +73,49 @@ limitations under the License.
 		 * updateStatistics
 		 * update the statistics from searches
 		 */ 
-	    function updateStatistic($query, $class, $group, $subject, $type, $temporal){
+	    function updateStatistic($query, $class, $group, $subject, $type, $temporal,$licence,$numFound){
 	    	$this->load->database();
-	    	$terms = array($query, 'class:'.$class, 'type:'.$type, 'subject:'.$subject, 'group:'.$group, 'type:'.$type, 'temporal:'.$temporal);
-	    	foreach($terms as $t){
-	    		//check if term exists
-	    		$term = $this->db->get_where('dba.tbl_search_statistics', array('search_term' => $t));
-	    		if($term->num_rows() > 0){//term exists
-	    			//update the number
-	    			$num = 0;
-	    			foreach($term->result() as $row){
-	    				$num = $row->occurrence;
+	    	if($numFound>0)
+	    	{
+	    		$terms = array($query, 'class:'.$class, 'type:'.$type, 'subject:'.$subject, 'group:'.$group, 'type:'.$type, 'temporal:'.$temporal);
+	    		foreach($terms as $t){
+	    			//check if term exists
+	    			$term = $this->db->get_where('dba.tbl_search_statistics', array('search_term' => $t));
+	    			if($term->num_rows() > 0){//term exists
+	    				//update the number
+	    				$num = 0;
+	    				foreach($term->result() as $row){
+	    					$num = $row->occurrence;
+	    				}
+	    				$num++;
+	    				$data = array('occurrence'=>$num);
+						$this->db->where('search_term', $t);
+						$this->db->update('dba.tbl_search_statistics', $data); 
+						//echo 'updated '.$t.' to '.$num.' ';
+	    			}else{//term does not exists
+	    				//add the term
+	    				$data = array('search_term' => $t);
+						$this->db->insert('dba.tbl_search_statistics', $data);
+						//echo 'inserted '.$t.' ';
 	    			}
-	    			$num++;
-	    			$data = array('occurrence'=>$num);
-					$this->db->where('search_term', $t);
-					$this->db->update('dba.tbl_search_statistics', $data); 
-					//echo 'updated '.$t.' to '.$num.' ';
-	    		}else{//term does not exists
-	    			//add the term
-	    			$data = array('search_term' => $t);
-					$this->db->insert('dba.tbl_search_statistics', $data);
-					//echo 'inserted '.$t.' ';
 	    		}
 	    	}
+
+	    	$insertStr = "INSERT INTO dba.tbl_internal_search_results (search_term,time_stamp,result_count) VALUES ('".$query."',NOW(), '".$numFound."')";
+	    	echo $insertStr."\n";	    	
+			$this->db->query($insertStr);	
+
 	    	echo 'search stat updated';
 	    }
-		
+	    
+		function updateSearchStatistics($query,$slug){
+	    	$this->load->database();
+	
+	    	$insertStr = "INSERT INTO dba.tbl_internal_search_statistics (search_term,slug,time_stamp) VALUES ('".$query."','".$slug."',NOW())";
+	    	echo $insertStr."\n";	    	
+			$this->db->query($insertStr);	
+			echo 'search stat updated';
+	    }		
 		
 		/*
 		 * getRelated

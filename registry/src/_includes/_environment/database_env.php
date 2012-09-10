@@ -33,3 +33,6 @@ define("eCNN_DBS_PIDS", "host=".$pids_db_host." port=".$pids_db_port." dbname=".
 // DOIS
 $gCNN_DBS_DOIS = false;
 define("eCNN_DBS_DOIS", "host=".$dois_db_host." port=".$dois_db_port." dbname=".$dois_db_name." user=webuser connect_timeout=60");
+
+$gCNN_DBS_ORCA_PROD = false;
+define("eCNN_DBS_ORCA_PROD", "host=115.146.80.90 port=5432 dbname=dbs_orca_production user=webuser connect_timeout=60");

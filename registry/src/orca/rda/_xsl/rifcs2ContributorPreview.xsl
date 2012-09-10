@@ -121,22 +121,27 @@
 	        <xsl:when test="../extRif:extendedMetadata/extRif:displayTitle!=''">
 	        	<xsl:apply-templates select="../extRif:extendedMetadata/extRif:displayTitle"/>
 	        </xsl:when>
-	         <xsl:otherwise>
-	                
-	        <div id="displaytitle"><h1><xsl:value-of select="../ro:key"/></h1>
-	                        	
-
-			
-			
-			</div><div class="right_icon"><img class="icon-heading">
+	        <xsl:when test="ro:displayTitle!=''">
+	        	<div id="displaytitle"><h1><xsl:value-of select="."/></h1></div>
+	        </xsl:when>
+	        <xsl:when test="ro:name[@type = 'primary']">
+	        	<div id="displaytitle"><h1><xsl:value-of select="."/></h1></div>
+	        </xsl:when> 
+	        <xsl:otherwise>               
+	       	 	<div id="displaytitle"><h1><xsl:value-of select="../ro:key"/></h1>	</div>
+		    </xsl:otherwise> 		
+		</xsl:choose>    
+		<div class="right_icon">
+			<img class="icon-heading">
 				<xsl:attribute name="src"><xsl:value-of select="$base_url"/>
 				<xsl:text>/img/icon/</xsl:text>
 				<xsl:value-of select="$objectClassType"/>
 				<xsl:text>_32.png</xsl:text></xsl:attribute>
-				</img></div> 
-	        </xsl:otherwise> 
+			</img>
+		</div> 
+
 	        
-        </xsl:choose>    
+
         <div class="clearfix"></div>  
 
         <xsl:apply-templates select="../extRif:extendedMetadata/extRif:displayLogo"/>

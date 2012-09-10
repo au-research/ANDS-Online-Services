@@ -137,7 +137,9 @@ limitations under the License.
 					$key_url =  base_url().'view/?key='.urlencode($ro_key);
 				}
 				//echo $key_url;
-				echo '<h2 itemprop="name"><a itemprop="url" href="'.$key_url.'">'.$name.'</a></h2>';
+				$classStr = '';
+				if($query!="All Records") $classStr=' theSlug="'.$r->{'url_slug'}.'" class="fromQuery"';
+				echo '<h2 itemprop="name"><a itemprop="url" href="'.$key_url.'" '.$classStr.'>'.$name.'</a></h2>';
 
 				//echo '<pre>';
 
