@@ -1300,7 +1300,7 @@ function getRelatedObjectTypesXML($registryObjectKey, $dataSourceKey, $registryO
 				$xml .= "      <$elementName>\n";
 				$xml .= "        <key>$key</key>\n";
 				$xml .= getRelationsXML($element['relation_id'], $typeArray[$registryObjectClass],$forSOLR);
-				if($forSOLR && ! $repeatKey)
+				if($forSOLR && ! $repeatKey && $relatedObject[0]['status']=='PUBLISHED')
 				{
 					$xml .= "        <extRif:relatedObjectClass>".strtolower($relatedObject[0]['registry_object_class'])."</extRif:relatedObjectClass>\n";
 					$xml .= "        <extRif:relatedObjectType>".strtolower($relatedObject[0]['type'])."</extRif:relatedObjectType>\n";
@@ -1349,7 +1349,7 @@ function getRelatedObjectTypesXML($registryObjectKey, $dataSourceKey, $registryO
 					$xml .= "        <key>$key</key>\n";
 					//$xml .= getRelationsXML($element['relation_id'],$typeArray[$registryObjectClass], $forSOLR);
 					$xml .= getRelationsXML($element['relation_id'], $typeArray[$registryObjectClass],$forSOLR,$getReverse=true);
-					if($forSOLR && !$repeatKey)
+					if($forSOLR && !$repeatKey  && $relatedObject[0]['status']=='PUBLISHED')
 					{
 					$relatedclass= strtolower($relatedObject[0]['registry_object_class']);
 					$relatedObject[0]['registry_object_class'] = strtolower($relatedObject[0]['registry_object_class']);
@@ -1395,7 +1395,7 @@ function getRelatedObjectTypesXML($registryObjectKey, $dataSourceKey, $registryO
 					$xml .= "      <$elementName>\n";
 					$xml .= "        <key>$key</key>\n";
 					$xml .= getRelationsXML($element['relation_id'],$typeArray[$registryObjectClass], $forSOLR, $getReverse=true);
-					if($forSOLR&& !$repeatKey)
+					if($forSOLR&& !$repeatKey  && $relatedObject[0]['status']=='PUBLISHED')
 					{
 						$relatedObject[0]['registry_object_class'] = strtolower($relatedObject[0]['registry_object_class']);
 						if(strtolower($relatedObject[0]['type'])=='person') { $connectionsNum['person']++; if($connectionsNum['person']>6) $addThisRelation = false;}

@@ -113,7 +113,7 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 		$oldRegistryObject = getRegistryObject($registryObjectKey);
 
 		$oldHarvestID = $oldRegistryObject[0]['created_who'];
-		if($oldRegistryObject || $oldHarvestID != $created_who )
+		if($oldRegistryObject || $oldHarvestID != $created_who  || strpos($oldHarvestID, ' (') === false)
 		{
 			if( $registryObjectKey)
 			{
