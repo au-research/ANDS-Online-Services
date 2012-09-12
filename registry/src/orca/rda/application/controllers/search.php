@@ -166,9 +166,8 @@ class Search extends CI_Controller {
 		$slug = $this->input->post('slug'); 
 		$this->load->model('Registryobjects','ro');
 		$this->ro->updateSearchStatistics($query,$slug);
-		//echo "we are back\n";
-		//return ;
 	}
+	
 	public function service_front(){//front    end for orca search service
 		$this->load->view('service_front');
 	}

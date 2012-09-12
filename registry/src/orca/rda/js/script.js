@@ -592,8 +592,6 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 	$('ul.sf-menu').superfish({autoArrows:false, delay:50});//menu
 	
 	
-	//$('#advanced').hide(); //already hides in css
-	
 	$('#clearSearch').live('click', function(){	//clearing search box, also clears everything
 		clearEverything();
 	});
@@ -604,19 +602,42 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 		var theslug = $(this).attr('theSlug');		
 		var stat_url = base_url+"search/updateSearchStatistics";
 			$.ajax({
-		  			type:"POST",
-		  			url: stat_url,
-		  			data: {query:decodeURIComponent(search_term), slug:theslug},
-		  			success: function(msg){
-		  				window.location = theurl;
-		  			},
-		  			error: function(request,error) 
-		  				{
-		  				 console.error(request);
-		  				 console.log(arguments);
-		  				}
-		  			});	
+		  		type:"POST",
+		  		url: stat_url,
+		  		data: {query:decodeURIComponent(search_term), slug:theslug},
+		  		success: function(msg){
+		  			window.location = theurl;
+		  		},
+		  		error: function(request,error) 
+		  			{
+		  			 console.error(request);
+		  			 console.log(arguments);
+		  			}
+		  		});	
 	});	
+ /*   $('a.fromQuery').live('mousedown', function(event) {
+    	alert("we have a mouse down event")
+        switch (event.which) {
+            case 1:
+                alert('Left mouse button pressed');
+                $(this).attr('target','_self');
+                break;
+            case 2:
+                alert('Middle mouse button pressed');
+                alert($(this).attr('target'));
+                $(this).attr('target','_blank');
+                break;
+            case 3:
+               alert('Right mouse button pressed');
+               var context = $(this).attr('contextmenu').html()
+               alert(context)
+                $(this).attr('target','_blank');
+                break;
+            default:
+                alert('You have a strange mouse');
+                $(this).attr('target','_self"');
+        }
+    }); */
 	
 	function clearEverything(){
 		//clearing the values

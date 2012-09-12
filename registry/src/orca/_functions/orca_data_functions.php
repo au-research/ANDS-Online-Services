@@ -3368,12 +3368,12 @@ function getTags($keyhash)
 	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
 	return $resultSet; 
 }
-function insertDailyStats($slug, $key, $group, $data_source, $day, $page_views,$unique_page_views,$display_title)
+function insertDailyStats($slug, $key, $group, $data_source, $day, $page_views,$unique_page_views,$display_title,$type)
 {
 	global $gCNN_DBS_ORCA;
 	$resultSet = null;
-	$strQuery = 'INSERT INTO  dba.tbl_google_statistics ("slug", "key", "data_source","group", "day", "page_views","unique_page_views","display_title") VALUES ($1, $2, $3, $4, $5, $6,$7,$8)';
-	$params = array($slug, $key, $group, $data_source, $day, $page_views,$unique_page_views,$display_title);
+	$strQuery = 'INSERT INTO  dba.tbl_google_statistics ("slug", "key", "data_source","group", "day", "page_views","unique_page_views","display_title","object_class") VALUES ($1, $2, $3, $4, $5, $6,$7,$8,$9)';
+	$params = array($slug, $key, $group, $data_source, $day, $page_views,$unique_page_views,$display_title,$type);
 	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
 	$strQuery = "SELECT CURRVAL(pg_get_serial_sequence($1,$2))";
 	$params = array('dba.tbl_google_statistics', 'id');
@@ -3385,7 +3385,7 @@ function getDataFromSlug($slug)
 {
 	global $gCNN_DBS_ORCA_PROD;	 
 	$resultSet = null;
-	$strQuery = "SELECT object.registry_object_key, object.object_group, object.data_source_key, object.display_title from dba.tbl_registry_objects as object, dba.tbl_url_mappings as slugs where object.registry_object_key = slugs.registry_object_key AND slugs.url_fragment = $1";
+	$strQuery = "SELECT object.registry_object_key, object.object_group, object.data_source_key, object.display_title, object.registry_object_class from dba.tbl_registry_objects as object, dba.tbl_url_mappings as slugs where object.registry_object_key = slugs.registry_object_key AND slugs.url_fragment = $1";
 	$params = array($slug);
 	$resultSet = executeQuery($gCNN_DBS_ORCA_PROD, $strQuery, $params);
 	if($resultSet)
@@ -3397,11 +3397,11 @@ function getDataFromSlug($slug)
 	}
 }
 
-function getCollectionsViewed($groupingType,$groupingValue,$dateFrom,$dateTo,$sortOrder)
+function getCollectionsViewed($groupingType,$groupingValue,$dateFrom,$dateTo,$sortOrder,$class)
 {
 	global $gCNN_DBS_ORCA;	 
 	$resultSet = null;
-	$strQuery = 'SELECT slug, "key", "group",data_source, display_title, SUM('.$sortOrder.') as '.$sortOrder.'  from dba.tbl_google_statistics where "'.$groupingType.'" = \''.$groupingValue.'\' and  day >= \''.$dateFrom.'\' and day <= \''.$dateTo.'\' GROUP BY slug,key,"group",data_source,display_title ORDER BY '.$sortOrder.' DESC';
+	$strQuery = 'SELECT slug, "key", "group",data_source, display_title, SUM('.$sortOrder.') as '.$sortOrder.'  from dba.tbl_google_statistics where "'.$groupingType.'" = \''.$groupingValue.'\' and  day >= \''.$dateFrom.'\' and day <= \''.$dateTo.'\' and lower(object_class) = \''.$class.'\' GROUP BY slug,key,"group",data_source,display_title ORDER BY '.$sortOrder.' DESC';
 	$params = array();
 	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
 	if($resultSet)
@@ -3419,6 +3419,39 @@ function getRegistryObjectKeysForGroup($object_group)
 	$resultSet = null;
 	$strQuery = "SELECT registry_object_key from dba.tbl_registry_objects where object_group = $1";
 	$params = array($object_group);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	if($resultSet)
+	{
+		return $resultSet; 
+	}
+	else {
+		return false;
+	}
+}
+
+function getNoResultSearches($timeFrom,$timeTo)
+{
+	global $gCNN_DBS_ORCA;	 
+	$resultSet = null;
+	$strQuery = "SELECT COUNT(search_term) as theCount, search_term from dba.tbl_internal_search_results WHERE result_count = '0' AND time_stamp > CAST('".$timeFrom."' AS timestamp) AND time_stamp < CAST('".$timeTo."' AS timestamp) GROUP BY search_term ORDER BY theCount DESC LIMIT 3";
+	$params = array();
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	if($resultSet)
+	{
+		return $resultSet; 
+	}
+	else {
+		return false;
+	}
+}
+
+function getSearchTermForPageView($slug,$dateFrom,$dateTo)
+{
+	
+	global $gCNN_DBS_ORCA;	 
+	$resultSet = null;
+	$strQuery = "select slug,search_term from dba.tbl_internal_search_statistics WHERE time_stamp >= CAST('".$dateFrom."' AS timestamp) AND  time_stamp < CAST('".$dateTo."' AS timestamp) AND slug = '".$slug."'";
+	$params = array();
 	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
 	if($resultSet)
 	{

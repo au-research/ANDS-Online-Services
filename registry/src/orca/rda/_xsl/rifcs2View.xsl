@@ -94,7 +94,7 @@
 	        		<script type="text/javascript" src="http://static.addtoany.com/menu/page.js"></script>
 	      
 	        		<!-- AddToAny END -->  
-   				<a id="tag_show">
+   			<!--  <a id="tag_show">
                     <xsl:attribute name="href">javascript:void(0);</xsl:attribute>                    
                     <img id="tag_icon">
                     <xsl:attribute name="src">
@@ -103,7 +103,7 @@
                     <xsl:text>tag_16_icon.png</xsl:text></xsl:attribute>
                     <xsl:attribute name="alt">Tag Icon</xsl:attribute>
                     </img>
-                    </a>  	
+                    </a>  	-->	
                    
 					<a target="_blank">
                     <xsl:attribute name="href"><xsl:value-of select="$base_url"/>view/printview/?key=<xsl:value-of select="ro:key"/></xsl:attribute>                    
