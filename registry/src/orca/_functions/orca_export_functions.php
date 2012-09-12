@@ -1370,6 +1370,7 @@ function getRelatedObjectTypesXML($registryObjectKey, $dataSourceKey, $registryO
 		}
 	} 
 	$listExt = getExternalReverseRelatedObjects($registryObjectKey, $dataSourceKey);
+	
 	if( $listExt && $forSOLR)
 	{
 	foreach( $listExt as $element )
