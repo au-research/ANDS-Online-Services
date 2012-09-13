@@ -662,7 +662,7 @@ addMenu($menu);
 		addMenu($menu);
 			// =============================================================================
 			// View Draft Records
-			$activity = new activity('aORCA_DATA_SOURCE_REPORT', 'Organisational & Data Source', 'orca/admin/data_source_reporting.php');
+			$activity = new activity('aORCA_DATA_SOURCE_REPORTS', 'Organisational & Data Source', 'orca/admin/data_source_reporting.php');
 			$activity->menu_id = 'mORCA_REPORTING';
 			//$activity->only_show_if_active= true;
 			addActivity($activity);		

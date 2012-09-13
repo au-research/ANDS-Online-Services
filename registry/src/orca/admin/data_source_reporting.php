@@ -381,12 +381,12 @@ if( (strtoupper($ds_report) == "GENERATE REPORT" ||  strtoupper($org_report) == 
 			<tbody>
 				<tr><td width="300" colspan="2" class="reportBlue" >Collections viewed most</td></tr>
 				<?php 
-				if($pageViewCount > 0)
+				if($pageViewCount > 0 )
 				{
 					for($i=0;$i<$pageViewCount;$i++)
 					{
 					?>
-						<tr><td width="20"></td><td class="reportResultCell" width="250"><?php if($page_views_stats[$i]['display_title']!=''){echo $page_views_stats[$i]['display_title'];}else{print_r($page_views_stats[$i]); echo "we are here";} ?> - <span class="faded">(<?php echo $page_views_stats[$i]['page_views'] ?>)</span></td></tr>
+						<tr><td width="20"></td><td class="reportResultCell" width="250"><?php if($page_views_stats[$i]['display_title']!=''){echo $page_views_stats[$i]['display_title'];}?> - <span class="faded">(<?php echo $page_views_stats[$i]['page_views'] ?>)</span></td></tr>
 					<?php 
 					}
 				}else{
