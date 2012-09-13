@@ -32,6 +32,8 @@ require '/var/www/htdocs/registry/orca/_functions/orca_data_functions.php';
 require '/var/www/htdocs/registry/orca/_functions/orca_data_source_functions.php';
 require '/var/www/htdocs/registry/orca/_functions/orca_export_functions.php';
 require '/var/www/htdocs/registry/orca/_functions/orca_access_functions.php';
+require '/var/www/htdocs/registry/orca/_functions/orca_taskmgr_functions.php';
+require '/var/www/htdocs/registry/orca/_functions/orca_solr_functions.php';
 require '/var/www/htdocs/registry/orca/_functions/orca_import_functions.php';
 require '/var/www/htdocs/registry/orca/_functions/orca_cache_functions.php';
 require '/var/www/htdocs/registry/orca/_functions/orca_presentation_functions.php';
