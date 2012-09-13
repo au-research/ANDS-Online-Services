@@ -23,10 +23,12 @@ define('gCURRENT_SCHEMA_VERSION', '1.3');
 define('gDATA_SOURCE','NLA_PARTY');
 define('gNLA_SRU_URI','http://www.nla.gov.au/apps/srw/search/peopleaustralia');
 define('gSOLR_UPDATE_URL' , $solr_url . "update");
+define('eIMAGE_ROOT', '_logos/logo_EMPTY.gif');
 
 require '/var/www/htdocs/registry/_includes/_environment/database_env.php';
 require '/var/www/htdocs/registry/_includes/_functions/database_functions.php';
 require '/var/www/htdocs/registry/_includes/_functions/general_functions.php';
+require '/var/www/htdocs/registry/_includes/_functions/presentation_functions.php';
 require '/var/www/htdocs/registry/_includes/_functions/access_functions.php';
 require '/var/www/htdocs/registry/orca/_functions/orca_data_functions.php';
 require '/var/www/htdocs/registry/orca/_functions/orca_data_source_functions.php';
