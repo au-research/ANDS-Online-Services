@@ -690,7 +690,7 @@ function updateRecordsForDataSource($dataSourceKey, $manuallyPublish,$manuallyPu
 	if(($manuallyPublish == 0 || $manuallyPublish == 'f') && $manuallyPublishOld == 't')
 	{
 		// set Approved to Published for all registry Objects
-		$actions .= 'Changed Status to PUBLISHED';
+		$actions .= "Changed Status to PUBLISHED:\n";
 		if($registryObjectKeys = getRegistryObjectKeysForDataSource($dataSourceKey))
 		{
 			for( $i=0; $i < count($registryObjectKeys); $i++ )
@@ -734,7 +734,7 @@ function updateRecordsForDataSource($dataSourceKey, $manuallyPublish,$manuallyPu
 				}
 				else if($registryObjectKeys[$i]['status'] == ASSESSMENT_IN_PROGRESS || $registryObjectKeys[$i]['status'] == SUBMITTED_FOR_ASSESSMENT)
 				{
-					$actions .= "PUBLISHING records\n";
+					$actions .= "PUBLISHING record:\n";
 					$rifcs = new DomDocument();
 					$rifcs->loadXML($registryObjectKeys[$i]['rifcs']);
 					$stripFromData = new DomDocument();
@@ -766,6 +766,12 @@ function updateRecordsForDataSource($dataSourceKey, $manuallyPublish,$manuallyPu
 					{
 						$deleteErrors = deleteDraftRegistryObject($dataSourceKey,$registryObjectKey);
 						$actions .= $registryObjectKeys[$i]['draft_key'].' Imported to Registry as '.$status."\n";
+					}
+					// if couldn't import records add them to the log and set status to DRAFT!
+					else{
+						updateDraftRegistryObjectStatus($registryObjectKeys[$i]['draft_key'],$dataSourceKey,DRAFT);
+						$actions .= $importErrors."\n";
+						$actions .= $registryObjectKeys[$i]['draft_key']." Changed Status to DRAFT\n";
 					}
 										
 				}

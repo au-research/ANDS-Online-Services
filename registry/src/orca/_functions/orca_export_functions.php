@@ -171,7 +171,13 @@ function getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR = false, $inclu
 			$xml .= '      <extRif:manually_assessed_flag>'.esc(trim($registryObject[0]['manually_assessed_flag'])).'</extRif:manually_assessed_flag>'."\n";
 			$xml .= '      <extRif:gold_status_flag>'.esc(trim($registryObject[0]['gold_status_flag'])).'</extRif:gold_status_flag>'."\n";
 			$xml .= '      <extRif:quality_level>'.esc(trim($registryObject[0]['quality_level'])).'</extRif:quality_level>'."\n";
-			$owner = ($registryObject[0]['created_who'] == 'SYSTEM' ? 'harvest' : 'manual');
+			if($registryObject[0]['created_who'] == 'SYSTEM' || (strlen($registryObject[0]['created_who']) == 40 && strpos($registryObject[0]['created_who'], ' (') === false))
+			{
+				$owner =  'harvest';
+			}
+			else{
+				$owner = 'manual';
+			}			
 			$xml .= '      <extRif:feedType>'.$owner.'</extRif:feedType>'."\n";
 			$xml .= '      <extRif:lastModifiedBy>'.$registryObject[0]['created_who'].'</extRif:lastModifiedBy>'."\n";
 			if($contributorPage = getGroupPage($group))

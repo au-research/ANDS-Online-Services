@@ -571,10 +571,10 @@
             <xsl:when test="string-length(.) &gt; 12000">
                 <xsl:choose>
 				    <xsl:when test="$output = 'script'">
-               			 <xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_value","Description Value must be less than 12000 characters.");</xsl:text>
+               			 <xsl:text>SetWarnings("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_value","Description Value must be less than 12000 characters.");</xsl:text>
 				    </xsl:when>
 				    <xsl:otherwise>
-						<span class="error">Description must be less than 12000 characters.</span>
+						<span class="warning">Description must be less than 12000 characters.</span>
 				    </xsl:otherwise>
 		    	</xsl:choose>
             </xsl:when>

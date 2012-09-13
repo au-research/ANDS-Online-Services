@@ -215,7 +215,7 @@ function searchRecords($status){
 	$sort='';
 	if($sortname!='undefined'){
 		if($sortorder!='undefined'){
-			$sort=''.$sortname.' '.$sortorder;
+			$sort=''.$sortname.' '.$sortorder.',s_list_title asc';
 		}
 	}
 	$start = 0;
