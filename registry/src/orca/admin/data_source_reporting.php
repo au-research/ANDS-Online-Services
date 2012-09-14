@@ -341,20 +341,20 @@ if( (strtoupper($ds_report) == "GENERATE REPORT" ||  strtoupper($org_report) == 
 	<legend><?php echo $title; ?></legend>
 	<p><strong>Reporting Date:</strong>&nbsp;&nbsp;<span class="reportDate"> <?php echo $dateString;?></span><br /></br /></p>
 	<p class="reportText">Statistics for <?php echo $title;?> </p>
-	<p>&nbsp;</p>
+	<p class="reportText"><?php echo $grouping;?> Summary </p>
 	<div class="reportDiv">
 		<table class="reportTable" width="800">
 			<tbody>
 				<tr style="border:0px;">
 					<td width="450">&nbsp;</td>
-					<td width="75" align="center">Collections</td>
-					<td width="75" align="center">Parties</td>
-					<td width="75" align="center">Activities</td>
-					<td width="75" align="center">Services</td>
+					<td width="75" align="center"  class="reportHeaderCell">Collections</td>
+					<td width="75" align="center"  class="reportHeaderCell">Parties</td>
+					<td width="75" align="center"  class="reportHeaderCell">Activities</td>
+					<td width="75" align="center"  class="reportHeaderCell">Services</td>
 					<td width="75" align="center"></td>
 				</tr>
 				<tr>
-					<td class="reportMauve">Number of Records within your <?php echo $grouping;?>:</td>
+					<td class="reportGrey">Number of Records within your <?php echo $grouping;?>:</td>
 					<td class="reportResultCell" ><?php echo $collectionRecords;?></td>
 					<td class="reportResultCell" ><?php echo $partyRecords;?></td>
 					<td class="reportResultCell" ><?php echo $activityRecords;?></td>
@@ -362,7 +362,7 @@ if( (strtoupper($ds_report) == "GENERATE REPORT" ||  strtoupper($org_report) == 
 					<td class="reportResultCell"><?php echo $totalCount;?></td>
 				</tr>
 				<tr>
-					<td class="reportBlue">Number of your records being viewed:</td>
+					<td class="reportGrey">Number of your records being viewed:</td>
 					<td class="reportResultCell" ><?php echo $filterViewCount;?></td>
 					<td class="reportResultCell" ><?php echo $partyViewCount;?></td>
 					<td class="reportResultCell" ><?php echo $activityViewCount;?></td>
@@ -370,7 +370,7 @@ if( (strtoupper($ds_report) == "GENERATE REPORT" ||  strtoupper($org_report) == 
 					<td class="reportResultCell"><?php echo $totalRecordsViewed;?></td>
 				</tr>		
 				<tr>
-					<td class="reportMauve">Number of times your records have been accessed:</td>
+					<td class="reportGrey">Number of times your records have been accessed:</td>
 					<td class="reportResultCell" ><?php  echo $totalcollectionViews;?></td>
 					<td class="reportResultCell" ><?php  echo $totalpartyViews;?></td>
 					<td class="reportResultCell" ><?php  echo $totalactivityViews;?></td>
@@ -381,21 +381,22 @@ if( (strtoupper($ds_report) == "GENERATE REPORT" ||  strtoupper($org_report) == 
 		</table>
 		
 			<br />
+			<br />
 		<table class="reportTable" width="800">
 			<tbody>
 				<tr style="border:0px">
-				<td  width="450">&nbsp;</td>
+				<td  width="450" >&nbsp;</td>
 		<?php	$count=0;
 				foreach($array['sources'] as $key => $value)
 				{
 					if($count<5){?>
-					<td align="center"><?php echo $key;?></td>					
+					<td align="center"   class="reportHeaderCell"><?php echo $key;?></td>					
 		<?php		}
 					$count++;
 				}		?>				
 				</tr>
 				<tr>
-				<td class="reportMauve" >How users are finding your Records:</td>				
+				<td class="reportGrey" >How users are finding your Records:</td>				
 		<?php 	$count=0;
 				foreach($array['sources'] as $key => $value)
 				{ 	
@@ -411,15 +412,13 @@ if( (strtoupper($ds_report) == "GENERATE REPORT" ||  strtoupper($org_report) == 
 		</table>	
 		<br />	
 </div>
-
-
 		<p class="reportText">RDA Search Summary: </p>
 		<div class="reportDiv">
 		<table class="reportTable" style="vertical-align: top" width="800">
 		<tr><td style="vertical-align:top">
 		<table class="reportTable" style="vertical-align:top">
 			<tbody>
-				<tr><td width="300" colspan="2" class="reportBlue" >Keyword users are using when searching RDA successfully for your records</td></tr>
+				<tr><td width="300" colspan="2" class="reportGrey" >Keyword users are using when searching RDA successfully for your records</td></tr>
 				<?php 
 				$outPutcount = 0;
 				foreach($array['search'] as $key => $search)
@@ -430,7 +429,6 @@ if( (strtoupper($ds_report) == "GENERATE REPORT" ||  strtoupper($org_report) == 
 	<?php 			}
 					$outPutcount++;
 				}
-
 				?>
 			
 			</tbody>
@@ -439,7 +437,7 @@ if( (strtoupper($ds_report) == "GENERATE REPORT" ||  strtoupper($org_report) == 
 		<td>		
 		<table class="reportTable" style="vertical-align:top">
 			<tbody>
-				<tr><td width="300" colspan="2" class="reportMauve" >Keywords users are searching RDA which produce zero search results</td></tr>
+				<tr><td width="300" colspan="2" class="reportGrey" >Keywords users are searching RDA which produce zero search results</td></tr>
 				<?php 
 				if(isset($noResults)&&count($noResults[0])>0)
 				{
@@ -447,7 +445,7 @@ if( (strtoupper($ds_report) == "GENERATE REPORT" ||  strtoupper($org_report) == 
 					foreach($noResults as $noResult)
 					{
 	?>
-					<tr><td width="20"></td><td class="reportResultCell" width="250"><?php echo $noResult['search_term'];?>  (<?php echo $noResult['thecount'];?> </td></tr>
+					<tr><td width="20"></td><td class="reportResultCell" width="250"><?php echo $noResult['search_term'];?>  (<?php echo $noResult['thecount'];?>) </td></tr>
 	<?php					
 					}
 				}
@@ -464,7 +462,7 @@ if( (strtoupper($ds_report) == "GENERATE REPORT" ||  strtoupper($org_report) == 
 		<tr style="vertical-align: top"><td>
 		<table class="reportTable">
 			<tbody>
-				<tr><td width="300" colspan="2" class="reportBlue" >Collections viewed most</td><td></td></tr>
+				<tr><td width="300" colspan="2" class="reportGrey" >Collections viewed most</td><td></td></tr>
 				<?php 
 				if($pageViewCount > 0)
 				{
@@ -485,14 +483,14 @@ if( (strtoupper($ds_report) == "GENERATE REPORT" ||  strtoupper($org_report) == 
 		<td>		
 		<table class="reportTable">
 			<tbody>
-				<tr><td width="300" colspan="2" class="reportMauve" >Collections viewed most by distinct users</td><td></td></tr>
+				<tr><td width="300" colspan="2" class="reportGrey" >Collections viewed most by distinct users</td><td></td></tr>
 				<?php 
 				if($uniqueViewCount > 0)
 				{
 					for($i=0;$i<$uniqueViewCount;$i++)
 					{
 					?>
-						<tr><td width="20"></td><td class="reportResultCell" width="250"><?php if($unique_views_stats[$i]['display_title']!=''){echo $unique_views_stats[$i]['display_title'];}else{echo $unique_views_stats[$i]['slug'];} ?> </td><td class="reportResultCell"><?php echo $unique_views_stats[$i]['unique_page_views'] ?>)</td></tr>
+						<tr><td width="20"></td><td class="reportResultCell" width="250"><?php if($unique_views_stats[$i]['display_title']!=''){echo $unique_views_stats[$i]['display_title'];}else{echo $unique_views_stats[$i]['slug'];} ?> </td><td class="reportResultCell"><?php echo $unique_views_stats[$i]['unique_page_views'] ?></td></tr>
 					<?php 
 					}
 				}
@@ -507,18 +505,18 @@ if( (strtoupper($ds_report) == "GENERATE REPORT" ||  strtoupper($org_report) == 
 		<br />
 		<table class="reportTable">
 			<tbody>
-				<tr><td width="200"></td>
-				<td class="reportMauve" width="50">ACT</td>
-				<td class="reportMauve" width="50">NSW</td>
-				<td class="reportMauve" width="50">QLD</td>
-				<td class="reportMauve" width="50">NT</td>
-				<td class="reportMauve" width="50">WA</td>
-				<td class="reportMauve" width="50">SA</td>
-				<td class="reportMauve" width="50">VIC</td>
-				<td class="reportMauve" width="50">TAS</td>	
+				<tr style="border:0px;align:center"><td width="200"></td>
+				<td class="reportHeaderCell" width="50" align="center" >ACT</td>
+				<td class="reportHeaderCell" width="50" align="center" >NSW</td>
+				<td class="reportHeaderCell" width="50" align="center" >QLD</td>
+				<td class="reportHeaderCell" width="50" align="center" >NT</td>
+				<td class="reportHeaderCell" width="50" align="center" >WA</td>
+				<td class="reportHeaderCell" width="50" align="center" >SA</td>
+				<td class="reportHeaderCell" width="50" align="center" >VIC</td>
+				<td class="reportHeaderCell" width="50" align="center" >TAS</td>	
 				<td></td>			
 				</tr>
-				<tr><td class="reportBlue" width="200">State Presence:</td>
+				<tr><td class="reportGrey" width="200">State Presence:</td>
 				<td class="reportResultCell" width="50"><?php if(isset($array['regions']['Australian Capital Territory'])) {$act = $array['regions']['Australian Capital Territory'];} else {$act = 0;} echo $act;?></td>
 				<td class="reportResultCell" width="50"><?php if(isset($array['regions']['New South Wales'])) {$nsw= $array['regions']['New South Wales'];} else {$nsw = 0;} echo $nsw;?></td>
 				<td class="reportResultCell" width="50"><?php if(isset($array['regions']['Queensland'])) {$qld =  $array['regions']['Queensland'];} else {$qld = 0;} echo $qld?></td>
@@ -536,18 +534,18 @@ if( (strtoupper($ds_report) == "GENERATE REPORT" ||  strtoupper($org_report) == 
 		<p class="reportText">Internationally:</p>	
 		<table class="reportTable">
 			<tbody>
-				<tr><td width="200"></td>
+				<tr style="border:0px"><td width="200"></td>
 		<?php 	$count = 0;
 				foreach($array['countries'] as $key => $value)
 				{ 	
 					if($count<5) {?>
-					<td class="reportMauve" width="100"><?php echo $key;?></td>					
+					<td class="reportHeaderCell" width="100" align="center" ><?php echo $key;?></td>					
 		<?php 		}
 					$count++;
 				}	?>
 				
 				</tr>
-				<tr><td class="reportBlue" width="200">Global Presence:</td>
+				<tr><td class="reportGrey" width="200">Global Presence:</td>
 		<?php 	$count = 0;
 				foreach($array['countries'] as $key => $value)
 				{		

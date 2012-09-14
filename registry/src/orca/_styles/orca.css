@@ -747,7 +747,24 @@ a.borderless{
 	padding:8px;
 	border:1px solid #000000;	
 }
-
+.reportGrey{
+	background: #f0f0f0;
+    background: -webkit-linear-gradient(top, #f7f7f7, #d1d1d1);
+    background: -moz-linear-gradient(top, #f7f7f7, #d1d1d1);
+    background: -ms-linear-gradient(top, #f7f7f7, #d1d1d1);
+    background: -o-linear-gradient(top, #f7f7f7, #d1d1d1);
+    -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=1, Direction=90, Color='#ffffff')";
+    filter: progid:DXImageTransform.Microsoft.Shadow(Strength=1, Direction=90, Color='#ffffff');
+    -webkit-transition: border-color .218s;
+    -moz-transition: border .218s;
+    -o-transition: border-color .218s;
+    transition: border-color .218s;
+    border: solid 1px #7f7f7f;
+	color: #000000;
+	font-size:0.9em;
+	font-weight: 600;	
+	padding:8px;
+}
 .reportBlue{
 	background-color:#2E9AFE;
 	color: #000000;
@@ -770,4 +787,7 @@ a.borderless{
 	padding:8px;
 	border:1px solid #000000;	
 }
-	
+.reportHeaderCell{
+	font-weight: 600;	
+	align:center;	
+}
