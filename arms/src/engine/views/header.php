@@ -55,6 +55,8 @@
       </div>
       <div class="span10" id="main-nav">
         <ul>
+        	
+    	<?php if(hasRole('RECORD_MANAGER')): ?>
           <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">My Records <b class="caret"></b></a>
             <ul class="dropdown-menu sub-menu pull-right">
@@ -63,6 +65,9 @@
               <li class=""><a href="#">Publish My Records</a></li>
             </ul>
           </li>
+     	<?php endif; ?>
+          
+        <?php if(hasRole('DS_MANAGER')): ?>
           <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">My Datasources <b class="caret"></b></a>
             <ul class="dropdown-menu sub-menu pull-right">
@@ -70,77 +75,45 @@
               <li class=""><a href="#">Datasources Tools</a></li>
             </ul>
           </li>
+        <?php endif; ?>
+          
+        <?php if(hasRole('PID_MANAGER') || hasRole('DOI_MANAGER')): ?>
           <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">My Identifiers <b class="caret"></b></a>
             <ul class="dropdown-menu sub-menu pull-right">
-              <li class=""><a href="#">DOI</a></li>
-              <li class=""><a href="#">PID</a></li>
+            	
+            	<?php if (hasRole('DOI_MANAGER')): ?>
+            		<li class=""><a href="#">DOI</a></li>
+            	<?php endif; ?>
+            	<?php if (hasRole('PID_MANAGER')): ?>
+              		<li class=""><a href="#">PID</a></li>
+              	<?php endif; ?>
             </ul>
           </li>
+        <?php endif; ?>
+          
+        <?php if(hasRole('PUBLIC')): ?>
           <li>
             <a href="javascript:;" id="main-nav-search"><i class="icon-search icon-white"></i></a>
           </li>
+	    <?php endif; ?>
+	      
+	    <?php if(hasRole('AUTHENTICATED_USER')): ?>
           <li>
             <a href="javascript:;" id="main-nav-user-account" title="aaa"><i class="icon-user icon-white"></i></a>
           </li>
+        <?php endif; ?>
+          
         </ul>
       </div>
 
       <div class="hide" id="user-account-info">
-        Logged in as Minh Duc Nguyen(u4297901) Logout
+      	<?php if(hasRole('AUTHENTICATED_USER')): ?>
+        	Logged in as <?=loggedInName();?> <br/>
+        	 <?php echo anchor('auth/logout', 'Logout'); ?>
+		<?php endif; ?>
       </div>
       
     </div>
 </div>
 
-
-<!--div class="navbar navbar-inverse" id="topbar">
-  <div class="navbar-inner" id="arms-nav">
-    <div class="container">
-      <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </a>
-      <a class="brand" href="#">
-        <img src="<?php echo base_url();?>/assets/img/ands_logo_white.png" alt="ANDS Logo White"/>
-      </a>
-      <div class="nav-collapse pull-right">
-        <ul class="nav">
-          <li class="active"><a href="#">Home</a></li>
-          <li><a href="#">Link</a></li>
-          <li><a href="#">Link</a></li>
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
-            <ul class="dropdown-menu">
-              <li><a href="#">Action</a></li>
-              <li><a href="#">Another action</a></li>
-              <li><a href="#">Something else here</a></li>
-              <li class="divider"></li>
-              <li class="nav-header">Nav header</li>
-              <li><a href="#">Separated link</a></li>
-              <li><a href="#">One more separated link</a></li>
-            </ul>
-          </li>
-        </ul>
-        <form class="navbar-search pull-left" action="">
-          <input type="text" class="search-query span2" placeholder="Search">
-        </form>
-        <ul class="nav pull-right">
-          <li><a href="#">Link</a></li>
-          <li class="divider-vertical"></li>
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
-            <ul class="dropdown-menu">
-              <li><a href="#">Action</a></li>
-              <li><a href="#">Another action</a></li>
-              <li><a href="#">Something else here</a></li>
-              <li class="divider"></li>
-              <li><a href="#">Separated link</a></li>
-            </ul>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</div-->

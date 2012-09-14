@@ -66,5 +66,22 @@ $db['registry']['stricton'] = FALSE;
 $db['registry']['save_queries'] = FALSE; 
 
 
+$db['cosi']['hostname'] = 'ands3.anu.edu.au';
+$db['cosi']['username'] = 'webuser';
+$db['cosi']['password'] = '';
+$db['cosi']['database'] = 'archive_dbs_cosi_production';
+$db['cosi']['dbdriver'] = 'postgre';
+$db['cosi']['dbprefix'] = '';
+$db['cosi']['pconnect'] = TRUE;
+$db['cosi']['db_debug'] = TRUE;
+$db['cosi']['cache_on'] = FALSE;
+$db['cosi']['cachedir'] = '';
+$db['cosi']['char_set'] = 'utf8';
+$db['cosi']['dbcollat'] = 'utf8_general_ci';
+$db['cosi']['swap_pre'] = '';
+$db['cosi']['autoinit'] = FALSE;
+$db['cosi']['stricton'] = FALSE;
+$db['cosi']['save_queries'] = FALSE; 
+
 /* End of file database.php */
 /* Location: ./application/config/database.php */

@@ -50,6 +50,31 @@ define('EXTRIF_NAMESPACE', "http://ands.org.au/standards/rif-cs/extendedRegistry
 define('RIFCS_NAMESPACE', "http://ands.org.au/standards/rif-cs/registryObjects");
 
 
+/*
+ * Authentication Methods
+ */
+define('gCOSI_AUTH_METHOD_BUILT_IN', 'AUTHENTICATION_BUILT_IN');
+define('gCOSI_AUTH_METHOD_LDAP', 'AUTHENTICATION_LDAP');
+define('gCOSI_AUTH_METHOD_SHIBBOLETH', 'AUTHENTICATION_SHIBBOLETH');
+
+define('gCOSI_AUTH_ROLE_FUNCTIONAL', 'ROLE_FUNCTIONAL');
+define('gCOSI_AUTH_ROLE_ORGANISATIONAL', 'ROLE_ORGANISATIONAL');
+
+
+define('gCOSI_AUTH_LDAP_HOST', "ldaps://ldap.anu.edu.au");
+define('gCOSI_AUTH_LDAP_PORT', 636); // 636 | 389
+define('gCOSI_AUTH_LDAP_BASE_DN', "ou=People, o=anu.edu.au");
+// The resource distinguished name.
+// The string @@ROLE_ID@@ will be replace with the user role_id, and escaped
+// for LDAP reserved characters before the bind is attempted.
+define('gCOSI_AUTH_LDAP_UID', "uid=@@ROLE_ID@@"); 
+define('gCOSI_AUTH_LDAP_DN', gCOSI_AUTH_LDAP_UID . ", " . gCOSI_AUTH_LDAP_BASE_DN); 
+
+define('AUTH_ROLE_ARRAY', 'registry_user_roles');
+define('AUTH_ORG_ARRAY', 'registry_org_roles');
+define('AUTH_ROLE_DEFAULT_ATTRIBUTE', 'PUBLIC');
+
+
 
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */

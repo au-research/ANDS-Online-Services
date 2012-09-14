@@ -21,17 +21,24 @@
 					<h1>Login</h1>
 				</div>
 				<div class="box-content">
-					<form class="form-horizontal" action="registry_object/manage">
+					
+					<?php if (isset($error_message)): ?>
+						<div class="alert alert-error">
+							<?php echo $error_message; ?>
+						</div>
+					<?php endif; ?>
+					
+					<form class="form-horizontal" action="<?=base_url("auth/login");?>" method="post">
 					  <div class="control-group">
-					    <label class="control-label" for="inputEmail">User ID</label>
+					    <label class="control-label" for="inputUsername">Username</label>
 					    <div class="controls">
-					      <input type="text" id="inputEmail" placeholder="Email">
+					      <input type="text" id="inputUsername" name="inputUsername" placeholder="Username">
 					    </div>
 					  </div>
 					  <div class="control-group">
 					    <label class="control-label" for="inputPassword">Password</label>
 					    <div class="controls">
-					      <input type="password" id="inputPassword" placeholder="Password">
+					      <input type="password" id="inputPassword" name="inputPassword" placeholder="Password">
 					    </div>
 					  </div>
 					  <div class="control-group">
