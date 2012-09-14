@@ -72,3 +72,29 @@ GRANT SELECT, INSERT, DELETE ON TABLE dba.tbl_internal_search_statistics TO webu
 
 GRANT ALL ON TABLE dba.tbl_internal_search_statistics_id_seq TO dba;
 GRANT SELECT, USAGE ON TABLE dba.tbl_internal_search_statistics_id_seq TO webuser;
+
+
+
+-- Table: dba.tbl_tags
+
+-- DROP TABLE dba.tbl_tags;
+
+CREATE TABLE dba.tbl_tags
+(
+  id serial NOT NULL,
+  ro_id integer,
+  tag character varying(255),
+  ro_hash character varying(255),
+  contributed_by character varying(255),
+  CONSTRAINT unique_tags UNIQUE (tag , ro_hash )
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE dba.tbl_tags
+  OWNER TO dba;
+GRANT ALL ON TABLE dba.tbl_tags TO dba;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE dba.tbl_tags TO webuser;
+
+GRANT ALL ON TABLE dba.tbl_tags_id_seq TO dba;
+GRANT ALL ON TABLE dba.tbl_tags_id_seq TO webuser;

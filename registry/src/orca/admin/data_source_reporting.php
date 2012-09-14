@@ -47,6 +47,7 @@ if(getPostedValue('ds_report')=='Generate Report')  { $report_type = "datasource
 
 if($report_type!='')
 {
+
 //we need to check we have the appropriate data passed and then display the report - calling individual stats functions
 	if($report_type == 'group' && $objectGroup == '')
 	{
@@ -129,7 +130,8 @@ if($report_type!='')
 			}
 			$i++;	
 		}
-
+		if(count($page_views_stats[0])>0)
+		{
 		foreach($page_views_stats as $page)
 		{
 			
@@ -148,6 +150,7 @@ if($report_type!='')
 				}
 
 			}
+		}
 		}
 		arsort($array['countries']);
 		arsort($array['sources']);
@@ -260,14 +263,16 @@ print('</select> <input type="submit" name="org_report" value="Generate Report" 
 
 if( (strtoupper($ds_report) == "GENERATE REPORT" ||  strtoupper($org_report) == "GENERATE REPORT")&& $errorMessages=='')
 { 
-	if($report_type=='group')
+	if($report_type =='group')
 	{
 		$title = $objectGroup;
+		$grouping = "Organisation";
 	}
-	if($report_type=='datasource');
+	if($report_type == "datasource")
 	{
 		$data_source = getDataSources($dataSourceKey,null);
 		$title = $data_source[0]['title'];
+		$grouping = "Datasource";		
 	}
 	?>
 	<p>&nbsp;</p>
@@ -280,20 +285,14 @@ if( (strtoupper($ds_report) == "GENERATE REPORT" ||  strtoupper($org_report) == 
 	<div class="reportDiv">
 		<table class="reportTable" width="450">
 			<tbody>
-				<tr><td class="reportMauve" width="400">Total Number of Records:</td><td class="reportResultCell"><?php echo $totalCount;?></td></tr>
-				<!--  <tr><td class="reportMauve">Time users averaged while viewing you records:</td><td class="reportResultCell">{X}</td></tr> -->
+				<tr><td class="reportMauve" width="400">Number of Records within your <?php echo $grouping;?>:</td><td class="reportResultCell"><?php echo $totalCount;?></td></tr>
+				<tr><td class="reportBlue"  width="400">Number of your records being viewed:</td><td class="reportResultCell"><?php echo $filterViewCount;?></td></tr>		
+				<!--<tr><td class="reportMauve"  width="400">Number of times your records have been accessed:</td><td class="reportResultCell"><?php echo $filterViewCount;?></td></tr>	   -->							
 			</tbody>
 		</table>
 	</div>
 
-	<div class="reportDiv">
-		<table class="reportTable" width="450">
-			<tbody>
-		<!--  <tr><td class="reportBlue">Number of records returned by RDA searches:</td><td class="reportResultCell">{X}</td></tr>  -->		
-				<tr><td class="reportBlue"  width="400">Number of records viewed:</td><td class="reportResultCell"><?php echo $filterViewCount;?></td></tr>
-			</tbody>
-		</table>
-	</div>
+	
 	
 	<p class="reportText">Summary </p>	
 		<div class="reportDiv">
@@ -353,11 +352,11 @@ if( (strtoupper($ds_report) == "GENERATE REPORT" ||  strtoupper($org_report) == 
 		</table>
 		</td>
 		<td>		
-		<table class="reportTable">
+		<table class="reportTable" style="vertical-align:top">
 			<tbody>
 				<tr><td width="300" colspan="2" class="reportMauve" >Keywords users are searching RDA which produce zero search results</td></tr>
 				<?php 
-				if(isset($noResults))
+				if(isset($noResults)&&count($noResults[0])>0)
 				{
 					
 					foreach($noResults as $noResult)
@@ -381,12 +380,12 @@ if( (strtoupper($ds_report) == "GENERATE REPORT" ||  strtoupper($org_report) == 
 			<tbody>
 				<tr><td width="300" colspan="2" class="reportBlue" >Collections viewed most</td></tr>
 				<?php 
-				if($pageViewCount > 0 )
+				if($pageViewCount > 0)
 				{
 					for($i=0;$i<$pageViewCount;$i++)
 					{
 					?>
-						<tr><td width="20"></td><td class="reportResultCell" width="250"><?php if($page_views_stats[$i]['display_title']!=''){echo $page_views_stats[$i]['display_title'];}?> - <span class="faded">(<?php echo $page_views_stats[$i]['page_views'] ?>)</span></td></tr>
+						<tr><td width="20"></td><td class="reportResultCell" width="250"><?php if($page_views_stats[$i]['display_title']!=''){echo $page_views_stats[$i]['display_title'];} ?> - <span class="faded">(<?php echo $page_views_stats[$i]['page_views'] ?>)</span></td></tr>
 					<?php 
 					}
 				}else{
