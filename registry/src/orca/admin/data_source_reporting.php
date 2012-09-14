@@ -71,10 +71,18 @@ if($report_type!='')
 		if($report_type=='group')
 		{
 			$totalRecords = getRegistryObjectKeysForGroup($objectGroup);
+			$collectionRecords = getRegistryObjectCount(null, $group=$objectGroup, $className='Collection', $status = null);
+			$partyRecords = getRegistryObjectCount(null, $group=$objectGroup, $className='Party', $status = null);		
+			$activityRecords = getRegistryObjectCount(null, $group=$objectGroup, $className='Activity', $status = null);	
+			$serviceRecords = getRegistryObjectCount(null, $group=$objectGroup, $className='Service', $status = null);					
 
 		}else if ($report_type=='datasource')
 		{
 			$totalRecords = getRegistryObjectKeysForDataSource($dataSourceKey);
+			$collectionRecords = getRegistryObjectCount($dataSourceKey, $group = null, $className='Collection', $status = null);
+			$partyRecords = getRegistryObjectCount($dataSourceKey, $group = null, $className='Party', $status = null);		
+			$activityRecords = getRegistryObjectCount($dataSourceKey, $group = null, $className='Activity', $status = null);	
+			$serviceRecords = getRegistryObjectCount($dataSourceKey, $group = null, $className='Service', $status = null);				
 		}	
 
 		if(isset($totalRecords[0]))	{
@@ -84,11 +92,63 @@ if($report_type!='')
 		}
 		
 		//Let's get the records which have been viewed	for the given time frame
-		$sortOrder = "page_views";
-		$class = "collection";
-		$page_views_stats = getCollectionsViewed($groupingType,$groupingValue,$dateFrom,$dateTo,$sortOrder,$class);
 		$pageViewCount = 0;
-		$pageViewCount = count($page_views_stats);
+		$totalcollectionViews = 0;			
+		$partyViewCount = 0;
+		$totalpartyViews = 0;			
+		$activityViewCount = 0;
+		$totalactivityViews = 0;			
+		$serviceViewCount = 0;
+		$totalserviceViews = 0;
+		$totalPageViews = 0;			
+		$sortOrder = "page_views";
+		
+		$class = "collection";
+		$page_views_stats = getCollectionsViewed($groupingType,$groupingValue,$dateFrom,$dateTo,$sortOrder,$class);			
+		if($page_views_stats)
+		{
+			$pageViewCount = count($page_views_stats);
+			foreach($page_views_stats as $pageStats)
+			{
+				$totalcollectionViews = $totalcollectionViews + $pageStats['page_views'];
+			}
+		}	
+				
+		$class = "party";
+		$party_views_stats = getCollectionsViewed($groupingType,$groupingValue,$dateFrom,$dateTo,$sortOrder,$class);			
+		if($party_views_stats)
+		{
+			$partyViewCount = count($party_views_stats);
+			foreach($party_views_stats as $pageStats)
+			{
+				$totalpartyViews = $totalpartyViews + $pageStats['page_views'];
+			}					
+		}	
+				
+		$class = "activity";
+		$activity_views_stats = getCollectionsViewed($groupingType,$groupingValue,$dateFrom,$dateTo,$sortOrder,$class);	
+		if($activity_views_stats)
+		{
+			$activityViewCount =  count($activity_views_stats);	
+			foreach($activity_views_stats as $pageStats)
+			{
+				$totalactivityViews = $totalactivityViews + $pageStats['page_views'];
+			}	
+		}
+				
+		$class = "service";
+		$service_views_stats = getCollectionsViewed($groupingType,$groupingValue,$dateFrom,$dateTo,$sortOrder,$class);		
+		if($service_views_stats)
+		{
+			$serviceViewCount =  count($service_views_stats);
+			foreach($service_views_stats as $pageStats)
+			{
+				$totalserviceViews = $totalserviceViews + $pageStats['page_views'];
+			}	
+		}		
+
+		$totalRecordsViewed = $pageViewCount + $partyViewCount + $activityViewCount + $serviceViewCount;
+		$totalPageViews = $totalcollectionViews + $totalpartyViews + $totalactivityViews + $totalserviceViews;
 		$filterViewCount = $pageViewCount;
 		if($pageViewCount > 3) $pageViewCount = 3;
 		$filter='';
@@ -157,7 +217,8 @@ if($report_type!='')
 		arsort($array['search']);		
 	
 		$sortOrder = "unique_page_views";
-		$unique_views_stats = getCollectionsViewed($groupingType,$groupingValue,$dateFrom,$dateTo,$sortOrder,$class);		
+		$class= 'collection';
+		$unique_views_stats = getCollectionsViewed($groupingType,$groupingValue,$dateFrom,$dateTo,$sortOrder,$class);	
 		$uniqueViewCount = 0;
 		$uniqueViewCount = count($unique_views_stats);
 		if($uniqueViewCount > 3) $uniqueViewCount = 3;	
@@ -277,42 +338,64 @@ if( (strtoupper($ds_report) == "GENERATE REPORT" ||  strtoupper($org_report) == 
 	?>
 	<p>&nbsp;</p>
 	<fieldset>
-	<legend><?php echo $title; ?>&nbsp;&nbsp;&nbsp; <a style="padding: 0px; margin: 0px;" href="services/data_statistics_xls.php?monthFrom=<?php echo getPostedValue('monthFrom');?>&yearFrom=<?php echo getPostedValue('yearFrom');?>&monthTo=<?php echo getPostedValue('monthTo');?>&yearTo=<?php echo getPostedValue('yearTo');?>&typeStat=<?php echo getPostedValue('typeStat');?>"><img title="Get xls file for the statistics" style=" vertical-align: -0.6em;" src="<?php echo gORCA_IMAGE_ROOT;?>xls.gif" alt=""/></a>	
-		</legend>
+	<legend><?php echo $title; ?></legend>
 	<p><strong>Reporting Date:</strong>&nbsp;&nbsp;<span class="reportDate"> <?php echo $dateString;?></span><br /></br /></p>
 	<p class="reportText">Statistics for <?php echo $title;?> </p>
 	<p>&nbsp;</p>
 	<div class="reportDiv">
-		<table class="reportTable" width="450">
+		<table class="reportTable" width="800">
 			<tbody>
-				<tr><td class="reportMauve" width="400">Number of Records within your <?php echo $grouping;?>:</td><td class="reportResultCell"><?php echo $totalCount;?></td></tr>
-				<tr><td class="reportBlue"  width="400">Number of your records being viewed:</td><td class="reportResultCell"><?php echo $filterViewCount;?></td></tr>		
-				<!--<tr><td class="reportMauve"  width="400">Number of times your records have been accessed:</td><td class="reportResultCell"><?php echo $filterViewCount;?></td></tr>	   -->							
+				<tr style="border:0px;">
+					<td width="450">&nbsp;</td>
+					<td width="75" align="center">Collections</td>
+					<td width="75" align="center">Parties</td>
+					<td width="75" align="center">Activities</td>
+					<td width="75" align="center">Services</td>
+					<td width="75" align="center"></td>
+				</tr>
+				<tr>
+					<td class="reportMauve">Number of Records within your <?php echo $grouping;?>:</td>
+					<td class="reportResultCell" ><?php echo $collectionRecords;?></td>
+					<td class="reportResultCell" ><?php echo $partyRecords;?></td>
+					<td class="reportResultCell" ><?php echo $activityRecords;?></td>
+					<td class="reportResultCell" ><?php echo $serviceRecords;?></td>
+					<td class="reportResultCell"><?php echo $totalCount;?></td>
+				</tr>
+				<tr>
+					<td class="reportBlue">Number of your records being viewed:</td>
+					<td class="reportResultCell" ><?php echo $filterViewCount;?></td>
+					<td class="reportResultCell" ><?php echo $partyViewCount;?></td>
+					<td class="reportResultCell" ><?php echo $activityViewCount;?></td>
+					<td class="reportResultCell" ><?php echo $serviceViewCount;?></td>
+					<td class="reportResultCell"><?php echo $totalRecordsViewed;?></td>
+				</tr>		
+				<tr>
+					<td class="reportMauve">Number of times your records have been accessed:</td>
+					<td class="reportResultCell" ><?php  echo $totalcollectionViews;?></td>
+					<td class="reportResultCell" ><?php  echo $totalpartyViews;?></td>
+					<td class="reportResultCell" ><?php  echo $totalactivityViews;?></td>
+					<td class="reportResultCell" ><?php  echo $totalserviceViews;?></td>
+					<td class="reportResultCell"><?php echo $totalPageViews;?></td>		
+				</tr>						
 			</tbody>
 		</table>
-	</div>
-
-	
-	
-	<p class="reportText">Summary </p>	
-		<div class="reportDiv">
 		
-		<br />
-		<table class="reportTable">
+			<br />
+		<table class="reportTable" width="800">
 			<tbody>
-				<tr>
-				<td width="200"></td>
+				<tr style="border:0px">
+				<td  width="450">&nbsp;</td>
 		<?php	$count=0;
 				foreach($array['sources'] as $key => $value)
 				{
 					if($count<5){?>
-					<td class="reportBlue" width="75"><?php echo $key;?></td>					
+					<td align="center"><?php echo $key;?></td>					
 		<?php		}
 					$count++;
 				}		?>				
 				</tr>
 				<tr>
-				<td class="reportMauve" width="200">Sources users are finding<br />your Records:</td>				
+				<td class="reportMauve" >How users are finding your Records:</td>				
 		<?php 	$count=0;
 				foreach($array['sources'] as $key => $value)
 				{ 	
@@ -326,13 +409,15 @@ if( (strtoupper($ds_report) == "GENERATE REPORT" ||  strtoupper($org_report) == 
 				</tr>
 			</tbody>
 		</table>	
-		<br />
-		
-	
-		<p class="reportText">Keywords: </p>
-		<table>
-		<tr><td>
-		<table class="reportTable">
+		<br />	
+</div>
+
+
+		<p class="reportText">RDA Search Summary: </p>
+		<div class="reportDiv">
+		<table class="reportTable" style="vertical-align: top" width="800">
+		<tr><td style="vertical-align:top">
+		<table class="reportTable" style="vertical-align:top">
 			<tbody>
 				<tr><td width="300" colspan="2" class="reportBlue" >Keyword users are using when searching RDA successfully for your records</td></tr>
 				<?php 
@@ -362,7 +447,7 @@ if( (strtoupper($ds_report) == "GENERATE REPORT" ||  strtoupper($org_report) == 
 					foreach($noResults as $noResult)
 					{
 	?>
-					<tr><td width="20"></td><td class="reportResultCell" width="250"><?php echo $noResult['search_term'];?>  (<?php echo $noResult['thecount'];?>) </td></tr>
+					<tr><td width="20"></td><td class="reportResultCell" width="250"><?php echo $noResult['search_term'];?>  (<?php echo $noResult['thecount'];?> </td></tr>
 	<?php					
 					}
 				}
@@ -371,21 +456,22 @@ if( (strtoupper($ds_report) == "GENERATE REPORT" ||  strtoupper($org_report) == 
 			</tbody>
 		</table></td></tr>
 		</table>
+</div>
 
-
-		<p class="reportText">Collections:</p>
-		<table>
+		<p class="reportText">Collection Summary:</p>
+		<div class="reportDiv">
+		<table width="800">
 		<tr style="vertical-align: top"><td>
 		<table class="reportTable">
 			<tbody>
-				<tr><td width="300" colspan="2" class="reportBlue" >Collections viewed most</td></tr>
+				<tr><td width="300" colspan="2" class="reportBlue" >Collections viewed most</td><td></td></tr>
 				<?php 
 				if($pageViewCount > 0)
 				{
 					for($i=0;$i<$pageViewCount;$i++)
 					{
 					?>
-						<tr><td width="20"></td><td class="reportResultCell" width="250"><?php if($page_views_stats[$i]['display_title']!=''){echo $page_views_stats[$i]['display_title'];} ?> - <span class="faded">(<?php echo $page_views_stats[$i]['page_views'] ?>)</span></td></tr>
+						<tr><td width="20"></td><td class="reportResultCell" width="250"><?php if($page_views_stats[$i]['display_title']!=''){echo $page_views_stats[$i]['display_title'];} ?> </td><td class="reportResultCell"><?php echo $page_views_stats[$i]['page_views'] ?></td></tr>
 					<?php 
 					}
 				}else{
@@ -399,14 +485,14 @@ if( (strtoupper($ds_report) == "GENERATE REPORT" ||  strtoupper($org_report) == 
 		<td>		
 		<table class="reportTable">
 			<tbody>
-				<tr><td width="300" colspan="2" class="reportMauve" >Collections viewed most by distinct users</td></tr>
+				<tr><td width="300" colspan="2" class="reportMauve" >Collections viewed most by distinct users</td><td></td></tr>
 				<?php 
 				if($uniqueViewCount > 0)
 				{
 					for($i=0;$i<$uniqueViewCount;$i++)
 					{
 					?>
-						<tr><td width="20"></td><td class="reportResultCell" width="250"><?php if($unique_views_stats[$i]['display_title']!=''){echo $unique_views_stats[$i]['display_title'];}else{echo $unique_views_stats[$i]['slug'];} ?> - <span class="faded">(<?php echo $unique_views_stats[$i]['unique_page_views'] ?>)</span></td></tr>
+						<tr><td width="20"></td><td class="reportResultCell" width="250"><?php if($unique_views_stats[$i]['display_title']!=''){echo $unique_views_stats[$i]['display_title'];}else{echo $unique_views_stats[$i]['slug'];} ?> </td><td class="reportResultCell"><?php echo $unique_views_stats[$i]['unique_page_views'] ?>)</td></tr>
 					<?php 
 					}
 				}
@@ -415,7 +501,9 @@ if( (strtoupper($ds_report) == "GENERATE REPORT" ||  strtoupper($org_report) == 
 		</table></td></tr>
 		</table>	
 		<br />
-		<p class="reportText">Presence:</p>		
+				<p class="reportText">Presence:</p>		
+		<div class="reportDiv">
+<p class="reportText">Nationally:</p>		
 		<br />
 		<table class="reportTable">
 			<tbody>
@@ -427,21 +515,25 @@ if( (strtoupper($ds_report) == "GENERATE REPORT" ||  strtoupper($org_report) == 
 				<td class="reportMauve" width="50">WA</td>
 				<td class="reportMauve" width="50">SA</td>
 				<td class="reportMauve" width="50">VIC</td>
-				<td class="reportMauve" width="50">TAS</td>				
+				<td class="reportMauve" width="50">TAS</td>	
+				<td></td>			
 				</tr>
-				<tr><td class="reportBlue" width="200">Users Location Total:</td>
-				<td class="reportResultCell" width="50"><?php if(isset($array['regions']['Australian Capital Territory'])) {echo $array['regions']['Australian Capital Territory'];} else {echo "0";}?></td>
-				<td class="reportResultCell" width="50"><?php if(isset($array['regions']['New South Wales'])) {echo $array['regions']['New South Wales'];} else {echo "0";}?></td>
-				<td class="reportResultCell" width="50"><?php if(isset($array['regions']['Queensland'])) {echo $array['regions']['Queensland'];} else {echo "0";}?></td>
-				<td class="reportResultCell" width="50"><?php if(isset($array['regions']['Northern Territory'])) {echo $array['regions']['Northern Territory'];} else {echo "0";}?></td>
-				<td class="reportResultCell" width="50"><?php if(isset($array['regions']['Western Australia'])) {echo $array['regions']['Western Australia'];} else {echo "0";}?></td>
-				<td class="reportResultCell" width="50"><?php if(isset($array['regions']['South Australia'])) {echo $array['regions']['South Australia'];} else {echo "0";}?></td>
-				<td class="reportResultCell" width="50"><?php if(isset($array['regions']['Victoria'])) {echo $array['regions']['Victoria'];} else {echo "0";}?></td>
-				<td class="reportResultCell" width="50"><?php if(isset($array['regions']['Tasmania'])) {echo $array['regions']['Tasmania'];} else {echo "0";}?></td>				
+				<tr><td class="reportBlue" width="200">State Presence:</td>
+				<td class="reportResultCell" width="50"><?php if(isset($array['regions']['Australian Capital Territory'])) {$act = $array['regions']['Australian Capital Territory'];} else {$act = 0;} echo $act;?></td>
+				<td class="reportResultCell" width="50"><?php if(isset($array['regions']['New South Wales'])) {$nsw= $array['regions']['New South Wales'];} else {$nsw = 0;} echo $nsw;?></td>
+				<td class="reportResultCell" width="50"><?php if(isset($array['regions']['Queensland'])) {$qld =  $array['regions']['Queensland'];} else {$qld = 0;} echo $qld?></td>
+				<td class="reportResultCell" width="50"><?php if(isset($array['regions']['Northern Territory'])) {$nt = $array['regions']['Northern Territory'];} else {$nt = 0;} echo $nt;?></td>
+				<td class="reportResultCell" width="50"><?php if(isset($array['regions']['Western Australia'])) {$wa =  $array['regions']['Western Australia'];} else {$wa=0;} echo $wa;?></td>
+				<td class="reportResultCell" width="50"><?php if(isset($array['regions']['South Australia'])) {$sa = $array['regions']['South Australia'];} else {$sa = 0;} echo $sa;?></td>
+				<td class="reportResultCell" width="50"><?php if(isset($array['regions']['Victoria'])) {$vic = $array['regions']['Victoria'];} else {$vic = 0;} echo $vic;?></td>
+				<td class="reportResultCell" width="50"><?php if(isset($array['regions']['Tasmania'])) {$tas = $array['regions']['Tasmania'];} else {$tas = 0;} echo $tas;?></td>
+				<?php $totalNational = $act + $nsw + $qld + $nt + $wa + $sa + $vic + $tas; ?>
+				<td class="reportResultCell" width="50"><?php echo $totalNational;?></td>				
 				</tr>
 			</tbody>
 		</table>	
 		<br />
+		<p class="reportText">Internationally:</p>	
 		<table class="reportTable">
 			<tbody>
 				<tr><td width="200"></td>
@@ -455,7 +547,7 @@ if( (strtoupper($ds_report) == "GENERATE REPORT" ||  strtoupper($org_report) == 
 				}	?>
 				
 				</tr>
-				<tr><td class="reportBlue" width="200">Users Location Total:</td>
+				<tr><td class="reportBlue" width="200">Global Presence:</td>
 		<?php 	$count = 0;
 				foreach($array['countries'] as $key => $value)
 				{		
@@ -467,7 +559,8 @@ if( (strtoupper($ds_report) == "GENERATE REPORT" ||  strtoupper($org_report) == 
 				
 				</tr>
 			</tbody>
-		</table>				
+		</table>	
+		</div>			
 	</div>
 	
 	</fieldset>
