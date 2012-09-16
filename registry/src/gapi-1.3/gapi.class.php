@@ -110,7 +110,7 @@ class gapi
    * @param Int $start_index OPTIONAL: Start index of results
    * @param Int $max_results OPTIONAL: Max results returned
    */
-  public function requestReportData($report_id, $dimensions, $metrics, $sort_metric=null, $filter=null, $start_date=null, $end_date=null, $start_index=1, $max_results=30,$segment=null)
+  public function requestReportData($report_id, $dimensions, $metrics, $sort_metric=null, $filter=null, $start_date=null, $end_date=null, $start_index=1, $max_results=30,$segment=null,$ga_api_key)
   {
     $parameters = array('ids'=>'ga:' . $report_id);
     if($segment!=null)
@@ -206,7 +206,7 @@ class gapi
     
     $parameters['start-index'] = $start_index;
     $parameters['max-results'] = $max_results;
-    $parameters['key'] = 'AIzaSyAl3TMujnebnE7dgVC87SJWN5sn7S0dABU';
+    $parameters['key'] = $ga_api_key;
     $parameters['prettyprint'] = gapi::dev_mode ? 'true' : 'false';
     
     $response = $this->httpRequest(gapi::report_data_url, $parameters, null, $this->generateAuthHeader());
