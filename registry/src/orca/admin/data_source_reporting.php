@@ -346,7 +346,7 @@ if( (strtoupper($ds_report) == "GENERATE REPORT" ||  strtoupper($org_report) == 
 		<table class="reportTable" width="800">
 			<tbody>
 				<tr style="border:0px;">
-					<td width="450">&nbsp;</td>
+					<td width="400">&nbsp;</td>
 					<td width="75" align="center"  class="reportHeaderCell">Collections</td>
 					<td width="75" align="center"  class="reportHeaderCell">Parties</td>
 					<td width="75" align="center"  class="reportHeaderCell">Activities</td>
@@ -382,10 +382,10 @@ if( (strtoupper($ds_report) == "GENERATE REPORT" ||  strtoupper($org_report) == 
 		
 			<br />
 			<br />
-		<table class="reportTable" width="800">
+		<table class="reportTable">
 			<tbody>
 				<tr style="border:0px">
-				<td  width="450" >&nbsp;</td>
+				<td  width="400" >&nbsp;</td>
 		<?php	$count=0;
 				foreach($array['sources'] as $key => $value)
 				{
@@ -418,14 +418,14 @@ if( (strtoupper($ds_report) == "GENERATE REPORT" ||  strtoupper($org_report) == 
 		<tr><td style="vertical-align:top">
 		<table class="reportTable" style="vertical-align:top">
 			<tbody>
-				<tr><td width="300" colspan="2" class="reportGrey" >Keyword users are using when searching RDA successfully for your records</td></tr>
+				<tr><td width="320" colspan="2" class="reportGrey" >Keyword users are using when searching RDA successfully for your records</td><td></td></tr>
 				<?php 
 				$outPutcount = 0;
 				foreach($array['search'] as $key => $search)
 				{
 					if($outPutcount<3)
 					{ ?>
-						<tr><td width="20"></td><td class="reportResultCell" width="250"><?php echo $key;?> (<?php echo count($search);?>)</td></tr>			
+						<tr><td width="20"></td><td class="reportResultCell" width="270"><?php echo $key;?> </td><td class="reportResultCell" ><?php echo count($search);?></td></tr>			
 	<?php 			}
 					$outPutcount++;
 				}
@@ -434,10 +434,10 @@ if( (strtoupper($ds_report) == "GENERATE REPORT" ||  strtoupper($org_report) == 
 			</tbody>
 		</table>
 		</td>
-		<td>		
+		<td align="right">		
 		<table class="reportTable" style="vertical-align:top">
 			<tbody>
-				<tr><td width="300" colspan="2" class="reportGrey" >Keywords users are searching RDA which produce zero search results</td></tr>
+				<tr><td width="320" colspan="2" class="reportGrey" >Keywords users are searching RDA which produce zero search results</td><td></td></tr>
 				<?php 
 				if(isset($noResults)&&count($noResults[0])>0)
 				{
@@ -445,7 +445,7 @@ if( (strtoupper($ds_report) == "GENERATE REPORT" ||  strtoupper($org_report) == 
 					foreach($noResults as $noResult)
 					{
 	?>
-					<tr><td width="20"></td><td class="reportResultCell" width="250"><?php echo $noResult['search_term'];?>  (<?php echo $noResult['thecount'];?>) </td></tr>
+					<tr><td width="20"></td><td class="reportResultCell" width="270"><?php echo $noResult['search_term'];?> </td><td class="reportResultCell" > <?php echo $noResult['thecount'];?></td></tr>
 	<?php					
 					}
 				}
@@ -462,35 +462,35 @@ if( (strtoupper($ds_report) == "GENERATE REPORT" ||  strtoupper($org_report) == 
 		<tr style="vertical-align: top"><td>
 		<table class="reportTable">
 			<tbody>
-				<tr><td width="300" colspan="2" class="reportGrey" >Collections viewed most</td><td></td></tr>
+				<tr><td width="320" colspan="2" class="reportGrey" >Collections viewed most</td><td></td></tr>
 				<?php 
 				if($pageViewCount > 0)
 				{
 					for($i=0;$i<$pageViewCount;$i++)
 					{
 					?>
-						<tr><td width="20"></td><td class="reportResultCell" width="250"><?php if($page_views_stats[$i]['display_title']!=''){echo $page_views_stats[$i]['display_title'];} ?> </td><td class="reportResultCell"><?php echo $page_views_stats[$i]['page_views'] ?></td></tr>
+						<tr><td width="20"></td><td class="reportResultCell" width="270"><?php if($page_views_stats[$i]['display_title']!=''){echo $page_views_stats[$i]['display_title'];} ?> </td><td class="reportResultCell"><?php echo $page_views_stats[$i]['page_views'] ?></td></tr>
 					<?php 
 					}
 				}else{
 				?>
-						<tr><td width="20"></td><td class="reportResultCell" width="250">No pages viewed within the given timeframe</td></tr>				
+						<tr><td width="20"></td><td class="reportResultCell" width="270">No pages viewed within the given timeframe</td></tr>				
 		<?php 	}
 				?>			
 			</tbody>
 		</table>
 		</td>
-		<td>		
+		<td align="right">		
 		<table class="reportTable">
 			<tbody>
-				<tr><td width="300" colspan="2" class="reportGrey" >Collections viewed most by distinct users</td><td></td></tr>
+				<tr><td width="320" colspan="2" class="reportGrey" >Collections viewed most by distinct users</td><td></td></tr>
 				<?php 
 				if($uniqueViewCount > 0)
 				{
 					for($i=0;$i<$uniqueViewCount;$i++)
 					{
 					?>
-						<tr><td width="20"></td><td class="reportResultCell" width="250"><?php if($unique_views_stats[$i]['display_title']!=''){echo $unique_views_stats[$i]['display_title'];}else{echo $unique_views_stats[$i]['slug'];} ?> </td><td class="reportResultCell"><?php echo $unique_views_stats[$i]['unique_page_views'] ?></td></tr>
+						<tr><td width="20"></td><td class="reportResultCell" width="270"><?php if($unique_views_stats[$i]['display_title']!=''){echo $unique_views_stats[$i]['display_title'];}else{echo $unique_views_stats[$i]['slug'];} ?> </td><td class="reportResultCell"><?php echo $unique_views_stats[$i]['unique_page_views'] ?></td></tr>
 					<?php 
 					}
 				}
