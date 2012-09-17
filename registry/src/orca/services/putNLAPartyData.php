@@ -24,7 +24,6 @@ define('gDATA_SOURCE','NLA_PARTY');
 define('gNLA_SRU_URI','http://www.nla.gov.au/apps/srw/search/peopleaustralia');
 define('gSOLR_UPDATE_URL' , $solr_url . "update");
 define('eIMAGE_ROOT', '_logos/logo_EMPTY.gif');
-
 require '/var/www/htdocs/registry/_includes/_environment/database_env.php';
 require '/var/www/htdocs/registry/_includes/_functions/database_functions.php';
 require '/var/www/htdocs/registry/_includes/_functions/general_functions.php';
@@ -33,37 +32,15 @@ require '/var/www/htdocs/registry/_includes/_functions/access_functions.php';
 require '/var/www/htdocs/registry/orca/_functions/orca_data_functions.php';
 require '/var/www/htdocs/registry/orca/_functions/orca_data_source_functions.php';
 require '/var/www/htdocs/registry/orca/_functions/orca_export_functions.php';
-require '/var/www/htdocs/registry/orca/_functions/orca_access_functions.php';
 require '/var/www/htdocs/registry/orca/_functions/orca_taskmgr_functions.php';
 require '/var/www/htdocs/registry/orca/_functions/orca_solr_functions.php';
+require '/var/www/htdocs/registry/orca/_functions/orca_access_functions.php';
 require '/var/www/htdocs/registry/orca/_functions/orca_import_functions.php';
 require '/var/www/htdocs/registry/orca/_functions/orca_cache_functions.php';
 require '/var/www/htdocs/registry/orca/_functions/orca_presentation_functions.php';
 require '/var/www/htdocs/registry/orca/_functions/orca_constants.php';
 
 chdir("/var/www/htdocs/registry/orca/_includes");
-function htmlNumericCharRefs($unsafeString)
-{
-        $safeString = str_replace("&", "&#38;", $unsafeString);
-        $safeString = str_replace('"', "&#34;", $safeString);
-        $safeString = str_replace("'", "&#39;", $safeString);
-        $safeString = str_replace("<", "&#60;", $safeString);
-        $safeString = str_replace(">", "&#62;", $safeString);
-        return $safeString;
-}
-function esc($unsafeString, $forJavascript=false)
-{
-        $safeString = $unsafeString;
-        if( $forJavascript )
-        {
-                $safeString = str_replace('\\', '\\\\', $safeString);
-                $safeString = str_replace("'", "\\'", $safeString);
-        }
-        $safeString = htmlNumericCharRefs($safeString);
-        $safeString = str_replace("\r", "", $safeString);
-        $safeString = str_replace("\n", "&#xA;", $safeString);
-        return $safeString;
-}
 
 // Open a connection to the database.
 // This will be closed automatically by the framework.
@@ -78,7 +55,6 @@ $services = $argv[1];
 $actions ='';
 $partyIdentifiers = array();
 $setIdentifiers = array();
-
 // Get the required NLA party identifiers or the nlaset local registry_object_keys from the database.
 if($services=="relatedNLA"){
 	//returns a list of all nla identifiers that are related objects to collections, services or activities and are not registry objects
