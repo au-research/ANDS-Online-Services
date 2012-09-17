@@ -150,7 +150,7 @@ if($report_type!='')
 		$totalRecordsViewed = $pageViewCount + $partyViewCount + $activityViewCount + $serviceViewCount;
 		$totalPageViews = $totalcollectionViews + $totalpartyViews + $totalactivityViews + $totalserviceViews;
 		$filterViewCount = $pageViewCount;
-		if($pageViewCount > 3) $pageViewCount = 3;
+		if($pageViewCount > 5) $pageViewCount = 5;
 		$filter='';
 		$ga = new gapi(ga_email,ga_password);
 
@@ -221,7 +221,7 @@ if($report_type!='')
 		$unique_views_stats = getCollectionsViewed($groupingType,$groupingValue,$dateFrom,$dateTo,$sortOrder,$class);	
 		$uniqueViewCount = 0;
 		$uniqueViewCount = count($unique_views_stats);
-		if($uniqueViewCount > 3) $uniqueViewCount = 3;	
+		if($uniqueViewCount > 5) $uniqueViewCount = 5;	
 
 		$noResults = getNoResultSearches($dateFrom,$dateTo);
 	
@@ -405,7 +405,15 @@ if( (strtoupper($ds_report) == "GENERATE REPORT" ||  strtoupper($org_report) == 
 					<td class="reportResultCell" width="75"><?php echo $value;?></td>					
 		<?php 		}
 					$count++;
-				} 		?>							
+				} 	
+
+				if(count($array['sources'])<1)
+				{
+				?>
+					<td class="reportResultCell" width="400">No analytical data available for the given date range.</td>					
+		<?php 	
+				}
+				?>							
 
 				</tr>
 			</tbody>
@@ -423,11 +431,18 @@ if( (strtoupper($ds_report) == "GENERATE REPORT" ||  strtoupper($org_report) == 
 				$outPutcount = 0;
 				foreach($array['search'] as $key => $search)
 				{
-					if($outPutcount<3)
+					if($outPutcount<5)
 					{ ?>
 						<tr><td width="20"></td><td class="reportResultCell" width="270"><?php echo $key;?> </td><td class="reportResultCell" ><?php echo count($search);?></td></tr>			
 	<?php 			}
 					$outPutcount++;
+				}
+				
+				if(count($array['search'])<1)
+				{
+				?>
+						<tr><td width="20"></td><td class="reportResultCell" width="270">No analytical data availble for the given date range.</td></tr>			
+	<?php 			
 				}
 				?>
 			
@@ -448,6 +463,10 @@ if( (strtoupper($ds_report) == "GENERATE REPORT" ||  strtoupper($org_report) == 
 					<tr><td width="20"></td><td class="reportResultCell" width="270"><?php echo $noResult['search_term'];?> </td><td class="reportResultCell" > <?php echo $noResult['thecount'];?></td></tr>
 	<?php					
 					}
+				}else{
+	?>
+					<tr><td width="20"></td><td class="reportResultCell" width="270">No analytical data available for the given date range.</td></tr>
+	<?php				
 				}
 				?>
 			
@@ -469,12 +488,12 @@ if( (strtoupper($ds_report) == "GENERATE REPORT" ||  strtoupper($org_report) == 
 					for($i=0;$i<$pageViewCount;$i++)
 					{
 					?>
-						<tr><td width="20"></td><td class="reportResultCell" width="270"><?php if($page_views_stats[$i]['display_title']!=''){echo $page_views_stats[$i]['display_title'];} ?> </td><td class="reportResultCell"><?php echo $page_views_stats[$i]['page_views'] ?></td></tr>
+						<tr><td width="20"></td><td class="reportResultCell" width="270"><?php if($page_views_stats[$i]['display_title']!=''){echo $page_views_stats[$i]['display_title'];}else{echo $page_views_stats[$i]['slug'];}  ?> </td><td class="reportResultCell"><?php echo $page_views_stats[$i]['page_views'] ?></td></tr>
 					<?php 
 					}
 				}else{
 				?>
-						<tr><td width="20"></td><td class="reportResultCell" width="270">No pages viewed within the given timeframe</td></tr>				
+						<tr><td width="20"></td><td class="reportResultCell" width="270">No analytical data available for the given date range.</td></tr>				
 		<?php 	}
 				?>			
 			</tbody>
@@ -485,7 +504,7 @@ if( (strtoupper($ds_report) == "GENERATE REPORT" ||  strtoupper($org_report) == 
 			<tbody>
 				<tr><td width="320" colspan="2" class="reportGrey" >Collections viewed most by distinct users</td><td></td></tr>
 				<?php 
-				if($uniqueViewCount > 0)
+				if($uniqueViewCount > 0 && $unique_views_stats[0]!='')
 				{
 					for($i=0;$i<$uniqueViewCount;$i++)
 					{
@@ -493,6 +512,11 @@ if( (strtoupper($ds_report) == "GENERATE REPORT" ||  strtoupper($org_report) == 
 						<tr><td width="20"></td><td class="reportResultCell" width="270"><?php if($unique_views_stats[$i]['display_title']!=''){echo $unique_views_stats[$i]['display_title'];}else{echo $unique_views_stats[$i]['slug'];} ?> </td><td class="reportResultCell"><?php echo $unique_views_stats[$i]['unique_page_views'] ?></td></tr>
 					<?php 
 					}
+				}else{
+					?>
+						<tr><td width="20"></td><td class="reportResultCell" width="270">No analytical data available for the given date range.</td></tr>
+					<?php 				
+				
 				}
 				?>				
 			</tbody>
@@ -553,7 +577,14 @@ if( (strtoupper($ds_report) == "GENERATE REPORT" ||  strtoupper($org_report) == 
 					<td class="reportResultCell" width="100"><?php echo $value;?></td>					
 		<?php 		}
 					$count++;
-				} 		?>
+				} 		
+				if(count($array['countries'])<1)
+				{
+				?>
+					<td class="reportResultCell" width="400">No analytical data available for the given date range.</td>					
+		<?php 	
+				}
+				?>
 				
 				</tr>
 			</tbody>

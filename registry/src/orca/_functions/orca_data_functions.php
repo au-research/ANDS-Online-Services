@@ -3433,7 +3433,7 @@ function getNoResultSearches($timeFrom,$timeTo)
 {
 	global $gCNN_DBS_ORCA;	 
 	$resultSet = null;
-	$strQuery = "SELECT COUNT(search_term) as theCount, search_term from dba.tbl_internal_search_results WHERE result_count = '0' AND time_stamp > CAST('".$timeFrom."' AS timestamp) AND time_stamp < CAST('".$timeTo."' AS timestamp) GROUP BY search_term ORDER BY theCount DESC LIMIT 3";
+	$strQuery = "SELECT COUNT(search_term) as theCount, search_term from dba.tbl_internal_search_results WHERE result_count = '0' AND time_stamp > CAST('".$timeFrom."' AS timestamp) AND time_stamp < CAST('".$timeTo."' AS timestamp) GROUP BY search_term ORDER BY theCount DESC LIMIT 5";
 	$params = array();
 	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
 	if($resultSet)
