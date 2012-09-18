@@ -1311,6 +1311,13 @@ function getRelatedObjectTypesXML($registryObjectKey, $dataSourceKey, $registryO
 				$xml .= getRelationsXML($element['relation_id'], $typeArray[$registryObjectClass],$forSOLR);
 				if($forSOLR && ! $repeatKey && $relatedObject[0]['status']=='PUBLISHED')
 				{
+				
+					if(isset($relatedObject[0]['type']) && strtolower($relatedObject[0]['registry_object_class'])!=''){
+					$relatedObject[0]['registry_object_class'] = strtolower($relatedObject[0]['registry_object_class']);
+					if(strtolower($relatedObject[0]['type'])=='person') { $connectionsNum['person']++; }
+					elseif(strtolower($relatedObject[0]['type'])=='group') { $connectionsNum['group']++;}
+					elseif(isset($relatedObject[0]['registry_object_class'])) {$connectionsNum[$relatedObject[0]['registry_object_class']]++;}	
+				}
 					$xml .= "        <extRif:relatedObjectClass>".strtolower($relatedObject[0]['registry_object_class'])."</extRif:relatedObjectClass>\n";
 					$xml .= "        <extRif:relatedObjectType>".strtolower($relatedObject[0]['type'])."</extRif:relatedObjectType>\n";
 					$xml .= "        <extRif:relatedObjectListTitle>".esc($relatedObject[0]['list_title'])."</extRif:relatedObjectListTitle>\n";
