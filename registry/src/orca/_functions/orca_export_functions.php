@@ -1184,7 +1184,7 @@ function getRelatedObjectTypesXML($registryObjectKey, $dataSourceKey, $registryO
 	$connectionsNum['activity']= 0;
 	$connectionsNum['service']= 0;
 	$connectionsNum['collection']= 0;
-
+	$connectionsNum['party']= 0;
 	
 	$pkey1 = '';
 	$pkey2 = '';
