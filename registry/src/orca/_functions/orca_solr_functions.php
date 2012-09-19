@@ -257,6 +257,43 @@ function addDraftSolrIndexForDatasource($dataSourceKey)
 }
 
 
+function addPublishedSolrIndexForDatasource($dataSourceKey)
+{
+	global $solr_update_url;
+	global $totalCount;
+	global $chunkSize;
+	$rifcsContent = '';
+	$allKeys = getRegistryObjectKeysForDataSource($dataSourceKey);
+    $message = '';
+	if($allKeys)
+	{
+		$arraySize = sizeof($allKeys);
+		$message .= "Reindexing Published ".$dataSourceKey.": Total: ".$arraySize;
+		$totalCount += $arraySize;
+		$result = '';
+		for($i = 0; $i < $arraySize ; $i++)
+		{
+			$key = $allKeys[$i]['registry_object_key'];
+			$rifcsContent .= getRegistryObjectXMLforSOLR($key, true);
+			if(($i % $chunkSize == 0 && $i != 0) || $i == ($arraySize -1))
+			{
+					$rifcs = wrapRegistryObjects($rifcsContent);
+					$solrrifcs = transformToSolr($rifcs);
+					if (strlen($solrrifcs) != 0)
+					{
+						$result = curl_post($solr_update_url, $solrrifcs);
+						$rifcsContent = '';
+					}
+			}
+		}
+		$result = curl_post($solr_update_url.'?commit=true', '<commit waitFlush="false" waitSearcher="false"/>');
+	}
+	return $message;
+}
+
+
+
+
 function addSetofDraftsToSolrIndex($registryObjectKeys, $data_source_key, $commit=true)
 {
 
