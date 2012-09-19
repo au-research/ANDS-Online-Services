@@ -47,7 +47,7 @@ openDatabaseConnection($gCNN_DBS_ORCA, eCNN_DBS_ORCA);
 			//$tomorrow = mktime(0,0,0,$month,$day+1,$year);
 			$date = date('Y-m-d',$yesterday);
 
-			$ga->requestReportData(ga_profile_id,array('pagePath'),array('pageviews','uniquePageviews'),null,null,$date,$date,1,1000);
+			$ga->requestReportData(ga_profile_id,array('pagePath'),array('pageviews','uniquePageviews'),null,null,$date,$date,1,1000,null,ga_api_key);
 
 			foreach($ga->getResults() as $result)
 			{					

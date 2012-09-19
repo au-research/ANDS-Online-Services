@@ -3383,11 +3383,11 @@ function insertDailyStats($slug, $key, $group, $data_source, $day, $page_views,$
 
 function getDataFromSlug($slug)
 {
-	global $gCNN_DBS_ORCA_PROD;	 
+	global $gCNN_DBS_ORCA;	 
 	$resultSet = null;
 	$strQuery = "SELECT object.registry_object_key, object.object_group, object.data_source_key, object.display_title, object.registry_object_class from dba.tbl_registry_objects as object, dba.tbl_url_mappings as slugs where object.registry_object_key = slugs.registry_object_key AND slugs.url_fragment = $1";
 	$params = array($slug);
-	$resultSet = executeQuery($gCNN_DBS_ORCA_PROD, $strQuery, $params);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
 	if($resultSet)
 	{
 		return $resultSet[0]; 
