@@ -166,7 +166,8 @@ if($report_type!='')
 			if($j>0) $filter .= " || ";
 			$filter .= 'pagePath == /'.$page_views_stats[$i]['slug'];	
 			$j++;
-			if($j == 10||$j == $filterViewCount){
+			$leftover = $j;
+			if($j == 10||$leftover == $filterViewCount){
 				$ga->requestReportData(ga_profile_id,array('pagePath','country','region','source'),array('pageviews','uniquePageviews'),null,$filter,$dateFrom,$dateTo,1,100,null,ga_api_key);		
 				foreach($ga->getResults() as $results){ 
 					if(isset($array['countries'][$results->getCountry()]))
