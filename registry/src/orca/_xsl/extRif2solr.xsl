@@ -15,7 +15,7 @@
 
     <xsl:template match="ro:registryObject">
         <doc>
-        <xsl:variable name="roKey" select="ro:key"/>
+        <xsl:variable name="roKey" select="normalize-space(ro:key)"/>
             <xsl:apply-templates select="ro:key"/>
 
         <xsl:choose>
@@ -41,25 +41,25 @@
                 <xsl:apply-templates select="extRif:extendedMetadata/extRif:lastModifiedBy"/>             	
         	</xsl:when>
         	<xsl:otherwise>
-	        	<xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:keyHash"/>
-	            <xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:status"/>
-	            <xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:reverseLinks"/> 
-	            <xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:searchBaseScore"/>
-	 			<xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:registryDateModified"/>
+	        	<xsl:apply-templates select="following-sibling::extRif:extendedMetadata[normalize-space(@key) = $roKey]/extRif:keyHash"/>
+	            <xsl:apply-templates select="following-sibling::extRif:extendedMetadata[normalize-space(@key) = $roKey]/extRif:status"/>
+	            <xsl:apply-templates select="following-sibling::extRif:extendedMetadata[normalize-space(@key) = $roKey]/extRif:reverseLinks"/> 
+	            <xsl:apply-templates select="following-sibling::extRif:extendedMetadata[normalize-space(@key) = $roKey]/extRif:searchBaseScore"/>
+	 			<xsl:apply-templates select="following-sibling::extRif:extendedMetadata[normalize-space(@key) = $roKey]/extRif:registryDateModified"/>
 	            <xsl:apply-templates select="ro:originatingSource"/>
-	            <xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:dataSourceKey"/> 
-	            <xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:dataSourceKeyHash"/> 
-	            <xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:displayTitle"/> 
-	            <xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:listTitle"/>
-	            <xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:flag"/>
-      			<xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:warning_count"/>
-      			<xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:error_count"/>
-     			<xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:url_slug"/>
-      			<xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:manually_assessed_flag"/>
-      			<xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:gold_status_flag"/>
-      			<xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:quality_level"/>
-      			<xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:feedType"/>
-                <xsl:apply-templates select="following-sibling::extRif:extendedMetadata[@key = $roKey]/extRif:lastModifiedBy"/>
+	            <xsl:apply-templates select="following-sibling::extRif:extendedMetadata[normalize-space(@key) = $roKey]/extRif:dataSourceKey"/> 
+	            <xsl:apply-templates select="following-sibling::extRif:extendedMetadata[normalize-space(@key) = $roKey]/extRif:dataSourceKeyHash"/> 
+	            <xsl:apply-templates select="following-sibling::extRif:extendedMetadata[normalize-space(@key) = $roKey]/extRif:displayTitle"/> 
+	            <xsl:apply-templates select="following-sibling::extRif:extendedMetadata[normalize-space(@key) = $roKey]/extRif:listTitle"/>
+	            <xsl:apply-templates select="following-sibling::extRif:extendedMetadata[normalize-space(@key) = $roKey]/extRif:flag"/>
+      			<xsl:apply-templates select="following-sibling::extRif:extendedMetadata[normalize-space(@key) = $roKey]/extRif:warning_count"/>
+      			<xsl:apply-templates select="following-sibling::extRif:extendedMetadata[normalize-space(@key) = $roKey]/extRif:error_count"/>
+     			<xsl:apply-templates select="following-sibling::extRif:extendedMetadata[normalize-space(@key) = $roKey]/extRif:url_slug"/>
+      			<xsl:apply-templates select="following-sibling::extRif:extendedMetadata[normalize-space(@key) = $roKey]/extRif:manually_assessed_flag"/>
+      			<xsl:apply-templates select="following-sibling::extRif:extendedMetadata[normalize-space(@key) = $roKey]/extRif:gold_status_flag"/>
+      			<xsl:apply-templates select="following-sibling::extRif:extendedMetadata[normalize-space(@key) = $roKey]/extRif:quality_level"/>
+      			<xsl:apply-templates select="following-sibling::extRif:extendedMetadata[normalize-space(@key) = $roKey]/extRif:feedType"/>
+                <xsl:apply-templates select="following-sibling::extRif:extendedMetadata[normalize-space(@key) = $roKey]/extRif:lastModifiedBy"/>
       			
         	</xsl:otherwise>
         </xsl:choose>
