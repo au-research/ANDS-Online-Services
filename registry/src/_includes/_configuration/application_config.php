@@ -646,7 +646,7 @@ addMenu($menu);
 
 			// =============================================================================
 			// Data Source Report
-			$activity = new activity('aORCA_DATA_SOURCE_REPORTS', 'Data Source Reports', 'orca/admin/data_source_report.php');
+			$activity = new activity('aORCA_DATA_SOURCE_REPORT', 'Data Source Reports', 'orca/admin/data_source_report.php');
 			addActivity($activity);
 
 
