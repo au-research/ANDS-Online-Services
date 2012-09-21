@@ -73,6 +73,9 @@ Common usage:
     <copy file="etc/web.xml"
           tofile="build/web.xml"
           preservelastmodified="true"/>
+    <copy todir="${basedir}/build/classes">
+      <fileset dir="${basedir}/src" includes="**/*.properties"/>
+    </copy>
   </target>
     
 	<!-- ============================================================= -->
