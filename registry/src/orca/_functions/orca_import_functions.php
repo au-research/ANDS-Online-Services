@@ -111,9 +111,20 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 		// =====================================================================
 		$registryObjectKey = substr($gXPath->evaluate("$xs:key", $registryObject)->item(0)->nodeValue, 0, 512);
 		$oldRegistryObject = getRegistryObject($registryObjectKey);
-
-		$oldHarvestID = $oldRegistryObject[0]['created_who'];
-		if($oldRegistryObject || $oldHarvestID != $created_who || $created_who == SYSTEM || strpos($oldHarvestID, ' (') === false)
+		
+	    $importThisRecord = true;
+	    if($oldRegistryObject) //check if this record should be replaced 
+	    {
+			$oldHarvestID = $oldRegistryObject[0]['created_who'];
+			if($created_who == SYSTEM)					// created by direct import
+				$importThisRecord  = true; 				
+			else if (strpos($oldHarvestID, ' (') > 0) 	// manually added... not created by harvest
+				$importThisRecord  = true;
+			else if($oldHarvestID == $created_who)		// created by the current harvest
+				$importThisRecord  = false;
+	    }
+				
+		if($importThisRecord)
 		{
 			if( $registryObjectKey)
 			{
@@ -295,6 +306,7 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 				}
 				else
 				{
+					bench(3);
 					if($deleted && !$errors && $activity = $gXPath->evaluate("$xs:activity", $registryObject)->item(0) )
 					{
 						$activityType = $activity->getAttribute("type");
@@ -530,7 +542,7 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 						importRelatedInfo($registryObjectKey, $service, "relatedInfo", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
 	
 					} // Service
-	
+					$runResultMessage .= bench(3) . " to insert";
 					// Add a default and list title for the registry object
 					$display_title = getOrderedNames($registryObjectKey, (isset($party) && $party), true);
 					$list_title = getOrderedNames($registryObjectKey, (isset($party) && $party), false);
@@ -552,16 +564,17 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 					updateRegistryObjectSLUG($registryObjectKey, $display_title, $currentUrlSlug);
 	
 					// A new record has been inserted? Update the cache
+					// WHY OH WHY ????????????????
 	
-					if (eCACHE_ENABLED && !writeCache($dataSourceKey, $registryObjectKey, generateExtendedRIFCS($registryObjectKey)))
+					//if (eCACHE_ENABLED && !writeCache($dataSourceKey, $registryObjectKey, generateExtendedRIFCS($registryObjectKey)))
 	
-					{
-						$runErrors .= "Could not writeCache() for key: " . $registryObjectKey ."\n";
-					}
-					else
-					{
-						$recordsCached++;
-					}
+					//{
+					//	$runErrors .= "Could not writeCache() for key: " . $registryObjectKey ."\n";
+					//}
+					//else
+					//{
+					//	$recordsCached++;
+					//}
 					
 					if(isContributorPage($registryObjectKey)&&$status=='PUBLISHED')
 					{
