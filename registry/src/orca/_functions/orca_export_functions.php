@@ -1371,7 +1371,8 @@ function getRelatedObjectTypesXML($registryObjectKey, $dataSourceKey, $registryO
 					$relatedObject[0]['registry_object_class'] = strtolower($relatedObject[0]['registry_object_class']);
 					if(strtolower($relatedObject[0]['type'])=='person') { $connectionsNum['person']++; if($connectionsNum['person']>6) $addThisRelation = false;}
 					elseif(strtolower($relatedObject[0]['type'])=='group') { $connectionsNum['group']++; if($connectionsNum['group']>6) $addThisRelation = false;}
-					elseif(isset($relatedObject[0]['registry_object_class'])) {$connectionsNum[$relatedObject[0]['registry_object_class']]++;	 if($connectionsNum[$relatedObject[0]['registry_object_class']]>6) $addThisRelation = false;}		
+					elseif(isset($relatedObject[0]['registry_object_class'])) {$connectionsNum[$relatedObject[0]['registry_object_class']]++;	 if($connectionsNum[$relatedObject[0]['registry_object_class']]>6) $addThisRelation = false;}	
+					if($addThisRelation){
 						$xml .= "        <extRif:relatedObjectClass>".strtolower($relatedObject[0]['registry_object_class'])."</extRif:relatedObjectClass>\n";
 						$xml .= "        <extRif:relatedObjectType>".strtolower($relatedObject[0]['type'])."</extRif:relatedObjectType>\n";
 						$xml .= "        <extRif:relatedObjectListTitle>".esc($relatedObject[0]['list_title'])."</extRif:relatedObjectListTitle>\n";
@@ -1379,6 +1380,7 @@ function getRelatedObjectTypesXML($registryObjectKey, $dataSourceKey, $registryO
 						$xml .= "        <extRif:relatedObjectSlug>".esc($relatedObject[0]['url_slug'])."</extRif:relatedObjectSlug>\n";						
 						$xml .= "        <extRif:relatedObjectReverseType>INTERNAL</extRif:relatedObjectReverseType>\n";							
 						if($relation_logo) $xml .= "        <extRif:relatedObjectLogo>".esc($relation_logo)."</extRif:relatedObjectLogo>\n";
+					}
 					}
 					$xml .= "      </$elementName>\n";
 		
@@ -1417,7 +1419,8 @@ function getRelatedObjectTypesXML($registryObjectKey, $dataSourceKey, $registryO
 						$relatedObject[0]['registry_object_class'] = strtolower($relatedObject[0]['registry_object_class']);
 						if(strtolower($relatedObject[0]['type'])=='person') { $connectionsNum['person']++; if($connectionsNum['person']>6) $addThisRelation = false;}
 						elseif(strtolower($relatedObject[0]['type'])=='group') { $connectionsNum['group']++; if($connectionsNum['group']>6) $addThisRelation = false;}
-						elseif(isset($relatedObject[0]['registry_object_class'])) {$connectionsNum[$relatedObject[0]['registry_object_class']]++;	 if($connectionsNum[$relatedObject[0]['registry_object_class']]>6) $addThisRelation = false;}				
+						elseif(isset($relatedObject[0]['registry_object_class'])) {$connectionsNum[$relatedObject[0]['registry_object_class']]++;	 if($connectionsNum[$relatedObject[0]['registry_object_class']]>6) $addThisRelation = false;}		
+						if($addThisRelation){	
 						$xml .= "        <extRif:relatedObjectClass>".strtolower($relatedObject[0]['registry_object_class'])."</extRif:relatedObjectClass>\n";
 						$xml .= "        <extRif:relatedObjectType>".strtolower($relatedObject[0]['type'])."</extRif:relatedObjectType>\n";
 						$xml .= "        <extRif:relatedObjectListTitle>".esc($relatedObject[0]['list_title'])."</extRif:relatedObjectListTitle>\n";
@@ -1425,6 +1428,7 @@ function getRelatedObjectTypesXML($registryObjectKey, $dataSourceKey, $registryO
 						$xml .= "        <extRif:relatedObjectSlug>".esc($relatedObject[0]['url_slug'])."</extRif:relatedObjectSlug>\n";						
 						$xml .= "        <extRif:relatedObjectReverseType>EXTERNAL</extRif:relatedObjectReverseType>\n";										
 						if($relation_logo) $xml .= "        <extRif:relatedObjectLogo>".esc($relation_logo)."</extRif:relatedObjectLogo>\n";
+						}
 					}
 					$xml .= "      </$elementName>\n";
 		
