@@ -300,8 +300,8 @@
 					<dd>{{oai_set}}</dd>
 					{{/oai_set}}
 			 	</dl>
-			 	<h3>Activity Log</h3>
-			 	<div class="well">Loading ...</div>
+			 	<h3>Activity Log</h3><h5 id="log_summary"></h5>
+			 	<div class="well" id="data_source_log_container"></div>
 		 	</div>
 	    </div>
 		</div>
@@ -402,6 +402,19 @@
 		<pre class="well linenums">{{log}}</pre>
 	{{/log}}
 </div>
+
+
+<div class="hide" id="datasource-log-template">
+	<table class="table table-hover">
+		<thead><tr><th>#</th><th>TYPE</th><th>LOG</th><th>DATE</th></tr></thead>
+		<tbody>
+		{{#items}}
+			<tr class="{{type}}"><td>{{id}}</td><td>{{type}}</td><td>{{log}}</td><td>{{date_modified}}</td></tr>
+		{{/items}}
+		</tbody>
+	</table>
+</div>
+
 
 <!-- mustache template for data source edit single-->
 <div class="hide" id="data-source-edit-template">

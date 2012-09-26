@@ -21,6 +21,7 @@ class Data_source extends MX_Controller {
 	 * @todo ACL on which data source you have access to
 	 * @return [HTML] output
 	 */
+	
 	public function index(){
 		//$this->output->enable_profiler(TRUE);
 		
@@ -137,6 +138,60 @@ class Data_source extends MX_Controller {
 		echo $jsonData;
 	}
 	
+	public function getDataSourceLogs()
+	{		
+		header('Cache-Control: no-cache, must-revalidate');
+		header('Content-type: application/json');
+		date_default_timezone_set('Australia/Canberra');
+		$offset = 0;
+		$count = 10;
+		$POST = $this->input->post();
+		if (isset($POST['id'])){
+			$id = (int) $this->input->post('id');
+		}
+		if (isset($POST['offset'])){
+			$offset = (int) $this->input->post('offset');
+		}
+			if (isset($POST['count'])){
+			$count= (int) $this->input->post('count');
+		}
+				
+		$jsonData = array();
+		$items = array();
+		$this->load->model("data_sources","ds");
+		$dataSource = $this->ds->getByID($id);
+		$dataSourceLogs = $dataSource->get_logs($offset, $count);
+		$logSize = (int) $dataSource->get_log_size();
+		$jsonData['log_size'] = $logSize;
+		if($logSize > $offset + $count)
+		{
+			$jsonData['next_offset'] = $offset + $count;
+		}
+		else
+		{
+			$jsonData['next_offset'] = 'all';
+		}
+		$jsonData['count'] = $count;
+		$jsonData['id'] = $id;
+
+
+
+		if(sizeof($dataSourceLogs) > 0){
+		foreach($dataSourceLogs as $log){
+			$item = array();
+			$item['type'] = $log['type'];
+			$item['log'] = $log['log'];
+			$item['id'] = $log['id'];
+			$item['date_modified'] = date("Y-m-d H:i:s", $log['date_modified']);
+			array_push($items, $item);
+		}
+		$jsonData['status'] = 'OK';
+		$jsonData['items'] = $items;
+		}		
+		$jsonData = json_encode($jsonData);
+		echo $jsonData;
+	}
+	
 	/**
 	 * Save a data source
 	 * 
@@ -169,23 +224,38 @@ class Data_source extends MX_Controller {
 		{
 			$dataSource = $this->ds->getByID($id);
 		}
-
+	    $harvesterParams = array('uri','provider_type','harvest_method','harvest_date','oai_set');
+		$resetHarvest = false;
 		// XXX: This doesn't handle "new" attribute creation? Probably need a whilelist to allow new values to be posted. //**whitelist**//
 		if ($dataSource)
 		{
-			foreach($dataSource->attributes() as $attrib=>$value){
+			$valid_attributes = array_merge(array_keys($dataSource->attributes()), $harvesterParams);
+			foreach($valid_attributes as $attrib){
 				if ($new_value = $this->input->post($attrib)) {
 					if($new_value=='true') $new_value=DB_TRUE;
 					if($new_value=='false') $new_value=DB_FALSE;
+					
+					if($new_value != $dataSource->{$attrib} && in_array($attrib, $harvesterParams))
+					{
+					   $dataSource->append_log("new_value ".$new_value." ".$attrib, 'warning');
+					   $resetHarvest = true;
+					} 
 					$dataSource->setAttribute($attrib, $new_value);
+
 				}
 			}
+			
 			$dataSource->save();
+			if($resetHarvest)
+			{
+				$dataSource->resetHarvest();	
+			}
 		}
 		
 		$jsonData = json_encode($jsonData);
 		echo $jsonData;
 	}
+	
 	
 	/**
 	 * Importing (Ben's import from URL)
@@ -238,6 +308,88 @@ class Data_source extends MX_Controller {
 			
 	}
 	
+	
+	public function putHarvestData()
+	{
+		$POST = $this->input->post();
+		$done = false;
+		if (isset($POST['harvestid'])){
+			$harvestId = (int) $this->input->post('harvestid');
+		}
+		if (isset($POST['content'])){
+			$data =  $this->input->post('content');
+		}
+		if (isset($POST['errmsg'])){
+			$errmsg =  $this->input->post('errmsg');
+		}
+		if (isset($POST['done'])){
+			$done =  strtoupper($this->input->post('done'));
+		}
+		if (isset($POST['date'])){
+			$nextHarvestDate =  $this->input->post('date');
+		}
+		$this->load->model("data_sources","ds");
+		$dataSource = $this->ds->getByHarvestID($harvestId);		
+		header("Content-Type: text/xml; charset=UTF-8", true);
+		date_default_timezone_set('Australia/Canberra');
+		$responseType = 'success';
+		$message = 'THANK YOU';
+		if($errmsg)
+		{
+			$dataSource->append_log("HARVESTER RESPONCE ".$errmsg, 'error');
+		}
+		else
+		{	
+
+			$this->load->model('data_source/import','importer');	
+			$rifcsXml = $this->importer->getRifcsFromHarvest($data);
+			
+			if(strpos($rifcsXml, 'ERROR') === 0)
+			{
+				$dataSource->append_log("RIF EXTRACTION ERROR ".$rifcsXml, 'error');
+				$responseType = 'error';
+			}
+			else
+			{
+				try
+				{ 
+					$log = $this->importer->importPayloadToDataSource($dataSource->getID(), $rifcsXml, $harvestId, false);
+					if(strpos($log , 'DONE WITH ERRORS') > 0)
+					{
+						$dataSource->append_log("IMPORTING RECORDS ".$data, 'info');	
+					}
+					else{
+						$dataSource->append_log("IMPORTING RECORDS ".$log.", finished Harvest: ".$done, 'info');	
+					}	
+
+				}
+				catch (Exception $e)
+				{					
+					$log .= "ERRORS" . NL;
+					$log .= $e->getMessage();
+					$dataSource->append_log("IMPORTING ".$log, 'error');
+				}	
+			}
+		}
+		if(!$nextHarvestDate && $done == 'TRUE')
+		{
+			$dataSource->deleteHarvestRequest($harvestId);
+			$dataSource->append_log("HARVEST COMPLETED ".$harvestId, 'info');
+		}
+		
+		if($done == 'TRUE')
+		{
+			$dataSource->append_log("INDEXING RECORDS ...".date( 'Y-m-d\TH:i:s.uP', time()), 'info');
+			$log = $this->importer->indexDS($dataSource->getID());
+			$dataSource->append_log("INDEXING COMPLETED ".date( 'Y-m-d\TH:i:s.uP', time())." ".$log, 'info');			
+		}
+
+		print('<?xml version="1.0" encoding="UTF-8"?>'."\n");
+		print('<response type="'.$responseType.'">'."\n");
+		print('<timestamp>'.date("Y-m-d H:i:s").'</timestamp>'."\n");
+		print("<message>".$message."</message>");
+		print("</response>");
+	}
 	/**
 	 * @ignore
 	 */

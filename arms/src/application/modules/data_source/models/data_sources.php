@@ -55,6 +55,26 @@ class Data_sources extends CI_Model {
 			return new _data_source($id[0]['data_source_id']);
 		}
 	} 	
+	
+		/**
+	 * Returns exactly one data source by ID (or NULL)
+	 * 
+	 * @param the data source ID
+	 * @return _data_source object or NULL
+	 */
+	function getByHarvestID($harvestId)
+	{
+		$query = $this->db->select("data_source_id")->get_where('harvest_requests', array("id"=>$harvestId));
+		if ($query->num_rows() == 0)
+		{
+			return NULL;
+		}
+		else
+		{
+			$id = $query->result_array();
+			return new _data_source($id[0]['data_source_id']);
+		}
+	} 	
 
 	/**
 	 * Returns exactly one data source by URL slug (or NULL)

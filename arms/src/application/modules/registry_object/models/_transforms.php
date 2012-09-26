@@ -9,6 +9,7 @@ class Transforms {
 	static $extrif_to_solr_transformer = NULL;
 	static $extrif_to_html_transformer = NULL;
 	static $extrif_to_form_transformer = NULL;
+	static $feed_to_rif_transformer = NULL;
 	
 	static function get_qa_transformer()
 	{
@@ -78,6 +79,20 @@ class Transforms {
 		}
 
 		return self::$extrif_to_form_transformer;
+	}
+	
+	static function get_feed_to_rif_transformer()
+	{
+		if (is_null(self::$feed_to_rif_transformer))
+		{
+			$getRifFromFeed = new DomDocument();
+			$getRifFromFeed->load('application/modules/registry_object/transforms/extract_rif_from_feed.xsl');
+			$getRifFromFeedproc = new XSLTProcessor();
+			$getRifFromFeedproc->importStyleSheet($getRifFromFeed);
+			self::$feed_to_rif_transformer =	$getRifFromFeedproc;
+		}
+
+		return self::$get_feed_to_rif_transformer;
 	}
 	
 }		

@@ -251,9 +251,10 @@ class _data_source {
 		return true;
 	}
 	
-	function get_logs($count = 10, $offset = 0)
+	function get_logs($offset = 0, $count = 10)
 	{
 		$logs = array();
+		$this->db->order_by("id", "desc"); 
 		$query = $this->db->get_where("data_source_logs", array("data_source_id"=>$this->id), $count, $offset);
 		if ($query->num_rows() > 0)
 		{
@@ -265,6 +266,13 @@ class _data_source {
 		return $logs;
 	}
 	
+	function get_log_size()
+	{
+		$this->db->from("data_source_logs");
+		$this->db->where(array("data_source_id"=>$this->id));
+		return $this->db->count_all_results();
+	}
+	
 	function clear_logs()
 	{
 		$this->db->where(array("data_source_id" => $this->id));
@@ -272,6 +280,39 @@ class _data_source {
 		return;
 	}
 	
+	function getHarvestRequests($id = null)
+	{
+		$harvestRequests = array();
+		$this->db->from("harvest_requests");
+		if($id != null)
+		$query = $this->db->where(array("data_source_id"=>$this->id, "id"=>$id));
+		else 
+		$query = $this->db->where(array("data_source_id"=>$this->id));
+		if ($query->num_rows() > 0)
+		{
+			foreach ($query->result_array() AS $row)
+			{
+				$harvestRequests[] = $row;		
+			}
+		}
+		return $harvestRequests;		
+	}
+	// TODO continue here!!!
+	function insertHarvestRequest($harvestFrequency, $oaiSet, $created, $updated, $nextHarvest, $status)
+	{
+		$harvestRequestId = strtoupper(sha1($this->id.microtime(false)));
+		if(!$created) $created = date( 'Y-m-d\TH:i:s.uP', time());
+		if(!$updated) $updated = date( 'Y-m-d\TH:i:s.uP', time());
+		if(!$nextHarvest) $nextHarvest = date( 'Y-m-d\TH:i:s.uP', time());
+		$this->db->insert("harvest_requests", array("data_source_id" => $this->id, "harvest_frequency" => $harvestFrequency, "oai_set" => $oaiSet, "status" => $status, "created"=>$created, "updated"=>$updated, "next_harvest"=>$nextHarvest));
+		return $this->db->insert_id();		
+	}
+	
+	function deleteHarvestRequest($harvestRequestId)
+	{
+		$this->db->delete("harvest_requests", array("id" => $harvestRequestId));
+		return;		
+	}
 	
 	/*
 	 * 	STATS
@@ -348,6 +389,167 @@ class _data_source {
 			return call_user_func_array(array($this, "setAttribute"), array($property, $value));
 		}
 	}
+	
+	
+	function submitHarvestRequest($harvestRequest)
+	{
+		$runErrors = '';
+
+	    $gORCA_HARVESTER_BASE_URI = "http://ands3.anu.edu.au:8080/harvester/";
+		$this->append_log("insertHarvestRequest: ".$harvestRequest, 'info');
+		$resultMessage = new DOMDocument();
+		$result = $resultMessage->load($gORCA_HARVESTER_BASE_URI.$harvestRequest);
+		$errors = error_get_last();
+		if( $errors )
+		{
+			$this->append_log("harvestRequest Error[1]: ".$errors['message']);
+		}
+		else
+		{
+			$responseType = strtoupper($resultMessage->getElementsByTagName("response")->item(0)->getAttribute("type"));
+			$message = $resultMessage->getElementsByTagName("message")->item(0)->nodeValue;
+			
+			if( $responseType != 'SUCCESS' )
+			{
+				$this->append_log("harvestRequest Error[2]: ".$message, "error");
+			}
+			else{
+				$this->append_log("harvestRequest Success: ".$message, "message");
+			}
+		}
+	}
+	
+	function resetHarvest($testOnly = false)
+	{
+		$dataSource = $this->id;
+		$responseTargetURI = 'http://ands3.anu.edu.au/workareas/leo/ands/arms/src/data_source/putharvestData';
+		$dataSourceURI = $this->getAttribute("uri");
+		$providerType = 'RIF'; //$this->getAttribute("provider_type");
+
+		$harvestDate = $this->getAttribute("uri");
+		$OAISet = '';
+		//if($this->getAttribute("oai_set"))
+		//{
+		//	$OAISet = $this->getAttribute("oai_set");
+		//}
+		$method = 'DIRECT';
+		if($this->getAttribute("harvest_method"))
+		{
+			$method = $this->getAttribute("harvest_method");
+		}	
+		$harvestDate = '';
+		if($this->getAttribute("harvest_date"))
+		{
+			$harvestDate = $this->getAttribute("harvest_date");
+		}
+			
+		$harvestFrequency = '';
+		if($this->getAttribute("harvest_frequency"))
+		{
+			$harvestFrequency = $this->getAttribute("harvest_frequency");
+		}
+		$status = "INITIALISED";
+		if($harvestDate == '')
+		$nextHarvest = $harvestDate;
+		
+		$status = "SCHEDULED FOR ".$harvestDate;
+
+		$mode = 'harvest'; if( $testOnly ){ $mode = 'test'; }
+		$advancedHarvestingMethod = $this->getAttribute("advanced_harvesting_mode");
+		
+		$action = $harvestFrequency." ".$OAISet." ".$created." ".$updated." ".$nextHarvest;
+		
+		$harvestRequestId = $this->insertHarvestRequest($harvestFrequency, $OAISet, $created, $updated, $nextHarvest, $status);
+		
+		
+
+		$harvestRequest  = 'requestHarvest?';
+		$harvestRequest .= 'responsetargeturl='.urlencode($responseTargetURI);		
+		$harvestRequest .= '&harvestid='.urlencode($harvestRequestId);
+		$harvestRequest .= '&sourceurl='.urlencode($dataSourceURI);
+		$harvestRequest .= '&method='.urlencode($providerType);
+		if( $OAISet )
+		{
+			$harvestRequest .= '&set='.urlencode($OAISet);
+		}
+		$harvestRequest .= '&date='.urlencode($harvestDate);
+		$harvestRequest .= '&frequency='.urlencode($harvestFrequency);
+		$harvestRequest .= '&mode='.urlencode($mode);
+		$harvestRequest .= '&ahm='.urlencode($advancedHarvestingMethod);
+		
+		// Submit the request.
+		
+		$this->submitHarvestRequest($harvestRequest);
+	
+	}
+	
+	function cancelHarvestRequest($harvestRequestId)
+	{
+
+	// Get the harvest request.
+	$harvestRequest = getHarvestRequests($harvestRequestId, null);
+	
+	$actions  = "DELETE HARVEST REQUEST\n";
+	$actions .= "Harvest Request ID: $harvestRequestId\n";
+	$actions .= "Submitted: ".formatDateTimeWithMask($harvestRequest[0]['created_when'], eDCT_FORMAT_ISO8601_DATE_TIMESEC)."\n";
+	$actions .= "Last Status Update: ".formatDateTimeWithMask($harvestRequest[0]['modified_when'], eDCT_FORMAT_ISO8601_DATE_TIMESEC)."\n";
+	$actions .= "Status: ".$harvestRequest[0]['status']."\n";
+	
+	
+	if( $harvestRequest )
+	{
+		$harvesterBaseURI = $harvestRequest[0]['harvester_base_uri'];
+		
+		// Submit a deleteHarvestRequest to the harvester.
+		$request = $harvesterBaseURI."deleteHarvestRequest?harvestid=".esc($harvestRequestId);
+		
+		// Submit the request.
+		$runErrors = '';
+		$resultMessage = new DOMDocument();
+		$result = $resultMessage->load($request);
+		$errors = error_get_last();
+		if( $errors )
+		{
+			$runErrors = "deleteHarvestRequest Error[1]: ".$errors['message']."\n";
+		}
+		else
+		{
+			$responseType = strtoupper($resultMessage->getElementsByTagName("response")->item(0)->getAttribute("type"));
+			$message = $resultMessage->getElementsByTagName("message")->item(0)->nodeValue;
+			
+			if( $responseType != 'SUCCESS' )
+			{
+				$runErrors = "deleteHarvestRequest Error[2]: $message";
+			}
+		}
+		
+		if( $runErrors )
+		{
+			$actions .= ">>ERRORS\n";
+			$actions .= $runErrors;
+		}
+		else
+		{
+			$actions .= ">>SUCCESS\n";
+			// Remove the entry.
+			$errors = deleteHarvestRequest($harvestRequestId);
+			if( $errors )
+			{
+				$actions .= $errors;
+			}
+		}
+	}
+	else
+	{
+		$actions .= ">>ERRORS\n";
+		$actions .= 'The harvest request does not exist.';
+	}
+
+	// Log the activity.
+	append_log($actions, "message");
+	}
+	
+	
 }
 
 

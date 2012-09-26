@@ -57,14 +57,14 @@ public class HarvestDAO
     protected static final String CREATE_HARVEST_SQL =
         "INSERT INTO harvest(harvest_id, provider_id, response_url, " +
         "method, mode, date_started, date_completed, resumption_token, " +
-        "status, date_from, date_until, metadata_prefix, set, advanced_harvesting_mode)" +
+        "status, date_from, date_until, metadata_prefix, `set`, advanced_harvesting_mode)" +
         " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     
     protected static final String SELECT_PROVIDER_SQL =
         "SELECT * FROM provider WHERE source_url = ?";
-    
-    protected static final String SELECT_PROVIDER_ID_SQL = 
-        "SELECT CURRVAL('provider_provider_id_seq')";
+    //TODO FIX MY CURRVAL STUFF for MYSQl with no SEQUENCE
+    protected static final String SELECT_PROVIDER_ID_SQL = "SELECT max(provider_id) FROM provider";
+       // "SELECT CURRVAL('provider_provider_id_seq')";
      
     protected static final String SELECT_HARVESTS_SQL =
         "SELECT provider.source_url, " +
@@ -72,7 +72,7 @@ public class HarvestDAO
         "harvest.method, harvest.mode, harvest.date_started, " +
         "harvest.date_completed, harvest.resumption_token, harvest.date_from, " + 
         "harvest.date_until, harvest.advanced_harvesting_mode, harvest.metadata_prefix, provider.provider_id, " +
-        "harvest.set, schedule.last_run, schedule.next_run, schedule.frequency " + 
+        "harvest.`set`, schedule.last_run, schedule.next_run, schedule.frequency " + 
         "FROM provider, harvest, schedule " +
         "WHERE provider.provider_id=harvest.provider_id " +
         "AND schedule.harvest_id=harvest.harvest_id";
@@ -83,7 +83,7 @@ public class HarvestDAO
         "harvest.method, harvest.mode, harvest.date_started, " +
         "harvest.date_completed, harvest.resumption_token, harvest.date_from, " +
         "harvest.date_until, harvest.advanced_harvesting_mode, harvest.metadata_prefix, provider.provider_id, " +
-        "harvest.set, schedule.last_run, schedule.next_run, schedule.frequency " + 
+        "harvest.`set`, schedule.last_run, schedule.next_run, schedule.frequency " + 
         "FROM provider, harvest, schedule " +
         "WHERE provider.provider_id=harvest.provider_id " +
         "AND schedule.harvest_id=harvest.harvest_id " +
@@ -95,7 +95,7 @@ public class HarvestDAO
     protected static final String UPDATE_HARVEST_SQL = 
         "UPDATE harvest SET status = ?, date_started = ?, date_completed = ?, " +
         "resumption_token = ?, date_from = ?, date_until = ?, mode = ?,  " +
-        "method = ?, metadata_prefix = ?, set = ? " + 
+        "method = ?, metadata_prefix = ?, `set` = ? " + 
         "WHERE harvest_id = ?";    
     
     protected static final String DELETE_HARVEST_SQL = 
@@ -189,7 +189,7 @@ public class HarvestDAO
                 ps = c.prepareStatement(SELECT_PROVIDER_ID_SQL);
                 rs = ps.executeQuery();
                 rs.next();
-                harvest.setProviderID(rs.getInt(1));
+                harvest.setProviderID(rs.getInt(1) + 1);
                 
                 ps.close();
                 rs.close();
@@ -200,7 +200,7 @@ public class HarvestDAO
             {
                 harvest.setProviderID();
             }
-            
+            log.info("harvest.getHarvestID()" + harvest.getHarvestID());
             ps = c.prepareStatement(CREATE_HARVEST_SQL);
             ps.setString(1, harvest.getHarvestID());
             ps.setInt(2, harvest.getProviderID());
@@ -231,6 +231,7 @@ public class HarvestDAO
             ps.setString(12, harvest.getMetadataPrefix());
             ps.setString(13, harvest.getSet());
             ps.setString(14, harvest.getAHM());
+            log.info("harvest.getAHM()" + harvest.getAHM() + "\n");
             ps.executeUpdate();
             ps.close();
             ps = null;

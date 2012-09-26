@@ -46,10 +46,10 @@ public class FragmentDAO
     private DataSource datasource;
     
     private static final String CREATE_FRAGMENT_SQL = 
-        "INSERT INTO fragment (harvest_id, request_id, date_stored, text) VALUES (?, ?, ?, ?)";
+        "INSERT INTO `fragment` (harvest_id, request_id, date_stored, `text`) VALUES (?, ?, ?, ?)";
     
     private static final String DELETE_FRAGMENTS_SQL = 
-        "DELETE FROM fragment WHERE harvest_id = ?";
+        "DELETE FROM `fragment` WHERE harvest_id = ?";
 
     /**
      * create a Fragment DAO

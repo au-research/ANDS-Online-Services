@@ -152,7 +152,7 @@ class Registry_objects extends CI_Model {
 	 * XXX: 
 	 * @return array(_data_source) or NULL
 	 */
-	function create($data_source_key, $registry_object_key, $class, $title, $status, $slug, $record_owner)
+	function create($data_source_key, $registry_object_key, $class, $title, $status, $slug, $record_owner, $harvestID)
 	{
 		if (is_null($this->getByKey($registry_object_key)))
 		{
@@ -174,6 +174,7 @@ class Registry_objects extends CI_Model {
 			
 			// Some extras
 			$ro->setAttribute("created",time());
+			$ro->setAttribute("harvest_id", $harvestID);
 	
 			$ro->create();
 			return $ro;
