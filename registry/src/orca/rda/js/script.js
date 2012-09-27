@@ -345,7 +345,7 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 	   			data:{uri:vocab_uri},
 				url: base_url+"/browse/vocabSearchResult/"+type+'/'+page,
 		        success:function(data){
-					$('#'+type+'_search_result').html(data);
+					$('#vocab_search_result').html(data);
 					$(".accordion").accordion({autoHeight:false, collapsible:true,active:false});
 		        },
 		        error:function(msg){}
