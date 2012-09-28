@@ -113,6 +113,46 @@ class Vocab_services extends CI_Model {
 	} 	
 	
 	/**
+	 * Get all datasources
+	 * 
+	 * @param limit by value
+	 * @param the offset value
+	 * @return array(_data_source) or empty array
+	 */
+	function getOwnedVocabs($limit = 16, $offset =0)
+	{
+		
+		$affiliations = $this->user->affiliations();
+		if (is_array($affiliations) && count($affiliations) > 0)
+		{
+			if($limit == 0)
+			{
+				$query = $this->db->select('id')->where_in('record_owner',$affiliations)->get('vocab_metadata');
+			}
+			else
+			{
+				$query = $this->db->select('id')->where_in('record_owner',$affiliations)->get('vocab_metadata', $limit, $offset);
+			}
+			
+			if ($query->num_rows() == 0)
+			{
+				return array();
+			}
+			else
+			{
+				$vocabs = array();
+				
+				foreach($query->result_array() AS $v)
+				{
+					$vocabs[] =  new _vocab($v['id']);
+				}
+				
+				return $vocabs;
+			}
+		}
+	} 	
+	
+	/**
 	 * XXX: 
 	 * @return array(_data_source) or NULL
 	 */

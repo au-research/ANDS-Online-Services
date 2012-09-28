@@ -56,7 +56,7 @@
       <div class="span10" id="main-nav">
         <ul>
         	
-    	<?php if(hasRole('RECORD_MANAGER')): ?>
+    	<?php if($this->user->hasFunction('REGISTRY_USER')): ?>
           <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">My Records <b class="caret"></b></a>
             <ul class="dropdown-menu sub-menu pull-right">
@@ -67,7 +67,7 @@
           </li>
      	<?php endif; ?>
           
-        <?php if(hasRole('DS_MANAGER')): ?>
+        <?php if($this->user->hasFunction('REGISTRY_USER')): ?>
           <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">My Datasources <b class="caret"></b></a>
             <ul class="dropdown-menu sub-menu pull-right">
@@ -76,29 +76,38 @@
             </ul>
           </li>
         <?php endif; ?>
+        
+        <?php if($this->user->hasFunction('VOCAB_USER')): ?>
+          <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">My Vocabularies <b class="caret"></b></a>
+            <ul class="dropdown-menu sub-menu pull-right">
+              <li class=""><?php echo anchor('vocab_service/', 'Manage Vocabularies');?></li>
+            </ul>
+          </li>
+        <?php endif; ?>
           
-        <?php if(hasRole('PID_MANAGER') || hasRole('DOI_MANAGER')): ?>
+        <?php if($this->user->hasFunction('PIDS_USER') || $this->user->hasFunction('DOIS_USER')): ?>
           <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">My Identifiers <b class="caret"></b></a>
             <ul class="dropdown-menu sub-menu pull-right">
             	
-            	<?php if (hasRole('DOI_MANAGER')): ?>
+            	<?php if ($this->user->hasFunction('DOIS_USER')): ?>
             		<li class=""><a href="#">DOI</a></li>
             	<?php endif; ?>
-            	<?php if (hasRole('PID_MANAGER')): ?>
+            	<?php if ($this->user->hasFunction('PIDS_USER')): ?>
               		<li class=""><a href="#">PID</a></li>
               	<?php endif; ?>
             </ul>
           </li>
         <?php endif; ?>
           
-        <?php if(hasRole('PUBLIC')): ?>
+        <?php if($this->user->hasFunction('PUBLIC')): ?>
           <li>
             <a href="javascript:;" id="main-nav-search"><i class="icon-search icon-white"></i></a>
           </li>
 	    <?php endif; ?>
 	      
-	    <?php if(hasRole('AUTHENTICATED_USER')): ?>
+	    <?php if($this->user->hasFunction('AUTHENTICATED_USER')): ?>
           <li>
             <a href="javascript:;" id="main-nav-user-account" title="aaa"><i class="icon-user icon-white"></i></a>
           </li>
@@ -108,8 +117,8 @@
       </div>
 
       <div class="hide" id="user-account-info">
-      	<?php if(hasRole('AUTHENTICATED_USER')): ?>
-        	Logged in as <?=loggedInName();?> <br/>
+      	<?php if($this->user->loggedIn()): ?>
+        	Logged in as <?=$this->user->name();?> <br/>
         	 <?php echo anchor('auth/logout', 'Logout'); ?>
 		<?php endif; ?>
       </div>

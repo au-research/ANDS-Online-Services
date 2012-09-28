@@ -49,6 +49,8 @@ define('DB_FALSE',"f");
 define('EXTRIF_NAMESPACE', "http://ands.org.au/standards/rif-cs/extendedRegistryObjects");
 define('RIFCS_NAMESPACE', "http://ands.org.au/standards/rif-cs/registryObjects");
 
+define('ENGINE_ENABLED_MODULE_LIST','ENGINE_ENABLED_MODULE_LIST');
+
 
 /*
  * Authentication Methods
@@ -69,11 +71,6 @@ define('gCOSI_AUTH_LDAP_BASE_DN', "ou=People, o=anu.edu.au");
 // for LDAP reserved characters before the bind is attempted.
 define('gCOSI_AUTH_LDAP_UID', "uid=@@ROLE_ID@@"); 
 define('gCOSI_AUTH_LDAP_DN', gCOSI_AUTH_LDAP_UID . ", " . gCOSI_AUTH_LDAP_BASE_DN); 
-
-define('AUTH_ROLE_ARRAY', 'registry_user_roles');
-define('AUTH_ORG_ARRAY', 'registry_org_roles');
-define('AUTH_ROLE_DEFAULT_ATTRIBUTE', 'PUBLIC');
-
 
 
 /* End of file constants.php */

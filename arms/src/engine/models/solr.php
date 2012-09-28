@@ -7,7 +7,7 @@ class Solr extends CI_Model {
     /*
      * Fire a search, given an array of fields and a string of facets
      */
-	function fireSearch($fields, $facet=''){
+	function fireSearch($fields, $facet='',$as_array=false){
 		/*prep*/
 		$fields_string='';
 		//foreach($fields as $key=>$value) { $fields_string .= $key.'='.str_replace("+","%2B",$value).'&'; }//build the string
@@ -15,9 +15,6 @@ class Solr extends CI_Model {
 			$fields_string .= $key.'='.$value.'&';
 		}//build the string
     	$fields_string .= $facet;//add the facet bits
-    	$fields_string = rtrim($fields_string,'&');
-
-	//echo $fields_string."....<br />";
 
     	$ch = curl_init();
     	$solr_url = $this->config->item('solr_url');
@@ -31,15 +28,11 @@ class Solr extends CI_Model {
     	//echo 'json received+<pre>'.$content.'</pre>';
 		curl_close($ch);//close the curl
 
-
-
-		$json = json_decode($content);
+		$json = json_decode($content,$as_array);
 		if($json){
 			return $json;
 		}else{
-			echo 'ERROR:'.$content.'<br/> QUERY: '.$fields_string;
+			throw new Exception('SOLR Query failed....ERROR:'.$content.'<br/> QUERY: '.$fields_string);
 		}
-		//echo  "*********".$content;
-		return $json;
     }
 }

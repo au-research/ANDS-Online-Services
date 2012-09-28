@@ -77,6 +77,38 @@ class Data_sources extends CI_Model {
 	} 	
 
 	/**
+	 * Returns data sources which this user has ownership of by virtue of their
+	 * affiliation (organisational roles)
+	 * 
+	 * @param the data source ID
+	 * @return _data_source object or NULL
+	 */
+	function getOwnedDataSources()
+	{
+		$affiliations = $this->user->affiliations();
+		if (is_array($affiliations) && count($affiliations) > 0)
+		{
+			$query = $this->db->select('data_source_id')->where('attribute','record_owner')->where_in('value',$affiliations)->get('data_source_attributes');
+			if ($query->num_rows() == 0)
+			{
+				return NULL;
+			}
+			else
+			{
+				$data_sources = array();
+				
+				foreach($query->result_array() AS $ds)
+				{
+					$data_sources[] =  new _data_source($ds['data_source_id']);
+				}
+				return $data_sources;
+			}
+		}
+		
+	} 	
+
+
+	/**
 	 * Returns exactly one data source by URL slug (or NULL)
 	 * 
 	 * @param the data source slug
