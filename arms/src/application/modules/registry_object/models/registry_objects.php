@@ -24,54 +24,71 @@ class Registry_objects extends CI_Model {
 	 * Note that registry_objects is joined to both data_sources and registry_object_attributes:
 	 * ensure the `$where` and `$sort` clauses are keyed accordingly.
 	 *
-	 * @param array of key-value pairs to feed into CI get_where (optional)
+	 * @param array of key-value pairs passed to the CI where() routine (optional)
 	 * @param list of registry_object_ids to satisfy a 'where id in' clause (optional)
 	 * @param how many records to return (optional)
 	 * @param query offset (optional)
 	 * @param sort field (optional)
 	 * @param sort direction (optional)
-	 * @return array(_registry_object)
+	 * @param passed to CI ActiveRecord where() routine, with no automatic escaping (optional)
+	 * @return array:
+	 *  - 'count' => complete query result count (disregarding limit/offset)
+	 *  - 'rows' => array(_registry_object)
 	 */
 	function get($where=array(),
 		     $in=false,
 		     $limit=0,
 		     $offset=0,
 		     $sort='registry_objects.registry_object_id',
-		     $sortd='asc')
+		     $sortd='asc',
+		     $rawwhere=array())
 	{
+		$count = 0;
 		if (is_array($in) and count($in) == 0)
 		{
-			return array();
+			return array('count' => $count, 'rows' => array());
 		}
 		else
 		{
 			$this->db->distinct()->select("registry_objects.registry_object_id")
 				->join("data_sources",
-				       "data_sources.data_source_id = registry_objects.data_source_id")
+				       "data_sources.data_source_id = registry_objects.data_source_id",
+				       "inner")
 				->join("registry_object_attributes",
-				       "registry_object_attributes.registry_object_id = registry_objects.registry_object_id")
+				       "registry_object_attributes.registry_object_id = registry_objects.registry_object_id",
+				       "inner")
+				->where($where)
+				->where($rawwhere, null, false)
 				->order_by($sort, $sortd);
 			if ($in !== false)
 			{
 				$this->db->where_in("registry_objects.registry_object_id", $in);
 			}
-			$query = $this->db->get_where('registry_objects',
-						      $where, $limit, $offset);
 
-
+			/**
+			 * FIXME: Cannot for the life of me figure out the correct way to retrieve the
+			 * number of matching rows while using $this->db->get([table], $limit, $offset).
+			 * So instead, we'll suck down the lot, get the count, and take our slice
+			 */
+			$query = $this->db->get('registry_objects');
+			$count = $query->num_rows();
 			if ($query->num_rows() > 0)
 			{
+				$results = $query->result_array();
+				print_r($results);
+				$results = array_slice($results, $offset, $limit);
 				$records = array_map(create_function('$r',
 								     $this->_mkro_callback),
-						     $query->result_array());
+						     $results);
 			}
 			else
 			{
+				$count = 0;
 				$records = array();
 			}
 			$query->free_result();
 		}
-		return $records;
+		return array('count' => $count, 'rows' => $records);
 	}
 
 	/**
