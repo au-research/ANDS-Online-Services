@@ -1,6 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-define('SERVICES_MODULE_PATH', 'application/modules/services/');
+//mod_enforce('services');
 
+define('SERVICES_MODULE_PATH', 'application/modules/services/');
 /**
  * Services controller
  * 
@@ -14,6 +15,8 @@ define('SERVICES_MODULE_PATH', 'application/modules/services/');
  */
 class Services extends MX_Controller {
 	
+	var $reserved_pages = array('register');
+	
 	public function _remap($api_key, $params = array())
 	{
 		$this->config->load('services');
@@ -21,8 +24,23 @@ class Services extends MX_Controller {
 		log_message('debug', 'Services request received from ' . $_SERVER["REMOTE_ADDR"]);
 		log_message('debug', 'Request URI: ' . $_SERVER["REQUEST_URI"]);
 		
+		// If no parameters supplied, display the services landing page!
+		if ($api_key == "index")
+		{
+			$this->service_list();
+			return;
+		}
+		else if (in_array($api_key, $this->reserved_pages) && method_exists($this, $api_key))
+		{
+			// Some pre-canned pages (such as the registration module will have methods defined in this class)
+			$this->{$api_key}();
+			return;
+		}
+		
 		// Method i.e. "getRIFCS", Format i.e. "xml"
 		list($method, $format, $options) = $this->parse_request_params($params);
+		
+		
 		
 		$formatter = $this->getFormatter($format);		
 		
@@ -38,7 +56,7 @@ class Services extends MX_Controller {
 		
 		// TODO: If debug mode...
 		
-		
+		$options = $service_mapping[$method];
 		$handler = $this->getMethodHandler($service_mapping[$method]['method_handler']);
 		$handler->initialise($options, $_GET, $formatter);
 		$this->output->set_content_type($formatter->output_mimetype());
@@ -47,7 +65,21 @@ class Services extends MX_Controller {
 		$handler->handle();
 	}
 
+	private function service_list()
+	{
+		$data['js_lib'] = array('core');
+		$data['scripts'] = array();
+		$data['title'] = 'Web Services';
+		$this->load->view('service_list', $data);
+	}
 	
+	private function register()
+	{
+		$data['js_lib'] = array('core');
+		$data['scripts'] = array();
+		$data['title'] = 'Web Services';
+		$this->load->view('register_api_key', $data);
+	}
 	
 	private function check_compatibility($method, $format, array $service_mapping)
 	{
@@ -82,12 +114,13 @@ class Services extends MX_Controller {
 		// Get the default values (partially malformed requests)
 		$method = $this->config->item('services_default_method');
 		$format = $this->config->item('services_default_format');
-		
+
 		// Grab the values from the parameter array
 		// The syntax should be: <method>.<format>/?<query params>
 		if (($called_method = array_shift($params)) != NULL)
 		{
 			$called_method = explode(".",$called_method);
+			
 			if ($called_method[0])
 			{
 				$method = $called_method[0];

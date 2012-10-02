@@ -7,18 +7,12 @@ class Auth extends CI_Controller {
 		$data['scripts'] = array();
 		
 		
-		if ($this->input->post('inputUsername') || $this->input->post('inputPassword'))
+		if ($this->input->post('inputUsername') || $this->input->post('inputPassword') && !$this->user->loggedIn())
 		{
 			try 
 			{
-				$this->load->model('authentication');
-				$login_object = $this->authentication->authenticate($this->input->post('inputUsername'),$this->input->post('inputPassword'), gCOSI_AUTH_METHOD_BUILT_IN);	
-
-				if ($login_object['result'] == 1)
+				if($this->user->authChallenge($this->input->post('inputUsername'), $this->input->post('inputPassword')))
 				{
-					appendRoles(array_merge(array('AUTHENTICATED_USER'),$login_object['functional_roles']));
-					$this->session->set_userdata(array('AUTH_USER_ID' => $login_object['role'] . "::",
-													'AUTH_USER_NAME' => $login_object['name']));
 					redirect('/');
 				}
 			}
@@ -32,10 +26,8 @@ class Auth extends CI_Controller {
 	}
 	
 	public function logout(){
-
-		$this->session->sess_destroy(); //??
-		redirect('/');
-		
+		// Logs the user out and redirects them to the homepage/logout confirmation screen
+		$this->user->logout(); 		
 	}
 	
 	public function dashboard()
@@ -43,7 +35,25 @@ class Auth extends CI_Controller {
 		$data['title'] = 'My Dashboard';
 		$data['js_lib'] = array('core');
 		$data['scripts'] = array();
-		if(hasRole('AUTHENTICATED_USER')) 
+		
+		
+		
+		if (mod_enabled('data_source'))
+		{
+			$this->load->model('data_source/data_sources','ds');
+			$data['my_datasources'] = $this->ds->getOwnedDataSources();
+		}
+		
+		
+		if (mod_enabled('vocab_service'))
+		{
+			$this->load->model('vocab_service/vocab_services','vocab');
+			$data['my_vocabs'] = $this->vocab->getOwnedVocabs();
+		}
+		
+		
+		
+		if($this->user->loggedIn()) 
 		{
 			$this->load->view('dashboard', $data);
 		}

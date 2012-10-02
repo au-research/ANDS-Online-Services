@@ -1,5 +1,10 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+
+$config['authentication_class'] = "cosi_authentication";
+
+
+$config[ENGINE_ENABLED_MODULE_LIST] = array('data_source','registry_object','vocab_service');
 /*
 |--------------------------------------------------------------------------
 | Base Site URL

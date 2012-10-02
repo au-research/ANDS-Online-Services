@@ -83,5 +83,23 @@ $db['cosi']['autoinit'] = FALSE;
 $db['cosi']['stricton'] = FALSE;
 $db['cosi']['save_queries'] = FALSE; 
 
+
+$db['vocabs']['hostname'] = 'localhost';
+$db['vocabs']['username'] = 'webuser';
+$db['vocabs']['password'] = 'q7fb94z';
+$db['vocabs']['database'] = 'dbs_vocabs';
+$db['vocabs']['dbdriver'] = 'mysql';
+$db['vocabs']['dbprefix'] = '';
+$db['vocabs']['pconnect'] = TRUE;
+$db['vocabs']['db_debug'] = TRUE;
+$db['vocabs']['cache_on'] = FALSE;
+$db['vocabs']['cachedir'] = '';
+$db['vocabs']['char_set'] = 'utf8';
+$db['vocabs']['dbcollat'] = 'utf8_general_ci';
+$db['vocabs']['swap_pre'] = '';
+$db['vocabs']['autoinit'] = TRUE;
+$db['vocabs']['stricton'] = FALSE;
+$db['vocabs']['save_queries'] = FALSE; 
+
 /* End of file database.php */
 /* Location: ./application/config/database.php */

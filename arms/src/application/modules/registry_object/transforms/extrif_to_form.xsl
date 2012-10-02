@@ -1019,14 +1019,17 @@
 				<h1>Rights</h1>
 				<p>
 					<div class="aro_box_part" type="rightsStatement">
+						<label class="control-label" >rightsStatement: </label>
 						<input type="text" class="input-xlarge" name="rightsUri" placeholder="Rights Uri" value=""/>
 						<input type="text" class="input-xlarge" name="value" placeholder="value" value=""/>
 					</div>
 					<div class="aro_box_part" type="licence">
+						<label class="control-label" >licence: </label>
 						<input type="text" class="input-xlarge" name="rightsUri" placeholder="Rights Uri" value=""/>
 						<input type="text" class="input-xlarge" name="value" placeholder="Value" value=""/>
 					</div>			
 					<div class="aro_box_part" type="accessRights">
+						<label class="control-label" >rightsUri: </label>
 						<input type="text" class="input-xlarge" name="rightsUri" placeholder="Rights Uri" value=""/>
 						<input type="text" class="input-xlarge" name="value" placeholder="Value" value=""/>
 					</div>

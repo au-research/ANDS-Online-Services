@@ -6,6 +6,6 @@ class RIFCSMethod extends MethodHandler
 	//var $params, $options, $formatter; 
    function handle()
    {
-   		print_pre($this->formatter);
+   		print_pre($this->params);
    }
 }

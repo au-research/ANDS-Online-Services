@@ -189,6 +189,7 @@ function load_datasource(data_source_id){
 
 			//draw the charts
 			drawCharts();
+			loadDataSourceLogs(data_source_id);
 
 			//button toggling at edit level
 			$('#view-datasource  .normal-toggle-button').each(function(){
@@ -212,16 +213,95 @@ function load_datasource(data_source_id){
 	return false;
 }
 
-/*
- * Draw Charts
- * Use the jqplot library, currently a dud
- *
- * @TODO: refactor
- *
- * 
- * @params [void]
- * @return [void]
- */
+function loadDataSourceLogs(data_source_id, offset, count)
+{
+	offset = typeof offset !== 'undefined' ? offset : 0;
+	count = typeof count !== 'undefined' ? count : 4;
+	$('#data_source_log_container').html('Loading + + +');
+	//$('#data_source_log_container').slideUp(500);
+
+	$.ajax({
+		url: 'data_source/getDataSourceLogs/',
+		data: {id:data_source_id, offset:offset, count:count},
+		type: 'POST',
+		//contentType: 'application/json; charset=utf-8',
+		dataType: 'json',
+		success: function(data){
+			console.log(data);
+			var logsTemplate = "<table class='table table-hover'>"+
+									"<thead><tr><th>#</th><th>DATE</th><th>TYPE</th><th>LOG</th></tr></thead>" +
+									"<tbody>" +
+									"{{#items}}" +
+										"<tr class='{{type}}'><td>{{id}}</td><td>{{date_modified}}</td><td>{{type}}</td><td>{{log}}</td></tr>" +
+										"{{/items}}" +
+									"<tr id='last_row'><td colspan='3'><a id='show_more_log' class='btn'>Show More<i class='icon-arrow-down'></i></a><input type='hidden' id='log_size' value='{{log_size}}'/><input type='hidden' id='next_offset' value='{{next_offset}}'/></td><td><span id='log_summary_bottom'></span></td></tr></tbody>" +
+								"</table>";
+			//var logsTemplate = $('#datasource-log-template').html();
+			//console.log("##"+logsTemplate+"%%");
+			var output = Mustache.render(logsTemplate, data);
+			//console.log("##"+output+"%%");
+			$('#data_source_log_container').html(output);
+
+			$('#data_source_log_container').fadeIn(500);
+			$('#log_summary').html('viewing ' + data.next_offset + ' of ' + data.log_size + ' log entries');
+			$('#log_summary_bottom').html('viewing ' + data.next_offset + ' of ' + data.log_size + ' log entries');
+			var nextOffSet = $('#next_offset').val();
+			if(nextOffSet != 'all')
+			{
+				$('#show_more_log').click(function(){
+				loadMoreSourceLogs(data_source_id, count);
+				});
+			}
+			else{
+				$('#show_more_log').remove();
+			}
+		},
+		error: function(data){
+		console.log(data);
+		}
+	});
+	return false;
+
+}
+
+function loadMoreSourceLogs(data_source_id, count)
+{
+
+	count = typeof count !== 'undefined' ? count : 2;
+	//$('#data_source_log_container').slideUp(500);
+	var offset = $('#next_offset').val();
+	$.ajax({
+		url: 'data_source/getDataSourceLogs/',
+		data: {id:data_source_id, offset:offset, count:count},
+		type: 'POST',
+		//contentType: 'application/json; charset=utf-8',
+		dataType: 'json',
+		success: function(data){
+			//console.log(data);
+			var logsTemplate = "{{#items}}" +
+								"<tr class='{{type}}'><td>{{id}}</td><td>{{date_modified}}</td><td>{{type}}</td><td>{{log}}</td></tr>" +
+								"{{/items}}";
+			//var logsTemplate = $('#datasource-log-template').html();
+			var output = Mustache.render(logsTemplate, data);
+			offset = data.next_offset;
+			if(offset == 'all')
+			{
+				$('#show_more_log').remove();
+			}
+			$('#log_summary').html('viewing ' + data.next_offset + ' of ' + data.log_size + ' log entries');
+			$('#log_summary_bottom').html('viewing ' + data.next_offset + ' of ' + data.log_size + ' log entries');
+			$('#next_offset').val(offset);
+			$('html, body').animate({"scrollTop": $("#last_row").offset().top}, 800);
+			$('#last_row').before(output);
+		},
+		error: function(data){
+		console.log(data);
+		}
+	});
+	return false;
+
+}
+
 function drawCharts(){
 	$('#ro-progression').height('350').html('');
 	$.jqplot('ro-progression',  [[[1, 2],[3,5.12],[5,13.1],[7,33.6],[9,85.9],[11,219.9]]]);

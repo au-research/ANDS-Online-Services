@@ -15,8 +15,8 @@ class Extrif_Extension extends ExtensionBase
 	{
 		$this->_CI->load->model('data_source/data_sources','ds');		
 		$ds = $this->_CI->ds->getByID($this->ro->data_source_id);
-		
-		$xml = $this->ro->getSimpleXML();
+		//same as in relationships.php
+		$xml = new SimpleXMLElement($this->ro->getRif()); // $this->ro->getSimpleXML();
 		$attributes = $xml->attributes(EXTRIF_NAMESPACE);
 
 		// Cannot enrich already enriched RIFCS!!

@@ -45,7 +45,7 @@ public class RequestDAO
     private DataSource datasource;
     
     private static final String SELECT_REQUEST_SQL = 
-        "SELECT request_id, request FROM request WHERE request = ?";
+        "SELECT request_id, `request` FROM `request` WHERE `request` = ?";
         
     /**
      * create a Request DAO

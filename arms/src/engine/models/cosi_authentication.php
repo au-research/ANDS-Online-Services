@@ -18,7 +18,7 @@ $Date: 2009-08-11 12:57:09 +1000 (Tue, 11 Aug 2009) $
 $Revision: 32 $
 *******************************************************************************/
 
-class Authentication extends CI_Model {
+class Cosi_authentication extends CI_Model {
 
 	private $cosi_db = null;
 	
@@ -39,7 +39,7 @@ class Authentication extends CI_Model {
      * @param $password Plaintext password to use to authenticate
      * @param $method Authentication method to use (built-in/ldap/shib...etc)
      */
-    function authenticate($username, $password, $method)
+    function authenticate($username, $password, $method=gCOSI_AUTH_METHOD_BUILT_IN)
     {
     	/*
     	 * Using the built-in account system
@@ -78,7 +78,7 @@ class Authentication extends CI_Model {
 					return array(	
 									'result'=>1,
     								'message'=>'Success',
-									'role'=>$username,
+									'user_identifier'=>$username,
 					    			'name'=>$result->row(1)->name,
     								'last_login'=>$result->row(1)->last_login,
     								'activities'=>$user_results['activities'],
@@ -130,7 +130,7 @@ class Authentication extends CI_Model {
 						return array(	
 										'result'=>1,
 										'message'=>'Success',
-										'role'=>$username,
+										'user_identifier'=>$username,
 						    			'name'=>(isset($LDAPAttributes['cn'][0]) ? $LDAPAttributes['cn'][0] : $result->row(1)->name), // implementation specific
 										'last_login'=>$result->row(1)->last_login,
 										'activities'=>$user_results['activities'],
@@ -176,7 +176,7 @@ class Authentication extends CI_Model {
 					return array(	
 									'result'=>1,
     								'message'=>'Success',
-									'role'=>$username,
+									'user_identifier'=>$username,
 					    			'name'=>$result->row(1)->name, 
     								'last_login'=>$result->row(1)->last_login,
     								'activities'=>$user_results['activities'],
