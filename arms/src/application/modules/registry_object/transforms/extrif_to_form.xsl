@@ -185,9 +185,6 @@
 						<select id="data_sources_select"/>
 						<input type="text" id="data_source_id_value" class="input-small hide"
 							name="title" value="{$dataSourceID}"/>
-						<p class="help-inline">
-							<small/>
-						</p>
 					</div>
 				</div>
 				
@@ -197,9 +194,6 @@
 					<div class="controls">
 						<input type="text" id="originatingSource" name="value" placeholder="Value" value="{originatingSource/text()}"/>
 						<input type="text" id="originatingSource" name="type" placeholder="Type"  value="{originatingSource/@type}"/>
-						<p class="help-inline">
-							<small/>
-						</p>
 					</div>
 				</div>
 				
@@ -773,20 +767,25 @@
 
 
 	<xsl:template match="temporal">
-		<div class="aro_box_part" type="temporal">
+		<div class="aro_box" type="temporal">
+			<div class="aro_box_display clearfix">
+				<h1>Temporal Coverage</h1>
+				<div class="control-group">
+					<div class="controls">
+						<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
+					</div>
+				</div>
+			</div>
 			<xsl:apply-templates select="date" mode="coverage"/>
 			<xsl:apply-templates select="text"/>
-			<button class="btn btn-mini btn-danger remove">
-				<i class="icon-remove icon-white"/>
-			</button>
 		</div>
 	</xsl:template>
 
 	<xsl:template match="date" mode="coverage">
 		<div class="aro_box_part" type="coverage_date">
 			<label class="control-label" for="title">Date: </label>
-			<input type="text" class="input-xlarge" name="type" placeholder="Date Type" value="{@type}"/>
-			<input type="text" class="input-xlarge" name="dateFormat" placeholder="Date Format" value="{@dateFormat}"/>
+			<input type="text" class="input-small" name="type" placeholder="Date Type" value="{@type}"/>
+			<input type="text" class="input-small" name="dateFormat" placeholder="Date Format" value="{@dateFormat}"/>
 			<input type="text" class="input-xlarge" name="value" placeholder="Date Value" value="{text()}"/>
 			<button class="btn btn-mini btn-danger remove">
 				<i class="icon-remove icon-white"/>
