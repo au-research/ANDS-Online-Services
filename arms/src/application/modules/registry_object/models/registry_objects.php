@@ -75,7 +75,6 @@ class Registry_objects extends CI_Model {
 			if ($query->num_rows() > 0)
 			{
 				$results = $query->result_array();
-				print_r($results);
 				$results = array_slice($results, $offset, $limit);
 				$records = array_map(create_function('$r',
 								     $this->_mkro_callback),
