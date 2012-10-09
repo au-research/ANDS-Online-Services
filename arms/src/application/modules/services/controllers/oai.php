@@ -280,7 +280,6 @@ class Oai extends MX_Controller
 				$newtoken = $this->token_for(array('source' => Oai::LIST_I,
 								   'cursor' => $response['cursor'],
 								   'created' => $created,
-								   'issued' => $this->responseDate,
 								   'format' => $supplied_format,
 								   'from' => $from,
 								   'until' => $until,
@@ -355,7 +354,6 @@ class Oai extends MX_Controller
 	 *  - format: 'metadataPrefix' argument (str)
 	 *  - cursor: number of records provided so far (int)
 	 *  - created: when the first request was created (int, timestamp)
-	 *  - issued: when this token was issued (int, timestamp)
 	 *  - from: 'from' argument, converted to timestamp (int, timestamp)
 	 *  - until: 'until' argument, converted to timestamp (int, timestamp)
 	 *  - set: 'set' argument (str)
@@ -364,10 +362,9 @@ class Oai extends MX_Controller
 	 *  - [1] format: metadataFormat
 	 *  - [2] cursor: int (pack 'I*')
 	 *  - [3] created: timestamp  (seconds, pack 'I*')
-	 *  - [4] issued: timestamp  (seconds, pack 'I*')
-	 *  - [5] from: timestamp (seconds, pack 'I*')
-	 *  - [6] until: timestamp  (seconds, pack 'I*')
-	 *  - [7] set: setSpec
+	 *  - [4] from: timestamp (seconds, pack 'I*')
+	 *  - [5] until: timestamp  (seconds, pack 'I*')
+	 *  - [6] set: setSpec
 	 */
 	public function token_for($params)
 	{
@@ -376,7 +373,6 @@ class Oai extends MX_Controller
 		$token[] = $params['format'];
 		$token[] = pack('I*', $params['cursor']);
 		$token[] = pack('I*', $params['created']);
-		$token[] = pack('I*', $params['issued']);
 		$token[] = pack('I*', $params['from']);
 		$token[] = pack('I*', $params['until']);
 		$token[] = $params['set'];
@@ -389,7 +385,6 @@ class Oai extends MX_Controller
 	 *  - from: timestamp
 	 *  - until: timestamp
 	 *  - created: timestamp
-	 *  - issued: timestamp
 	 *  - set: setSpec
 	 *  - format: metadataFormat
 	 *  - cursor: int
@@ -420,17 +415,15 @@ class Oai extends MX_Controller
 				{
 					$resume['source'] = $data[0];
 					$resume['format'] = $data[1];
-					$resume['set'] = $data[7];
+					$resume['set'] = $data[6];
 
 					$unpack = unpack('I*', $data[2]);
 					$resume['cursor'] = $unpack[1];
 					$unpack = unpack('I*', $data[3]);
 					$resume['created'] = $unpack[1];
 					$unpack = unpack('I*', $data[4]);
-					$resume['issued'] = $unpack[1];
-					$unpack = unpack('I*', $data[5]);
 					$resume['from'] = $unpack[1];
-					$unpack = unpack('I*', $data[6]);
+					$unpack = unpack('I*', $data[5]);
 					$resume['until'] = $unpack[1];
 
 					# now, some basic data validation
@@ -439,7 +432,6 @@ class Oai extends MX_Controller
 					# (if they exist at all)?
 					# c.f. http://stackoverflow.com/a/2524761/664095
 					foreach (array($resume['created'],
-						       $resume['issued'],
 						       $resume['from'],
 						       $resume['until']) as $t)
 					{
@@ -612,6 +604,6 @@ XMLHEAD;
 	{
 		$this->output->append_output("</OAI-PMH>");
 	}
-		}
+}
 
 ?>
