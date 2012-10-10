@@ -45,20 +45,84 @@ class Vocab_services extends CI_Model {
 	 */	
 	function getVersionsByID($id)
 	{
-
-		$query = $this->db->select()->get_where('vocab_versions', array('vocab_id'=>$id));
-
+		$qry = 'SELECT * FROM vocab_versions, vocab_version_formats WHERE vocab_versions.vocab_id = '.$id.' AND vocab_version_formats.version_id = vocab_versions.id ORDER BY vocab_version_formats.version_id DESC';
+		$query = $this->db->query($qry);
+		
 		if ($query->num_rows() == 0)
 		{
 			return NULL;
+			
 		}
 		else
 		{
 			$vocab_versions = $query->result();
+			//print_r($vocab_versions);
 			return $vocab_versions;
 		}	
 		
 	}
+	/**
+	 * Returns all versions of a vocab by vocab  ID (or NULL)
+	 * 
+	 * @param the vocab ID
+	 * @return vocab versions or NULL
+	 */	
+	function getVersionByID($id)
+	{
+		$qry = 'SELECT * FROM vocab_versions, vocab_version_formats WHERE vocab_versions.id = '.$id.' AND vocab_version_formats.version_id = vocab_versions.id';
+		$query = $this->db->query($qry);
+		
+		if ($query->num_rows() == 0)
+		{
+			return NULL;
+			
+		}
+		else
+		{
+			$vocab_version = $query->result();
+			//print_r($vocab_versions);
+			return $vocab_version;
+		}	
+		
+	}	
+	
+	/**
+	 * deletes a given format from a vocab version
+	 * 
+	 * @param the vocab version format ID
+	 * @return NULL
+	 */	
+	function deleteFormat($id)
+	{
+		$qry = 'DELETE FROM vocab_version_formats WHERE id = '.$id;
+		$query = $this->db->query($qry);
+		
+		if ($query)
+		{
+			return NULL;
+		}
+			
+
+	}	
+	
+	/**
+	 * adds a  format to a vocab version
+	 * 
+	 * @param the vocab version format ID
+	 * @return NULL
+	 */	
+	function addFormat($version_id,$format,$type,$value)
+	{
+		$qry = 'INSERT INTO vocab_version_formats (`version_id`,`type`,`value`,`format`) VALUES (\''.$version_id.'\',\''.$type.'\',\''.$value.'\',\''.$format.'\')';
+		$query = $this->db->query($qry);
+		
+		if ($query)
+		{
+			return NULL;
+		}
+			
+
+	}	
 	
 	/**
 	 * Returns all changes of a vocab by vocab  ID (or NULL)
@@ -154,7 +218,7 @@ class Vocab_services extends CI_Model {
 	
 	/**
 	 * XXX: 
-	 * @return array(_data_source) or NULL
+	 * @return array(_vocab) or NULL
 	 */
 	function create()
 	{
