@@ -55,7 +55,7 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 	$totalAttemptedInserts = 0;
 	$SUBMITTED_FOR_ASSESSMENT_Inserts = 0;
 	$totalInserts = 0;
-
+	$ds_ahm = 'STANDARD';
 	$runErrors = '';
 	$errors = null;
 	if($dataSourceKey == 'PUBLISH_MY_DATA')
@@ -66,6 +66,7 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 	else
 	{
 		$dataSource = getDataSources($dataSourceKey, null);
+		$ds_ahm = $dataSource[0]['advanced_harvesting_mode'];
 		$manuallyPublish = $dataSource[0]['auto_publish'];
 		$qaFlag = $dataSource[0]['qa_flag'];
 	}
@@ -117,7 +118,9 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 	    {
 			$oldHarvestID = $oldRegistryObject[0]['created_who'];
 			if($created_who == SYSTEM)					// created by direct import
-				$importThisRecord  = true; 				
+				$importThisRecord  = true; 
+			else if($ds_ahm == 'STANDARD' || $ds_ahm == 'INCREMENTAL')
+				$importThisRecord  = true;			
 			else if (strpos($oldHarvestID, ' (') > 0) 	// manually added... not created by harvest
 				$importThisRecord  = true;
 			else if($oldHarvestID == $created_who)		// created by the current harvest
