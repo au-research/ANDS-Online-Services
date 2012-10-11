@@ -2138,7 +2138,7 @@ function getSizeOfSpatialExtent($spatial_location_id)
 	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
 	
 	if (!isset($resultSet[0]))
-		return '';
+		return 9999;
 	else
 		return (float) $resultSet[0]['box_area'];
 }
