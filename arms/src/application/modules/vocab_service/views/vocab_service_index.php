@@ -543,7 +543,27 @@
 							<div class="controls">
 								<input type="text" class="input-xlarge" name="information_sources"></input>
 							</div>
+						</div>	
+												<legend>Vocabulary Versions</legend>
+						<div class="control-group">
+							<label class="control-label" for="title">Version Title</label>
+							<div class="controls">
+								<input type="text" class="input-xlarge" name="title"></input>
+							</div>
 						</div>												
+							<div class="control-group">
+							<label class="control-label" for="status">Version Status</label>
+							<div class="controls">
+								<input type="text" class="input-xlarge" name="status"></input>
+							</div>
+						</div>	
+						</div>												
+							<div class="control-group">
+							<label class="control-label" for="format"></label>
+							<div class="controls">
+								<button >Add Format</button>
+							</div>
+						</div>																													
 					</fieldset>
 				</div>
 	
