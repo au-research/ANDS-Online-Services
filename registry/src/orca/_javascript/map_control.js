@@ -51,9 +51,10 @@ var mctErrorMessage = "";
 
 var mctCurrentMapId = "";
 
-function mctInit(imagePath)
+function mctInit(imagePath, servicePath)
 {
 	mctImagesRootPath = imagePath;	
+	mctServicePath = servicePath;	
 }
 
 function mctGetErrorMessage()
@@ -812,6 +813,12 @@ function mctRemovePolygon(controlDivId)
 	var searchResultsDivId = MCT_ADDRESS_SEARCH_RESULTS_ID_PREFIX + controlDivId;
 	var searchResultsTextfieldId = MCT_ADDRESS_SEARCH_TEXTFIELD_ID_PREFIX + controlDivId;
 	html += '<div class="mct_dialog_text"><i>Search for a region or place to mark on the map</i></div>';
+	
+	html += '<input type="radio" name="geocoderSelector" checked="checked" value="geocoderSelector.gazetteer" /><label for="geocoderSelector.gazetteer" style="cursor:hand">Gazetteer</label>';
+	html += '<input type="radio" name="geocoderSelector" value="geocoderSelector.google" /><label for="geocoderSelector.google" style="cursor:hand">Google</label>';
+	
+	
+	
 	html += '<div class="mct_dialog_text"><input type="text" id="' + searchResultsTextfieldId + '" style="margin: 0px 0px 0px 0px; width: 210px;" onkeypress="return mctCheckSearchEvent(event, \'' + controlDivId + '\');" />';
 	html += '&nbsp;<button type="button" class="mct_button" onclick="mctDoSearch(\'' + controlDivId + '\')">search</button></div>';
 	html += '<div id="' + searchResultsDivId + '" style="padding: 0px 0px 0px 8px; margin: 0px 0px 0px 0px; height: 158px; white-space: nowrap; overflow: auto;">';
@@ -862,7 +869,7 @@ function mctDoSearch(controlDivId)
 {
 	var searchResultsTextfieldId = MCT_ADDRESS_SEARCH_TEXTFIELD_ID_PREFIX + controlDivId;
 	var searchResultsTextfield = getObject(searchResultsTextfieldId);
-	var searchText = searchResultsTextfield.value;
+	var searchText = $.trim(searchResultsTextfield.value);
 
 	var searchResultsDivId = MCT_ADDRESS_SEARCH_RESULTS_ID_PREFIX + controlDivId;
 	var searchResultsDiv = getObject(searchResultsDivId);	
@@ -870,13 +877,112 @@ function mctDoSearch(controlDivId)
 	{		
 		searchResultsDiv.innerHTML = 'Searching...';
   		mctCurrentMapId = controlDivId;
-  		mctGeocoder.geocode({ 'address': searchText}, function(results, status) {
-  	    	mctAddAddressToMap(results, status);
-  	    });
+  		if($("input[@name=geocoderSelector]:checked").val()  == 'geocoderSelector.gazetteer')
+  		{
+  			mctGazetteerGeocoder(searchText);
+  		}
+  		else{
+  			mctGeocoder.geocode({ 'address': searchText}, function(results, status) {
+  	    	mctAddAddressToMap(results, status);});
+  		}
 	}
 }
 
 function mctAddAddressToMap(results, status)
+{
+    var markerBullet = '';
+	var resultText = "";
+	var coordString = "";
+	//console.log(results);
+	if(status != google.maps.GeocoderStatus.OK) 
+	{
+		resultText = "No locations found";
+	} 
+	else 
+	{	
+		 // Loop through the results		
+		for( var i=0; i < results.length; i++ ) 
+		{
+			var accuracy = results[i].geometry.location_type;
+			//console.log(accuracy);
+			if(accuracy == 'ROOFTOP' || accuracy == 'APPROXIMATE')
+			{
+				coordString = results[i].geometry.location.lng().toFixed(6) +","+ results[i].geometry.location.lat().toFixed(6) ;
+				markerBullet = '&#8226;';				
+			}			
+			else
+			{
+				var nE = results[i].geometry.bounds.getNorthEast();
+				var sW = results[i].geometry.bounds.getSouthWest();
+				coordString = nE.lng().toFixed(6) +","+ nE.lat().toFixed(6)+" ";
+				coordString += sW.lng().toFixed(6) +","+ nE.lat().toFixed(6)+" ";
+				coordString += sW.lng().toFixed(6) +","+ sW.lat().toFixed(6)+" ";
+				coordString += nE.lng().toFixed(6) +","+ sW.lat().toFixed(6)+" ";
+				coordString += nE.lng().toFixed(6) +","+ nE.lat().toFixed(6);
+				markerBullet = '&#9633;';
+			}
+			//console.log(coordString);
+			resultText  += "<div class='mct_search_result' onclick='mctSetMapFromSearchResult(\""+coordString+"\",\""+mctCurrentMapId+"\");' title=\"Set the map with this search result\">" + markerBullet + "&nbsp;"+ results[i].formatted_address+"</div>";
+		}
+	}
+  	var searchResultsDivId = MCT_ADDRESS_SEARCH_RESULTS_ID_PREFIX + mctCurrentMapId;
+	var searchResultsDiv = getObject(searchResultsDivId);	
+	searchResultsDiv.innerHTML = resultText; 
+}
+
+function mctGazetteerGeocoder(searchText)
+{
+	var requestUrl = mctServicePath + '?searchText=*' + encodeURIComponent(searchText) + '&limit=14';
+	$.ajax({
+			type:"GET",  
+			crossDomain: true,
+			dataType: 'json',
+			url: requestUrl,   
+				success:function(data){
+					mctDisplayGazetteerData(data);
+				},
+				error:function(data){
+					$('#debug').append('doSearch error: '+data+'<br/>');
+				}
+			});
+}
+
+function mctDisplayGazetteerData(data)
+{
+	var markerBullet = '&#8226;';
+	var resultText = "";
+	var coordString = "";
+	//console.log(status);
+	if(data.items_count == '0') 
+	{
+		resultText = "No locations found";
+	} 
+	else 
+	{	
+		 // Loop through the results		
+		for( var i=0; i < data.items.length; i++ ) 
+		{
+			pointStr = data.items[i].coords;
+			coordString = data.items[i].lng +","+ data.items[i].lat ;
+			var	typetext = '';
+			for( var j=0; j < data.items[i].types.length; j++ ) 
+			{
+			typetext += data.items[i].types[j] + ' ';
+			}
+			//console.log(coordString);
+			resultText  += "<div class='mct_search_result' onclick='mctSetMapFromSearchResult(\""+coordString+"\",\""+mctCurrentMapId+"\");' title=\"Set the map with this search result\">" + markerBullet + "&nbsp;"+ data.items[i].title + "( " + typetext + ")</div>";
+		}
+	}
+  	var searchResultsDivId = MCT_ADDRESS_SEARCH_RESULTS_ID_PREFIX + mctCurrentMapId;
+	var searchResultsDiv = getObject(searchResultsDivId);	
+	searchResultsDiv.innerHTML = resultText;	
+
+
+
+
+}
+
+function mctGazetteerAddAddressToMap(results, status)
 {
     var markerBullet = '';
 	var resultText = "";
@@ -917,6 +1023,9 @@ function mctAddAddressToMap(results, status)
 	var searchResultsDiv = getObject(searchResultsDivId);	
 	searchResultsDiv.innerHTML = resultText; 
 }
+
+
+
 
 
 function mctSetMapFromSearchResult(coordString, controlDivId)

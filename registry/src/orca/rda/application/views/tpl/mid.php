@@ -59,7 +59,7 @@ limitations under the License.
 				<div id="spatialmap"></div>
 				<div class="ui-widget-header">
 				<span id="map-stuff">
-					<button id="start-drawing">Start Drawing</button>
+					<!-- button id="start-drawing">Start Drawing</button-->
 					<button id="clear-drawing">Clear Drawing</button>
 					<button id="expand">Expand</button>
 					<button id="collapse">Collapse</button>

@@ -78,7 +78,8 @@ limitations under the License.
 		//$q .= $r;
 		//OR (fulltext:('.$q.') -data_source_key:("AU_RESEARCH_GRANTS"))^3000 OR (fulltext:('.$q.') -data_source_key:("nhmrc.gov.au"))^3000
 
-		$q.=($extended_query);
+		
+		$q.=$extended_query;
 
 		if($sort!='score desc') $filter_query.='&sort='.$sort;
 		$q.=$filter_query;

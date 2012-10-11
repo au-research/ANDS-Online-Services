@@ -2126,6 +2126,23 @@ function getSpatialCoverage($coverage_id)
 	return $resultSet;
 }
 
+
+function getSizeOfSpatialExtent($spatial_location_id)
+{
+	global $gCNN_DBS_ORCA;
+	$resultSet = null;
+
+	$strQuery = 'SELECT area(bound_box) AS box_area FROM dba.tbl_spatial_extents WHERE spatial_location_id = $1';
+	$params = array($spatial_location_id);
+
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	
+	if (!isset($resultSet[0]))
+		return '';
+	else
+		return (float) $resultSet[0]['box_area'];
+}
+
 function getTemporalCoverage($coverage_id)
 {
 	global $gCNN_DBS_ORCA;

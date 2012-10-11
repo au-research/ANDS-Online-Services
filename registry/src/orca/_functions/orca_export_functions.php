@@ -691,7 +691,7 @@ function getLocationTypesXML($registryObjectKey, $elementName, $forSOLR)
 			}
 			$xml .= "      <$elementName$dateFrom$dateTo$type>\n";
 			$xml .= getAddressXML($element['location_id'], $forSOLR);
-			$xml .= getSpatialTypesXML($element['location_id'], $forSOLR);
+			$xml .= getSpatialTypesXML($element['location_id'], esc($element['type']), $forSOLR);
 			$xml .= "      </$elementName>\n";
 		}
 	}
@@ -736,12 +736,16 @@ function getSpatialCoverageXML($coverage_id, $forSOLR)
 				$lang = ' xml:lang="'.esc($lang).'"';
 			}
 			$value = esc($element['value']);
+
 			$xml .= "        <spatial$type$lang>$value</spatial>\n";
 
 			if ($forSOLR)
 			{
 
 				$xml .= "        <extRif:spatial$type$lang>\n";
+				$spatialLocationId = $element['spatial_location_id'];
+				$sizeOfArea = getSizeOfSpatialExtent($spatialLocationId);
+				
 				$centre = '';
 				if($element['type'] == 'iso19139dcmiBox')
 				{
@@ -758,6 +762,7 @@ function getSpatialCoverageXML($coverage_id, $forSOLR)
 					$coordinates = "$west,$north $east,$north $east,$south $west,$south $west,$north";
 					$centre = (($east+$west)/2).','.(($north+$south)/2);
 					$xml .= "          <extRif:coords>$west,$north $east,$north $east,$south $west,$south $west,$north</extRif:coords>\n";
+					$xml .= "          <extRif:area>$sizeOfArea</extRif:area>\n";
 				}
 				else if($element['type'] ==  'gmlKmlPolyCoords' || $element['type'] == 'kmlPolyCoords')
 				{
@@ -785,6 +790,7 @@ function getSpatialCoverageXML($coverage_id, $forSOLR)
 						}
 						$centre = (($east+$west)/2).','.(($north+$south)/2);
 						$xml .= "          <extRif:coords>$coordinates</extRif:coords>\n";
+						$xml .= "          <extRif:area>$sizeOfArea</extRif:area>\n";
 					}
 				}
 				else 
@@ -1080,7 +1086,7 @@ function getAddressPartsXML($physical_address_id, $forSOLR)
 }
 
 
-function getSpatialTypesXML($location_id, $forSOLR)
+function getSpatialTypesXML($location_id, $spatialType, $forSOLR)
 {
 	$xml = '';
 	$list = getSpatialLocations($location_id);
@@ -1102,7 +1108,14 @@ function getSpatialTypesXML($location_id, $forSOLR)
 			if ($forSOLR)
 			{
 				$centre = '';
+				$sizeOfArea = '';
 				$xml .= "        <extRif:spatial>";
+				if($spatialType == 'coverage')
+				{
+					$spatialLocationId = $element['spatial_location_id'];
+					$sizeOfArea = getSizeOfSpatialExtent($spatialLocationId);
+				}
+				
 				if($element['type'] == 'iso19139dcmiBox')
 				{
 					$valueString = strtolower(esc($element['value'])).';';
@@ -1157,6 +1170,10 @@ function getSpatialTypesXML($location_id, $forSOLR)
 		        {
 		        	$xml .= "          <extRif:center>$centre</extRif:center>\n";
 
+		        }
+		        if($sizeOfArea != '')
+		        {
+		        	$xml .= "          <extRif:area>$sizeOfArea</extRif:area>\n";
 		        }
 		        $xml .= "        </extRif:spatial>";
 

@@ -726,10 +726,10 @@ class Search extends CI_Controller {
 		$east = $this->input->post('east');
 		$west = $this->input->post('west');
 
-		//echo $north;
-		$query = 'select distinct rs.registry_object_key from dba.tbl_registry_objects rs, dba.tbl_spatial_extents se
+		//echo $north . $south . $east. $west;
+		$query = 'select distinct rs.key_hash from dba.tbl_registry_objects rs, dba.tbl_spatial_extents se
 	where rs.registry_object_key = se.registry_object_key
-	and se.bound_box && box ((point('.$north.','.$west.')),(point('.$south.','.$east.')))';
+	and se.bound_box && box ((point('.$north.','.$west.')),(point('.$south.','.$east.'))) limit 8000';
 		$this->load->database();
 		$data['registryObjects'] = $this->db->query($query);
 		$this->load->view('search/listIDs', $data);

@@ -2654,7 +2654,7 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 	
 	/*GOOGLE MAP*/
 
-	$( "#start-drawing" ).button({
+	/*$( "#start-drawing" ).button({
 		text: true,
 		icons: {
 			primary: "ui-icon-pencil"
@@ -2667,7 +2667,7 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 		$('#map-help-stuff').fadeIn();
 		$(this).hide();
 	});
-	
+	*/
 	$( "#expand" ).button(
 		{text: false,icons: {primary: "ui-icon-arrowthickstop-1-e"}
 	}).click(function(){
@@ -2708,7 +2708,13 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
     	//console.log(drawingArrays);
     	//google.maps.event.trigger(map, 'resize');
     	//map.setZoom( map.getZoom() );
-    	spatial_included_ids='';
+    	clearMap();
+    	$(this).hide();
+    	changeHashTo(formatSearch(search_term,1,classFilter));
+    });
+	
+	function clearMap(){
+		spatial_included_ids='';
     	for(i in drawingArrays){
     		if(drawingArrays[i]!=null){
     			drawingArrays[i].setMap(null);
@@ -2716,11 +2722,8 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
     		}
     	}
     	$('#clearSpatial').hide();
-    	$('#start-drawing').show();
-    	$(this).hide();
     	n='';s='';e='';w='';
-    	changeHashTo(formatSearch(search_term,1,classFilter));
-    });
+	}
 	
 	function resetZoom(){
 		google.maps.event.trigger(map, 'resize');
@@ -2749,6 +2752,53 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
       mapTypeId: google.maps.MapTypeId.ROADMAP
     };
     var map = new google.maps.Map(document.getElementById("spatialmap"),myOptions);
+    
+    
+    var drawingManager = new google.maps.drawing.DrawingManager({
+        drawingMode: google.maps.drawing.OverlayType.RECTANGLE,
+        drawingControl: true,
+        drawingControlOptions: {
+          position: google.maps.ControlPosition.TOP_CENTER,
+          drawingModes: [
+           // google.maps.drawing.OverlayType.MARKER,
+           // google.maps.drawing.OverlayType.CIRCLE,
+            google.maps.drawing.OverlayType.RECTANGLE
+          ]
+        },
+        rectangleOptions:{
+        	fillColor: '#FF0000'
+        }
+      });
+      drawingManager.setMap(map);
+      var rectangleOptions = drawingManager.get('rectangleOptions');
+      rectangleOptions.fillColor= '#FF0000';
+      rectangleOptions.strokeColor= "#FF0000";
+      rectangleOptions.fillOpacity= 0.1;
+      rectangleOptions.strokeOpacity= 0.8;
+      rectangleOptions.strokeWeight= 2;
+      rectangleOptions.clickable= false;
+      rectangleOptions.editable= true;
+      rectangleOptions.zIndex= 1;     
+      
+      drawingManager.set('rectangleOptions', rectangleOptions);
+    
+      google.maps.event.addListener(drawingManager, 'overlaycomplete', function(e) {
+          if (e.type == google.maps.drawing.OverlayType.RECTANGLE) {
+          // Switch back to non-drawing mode after drawing a shape.
+        
+          drawingManager.setDrawingMode(null);
+          var geoCodeRectangle = e.overlay;
+          drawingArrays.push(geoCodeRectangle);
+          //map.fitBounds(ui.item.bounds);
+          spatialSearch(geoCodeRectangle);
+        }
+      });
+      
+      google.maps.event.addListener(drawingManager, 'drawingmode_changed', function(e) {
+    	  var drawingMode = drawingManager.getDrawingMode();
+    	  if(drawingMode==='rectangle') clearMap();
+      });
+    
     //GEOCODER
     var geocoder = new google.maps.Geocoder();
     
@@ -2778,13 +2828,13 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 	          drawingArrays.push(geoCodeRectangle);
 	          map.fitBounds(ui.item.bounds);
 	          spatialSearch(geoCodeRectangle);
-	          $('#start-drawing').hide();
 	          $('#clear-drawing').show();
 	          //console.log(location);
 	          //marker.setPosition(location);
         }
       });
 
+    /*
     function startDrawing(){
     	var icon = new google.maps.MarkerImage(base_url+'img/square.png',
   		      new google.maps.Size(16, 16),
@@ -2895,7 +2945,7 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
          }
     }//END startDrawing
     
-    
+    */
     
     function spatialSearch(rt){
     	bnds = rt.getBounds();

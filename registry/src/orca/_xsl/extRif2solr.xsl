@@ -417,13 +417,22 @@
 
     </xsl:template>
     
-    <xsl:template match="ro:address | ro:electronic | ro:physical | ro:coverage | ro:temporal | extRif:spatial">
+    <xsl:template match="ro:address | ro:electronic | ro:physical | ro:coverage | ro:location | ro:temporal | extRif:spatial">
             <xsl:apply-templates/>
     </xsl:template>
     
-    <xsl:template match="ro:electronic/ro:value | ro:addressPart | ro:location/ro:spatial[@type = 'text']">
+    <xsl:template match="ro:electronic/ro:value | ro:addressPart | ro:spatial[@type = 'text']">
             <xsl:value-of select="."/><xsl:text> </xsl:text>
     </xsl:template>
+    
+    <xsl:template match="ro:spatial[@type = 'text']">
+        <xsl:element name="field">
+            <xsl:attribute name="name">spatial_coverage_text</xsl:attribute>
+            <xsl:value-of select="."/>
+        </xsl:element>
+    </xsl:template>
+    
+    
     
     <xsl:template match="ro:identifier" mode="value">
         <xsl:element name="field">
@@ -519,6 +528,13 @@
     <xsl:template match="ro:location/extRif:spatial/extRif:center | ro:coverage/extRif:spatial/extRif:center">
         <xsl:element name="field">
             <xsl:attribute name="name">spatial_coverage_center</xsl:attribute>
+            <xsl:value-of select="."/>
+        </xsl:element>
+    </xsl:template>
+    
+        <xsl:template match="ro:location/extRif:spatial/extRif:area | ro:coverage/extRif:spatial/extRif:area">
+        <xsl:element name="field">
+            <xsl:attribute name="name">spatial_coverage_area</xsl:attribute>
             <xsl:value-of select="."/>
         </xsl:element>
     </xsl:template>
