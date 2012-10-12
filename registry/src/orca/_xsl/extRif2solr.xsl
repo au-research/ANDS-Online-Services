@@ -67,7 +67,22 @@
             <xsl:element name="field">
                 <xsl:attribute name="name">group</xsl:attribute>
                 <xsl:value-of select="@group"/>
-            </xsl:element>  
+            </xsl:element> 
+            <xsl:if test=".//ro:location/extRif:spatial/extRif:area or .//ro:coverage/extRif:spatial/extRif:area">
+            <xsl:for-each select="//extRif:area">
+            <xsl:sort select="." data-type="number"/>
+            
+    			<xsl:if test="position() = 1">
+            		<xsl:apply-templates select="." mode="smallest"/>
+    			</xsl:if>
+    			<xsl:if test="position() = last()">
+            		<xsl:apply-templates select="." mode="largest"/>
+    			</xsl:if>
+
+            </xsl:for-each>
+            </xsl:if>
+
+             
             <xsl:apply-templates select="ro:collection | ro:party | ro:activity | ro:service"/>
 
         </doc>
@@ -532,9 +547,17 @@
         </xsl:element>
     </xsl:template>
     
-        <xsl:template match="ro:location/extRif:spatial/extRif:area | ro:coverage/extRif:spatial/extRif:area">
+    <xsl:template match="extRif:area" mode="smallest">
         <xsl:element name="field">
-            <xsl:attribute name="name">spatial_coverage_area</xsl:attribute>
+            <xsl:attribute name="name">smallest_spatial_coverage_area</xsl:attribute>
+            <xsl:value-of select="."/>
+        </xsl:element>
+    </xsl:template>
+    
+    
+   <xsl:template match="extRif:area" mode="largest">
+        <xsl:element name="field">
+            <xsl:attribute name="name">largest_spatial_coverage_area</xsl:attribute>
             <xsl:value-of select="."/>
         </xsl:element>
     </xsl:template>
@@ -547,7 +570,7 @@
     </xsl:template> 
 
 
-    <xsl:template match="ro:date | ro:description | ro:spatial | ro:text"/>
+    <xsl:template match="ro:date | ro:description | ro:spatial | ro:text | extRif:area"/>
 
     
     <xsl:template match="ro:name"/>

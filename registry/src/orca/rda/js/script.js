@@ -2761,7 +2761,7 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
           position: google.maps.ControlPosition.TOP_CENTER,
           drawingModes: [
            // google.maps.drawing.OverlayType.MARKER,
-           // google.maps.drawing.OverlayType.CIRCLE,
+            google.maps.drawing.OverlayType.CIRCLE,
             google.maps.drawing.OverlayType.RECTANGLE
           ]
         },
@@ -2792,6 +2792,15 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
           //map.fitBounds(ui.item.bounds);
           spatialSearch(geoCodeRectangle);
         }
+          if (e.type == google.maps.drawing.OverlayType.CIRCLE) {
+              // Switch back to non-drawing mode after drawing a shape.
+            
+              drawingManager.setDrawingMode(null);
+              var geoCodeRectangle = e.overlay;
+              drawingArrays.push(geoCodeRectangle);
+              //map.fitBounds(ui.item.bounds);
+              spatialSearch(geoCodeRectangle);
+            }
       });
       
       google.maps.event.addListener(drawingManager, 'drawingmode_changed', function(e) {
