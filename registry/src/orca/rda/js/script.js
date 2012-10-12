@@ -1905,19 +1905,22 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 			$(this).addClass('active');
 		});
 		
-		$("#scrollable").scrollable({circular: true}).autoscroll(6000);
-		var api = $("#scrollable").data("scrollable");
-		api.onSeek(function() {
-			var currentImageIndex = this.getIndex()+2;
-			var prev = this.getIndex() + 1;
-			var next = this.getIndex() + 3;
-			currentKey = $("#items img:nth-child(" + currentImageIndex + ")").attr('alt');
-			$('#items img').removeClass('current-scroll');
-			$("#items img:nth-child(" + currentImageIndex + ")").addClass('current-scroll');
-			currentDescription = $('div[name="'+currentKey+'"]').html();
-			$('#display-here').html(currentDescription);
-			$('#display-here a').tipsy({live:true, gravity:'w'});
-		});
+		if ($("#ref_spotlight_data div").length > 0)
+		{
+			$("#scrollable").scrollable({circular: true}).autoscroll(6000);
+			var api = $("#scrollable").data("scrollable");
+			api.onSeek(function() {
+				var currentImageIndex = this.getIndex()+2;
+				var prev = this.getIndex() + 1;
+				var next = this.getIndex() + 3;
+				currentKey = $("#items img:nth-child(" + currentImageIndex + ")").attr('alt');
+				$('#items img').removeClass('current-scroll');
+				$("#items img:nth-child(" + currentImageIndex + ")").addClass('current-scroll');
+				currentDescription = $('div[name="'+currentKey+'"]').html();
+				$('#display-here').html(currentDescription);
+				$('#display-here a').tipsy({live:true, gravity:'w'});
+			});
+		}
 		$("#items img").click(function(){
 			api.seekTo($(this).index()-1);
 			if($(this).hasClass('current-scroll')){
