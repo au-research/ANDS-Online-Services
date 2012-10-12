@@ -2140,7 +2140,7 @@ function getSizeOfSpatialExtent($spatial_location_id)
 	if (!isset($resultSet[0]))
 		return 9999;
 	else
-		return (float) $resultSet[0]['box_area'];
+		return $resultSet[0]['box_area'];
 }
 
 function getTemporalCoverage($coverage_id)
