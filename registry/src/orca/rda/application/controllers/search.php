@@ -637,6 +637,7 @@ class Search extends CI_Controller {
 		//echo '+spatial:('.$spatial_included_ids.')';
 		if($spatial_included_ids!='') {
 			$extended_query .= $spatial_included_ids;
+			$sort = 'smallest_spatial_coverage_area asc';
 		}
 		if($temporal!='All'){
 			$temporal_array = explode('-', $temporal);

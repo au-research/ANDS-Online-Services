@@ -467,6 +467,10 @@
    <field name="data_source_key" type="string" indexed="true" stored="true"/>
    
    <field name="date_modified" type="string" indexed="true" stored="true"/>
+   <field name="spatial_coverage_area" type="double" multiValued="true" indexed="true" stored="true"/>
+   <field name="smallest_spatial_coverage_area" type="double" indexed="true" stored="true"/>
+   <field name="largest_spatial_coverage_area" type="double" indexed="true" stored="true"/>
+   <field name="spatial_coverage_text" type="string" multiValued="true" indexed="true" stored="true"/>
    
    <!-- Anything that starts with s_ is alpha only sort-->
    <field name="group" type="string" indexed="true" stored="true"/>

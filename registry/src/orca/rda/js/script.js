@@ -2764,7 +2764,7 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
           position: google.maps.ControlPosition.TOP_CENTER,
           drawingModes: [
            // google.maps.drawing.OverlayType.MARKER,
-            google.maps.drawing.OverlayType.CIRCLE,
+           // google.maps.drawing.OverlayType.CIRCLE,
             google.maps.drawing.OverlayType.RECTANGLE
           ]
         },
