@@ -71,6 +71,7 @@ class XML_Extension extends ExtensionBase
 
 	function getExtRif()
 	{
+		$data = false;
 		$result = $this->db->select('data')->order_by('timestamp','desc')->limit(1)->get_where('record_data', array('registry_object_id'=>$this->ro->id, 'scheme'=>'extrif'));
 		if ($result->num_rows() > 0)
 		{
@@ -84,6 +85,7 @@ class XML_Extension extends ExtensionBase
 	}
 
 	function getExtRifDataRecord($id){
+		$data = false;
 		$result = $this->db->select('data')->limit(1)->get_where('record_data', array('id'=>$id, 'scheme'=>'extrif'));
 		if ($result->num_rows() > 0)
 		{
@@ -97,6 +99,7 @@ class XML_Extension extends ExtensionBase
 	}
 
 	function getRif(){
+		$data = false;
 		$result = $this->db->select('data')->order_by('timestamp','desc')->limit(1)->get_where('record_data', array('registry_object_id'=>$this->ro->id, 'scheme'=>'rif'));
 		if ($result->num_rows() > 0)
 		{
