@@ -31,6 +31,10 @@ class _registry_object extends ExtensionBoilerplate {
 			include_once('extensions/_base.php');
 			foreach($map AS $file)
 			{
+				if (!preg_match("/\.php$/",$file))
+				{
+					continue;
+				}
 				if (substr($file, 0, 1) != '_')
 				{
 					include_once('extensions/'.$file);
