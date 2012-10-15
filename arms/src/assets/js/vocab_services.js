@@ -31,6 +31,7 @@ $(function(){
 					case 'edit'		: load_vocab_edit(words[1], words[2]);break;
 					case 'delete'	: load_vocab_delete(words[1]);break;
 					case 'add'		: load_vocab_add(words[1]);break;
+					case 'version-edit'		: load_vocab_version_edit(words[1],words[2]);break;					
 					default: logErrorOnScreen('this functionality is currently being worked on');break;
 				}
 				$('#vocab_view_container').attr('vocab_id', words[1]);
@@ -92,19 +93,41 @@ $(function(){
 			}else if($(this).hasClass('delete')){
 				changeHashTo('delete/'+vocab_id);
 			}else if($(this).hasClass('add')){
-				alert(vocab_id)
-			changeHashTo('add/'+vocab_id);
-			}			
+				changeHashTo('add/'+vocab_id);	
+			}else if($(this).hasClass('version-edit')){
+				var version_id = $(this).attr('version_id')	
+				showEditVersionModal(vocab_id,version_id);
+			}else if($(this).hasClass('version-format-delete')){
+				var format_id = $(this).attr('format_id')	
+				deleteVersionFormat(format_id,vocab_id)
+			}else if($(this).hasClass('version-format-add')){
+				var version_id = $(this).attr('version_id')	
+				addVersionFormat(version_id,vocab_id);
+			}		
 		}
 	});
 
-	//data source chooser event
+	//vocab chooser event
 	$('#vocab-chooser').live({
 		change: function(e){
 			changeHashTo('view/'+$(this).val());
 		}
 	});
 
+	//vocab version format chooser event
+	$('#versionFormatType').live({
+		change: function(e){
+			var theChoice = $(this).val();
+			var thebox = $('#versionFormatValueBox').html();
+			if(theChoice == 'file')
+				{
+					$('#versionFormatValueBox').html('<input type="file" id="versionFormatValue" style="display:inline"/><br />');
+				} else {
+					$('#versionFormatValueBox').html('<input type="text" value="" id="versionFormatValue" style="width:300px"/><br />');			
+				}
+		}
+	});
+	
 	//closing box header will go back in history
 	$('.box-header .close').live({
 		click: function(e){
@@ -112,6 +135,7 @@ $(function(){
 			window.history.back();
 		}
 	});
+
 });
 
 /*
@@ -270,6 +294,44 @@ function load_vocab_edit(vocab_id, active_tab){
 				});
 			});
 			
+			//get the associated versions			
+			$.ajax({
+				url: 'vocab_service/getVocabVersions/'+vocab_id,
+				type: 'GET',
+				contentType: 'application/json; charset=utf-8',
+				dataType: 'json',
+				success: function(data){
+					//console.log(data);				
+					//var template = $('#vocab-version-edit-template').html();
+	
+					var template ='<fieldset><legend>Vocabulary Versions</legend></fieldset><div class="" id="vocab_edit_container"'+			
+				'</div><table class="table-bordered" background="#ffffff" width="800">'+
+					'<thead><tr align="left"><th style="padding-left:10px">Title</th><th style="padding-left:10px">Status</th><th style="padding-left:10px">Format</th><th style="padding-left:10px">Edit</th></tr></thead><tbody><tr>{{#items}}'+	
+					'{{#title}}'+
+					'<td style="padding-left:10px">{{title}}</td>'+
+					'{{/title}}'+					
+					'{{#status}}'+
+					'<td style="padding-left:10px">{{status}}</td>'+
+					'{{/status}}'+					
+					'<td style="padding-left:10px">{{#formats}}<a href="{{#value}}{{value}}{{/value}}" target="blank">{{#format}}{{format}}{{/format}}</a> '+		
+					'{{/formats}}</td><td style="padding-left:10px" vocab_id="'+vocab_id+'"><div class="btn-group item-control"><button class="btn version-edit" version_id="{{#id}}{{id}}{{/id}}"><i class="icon-edit"></i></button></div></div></td></tr>'+
+					'{{/items}}</tbody></table>'+	
+					'</div><br /><br />'+
+					'<div class="modal hide" id="versionModal">'+
+					 	'<div class="modal-header">'+
+					 	'<button type="button" class="close" data-dismiss="modal">×</button>'+
+					 	'<h3>Edit Version</h3>'+
+					 	'</div>'+
+					 	'<div class="modal-body" id="modal-form" vocab_id="'+vocab_id+'"></div>'+
+					 	'<div class="modal-footer"></div>'+
+					 '</div>';
+					var output = Mustache.render(template, data);
+					$('#edit-vocab-version').html(output);
+					$('#edit-vocab-version').fadeIn(500);
+
+				}
+			});			
+			
 			$("#edit-vocab .chzn-select").chosen().change(function(){
 				var input = $('#'+$(this).attr('for'));
 				$(input).val($(this).val());
@@ -279,57 +341,125 @@ function load_vocab_edit(vocab_id, active_tab){
 				$(this).val($(input).val());
 				$(this).chosen().trigger("liszt:updated");
 			});
+			
+
 		}
 	});
 	return false;
 }
-function load_vocab_add(vocab_id, active_tab){
-//	$('#add-vocab').html('Loading');
-	$('#browse-vocab').slideUp(500);
-	$('#view-vocabs').slideUp(500);
 
-
-/*	$.ajax({
-		url: 'vocab_service/getVocab/'+vocab_id,
+function showEditVersionModal(vocab_id,version_id)
+{
+	
+	$.ajax({
+		url: 'vocab_service/getVocabVersion/'+version_id,
 		type: 'GET',
 		contentType: 'application/json; charset=utf-8',
 		dataType: 'json',
 		success: function(data){
-			//console.log(data); */
-			var template = $('#vocab-add-template').html();
-		//	var output = Mustache.render(template,'{item:0}');
-		//	alert(output);
-			$('#add-vocab').html(template);
-			$('#add-vocab').fadeIn(500);
-	/*		if(active_tab && $('#'+active_tab).length > 0){//if an active tab is specified and exists
-				$('.nav-tabs li a[href=#'+active_tab+']').click();
-			}
-			
-			$('#edit-vocab  .normal-toggle-button').each(function(){
-				if($(this).attr('value')=='t' || $(this).attr('value')=='1' || $(this).attr('value')=='true' ){
-					$(this).find('input').attr('checked', 'checked');
-				}
-				$(this).toggleButtons({
-					width:75,enable:true,
-					onChange:function(){
-						$(this).find('input').attr('checked', 'checked');
-					}
-				});
-			});
-			
-			$("#edit-vocab .chzn-select").chosen().change(function(){
-				var input = $('#'+$(this).attr('for'));
-				$(input).val($(this).val());
-			});
-			$('#edit-vocab .chzn-select').each(function(){
-				var input = $('#'+$(this).attr('for'));
-				$(this).val($(input).val());
-				$(this).chosen().trigger("liszt:updated");
-			});
+			//console.log(data);				
+			var template = $('#vocab-version-edit-template').html();
+			var output = Mustache.render(template, data);
+			$('#versionModal').modal();
+			$('#modal-form').html(output);
 		}
-	});*/
+	});
+	
+}
+
+
+function load_vocab_add(vocab_id, active_tab){
+
+	$('#browse-vocab').slideUp(500);
+	$('#view-vocabs').slideUp(500);
+
+	var template = $('#vocab-add-template').html();
+
+	$('#add-vocab').html(template);
+	$('#add-vocab').fadeIn(500);
+
 	return false;
 }
+
+function deleteVersionFormat(format_id,vocab_id){
+	
+	confirm("Do you really want to delete the format of vocab " + format_id );
+	$.ajax({
+		url: 'vocab_service/deleteFormat/'+format_id,
+		type: 'GET',
+		contentType: 'application/json; charset=utf-8',
+		dataType: 'json',
+		success: function(data){
+
+				//$.modal.close();
+				changeHashTo('edit/'+vocab_id);
+				
+			},
+			error: function(data)
+			{
+				console.log(data)
+				$('#myModal').modal();
+				logErrorOnScreen("An error occured deleting your format!", $('#myModal .modal-body'));
+			//	$('#myModal .modal-body').append("<br/><pre>" + data + "</pre>");
+			}
+			
+	
+			});
+	
+}
+
+function addVersionFormat(version_id,vocab_id)
+{
+	var jsonData = [];
+	jsonData.push({name:'versionFormat', value:$('#versionFormat').val()});
+	jsonData.push({name:'versionFormatType', value:$('#versionFormatType').val()});	
+	if($('#versionFormatType').val()=='file')
+		{
+		 	var theFile=document.getElementById('versionFormatValue').files[0];
+		 
+		 	var uri = "vocab_service/uploadFile";
+		 	var xhr = new XMLHttpRequest();
+		 	var fd = new FormData();
+          
+		 	xhr.open("POST", uri, true);
+		 	xhr.onreadystatechange = function() {
+             if (xhr.readyState == 4 && xhr.status == 200) {
+                 // Handle response.
+     			// console.log(xhr.responseText + " is the responseText"); // handle response.
+             }
+		 	};
+		 	fd.append('theFile', theFile);
+		 	// Initiate a multipart/form-data upload
+		 	xhr.send(fd);
+		 
+		 	jsonData.push({name:'versionFormatValue', value:theFile['name']});
+
+		}else{
+			jsonData.push({name:'versionFormatValue', value:$('#versionFormatValue').val()});
+		}
+	$.ajax({
+		url: 'vocab_service/addFormat/'+version_id,
+		type: 'POST',
+		data: jsonData,
+		enctype: 'multipart/form-data',
+		success: function(data){
+				//console.log(data)
+				//$.modal.close();
+				changeHashTo('edit/'+vocab_id);
+				
+			},
+			error: function(data)
+			{
+				console.log(data)
+				$('#myModal').modal();
+				logErrorOnScreen("An error occured adding your format!", $('#myModal .modal-body'));
+			//	$('#myModal .modal-body').append("<br/><pre>" + data + "</pre>");
+			}
+			
+	
+			});	
+}
+
 $('#save-edit-form').live({
 	click: function(e){
 		e.preventDefault();
@@ -375,12 +505,13 @@ $('#save-edit-form').live({
 		$(this).button('reset');
 	}
 });
+
 $('#save-add-form').live({
 	click: function(e){
 		e.preventDefault();
 		var jsonData = [];
 		$(this).button('loading');
-		jsonData.push({name:'vocab_id', value:$('#vocab_view_container').attr('vocab_id')});
+		jsonData.push({name:'vocab_id', value:'0'});
 		$('#add-vocab #add-form input, #add-vocab #add-form textarea').each(function(){
 			var label = $(this).attr('name');
 			var value = $(this).val();
@@ -395,16 +526,15 @@ $('#save-add-form').live({
 			data: jsonData,
 			success: function(data){		
 					if (!data.status == "OK")
-					{
-						
+					{				
 						$('#myModal').modal();
 						logErrorOnScreen("An error occured whilst adding your vocab!", $('#myModal .modal-body'));
 						$('#myModal .modal-body').append("<br/><pre>" + data + "</pre>");
 					}
 					else
 					{
-						console.log(data);
-						changeHashTo('view/'+$('#vocab_view_container').attr('vocab_id'));
+						var decodedResp = JSON.parse(data);
+						changeHashTo('view/'+decodedResp.id);
 						createGrowl("Your Vocabulary was successfully added");
 						updateGrowls();
 					}
@@ -420,3 +550,4 @@ $('#save-add-form').live({
 		$(this).button('reset');
 	}
 });
+

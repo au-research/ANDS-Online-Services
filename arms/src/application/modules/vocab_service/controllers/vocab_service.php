@@ -142,25 +142,167 @@ class Vocab_service extends MX_Controller {
 
 		$versions= $this->vocab->getVersionsByID($id);
 		$items = array();
+		$currentVersion ='';
 		if($versions)
 		{
 			foreach($versions as $version){
-				$item = array();
-				$item['vocab_status'] = $version->vocab_status;
-				$item['id'] = $version->id;
-				$item['vocab_format'] = $version->vocab_format;
-				$item['vocabulary'] = $version->vocabulary;
-	
-				array_push($items, $item);
+			
+				
+				if($currentVersion!=$version->version_id)
+				{
+					if($currentVersion!='')
+					{
+						array_push($items, $item);
+					}
+					$currentVersion = $version->version_id;
+					$item = array();
+					$item['formats'] = array();									
+					$item['status'] = $version->status;
+					$item['id'] = $version->version_id;
+					$item['title'] = $version->title;
+					
+				} 
+					
+				$formats['format'][] = $version->format;
+				$formats['type'][] = $version->type;
+				$formats['value'][] = $version->value;
+				array_push($item['formats'], $formats);
+				unset($formats);
+			
 			}
+			array_push($items, $item);
 		}
-		
 		$jsonData['items'] = $items;
 		$jsonData = json_encode($jsonData);
 		echo $jsonData;
 	}
 	
+	/**
+	 * Get a set of vocab versions
+	 * 
+	 * 
+	 * @author Minh Duc Nguyen <minh.nguyen@ands.org.au>
+	 * @param [INT] vocab ID
+	 * @todo ACL on which vocabs you have access to, error handling
+	 * @return [JSON] of a list of vocab versions
+	 */	
+	public function getVocabVersion($id){
+		header('Cache-Control: no-cache, must-revalidate');
+		header('Content-type: application/json');
+
+		$jsonData = array();
+		$jsonData['status'] = 'OK';
+
+		$this->load->model("vocab_services","vocab");
+
+		$versions= $this->vocab->getVersionByID($id);
+		$items = array();
+		$currentVersion ='';
+		if($versions)
+		{
+			foreach($versions as $version){
+					//print_r($version);
+				
+				if($currentVersion!=$version->version_id)
+				{
+					if($currentVersion!='')
+					{
+						array_push($items, $item);
+					}
+					$currentVersion = $version->version_id;
+					$item = array();
+					$item['formats'] = array();									
+					$item['status'] = $version->status;
+					$item['id'] = $version->version_id;
+					$item['title'] = $version->title;
+					
+				} 
+					
+				$formats['format'][] = $version->format;
+				$formats['format_id'] = $version->id;
+				$formats['type'][] = $version->type;
+				$formats['value'][] = $version->value;
+				array_push($item['formats'], $formats);
+				unset($formats);
+			
+			}
+			array_push($items, $item);
+		}
+
+		$jsonData['items'] = $items;
+		$jsonData = json_encode($jsonData);
+		echo $jsonData;
+	}	
+
+		
+	/**
+	 * delete a format from a vocab version 
+	 * 
+	 * 
+	 * @author Liz Woods <liz.woods@ands.org.au>
+	 * @param [INT] version format ID
+	 * @todo ACL on which vocabs you have access to, error handling
+	 * @return NIL
+	 */	
 	
+	public function deleteFormat($format_id)
+	{
+		$this->load->model("vocab_services","vocab");
+
+		$changes= $this->vocab->deleteFormat($format_id);	
+	
+	}	
+	
+	/**
+	 * add a format to a vocab version 
+	 * 
+	 * 
+	 * @author Liz Woods <liz.woods@ands.org.au>
+	 * @param [INT] version ID
+	 * @todo ACL on which vocabs you have access to, error handling
+	 * @return NIL
+	 */	
+	
+	public function addFormat($version_id)
+	{
+		$POST = $this->input->post();
+
+		$format = $this->input->post('versionFormat');	
+
+		$type = $this->input->post('versionFormatType');
+	
+		$value = $this->input->post('versionFormatValue');	
+		print_r($value);				
+
+		$this->load->model("vocab_services","vocab");
+
+		$format= $this->vocab->addFormat($version_id,$format,$type,$value);	
+	
+	}	
+	
+	/**
+	 * uploadf a format file 
+	 * 
+	 * 
+	 * @author Liz Woods <liz.woods@ands.org.au>
+	 * @param NIL
+	 * @todo ACL
+	 * @return NIL
+	 */	
+	public function uploadFile()
+	{
+
+		print_r($_FILES);
+		echo getcwd();
+	  if (file_exists("../vocab_files/" . $_FILES["theFile"]["name"]))
+      {
+      	echo $_FILES["theFile"]["name"] . " already exists. ";
+      }
+    else
+      {
+      	move_uploaded_file($_FILES["theFile"]["tmp_name"],
+      	"/var/www/htdocs/workareas/liz/ands/ands/arms/src/application/modules/vocab_service/vocab_files/" . $_FILES["theFile"]["name"]);      }	
+	}	
 	/**
 	 * Get a set of vocab change histrory
 	 * 
@@ -264,33 +406,25 @@ class Vocab_service extends MX_Controller {
 		$vocab = NULL;
 		$id = NULL; 
 		
-		
 		$jsonData['status'] = 'OK';
-		$POST = $this->input->post();
-
-		print_r($POST);
 		
 		$this->load->model("vocab_services","vocab");
 
-
 		$vocabid = $this->vocab->create();
-
+		
+		$jsonData['id'] = $vocabid->id;
+		
 		$vocab = $this->vocab->getByID($vocabid->id);
-		print_r($vocab->attributes());
 			
 		if ($vocab)
 		{
-
 			foreach($vocab->attributes() as $attrib=>$value){						
 				if ($new_value = $this->input->post($attrib)) {
 					if($new_value=='true') $new_value=DB_TRUE;
 					if($new_value=='false') $new_value=DB_FALSE;
 					$vocab->setAttribute($attrib, $new_value);
-					$jsonData['item'][$attrib] = $new_value;
 				}
 			}
-			
-			print_r($vocab->attributes());
 			$vocab->save();
 		}
 		

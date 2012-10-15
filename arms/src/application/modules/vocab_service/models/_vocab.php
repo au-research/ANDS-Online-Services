@@ -92,8 +92,6 @@ class _vocab {
 
 	}
 	
-
-	
 	function create()
 	{
 		$this->db->insert("vocab_metadata", array("id" => NULL));

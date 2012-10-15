@@ -78,7 +78,6 @@
 </section>
 
 <section id="view-vocab" class="hide">Loading...</section>
-
 <section id="edit-vocab" class="hide">Loading...</section>
 <section id="add-vocab" class="hide">Loading...</section>
 </div>
@@ -178,9 +177,10 @@
 <?php
 	$vocab_version_view_fields = array(
 		'id' => 'Id',
-		'vocab_status' => 'Status',
-		'version' => 'Version',
-		'vocab_format' => 'Format',
+		'status' => 'Status',
+		'title' => 'Version',
+			'format' => 'Format',
+			'type' => 'Type',
 	);
 ?>
 
@@ -205,7 +205,7 @@
 </div>
 
 
-<?php
+			<?php
 	$vocab_changes_view_fields = array(
 		'id' => 'Id',
 		'change_date' => 'Change Date',
@@ -260,7 +260,11 @@
 {{#item}}
 	<div class="box">
 	<div class="box-header">
-	    <h1>Edit: {{title}}</h1>
+				<ul class="breadcrumbs">
+				<li><a href="javascript:;"><i class="icon-home"></i></a></li>
+				<li><?php echo anchor('vocab_service', 'Manage My Vocabs');?></li>
+				<li><a href="javascript:;" class="active">Edit: {{title}}</a></li>
+			</ul>
 	    <span class="right-widget">
         	<small><a href="javascript:;" class="close return-to-browse">&times;</a></small>
         </span>
@@ -269,7 +273,7 @@
 	<div class="">
 
 
-		<form class="form-horizontal" id="edit-form">
+		<form class="form-horizontal"  enctype="multipart/form-data"  id="edit-form">
 			<div class="tab-content">
 				<div id="admin" class="tab-pane active">
 					<fieldset>
@@ -289,7 +293,12 @@
 								<textarea class="input-xlarge" name="description">{{description}}</textarea>
 							</div>
 						</div>
-										
+						<div class="control-group">
+							<label class="control-label" for="publisher">Publisher</label>
+							<div class="controls">
+								<input type="text" class="input-xlarge" name="publisher" value="{{publisher}}">
+							</div>
+						</div>										
 						<div class="control-group">
 							<label class="control-label" for="contact_name">Contact Name</label>
 							<div class="controls">
@@ -324,21 +333,29 @@
 								<input type="text" class="input-xlarge" name="revision_cycle" value="{{revision_cycle}}">
 							</div>
 						</div>	
-						
-						<div class="control-group">
-							<label class="control-label" for="available_formats">Available Formats</label>
-							<div class="controls">
-								<input type="text" class="input-xlarge" name="available_formats" value="{{available_formats}}">
-							</div>
-						</div>	
-																					
+																	
 						<div class="control-group">
 							<label class="control-label" for="notes">Notes</label>
 							<div class="controls">
 								<textarea class="input-xlarge" name="notes">{{notes}}</textarea>
 							</div>
 						</div>
+						<div class="control-group">
+							<label class="control-label" for="language">Language</label>
+							<div class="controls">
+								<input type="text" class="input-xlarge" name="language" value="{{language}}"></input>
+							</div>
+						</div>
 						
+						<div class="control-group">
+							<label class="control-label" for="information_sources">Information Sources</label>
+							<div class="controls">
+								<input type="text" class="input-xlarge" name="information_sources" value="{{information_sources}}"></input>
+							</div>
+						</div>	
+		<section id="edit-vocab-version" class="hide">Loading...</section>
+	<!-- 	<section id="edit-vocab-changes" class="hide">Loading...</section>	 -->
+
 					</fieldset>
 				</div>
 	
@@ -361,11 +378,76 @@
 </div>
 {{/item}}
 </div>
+<?php
+	$vocab_version_edit_fields = array(
+		'id' => 'Id',
+		'status' => 'Status',
+		'title' => 'Version',
+
+	);
+?>
+
+<div class="hide" id="vocab-version-edit-template">
+		{{#items}}
+<p>Add a new format to <em>"{{#title}}{{title}}{{/title}}"</em></p>		
+<div class="item-control"> 
+			<select class="chzn-select" id="versionFormat" style="width:100px">
+				<option value="">Select</option>
+				<option value="SKOS">SKOS</option>
+				<option value="CSV">CSV</option>
+				<option value="TEXT">Text</option>				
+			</select>
+				 
+			<select class="chzn-select" id="versionFormatType" style="width:100px">
+				<option value="">Select</option>
+				<option value="file">Upload File</option>
+				<option value="uri">URI</option>
+			</select>
+			
+			<span id="versionFormatValueBox"><input type="text" value="" id="versionFormatValue" style="width:300px"/></span> <button class="btn version-format-add" version_id="{{#id}}{{id}}{{/id}}">Add</button></div>
+
+			
+			</p>
+			
+
+		<?php 
+		/*	foreach($vocab_version_edit_fields as $key=>$name){
+				echo '{{#'.$key.'}}';
+				echo '{{'.$key.'}} ::  ';
+				echo '{{/'.$key.'}}';					
+			}	*/	?>
+
+			{{#formats}} <?php 
+	
+				echo ' <div class="item-control"> {{#value}}{{value}}{{/value}} {{#format}}{{format}}{{/format}} <button class="btn version-format-delete" format_id="{{#format_id}}{{format_id}}{{/format_id}}"><i class="icon-trash"></i></button></div><br />';
+			
+		?>	{{/formats}}
+		{{/items}}	
+
+
+</div>
+
+<?php
+	$vocab_changes_edit_fields = array(
+		'id' => 'Id',
+		'change_date' => 'Change Date',
+		'description' => 'Description',
+	);
+?>			
+
+	
+	
+	
+	
 <div class="hide" id="vocab-add-template">
 
 	<div class="box">
 	<div class="box-header">
-	    <h1>Add </h1>
+					<ul class="breadcrumbs">
+				<li><a href="javascript:;"><i class="icon-home"></i></a></li>
+				<li><?php echo anchor('vocab_service', 'Manage My Vocabs');?></li>
+				<li><a href="javascript:;" class="active">Add Vocabulary</a></li>
+			</ul>
 	    <span class="right-widget">
         	<small><a href="javascript:;" class="close return-to-browse">&times;</a></small>
         </span>
@@ -394,7 +476,12 @@
 								<textarea class="input-xlarge" name="description"></textarea>
 							</div>
 						</div>
-										
+						<div class="control-group">
+							<label class="control-label" for="publisher">Publisher</label>
+							<div class="controls">
+								<input type="text" class="input-xlarge" name="contact_name" value="">
+							</div>
+						</div>										
 						<div class="control-group">
 							<label class="control-label" for="contact_name">Contact Name</label>
 							<div class="controls">
@@ -430,12 +517,12 @@
 							</div>
 						</div>	
 						
-						<div class="control-group">
+				<!--  	<div class="control-group">
 							<label class="control-label" for="available_formats">Available Formats</label>
 							<div class="controls">
 								<input type="text" class="input-xlarge" name="available_formats" value="">
 							</div>
-						</div>	
+						</div>	-->	
 																					
 						<div class="control-group">
 							<label class="control-label" for="notes">Notes</label>
@@ -444,6 +531,39 @@
 							</div>
 						</div>
 						
+						<div class="control-group">
+							<label class="control-label" for="language">Language</label>
+							<div class="controls">
+								<input type="text" class="input-xlarge" name="language"></input>
+							</div>
+						</div>
+						
+						<div class="control-group">
+							<label class="control-label" for="information_sources">Information Sources</label>
+							<div class="controls">
+								<input type="text" class="input-xlarge" name="information_sources"></input>
+							</div>
+						</div>	
+												<legend>Vocabulary Versions</legend>
+						<div class="control-group">
+							<label class="control-label" for="title">Version Title</label>
+							<div class="controls">
+								<input type="text" class="input-xlarge" name="title"></input>
+							</div>
+						</div>												
+							<div class="control-group">
+							<label class="control-label" for="status">Version Status</label>
+							<div class="controls">
+								<input type="text" class="input-xlarge" name="status"></input>
+							</div>
+						</div>	
+						</div>												
+							<div class="control-group">
+							<label class="control-label" for="format"></label>
+							<div class="controls">
+								<button >Add Format</button>
+							</div>
+						</div>																													
 					</fieldset>
 				</div>
 	
