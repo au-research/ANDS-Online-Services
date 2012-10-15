@@ -2,29 +2,25 @@
 class _record
 {
 	public $id;
-	private $data;
-	private $db;
-	private $header;
 	public $sets;
-	private $status;
+	private $header;
+	private $db;
+	private $_rec;
 
 	/**
 	 * @ignore
 	 */
-	public function __construct($id, $data, &$db, $status=null)
+	public function __construct($registry_object, &$db)
 	{
-		$this->id = $id;
-		$this->data = $data;
+		$this->_rec = $registry_object;
+		$this->id = $registry_object->registry_object_id;
 		$this->db = $db;
-		$this->status = $status;
 	}
 
-
-	public function status()
+	public function is_deleted()
 	{
-		return $this->status;
+		return strtolower($this->_rec->status) === "deleted";
 	}
-
 
 	public function header()
 	{
@@ -43,6 +39,41 @@ class _record
 			}
 		}
 		return $this->header;
+	}
+
+	public function metadata($format, $nestlvl=0)
+	{
+		$lprefix = "";
+		if ($nestlvl > 0)
+		{
+			foreach (range(0,$nestlvl) as $nest)
+			{
+				$lprefix .= "\t";
+			}
+		}
+		$output = "";
+		$data = false;
+		switch($format)
+		{
+		case 'oai_dc':
+			$data = $this->_rec->getOaidc();
+			break;
+		case 'rif':
+			$data = $this->_rec->getRif();
+			break;
+		}
+		if ($data)
+		{
+			foreach (explode("\n", $data) as $line)
+			{
+				if (empty($line))
+				{
+					continue;
+				}
+				$output .= $lprefix . $line . "\n";
+			}
+		}
+		return $output;
 	}
 
 	/*

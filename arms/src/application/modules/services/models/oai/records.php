@@ -57,10 +57,7 @@ class Records extends CI_Model
 		$count = $ro_response['count'];
 		foreach ($ro_response['rows'] as $ro)
 		{
-			$record = new _record($ro->registry_object_id,
-					      null,
-					      $this->db,
-					      $ro->status);
+			$record = new _record($ro, $this->db);
 			$record->sets = $this->sets->get($record->id);
 			$records[] = $record;
 		}
@@ -138,10 +135,7 @@ class Records extends CI_Model
 				{
 					$rec = $query->row();
 
-					return new _record($id,
-							   $rec,
-							   $this->db,
-							   $rec->status);
+					return new _record($rec, $this->db);
 				}
 				else
 				{

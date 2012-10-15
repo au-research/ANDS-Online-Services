@@ -197,7 +197,7 @@ class Oai extends MX_Controller
 	 * Oai::ListIdentifiers handler
 	 *
 	 * we're meant to look at the metadataPrefix argument, but seeing as this service
-	 * can provide all records in all formats, it's a bit moot. Check for its "
+	 * can provide all records in all formats, it's a bit moot. Check for its
 	 * presence anyway, and throw a badArgument if its not there
 	 *
 	 * @param a resumption token (optional)
@@ -205,6 +205,135 @@ class Oai extends MX_Controller
 	 * @throw Oai_BadFormat_Exceptions if an invalid metadataPrefix was specified
 	 */
 	public function list_identifiers($token=false)
+	{
+		$details = $this->_do_list_resumable(OAI::LIST_I, $token);
+		$response = $details['response'];
+		$newtoken = $details['token'];
+		if (count($response['records'] > 0))
+		{
+			$this->output->append_output("\t<ListIndentifiers>\n");
+			foreach ($response['records'] as $rec)
+			{
+				$header = $rec->header();
+				$status = $rec->is_deleted() ? " status='deleted'" : "";
+				$this->output->append_output(sprintf("\t\t<header%s>\n", $status));
+				$this->output->append_output("\t\t\t<identifier>" .
+							     sprintf($header['identifier'],
+								     "ands.org.au") .
+							     "</identifier>\n");
+				$this->output->append_output("\t\t\t<datestamp>" .
+							     $header['datestamp'] .
+							     "</datestamp>\n");
+				if (array_key_exists('sets', $header))
+				{
+					foreach ($header['sets'] as $set)
+					{
+						$this->output->append_output("\t\t\t" .
+									     $set->asRef() .
+									     "\n");
+					}
+				}
+				$this->output->append_output("\t\t</header>\n");
+			}
+			$this->_inject_token($newtoken, $response['count'], $response['cursor']);
+			$this->output->append_output("\t</ListIndentifiers>\n");
+		}
+	}
+
+	/**
+	 * Oai::ListSets handler
+	 */
+	public function list_sets($token=false)
+	{
+		$this->load->model('oai/Sets', 'sets');
+		$this->output->append_output("\t<ListSets>\n");
+		foreach ($this->sets->get() as $set)
+		{
+			$this->output->append_output("\t\t" . (string)$set . "\n");
+		}
+		$this->output->append_output("\t</ListSets>\n");
+	}
+
+
+	/**
+	 * Oai::ListRecords handler
+	 *
+	 * see `list_identifiers`. (The logic is the same: the only difference
+	 * being ListRecords returns full record metatada, not a record header)
+	 *
+	 * @param a resumption token (optional)
+	 * @throw Oai_BadArgument_Exceptions if no metadataPrefix was specified
+	 * @throw Oai_BadFormat_Exceptions if an invalid metadataPrefix was specified
+	 */
+	public function list_records($token=false)
+	{
+		$details = $this->_do_list_resumable(OAI::LIST_R, $token);
+		$response = $details['response'];
+		$newtoken = $details['token'];
+		$format = $details['format'];
+
+		if (count($response['records'] > 0))
+		{
+			$this->output->append_output("\t<ListRecords>\n");
+			foreach ($response['records'] as $rec)
+			{
+				$header = $rec->header();
+				$status = "";
+				$deleted = false;
+				if ($rec->is_deleted())
+				{
+					$status = " status='deleted'";
+					$deleted = true;
+				}
+
+				$this->output->append_output("\t\t<record>\n");
+				$this->output->append_output(sprintf("\t\t\t<header%s>\n", $status));
+				$this->output->append_output("\t\t\t\t<identifier>" .
+							     sprintf($header['identifier'],
+								     "ands.org.au") .
+							     "</identifier>\n");
+				$this->output->append_output("\t\t\t\t<datestamp>" .
+							     $header['datestamp'] .
+							     "</datestamp>\n");
+				if (array_key_exists('sets', $header))
+				{
+					foreach ($header['sets'] as $set)
+					{
+						$this->output->append_output("\t\t\t\t" .
+									     $set->asRef() .
+									     "\n");
+					}
+				}
+				$this->output->append_output("\t\t\t</header>\n");
+				if (!$deleted)
+				{
+					$this->output->append_output("\t\t\t<metadata>\n");
+					try
+					{
+					    $this->output->append_output($rec->metadata($format,
+											3));
+					}
+					catch (Exception $e) {/*eek... would be good to log these...*/}
+					$this->output->append_output("\t\t\t</metadata>\n");
+				}
+				$this->output->append_output("\t\t</record>\n");
+			}
+			$this->_inject_token($newtoken, $response['count'], $response['cursor']);
+			$this->output->append_output("\t</ListRecords>\n");
+		}
+	}
+
+
+	/*******
+	 *
+	 * handler helpers
+	 *
+	 *******/
+
+	/**
+	 * @ignore
+	 */
+	private function _do_list_resumable($resume_type, $token=false)
 	{
 		$supplied_format = $from = $until = $from_set = $start = $set = $created = false;
 		if ($token)
@@ -277,7 +406,7 @@ class Oai extends MX_Controller
 			}
 			if ($response['cursor'] < $response['count'])
 			{
-				$newtoken = $this->token_for(array('source' => Oai::LIST_I,
+				$newtoken = $this->token_for(array('source' => $resume_type,
 								   'cursor' => $response['cursor'],
 								   'created' => $created,
 								   'format' => $supplied_format,
@@ -289,63 +418,25 @@ class Oai extends MX_Controller
 			{
 				$newtoken = false;
 			}
-			$this->output->append_output("\t<ListIndentifiers>\n");
-			foreach ($response['records'] as $rec)
-			{
-				$header = $rec->header();
-				$status = $rec->status() == "DELETED" ? " status='deleted'" : "";
-				$this->output->append_output(sprintf("\t\t<header%s>\n", $status));
-				$this->output->append_output("\t\t\t<identifier>" .
-							     sprintf($header['identifier'],
-								     "ands.org.au") .
-							     "</identifier>\n");
-				$this->output->append_output("\t\t\t<datestamp>" .
-							     $header['datestamp'] .
-							     "</datestamp>\n");
-				if (array_key_exists('sets', $header))
-				{
-					foreach ($header['sets'] as $set)
-					{
-						$this->output->append_output("\t\t\t" .
-									     $set->asRef() .
-									     "\n");
-					}
-				}
-				$this->output->append_output("\t\t</header>\n");
-			}
-			if ($newtoken)
-			{
-				$tokestr = sprintf("\t\t<resumptionToken cursor='%d' completeListSize='%d'>%s</resumptionToken>\n",
-						   $response['cursor'],
-						   $response['count'],
-						   $newtoken);
-				$this->output->append_output($tokestr);
-			}
-			$this->output->append_output("\t</ListIndentifiers>\n");
+			return (array('token' => $newtoken,
+				      'response' => $response,
+				      'format' => $supplied_format));
 		}
 	}
 
 	/**
-	 * Oai::ListSets handler
+	 * @ignore
 	 */
-	public function list_sets($token=false)
+	private function _inject_token($token, $count, $cursor)
 	{
-		$this->load->model('oai/Sets', 'sets');
-		$this->output->append_output("\t<ListSets>\n");
-		foreach ($this->sets->get() as $set)
-		{
-			$this->output->append_output("\t\t" . (string)$set . "\n");
-		}
-		$this->output->append_output("\t</ListSets>\n");
+	    if ($token)
+	    {
+		$this->output->append_output(sprintf("\t\t<resumptionToken cursor='%d' completeListSize='%d'>%s</resumptionToken>\n",
+						     $cursor,
+						     $count,
+						     $token));
+	    }
 	}
-
-
-	/*******
-	 *
-	 * handler helpers
-	 *
-	 *******/
-
 
 	/**
 	 * create a resumption token (urlencoded, base64_encoded, serialised, packed array)
@@ -403,7 +494,9 @@ class Oai extends MX_Controller
 		$resume = array();
 		try
 		{
-			$data = unserialize(base64_decode(rawurldecode($token), true));
+			$data = rawurldecode($token);
+			$data = base64_decode($data, true);
+			$data = unserialize($data);
 			if ($data !== false)
 			{
 				# was this token created for the same source as the
@@ -559,7 +652,6 @@ class Oai extends MX_Controller
 	}
 
 
-
 	/*******
 	 *
 	 * layout helpers
@@ -604,6 +696,7 @@ XMLHEAD;
 	{
 		$this->output->append_output("</OAI-PMH>");
 	}
+
 }
 
 ?>
