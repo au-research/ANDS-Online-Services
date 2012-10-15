@@ -33,4 +33,6 @@ if (isset($vocabs) && $vocabs) {
 } else {
 	$terms[] = array (	"value" => getQueryValue("term"), "desc" => "No suggestions matching '".getQueryValue("term")."'");
 }
+
+usort($terms, function($a, $b){ return ($a['value'] < $b['value']) ? -1 : 1; });
 print json_encode($terms);
