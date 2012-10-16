@@ -15,61 +15,76 @@
 <div class="container" id="main-content">
 
 <section id="browse-vocabs" class="hide">
-<div class="row">
-	<div class="span8" id="browse-datasources-left">
-		<div class="box">
-			<div class="box-header clearfix">
-				<h1><?php echo $title;?><small><?php echo $small_title;?></small></h1>
-				<span class="right-widget">
-					<a href="javascript:;" tip="Show/Hide side bar" my="right center" at="left center" id="toggle_side_bar_btn"><i class="icon-tasks"></i></a>
-				</span>
-			</div>
-			<div class="box-content">
-
-				<!-- Toolbar -->
-			    <div class="row-fluid" id="mmr_toolbar">
-			    	<div class="span6">
-			    		<span class="dropdown" id="switch_menu">
-			    		<a class="btn dropdown-toggle" data-toggle="dropdown" data-target="#switch_menu" href="#switch_menu">Switch View <span class="caret"></span></a>
-						  <ul class="dropdown-menu" id="switch_view">
-						    <li><a href="javascript:;" name="thumbnails"><i class="icon-th"></i> Thumbnails View</a></li>
-						    <li><a href="javascript:;" name="lists"><i class="icon-th-list"></i> List View</a></li>
-						  </ul>
-						</span>
-					</div>
-					
-			    	<div class="span6 right-aligned">
-			    		<select data-placeholder="Choose a Vocabulary to View" tabindex="1" class="chzn-select" id="vocab-chooser">
-							<option value=""></option>
-							<?php
-								foreach($vocabs as $vocab){
-									echo '<option value="'.$vocab['id'].'">'.$vocab['title'].'</option>';
-								}
-							?>
-						</select>
-			    	</div>
-			    </div>
-
-			    <!-- List of items will be displayed here-->
-			    <ul class="lists" id="items"></ul>
-			    
-			    <!-- View More Link -->
-			    <div class="row-fluid">
-					<div class="span12">
-						<div class="well"><a href="javascript:;" id="load_more" page="1">Show More...</a></div>
-					</div>
+	<div class="row">
+		<div class="span8">
+			<div class="box">
+				<div class="box-header clearfix">
+					<h1><?php echo $title;?><small><?php echo $small_title;?></small></h1>
+					<span class="right-widget">
+						
+					</span>
 				</div>
+				<div class="box-content">
 
+					<!-- Toolbar -->
+				    <div class="row-fluid" id="mmr_toolbar">
+				    	<div class="span6">
+				    		<span class="dropdown" id="switch_menu">
+				    		<a class="btn dropdown-toggle" data-toggle="dropdown" data-target="#switch_menu" href="#switch_menu">Switch View <span class="caret"></span></a>
+							  <ul class="dropdown-menu" id="switch_view">
+							    <li><a href="javascript:;" name="thumbnails"><i class="icon-th"></i> Thumbnails View</a></li>
+							    <li><a href="javascript:;" name="lists"><i class="icon-th-list"></i> List View</a></li>
+							  </ul>
+							</span>
+						</div>
+						
+				    	<div class="span6 right-aligned">
+				    		<select data-placeholder="Choose a Vocabulary to View" tabindex="1" class="chzn-select" id="vocab-chooser">
+								<option value=""></option>
+								<?php
+									foreach($vocabs as $vocab){
+										echo '<option value="'.$vocab['id'].'">'.$vocab['title'].'</option>';
+									}
+								?>
+							</select>
+				    	</div>
+				    </div>
+
+				    <!-- List of items will be displayed here-->
+				    <ul class="lists" id="items"></ul>
+				    
+				    <!-- View More Link -->
+				    <div class="row-fluid">
+						<div class="span12">
+							<div class="well"><a href="javascript:;" id="load_more" page="1">Show More...</a></div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+		<div class="span4">
+			<div class="box">
+				<div class="box-header clearfix">
+					<h1>My Vocabularies</h1>
+				</div>
+				<div class="box-content">
+					<?php
+						if (sizeof($my_vocabs)==0){
+							echo "<p>You don't seem to own a vocabulary, you can create one</p>";
+						}else{
+							foreach($my_vocabs AS $v){
+								echo $v->title . "<BR/>";
+							}
+						}
+					?>
+					<button class="btn add" id="add" vocab_id="0"><i class="icon-plus"></i>Add a vocabulary</button>
+				</div>
 			</div>
 		</div>
 	</div>
-	<div class="span4 item-control" id="browse-vocabs-right">
-	<div vocab_id="0">
-	<div class="">
-		<button class="btn add" id="add" vocab_id="0"><i class="icon-add"></i>Add a vocabulary</button>
-	</div>
-</div>
-</div>
+
 	
 
 	<!-- Load More Link -->
@@ -122,7 +137,6 @@
 		'notes' => 'Notes',
 		'language' => 'Language',
 		'information_sources' => 'Information Sources',
-
 	);
 ?>
 
@@ -137,7 +151,6 @@
 				<li><?php echo anchor('vocab_service', 'Manage My Vocabs');?></li>
 				<li><a href="javascript:;" class="active">{{title}}</a></li>
 			</ul>
-	        <!--h1>{{title}}</h1-->
 	        <div class="clearfix"></div>
 	    </div>
 	    <div class="row-fluid">    	

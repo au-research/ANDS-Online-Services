@@ -48,12 +48,7 @@
             <script src="<?php echo base_url();?>assets/lib/qtip2/jquery.qtip.min.js" type="text/javascript"></script>
 
 
-            <!-- pretty print -->
-            <link rel="stylesheet" type="text/css" href=" http://twitter.github.com/bootstrap/assets/js/google-code-prettify/prettify.css" />
-            <script language="javascript" type="text/javascript" src="http://twitter.github.com/bootstrap/assets/js/google-code-prettify/prettify.js"></script>
-            <script>
-                prettyPrint();
-            </script>
+            
             
         <?php endif;?>
 

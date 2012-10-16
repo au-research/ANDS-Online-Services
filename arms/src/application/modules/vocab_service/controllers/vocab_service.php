@@ -22,12 +22,14 @@ class Vocab_service extends MX_Controller {
 	 * @return [HTML] output
 	 */
 	public function index(){
-				$this->load->database('vocabs');
-		$data['title'] = 'Classify My Data';
+		$this->load->database('vocabs');
+		$data['title'] = 'Browse Vocabularies';
 		$data['small_title'] = '';
 
 		$this->load->model("vocab_services","vocab");
 		$vocabs = $this->vocab->getAll(0,0);//get everything
+
+		$data['my_vocabs'] = $this->vocab->getOwnedVocabs();
 
 		$items = array();
 		foreach($vocabs as $vocab){
@@ -39,7 +41,7 @@ class Vocab_service extends MX_Controller {
 		}
 		$data['vocabs'] = $items;
 		$data['scripts'] = array('vocab_services');
-		$data['js_lib'] = array('core', 'graph');
+		$data['js_lib'] = array('core');
 		$this->load->view("vocab_service_index", $data);
 	}
 

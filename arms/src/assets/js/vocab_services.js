@@ -196,7 +196,7 @@ function load_vocab(vocab_id){
 		contentType: 'application/json; charset=utf-8',
 		dataType: 'json',
 		success: function(data){
-		//	console.log(data);
+			
 			var template = $('#vocab-view-template').html();
 			var output = Mustache.render(template, data);
 			var view = $('#view-vocab');
@@ -210,7 +210,8 @@ function load_vocab(vocab_id){
 				contentType: 'application/json; charset=utf-8',
 				dataType: 'json',
 				success: function(data){
-				//	console.log(data);				
+				//	console.log(data);		
+
 					var template = $('#vocab-version-view-template').html();
 					var output = Mustache.render(template, data);
 					$('#view-vocab-version').html(output);
@@ -234,6 +235,8 @@ function load_vocab(vocab_id){
 
 				}
 			}); 
+
+
 
 		}
 	});

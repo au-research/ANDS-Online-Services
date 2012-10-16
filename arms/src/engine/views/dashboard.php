@@ -60,7 +60,6 @@
 					      	<h3>My Data Sources</h3>
 					      	<p>
 					      		<?php
-		
 					      			foreach($my_datasources AS $ds)
 									{
 										echo $ds->title . " (".$ds->key.")" . "<BR/>";
