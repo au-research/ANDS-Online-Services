@@ -58,6 +58,7 @@ require '../../_includes/header.php';
 	// which will be displayed when the user selects the [?] help button.
 	tabs["#mandatoryInformation"] = {name:"Record Administration", cpg:"http://ands.org.au/guides/cpguide/cpgcollection.html"};
 	tabs["#name"] = {name:"Name/Title", cpg:"http://ands.org.au/guides/cpguide/cpgname.html"};
+	tabs["#dates"] = {name:"Dates", cpg:"http://ands.org.au/guides/content-providers-guide.html"};
 	tabs["#description"] = {name:"Descriptions/Rights",cpg:"http://ands.org.au/guides/cpguide/cpgdescription.html"};
 	tabs["#identifier"] = {name:"Identifiers", cpg:"http://ands.org.au/guides/cpguide/cpgidentifiers.html"};
 	tabs["#location"] = {name:"Locations",cpg:"http://ands.org.au/guides/cpguide/cpglocationintro.html"};
@@ -91,6 +92,7 @@ require '../../_includes/header.php';
 		quagmire_append('REQ_RIGHT', REQUIRED,'At least one right is required for the Collection.');
 
 		// Recommended List
+		quagmire_append('REC_DATES', RECOMMENDED,'At least one dates element is recommended for the Collection.');
 		quagmire_append('REC_IDENTIFIER', RECOMMENDED,'At least one identifier is recommended for the Collection.');
 		quagmire_append('REC_RELATED_OBJECT_ACTIVITY', RECOMMENDED,'The Collection must be related to at least one Activity record where possible.'); // "Required if available"...
 		quagmire_append('REC_SUBJECT', RECOMMENDED,'At least one subject (e.g. anzsrc-for code) is recommended for the Collection.');
@@ -127,8 +129,8 @@ require '../../_includes/header.php';
 
 
 <input type="hidden" id="object.objectClass" name="object.objectClass" value="Collection" />
-
-<table id="outer-table" summary="<?php print $action ?> Registry Object">
+<div style="width:100%;">
+<table id="outer-table" summary="<?php print $action ?> Registry Object" style="width:100%;">
 	<tbody>
 		<tr>
 
@@ -186,7 +188,7 @@ require '../../_includes/header.php';
 	</tr>
 	</tbody>
 </table>
-
+</div>
 </form>
 
 <script type="text/javascript">

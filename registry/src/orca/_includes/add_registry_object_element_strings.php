@@ -215,6 +215,23 @@ HTMLEND;
 
 
 //
+// Names
+//
+$_strings['collection_dates_metadata_guidance'] = <<<HTMLEND
+
+										<a href="javascript:toggleMetaGuide();" class="guideNotesPrompt" id="guideNotesPrompt_dates">+ Show Metadata Content Guidance Notes</a>
+										<ul id="guideNotes_dates" class="guideNotes" style="display:none;">
+										<li>
+											At least one dates element is recommended for this record
+										</li>
+										<li>
+											See also: <a href="" target="_blank">Dates Element (Content Providers Guide) XXX: TODO: </a>
+										</li>
+										</ul>
+
+HTMLEND;
+
+//
 // Locations
 //
 
@@ -817,6 +834,111 @@ $_strings['*_name'] = <<<HTMLEND
 
 HTMLEND;
 
+
+
+$_strings['*_dates'] = <<<HTMLEND
+
+										<table id="table_dates_%%SEQNUM1%%" class="formTable rmdElementContainer">
+
+											<tbody class="formFields andsgreen">
+
+												<tr>
+													<td width="39px" style="font-weight:normal;"><label class="mandatory" for="object_dates_%%SEQNUM1%%_type">Type:</label></td>
+													<td style="font-size:0.9em;" width="300px" onclick="getHelpText('collection_dates_type');">
+
+														<input type="text" id="object_dates_%%SEQNUM1%%_type" name="object.dates[%%SEQNUM1%%].type" maxlength="512" size="27" /><img id="button_dates_%%SEQNUM1%%_type" src="{$eAPP_ROOT}orca/_images/buttons/dropdown_in.png" onClick='toggleDropdown(this.id);' class='cursorimg' style="vertical-align:bottom; height:21px; width:21px;" />
+													<td><div class="fieldError" name="errors_dates_%%SEQNUM1%%_type" style=""></div></td>
+													<td width="100%">
+														<input type="button" class="buttonSmall" name="btn_dates_%%SEQNUM1%%_remove" value="Remove this Dates element" onClick="decCount('object.dates'); $('#table_dates_%%SEQNUM1%%').remove();" style="float:right;" /><br/>
+													</td>
+												</tr>
+
+												<tr>
+													<td colspan="4" style="text-align:left;">
+														<div style="padding:4px;">Date elements:</div>
+														<div name="errors_dates_%%SEQNUM1%%_date" class="error_notification" style="display:none;"></div>
+														<div id="object.dates_%%SEQNUM1%%_date_container">&nbsp;</div>
+													</td>
+												</tr>
+
+												<tr>
+													<td colspan="4" style="text-align:left;">
+														<input type="button" name="btn_dates_%%SEQNUM1%%_adddate" value="Add new Date element" onClick="getElement('date', [], 'object.dates[%%SEQNUM1%%].', null, getNextSeq('dates_%%SEQNUM1%%_date'));" style="float:right;" />
+														<br/>
+													</td>
+												</tr>
+
+											</tbody>
+
+										</table>
+
+										<script>
+
+											addVocabComplete('object_dates_%%SEQNUM1%%_type','RIFCSDatesType');
+											if ({$has_fragment} == false) {
+												getElement('date', [], 'object.dates[%%SEQNUM1%%].', null, getNextSeq('dates_%%SEQNUM1%%_date'));
+											}
+
+										</script>
+
+
+HTMLEND;
+
+
+
+$_strings['*_dates_date'] = <<<HTMLEND
+
+														<table id="table_dates_%%SEQNUM1%%_date_%%SEQNUM2%%" class="rmdElementContainer" style="font-weight:normal;">
+
+															<tbody class="formFields andsorange">
+
+																<tr>
+																	<td style="text-align:right;"><span class="infoControl"><img id="infoIcon" alt="More information" src="../_images/info_control_icon.gif"/><span class="infoSpan">
+
+														{$dateFormatInfoString}
+
+														</span></span>&nbsp;&nbsp;<label class="mandatory" for="object_dates_%%SEQNUM1%%_date_%%SEQNUM2%%_value">Value:</label></td>
+																	<td onclick="getHelpText('collection_namePart_value');">
+																		<input type="text" value="" name="object.dates[%%SEQNUM1%%].date[%%SEQNUM2%%].value" id="object_dates_%%SEQNUM1%%_date_%%SEQNUM2%%_value" onchange="checkDTF(this.id);" class="dateTimeField" maxlength="512" size="40" />
+																	</td>
+																	<td width="100%"><div class="fieldError" name="errors_dates_%%SEQNUM1%%_date_%%SEQNUM2%%_value" style="font-size:1.05em;"></div></td>
+																	<td rowspan="3" align="right">
+																		<input type="button" name="btn_dates_%%SEQNUM1%%_date_%%SEQNUM2%%_remove" value="Remove this Date element" onClick="decCount('object.dates[%%SEQNUM1%%].date'); $('#table_dates_%%SEQNUM1%%_date_%%SEQNUM2%%').remove();"  /><br/>
+																	</td>
+																</tr>
+
+
+																<tr>
+																	<td style="text-align:right;"><label class="mandatory" for="object_dates_%%SEQNUM1%%_date_%%SEQNUM2%%_type">Type:</label></td>
+																	<td onclick="" width="260px">
+																		<input type="text" id="object_dates_%%SEQNUM1%%_date_%%SEQNUM2%%_type" name="object.dates[%%SEQNUM1%%].date[%%SEQNUM2%%].type" maxlength="512" size="27" /><img id="button_dates_%%SEQNUM1%%_date_%%SEQNUM2%%_type" src="{$eAPP_ROOT}orca/_images/buttons/dropdown_in.png" onClick='toggleDropdown(this.id);' class='cursorimg' style="vertical-align:bottom; height:16px; width:16px;" />
+																	</td>
+																	<td width="100%"><div class="fieldError" name="errors_dates_%%SEQNUM1%%_date_%%SEQNUM2%%_type" style="font-size:1.05em;"></div></td>
+																</tr>
+
+																<tr>
+																	<td style="text-align:right;"><label class="mandatory" for="object_dates_%%SEQNUM1%%_date_%%SEQNUM2%%_dateFormat">Date Format:</label></td>
+																	<td onclick="" width="260px">
+																		<input type="text" id="object_dates_%%SEQNUM1%%_date_%%SEQNUM2%%_dateFormat" name="object.dates[%%SEQNUM1%%].date[%%SEQNUM2%%].dateFormat" maxlength="512" size="27" /><img id="button_dates_%%SEQNUM1%%_date_%%SEQNUM2%%_dateFormat" src="{$eAPP_ROOT}orca/_images/buttons/dropdown_in.png" onClick='toggleDropdown(this.id);' class='cursorimg' style="vertical-align:bottom; height:16px; width:16px;" />
+																	</td>
+																	<td width="100%"><div class="fieldError" name="errors_dates_%%SEQNUM1%%_date_%%SEQNUM2%%_dateFormat" style="font-size:1.05em;"></div></td>
+																</tr>
+																
+
+															</tbody>
+
+														</table>
+
+														<script>
+
+															addVocabComplete('object_dates_%%SEQNUM1%%_date_%%SEQNUM2%%_type','RIFCSTemporalCoverageDateType');
+															addVocabComplete('object_dates_%%SEQNUM1%%_date_%%SEQNUM2%%_dateFormat','RIFCSTemporalCoverageDateFormat');
+															
+														</script>
+
+
+
+HTMLEND;
 
 $_strings['*_name_namePart'] = <<<HTMLEND
 
@@ -2103,7 +2225,7 @@ $_strings['*_relatedInfo'] = <<<HTMLEND
 														<div style="padding:4px;">Identifier:</div>
 														<div id="relatedInfo_%%SEQNUM1%%_identifier_container">
 
-														<table id="table_elatedInfo_%%SEQNUM1%%_identifier" class="rmdElementContainer" style="font-weight:normal;">
+														<table id="table_relatedInfo_%%SEQNUM1%%_identifier" class="rmdElementContainer" style="font-weight:normal;">
 
 															<tbody class="formFields andsorange">
 
@@ -2135,6 +2257,7 @@ $_strings['*_relatedInfo'] = <<<HTMLEND
 														</div>
 													</td>
 												</tr>
+												
 												<tr>
 													<td colspan="4" style="text-align:left;">
 														<div style="padding:4px;">Title:</div>
@@ -2161,6 +2284,38 @@ $_strings['*_relatedInfo'] = <<<HTMLEND
 														</div>
 													</td>
 												</tr>
+												
+												<tr>
+													<td colspan="4" style="text-align:left;">
+														<div style="padding:4px;">Format:</div>
+														
+														
+														
+														<table id="table_relatedInfo_%%SEQNUM1%%_identifier" class="rmdElementContainer" style="font-weight:normal;">
+
+															<tbody class="formFields andsorange">
+
+																<tr>
+																	<td style="text-align:right;">Identifiers:</td>
+																	<td width="100%"><div id="object.relatedInfo_%%SEQNUM1%%_format_1_identifier_container"> </div></td>
+																</tr>
+																
+																<tr>
+																<td colspan="2">
+																<input type="button" value="Add a Format Identifier" onClick="getElement('identifier', [], 'object.relatedInfo[%%SEQNUM1%%].format[1].', null, getNextSeq('relatedInfo_%%SEQNUM1%%_format_1_identifier'));" style="float:left;" />
+																</td>
+																</tr>
+												
+															</tbody>
+
+														</table>
+														
+														</div>
+																							
+														<div class="fieldError" name="errors_relatedInfo_%%SEQNUM1%%_format_1" style="font-size:1.05em;"></div>
+													</td>
+												</tr>
+												
 												<tr>
 													<td colspan="4" style="text-align:left;">
 														<div style="padding:4px;">Notes:</div>
@@ -2196,10 +2351,54 @@ $_strings['*_relatedInfo'] = <<<HTMLEND
 										<script>
 											addVocabComplete('object_relatedInfo_%%SEQNUM1%%_type','RIFCSRelatedInformationType');
 											addVocabComplete('object_relatedInfo_%%SEQNUM1%%_identifier_1_type','RIFCSRelatedInformationIdentifierType');
+											
+											if ({$has_fragment} == false) {
+												getElement('identifier', [], 'object.relatedInfo[%%SEQNUM1%%].format[1].', null, getNextSeq('relatedInfo_%%SEQNUM1%%_format_1_identifier'));
+											}
 										</script>
 
 HTMLEND;
 
+
+$_strings['*_relatedInfo_format_identifier'] = <<<HTMLEND
+
+			<table id="table_relatedInfo_%%SEQNUM1%%_format_1_identifier_%%SEQNUM3%%" class="formTable rmdElementContainer">
+
+			<tbody class="formFields andsgrey">
+
+				<tr>
+
+					<td style="text-align:right; font-weight:normal; padding-left:8px; padding-top:8px;">
+					<label for="object_relatedInfo_%%SEQNUM1%%_format_1_identifier_%%SEQNUM3%%_value">Value:</label></td>
+					<td onclick="" width="300px">
+						<input type="text" value="" name="object.relatedInfo[%%SEQNUM1%%].format[1].identifier[%%SEQNUM3%%].value" id="object_relatedInfo_%%SEQNUM1%%_format_1_identifier_%%SEQNUM3%%_value" maxlength="512" size="40" />
+					</td>
+					<td><div class="fieldError" name="errors_relatedInfo_%%SEQNUM1%%_format_1_identifier_%%SEQNUM3%%_value"></div></td>
+					<td>
+						<input type="button" class="buttonSmall" name="btn_relatedInfo_%%SEQNUM1%%_format_1_identifier_%%SEQNUM3%%_remove" value="Remove this Identifier" onClick="decCount('object.relatedInfo[%%SEQNUM1%%].format[1].identifier'); $('#table_relatedInfo_%%SEQNUM1%%_format_1_identifier_%%SEQNUM3%%').remove();" style="float:right;" /><br/>
+					</td>
+				</tr>
+
+				<tr>
+					<td width="39px" style="font-weight:normal; padding-left:8px; padding-top:8px;"><label for="object_relatedInfo_%%SEQNUM1%%_format_1_identifier_%%SEQNUM3%%_type">Type:</label></td>
+					<td style="font-size:0.9em;">
+						<input type="text" value="" name="object.relatedInfo[%%SEQNUM1%%].format[1].identifier[%%SEQNUM3%%].type" id="object_relatedInfo_%%SEQNUM1%%_format_1_identifier_%%SEQNUM3%%_type" maxlength="512" size="35" /> <img id="button_relatedInfo_%%SEQNUM1%%_format_1_identifier_%%SEQNUM3%%_type" src="{$eAPP_ROOT}orca/_images/buttons/dropdown_in.png" onClick='toggleDropdown(this.id);' class='cursorimg' style="vertical-align:bottom; height:21px; width:21px;" />
+					</td>
+					<td><div class="fieldError" name="errors_relatedInfo_%%SEQNUM1%%_format_1_identifier_%%SEQNUM3%%_type"></div></td>
+					<td width="100%"></td>
+				</tr>
+
+			</tbody>
+
+		</table>
+
+		<script>
+
+			addVocabComplete('object_relatedInfo_%%SEQNUM1%%_format_1_identifier_%%SEQNUM3%%_type','RIFCSIdentifierType');
+
+		</script>
+
+HTMLEND;
 
 
 $_strings['*_citationInfo'] = <<<HTMLEND
@@ -2283,9 +2482,9 @@ $_strings['*_citationInfo_citationMetadata'] = <<<HTMLEND
 		<tbody class="formFields andsorange">
 
 			<tr>
-				<td align="right"><br/>Identifier:</td>
+				<td align="right"><br/><label class="mandatory"/>Identifier:</td>
 				<td colspan="2">
-					<table>
+					<table class="rmdElementContainer">
 						<tbody class="formFields andsgrey">
 
 							<tr>
@@ -2329,15 +2528,15 @@ $_strings['*_citationInfo_citationMetadata'] = <<<HTMLEND
 			</tr>
 
 			<tr>
-				<td style="text-align:right;" width="40px"><label class="mandatory" for="object_citationInfo_%%SEQNUM1%%_citationMetadata_1_edition_1_value">Edition:</label></td>
-				<td onclick="getHelpText('collection_citationInfo_citationMetadata_edition');" width="260px">
-					<input type="text" value="" name="object.citationInfo[%%SEQNUM1%%].citationMetadata[1].edition[1].value" id="object_citationInfo_%%SEQNUM1%%_citationMetadata_1_edition_1_value" maxlength="512" size="40" />
+				<td style="text-align:right;" width="40px"><label for="object_citationInfo_%%SEQNUM1%%_citationMetadata_1_version_1_value">Version:</label></td>
+				<td onclick="getHelpText('collection_citationInfo_citationMetadata_version');" width="260px">
+					<input type="text" value="" name="object.citationInfo[%%SEQNUM1%%].citationMetadata[1].version[1].value" id="object_citationInfo_%%SEQNUM1%%_citationMetadata_1_version_1_value" maxlength="512" size="40" />
 				</td>
-				<td><div class="fieldError" name="errors_citationInfo_%%SEQNUM1%%_citationMetadata_1_edition_1_value" style="font-size:1.05em;"></div></td>
+				<td><div class="fieldError" name="errors_citationInfo_%%SEQNUM1%%_citationMetadata_1_version_1_value" style="font-size:1.05em;"></div></td>
 			</tr>
 
 			<tr>
-				<td style="text-align:right;" width="40px"><label for="object_citationInfo_%%SEQNUM1%%_citationMetadata_1_publisher_1_value">Publisher:</label></td>
+				<td style="text-align:right;" width="40px"><label class="mandatory" for="object_citationInfo_%%SEQNUM1%%_citationMetadata_1_publisher_1_value">Publisher:</label></td>
 				<td onclick="getHelpText('collection_citationInfo_citationMetadata_publisher');" width="260px">
 					<input type="text" value="" name="object.citationInfo[%%SEQNUM1%%].citationMetadata[1].publisher[1].value" id="object_citationInfo_%%SEQNUM1%%_citationMetadata_1_publisher_1_value" maxlength="512" size="40" />
 				</td>
@@ -2345,7 +2544,7 @@ $_strings['*_citationInfo_citationMetadata'] = <<<HTMLEND
 			</tr>
 
 			<tr>
-				<td style="text-align:right;" width="40px"><label class="mandatory" for="object_citationInfo_%%SEQNUM1%%_citationMetadata_1_placePublished_1_value">Place Published:</label></td>
+				<td style="text-align:right;" width="40px"><label for="object_citationInfo_%%SEQNUM1%%_citationMetadata_1_placePublished_1_value">Place Published:</label></td>
 				<td onclick="getHelpText('collection_citationInfo_citationMetadata_placePublished');" width="260px">
 					<input type="text" value="" name="object.citationInfo[%%SEQNUM1%%].citationMetadata[1].placePublished[1].value" id="object_citationInfo_%%SEQNUM1%%_citationMetadata_1_placePublished_1_value" maxlength="512" size="40" />
 				</td>
@@ -2354,18 +2553,20 @@ $_strings['*_citationInfo_citationMetadata'] = <<<HTMLEND
 
 			<tr>
 			 	<td align="right">
-			 		Dates:
+			 		<label class="mandatory"/>Dates:
 			 	</td>
 				<td colspan="2">
 					<div id="object.citationInfo_%%SEQNUM1%%_citationMetadata_1_date_container">
 					</div>
+					
 					<input type="button" class="buttonSmall" name="btn_citation_%%SEQNUM1%%_addcitation_date" value="Add new Date" onClick="getElement('date', [], 'object.citationInfo[%%SEQNUM1%%].citationMetadata[1].', null, getNextSeq('citationInfo_%%SEQNUM1%%_citationMetadata_1_date'));"  />
+					 <div class="fieldError" name="errors_citationInfo_%%SEQNUM1%%_citationMetadata_1_date" style="padding-left:8px; font-size:1.05em;"></div>
 				</td>
 
 			</tr>
 
 			<tr>
-				<td style="text-align:right;" width="40px"><label class="mandatory" for="object_citationInfo_%%SEQNUM1%%_citationMetadata_1_url_1_value">URL:</label></td>
+				<td style="text-align:right;" width="40px"><label for="object_citationInfo_%%SEQNUM1%%_citationMetadata_1_url_1_value">URL:</label></td>
 				<td onclick="getHelpText('collection_citation_full_citation');" width="260px">
 					<input type="text" value="" onChange="testAnyURI(this.id);" class="validUri" name="object.citationInfo[%%SEQNUM1%%].citationMetadata[1].url[1].value" id="object_citationInfo_%%SEQNUM1%%_citationMetadata_1_url_1_value" maxlength="512" size="40" />
 				</td>
@@ -2373,7 +2574,7 @@ $_strings['*_citationInfo_citationMetadata'] = <<<HTMLEND
 			</tr>
 
 			<tr>
-				<td style="text-align:right;" width="40px"><label class="mandatory" for="object_citationInfo_%%SEQNUM1%%_citationMetadata_1_context_1_value">Context:</label></td>
+				<td style="text-align:right;" width="40px"><label for="object_citationInfo_%%SEQNUM1%%_citationMetadata_1_context_1_value">Context:</label></td>
 				<td onclick="getHelpText('collection_citation_full_citation');" width="260px">
 					<input type="text" value="" name="object.citationInfo[%%SEQNUM1%%].citationMetadata[1].context[1].value" id="object_citationInfo_%%SEQNUM1%%_citationMetadata_1_context_1_value" maxlength="512" size="40" />
 				</td>
@@ -2405,7 +2606,7 @@ $_strings['*_citationInfo_citationMetadata_date'] = <<<HTMLEND
 
 															<tbody class="formFields andsgrey">
 																<tr>
-																	<td style="text-align:right;"><label for="object_citationInfo_%%SEQNUM1%%_citationMetadata_1_date_%%SEQNUM3%%_value">Value:</label></td>
+																	<td style="text-align:right;"><label class="mandatory" for="object_citationInfo_%%SEQNUM1%%_citationMetadata_1_date_%%SEQNUM3%%_value">Value:</label></td>
 																	<td onclick="getHelpText('collection_citationInfo_citationMetadata_date');">
 																		<input type="text" value="" name="object.citationInfo[%%SEQNUM1%%].citationMetadata[1].date[%%SEQNUM3%%].value" id="object_citationInfo_%%SEQNUM1%%_citationMetadata_1_date_%%SEQNUM3%%_value" maxlength="512" size="40" />
 																	</td>

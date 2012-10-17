@@ -34,9 +34,9 @@ define('IN_ORCA', true);
 // note: changing this will cause all reharvested records to have a "new record revision" created
 define('gRIF_SCHEMA_PATH', eAPPLICATION_ROOT.'/orca/schemata/registryObjects.xsd'); 
 
-define('gRIF_SCHEMA_URI', 'http://services.ands.org.au/documentation/rifcs/1.3/schema/registryObjects.xsd');
+define('gRIF_SCHEMA_URI', 'http://services.ands.org.au/documentation/rifcs/1.4/schema/registryObjects.xsd');
 
-define('gCURRENT_SCHEMA_VERSION', '1.3');
+define('gCURRENT_SCHEMA_VERSION', '1.4');
 
 // Party identifiers to be treated to special display (NLA-specific)
 $NLAPartyTypeKey = array ("AU-ANL:PEAU");

@@ -274,7 +274,7 @@
         </xsl:element>
     </xsl:template>
    
-    <xsl:template match="ro:date"/>
+    <xsl:template match="ro:date | ro:dates | ro:format | ro:version"/>
    		
    
 </xsl:stylesheet>

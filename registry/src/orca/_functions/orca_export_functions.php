@@ -240,6 +240,10 @@ function getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR = false, $inclu
 		// -------------------------------------------------------------
 		$internalxml .= getIdentifierTypesXML($registryObjectKey, 'identifier');
 
+		// identifier
+		// -------------------------------------------------------------
+		$internalxml .= getDatesTypesXML($registryObjectKey, 'dates');
+
 		// name
 		// -------------------------------------------------------------
 		$internalxml .= getComplexNameTypesXML($registryObjectKey, 'name', $registryObjectClass, $forSOLR);
@@ -508,6 +512,32 @@ function getIdentifierTypesXML($registryObjectKey, $elementName)
 	return $xml;
 }
 
+function getDatesTypesXML($registryObjectKey, $elementName)
+{
+	$xml = '';
+	$elementName = esc($elementName);
+	$list = getDates($registryObjectKey);
+
+	if( $list )
+	{
+		foreach( $list as $element )
+		{
+			if( $type = $element['date_type'] )
+			{
+				$type = ' type="'.esc($type).'"';
+			}
+			$value = '';
+			
+			foreach ($element['elements'] AS $date)
+			{
+				$value .= '        <date type="'.$date['type'].'" dateFormat="'.$date['date_format'].'">'.$date['value'].'</date>' . "\n";	
+			}
+			
+			$xml .= "      <$elementName$type>\n$value      </$elementName>\n";
+		}
+	}
+	return $xml;
+}
 
 
 function getComplexNameTypesXML($registryObjectKey, $elementName, $registryObjectClass, $forSOLR = false)
@@ -896,7 +926,7 @@ function drawCitationInfoXML($citation_info_id, $row)
 		$xml .= "		<identifier type=\"".esc($row['metadata_type'])."\">".esc($row['metadata_identifier'])."</identifier>\n";
 		$xml .= getCitationContributorsXML($citation_info_id);
 		$xml .= "		<title>".esc($row['metadata_title'])."</title>\n";
-		$xml .= "		<edition>".esc($row['metadata_edition'])."</edition>\n";
+		$xml .= "		<version>".esc($row['metadata_edition'])."</version>\n";
 		if($row['metadata_publisher']){$xml .= "		<publisher>".esc($row['metadata_publisher'])."</publisher>\n";}
 		$xml .= "		<placePublished>".esc($row['metadata_place_published'])."</placePublished>\n";
 		$xml .= getCitationDatesXML($citation_info_id);
@@ -1978,6 +2008,18 @@ function getRelatedInfoTypesXML($registryObjectKey, $elementName)
 				$xml .= "<$elementName$type>\n";
 				$value = esc($element['identifier']);
 				$xml .= "		<identifier type=\"".esc($element['identifier_type'])."\">$value</identifier>\n";
+				
+				if($format_identifiers = $element['format_identifiers'])
+				{
+					$xml .= "		<format>\n";
+					foreach ($format_identifiers AS $identifier)
+					{
+						$xml .= "		  <identifier type=\"".$identifier['identifier_type']."\">".$identifier['identifier_value']."</identifier>\n";
+					}
+					$xml .= "		</format>\n";
+				}
+				
+				
 				if($notes = $element['title'])
 				{
 				$xml .= "		<title>".esc($notes)."</title>\n";

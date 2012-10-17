@@ -891,6 +891,38 @@ function insertRights($rights_id, $registryObjectKey, $rights_statement, $rights
 
 }
 
+function insertDates($registry_object_key, $date_type, $date_elements)
+{
+
+	global $gCNN_DBS_ORCA;
+
+	$errors = "";
+	$strQuery = 'INSERT INTO dba.tbl_dates ("registry_object_key", "date_type") VALUES ($1, $2)';
+	$params = array($registry_object_key, $date_type);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	
+	$strQuery = "SELECT CURRVAL(pg_get_serial_sequence($1,$2))";
+	$params = array('dba.tbl_dates', 'id');
+	$id = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+
+	if( ! ($id[0]['currval'] > 0) )
+	{
+		$errors .= "An error occurred when trying to insert the record (dates element).";
+	}
+	
+	foreach ($date_elements AS $date)
+	{
+		
+		$strQuery = 'INSERT INTO dba.tbl_date ("date_id", "type", "date_format", "value")  VALUES ($1, $2, $3, $4)';
+		$params = array($id[0]['currval'], $date['type'], $date['date_format'], $date['value']);
+		$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);		
+		
+	}
+	
+	return $errors;
+
+}
+
 function insertCitationDate($id, $citation_info_id, $value, $type)
 {
 
@@ -1103,7 +1135,7 @@ function insertRelatedInfoOld($related_info_id, $registry_object_key, $value)
 }
 
 
-function insertRelatedInfo($related_info_id, $registry_object_key, $info_type, $identifier = null, $identifier_type = null, $title = null, $notes = null)
+function insertRelatedInfo($related_info_id, $registry_object_key, $info_type, $identifier = null, $identifier_type = null, $title = null, $notes = null, $format_identifiers = null)
 {
 	global $gCNN_DBS_ORCA;
 
@@ -1120,6 +1152,16 @@ function insertRelatedInfo($related_info_id, $registry_object_key, $info_type, $
 	$strQuery = 'SELECT dba.udf_insert_related_info($1, $2, $3, $4, $5, $6, $7)';
 	$params = array($related_info_id, $registry_object_key, $info_type, substr($identifier, 0, 512), $identifier_type, $title, $notes);
 	$resultSet = executeUpdateQuery($gCNN_DBS_ORCA, $strQuery, $params);
+
+	if ($format_identifiers)
+	{
+		foreach ($format_identifiers AS $id)
+		{
+			$strQuery = 'INSERT INTO dba.tbl_related_info_format ("related_info_id", "identifier_type", "identifier_value") VALUES ($1, $2, $3)';
+			$params = array($related_info_id, $id['type'],$id['value']);
+			executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+		}
+	}
 
 	if( !$resultSet )
 	{
@@ -1693,6 +1735,33 @@ function getAccessPolicies($registry_object_key)
 
 	return $resultSet;
 }
+
+function getDates($registry_object_key)
+{
+	global $gCNN_DBS_ORCA;
+
+	$resultSet = null;
+	$strQuery = 'SELECT * FROM dba.tbl_dates WHERE registry_object_key = $1;';
+	$params = array($registry_object_key);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	
+	if (is_array($resultSet)){
+		foreach ($resultSet AS &$dates)
+		{
+			$strQuery = 'SELECT * FROM dba.tbl_date WHERE date_id = $1;';
+			$params = array($dates['id']);
+			$dates['elements'] = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+		}
+	}
+	else
+	{
+		return array();
+	}
+
+	return $resultSet;
+}
+
+
 function getExistenceDate($registry_object_key)
 {
 	global $gCNN_DBS_ORCA;
@@ -1712,7 +1781,16 @@ function getRelatedInfo($registry_object_key)
 	$strQuery = 'SELECT * FROM dba.udf_get_related_info($1)';
 	$params = array($registry_object_key);
 	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
-
+	
+	if (is_array($resultSet))
+	{
+		foreach ($resultSet AS &$relatedInfo)
+		{
+			$strQuery = 'SELECT * FROM dba.tbl_related_info_format WHERE related_info_id = $1;';
+			$params = array($relatedInfo['related_info_id']);
+			$relatedInfo['format_identifiers'] = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+		}
+	}
 	return $resultSet;
 }
 

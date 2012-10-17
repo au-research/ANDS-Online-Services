@@ -30,6 +30,9 @@ $registryObjectDataSourceRecordOwner = null;
 $registryObjectStatus = null;
 $dataSource = null;
 
+
+//echo "<pre>" . htmlentities(getRegistryObjectXMLFromDB(getQueryValue('key'))) . "</pre>";
+//echo "<br/><br/>";
 if( !$registryObject )
 {
 
@@ -233,6 +236,21 @@ if( $registryObject )
 		{
 			drawIdentifier($row['identifier_id'], $row);
 		}
+		print("			</td>\n");
+		print("		</tr>\n");
+	}
+	
+	if( $array = getDates($registryObjectKey) )
+	{
+		print("\n<!-- DATES -->\n");
+		print("		<tr>\n");
+		print("			<td>Dates:</td>\n");
+		print("			<td>\n");
+		foreach( $array as $row )
+		{
+			drawDates($row);
+		}
+		
 		print("			</td>\n");
 		print("		</tr>\n");
 	}
@@ -1314,6 +1332,26 @@ function drawRelatedInfo($id, $row=null)
 		print('	        		</table>'."\n");
 		print('				</td>'."\n");
 		print('			</tr>'."\n");
+		
+		if( $value = $row['format_identifiers'] )
+		{
+			print('		<tr>'."\n");
+			print('			<td class="attribute">Format:</td>'."\n");
+			print('			<td class="value">');
+			foreach ($value AS $identifier)
+			{
+				print('					<table class="subtable">'."\n");
+				print('					<tr>'."\n");
+				print('						<td class="attribute">'.esc($identifier['identifier_type']).':</td>'."\n");
+				print('						<td class="value">'.esc($identifier['identifier_value']).'</td>'."\n");
+				print('					</tr>'."\n");
+				print('					</table>');
+				
+			}
+			print('			</td>'."\n");
+			print('		</tr>'."\n");
+		}
+		
 		if( $value = $row['title'] )
 		{
 			print('		<tr>'."\n");
@@ -1464,6 +1502,42 @@ function drawTemporalCoverageText($id, $row=null)
 	print('         </td>'."\n");
 	print('		</tr>'."\n");
 }
+function drawDates($row)
+{
+	print('			<table class="subtable">'."\n");
+	print('				<tr>'."\n");
+	print('					<td class="attribute">Type:</td>'."\n");
+	print('					<td class="value">'.esc($row['date_type']).'</td>'."\n");
+	print('				</tr>'."\n");
+	print('				<tr>'."\n");
+	print('					<td class="attribute">Date:</td>'."\n");
+	print('					<td class="value">');
+	drawDate($row['elements']);
+	print('</td>'."\n");
+	print('				</tr>'."\n");
+	print('			</table>'."\n");
+}
+function drawDate($elements)
+{
+	foreach ($elements AS $row)
+	{
+		print('			<table class="subtable1">'."\n");
+		print('				<tr>'."\n");
+		print('					<td class="attribute">Type:</td>'."\n");
+		print('					<td class="valueAttribute">'.esc($row['type']).'</td>'."\n");
+		print('				</tr>'."\n");
+		print('				<tr>'."\n");
+		print('					<td class="attribute">Date Format:</td>'."\n");
+		print('					<td class="valueAttribute">'.esc($row['date_format']).'</td>'."\n");
+		print('				</tr>'."\n");
+		print('				<tr>'."\n");
+		print('					<td class="attribute">Value:</td>'."\n");
+		print('					<td class="value">'.esc($row['value']).'</td>'."\n");
+		print('				</tr>'."\n");
+		print('			</table>'."\n");
+	}
+}
+
 function drawExistenceDates($id, $row=null)
 {
 
@@ -1666,18 +1740,31 @@ function drawCitationInfo($id, $row=null)
 		print('					<td class="attribute">Title:</td>'."\n");
 		print('					<td class="value">'.esc($row['metadata_title']).'</td>'."\n");
 		print('				</tr>'."\n");
-		print('				<tr>'."\n");
-		print('					<td class="attribute">Edition:</td>'."\n");
-		print('					<td class="value">'.esc($row['metadata_edition']).'</td>'."\n");
-		print('				</tr>'."\n");
-		print('				<tr>'."\n");
-		print('					<td class="attribute">URL:</td>'."\n");
-		print('					<td class="value">'.esc($row['metadata_url']).'</td>'."\n");
-		print('				</tr>'."\n");
-		print('				<tr>'."\n");
-		print('					<td class="attribute">Place Published:</td>'."\n");
-		print('					<td class="value">'.esc($row['metadata_place_published']).'</td>'."\n");
-		print('				</tr>'."\n");
+		
+		if ($row['metadata_edition'])
+		{
+			print('				<tr>'."\n");
+			print('					<td class="attribute">Version:</td>'."\n");
+			print('					<td class="value">'.esc($row['metadata_edition']).'</td>'."\n");
+			print('				</tr>'."\n");
+		}
+
+		if($row['metadata_url'])
+		{
+			print('				<tr>'."\n");
+			print('					<td class="attribute">URL:</td>'."\n");
+			print('					<td class="value">'.esc($row['metadata_url']).'</td>'."\n");
+			print('				</tr>'."\n");
+		}
+		
+		if ($row['metadata_place_published'])
+		{
+			print('				<tr>'."\n");
+			print('					<td class="attribute">Place Published:</td>'."\n");
+			print('					<td class="value">'.esc($row['metadata_place_published']).'</td>'."\n");
+			print('				</tr>'."\n");
+		}
+		
 		if($row['metadata_publisher']!='')
 		{
 			print('				<tr>'."\n");
@@ -1685,10 +1772,14 @@ function drawCitationInfo($id, $row=null)
 			print('					<td class="value">'.esc($row['metadata_publisher']).'</td>'."\n");
 			print('				</tr>'."\n");
 		}
-		print('				<tr>'."\n");
-		print('					<td class="attribute">Context:</td>'."\n");
-		print('					<td class="value">'.esc($row['metadata_context']).'</td>'."\n");
-		print('				</tr>'."\n");
+		
+		if ($row['metadata_context'])
+		{
+			print('				<tr>'."\n");
+			print('					<td class="attribute">Context:</td>'."\n");
+			print('					<td class="value">'.esc($row['metadata_context']).'</td>'."\n");
+			print('				</tr>'."\n");
+		}
 
 		if($array = getCitationDates($row['citation_info_id']))
 		{

@@ -385,6 +385,11 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 						// -----------------------------------------------------------------
 						importComplexNameTypes($registryObjectKey, $collection, "name", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
 	
+	
+						// dates
+						// -----------------------------------------------------------------
+						importDatesElt($registryObjectKey, $collection, "dates", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+	
 						// location
 						// -----------------------------------------------------------------
 						importLocations($registryObjectKey, $collection, "location", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
@@ -850,6 +855,35 @@ function importNameParts($complex_name_id, $node, $runErrors, $totalAttemptedIns
 	}
 }
 
+function importDatesElt($registryObjectKey, $node, $elementName, $runErrors, $totalAttemptedInserts, $totalInserts)
+{
+	global $gXPath;
+	global $xs;
+
+	$list = $gXPath->evaluate("$xs:$elementName", $node);
+	for( $j=0; $j < $list->length; $j++ )
+	{
+		$type = $list->item($j)->getAttribute("type");
+		$date_elements = array();
+		$date_list = $gXPath->evaluate("$xs:date", $list->item($j));
+		
+		for( $i=0; $i < $date_list->length; $i++ )
+		{
+			$date = array(
+				"type" => $date_list->item($i)->getAttribute("type"),
+				"date_format" => $date_list->item($i)->getAttribute("dateFormat"),
+				"value" => $date_list->item($i)->nodeValue
+			);
+			$date_elements[] = $date;
+		}
+		
+		$errors = insertDates($registryObjectKey, $type, $date_elements);
+
+		$totalAttemptedInserts++;
+		if( !$errors ) { $totalInserts++; } else { $runErrors .= $errors . "Failed to insert dates element for key $registryObjectKey\n"; }
+	}
+}
+
 function importLocations($registryObjectKey, $node, $elementName, $runErrors, $totalAttemptedInserts, $totalInserts)
 {
 	global $gXPath;
@@ -1215,7 +1249,7 @@ function importRelatedInfo($registryObjectKey, $node, $elementName, $runErrors, 
 	}
 }
 */
-
+/* OLD v1.3 Related Info ingest 
 function importRelatedInfo($registryObjectKey, $node, $elementName, $runErrors, $totalAttemptedInserts, $totalInserts)
 {
 	global $gXPath;
@@ -1254,6 +1288,65 @@ function importRelatedInfo($registryObjectKey, $node, $elementName, $runErrors, 
 		else
 		{
 			$errors = insertRelatedInfo($id, $registryObjectKey, $type, $identifier, $identifier_type, $title, $notes);
+		}
+		$totalAttemptedInserts++;
+		if( !$errors ) { $totalInserts++; } else { $runErrors .= "Failed to insert relatedInfo for key $registryObjectKey\n"; }
+	}
+}
+*/
+
+
+function importRelatedInfo($registryObjectKey, $node, $elementName, $runErrors, $totalAttemptedInserts, $totalInserts)
+{
+	global $gXPath;
+	global $xs;
+
+	$list = $gXPath->evaluate("$xs:$elementName", $node);
+	for( $j=0; $j < $list->length; $j++ )
+	{
+		$id = getIdForColumn('dba.tbl_related_info.related_info_id');
+		$type = $list->item($j)->getAttribute("type");
+		$identifier = '';
+		$identifier_type = '';
+		$title = '';
+		$notes = '';
+
+		if( $identifierElement = $gXPath->evaluate("$xs:identifier", $list->item($j))->item(0) )
+		{
+			$identifier = $identifierElement->nodeValue;
+			$identifier_type = $identifierElement->getAttribute("type");
+		}
+
+		$format_identifiers = array();
+		if( $formatElement = $gXPath->evaluate("$xs:format", $list->item($j))->item(0) )
+		{
+			$id_list = $gXPath->evaluate("$xs:identifier", $formatElement);
+			for( $i=0; $i < $id_list->length; $i++ )
+			{
+				$format_identifiers[] = array(
+					"type"=> $id_list->item($i)->getAttribute('type'),
+					"value"=> $id_list->item($i)->nodeValue
+				);
+			}
+		}
+
+		if( $titleElement = $gXPath->evaluate("$xs:title", $list->item($j))->item(0) )
+		{
+			$title = $titleElement->nodeValue;
+		}
+
+		if( $notesElement = $gXPath->evaluate("$xs:notes", $list->item($j))->item(0) )
+		{
+			$notes = $notesElement->nodeValue;
+		}
+		if(!$identifier)
+		{// old rifcs probably :-(
+			$value = $list->item($j)->nodeValue;
+			$errors = insertRelatedInfoOld($id, $registryObjectKey, $value);
+		}
+		else
+		{
+			$errors = insertRelatedInfo($id, $registryObjectKey, $type, $identifier, $identifier_type, $title, $notes, $format_identifiers);
 		}
 		$totalAttemptedInserts++;
 		if( !$errors ) { $totalInserts++; } else { $runErrors .= "Failed to insert relatedInfo for key $registryObjectKey\n"; }
@@ -1487,6 +1580,12 @@ function importCitationInfo($registryObjectKey, $node, $elementName, $runErrors,
 		if( $editionElement = $gXPath->evaluate("$xs:edition", $list->item($j))->item(0) )
 		{
 			$edition = $editionElement->nodeValue;
+		}
+		
+		/* v1.4 renamed edition to version -- keep both for backwards compatibility */
+		if( $versionElement = $gXPath->evaluate("$xs:version", $list->item($j))->item(0) )
+		{
+			$edition = $versionElement->nodeValue;
 		}
 
 		if( $publisherElement = $gXPath->evaluate("$xs:publisher", $list->item($j))->item(0) )
