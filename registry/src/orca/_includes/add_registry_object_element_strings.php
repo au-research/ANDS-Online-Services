@@ -900,6 +900,8 @@ $_strings['*_dates_date'] = <<<HTMLEND
 														</span></span>&nbsp;&nbsp;<label class="mandatory" for="object_dates_%%SEQNUM1%%_date_%%SEQNUM2%%_value">Value:</label></td>
 																	<td onclick="getHelpText('collection_namePart_value');">
 																		<input type="text" value="" name="object.dates[%%SEQNUM1%%].date[%%SEQNUM2%%].value" id="object_dates_%%SEQNUM1%%_date_%%SEQNUM2%%_value" onchange="checkDTF(this.id);" class="dateTimeField" maxlength="512" size="40" />
+																		&nbsp;<span id="object_dates_%%SEQNUM1%%_date_%%SEQNUM2%%_value_dctImage" onClick="$('#object_dates_%%SEQNUM1%%_date_%%SEQNUM2%%_dateFormat').val('W3CDTF');">&nbsp;</span>&nbsp;
+																	
 																	</td>
 																	<td width="100%"><div class="fieldError" name="errors_dates_%%SEQNUM1%%_date_%%SEQNUM2%%_value" style="font-size:1.05em;"></div></td>
 																	<td rowspan="3" align="right">
@@ -930,6 +932,8 @@ $_strings['*_dates_date'] = <<<HTMLEND
 														</table>
 
 														<script>
+														
+															setTimeout('dctGetDateTimeControlSpec("object_dates_%%SEQNUM1%%_date_%%SEQNUM2%%_value", "YYYY-MM-DDThh:mm:00Z", "object_dates_%%SEQNUM1%%_date_%%SEQNUM2%%_value_dctImage");',250);
 
 															addVocabComplete('object_dates_%%SEQNUM1%%_date_%%SEQNUM2%%_type','RIFCSTemporalCoverageDateType');
 															addVocabComplete('object_dates_%%SEQNUM1%%_date_%%SEQNUM2%%_dateFormat','RIFCSTemporalCoverageDateFormat');

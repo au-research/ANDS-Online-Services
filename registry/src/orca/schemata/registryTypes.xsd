@@ -427,7 +427,7 @@ date.</xsd:documentation>
             </xsd:element>
             <xsd:element name="citationMetadata" minOccurs="1" maxOccurs="1">
                 <xsd:complexType>
-                    <xsd:sequence>
+                     <xsd:choice minOccurs="0" maxOccurs="unbounded">
                         <xsd:element name="identifier" type="identifierType" minOccurs="1"
                             maxOccurs="1"/>
                         <xsd:element name="contributor" type="citationNameType" minOccurs="1"
@@ -449,7 +449,7 @@ date.</xsd:documentation>
                             maxOccurs="unbounded"/>
                         <xsd:element name="url" type="xsd:string" minOccurs="0" maxOccurs="1"/>
                         <xsd:element name="context" type="xsd:string" minOccurs="0" maxOccurs="1"/>
-                    </xsd:sequence>
+                    </xsd:choice>
                 </xsd:complexType>
             </xsd:element>
         </xsd:choice>

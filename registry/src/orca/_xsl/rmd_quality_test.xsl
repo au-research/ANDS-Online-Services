@@ -1089,7 +1089,7 @@
         <xsl:if test="string-length(.) = 0">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_value","Format Identifier must be specified.");</xsl:text>
+            		<xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_value","A Format Identifier must be specified. &lt;br/&gt;&lt;span&gt;E.g. 'http://example.schema.location/'&lt;/span&gt;");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="error">Format Identifier must be specified.</span>
@@ -1109,20 +1109,20 @@
         <xsl:if test="string-length(@type) = 0">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_type","Format Identifier Type must be specified.");</xsl:text>
+            		<xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_type","Format Identifier Type must be specified.&lt;br/&gt;&lt;span&gt;E.g. 'uri'&lt;/span&gt;");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="error">Format Identifier Type must be specified.</span>
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>
-         <xsl:if test="string-length(@type) &gt; 512">
+         <xsl:if test="string-length(@type) &gt; 64">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_type","Format Identifier Type must be less than 512 characters.");</xsl:text>
+            		<xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_type","Format Identifier Type must be less than 64 characters.");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
-					<span class="error">Format Identifier Type must be less than 512 characters.</span>
+					<span class="error">Format Identifier Type must be less than 64 characters.</span>
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>
@@ -1412,13 +1412,13 @@
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>
-         <xsl:if test="string-length(@type) &gt; 512">
+         <xsl:if test="string-length(@type) &gt; 64">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_type","Dates type must be less than 512 characters.");</xsl:text>
+            		<xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_type","Dates type must be less than 64 characters.");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
-					<span class="error">Dates type must be less than 512 characters.</span>
+					<span class="error">Dates type must be less than 64 characters.</span>
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>
@@ -1456,13 +1456,13 @@
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>
-        <xsl:if test="string-length(@dateFormat) &gt; 512">
+        <xsl:if test="string-length(@dateFormat) &gt; 64">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-           			<xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_dateFormat","Date Format must be less than 512 characters.");</xsl:text>
+           			<xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_dateFormat","Date Format must be less than 64 characters.");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
-					<span class="error">Date Format must be less than 512 characters.</span>
+					<span class="error">Date Format must be less than 64 characters.</span>
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>
@@ -1476,13 +1476,13 @@
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>
-        <xsl:if test="string-length(@type) &gt; 512">
+        <xsl:if test="string-length(@type) &gt; 64">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-           			<xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_type","Date Type must be less than 512 characters.");</xsl:text>
+           			<xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_type","Date Type must be less than 64 characters.");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
-					<span class="error">Date Type must be less than 512 characters.</span>
+					<span class="error">Date Type must be less than 64 characters.</span>
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>
@@ -1888,7 +1888,7 @@
     	<xsl:if test="string-length(.) = 0">
 	        <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-	        		<xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_value","A Publisher must be entered. &lt;br/&gt;&lt;span&gt;E.g. '???'&lt;/span&gt;");</xsl:text>
+	        		<xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_value","A Publisher must be entered. &lt;br/&gt;&lt;span&gt;E.g. 'Geological Institute, University of Tokyo'&lt;/span&gt;");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="error">Citation Metadata Publisher must have a value.</span>
