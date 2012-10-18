@@ -101,5 +101,24 @@ $db['vocabs']['autoinit'] = TRUE;
 $db['vocabs']['stricton'] = FALSE;
 $db['vocabs']['save_queries'] = FALSE; 
 
+
+$db['dois']['hostname'] = 'ands3.anu.edu.au';
+$db['dois']['username'] = 'webuser';
+$db['dois']['password'] = '';
+$db['dois']['database'] = 'archive_dois';
+$db['dois']['dbdriver'] = 'postgre';
+$db['dois']['dbprefix'] = '';
+$db['dois']['pconnect'] = TRUE;
+$db['dois']['db_debug'] = TRUE;
+$db['dois']['cache_on'] = FALSE;
+$db['dois']['cachedir'] = '';
+$db['dois']['char_set'] = 'utf8';
+$db['dois']['dbcollat'] = 'utf8_general_ci';
+$db['dois']['swap_pre'] = '';
+$db['dois']['autoinit'] = FALSE;
+$db['dois']['stricton'] = FALSE;
+$db['dois']['save_queries'] = FALSE; 
+
+
 /* End of file database.php */
 /* Location: ./application/config/database.php */

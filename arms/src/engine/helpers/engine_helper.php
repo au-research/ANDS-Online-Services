@@ -15,3 +15,18 @@ function mod_enforce($module_name)
 	}
 }
 
+function my_exception_handler( $e ) {
+
+    $_ci =& get_instance(); // CI super object to access load etc.
+    
+	$data['js_lib'] = array('core');
+	$data['scripts'] = array();
+	$data['title'] = 'An error occurred!';
+
+    echo $_ci->load->view( 'header' , $data , true); 
+    
+   	echo $_ci->load->view( 'exception' , array("message" => $e->getMessage()) , true );
+   
+    echo $_ci->load->view( 'footer' , $data , true);
+}
+set_exception_handler('my_exception_handler');

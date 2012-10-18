@@ -86,13 +86,16 @@
           </li>
         <?php endif; ?>
           
-        <?php if($this->user->hasFunction('PIDS_USER') || $this->user->hasFunction('DOIS_USER')): ?>
+        <?php if($this->user->hasFunction('PIDS_USER') || $this->user->hasFunction('DOIS_USER') || $this->user->hasFunction('PUBLIC')): ?>
           <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="#">My Identifiers <b class="caret"></b></a>
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Tools <b class="caret"></b></a>
             <ul class="dropdown-menu sub-menu pull-right">
             	
-            	<?php if ($this->user->hasFunction('DOIS_USER')): ?>
-            		<li class=""><a href="#">DOI</a></li>
+            	<?php if (($this->user->hasFunction('DOIS_USER') || $this->user->hasFunction('PUBLIC')) && mod_enabled('mydois')): ?>
+            		<li class=""><?php echo anchor('mydois/', 'DOI Query Tool');?></li>
+            	<?php endif; ?>
+            	<?php if (($this->user->hasFunction('PUBLIC')) && mod_enabled('abs_sdmx_querytool')): ?>
+            		<li class=""><?php echo anchor('abs_sdmx_querytool/', 'ABS SDMX Query Tool');?></li>
             	<?php endif; ?>
             	<?php if ($this->user->hasFunction('PIDS_USER')): ?>
               		<li class=""><a href="#">PID</a></li>

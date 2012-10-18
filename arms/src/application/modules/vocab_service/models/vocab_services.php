@@ -185,7 +185,7 @@ class Vocab_services extends CI_Model {
 	 */
 	function getOwnedVocabs($limit = 16, $offset =0)
 	{
-		
+		$vocabs = array();
 		$affiliations = $this->user->affiliations();
 		if (is_array($affiliations) && count($affiliations) > 0)
 		{
@@ -200,20 +200,20 @@ class Vocab_services extends CI_Model {
 			
 			if ($query->num_rows() == 0)
 			{
-				return array();
+				return $vocabs;
 			}
 			else
 			{
-				$vocabs = array();
 				
 				foreach($query->result_array() AS $v)
 				{
 					$vocabs[] =  new _vocab($v['id']);
 				}
 				
-				return $vocabs;
 			}
 		}
+		
+		return $vocabs;
 	} 	
 	
 	/**

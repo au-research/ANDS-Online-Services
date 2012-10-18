@@ -85,26 +85,24 @@ class Data_sources extends CI_Model {
 	 */
 	function getOwnedDataSources()
 	{
+		$data_sources = array();
 		$affiliations = $this->user->affiliations();
 		if (is_array($affiliations) && count($affiliations) > 0)
 		{
 			$query = $this->db->select('data_source_id')->where('attribute','record_owner')->where_in('value',$affiliations)->get('data_source_attributes');
 			if ($query->num_rows() == 0)
 			{
-				return NULL;
+				return $data_sources;
 			}
 			else
-			{
-				$data_sources = array();
-				
+			{				
 				foreach($query->result_array() AS $ds)
 				{
 					$data_sources[] =  new _data_source($ds['data_source_id']);
 				}
-				return $data_sources;
 			}
 		}
-		
+		return $data_sources;	
 	} 	
 
 

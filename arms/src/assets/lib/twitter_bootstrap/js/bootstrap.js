@@ -169,6 +169,8 @@
         $.support.transition && this.$element.hasClass('fade') ?
           this.hideWithTransition() :
           this.hideModal()
+          
+        this.$element.removeData()
       }
 
     , enforceFocus: function () {

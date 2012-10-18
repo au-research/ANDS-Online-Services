@@ -69,6 +69,10 @@
             <script type="text/javascript" src="<?php echo base_url();?>assets/lib/bootstrap_datepicker/js/bootstrap-datepicker.js"></script>
             <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/lib/bootstrap_datepicker/css/datepicker.css" />
         <?php endif;?>
+        
+        <?php if($lib=='abs_sdmx_querytool'):?>
+            <script type="text/javascript" src="<?php echo base_url();?>assets/js/abs_sdmx_querytool.js"></script>
+        <?php endif;?>
 
     <?php endforeach;?>
 
