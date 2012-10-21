@@ -38,7 +38,7 @@ class Vocab_services extends CI_Model {
 	} 	
 
 	/**
-	 * Returns all versions of a vocab by vocab  ID (or NULL)
+	 * Returns all versions of a vocab by vocab  ID 
 	 * 
 	 * @param the vocab ID
 	 * @return vocab versions or NULL
@@ -61,6 +61,61 @@ class Vocab_services extends CI_Model {
 		}	
 		
 	}
+
+
+	/**
+	 * Returns all distinct formats of a vocab by vocab  ID 
+	 * 
+	 * @param the vocab ID
+	 * @return vocab formats or NULL
+	 */	
+	function getAvailableFormatsByID($id)
+	{
+		$qry = 'SELECT distinct(format) FROM dbs_vocabs.vocab_version_formats  WHERE version_id IN(SELECT id FROM dbs_vocabs.vocab_versions WHERE vocab_id = '.$id.');';
+		$query = $this->db->query($qry);
+		
+		if ($query->num_rows() == 0)
+		{
+			return NULL;
+			
+		}
+		else
+		{
+			$vocab_formats = $query->result();
+			return $vocab_formats;
+		}	
+		
+	}
+
+
+
+	/**
+	 * Returns all downloadable file of a certain format belongs to a certain vocab 
+	 * 
+	 * @param the vocab ID, the format
+	 * @return vocab formats or NULL
+	 */	
+	function getDownloadableByFormat($id, $format)
+	{
+		$qry = 'SELECT f.*, v.title, v.status from dbs_vocabs.vocab_version_formats f, dbs_vocabs.vocab_versions v WHERE f.format=\''.$format.'\' AND v.vocab_id='.$id.' AND f.version_id = v.id order by status asc;';
+		$query = $this->db->query($qry);
+		
+		if ($query->num_rows() == 0)
+		{
+			return NULL;
+			
+		}
+		else
+		{
+			$vocab_formats = $query->result();
+			return $vocab_formats;
+		}	
+		
+	}
+
+
+
+
 	/**
 	 * Returns all versions of a vocab by vocab  ID (or NULL)
 	 * 
@@ -86,6 +141,27 @@ class Vocab_services extends CI_Model {
 		
 	}	
 	
+	/**
+	 * Returns all formats of a version (or NULL)
+	 * 
+	 * @param the version ID
+	 * @return formats or NULL
+	 */	
+	function getFormatByVersion($id)
+	{
+		$query = $this->db->select()->get_where('vocab_version_formats', array('version_id'=>$id));
+		
+		if ($query->num_rows() == 0){
+			return NULL;
+		}
+		else{
+			$formats = $query->result();
+			return $formats;
+		}	
+		
+	}	
+
+
 	/**
 	 * deletes a given format from a vocab version
 	 * 
@@ -123,6 +199,10 @@ class Vocab_services extends CI_Model {
 			
 
 	}	
+
+
+
+
 	
 	/**
 	 * Returns all changes of a vocab by vocab  ID (or NULL)
@@ -211,10 +291,10 @@ class Vocab_services extends CI_Model {
 				}
 				
 			}
-		}
-		
+		}	
 		return $vocabs;
 	} 	
+
 	
 	/**
 	 * XXX: 

@@ -75,11 +75,14 @@ h1{.text-shadow}
 				background:url('../img/breadcrumb_arrow.png') no-repeat right scroll;
 				a{
 					padding:10px;
+					color:black;
+					&:hover{
+						text-decoration:none;
+					}
 				}
 				a.active{
-					font-size:18px;
 					color:@darkGray;
-					font-weight:bold;
+					font-weight:normal;
 					.ellipsis();
 				}
 				&:last-child{
@@ -105,6 +108,21 @@ h1{.text-shadow}
 		}
 	}
 	margin-bottom:15px;
+}
+
+.largeTag{
+	font-size:10px;
+	border:1px solid #ccc;
+	padding: 5px 8px;
+	margin:2px 5px;
+	color:black;
+	.light-gradient();
+	.text-shadow();
+	&:hover{
+		text-decoration:none;
+		color:#333;
+		cursor:pointer;
+	}
 }
 
 

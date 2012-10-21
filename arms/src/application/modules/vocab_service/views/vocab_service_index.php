@@ -54,7 +54,7 @@
 				    <ul class="lists" id="items"></ul>
 				    
 				    <!-- View More Link -->
-				    <div class="row-fluid">
+				    <div class="row-fluid" id="load_more_container">
 						<div class="span12">
 							<div class="well"><a href="javascript:;" id="load_more" page="1">Show More...</a></div>
 						</div>
@@ -74,22 +74,18 @@
 						if (sizeof($my_vocabs)==0){
 							echo "<p>You don't seem to own a vocabulary, you can create one</p>";
 						}else{
+							echo '<ul>';
 							foreach($my_vocabs AS $v){
-								echo $v->title . "<BR/>";
+								echo '<li><a href="#!/view/'.$v->id.'">'.$v->title . "</a></li>";
 							}
+							echo '</ul>';
 						}
 					?>
-					<button class="btn add" id="add" vocab_id="0"><i class="icon-plus"></i>Add a vocabulary</button>
+					<button class="btn add" id="add"><i class="icon-plus"></i>Add a vocabulary</button>
 				</div>
 			</div>
 		</div>
 	</div>
-
-	
-
-	<!-- Load More Link -->
-	
-
 </section>
 
 <section id="view-vocab" class="hide">Loading...</section>
@@ -99,9 +95,8 @@
 <!-- end of main content container -->
 
 
-<section id="vocab-templates">
 <!-- mustache template for list of items-->
-<div class="hide" id="items-template">
+<script type="text/x-mustache" id="items-template">
 	{{#items}}
 		<li>
 		  	<div class="item" vocab_id="{{id}}">
@@ -112,79 +107,171 @@
 			  	</div>
 		  		<div class="btn-group item-control">
 		  			<button class="btn view"><i class="icon-eye-open"></i></button>
-			  		<button class="btn edit"><i class="icon-edit"></i></button>
-			  		<button class="btn delete"><i class="icon-trash"></i></button>
+		  			{{#owned}}
+				  		<button class="btn edit"><i class="icon-edit"></i></button>
+				  		<button class="btn delete"><i class="icon-trash"></i></button>
+			  		{{/owned}}
 				</div>
 		  	</div>
 		  </li>
 	{{/items}}
-</div>
+</script>
 
 
 <!-- mustache template for vocab view single-->
-<div class="hide" id="vocab-view-template">
-<?php
-	$vocab_view_fields = array(
-		'id' => 'Id',
-		'title' => 'Title',
-		'description' => 'Description',
-		'contact_name' => 'Contact Name',
-		'contact_email' => 'Contact Email',
-		'contact_number' => 'Contact Number',
-		'website' => 'Website',
-		'revision_cycle' => 'Revision cycle',
-		'available_formats' =>'Available Formats',	
-		'notes' => 'Notes',
-		'language' => 'Language',
-		'information_sources' => 'Information Sources',
-	);
-?>
-
-{{#item}}
-	<div class="container">
+<script type="text/x-mustache" id="vocab-view-template">
+	<?php
+		$vocab_view_fields = array(
+			'id' => 'Id',
+			'title' => 'Title',
+			'description' => 'Description',
+			'contact_name' => 'Contact Name',
+			'contact_email' => 'Contact Email',
+			'contact_number' => 'Contact Number',
+			'website' => 'Website',
+			'revision_cycle' => 'Revision cycle',
+			'available_formats' =>'Available Formats',	
+			'notes' => 'Notes',
+			'language' => 'Language',
+			'information_sources' => 'Information Sources',
+		);
+	?>
+	{{#item}}
 	<div class="row">
-	<div class="span8" id="vocab_view_container" vocab_id="{{id}}">
-		<div class="box">
-		<div class="box-header">
-			<ul class="breadcrumbs">
-				<li><a href="javascript:;"><i class="icon-home"></i></a></li>
-				<li><?php echo anchor('vocab_service', 'Manage My Vocabs');?></li>
-				<li><a href="javascript:;" class="active">{{title}}</a></li>
-			</ul>
-	        <div class="clearfix"></div>
-	    </div>
-	    <div class="row-fluid">    	
-	 		<div>
-	 			<div class="btn-toolbar"  vocab_id="{{id}}">
-					<div class="btn-group item-control" vocab_id="{{id}}">
-				  		<button class="btn edit"><i class="icon-edit"></i> Edit Vocabulary</button>
-				  		<button class="btn deleteRecord"><i class="icon-trash"></i> Delete Record</button>
+		<div class="span8" id="vocab_view_container" vocab_id="{{id}}">
+			<div class="box">
+				<div class="box-header">
+					<ul class="breadcrumbs">
+						<li><a href="javascript:;"><i class="icon-home"></i></a></li>
+						<li><?php echo anchor('vocab_service', 'Manage My Vocabs');?></li>
+						<li><a href="javascript:;" class="active">{{title}}</a></li>
+					</ul>
+			        <div class="clearfix"></div>
+			    </div>
+
+			    <div class="box-content">
+
+			    	<h3>{{title}}</h3>
+			    	
+
+					{{#description}}
+						<h5>Description</h5>
+						{{description}}
+					{{/description}}
+
+					<h5>Available Formats</h5>
+					{{#hasFormats}}
+						{{#available_formats}}	
+							<span class="largeTag format" format="{{.}}" vocab_id="{{id}}">{{.}}</span>
+						{{/available_formats}}
+					{{/hasFormats}}
+
+					{{#noFormats}}
+						There is no available format for this vocabulary
+					{{/noFormats}}
+
+					
+
+					{{#language}}
+						<h5>Language</h5> {{language}}
+					{{/language}}
+
+					{{#notes}}
+						<h5>Notes</h5>
+						{{notes}}
+					{{/notes}}
+
+					{{#information_sources}}
+						<h5>Information Sources</h5>{{information_sources}}
+					{{/information_sources}}
+
+					
+			    	<div class="btn-toolbar">
+						<div class="btn-group item-control" vocab_id="{{id}}">
+							<button class="btn contact"><i class="icon-user"></i> Contact Publisher</button>
+						</div>
 					</div>
+					
+
+
+			    </div>
+			</div>
+		</div>
+
+		<div class="span4">
+			{{#contact}}
+			<div class="box">
+				<div class="box-header"><h3>Contacts</h3><div class="clearfix"></div></div>
+				<div class="box-content">
+					{{#contact_name}}
+						{{contact_name}}<br/>
+					{{/contact_name}}
+					{{#contact_email}}
+						{{&contact_email}}<br/>
+					{{/contact_email}}
+					{{#contact_number}}
+						{{contact_number}}<br/>
+					{{/contact_number}}
 				</div>
 			</div>
+			{{/contact}}
 			
-	    <div class="">		
-		<dl class="dl-horizontal">
-			<?php 
-			foreach($vocab_view_fields as $key=>$name){
-				echo '{{#'.$key.'}}';
-				echo '<dt>'.$name.'</dt>';
-				echo '<dd>{{'.$key.'}}</dd>';
-				echo '{{/'.$key.'}}';
-			}	
-			?>
-		</dl>
+			{{#owned}}
+			<div class="box">
+				<div class="box-header"><h3>Admin</h3><div class="clearfix"></div></div>
+				<div class="box-content">
+					<div class="btn-toolbar">
+						<div class="btn-group btn-group-vertical btn-group-left item-control" vocab_id="{{id}}">
+							<button class="btn edit"><i class="icon-edit"></i> Edit Vocabulary</button>
+							<button class="btn delete"><i class="icon-trash"></i> Delete Vocabulary</button>
+							<button class="btn addVersion"><i class="icon-plus"></i> Add A Version</button>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+			{{/owned}}
 
-		<section id="view-vocab-version" class="hide">Loading...</section>
-		<section id="view-vocab-changes" class="hide">Loading...</section>
+			<div class="box">
+				<div class="box-header"><h3>Versions</h3><div class="clearfix"/></div>
+				<div class="box-content">
+					<ul class="ro-list">
+					{{#hasVersions}}
+						{{#versions}}
+							<li><a href="javascript:;" class="version" version_id="{{id}}"><span class="name">{{title}}</span></a><span class="num">{{status}}</span></li>
+						{{/versions}}
+					{{/hasVersions}}
+					{{#noVersions}}
+						<li>This vocab does not have any available versions</li>
+					{{/noVersions}}
+
+					{{#owned}}
+					<li><a href="javascript:;"><i class="icon-plus"></i> Add a Version</a></li>
+					{{/owned}}
+					</ul>
+				</div>
+			</div>
+
+			<div class="box">
+				<div class="box-header"><h3>Changes</h3><div class="clearfix"/></div>
+				<div class="box-content">
+					{{#hasChanges}}
+						{{#changes}}
+							<li>{{change_date}}</li>
+						{{/changes}}
+					{{/hasChanges}}
+
+					{{#noChanges}}
+						<div class="well">This vocabulary has no changes</div>
+					{{/noChanges}}
+				</div>
+			</div>
+
 		</div>
-	    </div>
-		</div>
 	</div>
-	</div>
-	</div>
-{{/item}}
-</div>	
+			
+	{{/item}}
+</script>	
 
 
 <?php
@@ -197,7 +284,7 @@
 	);
 ?>
 
-<div class="hide" id="vocab-version-view-template">
+<script type="text/x-mustache" id="vocab-version-view-template">
 	<div class="" id="vocab_view_container" vocab_id="{{id}}">
 		<dl class="dl-horizontal">
 		<dt>Versions</dt>
@@ -215,10 +302,29 @@
 		</dd>
 		</dl>
 	</div>
-</div>
+</script>
 
+<script type="text/x-mustache" id="vocab-format-downloadable-template">
+	{{#hasItems}}
+	<ul>
+		{{#items}}
+		<li>{{value}} <span class="label label-info">{{type}}</span> <span class="label label-error">{{status}}</span></li>
+		{{/items}}
+	</ul>
+	{{/hasItems}}
+</script>
 
-			<?php
+<script type="text/x-mustache" id="vocab-format-downloadable-template-by-version">
+	{{#hasItems}}
+	<ul>
+		{{#items}}
+		<li>{{value}} <span class="label label-info">{{type}}</span> <span class="largeTag">{{format}}</span></li>
+		{{/items}}
+	</ul>
+	{{/hasItems}}
+</script>
+
+<?php
 	$vocab_changes_view_fields = array(
 		'id' => 'Id',
 		'change_date' => 'Change Date',
@@ -226,25 +332,24 @@
 	);
 ?>
 
-<div class="hide" id="vocab-changes-view-template">
-	<div class="" id="vocab_view_container" vocab_id="{{id}}">
-		<dl class="dl-horizontal">
-		<dt>Changes</dt>
-		<dd>
-		{{#items}}	
-			<?php 
-			foreach($vocab_changes_view_fields as $key=>$name){
-				echo '{{#'.$key.'}}';
-				echo '{{'.$key.'}} ';
-				echo '{{/'.$key.'}}';
-			}					
-			?>
-			<br />
-		{{/items}}
-		</dd>
-		</dl>
-	</div>
-</div>
+<script type="text/x-mustache" id="vocab-changes-view-template">
+	{{#hasChanges}}
+	<table class="table table-hover">
+		<thead><tr><th>#</th><th>Description</th><th>Date Changed</th></tr></thead>
+		<tbody>
+			{{#items}}
+				<tr>
+					<td>{{id}}</td><td>{{description}}</td><td>{{change_date}}</td>
+				</tr>
+			{{/items}}
+		</tbody>
+    </table>
+    {{/hasChanges}}
+
+    {{#noChanges}}
+    	No change have been done on this vocabulary
+    {{/noChanges}}
+</script>
 
 <div class="hide" id="items-template">
 	{{#items}}
@@ -269,8 +374,8 @@
 
 
 <!-- mustache template for data source edit single-->
-<div class="hide" id="vocab-edit-template">
-{{#item}}
+<script type="text/x-mustache" id="vocab-edit-template">
+	{{#item}}
 	<div class="box">
 	<div class="box-header">
 				<ul class="breadcrumbs">
@@ -388,9 +493,9 @@
 
 		
 	</div>
-</div>
-{{/item}}
-</div>
+	{{/item}}
+</script>
+
 <?php
 	$vocab_version_edit_fields = array(
 		'id' => 'Id',
@@ -400,10 +505,10 @@
 	);
 ?>
 
-<div class="hide" id="vocab-version-edit-template">
+<script type="text/x-mustache" id="vocab-version-edit-template">
 		{{#items}}
-<p>Add a new format to <em>"{{#title}}{{title}}{{/title}}"</em></p>		
-<div class="item-control"> 
+			<p>Add a new format to <em>"{{#title}}{{title}}{{/title}}"</em></p>		
+			<div class="item-control"> 
 			<select class="chzn-select" id="versionFormat" style="width:100px">
 				<option value="">Select</option>
 				<option value="SKOS">SKOS</option>
@@ -438,7 +543,7 @@
 		{{/items}}	
 
 
-</div>
+</script>
 
 <?php
 	$vocab_changes_edit_fields = array(

@@ -30,7 +30,7 @@ $(function(){
 					case 'view'		: load_vocab(words[1]);break;
 					case 'edit'		: load_vocab_edit(words[1], words[2]);break;
 					case 'delete'	: load_vocab_delete(words[1]);break;
-					case 'add'		: load_vocab_add(words[1]);break;
+					case 'add'		: load_vocab_add();break;
 					case 'version-edit'		: load_vocab_version_edit(words[1],words[2]);break;					
 					default: logErrorOnScreen('this functionality is currently being worked on');break;
 				}
@@ -82,10 +82,10 @@ $(function(){
 	});
 
 	//item button binding
-	$('.item-control .btn').live({
+	$('.btn').live({
 		click: function(e){
 			e.preventDefault();
-			var vocab_id = $(this).parent().parent().attr('vocab_id');
+			var vocab_id = $(this).parent().attr('vocab_id');
 			if($(this).hasClass('view')){
 				changeHashTo('view/'+vocab_id);
 			}else if($(this).hasClass('edit')){
@@ -93,7 +93,7 @@ $(function(){
 			}else if($(this).hasClass('delete')){
 				changeHashTo('delete/'+vocab_id);
 			}else if($(this).hasClass('add')){
-				changeHashTo('add/'+vocab_id);	
+				changeHashTo('add/');
 			}else if($(this).hasClass('version-edit')){
 				var version_id = $(this).attr('version_id')	
 				showEditVersionModal(vocab_id,version_id);
@@ -103,9 +103,10 @@ $(function(){
 			}else if($(this).hasClass('version-format-add')){
 				var version_id = $(this).attr('version_id')	
 				addVersionFormat(version_id,vocab_id);
-			}		
+			}
 		}
 	});
+
 
 	//vocab chooser event
 	$('#vocab-chooser').live({
@@ -150,7 +151,7 @@ function browse(view){
 		$('section').hide();
 		$('#items').removeClass();
 		$('#items').addClass(view);
-		$('#browse-vocabs').slideDown();
+		$('#browse-vocabs').fadeIn();
 	}else{
 		logErrorOnScreen('invalid View Argument');
 	}
@@ -175,6 +176,7 @@ function load_more(page){
 		success: function(data){
 			var itemsTemplate = $('#items-template').html();
 			var output = Mustache.render(itemsTemplate, data);
+			if(!data.more) $('#load_more_container').hide();
 			$('#items').append(output);
 		}
 	});
@@ -196,66 +198,74 @@ function load_vocab(vocab_id){
 		contentType: 'application/json; charset=utf-8',
 		dataType: 'json',
 		success: function(data){
-			
+			console.log(data);
+			if(data.status=='ERROR') logErrorOnScreen(data.message);
 			var template = $('#vocab-view-template').html();
 			var output = Mustache.render(template, data);
 			var view = $('#view-vocab');
 			$('#view-vocab').html(output);
 			$('#view-vocab').fadeIn(500);
-			
-			//get the associated versions			
-			$.ajax({
-				url: 'vocab_service/getVocabVersions/'+vocab_id,
-				type: 'GET',
-				contentType: 'application/json; charset=utf-8',
-				dataType: 'json',
-				success: function(data){
-				//	console.log(data);		
 
-					var template = $('#vocab-version-view-template').html();
-					var output = Mustache.render(template, data);
-					$('#view-vocab-version').html(output);
-					$('#view-vocab-version').fadeIn(500);
-
-				}
+			//bind tooltips on formats
+			$('.format').each(function(){
+				var vocab_id = $(this).attr('vocab_id');
+				var format = $(this).attr('format');
+				$(this).qtip({
+					content:{
+						text:'Loading...',
+						ajax:{
+							url: 'vocab_service/getDownloadableByFormat/'+vocab_id+'/'+format,
+							type: 'GET',
+							success: function(data, status){
+								var template = $('#vocab-format-downloadable-template').html();
+								var output = Mustache.render(template, data);
+								this.set('content.text', output);
+							}
+						}
+					},
+					position:{
+						my:'top left',
+						at: 'bottom center'
+					},
+					show: {event: 'click'},
+					hide: {event: 'unfocus'},
+					events: {},
+					style: {classes: 'ui-tooltip-shadow ui-tooltip-bootstrap ui-tooltip-large'}
+				});
 			});
 
-			//get the associated changes
-			$.ajax({
-				url: 'vocab_service/getVocabChanges/'+vocab_id,
-				type: 'GET',
-				contentType: 'application/json; charset=utf-8',
-				dataType: 'json',
-				success: function(data){
-				//	console.log(data);	
-					var template = $('#vocab-changes-view-template').html();
-					var output = Mustache.render(template, data);
-					$('#view-vocab-changes').html(output);
-					$('#view-vocab-changes').fadeIn(500);
+			//bind the tooltips on versions
 
-				}
-			}); 
-
-
-
+			$('.version').each(function(){
+				var version_id = $(this).attr('version_id');
+				var target = $(this).parent();
+				$(target).qtip({
+					content:{
+						text:'Loading...',
+						ajax:{
+							url: 'vocab_service/getFormatByVersion/'+version_id,
+							type: 'GET',
+							success: function(data, status){
+								var template = $('#vocab-format-downloadable-template-by-version').html();
+								var output = Mustache.render(template, data);
+								this.set('content.text', output);
+							}
+						}
+					},
+					position:{
+						my:'right center',
+						at: 'left center'
+					},
+					show: {event: 'click'},
+					hide: {event: 'unfocus'},
+					events: {},
+					style: {classes: 'ui-tooltip-shadow ui-tooltip-bootstrap ui-tooltip-large'}
+				});
+			});
+			
 		}
 	});
 	return false;
-}
-
-/*
- * Draw Charts
- * Use the jqplot library, currently a dud
- *
- * @TODO: refactor
- *
- * 
- * @params [void]
- * @return [void]
- */
-function drawCharts(){
-	$('#ro-progression').height('350').html('');
-	$.jqplot('ro-progression',  [[[1, 2],[3,5.12],[5,13.1],[7,33.6],[9,85.9],[11,219.9]]]);
 }
 
 /*
@@ -371,16 +381,14 @@ function showEditVersionModal(vocab_id,version_id)
 }
 
 
-function load_vocab_add(vocab_id, active_tab){
+function load_vocab_add(){
 
 	$('#browse-vocab').slideUp(500);
 	$('#view-vocabs').slideUp(500);
 
 	var template = $('#vocab-add-template').html();
-
 	$('#add-vocab').html(template);
 	$('#add-vocab').fadeIn(500);
-
 	return false;
 }
 

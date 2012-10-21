@@ -71,12 +71,22 @@ class Vocab_service extends MX_Controller {
 
 		$this->load->model("vocab_services","vocab");
 
+
+		//get owned vocabs permission
+		$ownedVocabs = $this->vocab->getOwnedVocabs();
+		$ownedVocabsID = array();
+		foreach($ownedVocabs as $v){
+			array_push($ownedVocabsID, $v->id);
+		}
+
 		//Limit and Offset calculated based on the page
-		$limit = 16;
+		$limit = 9;
 		$offset = ($page-1) * $limit;
 
 		$vocabs = $this->vocab->getAll($limit, $offset);
-
+		if(sizeof($vocabs)<$limit){
+			$jsonData['more'] = false;
+		}else $jsonData['more'] = true;
 		$items = array();
 		foreach($vocabs as $vocab){
 			$item = array();
@@ -84,6 +94,10 @@ class Vocab_service extends MX_Controller {
 			$item['id'] = $vocab->id;
 			$item['description'] = $vocab->description;
 			$item['counts'] = array();
+			
+			if(in_array($item['id'], $ownedVocabsID)){
+				$item['owned'] = true;
+			}
 
 			array_push($items, $item);
 		}
@@ -115,11 +129,151 @@ class Vocab_service extends MX_Controller {
 
 		if($vocab)
 		{
+			//get owned vocabs permission
+			$ownedVocabs = $this->vocab->getOwnedVocabs();
+			$ownedVocabsID = array();
+			foreach($ownedVocabs as $v){
+				array_push($ownedVocabsID, $v->id);
+			}
+
 			foreach($vocab->attributes as $attrib=>$value){
 				$jsonData['item'][$attrib] = $value->value;
-			} 
+			}
+
+			if($vocab->contact_name || $vocab->contact_email || $vocab->contact_number) $jsonData['item']['contact']=true;
+			//if($vocab->contact_email) $jsonData['item']['contact_email'] = mailto($vocab->contact_email);
+			if(in_array($vocab->id, $ownedVocabsID)) $jsonData['item']['owned']=true;
+
+			//vocab versions
+			$versions= $this->vocab->getVersionsByID($id);
+			$items = array();
+			$currentVersion ='';
+			if($versions)
+			{
+				$jsonData['item']['hasVersions']=true;
+				foreach($versions as $version){
+					if($currentVersion!=$version->version_id)
+					{
+						if($currentVersion!=''){
+							array_push($items, $item);
+						}
+						$currentVersion = $version->version_id;
+						$item = array();
+						$item['formats'] = array();									
+						$item['status'] = $version->status;
+						$item['id'] = $version->version_id;
+						$item['title'] = $version->title;
+					} 
+					$formats['format'][] = $version->format;
+					$formats['type'][] = $version->type;
+					$formats['value'][] = $version->value;
+					array_push($item['formats'], $formats);
+					unset($formats);
+				}
+				array_push($items, $item);
+				$jsonData['item']['versions']=$items;
+			}else{
+				$jsonData['noVersions']=true;
+			}
+
+			//vocab formats
+			$formats = $this->vocab->getAvailableFormatsByID($id);
+			unset($items);
+			$items = array();
+			if($formats){
+				$jsonData['item']['hasFormats']=true;
+				foreach($formats as $m){
+					array_push($items, $m->format);
+				}
+				$jsonData['item']['available_formats']=$items;
+			}else{
+				$jsonData['item']['noFormats']=true;
+			}
+
+			//vocab changes
+			$changes= $this->vocab->getChangesByID($id);
+			unset($items);
+			$items = array();
+			if($changes)
+			{
+				$jsonData['item']['hasChanges']=true;
+				foreach($changes as $change){
+					$item = array();
+					$item['change_date'] = $change->change_date;
+					$item['id'] = $change->id;
+					$item['description'] = $change->description;
+					array_push($items, $item);
+				}
+			}else{
+				$jsonData['item']['noChanges']=true;
+			}
+			$jsonData['item']['changes']=$items;
+		}else{
+			$jsonData['status'] = 'ERROR';
+			$jsonData['message'] = 'Non Existing Vocab Specified';
 		}
+
 		
+		$jsonData = json_encode($jsonData);
+		echo $jsonData;
+	}
+
+	public function getDownloadableByFormat($vocab_id, $format){
+		header('Cache-Control: no-cache, must-revalidate');
+		header('Content-type: application/json');
+
+		$jsonData = array();
+		$jsonData['status'] = 'OK';
+		$this->load->model("vocab_services","vocab");
+		$downloadables = $this->vocab->getDownloadableByFormat($vocab_id, $format);
+		$items = array();
+		if($downloadables){
+			$jsonData['hasItems']=true;
+			foreach($downloadables as $d){
+				$item = array();
+				$item['title']=$d->title;
+				$item['format']=$d->format;
+				$item['type']=$d->type;
+				$item['value']=$d->value;
+				$item['version_id']=$d->version_id;
+				$item['status']=$d->status;
+				array_push($items, $item);
+			}
+			$jsonData['items']=$items;
+		}else{
+			$jsonData['noItems']=true;
+			$jsonData['requestFor']=$vocab_id .' and '.$format;
+
+		}
+		$jsonData = json_encode($jsonData);
+		echo $jsonData;
+	}
+
+	public function getFormatByVersion($version_id){
+		header('Cache-Control: no-cache, must-revalidate');
+		header('Content-type: application/json');
+
+		$jsonData = array();
+		$jsonData['status'] = 'OK';
+		$this->load->model("vocab_services","vocab");
+		$formats = $this->vocab->getFormatByVersion($version_id);
+		$items = array();
+		if($formats){
+			$jsonData['hasItems']=true;
+			foreach($formats as $f){
+				$item = array();
+				$item['id']=$f->id;
+				$item['type']=$f->type;
+				$item['value']=$f->value;
+				$item['format']=$f->format;
+				array_push($items, $item);
+			}
+			$jsonData['items']=$items;
+		}else{
+			$jsonData['noItems']=true;
+			$jsonData['requestFor']='version_id = '. $version_id;
+
+		}
 		$jsonData = json_encode($jsonData);
 		echo $jsonData;
 	}
@@ -152,8 +306,7 @@ class Vocab_service extends MX_Controller {
 				
 				if($currentVersion!=$version->version_id)
 				{
-					if($currentVersion!='')
-					{
+					if($currentVersion!=''){
 						array_push($items, $item);
 					}
 					$currentVersion = $version->version_id;
@@ -176,7 +329,7 @@ class Vocab_service extends MX_Controller {
 		}
 		$jsonData['items'] = $items;
 		$jsonData = json_encode($jsonData);
-		echo $jsonData;
+		return $jsonData;
 	}
 	
 	/**
@@ -327,14 +480,16 @@ class Vocab_service extends MX_Controller {
 		$items = array();
 		if($changes)
 		{
+			$jsonData['hasChanges']=true;
 			foreach($changes as $change){
 				$item = array();
 				$item['change_date'] = $change->change_date;
 				$item['id'] = $change->id;
 				$item['description'] = $change->description;
-	
 				array_push($items, $item);
 			}
+		}else{
+			$jsonData['noChanges']=true;
 		}
 		
 		$jsonData['items'] = $items;
