@@ -74,7 +74,8 @@ class Oai extends MX_Controller
 		$this->_header();
 
 		$verb = $this->input->get_post('verb', TRUE);
-		if (array_key_exists($verb, $this->verbs))
+		if (!empty($verb) and
+		    array_key_exists($verb, $this->verbs))
 		{
 			try
 			{
