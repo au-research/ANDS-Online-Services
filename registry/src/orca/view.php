@@ -41,6 +41,7 @@ if( !$registryObject )
 else
 {
 	$registryObjectKey = $registryObject[0]['registry_object_key'];
+	$registry_object_hash = $registryObject[0]['key_hash'];
 	$dataSourceKey = $registryObject[0]['data_source_key'];
 	$dataSource = getDataSources($dataSourceKey, null);
 	$existingRelatedArray = Array();
@@ -48,7 +49,6 @@ else
 	$registryObjectRecordOwner = $registryObject[0]['record_owner'];
 	$registryObjectDataSourceRecordOwner = $dataSource[0]['record_owner'];
 	$registryObjectStatus = trim($registryObject[0]['status']);
-
 	// Check access.
 	if( !(in_array($registryObjectStatus, array(PUBLISHED, APPROVED)) || userIsORCA_ADMIN() || userIsORCA_LIAISON() || $registryObjectDataSourceRecordOwner == getThisOrcaUserIdentity() || $registryObjectRecordOwner == getThisOrcaUserIdentity()) )
 	{
@@ -592,11 +592,35 @@ if( $registryObject )
 		drawRecordField("Status Set:",  $statusWhen);
 		drawRecordField("Status Set By:",  $statusWho);
 	}
-
-	print("	</tbody>\n");
+	if( userIsDataSourceRecordOwner($registryObjectDataSourceRecordOwner) || userIsORCA_ADMIN() )
+	{
+		$tags = getTagsForRegistryObject($registry_object_hash);
+		if($tags)
+		{
+		print("	<tr><td>Tags:</td>\n");		
+		print("			<td>\n");
+		print('			<table class="subtable">'."\n");
+		print('<ul class="tag-list">');
+		foreach($tags as $tag)
+			{
+				print('<li>');
+				print('<a href="#">'.$tag['tag']." ".$tag['id'].'</a>');
+				print('</li>');
+				/*print("	  <tr><td></td>\n");
+				print("	    <td>\n");
+				print($tag['tag']." ".$tag['id']);
+				print("	    </td>\n");
+				print("	  </tr>\n");*/
+			}
+		print('</ul>');
+		print('			</table>'."\n");
+		}
+	}
+		print("	</tbody>\n");
 
 	if( userIsDataSourceRecordOwner($registryObjectDataSourceRecordOwner) || userIsORCA_ADMIN() )
 	{
+			
 		print("	<tbody>\n");
 		print("	  <tr>\n");
 		print("	    <td></td>\n");

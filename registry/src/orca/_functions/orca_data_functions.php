@@ -3486,8 +3486,18 @@ function getTagsForDataSource($ds_key)
 {	
 	global $gCNN_DBS_ORCA;
 	$resultSet = null;
-	$strQuery = "SELECT ro.list_title, t.tag, t.id from dba.tbl_registry_objects ro, dba.tbl_tags t where t.ro_hash = ro.key_hash and ro.data_source_key = $1";
+	$strQuery = "SELECT ro.list_title, ro.registry_object_key as key, t.tag, t.id from dba.tbl_registry_objects ro, dba.tbl_tags t where t.ro_hash = ro.key_hash and ro.data_source_key = $1";
 	$params = array($ds_key);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	return $resultSet;	
+}
+
+function getTagsForRegistryObject($ro_hash_key)
+{	
+	global $gCNN_DBS_ORCA;
+	$resultSet = null;
+	$strQuery = "SELECT * from dba.tbl_tags where ro_hash = $1";
+	$params = array($ro_hash_key);
 	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
 	return $resultSet;	
 }

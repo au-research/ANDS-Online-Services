@@ -791,3 +791,23 @@ a.borderless{
 	font-weight: 600;	
 	align:center;	
 }
+
+ul.tag-list{
+	list-style-type:none;
+	padding:0;
+	margin:15px 0px;
+}
+
+ul.tag-list li{
+	display:inline;
+}
+
+ul.tag-list li a{
+padding: 5px;
+border: 1px solid #CCC;
+background: #DDD;
+text-decoration: none;
+color: #454545;
+margin: 4px;
+line-height: 37px;
+}
