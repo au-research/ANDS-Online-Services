@@ -200,18 +200,19 @@ class Registry_objects extends CI_Model {
 	 * @param the data source ID to match by
 	 * @param boolean flag indicating whether to return an array of IDs (int), or an
 	 * array of `_registry_object`s.
-	 * @return array(registry_object_id), or null if no matching records
+	 * @return array of results, or null if no matching records
 	 */
 	function getIDsByDataSourceID($data_source_id, $make_ro=false)
 	{
-		return $this->_get(array(array('args' => $data_source_id,
-					       'fn' => function($db, $dsid) {
-						       $db->select("registry_object_id")
-							       ->from("registr_objects")
-							       ->where("data_source_id", $dsid);
-						       return $db;
-					       })),
-				   $make_ro);
+		$results =  $this->_get(array(array('args' => $data_source_id,
+						    'fn' => function($db, $dsid) {
+							    $db->select("registry_object_id")
+								    ->from("registry_objects")
+								    ->where("data_source_id", $dsid);
+							    return $db;
+						    })),
+					$make_ro);
+		return $make_ro ? $results : array_map(function($r){return $r['registry_object_id'];}, $results);
 	}
 
 	/**
