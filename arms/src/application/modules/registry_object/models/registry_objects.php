@@ -16,78 +16,89 @@ class Registry_objects extends CI_Model {
 	public $valid_status  = array("DRAFT"=>"DRAFT", "PUBLISHED"=>"PUBLISHED", "APPROVED"=>"APPROVED", "SUBMITTED_FOR_ASSESSMENT"=>"SUBMITTED_FOR_ASSESSMENT");
 	public $valid_levels  = array("level_1"=>"1", "level_2"=>"2", "level_3"=>"3", "level_4"=>"4" );
 
-	private $_mkro_callback = 'return new _registry_object($r["registry_object_id"]);';
 
 	/**
-	 * Get a number of registry_objects, limited by various parameters.
-	 * If no records are found, and empty array is returned.
-	 * Note that registry_objects is joined to both data_sources and registry_object_attributes:
-	 * ensure the `$where` and `$sort` clauses are keyed accordingly.
+	 * Generic registry_objects get handler.
 	 *
-	 * @param array of key-value pairs passed to the CI where() routine (optional)
-	 * @param list of registry_object_ids to satisfy a 'where id in' clause (optional)
-	 * @param how many records to return (optional)
-	 * @param query offset (optional)
-	 * @param sort field (optional)
-	 * @param sort direction (optional)
-	 * @param passed to CI ActiveRecord where() routine, with no automatic escaping (optional)
-	 * @return array:
-	 *  - 'count' => complete query result count (disregarding limit/offset)
-	 *  - 'rows' => array(_registry_object)
+	 * This moderately nifty piece of code lets you get some `_registry_object`
+	 * goodness by any means necessary. Just add wat^H^H^H the following:
+	 *   - a list of callback functions to apply to this (the `Registry_objects`) model
+	 *   - whether you want `_registry_object`s or plain old `registry_object_id`s (i.e. ints)
+	 *   - number of records to limit the reponse to (optional)
+	 *   - offset from which to retrieve record set (optional)
+	 *
+	 * The callback pipeline expects an array of arrays. Crazy, I know. I blame PHP for not
+	 * having a tuple/list/set datatype, or even a plain hash. That's right: I'm blaming my tools.
+	 * Anyway, `$pipeline` should look something like:
+	 *
+	 *
+	 * array(                                 //a list of callbacks to apply
+	 *   array(                               //the first callback
+	 *     'args' => ...,                     //arguments to pass to callback. this will be the second parameter. stuff with array as required
+	 *     'fn' => function($db,$args){...}   //callback. takes a CodeIgniter db object, which should be returned by the function.
+	 *  )
+	 * )
+	 *
+	 *
+	 * @param an array of processing callbacks (type `callable`). See above description
+	 * for specific details.
+	 * @param should we create `_registry_object` objects for each result? (default: true)
+	 * @param query limit (int) (default: false; i.e. no limit)
+	 * @param query offset (int) (default: false; i.e. no offset)
+	 * @return an array of results, or null if no results.
 	 */
-	function get($where=array(),
-		     $in=false,
-		     $limit=0,
-		     $offset=0,
-		     $sort='registry_objects.registry_object_id',
-		     $sortd='asc',
-		     $rawwhere=array())
+	public function _get($pipeline, $make_ro=true, $limit=false, $offset=false)
 	{
-		$count = 0;
-		if (is_array($in) and count($in) == 0)
+		if (!is_array($pipeline))
 		{
-			return array('count' => $count, 'rows' => array());
+			throw new Exception("pipeline must be an array");
+		}
+
+		foreach ($pipeline as $p)
+		{
+			if (!is_callable($p['fn']))
+			{
+				throw new Exception("pipeline members must be callable");
+			}
+		}
+
+		$CI =& get_instance();
+		$db = $CI->db;
+		foreach ($pipeline as $p)
+		{
+			$db = call_user_func($p['fn'], $db, $p['args']);
+		}
+		$results = null;
+		$query = false;
+		if ($limit && $offset)
+		{
+			$query = $db->get(null, $limit, $offset);
+		}
+		elseif ($limit)
+		{
+			$query = $db->get(null, $limit);
+		}
+		elseif ($offset)
+		{
+			$query = $db->get(null, null, $offset);
 		}
 		else
 		{
-			$this->db->distinct()->select("registry_objects.registry_object_id")
-				->join("data_sources",
-				       "data_sources.data_source_id = registry_objects.data_source_id",
-				       "inner")
-				->join("registry_object_attributes",
-				       "registry_object_attributes.registry_object_id = registry_objects.registry_object_id",
-				       "inner")
-				->where($where)
-				->where($rawwhere, null, false)
-				->order_by($sort, $sortd);
-			if ($in !== false)
+			$query = $db->get();
+		}
+		if ($query->num_rows() > 0)
+		{
+			$results = array();
+			foreach ($query->result_array() as $rec)
 			{
-				$this->db->where_in("registry_objects.registry_object_id", $in);
+				$results[] = $make_ro ? new _registry_object($rec["registry_object_id"]) : $rec;
 			}
-
-			/**
-			 * FIXME: Cannot for the life of me figure out the correct way to retrieve the
-			 * number of matching rows while using $this->db->get([table], $limit, $offset).
-			 * So instead, we'll suck down the lot, get the count, and take our slice
-			 */
-			$query = $this->db->get('registry_objects');
-			$count = $query->num_rows();
-			if ($query->num_rows() > 0)
-			{
-				$results = $query->result_array();
-				$results = array_slice($results, $offset, $limit);
-				$records = array_map(create_function('$r',
-								     $this->_mkro_callback),
-						     $results);
-			}
-			else
-			{
-				$count = 0;
-				$records = array();
-			}
+		}
+		if ($query)
+		{
 			$query->free_result();
 		}
-		return array('count' => $count, 'rows' => $records);
+		return $results;
 	}
 
 	/**
@@ -98,18 +109,14 @@ class Registry_objects extends CI_Model {
 	 */
 	function getByKey($key)
 	{
-		$query = $this->db->select("registry_object_id")->get_where('registry_objects', array('key'=>$key));
-		if ($query->num_rows() == 0)
-		{
-			$query->free_result();
-			return NULL;
-		}
-		else
-		{
-			$id = $query->result_array();
-			$query->free_result();
-			return new _registry_object($id[0]['registry_object_id']);
-		}
+		$results =  $this->_get(array(array('args' => $key,
+						    'fn' => function($db,$key) {
+							    $db->select("registry_object_id")
+								    ->from("registry_objects")
+								    ->where("key", $key);
+							    return $db;
+						    })));
+		return is_array($results) ? $results[0] : null;
 	}
 
 	/**
@@ -120,7 +127,16 @@ class Registry_objects extends CI_Model {
 	 */
 	function getByID($id)
 	{
-		return new _registry_object($id);
+		$results = $this->_get(array(array('args' => $id,
+						   'fn' => function($db,$id) {
+							   $db->select("registry_object_id")
+								   ->from("registry_objects")
+								   ->where("registry_object_id", $id);
+							   return $db;
+						   })),
+				       true,
+				       1);
+		return is_array($results) ? $results[0] : null;
 	}
 
 
@@ -132,18 +148,16 @@ class Registry_objects extends CI_Model {
 	 */
 	function getBySlug($slug)
 	{
-		$query = $this->db->select("registry_object_id")->get_where('registry_objects', array('slug'=>$slug));
-		if ($query->num_rows() == 0)
-		{
-			$query->free_result();
-			return NULL;
-		}
-		else
-		{
-			$id = $query->result_array();
-			$query->free_result();
-			return new _registry_object($id[0]['registry_object_id']);
-		}
+		$results = $this->_get(array(array('args' => $slug,
+						   'fn' => function($db,$slug) {
+							   $db->select("registry_object_id")
+								   ->from("registry_objects")
+								   ->where("slug", $slug);
+							   return $db;
+						   })),
+				       true,
+				       1);
+		return is_array($results) ? $results[0] : null;
 	}
 
 
@@ -154,49 +168,50 @@ class Registry_objects extends CI_Model {
 	 * @param the value that the attribute must match
 	 * @return array(_registry_object)
 	 */
-	function getByAttribute($attribute_name, $value, $core = FALSE)
+	function getByAttribute($attribute_name, $value, $core=false)
 	{
-		$matches = array();
-		$this->db->save_queries = FALSE;
-		if ($core)
-		{
-			$query = $this->db->select("registry_object_id")->get_where('registry_objects', array($attribute_name=>$value));
-		}
-		else
-		{
-			$query = $this->db->select("registry_object_id")->get_where('registry_object_attributes', array("attribute"=>$attribute_name, "value"=>$value));
-		}
-		if ($query->num_rows() > 0)
-		{
-			foreach ($query->result_array() AS $result)
-			{
-				$matches[] = new _registry_object($result['registry_object_id']);
-			}
-		}
-		$query->free_result();
-		//var_dump($matches);
-		return $matches;
+		$args = array('name' => $attribute_name, 'val' => $value);
+		return $core == true ?
+			$this->_get(array(array('args' => $args,
+						'fn' => function($db,$args) {
+							$db->select("registry_object_id")
+								->from("registry_objects")
+								->where($args['name'], $args['val']);
+							return $db;
+						})))
+			:
+			$this->_get(array(array('args' => $args,
+						'fn' => function($db,$args) {
+							$db->select("registry_object_id")
+								->from("registry_object_attributes")
+								->where("attribute", $args['name'])
+								->where("value", $args['val']);
+							return $db;
+						})))
+			;
 	}
 
+
 	/**
-	 * Get a number of registry_objects that match the attribute requirement (or an empty array)
+	 * Get a number of registry_objects that match the attribute requirement (or an empty array).
+	 * Note that by default, this method returns registry_object_id's only. If you want
+	 * `_registry_object`s, pass an additional boolean `true` for the second parameter
 	 *
 	 * @param the data source ID to match by
-	 * @return array(_registry_object)
+	 * @param boolean flag indicating whether to return an array of IDs (int), or an
+	 * array of `_registry_object`s.
+	 * @return array(registry_object_id), or null if no matching records
 	 */
-	function getIDsByDataSourceID($data_source_id)
+	function getIDsByDataSourceID($data_source_id, $make_ro=false)
 	{
-		$matches = array();
-		$query = $this->db->select("registry_object_id")->get_where('registry_objects', array("data_source_id"=>$data_source_id));
-		if ($query->num_rows() > 0)
-		{
-			foreach ($query->result_array() AS $result)
-			{
-				$matches[] = $result['registry_object_id'];
-			}
-		}
-		$query->free_result();
-		return $matches;
+		return $this->_get(array(array('args' => $data_source_id,
+					       'fn' => function($db, $dsid) {
+						       $db->select("registry_object_id")
+							       ->from("registr_objects")
+							       ->where("data_source_id", $dsid);
+						       return $db;
+					       })),
+				   $make_ro);
 	}
 
 	/**
@@ -207,17 +222,15 @@ class Registry_objects extends CI_Model {
 	 */
 	function getByDataSourceKey($data_source_key)
 	{
-		$matches = array();
-		$query = $this->db->select("registry_object_id")->join('data_sources', 'data_sources.data_source_id = registry_objects.data_source_id')->get_where('registry_objects', array("data_sources.key"=>$data_source_key));
-		if ($query->num_rows() > 0)
-		{
-			foreach ($query->result_array() AS $result)
-			{
-				$matches[] = new _registry_object($result['registry_object_id']);
-			}
-		}
-		$query->free_result();
-		return $matches;
+		return $this->_get(array(array('args' => $data_source_key,
+					       'fn' => function($db, $dsk) {
+						       $db->select("registry_object_id")
+							       ->from("registry_objects")
+							       ->join("data_sources",
+								      "data_sources.data_source_id = registry_objects.data_source_id")
+							       ->where("data_sources.key", $dsk);
+						       return $db;
+					       })));
 	}
 
 
@@ -229,7 +242,13 @@ class Registry_objects extends CI_Model {
 	 */
 	function getByClass($class)
 	{
-		return $this->get(array("class"=>$class));
+		return $this->_get(array(array('args' => $class,
+					       'fn' => function($db, $class) {
+						       $db->select("registry_object_id")
+							       ->from("registry_objects")
+							       ->where("class", $class);
+						       return $db;
+					       })));
 	}
 
 

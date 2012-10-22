@@ -19,58 +19,94 @@ class Records extends CI_Model
 	{
 		$this->load->model('oai/Sets', 'sets');
 		$this->load->model('registry_object/Registry_objects', 'ro');
-		$records = array();
-		$rawclause = array("registry_objects.status in" => "('approved', 'deleted')");
-		$clause = array();
+		$args = array();
+		$args['rawclause'] = array("registry_objects.status in" => "('approved', 'deleted')");
+		$args['clause'] = array();
+		$args['wherein'] = false;
 		if ($after)
 		{
-			$clause["registry_object_attributes.value >="] = $after->getTimestamp();
+			$args["clause"]["registry_object_attributes.value >="] = $after->getTimestamp();
 		}
 
 		if ($before)
 		{
-			$clause["registry_object_attributes.value <="] = $before->getTimestamp();
+			$args["clause"]["registry_object_attributes.value <="] = $before->getTimestamp();
 		}
 
 		if ($after or $before)
 		{
-			$clause["registry_object_attributes.attribute"] = "updated";
+			$args["clause"]["registry_object_attributes.attribute"] = "updated";
 		}
 
 		if ($set)
 		{
-			$from_ids = $this->sets->getIDsForSet($set);
+			$args["wherein"] = $this->sets->getIDsForSet($set);
+		}
+
+
+		$count = $this->ro->_get(array(array('args' => $args,
+						     'fn' => function($db, $args) {
+							     $db->select("count(distinct(registry_objects.registry_object_id))")
+								     ->from("registry_objects")
+								     ->join("data_sources",
+									    "data_sources.data_source_id = registry_objects.data_source_id",
+									    "inner")
+								     ->join("registry_object_attributes",
+									    "registry_object_attributes.registry_object_id = registry_objects.registry_object_id",
+									    "inner")
+								     ->where($args['rawclause'], null, false)
+								     ->where($args['clause']);
+							     if ($args['wherein'])
+							     {
+								     $db->where_in("registry_objects.registry_object_id",
+										   $args['wherein']);
+							     }
+							     return $db;
+						     })),
+					 false);
+
+		if (!is_array($count))
+		{
+			throw new Oai_NoRecordsMatch_Exceptions();
 		}
 		else
 		{
-			$from_ids = false;
+			$count = $count[0]["count(distinct(registry_objects.registry_object_id))"];
 		}
 
-		$ro_response = $this->ro->get($clause,
-					      $from_ids,
-					      100,
-					      $start,
-					      'registry_objects.registry_object_id',
-					      'asc',
-					      $rawclause);
+		$records = $this->ro->_get(array(array('args' => $args,
+						       'fn' => function($db, $args) {
+							       $db->distinct()
+								       ->select("registry_objects.registry_object_id")
+								       ->from("registry_objects")
+								       ->join("data_sources",
+									      "data_sources.data_source_id = registry_objects.data_source_id",
+									      "inner")
+								       ->join("registry_object_attributes",
+									      "registry_object_attributes.registry_object_id = registry_objects.registry_object_id",
+									      "inner")
+								       ->where($args['rawclause'], null, false)
+								       ->where($args['clause']);
+							       if ($args['wherein'])
+							       {
+								       $db->where_in("registry_objects.registry_object_id",
+										     $args['wherein']);
+							       }
+							       $db->order_by("registry_objects.registry_object_id", "asc");
+							       return $db;
+						       })),
+					   true,
+					   100,
+					   $start);
 
-		$count = $ro_response['count'];
-		foreach ($ro_response['rows'] as $ro)
+		foreach ($records as &$ro)
 		{
-			$record = new _record($ro, $this->db);
-			$record->sets = $this->sets->get($record->id);
-			$records[] = $record;
+			$ro = new _record($ro, $this->db);
+			$ro->sets = $this->sets->get($ro->id);
 		}
-		if (count($records) == 0)
-		{
-		    throw new Oai_NoRecordsMatch_Exceptions();
-		}
-		else
-		{
-		    return array('records' => $records,
-				 'cursor' => $start + count($records),
-				 'count' => $count);
-		}
+		return array('records' => $records,
+			     'cursor' => $start + count($records),
+			     'count' => $count);
 	}
 
 	/**
