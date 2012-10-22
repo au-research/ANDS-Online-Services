@@ -58,7 +58,7 @@ require '../../_includes/header.php';
 echo '<script type="text/javascript" src="https://www.google.com/jsapi"></script>';
 
 echo '<script type="text/javascript" src="'. eAPP_ROOT.'orca/_javascript/orca_dhtml.js"></script>
-		<script type="text/javascript" src="'. eAPP_ROOT.'orca/_javascript/mmr_dhtml.js"></script>
+		<script type="text/javascript" src="'. eAPP_ROOT.'orca/_javascript/tag_dhtml.js"></script>
 		<input type="hidden" id="elementSourceURL" value="' . eAPP_ROOT . 'orca/manage/process_registry_object.php?" />';
 
 //CHOSEN Javascript library for choosing data sources
@@ -75,7 +75,7 @@ echo '<link rel="stylesheet" href="'. eAPP_ROOT.'/_javascript/qtip2/jquery.qtip.
 		<script src="'. eAPP_ROOT.'/_javascript/qtip2/jquery.qtip.js" type="text/javascript"></script>';
 
 //Specific MMR Styles
-echo '<link rel="stylesheet" href="'. eAPP_ROOT.'orca/_styles/mmr.css" />';
+echo '<link rel="stylesheet" href="'. eAPP_ROOT.'orca/_styles/tags.css" />';
 
 
 echo '<h1>Manage My Tags</h1>';
@@ -118,8 +118,50 @@ else
 
 		displayMMRDataSourceSwitcher($dataSources, $data_source_key);
 	}
-
 }
+
+
+//START HTML
+if($data_source_key){
+	$html = '
+		<div id="tags">
+			<div class="tags-header">
+				'.$data_source_key.'
+			</div>
+			<div class="tags-content">
+				<div class="tags-ro">
+					<h1>Registry Object Title</h1>
+					<ul class="tag-list">
+						<li><a tagID=1 href="javascript:;">tag</a></li>
+						<li><a tagID=1 href="javascript:;">tag</a></li>
+						<li><a tagID=1 href="javascript:;">tag</a></li>
+						<li><a tagID=1 href="javascript:;">tag</a></li>
+						<li><a tagID=1 href="javascript:;">tag</a></li>
+						<li><a tagID=1 href="javascript:;">tag</a></li>
+						<li><a tagID=1 href="javascript:;">tag</a></li>
+						<li><a tagID=1 href="javascript:;">tag</a></li>
+					</ul>
+				</div>
+			</div>
+
+			<div class="tags-content">
+				<div class="tags-ro">
+					<h1>Registry Object Title</h1>
+					<ul class="tag-list">
+						<li><a tagID=1 href="javascript:;">tag</a></li>
+						<li><a tagID=1 href="javascript:;">tag</a></li>
+						<li><a tagID=1 href="javascript:;">tag</a></li>
+						<li><a tagID=1 href="javascript:;">tag</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		Click on the tag to delete
+	';
+	echo $html;
+}
+//END
+
 
 /*
  * function that I used (Minh)
@@ -134,8 +176,6 @@ function displayMMRDataSourceSwitcher(array $dataSources = array(), $selected_ke
 	}
 
 	?>
-
-
 
 		<form id="data_source_history_form" name="data_source_history_form" action="my_tags.php" method="get">
 			<div id="select_ds_container">

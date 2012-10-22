@@ -700,8 +700,8 @@ a.borderless{
     font: bold 12px Helvetica, Arial, sans-serif;
     display: block;
     float: left;
-    padding: 0 10px;   
-    line-height:36px; 
+    padding: 0 10px;
+    line-height:36px;
     border-right:solid 1px #7f7f7f;
     height:36px;
 }
