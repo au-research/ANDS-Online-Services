@@ -3471,6 +3471,7 @@ function scheduledTaskCheck($dataSourceKey)
 	else
 		return true;
 }
+
 function getTags($keyhash)
 {
 	global $gCNN_DBS_ORCA;
@@ -3480,6 +3481,27 @@ function getTags($keyhash)
 	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
 	return $resultSet; 
 }
+
+function getTagsForDataSource($ds_key)
+{	
+	global $gCNN_DBS_ORCA;
+	$resultSet = null;
+	$strQuery = "SELECT ro.list_title, t.tag, t.id from dba.tbl_registry_objects ro, dba.tbl_tags t where t.ro_hash = ro.key_hash and ro.data_source_key = $1";
+	$params = array($ds_key);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	return $resultSet;	
+}
+
+function deleteTag($tag_id)
+{
+	global $gCNN_DBS_ORCA;
+	$strQuery = "DELETE FROM dba.tbl_tags WHERE id = $1;";
+	$params = array($tag_id);
+	$result = executeUpdateQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	return $result;
+	
+}
+
 function insertDailyStats($slug, $key, $group, $data_source, $day, $page_views,$unique_page_views,$display_title,$type)
 {
 	global $gCNN_DBS_ORCA;

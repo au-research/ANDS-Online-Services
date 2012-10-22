@@ -77,6 +77,7 @@ switch($view){
 	case "tipError": tipError($key, $dataSourceKey);break;
 	case "getAllStat": getAllStat();break;
 	case "getSummary": getSummary();break;
+	case "getDataSourceTags": getDataSourceTags($dataSourceKey);break;
 }
 
 function summary($dataSourceKey){
@@ -740,5 +741,50 @@ function getSummary()
 		echo $jsonData;
 	}
 	
+}
+
+function getDataSourceTags($data_source_key)
+{
+ 	header("Content-type: application/json; charset=UTF-8");
+ 	$tags = getTagsForDataSource($data_source_key);	
+ 	$page = isset($_GET['page']) ? $_GET['page'] : 1;
+	$rp = isset($_GET['rp']) ? $_GET['rp'] : 20;
+ 	$result = array();
+ 	$tagsArray = array();
+ 	$result['count'] = sizeof($tags); 
+ 	$result['ds'] = $data_source_key;
+ 	$result['page'] = $page;
+ 	$result['rp'] = $rp;
+ 	$roCount = 0;
+ 	$minCount = ($page -1) * $rp;
+ 	$maxCount = $page * $rp;
+ 	$result['minCount'] = $minCount;
+ 	$result['maxCount'] = $maxCount;
+ 	foreach($tags as $tag)
+ 	{
+	 	if(isset($tagsArray[$tag['list_title']]))
+	 	{
+	 		array_push($tagsArray[$tag['list_title']], array('tag'=>$tag['tag'], 'tag_id'=>$tag['id']));
+		}
+		else
+		{
+			$roCount++;
+			if($roCount > $maxCount)
+			{
+			break;
+			}
+			else
+			{
+				$tagArray = array('tag'=>$tag['tag'], 'tag_id'=>$tag['id']);
+				$tagsArray[$tag['list_title']] = array();
+				array_push($tagsArray[$tag['list_title']], $tagArray);
+			}
+
+		}		
+ 	}
+ 	$result['roCount'] = $roCount;
+ 	$result['list'] = $tagsArray;
+	$jsonData = json_encode($result);
+	echo $jsonData;
 }
 ?>
