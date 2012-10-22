@@ -50,6 +50,11 @@ else if($task == 'validate')
 	{
 		include('_processes/validate.php');
 	}
+	
+else if($task == 'deleteTag')
+	{
+		include('_processes/delete_tag.php');
+	}
 
 else if($task ==  'delete')
 	{
