@@ -30,3 +30,16 @@ function my_exception_handler( $e ) {
     echo $_ci->load->view( 'footer' , $data , true);
 }
 set_exception_handler('my_exception_handler');
+
+function asset_url( $path )
+{
+	$CI =& get_instance();
+	if ($module_path = $CI->router->fetch_module())
+	{
+		return base_url( 'assets/' . $module_path . "/" . $path );
+	}
+	else
+	{
+		return base_url( 'assets/' . $path );
+	}
+}

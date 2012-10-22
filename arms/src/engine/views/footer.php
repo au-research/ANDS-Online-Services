@@ -33,6 +33,7 @@
         var editor = '';
     </script>
     <?php foreach($js_lib as $lib):?>
+    	
         <?php if($lib=='core'):?>
             <script src="<?php echo base_url();?>assets/lib/jquery-1.7.2.min.js"></script>
             <script src="<?php echo base_url();?>assets/lib/less-1.3.0.min.js" type="text/javascript"></script>
@@ -47,32 +48,26 @@
             <script src="<?php echo base_url();?>assets/lib/bootstrap_toggle_button/jquery.toggle.buttons.js" type="text/javascript"></script>
             <script src="<?php echo base_url();?>assets/lib/qtip2/jquery.qtip.min.js" type="text/javascript"></script>
 
-
-            
-            
-        <?php endif;?>
-
-        <?php if($lib=='graph'):?>
+        <?php elseif($lib=='graph'):?>
             <!--[if lt IE 9]><script language="javascript" type="text/javascript" src="excanvas.js"></script><![endif]-->
             <script language="javascript" type="text/javascript" src="<?php echo base_url();?>assets/lib/jqplot/jquery.jqplot.min.js"></script>
             <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/lib/jqplot/jquery.jqplot.css" />
-        <?php endif;?>
-
-        <?php if($lib=='tinymce'):?>
+            
+        <?php elseif($lib=='tinymce'):?>
             <script type="text/javascript" src="<?php echo base_url();?>assets/lib/tiny_mce/tiny_mce.js"></script>
             <script>
                var editor = 'tinymce';
             </script>
-        <?php endif;?>
 
-        <?php if($lib=='datepicker'):?>
+        <?php elseif($lib=='datepicker'):?>
             <script type="text/javascript" src="<?php echo base_url();?>assets/lib/bootstrap_datepicker/js/bootstrap-datepicker.js"></script>
             <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/lib/bootstrap_datepicker/css/datepicker.css" />
-        <?php endif;?>
         
-        <?php if($lib=='abs_sdmx_querytool'):?>
+        <?php elseif($lib=='abs_sdmx_querytool'):?>
             <script type="text/javascript" src="<?php echo base_url();?>assets/js/abs_sdmx_querytool.js"></script>
-        <?php endif;?>
+  
+  
+  		<?php endif; ?>
 
     <?php endforeach;?>
 
@@ -81,8 +76,14 @@
     
 	<script src="<?php echo base_url();?>assets/js/scripts.js"></script>
 
+
+	<!-- Module-specific styles and scripts -->
     <?php foreach($scripts as $script):?>
-        <script src="<?php echo base_url();?>assets/js/<?php echo $script;?>.js"></script>
+        <script src="<?php echo asset_url('js/' . $script);?>.js"></script>
+    <?php endforeach;?>
+    
+    <?php foreach($styles as $style):?>
+    	<link rel="stylesheet" type="text/css" href="<?php echo asset_url('css/' . $style);?>.css" />
     <?php endforeach;?>
 
     

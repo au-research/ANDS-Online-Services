@@ -46,7 +46,7 @@ class MX_Router extends CI_Router
 	public function _validate_request($segments) {
 
 		if (count($segments) == 0) return $segments;
-;
+
 		/* locate module controller */
 		if ($located = $this->locate($segments)) return $located;
 		

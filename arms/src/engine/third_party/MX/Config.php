@@ -36,7 +36,7 @@
 class MX_Config extends CI_Config 
 {	
 	public function load($file = 'config', $use_sections = FALSE, $fail_gracefully = FALSE, $_module = '') {
-		
+
 		if (in_array($file, $this->is_loaded, TRUE)) return $this->item($file);
 
 		$_module OR $_module = CI::$APP->router->fetch_module();
