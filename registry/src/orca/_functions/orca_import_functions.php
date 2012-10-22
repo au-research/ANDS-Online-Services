@@ -1017,7 +1017,7 @@ function importSpatialTypes($location_id, $node, $runErrors, $totalAttemptedInse
 		$lang = $list->item($j)->getAttribute("xml:lang");
 
 		$errors = insertSpatialLocation($id, $location_id, $value, $type, $lang);
-		if(!$errors && ($type == 'gmlKmlPolyCoords' || $type == 'kmlPolyCoords' || $type == 'iso19139dcmiBox'))
+		if(!$errors)
 		{
 		$errors = importSpatialExtent($id, $value, $type, $registryObjectKey);
 		}
@@ -1033,7 +1033,7 @@ function importSpatialExtent($id, $value, $type, $registryObjectKey)
 	$west  = 180;
 	$east  = -180;
 	//$msg = '';
-
+// && ($type == 'gmlKmlPolyCoords' || $type == 'kmlPolyCoords' || $type == 'iso19139dcmiBox')
 	if($type == 'kmlPolyCoords' || $type == 'gmlKmlPolyCoords')
 	{
 		$tok = strtok($value, " ");
@@ -1068,7 +1068,7 @@ function importSpatialExtent($id, $value, $type, $registryObjectKey)
 		}
 
 	}
-	if($type == 'iso19139dcmiBox')
+	elseif($type == 'iso19139dcmiBox')
 	{
 	//northlimit=-23.02; southlimit=-25.98; westlimit=166.03; eastLimit=176.1; projection=WGS84
 	$north = null;
@@ -1098,10 +1098,93 @@ function importSpatialExtent($id, $value, $type, $registryObjectKey)
 		  	$tok = strtok(";");
 		}
 	}
+	elseif($type == 'iso19139dcmiPoint' || $type == 'dcmiPoint') //"name=Tasman Sea, AU; east=160.0; north=-40.0"
+	{
+	//northlimit=-23.02; southlimit=-25.98; westlimit=166.03; eastLimit=176.1; projection=WGS84
+	$north = null;
+	$south = null;
+	$west  = null;
+	$east  = null;
+		$tok = strtok($value, ";");
+		while ($tok !== FALSE)
+		{
+			$keyValue = explode("=",$tok);
+			if(strtolower(trim($keyValue[0])) == 'north' && is_numeric($keyValue[1]))
+			{
+			  $north = floatval($keyValue[1]);
+			  $south = floatval($keyValue[1]);
+			}
+			if(strtolower(trim($keyValue[0])) == 'east' && is_numeric($keyValue[1]))
+			{
+			  $west = floatval($keyValue[1]);
+			  $east = floatval($keyValue[1]);
+			}
+		  	$tok = strtok(";");
+		}
+	}
+	elseif($type == 'text' || $type == 'iso31661' || $type == 'iso31662' || $type == 'iso31663' || $type == 'iso3166') //"name=Tasman Sea, AU; east=160.0; north=-40.0"
+	{
+	//northlimit=-23.02; southlimit=-25.98; westlimit=166.03; eastLimit=176.1; projection=WGS84
+	$north = null;
+	$south = null;
+	$west  = null;
+	$east  = null;
+		$searchText = trim($value);
+		getExtentFromGoogle(trim($value), &$north, &$south, &$west, &$east);
+	}
 	//$msg = $msg.'<br/> north:'.$north.' south:'.$south.' west:'.$west.' east:'.$east;
-
+	if($north != null && $south != nul && $west  != null && $east != null && $north <= 90 && $south >= -90 && $west  >= -180 && $east <= 180){
 	return insertSpatialExtent($id, $id, $registryObjectKey, $north, $south, $west, $east);
+	}
+	else{
+		return false;
+	}
 	//print($msg);
+}
+
+
+function getExtentFromGoogle($value, &$north, &$south, &$west, &$east)
+{
+	
+	$url = "http://maps.google.com/maps/api/geocode/json?sensor=false&address=";
+	$url = $url.urlencode($value);      
+	$resp_json = curl_file_get_contents($url);
+	$resp = json_decode($resp_json, true);
+
+	if($resp['status']=='OK'){
+		
+		if($resp['results'][0]['geometry']['viewport'])
+		{
+			$north = $resp['results'][0]['geometry']['viewport']['northeast']['lat'];
+			$south = $resp['results'][0]['geometry']['viewport']['southwest']['lat'];
+			$east = $resp['results'][0]['geometry']['viewport']['northeast']['lng'];
+			$west = $resp['results'][0]['geometry']['viewport']['southwest']['lng'];			
+		}
+		elseif($resp['results'][0]['geometry']['location'])
+		{
+			$north = $resp['results'][0]['geometry']['location']['lat'];
+			$south = $north;
+			$east = $resp['results'][0]['geometry']['location']['lng'];
+			$west = $east;			  
+		}
+		
+	}
+	else
+	{
+		return false;
+	}
+}
+
+function curl_file_get_contents($URL)
+{
+        $c = curl_init();
+        curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($c, CURLOPT_URL, $URL);
+        $contents = curl_exec($c);
+        curl_close($c);
+
+        if ($contents) return $contents;
+            else return FALSE;
 }
 
 function importRelatedObjectTypes($registryObjectKey, $node, $elementName, $runErrors, $totalAttemptedInserts, $totalInserts)
@@ -1461,7 +1544,7 @@ function importCoverage($registryObjectKey, $node, $elementName, $runErrors, $to
 			$lang = $spatialCoverageElements->item($k)->getAttribute("xml:lang");
 
 			$errors = insertSpatialCoverage($id, $coverageId, $value, $type, $lang);
-			if(!$errors && ($type == 'gmlKmlPolyCoords' || $type == 'kmlPolyCoords' || $type == 'iso19139dcmiBox'))
+			if(!$errors)
 			{
 			$errors = importSpatialExtent($id, $value, $type, $registryObjectKey);
 			}

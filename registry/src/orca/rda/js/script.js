@@ -1655,11 +1655,12 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 		    $.each(coverages, function(){
 		    	setTimeout('500');
 		    	var coverageText = $(this).text();
-		    	if(coverageText.indexOf('northlimit')==-1){
+		    	if(coverageText.indexOf('northlimit')==-1 && coverageText.indexOf('north')==-1){
 		    		
 		    		//there is no north limit
+		    		//console.log("coverageText1" ,coverageText);
 		    		if(validateLonLatText(coverageText)){//if the coverage text is resolvable (normal way)
-		    			//console.log(coverageText);
+		    			//console.log("YES " + coverageText);
 						coverage = $(this).html();
 						drawable = true;
 						split = coverage.split(' ');
@@ -1708,11 +1709,11 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 						//$('#spatial_coverage_map').hide();	
 					}
 		    		
-		    	}else{
+		    	}else if(coverageText.indexOf('northlimit') >= 0){
 		    		drawable = true;
 		    		mapContainsOnlyMarkers = false;
 		    		//there is a northlimit in the coverage text
-		    		//console.log(coverages);
+		    		//console.log("coverageText2" ,coverageText);
 
 			    	$.each(coverages, function(){
 			    		coverage = $(this).html();
@@ -1751,6 +1752,32 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 			    		//console.log(poly);
 					});
 		    	}
+		    	else if(coverageText.indexOf('north') >= 0){
+		    		drawable = true;
+			    	split = coverageText.split(';');
+			    	//console.log("coverageText3" ,coverageText);	
+			    		$.each(split, function(){
+							word = this.split('=');
+							
+							if(jQuery.trim(word[0])=='north') n=word[1];
+							if(jQuery.trim(word[0])=='east') e=word[1];
+						});
+			    		var coord = new google.maps.LatLng(parseFloat(n), parseFloat(e));
+			    		//console.log("coord" , coord);
+			    		var marker = new google.maps.Marker({
+			            map: map2,
+			            position: coord,
+			            draggable: false,
+			            raiseOnDrag:false,
+			            visible:true
+			        });
+			        // CC-197/CC-304 - Center map on markers
+			        bounds.extend(coord);
+
+
+			        marker.setMap(map2);
+			    		//console.log(poly);
+				}
 		    });
 		    //console.log(locationText);
 		    var next = 0;
@@ -1881,7 +1908,7 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
   				//	}
   				},
   				error:function(msg){
-  					console.log('error');
+  					//console.log('error');
   				}
   		});	
 	}
@@ -2809,7 +2836,26 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
       google.maps.event.addListener(drawingManager, 'drawingmode_changed', function(e) {
     	  var drawingMode = drawingManager.getDrawingMode();
     	  if(drawingMode==='rectangle') clearMap();
+    	    $('img').each(function(){
+    	    	if($(this).attr('src')=='http://maps.gstatic.com/mapfiles/drawing.png'){
+    	    		$(this).attr('src', 'null');
+    	    	}
+    	    });
       });
+      
+     google.maps.event.addListenerOnce(map, 'idle', function(){
+   	  $('img').each(function(){
+
+	    	if($(this).attr('src')=='http://maps.gstatic.com/mapfiles/drawing.png'){
+	    		//console.log("tilesloaded " + $(this).attr('src'));
+	    		$(this).attr('src', base_url+'/img/drawing.png');
+	    	}
+	  });
+     });
+     //console.log(drawingManager)
+      
+
+
     
     //GEOCODER
     var geocoder = new google.maps.Geocoder();
@@ -3043,7 +3089,7 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
     	
 		//if(!drawable) $('#spatial_coverage_map').hide();
     }
-    
+
 });//END DOCUMENT READY
 
 

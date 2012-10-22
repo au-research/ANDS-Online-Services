@@ -63,7 +63,7 @@ require '../../_includes/header.php';
 	tabs["#relatedObject"] = {name:"Related Objects",cpg:"http://ands.org.au/guides/cpguide/cpgrelatedobject.html"};
 	tabs["#subject"] = {name:"Subjects",cpg:"http://ands.org.au/guides/cpguide/cpgsubject.html"};
 	tabs["#existenceDates"] = {name:"Existence Dates",cpg:"http://ands.org.au/guides/cpguide/cpgexistencedates.html"};
-//	tabs["#coverage"] = {name:"Coverage",cpg:"http://ands.org.au/guides/cpguide/cpgcoverage.html", cError:false , cWarning:false};
+	tabs["#coverage"] = {name:"Coverage",cpg:"http://ands.org.au/guides/cpguide/cpgcoverage.html", cError:false , cWarning:false};
 	tabs["#relatedInfo"] = {name:"Related Info",cpg:"http://ands.org.au/guides/cpguide/cpgrelatedinfo.html"};
 	<?php
 

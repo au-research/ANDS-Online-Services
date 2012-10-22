@@ -525,6 +525,10 @@ addMenu($menu);
 			$activity->help_content_uri = eAPP_ROOT.'orca/_helpcontent/hc_manage_my_records.php';
 			$activity->help_content_fragment_id = 'mmr';
 			addActivity($activity);
+			
+			$activity = new activity('aORCA_REGISTRY_OBJECT_ADMIN_MY_TAGS', 'Manage My Tags', 'orca/manage/my_tags.php');
+			$activity->menu_id = 'mORCA_REGISTRY_OBJECTS';
+			addActivity($activity);
 
 
 			// =============================================================================

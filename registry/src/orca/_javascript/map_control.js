@@ -45,6 +45,7 @@ var mctMarkers = new Array();
 var mctMarkerListeners = new Array();
 var mctPolygons = new Array();
 var mctTempPolygons = new Array();
+var mctfeatureTypes = new Array();
 var mctGeocoder = null;
 var mctDrawingManagers = new Array(); // probably not useed
 var mctErrorMessage = "";
@@ -54,7 +55,8 @@ var mctCurrentMapId = "";
 function mctInit(imagePath, servicePath)
 {
 	mctImagesRootPath = imagePath;	
-	mctServicePath = servicePath;	
+	mctServicePath = servicePath;
+	mctLoadFeatureTypes();
 }
 
 function mctGetErrorMessage()
@@ -66,6 +68,20 @@ function mctSetErrorMessage(message)
 {
 	mctErrorMessage = message;
 	//console.log(mctErrorMessage);
+}
+
+function mctLoadFeatureTypes()
+{
+	var requestUrl = mctServicePath + '?feature=state.&callback=?';
+	$.getJSON(requestUrl, function(data) {
+		mctAddFeatureTypes(data);
+	});
+	
+	requestUrl = mctServicePath + '?feature=feature&callback=?';
+	$.getJSON(requestUrl, function(data) {
+		mctAddFeatureTypes(data);
+	});
+
 }
 
 function mctGetOriginalInputFieldValue(controlDivId)
@@ -905,12 +921,7 @@ function mctAddAddressToMap(results, status)
 		{
 			var accuracy = results[i].geometry.location_type;
 			//console.log(accuracy);
-			if(accuracy == 'ROOFTOP' || accuracy == 'APPROXIMATE')
-			{
-				coordString = results[i].geometry.location.lng().toFixed(6) +","+ results[i].geometry.location.lat().toFixed(6) ;
-				markerBullet = '&#8226;';				
-			}			
-			else
+			if(results[i].geometry.bounds)
 			{
 				var nE = results[i].geometry.bounds.getNorthEast();
 				var sW = results[i].geometry.bounds.getSouthWest();
@@ -919,7 +930,12 @@ function mctAddAddressToMap(results, status)
 				coordString += sW.lng().toFixed(6) +","+ sW.lat().toFixed(6)+" ";
 				coordString += nE.lng().toFixed(6) +","+ sW.lat().toFixed(6)+" ";
 				coordString += nE.lng().toFixed(6) +","+ nE.lat().toFixed(6);
-				markerBullet = '&#9633;';
+				markerBullet = '&#9633;';			
+			}			
+			else
+			{	
+				coordString = results[i].geometry.location.lng().toFixed(6) +","+ results[i].geometry.location.lat().toFixed(6) ;
+				markerBullet = '&#8226;';	
 			}
 			//console.log(coordString);
 			resultText  += "<div class='mct_search_result' onclick='mctSetMapFromSearchResult(\""+coordString+"\",\""+mctCurrentMapId+"\");' title=\"Set the map with this search result\">" + markerBullet + "&nbsp;"+ results[i].formatted_address+"</div>";
@@ -932,20 +948,23 @@ function mctAddAddressToMap(results, status)
 
 function mctGazetteerGeocoder(searchText)
 {
-	var requestUrl = mctServicePath + '?searchText=*' + encodeURIComponent(searchText) + '&limit=14';
-	$.ajax({
-			type:"GET",  
-			crossDomain: true,
-			dataType: 'json',
-			url: requestUrl,   
-				success:function(data){
-					mctDisplayGazetteerData(data);
-				},
-				error:function(data){
-					$('#debug').append('doSearch error: '+data+'<br/>');
-				}
-			});
+	var requestUrl = mctServicePath + '?searchText=*' + encodeURIComponent(searchText) + '*&limit=14&callback=?';	
+	$.getJSON(requestUrl, function(data) {
+		mctDisplayGazetteerData(data);
+	});
 }
+
+
+function mctAddFeatureTypes(data)
+{
+	for( var i=0; i < data.items.length; i++ ) 
+	{
+		var title = data.items[i].title;
+		var	id = data.items[i].id;
+		mctfeatureTypes[id] = title;
+	}
+}
+
 
 function mctDisplayGazetteerData(data)
 {
@@ -967,65 +986,24 @@ function mctDisplayGazetteerData(data)
 			var	typetext = '';
 			for( var j=0; j < data.items[i].types.length; j++ ) 
 			{
-			typetext += data.items[i].types[j] + ' ';
+				if(j != 0)
+					typetext += ', '
+				if(mctfeatureTypes[data.items[i].types[j]]){
+					typetext += mctfeatureTypes[data.items[i].types[j]];
+				}
+				else{
+					typetext += data.items[i].types[j];
+				}
+
 			}
 			//console.log(coordString);
-			resultText  += "<div class='mct_search_result' onclick='mctSetMapFromSearchResult(\""+coordString+"\",\""+mctCurrentMapId+"\");' title=\"Set the map with this search result\">" + markerBullet + "&nbsp;"+ data.items[i].title + "( " + typetext + ")</div>";
+			resultText  += "<div class='mct_search_result' onclick='mctSetMapFromSearchResult(\""+coordString+"\",\""+mctCurrentMapId+"\");' title=\"Set the map with this search result\">" + markerBullet + "&nbsp;"+ data.items[i].title + " (" + typetext + ")</div>";
 		}
 	}
   	var searchResultsDivId = MCT_ADDRESS_SEARCH_RESULTS_ID_PREFIX + mctCurrentMapId;
 	var searchResultsDiv = getObject(searchResultsDivId);	
 	searchResultsDiv.innerHTML = resultText;	
-
-
-
-
 }
-
-function mctGazetteerAddAddressToMap(results, status)
-{
-    var markerBullet = '';
-	var resultText = "";
-	var coordString = "";
-	//console.log(status);
-	if(status != google.maps.GeocoderStatus.OK) 
-	{
-		resultText = "No locations found";
-	} 
-	else 
-	{	
-		 // Loop through the results		
-		for( var i=0; i < results.length; i++ ) 
-		{
-			var accuracy = results[i].geometry.location_type;
-			//console.log(accuracy);
-			if(accuracy == 'ROOFTOP')
-			{
-				coordString = results[i].geometry.location.lng().toFixed(6) +","+ results[i].geometry.location.lat().toFixed(6) ;
-				markerBullet = '&#8226;';				
-			}			
-			else
-			{
-				var nE = results[i].geometry.bounds.getNorthEast();
-				var sW = results[i].geometry.bounds.getSouthWest();
-				coordString = nE.lng().toFixed(6) +","+ nE.lat().toFixed(6)+" ";
-				coordString += sW.lng().toFixed(6) +","+ nE.lat().toFixed(6)+" ";
-				coordString += sW.lng().toFixed(6) +","+ sW.lat().toFixed(6)+" ";
-				coordString += nE.lng().toFixed(6) +","+ sW.lat().toFixed(6)+" ";
-				coordString += nE.lng().toFixed(6) +","+ nE.lat().toFixed(6);
-				markerBullet = '&#9633;';
-			}
-			//console.log(coordString);
-			resultText  += "<div class='mct_search_result' onclick='mctSetMapFromSearchResult(\""+coordString+"\",\""+mctCurrentMapId+"\");' title=\"Set the map with this search result\">" + markerBullet + "&nbsp;"+ results[i].formatted_address+"</div>";
-		}
-	}
-  	var searchResultsDivId = MCT_ADDRESS_SEARCH_RESULTS_ID_PREFIX + mctCurrentMapId;
-	var searchResultsDiv = getObject(searchResultsDivId);	
-	searchResultsDiv.innerHTML = resultText; 
-}
-
-
-
 
 
 function mctSetMapFromSearchResult(coordString, controlDivId)

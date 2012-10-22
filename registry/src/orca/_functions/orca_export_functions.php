@@ -765,7 +765,7 @@ function getSpatialCoverageXML($coverage_id, $forSOLR)
 			{
 				$lang = ' xml:lang="'.esc($lang).'"';
 			}
-			$value = esc($element['value']);
+			$value = esc(trim($element['value']));
 
 			$xml .= "        <spatial$type$lang>$value</spatial>\n";
 
@@ -775,9 +775,22 @@ function getSpatialCoverageXML($coverage_id, $forSOLR)
 				$xml .= "        <extRif:spatial$type$lang>\n";
 				$spatialLocationId = $element['spatial_location_id'];
 				$sizeOfArea = getSizeOfSpatialExtent($spatialLocationId);
-				
+				$pathOfArea = getPathOfSpatialExtent($spatialLocationId);
 				$centre = '';
-				if($element['type'] == 'iso19139dcmiBox')
+				if($pathOfArea && ($element['type'] == 'dcmiPoint' || $element['type'] == 'iso31662' || $element['type'] == 'iso31663' || $element['type'] == 'iso3166' || $element['type'] == 'iso31661' || $element['type'] == 'text') )
+				{
+				$pathOfArea = str_replace( ')', '', $pathOfArea); 
+				$pathOfArea = str_replace( '(', '', $pathOfArea); 
+				$points = explode(',', $pathOfArea);
+				$north = $points[0];
+				$east = $points[1];
+				$south = $points[2];
+				$west = $points[3];
+				$centre = (($east+$west)/2).','.(($north+$south)/2);
+				$xml .= "          <extRif:coords>$west,$north $east,$north $east,$south $west,$south $west,$north</extRif:coords>\n";
+				$xml .= "          <extRif:area>$sizeOfArea</extRif:area>\n";
+				}
+				elseif($element['type'] == 'iso19139dcmiBox')
 				{
 					$valueString =  strtolower(esc($element['value'])).';';
 					$matches = array();
@@ -2864,6 +2877,7 @@ function curl_post($url, $post)
            echo "------------------------------------\n";
         } */
 }
+
 function changeFromCamelCase($camelCaseString)
 {
 	$output = '';

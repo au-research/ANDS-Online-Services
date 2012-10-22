@@ -686,7 +686,7 @@ function updateRecordsForDataSource($dataSourceKey, $manuallyPublish,$manuallyPu
 
 	$actions = '';
 	if($createPrimary=='0') $createPrimary='f';
-	
+	$resyncNeeded = false;
 	if(($manuallyPublish == 0 || $manuallyPublish == 'f') && $manuallyPublishOld == 't')
 	{
 		// set Approved to Published for all registry Objects
@@ -701,6 +701,7 @@ function updateRecordsForDataSource($dataSourceKey, $manuallyPublish,$manuallyPu
 		}
 		
 		insertDataSourceEvent($dataSourceKey, $actions);
+		$resyncNeeded = true;
 	}
 	//echo $createPrimary." = new :: ".$oldCreatePrimary." = old ";
 	//if($createPrimary!=$oldCreatePrimary||$class_1!=$class_1_old||$class_2!=$class_2_old)
@@ -780,8 +781,12 @@ function updateRecordsForDataSource($dataSourceKey, $manuallyPublish,$manuallyPu
 		}
 
 		insertDataSourceEvent($dataSourceKey, $actions);	
+		$resyncNeeded = true;
 	}
-	queueSyncDataSource($dataSourceKey);
+	if($resyncNeeded) // don't reSync if nothing has changed!!
+	{
+		queueSyncDataSource($dataSourceKey);
+	}
 	
 }
 

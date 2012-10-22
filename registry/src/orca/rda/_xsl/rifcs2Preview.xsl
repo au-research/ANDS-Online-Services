@@ -114,14 +114,14 @@
             <p><b><xsl:value-of select="$coverageLabel"/></b></p>
             <xsl:variable name="needMap">   
                 <xsl:for-each select="ro:coverage/ro:spatial"> 
-             	<xsl:if test="not(./@type) or (./@type!='text' and ./@type!='dcmiPoint')">        	
+             	<xsl:if test="not(./@type) or (./@type!='text')">        	
                       <xsl:text>yes</xsl:text>
                </xsl:if>
 
                </xsl:for-each>  
                     
              	<xsl:for-each select="ro:location/ro:spatial"> 
-             	<xsl:if test="not(./@type) or (./@type!='text' and ./@type!='dcmiPoint')">        	
+             	<xsl:if test="not(./@type) or (./@type!='text')">        	
                       <xsl:text>yes</xsl:text>
                </xsl:if>            
                </xsl:for-each>                 
@@ -656,10 +656,10 @@ Handle:
     </xsl:template> 
     
     <xsl:template match="ro:spatial">
-      <xsl:if test="not(./@type) or (./@type!= 'text' and ./@type!= 'dcmiPoint')">
+      <xsl:if test="not(./@type) or (./@type!= 'text')">
       	<p class="coverage" name="{@type}"><xsl:value-of select="."/></p>
       </xsl:if>
-      <xsl:if test="./@type= 'text' or ./@type= 'dcmiPoint'">
+      <xsl:if test="./@type= 'text' or not(./@type)">
      	 <p class="coverage_text"><xsl:value-of select="./@type"/>: <xsl:value-of select="."/></p>
       </xsl:if>     
     </xsl:template>
