@@ -4,8 +4,8 @@ class _record
 	public $id;
 	public $sets;
 	private $header;
-	private $db;
 	private $_rec;
+	public $mtime;
 
 	/**
 	 * @ignore
@@ -14,7 +14,7 @@ class _record
 	{
 		$this->_rec = $registry_object;
 		$this->id = $registry_object->registry_object_id;
-		$this->db = $db;
+		$this->mtime = $this->_latest($db);
 	}
 
 	public function is_deleted()
@@ -26,7 +26,7 @@ class _record
 	{
 		$this->header = array();
 		$this->header['identifier'] = $this->identifier();
-		$this->header['datestamp'] = $this->latest();
+		$this->header['datestamp'] = $this->mtime;
 		if (isset($this->sets))
 		{
 			if (is_array($this->sets))
@@ -89,8 +89,10 @@ class _record
 
 	/**
 	 * Retrieve the latest timestamp for this record
+	 * @param reference to CodeIgniter db object
+	 * @return an ISO 8601 formatted string for the date
 	 */
-	public function latest()
+	private function _latest(&$db)
 	{
 		$created;
 		$updated;
@@ -98,7 +100,7 @@ class _record
 
 		foreach (array("created", "updated") as $type)
 		{
-			$query = $this->db->select_max("value")
+			$query = $db->select_max("value")
 				->get_where("registry_object_attributes",
 					    array("registry_object_id" => $this->id,
 						  "attribute" => $type));
