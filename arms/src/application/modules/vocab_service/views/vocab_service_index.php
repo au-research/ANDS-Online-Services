@@ -224,7 +224,7 @@
 						<div class="btn-group btn-group-vertical btn-group-left item-control" vocab_id="{{id}}">
 							<button class="btn edit"><i class="icon-edit"></i> Edit Vocabulary</button>
 							<button class="btn delete"><i class="icon-trash"></i> Delete Vocabulary</button>
-							<button class="btn addVersion"><i class="icon-plus"></i> Add A Version</button>
+							<button class="btn addVersion" vocab_id="{{id}}"><i class="icon-plus"></i> Add A Version</button>
 						</div>
 					</div>
 					
@@ -246,7 +246,7 @@
 					{{/noVersions}}
 
 					{{#owned}}
-					<li><a href="javascript:;"><i class="icon-plus"></i> Add a Version</a></li>
+					<li class="addVersion" vocab_id="{{id}}"><a href="javascript:;"  ><i class="icon-plus"></i> Add a Version</a></li>
 					{{/owned}}
 					</ul>
 				</div>
@@ -268,6 +268,17 @@
 			</div>
 
 		</div>
+	</div>
+
+	<div class="hide" id="add-version-to-vocab">
+		<form class="form-inline" vocab_id="{{id}}">
+			<label>Version Title: </label>
+			<input type="text" class="input-medium" name="title" placeholder="Version Title">
+			<label class="checkbox">
+		    	<input type="checkbox" name="current"> Make Current
+		    </label>
+			<button type="submit" class="btn addVersionButton">Add Version</button>
+		</form>
 	</div>
 			
 	{{/item}}
@@ -322,15 +333,49 @@
 		{{/items}}
 	</ul>
 	{{/hasItems}}
+
+	{{#noItems}}
+		<p>This version has no downloadable formats available</p>
+	{{/noItems}}
+
+	{{#owned}}
+		<div class="btn-group">
+  			<button class="btn addFormat"><i class="icon-plus"></i> Add a Format</button>
+  			<button class="btn editVersion" version_id="{{id}}"><i class="icon-edit"></i></button>
+	  		<button class="btn deleteVersion" version_id="{{id}}"><i class="icon-trash"></i></button>
+		</div>
+		
+		<div class="editVersionForm hide" version_id="{{id}}"><hr/>
+			<form class="form well" vocab_id="{{id}}">
+				<label>Version Title: </label>
+				<input type="text" class="input-medium" name="title" value="{{title}}">
+				{{#current}}
+				<label class="checkbox">
+			    	<input type="checkbox" checked=checked name="current"> Make Current
+			    </label>
+				{{/current}}
+				{{#notCurrent}}
+				<label class="checkbox">
+			    	<input type="checkbox" name="current"> Make Current
+			    </label>
+				{{/notCurrent}}
+				
+				<button type="submit" class="btn editVersionConfirm" version_id="{{id}}">Submit Changes</button> <a href="javascript:;" version_id="{{id}}" class="cancelEdit">Cancel</a>
+			</form>
+		</div>
+
+		<div class="deleteVersionForm hide" version_id="{{id}}"><hr/>
+			<div class='well'>
+				<p>Are you sure you want to delete this version <br/>and all file formats associated with this version?</p>
+				<p>
+					<button type="submit" version_id="{{id}}" vocab_id="{{vocab_id}}" class="btn btn-error deleteVersionConfirm">Yes</button>
+					<a href="javascript:;" version_id="{{id}}" class="cancelDelete">No</a>
+				</p>
+			</div>
+		</div>
+	{{/owned}}
 </script>
 
-<?php
-	$vocab_changes_view_fields = array(
-		'id' => 'Id',
-		'change_date' => 'Change Date',
-		'description' => 'Description',
-	);
-?>
 
 <script type="text/x-mustache" id="vocab-changes-view-template">
 	{{#hasChanges}}
@@ -391,7 +436,7 @@
 	<div class="">
 
 
-		<form class="form-horizontal"  enctype="multipart/form-data"  id="edit-form">
+		<form class="form-horizontal"  enctype="multipart/form-data"  id="edit-form" vocab_id="{{id}}">
 			<div class="tab-content">
 				<div id="admin" class="tab-pane active">
 					<fieldset>
@@ -478,7 +523,7 @@
 				</div>
 	
 			</div>
-			<button class="btn" id="save-edit-form" data-loading-text="Saving..." >Save</button>
+			<button class="btn" id="save-edit-form" data-loading-text="Saving..." >Save</button> <span id="save-edit-form-message"></span>
 			<div class="modal hide" id="myModal">
 			  <div class="modal-header">
 			    <button type="button" class="close" data-dismiss="modal">×</button>
@@ -495,6 +540,7 @@
 	</div>
 	{{/item}}
 </script>
+
 
 <?php
 	$vocab_version_edit_fields = array(

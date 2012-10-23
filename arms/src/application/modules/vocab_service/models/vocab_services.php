@@ -45,8 +45,7 @@ class Vocab_services extends CI_Model {
 	 */	
 	function getVersionsByID($id)
 	{
-		$qry = 'SELECT * FROM vocab_versions, vocab_version_formats WHERE vocab_versions.vocab_id = '.$id.' AND vocab_version_formats.version_id = vocab_versions.id ORDER BY vocab_version_formats.version_id DESC';
-		$query = $this->db->query($qry);
+		$query = $this->db->order_by('status asc')->select()->get_where('vocab_versions', array('vocab_id'=>$id));
 		
 		if ($query->num_rows() == 0)
 		{
@@ -122,7 +121,7 @@ class Vocab_services extends CI_Model {
 	 * @param the vocab ID
 	 * @return vocab versions or NULL
 	 */	
-	function getVersionByID($id)
+	function getVersionByID_old($id)
 	{
 		$qry = 'SELECT * FROM vocab_versions, vocab_version_formats WHERE vocab_versions.id = '.$id.' AND vocab_version_formats.version_id = vocab_versions.id';
 		$query = $this->db->query($qry);
@@ -139,7 +138,30 @@ class Vocab_services extends CI_Model {
 			return $vocab_version;
 		}	
 		
-	}	
+	}
+
+	function getVersionByID($id){
+		$query = $this->db->limit(1)->select()->get_where('vocab_versions', array('id'=>$id));
+		if($query->num_rows()==0){
+			return null;
+		}else{
+			$results = $query->result();
+			return $results[0];
+		}
+	}
+
+
+
+
+	function getVocabIDbyVersion($version_id){
+		$query = $this->db->select()->get_where('vocab_versions', array('id'=>$version_id));
+		if($query->num_rows()==0){
+			return null;
+		}else{
+			$results = $query->result();
+			return $results[0]->vocab_id;
+		}
+	}
 	
 	/**
 	 * Returns all formats of a version (or NULL)
@@ -177,9 +199,11 @@ class Vocab_services extends CI_Model {
 		{
 			return NULL;
 		}
-			
-
 	}	
+
+	function deleteVersion($id){
+		return $this->db->delete('vocab_versions', array('id' => $id)); 
+	}
 	
 	/**
 	 * adds a  format to a vocab version
@@ -196,9 +220,53 @@ class Vocab_services extends CI_Model {
 		{
 			return NULL;
 		}
-			
-
 	}	
+
+	function addVersion($vocab_id, $version){
+		if($version['makeCurrent']){
+			$status = 'current';
+		}else $status = 'superceded';
+
+		//if adding a current version, all other versions must be superceded
+		if($status=='current'){
+			$data = array(
+               'status' => 'superceded'
+            );
+			$this->db->update('vocab_versions', $data); 
+		}
+
+		//and then we add the version
+		$data = array(
+			'title'=>$version['title'],
+			'status'=>$status,
+			'vocab_id'=>$vocab_id
+		);
+
+		$this->db->insert('vocab_versions', $data);
+	}
+
+	function updateVersion($version){
+		if($version['makeCurrent']){
+			$status = 'current';
+		}else $status = 'superceded';
+
+		//if adding a current version, all other versions must be superceded
+		if($status=='current'){
+			$data = array(
+               'status' => 'superceded'
+            );
+			$this->db->update('vocab_versions', $data);
+		}
+
+		//now we update our version
+		$data = array(
+			'title' => $version['title'],
+        	'status' => $status
+        );
+        $this->db->where('id', $version['id']);
+		$this->db->update('vocab_versions', $data); 
+
+	}
 
 
 

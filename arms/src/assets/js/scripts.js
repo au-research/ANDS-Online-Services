@@ -79,7 +79,7 @@ $(document).ready(function(){
 
 
 	//jgrowl
-	window.createGrowl = function(persistent) {
+	window.createGrowl = function(persistent, content) {
 	    // Use the last visible jGrowl qtip as our positioning target
 	    var target = $('.qtip.jgrowl:visible:last');
 
@@ -87,7 +87,7 @@ $(document).ready(function(){
 	    $('#main-content').qtip({
 	        // Any content config you want here really.... go wild!
 	        content: {
-	            text: 'Testing out our jGrowl implementation (persistent: ' + persistent + ')',
+	            text: content,
 	            title: {
 	                text: 'Attention!',
 	                button: true
