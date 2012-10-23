@@ -40,7 +40,8 @@ ul.tag-list{
 }
 
 ul.tag-list li{
-	display:inline;
+	display:inline-block;
+	width:auto;
 }
 
 ul.tag-list li a{

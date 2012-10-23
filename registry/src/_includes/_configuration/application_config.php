@@ -526,10 +526,6 @@ addMenu($menu);
 			$activity->help_content_fragment_id = 'mmr';
 			addActivity($activity);
 			
-			$activity = new activity('aORCA_REGISTRY_OBJECT_ADMIN_MY_TAGS', 'Manage My Tags', 'orca/manage/my_tags.php');
-			$activity->menu_id = 'mORCA_REGISTRY_OBJECTS';
-			addActivity($activity);
-
 
 			// =============================================================================
 			// Add Record Submenu
@@ -657,6 +653,10 @@ addMenu($menu);
 			// =============================================================================
 			// Export from a Data Source
 			$activity = new activity('aORCA_DATA_SOURCE_EXPORT', 'Export from Data Source', 'orca/admin/data_source_export.php');
+			$activity->menu_id = 'mORCA_DATA_SOURCE_ADMIN';
+			addActivity($activity);
+			
+			$activity = new activity('aORCA_REGISTRY_OBJECT_ADMIN_MY_TAGS', 'Manage My Tags', 'orca/manage/my_tags.php');
 			$activity->menu_id = 'mORCA_DATA_SOURCE_ADMIN';
 			addActivity($activity);
 			

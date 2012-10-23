@@ -890,6 +890,7 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 
 			$('#captchaError').html('<br />')
 			$('#tagError').html('<br />');
+			console.log(theTag);
 			if(theTag=='') 
 			{
 				$('#tagError').html('You must provide a tag');
@@ -910,7 +911,7 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 							$.ajax({
 								type:"POST",   
 								url: url, 
-								data:"tag="+theTag+"&keyHash="+keyHash+"&contributed_by="+contributed_by,   
+								data:"tag="+escape(theTag)+"&keyHash="+keyHash+"&contributed_by="+contributed_by,   
 				  					success:function(msg){	
 				  						if(msg==1)
 				  						{

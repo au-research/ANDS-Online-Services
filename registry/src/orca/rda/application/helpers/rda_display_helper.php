@@ -464,11 +464,13 @@ function addTag($tag,$keyHash,$contributed_by)
 	$CI =& get_instance();
 	$CI->load->database();
 	$tag = strtolower($tag);
-	$checkQuery = "SELECT * FROM dba.tbl_tags WHERE tag ='".$tag."' AND ro_hash = '".$keyHash."'";
+	$tag = str_replace('\'', '\\\'', $tag);
+	//echo $tag;
+	$checkQuery = "SELECT * FROM dba.tbl_tags WHERE tag =E'".$tag."' AND ro_hash = '".$keyHash."'";
 	$query = $CI->db->query($checkQuery); 
-	if($query->num_rows()==0)
+	if($query && $query->num_rows()==0)
 	{
-		$insertQuery = 'INSERT INTO dba.tbl_tags ("tag","ro_hash","contributed_by") VALUES (\''.$tag.'\',\''.$keyHash.'\',\''.$contributed_by.'\')';
+		$insertQuery = 'INSERT INTO dba.tbl_tags ("tag","ro_hash","contributed_by") VALUES (E\''.$tag.'\',\''.$keyHash.'\',\''.$contributed_by.'\')';
 		$query = $CI->db->query($insertQuery); 
 		return $query;
 	}else{

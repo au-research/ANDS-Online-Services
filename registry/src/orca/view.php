@@ -604,13 +604,8 @@ if( $registryObject )
 		foreach($tags as $tag)
 			{
 				print('<li>');
-				print('<a href="#">'.$tag['tag']." ".$tag['id'].'</a>');
+				print('<a tagID="'.$tag['id'].'" href="javascript:;">'.$tag['tag'].'</a>');
 				print('</li>');
-				/*print("	  <tr><td></td>\n");
-				print("	    <td>\n");
-				print($tag['tag']." ".$tag['id']);
-				print("	    </td>\n");
-				print("	  </tr>\n");*/
 			}
 		print('</ul>');
 		print('			</table>'."\n");

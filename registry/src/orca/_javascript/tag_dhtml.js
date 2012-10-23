@@ -1,3 +1,4 @@
+/*
 var dsKey;
 var dsName;
  
@@ -32,3 +33,5 @@ $(document).ready(function() {
 		alert('Deleting tag id = '+tagID);
 	});
 });//end
+
+*/

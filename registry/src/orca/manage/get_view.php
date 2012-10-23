@@ -760,19 +760,21 @@ function getDataSourceTags($data_source_key)
  	$maxCount = $page * $rp;
  	$result['minCount'] = $minCount;
  	$result['maxCount'] = $maxCount;
+ 	//var_dump($tags);
+ 	//exit();
  	foreach($tags as $tag)
  	{
-	 	if(isset($tagsArray[$tag['list_title']]))
+	 	if(isset($tagsArray[$tag['key']]))
 	 	{
-	 		array_push($tagsArray[$tag['list_title']]['tags'], array('tag'=>$tag['tag'], 'tag_id'=>$tag['id']));
+	 		array_push($tagsArray[$tag['key']]['tags'], array('tag'=>$tag['tag'], 'tag_id'=>$tag['id']));
 		}
- 		elseif(isset($tagsArrayNotSent[$tag['list_title']]))
+ 		elseif(isset($tagsArrayNotSent[$tag['key']]))
 	 	{
 	 		//array_push($tagsArray[$tag['list_title']['tags']], array('tag'=>$tag['tag'], 'tag_id'=>$tag['id']));
 		}
 		elseif($roCount < $minCount)
 		{
-			$tagsArrayNotSent[$tag['list_title']] = $tag['list_title'];
+			$tagsArrayNotSent[$tag['key']] = $tag['key'];
 			$roCount++;
 		}
 		elseif($roCount > $maxCount)
@@ -782,11 +784,11 @@ function getDataSourceTags($data_source_key)
 		else
 		{
 			$roCount++;
-			$tagsArray[$tag['list_title']]['list_title'] = $tag['list_title'];
-			$tagsArray[$tag['list_title']]['key'] = $tag['key'];
-			$tagsArray[$tag['list_title']]['tags'] = array();
+			$tagsArray[$tag['key']]['list_title'] = $tag['list_title'];
+			$tagsArray[$tag['key']]['key'] = $tag['key'];
+			$tagsArray[$tag['key']]['tags'] = array();
 			$tagArray = array('tag'=>$tag['tag'], 'tag_id'=>$tag['id']);
-			array_push($tagsArray[$tag['list_title']]['tags'],$tagArray);
+			array_push($tagsArray[$tag['key']]['tags'],$tagArray);
 
 		}		
  	}

@@ -546,9 +546,52 @@ $().ready(function(){
    });
 
    //chosen on data source;
-   if($('select[name=data_source_key]').length>0)$('select[name=data_source_key]').chosen();
+  // if($('select[name=data_source_key]').length>0)$('select[name=data_source_key]').chosen();
+   
+	//	$(".chzn-select").chosen(); 
+	//	$(".chzn-select-deselect").chosen({allow_single_deselect:true});
+
+		bindTagEvent();
+		function bindTagEvent(){
+			$('.tag-list a').each(function(e){
+				//e.preventDefault();
+				var tagID = $(this).attr('tagID');
+				$(this).qtip({
+					content:{text:'<a href="javascript:;" class="confirmedDelete" tagID="'+tagID+'">Delete</a>'},
+					position:{
+						my:'bottom center',
+						at: 'top center'
+					},
+					show: {event: 'click'},
+					hide: {event: 'unfocus'},
+					events: {
+						show: function(event, api) {
+							//console.log(api.id, button);
+						}
+					},
+					style: {classes: 'ui-tooltip-shadow ui-tooltip-bootstrap ui-tooltip-large'}
+				});
+			})
+		}
+
+		$('.confirmedDelete').live('click', function(e){
+			var tagID = $(this).attr('tagID');
+			removeTag(tagID);
+		});
 
 });
+
+
+function removeTag(tagID)
+{
+	$.ajax({
+        type:"POST",   
+        url:rootAppPath+"orca/manage/process_registry_object.php?task=deleteTag&tag_id="+tagID,   
+        success:function(msg){
+        	$('.tag-list li a[tagID='+tagID+']').parent().remove();
+        }
+    });
+}
 
 function formatErrorDesciption(description, title)
 {
