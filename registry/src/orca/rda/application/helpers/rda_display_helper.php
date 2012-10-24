@@ -465,7 +465,7 @@ function addTag($tag,$keyHash,$contributed_by)
 	$CI->load->database();
 	$tag = strtolower($tag);
 	$tag = str_replace('\'', '\\\'', $tag);
-	//echo $tag;
+	$tag = preg_replace('/[^a-zA-Z0-9\-]/', '', $tag);
 	$checkQuery = "SELECT * FROM dba.tbl_tags WHERE tag =E'".$tag."' AND ro_hash = '".$keyHash."'";
 	$query = $CI->db->query($checkQuery); 
 	if($query && $query->num_rows()==0)

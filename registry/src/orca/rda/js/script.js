@@ -882,6 +882,7 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 		
 		$('#tag_submit').click(function(){
 			var theTag = $('#new_tag').val();
+			theTag = theTag.replace(/[^a-zA-Z0-9\-]/g,"");
 			var keyHash = $('#keyHash').html();	
 			var key = $('#key').html();		
 			var datasource_key = $('#originating_source').html();
@@ -890,7 +891,7 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 
 			$('#captchaError').html('<br />')
 			$('#tagError').html('<br />');
-			console.log(theTag);
+
 			if(theTag=='') 
 			{
 				$('#tagError').html('You must provide a tag');

@@ -551,33 +551,77 @@ $().ready(function(){
 	//	$(".chzn-select").chosen(); 
 	//	$(".chzn-select-deselect").chosen({allow_single_deselect:true});
 
-		bindTagEvent();
-		function bindTagEvent(){
-			$('.tag-list a').each(function(e){
-				//e.preventDefault();
-				var tagID = $(this).attr('tagID');
-				$(this).qtip({
-					content:{text:'<a href="javascript:;" class="confirmedDelete" tagID="'+tagID+'">Delete</a>'},
-					position:{
-						my:'bottom center',
-						at: 'top center'
-					},
-					show: {event: 'click'},
-					hide: {event: 'unfocus'},
-					events: {
-						show: function(event, api) {
-							//console.log(api.id, button);
-						}
-					},
-					style: {classes: 'ui-tooltip-shadow ui-tooltip-bootstrap ui-tooltip-large'}
-				});
-			})
-		}
-
-		$('.confirmedDelete').live('click', function(e){
-			var tagID = $(this).attr('tagID');
-			removeTag(tagID);
+		
+		
+		
+		
+		
+		$('.addTag').click(function(e){
+			$(this).parent().before('<li><input type="text" class="newTagInput"></input></li>');
+			$('.newTagInput').focus();
+			//$('#addTag').hide();
 		});
+		
+		
+		/*$('.newTagInput').live('blur', function(e){
+			e.preventDefault();
+			//console.log('creating new tag of value = ' + $(this).val());
+			addNewTag(this);
+		});*/
+		
+		$('.newTagInput').live('keypress', function(e){
+			var code = (e.keyCode ? e.keyCode : e.which);
+			if(code==13){
+				//enter key
+				addNewTag(this);
+			}
+		});
+		
+		function addNewTag(element){
+			var tag_title = $(element).val();
+			tag_title = $.trim(tag_title);
+			tag_title = tag_title.replace(/[^a-zA-Z0-9\-]/g,"");
+			var keyHash = $(element).parents('ul').children().children('.addTag').attr('keyHash');
+			//http://devl.ands.org.au/workareas/leo/ands/registry/src/orca/manage/process_registry_object.php?task=addTag&tag=dogeatdfgjfgjogtoo&keyHash=2397bb5a4b1670faab26d6bd28608e39e2ee66ef
+			var url = rootAppPath+"orca/manage/process_registry_object.php?task=addTag&tag="+tag_title+'&keyHash='+keyHash;
+			var thisTagInput = element;
+			
+			if(tag_title!=''){
+				$.ajax({
+			        type:"POST",   
+			        url:url,   
+			        success:function(msg){
+			        	if(msg!=0){
+			        		$(thisTagInput).parent().before('<li><a href="javascript:;" tagID="'+msg+'">'+tag_title+'</a><span class="deleteImg" tagID="'+msg+'"></span></li>');
+			        		$(thisTagInput).remove();
+			        		bindTagEvent();
+			        	}else{
+			        		alert("the tag "+tag_title+" already exists!");
+			        	}
+			        }
+			    });
+			}else{
+				$(thisTagInput).parent().remove();
+			}
+		}
+		
+		/*
+		$('.tag-list a').live('mouseout', function(e){
+			var tagID = $(this).attr('tagID');
+			$('.tag-list li span[tagID='+tagID+']').hide();
+		});*/
+		
+		/*$('.tag-list li').die().live('hover', function(e){
+			var deleteIcon = $(this).children('span.deleteImg');
+			$(deleteIcon).show();
+		});
+		
+		$('.tag-list li').die().live('mouseout', function(e){
+			var deleteIcon = $(this).children('span.deleteImg');
+			$(deleteIcon).hide();
+		});*/
+		
+		bindTagEvent();
 
 });
 
@@ -588,7 +632,7 @@ function removeTag(tagID)
         type:"POST",   
         url:rootAppPath+"orca/manage/process_registry_object.php?task=deleteTag&tag_id="+tagID,   
         success:function(msg){
-        	$('.tag-list li a[tagID='+tagID+']').parent().remove();
+        	$('.tag-list li span[tagID='+tagID+']').parent().remove();
         }
     });
 }
@@ -857,6 +901,44 @@ descContent = '<HR><h3>Error Description:</h3><HR><img src="../_images/error_ico
    descContent += description;
 return descContent;
 }
+
+function bindTagEvent(){
+	$('span.deleteImg').each(function(e){
+		//e.preventDefault();
+		var tagID = $(this).attr('tagID');
+		$(this).qtip({
+			content:{text:'Are You Sure? <a href="javascript:;" class="confirmedDelete" tagID="'+tagID+'">yes</a>'},
+			position:{
+				my:'bottom center',
+				at: 'top center'
+			},
+			show: {event: 'click'},
+			hide: {event: 'unfocus'},
+			events: {
+				show: function(event, api) {
+					//console.log(api.id, button);
+				}
+			},
+			style: {classes: 'ui-tooltip-shadow ui-tooltip-bootstrap ui-tooltip-large'}
+		});
+	});
+	$('.tag-list li').hover(function(){
+		var deleteIcon = $(this).children('span.deleteImg');
+		$(this).children('a').addClass('hover');
+		$(deleteIcon).show();
+	}, function(){
+		var deleteIcon = $(this).children('span.deleteImg');
+		$(this).children('a').removeClass('hover');
+		$(deleteIcon).hide();
+	});
+	$('.confirmedDelete').live('click', function(e){
+		var tagID = $(this).attr('tagID');
+		console.log(tagID);
+		removeTag(tagID);
+	});
+}
+
+
 
 function setInstitutionalPage(theValue, theGroups, theDataSource)
 {

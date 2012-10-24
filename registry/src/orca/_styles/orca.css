@@ -795,20 +795,48 @@ a.borderless{
 ul.tag-list{
 	list-style-type:none;
 	padding:0;
-	margin:15px 0px;
+	margin: -7px 0px;
 }
 
 ul.tag-list li{
 	display:inline-block;
 	width:auto;
+	position:relative;
+	padding-right:10px;
 }
 
 ul.tag-list li a{
-padding: 5px;
-border: 1px solid #CCC;
-background: #DDD;
-text-decoration: none;
-color: #454545;
-margin: 4px;
-line-height: 37px;
+	padding: 5px;
+	border: 1px solid #CCC;
+	background: #DDD;
+	text-decoration: none;
+	color: #454545;
+	margin: 4px;
+	line-height: 37px;
+}
+
+ul.tag-list li a.hover{
+	border:1px solid #aaa;
+}
+
+ul.tag-list li span.deleteImg{
+	background: transparent url("../_images/error_icon.png") no-repeat left;
+	width: 20px;
+	height:30px;
+	position:absolute;
+	top:-7px;right:3px;
+	cursor:pointer;
+	display:none;
+}
+
+
+#addTag a{
+	background: #0a450a;
+	color: white;
+	/*background:  ransparent url("../rda/img/tag_16_icon.png") no-repeat left;
+	width: 20px;
+	height:18px;
+	line-height:37px;
+	cursor:pointer;
+	display:inline-block;*/
 }

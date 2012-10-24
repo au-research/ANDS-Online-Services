@@ -55,6 +55,10 @@ else if($task == 'deleteTag')
 	{
 		include('_processes/delete_tag.php');
 	}
+else if($task == 'addTag')
+	{
+		include('_processes/add_tag.php');
+	}
 
 else if($task ==  'delete')
 	{

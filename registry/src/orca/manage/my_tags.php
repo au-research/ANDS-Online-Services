@@ -219,6 +219,7 @@ function getDataSourceTags($data_source_key)
 			$roCount++;
 			$tagsArray[$tag['key']]['list_title'] = $tag['list_title'];
 			$tagsArray[$tag['key']]['key'] = $tag['key'];
+			$tagsArray[$tag['key']]['keyHash'] = $tag['key_hash'];
 			$tagsArray[$tag['key']]['tags'] = array();
 			$tagArray = array('tag'=>$tag['tag'], 'tag_id'=>$tag['id']);
 			array_push($tagsArray[$tag['key']]['tags'],$tagArray);
@@ -240,8 +241,9 @@ function getDataSourceTags($data_source_key)
 		$html .= '<ul class="tag-list">';
 			foreach($tags as $tag)
 			{
-			$html .= '<li><a tagID="'.$tag['tag_id'].'" href="javascript:;">'.$tag['tag'].'</a></li>';
+			$html .= '<li><a href="javascript:;" tagID="'.$tag['tag_id'].'">'.$tag['tag'].'</a><span class="deleteImg" tagID="'.$tag['tag_id'].'"></span></li>';
 			}
+		$html .= '<li><a class="addTag" href="javascript:;" keyHash="'.$roTag['keyHash'].'">+</a></li>';
 		$html .= '</ul></div>';
 	
 

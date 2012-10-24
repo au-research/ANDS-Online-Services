@@ -554,6 +554,26 @@ if( $registryObject )
 		print("			</td>\n");
 		print("		</tr>\n");
 	}
+	if(userIsORCA_ADMIN() )
+	{
+		$tags = getTagsForRegistryObject($registry_object_hash);
+
+		print("	<tr><td>Tags:</td>\n");		
+		print("			<td>\n");
+		//print('			<table class="subtable">'."\n");
+		print('<ul class="tag-list">');
+		if($tags)
+		{
+		foreach($tags as $tag)
+			{
+				print('<li>');
+				print('<a href="javascript:;" tagID="'.$tag['id'].'">'.$tag['tag'].'</a><span class="deleteImg" tagID="'.$tag['id'].'"></span>');
+				print('</li>');
+			}
+		}
+		print('<li><a class="addTag" href="javascript:;" keyHash="'.getRegistryObjectHashForKey($registryObjectKey).'">+</a></li></ul>');
+		print('			</td></tr>'."\n");
+	}
 
 
 	if( userIsDataSourceRecordOwner($registryObjectDataSourceRecordOwner) || userIsORCA_ADMIN() )
@@ -592,25 +612,7 @@ if( $registryObject )
 		drawRecordField("Status Set:",  $statusWhen);
 		drawRecordField("Status Set By:",  $statusWho);
 	}
-	if( userIsDataSourceRecordOwner($registryObjectDataSourceRecordOwner) || userIsORCA_ADMIN() )
-	{
-		$tags = getTagsForRegistryObject($registry_object_hash);
-		if($tags)
-		{
-		print("	<tr><td>Tags:</td>\n");		
-		print("			<td>\n");
-		print('			<table class="subtable">'."\n");
-		print('<ul class="tag-list">');
-		foreach($tags as $tag)
-			{
-				print('<li>');
-				print('<a tagID="'.$tag['id'].'" href="javascript:;">'.$tag['tag'].'</a>');
-				print('</li>');
-			}
-		print('</ul>');
-		print('			</table>'."\n");
-		}
-	}
+	
 		print("	</tbody>\n");
 
 	if( userIsDataSourceRecordOwner($registryObjectDataSourceRecordOwner) || userIsORCA_ADMIN() )

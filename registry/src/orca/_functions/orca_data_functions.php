@@ -3486,7 +3486,7 @@ function getTagsForDataSource($ds_key)
 {	
 	global $gCNN_DBS_ORCA;
 	$resultSet = null;
-	$strQuery = "SELECT ro.list_title, ro.registry_object_key as key, t.tag, t.id from dba.tbl_registry_objects ro, dba.tbl_tags t where t.ro_hash = ro.key_hash and ro.data_source_key = $1";
+	$strQuery = "SELECT ro.list_title, ro.registry_object_key as key, ro.key_hash, t.tag, t.id from dba.tbl_registry_objects ro, dba.tbl_tags t where t.ro_hash = ro.key_hash and ro.data_source_key = $1";
 	$params = array($ds_key);
 	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
 	return $resultSet;	
@@ -3510,6 +3510,33 @@ function deleteTag($tag_id)
 	$result = executeUpdateQuery($gCNN_DBS_ORCA, $strQuery, $params);
 	return $result;
 	
+}
+
+function tagExist($tag, $keyHash)
+{
+	global $gCNN_DBS_ORCA;
+	$resultSet = null;
+	$checkQuery = "SELECT * FROM dba.tbl_tags WHERE tag = $1 AND ro_hash = $2";
+	$params = array($tag, $keyHash);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $checkQuery, $params);
+	if($resultSet && sizeof($resultSet) > 0)
+		return true;
+	else
+		return false;
+	
+}
+
+function insertTag($tag, $keyHash, $contributed_by)
+{
+	global $gCNN_DBS_ORCA;
+	$resultSet = null;
+	$insertQuery = 'INSERT INTO dba.tbl_tags ("tag","ro_hash","contributed_by") VALUES ($1, $2, $3)';
+	$params = array($tag, $keyHash, $contributed_by);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $insertQuery, $params);
+	$strQuery = "SELECT CURRVAL(pg_get_serial_sequence($1,$2))";
+	$params = array('dba.tbl_tags', 'id');
+	$tagId = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	return $tagId[0]['currval'];	
 }
 
 function insertDailyStats($slug, $key, $group, $data_source, $day, $page_views,$unique_page_views,$display_title,$type)
