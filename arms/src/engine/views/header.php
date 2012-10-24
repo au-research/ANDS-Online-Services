@@ -46,7 +46,7 @@
     <link rel="apple-touch-icon-precomposed" href="ico/apple-touch-icon-57-precomposed.png"-->
   </head>
 
-<body>
+<body<?php echo(array_search('prettyprint', $js_lib) !== FALSE ? ' onload="prettyPrint();"' : '');?>>
 
 <div class="container-fluid" id="topbar">
     <div class="row-fluid">
@@ -86,19 +86,19 @@
           </li>
         <?php endif; ?>
           
-        <?php if($this->user->hasFunction('PIDS_USER') || $this->user->hasFunction('DOIS_USER') || $this->user->hasFunction('PUBLIC')): ?>
+        <?php if($this->user->hasFunction('AUTHENTICATED_USER')): ?>
           <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">Tools <b class="caret"></b></a>
             <ul class="dropdown-menu sub-menu pull-right">
             	
-            	<?php if (($this->user->hasFunction('DOIS_USER') || $this->user->hasFunction('PUBLIC')) && mod_enabled('mydois')): ?>
+            	<?php if (($this->user->hasFunction('DOIS_USER') || $this->user->hasFunction('AUTHENTICATED_USER')) && mod_enabled('mydois')): ?>
             		<li class=""><?php echo anchor('mydois/', 'DOI Query Tool');?></li>
             	<?php endif; ?>
             	<?php if (($this->user->hasFunction('PUBLIC')) && mod_enabled('abs_sdmx_querytool')): ?>
             		<li class=""><?php echo anchor('abs_sdmx_querytool/', 'ABS SDMX Query Tool');?></li>
             	<?php endif; ?>
-            	<?php if ($this->user->hasFunction('PIDS_USER')): ?>
-              		<li class=""><a href="#">PID</a></li>
+            	<?php if ($this->user->hasFunction('AUTHENTICATED_USER')): ?>
+              		<li class=""><?php echo anchor('location_capture_widget/', 'Location Capture Widget');?></li>
               	<?php endif; ?>
             </ul>
           </li>
@@ -110,7 +110,7 @@
           </li>
 	    <?php endif; ?>
 	      
-	    <?php if($this->user->hasFunction('AUTHENTICATED_USER')): ?>
+	    <?php if($this->user->hasFunction('PUBLIC')): ?>
           <li>
             <a href="javascript:;" id="main-nav-user-account" title="aaa"><i class="icon-user icon-white"></i></a>
           </li>

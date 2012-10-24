@@ -63,6 +63,10 @@
             <script type="text/javascript" src="<?php echo base_url();?>assets/lib/bootstrap_datepicker/js/bootstrap-datepicker.js"></script>
             <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/lib/bootstrap_datepicker/css/datepicker.css" />
         
+        <?php elseif($lib=='prettyprint'):?>
+            <script type="text/javascript" src="<?php echo base_url();?>assets/lib/prettyprint/pretty.js"></script>
+            <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/lib/prettyprint/pretty.css" />
+        
         <?php elseif($lib=='abs_sdmx_querytool'):?>
             <script type="text/javascript" src="<?php echo base_url();?>assets/js/abs_sdmx_querytool.js"></script>
   
@@ -78,13 +82,13 @@
 
 
 	<!-- Module-specific styles and scripts -->
-    <?php foreach($scripts as $script):?>
+    <?php if (isset($scripts)): foreach($scripts as $script):?>
         <script src="<?php echo asset_url('js/' . $script);?>.js"></script>
-    <?php endforeach;?>
+    <?php endforeach; endif; ?>
     
-    <?php foreach($styles as $style):?>
+    <?php if (isset($styles)): foreach($styles as $style):?>
     	<link rel="stylesheet" type="text/css" href="<?php echo asset_url('css/' . $style);?>.css" />
-    <?php endforeach;?>
+    <?php endforeach; endif; ?>
 
     
 

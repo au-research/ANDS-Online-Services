@@ -24,7 +24,7 @@
 				
 				<div class="span6">
 				    	
-			    	 <form action="<?=base_url('mydois/show/');?>" method="GET">
+			    	 <form method="GET">
 			    	 	
 					  <label><strong>Enter your SDMX Query</strong> (include &lt;message:Query&gt; tags)</label>
 					  <textarea rows="6" style="width:350px;" name="query" id="query" placeholder="e.g.
@@ -38,7 +38,7 @@
 					  <?php
 					  	if ($cookie = $this->input->cookie('last_used_sdmx_query')):
 					  ?>
-					  	<script id="reusable_query"><?=$cookie;?></script><br/>
+					  	<script type="text/html" id="reusable_query"><?=$cookie;?></script><br/>
 					  	<a class="small" onClick="$('#query').val($('#reusable_query').html());$(this).hide();">Re-use previous query...</a>
 					  <?php
 						endif;
