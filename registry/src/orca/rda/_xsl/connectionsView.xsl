@@ -185,7 +185,7 @@
 					</xsl:for-each>		
 					</ul>
 					<xsl:if test="..//extRif:relatedObjectActivityCount &gt; $connectionLimit">
-					<a class="connections_NumFound" type_id="group">
+					<a class="connections_NumFound" class_id="activity">
 					<xsl:attribute name="href">
 					<xsl:text>javascript:void(0);</xsl:text>
 					</xsl:attribute>						
@@ -234,7 +234,7 @@
 					</xsl:for-each>		
 					</ul>
 					<xsl:if test="..//extRif:relatedObjectServiceCount &gt; $connectionLimit">
-					<a class="connections_NumFound" type_id="group">
+					<a class="connections_NumFound" class_id="service">
 					<xsl:attribute name="href">
 					<xsl:text>javascript:void(0);</xsl:text>
 					</xsl:attribute>						
