@@ -545,29 +545,11 @@ $().ready(function(){
        $('.blockOverlay').attr('title','Click to unblock').click($.unblockUI);
    });
 
-   //chosen on data source;
-  // if($('select[name=data_source_key]').length>0)$('select[name=data_source_key]').chosen();
-   
-	//	$(".chzn-select").chosen(); 
-	//	$(".chzn-select-deselect").chosen({allow_single_deselect:true});
-
-		
-		
-		
-		
 		
 		$('.addTag').click(function(e){
 			$(this).parent().before('<li><input type="text" class="newTagInput"></input></li>');
 			$('.newTagInput').focus();
-			//$('#addTag').hide();
-		});
-		
-		
-		/*$('.newTagInput').live('blur', function(e){
-			e.preventDefault();
-			//console.log('creating new tag of value = ' + $(this).val());
-			addNewTag(this);
-		});*/
+		});		
 		
 		$('.newTagInput').live('keypress', function(e){
 			var code = (e.keyCode ? e.keyCode : e.which);
@@ -593,7 +575,7 @@ $().ready(function(){
 			        success:function(msg){
 			        	if(msg!=0){
 			        		$(thisTagInput).parent().before('<li><a href="javascript:;" tagID="'+msg+'">'+tag_title+'</a><span class="deleteImg" tagID="'+msg+'"></span></li>');
-			        		$(thisTagInput).remove();
+			        		$(thisTagInput).parent().remove();
 			        		bindTagEvent();
 			        	}else{
 			        		alert("the tag "+tag_title+" already exists!");
@@ -604,22 +586,6 @@ $().ready(function(){
 				$(thisTagInput).parent().remove();
 			}
 		}
-		
-		/*
-		$('.tag-list a').live('mouseout', function(e){
-			var tagID = $(this).attr('tagID');
-			$('.tag-list li span[tagID='+tagID+']').hide();
-		});*/
-		
-		/*$('.tag-list li').die().live('hover', function(e){
-			var deleteIcon = $(this).children('span.deleteImg');
-			$(deleteIcon).show();
-		});
-		
-		$('.tag-list li').die().live('mouseout', function(e){
-			var deleteIcon = $(this).children('span.deleteImg');
-			$(deleteIcon).hide();
-		});*/
 		
 		bindTagEvent();
 
