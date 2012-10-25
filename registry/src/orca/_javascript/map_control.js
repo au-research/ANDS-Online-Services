@@ -830,8 +830,8 @@ function mctRemovePolygon(controlDivId)
 	var searchResultsTextfieldId = MCT_ADDRESS_SEARCH_TEXTFIELD_ID_PREFIX + controlDivId;
 	html += '<div class="mct_dialog_text"><i>Search for a region or place to mark on the map</i></div>';
 	
-	html += '<input type="radio" name="geocoderSelector" checked="checked" value="geocoderSelector.gazetteer" /><label for="geocoderSelector.gazetteer" style="cursor:hand">Gazetteer</label>';
-	html += '<input type="radio" name="geocoderSelector" value="geocoderSelector.google" /><label for="geocoderSelector.google" style="cursor:hand">Google</label>';
+	html += '<input type="radio" name="geocoderSelector" checked="checked" value="geocoderSelector.gazetteer" /><label for="geocoderSelector.gazetteer" style="cursor:hand">Gazetteer of Australia</label>';
+	html += '<input type="radio" name="geocoderSelector" value="geocoderSelector.google" /><label for="geocoderSelector.google" style="cursor:hand">Google Maps</label>';
 	
 	
 	
