@@ -25,7 +25,7 @@ date_default_timezone_set('Australia/Canberra');
 |
 */
 $config['base_url']	= '';
-$config['solr_url'] = 'http://ands3.anu.edu.au:8080/solr1/';
+$config['solr_url'] = 'http://ands3.anu.edu.au:8983/solr/';
 
 /*
 |--------------------------------------------------------------------------

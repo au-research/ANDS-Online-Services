@@ -40,7 +40,8 @@
       			<xsl:apply-templates select="extRif:extendedMetadata/extRif:gold_status_flag"/>
       			<xsl:apply-templates select="extRif:extendedMetadata/extRif:quality_level"/>
       			<xsl:apply-templates select="extRif:extendedMetadata/extRif:feedType"/>   
-                <xsl:apply-templates select="extRif:extendedMetadata/extRif:lastModifiedBy"/>             	
+                <xsl:apply-templates select="extRif:extendedMetadata/extRif:lastModifiedBy"/>  
+                <xsl:apply-templates select="extRif:extendedMetadata/extRif:spatialGeometry/extRif:geometry"/>             	
         	</xsl:when>
         </xsl:choose>
 
@@ -474,6 +475,12 @@
         </xsl:element>
     </xsl:template>
     
+    <xsl:template match="extRif:extendedMetadata/extRif:spatialGeometry/extRif:geometry">
+    	<xsl:element name="field">
+            <xsl:attribute name="name">spatial</xsl:attribute>
+            <xsl:value-of select="."/>
+        </xsl:element>       
+    </xsl:template>
     <xsl:template match="extRif:description | description" mode="value">
         <xsl:element name="field">
             <xsl:attribute name="name">description_value</xsl:attribute>

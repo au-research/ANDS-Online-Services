@@ -12,7 +12,7 @@
  * @package ands/datasource
  * 
  */
-include_once("application/modules/data_source/models/_transforms.php");
+include_once("application/modules/registry_object/models/_transforms.php");
 class Import extends CI_Model {
 
 
@@ -24,16 +24,26 @@ class Import extends CI_Model {
 		$this->load->model('registry_object/registry_objects', 'ro');
 		$this->load->model('registry_object/registry_objects', 'oldRo');
 		$this->load->model('registry_object/rifcs', 'rifcs');
-		
 		$this->load->model('data_source/data_sources', 'ds');
+		
+		
 		$imput = $xml;
 		bench(0);
 		$timewaiting = 0;
 		$record_count = 0;
 		$reg_obj_count = 0;
 		$duplicate_record_count = 0;
+		
+		// An array of record ids created in this harvest (used in two-phase harvesting)
+		$harvested_record_ids = array();
+		
 		gc_enable();
+		
+		// XXX: COMMENTME
+		if ($harvestID == '') { $harvestID = "MANUAL-".time(); }
 
+
+		/* PHASE ONE => HARVEST THE RECORD IN ISOLATION */
 		$data_source = $this->ds->getByID($data_source_id);
 		try
 		{
@@ -59,40 +69,51 @@ class Import extends CI_Model {
 					foreach($registryObject->{$class} AS $ro_xml)
 					{
 						
+						// Flag records that are duplicates within this harvest and choose not to harvest them again (repeated keys in single harvest are dumb!)
 						$reharvest = true;
 						if($oldRo = $this->oldRo->getByKey((string)$registryObject->key))
 						{
 							$oldharvestID = $oldRo->getAttribute("harvest_id");
 							if($oldharvestID == $harvestID)
 							$reharvest = false;
+							
+							// XXX: Record ownership, reject if record already exists within the registry
 						}
 												
 						if($reharvest)
 						{
+							// XXX: Record owner should only be system if this is a harvest?
 							$record_owner = "SYSTEM";
 							
+							// Create a frame instance of the registryObject
 							$ro = $this->ro->create($data_source->key, (string)$registryObject->key, $ro_class, "", $status, "defaultSlug", $record_owner, $harvestID);
-							$ro->created_who = "SYSTEM";
+							$ro->created_who = $record_owner;
 							$ro->data_source_key = $data_source->key;
 							$ro->group = (string) $registryObject['group'];
 							$ro->setAttribute("harvest_id", $harvestID);
+							
 							// Order is important here!
 							$ro->updateXML($registryObject->asXML());
 							
+							// Generate the list and display titles first, then the SLUG
 							$ro->updateTitles();
 							$ro->generateSlug();
 							
+							// Save all our attributes to the object
 							$ro->save();
+							
+							// Add this record to our counts, etc.
+							$harvested_record_ids[] = $ro->id;
 							$record_count++;
-							//@$ro->free();
+							
+							// Memory management...
 							unset($ro);
 						}
-						else{
+						else
+						{
+							// XXX: Verbose message?
 							$duplicate_record_count++;
 						}
-						//print $ro;
-	
-						//echo BR.BR.BR;
 					}
 					
 					
@@ -100,6 +121,7 @@ class Import extends CI_Model {
 				
 			}
 			
+			// Clean up our memory objects...
 			unset($sxml);
 			unset($xml);
 			gc_collect_cycles();
@@ -109,15 +131,29 @@ class Import extends CI_Model {
 			throw new Exception ("UNABLE TO HARVEST FROM THIS DATA SOURCE" . NL . $e->getMessage() . NL);
 		}
 
-	/*	try
+
+
+		/* PHASE TWO - ENRICH THE HARVESTED RECORD IN LIGHT OF ITS CONTEXT */
+		try
 		{
-			foreach ($this->ro->getIDsByDataSourceID($data_source->data_source_id) AS $ro_id)
+			// Only enrich records received in this harvest
+			foreach ($harvested_record_ids AS $ro_id)
 			{
+				
 				$ro = $this->ro->getByID($ro_id);
+				
 				// add reverse relationships
 				$ro->addRelationships();
+				// XXX: re-enrich records which are related to this one
+				
+				
+				
 				$ro->update_quality_metadata();
-				// spatial center resooultion
+				
+				// spatial resooultion, center, coords in enrich?
+				$ro->determineSpatialExtents();
+				
+				
 				// vocab indexing resolution
 				
 				// Generate extrif
@@ -126,8 +162,7 @@ class Import extends CI_Model {
 				unset($ro);
 				clean_cycles();
 			}
-			// index data source
-			//$data_source->updateStats();
+			
 			gc_collect_cycles();
 			
 		}
@@ -135,7 +170,10 @@ class Import extends CI_Model {
 		{
 			throw new Exception ("UNABLE TO HARVEST FROM THIS DATA SOURCE" . NL . $e->getMessage() . NL);
 		}
-		*/
+		
+		// Index the datasource we just harvested?? XXX: Should this just index the records enriched?
+		$this->indexDS($data_source_id);
+		
 		echo ((float) bench(0) - (float) $timewaiting) . " seconds to harvest " . NL;
 		echo $reg_obj_count. " received " .NL.$record_count . " records inserted " . NL;
 		if($duplicate_record_count > 0)
@@ -150,8 +188,8 @@ class Import extends CI_Model {
 		else{
 		echo "DONE" . NL;
 		}
-	
-	
+		
+
 		return ob_get_clean();
 	}	
 
@@ -240,7 +278,7 @@ class Import extends CI_Model {
 	}
 	
 	function indexDS($data_source_id){
-		$solrUrl = 'http://ands3.anu.edu.au:8080/solr1/';
+		$solrUrl = 'http://ands3.anu.edu.au:8983/solr/';
 		$solrUpdateUrl = $solrUrl.'update/?wt=json';
 		$this->load->model('registry_objects', 'ro');
 		$this->load->model('data_source/data_sources', 'ds');

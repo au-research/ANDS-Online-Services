@@ -16,7 +16,7 @@ class Extrif_Extension extends ExtensionBase
 		$this->_CI->load->model('data_source/data_sources','ds');		
 		$ds = $this->_CI->ds->getByID($this->ro->data_source_id);
 		//same as in relationships.php
-		$xml = new SimpleXMLElement($this->ro->getRif()); // $this->ro->getSimpleXML();
+		$xml = new SimpleXMLElement($this->ro->getRif()); // $this->ro->getSimpleXML();  XXX
 		$attributes = $xml->attributes(EXTRIF_NAMESPACE);
 
 		// Cannot enrich already enriched RIFCS!!
@@ -57,6 +57,16 @@ class Extrif_Extension extends ExtensionBase
 				// XXX: TODO: Search base score, displayLogo
 				$extendedMetadata->addChild("extRif:searchBaseScore", 100, EXTRIF_NAMESPACE);
 				$extendedMetadata->addChild("extRif:displayLogo", NULL, EXTRIF_NAMESPACE);
+				
+				echo "gnaa..";
+				// xxx: spatial extents (sanity checking?)
+				$spatialGeometry = $extendedMetadata->addChild("extRif:spatialGeometry", NULL, EXTRIF_NAMESPACE);
+				foreach ($this->ro->getSpatialExtents() AS $extent)
+				{
+					echo "enriching..." . $extent;
+					$spatialGeometry->addChild("extRif:geometry", $extent, EXTRIF_NAMESPACE);
+				}
+				
 				
 				/* Names EXTRIF */
 				$names = $xml->xpath('//'.$this->ro->class.'/name');
