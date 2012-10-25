@@ -18,27 +18,27 @@ class Import extends CI_Model {
 
 	function importPayloadToDataSource($data_source_id, $xml, $harvestID = '', $debug=false, $mode = 'HARVEST')
 	{
-		
+
 		ob_start();
 		$this->output->enable_profiler(FALSE);
 		$this->load->model('registry_object/registry_objects', 'ro');
 		$this->load->model('registry_object/registry_objects', 'oldRo');
 		$this->load->model('registry_object/rifcs', 'rifcs');
 		$this->load->model('data_source/data_sources', 'ds');
-		
-		
+
+
 		$imput = $xml;
 		bench(0);
 		$timewaiting = 0;
 		$record_count = 0;
 		$reg_obj_count = 0;
 		$duplicate_record_count = 0;
-		
+
 		// An array of record ids created in this harvest (used in two-phase harvesting)
 		$harvested_record_ids = array();
-		
+
 		gc_enable();
-		
+
 		// XXX: COMMENTME
 		if ($harvestID == '') { $harvestID = "MANUAL-".time(); }
 
@@ -50,10 +50,8 @@ class Import extends CI_Model {
 			// Validate
 			$this->validateRIFCSXML($xml);
 			$sxml = $this->getSimpleXMLFromString($xml);
-			
-			
 			$status = $this->getDefaultRecordStatusForDataSource($data_source);
-			
+
 			foreach($sxml->xpath('//registryObject') AS $registryObject)
 			{
 				// Determine the registry object class
@@ -63,113 +61,68 @@ class Import extends CI_Model {
 				{
 					foreach ($this->ro->valid_classes AS $class)
 					{
-<<<<<<< HEAD
-						$ro_class = $class;
-					}
-					
-					foreach($registryObject->{$class} AS $ro_xml)
-					{
-						
-						// Flag records that are duplicates within this harvest and choose not to harvest them again (repeated keys in single harvest are dumb!)
-						$reharvest = true;
-						if($oldRo = $this->oldRo->getByKey((string)$registryObject->key))
-						{
-							$oldharvestID = $oldRo->getAttribute("harvest_id");
-							if($oldharvestID == $harvestID)
-							$reharvest = false;
-							
-							// XXX: Record ownership, reject if record already exists within the registry
-=======
 						if (property_exists($registryObject, $class))
 						{
 							$ro_class = $class;
->>>>>>> harvesting
 						}
-						
+	
 						foreach($registryObject->{$class} AS $ro_xml)
 						{
-<<<<<<< HEAD
-							// XXX: Record owner should only be system if this is a harvest?
-							$record_owner = "SYSTEM";
-							
-							// Create a frame instance of the registryObject
-							$ro = $this->ro->create($data_source->key, (string)$registryObject->key, $ro_class, "", $status, "defaultSlug", $record_owner, $harvestID);
-							$ro->created_who = $record_owner;
-							$ro->data_source_key = $data_source->key;
-							$ro->group = (string) $registryObject['group'];
-							$ro->setAttribute("harvest_id", $harvestID);
-							
-							// Order is important here!
-							$ro->updateXML($registryObject->asXML());
-							
-							// Generate the list and display titles first, then the SLUG
-							$ro->updateTitles();
-							$ro->generateSlug();
-							
-							// Save all our attributes to the object
-							$ro->save();
-							
-							// Add this record to our counts, etc.
-							$harvested_record_ids[] = $ro->id;
-							$record_count++;
-							
-							// Memory management...
-							unset($ro);
-						}
-						else
-						{
-							// XXX: Verbose message?
-							$duplicate_record_count++;
-						}
-=======
-							
+	
+							// Flag records that are duplicates within this harvest and choose not to harvest them again (repeated keys in single harvest are dumb!)
 							$reharvest = true;
 							if($oldRo = $this->oldRo->getByKey((string)$registryObject->key))
 							{
 								$oldharvestID = $oldRo->getAttribute("harvest_id");
 								if($oldharvestID == $harvestID)
 								$reharvest = false;
+	
+								// XXX: Record ownership, reject if record already exists within the registry
 							}
-													
+	
 							if($reharvest)
 							{
+								// XXX: Record owner should only be system if this is a harvest?
 								$record_owner = "SYSTEM";
-								
+	
+								// Create a frame instance of the registryObject
 								$ro = $this->ro->create($data_source->key, (string)$registryObject->key, $ro_class, "", $status, "defaultSlug", $record_owner, $harvestID);
-								$ro->created_who = "SYSTEM";
+								$ro->created_who = $record_owner;
 								$ro->data_source_key = $data_source->key;
 								$ro->group = (string) $registryObject['group'];
 								$ro->setAttribute("harvest_id", $harvestID);
+	
 								// Order is important here!
 								$ro->updateXML($registryObject->asXML());
-								
+	
+								// Generate the list and display titles first, then the SLUG
 								$ro->updateTitles();
 								$ro->generateSlug();
-								
+	
+								// Save all our attributes to the object
 								$ro->save();
+	
+								// Add this record to our counts, etc.
+								$harvested_record_ids[] = $ro->id;
 								$record_count++;
-								//@$ro->free();
+	
+								// Memory management...
 								unset($ro);
 							}
-							else{
+							else
+							{
+								// XXX: Verbose message?
 								$duplicate_record_count++;
 							}
-							//print $ro;
-		
-							//echo BR.BR.BR;
 						}
-						
-						
->>>>>>> harvesting
+	
+	
 					}
-					
 				}
+
 			}
-<<<<<<< HEAD
-			
+
 			// Clean up our memory objects...
-=======
->>>>>>> harvesting
 			unset($sxml);
 			unset($xml);
 			gc_collect_cycles();
@@ -187,41 +140,41 @@ class Import extends CI_Model {
 			// Only enrich records received in this harvest
 			foreach ($harvested_record_ids AS $ro_id)
 			{
-				
+
 				$ro = $this->ro->getByID($ro_id);
-				
+
 				// add reverse relationships
 				$ro->addRelationships();
 				// XXX: re-enrich records which are related to this one
-				
-				
-				
+
+
+
 				$ro->update_quality_metadata();
-				
+
 				// spatial resooultion, center, coords in enrich?
 				$ro->determineSpatialExtents();
-				
-				
+
+
 				// vocab indexing resolution
-				
+
 				// Generate extrif
 				$ro->enrich();
-				
+
 				unset($ro);
 				clean_cycles();
 			}
-			
+
 			gc_collect_cycles();
-			
+
 		}
 		catch (Exception $e)
 		{
 			throw new Exception ("UNABLE TO HARVEST FROM THIS DATA SOURCE" . NL . $e->getMessage() . NL);
 		}
-		
+
 		// Index the datasource we just harvested?? XXX: Should this just index the records enriched?
 		$this->indexDS($data_source_id);
-		
+
 		echo ((float) bench(0) - (float) $timewaiting) . " seconds to harvest " . NL;
 		echo $reg_obj_count. " received " .NL.$record_count . " records inserted " . NL;
 		if($duplicate_record_count > 0)
@@ -236,7 +189,7 @@ class Import extends CI_Model {
 		else{
 		echo "DONE" . NL;
 		}
-		
+
 
 		return ob_get_clean();
 	}	
@@ -245,14 +198,14 @@ class Import extends CI_Model {
 	private function getRIFCSFromURI($uri)
 	{
 		$xml = file_get_contents($uri);
-		
+
 		if (!$xml)
 		{
 			throw new Exception ("Unable to retreive valid feed data from: $uri");
 		}
 		return $xml;
 	}
-	
+
 	private function validateRIFCSXML($xml)
 	{
 		$doc = @DOMDocument::loadXML($xml);
@@ -262,7 +215,7 @@ class Import extends CI_Model {
 		}
 		libxml_use_internal_errors(true);
 		$validation_status = @$doc->schemaValidate("application/modules/registry_object/schema/registryObjects.xsd");
-		
+
 		if ($validation_status === TRUE) 
 		{
 			return TRUE;
@@ -278,14 +231,14 @@ class Import extends CI_Model {
 			throw new Exception("Unable to validate XML document against schema: " . NL . $error_string);
 		}
 	}
-	
+
 	private function getSimpleXMLFromString($xml)
 	{
 		// Simplexml doesn't play nicely with namespaces :-(
 		$xml = str_replace('xmlns="http://ands.org.au/standards/rif-cs/registryObjects"', '', $xml);
 		$xml = simplexml_load_string($xml, "SimpleXMLElement", 0);
 		//$xml->registerXPathNamespace("ro", "http://ands.org.au/standards/rif-cs/registryObjects");
-		
+
 		if ($xml === false)
 		{
 			$exception_message = "Could not parse Registry Object XML" . NL;
@@ -296,10 +249,10 @@ class Import extends CI_Model {
 		}
 		return $xml;
 	}
-	
+
 	private function getDefaultRecordStatusForDataSource(_data_source $data_source)
 	{
-		
+
 		/*
 		 * Harvest to the correct record mode
 		 * QA = SUBMIT FOR ASSESSMENT
@@ -321,10 +274,10 @@ class Import extends CI_Model {
 				$status = $this->ro->valid_status['PUBLISHED'];
 			}
 		}
-		
+
 		return $status;
 	}
-	
+
 	function indexDS($data_source_id){
 		$solrUrl = 'http://ands3.anu.edu.au:8983/solr/';
 		$solrUpdateUrl = $solrUrl.'update/?wt=json';
@@ -354,7 +307,7 @@ class Import extends CI_Model {
 		}
 		return curl_post($solrUpdateUrl.'?commit=true', '<commit waitSearcher="false"/>');
 	}
-	
+
 	function getRifcsFromHarvest($xmlData)
 	{
 		// Simplexml doesn't play nicely with namespaces :-(
@@ -377,5 +330,5 @@ class Import extends CI_Model {
 		}
 		return $result;
 	}
-	
+
 }
