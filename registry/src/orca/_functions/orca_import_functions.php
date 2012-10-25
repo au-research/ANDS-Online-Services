@@ -1022,7 +1022,7 @@ function importSpatialTypes($location_id, $node, $runErrors, $totalAttemptedInse
 		$errors = importSpatialExtent($id, $value, $type, $registryObjectKey);
 		}
 		$totalAttemptedInserts++;
-		//if( !$errors ) { $totalInserts++; } else { $runErrors .= "Failed to insert spatial for location $location_id\n"; }
+		if( !$errors ) { $totalInserts++; } else { $runErrors .= "Failed to insert spatial for location $location_id\n"; }
 	}
 }
 
@@ -1549,7 +1549,7 @@ function importCoverage($registryObjectKey, $node, $elementName, $runErrors, $to
 			$errors = importSpatialExtent($id, $value, $type, $registryObjectKey);
 			}
 			$totalAttemptedInserts++;
-			//if( !$errors ) { $totalInserts++; } else { $runErrors .= "Failed to insert spatial for coverage $coverageId\n"; }
+			if( !$errors ) { $totalInserts++; } else { $runErrors .= "Failed to insert spatial for coverage $coverageId\n"; }
 
 		}
 
