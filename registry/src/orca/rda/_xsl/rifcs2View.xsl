@@ -94,7 +94,8 @@
 	        		<script type="text/javascript" src="http://static.addtoany.com/menu/page.js"></script>
 	      
 	        		<!-- AddToAny END -->  
-   					<a id="tag_show">
+   			      <a id="tag_show">
+
                     <xsl:attribute name="href">javascript:void(0);</xsl:attribute>                    
                     <img id="tag_icon">
                     <xsl:attribute name="src">
@@ -103,7 +104,9 @@
                     <xsl:text>tag_16_icon.png</xsl:text></xsl:attribute>
                     <xsl:attribute name="alt">Tag Icon</xsl:attribute>
                     </img>
-                    </a>
+
+                    </a>	
+
                    
 					<a target="_blank">
                     <xsl:attribute name="href"><xsl:value-of select="$base_url"/>view/printview/?key=<xsl:value-of select="ro:key"/></xsl:attribute>                    
@@ -851,19 +854,25 @@ DOI:
     
 	<xsl:template match="ro:location/ro:address/ro:electronic">
 		<xsl:if test="./@type='url'">
-		<xsl:variable name="url">
-		
-		<xsl:choose>
-		<xsl:when test="string-length(.)>30">
-		<xsl:value-of select="substring(.,0,30)"/>...
-		</xsl:when>
-		<xsl:otherwise>
-		<xsl:value-of select="."/>
-		</xsl:otherwise>
-		</xsl:choose>
-		</xsl:variable>	
-			<a><xsl:attribute name="href"><xsl:value-of select="."/></xsl:attribute><xsl:attribute name="target">_blank</xsl:attribute><xsl:value-of select="$url"/></a><br />
-		</xsl:if>		
+    		<xsl:variable name="url">
+    		<xsl:choose>
+        		<xsl:when test="string-length(.)>30">
+        		  <xsl:value-of select="substring(.,0,30)"/>...
+        		</xsl:when>
+        		<xsl:otherwise>
+        		  <xsl:value-of select="."/>
+        		</xsl:otherwise>
+    		</xsl:choose>
+    		</xsl:variable>	
+			<a>
+                <xsl:attribute name="href">
+                    <xsl:value-of select="."/>
+                </xsl:attribute>
+                <xsl:attribute name="class">recordOutBound</xsl:attribute>
+                <xsl:attribute name="type">electronic_address</xsl:attribute>
+                <xsl:attribute name="target">_blank</xsl:attribute><xsl:value-of select="$url"/>
+            </a><br />
+		</xsl:if>
 	</xsl:template>
 	
 	<xsl:template match="ro:location/ro:address/ro:physical">

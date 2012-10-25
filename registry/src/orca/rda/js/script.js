@@ -791,7 +791,6 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 		});
 		
 		
-		
 		//if there is no brief, brief will be the first full
 		if(brief==null){
 			$('.descriptions div').each(function(){
@@ -879,6 +878,32 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 	  			});	
 			$('#add_tag_form').show();
 		});	
+
+		$('a.recordOutBound').click(function(e){
+			e.preventDefault();
+			var link = $(this).attr('href');
+			var type = $(this).attr('type');
+			var key = $('#key').html();
+			//console.log('recording:',key, link, type);
+
+			$.ajax({
+				type:"POST",
+				url:base_url+"api/recordOutBound/",
+				data:{link:link,type:type,key:key},
+				success:function(data){
+					if(data.status=='OK'){
+						console.log(data);
+					}else if(data.status=='ERROR'){
+						console.error(data);
+					}
+					console.log(data);
+				},
+				error: function(data){
+					console.error(data);
+				}
+			});
+			//window.open(link);
+		});
 		
 		$('#tag_submit').click(function(){
 			var theTag = $('#new_tag').val();

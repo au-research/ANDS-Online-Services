@@ -382,3 +382,27 @@ GRANT SELECT, USAGE ON TABLE dba.tbl_dates_id_seq TO webuser;
 GRANT SELECT, USAGE ON TABLE dba.tbl_related_info_format_id_seq TO webuser;
 
 
+
+-- Table: dba.tbl_stat_links
+
+-- DROP TABLE dba.tbl_stat_links;
+
+CREATE TABLE dba.tbl_stat_links
+(
+  id serial NOT NULL,
+  registry_object_key character varying(512) NOT NULL,
+  link character varying(1024) NOT NULL,
+  type character varying(512) NOT NULL,
+  date integer,
+  CONSTRAINT tbl_stat_links_pkey PRIMARY KEY (id )
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE dba.tbl_stat_links
+  OWNER TO postgres;
+GRANT ALL ON TABLE dba.tbl_stat_links TO postgres;
+GRANT SELECT, UPDATE, INSERT ON TABLE dba.tbl_stat_links TO public;
+GRANT SELECT, UPDATE, INSERT ON TABLE dba.tbl_stat_links TO webuser;
+GRANT USAGE, SELECT ON SEQUENCE dba.tbl_stat_links_id_seq TO webuser;
+
