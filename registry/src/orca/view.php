@@ -554,7 +554,7 @@ if( $registryObject )
 		print("			</td>\n");
 		print("		</tr>\n");
 	}
-	if(userIsORCA_ADMIN() )
+	if(hasRole('ORCA_TAG_MANAGER'))
 	{
 		$tags = getTagsForRegistryObject($registry_object_hash);
 
