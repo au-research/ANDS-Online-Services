@@ -2860,7 +2860,7 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
             }
       });
       
-      google.maps.event.addListener(drawingManager, 'drawingmode_changed', function(e) {
+     /* google.maps.event.addListener(drawingManager, 'drawingmode_changed', function(e) {
     	  var drawingMode = drawingManager.getDrawingMode();
     	  if(drawingMode==='rectangle') clearMap();
     	    $('img').each(function(){
@@ -2880,7 +2880,7 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 	  });
      });
      //console.log(drawingManager)
-      
+      */
 
 
     
