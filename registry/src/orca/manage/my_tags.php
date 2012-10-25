@@ -158,9 +158,9 @@ function displayMMRDataSourceSwitcher(array $dataSources = array(), $selected_ke
 					?>
 					</select>
 				</div>
-				<div class="content_block" style="float:right;margin-top:-14px;">
+				<!--  div class="content_block" style="float:right;margin-top:-14px;">
 					<a href="http://ands.org.au/resource/mmr-help-r8.pdf" id="cpgHelpButton" target="_blank"></a>
-				</div>
+				</div-->
 			</div>
 
 			<div class="clearfix"></div>
