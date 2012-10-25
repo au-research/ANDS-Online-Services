@@ -44,10 +44,14 @@ foreach ($rssArray AS $item)
 	if($item['type'] == "twitter")
 	{
 		// depluralise
-		$collection_count = $item['count'] . ($item['count'] > 1 ? " collections have " : " collection has ");
+		$collection_count = $item['count'] . ($item['count'] > 1 ? " collections" : " collection");
+		
+		// 16 collections added with the subject “Igneous and Metamorphic Petrology” #ANZSRC04304 http://researchda... 
+		$tweet = $collection_count." added with the subject '".substr($item['resolved_subject'], 0, 75)."' #ANZSRC".$item['code'];
+		
 		echo "			<item>\n";
-		echo "				<title>".$collection_count."been added to Research Data Australia with subject #ANZSRC".$item['code']."</title>\n";
-		echo "				<description>".$collection_count."been added to Research Data Australia with subject #ANZSRC".$item['code'] ."</description>\n";
+		echo "				<title>".$tweet."</title>\n";
+		echo "				<description>".$tweet ."</description>\n";
 		echo "				<link>" . $rdaInstance . "search#!/q=*:*/p=1/tab=collection/subject=".rawurlencode($item['resolved_uri'])."/resultSort=date_modified%20desc</link>\n";
 		echo "				<guid>" . $rdaInstance . "search#!/q=*:*/p=1/tab=collection/subject=".rawurlencode($item['resolved_uri'])."/resultSort=date_modified%20desc</guid>\n";
 		echo "				<author>".$item['resolved_subject']."</author>\n";
