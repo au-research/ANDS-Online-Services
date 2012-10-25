@@ -16,7 +16,7 @@ include_once("application/modules/registry_object/models/_transforms.php");
 class Import extends CI_Model {
 
 
-	function importPayloadToDataSource($data_source_id, $xml, $harvestID = '', $debug=false)
+	function importPayloadToDataSource($data_source_id, $xml, $harvestID = '', $debug=false, $mode = 'HARVEST')
 	{
 		
 		ob_start();
@@ -59,10 +59,11 @@ class Import extends CI_Model {
 				// Determine the registry object class
 				$reg_obj_count++;
 				$ro_class = NULL;
-				foreach ($this->ro->valid_classes AS $class)
+				if($mode == 'HARVEST')
 				{
-					if (property_exists($registryObject, $class))
+					foreach ($this->ro->valid_classes AS $class)
 					{
+<<<<<<< HEAD
 						$ro_class = $class;
 					}
 					
@@ -78,10 +79,16 @@ class Import extends CI_Model {
 							$reharvest = false;
 							
 							// XXX: Record ownership, reject if record already exists within the registry
-						}
-												
-						if($reharvest)
+=======
+						if (property_exists($registryObject, $class))
 						{
+							$ro_class = $class;
+>>>>>>> harvesting
+						}
+						
+						foreach($registryObject->{$class} AS $ro_xml)
+						{
+<<<<<<< HEAD
 							// XXX: Record owner should only be system if this is a harvest?
 							$record_owner = "SYSTEM";
 							
@@ -114,14 +121,55 @@ class Import extends CI_Model {
 							// XXX: Verbose message?
 							$duplicate_record_count++;
 						}
+=======
+							
+							$reharvest = true;
+							if($oldRo = $this->oldRo->getByKey((string)$registryObject->key))
+							{
+								$oldharvestID = $oldRo->getAttribute("harvest_id");
+								if($oldharvestID == $harvestID)
+								$reharvest = false;
+							}
+													
+							if($reharvest)
+							{
+								$record_owner = "SYSTEM";
+								
+								$ro = $this->ro->create($data_source->key, (string)$registryObject->key, $ro_class, "", $status, "defaultSlug", $record_owner, $harvestID);
+								$ro->created_who = "SYSTEM";
+								$ro->data_source_key = $data_source->key;
+								$ro->group = (string) $registryObject['group'];
+								$ro->setAttribute("harvest_id", $harvestID);
+								// Order is important here!
+								$ro->updateXML($registryObject->asXML());
+								
+								$ro->updateTitles();
+								$ro->generateSlug();
+								
+								$ro->save();
+								$record_count++;
+								//@$ro->free();
+								unset($ro);
+							}
+							else{
+								$duplicate_record_count++;
+							}
+							//print $ro;
+		
+							//echo BR.BR.BR;
+						}
+						
+						
+>>>>>>> harvesting
 					}
 					
-					
 				}
-				
 			}
+<<<<<<< HEAD
 			
 			// Clean up our memory objects...
+=======
+>>>>>>> harvesting
 			unset($sxml);
 			unset($xml);
 			gc_collect_cycles();

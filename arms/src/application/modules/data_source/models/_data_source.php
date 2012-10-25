@@ -166,7 +166,7 @@ class _data_source {
 				if ($attribute->core)
 				{
 					$this->db->where("data_source_id", $this->id);
-					$this->db->update("data_sources", array($attribute->name, $atttribute->value));
+					$this->db->update("data_sources", array($attribute->name, $attribute->value));
 					$attribute->dirty = FALSE;
 				}
 				else
@@ -218,7 +218,7 @@ class _data_source {
 	
 	function unsetAttribute($name)
 	{
-		setAttribute($name, NULL);
+		$this->setAttribute($name, NULL);
 	}
 	
 	
@@ -248,14 +248,17 @@ class _data_source {
 	function append_log($log_message, $log_type = "message")
 	{
 		$this->db->insert("data_source_logs", array("data_source_id" => $this->id, "date_modified" => time(), "type" => $log_type, "log" => $log_message));
-		return true;
+		return $this->db->insert_id();
 	}
 	
-	function get_logs($offset = 0, $count = 10)
+	function get_logs($offset = 0, $count = 10, $logid=null)
 	{
 		$logs = array();
 		$this->db->order_by("id", "desc"); 
-		$query = $this->db->get_where("data_source_logs", array("data_source_id"=>$this->id), $count, $offset);
+		if($logid)
+			$query = $this->db->get_where("data_source_logs", array("data_source_id"=>$this->id, "id >=" => $logid));
+		else
+			$query = $this->db->get_where("data_source_logs", array("data_source_id"=>$this->id), $count, $offset);
 		if ($query->num_rows() > 0)
 		{
 			foreach ($query->result_array() AS $row)
@@ -301,6 +304,7 @@ class _data_source {
 	function insertHarvestRequest($harvestFrequency, $oaiSet, $created, $updated, $nextHarvest, $status)
 	{
 		$harvestRequestId = strtoupper(sha1($this->id.microtime(false)));
+		date_default_timezone_set('Australia/Canberra');
 		if(!$created) $created = date( 'Y-m-d\TH:i:s.uP', time());
 		if(!$updated) $updated = date( 'Y-m-d\TH:i:s.uP', time());
 		if(!$nextHarvest) $nextHarvest = date( 'Y-m-d\TH:i:s.uP', time());
@@ -400,9 +404,10 @@ class _data_source {
 		$resultMessage = new DOMDocument();
 		$result = $resultMessage->load($gORCA_HARVESTER_BASE_URI.$harvestRequest);
 		$errors = error_get_last();
+		$logID = 0;
 		if( $errors )
 		{
-			$this->append_log("harvestRequest Error[1]: ".$errors['message']);
+			$logID = $this->append_log("harvestRequest Error[1]: ".$errors['message']);
 		}
 		else
 		{
@@ -411,58 +416,53 @@ class _data_source {
 			
 			if( $responseType != 'SUCCESS' )
 			{
-				$this->append_log("harvestRequest Error[2]: ".$message, "error");
+				$logID = $this->append_log("harvestRequest Error[2]: ".$message, "error");
 			}
 			else{
-				$this->append_log("harvestRequest Success: ".$message, "message");
+				$logID = $this->append_log("harvestRequest Success: ".$message, "message");
 			}
 		}
+		return $logID;
 	}
 	
-	function resetHarvest($testOnly = false)
+	function requestHarvest($created = '', $updated = '', $dataSourceURI = '', $providerType = '', $OAISet = '', $harvestMethod = '', $harvestDate = '', 			
+		$harvestFrequency = '', $advancedHarvestingMethod = '', $nextHarvest = '', $testOnly = false)
 	{
 		$dataSource = $this->id;
 		$responseTargetURI = 'http://ands3.anu.edu.au/workareas/leo/ands/arms/src/data_source/putharvestData';
-		$dataSourceURI = $this->getAttribute("uri");
-		$providerType = 'RIF'; //$this->getAttribute("provider_type");
+		
+		if($created == '')
+			$created = $this->getAttribute("created");		
+		if($dataSourceURI == '')
+			$dataSourceURI = $this->getAttribute("uri");
 
-		$harvestDate = $this->getAttribute("uri");
-		$OAISet = '';
-		//if($this->getAttribute("oai_set"))
-		//{
-		//	$OAISet = $this->getAttribute("oai_set");
-		//}
-		$method = 'DIRECT';
-		if($this->getAttribute("harvest_method"))
-		{
-			$method = $this->getAttribute("harvest_method");
-		}	
-		$harvestDate = '';
-		if($this->getAttribute("harvest_date"))
-		{
-			$harvestDate = $this->getAttribute("harvest_date");
-		}
-			
-		$harvestFrequency = '';
-		if($this->getAttribute("harvest_frequency"))
-		{
-			$harvestFrequency = $this->getAttribute("harvest_frequency");
-		}
-		$status = "INITIALISED";
+		if($providerType == '')
+			$providerType = $this->getAttribute("provider_type");
+		
+		//if($OAISet == '')
+			//$OAISet = $this->getAttribute("oai_set");
+
+		if($harvestMethod == '')
+			$harvestMethod = $this->getAttribute("harvest_method");
+	
 		if($harvestDate == '')
-		$nextHarvest = $harvestDate;
-		
-		$status = "SCHEDULED FOR ".$harvestDate;
+			$harvestDate = $this->getAttribute("harvest_date");
 
-		$mode = 'harvest'; if( $testOnly ){ $mode = 'test'; }
-		$advancedHarvestingMethod = $this->getAttribute("advanced_harvesting_mode");
+		if($harvestFrequency == '')
+			$harvestFrequency = $this->getAttribute("harvest_frequency");
+			
+        if($advancedHarvestingMethod = '')
+        	$advancedHarvestingMethod = $this->getAttribute("advanced_harvesting_mode");
 		
-		$action = $harvestFrequency." ".$OAISet." ".$created." ".$updated." ".$nextHarvest;
+        if($nextHarvest == '')
+			$nextHarvest = $harvestDate;	
+
+		$status = "SCHEDULED FOR ".$nextHarvest;
+		
+		$mode = 'harvest'; if( $testOnly ){ $mode = 'test'; }		
 		
 		$harvestRequestId = $this->insertHarvestRequest($harvestFrequency, $OAISet, $created, $updated, $nextHarvest, $status);
 		
-		
-
 		$harvestRequest  = 'requestHarvest?';
 		$harvestRequest .= 'responsetargeturl='.urlencode($responseTargetURI);		
 		$harvestRequest .= '&harvestid='.urlencode($harvestRequestId);
@@ -478,9 +478,8 @@ class _data_source {
 		$harvestRequest .= '&ahm='.urlencode($advancedHarvestingMethod);
 		
 		// Submit the request.
-		
-		$this->submitHarvestRequest($harvestRequest);
-	
+		$logID = $this->submitHarvestRequest($harvestRequest);
+	    return $logID;
 	}
 	
 	function cancelHarvestRequest($harvestRequestId)

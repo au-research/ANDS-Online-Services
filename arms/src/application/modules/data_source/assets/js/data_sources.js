@@ -302,6 +302,46 @@ function loadMoreSourceLogs(data_source_id, count)
 
 }
 
+function loadHarvestLogs(data_source_id, logid)
+{
+	console.log("logID: " + logid);
+	$.ajax({
+		url: 'data_source/getDataSourceLogs/',
+		data: {id:data_source_id, logid:logid},
+		type: 'POST',
+		dataType: 'json',
+		success: function(data){
+			var logsTemplate = "<table class='table table-hover'>"+
+			"<thead><tr><th>#</th><th>DATE</th><th>TYPE</th><th>LOG</th></tr></thead>" +
+			"<tbody>" +
+			"{{#items}}" +
+				"<tr class='{{type}}'><td>{{id}}</td><td>{{date_modified}}</td><td>{{type}}</td><td>{{log}}</td></tr>" +
+			"{{/items}}" +
+			"</tbody></table>";
+			var output = Mustache.render(logsTemplate, data);
+			$('#test_harvest_activity_log .modal-body').html(output);
+			$.each(data.items, function(i, v) {
+			    if (v.log.indexOf("TEST HARVEST COMPLETED") >= 0) {
+			        return false;
+			    }
+			    setTimeout(function(){loadHarvestLogs(data_source_id, logid)}, 2000);
+			});
+			
+			
+		},
+		error: function(data){
+		console.log(data);
+		}
+	});
+	
+
+	
+	return false;
+
+}
+
+
+
 function drawCharts(){
 	$('#ro-progression').height('350').html('');
 	$.jqplot('ro-progression',  [[[1, 2],[3,5.12],[5,13.1],[7,33.6],[9,85.9],[11,219.9]]]);
@@ -403,13 +443,63 @@ $('#save-edit-form').live({
 			{
 				$('#myModal').modal();
 				logErrorOnScreen("An error occured whilst saving your changes!", $('#myModal .modal-body'));
-				$('#myModal .modal-body').append("<br/><pre>" + data + "</pre>");
+				$('#myModal .modal-body').append("<br/><pre>Could't communicate with server</pre>");
 			}
 		});
 
 		/*var jsonString = ""+JSON.stringify(jsonData);
 		$('#myModal .modal-body').html('<pre>'+jsonString+'</pre>');
 		$('#myModal').modal();*/
+		$(this).button('reset');
+	}
+});
+
+
+$('#test-harvest').live({
+	click: function(e){
+		e.preventDefault();
+		var jsonData = [];
+		$(this).button('Running...');
+		
+		jsonData.push({name:'data_source_id', value:$('#data_source_view_container').attr('data_source_id')});
+		
+		$('#edit-datasource #edit-form input, #edit-datasource #edit-form textarea').each(function(){
+			var label = $(this).attr('name');
+			var value = $(this).val();
+			if($(this).attr('type')=='checkbox'){
+				var label = $(this).attr('for');
+				var value = $(this).is(':checked');
+			}
+			if(value!='' && value){
+				jsonData.push({name:label, value:value});
+			}
+		});
+
+		$.ajax({
+			url:'data_source/testHarvest', 
+			type: 'POST',
+			data: jsonData,
+			success: function(data){	
+				console.log(data);
+					if (data.status == "OK")
+					{
+						$('#test_harvest_activity_log').modal();
+						loadHarvestLogs($('#data_source_view_container').attr('data_source_id'), data.logid);
+					}
+					else
+					{
+						$('#test_harvest_activity_log').modal();
+						logErrorOnScreen("An error occured whilst testing your harvest!", $('#test_harvest_activity_log .modal-body'));
+					}
+			},
+			error: function()
+			{
+				$('#test_harvest_activity_log').modal();
+				logErrorOnScreen("An error occured whilst testing your harvest!", $('#test_harvest_activity_log .modal-body'));
+			}
+			
+		});
+
 		$(this).button('reset');
 	}
 });

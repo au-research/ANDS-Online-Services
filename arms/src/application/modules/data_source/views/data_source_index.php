@@ -635,6 +635,17 @@
 				</div>
 			</div>
 			<button class="btn" id="save-edit-form" data-loading-text="Saving..." >Save</button>
+			<button class="btn" id="test-harvest" data-loading-text="Testing Harvest..." >Test Harvest</button>
+			<div class="modal hide" id="test_harvest_activity_log">
+			  <div class="modal-header">
+			    <button type="button" class="close" data-dismiss="modal">×</button>
+			    <h3>Activity Log</h3>
+			  </div>
+			  <div class="modal-body"></div>
+			  <div class="modal-footer">
+			    
+			  </div>
+			</div>
 			<div class="modal hide" id="myModal">
 			  <div class="modal-header">
 			    <button type="button" class="close" data-dismiss="modal">×</button>
