@@ -78,11 +78,23 @@ if($report_type!='')
 
 		}else if ($report_type=='datasource')
 		{
-			$totalRecords = getRegistryObjectKeysForDataSource($dataSourceKey);
-			$collectionRecords = getRegistryObjectCount($dataSourceKey, $group = null, $className='Collection', $status = null);
-			$partyRecords = getRegistryObjectCount($dataSourceKey, $group = null, $className='Party', $status = null);		
-			$activityRecords = getRegistryObjectCount($dataSourceKey, $group = null, $className='Activity', $status = null);	
-			$serviceRecords = getRegistryObjectCount($dataSourceKey, $group = null, $className='Service', $status = null);				
+
+			if($dataSourceKey=="All")
+			{
+				$totalRecords = getRegistryObjects();
+				$collectionRecords = getRegistryObjectCount(null, $group = null, $className='Collection', $status = null);
+				$partyRecords = getRegistryObjectCount(null, $group = null, $className='Party', $status = null);		
+				$activityRecords = getRegistryObjectCount(null, $group = null, $className='Activity', $status = null);	
+				$serviceRecords = getRegistryObjectCount(null, $group = null, $className='Service', $status = null);			
+			}
+			else 
+			{
+				$totalRecords = getRegistryObjectKeysForDataSource($dataSourceKey);
+				$collectionRecords = getRegistryObjectCount($dataSourceKey, $group = null, $className='Collection', $status = null);
+				$partyRecords = getRegistryObjectCount($dataSourceKey, $group = null, $className='Party', $status = null);		
+				$activityRecords = getRegistryObjectCount($dataSourceKey, $group = null, $className='Activity', $status = null);	
+				$serviceRecords = getRegistryObjectCount($dataSourceKey, $group = null, $className='Service', $status = null);	
+			}			
 		}	
 
 		if(isset($totalRecords[0]))	{
@@ -104,7 +116,12 @@ if($report_type!='')
 		$sortOrder = "page_views";
 		
 		$class = "collection";
-		$page_views_stats = getCollectionsViewed($groupingType,$groupingValue,$dateFrom,$dateTo,$sortOrder,$class);			
+		if($dataSourceKey=="All")
+		{
+			$page_views_stats = getAllCollectionsViewed($dateFrom,$dateTo,$sortOrder,$class);				
+		}else{
+			$page_views_stats = getCollectionsViewed($groupingType,$groupingValue,$dateFrom,$dateTo,$sortOrder,$class);		
+		}	
 		if($page_views_stats)
 		{
 			$pageViewCount = count($page_views_stats);
@@ -115,7 +132,12 @@ if($report_type!='')
 		}	
 				
 		$class = "party";
-		$party_views_stats = getCollectionsViewed($groupingType,$groupingValue,$dateFrom,$dateTo,$sortOrder,$class);			
+		if($dataSourceKey=="All")
+		{
+			$party_views_stats = getAllCollectionsViewed($dateFrom,$dateTo,$sortOrder,$class);				
+		}else{
+			$party_views_stats = getCollectionsViewed($groupingType,$groupingValue,$dateFrom,$dateTo,$sortOrder,$class);	
+		}		
 		if($party_views_stats)
 		{
 			$partyViewCount = count($party_views_stats);
@@ -126,7 +148,12 @@ if($report_type!='')
 		}	
 				
 		$class = "activity";
-		$activity_views_stats = getCollectionsViewed($groupingType,$groupingValue,$dateFrom,$dateTo,$sortOrder,$class);	
+		if($dataSourceKey=="All")
+		{
+			$activity_views_stats = getAllCollectionsViewed($dateFrom,$dateTo,$sortOrder,$class);				
+		}else{
+			$activity_views_stats = getCollectionsViewed($groupingType,$groupingValue,$dateFrom,$dateTo,$sortOrder,$class);	
+		}
 		if($activity_views_stats)
 		{
 			$activityViewCount =  count($activity_views_stats);	
@@ -137,7 +164,12 @@ if($report_type!='')
 		}
 				
 		$class = "service";
-		$service_views_stats = getCollectionsViewed($groupingType,$groupingValue,$dateFrom,$dateTo,$sortOrder,$class);		
+		if($dataSourceKey=="All")
+		{
+			$service_views_stats = getAllCollectionsViewed($dateFrom,$dateTo,$sortOrder,$class);				
+		}else{
+			$service_views_stats = getCollectionsViewed($groupingType,$groupingValue,$dateFrom,$dateTo,$sortOrder,$class);	
+		}	
 		if($service_views_stats)
 		{
 			$serviceViewCount =  count($service_views_stats);
@@ -160,6 +192,7 @@ if($report_type!='')
 		$array['regions'] =  array();	
 		$array['sources'] =  array();
 		$array['search'] =  array();	
+		$array['outLinks'] = array();
 					
 		while($i<$filterViewCount)
 		{
@@ -204,27 +237,43 @@ if($report_type!='')
 				{
 					if(!isset($array['search'][$theTerm['search_term']][$theTerm['slug']]))	
 					{
-						$array['search'][$theTerm['search_term']][$theTerm['slug']]=$theTerm['slug']=1;
+						$array['search'][$theTerm['search_term']][$theTerm['slug']]=1;
 					}else{
 						$array['search'][$theTerm['search_term']][$theTerm['slug']]++;
 					}
 				}
 
 			}
+			
+			$outLinks = getOutLinkClicks($dateFrom,$dateTo,$page['key']);	
+				
+			if($outLinks){
+				for($i=0;$i<count($outLinks);$i++){
+					$array['outLinks'][] = $outLinks[$i];
+				}
+			}
 		}
 		}
 		arsort($array['countries']);
 		arsort($array['sources']);
 		arsort($array['search']);		
-	
+		arsort($array['outLinks']);	
+		
 		$sortOrder = "unique_page_views";
 		$class= 'collection';
-		$unique_views_stats = getCollectionsViewed($groupingType,$groupingValue,$dateFrom,$dateTo,$sortOrder,$class);	
+		if($dataSourceKey=="All")
+		{
+			$unique_views_stats = getAllCollectionsViewed($dateFrom,$dateTo,$sortOrder,$class);				
+		}else{
+			$unique_views_stats = getCollectionsViewed($groupingType,$groupingValue,$dateFrom,$dateTo,$sortOrder,$class);	
+		}		
+
 		$uniqueViewCount = 0;
 		$uniqueViewCount = count($unique_views_stats);
 		if($uniqueViewCount > 5) $uniqueViewCount = 5;	
 
 		$noResults = getNoResultSearches($dateFrom,$dateTo);
+	
 	
 
 	}
@@ -290,8 +339,14 @@ if( $rawResults )
 	print('  <option value="">{Data Source}</option>'."\n");
 	if( $searchResults )
 	{
+		if(userIsORCA_ADMIN()){
+			$selected = "";
+			if($dataSourceKey == "All"){ $selected = ' selected="selected"'; }
+			print('  <option value="All"'.$selected.'>All datasources</option>'."\n");
+		}
+				
 		foreach( $searchResults as $source )
-		{
+		{			
 			$selected = "";
 			if( $source['data_source_key'] == $dataSourceKey ){ $selected = ' selected="selected"'; }
 			print('  <option value="'.esc($source['data_source_key']).'"'.$selected.'>'.esc($source['title']).'</option>'."\n");
@@ -332,9 +387,15 @@ if( (strtoupper($ds_report) == "GENERATE REPORT" ||  strtoupper($org_report) == 
 	}
 	if($report_type == "datasource")
 	{
-		$data_source = getDataSources($dataSourceKey,null);
-		$title = $data_source[0]['title'];
-		$grouping = "Datasource";		
+		if($dataSourceKey=="All"){
+			$title = "All data sources";
+			$grouping = "Registry";				
+		}else{
+			$data_source = getDataSources($dataSourceKey,null);
+			$title = $data_source[0]['title'];
+			$grouping = "Datasource";				
+		}	
+
 	}
 	?>
 	<p>&nbsp;</p>
@@ -355,7 +416,7 @@ if( (strtoupper($ds_report) == "GENERATE REPORT" ||  strtoupper($org_report) == 
 					<td width="75" align="center"></td>
 				</tr>
 				<tr>
-					<td class="reportGrey">Number of Records within your <?php echo $grouping;?>:</td>
+					<td class="reportGrey">Number of records within your <?php echo $grouping;?>:</td>
 					<td class="reportResultCell" ><?php echo $collectionRecords;?></td>
 					<td class="reportResultCell" ><?php echo $partyRecords;?></td>
 					<td class="reportResultCell" ><?php echo $activityRecords;?></td>
@@ -524,6 +585,37 @@ if( (strtoupper($ds_report) == "GENERATE REPORT" ||  strtoupper($org_report) == 
 		</table></td></tr>
 		</table>	
 		<br />
+		<?php //if(isset($array['outLinks'][0])) {?>
+				<table class="reportTable">
+			<tbody>
+				<tr><td width="400" colspan="2" class="reportGrey" >Need some kind words about outlinks ..... </td><td></td><td></td></tr>
+				<?php 
+				if(isset($array['outLinks'][0]))
+				{
+					for($i=0;$i<$uniqueViewCount;$i++)
+					{
+						$theTitle = '';
+						$theArray = array_shift($array['outLinks']);
+
+						for($j=0;$j<count($page_views_stats);$j++)
+						{
+					 	if($theArray['registry_object_key']==$page_views_stats[$j]['key']) $theTitle = $page_views_stats[$j]['display_title'];
+						}
+						//if($theTitle=='')$theTitle = $page_views_stats[$j]['slug'];
+						if($theArray['link']!=''){
+					?>
+						<tr><td width="20"></td><td class="reportResultCell" width="400"><?php echo $theTitle ?> </td><td class="reportResultCell"><?php echo $theArray['link'] ?></td><td class="reportResultCell"><?php echo $theArray['clickcount'] ?></td></tr>
+					<?php }
+					}
+				}else{
+					?>
+						<tr><td width="20"></td><td class="reportResultCell" width="800">No analytical data available for the given date range.</td><td></td><td></td></tr>
+					<?php 				
+				
+				}
+				?>				
+			</tbody>
+		</table> <?php // } ?>
 				<p class="reportText">Presence:</p>		
 		<div class="reportDiv">
 <p class="reportText">Nationally:</p>		

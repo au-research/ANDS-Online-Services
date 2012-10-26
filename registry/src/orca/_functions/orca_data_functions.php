@@ -3561,6 +3561,7 @@ function getDataFromSlug($slug)
 	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
 	if($resultSet)
 	{
+
 		return $resultSet[0]; 
 	}
 	else {
@@ -3583,7 +3584,43 @@ function getCollectionsViewed($groupingType,$groupingValue,$dateFrom,$dateTo,$so
 		return false;
 	}
 }
-
+function getAllCollectionsViewed($dateFrom,$dateTo,$sortOrder,$class)
+{
+	global $gCNN_DBS_ORCA;	 
+	$resultSet = null;
+	$strQuery = 'SELECT slug, "key", "group",data_source, display_title, SUM('.$sortOrder.') as '.$sortOrder.'  from dba.tbl_google_statistics where  day >= \''.$dateFrom.'\' and day <= \''.$dateTo.'\' and lower(object_class) = \''.$class.'\' GROUP BY slug,key,"group",data_source,display_title ORDER BY '.$sortOrder.' DESC';
+	$params = array();
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	if($resultSet)
+	{
+		return $resultSet; 
+	}
+	else {
+		return false;
+	}
+}
+function getOutLinkClicks($dateFrom,$dateTo,$key)
+{
+	
+	$dateFromStamp = strtotime($dateFrom);
+	$dateToStamp =  strtotime($dateTo);
+	
+	global $gCNN_DBS_ORCA;	 
+	$resultSet = null;
+	$strQuery = 'select count(link) as clickcount ,links.registry_object_key, link 
+	from dba.tbl_stat_links links
+	where  date >= $1 and date <= $2 
+	and links.registry_object_key = $3 group by link, links.registry_object_key';
+	$params = array($dateFromStamp,$dateToStamp,$key);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	if($resultSet)
+	{
+		return $resultSet; 
+	}
+	else {
+		return false;
+	}
+}
 function getRegistryObjectKeysForGroup($object_group)
 {
 	global $gCNN_DBS_ORCA;	 
