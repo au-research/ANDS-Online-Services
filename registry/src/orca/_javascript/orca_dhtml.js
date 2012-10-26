@@ -897,9 +897,9 @@ function bindTagEvent(){
 		$(this).children('a').removeClass('hover');
 		$(deleteIcon).hide();
 	});
-	$('.confirmedDelete').live('click', function(e){
+	$('.confirmedDelete').die().live('click', function(e){
 		var tagID = $(this).attr('tagID');
-		console.log(tagID);
+		//console.log(tagID);
 		removeTag(tagID);
 	});
 }

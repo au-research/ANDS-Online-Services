@@ -33,7 +33,7 @@ if( $rawResults )
 {
 	foreach( $rawResults as $dataSource )
 	{
-		if( (userIsDataSourceRecordOwner($dataSource['record_owner']) || userIsORCA_QA()) )
+		if( (userIsDataSourceRecordOwner($dataSource['record_owner']) || userIsORCA_QA()) || hasRole('ORCA_TAG_MANAGER'))
 		{
 			$dataSources[] = $dataSource;
 		}
@@ -82,7 +82,7 @@ if (!$data_source_key)
 else
 {
 	$dataSource = getDataSources($data_source_key, null);
-	if(!(userIsDataSourceRecordOwner($dataSource[0]['record_owner']) || userIsORCA_QA()) )
+	if(!(userIsDataSourceRecordOwner($dataSource[0]['record_owner']) || userIsORCA_QA() || hasRole('ORCA_TAG_MANAGER')))
 	{
 		die("<font color='red'>Error: Access Denied for Datasource</font>");
 	}
@@ -129,7 +129,7 @@ if($data_source_key){
 
 function displayMMRDataSourceSwitcher(array $dataSources = array(), $selected_key = '')
 {
-	if (userIsORCA_ADMIN())
+	if (userIsORCA_ADMIN() || hasRole('ORCA_TAG_MANAGER'))
 	{
 		$dataSources[] = array('data_source_key'=>'PUBLISH_MY_DATA', 'title'=>'Publish My Data (ORCA Admin View)');
 		$dataSources[] = array('data_source_key'=>'ALL_DS_ORCA', 'title'=>'All Data Sources (ORCA Admin View)');
