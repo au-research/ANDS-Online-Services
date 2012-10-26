@@ -195,10 +195,9 @@ class Vocab_services extends CI_Model {
 		$qry = 'DELETE FROM vocab_version_formats WHERE id = '.$id;
 		$query = $this->db->query($qry);
 		
-		if ($query)
-		{
-			return NULL;
-		}
+		if ($query){
+			return true;
+		}else return false;
 	}	
 
 	function deleteVersion($id){
@@ -216,10 +215,10 @@ class Vocab_services extends CI_Model {
 		$qry = 'INSERT INTO vocab_version_formats (`version_id`,`type`,`value`,`format`) VALUES (\''.$version_id.'\',\''.$type.'\',\''.$value.'\',\''.$format.'\')';
 		$query = $this->db->query($qry);
 		
-		if ($query)
-		{
-			return NULL;
+		if ($query){
+			return true;
 		}
+		return false;
 	}	
 
 	function addVersion($vocab_id, $version){

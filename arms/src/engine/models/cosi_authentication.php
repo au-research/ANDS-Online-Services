@@ -230,7 +230,25 @@ class Cosi_authentication extends CI_Model {
     	return $ret;
     				
     }
+
+    public function getAllOrganisationalRoles(){
+        $roles = array();
+        $org_roles = $this->cosi_db->query("SELECT * FROM dba.tbl_roles WHERE role_type_id='ROLE_ORGANISATIONAL' AND enabled='t'");
+        foreach($org_roles->result() as $r){
+            $roles[] = array("role_id"=>$r->role_id, "name"=>$r->name);
+        }
+        return $roles;
+    }
     
+    public function registerAffiliation($thisRole, $orgRole){
+        $insertQry = 'INSERT INTO dba.tbl_role_relations (parent_role_id,child_role_id,created_who) VALUES (\''.$orgRole.'\',\''.$thisRole.'\',\''.$thisRole.'\');';
+        $query = $this->cosi_db->query($insertQry);
+        if($query){
+            return true;
+        }else{
+            return false;
+        }
+    }
     
     
     private function getChildRoles($role_id)

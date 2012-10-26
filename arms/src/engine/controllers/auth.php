@@ -29,6 +29,25 @@ class Auth extends CI_Controller {
 		// Logs the user out and redirects them to the homepage/logout confirmation screen
 		$this->user->logout(); 		
 	}
+
+	public function registerAffiliation(){
+		header('Cache-Control: no-cache, must-revalidate');
+		header('Content-type: application/json');
+
+		$orgRole = $this->input->post('orgRole');
+		$thisRole = $this->input->post('thisRole');
+		$jsonData = array();
+		$this->load->model('cosi_authentication', 'cosi');
+		if($this->cosi->registerAffiliation($thisRole, $orgRole)){
+			$jsonData['status']='OK';
+			$jsonData['message']='registering success';
+		}else{
+			$jsonData['status']='ERROR';
+			$jsonData['message']='problem encountered while registering affiliation';
+		}
+		$jsonData['message'].=$thisRole. ' affiliates with '.$orgRole;
+		echo json_encode($jsonData);
+	}
 	
 	public function dashboard()
 	{
@@ -36,7 +55,9 @@ class Auth extends CI_Controller {
 		$data['js_lib'] = array('core');
 		$data['scripts'] = array();
 		
-		
+		if(sizeof($this->user->affiliations())>0){
+			$data['hasAffiliation']=true;
+		}else $data['hasAffiliation']=false;
 		
 		if (mod_enabled('data_source'))
 		{
@@ -49,6 +70,9 @@ class Auth extends CI_Controller {
 		{
 			$this->load->model('vocab_service/vocab_services','vocab');
 			$data['my_vocabs'] = $this->vocab->getOwnedVocabs();
+
+			$this->load->model('cosi_authentication', 'cosi');
+			$data['available_organisations'] = $this->cosi->getAllOrganisationalRoles();
 		}
 		
 		

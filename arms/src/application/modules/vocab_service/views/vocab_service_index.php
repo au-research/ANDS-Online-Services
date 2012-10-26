@@ -223,7 +223,6 @@
 					<div class="btn-toolbar">
 						<div class="btn-group btn-group-vertical btn-group-left item-control" vocab_id="{{id}}">
 							<button class="btn edit"><i class="icon-edit"></i> Edit Vocabulary</button>
-							<button class="btn delete"><i class="icon-trash"></i> Delete Vocabulary</button>
 							<button class="btn addVersion" vocab_id="{{id}}"><i class="icon-plus"></i> Add A Version</button>
 						</div>
 					</div>
@@ -232,7 +231,7 @@
 			</div>
 			{{/owned}}
 
-			<div class="box">
+			<div class="box" vocab_id="{{id}}">
 				<div class="box-header"><h3>Versions</h3><div class="clearfix"/></div>
 				<div class="box-content">
 					<ul class="ro-list">
@@ -285,36 +284,6 @@
 </script>	
 
 
-<?php
-	$vocab_version_view_fields = array(
-		'id' => 'Id',
-		'status' => 'Status',
-		'title' => 'Version',
-			'format' => 'Format',
-			'type' => 'Type',
-	);
-?>
-
-<script type="text/x-mustache" id="vocab-version-view-template">
-	<div class="" id="vocab_view_container" vocab_id="{{id}}">
-		<dl class="dl-horizontal">
-		<dt>Versions</dt>
-		<dd>
-		{{#items}}
-		<?php 
-			foreach($vocab_version_view_fields as $key=>$name){
-				echo '{{#'.$key.'}}';
-				echo '{{'.$key.'}} ';
-				echo '{{/'.$key.'}}';
-			}					
-		?>
-		<br />
-		{{/items}}
-		</dd>
-		</dl>
-	</div>
-</script>
-
 <script type="text/x-mustache" id="vocab-format-downloadable-template">
 	{{#hasItems}}
 	<ul>
@@ -327,11 +296,26 @@
 
 <script type="text/x-mustache" id="vocab-format-downloadable-template-by-version">
 	{{#hasItems}}
-	<ul>
-		{{#items}}
-		<li>{{value}} <span class="label label-info">{{type}}</span> <span class="largeTag">{{format}}</span></li>
-		{{/items}}
-	</ul>
+	<table class="table table-bordered">
+		<thead>
+			<tr>
+				<th>Name</th><th>Type</th><th>Format</th><th>Action</th>
+			</tr>
+		</thead>
+		<tbody>
+			{{#items}}
+			<tr class="formatRow" format_id="{{id}}">
+				<td>{{value}}</td><td><span class="label label-info">{{type}}</span></td><td><span class="label label-info">{{format}}</span></td>
+				<td>
+					<div class="btn-group">
+			  			<button class="btn downloadFormat" format_id="{{id}}"><i class="icon-download"></i></button>
+				  		<button class="btn deleteFormat" format_id="{{id}}"><i class="icon-trash"></i></button>
+					</div>
+				</td>
+			</tr>
+			{{/items}}
+		</tbody>
+	</table>
 	{{/hasItems}}
 
 	{{#noItems}}
@@ -340,9 +324,42 @@
 
 	{{#owned}}
 		<div class="btn-group">
-  			<button class="btn addFormat"><i class="icon-plus"></i> Add a Format</button>
+  			<button class="btn addFormat" version_id="{{id}}"><i class="icon-plus"></i> Add a Format</button>
   			<button class="btn editVersion" version_id="{{id}}"><i class="icon-edit"></i></button>
 	  		<button class="btn deleteVersion" version_id="{{id}}"><i class="icon-trash"></i></button>
+		</div>
+
+		<div class="addFormatForm hide" version_id="{{id}}"><hr/>
+			<div class="form well">
+				<div class="control-group">
+				<label>Format:</label>
+					<div class="btn-group toggleAddFormat" data-toggle="buttons-radio" version_id="{{id}}">
+						<button type="button" class="btn" value="SKOS">SKOS</button>
+						<button type="button" class="btn" value="TEXT">TEXT</button>
+					</div>
+					<input type="hidden" name="format" class="inputAddFormat" version_id="{{id}}" value=""/>
+				</div>
+				<div class="control-group">
+				<label>Type:</label>
+					<div class="btn-group toggleAddFormatType" data-toggle="buttons-radio" version_id="{{id}}">
+						<button type="button" class="btn" value="file" content="fileSubmit">File</button>
+						<button type="button" class="btn" value="uri" content="uriSubmit">URI</button>
+					</div>
+					<input type="hidden" name="type" class="inputAddFormatType" version_id="{{id}}" value=""/>
+				</div>
+				<div class="control-group">
+					<div class="uriSubmit hide addFormatTypeContent" version_id="{{id}}">
+						<label>URI:</label>
+						<input type="text" class="input-medium" name="value"/>
+					</div>
+					<div class="fileSubmit hide addFormatTypeContent" version_id="{{id}}">
+						<label>File Upload:</label>
+						<input type="file" class="input-medium addFormatUploadValue" name="file" version_id="{{id}}"/>
+					</div>
+					<hr/>
+					<button type="submit" class="btn addFormatSubmit" version_id="{{id}}">Add Format</button> <a href="javascript:;" version_id="{{id}}" class="cancelAddFormat">Cancel</a>
+				</div>
+			</div>
 		</div>
 		
 		<div class="editVersionForm hide" version_id="{{id}}"><hr/>

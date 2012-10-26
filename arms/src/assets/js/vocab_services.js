@@ -237,6 +237,7 @@ function load_vocab(vocab_id){
 
 			$('.version').each(function(){
 				var version_id = $(this).attr('version_id');
+				var vocab_id = $(this).parents('.box').attr('vocab_id');
 				var target = $(this).parent();
 				$(target).qtip({
 					content:{
@@ -306,6 +307,13 @@ function load_vocab(vocab_id){
 									});
 								});
 
+								$('.cancelAddFormat').click(function(){
+									var version_id = $(this).attr('version_id');
+									$('.addFormatForm[version_id='+version_id+']').slideUp(100, function(){
+										$(target).qtip('reposition');
+									});
+								});
+
 								$('.deleteVersionConfirm').click(function(){
 									var version_id = $(this).attr('version_id');
 									var vocab_id = $(this).attr('vocab_id');
@@ -318,6 +326,99 @@ function load_vocab(vocab_id){
 										},
 										error: function(data){
 											logErrorOnScreen(data);
+										}
+									});
+								});
+
+								$('.addFormat').click(function(){
+									var version_id = $(this).attr('version_id');
+									$('.addFormatForm[version_id='+version_id+']').slideDown(100, function(){
+										$(target).qtip('reposition');
+									});
+								});
+
+								$('.toggleAddFormatType .btn').click(function(){
+									var version_id = $(this).parent().attr('version_id');
+									var show = $(this).attr('content');
+									$('.addFormatTypeContent').hide();
+									$('.'+show+'[version_id='+version_id+']').show();
+									$('.inputAddFormatType[version_id='+version_id+']').val($(this).attr('value'));
+								});
+
+								$('.toggleAddFormat .btn').click(function(){
+									var version_id = $(this).parent().attr('version_id');
+									$('.inputAddFormat[version_id='+version_id+']').val($(this).attr('value'));
+								});
+
+								$('.addFormatSubmit').click(function(){
+									var version_id = $(this).attr('version_id');
+									var form = $('.addFormatForm[version_id='+version_id+'] .form');
+									var jsonData = [];
+									$('input', form).each(function(){
+										var label = $(this).attr('name');
+										var value = $(this).val();
+										if(value!='' && value){
+											jsonData.push({name:label, value:value});
+										}
+									});
+									var type = $('.inputAddFormatType[version_id='+version_id+']').val();
+									var doAdd = true;
+
+									if(type=='file'){//uploading file
+										var data = new FormData();
+										$.each($('input.addFormatUploadValue[version_id='+version_id+']')[0].files, function(i, file) {
+											data.append('userfile', file);
+											jsonData.push({name:'value',value:file.name})
+										});
+										$.ajax({
+										    url: 'vocab_service/test',
+										    data: data,
+										    cache: false,
+										    contentType: false,
+										    processData: false,
+										    type: 'POST',
+										    success: function(data){
+										        if(data.status!='OK'){
+										        	doAdd = false;
+										        	logErrorOnScreen(data.message);
+										        }else{
+										        	$.ajax({
+														url:'vocab_service/addFormat/'+version_id, 
+														type: 'POST',
+														data: jsonData,
+														success: function(data){	
+															load_vocab(vocab_id);
+														}
+													});
+										        }
+										    }
+										});
+									}else{
+										$.ajax({
+											url:'vocab_service/addFormat/'+version_id, 
+											type: 'POST',
+											data: jsonData,
+											success: function(data){	
+												load_vocab(vocab_id);
+											}
+										});
+									}
+									
+								});
+
+								$('.deleteFormat').click(function(){
+									var format_id = $(this).attr('format_id');
+									$.ajax({
+										url:'vocab_service/deleteFormat/'+format_id, 
+										type: 'POST',
+										success: function(data){	
+											if(data.status=='OK'){
+												$('tr.formatRow[format_id='+format_id+']').fadeOut('200', function(){
+													$(target).qtip('reposition');
+												});
+											}else{
+												logErrorOnScreen(data);
+											}
 										}
 									});
 								});

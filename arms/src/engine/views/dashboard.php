@@ -35,11 +35,24 @@
 					      	<h3>My Affiliations</h3>
 					      	<p>
 					      		<?php
-					      			foreach($this->user->affiliations() AS $role)
-									{
-										echo $role . "<BR/>";
-									}
+					      			if($hasAffiliation){
+					      				foreach($this->user->affiliations() AS $role){
+											echo $role . "<BR/>";
+										}
+					      			}else{
+					      				echo 'You currently do not have any affiliation with any organisation';
+					      			}
+
+					      			echo '<div class="well">';
+					      			echo '<select id="organisational_roles">';
+					      			foreach($available_organisations as $o){
+					      				echo '<option value="'.$o['role_id'].'">'.$o['name'].'</option>';
+					      			}
+					      			echo '</select>';
+					      			echo '<button class="btn" id="affiliation_signup" localIdentifier="'.$this->user->localIdentifier().'">Affiliate with this Organisation</button>';
+					      			echo '</div>';
 					      		?>
+
 					      	</p>
 					      </div>
 					      <div class="span3">
@@ -60,10 +73,13 @@
 					      	<h3>My Data Sources</h3>
 					      	<p>
 					      		<?php
-					      			foreach($my_datasources AS $ds)
-									{
-										echo $ds->title . " (".$ds->key.")" . "<BR/>";
-									}
+					      			if(sizeof($my_datasources)>0){
+					      				foreach($my_datasources AS $ds){
+											echo $ds->title . " (".$ds->key.")" . "<BR/>";
+										}
+					      			}else{
+					      				echo "You can't manage any data source unless you are affiliate with an organisation";
+					      			}
 					      		?>
 					      	</p>
 					      </div>
@@ -73,11 +89,14 @@
 					      	<h3>My Vocabularies</h3>
 					      	<p>
 					      		<?php
-		
-					      			foreach($my_vocabs AS $v)
-									{
-										echo $v->title . "<BR/>";
+									if(sizeof($my_vocabs)>0){
+										foreach($my_vocabs AS $v){
+											echo $v->title . "<BR/>";
+										}
+									}else{
+										echo "You can't manage any vocabulary unless you are affiliate with an organisation";
 									}
+					      			
 					      		?>
 					      	</p>
 					      </div>
@@ -87,6 +106,16 @@
 			</div>
 		</div>
 		<div class="span2">&nbsp;</div>
+		<div class="modal hide" id="myModal">
+			  <div class="modal-header">
+			    <button type="button" class="close" data-dismiss="modal">×</button>
+			    <h3>Alert</h3>
+			  </div>
+			  <div class="modal-body"></div>
+			  <div class="modal-footer">
+			    
+			  </div>
+			</div>
 	</div>
 </div>
 

@@ -200,6 +200,31 @@ $(document).ready(function(){
 	updateGrowls();*/
 
 
+	//cosi main login screen 
+	$('#affiliation_signup').click(function(){
+		var orgRole = $('#organisational_roles').val();
+		var thisRole = $(this).attr('localIdentifier');
+		//console.log('registering '+thisRole+' to have this role '+orgRole);
+
+		var jsonData = [];
+		jsonData.push({name:'orgRole', value:orgRole});
+		jsonData.push({name:'thisRole', value:thisRole});
+		$.ajax({
+			url: 'auth/registerAffiliation/',
+			type: 'POST',
+			data: {orgRole:orgRole,thisRole:thisRole},
+			success: function(data){
+				if(data.status=='OK'){
+					$('#myModal .modal-body').append('You have to logout and log back in for the changes to take effect <a href="auth/logout">Logout</a>');
+					$('#myModal').modal();
+				}else{
+					console.error(data);
+				}
+			}
+		});
+
+	});
+
 });
 
 jQuery.fn.extend({

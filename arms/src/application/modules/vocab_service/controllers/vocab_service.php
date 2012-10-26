@@ -404,18 +404,67 @@ class Vocab_service extends MX_Controller {
 	 * @return NIL
 	 */	
 	
-	public function deleteFormat($format_id)
-	{
+	public function deleteFormat($format_id){
+		header('Cache-Control: no-cache, must-revalidate');
+		header('Content-type: application/json');
 		$this->load->model("vocab_services","vocab");
-
-		$changes= $this->vocab->deleteFormat($format_id);	
-	
+		$jsonData = array();
+		if($this->vocab->deleteFormat($format_id)){
+			$jsonData['status']='OK';
+			$jsonData['message']='format id = '.$format_id.' deleted successfully';
+		}else{
+			$jsonData['status']='ERROR';
+			$jsonData['message']='there is a problem deleting format id = '.$format_id;
+		}
+		echo json_encode($jsonData);
 	}	
 
 	public function deleteVersion(){
+		header('Cache-Control: no-cache, must-revalidate');
+		header('Content-type: application/json');
 		$version_id = $this->input->post('version_id');
 		$this->load->model("vocab_services","vocab");
 		$this->vocab->deleteVersion($version_id);
+	}
+
+	public function test(){
+		header('Cache-Control: no-cache, must-revalidate');
+		header('Content-type: application/json');
+
+		$config['upload_path'] = './assets/uploads/vocab_uploaded_files';
+		$config['allowed_types'] = '*';
+		$this->load->library('upload', $config);
+		$jsonData = array();
+		if ( ! $this->upload->do_upload()){
+			$error = array('error' => $this->upload->display_errors());
+			$jsonData['status']='ERROR'; 
+			$jsonData['message']=$error['error'];
+		}
+		else{
+			$data = array('upload_data' => $this->upload->data());
+			$jsonData['status']='OK'; 
+			$jsonData['message']='File uploaded successfully!';
+		}
+		$jsonData = json_encode($jsonData);
+		echo $jsonData;
+	}
+
+	public function addFormat($version_id){
+		$type = $this->input->post('type');
+		$format = $this->input->post('format');
+		$value = $this->input->post('value');
+		
+		$jsonData=array();
+		$this->load->model("vocab_services","vocab");
+		if($this->vocab->addFormat($version_id,$format,$type,$value)){
+			$jsonData['status']='OK';
+			$jsonData['message']='format added to the database';
+		}else{
+			$jsonData['status']='ERROR';
+			$jsonData['message']='problem adding format to the database';
+		}
+		$jsonData=json_encode($jsonData);
+		echo $jsonData;
 	}
 	
 	/**
@@ -428,22 +477,7 @@ class Vocab_service extends MX_Controller {
 	 * @return NIL
 	 */	
 	
-	public function addFormat($version_id)
-	{
-		$POST = $this->input->post();
-
-		$format = $this->input->post('versionFormat');	
-
-		$type = $this->input->post('versionFormatType');
 	
-		$value = $this->input->post('versionFormatValue');	
-		print_r($value);				
-
-		$this->load->model("vocab_services","vocab");
-
-		$format= $this->vocab->addFormat($version_id,$format,$type,$value);	
-	
-	}	
 
 	public function addVersion($vocab_id){
 		$this->load->model('vocab_services', 'vocab');
