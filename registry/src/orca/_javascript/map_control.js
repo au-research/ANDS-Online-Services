@@ -886,14 +886,15 @@ function mctDoSearch(controlDivId)
 	var searchResultsTextfieldId = MCT_ADDRESS_SEARCH_TEXTFIELD_ID_PREFIX + controlDivId;
 	var searchResultsTextfield = getObject(searchResultsTextfieldId);
 	var searchText = $.trim(searchResultsTextfield.value);
-
+	var controlDiv = $('#'+controlDivId);
+	var selector = $('input[name=geocoderSelector]:checked', controlDiv);
 	var searchResultsDivId = MCT_ADDRESS_SEARCH_RESULTS_ID_PREFIX + controlDivId;
 	var searchResultsDiv = getObject(searchResultsDivId);	
 	if( searchText != '' )
 	{		
 		searchResultsDiv.innerHTML = 'Searching...';
   		mctCurrentMapId = controlDivId;
-  		if($("input[@name=geocoderSelector]:checked").val()  == 'geocoderSelector.gazetteer')
+  		if($(selector).val()  == 'geocoderSelector.gazetteer')
   		{
   			mctGazetteerGeocoder(searchText);
   		}

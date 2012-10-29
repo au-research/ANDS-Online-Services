@@ -20,8 +20,6 @@ $tag = trim(getQueryValue('tag'));
 $contributed_by = getLoggedInUser();
 $keyHash = getQueryValue('keyHash');
 $tag = strtolower($tag);
-$tag = str_replace('\'', '\\\'', $tag);
-$tag = preg_replace('/[^a-zA-Z0-9\-]/', '', $tag);
 $tagID = 0;
 if(!tagExist($tag, $keyHash))
 {

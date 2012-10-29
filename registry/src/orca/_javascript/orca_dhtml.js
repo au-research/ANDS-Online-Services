@@ -562,12 +562,11 @@ $().ready(function(){
 		function addNewTag(element){
 			var tag_title = $(element).val();
 			tag_title = $.trim(tag_title);
-			tag_title = tag_title.replace(/[^a-zA-Z0-9\-]/g,"");
+			tag_title = tag_title.replace(/[^a-zA-Z0-9\s-]/g,"");
 			var keyHash = $(element).parents('ul').children().children('.addTag').attr('keyHash');
-			//http://devl.ands.org.au/workareas/leo/ands/registry/src/orca/manage/process_registry_object.php?task=addTag&tag=dogeatdfgjfgjogtoo&keyHash=2397bb5a4b1670faab26d6bd28608e39e2ee66ef
-			var url = rootAppPath+"orca/manage/process_registry_object.php?task=addTag&tag="+tag_title+'&keyHash='+keyHash;
+			var url = rootAppPath+"orca/manage/process_registry_object.php?task=addTag&tag="+escape(tag_title)+'&keyHash='+keyHash;
 			var thisTagInput = element;
-			
+			//console.log("tag_title: " + tag_title);			
 			if(tag_title!=''){
 				$.ajax({
 			        type:"POST",   
@@ -585,6 +584,7 @@ $().ready(function(){
 			}else{
 				$(thisTagInput).parent().remove();
 			}
+			
 		}
 		
 		bindTagEvent();
