@@ -574,6 +574,10 @@
 
     
     <xsl:template match="ro:name"/>
+    
+    <!-- ignore all other nodes and attributes -->
+	<xsl:template match="@* | node()" />
+
    		
    
 </xsl:stylesheet>
