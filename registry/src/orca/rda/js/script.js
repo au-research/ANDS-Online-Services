@@ -902,7 +902,7 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 					console.error(data);
 				}
 			});
-			//window.open(link);
+			window.open(link);
 		});
 		
 		$('#tag_submit').click(function(){
