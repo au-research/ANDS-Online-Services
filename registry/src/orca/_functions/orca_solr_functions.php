@@ -251,9 +251,9 @@ function addDraftSolrIndexForDatasource($dataSourceKey)
 				}
 		}
 	}
-			$result = curl_post($solr_update_url.'?commit=true', '<commit waitFlush="false" waitSearcher="false"/>');
+			$result .= curl_post($solr_update_url.'?commit=true', '<commit waitFlush="false" waitSearcher="false"/>');
 	}
-	return $message;
+	return $message."<br/> SOLR RESPONSE: ".$result;
 }
 
 
@@ -268,7 +268,7 @@ function addPublishedSolrIndexForDatasource($dataSourceKey)
 	if($allKeys)
 	{
 		$arraySize = sizeof($allKeys);
-		$message .= "Reindexing Published ".$dataSourceKey.": Total: ".$arraySize;
+		$message .= "Reindexing Published ".$dataSourceKey.": Total: ".$arraySize."<br/>";
 		$totalCount += $arraySize;
 		$result = '';
 		for($i = 0; $i < $arraySize ; $i++)
@@ -286,9 +286,9 @@ function addPublishedSolrIndexForDatasource($dataSourceKey)
 					}
 			}
 		}
-		$result = curl_post($solr_update_url.'?commit=true', '<commit waitFlush="false" waitSearcher="false"/>');
+		$result .= curl_post($solr_update_url.'?commit=true', '<commit waitFlush="false" waitSearcher="false"/>');
 	}
-	return $message;
+	return $message."<br/> SOLR RESPONSE: ".$result;
 }
 
 
