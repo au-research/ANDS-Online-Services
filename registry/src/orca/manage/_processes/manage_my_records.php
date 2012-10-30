@@ -84,7 +84,7 @@ switch(getQueryValue('action'))
 		
 		foreach($keys AS $key)
 		{
-			$response['response']=updateDraftRegistryObjectStatus(rawurldecode($key), $data_source_key, SUBMITTED_FOR_ASSESSMENT);
+			$response['response'] .= updateDraftRegistryObjectStatus(rawurldecode($key), $data_source_key, SUBMITTED_FOR_ASSESSMENT);
 		}
 		syncDraftKeys($keys, $data_source_key);
 		$target_data_source = getDataSources($data_source_key, null);
@@ -169,7 +169,8 @@ switch(getQueryValue('action'))
 		queueSyncDataSource($data_source_key);
 		$response['alert'] = $returnErrors;
 		$response['responsecode'] = "1";
-		$log = "APPROVING RECORDS <br/>KEYS: ".$keys." <br/>LOG: ".$returnErrors;
+		$keys_str = var_export($keys, true);
+		$log = "APPROVING RECORDS <br/>KEYS: ".$keys_str." <br/>LOG: ".$returnErrors;
 		insertDataSourceEvent($data_source_key, $log, 'INFO');
 		echo json_encode($response);
 		die();
@@ -212,7 +213,8 @@ switch(getQueryValue('action'))
 			}
 		}
 		queueSyncDataSource($data_source_key);
-		$log = "PUBLISHING KEYS <br/>KEYS: ".$keys." <br/>LOG: ".$error;
+		$keys_str = var_export($keys, true);
+		$log = "PUBLISHING KEYS <br/>KEYS: ".$keys_str." <br/>LOG: ".$error;
 		insertDataSourceEvent($data_source_key, $log, 'INFO');
 		//syncDraftKeys($keys, $data_source_key);
 		die();
