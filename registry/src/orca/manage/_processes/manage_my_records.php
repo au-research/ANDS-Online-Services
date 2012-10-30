@@ -162,13 +162,15 @@ switch(getQueryValue('action'))
 		deleteSetofSolrDrafts($keys, $data_source_key);
 		foreach($keys AS $key)
 		{
-			$returnErrors .= approveDraft(rawurldecode($key), $data_source_key);			
+			$returnErrors .= approveDraft($key, $data_source_key);			
 			$returnErrors .= syncKey(rawurldecode($key), $data_source_key);
 		}
 		//deleteSolrHashKeys(sha1($key.$data_source_key));//delete the draft
 		queueSyncDataSource($data_source_key);
 		$response['alert'] = $returnErrors;
 		$response['responsecode'] = "1";
+		$log = "APPROVING RECORDS <br/>KEYS: ".$keys." <br/>LOG: ".$returnErrors;
+		insertDataSourceEvent($data_source_key, $log, 'INFO');
 		echo json_encode($response);
 		die();
 		
@@ -178,6 +180,7 @@ switch(getQueryValue('action'))
 	case "PUBLISH":
 		deleteSetofSolrDrafts($keys, $data_source_key);
 		//var_dump($keys);
+		$error = '';
 		foreach($keys AS $key){
 			//is it a draft
 			$isDraft = getDraftRegistryObject(rawurldecode($key), $data_source_key);
@@ -209,6 +212,8 @@ switch(getQueryValue('action'))
 			}
 		}
 		queueSyncDataSource($data_source_key);
+		$log = "PUBLISHING KEYS <br/>KEYS: ".$keys." <br/>LOG: ".$error;
+		insertDataSourceEvent($data_source_key, $log, 'INFO');
 		//syncDraftKeys($keys, $data_source_key);
 		die();
 		

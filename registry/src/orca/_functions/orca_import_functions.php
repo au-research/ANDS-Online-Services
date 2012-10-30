@@ -1133,7 +1133,7 @@ function importSpatialExtent($id, $value, $type, $registryObjectKey)
 		getExtentFromGoogle(trim($value), &$north, &$south, &$west, &$east);
 	}
 	//$msg = $msg.'<br/> north:'.$north.' south:'.$south.' west:'.$west.' east:'.$east;
-	if($north != null && $south != nul && $west  != null && $east != null && $north <= 90 && $south >= -90 && $west  >= -180 && $east <= 180){
+	if($north != null && $south != null && $west  != null && $east != null && $north <= 90 && $south >= -90 && $west  >= -180 && $east <= 180){
 	return insertSpatialExtent($id, $id, $registryObjectKey, $north, $south, $west, $east);
 	}
 	else{
