@@ -348,7 +348,13 @@
             </xsl:when>
 
          </xsl:choose>
-            
+       <xsl:if test="ro:dates">
+               <p><b>Dates:</b> </p> 
+               <table>
+    <!--     <xsl:value-of select="ro:dates"/><br />  -->
+       		<xsl:apply-templates select="ro:dates"/>
+       		</table>  
+       </xsl:if>           
         <xsl:if test="ro:identifier">
             <div style="position:relative;clear:both;"><p><b>Identifiers:</b></p>
            	 	<div id="identifiers">
@@ -784,9 +790,9 @@ DOI:
             <xsl:text> </xsl:text>
             <xsl:value-of select="./ro:title"/>.
         </xsl:if>
-        <xsl:if test="./ro:edition != ''">
+        <xsl:if test="./ro:version != ''">
             <xsl:text> </xsl:text>
-            <xsl:value-of select="./ro:edition"/>.
+            <xsl:value-of select="./ro:version"/>.
         </xsl:if>   
         <xsl:if test="./ro:placePublished != ''">
             <xsl:text> </xsl:text>      
@@ -964,6 +970,17 @@ DOI:
 		<xsl:if test=".='email'">	
 	  		<xsl:value-of select=".."/><br />
 		</xsl:if>				
-	</xsl:template>  
-	      
+	</xsl:template> 
+	 
+    <xsl:template match="ro:dates">
+      <tr><td><xsl:value-of select="./@type"/>:  <td>    </td>  </td><td>
+        
+        <xsl:if test="./ro:date/@type!='dateTo'"> 
+       	 	<xsl:value-of select="./ro:date"/> 
+        </xsl:if>      
+         <xsl:if test="./ro:date/@type='dateTo'"> To 
+        <xsl:value-of select="./ro:date[@type='dateTo']"/> 
+        </xsl:if>
+       </td></tr>
+    </xsl:template>	      
 </xsl:stylesheet>

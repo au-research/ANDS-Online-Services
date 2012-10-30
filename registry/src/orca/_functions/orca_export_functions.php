@@ -242,7 +242,7 @@ function getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR = false, $inclu
 
 		// identifier
 		// -------------------------------------------------------------
-		$internalxml .= getDatesTypesXML($registryObjectKey, 'dates');
+		$internalxml .= getDatesTypesXML($registryObjectKey, 'dates', $forSOLR);
 
 		// name
 		// -------------------------------------------------------------
@@ -512,7 +512,7 @@ function getIdentifierTypesXML($registryObjectKey, $elementName)
 	return $xml;
 }
 
-function getDatesTypesXML($registryObjectKey, $elementName)
+function getDatesTypesXML($registryObjectKey, $elementName, $forSOLR = false)
 {
 	$xml = '';
 	$elementName = esc($elementName);
@@ -524,7 +524,12 @@ function getDatesTypesXML($registryObjectKey, $elementName)
 		{
 			if( $type = $element['date_type'] )
 			{
-				$type = ' type="'.esc($type).'"';
+				if($forSOLR)
+				{
+					$type = ' type="'.changeFromCamelCase(esc($type)).'"';
+				}else{
+					$type = ' type="'.esc($type).'"';
+				}
 			}
 			$value = '';
 			

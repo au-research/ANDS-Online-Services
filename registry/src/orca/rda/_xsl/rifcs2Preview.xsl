@@ -742,9 +742,9 @@ Handle:
             <xsl:text> </xsl:text>
             <xsl:value-of select="./ro:title"/>.
         </xsl:if>
-        <xsl:if test="./ro:edition != ''">
+        <xsl:if test="./ro:version != ''">
             <xsl:text> </xsl:text>
-            <xsl:value-of select="./ro:edition"/>.
+            <xsl:value-of select="./ro:version"/>.
         </xsl:if>   
         <xsl:if test="./ro:placePublished != ''">
             <xsl:text> </xsl:text>      
