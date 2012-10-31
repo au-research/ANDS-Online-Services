@@ -76,15 +76,19 @@
             </ul>
           </li>
         <?php endif; ?>
-        
-        <?php if($this->user->hasFunction('VOCAB_USER')): ?>
-          <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="#">My Vocabularies <b class="caret"></b></a>
-            <ul class="dropdown-menu sub-menu pull-right">
-              <li class=""><?php echo anchor('vocab_service/', 'Manage Vocabularies');?></li>
-            </ul>
-          </li>
-        <?php endif; ?>
+
+      <?php if($this->user->hasFunction('PUBLIC')):?>
+      <?php //if($this->user->hasFunction('VOCAB_USER')): ?>
+      <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Vocabularies <b class="caret"></b></a>
+        <ul class="dropdown-menu sub-menu pull-right">
+          <li class=""><?php echo anchor('vocab_service/', 'Browse Vocabularies');?></li>
+          <li class=""><?php echo anchor('vocab_service/publish', 'Publish');?></li>
+          <li class=""><?php echo anchor('vocab_service/support', 'Support');?></li>
+          <li class=""><?php echo anchor('vocab_service/about', 'About');?></li>
+        </ul>
+      </li>
+      <?php endif;?>
           
         <?php if($this->user->hasFunction('AUTHENTICATED_USER')): ?>
           <li class="dropdown">

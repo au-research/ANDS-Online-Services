@@ -76,7 +76,6 @@ class Vocab_services extends CI_Model {
 		if ($query->num_rows() == 0)
 		{
 			return NULL;
-			
 		}
 		else
 		{
@@ -183,6 +182,15 @@ class Vocab_services extends CI_Model {
 		
 	}	
 
+	function getFormatByID($format_id){
+		$query = $this->db->get_where('vocab_version_formats', array('id'=>$format_id));
+		if($query->num_rows()==0){
+			return false;
+		}else{
+			$formats = $query->result();
+			return $formats;
+		}
+	}
 
 	/**
 	 * deletes a given format from a vocab version
@@ -201,7 +209,13 @@ class Vocab_services extends CI_Model {
 	}	
 
 	function deleteVersion($id){
-		return $this->db->delete('vocab_versions', array('id' => $id)); 
+		$deleteVersion = $this->db->delete('vocab_versions', array('id' => $id)); 
+		if($deleteVersion){
+			$deleteFormats = $this->db->delete('vocab_version_formats', array('version_id'=>$id));
+			if($deleteFormats){
+				return true;
+			}else return false;
+		}else return false;
 	}
 	
 	/**
@@ -244,6 +258,37 @@ class Vocab_services extends CI_Model {
 		$this->db->insert('vocab_versions', $data);
 	}
 
+	function addBlankVocab($record_owner){
+		$data = array(
+			'record_owner'=>$record_owner,
+			'status'=>'DRAFT'
+		);
+		$this->db->insert('vocab_metadata', $data);
+
+		$last_id = $this->db->insert_id();
+
+
+		$data = array(
+			'vocab_id'=>$last_id,
+			'change_date'=>date("Y-m-d h:i:s"),
+			'description'=>'Initial vocabulary creation'
+		);
+
+		$this->db->insert('vocab_change_history', $data);
+
+		return $last_id;
+	}
+
+	function addChangeHistory($vocab_id, $description){
+		$data = array(
+			'vocab_id'=>$vocab_id,
+			'change_date'=>date("Y-m-d h:i:s"),
+			'description'=>$description
+		);
+
+		$this->db->insert('vocab_change_history', $data);
+	}
+
 	function updateVersion($version){
 		if($version['makeCurrent']){
 			$status = 'current';
@@ -267,9 +312,6 @@ class Vocab_services extends CI_Model {
 
 	}
 
-
-
-
 	
 	/**
 	 * Returns all changes of a vocab by vocab  ID (or NULL)
@@ -280,7 +322,7 @@ class Vocab_services extends CI_Model {
 	function getChangesByID($id)
 	{
 
-		$query = $this->db->select()->get_where('vocab_change_history', array('vocab_id'=>$id));
+		$query = $this->db->select()->order_by('change_date desc')->get_where('vocab_change_history', array('vocab_id'=>$id));
 
 		if ($query->num_rows() == 0)
 		{
@@ -322,6 +364,28 @@ class Vocab_services extends CI_Model {
 		
 		return $matches;
 	} 	
+
+
+	function getAllPublished($limit = 16, $offset =0)
+	{
+	 	$matches = array();
+		if($limit==0){
+			$query = $this->db->get_where('vocab_metadata', array('status'=>'PUBLISHED'));
+		}else{
+			$query = $this->db->get_where('vocab_metadata', array('status'=>'PUBLISHED'), $limit, $offset);
+		}
+
+		
+		if ($query->num_rows() > 0)
+		{
+			foreach ($query->result_array() AS $result)
+			{
+				$matches[] = new _vocab($result['id']);
+			}
+		}
+		
+		return $matches;
+	}
 	
 	/**
 	 * Get all datasources
@@ -330,7 +394,7 @@ class Vocab_services extends CI_Model {
 	 * @param the offset value
 	 * @return array(_data_source) or empty array
 	 */
-	function getOwnedVocabs($limit = 16, $offset =0)
+	function getGroupVocabs($limit = 16, $offset =0)
 	{
 		$vocabs = array();
 		$affiliations = $this->user->affiliations();
@@ -360,7 +424,28 @@ class Vocab_services extends CI_Model {
 			}
 		}	
 		return $vocabs;
-	} 	
+	}
+
+	function getOwnedVocabs(){
+		$vocabs = array();
+		$localIdentifier = $this->user->localIdentifier();
+		$query = $this->db->get_where('vocab_metadata', array('record_owner' => $localIdentifier));
+		if($query->num_rows()==0){
+			return $vocabs;
+		}else{
+			foreach($query->result_array() as $v){
+				$vocabs[] = new _vocab($v['id']);
+			}
+		}
+		return $vocabs;
+	}
+
+	function getAllOwnedVocabs(){
+		$vocabs = array();
+		$vocabs = array_merge($vocabs, $this->getGroupVocabs());
+		$vocabs = array_merge($vocabs, $this->getOwnedVocabs());
+		return $vocabs;
+	}
 
 	
 	/**

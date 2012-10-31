@@ -194,9 +194,6 @@ $(document).ready(function(){
     }
 	/*createGrowl(false);
 	createGrowl(false);
-	createGrowl(false);
-	createGrowl(false);
-	createGrowl(false);
 	updateGrowls();*/
 
 
@@ -215,14 +212,44 @@ $(document).ready(function(){
 			data: {orgRole:orgRole,thisRole:thisRole},
 			success: function(data){
 				if(data.status=='OK'){
-					$('#myModal .modal-body').append('You have to logout and log back in for the changes to take effect <a href="auth/logout">Logout</a>');
+					$('#myModal .modal-body').html('You have to logout and log back in for the changes to take effect <a href="auth/logout">Logout</a>');
 					$('#myModal').modal();
+				}else if(data.status=='WARNING'){
+					alert(data.message);
 				}else{
 					console.error(data);
 				}
 			}
 		});
+	});
 
+	$('#openAddOrganisation').click(function(){
+		var html = $('#addOrgHTML').html();
+		$('#myModal .modal-body').html(html);
+		$('#myModal').modal();
+	});
+
+	$('#confirmAddOrganisation').live({
+		click:function(){
+			var orgRole = $("#myModal input.orgName").val();
+			var thisRole = $('#myModal input.orgName').attr('localIdentifier');
+			$('#myModal').modal('hide');
+			$.ajax({
+				url: 'auth/registerAffiliation/true',
+				type: 'POST',
+				data: {orgRole:orgRole,thisRole:thisRole},
+				success: function(data){
+					if(data.status=='OK'){
+						$('#myModal .modal-body').html('You have to logout and log back in for the changes to take effect <a href="auth/logout">Logout</a>');
+						$('#myModal').modal();
+					}else if(data.status=='WARNING'){
+						alert(data.message);
+					}else{
+						console.error(data);
+					}
+				}
+			});
+		}
 	});
 
 });
@@ -314,6 +341,74 @@ function formatXml(xml) {
 
     return formatted;
 }
+
+
+function Core_bindFormValidation(form){
+	$(form).attr('valid', false);
+	$('input,textarea', form).each(function(){
+		Core_checkValidField(form, this);
+		$(this).die().live({
+			blur: function(){
+				Core_checkValidField(form, this);
+				Core_checkValidForm(form);
+			},
+			keyup: function(){
+				Core_checkValidField(form, this);
+				Core_checkValidForm(form);
+			}
+		});
+	});
+}
+
+function Core_checkValidField(form, field){
+	var valid = true;
+	if(field.required){//required validation
+		if($(field).val().length==0){
+			valid = false;
+		}else{
+			if($(field).attr('type')=='email'){//email validation
+				if(validateEmail($(field).val())){
+					valid = true;
+				}else{
+					valid = false;
+				}
+			}else{
+				valid = true;
+			}
+		}
+
+		if(valid){
+			$(field).closest('div.control-group').removeClass('error').addClass('success');
+			return true;
+		}else{
+			$(form).attr('valid', false); $(field).closest('div.control-group').removeClass('success').addClass('error');
+			return false;
+		}
+	}
+
+	//never gonna get here for field needing validation
+	return valid;
+}
+
+function Core_checkValidForm(form){
+	var valid = true;
+	$('input,textarea',form).each(function(){
+		if(!Core_checkValidField(form, this)){
+			valid = false;
+		}
+	});
+	if(valid){
+		$(form).attr('valid', true);
+	}else{
+		$(form).attr('valid', false);
+	}
+	return valid;
+}
+
+function validateEmail(email) { 
+    var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+} 
 
 Number.prototype.pad = function (len) {
     return (new Array(len+1).join("0") + this).slice(-len);

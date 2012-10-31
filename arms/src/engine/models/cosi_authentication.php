@@ -249,6 +249,14 @@ class Cosi_authentication extends CI_Model {
             return false;
         }
     }
+
+    public function createOrganisationalRole($orgRole, $thisRole){
+        $insertQry = 'INSERT INTO dba.tbl_roles (role_id,role_type_id,name,enabled,created_who) VALUES (\''.$orgRole.'\',\'ROLE_ORGANISATIONAL\',\''.$orgRole.'\',\'TRUE\',\''.$thisRole.'\');';
+        $query = $this->cosi_db->query($insertQry);
+        if($query){
+            return true;
+        }else return false;
+    }
     
     
     private function getChildRoles($role_id)

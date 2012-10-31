@@ -29,7 +29,7 @@ class Vocab_service extends MX_Controller {
 		$this->load->model("vocab_services","vocab");
 		$vocabs = $this->vocab->getAll(0,0);//get everything
 
-		$data['my_vocabs'] = $this->vocab->getOwnedVocabs();
+		$data['my_vocabs'] = $this->vocab->getAllOwnedVocabs();
 
 		$items = array();
 		foreach($vocabs as $vocab){
@@ -73,7 +73,7 @@ class Vocab_service extends MX_Controller {
 
 
 		//get owned vocabs permission
-		$ownedVocabs = $this->vocab->getOwnedVocabs();
+		$ownedVocabs = $this->vocab->getAllOwnedVocabs();
 		$ownedVocabsID = array();
 		foreach($ownedVocabs as $v){
 			array_push($ownedVocabsID, $v->id);
@@ -83,7 +83,10 @@ class Vocab_service extends MX_Controller {
 		$limit = 9;
 		$offset = ($page-1) * $limit;
 
-		$vocabs = $this->vocab->getAll($limit, $offset);
+		$vocabs = $this->vocab->getAllPublished($limit, $offset);
+
+
+
 		if(sizeof($vocabs)<$limit){
 			$jsonData['more'] = false;
 		}else $jsonData['more'] = true;
@@ -130,7 +133,7 @@ class Vocab_service extends MX_Controller {
 		if($vocab)
 		{
 			//get owned vocabs permission
-			$ownedVocabs = $this->vocab->getOwnedVocabs();
+			$ownedVocabs = $this->vocab->getAllOwnedVocabs();
 			$ownedVocabsID = array();
 			foreach($ownedVocabs as $v){
 				array_push($ownedVocabsID, $v->id);
@@ -187,8 +190,8 @@ class Vocab_service extends MX_Controller {
 				foreach($changes as $change){
 					$item = array();
 					$item['change_date'] = $change->change_date;
-					$item['id'] = $change->id;
-					$item['description'] = $change->description;
+					$item['change_id'] = $change->id;
+					$item['change_description'] = $change->description;
 					array_push($items, $item);
 				}
 			}else{
@@ -224,6 +227,7 @@ class Vocab_service extends MX_Controller {
 				$item['value']=$d->value;
 				$item['version_id']=$d->version_id;
 				$item['status']=$d->status;
+				$item['id']=$d->id;
 				array_push($items, $item);
 			}
 			$jsonData['items']=$items;
@@ -271,7 +275,7 @@ class Vocab_service extends MX_Controller {
 		}else{
 			$jsonData['notCurrent']=true;
 		}
-		$ownedVocabs = $this->vocab->getOwnedVocabs();
+		$ownedVocabs = $this->vocab->getAllOwnedVocabs();
 		$ownedVocabsID = array();
 		foreach($ownedVocabs as $v) array_push($ownedVocabsID, $v->id);
 		if(in_array($jsonData['vocab_id'], $ownedVocabsID)) $jsonData['owned']=true;
@@ -291,49 +295,46 @@ class Vocab_service extends MX_Controller {
 	 * @todo ACL on which vocabs you have access to, error handling
 	 * @return [JSON] of a list of vocab versions
 	 */	
-	public function getVocabVersions($id){
+	public function getVersions($vocab_id){
 		header('Cache-Control: no-cache, must-revalidate');
 		header('Content-type: application/json');
 
 		$jsonData = array();
 		$jsonData['status'] = 'OK';
+		$jsonData['id']=$vocab_id;
+		//vocab versions
+		$this->load->model('vocab_services', 'vocab');
+		$versions= $this->vocab->getVersionsByID($vocab_id);
 
-		$this->load->model("vocab_services","vocab");
 
-		$versions= $this->vocab->getVersionsByID($id);
+		//get owned vocabs permission
+		$ownedVocabs = $this->vocab->getAllOwnedVocabs();
+		$ownedVocabsID = array();
+		foreach($ownedVocabs as $v){
+			array_push($ownedVocabsID, $v->id);
+		}
+		if(in_array($vocab_id, $ownedVocabsID)) $jsonData['item']['owned']=true;
+
 		$items = array();
 		$currentVersion ='';
 		if($versions)
 		{
+			$jsonData['item']['hasVersions']=true;
 			foreach($versions as $version){
-			
-				
-				if($currentVersion!=$version->version_id)
-				{
-					if($currentVersion!=''){
-						array_push($items, $item);
-					}
-					$currentVersion = $version->version_id;
-					$item = array();
-					$item['formats'] = array();									
-					$item['status'] = $version->status;
-					$item['id'] = $version->version_id;
-					$item['title'] = $version->title;
-					
-				} 
-					
-				$formats['format'][] = $version->format;
-				$formats['type'][] = $version->type;
-				$formats['value'][] = $version->value;
-				array_push($item['formats'], $formats);
-				unset($formats);
-			
+				$item=array();
+				$item['status']=$version->status;
+				$item['title']=$version->title;
+				$item['id']=$version->id;
+				array_push($items, $item);
 			}
-			array_push($items, $item);
+			$jsonData['item']['versions']=$items;
+		}else{
+			$jsonData['noVersions']=true;
 		}
-		$jsonData['items'] = $items;
+
+		
 		$jsonData = json_encode($jsonData);
-		return $jsonData;
+		echo $jsonData;
 	}
 	
 	/**
@@ -431,8 +432,8 @@ class Vocab_service extends MX_Controller {
 		header('Cache-Control: no-cache, must-revalidate');
 		header('Content-type: application/json');
 
-		$config['upload_path'] = './assets/uploads/vocab_uploaded_files';
-		$config['allowed_types'] = '*';
+		$config['upload_path'] = $this->config->item('upload_path');
+		$config['allowed_types'] = $this->config->item('allowed_types');
 		$this->load->library('upload', $config);
 		$jsonData = array();
 		if ( ! $this->upload->do_upload()){
@@ -456,6 +457,9 @@ class Vocab_service extends MX_Controller {
 		
 		$jsonData=array();
 		$this->load->model("vocab_services","vocab");
+
+		if($type=='uri') $value = auto_link($value);
+
 		if($this->vocab->addFormat($version_id,$format,$type,$value)){
 			$jsonData['status']='OK';
 			$jsonData['message']='format added to the database';
@@ -465,6 +469,43 @@ class Vocab_service extends MX_Controller {
 		}
 		$jsonData=json_encode($jsonData);
 		echo $jsonData;
+	}
+
+	public function downloadFormat($format_id){
+		$this->load->model('vocab_services','vocab');		
+		$format = $this->vocab->getFormatByID($format_id);
+		$this->load->helper('url');
+		if($format){
+			$f = $format[0];//first format
+			if($f->type=='uri'){
+				$url = prep_url($f->value);
+				redirect($url);
+			}else if($f->type=='file'){
+				//echo 'is a file';
+				$upload_path = $this->config->item('upload_path');
+				$this->load->helper('download');
+				$data = file_get_contents($upload_path.'/'.$f->value); // Read the file's contents
+				$name = $f->value;
+				force_download($name, $data);
+			}
+		}else{
+			echo 'bad format';
+		}
+	}
+
+	public function addChangeHistory(){
+		$vocab_id = $this->input->post('vocab_id');
+		$description = $this->input->post('description');
+		$this->load->model('vocab_services', 'vocab');
+		$jsonData = array();
+		if($this->vocab->addChangeHistory($vocab_id, $description)){
+			$jsonData['status']='OK';
+			$jsonData['message']='change history updated';
+		}else{
+			$jsonData['status']='ERROR';
+			$jsoNData['message']='change history update failed';
+		}
+		echo json_encode($jsonData);
 	}
 	
 	/**
@@ -598,21 +639,29 @@ class Vocab_service extends MX_Controller {
 			$vocab = $this->vocab->getByID($id);
 		}
 
-
 		if ($vocab)
 		{
-			foreach($vocab->attributes() as $attrib=>$value){						
-				if ($new_value = $this->input->post($attrib)) {
-					if($new_value=='true') $new_value=DB_TRUE;
-					if($new_value=='false') $new_value=DB_FALSE;
-					$vocab->setAttribute($attrib, $new_value);
+			if($this->vocab->getAvailableFormatsByID($vocab->id)){
+				foreach($vocab->attributes() as $attrib=>$value){						
+					if ($new_value = $this->input->post($attrib)) {
+						if($new_value=='true') $new_value=DB_TRUE;
+						if($new_value=='false') $new_value=DB_FALSE;
+						$vocab->setAttribute($attrib, $new_value);
+					}
 				}
+				$vocab->setAttribute('status','PUBLISHED');
+				$vocab->save();
+				$jsonData['status']='OK';
+				$jsonData['message']='Your Vocabulary was successfully updated <a href="#!/view/'.$id.'">Go back to view</a>';
+			}else{
+				$vocab->setAttribute('status','DRAFT');
+				$vocab->save();
+				$jsonData['status']='WARNING';
+				$jsonData['message']='The vocabulary needs at least a version with a downloadable format to be saved correctly';
 			}
-			$vocab->save();
+			
 		}
 		
-		$jsonData['status']='OK';
-		$jsonData['message']='Your Vocabulary was successfully updated <a href="#!/view/'.$id.'">Go back to view</a>';
 		$jsonData = json_encode($jsonData);
 		echo $jsonData;
 	}
@@ -657,7 +706,22 @@ class Vocab_service extends MX_Controller {
 		$jsonData = json_encode($jsonData);
 		echo $jsonData;
 	}
-	
+
+	public function createBlankVocab(){
+		header('Cache-Control: no-cache, must-revalidate');
+		header('Content-type: application/json');
+		$this->load->model('vocab_services', 'vocab');
+		$record_owner = $this->user->localIdentifier();
+		if($id = $this->vocab->addBlankVocab($record_owner)){
+			$jsonData['status']='OK';
+			$jsonData['message']='blank vocab created sucessfully';
+			$jsonData['id']=$id;
+		}else{
+			$jsonData['status']='ERROR';
+			$jsonData['message']='blank vocab created unsucessfully';
+		}
+		echo json_encode($jsonData);
+	}
 	
 	
 	/**

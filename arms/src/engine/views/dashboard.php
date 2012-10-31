@@ -14,6 +14,117 @@
 
 <div class="container" id="main-content">
 	<div class="row">
+		<div class="span12">
+			<div class="box">
+				<div class="box-header clearfix">
+					<h1>ANDS Registry Dashboard</h1>
+				</div>
+				<div class="box-content">
+					<div class="well">
+						<p>You are now logged in as <strong><?=$this->user->name();?></strong><br/>
+						using the authentication provider's identifier of <strong><?=$this->user->localIdentifier();?></strong></p> <p>You can <em>Logout</em> by clicking the user icon in the upper right of your screen.</p>			
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="span4">
+			<div class="box">
+				<div class="box-header clearfix">
+					<h1>Affiliations</h1>
+				</div>
+				<div class="box-content">
+					<?php
+		      			if($hasAffiliation){
+		      				echo '<ul>';
+		      				foreach($this->user->affiliations() AS $role){
+								echo '<li>'.$role. "</li>";
+							}
+							echo '</ul>';
+		      			}else{
+		      				echo '	<p>
+		      							You currently do not have any affiliation with any organisation.
+		      						</p>';
+		      			}
+
+		      			echo '<div class="well">';
+		      			echo '<select id="organisational_roles">';
+		      			foreach($available_organisations as $o){
+		      				echo '<option value="'.$o['role_id'].'">'.$o['name'].'</option>';
+		      			}
+		      			echo '</select><br/>';
+		      			echo '<p><button class="btn" id="affiliation_signup" localIdentifier="'.$this->user->localIdentifier().'">Affiliate with this Organisation</button></p>';
+		      			echo '<p><a href="javascript:;" id="openAddOrganisation">Organisation not in list?</a></p>';
+		      			echo '</div>';
+		      		?>
+				</div>
+			</div>
+
+			<div class="hide" id="addOrgHTML">
+				<p>Add an organisation and be automatically affiliate with this:</p>
+				<p>Organisation Name: <input type="text" class="input-large orgName" localIdentifier="<?php echo $this->user->localIdentifier();?>"/></p>
+				<button class="btn" id="confirmAddOrganisation">Add</button>
+			</div>
+		</div>
+
+		<div class="span4">
+			<div class="box">
+				<div class="box-header clearfix">
+					<h1>Group vocabularies</h1>
+				</div>
+				<div class="box-content">
+					<?php
+						if($hasAffiliation){
+							if(sizeof($group_vocabs)>0){
+								echo '<ul>';
+								foreach($group_vocabs as $g){
+									echo '<li>'.$g->title.'</li>';
+								}
+								echo '</ul>';
+							}else{
+								echo 'Your group has not created any vocabulary yet';
+							}
+						}else{
+							echo "You can't manage any vocabulary unless you are affiliate with an organisation";
+						}
+					?>
+				</div>
+			</div>
+		</div>
+
+		<div class="span4">
+			<div class="box">
+				<div class="box-header clearfix">
+					<h1>My vocabularies</h1>
+				</div>
+				<div class="box-content">
+					<?php
+						if($hasAffiliation){
+							if(sizeof($owned_vocabs)>0){
+								echo '<ul>';
+								foreach($owned_vocabs as $g){
+									echo '<li>'.$g->title.'</li>';
+								}
+								echo '</ul>';
+							}else{
+								echo 'You have not created any vocabulary yet';
+							}
+							
+						}else{
+							echo "You can't manage any vocabulary unless you are affiliate with an organisation";
+						}
+					?>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+<div class="container hide">
+	<div class="row">
 		<div class="span2">&nbsp;</div>
 		<div class="span8">
 			<div class="box">
@@ -23,11 +134,9 @@
 				
 				<div class="box-content">
 					<div class="hero-unit">
-						  <p>You are now logged in as <strong><?=$this->user->name();?></strong><br/>
-							 using the authentication provider's identifier of <strong><?=$this->user->localIdentifier();?></strong></p>
+						  
 						
 						
-						<p>You can <em>Logout</em> by clicking the user icon in the upper right of your screen.</p>
 					</div>
 					<span class="label label-important">DEBUG</span>
 					<div class="row">
@@ -89,13 +198,7 @@
 					      	<h3>My Vocabularies</h3>
 					      	<p>
 					      		<?php
-									if(sizeof($my_vocabs)>0){
-										foreach($my_vocabs AS $v){
-											echo $v->title . "<BR/>";
-										}
-									}else{
-										echo "You can't manage any vocabulary unless you are affiliate with an organisation";
-									}
+									
 					      			
 					      		?>
 					      	</p>

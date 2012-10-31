@@ -47,7 +47,6 @@
             <script src="<?php echo base_url();?>assets/lib/jquery.ba-hashchange.js" type="text/javascript"></script>
             <script src="<?php echo base_url();?>assets/lib/bootstrap_toggle_button/jquery.toggle.buttons.js" type="text/javascript"></script>
             <script src="<?php echo base_url();?>assets/lib/qtip2/jquery.qtip.min.js" type="text/javascript"></script>
-
         <?php elseif($lib=='graph'):?>
             <!--[if lt IE 9]><script language="javascript" type="text/javascript" src="excanvas.js"></script><![endif]-->
             <script language="javascript" type="text/javascript" src="<?php echo base_url();?>assets/lib/jqplot/jquery.jqplot.min.js"></script>
@@ -69,6 +68,7 @@
         
         <?php elseif($lib=='abs_sdmx_querytool'):?>
             <script type="text/javascript" src="<?php echo base_url();?>assets/js/abs_sdmx_querytool.js"></script>
+            
   
   
   		<?php endif; ?>
