@@ -347,11 +347,11 @@
             </xsl:when>
 
          </xsl:choose>
-       <xsl:if test="ro:dates">
+       <xsl:if test="extRif:dates">
                <p><b>Dates:</b> </p> 
                <table>
     <!--     <xsl:value-of select="ro:dates"/><br />  -->
-       		<xsl:apply-templates select="ro:dates"/>
+       		<xsl:apply-templates select="extRif:dates"/>
        		</table>  
        </xsl:if>           
         <xsl:if test="ro:identifier">
@@ -592,13 +592,13 @@
         </p>        
     </xsl:template>
     <xsl:template match="ro:format">
-  		<xsl:apply-templates select="./ro:identifier[@type='doi']" mode = "formatdoi"/>
-    	<xsl:apply-templates select="./ro:identifier[@type='ark']" mode = "formatark"/>    	
-     	<xsl:apply-templates select="./ro:identifier[@type='AU-ANL:PEAU']" mode = "formatnla"/>  
-     	<xsl:apply-templates select="./ro:identifier[@type='handle']" mode = "formathandle"/>   
-     	<xsl:apply-templates select="./ro:identifier[@type='purl']" mode = "formatpurl"/>
-    	<xsl:apply-templates select="./ro:identifier[@type='uri']" mode = "formaturi"/> 
- 		<xsl:apply-templates select="./ro:identifier[not(@type =  'doi' or @type =  'ark' or @type =  'AU-ANL:PEAU' or @type =  'handle' or @type =  'purl' or @type =  'uri')]" mode="formatother"/>			            	                          	
+  		<xsl:apply-templates select="./extRif:identifier[@type='Doi']" mode = "formatdoi"/>
+    	<xsl:apply-templates select="./extRif:identifier[@type='Ark']" mode = "formatark"/>    	
+     	<xsl:apply-templates select="./extRif:identifier[@type='AU-ANL:PEAU']" mode = "formatnla"/>  
+     	<xsl:apply-templates select="./extRif:identifier[@type='Handle']" mode = "formathandle"/>   
+     	<xsl:apply-templates select="./extRif:identifier[@type='Purl']" mode = "formatpurl"/>
+    	<xsl:apply-templates select="./extRif:identifier[@type='Uri']" mode = "formaturi"/> 
+ 		<xsl:apply-templates select="./extRif:identifier[not(@type =  'Doi' or @type =  'Ark' or @type =  'AU-ANL:PEAU' or @type =  'Handle' or @type =  'Purl' or @type =  'Uri')]" mode="formatother"/>			            	                          	
     </xsl:template>
     
 
@@ -631,7 +631,7 @@ ARK:
 	</xsl:if>
     </p>	 
 </xsl:template>
-  <xsl:template match="ro:identifier" mode="formatark">
+  <xsl:template match="extRif:identifier" mode="formatark">
     <p>
 Format ARK: 
 	<xsl:variable name="theidentifier">    			
@@ -716,7 +716,7 @@ DOI:
 
     			
  </xsl:template>
-  <xsl:template match="ro:identifier" mode="formatdoi">   		
+  <xsl:template match="extRif:identifier" mode="formatdoi">   		
     <p>			
 Format DOI: 
     <xsl:variable name="theidentifier">    			
@@ -775,7 +775,7 @@ Format DOI:
 		</a> 
    </p>
  </xsl:template>
-  <xsl:template match="ro:identifier" mode="formathandle">      
+  <xsl:template match="extRif:identifier" mode="formathandle">      
  <p>			
   Format Handle: 
 	<xsl:variable name="theidentifier">    			
@@ -824,7 +824,7 @@ Format DOI:
     </a> 
     </p>
   </xsl:template>
-  <xsl:template match="ro:identifier" mode="formatpurl">     
+  <xsl:template match="extRif:identifier" mode="formatpurl">     
     <p>			
  	Format PURL: 
     <xsl:variable name="theidentifier">    			
@@ -869,7 +869,7 @@ Format DOI:
     </a>   		 
    </p>
   </xsl:template> 
-    <xsl:template match="ro:identifier" mode="formaturi">    
+    <xsl:template match="extRif:identifier" mode="formaturi">    
   <p> 			
  Format	URI: 
    <xsl:variable name="theidentifier">    			
@@ -909,7 +909,7 @@ Format DOI:
 	</xsl:choose>
 	</p>
   </xsl:template>  
-  <xsl:template match="ro:identifier" mode="formatother">   
+  <xsl:template match="extRif:identifier" mode="formatother">   
  <p>  Format 			 			 	    			 			
    <!--  <xsl:attribute name="name"><xsl:value-of select="./@type"/></xsl:attribute>  -->
    <xsl:choose>
@@ -926,6 +926,7 @@ Format DOI:
 	</xsl:choose>
 	</p>
   </xsl:template>   
+  
     <xsl:template match="ro:citationInfo/ro:fullCitation">
         <p><xsl:value-of select="."/></p>
         <span class="Z3988">    
@@ -996,7 +997,7 @@ Format DOI:
         	<xsl:text>&amp;rft.title=</xsl:text><xsl:value-of select="./ro:title"/> 
         	<xsl:text>&amp;rft.place=</xsl:text><xsl:value-of select="./ro:placePublished"/>
         	<xsl:text>&amp;rft_id=</xsl:text><xsl:value-of select="./ro:url"/>
-        	<xsl:text>&amp;rft.edition=</xsl:text><xsl:value-of select="./ro:edition"/>.
+        	<xsl:text>&amp;rft.edition=</xsl:text><xsl:value-of select="./ro:version"/>.
         	<xsl:text>&amp;rft.description=</xsl:text><xsl:value-of select="./ro:context"/>
         	</xsl:attribute>
     	</span>
@@ -1142,14 +1143,14 @@ Format DOI:
 		</xsl:if>				
 	</xsl:template> 
 	 
-    <xsl:template match="ro:dates">
+    <xsl:template match="extRif:dates">
       <tr><td><xsl:value-of select="./@etype"/>:  <td>    </td>  </td><td>
         
-        <xsl:if test="./ro:date/@type!='dateTo'"> 
-       	 	<xsl:value-of select="./ro:date[@type!='dateTo']"/> 
+        <xsl:if test="./extRif:date/@type!='dateTo'"> 
+       	 	<xsl:value-of select="./extRif:date[@type!='dateTo']"/> 
         </xsl:if>      
-         <xsl:if test="./ro:date/@type='dateTo'"> To 
-        <xsl:value-of select="./ro:date[@type='dateTo']"/> 
+         <xsl:if test="./extRif:date/@type='dateTo'"> To 
+        <xsl:value-of select="./extRif:date[@type='dateTo']"/> 
         </xsl:if>
        </td></tr>
     </xsl:template>	  

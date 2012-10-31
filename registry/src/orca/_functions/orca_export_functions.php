@@ -281,7 +281,7 @@ function getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR = false, $inclu
 
 		// relatedInfo
 		// -------------------------------------------------------------
-		$internalxml .= getRelatedInfoTypesXML($registryObjectKey, 'relatedInfo');
+		$internalxml .= getRelatedInfoTypesXML($registryObjectKey, 'relatedInfo', $forSOLR);
 
 		// rights
 		// -------------------------------------------------------------
@@ -524,21 +524,26 @@ function getDatesTypesXML($registryObjectKey, $elementName, $forSOLR = false)
 		{
 			if( $type = $element['date_type'] )
 			{
-				if($forSOLR)
-				{
-					$etype = ' etype="'.changeFromCamelCase(esc(str_replace("dc.","",$type))).'"';
-				}
+
+				$etype = ' etype="'.changeFromCamelCase(esc(str_replace("dc.","",$type))).'"';
 				$type = ' type="'.esc($type).'"';
 				
 			}
 			$value = '';
+			$extrifval = '';
 			
 			foreach ($element['elements'] AS $date)
 			{
 				$value .= '        <date type="'.$date['type'].'" dateFormat="'.$date['date_format'].'">'.$date['value'].'</date>' . "\n";	
+				$extrifval .= '    <extRif:date type="'.$date['type'].'" dateFormat="'.$date['date_format'].'">'.$date['value'].'</extRif:date>' . "\n";	
 			}
 			
-			$xml .= "      <$elementName$type$etype>\n$value      </$elementName>\n";
+			$xml .= "      <$elementName$type>\n$value      </$elementName>\n";
+			
+			if($forSOLR)
+			{
+				$xml .= "      <extRif:$elementName$type$etype>\n$extrifval      </extRif:$elementName>\n";			
+			}			
 		}
 	}
 	return $xml;
@@ -1996,7 +2001,7 @@ function getAccessPolicyTypesXML($registryObjectKey, $elementName)
 }
 
 
-function getRelatedInfoTypesXML($registryObjectKey, $elementName)
+function getRelatedInfoTypesXML($registryObjectKey, $elementName, $forSOLR)
 {
 	$xml = '';
 	$elementName = esc($elementName);
@@ -2027,6 +2032,10 @@ function getRelatedInfoTypesXML($registryObjectKey, $elementName)
 					foreach ($format_identifiers AS $identifier)
 					{
 						$xml .= "		  <identifier type=\"".$identifier['identifier_type']."\">".$identifier['identifier_value']."</identifier>\n";
+						if($forSOLR)
+						{
+						$xml .= "		  <extRif:identifier type=\"".changeFromCamelCase($identifier['identifier_type'])."\">".$identifier['identifier_value']."</extRif:identifier>\n";					
+						}
 					}
 					$xml .= "		</format>\n";
 				}
