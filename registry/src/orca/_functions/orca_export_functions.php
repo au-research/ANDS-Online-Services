@@ -526,7 +526,7 @@ function getDatesTypesXML($registryObjectKey, $elementName, $forSOLR = false)
 			{
 				if($forSOLR)
 				{
-					$type = ' type="'.changeFromCamelCase(esc($type)).'"';
+					$type = ' type="'.changeFromCamelCase(esc(str_replace("dc.","",$type))).'"';
 				}else{
 					$type = ' type="'.esc($type).'"';
 				}
