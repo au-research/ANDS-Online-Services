@@ -526,10 +526,10 @@ function getDatesTypesXML($registryObjectKey, $elementName, $forSOLR = false)
 			{
 				if($forSOLR)
 				{
-					$type = ' type="'.changeFromCamelCase(esc(str_replace("dc.","",$type))).'"';
-				}else{
-					$type = ' type="'.esc($type).'"';
+					$etype = ' etype="'.changeFromCamelCase(esc(str_replace("dc.","",$type))).'"';
 				}
+				$type = ' type="'.esc($type).'"';
+				
 			}
 			$value = '';
 			
@@ -538,7 +538,7 @@ function getDatesTypesXML($registryObjectKey, $elementName, $forSOLR = false)
 				$value .= '        <date type="'.$date['type'].'" dateFormat="'.$date['date_format'].'">'.$date['value'].'</date>' . "\n";	
 			}
 			
-			$xml .= "      <$elementName$type>\n$value      </$elementName>\n";
+			$xml .= "      <$elementName$type$etype>\n$value      </$elementName>\n";
 		}
 	}
 	return $xml;

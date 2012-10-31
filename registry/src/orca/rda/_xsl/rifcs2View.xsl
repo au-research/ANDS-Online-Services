@@ -973,10 +973,10 @@ DOI:
 	</xsl:template> 
 	 
     <xsl:template match="ro:dates">
-      <tr><td><xsl:value-of select="./@type"/>:  <td>    </td>  </td><td>
+      <tr><td><xsl:value-of select="./@etype"/>:  <td>    </td>  </td><td>
         
         <xsl:if test="./ro:date/@type!='dateTo'"> 
-       	 	<xsl:value-of select="./ro:date"/> 
+       	 	<xsl:value-of select="./ro:date[@type!='dateTo']"/> 
         </xsl:if>      
          <xsl:if test="./ro:date/@type='dateTo'"> To 
         <xsl:value-of select="./ro:date[@type='dateTo']"/> 
