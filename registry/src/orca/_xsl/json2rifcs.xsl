@@ -251,11 +251,13 @@
 	<xsl:template match="format[not(identifier/value/text()) and not(identifier/type/text())]"/>	
 	<xsl:template match="text[not(value/text())]"/>
 	<xsl:template match="notes[not(value/text())]"/>
-	<xsl:template match="url[not(value/text())] | placePublished[not(value/text())] | context[not(value/text())] | version[not(value/text())]"/>
+	<xsl:template match="url[not(value/text())] | placePublished[not(value/text())] | context[not(value/text())]"/>
 	<xsl:template match="relatedInfo/title[not(value/text())]"/>
-	<xsl:template match="citationInfo[not(fullCitation/style/text()) and not(fullCitation/value/text()) and not(citationMetadata/identifier/value/text()) and not(citationMetadata/identifier/type/text()) and not(citationMetadata/contributor/namePart/value/text()) and not(citationMetadata/contributor/namePart/type/text()) and not(citationMetadata/title/value/text()) and not(citationMetadata/edition/value/text()) and not(citationMetadata/placePublished/value/text()) and not(citationMetadata/publisher/value/text()) and not(citationMetadata/date/value/text()) and not(citationMetadata/date/type/text()) and not(citationMetadata/url/value/text()) and not(citationMetadata/context/value/text())]"/>
+	<xsl:template match="citationInfo[not(fullCitation/style/text()) and not(fullCitation/value/text()) and not(citationMetadata/identifier/value/text()) and not(citationMetadata/identifier/type/text()) and not(citationMetadata/contributor/namePart/value/text()) and not(citationMetadata/contributor/namePart/type/text()) and not(citationMetadata/title/value/text()) and not(citationMetadata/version/value/text()) and not(citationMetadata/placePublished/value/text()) and not(citationMetadata/publisher/value/text()) and not(citationMetadata/date/value/text()) and not(citationMetadata/date/type/text()) and not(citationMetadata/url/value/text()) and not(citationMetadata/context/value/text())]"/>
 	<xsl:template match="fullCitation[not(style/text()) and not(value/text())]"/>
-	<xsl:template match="citationMetadata[not(identifier/value/text()) and not(identifier/type/text()) and not(contributor/namePart/value/text()) and not(contributor/namePart/type/text()) and not(title/value/text()) and not(edition/value/text()) and not(publisher/value/text()) and not(placePublished/value/text()) and not(date/value/text()) and not(date/type/text()) and not(url/value/text()) and not(context/value/text())]"/>
+	
+	<xsl:template match="citationMetadata[not(identifier/value/text()) and not(identifier/type/text()) and not(contributor/namePart/value/text()) and not(contributor/namePart/type/text()) and not(title/value/text()) and not(version/value/text()) and not(publisher/value/text()) and not(placePublished/value/text()) and not(date/value/text()) and not(date/type/text()) and not(url/value/text()) and not(context/value/text())]"/>
+
 	<xsl:template match="relatedInfo[not(type/text()) and not(identifier/value/text()) and not(identifier/type/text()) and not(title/value/text()) and not(notes/value/text())]"/>
 	<xsl:template match="existenceDates[not(startDate/value/text()) and not(startDate/dateFormat/text()) and not(endDate/value/text()) and not(endDate/dateFormat/text())]"/>
 	<xsl:template match="startDate[not(value/text()) and not(dateFormat/text())]"/>

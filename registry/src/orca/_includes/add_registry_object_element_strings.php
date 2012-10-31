@@ -2398,7 +2398,7 @@ $_strings['*_relatedInfo_format_identifier'] = <<<HTMLEND
 
 		<script>
 
-			addVocabComplete('object_relatedInfo_%%SEQNUM1%%_format_1_identifier_%%SEQNUM3%%_type','RIFCSIdentifierType');
+			addVocabComplete('object_relatedInfo_%%SEQNUM1%%_format_1_identifier_%%SEQNUM3%%_type','RIFCSRelatedInformationIdentifierType');
 
 		</script>
 
@@ -2564,7 +2564,7 @@ $_strings['*_citationInfo_citationMetadata'] = <<<HTMLEND
 					</div>
 					
 					<input type="button" class="buttonSmall" name="btn_citation_%%SEQNUM1%%_addcitation_date" value="Add new Date" onClick="getElement('date', [], 'object.citationInfo[%%SEQNUM1%%].citationMetadata[1].', null, getNextSeq('citationInfo_%%SEQNUM1%%_citationMetadata_1_date'));"  />
-					 <div class="fieldError" name="errors_citationInfo_%%SEQNUM1%%_citationMetadata_1_date" style="padding-left:8px; font-size:1.05em;"></div>
+					 <div class="fieldError" name="errors_citationInfo_%%SEQNUM1%%_citationMetadata_1_date" style="padding-left:18px; font-size:1.05em;"></div>
 				</td>
 
 			</tr>

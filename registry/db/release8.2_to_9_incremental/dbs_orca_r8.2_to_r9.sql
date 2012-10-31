@@ -29,17 +29,17 @@ DELETE FROM dba.tbl_terms WHERE identifier='initial' AND vocabulary_identifier='
 -- CC-85
 INSERT INTO dba.tbl_vocabularies VALUES ('RIFCSDatesType', 'local', '1.4', 'RIFCS DatesType', 'primary', '', 'http://services.ands.org.au/documentation/rifcs/1.4/vocabs/vocabularies.html');
 
-INSERT INTO dba.tbl_terms VALUES ('available', 'local', '', 'available', 'Date (often a range) that the resource became or will become available.', '', 'RIFCSDatesType', '', 'pt', '', 'RIFCS Dates Type', '');
+INSERT INTO dba.tbl_terms VALUES ('dc.available', 'local', '', 'dc.available', 'Date (often a range) that the resource became or will become available.', '', 'RIFCSDatesType', '', 'pt', '', 'RIFCS Dates Type', '');
 
-INSERT INTO dba.tbl_terms VALUES ('created', 'local', '', 'created', 'Date of creation of the resource. ', '', 'RIFCSDatesType', '', 'pt', '', 'RIFCS Dates Type', '');
+INSERT INTO dba.tbl_terms VALUES ('dc.created', 'local', '', 'dc.created', 'Date of creation of the resource. ', '', 'RIFCSDatesType', '', 'pt', '', 'RIFCS Dates Type', '');
 
-INSERT INTO dba.tbl_terms VALUES ('dateAccepted', 'local', '', 'dateAccepted', 'Date of acceptance of the resource.', '', 'RIFCSDatesType', '', 'pt', '', 'RIFCS Dates Type', '');
+INSERT INTO dba.tbl_terms VALUES ('dc.dateAccepted', 'local', '', 'dc.dateAccepted', 'Date of acceptance of the resource.', '', 'RIFCSDatesType', '', 'pt', '', 'RIFCS Dates Type', '');
 
-INSERT INTO dba.tbl_terms VALUES ('dateSubmitted', 'local', '', 'dateSubmitted', 'Date of submission of the resource.', '', 'RIFCSDatesType', '', 'pt', '', 'RIFCS Dates Type', '');
+INSERT INTO dba.tbl_terms VALUES ('dc.dateSubmitted', 'local', '', 'dc.dateSubmitted', 'Date of submission of the resource.', '', 'RIFCSDatesType', '', 'pt', '', 'RIFCS Dates Type', '');
 
-INSERT INTO dba.tbl_terms VALUES ('issued', 'local', '', 'issued', 'Date of formal issuance (e.g.publication) of the resource.', '', 'RIFCSDatesType', '', 'pt', '', 'RIFCS Dates Type', '');
+INSERT INTO dba.tbl_terms VALUES ('dc.issued', 'local', '', 'dc.issued', 'Date of formal issuance (e.g.publication) of the resource.', '', 'RIFCSDatesType', '', 'pt', '', 'RIFCS Dates Type', '');
 
-INSERT INTO dba.tbl_terms VALUES ('valid', 'local', '', 'valid', 'Date (often a range) of validity of a resource.', '', 'RIFCSDatesType', '', 'pt', '', 'RIFCS Dates Type', '');
+INSERT INTO dba.tbl_terms VALUES ('dc.valid', 'local', '', 'dc.valid', 'Date (often a range) of validity of a resource.', '', 'RIFCSDatesType', '', 'pt', '', 'RIFCS Dates Type', '');
 
 
 
