@@ -72,7 +72,7 @@
 					<span class="qa_ok" level="2" field_id="errors_name" qa_id="REQ_PRIMARY_NAME">At least one primary name is required for the Collection record.</span>
 			</xsl:otherwise>
 	    </xsl:choose>
-	    
+
 	    <xsl:choose>
 	       	<xsl:when test="not(contains($relatedObjectClassesStr, 'Party') or ro:relatedObject/ro:key[@roclass = 'Party'] or ro:relatedObject/ro:key[@roclass = 'party'])">
 				<span class="qa_error" level="2" field_id="errors_relatedObject" qa_id="REQ_RELATED_OBJECT_PARTY">The Collection must be related to at least one Party record. <i><xsl:value-of select="$CP_roError_cont"/></i></span>
@@ -117,6 +117,17 @@
 				<span class="qa_ok" level="3" field_id="errors_identifier" qa_id="REC_IDENTIFIER">At least one identifier is recommended for the Collection.</span>
 			</xsl:otherwise>
         </xsl:choose>
+        
+        	    
+	    <xsl:choose>
+	       	<xsl:when test="not(ro:dates)">
+				<span class="qa_error" level="3" field_id="errors_dates" qa_id="REC_DATES">At least one dates element is recommended for the Collection.</span>
+			</xsl:when>
+			<xsl:otherwise>
+				<span class="qa_ok" level="3" field_id="errors_dates" qa_id="REC_DATES">At least one dates element is recommended for the Collection.</span>
+			</xsl:otherwise>
+        </xsl:choose>
+	    
          
         <xsl:choose>
 	       	<xsl:when test="not(contains($relatedObjectClassesStr, 'Activity') or ro:relatedObject/ro:key[@roclass = 'Activity'] or ro:relatedObject/ro:key[@roclass = 'activity'])">
