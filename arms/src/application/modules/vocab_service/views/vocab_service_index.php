@@ -186,8 +186,36 @@
 					
 			    	<div class="btn-toolbar">
 						<div class="btn-group item-control" vocab_id="{{id}}">
-							<button class="btn contact"><i class="icon-user"></i> Contact Publisher</button>
+							<button class="btn contact" id="contactPublisher"><i class="icon-user"></i> Contact Publisher</button>
 						</div>
+					</div>
+
+					<div id="contactPublisherForm" class="hide">
+						<form class="contactPublisherForm">
+							<div class="control-group">
+								<label class="control-label" for="title">Your Name</label>
+								<div class="controls">
+									<input type="text" class="input-xlarge" name="name" value="" required placeholder="Enter a your full name">
+									<p class="help-inline"><small></small></p>
+								</div>
+							</div>
+
+							<div class="control-group">
+								<label class="control-label" for="title">Your Email Address</label>
+								<div class="controls">
+									<input type="email" class="input-xlarge" name="email" value="" required placeholder="Enter your email address">
+									<p class="help-inline"><small></small></p>
+								</div>
+							</div>
+
+							<div class="control-group">
+								<label class="control-label" for="description">Your Message</label>
+								<div class="controls">
+									<textarea class="input-xlarge" name="description" required placeholder="Enter your message"></textarea>
+								</div>
+							</div>
+							<button class="btn confirmContactPublisher" vocab_id="{{id}}">Submit</button>
+						</form>
 					</div>
 					
 

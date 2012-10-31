@@ -542,6 +542,29 @@ class Vocab_service extends MX_Controller {
 		}else $version['makeCurrent']=false;
 		$this->vocab->updateVersion($version);
 	}
+
+	public function contactPublisher(){
+		$name = $this->input->post('name');
+		$email = $this->input->post('email');
+		$message = $this->input->post('message');
+		$vocab_id = $this->input->post('vocab_id');
+
+		$this->load->model("vocab_services","vocab");
+		$vocab= $this->vocab->getByID($vocab_id);
+
+		$jsonData = array();
+		if($vocab){
+			$publisher_email = $vocab->contact_email;
+			//sending email
+			$this->load->library('email');
+			$this->email->from($email, $name);
+			$this->email->to($publisher_email); //$publisher_email
+			$this->email->subject('New message from ANDS vocabulary service');
+			$message = 'You have just received an email through the contact publisher link from ANDS vocabulary services. The content of the message are following: '.$message;
+			$this->email->message($message);	
+			$this->email->send();
+		}
+	}
 	
 	/**
 	 * uploadf a format file 
