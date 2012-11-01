@@ -265,8 +265,17 @@
      	 		<p class="coverage_text"><xsl:value-of select="./@type"/>: <xsl:value-of select="."/></p>
       		</xsl:for-each>
       		
+<<<<<<< HEAD
             <xsl:if test="ro:coverage/ro:temporal/ro:date | ro:location[@dateFrom!=''] | ro:location[@dateTo!=''] | ro:coverage/ro:temporal/ro:text">
              	  Time Period: <br />
+=======
+      		<xsl:for-each select="ro:location/ro:spatial[@type!='iso19139dcmiBox' and @type!='gmlKmlPolyCoords' and @type!='kmlPolyCoords']">
+     	 		<p class="coverage_text"><xsl:value-of select="./@type"/>: <xsl:value-of select="."/></p>
+      		</xsl:for-each>
+      		
+            <xsl:if test="ro:coverage/ro:temporal/ro:date | ro:location[@dateFrom!=''] | ro:location[@dateTo!='']">
+             	<br/><br/>   Time Period:
+>>>>>>> r9 bugs
              </xsl:if>
              
     		<xsl:if test="ro:coverage/ro:temporal/ro:date">

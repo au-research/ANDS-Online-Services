@@ -563,6 +563,8 @@ $().ready(function(){
 			var tag_title = $(element).val();
 			tag_title = $.trim(tag_title);
 			tag_title = tag_title.replace(/[^a-zA-Z0-9\s-]/g,"");
+			if(tag_title.length < 256)
+			{
 			var keyHash = $(element).parents('ul').children().children('.addTag').attr('keyHash');
 			var url = rootAppPath+"orca/manage/process_registry_object.php?task=addTag&tag="+escape(tag_title)+'&keyHash='+keyHash;
 			var thisTagInput = element;
@@ -583,6 +585,10 @@ $().ready(function(){
 			    });
 			}else{
 				$(thisTagInput).parent().remove();
+			}
+			}
+			else{
+				alert("your tag:"+tag_title+" is longer than 255 character");
 			}
 			
 		}

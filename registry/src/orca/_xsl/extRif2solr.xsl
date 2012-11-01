@@ -69,7 +69,7 @@
                 <xsl:value-of select="@group"/>
             </xsl:element> 
             <xsl:if test=".//ro:location/extRif:spatial/extRif:area or .//ro:coverage/extRif:spatial/extRif:area">
-            <xsl:for-each select="//extRif:area">
+            <xsl:for-each select=".//extRif:area">
             <xsl:sort select="." data-type="number"/>
             
     			<xsl:if test="position() = 1">
