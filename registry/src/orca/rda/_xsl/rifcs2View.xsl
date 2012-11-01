@@ -256,7 +256,7 @@
                     <div id="spatial_coverage_map"></div>
               <!--  /xsl:if-->
             </xsl:if>   
-                    
+           
             <xsl:if test="ro:coverage/extRif:spatial/extRif:center | ro:location/extRif:spatial/extRif:center">
                 <xsl:apply-templates select="ro:coverage/extRif:spatial/extRif:center | ro:location/extRif:spatial/extRif:center"/>
             </xsl:if> 
