@@ -470,7 +470,23 @@
    <xsl:template match="ro:coverage/ro:temporal/ro:text">  
     <xsl:value-of select="."/><br />
    </xsl:template>
-    
+   <xsl:template match="ro:coverage/ro:temporal/ro:date">  
+          <xsl:if test="./@type = 'dateFrom'">
+            From         <xsl:value-of select="."/>     
+        </xsl:if>
+        <xsl:if test="./@type = 'dateTo'">
+            To         <xsl:value-of select="."/>  <br /> 
+        </xsl:if> 
+   </xsl:template>  
+   <xsl:template match="ro:date">  
+        <xsl:if test="./@dateFrom != ''">
+            From         <xsl:value-of select="./@dateFrom"/>     
+        </xsl:if>
+        <xsl:if test="./@dateTo != ''">
+            To         <xsl:value-of select="./@dateTo"/>   
+        </xsl:if> <br />
+   </xsl:template>  
+     
     <xsl:template match="ro:name[@type = 'alternative']">
      <p class="alt_displayTitle">
      	<xsl:choose>
@@ -817,7 +833,7 @@ Format 	URI:
         <xsl:if test="./@type = 'dateTo'">
             To  
         </xsl:if>       
-        <xsl:value-of select="."/>          
+        <xsl:value-of select="."/>    <br />      
     </xsl:template> 
     <xsl:template match="ro:text">  
      

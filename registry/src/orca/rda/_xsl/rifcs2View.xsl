@@ -94,7 +94,7 @@
 	        		<script type="text/javascript" src="http://static.addtoany.com/menu/page.js"></script>
 	      
 	        		<!-- AddToAny END -->  
-   			      <a id="tag_show">
+   			    <!--   <a id="tag_show">
 
                     <xsl:attribute name="href">javascript:void(0);</xsl:attribute>                    
                     <img id="tag_icon">
@@ -105,7 +105,7 @@
                     <xsl:attribute name="alt">Tag Icon</xsl:attribute>
                     </img>
 
-                    </a>	
+                    </a>	 -->
 
                    
 					<a target="_blank">
@@ -264,29 +264,23 @@
            	<xsl:for-each select="ro:coverage/ro:spatial[@type!='iso19139dcmiBox' and @type!='gmlKmlPolyCoords' and @type!='kmlPolyCoords']">
      	 		<p class="coverage_text"><xsl:value-of select="./@type"/>: <xsl:value-of select="."/></p>
       		</xsl:for-each>
-      		
-<<<<<<< HEAD
-            <xsl:if test="ro:coverage/ro:temporal/ro:date | ro:location[@dateFrom!=''] | ro:location[@dateTo!=''] | ro:coverage/ro:temporal/ro:text">
-             	  Time Period: <br />
-=======
+ 
       		<xsl:for-each select="ro:location/ro:spatial[@type!='iso19139dcmiBox' and @type!='gmlKmlPolyCoords' and @type!='kmlPolyCoords']">
      	 		<p class="coverage_text"><xsl:value-of select="./@type"/>: <xsl:value-of select="."/></p>
-      		</xsl:for-each>
-      		
-            <xsl:if test="ro:coverage/ro:temporal/ro:date | ro:location[@dateFrom!=''] | ro:location[@dateTo!='']">
-             	<br/><br/>   Time Period:
->>>>>>> r9 bugs
-             </xsl:if>
-             
+      		</xsl:for-each>     		
+
+            <xsl:if test="ro:coverage/ro:temporal/ro:date | ro:location[@dateFrom!=''] | ro:location[@dateTo!=''] | ro:coverage/ro:temporal/ro:text">
+             	  Time Period: <br />
+            </xsl:if>
+
     		<xsl:if test="ro:coverage/ro:temporal/ro:date">
-               <br />  <xsl:apply-templates select="ro:coverage/ro:temporal/ro:date"/> <br />
+                <xsl:apply-templates select="ro:coverage/ro:temporal/ro:date"/>
              </xsl:if> 
              
              <xsl:if test="ro:location[@dateFrom!=''] | ro:location[@dateTo!='']">
-             	<br /> <xsl:apply-templates select="ro:location[@dateFrom!=''] | ro:location[@dateTo!='']"/>   
+             	 <xsl:apply-templates select="ro:location[@dateFrom!=''] | ro:location[@dateTo!='']"/>   
              </xsl:if>           
-             
-    
+          
             <xsl:if test="ro:coverage/ro:temporal/ro:text">
                   <xsl:apply-templates select="ro:coverage/ro:temporal/ro:text"/> 
                 
@@ -359,8 +353,7 @@
        <xsl:if test="extRif:dates">
                <p><b>Dates:</b> </p> 
                <table>
-    <!--     <xsl:value-of select="ro:dates"/><br />  -->
-       		<xsl:apply-templates select="extRif:dates"/>
+        		<xsl:apply-templates select="extRif:dates"/>
        		</table>  
        </xsl:if>           
         <xsl:if test="ro:identifier">
@@ -559,8 +552,8 @@
         </xsl:if>
         <xsl:if test="./@type = 'dateTo'">
             To  
-        </xsl:if>       
-        <xsl:value-of select="."/>          
+        </xsl:if>     
+        <xsl:value-of select="."/>       
     </xsl:template> 
       <xsl:template match="ro:location[@dateFrom!=''] | ro:location[@dateTo!='']">  
         <xsl:if test="./@dateFrom != ''">
@@ -574,6 +567,14 @@
     <xsl:template match="ro:coverage/ro:temporal/ro:text">
      <xsl:value-of select="."/>   <br />
     </xsl:template>
+    <xsl:template match="ro:coverage/ro:temporal/ro:date">
+           <xsl:if test="./@type = 'dateFrom'">
+            From         <xsl:value-of select="."/>     
+        </xsl:if>
+        <xsl:if test="./@type = 'dateTo'">
+            To         <xsl:value-of select="."/>   <br />
+        </xsl:if> 
+    </xsl:template>    
     <xsl:template match="ro:subject">   
             <li><a href="javascript:void(0);" class="subjectFilter" id="{@extRif:resolvedValue}" title="{.}"><xsl:value-of select="@extRif:resolvedValue"/></a></li>       
     </xsl:template>
