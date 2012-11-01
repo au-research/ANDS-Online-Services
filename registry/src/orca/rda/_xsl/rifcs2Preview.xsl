@@ -212,7 +212,13 @@
             </xsl:when>
 
          </xsl:choose>
-            
+         <xsl:if test="ro:dates">
+               <p><b>Dates:</b> </p> 
+               <table>
+    <!--     <xsl:value-of select="ro:dates"/><br />  -->
+       		<xsl:apply-templates select="ro:dates"/>
+       		</table>  
+       </xsl:if>           
         <xsl:if test="ro:identifier">
             <div style="position:relative;clear:both;"><p><b>Identifiers:</b></p>
            	 	<div id="identifiers">
@@ -1081,5 +1087,15 @@ Format 	URI:
 			</xsl:if>			
 		</p>		
 	</xsl:template>				
-    
+     <xsl:template match="ro:dates">
+      <tr><td><xsl:value-of select="./@type"/>:  <td>    </td>  </td><td>
+        
+        <xsl:if test="./ro:date/@type!='dateTo'"> 
+       	 	<xsl:value-of select="./ro:date[@type!='dateTo']"/> 
+        </xsl:if>      
+         <xsl:if test="./ro:date/@type='dateTo'"> To 
+        <xsl:value-of select="./ro:date[@type='dateTo']"/> 
+        </xsl:if>
+       </td></tr>
+    </xsl:template>	     
 </xsl:stylesheet>
