@@ -2333,7 +2333,7 @@ $_strings['*_relatedInfo'] = <<<HTMLEND
 
 																	<td style="text-align:right;"><label for="object_relatedInfo_%%SEQNUM1%%_notes_1_value">Value:</label></td>
 																	<td onclick="getHelpText('collection_relatedInfo_title_value');">
-																		<input type="text" value="" name="object.relatedInfo[%%SEQNUM1%%].notes[1].value" id="object_relatedInfo_%%SEQNUM1%%_notes_1_value" maxlength="512" size="40" />
+																		<input type="text" value="" name="object.relatedInfo[%%SEQNUM1%%].notes[1].value" id="object_relatedInfo_%%SEQNUM1%%_notes_1_value" maxlength="4000" size="40" />
 																	</td>
 																	<td><div class="fieldError" name="errors_relatedInfo_%%SEQNUM1%%_notes_1_value"></div></td>
 																	<td width="100%"></td>

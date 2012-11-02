@@ -1369,13 +1369,13 @@
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>
-        <xsl:if test="string-length(.) &gt; 512">
+        <xsl:if test="string-length(.) &gt; 4000">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_value","Full Citation must be less than 512 characters.");</xsl:text>
+            		<xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_value","Full Citation must be less than 4000 characters.");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
-					<span class="error">Full Citation must be less than 512 characters.</span>
+					<span class="error">Full Citation must be less than 4000 characters.</span>
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>
