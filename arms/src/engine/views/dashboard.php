@@ -63,9 +63,16 @@
 			</div>
 
 			<div class="hide" id="addOrgHTML">
-				<p>Add an organisation and be automatically affiliate with this:</p>
-				<p>Organisation Name: <input type="text" class="input-large orgName" localIdentifier="<?php echo $this->user->localIdentifier();?>"/></p>
-				<button class="btn" id="confirmAddOrganisation">Add</button>
+				<form class="addOrgForm">
+					<p>Please enter the name of your organisation to add it to the system:</p>
+					<div class="control-group">
+						<label class="control-label" for="title">Organisation Name:</label>
+						<div class="controls">
+							 <input type="text" class="input-large orgName" localIdentifier="<?php echo $this->user->localIdentifier();?>" required/>
+						</div>
+					</div>
+					<button class="btn" id="confirmAddOrganisation">Add</button>
+				</form>
 			</div>
 		</div>
 
@@ -209,17 +216,19 @@
 			</div>
 		</div>
 		<div class="span2">&nbsp;</div>
-		<div class="modal hide" id="myModal">
-			  <div class="modal-header">
-			    <button type="button" class="close" data-dismiss="modal">×</button>
-			    <h3>Alert</h3>
-			  </div>
-			  <div class="modal-body"></div>
-			  <div class="modal-footer">
-			    
-			  </div>
-			</div>
+		
 	</div>
+</div>
+
+<div class="modal hide" id="myModal">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">×</button>
+    <h3>Alert</h3>
+  </div>
+  <div class="modal-body"></div>
+  <div class="modal-footer">
+    
+  </div>
 </div>
 
 <?php $this->load->view('footer');?>

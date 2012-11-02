@@ -227,28 +227,33 @@ $(document).ready(function(){
 		var html = $('#addOrgHTML').html();
 		$('#myModal .modal-body').html(html);
 		$('#myModal').modal();
+		Core_bindFormValidation($('#myModal .addOrgForm'));
 	});
 
 	$('#confirmAddOrganisation').live({
-		click:function(){
+		click:function(e){
+			e.preventDefault();
 			var orgRole = $("#myModal input.orgName").val();
 			var thisRole = $('#myModal input.orgName').attr('localIdentifier');
-			$('#myModal').modal('hide');
-			$.ajax({
-				url: 'auth/registerAffiliation/true',
-				type: 'POST',
-				data: {orgRole:orgRole,thisRole:thisRole},
-				success: function(data){
-					if(data.status=='OK'){
-						$('#myModal .modal-body').html('You have to logout and log back in for the changes to take effect <a href="auth/logout">Logout</a>');
-						$('#myModal').modal();
-					}else if(data.status=='WARNING'){
-						alert(data.message);
-					}else{
-						console.error(data);
+			if(Core_checkValidForm($('#myModal .addOrgForm'))){
+				$('#myModal').modal('hide');
+				$.ajax({
+					url: 'auth/registerAffiliation/true',
+					type: 'POST',
+					data: {orgRole:orgRole,thisRole:thisRole},
+					success: function(data){
+						if(data.status=='OK'){
+							
+							$('#myModal .modal-body').html('You have to logout and log back in for the changes to take effect <a href="auth/logout">Logout</a>');
+							$('#myModal').modal();
+						}else if(data.status=='WARNING'){
+							alert(data.message);
+						}else{
+							console.error(data);
+						}
 					}
-				}
-			});
+				});
+			}
 		}
 	});
 
