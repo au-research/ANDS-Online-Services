@@ -588,7 +588,7 @@ $().ready(function(){
 			}
 			}
 			else{
-				alert("your tag:"+tag_title+" is longer than 255 character");
+				alert("Your given tag is longer than 255 characters, please reduce you tag size.");
 			}
 			
 		}
