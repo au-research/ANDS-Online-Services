@@ -151,7 +151,7 @@ class Vocab_service extends MX_Controller {
 				$jsonData['item'][$attrib] = $value->value;
 			}
 
-			if($vocab->contact_name || $vocab->contact_email || $vocab->contact_number) $jsonData['item']['contact']=true;
+			if($vocab->contact_name || $vocab->contact_number) $jsonData['item']['contact']=true;
 			if(in_array($vocab->id, $ownedVocabsID)) $jsonData['item']['owned']=true;
 
 			//vocab versions

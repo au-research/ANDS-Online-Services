@@ -280,9 +280,6 @@
 							<button class="btn confirmContactPublisher" vocab_id="{{id}}">Submit</button>
 						</form>
 					</div>
-					
-
-
 			    </div>
 			</div>
 		</div>

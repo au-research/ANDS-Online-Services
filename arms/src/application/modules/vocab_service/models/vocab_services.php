@@ -220,15 +220,18 @@ class Vocab_services extends CI_Model {
 
 			//make the latest version status of current
 			$latestVersionQuery = $this->db->order_by('date_added', 'desc')->get_where('vocab_versions', array('vocab_id'=>$vocab_id), 1, 0);
-			$result = $latestVersionQuery->result();
-			$latestVersion = $result[0];
-			$latestVersion_id = $latestVersion->id;
 
-			$data = array(
-				'status'=>'current'
-			);
-			$this->db->where('id', $latestVersion_id);
-			$this->db->update('vocab_versions', $data);
+			if($latestVersionQuery->num_rows()>0){
+				$result = $latestVersionQuery->result();
+				$latestVersion = $result[0];
+				$latestVersion_id = $latestVersion->id;
+
+				$data = array(
+					'status'=>'current'
+				);
+				$this->db->where('id', $latestVersion_id);
+				$this->db->update('vocab_versions', $data);
+			}
 			return true;
 		}else return false;
 	}
@@ -278,13 +281,11 @@ class Vocab_services extends CI_Model {
 
 		$last_id = $this->db->insert_id();
 
-
-		$data = array(
+		/*$data = array(
 			'vocab_id'=>$last_id,
 			'description'=>'Initial vocabulary creation'
 		);
-
-		$this->db->insert('vocab_change_history', $data);
+		$this->db->insert('vocab_change_history', $data);*/
 
 		return $last_id;
 	}
@@ -292,7 +293,6 @@ class Vocab_services extends CI_Model {
 	function addChangeHistory($vocab_id, $description){
 		$data = array(
 			'vocab_id'=>$vocab_id,
-			'change_date'=>date("Y-m-d h:i:s"),
 			'description'=>$description
 		);
 
