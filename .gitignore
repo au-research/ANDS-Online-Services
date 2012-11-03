@@ -6,12 +6,14 @@
 /registry/src/orca/htmlpurifier/
 .DS_Store
 ._*
+*/.htaccess
 harvester/build/
 harvester/lib/
 pids/build/
 pids/lib/
 registry/src/.project
 rifcs-api/build/
+/arms/src/.htaccess
 /registry/src/global_config.php
 /registry/src/orca/rda/.htaccess
 /registry/src/.htaccess
