@@ -112,7 +112,7 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 		// =====================================================================
 		$registryObjectKey = substr($gXPath->evaluate("$xs:key", $registryObject)->item(0)->nodeValue, 0, 512);
 		$oldRegistryObject = getRegistryObject($registryObjectKey);
-		
+
 	    $importThisRecord = true;
 	    if($oldRegistryObject) //check if this record should be replaced 
 	    {
@@ -385,7 +385,7 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 						// -----------------------------------------------------------------
 						importComplexNameTypes($registryObjectKey, $collection, "name", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
 	
-	
+
 						// dates
 						// -----------------------------------------------------------------
 						importDatesElt($registryObjectKey, $collection, "dates", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
@@ -549,6 +549,7 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 						importRelatedInfo($registryObjectKey, $service, "relatedInfo", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
 	
 					} // Service
+
 					// Add a default and list title for the registry object
 					$display_title = getOrderedNames($registryObjectKey, (isset($party) && $party), true);
 					$list_title = getOrderedNames($registryObjectKey, (isset($party) && $party), false);
@@ -570,6 +571,7 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 					updateRegistryObjectSLUG($registryObjectKey, $display_title, $currentUrlSlug);
 	
 					// A new record has been inserted? Update the cache
+
 					// WHY OH WHY ????????????????
 	
 					//if (eCACHE_ENABLED && !writeCache($dataSourceKey, $registryObjectKey, generateExtendedRIFCS($registryObjectKey)))
@@ -590,7 +592,7 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 						$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
 						$headers .= 'From:'.eCONTACT_EMAIL_FROM."\r\n";
 						mail(eCONTACT_EMAIL, $subject, $mailBody, $headers);						
-		
+	
 					}
 				}
 			}

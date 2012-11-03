@@ -1,0 +1,831 @@
+<!DOCTYPE html><html xmlns:date="http://exslt.org/dates-and-times" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>phpDocumentor » \CI_DB_mysql_utility</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../css/template.css" rel="stylesheet" media="all">
+<script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../js/bootstrap.js" type="text/javascript"></script><script src="../js/template.js" type="text/javascript"></script><script src="../js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../img/favicon.ico">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">phpDocumentor</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Packages</a></li>
+<li><a href="../packages/CodeIgniter.html"><i class="icon-folder-open"></i> CodeIgniter</a></li>
+<li><a href="../packages/Default.html"><i class="icon-folder-open"></i> Default</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">1170</span></a></li>
+<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul><li>todo 
+                <span class="label label-info">1</span>
+</li></ul></a></li>
+<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">0</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods</li>
+<li class="method public inherited"><a href="#__construct" title="__construct :: Constructor"><span class="description">Constructor</span><pre>__construct()</pre></a></li>
+<li class="method public "><a href="#_backup" title="_backup :: MySQL Export"><span class="description">MySQL Export</span><pre>_backup()</pre></a></li>
+<li class="method public "><a href="#_list_databases" title="_list_databases :: List databases"><span class="description">List databases</span><pre>_list_databases()</pre></a></li>
+<li class="method public "><a href="#_optimize_table" title="_optimize_table :: Optimize table query"><span class="description">Optimize table query</span><pre>_optimize_table()</pre></a></li>
+<li class="method public "><a href="#_repair_table" title="_repair_table :: Repair table query"><span class="description">Repair table query</span><pre>_repair_table()</pre></a></li>
+<li class="method public inherited"><a href="#_reset" title="_reset :: Reset"><span class="description">Reset</span><pre>_reset()</pre></a></li>
+<li class="method public inherited"><a href="#add_column" title="add_column :: Column Add"><span class="description">Column Add</span><pre>add_column()</pre></a></li>
+<li class="method public inherited"><a href="#add_field" title="add_field :: Add Field"><span class="description">Add Field</span><pre>add_field()</pre></a></li>
+<li class="method public inherited"><a href="#add_key" title="add_key :: Add Key"><span class="description">Add Key</span><pre>add_key()</pre></a></li>
+<li class="method public inherited"><a href="#backup" title="backup :: Database Backup"><span class="description">Database Backup</span><pre>backup()</pre></a></li>
+<li class="method public inherited"><a href="#create_database" title="create_database :: Create database"><span class="description">Create database</span><pre>create_database()</pre></a></li>
+<li class="method public inherited"><a href="#create_table" title="create_table :: Create Table"><span class="description">Create Table</span><pre>create_table()</pre></a></li>
+<li class="method public inherited"><a href="#csv_from_result" title="csv_from_result :: Generate CSV from a query result object"><span class="description">Generate CSV from a query result object</span><pre>csv_from_result()</pre></a></li>
+<li class="method public inherited"><a href="#database_exists" title="database_exists :: Determine if a particular database exists"><span class="description">Determine if a particular database exists</span><pre>database_exists()</pre></a></li>
+<li class="method public inherited"><a href="#drop_column" title="drop_column :: Column Drop"><span class="description">Column Drop</span><pre>drop_column()</pre></a></li>
+<li class="method public inherited"><a href="#drop_database" title="drop_database :: Drop database"><span class="description">Drop database</span><pre>drop_database()</pre></a></li>
+<li class="method public inherited"><a href="#drop_table" title="drop_table :: Drop Table"><span class="description">Drop Table</span><pre>drop_table()</pre></a></li>
+<li class="method public inherited"><a href="#list_databases" title="list_databases :: List databases"><span class="description">List databases</span><pre>list_databases()</pre></a></li>
+<li class="method public inherited"><a href="#modify_column" title="modify_column :: Column Modify"><span class="description">Column Modify</span><pre>modify_column()</pre></a></li>
+<li class="method public inherited"><a href="#optimize_database" title="optimize_database :: Optimize Database"><span class="description">Optimize Database</span><pre>optimize_database()</pre></a></li>
+<li class="method public inherited"><a href="#optimize_table" title="optimize_table :: Optimize Table"><span class="description">Optimize Table</span><pre>optimize_table()</pre></a></li>
+<li class="method public inherited"><a href="#rename_table" title="rename_table :: Rename Table"><span class="description">Rename Table</span><pre>rename_table()</pre></a></li>
+<li class="method public inherited"><a href="#repair_table" title="repair_table :: Repair Table"><span class="description">Repair Table</span><pre>repair_table()</pre></a></li>
+<li class="method public inherited"><a href="#xml_from_result" title="xml_from_result :: Generate XML data from a query result object"><span class="description">Generate XML data from a query result object</span><pre>xml_from_result()</pre></a></li>
+<li class="nav-header">
+<i class="icon-custom icon-property"></i> Properties</li>
+<li class="property public inherited"><a href="#%24data_cache" title="$data_cache :: "><span class="description">$data_cache</span><pre>$data_cache</pre></a></li>
+<li class="property public inherited"><a href="#%24db" title="$db :: "><span class="description">$db</span><pre>$db</pre></a></li>
+<li class="property public inherited"><a href="#%24db_char_set" title="$db_char_set :: "><span class="description">$db_char_set</span><pre>$db_char_set</pre></a></li>
+<li class="property public inherited"><a href="#%24fields" title="$fields :: "><span class="description">$fields</span><pre>$fields</pre></a></li>
+<li class="property public inherited"><a href="#%24keys" title="$keys :: "><span class="description">$keys</span><pre>$keys</pre></a></li>
+<li class="property public inherited"><a href="#%24primary_keys" title="$primary_keys :: "><span class="description">$primary_keys</span><pre>$primary_keys</pre></a></li>
+</ul>
+</div>
+<div class="span8">
+<a name="%5CCI_DB_mysql_utility" id="\CI_DB_mysql_utility"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/global.html">global</a></li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/CI_DB_mysql_utility.html">CI_DB_mysql_utility</a>
+</li>
+</ul>
+<div href="../classes/CI_DB_mysql_utility.html" class="element class">
+<p class="short_description">MySQL Utility Class</p>
+<div class="details">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>category</th>
+<td>Database</td>
+</tr>
+<tr>
+<th>author</th>
+<td><a href="">ExpressionEngine Dev Team</a></td>
+</tr>
+<tr>
+<th>link</th>
+<td><a href="http://codeigniter.com/user_guide/database/">http://codeigniter.com/user_guide/database/</a></td>
+</tr>
+</table>
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a name="__construct" id="__construct"></a><div class="element clickable method public __construct" data-toggle="collapse" data-target=".__construct .collapse">
+<h2>Constructor</h2>
+<pre>__construct() </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Grabs the CI super object instance so we can access it.</p></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_DB_utility::__construct()</td>
+</tr></table>
+</div></div>
+</div>
+<a name="_backup" id="_backup"></a><div class="element clickable method public _backup" data-toggle="collapse" data-target="._backup .collapse">
+<h2>MySQL Export</h2>
+<pre>_backup(array $params) : mixed</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$params</h4>
+<code>array</code><p>Preferences</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>mixed</code></div>
+</div></div>
+</div>
+<a name="_list_databases" id="_list_databases"></a><div class="element clickable method public _list_databases" data-toggle="collapse" data-target="._list_databases .collapse">
+<h2>List databases</h2>
+<pre>_list_databases() : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="_optimize_table" id="_optimize_table"></a><div class="element clickable method public _optimize_table" data-toggle="collapse" data-target="._optimize_table .collapse">
+<h2>Optimize table query</h2>
+<pre>_optimize_table(string $table) : object</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Generates a platform-specific query so that a table can be optimized</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$table</h4>
+<code>string</code><p>the table name</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>object</code></div>
+</div></div>
+</div>
+<a name="_repair_table" id="_repair_table"></a><div class="element clickable method public _repair_table" data-toggle="collapse" data-target="._repair_table .collapse">
+<h2>Repair table query</h2>
+<pre>_repair_table(string $table) : object</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Generates a platform-specific query so that a table can be repaired</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$table</h4>
+<code>string</code><p>the table name</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>object</code></div>
+</div></div>
+</div>
+<a name="_reset" id="_reset"></a><div class="element clickable method public _reset" data-toggle="collapse" data-target="._reset .collapse">
+<h2>Reset</h2>
+<pre>_reset() : void</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Resets table creation vars</p></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>private</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_DB_forge::_reset()</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_DB_utility::_reset()</td>
+</tr>
+</table>
+</div></div>
+</div>
+<a name="add_column" id="add_column"></a><div class="element clickable method public add_column" data-toggle="collapse" data-target=".add_column .collapse">
+<h2>Column Add</h2>
+<pre>add_column(string $table, string $field, string $after_field) : bool</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_DB_forge::add_column()</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_DB_utility::add_column()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$table</h4>
+<code>string</code><p>the table name</p></div>
+<div class="subelement argument">
+<h4>$field</h4>
+<code>string</code><p>the column name</p></div>
+<div class="subelement argument">
+<h4>$after_field</h4>
+<code>string</code><p>the column definition</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="add_field" id="add_field"></a><div class="element clickable method public add_field" data-toggle="collapse" data-target=".add_field .collapse">
+<h2>Add Field</h2>
+<pre>add_field(string $field) : void</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_DB_forge::add_field()</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_DB_utility::add_field()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$field</h4>
+<code>string</code><p>collation</p></div>
+</div></div>
+</div>
+<a name="add_key" id="add_key"></a><div class="element clickable method public add_key" data-toggle="collapse" data-target=".add_key .collapse">
+<h2>Add Key</h2>
+<pre>add_key(string $key, string $primary) : void</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_DB_forge::add_key()</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_DB_utility::add_key()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$key</h4>
+<code>string</code><p>key</p></div>
+<div class="subelement argument">
+<h4>$primary</h4>
+<code>string</code><p>type</p></div>
+</div></div>
+</div>
+<a name="backup" id="backup"></a><div class="element clickable method public backup" data-toggle="collapse" data-target=".backup .collapse">
+<h2>Database Backup</h2>
+<pre>backup($params) : void</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_DB_utility::backup()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$params</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="create_database" id="create_database"></a><div class="element clickable method public create_database" data-toggle="collapse" data-target=".create_database .collapse">
+<h2>Create database</h2>
+<pre>create_database(string $db_name) : bool</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_DB_forge::create_database()</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_DB_utility::create_database()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$db_name</h4>
+<code>string</code><p>the database name</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="create_table" id="create_table"></a><div class="element clickable method public create_table" data-toggle="collapse" data-target=".create_table .collapse">
+<h2>Create Table</h2>
+<pre>create_table(string $table, $if_not_exists) : bool</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_DB_forge::create_table()</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_DB_utility::create_table()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$table</h4>
+<code>string</code><p>the table name</p></div>
+<div class="subelement argument">
+<h4>$if_not_exists</h4>
+<code></code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="csv_from_result" id="csv_from_result"></a><div class="element clickable method public csv_from_result" data-toggle="collapse" data-target=".csv_from_result .collapse">
+<h2>Generate CSV from a query result object</h2>
+<pre>csv_from_result(object $query, string $delim, string $newline, string $enclosure) : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_DB_utility::csv_from_result()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$query</h4>
+<code>object</code><p>The query result object</p></div>
+<div class="subelement argument">
+<h4>$delim</h4>
+<code>string</code><p>The delimiter - comma by default</p>
+</div>
+<div class="subelement argument">
+<h4>$newline</h4>
+<code>string</code><p>The newline character - \n by default</p>
+</div>
+<div class="subelement argument">
+<h4>$enclosure</h4>
+<code>string</code><p>The enclosure - double quote by default</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="database_exists" id="database_exists"></a><div class="element clickable method public database_exists" data-toggle="collapse" data-target=".database_exists .collapse">
+<h2>Determine if a particular database exists</h2>
+<pre>database_exists($database_name) : boolean</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_DB_utility::database_exists()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$database_name</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>boolean</code></div>
+</div></div>
+</div>
+<a name="drop_column" id="drop_column"></a><div class="element clickable method public drop_column" data-toggle="collapse" data-target=".drop_column .collapse">
+<h2>Column Drop</h2>
+<pre>drop_column(string $table, string $column_name) : bool</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_DB_forge::drop_column()</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_DB_utility::drop_column()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$table</h4>
+<code>string</code><p>the table name</p></div>
+<div class="subelement argument">
+<h4>$column_name</h4>
+<code>string</code><p>the column name</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="drop_database" id="drop_database"></a><div class="element clickable method public drop_database" data-toggle="collapse" data-target=".drop_database .collapse">
+<h2>Drop database</h2>
+<pre>drop_database(string $db_name) : bool</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_DB_forge::drop_database()</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_DB_utility::drop_database()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$db_name</h4>
+<code>string</code><p>the database name</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="drop_table" id="drop_table"></a><div class="element clickable method public drop_table" data-toggle="collapse" data-target=".drop_table .collapse">
+<h2>Drop Table</h2>
+<pre>drop_table(string $table_name) : bool</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_DB_forge::drop_table()</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_DB_utility::drop_table()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$table_name</h4>
+<code>string</code><p>the table name</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="list_databases" id="list_databases"></a><div class="element clickable method public list_databases" data-toggle="collapse" data-target=".list_databases .collapse">
+<h2>List databases</h2>
+<pre>list_databases() : bool</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_DB_utility::list_databases()</td>
+</tr>
+</table>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="modify_column" id="modify_column"></a><div class="element clickable method public modify_column" data-toggle="collapse" data-target=".modify_column .collapse">
+<h2>Column Modify</h2>
+<pre>modify_column(string $table, string $field) : bool</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_DB_forge::modify_column()</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_DB_utility::modify_column()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$table</h4>
+<code>string</code><p>the table name</p></div>
+<div class="subelement argument">
+<h4>$field</h4>
+<code>string</code><p>the column name</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="optimize_database" id="optimize_database"></a><div class="element clickable method public optimize_database" data-toggle="collapse" data-target=".optimize_database .collapse">
+<h2>Optimize Database</h2>
+<pre>optimize_database() : array</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_DB_utility::optimize_database()</td>
+</tr>
+</table>
+<h3>Returns</h3>
+<div class="subelement response"><code>array</code></div>
+</div></div>
+</div>
+<a name="optimize_table" id="optimize_table"></a><div class="element clickable method public optimize_table" data-toggle="collapse" data-target=".optimize_table .collapse">
+<h2>Optimize Table</h2>
+<pre>optimize_table(string $table_name) : bool</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_DB_utility::optimize_table()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$table_name</h4>
+<code>string</code><p>the table name</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="rename_table" id="rename_table"></a><div class="element clickable method public rename_table" data-toggle="collapse" data-target=".rename_table .collapse">
+<h2>Rename Table</h2>
+<pre>rename_table(string $table_name, string $new_table_name) : bool</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_DB_forge::rename_table()</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_DB_utility::rename_table()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$table_name</h4>
+<code>string</code><p>the old table name</p></div>
+<div class="subelement argument">
+<h4>$new_table_name</h4>
+<code>string</code><p>the new table name</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="repair_table" id="repair_table"></a><div class="element clickable method public repair_table" data-toggle="collapse" data-target=".repair_table .collapse">
+<h2>Repair Table</h2>
+<pre>repair_table(string $table_name) : bool</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_DB_utility::repair_table()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$table_name</h4>
+<code>string</code><p>the table name</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="xml_from_result" id="xml_from_result"></a><div class="element clickable method public xml_from_result" data-toggle="collapse" data-target=".xml_from_result .collapse">
+<h2>Generate XML data from a query result object</h2>
+<pre>xml_from_result(object $query, array $params) : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_DB_utility::xml_from_result()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$query</h4>
+<code>object</code><p>The query result object</p></div>
+<div class="subelement argument">
+<h4>$params</h4>
+<code>array</code><p>Any preferences</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<h3>
+<i class="icon-custom icon-property"></i> Properties</h3>
+<a name="%24data_cache" id="$data_cache"> </a><div class="element clickable property public $data_cache" data-toggle="collapse" data-target=".$data_cache .collapse">
+<h2>$data_cache</h2>
+<pre>$data_cache </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_DB_utility::$$data_cache</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24db" id="$db"> </a><div class="element clickable property public $db" data-toggle="collapse" data-target=".$db .collapse">
+<h2>$db</h2>
+<pre>$db </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_DB_utility::$$db</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24db_char_set" id="$db_char_set"> </a><div class="element clickable property public $db_char_set" data-toggle="collapse" data-target=".$db_char_set .collapse">
+<h2>$db_char_set</h2>
+<pre>$db_char_set </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>inherited_from</th>
+<td>\CI_DB_forge::$$db_char_set</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_DB_utility::$$db_char_set</td>
+</tr>
+</table>
+</div></div>
+</div>
+<a name="%24fields" id="$fields"> </a><div class="element clickable property public $fields" data-toggle="collapse" data-target=".$fields .collapse">
+<h2>$fields</h2>
+<pre>$fields </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>inherited_from</th>
+<td>\CI_DB_forge::$$fields</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_DB_utility::$$fields</td>
+</tr>
+</table>
+</div></div>
+</div>
+<a name="%24keys" id="$keys"> </a><div class="element clickable property public $keys" data-toggle="collapse" data-target=".$keys .collapse">
+<h2>$keys</h2>
+<pre>$keys </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>inherited_from</th>
+<td>\CI_DB_forge::$$keys</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_DB_utility::$$keys</td>
+</tr>
+</table>
+</div></div>
+</div>
+<a name="%24primary_keys" id="$primary_keys"> </a><div class="element clickable property public $primary_keys" data-toggle="collapse" data-target=".$primary_keys .collapse">
+<h2>$primary_keys</h2>
+<pre>$primary_keys </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>inherited_from</th>
+<td>\CI_DB_forge::$$primary_keys</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_DB_utility::$$primary_keys</td>
+</tr>
+</table>
+</div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a8</a> and<br>
+            generated on 2012-07-27T12:29:23+10:00.<br></footer></div>
+</div>
+</body>
+</html>

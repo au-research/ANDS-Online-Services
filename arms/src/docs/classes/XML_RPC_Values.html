@@ -1,0 +1,881 @@
+<!DOCTYPE html><html xmlns:date="http://exslt.org/dates-and-times" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>phpDocumentor » \XML_RPC_Values</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../css/template.css" rel="stylesheet" media="all">
+<script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../js/bootstrap.js" type="text/javascript"></script><script src="../js/template.js" type="text/javascript"></script><script src="../js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../img/favicon.ico">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">phpDocumentor</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Packages</a></li>
+<li><a href="../packages/CodeIgniter.html"><i class="icon-folder-open"></i> CodeIgniter</a></li>
+<li><a href="../packages/Default.html"><i class="icon-folder-open"></i> Default</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">1170</span></a></li>
+<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul><li>todo 
+                <span class="label label-info">1</span>
+</li></ul></a></li>
+<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">0</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods</li>
+<li class="method public "><a href="#__construct" title="__construct :: "><span class="description">__construct()
+        </span><pre>__construct()</pre></a></li>
+<li class="method public "><a href="#addArray" title="addArray :: "><span class="description">addArray()
+        </span><pre>addArray()</pre></a></li>
+<li class="method public "><a href="#addScalar" title="addScalar :: "><span class="description">addScalar()
+        </span><pre>addScalar()</pre></a></li>
+<li class="method public "><a href="#addStruct" title="addStruct :: "><span class="description">addStruct()
+        </span><pre>addStruct()</pre></a></li>
+<li class="method public inherited"><a href="#display_error" title="display_error :: "><span class="description">display_error()
+        </span><pre>display_error()</pre></a></li>
+<li class="method public inherited"><a href="#display_response" title="display_response :: "><span class="description">display_response()
+        </span><pre>display_response()</pre></a></li>
+<li class="method public inherited"><a href="#initialize" title="initialize :: "><span class="description">initialize()
+        </span><pre>initialize()</pre></a></li>
+<li class="method public "><a href="#iso8601_encode" title="iso8601_encode :: "><span class="description">iso8601_encode()
+        </span><pre>iso8601_encode()</pre></a></li>
+<li class="method public "><a href="#kindOf" title="kindOf :: "><span class="description">kindOf()
+        </span><pre>kindOf()</pre></a></li>
+<li class="method public inherited"><a href="#method" title="method :: "><span class="description">method()
+        </span><pre>method()</pre></a></li>
+<li class="method public inherited"><a href="#request" title="request :: "><span class="description">request()
+        </span><pre>request()</pre></a></li>
+<li class="method public "><a href="#scalarval" title="scalarval :: "><span class="description">scalarval()
+        </span><pre>scalarval()</pre></a></li>
+<li class="method public inherited"><a href="#send_error_message" title="send_error_message :: "><span class="description">send_error_message()
+        </span><pre>send_error_message()</pre></a></li>
+<li class="method public inherited"><a href="#send_request" title="send_request :: "><span class="description">send_request()
+        </span><pre>send_request()</pre></a></li>
+<li class="method public inherited"><a href="#send_response" title="send_response :: "><span class="description">send_response()
+        </span><pre>send_response()</pre></a></li>
+<li class="method public "><a href="#serialize_class" title="serialize_class :: "><span class="description">serialize_class()
+        </span><pre>serialize_class()</pre></a></li>
+<li class="method public "><a href="#serializedata" title="serializedata :: "><span class="description">serializedata()
+        </span><pre>serializedata()</pre></a></li>
+<li class="method public "><a href="#serializeval" title="serializeval :: "><span class="description">serializeval()
+        </span><pre>serializeval()</pre></a></li>
+<li class="method public inherited"><a href="#server" title="server :: "><span class="description">server()
+        </span><pre>server()</pre></a></li>
+<li class="method public inherited"><a href="#set_debug" title="set_debug :: "><span class="description">set_debug()
+        </span><pre>set_debug()</pre></a></li>
+<li class="method public inherited"><a href="#timeout" title="timeout :: "><span class="description">timeout()
+        </span><pre>timeout()</pre></a></li>
+<li class="method public inherited"><a href="#values_parsing" title="values_parsing :: "><span class="description">values_parsing()
+        </span><pre>values_parsing()</pre></a></li>
+<li class="nav-header">
+<i class="icon-custom icon-property"></i> Properties</li>
+<li class="property public inherited"><a href="#%24client" title="$client :: "><span class="description">$client</span><pre>$client</pre></a></li>
+<li class="property public inherited"><a href="#%24data" title="$data :: "><span class="description">$data</span><pre>$data</pre></a></li>
+<li class="property public inherited"><a href="#%24debug" title="$debug :: "><span class="description">$debug</span><pre>$debug</pre></a></li>
+<li class="property public inherited"><a href="#%24error" title="$error :: "><span class="description">$error</span><pre>$error</pre></a></li>
+<li class="property public "><a href="#%24me" title="$me :: "><span class="description">$me</span><pre>$me</pre></a></li>
+<li class="property public inherited"><a href="#%24message" title="$message :: "><span class="description">$message</span><pre>$message</pre></a></li>
+<li class="property public inherited"><a href="#%24method" title="$method :: "><span class="description">$method</span><pre>$method</pre></a></li>
+<li class="property public "><a href="#%24mytype" title="$mytype :: "><span class="description">$mytype</span><pre>$mytype</pre></a></li>
+<li class="property public inherited"><a href="#%24response" title="$response :: "><span class="description">$response</span><pre>$response</pre></a></li>
+<li class="property public inherited"><a href="#%24result" title="$result :: "><span class="description">$result</span><pre>$result</pre></a></li>
+<li class="property public inherited"><a href="#%24valid_parents" title="$valid_parents :: "><span class="description">$valid_parents</span><pre>$valid_parents</pre></a></li>
+<li class="property public inherited"><a href="#%24xmlrpcArray" title="$xmlrpcArray :: "><span class="description">$xmlrpcArray</span><pre>$xmlrpcArray</pre></a></li>
+<li class="property public inherited"><a href="#%24xmlrpcBase64" title="$xmlrpcBase64 :: "><span class="description">$xmlrpcBase64</span><pre>$xmlrpcBase64</pre></a></li>
+<li class="property public inherited"><a href="#%24xmlrpcBoolean" title="$xmlrpcBoolean :: "><span class="description">$xmlrpcBoolean</span><pre>$xmlrpcBoolean</pre></a></li>
+<li class="property public inherited"><a href="#%24xmlrpcDateTime" title="$xmlrpcDateTime :: "><span class="description">$xmlrpcDateTime</span><pre>$xmlrpcDateTime</pre></a></li>
+<li class="property public inherited"><a href="#%24xmlrpcDouble" title="$xmlrpcDouble :: "><span class="description">$xmlrpcDouble</span><pre>$xmlrpcDouble</pre></a></li>
+<li class="property public inherited"><a href="#%24xmlrpcI4" title="$xmlrpcI4 :: "><span class="description">$xmlrpcI4</span><pre>$xmlrpcI4</pre></a></li>
+<li class="property public inherited"><a href="#%24xmlrpcInt" title="$xmlrpcInt :: "><span class="description">$xmlrpcInt</span><pre>$xmlrpcInt</pre></a></li>
+<li class="property public inherited"><a href="#%24xmlrpcName" title="$xmlrpcName :: "><span class="description">$xmlrpcName</span><pre>$xmlrpcName</pre></a></li>
+<li class="property public inherited"><a href="#%24xmlrpcString" title="$xmlrpcString :: "><span class="description">$xmlrpcString</span><pre>$xmlrpcString</pre></a></li>
+<li class="property public inherited"><a href="#%24xmlrpcStruct" title="$xmlrpcStruct :: "><span class="description">$xmlrpcStruct</span><pre>$xmlrpcStruct</pre></a></li>
+<li class="property public inherited"><a href="#%24xmlrpcTypes" title="$xmlrpcTypes :: "><span class="description">$xmlrpcTypes</span><pre>$xmlrpcTypes</pre></a></li>
+<li class="property public inherited"><a href="#%24xmlrpcVersion" title="$xmlrpcVersion :: "><span class="description">$xmlrpcVersion</span><pre>$xmlrpcVersion</pre></a></li>
+<li class="property public inherited"><a href="#%24xmlrpc_backslash" title="$xmlrpc_backslash :: "><span class="description">$xmlrpc_backslash</span><pre>$xmlrpc_backslash</pre></a></li>
+<li class="property public inherited"><a href="#%24xmlrpc_defencoding" title="$xmlrpc_defencoding :: "><span class="description">$xmlrpc_defencoding</span><pre>$xmlrpc_defencoding</pre></a></li>
+<li class="property public inherited"><a href="#%24xmlrpcerr" title="$xmlrpcerr :: "><span class="description">$xmlrpcerr</span><pre>$xmlrpcerr</pre></a></li>
+<li class="property public inherited"><a href="#%24xmlrpcerruser" title="$xmlrpcerruser :: "><span class="description">$xmlrpcerruser</span><pre>$xmlrpcerruser</pre></a></li>
+<li class="property public inherited"><a href="#%24xmlrpcerrxml" title="$xmlrpcerrxml :: "><span class="description">$xmlrpcerrxml</span><pre>$xmlrpcerrxml</pre></a></li>
+<li class="property public inherited"><a href="#%24xmlrpcstr" title="$xmlrpcstr :: "><span class="description">$xmlrpcstr</span><pre>$xmlrpcstr</pre></a></li>
+<li class="property public inherited"><a href="#%24xss_clean" title="$xss_clean :: "><span class="description">$xss_clean</span><pre>$xss_clean</pre></a></li>
+</ul>
+</div>
+<div class="span8">
+<a name="%5CXML_RPC_Values" id="\XML_RPC_Values"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/global.html">global</a></li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/XML_RPC_Values.html">XML_RPC_Values</a>
+</li>
+</ul>
+<div href="../classes/XML_RPC_Values.html" class="element class">
+<p class="short_description">XML-RPC Values class</p>
+<div class="details">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>category</th>
+<td>XML-RPC</td>
+</tr>
+<tr>
+<th>author</th>
+<td><a href="">ExpressionEngine Dev Team</a></td>
+</tr>
+<tr>
+<th>link</th>
+<td><a href="http://codeigniter.com/user_guide/libraries/xmlrpc.html">http://codeigniter.com/user_guide/libraries/xmlrpc.html</a></td>
+</tr>
+<tr>
+<th>package</th>
+<td><a href="../packages/Default.html">CodeIgniter</a></td>
+</tr>
+</table>
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a name="__construct" id="__construct"></a><div class="element clickable method public __construct" data-toggle="collapse" data-target=".__construct .collapse">
+<h2>__construct()
+        </h2>
+<pre>__construct($val, $type) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$val</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$type</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="addArray" id="addArray"></a><div class="element clickable method public addArray" data-toggle="collapse" data-target=".addArray .collapse">
+<h2>addArray()
+        </h2>
+<pre>addArray($vals) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$vals</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="addScalar" id="addScalar"></a><div class="element clickable method public addScalar" data-toggle="collapse" data-target=".addScalar .collapse">
+<h2>addScalar()
+        </h2>
+<pre>addScalar($val, $type) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$val</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$type</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="addStruct" id="addStruct"></a><div class="element clickable method public addStruct" data-toggle="collapse" data-target=".addStruct .collapse">
+<h2>addStruct()
+        </h2>
+<pre>addStruct($vals) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$vals</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="display_error" id="display_error"></a><div class="element clickable method public display_error" data-toggle="collapse" data-target=".display_error .collapse">
+<h2>display_error()
+        </h2>
+<pre>display_error() </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Xmlrpc::display_error()</td>
+</tr></table>
+</div></div>
+</div>
+<a name="display_response" id="display_response"></a><div class="element clickable method public display_response" data-toggle="collapse" data-target=".display_response .collapse">
+<h2>display_response()
+        </h2>
+<pre>display_response() </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Xmlrpc::display_response()</td>
+</tr></table>
+</div></div>
+</div>
+<a name="initialize" id="initialize"></a><div class="element clickable method public initialize" data-toggle="collapse" data-target=".initialize .collapse">
+<h2>initialize()
+        </h2>
+<pre>initialize($config) </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Xmlrpc::initialize()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$config</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="iso8601_encode" id="iso8601_encode"></a><div class="element clickable method public iso8601_encode" data-toggle="collapse" data-target=".iso8601_encode .collapse">
+<h2>iso8601_encode()
+        </h2>
+<pre>iso8601_encode($time, $utc) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$time</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$utc</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="kindOf" id="kindOf"></a><div class="element clickable method public kindOf" data-toggle="collapse" data-target=".kindOf .collapse">
+<h2>kindOf()
+        </h2>
+<pre>kindOf() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="method" id="method"></a><div class="element clickable method public method" data-toggle="collapse" data-target=".method .collapse">
+<h2>method()
+        </h2>
+<pre>method($function) </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Xmlrpc::method()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$function</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="request" id="request"></a><div class="element clickable method public request" data-toggle="collapse" data-target=".request .collapse">
+<h2>request()
+        </h2>
+<pre>request($incoming) </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Xmlrpc::request()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$incoming</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="scalarval" id="scalarval"></a><div class="element clickable method public scalarval" data-toggle="collapse" data-target=".scalarval .collapse">
+<h2>scalarval()
+        </h2>
+<pre>scalarval() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="send_error_message" id="send_error_message"></a><div class="element clickable method public send_error_message" data-toggle="collapse" data-target=".send_error_message .collapse">
+<h2>send_error_message()
+        </h2>
+<pre>send_error_message($number, $message) </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Xmlrpc::send_error_message()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$number</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$message</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="send_request" id="send_request"></a><div class="element clickable method public send_request" data-toggle="collapse" data-target=".send_request .collapse">
+<h2>send_request()
+        </h2>
+<pre>send_request() </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Xmlrpc::send_request()</td>
+</tr></table>
+</div></div>
+</div>
+<a name="send_response" id="send_response"></a><div class="element clickable method public send_response" data-toggle="collapse" data-target=".send_response .collapse">
+<h2>send_response()
+        </h2>
+<pre>send_response($response) </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Xmlrpc::send_response()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$response</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="serialize_class" id="serialize_class"></a><div class="element clickable method public serialize_class" data-toggle="collapse" data-target=".serialize_class .collapse">
+<h2>serialize_class()
+        </h2>
+<pre>serialize_class() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="serializedata" id="serializedata"></a><div class="element clickable method public serializedata" data-toggle="collapse" data-target=".serializedata .collapse">
+<h2>serializedata()
+        </h2>
+<pre>serializedata($typ, $val) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$typ</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$val</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="serializeval" id="serializeval"></a><div class="element clickable method public serializeval" data-toggle="collapse" data-target=".serializeval .collapse">
+<h2>serializeval()
+        </h2>
+<pre>serializeval($o) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$o</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="server" id="server"></a><div class="element clickable method public server" data-toggle="collapse" data-target=".server .collapse">
+<h2>server()
+        </h2>
+<pre>server($url, $port) </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Xmlrpc::server()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$url</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$port</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="set_debug" id="set_debug"></a><div class="element clickable method public set_debug" data-toggle="collapse" data-target=".set_debug .collapse">
+<h2>set_debug()
+        </h2>
+<pre>set_debug($flag) </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Xmlrpc::set_debug()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$flag</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="timeout" id="timeout"></a><div class="element clickable method public timeout" data-toggle="collapse" data-target=".timeout .collapse">
+<h2>timeout()
+        </h2>
+<pre>timeout($seconds) </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Xmlrpc::timeout()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$seconds</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="values_parsing" id="values_parsing"></a><div class="element clickable method public values_parsing" data-toggle="collapse" data-target=".values_parsing .collapse">
+<h2>values_parsing()
+        </h2>
+<pre>values_parsing($value, $return) </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Xmlrpc::values_parsing()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$value</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$return</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<h3>
+<i class="icon-custom icon-property"></i> Properties</h3>
+<a name="%24client" id="$client"> </a><div class="element clickable property public $client" data-toggle="collapse" data-target=".$client .collapse">
+<h2>$client</h2>
+<pre>$client </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Xmlrpc::$$client</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24data" id="$data"> </a><div class="element clickable property public $data" data-toggle="collapse" data-target=".$data .collapse">
+<h2>$data</h2>
+<pre>$data </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Xmlrpc::$$data</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24debug" id="$debug"> </a><div class="element clickable property public $debug" data-toggle="collapse" data-target=".$debug .collapse">
+<h2>$debug</h2>
+<pre>$debug </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Xmlrpc::$$debug</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24error" id="$error"> </a><div class="element clickable property public $error" data-toggle="collapse" data-target=".$error .collapse">
+<h2>$error</h2>
+<pre>$error </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Xmlrpc::$$error</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24me" id="$me"> </a><div class="element clickable property public $me" data-toggle="collapse" data-target=".$me .collapse">
+<h2>$me</h2>
+<pre>$me </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24message" id="$message"> </a><div class="element clickable property public $message" data-toggle="collapse" data-target=".$message .collapse">
+<h2>$message</h2>
+<pre>$message </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Xmlrpc::$$message</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24method" id="$method"> </a><div class="element clickable property public $method" data-toggle="collapse" data-target=".$method .collapse">
+<h2>$method</h2>
+<pre>$method </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Xmlrpc::$$method</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24mytype" id="$mytype"> </a><div class="element clickable property public $mytype" data-toggle="collapse" data-target=".$mytype .collapse">
+<h2>$mytype</h2>
+<pre>$mytype </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24response" id="$response"> </a><div class="element clickable property public $response" data-toggle="collapse" data-target=".$response .collapse">
+<h2>$response</h2>
+<pre>$response </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Xmlrpc::$$response</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24result" id="$result"> </a><div class="element clickable property public $result" data-toggle="collapse" data-target=".$result .collapse">
+<h2>$result</h2>
+<pre>$result </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Xmlrpc::$$result</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24valid_parents" id="$valid_parents"> </a><div class="element clickable property public $valid_parents" data-toggle="collapse" data-target=".$valid_parents .collapse">
+<h2>$valid_parents</h2>
+<pre>$valid_parents </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Xmlrpc::$$valid_parents</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24xmlrpcArray" id="$xmlrpcArray"> </a><div class="element clickable property public $xmlrpcArray" data-toggle="collapse" data-target=".$xmlrpcArray .collapse">
+<h2>$xmlrpcArray</h2>
+<pre>$xmlrpcArray </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Xmlrpc::$$xmlrpcArray</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24xmlrpcBase64" id="$xmlrpcBase64"> </a><div class="element clickable property public $xmlrpcBase64" data-toggle="collapse" data-target=".$xmlrpcBase64 .collapse">
+<h2>$xmlrpcBase64</h2>
+<pre>$xmlrpcBase64 </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Xmlrpc::$$xmlrpcBase64</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24xmlrpcBoolean" id="$xmlrpcBoolean"> </a><div class="element clickable property public $xmlrpcBoolean" data-toggle="collapse" data-target=".$xmlrpcBoolean .collapse">
+<h2>$xmlrpcBoolean</h2>
+<pre>$xmlrpcBoolean </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Xmlrpc::$$xmlrpcBoolean</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24xmlrpcDateTime" id="$xmlrpcDateTime"> </a><div class="element clickable property public $xmlrpcDateTime" data-toggle="collapse" data-target=".$xmlrpcDateTime .collapse">
+<h2>$xmlrpcDateTime</h2>
+<pre>$xmlrpcDateTime </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Xmlrpc::$$xmlrpcDateTime</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24xmlrpcDouble" id="$xmlrpcDouble"> </a><div class="element clickable property public $xmlrpcDouble" data-toggle="collapse" data-target=".$xmlrpcDouble .collapse">
+<h2>$xmlrpcDouble</h2>
+<pre>$xmlrpcDouble </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Xmlrpc::$$xmlrpcDouble</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24xmlrpcI4" id="$xmlrpcI4"> </a><div class="element clickable property public $xmlrpcI4" data-toggle="collapse" data-target=".$xmlrpcI4 .collapse">
+<h2>$xmlrpcI4</h2>
+<pre>$xmlrpcI4 </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Xmlrpc::$$xmlrpcI4</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24xmlrpcInt" id="$xmlrpcInt"> </a><div class="element clickable property public $xmlrpcInt" data-toggle="collapse" data-target=".$xmlrpcInt .collapse">
+<h2>$xmlrpcInt</h2>
+<pre>$xmlrpcInt </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Xmlrpc::$$xmlrpcInt</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24xmlrpcName" id="$xmlrpcName"> </a><div class="element clickable property public $xmlrpcName" data-toggle="collapse" data-target=".$xmlrpcName .collapse">
+<h2>$xmlrpcName</h2>
+<pre>$xmlrpcName </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Xmlrpc::$$xmlrpcName</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24xmlrpcString" id="$xmlrpcString"> </a><div class="element clickable property public $xmlrpcString" data-toggle="collapse" data-target=".$xmlrpcString .collapse">
+<h2>$xmlrpcString</h2>
+<pre>$xmlrpcString </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Xmlrpc::$$xmlrpcString</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24xmlrpcStruct" id="$xmlrpcStruct"> </a><div class="element clickable property public $xmlrpcStruct" data-toggle="collapse" data-target=".$xmlrpcStruct .collapse">
+<h2>$xmlrpcStruct</h2>
+<pre>$xmlrpcStruct </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Xmlrpc::$$xmlrpcStruct</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24xmlrpcTypes" id="$xmlrpcTypes"> </a><div class="element clickable property public $xmlrpcTypes" data-toggle="collapse" data-target=".$xmlrpcTypes .collapse">
+<h2>$xmlrpcTypes</h2>
+<pre>$xmlrpcTypes </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Xmlrpc::$$xmlrpcTypes</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24xmlrpcVersion" id="$xmlrpcVersion"> </a><div class="element clickable property public $xmlrpcVersion" data-toggle="collapse" data-target=".$xmlrpcVersion .collapse">
+<h2>$xmlrpcVersion</h2>
+<pre>$xmlrpcVersion </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Xmlrpc::$$xmlrpcVersion</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24xmlrpc_backslash" id="$xmlrpc_backslash"> </a><div class="element clickable property public $xmlrpc_backslash" data-toggle="collapse" data-target=".$xmlrpc_backslash .collapse">
+<h2>$xmlrpc_backslash</h2>
+<pre>$xmlrpc_backslash </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Xmlrpc::$$xmlrpc_backslash</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24xmlrpc_defencoding" id="$xmlrpc_defencoding"> </a><div class="element clickable property public $xmlrpc_defencoding" data-toggle="collapse" data-target=".$xmlrpc_defencoding .collapse">
+<h2>$xmlrpc_defencoding</h2>
+<pre>$xmlrpc_defencoding </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Xmlrpc::$$xmlrpc_defencoding</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24xmlrpcerr" id="$xmlrpcerr"> </a><div class="element clickable property public $xmlrpcerr" data-toggle="collapse" data-target=".$xmlrpcerr .collapse">
+<h2>$xmlrpcerr</h2>
+<pre>$xmlrpcerr </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Xmlrpc::$$xmlrpcerr</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24xmlrpcerruser" id="$xmlrpcerruser"> </a><div class="element clickable property public $xmlrpcerruser" data-toggle="collapse" data-target=".$xmlrpcerruser .collapse">
+<h2>$xmlrpcerruser</h2>
+<pre>$xmlrpcerruser </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Xmlrpc::$$xmlrpcerruser</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24xmlrpcerrxml" id="$xmlrpcerrxml"> </a><div class="element clickable property public $xmlrpcerrxml" data-toggle="collapse" data-target=".$xmlrpcerrxml .collapse">
+<h2>$xmlrpcerrxml</h2>
+<pre>$xmlrpcerrxml </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Xmlrpc::$$xmlrpcerrxml</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24xmlrpcstr" id="$xmlrpcstr"> </a><div class="element clickable property public $xmlrpcstr" data-toggle="collapse" data-target=".$xmlrpcstr .collapse">
+<h2>$xmlrpcstr</h2>
+<pre>$xmlrpcstr </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Xmlrpc::$$xmlrpcstr</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24xss_clean" id="$xss_clean"> </a><div class="element clickable property public $xss_clean" data-toggle="collapse" data-target=".$xss_clean .collapse">
+<h2>$xss_clean</h2>
+<pre>$xss_clean </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Xmlrpc::$$xss_clean</td>
+</tr></table>
+</div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a8</a> and<br>
+            generated on 2012-07-27T12:29:22+10:00.<br></footer></div>
+</div>
+</body>
+</html>

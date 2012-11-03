@@ -15,6 +15,7 @@ limitations under the License.
 *******************************************************************************/
 // Include required files and initialisation.
 
+
 require '/var/www/htdocs/registry/global_config.php';
 
 define('gRIF_SCHEMA_PATH', eAPPLICATION_ROOT.'/orca/schemata/registryObjects.xsd');
@@ -42,10 +43,7 @@ require '/var/www/htdocs/registry/orca/_functions/orca_constants.php';
 
 chdir("/var/www/htdocs/registry/orca/_includes");
 
-// Open a connection to the database.
-// This will be closed automatically by the framework.
-openDatabaseConnection($gCNN_DBS_ORCA, eCNN_DBS_ORCA);
-
+require '/var/www/htdocs/registry/global_config.php';
 
 // Open a connection to the database.
 // This will be closed automatically by the framework.

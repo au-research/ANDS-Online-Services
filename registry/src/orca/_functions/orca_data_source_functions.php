@@ -815,10 +815,11 @@ function deleteDataSourceDrafts($dataSourceKey , $message)
 function purgeDataSource($dataSourceKey, $harvestRequestId){
 	$ahm = getDataSourceAdvancedHarvestingMode($dataSourceKey);
 	if($ahm=='REFRESH'){//only if the advanced harvesting mode is REFRESH
+
 		$message = '';
 		$total = 0;
 		$total_drafts = 0;
-
+		$errors = '';
 		$keys = getRegistryObjectKeysForPurge($dataSourceKey, $harvestRequestId);
 		if($keys){
 			for( $i=0; $i < count($keys); $i++ ){
@@ -845,6 +846,7 @@ function purgeDataSource($dataSourceKey, $harvestRequestId){
 		if($total>0)$message .= "DELETED ".$total." REGISTRY OBJECTS NOT IN HARVEST: $harvestRequestId\n";
 		if($total_drafts>0)$message .= "DELETED ".$total_drafts." DRAFTS NOT IN HARVEST: $harvestRequestId\n";
 		return $message;
+
 	}else{
 		return false;
 	}

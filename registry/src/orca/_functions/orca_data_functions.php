@@ -469,6 +469,7 @@ function getDraftsForPurge($data_source_key, $harvest_id)
 	return $resultSet;
 }
 
+
 function deleteRegistryObject($registry_object_key)
 {
 	global $gCNN_DBS_ORCA;

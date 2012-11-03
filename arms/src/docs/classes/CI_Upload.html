@@ -1,0 +1,678 @@
+<!DOCTYPE html><html xmlns:date="http://exslt.org/dates-and-times" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>phpDocumentor » \CI_Upload</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../css/template.css" rel="stylesheet" media="all">
+<script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../js/bootstrap.js" type="text/javascript"></script><script src="../js/template.js" type="text/javascript"></script><script src="../js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../img/favicon.ico">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">phpDocumentor</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Packages</a></li>
+<li><a href="../packages/CodeIgniter.html"><i class="icon-folder-open"></i> CodeIgniter</a></li>
+<li><a href="../packages/Default.html"><i class="icon-folder-open"></i> Default</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">1170</span></a></li>
+<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul><li>todo 
+                <span class="label label-info">1</span>
+</li></ul></a></li>
+<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">0</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods</li>
+<li class="method public "><a href="#__construct" title="__construct :: Constructor"><span class="description">Constructor</span><pre>__construct()</pre></a></li>
+<li class="method public "><a href="#clean_file_name" title="clean_file_name :: Clean the file name for security"><span class="description">Clean the file name for security</span><pre>clean_file_name()</pre></a></li>
+<li class="method public "><a href="#data" title="data :: Finalized Data Array"><span class="description">Finalized Data Array</span><pre>data()</pre></a></li>
+<li class="method public "><a href="#display_errors" title="display_errors :: Display the error message"><span class="description">Display the error message</span><pre>display_errors()</pre></a></li>
+<li class="method public "><a href="#do_upload" title="do_upload :: Perform the file upload"><span class="description">Perform the file upload</span><pre>do_upload()</pre></a></li>
+<li class="method public "><a href="#do_xss_clean" title="do_xss_clean :: Runs the file through the XSS clean function"><span class="description">Runs the file through the XSS clean function</span><pre>do_xss_clean()</pre></a></li>
+<li class="method public "><a href="#get_extension" title="get_extension :: Extract the file extension"><span class="description">Extract the file extension</span><pre>get_extension()</pre></a></li>
+<li class="method public "><a href="#initialize" title="initialize :: Initialize preferences"><span class="description">Initialize preferences</span><pre>initialize()</pre></a></li>
+<li class="method public "><a href="#is_allowed_dimensions" title="is_allowed_dimensions :: Verify that the image is within the allowed width/height"><span class="description">Verify that the image is within the allowed width/height</span><pre>is_allowed_dimensions()</pre></a></li>
+<li class="method public "><a href="#is_allowed_filesize" title="is_allowed_filesize :: Verify that the file is within the allowed size"><span class="description">Verify that the file is within the allowed size</span><pre>is_allowed_filesize()</pre></a></li>
+<li class="method public "><a href="#is_allowed_filetype" title="is_allowed_filetype :: Verify that the filetype is allowed"><span class="description">Verify that the filetype is allowed</span><pre>is_allowed_filetype()</pre></a></li>
+<li class="method public "><a href="#is_image" title="is_image :: Validate the image"><span class="description">Validate the image</span><pre>is_image()</pre></a></li>
+<li class="method public "><a href="#limit_filename_length" title="limit_filename_length :: Limit the File Name Length"><span class="description">Limit the File Name Length</span><pre>limit_filename_length()</pre></a></li>
+<li class="method public "><a href="#mimes_types" title="mimes_types :: List of Mime Types"><span class="description">List of Mime Types</span><pre>mimes_types()</pre></a></li>
+<li class="method public "><a href="#set_allowed_types" title="set_allowed_types :: Set Allowed File Types"><span class="description">Set Allowed File Types</span><pre>set_allowed_types()</pre></a></li>
+<li class="method public "><a href="#set_error" title="set_error :: Set an error message"><span class="description">Set an error message</span><pre>set_error()</pre></a></li>
+<li class="method public "><a href="#set_filename" title="set_filename :: Set the file name"><span class="description">Set the file name</span><pre>set_filename()</pre></a></li>
+<li class="method public "><a href="#set_image_properties" title="set_image_properties :: Set Image Properties"><span class="description">Set Image Properties</span><pre>set_image_properties()</pre></a></li>
+<li class="method public "><a href="#set_max_filename" title="set_max_filename :: Set Maximum File Name Length"><span class="description">Set Maximum File Name Length</span><pre>set_max_filename()</pre></a></li>
+<li class="method public "><a href="#set_max_filesize" title="set_max_filesize :: Set Maximum File Size"><span class="description">Set Maximum File Size</span><pre>set_max_filesize()</pre></a></li>
+<li class="method public "><a href="#set_max_height" title="set_max_height :: Set Maximum Image Height"><span class="description">Set Maximum Image Height</span><pre>set_max_height()</pre></a></li>
+<li class="method public "><a href="#set_max_width" title="set_max_width :: Set Maximum Image Width"><span class="description">Set Maximum Image Width</span><pre>set_max_width()</pre></a></li>
+<li class="method public "><a href="#set_upload_path" title="set_upload_path :: Set Upload Path"><span class="description">Set Upload Path</span><pre>set_upload_path()</pre></a></li>
+<li class="method public "><a href="#set_xss_clean" title="set_xss_clean :: Set XSS Clean"><span class="description">Set XSS Clean</span><pre>set_xss_clean()</pre></a></li>
+<li class="method public "><a href="#validate_upload_path" title="validate_upload_path :: Validate Upload Path"><span class="description">Validate Upload Path</span><pre>validate_upload_path()</pre></a></li>
+<li class="nav-header protected">» Protected</li>
+<li class="method protected "><a href="#_file_mime_type" title="_file_mime_type :: File MIME type"><span class="description">File MIME type</span><pre>_file_mime_type()</pre></a></li>
+<li class="method protected "><a href="#_prep_filename" title="_prep_filename :: Prep Filename"><span class="description">Prep Filename</span><pre>_prep_filename()</pre></a></li>
+<li class="nav-header">
+<i class="icon-custom icon-property"></i> Properties</li>
+<li class="property public "><a href="#%24allowed_types" title="$allowed_types :: "><span class="description">$allowed_types</span><pre>$allowed_types</pre></a></li>
+<li class="property public "><a href="#%24client_name" title="$client_name :: "><span class="description">$client_name</span><pre>$client_name</pre></a></li>
+<li class="property public "><a href="#%24encrypt_name" title="$encrypt_name :: "><span class="description">$encrypt_name</span><pre>$encrypt_name</pre></a></li>
+<li class="property public "><a href="#%24error_msg" title="$error_msg :: "><span class="description">$error_msg</span><pre>$error_msg</pre></a></li>
+<li class="property public "><a href="#%24file_ext" title="$file_ext :: "><span class="description">$file_ext</span><pre>$file_ext</pre></a></li>
+<li class="property public "><a href="#%24file_name" title="$file_name :: "><span class="description">$file_name</span><pre>$file_name</pre></a></li>
+<li class="property public "><a href="#%24file_size" title="$file_size :: "><span class="description">$file_size</span><pre>$file_size</pre></a></li>
+<li class="property public "><a href="#%24file_temp" title="$file_temp :: "><span class="description">$file_temp</span><pre>$file_temp</pre></a></li>
+<li class="property public "><a href="#%24file_type" title="$file_type :: "><span class="description">$file_type</span><pre>$file_type</pre></a></li>
+<li class="property public "><a href="#%24image_height" title="$image_height :: "><span class="description">$image_height</span><pre>$image_height</pre></a></li>
+<li class="property public "><a href="#%24image_size_str" title="$image_size_str :: "><span class="description">$image_size_str</span><pre>$image_size_str</pre></a></li>
+<li class="property public "><a href="#%24image_type" title="$image_type :: "><span class="description">$image_type</span><pre>$image_type</pre></a></li>
+<li class="property public "><a href="#%24image_width" title="$image_width :: "><span class="description">$image_width</span><pre>$image_width</pre></a></li>
+<li class="property public "><a href="#%24is_image" title="$is_image :: "><span class="description">$is_image</span><pre>$is_image</pre></a></li>
+<li class="property public "><a href="#%24max_filename" title="$max_filename :: "><span class="description">$max_filename</span><pre>$max_filename</pre></a></li>
+<li class="property public "><a href="#%24max_height" title="$max_height :: "><span class="description">$max_height</span><pre>$max_height</pre></a></li>
+<li class="property public "><a href="#%24max_size" title="$max_size :: "><span class="description">$max_size</span><pre>$max_size</pre></a></li>
+<li class="property public "><a href="#%24max_width" title="$max_width :: "><span class="description">$max_width</span><pre>$max_width</pre></a></li>
+<li class="property public "><a href="#%24mimes" title="$mimes :: "><span class="description">$mimes</span><pre>$mimes</pre></a></li>
+<li class="property public "><a href="#%24orig_name" title="$orig_name :: "><span class="description">$orig_name</span><pre>$orig_name</pre></a></li>
+<li class="property public "><a href="#%24overwrite" title="$overwrite :: "><span class="description">$overwrite</span><pre>$overwrite</pre></a></li>
+<li class="property public "><a href="#%24remove_spaces" title="$remove_spaces :: "><span class="description">$remove_spaces</span><pre>$remove_spaces</pre></a></li>
+<li class="property public "><a href="#%24temp_prefix" title="$temp_prefix :: "><span class="description">$temp_prefix</span><pre>$temp_prefix</pre></a></li>
+<li class="property public "><a href="#%24upload_path" title="$upload_path :: "><span class="description">$upload_path</span><pre>$upload_path</pre></a></li>
+<li class="property public "><a href="#%24xss_clean" title="$xss_clean :: "><span class="description">$xss_clean</span><pre>$xss_clean</pre></a></li>
+<li class="nav-header protected">» Protected</li>
+<li class="property protected "><a href="#%24_file_name_override" title="$_file_name_override :: "><span class="description">$_file_name_override</span><pre>$_file_name_override</pre></a></li>
+</ul>
+</div>
+<div class="span8">
+<a name="%5CCI_Upload" id="\CI_Upload"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/global.html">global</a></li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/CI_Upload.html">CI_Upload</a>
+</li>
+</ul>
+<div href="../classes/CI_Upload.html" class="element class">
+<p class="short_description">File Uploading Class</p>
+<div class="details">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>package</th>
+<td><a href="../packages/CodeIgniter.Libraries.html">CodeIgniter</a></td>
+</tr>
+<tr>
+<th>subpackage</th>
+<td>Libraries</td>
+</tr>
+<tr>
+<th>category</th>
+<td>Uploads</td>
+</tr>
+<tr>
+<th>author</th>
+<td><a href="">ExpressionEngine Dev Team</a></td>
+</tr>
+<tr>
+<th>link</th>
+<td><a href="http://codeigniter.com/user_guide/libraries/file_uploading.html">http://codeigniter.com/user_guide/libraries/file_uploading.html</a></td>
+</tr>
+</table>
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a name="__construct" id="__construct"></a><div class="element clickable method public __construct" data-toggle="collapse" data-target=".__construct .collapse">
+<h2>Constructor</h2>
+<pre>__construct($props) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$props</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="clean_file_name" id="clean_file_name"></a><div class="element clickable method public clean_file_name" data-toggle="collapse" data-target=".clean_file_name .collapse">
+<h2>Clean the file name for security</h2>
+<pre>clean_file_name($filename) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$filename</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="data" id="data"></a><div class="element clickable method public data" data-toggle="collapse" data-target=".data .collapse">
+<h2>Finalized Data Array</h2>
+<pre>data() : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Returns an associative array containing all of the information
+related to the upload, allowing the developer easy access in one array.</p></p>
+<h3>Returns</h3>
+<div class="subelement response"><code>array</code></div>
+</div></div>
+</div>
+<a name="display_errors" id="display_errors"></a><div class="element clickable method public display_errors" data-toggle="collapse" data-target=".display_errors .collapse">
+<h2>Display the error message</h2>
+<pre>display_errors($open, $close) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$open</h4>
+<code></code><p>string</p></div>
+<div class="subelement argument">
+<h4>$close</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="do_upload" id="do_upload"></a><div class="element clickable method public do_upload" data-toggle="collapse" data-target=".do_upload .collapse">
+<h2>Perform the file upload</h2>
+<pre>do_upload($field) : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$field</h4>
+<code></code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="do_xss_clean" id="do_xss_clean"></a><div class="element clickable method public do_xss_clean" data-toggle="collapse" data-target=".do_xss_clean .collapse">
+<h2>Runs the file through the XSS clean function</h2>
+<pre>do_xss_clean() : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"><p>This prevents people from embedding malicious code in their files.
+I'm not sure that it won't negatively affect certain files in unexpected ways,
+but so far I haven't found that it causes trouble.</p></p></div></div>
+</div>
+<a name="get_extension" id="get_extension"></a><div class="element clickable method public get_extension" data-toggle="collapse" data-target=".get_extension .collapse">
+<h2>Extract the file extension</h2>
+<pre>get_extension($filename) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$filename</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="initialize" id="initialize"></a><div class="element clickable method public initialize" data-toggle="collapse" data-target=".initialize .collapse">
+<h2>Initialize preferences</h2>
+<pre>initialize($config) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$config</h4>
+<code></code><p>array</p></div>
+</div></div>
+</div>
+<a name="is_allowed_dimensions" id="is_allowed_dimensions"></a><div class="element clickable method public is_allowed_dimensions" data-toggle="collapse" data-target=".is_allowed_dimensions .collapse">
+<h2>Verify that the image is within the allowed width/height</h2>
+<pre>is_allowed_dimensions() : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="is_allowed_filesize" id="is_allowed_filesize"></a><div class="element clickable method public is_allowed_filesize" data-toggle="collapse" data-target=".is_allowed_filesize .collapse">
+<h2>Verify that the file is within the allowed size</h2>
+<pre>is_allowed_filesize() : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="is_allowed_filetype" id="is_allowed_filetype"></a><div class="element clickable method public is_allowed_filetype" data-toggle="collapse" data-target=".is_allowed_filetype .collapse">
+<h2>Verify that the filetype is allowed</h2>
+<pre>is_allowed_filetype($ignore_mime) : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$ignore_mime</h4>
+<code></code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="is_image" id="is_image"></a><div class="element clickable method public is_image" data-toggle="collapse" data-target=".is_image .collapse">
+<h2>Validate the image</h2>
+<pre>is_image() : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="limit_filename_length" id="limit_filename_length"></a><div class="element clickable method public limit_filename_length" data-toggle="collapse" data-target=".limit_filename_length .collapse">
+<h2>Limit the File Name Length</h2>
+<pre>limit_filename_length($filename, $length) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$filename</h4>
+<code></code><p>string</p></div>
+<div class="subelement argument">
+<h4>$length</h4>
+<code></code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="mimes_types" id="mimes_types"></a><div class="element clickable method public mimes_types" data-toggle="collapse" data-target=".mimes_types .collapse">
+<h2>List of Mime Types</h2>
+<pre>mimes_types($mime) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>This is a list of mime types.  We use it to validate
+the "allowed types" set by the developer</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$mime</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="set_allowed_types" id="set_allowed_types"></a><div class="element clickable method public set_allowed_types" data-toggle="collapse" data-target=".set_allowed_types .collapse">
+<h2>Set Allowed File Types</h2>
+<pre>set_allowed_types($types) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$types</h4>
+<code></code><p>string</p></div>
+</div></div>
+</div>
+<a name="set_error" id="set_error"></a><div class="element clickable method public set_error" data-toggle="collapse" data-target=".set_error .collapse">
+<h2>Set an error message</h2>
+<pre>set_error($msg) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$msg</h4>
+<code></code><p>string</p></div>
+</div></div>
+</div>
+<a name="set_filename" id="set_filename"></a><div class="element clickable method public set_filename" data-toggle="collapse" data-target=".set_filename .collapse">
+<h2>Set the file name</h2>
+<pre>set_filename($path, $filename) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>This function takes a filename/path as input and looks for the
+existence of a file with the same name. If found, it will append a
+number to the end of the filename to avoid overwriting a pre-existing file.</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$path</h4>
+<code></code><p>string</p></div>
+<div class="subelement argument">
+<h4>$filename</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="set_image_properties" id="set_image_properties"></a><div class="element clickable method public set_image_properties" data-toggle="collapse" data-target=".set_image_properties .collapse">
+<h2>Set Image Properties</h2>
+<pre>set_image_properties($path) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Uses GD to determine the width/height/type of image</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$path</h4>
+<code></code><p>string</p></div>
+</div></div>
+</div>
+<a name="set_max_filename" id="set_max_filename"></a><div class="element clickable method public set_max_filename" data-toggle="collapse" data-target=".set_max_filename .collapse">
+<h2>Set Maximum File Name Length</h2>
+<pre>set_max_filename($n) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$n</h4>
+<code></code><p>integer</p></div>
+</div></div>
+</div>
+<a name="set_max_filesize" id="set_max_filesize"></a><div class="element clickable method public set_max_filesize" data-toggle="collapse" data-target=".set_max_filesize .collapse">
+<h2>Set Maximum File Size</h2>
+<pre>set_max_filesize($n) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$n</h4>
+<code></code><p>integer</p></div>
+</div></div>
+</div>
+<a name="set_max_height" id="set_max_height"></a><div class="element clickable method public set_max_height" data-toggle="collapse" data-target=".set_max_height .collapse">
+<h2>Set Maximum Image Height</h2>
+<pre>set_max_height($n) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$n</h4>
+<code></code><p>integer</p></div>
+</div></div>
+</div>
+<a name="set_max_width" id="set_max_width"></a><div class="element clickable method public set_max_width" data-toggle="collapse" data-target=".set_max_width .collapse">
+<h2>Set Maximum Image Width</h2>
+<pre>set_max_width($n) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$n</h4>
+<code></code><p>integer</p></div>
+</div></div>
+</div>
+<a name="set_upload_path" id="set_upload_path"></a><div class="element clickable method public set_upload_path" data-toggle="collapse" data-target=".set_upload_path .collapse">
+<h2>Set Upload Path</h2>
+<pre>set_upload_path($path) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$path</h4>
+<code></code><p>string</p></div>
+</div></div>
+</div>
+<a name="set_xss_clean" id="set_xss_clean"></a><div class="element clickable method public set_xss_clean" data-toggle="collapse" data-target=".set_xss_clean .collapse">
+<h2>Set XSS Clean</h2>
+<pre>set_xss_clean($flag) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Enables the XSS flag so that the file that was uploaded
+will be run through the XSS filter.</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$flag</h4>
+<code></code><p>bool</p></div>
+</div></div>
+</div>
+<a name="validate_upload_path" id="validate_upload_path"></a><div class="element clickable method public validate_upload_path" data-toggle="collapse" data-target=".validate_upload_path .collapse">
+<h2>Validate Upload Path</h2>
+<pre>validate_upload_path() : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Verifies that it is a valid upload path with proper permissions.</p></p>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="_file_mime_type" id="_file_mime_type"></a><div class="element clickable method protected _file_mime_type" data-toggle="collapse" data-target="._file_mime_type .collapse">
+<h2>File MIME type</h2>
+<pre>_file_mime_type($file) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Detects the (actual) MIME type of the uploaded file, if possible.
+The input array is expected to be $_FILES[$field]</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$file</h4>
+<code></code><p>array</p></div>
+</div></div>
+</div>
+<a name="_prep_filename" id="_prep_filename"></a><div class="element clickable method protected _prep_filename" data-toggle="collapse" data-target="._prep_filename .collapse">
+<h2>Prep Filename</h2>
+<pre>_prep_filename($filename) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Prevents possible script execution from Apache's handling of files multiple extensions
+http://httpd.apache.org/docs/1.3/mod/mod_mime.html#multipleext</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$filename</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<h3>
+<i class="icon-custom icon-property"></i> Properties</h3>
+<a name="%24allowed_types" id="$allowed_types"> </a><div class="element clickable property public $allowed_types" data-toggle="collapse" data-target=".$allowed_types .collapse">
+<h2>$allowed_types</h2>
+<pre>$allowed_types </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24client_name" id="$client_name"> </a><div class="element clickable property public $client_name" data-toggle="collapse" data-target=".$client_name .collapse">
+<h2>$client_name</h2>
+<pre>$client_name </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24encrypt_name" id="$encrypt_name"> </a><div class="element clickable property public $encrypt_name" data-toggle="collapse" data-target=".$encrypt_name .collapse">
+<h2>$encrypt_name</h2>
+<pre>$encrypt_name </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24error_msg" id="$error_msg"> </a><div class="element clickable property public $error_msg" data-toggle="collapse" data-target=".$error_msg .collapse">
+<h2>$error_msg</h2>
+<pre>$error_msg </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24file_ext" id="$file_ext"> </a><div class="element clickable property public $file_ext" data-toggle="collapse" data-target=".$file_ext .collapse">
+<h2>$file_ext</h2>
+<pre>$file_ext </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24file_name" id="$file_name"> </a><div class="element clickable property public $file_name" data-toggle="collapse" data-target=".$file_name .collapse">
+<h2>$file_name</h2>
+<pre>$file_name </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24file_size" id="$file_size"> </a><div class="element clickable property public $file_size" data-toggle="collapse" data-target=".$file_size .collapse">
+<h2>$file_size</h2>
+<pre>$file_size </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24file_temp" id="$file_temp"> </a><div class="element clickable property public $file_temp" data-toggle="collapse" data-target=".$file_temp .collapse">
+<h2>$file_temp</h2>
+<pre>$file_temp </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24file_type" id="$file_type"> </a><div class="element clickable property public $file_type" data-toggle="collapse" data-target=".$file_type .collapse">
+<h2>$file_type</h2>
+<pre>$file_type </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24image_height" id="$image_height"> </a><div class="element clickable property public $image_height" data-toggle="collapse" data-target=".$image_height .collapse">
+<h2>$image_height</h2>
+<pre>$image_height </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24image_size_str" id="$image_size_str"> </a><div class="element clickable property public $image_size_str" data-toggle="collapse" data-target=".$image_size_str .collapse">
+<h2>$image_size_str</h2>
+<pre>$image_size_str </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24image_type" id="$image_type"> </a><div class="element clickable property public $image_type" data-toggle="collapse" data-target=".$image_type .collapse">
+<h2>$image_type</h2>
+<pre>$image_type </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24image_width" id="$image_width"> </a><div class="element clickable property public $image_width" data-toggle="collapse" data-target=".$image_width .collapse">
+<h2>$image_width</h2>
+<pre>$image_width </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24is_image" id="$is_image"> </a><div class="element clickable property public $is_image" data-toggle="collapse" data-target=".$is_image .collapse">
+<h2>$is_image</h2>
+<pre>$is_image </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24max_filename" id="$max_filename"> </a><div class="element clickable property public $max_filename" data-toggle="collapse" data-target=".$max_filename .collapse">
+<h2>$max_filename</h2>
+<pre>$max_filename </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24max_height" id="$max_height"> </a><div class="element clickable property public $max_height" data-toggle="collapse" data-target=".$max_height .collapse">
+<h2>$max_height</h2>
+<pre>$max_height </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24max_size" id="$max_size"> </a><div class="element clickable property public $max_size" data-toggle="collapse" data-target=".$max_size .collapse">
+<h2>$max_size</h2>
+<pre>$max_size </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24max_width" id="$max_width"> </a><div class="element clickable property public $max_width" data-toggle="collapse" data-target=".$max_width .collapse">
+<h2>$max_width</h2>
+<pre>$max_width </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24mimes" id="$mimes"> </a><div class="element clickable property public $mimes" data-toggle="collapse" data-target=".$mimes .collapse">
+<h2>$mimes</h2>
+<pre>$mimes </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24orig_name" id="$orig_name"> </a><div class="element clickable property public $orig_name" data-toggle="collapse" data-target=".$orig_name .collapse">
+<h2>$orig_name</h2>
+<pre>$orig_name </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24overwrite" id="$overwrite"> </a><div class="element clickable property public $overwrite" data-toggle="collapse" data-target=".$overwrite .collapse">
+<h2>$overwrite</h2>
+<pre>$overwrite </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24remove_spaces" id="$remove_spaces"> </a><div class="element clickable property public $remove_spaces" data-toggle="collapse" data-target=".$remove_spaces .collapse">
+<h2>$remove_spaces</h2>
+<pre>$remove_spaces </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24temp_prefix" id="$temp_prefix"> </a><div class="element clickable property public $temp_prefix" data-toggle="collapse" data-target=".$temp_prefix .collapse">
+<h2>$temp_prefix</h2>
+<pre>$temp_prefix </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24upload_path" id="$upload_path"> </a><div class="element clickable property public $upload_path" data-toggle="collapse" data-target=".$upload_path .collapse">
+<h2>$upload_path</h2>
+<pre>$upload_path </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24xss_clean" id="$xss_clean"> </a><div class="element clickable property public $xss_clean" data-toggle="collapse" data-target=".$xss_clean .collapse">
+<h2>$xss_clean</h2>
+<pre>$xss_clean </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24_file_name_override" id="$_file_name_override"> </a><div class="element clickable property protected $_file_name_override" data-toggle="collapse" data-target=".$_file_name_override .collapse">
+<h2>$_file_name_override</h2>
+<pre>$_file_name_override </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a8</a> and<br>
+            generated on 2012-07-27T12:29:22+10:00.<br></footer></div>
+</div>
+</body>
+</html>

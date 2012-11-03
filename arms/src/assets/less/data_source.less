@@ -1,0 +1,52 @@
+.ro-list{
+	margin:-10px;padding:0;
+	li{
+		.light-gradient();
+		list-style-type:none;
+		margin:0;padding:10px;
+		&:hover{
+			background:#eee;
+		}
+		cursor:pointer;
+		.name{
+			.text-shadow();
+		}
+		.num{
+			color:white;
+			font-size:11px;
+			font-weight:bold;
+			float:right;
+			background-color:@accentColor;
+			padding: 1px 9px;
+			-webkit-border-radius: 9px;
+			-moz-border-radius: 9px;
+			border-radius: 9px;
+		}
+		a{
+			text-decoration:none;
+			color:@fontColor;
+			&:hover{
+				text-decoration:none;
+			}
+		}
+	}
+}
+
+#importRecordsFromURLModal{
+  .modal-screen-container{
+      min-height:240px;
+      max-height:450px;
+      overflow:auto;
+  }
+  .modal-body{
+      #remoteSourceURLDisplay{
+        width:380px;
+        font-style:italic;
+        padding:15px 0px 15px 15px;
+        .ellipsis(); 
+      }
+      input[name="url"]{
+        width:90%;
+      } 
+   }
+}

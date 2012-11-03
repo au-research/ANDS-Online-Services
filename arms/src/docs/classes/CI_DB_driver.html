@@ -1,0 +1,1130 @@
+<!DOCTYPE html><html xmlns:date="http://exslt.org/dates-and-times" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>phpDocumentor » \CI_DB_driver</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../css/template.css" rel="stylesheet" media="all">
+<script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../js/bootstrap.js" type="text/javascript"></script><script src="../js/template.js" type="text/javascript"></script><script src="../js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../img/favicon.ico">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">phpDocumentor</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Packages</a></li>
+<li><a href="../packages/CodeIgniter.html"><i class="icon-folder-open"></i> CodeIgniter</a></li>
+<li><a href="../packages/Default.html"><i class="icon-folder-open"></i> Default</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">1170</span></a></li>
+<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul><li>todo 
+                <span class="label label-info">1</span>
+</li></ul></a></li>
+<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">0</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods</li>
+<li class="method public "><a href="#__construct" title="__construct :: Constructor."><span class="description">Constructor.</span><pre>__construct()</pre></a></li>
+<li class="method public "><a href="#_cache_init" title="_cache_init :: Initialize the Cache Class"><span class="description">Initialize the Cache Class</span><pre>_cache_init()</pre></a></li>
+<li class="method public "><a href="#_has_operator" title="_has_operator :: Tests whether the string has an SQL operator"><span class="description">Tests whether the string has an SQL operator</span><pre>_has_operator()</pre></a></li>
+<li class="method public "><a href="#_protect_identifiers" title="_protect_identifiers :: Protect Identifiers"><span class="description">Protect Identifiers</span><pre>_protect_identifiers()</pre></a></li>
+<li class="method public "><a href="#cache_delete" title="cache_delete :: Delete the cache files associated with a particular URI"><span class="description">Delete the cache files associated with a particular URI</span><pre>cache_delete()</pre></a></li>
+<li class="method public "><a href="#cache_delete_all" title="cache_delete_all :: Delete All cache files"><span class="description">Delete All cache files</span><pre>cache_delete_all()</pre></a></li>
+<li class="method public "><a href="#cache_off" title="cache_off :: Disable Query Caching"><span class="description">Disable Query Caching</span><pre>cache_off()</pre></a></li>
+<li class="method public "><a href="#cache_on" title="cache_on :: Enable Query Caching"><span class="description">Enable Query Caching</span><pre>cache_on()</pre></a></li>
+<li class="method public "><a href="#cache_set_path" title="cache_set_path :: Set Cache Directory Path"><span class="description">Set Cache Directory Path</span><pre>cache_set_path()</pre></a></li>
+<li class="method public "><a href="#call_function" title="call_function :: Enables a native PHP function to be run, using a platform agnostic wrapper."><span class="description">Enables a native PHP function to be run, using a platform agnostic wrapper.</span><pre>call_function()</pre></a></li>
+<li class="method public "><a href="#close" title="close :: Close DB Connection"><span class="description">Close DB Connection</span><pre>close()</pre></a></li>
+<li class="method public "><a href="#compile_binds" title="compile_binds :: Compile Bindings"><span class="description">Compile Bindings</span><pre>compile_binds()</pre></a></li>
+<li class="method public "><a href="#db_set_charset" title="db_set_charset :: Set client character set"><span class="description">Set client character set</span><pre>db_set_charset()</pre></a></li>
+<li class="method public "><a href="#display_error" title="display_error :: Display an error message"><span class="description">Display an error message</span><pre>display_error()</pre></a></li>
+<li class="method public "><a href="#elapsed_time" title="elapsed_time :: Calculate the aggregate query elapsed time"><span class="description">Calculate the aggregate query elapsed time</span><pre>elapsed_time()</pre></a></li>
+<li class="method public "><a href="#escape" title='escape :: "Smart" Escape String'><span class="description">"Smart" Escape String</span><pre>escape()</pre></a></li>
+<li class="method public "><a href="#escape_like_str" title="escape_like_str :: Escape LIKE String"><span class="description">Escape LIKE String</span><pre>escape_like_str()</pre></a></li>
+<li class="method public "><a href="#field_data" title="field_data :: Returns an object with field data"><span class="description">Returns an object with field data</span><pre>field_data()</pre></a></li>
+<li class="method public "><a href="#field_exists" title="field_exists :: Determine if a particular field exists"><span class="description">Determine if a particular field exists</span><pre>field_exists()</pre></a></li>
+<li class="method public "><a href="#insert_string" title="insert_string :: Generate an insert string"><span class="description">Generate an insert string</span><pre>insert_string()</pre></a></li>
+<li class="method public "><a href="#is_write_type" title='is_write_type :: Determines if a query is a "write" type.'><span class="description">Determines if a query is a "write" type.</span><pre>is_write_type()</pre></a></li>
+<li class="method public "><a href="#last_query" title="last_query :: Returns the last query that was executed"><span class="description">Returns the last query that was executed</span><pre>last_query()</pre></a></li>
+<li class="method public "><a href="#list_fields" title="list_fields :: Fetch MySQL Field Names"><span class="description">Fetch MySQL Field Names</span><pre>list_fields()</pre></a></li>
+<li class="method public "><a href="#list_tables" title="list_tables :: Returns an array of table names"><span class="description">Returns an array of table names</span><pre>list_tables()</pre></a></li>
+<li class="method public "><a href="#load_rdriver" title="load_rdriver :: Load the result drivers"><span class="description">Load the result drivers</span><pre>load_rdriver()</pre></a></li>
+<li class="method public "><a href="#platform" title="platform :: The name of the platform in use (mysql, mssql, etc."><span class="description">The name of the platform in use (mysql, mssql, etc.</span><pre>platform()</pre></a></li>
+<li class="method public "><a href="#primary" title="primary :: Primary"><span class="description">Primary</span><pre>primary()</pre></a></li>
+<li class="method public "><a href="#protect_identifiers" title="protect_identifiers :: Protect Identifiers"><span class="description">Protect Identifiers</span><pre>protect_identifiers()</pre></a></li>
+<li class="method public "><a href="#query" title="query :: Execute the query"><span class="description">Execute the query</span><pre>query()</pre></a></li>
+<li class="method public "><a href="#simple_query" title="simple_query :: Simple Query
+This is a simplified version of the query() function."><span class="description">Simple Query
+This is a simplified version of the query() function.</span><pre>simple_query()</pre></a></li>
+<li class="method public "><a href="#table_exists" title="table_exists :: Determine if a particular table exists"><span class="description">Determine if a particular table exists</span><pre>table_exists()</pre></a></li>
+<li class="method public "><a href="#total_queries" title="total_queries :: Returns the total number of queries"><span class="description">Returns the total number of queries</span><pre>total_queries()</pre></a></li>
+<li class="method public "><a href="#trans_complete" title="trans_complete :: Complete Transaction"><span class="description">Complete Transaction</span><pre>trans_complete()</pre></a></li>
+<li class="method public "><a href="#trans_off" title="trans_off :: Disable Transactions
+This permits transactions to be disabled at run-time."><span class="description">Disable Transactions
+This permits transactions to be disabled at run-time.</span><pre>trans_off()</pre></a></li>
+<li class="method public "><a href="#trans_start" title="trans_start :: Start Transaction"><span class="description">Start Transaction</span><pre>trans_start()</pre></a></li>
+<li class="method public "><a href="#trans_status" title="trans_status :: Lets you retrieve the transaction flag to determine if it has failed"><span class="description">Lets you retrieve the transaction flag to determine if it has failed</span><pre>trans_status()</pre></a></li>
+<li class="method public "><a href="#trans_strict" title="trans_strict :: Enable/disable Transaction Strict Mode
+When strict mode is enabled, if you are running multiple groups of
+transactions, if one group fails all groups will be rolled back."><span class="description">Enable/disable Transaction Strict Mode
+When strict mode is enabled, if you are running multiple groups of
+transactions, if one group fails all groups will be rolled back.</span><pre>trans_strict()</pre></a></li>
+<li class="method public "><a href="#update_string" title="update_string :: Generate an update string"><span class="description">Generate an update string</span><pre>update_string()</pre></a></li>
+<li class="method public "><a href="#version" title="version :: Database Version Number."><span class="description">Database Version Number.</span><pre>version()</pre></a></li>
+<li class="nav-header protected">» Protected</li>
+<li class="method protected "><a href="#_reset_select" title="_reset_select :: Dummy method that allows Active Record class to be disabled"><span class="description">Dummy method that allows Active Record class to be disabled</span><pre>_reset_select()</pre></a></li>
+<li class="nav-header">
+<i class="icon-custom icon-property"></i> Properties</li>
+<li class="property public "><a href="#%24CACHE" title="$CACHE :: "><span class="description">$CACHE</span><pre>$CACHE</pre></a></li>
+<li class="property public "><a href="#%24_protect_identifiers" title="$_protect_identifiers :: "><span class="description">$_protect_identifiers</span><pre>$_protect_identifiers</pre></a></li>
+<li class="property public "><a href="#%24_reserved_identifiers" title="$_reserved_identifiers :: "><span class="description">$_reserved_identifiers</span><pre>$_reserved_identifiers</pre></a></li>
+<li class="property public "><a href="#%24_trans_depth" title="$_trans_depth :: "><span class="description">$_trans_depth</span><pre>$_trans_depth</pre></a></li>
+<li class="property public "><a href="#%24_trans_status" title="$_trans_status :: "><span class="description">$_trans_status</span><pre>$_trans_status</pre></a></li>
+<li class="property public "><a href="#%24autoinit" title="$autoinit :: "><span class="description">$autoinit</span><pre>$autoinit</pre></a></li>
+<li class="property public "><a href="#%24benchmark" title="$benchmark :: "><span class="description">$benchmark</span><pre>$benchmark</pre></a></li>
+<li class="property public "><a href="#%24bind_marker" title="$bind_marker :: "><span class="description">$bind_marker</span><pre>$bind_marker</pre></a></li>
+<li class="property public "><a href="#%24cache_autodel" title="$cache_autodel :: "><span class="description">$cache_autodel</span><pre>$cache_autodel</pre></a></li>
+<li class="property public "><a href="#%24cache_on" title="$cache_on :: "><span class="description">$cache_on</span><pre>$cache_on</pre></a></li>
+<li class="property public "><a href="#%24cachedir" title="$cachedir :: "><span class="description">$cachedir</span><pre>$cachedir</pre></a></li>
+<li class="property public "><a href="#%24char_set" title="$char_set :: "><span class="description">$char_set</span><pre>$char_set</pre></a></li>
+<li class="property public "><a href="#%24conn_id" title="$conn_id :: "><span class="description">$conn_id</span><pre>$conn_id</pre></a></li>
+<li class="property public "><a href="#%24curs_id" title="$curs_id :: "><span class="description">$curs_id</span><pre>$curs_id</pre></a></li>
+<li class="property public "><a href="#%24data_cache" title="$data_cache :: "><span class="description">$data_cache</span><pre>$data_cache</pre></a></li>
+<li class="property public "><a href="#%24database" title="$database :: "><span class="description">$database</span><pre>$database</pre></a></li>
+<li class="property public "><a href="#%24db_debug" title="$db_debug :: "><span class="description">$db_debug</span><pre>$db_debug</pre></a></li>
+<li class="property public "><a href="#%24dbcollat" title="$dbcollat :: "><span class="description">$dbcollat</span><pre>$dbcollat</pre></a></li>
+<li class="property public "><a href="#%24dbdriver" title="$dbdriver :: "><span class="description">$dbdriver</span><pre>$dbdriver</pre></a></li>
+<li class="property public "><a href="#%24dbprefix" title="$dbprefix :: "><span class="description">$dbprefix</span><pre>$dbprefix</pre></a></li>
+<li class="property public "><a href="#%24hostname" title="$hostname :: "><span class="description">$hostname</span><pre>$hostname</pre></a></li>
+<li class="property public "><a href="#%24limit_used" title="$limit_used :: "><span class="description">$limit_used</span><pre>$limit_used</pre></a></li>
+<li class="property public "><a href="#%24password" title="$password :: "><span class="description">$password</span><pre>$password</pre></a></li>
+<li class="property public "><a href="#%24pconnect" title="$pconnect :: "><span class="description">$pconnect</span><pre>$pconnect</pre></a></li>
+<li class="property public "><a href="#%24port" title="$port :: "><span class="description">$port</span><pre>$port</pre></a></li>
+<li class="property public "><a href="#%24queries" title="$queries :: "><span class="description">$queries</span><pre>$queries</pre></a></li>
+<li class="property public "><a href="#%24query_count" title="$query_count :: "><span class="description">$query_count</span><pre>$query_count</pre></a></li>
+<li class="property public "><a href="#%24query_times" title="$query_times :: "><span class="description">$query_times</span><pre>$query_times</pre></a></li>
+<li class="property public "><a href="#%24result_id" title="$result_id :: "><span class="description">$result_id</span><pre>$result_id</pre></a></li>
+<li class="property public "><a href="#%24save_queries" title="$save_queries :: "><span class="description">$save_queries</span><pre>$save_queries</pre></a></li>
+<li class="property public "><a href="#%24stmt_id" title="$stmt_id :: "><span class="description">$stmt_id</span><pre>$stmt_id</pre></a></li>
+<li class="property public "><a href="#%24swap_pre" title="$swap_pre :: "><span class="description">$swap_pre</span><pre>$swap_pre</pre></a></li>
+<li class="property public "><a href="#%24trans_enabled" title="$trans_enabled :: "><span class="description">$trans_enabled</span><pre>$trans_enabled</pre></a></li>
+<li class="property public "><a href="#%24trans_strict" title="$trans_strict :: "><span class="description">$trans_strict</span><pre>$trans_strict</pre></a></li>
+<li class="property public "><a href="#%24username" title="$username :: "><span class="description">$username</span><pre>$username</pre></a></li>
+</ul>
+</div>
+<div class="span8">
+<a name="%5CCI_DB_driver" id="\CI_DB_driver"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/global.html">global</a></li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/CI_DB_driver.html">CI_DB_driver</a>
+</li>
+</ul>
+<div href="../classes/CI_DB_driver.html" class="element class">
+<p class="short_description">Database Driver Class</p>
+<div class="details">
+<p class="long_description"><p>This is the platform-independent base DB implementation class.
+This class will not be called directly. Rather, the adapter
+class for the specific database will extend and instantiate it.</p></p>
+<table class="table table-bordered">
+<tr>
+<th>package</th>
+<td><a href="../packages/CodeIgniter.Drivers.html">CodeIgniter</a></td>
+</tr>
+<tr>
+<th>subpackage</th>
+<td>Drivers</td>
+</tr>
+<tr>
+<th>category</th>
+<td>Database</td>
+</tr>
+<tr>
+<th>author</th>
+<td><a href="">ExpressionEngine Dev Team</a></td>
+</tr>
+<tr>
+<th>link</th>
+<td><a href="http://codeigniter.com/user_guide/database/">http://codeigniter.com/user_guide/database/</a></td>
+</tr>
+</table>
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a name="__construct" id="__construct"></a><div class="element clickable method public __construct" data-toggle="collapse" data-target=".__construct .collapse">
+<h2>Constructor.</h2>
+<pre>__construct($params) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Accepts one parameter containing the database
+connection settings.</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$params</h4>
+<code></code><p>array</p></div>
+</div></div>
+</div>
+<a name="_cache_init" id="_cache_init"></a><div class="element clickable method public _cache_init" data-toggle="collapse" data-target="._cache_init .collapse">
+<h2>Initialize the Cache Class</h2>
+<pre>_cache_init() : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+</div></div>
+</div>
+<a name="_has_operator" id="_has_operator"></a><div class="element clickable method public _has_operator" data-toggle="collapse" data-target="._has_operator .collapse">
+<h2>Tests whether the string has an SQL operator</h2>
+<pre>_has_operator($str) : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$str</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="_protect_identifiers" id="_protect_identifiers"></a><div class="element clickable method public _protect_identifiers" data-toggle="collapse" data-target="._protect_identifiers .collapse">
+<h2>Protect Identifiers</h2>
+<pre>_protect_identifiers($item, $prefix_single, $protect_identifiers, $field_exists) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>This function is used extensively by the Active Record class, and by
+a couple functions in this class.
+It takes a column or table name (optionally with an alias) and inserts
+the table prefix onto it.  Some logic is necessary in order to deal with
+column names that include the path.  Consider a query like this:</p>
+
+<p>SELECT * FROM hostname.database.table.column AS c FROM hostname.database.table</p>
+
+<p>Or a query with aliasing:</p>
+
+<p>SELECT m.member_id, m.member_name FROM members AS m</p>
+
+<p>Since the column name can include up to four segments (host, DB, table, column)
+or also have an alias prefix, we need to do a bit of work to figure this out and
+insert the table prefix (if it exists) in the proper position, and escape only
+the correct identifiers.</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$item</h4>
+<code></code><p>string</p></div>
+<div class="subelement argument">
+<h4>$prefix_single</h4>
+<code></code><p>bool</p></div>
+<div class="subelement argument">
+<h4>$protect_identifiers</h4>
+<code></code><p>mixed</p></div>
+<div class="subelement argument">
+<h4>$field_exists</h4>
+<code></code><p>bool</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="cache_delete" id="cache_delete"></a><div class="element clickable method public cache_delete" data-toggle="collapse" data-target=".cache_delete .collapse">
+<h2>Delete the cache files associated with a particular URI</h2>
+<pre>cache_delete($segment_one, $segment_two) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$segment_one</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$segment_two</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="cache_delete_all" id="cache_delete_all"></a><div class="element clickable method public cache_delete_all" data-toggle="collapse" data-target=".cache_delete_all .collapse">
+<h2>Delete All cache files</h2>
+<pre>cache_delete_all() : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="cache_off" id="cache_off"></a><div class="element clickable method public cache_off" data-toggle="collapse" data-target=".cache_off .collapse">
+<h2>Disable Query Caching</h2>
+<pre>cache_off() : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="cache_on" id="cache_on"></a><div class="element clickable method public cache_on" data-toggle="collapse" data-target=".cache_on .collapse">
+<h2>Enable Query Caching</h2>
+<pre>cache_on() : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="cache_set_path" id="cache_set_path"></a><div class="element clickable method public cache_set_path" data-toggle="collapse" data-target=".cache_set_path .collapse">
+<h2>Set Cache Directory Path</h2>
+<pre>cache_set_path(string $path) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$path</h4>
+<code>string</code><p>the path to the cache directory</p></div>
+</div></div>
+</div>
+<a name="call_function" id="call_function"></a><div class="element clickable method public call_function" data-toggle="collapse" data-target=".call_function .collapse">
+<h2>Enables a native PHP function to be run, using a platform agnostic wrapper.</h2>
+<pre>call_function(string $function) : mixed</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$function</h4>
+<code>string</code><p>the function name</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>mixed</code></div>
+</div></div>
+</div>
+<a name="close" id="close"></a><div class="element clickable method public close" data-toggle="collapse" data-target=".close .collapse">
+<h2>Close DB Connection</h2>
+<pre>close() : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="compile_binds" id="compile_binds"></a><div class="element clickable method public compile_binds" data-toggle="collapse" data-target=".compile_binds .collapse">
+<h2>Compile Bindings</h2>
+<pre>compile_binds(string $sql, array $binds) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$sql</h4>
+<code>string</code><p>the sql statement</p></div>
+<div class="subelement argument">
+<h4>$binds</h4>
+<code>array</code><p>an array of bind data</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="db_set_charset" id="db_set_charset"></a><div class="element clickable method public db_set_charset" data-toggle="collapse" data-target=".db_set_charset .collapse">
+<h2>Set client character set</h2>
+<pre>db_set_charset($charset, $collation) : resource</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$charset</h4>
+<code></code><p>string</p></div>
+<div class="subelement argument">
+<h4>$collation</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>resource</code></div>
+</div></div>
+</div>
+<a name="display_error" id="display_error"></a><div class="element clickable method public display_error" data-toggle="collapse" data-target=".display_error .collapse">
+<h2>Display an error message</h2>
+<pre>display_error(string $error, string $swap, boolean $native) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$error</h4>
+<code>string</code><p>the error message</p></div>
+<div class="subelement argument">
+<h4>$swap</h4>
+<code>string</code><p>any "swap" values</p>
+</div>
+<div class="subelement argument">
+<h4>$native</h4>
+<code>boolean</code><p>whether to localize the message</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code>sends the application/error_db.php template</div>
+</div></div>
+</div>
+<a name="elapsed_time" id="elapsed_time"></a><div class="element clickable method public elapsed_time" data-toggle="collapse" data-target=".elapsed_time .collapse">
+<h2>Calculate the aggregate query elapsed time</h2>
+<pre>elapsed_time(integer $decimals) : integer</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$decimals</h4>
+<code>integer</code><p>The number of decimal places</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>integer</code></div>
+</div></div>
+</div>
+<a name="escape" id="escape"></a><div class="element clickable method public escape" data-toggle="collapse" data-target=".escape .collapse">
+<h2>"Smart" Escape String</h2>
+<pre>escape($str) : mixed</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Escapes data based on type
+Sets boolean and null types</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$str</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>mixed</code></div>
+</div></div>
+</div>
+<a name="escape_like_str" id="escape_like_str"></a><div class="element clickable method public escape_like_str" data-toggle="collapse" data-target=".escape_like_str .collapse">
+<h2>Escape LIKE String</h2>
+<pre>escape_like_str($str) : mixed</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Calls the individual driver for platform
+specific escaping for LIKE conditions</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$str</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>mixed</code></div>
+</div></div>
+</div>
+<a name="field_data" id="field_data"></a><div class="element clickable method public field_data" data-toggle="collapse" data-target=".field_data .collapse">
+<h2>Returns an object with field data</h2>
+<pre>field_data(string $table) : object</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$table</h4>
+<code>string</code><p>the table name</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>object</code></div>
+</div></div>
+</div>
+<a name="field_exists" id="field_exists"></a><div class="element clickable method public field_exists" data-toggle="collapse" data-target=".field_exists .collapse">
+<h2>Determine if a particular field exists</h2>
+<pre>field_exists($field_name, $table_name) : boolean</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$field_name</h4>
+<code></code><p>string</p></div>
+<div class="subelement argument">
+<h4>$table_name</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>boolean</code></div>
+</div></div>
+</div>
+<a name="insert_string" id="insert_string"></a><div class="element clickable method public insert_string" data-toggle="collapse" data-target=".insert_string .collapse">
+<h2>Generate an insert string</h2>
+<pre>insert_string(string $table, array $data) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$table</h4>
+<code>string</code><p>the table upon which the query will be performed</p></div>
+<div class="subelement argument">
+<h4>$data</h4>
+<code>array</code><p>an associative array data of key/values</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="is_write_type" id="is_write_type"></a><div class="element clickable method public is_write_type" data-toggle="collapse" data-target=".is_write_type .collapse">
+<h2>Determines if a query is a "write" type.</h2>
+<pre>is_write_type(string $sql) : boolean</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$sql</h4>
+<code>string</code><p>An SQL query string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>boolean</code></div>
+</div></div>
+</div>
+<a name="last_query" id="last_query"></a><div class="element clickable method public last_query" data-toggle="collapse" data-target=".last_query .collapse">
+<h2>Returns the last query that was executed</h2>
+<pre>last_query() : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="list_fields" id="list_fields"></a><div class="element clickable method public list_fields" data-toggle="collapse" data-target=".list_fields .collapse">
+<h2>Fetch MySQL Field Names</h2>
+<pre>list_fields(string $table) : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$table</h4>
+<code>string</code><p>the table name</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>array</code></div>
+</div></div>
+</div>
+<a name="list_tables" id="list_tables"></a><div class="element clickable method public list_tables" data-toggle="collapse" data-target=".list_tables .collapse">
+<h2>Returns an array of table names</h2>
+<pre>list_tables($constrain_by_prefix) : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$constrain_by_prefix</h4>
+<code></code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>array</code></div>
+</div></div>
+</div>
+<a name="load_rdriver" id="load_rdriver"></a><div class="element clickable method public load_rdriver" data-toggle="collapse" data-target=".load_rdriver .collapse">
+<h2>Load the result drivers</h2>
+<pre>load_rdriver() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code>the name of the result class</div>
+</div></div>
+</div>
+<a name="platform" id="platform"></a><div class="element clickable method public platform" data-toggle="collapse" data-target=".platform .collapse">
+<h2>The name of the platform in use (mysql, mssql, etc.</h2>
+<pre>platform() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>..)</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="primary" id="primary"></a><div class="element clickable method public primary" data-toggle="collapse" data-target=".primary .collapse">
+<h2>Primary</h2>
+<pre>primary(string $table) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Retrieves the primary key.  It assumes that the row in the first
+position is the primary key</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$table</h4>
+<code>string</code><p>the table name</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="protect_identifiers" id="protect_identifiers"></a><div class="element clickable method public protect_identifiers" data-toggle="collapse" data-target=".protect_identifiers .collapse">
+<h2>Protect Identifiers</h2>
+<pre>protect_identifiers(mixed $item, $prefix_single) : mixed</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>This function adds backticks if appropriate based on db type</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$item</h4>
+<code>mixed</code><p>the item to escape</p></div>
+<div class="subelement argument">
+<h4>$prefix_single</h4>
+<code></code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>mixed</code>the item with backticks</div>
+</div></div>
+</div>
+<a name="query" id="query"></a><div class="element clickable method public query" data-toggle="collapse" data-target=".query .collapse">
+<h2>Execute the query</h2>
+<pre>query(string $sql, array $binds, $return_object) : mixed</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Accepts an SQL string as input and returns a result object upon
+successful execution of a "read" type query.  Returns boolean TRUE
+upon successful execution of a "write" type query. Returns boolean
+FALSE upon failure, and if the $db_debug variable is set to TRUE
+will raise an error.</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$sql</h4>
+<code>string</code><p>An SQL query string</p></div>
+<div class="subelement argument">
+<h4>$binds</h4>
+<code>array</code><p>An array of binding data</p></div>
+<div class="subelement argument">
+<h4>$return_object</h4>
+<code></code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>mixed</code></div>
+</div></div>
+</div>
+<a name="simple_query" id="simple_query"></a><div class="element clickable method public simple_query" data-toggle="collapse" data-target=".simple_query .collapse">
+<h2>Simple Query
+This is a simplified version of the query() function.</h2>
+<pre>simple_query(string $sql) : mixed</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Internally
+we only use it when running transaction commands since they do
+not require all the features of the main query() function.</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$sql</h4>
+<code>string</code><p>the sql query</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>mixed</code></div>
+</div></div>
+</div>
+<a name="table_exists" id="table_exists"></a><div class="element clickable method public table_exists" data-toggle="collapse" data-target=".table_exists .collapse">
+<h2>Determine if a particular table exists</h2>
+<pre>table_exists($table_name) : boolean</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$table_name</h4>
+<code></code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>boolean</code></div>
+</div></div>
+</div>
+<a name="total_queries" id="total_queries"></a><div class="element clickable method public total_queries" data-toggle="collapse" data-target=".total_queries .collapse">
+<h2>Returns the total number of queries</h2>
+<pre>total_queries() : integer</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>integer</code></div>
+</div></div>
+</div>
+<a name="trans_complete" id="trans_complete"></a><div class="element clickable method public trans_complete" data-toggle="collapse" data-target=".trans_complete .collapse">
+<h2>Complete Transaction</h2>
+<pre>trans_complete() : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="trans_off" id="trans_off"></a><div class="element clickable method public trans_off" data-toggle="collapse" data-target=".trans_off .collapse">
+<h2>Disable Transactions
+This permits transactions to be disabled at run-time.</h2>
+<pre>trans_off() : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="trans_start" id="trans_start"></a><div class="element clickable method public trans_start" data-toggle="collapse" data-target=".trans_start .collapse">
+<h2>Start Transaction</h2>
+<pre>trans_start($test_mode) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$test_mode</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="trans_status" id="trans_status"></a><div class="element clickable method public trans_status" data-toggle="collapse" data-target=".trans_status .collapse">
+<h2>Lets you retrieve the transaction flag to determine if it has failed</h2>
+<pre>trans_status() : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="trans_strict" id="trans_strict"></a><div class="element clickable method public trans_strict" data-toggle="collapse" data-target=".trans_strict .collapse">
+<h2>Enable/disable Transaction Strict Mode
+When strict mode is enabled, if you are running multiple groups of
+transactions, if one group fails all groups will be rolled back.</h2>
+<pre>trans_strict($mode) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>If strict mode is disabled, each group is treated autonomously, meaning
+a failure of one group will not affect any others</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$mode</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="update_string" id="update_string"></a><div class="element clickable method public update_string" data-toggle="collapse" data-target=".update_string .collapse">
+<h2>Generate an update string</h2>
+<pre>update_string(string $table, array $data, mixed $where) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$table</h4>
+<code>string</code><p>the table upon which the query will be performed</p></div>
+<div class="subelement argument">
+<h4>$data</h4>
+<code>array</code><p>an associative array data of key/values</p>
+</div>
+<div class="subelement argument">
+<h4>$where</h4>
+<code>mixed</code><p>the "where" statement</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="version" id="version"></a><div class="element clickable method public version" data-toggle="collapse" data-target=".version .collapse">
+<h2>Database Version Number.</h2>
+<pre>version() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Returns a string containing the
+version of the database being used</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_reset_select" id="_reset_select"></a><div class="element clickable method protected _reset_select" data-toggle="collapse" data-target="._reset_select .collapse">
+<h2>Dummy method that allows Active Record class to be disabled</h2>
+<pre>_reset_select() : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"><p>This function is used extensively by every db driver.</p></p></div></div>
+</div>
+<h3>
+<i class="icon-custom icon-property"></i> Properties</h3>
+<a name="%24CACHE" id="$CACHE"> </a><div class="element clickable property public $CACHE" data-toggle="collapse" data-target=".$CACHE .collapse">
+<h2>$CACHE</h2>
+<pre>$CACHE </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24_protect_identifiers" id="$_protect_identifiers"> </a><div class="element clickable property public $_protect_identifiers" data-toggle="collapse" data-target=".$_protect_identifiers .collapse">
+<h2>$_protect_identifiers</h2>
+<pre>$_protect_identifiers </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24_reserved_identifiers" id="$_reserved_identifiers"> </a><div class="element clickable property public $_reserved_identifiers" data-toggle="collapse" data-target=".$_reserved_identifiers .collapse">
+<h2>$_reserved_identifiers</h2>
+<pre>$_reserved_identifiers </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24_trans_depth" id="$_trans_depth"> </a><div class="element clickable property public $_trans_depth" data-toggle="collapse" data-target=".$_trans_depth .collapse">
+<h2>$_trans_depth</h2>
+<pre>$_trans_depth </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24_trans_status" id="$_trans_status"> </a><div class="element clickable property public $_trans_status" data-toggle="collapse" data-target=".$_trans_status .collapse">
+<h2>$_trans_status</h2>
+<pre>$_trans_status </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24autoinit" id="$autoinit"> </a><div class="element clickable property public $autoinit" data-toggle="collapse" data-target=".$autoinit .collapse">
+<h2>$autoinit</h2>
+<pre>$autoinit </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24benchmark" id="$benchmark"> </a><div class="element clickable property public $benchmark" data-toggle="collapse" data-target=".$benchmark .collapse">
+<h2>$benchmark</h2>
+<pre>$benchmark </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24bind_marker" id="$bind_marker"> </a><div class="element clickable property public $bind_marker" data-toggle="collapse" data-target=".$bind_marker .collapse">
+<h2>$bind_marker</h2>
+<pre>$bind_marker </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24cache_autodel" id="$cache_autodel"> </a><div class="element clickable property public $cache_autodel" data-toggle="collapse" data-target=".$cache_autodel .collapse">
+<h2>$cache_autodel</h2>
+<pre>$cache_autodel </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24cache_on" id="$cache_on"> </a><div class="element clickable property public $cache_on" data-toggle="collapse" data-target=".$cache_on .collapse">
+<h2>$cache_on</h2>
+<pre>$cache_on </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24cachedir" id="$cachedir"> </a><div class="element clickable property public $cachedir" data-toggle="collapse" data-target=".$cachedir .collapse">
+<h2>$cachedir</h2>
+<pre>$cachedir </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24char_set" id="$char_set"> </a><div class="element clickable property public $char_set" data-toggle="collapse" data-target=".$char_set .collapse">
+<h2>$char_set</h2>
+<pre>$char_set </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24conn_id" id="$conn_id"> </a><div class="element clickable property public $conn_id" data-toggle="collapse" data-target=".$conn_id .collapse">
+<h2>$conn_id</h2>
+<pre>$conn_id </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24curs_id" id="$curs_id"> </a><div class="element clickable property public $curs_id" data-toggle="collapse" data-target=".$curs_id .collapse">
+<h2>$curs_id</h2>
+<pre>$curs_id </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24data_cache" id="$data_cache"> </a><div class="element clickable property public $data_cache" data-toggle="collapse" data-target=".$data_cache .collapse">
+<h2>$data_cache</h2>
+<pre>$data_cache </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24database" id="$database"> </a><div class="element clickable property public $database" data-toggle="collapse" data-target=".$database .collapse">
+<h2>$database</h2>
+<pre>$database </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24db_debug" id="$db_debug"> </a><div class="element clickable property public $db_debug" data-toggle="collapse" data-target=".$db_debug .collapse">
+<h2>$db_debug</h2>
+<pre>$db_debug </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24dbcollat" id="$dbcollat"> </a><div class="element clickable property public $dbcollat" data-toggle="collapse" data-target=".$dbcollat .collapse">
+<h2>$dbcollat</h2>
+<pre>$dbcollat </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24dbdriver" id="$dbdriver"> </a><div class="element clickable property public $dbdriver" data-toggle="collapse" data-target=".$dbdriver .collapse">
+<h2>$dbdriver</h2>
+<pre>$dbdriver </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24dbprefix" id="$dbprefix"> </a><div class="element clickable property public $dbprefix" data-toggle="collapse" data-target=".$dbprefix .collapse">
+<h2>$dbprefix</h2>
+<pre>$dbprefix </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24hostname" id="$hostname"> </a><div class="element clickable property public $hostname" data-toggle="collapse" data-target=".$hostname .collapse">
+<h2>$hostname</h2>
+<pre>$hostname </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24limit_used" id="$limit_used"> </a><div class="element clickable property public $limit_used" data-toggle="collapse" data-target=".$limit_used .collapse">
+<h2>$limit_used</h2>
+<pre>$limit_used </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24password" id="$password"> </a><div class="element clickable property public $password" data-toggle="collapse" data-target=".$password .collapse">
+<h2>$password</h2>
+<pre>$password </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24pconnect" id="$pconnect"> </a><div class="element clickable property public $pconnect" data-toggle="collapse" data-target=".$pconnect .collapse">
+<h2>$pconnect</h2>
+<pre>$pconnect </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24port" id="$port"> </a><div class="element clickable property public $port" data-toggle="collapse" data-target=".$port .collapse">
+<h2>$port</h2>
+<pre>$port </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24queries" id="$queries"> </a><div class="element clickable property public $queries" data-toggle="collapse" data-target=".$queries .collapse">
+<h2>$queries</h2>
+<pre>$queries </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24query_count" id="$query_count"> </a><div class="element clickable property public $query_count" data-toggle="collapse" data-target=".$query_count .collapse">
+<h2>$query_count</h2>
+<pre>$query_count </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24query_times" id="$query_times"> </a><div class="element clickable property public $query_times" data-toggle="collapse" data-target=".$query_times .collapse">
+<h2>$query_times</h2>
+<pre>$query_times </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24result_id" id="$result_id"> </a><div class="element clickable property public $result_id" data-toggle="collapse" data-target=".$result_id .collapse">
+<h2>$result_id</h2>
+<pre>$result_id </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24save_queries" id="$save_queries"> </a><div class="element clickable property public $save_queries" data-toggle="collapse" data-target=".$save_queries .collapse">
+<h2>$save_queries</h2>
+<pre>$save_queries </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24stmt_id" id="$stmt_id"> </a><div class="element clickable property public $stmt_id" data-toggle="collapse" data-target=".$stmt_id .collapse">
+<h2>$stmt_id</h2>
+<pre>$stmt_id </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24swap_pre" id="$swap_pre"> </a><div class="element clickable property public $swap_pre" data-toggle="collapse" data-target=".$swap_pre .collapse">
+<h2>$swap_pre</h2>
+<pre>$swap_pre </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24trans_enabled" id="$trans_enabled"> </a><div class="element clickable property public $trans_enabled" data-toggle="collapse" data-target=".$trans_enabled .collapse">
+<h2>$trans_enabled</h2>
+<pre>$trans_enabled </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24trans_strict" id="$trans_strict"> </a><div class="element clickable property public $trans_strict" data-toggle="collapse" data-target=".$trans_strict .collapse">
+<h2>$trans_strict</h2>
+<pre>$trans_strict </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24username" id="$username"> </a><div class="element clickable property public $username" data-toggle="collapse" data-target=".$username .collapse">
+<h2>$username</h2>
+<pre>$username </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a8</a> and<br>
+            generated on 2012-07-27T12:29:24+10:00.<br></footer></div>
+</div>
+</body>
+</html>

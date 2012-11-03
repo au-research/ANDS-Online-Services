@@ -1,0 +1,316 @@
+<!DOCTYPE html><html xmlns:date="http://exslt.org/dates-and-times" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>phpDocumentor » \CI_Cache</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../css/template.css" rel="stylesheet" media="all">
+<script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../js/bootstrap.js" type="text/javascript"></script><script src="../js/template.js" type="text/javascript"></script><script src="../js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../img/favicon.ico">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">phpDocumentor</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Packages</a></li>
+<li><a href="../packages/CodeIgniter.html"><i class="icon-folder-open"></i> CodeIgniter</a></li>
+<li><a href="../packages/Default.html"><i class="icon-folder-open"></i> Default</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">1170</span></a></li>
+<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul><li>todo 
+                <span class="label label-info">1</span>
+</li></ul></a></li>
+<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">0</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods</li>
+<li class="method public "><a href="#__construct" title="__construct :: Constructor"><span class="description">Constructor</span><pre>__construct()</pre></a></li>
+<li class="method public "><a href="#__get" title="__get :: __get()"><span class="description">__get()</span><pre>__get()</pre></a></li>
+<li class="method public "><a href="#cache_info" title="cache_info :: Cache Info"><span class="description">Cache Info</span><pre>cache_info()</pre></a></li>
+<li class="method public "><a href="#clean" title="clean :: Clean the cache"><span class="description">Clean the cache</span><pre>clean()</pre></a></li>
+<li class="method public "><a href="#delete" title="delete :: Delete from Cache"><span class="description">Delete from Cache</span><pre>delete()</pre></a></li>
+<li class="method public "><a href="#get" title="get :: Get"><span class="description">Get</span><pre>get()</pre></a></li>
+<li class="method public "><a href="#get_metadata" title="get_metadata :: Get Cache Metadata"><span class="description">Get Cache Metadata</span><pre>get_metadata()</pre></a></li>
+<li class="method public "><a href="#is_supported" title="is_supported :: Is the requested driver supported in this environment?"><span class="description">Is the requested driver supported in this environment?</span><pre>is_supported()</pre></a></li>
+<li class="method public "><a href="#save" title="save :: Cache Save"><span class="description">Cache Save</span><pre>save()</pre></a></li>
+<li class="nav-header private">» Private</li>
+<li class="method private "><a href="#_initialize" title="_initialize :: Initialize"><span class="description">Initialize</span><pre>_initialize()</pre></a></li>
+<li class="nav-header">
+<i class="icon-custom icon-property"></i> Properties</li>
+<li class="nav-header protected">» Protected</li>
+<li class="property protected "><a href="#%24_adapter" title="$_adapter :: "><span class="description">$_adapter</span><pre>$_adapter</pre></a></li>
+<li class="property protected "><a href="#%24_backup_driver" title="$_backup_driver :: "><span class="description">$_backup_driver</span><pre>$_backup_driver</pre></a></li>
+<li class="property protected "><a href="#%24_cache_path" title="$_cache_path :: "><span class="description">$_cache_path</span><pre>$_cache_path</pre></a></li>
+<li class="property protected inherited"><a href="#%24lib_name" title="$lib_name :: "><span class="description">$lib_name</span><pre>$lib_name</pre></a></li>
+<li class="property protected "><a href="#%24valid_drivers" title="$valid_drivers :: "><span class="description">$valid_drivers</span><pre>$valid_drivers</pre></a></li>
+</ul>
+</div>
+<div class="span8">
+<a name="%5CCI_Cache" id="\CI_Cache"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/global.html">global</a></li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/CI_Cache.html">CI_Cache</a>
+</li>
+</ul>
+<div href="../classes/CI_Cache.html" class="element class">
+<p class="short_description">CodeIgniter Caching Class</p>
+<div class="details">
+<p class="long_description"><p>This class enables you to create "Driver" libraries that add runtime ability
+to extend the capabilities of a class via additional driver objects</p></p>
+<table class="table table-bordered">
+<tr>
+<th>package</th>
+<td><a href="../packages/CodeIgniter.Libraries.html">CodeIgniter</a></td>
+</tr>
+<tr>
+<th>subpackage</th>
+<td>Libraries</td>
+</tr>
+<tr>
+<th>category</th>
+<td>Core</td>
+</tr>
+<tr>
+<th>author</th>
+<td><a href="">ExpressionEngine Dev Team</a></td>
+</tr>
+<tr>
+<th>link</th>
+<td><a href=""></a></td>
+</tr>
+</table>
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a name="__construct" id="__construct"></a><div class="element clickable method public __construct" data-toggle="collapse" data-target=".__construct .collapse">
+<h2>Constructor</h2>
+<pre>__construct($config) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$config</h4>
+<code></code><p>array</p></div>
+</div></div>
+</div>
+<a name="__get" id="__get"></a><div class="element clickable method public __get" data-toggle="collapse" data-target=".__get .collapse">
+<h2>__get()</h2>
+<pre>__get($child) : object</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$child</h4>
+<code></code><p>child</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>object</code></div>
+</div></div>
+</div>
+<a name="cache_info" id="cache_info"></a><div class="element clickable method public cache_info" data-toggle="collapse" data-target=".cache_info .collapse">
+<h2>Cache Info</h2>
+<pre>cache_info(string $type) : mixed</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$type</h4>
+<code>string</code><p>user/filehits</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>mixed</code>array on success, false on failure</div>
+</div></div>
+</div>
+<a name="clean" id="clean"></a><div class="element clickable method public clean" data-toggle="collapse" data-target=".clean .collapse">
+<h2>Clean the cache</h2>
+<pre>clean() : boolean</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>boolean</code>false on failure/true on success</div>
+</div></div>
+</div>
+<a name="delete" id="delete"></a><div class="element clickable method public delete" data-toggle="collapse" data-target=".delete .collapse">
+<h2>Delete from Cache</h2>
+<pre>delete(mixed $id) : boolean</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$id</h4>
+<code>mixed</code><p>unique identifier of the item in the cache</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>boolean</code>true on success/false on failure</div>
+</div></div>
+</div>
+<a name="get" id="get"></a><div class="element clickable method public get" data-toggle="collapse" data-target=".get .collapse">
+<h2>Get</h2>
+<pre>get($id) : mixed</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Look for a value in the cache.  If it exists, return the data
+if not, return FALSE</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$id</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>mixed</code>value that is stored/FALSE on failure</div>
+</div></div>
+</div>
+<a name="get_metadata" id="get_metadata"></a><div class="element clickable method public get_metadata" data-toggle="collapse" data-target=".get_metadata .collapse">
+<h2>Get Cache Metadata</h2>
+<pre>get_metadata(mixed $id) : mixed</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$id</h4>
+<code>mixed</code><p>key to get cache metadata on</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>mixed</code>return value from child method</div>
+</div></div>
+</div>
+<a name="is_supported" id="is_supported"></a><div class="element clickable method public is_supported" data-toggle="collapse" data-target=".is_supported .collapse">
+<h2>Is the requested driver supported in this environment?</h2>
+<pre>is_supported(string $driver) : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$driver</h4>
+<code>string</code><p>The driver to test.</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>array</code></div>
+</div></div>
+</div>
+<a name="save" id="save"></a><div class="element clickable method public save" data-toggle="collapse" data-target=".save .collapse">
+<h2>Cache Save</h2>
+<pre>save(string $id, mixed $data, int $ttl) : boolean</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$id</h4>
+<code>string</code><p>Unique Key</p></div>
+<div class="subelement argument">
+<h4>$data</h4>
+<code>mixed</code><p>Data to store</p></div>
+<div class="subelement argument">
+<h4>$ttl</h4>
+<code>int</code><p>Length of time (in seconds) to cache the data</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>boolean</code>true on success/false on failure</div>
+</div></div>
+</div>
+<a name="_initialize" id="_initialize"></a><div class="element clickable method private _initialize" data-toggle="collapse" data-target="._initialize .collapse">
+<h2>Initialize</h2>
+<pre>_initialize($config) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Initialize class properties based on the configuration array.</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$config</h4>
+<code></code><p>array</p></div>
+</div></div>
+</div>
+<h3>
+<i class="icon-custom icon-property"></i> Properties</h3>
+<a name="%24_adapter" id="$_adapter"> </a><div class="element clickable property protected $_adapter" data-toggle="collapse" data-target=".$_adapter .collapse">
+<h2>$_adapter</h2>
+<pre>$_adapter </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24_backup_driver" id="$_backup_driver"> </a><div class="element clickable property protected $_backup_driver" data-toggle="collapse" data-target=".$_backup_driver .collapse">
+<h2>$_backup_driver</h2>
+<pre>$_backup_driver </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24_cache_path" id="$_cache_path"> </a><div class="element clickable property protected $_cache_path" data-toggle="collapse" data-target=".$_cache_path .collapse">
+<h2>$_cache_path</h2>
+<pre>$_cache_path </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24lib_name" id="$lib_name"> </a><div class="element clickable property protected $lib_name" data-toggle="collapse" data-target=".$lib_name .collapse">
+<h2>$lib_name</h2>
+<pre>$lib_name </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Driver_Library::$$lib_name</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24valid_drivers" id="$valid_drivers"> </a><div class="element clickable property protected $valid_drivers" data-toggle="collapse" data-target=".$valid_drivers .collapse">
+<h2>$valid_drivers</h2>
+<pre>$valid_drivers </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a8</a> and<br>
+            generated on 2012-07-27T12:29:22+10:00.<br></footer></div>
+</div>
+</body>
+</html>

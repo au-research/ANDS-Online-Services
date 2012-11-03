@@ -640,6 +640,7 @@ ARK:
 		<a class="identifier"><xsl:value-of select="."/></a>
 	</xsl:if>
     </p>	 
+
 </xsl:template>
   <xsl:template match="extRif:identifier" mode="formatark">
     <p>
@@ -667,6 +668,7 @@ Format ARK:
 		<a class="identifier"><xsl:value-of select="."/></a>
 	</xsl:if>
     </p>	 
+
 </xsl:template>
  <xsl:template match="ro:identifier" mode="nla">
     <p>
@@ -726,6 +728,7 @@ DOI:
 
     			
  </xsl:template>
+
   <xsl:template match="extRif:identifier" mode="formatdoi">   		
     <p>			
 Format DOI: 
@@ -757,6 +760,7 @@ Format DOI:
 
     			
  </xsl:template>
+
  <xsl:template match="ro:identifier" mode="handle">      
  <p>			
     Handle: 
@@ -776,6 +780,7 @@ Format DOI:
      	</xsl:otherwise>		
 	</xsl:choose>
     </xsl:variable>
+
     			     
 		<a>
             <xsl:attribute name="class">identifier</xsl:attribute>

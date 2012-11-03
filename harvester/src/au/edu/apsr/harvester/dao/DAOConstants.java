@@ -29,5 +29,7 @@ public class DAOConstants
     /** 
      * The resource name for the Postgres data source 
      */
-    protected static final String DAO_DATASOURCE = "java:/comp/env/jdbc/postgres";
+    //protected static final String DAO_DATASOURCE = "java:/comp/env/jdbc/postgres";
+    
+    protected static final String DAO_DATASOURCE = "java:/comp/env/jdbc/mysql";
 }

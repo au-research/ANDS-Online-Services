@@ -1,0 +1,1058 @@
+<!DOCTYPE html><html xmlns:date="http://exslt.org/dates-and-times" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>phpDocumentor » \MX_Loader</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../css/template.css" rel="stylesheet" media="all">
+<script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../js/bootstrap.js" type="text/javascript"></script><script src="../js/template.js" type="text/javascript"></script><script src="../js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../img/favicon.ico">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">phpDocumentor</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Packages</a></li>
+<li><a href="../packages/CodeIgniter.html"><i class="icon-folder-open"></i> CodeIgniter</a></li>
+<li><a href="../packages/Default.html"><i class="icon-folder-open"></i> Default</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">1170</span></a></li>
+<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul><li>todo 
+                <span class="label label-info">1</span>
+</li></ul></a></li>
+<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">0</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods</li>
+<li class="method public inherited"><a href="#__construct" title="__construct :: Constructor"><span class="description">Constructor</span><pre>__construct()</pre></a></li>
+<li class="method public "><a href="#__get" title="__get :: "><span class="description">__get()
+        </span><pre>__get()</pre></a></li>
+<li class="method public "><a href="#_add_module_paths" title="_add_module_paths :: Add a module path loader variables *"><span class="description">Add a module path loader variables *</span><pre>_add_module_paths()</pre></a></li>
+<li class="method public "><a href="#_autoloader" title="_autoloader :: Autoload module items *"><span class="description">Autoload module items *</span><pre>_autoloader()</pre></a></li>
+<li class="method public "><a href="#_ci_is_instance" title="_ci_is_instance :: "><span class="description">_ci_is_instance()
+        </span><pre>_ci_is_instance()</pre></a></li>
+<li class="method public "><a href="#_ci_load" title="_ci_load :: Loader"><span class="description">Loader</span><pre>_ci_load()</pre></a></li>
+<li class="method public inherited"><a href="#add_package_path" title="add_package_path :: Add Package Path"><span class="description">Add Package Path</span><pre>add_package_path()</pre></a></li>
+<li class="method public "><a href="#config" title="config :: Load a module config file *"><span class="description">Load a module config file *</span><pre>config()</pre></a></li>
+<li class="method public "><a href="#database" title="database :: Load the database drivers *"><span class="description">Load the database drivers *</span><pre>database()</pre></a></li>
+<li class="method public inherited"><a href="#dbforge" title="dbforge :: Load the Database Forge Class"><span class="description">Load the Database Forge Class</span><pre>dbforge()</pre></a></li>
+<li class="method public inherited"><a href="#dbutil" title="dbutil :: Load the Utilities Class"><span class="description">Load the Utilities Class</span><pre>dbutil()</pre></a></li>
+<li class="method public inherited"><a href="#driver" title="driver :: Driver"><span class="description">Driver</span><pre>driver()</pre></a></li>
+<li class="method public inherited"><a href="#file" title="file :: Load File"><span class="description">Load File</span><pre>file()</pre></a></li>
+<li class="method public inherited"><a href="#get_package_paths" title="get_package_paths :: Get Package Paths"><span class="description">Get Package Paths</span><pre>get_package_paths()</pre></a></li>
+<li class="method public inherited"><a href="#get_var" title="get_var :: Get Variable"><span class="description">Get Variable</span><pre>get_var()</pre></a></li>
+<li class="method public "><a href="#helper" title="helper :: Load a module helper *"><span class="description">Load a module helper *</span><pre>helper()</pre></a></li>
+<li class="method public "><a href="#helpers" title="helpers :: Load an array of helpers *"><span class="description">Load an array of helpers *</span><pre>helpers()</pre></a></li>
+<li class="method public "><a href="#initialize" title="initialize :: Initialize the loader variables *"><span class="description">Initialize the loader variables *</span><pre>initialize()</pre></a></li>
+<li class="method public inherited"><a href="#is_loaded" title="is_loaded :: Is Loaded"><span class="description">Is Loaded</span><pre>is_loaded()</pre></a></li>
+<li class="method public "><a href="#language" title="language :: Load a module language file *"><span class="description">Load a module language file *</span><pre>language()</pre></a></li>
+<li class="method public "><a href="#languages" title="languages :: "><span class="description">languages()
+        </span><pre>languages()</pre></a></li>
+<li class="method public "><a href="#libraries" title="libraries :: Load an array of libraries *"><span class="description">Load an array of libraries *</span><pre>libraries()</pre></a></li>
+<li class="method public "><a href="#library" title="library :: Load a module library *"><span class="description">Load a module library *</span><pre>library()</pre></a></li>
+<li class="method public "><a href="#model" title="model :: Load a module model *"><span class="description">Load a module model *</span><pre>model()</pre></a></li>
+<li class="method public "><a href="#models" title="models :: Load an array of models *"><span class="description">Load an array of models *</span><pre>models()</pre></a></li>
+<li class="method public "><a href="#module" title="module :: Load a module controller *"><span class="description">Load a module controller *</span><pre>module()</pre></a></li>
+<li class="method public "><a href="#modules" title="modules :: Load an array of controllers *"><span class="description">Load an array of controllers *</span><pre>modules()</pre></a></li>
+<li class="method public "><a href="#plugin" title="plugin :: Load a module plugin *"><span class="description">Load a module plugin *</span><pre>plugin()</pre></a></li>
+<li class="method public "><a href="#plugins" title="plugins :: Load an array of plugins *"><span class="description">Load an array of plugins *</span><pre>plugins()</pre></a></li>
+<li class="method public inherited"><a href="#remove_package_path" title="remove_package_path :: Remove Package Path"><span class="description">Remove Package Path</span><pre>remove_package_path()</pre></a></li>
+<li class="method public inherited"><a href="#vars" title="vars :: Set Variables"><span class="description">Set Variables</span><pre>vars()</pre></a></li>
+<li class="method public "><a href="#view" title="view :: Load a module view *"><span class="description">Load a module view *</span><pre>view()</pre></a></li>
+<li class="nav-header protected">» Protected</li>
+<li class="method protected "><a href="#_ci_get_component" title="_ci_get_component :: Get a reference to a specific library or model"><span class="description">Get a reference to a specific library or model</span><pre>_ci_get_component()</pre></a></li>
+<li class="method protected inherited"><a href="#_ci_init_class" title="_ci_init_class :: Instantiates a class"><span class="description">Instantiates a class</span><pre>_ci_init_class()</pre></a></li>
+<li class="method protected inherited"><a href="#_ci_load_class" title="_ci_load_class :: Load class"><span class="description">Load class</span><pre>_ci_load_class()</pre></a></li>
+<li class="method protected inherited"><a href="#_ci_object_to_array" title="_ci_object_to_array :: Object to Array"><span class="description">Object to Array</span><pre>_ci_object_to_array()</pre></a></li>
+<li class="method protected inherited"><a href="#_ci_prep_filename" title="_ci_prep_filename :: Prep filename"><span class="description">Prep filename</span><pre>_ci_prep_filename()</pre></a></li>
+<li class="nav-header private">» Private</li>
+<li class="method private inherited"><a href="#_ci_autoloader" title="_ci_autoloader :: Autoloader"><span class="description">Autoloader</span><pre>_ci_autoloader()</pre></a></li>
+<li class="nav-header">
+<i class="icon-custom icon-property"></i> Properties</li>
+<li class="property public "><a href="#%24_ci_cached_vars" title="$_ci_cached_vars :: List of cached variables"><span class="description">List of cached variables</span><pre>$_ci_cached_vars</pre></a></li>
+<li class="property public "><a href="#%24_ci_plugins" title="$_ci_plugins :: "><span class="description">$_ci_plugins</span><pre>$_ci_plugins</pre></a></li>
+<li class="nav-header protected">» Protected</li>
+<li class="property protected inherited"><a href="#%24_base_classes" title="$_base_classes :: List of loaded base classes
+Set by the controller class"><span class="description">List of loaded base classes
+Set by the controller class</span><pre>$_base_classes</pre></a></li>
+<li class="property protected inherited"><a href="#%24_ci_classes" title="$_ci_classes :: List of loaded classes"><span class="description">List of loaded classes</span><pre>$_ci_classes</pre></a></li>
+<li class="property protected inherited"><a href="#%24_ci_helper_paths" title="$_ci_helper_paths :: List of paths to load helpers from"><span class="description">List of paths to load helpers from</span><pre>$_ci_helper_paths</pre></a></li>
+<li class="property protected inherited"><a href="#%24_ci_helpers" title="$_ci_helpers :: List of loaded helpers"><span class="description">List of loaded helpers</span><pre>$_ci_helpers</pre></a></li>
+<li class="property protected inherited"><a href="#%24_ci_library_paths" title="$_ci_library_paths :: List of paths to load libraries from"><span class="description">List of paths to load libraries from</span><pre>$_ci_library_paths</pre></a></li>
+<li class="property protected inherited"><a href="#%24_ci_loaded_files" title="$_ci_loaded_files :: List of loaded files"><span class="description">List of loaded files</span><pre>$_ci_loaded_files</pre></a></li>
+<li class="property protected inherited"><a href="#%24_ci_model_paths" title="$_ci_model_paths :: List of paths to load models from"><span class="description">List of paths to load models from</span><pre>$_ci_model_paths</pre></a></li>
+<li class="property protected inherited"><a href="#%24_ci_models" title="$_ci_models :: List of loaded models"><span class="description">List of loaded models</span><pre>$_ci_models</pre></a></li>
+<li class="property protected inherited"><a href="#%24_ci_ob_level" title="$_ci_ob_level :: Nesting level of the output buffering mechanism"><span class="description">Nesting level of the output buffering mechanism</span><pre>$_ci_ob_level</pre></a></li>
+<li class="property protected inherited"><a href="#%24_ci_varmap" title="$_ci_varmap :: List of class name mappings"><span class="description">List of class name mappings</span><pre>$_ci_varmap</pre></a></li>
+<li class="property protected inherited"><a href="#%24_ci_view_paths" title="$_ci_view_paths :: List of paths to load views from"><span class="description">List of paths to load views from</span><pre>$_ci_view_paths</pre></a></li>
+<li class="property protected "><a href="#%24_module" title="$_module :: "><span class="description">$_module</span><pre>$_module</pre></a></li>
+</ul>
+</div>
+<div class="span8">
+<a name="%5CMX_Loader" id="\MX_Loader"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/global.html">global</a></li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/MX_Loader.html">MX_Loader</a>
+</li>
+</ul>
+<div href="../classes/MX_Loader.html" class="element class">
+<p class="short_description">Modular Extensions - HMVC</p>
+<div class="details">
+<p class="long_description"><p>Adapted from the CodeIgniter Core Classes</p></p>
+<table class="table table-bordered">
+<tr>
+<th>link</th>
+<td><a href="http://codeigniter.com%0ADescription:%0AThis">library extends the CodeIgniter CI_Loader class
+and adds features allowing use of modules and the HMVC design pattern.
+Install this file as application/third_party/MX/Loader.php</a></td>
+</tr>
+<tr>
+<th>copyright</th>
+<td>Copyright (c) 2011 Wiredesignz</td>
+</tr>
+<tr>
+<th>version</th>
+<td>5.4
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.</td>
+</tr>
+<tr>
+<th>package</th>
+<td><a href="../packages/Default.html">CodeIgniter</a></td>
+</tr>
+<tr>
+<th>author</th>
+<td><a href="">ExpressionEngine Dev Team</a></td>
+</tr>
+<tr>
+<th>subpackage</th>
+<td>Libraries</td>
+</tr>
+</table>
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a name="__construct" id="__construct"></a><div class="element clickable method public __construct" data-toggle="collapse" data-target=".__construct .collapse">
+<h2>Constructor</h2>
+<pre>__construct() </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Sets the path to the view files and gets the initial output buffering level</p></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Loader::__construct()</td>
+</tr></table>
+</div></div>
+</div>
+<a name="__get" id="__get"></a><div class="element clickable method public __get" data-toggle="collapse" data-target=".__get .collapse">
+<h2>__get()
+        </h2>
+<pre>__get($class) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$class</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="_add_module_paths" id="_add_module_paths"></a><div class="element clickable method public _add_module_paths" data-toggle="collapse" data-target="._add_module_paths .collapse">
+<h2>Add a module path loader variables *</h2>
+<pre>_add_module_paths($module) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$module</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="_autoloader" id="_autoloader"></a><div class="element clickable method public _autoloader" data-toggle="collapse" data-target="._autoloader .collapse">
+<h2>Autoload module items *</h2>
+<pre>_autoloader($autoload) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$autoload</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="_ci_is_instance" id="_ci_is_instance"></a><div class="element clickable method public _ci_is_instance" data-toggle="collapse" data-target="._ci_is_instance .collapse">
+<h2>_ci_is_instance()
+        </h2>
+<pre>_ci_is_instance() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="_ci_load" id="_ci_load"></a><div class="element clickable method public _ci_load" data-toggle="collapse" data-target="._ci_load .collapse">
+<h2>Loader</h2>
+<pre>_ci_load($_ci_data) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>This function is used to load views and files.
+Variables are prefixed with <em>ci</em> to avoid symbol collision with
+variables made available to view files</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$_ci_data</h4>
+<code></code><p>array</p></div>
+</div></div>
+</div>
+<a name="add_package_path" id="add_package_path"></a><div class="element clickable method public add_package_path" data-toggle="collapse" data-target=".add_package_path .collapse">
+<h2>Add Package Path</h2>
+<pre>add_package_path($path, $view_cascade) : void</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Prepends a parent path to the library, model, helper, and config path arrays</p></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Loader::add_package_path()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$path</h4>
+<code></code><p>string</p></div>
+<div class="subelement argument">
+<h4>$view_cascade</h4>
+<code></code><p>boolean</p></div>
+</div></div>
+</div>
+<a name="config" id="config"></a><div class="element clickable method public config" data-toggle="collapse" data-target=".config .collapse">
+<h2>Load a module config file *</h2>
+<pre>config($file, $use_sections, $fail_gracefully) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$file</h4>
+<code></code><p>string</p></div>
+<div class="subelement argument">
+<h4>$use_sections</h4>
+<code></code><p>bool</p></div>
+<div class="subelement argument">
+<h4>$fail_gracefully</h4>
+<code></code><p>bool</p></div>
+</div></div>
+</div>
+<a name="database" id="database"></a><div class="element clickable method public database" data-toggle="collapse" data-target=".database .collapse">
+<h2>Load the database drivers *</h2>
+<pre>database(string $params, bool $return, bool $active_record) : object</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$params</h4>
+<code>string</code><p>the DB credentials</p></div>
+<div class="subelement argument">
+<h4>$return</h4>
+<code>bool</code><p>whether to return the DB object</p></div>
+<div class="subelement argument">
+<h4>$active_record</h4>
+<code>bool</code><p>whether to enable active record (this allows us to override the config setting)</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>object</code></div>
+</div></div>
+</div>
+<a name="dbforge" id="dbforge"></a><div class="element clickable method public dbforge" data-toggle="collapse" data-target=".dbforge .collapse">
+<h2>Load the Database Forge Class</h2>
+<pre>dbforge() : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Loader::dbforge()</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="dbutil" id="dbutil"></a><div class="element clickable method public dbutil" data-toggle="collapse" data-target=".dbutil .collapse">
+<h2>Load the Utilities Class</h2>
+<pre>dbutil() : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Loader::dbutil()</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="driver" id="driver"></a><div class="element clickable method public driver" data-toggle="collapse" data-target=".driver .collapse">
+<h2>Driver</h2>
+<pre>driver(string $library, mixed $params, string $object_name) : void</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Loads a driver library</p></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Loader::driver()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$library</h4>
+<code>string</code><p>the name of the class</p></div>
+<div class="subelement argument">
+<h4>$params</h4>
+<code>mixed</code><p>the optional parameters</p></div>
+<div class="subelement argument">
+<h4>$object_name</h4>
+<code>string</code><p>an optional object name</p></div>
+</div></div>
+</div>
+<a name="file" id="file"></a><div class="element clickable method public file" data-toggle="collapse" data-target=".file .collapse">
+<h2>Load File</h2>
+<pre>file($path, $return) : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>This is a generic file loader</p></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Loader::file()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$path</h4>
+<code></code><p>string</p></div>
+<div class="subelement argument">
+<h4>$return</h4>
+<code></code><p>bool</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="get_package_paths" id="get_package_paths"></a><div class="element clickable method public get_package_paths" data-toggle="collapse" data-target=".get_package_paths .collapse">
+<h2>Get Package Paths</h2>
+<pre>get_package_paths($include_base) : void</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Return a list of all package paths, by default it will ignore BASEPATH.</p></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Loader::get_package_paths()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$include_base</h4>
+<code></code><p>string</p></div>
+</div></div>
+</div>
+<a name="get_var" id="get_var"></a><div class="element clickable method public get_var" data-toggle="collapse" data-target=".get_var .collapse">
+<h2>Get Variable</h2>
+<pre>get_var($key) : void</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Check if a variable is set and retrieve it.</p></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Loader::get_var()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$key</h4>
+<code></code><p>array</p></div>
+</div></div>
+</div>
+<a name="helper" id="helper"></a><div class="element clickable method public helper" data-toggle="collapse" data-target=".helper .collapse">
+<h2>Load a module helper *</h2>
+<pre>helper($helper) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>This function loads the specified helper file.</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$helper</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="helpers" id="helpers"></a><div class="element clickable method public helpers" data-toggle="collapse" data-target=".helpers .collapse">
+<h2>Load an array of helpers *</h2>
+<pre>helpers($helpers) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>This is simply an alias to the above function in case the
+user has written the plural form of this function.</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$helpers</h4>
+<code></code><p>array</p></div>
+</div></div>
+</div>
+<a name="initialize" id="initialize"></a><div class="element clickable method public initialize" data-toggle="collapse" data-target=".initialize .collapse">
+<h2>Initialize the loader variables *</h2>
+<pre>initialize($controller) : object</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>This method is called once in CI_Controller.</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$controller</h4>
+<code></code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>object</code></div>
+</div></div>
+</div>
+<a name="is_loaded" id="is_loaded"></a><div class="element clickable method public is_loaded" data-toggle="collapse" data-target=".is_loaded .collapse">
+<h2>Is Loaded</h2>
+<pre>is_loaded(string $class) : mixed</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>A utility function to test if a class is in the self::$_ci_classes array.
+This function returns the object name if the class tested for is loaded,
+and returns FALSE if it isn't.</p>
+
+<p>It is mainly used in the form_helper -> _get_validation_object()</p></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Loader::is_loaded()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$class</h4>
+<code>string</code><p>class being checked for</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>mixed</code>class object name on the CI SuperObject or FALSE</div>
+</div></div>
+</div>
+<a name="language" id="language"></a><div class="element clickable method public language" data-toggle="collapse" data-target=".language .collapse">
+<h2>Load a module language file *</h2>
+<pre>language($langfile, $idiom, $return, $add_suffix, $alt_path) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$langfile</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$idiom</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$return</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$add_suffix</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$alt_path</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="languages" id="languages"></a><div class="element clickable method public languages" data-toggle="collapse" data-target=".languages .collapse">
+<h2>languages()
+        </h2>
+<pre>languages($languages) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$languages</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="libraries" id="libraries"></a><div class="element clickable method public libraries" data-toggle="collapse" data-target=".libraries .collapse">
+<h2>Load an array of libraries *</h2>
+<pre>libraries($libraries) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$libraries</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="library" id="library"></a><div class="element clickable method public library" data-toggle="collapse" data-target=".library .collapse">
+<h2>Load a module library *</h2>
+<pre>library(string $library, mixed $params, string $object_name) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>This function lets users load and instantiate classes.
+It is designed to be called from a user's app controllers.</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$library</h4>
+<code>string</code><p>the name of the class</p></div>
+<div class="subelement argument">
+<h4>$params</h4>
+<code>mixed</code><p>the optional parameters</p></div>
+<div class="subelement argument">
+<h4>$object_name</h4>
+<code>string</code><p>an optional object name</p></div>
+</div></div>
+</div>
+<a name="model" id="model"></a><div class="element clickable method public model" data-toggle="collapse" data-target=".model .collapse">
+<h2>Load a module model *</h2>
+<pre>model(string $model, $object_name, $connect) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>This function lets users load and instantiate models.</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$model</h4>
+<code>string</code><p>the name of the class</p></div>
+<div class="subelement argument">
+<h4>$object_name</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$connect</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="models" id="models"></a><div class="element clickable method public models" data-toggle="collapse" data-target=".models .collapse">
+<h2>Load an array of models *</h2>
+<pre>models($models) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$models</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="module" id="module"></a><div class="element clickable method public module" data-toggle="collapse" data-target=".module .collapse">
+<h2>Load a module controller *</h2>
+<pre>module($module, $params) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$module</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$params</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="modules" id="modules"></a><div class="element clickable method public modules" data-toggle="collapse" data-target=".modules .collapse">
+<h2>Load an array of controllers *</h2>
+<pre>modules($modules) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$modules</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="plugin" id="plugin"></a><div class="element clickable method public plugin" data-toggle="collapse" data-target=".plugin .collapse">
+<h2>Load a module plugin *</h2>
+<pre>plugin($plugin) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$plugin</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="plugins" id="plugins"></a><div class="element clickable method public plugins" data-toggle="collapse" data-target=".plugins .collapse">
+<h2>Load an array of plugins *</h2>
+<pre>plugins($plugins) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$plugins</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="remove_package_path" id="remove_package_path"></a><div class="element clickable method public remove_package_path" data-toggle="collapse" data-target=".remove_package_path .collapse">
+<h2>Remove Package Path</h2>
+<pre>remove_package_path($path, $remove_config_path) : \type</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Remove a path from the library, model, and helper path arrays if it exists
+If no path is provided, the most recently added path is removed.</p></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Loader::remove_package_path()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$path</h4>
+<code></code><p>type</p></div>
+<div class="subelement argument">
+<h4>$remove_config_path</h4>
+<code></code><p>bool</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>\type</code></div>
+</div></div>
+</div>
+<a name="vars" id="vars"></a><div class="element clickable method public vars" data-toggle="collapse" data-target=".vars .collapse">
+<h2>Set Variables</h2>
+<pre>vars($vars, $val) : void</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Once variables are set they become available within
+the controller class and its "view" files.</p></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Loader::vars()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$vars</h4>
+<code></code><p>array</p></div>
+<div class="subelement argument">
+<h4>$val</h4>
+<code></code><p>string</p></div>
+</div></div>
+</div>
+<a name="view" id="view"></a><div class="element clickable method public view" data-toggle="collapse" data-target=".view .collapse">
+<h2>Load a module view *</h2>
+<pre>view($view, $vars, $return) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>This function is used to load a "view" file.  It has three parameters:</p>
+
+<ol>
+<li>The name of the "view" file to be included.</li>
+<li>An associative array of data to be extracted for use in the view.</li>
+<li>TRUE/FALSE - whether to return the data or load it.  In
+some cases it's advantageous to be able to return data so that
+a developer can process it in some way.</li>
+</ol></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$view</h4>
+<code></code><p>string</p></div>
+<div class="subelement argument">
+<h4>$vars</h4>
+<code></code><p>array</p></div>
+<div class="subelement argument">
+<h4>$return</h4>
+<code></code><p>bool</p></div>
+</div></div>
+</div>
+<a name="_ci_get_component" id="_ci_get_component"></a><div class="element clickable method protected _ci_get_component" data-toggle="collapse" data-target="._ci_get_component .collapse">
+<h2>Get a reference to a specific library or model</h2>
+<pre>_ci_get_component($component) : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$component</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="_ci_init_class" id="_ci_init_class"></a><div class="element clickable method protected _ci_init_class" data-toggle="collapse" data-target="._ci_init_class .collapse">
+<h2>Instantiates a class</h2>
+<pre>_ci_init_class($class, $prefix, $config, string $object_name) : null</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Loader::_ci_init_class()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$class</h4>
+<code></code><p>string</p></div>
+<div class="subelement argument">
+<h4>$prefix</h4>
+<code></code><p>string</p></div>
+<div class="subelement argument">
+<h4>$config</h4>
+<code></code><p>bool</p></div>
+<div class="subelement argument">
+<h4>$object_name</h4>
+<code>string</code><p>an optional object name</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>null</code></div>
+</div></div>
+</div>
+<a name="_ci_load_class" id="_ci_load_class"></a><div class="element clickable method protected _ci_load_class" data-toggle="collapse" data-target="._ci_load_class .collapse">
+<h2>Load class</h2>
+<pre>_ci_load_class(string $class, mixed $params, string $object_name) : void</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>This function loads the requested class.</p></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Loader::_ci_load_class()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$class</h4>
+<code>string</code><p>the item that is being loaded</p></div>
+<div class="subelement argument">
+<h4>$params</h4>
+<code>mixed</code><p>any additional parameters</p></div>
+<div class="subelement argument">
+<h4>$object_name</h4>
+<code>string</code><p>an optional object name</p></div>
+</div></div>
+</div>
+<a name="_ci_object_to_array" id="_ci_object_to_array"></a><div class="element clickable method protected _ci_object_to_array" data-toggle="collapse" data-target="._ci_object_to_array .collapse">
+<h2>Object to Array</h2>
+<pre>_ci_object_to_array($object) : array</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Takes an object as input and converts the class variables to array key/vals</p></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Loader::_ci_object_to_array()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$object</h4>
+<code></code><p>object</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>array</code></div>
+</div></div>
+</div>
+<a name="_ci_prep_filename" id="_ci_prep_filename"></a><div class="element clickable method protected _ci_prep_filename" data-toggle="collapse" data-target="._ci_prep_filename .collapse">
+<h2>Prep filename</h2>
+<pre>_ci_prep_filename($filename, $extension) : array</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>This function preps the name of various items to make loading them more reliable.</p></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Loader::_ci_prep_filename()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$filename</h4>
+<code></code><p>mixed</p></div>
+<div class="subelement argument">
+<h4>$extension</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>array</code></div>
+</div></div>
+</div>
+<a name="_ci_autoloader" id="_ci_autoloader"></a><div class="element clickable method private _ci_autoloader" data-toggle="collapse" data-target="._ci_autoloader .collapse">
+<h2>Autoloader</h2>
+<pre>_ci_autoloader() : void</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>The config/autoload.php file contains an array that permits sub-systems,
+libraries, and helpers to be loaded automatically.</p></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Loader::_ci_autoloader()</td>
+</tr></table>
+</div></div>
+</div>
+<h3>
+<i class="icon-custom icon-property"></i> Properties</h3>
+<a name="%24_ci_cached_vars" id="$_ci_cached_vars"> </a><div class="element clickable property public $_ci_cached_vars" data-toggle="collapse" data-target=".$_ci_cached_vars .collapse">
+<h2>List of cached variables</h2>
+<pre>$_ci_cached_vars : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24_ci_plugins" id="$_ci_plugins"> </a><div class="element clickable property public $_ci_plugins" data-toggle="collapse" data-target=".$_ci_plugins .collapse">
+<h2>$_ci_plugins</h2>
+<pre>$_ci_plugins </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24_base_classes" id="$_base_classes"> </a><div class="element clickable property protected $_base_classes" data-toggle="collapse" data-target=".$_base_classes .collapse">
+<h2>List of loaded base classes
+Set by the controller class</h2>
+<pre>$_base_classes : array</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>protected</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Loader::$$_base_classes</td>
+</tr>
+</table>
+</div></div>
+</div>
+<a name="%24_ci_classes" id="$_ci_classes"> </a><div class="element clickable property protected $_ci_classes" data-toggle="collapse" data-target=".$_ci_classes .collapse">
+<h2>List of loaded classes</h2>
+<pre>$_ci_classes : array</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>protected</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Loader::$$_ci_classes</td>
+</tr>
+</table>
+</div></div>
+</div>
+<a name="%24_ci_helper_paths" id="$_ci_helper_paths"> </a><div class="element clickable property protected $_ci_helper_paths" data-toggle="collapse" data-target=".$_ci_helper_paths .collapse">
+<h2>List of paths to load helpers from</h2>
+<pre>$_ci_helper_paths : array</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>protected</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Loader::$$_ci_helper_paths</td>
+</tr>
+</table>
+</div></div>
+</div>
+<a name="%24_ci_helpers" id="$_ci_helpers"> </a><div class="element clickable property protected $_ci_helpers" data-toggle="collapse" data-target=".$_ci_helpers .collapse">
+<h2>List of loaded helpers</h2>
+<pre>$_ci_helpers : array</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>protected</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Loader::$$_ci_helpers</td>
+</tr>
+</table>
+</div></div>
+</div>
+<a name="%24_ci_library_paths" id="$_ci_library_paths"> </a><div class="element clickable property protected $_ci_library_paths" data-toggle="collapse" data-target=".$_ci_library_paths .collapse">
+<h2>List of paths to load libraries from</h2>
+<pre>$_ci_library_paths : array</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>protected</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Loader::$$_ci_library_paths</td>
+</tr>
+</table>
+</div></div>
+</div>
+<a name="%24_ci_loaded_files" id="$_ci_loaded_files"> </a><div class="element clickable property protected $_ci_loaded_files" data-toggle="collapse" data-target=".$_ci_loaded_files .collapse">
+<h2>List of loaded files</h2>
+<pre>$_ci_loaded_files : array</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>protected</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Loader::$$_ci_loaded_files</td>
+</tr>
+</table>
+</div></div>
+</div>
+<a name="%24_ci_model_paths" id="$_ci_model_paths"> </a><div class="element clickable property protected $_ci_model_paths" data-toggle="collapse" data-target=".$_ci_model_paths .collapse">
+<h2>List of paths to load models from</h2>
+<pre>$_ci_model_paths : array</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>protected</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Loader::$$_ci_model_paths</td>
+</tr>
+</table>
+</div></div>
+</div>
+<a name="%24_ci_models" id="$_ci_models"> </a><div class="element clickable property protected $_ci_models" data-toggle="collapse" data-target=".$_ci_models .collapse">
+<h2>List of loaded models</h2>
+<pre>$_ci_models : array</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>protected</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Loader::$$_ci_models</td>
+</tr>
+</table>
+</div></div>
+</div>
+<a name="%24_ci_ob_level" id="$_ci_ob_level"> </a><div class="element clickable property protected $_ci_ob_level" data-toggle="collapse" data-target=".$_ci_ob_level .collapse">
+<h2>Nesting level of the output buffering mechanism</h2>
+<pre>$_ci_ob_level : int</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>protected</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Loader::$$_ci_ob_level</td>
+</tr>
+</table>
+</div></div>
+</div>
+<a name="%24_ci_varmap" id="$_ci_varmap"> </a><div class="element clickable property protected $_ci_varmap" data-toggle="collapse" data-target=".$_ci_varmap .collapse">
+<h2>List of class name mappings</h2>
+<pre>$_ci_varmap : array</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>protected</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Loader::$$_ci_varmap</td>
+</tr>
+</table>
+</div></div>
+</div>
+<a name="%24_ci_view_paths" id="$_ci_view_paths"> </a><div class="element clickable property protected $_ci_view_paths" data-toggle="collapse" data-target=".$_ci_view_paths .collapse">
+<h2>List of paths to load views from</h2>
+<pre>$_ci_view_paths : array</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>protected</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Loader::$$_ci_view_paths</td>
+</tr>
+</table>
+</div></div>
+</div>
+<a name="%24_module" id="$_module"> </a><div class="element clickable property protected $_module" data-toggle="collapse" data-target=".$_module .collapse">
+<h2>$_module</h2>
+<pre>$_module </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a8</a> and<br>
+            generated on 2012-07-27T12:29:25+10:00.<br></footer></div>
+</div>
+</body>
+</html>

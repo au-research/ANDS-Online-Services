@@ -1,0 +1,2600 @@
+<!DOCTYPE html><html xmlns:date="http://exslt.org/dates-and-times" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>phpDocumentor » \CI_Jquery</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../css/template.css" rel="stylesheet" media="all">
+<script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../js/bootstrap.js" type="text/javascript"></script><script src="../js/template.js" type="text/javascript"></script><script src="../js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../img/favicon.ico">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">phpDocumentor</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Packages</a></li>
+<li><a href="../packages/CodeIgniter.html"><i class="icon-folder-open"></i> CodeIgniter</a></li>
+<li><a href="../packages/Default.html"><i class="icon-folder-open"></i> Default</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">1170</span></a></li>
+<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul><li>todo 
+                <span class="label label-info">1</span>
+</li></ul></a></li>
+<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">0</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods</li>
+<li class="method public "><a href="#__construct" title="__construct :: "><span class="description">__construct()
+        </span><pre>__construct()</pre></a></li>
+<li class="method public "><a href="#_addClass" title="_addClass :: Add Class"><span class="description">Add Class</span><pre>_addClass()</pre></a></li>
+<li class="method public "><a href="#_add_event" title="_add_event :: Add Event"><span class="description">Add Event</span><pre>_add_event()</pre></a></li>
+<li class="method public "><a href="#_animate" title="_animate :: Animate"><span class="description">Animate</span><pre>_animate()</pre></a></li>
+<li class="method public "><a href="#_blur" title="_blur :: Blur"><span class="description">Blur</span><pre>_blur()</pre></a></li>
+<li class="method public "><a href="#_change" title="_change :: Change"><span class="description">Change</span><pre>_change()</pre></a></li>
+<li class="method public "><a href="#_clear_compile" title="_clear_compile :: Clear Compile"><span class="description">Clear Compile</span><pre>_clear_compile()</pre></a></li>
+<li class="method public "><a href="#_click" title="_click :: Click"><span class="description">Click</span><pre>_click()</pre></a></li>
+<li class="method public inherited"><a href="#_close_script" title="_close_script :: Close Script"><span class="description">Close Script</span><pre>_close_script()</pre></a></li>
+<li class="method public "><a href="#_compile" title="_compile :: Compile"><span class="description">Compile</span><pre>_compile()</pre></a></li>
+<li class="method public "><a href="#_dblclick" title="_dblclick :: Double Click"><span class="description">Double Click</span><pre>_dblclick()</pre></a></li>
+<li class="method public "><a href="#_document_ready" title="_document_ready :: Document Ready"><span class="description">Document Ready</span><pre>_document_ready()</pre></a></li>
+<li class="method public "><a href="#_error" title="_error :: Error"><span class="description">Error</span><pre>_error()</pre></a></li>
+<li class="method public "><a href="#_fadeIn" title="_fadeIn :: Fade In"><span class="description">Fade In</span><pre>_fadeIn()</pre></a></li>
+<li class="method public "><a href="#_fadeOut" title="_fadeOut :: Fade Out"><span class="description">Fade Out</span><pre>_fadeOut()</pre></a></li>
+<li class="method public "><a href="#_focus" title="_focus :: Focus"><span class="description">Focus</span><pre>_focus()</pre></a></li>
+<li class="method public "><a href="#_hide" title="_hide :: Hide"><span class="description">Hide</span><pre>_hide()</pre></a></li>
+<li class="method public "><a href="#_hover" title="_hover :: Hover"><span class="description">Hover</span><pre>_hover()</pre></a></li>
+<li class="method public inherited"><a href="#_is_associative_array" title="_is_associative_array :: Is associative array"><span class="description">Is associative array</span><pre>_is_associative_array()</pre></a></li>
+<li class="method public "><a href="#_keydown" title="_keydown :: Keydown"><span class="description">Keydown</span><pre>_keydown()</pre></a></li>
+<li class="method public "><a href="#_keyup" title="_keyup :: Keyup"><span class="description">Keyup</span><pre>_keyup()</pre></a></li>
+<li class="method public "><a href="#_load" title="_load :: Load"><span class="description">Load</span><pre>_load()</pre></a></li>
+<li class="method public "><a href="#_mousedown" title="_mousedown :: Mousedown"><span class="description">Mousedown</span><pre>_mousedown()</pre></a></li>
+<li class="method public "><a href="#_mouseout" title="_mouseout :: Mouse Out"><span class="description">Mouse Out</span><pre>_mouseout()</pre></a></li>
+<li class="method public "><a href="#_mouseover" title="_mouseover :: Mouse Over"><span class="description">Mouse Over</span><pre>_mouseover()</pre></a></li>
+<li class="method public "><a href="#_mouseup" title="_mouseup :: Mouseup"><span class="description">Mouseup</span><pre>_mouseup()</pre></a></li>
+<li class="method public inherited"><a href="#_open_script" title="_open_script :: Open Script"><span class="description">Open Script</span><pre>_open_script()</pre></a></li>
+<li class="method public "><a href="#_output" title="_output :: Output"><span class="description">Output</span><pre>_output()</pre></a></li>
+<li class="method public inherited"><a href="#_prep_args" title="_prep_args :: Prep Args"><span class="description">Prep Args</span><pre>_prep_args()</pre></a></li>
+<li class="method public "><a href="#_prep_element" title="_prep_element :: Prep Element"><span class="description">Prep Element</span><pre>_prep_element()</pre></a></li>
+<li class="method public "><a href="#_removeClass" title="_removeClass :: Remove Class"><span class="description">Remove Class</span><pre>_removeClass()</pre></a></li>
+<li class="method public "><a href="#_resize" title="_resize :: Resize"><span class="description">Resize</span><pre>_resize()</pre></a></li>
+<li class="method public "><a href="#_scroll" title="_scroll :: Scroll"><span class="description">Scroll</span><pre>_scroll()</pre></a></li>
+<li class="method public "><a href="#_show" title="_show :: Show"><span class="description">Show</span><pre>_show()</pre></a></li>
+<li class="method public "><a href="#_slideDown" title="_slideDown :: Slide Down"><span class="description">Slide Down</span><pre>_slideDown()</pre></a></li>
+<li class="method public "><a href="#_slideToggle" title="_slideToggle :: Slide Toggle"><span class="description">Slide Toggle</span><pre>_slideToggle()</pre></a></li>
+<li class="method public "><a href="#_slideUp" title="_slideUp :: Slide Up"><span class="description">Slide Up</span><pre>_slideUp()</pre></a></li>
+<li class="method public "><a href="#_toggle" title="_toggle :: Toggle"><span class="description">Toggle</span><pre>_toggle()</pre></a></li>
+<li class="method public "><a href="#_toggleClass" title="_toggleClass :: Toggle Class"><span class="description">Toggle Class</span><pre>_toggleClass()</pre></a></li>
+<li class="method public "><a href="#_unload" title="_unload :: Unload"><span class="description">Unload</span><pre>_unload()</pre></a></li>
+<li class="method public "><a href="#_updater" title="_updater :: Updater"><span class="description">Updater</span><pre>_updater()</pre></a></li>
+<li class="method public "><a href="#_validate_speed" title="_validate_speed :: Validate Speed"><span class="description">Validate Speed</span><pre>_validate_speed()</pre></a></li>
+<li class="method public "><a href="#_zebraTables" title="_zebraTables :: Zebra tables"><span class="description">Zebra tables</span><pre>_zebraTables()</pre></a></li>
+<li class="method public inherited"><a href="#addClass" title="addClass :: Add Class"><span class="description">Add Class</span><pre>addClass()</pre></a></li>
+<li class="method public inherited"><a href="#animate" title="animate :: Animate"><span class="description">Animate</span><pre>animate()</pre></a></li>
+<li class="method public inherited"><a href="#blur" title="blur :: Blur"><span class="description">Blur</span><pre>blur()</pre></a></li>
+<li class="method public inherited"><a href="#change" title="change :: Change"><span class="description">Change</span><pre>change()</pre></a></li>
+<li class="method public inherited"><a href="#clear_compile" title="clear_compile :: Clear Compile"><span class="description">Clear Compile</span><pre>clear_compile()</pre></a></li>
+<li class="method public inherited"><a href="#click" title="click :: Click"><span class="description">Click</span><pre>click()</pre></a></li>
+<li class="method public inherited"><a href="#compile" title="compile :: Compile"><span class="description">Compile</span><pre>compile()</pre></a></li>
+<li class="method public "><a href="#corner" title="corner :: Corner Plugin"><span class="description">Corner Plugin</span><pre>corner()</pre></a></li>
+<li class="method public inherited"><a href="#dblclick" title="dblclick :: Double Click"><span class="description">Double Click</span><pre>dblclick()</pre></a></li>
+<li class="method public "><a href="#effect" title="effect :: Effect"><span class="description">Effect</span><pre>effect()</pre></a></li>
+<li class="method public inherited"><a href="#error" title="error :: Error"><span class="description">Error</span><pre>error()</pre></a></li>
+<li class="method public inherited"><a href="#external" title="external :: External"><span class="description">External</span><pre>external()</pre></a></li>
+<li class="method public inherited"><a href="#fadeIn" title="fadeIn :: Fade In"><span class="description">Fade In</span><pre>fadeIn()</pre></a></li>
+<li class="method public inherited"><a href="#fadeOut" title="fadeOut :: Fade Out"><span class="description">Fade Out</span><pre>fadeOut()</pre></a></li>
+<li class="method public inherited"><a href="#focus" title="focus :: Focus"><span class="description">Focus</span><pre>focus()</pre></a></li>
+<li class="method public inherited"><a href="#generate_json" title="generate_json :: Generate JSON"><span class="description">Generate JSON</span><pre>generate_json()</pre></a></li>
+<li class="method public inherited"><a href="#hide" title="hide :: Hide"><span class="description">Hide</span><pre>hide()</pre></a></li>
+<li class="method public inherited"><a href="#hover" title="hover :: Hover"><span class="description">Hover</span><pre>hover()</pre></a></li>
+<li class="method public inherited"><a href="#inline" title="inline :: Inline"><span class="description">Inline</span><pre>inline()</pre></a></li>
+<li class="method public inherited"><a href="#keydown" title="keydown :: Keydown"><span class="description">Keydown</span><pre>keydown()</pre></a></li>
+<li class="method public inherited"><a href="#keyup" title="keyup :: Keyup"><span class="description">Keyup</span><pre>keyup()</pre></a></li>
+<li class="method public inherited"><a href="#load" title="load :: Load"><span class="description">Load</span><pre>load()</pre></a></li>
+<li class="method public "><a href="#modal" title="modal :: modal window"><span class="description">modal window</span><pre>modal()</pre></a></li>
+<li class="method public inherited"><a href="#mousedown" title="mousedown :: Mousedown"><span class="description">Mousedown</span><pre>mousedown()</pre></a></li>
+<li class="method public inherited"><a href="#mouseout" title="mouseout :: Mouse Out"><span class="description">Mouse Out</span><pre>mouseout()</pre></a></li>
+<li class="method public inherited"><a href="#mouseover" title="mouseover :: Mouse Over"><span class="description">Mouse Over</span><pre>mouseover()</pre></a></li>
+<li class="method public inherited"><a href="#mouseup" title="mouseup :: Mouseup"><span class="description">Mouseup</span><pre>mouseup()</pre></a></li>
+<li class="method public inherited"><a href="#output" title="output :: Output"><span class="description">Output</span><pre>output()</pre></a></li>
+<li class="method public "><a href="#plugin" title="plugin :: Plugin"><span class="description">Plugin</span><pre>plugin()</pre></a></li>
+<li class="method public inherited"><a href="#ready" title="ready :: Ready"><span class="description">Ready</span><pre>ready()</pre></a></li>
+<li class="method public inherited"><a href="#removeClass" title="removeClass :: Remove Class"><span class="description">Remove Class</span><pre>removeClass()</pre></a></li>
+<li class="method public inherited"><a href="#resize" title="resize :: Resize"><span class="description">Resize</span><pre>resize()</pre></a></li>
+<li class="method public "><a href="#script" title="script :: Script Tag"><span class="description">Script Tag</span><pre>script()</pre></a></li>
+<li class="method public inherited"><a href="#scroll" title="scroll :: Scroll"><span class="description">Scroll</span><pre>scroll()</pre></a></li>
+<li class="method public inherited"><a href="#show" title="show :: Show"><span class="description">Show</span><pre>show()</pre></a></li>
+<li class="method public inherited"><a href="#slideDown" title="slideDown :: Slide Down"><span class="description">Slide Down</span><pre>slideDown()</pre></a></li>
+<li class="method public inherited"><a href="#slideToggle" title="slideToggle :: Slide Toggle"><span class="description">Slide Toggle</span><pre>slideToggle()</pre></a></li>
+<li class="method public inherited"><a href="#slideUp" title="slideUp :: Slide Up"><span class="description">Slide Up</span><pre>slideUp()</pre></a></li>
+<li class="method public "><a href="#sortable" title="sortable :: Sortable"><span class="description">Sortable</span><pre>sortable()</pre></a></li>
+<li class="method public "><a href="#tablesorter" title="tablesorter :: Table Sorter Plugin"><span class="description">Table Sorter Plugin</span><pre>tablesorter()</pre></a></li>
+<li class="method public inherited"><a href="#toggle" title="toggle :: Toggle"><span class="description">Toggle</span><pre>toggle()</pre></a></li>
+<li class="method public inherited"><a href="#toggleClass" title="toggleClass :: Toggle Class"><span class="description">Toggle Class</span><pre>toggleClass()</pre></a></li>
+<li class="method public "><a href="#ui" title="ui :: UI"><span class="description">UI</span><pre>ui()</pre></a></li>
+<li class="method public inherited"><a href="#unload" title="unload :: Unload"><span class="description">Unload</span><pre>unload()</pre></a></li>
+<li class="method public inherited"><a href="#update" title="update :: Update"><span class="description">Update</span><pre>update()</pre></a></li>
+<li class="nav-header">
+<i class="icon-custom icon-property"></i> Properties</li>
+<li class="property public "><a href="#%24_javascript_folder" title="$_javascript_folder :: "><span class="description">$_javascript_folder</span><pre>$_javascript_folder</pre></a></li>
+<li class="property public inherited"><a href="#%24_javascript_location" title="$_javascript_location :: "><span class="description">$_javascript_location</span><pre>$_javascript_location</pre></a></li>
+<li class="property public "><a href="#%24jquery_ajax_img" title="$jquery_ajax_img :: "><span class="description">$jquery_ajax_img</span><pre>$jquery_ajax_img</pre></a></li>
+<li class="property public "><a href="#%24jquery_code_for_compile" title="$jquery_code_for_compile :: "><span class="description">$jquery_code_for_compile</span><pre>$jquery_code_for_compile</pre></a></li>
+<li class="property public "><a href="#%24jquery_code_for_load" title="$jquery_code_for_load :: "><span class="description">$jquery_code_for_load</span><pre>$jquery_code_for_load</pre></a></li>
+<li class="property public "><a href="#%24jquery_corner_active" title="$jquery_corner_active :: "><span class="description">$jquery_corner_active</span><pre>$jquery_corner_active</pre></a></li>
+<li class="property public "><a href="#%24jquery_table_sorter_active" title="$jquery_table_sorter_active :: "><span class="description">$jquery_table_sorter_active</span><pre>$jquery_table_sorter_active</pre></a></li>
+<li class="property public "><a href="#%24jquery_table_sorter_pager_active" title="$jquery_table_sorter_pager_active :: "><span class="description">$jquery_table_sorter_pager_active</span><pre>$jquery_table_sorter_pager_active</pre></a></li>
+</ul>
+</div>
+<div class="span8">
+<a name="%5CCI_Jquery" id="\CI_Jquery"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/global.html">global</a></li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/CI_Jquery.html">CI_Jquery</a>
+</li>
+</ul>
+<div href="../classes/CI_Jquery.html" class="element class">
+<p class="short_description">Jquery Class</p>
+<div class="details">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>package</th>
+<td><a href="../packages/CodeIgniter.Libraries.html">CodeIgniter</a></td>
+</tr>
+<tr>
+<th>subpackage</th>
+<td>Libraries</td>
+</tr>
+<tr>
+<th>author</th>
+<td><a href="">ExpressionEngine Dev Team</a></td>
+</tr>
+<tr>
+<th>category</th>
+<td>Loader</td>
+</tr>
+<tr>
+<th>link</th>
+<td><a href="http://www.codeigniter.com/user_guide/libraries/javascript.html">http://www.codeigniter.com/user_guide/libraries/javascript.html</a></td>
+</tr>
+</table>
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a name="__construct" id="__construct"></a><div class="element clickable method public __construct" data-toggle="collapse" data-target=".__construct .collapse">
+<h2>__construct()
+        </h2>
+<pre>__construct($params) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$params</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="_addClass" id="_addClass"></a><div class="element clickable method public _addClass" data-toggle="collapse" data-target="._addClass .collapse">
+<h2>Add Class</h2>
+<pre>_addClass(string $element, $class) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a jQuery addClass event</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><ul>
+<li>element</li>
+</ul>
+</div>
+<div class="subelement argument">
+<h4>$class</h4>
+<code></code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_add_event" id="_add_event"></a><div class="element clickable method public _add_event" data-toggle="collapse" data-target="._add_event .collapse">
+<h2>Add Event</h2>
+<pre>_add_event(string $element, string $js, string $event) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Constructs the syntax for an event, and adds to into the array for compilation</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><p>The element to attach the event to</p></div>
+<div class="subelement argument">
+<h4>$js</h4>
+<code>string</code><p>The code to execute</p></div>
+<div class="subelement argument">
+<h4>$event</h4>
+<code>string</code><p>The event to pass</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_animate" id="_animate"></a><div class="element clickable method public _animate" data-toggle="collapse" data-target="._animate .collapse">
+<h2>Animate</h2>
+<pre>_animate(string $element, string $params, string $speed, $extra) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a jQuery animate event</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><ul>
+<li>element</li>
+</ul>
+</div>
+<div class="subelement argument">
+<h4>$params</h4>
+<code>string</code><ul>
+<li>One of 'slow', 'normal', 'fast', or time in milliseconds</li>
+</ul>
+</div>
+<div class="subelement argument">
+<h4>$speed</h4>
+<code>string</code><ul>
+<li>Javascript callback function</li>
+</ul>
+</div>
+<div class="subelement argument">
+<h4>$extra</h4>
+<code></code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_blur" id="_blur"></a><div class="element clickable method public _blur" data-toggle="collapse" data-target="._blur .collapse">
+<h2>Blur</h2>
+<pre>_blur(string $element, string $js) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a jQuery blur event</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><p>The element to attach the event to</p></div>
+<div class="subelement argument">
+<h4>$js</h4>
+<code>string</code><p>The code to execute</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_change" id="_change"></a><div class="element clickable method public _change" data-toggle="collapse" data-target="._change .collapse">
+<h2>Change</h2>
+<pre>_change(string $element, string $js) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a jQuery change event</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><p>The element to attach the event to</p></div>
+<div class="subelement argument">
+<h4>$js</h4>
+<code>string</code><p>The code to execute</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_clear_compile" id="_clear_compile"></a><div class="element clickable method public _clear_compile" data-toggle="collapse" data-target="._clear_compile .collapse">
+<h2>Clear Compile</h2>
+<pre>_clear_compile() : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Clears the array of script events collected for output</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="_click" id="_click"></a><div class="element clickable method public _click" data-toggle="collapse" data-target="._click .collapse">
+<h2>Click</h2>
+<pre>_click(string $element, string $js, boolean $ret_false) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a jQuery click event</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><p>The element to attach the event to</p></div>
+<div class="subelement argument">
+<h4>$js</h4>
+<code>string</code><p>The code to execute</p></div>
+<div class="subelement argument">
+<h4>$ret_false</h4>
+<code>boolean</code><p>whether or not to return false</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_close_script" id="_close_script"></a><div class="element clickable method public _close_script" data-toggle="collapse" data-target="._close_script .collapse">
+<h2>Close Script</h2>
+<pre>_close_script($extra) : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs an closing </script></p></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>private</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Javascript::_close_script()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$extra</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_compile" id="_compile"></a><div class="element clickable method public _compile" data-toggle="collapse" data-target="._compile .collapse">
+<h2>Compile</h2>
+<pre>_compile($view_var, $script_tags) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>As events are specified, they are stored in an array
+This funciton compiles them all for output on a page</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$view_var</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$script_tags</h4>
+<code></code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_dblclick" id="_dblclick"></a><div class="element clickable method public _dblclick" data-toggle="collapse" data-target="._dblclick .collapse">
+<h2>Double Click</h2>
+<pre>_dblclick(string $element, string $js) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a jQuery dblclick event</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><p>The element to attach the event to</p></div>
+<div class="subelement argument">
+<h4>$js</h4>
+<code>string</code><p>The code to execute</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_document_ready" id="_document_ready"></a><div class="element clickable method public _document_ready" data-toggle="collapse" data-target="._document_ready .collapse">
+<h2>Document Ready</h2>
+<pre>_document_ready($js) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>A wrapper for writing document.ready()</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$js</h4>
+<code></code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_error" id="_error"></a><div class="element clickable method public _error" data-toggle="collapse" data-target="._error .collapse">
+<h2>Error</h2>
+<pre>_error(string $element, string $js) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a jQuery error event</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><p>The element to attach the event to</p></div>
+<div class="subelement argument">
+<h4>$js</h4>
+<code>string</code><p>The code to execute</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_fadeIn" id="_fadeIn"></a><div class="element clickable method public _fadeIn" data-toggle="collapse" data-target="._fadeIn .collapse">
+<h2>Fade In</h2>
+<pre>_fadeIn(string $element, string $speed, string $callback) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a jQuery hide event</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><ul>
+<li>element</li>
+</ul>
+</div>
+<div class="subelement argument">
+<h4>$speed</h4>
+<code>string</code><ul>
+<li>One of 'slow', 'normal', 'fast', or time in milliseconds</li>
+</ul>
+</div>
+<div class="subelement argument">
+<h4>$callback</h4>
+<code>string</code><ul>
+<li>Javascript callback function</li>
+</ul>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_fadeOut" id="_fadeOut"></a><div class="element clickable method public _fadeOut" data-toggle="collapse" data-target="._fadeOut .collapse">
+<h2>Fade Out</h2>
+<pre>_fadeOut(string $element, string $speed, string $callback) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a jQuery hide event</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><ul>
+<li>element</li>
+</ul>
+</div>
+<div class="subelement argument">
+<h4>$speed</h4>
+<code>string</code><ul>
+<li>One of 'slow', 'normal', 'fast', or time in milliseconds</li>
+</ul>
+</div>
+<div class="subelement argument">
+<h4>$callback</h4>
+<code>string</code><ul>
+<li>Javascript callback function</li>
+</ul>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_focus" id="_focus"></a><div class="element clickable method public _focus" data-toggle="collapse" data-target="._focus .collapse">
+<h2>Focus</h2>
+<pre>_focus(string $element, string $js) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a jQuery focus event</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><p>The element to attach the event to</p></div>
+<div class="subelement argument">
+<h4>$js</h4>
+<code>string</code><p>The code to execute</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_hide" id="_hide"></a><div class="element clickable method public _hide" data-toggle="collapse" data-target="._hide .collapse">
+<h2>Hide</h2>
+<pre>_hide(string $element, string $speed, string $callback) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a jQuery hide action</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><ul>
+<li>element</li>
+</ul>
+</div>
+<div class="subelement argument">
+<h4>$speed</h4>
+<code>string</code><ul>
+<li>One of 'slow', 'normal', 'fast', or time in milliseconds</li>
+</ul>
+</div>
+<div class="subelement argument">
+<h4>$callback</h4>
+<code>string</code><ul>
+<li>Javascript callback function</li>
+</ul>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_hover" id="_hover"></a><div class="element clickable method public _hover" data-toggle="collapse" data-target="._hover .collapse">
+<h2>Hover</h2>
+<pre>_hover(string $element, string $over, string $out) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a jQuery hover event</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><ul>
+<li>element</li>
+</ul>
+</div>
+<div class="subelement argument">
+<h4>$over</h4>
+<code>string</code><ul>
+<li>Javascript code for mouse over</li>
+</ul>
+</div>
+<div class="subelement argument">
+<h4>$out</h4>
+<code>string</code><ul>
+<li>Javascript code for mouse out</li>
+</ul>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_is_associative_array" id="_is_associative_array"></a><div class="element clickable method public _is_associative_array" data-toggle="collapse" data-target="._is_associative_array .collapse">
+<h2>Is associative array</h2>
+<pre>_is_associative_array($arr) : \type</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Checks for an associative array</p></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Javascript::_is_associative_array()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$arr</h4>
+<code></code><p>type</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>\type</code></div>
+</div></div>
+</div>
+<a name="_keydown" id="_keydown"></a><div class="element clickable method public _keydown" data-toggle="collapse" data-target="._keydown .collapse">
+<h2>Keydown</h2>
+<pre>_keydown(string $element, string $js) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a jQuery keydown event</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><p>The element to attach the event to</p></div>
+<div class="subelement argument">
+<h4>$js</h4>
+<code>string</code><p>The code to execute</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_keyup" id="_keyup"></a><div class="element clickable method public _keyup" data-toggle="collapse" data-target="._keyup .collapse">
+<h2>Keyup</h2>
+<pre>_keyup(string $element, string $js) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a jQuery keydown event</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><p>The element to attach the event to</p></div>
+<div class="subelement argument">
+<h4>$js</h4>
+<code>string</code><p>The code to execute</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_load" id="_load"></a><div class="element clickable method public _load" data-toggle="collapse" data-target="._load .collapse">
+<h2>Load</h2>
+<pre>_load(string $element, string $js) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a jQuery load event</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><p>The element to attach the event to</p></div>
+<div class="subelement argument">
+<h4>$js</h4>
+<code>string</code><p>The code to execute</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_mousedown" id="_mousedown"></a><div class="element clickable method public _mousedown" data-toggle="collapse" data-target="._mousedown .collapse">
+<h2>Mousedown</h2>
+<pre>_mousedown(string $element, string $js) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a jQuery mousedown event</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><p>The element to attach the event to</p></div>
+<div class="subelement argument">
+<h4>$js</h4>
+<code>string</code><p>The code to execute</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_mouseout" id="_mouseout"></a><div class="element clickable method public _mouseout" data-toggle="collapse" data-target="._mouseout .collapse">
+<h2>Mouse Out</h2>
+<pre>_mouseout(string $element, string $js) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a jQuery mouseout event</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><p>The element to attach the event to</p></div>
+<div class="subelement argument">
+<h4>$js</h4>
+<code>string</code><p>The code to execute</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_mouseover" id="_mouseover"></a><div class="element clickable method public _mouseover" data-toggle="collapse" data-target="._mouseover .collapse">
+<h2>Mouse Over</h2>
+<pre>_mouseover(string $element, string $js) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a jQuery mouseover event</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><p>The element to attach the event to</p></div>
+<div class="subelement argument">
+<h4>$js</h4>
+<code>string</code><p>The code to execute</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_mouseup" id="_mouseup"></a><div class="element clickable method public _mouseup" data-toggle="collapse" data-target="._mouseup .collapse">
+<h2>Mouseup</h2>
+<pre>_mouseup(string $element, string $js) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a jQuery mouseup event</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><p>The element to attach the event to</p></div>
+<div class="subelement argument">
+<h4>$js</h4>
+<code>string</code><p>The code to execute</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_open_script" id="_open_script"></a><div class="element clickable method public _open_script" data-toggle="collapse" data-target="._open_script .collapse">
+<h2>Open Script</h2>
+<pre>_open_script($src) : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs an opening</p>
+
+<p>&lt;</p>
+
+<p>script></p></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>private</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Javascript::_open_script()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$src</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_output" id="_output"></a><div class="element clickable method public _output" data-toggle="collapse" data-target="._output .collapse">
+<h2>Output</h2>
+<pre>_output(string $array_js) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs script directly</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$array_js</h4>
+<code>string</code><p>The element to attach the event to</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_prep_args" id="_prep_args"></a><div class="element clickable method public _prep_args" data-toggle="collapse" data-target="._prep_args .collapse">
+<h2>Prep Args</h2>
+<pre>_prep_args($result, $is_key) : \type</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Ensures a standard json value and escapes values</p></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Javascript::_prep_args()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$result</h4>
+<code></code><p>type</p></div>
+<div class="subelement argument">
+<h4>$is_key</h4>
+<code></code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>\type</code></div>
+</div></div>
+</div>
+<a name="_prep_element" id="_prep_element"></a><div class="element clickable method public _prep_element" data-toggle="collapse" data-target="._prep_element .collapse">
+<h2>Prep Element</h2>
+<pre>_prep_element($element) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Puts HTML element in quotes for use in jQuery code
+unless the supplied element is the Javascript 'this'
+object, in which case no quotes are added</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_removeClass" id="_removeClass"></a><div class="element clickable method public _removeClass" data-toggle="collapse" data-target="._removeClass .collapse">
+<h2>Remove Class</h2>
+<pre>_removeClass(string $element, $class) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a jQuery remove class event</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><ul>
+<li>element</li>
+</ul>
+</div>
+<div class="subelement argument">
+<h4>$class</h4>
+<code></code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_resize" id="_resize"></a><div class="element clickable method public _resize" data-toggle="collapse" data-target="._resize .collapse">
+<h2>Resize</h2>
+<pre>_resize(string $element, string $js) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a jQuery resize event</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><p>The element to attach the event to</p></div>
+<div class="subelement argument">
+<h4>$js</h4>
+<code>string</code><p>The code to execute</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_scroll" id="_scroll"></a><div class="element clickable method public _scroll" data-toggle="collapse" data-target="._scroll .collapse">
+<h2>Scroll</h2>
+<pre>_scroll(string $element, string $js) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a jQuery scroll event</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><p>The element to attach the event to</p></div>
+<div class="subelement argument">
+<h4>$js</h4>
+<code>string</code><p>The code to execute</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_show" id="_show"></a><div class="element clickable method public _show" data-toggle="collapse" data-target="._show .collapse">
+<h2>Show</h2>
+<pre>_show(string $element, string $speed, string $callback) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a jQuery show event</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><ul>
+<li>element</li>
+</ul>
+</div>
+<div class="subelement argument">
+<h4>$speed</h4>
+<code>string</code><ul>
+<li>One of 'slow', 'normal', 'fast', or time in milliseconds</li>
+</ul>
+</div>
+<div class="subelement argument">
+<h4>$callback</h4>
+<code>string</code><ul>
+<li>Javascript callback function</li>
+</ul>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_slideDown" id="_slideDown"></a><div class="element clickable method public _slideDown" data-toggle="collapse" data-target="._slideDown .collapse">
+<h2>Slide Down</h2>
+<pre>_slideDown(string $element, string $speed, string $callback) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a jQuery slideDown event</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><ul>
+<li>element</li>
+</ul>
+</div>
+<div class="subelement argument">
+<h4>$speed</h4>
+<code>string</code><ul>
+<li>One of 'slow', 'normal', 'fast', or time in milliseconds</li>
+</ul>
+</div>
+<div class="subelement argument">
+<h4>$callback</h4>
+<code>string</code><ul>
+<li>Javascript callback function</li>
+</ul>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_slideToggle" id="_slideToggle"></a><div class="element clickable method public _slideToggle" data-toggle="collapse" data-target="._slideToggle .collapse">
+<h2>Slide Toggle</h2>
+<pre>_slideToggle(string $element, string $speed, string $callback) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a jQuery slideToggle event</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><ul>
+<li>element</li>
+</ul>
+</div>
+<div class="subelement argument">
+<h4>$speed</h4>
+<code>string</code><ul>
+<li>One of 'slow', 'normal', 'fast', or time in milliseconds</li>
+</ul>
+</div>
+<div class="subelement argument">
+<h4>$callback</h4>
+<code>string</code><ul>
+<li>Javascript callback function</li>
+</ul>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_slideUp" id="_slideUp"></a><div class="element clickable method public _slideUp" data-toggle="collapse" data-target="._slideUp .collapse">
+<h2>Slide Up</h2>
+<pre>_slideUp(string $element, string $speed, string $callback) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a jQuery slideUp event</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><ul>
+<li>element</li>
+</ul>
+</div>
+<div class="subelement argument">
+<h4>$speed</h4>
+<code>string</code><ul>
+<li>One of 'slow', 'normal', 'fast', or time in milliseconds</li>
+</ul>
+</div>
+<div class="subelement argument">
+<h4>$callback</h4>
+<code>string</code><ul>
+<li>Javascript callback function</li>
+</ul>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_toggle" id="_toggle"></a><div class="element clickable method public _toggle" data-toggle="collapse" data-target="._toggle .collapse">
+<h2>Toggle</h2>
+<pre>_toggle(string $element) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a jQuery toggle event</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><ul>
+<li>element</li>
+</ul>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_toggleClass" id="_toggleClass"></a><div class="element clickable method public _toggleClass" data-toggle="collapse" data-target="._toggleClass .collapse">
+<h2>Toggle Class</h2>
+<pre>_toggleClass(string $element, $class) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a jQuery toggle class event</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><ul>
+<li>element</li>
+</ul>
+</div>
+<div class="subelement argument">
+<h4>$class</h4>
+<code></code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_unload" id="_unload"></a><div class="element clickable method public _unload" data-toggle="collapse" data-target="._unload .collapse">
+<h2>Unload</h2>
+<pre>_unload(string $element, string $js) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a jQuery unload event</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><p>The element to attach the event to</p></div>
+<div class="subelement argument">
+<h4>$js</h4>
+<code>string</code><p>The code to execute</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_updater" id="_updater"></a><div class="element clickable method public _updater" data-toggle="collapse" data-target="._updater .collapse">
+<h2>Updater</h2>
+<pre>_updater(string $container, string $controller, string $options) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>An Ajax call that populates the designated DOM node with
+returned content</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$container</h4>
+<code>string</code><p>The element to attach the event to</p></div>
+<div class="subelement argument">
+<h4>$controller</h4>
+<code>string</code><p>the controller to run the call against</p></div>
+<div class="subelement argument">
+<h4>$options</h4>
+<code>string</code><p>optional parameters</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_validate_speed" id="_validate_speed"></a><div class="element clickable method public _validate_speed" data-toggle="collapse" data-target="._validate_speed .collapse">
+<h2>Validate Speed</h2>
+<pre>_validate_speed($speed) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Ensures the speed parameter is valid for jQuery</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$speed</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_zebraTables" id="_zebraTables"></a><div class="element clickable method public _zebraTables" data-toggle="collapse" data-target="._zebraTables .collapse">
+<h2>Zebra tables</h2>
+<pre>_zebraTables(string $class, string $odd, $hover) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$class</h4>
+<code>string</code><p>table name</p></div>
+<div class="subelement argument">
+<h4>$odd</h4>
+<code>string</code><p>plugin location</p></div>
+<div class="subelement argument">
+<h4>$hover</h4>
+<code></code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="addClass" id="addClass"></a><div class="element clickable method public addClass" data-toggle="collapse" data-target=".addClass .collapse">
+<h2>Add Class</h2>
+<pre>addClass(string $element, string $class) : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a javascript library addClass event</p></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Javascript::addClass()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><ul>
+<li>element</li>
+</ul>
+</div>
+<div class="subelement argument">
+<h4>$class</h4>
+<code>string</code><ul>
+<li>Class to add</li>
+</ul>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="animate" id="animate"></a><div class="element clickable method public animate" data-toggle="collapse" data-target=".animate .collapse">
+<h2>Animate</h2>
+<pre>animate(string $element, string $params, string $speed, $extra) : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a javascript library animate event</p></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Javascript::animate()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><ul>
+<li>element</li>
+</ul>
+</div>
+<div class="subelement argument">
+<h4>$params</h4>
+<code>string</code><ul>
+<li>One of 'slow', 'normal', 'fast', or time in milliseconds</li>
+</ul>
+</div>
+<div class="subelement argument">
+<h4>$speed</h4>
+<code>string</code><ul>
+<li>Javascript callback function</li>
+</ul>
+</div>
+<div class="subelement argument">
+<h4>$extra</h4>
+<code></code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="blur" id="blur"></a><div class="element clickable method public blur" data-toggle="collapse" data-target=".blur .collapse">
+<h2>Blur</h2>
+<pre>blur(string $element, string $js) : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a javascript library blur event</p></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Javascript::blur()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><p>The element to attach the event to</p></div>
+<div class="subelement argument">
+<h4>$js</h4>
+<code>string</code><p>The code to execute</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="change" id="change"></a><div class="element clickable method public change" data-toggle="collapse" data-target=".change .collapse">
+<h2>Change</h2>
+<pre>change(string $element, string $js) : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a javascript library change event</p></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Javascript::change()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><p>The element to attach the event to</p></div>
+<div class="subelement argument">
+<h4>$js</h4>
+<code>string</code><p>The code to execute</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="clear_compile" id="clear_compile"></a><div class="element clickable method public clear_compile" data-toggle="collapse" data-target=".clear_compile .collapse">
+<h2>Clear Compile</h2>
+<pre>clear_compile() : void</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Clears any previous javascript collected for output</p></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Javascript::clear_compile()</td>
+</tr>
+</table>
+</div></div>
+</div>
+<a name="click" id="click"></a><div class="element clickable method public click" data-toggle="collapse" data-target=".click .collapse">
+<h2>Click</h2>
+<pre>click(string $element, string $js, boolean $ret_false) : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a javascript library click event</p></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Javascript::click()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><p>The element to attach the event to</p></div>
+<div class="subelement argument">
+<h4>$js</h4>
+<code>string</code><p>The code to execute</p></div>
+<div class="subelement argument">
+<h4>$ret_false</h4>
+<code>boolean</code><p>whether or not to return false</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="compile" id="compile"></a><div class="element clickable method public compile" data-toggle="collapse" data-target=".compile .collapse">
+<h2>Compile</h2>
+<pre>compile(string $view_var, $script_tags) : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>gather together all script needing to be output</p></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Javascript::compile()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$view_var</h4>
+<code>string</code><p>The element to attach the event to</p></div>
+<div class="subelement argument">
+<h4>$script_tags</h4>
+<code></code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="corner" id="corner"></a><div class="element clickable method public corner" data-toggle="collapse" data-target=".corner .collapse">
+<h2>Corner Plugin</h2>
+<pre>corner(string $element, $corner_style) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>http://www.malsup.com/jquery/corner/</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><p>target</p></div>
+<div class="subelement argument">
+<h4>$corner_style</h4>
+<code></code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="dblclick" id="dblclick"></a><div class="element clickable method public dblclick" data-toggle="collapse" data-target=".dblclick .collapse">
+<h2>Double Click</h2>
+<pre>dblclick(string $element, string $js) : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a javascript library dblclick event</p></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Javascript::dblclick()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><p>The element to attach the event to</p></div>
+<div class="subelement argument">
+<h4>$js</h4>
+<code>string</code><p>The code to execute</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="effect" id="effect"></a><div class="element clickable method public effect" data-toggle="collapse" data-target=".effect .collapse">
+<h2>Effect</h2>
+<pre>effect($src, $relative) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Load an Effect library</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$src</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$relative</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="error" id="error"></a><div class="element clickable method public error" data-toggle="collapse" data-target=".error .collapse">
+<h2>Error</h2>
+<pre>error(string $element, string $js) : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a javascript library error event</p></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Javascript::error()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><p>The element to attach the event to</p></div>
+<div class="subelement argument">
+<h4>$js</h4>
+<code>string</code><p>The code to execute</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="external" id="external"></a><div class="element clickable method public external" data-toggle="collapse" data-target=".external .collapse">
+<h2>External</h2>
+<pre>external(string $external_file, $relative) : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a <script> tag with the source as an external js file</p></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Javascript::external()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$external_file</h4>
+<code>string</code><p>The element to attach the event to</p></div>
+<div class="subelement argument">
+<h4>$relative</h4>
+<code></code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="fadeIn" id="fadeIn"></a><div class="element clickable method public fadeIn" data-toggle="collapse" data-target=".fadeIn .collapse">
+<h2>Fade In</h2>
+<pre>fadeIn(string $element, string $speed, string $callback) : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a javascript library hide event</p></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Javascript::fadeIn()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><ul>
+<li>element</li>
+</ul>
+</div>
+<div class="subelement argument">
+<h4>$speed</h4>
+<code>string</code><ul>
+<li>One of 'slow', 'normal', 'fast', or time in milliseconds</li>
+</ul>
+</div>
+<div class="subelement argument">
+<h4>$callback</h4>
+<code>string</code><ul>
+<li>Javascript callback function</li>
+</ul>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="fadeOut" id="fadeOut"></a><div class="element clickable method public fadeOut" data-toggle="collapse" data-target=".fadeOut .collapse">
+<h2>Fade Out</h2>
+<pre>fadeOut(string $element, string $speed, string $callback) : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a javascript library hide event</p></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Javascript::fadeOut()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><ul>
+<li>element</li>
+</ul>
+</div>
+<div class="subelement argument">
+<h4>$speed</h4>
+<code>string</code><ul>
+<li>One of 'slow', 'normal', 'fast', or time in milliseconds</li>
+</ul>
+</div>
+<div class="subelement argument">
+<h4>$callback</h4>
+<code>string</code><ul>
+<li>Javascript callback function</li>
+</ul>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="focus" id="focus"></a><div class="element clickable method public focus" data-toggle="collapse" data-target=".focus .collapse">
+<h2>Focus</h2>
+<pre>focus(string $element, string $js) : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a javascript library focus event</p></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Javascript::focus()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><p>The element to attach the event to</p></div>
+<div class="subelement argument">
+<h4>$js</h4>
+<code>string</code><p>The code to execute</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="generate_json" id="generate_json"></a><div class="element clickable method public generate_json" data-toggle="collapse" data-target=".generate_json .collapse">
+<h2>Generate JSON</h2>
+<pre>generate_json(mixed $result, bool $match_array_type) : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Can be passed a database result or associative array and returns a JSON formatted string</p></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Javascript::generate_json()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$result</h4>
+<code>mixed</code><p>result set or array</p></div>
+<div class="subelement argument">
+<h4>$match_array_type</h4>
+<code>bool</code><p>match array types (defaults to objects)</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code>a json formatted string</div>
+</div></div>
+</div>
+<a name="hide" id="hide"></a><div class="element clickable method public hide" data-toggle="collapse" data-target=".hide .collapse">
+<h2>Hide</h2>
+<pre>hide(string $element, string $speed, string $callback) : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a javascript library hide action</p></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Javascript::hide()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><ul>
+<li>element</li>
+</ul>
+</div>
+<div class="subelement argument">
+<h4>$speed</h4>
+<code>string</code><ul>
+<li>One of 'slow', 'normal', 'fast', or time in milliseconds</li>
+</ul>
+</div>
+<div class="subelement argument">
+<h4>$callback</h4>
+<code>string</code><ul>
+<li>Javascript callback function</li>
+</ul>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="hover" id="hover"></a><div class="element clickable method public hover" data-toggle="collapse" data-target=".hover .collapse">
+<h2>Hover</h2>
+<pre>hover(string $element, string $over, string $out) : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a javascript library hover event</p></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Javascript::hover()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><ul>
+<li>element</li>
+</ul>
+</div>
+<div class="subelement argument">
+<h4>$over</h4>
+<code>string</code><ul>
+<li>Javascript code for mouse over</li>
+</ul>
+</div>
+<div class="subelement argument">
+<h4>$out</h4>
+<code>string</code><ul>
+<li>Javascript code for mouse out</li>
+</ul>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="inline" id="inline"></a><div class="element clickable method public inline" data-toggle="collapse" data-target=".inline .collapse">
+<h2>Inline</h2>
+<pre>inline(string $script, boolean $cdata) : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a <script> tag</p></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Javascript::inline()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$script</h4>
+<code>string</code><p>The element to attach the event to</p></div>
+<div class="subelement argument">
+<h4>$cdata</h4>
+<code>boolean</code><p>If a CDATA section should be added</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="keydown" id="keydown"></a><div class="element clickable method public keydown" data-toggle="collapse" data-target=".keydown .collapse">
+<h2>Keydown</h2>
+<pre>keydown(string $element, string $js) : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a javascript library keydown event</p></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Javascript::keydown()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><p>The element to attach the event to</p></div>
+<div class="subelement argument">
+<h4>$js</h4>
+<code>string</code><p>The code to execute</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="keyup" id="keyup"></a><div class="element clickable method public keyup" data-toggle="collapse" data-target=".keyup .collapse">
+<h2>Keyup</h2>
+<pre>keyup(string $element, string $js) : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a javascript library keydown event</p></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Javascript::keyup()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><p>The element to attach the event to</p></div>
+<div class="subelement argument">
+<h4>$js</h4>
+<code>string</code><p>The code to execute</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="load" id="load"></a><div class="element clickable method public load" data-toggle="collapse" data-target=".load .collapse">
+<h2>Load</h2>
+<pre>load(string $element, string $js) : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a javascript library load event</p></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Javascript::load()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><p>The element to attach the event to</p></div>
+<div class="subelement argument">
+<h4>$js</h4>
+<code>string</code><p>The code to execute</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="modal" id="modal"></a><div class="element clickable method public modal" data-toggle="collapse" data-target=".modal .collapse">
+<h2>modal window</h2>
+<pre>modal($src, $relative) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Load a thickbox modal window</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$src</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$relative</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="mousedown" id="mousedown"></a><div class="element clickable method public mousedown" data-toggle="collapse" data-target=".mousedown .collapse">
+<h2>Mousedown</h2>
+<pre>mousedown(string $element, string $js) : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a javascript library mousedown event</p></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Javascript::mousedown()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><p>The element to attach the event to</p></div>
+<div class="subelement argument">
+<h4>$js</h4>
+<code>string</code><p>The code to execute</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="mouseout" id="mouseout"></a><div class="element clickable method public mouseout" data-toggle="collapse" data-target=".mouseout .collapse">
+<h2>Mouse Out</h2>
+<pre>mouseout(string $element, string $js) : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a javascript library mouseout event</p></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Javascript::mouseout()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><p>The element to attach the event to</p></div>
+<div class="subelement argument">
+<h4>$js</h4>
+<code>string</code><p>The code to execute</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="mouseover" id="mouseover"></a><div class="element clickable method public mouseover" data-toggle="collapse" data-target=".mouseover .collapse">
+<h2>Mouse Over</h2>
+<pre>mouseover(string $element, string $js) : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a javascript library mouseover event</p></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Javascript::mouseover()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><p>The element to attach the event to</p></div>
+<div class="subelement argument">
+<h4>$js</h4>
+<code>string</code><p>The code to execute</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="mouseup" id="mouseup"></a><div class="element clickable method public mouseup" data-toggle="collapse" data-target=".mouseup .collapse">
+<h2>Mouseup</h2>
+<pre>mouseup(string $element, string $js) : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a javascript library mouseup event</p></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Javascript::mouseup()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><p>The element to attach the event to</p></div>
+<div class="subelement argument">
+<h4>$js</h4>
+<code>string</code><p>The code to execute</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="output" id="output"></a><div class="element clickable method public output" data-toggle="collapse" data-target=".output .collapse">
+<h2>Output</h2>
+<pre>output(string $js) : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs the called javascript to the screen</p></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Javascript::output()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$js</h4>
+<code>string</code><p>The code to output</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="plugin" id="plugin"></a><div class="element clickable method public plugin" data-toggle="collapse" data-target=".plugin .collapse">
+<h2>Plugin</h2>
+<pre>plugin($src, $relative) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Load a plugin library</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$src</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$relative</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="ready" id="ready"></a><div class="element clickable method public ready" data-toggle="collapse" data-target=".ready .collapse">
+<h2>Ready</h2>
+<pre>ready(string $js) : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a javascript library mouseup event</p></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Javascript::ready()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$js</h4>
+<code>string</code><p>The element to attach the event to</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="removeClass" id="removeClass"></a><div class="element clickable method public removeClass" data-toggle="collapse" data-target=".removeClass .collapse">
+<h2>Remove Class</h2>
+<pre>removeClass(string $element, string $class) : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a javascript library removeClass event</p></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Javascript::removeClass()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><ul>
+<li>element</li>
+</ul>
+</div>
+<div class="subelement argument">
+<h4>$class</h4>
+<code>string</code><ul>
+<li>Class to add</li>
+</ul>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="resize" id="resize"></a><div class="element clickable method public resize" data-toggle="collapse" data-target=".resize .collapse">
+<h2>Resize</h2>
+<pre>resize(string $element, string $js) : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a javascript library resize event</p></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Javascript::resize()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><p>The element to attach the event to</p></div>
+<div class="subelement argument">
+<h4>$js</h4>
+<code>string</code><p>The code to execute</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="script" id="script"></a><div class="element clickable method public script" data-toggle="collapse" data-target=".script .collapse">
+<h2>Script Tag</h2>
+<pre>script($library_src, $relative) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs the script tag that loads the jquery.js file into an HTML document</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$library_src</h4>
+<code></code><p>string</p></div>
+<div class="subelement argument">
+<h4>$relative</h4>
+<code></code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="scroll" id="scroll"></a><div class="element clickable method public scroll" data-toggle="collapse" data-target=".scroll .collapse">
+<h2>Scroll</h2>
+<pre>scroll(string $element, string $js) : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a javascript library scroll event</p></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Javascript::scroll()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><p>The element to attach the event to</p></div>
+<div class="subelement argument">
+<h4>$js</h4>
+<code>string</code><p>The code to execute</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="show" id="show"></a><div class="element clickable method public show" data-toggle="collapse" data-target=".show .collapse">
+<h2>Show</h2>
+<pre>show(string $element, string $speed, string $callback) : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a javascript library show event</p></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Javascript::show()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><ul>
+<li>element</li>
+</ul>
+</div>
+<div class="subelement argument">
+<h4>$speed</h4>
+<code>string</code><ul>
+<li>One of 'slow', 'normal', 'fast', or time in milliseconds</li>
+</ul>
+</div>
+<div class="subelement argument">
+<h4>$callback</h4>
+<code>string</code><ul>
+<li>Javascript callback function</li>
+</ul>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="slideDown" id="slideDown"></a><div class="element clickable method public slideDown" data-toggle="collapse" data-target=".slideDown .collapse">
+<h2>Slide Down</h2>
+<pre>slideDown(string $element, string $speed, string $callback) : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a javascript library slideDown event</p></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Javascript::slideDown()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><ul>
+<li>element</li>
+</ul>
+</div>
+<div class="subelement argument">
+<h4>$speed</h4>
+<code>string</code><ul>
+<li>One of 'slow', 'normal', 'fast', or time in milliseconds</li>
+</ul>
+</div>
+<div class="subelement argument">
+<h4>$callback</h4>
+<code>string</code><ul>
+<li>Javascript callback function</li>
+</ul>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="slideToggle" id="slideToggle"></a><div class="element clickable method public slideToggle" data-toggle="collapse" data-target=".slideToggle .collapse">
+<h2>Slide Toggle</h2>
+<pre>slideToggle(string $element, string $speed, string $callback) : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a javascript library slideToggle event</p></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Javascript::slideToggle()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><ul>
+<li>element</li>
+</ul>
+</div>
+<div class="subelement argument">
+<h4>$speed</h4>
+<code>string</code><ul>
+<li>One of 'slow', 'normal', 'fast', or time in milliseconds</li>
+</ul>
+</div>
+<div class="subelement argument">
+<h4>$callback</h4>
+<code>string</code><ul>
+<li>Javascript callback function</li>
+</ul>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="slideUp" id="slideUp"></a><div class="element clickable method public slideUp" data-toggle="collapse" data-target=".slideUp .collapse">
+<h2>Slide Up</h2>
+<pre>slideUp(string $element, string $speed, string $callback) : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a javascript library slideUp event</p></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Javascript::slideUp()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><ul>
+<li>element</li>
+</ul>
+</div>
+<div class="subelement argument">
+<h4>$speed</h4>
+<code>string</code><ul>
+<li>One of 'slow', 'normal', 'fast', or time in milliseconds</li>
+</ul>
+</div>
+<div class="subelement argument">
+<h4>$callback</h4>
+<code>string</code><ul>
+<li>Javascript callback function</li>
+</ul>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="sortable" id="sortable"></a><div class="element clickable method public sortable" data-toggle="collapse" data-target=".sortable .collapse">
+<h2>Sortable</h2>
+<pre>sortable($element, $options) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Creates a jQuery sortable</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$options</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="tablesorter" id="tablesorter"></a><div class="element clickable method public tablesorter" data-toggle="collapse" data-target=".tablesorter .collapse">
+<h2>Table Sorter Plugin</h2>
+<pre>tablesorter(string $table, string $options) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$table</h4>
+<code>string</code><p>table name</p></div>
+<div class="subelement argument">
+<h4>$options</h4>
+<code>string</code><p>plugin location</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="toggle" id="toggle"></a><div class="element clickable method public toggle" data-toggle="collapse" data-target=".toggle .collapse">
+<h2>Toggle</h2>
+<pre>toggle(string $element) : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a javascript library toggle event</p></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Javascript::toggle()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><ul>
+<li>element</li>
+</ul>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="toggleClass" id="toggleClass"></a><div class="element clickable method public toggleClass" data-toggle="collapse" data-target=".toggleClass .collapse">
+<h2>Toggle Class</h2>
+<pre>toggleClass(string $element, $class) : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a javascript library toggle class event</p></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Javascript::toggleClass()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><ul>
+<li>element</li>
+</ul>
+</div>
+<div class="subelement argument">
+<h4>$class</h4>
+<code></code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="ui" id="ui"></a><div class="element clickable method public ui" data-toggle="collapse" data-target=".ui .collapse">
+<h2>UI</h2>
+<pre>ui($src, $relative) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Load a user interface library</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$src</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$relative</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="unload" id="unload"></a><div class="element clickable method public unload" data-toggle="collapse" data-target=".unload .collapse">
+<h2>Unload</h2>
+<pre>unload(string $element, string $js) : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a javascript library unload event</p></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Javascript::unload()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><p>The element to attach the event to</p></div>
+<div class="subelement argument">
+<h4>$js</h4>
+<code>string</code><p>The code to execute</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="update" id="update"></a><div class="element clickable method public update" data-toggle="collapse" data-target=".update .collapse">
+<h2>Update</h2>
+<pre>update(string $element, string $speed, string $callback) : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Outputs a javascript library slideDown event</p></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Javascript::update()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$element</h4>
+<code>string</code><ul>
+<li>element</li>
+</ul>
+</div>
+<div class="subelement argument">
+<h4>$speed</h4>
+<code>string</code><ul>
+<li>One of 'slow', 'normal', 'fast', or time in milliseconds</li>
+</ul>
+</div>
+<div class="subelement argument">
+<h4>$callback</h4>
+<code>string</code><ul>
+<li>Javascript callback function</li>
+</ul>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<h3>
+<i class="icon-custom icon-property"></i> Properties</h3>
+<a name="%24_javascript_folder" id="$_javascript_folder"> </a><div class="element clickable property public $_javascript_folder" data-toggle="collapse" data-target=".$_javascript_folder .collapse">
+<h2>$_javascript_folder</h2>
+<pre>$_javascript_folder </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24_javascript_location" id="$_javascript_location"> </a><div class="element clickable property public $_javascript_location" data-toggle="collapse" data-target=".$_javascript_location .collapse">
+<h2>$_javascript_location</h2>
+<pre>$_javascript_location </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Javascript::$$_javascript_location</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24jquery_ajax_img" id="$jquery_ajax_img"> </a><div class="element clickable property public $jquery_ajax_img" data-toggle="collapse" data-target=".$jquery_ajax_img .collapse">
+<h2>$jquery_ajax_img</h2>
+<pre>$jquery_ajax_img </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24jquery_code_for_compile" id="$jquery_code_for_compile"> </a><div class="element clickable property public $jquery_code_for_compile" data-toggle="collapse" data-target=".$jquery_code_for_compile .collapse">
+<h2>$jquery_code_for_compile</h2>
+<pre>$jquery_code_for_compile </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24jquery_code_for_load" id="$jquery_code_for_load"> </a><div class="element clickable property public $jquery_code_for_load" data-toggle="collapse" data-target=".$jquery_code_for_load .collapse">
+<h2>$jquery_code_for_load</h2>
+<pre>$jquery_code_for_load </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24jquery_corner_active" id="$jquery_corner_active"> </a><div class="element clickable property public $jquery_corner_active" data-toggle="collapse" data-target=".$jquery_corner_active .collapse">
+<h2>$jquery_corner_active</h2>
+<pre>$jquery_corner_active </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24jquery_table_sorter_active" id="$jquery_table_sorter_active"> </a><div class="element clickable property public $jquery_table_sorter_active" data-toggle="collapse" data-target=".$jquery_table_sorter_active .collapse">
+<h2>$jquery_table_sorter_active</h2>
+<pre>$jquery_table_sorter_active </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24jquery_table_sorter_pager_active" id="$jquery_table_sorter_pager_active"> </a><div class="element clickable property public $jquery_table_sorter_pager_active" data-toggle="collapse" data-target=".$jquery_table_sorter_pager_active .collapse">
+<h2>$jquery_table_sorter_pager_active</h2>
+<pre>$jquery_table_sorter_pager_active </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a8</a> and<br>
+            generated on 2012-07-27T12:29:22+10:00.<br></footer></div>
+</div>
+</body>
+</html>

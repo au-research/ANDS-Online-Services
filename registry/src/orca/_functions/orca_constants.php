@@ -47,6 +47,7 @@ $typeArray['collection'] = array(
 	"isAvaiableThrough" =>array("Available through", "Makes available"),	
 	"isProducedBy" =>array("Produced by", "Produces"),
 	"isOperatedOn" =>array("Operated on", "Operates on"),	
+
 );
 $typeArray['party'] = array(
 	"hasAssociationWith" => array("Associated with", "Associated with"),

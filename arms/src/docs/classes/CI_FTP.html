@@ -1,0 +1,574 @@
+<!DOCTYPE html><html xmlns:date="http://exslt.org/dates-and-times" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>phpDocumentor » \CI_FTP</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../css/template.css" rel="stylesheet" media="all">
+<script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../js/bootstrap.js" type="text/javascript"></script><script src="../js/template.js" type="text/javascript"></script><script src="../js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../img/favicon.ico">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">phpDocumentor</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Packages</a></li>
+<li><a href="../packages/CodeIgniter.html"><i class="icon-folder-open"></i> CodeIgniter</a></li>
+<li><a href="../packages/Default.html"><i class="icon-folder-open"></i> Default</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">1170</span></a></li>
+<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul><li>todo 
+                <span class="label label-info">1</span>
+</li></ul></a></li>
+<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">0</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods</li>
+<li class="method public "><a href="#__construct" title="__construct :: Constructor - Sets Preferences"><span class="description">Constructor - Sets Preferences</span><pre>__construct()</pre></a></li>
+<li class="method public "><a href="#_error" title="_error :: Display error message"><span class="description">Display error message</span><pre>_error()</pre></a></li>
+<li class="method public "><a href="#_getext" title="_getext :: Extract the file extension"><span class="description">Extract the file extension</span><pre>_getext()</pre></a></li>
+<li class="method public "><a href="#_is_conn" title="_is_conn :: Validates the connection ID"><span class="description">Validates the connection ID</span><pre>_is_conn()</pre></a></li>
+<li class="method public "><a href="#_login" title="_login :: FTP Login"><span class="description">FTP Login</span><pre>_login()</pre></a></li>
+<li class="method public "><a href="#_settype" title="_settype :: Set the upload type"><span class="description">Set the upload type</span><pre>_settype()</pre></a></li>
+<li class="method public "><a href="#changedir" title="changedir :: Change directory"><span class="description">Change directory</span><pre>changedir()</pre></a></li>
+<li class="method public "><a href="#chmod" title="chmod :: Set file permissions"><span class="description">Set file permissions</span><pre>chmod()</pre></a></li>
+<li class="method public "><a href="#close" title="close :: Close the connection"><span class="description">Close the connection</span><pre>close()</pre></a></li>
+<li class="method public "><a href="#connect" title="connect :: FTP Connect"><span class="description">FTP Connect</span><pre>connect()</pre></a></li>
+<li class="method public "><a href="#delete_dir" title="delete_dir :: Delete a folder and recursively delete everything (including sub-folders)
+containted within it."><span class="description">Delete a folder and recursively delete everything (including sub-folders)
+containted within it.</span><pre>delete_dir()</pre></a></li>
+<li class="method public "><a href="#delete_file" title="delete_file :: Rename (or move) a file"><span class="description">Rename (or move) a file</span><pre>delete_file()</pre></a></li>
+<li class="method public "><a href="#download" title="download :: Download a file from a remote server to the local server"><span class="description">Download a file from a remote server to the local server</span><pre>download()</pre></a></li>
+<li class="method public "><a href="#initialize" title="initialize :: Initialize preferences"><span class="description">Initialize preferences</span><pre>initialize()</pre></a></li>
+<li class="method public "><a href="#list_files" title="list_files :: FTP List files in the specified directory"><span class="description">FTP List files in the specified directory</span><pre>list_files()</pre></a></li>
+<li class="method public "><a href="#mirror" title="mirror :: Read a directory and recreate it remotely"><span class="description">Read a directory and recreate it remotely</span><pre>mirror()</pre></a></li>
+<li class="method public "><a href="#mkdir" title="mkdir :: Create a directory"><span class="description">Create a directory</span><pre>mkdir()</pre></a></li>
+<li class="method public "><a href="#move" title="move :: Move a file"><span class="description">Move a file</span><pre>move()</pre></a></li>
+<li class="method public "><a href="#rename" title="rename :: Rename (or move) a file"><span class="description">Rename (or move) a file</span><pre>rename()</pre></a></li>
+<li class="method public "><a href="#upload" title="upload :: Upload a file to the server"><span class="description">Upload a file to the server</span><pre>upload()</pre></a></li>
+<li class="nav-header">
+<i class="icon-custom icon-property"></i> Properties</li>
+<li class="property public "><a href="#%24conn_id" title="$conn_id :: "><span class="description">$conn_id</span><pre>$conn_id</pre></a></li>
+<li class="property public "><a href="#%24debug" title="$debug :: "><span class="description">$debug</span><pre>$debug</pre></a></li>
+<li class="property public "><a href="#%24hostname" title="$hostname :: "><span class="description">$hostname</span><pre>$hostname</pre></a></li>
+<li class="property public "><a href="#%24passive" title="$passive :: "><span class="description">$passive</span><pre>$passive</pre></a></li>
+<li class="property public "><a href="#%24password" title="$password :: "><span class="description">$password</span><pre>$password</pre></a></li>
+<li class="property public "><a href="#%24port" title="$port :: "><span class="description">$port</span><pre>$port</pre></a></li>
+<li class="property public "><a href="#%24username" title="$username :: "><span class="description">$username</span><pre>$username</pre></a></li>
+</ul>
+</div>
+<div class="span8">
+<a name="%5CCI_FTP" id="\CI_FTP"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/global.html">global</a></li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/CI_FTP.html">CI_FTP</a>
+</li>
+</ul>
+<div href="../classes/CI_FTP.html" class="element class">
+<p class="short_description">FTP Class</p>
+<div class="details">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>package</th>
+<td><a href="../packages/CodeIgniter.Libraries.html">CodeIgniter</a></td>
+</tr>
+<tr>
+<th>subpackage</th>
+<td>Libraries</td>
+</tr>
+<tr>
+<th>category</th>
+<td>Libraries</td>
+</tr>
+<tr>
+<th>author</th>
+<td><a href="">ExpressionEngine Dev Team</a></td>
+</tr>
+<tr>
+<th>link</th>
+<td><a href="http://codeigniter.com/user_guide/libraries/ftp.html">http://codeigniter.com/user_guide/libraries/ftp.html</a></td>
+</tr>
+</table>
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a name="__construct" id="__construct"></a><div class="element clickable method public __construct" data-toggle="collapse" data-target=".__construct .collapse">
+<h2>Constructor - Sets Preferences</h2>
+<pre>__construct($config) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>The constructor can be passed an array of config values</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$config</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="_error" id="_error"></a><div class="element clickable method public _error" data-toggle="collapse" data-target="._error .collapse">
+<h2>Display error message</h2>
+<pre>_error($line) : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$line</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="_getext" id="_getext"></a><div class="element clickable method public _getext" data-toggle="collapse" data-target="._getext .collapse">
+<h2>Extract the file extension</h2>
+<pre>_getext($filename) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$filename</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_is_conn" id="_is_conn"></a><div class="element clickable method public _is_conn" data-toggle="collapse" data-target="._is_conn .collapse">
+<h2>Validates the connection ID</h2>
+<pre>_is_conn() : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="_login" id="_login"></a><div class="element clickable method public _login" data-toggle="collapse" data-target="._login .collapse">
+<h2>FTP Login</h2>
+<pre>_login() : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="_settype" id="_settype"></a><div class="element clickable method public _settype" data-toggle="collapse" data-target="._settype .collapse">
+<h2>Set the upload type</h2>
+<pre>_settype($ext) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$ext</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="changedir" id="changedir"></a><div class="element clickable method public changedir" data-toggle="collapse" data-target=".changedir .collapse">
+<h2>Change directory</h2>
+<pre>changedir($path, $supress_debug) : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>The second parameter lets us momentarily turn off debugging so that
+this function can be used to test for the existence of a folder
+without throwing an error.  There's no FTP equivalent to is_dir()
+so we do it by trying to change to a particular directory.
+Internally, this parameter is only used by the "mirror" function below.</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$path</h4>
+<code></code><p>string</p></div>
+<div class="subelement argument">
+<h4>$supress_debug</h4>
+<code></code><p>bool</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="chmod" id="chmod"></a><div class="element clickable method public chmod" data-toggle="collapse" data-target=".chmod .collapse">
+<h2>Set file permissions</h2>
+<pre>chmod(string $path, string $perm) : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$path</h4>
+<code>string</code><p>the file path</p></div>
+<div class="subelement argument">
+<h4>$perm</h4>
+<code>string</code><p>the permissions</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="close" id="close"></a><div class="element clickable method public close" data-toggle="collapse" data-target=".close .collapse">
+<h2>Close the connection</h2>
+<pre>close() : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="connect" id="connect"></a><div class="element clickable method public connect" data-toggle="collapse" data-target=".connect .collapse">
+<h2>FTP Connect</h2>
+<pre>connect(array $config) : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$config</h4>
+<code>array</code><p>the connection values</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="delete_dir" id="delete_dir"></a><div class="element clickable method public delete_dir" data-toggle="collapse" data-target=".delete_dir .collapse">
+<h2>Delete a folder and recursively delete everything (including sub-folders)
+containted within it.</h2>
+<pre>delete_dir($filepath) : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$filepath</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="delete_file" id="delete_file"></a><div class="element clickable method public delete_file" data-toggle="collapse" data-target=".delete_file .collapse">
+<h2>Rename (or move) a file</h2>
+<pre>delete_file($filepath) : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$filepath</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="download" id="download"></a><div class="element clickable method public download" data-toggle="collapse" data-target=".download .collapse">
+<h2>Download a file from a remote server to the local server</h2>
+<pre>download($rempath, $locpath, $mode) : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$rempath</h4>
+<code></code><p>string</p></div>
+<div class="subelement argument">
+<h4>$locpath</h4>
+<code></code><p>string</p></div>
+<div class="subelement argument">
+<h4>$mode</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="initialize" id="initialize"></a><div class="element clickable method public initialize" data-toggle="collapse" data-target=".initialize .collapse">
+<h2>Initialize preferences</h2>
+<pre>initialize($config) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$config</h4>
+<code></code><p>array</p></div>
+</div></div>
+</div>
+<a name="list_files" id="list_files"></a><div class="element clickable method public list_files" data-toggle="collapse" data-target=".list_files .collapse">
+<h2>FTP List files in the specified directory</h2>
+<pre>list_files($path) : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$path</h4>
+<code></code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>array</code></div>
+</div></div>
+</div>
+<a name="mirror" id="mirror"></a><div class="element clickable method public mirror" data-toggle="collapse" data-target=".mirror .collapse">
+<h2>Read a directory and recreate it remotely</h2>
+<pre>mirror(string $locpath, string $rempath) : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>This function recursively reads a folder and everything it contains (including
+sub-folders) and creates a mirror via FTP based on it.  Whatever the directory structure
+of the original file path will be recreated on the server.</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$locpath</h4>
+<code>string</code><p>path to source with trailing slash</p></div>
+<div class="subelement argument">
+<h4>$rempath</h4>
+<code>string</code><p>path to destination - include the base folder with trailing slash</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="mkdir" id="mkdir"></a><div class="element clickable method public mkdir" data-toggle="collapse" data-target=".mkdir .collapse">
+<h2>Create a directory</h2>
+<pre>mkdir($path, $permissions) : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$path</h4>
+<code></code><p>string</p></div>
+<div class="subelement argument">
+<h4>$permissions</h4>
+<code></code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="move" id="move"></a><div class="element clickable method public move" data-toggle="collapse" data-target=".move .collapse">
+<h2>Move a file</h2>
+<pre>move($old_file, $new_file) : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$old_file</h4>
+<code></code><p>string</p></div>
+<div class="subelement argument">
+<h4>$new_file</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="rename" id="rename"></a><div class="element clickable method public rename" data-toggle="collapse" data-target=".rename .collapse">
+<h2>Rename (or move) a file</h2>
+<pre>rename($old_file, $new_file, $move) : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$old_file</h4>
+<code></code><p>string</p></div>
+<div class="subelement argument">
+<h4>$new_file</h4>
+<code></code><p>string</p></div>
+<div class="subelement argument">
+<h4>$move</h4>
+<code></code><p>bool</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="upload" id="upload"></a><div class="element clickable method public upload" data-toggle="collapse" data-target=".upload .collapse">
+<h2>Upload a file to the server</h2>
+<pre>upload($locpath, $rempath, $mode, $permissions) : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$locpath</h4>
+<code></code><p>string</p></div>
+<div class="subelement argument">
+<h4>$rempath</h4>
+<code></code><p>string</p></div>
+<div class="subelement argument">
+<h4>$mode</h4>
+<code></code><p>string</p></div>
+<div class="subelement argument">
+<h4>$permissions</h4>
+<code></code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<h3>
+<i class="icon-custom icon-property"></i> Properties</h3>
+<a name="%24conn_id" id="$conn_id"> </a><div class="element clickable property public $conn_id" data-toggle="collapse" data-target=".$conn_id .collapse">
+<h2>$conn_id</h2>
+<pre>$conn_id </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24debug" id="$debug"> </a><div class="element clickable property public $debug" data-toggle="collapse" data-target=".$debug .collapse">
+<h2>$debug</h2>
+<pre>$debug </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24hostname" id="$hostname"> </a><div class="element clickable property public $hostname" data-toggle="collapse" data-target=".$hostname .collapse">
+<h2>$hostname</h2>
+<pre>$hostname </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24passive" id="$passive"> </a><div class="element clickable property public $passive" data-toggle="collapse" data-target=".$passive .collapse">
+<h2>$passive</h2>
+<pre>$passive </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24password" id="$password"> </a><div class="element clickable property public $password" data-toggle="collapse" data-target=".$password .collapse">
+<h2>$password</h2>
+<pre>$password </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24port" id="$port"> </a><div class="element clickable property public $port" data-toggle="collapse" data-target=".$port .collapse">
+<h2>$port</h2>
+<pre>$port </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24username" id="$username"> </a><div class="element clickable property public $username" data-toggle="collapse" data-target=".$username .collapse">
+<h2>$username</h2>
+<pre>$username </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a8</a> and<br>
+            generated on 2012-07-27T12:29:22+10:00.<br></footer></div>
+</div>
+</body>
+</html>

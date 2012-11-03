@@ -1,0 +1,532 @@
+<!DOCTYPE html><html xmlns:date="http://exslt.org/dates-and-times" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>phpDocumentor » \CI_Security</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../css/template.css" rel="stylesheet" media="all">
+<script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../js/bootstrap.js" type="text/javascript"></script><script src="../js/template.js" type="text/javascript"></script><script src="../js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../img/favicon.ico">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">phpDocumentor</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Packages</a></li>
+<li><a href="../packages/CodeIgniter.html"><i class="icon-folder-open"></i> CodeIgniter</a></li>
+<li><a href="../packages/Default.html"><i class="icon-folder-open"></i> Default</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">1170</span></a></li>
+<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul><li>todo 
+                <span class="label label-info">1</span>
+</li></ul></a></li>
+<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">0</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods</li>
+<li class="method public "><a href="#__construct" title="__construct :: Constructor"><span class="description">Constructor</span><pre>__construct()</pre></a></li>
+<li class="method public "><a href="#csrf_set_cookie" title="csrf_set_cookie :: Set Cross Site Request Forgery Protection Cookie"><span class="description">Set Cross Site Request Forgery Protection Cookie</span><pre>csrf_set_cookie()</pre></a></li>
+<li class="method public "><a href="#csrf_show_error" title="csrf_show_error :: Show CSRF Error"><span class="description">Show CSRF Error</span><pre>csrf_show_error()</pre></a></li>
+<li class="method public "><a href="#csrf_verify" title="csrf_verify :: Verify Cross Site Request Forgery Protection"><span class="description">Verify Cross Site Request Forgery Protection</span><pre>csrf_verify()</pre></a></li>
+<li class="method public "><a href="#entity_decode" title="entity_decode :: HTML Entities Decode"><span class="description">HTML Entities Decode</span><pre>entity_decode()</pre></a></li>
+<li class="method public "><a href="#get_csrf_hash" title="get_csrf_hash :: Get CSRF Hash"><span class="description">Get CSRF Hash</span><pre>get_csrf_hash()</pre></a></li>
+<li class="method public "><a href="#get_csrf_token_name" title="get_csrf_token_name :: Get CSRF Token Name"><span class="description">Get CSRF Token Name</span><pre>get_csrf_token_name()</pre></a></li>
+<li class="method public "><a href="#sanitize_filename" title="sanitize_filename :: Filename Security"><span class="description">Filename Security</span><pre>sanitize_filename()</pre></a></li>
+<li class="method public "><a href="#xss_clean" title="xss_clean :: XSS Clean"><span class="description">XSS Clean</span><pre>xss_clean()</pre></a></li>
+<li class="method public "><a href="#xss_hash" title="xss_hash :: Random Hash for protecting URLs"><span class="description">Random Hash for protecting URLs</span><pre>xss_hash()</pre></a></li>
+<li class="nav-header protected">» Protected</li>
+<li class="method protected "><a href="#_compact_exploded_words" title="_compact_exploded_words :: Compact Exploded Words"><span class="description">Compact Exploded Words</span><pre>_compact_exploded_words()</pre></a></li>
+<li class="method protected "><a href="#_convert_attribute" title="_convert_attribute :: Attribute Conversion"><span class="description">Attribute Conversion</span><pre>_convert_attribute()</pre></a></li>
+<li class="method protected "><a href="#_csrf_set_hash" title="_csrf_set_hash :: Set Cross Site Request Forgery Protection Cookie"><span class="description">Set Cross Site Request Forgery Protection Cookie</span><pre>_csrf_set_hash()</pre></a></li>
+<li class="method protected "><a href="#_decode_entity" title="_decode_entity :: HTML Entity Decode Callback"><span class="description">HTML Entity Decode Callback</span><pre>_decode_entity()</pre></a></li>
+<li class="method protected "><a href="#_do_never_allowed" title="_do_never_allowed :: Do Never Allowed"><span class="description">Do Never Allowed</span><pre>_do_never_allowed()</pre></a></li>
+<li class="method protected "><a href="#_filter_attributes" title="_filter_attributes :: Filter Attributes"><span class="description">Filter Attributes</span><pre>_filter_attributes()</pre></a></li>
+<li class="method protected "><a href="#_js_img_removal" title="_js_img_removal :: JS Image Removal"><span class="description">JS Image Removal</span><pre>_js_img_removal()</pre></a></li>
+<li class="method protected "><a href="#_js_link_removal" title="_js_link_removal :: JS Link Removal"><span class="description">JS Link Removal</span><pre>_js_link_removal()</pre></a></li>
+<li class="method protected "><a href="#_remove_evil_attributes" title="_remove_evil_attributes :: "><span class="description">_remove_evil_attributes()
+        </span><pre>_remove_evil_attributes()</pre></a></li>
+<li class="method protected "><a href="#_sanitize_naughty_html" title="_sanitize_naughty_html :: Sanitize Naughty HTML"><span class="description">Sanitize Naughty HTML</span><pre>_sanitize_naughty_html()</pre></a></li>
+<li class="method protected "><a href="#_validate_entities" title="_validate_entities :: Validate URL entities"><span class="description">Validate URL entities</span><pre>_validate_entities()</pre></a></li>
+<li class="nav-header">
+<i class="icon-custom icon-property"></i> Properties</li>
+<li class="nav-header protected">» Protected</li>
+<li class="property protected "><a href="#%24_csrf_cookie_name" title="$_csrf_cookie_name :: Cookie name for Cross Site Request Forgery Protection Cookie"><span class="description">Cookie name for Cross Site Request Forgery Protection Cookie</span><pre>$_csrf_cookie_name</pre></a></li>
+<li class="property protected "><a href="#%24_csrf_expire" title="$_csrf_expire :: Expiration time for Cross Site Request Forgery Protection Cookie
+Defaults to two hours (in seconds)"><span class="description">Expiration time for Cross Site Request Forgery Protection Cookie
+Defaults to two hours (in seconds)</span><pre>$_csrf_expire</pre></a></li>
+<li class="property protected "><a href="#%24_csrf_hash" title="$_csrf_hash :: Random Hash for Cross Site Request Forgery Protection Cookie"><span class="description">Random Hash for Cross Site Request Forgery Protection Cookie</span><pre>$_csrf_hash</pre></a></li>
+<li class="property protected "><a href="#%24_csrf_token_name" title="$_csrf_token_name :: Token name for Cross Site Request Forgery Protection Cookie"><span class="description">Token name for Cross Site Request Forgery Protection Cookie</span><pre>$_csrf_token_name</pre></a></li>
+<li class="property protected "><a href="#%24_never_allowed_regex" title="$_never_allowed_regex :: List of never allowed regex replacement"><span class="description">List of never allowed regex replacement</span><pre>$_never_allowed_regex</pre></a></li>
+<li class="property protected "><a href="#%24_never_allowed_str" title="$_never_allowed_str :: List of never allowed strings"><span class="description">List of never allowed strings</span><pre>$_never_allowed_str</pre></a></li>
+<li class="property protected "><a href="#%24_xss_hash" title="$_xss_hash :: Random Hash for protecting URLs"><span class="description">Random Hash for protecting URLs</span><pre>$_xss_hash</pre></a></li>
+</ul>
+</div>
+<div class="span8">
+<a name="%5CCI_Security" id="\CI_Security"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/global.html">global</a></li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/CI_Security.html">CI_Security</a>
+</li>
+</ul>
+<div href="../classes/CI_Security.html" class="element class">
+<p class="short_description">Security Class</p>
+<div class="details">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>package</th>
+<td><a href="../packages/CodeIgniter.Libraries.html">CodeIgniter</a></td>
+</tr>
+<tr>
+<th>subpackage</th>
+<td>Libraries</td>
+</tr>
+<tr>
+<th>category</th>
+<td>Security</td>
+</tr>
+<tr>
+<th>author</th>
+<td><a href="">ExpressionEngine Dev Team</a></td>
+</tr>
+<tr>
+<th>link</th>
+<td><a href="http://codeigniter.com/user_guide/libraries/security.html">http://codeigniter.com/user_guide/libraries/security.html</a></td>
+</tr>
+</table>
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a name="__construct" id="__construct"></a><div class="element clickable method public __construct" data-toggle="collapse" data-target=".__construct .collapse">
+<h2>Constructor</h2>
+<pre>__construct() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="csrf_set_cookie" id="csrf_set_cookie"></a><div class="element clickable method public csrf_set_cookie" data-toggle="collapse" data-target=".csrf_set_cookie .collapse">
+<h2>Set Cross Site Request Forgery Protection Cookie</h2>
+<pre>csrf_set_cookie() : object</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Returns</h3>
+<div class="subelement response"><code>object</code></div>
+</div></div>
+</div>
+<a name="csrf_show_error" id="csrf_show_error"></a><div class="element clickable method public csrf_show_error" data-toggle="collapse" data-target=".csrf_show_error .collapse">
+<h2>Show CSRF Error</h2>
+<pre>csrf_show_error() : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="csrf_verify" id="csrf_verify"></a><div class="element clickable method public csrf_verify" data-toggle="collapse" data-target=".csrf_verify .collapse">
+<h2>Verify Cross Site Request Forgery Protection</h2>
+<pre>csrf_verify() : object</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Returns</h3>
+<div class="subelement response"><code>object</code></div>
+</div></div>
+</div>
+<a name="entity_decode" id="entity_decode"></a><div class="element clickable method public entity_decode" data-toggle="collapse" data-target=".entity_decode .collapse">
+<h2>HTML Entities Decode</h2>
+<pre>entity_decode($str, $charset) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>This function is a replacement for html_entity_decode()</p>
+
+<p>The reason we are not using html_entity_decode() by itself is because
+while it is not technically correct to leave out the semicolon
+at the end of an entity most browsers will still interpret the entity
+correctly.  html_entity_decode() does not convert entities without
+semicolons, so we are left with our own little solution here. Bummer.</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$str</h4>
+<code></code><p>string</p></div>
+<div class="subelement argument">
+<h4>$charset</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="get_csrf_hash" id="get_csrf_hash"></a><div class="element clickable method public get_csrf_hash" data-toggle="collapse" data-target=".get_csrf_hash .collapse">
+<h2>Get CSRF Hash</h2>
+<pre>get_csrf_hash() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Getter Method</p></p>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code>self::_csrf_hash</div>
+</div></div>
+</div>
+<a name="get_csrf_token_name" id="get_csrf_token_name"></a><div class="element clickable method public get_csrf_token_name" data-toggle="collapse" data-target=".get_csrf_token_name .collapse">
+<h2>Get CSRF Token Name</h2>
+<pre>get_csrf_token_name() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Getter Method</p></p>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>string</code>self::csrf_token_name</div>
+</div></div>
+</div>
+<a name="sanitize_filename" id="sanitize_filename"></a><div class="element clickable method public sanitize_filename" data-toggle="collapse" data-target=".sanitize_filename .collapse">
+<h2>Filename Security</h2>
+<pre>sanitize_filename($str, $relative_path) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$str</h4>
+<code></code><p>string</p></div>
+<div class="subelement argument">
+<h4>$relative_path</h4>
+<code></code><p>bool</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="xss_clean" id="xss_clean"></a><div class="element clickable method public xss_clean" data-toggle="collapse" data-target=".xss_clean .collapse">
+<h2>XSS Clean</h2>
+<pre>xss_clean(mixed $str, $is_image) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Sanitizes data so that Cross Site Scripting Hacks can be
+prevented.  This function does a fair amount of work but
+it is extremely thorough, designed to prevent even the
+most obscure XSS attempts.  Nothing is ever 100% foolproof,
+of course, but I haven't been able to get anything passed
+the filter.</p>
+
+<p>Note: This function should only be used to deal with data
+upon submission.  It's not something that should
+be used for general runtime processing.</p>
+
+<p>This function was based in part on some code and ideas I
+got from Bitflux: http://channel.bitflux.ch/wiki/XSS_Prevention</p>
+
+<p>To help develop this script I used this great list of
+vulnerabilities along with a few other hacks I've
+harvested from examining vulnerabilities in other programs:
+http://ha.ckers.org/xss.html</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$str</h4>
+<code>mixed</code><p>string or array</p></div>
+<div class="subelement argument">
+<h4>$is_image</h4>
+<code></code><p>bool</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="xss_hash" id="xss_hash"></a><div class="element clickable method public xss_hash" data-toggle="collapse" data-target=".xss_hash .collapse">
+<h2>Random Hash for protecting URLs</h2>
+<pre>xss_hash() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_compact_exploded_words" id="_compact_exploded_words"></a><div class="element clickable method protected _compact_exploded_words" data-toggle="collapse" data-target="._compact_exploded_words .collapse">
+<h2>Compact Exploded Words</h2>
+<pre>_compact_exploded_words($matches) : \type</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Callback function for xss_clean() to remove whitespace from
+things like j a v a s c r i p t</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$matches</h4>
+<code></code><p>type</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>\type</code></div>
+</div></div>
+</div>
+<a name="_convert_attribute" id="_convert_attribute"></a><div class="element clickable method protected _convert_attribute" data-toggle="collapse" data-target="._convert_attribute .collapse">
+<h2>Attribute Conversion</h2>
+<pre>_convert_attribute($match) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Used as a callback for XSS Clean</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$match</h4>
+<code></code><p>array</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_csrf_set_hash" id="_csrf_set_hash"></a><div class="element clickable method protected _csrf_set_hash" data-toggle="collapse" data-target="._csrf_set_hash .collapse">
+<h2>Set Cross Site Request Forgery Protection Cookie</h2>
+<pre>_csrf_set_hash() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_decode_entity" id="_decode_entity"></a><div class="element clickable method protected _decode_entity" data-toggle="collapse" data-target="._decode_entity .collapse">
+<h2>HTML Entity Decode Callback</h2>
+<pre>_decode_entity($match) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Used as a callback for XSS Clean</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$match</h4>
+<code></code><p>array</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_do_never_allowed" id="_do_never_allowed"></a><div class="element clickable method protected _do_never_allowed" data-toggle="collapse" data-target="._do_never_allowed .collapse">
+<h2>Do Never Allowed</h2>
+<pre>_do_never_allowed($str) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>A utility function for xss_clean()</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$str</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_filter_attributes" id="_filter_attributes"></a><div class="element clickable method protected _filter_attributes" data-toggle="collapse" data-target="._filter_attributes .collapse">
+<h2>Filter Attributes</h2>
+<pre>_filter_attributes($str) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Filters tag attributes for consistency and safety</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$str</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_js_img_removal" id="_js_img_removal"></a><div class="element clickable method protected _js_img_removal" data-toggle="collapse" data-target="._js_img_removal .collapse">
+<h2>JS Image Removal</h2>
+<pre>_js_img_removal($match) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Callback function for xss_clean() to sanitize image tags
+This limits the PCRE backtracks, making it more performance friendly
+and prevents PREG_BACKTRACK_LIMIT_ERROR from being triggered in
+PHP 5.2+ on image tag heavy strings</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$match</h4>
+<code></code><p>array</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_js_link_removal" id="_js_link_removal"></a><div class="element clickable method protected _js_link_removal" data-toggle="collapse" data-target="._js_link_removal .collapse">
+<h2>JS Link Removal</h2>
+<pre>_js_link_removal($match) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Callback function for xss_clean() to sanitize links
+This limits the PCRE backtracks, making it more performance friendly
+and prevents PREG_BACKTRACK_LIMIT_ERROR from being triggered in
+PHP 5.2+ on link-heavy strings</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$match</h4>
+<code></code><p>array</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_remove_evil_attributes" id="_remove_evil_attributes"></a><div class="element clickable method protected _remove_evil_attributes" data-toggle="collapse" data-target="._remove_evil_attributes .collapse">
+<h2>_remove_evil_attributes()
+        </h2>
+<pre>_remove_evil_attributes($str, $is_image) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$str</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$is_image</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="_sanitize_naughty_html" id="_sanitize_naughty_html"></a><div class="element clickable method protected _sanitize_naughty_html" data-toggle="collapse" data-target="._sanitize_naughty_html .collapse">
+<h2>Sanitize Naughty HTML</h2>
+<pre>_sanitize_naughty_html($matches) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Callback function for xss_clean() to remove naughty HTML elements</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$matches</h4>
+<code></code><p>array</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_validate_entities" id="_validate_entities"></a><div class="element clickable method protected _validate_entities" data-toggle="collapse" data-target="._validate_entities .collapse">
+<h2>Validate URL entities</h2>
+<pre>_validate_entities($str) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Called by xss_clean()</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$str</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<h3>
+<i class="icon-custom icon-property"></i> Properties</h3>
+<a name="%24_csrf_cookie_name" id="$_csrf_cookie_name"> </a><div class="element clickable property protected $_csrf_cookie_name" data-toggle="collapse" data-target=".$_csrf_cookie_name .collapse">
+<h2>Cookie name for Cross Site Request Forgery Protection Cookie</h2>
+<pre>$_csrf_cookie_name : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>protected</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24_csrf_expire" id="$_csrf_expire"> </a><div class="element clickable property protected $_csrf_expire" data-toggle="collapse" data-target=".$_csrf_expire .collapse">
+<h2>Expiration time for Cross Site Request Forgery Protection Cookie
+Defaults to two hours (in seconds)</h2>
+<pre>$_csrf_expire : int</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>protected</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24_csrf_hash" id="$_csrf_hash"> </a><div class="element clickable property protected $_csrf_hash" data-toggle="collapse" data-target=".$_csrf_hash .collapse">
+<h2>Random Hash for Cross Site Request Forgery Protection Cookie</h2>
+<pre>$_csrf_hash : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>protected</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24_csrf_token_name" id="$_csrf_token_name"> </a><div class="element clickable property protected $_csrf_token_name" data-toggle="collapse" data-target=".$_csrf_token_name .collapse">
+<h2>Token name for Cross Site Request Forgery Protection Cookie</h2>
+<pre>$_csrf_token_name : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>protected</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24_never_allowed_regex" id="$_never_allowed_regex"> </a><div class="element clickable property protected $_never_allowed_regex" data-toggle="collapse" data-target=".$_never_allowed_regex .collapse">
+<h2>List of never allowed regex replacement</h2>
+<pre>$_never_allowed_regex : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>protected</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24_never_allowed_str" id="$_never_allowed_str"> </a><div class="element clickable property protected $_never_allowed_str" data-toggle="collapse" data-target=".$_never_allowed_str .collapse">
+<h2>List of never allowed strings</h2>
+<pre>$_never_allowed_str : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>protected</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24_xss_hash" id="$_xss_hash"> </a><div class="element clickable property protected $_xss_hash" data-toggle="collapse" data-target=".$_xss_hash .collapse">
+<h2>Random Hash for protecting URLs</h2>
+<pre>$_xss_hash : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>protected</td>
+</tr></table>
+</div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a8</a> and<br>
+            generated on 2012-07-27T12:29:20+10:00.<br></footer></div>
+</div>
+</body>
+</html>

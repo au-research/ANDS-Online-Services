@@ -1,0 +1,254 @@
+<!DOCTYPE html><html xmlns:date="http://exslt.org/dates-and-times" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>phpDocumentor » \XML_RPC_Response</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../css/template.css" rel="stylesheet" media="all">
+<script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../js/bootstrap.js" type="text/javascript"></script><script src="../js/template.js" type="text/javascript"></script><script src="../js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../img/favicon.ico">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">phpDocumentor</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Packages</a></li>
+<li><a href="../packages/CodeIgniter.html"><i class="icon-folder-open"></i> CodeIgniter</a></li>
+<li><a href="../packages/Default.html"><i class="icon-folder-open"></i> Default</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">1170</span></a></li>
+<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul><li>todo 
+                <span class="label label-info">1</span>
+</li></ul></a></li>
+<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">0</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods</li>
+<li class="method public "><a href="#__construct" title="__construct :: "><span class="description">__construct()
+        </span><pre>__construct()</pre></a></li>
+<li class="method public "><a href="#decode" title="decode :: "><span class="description">decode()
+        </span><pre>decode()</pre></a></li>
+<li class="method public "><a href="#faultCode" title="faultCode :: "><span class="description">faultCode()
+        </span><pre>faultCode()</pre></a></li>
+<li class="method public "><a href="#faultString" title="faultString :: "><span class="description">faultString()
+        </span><pre>faultString()</pre></a></li>
+<li class="method public "><a href="#iso8601_decode" title="iso8601_decode :: "><span class="description">iso8601_decode()
+        </span><pre>iso8601_decode()</pre></a></li>
+<li class="method public "><a href="#prepare_response" title="prepare_response :: "><span class="description">prepare_response()
+        </span><pre>prepare_response()</pre></a></li>
+<li class="method public "><a href="#value" title="value :: "><span class="description">value()
+        </span><pre>value()</pre></a></li>
+<li class="method public "><a href="#xmlrpc_decoder" title="xmlrpc_decoder :: "><span class="description">xmlrpc_decoder()
+        </span><pre>xmlrpc_decoder()</pre></a></li>
+<li class="nav-header">
+<i class="icon-custom icon-property"></i> Properties</li>
+<li class="property public "><a href="#%24errno" title="$errno :: "><span class="description">$errno</span><pre>$errno</pre></a></li>
+<li class="property public "><a href="#%24errstr" title="$errstr :: "><span class="description">$errstr</span><pre>$errstr</pre></a></li>
+<li class="property public "><a href="#%24headers" title="$headers :: "><span class="description">$headers</span><pre>$headers</pre></a></li>
+<li class="property public "><a href="#%24val" title="$val :: "><span class="description">$val</span><pre>$val</pre></a></li>
+<li class="property public "><a href="#%24xss_clean" title="$xss_clean :: "><span class="description">$xss_clean</span><pre>$xss_clean</pre></a></li>
+</ul>
+</div>
+<div class="span8">
+<a name="%5CXML_RPC_Response" id="\XML_RPC_Response"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/global.html">global</a></li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/XML_RPC_Response.html">XML_RPC_Response</a>
+</li>
+</ul>
+<div href="../classes/XML_RPC_Response.html" class="element class">
+<p class="short_description">XML-RPC Response class</p>
+<div class="details">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>category</th>
+<td>XML-RPC</td>
+</tr>
+<tr>
+<th>author</th>
+<td><a href="">ExpressionEngine Dev Team</a></td>
+</tr>
+<tr>
+<th>link</th>
+<td><a href="http://codeigniter.com/user_guide/libraries/xmlrpc.html">http://codeigniter.com/user_guide/libraries/xmlrpc.html</a></td>
+</tr>
+</table>
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a name="__construct" id="__construct"></a><div class="element clickable method public __construct" data-toggle="collapse" data-target=".__construct .collapse">
+<h2>__construct()
+        </h2>
+<pre>__construct($val, $code, $fstr) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$val</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$code</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$fstr</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="decode" id="decode"></a><div class="element clickable method public decode" data-toggle="collapse" data-target=".decode .collapse">
+<h2>decode()
+        </h2>
+<pre>decode($array) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$array</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="faultCode" id="faultCode"></a><div class="element clickable method public faultCode" data-toggle="collapse" data-target=".faultCode .collapse">
+<h2>faultCode()
+        </h2>
+<pre>faultCode() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="faultString" id="faultString"></a><div class="element clickable method public faultString" data-toggle="collapse" data-target=".faultString .collapse">
+<h2>faultString()
+        </h2>
+<pre>faultString() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="iso8601_decode" id="iso8601_decode"></a><div class="element clickable method public iso8601_decode" data-toggle="collapse" data-target=".iso8601_decode .collapse">
+<h2>iso8601_decode()
+        </h2>
+<pre>iso8601_decode($time, $utc) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$time</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$utc</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="prepare_response" id="prepare_response"></a><div class="element clickable method public prepare_response" data-toggle="collapse" data-target=".prepare_response .collapse">
+<h2>prepare_response()
+        </h2>
+<pre>prepare_response() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="value" id="value"></a><div class="element clickable method public value" data-toggle="collapse" data-target=".value .collapse">
+<h2>value()
+        </h2>
+<pre>value() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="xmlrpc_decoder" id="xmlrpc_decoder"></a><div class="element clickable method public xmlrpc_decoder" data-toggle="collapse" data-target=".xmlrpc_decoder .collapse">
+<h2>xmlrpc_decoder()
+        </h2>
+<pre>xmlrpc_decoder($xmlrpc_val) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$xmlrpc_val</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<h3>
+<i class="icon-custom icon-property"></i> Properties</h3>
+<a name="%24errno" id="$errno"> </a><div class="element clickable property public $errno" data-toggle="collapse" data-target=".$errno .collapse">
+<h2>$errno</h2>
+<pre>$errno </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24errstr" id="$errstr"> </a><div class="element clickable property public $errstr" data-toggle="collapse" data-target=".$errstr .collapse">
+<h2>$errstr</h2>
+<pre>$errstr </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24headers" id="$headers"> </a><div class="element clickable property public $headers" data-toggle="collapse" data-target=".$headers .collapse">
+<h2>$headers</h2>
+<pre>$headers </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24val" id="$val"> </a><div class="element clickable property public $val" data-toggle="collapse" data-target=".$val .collapse">
+<h2>$val</h2>
+<pre>$val </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24xss_clean" id="$xss_clean"> </a><div class="element clickable property public $xss_clean" data-toggle="collapse" data-target=".$xss_clean .collapse">
+<h2>$xss_clean</h2>
+<pre>$xss_clean </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a8</a> and<br>
+            generated on 2012-07-27T12:29:22+10:00.<br></footer></div>
+</div>
+</body>
+</html>
