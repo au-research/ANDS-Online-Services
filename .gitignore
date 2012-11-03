@@ -14,6 +14,7 @@ pids/lib/
 registry/src/.project
 rifcs-api/build/
 arms/src/.htaccess
+/arms/src/global_config.php
 /registry/src/global_config.php
 /registry/src/orca/rda/.htaccess
 /registry/src/.htaccess

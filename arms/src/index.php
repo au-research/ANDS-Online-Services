@@ -1,4 +1,6 @@
 <?php
+// Pull in the global imports
+require_once('./global_config.php');
 
 /*
  *---------------------------------------------------------------

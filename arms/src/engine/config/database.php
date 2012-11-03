@@ -48,77 +48,10 @@
 $active_group = 'registry';
 $active_record = TRUE;
 
-$db['registry']['hostname'] = 'localhost';
-$db['registry']['username'] = 'webuser';
-$db['registry']['password'] = 'q7fb94z';
-$db['registry']['database'] = 'dbs_registry';
-$db['registry']['dbdriver'] = 'mysql';
-$db['registry']['dbprefix'] = '';
-$db['registry']['pconnect'] = TRUE;
-$db['registry']['db_debug'] = TRUE;
-$db['registry']['cache_on'] = FALSE;
-$db['registry']['cachedir'] = '';
-$db['registry']['char_set'] = 'utf8';
-$db['registry']['dbcollat'] = 'utf8_general_ci';
-$db['registry']['swap_pre'] = '';
-$db['registry']['autoinit'] = TRUE;
-$db['registry']['stricton'] = FALSE;
-$db['registry']['save_queries'] = FALSE; 
-
-
-$db['cosi']['hostname'] = 'ands3.anu.edu.au';
-$db['cosi']['username'] = 'webuser';
-$db['cosi']['password'] = '';
-$db['cosi']['database'] = 'archive_dbs_cosi_production';
-$db['cosi']['dbdriver'] = 'postgre';
-$db['cosi']['dbprefix'] = '';
-$db['cosi']['pconnect'] = TRUE;
-$db['cosi']['db_debug'] = TRUE;
-$db['cosi']['cache_on'] = FALSE;
-$db['cosi']['cachedir'] = '';
-$db['cosi']['char_set'] = 'utf8';
-$db['cosi']['dbcollat'] = 'utf8_general_ci';
-$db['cosi']['swap_pre'] = '';
-$db['cosi']['autoinit'] = FALSE;
-$db['cosi']['stricton'] = FALSE;
-$db['cosi']['save_queries'] = FALSE; 
-
-
-$db['vocabs']['hostname'] = 'localhost';
-$db['vocabs']['username'] = 'webuser';
-$db['vocabs']['password'] = 'q7fb94z';
-$db['vocabs']['database'] = 'dbs_vocabs';
-$db['vocabs']['dbdriver'] = 'mysql';
-$db['vocabs']['dbprefix'] = '';
-$db['vocabs']['pconnect'] = TRUE;
-$db['vocabs']['db_debug'] = TRUE;
-$db['vocabs']['cache_on'] = FALSE;
-$db['vocabs']['cachedir'] = '';
-$db['vocabs']['char_set'] = 'utf8';
-$db['vocabs']['dbcollat'] = 'utf8_general_ci';
-$db['vocabs']['swap_pre'] = '';
-$db['vocabs']['autoinit'] = TRUE;
-$db['vocabs']['stricton'] = FALSE;
-$db['vocabs']['save_queries'] = FALSE; 
-
-
-$db['dois']['hostname'] = 'ands3.anu.edu.au';
-$db['dois']['username'] = 'webuser';
-$db['dois']['password'] = '';
-$db['dois']['database'] = 'archive_dois';
-$db['dois']['dbdriver'] = 'postgre';
-$db['dois']['dbprefix'] = '';
-$db['dois']['pconnect'] = TRUE;
-$db['dois']['db_debug'] = TRUE;
-$db['dois']['cache_on'] = FALSE;
-$db['dois']['cachedir'] = '';
-$db['dois']['char_set'] = 'utf8';
-$db['dois']['dbcollat'] = 'utf8_general_ci';
-$db['dois']['swap_pre'] = '';
-$db['dois']['autoinit'] = FALSE;
-$db['dois']['stricton'] = FALSE;
-$db['dois']['save_queries'] = FALSE; 
-
+// Temporary workaround to pull this from the global_config.php
+global $eDBCONF;
+$db = $eDBCONF;
 
 /* End of file database.php */
 /* Location: ./application/config/database.php */
+

@@ -1,0 +1,74 @@
+<?php
+
+/* DATABASE CONFIGURATION */
+$eDBCONF = array();
+$eDBCONF['registry']['hostname'] = 'localhost';
+$eDBCONF['registry']['username'] = 'webuser';
+$eDBCONF['registry']['password'] = '';
+$eDBCONF['registry']['database'] = 'dbs_registry';
+$eDBCONF['registry']['dbdriver'] = 'mysql';
+$eDBCONF['registry']['dbprefix'] = '';
+$eDBCONF['registry']['pconnect'] = TRUE;
+$eDBCONF['registry']['db_debug'] = TRUE;
+$eDBCONF['registry']['cache_on'] = FALSE;
+$eDBCONF['registry']['cachedir'] = '';
+$eDBCONF['registry']['char_set'] = 'utf8';
+$eDBCONF['registry']['dbcollat'] = 'utf8_general_ci';
+$eDBCONF['registry']['swap_pre'] = '';
+$eDBCONF['registry']['autoinit'] = TRUE;
+$eDBCONF['registry']['stricton'] = FALSE;
+$eDBCONF['registry']['save_queries'] = FALSE; 
+
+
+$eDBCONF['cosi']['hostname'] = 'ands-dev.anu.edu.au';
+$eDBCONF['cosi']['username'] = 'webuser';
+$eDBCONF['cosi']['password'] = '';
+$eDBCONF['cosi']['database'] = 'dbs_cosi';
+$eDBCONF['cosi']['dbdriver'] = 'postgre';
+$eDBCONF['cosi']['dbprefix'] = '';
+$eDBCONF['cosi']['pconnect'] = TRUE;
+$eDBCONF['cosi']['db_debug'] = TRUE;
+$eDBCONF['cosi']['cache_on'] = FALSE;
+$eDBCONF['cosi']['cachedir'] = '';
+$eDBCONF['cosi']['char_set'] = 'utf8';
+$eDBCONF['cosi']['dbcollat'] = 'utf8_general_ci';
+$eDBCONF['cosi']['swap_pre'] = '';
+$eDBCONF['cosi']['autoinit'] = FALSE;
+$eDBCONF['cosi']['stricton'] = FALSE;
+$eDBCONF['cosi']['save_queries'] = FALSE; 
+
+
+$eDBCONF['vocabs']['hostname'] = 'localhost';
+$eDBCONF['vocabs']['username'] = 'webuser';
+$eDBCONF['vocabs']['password'] = '';
+$eDBCONF['vocabs']['database'] = 'dbs_vocabs';
+$eDBCONF['vocabs']['dbdriver'] = 'mysql';
+$eDBCONF['vocabs']['dbprefix'] = '';
+$eDBCONF['vocabs']['pconnect'] = TRUE;
+$eDBCONF['vocabs']['db_debug'] = TRUE;
+$eDBCONF['vocabs']['cache_on'] = FALSE;
+$eDBCONF['vocabs']['cachedir'] = '';
+$eDBCONF['vocabs']['char_set'] = 'utf8';
+$eDBCONF['vocabs']['dbcollat'] = 'utf8_general_ci';
+$eDBCONF['vocabs']['swap_pre'] = '';
+$eDBCONF['vocabs']['autoinit'] = TRUE;
+$eDBCONF['vocabs']['stricton'] = FALSE;
+$eDBCONF['vocabs']['save_queries'] = FALSE; 
+
+
+$eDBCONF['dois']['hostname'] = 'ands-dev.anu.edu.au';
+$eDBCONF['dois']['username'] = 'webuser';
+$eDBCONF['dois']['password'] = '';
+$eDBCONF['dois']['database'] = 'dois';
+$eDBCONF['dois']['dbdriver'] = 'postgre';
+$eDBCONF['dois']['dbprefix'] = '';
+$eDBCONF['dois']['pconnect'] = TRUE;
+$eDBCONF['dois']['db_debug'] = TRUE;
+$eDBCONF['dois']['cache_on'] = FALSE;
+$eDBCONF['dois']['cachedir'] = '';
+$eDBCONF['dois']['char_set'] = 'utf8';
+$eDBCONF['dois']['dbcollat'] = 'utf8_general_ci';
+$eDBCONF['dois']['swap_pre'] = '';
+$eDBCONF['dois']['autoinit'] = FALSE;
+$eDBCONF['dois']['stricton'] = FALSE;
+$eDBCONF['dois']['save_queries'] = FALSE; 

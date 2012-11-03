@@ -2,12 +2,7 @@
 
 
 $config['authentication_class'] = "cosi_authentication";
-
-
 $config[ENGINE_ENABLED_MODULE_LIST] = array('data_source','registry_object','vocab_service','mydois','abs_sdmx_querytool');
-
-
-
 
 date_default_timezone_set('Australia/Canberra');
 /*
@@ -25,7 +20,7 @@ date_default_timezone_set('Australia/Canberra');
 |
 */
 $config['base_url']	= '';
-$config['solr_url'] = 'http://ands3.anu.edu.au:8983/solr/';
+#$config['solr_url'] = 'http://ands3.anu.edu.au:8983/solr/';
 
 /*
 |--------------------------------------------------------------------------

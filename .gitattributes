@@ -1,0 +1,5 @@
+*.php -crlf
+*.sql -crlf
+*.xml -crlf
+*.xsl -crlf
+*.js -crlf
