@@ -46,7 +46,9 @@ $typeArray['collection'] = array(
 	"supports" =>array("Supports", "Supported by"),	
 	"isAvaiableThrough" =>array("Available through", "Makes available"),	
 	"isProducedBy" =>array("Produced by", "Produces"),
-	"isOperatedOn" =>array("Operated on", "Operates on"),	
+	"isOperatedOn" =>array("Operated on", "Operates on"),
+	"hasPrincipalInvestigator" =>array("Principal investigator", "Principal investigator of"),
+	"isPrincipalInvestigator" =>array("Principal investigator of", "Principal investigator"),	
 
 );
 $typeArray['party'] = array(
@@ -66,6 +68,8 @@ $typeArray['party'] = array(
 	"enriches" =>array("Enriches", "Enriched by"),
 	"makesAvailable" =>array("Makes available", "Available through"),
 	"isEnrichedBy" =>array("Enriched by", "Enriches"),
+	"hasPrincipalInvestigator" =>array("Principal investigator", "Principal investigator of"),
+	"isPrincipalInvestigator" =>array("Principal investigator of", "Principal investigator"),
 );
 $typeArray['service'] = array(
 	"hasAssociationWith" =>  array("Associated with", "Associated with"),
@@ -81,6 +85,8 @@ $typeArray['service'] = array(
 	"produces" =>array("Produces", "Produced by"),
 	"operatesOn" =>array("Operates on", "Operated by"),
 	"addsValueTo" =>array("Adds value to", "Value added by"),
+	"hasPrincipalInvestigator" =>array("Principal investigator", "Principal investigator of"),
+	"isPrincipalInvestigator" =>array("Principal investigator of", "Principal investigator"),
 );
 $typeArray['activity'] = array(
 	"hasAssociationWith" =>   array("Associated with", "Associated with"),
@@ -93,6 +99,8 @@ $typeArray['activity'] = array(
 	"isPartOf" => array("Part of","Includes"),
 	"enriches" =>array("Enriches", "Enriched by"),
 	"makesAvailable" =>array("Makes available", "Available through"),
+	"hasPrincipalInvestigator" =>array("Principal investigator", "Principal investigator of"),
+	"isPrincipalInvestigator" =>array("Principal investigator of", "Principal investigator"),
 );	
 // Slug defaults
 define('NO_NAME_OR_TITLE_SLUG', 'no-nametitle');
