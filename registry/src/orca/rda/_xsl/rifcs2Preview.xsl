@@ -475,7 +475,7 @@
             From         <xsl:value-of select="."/>     
         </xsl:if>
         <xsl:if test="./@type = 'dateTo'">
-            To         <xsl:value-of select="."/>  <br /> 
+            to         <xsl:value-of select="."/>  <br /> 
         </xsl:if> 
    </xsl:template>  
    <xsl:template match="ro:date">  
@@ -483,7 +483,7 @@
             From         <xsl:value-of select="./@dateFrom"/>     
         </xsl:if>
         <xsl:if test="./@dateTo != ''">
-            To         <xsl:value-of select="./@dateTo"/>   
+            to         <xsl:value-of select="./@dateTo"/>   
         </xsl:if> <br />
    </xsl:template>  
      
@@ -831,7 +831,7 @@ Format 	URI:
             From 
         </xsl:if>
         <xsl:if test="./@type = 'dateTo'">
-            To  
+            to  
         </xsl:if>       
         <xsl:value-of select="."/>    <br />      
     </xsl:template> 

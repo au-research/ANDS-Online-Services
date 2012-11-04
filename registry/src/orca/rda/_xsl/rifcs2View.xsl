@@ -551,7 +551,7 @@
             From 
         </xsl:if>
         <xsl:if test="./@type = 'dateTo'">
-            To  
+            to  
         </xsl:if>     
         <xsl:value-of select="."/>       
     </xsl:template> 
@@ -560,7 +560,7 @@
             From         <xsl:value-of select="./@dateFrom"/>     
         </xsl:if>
         <xsl:if test="./@dateTo != ''">
-            To         <xsl:value-of select="./@dateTo"/>   
+            to         <xsl:value-of select="./@dateTo"/>   
         </xsl:if>       
      
     </xsl:template>   
@@ -572,7 +572,7 @@
             From         <xsl:value-of select="."/>     
         </xsl:if>
         <xsl:if test="./@type = 'dateTo'">
-            To         <xsl:value-of select="."/>   <br />
+            to         <xsl:value-of select="."/>   <br />
         </xsl:if> 
     </xsl:template>    
     <xsl:template match="ro:subject">   
@@ -1162,7 +1162,7 @@ Format DOI:
         <xsl:if test="./extRif:date/@type!='dateTo'"> 
        	 	<xsl:value-of select="./extRif:date[@type!='dateTo']"/> 
         </xsl:if>      
-         <xsl:if test="./extRif:date/@type='dateTo'"> To 
+         <xsl:if test="./extRif:date/@type='dateTo'"> to 
         <xsl:value-of select="./extRif:date[@type='dateTo']"/> 
         </xsl:if>
        </td></tr>
