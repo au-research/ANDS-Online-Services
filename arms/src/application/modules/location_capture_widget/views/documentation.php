@@ -29,7 +29,7 @@
 				    	 place name resolution (using the Australian Gazetteer Service and Google Maps API).
 			    	 </p>
 			    	 <p>
-			    		 View the <a target="_blank" href="<?=asset_url('demo.html');?>">demo here</a>
+			    		 <a target="_blank" class="btn btn-success" href="<?=asset_url('demo.html');?>"><i class="icon-circle-arrow-right icon-white"></i> View the Demo</a>
 			    	 </p>
 			    	 <br/>
 			    	 
