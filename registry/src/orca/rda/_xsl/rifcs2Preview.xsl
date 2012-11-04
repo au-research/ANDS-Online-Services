@@ -1109,7 +1109,7 @@ Format 	URI:
         <xsl:if test="./ro:date/@type!='dateTo'"> 
        	 	<xsl:value-of select="./ro:date[@type!='dateTo']"/> 
         </xsl:if>      
-         <xsl:if test="./ro:date/@type='dateTo'"> To 
+         <xsl:if test="./ro:date/@type='dateTo'"> to 
         <xsl:value-of select="./ro:date[@type='dateTo']"/> 
         </xsl:if>
        </td></tr>
