@@ -458,7 +458,7 @@ if( (strtoupper($ds_report) == "GENERATE REPORT" ||  strtoupper($org_report) == 
 				}		?>				
 				</tr>
 				<tr>
-				<td class="reportGrey" >How users are finding your Records:</td>				
+				<td class="reportGrey" >How users are finding your Collections:</td>				
 		<?php 	$count=0;
 				foreach($array['sources'] as $key => $value)
 				{ 	
@@ -588,7 +588,7 @@ if( (strtoupper($ds_report) == "GENERATE REPORT" ||  strtoupper($org_report) == 
 		<?php //if(isset($array['outLinks'][0])) {?>
 				<table class="reportTable">
 			<tbody>
-				<tr><td width="400" colspan="2" class="reportGrey" >Need some kind words about outlinks ..... </td><td></td><td></td></tr>
+				<tr><td width="400" colspan="2" class="reportGrey" >Users externally redirected from your collections: </td><td></td><td></td></tr>
 				<?php 
 				if(isset($array['outLinks'][0]))
 				{
