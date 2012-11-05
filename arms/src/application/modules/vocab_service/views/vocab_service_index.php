@@ -336,6 +336,7 @@
 					<div class="btn-toolbar">
 						<div class="btn-group btn-group-vertical btn-group-left item-control" vocab_id="{{id}}">
 							<button class="btn edit" vocab_id="{{id}}"><i class="icon-edit"></i> Edit Vocabulary</button>
+							<button class="btn" vocab_id="{{id}}"><i class="icon-trash"></i> Delete Vocabulary</button>
 							<button class="btn addVersion" vocab_id="{{id}}" view="view"><i class="icon-plus"></i> Add A Version</button>
 						</div>
 					</div>
@@ -510,18 +511,7 @@
 		<div class="editVersionForm hide" version_id="{{id}}"><hr/>
 			<form class="form well" vocab_id="{{id}}">
 				<label>Version Title: </label>
-				<input type="text" class="input-medium" name="title" value="{{title}}">
-				{{#current}}
-				<label class="checkbox">
-			    	<input type="checkbox" checked=checked name="current"> Make Current
-			    </label>
-				{{/current}}
-				{{#notCurrent}}
-				<label class="checkbox">
-			    	<input type="checkbox" name="current"> Make Current
-			    </label>
-				{{/notCurrent}}
-				
+				<input type="text" class="input-medium" name="title" value="{{title}}"><br/>
 				<button type="submit" class="btn editVersionConfirm" version_id="{{id}}">Submit Changes</button> <a href="javascript:;" version_id="{{id}}" class="cancelEdit">Cancel</a>
 			</form>
 		</div>
@@ -638,7 +628,22 @@
 								</div>
 
 							</fieldset>
-						<button class="btn" id="save-edit-form" data-loading-text="Saving..." >Save</button> <span id="save-edit-form-message"></span>
+
+							<div class="aro_toolbar">
+								<div class="message" id="save-edit-form-message"></div>
+								<div class="aro_controls">
+									
+									<div class="btn-toolbar">				  
+									  <div class="btn-group">
+									  	<button class="btn btn-primary" id="save-edit-form">
+										  <i class="icon-download-alt icon-white"></i> Save
+										</button>
+									  </div>
+
+									</div>
+								</div>		
+							<div class="clearfix"></div>	
+						</div>
 						
 					</form>
 

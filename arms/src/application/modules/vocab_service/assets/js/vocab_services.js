@@ -364,9 +364,7 @@ function bindVocabVersioning(view){
 									jsonData.push({name:label, value:value});
 								}
 							});
-							if($('input[type=checkbox]', form).is(":checked")){
-								jsonData.push({name:'makeCurrent', value:true});
-							}
+							
 							$.ajax({
 								url:'vocab_service/updateVersion/', 
 								type: 'POST',
@@ -520,7 +518,7 @@ function bindVocabVersioning(view){
 								}
 								requireChangeHistory(vocab_id);
 							}else{
-								alert('form is not valid');
+								//alert('form is not valid');
 							}
 						});
 
@@ -553,7 +551,7 @@ function bindVocabVersioning(view){
 				at: 'left center'
 			},
 			show: {event: 'click',solo:true},
-			hide: {event: 'click'},
+			hide: {fixed:true,delay:2500},
 			events: {},
 			style: {classes: 'ui-tooltip-shadow ui-tooltip-bootstrap ui-tooltip-large'}
 		});
@@ -699,7 +697,7 @@ function requireChangeHistory(vocab_id){
 	var form = $('#myModal-noClose form');
 	Core_bindFormValidation(form);
 	$('#confirmAddChangeHistory').click(function(){
-		var description = $('#myModal .changeHistoryDescription').val();
+		var description = $('#myModal-noClose .changeHistoryDescription').val();
 		if(Core_checkValidForm($('#myModal-noClose form'))){
 			$.ajax({
 				url:'vocab_service/addChangeHistory/', 
