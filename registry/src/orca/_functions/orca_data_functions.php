@@ -355,6 +355,19 @@ function getDataSources($key, $filter)
 	return $resultSet;
 }
 
+
+function getDataSourceKeysByCount($order="ASC")
+{
+	global $gCNN_DBS_ORCA;
+	
+	$resultSet = null;
+	$strQuery = 'SELECT data_source_key FROM dba.tbl_registry_objects GROUP BY data_source_key ORDER BY COUNT(*) ' . $order;
+	$params = array();
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	
+	return $resultSet;
+}
+
 // By Name (basically the wordy vocabulary title)
 function getTermsForVocab($vocabName, $term = "")
 {
