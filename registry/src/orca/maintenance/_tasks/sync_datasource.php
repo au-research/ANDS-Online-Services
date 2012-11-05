@@ -15,12 +15,15 @@ function task_sync_datasource($task)
 	{
 		$ds = getDataSourceKeysByCount('ASC');
 		
-		foreach($ds AS $datasource)
+		if (count($ds) > 0)
 		{
-			// Sync all data sources
-			addNewTask('RUN_QUALITY_CHECK', "Requeued task from task run: " . $taskId, '', $ds['data_source_key'], null);
-			addNewTask('GENERATE_CACHE', "Requeued task from task run: " . $taskId, '', $ds['data_source_key'], null);
-			addNewTask('INDEX_RECORDS', "Requeued task from task run: " . $taskId, '', $ds['data_source_key'], null);
+			foreach($ds AS $datasource)
+			{
+				// Sync all data sources
+				addNewTask('RUN_QUALITY_CHECK', "Requeued task from task run: " . $taskId, '', $datasource['data_source_key'], null);
+				addNewTask('GENERATE_CACHE', "Requeued task from task run: " . $taskId, '', $datasource['data_source_key'], null);
+				addNewTask('INDEX_RECORDS', "Requeued task from task run: " . $taskId, '', $datasource['data_source_key'], null);
+			}
 		}
 		
 	}
