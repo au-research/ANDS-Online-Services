@@ -43,7 +43,7 @@ class Mydois extends MX_Controller {
 		$this->input->set_cookie('last_used_doi_appid', $appId, 9999999);
 		//087391e742ee920e4428aa6e4ca548b190138b89
 
-		$query = $doi_db->where('client_id',$client_obj->client_id)->where('status !=','REQUESTED')->select('*')->order_by('updated_when DESC, created_when DESC')->get('doi_objects');
+		$query = $doi_db->order_by('updated_when', 'desc')->order_by('created_when', 'desc')->where('client_id',$client_obj->client_id)->where('status !=','REQUESTED')->select('*')->get('doi_objects');
 
 		
 		$data['dois'] = array();

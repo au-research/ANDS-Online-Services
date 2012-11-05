@@ -63,7 +63,7 @@ $testDoiPrefix =  $this->config->item('test_doi_prefix');
 							</td>
 							<td><?=$doi->status;?>
 							</td>
-							<td><?=date('Y-m-d H:i:s', strtotime(($doi->updated_when ? $doi->updated_when : $doi->created_when)));?></td>
+							<td><?=date('Y-m-d H:i:s', strtotime($doi->updated_when));?></td>
 						</tr>	
 					<?php endforeach; ?>
 					</tbody>
