@@ -5,7 +5,7 @@
 			<h1>Support</h1>
 		</div>
 		<div class="box-content">
-			Under construction...
+			
 		</div>
 	</div>
 
