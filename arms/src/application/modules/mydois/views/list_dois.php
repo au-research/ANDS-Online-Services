@@ -9,7 +9,11 @@
  * 
  */
 ?>
-<?php $this->load->view('header');?>
+<?php 
+$this->load->view('header'); 
+$testDoiPrefix =  $this->config->item('test_doi_prefix');
+
+?>
 <div class="container" id="main-content">
 	
 <section id="registry-web-services">
@@ -45,11 +49,14 @@
 						</tr>
 					</thead>
 					<tbody>
-					<?php foreach($dois AS $doi): ?>
+					<?php foreach($dois AS $doi): 
+					$doiTitle = getDoiTitle($doi->datacite_xml);
+					?>
 						<tr>
-							<td width="40%"><small><strong><?=$doi->title;?></strong><br/><?=anchor($doi->url,$doi->url);?></small></td>
+							<td width="40%"><small><strong><?=$doiTitle;?></strong><br/><?=anchor($doi->url,$doi->url);?></small></td>
 							<td>
 								<?=anchor('http://dx.doi.org/' . $doi->doi_id, $doi->doi_id);?>
+								<?php if(strpos($doi->doi_id ,$testDoiPrefix) === 0) {echo "<br/><span class='label label-important'>Test DOI</span>";}  ?>
 							</td>
 							<td>
 								<?=anchor('mydois/getDoiXml?doi_id=' . rawurlencode($doi->doi_id), 'View XML', array("role"=>"button", "class"=>"btn btn-mini", "data-target"=>"#viewDoiXmlModal", "data-toggle"=>"modal"));?>
@@ -119,3 +126,44 @@
 
 </div>
 <?php $this->load->view('footer');?>
+
+<?php 
+
+function getDoiTitle($doiXml)
+{
+	
+	$doiObjects = new DOMDocument();
+	$titleFragment = 'No Title';
+	if(strpos($doiXml ,'<') === 0)
+	{			
+		$result = $doiObjects->loadXML(trim($doiXml));
+		$titles = $doiObjects->getElementsByTagName('title');
+		
+		if($titles->length > 0)
+		{
+			$titleFragment = '';
+			for( $j=0; $j < $titles->length; $j++ )
+			{
+				if($titles->item($j)->getAttribute("titleType"))
+				{
+					$titleType = $titles->item($j)->getAttribute("titleType");
+					$title = $titles->item($j)->nodeValue;
+					$titleFragment .= $title." (".$titleType.")<br/>";
+				}
+				else {
+					$titleFragment .= $titles->item($j)->nodeValue."<br/>";
+				}
+			}
+		}
+	}
+	else{
+		$titleFragment = $doiXml;
+	}
+		
+	return $titleFragment;
+	
+}
+
+
+?>
+function

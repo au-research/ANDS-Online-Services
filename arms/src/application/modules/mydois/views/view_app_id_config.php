@@ -24,7 +24,7 @@
   <dt>Authorised IP Address</dt>
   <dd><pre><?=$ip_address;?></pre></dd>
   
-  <dt>Datacite Prefix</dt>
+  <dt>DataCite Prefix</dt>
   <dd><pre><?=$datacite_prefix;?></pre></dd>
   
   <dt>Permitted URL Domains</dt>

@@ -32,6 +32,7 @@ class Mydois extends MX_Controller {
 		
 		// Validate the appId
 		$appId = $this->input->get_post('app_id');
+		$doiStatus = $this->input->get_post('doi_status');
 		if (!$appId) throw new Exception ('Invalid App ID');  
 		
 		$query = $doi_db->where('app_id',$appId)->select('*')->get('doi_client');
@@ -41,9 +42,10 @@ class Mydois extends MX_Controller {
 		// Store the recently used app id in the client cookie
 		$this->input->set_cookie('last_used_doi_appid', $appId, 9999999);
 		//087391e742ee920e4428aa6e4ca548b190138b89
+
+		$query = $doi_db->where('client_id',$client_obj->client_id)->where('status !=','REQUESTED')->select('*')->order_by('updated_when DESC, created_when DESC')->get('doi_objects');
+
 		
-		$query = $doi_db->where('client_id',$client_obj->client_id)->join('doi_titles', 'doi_titles.doi_id = doi_objects.doi_id')
-								->select('*')->order_by('updated_when DESC, created_when DESC')->get('doi_objects');
 		$data['dois'] = array();
 		foreach ($query->result() AS $doi)
 		{
@@ -67,7 +69,7 @@ class Mydois extends MX_Controller {
 		if (!$client_obj = $query->result()) throw new Exception ('Invalid App ID');  
 		$client_obj = array_pop($client_obj);
 		
-		$query = $doi_db->where('client_id',$client_obj->client_id)->select('*')->limit(50)->get('activity_log');
+		$query = $doi_db->order_by('timestamp', 'desc')->where('client_id',$client_obj->client_id)->select('*')->limit(50)->get('activity_log');
 		$this->load->view('view_activity_log',array("activities"=>$query->result()));
 		
 
