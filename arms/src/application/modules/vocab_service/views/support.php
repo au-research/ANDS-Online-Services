@@ -1,3 +1,13 @@
 <?php $this->load->view('header');?>
-Support
+<div class="container" id="main-content">
+	<div class="box">
+		<div class="box-header clearfix">
+			<h1>Support</h1>
+		</div>
+		<div class="box-content">
+			Under construction...
+		</div>
+	</div>
+
+</div>
 <?php $this->load->view('footer');?>

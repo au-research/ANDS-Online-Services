@@ -49,8 +49,9 @@ $(document).ready(function(){
 		}
 	});
 
-	
-
+	$('.closeTip').live('click', function(){
+		$('div.qtip:visible').qtip('hide');
+	});
 
 
 	//catch all tip, bad practice, but useful nonetheless

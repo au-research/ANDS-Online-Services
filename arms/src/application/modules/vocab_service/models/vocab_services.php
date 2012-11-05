@@ -234,6 +234,24 @@ class Vocab_services extends CI_Model {
 			return true;
 		}else return false;
 	}
+
+	function deleteVocab($vocab_id){
+		//set the vocab to retire
+		$data = array(
+			'status'=>'RETIRED'
+		);
+		$this->db->where('id', $vocab_id);
+		$this->db->update('vocab_metadata', $data);
+
+		//set all version to retire
+		$data = array(
+			'status'=>'RETIRED'
+		);
+		$this->db->where('vocab_id', $vocab_id);
+		$this->db->update('vocab_versions', $data);
+
+		//delete all formats
+	}
 	
 	/**
 	 * adds a  format to a vocab version

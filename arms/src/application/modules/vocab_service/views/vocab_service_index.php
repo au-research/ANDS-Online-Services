@@ -336,11 +336,18 @@
 					<div class="btn-toolbar">
 						<div class="btn-group btn-group-vertical btn-group-left item-control" vocab_id="{{id}}">
 							<button class="btn edit" vocab_id="{{id}}"><i class="icon-edit"></i> Edit Vocabulary</button>
-							<button class="btn" vocab_id="{{id}}"><i class="icon-trash"></i> Delete Vocabulary</button>
+							<button class="btn" vocab_id="{{id}}" id="deleteVocab"><i class="icon-trash"></i> Delete Vocabulary</button>
 							<button class="btn addVersion" vocab_id="{{id}}" view="view"><i class="icon-plus"></i> Add A Version</button>
 						</div>
 					</div>
 					
+					<div class="hide" id="deleteVocabForm">
+						<p>Are you sure you want to delete this vocabulary? <br/>
+						All versions, formats and change history associated with this version will also be deleted<br/>
+						This action is <b>irreversible</b></p>
+						<p><button class="btn btn-danger" id="deleteVocabConfirm" vocab_id="{{id}}">Delete vocabulary</button><button class="btn btn-link closeTip">Cancel</button></p>
+					</div>
+
 				</div>
 			</div>
 			{{/owned}}

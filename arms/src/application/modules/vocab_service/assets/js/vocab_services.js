@@ -288,6 +288,33 @@ function load_vocab(vocab_id){
 				});
 
 			});
+
+			$('#deleteVocab').qtip({
+				content:$('#deleteVocabForm'),
+				position:{
+					my:'center right',
+					at:'center left'
+				},
+				show:{event:'click'},
+				hide:{event:'unfocus'},
+				style: {classes: 'ui-tooltip-shadow ui-tooltip-bootstrap ui-tooltip-large'}
+			});
+
+			$('#deleteVocabConfirm').click(function(){
+				var vocab_id = $(this).attr('vocab_id');
+				$.ajax({
+					url:'vocab_service/deleteVocab/', 
+					type: 'POST',
+					data: {vocab_id:vocab_id},
+					success: function(data){
+						browse('lists');
+						$('div.qtip:visible').qtip('hide');
+					},
+					error: function(data){
+						logErrorOnScreen(data);
+					}
+				});
+			});
 			
 		}
 	});
@@ -538,10 +565,6 @@ function bindVocabVersioning(view){
 								}
 							});
 							requireChangeHistory(vocab_id);
-						});
-
-						$('.closeTip').click(function(){
-							$('div.qtip:visible').qtip('hide');
 						});
 					}
 				}

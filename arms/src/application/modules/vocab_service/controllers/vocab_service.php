@@ -61,17 +61,23 @@ class Vocab_service extends MX_Controller {
 	}
 
 	public function publish(){
+		$data['title']='Publish on ANDS Vocabularies Services';
+		$data['js_lib'] = array('core');
+		$this->load->view("publish", $data);
+	}
+
+	public function addVocabulary(){
 		redirect('vocab_service/#!/add');
 	}
 
 	public function support(){
-		$data['title']='Support Vocabularies Services';
+		$data['title']='Support ANDS Vocabularies Services';
 		$data['js_lib'] = array('core');
 		$this->load->view("support", $data);
 	}
 
 	public function about(){
-		$data['title']='Support Vocabularies Services';
+		$data['title']='About ANDS Vocabularies Services';
 		$data['js_lib'] = array('core');
 		$this->load->view("about", $data);
 	}
@@ -460,6 +466,14 @@ class Vocab_service extends MX_Controller {
 		$version_id = $this->input->post('version_id');
 		$this->load->model("vocab_services","vocab");
 		$this->vocab->deleteVersion($version_id);
+	}
+
+	public function deleteVocab(){
+		header('Cache-Control: no-cache, must-revalidate');
+		header('Content-type: application/json');
+		$vocab_id = $this->input->post('vocab_id');
+		$this->load->model('vocab_services', 'vocab');
+		$this->vocab->deleteVocab($vocab_id);
 	}
 
 	public function uploadFile(){
