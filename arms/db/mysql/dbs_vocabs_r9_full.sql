@@ -73,6 +73,7 @@ CREATE TABLE `vocab_metadata` (
   `information_sources` varchar(512) DEFAULT NULL,
   `record_owner` varchar(512) DEFAULT NULL,
   `status` varchar(45) DEFAULT NULL,
+  `subjects` varchar(512) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=87 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;

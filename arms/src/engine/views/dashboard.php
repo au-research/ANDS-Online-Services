@@ -87,7 +87,7 @@
 							if(sizeof($group_vocabs)>0){
 								echo '<ul>';
 								foreach($group_vocabs as $g){
-									echo '<li>'.$g->title.'</li>';
+									echo '<li><a href="vocab_service/#!/view/'.$g->id.'">'.$g->title . "</a></li>";
 								}
 								echo '</ul>';
 							}else{
@@ -112,7 +112,7 @@
 							if(sizeof($owned_vocabs)>0){
 								echo '<ul>';
 								foreach($owned_vocabs as $g){
-									echo '<li>'.$g->title.'</li>';
+									echo '<li><a href="vocab_service/#!/view/'.$g->id.'">'.$g->title . "</a></li>";
 								}
 								echo '</ul>';
 							}else{

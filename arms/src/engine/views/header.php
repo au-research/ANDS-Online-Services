@@ -108,7 +108,7 @@
           </li>
         <?php endif; ?>
           
-        <?php if($this->user->hasFunction('PUBLIC')): ?>
+        <?php if($this->user->hasFunction('REGISTRY_USER')): ?>
           <li>
             <a href="javascript:;" id="main-nav-search"><i class="icon-search icon-white"></i></a>
           </li>
@@ -127,7 +127,9 @@
       	<?php if($this->user->loggedIn()): ?>
         	Logged in as <?=$this->user->name();?> <br/>
         	 <?php echo anchor('auth/logout', 'Logout'); ?>
-		<?php endif; ?>
+		  <?php else: ?>
+        <?php echo anchor('auth/login', 'Login');?>
+      <?php endif;?>
       </div>
       
     </div>

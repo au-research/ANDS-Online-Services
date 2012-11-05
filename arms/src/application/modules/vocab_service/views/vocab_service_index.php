@@ -16,6 +16,17 @@
 
 <div class="modal hide" id="myModal">
 	<div class="modal-header">
+	<button type="button" class="close" data-dismiss="modal">×</button>
+	<h3>&nbsp;</h3>
+	</div>
+	<div class="modal-body"></div>
+	<div class="modal-footer">
+		<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+	</div>
+</div>
+
+<div class="modal hide" id="myModal-noClose">
+	<div class="modal-header">
 	<!--button type="button" class="close" data-dismiss="modal">×</button-->
 	<h3>Alert</h3>
 	</div>
@@ -27,7 +38,7 @@
 	<form>
 		<p>Please add a change description:</p>
 		<p><textarea class="changeHistoryDescription" required></textarea></p>
-		<button class="btn" id="confirmAddChangeHistory">Add</button>
+		<button class="btn btn-primary" id="confirmAddChangeHistory">Add</button>
 	</form>
 </div>
 
@@ -158,6 +169,28 @@
 					<?php endif;?>
 				</div>
 			</div>
+
+			<?php if($this->user->loggedIn()):?>
+			<div class="box">
+				<div class="box-header clearfix">
+					<h1>Group Vocabularies</h1>
+				</div>
+				<div class="box-content">
+					<?php
+						if (sizeof($group_vocabs)==0){
+							echo "<p>Your group don't seem to own a vocabulary</p>";
+						}else{
+							echo '<ul>';
+							foreach($group_vocabs AS $v){
+								echo '<li><a href="#!/view/'.$v->id.'">'.$v->title . "</a></li>";
+							}
+							echo '</ul>';
+						}
+					?>
+				</div>
+			</div>
+			<?php endif;?>
+
 		</div>
 	</div>
 </section>
@@ -202,7 +235,7 @@
 				<div class="box-header">
 					<ul class="breadcrumbs">
 						<li><a href="<?php echo base_url();?>"><i class="icon-home"></i></a></li>
-						<li><?php echo anchor('vocab_service', 'Manage My Vocabs');?></li>
+						<li><?php echo anchor('vocab_service', 'Browse Vocabularies');?></li>
 						<li><a href="javascript:;" class="active">{{title}}</a></li>
 					</ul>
 			        <div class="clearfix"></div>
@@ -212,10 +245,12 @@
 
 			    	<h3>{{title}}</h3>
 			    	
+			    	{{#publisher}}
+						<h5>Publisher</h5> {{publisher}}
+					{{/publisher}}
 
 					{{#description}}
-						<h5>Description</h5>
-						{{description}}
+						<h5>Description</h5> {{description}}
 					{{/description}}
 
 					<h5>Available Formats</h5>
@@ -235,23 +270,31 @@
 						<h5>Language</h5> {{language}}
 					{{/language}}
 
-					{{#language}}
+					{{#subjects}}
 						<h5>Subjects</h5> {{subject}}
-					{{/language}}
+					{{/subjects}}
+
+					{{#revision_cycle}}
+						<h5>Revision Cycle</h5> {{revision_cycle}}
+					{{/revision_cycle}}
+
+					{{#website}}
+						<h5>Website</h5> {{website}}
+					{{/website}}
 
 					{{#notes}}
-						<h5>Notes</h5>
-						{{notes}}
+						<h5>Notes</h5> {{notes}}
 					{{/notes}}
 
 
 
-					
+					<?php if($this->user->loggedIn()):?>
 			    	<div class="btn-toolbar">
 						<div class="btn-group item-control" vocab_id="{{id}}">
 							<button class="btn contact" id="contactPublisher"><i class="icon-user"></i> Contact Publisher</button>
 						</div>
 					</div>
+					<?php endif;?>
 
 					<div id="contactPublisherForm" class="hide">
 						<form class="contactPublisherForm">
@@ -277,7 +320,7 @@
 									<textarea class="input-xlarge" name="description" required placeholder="Enter your message"></textarea>
 								</div>
 							</div>
-							<button class="btn confirmContactPublisher" vocab_id="{{id}}">Submit</button>
+							<button class="btn btn-primary confirmContactPublisher" vocab_id="{{id}}">Submit</button>
 						</form>
 					</div>
 			    </div>
@@ -285,21 +328,6 @@
 		</div>
 
 		<div class="span4">
-			{{#contact}}
-			<div class="box">
-				<div class="box-header"><h3>Contacts</h3><div class="clearfix"></div></div>
-				<div class="box-content">
-					{{#contact_name}}
-						{{contact_name}}<br/>
-					{{/contact_name}}
-					
-					{{#website}}
-						{{website}}<br/>
-					{{/website}}
-
-				</div>
-			</div>
-			{{/contact}}
 			
 			{{#owned}}
 			<div class="box">
@@ -433,6 +461,7 @@
 	  		<button class="btn deleteVersion" version_id="{{id}}"><i class="icon-trash"></i></button>
 		</div>
 
+
 		<div class="addFormatForm hide" version_id="{{id}}"><hr/>
 			<div class="form well">
 				<fielset>
@@ -517,8 +546,8 @@
 			<div class="box">
 				<div class="box-header clearfix">
 					<ul class="breadcrumbs">
-						<li><a href="javascript:;"><i class="icon-home"></i></a></li>
-						<li><?php echo anchor('vocab_service', 'Manage My Vocabs');?></li>
+						<li><a href="<?php echo base_url();?>"><i class="icon-home"></i></a></li>
+						<li><?php echo anchor('vocab_service', 'Browse Vocabularies');?></li>
 						<li><a href="javascript:;" class="active"></a></li>
 					</ul>
 				</div>
@@ -613,7 +642,6 @@
 						
 					</form>
 
-					
 				</div>
 			</div>
 		</div>

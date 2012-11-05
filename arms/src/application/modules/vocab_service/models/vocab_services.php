@@ -45,7 +45,7 @@ class Vocab_services extends CI_Model {
 	 */	
 	function getVersionsByID($id)
 	{
-		$query = $this->db->order_by('status asc')->select()->get_where('vocab_versions', array('vocab_id'=>$id));
+		$query = $this->db->order_by('date_added asc')->select()->get_where('vocab_versions', array('vocab_id'=>$id));
 		
 		if ($query->num_rows() == 0)
 		{
@@ -58,7 +58,6 @@ class Vocab_services extends CI_Model {
 			//print_r($vocab_versions);
 			return $vocab_versions;
 		}	
-		
 	}
 
 	function getVersionByID($id){
@@ -404,7 +403,7 @@ class Vocab_services extends CI_Model {
 	 * @param the offset value
 	 * @return array(_data_source) or empty array
 	 */
-	function getGroupVocabs($limit = 16, $offset =0)
+	function getGrouasfadpVocabs($limit = 16, $offset =0)
 	{
 		$vocabs = array();
 		$affiliations = $this->user->affiliations();
@@ -436,10 +435,33 @@ class Vocab_services extends CI_Model {
 		return $vocabs;
 	}
 
-	function getOwnedVocabs(){
+	function getGroupVocabs(){
 		$vocabs = array();
-		$localIdentifier = $this->user->localIdentifier();
-		$query = $this->db->get_where('vocab_metadata', array('record_owner' => $localIdentifier));
+		$users = array();
+		$affiliations = $this->user->affiliations();
+		$this->load->model('cosi_authentication', 'cosi');
+		foreach($affiliations as $a){
+			$users = array_merge($users, $this->cosi->getRolesInAffiliate($a));
+		}
+		$users = array_unique($users);
+		foreach($users as $u){
+			$vocabs = array_merge($vocabs, $this->getVocabsByRole($u));
+		}
+		return $vocabs;
+	}
+
+	function getOwnedVocabs($getDrafts){
+		return $this->getVocabsByRole($this->user->localIdentifier(), $getDrafts);
+	}
+
+	function getVocabsByRole($role_id, $getDrafts = false){
+		$vocabs = array();
+		$localIdentifier = $role_id;
+		if($getDrafts){
+			$query = $this->db->get_where('vocab_metadata', array('record_owner' => $localIdentifier));
+		}else{
+			$query = $this->db->get_where('vocab_metadata', array('record_owner' => $localIdentifier,'status'=>'PUBLISHED'));
+		}
 		if($query->num_rows()==0){
 			return $vocabs;
 		}else{
@@ -450,10 +472,10 @@ class Vocab_services extends CI_Model {
 		return $vocabs;
 	}
 
-	function getAllOwnedVocabs(){
+	function getAllOwnedVocabs($getDrafts = false){
 		$vocabs = array();
 		$vocabs = array_merge($vocabs, $this->getGroupVocabs());
-		$vocabs = array_merge($vocabs, $this->getOwnedVocabs());
+		$vocabs = array_merge($vocabs, $this->getOwnedVocabs($getDrafts));
 		return $vocabs;
 	}
 

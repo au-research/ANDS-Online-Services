@@ -1,6 +1,6 @@
 <?php
-// Pull in the global imports
-require_once('./global_config.php');
+
+
 
 /*
  *---------------------------------------------------------------
@@ -48,6 +48,9 @@ if (defined('ENVIRONMENT'))
 			exit('The application environment is not set correctly.');
 	}
 }
+
+// Pull in the global imports
+require_once('./global_config.php');
 
 /*
  *---------------------------------------------------------------

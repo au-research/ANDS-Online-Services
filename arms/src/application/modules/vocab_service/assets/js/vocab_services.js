@@ -270,7 +270,6 @@ function load_vocab(vocab_id){
 					});
 					
 					if(Core_checkValidForm(theForm)){
-						console.log(jsonData);
 						$.ajax({
 							url:'vocab_service/contactPublisher/', 
 							type: 'POST',
@@ -306,7 +305,6 @@ function loadVersions(vocab_id, view){
 			var template = $('#vocab-versions').html();
 			data.view = view;
 			var output = Mustache.render(template, data);
-
 			if(view=='view'){
 				$('#versions-view').html(output);
 				$('#versions-view .addVersion').attr('view','reloadView');
@@ -545,6 +543,10 @@ function bindVocabVersioning(view){
 							});
 							requireChangeHistory(vocab_id);
 						});
+
+						$('.closeTip').click(function(){
+							$('div.qtip:visible').qtip('hide');
+						});
 					}
 				}
 			},
@@ -552,8 +554,8 @@ function bindVocabVersioning(view){
 				my:'right center',
 				at: 'left center'
 			},
-			show: {event: 'click'},
-			hide: {event: 'unfocus'},
+			show: {event: 'click',solo:true},
+			hide: {event: 'click'},
 			events: {},
 			style: {classes: 'ui-tooltip-shadow ui-tooltip-bootstrap ui-tooltip-large'}
 		});
@@ -637,7 +639,7 @@ function bindVocabVersioning(view){
 									type: 'POST',
 									data: jsonData,
 									success: function(data){	
-										console.log(data);
+										requireChangeHistory(vocab_id);
 										loadVersions(vocab_id,view);
 									},
 									error: function(data){
@@ -668,6 +670,7 @@ function bindVocabVersioning(view){
 												data: jsonData,
 												success: function(data){
 													loadVersions(vocab_id,view);
+													requireChangeHistory(vocab_id);
 												},
 												error: function(data){
 													logErrorOnScreen(data);
@@ -693,23 +696,23 @@ function bindVocabVersioning(view){
 function requireChangeHistory(vocab_id){
 	$('div.qtip:visible').qtip('hide');//close all qtip
 	var html = $('#changeHistoryForm').html();
-	$('#myModal .modal-body').html(html);
-	$('#myModal').modal({backdrop:'static',keyboard:false});
-	var form = $('#myModal form');
+	$('#myModal-noClose .modal-body').html(html);
+	$('#myModal-noClose').modal({backdrop:'static',keyboard:false});
+	var form = $('#myModal-noClose form');
 	Core_bindFormValidation(form);
 	$('#confirmAddChangeHistory').click(function(){
 		var description = $('#myModal .changeHistoryDescription').val();
-		if(Core_checkValidForm($('#myModal form'))){
+		if(Core_checkValidForm($('#myModal-noClose form'))){
 			$.ajax({
 				url:'vocab_service/addChangeHistory/', 
 				type: 'POST',
 				data: {vocab_id:vocab_id,description:description},
 				success: function(data){
-					$('#myModal').modal('hide');
+					$('#myModal-noClose').modal('hide');
 				},
 				error: function(data){
 					logErrorOnScreen(data);
-					$('#myModal').modal('hide');
+					$('#myModal-noClose').modal('hide');
 				}
 			});
 		}
@@ -739,7 +742,6 @@ function load_vocab_edit(vocab_id){
 			var output = Mustache.render(template, data);
 			$('#edit-vocab').html(output);
 			$('#edit-vocab').fadeIn(500);
-			
 			loadVersions(vocab_id, 'edit');
 			var form = $('#edit-form');
 			Core_bindFormValidation(form);

@@ -49,6 +49,10 @@ $(document).ready(function(){
 		}
 	});
 
+	$('#main-nav-user-account').click(function(){
+		
+	});
+
 	//catch all tip, bad practice, but useful nonetheless
 	$('a[tip]').live('mouseover', function(event) {
 		// Bind the qTip within the event handler

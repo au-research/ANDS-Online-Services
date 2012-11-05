@@ -31,10 +31,13 @@ class Vocab_service extends MX_Controller {
 
 		//if logged in
 		if($this->user->loggedIn()){
-			$data['my_vocabs'] = $this->vocab->getAllOwnedVocabs();
+			$data['my_vocabs'] = $this->vocab->getOwnedVocabs(false);
+			$data['group_vocabs'] = $this->vocab->getGroupVocabs();
 		}else{
 			$data['my_vocabs'] = array();
 		}
+
+
 
 		$items = array();
 		foreach($vocabs as $vocab){
@@ -57,6 +60,21 @@ class Vocab_service extends MX_Controller {
 		$this->index();
 	}
 
+	public function publish(){
+		redirect('vocab_service/#!/add');
+	}
+
+	public function support(){
+		$data['title']='Support Vocabularies Services';
+		$data['js_lib'] = array('core');
+		$this->load->view("support", $data);
+	}
+
+	public function about(){
+		$data['title']='Support Vocabularies Services';
+		$data['js_lib'] = array('core');
+		$this->load->view("about", $data);
+	}
 
 	/**
 	 * Get a list of data sources
@@ -324,7 +342,7 @@ class Vocab_service extends MX_Controller {
 		//get owned vocabs permission
 		if($this->user->loggedIn()){
 			$ownedVocabsID = array();
-			$ownedVocabs = $this->vocab->getAllOwnedVocabs();
+			$ownedVocabs = $this->vocab->getAllOwnedVocabs(true);
 			foreach($ownedVocabs as $v){
 				array_push($ownedVocabsID, $v->id);
 			}
@@ -696,7 +714,7 @@ class Vocab_service extends MX_Controller {
 				$vocab->setAttribute('status','DRAFT');
 				$vocab->save();
 				$jsonData['status']='WARNING';
-				$jsonData['message']=' The vocabulary needs at least a version with a downloadable format to be saved correctly';
+				$jsonData['message']=' A vocabulary version must be added before the vocabulary can be saved.';
 			}
 			
 		}
