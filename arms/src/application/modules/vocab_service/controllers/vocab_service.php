@@ -467,6 +467,11 @@ class Vocab_service extends MX_Controller {
 		header('Content-type: application/json');
 
 		$config['upload_path'] = $this->config->item('upload_path');
+
+		if(!file_exists($config['upload_path'])){
+   			mkdir($config['upload_path']);
+		}
+
 		$config['allowed_types'] = $this->config->item('allowed_types');
 		$this->load->library('upload', $config);
 		$jsonData = array();

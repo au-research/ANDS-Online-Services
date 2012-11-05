@@ -371,7 +371,7 @@ function bindVocabVersioning(view){
 								url:'vocab_service/updateVersion/', 
 								type: 'POST',
 								data: jsonData,
-								success: function(data){	
+								success: function(data){
 									loadVersions(vocab_id,view);
 								},
 								error: function(data){
@@ -479,9 +479,7 @@ function bindVocabVersioning(view){
 										jsonData.push({name:label, value:value});
 									}
 								});
-								console.log(jsonData);
 								var type = $('input[name=type]',form).val();
-								console.log(type);
 								if(type=='file'){
 									var data = new FormData();
 									$.each($('input.addFormatUploadValue', form)[0].files, function(i, file) {
