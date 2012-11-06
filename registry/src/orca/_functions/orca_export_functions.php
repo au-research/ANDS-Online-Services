@@ -1304,6 +1304,8 @@ function getRelatedObjectTypesXML($registryObjectKey, $dataSourceKey, $registryO
 				$xml .= "        <extRif:relatedObjectSlug>".esc($relatedObject[0]['url_slug'])."</extRif:relatedObjectSlug>\n";				
 				if($relation_logo)
 					$xml .= "        <extRif:relatedObjectLogo>".esc($relation_logo)."</extRif:relatedObjectLogo>\n";
+				if($isAContributor = isContributorPage($pkey1))
+					$xml .=  "        <extRif:contributorGroup>".esc($isAContributor['object_group'])."</extRif:contributorGroup>\n";
 			}
 			$xml .= "      </$elementName>\n";
 		}
@@ -1341,6 +1343,8 @@ function getRelatedObjectTypesXML($registryObjectKey, $dataSourceKey, $registryO
 				$xml .= "        <extRif:relatedObjectSlug>".esc($relatedObject[0]['url_slug'])."</extRif:relatedObjectSlug>\n";				
 				if($relation_logo)
 					$xml .= "        <extRif:relatedObjectLogo>".esc($relation_logo)."</extRif:relatedObjectLogo>\n";
+				if($isAContributor = isContributorPage($pkey2))
+					$xml .=  "        <extRif:contributorGroup>".esc($isAContributor['object_group'])."</extRif:contributorGroup>\n";
 			}
 			$xml .= "      </$elementName>\n";
 		}
@@ -1398,6 +1402,8 @@ function getRelatedObjectTypesXML($registryObjectKey, $dataSourceKey, $registryO
 					$xml .= "        <extRif:relatedObjectDisplayTitle>".esc($relatedObject[0]['display_title'])."</extRif:relatedObjectDisplayTitle>\n";
 					$xml .= "        <extRif:relatedObjectSlug>".esc($relatedObject[0]['url_slug'])."</extRif:relatedObjectSlug>\n";					
 					if($relation_logo) $xml .= "        <extRif:relatedObjectLogo>".esc($relation_logo)."</extRif:relatedObjectLogo>\n";
+					if($isAContributor = isContributorPage($key))
+					$xml .=  "        <extRif:contributorGroup>".esc($isAContributor['object_group'])."</extRif:contributorGroup>\n";					
 				}
 				$xml .= "      </$elementName>\n";
 			}
@@ -1455,6 +1461,8 @@ function getRelatedObjectTypesXML($registryObjectKey, $dataSourceKey, $registryO
 							$xml .= "        <extRif:relatedObjectSlug>".esc($relatedObject[0]['url_slug'])."</extRif:relatedObjectSlug>\n";						
 							$xml .= "        <extRif:relatedObjectReverseType>INTERNAL</extRif:relatedObjectReverseType>\n";							
 							if($relation_logo) $xml .= "        <extRif:relatedObjectLogo>".esc($relation_logo)."</extRif:relatedObjectLogo>\n";
+					if($isAContributor = isContributorPage($key))
+					$xml .=  "        <extRif:contributorGroup>".esc($isAContributor['object_group'])."</extRif:contributorGroup>\n";								
 						}
 					}
 
@@ -1505,6 +1513,8 @@ function getRelatedObjectTypesXML($registryObjectKey, $dataSourceKey, $registryO
 						$xml .= "        <extRif:relatedObjectSlug>".esc($relatedObject[0]['url_slug'])."</extRif:relatedObjectSlug>\n";						
 						$xml .= "        <extRif:relatedObjectReverseType>EXTERNAL</extRif:relatedObjectReverseType>\n";										
 						if($relation_logo) $xml .= "        <extRif:relatedObjectLogo>".esc($relation_logo)."</extRif:relatedObjectLogo>\n";
+											if($isAContributor = isContributorPage($key))
+					$xml .=  "        <extRif:contributorGroup>".esc($isAContributor['object_group'])."</extRif:contributorGroup>\n";	
 
 						}
 
