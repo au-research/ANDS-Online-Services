@@ -659,6 +659,22 @@
 		</div>
 
 		<div class="span4">
+
+			<div class="box">
+				<div class="box-header clearfix"><h1>Vocabulary Owner</h1></div>
+				<div class="box-content">
+					<?php
+						$orgs = $this->user->affiliations();
+						echo '<select>';
+						foreach($orgs as $o){
+							echo '<option value="'.$o.'">'.$o.'</option>';
+						}
+						echo '</select>';
+					?>
+				</div>
+			</div>
+
+
 			<div id="versions-edit">
 	
 			</div>
