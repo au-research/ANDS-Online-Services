@@ -359,7 +359,6 @@ function bindVocabVersioning(view){
 					url: 'vocab_service/getFormatByVersion/'+version_id+'/'+view,
 					type: 'GET',
 					success: function(data, status){
-						console.log(data);
 						var template = $('#vocab-format-downloadable-template-by-version').html();
 						var output = Mustache.render(template, data);
 						this.set('content.text', output);
@@ -398,6 +397,7 @@ function bindVocabVersioning(view){
 								data: jsonData,
 								success: function(data){
 									loadVersions(vocab_id,view);
+									showSubAlert('Version saved successfully', 'success');
 								},
 								error: function(data){
 									logErrorOnScreen(data);
@@ -436,6 +436,7 @@ function bindVocabVersioning(view){
 								data: {version_id:version_id},
 								success: function(data){	
 									loadVersions(vocab_id,view);
+									showSubAlert('Version deleted successfully', 'success');
 								},
 								error: function(data){
 									logErrorOnScreen(data);
@@ -458,6 +459,7 @@ function bindVocabVersioning(view){
 										{value:'TEXT',subtext:''},
 										{value:'CSV',subtext:''},
 										{value:'ZTHES',subtext:''},
+										{value:'RDF',subtext:''},
 										{value:'OTHER',subtext:''}
 									]
 								});
@@ -529,6 +531,7 @@ function bindVocabVersioning(view){
 													data: jsonData,
 													success: function(data){
 														loadVersions(vocab_id,view);
+														showSubAlert('Format saved successfully', 'success');
 													}
 												});
 									        }
@@ -557,10 +560,10 @@ function bindVocabVersioning(view){
 								type: 'POST',
 								success: function(data){	
 									if(data.status=='OK'){
-										/*$('tr.formatRow[format_id='+format_id+']').fadeOut('200', function(){
+										$('tr.formatRow[format_id='+format_id+']').fadeOut('200', function(){
 											$(target).qtip('reposition');
-										});*/
-										loadVersions(vocab_id,view);
+										});
+										showSubAlert('Format deleted successfully', 'success');
 									}else{
 										logErrorOnScreen(data);
 									}
@@ -609,7 +612,6 @@ function bindVocabVersioning(view){
 				show: function(event, api){
 					var tooltip = api.elements.tooltip;
 					var form = $('form',tooltip);
-
 					Core_bindFormValidation(form);
 
 					$('.typeahead', tooltip).typeahead({
@@ -619,6 +621,7 @@ function bindVocabVersioning(view){
 							{value:'TEXT',subtext:''},
 							{value:'CSV',subtext:''},
 							{value:'ZTHES',subtext:''},
+							{value:'RDF',subtext:''},
 							{value:'OTHER',subtext:''}
 						]
 					});
@@ -626,7 +629,7 @@ function bindVocabVersioning(view){
 						$('.addVersion').qtip('hide');
 					});
 
-					$('.toggleAddFormatType .btn', tooltip).click(function(){
+					$('.toggleAddFormatType .btn', tooltip).die().unbind().click(function(){
 						var show = $(this).attr('content');
 						$('.addFormatTypeContent').hide();
 						$('.addFormatTypeContent input', tooltip).removeAttr('required');
@@ -635,11 +638,11 @@ function bindVocabVersioning(view){
 						$('input[name=type]',tooltip).val($(this).attr('value'));
 					});
 
-					$('.addVersionButton', tooltip).click(function(e){
+					$('.addVersionButton', tooltip).die().unbind().click(function(e){
 						e.preventDefault();
 						var jsonData = [];
-						//$(this).button('loading');
-						var form = $(this).parents('form');
+						$(this).button('loading');
+						var form = $('form', tooltip);
 
 						jsonData.push({name:'vocab_id', value:vocab_id});
 						
@@ -662,6 +665,8 @@ function bindVocabVersioning(view){
 									success: function(data){	
 										requireChangeHistory(vocab_id);
 										loadVersions(vocab_id,view);
+										$(this).button('reset');
+										showSubAlert('Version saved successfully', 'success');
 									},
 									error: function(data){
 										logErrorOnScreen(data);
@@ -692,6 +697,8 @@ function bindVocabVersioning(view){
 												success: function(data){
 													loadVersions(vocab_id,view);
 													requireChangeHistory(vocab_id);
+													$(this).button('reset');
+													showSubAlert('Version saved successfully', 'success');
 												},
 												error: function(data){
 													logErrorOnScreen(data);
@@ -704,7 +711,7 @@ function bindVocabVersioning(view){
 						}else{
 							alert('form is not valid');
 						}
-						$(this).button('reset');						
+						
 					});
 				}
 			},
@@ -776,6 +783,7 @@ function load_vocab_edit(vocab_id){
 					var input = $('#edit-vocab input[name=record_owner]');
 					$(input).val($(this).val());
 				});
+				
 			}else{
 				logErrorOnScreen(data.message);
 			}
@@ -785,9 +793,16 @@ function load_vocab_edit(vocab_id){
 	return false;
 }
 
+function showSubAlert(content, alert_class){
+	var vocab_id = $('#subalert').attr('vocab_id');
+	$('#subalert').slideUp(100, function(){
+		$('#subalert').removeClass('alert-success').removeClass('alert-warning').removeClass('alert-error').addClass('alert-'+alert_class).html("");
+		$('#subalert').html(''+content+' <a href="#!/view/'+vocab_id+'">View vocabulary</a>').slideDown();
+	});
+}
+
 function showEditVersionModal(vocab_id,version_id)
 {
-	
 	$.ajax({
 		url: 'vocab_service/getVocabVersion/'+version_id,
 		type: 'GET',

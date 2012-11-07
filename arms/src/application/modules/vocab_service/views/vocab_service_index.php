@@ -385,9 +385,8 @@
 		{{#owned}}
 			{{#editable}}
 			<div class="box-footer clearfix">
-				<div class="btn-group">
-					<button class="btn btn-primary addVersion" vocab_id="{{id}}" view="{{view}}"><i class="icon-plus icon-white"></i> Add a Version</button>
-				</div>
+				<button class="btn btn-primary addVersion" vocab_id="{{id}}" view="{{view}}"><i class="icon-plus icon-white"></i> Add a Version</button>
+				<span id="versions-message" vocab_id="{{id}}"></span>
 			</div>
 			{{/editable}}
 		{{/owned}}
@@ -542,7 +541,7 @@
 					<ul class="breadcrumbs">
 						<li><a href="<?php echo base_url();?>"><i class="icon-home"></i></a></li>
 						<li><?php echo anchor('vocab_service', 'Browse Vocabularies');?></li>
-						<li><a href="javascript:;" class="active"></a></li>
+						<li><a href="<?php echo base_url();?>vocab_service/#!/view/{{id}}">{{title}}</a></li>
 					</ul>
 				</div>
 
@@ -673,10 +672,12 @@
 				</div>
 			</div>
 
-
+			
 			<div id="versions-edit">
 	
 			</div>
+
+			<div class="alert alert-success hide" id="subalert" vocab_id="{{id}}"></div>
 		</div>
 
 		
