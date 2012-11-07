@@ -31,13 +31,11 @@ class Vocab_service extends MX_Controller {
 
 		//if logged in
 		if($this->user->loggedIn()){
-			$data['my_vocabs'] = $this->vocab->getOwnedVocabs(false);
+			//$data['my_vocabs'] = $this->vocab->getOwnedVocabs(false);
 			$data['group_vocabs'] = $this->vocab->getGroupVocabs();
 		}else{
-			$data['my_vocabs'] = array();
+			$data['group_vocabs'] = array();
 		}
-
-
 
 		$items = array();
 		foreach($vocabs as $vocab){
@@ -67,7 +65,21 @@ class Vocab_service extends MX_Controller {
 	}
 
 	public function addVocabulary(){
-		redirect('vocab_service/#!/add');
+		
+		if(sizeof($this->user->affiliations()>0)){
+			$hasOrg = true;
+		}else{
+			$hasOrg = false;
+		}
+
+		if($this->user->loggedIn() && $hasOrg){
+			redirect('vocab_service/#!/add');
+		}else{
+			$data['title']='Publish on ANDS Vocabularies Services';
+			$data['js_lib'] = array('core');
+			$this->load->view("publish", $data);
+		}
+		
 	}
 
 	public function support(){
@@ -149,7 +161,7 @@ class Vocab_service extends MX_Controller {
 	 * @todo ACL on which vocab you have access to, error handling
 	 * @return [JSON] of a single vocab
 	 */
-	public function getVocab($id){
+	public function getVocab($id, $view='view'){
 		header('Cache-Control: no-cache, must-revalidate');
 		header('Content-type: application/json');
 
@@ -162,6 +174,9 @@ class Vocab_service extends MX_Controller {
 
 		if($vocab)
 		{
+			$jsonData['item']['view'] = $view;
+			
+
 			//get owned vocabs permission
 			$ownedVocabsID = array();
 			if($this->user->loggedIn()){
@@ -176,7 +191,12 @@ class Vocab_service extends MX_Controller {
 			}
 
 			if($vocab->contact_name || $vocab->contact_number) $jsonData['item']['contact']=true;
-			if(in_array($vocab->id, $ownedVocabsID)) $jsonData['item']['owned']=true;
+			if(in_array($vocab->id, $ownedVocabsID)){
+				$jsonData['item']['owned']=true;
+				if($view=='edit'){
+					$jsonData['item']['editable'] = true;
+				}
+			}
 
 			//vocab versions
 			$versions= $this->vocab->getVersionsByID($id);
@@ -194,7 +214,7 @@ class Vocab_service extends MX_Controller {
 				}
 				$jsonData['item']['versions']=$items;
 			}else{
-				$jsonData['noVersions']=true;
+				$jsonData['item']['noVersions']=true;
 			}
 
 			//vocab formats
@@ -273,7 +293,7 @@ class Vocab_service extends MX_Controller {
 		echo $jsonData;
 	}
 
-	public function getFormatByVersion($version_id){
+	public function getFormatByVersion($version_id, $view='view'){
 		header('Cache-Control: no-cache, must-revalidate');
 		header('Content-type: application/json');
 
@@ -315,7 +335,13 @@ class Vocab_service extends MX_Controller {
 			$ownedVocabsID = array();
 			$ownedVocabs = $this->vocab->getAllOwnedVocabs();
 			foreach($ownedVocabs as $v) array_push($ownedVocabsID, $v->id);
-			if(in_array($jsonData['vocab_id'], $ownedVocabsID)) $jsonData['owned']=true;
+			if(in_array($jsonData['vocab_id'], $ownedVocabsID)){
+				$jsonData['owned']=true;
+				$jsonData['view'] = $view;
+				if($view=='edit'){
+					$jsonData['editable']=true;
+				}
+			}
 		}
 
 		$jsonData['id']=$version_id;
@@ -333,7 +359,7 @@ class Vocab_service extends MX_Controller {
 	 * @todo ACL on which vocabs you have access to, error handling
 	 * @return [JSON] of a list of vocab versions
 	 */	
-	public function getVersions($vocab_id){
+	public function getVersions($vocab_id, $view='view'){
 		header('Cache-Control: no-cache, must-revalidate');
 		header('Content-type: application/json');
 
@@ -352,7 +378,12 @@ class Vocab_service extends MX_Controller {
 			foreach($ownedVocabs as $v){
 				array_push($ownedVocabsID, $v->id);
 			}
-			if(in_array($vocab_id, $ownedVocabsID)) $jsonData['item']['owned']=true;
+			if(in_array($vocab_id, $ownedVocabsID)) {
+				$jsonData['item']['owned']=true;
+				if($view=='edit'){
+					$jsonData['item']['editable']=true;
+				}
+			}
 		}
 
 		$items = array();
@@ -741,61 +772,30 @@ class Vocab_service extends MX_Controller {
 		$jsonData = json_encode($jsonData);
 		echo $jsonData;
 	}
-	
-	/**
-	 * Create a vocab
-	 * 
-	 * 
-	 * @author Minh Duc Nguyen <minh.nguyen@ands.org.au>
-	 * @param [POST] Vocab ID [POST] attributes
-	 * @todo ACL on which vocab you have access to, error handling, new attributes
-	 * @return [JSON] result of the saving [VOID] 
-	 */
-	public function addVocab(){
-		
-		$jsonData = array();
-		$vocab = NULL;
-		$id = NULL; 
-		
-		$jsonData['status'] = 'OK';
-		
-		$this->load->model("vocab_services","vocab");
 
-		$vocabid = $this->vocab->create();
-		
-		$jsonData['id'] = $vocabid->id;
-		
-		$vocab = $this->vocab->getByID($vocabid->id);
-			
-		if ($vocab)
-		{
-			foreach($vocab->attributes() as $attrib=>$value){						
-				if ($new_value = $this->input->post($attrib)) {
-					if($new_value=='true') $new_value=DB_TRUE;
-					if($new_value=='false') $new_value=DB_FALSE;
-					$vocab->setAttribute($attrib, $new_value);
-				}
-			}
-			$vocab->save();
-		}
-		
-		$jsonData = json_encode($jsonData);
-		echo $jsonData;
-	}
 
 	public function createBlankVocab(){
 		header('Cache-Control: no-cache, must-revalidate');
 		header('Content-type: application/json');
 		$this->load->model('vocab_services', 'vocab');
-		$record_owner = $this->user->localIdentifier();
-		if($id = $this->vocab->addBlankVocab($record_owner)){
-			$jsonData['status']='OK';
-			$jsonData['message']='blank vocab created sucessfully';
-			$jsonData['id']=$id;
+
+		$affiliations = $this->user->affiliations();
+		if(sizeof($affiliations)>0){
+			$record_owner = $affiliations[0];
+			if($id = $this->vocab->addBlankVocab($record_owner)){
+				$jsonData['status']='OK';
+				$jsonData['message']='blank vocab created sucessfully';
+				$jsonData['id']=$id;
+			}else{
+				$jsonData['status']='ERROR';
+				$jsonData['message']='blank vocab created unsucessfully';
+			}
 		}else{
 			$jsonData['status']='ERROR';
-			$jsonData['message']='blank vocab created unsucessfully';
+			$jsonData['message']='You have to be an affiliation with an existing organisation to add vocab. 
+									<p>'.anchor('', 'Go to Dashboard').' or '.anchor('vocab_service/index', 'Browse Vocabularies').'</p>';
 		}
+		
 		echo json_encode($jsonData);
 	}
 	

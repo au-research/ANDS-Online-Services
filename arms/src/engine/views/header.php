@@ -51,7 +51,9 @@
 <div class="container-fluid" id="topbar">
     <div class="row-fluid">
       <div class="span2" id="logo">
-        <img src="<?php echo base_url();?>/assets/img/ands_logo_white.png" alt="ANDS Logo White"/>
+        <a href="<?php echo base_url();?>">
+          <img src="<?php echo base_url();?>/assets/img/ands_logo_white.png" alt="ANDS Logo White"/>
+        </a>
       </div>
       <div class="span10" id="main-nav">
         <ul>

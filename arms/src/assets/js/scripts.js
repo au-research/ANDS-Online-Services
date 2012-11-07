@@ -17,13 +17,11 @@ function changeHashTo(hash){
 
 function logErrorOnScreen(error, target){
 	var template = $('#error-template').html();
-	var output = Mustache.render(template, $("<div/>").html(error).text());
-	if (!target)
-	{
+	var output = Mustache.render(template, $("<div/>").html(error).html());
+	if (!target){
 		$('#main-content').prepend(output);
 	}
-	else
-	{
+	else{
 		target.html(output);
 	}
 }
@@ -52,6 +50,8 @@ $(document).ready(function(){
 	$('.closeTip').live('click', function(){
 		$('div.qtip:visible').qtip('hide');
 	});
+
+	$('.chosen').chosen();
 
 
 	//catch all tip, bad practice, but useful nonetheless
@@ -376,6 +376,14 @@ function Core_checkValidField(form, field){
 		if($(field).val().length==0){
 			valid = false;
 		}else{
+			if(field.maxLength>0){//maxlength is specified
+				if($(field).val().length>field.maxLength){
+					valid = false;
+				}else{
+					valid = true;
+				}
+			}
+
 			if($(field).attr('type')=='email'){//email validation
 				if(validateEmail($(field).val())){
 					valid = true;
@@ -384,7 +392,7 @@ function Core_checkValidField(form, field){
 				}
 			}else{
 				valid = true;
-			}
+			}			
 		}
 
 		if(valid){

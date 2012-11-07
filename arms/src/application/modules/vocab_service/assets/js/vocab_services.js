@@ -81,7 +81,7 @@ $(function(){
 	});
 
 	//item button binding
-	$('.btn').live({
+	$('.btn').die().live({
 		click: function(e){
 			e.preventDefault();
 			var vocab_id = $(this).attr('vocab_id');
@@ -323,11 +323,11 @@ function load_vocab(vocab_id){
 
 function loadVersions(vocab_id, view){
 	$.ajax({
-		url: 'vocab_service/getVersions/'+vocab_id,
+		url: 'vocab_service/getVersions/'+vocab_id+'/'+view,
 		type: 'GET',
 		contentType: 'application/json; charset=utf-8',
 		dataType: 'json',
-		success: function(data){
+		success: function(data){			
 			if(data.status=='ERROR') logErrorOnScreen(data.message);
 			var template = $('#vocab-versions').html();
 			data.view = view;
@@ -347,7 +347,6 @@ function loadVersions(vocab_id, view){
 
 
 function bindVocabVersioning(view){
-
 	//bind the tooltips on versions
 	$('.version').each(function(){
 		var version_id = $(this).attr('version_id');
@@ -357,9 +356,10 @@ function bindVocabVersioning(view){
 			content:{
 				text:'Loading...',
 				ajax:{
-					url: 'vocab_service/getFormatByVersion/'+version_id,
+					url: 'vocab_service/getFormatByVersion/'+version_id+'/'+view,
 					type: 'GET',
 					success: function(data, status){
+						console.log(data);
 						var template = $('#vocab-format-downloadable-template-by-version').html();
 						var output = Mustache.render(template, data);
 						this.set('content.text', output);
@@ -494,7 +494,7 @@ function bindVocabVersioning(view){
 						$('.addFormatSubmit').click(function(){
 							var version_id = $(this).attr('version_id');
 							var form = $('.addFormatForm[version_id='+version_id+'] .form');
-							var view = 'edit';
+							var view = $(this).attr('view');
 							if(Core_checkValidForm(form)){
 								var jsonData = [];
 								$('input', form).each(function(){
@@ -538,7 +538,7 @@ function bindVocabVersioning(view){
 										url:'vocab_service/addFormat/'+version_id, 
 										type: 'POST',
 										data: jsonData,
-										success: function(data){	
+										success: function(data){
 											loadVersions(vocab_id,view);
 										}
 									});
@@ -556,9 +556,10 @@ function bindVocabVersioning(view){
 								type: 'POST',
 								success: function(data){	
 									if(data.status=='OK'){
-										$('tr.formatRow[format_id='+format_id+']').fadeOut('200', function(){
+										/*$('tr.formatRow[format_id='+format_id+']').fadeOut('200', function(){
 											$(target).qtip('reposition');
-										});
+										});*/
+										loadVersions(vocab_id,view);
 									}else{
 										logErrorOnScreen(data);
 									}
@@ -713,6 +714,7 @@ function bindVocabVersioning(view){
 }
 
 function requireChangeHistory(vocab_id){
+	//require all changes on view screen
 	$('div.qtip:visible').qtip('hide');//close all qtip
 	var html = $('#changeHistoryForm').html();
 	$('#myModal-noClose .modal-body').html(html);
@@ -751,17 +753,16 @@ function load_vocab_edit(vocab_id){
 	$('#browse-vocab').slideUp(500);
 	$('#view-vocabs').slideUp(500);
 	$.ajax({
-		url: 'vocab_service/getVocab/'+vocab_id,
+		url: 'vocab_service/getVocab/'+vocab_id+'/edit/',
 		type: 'GET',
 		contentType: 'application/json; charset=utf-8',
 		dataType: 'json',
 		success: function(data){
-			//console.log(data);
 			var template = $('#vocab-edit-template').html();
 			var output = Mustache.render(template, data);
 			$('#edit-vocab').html(output);
 			$('#edit-vocab').fadeIn(500);
-			loadVersions(vocab_id, 'edit');
+			loadVersions(vocab_id, data.item.view);
 			var form = $('#edit-form');
 			Core_bindFormValidation(form);
 			
@@ -801,7 +802,7 @@ function load_vocab_add(){
 				var id = data.id;
 				changeHashTo('edit/'+id);
 			}else{
-				console.error(data.message);
+				logErrorOnScreen(data.message);
 			}
 		}
 	});
@@ -835,7 +836,7 @@ function deleteVersionFormat(format_id,vocab_id){
 }
 
 
-$('#save-edit-form').live({
+$('#save-edit-form').die().live({
 	click: function(e){
 		e.preventDefault();
 		var jsonData = [];

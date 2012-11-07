@@ -45,15 +45,12 @@ class Vocab_services extends CI_Model {
 	 */	
 	function getVersionsByID($id)
 	{
-		$query = $this->db->order_by('date_added asc')->select()->get_where('vocab_versions', array('vocab_id'=>$id));
+		$query = $this->db->order_by('date_added asc')->select()->get_where('vocab_versions', array('vocab_id'=>$id,'status !='=>'RETIRED'));
 		
-		if ($query->num_rows() == 0)
-		{
+		if ($query->num_rows() == 0){
 			return NULL;
-			
 		}
-		else
-		{
+		else{
 			$vocab_versions = $query->result();
 			//print_r($vocab_versions);
 			return $vocab_versions;
@@ -212,27 +209,31 @@ class Vocab_services extends CI_Model {
 		$version = $this->getVersionByID($id);
 		$vocab_id = $version->vocab_id;
 
-		$deleteVersion = $this->db->delete('vocab_versions', array('id' => $id)); 
-		if($deleteVersion){
-			//delete all formats associated with this version
-			$deleteFormats = $this->db->delete('vocab_version_formats', array('version_id'=>$id));
+		//set version to retire
+		$data = array(
+			'status'=>'RETIRED'
+		);
+		$this->db->where('id', $id);
+		$this->db->update('vocab_versions', $data);
 
-			//make the latest version status of current
-			$latestVersionQuery = $this->db->order_by('date_added', 'desc')->get_where('vocab_versions', array('vocab_id'=>$vocab_id), 1, 0);
+		//delete all formats associated with this version
+		$deleteFormats = $this->db->delete('vocab_version_formats', array('version_id'=>$id));
 
-			if($latestVersionQuery->num_rows()>0){
-				$result = $latestVersionQuery->result();
-				$latestVersion = $result[0];
-				$latestVersion_id = $latestVersion->id;
+		//make the latest version status of current
+		$latestVersionQuery = $this->db->order_by('date_added', 'desc')->get_where('vocab_versions', array('vocab_id'=>$vocab_id, 'id !='=>$id), 1, 0);
 
-				$data = array(
-					'status'=>'current'
-				);
-				$this->db->where('id', $latestVersion_id);
-				$this->db->update('vocab_versions', $data);
-			}
-			return true;
-		}else return false;
+		if($latestVersionQuery->num_rows()>0){
+			$result = $latestVersionQuery->result();
+			$latestVersion = $result[0];
+			$latestVersion_id = $latestVersion->id;
+
+			$data = array(
+				'status'=>'current'
+			);
+			$this->db->where('id', $latestVersion_id);
+			$this->db->update('vocab_versions', $data);
+		}
+		return true;
 	}
 
 	function deleteVocab($vocab_id){
@@ -421,7 +422,7 @@ class Vocab_services extends CI_Model {
 	 * @param the offset value
 	 * @return array(_data_source) or empty array
 	 */
-	function getGrouasfadpVocabs($limit = 16, $offset =0)
+	function getGroupVocabs($limit = 16, $offset =0)
 	{
 		$vocabs = array();
 		$affiliations = $this->user->affiliations();
@@ -453,7 +454,7 @@ class Vocab_services extends CI_Model {
 		return $vocabs;
 	}
 
-	function getGroupVocabs(){
+	function getGroupUsersVocabs(){
 		$vocabs = array();
 		$users = array();
 		$affiliations = $this->user->affiliations();
@@ -493,6 +494,7 @@ class Vocab_services extends CI_Model {
 	function getAllOwnedVocabs($getDrafts = false){
 		$vocabs = array();
 		$vocabs = array_merge($vocabs, $this->getGroupVocabs());
+		$vocabs = array_merge($vocabs, $this->getGroupUsersVocabs());
 		$vocabs = array_merge($vocabs, $this->getOwnedVocabs($getDrafts));
 		return $vocabs;
 	}

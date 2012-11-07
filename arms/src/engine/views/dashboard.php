@@ -30,7 +30,7 @@
 	</div>
 
 	<div class="row">
-		<div class="span4">
+		<div class="span6">
 			<div class="box">
 				<div class="box-header clearfix">
 					<h1>Affiliations</h1>
@@ -50,11 +50,11 @@
 		      			}
 
 		      			echo '<div class="well">';
-		      			echo '<select id="organisational_roles">';
+		      			echo '<p><select id="organisational_roles" class="chosen">';
 		      			foreach($available_organisations as $o){
 		      				echo '<option value="'.$o['role_id'].'">'.$o['name'].'</option>';
 		      			}
-		      			echo '</select><br/>';
+		      			echo '</select></p>';
 		      			echo '<p><button class="btn" id="affiliation_signup" localIdentifier="'.$this->user->localIdentifier().'">Affiliate with this Organisation</button></p>';
 		      			echo '<p><a href="javascript:;" id="openAddOrganisation">Organisation not in list?</a></p>';
 		      			echo '</div>';
@@ -68,7 +68,7 @@
 					<div class="control-group">
 						<label class="control-label" for="title">Organisation Name:</label>
 						<div class="controls">
-							 <input type="text" class="input-large orgName" localIdentifier="<?php echo $this->user->localIdentifier();?>" required/>
+							 <input type="text" class="input-large orgName" localIdentifier="<?php echo $this->user->localIdentifier();?>" required maxLength="255"/>
 						</div>
 					</div>
 					<button class="btn" id="confirmAddOrganisation">Add</button>
@@ -76,10 +76,10 @@
 			</div>
 		</div>
 
-		<div class="span4">
+		<div class="span6">
 			<div class="box">
 				<div class="box-header clearfix">
-					<h1>Group vocabularies</h1>
+					<h1>My Vocabularies</h1>
 				</div>
 				<div class="box-content">
 					<?php
@@ -93,32 +93,6 @@
 							}else{
 								echo 'Your group has not created any vocabulary yet';
 							}
-						}else{
-							echo "You can't manage any vocabulary unless you are affiliate with an organisation";
-						}
-					?>
-				</div>
-			</div>
-		</div>
-
-		<div class="span4">
-			<div class="box">
-				<div class="box-header clearfix">
-					<h1>My vocabularies</h1>
-				</div>
-				<div class="box-content">
-					<?php
-						if($hasAffiliation){
-							if(sizeof($owned_vocabs)>0){
-								echo '<ul>';
-								foreach($owned_vocabs as $g){
-									echo '<li><a href="vocab_service/#!/view/'.$g->id.'">'.$g->title . "</a></li>";
-								}
-								echo '</ul>';
-							}else{
-								echo 'You have not created any vocabulary yet';
-							}
-							
 						}else{
 							echo "You can't manage any vocabulary unless you are affiliate with an organisation";
 						}

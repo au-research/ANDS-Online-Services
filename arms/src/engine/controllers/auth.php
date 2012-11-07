@@ -93,7 +93,7 @@ class Auth extends CI_Controller {
 			{
 				$this->load->model('vocab_service/vocab_services','vocab');
 				$data['group_vocabs']=$this->vocab->getGroupVocabs();
-				$data['owned_vocabs']=$this->vocab->getOwnedVocabs(false);
+				//$data['owned_vocabs']=$this->vocab->getOwnedVocabs(false);
 				$this->load->model('cosi_authentication', 'cosi');
 				$data['available_organisations'] = $this->cosi->getAllOrganisationalRoles();
 				asort($data['available_organisations']);

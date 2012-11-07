@@ -146,50 +146,34 @@
 		</div>
 
 		<div class="span4">
+			
+
+			
 			<div class="box">
 				<div class="box-header clearfix">
 					<h1>My Vocabularies</h1>
 				</div>
 				<div class="box-content">
-					<?php
-						if (sizeof($my_vocabs)==0){
-							echo "<p>You don't seem to own a vocabulary</p>";
-						}else{
-							echo '<ul>';
-							foreach($my_vocabs AS $v){
-								echo '<li><a href="#!/view/'.$v->id.'">'.$v->title . "</a></li>";
-							}
-							echo '</ul>';
-						}
-					?>
-					<?php if($this->user->loggedIn()):?>
-					<button class="btn add" id="add"><i class="icon-plus"></i>Add a vocabulary</button>
-					<?php else:?>
-					<p>Only logged in users can add a vocabulary <?php echo anchor('auth/login', 'Log In');?>
-					<?php endif;?>
-				</div>
-			</div>
 
-			<?php if($this->user->loggedIn()):?>
-			<div class="box">
-				<div class="box-header clearfix">
-					<h1>Group Vocabularies</h1>
-				</div>
-				<div class="box-content">
 					<?php
-						if (sizeof($group_vocabs)==0){
-							echo "<p>Your group don't seem to own a vocabulary</p>";
-						}else{
+						if(sizeof($group_vocabs)>0 && $this->user->loggedIn()){
 							echo '<ul>';
 							foreach($group_vocabs AS $v){
 								echo '<li><a href="#!/view/'.$v->id.'">'.$v->title . "</a></li>";
 							}
 							echo '</ul>';
+						}else if(sizeof($group_vocabs)){
+							echo "<p>No Vocabulary Available</p>";
 						}
 					?>
+					<?php if($this->user->loggedIn()):?>
+						<button class="btn add" id="add"><i class="icon-plus"></i>Add a vocabulary</button>
+					<?php else:?>
+						<p>Only logged in users can add a vocabulary <?php echo anchor('auth/login', 'Log In');?>
+					<?php endif;?>
 				</div>
 			</div>
-			<?php endif;?>
+
 
 		</div>
 	</div>
@@ -337,7 +321,6 @@
 						<div class="btn-group btn-group-vertical btn-group-left item-control" vocab_id="{{id}}">
 							<button class="btn edit" vocab_id="{{id}}"><i class="icon-edit"></i> Edit Vocabulary</button>
 							<button class="btn" vocab_id="{{id}}" id="deleteVocab"><i class="icon-trash"></i> Delete Vocabulary</button>
-							<button class="btn addVersion" vocab_id="{{id}}" view="view"><i class="icon-plus"></i> Add A Version</button>
 						</div>
 					</div>
 					
@@ -397,7 +380,9 @@
 			{{/noVersions}}
 
 			{{#owned}}
-			<li class="addVersion" vocab_id="{{id}}" view="{{view}}"><a href="javascript:;"><i class="icon-plus"></i> Add a Version</a></li>
+				{{#editable}}
+				<li class="addVersion" vocab_id="{{id}}" view="{{view}}"><a href="javascript:;"><i class="icon-plus"></i> Add a Version</a></li>
+				{{/editable}}
 			{{/owned}}
 			</ul>
 		</div>
@@ -421,7 +406,9 @@
 					<div class="btn-group">
 			  			<button class="btn downloadFormat" format_id="{{id}}"><i class="icon-download"></i></button>
 			  			{{#owned}}
+			  			{{#editable}}
 				  		<button class="btn deleteFormat" format_id="{{id}}"><i class="icon-trash"></i></button>
+				  		{{/editable}}
 				  		{{/owned}}
 					</div>
 				</td>
@@ -448,7 +435,9 @@
 					<div class="btn-group">
 			  			<button class="btn downloadFormat" format_id="{{id}}"><i class="icon-download"></i></button>
 			  			{{#owned}}
+			  			{{#editable}}
 				  		<button class="btn deleteFormat" format_id="{{id}}"><i class="icon-trash"></i></button>
+				  		{{/editable}}
 				  		{{/owned}}
 					</div>
 				</td>
@@ -463,6 +452,7 @@
 	{{/noItems}}
 
 	{{#owned}}
+	{{#editable}}
 		<div class="btn-group">
   			<button class="btn addFormat" version_id="{{id}}"><i class="icon-plus"></i> Add a Format</button>
   			<button class="btn editVersion" version_id="{{id}}"><i class="icon-edit"></i></button>
@@ -510,7 +500,7 @@
 
 				</fieldset>
 				<hr/>
-				<button type="submit" class="btn addFormatSubmit" version_id="{{id}}">Add Format</button> <a href="javascript:;" version_id="{{id}}" class="cancelAddFormat">Cancel</a>
+				<button type="submit" class="btn addFormatSubmit" version_id="{{id}}" view="{{view}}">Add Format</button> <a href="javascript:;" version_id="{{id}}" class="cancelAddFormat">Cancel</a>
 				</div>
 			</div>
 		</div>
@@ -532,6 +522,7 @@
 				</p>
 			</div>
 		</div>
+	{{/editable}}
 	{{/owned}}
 </script>
 
@@ -641,13 +632,13 @@
 								<div class="aro_controls">
 									
 									<div class="btn-toolbar">				  
-									  <div class="btn-group">
 									  	<button class="btn btn-primary" id="save-edit-form">
 										  <i class="icon-download-alt icon-white"></i> Save
 										</button>
-									  </div>
-
+										<a class="btn btn-link view" vocab_id="{{id}}" href="javascript:;">Cancel</a>
 									</div>
+
+
 								</div>		
 							<div class="clearfix"></div>	
 						</div>

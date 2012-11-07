@@ -89,7 +89,7 @@ CREATE TABLE `vocab_version_formats` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `version_id` int(11) DEFAULT NULL,
   `type` varchar(45) DEFAULT NULL,
-  `value` varchar(45) DEFAULT NULL,
+  `value` varchar(2048) DEFAULT NULL,
   `format` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=144 DEFAULT CHARSET=utf8;
