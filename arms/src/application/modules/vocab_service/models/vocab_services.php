@@ -91,8 +91,6 @@ class Vocab_services extends CI_Model {
 		
 	}
 
-
-
 	/**
 	 * Returns all downloadable file of a certain format belongs to a certain vocab 
 	 * 
@@ -113,12 +111,8 @@ class Vocab_services extends CI_Model {
 		{
 			$vocab_formats = $query->result();
 			return $vocab_formats;
-		}	
-		
+		}
 	}
-
-
-
 
 	/**
 	 * Returns all versions of a vocab by vocab  ID (or NULL)
@@ -220,7 +214,7 @@ class Vocab_services extends CI_Model {
 		$deleteFormats = $this->db->delete('vocab_version_formats', array('version_id'=>$id));
 
 		//make the latest version status of current
-		$latestVersionQuery = $this->db->order_by('date_added', 'desc')->get_where('vocab_versions', array('vocab_id'=>$vocab_id, 'id !='=>$id), 1, 0);
+		$latestVersionQuery = $this->db->order_by('date_added', 'desc')->get_where('vocab_versions', array('vocab_id'=>$vocab_id, 'id !='=>$id, 'status !='=>'RETIRED'));
 
 		if($latestVersionQuery->num_rows()>0){
 			$result = $latestVersionQuery->result();
@@ -277,6 +271,7 @@ class Vocab_services extends CI_Model {
 		$data = array(
            'status' => 'superseded'
         );
+        $this->db->where('status !=', 'RETIRED');
 		$this->db->update('vocab_versions', $data); 
 		
 		//and then we add the version

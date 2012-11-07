@@ -255,7 +255,7 @@
 					{{/language}}
 
 					{{#subjects}}
-						<h5>Subjects</h5> {{subject}}
+						<h5>Subjects</h5> {{subjects}}
 					{{/subjects}}
 
 					{{#revision_cycle}}
@@ -379,13 +379,19 @@
 				<li>This vocab does not have any available versions</li>
 			{{/noVersions}}
 
-			{{#owned}}
-				{{#editable}}
-				<li class="addVersion" vocab_id="{{id}}" view="{{view}}"><a href="javascript:;"><i class="icon-plus"></i> Add a Version</a></li>
-				{{/editable}}
-			{{/owned}}
 			</ul>
 		</div>
+
+		{{#owned}}
+			{{#editable}}
+			<div class="box-footer clearfix">
+				<div class="btn-group">
+					<button class="btn btn-primary addVersion" vocab_id="{{id}}" view="{{view}}"><i class="icon-plus icon-white"></i> Add a Version</button>
+				</div>
+			</div>
+			{{/editable}}
+		{{/owned}}
+		
 	</div>
 {{/item}}
 </script>

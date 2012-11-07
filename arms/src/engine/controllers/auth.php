@@ -61,8 +61,8 @@ class Auth extends CI_Controller {
 
 		//sending email
 		$this->load->library('email');
-		$this->email->from('minh.nguyen@ands.org.au', 'Minh Duc Nguyen test');
-		$this->email->to('minh.nguyen@ands.org.au'); 
+		$this->email->from($this->config->item('vocab_admin_email'), 'ANDS Vocabulary Notification');
+		$this->email->to($this->config->item('vocab_admin_email')); 
 		$this->email->subject('New user affiliation registered');
 		$message = 'Registering user '.$thisRole. ' to affiliate with '.$orgRole;
 		if($new) $message.='. User created '.$orgRole;
