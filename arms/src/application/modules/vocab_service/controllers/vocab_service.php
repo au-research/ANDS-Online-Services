@@ -529,6 +529,8 @@ class Vocab_service extends MX_Controller {
 			$data = array('upload_data' => $this->upload->data());
 			$jsonData['status']='OK'; 
 			$jsonData['message']='File uploaded successfully!';
+			$uploadData = $this->upload->data();
+			$jsonData['fileName'] = $uploadData['file_name'];
 		}
 		$jsonData = json_encode($jsonData);
 		echo $jsonData;
@@ -563,10 +565,13 @@ class Vocab_service extends MX_Controller {
 				$url = prep_url($f->value);
 				redirect($url);
 			}else if($f->type=='file'){
-				//echo 'is a file';
+				echo 'is a file';
+
+				$filename = $f->value;
+
 				$upload_path = $this->config->item('upload_path');
 				$this->load->helper('download');
-				$data = file_get_contents($upload_path.'/'.$f->value); // Read the file's contents
+				$data = file_get_contents($upload_path.'/'.$filename); // Read the file's contents
 				$name = $f->value;
 				force_download($name, $data);
 			}

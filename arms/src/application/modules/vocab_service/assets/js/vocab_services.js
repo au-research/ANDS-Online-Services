@@ -509,7 +509,7 @@ function bindVocabVersioning(view){
 									var data = new FormData();
 									$.each($('input.addFormatUploadValue', form)[0].files, function(i, file) {
 										data.append('userfile', file);
-										jsonData.push({name:'value',value:file.name})
+										
 									});
 									$.ajax({
 									    url: 'vocab_service/uploadFile',
@@ -522,6 +522,7 @@ function bindVocabVersioning(view){
 									        if(data.status!='OK'){
 									        	logErrorOnScreen(data.message);
 									        }else{
+									        	jsonData.push({name:'value',value:data.fileName})
 									        	$.ajax({
 													url:'vocab_service/addFormat/'+version_id, 
 													type: 'POST',
@@ -575,7 +576,7 @@ function bindVocabVersioning(view){
 				at: 'left center'
 			},
 			show: {event: 'click',solo:true},
-			hide: {fixed:true,delay:2500},
+			hide: {fixed:true,delay:5500},
 			events: {},
 			style: {classes: 'ui-tooltip-shadow ui-tooltip-bootstrap ui-tooltip-large'}
 		});

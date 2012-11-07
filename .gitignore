@@ -10,6 +10,7 @@
 harvester/build/
 harvester/lib/
 pids/build/
+arms/src/assets/uploads/
 pids/lib/
 registry/src/.project
 rifcs-api/build/
