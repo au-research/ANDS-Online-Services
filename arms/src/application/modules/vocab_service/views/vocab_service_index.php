@@ -553,6 +553,8 @@
 									</div>
 								</div>
 
+								<input type="hidden" class="input" name="record_owner" value="{{record_owner}}">
+
 								<div class="control-group">
 									<label class="control-label" for="description">Description</label>
 									<div class="controls">
@@ -656,7 +658,7 @@
 				<div class="box-content">
 					<?php
 						$orgs = $this->user->affiliations();
-						echo '<select>';
+						echo '<select class="chosen" id="chooseRecordOwner">';
 						foreach($orgs as $o){
 							echo '<option value="'.$o.'">'.$o.'</option>';
 						}

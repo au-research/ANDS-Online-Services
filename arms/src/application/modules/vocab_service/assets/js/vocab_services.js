@@ -765,7 +765,15 @@ function load_vocab_edit(vocab_id){
 			loadVersions(vocab_id, data.item.view);
 			var form = $('#edit-form');
 			Core_bindFormValidation(form);
-			
+
+			var record_owner = $('#edit-vocab input[name=record_owner]').val();
+			$('#chooseRecordOwner').val(record_owner);
+			$('#chooseRecordOwner').chosen().trigger("liszt:updated");
+
+			$("#edit-vocab #chooseRecordOwner").chosen().change(function(){
+				var input = $('#edit-vocab input[name=record_owner]');
+				$(input).val($(this).val());
+			});
 		}
 	});
 	return false;
