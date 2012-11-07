@@ -759,22 +759,27 @@ function load_vocab_edit(vocab_id){
 		contentType: 'application/json; charset=utf-8',
 		dataType: 'json',
 		success: function(data){
-			var template = $('#vocab-edit-template').html();
-			var output = Mustache.render(template, data);
-			$('#edit-vocab').html(output);
-			$('#edit-vocab').fadeIn(500);
-			loadVersions(vocab_id, data.item.view);
-			var form = $('#edit-form');
-			Core_bindFormValidation(form);
+			if(data.status=='OK'){
+				var template = $('#vocab-edit-template').html();
+				var output = Mustache.render(template, data);
+				$('#edit-vocab').html(output);
+				$('#edit-vocab').fadeIn(500);
+				loadVersions(vocab_id, data.item.view);
+				var form = $('#edit-form');
+				Core_bindFormValidation(form);
 
-			var record_owner = $('#edit-vocab input[name=record_owner]').val();
-			$('#chooseRecordOwner').val(record_owner);
-			$('#chooseRecordOwner').chosen().trigger("liszt:updated");
+				var record_owner = $('#edit-vocab input[name=record_owner]').val();
+				$('#chooseRecordOwner').val(record_owner);
+				$('#chooseRecordOwner').chosen().trigger("liszt:updated");
 
-			$("#edit-vocab #chooseRecordOwner").chosen().change(function(){
-				var input = $('#edit-vocab input[name=record_owner]');
-				$(input).val($(this).val());
-			});
+				$("#edit-vocab #chooseRecordOwner").chosen().change(function(){
+					var input = $('#edit-vocab input[name=record_owner]');
+					$(input).val($(this).val());
+				});
+			}else{
+				logErrorOnScreen(data.message);
+			}
+			
 		}
 	});
 	return false;
