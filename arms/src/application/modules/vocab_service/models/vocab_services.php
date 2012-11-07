@@ -203,6 +203,10 @@ class Vocab_services extends CI_Model {
 		$version = $this->getVersionByID($id);
 		$vocab_id = $version->vocab_id;
 
+		//check if the version is a current one
+		$isCurrent = $this->isVersionCurrent($id);
+
+
 		//set version to retire
 		$data = array(
 			'status'=>'RETIRED'
@@ -213,21 +217,34 @@ class Vocab_services extends CI_Model {
 		//delete all formats associated with this version
 		$deleteFormats = $this->db->delete('vocab_version_formats', array('version_id'=>$id));
 
-		//make the latest version status of current
-		$latestVersionQuery = $this->db->order_by('date_added', 'desc')->get_where('vocab_versions', array('vocab_id'=>$vocab_id, 'id !='=>$id, 'status !='=>'RETIRED'));
+		if($isCurrent){
+			//make the latest version status of current
+			$latestVersionQuery = $this->db->order_by('date_added', 'desc')->get_where('vocab_versions', array('vocab_id'=>$vocab_id, 'id !='=>$id, 'status !='=>'RETIRED'),1,0);
 
-		if($latestVersionQuery->num_rows()>0){
-			$result = $latestVersionQuery->result();
-			$latestVersion = $result[0];
-			$latestVersion_id = $latestVersion->id;
+			if($latestVersionQuery->num_rows()>0){
+				$result = $latestVersionQuery->result();
+				$latestVersion = $result[0];
+				$latestVersion_id = $latestVersion->id;
 
-			$data = array(
-				'status'=>'current'
-			);
-			$this->db->where('id', $latestVersion_id);
-			$this->db->update('vocab_versions', $data);
+				$data = array(
+					'status'=>'current'
+				);
+				$this->db->where('id', $latestVersion_id);
+				$this->db->update('vocab_versions', $data);
+			}
 		}
 		return true;
+	}
+
+	function isVersionCurrent($id){
+		$query = $this->db->get_where('vocab_versions', array('id'=>$id),1,0);
+		$result = $query->result();
+		$version = $result[0];
+		if($version->status=='current'){
+			return true;
+		}else{
+			return false;
+		}
 	}
 
 	function deleteVocab($vocab_id){

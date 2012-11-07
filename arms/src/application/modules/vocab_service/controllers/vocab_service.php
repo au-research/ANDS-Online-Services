@@ -172,11 +172,11 @@ class Vocab_service extends MX_Controller {
 
 		$vocab= $this->vocab->getByID($id);
 
+
 		if($vocab)
 		{
 			$jsonData['item']['view'] = $view;
 			
-
 			//get owned vocabs permission
 			$ownedVocabsID = array();
 			if($this->user->loggedIn()){
@@ -195,6 +195,11 @@ class Vocab_service extends MX_Controller {
 				$jsonData['item']['owned']=true;
 				if($view=='edit'){
 					$jsonData['item']['editable'] = true;
+				}
+			}else{//not owned
+				if($view=='edit'){
+					$jsonData['status']='ERROR';
+					$jsonData['message']='Access Denied. You are not allowed to edit this vocabulary';
 				}
 			}
 
