@@ -218,8 +218,8 @@ class Vocab_services extends CI_Model {
 		$deleteFormats = $this->db->delete('vocab_version_formats', array('version_id'=>$id));
 
 		if($isCurrent){
-			//make the latest version status of current
-			$latestVersionQuery = $this->db->order_by('date_added', 'desc')->get_where('vocab_versions', array('vocab_id'=>$vocab_id, 'id !='=>$id, 'status !='=>'RETIRED'),1,0);
+			//make the latest superseded the current one
+			$latestVersionQuery = $this->db->order_by('date_added', 'desc')->get_where('vocab_versions', array('vocab_id'=>$vocab_id, 'status'=>'superseded'),1,0);
 
 			if($latestVersionQuery->num_rows()>0){
 				$result = $latestVersionQuery->result();
