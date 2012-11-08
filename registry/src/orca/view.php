@@ -121,7 +121,8 @@ if( $registryObject )
 	print("	<thead>\n");
 
 	$rdaLink = '';
-
+	if($rda_root)
+		$rda_root .= "/";
 	// The link to the RDA
 	$rdaLinkPrefix = 'View';
 	if( $registryObjectStatus != PUBLISHED )
@@ -129,9 +130,9 @@ if( $registryObject )
 		$rdaLinkPrefix = 'Preview';
 	}
 	if(isContributorPage($registryObjectKey)) {
-		$rdaLink = '<br /><a style="font-size:0.8em; font-weight: normal;" href="http://'.$host.'/'.$rda_root . '/view/group/?group='.urlencode($registryObjectKey). '&groupName='.esc($objectGroup).'">'.$rdaLinkPrefix.' this record in Research Data Australia</a>'."\n";
+		$rdaLink = '<br /><a style="font-size:0.8em; font-weight: normal;" href="http://'.$host.'/'.$rda_root.'view/group/?group='.urlencode($registryObjectKey).'&groupName='.esc($objectGroup).'">'.$rdaLinkPrefix.' this record in Research Data Australia</a>'."\n";
 	} else {
-		$rdaLink = '<br /><a style="font-size:0.8em; font-weight: normal;" href="http://'.$host.'/'.$rda_root . '/' . $url_slug.'">'.$rdaLinkPrefix.' this record in Research Data Australia</a>'."\n";
+		$rdaLink = '<br /><a style="font-size:0.8em; font-weight: normal;" href="http://'.$host.'/'.$rda_root.$url_slug.'">'.$rdaLinkPrefix.' this record in Research Data Australia</a>'."\n";
 	}
 
 	$recordHistory = "";
