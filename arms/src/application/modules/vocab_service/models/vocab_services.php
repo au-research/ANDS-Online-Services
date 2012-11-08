@@ -306,7 +306,6 @@ class Vocab_services extends CI_Model {
 
 	function addBlankVocab($record_owner){
 		$data = array(
-			'title'=>'No Title',
 			'record_owner'=>$record_owner,
 			'status'=>'DRAFT'
 		);

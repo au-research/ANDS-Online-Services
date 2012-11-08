@@ -378,7 +378,7 @@
 
 <script type="text/x-mustache" id="vocab-versions">
 {{#item}}
-	<div class="box" vocab_id="{{id}}">
+	<div class="box {{#noVersions}}box-error{{/noVersions}}" vocab_id="{{id}}">
 		<div class="box-header"><h3>Versions</h3><div class="clearfix"/></div>
 		<div class="box-content">
 			<ul class="ro-list">

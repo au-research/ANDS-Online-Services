@@ -76,7 +76,6 @@ class Auth extends CI_Controller {
 		$data['js_lib'] = array('core');
 		$data['scripts'] = array();
 		
-		
 		if($this->user->loggedIn()) 
 		{
 			if(sizeof($this->user->affiliations())>0){
