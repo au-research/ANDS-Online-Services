@@ -1027,9 +1027,18 @@ Format DOI:
         <xsl:if test="./ro:namePart/@type='given'">
             <xsl:value-of select="./ro:namePart[@type='given']"/>.
         </xsl:if>
-                <xsl:if test="./ro:namePart/@type='initial' and not(./ro:namePart/@type='given')">
+        <xsl:if test="./ro:namePart/@type='initial' and not(./ro:namePart/@type='given')">
             <xsl:value-of select="./ro:namePart[@type='initial']"/>.
         </xsl:if>   
+         <xsl:if test="./ro:namePart/@type='full'">
+            <xsl:value-of select="./ro:namePart[@type='full']"/>.
+        </xsl:if>
+        <xsl:if test="./ro:namePart/@type=''">
+            <xsl:value-of select="./ro:namePart[@type='']"/>.
+        </xsl:if>         
+         <xsl:if test="./ro:namePart[not (@type)]">
+            <xsl:value-of select="./ro:namePart"/>.
+        </xsl:if>                
     </xsl:template> 
 
     <xsl:template match="//ro:citationInfo/ro:citationMetadata/ro:date">
