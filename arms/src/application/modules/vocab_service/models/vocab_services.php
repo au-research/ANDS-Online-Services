@@ -45,7 +45,7 @@ class Vocab_services extends CI_Model {
 	 */	
 	function getVersionsByID($id)
 	{
-		$query = $this->db->order_by('date_added asc')->select()->get_where('vocab_versions', array('vocab_id'=>$id,'status !='=>'RETIRED'));
+		$query = $this->db->order_by('date_added desc')->select()->get_where('vocab_versions', array('vocab_id'=>$id,'status !='=>'RETIRED'));
 		
 		if ($query->num_rows() == 0){
 			return NULL;
@@ -54,7 +54,7 @@ class Vocab_services extends CI_Model {
 			$vocab_versions = $query->result();
 			//print_r($vocab_versions);
 			return $vocab_versions;
-		}	
+		}
 	}
 
 	function getVersionByID($id){
@@ -449,6 +449,22 @@ class Vocab_services extends CI_Model {
 		return $vocabs;
 	}
 
+	function getGroupVocabsDrafts(){
+		$vocabs = array();
+		$affiliations = $this->user->affiliations();
+		$query = $this->db->select('id')->where_in('record_owner',$affiliations)->where('status', 'DRAFT')->get('vocab_metadata');
+		if ($query->num_rows() == 0){
+			return $vocabs;
+		}
+		else{
+			foreach($query->result_array() AS $v){
+				$vocabs[] =  new _vocab($v['id']);
+			}
+		}
+		return $vocabs;
+	}
+
+	//retired
 	function getGroupUsersVocabs(){
 		$vocabs = array();
 		$users = array();
@@ -464,10 +480,12 @@ class Vocab_services extends CI_Model {
 		return $vocabs;
 	}
 
+	//retired
 	function getOwnedVocabs($getDrafts){
 		return $this->getVocabsByRole($this->user->localIdentifier(), $getDrafts);
 	}
 
+	//retired
 	function getVocabsByRole($role_id, $getDrafts = false){
 		$vocabs = array();
 		$localIdentifier = $role_id;
@@ -489,8 +507,7 @@ class Vocab_services extends CI_Model {
 	function getAllOwnedVocabs($getDrafts = false){
 		$vocabs = array();
 		$vocabs = array_merge($vocabs, $this->getGroupVocabs());
-		$vocabs = array_merge($vocabs, $this->getGroupUsersVocabs());
-		$vocabs = array_merge($vocabs, $this->getOwnedVocabs($getDrafts));
+		$vocabs = array_merge($vocabs, $this->getGroupVocabsDrafts());
 		return $vocabs;
 	}
 

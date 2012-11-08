@@ -180,7 +180,7 @@ class Vocab_service extends MX_Controller {
 			//get owned vocabs permission
 			$ownedVocabsID = array();
 			if($this->user->loggedIn()){
-				$ownedVocabs = $this->vocab->getAllOwnedVocabs();
+				$ownedVocabs = $this->vocab->getAllOwnedVocabs(true);
 				foreach($ownedVocabs as $v){
 					array_push($ownedVocabsID, $v->id);
 				}
