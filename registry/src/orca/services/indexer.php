@@ -97,7 +97,7 @@ function indexDS($dataSourceKey, $status = 'All', $optimise = true){
 	}
 }
 
-function clearDS($dataSourceKey){
+function clearDSDIEDIEDIE($dataSourceKey){
 	global $solr_update_url;
 	echo "Clearing DS SOLR indexes: ".$dataSourceKey;
 	$result = curl_post($solr_update_url.'?commit=true', '<delete><query>data_source_key:("'.esc($dataSourceKey).'")</query></delete>');	
@@ -170,7 +170,7 @@ function clearAllSolrIndex()
 }
 
 
-function addPublishedSolrIndexForDatasource($dataSourceKey)
+function addPublishedSolrIndexForDatasourceDIEDIEDIE($dataSourceKey)
 {
 	global $solr_update_url;
 	global $totalCount;
@@ -233,7 +233,7 @@ function addPublishedSolrIndexForDatasource($dataSourceKey)
 }
 
 
-function addDraftSolrIndexForDatasource($dataSourceKey)
+function addDraftSolrIndexForDatasourceDIEDIEDIE($dataSourceKey)
 {
 	global $solr_update_url;
 	global $totalCount;
@@ -403,42 +403,46 @@ $ISO_CODE_ARRAY = loadISOcodes(eAPPLICATION_ROOT.'orca/iso3166_country_names_and
 
 print('START'."<br/>");
 
-if( $unprocessedLocations || $unprocessedCoverage)
-{
-	foreach( $unprocessedLocations as $location )
+	if( $unprocessedLocations)
 	{
-		$type = $location['type'];
-		$value = $location['value'];
-		$registryObjectKey = $location['registry_object_key'];
-		$id = $location['spatial_location_id'];
-		if(array_key_exists($value,$ISO_CODE_ARRAY))
+		foreach( $unprocessedLocations as $location )
 		{
-			$value = $ISO_CODE_ARRAY[$value];
+			$type = $location['type'];
+			$value = $location['value'];
+			$registryObjectKey = $location['registry_object_key'];
+			$id = $location['spatial_location_id'];
+			if(array_key_exists($value,$ISO_CODE_ARRAY))
+			{
+				$value = $ISO_CODE_ARRAY[$value];
+			}
+			
+			print ($id." ".$registryObjectKey." ".$type." ".$value."<br/>");
+			ob_flush();flush();
+			importSpatialExtent($id, $value, $type, $registryObjectKey);
+	
 		}
-		
-		print ($id." ".$registryObjectKey." ".$type." ".$value."<br/>");
-		ob_flush();flush();
-		importSpatialExtent($id, $value, $type, $registryObjectKey);
-
 	}
-	foreach( $unprocessedCoverage as $location )
+	if($unprocessedCoverage)
 	{
-		$type = $location['type'];
-		$value = $location['value'];
-		$registryObjectKey = $location['registry_object_key'];
-		$id = $location['spatial_location_id'];
-		if(array_key_exists($value,$ISO_CODE_ARRAY))
+		foreach( $unprocessedCoverage as $location )
 		{
-			$value = $ISO_CODE_ARRAY[$value];
-		}
-		
-		print($id." ".$registryObjectKey." ".$type." ".$value."<br/>");
-		ob_flush();flush();
-		importSpatialExtent($id, $value, $type, $registryObjectKey);
+			$type = $location['type'];
+			$value = $location['value'];
+			$registryObjectKey = $location['registry_object_key'];
+			$id = $location['spatial_location_id'];
+			if(array_key_exists($value,$ISO_CODE_ARRAY))
+			{
+				$value = $ISO_CODE_ARRAY[$value];
+			}
+			
+			print($id." ".$registryObjectKey." ".$type." ".$value."<br/>");
+			ob_flush();flush();
+			importSpatialExtent($id, $value, $type, $registryObjectKey);
+		}	
 	}
 	
-}
 print("<br/>END");
+
 }
 
 function getUnprocessedLocations()
