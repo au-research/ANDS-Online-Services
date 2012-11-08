@@ -143,6 +143,7 @@ function addDraftSolrIndexForDatasource($dataSourceKey)
 	global $solr_update_url;
 	global $totalCount;
 	global $chunkSize;
+	$result = '';
 	$message = '';
 	$rifcsContent = '';
 	$allKeys = getDraftRegistryObject(null , $dataSourceKey);
@@ -265,12 +266,13 @@ function addPublishedSolrIndexForDatasource($dataSourceKey)
 	$rifcsContent = '';
 	$allKeys = getRegistryObjectKeysForDataSource($dataSourceKey);
     $message = '';
+    $result = '';
 	if($allKeys)
 	{
 		$arraySize = sizeof($allKeys);
 		$message .= "Reindexing Published ".$dataSourceKey.": Total: ".$arraySize."<br/>";
 		$totalCount += $arraySize;
-		$result = '';
+
 		for($i = 0; $i < $arraySize ; $i++)
 		{
 			$key = $allKeys[$i]['registry_object_key'];

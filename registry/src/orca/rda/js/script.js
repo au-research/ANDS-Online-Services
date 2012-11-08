@@ -1730,7 +1730,7 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 					}else{
 						//CC-145
 						//console.log(coverageText);
-						locationText.push(coverageText);
+						//locationText.push(coverageText);
 						
 						//setTimeout(drawTheAddress(coverageText, map2),100000);
 						//$('#spatial_coverage_map').hide();	

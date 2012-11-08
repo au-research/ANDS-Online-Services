@@ -1030,45 +1030,51 @@ function importSpatialTypes($location_id, $node, $runErrors, $totalAttemptedInse
 
 function importSpatialExtent($id, $value, $type, $registryObjectKey)
 {
-	$north = -90;
-	$south = 90;
-	$west  = 180;
-	$east  = -180;
-	//$msg = '';
-// && ($type == 'gmlKmlPolyCoords' || $type == 'kmlPolyCoords' || $type == 'iso19139dcmiBox')
+
+	$north = null;
+	$south = null;
+	$west  = null;
+	$east  = null;
+
 	if($type == 'kmlPolyCoords' || $type == 'gmlKmlPolyCoords')
 	{
-		$tok = strtok($value, " ");
-		while ($tok !== FALSE)
+		if(isValidKmlPolyCoords($value))	
 		{
-			$keyValue = explode(",", $tok);
-			//$msg = $msg.'<br/>lat ' .$keyValue[1]. ' long '.$keyValue[0];
-			if(is_numeric($keyValue[1]) && is_numeric($keyValue[0]))
-				{
-
-				$lng = floatval($keyValue[0]);
-				$lat = floatval($keyValue[1]);
-				//$msg = $msg.'<br/>lat ' .$lat. ' long '.$lng;
-				if ($lat > $north)
-				{
-				 $north = $lat;
+			$north = -90;
+			$south = 90;
+			$west  = 180;
+			$east  = -180;
+			$tok = strtok($value, " ");
+			while ($tok !== FALSE)
+			{
+				$keyValue = explode(",", $tok);
+				//$msg = $msg.'<br/>lat ' .$keyValue[1]. ' long '.$keyValue[0];
+				if(is_numeric($keyValue[1]) && is_numeric($keyValue[0]))
+					{
+	
+					$lng = floatval($keyValue[0]);
+					$lat = floatval($keyValue[1]);
+					//$msg = $msg.'<br/>lat ' .$lat. ' long '.$lng;
+					if ($lat > $north)
+					{
+					 $north = $lat;
+					}
+					if($lat < $south)
+					{
+					 $south = $lat;
+					}
+					if($lng < $west)
+					{
+					 $west = $lng;
+					}
+					if($lng > $east)
+					{
+					 $east = $lng;
+					}
 				}
-				if($lat < $south)
-				{
-				 $south = $lat;
-				}
-				if($lng < $west)
-				{
-				 $west = $lng;
-				}
-				if($lng > $east)
-				{
-				 $east = $lng;
-				}
+				$tok = strtok(" ");
 			}
-			$tok = strtok(" ");
 		}
-
 	}
 	elseif($type == 'iso19139dcmiBox')
 	{
@@ -1145,6 +1151,18 @@ function importSpatialExtent($id, $value, $type, $registryObjectKey)
 }
 
 
+function isValidKmlPolyCoords($coords)
+{
+	$valid = false;
+	$coordinates = preg_replace("/\s+/", " ", trim($coords));
+	if( preg_match('/^(\-?\d+(\.\d+)?),(\-?\d+(\.\d+)?)( (\-?\d+(\.\d+)?),(\-?\d+(\.\d+)?))*$/', $coordinates) )
+	{
+		$valid = true;
+	}
+	return $valid;
+}
+
+
 function getExtentFromGoogle($value, &$north, &$south, &$west, &$east)
 {
 	
@@ -1153,8 +1171,7 @@ function getExtentFromGoogle($value, &$north, &$south, &$west, &$east)
 	$resp_json = curl_file_get_contents($url);
 	$resp = json_decode($resp_json, true);
 
-	if($resp['status']=='OK'){
-		
+	if($resp['status']=='OK'){		
 		if($resp['results'][0]['geometry']['viewport'])
 		{
 			$north = $resp['results'][0]['geometry']['viewport']['northeast']['lat'];
@@ -1168,11 +1185,11 @@ function getExtentFromGoogle($value, &$north, &$south, &$west, &$east)
 			$south = $north;
 			$east = $resp['results'][0]['geometry']['location']['lng'];
 			$west = $east;			  
-		}
-		
+		}		
 	}
 	else
 	{
+		print ("ERROR:    ".$resp['status']."<br/>");
 		return false;
 	}
 }

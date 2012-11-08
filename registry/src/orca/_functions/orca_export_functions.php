@@ -1163,13 +1163,24 @@ function getSpatialTypesXML($location_id, $spatialType, $forSOLR)
 				$centre = '';
 				$sizeOfArea = '';
 				$xml .= "        <extRif:spatial>";
-				if($spatialType == 'coverage')
+				$spatialLocationId = $element['spatial_location_id'];
+				$sizeOfArea = getSizeOfSpatialExtent($spatialLocationId);
+				$pathOfArea = getPathOfSpatialExtent($spatialLocationId);
+				
+				if($pathOfArea && ($element['type'] == 'dcmiPoint' || $element['type'] == 'iso31662' || $element['type'] == 'iso31663' || $element['type'] == 'iso3166' || $element['type'] == 'iso31661' || $element['type'] == 'text') )
 				{
-					$spatialLocationId = $element['spatial_location_id'];
-					$sizeOfArea = getSizeOfSpatialExtent($spatialLocationId);
+				$pathOfArea = str_replace( ')', '', $pathOfArea); 
+				$pathOfArea = str_replace( '(', '', $pathOfArea); 
+				$points = explode(',', $pathOfArea);
+				$north = $points[0];
+				$east = $points[1];
+				$south = $points[2];
+				$west = $points[3];
+				$centre = (($east+$west)/2).','.(($north+$south)/2);
+				$xml .= "\n          <extRif:coords>$west,$north $east,$north $east,$south $west,$south $west,$north</extRif:coords>\n";
 				}
 				
-				if($element['type'] == 'iso19139dcmiBox')
+				else if($element['type'] == 'iso19139dcmiBox')
 				{
 					$valueString = strtolower(esc($element['value'])).';';
 					$matches = array();
@@ -1183,7 +1194,7 @@ function getSpatialTypesXML($location_id, $spatialType, $forSOLR)
 					$east = (float)$matches[1];
 					$coordinates = "$west,$north $east,$north $east,$south $west,$south $west,$north";
 					$centre = (($east+$west)/2).','.(($north+$south)/2);
-					$xml .= "          <extRif:coords>$west,$north $east,$north $east,$south $west,$south $west,$north</extRif:coords>\n";
+					$xml .= "\n          <extRif:coords>$west,$north $east,$north $east,$south $west,$south $west,$north</extRif:coords>\n";
 
 
 				}
@@ -1191,7 +1202,7 @@ function getSpatialTypesXML($location_id, $spatialType, $forSOLR)
 				{
 					$coordinates = trim(esc($element['value']));
 					$coordinates = preg_replace("/\s+/", " ", $coordinates);
-					$xml .= "          <extRif:isValidCoords>".validKmlPolyCoords($coordinates)."---".$coordinates."</extRif:isValidCoords>\n";
+					//$xml .= "          <extRif:isValidCoords>".validKmlPolyCoords($coordinates)."---".$coordinates."</extRif:isValidCoords>\n";
 					//if( validKmlPolyCoords($coordinates) )
 					//{
 						// Build the coordinates string for the centre.
@@ -1212,7 +1223,7 @@ function getSpatialTypesXML($location_id, $spatialType, $forSOLR)
 							}
 						}
 						$centre = (($east+$west)/2).','.(($north+$south)/2);
-					    $xml .= "          <extRif:coords>$coordinates</extRif:coords>\n";
+					    $xml .= "\n          <extRif:coords>$coordinates</extRif:coords>\n";
 
 					//}
 				}

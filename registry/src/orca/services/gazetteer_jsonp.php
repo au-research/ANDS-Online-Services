@@ -50,8 +50,8 @@
 		$gXPath = new DOMXpath($gazetteerDoc);
 		if($searchText)
 		{
-			$featureMemberListTOP = $gXPath->evaluate('gml:featureMember[descendant::node()[contains(@xlink:href,"LOCU")] or descendant::node()[contains(@xlink:href,"SUB")] or descendant::node()[contains(@xlink:href,"URBN")]]');
-			$featureMemberListBOTTOM = $gXPath->evaluate('gml:featureMember[not(descendant::node()[contains(@xlink:href,"LOCU")] or descendant::node()[contains(@xlink:href,"SUB")] or descendant::node()[contains(@xlink:href,"URBN")])]');
+			$featureMemberListTOP = $gXPath->evaluate('gml:featureMember[descendant::node()[contains(@xlink:href,"LOCU")] or descendant::node()[contains(@xlink:href,"SUB")] or descendant::node()[contains(@xlink:href,"STAT")] or descendant::node()[contains(@xlink:href,"URBN")]]');
+			$featureMemberListBOTTOM = $gXPath->evaluate('gml:featureMember[not(descendant::node()[contains(@xlink:href,"LOCU")] or descendant::node()[contains(@xlink:href,"SUB")] or descendant::node()[contains(@xlink:href,"STAT")] or descendant::node()[contains(@xlink:href,"URBN")])]');
 			$jsonData['items_count'] = ($featureMemberListTOP->length) + ($featureMemberListBOTTOM->length) ;		
 			$items = array();
 	        for( $i=0; $i < $featureMemberListTOP->length; $i++ )

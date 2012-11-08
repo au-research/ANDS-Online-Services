@@ -260,7 +260,7 @@
             <xsl:if test="ro:coverage/extRif:spatial/extRif:center | ro:location/extRif:spatial/extRif:center">
                 <xsl:apply-templates select="ro:coverage/extRif:spatial/extRif:center | ro:location/extRif:spatial/extRif:center"/>
             </xsl:if> 
-            
+       
            	<xsl:for-each select="ro:coverage/ro:spatial[@type!='iso19139dcmiBox' and @type!='gmlKmlPolyCoords' and @type!='kmlPolyCoords']">
      	 		<p class="coverage_text"><xsl:value-of select="./@type"/>: <xsl:value-of select="."/></p>
       		</xsl:for-each>
