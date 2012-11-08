@@ -270,6 +270,18 @@
 						<h5>Notes</h5> {{notes}}
 					{{/notes}}
 
+					{{#owned}}
+						{{#contact_name}}
+							<h5>Contact name</h5> {{contact_name}}
+						{{/contact_name}}
+						{{#contact_email}}
+							<h5>Contact Email</h5> {{contact_email}}
+						{{/contact_email}}
+						{{#contact_number}}
+							<h5>Contact Number</h5> {{contact_number}}
+						{{/contact_number}}
+					{{/owned}}
+
 
 
 					<?php if($this->user->loggedIn()):?>
@@ -672,7 +684,7 @@
 				</div>
 			</div>
 
-			
+
 			<div id="versions-edit">
 	
 			</div>

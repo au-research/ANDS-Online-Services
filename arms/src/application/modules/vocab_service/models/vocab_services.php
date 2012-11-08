@@ -452,13 +452,15 @@ class Vocab_services extends CI_Model {
 	function getGroupVocabsDrafts(){
 		$vocabs = array();
 		$affiliations = $this->user->affiliations();
-		$query = $this->db->select('id')->where_in('record_owner',$affiliations)->where('status', 'DRAFT')->get('vocab_metadata');
-		if ($query->num_rows() == 0){
-			return $vocabs;
-		}
-		else{
-			foreach($query->result_array() AS $v){
-				$vocabs[] =  new _vocab($v['id']);
+		if (is_array($affiliations) && count($affiliations) > 0){
+			$query = $this->db->select('id')->where_in('record_owner',$affiliations)->where('status', 'DRAFT')->get('vocab_metadata');
+			if ($query->num_rows() == 0){
+				return $vocabs;
+			}
+			else{
+				foreach($query->result_array() AS $v){
+					$vocabs[] =  new _vocab($v['id']);
+				}
 			}
 		}
 		return $vocabs;

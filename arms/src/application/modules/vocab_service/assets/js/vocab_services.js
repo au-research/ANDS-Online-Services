@@ -830,8 +830,8 @@ function load_vocab_add(){
 			if(data.status=='OK'){
 				var id = data.id;
 				changeHashTo('edit/'+id);
-			}else{
-				logErrorOnScreen(data.message);
+			}else if(data.status=='WARNING'){
+				window.location =data.redirect;
 			}
 		}
 	});

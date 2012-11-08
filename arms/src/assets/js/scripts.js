@@ -212,12 +212,12 @@ $(document).ready(function(){
 		jsonData.push({name:'orgRole', value:orgRole});
 		jsonData.push({name:'thisRole', value:thisRole});
 		$.ajax({
-			url: 'auth/registerAffiliation/',
+			url: base_url+'auth/registerAffiliation/',
 			type: 'POST',
 			data: {orgRole:orgRole,thisRole:thisRole},
 			success: function(data){
 				if(data.status=='OK'){
-					$('#myModal .modal-body').html('You have to logout and log back in for the changes to take effect <a href="auth/logout">Logout</a>');
+					$('#myModal .modal-body').html('You have to logout and log back in for the changes to take effect <a href="'+base_url+'auth/logout">Logout</a>');
 					$('#myModal').modal();
 				}else if(data.status=='WARNING'){
 					alert(data.message);
@@ -243,13 +243,13 @@ $(document).ready(function(){
 			if(Core_checkValidForm($('#myModal .addOrgForm'))){
 				$('#myModal').modal('hide');
 				$.ajax({
-					url: 'auth/registerAffiliation/true',
+					url: base_url+'auth/registerAffiliation/true',
 					type: 'POST',
 					data: {orgRole:orgRole,thisRole:thisRole},
 					success: function(data){
 						if(data.status=='OK'){
 							
-							$('#myModal .modal-body').html('You have to logout and log back in for the changes to take effect <a href="auth/logout">Logout</a>');
+							$('#myModal .modal-body').html('You have to logout and log back in for the changes to take effect <a href="'+base_url+'auth/logout">Logout</a>');
 							$('#myModal').modal();
 						}else if(data.status=='WARNING'){
 							alert(data.message);

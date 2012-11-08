@@ -801,12 +801,25 @@ class Vocab_service extends MX_Controller {
 				$jsonData['message']='blank vocab created unsucessfully';
 			}
 		}else{
-			$jsonData['status']='ERROR';
+			$jsonData['status']='WARNING';
+			$jsonData['redirect']='affiliation';
 			$jsonData['message']='You have to be an affiliation with an existing organisation to add vocab. 
 									<p>'.anchor('', 'Go to Dashboard').' or '.anchor('vocab_service/index', 'Browse Vocabularies').'</p>';
 		}
 		
 		echo json_encode($jsonData);
+	}
+
+	public function affiliation(){
+
+		$this->load->model('cosi_authentication', 'cosi');
+		$data['available_organisations'] = $this->cosi->getAllOrganisationalRoles();
+		asort($data['available_organisations']);
+		
+
+		$data['title'] = 'ANDS Vocabularies - Account Setup';
+		$data['js_lib'] = array('core');
+		$this->load->view('affiliation', $data);
 	}
 	
 	
