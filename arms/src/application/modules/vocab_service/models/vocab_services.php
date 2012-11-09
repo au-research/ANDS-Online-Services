@@ -243,7 +243,7 @@ class Vocab_services extends CI_Model {
 			}
 		}
 
-		//now we have a set of all superseded, find the latest date_added to become the current version
+		//now we have a set of all superseded, find the latest date_added to become the current
 		$latestVersionQuery = $this->db->order_by('date_added', 'desc')->get_where('vocab_versions', array('vocab_id'=>$vocab_id, 'status'=>'superseded'),1,0);
 		if($latestVersionQuery->num_rows()>0){
 			//there is a latest version

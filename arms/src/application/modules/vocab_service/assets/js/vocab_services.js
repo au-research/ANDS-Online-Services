@@ -391,19 +391,22 @@ function bindVocabVersioning(view){
 								}
 							});
 							
-							$.ajax({
-								url:'vocab_service/updateVersion/', 
-								type: 'POST',
-								data: jsonData,
-								success: function(data){
-									loadVersions(vocab_id,view);
-									//showSubAlert('Version saved successfully', 'success');
-								},
-								error: function(data){
-									logErrorOnScreen(data);
-								}
-							});
-							requireChangeHistory(vocab_id);
+							if(Core_checkValidForm(form)){
+								$.ajax({
+									url:'vocab_service/updateVersion/', 
+									type: 'POST',
+									data: jsonData,
+									success: function(data){
+										loadVersions(vocab_id,view);
+										//showSubAlert('Version saved successfully', 'success');
+									},
+									error: function(data){
+										logErrorOnScreen(data);
+									}
+								});
+							}else{
+								alert('form is not valid');
+							}
 						});
 
 						$('.deleteVersion').click(function(){

@@ -525,7 +525,7 @@
 		<div class="editVersionForm hide" version_id="{{id}}"><hr/>
 			<form class="form well" vocab_id="{{id}}">
 				<label>Version Title: </label>
-				<input type="text" class="input-medium" name="title" value="{{title}}"><br/>
+				<input type="text" class="input-medium" name="title" value="{{title}}" required><br/>
 				<button type="submit" class="btn editVersionConfirm" version_id="{{id}}">Submit Changes</button> <a href="javascript:;" version_id="{{id}}" class="cancelEdit">Cancel</a>
 			</form>
 		</div>
