@@ -76,7 +76,7 @@ class Vocab_services extends CI_Model {
 	 */	
 	function getAvailableFormatsByID($id)
 	{
-		$qry = 'SELECT distinct(format) FROM dbs_vocabs.vocab_version_formats  WHERE version_id IN(SELECT id FROM dbs_vocabs.vocab_versions WHERE vocab_id = '.$id.');';
+		$qry = 'SELECT distinct(format) FROM dbs_vocabs.vocab_version_formats  WHERE version_id IN(SELECT id FROM dbs_vocabs.vocab_versions WHERE vocab_id = '.$id.' AND (status = "current" OR status = "superseded" OR status="pending-add"));';
 		$query = $this->db->query($qry);
 		
 		if ($query->num_rows() == 0)
@@ -88,7 +88,6 @@ class Vocab_services extends CI_Model {
 			$vocab_formats = $query->result();
 			return $vocab_formats;
 		}	
-		
 	}
 
 	/**
@@ -203,51 +202,51 @@ class Vocab_services extends CI_Model {
 		$version = $this->getVersionByID($id);
 		$vocab_id = $version->vocab_id;
 
-		//check if the version is a current one
-		$isCurrent = $this->isVersionCurrent($id);
-
-
-		//set version to retire
 		$data = array(
-			'status'=>'RETIRED'
+			'status'=>'pending-delete'
 		);
 		$this->db->where('id', $id);
 		$this->db->update('vocab_versions', $data);
-
-		//delete all formats associated with this version
-		$deleteFormats = $this->db->delete('vocab_version_formats', array('version_id'=>$id));
-
-		if($isCurrent){//if deleting a current version
-			//make the latest superseded the current one
-			$latestVersionQuery = $this->db->order_by('date_added', 'desc')->get_where('vocab_versions', array('vocab_id'=>$vocab_id, 'status'=>'superseded'),1,0);
-
-			if($latestVersionQuery->num_rows()>0){
-				//there is a latest version
-				$result = $latestVersionQuery->result();
-				$latestVersion = $result[0];
-				$latestVersion_id = $latestVersion->id;
-
-				//make it current
-				$data = array(
-					'status'=>'current'
-				);
-				$this->db->where('id', $latestVersion_id);
-				$this->db->update('vocab_versions', $data);
-			}
-		}
+		
 		return true;
 	}
 
-	function isVersionCurrent($id){
-		$query = $this->db->get_where('vocab_versions', array('id'=>$id),1,0);
-		$result = $query->result();
-		$version = $result[0];
-		if($version->status=='current'){
-			return true;
-		}else{
-			return false;
+	function cleanUpVersions($vocab_id){
+		$versions = $this->getVersionsByID($vocab_id);
+		foreach($versions as $version){
+			if($version->status=="pending-delete"){
+				$data = array(
+					'status'=>'RETIRED'
+				);
+				$this->db->where('id', $version->id);
+				$this->db->update('vocab_versions', $data);
+			}
+
+			if($version->status=="pending-add"){
+				$data = array(
+					'status'=>'superseded'
+				);
+				$this->db->where('id', $version->id);
+				$this->db->update('vocab_versions', $data);
+			}
+		}
+
+		$latestVersionQuery = $this->db->order_by('date_added', 'desc')->get_where('vocab_versions', array('vocab_id'=>$vocab_id, 'status'=>'superseded'),1,0);
+		if($latestVersionQuery->num_rows()>0){
+			//there is a latest version
+			$result = $latestVersionQuery->result();
+			$latestVersion = $result[0];
+			$latestVersion_id = $latestVersion->id;
+
+			//make it current
+			$data = array(
+				'status'=>'current'
+			);
+			$this->db->where('id', $latestVersion_id);
+			$this->db->update('vocab_versions', $data);
 		}
 	}
+
 
 	function deleteVocab($vocab_id){
 		//set the vocab to retire
@@ -287,16 +286,16 @@ class Vocab_services extends CI_Model {
 	function addVersion($vocab_id, $version){
 
 		//if adding a current version, all other versions must be superceded
-		$data = array(
+		/*$data = array(
            'status' => 'superseded'
         );
         $this->db->where('status !=', 'RETIRED');
-		$this->db->update('vocab_versions', $data); 
+		$this->db->update('vocab_versions', $data);*/
 		
 		//and then we add the version
 		$data = array(
 			'title'=>$version['title'],
-			'status'=>'current',
+			'status'=>'pending-add',
 			'vocab_id'=>$vocab_id
 		);
 

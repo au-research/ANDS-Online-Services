@@ -768,6 +768,7 @@ class Vocab_service extends MX_Controller {
 				}
 				$vocab->setAttribute('status','PUBLISHED');
 				$vocab->save();
+				$this->vocab->cleanUpVersions($vocab->id);
 				$jsonData['status']='OK';
 				$jsonData['message']=' Your Vocabulary was successfully updated <a href="#!/view/'.$id.'">View the vocabulary</a>';
 			}else{

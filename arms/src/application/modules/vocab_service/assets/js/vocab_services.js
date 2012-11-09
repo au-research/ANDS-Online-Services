@@ -397,7 +397,7 @@ function bindVocabVersioning(view){
 								data: jsonData,
 								success: function(data){
 									loadVersions(vocab_id,view);
-									showSubAlert('Version saved successfully', 'success');
+									//showSubAlert('Version saved successfully', 'success');
 								},
 								error: function(data){
 									logErrorOnScreen(data);
@@ -436,13 +436,12 @@ function bindVocabVersioning(view){
 								data: {version_id:version_id},
 								success: function(data){	
 									loadVersions(vocab_id,view);
-									showSubAlert('Version deleted successfully', 'success');
+									//showSubAlert('Version deleted successfully', 'success');
 								},
 								error: function(data){
 									logErrorOnScreen(data);
 								}
 							});
-							requireChangeHistory(vocab_id);
 						});
 
 						$('.addFormat').click(function(){
@@ -511,7 +510,6 @@ function bindVocabVersioning(view){
 									var data = new FormData();
 									$.each($('input.addFormatUploadValue', form)[0].files, function(i, file) {
 										data.append('userfile', file);
-										
 									});
 									$.ajax({
 									    url: 'vocab_service/uploadFile',
@@ -531,7 +529,7 @@ function bindVocabVersioning(view){
 													data: jsonData,
 													success: function(data){
 														loadVersions(vocab_id,view);
-														showSubAlert('Format saved successfully', 'success');
+														//showSubAlert('Format saved successfully', 'success');
 													}
 												});
 									        }
@@ -547,7 +545,7 @@ function bindVocabVersioning(view){
 										}
 									});
 								}
-								requireChangeHistory(vocab_id);
+								//requireChangeHistory(vocab_id);
 							}else{
 								//alert('form is not valid');
 							}
@@ -563,13 +561,13 @@ function bindVocabVersioning(view){
 										$('tr.formatRow[format_id='+format_id+']').fadeOut('200', function(){
 											$(target).qtip('reposition');
 										});
-										showSubAlert('Format deleted successfully', 'success');
+										//showSubAlert('Format deleted successfully', 'success');
 									}else{
 										logErrorOnScreen(data);
 									}
 								}
 							});
-							requireChangeHistory(vocab_id);
+							//requireChangeHistory(vocab_id);
 						});
 					}
 				}
@@ -641,7 +639,6 @@ function bindVocabVersioning(view){
 					$('.addVersionButton', tooltip).die().unbind().click(function(e){
 						e.preventDefault();
 						var jsonData = [];
-						$(this).button('loading');
 						var form = $('form', tooltip);
 
 						jsonData.push({name:'vocab_id', value:vocab_id});
@@ -663,10 +660,10 @@ function bindVocabVersioning(view){
 									type: 'POST',
 									data: jsonData,
 									success: function(data){	
-										requireChangeHistory(vocab_id);
+										//requireChangeHistory(vocab_id);
 										loadVersions(vocab_id,view);
 										$(this).button('reset');
-										showSubAlert('Version saved successfully', 'success');
+										//showSubAlert('Version saved successfully', 'success');
 									},
 									error: function(data){
 										logErrorOnScreen(data);
@@ -696,9 +693,9 @@ function bindVocabVersioning(view){
 												data: jsonData,
 												success: function(data){
 													loadVersions(vocab_id,view);
-													requireChangeHistory(vocab_id);
+													//requireChangeHistory(vocab_id);
 													$(this).button('reset');
-													showSubAlert('Version saved successfully', 'success');
+													//showSubAlert('Version saved successfully', 'success');
 												},
 												error: function(data){
 													logErrorOnScreen(data);
@@ -837,34 +834,6 @@ function load_vocab_add(){
 	});
 }
 
-function deleteVersionFormat(format_id,vocab_id){
-	
-	confirm("Do you really want to delete the format of vocab " + format_id );
-	$.ajax({
-		url: 'vocab_service/deleteFormat/'+format_id,
-		type: 'GET',
-		contentType: 'application/json; charset=utf-8',
-		dataType: 'json',
-		success: function(data){
-
-				//$.modal.close();
-				changeHashTo('edit/'+vocab_id);
-				
-			},
-			error: function(data)
-			{
-				console.log(data)
-				$('#myModal').modal();
-				logErrorOnScreen("An error occured deleting your format!", $('#myModal .modal-body'));
-			//	$('#myModal .modal-body').append("<br/><pre>" + data + "</pre>");
-			}
-			
-	
-			});
-	
-}
-
-
 $('#save-edit-form').die().live({
 	click: function(e){
 		e.preventDefault();
@@ -891,6 +860,7 @@ $('#save-edit-form').die().live({
 					if(data.status=='OK'){
 						$('#save-edit-form-message').html(data.message);
 						requireChangeHistory(vocab_id);
+						loadVersions(vocab_id,'edit');
 					}else if(data.status=='WARNING'){
 						$('#myModal .modal-body').html(data.message);
 						$('#myModal').modal();
