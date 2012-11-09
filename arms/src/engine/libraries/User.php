@@ -35,7 +35,7 @@ class User {
 		}
 		else
 		{
-			throw new Exception("Unable to authenticate user. Login object returned negative response.");
+			throw new Exception("Unable to authenticate user. Login object returned negative response.".$login_response['message']);
 		}
 		
 		return false;

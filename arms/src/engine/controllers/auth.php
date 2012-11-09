@@ -19,6 +19,7 @@ class Auth extends CI_Controller {
 			catch (Exception $e)
 			{
 				$data['error_message'] = "Unable to login. Please check your credentials are accurate.";
+				$data['exception'] = $e;
 			}
 		}
 		

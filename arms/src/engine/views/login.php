@@ -28,6 +28,12 @@
 						</div>
 					<?php endif; ?>
 					
+					<?php if (isset($exception)): ?>
+						<div class="alert alert-error">
+							<?php echo $exception; ?>
+						</div>
+					<?php endif; ?>
+					
 					<form class="form-horizontal" action="<?=base_url("auth/login");?>" method="post">
 					  <div class="control-group">
 					    <label class="control-label" for="inputUsername">Username</label>

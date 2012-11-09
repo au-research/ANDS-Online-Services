@@ -44,7 +44,18 @@ class Cosi_authentication extends CI_Model {
     	/*
     	 * Using the built-in account system
     	 */
-    	if ($method === gCOSI_AUTH_METHOD_BUILT_IN)
+    	$result = $this->cosi_db->get_where("dba.tbl_roles",	
+    												array(
+    													"role_id"=>$username,
+    													"role_type_id"=>"ROLE_USER",	
+    													"enabled"=>'t'
+    												));
+		if($result->num_rows() > 0){
+			$method = trim($result->row(1)->authentication_service_id);
+		}
+    												
+    	//return array('result'=>0,'message'=>json_encode($result));												
+    	if ($method === 'AUTHENTICATION_BUILT_IN')
 		{
 			if ($username == '')
 			{
@@ -92,70 +103,9 @@ class Cosi_authentication extends CI_Model {
 					throw new Exception('Authentication Failed (2)');
 	    		}
     		}
-    		else
-    		{	
-				/*
-				 * Try using the LDAP Authentication Methods
-				 */
-				$this->load->helper('ldap');
-				if ($username == '')
-				{
-					throw new Exception('Authentication Failed (00)');
-				}
-					
-				if ($password == '')
-				{
-					throw new Exception('Authentication Failed (01)');
-				}
-				
-				$result = $this->cosi_db->get_where("dba.tbl_roles",	
-														array(
-															"role_id"=>$username,
-															"role_type_id"=>"ROLE_USER",
-		  													"authentication_service_id"=>gCOSI_AUTH_METHOD_LDAP,	
-															"enabled"=>'t'
-														));
-														
-				if ($result->num_rows() > 0)
-				{
-					$LDAPAttributes = array();
-					$LDAPMessage = "";
-					$successful = authenticateWithLDAP($username, $password, $LDAPAttributes, $LDAPMessage);
-		
-					
-					if (count($LDAPAttributes) > 0)
-					{
-						$user_results = $this->getRolesAndActivitiesByRoleID ($username);
-						
-						return array(	
-										'result'=>1,
-										'message'=>'Success',
-										'user_identifier'=>$username,
-						    			'name'=>(isset($LDAPAttributes['cn'][0]) ? $LDAPAttributes['cn'][0] : $result->row(1)->name), // implementation specific
-										'last_login'=>$result->row(1)->last_login,
-										'activities'=>$user_results['activities'],
-										'organisational_roles'=>$user_results['organisational_roles'],
-										'functional_roles'=>$user_results['functional_roles']
-									);
-					}
-		    		else
-		    		{
-		    			// LDAP ERROR (Could not bind)
-		    			// You may wish to debug by appending $LDAPMessage to this response
-						throw new Exception('Authentication Failed (02)');
-		    		}
-				}
-				else
-				{
-					// No such user/disabled
-					throw new Exception('Authentication Failed (03)');
-				}
-				
-				// No such user/disabled
-				throw new Exception('Authentication Failed (03)');
-			}	
+    		
 		}
-		elseif ($method == gCOSI_AUTH_METHOD_SHIBBOLETH)
+		else if ($method === 'AUTHENTICATION_SHIBBOLETH')
 		{
 			
 			$result = $this->cosi_db->get_where("dba.tbl_roles",	
@@ -197,12 +147,70 @@ class Cosi_authentication extends CI_Model {
     		}
     		
 		}
-		/* No such authentication method */
+		else if($method === 'AUTHENTICATION_LDAP')
+		{
+			/*
+			 * Try using the LDAP Authentication Methods
+			 */
+			
+			$this->load->helper('ldap');
+			if ($username == '')
+			{
+				throw new Exception('Authentication Failed (00)');
+			}
+				
+			if ($password == '')
+			{
+				throw new Exception('Authentication Failed (01)');
+			}
+			
+			$result = $this->cosi_db->get_where("dba.tbl_roles",	
+													array(
+														"role_id"=>$username,
+														"role_type_id"=>"ROLE_USER",
+	  													"authentication_service_id"=>gCOSI_AUTH_METHOD_LDAP,	
+														"enabled"=>'t'
+													));
+												
+			if ($result->num_rows() > 0)
+			{
+				$LDAPAttributes = array();
+				$LDAPMessage = "";
+				$successful = $this->authenticateWithLDAP($username, $password, $LDAPAttributes, $LDAPMessage);
+				if (count($LDAPAttributes) > 0)
+				{
+					$user_results = $this->getRolesAndActivitiesByRoleID ($username);
+					
+					return array(	
+									'result'=>1,
+									'message'=>'Success',
+									'user_identifier'=>$username,
+					    			'name'=>(isset($LDAPAttributes['cn'][0]) ? $LDAPAttributes['cn'][0] : $result->row(1)->name), // implementation specific
+									'last_login'=>$result->row(1)->last_login,
+									'activities'=>$user_results['activities'],
+									'organisational_roles'=>$user_results['organisational_roles'],
+									'functional_roles'=>$user_results['functional_roles']
+								);
+				}
+	    		else
+	    		{
+	    			// LDAP ERROR (Could not bind)
+	    			// You may wish to debug by appending $LDAPMessage to this response
+					throw new Exception('Authentication Failed (02)');
+	    		}
+			}
+			else
+			{
+				// No such user/disabled
+				throw new Exception('Authentication Failed (03)');
+			}
+		}
     	else
-    	{
-    		// Invalid authentication method
-    		throw new Exception('Authentication Failed (-1)');
-    	}
+		{
+		return array('result'=>0,'message'=>json_encode($result));	
+		}
+		
+		
     }
     
     
@@ -287,8 +295,126 @@ class Cosi_authentication extends CI_Model {
     	return $roles;
     }
     
-    
-    
+	private function authenticateWithLDAP($role_id, $passphrase, &$LDAPAttributes, &$userMessage)
+	{
+$eLDAPHost = "ldap://ldap.anu.edu.au";
+$eLDAPPort = 389; //636 | 389
+// The resource distinguished name.
+// The string @@ROLE_ID@@ will be replace with the user role_id, and escaped
+// for LDAP reserved characters before the bind is attempted.
+$eLDAPBaseDN = "ou=People, o=anu.edu.au";
+$eLDAPuid = "uid=@@ROLE_ID@@";
+$eLDAPDN = "$eLDAPuid, $eLDAPBaseDN";
+
+		
+		$validCredentials = false;
+		
+		if( $eLDAPBaseDN && $eLDAPuid )
+		{
+			$ldapDN = str_replace("@@ROLE_ID@@", escLDAPChars($role_id), $eLDAPDN);
+			$ldapconn = ldap_connect($eLDAPHost, $eLDAPPort);
+		
+			if( $ldapconn && $passphrase != '' )
+			{
+				$ldapbind = ldap_bind($ldapconn, $ldapDN, $passphrase);
+				if( $ldapbind )
+				{
+					$validCredentials = true;
+				
+					// Put this user's LDAP attributes into session to make them available
+					// for use with authorisations and stuff.
+					$ldapUserDN = str_replace("@@ROLE_ID@@", escLDAPChars($role_id), $eLDAPuid);
+					$searchResult = ldap_search($ldapconn, $eLDAPBaseDN, $ldapUserDN);
+					if( $searchResult && ldap_count_entries($ldapconn, $searchResult) === 1 )
+					{
+						$entry = ldap_first_entry($ldapconn, $searchResult);
+						$LDAPAttributes = ldap_get_attributes($ldapconn, $entry);
+					}
+				
+					ldap_unbind($ldapconn);
+				}
+				else
+				{
+					$ldapErrorNumber = ldap_errno($ldapconn);
+					if( $ldapErrorNumber === 49 ) // 0x31 = 49 is the LDAP error number for invalid credentials.
+					{
+						$userMessage = "LOGIN FAILED\nInvalid user ID/password [31,49].\n";
+					}
+					else
+					{
+						$userMessage = "LOGIN FAILED\nAuthentication service error [32,$ldapErrorNumber].\n";
+					}
+					/* 
+					LDAP error numbers have the same meaning across implementations, though the messages vary.
+	 
+					A list of implementation specific error messages can be obtained using:
+					 	for ($i=-1; $i<100; $i++) {
+					 		printf("Error $i: %s<br />\n", ldap_err2str($i));
+					 	}
+	
+					Error numbers and messages are for troubleshooting, and should not be displayed to users.
+	
+					Example results:
+						Error -1: Can't contact LDAP server
+						Error 0: Success
+						Error 1: Operations error
+						Error 2: Protocol error
+						Error 3: Time limit exceeded
+						Error 4: Size limit exceeded
+						Error 5: Compare False
+						Error 6: Compare True
+						Error 7: Authentication method not supported
+						Error 8: Strong(er) authentication required
+						Error 9: Partial results and referral received
+						Error 10: Referral
+						Error 11: Administrative limit exceeded
+						Error 12: Critical extension is unavailable
+						Error 13: Confidentiality required
+						Error 14: SASL bind in progress
+						Error 16: No such attribute
+						Error 17: Undefined attribute type
+						Error 18: Inappropriate matching
+						Error 19: Constraint violation
+						Error 20: Type or value exists
+						Error 21: Invalid syntax
+						Error 32: No such object
+						Error 33: Alias problem
+						Error 34: Invalid DN syntax
+						Error 35: Entry is a leaf
+						Error 36: Alias dereferencing problem
+						Error 47: Proxy Authorization Failure
+						Error 48: Inappropriate authentication
+						Error 49: Invalid credentials
+						Error 50: Insufficient access
+						Error 51: Server is busy
+						Error 52: Server is unavailable
+						Error 53: Server is unwilling to perform
+						Error 54: Loop detected
+						Error 64: Naming violation
+						Error 65: Object class violation
+						Error 66: Operation not allowed on non-leaf
+						Error 67: Operation not allowed on RDN
+						Error 68: Already exists
+						Error 69: Cannot modify object class
+						Error 70: Results too large
+						Error 71: Operation affects multiple DSAs
+						Error 80: Internal (implementation specific) error
+					 */
+				}
+			}
+			else
+			{
+				$userMessage = "LOGIN FAILED\nAuthentication service error [30].\n";
+			}
+		}
+		else
+		{
+			$userMessage = "LOGIN FAILED\nAuthentication service error [31].\n";
+		}
+		
+		return $validCredentials;
+	}
+	    
     private function getChildActivities($role_id)
     {
     	$activities = array();
