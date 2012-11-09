@@ -2875,7 +2875,7 @@ $_strings['*_buttons'] = <<<HTMLEND
 							<tr>
 								<td class="formNotes" id="rmb_formNotes">
 									Fields marked <label class="mandatory"></label>are <b>mandatory</b>.<br />
-									Data captured through this system will be validated against the <a class="colorGrey" target="_blank" href="http://ands.org.au/resource/rif-cs.html">RIF-CS 1.3.0 Schema</a> and <a class="colorGrey" target="_blank" href="http://ands.org.au/resource/metadata-content-requirements.html">Metadata Content Requirements</a>.<br />
+									Data captured through this system will be validated against the latest version of the  <a class="colorGrey" target="_blank" href="http://ands.org.au/resource/rif-cs.html">RIF-CS Schema</a> and <a class="colorGrey" target="_blank" href="http://ands.org.au/resource/metadata-content-requirements.html">Metadata Content Requirements</a>.<br />
 								</td>
 							</tr>
 						</tbody>
