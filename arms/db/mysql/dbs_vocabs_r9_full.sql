@@ -107,7 +107,7 @@ CREATE TABLE `vocab_versions` (
   `vocab_id` int(11) DEFAULT NULL,
   `status` varchar(45) DEFAULT NULL,
   `title` varchar(45) DEFAULT NULL,
-  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=104 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
