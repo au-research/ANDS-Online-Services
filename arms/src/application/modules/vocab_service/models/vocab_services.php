@@ -214,6 +214,17 @@ class Vocab_services extends CI_Model {
 	function cleanUpVersions($vocab_id){
 		$versions = $this->getVersionsByID($vocab_id);
 		foreach($versions as $version){
+
+			//make all current superseded
+			if($version->status=='current'){
+				$data = array(
+					'status'=>'superseded'
+				);
+				$this->db->where('id', $version->id);
+				$this->db->update('vocab_versions', $data);
+			}
+
+			//delete all pending delete
 			if($version->status=="pending-delete"){
 				$data = array(
 					'status'=>'RETIRED'
@@ -222,6 +233,7 @@ class Vocab_services extends CI_Model {
 				$this->db->update('vocab_versions', $data);
 			}
 
+			//make all pending-add superseded
 			if($version->status=="pending-add"){
 				$data = array(
 					'status'=>'superseded'
@@ -231,6 +243,7 @@ class Vocab_services extends CI_Model {
 			}
 		}
 
+		//now we have a set of all superseded, find the latest date_added to become the current version
 		$latestVersionQuery = $this->db->order_by('date_added', 'desc')->get_where('vocab_versions', array('vocab_id'=>$vocab_id, 'status'=>'superseded'),1,0);
 		if($latestVersionQuery->num_rows()>0){
 			//there is a latest version
