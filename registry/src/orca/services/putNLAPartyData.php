@@ -43,7 +43,6 @@ require '/var/www/htdocs/registry/orca/_functions/orca_constants.php';
 
 chdir("/var/www/htdocs/registry/orca/_includes");
 
-require '/var/www/htdocs/registry/global_config.php';
 
 // Open a connection to the database.
 // This will be closed automatically by the framework.
