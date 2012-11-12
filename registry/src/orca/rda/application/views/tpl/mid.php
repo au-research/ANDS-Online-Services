@@ -72,14 +72,14 @@ limitations under the License.
 					</span>
 				</div>
 			</div>
-			<div id="spatial-info2" class="hide">
-				<ul style="text-align:left">
-				<li>To use the spatial search tool, click on 'Start Drawing' at the bottom of the map. Then left-click anywhere on the map, and release your mouse button. Next, drag your mouse and left-click and release again. This will create a rectangular search area on the map. You can use the 'Clear Drawing' button to clear your search area and start again.</li>
-				<li>You can use the arrow found on the right hand side of the 'Start Drawing' button to expand the map.</li>
-				<li>Spatial search results will be displayed in the results list and on the interactive map.</li>
-				<li>Only those objects which have geospatial information associated with them will be returned as results from a Spatial search. Not all metadata Providers include geospatial information with their objects.</li>
-				<li>Only the objects that are listed in the current search results view will appear on the map. Choose a results page number or click on '>' to move further down the results list.</li>
-				</ul>
+			<div id="spatial-info2" style="text-align:left" class="hide">
+				<p>To define a search area within the spatial search tool, click the button containing a 'square' at the top of the tool, this will turn your courser into a cross. Left click once on the map on the location you would like your rectangle to begin drawing, now move your courser to your final location and left click again, the spatial tool will now draw a rectangle which will become your search bounding box.</p>
+				<p>You can conduct a search via a location name, by using the text box located on the bottom of the map. Type your required location, once typed the map tool will display a list of locations, now click your required location.</p>
+				<p>After defining a search area you require to create a new bounding box, press the “Clear Drawing” button located at the bottom left of the map, this will now clear your map.</p>
+				<p>To navigate the map within the spatial tool, click the button containing a small 'hand', your courser will now change to a hand symbol, now click and hold the left mouse button and drag, you will now see the map move. An alternative way to navigate the map is to click the arrow buttons located at the top left of the map. If you would like to zoom in or out within the current map, click the plus or minus buttons located in the top left hand side of the map.</p>
+				<p>Spatial search results will be displayed in the results list and on the interactive map.</p>
+				<p>Only those objects which have geospatial information associated with them will be returned as results from a Spatial search. Not all metadata Providers include geospatial information with their objects.</p>
+				<p>Only the objects that are listed in the current search results view will appear on the map. Choose a results page number or click on '>' to move further down the results list.</p>
 			</div>
 			
 			<div id="advanced-text">
