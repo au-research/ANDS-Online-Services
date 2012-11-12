@@ -284,13 +284,13 @@
 
 
 
-					<?php if($this->user->loggedIn()):?>
+					<?php //if($this->user->loggedIn()):?>
 			    	<div class="btn-toolbar">
 						<div class="btn-group item-control" vocab_id="{{id}}">
 							<button class="btn contact" id="contactPublisher"><i class="icon-user"></i> Contact Publisher</button>
 						</div>
 					</div>
-					<?php endif;?>
+					<?php //endif;?>
 
 					<div id="contactPublisherForm" class="hide">
 						<form class="contactPublisherForm">

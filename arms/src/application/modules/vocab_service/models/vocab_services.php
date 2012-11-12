@@ -22,6 +22,7 @@ class Vocab_services extends CI_Model {
 	 * @param the vocab ID
 	 * @return _vocab object or NULL
 	 */
+	
 	function getByID($id)
 	{
 
