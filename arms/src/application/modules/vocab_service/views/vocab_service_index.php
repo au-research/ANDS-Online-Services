@@ -654,7 +654,7 @@
 									  	<button class="btn btn-primary" id="save-edit-form">
 										  <i class="icon-download-alt icon-white"></i> Save
 										</button>
-										<a class="btn btn-link view" vocab_id="{{id}}" href="javascript:;">Cancel</a>
+										<a class="btn btn-link cancel" vocab_id="{{id}}" href="javascript:;">Cancel</a>
 									</div>
 
 

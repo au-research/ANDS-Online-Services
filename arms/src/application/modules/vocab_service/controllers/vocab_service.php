@@ -652,10 +652,12 @@ class Vocab_service extends MX_Controller {
 			'title'=>$this->input->post('title'),
 			'id'=>$this->input->post('id')
 		);
-		if($this->input->post('makeCurrent')) {
-			$version['makeCurrent']=true;
-		}else $version['makeCurrent']=false;
 		$this->vocab->updateVersion($version);
+	}
+
+	public function undoVocab($vocab_id){
+		$this->load->model('vocab_services', 'vocab');
+		$this->vocab->undoVersions($vocab_id);
 	}
 
 	public function contactPublisher(){
@@ -803,7 +805,7 @@ class Vocab_service extends MX_Controller {
 			}
 		}else{
 			$jsonData['status']='WARNING';
-			$jsonData['redirect']='affiliation';
+			$jsonData['redirect']=base_url().'vocab_service/affiliation';
 			$jsonData['message']='You have to be an affiliation with an existing organisation to add vocab. 
 									<p>'.anchor('', 'Go to Dashboard').' or '.anchor('vocab_service/index', 'Browse Vocabularies').'</p>';
 		}

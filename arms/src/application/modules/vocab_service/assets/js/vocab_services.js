@@ -81,7 +81,7 @@ $(function(){
 	});
 
 	//item button binding
-	$('.btn').die().live({
+	$('.btn').live({
 		click: function(e){
 			e.preventDefault();
 			var vocab_id = $(this).attr('vocab_id');
@@ -93,15 +93,6 @@ $(function(){
 				changeHashTo('delete/'+vocab_id);
 			}else if($(this).hasClass('add')){
 				changeHashTo('add/');
-			}else if($(this).hasClass('version-edit')){
-				var version_id = $(this).attr('version_id')	
-				showEditVersionModal(vocab_id,version_id);
-			}else if($(this).hasClass('version-format-delete')){
-				var format_id = $(this).attr('format_id')	
-				deleteVersionFormat(format_id,vocab_id)
-			}else if($(this).hasClass('version-format-add')){
-				var version_id = $(this).attr('version_id')	
-				addVersionFormat(version_id,vocab_id);
 			}
 		}
 	});
@@ -189,6 +180,7 @@ function load_more(page){
  * @return false
  */
 function load_vocab(vocab_id){
+	$('#edit-vocab').hide();
 	$('#view-vocab').html('Loading');
 	$('#browse-vocabs').slideUp(500);
 	$.ajax({
@@ -784,6 +776,17 @@ function load_vocab_edit(vocab_id){
 					$(input).val($(this).val());
 				});
 				
+				$('#edit-vocab .cancel').click(function(){
+					var vocab_id = $(this).attr('vocab_id');
+					$.ajax({
+						url:'vocab_service/undoVocab/'+vocab_id, 
+						type: 'POST',
+						success: function(data){
+							changeHashTo('view/'+vocab_id);
+						}
+					});
+				});
+
 			}else{
 				logErrorOnScreen(data.message);
 			}
