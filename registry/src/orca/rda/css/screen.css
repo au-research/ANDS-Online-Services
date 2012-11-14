@@ -754,3 +754,6 @@ display:block;
     display:block;
     background-image:url('../img/delete.png'); 
 	}
+#clear_advanced{
+	padding-left:30px;
+	}
