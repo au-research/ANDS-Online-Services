@@ -218,16 +218,17 @@ HTMLEND;
 // Names
 //
 $_strings['collection_dates_metadata_guidance'] = <<<HTMLEND
-
+										
 										<a href="javascript:toggleMetaGuide();" class="guideNotesPrompt" id="guideNotesPrompt_dates">+ Show Metadata Content Guidance Notes</a>
 										<ul id="guideNotes_dates" class="guideNotes" style="display:none;">
 										<li>
 											At least one dates element is recommended for this record
 										</li>
 										<li>
-											See also: <a href="" target="_blank">Dates Element (Content Providers Guide) XXX: TODO: </a>
+											See also: <a href="http://ands.org.au/guides/cpguide/cpgdates.html" target="_blank">Dates Element (Content Providers Guide)</a>
 										</li>
 										</ul>
+										<p class="guideNotes" >The Dates element can be used to record dates associated with an event in the life cycle of the data collection such as when it was created or published. <br />To record the time coverage of the collection, please use the Temporal element on the Coverage tab.<p>
 
 HTMLEND;
 
@@ -464,6 +465,10 @@ $_strings['*_coverage_metadata_guidance'] = <<<HTMLEND
 											See also: <a href="http://ands.org.au/guides/cpguide/cpgcoverage.html" target="_blank">Coverage Element (Content Providers Guide)</a>
 										</li>
 										</ul>
+										<p  class="guideNotes" >
+										The Coverage element should be used to record the temporal and/or spatial coverage of the collection. <br />
+										To record dates associated with an event in the life cycle of the collection (eg. date created) please use the Dates tab.
+										</p>
 
 HTMLEND;
 

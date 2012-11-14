@@ -58,7 +58,6 @@ require '../../_includes/header.php';
 	// which will be displayed when the user selects the [?] help button.
 	tabs["#mandatoryInformation"] = {name:"Record Administration", cpg:"http://ands.org.au/guides/cpguide/cpgcollection.html"};
 	tabs["#name"] = {name:"Name/Title", cpg:"http://ands.org.au/guides/cpguide/cpgname.html"};
-	tabs["#dates"] = {name:"Dates", cpg:"http://ands.org.au/guides/content-providers-guide.html"};
 	tabs["#description"] = {name:"Descriptions/Rights",cpg:"http://ands.org.au/guides/cpguide/cpgdescription.html"};
 	tabs["#identifier"] = {name:"Identifiers", cpg:"http://ands.org.au/guides/cpguide/cpgidentifiers.html"};
 	tabs["#location"] = {name:"Locations",cpg:"http://ands.org.au/guides/cpguide/cpglocationintro.html"};
@@ -67,7 +66,7 @@ require '../../_includes/header.php';
 	tabs["#coverage"] = {name:"Coverage",cpg:"http://ands.org.au/guides/cpguide/cpgcoverage.html"};
 	tabs["#citationInfo"] = {name:"Citations",cpg:"http://ands.org.au/guides/cpguide/cpgcitation.html"};
 	tabs["#relatedInfo"] = {name:"Related Info",cpg:"http://ands.org.au/guides/cpguide/cpgrelatedinfo.html"};
-
+	tabs["#dates"] = {name:"Dates", cpg:"http://www.ands.org.au/guides/cpguide/cpgdates.html"};
 	<?php
 
 	if ($readOnly)
