@@ -15,7 +15,7 @@ class User {
 	/**
 	 * 
 	 */
-    function authChallenge($username, $password, $displayName)
+    function authChallenge($username, $password, $displayName='')
     {
     	// Dynamically load the authentication_class (as defined in the config file)
     	$this->CI->load->model($this->CI->config->item('authentication_class'), 'auth');
