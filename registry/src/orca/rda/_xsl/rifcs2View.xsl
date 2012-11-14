@@ -571,6 +571,9 @@
      <xsl:value-of select="."/>   <br />
     </xsl:template>
     <xsl:template match="ro:coverage/ro:temporal/ro:date">
+               <xsl:if test="./@type = 'datefrom'">
+            From         <xsl:value-of select="."/>     
+        </xsl:if>
            <xsl:if test="./@type = 'dateFrom'">
             From         <xsl:value-of select="."/>     
         </xsl:if>
