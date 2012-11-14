@@ -584,11 +584,14 @@ HTMLEND;
  * COLLECTION TABLE ELEMENTS
  *********************************************/
 $ds_string = "";
+
 if (isset($_GET['cache_set']) || (isset($_GET['tag']) && (strpos($_GET['tag'], "mandatoryInformation") !== FALSE || strpos($_GET['tag'], "relatedObject") !== FALSE))) {
 
 
 	// Execute the search.
+
 	$rawResults = getDataSources(null, null);
+
 	$searchResults = array();
 
 	if (userIsORCA_ADMIN())
@@ -604,6 +607,7 @@ if (isset($_GET['cache_set']) || (isset($_GET['tag']) && (strpos($_GET['tag'], "
 	// Check the record owners.
 	if( $rawResults )
 	{
+
 		foreach( $rawResults as $dataSource )
 		{
 			if( (userIsORCA_ADMIN() || userIsDataSourceRecordOwner($dataSource['record_owner'])) )
@@ -611,6 +615,7 @@ if (isset($_GET['cache_set']) || (isset($_GET['tag']) && (strpos($_GET['tag'], "
 				$searchResults[] = $dataSource;
 			}
 		}
+
 	}
 	if (isset($_GET['data_source']))
 	{
@@ -649,7 +654,6 @@ if (isset($_GET['cache_set']) || (isset($_GET['tag']) && (strpos($_GET['tag'], "
 	$email_script = "var adminEmail = '" . eCONTACT_EMAIL ."';";
 
 $originatingSource = eORIGSOURCE_REGISTER_MY_DATA;
-
 }
 
 if (isset($_GET['tag']) && (strpos($_GET['tag'], "mandatoryInformation") !== FALSE || strpos($_GET['tag'], "relatedObject") !== FALSE))

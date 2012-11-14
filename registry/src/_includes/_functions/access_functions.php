@@ -518,12 +518,20 @@ function hasActivity($activity_id)
 	return $hasActivity;
 }
 
+$gUserRoleIDs = null;
 function hasRole($role_id)
 {
+	// Cache the role IDs
+	global $gUserRoleIDs; 
+	if ($gUserRoleIDs === null)
+	{
+		$gUserRoleIDs = getAllUserRoleIDs(getSessionVar(sROLE_ID));
+	}
+	
 	$hasRole = false;
 	
-	$userRoleIDs = getAllUserRoleIDs(getSessionVar(sROLE_ID));
-	if( in_array($role_id, $userRoleIDs, true) )
+
+	if( in_array($role_id, $gUserRoleIDs, true) )
 	{
 		$hasRole = true;
 	}
