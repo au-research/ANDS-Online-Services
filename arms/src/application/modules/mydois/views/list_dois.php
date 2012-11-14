@@ -56,7 +56,7 @@ $testDoiPrefix =  $this->config->item('test_doi_prefix');
 							<td width="40%"><small><strong><?=$doiTitle;?></strong><br/><?=anchor($doi->url,$doi->url);?></small></td>
 							<td>
 								<?=anchor('http://dx.doi.org/' . $doi->doi_id, $doi->doi_id);?>
-								<?php if(strpos($doi->doi_id ,$testDoiPrefix) === 0) {echo "<br/><span class='label label-important'>Test DOI</span>";}  ?>
+								<?php if(strpos($doi->doi_id ,$testDoiPrefix) === 0) {echo "<br/><span class='muted'><em>Test prefix DOI</em></span>";}  ?>
 							</td>
 							<td>
 								<?=anchor('mydois/getDoiXml?doi_id=' . rawurlencode($doi->doi_id), 'View XML', array("role"=>"button", "class"=>"btn btn-mini", "data-target"=>"#viewDoiXmlModal", "data-toggle"=>"modal"));?>
