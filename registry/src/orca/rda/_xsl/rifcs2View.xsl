@@ -269,7 +269,7 @@
      	 		<p class="coverage_text"><xsl:value-of select="./@type"/>: <xsl:value-of select="."/></p>
       		</xsl:for-each>     		
 
-            <xsl:if test="ro:coverage/ro:temporal/ro:date | ro:location[@dateFrom!=''] | ro:location[@dateTo!=''] | ro:coverage/ro:temporal/ro:text">
+            <xsl:if test="ro:coverage/ro:temporal/ro:date | ro:location[@dateFrom!=''] | ro:location[@datefrom!=''] | ro:location[@dateTo!=''] | ro:coverage/ro:temporal/ro:text">
              	  Time Period: <br />
             </xsl:if>
 
@@ -277,8 +277,8 @@
                 <xsl:apply-templates select="ro:coverage/ro:temporal/ro:date"/>
              </xsl:if> 
              
-             <xsl:if test="ro:location[@dateFrom!=''] | ro:location[@dateTo!='']">
-             	 <xsl:apply-templates select="ro:location[@dateFrom!=''] | ro:location[@dateTo!='']"/>   
+             <xsl:if test="ro:location[@datefrom!=''] | ro:location[@dateFrom!=''] | ro:location[@dateTo!='']">
+             	 <xsl:apply-templates select="ro:location[@datefrom!=''] |ro:location[@dateFrom!=''] | ro:location[@dateTo!='']"/>   
              </xsl:if>           
           
             <xsl:if test="ro:coverage/ro:temporal/ro:text">
@@ -555,7 +555,10 @@
         </xsl:if>     
         <xsl:value-of select="."/>       
     </xsl:template> 
-      <xsl:template match="ro:location[@dateFrom!=''] | ro:location[@dateTo!='']">  
+      <xsl:template match="ro:location[@datefrom!=''] |ro:location[@dateFrom!=''] | ro:location[@dateTo!='']">  
+         <xsl:if test="./@datefrom != ''">
+            From         <xsl:value-of select="./@datefrom"/>     
+        </xsl:if>     
         <xsl:if test="./@dateFrom != ''">
             From         <xsl:value-of select="./@dateFrom"/>     
         </xsl:if>
