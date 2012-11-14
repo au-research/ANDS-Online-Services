@@ -1,11 +1,11 @@
 <?php
 function authenticateWithLDAP($role_id, $passphrase, &$LDAPAttributes, &$userMessage)
 {
-$eLDAPHost = "ldap://ldap.anu.edu.au";
-$eLDAPPort = 389; //636 | 389
-$eLDAPBaseDN = "ou=People, o=anu.edu.au";
-$eLDAPuid = "uid=@@ROLE_ID@@";
-$eLDAPDN = "$eLDAPuid, $eLDAPBaseDN";
+$eLDAPHost = gCOSI_AUTH_LDAP_HOST;//"ldap://ldap.anu.edu.au";
+$eLDAPPort = gCOSI_AUTH_LDAP_PORT;//389; //636 | 389
+$eLDAPBaseDN = gCOSI_AUTH_LDAP_BASE_DN;//"ou=People, o=anu.edu.au";
+$eLDAPuid = gCOSI_AUTH_LDAP_UID;//"uid=@@ROLE_ID@@";
+$eLDAPDN = gCOSI_AUTH_LDAP_DN;//"$eLDAPuid, $eLDAPBaseDN";
 
 		
 		$validCredentials = false;

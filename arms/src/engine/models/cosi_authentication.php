@@ -39,7 +39,7 @@ class Cosi_authentication extends CI_Model {
      * @param $password Plaintext password to use to authenticate
      * @param $method Authentication method to use (built-in/ldap/shib...etc)
      */
-    function authenticate($username, $password, $displayName='', $method='AUTHENTICATION_SHIBBOLETH')
+    function authenticate($username, $password, $displayName='', $method=gCOSI_AUTH_METHOD_SHIBBOLETH)
     {
     	/*
     	 * Using the built-in account system
@@ -55,7 +55,7 @@ class Cosi_authentication extends CI_Model {
 		}
     												
     	//return array('result'=>0,'message'=>json_encode($result));												
-    	if ($method === 'AUTHENTICATION_BUILT_IN')
+    	if ($method === gCOSI_AUTH_METHOD_BUILT_IN)
 		{
 			if ($username == '')
 			{
@@ -105,7 +105,7 @@ class Cosi_authentication extends CI_Model {
     		}
     		
 		}
-		else if ($method === 'AUTHENTICATION_SHIBBOLETH')
+		else if ($method === gCOSI_AUTH_METHOD_SHIBBOLETH)
 		{			
 			if ($username == '')
 			{
@@ -123,7 +123,7 @@ class Cosi_authentication extends CI_Model {
     						'functional_roles'=>$user_results['functional_roles']
     					);			    		
 		}
-		else if($method === 'AUTHENTICATION_LDAP')
+		else if($method === gCOSI_AUTH_METHOD_LDAP)
 		{
 			/*
 			 * Try using the LDAP Authentication Methods

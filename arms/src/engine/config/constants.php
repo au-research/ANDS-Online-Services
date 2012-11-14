@@ -63,8 +63,8 @@ define('gCOSI_AUTH_ROLE_FUNCTIONAL', 'ROLE_FUNCTIONAL');
 define('gCOSI_AUTH_ROLE_ORGANISATIONAL', 'ROLE_ORGANISATIONAL');
 
 
-define('gCOSI_AUTH_LDAP_HOST', "ldaps://ldap.anu.edu.au");
-define('gCOSI_AUTH_LDAP_PORT', 636); // 636 | 389
+define('gCOSI_AUTH_LDAP_HOST', "ldap://ldap.anu.edu.au");
+define('gCOSI_AUTH_LDAP_PORT', 389); // 636 | 389
 define('gCOSI_AUTH_LDAP_BASE_DN', "ou=People, o=anu.edu.au");
 // The resource distinguished name.
 // The string @@ROLE_ID@@ will be replace with the user role_id, and escaped
