@@ -30,6 +30,32 @@ class Auth extends CI_Controller {
 		// Logs the user out and redirects them to the homepage/logout confirmation screen
 		$this->user->logout(); 		
 	}
+	
+	public function setUser(){
+		$sharedToken = '';
+		$displayName = '';
+		if(isset($_SERVER['shib-shared-token']))
+		{
+			$sharedToken = $_SERVER['shib-shared-token'];
+		}
+		if(isset($_SERVER['displayName']))
+		{		
+			$displayName=$_SERVER['displayName'];
+		}
+		try 
+		{
+			if($this->user->authChallenge($sharedToken, '', $displayName))
+			{
+				redirect('/');
+			}
+		}
+		catch (Exception $e)
+		{
+			$data['error_message'] = "Unable to login. Please check your credentials are accurate.";
+			$data['exception'] = $e;
+		}
+
+	}
 
 	public function registerAffiliation($new = false){
 		header('Cache-Control: no-cache, must-revalidate');
@@ -107,5 +133,28 @@ class Auth extends CI_Controller {
 		}
 	}
 	
+	public function printData($title, $internal_array)
+	{
+		if( $internal_array )
+		{
+			print '<b>'.$title."</b><br />\n";
+			foreach($internal_array as $key => $value)
+			{
+				print("$key=");	
+				if( is_array($value) )
+				{
+					foreach( $value as $subvalue )
+					{
+						print("$subvalue, ");
+					}
+				}
+				else
+				{
+					print($value);
+				}
+				print "<br />\n";			
+			}
+		}
+	}
 
 }

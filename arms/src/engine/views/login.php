@@ -51,6 +51,7 @@
 					    <div class="controls">
 					      
 					      <button type="submit" class="btn">Sign in</button>
+					      <a href="https://devl.ands.org.au/Shibboleth.sso/Login?target=https://devl.ands.org.au/workareas/leo/ands/arms/src/auth/setUser" class="btn">Login with Shib</a>
 					    </div>
 					  </div>
 					</form>

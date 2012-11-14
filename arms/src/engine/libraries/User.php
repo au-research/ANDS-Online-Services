@@ -15,11 +15,11 @@ class User {
 	/**
 	 * 
 	 */
-    function authChallenge($username, $password)
+    function authChallenge($username, $password, $displayName)
     {
     	// Dynamically load the authentication_class (as defined in the config file)
     	$this->CI->load->model($this->CI->config->item('authentication_class'), 'auth');
-		$login_response = $this->CI->auth->authenticate($username,$password);
+		$login_response = $this->CI->auth->authenticate($username, $password, $displayName);
 		
 		if ($login_response['result'] == 1)
 		{

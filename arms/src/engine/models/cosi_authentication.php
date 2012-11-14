@@ -39,7 +39,7 @@ class Cosi_authentication extends CI_Model {
      * @param $password Plaintext password to use to authenticate
      * @param $method Authentication method to use (built-in/ldap/shib...etc)
      */
-    function authenticate($username, $password, $method=gCOSI_AUTH_METHOD_BUILT_IN)
+    function authenticate($username, $password, $displayName, $method='AUTHENTICATION_SHIBBOLETH')
     {
     	/*
     	 * Using the built-in account system
@@ -106,46 +106,22 @@ class Cosi_authentication extends CI_Model {
     		
 		}
 		else if ($method === 'AUTHENTICATION_SHIBBOLETH')
-		{
-			
-			$result = $this->cosi_db->get_where("dba.tbl_roles",	
-    												array(
-    													"role_id"=>$username,
-    													"role_type_id"=>"ROLE_USER",
-      													"authentication_service_id"=>gCOSI_AUTH_METHOD_SHIBBOLETH,	
-    													"enabled"=>'t'
-    												));
-    												
-			if ($result->num_rows() > 0)
-    		{
-    			
-    			if ($password == $this->config->item('gCOSI_SHIBBOLETH_SHARED_KEY'))
-    			{
-    				$user_results = $this->getRolesAndActivitiesByRoleID ($username);
-    				
-					return array(	
-									'result'=>1,
-    								'message'=>'Success',
-									'user_identifier'=>$username,
-					    			'name'=>$result->row(1)->name, 
-    								'last_login'=>$result->row(1)->last_login,
-    								'activities'=>$user_results['activities'],
-    								'organisational_roles'=>$user_results['organisational_roles'],
-    								'functional_roles'=>$user_results['functional_roles']
-    							);
-    			}
-	    		else
-	    		{
-	    			// Invalid shared key
-					throw new Exception('Authentication Failed (11)');
-	    		}
-    		}
-    		else
-    		{
-    			// No such user/disabled
-				throw new Exception('Authentication Failed (12)');
-    		}
-    		
+		{			
+			if ($username == '')
+			{
+				throw new Exception('Authentication Failed (0)');
+			}			
+			$user_results = $this->getRolesAndActivitiesByRoleID ($username);   				
+			return array(	
+							'result'=>1,
+    						'message'=>'Success',
+							'user_identifier'=>$username,
+					    	'name'=>$displayName,
+    						'last_login'=>$result->row(1)->last_login,
+    						'activities'=>$user_results['activities'],
+    						'organisational_roles'=>$user_results['organisational_roles'],
+    						'functional_roles'=>$user_results['functional_roles']
+    					);			    		
 		}
 		else if($method === 'AUTHENTICATION_LDAP')
 		{
