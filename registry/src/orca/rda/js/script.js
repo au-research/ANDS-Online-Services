@@ -2726,7 +2726,7 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 	});
 	*/
 	$( "#expand" ).button(
-		{text: false,icons: {primary: "ui-icon-arrowthickstop-1-e"}
+		{text: false,icons: {primary: "ui-icon-circle-arrow-e"}
 	}).click(function(){
 		$('#advanced-text').hide();
     	$('#advanced-spatial').css('width', '100%');
@@ -2739,7 +2739,7 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 	
 	$('#collapse').hide();
 	$("#collapse").button(
-			{text: false,icons: {primary: "ui-icon-arrowthickstop-1-w"}
+			{text: false,icons: {primary: "ui-icon-circle-arrow-w"}
 	}).click(function(){
 			$('#advanced-text').show();
 	    	$('#advanced-spatial').css('width', '300px');

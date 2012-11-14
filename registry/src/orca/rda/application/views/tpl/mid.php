@@ -61,7 +61,7 @@ limitations under the License.
 				<span id="map-stuff">
 					<!-- button id="start-drawing">Start Drawing</button-->
 					<button id="clear-drawing">Clear Drawing</button>
-					<button id="expand">Expand</button>
+					<button id="expand">Expand Map</button>
 					<button id="collapse">Collapse</button>
 					<input type="text" id="address"/>
 					<button id="map-info">Info</button>

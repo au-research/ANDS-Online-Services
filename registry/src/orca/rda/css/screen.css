@@ -757,3 +757,9 @@ display:block;
 #clear_advanced{
 	padding-left:30px;
 	}
+.ui-state-default .ui-icon-info { background-image: url(smoothness/images/ui-icons_2e83ff_256x240.png); }
+.ui-state-hover .ui-icon-info, .ui-state-focus .ui-icon {background-image: url(smoothness/images/ui-icons_2e83ff_256x240.png); }
+.ui-state-default .ui-icon-circle-arrow-e { background-image: url(smoothness/images/ui-icons_2e83ff_256x240.png); }
+.ui-state-hover .ui-icon-circle-arrow-e  {background-image: url(smoothness/images/ui-icons_2e83ff_256x240.png); }
+.ui-state-default .ui-icon-circle-arrow-w { background-image: url(smoothness/images/ui-icons_2e83ff_256x240.png); }
+.ui-state-hover .ui-icon-circle-arrow-w  {background-image: url(smoothness/images/ui-icons_2e83ff_256x240.png); }
