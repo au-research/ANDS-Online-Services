@@ -40,7 +40,7 @@
 
 
 					<img src="<?php echo asset_url('img/aaf_logo.gif');?>" style="display:block;margin:10px auto;"/>
-					<a href="<?php echo secure_host_url();?>/Shibboleth.sso/<?php echo gSHIBBOLETH_SESSION_INITIATOR;?>?target=<?php echo secure_base_url();?>auth/setUser" class="btn btn-primary btn-block">Login using Australian Access Federation (AAF) credentials</a>
+					<a href="<?php echo secure_host_url();?><?php echo gSHIBBOLETH_SESSION_INITIATOR;?>?target=<?php echo secure_base_url();?>auth/setUser" class="btn btn-primary btn-block">Login using Australian Access Federation (AAF) credentials</a>
 
 
 
