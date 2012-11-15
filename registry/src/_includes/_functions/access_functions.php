@@ -530,7 +530,6 @@ function hasRole($role_id)
 	
 	$hasRole = false;
 	
-
 	if( in_array($role_id, $gUserRoleIDs, true) )
 	{
 		$hasRole = true;

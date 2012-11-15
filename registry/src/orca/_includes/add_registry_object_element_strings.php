@@ -589,9 +589,7 @@ if (isset($_GET['cache_set']) || (isset($_GET['tag']) && (strpos($_GET['tag'], "
 
 
 	// Execute the search.
-
 	$rawResults = getDataSources(null, null);
-
 	$searchResults = array();
 
 	if (userIsORCA_ADMIN())
@@ -1212,12 +1210,8 @@ $_strings['*_description'] = <<<HTMLEND
 
 													<td style="text-align:right; font-weight:normal; padding-left:8px; padding-top:8px;"><label class="mandatory" for="object_description_%%SEQNUM1%%_value">Value:</label></td>
 													<td>
-														<textarea name="object.description[%%SEQNUM1%%].value" id="object_description_%%SEQNUM1%%_value" class="ckeditor_text"></textarea>
-																							<script>
-														CKEDITOR.replace('object_description_%%SEQNUM1%%_value',{ toolbar: 'Basic'});
-
-										</script>
-														</td>
+														<textarea name="object.description[%%SEQNUM1%%].value" id="object_description_%%SEQNUM1%%_value" class="async_ckeditor_text"></textarea>
+													</td>
 													<td><div class="fieldError" name="errors_description_%%SEQNUM1%%_value"></div></td>
 													<td>
 														<input type="button" class="buttonSmall" name="btn_description_%%SEQNUM1%%_remove" value="Remove this Description" onClick="decCount('object.description'); $('#table_description_%%SEQNUM1%%').remove();" style="float:right;" /><br/>
@@ -1889,11 +1883,7 @@ $_strings['*_location_address_physical_addressPart'] = <<<HTMLEND
 												<tr>
 													<td style="text-align:right; vertical-align:middle; font-weight:normal; width:20px;"><label class="mandatory" for="object.location[%%SEQNUM1%%].address[%%SEQNUM2%%].physical[%%SEQNUM3%%].addressPart[%%SEQNUM4%%].value">Value:</label></td>
 													<td onclick="getHelpText('collection_location_physical_address_part_type');" style="vertical-align:middle; width:270px;">
-
-
-														<textarea id="object_location_%%SEQNUM1%%_address_%%SEQNUM2%%_physical_%%SEQNUM3%%_addressPart_%%SEQNUM4%%_value" name="object.location[%%SEQNUM1%%].address[%%SEQNUM2%%].physical[%%SEQNUM3%%].addressPart[%%SEQNUM4%%].value"  onChange="testAnyURI(this.id);" class="ckeditor_text"></textarea>
-
-														<script>CKEDITOR.replace('object_location_%%SEQNUM1%%_address_%%SEQNUM2%%_physical_%%SEQNUM3%%_addressPart_%%SEQNUM4%%_value',{ toolbar: 'Basic'}); </script>
+														<textarea id="object_location_%%SEQNUM1%%_address_%%SEQNUM2%%_physical_%%SEQNUM3%%_addressPart_%%SEQNUM4%%_value" name="object.location[%%SEQNUM1%%].address[%%SEQNUM2%%].physical[%%SEQNUM3%%].addressPart[%%SEQNUM4%%].value"  onChange="testAnyURI(this.id);" class="async_ckeditor_text"></textarea>
 													</td>
 													<td><div class="fieldError" name="errors_location_%%SEQNUM1%%_address_%%SEQNUM2%%_physical_%%SEQNUM3%%_addressPart_%%SEQNUM4%%_value" style="font-size:1.05em;"></div></td>
 												</tr>

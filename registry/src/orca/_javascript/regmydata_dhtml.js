@@ -37,7 +37,17 @@ var elementCache = { 'element': {}, 'tab': {}};
 var qualityLevel = 0;
 var STATUS_COOKIE_NAME = 'ORCA_REGISTRY_MANAGE_STATUS';
 var STATUS_COOKIE_TTL_DAYS = 365*5;
+
 var keyArray = new Array();
+
+var mctInitFunc = null;
+
+function mctAsyncInit(controls, resolver)
+{
+	mctInitFunc = function(){ mctInit(controls, resolver); }
+}
+
+
 // init namespace
 $.rmd = {};
 
@@ -539,9 +549,9 @@ function getElement(elementType, callback, context, fragment, seq)
 				}
 				
 				traverse((context == null ? "object." : context + elementType + (tcount != undefined ? "[" + tcount + "]" : "") + "."), fragment);
-				
+	
 				eval('contexts[\''+data.cbc+'\'] = null;');
-				
+			
 				requestsRemaining -= 1;
 				advanceLoadingStatus();
 			}, "json");
@@ -894,13 +904,12 @@ function advanceLoadingStatus () {
 
 		key = $.urlParam('key');
 		if (key == "") { key = $("#elementCategory").val(); }
-		
+		showLoading("Parsing the RIFCS XML...");
 		requestsRemaining += 1;
 		$.get(rootAppPath + "orca/manage/process_registry_object.php?task=get&data_source="+$.urlParam('data_source')+"&key=" + key, 
 				function(data) {
 					requestsRemaining -= 1;
 					traverse(null, data);
-
 					pageStatus = 'LOADING_ELTS'; 
 					readyToAdvance = true;
 					advanceLoadingStatus();
@@ -926,7 +935,7 @@ function advanceLoadingStatus () {
 					//getRelatedObjectPreview(k, target);
 				}
 			});	
-		getRelatedObjectsPreview();	
+		getRelatedObjectsPreview();
 		
 	}
 	
@@ -1014,6 +1023,16 @@ function advanceLoadingStatus () {
 			$('#enableBtn').removeAttr('disabled');
 			disableEditing();
 		}
+
+
+		// Asyncronously load ckeditors
+		$('.async_ckeditor_text').each(function(i, elt){
+			$(this).addClass('ckeditor_text');
+			CKEDITOR.replace($(this).attr('id'),{ toolbar: 'Basic'});
+		});
+		
+		if (mctInitFunc) { mctInitFunc(); }
+
 
 	}
 	
