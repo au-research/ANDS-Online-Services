@@ -522,7 +522,7 @@ function bindVocabVersioning(view){
 													data: jsonData,
 													success: function(data){
 														loadVersions(vocab_id,view);
-														//showSubAlert('Format saved successfully', 'success');
+														showSubAlert('Format saved successfully');
 													}
 												});
 									        }
@@ -535,6 +535,7 @@ function bindVocabVersioning(view){
 										data: jsonData,
 										success: function(data){
 											loadVersions(vocab_id,view);
+											showSubAlert('Format saved successfully');
 										}
 									});
 								}
@@ -545,21 +546,23 @@ function bindVocabVersioning(view){
 						});
 
 						$('.deleteFormat').click(function(){
-							var format_id = $(this).attr('format_id');
-							$.ajax({
-								url:'vocab_service/deleteFormat/'+format_id, 
-								type: 'POST',
-								success: function(data){	
-									if(data.status=='OK'){
-										$('tr.formatRow[format_id='+format_id+']').fadeOut('200', function(){
-											$(target).qtip('reposition');
-										});
-										//showSubAlert('Format deleted successfully', 'success');
-									}else{
-										logErrorOnScreen(data);
+							if(confirm('Do you want to delete this format?')){
+								var format_id = $(this).attr('format_id');
+								$.ajax({
+									url:'vocab_service/deleteFormat/'+format_id, 
+									type: 'POST',
+									success: function(data){	
+										if(data.status=='OK'){
+											$('tr.formatRow[format_id='+format_id+']').fadeOut('200', function(){
+												$(target).qtip('reposition');
+											});
+											showSubAlert('Format deleted successfully', 'success');
+										}else{
+											logErrorOnScreen(data);
+										}
 									}
-								}
-							});
+								});
+							}
 							//requireChangeHistory(vocab_id);
 						});
 					}
@@ -795,6 +798,7 @@ function load_vocab_edit(vocab_id){
 }
 
 function showSubAlert(content, alert_class){
+	if(alert_class=='undefined') alert_class='success';
 	var vocab_id = $('#subalert').attr('vocab_id');
 	$('#subalert').slideUp(100, function(){
 		$('#subalert').removeClass('alert-success').removeClass('alert-warning').removeClass('alert-error').addClass('alert-'+alert_class).html("");
