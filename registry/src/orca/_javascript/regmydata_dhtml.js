@@ -44,7 +44,7 @@ var mctInitFunc = null;
 
 function mctAsyncInit(controls, resolver)
 {
-	mctInitFunc = function(){ mctInit(controls, resolver); }
+	mctInitFunc = function(){ console.log("asd"); mctInit(controls, resolver); }
 }
 
 
@@ -1030,9 +1030,9 @@ function advanceLoadingStatus () {
 			$(this).addClass('ckeditor_text');
 			CKEDITOR.replace($(this).attr('id'),{ toolbar: 'Basic'});
 		});
-		
+	
 		// Load the Gazeteer/Map asynchronously
-		if (mctInitFunc) { window.setTimeout(mctInitFunc(), 3000); }
+		if (mctInitFunc) { window.setTimeout(mctInitFunc,5000); }
 
 
 	}
