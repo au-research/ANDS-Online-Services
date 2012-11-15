@@ -34,9 +34,12 @@ class Auth extends CI_Controller {
 	public function setUser(){
 		$sharedToken = '';
 		$displayName = '';
-		if(isset($_SERVER['shib-shared-token']))
-		{
+		if(isset($_SERVER['shib-shared-token'])){
 			$sharedToken = $_SERVER['shib-shared-token'];
+		}else{
+			$data['error_message'] = "Unable to login. Shibboleth IDP was not able to authenticate the given credentials.";
+			$data['exception'] = $e;
+			$this->load->view('login', $data);
 		}
 		if(isset($_SERVER['displayName']))
 		{		
@@ -46,13 +49,18 @@ class Auth extends CI_Controller {
 		{
 			if($this->user->authChallenge($sharedToken, '', $displayName))
 			{
-				redirect('/');
+				redirect('/auth/dashboard/');
+			}else{
+				$data['error_message'] = "Unable to login. Please check your credentials are accurate.";
+				$data['exception'] = $e;
+				$this->load->view('login', $data);
 			}
 		}
 		catch (Exception $e)
 		{
 			$data['error_message'] = "Unable to login. Please check your credentials are accurate.";
 			$data['exception'] = $e;
+			$this->load->view('login', $data);
 		}
 
 	}

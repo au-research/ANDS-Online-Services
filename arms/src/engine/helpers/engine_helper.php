@@ -43,3 +43,21 @@ function asset_url( $path )
 		return base_url( 'assets/' . $path );
 	}
 }
+
+function host_url(){
+	$url = parse_url(site_url());
+	return $url['scheme'].'://'.$url['host'];
+}
+
+function secure_host_url(){
+	$url = parse_url(site_url());
+	$protocol = 'https://';
+	$host = $url['host'];
+	return $protocol.$host;
+}
+
+function secure_base_url(){
+	$url = parse_url(site_url());
+	$protocol = 'https://';
+	return $protocol.$url['host'].$url['path'];
+}

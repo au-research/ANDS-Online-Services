@@ -61,6 +61,7 @@ h1{.text-shadow}
 	border:1px solid @borderColor;
 	padding:10px;
 	background:@boxBackground;
+	overflow:hidden;
 	.box-header{
 		margin: -10px -10px 10px -10px;
 		padding:0px 10px;
@@ -114,7 +115,7 @@ h1{.text-shadow}
 		}
 	}
 	.box-content{
-		
+		overflow:hidden;
 	}
 	.box-footer{
 		margin:-10px;
@@ -126,7 +127,23 @@ h1{.text-shadow}
 			
 		}
 	}
+	.container{
+
+	}
 	margin-bottom:15px;
+}
+
+.box-noStyle{
+	width:50%;
+	padding:10px;
+	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+	-moz-box-sizing: border-box;    /* Firefox, other Gecko */
+	box-sizing: border-box;         /* Opera/IE 8+ */
+	float:left;
+}
+
+.border-right{
+	border-right:1px solid @borderColor;
 }
 
 .box-error{

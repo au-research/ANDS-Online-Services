@@ -72,6 +72,7 @@ define('gCOSI_AUTH_LDAP_BASE_DN', "ou=People, o=anu.edu.au");
 define('gCOSI_AUTH_LDAP_UID', "uid=@@ROLE_ID@@"); 
 define('gCOSI_AUTH_LDAP_DN', gCOSI_AUTH_LDAP_UID . ", " . gCOSI_AUTH_LDAP_BASE_DN); 
 
+define('gSHIBBOLETH_SESSION_INITIATOR', 'Login');
 
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */

@@ -14,8 +14,8 @@
 
 <div class="container" id="main-content">
 	<div class="row">
-		<div class="span3">&nbsp;</div>
-		<div class="span6">
+		<div class="span2">&nbsp;</div>
+		<div class="span8">
 			<div class="box">
 				<div class="box-header clearfix">
 					<h1>Login</h1>
@@ -34,31 +34,40 @@
 						</div>
 					<?php endif; ?>
 					
-					<form class="form-horizontal" action="<?=base_url("auth/login");?>" method="post">
-					  <div class="control-group">
-					    <label class="control-label" for="inputUsername">Username</label>
-					    <div class="controls">
-					      <input type="text" id="inputUsername" name="inputUsername" placeholder="Username">
-					    </div>
-					  </div>
-					  <div class="control-group">
-					    <label class="control-label" for="inputPassword">Password</label>
-					    <div class="controls">
-					      <input type="password" id="inputPassword" name="inputPassword" placeholder="Password">
-					    </div>
-					  </div>
-					  <div class="control-group">
-					    <div class="controls">
-					      
-					      <button type="submit" class="btn">Sign in</button>
-					      <a href="https://devl.ands.org.au/Shibboleth.sso/Login?target=https://devl.ands.org.au/workareas/leo/ands/arms/src/auth/setUser" class="btn">Login with Shib</a>
-					    </div>
-					  </div>
-					</form>
+
+						<div class="clearfix">
+							<div class="box-noStyle border-right">
+								<img src="<?php echo asset_url('img/aaf_logo.gif');?>" style="display:block;margin:0 auto;"/>
+								<a href="<?php echo secure_host_url();?>/Shibboleth.sso/<?php echo gSHIBBOLETH_SESSION_INITIATOR;?>?target=<?php echo secure_base_url();?>auth/setUser" class="btn btn-primary btn-block">Login using Australian Access Federation (AAF) credentials</a>
+							</div>
+							<div class="box-noStyle">
+								<form class="form" action="<?=base_url("auth/login");?>" method="post">
+								  <div class="control-group">
+								    
+								    <div class="controls">
+								      <input type="text" id="inputUsername" name="inputUsername" placeholder="Username">
+								    </div>
+								  </div>
+								  <div class="control-group">
+								    <div class="controls">
+								      <input type="password" id="inputPassword" name="inputPassword" placeholder="Password">
+								    </div>
+								  </div>
+								  <div class="control-group">
+								    <div class="controls">
+								      <button type="submit" class="btn btn-primary btn-block">Login using local credentials</button>
+								    </div>
+								  </div>
+								</form>
+							</div>
+						</div>
+
+
+					
 				</div>
 			</div>
 		</div>
-		<div class="span3"></div>
+		<div class="span2"></div>
 	</div>
 </div>
 
