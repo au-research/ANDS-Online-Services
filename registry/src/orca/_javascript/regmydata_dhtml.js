@@ -1031,7 +1031,8 @@ function advanceLoadingStatus () {
 			CKEDITOR.replace($(this).attr('id'),{ toolbar: 'Basic'});
 		});
 		
-		if (mctInitFunc) { mctInitFunc(); }
+		// Load the Gazeteer/Map asynchronously
+		if (mctInitFunc) { window.setTimeout(mctInitFunc(), 3000); }
 
 
 	}
