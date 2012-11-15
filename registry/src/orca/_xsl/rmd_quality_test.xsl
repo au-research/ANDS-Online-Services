@@ -130,7 +130,7 @@
             		<xsl:text>SetInfos("errors_dates","At least one dates element is recommended for the Collection record.","REC_DATES");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
-					<span class="warning">At least one dates element is recommended for the Collection record.</span>
+					<span class="info">At least one dates element is recommended for the Collection record.</span>
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>
