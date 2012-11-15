@@ -14,11 +14,14 @@
 
 <div class="container" id="main-content">
 	<div class="row">
-		<div class="span2">&nbsp;</div>
-		<div class="span8">
+		<div class="span3">&nbsp;</div>
+		<div class="span6">
 			<div class="box">
 				<div class="box-header clearfix">
 					<h1>Login</h1>
+					<div class="right-widget">
+						<a href="javascript:;" id="showBuiltInLoginForm"><i class="icon-chevron-down"></i></a>
+					</div>
 				</div>
 				<div class="box-content">
 					
@@ -35,39 +38,40 @@
 					<?php endif; ?>
 					
 
-						<div class="clearfix">
-							<div class="box-noStyle border-right">
-								<img src="<?php echo asset_url('img/aaf_logo.gif');?>" style="display:block;margin:0 auto;"/>
-								<a href="<?php echo secure_host_url();?>/Shibboleth.sso/<?php echo gSHIBBOLETH_SESSION_INITIATOR;?>?target=<?php echo secure_base_url();?>auth/setUser" class="btn btn-primary btn-block">Login using Australian Access Federation (AAF) credentials</a>
-							</div>
-							<div class="box-noStyle">
-								<form class="form" action="<?=base_url("auth/login");?>" method="post">
-								  <div class="control-group">
-								    
-								    <div class="controls">
-								      <input type="text" id="inputUsername" name="inputUsername" placeholder="Username">
-								    </div>
-								  </div>
-								  <div class="control-group">
-								    <div class="controls">
-								      <input type="password" id="inputPassword" name="inputPassword" placeholder="Password">
-								    </div>
-								  </div>
-								  <div class="control-group">
-								    <div class="controls">
-								      <button type="submit" class="btn btn-primary btn-block">Login using local credentials</button>
-								    </div>
-								  </div>
-								</form>
-							</div>
-						</div>
+
+					<img src="<?php echo asset_url('img/aaf_logo.gif');?>" style="display:block;margin:10px auto;"/>
+					<a href="<?php echo secure_host_url();?>/Shibboleth.sso/<?php echo gSHIBBOLETH_SESSION_INITIATOR;?>?target=<?php echo secure_base_url();?>auth/setUser" class="btn btn-primary btn-block">Login using Australian Access Federation (AAF) credentials</a>
+
 
 
 					
 				</div>
 			</div>
 		</div>
-		<div class="span2"></div>
+		<div class="span3"></div>
+	</div>
+
+
+	<div class="hide" id="BuiltInLoginForm">
+		<form class="form" action="<?=base_url("auth/login");?>" method="post">
+		  <div class="control-group">
+		    <div class="controls">
+		    	<label>Username</label>
+		    	<input type="text" id="inputUsername" name="inputUsername" placeholder="Username">
+		    </div>
+		  </div>
+		  <div class="control-group">
+		    <div class="controls">
+		    	<label>Password</label>
+		    	<input type="password" id="inputPassword" name="inputPassword" placeholder="Password">
+		    </div>
+		  </div>
+		  <div class="control-group">
+		    <div class="controls">
+		    	<button type="submit" class="btn btn-primary btn-block">Login using local credentials</button>
+		    </div>
+		  </div>
+		</form>
 	</div>
 </div>
 

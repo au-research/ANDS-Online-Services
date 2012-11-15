@@ -262,6 +262,19 @@ $(document).ready(function(){
 		}
 	});
 
+	$('#showBuiltInLoginForm').qtip({
+		content:{
+			text:$('#BuiltInLoginForm')
+		},
+		position:{
+			my:'top right',
+			at: 'bottom center'
+		},
+		show: {event: 'click'},
+		hide: {event: 'unfocus'},
+		events: {},
+		style: {classes: 'ui-tooltip-shadow ui-tooltip-bootstrap ui-tooltip-large'}
+	});
 });
 
 jQuery.fn.extend({
