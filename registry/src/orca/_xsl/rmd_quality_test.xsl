@@ -127,7 +127,7 @@
         <xsl:if test="not(ro:dates/ro:date)">
         	<xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetWarnings("errors_dates","At least one dates element is recommended for the Collection record.","REC_DATES");</xsl:text>
+            		<xsl:text>SetInfos("errors_dates","At least one dates element is recommended for the Collection record.","REC_DATES");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="warning">At least one dates element is recommended for the Collection record.</span>
