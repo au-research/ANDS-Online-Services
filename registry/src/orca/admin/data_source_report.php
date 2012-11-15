@@ -70,6 +70,7 @@ if (getQueryValue('type') == "quality"):
 
 
 	<?php
+
 	if (count($records) == 0 && count($drafts) == 0)
 	{
 		echo "<h3><i>No records found!</i></h3>";
@@ -79,9 +80,10 @@ if (getQueryValue('type') == "quality"):
 	{
 		echo "<h3>Published Records</h3>";
 	}
-	foreach($records AS $record):
-	$metadata_required_errors = substr_count($record['quality_test_result'], "<span class=\"warning\">");
-	$metadata_recommended_errors = substr_count($record['quality_test_result'], "<span class=\"info\">");
+
+	foreach($records AS $rec):
+	$metadata_required_errors = substr_count($rec['quality_test_result'], "<span class=\"warning\">");
+	$metadata_recommended_errors = substr_count($rec['quality_test_result'], "<span class=\"info\">");
 	$qa_string =  "<span class='metadatawarning'>" . $metadata_required_errors . " " . depluralise("required fields", $metadata_required_errors) . "  missing </span> " .
 					" / <span class='metadatainfo'>" . $metadata_recommended_errors . " " . depluralise("recommended fields", $metadata_recommended_errors) . " missing </span>";
 	?>
@@ -89,16 +91,16 @@ if (getQueryValue('type') == "quality"):
 
 		<tr>
 		<td style="width:100px; text-align:center;">
-		<?php echo getRegistryObjectStatusSpan($record['status']);?><br/>
-		<?php echo $record['registry_object_class']; ?>
+		<?php echo getRegistryObjectStatusSpan($rec['status']);?><br/>
+		<?php echo $rec['registry_object_class']; ?>
 		</td>
 		<td class="regObjTitleInfo" style="width:350px;">
-		<b><?php echo $record['display_title'];?></b><br/>
-		<i><a href="<?php echo eAPP_ROOT . "orca/view.php?key=" . rawurlencode($record['registry_object_key']); ?>" target="_blank"><?php echo elipsesLimit($record['registry_object_key'], 60);?></a></i>
+		<b><?php echo $rec['display_title'];?></b><br/>
+		<i><a href="<?php echo eAPP_ROOT . "orca/view.php?key=" . rawurlencode($rec['registry_object_key']); ?>" target="_blank"><?php echo elipsesLimit($rec['registry_object_key'], 60);?></a></i>
 		</td>
 		<td style="min-width:550px;">
-		<b>Quality Level: <?php echo $record['quality_level'];?></b> ( <?php echo $qa_string;?>)<br/>
-		<?php echo $record['quality_test_result'];?>
+		<b>Quality Level: <?php echo $rec['quality_level'];?></b> ( <?php echo $qa_string;?>)<br/>
+		<?php echo $rec['quality_test_result'];?>
 		</td>
 		</tr>
 
