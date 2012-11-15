@@ -52,7 +52,7 @@
     <div class="row-fluid">
       <div class="span2" id="logo">
         <a href="<?php echo base_url();?>">
-          <img src="<?php echo base_url();?>/assets/img/ands_logo_white.png" alt="ANDS Logo White"/>
+          <img src="<?php echo base_url();?>/assets/img/ands_logo_white.png" alt="ANDS Logo White" tip="Dashboard" my="top center" at="bottom center"/>
         </a>
       </div>
       <div class="span10" id="main-nav">

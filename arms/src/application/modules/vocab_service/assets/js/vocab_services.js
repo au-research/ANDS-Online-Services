@@ -563,7 +563,6 @@ function bindVocabVersioning(view){
 									}
 								});
 							}
-							//requireChangeHistory(vocab_id);
 						});
 					}
 				}

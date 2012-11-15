@@ -471,8 +471,8 @@
 	{{#editable}}
 		<div class="btn-group">
   			<button class="btn addFormat" version_id="{{id}}"><i class="icon-plus"></i> Add a Format</button>
-  			<button class="btn editVersion" version_id="{{id}}"><i class="icon-edit"></i></button>
-	  		<button class="btn deleteVersion" version_id="{{id}}"><i class="icon-trash"></i></button>
+  			<button class="btn editVersion" version_id="{{id}}" tip="Edit this Version"><i class="icon-edit"></i></button>
+	  		<button class="btn deleteVersion" version_id="{{id}}" tip="Delete this Version"><i class="icon-trash"></i></button>
 		</div>
 
 
