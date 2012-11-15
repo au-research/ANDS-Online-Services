@@ -91,10 +91,11 @@
 								}
 								echo '</ul>';
 							}else{
-								echo 'Your group has not created any vocabulary yet';
+								echo 'You have no vocabularies.';
 							}
 						}else{
-							echo "You can't manage any vocabulary unless you are affiliate with an organisation";
+							echo 'You have no vocabularies.';
+							//echo "You can't manage any vocabulary unless you are affiliate with an organisation";
 						}
 					?>
 				</div>

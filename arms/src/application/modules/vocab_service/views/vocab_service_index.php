@@ -163,7 +163,7 @@
 							}
 							echo '</ul>';
 						}else if(sizeof($group_vocabs)){
-							echo "<p>No Vocabulary Available</p>";
+							echo "<p>You have no vocabularies.</p>";
 						}
 					?>
 					<?php if($this->user->loggedIn()):?>
@@ -466,7 +466,7 @@
 			<div class="hide deleteFormatConfirmForm" format_id="{{id}}">
 				<div class='well'>
 					<p>
-						Are you sure you want to delete this {{format}}?
+						Are you sure you want to delete this {{format}} format?
 					</p>
 					<p>
 						<button class="btn deleteFormat" format_id="{{id}}">Yes</button>
