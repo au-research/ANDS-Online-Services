@@ -9,7 +9,7 @@
 				As this is your first time logging into the system you will need to add yourself to an organisation. Organisational roles are used within the ANDS Vocabulary Discovery Portal to control access to vocabularies. A logged in user can access and manage any vocabulary created under the organisation they are a member of. This allows multiple users from the same organisation to manage the organisation's vocabularies.
 			</p>
 			<p>
-				If your organisation doesn't exist in the dropdown select the 'Organisation not in list?' link at the bottom of the list to add a new one
+				If your organisation doesn't exist in the dropdown select the 'Organisation not in list?' link at the bottom of the form to add a new one
 			</p>
 
 			<?php
