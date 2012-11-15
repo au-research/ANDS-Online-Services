@@ -1051,7 +1051,7 @@ $_strings['*_relatedObject'] = <<<HTMLEND
 													</td>
 
 												</tr>
-												<tr><td colspan="4"><div class="ro_preview"></div></td></tr>
+												<tr><td colspan="4"><div class="ro_preview" key="object_relatedObject_%%SEQNUM1%%_key_1_value"></div></td></tr>
 												<tr>
 													<td colspan="4" style="text-align:left;">
 														<div style="padding:4px;">Relations:</div>
