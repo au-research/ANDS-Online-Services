@@ -55,7 +55,7 @@ $(document).ready(function(){
 
 
 	//catch all tip, bad practice, but useful nonetheless
-	$('a[tip]').live('mouseover', function(event) {
+	$('*[tip]').live('mouseover', function(event) {
 		// Bind the qTip within the event handler
 		var my = $(this).attr('my');
 		var at = $(this).attr('at');

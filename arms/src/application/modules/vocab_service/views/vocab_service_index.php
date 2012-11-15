@@ -197,14 +197,13 @@
 				  	<p>{{description}}</p>
 			  	</div>
 		  		<div class="btn-group item-control">
-		  			<button class="btn view" vocab_id="{{id}}"><i class="icon-eye-open"></i></button>
+		  			<button class="btn view" tip="View Vocabulary" vocab_id="{{id}}"><i class="icon-eye-open"></i></button>
 		  			{{#owned}}
-				  		<button class="btn edit" vocab_id="{{id}}"><i class="icon-edit"></i></button>
-				  		<!--button class="btn delete" vocab_id="{{id}}"><i class="icon-trash"></i></button-->
+				  		<button class="btn edit" tip="Edit Vocabulary" vocab_id="{{id}}"><i class="icon-edit"></i></button>
 			  		{{/owned}}
 				</div>
 		  	</div>
-		  </li>
+		</li>
 	{{/items}}
 </script>
 
@@ -218,7 +217,7 @@
 			<div class="box">
 				<div class="box-header">
 					<ul class="breadcrumbs">
-						<li><a href="<?php echo base_url();?>"><i class="icon-home"></i></a></li>
+						<li><a href="<?php echo base_url();?>" tip="Back to Dashboard"><i class="icon-home"></i></a></li>
 						<li><?php echo anchor('vocab_service', 'Browse Vocabularies');?></li>
 						<li><a href="javascript:;" class="active">{{title}}</a></li>
 					</ul>
@@ -421,10 +420,10 @@
 				<td>{{version_name}}</td><td><span class="label label-info">{{type}}</span></td><td><span class="label label-info">{{format}}</span></td>
 				<td>
 					<div class="btn-group">
-			  			<button class="btn downloadFormat" format_id="{{id}}"><i class="icon-download"></i></button>
+			  			<button class="btn downloadFormat" tip="{{#tip}}{{tip}}{{/tip}}" format_id="{{id}}"><i class="icon-download"></i></button>
 			  			{{#owned}}
 			  			{{#editable}}
-				  		<button class="btn deleteFormat" format_id="{{id}}"><i class="icon-trash"></i></button>
+				  		<button class="btn deleteFormat" tip="{{#tip}}{{tip}}{{/tip}}" format_id="{{id}}"><i class="icon-trash"></i></button>
 				  		{{/editable}}
 				  		{{/owned}}
 					</div>
@@ -450,10 +449,10 @@
 				<td>{{version_name}}</td><td><span class="label label-info">{{type}}</span></td><td><span class="label label-info">{{format}}</span></td>
 				<td>
 					<div class="btn-group">
-			  			<button class="btn downloadFormat" format_id="{{id}}"><i class="icon-download"></i></button>
+			  			<button class="btn downloadFormat" tip="{{#tip}}{{tip}}{{/tip}}" format_id="{{id}}"><i class="icon-download"></i></button>
 			  			{{#owned}}
 			  			{{#editable}}
-				  		<button class="btn deleteFormat" format_id="{{id}}"><i class="icon-trash"></i></button>
+				  		<button class="btn deleteFormat" tip="Delete This Format" format_id="{{id}}"><i class="icon-trash"></i></button>
 				  		{{/editable}}
 				  		{{/owned}}
 					</div>

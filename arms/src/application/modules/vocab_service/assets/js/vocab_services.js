@@ -276,9 +276,7 @@ function load_vocab(vocab_id){
 					}else{
 						console.log('form is not valid');
 					}
-
 				});
-
 			});
 
 			$('#deleteVocab').qtip({

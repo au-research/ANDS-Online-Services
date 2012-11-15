@@ -285,6 +285,13 @@ class Vocab_service extends MX_Controller {
 				$item['status']=$d->status;
 				$item['id']=$d->id;
 				$version = $this->vocab->getVersionByID($d->version_id);
+
+				if($d->type=='file'){
+					$item['tip']='Download this file';
+				}else if($d->type=='uri'){
+					$item['tip']='Open this URI';
+				}
+
 				$item['version_name']=$version->title;
 				array_push($items, $item);
 			}
@@ -317,6 +324,11 @@ class Vocab_service extends MX_Controller {
 				$item['value']=$f->value;
 				$item['format']=$f->format;
 				$item['version_name']=$version->title;
+				if($f->type=='file'){
+					$item['tip']='Download this file';
+				}else if($f->type=='uri'){
+					$item['tip']='Open this URI';
+				}
 				array_push($items, $item);
 			}
 			$jsonData['items']=$items;
