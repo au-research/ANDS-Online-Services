@@ -297,7 +297,9 @@ function load_vocab(vocab_id){
 					type: 'POST',
 					data: {vocab_id:vocab_id},
 					success: function(data){
-						browse('lists');
+						$('#items').html('');
+						load_more(1);
+						changeHashTo('browse/lists');
 						$('div.qtip:visible').qtip('hide');
 					},
 					error: function(data){
