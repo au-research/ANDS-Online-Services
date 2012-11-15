@@ -452,7 +452,7 @@
 			  			<button class="btn downloadFormat" tip="{{#tip}}{{tip}}{{/tip}}" format_id="{{id}}"><i class="icon-download"></i></button>
 			  			{{#owned}}
 			  			{{#editable}}
-				  		<button class="btn deleteFormat" tip="Delete This Format" format_id="{{id}}"><i class="icon-trash"></i></button>
+				  		<button class="btn openDeleteFormatForm" tip="Delete This Format" format_id="{{id}}"><i class="icon-trash"></i></button>
 				  		{{/editable}}
 				  		{{/owned}}
 					</div>
@@ -461,6 +461,21 @@
 			{{/items}}
 		</tbody>
 	</table>
+
+		{{#items}}
+			<div class="hide deleteFormatConfirmForm" format_id="{{id}}">
+				<div class='well'>
+					<p>
+						Are you sure you want to delete this {{format}}?
+					</p>
+					<p>
+						<button class="btn deleteFormat" format_id="{{id}}">Yes</button>
+						<button class="btn btn-link cancelDeleteFormat" format_id="{{id}}">No</button>
+					</p>
+				</div>
+			</div>
+		{{/items}}
+
 	{{/hasItems}}
 
 	{{#noItems}}

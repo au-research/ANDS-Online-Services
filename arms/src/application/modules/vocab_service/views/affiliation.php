@@ -14,12 +14,13 @@
 
 			<?php
 				echo '<div class="well">';
-      			echo '<p><select id="organisational_roles" class="chosen">';
+      			echo '<p><select id="organisational_roles" class="chosen" data-placeholder="Select an organisation">';
+      			echo '<option value></option>';
       			foreach($available_organisations as $o){
       				echo '<option value="'.$o['role_id'].'">'.$o['name'].'</option>';
       			}
       			echo '</select></p>';
-      			echo '<p><button class="btn" id="affiliation_signup" localIdentifier="'.$this->user->localIdentifier().'">Affiliate with this Organisation</button></p>';
+      			echo '<p><button class="btn disabled" id="affiliation_signup" localIdentifier="'.$this->user->localIdentifier().'">Save</button></p>';
       			echo '<p><a href="javascript:;" id="openAddOrganisation">Organisation not in list?</a></p>';
       			echo '</div>';
       		?>

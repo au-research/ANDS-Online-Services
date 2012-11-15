@@ -30,7 +30,7 @@
 	</div>
 
 	<div class="row">
-		<div class="span6">
+		<div class="span6 hide">
 			<div class="box">
 				<div class="box-header clearfix">
 					<h1>Affiliations</h1>

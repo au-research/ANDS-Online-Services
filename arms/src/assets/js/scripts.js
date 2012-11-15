@@ -203,29 +203,32 @@ $(document).ready(function(){
 
 
 	//cosi main login screen 
-	$('#affiliation_signup').click(function(){
-		var orgRole = $('#organisational_roles').val();
-		var thisRole = $(this).attr('localIdentifier');
-		//console.log('registering '+thisRole+' to have this role '+orgRole);
+	$('#affiliation_signup').click(function(e){
+		e.preventDefault();
+		if(!$(this).hasClass('disabled')){
+			var orgRole = $('#organisational_roles').val();
+			var thisRole = $(this).attr('localIdentifier');
+			//console.log('registering '+thisRole+' to have this role '+orgRole);
 
-		var jsonData = [];
-		jsonData.push({name:'orgRole', value:orgRole});
-		jsonData.push({name:'thisRole', value:thisRole});
-		$.ajax({
-			url: base_url+'auth/registerAffiliation/',
-			type: 'POST',
-			data: {orgRole:orgRole,thisRole:thisRole},
-			success: function(data){
-				if(data.status=='OK'){
-					$('#myModal .modal-body').html('You have to logout and log back in for the changes to take effect <a href="'+base_url+'auth/logout">Logout</a>');
-					$('#myModal').modal();
-				}else if(data.status=='WARNING'){
-					alert(data.message);
-				}else{
-					console.error(data);
+			var jsonData = [];
+			jsonData.push({name:'orgRole', value:orgRole});
+			jsonData.push({name:'thisRole', value:thisRole});
+			$.ajax({
+				url: base_url+'auth/registerAffiliation/',
+				type: 'POST',
+				data: {orgRole:orgRole,thisRole:thisRole},
+				success: function(data){
+					if(data.status=='OK'){
+						$('#myModal .modal-body').html('You have to logout and log back in for the changes to take effect <a href="'+base_url+'auth/logout">Logout</a>');
+						$('#myModal').modal();
+					}else if(data.status=='WARNING'){
+						alert(data.message);
+					}else{
+						//console.error(data);
+					}
 				}
-			}
-		});
+			});
+		}
 	});
 
 	$('#openAddOrganisation').click(function(){
@@ -274,6 +277,15 @@ $(document).ready(function(){
 		hide: {event: 'unfocus'},
 		events: {},
 		style: {classes: 'ui-tooltip-shadow ui-tooltip-bootstrap ui-tooltip-large'}
+	});
+
+	$("#organisational_roles").chosen().change(function(){
+		var value = $(this).val();
+		if(value){
+			$('#affiliation_signup').removeClass('disabled');
+		}else{
+			$('#affiliation_signup').addClass('disabled');
+		}
 	});
 });
 

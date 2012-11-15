@@ -545,24 +545,34 @@ function bindVocabVersioning(view){
 							}
 						});
 
+						$('.openDeleteFormatForm').click(function(){
+							var format_id = $(this).attr('format_id');
+							$('.deleteFormatConfirmForm[format_id='+format_id+']').show();
+						});
+
+						$('.cancelDeleteFormat').click(function(){
+							var format_id = $(this).attr('format_id');
+							$('.deleteFormatConfirmForm[format_id='+format_id+']').hide();
+						});
+
 						$('.deleteFormat').click(function(){
-							if(confirm('Do you want to delete this format?')){
-								var format_id = $(this).attr('format_id');
-								$.ajax({
-									url:'vocab_service/deleteFormat/'+format_id, 
-									type: 'POST',
-									success: function(data){	
-										if(data.status=='OK'){
-											$('tr.formatRow[format_id='+format_id+']').fadeOut('200', function(){
-												$(target).qtip('reposition');
-											});
-											showSubAlert('Format deleted successfully', 'success');
-										}else{
-											logErrorOnScreen(data);
-										}
+							var format_id = $(this).attr('format_id');
+							$.ajax({
+								url:'vocab_service/deleteFormat/'+format_id, 
+								type: 'POST',
+								success: function(data){	
+									if(data.status=='OK'){
+										$('.deleteFormatConfirmForm[format_id='+format_id+']').hide();
+										$('tr.formatRow[format_id='+format_id+']').fadeOut('200', function(){
+											$(target).qtip('reposition');
+										});
+
+										showSubAlert('Format deleted successfully', 'success');
+									}else{
+										logErrorOnScreen(data);
 									}
-								});
-							}
+								}
+							});
 						});
 					}
 				}

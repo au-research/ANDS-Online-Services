@@ -106,7 +106,7 @@ class Cosi_authentication extends CI_Model {
     		
 		}
 		else if ($method === gCOSI_AUTH_METHOD_SHIBBOLETH)
-		{			
+		{
 			if ($username == '')
 			{
 				throw new Exception('Authentication Failed (0)');
