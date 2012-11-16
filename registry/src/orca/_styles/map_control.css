@@ -132,8 +132,8 @@ limitations under the License.
 
 .mct_dialog_inner
 {
-	width: 300px;
-	overflow: hidden;
+	width: 411px;
+	overflow: wrap; 
 	margin: auto;
 	margin-top: 40px;
 	color: #000000;
@@ -144,7 +144,7 @@ limitations under the License.
 .mct_dialog_content
 {
 	height: 208px;
-	white-space: normal;
+	/* white-space: normal; */
 	overflow: auto;
 }
 

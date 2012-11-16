@@ -860,7 +860,7 @@ function mctRemovePolygon(controlDivId)
 	
 	html += '<div class="mct_dialog_text"><input type="text" id="' + searchResultsTextfieldId + '" style="margin: 0px 0px 0px 0px; width: 210px;" onkeypress="return mctCheckSearchEvent(event, \'' + controlDivId + '\');" />';
 	html += '&nbsp;<button type="button" class="mct_button" onclick="mctDoSearch(\'' + controlDivId + '\')">search</button></div>';
-	html += '<div id="' + searchResultsDivId + '" style="padding: 0px 0px 0px 8px; margin: 0px 0px 0px 0px; height: 158px; white-space: nowrap; overflow: auto;">';
+	html += '<div id="' + searchResultsDivId + '" style="padding: 0px 0px 0px 8px; margin: 0px 0px 0px 0px; height: 158px; white-space:normal; overflow: auto;">';
 	html += '</div>';
 	
 	html += '</div>';
