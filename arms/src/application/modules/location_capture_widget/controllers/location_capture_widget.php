@@ -14,5 +14,10 @@ class Location_capture_widget extends MX_Controller {
 		$this->load->view('documentation', $data);
 		
 	}
+	
+	function demo()
+	{
+		$this->load->view('demo');
+	}
 }
 	

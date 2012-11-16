@@ -31,7 +31,9 @@ var MCT_POLY_COLOUR      = '#008dce';
 var MCT_EDIT_POLY_COLOUR = '#ff5b00';
 var MCT_OPEN_POLY_COLOUR = '#ff0000';
 
-var MCT_DEFAULT_SERVICE_POINT = 'http://services.ands.org.au/api/resolver/';
+var MCT_DEFAULT_PROTOCOL = (window.location.protocol == 'https:' ? "https://" : "http://");
+
+var MCT_DEFAULT_SERVICE_POINT = MCT_DEFAULT_PROTOCOL + 'services.ands.org.au/api/resolver/';
 
 if(typeof(mctInputFields) == 'undefined')
 var mctInputFields = new Array();
@@ -217,7 +219,7 @@ function mctGetMapControl(mapInputFieldId)
 			// Build any icons we might need.
 			if( !mctEditPushpin)
 			{
-				mctEditPushpin = new google.maps.MarkerImage('http://maps.google.com/intl/en_us/mapfiles/ms/micons/orange.png',
+				mctEditPushpin = new google.maps.MarkerImage(MCT_DEFAULT_PROTOCOL + 'maps.google.com/intl/en_us/mapfiles/ms/micons/orange.png',
 					      new google.maps.Size(24,32),
 					      new google.maps.Point(0,0),
 					      new google.maps.Point(12,32));
@@ -225,13 +227,13 @@ function mctGetMapControl(mapInputFieldId)
 			
 			if( !mctPushpin)
 			{
-				mctPushpin = new google.maps.MarkerImage('http://maps.google.com/intl/en_us/mapfiles/ms/micons/blue.png',
+				mctPushpin = new google.maps.MarkerImage(MCT_DEFAULT_PROTOCOL + 'maps.google.com/intl/en_us/mapfiles/ms/micons/blue.png',
 					      new google.maps.Size(24,32),
 					      new google.maps.Point(0,0),
 					      new google.maps.Point(12,32));			
 			}
 
-		    mctShadow = new google.maps.MarkerImage('http://maps.google.com/intl/en_us/mapfiles/ms/micons/msmarker.shadow.png',
+		    mctShadow = new google.maps.MarkerImage(MCT_DEFAULT_PROTOCOL + 'maps.google.com/intl/en_us/mapfiles/ms/micons/msmarker.shadow.png',
 		    		new google.maps.Size(24,32),
 				      new google.maps.Point(0,0),
 				      new google.maps.Point(12,32));
@@ -847,7 +849,7 @@ function mctRemovePolygon(controlDivId)
 {
 	var mapDialogId = MCT_ADDRESS_SEARCH_DIALOG_ID_PREFIX + controlDivId;
 	html = '<div class="mct_dialog_container" id="' + mapDialogId + '">';
-	html += '<img class="mct_dialog_back" src="http://maps.google.com/mapfiles/iws_s.png" alt="" />';
+	html += '<img class="mct_dialog_back" src="'+ MCT_DEFAULT_PROTOCOL + 'maps.google.com/mapfiles/iws_s.png" alt="" />';
 	html += '<div class="mct_dialog_outer">';
 	html += '<div class="mct_dialog_inner">';
 	html += '<div class="mct_dialog_content" style="overflow: hidden;">';
@@ -1052,7 +1054,7 @@ function mctGetLonLatDialogHTML(controlDivId)
 {
 	var mapDialogId = MCT_LONLAT_DIALOG_ID_PREFIX + controlDivId;
 	html = '<div class="mct_dialog_container" id="' + mapDialogId + '">';
-	html += '<img class="mct_dialog_back" src="http://maps.google.com/mapfiles/iws_s.png" alt="" />';
+	html += '<img class="mct_dialog_back" src="' + MCT_DEFAULT_PROTOCOL + 'maps.google.com/mapfiles/iws_s.png" alt="" />';
 	html += '<div class="mct_dialog_outer">';
 	html += '<div class="mct_dialog_inner">';
 	html += '<div class="mct_dialog_content">';

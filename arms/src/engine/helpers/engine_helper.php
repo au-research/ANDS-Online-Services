@@ -44,6 +44,12 @@ function asset_url( $path )
 	}
 }
 
+function current_protocol()
+{
+	$url = parse_url(site_url());
+	return $url['scheme'].'://';
+}
+
 function host_url(){
 	$url = parse_url(site_url());
 	return $url['scheme'].'://'.$url['host'];

@@ -29,7 +29,7 @@
 				    	 place name resolution (using the Australian Gazetteer Service and Google Maps API).
 			    	 </p>
 			    	 <p>
-			    		 <a target="_blank" class="btn btn-success" href="<?=asset_url('demo.html');?>"><i class="icon-circle-arrow-right icon-white"></i> View the Demo</a>
+			    		 <a target="_blank" class="btn btn-success" href="<?=base_url('location_capture_widget/demo/');?>"><i class="icon-circle-arrow-right icon-white"></i> View the Demo</a>
 			    	 </p>
 			    	 <br/>
 			    	 
@@ -72,6 +72,13 @@
 					<em>latLong can only contain valid latitude,longtitude pairs (each pair seperated by a space). Place names specified as a latLon will cause the plugin to fail. </em>
 			    	 </p>
 			    	 <br/>
+			    	 
+			    	 <h5>I'm getting an "insecure content" warning? Can the widget run under HTTPS?</h5>
+			    	 <p>Yes! Ensure that all the <code>&lt;script&gt;</code> and <code>&lt;link&gt;</code> tags (from Step 1 &amp; 2) are pointing to the securely-hosted version of the resource.
+			    	 	In other words, the URL starts with <b>https://</b> (such as <code>https://maps.google.com/api...</code>).
+			    	 </p>
+			    	 <br/>
+			    	 
 			    	 
 			    	 <h5>What service is doing the placename resolution? </h5>
 			    	 <p>ANDS hosts a resolver proxy service that provides JSONP results based on the response from the Gazetteer service. 
