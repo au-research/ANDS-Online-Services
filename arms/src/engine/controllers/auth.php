@@ -33,7 +33,6 @@ class Auth extends CI_Controller {
 	
 	public function setUser(){
 		$sharedToken = '';
-		$displayName = '';
 		if(isset($_SERVER['shib-shared-token'])){
 			$sharedToken = $_SERVER['shib-shared-token'];
 		}else{
@@ -41,13 +40,10 @@ class Auth extends CI_Controller {
 			$data['exception'] = $e;
 			$this->load->view('login', $data);
 		}
-		if(isset($_SERVER['displayName']))
-		{		
-			$displayName=$_SERVER['displayName'];
-		}
+
 		try 
 		{
-			if($this->user->authChallenge($sharedToken, '', $displayName))
+			if($this->user->authChallenge($sharedToken, ''))
 			{
 				redirect('/auth/dashboard/');
 			}else{
@@ -83,6 +79,7 @@ class Auth extends CI_Controller {
 			$jsonData['message']='You are already affiliate with this organisation: '.$orgRole;
 		}else{
 			if($this->cosi->registerAffiliation($thisRole, $orgRole)){
+				$this->user->refreshAffiliations($thisRole);
 				$jsonData['status']='OK';
 				$jsonData['message']='registering success';
 			}else{

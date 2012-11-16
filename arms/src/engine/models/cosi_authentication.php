@@ -39,11 +39,8 @@ class Cosi_authentication extends CI_Model {
      * @param $password Plaintext password to use to authenticate
      * @param $method Authentication method to use (built-in/ldap/shib...etc)
      */
-    function authenticate($username, $password, $displayName='', $method=gCOSI_AUTH_METHOD_SHIBBOLETH)
+    function authenticate($username, $password, $method=gCOSI_AUTH_METHOD_SHIBBOLETH)
     {
-    	/*
-    	 * Using the built-in account system
-    	 */
     	$result = $this->cosi_db->get_where("dba.tbl_roles",	
     												array(
     													"role_id"=>$username,
@@ -52,7 +49,29 @@ class Cosi_authentication extends CI_Model {
     												));
 		if($result->num_rows() > 0){
 			$method = trim($result->row(1)->authentication_service_id);
-		}
+		}else{
+            if($method==gCOSI_AUTH_METHOD_SHIBBOLETH){
+                //create user 
+                
+                $data = array(
+                    'role_id' => $username,
+                    'role_type_id'=>'ROLE_USER',
+                    'authentication_service_id'=>$method,
+                    'enabled'=>DB_TRUE,
+                    'name'=> $_SERVER['displayName']
+                    //'email' => $_SERVER['mail']
+                );
+
+                $this->cosi_db->insert('dba.tbl_roles',$data);
+
+                $result = $this->cosi_db->get_where("dba.tbl_roles",    
+                                                    array(
+                                                        "role_id"=>$username,
+                                                        "role_type_id"=>"ROLE_USER",    
+                                                        "enabled"=>'t'
+                                                    ));
+            }
+        }
     												
     	//return array('result'=>0,'message'=>json_encode($result));												
     	if ($method === gCOSI_AUTH_METHOD_BUILT_IN)
@@ -89,7 +108,7 @@ class Cosi_authentication extends CI_Model {
 					return array(	
 									'result'=>1,
     								'message'=>'Success',
-									'user_identifier'=>$username,
+									'user_identifier'=>$result->row(1)->role_id,
 					    			'name'=>$result->row(1)->name,
     								'last_login'=>$result->row(1)->last_login,
     								'activities'=>$user_results['activities'],
@@ -116,7 +135,7 @@ class Cosi_authentication extends CI_Model {
 							'result'=>1,
     						'message'=>'Success',
 							'user_identifier'=>$username,
-					    	'name'=>$displayName,
+					    	'name'=>$result->row(1)->name,
     						'last_login'=>$result->row(1)->last_login,
     						'activities'=>$user_results['activities'],
     						'organisational_roles'=>$user_results['organisational_roles'],

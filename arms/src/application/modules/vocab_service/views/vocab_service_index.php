@@ -281,8 +281,6 @@
 						{{/contact_number}}
 					{{/owned}}
 
-
-
 					<?php //if($this->user->loggedIn()):?>
 			    	<div class="btn-toolbar">
 						<div class="btn-group item-control" vocab_id="{{id}}">
@@ -296,7 +294,7 @@
 							<div class="control-group">
 								<label class="control-label" for="title">Your Name</label>
 								<div class="controls">
-									<input type="text" class="input-xlarge" name="name" value="" required placeholder="Enter a your full name">
+									<input type="text" class="input-xlarge" name="name" value="" required placeholder="Enter your full name">
 									<p class="help-inline"><small></small></p>
 								</div>
 							</div>

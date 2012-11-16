@@ -15,11 +15,11 @@ class User {
 	/**
 	 * 
 	 */
-    function authChallenge($username, $password, $displayName='')
+    function authChallenge($username, $password)
     {
     	// Dynamically load the authentication_class (as defined in the config file)
     	$this->CI->load->model($this->CI->config->item('authentication_class'), 'auth');
-		$login_response = $this->CI->auth->authenticate($username, $password, $displayName);
+		$login_response = $this->CI->auth->authenticate($username, $password);
 		
 		if ($login_response['result'] == 1)
 		{
@@ -50,6 +50,16 @@ class User {
 		redirect('/');
 	}
 	
+
+	public function refreshAffiliations($role_id)
+	{
+		$this->CI->load->model('cosi_authentication', 'cosi');
+		$roles = $this->CI->cosi->getRolesAndActivitiesByRoleID($role_id);
+		if($roles){
+			$this->appendAffiliation($roles['organisational_roles']);
+		}
+	}
+
 	/**
 	 * Return whether a user is authenticated or not
 	 */
