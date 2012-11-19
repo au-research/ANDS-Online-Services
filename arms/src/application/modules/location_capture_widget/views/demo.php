@@ -31,7 +31,7 @@
 		Location: <i>(click and draw a point or region | search for a place name)</i><br/>
 		<script type="text/javascript">
 			mapInputFieldId = 'geoLocation';
-			//latLon = '';
+			//lonLat = '151.342636,-33.424598 150.502229,-33.424598 150.502229,-34.169249 151.342636,-34.169249 151.342636,-33.424598';
 			//mctServicePath = 'http://test.ands.org.au/registry/orca/services/gazetteer_jsonp.php';
 		</script>
 		<script type="text/javascript" src="<?=asset_url('js/location_capture_widget.js');?>"></script>

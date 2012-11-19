@@ -62,14 +62,14 @@
 			    	 <h4>Advanced Options / Customisation</h4>
 			    	 
 			    	 <h5>Can I load existing coordinate data into the widget? </h5>
-			    	 <p>Yes, if you want the widget to display information that has already entered into a form, simply define the <code>latLon</code> variable before calling the widget:
+			    	 <p>Yes, if you want the widget to display information that has already entered into a form, simply define the <code>lonLat</code> variable before calling the widget:
 			    	 <pre class="prettyprint">
 &lt;script type="text/javascript"&gt;
   mapInputFieldId = 'geoLocation1';  // this will be the name of the form element containing the coordinates
-  latLon = '132.121094,-19.110135';  // a number of comma-seperated latitude,longtitude pairs
+  lonLat = '132.121094,-19.110135';  // a number of comma-seperated latitude,longtitude pairs
 &lt;/script&gt;
 &lt;script type="text/javascript" src="http://services.ands.org.au/api/resolver/location_capture_widget.js"&gt;&lt;/script&gt;   </pre>	
-					<em>latLong can only contain valid latitude,longtitude pairs (each pair seperated by a space). Place names specified as a latLon will cause the plugin to fail. </em>
+					<em>lonLat can only contain valid longtitude,latitude pairs (each pair seperated by a space). Place names specified as a latLon will cause the plugin to fail. </em>
 			    	 </p>
 			    	 <br/>
 			    	 
@@ -99,12 +99,12 @@
 			    <div class="span4">
 			    	<h5>Enrich your web forms in seconds...</h5>
 			    	<p>
-				    	<a href="<?=asset_url('demo.html');?>"><img src="<?=asset_url('img/resolution_widget1.png');?>" class="img-rounded" alt="Resolution of Place Names" /></a>
+				    	<a href="<?=base_url('location_capture_widget/demo');?>"><img src="<?=asset_url('img/resolution_widget1.png');?>" class="img-rounded" alt="Resolution of Place Names" /></a>
 						<small class="pull-right"><em>Resolve place names to coordinates using the Australian Gazetteer Service and Google Maps API.</em></small>
 					</p>
 					<br/>
 					<p>
-				    	<a href="<?=asset_url('demo.html');?>"><img src="<?=asset_url('img/resolution_widget2.png');?>" class="img-rounded" alt="Draw Regions" /></a>
+				    	<a href="<?=base_url('location_capture_widget/demo');?>"><img src="<?=asset_url('img/resolution_widget2.png');?>" class="img-rounded" alt="Draw Regions" /></a>
 						<small class="pull-right"><em>Allow your users to provide richer location content by defining their own regions by drawing them on the map.</em></small>
 					</p>
 					

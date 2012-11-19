@@ -68,13 +68,13 @@ var mctErrorMessage = "";
 var mctCurrentMapId = "";
 
 
-function mctMakeMapWidget(mapInputFieldId, latLon)
+function mctMakeMapWidget(mapInputFieldId, lonLat)
 {
 	if(mctfeatureTypes.length == 0)
 	{
 		mctLoadFeatureTypes();
 	}
-	mctSetMapControl(mapInputFieldId, latLon);
+	mctSetMapControl(mapInputFieldId, lonLat);
 }
 
 
@@ -139,7 +139,7 @@ function mctGetOriginalInputFieldValue(controlDivId)
 	return mctOriginalInputFieldValues[controlDivId];
 }
 
-function mctSetMapControl(mapInputFieldId, latLon)
+function mctSetMapControl(mapInputFieldId, lonLat)
 {
 	// Because IE6 and 7 have problems if with the map if we put it on the page before
 	// the required bits of the DOM have loaded we need to delay loading the maps.
@@ -150,7 +150,7 @@ function mctSetMapControl(mapInputFieldId, latLon)
 	// Build the map control div.
 
 	var controlDivId = MCT_CONTROL_ID_PREFIX + mapInputFieldId;
-	document.write('<input name="'+mapInputFieldId+'" id="'+mapInputFieldId+'" type="hidden" value="'+latLon+'">');
+	document.write('<input name="'+mapInputFieldId+'" id="'+mapInputFieldId+'" type="hidden" value="'+lonLat+'">');
 	document.write('<div id="' + controlDivId + '" class="mct_control"></div>');
 	
 	// Add this map to the onload queue.
@@ -1128,6 +1128,6 @@ function getObject(ID)
 		alert("ERROR: Loading Map Widget failed. You must specify a mapInputFieldId before invoking the widget. Refer to documentation/examples for further assistance.");
 	}
 	
-	mctMakeMapWidget(mapInputFieldId, (typeof(window.latLon) == 'undefined' ? '' : window.latLon));
+	mctMakeMapWidget(mapInputFieldId, (typeof(window.lonLat) == 'undefined' ? '' : window.lonLat));
 	
 }) ()
