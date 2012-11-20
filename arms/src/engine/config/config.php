@@ -2,26 +2,22 @@
 
 
 $config['authentication_class'] = "cosi_authentication";
-$config[ENGINE_ENABLED_MODULE_LIST] = array('data_source','registry_object','vocab_service','mydois','abs_sdmx_querytool');
+$config[ENGINE_ENABLED_MODULE_LIST] = array('data_source','registry_object',
+											'vocab_service','mydois','abs_sdmx_querytool');
+
+
+
+$application_directives = array(
+						"registry" => 
+								array(	
+									"base_url" => "http://devl.ands.org.au/workareas/ben/arms/src/registry/",
+									"active_application" => "registry/"
+								)
+
+						);
+
 
 date_default_timezone_set('Australia/Canberra');
-/*
-|--------------------------------------------------------------------------
-| Base Site URL
-|--------------------------------------------------------------------------
-|
-| URL to your CodeIgniter root. Typically this will be your base URL,
-| WITH a trailing slash:
-|
-|	http://example.com/
-|
-| If this is not set then CodeIgniter will guess the protocol, domain and
-| path to your installation.
-|
-*/
-$config['base_url']	= '';
-#$config['solr_url'] = 'http://ands3.anu.edu.au:8983/solr/';
-
 /*
 |--------------------------------------------------------------------------
 | Index File
@@ -363,9 +359,39 @@ $config['rewrite_short_tags'] = TRUE;
 */
 $config['proxy_ips'] = '';
 
+
+/* Reroute our requests and setup the CI routing environment based on the active application */
+if (isset($application_directives[$_GET['app']]))
+{
+	$active_application = $application_directives[$_GET['app']]['active_application'];
+	$base_url = $application_directives[$_GET['app']]['base_url'];
+	$_SERVER['SCRIPT_NAME'] = dirname($_SERVER['SCRIPT_NAME']) . "/" . $active_application;
+}
+else
+{
+	$active_application = "unknown";
+	$base_url = "";
+}
+
 $config['modules_locations'] = array(
-       'application/'.'modules/' => '../../application/modules/',
+       'applications/'.$active_application => '../../applications/'.$active_application,
 );
+
+/*
+|--------------------------------------------------------------------------
+| Base Site URL
+|--------------------------------------------------------------------------
+|
+| URL to your CodeIgniter root. Typically this will be your base URL,
+| WITH a trailing slash:
+|
+|	http://example.com/
+|
+| If this is not set then CodeIgniter will guess the protocol, domain and
+| path to your installation.
+|
+*/
+$config['base_url']	= $base_url;
 
 /* End of file config.php */
 /* Location: ./application/config/config.php */
