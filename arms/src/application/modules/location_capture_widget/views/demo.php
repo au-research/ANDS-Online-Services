@@ -32,7 +32,7 @@
 		<script type="text/javascript">
 			mapInputFieldId = 'geoLocation';
 			//lonLat = '151.342636,-33.424598 150.502229,-33.424598 150.502229,-34.169249 151.342636,-34.169249 151.342636,-33.424598';
-			//mctServicePath = 'http://test.ands.org.au/registry/orca/services/gazetteer_jsonp.php';
+			mctServicePath = '<?=current_protocol();?>services.ands.org.au/api/resolver/';
 		</script>
 		<script type="text/javascript" src="<?=asset_url('js/location_capture_widget.js');?>"></script>
 

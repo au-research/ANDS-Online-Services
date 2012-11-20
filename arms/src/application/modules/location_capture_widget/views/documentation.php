@@ -66,7 +66,8 @@
 			    	 <pre class="prettyprint">
 &lt;script type="text/javascript"&gt;
   mapInputFieldId = 'geoLocation1';  // this will be the name of the form element containing the coordinates
-  lonLat = '132.121094,-19.110135';  // a number of comma-seperated latitude,longtitude pairs
+  lonLat = '132.121094,-19.110135';  // a number of comma-seperated longtitude,latitude pairs
+  mctServicePath = 'http://services.ands.org.au/api/resolver/'; //ANDS hosts a resolver proxy service
 &lt;/script&gt;
 &lt;script type="text/javascript" src="http://services.ands.org.au/api/resolver/location_capture_widget.js"&gt;&lt;/script&gt;   </pre>	
 					<em>lonLat can only contain valid longtitude,latitude pairs (each pair seperated by a space). Place names specified as a latLon will cause the plugin to fail. </em>
