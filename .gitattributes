@@ -1,5 +1,4 @@
-*.php -crlf
-*.sql -crlf
-*.xml -crlf
-*.xsl -crlf
-*.js -crlf
+* text=auto
+*.jpg binary
+*.png binary
+*.gif binary
