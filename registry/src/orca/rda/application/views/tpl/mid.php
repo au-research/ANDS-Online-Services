@@ -24,6 +24,7 @@ limitations under the License.
 				$search_term = urldecode(rawurldecode($search_term));
 			}
 		?>
+		
 		<div id="mid" class="clearfix">
 			<div id="logo">
 					<a href="<?php echo base_url();?>"><img src="<?php echo base_url();?>img/rda-design.png"/></a>
@@ -79,7 +80,7 @@ limitations under the License.
 				<p>To navigate the map within the spatial tool, click the button containing a small 'hand', your courser will now change to a hand symbol, now click and hold the left mouse button and drag, you will now see the map move. An alternative way to navigate the map is to click the arrow buttons located at the top left of the map. If you would like to zoom in or out within the current map, click the plus or minus buttons located in the top left hand side of the map.</p>
 				<p>Spatial search results will be displayed in the results list and on the interactive map.</p>
 				<p>Only those objects which have geospatial information associated with them will be returned as results from a Spatial search. Not all metadata Providers include geospatial information with their objects.</p>
-				<p>Only the objects that are listed in the current search results view will appear on the map. Choose a results page number or click on '>' to move further down the results list.</p>
+				<p>Only the objects that are listed in the current search results view will appear on the map. Choose a results page number or click on '&gt;' to move further down the results list.</p>
 			</div>
 			
 			<div id="advanced-text">
