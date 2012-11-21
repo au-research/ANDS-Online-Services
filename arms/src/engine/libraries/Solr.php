@@ -4,6 +4,7 @@
  * SOLR class for use globally
  * Search functionality
  * Index functionality
+ * @author : <minh.nguyen@ands.org.au>
  */
 class Solr {
 

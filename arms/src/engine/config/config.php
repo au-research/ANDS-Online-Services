@@ -379,6 +379,8 @@ $default_base_url = isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !=
 $default_base_url .= '://'. $_SERVER['HTTP_HOST'];
 $default_base_url .= str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']);
 
+$config['default_base_url'] = $default_base_url;
+
 /* Reroute our requests and setup the CI routing environment based on the active application */
 if (isset($application_directives[$_GET['app']]))
 {

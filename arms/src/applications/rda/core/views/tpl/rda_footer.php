@@ -23,5 +23,14 @@
 			<div class="clear"></div>
 		</div><!-- inner -->
 	</div><!-- foot_nav -->
+
+	<!-- Zoo Scripts Untouched -->
+	<script type="text/javascript" src="<?php echo asset_url('js/jquery-1.7.2.min.js');?>"></script>
+	<script type="text/javascript" src="<?php echo asset_url('js/jquery.flexslider-min.js');?>"></script>
+	<script type="text/javascript" src="<?php echo asset_url('js/jquery-ui.js');?>"></script>
+	<script type="text/javascript" src="<?php echo asset_url('js/script.js');?>"></script>
+
+	 <script src="<?php echo asset_url('lib/less-1.3.0.min.js', true);?>" type="text/javascript"></script>
+
 </body>
 </html>

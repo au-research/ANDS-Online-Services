@@ -3,6 +3,7 @@
 class Home extends MX_Controller {
 
 	function index(){
-		$this->load->view('rda_template');
+		$data['title']='Research Data Australia';
+		$this->load->view('home', $data);
 	}
 }

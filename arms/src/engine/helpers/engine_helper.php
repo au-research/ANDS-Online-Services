@@ -35,9 +35,14 @@ function json_exception_handler( $e ) {
     echo json_encode(array("status"=>"ERROR", "message"=> $e->getMessage()));
 }
 
-function asset_url( $path )
+function asset_url( $path, $base = false )
 {
 	$CI =& get_instance();
+
+	if($base){
+		return $CI->config->item('default_base_url').'assets/'.$path;
+	}
+	
 	if ($module_path = $CI->router->fetch_module())
 	{
 		return base_url( 'assets/' . $module_path . "/" . $path );

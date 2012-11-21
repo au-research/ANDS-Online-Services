@@ -2,44 +2,15 @@
 <html>
 <head>
 <meta charset="UTF-8" />
-<title>Title</title>
+<title><?php echo $title;?></title>
+
+<!-- Zoo Stylesheets Untouched -->
 <link rel="stylesheet" href="<?php echo asset_url('style.css');?>" type="text/css" media="screen" />
 <link rel="stylesheet" href="<?php echo asset_url('css/jquery-ui.css');?>" type="text/css" media="screen" />
-<script type="text/javascript" src="<?php echo asset_url('js/jquery-1.7.2.min.js');?>"></script>
-<script type="text/javascript" src="<?php echo asset_url('js/jquery.flexslider-min.js');?>"></script>
-<script type="text/javascript" src="<?php echo asset_url('js/jquery-ui.js');?>"></script>
-<script type="text/javascript" src="<?php echo asset_url('js/script.js');?>"></script>
-<script type="text/javascript">
-  $(window).load(function() {
-    $('.flexslider').flexslider();
-    $( "#range_slider" ).slider({
-            range: true,
-            min: 0,
-            max: 500,
-            values: [ 75, 300 ],
-            slide: function( event, ui ) {
-                $( "#amount" ).val( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] );
-            }
-    });
-    $('#clear_search').click(function() {
-    	var $form = $(this).parents('form');
-    	$form.find('input[type="text"]').val('');
-    	$form.find('input[type="checkbox"]').removeAttr('checked');
-    	$form.find('option').attr('selected', false);
-    	$form.find('select').find('option').first().attr('selected', true);
-    	return false;
-    });
-    $('#ad_st').toggle(function() {
-    	$(this).addClass('exped');
-    	$('.advanced_search').slideDown();
-    	return false;
-    }, function() {
-     	$(this).removeClass('exped');
-    	$('.advanced_search').slideUp('fast');
-    	return false;   	
-    });
-  });
-</script>
+
+<!-- ANDS Less file and general styling correction-->
+<link href="<?php echo asset_url('less/ands.less');?>" rel="stylesheet/less" type="text/css">
+
 </head>
 <body>
 	<div class="header">
