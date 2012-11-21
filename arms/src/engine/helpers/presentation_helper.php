@@ -22,6 +22,37 @@ function wrap_xml($xml, $scheme = 'rif')
 	}
 	return $return;		
 }
+
+function json_to_xml($obj){
+  $str = "";
+  if(is_null($obj))
+  {
+    return "<null/>";
+  }
+  elseif(is_array($obj)) 
+  {
+      //a list is a hash with 'simple' incremental keys
+    $is_list = array_keys($obj) == array_keys(array_values($obj));
+    if(!$is_list) {
+      foreach($obj as $k=>$v)
+        $str.="<$k>".json_to_xml($v)."</$k>".NL;
+    } else {
+      $str.= "<list>";
+      foreach($obj as $v)
+        $str.="<item>".json_to_xml($v)."</item>".NL;
+      $str .= "</list>";
+    }
+    return $str;
+  }
+  elseif(is_string($obj))
+  {
+    return htmlspecialchars($obj) != $obj ? "<![CDATA[$obj]]>" : $obj;
+  } 
+  elseif(is_scalar($obj))
+    return $obj;
+  else
+    throw new Exception("Unsupported type $obj");
+}
 	
 	
 $BENCHMARK_TIME = array();

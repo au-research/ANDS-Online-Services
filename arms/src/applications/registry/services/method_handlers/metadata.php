@@ -48,7 +48,7 @@ class MetadataMethod extends MethodHandler
 			$result = $result['response'];
 		}
 		
-		echo json_encode($result);
+		$this->formatter->display($result);
    }
    
 }

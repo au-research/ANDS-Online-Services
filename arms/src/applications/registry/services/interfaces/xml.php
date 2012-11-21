@@ -7,18 +7,18 @@ class XMLInterface extends FormatHandler
 	
 	function display($payload)
 	{
-		echo "<?xml version=\"1.0\"?>";
+		echo "<?xml version=\"1.0\"?>".NL;
 		echo "<response>".NL;
-			echo $payload;
-		echo "</response>".NL;
+			echo json_to_xml($payload);
+		echo "</response>";
 	}
     
 	function error($message)
 	{
-		echo '<?xml version="1.0" ?>';
+		echo '<?xml version="1.0" ?>'.NL;
 		echo '<response type="error">'.NL;
 			echo htmlentities($message);
-		echo '</response>'.NL;
+		echo '</response>';
 	}
 	
 	function output_mimetype()
