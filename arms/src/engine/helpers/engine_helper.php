@@ -15,7 +15,7 @@ function mod_enforce($module_name)
 	}
 }
 
-function my_exception_handler( $e ) {
+function default_exception_handler( $e ) {
 
     $_ci =& get_instance(); // CI super object to access load etc.
     
@@ -29,7 +29,11 @@ function my_exception_handler( $e ) {
    
     echo $_ci->load->view( 'footer' , $data , true);
 }
-set_exception_handler('my_exception_handler');
+set_exception_handler('default_exception_handler');
+
+function json_exception_handler( $e ) {
+    echo json_encode(array("status"=>"ERROR", "message"=> $e->getMessage()));
+}
 
 function asset_url( $path )
 {

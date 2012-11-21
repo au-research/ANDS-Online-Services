@@ -23,6 +23,8 @@ function wrap_xml($xml, $scheme = 'rif')
 	return $return;		
 }
 
+
+/* Transform an array to XML */
 function json_to_xml($obj){
   $str = "";
   if(is_null($obj))
