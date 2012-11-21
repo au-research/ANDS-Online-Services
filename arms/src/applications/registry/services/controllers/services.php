@@ -1,5 +1,4 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-//mod_enforce('services');
 
 define('SERVICES_MODULE_PATH', APP_PATH.'services/');
 /**
@@ -40,10 +39,16 @@ class Services extends MX_Controller {
 		// Method i.e. "getRIFCS", Format i.e. "xml"
 		list($method, $format, $options) = $this->parse_request_params($params);
 		
-		
-		
-		$formatter = $this->getFormatter($format);		
-		
+		// Setup our formatter
+		global $formatter;
+		$formatter = $this->getFormatter($format);
+
+		// Allow it to grab exceptions and serve them appropriately!
+		set_exception_handler(function($exception) {
+			global $formatter;
+		 	$formatter->error($exception->getMessage());
+		});
+
 		if (!$this->check_compatibility($method, $format, $service_mapping))
 		{
 			$formatter->error("Your requested method does not support this format: " . $format);
@@ -63,6 +68,9 @@ class Services extends MX_Controller {
 		
 		// All the setup is finished! Palm off the handling of the request...
 		$handler->handle();
+
+		unset($formatter);
+		restore_error_handler();
 	}
 
 	private function service_list()
