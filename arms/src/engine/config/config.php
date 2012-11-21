@@ -1,6 +1,5 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-
 /* Which modules are enabled for this installation? */
 $config[ENGINE_ENABLED_MODULE_LIST] = array(
 	'data_source',
@@ -21,17 +20,20 @@ $application_directives = array(
 	"registry" => 
 			array(	
 				"base_url" => "%%BASEURL%%/registry/",
-				"active_application" => "registry"
+				"active_application" => "registry",
+				"default_controller" => "example",
 			),
 	"rda" => 
 			array(	
 				"base_url" => "%%BASEURL%%/rda/",
-				"active_application" => "rda"
+				"active_application" => "rda",
+				"default_controller" => "auth/login",
 			)
 );
 
 /* If no application is matched, what should we default to? */
 $default_application = 'registry';
+$_GET['app'] = (!isset($_GET['app']) || $_GET['app'] == "" ? $default_application : $_GET['app']);
 
 /* Where in the world are we anyway? */
 date_default_timezone_set('Australia/Canberra');
@@ -381,12 +383,14 @@ $default_base_url .= '://'. $_SERVER['HTTP_HOST'];
 $default_base_url .= str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']);
 
 /* Reroute our requests and setup the CI routing environment based on the active application */
-$_GET['app'] = (!isset($_GET['app']) ? $default_application : $_GET['app']);
 if (isset($application_directives[$_GET['app']]))
 {
 	$active_application = $application_directives[$_GET['app']]['active_application'];
 	$base_url = str_replace("%%BASEURL%%/", $default_base_url, $application_directives[$_GET['app']]['base_url']);
 	$_SERVER['SCRIPT_NAME'] = dirname($_SERVER['SCRIPT_NAME']) . "/" . $active_application . '/';
+
+	/* What is the default controller for this app? (will be inserted as the default route) */
+	$config['default_controller'] = $application_directives[$_GET['app']]['default_controller'];
 }
 else
 {

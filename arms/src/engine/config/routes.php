@@ -38,7 +38,7 @@
 |
 */
 
-$route['default_controller'] = "auth/dashboard";
+$route['default_controller'] = $this->config->item('default_controller');
 $route['404_override'] = '';
 
 
