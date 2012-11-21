@@ -172,8 +172,8 @@ class Cosi_authentication extends CI_Model {
 				$LDAPAttributes = array();
 				$LDAPMessage = "";
 				$successful = authenticateWithLDAP($username, $password, $LDAPAttributes, $LDAPMessage);
-				if (count($LDAPAttributes) > 0)
-				{
+				//if (count($LDAPAttributes) > 0)
+				//{
 					$user_results = $this->getRolesAndActivitiesByRoleID ($username);
 					
 					return array(	
@@ -186,13 +186,13 @@ class Cosi_authentication extends CI_Model {
 									'organisational_roles'=>$user_results['organisational_roles'],
 									'functional_roles'=>$user_results['functional_roles']
 								);
-				}
-	    		else
-	    		{
+				}//
+	    		//else
+	    		//{
 	    			// LDAP ERROR (Could not bind)
 	    			// You may wish to debug by appending $LDAPMessage to this response
-					throw new Exception('Authentication Failed (02)');
-	    		}
+				//	throw new Exception('Authentication Failed (02)');
+	    		//}
 			}
 			else
 			{
