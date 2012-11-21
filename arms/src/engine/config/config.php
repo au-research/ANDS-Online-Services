@@ -1,25 +1,39 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 
+/* Which modules are enabled for this installation? */
+$config[ENGINE_ENABLED_MODULE_LIST] = array(
+	'data_source',
+	'registry_object',
+	'vocab_service',
+	'mydois',
+	'abs_sdmx_querytool'
+);
+
+/* What authencation class should we use to power the login/ACL? */
 $config['authentication_class'] = "cosi_authentication";
-$config[ENGINE_ENABLED_MODULE_LIST] = array('data_source','registry_object',
-											'vocab_service','mydois','abs_sdmx_querytool');
 
+/* For multiple-application environments, this "app" will be matched 
+by the $_GET['app'] which is rewritten in .htaccess. The array key is
+the full match (above). The active_application is the subfolder within 
+applications/ that contains this application's modules.  */
 $application_directives = array(
-						"registry" => 
-								array(	
-									"base_url" => "%%BASEURL%%/registry/",
-									"active_application" => "registry"
-								),
-						"rda" => 
-								array(	
-									"base_url" => "%%BASEURL%%/rda/",
-									"active_application" => "rda"
-								)
+	"registry" => 
+			array(	
+				"base_url" => "%%BASEURL%%/registry/",
+				"active_application" => "registry"
+			),
+	"rda" => 
+			array(	
+				"base_url" => "%%BASEURL%%/rda/",
+				"active_application" => "rda"
+			)
+);
 
-						);
+/* If no application is matched, what should we default to? */
+$default_application = 'registry';
 
-
+/* Where in the world are we anyway? */
 date_default_timezone_set('Australia/Canberra');
 /*
 |--------------------------------------------------------------------------
@@ -367,11 +381,12 @@ $default_base_url .= '://'. $_SERVER['HTTP_HOST'];
 $default_base_url .= str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']);
 
 /* Reroute our requests and setup the CI routing environment based on the active application */
+$_GET['app'] = (!isset($_GET['app']) ? $default_application : $_GET['app']);
 if (isset($application_directives[$_GET['app']]))
 {
-	$active_application = $application_directives[$_GET['app']]['active_application'] . "/";
-	$base_url = str_replace("%%BASEURL%%", $default_base_url, $application_directives[$_GET['app']]['base_url']);
-	$_SERVER['SCRIPT_NAME'] = dirname($_SERVER['SCRIPT_NAME']) . "/" . $active_application;
+	$active_application = $application_directives[$_GET['app']]['active_application'];
+	$base_url = str_replace("%%BASEURL%%/", $default_base_url, $application_directives[$_GET['app']]['base_url']);
+	$_SERVER['SCRIPT_NAME'] = dirname($_SERVER['SCRIPT_NAME']) . "/" . $active_application . '/';
 }
 else
 {
@@ -380,7 +395,7 @@ else
 }
 
 $config['modules_locations'] = array(
-       'applications/'.$active_application => '../../applications/'.$active_application,
+       'applications/'.$active_application . '/' => '../../applications/'.$active_application . '/',
 );
 
 /*
