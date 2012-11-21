@@ -360,7 +360,7 @@ function load_datasource_edit(data_source_id, active_tab){
 	$('#browse-datasources').slideUp(500);
 	$('#view-datasources').slideUp(500);
 	$.ajax({
-		url: 'getDataSource/'+data_source_id,
+		url: 'data_source/getDataSource/'+data_source_id,
 		type: 'GET',
 		contentType: 'application/json; charset=utf-8',
 		dataType: 'json',
@@ -375,16 +375,37 @@ function load_datasource_edit(data_source_id, active_tab){
 			}
 			
 			$('#edit-datasource  .normal-toggle-button').each(function(){
-				if($(this).attr('value')=='t' || $(this).attr('value')=='1' || $(this).attr('value')=='true' ){
-					$(this).find('input').attr('checked', 'checked');
-				}
-				$(this).toggleButtons({
-					width:75,enable:true,
-					onChange:function(){
+				
+				if($(this).attr('class')=='creat-primary normal-toggle-button')
+					{
+						if($(this).attr('value')=='t' || $(this).attr('value')=='1' || $(this).attr('value')=='true' ){
 						$(this).find('input').attr('checked', 'checked');
+			
+						}
+
+						$(this).toggleButtons({
+							width:75,enable:true,
+							onChange:function(){
+								$(this).find('input').attr('checked', 'checked');
+								$('#primary-div').toggle();
+						}
+						});						
+					}else{
+						if($(this).attr('value')=='t' || $(this).attr('value')=='1' || $(this).attr('value')=='true' ){
+							$(this).find('input').attr('checked', 'checked');
+				
+						}
+						$(this).toggleButtons({
+							width:75,enable:true,
+							onChange:function(){		
+								$(this).find('input').attr('checked', 'checked');
+							}
+						});						
 					}
-				});
+				
+
 			});
+			
 			
 			$("#edit-datasource .chzn-select").chosen().change(function(){
 				var input = $('#'+$(this).attr('for'));
@@ -397,8 +418,10 @@ function load_datasource_edit(data_source_id, active_tab){
 			});
 		}
 	});
+
 	return false;
 }
+
 
 $('#save-edit-form').live({
 	click: function(e){

@@ -510,9 +510,12 @@
 							<label class="control-label">Create Primary Relationships</label>
 							<div class="controls">
 								<p class="help-inline">
-								<div class="normal-toggle-button" value="{{create_primary_relationships}}">
-    								<input type="checkbox" for="create_primary_relationships" >
+								<div class="creat-primary normal-toggle-button" value="{{create_primary_relationships}}">
+    								<input type="checkbox" for="create_primary_relationships" name="create-primary">
 								</div>
+								<div id="primary-div" class="hide">
+    								<input type="text" for="primary_key_1">
+    							</div>
 								</p>
 							</div>
 						</div>
