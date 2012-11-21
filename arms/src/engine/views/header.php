@@ -58,7 +58,7 @@
       <div class="span10" id="main-nav">
         <ul>
         	
-    	<?php if($this->user->hasFunction('REGISTRY_USER')): ?>
+    	<?php if($this->user->hasFunction('REGISTRY_USER') && mod_enabled('registry')): ?>
           <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">My Records <b class="caret"></b></a>
             <ul class="dropdown-menu sub-menu pull-right">
@@ -69,7 +69,7 @@
           </li>
      	<?php endif; ?>
           
-        <?php if($this->user->hasFunction('REGISTRY_USER')): ?>
+        <?php if($this->user->hasFunction('REGISTRY_USER') && mod_enabled('registry')): ?>
           <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">My Datasources <b class="caret"></b></a>
             <ul class="dropdown-menu sub-menu pull-right">
@@ -114,7 +114,7 @@
           </li>
         <?php endif; ?>
           
-        <?php if($this->user->hasFunction('REGISTRY_USER')): ?>
+        <?php if($this->user->hasFunction('REGISTRY_USER') && mod_enabled('registry')): ?>
           <li>
             <a href="javascript:;" id="main-nav-search"><i class="icon-search icon-white"></i></a>
           </li>
