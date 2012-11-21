@@ -1,7 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 //mod_enforce('services');
 
-define('SERVICES_MODULE_PATH', 'application/modules/services/');
+define('SERVICES_MODULE_PATH', APP_PATH.'services/');
 /**
  * Services controller
  * 
