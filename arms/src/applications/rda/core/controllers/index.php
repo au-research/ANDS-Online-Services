@@ -1,10 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-//mod_enforce('mydois');
 
-/**
- *  
- */
-class Example extends MX_Controller {
+class Index extends MX_Controller {
 
 	function index()
 	{

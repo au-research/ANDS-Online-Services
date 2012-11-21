@@ -1,4 +1,4 @@
 <?php
-$autoload['config'] = array('example');
+$autoload['routes'] = array('routes');
 $autoload['libraries'] = array();
 $autoload['helper'] = array();

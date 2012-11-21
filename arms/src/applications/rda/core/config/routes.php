@@ -1,3 +1,2 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-
-//define('CONSTANT_NAME', '<value>');
+$route['default_controller'] = "rda/example";

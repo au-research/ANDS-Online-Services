@@ -21,13 +21,13 @@ $application_directives = array(
 			array(	
 				"base_url" => "%%BASEURL%%/registry/",
 				"active_application" => "registry",
-				"default_controller" => "example",
+				"default_controller" => "auth/dashboard",
 			),
 	"rda" => 
 			array(	
 				"base_url" => "%%BASEURL%%/rda/",
 				"active_application" => "rda",
-				"default_controller" => "auth/login",
+				"default_controller" => "core/home",
 			)
 );
 
