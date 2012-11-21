@@ -5,7 +5,7 @@ class Extrif_Extension extends ExtensionBase
 	function __construct($ro_pointer)
 	{
 		parent::__construct($ro_pointer);
-		include_once("application/modules/registry_object/models/_transforms.php");
+		include_once(APP_PATH."registry_object/models/_transforms.php");
 	}		
 	
 	/*

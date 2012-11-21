@@ -391,6 +391,7 @@ if (isset($application_directives[$_GET['app']]))
 
 	/* What is the default controller for this app? (will be inserted as the default route) */
 	$config['default_controller'] = $application_directives[$_GET['app']]['default_controller'];
+	define("APP_PATH",'./applications/'.$active_application.'/');
 }
 else
 {

@@ -3,6 +3,6 @@
 class Home extends MX_Controller {
 
 	function index(){
-		echo "Hello World";
+		$this->load->view('rda_template');
 	}
 }
