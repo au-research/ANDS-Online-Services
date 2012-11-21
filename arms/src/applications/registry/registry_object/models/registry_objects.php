@@ -144,14 +144,16 @@ class Registry_objects extends CI_Model {
 	 * Returns exactly one registry object by URL slug (or NULL)
 	 *
 	 * @param the registry object slug
+	 * @param the status of the registry object we want 
 	 * @return _registry_object object or NULL
 	 */
-	function getBySlug($slug)
+	function getBySlug($slug, $status = "PUBLISHED")
 	{
 		$results = $this->_get(array(array('args' => $slug,
 						   'fn' => function($db,$slug) {
 							   $db->select("registry_object_id")
 								   ->from("registry_objects")
+								   ->where("status", "PUBLISHED")
 								   ->where("slug", $slug);
 							   return $db;
 						   })),

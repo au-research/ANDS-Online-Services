@@ -27,7 +27,7 @@ class Solr {
      */
     function init(){
     	$this->solr_url = $this->CI->config->item('solr_url');
-    	$this->options = array('q'=>'*:*','start'=>'0','indent'=>'on', 'wt'=>'json', 'fl'=>'*', 'rows'=>'10');
+    	$this->options = array('q'=>'*:* +status:PUBLISHED','start'=>'0','indent'=>'on', 'wt'=>'json', 'fl'=>'*', 'rows'=>'10');
     	return true;
     }
 
@@ -38,7 +38,17 @@ class Solr {
      */
     function setOpt($field, $value){
     	$this->options[$field] = $value;
-    	$this->executeSearch();
+    	//$this->executeSearch(); /// ?????? bad bad bad XXX: fixy fixy
+    }
+
+     /**
+     * Manually set the facet option for solr search (and enable the facet functionality)
+     * @param string $field 
+     * @param string $value
+     */
+    function setFacetOpt($field, $value){
+        $this->setOpt('facet','true');
+        $this->setOpt('facet.' . $field, $value);
     }
 
     /**
@@ -73,6 +83,28 @@ class Solr {
     	return $this->result->{'reponse'};
     }
 
+    /**
+     * get SOLR facet query response by field name
+     * @param  string $facet_field the name of a facet field (earlier instantiated with setOpt())
+     * @return array 
+     */
+    function getFacetResult($facet_field){
+        if (isset($this->result->facet_counts->facet_fields->{$facet_field}))
+        {
+            // Sort the pairs (they arrive in list form, we want them as value=>count tuples)
+            $value_pair_list = $this->result->facet_counts->facet_fields->{$facet_field};
+            $tuples = array();
+            for ($i=0; ($i+2)<count($value_pair_list); $i+=2)
+            {
+                $tuples[$value_pair_list[$i]] = $value_pair_list[$i+1];
+            }
+            return $tuples;
+        }
+        else
+        {
+            return array();
+        }
+    }
     
     /**
      * Sample simple search
@@ -83,6 +115,14 @@ class Solr {
 		$this->options['q']='fulltext:'.$term;
 		return $this->executeSearch();
 	}
+
+    /**
+     * Add query condition
+     * @param  string $condition add a query condition to this request (appends to q=)
+     */
+    function addQueryCondition($condition){
+        $this->options['q'].=' '. $condition;
+    }
 
 	/**
 	 * Execute the search based on the given options

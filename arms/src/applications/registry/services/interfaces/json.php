@@ -7,7 +7,7 @@ class JSONInterface extends FormatHandler
 	
 	function display($payload)
 	{
-		echo json_encode(array("status"=>"success", "message"=>$message));
+		echo json_encode(array("status"=>"success", "message"=>$payload));
 	}
     
 	function error($message)
