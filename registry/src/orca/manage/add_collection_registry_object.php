@@ -46,10 +46,9 @@ require '../../_includes/header.php';
 <script type="text/javascript" src="<?php print eAPP_ROOT ?>orca/_javascript/regmydata_dhtml.js"></script>
 <script type="text/javascript" src="<?php print eAPP_ROOT ?>orca/_javascript/map_control.js"></script>
 <script type="text/javascript" src="<?php print eAPP_ROOT ?>orca/_javascript/form2json.js"></script>
-<script type="text/javascript" src="<?php print eAPP_ROOT ?>ckeditor/ckeditor.js"></script>
-<script type="text/javascript" src="<?php print eAPP_ROOT ?>ckeditor/adapters/jquery.js"></script>
+<script type="text/javascript" src="<?php print eAPP_ROOT ?>ckeditor/ckeditor_basic.js"></script>
 <script type="text/javascript">vcSetImagePath('<?php print gORCA_IMAGE_ROOT ?>_controls/_vocab_control/');</script>
-<script type="text/javascript">mctInit('<?php print gORCA_IMAGE_ROOT ?>_controls/_map_control/');</script>
+<script type="text/javascript">mctAsyncInit('<?php print gORCA_IMAGE_ROOT ?>_controls/_map_control/', '<?php print eAPP_ROOT ?>orca/services/gazetteer_jsonp.php')</script>
 
 <script type="text/javascript">
 
@@ -66,7 +65,7 @@ require '../../_includes/header.php';
 	tabs["#coverage"] = {name:"Coverage",cpg:"http://ands.org.au/guides/cpguide/cpgcoverage.html"};
 	tabs["#citationInfo"] = {name:"Citations",cpg:"http://ands.org.au/guides/cpguide/cpgcitation.html"};
 	tabs["#relatedInfo"] = {name:"Related Info",cpg:"http://ands.org.au/guides/cpguide/cpgrelatedinfo.html"};
-
+	tabs["#dates"] = {name:"Dates", cpg:"http://www.ands.org.au/guides/cpguide/cpgdates.html"};
 	<?php
 
 	if ($readOnly)
@@ -91,6 +90,7 @@ require '../../_includes/header.php';
 		quagmire_append('REQ_RIGHT', REQUIRED,'At least one right is required for the Collection.');
 
 		// Recommended List
+		quagmire_append('REC_DATES', RECOMMENDED,'At least one dates element is recommended for the Collection.');
 		quagmire_append('REC_IDENTIFIER', RECOMMENDED,'At least one identifier is recommended for the Collection.');
 		quagmire_append('REC_RELATED_OBJECT_ACTIVITY', RECOMMENDED,'The Collection must be related to at least one Activity record where possible.'); // "Required if available"...
 		quagmire_append('REC_SUBJECT', RECOMMENDED,'At least one subject (e.g. anzsrc-for code) is recommended for the Collection.');
@@ -127,8 +127,8 @@ require '../../_includes/header.php';
 
 
 <input type="hidden" id="object.objectClass" name="object.objectClass" value="Collection" />
-
-<table id="outer-table" summary="<?php print $action ?> Registry Object">
+<div style="width:100%;">
+<table id="outer-table" summary="<?php print $action ?> Registry Object" style="width:100%;">
 	<tbody>
 		<tr>
 
@@ -186,7 +186,7 @@ require '../../_includes/header.php';
 	</tr>
 	</tbody>
 </table>
-
+</div>
 </form>
 
 <script type="text/javascript">

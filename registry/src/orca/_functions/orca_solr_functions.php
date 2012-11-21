@@ -5,7 +5,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -129,6 +129,171 @@ function addDraftToSolrIndex($registryObjectKey, $data_source_key, $commit=true)
 	}
 	return $result;
 }
+
+function clearDS($dataSourceKey){
+	global $solr_update_url;
+	echo "Clearing DS SOLR indexes: ".$dataSourceKey."  ".$solr_update_url;
+	$result = curl_post($solr_update_url.'?commit=true', '<delete><query>data_source_key:("'.esc($dataSourceKey).'")</query></delete>');
+	$result .= curl_post($solr_update_url.'?optimize=true', '<optimize waitFlush="false" waitSearcher="false"/>');
+	return $result;
+}
+
+function addDraftSolrIndexForDatasource($dataSourceKey)
+{
+	global $solr_update_url;
+	global $totalCount;
+	global $chunkSize;
+	$result = '';
+	$message = '';
+	$rifcsContent = '';
+	$allKeys = getDraftRegistryObject(null , $dataSourceKey);
+	if($allKeys)
+	{
+	$arraySize = sizeof($allKeys);
+	$message  ="Reindexing Drafts ".$dataSourceKey.": Total: ".$arraySize;
+	$totalCount = $totalCount + $arraySize;
+
+	for($i = 0; $i < $arraySize ; $i++)
+	{
+		$key = $allKeys[$i]['draft_key'];
+		//$totalCount++;
+		//echo $key;
+			$xml = "    <extRif:extendedMetadata key=\"".esc($key)."\">\n";
+
+			$hash = sha1($key.$dataSourceKey);
+			if ($hash)
+			{
+				$xml .= "      <extRif:keyHash>".esc($hash)."</extRif:keyHash>\n";
+			}
+			$dataSource = getDataSources($dataSourceKey, null);
+			$allow_reverse_internal_links = $dataSource[0]['allow_reverse_internal_links'];
+			$allow_reverse_external_links = $dataSource[0]['allow_reverse_external_links'];
+			$hash = sha1($dataSourceKey);
+			if ($hash)
+			{
+				$xml .= "      <extRif:dataSourceKeyHash>".esc($hash)."</extRif:dataSourceKeyHash>\n";
+			}
+			$xml .= "      <extRif:status>".esc($allKeys[$i]['status'])."</extRif:status>\n";
+			$xml .= "      <extRif:dataSourceKey>".esc($dataSourceKey)."</extRif:dataSourceKey>\n";
+			$reverseLinks = 'NONE';
+
+			if($allow_reverse_internal_links == 't' && $allow_reverse_external_links == 't')
+			{
+				$reverseLinks = 'BOTH';
+			}
+			else if($allow_reverse_internal_links == 't')
+			{
+				$reverseLinks = 'INT';
+
+			}
+			else if($allow_reverse_external_links == 't')
+			{
+				$reverseLinks = 'EXT';
+			}
+			$xml .= "      <extRif:reverseLinks>".$reverseLinks."</extRif:reverseLinks>\n";
+
+
+			// Get registry date modified
+			if (!($registryDateModified =  $allKeys[$i]['date_modified']))
+			{
+					$registryDateModified = time(); // default to now
+			}
+			else 
+			{
+				$registryDateModified = strtotime($registryDateModified); // parse the SQL timestamp
+			}
+			// SOLR requires the date in ISO8601, restricted to zulu time (why, I don't know...)
+			$xml .= "      <extRif:registryDateModified>".gmdate('Y-m-d\TH:i:s\Z',$registryDateModified)."</extRif:registryDateModified>\n";
+			
+
+
+			// displayTitle
+			// -------------------------------------------------------------
+			$xml .= '      <extRif:displayTitle>'.esc(trim($allKeys[$i]['registry_object_title'])).'</extRif:displayTitle>'."\n";
+
+
+			// listTitle
+			// -------------------------------------------------------------
+			$xml .= '      <extRif:listTitle>'.esc(trim($allKeys[$i]['registry_object_title'])).'</extRif:listTitle>'."\n";
+			$xml .= '      <extRif:flag>'.($allKeys[$i]['flag'] == 'f' ? '0' : '1').'</extRif:flag>'."\n";
+			$xml .= '      <extRif:warning_count>'.esc(trim($allKeys[$i]['warning_count'])).'</extRif:warning_count>'."\n";
+			$xml .= '      <extRif:error_count>'.esc(trim($allKeys[$i]['error_count'])).'</extRif:error_count>'."\n";
+			//$xml .= '      <extRif:gold_status_flag>'.esc(trim($allKeys[$i]['gold_status_flag'])).'</extRif:gold_status_flag>'."\n";
+			$xml .= '      <extRif:quality_level>'.esc(trim($allKeys[$i]['quality_level'])).'</extRif:quality_level>'."\n";
+			if($allKeys[$i]['draft_owner'] == 'SYSTEM' || (strlen($allKeys[$i]['draft_owner']) == 40 && strpos($allKeys[$i]['draft_owner'], ' (') === false))
+            {
+				$owner =  'harvest';
+            }
+            else{
+				$owner = 'manual';
+            }
+            $xml .= '      <extRif:feedType>'.$owner.'</extRif:feedType>'."\n";
+			$xml .= '      <extRif:lastModifiedBy>'.$allKeys[$i]['draft_owner'].'</extRif:lastModifiedBy>'."\n";	
+			$xml .= "    </extRif:extendedMetadata>\n";
+
+
+		$rifcsContent .= unwrapRegistryObject($allKeys[$i]['rifcs']);
+		$rifcsContent .= $xml;
+		//print $rifcsContent."\n";
+		if(($i % $chunkSize == 0 && $i != 0) || $i == ($arraySize -1))
+		{
+				$rifcs = wrapRegistryObjects($rifcsContent);
+				$solrrifcs = transformToSolr($rifcs);
+				//echo $solrrifcs."\n";
+				if (strlen($solrrifcs) == 0)
+				{
+					echo "<font color='red'>".$rifcs."</font>";
+				}
+				else
+				{
+					$result = curl_post($solr_update_url, $solrrifcs);
+					$rifcsContent = '';
+
+				}
+		}
+	}
+			$result .= curl_post($solr_update_url.'?commit=true', '<commit waitFlush="false" waitSearcher="false"/>');
+	}
+	return $message."<br/> SOLR RESPONSE: ".$result;
+}
+
+
+function addPublishedSolrIndexForDatasource($dataSourceKey)
+{
+	global $solr_update_url;
+	global $totalCount;
+	global $chunkSize;
+	$rifcsContent = '';
+	$allKeys = getRegistryObjectKeysForDataSource($dataSourceKey);
+    $message = '';
+    $result = '';
+	if($allKeys)
+	{
+		$arraySize = sizeof($allKeys);
+		$message .= "Reindexing Published ".$dataSourceKey.": Total: ".$arraySize."<br/>";
+		$totalCount += $arraySize;
+
+		for($i = 0; $i < $arraySize ; $i++)
+		{
+			$key = $allKeys[$i]['registry_object_key'];
+			$rifcsContent .= getRegistryObjectXMLforSOLR($key, true);
+			if(($i % $chunkSize == 0 && $i != 0) || $i == ($arraySize -1))
+			{
+					$rifcs = wrapRegistryObjects($rifcsContent);
+					$solrrifcs = transformToSolr($rifcs);
+					if (strlen($solrrifcs) != 0)
+					{
+						$result = curl_post($solr_update_url, $solrrifcs);
+						$rifcsContent = '';
+					}
+			}
+		}
+		$result .= curl_post($solr_update_url.'?commit=true', '<commit waitFlush="false" waitSearcher="false"/>');
+	}
+	return $message."<br/> SOLR RESPONSE: ".$result;
+}
+
+
 
 
 function addSetofDraftsToSolrIndex($registryObjectKeys, $data_source_key, $commit=true)

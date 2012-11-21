@@ -693,3 +693,73 @@ display:block;
     height: 200px;
 }
 .grey{color:#333333;}
+#tag_icon{
+    position:absolute;
+ 	top:5px;
+ 	right:35px;
+    cursor:pointer;
+    display:block;
+}
+#tag_view{
+	width:920px;
+	min-height:20px;
+	border:1px ridge #888888;
+	margin-top:10px;
+	margin-left:10px;
+	margin-right:15px;	
+	margin-bottom:-10px;
+	padding:10px;
+	-moz-border-radius: 15px;
+	border-radius: 5px;
+}
+.tag_text{
+	color:#3366ff;
+}
+#add_tag_button{
+	position:relative;
+	margin-top:-2px;
+	float:right;
+}
+
+#add_tag_form{
+	position:relative;
+	margin-top:-20px;
+	float:right;
+	clear:both;
+	width:200px;
+	padding:20px;
+	background-color:#ffffff;
+	border:1px solid #888888;
+	display:none;
+	-moz-border-radius: 15px;
+	border-radius: 5px;
+}
+
+#add_tag_capture{
+	position:relative;
+	margin:-2px;
+	float:right;
+}
+.tagFormError{
+	color:#b22222;
+	height:12px;
+}
+#tag_close{
+	height:16px;
+	width:16px;
+	position:positive;
+	float:right;
+	clear:both;
+    cursor:pointer;
+    display:block;
+    background-image:url('../img/delete.png'); 
+	}
+#clear_advanced{
+	padding-left:30px;
+	}
+.ui-state-default .ui-icon-info { background-image: url(smoothness/images/ui-icons_2e83ff_256x240.png); }
+.ui-state-hover .ui-icon-info, .ui-state-focus .ui-icon {background-image: url(smoothness/images/ui-icons_2e83ff_256x240.png); }
+.ui-state-default .ui-icon-circle-arrow-e { background-image: url(smoothness/images/ui-icons_2e83ff_256x240.png); }
+.ui-state-hover .ui-icon-circle-arrow-e  {background-image: url(smoothness/images/ui-icons_2e83ff_256x240.png); }
+.ui-state-default .ui-icon-circle-arrow-w { background-image: url(smoothness/images/ui-icons_2e83ff_256x240.png); }
+.ui-state-hover .ui-icon-circle-arrow-w  {background-image: url(smoothness/images/ui-icons_2e83ff_256x240.png); }

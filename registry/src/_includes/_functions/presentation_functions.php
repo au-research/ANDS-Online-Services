@@ -128,7 +128,46 @@ function drawMonthYearInput($field1NameAndID, $unsafeValue1,$field2NameAndID, $u
 	}
 
 	print'</select>'."\n";
-	print '&nbsp;<span class="inputFormat">MM -YYYY</span>';
+	print '&nbsp;<span class="inputFormat">MM - YYYY</span>';
+}
+
+function drawDayMonthYearInput($field3NameAndID, $unsafeValue3,$field1NameAndID, $unsafeValue1,$field2NameAndID, $unsafeValue2)
+{
+	if(!$unsafeValue1) $unsafeValue1=date("m");
+	if(!$unsafeValue2) $unsafeValue2=date("Y");
+	if(!$unsafeValue3) $unsafeValue3=date("d");
+
+	print '<select name="'.$field3NameAndID.'" id="'.$field3NameAndID.'"  />';
+	 for($i=1;$i<32;$i++)
+	{
+		print('<option value="'.$i.'"');
+		if($i==intval($unsafeValue3)) print(" selected");
+		print('>'.date("d",mktime($hour=null,$minute=null,$second=null,$month=date("m"),$day=$i,$year=date("Y"))).'</option>');
+
+	}
+	print'</select>'."\n";
+	
+	print '<select name="'.$field1NameAndID.'" id="'.$field1NameAndID.'"  />';
+	 for($i=1;$i<13;$i++)
+	{
+		print('<option value="'.$i.'"');
+		if($i==intval($unsafeValue1)) print(" selected");
+		print('>'.date("M",mktime($hour=null,$minute=null,$second=null,$month=$i,$day=date("d"),$year=date("Y"))).'</option>');
+
+	}
+	print'</select>'."\n";
+
+	print '<select name="'.$field2NameAndID.'" id="'.$field2NameAndID.'"  />';
+	for($i=2011;$i<(date("Y"))+1;$i++)
+	{
+		print('<option value="'.$i.'"');
+		if($i==$unsafeValue2) print(" selected");
+		print('>'.$i.'</option>');
+
+	}
+
+	print'</select>'."\n";
+	print '&nbsp;<span class="inputFormat">DD - MM - YYYY</span>';
 }
 function getFormattedDatetimeWithMask($datetime, $mask)
 {

@@ -64,6 +64,7 @@ limitations under the License.
 			<div id="search-result-content" class="bottom-corner">
 				<?php  
 					$data['queryStr']= $queryStr;
+					$data['query']=$query;
 					$this->load->view('search/content', $data);
 				?>
 			</div>

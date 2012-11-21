@@ -177,7 +177,7 @@ public class RIFHarvestThread extends HarvestThread
 
                 //if the harvest is not incremental, remove datefrom and dateuntil from list records
                 //log.info("HARVEST AHM: "+harvest.getAHM());
-                if(!harvest.getAHM().equals("INCREMENTAL")){
+                if(harvest.getAHM() != null && !harvest.getAHM().equals("INCREMENTAL")){
                     setFrom(null);
                     setUntil(null);
                 }

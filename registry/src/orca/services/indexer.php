@@ -42,6 +42,7 @@ switch($task){
 	case "clearDS":		clearDS($dataSourceKey);							break;
 	case "clearKey":	clearKey($key);										break;
 	case "checkQuality":	checkQuality($key,$dataSourceKey);				break;
+	case "populateSpatialExtents": populateSpatialExtents();				break;
 	default: print "no task defined"; 										break;
 }
 
@@ -96,7 +97,7 @@ function indexDS($dataSourceKey, $status = 'All', $optimise = true){
 	}
 }
 
-function clearDS($dataSourceKey){
+function clearDSDIEDIEDIE($dataSourceKey){
 	global $solr_update_url;
 	echo "Clearing DS SOLR indexes: ".$dataSourceKey;
 	$result = curl_post($solr_update_url.'?commit=true', '<delete><query>data_source_key:("'.esc($dataSourceKey).'")</query></delete>');	
@@ -169,7 +170,7 @@ function clearAllSolrIndex()
 }
 
 
-function addPublishedSolrIndexForDatasource($dataSourceKey)
+function addPublishedSolrIndexForDatasourceDIEDIEDIE($dataSourceKey)
 {
 	global $solr_update_url;
 	global $totalCount;
@@ -232,7 +233,7 @@ function addPublishedSolrIndexForDatasource($dataSourceKey)
 }
 
 
-function addDraftSolrIndexForDatasource($dataSourceKey)
+function addDraftSolrIndexForDatasourceDIEDIEDIE($dataSourceKey)
 {
 	global $solr_update_url;
 	global $totalCount;
@@ -393,8 +394,97 @@ function checkQuality($key,$dataSourceKey)
 	
 }
 
+function populateSpatialExtents()
+{
+
+$unprocessedLocations = getUnprocessedLocations();
+$unprocessedCoverage = getUnprocessedCoverage();
+$ISO_CODE_ARRAY = loadISOcodes(eAPPLICATION_ROOT.'orca/iso3166_country_names_and_code_elements.xml');
+
+print('START'."<br/>");
+
+	if( $unprocessedLocations)
+	{
+		foreach( $unprocessedLocations as $location )
+		{
+			$type = $location['type'];
+			$value = $location['value'];
+			$registryObjectKey = $location['registry_object_key'];
+			$id = $location['spatial_location_id'];
+			if(array_key_exists($value,$ISO_CODE_ARRAY))
+			{
+				$value = $ISO_CODE_ARRAY[$value];
+			}
+			
+			print ($id." ".$registryObjectKey." ".$type." ".$value."<br/>");
+			ob_flush();flush();
+			importSpatialExtent($id, $value, $type, $registryObjectKey);
+	
+		}
+	}
+	if($unprocessedCoverage)
+	{
+		foreach( $unprocessedCoverage as $location )
+		{
+			$type = $location['type'];
+			$value = $location['value'];
+			$registryObjectKey = $location['registry_object_key'];
+			$id = $location['spatial_location_id'];
+			if(array_key_exists($value,$ISO_CODE_ARRAY))
+			{
+				$value = $ISO_CODE_ARRAY[$value];
+			}
+			
+			print($id." ".$registryObjectKey." ".$type." ".$value."<br/>");
+			ob_flush();flush();
+			importSpatialExtent($id, $value, $type, $registryObjectKey);
+		}	
+	}
+	
+print("<br/>END");
+
+}
+
+function getUnprocessedLocations()
+{
+	global $gCNN_DBS_ORCA;
+	$resultSet = null;
+	$strQuery = 'select sl.*, l.registry_object_key from dba.tbl_spatial_locations sl, dba.tbl_locations l where l.location_id = sl.location_id and sl.spatial_location_id not in (select spatial_location_id from dba.tbl_spatial_extents)';
+	$params = array();
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	return $resultSet;
+}
 
 
+function getUnprocessedCoverage()
+{
+	global $gCNN_DBS_ORCA;
+	$resultSet = null;
+	$strQuery = 'select sl.*, c.registry_object_key from dba.tbl_spatial_locations sl, dba.tbl_coverage c where c.coverage_id = sl.coverage_id and sl.spatial_location_id not in (select spatial_location_id from dba.tbl_spatial_extents)';
+	$params = array();
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	return $resultSet;
+}
+
+
+function loadISOcodes($filePath)
+{
+$codeArray = array();
+$codes = new DomDocument();
+$codes->load($filePath);
+$codeList = $codes->getElementsByTagName('ISO_3166-1_Entry');
+
+	$count = $codeList->length;
+	for($i=0;$i<$count;$i++)
+	{
+		if($codeList->item($i)->hasChildNodes()){
+			$countryName  = $codeList->item($i)->getElementsByTagName('ISO_3166-1_Country_name');
+			$code = $codeList->item($i)->getElementsByTagName('ISO_3166-1_Alpha-2_Code_element');
+			$codeArray[$code->item(0)->firstChild->nodeValue] =  $countryName->item(0)->firstChild->nodeValue;
+		}
+	}
+	return $codeArray;
+}
 
 require '../../_includes/finish.php';
 ?>

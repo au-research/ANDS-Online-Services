@@ -1148,7 +1148,7 @@ function getRegistryObjectOAIDCXMLElements($registryObjectKey)
 			}
 		}
 
-		$xml .= "          <dc:identifier>http://".$host.'/'.$rda_root . '/view.php?key='.esc(urlencode($registryObjectKey))."</dc:identifier>\n";
+		$xml .= "          <dc:identifier>http://".$host.'/'.$rda_root . '/view/?key='.esc(urlencode($registryObjectKey))."</dc:identifier>\n";
 
 		//<element ref="dc:description"/>
 	    //<element ref="dc:rights" />

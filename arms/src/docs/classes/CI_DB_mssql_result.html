@@ -1,0 +1,673 @@
+<!DOCTYPE html><html xmlns:date="http://exslt.org/dates-and-times" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>phpDocumentor » \CI_DB_mssql_result</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../css/template.css" rel="stylesheet" media="all">
+<script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../js/bootstrap.js" type="text/javascript"></script><script src="../js/template.js" type="text/javascript"></script><script src="../js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../img/favicon.ico">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">phpDocumentor</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Packages</a></li>
+<li><a href="../packages/CodeIgniter.html"><i class="icon-folder-open"></i> CodeIgniter</a></li>
+<li><a href="../packages/Default.html"><i class="icon-folder-open"></i> Default</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">1170</span></a></li>
+<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul><li>todo 
+                <span class="label label-info">1</span>
+</li></ul></a></li>
+<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">0</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods</li>
+<li class="method public "><a href="#_data_seek" title="_data_seek :: Data Seek"><span class="description">Data Seek</span><pre>_data_seek()</pre></a></li>
+<li class="method public "><a href="#_fetch_assoc" title="_fetch_assoc :: Result - associative array"><span class="description">Result - associative array</span><pre>_fetch_assoc()</pre></a></li>
+<li class="method public "><a href="#_fetch_object" title="_fetch_object :: Result - object"><span class="description">Result - object</span><pre>_fetch_object()</pre></a></li>
+<li class="method public inherited"><a href="#custom_result_object" title="custom_result_object :: Custom query result."><span class="description">Custom query result.</span><pre>custom_result_object()</pre></a></li>
+<li class="method public inherited"><a href="#custom_row_object" title="custom_row_object :: Returns a single result row - custom object version"><span class="description">Returns a single result row - custom object version</span><pre>custom_row_object()</pre></a></li>
+<li class="method public "><a href="#field_data" title="field_data :: Field data"><span class="description">Field data</span><pre>field_data()</pre></a></li>
+<li class="method public inherited"><a href="#first_row" title='first_row :: Returns the "first" row'><span class="description">Returns the "first" row</span><pre>first_row()</pre></a></li>
+<li class="method public "><a href="#free_result" title="free_result :: Free the result"><span class="description">Free the result</span><pre>free_result()</pre></a></li>
+<li class="method public inherited"><a href="#last_row" title='last_row :: Returns the "last" row'><span class="description">Returns the "last" row</span><pre>last_row()</pre></a></li>
+<li class="method public "><a href="#list_fields" title="list_fields :: Fetch Field Names"><span class="description">Fetch Field Names</span><pre>list_fields()</pre></a></li>
+<li class="method public inherited"><a href="#next_row" title='next_row :: Returns the "next" row'><span class="description">Returns the "next" row</span><pre>next_row()</pre></a></li>
+<li class="method public "><a href="#num_fields" title="num_fields :: Number of fields in the result set"><span class="description">Number of fields in the result set</span><pre>num_fields()</pre></a></li>
+<li class="method public "><a href="#num_rows" title="num_rows :: Number of rows in the result set"><span class="description">Number of rows in the result set</span><pre>num_rows()</pre></a></li>
+<li class="method public inherited"><a href="#previous_row" title='previous_row :: Returns the "previous" row'><span class="description">Returns the "previous" row</span><pre>previous_row()</pre></a></li>
+<li class="method public inherited"><a href="#result" title="result :: Query result."><span class="description">Query result.</span><pre>result()</pre></a></li>
+<li class="method public inherited"><a href="#result_array" title="result_array :: Query result."><span class="description">Query result.</span><pre>result_array()</pre></a></li>
+<li class="method public inherited"><a href="#result_object" title="result_object :: Query result."><span class="description">Query result.</span><pre>result_object()</pre></a></li>
+<li class="method public inherited"><a href="#row" title="row :: Query result."><span class="description">Query result.</span><pre>row()</pre></a></li>
+<li class="method public inherited"><a href="#row_array" title="row_array :: Returns a single result row - array version"><span class="description">Returns a single result row - array version</span><pre>row_array()</pre></a></li>
+<li class="method public inherited"><a href="#row_object" title="row_object :: Returns a single result row - object version"><span class="description">Returns a single result row - object version</span><pre>row_object()</pre></a></li>
+<li class="method public inherited"><a href="#set_row" title="set_row :: Assigns an item into a particular column slot"><span class="description">Assigns an item into a particular column slot</span><pre>set_row()</pre></a></li>
+<li class="nav-header">
+<i class="icon-custom icon-property"></i> Properties</li>
+<li class="property public inherited"><a href="#%24conn_id" title="$conn_id :: "><span class="description">$conn_id</span><pre>$conn_id</pre></a></li>
+<li class="property public inherited"><a href="#%24current_row" title="$current_row :: "><span class="description">$current_row</span><pre>$current_row</pre></a></li>
+<li class="property public inherited"><a href="#%24custom_result_object" title="$custom_result_object :: "><span class="description">$custom_result_object</span><pre>$custom_result_object</pre></a></li>
+<li class="property public inherited"><a href="#%24num_rows" title="$num_rows :: "><span class="description">$num_rows</span><pre>$num_rows</pre></a></li>
+<li class="property public inherited"><a href="#%24result_array" title="$result_array :: "><span class="description">$result_array</span><pre>$result_array</pre></a></li>
+<li class="property public inherited"><a href="#%24result_id" title="$result_id :: "><span class="description">$result_id</span><pre>$result_id</pre></a></li>
+<li class="property public inherited"><a href="#%24result_object" title="$result_object :: "><span class="description">$result_object</span><pre>$result_object</pre></a></li>
+<li class="property public inherited"><a href="#%24row_data" title="$row_data :: "><span class="description">$row_data</span><pre>$row_data</pre></a></li>
+</ul>
+</div>
+<div class="span8">
+<a name="%5CCI_DB_mssql_result" id="\CI_DB_mssql_result"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/global.html">global</a></li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/CI_DB_mssql_result.html">CI_DB_mssql_result</a>
+</li>
+</ul>
+<div href="../classes/CI_DB_mssql_result.html" class="element class">
+<p class="short_description">MS SQL Result Class</p>
+<div class="details">
+<p class="long_description"><p>This class extends the parent result class: CI_DB_result</p></p>
+<table class="table table-bordered">
+<tr>
+<th>category</th>
+<td>Database</td>
+</tr>
+<tr>
+<th>author</th>
+<td><a href="">ExpressionEngine Dev Team</a></td>
+</tr>
+<tr>
+<th>link</th>
+<td><a href="http://codeigniter.com/user_guide/database/">http://codeigniter.com/user_guide/database/</a></td>
+</tr>
+</table>
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a name="_data_seek" id="_data_seek"></a><div class="element clickable method public _data_seek" data-toggle="collapse" data-target="._data_seek .collapse">
+<h2>Data Seek</h2>
+<pre>_data_seek($n) : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Moves the internal pointer to the desired offset.  We call
+this internally before fetching results to make sure the
+result set starts at zero</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$n</h4>
+<code></code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>array</code></div>
+</div></div>
+</div>
+<a name="_fetch_assoc" id="_fetch_assoc"></a><div class="element clickable method public _fetch_assoc" data-toggle="collapse" data-target="._fetch_assoc .collapse">
+<h2>Result - associative array</h2>
+<pre>_fetch_assoc() : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Returns the result set as an array</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>array</code></div>
+</div></div>
+</div>
+<a name="_fetch_object" id="_fetch_object"></a><div class="element clickable method public _fetch_object" data-toggle="collapse" data-target="._fetch_object .collapse">
+<h2>Result - object</h2>
+<pre>_fetch_object() : object</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Returns the result set as an object</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>object</code></div>
+</div></div>
+</div>
+<a name="custom_result_object" id="custom_result_object"></a><div class="element clickable method public custom_result_object" data-toggle="collapse" data-target=".custom_result_object .collapse">
+<h2>Custom query result.</h2>
+<pre>custom_result_object(\class_name $class_name) : array</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_DB_result::custom_result_object()</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$class_name</h4>
+<code>\class_name</code><p>A string that represents the type of object you want back</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>array</code>of objects</div>
+</div></div>
+</div>
+<a name="custom_row_object" id="custom_row_object"></a><div class="element clickable method public custom_row_object" data-toggle="collapse" data-target=".custom_row_object .collapse">
+<h2>Returns a single result row - custom object version</h2>
+<pre>custom_row_object($n, $type) : object</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_DB_result::custom_row_object()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$n</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$type</h4>
+<code></code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>object</code></div>
+</div></div>
+</div>
+<a name="field_data" id="field_data"></a><div class="element clickable method public field_data" data-toggle="collapse" data-target=".field_data .collapse">
+<h2>Field data</h2>
+<pre>field_data() : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Generates an array of objects containing field meta-data</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>array</code></div>
+</div></div>
+</div>
+<a name="first_row" id="first_row"></a><div class="element clickable method public first_row" data-toggle="collapse" data-target=".first_row .collapse">
+<h2>Returns the "first" row</h2>
+<pre>first_row($type) : object</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_DB_result::first_row()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$type</h4>
+<code></code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>object</code></div>
+</div></div>
+</div>
+<a name="free_result" id="free_result"></a><div class="element clickable method public free_result" data-toggle="collapse" data-target=".free_result .collapse">
+<h2>Free the result</h2>
+<pre>free_result() : null</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Returns</h3>
+<div class="subelement response"><code>null</code></div>
+</div></div>
+</div>
+<a name="last_row" id="last_row"></a><div class="element clickable method public last_row" data-toggle="collapse" data-target=".last_row .collapse">
+<h2>Returns the "last" row</h2>
+<pre>last_row($type) : object</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_DB_result::last_row()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$type</h4>
+<code></code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>object</code></div>
+</div></div>
+</div>
+<a name="list_fields" id="list_fields"></a><div class="element clickable method public list_fields" data-toggle="collapse" data-target=".list_fields .collapse">
+<h2>Fetch Field Names</h2>
+<pre>list_fields() : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Generates an array of column names</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>array</code></div>
+</div></div>
+</div>
+<a name="next_row" id="next_row"></a><div class="element clickable method public next_row" data-toggle="collapse" data-target=".next_row .collapse">
+<h2>Returns the "next" row</h2>
+<pre>next_row($type) : object</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_DB_result::next_row()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$type</h4>
+<code></code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>object</code></div>
+</div></div>
+</div>
+<a name="num_fields" id="num_fields"></a><div class="element clickable method public num_fields" data-toggle="collapse" data-target=".num_fields .collapse">
+<h2>Number of fields in the result set</h2>
+<pre>num_fields() : integer</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>integer</code></div>
+</div></div>
+</div>
+<a name="num_rows" id="num_rows"></a><div class="element clickable method public num_rows" data-toggle="collapse" data-target=".num_rows .collapse">
+<h2>Number of rows in the result set</h2>
+<pre>num_rows() : integer</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>When caching is enabled we do not load the other driver.
+These functions are primarily here to prevent undefined function errors
+when a cached result object is in use.  They are not otherwise fully
+operational due to the unavailability of the database resource IDs with
+cached results.</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>integer</code></div>
+</div></div>
+</div>
+<a name="previous_row" id="previous_row"></a><div class="element clickable method public previous_row" data-toggle="collapse" data-target=".previous_row .collapse">
+<h2>Returns the "previous" row</h2>
+<pre>previous_row($type) : object</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_DB_result::previous_row()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$type</h4>
+<code></code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>object</code></div>
+</div></div>
+</div>
+<a name="result" id="result"></a><div class="element clickable method public result" data-toggle="collapse" data-target=".result .collapse">
+<h2>Query result.</h2>
+<pre>result(string $type) : mixed</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Acts as a wrapper function for the following functions.</p></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_DB_result::result()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$type</h4>
+<code>string</code><p>can be "object" or "array"</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>mixed</code>either a result object or array</div>
+</div></div>
+</div>
+<a name="result_array" id="result_array"></a><div class="element clickable method public result_array" data-toggle="collapse" data-target=".result_array .collapse">
+<h2>Query result.</h2>
+<pre>result_array() : array</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>"array" version.</p></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_DB_result::result_array()</td>
+</tr>
+</table>
+<h3>Returns</h3>
+<div class="subelement response"><code>array</code></div>
+</div></div>
+</div>
+<a name="result_object" id="result_object"></a><div class="element clickable method public result_object" data-toggle="collapse" data-target=".result_object .collapse">
+<h2>Query result.</h2>
+<pre>result_object() : object</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>"object" version.</p></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_DB_result::result_object()</td>
+</tr>
+</table>
+<h3>Returns</h3>
+<div class="subelement response"><code>object</code></div>
+</div></div>
+</div>
+<a name="row" id="row"></a><div class="element clickable method public row" data-toggle="collapse" data-target=".row .collapse">
+<h2>Query result.</h2>
+<pre>row($n, string $type) : mixed</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Acts as a wrapper function for the following functions.</p></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_DB_result::row()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$n</h4>
+<code></code><p>string</p></div>
+<div class="subelement argument">
+<h4>$type</h4>
+<code>string</code><p>can be "object" or "array"</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>mixed</code>either a result object or array</div>
+</div></div>
+</div>
+<a name="row_array" id="row_array"></a><div class="element clickable method public row_array" data-toggle="collapse" data-target=".row_array .collapse">
+<h2>Returns a single result row - array version</h2>
+<pre>row_array($n) : array</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_DB_result::row_array()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$n</h4>
+<code></code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>array</code></div>
+</div></div>
+</div>
+<a name="row_object" id="row_object"></a><div class="element clickable method public row_object" data-toggle="collapse" data-target=".row_object .collapse">
+<h2>Returns a single result row - object version</h2>
+<pre>row_object($n) : object</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_DB_result::row_object()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$n</h4>
+<code></code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>object</code></div>
+</div></div>
+</div>
+<a name="set_row" id="set_row"></a><div class="element clickable method public set_row" data-toggle="collapse" data-target=".set_row .collapse">
+<h2>Assigns an item into a particular column slot</h2>
+<pre>set_row($key, $value) : object</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_DB_result::set_row()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$key</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$value</h4>
+<code></code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>object</code></div>
+</div></div>
+</div>
+<h3>
+<i class="icon-custom icon-property"></i> Properties</h3>
+<a name="%24conn_id" id="$conn_id"> </a><div class="element clickable property public $conn_id" data-toggle="collapse" data-target=".$conn_id .collapse">
+<h2>$conn_id</h2>
+<pre>$conn_id </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_DB_result::$$conn_id</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24current_row" id="$current_row"> </a><div class="element clickable property public $current_row" data-toggle="collapse" data-target=".$current_row .collapse">
+<h2>$current_row</h2>
+<pre>$current_row </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_DB_result::$$current_row</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24custom_result_object" id="$custom_result_object"> </a><div class="element clickable property public $custom_result_object" data-toggle="collapse" data-target=".$custom_result_object .collapse">
+<h2>$custom_result_object</h2>
+<pre>$custom_result_object </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_DB_result::$$custom_result_object</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24num_rows" id="$num_rows"> </a><div class="element clickable property public $num_rows" data-toggle="collapse" data-target=".$num_rows .collapse">
+<h2>$num_rows</h2>
+<pre>$num_rows </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_DB_result::$$num_rows</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24result_array" id="$result_array"> </a><div class="element clickable property public $result_array" data-toggle="collapse" data-target=".$result_array .collapse">
+<h2>$result_array</h2>
+<pre>$result_array </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_DB_result::$$result_array</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24result_id" id="$result_id"> </a><div class="element clickable property public $result_id" data-toggle="collapse" data-target=".$result_id .collapse">
+<h2>$result_id</h2>
+<pre>$result_id </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_DB_result::$$result_id</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24result_object" id="$result_object"> </a><div class="element clickable property public $result_object" data-toggle="collapse" data-target=".$result_object .collapse">
+<h2>$result_object</h2>
+<pre>$result_object </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_DB_result::$$result_object</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24row_data" id="$row_data"> </a><div class="element clickable property public $row_data" data-toggle="collapse" data-target=".$row_data .collapse">
+<h2>$row_data</h2>
+<pre>$row_data </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_DB_result::$$row_data</td>
+</tr></table>
+</div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a8</a> and<br>
+            generated on 2012-07-27T12:29:24+10:00.<br></footer></div>
+</div>
+</body>
+</html>

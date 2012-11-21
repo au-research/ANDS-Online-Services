@@ -171,21 +171,28 @@ function getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR = false, $inclu
 			$xml .= '      <extRif:manually_assessed_flag>'.esc(trim($registryObject[0]['manually_assessed_flag'])).'</extRif:manually_assessed_flag>'."\n";
 			$xml .= '      <extRif:gold_status_flag>'.esc(trim($registryObject[0]['gold_status_flag'])).'</extRif:gold_status_flag>'."\n";
 			$xml .= '      <extRif:quality_level>'.esc(trim($registryObject[0]['quality_level'])).'</extRif:quality_level>'."\n";
-			$owner = ($registryObject[0]['created_who'] == 'SYSTEM' ? 'harvest' : 'manual');
+			if($registryObject[0]['created_who'] == 'SYSTEM' || (strlen($registryObject[0]['created_who']) == 40 && strpos($registryObject[0]['created_who'], ' (') === false))
+			{
+				$owner =  'harvest';
+			}
+			else{
+				$owner = 'manual';
+			}			
 			$xml .= '      <extRif:feedType>'.$owner.'</extRif:feedType>'."\n";
 			$xml .= '      <extRif:lastModifiedBy>'.$registryObject[0]['created_who'].'</extRif:lastModifiedBy>'."\n";
 			if($contributorPage = getGroupPage($group))
 			{
-				$contributorPageTitle = getRegistryObject($contributorPage[0]['registry_object_key'], $overridePermissions = true);
-				if($contributorPageTitle)
+
+				$contributorPageObject = getRegistryObject($contributorPage[0]['registry_object_key'], $overridePermissions = true);
+				if($contributorPageObject)
 				{
 					$xml .= '      <extRif:contributorPage>'.rawurlencode($contributorPage[0]['registry_object_key']).'</extRif:contributorPage>'."\n";
 					$contributorLogoStr = getDescriptionLogo($contributorPage[0]['registry_object_key']);
 					if ($contributorLogoStr !== false)
 					{
 						$xml .= '      <extRif:contributorDisplayLogo>'.strip_tags(esc($contributorLogoStr)).'</extRif:contributorDisplayLogo>'."\n";
-					}
-				}		
+					}	
+				}	
 			}
 			$xml .= "    </extRif:extendedMetadata>\n";
 		}
@@ -220,6 +227,10 @@ function getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR = false, $inclu
 		}
 
 		$xml .= "    <originatingSource$originatingSourceType>$originatingSource</originatingSource>\n";
+		if($forSOLR)
+		{
+			$xml .= getTagsXml(esc(trim($registryObject[0]['key_hash'])),'extRif:tags');
+		}
 
 
 		// To prevent empty XML elements, we append to blank string and check that it actually
@@ -229,6 +240,10 @@ function getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR = false, $inclu
 		// identifier
 		// -------------------------------------------------------------
 		$internalxml .= getIdentifierTypesXML($registryObjectKey, 'identifier');
+
+		// identifier
+		// -------------------------------------------------------------
+		$internalxml .= getDatesTypesXML($registryObjectKey, 'dates', $forSOLR);
 
 		// name
 		// -------------------------------------------------------------
@@ -267,7 +282,7 @@ function getRegistryObjectXMLFromDB($registryObjectKey, $forSOLR = false, $inclu
 
 		// relatedInfo
 		// -------------------------------------------------------------
-		$internalxml .= getRelatedInfoTypesXML($registryObjectKey, 'relatedInfo');
+		$internalxml .= getRelatedInfoTypesXML($registryObjectKey, 'relatedInfo', $forSOLR);
 
 		// rights
 		// -------------------------------------------------------------
@@ -498,6 +513,42 @@ function getIdentifierTypesXML($registryObjectKey, $elementName)
 	return $xml;
 }
 
+function getDatesTypesXML($registryObjectKey, $elementName, $forSOLR = false)
+{
+	$xml = '';
+	$elementName = esc($elementName);
+	$list = getDates($registryObjectKey);
+
+	if( $list )
+	{
+		foreach( $list as $element )
+		{
+			if( $type = $element['date_type'] )
+			{
+
+				$etype = ' etype="'.changeFromCamelCase(esc(str_replace("dc.","",$type))).'"';
+				$type = ' type="'.esc($type).'"';
+				
+			}
+			$value = '';
+			$extrifval = '';
+			
+			foreach ($element['elements'] AS $date)
+			{
+				$value .= '        <date type="'.$date['type'].'" dateFormat="'.$date['date_format'].'">'.$date['value'].'</date>' . "\n";	
+				$extrifval .= '    <extRif:date type="'.$date['type'].'" dateFormat="'.$date['date_format'].'">'.$date['value'].'</extRif:date>' . "\n";	
+			}
+			
+			$xml .= "      <$elementName$type>\n$value      </$elementName>\n";
+			
+			if($forSOLR)
+			{
+				$xml .= "      <extRif:$elementName$type$etype>\n$extrifval      </extRif:$elementName>\n";			
+			}			
+		}
+	}
+	return $xml;
+}
 
 
 function getComplexNameTypesXML($registryObjectKey, $elementName, $registryObjectClass, $forSOLR = false)
@@ -681,7 +732,7 @@ function getLocationTypesXML($registryObjectKey, $elementName, $forSOLR)
 			}
 			$xml .= "      <$elementName$dateFrom$dateTo$type>\n";
 			$xml .= getAddressXML($element['location_id'], $forSOLR);
-			$xml .= getSpatialTypesXML($element['location_id'], $forSOLR);
+			$xml .= getSpatialTypesXML($element['location_id'], esc($element['type']), $forSOLR);
 			$xml .= "      </$elementName>\n";
 		}
 	}
@@ -725,15 +776,32 @@ function getSpatialCoverageXML($coverage_id, $forSOLR)
 			{
 				$lang = ' xml:lang="'.esc($lang).'"';
 			}
-			$value = esc($element['value']);
+			$value = esc(trim($element['value']));
+
 			$xml .= "        <spatial$type$lang>$value</spatial>\n";
 
 			if ($forSOLR)
 			{
 
 				$xml .= "        <extRif:spatial$type$lang>\n";
+				$spatialLocationId = $element['spatial_location_id'];
+				$sizeOfArea = getSizeOfSpatialExtent($spatialLocationId);
+				$pathOfArea = getPathOfSpatialExtent($spatialLocationId);
 				$centre = '';
-				if($element['type'] == 'iso19139dcmiBox')
+				if($pathOfArea && ($element['type'] == 'dcmiPoint' || $element['type'] == 'iso31662' || $element['type'] == 'iso31663' || $element['type'] == 'iso3166' || $element['type'] == 'iso31661' || $element['type'] == 'text') )
+				{
+				$pathOfArea = str_replace( ')', '', $pathOfArea); 
+				$pathOfArea = str_replace( '(', '', $pathOfArea); 
+				$points = explode(',', $pathOfArea);
+				$north = $points[0];
+				$east = $points[1];
+				$south = $points[2];
+				$west = $points[3];
+				$centre = (($east+$west)/2).','.(($north+$south)/2);
+				$xml .= "          <extRif:coords>$west,$north $east,$north $east,$south $west,$south $west,$north</extRif:coords>\n";
+				$xml .= "          <extRif:area>$sizeOfArea</extRif:area>\n";
+				}
+				elseif($element['type'] == 'iso19139dcmiBox')
 				{
 					$valueString =  strtolower(esc($element['value'])).';';
 					$matches = array();
@@ -748,6 +816,7 @@ function getSpatialCoverageXML($coverage_id, $forSOLR)
 					$coordinates = "$west,$north $east,$north $east,$south $west,$south $west,$north";
 					$centre = (($east+$west)/2).','.(($north+$south)/2);
 					$xml .= "          <extRif:coords>$west,$north $east,$north $east,$south $west,$south $west,$north</extRif:coords>\n";
+					$xml .= "          <extRif:area>$sizeOfArea</extRif:area>\n";
 				}
 				else if($element['type'] ==  'gmlKmlPolyCoords' || $element['type'] == 'kmlPolyCoords')
 				{
@@ -775,6 +844,7 @@ function getSpatialCoverageXML($coverage_id, $forSOLR)
 						}
 						$centre = (($east+$west)/2).','.(($north+$south)/2);
 						$xml .= "          <extRif:coords>$coordinates</extRif:coords>\n";
+						$xml .= "          <extRif:area>$sizeOfArea</extRif:area>\n";
 					}
 				}
 				else 
@@ -880,7 +950,7 @@ function drawCitationInfoXML($citation_info_id, $row)
 		$xml .= "		<identifier type=\"".esc($row['metadata_type'])."\">".esc($row['metadata_identifier'])."</identifier>\n";
 		$xml .= getCitationContributorsXML($citation_info_id);
 		$xml .= "		<title>".esc($row['metadata_title'])."</title>\n";
-		$xml .= "		<edition>".esc($row['metadata_edition'])."</edition>\n";
+		$xml .= "		<version>".esc($row['metadata_edition'])."</version>\n";
 		if($row['metadata_publisher']){$xml .= "		<publisher>".esc($row['metadata_publisher'])."</publisher>\n";}
 		$xml .= "		<placePublished>".esc($row['metadata_place_published'])."</placePublished>\n";
 		$xml .= getCitationDatesXML($citation_info_id);
@@ -1070,7 +1140,7 @@ function getAddressPartsXML($physical_address_id, $forSOLR)
 }
 
 
-function getSpatialTypesXML($location_id, $forSOLR)
+function getSpatialTypesXML($location_id, $spatialType, $forSOLR)
 {
 	$xml = '';
 	$list = getSpatialLocations($location_id);
@@ -1092,8 +1162,26 @@ function getSpatialTypesXML($location_id, $forSOLR)
 			if ($forSOLR)
 			{
 				$centre = '';
+				$sizeOfArea = '';
 				$xml .= "        <extRif:spatial>";
-				if($element['type'] == 'iso19139dcmiBox')
+				$spatialLocationId = $element['spatial_location_id'];
+				$sizeOfArea = getSizeOfSpatialExtent($spatialLocationId);
+				$pathOfArea = getPathOfSpatialExtent($spatialLocationId);
+				
+				if($pathOfArea && ($element['type'] == 'dcmiPoint' || $element['type'] == 'iso31662' || $element['type'] == 'iso31663' || $element['type'] == 'iso3166' || $element['type'] == 'iso31661' || $element['type'] == 'text') )
+				{
+				$pathOfArea = str_replace( ')', '', $pathOfArea); 
+				$pathOfArea = str_replace( '(', '', $pathOfArea); 
+				$points = explode(',', $pathOfArea);
+				$north = $points[0];
+				$east = $points[1];
+				$south = $points[2];
+				$west = $points[3];
+				$centre = (($east+$west)/2).','.(($north+$south)/2);
+				$xml .= "\n          <extRif:coords>$west,$north $east,$north $east,$south $west,$south $west,$north</extRif:coords>\n";
+				}
+				
+				else if($element['type'] == 'iso19139dcmiBox')
 				{
 					$valueString = strtolower(esc($element['value'])).';';
 					$matches = array();
@@ -1107,7 +1195,7 @@ function getSpatialTypesXML($location_id, $forSOLR)
 					$east = (float)$matches[1];
 					$coordinates = "$west,$north $east,$north $east,$south $west,$south $west,$north";
 					$centre = (($east+$west)/2).','.(($north+$south)/2);
-					$xml .= "          <extRif:coords>$west,$north $east,$north $east,$south $west,$south $west,$north</extRif:coords>\n";
+					$xml .= "\n          <extRif:coords>$west,$north $east,$north $east,$south $west,$south $west,$north</extRif:coords>\n";
 
 
 				}
@@ -1115,7 +1203,7 @@ function getSpatialTypesXML($location_id, $forSOLR)
 				{
 					$coordinates = trim(esc($element['value']));
 					$coordinates = preg_replace("/\s+/", " ", $coordinates);
-					$xml .= "          <extRif:isValidCoords>".validKmlPolyCoords($coordinates)."---".$coordinates."</extRif:isValidCoords>\n";
+					//$xml .= "          <extRif:isValidCoords>".validKmlPolyCoords($coordinates)."---".$coordinates."</extRif:isValidCoords>\n";
 					//if( validKmlPolyCoords($coordinates) )
 					//{
 						// Build the coordinates string for the centre.
@@ -1136,7 +1224,7 @@ function getSpatialTypesXML($location_id, $forSOLR)
 							}
 						}
 						$centre = (($east+$west)/2).','.(($north+$south)/2);
-					    $xml .= "          <extRif:coords>$coordinates</extRif:coords>\n";
+					    $xml .= "\n          <extRif:coords>$coordinates</extRif:coords>\n";
 
 					//}
 				}
@@ -1147,6 +1235,10 @@ function getSpatialTypesXML($location_id, $forSOLR)
 		        {
 		        	$xml .= "          <extRif:center>$centre</extRif:center>\n";
 
+		        }
+		        if($sizeOfArea != '')
+		        {
+		        	$xml .= "          <extRif:area>$sizeOfArea</extRif:area>\n";
 		        }
 		        $xml .= "        </extRif:spatial>";
 
@@ -1174,7 +1266,7 @@ function getRelatedObjectTypesXML($registryObjectKey, $dataSourceKey, $registryO
 	$connectionsNum['activity']= 0;
 	$connectionsNum['service']= 0;
 	$connectionsNum['collection']= 0;
-
+	$connectionsNum['party']= 0;
 	
 	$pkey1 = '';
 	$pkey2 = '';
@@ -1224,6 +1316,8 @@ function getRelatedObjectTypesXML($registryObjectKey, $dataSourceKey, $registryO
 				$xml .= "        <extRif:relatedObjectSlug>".esc($relatedObject[0]['url_slug'])."</extRif:relatedObjectSlug>\n";				
 				if($relation_logo)
 					$xml .= "        <extRif:relatedObjectLogo>".esc($relation_logo)."</extRif:relatedObjectLogo>\n";
+				if($isAContributor = isContributorPage($pkey1))
+					$xml .=  "        <extRif:contributorGroup>".esc($isAContributor['object_group'])."</extRif:contributorGroup>\n";
 			}
 			$xml .= "      </$elementName>\n";
 		}
@@ -1261,6 +1355,8 @@ function getRelatedObjectTypesXML($registryObjectKey, $dataSourceKey, $registryO
 				$xml .= "        <extRif:relatedObjectSlug>".esc($relatedObject[0]['url_slug'])."</extRif:relatedObjectSlug>\n";				
 				if($relation_logo)
 					$xml .= "        <extRif:relatedObjectLogo>".esc($relation_logo)."</extRif:relatedObjectLogo>\n";
+				if($isAContributor = isContributorPage($pkey2))
+					$xml .=  "        <extRif:contributorGroup>".esc($isAContributor['object_group'])."</extRif:contributorGroup>\n";
 			}
 			$xml .= "      </$elementName>\n";
 		}
@@ -1283,13 +1379,16 @@ function getRelatedObjectTypesXML($registryObjectKey, $dataSourceKey, $registryO
 				$relatedObject = getRegistryObject($element['related_registry_object_key'],true);
 				$relation_logo = false;
 				$relationType = getRelationType($element['relation_id']);
+
+				/* This popped up in a merge? Deprecated ? Looks like it is in the if() below?
 				if(isset($relatedObject[0]['type']) && strtolower($relatedObject[0]['registry_object_class'])!=''){
 					$relatedObject[0]['registry_object_class'] = strtolower($relatedObject[0]['registry_object_class']);
 					if(strtolower($relatedObject[0]['type'])=='person') { $connectionsNum['person']++; }
 					elseif(strtolower($relatedObject[0]['type'])=='group') { $connectionsNum['group']++;}
 					elseif(isset($relatedObject[0]['registry_object_class'])) {$connectionsNum[$relatedObject[0]['registry_object_class']]++;}	
 				}
-											
+				*/				
+							
 				if (isset($element) &&	$relatedObject[0]['registry_object_class'] == 'Party' && strtolower($relatedObject[0]['type']) != 'person' )
 				{
 					$relation_logo = getDescriptionLogo($key);
@@ -1299,14 +1398,24 @@ function getRelatedObjectTypesXML($registryObjectKey, $dataSourceKey, $registryO
 				$xml .= "      <$elementName>\n";
 				$xml .= "        <key>$key</key>\n";
 				$xml .= getRelationsXML($element['relation_id'], $typeArray[$registryObjectClass],$forSOLR);
-				if($forSOLR && ! $repeatKey)
+
+				if($forSOLR && ! $repeatKey && $relatedObject[0]['status']=='PUBLISHED')
 				{
+				
+					if(isset($relatedObject[0]['type']) && strtolower($relatedObject[0]['registry_object_class'])!=''){
+					$relatedObject[0]['registry_object_class'] = strtolower($relatedObject[0]['registry_object_class']);
+					if(strtolower($relatedObject[0]['type'])=='person') { $connectionsNum['person']++; }
+					elseif(strtolower($relatedObject[0]['type'])=='group') { $connectionsNum['group']++;}
+					elseif(isset($relatedObject[0]['registry_object_class'])) {$connectionsNum[$relatedObject[0]['registry_object_class']]++;}	
+					}
 					$xml .= "        <extRif:relatedObjectClass>".strtolower($relatedObject[0]['registry_object_class'])."</extRif:relatedObjectClass>\n";
 					$xml .= "        <extRif:relatedObjectType>".strtolower($relatedObject[0]['type'])."</extRif:relatedObjectType>\n";
 					$xml .= "        <extRif:relatedObjectListTitle>".esc($relatedObject[0]['list_title'])."</extRif:relatedObjectListTitle>\n";
 					$xml .= "        <extRif:relatedObjectDisplayTitle>".esc($relatedObject[0]['display_title'])."</extRif:relatedObjectDisplayTitle>\n";
 					$xml .= "        <extRif:relatedObjectSlug>".esc($relatedObject[0]['url_slug'])."</extRif:relatedObjectSlug>\n";					
 					if($relation_logo) $xml .= "        <extRif:relatedObjectLogo>".esc($relation_logo)."</extRif:relatedObjectLogo>\n";
+					if($isAContributor = isContributorPage($key))
+					$xml .=  "        <extRif:contributorGroup>".esc($isAContributor['object_group'])."</extRif:contributorGroup>\n";					
 				}
 				$xml .= "      </$elementName>\n";
 			}
@@ -1348,21 +1457,27 @@ function getRelatedObjectTypesXML($registryObjectKey, $dataSourceKey, $registryO
 					$xml .= "        <key>$key</key>\n";
 					//$xml .= getRelationsXML($element['relation_id'],$typeArray[$registryObjectClass], $forSOLR);
 					$xml .= getRelationsXML($element['relation_id'], $typeArray[$registryObjectClass],$forSOLR,$getReverse=true);
-					if($forSOLR && !$repeatKey)
+
+					if($forSOLR && !$repeatKey  && $relatedObject[0]['status']=='PUBLISHED')
 					{
-					$relatedclass= strtolower($relatedObject[0]['registry_object_class']);
-					$relatedObject[0]['registry_object_class'] = strtolower($relatedObject[0]['registry_object_class']);
-					if(strtolower($relatedObject[0]['type'])=='person') { $connectionsNum['person']++; if($connectionsNum['person']>6) $addThisRelation = false;}
-					elseif(strtolower($relatedObject[0]['type'])=='group') { $connectionsNum['group']++; if($connectionsNum['group']>6) $addThisRelation = false;}
-					elseif(isset($relatedObject[0]['registry_object_class'])) {$connectionsNum[$relatedObject[0]['registry_object_class']]++;	 if($connectionsNum[$relatedObject[0]['registry_object_class']]>6) $addThisRelation = false;}		
-						$xml .= "        <extRif:relatedObjectClass>".strtolower($relatedObject[0]['registry_object_class'])."</extRif:relatedObjectClass>\n";
-						$xml .= "        <extRif:relatedObjectType>".strtolower($relatedObject[0]['type'])."</extRif:relatedObjectType>\n";
-						$xml .= "        <extRif:relatedObjectListTitle>".esc($relatedObject[0]['list_title'])."</extRif:relatedObjectListTitle>\n";
-						$xml .= "        <extRif:relatedObjectDisplayTitle>".esc($relatedObject[0]['display_title'])."</extRif:relatedObjectDisplayTitle>\n";
-						$xml .= "        <extRif:relatedObjectSlug>".esc($relatedObject[0]['url_slug'])."</extRif:relatedObjectSlug>\n";						
-						$xml .= "        <extRif:relatedObjectReverseType>INTERNAL</extRif:relatedObjectReverseType>\n";							
-						if($relation_logo) $xml .= "        <extRif:relatedObjectLogo>".esc($relation_logo)."</extRif:relatedObjectLogo>\n";
+						$relatedclass= strtolower($relatedObject[0]['registry_object_class']);
+						$relatedObject[0]['registry_object_class'] = strtolower($relatedObject[0]['registry_object_class']);
+						if(strtolower($relatedObject[0]['type'])=='person') { $connectionsNum['person']++; if($connectionsNum['person']>6) $addThisRelation = false;}
+						elseif(strtolower($relatedObject[0]['type'])=='group') { $connectionsNum['group']++; if($connectionsNum['group']>6) $addThisRelation = false;}
+						elseif(isset($relatedObject[0]['registry_object_class'])) {$connectionsNum[$relatedObject[0]['registry_object_class']]++;	 if($connectionsNum[$relatedObject[0]['registry_object_class']]>6) $addThisRelation = false;}	
+						if($addThisRelation){
+							$xml .= "        <extRif:relatedObjectClass>".strtolower($relatedObject[0]['registry_object_class'])."</extRif:relatedObjectClass>\n";
+							$xml .= "        <extRif:relatedObjectType>".strtolower($relatedObject[0]['type'])."</extRif:relatedObjectType>\n";
+							$xml .= "        <extRif:relatedObjectListTitle>".esc($relatedObject[0]['list_title'])."</extRif:relatedObjectListTitle>\n";
+							$xml .= "        <extRif:relatedObjectDisplayTitle>".esc($relatedObject[0]['display_title'])."</extRif:relatedObjectDisplayTitle>\n";
+							$xml .= "        <extRif:relatedObjectSlug>".esc($relatedObject[0]['url_slug'])."</extRif:relatedObjectSlug>\n";						
+							$xml .= "        <extRif:relatedObjectReverseType>INTERNAL</extRif:relatedObjectReverseType>\n";							
+							if($relation_logo) $xml .= "        <extRif:relatedObjectLogo>".esc($relation_logo)."</extRif:relatedObjectLogo>\n";
+					if($isAContributor = isContributorPage($key))
+					$xml .=  "        <extRif:contributorGroup>".esc($isAContributor['object_group'])."</extRif:contributorGroup>\n";								
+						}
 					}
+
 					$xml .= "      </$elementName>\n";
 		
 			}
@@ -1394,12 +1509,15 @@ function getRelatedObjectTypesXML($registryObjectKey, $dataSourceKey, $registryO
 					$xml .= "      <$elementName>\n";
 					$xml .= "        <key>$key</key>\n";
 					$xml .= getRelationsXML($element['relation_id'],$typeArray[$registryObjectClass], $forSOLR, $getReverse=true);
-					if($forSOLR&& !$repeatKey)
+					if($forSOLR&& !$repeatKey  && $relatedObject[0]['status']=='PUBLISHED')
 					{
 						$relatedObject[0]['registry_object_class'] = strtolower($relatedObject[0]['registry_object_class']);
 						if(strtolower($relatedObject[0]['type'])=='person') { $connectionsNum['person']++; if($connectionsNum['person']>6) $addThisRelation = false;}
 						elseif(strtolower($relatedObject[0]['type'])=='group') { $connectionsNum['group']++; if($connectionsNum['group']>6) $addThisRelation = false;}
-						elseif(isset($relatedObject[0]['registry_object_class'])) {$connectionsNum[$relatedObject[0]['registry_object_class']]++;	 if($connectionsNum[$relatedObject[0]['registry_object_class']]>6) $addThisRelation = false;}				
+
+						elseif(isset($relatedObject[0]['registry_object_class'])) {$connectionsNum[$relatedObject[0]['registry_object_class']]++;	 if($connectionsNum[$relatedObject[0]['registry_object_class']]>6) $addThisRelation = false;}		
+						if($addThisRelation){	
+
 						$xml .= "        <extRif:relatedObjectClass>".strtolower($relatedObject[0]['registry_object_class'])."</extRif:relatedObjectClass>\n";
 						$xml .= "        <extRif:relatedObjectType>".strtolower($relatedObject[0]['type'])."</extRif:relatedObjectType>\n";
 						$xml .= "        <extRif:relatedObjectListTitle>".esc($relatedObject[0]['list_title'])."</extRif:relatedObjectListTitle>\n";
@@ -1407,12 +1525,18 @@ function getRelatedObjectTypesXML($registryObjectKey, $dataSourceKey, $registryO
 						$xml .= "        <extRif:relatedObjectSlug>".esc($relatedObject[0]['url_slug'])."</extRif:relatedObjectSlug>\n";						
 						$xml .= "        <extRif:relatedObjectReverseType>EXTERNAL</extRif:relatedObjectReverseType>\n";										
 						if($relation_logo) $xml .= "        <extRif:relatedObjectLogo>".esc($relation_logo)."</extRif:relatedObjectLogo>\n";
+											if($isAContributor = isContributorPage($key))
+					$xml .=  "        <extRif:contributorGroup>".esc($isAContributor['object_group'])."</extRif:contributorGroup>\n";	
+
+						}
+
 					}
 					$xml .= "      </$elementName>\n";
 		
 			}
 		}
 	} 
+
 	if($forSOLR){
 		$xml .= "<extRif:relatedObjectPersonCount>".$connectionsNum['person']."</extRif:relatedObjectPersonCount>";
 		$xml .= "<extRif:relatedObjectGroupCount>".$connectionsNum['group']."</extRif:relatedObjectGroupCount>";	
@@ -1420,6 +1544,7 @@ function getRelatedObjectTypesXML($registryObjectKey, $dataSourceKey, $registryO
 		$xml .= "<extRif:relatedObjectServiceCount>".$connectionsNum['service']."</extRif:relatedObjectServiceCount>";
 		$xml .= "<extRif:relatedObjectActivityCount>".$connectionsNum['activity']."</extRif:relatedObjectActivityCount>";	
 	}		
+
 	return $xml;
 } 
 
@@ -1915,7 +2040,7 @@ function getAccessPolicyTypesXML($registryObjectKey, $elementName)
 }
 
 
-function getRelatedInfoTypesXML($registryObjectKey, $elementName)
+function getRelatedInfoTypesXML($registryObjectKey, $elementName, $forSOLR)
 {
 	$xml = '';
 	$elementName = esc($elementName);
@@ -1939,6 +2064,22 @@ function getRelatedInfoTypesXML($registryObjectKey, $elementName)
 				$xml .= "<$elementName$type>\n";
 				$value = esc($element['identifier']);
 				$xml .= "		<identifier type=\"".esc($element['identifier_type'])."\">$value</identifier>\n";
+				
+				if($format_identifiers = $element['format_identifiers'])
+				{
+					$xml .= "		<format>\n";
+					foreach ($format_identifiers AS $identifier)
+					{
+						$xml .= "		  <identifier type=\"".$identifier['identifier_type']."\">".$identifier['identifier_value']."</identifier>\n";
+						if($forSOLR)
+						{
+						$xml .= "		  <extRif:identifier type=\"".changeFromCamelCase($identifier['identifier_type'])."\">".$identifier['identifier_value']."</extRif:identifier>\n";					
+						}
+					}
+					$xml .= "		</format>\n";
+				}
+				
+				
 				if($notes = $element['title'])
 				{
 				$xml .= "		<title>".esc($notes)."</title>\n";
@@ -2783,6 +2924,7 @@ function curl_post($url, $post)
            echo "------------------------------------\n";
         } */
 }
+
 function changeFromCamelCase($camelCaseString)
 {
 	$output = '';
@@ -3532,4 +3674,23 @@ function getSearchBaseScore($registry_object_key)
 
 }
 
+function getTagsXML($keyHash, $elementName)
+{
+$xml = '';
+	$list = getTags($keyHash);
+
+ 	if( $list )
+	{ 
+		$xml =	"		<$elementName>\n";		
+		foreach( $list as $element )
+		{
+
+			$xml .= "<extRif:tag>".$element['tag']."</extRif:tag>";
+
+		}
+		$xml .= "      </$elementName>\n";
+	} 
+	return $xml; 
+	
+}
 ?>

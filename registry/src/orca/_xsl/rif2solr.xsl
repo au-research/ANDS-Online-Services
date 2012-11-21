@@ -191,7 +191,7 @@
         </xsl:if>   
     </xsl:template>
     
-    <xsl:template match="ro:address | ro:electronic | ro:physical | ro:coverage | ro:temporal">
+    <xsl:template match="ro:address | ro:electronic | ro:physical | ro:coverage | ro:spatial | ro:temporal">
             <xsl:apply-templates/>
     </xsl:template>
     
@@ -274,7 +274,7 @@
         </xsl:element>
     </xsl:template>
    
-    <xsl:template match="ro:date"/>
+    <xsl:template match="ro:date | ro:dates | ro:format | ro:version"/>
    		
    
 </xsl:stylesheet>

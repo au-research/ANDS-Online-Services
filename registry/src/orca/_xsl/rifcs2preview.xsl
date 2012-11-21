@@ -101,6 +101,19 @@
 				</td>
 			</tr>
 		</xsl:if>
+		
+		<xsl:choose>
+			<xsl:when test="ro:dates">
+				<tr>
+					<td>Dates:</td>
+					<td><!--  div name="errors_description" class="fieldError"/-->
+						<table class="subtable">
+							<xsl:apply-templates select="ro:dates"/>
+						</table>
+					</td>
+				</tr>
+			</xsl:when>
+	 	</xsl:choose>
 
 		<xsl:if test="ro:identifier">
 			<tr>
@@ -112,6 +125,8 @@
 				</td>
 			</tr>
 		</xsl:if>
+		
+		
 		
 		<xsl:if test="ro:location">
 			<tr>
@@ -379,6 +394,8 @@
 					<xsl:if test="./ro:notes">
 			         	<xsl:apply-templates select="ro:notes"/>
 					</xsl:if>
+					
+					<xsl:apply-templates select="ro:format"/>
 				</table>
 			</td>
 		</tr>

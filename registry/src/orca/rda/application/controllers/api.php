@@ -35,7 +35,30 @@ class Api extends CI_Controller {
     	//echo 'json received+<pre>'.$content.'</pre>';
 		curl_close($ch);//close the curl
 		echo $content;	
+	}
 
+	public function recordOutBound(){
+		$key = $this->input->post('key');
+		$link = $this->input->post('link');
+		$type = $this->input->post('type');
+		$this->load->database();
+
+		$jsonData = array();
+
+		
+		$count = 1;
+		$insertStr = "INSERT INTO dba.tbl_stat_links (registry_object_key,link,date,type) VALUES ('".$key."','".$link."','".time()."','".$type."')";
+		$insert = $this->db->query($insertStr);
+		if($insert){
+			$jsonData['status']='OK';
+			$jsonData['message']='insert success';
+		}else{
+			$jsonData['status']='ERROR';
+			$jsonData['message']='query: '.$insertStr.' ## error: '.pg_last_error();
+		}
+		
+		$jsonData = json_encode($jsonData);
+		echo $jsonData;
 	}
 }
 ?>

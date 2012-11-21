@@ -55,7 +55,7 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 	$totalAttemptedInserts = 0;
 	$SUBMITTED_FOR_ASSESSMENT_Inserts = 0;
 	$totalInserts = 0;
-
+	$ds_ahm = 'STANDARD';
 	$runErrors = '';
 	$errors = null;
 	if($dataSourceKey == 'PUBLISH_MY_DATA')
@@ -66,6 +66,7 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 	else
 	{
 		$dataSource = getDataSources($dataSourceKey, null);
+		$ds_ahm = $dataSource[0]['advanced_harvesting_mode'];
 		$manuallyPublish = $dataSource[0]['auto_publish'];
 		$qaFlag = $dataSource[0]['qa_flag'];
 	}
@@ -112,8 +113,21 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 		$registryObjectKey = substr($gXPath->evaluate("$xs:key", $registryObject)->item(0)->nodeValue, 0, 512);
 		$oldRegistryObject = getRegistryObject($registryObjectKey);
 
-		$oldHarvestID = $oldRegistryObject[0]['created_who'];
-		if($oldRegistryObject || $oldHarvestID != $created_who )
+	    $importThisRecord = true;
+	    if($oldRegistryObject) //check if this record should be replaced 
+	    {
+			$oldHarvestID = $oldRegistryObject[0]['created_who'];
+			if($created_who == SYSTEM)					// created by direct import
+				$importThisRecord  = true; 
+			else if($ds_ahm == 'STANDARD' || $ds_ahm == 'INCREMENTAL')
+				$importThisRecord  = true;			
+			else if (strpos($oldHarvestID, ' (') > 0) 	// manually added... not created by harvest
+				$importThisRecord  = true;
+			else if($oldHarvestID == $created_who)		// created by the current harvest
+				$importThisRecord  = false;
+	    }
+				
+		if($importThisRecord)
 		{
 			if( $registryObjectKey)
 			{
@@ -285,7 +299,7 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 						);
 					}
 					$oldDraft = getDraftRegistryObject($registryObjectKey, $dataSourceKey);
-					if(!$oldDraft || $oldDraft[0]['draft_owner'] != $created_who){
+					if(!$oldDraft || $oldDraft[0]['draft_owner'] != $created_who || $created_who == SYSTEM){
 						$runResultMessage .=  insertDraftRegistryObject(($dataSourceKey == 'PUBLISH_MY_DATA' ? $record_owner : $created_who), $registryObjectKey, $draft_class, $object_group, $draft_type, $title, $dataSourceKey, date('Y-m-d H:i:s'), $date_modified , $rifcs, '', 0, 0, SUBMITTED_FOR_ASSESSMENT);
 						$SUBMITTED_FOR_ASSESSMENT_Inserts++;
 					}else{
@@ -370,6 +384,11 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 						// name
 						// -----------------------------------------------------------------
 						importComplexNameTypes($registryObjectKey, $collection, "name", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+	
+
+						// dates
+						// -----------------------------------------------------------------
+						importDatesElt($registryObjectKey, $collection, "dates", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
 	
 						// location
 						// -----------------------------------------------------------------
@@ -530,7 +549,7 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 						importRelatedInfo($registryObjectKey, $service, "relatedInfo", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
 	
 					} // Service
-	
+
 					// Add a default and list title for the registry object
 					$display_title = getOrderedNames($registryObjectKey, (isset($party) && $party), true);
 					$list_title = getOrderedNames($registryObjectKey, (isset($party) && $party), false);
@@ -552,16 +571,18 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 					updateRegistryObjectSLUG($registryObjectKey, $display_title, $currentUrlSlug);
 	
 					// A new record has been inserted? Update the cache
+
+					// WHY OH WHY ????????????????
 	
-					if (eCACHE_ENABLED && !writeCache($dataSourceKey, $registryObjectKey, generateExtendedRIFCS($registryObjectKey)))
+					//if (eCACHE_ENABLED && !writeCache($dataSourceKey, $registryObjectKey, generateExtendedRIFCS($registryObjectKey)))
 	
-					{
-						$runErrors .= "Could not writeCache() for key: " . $registryObjectKey ."\n";
-					}
-					else
-					{
-						$recordsCached++;
-					}
+					//{
+					//	$runErrors .= "Could not writeCache() for key: " . $registryObjectKey ."\n";
+					//}
+					//else
+					//{
+					//	$recordsCached++;
+					//}
 					
 					if(isContributorPage($registryObjectKey)&&$status=='PUBLISHED')
 					{
@@ -571,7 +592,7 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 						$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
 						$headers .= 'From:'.eCONTACT_EMAIL_FROM."\r\n";
 						mail(eCONTACT_EMAIL, $subject, $mailBody, $headers);						
-		
+	
 					}
 				}
 			}
@@ -836,6 +857,35 @@ function importNameParts($complex_name_id, $node, $runErrors, $totalAttemptedIns
 	}
 }
 
+function importDatesElt($registryObjectKey, $node, $elementName, $runErrors, $totalAttemptedInserts, $totalInserts)
+{
+	global $gXPath;
+	global $xs;
+
+	$list = $gXPath->evaluate("$xs:$elementName", $node);
+	for( $j=0; $j < $list->length; $j++ )
+	{
+		$type = $list->item($j)->getAttribute("type");
+		$date_elements = array();
+		$date_list = $gXPath->evaluate("$xs:date", $list->item($j));
+		
+		for( $i=0; $i < $date_list->length; $i++ )
+		{
+			$date = array(
+				"type" => $date_list->item($i)->getAttribute("type"),
+				"date_format" => $date_list->item($i)->getAttribute("dateFormat"),
+				"value" => $date_list->item($i)->nodeValue
+			);
+			$date_elements[] = $date;
+		}
+		
+		$errors = insertDates($registryObjectKey, $type, $date_elements);
+
+		$totalAttemptedInserts++;
+		if( !$errors ) { $totalInserts++; } else { $runErrors .= $errors . "Failed to insert dates element for key $registryObjectKey\n"; }
+	}
+}
+
 function importLocations($registryObjectKey, $node, $elementName, $runErrors, $totalAttemptedInserts, $totalInserts)
 {
 	global $gXPath;
@@ -969,58 +1019,64 @@ function importSpatialTypes($location_id, $node, $runErrors, $totalAttemptedInse
 		$lang = $list->item($j)->getAttribute("xml:lang");
 
 		$errors = insertSpatialLocation($id, $location_id, $value, $type, $lang);
-		if(!$errors && ($type == 'gmlKmlPolyCoords' || $type == 'kmlPolyCoords' || $type == 'iso19139dcmiBox'))
+		if(!$errors)
 		{
 		$errors = importSpatialExtent($id, $value, $type, $registryObjectKey);
 		}
 		$totalAttemptedInserts++;
-		//if( !$errors ) { $totalInserts++; } else { $runErrors .= "Failed to insert spatial for location $location_id\n"; }
+		if( !$errors ) { $totalInserts++; } else { $runErrors .= "Failed to insert spatial for location $location_id\n"; }
 	}
 }
 
 function importSpatialExtent($id, $value, $type, $registryObjectKey)
 {
-	$north = -90;
-	$south = 90;
-	$west  = 180;
-	$east  = -180;
-	//$msg = '';
+
+	$north = null;
+	$south = null;
+	$west  = null;
+	$east  = null;
 
 	if($type == 'kmlPolyCoords' || $type == 'gmlKmlPolyCoords')
 	{
-		$tok = strtok($value, " ");
-		while ($tok !== FALSE)
+		if(isValidKmlPolyCoords($value))	
 		{
-			$keyValue = explode(",", $tok);
-			//$msg = $msg.'<br/>lat ' .$keyValue[1]. ' long '.$keyValue[0];
-			if(is_numeric($keyValue[1]) && is_numeric($keyValue[0]))
-				{
-
-				$lng = floatval($keyValue[0]);
-				$lat = floatval($keyValue[1]);
-				//$msg = $msg.'<br/>lat ' .$lat. ' long '.$lng;
-				if ($lat > $north)
-				{
-				 $north = $lat;
+			$north = -90;
+			$south = 90;
+			$west  = 180;
+			$east  = -180;
+			$tok = strtok($value, " ");
+			while ($tok !== FALSE)
+			{
+				$keyValue = explode(",", $tok);
+				//$msg = $msg.'<br/>lat ' .$keyValue[1]. ' long '.$keyValue[0];
+				if(is_numeric($keyValue[1]) && is_numeric($keyValue[0]))
+					{
+	
+					$lng = floatval($keyValue[0]);
+					$lat = floatval($keyValue[1]);
+					//$msg = $msg.'<br/>lat ' .$lat. ' long '.$lng;
+					if ($lat > $north)
+					{
+					 $north = $lat;
+					}
+					if($lat < $south)
+					{
+					 $south = $lat;
+					}
+					if($lng < $west)
+					{
+					 $west = $lng;
+					}
+					if($lng > $east)
+					{
+					 $east = $lng;
+					}
 				}
-				if($lat < $south)
-				{
-				 $south = $lat;
-				}
-				if($lng < $west)
-				{
-				 $west = $lng;
-				}
-				if($lng > $east)
-				{
-				 $east = $lng;
-				}
+				$tok = strtok(" ");
 			}
-			$tok = strtok(" ");
 		}
-
 	}
-	if($type == 'iso19139dcmiBox')
+	elseif($type == 'iso19139dcmiBox')
 	{
 	//northlimit=-23.02; southlimit=-25.98; westlimit=166.03; eastLimit=176.1; projection=WGS84
 	$north = null;
@@ -1050,10 +1106,104 @@ function importSpatialExtent($id, $value, $type, $registryObjectKey)
 		  	$tok = strtok(";");
 		}
 	}
+	elseif($type == 'iso19139dcmiPoint' || $type == 'dcmiPoint') //"name=Tasman Sea, AU; east=160.0; north=-40.0"
+	{
+	//northlimit=-23.02; southlimit=-25.98; westlimit=166.03; eastLimit=176.1; projection=WGS84
+	$north = null;
+	$south = null;
+	$west  = null;
+	$east  = null;
+		$tok = strtok($value, ";");
+		while ($tok !== FALSE)
+		{
+			$keyValue = explode("=",$tok);
+			if(strtolower(trim($keyValue[0])) == 'north' && is_numeric($keyValue[1]))
+			{
+			  $north = floatval($keyValue[1]);
+			  $south = floatval($keyValue[1]);
+			}
+			if(strtolower(trim($keyValue[0])) == 'east' && is_numeric($keyValue[1]))
+			{
+			  $west = floatval($keyValue[1]);
+			  $east = floatval($keyValue[1]);
+			}
+		  	$tok = strtok(";");
+		}
+	}
+	elseif($type == 'text' || $type == 'iso31661' || $type == 'iso31662' || $type == 'iso31663' || $type == 'iso3166') //"name=Tasman Sea, AU; east=160.0; north=-40.0"
+	{
+	//northlimit=-23.02; southlimit=-25.98; westlimit=166.03; eastLimit=176.1; projection=WGS84
+	$north = null;
+	$south = null;
+	$west  = null;
+	$east  = null;
+		$searchText = trim($value);
+		getExtentFromGoogle(trim($value), &$north, &$south, &$west, &$east);
+	}
 	//$msg = $msg.'<br/> north:'.$north.' south:'.$south.' west:'.$west.' east:'.$east;
-
-	return insertSpatialExtent($id, $id, $registryObjectKey, $north, $south, $west, $east);
+	if($north != null && $south != null && $west  != null && $east != null && $north <= 90 && $south >= -90 && $west  >= -180 && $east <= 180){
+		return insertSpatialExtent($id, $id, $registryObjectKey, $north, $south, $west, $east);
+	}
+	else{
+		return false;
+	}
 	//print($msg);
+}
+
+
+function isValidKmlPolyCoords($coords)
+{
+	$valid = false;
+	$coordinates = preg_replace("/\s+/", " ", trim($coords));
+	if( preg_match('/^(\-?\d+(\.\d+)?),(\-?\d+(\.\d+)?)( (\-?\d+(\.\d+)?),(\-?\d+(\.\d+)?))*$/', $coordinates) )
+	{
+		$valid = true;
+	}
+	return $valid;
+}
+
+
+function getExtentFromGoogle($value, &$north, &$south, &$west, &$east)
+{
+	
+	$url = "http://maps.google.com/maps/api/geocode/json?sensor=false&address=";
+	$url = $url.urlencode($value);      
+	$resp_json = curl_file_get_contents($url);
+	$resp = json_decode($resp_json, true);
+
+	if($resp['status']=='OK'){		
+		if($resp['results'][0]['geometry']['viewport'])
+		{
+			$north = $resp['results'][0]['geometry']['viewport']['northeast']['lat'];
+			$south = $resp['results'][0]['geometry']['viewport']['southwest']['lat'];
+			$east = $resp['results'][0]['geometry']['viewport']['northeast']['lng'];
+			$west = $resp['results'][0]['geometry']['viewport']['southwest']['lng'];			
+		}
+		elseif($resp['results'][0]['geometry']['location'])
+		{
+			$north = $resp['results'][0]['geometry']['location']['lat'];
+			$south = $north;
+			$east = $resp['results'][0]['geometry']['location']['lng'];
+			$west = $east;			  
+		}		
+	}
+	else
+	{
+		print ("ERROR:    ".$resp['status']."<br/>");
+		return false;
+	}
+}
+
+function curl_file_get_contents($URL)
+{
+        $c = curl_init();
+        curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($c, CURLOPT_URL, $URL);
+        $contents = curl_exec($c);
+        curl_close($c);
+
+        if ($contents) return $contents;
+            else return FALSE;
 }
 
 function importRelatedObjectTypes($registryObjectKey, $node, $elementName, $runErrors, $totalAttemptedInserts, $totalInserts)
@@ -1201,7 +1351,7 @@ function importRelatedInfo($registryObjectKey, $node, $elementName, $runErrors, 
 	}
 }
 */
-
+/* OLD v1.3 Related Info ingest 
 function importRelatedInfo($registryObjectKey, $node, $elementName, $runErrors, $totalAttemptedInserts, $totalInserts)
 {
 	global $gXPath;
@@ -1240,6 +1390,65 @@ function importRelatedInfo($registryObjectKey, $node, $elementName, $runErrors, 
 		else
 		{
 			$errors = insertRelatedInfo($id, $registryObjectKey, $type, $identifier, $identifier_type, $title, $notes);
+		}
+		$totalAttemptedInserts++;
+		if( !$errors ) { $totalInserts++; } else { $runErrors .= "Failed to insert relatedInfo for key $registryObjectKey\n"; }
+	}
+}
+*/
+
+
+function importRelatedInfo($registryObjectKey, $node, $elementName, $runErrors, $totalAttemptedInserts, $totalInserts)
+{
+	global $gXPath;
+	global $xs;
+
+	$list = $gXPath->evaluate("$xs:$elementName", $node);
+	for( $j=0; $j < $list->length; $j++ )
+	{
+		$id = getIdForColumn('dba.tbl_related_info.related_info_id');
+		$type = $list->item($j)->getAttribute("type");
+		$identifier = '';
+		$identifier_type = '';
+		$title = '';
+		$notes = '';
+
+		if( $identifierElement = $gXPath->evaluate("$xs:identifier", $list->item($j))->item(0) )
+		{
+			$identifier = $identifierElement->nodeValue;
+			$identifier_type = $identifierElement->getAttribute("type");
+		}
+
+		$format_identifiers = array();
+		if( $formatElement = $gXPath->evaluate("$xs:format", $list->item($j))->item(0) )
+		{
+			$id_list = $gXPath->evaluate("$xs:identifier", $formatElement);
+			for( $i=0; $i < $id_list->length; $i++ )
+			{
+				$format_identifiers[] = array(
+					"type"=> $id_list->item($i)->getAttribute('type'),
+					"value"=> $id_list->item($i)->nodeValue
+				);
+			}
+		}
+
+		if( $titleElement = $gXPath->evaluate("$xs:title", $list->item($j))->item(0) )
+		{
+			$title = $titleElement->nodeValue;
+		}
+
+		if( $notesElement = $gXPath->evaluate("$xs:notes", $list->item($j))->item(0) )
+		{
+			$notes = $notesElement->nodeValue;
+		}
+		if(!$identifier)
+		{// old rifcs probably :-(
+			$value = $list->item($j)->nodeValue;
+			$errors = insertRelatedInfoOld($id, $registryObjectKey, $value);
+		}
+		else
+		{
+			$errors = insertRelatedInfo($id, $registryObjectKey, $type, $identifier, $identifier_type, $title, $notes, $format_identifiers);
 		}
 		$totalAttemptedInserts++;
 		if( !$errors ) { $totalInserts++; } else { $runErrors .= "Failed to insert relatedInfo for key $registryObjectKey\n"; }
@@ -1354,12 +1563,12 @@ function importCoverage($registryObjectKey, $node, $elementName, $runErrors, $to
 			$lang = $spatialCoverageElements->item($k)->getAttribute("xml:lang");
 
 			$errors = insertSpatialCoverage($id, $coverageId, $value, $type, $lang);
-			if(!$errors && ($type == 'gmlKmlPolyCoords' || $type == 'kmlPolyCoords' || $type == 'iso19139dcmiBox'))
+			if(!$errors)
 			{
 			$errors = importSpatialExtent($id, $value, $type, $registryObjectKey);
 			}
 			$totalAttemptedInserts++;
-			//if( !$errors ) { $totalInserts++; } else { $runErrors .= "Failed to insert spatial for coverage $coverageId\n"; }
+			if( !$errors ) { $totalInserts++; } else { $runErrors .= "Failed to insert spatial for coverage $coverageId\n"; }
 
 		}
 
@@ -1473,6 +1682,12 @@ function importCitationInfo($registryObjectKey, $node, $elementName, $runErrors,
 		if( $editionElement = $gXPath->evaluate("$xs:edition", $list->item($j))->item(0) )
 		{
 			$edition = $editionElement->nodeValue;
+		}
+		
+		/* v1.4 renamed edition to version -- keep both for backwards compatibility */
+		if( $versionElement = $gXPath->evaluate("$xs:version", $list->item($j))->item(0) )
+		{
+			$edition = $versionElement->nodeValue;
 		}
 
 		if( $publisherElement = $gXPath->evaluate("$xs:publisher", $list->item($j))->item(0) )

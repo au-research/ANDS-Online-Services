@@ -1,0 +1,709 @@
+<!DOCTYPE html><html xmlns:date="http://exslt.org/dates-and-times" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>phpDocumentor » \CI_DB_mysql_driver</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../css/template.css" rel="stylesheet" media="all">
+<script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../js/bootstrap.js" type="text/javascript"></script><script src="../js/template.js" type="text/javascript"></script><script src="../js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../img/favicon.ico">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">phpDocumentor</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Packages</a></li>
+<li><a href="../packages/CodeIgniter.html"><i class="icon-folder-open"></i> CodeIgniter</a></li>
+<li><a href="../packages/Default.html"><i class="icon-folder-open"></i> Default</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">1170</span></a></li>
+<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul><li>todo 
+                <span class="label label-info">1</span>
+</li></ul></a></li>
+<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">0</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods</li>
+<li class="method public "><a href="#_close" title="_close :: Close DB Connection"><span class="description">Close DB Connection</span><pre>_close()</pre></a></li>
+<li class="method public "><a href="#_delete" title="_delete :: Delete statement"><span class="description">Delete statement</span><pre>_delete()</pre></a></li>
+<li class="method public "><a href="#_error_message" title="_error_message :: The error message string"><span class="description">The error message string</span><pre>_error_message()</pre></a></li>
+<li class="method public "><a href="#_error_number" title="_error_number :: The error message number"><span class="description">The error message number</span><pre>_error_number()</pre></a></li>
+<li class="method public "><a href="#_escape_identifiers" title="_escape_identifiers :: Escape the SQL Identifiers"><span class="description">Escape the SQL Identifiers</span><pre>_escape_identifiers()</pre></a></li>
+<li class="method public "><a href="#_field_data" title="_field_data :: Field data query"><span class="description">Field data query</span><pre>_field_data()</pre></a></li>
+<li class="method public "><a href="#_from_tables" title="_from_tables :: From Tables"><span class="description">From Tables</span><pre>_from_tables()</pre></a></li>
+<li class="method public "><a href="#_insert" title="_insert :: Insert statement"><span class="description">Insert statement</span><pre>_insert()</pre></a></li>
+<li class="method public "><a href="#_insert_batch" title="_insert_batch :: Insert_batch statement"><span class="description">Insert_batch statement</span><pre>_insert_batch()</pre></a></li>
+<li class="method public "><a href="#_limit" title="_limit :: Limit string"><span class="description">Limit string</span><pre>_limit()</pre></a></li>
+<li class="method public "><a href="#_list_columns" title="_list_columns :: Show column query"><span class="description">Show column query</span><pre>_list_columns()</pre></a></li>
+<li class="method public "><a href="#_list_tables" title="_list_tables :: List table query"><span class="description">List table query</span><pre>_list_tables()</pre></a></li>
+<li class="method public "><a href="#_replace" title="_replace :: Replace statement"><span class="description">Replace statement</span><pre>_replace()</pre></a></li>
+<li class="method public "><a href="#_truncate" title="_truncate :: Truncate statement"><span class="description">Truncate statement</span><pre>_truncate()</pre></a></li>
+<li class="method public "><a href="#_update" title="_update :: Update statement"><span class="description">Update statement</span><pre>_update()</pre></a></li>
+<li class="method public "><a href="#_update_batch" title="_update_batch :: Update_Batch statement"><span class="description">Update_Batch statement</span><pre>_update_batch()</pre></a></li>
+<li class="method public "><a href="#_version" title="_version :: Version number query string"><span class="description">Version number query string</span><pre>_version()</pre></a></li>
+<li class="method public "><a href="#affected_rows" title="affected_rows :: Affected Rows"><span class="description">Affected Rows</span><pre>affected_rows()</pre></a></li>
+<li class="method public "><a href="#count_all" title='count_all :: "Count All" query'><span class="description">"Count All" query</span><pre>count_all()</pre></a></li>
+<li class="method public "><a href="#db_set_charset" title="db_set_charset :: Set client character set"><span class="description">Set client character set</span><pre>db_set_charset()</pre></a></li>
+<li class="method public "><a href="#escape_str" title="escape_str :: Escape String"><span class="description">Escape String</span><pre>escape_str()</pre></a></li>
+<li class="method public "><a href="#insert_id" title="insert_id :: Insert ID"><span class="description">Insert ID</span><pre>insert_id()</pre></a></li>
+<li class="method public "><a href="#reconnect" title="reconnect :: Reconnect"><span class="description">Reconnect</span><pre>reconnect()</pre></a></li>
+<li class="method public "><a href="#trans_begin" title="trans_begin :: Begin Transaction"><span class="description">Begin Transaction</span><pre>trans_begin()</pre></a></li>
+<li class="method public "><a href="#trans_commit" title="trans_commit :: Commit Transaction"><span class="description">Commit Transaction</span><pre>trans_commit()</pre></a></li>
+<li class="method public "><a href="#trans_rollback" title="trans_rollback :: Rollback Transaction"><span class="description">Rollback Transaction</span><pre>trans_rollback()</pre></a></li>
+<li class="nav-header">
+<i class="icon-custom icon-property"></i> Properties</li>
+<li class="property public "><a href="#%24_count_string" title="$_count_string :: The syntax to count rows is slightly different across different
+database engines, so this string appears in each driver and is
+used for the count_all() and count_all_results() functions."><span class="description">The syntax to count rows is slightly different across different
+database engines, so this string appears in each driver and is
+used for the count_all() and count_all_results() functions.</span><pre>$_count_string</pre></a></li>
+<li class="property public "><a href="#%24_escape_char" title="$_escape_char :: "><span class="description">$_escape_char</span><pre>$_escape_char</pre></a></li>
+<li class="property public "><a href="#%24_like_escape_chr" title="$_like_escape_chr :: "><span class="description">$_like_escape_chr</span><pre>$_like_escape_chr</pre></a></li>
+<li class="property public "><a href="#%24_like_escape_str" title="$_like_escape_str :: "><span class="description">$_like_escape_str</span><pre>$_like_escape_str</pre></a></li>
+<li class="property public "><a href="#%24_random_keyword" title="$_random_keyword :: "><span class="description">$_random_keyword</span><pre>$_random_keyword</pre></a></li>
+<li class="property public "><a href="#%24dbdriver" title="$dbdriver :: "><span class="description">$dbdriver</span><pre>$dbdriver</pre></a></li>
+<li class="property public "><a href="#%24delete_hack" title='$delete_hack :: Whether to use the MySQL "delete hack" which allows the number
+of affected rows to be shown.'><span class="description">Whether to use the MySQL "delete hack" which allows the number
+of affected rows to be shown.</span><pre>$delete_hack</pre></a></li>
+<li class="property public "><a href="#%24use_set_names" title="$use_set_names :: "><span class="description">$use_set_names</span><pre>$use_set_names</pre></a></li>
+</ul>
+</div>
+<div class="span8">
+<a name="%5CCI_DB_mysql_driver" id="\CI_DB_mysql_driver"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/global.html">global</a></li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/CI_DB_mysql_driver.html">CI_DB_mysql_driver</a>
+</li>
+</ul>
+<div href="../classes/CI_DB_mysql_driver.html" class="element class">
+<p class="short_description">MySQL Database Adapter Class</p>
+<div class="details">
+<p class="long_description"><p>Note: _DB is an extender class that the app controller
+creates dynamically based on whether the active record
+class is being used or not.</p></p>
+<table class="table table-bordered">
+<tr>
+<th>package</th>
+<td><a href="../packages/CodeIgniter.Drivers.html">CodeIgniter</a></td>
+</tr>
+<tr>
+<th>subpackage</th>
+<td>Drivers</td>
+</tr>
+<tr>
+<th>category</th>
+<td>Database</td>
+</tr>
+<tr>
+<th>author</th>
+<td><a href="">ExpressionEngine Dev Team</a></td>
+</tr>
+<tr>
+<th>link</th>
+<td><a href="http://codeigniter.com/user_guide/database/">http://codeigniter.com/user_guide/database/</a></td>
+</tr>
+</table>
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a name="_close" id="_close"></a><div class="element clickable method public _close" data-toggle="collapse" data-target="._close .collapse">
+<h2>Close DB Connection</h2>
+<pre>_close($conn_id) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$conn_id</h4>
+<code></code><p>resource</p></div>
+</div></div>
+</div>
+<a name="_delete" id="_delete"></a><div class="element clickable method public _delete" data-toggle="collapse" data-target="._delete .collapse">
+<h2>Delete statement</h2>
+<pre>_delete(string $table, array $where, string $like, $limit) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Generates a platform-specific delete string from the supplied data</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$table</h4>
+<code>string</code><p>the table name</p></div>
+<div class="subelement argument">
+<h4>$where</h4>
+<code>array</code><p>the where clause</p></div>
+<div class="subelement argument">
+<h4>$like</h4>
+<code>string</code><p>the limit clause</p></div>
+<div class="subelement argument">
+<h4>$limit</h4>
+<code></code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_error_message" id="_error_message"></a><div class="element clickable method public _error_message" data-toggle="collapse" data-target="._error_message .collapse">
+<h2>The error message string</h2>
+<pre>_error_message() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_error_number" id="_error_number"></a><div class="element clickable method public _error_number" data-toggle="collapse" data-target="._error_number .collapse">
+<h2>The error message number</h2>
+<pre>_error_number() : integer</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>integer</code></div>
+</div></div>
+</div>
+<a name="_escape_identifiers" id="_escape_identifiers"></a><div class="element clickable method public _escape_identifiers" data-toggle="collapse" data-target="._escape_identifiers .collapse">
+<h2>Escape the SQL Identifiers</h2>
+<pre>_escape_identifiers($item) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>This function escapes column and table names</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$item</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_field_data" id="_field_data"></a><div class="element clickable method public _field_data" data-toggle="collapse" data-target="._field_data .collapse">
+<h2>Field data query</h2>
+<pre>_field_data(string $table) : object</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Generates a platform-specific query so that the column data can be retrieved</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$table</h4>
+<code>string</code><p>the table name</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>object</code></div>
+</div></div>
+</div>
+<a name="_from_tables" id="_from_tables"></a><div class="element clickable method public _from_tables" data-toggle="collapse" data-target="._from_tables .collapse">
+<h2>From Tables</h2>
+<pre>_from_tables($tables) : \type</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>This function implicitly groups FROM tables so there is no confusion
+about operator precedence in harmony with SQL standards</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$tables</h4>
+<code></code><p>type</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>\type</code></div>
+</div></div>
+</div>
+<a name="_insert" id="_insert"></a><div class="element clickable method public _insert" data-toggle="collapse" data-target="._insert .collapse">
+<h2>Insert statement</h2>
+<pre>_insert(string $table, array $keys, array $values) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Generates a platform-specific insert string from the supplied data</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$table</h4>
+<code>string</code><p>the table name</p></div>
+<div class="subelement argument">
+<h4>$keys</h4>
+<code>array</code><p>the insert keys</p></div>
+<div class="subelement argument">
+<h4>$values</h4>
+<code>array</code><p>the insert values</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_insert_batch" id="_insert_batch"></a><div class="element clickable method public _insert_batch" data-toggle="collapse" data-target="._insert_batch .collapse">
+<h2>Insert_batch statement</h2>
+<pre>_insert_batch(string $table, array $keys, array $values) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Generates a platform-specific insert string from the supplied data</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$table</h4>
+<code>string</code><p>the table name</p></div>
+<div class="subelement argument">
+<h4>$keys</h4>
+<code>array</code><p>the insert keys</p></div>
+<div class="subelement argument">
+<h4>$values</h4>
+<code>array</code><p>the insert values</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_limit" id="_limit"></a><div class="element clickable method public _limit" data-toggle="collapse" data-target="._limit .collapse">
+<h2>Limit string</h2>
+<pre>_limit(string $sql, integer $limit, integer $offset) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Generates a platform-specific LIMIT clause</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$sql</h4>
+<code>string</code><p>the sql query string</p></div>
+<div class="subelement argument">
+<h4>$limit</h4>
+<code>integer</code><p>the number of rows to limit the query to</p></div>
+<div class="subelement argument">
+<h4>$offset</h4>
+<code>integer</code><p>the offset value</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_list_columns" id="_list_columns"></a><div class="element clickable method public _list_columns" data-toggle="collapse" data-target="._list_columns .collapse">
+<h2>Show column query</h2>
+<pre>_list_columns(string $table) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Generates a platform-specific query string so that the column names can be fetched</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$table</h4>
+<code>string</code><p>the table name</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_list_tables" id="_list_tables"></a><div class="element clickable method public _list_tables" data-toggle="collapse" data-target="._list_tables .collapse">
+<h2>List table query</h2>
+<pre>_list_tables($prefix_limit) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Generates a platform-specific query string so that the table names can be fetched</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$prefix_limit</h4>
+<code></code><p>boolean</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_replace" id="_replace"></a><div class="element clickable method public _replace" data-toggle="collapse" data-target="._replace .collapse">
+<h2>Replace statement</h2>
+<pre>_replace(string $table, array $keys, array $values) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Generates a platform-specific replace string from the supplied data</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$table</h4>
+<code>string</code><p>the table name</p></div>
+<div class="subelement argument">
+<h4>$keys</h4>
+<code>array</code><p>the insert keys</p></div>
+<div class="subelement argument">
+<h4>$values</h4>
+<code>array</code><p>the insert values</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_truncate" id="_truncate"></a><div class="element clickable method public _truncate" data-toggle="collapse" data-target="._truncate .collapse">
+<h2>Truncate statement</h2>
+<pre>_truncate(string $table) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Generates a platform-specific truncate string from the supplied data
+If the database does not support the truncate() command
+This function maps to "DELETE FROM table"</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$table</h4>
+<code>string</code><p>the table name</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_update" id="_update"></a><div class="element clickable method public _update" data-toggle="collapse" data-target="._update .collapse">
+<h2>Update statement</h2>
+<pre>_update(string $table, array $values, array $where, array $orderby, array $limit) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Generates a platform-specific update string from the supplied data</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$table</h4>
+<code>string</code><p>the table name</p></div>
+<div class="subelement argument">
+<h4>$values</h4>
+<code>array</code><p>the update data</p></div>
+<div class="subelement argument">
+<h4>$where</h4>
+<code>array</code><p>the where clause</p></div>
+<div class="subelement argument">
+<h4>$orderby</h4>
+<code>array</code><p>the orderby clause</p></div>
+<div class="subelement argument">
+<h4>$limit</h4>
+<code>array</code><p>the limit clause</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_update_batch" id="_update_batch"></a><div class="element clickable method public _update_batch" data-toggle="collapse" data-target="._update_batch .collapse">
+<h2>Update_Batch statement</h2>
+<pre>_update_batch(string $table, array $values, array $index, $where) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Generates a platform-specific batch update string from the supplied data</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$table</h4>
+<code>string</code><p>the table name</p></div>
+<div class="subelement argument">
+<h4>$values</h4>
+<code>array</code><p>the update data</p></div>
+<div class="subelement argument">
+<h4>$index</h4>
+<code>array</code><p>the where clause</p></div>
+<div class="subelement argument">
+<h4>$where</h4>
+<code></code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_version" id="_version"></a><div class="element clickable method public _version" data-toggle="collapse" data-target="._version .collapse">
+<h2>Version number query string</h2>
+<pre>_version() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="affected_rows" id="affected_rows"></a><div class="element clickable method public affected_rows" data-toggle="collapse" data-target=".affected_rows .collapse">
+<h2>Affected Rows</h2>
+<pre>affected_rows() : integer</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>integer</code></div>
+</div></div>
+</div>
+<a name="count_all" id="count_all"></a><div class="element clickable method public count_all" data-toggle="collapse" data-target=".count_all .collapse">
+<h2>"Count All" query</h2>
+<pre>count_all($table) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Generates a platform-specific query string that counts all records in
+the specified database</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$table</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="db_set_charset" id="db_set_charset"></a><div class="element clickable method public db_set_charset" data-toggle="collapse" data-target=".db_set_charset .collapse">
+<h2>Set client character set</h2>
+<pre>db_set_charset($charset, $collation) : resource</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$charset</h4>
+<code></code><p>string</p></div>
+<div class="subelement argument">
+<h4>$collation</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>resource</code></div>
+</div></div>
+</div>
+<a name="escape_str" id="escape_str"></a><div class="element clickable method public escape_str" data-toggle="collapse" data-target=".escape_str .collapse">
+<h2>Escape String</h2>
+<pre>escape_str($str, bool $like) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$str</h4>
+<code></code><p>string</p></div>
+<div class="subelement argument">
+<h4>$like</h4>
+<code>bool</code><p>whether or not the string will be used in a LIKE condition</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="insert_id" id="insert_id"></a><div class="element clickable method public insert_id" data-toggle="collapse" data-target=".insert_id .collapse">
+<h2>Insert ID</h2>
+<pre>insert_id() : integer</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>integer</code></div>
+</div></div>
+</div>
+<a name="reconnect" id="reconnect"></a><div class="element clickable method public reconnect" data-toggle="collapse" data-target=".reconnect .collapse">
+<h2>Reconnect</h2>
+<pre>reconnect() : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Keep / reestablish the db connection if no queries have been
+sent for a length of time exceeding the server's idle timeout</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="trans_begin" id="trans_begin"></a><div class="element clickable method public trans_begin" data-toggle="collapse" data-target=".trans_begin .collapse">
+<h2>Begin Transaction</h2>
+<pre>trans_begin($test_mode) : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$test_mode</h4>
+<code></code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="trans_commit" id="trans_commit"></a><div class="element clickable method public trans_commit" data-toggle="collapse" data-target=".trans_commit .collapse">
+<h2>Commit Transaction</h2>
+<pre>trans_commit() : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<a name="trans_rollback" id="trans_rollback"></a><div class="element clickable method public trans_rollback" data-toggle="collapse" data-target=".trans_rollback .collapse">
+<h2>Rollback Transaction</h2>
+<pre>trans_rollback() : bool</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>bool</code></div>
+</div></div>
+</div>
+<h3>
+<i class="icon-custom icon-property"></i> Properties</h3>
+<a name="%24_count_string" id="$_count_string"> </a><div class="element clickable property public $_count_string" data-toggle="collapse" data-target=".$_count_string .collapse">
+<h2>The syntax to count rows is slightly different across different
+database engines, so this string appears in each driver and is
+used for the count_all() and count_all_results() functions.</h2>
+<pre>$_count_string </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24_escape_char" id="$_escape_char"> </a><div class="element clickable property public $_escape_char" data-toggle="collapse" data-target=".$_escape_char .collapse">
+<h2>$_escape_char</h2>
+<pre>$_escape_char </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24_like_escape_chr" id="$_like_escape_chr"> </a><div class="element clickable property public $_like_escape_chr" data-toggle="collapse" data-target=".$_like_escape_chr .collapse">
+<h2>$_like_escape_chr</h2>
+<pre>$_like_escape_chr </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24_like_escape_str" id="$_like_escape_str"> </a><div class="element clickable property public $_like_escape_str" data-toggle="collapse" data-target=".$_like_escape_str .collapse">
+<h2>$_like_escape_str</h2>
+<pre>$_like_escape_str </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24_random_keyword" id="$_random_keyword"> </a><div class="element clickable property public $_random_keyword" data-toggle="collapse" data-target=".$_random_keyword .collapse">
+<h2>$_random_keyword</h2>
+<pre>$_random_keyword </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24dbdriver" id="$dbdriver"> </a><div class="element clickable property public $dbdriver" data-toggle="collapse" data-target=".$dbdriver .collapse">
+<h2>$dbdriver</h2>
+<pre>$dbdriver </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24delete_hack" id="$delete_hack"> </a><div class="element clickable property public $delete_hack" data-toggle="collapse" data-target=".$delete_hack .collapse">
+<h2>Whether to use the MySQL "delete hack" which allows the number
+of affected rows to be shown.</h2>
+<pre>$delete_hack </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"><p>Uses a preg_replace when enabled,
+adding a bit more processing to all queries.</p></p></div></div>
+</div>
+<a name="%24use_set_names" id="$use_set_names"> </a><div class="element clickable property public $use_set_names" data-toggle="collapse" data-target=".$use_set_names .collapse">
+<h2>$use_set_names</h2>
+<pre>$use_set_names </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a8</a> and<br>
+            generated on 2012-07-27T12:29:23+10:00.<br></footer></div>
+</div>
+</body>
+</html>

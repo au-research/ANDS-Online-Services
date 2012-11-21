@@ -30,6 +30,9 @@ $registryObjectDataSourceRecordOwner = null;
 $registryObjectStatus = null;
 $dataSource = null;
 
+
+//echo "<pre>" . htmlentities(getRegistryObjectXMLFromDB(getQueryValue('key'))) . "</pre>";
+//echo "<br/><br/>";
 if( !$registryObject )
 {
 
@@ -38,6 +41,7 @@ if( !$registryObject )
 else
 {
 	$registryObjectKey = $registryObject[0]['registry_object_key'];
+	$registry_object_hash = $registryObject[0]['key_hash'];
 	$dataSourceKey = $registryObject[0]['data_source_key'];
 	$dataSource = getDataSources($dataSourceKey, null);
 	$existingRelatedArray = Array();
@@ -45,7 +49,6 @@ else
 	$registryObjectRecordOwner = $registryObject[0]['record_owner'];
 	$registryObjectDataSourceRecordOwner = $dataSource[0]['record_owner'];
 	$registryObjectStatus = trim($registryObject[0]['status']);
-
 	// Check access.
 	if( !(in_array($registryObjectStatus, array(PUBLISHED, APPROVED)) || userIsORCA_ADMIN() || userIsORCA_LIAISON() || $registryObjectDataSourceRecordOwner == getThisOrcaUserIdentity() || $registryObjectRecordOwner == getThisOrcaUserIdentity()) )
 	{
@@ -118,7 +121,8 @@ if( $registryObject )
 	print("	<thead>\n");
 
 	$rdaLink = '';
-
+	if($rda_root)
+		$rda_root .= "/";
 	// The link to the RDA
 	$rdaLinkPrefix = 'View';
 	if( $registryObjectStatus != PUBLISHED )
@@ -126,9 +130,9 @@ if( $registryObject )
 		$rdaLinkPrefix = 'Preview';
 	}
 	if(isContributorPage($registryObjectKey)) {
-		$rdaLink = '<br /><a style="font-size:0.8em; font-weight: normal;" href="http://'.$host.'/'.$rda_root . '/view/group/?group='.urlencode($registryObjectKey). '&groupName='.esc($objectGroup).'">'.$rdaLinkPrefix.' this record in Research Data Australia</a>'."\n";
+		$rdaLink = '<br /><a style="font-size:0.8em; font-weight: normal;" href="http://'.$host.'/'.$rda_root.'view/group/?group='.urlencode($registryObjectKey).'&groupName='.esc($objectGroup).'">'.$rdaLinkPrefix.' this record in Research Data Australia</a>'."\n";
 	} else {
-		$rdaLink = '<br /><a style="font-size:0.8em; font-weight: normal;" href="http://'.$host.'/'.$rda_root . '/' . $url_slug.'">'.$rdaLinkPrefix.' this record in Research Data Australia</a>'."\n";
+		$rdaLink = '<br /><a style="font-size:0.8em; font-weight: normal;" href="http://'.$host.'/'.$rda_root.$url_slug.'">'.$rdaLinkPrefix.' this record in Research Data Australia</a>'."\n";
 	}
 
 	$recordHistory = "";
@@ -233,6 +237,21 @@ if( $registryObject )
 		{
 			drawIdentifier($row['identifier_id'], $row);
 		}
+		print("			</td>\n");
+		print("		</tr>\n");
+	}
+	
+	if( $array = getDates($registryObjectKey) )
+	{
+		print("\n<!-- DATES -->\n");
+		print("		<tr>\n");
+		print("			<td>Dates:</td>\n");
+		print("			<td>\n");
+		foreach( $array as $row )
+		{
+			drawDates($row);
+		}
+		
 		print("			</td>\n");
 		print("		</tr>\n");
 	}
@@ -536,6 +555,26 @@ if( $registryObject )
 		print("			</td>\n");
 		print("		</tr>\n");
 	}
+	if(hasRole('ORCA_TAG_MANAGER'))
+	{
+		$tags = getTagsForRegistryObject($registry_object_hash);
+
+		print("	<tr><td>Tags:</td>\n");		
+		print("			<td>\n");
+		//print('			<table class="subtable">'."\n");
+		print('<ul class="tag-list">');
+		if($tags)
+		{
+		foreach($tags as $tag)
+			{
+				print('<li>');
+				print('<a href="javascript:;" tagID="'.$tag['id'].'">'.$tag['tag'].'</a><span class="deleteImg" tagID="'.$tag['id'].'"></span>');
+				print('</li>');
+			}
+		}
+		print('<li><a class="addTag" href="javascript:;" keyHash="'.getRegistryObjectHashForKey($registryObjectKey).'">+</a></li></ul>');
+		print('			</td></tr>'."\n");
+	}
 
 
 	if( userIsDataSourceRecordOwner($registryObjectDataSourceRecordOwner) || userIsORCA_ADMIN() )
@@ -574,11 +613,12 @@ if( $registryObject )
 		drawRecordField("Status Set:",  $statusWhen);
 		drawRecordField("Status Set By:",  $statusWho);
 	}
-
-	print("	</tbody>\n");
+	
+		print("	</tbody>\n");
 
 	if( userIsDataSourceRecordOwner($registryObjectDataSourceRecordOwner) || userIsORCA_ADMIN() )
 	{
+			
 		print("	<tbody>\n");
 		print("	  <tr>\n");
 		print("	    <td></td>\n");
@@ -1314,6 +1354,26 @@ function drawRelatedInfo($id, $row=null)
 		print('	        		</table>'."\n");
 		print('				</td>'."\n");
 		print('			</tr>'."\n");
+		
+		if( $value = $row['format_identifiers'] )
+		{
+			print('		<tr>'."\n");
+			print('			<td class="attribute">Format:</td>'."\n");
+			print('			<td class="value">');
+			foreach ($value AS $identifier)
+			{
+				print('					<table class="subtable">'."\n");
+				print('					<tr>'."\n");
+				print('						<td class="attribute">'.esc($identifier['identifier_type']).':</td>'."\n");
+				print('						<td class="value">'.esc($identifier['identifier_value']).'</td>'."\n");
+				print('					</tr>'."\n");
+				print('					</table>');
+				
+			}
+			print('			</td>'."\n");
+			print('		</tr>'."\n");
+		}
+		
 		if( $value = $row['title'] )
 		{
 			print('		<tr>'."\n");
@@ -1464,6 +1524,42 @@ function drawTemporalCoverageText($id, $row=null)
 	print('         </td>'."\n");
 	print('		</tr>'."\n");
 }
+function drawDates($row)
+{
+	print('			<table class="subtable">'."\n");
+	print('				<tr>'."\n");
+	print('					<td class="attribute">Type:</td>'."\n");
+	print('					<td class="value">'.esc($row['date_type']).'</td>'."\n");
+	print('				</tr>'."\n");
+	print('				<tr>'."\n");
+	print('					<td class="attribute">Date:</td>'."\n");
+	print('					<td class="value">');
+	drawDate($row['elements']);
+	print('</td>'."\n");
+	print('				</tr>'."\n");
+	print('			</table>'."\n");
+}
+function drawDate($elements)
+{
+	foreach ($elements AS $row)
+	{
+		print('			<table class="subtable1">'."\n");
+		print('				<tr>'."\n");
+		print('					<td class="attribute">Type:</td>'."\n");
+		print('					<td class="valueAttribute">'.esc($row['type']).'</td>'."\n");
+		print('				</tr>'."\n");
+		print('				<tr>'."\n");
+		print('					<td class="attribute">Date Format:</td>'."\n");
+		print('					<td class="valueAttribute">'.esc($row['date_format']).'</td>'."\n");
+		print('				</tr>'."\n");
+		print('				<tr>'."\n");
+		print('					<td class="attribute">Value:</td>'."\n");
+		print('					<td class="value">'.esc($row['value']).'</td>'."\n");
+		print('				</tr>'."\n");
+		print('			</table>'."\n");
+	}
+}
+
 function drawExistenceDates($id, $row=null)
 {
 
@@ -1666,18 +1762,31 @@ function drawCitationInfo($id, $row=null)
 		print('					<td class="attribute">Title:</td>'."\n");
 		print('					<td class="value">'.esc($row['metadata_title']).'</td>'."\n");
 		print('				</tr>'."\n");
-		print('				<tr>'."\n");
-		print('					<td class="attribute">Edition:</td>'."\n");
-		print('					<td class="value">'.esc($row['metadata_edition']).'</td>'."\n");
-		print('				</tr>'."\n");
-		print('				<tr>'."\n");
-		print('					<td class="attribute">URL:</td>'."\n");
-		print('					<td class="value">'.esc($row['metadata_url']).'</td>'."\n");
-		print('				</tr>'."\n");
-		print('				<tr>'."\n");
-		print('					<td class="attribute">Place Published:</td>'."\n");
-		print('					<td class="value">'.esc($row['metadata_place_published']).'</td>'."\n");
-		print('				</tr>'."\n");
+		
+		if ($row['metadata_edition'])
+		{
+			print('				<tr>'."\n");
+			print('					<td class="attribute">Version:</td>'."\n");
+			print('					<td class="value">'.esc($row['metadata_edition']).'</td>'."\n");
+			print('				</tr>'."\n");
+		}
+
+		if($row['metadata_url'])
+		{
+			print('				<tr>'."\n");
+			print('					<td class="attribute">URL:</td>'."\n");
+			print('					<td class="value">'.esc($row['metadata_url']).'</td>'."\n");
+			print('				</tr>'."\n");
+		}
+		
+		if ($row['metadata_place_published'])
+		{
+			print('				<tr>'."\n");
+			print('					<td class="attribute">Place Published:</td>'."\n");
+			print('					<td class="value">'.esc($row['metadata_place_published']).'</td>'."\n");
+			print('				</tr>'."\n");
+		}
+		
 		if($row['metadata_publisher']!='')
 		{
 			print('				<tr>'."\n");
@@ -1685,10 +1794,14 @@ function drawCitationInfo($id, $row=null)
 			print('					<td class="value">'.esc($row['metadata_publisher']).'</td>'."\n");
 			print('				</tr>'."\n");
 		}
-		print('				<tr>'."\n");
-		print('					<td class="attribute">Context:</td>'."\n");
-		print('					<td class="value">'.esc($row['metadata_context']).'</td>'."\n");
-		print('				</tr>'."\n");
+		
+		if ($row['metadata_context'])
+		{
+			print('				<tr>'."\n");
+			print('					<td class="attribute">Context:</td>'."\n");
+			print('					<td class="value">'.esc($row['metadata_context']).'</td>'."\n");
+			print('				</tr>'."\n");
+		}
 
 		if($array = getCitationDates($row['citation_info_id']))
 		{

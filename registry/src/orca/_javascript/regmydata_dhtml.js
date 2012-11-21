@@ -38,6 +38,16 @@ var qualityLevel = 0;
 var STATUS_COOKIE_NAME = 'ORCA_REGISTRY_MANAGE_STATUS';
 var STATUS_COOKIE_TTL_DAYS = 365*5;
 
+var keyArray = new Array();
+
+var mctInitFunc = null;
+
+function mctAsyncInit(controls, resolver)
+{
+	mctInitFunc = function(){ console.log("asd"); mctInit(controls, resolver); }
+}
+
+
 // init namespace
 $.rmd = {};
 
@@ -77,7 +87,7 @@ $(document).ready(function() {
 	
 	advanceLoadingStatus();
 	
-
+/*
 	$('.relatedObjectKey').live('blur', function(){
 		var key = $(this).val();
 		if(key!=''){
@@ -85,7 +95,7 @@ $(document).ready(function() {
 			getRelatedObjectPreview(key, target);
 		}
 	});
-	
+*/	
 
 	// =============================================================================
 	// TAB NAVIGATION functionality
@@ -539,9 +549,9 @@ function getElement(elementType, callback, context, fragment, seq)
 				}
 				
 				traverse((context == null ? "object." : context + elementType + (tcount != undefined ? "[" + tcount + "]" : "") + "."), fragment);
-				
+	
 				eval('contexts[\''+data.cbc+'\'] = null;');
-				
+			
 				requestsRemaining -= 1;
 				advanceLoadingStatus();
 			}, "json");
@@ -894,13 +904,12 @@ function advanceLoadingStatus () {
 
 		key = $.urlParam('key');
 		if (key == "") { key = $("#elementCategory").val(); }
-		
+		showLoading("Parsing the RIFCS XML...");
 		requestsRemaining += 1;
 		$.get(rootAppPath + "orca/manage/process_registry_object.php?task=get&data_source="+$.urlParam('data_source')+"&key=" + key, 
 				function(data) {
 					requestsRemaining -= 1;
 					traverse(null, data);
-
 					pageStatus = 'LOADING_ELTS'; 
 					readyToAdvance = true;
 					advanceLoadingStatus();
@@ -914,7 +923,20 @@ function advanceLoadingStatus () {
 	// Stage 2.5 - Resolve relatedObject class names
 	if (pageStatus == 'LOADING_ELTS' && requestsRemaining == 0 && readyToAdvance == true) {	
 		pageStatus = 'LOADING_RELOBJS'; 
-		setRelatedObjectClasses();		
+		readyToAdvance = false;
+			showLoading("Loading Related Objects...");
+			$('.relatedObjectKey').each(function(){
+				//console.log($(this).val());
+				var k = $(this).val();
+				if(k!=''){
+					
+					var target = $(this).attr('id');
+					keyArray.push(new Array(k,target));
+					//getRelatedObjectPreview(k, target);
+				}
+			});	
+		getRelatedObjectsPreview();
+		
 	}
 	
 	
@@ -942,7 +964,6 @@ function advanceLoadingStatus () {
 			$.post(rootAppPath + "orca/manage/process_registry_object.php?task=validate&data_source="+encodeURIComponent($('#object_mandatoryInformation_dataSource').val())+"&key="+key+"&firstLoad=ggg&userMode=" + userMode, JSON.stringify(form2object('registry_object_add')),
 
 					function(data) {
-						
 						$("#rmd_scripts").html(data);
 						
 						readyToAdvance = true;
@@ -1003,16 +1024,16 @@ function advanceLoadingStatus () {
 			disableEditing();
 		}
 
-		
-		//load related objects preview
-		$('.relatedObjectKey').each(function(){
-			//console.log($(this).val());
-			var k = $(this).val();
-			if(k!=''){
-				var target = $(this).parents().nextAll().find('.ro_preview').first();
-				getRelatedObjectPreview(k, target);
-			}
-		});	
+
+		// Asyncronously load ckeditors
+		$('.async_ckeditor_text').each(function(i, elt){
+			$(this).addClass('ckeditor_text');
+			CKEDITOR.replace($(this).attr('id'),{ toolbar: 'Basic'});
+		});
+	
+		// Load the Gazeteer/Map asynchronously
+		if (mctInitFunc) { window.setTimeout(mctInitFunc,5000); }
+
 
 	}
 	
@@ -1021,13 +1042,33 @@ function advanceLoadingStatus () {
 
 
 }
-
+// TODO: pass an array instead of doing it for each relatedObject!
 function getRelatedObjectPreview(key, target){
 	$.get('process_registry_object.php?task=related_object_preview&key='+key, function(data) {
 	  $(target).html(data);
 	  setRelatedObjectClasses();
 	});
+}
 
+function getRelatedObjectsPreview()
+{	
+	$.ajax({
+		url:'process_registry_object.php?task=related_objects_preview',
+		data:{'keys' : JSON.stringify(keyArray)},
+		dataType:'json',
+		type:'POST',
+		success:function(data){
+			$.each(data, function(i, item) {
+				$('.ro_preview[key="'+i+'"]').html(item.html);
+				$('#'+i.replace(/value/,"roclass")).val(item.class);				
+				});	
+			readyToAdvance = true;
+			advanceLoadingStatus();
+		},
+		error:function(data){
+			//console.log(data);
+		}
+	});	
 }
 
 function doKeepAlive() {

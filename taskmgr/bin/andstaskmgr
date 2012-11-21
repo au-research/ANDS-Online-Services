@@ -36,7 +36,7 @@ status() {
 stop() {
     if [ -e "$PID_PATH/$PROG_WRAPPER.pid" ]; then
         ## Program is running, so stop it
-        killall $PROG_NAME
+       	killall $PROG_NAME
 
         rm "$PID_PATH/$PROG_WRAPPER.pid"
         
@@ -45,6 +45,17 @@ stop() {
         ## Program is not running, exit with error.
         echo "Error! $PROG_NAME not started!" 1>&2
         exit 1
+    fi
+}
+
+try-stop() {
+    if [ -e "$PID_PATH/$PROG_WRAPPER.pid" ]; then
+        ## Program is running, so stop it
+        killall $PROG_NAME
+
+        rm "$PID_PATH/$PROG_WRAPPER.pid"
+        
+        echo "$PROG_NAME stopped"
     fi
 }
 
@@ -74,7 +85,7 @@ case "$1" in
         tail -f /var/log/$PROG_WRAPPER.log
     ;;
     reload|restart|force-reload)
-        stop
+        try-stop
         start
         exit 0
     ;;

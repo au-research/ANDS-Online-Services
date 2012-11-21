@@ -686,11 +686,11 @@ function updateRecordsForDataSource($dataSourceKey, $manuallyPublish,$manuallyPu
 
 	$actions = '';
 	if($createPrimary=='0') $createPrimary='f';
-	
+	$resyncNeeded = false;
 	if(($manuallyPublish == 0 || $manuallyPublish == 'f') && $manuallyPublishOld == 't')
 	{
 		// set Approved to Published for all registry Objects
-		$actions .= 'Changed Status to PUBLISHED';
+		$actions .= "Changed Status to PUBLISHED:\n";
 		if($registryObjectKeys = getRegistryObjectKeysForDataSource($dataSourceKey))
 		{
 			for( $i=0; $i < count($registryObjectKeys); $i++ )
@@ -701,6 +701,7 @@ function updateRecordsForDataSource($dataSourceKey, $manuallyPublish,$manuallyPu
 		}
 		
 		insertDataSourceEvent($dataSourceKey, $actions);
+		$resyncNeeded = true;
 	}
 	//echo $createPrimary." = new :: ".$oldCreatePrimary." = old ";
 	//if($createPrimary!=$oldCreatePrimary||$class_1!=$class_1_old||$class_2!=$class_2_old)
@@ -734,7 +735,7 @@ function updateRecordsForDataSource($dataSourceKey, $manuallyPublish,$manuallyPu
 				}
 				else if($registryObjectKeys[$i]['status'] == ASSESSMENT_IN_PROGRESS || $registryObjectKeys[$i]['status'] == SUBMITTED_FOR_ASSESSMENT)
 				{
-					$actions .= "PUBLISHING records\n";
+					$actions .= "PUBLISHING record:\n";
 					$rifcs = new DomDocument();
 					$rifcs->loadXML($registryObjectKeys[$i]['rifcs']);
 					$stripFromData = new DomDocument();
@@ -767,6 +768,12 @@ function updateRecordsForDataSource($dataSourceKey, $manuallyPublish,$manuallyPu
 						$deleteErrors = deleteDraftRegistryObject($dataSourceKey,$registryObjectKey);
 						$actions .= $registryObjectKeys[$i]['draft_key'].' Imported to Registry as '.$status."\n";
 					}
+					// if couldn't import records add them to the log and set status to DRAFT!
+					else{
+						updateDraftRegistryObjectStatus($registryObjectKeys[$i]['draft_key'],$dataSourceKey,DRAFT);
+						$actions .= $importErrors."\n";
+						$actions .= $registryObjectKeys[$i]['draft_key']." Changed Status to DRAFT\n";
+					}
 										
 				}
 			}
@@ -774,8 +781,12 @@ function updateRecordsForDataSource($dataSourceKey, $manuallyPublish,$manuallyPu
 		}
 
 		insertDataSourceEvent($dataSourceKey, $actions);	
+		$resyncNeeded = true;
 	}
-	queueSyncDataSource($dataSourceKey);
+	if($resyncNeeded) // don't reSync if nothing has changed!!
+	{
+		queueSyncDataSource($dataSourceKey);
+	}
 	
 }
 
@@ -804,10 +815,11 @@ function deleteDataSourceDrafts($dataSourceKey , $message)
 function purgeDataSource($dataSourceKey, $harvestRequestId){
 	$ahm = getDataSourceAdvancedHarvestingMode($dataSourceKey);
 	if($ahm=='REFRESH'){//only if the advanced harvesting mode is REFRESH
+
 		$message = '';
 		$total = 0;
 		$total_drafts = 0;
-
+		$errors = '';
 		$keys = getRegistryObjectKeysForPurge($dataSourceKey, $harvestRequestId);
 		if($keys){
 			for( $i=0; $i < count($keys); $i++ ){
@@ -834,6 +846,7 @@ function purgeDataSource($dataSourceKey, $harvestRequestId){
 		if($total>0)$message .= "DELETED ".$total." REGISTRY OBJECTS NOT IN HARVEST: $harvestRequestId\n";
 		if($total_drafts>0)$message .= "DELETED ".$total_drafts." DRAFTS NOT IN HARVEST: $harvestRequestId\n";
 		return $message;
+
 	}else{
 		return false;
 	}

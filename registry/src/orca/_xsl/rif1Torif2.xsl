@@ -122,6 +122,13 @@
 		</xsl:element>
 
 	</xsl:template>
+	
+	<!-- v1.4 citation metadata edition -> version -->
+	<xsl:template match="rif:edition">
+		<xsl:element name="version" xmlns="http://ands.org.au/standards/rif-cs/registryObjects">
+			<xsl:value-of select="text()"/>
+		</xsl:element>
+	</xsl:template>
 
 	<xsl:template match="rif:relatedInfo[not(rif:identifier)]">
 		<xsl:element name="relatedInfo" xmlns="http://ands.org.au/standards/rif-cs/registryObjects">

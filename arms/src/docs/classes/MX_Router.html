@@ -1,0 +1,559 @@
+<!DOCTYPE html><html xmlns:date="http://exslt.org/dates-and-times" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>phpDocumentor » \MX_Router</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../css/template.css" rel="stylesheet" media="all">
+<script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../js/bootstrap.js" type="text/javascript"></script><script src="../js/template.js" type="text/javascript"></script><script src="../js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../img/favicon.ico">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">phpDocumentor</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Packages</a></li>
+<li><a href="../packages/CodeIgniter.html"><i class="icon-folder-open"></i> CodeIgniter</a></li>
+<li><a href="../packages/Default.html"><i class="icon-folder-open"></i> Default</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">1170</span></a></li>
+<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul><li>todo 
+                <span class="label label-info">1</span>
+</li></ul></a></li>
+<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">0</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods</li>
+<li class="method public inherited"><a href="#__construct" title="__construct :: Constructor"><span class="description">Constructor</span><pre>__construct()</pre></a></li>
+<li class="method public inherited"><a href="#_parse_routes" title="_parse_routes :: Parse Routes"><span class="description">Parse Routes</span><pre>_parse_routes()</pre></a></li>
+<li class="method public inherited"><a href="#_set_default_controller" title="_set_default_controller :: Set the default controller"><span class="description">Set the default controller</span><pre>_set_default_controller()</pre></a></li>
+<li class="method public inherited"><a href="#_set_overrides" title="_set_overrides :: Set the controller overrides"><span class="description">Set the controller overrides</span><pre>_set_overrides()</pre></a></li>
+<li class="method public inherited"><a href="#_set_request" title="_set_request :: Set the Route"><span class="description">Set the Route</span><pre>_set_request()</pre></a></li>
+<li class="method public inherited"><a href="#_set_routing" title="_set_routing :: Set the route mapping"><span class="description">Set the route mapping</span><pre>_set_routing()</pre></a></li>
+<li class="method public "><a href="#_validate_request" title="_validate_request :: Validates the supplied segments."><span class="description">Validates the supplied segments.</span><pre>_validate_request()</pre></a></li>
+<li class="method public inherited"><a href="#fetch_class" title="fetch_class :: Fetch the current class"><span class="description">Fetch the current class</span><pre>fetch_class()</pre></a></li>
+<li class="method public inherited"><a href="#fetch_directory" title="fetch_directory :: Fetch the sub-directory (if any) that contains the requested controller class"><span class="description">Fetch the sub-directory (if any) that contains the requested controller class</span><pre>fetch_directory()</pre></a></li>
+<li class="method public inherited"><a href="#fetch_method" title="fetch_method :: Fetch the current method"><span class="description">Fetch the current method</span><pre>fetch_method()</pre></a></li>
+<li class="method public "><a href="#fetch_module" title="fetch_module :: "><span class="description">fetch_module()
+        </span><pre>fetch_module()</pre></a></li>
+<li class="method public "><a href="#locate" title="locate :: Locate the controller *"><span class="description">Locate the controller *</span><pre>locate()</pre></a></li>
+<li class="method public "><a href="#set_class" title="set_class :: Set the class name"><span class="description">Set the class name</span><pre>set_class()</pre></a></li>
+<li class="method public inherited"><a href="#set_directory" title="set_directory :: Set the directory name"><span class="description">Set the directory name</span><pre>set_directory()</pre></a></li>
+<li class="method public inherited"><a href="#set_method" title="set_method :: Set the method name"><span class="description">Set the method name</span><pre>set_method()</pre></a></li>
+<li class="nav-header">
+<i class="icon-custom icon-property"></i> Properties</li>
+<li class="property public inherited"><a href="#%24class" title="$class :: Current class name"><span class="description">Current class name</span><pre>$class</pre></a></li>
+<li class="property public inherited"><a href="#%24config" title="$config :: Config class"><span class="description">Config class</span><pre>$config</pre></a></li>
+<li class="property public inherited"><a href="#%24default_controller" title="$default_controller :: Default controller (and method if specific)"><span class="description">Default controller (and method if specific)</span><pre>$default_controller</pre></a></li>
+<li class="property public inherited"><a href="#%24directory" title="$directory :: Sub-directory that contains the requested controller class"><span class="description">Sub-directory that contains the requested controller class</span><pre>$directory</pre></a></li>
+<li class="property public inherited"><a href="#%24error_routes" title="$error_routes :: List of error routes"><span class="description">List of error routes</span><pre>$error_routes</pre></a></li>
+<li class="property public inherited"><a href="#%24method" title="$method :: Current method name"><span class="description">Current method name</span><pre>$method</pre></a></li>
+<li class="property public inherited"><a href="#%24routes" title="$routes :: List of routes"><span class="description">List of routes</span><pre>$routes</pre></a></li>
+<li class="nav-header protected">» Protected</li>
+<li class="property protected "><a href="#%24module" title="$module :: "><span class="description">$module</span><pre>$module</pre></a></li>
+</ul>
+</div>
+<div class="span8">
+<a name="%5CMX_Router" id="\MX_Router"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/global.html">global</a></li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/MX_Router.html">MX_Router</a>
+</li>
+</ul>
+<div href="../classes/MX_Router.html" class="element class">
+<p class="short_description">Modular Extensions - HMVC</p>
+<div class="details">
+<p class="long_description"><p>Adapted from the CodeIgniter Core Classes</p></p>
+<table class="table table-bordered">
+<tr>
+<th>link</th>
+<td><a href="http://codeigniter.com%0ADescription:%0AThis">library extends the CodeIgniter router class.
+Install this file as application/third_party/MX/Router.php</a></td>
+</tr>
+<tr>
+<th>copyright</th>
+<td>Copyright (c) 2011 Wiredesignz</td>
+</tr>
+<tr>
+<th>version</th>
+<td>5.4
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.</td>
+</tr>
+<tr>
+<th>package</th>
+<td><a href="../packages/Default.html">CodeIgniter</a></td>
+</tr>
+<tr>
+<th>author</th>
+<td><a href="">ExpressionEngine Dev Team</a></td>
+</tr>
+<tr>
+<th>subpackage</th>
+<td>Libraries</td>
+</tr>
+</table>
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a name="__construct" id="__construct"></a><div class="element clickable method public __construct" data-toggle="collapse" data-target=".__construct .collapse">
+<h2>Constructor</h2>
+<pre>__construct() </pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Runs the route mapping function.</p></p>
+<table class="table table-bordered"><tr>
+<th>inherited_from</th>
+<td>\CI_Router::__construct()</td>
+</tr></table>
+</div></div>
+</div>
+<a name="_parse_routes" id="_parse_routes"></a><div class="element clickable method public _parse_routes" data-toggle="collapse" data-target="._parse_routes .collapse">
+<h2>Parse Routes</h2>
+<pre>_parse_routes() : void</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>This function matches any routes that may exist in
+the config/routes.php file against the URI to
+determine if the class/method need to be remapped.</p></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>private</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Router::_parse_routes()</td>
+</tr>
+</table>
+</div></div>
+</div>
+<a name="_set_default_controller" id="_set_default_controller"></a><div class="element clickable method public _set_default_controller" data-toggle="collapse" data-target="._set_default_controller .collapse">
+<h2>Set the default controller</h2>
+<pre>_set_default_controller() : void</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>private</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Router::_set_default_controller()</td>
+</tr>
+</table>
+</div></div>
+</div>
+<a name="_set_overrides" id="_set_overrides"></a><div class="element clickable method public _set_overrides" data-toggle="collapse" data-target="._set_overrides .collapse">
+<h2>Set the controller overrides</h2>
+<pre>_set_overrides($routing) : null</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Router::_set_overrides()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$routing</h4>
+<code></code><p>array</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>null</code></div>
+</div></div>
+</div>
+<a name="_set_request" id="_set_request"></a><div class="element clickable method public _set_request" data-toggle="collapse" data-target="._set_request .collapse">
+<h2>Set the Route</h2>
+<pre>_set_request($segments) : void</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>This function takes an array of URI segments as
+input, and sets the current class/method</p></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>private</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Router::_set_request()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$segments</h4>
+<code></code><p>array</p></div>
+</div></div>
+</div>
+<a name="_set_routing" id="_set_routing"></a><div class="element clickable method public _set_routing" data-toggle="collapse" data-target="._set_routing .collapse">
+<h2>Set the route mapping</h2>
+<pre>_set_routing() : void</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>This function determines what should be served based on the URI request,
+as well as any "routes" that have been set in the routing config file.</p></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>private</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Router::_set_routing()</td>
+</tr>
+</table>
+</div></div>
+</div>
+<a name="_validate_request" id="_validate_request"></a><div class="element clickable method public _validate_request" data-toggle="collapse" data-target="._validate_request .collapse">
+<h2>Validates the supplied segments.</h2>
+<pre>_validate_request($segments) : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Attempts to determine the path to
+the controller.</p></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$segments</h4>
+<code></code><p>array</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>array</code></div>
+</div></div>
+</div>
+<a name="fetch_class" id="fetch_class"></a><div class="element clickable method public fetch_class" data-toggle="collapse" data-target=".fetch_class .collapse">
+<h2>Fetch the current class</h2>
+<pre>fetch_class() : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Router::fetch_class()</td>
+</tr>
+</table>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="fetch_directory" id="fetch_directory"></a><div class="element clickable method public fetch_directory" data-toggle="collapse" data-target=".fetch_directory .collapse">
+<h2>Fetch the sub-directory (if any) that contains the requested controller class</h2>
+<pre>fetch_directory() : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Router::fetch_directory()</td>
+</tr>
+</table>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="fetch_method" id="fetch_method"></a><div class="element clickable method public fetch_method" data-toggle="collapse" data-target=".fetch_method .collapse">
+<h2>Fetch the current method</h2>
+<pre>fetch_method() : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Router::fetch_method()</td>
+</tr>
+</table>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="fetch_module" id="fetch_module"></a><div class="element clickable method public fetch_module" data-toggle="collapse" data-target=".fetch_module .collapse">
+<h2>fetch_module()
+        </h2>
+<pre>fetch_module() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="locate" id="locate"></a><div class="element clickable method public locate" data-toggle="collapse" data-target=".locate .collapse">
+<h2>Locate the controller *</h2>
+<pre>locate($segments) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$segments</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="set_class" id="set_class"></a><div class="element clickable method public set_class" data-toggle="collapse" data-target=".set_class .collapse">
+<h2>Set the class name</h2>
+<pre>set_class($class) : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$class</h4>
+<code></code><p>string</p></div>
+</div></div>
+</div>
+<a name="set_directory" id="set_directory"></a><div class="element clickable method public set_directory" data-toggle="collapse" data-target=".set_directory .collapse">
+<h2>Set the directory name</h2>
+<pre>set_directory($dir) : void</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Router::set_directory()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$dir</h4>
+<code></code><p>string</p></div>
+</div></div>
+</div>
+<a name="set_method" id="set_method"></a><div class="element clickable method public set_method" data-toggle="collapse" data-target=".set_method .collapse">
+<h2>Set the method name</h2>
+<pre>set_method($method) : void</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Router::set_method()</td>
+</tr>
+</table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$method</h4>
+<code></code><p>string</p></div>
+</div></div>
+</div>
+<h3>
+<i class="icon-custom icon-property"></i> Properties</h3>
+<a name="%24class" id="$class"> </a><div class="element clickable property public $class" data-toggle="collapse" data-target=".$class .collapse">
+<h2>Current class name</h2>
+<pre>$class : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Router::$$class</td>
+</tr>
+</table>
+</div></div>
+</div>
+<a name="%24config" id="$config"> </a><div class="element clickable property public $config" data-toggle="collapse" data-target=".$config .collapse">
+<h2>Config class</h2>
+<pre>$config : object</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Router::$$config</td>
+</tr>
+</table>
+</div></div>
+</div>
+<a name="%24default_controller" id="$default_controller"> </a><div class="element clickable property public $default_controller" data-toggle="collapse" data-target=".$default_controller .collapse">
+<h2>Default controller (and method if specific)</h2>
+<pre>$default_controller : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Router::$$default_controller</td>
+</tr>
+</table>
+</div></div>
+</div>
+<a name="%24directory" id="$directory"> </a><div class="element clickable property public $directory" data-toggle="collapse" data-target=".$directory .collapse">
+<h2>Sub-directory that contains the requested controller class</h2>
+<pre>$directory : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Router::$$directory</td>
+</tr>
+</table>
+</div></div>
+</div>
+<a name="%24error_routes" id="$error_routes"> </a><div class="element clickable property public $error_routes" data-toggle="collapse" data-target=".$error_routes .collapse">
+<h2>List of error routes</h2>
+<pre>$error_routes : array</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Router::$$error_routes</td>
+</tr>
+</table>
+</div></div>
+</div>
+<a name="%24method" id="$method"> </a><div class="element clickable property public $method" data-toggle="collapse" data-target=".$method .collapse">
+<h2>Current method name</h2>
+<pre>$method : string</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Router::$$method</td>
+</tr>
+</table>
+</div></div>
+</div>
+<a name="%24routes" id="$routes"> </a><div class="element clickable property public $routes" data-toggle="collapse" data-target=".$routes .collapse">
+<h2>List of routes</h2>
+<pre>$routes : array</pre>
+<div class="labels"><span class="label">Inherited</span></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered">
+<tr>
+<th>access</th>
+<td>public</td>
+</tr>
+<tr>
+<th>inherited_from</th>
+<td>\CI_Router::$$routes</td>
+</tr>
+</table>
+</div></div>
+</div>
+<a name="%24module" id="$module"> </a><div class="element clickable property protected $module" data-toggle="collapse" data-target=".$module .collapse">
+<h2>$module</h2>
+<pre>$module </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a8</a> and<br>
+            generated on 2012-07-27T12:29:25+10:00.<br></footer></div>
+</div>
+</body>
+</html>

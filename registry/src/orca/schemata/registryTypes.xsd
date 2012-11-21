@@ -1,11 +1,12 @@
 <?xml version="1.0"?>
-<xsd:schema version="1.3" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+<xsd:schema version="1.4" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
     xmlns="http://ands.org.au/standards/rif-cs/registryObjects"
     targetNamespace="http://ands.org.au/standards/rif-cs/registryObjects"
     elementFormDefault="qualified" attributeFormDefault="unqualified">
 
     <!-- Point to a local cached version of the W3 XML schema to avoid 20s+ wait times in validation -->
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="xml.xsd"/>
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"
+        schemaLocation="http://services.ands.org.au/documentation/rifcs/xml/xml.xsd"/>
 
     <xsd:annotation>
         <xsd:documentation>Type library for Registry Schema</xsd:documentation>
@@ -22,6 +23,38 @@
                 </xsd:attribute>
             </xsd:extension>
         </xsd:simpleContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="datesType">
+        <xsd:sequence>
+            <xsd:element name="date" minOccurs="0" maxOccurs="unbounded">
+                <xsd:annotation>
+                    <xsd:documentation>The date element describes a specific date associated with an event in the life cycle of the data collection object.</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                    <xsd:simpleContent>
+                        <xsd:extension base="xsd:string">
+                            <xsd:attribute name="type" use="required" type="xsd:string">
+                                <xsd:annotation>
+                                    <xsd:documentation>A value taken from a controlled vocabulary indicating the type of
+date.</xsd:documentation>
+                                </xsd:annotation>
+                            </xsd:attribute>
+                            <xsd:attribute name="dateFormat" use="required" type="xsd:string">
+                                <xsd:annotation>
+                                    <xsd:documentation>The format of the date element (from the RIFCS Date Type vocabulary).</xsd:documentation>
+                                </xsd:annotation>
+                            </xsd:attribute>
+                        </xsd:extension>
+                    </xsd:simpleContent>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+        <xsd:attribute name="type" use="required" type="xsd:string">
+            <xsd:annotation>
+                <xsd:documentation>A value taken from the Temporal Coverage Date Type vocabulary indicating the type of this date.</xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
     </xsd:complexType>
 
     <xsd:complexType name="nameType">
@@ -295,7 +328,8 @@
         <xsd:choice minOccurs="1" maxOccurs="3">
             <xsd:element name="rightsStatement" type="rightsInfoType" minOccurs="0" maxOccurs="1"/>
             <xsd:element name="licence" type="rightsTypedInfoType" minOccurs="0" maxOccurs="1"/>
-            <xsd:element name="accessRights" type="rightsTypedInfoType" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="accessRights" type="rightsTypedInfoType" minOccurs="0" maxOccurs="1"
+            />
         </xsd:choice>
     </xsd:complexType>
 
@@ -324,7 +358,7 @@
                         <xsd:documentation>A value taken from a controlled vocabulary indicating the
                             type of rights or license.</xsd:documentation>
                     </xsd:annotation>
-                </xsd:attribute>               
+                </xsd:attribute>
             </xsd:extension>
         </xsd:simpleContent>
     </xsd:complexType>
@@ -361,10 +395,11 @@
     </xsd:complexType>
 
     <xsd:complexType name="relatedInfoType">
-        <xsd:choice minOccurs="1" maxOccurs="3">
+        <xsd:choice minOccurs="1" maxOccurs="unbounded">
             <xsd:element name="identifier" type="identifierType" minOccurs="1" maxOccurs="1"/>
             <xsd:element name="title" type="xsd:string" minOccurs="0" maxOccurs="1"/>
             <xsd:element name="notes" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+            <xsd:element minOccurs="0" name="format" type="relatedInfoFormatType"/>
         </xsd:choice>
         <xsd:attribute name="type" use="optional" type="xsd:string">
             <xsd:annotation>
@@ -392,22 +427,29 @@
             </xsd:element>
             <xsd:element name="citationMetadata" minOccurs="1" maxOccurs="1">
                 <xsd:complexType>
-                    <xsd:sequence>
+                     <xsd:choice minOccurs="0" maxOccurs="unbounded">
                         <xsd:element name="identifier" type="identifierType" minOccurs="1"
                             maxOccurs="1"/>
                         <xsd:element name="contributor" type="citationNameType" minOccurs="1"
                             maxOccurs="unbounded"/>
                         <xsd:element name="title" type="xsd:string" minOccurs="1" maxOccurs="1"/>
-                        <xsd:element name="edition" type="xsd:string" minOccurs="1" maxOccurs="1"/>
-                        <xsd:element name="publisher" type="xsd:string" minOccurs="0"
+                        <xsd:element name="version" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+                        
+                        <xsd:element name="edition" type="xsd:string" minOccurs="0" maxOccurs="1">
+                                <xsd:annotation>
+                                    <xsd:documentation>THIS ELEMENT IS DEPRECATED AS OF V1.4 (USE
+                                        'version' ELEMENT INSTEAD.</xsd:documentation>
+                                </xsd:annotation>
+                        </xsd:element>
+                        
+                        <xsd:element name="publisher" type="xsd:string" minOccurs="1" maxOccurs="1"/>
+                        <xsd:element name="placePublished" type="xsd:string" minOccurs="0"
                             maxOccurs="1"/>
-                        <xsd:element name="placePublished" type="xsd:string" minOccurs="1"
-                            maxOccurs="1"/>
-                        <xsd:element name="date" type="citationDateType" minOccurs="0"
+                        <xsd:element name="date" type="citationDateType" minOccurs="1"
                             maxOccurs="unbounded"/>
-                        <xsd:element name="url" type="xsd:string" minOccurs="1" maxOccurs="1"/>
-                        <xsd:element name="context" type="xsd:string" minOccurs="1" maxOccurs="1"/>
-                    </xsd:sequence>
+                        <xsd:element name="url" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+                        <xsd:element name="context" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+                    </xsd:choice>
                 </xsd:complexType>
             </xsd:element>
         </xsd:choice>
@@ -466,7 +508,7 @@
                     object being described</xsd:documentation>
             </xsd:annotation>
         </xsd:attribute>
-        <xsd:attribute name="dateModified" type="xsd:dateTime" use="optional">
+        <xsd:attribute name="dateModified" type="xsd:string" use="optional">
             <xsd:annotation>
                 <xsd:documentation>The date this object’s metadata was last changed. This only
                     refers to the metadata of the registry object itself. For example if a
@@ -478,7 +520,7 @@
     </xsd:attributeGroup>
 
     <xsd:attributeGroup name="dateRangeAttributes">
-        <xsd:attribute name="dateFrom" type="xsd:dateTime" use="optional">
+        <xsd:attribute name="dateFrom" type="xsd:string" use="optional">
             <xsd:annotation>
                 <xsd:documentation>The date from which the metadata being described was current.
                     This is only applicable where versions of the same metadata is being provided
@@ -487,7 +529,7 @@
                     (http://www.w3.org/TR/xmlschema-2/).</xsd:documentation>
             </xsd:annotation>
         </xsd:attribute>
-        <xsd:attribute name="dateTo" type="xsd:dateTime" use="optional">
+        <xsd:attribute name="dateTo" type="xsd:string" use="optional">
             <xsd:annotation>
                 <xsd:documentation>The date the metadata being described was no longer current. This
                     is only applicable where versions of the same metadata is being provided (e.g.
@@ -508,7 +550,7 @@
     </xsd:attributeGroup>
 
     <xsd:attributeGroup name="collectionAttributes">
-        <xsd:attribute name="dateAccessioned" type="xsd:dateTime" use="optional">
+        <xsd:attribute name="dateAccessioned" type="xsd:string" use="optional">
             <xsd:annotation>
                 <xsd:documentation>The date this object was registered in a managed environment.
                     Must be UTC and of one of the forms described in section 3.2.7 of the W3C's
@@ -518,4 +560,17 @@
         </xsd:attribute>
     </xsd:attributeGroup>
 
+    <xsd:complexType name="relatedInfoFormatType">
+        <xsd:sequence>
+            <xsd:element maxOccurs="unbounded" minOccurs="1" name="identifier">
+                <xsd:complexType>
+                    <xsd:simpleContent>
+                        <xsd:extension base="xsd:string">
+                            <xsd:attribute name="type" type="xsd:string" use="required"/>
+                        </xsd:extension>
+                    </xsd:simpleContent>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
 </xsd:schema>

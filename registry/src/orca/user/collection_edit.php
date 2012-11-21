@@ -386,7 +386,7 @@ require '../../_includes/header.php';
 <script type="text/javascript" src="<?php print ePROTOCOL ?>://maps.google.com/maps/api/js?sensor=false&libraries=drawing"></script>
 <script type="text/javascript" src="<?php print eAPP_ROOT ?>orca/_javascript/map_control.js"></script>
 <script type="text/javascript" src="<?php print eAPP_ROOT ?>orca/_javascript/orca_dhtml.js"></script>
-<script type="text/javascript">mctInit('<?php print gORCA_IMAGE_ROOT ?>_controls/_map_control/')</script>
+<script type="text/javascript">mctInit('<?php print gORCA_IMAGE_ROOT ?>_controls/_map_control/', '<?php print eAPP_ROOT ?>orca/services/gazetteer_jsonp.php')</script>
 <script type="text/javascript">vcSetImagePath('<?php print gORCA_IMAGE_ROOT ?>_controls/_vocab_control/')</script>
 <form id="collection_edit" action="collection_edit.php?key=<?php printSafe(urlencode($registryObjectKey)) ?>" method="post">
 <table class="formTable" summary="Edit Collection">

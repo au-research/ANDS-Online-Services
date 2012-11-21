@@ -48,7 +48,7 @@ require '../../_includes/header.php';
 <script type="text/javascript" src="<?php print eAPP_ROOT ?>orca/_javascript/form2json.js"></script>
 <script type="text/javascript" src="<?php print eAPP_ROOT ?>ckeditor/ckeditor.js"></script>
 <script type="text/javascript">vcSetImagePath('<?php print gORCA_IMAGE_ROOT ?>_controls/_vocab_control/');</script>
-<script type="text/javascript">mctInit('<?php print gORCA_IMAGE_ROOT ?>_controls/_map_control/');</script>
+<script type="text/javascript">mctAsyncInit('<?php print gORCA_IMAGE_ROOT ?>_controls/_map_control/', '<?php print eAPP_ROOT ?>orca/services/gazetteer_jsonp.php')</script>
 
 <script type="text/javascript">
 
@@ -63,7 +63,7 @@ require '../../_includes/header.php';
 	tabs["#relatedObject"] = {name:"Related Objects",cpg:"http://ands.org.au/guides/cpguide/cpgrelatedobject.html"};
 	tabs["#subject"] = {name:"Subjects",cpg:"http://ands.org.au/guides/cpguide/cpgsubject.html"};
 	tabs["#existenceDates"] = {name:"Existence Dates",cpg:"http://ands.org.au/guides/cpguide/cpgexistencedates.html"};
-//	tabs["#coverage"] = {name:"Coverage",cpg:"http://ands.org.au/guides/cpguide/cpgcoverage.html", cError:false , cWarning:false};
+	tabs["#coverage"] = {name:"Coverage",cpg:"http://ands.org.au/guides/cpguide/cpgcoverage.html", cError:false , cWarning:false};
 	tabs["#relatedInfo"] = {name:"Related Info",cpg:"http://ands.org.au/guides/cpguide/cpgrelatedinfo.html"};
 	<?php
 

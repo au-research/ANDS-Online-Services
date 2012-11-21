@@ -1,0 +1,456 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project version="2.0.0a8" title="">
+  <file path="controllers/data_source.php" hash="f50bc387811e3eea228ee05497332d99" package="Default">
+    <class final="false" abstract="false" namespace="global" line="13" package="ands/datasource">
+      <extends>\MX_Controller</extends>
+      <name>Data_source</name>
+      <full_name>\Data_source</full_name>
+      <docblock line="4">
+        <description><![CDATA[Core Data Source controller]]></description>
+        <long-description><![CDATA[]]></long-description>
+        <tag line="4" name="author" description="Ben Greenwood &lt;ben.greenwood@ands.org.au&gt;"/>
+        <tag line="4" name="see" description="\global\ands/datasource/_data_source" refers="\global\ands/datasource/_data_source"/>
+        <tag line="4" name="package" description="ands/datasource"/>
+      </docblock>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="15" package="ands/datasource">
+        <name>index</name>
+        <full_name>index</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="33" package="ands/datasource">
+        <name>__construct</name>
+        <full_name>__construct</full_name>
+        <docblock line="30">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="30" name="ignore" description=""/>
+        </docblock>
+      </method>
+    </class>
+    <parse_markers>
+      <error line="0" code="50007">No page-level DocBlock was found in file controllers/data_source.php</error>
+      <error line="15" code="50010">No DocBlock was found for method index()</error>
+    </parse_markers>
+  </file>
+  <file path="models/_data_source.php" hash="bc706f46ca9ccf94206baa3d9c40615b" package="Default">
+    <class final="false" abstract="false" namespace="global" line="40" package="ands/datasource\helpers">
+      <extends/>
+      <name>_data_source</name>
+      <full_name>\_data_source</full_name>
+      <docblock line="3">
+        <description><![CDATA[Data Sources PHP object]]></description>
+        <long-description><![CDATA[<p>This class defines the PHP object representation of
+data sources. Objects can be initialised, modified
+and saved, abstracting away the underlying attribute
+structure.</p>
+
+<p>"Core" attributes must be initialised before a registry
+object can be created.</p>
+
+<pre><code> // Creating a new data source
+$ds = new _data_source();
+
+// Compulsory attributes
+$ds->_initAttribute("key","test.test3", TRUE);
+$ds->_initAttribute("slug","testtest3", TRUE);
+
+// Some extras
+$ds->setAttribute("record_owner","Tran");
+
+$ds->create();
+print "New DS received ID " . $ds->getID();
+
+
+// Updating a data source
+
+$ds = new _data_source(5);
+$ds->record_owner = "Bob";
+print $ds->save();
+</code></pre>]]></long-description>
+        <tag line="3" name="author" description="Ben Greenwood &lt;ben.greenwood@ands.org.au&gt;"/>
+        <tag line="3" name="package" description="ands/datasource"/>
+        <tag line="3" name="subpackage" description="helpers"/>
+      </docblock>
+      <constant namespace="global" line="47" package="ands/datasource\helpers">
+        <name>MAX_NAME_LEN</name>
+        <full_name>MAX_NAME_LEN</full_name>
+        <value><![CDATA[32]]></value>
+      </constant>
+      <constant namespace="global" line="48" package="ands/datasource\helpers">
+        <name>MAX_VALUE_LEN</name>
+        <full_name>MAX_VALUE_LEN</full_name>
+        <value><![CDATA[255]]></value>
+      </constant>
+      <property final="false" static="false" visibility="private" line="42" namespace="global" package="Default">
+        <name>$id</name>
+        <default><![CDATA[]]></default>
+      </property>
+      <property final="false" static="false" visibility="private" line="43" namespace="global" package="Default">
+        <name>$_CI</name>
+        <default><![CDATA[]]></default>
+      </property>
+      <property final="false" static="false" visibility="private" line="44" namespace="global" package="Default">
+        <name>$db</name>
+        <default><![CDATA[]]></default>
+      </property>
+      <property final="false" static="false" visibility="public" line="46" namespace="global" package="Default">
+        <name>$attributes</name>
+        <default><![CDATA[array()]]></default>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="50" package="ands/datasource\helpers">
+        <name>__construct</name>
+        <full_name>__construct</full_name>
+        <argument line="50">
+          <name>$id</name>
+          <default><![CDATA[NULL]]></default>
+          <type/>
+        </argument>
+        <argument line="50">
+          <name>$core_attributes_only</name>
+          <default><![CDATA[FALSE]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="68" package="ands/datasource\helpers">
+        <name>getID</name>
+        <full_name>getID</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="73" package="ands/datasource\helpers">
+        <name>init</name>
+        <full_name>init</full_name>
+        <argument line="73">
+          <name>$core_attributes_only</name>
+          <default><![CDATA[FALSE]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="110" package="ands/datasource\helpers">
+        <name>setAttribute</name>
+        <full_name>setAttribute</full_name>
+        <argument line="110">
+          <name>$name</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+        <argument line="110">
+          <name>$value</name>
+          <default><![CDATA[NULL]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="149" package="ands/datasource\helpers">
+        <name>create</name>
+        <full_name>create</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="157" package="ands/datasource\helpers">
+        <name>save</name>
+        <full_name>save</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="202" package="ands/datasource\helpers">
+        <name>getAttribute</name>
+        <full_name>getAttribute</full_name>
+        <argument line="202">
+          <name>$name</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+        <argument line="202">
+          <name>$graceful</name>
+          <default><![CDATA[FALSE]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="218" package="ands/datasource\helpers">
+        <name>unsetAttribute</name>
+        <full_name>unsetAttribute</full_name>
+        <argument line="218">
+          <name>$name</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="224" package="ands/datasource\helpers">
+        <name>_initAttribute</name>
+        <full_name>_initAttribute</full_name>
+        <argument line="224">
+          <name>$name</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+        <argument line="224">
+          <name>$value</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+        <argument line="224">
+          <name>$core</name>
+          <default><![CDATA[FALSE]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="234" package="ands/datasource\helpers">
+        <name>__toString</name>
+        <full_name>__toString</full_name>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="249" package="ands/datasource\helpers">
+        <name>__get</name>
+        <full_name>__get</full_name>
+        <docblock line="244">
+          <description><![CDATA[This is where the magic mappings happen (i.e.]]></description>
+          <long-description><![CDATA[<p>$data_source->record_owner)</p>]]></long-description>
+          <tag line="244" name="ignore" description=""/>
+        </docblock>
+        <argument line="249">
+          <name>$property</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="266" package="ands/datasource\helpers">
+        <name>__set</name>
+        <full_name>__set</full_name>
+        <docblock line="261">
+          <description><![CDATA[This is where the magic mappings happen (i.e.]]></description>
+          <long-description><![CDATA[<p>$data_source->record_owner)</p>]]></long-description>
+          <tag line="261" name="ignore" description=""/>
+        </docblock>
+        <argument line="266">
+          <name>$property</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+        <argument line="266">
+          <name>$value</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+    </class>
+    <class final="false" abstract="false" namespace="global" line="293" package="ands/datasource\helpers">
+      <extends/>
+      <name>_data_source_attribute</name>
+      <full_name>\_data_source_attribute</full_name>
+      <docblock line="280">
+        <description><![CDATA[Data Source Attribute]]></description>
+        <long-description><![CDATA[<p>A representation of attributes of a data source, allowing
+the state of the attribute to be mainted, so that calls
+to ->save() only write dirty data to the database.</p>]]></long-description>
+        <tag line="280" name="author" description="Ben Greenwood &lt;ben.greenwood@ands.org.au&gt;"/>
+        <tag line="280" name="version" description="0.1"/>
+        <tag line="280" name="package" description="ands/datasource"/>
+        <tag line="280" name="subpackage" description="helpers"/>
+      </docblock>
+      <property final="false" static="false" visibility="public" line="295" namespace="global" package="Default">
+        <name>$name</name>
+        <default><![CDATA[]]></default>
+      </property>
+      <property final="false" static="false" visibility="public" line="296" namespace="global" package="Default">
+        <name>$value</name>
+        <default><![CDATA[]]></default>
+      </property>
+      <property final="false" static="false" visibility="public" line="297" namespace="global" package="Default">
+        <name>$core</name>
+        <default><![CDATA[FALSE]]></default>
+      </property>
+      <property final="false" static="false" visibility="public" line="298" namespace="global" package="Default">
+        <name>$dirty</name>
+        <default><![CDATA[FALSE]]></default>
+      </property>
+      <property final="false" static="false" visibility="public" line="299" namespace="global" package="Default">
+        <name>$new</name>
+        <default><![CDATA[FALSE]]></default>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="301" package="ands/datasource\helpers">
+        <name>__construct</name>
+        <full_name>__construct</full_name>
+        <argument line="301">
+          <name>$name</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+        <argument line="301">
+          <name>$value</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="310" package="ands/datasource\helpers">
+        <name>__toString</name>
+        <full_name>__toString</full_name>
+        <docblock line="307">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="307" name="ignore" description=""/>
+        </docblock>
+      </method>
+    </class>
+    <parse_markers>
+      <error line="0" code="50007">No page-level DocBlock was found in file models/_data_source.php</error>
+      <error line="42" code="50018">No DocBlock was found for property $id</error>
+      <error line="43" code="50018">No DocBlock was found for property $_CI</error>
+      <error line="44" code="50018">No DocBlock was found for property $db</error>
+      <error line="46" code="50018">No DocBlock was found for property $attributes</error>
+      <error line="50" code="50010">No DocBlock was found for method __construct()</error>
+      <error line="68" code="50010">No DocBlock was found for method getID()</error>
+      <error line="73" code="50010">No DocBlock was found for method init()</error>
+      <error line="110" code="50010">No DocBlock was found for method setAttribute()</error>
+      <error line="149" code="50010">No DocBlock was found for method create()</error>
+      <error line="157" code="50010">No DocBlock was found for method save()</error>
+      <error line="202" code="50010">No DocBlock was found for method getAttribute()</error>
+      <error line="218" code="50010">No DocBlock was found for method unsetAttribute()</error>
+      <error line="224" code="50010">No DocBlock was found for method _initAttribute()</error>
+      <error line="234" code="50010">No DocBlock was found for method __toString()</error>
+      <error line="295" code="50018">No DocBlock was found for property $name</error>
+      <error line="296" code="50018">No DocBlock was found for property $value</error>
+      <error line="297" code="50018">No DocBlock was found for property $core</error>
+      <error line="298" code="50018">No DocBlock was found for property $dirty</error>
+      <error line="299" code="50018">No DocBlock was found for property $new</error>
+      <error line="301" code="50010">No DocBlock was found for method __construct()</error>
+    </parse_markers>
+  </file>
+  <file path="models/data_sources.php" hash="e3cd91af08875868581edc5224cdc8c3" package="Default">
+    <include line="128" type="Include Once" package="Default">
+      <name>_data_source.php</name>
+    </include>
+    <class final="false" abstract="false" namespace="global" line="16" package="ands/datasource">
+      <extends>\CI_Model</extends>
+      <name>Data_sources</name>
+      <full_name>\Data_sources</full_name>
+      <docblock line="3">
+        <description><![CDATA[Core Data Sources model]]></description>
+        <long-description><![CDATA[<p>This model allows the reference and initialisation
+of Data Sources. All instances of the _data_source
+PHP class should be invoked through this model.</p>]]></long-description>
+        <tag line="3" name="author" description="Ben Greenwood &lt;ben.greenwood@ands.org.au&gt;"/>
+        <tag line="3" name="see" description="\global\ands/datasource/_data_source" refers="\global\ands/datasource/_data_source"/>
+        <tag line="3" name="package" description="ands/datasource"/>
+      </docblock>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="25" package="ands/datasource">
+        <name>getByKey</name>
+        <full_name>getByKey</full_name>
+        <docblock line="19">
+          <description><![CDATA[Get by key]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="19" name="param" description="data source key" type="\the" variable="$key">
+            <type by_reference="false">\the</type>
+          </tag>
+          <tag line="19" name="return" description="object or NULL" type="\_data_source">
+            <type by_reference="false">\_data_source</type>
+          </tag>
+        </docblock>
+        <argument line="25">
+          <name>$key</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="45" package="ands/datasource">
+        <name>getBySlug</name>
+        <full_name>getBySlug</full_name>
+        <docblock line="39">
+          <description><![CDATA[Get by URL slug]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="39" name="param" description="data source slug" type="\the" variable="$key">
+            <type by_reference="false">\the</type>
+          </tag>
+          <tag line="39" name="return" description="object or NULL" type="\_data_source">
+            <type by_reference="false">\_data_source</type>
+          </tag>
+        </docblock>
+        <argument line="45">
+          <name>$key</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="66" package="ands/datasource">
+        <name>getByAttribute</name>
+        <full_name>getByAttribute</full_name>
+        <docblock line="59">
+          <description><![CDATA[Get a number of datasources that match the attribute requirement]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="59" name="param" description="name of the attribute to match by" type="\the" variable="$attribute_name">
+            <type by_reference="false">\the</type>
+          </tag>
+          <tag line="59" name="param" description="value that the attribute must match" type="\the" variable="$value">
+            <type by_reference="false">\the</type>
+          </tag>
+          <tag line="59" name="return" description="" type="\array(_data_source)">
+            <type by_reference="false">\array(_data_source)</type>
+          </tag>
+        </docblock>
+        <argument line="66">
+          <name>$attribute_name</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+        <argument line="66">
+          <name>$value</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="87" package="ands/datasource">
+        <name>getAll</name>
+        <full_name>getAll</full_name>
+        <docblock line="80">
+          <description><![CDATA[Get a number of datasources that match the attribute requirement]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="80" name="param" description="name of the attribute to match by" type="\the" variable="">
+            <type by_reference="false">\the</type>
+          </tag>
+          <tag line="80" name="param" description="value that the attribute must match" type="\the" variable="">
+            <type by_reference="false">\the</type>
+          </tag>
+          <tag line="80" name="return" description="or NULL" type="\array(_data_source)">
+            <type by_reference="false">\array(_data_source)</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="107" package="ands/datasource">
+        <name>create</name>
+        <full_name>create</full_name>
+        <docblock line="103">
+          <description><![CDATA[XXX:]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="103" name="return" description="or NULL" type="\array(_data_source)">
+            <type by_reference="false">\array(_data_source)</type>
+          </tag>
+        </docblock>
+        <argument line="107">
+          <name>$key</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+        <argument line="107">
+          <name>$slug</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="global" line="125" package="ands/datasource">
+        <name>__construct</name>
+        <full_name>__construct</full_name>
+        <docblock line="122">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="122" name="ignore" description=""/>
+        </docblock>
+      </method>
+    </class>
+    <parse_markers>
+      <error line="0" code="50007">No page-level DocBlock was found in file models/data_sources.php</error>
+      <notice line="80" code="50013">Parameter  could not be found in getAll()</notice>
+      <notice line="80" code="50013">Parameter  could not be found in getAll()</notice>
+      <error line="103" code="50015">Argument $key is missing from the Docblock of create()</error>
+      <error line="103" code="50015">Argument $slug is missing from the Docblock of create()</error>
+    </parse_markers>
+  </file>
+  <package name="Default" full_name="Default"/>
+  <package name="ands/datasource" full_name="ands/datasource">
+    <package name="helpers" full_name="ands/datasource\helpers"/>
+  </package>
+  <namespace name="global" full_name="global"/>
+  <marker count="0">todo</marker>
+  <marker count="0">fixme</marker>
+  <deprecated count="0"/>
+</project>

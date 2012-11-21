@@ -1,0 +1,100 @@
+-- Table: dba.tbl_google_statistics
+
+-- DROP TABLE dba.tbl_google_statistics;
+
+CREATE TABLE dba.tbl_google_statistics
+(
+  id serial NOT NULL,
+  slug character varying(512),
+  key character varying(512),
+  "group" character varying(255),
+  data_source character varying(255),
+  page_views integer,
+  unique_page_views integer,
+  display_title character varying(512),
+  object_class character varying(255),
+  day date,
+  CONSTRAINT tbl_google_statistics_pkey PRIMARY KEY (id )
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE dba.tbl_google_statistics
+  OWNER TO dba;
+GRANT ALL ON TABLE dba.tbl_google_statistics TO dba;
+GRANT SELECT, INSERT, DELETE ON TABLE dba.tbl_google_statistics TO webuser;
+
+GRANT ALL ON TABLE dba.tbl_google_statistics_id_seq TO dba;
+GRANT SELECT, USAGE ON TABLE dba.tbl_google_statistics_id_seq TO webuser;
+
+
+-- Table: dba.tbl_internal_search_results
+
+-- DROP TABLE dba.tbl_internal_search_results;
+
+CREATE TABLE dba.tbl_internal_search_results
+(
+  id serial NOT NULL,
+  search_term character varying(512),
+  time_stamp timestamp without time zone,
+  result_count integer
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE dba.tbl_internal_search_results
+  OWNER TO dba;
+GRANT ALL ON TABLE dba.tbl_internal_search_results TO dba;
+GRANT SELECT, INSERT, DELETE ON TABLE dba.tbl_internal_search_results TO webuser;
+
+GRANT ALL ON TABLE dba.tbl_internal_search_results_id_seq TO dba;
+GRANT SELECT, USAGE ON TABLE dba.tbl_internal_search_results_id_seq TO webuser;
+
+-- Table: dba.tbl_internal_search_statistics
+
+-- DROP TABLE dba.tbl_internal_search_statistics;
+
+CREATE TABLE dba.tbl_internal_search_statistics
+(
+  id serial NOT NULL,
+  search_term character varying(512),
+  slug character varying(512),
+  time_stamp timestamp without time zone,
+  CONSTRAINT id PRIMARY KEY (id )
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE dba.tbl_internal_search_statistics
+  OWNER TO dba;
+GRANT ALL ON TABLE dba.tbl_internal_search_statistics TO dba;
+GRANT SELECT, INSERT, DELETE ON TABLE dba.tbl_internal_search_statistics TO webuser;
+
+GRANT ALL ON TABLE dba.tbl_internal_search_statistics_id_seq TO dba;
+GRANT SELECT, USAGE ON TABLE dba.tbl_internal_search_statistics_id_seq TO webuser;
+
+
+
+-- Table: dba.tbl_tags
+
+-- DROP TABLE dba.tbl_tags;
+
+CREATE TABLE dba.tbl_tags
+(
+  id serial NOT NULL,
+  ro_id integer,
+  tag character varying(255),
+  ro_hash character varying(255),
+  contributed_by character varying(255),
+  CONSTRAINT unique_tags UNIQUE (tag , ro_hash )
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE dba.tbl_tags
+  OWNER TO dba;
+GRANT ALL ON TABLE dba.tbl_tags TO dba;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE dba.tbl_tags TO webuser;
+
+GRANT ALL ON TABLE dba.tbl_tags_id_seq TO dba;
+GRANT ALL ON TABLE dba.tbl_tags_id_seq TO webuser;

@@ -40,7 +40,9 @@ if (isset($_GET['cache_set']))
 	}
 	$has_fragment = "%%HASFRAGMENT%%";
 	// Include the context file
+
 	require '_includes/' . $context . '_strings.php';
+
 
 	$cacheSet = array();
 	foreach ($_strings AS $key => $element)

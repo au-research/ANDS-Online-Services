@@ -1,0 +1,448 @@
+<!DOCTYPE html><html xmlns:date="http://exslt.org/dates-and-times" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>phpDocumentor » CodeIgniter\Libraries</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../css/template.css" rel="stylesheet" media="all">
+<script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../js/bootstrap.js" type="text/javascript"></script><script src="../js/template.js" type="text/javascript"></script><script src="../js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../img/favicon.ico">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">phpDocumentor</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Packages</a></li>
+<li><a href="../packages/CodeIgniter.html"><i class="icon-folder-open"></i> CodeIgniter</a></li>
+<li><a href="../packages/Default.html"><i class="icon-folder-open"></i> Default</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">1170</span></a></li>
+<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul><li>todo 
+                <span class="label label-info">1</span>
+</li></ul></a></li>
+<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">0</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-map-marker"></i> Packages</li>
+<li>
+<a href="../packages/CodeIgniter.Libraries.html" title="Libraries"><i class="icon-folder-open"></i>Libraries</a><ul class="nav nav-list nav-packages"></ul>
+</li>
+<li class="nav-header">
+<i class="icon-custom icon-class"></i> Classes</li>
+<li><a href="#CI_Model" title="CodeIgniter Model Class">CI_Model</a></li>
+<li><a href="#CI_Output" title="Output Class">CI_Output</a></li>
+<li><a href="#CI_Hooks" title="CodeIgniter Hooks Class">CI_Hooks</a></li>
+<li><a href="#CI_Security" title="Security Class">CI_Security</a></li>
+<li><a href="#CI_Input" title="Input Class">CI_Input</a></li>
+<li><a href="#CI_Loader" title="Loader Class">CI_Loader</a></li>
+<li><a href="#CI_Config" title="CodeIgniter Config Class">CI_Config</a></li>
+<li><a href="#CI_Exceptions" title="Exceptions Class">CI_Exceptions</a></li>
+<li><a href="#CI_URI" title="URI Class">CI_URI</a></li>
+<li><a href="#CI_Benchmark" title="CodeIgniter Benchmark Class">CI_Benchmark</a></li>
+<li><a href="#CI_Utf8" title="Utf8 Class">CI_Utf8</a></li>
+<li><a href="#CI_Router" title="Router Class">CI_Router</a></li>
+<li><a href="#CI_Controller" title="CodeIgniter Application Controller Class">CI_Controller</a></li>
+<li><a href="#CI_Lang" title="Language Class">CI_Lang</a></li>
+<li><a href="#CI_Driver_Library" title="CodeIgniter Driver Library Class">CI_Driver_Library</a></li>
+<li><a href="#CI_Driver" title="CodeIgniter Driver Class">CI_Driver</a></li>
+<li><a href="#CI_Session" title="Session Class">CI_Session</a></li>
+<li><a href="#CI_Image_lib" title="Image Manipulation class">CI_Image_lib</a></li>
+<li><a href="#CI_SHA1" title="SHA1 Encoding Class">CI_SHA1</a></li>
+<li><a href="#CI_Parser" title="Parser Class">CI_Parser</a></li>
+<li><a href="#CI_Table" title="HTML Table Generating Class">CI_Table</a></li>
+<li><a href="#CI_Calendar" title="CodeIgniter Calendar Class">CI_Calendar</a></li>
+<li><a href="#CI_Pagination" title="Pagination Class">CI_Pagination</a></li>
+<li><a href="#CI_Zip" title="Zip Compression Class">CI_Zip</a></li>
+<li><a href="#CI_Cart" title="Shopping Cart Class">CI_Cart</a></li>
+<li><a href="#CI_Unit_test" title="Unit Testing Class">CI_Unit_test</a></li>
+<li><a href="#CI_Xmlrpcs" title="XML-RPC server class">CI_Xmlrpcs</a></li>
+<li><a href="#CI_Log" title="Logging Class">CI_Log</a></li>
+<li><a href="#CI_Encrypt" title="CodeIgniter Encryption Class">CI_Encrypt</a></li>
+<li><a href="#CI_Migration" title="Migration Class">CI_Migration</a></li>
+<li><a href="#CI_Javascript" title="Javascript Class">CI_Javascript</a></li>
+<li><a href="#CI_Cache_dummy" title="CodeIgniter Dummy Caching Class">CI_Cache_dummy</a></li>
+<li><a href="#CI_Cache_apc" title="CodeIgniter APC Caching Class">CI_Cache_apc</a></li>
+<li><a href="#CI_Cache_file" title="CodeIgniter Memcached Caching Class">CI_Cache_file</a></li>
+<li><a href="#CI_Cache_memcached" title="CodeIgniter Memcached Caching Class">CI_Cache_memcached</a></li>
+<li><a href="#CI_Cache" title="CodeIgniter Caching Class">CI_Cache</a></li>
+<li><a href="#CI_FTP" title="FTP Class">CI_FTP</a></li>
+<li><a href="#CI_Xmlrpc" title="XML-RPC request handler class">CI_Xmlrpc</a></li>
+<li><a href="#CI_Jquery" title="Jquery Class">CI_Jquery</a></li>
+<li><a href="#CI_Profiler" title="CodeIgniter Profiler Class">CI_Profiler</a></li>
+<li><a href="#CI_Email" title="CodeIgniter Email Class">CI_Email</a></li>
+<li><a href="#CI_Form_validation" title="Form Validation Class">CI_Form_validation</a></li>
+<li><a href="#CI_Trackback" title="Trackback Class">CI_Trackback</a></li>
+<li><a href="#CI_User_agent" title="User Agent Class">CI_User_agent</a></li>
+<li><a href="#CI_Upload" title="File Uploading Class">CI_Upload</a></li>
+</ul>
+</div>
+<div class="span8 package-contents">
+<ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-folder-open"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../packages/CodeIgniter.html">CodeIgniter</a></li>
+<span class="divider">\</span><li class="active"><a href="../packages/CodeIgniter.Libraries.html">Libraries</a></li>
+</ul>
+<div class="package-indent">
+<h3>
+<i class="icon-custom icon-class"></i> Classes and interfaces</h3>
+<a name="CI_Benchmark" id="CI_Benchmark"></a><div class="element ajax clickable class" href="../classes/CI_Benchmark.html">
+<h1>CI_Benchmark<a href="../classes/CI_Benchmark.html">¶</a>
+</h1>
+<p class="short_description">CodeIgniter Benchmark Class</p>
+<div class="details collapse"></div>
+<a href="../classes/CI_Benchmark.html" class="more">« More »</a>
+</div>
+<a name="CI_Cache" id="CI_Cache"></a><div class="element ajax clickable class" href="../classes/CI_Cache.html">
+<h1>CI_Cache<a href="../classes/CI_Cache.html">¶</a>
+</h1>
+<p class="short_description">CodeIgniter Caching Class</p>
+<div class="details collapse"></div>
+<a href="../classes/CI_Cache.html" class="more">« More »</a>
+</div>
+<a name="CI_Cache_apc" id="CI_Cache_apc"></a><div class="element ajax clickable class" href="../classes/CI_Cache_apc.html">
+<h1>CI_Cache_apc<a href="../classes/CI_Cache_apc.html">¶</a>
+</h1>
+<p class="short_description">CodeIgniter APC Caching Class</p>
+<div class="details collapse"></div>
+<a href="../classes/CI_Cache_apc.html" class="more">« More »</a>
+</div>
+<a name="CI_Cache_dummy" id="CI_Cache_dummy"></a><div class="element ajax clickable class" href="../classes/CI_Cache_dummy.html">
+<h1>CI_Cache_dummy<a href="../classes/CI_Cache_dummy.html">¶</a>
+</h1>
+<p class="short_description">CodeIgniter Dummy Caching Class</p>
+<div class="details collapse"></div>
+<a href="../classes/CI_Cache_dummy.html" class="more">« More »</a>
+</div>
+<a name="CI_Cache_file" id="CI_Cache_file"></a><div class="element ajax clickable class" href="../classes/CI_Cache_file.html">
+<h1>CI_Cache_file<a href="../classes/CI_Cache_file.html">¶</a>
+</h1>
+<p class="short_description">CodeIgniter Memcached Caching Class</p>
+<div class="details collapse"></div>
+<a href="../classes/CI_Cache_file.html" class="more">« More »</a>
+</div>
+<a name="CI_Cache_memcached" id="CI_Cache_memcached"></a><div class="element ajax clickable class" href="../classes/CI_Cache_memcached.html">
+<h1>CI_Cache_memcached<a href="../classes/CI_Cache_memcached.html">¶</a>
+</h1>
+<p class="short_description">CodeIgniter Memcached Caching Class</p>
+<div class="details collapse"></div>
+<a href="../classes/CI_Cache_memcached.html" class="more">« More »</a>
+</div>
+<a name="CI_Calendar" id="CI_Calendar"></a><div class="element ajax clickable class" href="../classes/CI_Calendar.html">
+<h1>CI_Calendar<a href="../classes/CI_Calendar.html">¶</a>
+</h1>
+<p class="short_description">CodeIgniter Calendar Class</p>
+<div class="details collapse"></div>
+<a href="../classes/CI_Calendar.html" class="more">« More »</a>
+</div>
+<a name="CI_Cart" id="CI_Cart"></a><div class="element ajax clickable class" href="../classes/CI_Cart.html">
+<h1>CI_Cart<a href="../classes/CI_Cart.html">¶</a>
+</h1>
+<p class="short_description">Shopping Cart Class</p>
+<div class="details collapse"></div>
+<a href="../classes/CI_Cart.html" class="more">« More »</a>
+</div>
+<a name="CI_Config" id="CI_Config"></a><div class="element ajax clickable class" href="../classes/CI_Config.html">
+<h1>CI_Config<a href="../classes/CI_Config.html">¶</a>
+</h1>
+<p class="short_description">CodeIgniter Config Class</p>
+<div class="details collapse"></div>
+<a href="../classes/CI_Config.html" class="more">« More »</a>
+</div>
+<a name="CI_Controller" id="CI_Controller"></a><div class="element ajax clickable class" href="../classes/CI_Controller.html">
+<h1>CI_Controller<a href="../classes/CI_Controller.html">¶</a>
+</h1>
+<p class="short_description">CodeIgniter Application Controller Class</p>
+<div class="details collapse"></div>
+<a href="../classes/CI_Controller.html" class="more">« More »</a>
+</div>
+<a name="CI_Driver" id="CI_Driver"></a><div class="element ajax clickable class" href="../classes/CI_Driver.html">
+<h1>CI_Driver<a href="../classes/CI_Driver.html">¶</a>
+</h1>
+<p class="short_description">CodeIgniter Driver Class</p>
+<div class="details collapse"></div>
+<a href="../classes/CI_Driver.html" class="more">« More »</a>
+</div>
+<a name="CI_Driver_Library" id="CI_Driver_Library"></a><div class="element ajax clickable class" href="../classes/CI_Driver_Library.html">
+<h1>CI_Driver_Library<a href="../classes/CI_Driver_Library.html">¶</a>
+</h1>
+<p class="short_description">CodeIgniter Driver Library Class</p>
+<div class="details collapse"></div>
+<a href="../classes/CI_Driver_Library.html" class="more">« More »</a>
+</div>
+<a name="CI_Email" id="CI_Email"></a><div class="element ajax clickable class" href="../classes/CI_Email.html">
+<h1>CI_Email<a href="../classes/CI_Email.html">¶</a>
+</h1>
+<p class="short_description">CodeIgniter Email Class</p>
+<div class="details collapse"></div>
+<a href="../classes/CI_Email.html" class="more">« More »</a>
+</div>
+<a name="CI_Encrypt" id="CI_Encrypt"></a><div class="element ajax clickable class" href="../classes/CI_Encrypt.html">
+<h1>CI_Encrypt<a href="../classes/CI_Encrypt.html">¶</a>
+</h1>
+<p class="short_description">CodeIgniter Encryption Class</p>
+<div class="details collapse"></div>
+<a href="../classes/CI_Encrypt.html" class="more">« More »</a>
+</div>
+<a name="CI_Exceptions" id="CI_Exceptions"></a><div class="element ajax clickable class" href="../classes/CI_Exceptions.html">
+<h1>CI_Exceptions<a href="../classes/CI_Exceptions.html">¶</a>
+</h1>
+<p class="short_description">Exceptions Class</p>
+<div class="details collapse"></div>
+<a href="../classes/CI_Exceptions.html" class="more">« More »</a>
+</div>
+<a name="CI_FTP" id="CI_FTP"></a><div class="element ajax clickable class" href="../classes/CI_FTP.html">
+<h1>CI_FTP<a href="../classes/CI_FTP.html">¶</a>
+</h1>
+<p class="short_description">FTP Class</p>
+<div class="details collapse"></div>
+<a href="../classes/CI_FTP.html" class="more">« More »</a>
+</div>
+<a name="CI_Form_validation" id="CI_Form_validation"></a><div class="element ajax clickable class" href="../classes/CI_Form_validation.html">
+<h1>CI_Form_validation<a href="../classes/CI_Form_validation.html">¶</a>
+</h1>
+<p class="short_description">Form Validation Class</p>
+<div class="details collapse"></div>
+<a href="../classes/CI_Form_validation.html" class="more">« More »</a>
+</div>
+<a name="CI_Hooks" id="CI_Hooks"></a><div class="element ajax clickable class" href="../classes/CI_Hooks.html">
+<h1>CI_Hooks<a href="../classes/CI_Hooks.html">¶</a>
+</h1>
+<p class="short_description">CodeIgniter Hooks Class</p>
+<div class="details collapse"></div>
+<a href="../classes/CI_Hooks.html" class="more">« More »</a>
+</div>
+<a name="CI_Image_lib" id="CI_Image_lib"></a><div class="element ajax clickable class" href="../classes/CI_Image_lib.html">
+<h1>CI_Image_lib<a href="../classes/CI_Image_lib.html">¶</a>
+</h1>
+<p class="short_description">Image Manipulation class</p>
+<div class="details collapse"></div>
+<a href="../classes/CI_Image_lib.html" class="more">« More »</a>
+</div>
+<a name="CI_Input" id="CI_Input"></a><div class="element ajax clickable class" href="../classes/CI_Input.html">
+<h1>CI_Input<a href="../classes/CI_Input.html">¶</a>
+</h1>
+<p class="short_description">Input Class</p>
+<div class="details collapse"></div>
+<a href="../classes/CI_Input.html" class="more">« More »</a>
+</div>
+<a name="CI_Javascript" id="CI_Javascript"></a><div class="element ajax clickable class" href="../classes/CI_Javascript.html">
+<h1>CI_Javascript<a href="../classes/CI_Javascript.html">¶</a>
+</h1>
+<p class="short_description">Javascript Class</p>
+<div class="details collapse"></div>
+<a href="../classes/CI_Javascript.html" class="more">« More »</a>
+</div>
+<a name="CI_Jquery" id="CI_Jquery"></a><div class="element ajax clickable class" href="../classes/CI_Jquery.html">
+<h1>CI_Jquery<a href="../classes/CI_Jquery.html">¶</a>
+</h1>
+<p class="short_description">Jquery Class</p>
+<div class="details collapse"></div>
+<a href="../classes/CI_Jquery.html" class="more">« More »</a>
+</div>
+<a name="CI_Lang" id="CI_Lang"></a><div class="element ajax clickable class" href="../classes/CI_Lang.html">
+<h1>CI_Lang<a href="../classes/CI_Lang.html">¶</a>
+</h1>
+<p class="short_description">Language Class</p>
+<div class="details collapse"></div>
+<a href="../classes/CI_Lang.html" class="more">« More »</a>
+</div>
+<a name="CI_Loader" id="CI_Loader"></a><div class="element ajax clickable class" href="../classes/CI_Loader.html">
+<h1>CI_Loader<a href="../classes/CI_Loader.html">¶</a>
+</h1>
+<p class="short_description">Loader Class</p>
+<div class="details collapse"></div>
+<a href="../classes/CI_Loader.html" class="more">« More »</a>
+</div>
+<a name="CI_Log" id="CI_Log"></a><div class="element ajax clickable class" href="../classes/CI_Log.html">
+<h1>CI_Log<a href="../classes/CI_Log.html">¶</a>
+</h1>
+<p class="short_description">Logging Class</p>
+<div class="details collapse"></div>
+<a href="../classes/CI_Log.html" class="more">« More »</a>
+</div>
+<a name="CI_Migration" id="CI_Migration"></a><div class="element ajax clickable class" href="../classes/CI_Migration.html">
+<h1>CI_Migration<a href="../classes/CI_Migration.html">¶</a>
+</h1>
+<p class="short_description">Migration Class</p>
+<div class="details collapse"></div>
+<a href="../classes/CI_Migration.html" class="more">« More »</a>
+</div>
+<a name="CI_Model" id="CI_Model"></a><div class="element ajax clickable class" href="../classes/CI_Model.html">
+<h1>CI_Model<a href="../classes/CI_Model.html">¶</a>
+</h1>
+<p class="short_description">CodeIgniter Model Class</p>
+<div class="details collapse"></div>
+<a href="../classes/CI_Model.html" class="more">« More »</a>
+</div>
+<a name="CI_Output" id="CI_Output"></a><div class="element ajax clickable class" href="../classes/CI_Output.html">
+<h1>CI_Output<a href="../classes/CI_Output.html">¶</a>
+</h1>
+<p class="short_description">Output Class</p>
+<div class="details collapse"></div>
+<a href="../classes/CI_Output.html" class="more">« More »</a>
+</div>
+<a name="CI_Pagination" id="CI_Pagination"></a><div class="element ajax clickable class" href="../classes/CI_Pagination.html">
+<h1>CI_Pagination<a href="../classes/CI_Pagination.html">¶</a>
+</h1>
+<p class="short_description">Pagination Class</p>
+<div class="details collapse"></div>
+<a href="../classes/CI_Pagination.html" class="more">« More »</a>
+</div>
+<a name="CI_Parser" id="CI_Parser"></a><div class="element ajax clickable class" href="../classes/CI_Parser.html">
+<h1>CI_Parser<a href="../classes/CI_Parser.html">¶</a>
+</h1>
+<p class="short_description">Parser Class</p>
+<div class="details collapse"></div>
+<a href="../classes/CI_Parser.html" class="more">« More »</a>
+</div>
+<a name="CI_Profiler" id="CI_Profiler"></a><div class="element ajax clickable class" href="../classes/CI_Profiler.html">
+<h1>CI_Profiler<a href="../classes/CI_Profiler.html">¶</a>
+</h1>
+<p class="short_description">CodeIgniter Profiler Class</p>
+<div class="details collapse"></div>
+<a href="../classes/CI_Profiler.html" class="more">« More »</a>
+</div>
+<a name="CI_Router" id="CI_Router"></a><div class="element ajax clickable class" href="../classes/CI_Router.html">
+<h1>CI_Router<a href="../classes/CI_Router.html">¶</a>
+</h1>
+<p class="short_description">Router Class</p>
+<div class="details collapse"></div>
+<a href="../classes/CI_Router.html" class="more">« More »</a>
+</div>
+<a name="CI_SHA1" id="CI_SHA1"></a><div class="element ajax clickable class" href="../classes/CI_SHA1.html">
+<h1>CI_SHA1<a href="../classes/CI_SHA1.html">¶</a>
+</h1>
+<p class="short_description">SHA1 Encoding Class</p>
+<div class="details collapse"></div>
+<a href="../classes/CI_SHA1.html" class="more">« More »</a>
+</div>
+<a name="CI_Security" id="CI_Security"></a><div class="element ajax clickable class" href="../classes/CI_Security.html">
+<h1>CI_Security<a href="../classes/CI_Security.html">¶</a>
+</h1>
+<p class="short_description">Security Class</p>
+<div class="details collapse"></div>
+<a href="../classes/CI_Security.html" class="more">« More »</a>
+</div>
+<a name="CI_Session" id="CI_Session"></a><div class="element ajax clickable class" href="../classes/CI_Session.html">
+<h1>CI_Session<a href="../classes/CI_Session.html">¶</a>
+</h1>
+<p class="short_description">Session Class</p>
+<div class="details collapse"></div>
+<a href="../classes/CI_Session.html" class="more">« More »</a>
+</div>
+<a name="CI_Table" id="CI_Table"></a><div class="element ajax clickable class" href="../classes/CI_Table.html">
+<h1>CI_Table<a href="../classes/CI_Table.html">¶</a>
+</h1>
+<p class="short_description">HTML Table Generating Class</p>
+<div class="details collapse"></div>
+<a href="../classes/CI_Table.html" class="more">« More »</a>
+</div>
+<a name="CI_Trackback" id="CI_Trackback"></a><div class="element ajax clickable class" href="../classes/CI_Trackback.html">
+<h1>CI_Trackback<a href="../classes/CI_Trackback.html">¶</a>
+</h1>
+<p class="short_description">Trackback Class</p>
+<div class="details collapse"></div>
+<a href="../classes/CI_Trackback.html" class="more">« More »</a>
+</div>
+<a name="CI_URI" id="CI_URI"></a><div class="element ajax clickable class" href="../classes/CI_URI.html">
+<h1>CI_URI<a href="../classes/CI_URI.html">¶</a>
+</h1>
+<p class="short_description">URI Class</p>
+<div class="details collapse"></div>
+<a href="../classes/CI_URI.html" class="more">« More »</a>
+</div>
+<a name="CI_Unit_test" id="CI_Unit_test"></a><div class="element ajax clickable class" href="../classes/CI_Unit_test.html">
+<h1>CI_Unit_test<a href="../classes/CI_Unit_test.html">¶</a>
+</h1>
+<p class="short_description">Unit Testing Class</p>
+<div class="details collapse"></div>
+<a href="../classes/CI_Unit_test.html" class="more">« More »</a>
+</div>
+<a name="CI_Upload" id="CI_Upload"></a><div class="element ajax clickable class" href="../classes/CI_Upload.html">
+<h1>CI_Upload<a href="../classes/CI_Upload.html">¶</a>
+</h1>
+<p class="short_description">File Uploading Class</p>
+<div class="details collapse"></div>
+<a href="../classes/CI_Upload.html" class="more">« More »</a>
+</div>
+<a name="CI_User_agent" id="CI_User_agent"></a><div class="element ajax clickable class" href="../classes/CI_User_agent.html">
+<h1>CI_User_agent<a href="../classes/CI_User_agent.html">¶</a>
+</h1>
+<p class="short_description">User Agent Class</p>
+<div class="details collapse"></div>
+<a href="../classes/CI_User_agent.html" class="more">« More »</a>
+</div>
+<a name="CI_Utf8" id="CI_Utf8"></a><div class="element ajax clickable class" href="../classes/CI_Utf8.html">
+<h1>CI_Utf8<a href="../classes/CI_Utf8.html">¶</a>
+</h1>
+<p class="short_description">Utf8 Class</p>
+<div class="details collapse"></div>
+<a href="../classes/CI_Utf8.html" class="more">« More »</a>
+</div>
+<a name="CI_Xmlrpc" id="CI_Xmlrpc"></a><div class="element ajax clickable class" href="../classes/CI_Xmlrpc.html">
+<h1>CI_Xmlrpc<a href="../classes/CI_Xmlrpc.html">¶</a>
+</h1>
+<p class="short_description">XML-RPC request handler class</p>
+<div class="details collapse"></div>
+<a href="../classes/CI_Xmlrpc.html" class="more">« More »</a>
+</div>
+<a name="CI_Xmlrpcs" id="CI_Xmlrpcs"></a><div class="element ajax clickable class" href="../classes/CI_Xmlrpcs.html">
+<h1>CI_Xmlrpcs<a href="../classes/CI_Xmlrpcs.html">¶</a>
+</h1>
+<p class="short_description">XML-RPC server class</p>
+<div class="details collapse"></div>
+<a href="../classes/CI_Xmlrpcs.html" class="more">« More »</a>
+</div>
+<a name="CI_Zip" id="CI_Zip"></a><div class="element ajax clickable class" href="../classes/CI_Zip.html">
+<h1>CI_Zip<a href="../classes/CI_Zip.html">¶</a>
+</h1>
+<p class="short_description">Zip Compression Class</p>
+<div class="details collapse"></div>
+<a href="../classes/CI_Zip.html" class="more">« More »</a>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a8</a> and<br>
+            generated on 2012-07-27T12:29:20+10:00.<br></footer></div>
+</div>
+</body>
+</html>

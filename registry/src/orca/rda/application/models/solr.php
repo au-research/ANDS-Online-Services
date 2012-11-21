@@ -68,8 +68,7 @@ limitations under the License.
 
 		//$r = '(fulltext:('.$q.') OR key:('.$q.')^50 OR displayTitle:('.$q.')^50 OR listTitle:('.$q.')^50 OR description_value:('.$q.')^5 OR subject_value:('.$q.')^10 OR name_part:('.$q.')^30)';
 		//$q .= $r . ' OR (fulltext:('.$q.') -data_source_key:("AU_RESEARCH_GRANTS"))^3000 OR (fulltext:('.$q.') -data_source_key:("nhmrc.gov.au"))^3000';
-		if ($q == "*:*")
-		{
+		if ($q == "*:*" && $extended_query==""){
 			$sort = "search_base_score desc";
 		}
 		$q = '(fulltext:('.$q.') OR key:('.$q.')^50 OR display_title:('.$q.')^50 OR list_title:('.$q.')^50 OR description_value:('.$q.')^5 OR subject_value_resolved:('.$q.')^10 OR ((fulltext:('.$q.') -data_source_key:("AU_RESEARCH_GRANTS"))^3000 OR (fulltext:('.$q.') -data_source_key:("nhmrc.gov.au"))^3000))';
@@ -78,7 +77,8 @@ limitations under the License.
 		//$q .= $r;
 		//OR (fulltext:('.$q.') -data_source_key:("AU_RESEARCH_GRANTS"))^3000 OR (fulltext:('.$q.') -data_source_key:("nhmrc.gov.au"))^3000
 
-		$q.=($extended_query);
+		
+		$q.=$extended_query;
 
 		if($sort!='score desc') $filter_query.='&sort='.$sort;
 		$q.=$filter_query;
@@ -103,6 +103,7 @@ limitations under the License.
     	//$fields_string = urldecode($fields_string);
 
     	//echo $fields_string.'<hr/>';
+    	//echo $sort.'<hr/>';
 
 
     	$ch = curl_init();

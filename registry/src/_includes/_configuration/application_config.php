@@ -242,7 +242,14 @@ addMenu($menu);
 		$activity->no_check_ssl= true;
 
 		addActivity($activity);
+		
+		// =============================================================================
+		// services/rda
+		$activity = new activity('aORCA_SERVICE_RDA', 'ORCA services to RDA', 'http://'.eHOST.'/'.eROOT_DIR.'/orca/services/rda.php');
+		$activity->no_check_ssl= true;
 
+		addActivity($activity);
+		
 		// services/getRegistryObjectsSOLR
 		$activity = new activity('aORCA_SERVICE_GET_REGISTRY_OBJECTS_SOLR_2', 'Indexer', 'http://'.eHOST.'/'.eROOT_DIR.'/orca/services/indexer.php');
 		$activity->no_check_ssl= true;
@@ -518,7 +525,7 @@ addMenu($menu);
 			$activity->help_content_uri = eAPP_ROOT.'orca/_helpcontent/hc_manage_my_records.php';
 			$activity->help_content_fragment_id = 'mmr';
 			addActivity($activity);
-
+			
 
 			// =============================================================================
 			// Add Record Submenu
@@ -639,7 +646,7 @@ addMenu($menu);
 
 			// =============================================================================
 			// Data Source Report
-			$activity = new activity('aORCA_DATA_SOURCE_REPORTS', 'Data Source Reports', 'orca/admin/data_source_report.php');
+			$activity = new activity('aORCA_DATA_SOURCE_REPORT', 'Data Source Reports', 'orca/admin/data_source_report.php');
 			addActivity($activity);
 
 
@@ -648,7 +655,21 @@ addMenu($menu);
 			$activity = new activity('aORCA_DATA_SOURCE_EXPORT', 'Export from Data Source', 'orca/admin/data_source_export.php');
 			$activity->menu_id = 'mORCA_DATA_SOURCE_ADMIN';
 			addActivity($activity);
-
+			
+			$activity = new activity('aORCA_REGISTRY_OBJECT_ADMIN_MY_TAGS', 'Manage My Tags', 'orca/manage/my_tags.php');
+			$activity->menu_id = 'mORCA_DATA_SOURCE_ADMIN';
+			addActivity($activity);
+			
+		// =============================================================================
+		// Registry Object Reporting by datasource/group
+		$menu = new menu('mORCA_REPORTING', 'Reporting', 'mORCA_ADMINISTRATION');
+		addMenu($menu);
+			// =============================================================================
+			// View Draft Records
+			$activity = new activity('aORCA_DATA_SOURCE_REPORTS', 'Organisational & Data Source', 'orca/admin/data_source_reporting.php');
+			$activity->menu_id = 'mORCA_REPORTING';
+			//$activity->only_show_if_active= true;
+			addActivity($activity);		
 	// =============================================================================
 	// PIDS IP Administration
 	$menu = new menu('mORCA_PIDS_ADMINISTRATION', 'PIDS IP Administration', gROOT_MENU_ID);

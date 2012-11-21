@@ -132,6 +132,9 @@ $_strings['*_name'] = <<<HTMLEND
 HTMLEND;
 
 
+
+
+
 // 
 // Identifiers
 //
@@ -484,7 +487,48 @@ $_strings['*_relatedInfo'] = <<<HTMLEND
 				</script>
 				
 HTMLEND;
+// 
+// Dates
+//
 
+$_strings['*_dates'] = <<<HTMLEND
+
+				<table class="inner-table">
+					<tr>
+						<td class="tab_title" style="border-right:none;">	
+							<br/>				
+							Dates									
+						</td>
+						<td width="62px" rowspan="3" valign="top" style="border:none;">
+							<a href="http://ands.org.au/guides/content-providers-guide.html" target="_blank" id="cpgHelpButton" name="helpButton" style="float:right;"></a>
+						</td>
+					</tr>
+					<tr>
+						<td style="border-bottom:none; border-right:none;" id="dates_metadata_guidance_container">					
+																							
+						</td>
+					</tr>
+					<tr>
+						<td style="border:none;">					
+							<div name="errors_dates" class="error_notification" style="display:none;"></div>				
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2" id="field_container">
+							<div id="object.dates_container">&nbsp;</div>
+		
+							<input type="button" class="buttonSmall" name="" value="Add new Dates" 							
+													onClick="getElement('dates', [], 'object.', null, getNextSeq('dates'));" />
+						</td>
+					</tr>
+				</table>
+				
+				<script type="text/javascript">								
+					getRemoteElement("#dates_metadata_guidance_container", 
+						"dates_metadata_guidance");
+				</script>
+				
+HTMLEND;
 //
 // Existence Dates (Party, Activity, Service)
 //

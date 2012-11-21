@@ -17,14 +17,14 @@ limitations under the License.
 **/ 
 ?>
 <?php 
-	$str = '+key:(';
+	$str = '+key_hash:(';
 	$first = true;
 	foreach($registryObjects->result() as $r)
 	{
 		if(!$first){
-			$str.=' OR "'.$r->registry_object_key.'"';
+			$str.=' OR "'.$r->key_hash.'"';
 		}else{
-			$str.='"'.$r->registry_object_key.'"';
+			$str.='"'.$r->key_hash.'"';
 			$first = false;
 		}
 	}

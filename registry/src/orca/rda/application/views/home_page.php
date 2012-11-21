@@ -160,7 +160,7 @@ limitations under the License.
 </div>
 
 
-<div class="hide">
+<div class="hide" id="ref_spotlight_data">
 	<?php 
 	foreach($keys as $key){
 		$d = '';

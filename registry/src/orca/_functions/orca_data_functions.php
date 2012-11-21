@@ -73,7 +73,6 @@ function insertDataSource()
 
 	$errors = "";
 	$strQuery = 'SELECT dba.udf_insert_data_source($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32,$33,$34)';
-	
 	$params = 
 		array(
 			getLoggedInUser(), //modified_who
@@ -356,6 +355,19 @@ function getDataSources($key, $filter)
 	return $resultSet;
 }
 
+
+function getDataSourceKeysByCount($order="ASC")
+{
+	global $gCNN_DBS_ORCA;
+	
+	$resultSet = null;
+	$strQuery = 'SELECT data_source_key FROM dba.tbl_registry_objects GROUP BY data_source_key ORDER BY COUNT(*) ' . $order;
+	$params = array();
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	
+	return $resultSet;
+}
+
 // By Name (basically the wordy vocabulary title)
 function getTermsForVocab($vocabName, $term = "")
 {
@@ -469,6 +481,7 @@ function getDraftsForPurge($data_source_key, $harvest_id)
 
 	return $resultSet;
 }
+
 
 function deleteRegistryObject($registry_object_key)
 {
@@ -892,6 +905,38 @@ function insertRights($rights_id, $registryObjectKey, $rights_statement, $rights
 
 }
 
+function insertDates($registry_object_key, $date_type, $date_elements)
+{
+
+	global $gCNN_DBS_ORCA;
+
+	$errors = "";
+	$strQuery = 'INSERT INTO dba.tbl_dates ("registry_object_key", "date_type") VALUES ($1, $2)';
+	$params = array($registry_object_key, $date_type);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	
+	$strQuery = "SELECT CURRVAL(pg_get_serial_sequence($1,$2))";
+	$params = array('dba.tbl_dates', 'id');
+	$id = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+
+	if( ! ($id[0]['currval'] > 0) )
+	{
+		$errors .= "An error occurred when trying to insert the record (dates element).";
+	}
+	
+	foreach ($date_elements AS $date)
+	{
+		
+		$strQuery = 'INSERT INTO dba.tbl_date ("date_id", "type", "date_format", "value")  VALUES ($1, $2, $3, $4)';
+		$params = array($id[0]['currval'], $date['type'], $date['date_format'], $date['value']);
+		$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);		
+		
+	}
+	
+	return $errors;
+
+}
+
 function insertCitationDate($id, $citation_info_id, $value, $type)
 {
 
@@ -1104,7 +1149,7 @@ function insertRelatedInfoOld($related_info_id, $registry_object_key, $value)
 }
 
 
-function insertRelatedInfo($related_info_id, $registry_object_key, $info_type, $identifier = null, $identifier_type = null, $title = null, $notes = null)
+function insertRelatedInfo($related_info_id, $registry_object_key, $info_type, $identifier = null, $identifier_type = null, $title = null, $notes = null, $format_identifiers = null)
 {
 	global $gCNN_DBS_ORCA;
 
@@ -1121,6 +1166,16 @@ function insertRelatedInfo($related_info_id, $registry_object_key, $info_type, $
 	$strQuery = 'SELECT dba.udf_insert_related_info($1, $2, $3, $4, $5, $6, $7)';
 	$params = array($related_info_id, $registry_object_key, $info_type, substr($identifier, 0, 512), $identifier_type, $title, $notes);
 	$resultSet = executeUpdateQuery($gCNN_DBS_ORCA, $strQuery, $params);
+
+	if ($format_identifiers)
+	{
+		foreach ($format_identifiers AS $id)
+		{
+			$strQuery = 'INSERT INTO dba.tbl_related_info_format ("related_info_id", "identifier_type", "identifier_value") VALUES ($1, $2, $3)';
+			$params = array($related_info_id, $id['type'],$id['value']);
+			executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+		}
+	}
 
 	if( !$resultSet )
 	{
@@ -1694,6 +1749,33 @@ function getAccessPolicies($registry_object_key)
 
 	return $resultSet;
 }
+
+function getDates($registry_object_key)
+{
+	global $gCNN_DBS_ORCA;
+
+	$resultSet = null;
+	$strQuery = 'SELECT * FROM dba.tbl_dates WHERE registry_object_key = $1;';
+	$params = array($registry_object_key);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	
+	if (is_array($resultSet)){
+		foreach ($resultSet AS &$dates)
+		{
+			$strQuery = 'SELECT * FROM dba.tbl_date WHERE date_id = $1;';
+			$params = array($dates['id']);
+			$dates['elements'] = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+		}
+	}
+	else
+	{
+		return array();
+	}
+
+	return $resultSet;
+}
+
+
 function getExistenceDate($registry_object_key)
 {
 	global $gCNN_DBS_ORCA;
@@ -1713,7 +1795,16 @@ function getRelatedInfo($registry_object_key)
 	$strQuery = 'SELECT * FROM dba.udf_get_related_info($1)';
 	$params = array($registry_object_key);
 	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
-
+	
+	if (is_array($resultSet))
+	{
+		foreach ($resultSet AS &$relatedInfo)
+		{
+			$strQuery = 'SELECT * FROM dba.tbl_related_info_format WHERE related_info_id = $1;';
+			$params = array($relatedInfo['related_info_id']);
+			$relatedInfo['format_identifiers'] = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+		}
+	}
 	return $resultSet;
 }
 
@@ -2126,6 +2217,40 @@ function getSpatialCoverage($coverage_id)
 
 	return $resultSet;
 }
+
+
+function getSizeOfSpatialExtent($spatial_location_id)
+{
+	global $gCNN_DBS_ORCA;
+	$resultSet = null;
+
+	$strQuery = 'SELECT area(bound_box) AS box_area FROM dba.tbl_spatial_extents WHERE spatial_location_id = $1';
+	$params = array($spatial_location_id);
+
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	
+	if (!isset($resultSet[0]))
+		return 64800; //(180 x 360)
+	else
+		return $resultSet[0]['box_area'];
+}
+
+function getPathOfSpatialExtent($spatial_location_id)
+{
+	global $gCNN_DBS_ORCA;
+	$resultSet = null;
+
+	$strQuery = 'SELECT bound_box AS box_path FROM dba.tbl_spatial_extents WHERE spatial_location_id = $1';
+	$params = array($spatial_location_id);
+
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	
+	if (!isset($resultSet[0]))
+		return null; //(180 x 360)
+	else
+		return $resultSet[0]['box_path'];
+}
+
 
 function getTemporalCoverage($coverage_id)
 {
@@ -3359,5 +3484,203 @@ function scheduledTaskCheck($dataSourceKey)
 		return false;
 	else
 		return true;
+}
+
+function getTags($keyhash)
+{
+	global $gCNN_DBS_ORCA;
+	$resultSet = null;
+	$strQuery = "SELECT * from dba.tbl_tags where ro_hash = $1";
+	$params = array($keyhash);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	return $resultSet; 
+}
+
+function getTagsForDataSource($ds_key)
+{	
+	global $gCNN_DBS_ORCA;
+	$resultSet = null;
+	$strQuery = "SELECT ro.list_title, ro.registry_object_key as key, ro.key_hash, t.tag, t.id from dba.tbl_registry_objects ro, dba.tbl_tags t where t.ro_hash = ro.key_hash and ro.data_source_key = $1";
+	$params = array($ds_key);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	return $resultSet;	
+}
+
+function getTagsForRegistryObject($ro_hash_key)
+{	
+	global $gCNN_DBS_ORCA;
+	$resultSet = null;
+	$strQuery = "SELECT * from dba.tbl_tags where ro_hash = $1";
+	$params = array($ro_hash_key);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	return $resultSet;	
+}
+
+function deleteTag($tag_id)
+{
+	global $gCNN_DBS_ORCA;
+	$strQuery = "DELETE FROM dba.tbl_tags WHERE id = $1;";
+	$params = array($tag_id);
+	$result = executeUpdateQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	return $result;
+	
+}
+
+function tagExist($tag, $keyHash)
+{
+	global $gCNN_DBS_ORCA;
+	$resultSet = null;
+	$checkQuery = "SELECT * FROM dba.tbl_tags WHERE tag = $1 AND ro_hash = $2";
+	$params = array($tag, $keyHash);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $checkQuery, $params);
+	if($resultSet && sizeof($resultSet) > 0)
+		return true;
+	else
+		return false;
+	
+}
+
+function insertTag($tag, $keyHash, $contributed_by)
+{
+	global $gCNN_DBS_ORCA;
+	$resultSet = null;
+	$insertQuery = 'INSERT INTO dba.tbl_tags ("tag","ro_hash","contributed_by") VALUES ($1, $2, $3)';
+	$params = array($tag, $keyHash, $contributed_by);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $insertQuery, $params);
+	$strQuery = "SELECT CURRVAL(pg_get_serial_sequence($1,$2))";
+	$params = array('dba.tbl_tags', 'id');
+	$tagId = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	return $tagId[0]['currval'];	
+}
+
+function insertDailyStats($slug, $key, $group, $data_source, $day, $page_views,$unique_page_views,$display_title,$type)
+{
+	global $gCNN_DBS_ORCA;
+	$resultSet = null;
+	$strQuery = 'INSERT INTO  dba.tbl_google_statistics ("slug", "key", "data_source","group", "day", "page_views","unique_page_views","display_title","object_class") VALUES ($1, $2, $3, $4, $5, $6,$7,$8,$9)';
+	$params = array($slug, $key, $group, $data_source, $day, $page_views,$unique_page_views,$display_title,$type);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	$strQuery = "SELECT CURRVAL(pg_get_serial_sequence($1,$2))";
+	$params = array('dba.tbl_google_statistics', 'id');
+	$dayStatId = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	return $dayStatId[0]['currval'];
+}
+
+function getDataFromSlug($slug)
+{
+	global $gCNN_DBS_ORCA;	 
+	$resultSet = null;
+	$strQuery = "SELECT object.registry_object_key, object.object_group, object.data_source_key, object.display_title, object.registry_object_class from dba.tbl_registry_objects as object, dba.tbl_url_mappings as slugs where object.registry_object_key = slugs.registry_object_key AND slugs.url_fragment = $1";
+	$params = array($slug);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	if($resultSet)
+	{
+
+		return $resultSet[0]; 
+	}
+	else {
+		return false;
+	}
+}
+
+function getCollectionsViewed($groupingType,$groupingValue,$dateFrom,$dateTo,$sortOrder,$class)
+{
+	global $gCNN_DBS_ORCA;	 
+	$resultSet = null;
+	$strQuery = 'SELECT slug, "key", "group",data_source, display_title, SUM('.$sortOrder.') as '.$sortOrder.'  from dba.tbl_google_statistics where "'.$groupingType.'" = \''.$groupingValue.'\' and  day >= \''.$dateFrom.'\' and day <= \''.$dateTo.'\' and lower(object_class) = \''.$class.'\' GROUP BY slug,key,"group",data_source,display_title ORDER BY '.$sortOrder.' DESC';
+	$params = array();
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	if($resultSet)
+	{
+		return $resultSet; 
+	}
+	else {
+		return false;
+	}
+}
+function getAllCollectionsViewed($dateFrom,$dateTo,$sortOrder,$class)
+{
+	global $gCNN_DBS_ORCA;	 
+	$resultSet = null;
+	$strQuery = 'SELECT slug, "key", "group",data_source, display_title, SUM('.$sortOrder.') as '.$sortOrder.'  from dba.tbl_google_statistics where  day >= \''.$dateFrom.'\' and day <= \''.$dateTo.'\' and lower(object_class) = \''.$class.'\' GROUP BY slug,key,"group",data_source,display_title ORDER BY '.$sortOrder.' DESC';
+	$params = array();
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	if($resultSet)
+	{
+		return $resultSet; 
+	}
+	else {
+		return false;
+	}
+}
+function getOutLinkClicks($dateFrom,$dateTo,$key)
+{
+	
+	$dateFromStamp = strtotime($dateFrom);
+	$dateToStamp =  strtotime($dateTo);
+	
+	global $gCNN_DBS_ORCA;	 
+	$resultSet = null;
+	$strQuery = 'select count(link) as clickcount ,links.registry_object_key, link 
+	from dba.tbl_stat_links links
+	where  date >= $1 and date <= $2 
+	and links.registry_object_key = $3 group by link, links.registry_object_key';
+	$params = array($dateFromStamp,$dateToStamp,$key);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	if($resultSet)
+	{
+		return $resultSet; 
+	}
+	else {
+		return false;
+	}
+}
+function getRegistryObjectKeysForGroup($object_group)
+{
+	global $gCNN_DBS_ORCA;	 
+	$resultSet = null;
+	$strQuery = "SELECT registry_object_key from dba.tbl_registry_objects where object_group = $1";
+	$params = array($object_group);
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	if($resultSet)
+	{
+		return $resultSet; 
+	}
+	else {
+		return false;
+	}
+}
+
+function getNoResultSearches($timeFrom,$timeTo)
+{
+	global $gCNN_DBS_ORCA;	 
+	$resultSet = null;
+	$strQuery = "SELECT COUNT(search_term) as theCount, search_term from dba.tbl_internal_search_results WHERE result_count = '0' AND time_stamp > CAST('".$timeFrom."' AS timestamp) AND time_stamp < CAST('".$timeTo."' AS timestamp) GROUP BY search_term ORDER BY theCount DESC LIMIT 5";
+	$params = array();
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	if($resultSet)
+	{
+		return $resultSet; 
+	}
+	else {
+		return false;
+	}
+}
+
+function getSearchTermForPageView($slug,$dateFrom,$dateTo)
+{
+	
+	global $gCNN_DBS_ORCA;	 
+	$resultSet = null;
+	$strQuery = "select slug,search_term from dba.tbl_internal_search_statistics WHERE time_stamp >= CAST('".$dateFrom."' AS timestamp) AND  time_stamp < CAST('".$dateTo."' AS timestamp) AND slug = '".$slug."'";
+	$params = array();
+	$resultSet = executeQuery($gCNN_DBS_ORCA, $strQuery, $params);
+	if($resultSet)
+	{
+		return $resultSet; 
+	}
+	else {
+		return false;
+	}
 }
 ?>

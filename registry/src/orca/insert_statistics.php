@@ -49,6 +49,7 @@ openDatabaseConnection($gCNN_DBS_DOIS, eCNN_DBS_DOIS);
 	global $gCNN_DBS_ORCA;
 	
 	$theMonth = date("2012-01-01");
+	$theMonth = date("Y-m-d",time(0));
 	$object_count = getRegistryObjectStatCount($theMonth,$registryObjectClass=null);
 	$collection_count = getRegistryObjectStatCount($theMonth,$registryObjectClass='Collection');
 	$party_count = getRegistryObjectStatCount($theMonth,$registryObjectClass='Party');

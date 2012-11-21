@@ -1,0 +1,618 @@
+<!DOCTYPE html><html xmlns:date="http://exslt.org/dates-and-times" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+<meta charset="utf-8">
+<title>phpDocumentor » \CI_URI</title>
+<meta name="author" content="Mike van Riel">
+<meta name="description" content="">
+<link href="../css/template.css" rel="stylesheet" media="all">
+<script src="../js/jquery-1.7.1.min.js" type="text/javascript"></script><script src="../js/jquery-ui-1.8.2.custom.min.js" type="text/javascript"></script><script src="../js/jquery.mousewheel.min.js" type="text/javascript"></script><script src="../js/bootstrap.js" type="text/javascript"></script><script src="../js/template.js" type="text/javascript"></script><script src="../js/prettify/prettify.min.js" type="text/javascript"></script><link rel="shortcut icon" href="../img/favicon.ico">
+<link rel="apple-touch-icon" href="../img/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="72x72" href="../img/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="114x114" href="../img/apple-touch-icon-114x114.png">
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner"><div class="container">
+<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a class="brand" href="../index.html">phpDocumentor</a><div class="nav-collapse"><ul class="nav">
+<li class="dropdown">
+<a href="#api" class="dropdown-toggle" data-toggle="dropdown">
+                                    API Documentation <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a>Packages</a></li>
+<li><a href="../packages/CodeIgniter.html"><i class="icon-folder-open"></i> CodeIgniter</a></li>
+<li><a href="../packages/Default.html"><i class="icon-folder-open"></i> Default</a></li>
+</ul>
+</li>
+<li class="dropdown" id="charts-menu">
+<a href="#charts" class="dropdown-toggle" data-toggle="dropdown">
+                                    Charts <b class="caret"></b></a><ul class="dropdown-menu"><li><a href="../graph_class.html"><i class="icon-list-alt"></i> Class hierarchy diagram</a></li></ul>
+</li>
+<li class="dropdown" id="reports-menu">
+<a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
+                                    Reports <b class="caret"></b></a><ul class="dropdown-menu">
+<li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
+                <span class="label label-info">1170</span></a></li>
+<li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
+                <ul><li>todo 
+                <span class="label label-info">1</span>
+</li></ul></a></li>
+<li><a href="../deprecated.html"><i class="icon-stop"></i> Deprecated elements 
+                <span class="label label-info">0</span></a></li>
+</ul>
+</li>
+</ul></div>
+</div></div>
+<div class="go_to_top"><a href="#___" style="color: inherit">Back to top  <i class="icon-upload icon-white"></i></a></div>
+</div>
+<div id="___" class="container">
+<noscript><div class="alert alert-warning">
+                            Javascript is disabled; several features are only available
+                            if Javascript is enabled.
+                        </div></noscript>
+<div class="row">
+<div class="span4">
+<span class="btn-group visibility" data-toggle="buttons-checkbox"><button class="btn public active" title="Show public elements">Public</button><button class="btn protected" title="Show protected elements">Protected</button><button class="btn private" title="Show private elements">Private</button><button class="btn inherited active" title="Show inherited elements">Inherited</button></span><div class="btn-group view pull-right" data-toggle="buttons-radio">
+<button class="btn details" title="Show descriptions and method names"><i class="icon-list"></i></button><button class="btn simple" title="Show only method names"><i class="icon-align-justify"></i></button>
+</div>
+<ul class="side-nav nav nav-list">
+<li class="nav-header">
+<i class="icon-custom icon-method"></i> Methods</li>
+<li class="method public "><a href="#__construct" title="__construct :: Constructor"><span class="description">Constructor</span><pre>__construct()</pre></a></li>
+<li class="method public "><a href="#_explode_segments" title="_explode_segments :: Explode the URI Segments."><span class="description">Explode the URI Segments.</span><pre>_explode_segments()</pre></a></li>
+<li class="method public "><a href="#_fetch_uri_string" title="_fetch_uri_string :: Get the URI String"><span class="description">Get the URI String</span><pre>_fetch_uri_string()</pre></a></li>
+<li class="method public "><a href="#_filter_uri" title="_filter_uri :: Filter segments for malicious characters"><span class="description">Filter segments for malicious characters</span><pre>_filter_uri()</pre></a></li>
+<li class="method public "><a href="#_reindex_segments" title="_reindex_segments :: Re-index Segments"><span class="description">Re-index Segments</span><pre>_reindex_segments()</pre></a></li>
+<li class="method public "><a href="#_remove_url_suffix" title="_remove_url_suffix :: Remove the suffix from the URL if needed"><span class="description">Remove the suffix from the URL if needed</span><pre>_remove_url_suffix()</pre></a></li>
+<li class="method public "><a href="#_set_uri_string" title="_set_uri_string :: Set the URI String"><span class="description">Set the URI String</span><pre>_set_uri_string()</pre></a></li>
+<li class="method public "><a href="#_slash_segment" title="_slash_segment :: Fetch a URI Segment and add a trailing slash - helper function"><span class="description">Fetch a URI Segment and add a trailing slash - helper function</span><pre>_slash_segment()</pre></a></li>
+<li class="method public "><a href="#_uri_to_assoc" title="_uri_to_assoc :: Generate a key value pair from the URI string or Re-routed URI string"><span class="description">Generate a key value pair from the URI string or Re-routed URI string</span><pre>_uri_to_assoc()</pre></a></li>
+<li class="method public "><a href="#assoc_to_uri" title="assoc_to_uri :: Generate a URI string from an associative array"><span class="description">Generate a URI string from an associative array</span><pre>assoc_to_uri()</pre></a></li>
+<li class="method public "><a href="#rsegment" title='rsegment :: Fetch a URI "routed" Segment'><span class="description">Fetch a URI "routed" Segment</span><pre>rsegment()</pre></a></li>
+<li class="method public "><a href="#rsegment_array" title="rsegment_array :: Routed Segment Array"><span class="description">Routed Segment Array</span><pre>rsegment_array()</pre></a></li>
+<li class="method public "><a href="#ruri_string" title="ruri_string :: Fetch the entire Re-routed URI string"><span class="description">Fetch the entire Re-routed URI string</span><pre>ruri_string()</pre></a></li>
+<li class="method public "><a href="#ruri_to_assoc" title="ruri_to_assoc :: Identical to above only it uses the re-routed segment array"><span class="description">Identical to above only it uses the re-routed segment array</span><pre>ruri_to_assoc()</pre></a></li>
+<li class="method public "><a href="#segment" title="segment :: Fetch a URI Segment"><span class="description">Fetch a URI Segment</span><pre>segment()</pre></a></li>
+<li class="method public "><a href="#segment_array" title="segment_array :: Segment Array"><span class="description">Segment Array</span><pre>segment_array()</pre></a></li>
+<li class="method public "><a href="#slash_rsegment" title="slash_rsegment :: Fetch a URI Segment and add a trailing slash"><span class="description">Fetch a URI Segment and add a trailing slash</span><pre>slash_rsegment()</pre></a></li>
+<li class="method public "><a href="#slash_segment" title="slash_segment :: Fetch a URI Segment and add a trailing slash"><span class="description">Fetch a URI Segment and add a trailing slash</span><pre>slash_segment()</pre></a></li>
+<li class="method public "><a href="#total_rsegments" title="total_rsegments :: Total number of routed segments"><span class="description">Total number of routed segments</span><pre>total_rsegments()</pre></a></li>
+<li class="method public "><a href="#total_segments" title="total_segments :: Total number of segments"><span class="description">Total number of segments</span><pre>total_segments()</pre></a></li>
+<li class="method public "><a href="#uri_string" title="uri_string :: Fetch the entire URI string"><span class="description">Fetch the entire URI string</span><pre>uri_string()</pre></a></li>
+<li class="method public "><a href="#uri_to_assoc" title="uri_to_assoc :: Generate a key value pair from the URI string"><span class="description">Generate a key value pair from the URI string</span><pre>uri_to_assoc()</pre></a></li>
+<li class="nav-header private">» Private</li>
+<li class="method private "><a href="#_detect_uri" title="_detect_uri :: Detects the URI"><span class="description">Detects the URI</span><pre>_detect_uri()</pre></a></li>
+<li class="method private "><a href="#_parse_cli_args" title="_parse_cli_args :: Parse cli arguments"><span class="description">Parse cli arguments</span><pre>_parse_cli_args()</pre></a></li>
+<li class="nav-header">
+<i class="icon-custom icon-property"></i> Properties</li>
+<li class="property public "><a href="#%24keyval" title="$keyval :: List of cached uri segments"><span class="description">List of cached uri segments</span><pre>$keyval</pre></a></li>
+<li class="property public "><a href="#%24rsegments" title="$rsegments :: Re-indexed list of uri segments
+Starts at 1 instead of 0"><span class="description">Re-indexed list of uri segments
+Starts at 1 instead of 0</span><pre>$rsegments</pre></a></li>
+<li class="property public "><a href="#%24segments" title="$segments :: List of uri segments"><span class="description">List of uri segments</span><pre>$segments</pre></a></li>
+<li class="property public "><a href="#%24uri_string" title="$uri_string :: Current uri string"><span class="description">Current uri string</span><pre>$uri_string</pre></a></li>
+</ul>
+</div>
+<div class="span8">
+<a name="%5CCI_URI" id="\CI_URI"></a><ul class="breadcrumb">
+<li>
+<a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
+</li>
+<li><a href="../namespaces/global.html">global</a></li>
+<li class="active">
+<span class="divider">\</span><a href="../classes/CI_URI.html">CI_URI</a>
+</li>
+</ul>
+<div href="../classes/CI_URI.html" class="element class">
+<p class="short_description">URI Class</p>
+<div class="details">
+<p class="long_description"><p>Parses URIs and determines routing</p></p>
+<table class="table table-bordered">
+<tr>
+<th>package</th>
+<td><a href="../packages/CodeIgniter.Libraries.html">CodeIgniter</a></td>
+</tr>
+<tr>
+<th>subpackage</th>
+<td>Libraries</td>
+</tr>
+<tr>
+<th>category</th>
+<td>URI</td>
+</tr>
+<tr>
+<th>author</th>
+<td><a href="">ExpressionEngine Dev Team</a></td>
+</tr>
+<tr>
+<th>link</th>
+<td><a href="http://codeigniter.com/user_guide/libraries/uri.html">http://codeigniter.com/user_guide/libraries/uri.html</a></td>
+</tr>
+</table>
+<h3>
+<i class="icon-custom icon-method"></i> Methods</h3>
+<a name="__construct" id="__construct"></a><div class="element clickable method public __construct" data-toggle="collapse" data-target=".__construct .collapse">
+<h2>Constructor</h2>
+<pre>__construct() </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Simply globalizes the $RTR object.  The front
+loads the Router class early on so it's not available
+normally as other classes are.</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="_explode_segments" id="_explode_segments"></a><div class="element clickable method public _explode_segments" data-toggle="collapse" data-target="._explode_segments .collapse">
+<h2>Explode the URI Segments.</h2>
+<pre>_explode_segments() : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>The individual segments will
+be stored in the $this->segments array.</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+</div></div>
+</div>
+<a name="_fetch_uri_string" id="_fetch_uri_string"></a><div class="element clickable method public _fetch_uri_string" data-toggle="collapse" data-target="._fetch_uri_string .collapse">
+<h2>Get the URI String</h2>
+<pre>_fetch_uri_string() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_filter_uri" id="_filter_uri"></a><div class="element clickable method public _filter_uri" data-toggle="collapse" data-target="._filter_uri .collapse">
+<h2>Filter segments for malicious characters</h2>
+<pre>_filter_uri($str) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$str</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_reindex_segments" id="_reindex_segments"></a><div class="element clickable method public _reindex_segments" data-toggle="collapse" data-target="._reindex_segments .collapse">
+<h2>Re-index Segments</h2>
+<pre>_reindex_segments() : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>This function re-indexes the $this->segment array so that it
+starts at 1 rather than 0.  Doing so makes it simpler to
+use functions like $this->uri->segment(n) since there is
+a 1:1 relationship between the segment array and the actual segments.</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+</div></div>
+</div>
+<a name="_remove_url_suffix" id="_remove_url_suffix"></a><div class="element clickable method public _remove_url_suffix" data-toggle="collapse" data-target="._remove_url_suffix .collapse">
+<h2>Remove the suffix from the URL if needed</h2>
+<pre>_remove_url_suffix() : void</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+</div></div>
+</div>
+<a name="_set_uri_string" id="_set_uri_string"></a><div class="element clickable method public _set_uri_string" data-toggle="collapse" data-target="._set_uri_string .collapse">
+<h2>Set the URI String</h2>
+<pre>_set_uri_string($str) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$str</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_slash_segment" id="_slash_segment"></a><div class="element clickable method public _slash_segment" data-toggle="collapse" data-target="._slash_segment .collapse">
+<h2>Fetch a URI Segment and add a trailing slash - helper function</h2>
+<pre>_slash_segment($n, $where, $which) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$n</h4>
+<code></code><p>integer</p></div>
+<div class="subelement argument">
+<h4>$where</h4>
+<code></code><p>string</p></div>
+<div class="subelement argument">
+<h4>$which</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_uri_to_assoc" id="_uri_to_assoc"></a><div class="element clickable method public _uri_to_assoc" data-toggle="collapse" data-target="._uri_to_assoc .collapse">
+<h2>Generate a key value pair from the URI string or Re-routed URI string</h2>
+<pre>_uri_to_assoc(integer $n, array $default, string $which) : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$n</h4>
+<code>integer</code><p>the starting segment number</p></div>
+<div class="subelement argument">
+<h4>$default</h4>
+<code>array</code><p>an array of default values</p></div>
+<div class="subelement argument">
+<h4>$which</h4>
+<code>string</code><p>which array we should use</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>array</code></div>
+</div></div>
+</div>
+<a name="assoc_to_uri" id="assoc_to_uri"></a><div class="element clickable method public assoc_to_uri" data-toggle="collapse" data-target=".assoc_to_uri .collapse">
+<h2>Generate a URI string from an associative array</h2>
+<pre>assoc_to_uri(array $array) : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$array</h4>
+<code>array</code><p>an associative array of key/values</p>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>array</code></div>
+</div></div>
+</div>
+<a name="rsegment" id="rsegment"></a><div class="element clickable method public rsegment" data-toggle="collapse" data-target=".rsegment .collapse">
+<h2>Fetch a URI "routed" Segment</h2>
+<pre>rsegment($n, $no_result) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>This function returns the re-routed URI segment (assuming routing rules are used)
+based on the number provided.  If there is no routing this function returns the
+same result as $this->segment()</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$n</h4>
+<code></code><p>integer</p></div>
+<div class="subelement argument">
+<h4>$no_result</h4>
+<code></code><p>bool</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="rsegment_array" id="rsegment_array"></a><div class="element clickable method public rsegment_array" data-toggle="collapse" data-target=".rsegment_array .collapse">
+<h2>Routed Segment Array</h2>
+<pre>rsegment_array() : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>array</code></div>
+</div></div>
+</div>
+<a name="ruri_string" id="ruri_string"></a><div class="element clickable method public ruri_string" data-toggle="collapse" data-target=".ruri_string .collapse">
+<h2>Fetch the entire Re-routed URI string</h2>
+<pre>ruri_string() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="ruri_to_assoc" id="ruri_to_assoc"></a><div class="element clickable method public ruri_to_assoc" data-toggle="collapse" data-target=".ruri_to_assoc .collapse">
+<h2>Identical to above only it uses the re-routed segment array</h2>
+<pre>ruri_to_assoc(integer $n, array $default) : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$n</h4>
+<code>integer</code><p>the starting segment number</p></div>
+<div class="subelement argument">
+<h4>$default</h4>
+<code>array</code><p>an array of default values</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>array</code></div>
+</div></div>
+</div>
+<a name="segment" id="segment"></a><div class="element clickable method public segment" data-toggle="collapse" data-target=".segment .collapse">
+<h2>Fetch a URI Segment</h2>
+<pre>segment($n, $no_result) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>This function returns the URI segment based on the number provided.</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$n</h4>
+<code></code><p>integer</p></div>
+<div class="subelement argument">
+<h4>$no_result</h4>
+<code></code><p>bool</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="segment_array" id="segment_array"></a><div class="element clickable method public segment_array" data-toggle="collapse" data-target=".segment_array .collapse">
+<h2>Segment Array</h2>
+<pre>segment_array() : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>array</code></div>
+</div></div>
+</div>
+<a name="slash_rsegment" id="slash_rsegment"></a><div class="element clickable method public slash_rsegment" data-toggle="collapse" data-target=".slash_rsegment .collapse">
+<h2>Fetch a URI Segment and add a trailing slash</h2>
+<pre>slash_rsegment($n, $where) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$n</h4>
+<code></code><p>integer</p></div>
+<div class="subelement argument">
+<h4>$where</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="slash_segment" id="slash_segment"></a><div class="element clickable method public slash_segment" data-toggle="collapse" data-target=".slash_segment .collapse">
+<h2>Fetch a URI Segment and add a trailing slash</h2>
+<pre>slash_segment($n, $where) : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$n</h4>
+<code></code><p>integer</p></div>
+<div class="subelement argument">
+<h4>$where</h4>
+<code></code><p>string</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="total_rsegments" id="total_rsegments"></a><div class="element clickable method public total_rsegments" data-toggle="collapse" data-target=".total_rsegments .collapse">
+<h2>Total number of routed segments</h2>
+<pre>total_rsegments() : integer</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>integer</code></div>
+</div></div>
+</div>
+<a name="total_segments" id="total_segments"></a><div class="element clickable method public total_segments" data-toggle="collapse" data-target=".total_segments .collapse">
+<h2>Total number of segments</h2>
+<pre>total_segments() : integer</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>integer</code></div>
+</div></div>
+</div>
+<a name="uri_string" id="uri_string"></a><div class="element clickable method public uri_string" data-toggle="collapse" data-target=".uri_string .collapse">
+<h2>Fetch the entire URI string</h2>
+<pre>uri_string() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="uri_to_assoc" id="uri_to_assoc"></a><div class="element clickable method public uri_to_assoc" data-toggle="collapse" data-target=".uri_to_assoc .collapse">
+<h2>Generate a key value pair from the URI string</h2>
+<pre>uri_to_assoc(integer $n, array $default) : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>This function generates and associative array of URI data starting
+at the supplied segment. For example, if this is your URI:</p>
+
+<p>example.com/user/search/name/joe/location/UK/gender/male</p>
+
+<p>You can use this function to generate an array with this prototype:</p>
+
+<p>array (
+        name => joe
+        location => UK
+        gender => male
+     )</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$n</h4>
+<code>integer</code><p>the starting segment number</p></div>
+<div class="subelement argument">
+<h4>$default</h4>
+<code>array</code><p>an array of default values</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>array</code></div>
+</div></div>
+</div>
+<a name="_detect_uri" id="_detect_uri"></a><div class="element clickable method private _detect_uri" data-toggle="collapse" data-target="._detect_uri .collapse">
+<h2>Detects the URI</h2>
+<pre>_detect_uri() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>This function will detect the URI automatically and fix the query string
+if necessary.</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<a name="_parse_cli_args" id="_parse_cli_args"></a><div class="element clickable method private _parse_cli_args" data-toggle="collapse" data-target="._parse_cli_args .collapse">
+<h2>Parse cli arguments</h2>
+<pre>_parse_cli_args() : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"><p>Take each command line argument and assume it is a URI segment.</p></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>private</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>string</code></div>
+</div></div>
+</div>
+<h3>
+<i class="icon-custom icon-property"></i> Properties</h3>
+<a name="%24keyval" id="$keyval"> </a><div class="element clickable property public $keyval" data-toggle="collapse" data-target=".$keyval .collapse">
+<h2>List of cached uri segments</h2>
+<pre>$keyval : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24rsegments" id="$rsegments"> </a><div class="element clickable property public $rsegments" data-toggle="collapse" data-target=".$rsegments .collapse">
+<h2>Re-indexed list of uri segments
+Starts at 1 instead of 0</h2>
+<pre>$rsegments : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24segments" id="$segments"> </a><div class="element clickable property public $segments" data-toggle="collapse" data-target=".$segments .collapse">
+<h2>List of uri segments</h2>
+<pre>$segments : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+<a name="%24uri_string" id="$uri_string"> </a><div class="element clickable property public $uri_string" data-toggle="collapse" data-target=".$uri_string .collapse">
+<h2>Current uri string</h2>
+<pre>$uri_string : string</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>access</th>
+<td>public</td>
+</tr></table>
+</div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row"><footer class="span12">
+            Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
+            Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a8</a> and<br>
+            generated on 2012-07-27T12:29:21+10:00.<br></footer></div>
+</div>
+</body>
+</html>

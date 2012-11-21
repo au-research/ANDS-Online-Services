@@ -70,6 +70,7 @@ $(document).ready(function(){
 	
 	
 	$('#clearSearch').tipsy({live:true, gravity:'se'});
+
 	
 	function initVocabPage(){
 		loadBigTree('http://purl.org/au-research/vocabulary/anzsrc-for/2008/01', 'anzsrc-for');
@@ -344,7 +345,7 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 	   			data:{uri:vocab_uri},
 				url: base_url+"/browse/vocabSearchResult/"+type+'/'+page,
 		        success:function(data){
-					$('#'+type+'_search_result').html(data);
+					$('#vocab_search_result').html(data);
 					$(".accordion").accordion({autoHeight:false, collapsible:true,active:false});
 		        },
 		        error:function(msg){}
@@ -366,6 +367,7 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 	var hash = window.location.hash;
 	//console.log(hash);
 	
+
 	/*GET HASH TAG*/
 	$(window).hashchange(function(){
 		//var hash = window.location.hash;
@@ -590,13 +592,52 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 	$('ul.sf-menu').superfish({autoArrows:false, delay:50});//menu
 	
 	
-	//$('#advanced').hide(); //already hides in css
-	
 	$('#clearSearch').live('click', function(){	//clearing search box, also clears everything
 		clearEverything();
 	});
 
-	
+	$('a.fromQuery').live('click', function(e){	//determine if someone has viewed a record as a result of a search query
+		e.preventDefault();
+		var theurl = $(this).attr('href');				
+		var theslug = $(this).attr('theSlug');		
+		var stat_url = base_url+"search/updateSearchStatistics";
+			$.ajax({
+		  		type:"POST",
+		  		url: stat_url,
+		  		data: {query:decodeURIComponent(search_term), slug:theslug},
+		  		success: function(msg){
+		  			window.location = theurl;
+		  		},
+		  		error: function(request,error) 
+		  			{
+		  			 console.error(request);
+		  			 console.log(arguments);
+		  			}
+		  		});	
+	});	
+ /*   $('a.fromQuery').live('mousedown', function(event) {
+    	alert("we have a mouse down event")
+        switch (event.which) {
+            case 1:
+                alert('Left mouse button pressed');
+                $(this).attr('target','_self');
+                break;
+            case 2:
+                alert('Middle mouse button pressed');
+                alert($(this).attr('target'));
+                $(this).attr('target','_blank');
+                break;
+            case 3:
+               alert('Right mouse button pressed');
+               var context = $(this).attr('contextmenu').html()
+               alert(context)
+                $(this).attr('target','_blank');
+                break;
+            default:
+                alert('You have a strange mouse');
+                $(this).attr('target','_self"');
+        }
+    }); */
 	
 	function clearEverything(){
 		//clearing the values
@@ -750,7 +791,6 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 		});
 		
 		
-		
 		//if there is no brief, brief will be the first full
 		if(brief==null){
 			$('.descriptions div').each(function(){
@@ -787,11 +827,178 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 
 		
 		var key = $('#key').html();
+		var keyHash = $('#keyHash').html();		
 		var itemClass = $('#class').text();
 
 		//console.log(key);
 		
 		initConnectionsBox();//setup the connections Box
+		
+	//init the tag info div
+		$('#tag_close').click(function()
+				{
+			$('#add_tag_form').hide();
+				})
+		var contributed_by = '';
+		var captchaOK = '';		
+		$('#tag_show').click(function(){
+
+			var disp = $('#tag_view').css('display');
+			if(disp=='none')
+			{ 
+				$('#tag_view').show();
+
+			}
+			if(disp=='block')
+			{ 
+				$('#tag_view').hide();
+				$('#add_tag_form').hide();
+			}			
+		});	
+		
+		$('#tag_add').click(function(){
+			captchaOK = '';
+			$.ajax({
+	  			type:"POST",   
+	  			url: orca_service_rda, 
+	  			data: {task:'getUser'},   
+	  				success:function(msg){	
+	  					contributed_by = msg;
+	  					if(contributed_by.indexOf('Logged in')>0)
+	  					{
+	  						captchaOK = 'OK';
+	  					}else{
+	  						resetCaptcha();
+
+	  					}
+	  				},
+	  				error:function(msg){
+	  					//alert(msg);
+	  				}
+	  			});	
+			$('#add_tag_form').show();
+		});	
+
+		$('a.recordOutBound').click(function(e){
+			e.preventDefault();
+			var link = $(this).attr('href');
+			var type = $(this).attr('type');
+			var key = $('#key').html();
+			//console.log('recording:',key, link, type);
+
+			$.ajax({
+				type:"POST",
+				url:base_url+"api/recordOutBound/",
+				data:{link:link,type:type,key:key},
+				success:function(data){
+					if(data.status=='OK'){
+						console.log(data);
+					}else if(data.status=='ERROR'){
+						console.error(data);
+					}
+					console.log(data);
+				},
+				error: function(data){
+					console.error(data);
+				}
+			});
+			window.open(link);
+		});
+		
+		$('#tag_submit').click(function(){
+			var theTag = $('#new_tag').val();
+			theTag = theTag.replace(/[^a-zA-Z0-9\-]/g,"");
+			var keyHash = $('#keyHash').html();	
+			var key = $('#key').html();		
+			var datasource_key = $('#originating_source').html();
+			var capture_img = $('#img').val();
+			var capture_response = $('#code').val();
+
+			$('#captchaError').html('<br />')
+			$('#tagError').html('<br />');
+
+			if(theTag=='') 
+			{
+				$('#tagError').html('You must provide a tag');
+				resetCaptcha(captchaOK);					
+			}else{	
+				$.ajax({
+		  		type:"GET",   
+		  		url: orca_service_rda, 
+		  		data: {task:'checkTheCaptcha',img:capture_img,response:capture_response},   
+		  			success:function(msg){	
+		  			if(msg=='FAILED' && captchaOK!='OK')
+		  				{
+		  					captchaOK = msg
+	  						resetCaptcha('FAILED');
+		  				}	else {
+		  					captchaOK = 'OK';
+		  					var url = base_url+"tag/addRecordTag";
+							$.ajax({
+								type:"POST",   
+								url: url, 
+								data:"tag="+escape(theTag)+"&keyHash="+keyHash+"&contributed_by="+contributed_by,   
+				  					success:function(msg){	
+				  						if(msg==1)
+				  						{
+				  							$.ajax({
+				  								type:"GET",   
+				  								url: orca_service_rda,
+				  								data: {task:'resync',key:key,datasource_key:datasource_key},
+				  				  					success:function(msg){	
+				  				  						//alert(msg);
+				  				  					},
+				  				  					error:function(msg){
+				  				  					}
+				  				  				});	
+				  							var tagList = $('#tag_lists').html();
+				  							if($('.tag_text').length)
+				  								{
+				  									tagList = tagList + ' | <span class="tag_text"> ' + theTag + '</span>';	
+				  								}else{
+				  									tagList = ' <span class="tag_text"> ' + theTag + '</span>';
+				  								}
+				  							$('#tag_lists').html(tagList);
+				  						}
+				  						$('#new_tag').val('');
+				  						$('#add_tag_form').hide();
+				  					},
+				  					error:function(msg){
+				  					//alert(msg);
+				  					}
+				  				});		  					
+		  				}					
+		  			},
+		  			error:function(msg){
+		  				
+		  			}
+		  		});	
+	  	
+				}
+			});		
+
+		function resetCaptcha(REASON)
+		{
+			if(REASON!='OK')
+				{
+				$.ajax({
+					type:"POST",   
+					url: orca_service_rda, 
+					data: {task:'getTheCaptcha'},   
+						success:function(msg){
+							$('#captcha_id').html(msg)
+							if(REASON=='FAILED')
+			  				{
+									$('#captchaError').html('Code entered incorrectly<br />');
+									$('#code').val('');
+			  				}
+						},
+						error:function(msg){
+							//alert("Error: " + msg);
+						}
+					});	
+				}
+		}
 		
 		if(itemClass=='Collection') {
 			initSubjectsSEEALSO();
@@ -838,7 +1045,7 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 ///////////////////////
 // Set up the institutional page views by using ajax to load all the group stats
 /////////////////////////
-	
+
 	function initInstitutionViewPage(){
 		var key = $('#key').html();
 		var group = location.href.substr(location.href.indexOf("groupName=")+10,location.href.length);
@@ -1475,11 +1682,12 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 		    $.each(coverages, function(){
 		    	setTimeout('500');
 		    	var coverageText = $(this).text();
-		    	if(coverageText.indexOf('northlimit')==-1){
+		    	if(coverageText.indexOf('northlimit')==-1 && coverageText.indexOf('north')==-1){
 		    		
 		    		//there is no north limit
+		    		//console.log("coverageText1" ,coverageText);
 		    		if(validateLonLatText(coverageText)){//if the coverage text is resolvable (normal way)
-		    			//console.log(coverageText);
+		    			//console.log("YES " + coverageText);
 						coverage = $(this).html();
 						drawable = true;
 						split = coverage.split(' ');
@@ -1522,17 +1730,17 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 					}else{
 						//CC-145
 						//console.log(coverageText);
-						locationText.push(coverageText);
+						//locationText.push(coverageText);
 						
 						//setTimeout(drawTheAddress(coverageText, map2),100000);
 						//$('#spatial_coverage_map').hide();	
 					}
 		    		
-		    	}else{
+		    	}else if(coverageText.indexOf('northlimit') >= 0){
 		    		drawable = true;
 		    		mapContainsOnlyMarkers = false;
 		    		//there is a northlimit in the coverage text
-		    		//console.log(coverages);
+		    		//console.log("coverageText2" ,coverageText);
 
 			    	$.each(coverages, function(){
 			    		coverage = $(this).html();
@@ -1571,6 +1779,32 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 			    		//console.log(poly);
 					});
 		    	}
+		    	else if(coverageText.indexOf('north') >= 0){
+		    		drawable = true;
+			    	split = coverageText.split(';');
+			    	//console.log("coverageText3" ,coverageText);	
+			    		$.each(split, function(){
+							word = this.split('=');
+							
+							if(jQuery.trim(word[0])=='north') n=word[1];
+							if(jQuery.trim(word[0])=='east') e=word[1];
+						});
+			    		var coord = new google.maps.LatLng(parseFloat(n), parseFloat(e));
+			    		//console.log("coord" , coord);
+			    		var marker = new google.maps.Marker({
+			            map: map2,
+			            position: coord,
+			            draggable: false,
+			            raiseOnDrag:false,
+			            visible:true
+			        });
+			        // CC-197/CC-304 - Center map on markers
+			        bounds.extend(coord);
+
+
+			        marker.setMap(map2);
+			    		//console.log(poly);
+				}
 		    });
 		    //console.log(locationText);
 		    var next = 0;
@@ -1688,19 +1922,20 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
   					$('#map-help-stuff').html('');
   					//$('#search-result').css('opacity','1.0');
   					initFormat();
-  					if($('#realNumFound').html() !='0'){//only update statistic when there is a result
+  				//	if($('#realNumFound').html() !='0'){//only update statistic when there is a result
+  						var numFound = $('#realNumFound').html();
   						//update search statistics
   						$.ajax({
   				  			type:"POST",
   				  			url: base_url+"search/updateStatistic/",
-  				  			data:"q="+decodeURIComponent(search_term)+"&classFilter="+classFilter+"&typeFilter="+typeFilter+"&groupFilter="+groupFilter+"&subjectFilter="+subjectFilter+"&licenceFilter="+licenceFilter+"&page="+page+"&spatial_included_ids="+spatial_included_ids+"&temporal="+temporal,   
+  				  			data:"q="+decodeURIComponent(search_term)+"&classFilter="+classFilter+"&typeFilter="+typeFilter+"&groupFilter="+groupFilter+"&subjectFilter="+subjectFilter+"&licenceFilter="+licenceFilter+"&page="+page+"&spatial_included_ids="+spatial_included_ids+"&temporal="+temporal+"&numFound="+numFound,   
   				  				success:function(msg){},
   				  				error:function(msg){}
   				  			});
-  					}
+  				//	}
   				},
   				error:function(msg){
-  					console.log('error');
+  					//console.log('error');
   				}
   		});	
 	}
@@ -1724,19 +1959,22 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 			$(this).addClass('active');
 		});
 		
-		$("#scrollable").scrollable({circular: true}).autoscroll(6000);
-		var api = $("#scrollable").data("scrollable");
-		api.onSeek(function() {
-			var currentImageIndex = this.getIndex()+2;
-			var prev = this.getIndex() + 1;
-			var next = this.getIndex() + 3;
-			currentKey = $("#items img:nth-child(" + currentImageIndex + ")").attr('alt');
-			$('#items img').removeClass('current-scroll');
-			$("#items img:nth-child(" + currentImageIndex + ")").addClass('current-scroll');
-			currentDescription = $('div[name="'+currentKey+'"]').html();
-			$('#display-here').html(currentDescription);
-			$('#display-here a').tipsy({live:true, gravity:'w'});
-		});
+		if ($("#ref_spotlight_data div").length > 0)
+		{
+			$("#scrollable").scrollable({circular: true}).autoscroll(6000);
+			var api = $("#scrollable").data("scrollable");
+			api.onSeek(function() {
+				var currentImageIndex = this.getIndex()+2;
+				var prev = this.getIndex() + 1;
+				var next = this.getIndex() + 3;
+				currentKey = $("#items img:nth-child(" + currentImageIndex + ")").attr('alt');
+				$('#items img').removeClass('current-scroll');
+				$("#items img:nth-child(" + currentImageIndex + ")").addClass('current-scroll');
+				currentDescription = $('div[name="'+currentKey+'"]').html();
+				$('#display-here').html(currentDescription);
+				$('#display-here a').tipsy({live:true, gravity:'w'});
+			});
+		}
 		$("#items img").click(function(){
 			api.seekTo($(this).index()-1);
 			if($(this).hasClass('current-scroll')){
@@ -2473,7 +2711,7 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 	
 	/*GOOGLE MAP*/
 
-	$( "#start-drawing" ).button({
+	/*$( "#start-drawing" ).button({
 		text: true,
 		icons: {
 			primary: "ui-icon-pencil"
@@ -2486,9 +2724,9 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 		$('#map-help-stuff').fadeIn();
 		$(this).hide();
 	});
-	
+	*/
 	$( "#expand" ).button(
-		{text: false,icons: {primary: "ui-icon-arrowthickstop-1-e"}
+		{text: false,icons: {primary: "ui-icon-circle-arrow-e"}
 	}).click(function(){
 		$('#advanced-text').hide();
     	$('#advanced-spatial').css('width', '100%');
@@ -2501,7 +2739,7 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 	
 	$('#collapse').hide();
 	$("#collapse").button(
-			{text: false,icons: {primary: "ui-icon-arrowthickstop-1-w"}
+			{text: false,icons: {primary: "ui-icon-circle-arrow-w"}
 	}).click(function(){
 			$('#advanced-text').show();
 	    	$('#advanced-spatial').css('width', '300px');
@@ -2527,7 +2765,13 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
     	//console.log(drawingArrays);
     	//google.maps.event.trigger(map, 'resize');
     	//map.setZoom( map.getZoom() );
-    	spatial_included_ids='';
+    	clearMap();
+    	$(this).hide();
+    	changeHashTo(formatSearch(search_term,1,classFilter));
+    });
+	
+	function clearMap(){
+		spatial_included_ids='';
     	for(i in drawingArrays){
     		if(drawingArrays[i]!=null){
     			drawingArrays[i].setMap(null);
@@ -2535,11 +2779,8 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
     		}
     	}
     	$('#clearSpatial').hide();
-    	$('#start-drawing').show();
-    	$(this).hide();
     	n='';s='';e='';w='';
-    	changeHashTo(formatSearch(search_term,1,classFilter));
-    });
+	}
 	
 	function resetZoom(){
 		google.maps.event.trigger(map, 'resize');
@@ -2568,6 +2809,81 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
       mapTypeId: google.maps.MapTypeId.ROADMAP
     };
     var map = new google.maps.Map(document.getElementById("spatialmap"),myOptions);
+    
+    
+    var drawingManager = new google.maps.drawing.DrawingManager({
+        drawingMode: google.maps.drawing.OverlayType.RECTANGLE,
+        drawingControl: true,
+        drawingControlOptions: {
+          position: google.maps.ControlPosition.TOP_CENTER,
+          drawingModes: [
+           // google.maps.drawing.OverlayType.MARKER,
+           // google.maps.drawing.OverlayType.CIRCLE,
+            google.maps.drawing.OverlayType.RECTANGLE
+          ]
+        },
+        rectangleOptions:{
+        	fillColor: '#FF0000'
+        }
+      });
+      drawingManager.setMap(map);
+      var rectangleOptions = drawingManager.get('rectangleOptions');
+      rectangleOptions.fillColor= '#FF0000';
+      rectangleOptions.strokeColor= "#FF0000";
+      rectangleOptions.fillOpacity= 0.1;
+      rectangleOptions.strokeOpacity= 0.8;
+      rectangleOptions.strokeWeight= 2;
+      rectangleOptions.clickable= false;
+      rectangleOptions.editable= true;
+      rectangleOptions.zIndex= 1;     
+      
+      drawingManager.set('rectangleOptions', rectangleOptions);
+    
+      google.maps.event.addListener(drawingManager, 'overlaycomplete', function(e) {
+          if (e.type == google.maps.drawing.OverlayType.RECTANGLE) {
+          // Switch back to non-drawing mode after drawing a shape.
+        
+          drawingManager.setDrawingMode(null);
+          var geoCodeRectangle = e.overlay;
+          drawingArrays.push(geoCodeRectangle);
+          //map.fitBounds(ui.item.bounds);
+          spatialSearch(geoCodeRectangle);
+        }
+          if (e.type == google.maps.drawing.OverlayType.CIRCLE) {
+              // Switch back to non-drawing mode after drawing a shape.
+            
+              drawingManager.setDrawingMode(null);
+              var geoCodeRectangle = e.overlay;
+              drawingArrays.push(geoCodeRectangle);
+              //map.fitBounds(ui.item.bounds);
+              spatialSearch(geoCodeRectangle);
+            }
+      });
+      
+     /* google.maps.event.addListener(drawingManager, 'drawingmode_changed', function(e) {
+    	  var drawingMode = drawingManager.getDrawingMode();
+    	  if(drawingMode==='rectangle') clearMap();
+    	    $('img').each(function(){
+    	    	if($(this).attr('src')=='http://maps.gstatic.com/mapfiles/drawing.png'){
+    	    		$(this).attr('src', 'null');
+    	    	}
+    	    });
+      });
+      
+     google.maps.event.addListenerOnce(map, 'idle', function(){
+   	  $('img').each(function(){
+
+	    	if($(this).attr('src')=='http://maps.gstatic.com/mapfiles/drawing.png'){
+	    		//console.log("tilesloaded " + $(this).attr('src'));
+	    		$(this).attr('src', base_url+'/img/drawing.png');
+	    	}
+	  });
+     });
+     //console.log(drawingManager)
+      */
+
+
+    
     //GEOCODER
     var geocoder = new google.maps.Geocoder();
     
@@ -2597,13 +2913,13 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 	          drawingArrays.push(geoCodeRectangle);
 	          map.fitBounds(ui.item.bounds);
 	          spatialSearch(geoCodeRectangle);
-	          $('#start-drawing').hide();
 	          $('#clear-drawing').show();
 	          //console.log(location);
 	          //marker.setPosition(location);
         }
       });
 
+    /*
     function startDrawing(){
     	var icon = new google.maps.MarkerImage(base_url+'img/square.png',
   		      new google.maps.Size(16, 16),
@@ -2714,7 +3030,7 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
          }
     }//END startDrawing
     
-    
+    */
     
     function spatialSearch(rt){
     	bnds = rt.getBounds();
@@ -2800,7 +3116,7 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
     	
 		//if(!drawable) $('#spatial_coverage_map').hide();
     }
-    
+
 });//END DOCUMENT READY
 
 

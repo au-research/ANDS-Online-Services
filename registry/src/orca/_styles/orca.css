@@ -700,8 +700,8 @@ a.borderless{
     font: bold 12px Helvetica, Arial, sans-serif;
     display: block;
     float: left;
-    padding: 0 10px;   
-    line-height:36px; 
+    padding: 0 10px;
+    line-height:36px;
     border-right:solid 1px #7f7f7f;
     height:36px;
 }
@@ -725,3 +725,118 @@ a.borderless{
     height:auto;
 }
 
+.reportDate{
+	color: #877c70;
+	font-style: italic;
+	font-weight: 300;
+}
+.reportText{
+	color: #000000;
+	font-size:0.9em;
+	font-weight: 600;
+}
+.reportDiv{
+	padding-left:40px;	
+	padding-bottom:40px
+}
+.reportMauve{
+	background-color:#BCA9F5;
+	color: #000000;
+	font-size:0.9em;
+	font-weight: 600;	
+	padding:8px;
+	border:1px solid #000000;	
+}
+.reportGrey{
+	background: #f0f0f0;
+    background: -webkit-linear-gradient(top, #f7f7f7, #d1d1d1);
+    background: -moz-linear-gradient(top, #f7f7f7, #d1d1d1);
+    background: -ms-linear-gradient(top, #f7f7f7, #d1d1d1);
+    background: -o-linear-gradient(top, #f7f7f7, #d1d1d1);
+    -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=1, Direction=90, Color='#ffffff')";
+    filter: progid:DXImageTransform.Microsoft.Shadow(Strength=1, Direction=90, Color='#ffffff');
+    -webkit-transition: border-color .218s;
+    -moz-transition: border .218s;
+    -o-transition: border-color .218s;
+    transition: border-color .218s;
+    border: solid 1px #7f7f7f;
+	color: #000000;
+	font-size:0.9em;
+	font-weight: 600;	
+	padding:8px;
+}
+.reportBlue{
+	background-color:#2E9AFE;
+	color: #000000;
+	font-size:0.9em;
+	font-weight: 600;	
+	padding:8px;
+	border:1px solid #000000;		
+}
+
+.reportTable{
+	cell-spacing:0px;	
+	border-spacing:0;
+  	border-collapse:collapse;
+	
+}
+.reportResultCell{
+	background-color:#FFFFFF;
+	color: #000000;
+	font-size:0.9em;
+	padding:8px;
+	border:1px solid #000000;	
+}
+.reportHeaderCell{
+	font-weight: 600;	
+	align:center;	
+}
+
+ul.tag-list{
+	list-style-type:none;
+	padding:0;
+	margin: -7px 0px;
+}
+
+ul.tag-list li{
+	display:inline-block;
+	width:auto;
+	position:relative;
+	padding-right:10px;
+}
+
+ul.tag-list li a{
+	padding: 5px;
+	border: 1px solid #CCC;
+	background: #DDD;
+	text-decoration: none;
+	color: #454545;
+	margin: 4px;
+	line-height: 37px;
+}
+
+ul.tag-list li a.hover{
+	border:1px solid #aaa;
+}
+
+ul.tag-list li span.deleteImg{
+	background: transparent url("../_images/error_icon.png") no-repeat left;
+	width: 20px;
+	height:30px;
+	position:absolute;
+	top:-7px;right:3px;
+	cursor:pointer;
+	display:none;
+}
+
+
+#addTag a{
+	background: #0a450a;
+	color: white;
+	/*background:  ransparent url("../rda/img/tag_16_icon.png") no-repeat left;
+	width: 20px;
+	height:18px;
+	line-height:37px;
+	cursor:pointer;
+	display:inline-block;*/
+}

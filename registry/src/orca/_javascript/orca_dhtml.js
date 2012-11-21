@@ -545,10 +545,69 @@ $().ready(function(){
        $('.blockOverlay').attr('title','Click to unblock').click($.unblockUI);
    });
 
-   //chosen on data source;
-   if($('select[name=data_source_key]').length>0)$('select[name=data_source_key]').chosen();
+		
+		$('.addTag').click(function(e){
+			$(this).parent().before('<li><input type="text" class="newTagInput"></input></li>');
+			$('.newTagInput').focus();
+		});		
+		
+		$('.newTagInput').live('keypress', function(e){
+			var code = (e.keyCode ? e.keyCode : e.which);
+			if(code==13){
+				//enter key
+				addNewTag(this);
+			}
+		});
+		
+		function addNewTag(element){
+			var tag_title = $(element).val();
+			tag_title = $.trim(tag_title);
+			tag_title = tag_title.replace(/[^a-zA-Z0-9\s-]/g,"");
+			if(tag_title.length < 256)
+			{
+			var keyHash = $(element).parents('ul').children().children('.addTag').attr('keyHash');
+			var url = rootAppPath+"orca/manage/process_registry_object.php?task=addTag&tag="+escape(tag_title)+'&keyHash='+keyHash;
+			var thisTagInput = element;
+			//console.log("tag_title: " + tag_title);			
+			if(tag_title!=''){
+				$.ajax({
+			        type:"POST",   
+			        url:url,   
+			        success:function(msg){
+			        	if(msg!=0){
+			        		$(thisTagInput).parent().before('<li><a href="javascript:;" tagID="'+msg+'">'+tag_title+'</a><span class="deleteImg" tagID="'+msg+'"></span></li>');
+			        		$(thisTagInput).parent().remove();
+			        		bindTagEvent();
+			        	}else{
+			        		alert("the tag "+tag_title+" already exists!");
+			        	}
+			        }
+			    });
+			}else{
+				$(thisTagInput).parent().remove();
+			}
+			}
+			else{
+				alert("Your given tag is longer than 255 characters, please reduce you tag size.");
+			}
+			
+		}
+		
+		bindTagEvent();
 
 });
+
+
+function removeTag(tagID)
+{
+	$.ajax({
+        type:"POST",   
+        url:rootAppPath+"orca/manage/process_registry_object.php?task=deleteTag&tag_id="+tagID,   
+        success:function(msg){
+        	$('.tag-list li span[tagID='+tagID+']').parent().remove();
+        }
+    });
+}
 
 function formatErrorDesciption(description, title)
 {
@@ -814,6 +873,44 @@ descContent = '<HR><h3>Error Description:</h3><HR><img src="../_images/error_ico
    descContent += description;
 return descContent;
 }
+
+function bindTagEvent(){
+	$('span.deleteImg').each(function(e){
+		//e.preventDefault();
+		var tagID = $(this).attr('tagID');
+		$(this).qtip({
+			content:{text:'Are You Sure? <a href="javascript:;" class="confirmedDelete" tagID="'+tagID+'">yes</a>'},
+			position:{
+				my:'bottom center',
+				at: 'top center'
+			},
+			show: {event: 'click'},
+			hide: {event: 'unfocus'},
+			events: {
+				show: function(event, api) {
+					//console.log(api.id, button);
+				}
+			},
+			style: {classes: 'ui-tooltip-shadow ui-tooltip-bootstrap ui-tooltip-large'}
+		});
+	});
+	$('.tag-list li').hover(function(){
+		var deleteIcon = $(this).children('span.deleteImg');
+		$(this).children('a').addClass('hover');
+		$(deleteIcon).show();
+	}, function(){
+		var deleteIcon = $(this).children('span.deleteImg');
+		$(this).children('a').removeClass('hover');
+		$(deleteIcon).hide();
+	});
+	$('.confirmedDelete').die().live('click', function(e){
+		var tagID = $(this).attr('tagID');
+		//console.log(tagID);
+		removeTag(tagID);
+	});
+}
+
+
 
 function setInstitutionalPage(theValue, theGroups, theDataSource)
 {

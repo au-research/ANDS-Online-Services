@@ -587,7 +587,7 @@ margin: 0;
 .dynamic_panel 
 {
 	display:none;
-	min-width:1137px;
+	/*min-width:1137px;*/
 }
 
 .guideNotes li

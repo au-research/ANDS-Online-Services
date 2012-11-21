@@ -106,8 +106,11 @@
 							<xsl:attribute name="href">
 							<xsl:value-of select="$base_url"/>
 							<xsl:choose>
+								<xsl:when test="../extRif:contributorGroup!=''">
+									<xsl:text>view/group/?group=</xsl:text><xsl:value-of select="../ro:key"/><xsl:text>&amp;groupName=</xsl:text><xsl:value-of select="../extRif:contributorGroup"/>
+								</xsl:when>		
 								<xsl:when test="../extRif:relatedObjectSlug=''">
-									<xsl:text>view/?key=</xsl:text><xsl:value-of select="../key"/>
+									<xsl:text>view/?key=</xsl:text><xsl:value-of select="../ro:key"/>
 								</xsl:when>
 								<xsl:otherwise>
 									<xsl:value-of select="../extRif:relatedObjectSlug"/>
@@ -185,7 +188,7 @@
 					</xsl:for-each>		
 					</ul>
 					<xsl:if test="..//extRif:relatedObjectActivityCount &gt; $connectionLimit">
-					<a class="connections_NumFound" type_id="group">
+					<a class="connections_NumFound" class_id="activity">
 					<xsl:attribute name="href">
 					<xsl:text>javascript:void(0);</xsl:text>
 					</xsl:attribute>						
@@ -234,7 +237,7 @@
 					</xsl:for-each>		
 					</ul>
 					<xsl:if test="..//extRif:relatedObjectServiceCount &gt; $connectionLimit">
-					<a class="connections_NumFound" type_id="group">
+					<a class="connections_NumFound" class_id="service">
 					<xsl:attribute name="href">
 					<xsl:text>javascript:void(0);</xsl:text>
 					</xsl:attribute>						

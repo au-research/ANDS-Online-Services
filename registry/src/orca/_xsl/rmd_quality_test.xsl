@@ -124,6 +124,17 @@
 	    	</xsl:choose>
         </xsl:if>
         
+        <xsl:if test="not(ro:dates/ro:date)">
+        	<xsl:choose>
+			    <xsl:when test="$output = 'script'">
+            		<xsl:text>SetInfos("errors_dates","At least one dates element is recommended for the Collection record.","REC_DATES");</xsl:text>
+			    </xsl:when>
+			    <xsl:otherwise>
+					<span class="info">At least one dates element is recommended for the Collection record.</span>
+			    </xsl:otherwise>
+	    	</xsl:choose>
+        </xsl:if>
+        
         <xsl:if test="not(ro:description[@type='brief']) and not(ro:description[@type='full'])">
         	<xsl:choose>
 			    <xsl:when test="$output = 'script'">
@@ -224,7 +235,7 @@
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>         
-        <xsl:apply-templates select="ro:description | ro:coverage | ro:location | ro:name | ro:identifier | ro:subject | ro:relatedObject | ro:relatedInfo | ro:citationInfo | ro:rights"/>
+        <xsl:apply-templates select="ro:description | ro:coverage | ro:location | ro:name | ro:identifier | ro:subject | ro:relatedObject | ro:relatedInfo | ro:citationInfo | ro:rights | ro:dates"/>
    </xsl:template>
     
     <xsl:template match="ro:party">
@@ -571,10 +582,10 @@
             <xsl:when test="string-length(.) &gt; 12000">
                 <xsl:choose>
 				    <xsl:when test="$output = 'script'">
-               			 <xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_value","Description Value must be less than 12000 characters.");</xsl:text>
+               			 <xsl:text>SetWarnings("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_value","Description Value must be less than 12000 characters.");</xsl:text>
 				    </xsl:when>
 				    <xsl:otherwise>
-						<span class="error">Description must be less than 12000 characters.</span>
+						<span class="warning">Description must be less than 12000 characters.</span>
 				    </xsl:otherwise>
 		    	</xsl:choose>
             </xsl:when>
@@ -1024,7 +1035,7 @@
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>
-        <xsl:apply-templates select="ro:identifier | ro:title | ro:notes"/>
+        <xsl:apply-templates select="ro:identifier | ro:title | ro:notes | ro:format"/>
     </xsl:template>
     
     <xsl:template match="ro:relatedInfo/ro:identifier">
@@ -1070,6 +1081,53 @@
         </xsl:if>
     </xsl:template>
     
+    <xsl:template match="ro:format">
+    	<xsl:apply-templates select="ro:identifier" />
+    </xsl:template>
+    
+     <xsl:template match="ro:relatedInfo/ro:format/ro:identifier">
+        <xsl:if test="string-length(.) = 0">
+            <xsl:choose>
+			    <xsl:when test="$output = 'script'">
+            		<xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_value","A Format Identifier must be specified. &lt;br/&gt;&lt;span&gt;E.g. 'http://example.schema.location/'&lt;/span&gt;");</xsl:text>
+			    </xsl:when>
+			    <xsl:otherwise>
+					<span class="error">Format Identifier must be specified.</span>
+			    </xsl:otherwise>
+	    	</xsl:choose>
+        </xsl:if>
+         <xsl:if test="string-length(.) &gt; 512">
+            <xsl:choose>
+			    <xsl:when test="$output = 'script'">
+            		<xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_value","Format Identifier must be less than 512 characters.");</xsl:text>
+			    </xsl:when>
+			    <xsl:otherwise>
+					<span class="error">Format Identifier must be less than 512 characters.</span>
+			    </xsl:otherwise>
+	    	</xsl:choose>
+        </xsl:if>
+        <xsl:if test="string-length(@type) = 0">
+            <xsl:choose>
+			    <xsl:when test="$output = 'script'">
+            		<xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_type","Format Identifier Type must be specified.&lt;br/&gt;&lt;span&gt;E.g. 'uri'&lt;/span&gt;");</xsl:text>
+			    </xsl:when>
+			    <xsl:otherwise>
+					<span class="error">Format Identifier Type must be specified.</span>
+			    </xsl:otherwise>
+	    	</xsl:choose>
+        </xsl:if>
+         <xsl:if test="string-length(@type) &gt; 64">
+            <xsl:choose>
+			    <xsl:when test="$output = 'script'">
+            		<xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_type","Format Identifier Type must be less than 64 characters.");</xsl:text>
+			    </xsl:when>
+			    <xsl:otherwise>
+					<span class="error">Format Identifier Type must be less than 64 characters.</span>
+			    </xsl:otherwise>
+	    	</xsl:choose>
+        </xsl:if>
+    </xsl:template>
+    
     <xsl:template match="ro:relatedInfo/ro:title">
         <xsl:if test="string-length(.) &gt; 512">
             <xsl:choose>
@@ -1083,13 +1141,13 @@
         </xsl:if>
     </xsl:template>
     <xsl:template match="ro:relatedInfo/ro:notes">
-        <xsl:if test="string-length(.) &gt; 512">
+        <xsl:if test="string-length(.) &gt; 4000">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_value","Related Info Notes must be less than 512 characters.");</xsl:text>
+            		<xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_value","Related Info Notes must be less than 4000 characters.");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
-					<span class="error">Related Info Notes must be less than 512 characters.</span>
+					<span class="error">Related Info Notes must be less than 4000 characters.</span>
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>
@@ -1311,13 +1369,13 @@
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>
-        <xsl:if test="string-length(.) &gt; 512">
+        <xsl:if test="string-length(.) &gt; 4000">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_value","Full Citation must be less than 512 characters.");</xsl:text>
+            		<xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_value","Full Citation must be less than 4000 characters.");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
-					<span class="error">Full Citation must be less than 512 characters.</span>
+					<span class="error">Full Citation must be less than 4000 characters.</span>
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>
@@ -1332,6 +1390,104 @@
 	    	</xsl:choose>
         </xsl:if>
     </xsl:template>
+    
+     <xsl:template match="ro:dates">
+     	<xsl:if test="not(ro:date/text())">
+            <xsl:choose>
+			    <xsl:when test="$output = 'script'">
+            		<xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_type","Dates must have at least one date.");</xsl:text>
+			    </xsl:when>
+			    <xsl:otherwise>
+					<span class="error">Dates must have at least one date.</span>
+			    </xsl:otherwise>
+	    	</xsl:choose>
+        </xsl:if>
+     	<xsl:if test="string-length(@type) = 0">
+            <xsl:choose>
+			    <xsl:when test="$output = 'script'">
+            		<xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_type","Dates type must have a value. &lt;br/&gt;&lt;span&gt;E.g. 'available'&lt;/span&gt;");</xsl:text>
+			    </xsl:when>
+			    <xsl:otherwise>
+					<span class="error">Dates type must have a value.</span>
+			    </xsl:otherwise>
+	    	</xsl:choose>
+        </xsl:if>
+         <xsl:if test="string-length(@type) &gt; 64">
+            <xsl:choose>
+			    <xsl:when test="$output = 'script'">
+            		<xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_type","Dates type must be less than 64 characters.");</xsl:text>
+			    </xsl:when>
+			    <xsl:otherwise>
+					<span class="error">Dates type must be less than 64 characters.</span>
+			    </xsl:otherwise>
+	    	</xsl:choose>
+        </xsl:if>
+		<xsl:apply-templates select="ro:date"/>
+    </xsl:template>
+    
+    <xsl:template match="ro:date">
+    	<xsl:if test="string-length(.) = 0">
+            <xsl:choose>
+			    <xsl:when test="$output = 'script'">
+            		<xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_value","Date must have a value.");</xsl:text>
+			    </xsl:when>
+			    <xsl:otherwise>
+					<span class="error">Date must have a value.</span>
+			    </xsl:otherwise>
+	    	</xsl:choose>
+        </xsl:if>
+        <xsl:if test="string-length(.) &gt; 512">
+            <xsl:choose>
+			    <xsl:when test="$output = 'script'">
+            		<xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_value","Date must be less than 512 characters.");</xsl:text>
+			    </xsl:when>
+			    <xsl:otherwise>
+					<span class="error">Date must be less than 512 characters.</span>
+			    </xsl:otherwise>
+	    	</xsl:choose>
+        </xsl:if>
+        <xsl:if test="string-length(@dateFormat) = 0">
+            <xsl:choose>
+			    <xsl:when test="$output = 'script'">
+           			<xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_dateFormat","A Date Format must be specified. &lt;br/&gt;&lt;span&gt;E.g. 'W3CDTF'&lt;/span&gt;");</xsl:text>
+			    </xsl:when>
+			    <xsl:otherwise>
+					<span class="error">Date Format must have a value.</span>
+			    </xsl:otherwise>
+	    	</xsl:choose>
+        </xsl:if>
+        <xsl:if test="string-length(@dateFormat) &gt; 64">
+            <xsl:choose>
+			    <xsl:when test="$output = 'script'">
+           			<xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_dateFormat","Date Format must be less than 64 characters.");</xsl:text>
+			    </xsl:when>
+			    <xsl:otherwise>
+					<span class="error">Date Format must be less than 64 characters.</span>
+			    </xsl:otherwise>
+	    	</xsl:choose>
+        </xsl:if>
+        <xsl:if test="string-length(@type) = 0">
+            <xsl:choose>
+			    <xsl:when test="$output = 'script'">
+           			<xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_type","A Date Type must be specified. &lt;br/&gt;&lt;span&gt;E.g. 'dateFrom'&lt;/span&gt;");</xsl:text>
+			    </xsl:when>
+			    <xsl:otherwise>
+					<span class="error">Date Type must have a value.</span>
+			    </xsl:otherwise>
+	    	</xsl:choose>
+        </xsl:if>
+        <xsl:if test="string-length(@type) &gt; 64">
+            <xsl:choose>
+			    <xsl:when test="$output = 'script'">
+           			<xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_type","Date Type must be less than 64 characters.");</xsl:text>
+			    </xsl:when>
+			    <xsl:otherwise>
+					<span class="error">Date Type must be less than 64 characters.</span>
+			    </xsl:otherwise>
+	    	</xsl:choose>
+        </xsl:if>
+    </xsl:template>
+    
     
     <xsl:template match="ro:existenceDates">
 		<xsl:apply-templates select="ro:startDate | ro:endDate"/>
@@ -1508,7 +1664,18 @@
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>
-		<xsl:apply-templates select="ro:identifier | ro:contributor | ro:title | ro:edition | ro:publisher | ro:placePublished | ro:date | ro:url | ro:context"/>
+        
+        <xsl:if test="not(ro:date)">
+            <xsl:choose>
+			    <xsl:when test="$output = 'script'">
+            		<xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_date","Citation Metadata must have at least one Date.");</xsl:text>
+			    </xsl:when>
+			    <xsl:otherwise>
+					<span class="error">Citation Metadata must have at least one Date.</span>
+			    </xsl:otherwise>
+	    	</xsl:choose>
+        </xsl:if>
+		<xsl:apply-templates select="ro:identifier | ro:contributor | ro:title | ro:version | ro:publisher | ro:placePublished | ro:date | ro:url | ro:context"/>
     </xsl:template>
     
     
@@ -1679,16 +1846,6 @@
     </xsl:template>
     
     <xsl:template match="ro:citationMetadata/ro:url">
-	    <xsl:if test="string-length(.) = 0">
-	        <xsl:choose>
-			    <xsl:when test="$output = 'script'">
-	        		<xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_value","A URL must be entered. &lt;br/&gt;&lt;span&gt;E.g. 'http://www.example.com'&lt;/span&gt;");</xsl:text>
-			    </xsl:when>
-			    <xsl:otherwise>
-					<span class="error">Citation Metadata URL must have a value.</span>
-			    </xsl:otherwise>
-	    	</xsl:choose>
-	    </xsl:if>
 	    <xsl:if test="string-length(.) &gt; 512">
 	        <xsl:choose>
 			    <xsl:when test="$output = 'script'">
@@ -1702,16 +1859,6 @@
     </xsl:template>
     
     <xsl:template match="ro:citationMetadata/ro:context">
-	    <xsl:if test="string-length(.) = 0">
-	        <xsl:choose>
-			    <xsl:when test="$output = 'script'">
-	        		<xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_value","A Context must be entered. &lt;br/&gt;&lt;span&gt;E.g. 'Aquaculture development database'&lt;/span&gt;");</xsl:text>
-			    </xsl:when>
-			    <xsl:otherwise>
-					<span class="error">Citation Metadata Context must have a value.</span>
-			    </xsl:otherwise>
-	    	</xsl:choose>
-	    </xsl:if>
 	    <xsl:if test="string-length(.) &gt; 512">
 	        <xsl:choose>
 			    <xsl:when test="$output = 'script'">
@@ -1724,30 +1871,30 @@
 	    </xsl:if>
     </xsl:template>
     
-    <xsl:template match="ro:citationMetadata/ro:edition">
-	    <xsl:if test="string-length(.) = 0">
-	        <xsl:choose>
-			    <xsl:when test="$output = 'script'">
-	        		<xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_value","An Edition must be entered. &lt;br/&gt;&lt;span&gt;E.g. '2nd edition'&lt;/span&gt;");</xsl:text>
-			    </xsl:when>
-			    <xsl:otherwise>
-					<span class="error">Citation Metadata Edition must have a value.</span>
-			    </xsl:otherwise>
-	    	</xsl:choose>
-	    </xsl:if>
+    <xsl:template match="ro:citationMetadata/ro:version">
 	    <xsl:if test="string-length(.) &gt; 512">
 	        <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-	        		<xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_value","Edition must be less than 512 characters");</xsl:text>
+	        		<xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_value","Version must be less than 512 characters");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
-					<span class="error">Citation Metadata Edition must be less than 512 characters.</span>
+					<span class="error">Citation Metadata Version must be less than 512 characters.</span>
 			    </xsl:otherwise>
 	    	</xsl:choose>
 	    </xsl:if>
     </xsl:template>
     
     <xsl:template match="ro:citationMetadata/ro:publisher">
+    	<xsl:if test="string-length(.) = 0">
+	        <xsl:choose>
+			    <xsl:when test="$output = 'script'">
+	        		<xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_value","A Publisher must be entered. &lt;br/&gt;&lt;span&gt;E.g. 'Geological Institute, University of Tokyo'&lt;/span&gt;");</xsl:text>
+			    </xsl:when>
+			    <xsl:otherwise>
+					<span class="error">Citation Metadata Publisher must have a value.</span>
+			    </xsl:otherwise>
+	    	</xsl:choose>
+	    </xsl:if>
 	    <xsl:if test="string-length(.) &gt; 512">
 	        <xsl:choose>
 			    <xsl:when test="$output = 'script'">
@@ -1761,16 +1908,6 @@
     </xsl:template>
     
     <xsl:template match="ro:citationMetadata/ro:placePublished">
-	    <xsl:if test="string-length(.) = 0">
-	        <xsl:choose>
-			    <xsl:when test="$output = 'script'">
-	        		<xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_value","A Place Published must be entered. &lt;br/&gt;&lt;span&gt;E.g. 'Sydney, Australia'&lt;/span&gt;");</xsl:text>
-			    </xsl:when>
-			    <xsl:otherwise>
-					<span class="error">Citation Metadata Place Published must have a value.</span>
-			    </xsl:otherwise>
-	    	</xsl:choose>
-	    </xsl:if>
 	    <xsl:if test="string-length(.) &gt; 512">
 	        <xsl:choose>
 			    <xsl:when test="$output = 'script'">

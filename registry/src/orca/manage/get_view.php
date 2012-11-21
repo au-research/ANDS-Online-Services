@@ -77,6 +77,7 @@ switch($view){
 	case "tipError": tipError($key, $dataSourceKey);break;
 	case "getAllStat": getAllStat();break;
 	case "getSummary": getSummary();break;
+	case "getDataSourceTags": getDataSourceTags($dataSourceKey);break;
 }
 
 function summary($dataSourceKey){
@@ -215,7 +216,7 @@ function searchRecords($status){
 	$sort='';
 	if($sortname!='undefined'){
 		if($sortorder!='undefined'){
-			$sort=''.$sortname.' '.$sortorder;
+			$sort=''.$sortname.' '.$sortorder.',s_list_title asc';
 		}
 	}
 	$start = 0;
@@ -740,5 +741,60 @@ function getSummary()
 		echo $jsonData;
 	}
 	
+}
+
+function getDataSourceTags($data_source_key)
+{
+ 	header("Content-type: application/json; charset=UTF-8");
+ 	$tags = getTagsForDataSource($data_source_key);	
+ 	$page = isset($_GET['page']) ? $_GET['page'] : 1;
+	$rp = isset($_GET['rp']) ? $_GET['rp'] : 20;
+ 	$result = array();
+ 	$tagsArray = array();
+ 	$result['count'] = sizeof($tags); 
+ 	$result['ds'] = $data_source_key;
+ 	$result['page'] = $page;
+ 	$result['rp'] = $rp;
+ 	$roCount = 0;
+ 	$minCount = ($page -1) * $rp;
+ 	$maxCount = $page * $rp;
+ 	$result['minCount'] = $minCount;
+ 	$result['maxCount'] = $maxCount;
+ 	//var_dump($tags);
+ 	//exit();
+ 	foreach($tags as $tag)
+ 	{
+	 	if(isset($tagsArray[$tag['key']]))
+	 	{
+	 		array_push($tagsArray[$tag['key']]['tags'], array('tag'=>$tag['tag'], 'tag_id'=>$tag['id']));
+		}
+ 		elseif(isset($tagsArrayNotSent[$tag['key']]))
+	 	{
+	 		//array_push($tagsArray[$tag['list_title']['tags']], array('tag'=>$tag['tag'], 'tag_id'=>$tag['id']));
+		}
+		elseif($roCount < $minCount)
+		{
+			$tagsArrayNotSent[$tag['key']] = $tag['key'];
+			$roCount++;
+		}
+		elseif($roCount > $maxCount)
+		{
+			break;
+		}
+		else
+		{
+			$roCount++;
+			$tagsArray[$tag['key']]['list_title'] = $tag['list_title'];
+			$tagsArray[$tag['key']]['key'] = $tag['key'];
+			$tagsArray[$tag['key']]['tags'] = array();
+			$tagArray = array('tag'=>$tag['tag'], 'tag_id'=>$tag['id']);
+			array_push($tagsArray[$tag['key']]['tags'],$tagArray);
+
+		}		
+ 	}
+ 	$result['roCount'] = $roCount;
+ 	$result['list'] = $tagsArray;
+	$jsonData = json_encode($result);
+	echo $jsonData;
 }
 ?>

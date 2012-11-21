@@ -47,6 +47,7 @@ limitations under the License.
 		@import url("<?php print eAPP_ROOT ?>_styles/datetime_control.css");
 		@import url("<?php print eAPP_ROOT ?>_styles/wait_control.css");
 		@import url("<?php print eAPP_ROOT ?>_styles/demo_table.css");
+		@import url("<?php print eAPP_ROOT ?>_javascript/qtip2/jquery.qtip.css");
 		<?php printApplicationStyleSheets(); ?>
 
 	</style>
@@ -59,7 +60,7 @@ limitations under the License.
 	<script type="text/javascript" src="<?php print eAPP_ROOT ?>_javascript/jquery-ui-1.8.17.custom.min.js"></script>
 	<script type="text/javascript" src="<?php print eAPP_ROOT ?>_javascript/jquery-ui-timepicker-addon-amended.js"></script>
 	<script type="text/javascript" src="<?php print eAPP_ROOT ?>orca/_javascript/orca_dhtml.js"></script>
-
+	<script type="text/javascript" src="<?php print eAPP_ROOT ?>_javascript/qtip2/jquery.qtip.js" ></script>
 	<script type="text/javascript" src="<?php print eAPP_ROOT ?>_javascript/jquery.cookie.js"></script>
 
 	

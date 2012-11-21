@@ -46,6 +46,7 @@ limitations under the License.
   		var base_url = "<?php echo base_url(); ?>";
   		var secure_base_url = "<?php echo getHTTPs(base_url());?>";
 		var service_url = "<?php echo service_url();?>";
+		var orca_service_rda = "<?php echo $this->config->item('orca_service_rda'); ?>";
 		var enable_warning_notices = "<?php echo $this->config->item('enable_warning_notices');?>";
 		var warning_notices = "<?php echo $this->config->item('warning_notices');?>";
 	</script>
@@ -57,7 +58,7 @@ limitations under the License.
 	<script type="text/javascript" src="<?php echo base_url();?>js/jquery.tools.min.js"></script> <!-- jQuery Tools-->
 	<!--  <script src="http://cdn.jquerytools.org/1.2.5/all/jquery.tools.min.js"></script>JQuery Tools -->
 	<script type="text/javascript" src="<?php echo base_url();?>js/jquery.ba-hashchange.min.js"></script> <!-- Monitoring on Hash Change-->
-	<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script> <!--Google Map v3 from Google-->
+	<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&libraries=drawing"></script> <!--Google Map v3 from Google-->
 
 	<script type="text/javascript" src="<?php echo base_url();?>js/jquery-ui-1.8.14.custom.min.js"></script> <!-- jQuery UI-->
 	<script type="text/javascript" src="<?php echo base_url();?>js/jquery.tipsy.js"></script> <!-- jQuery Tooltip-->
@@ -77,7 +78,7 @@ limitations under the License.
 		<!-- Rounded Corners for IE -->
     	<script type="text/javascript" src="<?php echo base_url();?>js/DD_roundies_0.0.2a-min.js"></script>
     	<script>
-    		DD_roundies.addRule('.box', '10px');
+    		//DD_roundies.addRule('.hp-box', '10px');
     		DD_roundies.addRule('.hp-class-item', '10px');
 
     	</script>

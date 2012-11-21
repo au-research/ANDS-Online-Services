@@ -156,10 +156,18 @@ class Search extends CI_Controller {
 		$type = $this->input->post('typeFilter');
 		$licence = $this->input->post('licenceFilter');
 		$temporal = $this->input->post('temporal');
+		$numFound = $this->input->post('numFound');
 		$this->load->model('Registryobjects','ro');
-		$this->ro->updateStatistic($query, $class, $group, $subject, $type, $temporal,$licence);
+		$this->ro->updateStatistic($query, $class, $group, $subject, $type, $temporal,$licence,$numFound);
 	}
-
+	
+	public function updateSearchStatistics(){
+		$query = $this->input->post('query');
+		$slug = $this->input->post('slug'); 
+		$this->load->model('Registryobjects','ro');
+		$this->ro->updateSearchStatistics($query,$slug);
+	}
+	
 	public function service_front(){//front    end for orca search service
 		$this->load->view('service_front');
 	}
@@ -629,6 +637,7 @@ class Search extends CI_Controller {
 		//echo '+spatial:('.$spatial_included_ids.')';
 		if($spatial_included_ids!='') {
 			$extended_query .= $spatial_included_ids;
+			$sort = 'smallest_spatial_coverage_area asc';
 		}
 		if($temporal!='All'){
 			$temporal_array = explode('-', $temporal);
@@ -718,10 +727,10 @@ class Search extends CI_Controller {
 		$east = $this->input->post('east');
 		$west = $this->input->post('west');
 
-		//echo $north;
-		$query = 'select distinct rs.registry_object_key from dba.tbl_registry_objects rs, dba.tbl_spatial_extents se
+		//echo $north . $south . $east. $west;
+		$query = 'select distinct rs.key_hash from dba.tbl_registry_objects rs, dba.tbl_spatial_extents se
 	where rs.registry_object_key = se.registry_object_key
-	and se.bound_box && box ((point('.$north.','.$west.')),(point('.$south.','.$east.')))';
+	and se.bound_box && box ((point('.$north.','.$west.')),(point('.$south.','.$east.'))) limit 8000';
 		$this->load->database();
 		$data['registryObjects'] = $this->db->query($query);
 		$this->load->view('search/listIDs', $data);
