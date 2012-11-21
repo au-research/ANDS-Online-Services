@@ -88,7 +88,7 @@ class Solr {
 	 * Execute the search based on the given options
 	 * @return array results
 	 */
-	function executeSearch(){
+	function executeSearch($as_array = false){
 		$fields_string='';
 		foreach($this->options as $key=>$value) {
 			$fields_string .= $key.'='.$value.'&';
@@ -105,7 +105,7 @@ class Solr {
     	//echo 'json received+<pre>'.$content.'</pre>';
 		curl_close($ch);//close the curl
 
-		$json = json_decode($content);
+		$json = json_decode($content, $as_array);
 		if($json){
 			$this->result = $json;
 			return $this->result;

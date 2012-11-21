@@ -1,4 +1,6 @@
 <?php
+/* SOLR URL */
+$ENV['solr_url'] = "http://ands3.anu.edu.au:8080/solr1/";
 
 /* ENABLED MODULES */
 $ENV['ENABLED_MODULES'] = array(

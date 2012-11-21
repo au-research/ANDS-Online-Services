@@ -34,8 +34,14 @@ class MetadataMethod extends MethodHandler
 		$fields = array_merge($this->default_params, $fields);
 		
 		$CI =& get_instance();
-		$CI->load->model('solr');
-		$result = $CI->solr->fireSearch($fields,NULL,true);
+		$CI->load->library('solr');
+
+		foreach($fields AS $key => $field)
+		{
+			$CI->solr->setOpt($key, $field);
+		}
+
+		$result = $CI->solr->executeSearch(true);
 		
 		if (!isset($this->params['debugQuery']))
 		{
