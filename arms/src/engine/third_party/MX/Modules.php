@@ -168,6 +168,7 @@ class Modules
 	**/
 	public static function find($file, $module, $base) {
 	
+
 		$segments = explode('/', $file);
 
 		$file = array_pop($segments);
@@ -180,7 +181,9 @@ class Modules
 			$modules[array_shift($segments)] = ltrim(implode('/', $segments).'/','/');
 		}	
 
-		foreach (Modules::$locations as $location => $offset) {					
+		foreach (Modules::$locations as $location => $offset) {	
+			// Check the core folder if all else fails!
+			$modules["core"] = "";	
 			foreach($modules as $module => $subpath) {			
 				$fullpath = $location.$module.'/'.$base.$subpath;
 				
@@ -190,6 +193,7 @@ class Modules
 				if (is_file($fullpath.$file_ext)) return array($fullpath, $file);
 			}
 		}
+
 		
 		return array(FALSE, $file);	
 	}

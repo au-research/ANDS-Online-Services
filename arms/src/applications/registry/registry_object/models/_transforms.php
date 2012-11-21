@@ -11,12 +11,13 @@ class Transforms {
 	static $extrif_to_form_transformer = NULL;
 	static $feed_to_rif_transformer = NULL;
 	
+
 	static function get_qa_transformer()
 	{
 		if (is_null(self::$qa_transformer))
 		{
 			$rmdQualityTest = new DomDocument();
-			$rmdQualityTest->load('application/modules/registry_object/transforms/quality_report.xsl');
+			$rmdQualityTest->load(APP_PATH.'registry_object/transforms/quality_report.xsl');
 			$qualityTestproc = new XSLTProcessor();
 			$qualityTestproc->importStyleSheet($rmdQualityTest);
 			self::$qa_transformer =	$qualityTestproc;
@@ -30,7 +31,7 @@ class Transforms {
 		if (is_null(self::$qa_level_transformer))
 		{
 			$rmdQualityTest = new DomDocument();
-			$rmdQualityTest->load('application/modules/registry_object/transforms/level_report.xsl');
+			$rmdQualityTest->load(APP_PATH.'registry_object/transforms/level_report.xsl');
 			$qualityTestproc = new XSLTProcessor();
 			$qualityTestproc->importStyleSheet($rmdQualityTest);
 			self::$qa_level_transformer =	$qualityTestproc;
@@ -44,7 +45,7 @@ class Transforms {
 		if (is_null(self::$extrif_to_solr_transformer))
 		{
 			$extRifToSOLR = new DomDocument();
-			$extRifToSOLR->load('application/modules/registry_object/transforms/extrif_to_solr.xsl');
+			$extRifToSOLR->load(APP_PATH.'registry_object/transforms/extrif_to_solr.xsl');
 			$extRifToSOLRproc = new XSLTProcessor();
 			$extRifToSOLRproc->importStyleSheet($extRifToSOLR);
 			self::$extrif_to_solr_transformer =	$extRifToSOLRproc;
@@ -58,7 +59,7 @@ class Transforms {
 		if (is_null(self::$extrif_to_html_transformer))
 		{
 			$extRifToHtml = new DomDocument();
-			$extRifToHtml->load('application/modules/registry_object/transforms/extrif_to_html.xsl');
+			$extRifToHtml->load(APP_PATH.'registry_object/transforms/extrif_to_html.xsl');
 			$extRifToHtmlproc = new XSLTProcessor();
 			$extRifToHtmlproc->importStyleSheet($extRifToHtml);
 			self::$extrif_to_html_transformer =	$extRifToHtmlproc;
@@ -72,7 +73,7 @@ class Transforms {
 		if (is_null(self::$extrif_to_form_transformer))
 		{
 			$extRifToForm = new DomDocument();
-			$extRifToForm->load('application/modules/registry_object/transforms/extrif_to_form.xsl');
+			$extRifToForm->load(APP_PATH.'registry_object/transforms/extrif_to_form.xsl');
 			$extRifToFormproc = new XSLTProcessor();
 			$extRifToFormproc->importStyleSheet($extRifToForm);
 			self::$extrif_to_form_transformer =	$extRifToFormproc;
@@ -86,7 +87,7 @@ class Transforms {
 		if (is_null(self::$feed_to_rif_transformer))
 		{
 			$getRifFromFeed = new DomDocument();
-			$getRifFromFeed->load('application/modules/registry_object/transforms/extract_rif_from_feed.xsl');
+			$getRifFromFeed->load(APP_PATH.'registry_object/transforms/extract_rif_from_feed.xsl');
 			$getRifFromFeedproc = new XSLTProcessor();
 			$getRifFromFeedproc->importStyleSheet($getRifFromFeed);
 			self::$feed_to_rif_transformer =	$getRifFromFeedproc;

@@ -1,27 +1,49 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
 global $ENV;
 
+
+/* Which modules are enabled for this installation? */
+$config[ENGINE_ENABLED_MODULE_LIST] = array(
+	'data_source',
+	'registry_object',
+	'vocab_service',
+	'mydois',
+	'abs_sdmx_querytool'
+);
+
+
+/* What authencation class should we use to power the login/ACL? */
 $config['authentication_class'] = "cosi_authentication";
+
 $config[ENGINE_ENABLED_MODULE_LIST] = $ENV['ENABLED_MODULES'];
 
-date_default_timezone_set('Australia/Canberra');
-/*
-|--------------------------------------------------------------------------
-| Base Site URL
-|--------------------------------------------------------------------------
-|
-| URL to your CodeIgniter root. Typically this will be your base URL,
-| WITH a trailing slash:
-|
-|	http://example.com/
-|
-| If this is not set then CodeIgniter will guess the protocol, domain and
-| path to your installation.
-|
-*/
-$config['base_url']	= '';
-#$config['solr_url'] = 'http://ands3.anu.edu.au:8983/solr/';
 
+/* For multiple-application environments, this "app" will be matched 
+by the $_GET['app'] which is rewritten in .htaccess. The array key is
+the full match (above). The active_application is the subfolder within 
+applications/ that contains this application's modules.  */
+$application_directives = array(
+	"registry" => 
+			array(	
+				"base_url" => "%%BASEURL%%/registry/",
+				"active_application" => "registry",
+				"default_controller" => "auth/dashboard",
+			),
+	"rda" => 
+			array(	
+				"base_url" => "%%BASEURL%%/rda/",
+				"active_application" => "rda",
+				"default_controller" => "core/home",
+			)
+);
+
+/* If no application is matched, what should we default to? */
+$default_application = 'registry';
+$_GET['app'] = (!isset($_GET['app']) || $_GET['app'] == "" ? $default_application : $_GET['app']);
+
+/* Where in the world are we anyway? */
+date_default_timezone_set('Australia/Canberra');
 /*
 |--------------------------------------------------------------------------
 | Index File
@@ -363,9 +385,46 @@ $config['rewrite_short_tags'] = TRUE;
 */
 $config['proxy_ips'] = '';
 
+$default_base_url = isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off' ? 'https' : 'http';
+$default_base_url .= '://'. $_SERVER['HTTP_HOST'];
+$default_base_url .= str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']);
+
+/* Reroute our requests and setup the CI routing environment based on the active application */
+if (isset($application_directives[$_GET['app']]))
+{
+	$active_application = $application_directives[$_GET['app']]['active_application'];
+	$base_url = str_replace("%%BASEURL%%/", $default_base_url, $application_directives[$_GET['app']]['base_url']);
+	$_SERVER['SCRIPT_NAME'] = dirname($_SERVER['SCRIPT_NAME']) . "/" . $active_application . '/';
+
+	/* What is the default controller for this app? (will be inserted as the default route) */
+	$config['default_controller'] = $application_directives[$_GET['app']]['default_controller'];
+	define("APP_PATH",'./applications/'.$active_application.'/');
+}
+else
+{
+	$active_application = "unknown";
+	$base_url = "";
+}
+
 $config['modules_locations'] = array(
-       'application/'.'modules/' => '../../application/modules/',
+       'applications/'.$active_application . '/' => '../../applications/'.$active_application . '/',
 );
+
+/*
+|--------------------------------------------------------------------------
+| Base Site URL
+|--------------------------------------------------------------------------
+|
+| URL to your CodeIgniter root. Typically this will be your base URL,
+| WITH a trailing slash:
+|
+|	http://example.com/
+|
+| If this is not set then CodeIgniter will guess the protocol, domain and
+| path to your installation.
+|
+*/
+$config['base_url']	= $base_url;
 
 /* End of file config.php */
 /* Location: ./application/config/config.php */
