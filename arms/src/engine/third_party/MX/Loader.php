@@ -185,7 +185,7 @@ class MX_Loader extends CI_Loader
 			
 		/* check module */
 		list($path, $_model) = Modules::find(strtolower($model), $this->_module, 'models/');
-		
+
 		if ($path == FALSE) {
 			
 			/* check application & packages */
@@ -350,7 +350,7 @@ class MX_Loader extends CI_Loader
 				$autoload = array_merge(Modules::load_file($file, $path, 'autoload'), $autoload);
 			}
 		}
-		
+
 		/* nothing to do */
 		if (count($autoload) == 0) return;
 		

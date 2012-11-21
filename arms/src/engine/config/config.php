@@ -5,13 +5,16 @@ $config['authentication_class'] = "cosi_authentication";
 $config[ENGINE_ENABLED_MODULE_LIST] = array('data_source','registry_object',
 											'vocab_service','mydois','abs_sdmx_querytool');
 
-
-
 $application_directives = array(
 						"registry" => 
 								array(	
-									"base_url" => "http://devl.ands.org.au/workareas/ben/arms/src/registry/",
-									"active_application" => "registry/"
+									"base_url" => "%%BASEURL%%/registry/",
+									"active_application" => "registry"
+								),
+						"rda" => 
+								array(	
+									"base_url" => "%%BASEURL%%/rda/",
+									"active_application" => "rda"
 								)
 
 						);
@@ -359,12 +362,15 @@ $config['rewrite_short_tags'] = TRUE;
 */
 $config['proxy_ips'] = '';
 
+$default_base_url = isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off' ? 'https' : 'http';
+$default_base_url .= '://'. $_SERVER['HTTP_HOST'];
+$default_base_url .= str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']);
 
 /* Reroute our requests and setup the CI routing environment based on the active application */
 if (isset($application_directives[$_GET['app']]))
 {
-	$active_application = $application_directives[$_GET['app']]['active_application'];
-	$base_url = $application_directives[$_GET['app']]['base_url'];
+	$active_application = $application_directives[$_GET['app']]['active_application'] . "/";
+	$base_url = str_replace("%%BASEURL%%", $default_base_url, $application_directives[$_GET['app']]['base_url']);
 	$_SERVER['SCRIPT_NAME'] = dirname($_SERVER['SCRIPT_NAME']) . "/" . $active_application;
 }
 else
