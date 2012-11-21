@@ -2,22 +2,12 @@
 
 global $ENV;
 
-
-/* Which modules are enabled for this installation? */
-$config[ENGINE_ENABLED_MODULE_LIST] = array(
-	'data_source',
-	'registry_object',
-	'vocab_service',
-	'mydois',
-	'abs_sdmx_querytool'
-);
-
-
 /* What authencation class should we use to power the login/ACL? */
 $config['authentication_class'] = "cosi_authentication";
 
-$config[ENGINE_ENABLED_MODULE_LIST] = $ENV['ENABLED_MODULES'];
-
+// Merge in the config options from global_config.php
+$config = array_merge($config, $ENV);
+$config[ENGINE_ENABLED_MODULE_LIST] = &$config['ENABLED_MODULES'];
 
 /* For multiple-application environments, this "app" will be matched 
 by the $_GET['app'] which is rewritten in .htaccess. The array key is
