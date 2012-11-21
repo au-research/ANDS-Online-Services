@@ -1,5 +1,14 @@
 <?php
 
+/* ENABLED MODULES */
+$ENV['ENABLED_MODULES'] = array(
+#	'registry',
+	'vocab_service',
+	'mydois',
+#	'abs_sdmx_querytool'
+);
+
+
 /* DATABASE CONFIGURATION */
 $eDBCONF = array();
 $eDBCONF['registry']['hostname'] = 'localhost';
