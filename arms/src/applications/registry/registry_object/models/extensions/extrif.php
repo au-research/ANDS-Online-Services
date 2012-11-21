@@ -58,13 +58,13 @@ class Extrif_Extension extends ExtensionBase
 				$extendedMetadata->addChild("extRif:searchBaseScore", 100, EXTRIF_NAMESPACE);
 				$extendedMetadata->addChild("extRif:displayLogo", NULL, EXTRIF_NAMESPACE);
 				
-				echo "gnaa..";
+				//echo "gnaa..";
 				// xxx: spatial extents (sanity checking?)
 				$spatialGeometry = $extendedMetadata->addChild("extRif:spatialGeometry", NULL, EXTRIF_NAMESPACE);
-				foreach ($this->ro->getSpatialExtents() AS $extent)
+				foreach ($this->ro->determineSpatialExtents() AS $extent)
 				{
 					echo "enriching..." . $extent;
-					$spatialGeometry->addChild("extRif:geometry", $extent, EXTRIF_NAMESPACE);
+					$spatialGeometry->addChild("extRif:extent", $extent, EXTRIF_NAMESPACE);
 				}
 				
 				

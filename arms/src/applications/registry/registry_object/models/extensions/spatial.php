@@ -7,42 +7,142 @@ class Spatial_Extension extends ExtensionBase
 	{
 		parent::__construct($ro_pointer);
 	}		
-	
-	
+		
 	function determineSpatialExtents()
 	{
 		$extents = array();
 		
-		$sxml = $this->ro->getSimpleXML();
-		
+		$sxml = $this->ro->getSimpleXML();		
 		$spatial_elts = $sxml->xpath('//spatial');
+		
 		foreach ($spatial_elts AS $spatial)
 		{
-			/** XXX: COORDINATES, POLYGONS, FIXYFIXY **/
-			// XXX: if type kmlPolyCoords
-			$coords = explode(" ",$spatial);
-			
-			if (count($coords) == 1)
+			$north = null;
+			$south = null;
+			$west  = null;
+			$east  = null;
+			$type = $spatial["type"];
+			$value = (string)$spatial;
+			if($type == 'kmlPolyCoords' || $type == 'gmlKmlPolyCoords')
 			{
-				// XXX: check valid coords
-				$coords = explode(",", $coords[0]);
-				$extents[] = ((int)$coords[0]) ." ". ((int)$coords[1]);
-			}
-			// XXX: box
+				if(isValidKmlPolyCoords($value))	
+				{
+					$north = -90;
+					$south = 90;
+					$west  = 180;
+					$east  = -180;
+					$tok = strtok($value, " ");
+					while ($tok !== FALSE)
+					{
+						$keyValue = explode(",", $tok);
+						//$msg = $msg.'<br/>lat ' .$keyValue[1]. ' long '.$keyValue[0];
+						if(is_numeric($keyValue[1]) && is_numeric($keyValue[0]))
+							{
 			
-			// XXX: check length? 1024 chars?
-		}
-
-
-
-
-		// Insert to DB
-		foreach ($extents AS $extent)
-		{
-			$this->db->where('registry_object_id',$this->id)->delete('spatial_extents');
-			$this->db->insert('spatial_extents', array('registry_object_id'=>$this->id, 'coordinates' => $extent));
-		}
+							$lng = floatval($keyValue[0]);
+							$lat = floatval($keyValue[1]);
+							//$msg = $msg.'<br/>lat ' .$lat. ' long '.$lng;
+							if ($lat > $north)
+							{
+							 $north = $lat;
+							}
+							if($lat < $south)
+							{
+							 $south = $lat;
+							}
+							if($lng < $west)
+							{
+							 $west = $lng;
+							}
+							if($lng > $east)
+							{
+							 $east = $lng;
+							}
+						}
+						$tok = strtok(" ");
+					}
+				}
+			}
+			elseif($type == 'iso19139dcmiBox')
+			{
+			//northlimit=-23.02; southlimit=-25.98; westlimit=166.03; eastLimit=176.1; projection=WGS84
+				$north = null;
+				$south = null;
+				$west  = null;
+				$east  = null;
+				$tok = strtok($value, ";");
+				while ($tok !== FALSE)
+				{
+					$keyValue = explode("=",$tok);
+					if(strtolower(trim($keyValue[0])) == 'northlimit' && is_numeric($keyValue[1]))
+					{
+					  $north = floatval($keyValue[1]);
+					}
+					if(strtolower(trim($keyValue[0])) == 'southlimit' && is_numeric($keyValue[1]))
+					{
+					  $south = floatval($keyValue[1]);
+					}
+					if(strtolower(trim($keyValue[0])) == 'westlimit' && is_numeric($keyValue[1]))
+					{
+					  $west = floatval($keyValue[1]);
+					}
+					if(strtolower(trim($keyValue[0])) == 'eastlimit' && is_numeric($keyValue[1]))
+					{
+					  $east = floatval($keyValue[1]);
+					}
+				  	$tok = strtok(";");
+				}
+			}
+			elseif($type == 'iso19139dcmiPoint' || $type == 'dcmiPoint') //"name=Tasman Sea, AU; east=160.0; north=-40.0"
+			{
+			//northlimit=-23.02; southlimit=-25.98; westlimit=166.03; eastLimit=176.1; projection=WGS84
+				$north = null;
+				$south = null;
+				$west  = null;
+				$east  = null;
+				$tok = strtok($value, ";");
+				while ($tok !== FALSE)
+				{
+					$keyValue = explode("=",$tok);
+					if(strtolower(trim($keyValue[0])) == 'north' && is_numeric($keyValue[1]))
+					{
+					  $north = floatval($keyValue[1]);
+					  $south = floatval($keyValue[1]);
+					}
+					if(strtolower(trim($keyValue[0])) == 'east' && is_numeric($keyValue[1]))
+					{
+					  $west = floatval($keyValue[1]);
+					  $east = floatval($keyValue[1]);
+					}
+				  	$tok = strtok(";");
+				}
+			}
+			elseif($type == 'text' || $type == 'iso31661' || $type == 'iso31662' || $type == 'iso31663' || $type == 'iso3166') //"name=Tasman Sea, AU; east=160.0; north=-40.0"
+			{
+			//northlimit=-23.02; southlimit=-25.98; westlimit=166.03; eastLimit=176.1; projection=WGS84
+				$north = null;
+				$south = null;
+				$west  = null;
+				$east  = null;
+				// Insert to DB
+		//foreach ($extents AS $extent)
+		//{
+		//	$this->db->where('registry_object_id',$this->id)->delete('spatial_extents');
+		//	$this->db->insert('spatial_extents', array('registry_object_id'=>$this->id, 'coordinates' => $extent));
+		//}
 		
+			// XXX NOT YET...
+			//	$searchText = trim($value);
+			//	getExtentFromGoogle(trim($value), &$north, &$south, &$west, &$east);
+			}
+			//$msg = $msg.'<br/> north:'.$north.' south:'.$south.' west:'.$west.' east:'.$east;
+			if($north != null && $south != null && $west  != null && $east != null && $north <= 90 && $south >= -90 && $west  >= -180 && $east <= 180){
+				//A lat-lon rectangle can be indexed with 4 numbers in minX minY maxX maxY order:
+    			// <field name="geo">-74.093 41.042 -69.347 44.558</field> 				
+				$extents[] = $west." ".$south." ".$east." ".$north;
+			}
+
+		}		
 		return $extents;
 	}
 
@@ -60,6 +160,17 @@ class Spatial_Extension extends ExtensionBase
 		}
 
 		return $extents;	
+	}
+	
+	function isValidKmlPolyCoords($coords)
+	{
+		$valid = false;
+		$coordinates = preg_replace("/\s+/", " ", trim($coords));
+		if( preg_match('/^(\-?\d+(\.\d+)?),(\-?\d+(\.\d+)?)( (\-?\d+(\.\d+)?),(\-?\d+(\.\d+)?))*$/', $coordinates) )
+		{
+			$valid = true;
+		}
+		return $valid;
 	}
 	
 }
