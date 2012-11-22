@@ -11,13 +11,23 @@ class Home extends MX_Controller {
 		$this->solr->setFacetOpt('field', 'class');
 		$this->solr->setFacetOpt('field', 'type');
 		$this->solr->executeSearch();
+
+		//classes
 		$classes = $this->solr->getFacetResult('class');
-		
 		$data = array('collection'=>0,'service'=>0,'activity'=>0,'party'=>0);
 		foreach($classes as $class=>$num){
 			$data[$class] = $num;
 		}
-
+		
 		$this->load->view('home', $data);
+	}
+
+	function about(){
+		$data['title'] = 'Research Data Australia - About';
+		$this->load->view('about', $data);
+	}
+
+	function contact(){
+		echo 'contact';
 	}
 }

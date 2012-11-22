@@ -2,8 +2,8 @@
 		<div class="foot">
 			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui. </p>
 			<p class="small">ANDS is supported by the Australian Government through the National Collaborative Research Infrastructure Strategy Program and the Education Investment Fund (EIF) Super Science Initiative.</p>
-			<a href="#" class="gov_logo"><img src="<?php echo asset_url('images/gov_logo.jpg');?>" alt="" /></a>
-			<a href="#" class="footer_logo"><img src="<?php echo asset_url('images/footer_logo.jpg');?>" alt="" /></a>			
+			<a href="#" class="gov_logo"><img src="<?php echo asset_url('images/gov_logo.jpg', 'core');?>" alt="" /></a>
+			<a href="#" class="footer_logo"><img src="<?php echo asset_url('images/footer_logo.jpg', 'core');?>" alt="" /></a>			
 		</div><!-- foot -->		
 	</div><!-- footer -->	
 	<div class="foot_nav">
@@ -25,12 +25,12 @@
 	</div><!-- foot_nav -->
 
 	<!-- Zoo Scripts Untouched -->
-	<script type="text/javascript" src="<?php echo asset_url('js/jquery-1.7.2.min.js');?>"></script>
-	<script type="text/javascript" src="<?php echo asset_url('js/jquery.flexslider-min.js');?>"></script>
-	<script type="text/javascript" src="<?php echo asset_url('js/jquery-ui.js');?>"></script>
-	<script type="text/javascript" src="<?php echo asset_url('js/script.js');?>"></script>
+	<script type="text/javascript" src="<?php echo asset_url('js/jquery-1.7.2.min.js', 'core');?>"></script>
+	<script type="text/javascript" src="<?php echo asset_url('js/jquery.flexslider-min.js', 'core');?>"></script>
+	<script type="text/javascript" src="<?php echo asset_url('js/jquery-ui.js', 'core');?>"></script>
+	<script type="text/javascript" src="<?php echo asset_url('js/script.js', 'core');?>"></script>
 
-	 <script src="<?php echo asset_url('lib/less-1.3.0.min.js', true);?>" type="text/javascript"></script>
+	 <script src="<?php echo asset_url('lib/less-1.3.0.min.js', 'base');?>" type="text/javascript"></script>
 
 </body>
 </html>

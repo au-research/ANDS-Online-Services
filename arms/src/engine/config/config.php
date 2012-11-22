@@ -24,7 +24,7 @@ $application_directives = array(
 			array(	
 				"base_url" => "%%BASEURL%%/rda/",
 				"active_application" => "rda",
-				"default_controller" => "core/home",
+				"default_controller" => "home/index",
 			)
 );
 

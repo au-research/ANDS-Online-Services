@@ -1,4 +1,4 @@
-<?php $this->load->view('tpl/rda_header');?>
+<?php $this->load->view('rda_header');?>
 <div class="container">
 	<div class="intro">
 		<h3>What’s in Research Data Australia</h3>
@@ -59,4 +59,4 @@
 <div class="social">
 	<a href="#"><img src="<?php echo asset_url('images/facebook.png');?>" alt="" /></a><a href="#"><img src="<?php echo asset_url('images/twitter.png');?>" alt="" /></a> RSS,ATOM and Twitter feeds are now available. Learn more here....
 </div><!-- social -->
-<?php $this->load->view('tpl/rda_footer');?>
+<?php $this->load->view('rda_footer');?>

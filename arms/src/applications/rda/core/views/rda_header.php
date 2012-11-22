@@ -2,20 +2,28 @@
 <html>
 <head>
 <meta charset="UTF-8" />
-<title><?php echo $title;?></title>
+<title>
+	<?php
+		if(isset($title)){
+			echo $title;
+		}else{
+			echo 'Research Data Australia';
+		}
+	?>
+</title>
 
 <!-- Zoo Stylesheets Untouched -->
-<link rel="stylesheet" href="<?php echo asset_url('style.css');?>" type="text/css" media="screen" />
-<link rel="stylesheet" href="<?php echo asset_url('css/jquery-ui.css');?>" type="text/css" media="screen" />
+<link rel="stylesheet" href="<?php echo asset_url('style.css','core');?>" type="text/css" media="screen" />
+<link rel="stylesheet" href="<?php echo asset_url('css/jquery-ui.css', 'core');?>" type="text/css" media="screen" />
 
 <!-- ANDS Less file and general styling correction-->
-<link href="<?php echo asset_url('less/ands.less');?>" rel="stylesheet/less" type="text/css">
+<link href="<?php echo asset_url('less/ands.less', 'core');?>" rel="stylesheet/less" type="text/css">
 
 </head>
 <body>
 	<div class="header">
 		<div class="head">
-			<a href="#" class="logo"><img src="<?php echo asset_url('images/logo.png');?>" alt="" /></a>
+			<a href="#" class="logo"><img src="<?php echo asset_url('images/logo.png','core');?>" alt="" /></a>
 			<div class="tagline">
 				<span>Research Data</span> Australia
 			</div><!-- tagline -->
@@ -55,7 +63,7 @@
 			<div class="adv_inner">
 				<form action="/" method="post">
 				<div class="left">
-					<img src="<?php echo asset_url('images/t/map.jpg');?>" alt="" />
+					<img src="<?php echo asset_url('images/t/map.jpg', 'core');?>" alt="" />
 					<div class="draw_box">
 						<a href="#" class="draw">Start drawing</a>
 						<a href="#" class="play"></a>

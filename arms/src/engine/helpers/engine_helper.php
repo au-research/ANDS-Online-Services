@@ -35,23 +35,24 @@ function json_exception_handler( $e ) {
     echo json_encode(array("status"=>"ERROR", "message"=> $e->getMessage()));
 }
 
-function asset_url( $path, $base = false )
+function asset_url( $path, $loc = 'modules')
 {
 	$CI =& get_instance();
 
-	if($base){
+	if($loc == 'base'){
 		return $CI->config->item('default_base_url').'assets/'.$path;
-	}
-	
-	if ($module_path = $CI->router->fetch_module())
-	{
-		return base_url( 'assets/' . $module_path . "/" . $path );
-	}
-	else
-	{
-		return base_url( 'assets/' . $path );
+	}else if($loc == 'core'){
+		return base_url( 'assets/core/' . $path );
+	}else if($loc == 'modules'){
+		if ($module_path = $CI->router->fetch_module()){
+			return base_url( 'assets/' . $module_path . "/" . $path );
+		}
+		else{
+			return base_url( 'assets/' . $path );
+		}
 	}
 }
+
 
 function current_protocol()
 {
