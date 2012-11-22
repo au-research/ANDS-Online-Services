@@ -186,7 +186,7 @@ class Cosi_authentication extends CI_Model {
 									'organisational_roles'=>$user_results['organisational_roles'],
 									'functional_roles'=>$user_results['functional_roles']
 								);
-				}//
+				//}
 	    		//else
 	    		//{
 	    			// LDAP ERROR (Could not bind)
