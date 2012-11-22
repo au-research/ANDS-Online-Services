@@ -163,7 +163,7 @@ class Registry_object extends MX_Controller {
 		if($page!=1) $start = ($page - 1) * $row;
 
 		//Fire the SOLR search
-		$this->load->model('solr');
+		/*$this->load->model('solr');
 		$fields = array(
 			'q'=>$q,'start'=>$start,'indent'=>'on', 'wt'=>'json', 'fl'=>'*', 'rows'=>$row
 		);
@@ -171,7 +171,16 @@ class Registry_object extends MX_Controller {
 			$fields['sort']=$sorts;
 		}
 		$facets = '&facet=true&facet.sort=index&facet.mincount=1&facet.field=class&facet.field=status&facet.field=quality_level';
-		$solr_search_result = $this->solr->fireSearch($fields, $facets);
+		$solr_search_result = $this->solr->fireSearch($fields, $facets);*/
+		
+		$this->load->library('solr');
+		$this->solr->setOpt('q',$q);
+		$this->solr->setOpt('start',$start);
+		$this->solr->setOpt('rows',$row);
+		$this->solr->setOpt('sort',$sorts);
+		$this->solr->setOpt('q',$q);
+		$this->solr->setFacetOpt('field', 'class');
+		$solr_search_result = $this->solr->executeSearch();
 
 		//Analyze the result
 		$solr_header = $solr_search_result->{'responseHeader'};

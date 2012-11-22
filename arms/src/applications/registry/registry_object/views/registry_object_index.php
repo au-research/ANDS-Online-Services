@@ -33,7 +33,7 @@
 			<div class="box-header clearfix">
 				<h1><?php echo $data_source_title;?> <small>Manage My Records</small></h1>
 				<span class="right-widget">
-					<h1><small><?php echo anchor('data_source/#!/view/40', 'Manage This Datasource', array('class'=>'manage_ds_link'));?></small></h1>
+					<h1><small><?php echo anchor('data_source/#!/view/'.$data_source_id, 'Manage This Datasource', array('class'=>'manage_ds_link'));?></small></h1>
 				</span>
 				<div class="clearfix"></div>
 			</div>
