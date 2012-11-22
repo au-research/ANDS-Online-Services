@@ -41,7 +41,7 @@
       			<xsl:apply-templates select="extRif:extendedMetadata/extRif:quality_level"/>
       			<xsl:apply-templates select="extRif:extendedMetadata/extRif:feedType"/>   
                 <xsl:apply-templates select="extRif:extendedMetadata/extRif:lastModifiedBy"/>  
-                <xsl:apply-templates select="extRif:extendedMetadata/extRif:spatialGeometry/extRif:geometry"/>             	
+                <xsl:apply-templates select="extRif:extendedMetadata/extRif:spatialGeometry/extRif:extent"/>             	
         	</xsl:when>
         </xsl:choose>
 
@@ -475,7 +475,7 @@
         </xsl:element>
     </xsl:template>
     
-    <xsl:template match="extRif:extendedMetadata/extRif:spatialGeometry/extRif:geometry">
+    <xsl:template match="extRif:extendedMetadata/extRif:spatialGeometry/extRif:extent">
     	<xsl:element name="field">
             <xsl:attribute name="name">spatial</xsl:attribute>
             <xsl:value-of select="."/>
@@ -517,7 +517,7 @@
     </xsl:template> 
 
 
-    <xsl:template match="date | description | spatial | text"/>
+    <xsl:template match="date | description | spatial | text | extRif:geometry"/>
 
     
     <xsl:template match="name"/>

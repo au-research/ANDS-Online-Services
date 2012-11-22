@@ -75,6 +75,14 @@ class Registry_object extends MX_Controller {
 		$jsonData = json_encode($jsonData);
 		echo $jsonData;
 	}
+	
+	function getLeo($id){
+		$this->load->model('registry_objects', 'ro');
+		$ro = $this->ro->getByID($id);
+		$ro->enrich();
+		//echo $ro->getExtRif();
+		echo $ro->transformForSOLR();
+	}
 
 	/**
 	 * Get the edit form of a Record

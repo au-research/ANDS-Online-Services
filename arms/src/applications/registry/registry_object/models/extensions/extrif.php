@@ -61,10 +61,11 @@ class Extrif_Extension extends ExtensionBase
 				//echo "gnaa..";
 				// xxx: spatial extents (sanity checking?)
 				$spatialGeometry = $extendedMetadata->addChild("extRif:spatialGeometry", NULL, EXTRIF_NAMESPACE);
-				foreach ($this->ro->determineSpatialExtents() AS $extent)
+				foreach ($this->ro->getLocationAsLonLats() AS $lonLat)
 				{
-					echo "enriching..." . $extent;
-					$spatialGeometry->addChild("extRif:extent", $extent, EXTRIF_NAMESPACE);
+					//echo "enriching..." . $extent;
+					$spatialGeometry->addChild("extRif:geometry", $lonLat, EXTRIF_NAMESPACE);
+					$spatialGeometry->addChild("extRif:extent", $this->ro->calcExtent($lonLat), EXTRIF_NAMESPACE);
 				}
 				
 				

@@ -145,7 +145,77 @@ class Spatial_Extension extends ExtensionBase
 		}		
 		return $extents;
 	}
-
+	
+	function getLocationAsLonLats()
+	{
+		$coords = array();
+		
+		$sxml = $this->ro->getSimpleXML();		
+		$spatial_elts = $sxml->xpath('//spatial');
+		
+		foreach ($spatial_elts AS $spatial)
+		{
+			
+			$type = $spatial["type"];
+			$value = (string)$spatial;
+			
+			if($this->isValidKmlPolyCoords($value) && ($type == 'kmlPolyCoords' || $type == 'gmlKmlPolyCoords'))
+			{
+				$coords[] = $value;					
+			}
+			elseif($type == 'iso19139dcmiBox')
+			{
+				$tok = strtok($value, ";");
+				while ($tok !== FALSE)
+				{
+					$keyValue = explode("=",$tok);
+					if(strtolower(trim($keyValue[0])) == 'northlimit' && is_numeric($keyValue[1]))
+					{
+					  $north = floatval($keyValue[1]);
+					}
+					if(strtolower(trim($keyValue[0])) == 'southlimit' && is_numeric($keyValue[1]))
+					{
+					  $south = floatval($keyValue[1]);
+					}
+					if(strtolower(trim($keyValue[0])) == 'westlimit' && is_numeric($keyValue[1]))
+					{
+					  $west = floatval($keyValue[1]);
+					}
+					if(strtolower(trim($keyValue[0])) == 'eastlimit' && is_numeric($keyValue[1]))
+					{
+					  $east = floatval($keyValue[1]);
+					}
+				  	$tok = strtok(";");
+				}
+				if($north == $south && $east == $west){
+					$coords[] = $east.",".$north;	
+				}
+				else{
+					$coords[] = $east.",".$north." ".$east.",".$south." ".$west.",".$south." ".$west.",".$north." ".$east.",".$north;
+				}
+			}
+			elseif($type == 'iso19139dcmiPoint' || $type == 'dcmiPoint') //"name=Tasman Sea, AU; east=160.0; north=-40.0"
+			{
+				$tok = strtok($value, ";");
+				while ($tok !== FALSE)
+				{
+					$keyValue = explode("=",$tok);
+					if(strtolower(trim($keyValue[0])) == 'north' && is_numeric($keyValue[1]))
+					{
+					  $north = floatval($keyValue[1]);
+					}
+					if(strtolower(trim($keyValue[0])) == 'east' && is_numeric($keyValue[1]))
+					{
+					  $east = floatval($keyValue[1]);
+					}
+				  	$tok = strtok(";");
+				}
+				$coords[] = $east.",".$north;	
+			}
+		}		
+		return $coords;
+	}
+	
 	
 	function getSpatialExtents()
 	{
@@ -160,6 +230,49 @@ class Spatial_Extension extends ExtensionBase
 		}
 
 		return $extents;	
+	}
+	
+	function calcExtent($coords)
+	{
+		$north = -90;
+		$south = 90;
+		$west  = 180;
+		$east  = -180;
+		$tok = strtok($coords, " ");
+		while ($tok !== FALSE)
+		{
+			$keyValue = explode(",", $tok);
+			if(is_numeric($keyValue[1]) && is_numeric($keyValue[0]))
+				{
+
+				$lng = floatval($keyValue[0]);
+				$lat = floatval($keyValue[1]);
+				//$msg = $msg.'<br/>lat ' .$lat. ' long '.$lng;
+				if ($lat > $north)
+				{
+				 $north = $lat;
+				}
+				if($lat < $south)
+				{
+				 $south = $lat;
+				}
+				if($lng < $west)
+				{
+				 $west = $lng;
+				}
+				if($lng > $east)
+				{
+				 $east = $lng;
+				}
+			}
+			$tok = strtok(" ");
+		}
+		if($north == $south && $east == $west){
+			return $west." ".$south;	
+		}
+		else{
+			return $west." ".$south." ".$east." ".$north;
+		}			
 	}
 	
 	function isValidKmlPolyCoords($coords)
