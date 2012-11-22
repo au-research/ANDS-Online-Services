@@ -487,7 +487,7 @@ class Vocab_services extends CI_Model {
 		if (is_array($affiliations) && count($affiliations) > 0)
 		{
 			if($limit == 0){
-				$query = $this->db->select('id')->where_in('record_owner',$affiliations)->get('vocab_metadata');
+				$query = $this->db->select('id')->where_in('record_owner',$affiliations)->where('status !=','DRAFT')->where('status !=','RETIRED')->get('vocab_metadata');
 			}
 			else{
 				$query = $this->db->select('id')->where_in('record_owner',$affiliations)->where('status !=','DRAFT')->where('status !=','RETIRED')->get('vocab_metadata', $limit, $offset);
