@@ -1,4 +1,4 @@
 <?php
 $autoload['routes'] = array('routes');
-$autoload['libraries'] = array();
+$autoload['libraries'] = array('stats');
 $autoload['helper'] = array();

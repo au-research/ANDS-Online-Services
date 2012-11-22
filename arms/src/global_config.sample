@@ -30,6 +30,22 @@ $eDBCONF['registry']['autoinit'] = TRUE;
 $eDBCONF['registry']['stricton'] = FALSE;
 $eDBCONF['registry']['save_queries'] = FALSE; 
 
+$eDBCONF['portal']['hostname'] = 'localhost';
+$eDBCONF['portal']['username'] = 'webuser';
+$eDBCONF['portal']['password'] = '';
+$eDBCONF['portal']['database'] = 'dbs_portal';
+$eDBCONF['portal']['dbdriver'] = 'mysql';
+$eDBCONF['portal']['dbprefix'] = '';
+$eDBCONF['portal']['pconnect'] = TRUE;
+$eDBCONF['portal']['db_debug'] = TRUE;
+$eDBCONF['portal']['cache_on'] = FALSE;
+$eDBCONF['portal']['cachedir'] = '';
+$eDBCONF['portal']['char_set'] = 'utf8';
+$eDBCONF['portal']['dbcollat'] = 'utf8_general_ci';
+$eDBCONF['portal']['swap_pre'] = '';
+$eDBCONF['portal']['autoinit'] = TRUE;
+$eDBCONF['portal']['stricton'] = FALSE;
+$eDBCONF['portal']['save_queries'] = FALSE; 
 
 $eDBCONF['cosi']['hostname'] = 'ands-dev.anu.edu.au';
 $eDBCONF['cosi']['username'] = 'webuser';
