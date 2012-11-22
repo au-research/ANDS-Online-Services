@@ -13,6 +13,7 @@ class Solr {
 	private $result;
 	private $options;
 
+
 	/**
 	 * Construction of this class
 	 */
@@ -38,8 +39,20 @@ class Solr {
      * @param string $value
      */
     function setOpt($field, $value){
-    	$this->options[$field] = $value;
-    	//$this->executeSearch(); /// ?????? bad bad bad XXX: fixy fixy
+        if(isset($this->options[$field])){
+            if(is_array($this->options[$field])){
+                array_push($this->options[$field], $value);
+            }else{
+                $this->options[$field] = array($this->options[$field], $value);
+            }
+        }else{
+    	   $this->options[$field] = $value;
+        }
+    }
+
+    public function getOptions()
+    {
+        return $this->options;
     }
 
      /**
@@ -47,10 +60,11 @@ class Solr {
      * @param string $field 
      * @param string $value
      */
-    function setFacetOpt($field, $value){
+    function setFacetOpt($field, $value=null){
         $this->setOpt('facet','true');
-        $this->setOpt('facet.' . $field, $value);
+        $this->setOpt('facet.' . $field, $value); 
     }
+
 
     /**
      * Manually set the solr url
@@ -59,6 +73,7 @@ class Solr {
     function setSolrUrl($value){
     	$this->solr_url = $value;
     }
+
 
     /**
      * return the total numFound of the search result
@@ -132,7 +147,13 @@ class Solr {
 	function executeSearch($as_array = false){
 		$fields_string='';
 		foreach($this->options as $key=>$value) {
-			$fields_string .= $key.'='.$value.'&';
+            if(is_array($value)){
+                foreach($value as $v){
+                   $fields_string .= $key.'='.$v.'&';
+                }
+            }else{
+                $fields_string .= $key.'='.$value.'&';
+            }
 		}//build the string
 
     	$ch = curl_init();
