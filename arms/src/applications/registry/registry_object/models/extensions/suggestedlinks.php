@@ -20,16 +20,30 @@ class Suggestedlinks_Extension extends ExtensionBase
 	function getSuggestedLinks($suggestor, $start=0, $rows=20)
 	{
 		$suggested_links = array();
-		if (method_exists($this,"_suggest_".$suggestor))
+		if (!$suggestor) { throw new Exception("No suggestor specified..."); }
+
+		// Get the necessary classes
+		require_once(APP_PATH . 'registry_object/suggestors/_suggestor.php');
+
+		if (file_exists(APP_PATH . 'registry_object/suggestors/' . $suggestor . '.php'))
 		{
-			$suggested_links = $this->{"_suggest_" . $suggestor}($start, $rows);
+			require_once(APP_PATH . 'registry_object/suggestors/' . $suggestor . '.php');
+		}
+		
+		// Try and instantiate the class
+		if (class_exists("Suggestor_" . $suggestor))
+		{
+			$classname = "Suggestor_" . $suggestor;
+			$suggestor = new $classname();
+			$suggested_links = $suggestor->getSuggestedLinksForRegistryObject($this->ro, $start, $rows);
 		}
 		else
 		{
-			throw new Exception("Unsupported Suggestor in suggestedlinks.php");
+			throw new Exception("Suggestor could not be found: " . $suggestor);
 		}
 
 		return $suggested_links;
+
 	}
 	
 
