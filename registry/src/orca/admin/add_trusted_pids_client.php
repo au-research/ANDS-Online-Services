@@ -167,18 +167,4 @@ require '../../_includes/finish.php';
 function valid_ip($ip) { 
     return preg_match("/^([1-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])" . 
             "(\.([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])){3}$/", $ip); 
-} 
-
-function curl_file_get_contents($URL)
-    {
-        $c = curl_init();
-        curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($c, CURLOPT_URL, $URL);
-        $contents = curl_exec($c);
-        curl_close($c);
-
-        if ($contents) return $contents;
-            else return FALSE;
-    }
-
-?>
+}
