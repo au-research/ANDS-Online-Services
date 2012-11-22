@@ -1,3 +1,8 @@
+</div><!-- container -->
+<div class="social">
+	<a href="#"><img src="<?php echo asset_url('images/facebook.png','core');?>" alt="" /></a><a href="#"><img src="<?php echo asset_url('images/twitter.png','core');?>" alt="" /></a> RSS,ATOM and Twitter feeds are now available. Learn more here....
+</div><!-- social -->
+
 <div class="footer">
 		<div class="foot">
 			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui. </p>
@@ -24,13 +29,27 @@
 		</div><!-- inner -->
 	</div><!-- foot_nav -->
 
+
+	 <script>
+        localStorage.clear();
+        var base_url = '<?php echo base_url();?>';
+        var default_base_url = "<?php echo $this->config->item('default_base_url');?>";
+        var suffix = '#!/';
+    </script>
+
 	<!-- Zoo Scripts Untouched -->
 	<script type="text/javascript" src="<?php echo asset_url('js/jquery-1.7.2.min.js', 'core');?>"></script>
 	<script type="text/javascript" src="<?php echo asset_url('js/jquery.flexslider-min.js', 'core');?>"></script>
 	<script type="text/javascript" src="<?php echo asset_url('js/jquery-ui.js', 'core');?>"></script>
 	<script type="text/javascript" src="<?php echo asset_url('js/script.js', 'core');?>"></script>
 
-	 <script src="<?php echo asset_url('lib/less-1.3.0.min.js', 'base');?>" type="text/javascript"></script>
+	<script src="<?php echo asset_url('lib/less-1.3.0.min.js', 'base');?>" type="text/javascript"></script>
+	<script src="<?php echo asset_url('lib/mustache.js','base');?>"></script>
+
+	<!-- Module-specific styles and scripts -->
+    <?php if (isset($scripts)): foreach($scripts as $script):?>
+        <script src="<?php echo asset_url('js/' . $script);?>.js"></script>
+    <?php endforeach; endif; ?>
 
 </body>
 </html>

@@ -1,5 +1,5 @@
 <?php $this->load->view('rda_header');?>
-<div class="container">
+
 	<div class="intro">
 		<h3>What’s in Research Data Australia</h3>
 		<div class="intro_box">
@@ -29,8 +29,8 @@
 	</div><!-- intro -->
 	<div class="right">
 		<h3>Featured research domains</h3>
-		<div class="flexslider">
-			<ul class="slides">
+		<div class="flexslider" id="spotlight">
+			<!--ul class="slides">
 				<li>
 					<img src="images/t/auscope.jpg" alt="" />
 					<a href="#" class="title">The Australian Plant Phenomics Facility</a>
@@ -47,7 +47,7 @@
 					</div>
 					<a href="http://www.australianplantphenomics.com.au"><strong>www.australianplantphenomics.com.au</strong></a>
 				</li>
-			</ul>
+			</ul-->
 		</div><!-- flexslider -->
 		<div class="clear"></div>
 		<h3>Who contributes to Research Data Australia?</h3>
@@ -55,8 +55,21 @@
 		<a href="#"><strong>See All</strong></a>
 	</div><!-- right -->		
 	<div class="clear"></div>
-</div><!-- container -->
-<div class="social">
-	<a href="#"><img src="<?php echo asset_url('images/facebook.png');?>" alt="" /></a><a href="#"><img src="<?php echo asset_url('images/twitter.png');?>" alt="" /></a> RSS,ATOM and Twitter feeds are now available. Learn more here....
-</div><!-- social -->
+
+
+
+<script type="text/x-mustache" id="spotlight_template">
+	<ul class="slides">
+	{{#partners}}
+		<li>
+			<a href="#" class="title">{{{title}}}</a>
+			<div class="excerpt">
+				{{{description}}}
+			</div>
+			<a href="{{{url}}}"><strong>{{{url}}}</strong></a>
+		</li>
+	{{/partners}}
+	</ul>
+</script>
+
 <?php $this->load->view('rda_footer');?>

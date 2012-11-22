@@ -55,7 +55,6 @@
 				<a href="#" class="search_map">Map</a>
 				<div class="clear buttons">
 					<a href="#" id="ad_st">Advanced Search</a>
-					<a href="#">What can I Search for</a>
 				</div>
 			</form>
 		</div><!-- inner -->
@@ -124,3 +123,5 @@
 			</div><!-- adv_inner -->
 		</div><!-- advanced_search -->
 	</div><!-- search -->
+
+	<div class="container">

@@ -20,10 +20,10 @@ $application_directives = array(
 				"active_application" => "registry",
 				"default_controller" => "auth/dashboard",
 			),
-	"rda" => 
+	"portal" => 
 			array(	
-				"base_url" => "%%BASEURL%%/rda/",
-				"active_application" => "rda",
+				"base_url" => "%%BASEURL%%/portal/",
+				"active_application" => "portal",
 				"default_controller" => "home/index",
 			)
 );

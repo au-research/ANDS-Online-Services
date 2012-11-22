@@ -9,7 +9,6 @@ class Home extends MX_Controller {
 		$this->load->library('solr');
 		$this->solr->setOpt('rows','0');
 		$this->solr->setFacetOpt('field', 'class');
-		$this->solr->setFacetOpt('field', 'type');
 		$this->solr->executeSearch();
 
 		//classes
@@ -19,6 +18,9 @@ class Home extends MX_Controller {
 			$data[$class] = $num;
 		}
 		
+		//spotlights
+		
+		$data['scripts'] = array('home_page');
 		$this->load->view('home', $data);
 	}
 
