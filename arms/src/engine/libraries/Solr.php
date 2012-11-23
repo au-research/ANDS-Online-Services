@@ -12,7 +12,7 @@ class Solr {
 	private $solr_url;
 	private $result;
 	private $options;
-
+    private $multi_valued_fields;
 
 	/**
 	 * Construction of this class
@@ -29,7 +29,8 @@ class Solr {
      */
     function init(){
     	$this->solr_url = $this->CI->config->item('solr_url');
-    	$this->options = array('q'=>'*:* +status:PUBLISHED','start'=>'0','indent'=>'on', 'wt'=>'json', 'fl'=>'*', 'rows'=>'10');
+    	$this->options = array('q'=>'','start'=>'0','indent'=>'on', 'wt'=>'json', 'fl'=>'*', 'rows'=>'10');
+        $this->multi_valued_fields = array('facet.field', 'fq');
     	return true;
     }
 
@@ -43,7 +44,11 @@ class Solr {
             if(is_array($this->options[$field])){
                 array_push($this->options[$field], $value);
             }else{
-                $this->options[$field] = array($this->options[$field], $value);
+                if(in_array($field, $this->multi_valued_fields)){
+                    $this->options[$field] = array($this->options[$field], $value);
+                }else{
+                    $this->options[$field] = $value;
+                }
             }
         }else{
     	   $this->options[$field] = $value;
@@ -96,7 +101,11 @@ class Solr {
      * @return array 
      */
     function getResult(){
-    	return $this->result->{'reponse'};
+    	return $this->result->{'response'};
+    }
+
+    function getFacet(){
+        return $this->result->{'facet_counts'};
     }
 
     /**
@@ -110,7 +119,7 @@ class Solr {
             // Sort the pairs (they arrive in list form, we want them as value=>count tuples)
             $value_pair_list = $this->result->facet_counts->facet_fields->{$facet_field};
             $tuples = array();
-            for ($i=0; ($i+2)<count($value_pair_list); $i+=2)
+            for ($i=0; $i<count($value_pair_list)-1; $i+=2)
             {
                 $tuples[$value_pair_list[$i]] = $value_pair_list[$i+1];
             }
@@ -140,13 +149,10 @@ class Solr {
         $this->options['q'].=' '. $condition;
     }
 
-	/**
-	 * Execute the search based on the given options
-	 * @return array results
-	 */
-	function executeSearch($as_array = false){
-		$fields_string='';
-		foreach($this->options as $key=>$value) {
+
+    function constructFieldString(){
+        $fields_string='';
+        foreach($this->options as $key=>$value) {
             if(is_array($value)){
                 foreach($value as $v){
                    $fields_string .= $key.'='.$v.'&';
@@ -154,7 +160,17 @@ class Solr {
             }else{
                 $fields_string .= $key.'='.$value.'&';
             }
-		}//build the string
+        }//build the string
+        return $fields_string;
+    }
+
+	/**
+	 * Execute the search based on the given options
+	 * @return array results
+	 */
+	function executeSearch($as_array = false){
+		
+        $fields_string = $this->constructFieldString();
 
     	$ch = curl_init();
     	//set the url, number of POST vars, POST data

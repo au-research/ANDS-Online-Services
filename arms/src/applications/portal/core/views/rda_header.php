@@ -42,7 +42,7 @@
 	<div class="search">
 		<div class="inner">
 			<form action="/" method="post">
-				<input type="text" name="s" value="Search eg. Something Something" onblur="if(this.value.length == 0) this.value='Search eg. Something Something';" onclick="if(this.value == 'Search eg. Something Something') this.value='';" />
+				<input type="text" id="search_box" name="s" value="Search eg. Something Something" onblur="if(this.value.length == 0) this.value='Search eg. Something Something';" onclick="if(this.value == 'Search eg. Something Something') this.value='';" />
 				<div class="text_select">
 						<input type="text" name="Subject" autocomplete="off" />
 						<span class="default_value">Subject</span>				

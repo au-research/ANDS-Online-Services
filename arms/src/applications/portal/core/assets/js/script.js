@@ -52,4 +52,10 @@ $(document).ready(function() {
     	$('.advanced_search').slideUp('fast');
     	return false;   	
     });
+
+    $('#search_box').keypress(function(e){
+		if(e.which==13){//press enter
+			window.location = base_url+'search/#!/q='+$(this).val();
+		}
+	});
 });
