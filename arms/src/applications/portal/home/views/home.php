@@ -3,25 +3,25 @@
 	<div class="intro">
 		<h3>What’s in Research Data Australia</h3>
 		<div class="intro_box">
-			<div class="intro_inner" id="intro_inner_1">
+			<div class="intro_inner" id="collection_icon">
 				<h4><a href="#">Collections <span>(<?php echo $collection;?>)</span></a></h4>
 				Research datasets or collections of research materials.
 			</div><!-- intro_inner -->
 		</div><!-- intro_box -->
 		<div class="intro_box">
-			<div class="intro_inner" id="intro_inner_2">
+			<div class="intro_inner" id="party_icon">
 				<h4><a href="#">Parties <span>(<?php echo $party;?>)</span></a></h4>
 				Researchers or research organisations that create or maintain research datasets or collections.
 			</div><!-- intro_inner -->
 		</div><!-- intro_box -->
 					<div class="intro_box">
-			<div class="intro_inner" id="intro_inner_3">
+			<div class="intro_inner" id="service_icon">
 				<h4><a href="#">Services <span>(<?php echo $service;?>)</span></a></h4>
 				Services that support the creation or use of research datasets or collections.
 			</div><!-- intro_inner -->
 		</div><!-- intro_box -->
 					<div class="intro_box">
-			<div class="intro_inner" id="intro_inner_4">
+			<div class="intro_inner" id="activity_icon">
 				<h4><a href="#">Activities <span>(<?php echo $activity;?>)</span></a></h4>
 				Projects or programs that create research datasets or collections.
 			</div><!-- intro_inner -->

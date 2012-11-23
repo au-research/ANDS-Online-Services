@@ -74,5 +74,18 @@ define('gCOSI_AUTH_LDAP_DN', gCOSI_AUTH_LDAP_UID . ", " . gCOSI_AUTH_LDAP_BASE_D
 
 define('gSHIBBOLETH_SESSION_INITIATOR', '/Shibboleth.sso/Login');
 
+
+/*
+ * Status for records
+ */
+define('PUBLISHED', 'PUBLISHED');
+define('APPROVED', 'APPROVED');
+define('SUBMITTED_FOR_ASSESSMENT', 'SUBMITTED_FOR_ASSESSMENT');
+define('ASSESSMENT_IN_PROGRESS', 'ASSESSMENT_IN_PROGRESS');
+define('DRAFT', 'DRAFT');
+
+
+
+
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */

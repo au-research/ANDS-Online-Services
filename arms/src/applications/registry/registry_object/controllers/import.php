@@ -166,8 +166,8 @@ class Import extends MX_Controller {
 		$this->load->model('rifcs', 'rifcs');
 		
 		$this->load->model('data_source/data_sources', 'ds');
-		$data_sources = array_slice($this->ds->getAll(18),0,2);
-		
+		$data_sources = array($this->ds->getByKey('abctb.org.au'));
+
 		bench(0);
 		$timewaiting = 0;
 		gc_enable();
@@ -178,12 +178,12 @@ class Import extends MX_Controller {
 			try
 			{
 				bench(1);
-				$xml = $this->getRIFCSFromURI("http://demo.ands.org.au/registry/orca/services/getRegistryObjects.php?parties=party&activities=activity&services=service&collections=collection&source_key=".rawurlencode($ds->key));
+				$xml = $this->getRIFCSFromURI("http://demo.ands.org.au/registry/orca/services/getRegistryObjects.php?parties=party&collections=collection&activities=activity&services=service&source_key=".rawurlencode($ds->key));
 				$bench = bench(1);
 				echo $ds->key . " => " . $bench . BR;
 				
 				$timewaiting += (float) $bench;
-				$this->ingestXMLForDataSource($ds, $xml);
+				$imported_registry_object_ids = $this->ingestXMLForDataSource($ds, $xml);
 				unset($xml);
 				
 				gc_collect_cycles();
@@ -194,18 +194,19 @@ class Import extends MX_Controller {
 				echo "<pre>" . nl2br($e->getMessage()) . "</pre>" . BR;
 			}
 		}
-		
+
 		foreach($data_sources AS $ds)
 		{
 			try
 			{
-	
-				foreach ($this->ro->getIDsByDataSourceID($ds->data_source_id) AS $ro_id)
+				foreach ($imported_registry_object_ids AS $ro_id)
 				{
 					$ro = $this->ro->getByID($ro_id);
+
 					// add reverse relationships
 					$ro->addRelationships();
 					$ro->update_quality_metadata();
+
 					// spatial center resooultion
 					// vocab indexing resolution
 					
@@ -241,6 +242,7 @@ class Import extends MX_Controller {
 		$this->validateRIFCSXML($xml);
 		$sxml = $this->getSimpleXMLFromString($xml);
 		
+		$imported_registry_object_ids = array();
 		
 		$status = $this->getDefaultRecordStatusForDataSource($data_source);
 		
@@ -261,10 +263,11 @@ class Import extends MX_Controller {
 			
 					$record_owner = "SYSTEM";
 					
-					$ro = $this->ro->create($data_source->key, (string)$registryObject->key, $ro_class, "", $status, "defaultSlug", $record_owner);
+					$ro = $this->ro->create($data_source->key, (string)$registryObject->key, $ro_class, "", $status, "defaultSlug", $record_owner, NULL);
 					$ro->created_who = "SYSTEM";
 					$ro->data_source_key = $data_source->key;
 					$ro->group = (string) $registryObject['group'];
+					$ro->type = (string) $ro_xml['type'];
 					
 					// Order is important here!
 					$ro->updateXML($registryObject->asXML());
@@ -273,6 +276,8 @@ class Import extends MX_Controller {
 					$ro->generateSlug();
 					
 					$ro->save();
+
+					$imported_registry_object_ids[] = $ro->id;
 					print $ro;
 					//@$ro->free();
 					unset($ro);
@@ -286,7 +291,7 @@ class Import extends MX_Controller {
 			}
 			
 		}
-		
+		return $imported_registry_object_ids;
 		unset($sxml);
 				
 	}
@@ -310,7 +315,7 @@ class Import extends MX_Controller {
 			throw new Exception("Unable to parse XML. Perhaps your XML file is not well-formed?");
 		}
 		libxml_use_internal_errors(true);
-		$validation_status = @$doc->schemaValidate("application/modules/registry_object/schema/registryObjects.xsd");
+		$validation_status = @$doc->schemaValidate(APP_PATH . "registry_object/schema/registryObjects.xsd");
 		
 		if ($validation_status === TRUE) 
 		{

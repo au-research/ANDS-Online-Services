@@ -558,7 +558,9 @@ a.search_map {
 	font-weight: bold;
 }
 
-
+.hide {
+	display:none;
+}
 
 /***********************************************************************************/
 /*                             Content List			                               */
@@ -568,6 +570,10 @@ a.search_map {
 	margin: 0 auto;	
 	padding: 42px 0 0 0;
 	position: relative;
+}
+.less_padding {
+	padding-top: 21px;
+	padding-bottom: 21px;
 }
 .intro {
 	width: 418px;
@@ -582,17 +588,17 @@ a.search_map {
 .intro_inner {
 	padding: 26px 10px 0 113px;
 }
-#intro_inner_1 {
-	background: url(images/intro_inner_1.png) no-repeat 22px 36px;	
+#collection_icon {
+	background: url(images/collection.png) no-repeat 22px 36px;	
 }
-#intro_inner_2 {
-	background: url(images/intro_inner_2.png) no-repeat 25px 35px;	
+#party_icon {
+	background: url(images/party.png) no-repeat 25px 35px;	
 }
-#intro_inner_3 {
-	background: url(images/intro_inner_3.png) no-repeat 19px 37px;	
+#service_icon {
+	background: url(images/service.png) no-repeat 19px 37px;	
 }
-#intro_inner_4 {
-	background: url(images/intro_inner_4.png) no-repeat 21px 30px;	
+#activity_icon{
+	background: url(images/activity.png) no-repeat 21px 30px;	
 }
 .intro_inner h4,
 .intro_inner h4 a {

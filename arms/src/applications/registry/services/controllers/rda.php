@@ -105,15 +105,22 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 			throw new Exception("Invalid URL SLUG or registry_object_id specified.");
 		}
 
+		// Some filter variables
+		$limit = ($this->input->get('limit') ? $this->input->get('limit') : 2);
+		$offset = ($this->input->get('offset') ? $this->input->get('offset') : null);
+		$type_filter = ($this->input->get('type_filter') ? $this->input->get('type_filter') : null);
+
 		// Get the RO instance for this registry object so we can fetch its connections
 		$this->load->model('registry_object/registry_objects', 'ro');
 		if ($this->input->get('slug'))
 		{
 			$registry_object = $this->ro->getBySlug($this->input->get('slug'));
+			$published_only = TRUE;
 		}
 		elseif ($this->input->get('registry_object_id'))
 		{
 			$registry_object = $this->ro->getByID($this->input->get('registry_object_id'));
+			$published_only = FALSE;
 		}
 
 		if (!$registry_object)
@@ -124,7 +131,7 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 		// XXX: TODO: some logic to limit to 20 per "class of connection" and offset on request (for pagination)
 
 		// Return this registry object's connections
-		echo json_encode(array("connections"=>$registry_object->getConnections()));
+		echo json_encode(array("connections"=>$registry_object->getConnections($published_only,$type_filter,$limit,$offset)));
 	}
 
 
