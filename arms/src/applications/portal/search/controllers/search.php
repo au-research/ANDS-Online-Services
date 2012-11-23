@@ -90,7 +90,7 @@ class Search extends MX_Controller {
 					'count' => $count
 				);
 			}
-			array_push($data['facet_result'], array('label'=>$display, 'values'=>$facet_values));
+			array_push($data['facet_result'], array('label'=>$display, 'facet_type'=>$facet, 'values'=>$facet_values));
 		}
 
 		/**

@@ -55,8 +55,11 @@ class Solr {
         }
     }
 
-    public function getOptions()
-    {
+    /**
+     * Return all of the options, mainly for debugging
+     * @return array of SOLR options
+     */
+    public function getOptions(){
         return $this->options;
     }
 
@@ -150,6 +153,10 @@ class Solr {
     }
 
 
+    /**
+     * Construct a field string based on SOLR OPTIONS, for posting
+     * @return string fields_string
+     */
     function constructFieldString(){
         $fields_string='';
         foreach($this->options as $key=>$value) {

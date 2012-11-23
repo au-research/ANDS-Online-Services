@@ -1,7 +1,7 @@
-$(document).ready(function() {
+var searchData = [];
+var searchUrl = base_url+'search/filter';
 
-	var searchData = [];
-	var searchUrl = base_url+'search/filter';
+$(document).ready(function() {
 
 	/*GET HASH TAG*/
 	$(window).hashchange(function(){
@@ -41,6 +41,7 @@ function executeSearch(searchData, searchUrl){
 			console.log(data);
 
 			//search result
+			$('#search-result').html();
 			var template = $('#search-result-template').html();
 			var output = Mustache.render(template, data.result);
 			$('#search-result').html(output);
@@ -54,9 +55,20 @@ function executeSearch(searchData, searchUrl){
 			var template = $('#facet-template').html();
 			var output = Mustache.render(template, data);
 			$('#facet-result').html(output);
+
+			initSearchPage();
 		},
 		error: function(data){
 			console.error(data);
 		}
+	});
+}
+
+function initSearchPage(){
+
+	//bind the facets
+	$('.facet_select').click(function(){
+		searchData.push({label:$(this).attr('facet_type'),value:$(this).attr('facet_value')});
+		executeSearch(searchData, searchUrl);
 	});
 }

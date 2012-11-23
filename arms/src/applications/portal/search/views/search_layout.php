@@ -53,7 +53,7 @@
 	<h3 class="widget_title">{{label}}</h3>
 	<ul>
 		{{#values}}
-			<li><a href="#">{{title}} ({{count}})</a></li>
+			<li><a href="javascript:;" class="facet_select" facet_type="{{facet_type}}" facet_value="{{title}}">{{title}} ({{count}})</a></li>
 		{{/values}}
 	</ul>
 </div>
