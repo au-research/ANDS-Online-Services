@@ -272,8 +272,7 @@ class Oai extends MX_Controller
 		$response = $details['response'];
 		$newtoken = $details['token'];
 		$format = $details['format'];
-
-		if (count($response['records'] > 0))
+		if ($response['count'] > 0)
 		{
 			$this->output->append_output("\t<ListRecords>\n");
 			foreach ($response['records'] as $rec)
@@ -320,6 +319,12 @@ class Oai extends MX_Controller
 				$this->output->append_output("\t\t</record>\n");
 			}
 			$this->_inject_token($newtoken, $response['count'], $response['cursor']);
+			$this->output->append_output("\t</ListRecords>\n");
+		}
+		else 
+		{
+			$this->output->append_output("\t<ListRecords>\n");
+			$this->_inject_token(' ', 0, 0);
 			$this->output->append_output("\t</ListRecords>\n");
 		}
 	}

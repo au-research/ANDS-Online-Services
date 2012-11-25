@@ -98,15 +98,24 @@ class Records extends CI_Model
 					   true,
 					   100,
 					   $start);
-
-		foreach ($records as &$ro)
+		if (isset($records))
 		{
-			$ro = new _record($ro, $this->db);
-			$ro->sets = $this->sets->get($ro->id);
-		}
-		return array('records' => $records,
+			foreach ($records as &$ro)
+			{
+				$ro = new _record($ro, $this->db);
+				$ro->sets = $this->sets->get($ro->id);
+			}
+			return array('records' => $records,
 			     'cursor' => $start + count($records),
 			     'count' => $count);
+		}
+		else
+		{
+			return array('records' => 0,
+				'cursor' => 0,
+				'count' => 0);
+		}
+		
 	}
 
 	/**
