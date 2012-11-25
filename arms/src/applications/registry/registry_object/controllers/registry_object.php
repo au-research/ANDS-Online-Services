@@ -56,7 +56,6 @@ class Registry_object extends MX_Controller {
 	public function get_record($id){
 		$this->load->model('registry_objects', 'ro');
 		$ro = $this->ro->getByID($id);
-
 		$data['xml'] = $ro->getRif();
 		$data['extrif'] = $ro->getExtRif();
 		$data['view'] = $ro->transformForHtml();
@@ -81,7 +80,7 @@ class Registry_object extends MX_Controller {
 		$ro = $this->ro->getByID($id);
 		$ro->enrich();
 		//echo $ro->getExtRif();
-		echo $ro->transformForSOLR();
+		echo $ro->transformToDC();
 	}
 
 	/**

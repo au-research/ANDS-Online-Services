@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+<xsl:stylesheet version="1.0" xmlns:ro="http://ands.org.au/standards/rif-cs/registryObjects" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:extRif="http://ands.org.au/standards/rif-cs/extendedRegistryObjects"
-	exclude-result-prefixes="extRif">
+	exclude-result-prefixes="extRif ro">
 	<xsl:output method="xml" encoding="UTF-8" indent="yes" omit-xml-declaration="yes"/>
-	<xsl:template match="registryObject">
+	<xsl:template match="ro:registryObject">
 		<xsl:variable name="ro_class">
-			<xsl:apply-templates select="collection | activity | party  | service" mode="getClass"/>
+			<xsl:apply-templates select="ro:collection | ro:activity | ro:party  | ro:service" mode="getClass"/>
 		</xsl:variable>
 		<div class="">
 			<!-- tabs -->
@@ -142,7 +142,7 @@
 		<input type="hidden" class="hide" id="originatingSource" value="{$ro_class}"/>
 	</xsl:template>
 
-	<xsl:template match="collection | activity | party  | service" mode="getClass">
+	<xsl:template match="ro:collection | ro:activity | ro:party  | ro:service" mode="getClass">
 		<xsl:value-of select="name()"/>
 	</xsl:template>
 
@@ -154,14 +154,14 @@
 				<legend>Record Administration</legend>
 				<xsl:variable name="ro_type">
 					<xsl:apply-templates
-						select="collection/@type | activity/@type | party/@type  | service/@type"/>
+						select="ro:collection/@type | ro:activity/@type | ro:party/@type  | ro:service/@type"/>
 				</xsl:variable>
 				<xsl:variable name="dataSourceID">
 					<xsl:value-of select="extRif:extendedMetadata/extRif:dataSourceID"/>
 				</xsl:variable>
 				<xsl:variable name="dateModified">
 					<xsl:apply-templates
-						select="collection/@dateModified | activity/@dateModified | party/@dateModified  | service/@dateModified"/>
+						select="ro:collection/@dateModified | ro:activity/@dateModified | ro:party/@dateModified  | ro:service/@dateModified"/>
 				</xsl:variable>
 
 				<div class="control-group">
@@ -241,13 +241,13 @@
 					</div>
 				</div>
 
-				<xsl:if test="collection">
+				<xsl:if test="ro:collection">
 					<div class="control-group">
 						<label class="control-label" for="title">Date Accessioned</label>
 						<div class="controls">
 							<div class="input-append">
 								<input type="text" class="input-large datepicker" name="title"
-									value="{collection/@dateAccessioned}"/>
+									value="{ro:collection/@dateAccessioned}"/>
 								<button class="btn triggerDatePicker" type="button">
 									<i class="icon-calendar"/>
 								</button>
@@ -269,7 +269,7 @@
 				<legend>Names</legend>
 
 				<xsl:apply-templates
-					select="collection/name | activity/name | party/name  | service/name"/>
+					select="ro:collection/ro:name | ro:activity/ro:name | ro:party/ro:name  | ro:service/ro:name"/>
 				<div class="separate_line"/>
 
 				<button class="btn btn-primary addNew" type="name">
@@ -279,16 +279,16 @@
 		</div>
 	</xsl:template>
 
-	<xsl:template match="collection/@type | activity/@type | party/@type  | service/@type">
+	<xsl:template match="ro:collection/@type | ro:activity/@type | ro:party/@type  | ro:service/@type">
 		<xsl:value-of select="."/>
 	</xsl:template>
 	
-	<xsl:template match="collection/@dateModified | activity/@dateModified | party/@dateModified  | service/@dateModified">
+	<xsl:template match="ro:collection/@dateModified | ro:activity/@dateModified | ro:party/@dateModified  | ro:service/@dateModified">
 		<xsl:value-of select="."/>
 	</xsl:template>
 	
 
-	<xsl:template match="collection/name | activity/name | party/name  | service/name">
+	<xsl:template match="ro:collection/ro:name | ro:activity/ro:name | ro:party/ro:name  | ro:service/ro:name">
 		<div class="aro_box" type="name">
 			<div class="aro_box_display clearfix">
 				<a href="javascript:;" class="toggle">
@@ -310,7 +310,7 @@
 				</div>
 			</div>
 			
-			<xsl:apply-templates select="namePart"/>
+			<xsl:apply-templates select="ro:namePart"/>
 			<div class="separate_line"/>
 			<div class="controls hide">
 				<button class="btn btn-primary addNew" type="namePart">
@@ -320,7 +320,7 @@
 		</div>
 	</xsl:template>
 
-	<xsl:template match="namePart">
+	<xsl:template match="ro:namePart">
 		<div class="aro_box_part hide" type="namePart">
 			<div class="control-group">
 				<label class="control-label" for="title">Name Part: </label>
@@ -345,9 +345,9 @@
 			<fieldset>
 				<legend>Descriptions / Rights</legend>
 				<xsl:apply-templates
-					select="collection/description | activity/description | party/description  | service/description"/>
+					select="ro:collection/ro:description | ro:activity/ro:description | ro:party/ro:description  | ro:service/ro:description"/>
 				<xsl:apply-templates
-					select="collection/rights | activity/rights | party/rights  | service/rights"/>
+					select="ro:collection/ro:rights | ro:activity/ro:rights | ro:party/ro:rights  | ro:service/ro:rights"/>
 				<div class="separate_line"/>
 				<button class="btn btn-primary addNew" type="description">
 					<i class="icon-plus icon-white"/> Add Description </button>
@@ -362,7 +362,7 @@
 		<div id="accesspolicies" class="tab-pane">
 			<fieldset>
 				<legend>Access Policy</legend>
-				<xsl:apply-templates select="service/accessPolicy"/>
+				<xsl:apply-templates select="ro:service/ro:accessPolicy"/>
 				<div class="separate_line"/>
 				<button class="btn btn-primary addNew" type="accesspolicy">
 					<i class="icon-plus icon-white"/> Add Access Policy </button>
@@ -376,7 +376,7 @@
 		<div id="citationinfos" class="tab-pane">
 			<fieldset>
 				<legend>Citation Info</legend>
-				<xsl:apply-templates select="collection/citationInfo"/>
+				<xsl:apply-templates select="ro:collection/ro:citationInfo"/>
 				<div class="separate_line"/>
 				<div class="btn-group dropup">
 					<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"> <i class="icon-pencil icon-white"></i> Add Citation Info</button>
@@ -394,7 +394,7 @@
 		</div>
 	</xsl:template>
 
-	<xsl:template match="collection/description | activity/description | party/description  | service/description">
+	<xsl:template match="ro:collection/ro:description | ro:activity/ro:description | ro:party/ro:description  | ro:service/ro:description">
 		<div class="aro_box" type="description">
 			<h1>Description</h1>
 			<p>
@@ -416,7 +416,7 @@
 		</div>
 	</xsl:template>
 
-	<xsl:template match="collection/rights | activity/rights | party/rights  | service/rights">
+	<xsl:template match="ro:collection/ro:rights | ro:activity/ro:rights | ro:party/ro:rights  | ro:service/ro:rights">
 		<div class="aro_box" type="rights">
 			<h1>Rights</h1>
 			<p>
@@ -447,7 +447,7 @@
 			<fieldset>
 				<legend>Subjects</legend>
 				<xsl:apply-templates
-					select="collection/subject | activity/subject | party/subject  | service/subject"/>
+					select="ro:collection/ro:subject | ro:activity/ro:subject | ro:party/ro:subject  | ro:service/ro:subject"/>
 				<div class="separate_line"/>
 				<button class="btn btn-primary addNew" type="subject">
 					<i class="icon-plus icon-white"/> Add Subject </button>
@@ -462,7 +462,7 @@
 			<fieldset>
 				<legend>Identifiers</legend>
 				<xsl:apply-templates
-					select="collection/identifier | activity/identifier | party/identifier  | service/identifier"/>
+					select="ro:collection/ro:identifier | ro:activity/ro:identifier | ro:party/ro:identifier  | ro:service/ro:identifier"/>
 				<div class="separate_line"/>
 				<button class="btn btn-primary addNew" type="identifier">
 					<i class="icon-plus icon-white"/> Add Identifier </button>
@@ -476,7 +476,7 @@
 			<fieldset>
 				<legend>Related Objects</legend>
 				<xsl:apply-templates
-					select="collection/relatedObject | activity/relatedObject | party/relatedObject  | service/relatedObject"/>
+					select="ro:collection/ro:relatedObject | ro:activity/ro:relatedObject | ro:party/ro:relatedObject  | ro:service/ro:relatedObject"/>
 				<div class="separate_line"/>
 				<button class="btn btn-primary addNew" type="relatedobject">
 					<i class="icon-plus icon-white"/> Add Related Object </button>
@@ -490,7 +490,7 @@
 			<fieldset>
 				<legend>Related Infos</legend>
 				<xsl:apply-templates
-					select="collection/relatedInfo | activity/relatedInfo | party/relatedInfo | service/relatedInfo"/>
+					select="ro:collection/ro:relatedInfo | ro:activity/ro:relatedInfo | ro:party/ro:relatedInfo | ro:service/ro:relatedInfo"/>
 				<div class="separate_line"/>
 				<button class="btn btn-primary addNew" type="relatedinfo">
 					<i class="icon-plus icon-white"/> Add related Info </button>
@@ -504,7 +504,7 @@
 			<fieldset>
 				<legend>Locations</legend>
 				<xsl:apply-templates
-					select="collection/location | activity/location | party/location  | service/location"/>
+					select="ro:collection/ro:location | ro:activity/ro:location | ro:party/ro:location  | ro:service/ro:location"/>
 				<div class="separate_line"/>
 				<button class="btn btn-primary addNew" type="location">
 					<i class="icon-plus icon-white"/> Add Location </button>
@@ -518,7 +518,7 @@
 			<fieldset>
 				<legend>Coverage</legend>
 				<xsl:apply-templates
-					select="collection/coverage | activity/coverage | party/coverage  | service/coverage"/>
+					select="ro:collection/ro:coverage | ro:activity/ro:coverage | ro:party/ro:coverage  | ro:service/ro:coverage"/>
 				<div class="separate_line"/>
 				<button class="btn btn-primary addNew" type="coverage">
 					<i class="icon-plus icon-white"/> Add Coverage </button>
@@ -531,7 +531,7 @@
 		<div id="existencedates" class="tab-pane">
 			<fieldset>
 				<legend>Existence dates</legend>
-				<xsl:apply-templates select="activity/existenceDates | party/existenceDates  | service/existenceDates"/>
+				<xsl:apply-templates select="ro:activity/ro:existenceDates | ro:party/ro:existenceDates  | ro:service/ro:existenceDates"/>
 				<div class="separate_line"/>
 				<button class="btn btn-primary addNew" type="existenceDate">
 					<i class="icon-plus icon-white"/> Add Existence Date </button>
@@ -541,7 +541,7 @@
 	</xsl:template>
 
 
-	<xsl:template match="activity/existenceDates | party/existenceDates  | service/existenceDates">
+	<xsl:template match="ro:activity/ro:existenceDates | ro:party/ro:existenceDates  | ro:service/ro:existenceDates">
 		<div class="aro_box" type="existenceDate">
 			<div class="aro_box_display clearfix">
 				<div class="controls">
@@ -561,7 +561,7 @@
 	</xsl:template>
 
 
-	<xsl:template match="collection/relatedInfo | activity/relatedInfo | party/relatedInfo | service/relatedInfo">
+	<xsl:template match="ro:collection/ro:relatedInfo | ro:activity/ro:relatedInfo | ro:party/ro:relatedInfo | ro:service/ro:relatedInfo">
 		<div class="aro_box" type="relatedInfo">
 			<div class="aro_box_display clearfix">
 				<a href="javascript:;" class="toggle">
@@ -622,7 +622,7 @@
 	</xsl:template>
 
 
-	<xsl:template match="collection/subject  | activity/subject  | party/subject   | service/subject">
+	<xsl:template match="ro:collection/ro:subject  | ro:activity/ro:subject  | ro:party/ro:subject   | ro:service/ro:subject">
 		<div class="aro_box" type="subject">
 			<div class="aro_box_display clearfix">
 				<div class="controls"> Type: <input type="text" class="input-small" name="type"
@@ -637,7 +637,7 @@
 		</div>
 	</xsl:template>
 
-	<xsl:template match="collection/identifier  | activity/identifier  | party/identifier   | service/identifier">
+	<xsl:template match="ro:collection/ro:identifier  | ro:activity/ro:identifier  | ro:party/ro:identifier   | ro:service/ro:identifier">
 		<div class="aro_box" type="identifier">
 			<div class="aro_box_display clearfix">
 				<div class="controls">
@@ -655,7 +655,7 @@
 		</div>
 	</xsl:template>
 
-	<xsl:template match="collection/relatedObject | activity/relatedObject | party/relatedObject  | service/relatedObject">
+	<xsl:template match="ro:collection/ro:relatedObject | ro:activity/ro:relatedObject | ro:party/ro:relatedObject  | ro:service/ro:relatedObject">
 		<div class="aro_box" type="relatedobject">
 			<div class="aro_box_display clearfix">
 				<a href="javascript:;" class="toggle">
@@ -689,7 +689,7 @@
 		</div>
 	</xsl:template>
 
-	<xsl:template match="collection/location | activity/location | party/location  | service/location">
+	<xsl:template match="ro:collection/ro:location | ro:activity/ro:location | ro:party/ro:location  | ro:service/ro:location">
 		<div class="aro_box" type="location">
 			<div class="aro_box_display clearfix">
 				<a href="javascript:;" class="toggle">
@@ -711,7 +711,7 @@
 			</div>
 			<div class="aro_subbox" type="address">
 				<h1>Address</h1>
-				<xsl:apply-templates select="address"/>
+				<xsl:apply-templates select="ro:address"/>
 				<div class="separate_line"/>
 
 				<div class="btn-group dropup">
@@ -735,7 +735,7 @@
 
 			<div class="aro_subbox" type="spatial">
 				<h1>Spatial Location</h1>
-				<xsl:apply-templates select="spatial"/>
+				<xsl:apply-templates select="ro:spatial"/>
 				<div class="separate_line"/>
 				<button class="btn btn-primary addNew" type="spatial">
 					<i class="icon-map-marker icon-white"/> Add Spatial Location </button>
@@ -743,10 +743,10 @@
 		</div>
 	</xsl:template>
 
-	<xsl:template match="collection/coverage | activity/coverage | party/coverage  | service/coverage">
+	<xsl:template match="ro:collection/ro:coverage | ro:activity/ro:coverage | ro:party/ro:coverage  | ro:service/ro:coverage">
 		<div class="aro_box" type="coverage">
-			<xsl:apply-templates select="temporal"/>
-			<xsl:apply-templates select="spatial"/>
+			<xsl:apply-templates select="ro:temporal"/>
+			<xsl:apply-templates select="ro:spatial"/>
 			<div class="separate_line"/>	
 			<div class="btn-group dropup">
 				<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"> <i class="icon-envelope icon-white"></i> Add Coverage</button>
@@ -766,7 +766,7 @@
 	</xsl:template>
 
 
-	<xsl:template match="temporal">
+	<xsl:template match="ro:temporal">
 		<div class="aro_box" type="temporal">
 			<div class="aro_box_display clearfix">
 				<h1>Temporal Coverage</h1>
@@ -781,7 +781,7 @@
 		</div>
 	</xsl:template>
 
-	<xsl:template match="date" mode="coverage">
+	<xsl:template match="ro:date" mode="coverage">
 		<div class="aro_box_part" type="coverage_date">
 			<label class="control-label" for="title">Date: </label>
 			<input type="text" class="input-small" name="type" placeholder="Date Type" value="{@type}"/>
@@ -793,7 +793,7 @@
 		</div>
 	</xsl:template>
 	
-	<xsl:template match="date">
+	<xsl:template match="ro:date">
 		<div class="aro_box_part" type="date">
 			<label class="control-label" for="title">Date: </label>
 			<input type="text" class="input-xlarge" name="type" placeholder="Date Type" value="{@type}"/>
@@ -804,7 +804,7 @@
 		</div>
 	</xsl:template>
 	
-	<xsl:template match="text">
+	<xsl:template match="ro:text">
 		<div class="aro_box_part" type="text">
 			<label class="control-label" for="title">Text: </label>
 			<input type="text" class="input-xlarge" name="value" placeholder="Date Value" value="{text()}"/>
@@ -814,7 +814,7 @@
 		</div>
 	</xsl:template>
 
-	<xsl:template match="relation">
+	<xsl:template match="ro:relation">
 		<div class="aro_box_part" type="relation">
 			<div class="control-group">
 				<label class="control-label" for="title">Relation: </label>
@@ -837,7 +837,7 @@
 	</xsl:template>
 
 
-	<xsl:template match="spatial">
+	<xsl:template match="ro:spatial">
 		<div class="aro_box_part" type="spatial">
 			<div class="control-group">
 				<label class="control-label" for="title">Spatial: </label>
@@ -855,23 +855,23 @@
 		</div>
 	</xsl:template>
 
-	<xsl:template match="address">
-		<xsl:apply-templates select="electronic | physical"/>
+	<xsl:template match="ro:address">
+		<xsl:apply-templates select="ro:electronic | ro:physical"/>
 		<div class="separate_line"/>
 	</xsl:template>
 
-	<xsl:template match="electronic">
+	<xsl:template match="ro:electronic">
 		<div class="aro_box_part" type="electronic">
 			<label class="control-label" for="title">Electronic Address: </label>
 			<div class="control-group">
 				<input type="text" class="input-small" name="type" placeholder="Type"
 					value="{@type}"/>
 				<input type="text" class="input-xlarge" name="value" placeholder="Value"
-					value="{value}"/>
-				<xsl:if test="ancestor::service">
+					value="{ro:value}"/>
+				<xsl:if test="ancestor::ro:service">
 					<button class="btn btn-primary showParts"><i class="icon-chevron-right icon-white"></i></button>
 					<div class="parts hide">
-						<xsl:apply-templates select="arg"/>
+						<xsl:apply-templates select="ro:arg"/>
 						<div class="separate_line"/>
 						<button class="btn btn-primary addNew" type="arg">
 							<i class="icon-plus icon-white"></i> Add Args
@@ -882,14 +882,14 @@
 		</div>
 	</xsl:template>
 
-	<xsl:template match="physical">
+	<xsl:template match="ro:physical">
 		<div class="aro_box_part" type="physical">
 			<label class="control-label" for="title">Physical Address: </label>
 			<div class="control-group">
 				<input type="text" class="input-small" name="type" placeholder="Type" value="{@type}"/>
 				<button class="btn btn-primary showParts"><i class="icon-chevron-right icon-white"></i></button>
 				<div class="parts hide" type="addressParts">
-					<xsl:apply-templates select="addressPart"/>
+					<xsl:apply-templates select="ro:addressPart"/>
 					<div class="separate_line"/>
 					<button class="btn btn-primary addNew" type="addressPart">
 						<i class="icon-plus icon-white"></i> Add Address Part
@@ -899,7 +899,7 @@
 		</div>
 	</xsl:template>
 
-	<xsl:template match="arg">
+	<xsl:template match="ro:arg">
 		<div class="aro_box_part" type="arg">
 			<label class="control-label" for="title">Arg: </label>
 			<div class="control-group">
@@ -914,7 +914,7 @@
 		</div>
 	</xsl:template>
 
-	<xsl:template match="addressPart">
+	<xsl:template match="ro:addressPart">
 		<div class="aro_box_part" type="addressPart">
 			<div class="control-group">
 				<input type="text" class="input-small" name="type" placeholder="Type"
@@ -928,7 +928,7 @@
 		</div>
 	</xsl:template>
 
-	<xsl:template match="accessPolicy">
+	<xsl:template match="ro:accessPolicy">
 		<div class="aro_box" type="accessPolicy">
 			<input type="text" class="input-xlarge" name="value" placeholder="value"
 				value="{text()}"/>
@@ -1203,7 +1203,7 @@
 			</div>			
 			<div class="aro_subbox" type="address">
 				<h1>Address</h1>
-				<xsl:apply-templates select="address"/>
+				<xsl:apply-templates select="ro:address"/>
 				<div class="separate_line"/>
 				<div class="btn-group dropup">
 					<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"> <i class="icon-envelope icon-white"></i> Add Address</button>
@@ -1224,7 +1224,7 @@
 			</div>		
 			<div class="aro_subbox" type="spatial">
 				<h1>Spatial Location</h1>
-				<xsl:apply-templates select="spatial"/>
+				<xsl:apply-templates select="ro:spatial"/>
 				<div class="separate_line"/>
 				<button class="btn btn-primary addNew" type="spatial">
 					<i class="icon-map-marker icon-white"/> Add Spatial Location </button>
@@ -1253,7 +1253,7 @@
 			<div class="control-group">
 				<input type="text" class="input-small" name="type" placeholder="Type" value=""/>
 				<input type="text" class="input-xlarge" name="value" placeholder="Value" value=""/>
-				<xsl:if test="service">
+				<xsl:if test="ro:service">
 					<button class="btn btn-primary showParts"><i class="icon-chevron-right icon-white"></i></button>
 					<div class="parts hide">
 						<div class="separate_line"/>

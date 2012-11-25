@@ -10,6 +10,7 @@ class Transforms {
 	static $extrif_to_html_transformer = NULL;
 	static $extrif_to_form_transformer = NULL;
 	static $feed_to_rif_transformer = NULL;
+	static $extrif_to_dc_transformer = NULL;
 	
 
 	static function get_qa_transformer()
@@ -52,6 +53,21 @@ class Transforms {
 		}
 
 		return self::$extrif_to_solr_transformer;
+	}
+	
+	
+	static function get_extrif_to_dc_transformer()
+	{
+		if (is_null(self::$extrif_to_dc_transformer))
+		{
+			$extRifToDC = new DomDocument();
+			$extRifToDC->load(APP_PATH.'registry_object/transforms/extrif_to_dc.xsl');
+			$extRifToDCproc = new XSLTProcessor();
+			$extRifToDCproc->importStyleSheet($extRifToDC);
+			self::$extrif_to_dc_transformer =	$extRifToDCproc;
+		}
+
+		return self::$extrif_to_dc_transformer;
 	}
 	
 	static function get_extrif_to_html_transformer()

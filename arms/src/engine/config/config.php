@@ -421,5 +421,15 @@ $config['solr_url'] = $ENV['solr_url'];
 
 $config['solr_url']	= 'http://ands3.anu.edu.au:8080/solr1/collection1/';
 
+/*
+HTML Purifier config
+ */
+
+$config['Core_Encoding'] = 'UTF-8';
+$config['HTML_Doctype'] = 'XHTML 1.0 Transitional';
+$config['HTML_AllowedElements'] = 'a, abbr, acronym, b, blockquote, br, caption, cite, code, dd, del, dfn, div, dl, dt, em, h1, h2, h3, h4, h5, h6, i, img, ins, kbd, li, ol, p, pre, s, span, strike, strong, sub, sup, table, tbody, td, tfoot, th, thead, tr, tt, u, ul, var';
+$config['HTML_AllowedAttributes'] = 'a.href, a.rev, a.title, a.target, a.rel, abbr.title, acronym.title, blockquote.cite, div.align, div.class, div.id, img.src, img.alt, img.title, img.class, img.align, span.class, span.id, table.class, table.id, table.border, table.cellpadding, table.cellspacing, table.width, td.abbr, td.align, td.class, td.id, td.colspan, td.rowspan, td.valign, tr.align, tr.class, tr.id, tr.valign, th.abbr, th.align, th.class, th.id, th.colspan, th.rowspan, th.valign, img.width, img.height, img.style';
+$config['Cache_DefinitionImpl'] = null;
+
 /* End of file config.php */
 /* Location: ./application/config/config.php */

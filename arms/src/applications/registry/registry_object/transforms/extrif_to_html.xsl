@@ -1,28 +1,29 @@
 <?xml version="1.0"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+<xsl:stylesheet version="1.0" xmlns:ro="http://ands.org.au/standards/rif-cs/registryObjects" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:extRif="http://ands.org.au/standards/rif-cs/extendedRegistryObjects"
-	exclude-result-prefixes="extRif">
+	exclude-result-prefixes="extRif ro">
 	<xsl:output method="xml" encoding="UTF-8" indent="yes" omit-xml-declaration="yes"/>
 	<xsl:param name="dataSource"/>
 	<xsl:param name="dateCreated"/>
-	<xsl:template match="registryObjects">
-			<xsl:apply-templates select="registryObject"/>
+
+	<xsl:template match="ro:registryObjects">
+			<xsl:apply-templates select="ro:registryObject"/>
 	</xsl:template>
 
-	<xsl:template match="registryObject">
+	<xsl:template match="ro:registryObject">
 		<table class="recordTable" summary="Preview of Draft Registry Object">
 			<tbody class="recordFields">
 				<tr>
 					<td>Type: </td>
 					<td style="">
-						<xsl:apply-templates select="collection/@type | activity/@type | party/@type  | service/@type"/>
+						<xsl:apply-templates select="ro:collection/@type | ro:activity/@type | ro:party/@type  | ro:service/@type"/>
 					</td>
 				</tr>
 
 				<tr>
 					<td>Key: </td>
 					<td>
-						<xsl:apply-templates select="key"/>
+						<xsl:apply-templates select="ro:key"/>
 					</td>
 				</tr>
 
@@ -36,7 +37,7 @@
 				<tr>
 					<td>Originating Source: </td>
 					<td>
-						<xsl:apply-templates select="originatingSource"/>
+						<xsl:apply-templates select="ro:originatingSource"/>
 					</td>
 				</tr>
 			
@@ -47,7 +48,7 @@
 					</td>
 				</tr>	
 			
-				<xsl:apply-templates select="collection | activity | party | service"/>
+				<xsl:apply-templates select="ro:collection | ro:activity | ro:party | ro:service"/>
 				
 				
 				<tr>
@@ -66,11 +67,11 @@
 		<xsl:value-of select="."/>
 	</xsl:template>
 	
-	<xsl:template match="collection/@type | activity/@type | party/@type  | service/@type">
+	<xsl:template match="ro:collection/@type | ro:activity/@type | ro:party/@type  | ro:service/@type">
 		<xsl:value-of select="."/>
 	</xsl:template>
 	
-	<xsl:template match="key">
+	<xsl:template match="ro:key">
 		<xsl:value-of select="."/>
 	</xsl:template>
 	
@@ -85,7 +86,7 @@
 		</tr>
 	</xsl:template-->
 	
-	<xsl:template match="relatedObject/key">
+	<xsl:template match="ro:relatedObject/ro:key">
 		<tr>
 			<td class="attribute">
 				<xsl:value-of select="name()"/><xsl:text>: </xsl:text></td>
@@ -95,88 +96,88 @@
 		</tr>
 	</xsl:template>
 	
-	<xsl:template match="originatingSource">
+	<xsl:template match="ro:originatingSource">
 		<xsl:value-of select="."/>
 	</xsl:template>
 
 
-	<xsl:template match="collection | activity | party | service">
+	<xsl:template match="ro:collection | ro:activity | ro:party | ro:service">
 
-		<xsl:if test="name">
+		<xsl:if test="ro:name">
 			<tr>
 				<td>Names:</td>
 				<td>
 					<table class="subtable">
-					<xsl:apply-templates select="name"/>
+					<xsl:apply-templates select="ro:name"/>
 					</table>
 				</td>
 			</tr>
 		</xsl:if>
 
-		<xsl:if test="identifier">
+		<xsl:if test="ro:identifier">
 			<tr>
 				<td>Identifiers:</td>
 				<td>
 					<table class="subtable">
-						<xsl:apply-templates select="identifier"/>
+						<xsl:apply-templates select="ro:identifier"/>
 					</table>
 				</td>
 			</tr>
 		</xsl:if>
 		
-		<xsl:if test="location">
+		<xsl:if test="ro:location">
 			<tr>
 				<td>Location:</td>
 				<td>
 					<table class="subtable">
-						<xsl:apply-templates select="location"/>
+						<xsl:apply-templates select="ro:location"/>
 					</table>
 				</td>
 			</tr>
 		</xsl:if>
 		
-		<xsl:if test="coverage">
+		<xsl:if test="ro:coverage">
 			<tr>
 				<td>Coverage:</td>
 				<td>
 					<table class="subtable">
-						<xsl:apply-templates select="coverage"/>
+						<xsl:apply-templates select="ro:coverage"/>
 					</table>
 				</td>
 			</tr>
 		</xsl:if>
 		
 		
-		<xsl:if test="relatedObject">
+		<xsl:if test="ro:relatedObject">
 			<tr>
 				<td>Related Objects:</td>
 				<td>
 					<table class="subtable">
-						<xsl:apply-templates select="relatedObject"/>
+						<xsl:apply-templates select="ro:relatedObject"/>
 					</table>
 				</td>
 			</tr>
 		</xsl:if>
 		
 		
-		<xsl:if test="subject">
+		<xsl:if test="ro:subject">
 			<tr>
 				<td>Subjects:</td>
 				<td>
 					<table class="subtable">
-						<xsl:apply-templates select="subject"/>
+						<xsl:apply-templates select="ro:subject"/>
 					</table>
 				</td>
 			</tr>
 		</xsl:if>
 			
 		<xsl:choose>
-			<xsl:when test="description">
+			<xsl:when test="ro:description">
 				<tr>
 					<td>Description:</td>
 					<td><!--  div name="errors_description" class="fieldError"/-->
 						<table class="subtable">
-							<xsl:apply-templates select="description"/>
+							<xsl:apply-templates select="ro:description"/>
 						</table>
 					</td>
 				</tr>
@@ -184,57 +185,57 @@
 	 	</xsl:choose>
 	 	
 	 	<xsl:choose>
-			<xsl:when test="existenceDates">
+			<xsl:when test="ro:existenceDates">
 				<tr>
 					<td>Existence Dates:</td>
 					<td>
 						<table class="subtable">
-							<xsl:apply-templates select="existenceDates"/>
+							<xsl:apply-templates select="ro:existenceDates"/>
 						</table>
 					</td>
 				</tr>
 			</xsl:when>
 	 	</xsl:choose>
 	 	
-	 	<xsl:if test="citationInfo">
+	 	<xsl:if test="ro:citationInfo">
 			<tr>
 				<td>Citation:</td>
 				<td>
 					<table class="subtable">
-						<xsl:apply-templates select="citationInfo"/>
+						<xsl:apply-templates select="ro:citationInfo"/>
 					</table>
 				</td>
 			</tr>
 		</xsl:if>
 	 	
-	 	<xsl:if test="relatedInfo">
+	 	<xsl:if test="ro:relatedInfo">
 			<tr>
 				<td>Related Info:</td>
 				<td>
 					<table class="subtable">
-						<xsl:apply-templates select="relatedInfo"/>
+						<xsl:apply-templates select="ro:relatedInfo"/>
 					</table>
 				</td>
 			</tr>
 		</xsl:if>	
 		
-		 <xsl:if test="rights">
+		 <xsl:if test="ro:rights">
 			<tr>
 				<td>Rights:</td>
 				<td>
 					<table class="subtable">
-						<xsl:apply-templates select="rights"/>
+						<xsl:apply-templates select="ro:rights"/>
 					</table>
 				</td>
 			</tr>
 		</xsl:if>
 		
-	 	<xsl:if test="accessPolicy">
+	 	<xsl:if test="ro:accessPolicy">
 			<tr>
 				<td>Access Policy:</td>
 				<td>
 					<table class="subtable">
-						<xsl:apply-templates select="accessPolicy"/>
+						<xsl:apply-templates select="ro:accessPolicy"/>
 					</table>
 				</td>
 			</tr>
@@ -283,7 +284,7 @@
 		</tr>
 	</xsl:template-->
 	
-	<xsl:template match="citationMetadata/identifier">
+	<xsl:template match="ro:citationMetadata/ro:identifier">
 		
 		
 		<tr>	
@@ -326,7 +327,7 @@
 	
 		
 	
-    <xsl:template match="relatedInfo/identifier">
+    <xsl:template match="ro:relatedInfo/ro:identifier">
 		
 		<tr>	
 			<td class="attribute">
@@ -368,7 +369,7 @@
     </xsl:template>
 	
 	
-    <xsl:template match="relatedInfo">
+    <xsl:template match="ro:relatedInfo">
 		<tr>	
 			<td class="attribute">
 				Type<xsl:text>: </xsl:text>
@@ -382,13 +383,13 @@
 				<table class="subtable1">
 		
 					<xsl:if test="./title">
-			         	<xsl:apply-templates select="title"/>
+			         	<xsl:apply-templates select="ro:title"/>
 					</xsl:if>
 			
-					<xsl:apply-templates select="identifier"/>
+					<xsl:apply-templates select="ro:identifier"/>
 					
 					<xsl:if test="./notes">
-			         	<xsl:apply-templates select="notes"/>
+			         	<xsl:apply-templates select="ro:notes"/>
 					</xsl:if>
 				</table>
 			</td>
@@ -396,7 +397,7 @@
 	           
      </xsl:template>
 	
-	  <xsl:template match="identifier" mode="ark">
+	  <xsl:template match="ro:identifier" mode="ark">
 	      			    <xsl:variable name="theidentifier">    			
 	    				<xsl:choose>	
 	    			    	<xsl:when test="string-length(substring-after(.,'http://'))>0">
@@ -420,7 +421,7 @@
 	    					<xsl:value-of select="."/>
 	    				</xsl:if> 
 	</xsl:template>
-	 <xsl:template match="identifier" mode="nla">
+	 <xsl:template match="ro:identifier" mode="nla">
 	       			    <xsl:variable name="theidentifier">    			
 	    				<xsl:choose>				
 	    			    	<xsl:when test="string-length(substring-after(.,'nla.gov.au/'))>0">
@@ -444,7 +445,7 @@
 	    				<xsl:value-of select="."/>
 	  				</xsl:if> 
 	 </xsl:template>
-	 <xsl:template match="identifier" mode="doi">   					
+	 <xsl:template match="ro:identifier" mode="doi">   					
 	        	  <xsl:variable name="theidentifier">    			
 	    				<xsl:choose>				
 	    			    	<xsl:when test="string-length(substring-after(.,'doi.org/'))>0">
@@ -470,7 +471,7 @@
 
     			
 	 </xsl:template>
-	 <xsl:template match="identifier" mode="handle">      			
+	 <xsl:template match="ro:identifier" mode="handle">      			
 	      			    <xsl:variable name="theidentifier">    			
 	    				<xsl:choose>
 	     			    	<xsl:when test="string-length(substring-after(.,'hdl:'))>0">
@@ -495,7 +496,7 @@
 	    				<xsl:value-of select="."/>
 	    				</a> 	 
 	 </xsl:template>
-	 <xsl:template match="identifier" mode="purl">     			
+	 <xsl:template match="ro:identifier" mode="purl">     			
 	    <xsl:variable name="theidentifier">    			
 	    <xsl:choose>				
 	    	<xsl:when test="string-length(substring-after(.,'purl.org/'))>0">
@@ -513,7 +514,7 @@
 	    </a>  
 	 </xsl:template>
 	 
-	 <xsl:template match="identifier | relation/url" mode="uri">     			
+	 <xsl:template match="ro:identifier | ro:relation/ro:url" mode="uri">     			
 	   <xsl:variable name="theidentifier">    			
 	    <xsl:choose>				
 	    	<xsl:when test="string-length(substring-after(.,'http'))>0"><xsl:value-of select="."/></xsl:when>		     	
@@ -528,7 +529,7 @@
 	    </a>   		 
 	</xsl:template> 
 	
-    <xsl:template match="identifier" mode="other">     		
+    <xsl:template match="ro:identifier" mode="other">     		
 		
 		<tr>	
 			<td class="attribute">
@@ -551,7 +552,7 @@
 	
 	
 
-	<xsl:template match="relation/description">
+	<xsl:template match="ro:relation/ro:description">
 		<tr>	
 			<td class="attribute">
 				<xsl:value-of select="local-name()"/><xsl:text>: </xsl:text>
@@ -564,7 +565,7 @@
 		</tr>
 	</xsl:template>
 	
-	<xsl:template match="relation/url">
+	<xsl:template match="ro:relation/ro:url">
 		<tr>	
 			<td class="attribute">
 				<xsl:value-of select="local-name()"/><xsl:text>: </xsl:text>
@@ -577,14 +578,14 @@
 	
 
 
-	<xsl:template match="name/namePart">
+	<xsl:template match="ro:name/ro:namePart">
 		<tr>	
 			<td class="attribute">
 			<xsl:choose>
-			<xsl:when test="following-sibling::namePart">
+			<xsl:when test="following-sibling::ro:namePart">
 			<xsl:text>Name Parts:</xsl:text>
 			</xsl:when>
-			<xsl:when test="preceding-sibling::namePart"/>
+			<xsl:when test="preceding-sibling::ro:namePart"/>
 			<xsl:otherwise>
 			<xsl:text>Name Part:</xsl:text>
 			</xsl:otherwise>
@@ -610,7 +611,7 @@
 	</xsl:template>
 
 
-	<xsl:template match="value/text()">
+	<xsl:template match="ro:value/text()">
 		<tr>
 			<td class="value">
 				<xsl:value-of select="."/>

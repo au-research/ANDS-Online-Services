@@ -23,6 +23,7 @@ class Extrif_Extension extends ExtensionBase
 		if(! (string) $attributes['enriched'])
 		{
 			$xml->addAttribute("extRif:enriched","true",EXTRIF_NAMESPACE);
+			$xml->addAttribute("xmlns",RIFCS_NAMESPACE);
 			if (count($xml->key) == 1)
 			{
 				/* EXTENDED METADATA CONTAINER */
@@ -86,12 +87,21 @@ class Extrif_Extension extends ExtensionBase
 				
 				foreach ($descriptions AS $description)
 				{
-					$extrifDescription = $xml->addChild("extRif:description", (string)$description, EXTRIF_NAMESPACE);
+					$description = (string) $description;
+					$this->_CI->load->library('purifier');
+					$clean_html = $this->_CI->purifier->purify($description);
+
+					$extrifDescription = $xml->addChild("extRif:description", $clean_html, EXTRIF_NAMESPACE);
 					$extrifDescription->addAttribute("type", (string) $description['type']);
 					// XXX: TODO: CLEAN UP HTML (PURIFY)
+
+
 				}	
 					
-				$this->ro->updateXML($xml->asXML(),TRUE,'extrif');
+				//$this->ro->updateXML($this->ro->purify($xml->asXML()),TRUE,'extrif');
+
+				
+
 				return $this;
 			}
 			else
@@ -121,8 +131,10 @@ class Extrif_Extension extends ExtensionBase
 		try{
 			$xslt_processor = Transforms::get_extrif_to_html_transformer();
 			$dom = new DOMDocument();
-			//$dom->loadXML($this->ro->getXML());
+			$dataSource = $this->ro->data_source_key;
+			$this->ro->enrich();
 			$dom->loadXML($this->ro->getExtRif());
+			$xslt_processor->setParameter('','dataSource',$dataSource);
 			return $xslt_processor->transformToXML($dom);
 		}catch (Exception $e)
 		{
@@ -136,6 +148,25 @@ class Extrif_Extension extends ExtensionBase
 	{
 		try{
 			$xslt_processor = Transforms::get_extrif_to_form_transformer();
+			$dom = new DOMDocument();
+			//$dom->loadXML($this->ro->getXML());
+			$dataSource = $this->ro->data_source_key;
+			$this->ro->enrich();
+			$dom->loadXML($this->ro->getExtRif());
+			$xslt_processor->setParameter('','dataSource',$dataSource);
+			return $xslt_processor->transformToXML($dom);
+		}
+		catch (Exception $e)
+		{
+			echo "UNABLE TO TRANSFORM" . BR;	
+			echo "<pre>" . nl2br($e->getMessage()) . "</pre>" . BR;
+		}
+	}
+	
+	function transformToDC()
+	{
+		try{
+			$xslt_processor = Transforms::get_extrif_to_dc_transformer();
 			$dom = new DOMDocument();
 			//$dom->loadXML($this->ro->getXML());
 			$dom->loadXML($this->ro->getExtRif());
@@ -181,4 +212,5 @@ class Extrif_Extension extends ExtensionBase
 		}
 		return $reverseLinks;
 	}
+
 }
