@@ -87,13 +87,14 @@ class Extrif_Extension extends ExtensionBase
 				
 				foreach ($descriptions AS $description)
 				{
-					$description = (string) $description;
+					
+					$aArray = $description->attributes();
+					$type = $aArray['type'];
+					$description = (string) $description;					
 					$this->_CI->load->library('purifier');
-
 					$clean_html = $this->_CI->purifier->purify_html($description);
-
 					$extrifDescription = $xml->addChild("extRif:description", $clean_html, EXTRIF_NAMESPACE);
-					$extrifDescription->addAttribute("type", (string) $description['type']);
+					$extrifDescription->addAttribute("type", $type);
 					// XXX: TODO: CLEAN UP HTML (PURIFY)
 
 

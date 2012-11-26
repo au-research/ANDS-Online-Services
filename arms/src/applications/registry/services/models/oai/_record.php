@@ -56,10 +56,11 @@ class _record
 		switch($format)
 		{
 		case 'oai_dc':
+			//$this->_rec->enrich();
 			$data = $this->_rec->transformToDC();
 			break;
 		case 'rif':
-			$data = $this->_rec->getRif();
+			$data = $this->_rec->getExtRif();//getRif();
 			break;
 		}
 		if ($data)
