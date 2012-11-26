@@ -20,6 +20,7 @@ class Records extends CI_Model
 		$this->load->model('oai/Sets', 'sets');
 		$this->load->model('registry_object/Registry_objects', 'ro');
 		$args = array();
+		//TODO: remove 'APPROVED' from set of valid statuses for production deployment!
 		$args['rawclause'] = array("registry_objects.status in" => "('PUBLISHED', 'DELETED', 'APPROVED')");
 		$args['clause'] = array();
 		$args['wherein'] = false;

@@ -210,7 +210,7 @@ class Oai extends MX_Controller
 		$details = $this->_do_list_resumable(OAI::LIST_I, $token);
 		$response = $details['response'];
 		$newtoken = $details['token'];
-		if (count($response['records'] > 0))
+		if ($response['count'] > 0)
 		{
 			$this->output->append_output("\t<ListIndentifiers>\n");
 			foreach ($response['records'] as $rec)
@@ -324,7 +324,7 @@ class Oai extends MX_Controller
 		else 
 		{
 			$this->output->append_output("\t<ListRecords>\n");
-			$this->_inject_token(' ', 0, 0);
+			$this->_inject_token(chr(0), 0, 0);
 			$this->output->append_output("\t</ListRecords>\n");
 		}
 	}
@@ -335,6 +335,31 @@ class Oai extends MX_Controller
 	 * handler helpers
 	 *
 	 *******/
+
+	/**
+	 * given an array of query parameters, extract those pertaining to the OAI protocol:
+	 *  - verb
+	 *  - identifier
+	 *  - metadataPrefix
+	 *  - from
+	 *  - until
+	 *  - set
+	 *  - resumptionToken
+	 *
+	 * @param an array of HTTP query params (eg $_GET, $_POST, $_REQUEST)
+	 * @return an array of OAI query params
+	 */
+	private function _oai_params($params)
+	{
+	    $whitelist = array ('verb' => '',
+				'identifier' => '',
+				'metadataPrefix' => '',
+				'from' => '',
+				'until' => '',
+				'set' => '',
+				'resumptionToken' => '');
+	    return array_intersect_key($params, $whitelist);
+	}
 
 	/**
 	 * @ignore
@@ -642,7 +667,7 @@ class Oai extends MX_Controller
 				throw new Oai_BadToken_Exceptions();
 			}
 
-			if (count($_REQUEST) > 2)
+			if (count($this->_oai_params($_REQUEST)) > 2)
 			{
 				throw new Oai_BadArgument_Exceptions("'resumptionToken' is an exclusive parameter");
 			}
@@ -690,7 +715,7 @@ XMLHEAD;
 			$response_date) . "\n");
 
 		$request = "\t<request";
-		foreach ($_REQUEST as $param=>$val)
+		foreach ($this->_oai_params($_REQUEST) as $param=>$val)
 		{
 		$request .= sprintf(' %s="%s"', $param, $val);
 	        }
