@@ -19,7 +19,7 @@ limitations under the License.
 	var WIDGET_ID = "ands_vocab_widget_list";
 	var defaults = {
 	    //location (absolute URL) of the jsonp proxy
-	    endpoint: 'http://ands3.anu.edu.au/workareas/smcphill/ands-online-services/arms/src/vocab_widget/proxy/',
+	    endpoint: 'http://ands3.anu.edu.au/workareas/smcphill/ands-online-services/arms/src/registry/vocab_widget/proxy/',
 
 	    //currently, only search is available. in future, 'narrow',
 	    //'broad', 'concepts' modes will be added
