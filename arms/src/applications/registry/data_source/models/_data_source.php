@@ -158,15 +158,17 @@ class _data_source {
 	{
 		// Mark this record as recently updated
 		$this->setAttribute("updated", time());
-		
+
 		foreach($this->attributes AS $attribute)
 		{
 			if ($attribute->dirty)
 			{
 				if ($attribute->core)
 				{
+					$theUpdate=array();
+					$theUpdate[$attribute->name] =$attribute->value;
 					$this->db->where("data_source_id", $this->id);
-					$this->db->update("data_sources", array($attribute->name, $attribute->value));
+					$this->db->update("data_sources", $theUpdate);
 					$attribute->dirty = FALSE;
 				}
 				else

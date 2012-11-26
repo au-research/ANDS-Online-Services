@@ -380,7 +380,10 @@ function load_datasource_edit(data_source_id, active_tab){
 					{
 						if($(this).attr('value')=='t' || $(this).attr('value')=='1' || $(this).attr('value')=='true' ){
 						$(this).find('input').attr('checked', 'checked');
-			
+						$('#primary-div').toggle();
+						}else{
+							
+							$(this).find('input').attr('value')=='f'
 						}
 
 						$(this).toggleButtons({

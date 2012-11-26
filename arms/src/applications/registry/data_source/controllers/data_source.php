@@ -216,6 +216,7 @@ class Data_source extends MX_Controller {
 		
 		$jsonData['status'] = 'OK';
 		$POST = $this->input->post();
+
 		if (isset($POST['data_source_id'])){
 			$id = (int) $this->input->post('data_source_id');
 		}
@@ -231,23 +232,28 @@ class Data_source extends MX_Controller {
 			$dataSource = $this->ds->getByID($id);
 		}
 	    $harvesterParams = array('uri','provider_type','harvest_method','harvest_date','oai_set');
+	    $primaryRelationship = array('class_1','class_2','primary_key_1','primary_key_2','collection_rel_1','collection_rel_2','activity_rel_1','activity_rel_2','party_rel_1','party_rel_2','service_rel_1','service_rel_2');
 		$resetHarvest = false;
 
 		// XXX: This doesn't handle "new" attribute creation? Probably need a whilelist to allow new values to be posted. //**whitelist**//
 		if ($dataSource)
 		{
 			$valid_attributes = array_merge(array_keys($dataSource->attributes()), $harvesterParams);
-			foreach($valid_attributes as $attrib)
-			{		
-				if (isset($POST[$attrib]))
-				{					
+
+			$valid_attributes = array_merge($valid_attributes, $primaryRelationship);
+
+			foreach($valid_attributes as $attrib){							
+				if (isset($POST[$attrib])){					
+
 					$new_value = $this->input->post($attrib);
 				}
 				else if(in_array($attrib, $harvesterParams))
 				{
 					$new_value = '';	
-				}
 
+				else if(in_array($attrib, $primaryRelationship)){
+					$new_value = '';				
+				}	
 
 				if($new_value=='true') $new_value=DB_TRUE;
 				if($new_value=='false') $new_value=DB_FALSE;
@@ -259,15 +265,17 @@ class Data_source extends MX_Controller {
 
 				$dataSource->{$attrib} = $new_value;
 
-				/*if($new_value == '' && $new_value != $dataSource->{$attrib} && in_array($attrib, $harvesterParams))
+				if($new_value == '' && $new_value != $dataSource->{$attrib} && in_array($attrib, $harvesterParams))
 				{
 					$dataSource->append_log("didn't get value ".$new_value." ".$attrib, 'warning');
-					//$dataSource->unsetAttribute($attrib);
+					$dataSource->unsetAttribute($attrib);
 				}
 				else{
 					$dataSource->append_log("setAttribute FOR ".$new_value." ".$attrib, 'warning');
-					//$dataSource->setAttribute($attrib, $new_value);
-				}*/
+
+					$dataSource->setAttribute($attrib, $new_value);
+				}
+
 				
 			}		
 			$dataSource->append_log("dataSource->save()", 'warning');	

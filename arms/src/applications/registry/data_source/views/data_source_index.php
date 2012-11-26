@@ -567,12 +567,79 @@
 								<div class="creat-primary normal-toggle-button" value="{{create_primary_relationships}}">
     								<input type="checkbox" for="create_primary_relationships" name="create-primary">
 								</div>
-								<div id="primary-div" class="hide">
-    								<input type="text" for="primary_key_1">
-    							</div>
+
 								</p>
 							</div>
 						</div>
+						
+						<div id="primary-div" class="hide">	
+							<div class="control-group">
+						
+								<div class="controls">	
+								<p>
+									Class 			
+    								<select name="class_1">
+									<option value="party">Party</option>
+									<option value="collection">Collection</option>
+									<option value="service">Service</option>
+									<option value="activity">Activity</option>
+								</select>	
+								
+									Class 			
+    								<select name="class_2">
+									<option value="party">Party</option>
+									<option value="collection">Collection</option>
+									<option value="service">Service</option>
+									<option value="activity">Activity</option>
+								</select>	
+								</p>
+								</div>
+								
+								<div class="controls">	
+								<p>
+									Key: <input name="primary_key_1" value="{{primary_key_1}}"/>
+									Key: <input name="primary_key_2" value="{{primary_key_2}}"/>	
+								</p>						
+    							</div>
+    							
+								<div class="controls">	
+								<p>
+									Relationship From: 
+									Relationship From: 
+								</p>						
+    							</div> 
+    							   							
+ 								<div class="controls">	
+								<p>
+									Collection: <input name="collection_rel_1" value="{{collection_rel_1}}"/>
+									Collection: <input name="collection_rel_2" value="{{collection_rel_2}}"/>
+								</p>						
+    							</div> 
+    							     							
+  								<div class="controls">	
+								<p>
+									Service: <input name="service_rel_1" value="{{service_rel_1}}"/>
+									Service: <input name="service_rel_2" value="{{service_rel_2}}"/>
+								</p>						
+    							</div> 
+    							   							
+    							<div class="controls">	
+								<p>
+									Activity: <input name="activity_rel_1" value="{{activity_rel_1}}"/>
+									Activity: <input name="activity_rel_2" value="{{activity_rel_2}}"/>
+								</p>						
+    							</div> 
+    							 							
+    							<div class="controls">	
+								<p>
+									Party: <input name="party_rel_1" value="{{party_rel_1}}"/>
+									Party: <input name="party_rel_2" value="{{party_rel_2}}"/>
+								</p>						
+    							</div> 
+    							     							  							
+    						</div> 	
+    											
+    					</div>
 
 						<div class="control-group">
 							<label class="control-label">Party Records to NLA</label>
