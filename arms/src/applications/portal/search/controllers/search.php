@@ -85,8 +85,6 @@ class Search extends MX_Controller {
 		$data['solr_header'] = $this->solr->getHeader();
 		$data['result'] = $this->solr->getResult();
 		$data['numFound'] = $this->solr->getNumFound();
-		$data['currentPage'] = $page;
-		$data['totalPage'] = ceil($data['numFound'] / $pp);
 		$data['timeTaken'] = $data['solr_header']->{'QTime'} / 1000;
 
 		/**
@@ -109,6 +107,35 @@ class Search extends MX_Controller {
 				$data['selected_tab'] = $facet;
 			}
 		}
+
+		/**
+		 * Pagination prep
+		 * Page: {{page}}/{{totalPage}} |  <a href="#">First</a>  <span class="current">1</span>  <a href="#">2</a>  <a href="#">3</a>  <a href="#">4</a>  <a href="#">Last</a>
+		 */
+		$range = 3;
+		$pagi = '';
+		$pagi .= '<div class="page_navi">';
+		$pagi .=  'Page: '.$page.'/'.ceil($data['numFound'] / $pp).'   |  ';
+		$pagi .=  '<a href="javascript:void(0);" class="filter" filter_type="p" filter_value="1">First</a>';
+		if($page > 1){
+			//$pagi .=  '<a href="javascript:void(0);"> &lt;</a>';
+		}
+		for ($x = ($page - $range); $x < (($page + $range) + 1); $x++) {
+			if (($x > 0) && ($x <= ceil($data['numFound'] / $pp))) { //if it's valid
+				if($x==$page){//if we're on current
+					$pagi .=  '<a href="javascript:;" class="current filter" filter_type="p" filter_value="'.$x.'">'.$x.'</a>';
+				}else{//not current
+					$pagi .=  '<a href="javascript:;" class="filter" filter_type="p" filter_value="'.$x.'">'.$x.'</a>';
+				}
+			}
+		}
+		//if not on last page, show Next
+		if($page < ceil($data['numFound'] / $pp)){
+			//$pagi .=  '<a href="javascript:void(0);">&gt;</a>';
+		}
+		$pagi .=  '<a href="javascript:void(0);" class="filter" filter_type="p" filter_value="'.ceil($data['numFound'] / $pp).'">Last</a>';
+		$pagi .=  '</div>';
+		$data['pagination'] = $pagi;
 
 		/**
 		 * Debugging

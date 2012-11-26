@@ -52,9 +52,7 @@
 <script type="text/x-mustache" id="pagination-template">
 <div class="results_navi">
 	<div class="results">{{numFound}} results ({{timeTaken}} seconds)</div>
-	<div class="page_navi">
-		Page: {{currentPage}}/{{totalPage}} |  <a href="#">First</a>  <span class="current">1</span>  <a href="#">2</a>  <a href="#">3</a>  <a href="#">4</a>  <a href="#">Last</a>
-	</div>
+	{{{pagination}}}
 	<div class="clear"></div>
 </div>
 </script>
@@ -65,7 +63,7 @@
 	<h3 class="widget_title">{{label}}</h3>
 	<ul>
 		{{#values}}
-			<li><a href="javascript:;" class="facet_select" facet_type="{{facet_type}}" facet_value="{{title}}">{{title}} ({{count}})</a></li>
+			<li><a href="javascript:;" class="filter" filter_type="{{facet_type}}" filter_value="{{title}}">{{title}} ({{count}})</a></li>
 		{{/values}}
 	</ul>
 </div>

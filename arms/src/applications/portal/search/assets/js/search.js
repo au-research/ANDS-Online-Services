@@ -80,8 +80,8 @@ function executeSearch(searchData, searchUrl){
 
 function initSearchPage(){
 	//bind the facets
-	$('.facet_select').click(function(){
-		searchData[$(this).attr('facet_type')] = encodeURIComponent($(this).attr('facet_value'));
+	$('.filter').click(function(){
+		searchData[$(this).attr('filter_type')] = encodeURIComponent($(this).attr('filter_value'));
 		//searchData.push({label:$(this).attr('facet_type'),value:encodeURIComponent($(this).attr('facet_value'))});
 		var query_string = '#!/';
 		$.each(searchData, function(i, v){
