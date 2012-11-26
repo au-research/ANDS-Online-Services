@@ -74,6 +74,13 @@ class Registry_object extends MX_Controller {
 		$jsonData = json_encode($jsonData);
 		echo $jsonData;
 	}
+
+	function add(){
+		$data['title'] = 'Add Registry Objects';
+		$data['scripts'] = array('add_registry_object');
+		$data['js_lib'] = array('core');
+		$this->load->view("add_registry_object", $data);
+	}
 	
 	function getLeo($id){
 		$this->load->model('registry_objects', 'ro');
