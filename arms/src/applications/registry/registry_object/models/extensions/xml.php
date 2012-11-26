@@ -39,7 +39,7 @@ class XML_Extension extends ExtensionBase
 		else
 		{
 			$xml = $this->getXML($record_data_id);
-			$this->_simplexml = simplexml_load_string($xml);
+			$this->_simplexml = simplexml_load_string(str_replace('&','&amp;',$xml));
 			return $this->_simplexml;
 		}
 	}

@@ -28,7 +28,7 @@ class Purifier {
     }
 
 
-    function purify($dirty_html){
+    function purify_html($dirty_html){
     	$clean_html = $this->htmlPurifier->purify($dirty_html);
         return $clean_html;
     }

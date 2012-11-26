@@ -20,7 +20,7 @@ class Extrif_Extension extends ExtensionBase
 		$attributes = $xml->attributes(EXTRIF_NAMESPACE);
 
 		// Cannot enrich already enriched RIFCS!!
-		if(! (string) $attributes['enriched'])
+		if(true)//! (string) $attributes['enriched'])
 		{
 			$xml->addAttribute("extRif:enriched","true",EXTRIF_NAMESPACE);
 			$xml->addAttribute("xmlns",RIFCS_NAMESPACE);
@@ -89,7 +89,8 @@ class Extrif_Extension extends ExtensionBase
 				{
 					$description = (string) $description;
 					$this->_CI->load->library('purifier');
-					$clean_html = $this->_CI->purifier->purify($description);
+
+					$clean_html = $this->_CI->purifier->purify_html($description);
 
 					$extrifDescription = $xml->addChild("extRif:description", $clean_html, EXTRIF_NAMESPACE);
 					$extrifDescription->addAttribute("type", (string) $description['type']);
@@ -98,7 +99,7 @@ class Extrif_Extension extends ExtensionBase
 
 				}	
 					
-				//$this->ro->updateXML($this->ro->purify($xml->asXML()),TRUE,'extrif');
+				$this->ro->updateXML($xml->asXML(),TRUE,'extrif');
 
 				
 
@@ -168,8 +169,8 @@ class Extrif_Extension extends ExtensionBase
 		try{
 			$xslt_processor = Transforms::get_extrif_to_dc_transformer();
 			$dom = new DOMDocument();
-			//$dom->loadXML($this->ro->getXML());
-			$dom->loadXML($this->ro->getExtRif());
+			$this->ro->enrich();
+			$dom->loadXML(str_replace('&','&amp;',$this->ro->getExtRif()));
 			return $xslt_processor->transformToXML($dom);
 		}catch (Exception $e)
 		{
