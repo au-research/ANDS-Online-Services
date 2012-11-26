@@ -1,23 +1,35 @@
 <?php $this->load->view('rda_header');?>
 <div class="main">
 	<div class="page_title">
-		<h1>Information and Computer Sciences</h1>
-		<h3>Queensland University of Technology</h3>
+		<h1 id="selected_subject"></h1>
+		<h3 id="selected_group"></h3>
 	</div>
 	<div class="tabs">
-		<a href="#" class="current">All</a>
-		<a href="#">Collections</a>
-		<a href="#">Parties</a>
-		<a href="#">Activities</a>
-		<a href="#">Services</a>		
+		<?php
+			$tabs = array(
+				'All' => array('facet_value'=>'all','display'=>'All','selected'=>true, 'count'=>0),
+				'collection' => array('facet_value'=>'collection','display'=>'Collections','selected'=>false, 'count'=>0),
+				'party' => array('facet_value'=>'party','display'=>'Parties','selected'=>false, 'count'=>0),
+				'service' => array('facet_value'=>'service','display'=>'Services','selected'=>false, 'count'=>0),
+				'activity' => array('facet_value'=>'activity','display'=>'Activities','selected'=>false, 'count'=>0)
+			);
+			
+			foreach($tabs as $t){
+				if($t['selected']){
+					$s = 'current';
+				}else $s = '';
+				echo "<a href='javascript:;' class='facet_select ".$s."' facet_type='tab' facet_value=".$t['facet_value'].">".$t['display']."</a>";
+			}
+		?>
+		
 		<a href="#" class="tabs_nav"></a>	
-		<div class="clear"></div>																	
+		<div class="clear"></div>
 	</div>
 	
 	<div class="pagination"></div>
 	<div id="search-result"></div>
 	<div class="pagination"></div>
-											
+
 </div><!-- main -->
 <div class="sidebar">
 	<div id="facet-result"></div>				
@@ -29,7 +41,7 @@
 <script type="text/x-mustache" id="search-result-template">
 {{#docs}}
 	<div class="post">
-		<a href="#" class="title">{{display_title}}</a>
+		<a href="<?php echo base_url();?>view/?id={{id}}" class="title">{{display_title}}</a>
 		<div class="excerpt">
 			{{{description_value}}}
 		</div>
@@ -39,7 +51,7 @@
 
 <script type="text/x-mustache" id="pagination-template">
 <div class="results_navi">
-	<div class="results">{{numFound}} results (0.006 seconds)</div>
+	<div class="results">{{numFound}} results ({{timeTaken}} seconds)</div>
 	<div class="page_navi">
 		Page: {{currentPage}}/{{totalPage}} |  <a href="#">First</a>  <span class="current">1</span>  <a href="#">2</a>  <a href="#">3</a>  <a href="#">4</a>  <a href="#">Last</a>
 	</div>

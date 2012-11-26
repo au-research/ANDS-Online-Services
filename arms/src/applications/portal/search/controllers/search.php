@@ -44,20 +44,32 @@ class Search extends MX_Controller {
 		/**
 		 * Setting the SOLR OPTIONS based on the filters sent over AJAX
 		 */
-		foreach($filters as $f){
-			switch($f['label']){
-				case 'q': $this->solr->setOpt('q', ''.$f['value']);break;
-				case 'p': 
-					$page = (int)$f['value'];
-					if($page>1){
-						$start = $pp * ($page-1);
-					}
-					$this->solr->setOpt('start', $start);
-					break;
-				case 'tab': $this->solr->setOpt('fq', 'class:'.$f['value']);break;
-				case 'group': $this->solr->setOpt('group', $f['value']);break;
-				case 'type': $this->solr->setOpt('type', $f['value']);break;
-				case 'subject': $this->solr->setOpt('subject_value_resolved', $f['value']);break;
+		if($filters){
+			foreach($filters as $key=>$value){
+				$value = urldecode($value);
+				switch($key){
+					case 'q': $this->solr->setOpt('q', $value);break;
+					case 'p': 
+						$page = (int)$value;
+						if($page>1){
+							$start = $pp * ($page-1);
+						}
+						$this->solr->setOpt('start', $start);
+						break;
+					case 'tab': 
+						if($value!='all') $this->solr->setOpt('fq', 'class:("'.$value.'")');
+						break;
+					case 'group': 
+						$this->solr->setOpt('fq', 'group:("'.$value.'")');
+						break;
+					case 'type': 
+						$this->solr->setOpt('fq', 'type:'.$value);
+						break;
+					case 'subject': 
+						$this->solr->setOpt('subject_value_resolved', $value);
+						break;
+				}
+				
 			}
 		}
 
@@ -75,7 +87,7 @@ class Search extends MX_Controller {
 		$data['numFound'] = $this->solr->getNumFound();
 		$data['currentPage'] = $page;
 		$data['totalPage'] = ceil($data['numFound'] / $pp);
-		$data['timeTaken'] = $data['solr_header']->{'QTime'};
+		$data['timeTaken'] = $data['solr_header']->{'QTime'} / 1000;
 
 		/**
 		 * House cleaning on the facet_results
@@ -90,7 +102,12 @@ class Search extends MX_Controller {
 					'count' => $count
 				);
 			}
-			array_push($data['facet_result'], array('label'=>$display, 'facet_type'=>$facet, 'values'=>$facet_values));
+			// little bit different with class being tab
+			if($facet!='class'){
+				array_push($data['facet_result'], array('label'=>$display, 'facet_type'=>$facet, 'values'=>$facet_values));
+			}else{
+				$data['selected_tab'] = $facet;
+			}
 		}
 
 		/**

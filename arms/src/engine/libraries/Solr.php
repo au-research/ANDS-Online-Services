@@ -56,6 +56,17 @@ class Solr {
     }
 
     /**
+     * get the existing option
+     * @param  string $field 
+     * @return value 
+     */
+    function getOpt($field){
+        if(isset($this->options[$field])){
+            return $this->options[$field];
+        }else return null;
+    }
+
+    /**
      * Return all of the options, mainly for debugging
      * @return array of SOLR options
      */
