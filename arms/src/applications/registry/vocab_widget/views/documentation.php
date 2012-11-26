@@ -14,18 +14,18 @@
 			<div class="box-header clearfix">
 				<h1><?=$title;?></h1>
 			</div>
-
 			<div class="row-fluid">
-
 				<div class="span8">
 				    <div class="alert alert-info">
 					  <strong>Developer Zone!</strong> Some basic web development knowledge may be needed to implement this widget.
-					</div>
-
+				    </div>
 			    	 <h4>What is this widget?</h4>
 			    	 <p>
-				   Coming soon
+				   The ANDS Vocabulary Widget allows you to instantly query the ANDS SISSvoc vocabulary. Currently, all concepts can be queried and retrieved (exploring concept hierarchy via "broaden" / "narrow" coming soon).
 			    	 </p>
+				 <p>
+				   The widget has been written in the style of a jQuery plugin, allowing complete control over styling and functionality with just a few lines of javascript.
+				 </p>
 			    	 <p>
 			    		 <a target="_blank" class="btn btn-success" href="<?=asset_url('demo.html');?>"><i class="icon-circle-arrow-right icon-white"></i> View the Demo</a>
 			    	 </p>
@@ -34,14 +34,114 @@
 
 			    	 <h4>How does it work?</h4>
 			    	 <p>
-				   Coming soon
+				   The widget requires jQuery; load this, and the plugin itself (and associated CSS styles) in your document's &lt;head&gt;&lt;/head&gt; segment:
+<pre class="prettyprint pre-scrollable" style="min-height:5em">
+&lt;script src='http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.js'&gt;&lt;/script&gt;
+&lt;script type="text/javascript" src="http://services.ands.org.au/api/resolver/vocab_widget.js"&gt;&lt;/script&gt;
+&lt;link rel="stylesheet" type="text/css" href="http://services.ands.org.au/api/resolver/vocab_widget.css" /&gt;
+</pre>
 			    	 </p>
-
+				 <p>
+				   Ensure there is a text input box ready to accept user input:
+				 </p>
+<pre class="prettyprint pre-scrollable">
+  &lt;input type="text" id="vocabInput"&gt;
+</pre>
+				 <p>
+				   Then, either inside a <code>$(document).ready()</code> handler, or at the bottom of your document, call the plugin on a jQuery selector:
+				 </p>
+<pre class="prettyprint pre-scrollable">
+  &lt;script text="text/javascript"&gt;
+    $(document).ready(function() {
+      $("#vocabInput").ands_vocab_widget();
+    }
+  &lt;/script&gt;
+</pre>
+                                 <p>
+				   The plugin accepts a suite of options, detailed below.
+				 </p>
 
 			    	 <h4>Advanced Options / Customisation</h4>
 			    	 <p>
-				   Coming soon
+				   The following options can be passed into the plugin using a Javascript hash/object, such as <code>$("#vocabInput").ands_vocab_widget({cache: false});</code>. Be sure to quote strings, and separate multiple options with a comma (<code>,</code>).
 			    	 </p>
+				 <table class="table table-condensed" style="font-size:0.9em">
+				   <thead>
+				     <tr>
+				       <th>Option</th>
+				       <th>Type</th>
+				       <th>Default value</th>
+				       <th>Description</th>
+				   </thead>
+				   <tbody>
+				     <tr>
+				       <td>endpoint</td>
+				       <td>string</td>
+				       <td>"http://services.ands.org.au/api/resolver/vocab_widget/"</td>
+				       <td>Location (absolute URL) of the (JSONP) SISSvoc provider.</td>
+				     </tr>
+				     <tr>
+				       <td>mode</td>
+				       <td>string</td>
+				       <td>"search"</td>
+				       <td>Reserved for future use. Currently, only "search" is allowed.</td>
+				     </tr>
+				     <tr>
+				       <td>max_results</td>
+				       <td>integer</td>
+				       <td>100</td>
+				       <td>At most, how many results should be returned?</td>
+				     </tr>
+				     <tr>
+				       <td>min_chars</td>
+				       <td>integer</td>
+				       <td>3</td>
+				       <td>How many characters are required before a search is executed?</td>
+				     </tr>
+				     <tr>
+				       <td>delay</td>
+				       <td>integer</td>
+				       <td>500</td>
+				       <td>How long to wait (after initial user input) before executing the search? Provide in milliseconds</td>
+				     </tr>
+				     <tr>
+				       <td>cache</td>
+				       <td>boolean</td>
+				       <td>true</td>
+				       <td>Cache search results?</td>
+				     </tr>
+				     <tr>
+				       <td>nohits_msg</td>
+				       <td>string / boolean false</td>
+				       <td>"No matches found"</td>
+				       <td>Message to display when no matching concepts are found. Set to <code>false</code> to suppress such messages</td>
+				     </tr>
+				     <tr>
+				       <td>error_msg</td>
+				       <td>string / boolean false</td>
+				       <td>"ANDS Vocabulary Widget service error"</td>
+				       <td>Message title to display when an error is encountered. Set to <code>false</code> to suppress such messages</td>
+				     </tr>
+				     <tr>
+				       <td>list_class</td>
+				       <td>string</td>
+				       <td>"ands_vocab_list"</td>
+				       <td>CSS 'class' references for the dropdown list. Separate multiple classes by spaces</td>
+				     </tr>
+				     <tr>
+				       <td>fields</td>
+				       <td>array of strings</td>
+				       <td>["label", "notation", "about"]</td>
+				       <td>Which fields do you want to display? currently ('label', 'notation', 'about') are available</td>
+				     </tr>
+				     <tr>
+				       <td>target</td>
+				       <td>string</td>
+				       <td>"notation"</td>
+				       <td>What data field should be stored upon selection?</td>
+				     </tr>
+				   </tbody>
+				 </table>
 			    </div>
 
 
@@ -49,7 +149,8 @@
 			    <div class="span4">
 			    	<h5>Enrich your web forms in seconds...</h5>
 				<p>
-				  Coming soon
+				  <a href="<?=asset_url('demo.html');?>"><img src="<?=asset_url('img/vocab_widget_screenshot.png');?>" class="img-rounded" alt="Resolution of Place Names" /></a>
+						<small class="pull-right"><em>Query the ANDS SISSvoc service to retrieve vocabulary concepts.</em></small>
 				</p>
 
 			    	 <br/><br/>
