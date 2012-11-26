@@ -32,6 +32,7 @@ ul.ands_vocab_list li[role="vocab_item"]:hover {
 ul.ands_vocab_list li span[role="label"] {
     font-weight: bold;
     float:left;
+    width:80%;
 }
 
 ul.ands_vocab_list li span[role="notation"] {
