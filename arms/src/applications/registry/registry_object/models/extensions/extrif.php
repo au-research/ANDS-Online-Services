@@ -95,14 +95,13 @@ class Extrif_Extension extends ExtensionBase
 					$clean_html = $this->_CI->purifier->purify_html($description);
 					$extrifDescription = $xml->addChild("extRif:description", $clean_html, EXTRIF_NAMESPACE);
 					$extrifDescription->addAttribute("type", $type);
-					// XXX: TODO: CLEAN UP HTML (PURIFY)
+
+					//$extrifDescription->addAttribute("type", (string) $description['type']);
 
 
 				}	
 					
 				$this->ro->updateXML($xml->asXML(),TRUE,'extrif');
-
-				
 
 				return $this;
 			}
