@@ -50,9 +50,10 @@ class Cosi_authentication extends CI_Model {
 		if($result->num_rows() > 0){
 			$method = trim($result->row(1)->authentication_service_id);
 		}else{
-            if($method==gCOSI_AUTH_METHOD_SHIBBOLETH){
+            if($method==gCOSI_AUTH_METHOD_SHIBBOLETH && isset($_SERVER['displayName'])){
                 //create user 
-                
+                var_dump($method);
+                var_dump($_SERVER['displayName']);
                 $data = array(
                     'role_id' => $username,
                     'role_type_id'=>'ROLE_USER',
@@ -126,6 +127,9 @@ class Cosi_authentication extends CI_Model {
 		}
 		else if ($method === gCOSI_AUTH_METHOD_SHIBBOLETH)
 		{
+            if(!isset($_SERVER['displayName'])){
+                throw new Exception('Bad Credentials');
+            }
 			if ($username == '')
 			{
 				throw new Exception('Authentication Failed (0)');

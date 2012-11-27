@@ -44,7 +44,7 @@ var mctInitFunc = null;
 
 function mctAsyncInit(controls, resolver)
 {
-	mctInitFunc = function(){ console.log("asd"); mctInit(controls, resolver); }
+	mctInitFunc = function(){mctInit(controls, resolver);}
 }
 
 
@@ -2834,6 +2834,7 @@ $('#enableBtn').live('click', function(){
 			activateTab(activeTab);
 			$('#preview_tab > a').html("<img id=\"saveButton\" src=\"" +orcaImageRoot+ "/save.png\" style=\"padding-top:4px;\" alt=\"Save and Preview this Draft\" /> Save Draft");
 			$(this).parent().hide();
+			$('#button_bar').remove();
 		}
 	}
 });
