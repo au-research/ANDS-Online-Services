@@ -36,8 +36,6 @@ $(function(){
 		}
 	});
 	
-	var ul = $('#sidebar > ul');
-	
 	$('#sidebar > a').click(function(e)
 	{
 		e.preventDefault();
@@ -45,11 +43,11 @@ $(function(){
 		if(sidebar.hasClass('open'))
 		{
 			sidebar.removeClass('open');
-			ul.slideUp(250);
+			$('#sidebar > ul').slideUp(250);
 		} else 
 		{
 			sidebar.addClass('open');
-			ul.slideDown(250);
+			$('#sidebar > ul').slideDown(250);
 		}
 	});
 });

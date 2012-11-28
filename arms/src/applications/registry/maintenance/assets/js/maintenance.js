@@ -4,16 +4,12 @@
 
 $(function(){
 	initView();
+	
 });
 
 function initView(){
 
-	//get SOLR stat
-	$.getJSON(base_url+'maintenance/getSOLRstat', function(data) {
-		var template = $('#solr-template').html();
-		var output = Mustache.render(template, data);
-		$('#solr').html(output);
-	});
+	updateStat();
 
 	//get Datasources stat
 	$.getJSON(base_url+'maintenance/getDataSourcesStat', function(data) {
@@ -21,5 +17,23 @@ function initView(){
 		var output = Mustache.render(template, data);
 		$('#ds').html(output);
 		$('#dataSourceSelect').chosen();
+		$('.data-table').dataTable({
+			"bJQueryUI": true,
+			"sPaginationType": "full_numbers",
+			"sDom": '<""l>t<"F"fp>'
+		});
+	});
+}
+
+function updateStat() {
+
+	//get Stat
+	$('#stat').css('opacity', '0.5');
+	$.getJSON(base_url+'maintenance/getStat', function(data) {
+		var template = $('#stat-template').html();
+		var output = Mustache.render(template, data);
+		$('#stat').html(output);
+		$('#stat').css('opacity', '1');
+		//$('.updateSOLRstat').click(updateSOLRstat);
 	});
 }

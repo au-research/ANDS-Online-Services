@@ -11,57 +11,76 @@
 ?>
 
 <?php  $this->load->view('header');?>
-<div class="container" id="main-content">
-	<div class="row">
-		<div class="span3">
-			<div id="solr"></div>
-		</div>
-		<div class="span3">
-			<div id="ds"></div>
-		</div>
-		<div class="span3">
-
-		</div>
-		<div class="span3">
-
-		</div>
-	</div>
+<div class="container-fluid" id="main-content">
+	<div id="stat"></div>
+	<div id="ds"></div>
 </div>
 
-
-<script type="text/x-mustache" id="solr-template">
-<div class="box">
-	<div class="box-header clearfix"><h1>Index Stat</h1></div>
-	<div class="box-content">
-		<p>Total Count (DB): <b>{{totalCountDB}}</b></p>
-		<p>Total Count (SOLR): <b>{{totalCountSOLR}}</b></p>
-		<hr/>
-		<div class="btn-group btn-group-vertical">
-			<button class="btn task" action="reindex_all">ReIndex Everything</button>
-			<button class="btn task" action="reindex_missing_all">ReIndex <b>{{notIndexed}}</b> Missing</button>
-			<button class="btn task" action="optimize">Optimize</button>
-			<button class="btn task btn-danger" action="clearindex_all">Clear Everything</button>
-		</div>
+<script type="text/x-mustache" id="stat-template">
+<div class="row-fluid">
+	<div class="span12 center" style="text-align: center;">					
+		<ul class="stat-boxes">
+			<li>
+				<div class="left peity_bar_good"><span>Database</span>Registry Objects</div>
+				<div class="right">
+					<strong>{{totalCountDB}}</strong>
+				</div>
+			</li>
+			<li>
+				<div class="left peity_bar_neutral"><span>SOLR Indexed</span>Registry Objects</div>
+				<div class="right">
+					<strong>{{totalCountSOLR}}</strong>
+				</div>
+			</li>
+			<li>
+				<div class="left peity_bar_bad"><span>Missing</span>Registry Objects</div>
+				<div class="right">
+					<strong>{{notIndexed}}</strong>
+				</div>
+			</li>
+		</ul>
 	</div>
 </div>
 </script>
 
 
+
 <script type="text/x-mustache" id="ds-template">
-<div class="box">
-	<div class="box-header clearfix"><h1>Datasources</h1></div>
-	<div class="box-content">
-		<select class="chzn" id="dataSourceSelect">
-		{{#dataSources}}
-			<option value="{{id}}">{{title}}</option>
-		{{/dataSources}}
-		</select>
-		<hr/>
-		<div class="btn-group btn-group-vertical">
-			<button class="btn task" action="reindex_ds">ReIndex</button>
-			<button class="btn task" action="reindex_missing_ds">ReIndex <b>{{notIndexed}}</b> Missing</button>
-			<button class="btn task btn-danger" action="clearindex_ds">Clear</button>
-		</div>
+<div class="widget-box">
+	<div class="widget-title">
+		<h5>Data Sources</h5>
+	</div>
+	<div class="widget-content nopadding">
+		<table class="table table-bordered data-table">
+			<thead>
+				<tr>
+					<th>id</th>
+					<th>Title</th>
+					<th>Total Registry Count</th>
+					<th>Total Indexed</th>
+					<th>Total Missing</th>
+					<th>Action</th>
+				</tr>
+			</thead>
+			<tbody>
+			{{#dataSources}}
+				<tr>
+					<td>{{id}}</td>
+					<td>{{title}}</td>
+					<td>{{totalCountDB}}</td>
+					<td>{{totalCountSOLR}}</td>
+					<td>{{totalMissing}}</td>
+					<td>
+						<div class="btn-group">
+							<button class="btn task" action="reindex_ds">ReIndex</button>
+							<button class="btn task" action="reindex_missing_ds">ReIndex <b>{{notIndexed}}</b> Missing</button>
+							<button class="btn task btn-danger" action="clearindex_ds">Clear</button>
+						</div>
+					</td>
+				</tr>
+			{{/dataSources}}
+			</tbody>
+		</table>  
 	</div>
 </div>
 </script>

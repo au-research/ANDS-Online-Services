@@ -12,19 +12,25 @@
 
 class Maintenance_stat extends CI_Model {
 
-	
-	function getTotalRegistryObjectsCount($where='db'){
+	function getTotalRegistryObjectsCount($where='db', $data_source_id='*'){
 		if($where=='db'){
 			$this->db->from('registry_objects');
+			if($data_source_id!='*'){
+				$this->db->where('data_source_id', $data_source_id);
+			}
 			$query = $this->db->get();
 			return $query->num_rows();
 		}else if($where=='solr'){
 			$this->load->library('solr');
 			$this->solr->setOpt('q', '*:*');
+			if($data_source_id!='*'){
+				$this->solr->setOpt('fq', '+data_source_id:'.$data_source_id);
+			}
 			$this->solr->executeSearch();
 			return $this->solr->getNumFound();
 		}
 	}
+	
 
 	function getAllIDs($where='db'){
 		$array = array();

@@ -293,7 +293,7 @@ class Import extends CI_Model {
 				//echo $ro->getExtRif();
 				$solrXML =  str_replace("&lt;field","\n&lt;field", htmlentities($ro->transformForSOLR()));
 				$solrXML = $ro->transformForSOLR();
-				//echo $solrXML;
+				echo $solrXML;
 				$result = curl_post($solrUpdateUrl, $solrXML);
 				$result = json_decode($result);
 				if($result->{'responseHeader'}->{'status'}==0){
