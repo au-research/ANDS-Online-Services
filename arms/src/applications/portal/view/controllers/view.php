@@ -21,13 +21,12 @@ class View extends MX_Controller {
 			$extRif = $this->registry->fetchExtRifByID($this->input->get('id'));
 			$connections = $this->registry->fetchConnectionsByID($this->input->get('id'));
 		}
-
-
+		$data['connections_contents'] = $connections;
+		$connDiv = $this->load->view('connections', $data, true);
 		$data['registry_object_contents'] = $this->registry->transformExtrifToHTMLStandardRecord($extRif);
-
-		//$data['connections_box_initial_state'] = 
-
+		$data['registry_object_contents'] = str_replace('%%%%CONNECTIONS%%%%', $connDiv, $data['registry_object_contents']);
 		$this->load->view('view', $data);
+
 	}
 
 }

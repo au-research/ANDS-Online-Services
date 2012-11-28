@@ -86,23 +86,15 @@ class Extrif_Extension extends ExtensionBase
 				$descriptions = $xml->xpath('//'.$this->ro->class.'/description');
 				
 				foreach ($descriptions AS $description)
-				{
-					
-					$aArray = $description->attributes();
-					$type = $aArray['type'];
+				{					
+					$type = (string) $description['type'];
 					$description = (string) $description;					
 					$this->_CI->load->library('purifier');
 					$clean_html = $this->_CI->purifier->purify_html($description);
 					$extrifDescription = $xml->addChild("extRif:description", $clean_html, EXTRIF_NAMESPACE);
 					$extrifDescription->addAttribute("type", $type);
-
-					//$extrifDescription->addAttribute("type", (string) $description['type']);
-
-
-				}	
-					
+				}						
 				$this->ro->updateXML($xml->asXML(),TRUE,'extrif');
-
 				return $this;
 			}
 			else
@@ -111,7 +103,7 @@ class Extrif_Extension extends ExtensionBase
 			}
 		}
 	}
-	
+
 	function transformForSOLR()
 	{
 		try{
@@ -170,7 +162,8 @@ class Extrif_Extension extends ExtensionBase
 			$xslt_processor = Transforms::get_extrif_to_dc_transformer();
 			$dom = new DOMDocument();
 			$this->ro->enrich();
-			$dom->loadXML(str_replace('&','&amp;',$this->ro->getExtRif()));
+			$dom->loadXML($this->ro->getExtRif());
+			//$dom->loadXML(str_replace('&','&amp;',$this->ro->getExtRif()));
 			return $xslt_processor->transformToXML($dom);
 		}catch (Exception $e)
 		{

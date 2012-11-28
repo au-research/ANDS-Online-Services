@@ -9,15 +9,15 @@
     <xsl:apply-templates/>
 </xsl:template>   
     
- <xsl:template match="registryObjects">
-    <xsl:apply-templates select="registryObject"/>
+ <xsl:template match="ro:registryObjects">
+    <xsl:apply-templates select="ro:registryObject"/>
  </xsl:template> 
 
-    <xsl:template match="registryObject">
+    <xsl:template match="ro:registryObject">
         <add>
         <doc>
-        <xsl:variable name="roKey" select="key"/>
-            <xsl:apply-templates select="key"/>
+        <xsl:variable name="roKey"/>
+            <xsl:apply-templates select="ro:key"/>
 
         <xsl:choose>
 			<xsl:when test="extRif:extendedMetadata">
@@ -49,13 +49,13 @@
                 <xsl:attribute name="name">group</xsl:attribute>
                 <xsl:value-of select="@group"/>
             </xsl:element>  
-            <xsl:apply-templates select="collection | party | activity | service"/>
+            <xsl:apply-templates select="ro:collection | ro:party | ro:activity | ro:service"/>
 
         </doc>
         </add>
     </xsl:template> 
    
-    <xsl:template match="key">
+    <xsl:template match="ro:key">
         <xsl:element name="field">
             <xsl:attribute name="name">key</xsl:attribute>
             <xsl:value-of select="."/>
@@ -247,7 +247,7 @@
         </xsl:element>       
     </xsl:template>
    
-    <xsl:template match="collection | party | activity | service">
+    <xsl:template match="ro:collection | ro:party | ro:activity | ro:service">
         <xsl:element name="field">
             <xsl:attribute name="name">class</xsl:attribute>
             <xsl:value-of select="local-name()"/>
@@ -260,14 +260,14 @@
             <xsl:attribute name="name">date_modified</xsl:attribute>
             <xsl:value-of select="@dateModified"/>
         </xsl:element-->  
-        <xsl:apply-templates select="identifier" mode="value"/>
-        <xsl:apply-templates select="identifier" mode="type"/>
-        <xsl:apply-templates select="name"/>
+        <xsl:apply-templates select="ro:identifier" mode="value"/>
+        <xsl:apply-templates select="ro:identifier" mode="type"/>
+        <xsl:apply-templates select="ro:name"/>
         
-        <xsl:apply-templates select="subject" mode="value"/>
-        <xsl:apply-templates select="subject" mode="resolved_value"/>
-        <xsl:apply-templates select="subject" mode="type"/>
-        <xsl:apply-templates select="subject" mode="vocab_uri"/>
+        <xsl:apply-templates select="ro:subject" mode="value"/>
+        <xsl:apply-templates select="ro:subject" mode="resolved_value"/>
+        <xsl:apply-templates select="ro:subject" mode="type"/>
+        <xsl:apply-templates select="ro:subject" mode="vocab_uri"/>
         <xsl:apply-templates select="extRif:broaderSubject" mode="value"/>
         <xsl:apply-templates select="extRif:broaderSubject" mode="resolved_value"/>
         <xsl:apply-templates select="extRif:broaderSubject" mode="type"/>
@@ -279,37 +279,37 @@
         		<xsl:apply-templates select="extRif:description" mode="type"/>
         	</xsl:when>
         	<xsl:otherwise>
-        	   	<xsl:apply-templates select="description" mode="value"/>
-        		<xsl:apply-templates select="description" mode="type"/>
+        	   	<xsl:apply-templates select="ro:description" mode="value"/>
+        		<xsl:apply-templates select="ro:description" mode="type"/>
         	</xsl:otherwise>
         </xsl:choose>
 
         
-        <xsl:apply-templates select="displayTitle"/>
-        <xsl:apply-templates select="listTitle"/>
+        <xsl:apply-templates select="ro:displayTitle"/>
+        <xsl:apply-templates select="ro:listTitle"/>
         
-        <xsl:apply-templates select="location"/>
-        <xsl:apply-templates select="coverage"/>
+        <xsl:apply-templates select="ro:location"/>
+        <xsl:apply-templates select="ro:coverage"/>
         
-        <xsl:apply-templates select="relatedObject"/>
-        <xsl:apply-templates select="relatedInfo"/>
+        <xsl:apply-templates select="ro:relatedObject"/>
+        <xsl:apply-templates select="ro:relatedInfo"/>
     </xsl:template>
     
-    <xsl:template match="location">
+    <xsl:template match="ro:location">
         <xsl:element name="field">
             <xsl:attribute name="name">location</xsl:attribute>
             <xsl:apply-templates/>
         </xsl:element>       
     </xsl:template>
     
-    <xsl:template match="relatedInfo">
+    <xsl:template match="ro:relatedInfo">
     <xsl:element name="field">
         <xsl:attribute name="name">related_info</xsl:attribute>
         <xsl:apply-templates/>
     </xsl:element>       
     </xsl:template>
     
-    <xsl:template match="relatedInfo/*">
+    <xsl:template match="ro:relatedInfo/*">
             <xsl:value-of select="."/><xsl:text> </xsl:text>
     </xsl:template>
     
@@ -326,48 +326,48 @@
     </relatedObject>
     
     -->
-    <xsl:template match="relatedObject">
+    <xsl:template match="ro:relatedObject">
 
             <xsl:apply-templates/>
        
     </xsl:template>
     
-    <xsl:template match="relatedObject/key">
+    <xsl:template match="ro:relatedObject/ro:key">
         <xsl:element name="field">
             <xsl:attribute name="name">related_object_key</xsl:attribute>
             <xsl:value-of select="."/>
         </xsl:element>       
     </xsl:template>
     
-    <xsl:template match="relatedObject/extRif:relatedObjectClass">
+    <xsl:template match="ro:relatedObject/extRif:relatedObjectClass">
         <xsl:element name="field">
             <xsl:attribute name="name">related_object_class</xsl:attribute>
             <xsl:value-of select="."/>
         </xsl:element>       
     </xsl:template>
     
-    <xsl:template match="relatedObject/extRif:relatedObjectType">
+    <xsl:template match="ro:relatedObject/extRif:relatedObjectType">
         <xsl:element name="field">
             <xsl:attribute name="name">related_object_type</xsl:attribute>
             <xsl:value-of select="."/>
         </xsl:element>       
     </xsl:template>
     
-    <xsl:template match="relatedObject/extRif:relatedObjectListTitle">
+    <xsl:template match="ro:relatedObject/extRif:relatedObjectListTitle">
         <xsl:element name="field">
             <xsl:attribute name="name">related_object_list_title</xsl:attribute>
             <xsl:value-of select="."/>
         </xsl:element>       
     </xsl:template>
     
-    <xsl:template match="relatedObject/extRif:relatedObjectDisplayTitle">
+    <xsl:template match="ro:relatedObject/extRif:relatedObjectDisplayTitle">
         <xsl:element name="field">
             <xsl:attribute name="name">related_object_display_title</xsl:attribute>
             <xsl:value-of select="."/>
         </xsl:element>       
     </xsl:template>
         
-    <xsl:template match="relatedObject/relation">
+    <xsl:template match="ro:relatedObject/ro:relation">
     <xsl:element name="field">
         <xsl:attribute name="name">related_object_relation</xsl:attribute>
         <xsl:choose>
@@ -382,7 +382,7 @@
     </xsl:template>
 
     
-    <xsl:template match="coverage/temporal/extRif:date[@type = 'dateFrom'] | coverage/temporal/extRif:date[@type = 'dateTo']">
+    <xsl:template match="ro:coverage/ro:temporal/extRif:date[@type = 'dateFrom'] | ro:coverage/ro:temporal/extRif:date[@type = 'dateTo']">
 
 	        <xsl:element name="field">	            
 
@@ -397,50 +397,50 @@
 
     </xsl:template>
     
-    <xsl:template match="address | electronic | physical | coverage | temporal | extRif:spatial">
+    <xsl:template match="ro:address | ro:electronic | ro:physical | ro:coverage | ro:temporal | extRif:spatial">
             <xsl:apply-templates/>
     </xsl:template>
     
-    <xsl:template match="electronic/value | addressPart | location/spatial[@type = 'text']">
+    <xsl:template match="ro:electronic/ro:value | ro:addressPart | ro:location/ro:spatial[@type = 'text']">
             <xsl:value-of select="."/><xsl:text> </xsl:text>
     </xsl:template>
     
-    <xsl:template match="identifier" mode="value">
+    <xsl:template match="ro:identifier" mode="value">
         <xsl:element name="field">
             <xsl:attribute name="name">identifier_value</xsl:attribute>
             <xsl:value-of select="."/>
         </xsl:element>       
     </xsl:template>
     
-    <xsl:template match="identifier" mode="type">
+    <xsl:template match="ro:identifier" mode="type">
         <xsl:element name="field">
             <xsl:attribute name="name">identifier_type</xsl:attribute>
             <xsl:value-of select="@type"/>
         </xsl:element>       
     </xsl:template>
       
-    <xsl:template match="subject" mode="value">
+    <xsl:template match="ro:subject" mode="value">
         <xsl:element name="field">
             <xsl:attribute name="name">subject_value_unresolved</xsl:attribute>
             <xsl:value-of select="."/>
         </xsl:element>       
     </xsl:template>
     
-    <xsl:template match="subject" mode="resolved_value">
+    <xsl:template match="ro:subject" mode="resolved_value">
         <xsl:element name="field">
             <xsl:attribute name="name">subject_value_resolved</xsl:attribute>
             <xsl:value-of select="@extRif:resolvedValue"/>
         </xsl:element>       
     </xsl:template>
        
-    <xsl:template match="subject" mode="type">
+    <xsl:template match="ro:subject" mode="type">
         <xsl:element name="field">
             <xsl:attribute name="name">subject_type</xsl:attribute>
             <xsl:value-of select="@type"/>
         </xsl:element>
     </xsl:template>
     
-    <xsl:template match="subject" mode="vocab_uri">
+    <xsl:template match="ro:subject" mode="vocab_uri">
         <xsl:element name="field">
             <xsl:attribute name="name">subject_vocab_uri</xsl:attribute>
             <xsl:value-of select="@extRif:vocabUri"/>
@@ -495,14 +495,14 @@
         </xsl:element>
     </xsl:template>
     <!-- ignore list -->
-    <xsl:template match="location/extRif:spatial/extRif:coords | coverage/extRif:spatial/extRif:coords">
+    <xsl:template match="ro:location/extRif:spatial/extRif:coords | ro:coverage/extRif:spatial/extRif:coords">
         <xsl:element name="field">
             <xsl:attribute name="name">spatial_coverage</xsl:attribute>
             <xsl:value-of select="."/>
         </xsl:element>
     </xsl:template>
     
-    <xsl:template match="location/extRif:spatial/extRif:center | coverage/extRif:spatial/extRif:center">
+    <xsl:template match="ro:location/extRif:spatial/extRif:center | ro:coverage/extRif:spatial/extRif:center">
         <xsl:element name="field">
             <xsl:attribute name="name">spatial_coverage_center</xsl:attribute>
             <xsl:value-of select="."/>
@@ -517,10 +517,10 @@
     </xsl:template> 
 
 
-    <xsl:template match="date | description | spatial | text | extRif:geometry"/>
+    <xsl:template match="ro:date | ro:description | ro:spatial | ro:text | extRif:geometry"/>
 
     
-    <xsl:template match="name"/>
+    <xsl:template match="ro:name"/>
    		
    
 </xsl:stylesheet>
