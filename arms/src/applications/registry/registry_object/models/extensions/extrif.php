@@ -75,7 +75,7 @@ class Extrif_Extension extends ExtensionBase
 				
 				foreach ($names AS $name)
 				{
-					$extrifName = $xml->addChild("extRif:name", NULL, EXTRIF_NAMESPACE);
+					$extrifName = $extendedMetadata->addChild("extRif:name", NULL, EXTRIF_NAMESPACE);
 					$extrifName->addAttribute("extRif:type", (string) $name['type'], EXTRIF_NAMESPACE);
 					$titles =  $this->ro->getTitlesForFragment($name, $this->ro->class);
 					$extrifName->addChild("extRif:listTitle", $titles['list_title'], EXTRIF_NAMESPACE);
@@ -91,7 +91,7 @@ class Extrif_Extension extends ExtensionBase
 					$description = (string) $description;					
 					$this->_CI->load->library('purifier');
 					$clean_html = $this->_CI->purifier->purify_html($description);
-					$extrifDescription = $xml->addChild("extRif:description", $clean_html, EXTRIF_NAMESPACE);
+					$extrifDescription = $extendedMetadata->addChild("extRif:description", $clean_html, EXTRIF_NAMESPACE);
 					$extrifDescription->addAttribute("type", $type);
 				}						
 				$this->ro->updateXML($xml->asXML(),TRUE,'extrif');

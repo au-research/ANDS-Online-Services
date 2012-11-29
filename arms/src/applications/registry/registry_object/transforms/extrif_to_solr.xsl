@@ -41,7 +41,14 @@
       			<xsl:apply-templates select="extRif:extendedMetadata/extRif:quality_level"/>
       			<xsl:apply-templates select="extRif:extendedMetadata/extRif:feedType"/>   
                 <xsl:apply-templates select="extRif:extendedMetadata/extRif:lastModifiedBy"/>  
-                <xsl:apply-templates select="extRif:extendedMetadata/extRif:spatialGeometry/extRif:extent"/>             	
+                <xsl:apply-templates select="extRif:extendedMetadata/extRif:spatialGeometry/extRif:extent"/>
+                <xsl:apply-templates select="extRif:extendedMetadata/extRif:broaderSubject" mode="value"/>
+                <xsl:apply-templates select="extRif:extendedMetadata/extRif:broaderSubject" mode="resolved_value"/>
+                <xsl:apply-templates select="extRif:extendedMetadata/extRif:broaderSubject" mode="type"/>
+                <xsl:apply-templates select="extRif:extendedMetadata/extRif:broaderSubject" mode="vocab_uri"/>
+                <xsl:apply-templates select="extRif:extendedMetadata/extRif:rights[@licence_group!='']" mode="licence_group"/>        
+                <xsl:apply-templates select="extRif:extendedMetadata/extRif:description" mode="value"/>
+                <xsl:apply-templates select="extRif:extendedMetadata/extRif:description" mode="type"/>  	
         	</xsl:when>
         </xsl:choose>
 
@@ -268,21 +275,7 @@
         <xsl:apply-templates select="ro:subject" mode="resolved_value"/>
         <xsl:apply-templates select="ro:subject" mode="type"/>
         <xsl:apply-templates select="ro:subject" mode="vocab_uri"/>
-        <xsl:apply-templates select="extRif:broaderSubject" mode="value"/>
-        <xsl:apply-templates select="extRif:broaderSubject" mode="resolved_value"/>
-        <xsl:apply-templates select="extRif:broaderSubject" mode="type"/>
-        <xsl:apply-templates select="extRif:broaderSubject" mode="vocab_uri"/>
-        <xsl:apply-templates select="extRif:rights[@licence_group!='']" mode="licence_group"/>        
-        <xsl:choose>
-        	<xsl:when test="extRif:description">
-        	   	<xsl:apply-templates select="extRif:description" mode="value"/>
-        		<xsl:apply-templates select="extRif:description" mode="type"/>
-        	</xsl:when>
-        	<xsl:otherwise>
-        	   	<xsl:apply-templates select="ro:description" mode="value"/>
-        		<xsl:apply-templates select="ro:description" mode="type"/>
-        	</xsl:otherwise>
-        </xsl:choose>
+        
 
         
         <xsl:apply-templates select="ro:displayTitle"/>
