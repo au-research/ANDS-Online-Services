@@ -576,8 +576,8 @@
 							<div class="controls">
 								<select data-placeholder="Choose a Provider Type" tabindex="1" class="chzn-select input-xlarge" for="provider_type">
 									<option value=""></option>
-									<option value="RIF">RIF</option>
-									<option value="OAI_RIF">RIF OAI-PMH</option>
+									<option value="GET">RIF</option>
+									<option value="RIF">RIF OAI-PMH</option>
 								</select>
 								<input type="text" class="input-small hide" name="provider_type" value="{{provider_type}}">
 							</div>
@@ -587,9 +587,9 @@
 							<label class="control-label" for="harvest_method">Harvest Method</label>
 							<div class="controls">
 								<select data-placeholder="Choose a Harvest Method" tabindex="1" class="chzn-select input-xlarge" for="harvest_method">
-									<option value="DIRECT">DIRECT</option>
-									<option value="GET">Harvester DIRECT</option>
-									<option value="RIF">Harvester OAI-PMH</option>
+									<option value="RIF">DIRECT</option>
+									<option value="RIF">Harvester DIRECT</option>
+									<option value="RIF OAI-PMH">Harvester OAI-PMH</option>
 								</select>
 								<input type="text" class="input-small hide" name="harvest_method" value="{{harvest_method}}">
 							</div>
