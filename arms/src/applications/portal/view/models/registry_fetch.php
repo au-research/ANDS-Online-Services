@@ -8,9 +8,7 @@ class Registry_fetch extends CI_Model
 		$xsl_args = array(
 			'base_url' => base_url(),
 		);
-		//print_pre(htmlentities($extrif));
-		// XXX: Quick fix xmlns!!!
-		//$extrif = str_replace("<registryObject ", "<registryObject xmlns=\"http://ands.org.au/standards/rif-cs/registryObjects\" ", $extrif);
+
 		return $this->_transformByXSL($extrif, 'extRif2view.xsl', $xsl_args);
 	}
 

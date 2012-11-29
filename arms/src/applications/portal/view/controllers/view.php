@@ -23,8 +23,11 @@ class View extends MX_Controller {
 		}
 		$data['connections_contents'] = $connections;
 		$connDiv = $this->load->view('connections', $data, true);
+
 		$data['registry_object_contents'] = $this->registry->transformExtrifToHTMLStandardRecord($extRif);
 		$data['registry_object_contents'] = str_replace('%%%%CONNECTIONS%%%%', $connDiv, $data['registry_object_contents']);
+		
+
 		$this->load->view('view', $data);
 
 	}

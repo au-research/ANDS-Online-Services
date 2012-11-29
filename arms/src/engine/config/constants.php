@@ -36,7 +36,8 @@ define('FOPEN_READ_WRITE_CREATE',				'a+b');
 define('FOPEN_WRITE_CREATE_STRICT',				'xb');
 define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 
-
+define('EXTRIF_NAMESPACE', "http://ands.org.au/standards/rif-cs/extendedRegistryObjects");
+define('RIFCS_NAMESPACE', "http://ands.org.au/standards/rif-cs/registryObjects");
 
 define('BR','<br/>');
 define('NL',"\n");
@@ -44,10 +45,6 @@ define('TAB',"\t");
 
 define('DB_TRUE',"t");
 define('DB_FALSE',"f");
-
-
-define('EXTRIF_NAMESPACE', "http://ands.org.au/standards/rif-cs/extendedRegistryObjects");
-define('RIFCS_NAMESPACE', "http://ands.org.au/standards/rif-cs/registryObjects");
 
 define('ENGINE_ENABLED_MODULE_LIST','ENGINE_ENABLED_MODULE_LIST');
 

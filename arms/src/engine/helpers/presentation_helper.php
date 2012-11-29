@@ -6,56 +6,6 @@ function print_pre($var)
 	echo "</pre>";
 } 
 
-function wrap_xml($xml, $scheme = 'rif')
-{
-	
-	$return = "";
-	switch($scheme)
-	{
-		
-		case "rif":
-			$return .= '<registryObjects xmlns="http://ands.org.au/standards/rif-cs/registryObjects" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects http://services.ands.org.au/documentation/rifcs/schema/registryObjects.xsd">' . NL; 
-			$return .= $xml;
-			$return .= '</registryObjects>' . NL;
-				
-		break;
-	}
-	return $return;		
-}
-
-
-/* Transform an array to XML */
-function json_to_xml($obj){
-  $str = "";
-  if(is_null($obj))
-  {
-    return "<null/>";
-  }
-  elseif(is_array($obj)) 
-  {
-      //a list is a hash with 'simple' incremental keys
-    $is_list = array_keys($obj) == array_keys(array_values($obj));
-    if(!$is_list) {
-      foreach($obj as $k=>$v)
-        $str.="<$k>".json_to_xml($v)."</$k>".NL;
-    } else {
-      $str.= "<list>";
-      foreach($obj as $v)
-        $str.="<item>".json_to_xml($v)."</item>".NL;
-      $str .= "</list>";
-    }
-    return $str;
-  }
-  elseif(is_string($obj))
-  {
-    return htmlspecialchars($obj) != $obj ? "<![CDATA[$obj]]>" : $obj;
-  } 
-  elseif(is_scalar($obj))
-    return $obj;
-  else
-    throw new Exception("Unsupported type $obj");
-}
-	
 	
 $BENCHMARK_TIME = array();
 function bench($idx = 0)

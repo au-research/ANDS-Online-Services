@@ -10,16 +10,17 @@ class Title_Extension extends ExtensionBase
 		parent::__construct($ro_pointer);
 	}	
 		 
-	function updateTitles()
+	function updateTitles($sxml = null)
 	{
 		$list_title = self::DEFAULT_TITLE;
 		$display_title = self::DEFAULT_TITLE;
 		
-		$sxml = simplexml_load_string($this->ro->getXML());
-		if ($sxml)
+		if (is_null($sxml))
 		{
-			$titles = $this->getTitlesForRegistryObject($sxml);
+			$sxml = simplexml_load_string($this->ro->getRif());
 		}
+		
+		$titles = $this->getTitlesForRegistryObject($sxml);
 
 		$this->ro->title = $titles['display_title'];
 		$this->ro->list_title = $titles['list_title'];

@@ -200,7 +200,7 @@ class Data_sources extends CI_Model {
 	function __construct()
 	{
 		parent::__construct();
-		include_once("_data_source.php");
+		require_once("_data_source.php");
 	}	
 		
 }

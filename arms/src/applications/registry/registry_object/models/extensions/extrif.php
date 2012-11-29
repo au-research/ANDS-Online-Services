@@ -16,7 +16,7 @@ class Extrif_Extension extends ExtensionBase
 		$this->_CI->load->model('data_source/data_sources','ds');		
 		$ds = $this->_CI->ds->getByID($this->ro->data_source_id);
 		//same as in relationships.php
-		$xml = new SimpleXMLElement($this->ro->getRif()); // $this->ro->getSimpleXML();  XXX
+		$xml = $this->ro->getSimpleXML();
 		$attributes = $xml->attributes(EXTRIF_NAMESPACE);
 
 		// Cannot enrich already enriched RIFCS!!
@@ -27,7 +27,6 @@ class Extrif_Extension extends ExtensionBase
 			if (count($xml->key) == 1)
 			{
 				/* EXTENDED METADATA CONTAINER */
-				
 				$extendedMetadata = $xml->addChild("extRif:extendedMetadata", NULL, EXTRIF_NAMESPACE);
 				
 				$extendedMetadata->addChild("extRif:status", $this->ro->status, EXTRIF_NAMESPACE);
@@ -59,7 +58,6 @@ class Extrif_Extension extends ExtensionBase
 				$extendedMetadata->addChild("extRif:searchBaseScore", 100, EXTRIF_NAMESPACE);
 				$extendedMetadata->addChild("extRif:displayLogo", NULL, EXTRIF_NAMESPACE);
 				
-				//echo "gnaa..";
 				// xxx: spatial extents (sanity checking?)
 				$spatialGeometry = $extendedMetadata->addChild("extRif:spatialGeometry", NULL, EXTRIF_NAMESPACE);
 				foreach ($this->ro->getLocationAsLonLats() AS $lonLat)
@@ -83,15 +81,15 @@ class Extrif_Extension extends ExtensionBase
 				}	
 				
 				/* Names EXTRIF */
-				$descriptions = $xml->xpath('//'.$this->ro->class.'/description');
+				//$descriptions = $xml->xpath('//'.$this->ro->class.'/description');
 				
-				foreach ($descriptions AS $description)
+				foreach ($xml->{$this->ro->class}->description AS $description)
 				{					
 					$type = (string) $description['type'];
-					$description = (string) $description;					
+					$description_str = (string) $description;					
 					$this->_CI->load->library('purifier');
-					$clean_html = $this->_CI->purifier->purify_html($description);
-					$extrifDescription = $extendedMetadata->addChild("extRif:description", $clean_html, EXTRIF_NAMESPACE);
+					$clean_html = $this->_CI->purifier->purify_html($description_str);
+					$extrifDescription = $xml->{$this->ro->class}->addChild("extRif:description", $clean_html, EXTRIF_NAMESPACE);
 					$extrifDescription->addAttribute("type", $type);
 				}						
 				$this->ro->updateXML($xml->asXML(),TRUE,'extrif');
