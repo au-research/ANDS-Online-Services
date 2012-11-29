@@ -10,19 +10,8 @@ $(function(){
 function initView(){
 
 	updateStat();
-
-	//get Datasources stat
-	$.getJSON(base_url+'maintenance/getDataSourcesStat', function(data) {
-		var template = $('#ds-template').html();
-		var output = Mustache.render(template, data);
-		$('#ds').html(output);
-		$('#dataSourceSelect').chosen();
-		$('.data-table').dataTable({
-			"bJQueryUI": true,
-			"sPaginationType": "full_numbers",
-			"sDom": '<""l>t<"F"fp>'
-		});
-	});
+	updateDataSourcesStat();
+	
 }
 
 function updateStat() {
@@ -35,5 +24,43 @@ function updateStat() {
 		$('#stat').html(output);
 		$('#stat').css('opacity', '1');
 		//$('.updateSOLRstat').click(updateSOLRstat);
+	});
+}
+
+function updateDataSourcesStat(){
+	//get Datasources stat
+	$('#ds').css('opacity','0.5');
+	$.getJSON(base_url+'maintenance/getDataSourcesStat', function(data) {
+		var template = $('#ds-template').html();
+		var output = Mustache.render(template, data);
+		$('#ds').css('opacity', '1.0');
+		$('#ds').html(output);
+		$('#dataSourceSelect').chosen();
+		$('.data-table').dataTable({
+			"bJQueryUI": true,
+			"sPaginationType": "full_numbers",
+			"sDom": '<""l>t<"F"fp>'
+		});
+		$('button.reindex_ds').die().live({
+			click:function(){
+				$(this).button('loading');
+				var ds_id = $(this).attr('ds_id');
+				$.getJSON(base_url+'maintenance/indexDS/'+ds_id, function(data) {
+					//console.log(data);
+					updateDataSourcesStat();
+				});
+			}
+		});
+
+		$('button.clearindex_ds').die().live({
+			click:function(){
+				$(this).button('loading');
+				var ds_id = $(this).attr('ds_id');
+				$.getJSON(base_url+'maintenance/clearDS/'+ds_id, function(data) {
+					//console.log(data);
+					updateDataSourcesStat();
+				});
+			}
+		});
 	});
 }

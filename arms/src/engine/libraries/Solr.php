@@ -216,4 +216,26 @@ class Solr {
         curl_close($ch);//close the curl
         return $content;
     }
+
+    function addDoc($docs){
+        return curl_post($this->solr_url.'update?wt=json', $docs);
+    }
+
+    function commit(){
+        return curl_post($this->solr_url.'update?wt=json&commit=true', '<commit waitSearcher="false"/>');
+    }
+
+    function clear($data_source_id='all'){
+        if($data_source_id!='all'){
+            $query = 'data_source_id:("'.$data_source_id.'")';
+        }else{
+            $query = '*:*';
+        }
+        echo $query;
+
+        $result = curl_post($this->solr_url.'update?commit=true&wt=json', '<delete><query>'.$query.'</query></delete>');    
+        //$result .= curl_post($this->solr_url.'update?optimize=true', '<optimize waitFlush="false" waitSearcher="false"/>');
+        return $result; 
+        //return curl_post($this->solr_url.'update?wt=json&commit=true', '<delete>'.$query.'</delete>');
+    }
 }

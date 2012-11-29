@@ -66,7 +66,7 @@ class Maintenance extends MX_Controller {
 		echo json_encode($data);
 	}
 
-	function enrichDS($data_source_id){
+	function enrichDS($data_source_id){//TODO: XXX
 		header('Cache-Control: no-cache, must-revalidate');
 		header('Content-type: application/json');
 
@@ -86,29 +86,67 @@ class Maintenance extends MX_Controller {
 		}
 	}
 
+	/**
+	 * web service for maintenance, this will index a data source
+	 * @param  int $data_source_id 
+	 * @return json result
+	 */
 	function indexDS($data_source_id){
 		header('Cache-Control: no-cache, must-revalidate');
 		header('Content-type: application/json');
+
+		$data = array();
+		$data['data_source_id']=$data_source_id;
+		$data['error']='';
 
 		$this->load->model('registry_object/registry_objects', 'ro');
 		$this->load->model('data_source/data_sources', 'ds');
 		$this->load->library('solr');
 
-		//construct the
 		$ids = $this->ro->getIDsByDataSourceID($data_source_id);
-		$i = 1;
+		$i = 0;
 		foreach($ids as $ro_id){
 			try{
 				$ro = $this->ro->getByID($ro_id);
-				$solrXML = $ro->transformForSOLR();
-				echo $solrXML;
-				echo $this->solr->post($solrXML, 'update');
-				
+				if($ro){
+					$ro->enrich();//TODO: XXX
+					$solrXML = $ro->transformForSOLR();
+					$result = $this->solr->addDoc($solrXML);
+					$result = json_decode($result);
+					$data['results'][$ro_id] = array(
+						'result'=>$result->{'responseHeader'}->{'status'},
+						'QTime'=>$result->{'responseHeader'}->{'QTime'}
+					);
+					if($result->{'responseHeader'}->{'status'}!=0){
+						$data['results'][$ro_id]['msg'] = $result->{'error'}->{'msg'};
+						$data['error'] .= $result->{'error'}->{'msg'};
+					}else{
+						//success
+						$i++;
+					}
+				}else{
+					$data['results'][$ro_id] = array(
+						'result'=>'Not Found!',
+						'QTime'=>0
+					);
+					$data['error'] .= 'RO not found: '. $ro_id.'<br/>';
+				}
 			}catch (Exception $e){
-				echo "UNABLE TO Index this registry object id = ".$ro_id . BR;	
-				echo "<pre>" . nl2br($e->getMessage()) . "</pre>" . BR;
+				$data['results'][$ro_id] = array(
+					'result'=>"<pre>" . nl2br($e) . "</pre>",
+					'QTime'=>0
+				);
+				$data['error'] .= nl2br($e);
 			}
 		}
+		$this->solr->commit();
+		$data['totalAdded'] = $i;
+		echo json_encode($data);
+	}
+
+	function clearDS($data_source_id){
+		$this->load->library('solr');
+		echo $this->solr->clear($data_source_id);
 	}
 	
 	/**

@@ -72,9 +72,8 @@
 					<td>{{totalMissing}}</td>
 					<td>
 						<div class="btn-group">
-							<button class="btn task" action="reindex_ds">ReIndex</button>
-							<button class="btn task" action="reindex_missing_ds">ReIndex <b>{{notIndexed}}</b> Missing</button>
-							<button class="btn task btn-danger" action="clearindex_ds">Clear</button>
+							<button class="btn task reindex_ds" ds_id="{{id}}" data-loading-text="Reindexing">ReIndex</button>
+							<button class="btn task btn-danger clearindex_ds" ds_id="{{id}}" data-loading-text="Clearing">Clear</button>
 						</div>
 					</td>
 				</tr>
