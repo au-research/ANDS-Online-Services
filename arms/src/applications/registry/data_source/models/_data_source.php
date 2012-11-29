@@ -497,7 +497,7 @@ class _data_source {
 	
 	if( $harvestRequest )
 	{
-		$harvesterBaseURI = $this->config->item('harvester_base_url');
+		$harvesterBaseURI = $this->_CI->config->item('harvester_base_url');
 		
 		// Submit a deleteHarvestRequest to the harvester.
 		$request = $harvesterBaseURI."deleteHarvestRequest?harvestid=".esc($harvestRequestId);
