@@ -1,3 +1,3 @@
 <?php
 $autoload['libraries'] = array('importer');
-$autoload['helper'] = array('crosswalks','xml');
+$autoload['helper'] = array('crosswalks','xml','registry');

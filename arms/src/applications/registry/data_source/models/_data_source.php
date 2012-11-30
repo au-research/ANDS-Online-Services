@@ -403,7 +403,7 @@ class _data_source {
 	{
 		$runErrors = '';
 		$harvesterBaseURI = $this->_CI->config->item('harvester_base_url');
-		$this->append_log("insertHarvestRequest: ".$harvesterBaseURI.$harvestRequest, 'info');
+		$this->append_log("A new harvest has been scheduled", 'info');
 		$resultMessage = new DOMDocument();
 
 		$result = $resultMessage->load($harvesterBaseURI.$harvestRequest);
@@ -423,7 +423,7 @@ class _data_source {
 				$logID = $this->append_log("harvestRequest Error[2]: ".$message, "error");
 			}
 			else{
-				$logID = $this->append_log("harvestRequest Success: ".$message, "message");
+				//$logID = $this->append_log("harvestRequest Success: ".$message, "message");
 			}
 		}
 		return $logID;
@@ -461,7 +461,7 @@ class _data_source {
         if($nextHarvest == '')
 			$nextHarvest = $harvestDate;	
 
-		$status = "SCHEDULED FOR ".$nextHarvest;
+		$status = "SCHEDULED FOR ". ($nextHarvest ? $nextHarvest : "NOW");
 		
 		$mode = 'harvest'; if( $testOnly ){ $mode = 'test'; }		
 		

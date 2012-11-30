@@ -38,6 +38,7 @@ define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 
 define('EXTRIF_NAMESPACE', "http://ands.org.au/standards/rif-cs/extendedRegistryObjects");
 define('RIFCS_NAMESPACE', "http://ands.org.au/standards/rif-cs/registryObjects");
+define('OAI_NAMESPACE', "http://www.openarchives.org/OAI/2.0/");
 
 define('BR','<br/>');
 define('NL',"\n");
@@ -77,10 +78,10 @@ define('gSHIBBOLETH_SESSION_INITIATOR', '/Shibboleth.sso/Login');
  */
 define('PUBLISHED', 'PUBLISHED');
 define('APPROVED', 'APPROVED');
-define('SUBMITTED_FOR_ASSESSMENT', 'SUBMITTED_FOR_ASSESSMENT');
 define('ASSESSMENT_IN_PROGRESS', 'ASSESSMENT_IN_PROGRESS');
+define('SUBMITTED_FOR_ASSESSMENT', 'SUBMITTED_FOR_ASSESSMENT');
 define('DRAFT', 'DRAFT');
-
+define('MORE_WORK_REQUIRED', 'MORE_WORK_REQUIRED');
 
 
 

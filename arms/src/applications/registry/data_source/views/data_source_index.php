@@ -179,8 +179,8 @@
 						</a>
 						<ul class="dropdown-menu">
 							<li><a data-toggle="modal" href="#importRecordsFromURLModal" id="importFromURLLink">From a URL</a></li>
-							<li><a href="#">From an XML File</a></li>
-							<li><a href="#">From the Harvester</a></li>
+							<li><a data-toggle="modal" href="#importRecordsFromXMLModal" id="importFromXMLLink">From XML Contents</a></li>
+							<li><a href="" id="importFromHarvesterLink">From the Harvester</a></li>
 						</ul>
 					</div>
 				</div>
@@ -300,8 +300,6 @@
 					<dd>{{oai_set}}</dd>
 					{{/oai_set}}
 			 	</dl>
-			 	<h3>Activity Log</h3><h5 id="log_summary"></h5>
-			 	<div class="well" id="data_source_log_container"></div>
 		 	</div>
 	    </div>
 		</div>
@@ -342,6 +340,15 @@
 	</div>
 
 </div>
+
+<div class="row">
+	<div class="span12">
+		<h3>Activity Log</h3><h5 id="log_summary"></h5>
+		<div class="well" id="data_source_log_container"></div>
+	</div>
+</div>
+
+
 </div>
 
 <!-- Modal form for importing records from a URL -->
@@ -389,6 +396,53 @@
 	
 </div>
 
+<!-- Modal form for importing records from a URL -->
+<div class="modal hide fade" id="importRecordsFromXMLModal">
+	
+	<div class="modal-header">
+		<a href="javascript:;" class="close" data-dismiss="modal">×</a>
+		<h3>Import Registry Objects from pasted XML</h3>
+	</div>
+	
+	<div class="modal-screen-container">
+		<div name="selectionScreen" class="modal-body">
+			
+			<div class="alert alert-info">
+				Paste the XML contents into the field below. 
+			</div>
+			
+			
+			<form class="form-vertical">
+				<fieldset>
+					<label><b>XML to import:</b> </label>
+					<textarea name="xml" id="xml_paste" rows="18" style="width:97%;font-family:Courier;font-size:8px;line-height:9px;"></textarea>
+				</fieldset>
+			</form>
+			
+			<p><span class="label label-info">Note</span> <small>This tool is designed for small imports (&lt;100 records). It may fail with larger bulk imports.</small></p>
+		</div>
+		
+		<!-- A hidden loading screen -->
+		<div name="loadingScreen" class="modal-body hide loading">
+				<b>Loading XML from: </b><div id="remoteSourceURLDisplay"></div>
+				<div class="progress progress-striped active">
+				  <div class="bar" style="width: 100%;"></div>
+				</div>
+		</div>
+		
+		<!-- A hidden loading screen -->
+		<div name="resultScreen" class="modal-body hide loading">
+		</div>
+	</div>
+	
+	
+	<div class="modal-footer">
+		<a href="javascript:;" class="btn btn-primary doImportRecords" data-loading-text="Importing records...">Import Records</a>
+		<a href="#" class="btn hide" data-dismiss="modal">Close</a>
+	</div>
+	
+</div>
+
 	{{/item}}
 </div>
 
@@ -409,7 +463,7 @@
 		<thead><tr><th>#</th><th>TYPE</th><th>LOG</th><th>DATE</th></tr></thead>
 		<tbody>
 		{{#items}}
-			<tr class="{{type}}"><td>{{id}}</td><td>{{type}}</td><td>{{log}}</td><td>{{date_modified}}</td></tr>
+			<tr class="{{type}}"><td>{{id}}</td><td>{{type}}</td><td><pre>{{log}}</pre></td><td>{{date_modified}}</td></tr>
 		{{/items}}
 		</tbody>
 	</table>

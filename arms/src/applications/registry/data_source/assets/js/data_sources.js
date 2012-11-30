@@ -232,7 +232,7 @@ function loadDataSourceLogs(data_source_id, offset, count)
 									"<thead><tr><th>#</th><th>DATE</th><th>TYPE</th><th>LOG</th></tr></thead>" +
 									"<tbody>" +
 									"{{#items}}" +
-										"<tr class='{{type}}'><td>{{id}}</td><td>{{date_modified}}</td><td>{{type}}</td><td>{{log}}</td></tr>" +
+										"<tr class='{{type}}'><td>{{id}}</td><td>{{date_modified}}</td><td>{{type}}</td><td><pre style='width:600px;'>{{log}}</pre></td></tr>" +
 										"{{/items}}" +
 									"<tr id='last_row'><td colspan='3'><a id='show_more_log' class='btn'>Show More<i class='icon-arrow-down'></i></a><input type='hidden' id='log_size' value='{{log_size}}'/><input type='hidden' id='next_offset' value='{{next_offset}}'/></td><td><span id='log_summary_bottom'></span></td></tr></tbody>" +
 								"</table>";
@@ -443,6 +443,11 @@ $('#save-edit-form').live({
 			}
 		});
 
+		$('#edit-datasource #edit-form select').each(function(){
+			label = $(this).attr('for');
+			jsonData.push({name:label, value:$(this).val()});
+		});
+
 		$.ajax({
 			url:'data_source/updateDataSource', 
 			type: 'POST',
@@ -477,6 +482,35 @@ $('#save-edit-form').live({
 	}
 });
 
+
+$('#importFromHarvesterLink').live({
+	click: function(e){
+		e.preventDefault();
+		var jsonData = [];
+
+		jsonData.push({name:'data_source_id', value:$('#data_source_view_container').attr('data_source_id')});
+
+		$.ajax({
+			url:'data_source/triggerHarvest', 
+			type: 'POST',
+			data: jsonData,
+			dataType: 'json',
+			success: function(data){
+				if (data.status == "OK")
+				{
+					changeHashTo('view/'+$('#data_source_view_container').attr('data_source_id'));
+					createGrowl("Your harvest was successfully queued for harvest. Check the Activity Log below.");
+					updateGrowls();
+				}
+			},
+			error: function()
+			{
+				logErrorOnScreen("An error occured whilst testing your harvest!");
+			}
+		});
+
+	}
+});
 
 $('#test-harvest').live({
 	click: function(e){
@@ -553,9 +587,9 @@ $('#importRecordsFromURLModal .doImportRecords').live({
 						}
 						else
 						{
-								$('.modal-body', thisForm).hide();
-								logErrorOnScreen(data.message, $('div[name=resultScreen]', thisForm));
-								$('div[name=resultScreen]', thisForm).fadeIn();
+							$('.modal-body', thisForm).hide();
+							logErrorOnScreen(data.message + "<pre>" + data.log + "</pre>", $('div[name=resultScreen]', thisForm));
+							$('div[name=resultScreen]', thisForm).fadeIn();
 						}
 						$('.modal-footer a').toggle();
 
@@ -585,6 +619,73 @@ $('#importRecordsFromURLModal .doImportRecords').live({
 				thisForm.attr('loaded','false');
 				$('.modal-footer a').hide();
 				$('#importRecordsFromURLModal .doImportRecords').button('reset').show();
+				$('.modal-body', thisForm).hide();
+				$('div[name=selectionScreen]', thisForm).show();
+			}
+				
+		);
+						
+		
+	}
+});
+
+$('#importRecordsFromXMLModal .doImportRecords').live({
+	click: function(e){
+		var thisForm = $('#importRecordsFromXMLModal');
+		/* fire off the ajax request */
+		$.ajax({
+			url:'importFromXMLPasteToDataSource', 
+			type: 'POST',
+			data:	{ 
+				xml: $('#xml_paste').val(), 
+				data_source_id: $('#data_source_view_container').attr('data_source_id') 
+			}, 
+			success: function(data)
+					{
+						var thisForm = $('#importRecordsFromXMLModal');
+						thisForm.attr('loaded','true');
+						var output = '';
+				
+						if(data.response == "success")
+						{
+							output = Mustache.render($('#import-screen-success-report-template').html(), data);
+							$('.modal-body', thisForm).hide();
+							$('div[name=resultScreen]', thisForm).html(output).fadeIn();
+						}
+						else
+						{
+								$('.modal-body', thisForm).hide();
+								logErrorOnScreen(data.message, $('div[name=resultScreen]', thisForm));
+								$('div[name=resultScreen]', thisForm).fadeIn();
+						}
+						$('.modal-footer a').toggle();
+
+					}, 
+			error: function(data)
+					{
+						$('.modal-body', thisForm).hide();
+						logErrorOnScreen(data.responseText, $('div[name=resultScreen]', thisForm));
+						$('div[name=resultScreen]', thisForm).fadeIn();
+						$('.modal-footer a').toggle();
+					},
+			dataType: 'json'
+		});
+		
+		$(this).button('loading');
+		
+		if (thisForm.attr('loaded') != 'true')
+		{
+			$('.modal-body', thisForm).hide();
+			$('div[name=loadingScreen]', thisForm).fadeIn();
+		}
+		
+		$('#importRecordsFromXMLModal').on('hide',
+			function()
+			{
+				load_datasource($('#data_source_view_container').attr('data_source_id'));
+				thisForm.attr('loaded','false');
+				$('.modal-footer a').hide();
+				$('#importRecordsFromXMLModal .doImportRecords').button('reset').show();
 				$('.modal-body', thisForm).hide();
 				$('div[name=selectionScreen]', thisForm).show();
 			}

@@ -232,17 +232,23 @@ class Data_source extends MX_Controller {
 		}
 	    $harvesterParams = array('uri','provider_type','harvest_method','harvest_date','oai_set');
 		$resetHarvest = false;
+
 		// XXX: This doesn't handle "new" attribute creation? Probably need a whilelist to allow new values to be posted. //**whitelist**//
 		if ($dataSource)
 		{
 			$valid_attributes = array_merge(array_keys($dataSource->attributes()), $harvesterParams);
-			foreach($valid_attributes as $attrib){							
-				if (isset($POST[$attrib])){					
+			foreach($valid_attributes as $attrib)
+			{		
+				if (isset($POST[$attrib]))
+				{					
 					$new_value = $this->input->post($attrib);
 				}
-				else if(in_array($attrib, $harvesterParams)){
+				else if(in_array($attrib, $harvesterParams))
+				{
 					$new_value = '';	
-				}	
+				}
+
+
 				if($new_value=='true') $new_value=DB_TRUE;
 				if($new_value=='false') $new_value=DB_FALSE;
 
@@ -250,8 +256,10 @@ class Data_source extends MX_Controller {
 				{
 				   $resetHarvest = true;
 				} 
-				
-				if($new_value == '' && $new_value != $dataSource->{$attrib} && in_array($attrib, $harvesterParams))
+
+				$dataSource->{$attrib} = $new_value;
+
+				/*if($new_value == '' && $new_value != $dataSource->{$attrib} && in_array($attrib, $harvesterParams))
 				{
 					$dataSource->append_log("didn't get value ".$new_value." ".$attrib, 'warning');
 					//$dataSource->unsetAttribute($attrib);
@@ -259,11 +267,12 @@ class Data_source extends MX_Controller {
 				else{
 					$dataSource->append_log("setAttribute FOR ".$new_value." ".$attrib, 'warning');
 					//$dataSource->setAttribute($attrib, $new_value);
-				}
+				}*/
 				
 			}		
 			$dataSource->append_log("dataSource->save()", 'warning');	
 			$dataSource->save();
+
 			if($resetHarvest)
 			{
 				$dataSource->requestHarvest();	
@@ -274,19 +283,46 @@ class Data_source extends MX_Controller {
 		echo $jsonData;
 	}
 	
+	/**
+	 * Trigger harvest
+	 */
+	function triggerHarvest()
+	{
+		$jsonData = array("status"=>"ERROR");
+
+		$this->load->model("data_sources","ds");
+		$this->load->model("registry_object/registry_objects", "ro");
+
+		if ($this->input->post('data_source_id')){
+
+			$id = (int) $this->input->post('data_source_id');
+	
+			if ($id == 0) {
+				 $jsonData['message'] = "ERROR: Invalid data source ID"; 
+			}
+			else 
+			{
+				$dataSource = $this->ds->getByID($id);
+				$dataSource->requestHarvest();
+				$jsonData['status'] = "OK";
+			}
+		}
+		
+		echo json_encode($jsonData);
+	}
 	
 	/**
 	 * Importing (Ben's import from URL)
 	 * 
 	 * 
-	 * @author Minh Duc Nguyen <minh.nguyen@ands.org.au>
+	 * @author Ben Greenwood <ben.greenwood@anu.edu.au>
 	 * @param [POST] URL to the source
 	 * @todo ACL on which data source you have access to, error handling
 	 * @return [JSON] result of the saving [VOID] 
 	 */
 	function importFromURLtoDataSource()
 	{
-		$this->load->model('data_source/import','importer');
+		 $this->load->library('importer');
 		
 		$log = 'IMPORT LOG' . NL;
 		//$log .= 'URI: ' . $this->input->post('url') . NL;
@@ -309,15 +345,98 @@ class Data_source extends MX_Controller {
 		
 		try
 		{ 
-			$log .= $this->importer->importPayloadToDataSource($this->input->post('data_source_id'), $xml);
+
+			$this->load->model('data_source/data_sources', 'ds');
+			$this->importer->setXML($xml);
+			// XXX: If crosswalk...
+			$this->importer->setDatasource($this->ds->getByID($this->input->post('data_source_id')));
+			$this->importer->commit();
+
+
+			if ($error_log = $this->importer->getErrors())
+			{
+				$log .= "ERRORS DURING IMPORT" . NL;
+				$log .= "====================" . NL ;
+				$log .= $error_log . NL;
+			}
+
+			$log .= "IMPORT COMPLETED" . NL;
+			$log .= "====================" . NL;
+			$log .= $this->importer->getMessages();
+
+
+			// XXX: data source log append...
 		}
 		catch (Exception $e)
 		{
 			
-			$log .= "ERRORS" . NL;
+			$log .= "CRITICAL IMPORT ERROR [HARVEST COULD NOT CONTINUE]" . NL;
 			$log .= $e->getMessage();
 			
 			echo json_encode(array("response"=>"failure", "message"=>"An error occured whilst importing from this URL", "log"=>$log));
+			return;	
+		}	
+	
+		echo json_encode(array("response"=>"success", "message"=>"Import completed successfully!", "log"=>$log));	
+			
+	}
+
+	/**
+	 * Importing (Ben's import from XML Paste)
+	 * 
+	 * 
+	 * @author Ben Greenwood <ben.greenwood@anu.edu.au>
+	 * @param [POST] xml A blob of XML data to parse and import
+	 * @todo ACL on which data source you have access to, error handling
+	 * @return [JSON] result of the saving [VOID] 
+	 */
+	function importFromXMLPasteToDataSource()
+	{
+		$this->load->library('importer');
+		
+
+		$xml = $this->input->post('xml');
+
+		$log = 'IMPORT LOG' . NL;
+		$log .= 'Harvest Method: Direct import from text posted' . NL;
+		$log .= strlen($xml) . ' characters received...' . NL;
+	
+		if (strlen($xml) == 0)
+		{
+			echo json_encode(array("response"=>"failure", "message"=>"Unable to retrieve any content from the specified XML"));
+			return;	
+		}
+		
+		try
+		{ 
+
+			$this->load->model('data_source/data_sources', 'ds');
+			$this->importer->setXML($xml);
+			// XXX: If crosswalk...
+			$this->importer->setDatasource($this->ds->getByID($this->input->post('data_source_id')));
+			$this->importer->commit();
+
+
+			if ($error_log = $this->importer->getErrors())
+			{
+				$log .= NL . "ERRORS DURING IMPORT" . NL;
+				$log .= "====================" . NL ;
+				$log .= $error_log;
+			}
+
+			$log .= "IMPORT COMPLETED" . NL;
+			$log .= "====================" . NL;
+			$log .= $this->importer->getMessages();
+
+			// XXX: data source log append...
+		}
+		catch (Exception $e)
+		{
+			
+			$log .= "CRITICAL IMPORT ERROR [HARVEST COULD NOT CONTINUE]" . NL;
+			$log .= $e->getMessage();
+			
+			echo json_encode(array("response"=>"failure", "message"=>"An error occured whilst importing from the specified XML", "log"=>$log));
 			return;	
 		}	
 		
@@ -325,23 +444,25 @@ class Data_source extends MX_Controller {
 		echo json_encode(array("response"=>"success", "message"=>"Import completed successfully!", "log"=>$log));	
 			
 	}
+
+
 	public function testHarvest()
 	{
 		header('Content-type: application/json');
 		$jsonData = array();
 		$dataSource = NULL;
 		$id = NULL; 
-		
-		
+
+
 		$jsonData['status'] = 'OK';
 		$POST = $this->input->post();
 		if (isset($POST['data_source_id'])){
 			$id = (int) $this->input->post('data_source_id');
 		}
-		
+
 		$this->load->model("data_sources","ds");
 		$this->load->model("registry_object/registry_objects", "ro");
-		
+
 		if ($id == 0) {
 			 $jsonData['status'] = "ERROR: Invalid data source ID"; 
 		}
@@ -363,11 +484,12 @@ class Data_source extends MX_Controller {
 			$nextHarvest = $harvestDate;
 			$jsonData['logid'] = $dataSource->requestHarvest('','',$dataSourceURI, $providerType, $OAISet, $harvestMethod, $harvestDate, $harvestFrequency, $advancedHarvestingMethod, $nextHarvest, true);				
 		}
-				
+
 		$jsonData = json_encode($jsonData);
 		echo $jsonData;			
 	}
 	
+
 	public function putHarvestData()
 	{
 		$POST = $this->input->post();
@@ -399,65 +521,87 @@ class Data_source extends MX_Controller {
 				$mode =  strtoupper($this->input->post('mode'));
 			}
 			$this->load->model("data_sources","ds");
-			$dataSource = $this->ds->getByHarvestID($harvestId);		
+			$dataSource = $this->ds->getByHarvestID($harvestId);
+
 			if($errmsg)
 			{
-				$dataSource->append_log("HARVESTER RESPONCE ".$errmsg, 'error');
+				$dataSource->append_log("HARVESTER RESPONDED UNEXPECTEDLY: ".$errmsg, HARVEST_ERROR);
 			}
 			else
 			{	
 	
-				$this->load->model('data_source/import','importer');	
-				$rifcsXml = $this->importer->getRifcsFromHarvest($data);
-				if(strpos($rifcsXml, 'ERROR') === 0)
+				$this->load->library('importer');	
+
+				$this->load->model('data_source/data_sources', 'ds');
+
+				// XXX: If crosswalk...
+				$rifcsXml = $this->importer->extractRIFCSFromOAI($data);
+
+				if (strpos($rifcsXml, 'registryObject ') === FALSE)
 				{
-					$dataSource->append_log("RIF EXTRACTION ERROR ".$rifcsXml, 'error');
-					$responseType = 'error';
+					$dataSource->append_log("CRITICAL ERROR: Could not extract data from OAI feed. Check your provider.", HARVEST_ERROR);
+					$dataSource->append_log($rifcsXml, HARVEST_ERROR);	
 				}
 				else
 				{
-					try
-					{ 
-						$log = $this->importer->importPayloadToDataSource($dataSource->getID(), $rifcsXml, $harvestId, false, $mode);
-						if(strpos($log , 'DONE WITH ERRORS') > 0)
-						{
-							$dataSource->append_log($mode." IMPORTING RECORDS ".$data, 'error');	
-						}
-						else{
-							$dataSource->append_log($mode." IMPORTING RECORDS ".$log.", finished Harvest: ".$done, 'info');	
-						}	
-	
+
+					$this->importer->setXML($rifcsXml);
+					// XXX: If crosswalk...
+					$this->importer->setHarvestID($harvestId);
+					$this->importer->setDatasource($dataSource);
+
+					if ($done != HARVEST_COMPLETE)
+					{
+						$this->importer->setPartialCommitOnly(TRUE);
 					}
-					catch (Exception $e)
-					{					
-						$log .= "ERRORS" . NL;
-						$log .= $e->getMessage();
-						$dataSource->append_log("IMPORTING ".$log, 'error');
+
+
+					if ($mode != HARVEST_TEST_MODE)
+					{
+						try
+						{
+							$this->importer->commit();
+
+							if($this->importer->getErrors())
+							{
+								$dataSource->append_log($this->importer->getErrors(), HARVEST_WARNING);	
+							}
+
+							if($this->importer->getMessages())
+							{
+								$dataSource->append_log($this->importer->getMessages(), HARVEST_INFO);	
+							}
+							
+							$responseType = 'success';
+						}
+						catch (Exception $e)
+						{
+							$dataSource->append_log("CRITICAL ERROR: " . NL . $e->getMessages() . NL . $this->importer->getErrors(), HARVEST_ERROR);	
+						}
 					}	
 				}
 			}
-			if(!$nextHarvestDate && $done == 'TRUE' || $mode == 'TEST')
+
+			if(!$nextHarvestDate && $done == HARVEST_COMPLETE || $mode == HARVEST_TEST_MODE)
 			{
 				$dataSource->deleteHarvestRequest($harvestId);
-				$dataSource->append_log($mode." HARVEST COMPLETED ".$harvestId, 'info');
 			}
 			
-			if($done == 'TRUE' && $mode != 'TEST')
-			{
-				$dataSource->append_log("INDEXING RECORDS ...".date( 'Y-m-d\TH:i:s.uP', time()), 'info');
-				$log = $this->importer->indexDS($dataSource->getID());
-				$dataSource->append_log("INDEXING COMPLETED ".date( 'Y-m-d\TH:i:s.uP', time())." ".$log, 'info');			
-			}
 		}
-		else{
+		else
+		{
 			$message = "Missing harvestid param";
 		}
+
+
 		print('<?xml version="1.0" encoding="UTF-8"?>'."\n");
 		print('<response type="'.$responseType.'">'."\n");
 		print('<timestamp>'.date("Y-m-d H:i:s").'</timestamp>'."\n");
 		print("<message>".$message."</message>\n");
 		print("</response>");
 	}
+
+
 	/**
 	 * @ignore
 	 */
@@ -467,6 +611,3 @@ class Data_source extends MX_Controller {
 	}
 	
 }
-
-/* End of file welcome.php */
-/* Location: ./application/controllers/welcome.php */

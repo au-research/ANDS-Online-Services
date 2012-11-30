@@ -116,7 +116,7 @@ class Registry_objects extends CI_Model {
 								    ->where("key", $key);
 							    return $db;
 						    })));
-		return is_array($results) ? $results[0] : null;
+		return is_array($results) ? $results : null;
 	}
 
 	/**
@@ -292,36 +292,27 @@ class Registry_objects extends CI_Model {
 	 */
 	function create($data_source_key, $registry_object_key, $class, $title, $status, $slug, $record_owner, $harvestID)
 	{
-		if (is_null($this->getByKey($registry_object_key)))
-		{
+		$ro = new _registry_object();
 
-			$ro = new _registry_object();
-
-			// Get the data_source_id for this data source key
-			$this->load->model('data_source/data_sources','ds');
-			$ds = $this->ds->getByKey($data_source_key);
-			$ro->_initAttribute("data_source_id", $ds->getAttribute('data_source_id'), TRUE);
+		// Get the data_source_id for this data source key
+		$this->load->model('data_source/data_sources','ds');
+		$ds = $this->ds->getByKey($data_source_key);
+		$ro->_initAttribute("data_source_id", $ds->getAttribute('data_source_id'), TRUE);
 
 
-			$ro->_initAttribute("key",$registry_object_key, TRUE);
-			$ro->_initAttribute("class",$class, TRUE);
-			$ro->_initAttribute("title",$title, TRUE);
-			$ro->_initAttribute("status",$status, TRUE);
-			$ro->_initAttribute("slug",$slug, TRUE);
-			$ro->_initAttribute("record_owner",$record_owner, TRUE);
+		$ro->_initAttribute("key",$registry_object_key, TRUE);
+		$ro->_initAttribute("class",$class, TRUE);
+		$ro->_initAttribute("title",$title, TRUE);
+		$ro->_initAttribute("status",$status, TRUE);
+		$ro->_initAttribute("slug",$slug, TRUE);
+		$ro->_initAttribute("record_owner",$record_owner, TRUE);
 
-			// Some extras
-			$ro->setAttribute("created",time());
-			$ro->setAttribute("harvest_id", $harvestID);
+		// Some extras
+		$ro->setAttribute("created",time());
+		$ro->setAttribute("harvest_id", $harvestID);
 
-			$ro->create();
-			return $ro;
-
-		}
-		else
-		{
-			return $this->update($registry_object_key, $class, $title, $status, $slug, $record_owner);
-		}
+		$ro->create();
+		return $ro;
 	}
 
 	/**

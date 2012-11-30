@@ -14,6 +14,8 @@ class Importer {
 	private $harvestID;
 	private $dataSource;
 	private $start_time;
+	private $partialCommitOnly;
+	private $status; // status of the currently ingested record
 
 	private $importedRecords;
 
@@ -49,7 +51,10 @@ class Importer {
 	 */
 	public function commit()
 	{
-		$this->start_time = microtime(true);
+		if (is_null($this->start_time))
+		{
+			$this->start_time = microtime(true);
+		}
 
 		// Some sanity checks
 		if (!($this->dataSource instanceof _data_source))
@@ -79,6 +84,8 @@ class Importer {
 		}
 		$sxml->registerXPathNamespace("ro", RIFCS_NAMESPACE);
 	
+		// Decide on the default status for these records
+		$this->status = $this->_getDefaultRecordStatusForDataSource($this->dataSource);
 
 		// Right then, lets start parsing each registryObject & importing! 
 		foreach($sxml->xpath('//ro:registryObject') AS $registryObject)
@@ -95,29 +102,32 @@ class Importer {
 			}
 		}
 
-		// And now, onto the second stage...
-		$this->_enrichRecords();
-
-		$this->_reindexRecords();
-
-
-
-		// Finish up by returning our stats...
-		$time_taken = sprintf ("%.3f", (float) (microtime(true) - $this->start_time));
-		$this->message_log[] = "Harvest complete! Took " . ($time_taken) . "s...";
-		$this->message_log[] = "Registry Object(s) in feed: " . $this->ingest_attempts;
-		$this->message_log[] = "Registry Object(s) created: " . $this->ingest_new_record;
-		$this->message_log[] = "Registry Object(s) updated: " . $this->ingest_new_revision;
-		$this->message_log[] = "Registry Object(s) failed : " . $this->ingest_failures;
-		if ($this->ingest_duplicate_ignore)
+		// Partial commits mean that there is more to come in this harvest...woooah-on donkey
+		if (!$this->partialCommitOnly)
 		{
-			$this->message_log[] = "Registry Object duplicates: " . $this->ingest_duplicate_ignore;
+			// And now, onto the second stage...
+			$this->_enrichRecords();
+			$this->_reindexRecords();
+		
+			// Finish up by returning our stats...
+			$time_taken = sprintf ("%.3f", (float) (microtime(true) - $this->start_time));
+			$this->message_log[] = "Harvest complete! Took " . ($time_taken) . "s...";
+			$this->message_log[] = "Registry Object(s) in feed: " . $this->ingest_attempts;
+			$this->message_log[] = "Registry Object(s) created: " . $this->ingest_new_record;
+			$this->message_log[] = "Registry Object(s) updated: " . $this->ingest_new_revision;
+			if ($this->ingest_failures)
+			{
+				$this->message_log[] = "Registry Object(s) failed : " . $this->ingest_failures;
+			}
+			if ($this->ingest_duplicate_ignore)
+			{
+				$this->message_log[] = "Registry Object duplicates: " . $this->ingest_duplicate_ignore;
+			}
+			
+			$this->message_log[] = "Reindexed record count: " . $this->reindexed_records;
 		}
-		$this->message_log[] = "Reindexed record count: " . $this->reindexed_records;
-
 
 	}
-
 
 	/**
 	 * 
@@ -125,11 +135,7 @@ class Importer {
 	public function _ingestRecord($registryObject)
 	{
 		$this->CI->load->model('registry_object/registry_objects', 'ro');
-		$this->CI->load->model('registry_object/rifcs', 'rifcs');
 		$this->CI->load->model('data_source/data_sources', 'ds');
-
-
-		$status = $this->_getDefaultRecordStatusForDataSource($this->dataSource);
 
 		foreach ($this->valid_classes AS $class)
 		{
@@ -139,19 +145,13 @@ class Importer {
 				$ro_xml =& $registryObject->{$class}[0];
 	
 
-				// Flag records that are duplicates within this harvest and choose not to harvest them again (repeated keys in single harvest are dumb!)
-				$reharvest = true;
-				if($oldRo = $this->CI->ro->getByKey((string)$registryObject->key))
-				{
-					$oldharvestID = $oldRo->getAttribute("harvest_id");
-					if($oldharvestID == $this->harvestID)
-					$reharvest = false;
-
-					// XXX: Record ownership, reject if record already exists within the registry
-				}
+				// Choose whether or not to harvest this record and whether this should overwrite 
+				// the existing entry or just create a new revision
+				list($reharvest, $revision_record_id) = $this->decideHarvestability($registryObject);
 
 				if($reharvest)
 				{
+
 					// Clean up crosswalk XML if applicable
 					$ro_xml->registerXPathNamespace("ro", RIFCS_NAMESPACE);
 
@@ -178,13 +178,28 @@ class Importer {
 						unset($ro_xml->relatedInfo[$nativeHarvestIdx]);
 					}
 
-
-
 					// XXX: Record owner should only be system if this is a harvest?
 					$record_owner = "SYSTEM";
 
-					// Create a frame instance of the registryObject
-					$ro = $this->CI->ro->create($this->dataSource->key, (string)$registryObject->key, $class, "", $status, "defaultSlug", $record_owner, $this->harvestID);
+					
+					if (is_null($revision_record_id))
+					{
+						// We are creating a new registryObject
+						$ro = $this->CI->ro->create($this->dataSource->key, (string)$registryObject->key, $class, "", $this->status, "temporary_slug", $record_owner, $this->harvestID);
+						$this->ingest_new_record++;
+					}
+					else
+					{
+						// The registryObject exists, just add a new revision to it?
+						$ro = $this->CI->ro->getByID($revision_record_id);
+						$ro->status = $this->status;
+						$ro->harvest_id = $this->harvestID;
+						$ro->class = $class;
+						$ro->record_owner = $record_owner;
+
+						$this->ingest_new_revision++;
+					}
+
 					$ro->created_who = $record_owner;
 					$ro->data_source_key = $this->dataSource->key;
 					$ro->group = (string) $registryObject['group'];
@@ -206,24 +221,28 @@ class Importer {
 
 					// Generate the list and display titles first, then the SLUG
 					$ro->updateTitles();
-					$ro->generateSlug();
 
+					// Only generate SLUGs for published records
+					if (in_array($this->status, getApprovedStatusGroup()))
+					{
+						$ro->generateSlug();
+					}
+					else
+					{
+						$ro->slug = 'draft_record_slug-' . $ro->id;
+					}
 					// Save all our attributes to the object
 					$ro->save();
 
 					// Add this record to our counts, etc.
 					$this->importedRecords[] = $ro->id;
-					$this->ingest_new_record++;
+					$this->ingest_successes++;
 
 					// Memory management...
 					unset($ro);
 					clean_cycles();
 				}
-				else
-				{
-					// XXX: Verbose message?
-					$this->ingest_duplicate_ignore++;
-				}
+
 			}
 		}
 
@@ -299,6 +318,58 @@ class Importer {
 		return curl_post($solrUpdateUrl.'?commit=true', '<commit waitSearcher="false"/>');
 	}
 
+
+	/**
+	 * 
+	 */
+	public function decideHarvestability($registryObject)
+	{
+		$reharvest = true;
+		$revision_record_id = null;
+
+		// Get any existing registry objects with the same key
+		$existingRegistryObjects = $this->CI->ro->getByKey((string)$registryObject->key);
+		if (!is_array($existingRegistryObjects)) return array($reharvest, $revision_record_id);
+
+		foreach ($existingRegistryObjects AS $existingRO)
+		{
+			// Reject this record if it is already in the feed
+			if ($existingRO->harvest_id == $this->harvestID)
+			{
+				$reharvest = false;
+				$this->error_log[] = "Ignored a record received twice in this harvest: " . $registryObject->key;
+				$this->ingest_duplicate_ignore++;
+				break;
+			}
+
+			// Record ownership, reject if record already exists within the registry
+			if($existingRO->data_source_id != $this->dataSource->id)
+			{
+				$reharvest = false;
+				$this->error_log[] = "Ignored a record already existing in a different data source: " . $registryObject->key;
+				$this->ingest_duplicate_ignore++;
+				break;
+			}
+
+			// Handle overwriting existing records of same "Status group"
+			if (  	
+				(in_array($this->status,  getDraftStatusGroup()) && in_array($existingRO->status,  getDraftStatusGroup()))
+				OR 
+				(in_array($this->status,  getApprovedStatusGroup()) && in_array($existingRO->status,  getApprovedStatusGroup()))
+			)
+			{
+				// We should overwrite the record revision (can only have at most one registry object in each status group)
+				$revision_record_id = $existingRO->registry_object_id;
+				break;
+			}
+
+		}
+
+		return  array($reharvest, $revision_record_id);
+	}
+
+
+
 	/**
 	 * 
 	 */
@@ -366,6 +437,14 @@ class Importer {
 	}
 
 
+	/**
+	 * 
+	 */
+	public function setPartialCommitOnly($bool)
+	{
+		$this->partialCommitOnly = (boolean) $bool;
+		return;
+	}
 
 	/**
 	 * 
@@ -417,30 +496,6 @@ class Importer {
 
 
 	/**
-	 * XXX: BROKEN?
-	 */
-	private function _getRifcsFromHarvest($xmlData)
-	{
-		$result = ''; 
-
-		$xslt_processor = HarvestTransforms::get_feed_to_rif_transformer();
-		$dom = new DOMDocument();
-		if(substr($xmlData, 0, 1) == '<')
-		{
-			$dom->loadXML($xmlData);
-		}
-		else
-		{
-			$dom->loadXML(utf8_decode($xmlData));
-		}
-
-		$result = $xslt_processor->transformToXML($dom);
-
-		return $result;
-	}
-
-
-	/**
  	 * 
  	 */
 	private function _getDefaultRecordStatusForDataSource(_data_source $data_source)
@@ -471,6 +526,65 @@ class Importer {
 		return $status;
 	}
 
+	/**
+	 * 
+	 */
+	public function extractRIFCSFromOAI($oai_feed)
+	{
+
+		/*if(substr($oai_feed, 0, 1) != '<')
+		{
+			$oai_feed = utf8_decode($oai_feed);
+		}*/
+		
+		$sxml = simplexml_load_string($oai_feed);
+		$sxml->registerXPathNamespace("oai", OAI_NAMESPACE);
+		$sxml->registerXPathNamespace("ro", RIFCS_NAMESPACE);
+
+		$registryObjects = $sxml->xpath('//ro:registryObject');
+
+		$result = '';
+		foreach ($registryObjects AS $ro)
+		{
+			$result .= $ro->asXML();
+		}
+
+		$result = wrapRegistryObjects($result);
+		
+		return $result;
+	}
+
+
+
+	public function getErrors()
+	{
+		$log = '';
+		if (count($this->error_log) > 0)
+		{
+			foreach ($this->error_log AS $error)
+			{
+				$log .= "  $error" . NL;
+			}
+			$log .= NL;
+			
+		}
+
+		if ($log) return $log; else return FALSE;
+	}
+
+	public function getMessages()
+	{
+		$log = '';
+		if (count($this->message_log) > 0)
+		{
+			foreach ($this->message_log AS $msg)
+			{
+				$log .= "  $msg" . NL;
+			}			
+		}
+
+		if ($log) return $log; else return FALSE;
+	}
 
 	/**
 	 * 
@@ -482,12 +596,14 @@ class Importer {
 		$this->xmlPayload = '';
 		$this->dataSource = null;
 		$this->importedRecords = array();
+		$this->partialCommitOnly = false;
 
 		$this->ingest_attempts = 0;
 		$this->ingest_successes = 0;
 		$this->ingest_failures = 0;
 		$this->ingest_duplicate_ignore = 0;
 		$this->ingest_new_revision = 0;
+		$this->ingest_new_record = 0;
 		$this->reindexed_records = 0;
 
 		$this->error_log = array();
