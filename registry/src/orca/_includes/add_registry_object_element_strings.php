@@ -1234,7 +1234,7 @@ $_strings['*_description'] = <<<HTMLEND
 										</table>
 
 										<script>
-
+											CKEDITOR.replace('object_description_%%SEQNUM1%%_value',{ toolbar: 'Basic'});
 											addVocabComplete('object_description_%%SEQNUM1%%_type','RIFCSDescriptionType');
 										</script>
 

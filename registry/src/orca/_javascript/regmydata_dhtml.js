@@ -1026,10 +1026,10 @@ function advanceLoadingStatus () {
 
 
 		// Asyncronously load ckeditors
-		$('.async_ckeditor_text').each(function(i, elt){
+		/*$('.async_ckeditor_text').each(function(i, elt){
 			$(this).addClass('ckeditor_text');
 			CKEDITOR.replace($(this).attr('id'),{ toolbar: 'Basic'});
-		});
+		});*/
 	
 		// Load the Gazeteer/Map asynchronously
 		if (mctInitFunc) { window.setTimeout(mctInitFunc,5000); }
