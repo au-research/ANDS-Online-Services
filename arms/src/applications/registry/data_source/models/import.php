@@ -12,7 +12,7 @@
  * @package ands/datasource
  * 
  */
-include_once("applications/registry/registry_object/models/_transforms.php");
+include_once("applications/registry/data_source/models/_transforms.php");
 class Import extends CI_Model {
 
 

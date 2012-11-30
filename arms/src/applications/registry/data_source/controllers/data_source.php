@@ -409,7 +409,6 @@ class Data_source extends MX_Controller {
 	
 				$this->load->model('data_source/import','importer');	
 				$rifcsXml = $this->importer->getRifcsFromHarvest($data);
-				
 				if(strpos($rifcsXml, 'ERROR') === 0)
 				{
 					$dataSource->append_log("RIF EXTRACTION ERROR ".$rifcsXml, 'error');
