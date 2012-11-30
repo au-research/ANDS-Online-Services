@@ -977,7 +977,7 @@ function mctAddAddressToMap(results, status)
 function mctGazetteerGeocoder(searchText)
 {
 	var mctServicePath = (typeof(window.mctServicePath) == 'undefined' ? MCT_DEFAULT_SERVICE_POINT : window.mctServicePath);
-	var requestUrl = mctServicePath + '?searchText=*' + encodeURIComponent(searchText) + '*&limit=14&callback=?';	
+	var requestUrl = mctServicePath + '?searchText=*' + encodeURIComponent(searchText) + '*&callback=?';	
 	$.getJSON(requestUrl, function(data) {
 		mctDisplayGazetteerData(data);
 	});

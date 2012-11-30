@@ -39,7 +39,7 @@ header('Content-type: application/json');
 $jsonData['status'] = 'ERROR';
 $jsonData['message'] = 'searchText must be defined';
 $searchText = '';
-$limit = 99;
+$limit = 500;
 $recCount = 0;
 $feature = '';
 $callback = "function";
@@ -65,7 +65,7 @@ if (isset($_GET['feature'])) {
 
 // Design the XML query (Gazetteer uses bizarre XML fragments in the URL request)
 if ($searchText) {
-	$mctGazetteerGeocoderUrl = 'http://gazetteer.mymaps.gov.au/geoserver/wfs?service=wfs&version=1.1.0&request=GetFeature&typename=iso19112:SI_LocationInstance&maxFeatures=100&filter=';
+	$mctGazetteerGeocoderUrl = 'http://gazetteer.mymaps.gov.au/geoserver/wfs?service=wfs&version=1.1.0&request=GetFeature&typename=iso19112:SI_LocationInstance&maxFeatures=5000&filter=';
 	$filterText = '<ogc:Filter xmlns:ogc="http://www.opengis.net/ogc"><ogc:PropertyIsLike wildCard="*" singleChar="#" escapeChar="\\"><ogc:PropertyName>iso19112:alternativeGeographicIdentifiers/iso19112:alternativeGeographicIdentifier/iso19112:name</ogc:PropertyName><ogc:Literal>' . $searchText . '</ogc:Literal></ogc:PropertyIsLike></ogc:Filter>';
 }
 if ($feature) {
@@ -89,8 +89,8 @@ $gXPath = new DOMXpath($gazetteerDoc);
 
 if ($searchText) {
 	// Resolve and order the results (we only want a few of the feature types to avoid a massive list)
-	$featureMemberListTOP = $gXPath -> evaluate('gml:featureMember[descendant::node()[contains(@xlink:href,"LOCU")] or descendant::node()[contains(@xlink:href,"SUB")] or descendant::node()[contains(@xlink:href,"URBN")]]');
-	$featureMemberListBOTTOM = $gXPath -> evaluate('gml:featureMember[not(descendant::node()[contains(@xlink:href,"LOCU")] or descendant::node()[contains(@xlink:href,"SUB")] or descendant::node()[contains(@xlink:href,"URBN")])]');
+	$featureMemberListTOP = $gXPath -> evaluate('gml:featureMember[descendant::node()[contains(@xlink:href,"STAT")] or descendant::node()[contains(@xlink:href,"SUB")] or descendant::node()[contains(@xlink:href,"URBN")]]');
+	$featureMemberListBOTTOM = $gXPath -> evaluate('gml:featureMember[not(descendant::node()[contains(@xlink:href,"STAT")] or descendant::node()[contains(@xlink:href,"SUB")] or descendant::node()[contains(@xlink:href,"URBN")])]');
 	$jsonData['items_count'] = ($featureMemberListTOP -> length) + ($featureMemberListBOTTOM -> length);
 	$items = array();
 	for ($i = 0; $i < $featureMemberListTOP -> length; $i++) {

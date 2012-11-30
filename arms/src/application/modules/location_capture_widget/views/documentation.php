@@ -87,11 +87,37 @@
 			    	 	and change the location by defining <code>mctServicePath</code> before calling the widget.
 			    	 </p>
 			    	 <br/>
-			    	 
+
+
+			    	 <h5>How do I reference the Google Map object / how do I trigger rendering the map post-pageload?</h5>
+			    	 <p>
+			    	 	The Google Map container is required to be visible in order for the widget to render the map against it. If you have embedded the map in a modal form, this might not be possible. <br/><br/>
+
+			    	 	In this case, you will need to call a trigger on the instance of the Google Map object. You can reference a specific map based on the <code>mapInputFieldId</code> prepended with <code>mct_control_</code>.<br/><br/>
+
+						For example, if <a href="<?=base_url('location_capture_widget/demo/');?>">the demo</a> were in a modal-style form, we would call this function once the form was visible:<br/>
+						<code>google.maps.event.trigger(mctMaps['mct_control_geoLocation'], 'resize');</code><br/><br/>
+
+						<i>Thanks to eResearch Services, Griffith University for pointing out this use case.</i>
+			    	 </p>
+			    	 <br/>
+
+			    	 <h5>How are the placename results ordered?</h5>
+			    	 <p>
+			    	 	The Gazetteer Web Service does not currently provide any effective mechanism for ordering search results. <br/><br/>
+
+			    	 	At present, a crude ordering is performed by the resolver proxy (either hosted by ANDS or available in the open source package). It attempts to bubble potentially-significant
+			    	 	place names to the top (such as states, suburbs and urban areas).<br/><br/>
+
+			    	 	Note: As of December 2012, the proxy will return up to 500 results to search queries. This may cause some congestion and can be limited in either the Javascript or resolver. 
+			    	 </p>
+			    	 <br/>
+
+
+
 			    	 <h5>How can I customise the widget / not use the ANDS-hosted resources? </h5>
 			    	 <p>Full source code for this widget is available and licensed under Apache License, Version 2.0.</p>
 			    	 <br/>
-			    	 
 			    	
 			    </div> 
 			    
