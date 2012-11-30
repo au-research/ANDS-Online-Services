@@ -219,8 +219,6 @@ class User {
 		$this->functions = $this->CI->session->userdata(AUTH_FUNCTION_ARRAY);
 		$this->affiliations = $this->CI->session->userdata(AUTH_AFFILIATION_ARRAY);
 	}
-		 
-
 }
 
 define('AUTH_USER_FRIENDLY_NAME', 'USER_FRIENDLY_NAME');

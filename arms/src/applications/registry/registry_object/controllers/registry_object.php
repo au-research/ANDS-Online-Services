@@ -24,22 +24,87 @@ class Registry_object extends MX_Controller {
 	public function manage($data_source_id = false){
 		$data['title'] = 'Manage My Records';
 
+		$this->load->model('data_source/data_sources', 'ds');
 		if($data_source_id){
-			$this->load->model('data_source/data_sources', 'ds');
 			$data_source = $this->ds->getByID($data_source_id);
 			if(!$data_source) show_error("Unable to retrieve data source id = ".$data_source_id, 404);
-			$data['data_source_title'] = $data_source->title;
-			$data['data_source_id'] = $data_source->id;
 			
+			$data_source->updateStats();//TODO: XXX
+
+			$data['data_source'] = $data_source;
+
+			//MMR
+			$this->load->model('registry_object/registry_objects', 'ro');
+			$ros = $this->ro->getByDataSourceID($data_source_id);
+
 		}else{
 			//showing all registry objects for all datasource
 			$data['data_source_title'] = 'Viewing All Registry Objects';
 			$data['data_source_id'] = 0;
 			//show_error('No Data Source ID provided. use all data source view for relevant roles');
+			
 		}
-		$data['scripts'] = array('registry_objects');
-		$data['js_lib'] = array('core', 'tinymce', 'datepicker');
-		$this->load->view("registry_object_index", $data);
+		$data['scripts'] = array('manage_my_record');
+		$data['js_lib'] = array('core', 'tinymce', 'datepicker', 'dataTables');
+
+
+		$this->load->view("manage_my_record", $data);
+	}
+
+	public function getData($data_source_id, $filter='', $value=''){
+		header('Cache-Control: no-cache, must-revalidate');
+		header('Content-type: application/json');
+		$jsonData = array();
+		$jsonData['aaData'] = array();
+
+		$limit = ($this->input->post('iDisplayLength') ? (int) $this->input->post('iDisplayLength') : 10);
+		$offset = ($this->input->post('iDisplayStart') ? (int) $this->input->post('iDisplayStart') : 0);
+
+		//filters
+		$filters = array();
+		$filters['filter'] = $filter!='' ? array($filter=>$value) : false;
+		$filters['search'] = ($this->input->post('sSearch') ? $this->input->post('sSearch') : false);
+
+		//sort
+		$filters['sort'] = array();
+		$aColumns=array('key', 'title', 'status');
+		for($i=0; $i<intval($this->input->post('iSortingCols')); $i++){
+			if($this->input->post('bSortable_'.intval($this->input->post('iSortCol_'.$i)))=='true'){
+				$filters['sort'][] = array(
+					$aColumns[intval($this->db->escape_str($this->input->post('iSortCol_'.$i)))] => $this->db->escape_str($this->input->post('sSortDir_'.$i))
+				);
+			}
+        }
+
+		//Get Registry Objects
+		$this->load->model('registry_object/registry_objects', 'ro');
+		$ros = $this->ro->getByDataSourceID($data_source_id,$limit,$offset,$filters);
+		if($ros){
+			foreach($ros as $ro){
+				$jsonData['aaData'][] = array(
+					'key'=>$ro->key,
+					'Title'=>$ro->list_title,
+					'Status'=>$ro->status,
+					'Options'=>'Options'
+				);
+			}
+		}
+
+		//Data Source
+		$this->load->model('data_source/data_sources', 'ds');
+		$data_source = $this->ds->getByID($data_source_id);
+
+		
+
+		$jsonData['sEcho']=(int)$this->input->post('sEcho');
+		$jsonData['iTotalRecords'] = (int) $data_source->count_total;
+
+		$hasFilter = false;
+		
+		$jsonData['iTotalDisplayRecords'] = $filters['search'] ? sizeof($ros) : $data_source->count_total;
+		$jsonData['filters'] = $filters;
+
+        echo json_encode($jsonData);
 	}
 
 
