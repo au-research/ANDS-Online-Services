@@ -5,7 +5,12 @@
 			<h1>Support</h1>
 		</div>
 		<div class="box-content">
-			<form action="support/submit">
+			<?php
+				if(isset($success)){
+					echo '<p>'.$success.'</p>';
+				}
+			?>
+			<form action="<?php echo base_url();?>vocab_service/support/submit">
 				<div class="control-group">
 					<label class="control-label" for="from_email">Your Email Address: </label>
 					<div class="controls">

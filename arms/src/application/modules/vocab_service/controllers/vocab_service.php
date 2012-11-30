@@ -82,10 +82,28 @@ class Vocab_service extends MX_Controller {
 		
 	}
 
-	public function support(){
-		$data['title']='Support ANDS Vocabularies Services';
-		$data['js_lib'] = array('core');
-		$this->load->view("support", $data);
+	public function support($action = 'form'){
+		if($action=='form'){
+			$data['title']='Support ANDS Vocabularies Services';
+			$data['js_lib'] = array('core');
+			$this->load->view("support", $data);
+		}else if($action=='submit'){
+			$email = $this->input->get('from_email');
+			$title = $this->input->get('from_title');
+			$message = $this->input->get('message');
+			$to_email = $this->config->item('vocab_admin_email');
+			//sending email
+			$this->load->library('email');
+			$this->email->from($email, $title);
+			$this->email->to($to_email); //$publisher_email
+			$this->email->subject('Message from the ANDS Vocabulary Discovery Portal');
+			$this->email->message($message);
+			$this->email->send();
+			$data['title']='Support ANDS Vocabularies Services';
+			$data['success'] = 'Your message has been successfully sent';
+			$data['js_lib'] = array('core');
+			$this->load->view("support", $data);
+		}
 	}
 
 	public function about(){
