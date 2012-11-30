@@ -1672,7 +1672,7 @@ $('.getConcept').tipsy({live:true, gravity:'sw'});
 		    var bounds = new google.maps.LatLngBounds();
 			
 		    //draw coverages
-		    var coverages = $('p.coverage');
+		    var coverages = $('p.coverage[name!=text]');
 		    //console.log(coverages.html());
 		    //console.log(coverages.text());
 		    

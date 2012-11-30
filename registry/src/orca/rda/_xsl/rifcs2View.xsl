@@ -534,15 +534,11 @@
     
 
     <xsl:template match="ro:coverage/extRif:spatial/extRif:coords">
-      <xsl:if test="not(./@type) or (./@type!= 'text' and ./@type!= 'dcmiPoint')">
-        <p class="coverage" name="{@type}"><xsl:value-of select="."/></p>
+      <xsl:if test="not(../../@type) or (.././@type!= 'text' and @.././type!= 'dcmiPoint')">
+        <p class="coverage" name="{.././@type}"><xsl:value-of select="."/></p>
       </xsl:if>
     </xsl:template>
-     <xsl:template match="ro:location/extRif:spatial/extRif:coords">
-      <xsl:if test="not(./@type) or (./@type!= 'text' and ./@type!= 'dcmiPoint')">
-        <p class="coverage" name="{@type}"><xsl:value-of select="."/></p>
-      </xsl:if>
-    </xsl:template>   
+      
     <xsl:template match="extRif:center">
         <p class="spatial_coverage_center"><xsl:value-of select="."/></p>
     </xsl:template>
