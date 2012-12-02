@@ -1,12 +1,13 @@
 <?php
 function authenticateWithLDAP($role_id, $passphrase, &$LDAPAttributes, &$userMessage)
 {
-$eLDAPHost = gCOSI_AUTH_LDAP_HOST;//"ldap://ldap.anu.edu.au";
-$eLDAPPort = gCOSI_AUTH_LDAP_PORT;//389; //636 | 389
-$eLDAPBaseDN = gCOSI_AUTH_LDAP_BASE_DN;//"ou=People, o=anu.edu.au";
-$eLDAPuid = gCOSI_AUTH_LDAP_UID;//"uid=@@ROLE_ID@@";
-$eLDAPDN = gCOSI_AUTH_LDAP_DN;//"$eLDAPuid, $eLDAPBaseDN";
 
+
+		$eLDAPHost = gCOSI_AUTH_LDAP_HOST;//"ldap://ldap.anu.edu.au";
+		$eLDAPPort = gCOSI_AUTH_LDAP_PORT;//389; //636 | 389
+		$eLDAPBaseDN = gCOSI_AUTH_LDAP_BASE_DN;//"ou=People, o=anu.edu.au";
+		$eLDAPuid = gCOSI_AUTH_LDAP_UID;//"uid=@@ROLE_ID@@";
+		$eLDAPDN = gCOSI_AUTH_LDAP_DN;//"$eLDAPuid, $eLDAPBaseDN";
 		
 		$validCredentials = false;
 		
@@ -17,7 +18,7 @@ $eLDAPDN = gCOSI_AUTH_LDAP_DN;//"$eLDAPuid, $eLDAPBaseDN";
 		
 			if( $ldapconn && $passphrase != '' )
 			{
-				$ldapbind = ldap_bind($ldapconn, $ldapDN, $passphrase);
+				$ldapbind = @ldap_bind($ldapconn, $ldapDN, $passphrase);
 				if( $ldapbind )
 				{
 					$validCredentials = true;
