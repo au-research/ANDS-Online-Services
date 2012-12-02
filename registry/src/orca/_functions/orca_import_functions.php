@@ -1130,7 +1130,7 @@ function importSpatialExtent($id, $value, $type, $registryObjectKey)
 		  	$tok = strtok(";");
 		}
 	}
-	elseif($type == 'text' || $type == 'iso31661' || $type == 'iso31662' || $type == 'iso31663' || $type == 'iso3166') //"name=Tasman Sea, AU; east=160.0; north=-40.0"
+	elseif($type == 'iso31661' || $type == 'iso31662' || $type == 'iso31663' || $type == 'iso3166') //"name=Tasman Sea, AU; east=160.0; north=-40.0"
 	{
 	//northlimit=-23.02; southlimit=-25.98; westlimit=166.03; eastLimit=176.1; projection=WGS84
 	$north = null;
