@@ -38,7 +38,7 @@
 					// if (isset($exception)): 
 					if(false): ?>
 						<div class="alert alert-error">
-							<?php echo $exception; ?>
+							Error: <?php echo $exception->getMessage(); ?>
 						</div>
 					<?php endif; ?>
 					<?php 
