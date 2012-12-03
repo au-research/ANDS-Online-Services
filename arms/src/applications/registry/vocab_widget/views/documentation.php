@@ -65,78 +65,73 @@
 			    	 <p>
 				   The following options can be passed into the plugin using a Javascript hash/object, such as <code>$("#vocabInput").ands_vocab_widget({cache: false});</code>. Be sure to quote strings, and separate multiple options with a comma (<code>,</code>).
 			    	 </p>
-				 <table class="table table-condensed" style="font-size:0.9em">
+				 <table class="table" style="font-size:0.9em">
+				   <caption>
+				     <strong>Legend:</strong>
+				     <span class="badge badge-info">S</span>: String,
+				     <span class="badge badge-info">I</span>: Integer,
+				     <span class="badge badge-info">B</span>: Boolean,
+				     <span class="badge badge-info">[n]</span>: Array of 'n'
+				   </caption>
 				   <thead>
 				     <tr>
-				       <th>Option</th>
-				       <th>Type</th>
+				       <th style="width:25%">Option</th>
 				       <th>Default value</th>
 				       <th>Description</th>
 				   </thead>
 				   <tbody>
 				     <tr>
-				       <td>endpoint</td>
-				       <td>string</td>
+				       <td>endpoint <span class="pull-right badge badge-info">S</span></td>
 				       <td>"http://services.ands.org.au/api/resolver/vocab_widget/"</td>
 				       <td>Location (absolute URL) of the (JSONP) SISSvoc provider.</td>
 				     </tr>
 				     <tr>
-				       <td>mode</td>
-				       <td>string</td>
+				       <td>mode <span class="pull-right badge badge-info">S</span></td>
 				       <td>"search"</td>
 				       <td>Reserved for future use. Currently, only "search" is allowed.</td>
 				     </tr>
 				     <tr>
-				       <td>max_results</td>
-				       <td>integer</td>
+				       <td>max_results <span class="pull-right badge badge-info">I</span></td>
 				       <td>100</td>
 				       <td>At most, how many results should be returned?</td>
 				     </tr>
 				     <tr>
-				       <td>min_chars</td>
-				       <td>integer</td>
+				       <td>min_chars <span class="pull-right badge badge-info">I</span></td>
 				       <td>3</td>
 				       <td>How many characters are required before a search is executed?</td>
 				     </tr>
 				     <tr>
-				       <td>delay</td>
-				       <td>integer</td>
+				       <td>delay <span class="pull-right badge badge-info">I</span></td>
 				       <td>500</td>
 				       <td>How long to wait (after initial user input) before executing the search? Provide in milliseconds</td>
 				     </tr>
 				     <tr>
-				       <td>cache</td>
-				       <td>boolean</td>
+				       <td>cache <span class="pull-right badge badge-info">B</span></td>
 				       <td>true</td>
 				       <td>Cache search results?</td>
 				     </tr>
 				     <tr>
-				       <td>nohits_msg</td>
-				       <td>string / boolean false</td>
+				       <td>nohits_msg <span class="pull-right badge badge-info">S</span> <span class="pull-right badge badge-info">B</span></td>
 				       <td>"No matches found"</td>
-				       <td>Message to display when no matching concepts are found. Set to <code>false</code> to suppress such messages</td>
+				       <td>Message to display when no matching concepts are found. Set to <span class="badge badge-info">B</span> <code>false</code> to suppress such messages</td>
 				     </tr>
 				     <tr>
-				       <td>error_msg</td>
-				       <td>string / boolean false</td>
+				       <td>error_msg <span class="pull-right badge badge-info">S</span> <span class="pull-right badge badge-info">B</span></td>
 				       <td>"ANDS Vocabulary Widget service error"</td>
-				       <td>Message title to display when an error is encountered. Set to <code>false</code> to suppress such messages</td>
+				       <td>Message title to display when an error is encountered. Set to <span class="badge badge-info">B</span> <code>false</code> to suppress such messages</td>
 				     </tr>
 				     <tr>
-				       <td>list_class</td>
-				       <td>string</td>
+				       <td>list_class <span class="pull-right badge badge-info">S</span></td>
 				       <td>"ands_vocab_list"</td>
 				       <td>CSS 'class' references for the dropdown list. Separate multiple classes by spaces</td>
 				     </tr>
 				     <tr>
-				       <td>fields</td>
-				       <td>array of strings</td>
+				       <td>fields <span class="pull-right badge badge-info">[S]</span></td>
 				       <td>["label", "notation", "about"]</td>
 				       <td>Which fields do you want to display? currently ('label', 'notation', 'about') are available</td>
 				     </tr>
 				     <tr>
-				       <td>target</td>
-				       <td>string</td>
+				       <td>target <span class="pull-right badge badge-info">S</span></td>
 				       <td>"notation"</td>
 				       <td>What data field should be stored upon selection?</td>
 				     </tr>
