@@ -325,6 +325,10 @@ class _data_source {
 	function updateStats()
 	{
 		$this->_CI->load->model("registry_object/registry_objects", "ro");
+
+		$this->db->where(array('data_source_id'=>$this->id));
+		$this->setAttribute("count_total", $this->db->count_all_results('registry_objects'));
+
 		foreach ($this->_CI->ro->valid_classes AS $class)
 		{
 			$this->db->where(array('data_source_id'=>$this->id, 'class'=>$class));
@@ -398,11 +402,11 @@ class _data_source {
 	function submitHarvestRequest($harvestRequest)
 	{
 		$runErrors = '';
-
-	    $gORCA_HARVESTER_BASE_URI = "http://ands3.anu.edu.au:8080/harvester/";
-		$this->append_log("insertHarvestRequest: ".$harvestRequest, 'info');
+		$harvesterBaseURI = $this->_CI->config->item('harvester_base_url');
+		$this->append_log("insertHarvestRequest: ".$harvesterBaseURI.$harvestRequest, 'info');
 		$resultMessage = new DOMDocument();
-		$result = $resultMessage->load($gORCA_HARVESTER_BASE_URI.$harvestRequest);
+
+		$result = $resultMessage->load($harvesterBaseURI.$harvestRequest);
 		$errors = error_get_last();
 		$logID = 0;
 		if( $errors )
@@ -429,7 +433,7 @@ class _data_source {
 		$harvestFrequency = '', $advancedHarvestingMethod = '', $nextHarvest = '', $testOnly = false)
 	{
 		$dataSource = $this->id;
-		$responseTargetURI = 'http://ands3.anu.edu.au/workareas/leo/ands/arms/src/data_source/putharvestData';
+		$responseTargetURI = base_url('data_source/putharvestData');
 		
 		if($created == '')
 			$created = $this->getAttribute("created");		
@@ -497,7 +501,7 @@ class _data_source {
 	
 	if( $harvestRequest )
 	{
-		$harvesterBaseURI = $harvestRequest[0]['harvester_base_uri'];
+		$harvesterBaseURI = $this->_CI->config->item('harvester_base_url');
 		
 		// Submit a deleteHarvestRequest to the harvester.
 		$request = $harvesterBaseURI."deleteHarvestRequest?harvestid=".esc($harvestRequestId);

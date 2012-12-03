@@ -7,6 +7,8 @@ class Home extends MX_Controller {
 
 		//solr for counts
 		$this->load->library('solr');
+		$this->solr->setOpt('q', '*:*');
+		//$this->solr->setOpt('fq', 'status:PUBLISHED');
 		$this->solr->setOpt('rows','0');
 		$this->solr->setFacetOpt('field', 'class');
 		$this->solr->executeSearch();

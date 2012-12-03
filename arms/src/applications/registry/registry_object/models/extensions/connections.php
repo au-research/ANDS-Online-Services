@@ -51,7 +51,7 @@ class Connections_Extension extends ExtensionBase
 		$total_connection_count = 0;
 
 		$this->_CI->load->model('data_source/data_sources','ds');
-		$ds = $this->_CI->ds->getByKey($this->ro->data_source_key);
+		$ds = $this->_CI->ds->getByID($this->ro->data_source_id);
 
 		$allow_reverse_internal_links = ($ds->allow_reverse_internal_links == "t");
 		$allow_reverse_external_links = ($ds->allow_reverse_external_links == "t");
@@ -117,7 +117,7 @@ class Connections_Extension extends ExtensionBase
 				if (!isset($ordered_connections[$connection['class']]))
 				{
 					$ordered_connections[$connection['class']] = array();
-					$ordered_connections[$connection['class'] . '_count'] = 1;
+					$ordered_connections[$connection['class'] . '_count'] = 0;
 				}
 
 				// Stop the same connected object coming from two different sources

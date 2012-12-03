@@ -65,6 +65,9 @@
         <?php elseif($lib=='prettyprint'):?>
             <script type="text/javascript" src="<?php echo base_url();?>assets/lib/prettyprint/pretty.js"></script>
             <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/lib/prettyprint/pretty.css" />
+
+        <?php elseif($lib=='dataTables'):?>
+            <script type="text/javascript" src="<?php echo base_url();?>assets/lib/dataTable/js/jquery.dataTables.js"></script>
         
         <?php elseif($lib=='abs_sdmx_querytool'):?>
             <script type="text/javascript" src="<?php echo base_url();?>assets/js/abs_sdmx_querytool.js"></script>

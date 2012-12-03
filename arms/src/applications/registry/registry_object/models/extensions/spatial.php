@@ -25,7 +25,7 @@ class Spatial_Extension extends ExtensionBase
 			$value = (string)$spatial;
 			if($type == 'kmlPolyCoords' || $type == 'gmlKmlPolyCoords')
 			{
-				if(isValidKmlPolyCoords($value))	
+				if($this->isValidKmlPolyCoords($value))	
 				{
 					$north = -90;
 					$south = 90;

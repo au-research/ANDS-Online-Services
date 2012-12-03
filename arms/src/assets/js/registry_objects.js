@@ -200,6 +200,8 @@ $(function(){
 			changeHashTo(view+'/'+id);
 		}
 	});
+
+
 	
 });
 

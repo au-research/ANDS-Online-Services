@@ -12,7 +12,7 @@
  * @package ands/datasource
  * 
  */
-include_once("application/modules/registry_object/models/_transforms.php");
+include_once("applications/registry/data_source/models/_transforms.php");
 class Import extends CI_Model {
 
 
@@ -173,7 +173,7 @@ class Import extends CI_Model {
 		}
 
 		// Index the datasource we just harvested?? XXX: Should this just index the records enriched?
-		$this->indexDS($data_source_id);
+		//$this->indexDS($data_source_id);
 
 		echo ((float) bench(0) - (float) $timewaiting) . " seconds to harvest " . NL;
 		echo $reg_obj_count. " received " .NL.$record_count . " records inserted " . NL;
@@ -214,7 +214,7 @@ class Import extends CI_Model {
 			throw new Exception("Unable to parse XML. Perhaps your XML file is not well-formed?".$xml);
 		}
 		libxml_use_internal_errors(true);
-		$validation_status = @$doc->schemaValidate("application/modules/registry_object/schema/registryObjects.xsd");
+		$validation_status = @$doc->schemaValidate("applications/registry/registry_object/schema/registryObjects.xsd");
 
 		if ($validation_status === TRUE) 
 		{
@@ -293,7 +293,7 @@ class Import extends CI_Model {
 				//echo $ro->getExtRif();
 				$solrXML =  str_replace("&lt;field","\n&lt;field", htmlentities($ro->transformForSOLR()));
 				$solrXML = $ro->transformForSOLR();
-				//echo $solrXML;
+				echo $solrXML;
 				$result = curl_post($solrUpdateUrl, $solrXML);
 				$result = json_decode($result);
 				if($result->{'responseHeader'}->{'status'}==0){

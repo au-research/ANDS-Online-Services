@@ -11,6 +11,26 @@
  */
 class Import extends MX_Controller {
 
+	function library_test()
+	{
+		$this->load->library('importer');
+		$this->load->model('data_source/data_sources', 'ds');
+		$this->importer->setXML('
+[myDemoKey3]
+class = "party"
+type = "group"
+group = "Ben\'s Test Records"
+originatingSource = "http://ands.org.au/"
+name = "This person came from an INI FILE!!!!"
+description = "This is just an example..."
+		');
+		$this->importer->setCrosswalk("benINItoRIFCS");
+		$this->importer->setDatasource($this->ds->getByID(14));
+		$this->importer->commit();
+
+		print_pre($this->importer->message_log);
+	}
+
 	function test()
 	{
 		

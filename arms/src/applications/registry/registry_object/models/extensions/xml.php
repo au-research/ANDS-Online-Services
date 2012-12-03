@@ -4,6 +4,7 @@ class XML_Extension extends ExtensionBase
 {
 	
 	private $_xml;	// internal pointer for RIFCS XML
+	private $_rif;	
 	private $_simplexml;
 	
 	function __construct($ro_pointer)
@@ -12,6 +13,18 @@ class XML_Extension extends ExtensionBase
 	}		
 	
 	
+	/**
+	 *  Clean up all previous versions (set = FALSE, "prune" extRif)
+	 */
+	function cleanupPreviousVersions()
+	{
+		$this->db->where(array('registry_object_id'=>$this->ro->id));
+		$this->db->update('record_data', array('current'=>DB_FALSE));
+
+		$this->db->where(array('registry_object_id'=>$this->ro->id, 'scheme'=>'extRif'));
+		$this->db->delete('record_data');
+	}
+
 	/*
 	 * Record data methods
 	 */
@@ -38,7 +51,7 @@ class XML_Extension extends ExtensionBase
 		}
 		else
 		{
-			$xml = $this->getXML($record_data_id);
+			$xml = $this->getRif($record_data_id);
 			$this->_simplexml = simplexml_load_string(str_replace('&','&amp;',$xml));
 			return $this->_simplexml;
 		}
@@ -47,10 +60,13 @@ class XML_Extension extends ExtensionBase
 		 
 	function updateXML($data, $current = TRUE, $scheme = NULL)
 	{
-			$_xml = new _xml($this->ro->id);
-			$_xml->update($data, $current, $scheme); 
-			$this->_xml = $_xml;
-			$this->_simplexml = simplexml_load_string($_xml->xml);
+		$_xml = new _xml($this->ro->id);
+		$_xml->update($data, $current, $scheme); 
+		$this->_xml = $_xml;
+		if (is_null($scheme)) {
+			$this->_rif =& $_xml;
+		}
+		$this->_simplexml = simplexml_load_string($_xml->xml);
 	}
 	
 	
@@ -99,6 +115,8 @@ class XML_Extension extends ExtensionBase
 	}
 
 	function getRif(){
+		if (!is_null($this->_rif)) return $this->_rif->xml;
+
 		$data = false;
 		$result = $this->db->select('data')->order_by('timestamp','desc')->limit(1)->get_where('record_data', array('registry_object_id'=>$this->ro->id, 'scheme'=>'rif'));
 		if ($result->num_rows() > 0)

@@ -8,9 +8,7 @@ class Registry_fetch extends CI_Model
 		$xsl_args = array(
 			'base_url' => base_url(),
 		);
-		//print_pre(htmlentities($extrif));
-		// XXX: Quick fix xmlns!!!
-		$extrif = str_replace("<registryObject ", "<registryObject xmlns=\"http://ands.org.au/standards/rif-cs/registryObjects\" ", $extrif);
+
 		return $this->_transformByXSL($extrif, 'extRif2view.xsl', $xsl_args);
 	}
 
@@ -67,6 +65,7 @@ class Registry_fetch extends CI_Model
 	function fetchConnectionsBySlug($slug)
 	{
 		$url = $this->config->item('registry_endpoint') . "getConnections/?slug=" . $slug;
+
 		$contents = json_decode(file_get_contents($url), true);
 		if (isset($contents['connections']))
 		{

@@ -678,11 +678,11 @@
 				<div class="control-group">
 					<label class="control-label" for="title">Key: </label>
 					<div class="controls">
-						<input type="text" class="input-xlarge" name="key" value="{key}"/>
+						<input type="text" class="input-xlarge" name="key" value="{ro:key}"/>
 					</div>
 				</div>
 			</div>
-			<xsl:apply-templates select="relation"/>
+			<xsl:apply-templates select="ro:relation"/>
 			<div class="separate_line"/>
 			<button class="btn btn-primary addNew" type="relation">
 				<i class="icon-plus icon-white"/> Add Relation </button>
@@ -824,7 +824,7 @@
 					<input type="text" class="input-xlarge" name="description"
 						placeholder="Description" value="{description}"/>
 					<input type="text" class="input-xlarge" name="url" placeholder="Url"
-						value="{url}"/>
+						value="{ro:url}"/>
 					<button class="btn btn-mini btn-danger remove">
 						<i class="icon-remove icon-white"/>
 					</button>

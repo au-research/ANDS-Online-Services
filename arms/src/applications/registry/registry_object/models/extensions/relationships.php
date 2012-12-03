@@ -14,7 +14,7 @@ class Relationships_Extension extends ExtensionBase
 		$this->db->where(array('registry_object_id' => $this->ro->id));
 		$this->db->delete('registry_object_relationships');	
 		// maybe ADD a getSimpleXML() method!!
-		$sxml = new SimpleXMLElement($this->ro->getRif());
+		$sxml = $this->ro->getSimpleXml();
 		foreach ($sxml->xpath('//'.$this->ro->class.'/relatedObject/key') AS $related_object_key)
 		{
 			$result = $this->db->select('class')->get_where('registry_objects', array('key'=>(string)$related_object_key));

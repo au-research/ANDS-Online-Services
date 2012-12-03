@@ -206,11 +206,11 @@
     <xsl:if test="ro:description">
 
         <div class="descriptions" style="position:relative;clear:both;">
-            <xsl:apply-templates select="../extRif:description[@type= 'brief']" mode="content"/>
-            <xsl:apply-templates select="../extRif:description[@type= 'full']" mode="content"/>
-            <xsl:apply-templates select="../extRif:description[@type= 'significanceStatement']" mode="content"/>       
-            <xsl:apply-templates select="../extRif:description[@type= 'notes']" mode="content"/>   
-            <xsl:apply-templates select="../extRif:description[not(@type =  'notes' or @type =  'significanceStatement' or @type =  'full' or @type =  'brief' or @type =  'logo' or @type =  'rights' or @type =  'accessRights')]" mode="content"/>
+            <xsl:apply-templates select="extRif:description[@type= 'brief']" mode="content"/>
+            <xsl:apply-templates select="extRif:description[@type= 'full']" mode="content"/>
+            <xsl:apply-templates select="extRif:description[@type= 'significanceStatement']" mode="content"/>       
+            <xsl:apply-templates select="extRif:description[@type= 'notes']" mode="content"/>   
+            <xsl:apply-templates select="extRif:description[not(@type =  'notes' or @type =  'significanceStatement' or @type =  'full' or @type =  'brief' or @type =  'logo' or @type =  'rights' or @type =  'accessRights')]" mode="content"/>
         </div>
     </xsl:if>
     <a href="javascript:void(0);" class="showall_descriptions hide">More...</a>
@@ -456,18 +456,14 @@
     </xsl:if>
 
     <!-- NEW CONNECTION -->
-    <div class="right-box" id="connectionsRightBox">
-        <div id="connectionsInfoBox" class="hide"></div>
-        <h2>Connections</h2>
-        <div id="connections">
-            <img>
-                <xsl:attribute name="src"><xsl:value-of select="$base_url"/><xsl:text>assets/core/images/ajax-loader.gif</xsl:text></xsl:attribute>
-                <xsl:attribute name="class">loading-icon</xsl:attribute>
-                <xsl:attribute name="alt">Loading…</xsl:attribute>
-            </img>
-        </div>
-        <p></p>
-    </div>  
+    <!--xsl:if test="//ro:relatedObject"-->
+      <div class="right-box" id="connectionsRightBox">
+          <div id="connectionsInfoBox" class="hide"></div>
+          <h2>Connections</h2>
+          <div id="connections">%%%%CONNECTIONS%%%%</div>
+          <p></p>
+      </div>  
+    <!--/xsl:if-->
 
 
 

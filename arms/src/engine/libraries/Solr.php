@@ -188,18 +188,7 @@ class Solr {
 	 */
 	function executeSearch($as_array = false){
 		
-        $fields_string = $this->constructFieldString();
-
-    	$ch = curl_init();
-    	//set the url, number of POST vars, POST data
-		curl_setopt($ch,CURLOPT_URL,$this->solr_url.'select');//post to SOLR
-		//curl_setopt($ch,CURLOPT_POST,count($fields));//number of POST var
-		curl_setopt($ch,CURLOPT_POSTFIELDS,$fields_string);//post the field strings
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);//return to variable
-    	$content = curl_exec($ch);//execute the curl
-
-    	//echo 'json received+<pre>'.$content.'</pre>';
-		curl_close($ch);//close the curl
+        $content = $this->post($this->constructFieldString(), 'select');
 
 		$json = json_decode($content, $as_array);
 		if($json){
@@ -209,4 +198,44 @@ class Solr {
 			throw new Exception('SOLR Query failed....ERROR:'.$content.'<br/> QUERY: '.$fields_string);
 		}
 	}
+
+    /**
+     * Post a set of documents to SOLR
+     * @param  string of xml $docs   
+     * @param  string $handle [select|update]
+     * @return json|xml return values
+     */
+    function post($docs, $handle='select'){
+        $ch = curl_init();
+        //set the url, number of POST vars, POST data
+        curl_setopt($ch,CURLOPT_URL,$this->solr_url.$handle);//post to SOLR
+        //curl_setopt($ch,CURLOPT_POST,count($fields));//number of POST var
+        curl_setopt($ch,CURLOPT_POSTFIELDS,$docs);//post the field strings
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);//return to variable
+        $content = curl_exec($ch);//execute the curl
+        curl_close($ch);//close the curl
+        return $content;
+    }
+
+    function addDoc($docs){
+        return curl_post($this->solr_url.'update?wt=json', $docs);
+    }
+
+    function commit(){
+        return curl_post($this->solr_url.'update?wt=json&commit=true', '<commit waitSearcher="false"/>');
+    }
+
+    function clear($data_source_id='all'){
+        if($data_source_id!='all'){
+            $query = 'data_source_id:("'.$data_source_id.'")';
+        }else{
+            $query = '*:*';
+        }
+        echo $query;
+
+        $result = curl_post($this->solr_url.'update?commit=true&wt=json', '<delete><query>'.$query.'</query></delete>');    
+        //$result .= curl_post($this->solr_url.'update?optimize=true', '<optimize waitFlush="false" waitSearcher="false"/>');
+        return $result; 
+        //return curl_post($this->solr_url.'update?wt=json&commit=true', '<delete>'.$query.'</delete>');
+    }
 }
