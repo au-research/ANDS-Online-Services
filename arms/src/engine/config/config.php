@@ -377,7 +377,7 @@ $config['rewrite_short_tags'] = TRUE;
 $config['proxy_ips'] = '';
 
 $default_base_url = isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off' ? 'https' : 'http';
-$default_base_url .= '://'. $_SERVER['HTTP_HOST'];
+$default_base_url .= '://'. (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : "cli");
 $default_base_url .= str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']);
 
 $config['default_base_url'] = $default_base_url;
@@ -402,6 +402,7 @@ else
 $config['modules_locations'] = array(
        'applications/'.$active_application . '/' => '../../applications/'.$active_application . '/',
 );
+
 
 /*
 |--------------------------------------------------------------------------
