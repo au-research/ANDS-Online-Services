@@ -163,7 +163,6 @@ class Solr {
         $this->options['q'].=' '. $condition;
     }
 
-
     /**
      * Construct a field string based on SOLR OPTIONS, for posting
      * @return string fields_string
@@ -223,6 +222,17 @@ class Solr {
 
     function commit(){
         return curl_post($this->solr_url.'update?wt=json&commit=true', '<commit waitSearcher="false"/>');
+    }
+
+
+    function deleteByQueryCondition($query_condition)
+    {
+        if ($query_condition)
+        {
+            $result = curl_post($this->solr_url.'update?commit=true&wt=json',
+                                     '<delete><query>'.$query_condition.'</query></delete>');    
+            return $result;
+        }
     }
 
     function clear($data_source_id='all'){

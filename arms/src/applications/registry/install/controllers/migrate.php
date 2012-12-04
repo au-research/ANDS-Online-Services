@@ -19,12 +19,13 @@ class Migrate extends MX_Controller
 
 		$num_data_sources = $query->num_rows();
 		
-		/*echo $num_data_sources . " data sources found. Do you wish to migrate these data sources? [y/n]: ";
+		echo $num_data_sources . " data sources found. Do you wish to migrate these data sources? [y/n]: ";
 
 		if ($this->getInput() != 'y'){
 			echo "Exiting..." . NL;
 			return;
-		}*/
+		}
+
 		// Start the clock...
 		$this->exec_time = microtime(true);
 		$this->load->model('data_source/data_sources','ds');

@@ -13,7 +13,8 @@ class Relationships_Extension extends ExtensionBase
 		// Delete any old relationships (we only run this on ingest, so its a once-off update)
 		$this->db->where(array('registry_object_id' => $this->ro->id));
 		$this->db->delete('registry_object_relationships');	
-		// maybe ADD a getSimpleXML() method!!
+
+		$related_keys = array();
 		$sxml = $this->ro->getSimpleXml();
 		foreach ($sxml->xpath('//'.$this->ro->class.'/relatedObject/key') AS $related_object_key)
 		{
@@ -25,9 +26,23 @@ class Relationships_Extension extends ExtensionBase
 				$result->free_result();
 				$class = $class['class'];
 			}
+			$related_keys[] = (string)$related_object_key;
 			
 			$this->db->insert('registry_object_relationships', array("registry_object_id"=>$this->ro->id, "related_object_key" => (string)$related_object_key,'related_object_class'=>$class));
 		}
+
+		return $related_keys;
+	}
+
+	function getRelationships()
+	{
+		$related_keys = array();
+		$result = $this->db->select('related_object_key')->get_where('registry_object_relationships', array('registry_object_id'=>(string)$this->ro->id));
+		foreach ($result->result_array() AS $row)
+		{
+			$related_keys[] = $row['related_object_key'];
+		}
+		return $related_keys;
 	}
 	
 	function getRelatedClasses()

@@ -148,6 +148,30 @@ class Core_extension extends ExtensionBase
 		}
 		return $this;
 	}
+
+	/* Logically marks this record as deleted */
+	function delete()
+	{
+		// Mark this record as recently updated
+		$this->setAttribute("updated", time());
+		$this->setAttribute("status", DELETED);
+		
+		return $this;
+	}
+
+	/* Removes all trace of the record from the database (use this wisely...) */
+	function eraseFromDatabase()
+	{
+		$this->db->delete('registry_object_relationships', array('registry_object_id'=>$this->id));
+		$this->db->delete('registry_object_metadata', array('registry_object_id'=>$this->id));
+		$this->db->delete('registry_object_attributes', array('registry_object_id'=>$this->id));
+		$this->db->delete('record_data', array('registry_object_id'=>$this->id));
+		$this->db->delete('url_mappings', array('registry_object_id'=>$this->id));
+		$this->db->delete('spatial_extents', array('registry_object_id'=>$this->id));
+		$this->db->delete('registry_objects', array('registry_object_id'=>$this->id));
+
+		return $this;
+	}
 	
 	
 	function getAttribute($name, $graceful = TRUE)

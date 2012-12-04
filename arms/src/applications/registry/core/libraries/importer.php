@@ -28,6 +28,8 @@ class Importer {
 	public $ingest_new_record;
 
 	public $reindexed_records;
+	public $affected_records;
+	public $deleted_records;
 
 	public $error_log = array();
 	public $message_log = array();
@@ -129,6 +131,7 @@ class Importer {
 
 	}
 
+
 	/**
 	 * 
 	 */
@@ -185,7 +188,7 @@ class Importer {
 					if (is_null($revision_record_id))
 					{
 						// We are creating a new registryObject
-						$ro = $this->CI->ro->create($this->dataSource->key, (string)$registryObject->key, $class, "", $this->status, "temporary_slug", $record_owner, $this->harvestID);
+						$ro = $this->CI->ro->create($this->dataSource, (string)$registryObject->key, $class, "", $this->status, "temporary_slug", $record_owner, $this->harvestID);
 						$this->ingest_new_record++;
 					}
 					else
@@ -251,10 +254,28 @@ class Importer {
 		gc_collect_cycles();
 	}
 
+/* XXX: TODO
+	public function deleteRecordsByIDs(array $deleted_record_ids)
+	{
+		$affected_record_ids = array();
+		$this->deleted_records = $deleted_record_ids;
+		foreach($this->deleted_records AS $ro_id)
+		{
+			$ro = $this->CI->ro->getByID($ro_id);
+			$related_keys = $ro->getRelationships();
+			foreach ($related_keys AS $key)
+			{
+
+			}
+			$affected_record_keys = array_merge($affected_record_keys, $ro->getRelationships());
+			$ro->delete();
+		}
+	}
+*/
 	/**
 	 * 
 	 */
-	public function _enrichRecords()
+	public function _enrichRecords($directly_affected_records = array())
 	{
 		// Only enrich records received in this harvest
 		foreach ($this->importedRecords AS $ro_id)
@@ -262,11 +283,11 @@ class Importer {
 
 			$ro = $this->CI->ro->getByID($ro_id);
 
-			// XXX: delete previous enriched records
-
-			// xxx: REMOVE PREVIOUS RELATIONSHIPS 
 			// add reverse relationships
-			$ro->addRelationships();
+			// previous relationships are reset by this call
+			$related_keys = $ro->addRelationships();
+			$directly_affected_records = array_merge($related_keys, $directly_affected_records);
+
 			// XXX: re-enrich records which are related to this one
 
 			$ro->update_quality_metadata();
@@ -282,9 +303,28 @@ class Importer {
 			unset($ro);
 			clean_cycles();
 		}
-
 		gc_collect_cycles();
 
+
+		// enrich related records, etc?
+		foreach ($directly_affected_records AS $ro_key)
+		{
+			$registryObjects = $this->CI->ro->getByKey($ro_key);
+			if (is_array($registryObjects))
+			{
+				foreach ($registryObjects AS $ro)
+				{
+					$this->affected_records[$ro->id] = $ro->id;
+
+					$ro->addRelationships();
+					$ro->update_quality_metadata();
+					$ro->enrich();
+					unset($ro);
+					clean_cycles();
+				}
+			}
+		}
+		gc_collect_cycles();
 	}
 
 	/**
@@ -296,23 +336,40 @@ class Importer {
 		$this->CI->load->model('registry_objects', 'ro');
 		$this->CI->load->model('data_source/data_sources', 'ds');
 
-		foreach($this->importedRecords AS $ro_id){
+		$this->CI->load->library('solr');
+
+		$deleted_records = array();
+
+		$allAffectedRecords = array_merge($this->importedRecords, $this->affected_records);
+		foreach($allAffectedRecords AS $ro_id){
 			try{
 				$ro = $this->CI->ro->getByID($ro_id);
-				//echo $ro->getExtRif();
-				//$solrXML =  str_replace("&lt;field","\n&lt;field", htmlentities($ro->transformForSOLR()));
-				$solrXML = $ro->transformForSOLR();
-				//echo $solrXML;
-				$result = curl_post($solrUpdateUrl, $solrXML);
-				$result = json_decode($result);
-				if($result->{'responseHeader'}->{'status'}==0){
-					$this->reindexed_records++;
+
+				// Purge deleted records from the index
+				if ($ro->status == DELETED)
+				{
+					$deleted_records[] = 'id:("' . $ro->id . '")';
+				}
+				else
+				{
+					// XXX: Use the SOLR library, do update in batches
+					$solrXML = $ro->transformForSOLR();
+					$result = curl_post($solrUpdateUrl, $solrXML);
+					$result = json_decode($result);
+					if($result->{'responseHeader'}->{'status'}==0){
+						$this->reindexed_records++;
+					}
 				}
 			}
 			catch (Exception $e)
 			{
 				$this->error_log[] = "UNABLE TO Index this registry object id = ".$ro_id . BR . "<pre>" . nl2br($e->getMessage()) . "</pre>";	
 			}
+		}
+
+		if (count($deleted_records) > 0)
+		{
+			$this->solr->deleteByQueryCondition(implode(' OR ', $deleted_records));
 		}
 
 		return curl_post($solrUpdateUrl.'?commit=true', '<commit waitSearcher="false"/>');
@@ -596,6 +653,7 @@ class Importer {
 		$this->xmlPayload = '';
 		$this->dataSource = null;
 		$this->importedRecords = array();
+		$this->affected_records = array();
 		$this->partialCommitOnly = false;
 
 		$this->ingest_attempts = 0;
