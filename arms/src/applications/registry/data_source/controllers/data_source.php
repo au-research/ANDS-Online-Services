@@ -25,7 +25,7 @@ class Data_source extends MX_Controller {
 	public function index(){
 		//$this->output->enable_profiler(TRUE);
 		
-		$data['title'] = 'Manage My Datasources';
+		$data['title'] = 'Manage My Datasources....';
 		$data['small_title'] = '';
 
 		$this->load->model("data_sources","ds");
@@ -40,7 +40,7 @@ class Data_source extends MX_Controller {
 		}
 		$data['dataSources'] = $items;
 		$data['scripts'] = array('data_sources');
-		$data['js_lib'] = array('core', 'graph');
+		$data['js_lib'] = array('core', 'graph', 'datepicker');
 
 		$this->load->view("data_source_index", $data);
 	}
@@ -138,6 +138,34 @@ class Data_source extends MX_Controller {
 		echo $jsonData;
 	}
 	
+	public function getContributorGroups()
+	{
+		header('Cache-Control: no-cache, must-revalidate');
+		header('Content-type: application/json');
+		date_default_timezone_set('Australia/Canberra');
+
+		$POST = $this->input->post();
+		$items = array();
+		
+		if (isset($POST['id'])){
+			$id = (int) $this->input->post('id');
+		}	
+		$this->load->model("data_sources","ds");
+		$dataSource = $this->ds->getByID($id);
+		$dataSourceGroups = $dataSource->get_groups();
+		if(sizeof($dataSourceGroups) > 0){
+		foreach($dataSourceGroups as $group){
+			$item = array();
+			$item['group'] = $group;
+			array_push($items, $item);
+		}
+		$jsonData['status'] = 'OK';
+		$jsonData['items'] = $items;
+		}		
+		$jsonData = json_encode($jsonData);
+		echo $jsonData;
+	}
+	
 	public function getDataSourceLogs()
 	{		
 		header('Cache-Control: no-cache, must-revalidate');
@@ -216,6 +244,9 @@ class Data_source extends MX_Controller {
 		
 		$jsonData['status'] = 'OK';
 		$POST = $this->input->post();
+		print("<pre>");
+		print_r($POST);
+		print("</pre>");
 
 		if (isset($POST['data_source_id'])){
 			$id = (int) $this->input->post('data_source_id');
@@ -233,6 +264,7 @@ class Data_source extends MX_Controller {
 		}
 	    $harvesterParams = array('uri','provider_type','harvest_method','harvest_date','oai_set');
 	    $primaryRelationship = array('class_1','class_2','primary_key_1','primary_key_2','collection_rel_1','collection_rel_2','activity_rel_1','activity_rel_2','party_rel_1','party_rel_2','service_rel_1','service_rel_2');
+		$institutionPages = array('institution_pages');
 		$resetHarvest = false;
 
 		// XXX: This doesn't handle "new" attribute creation? Probably need a whilelist to allow new values to be posted. //**whitelist**//
@@ -241,11 +273,14 @@ class Data_source extends MX_Controller {
 			$valid_attributes = array_merge(array_keys($dataSource->attributes()), $harvesterParams);
 
 			$valid_attributes = array_merge($valid_attributes, $primaryRelationship);
+			$valid_attributes = array_merge($valid_attributes, $institutionPages);
+			$valid_attributes =array_unique($valid_attributes);
 
 			foreach($valid_attributes as $attrib){							
 				if (isset($POST[$attrib])){					
 
-					$new_value = $this->input->post($attrib);
+					$new_value = trim($this->input->post($attrib));
+
 				}
 				else if(in_array($attrib, $harvesterParams))
 				{
@@ -254,9 +289,47 @@ class Data_source extends MX_Controller {
 				else if(in_array($attrib, $primaryRelationship)){
 					$new_value = '';				
 				}	
+				if($this->input->post('create_primary_relationships')=='false')
+				{
+					switch($attrib){
+						case 'class_1':
+						case 'primary_key_1':
+						case 'service_rel_1':
+						case 'activity_rel_1':
+						case 'collection_rel_1':
+						case 'party_rel_1':
+						case 'class_2':
+						case 'primary_key_2':
+						case 'service_rel_2':
+						case 'activity_rel_2':
+						case 'collection_rel_2':
+						case 'party_rel_2':		
+							$new_value = '';
+							break;
+						default:
+							break;
+					}
+				
+				}
+
+
+			/*	this push to nla functionality has been removed as NLA aren't using it and the ds admins were getting confused
+
+				if($this->input->post('push_to_nla')=='false')
+				{
+					switch($attrib){
+						case 'isil_value':
+							$new_value = '';
+							break;
+						default:
+							break;	
+					}				
+				} 
+
+			*/
 
 				if($new_value=='true') $new_value=DB_TRUE;
-				if($new_value=='false') $new_value=DB_FALSE;
+				if($new_value=='false'){$new_value=DB_FALSE;} 
 
 				if($new_value != $dataSource->{$attrib} && in_array($attrib, $harvesterParams))
 				{
@@ -271,9 +344,16 @@ class Data_source extends MX_Controller {
 					$dataSource->unsetAttribute($attrib);
 				}
 				else{
+					if($new_value)
 					$dataSource->append_log("setAttribute FOR ".$new_value." ".$attrib, 'warning');
 
 					$dataSource->setAttribute($attrib, $new_value);
+				}
+
+				if($attrib=='institution_pages')
+				{
+					$dataSource->setContributorPages($new_value);
+
 				}
 
 				
@@ -609,6 +689,20 @@ class Data_source extends MX_Controller {
 		print("</response>");
 	}
 
+
+
+	function getContributorPages()
+	{
+		$POST = $this->input->post();
+		print_r($POST);
+				print('<?xml version="1.0" encoding="UTF-8"?>'."\n");
+		print('<response type="">'."\n");
+		print('<timestamp>'.date("Y-m-d H:i:s").'</timestamp>'."\n");
+		print("<message> we need to get the contibutor groups and the pages if required</message>\n");
+		print("</response>");
+		return " we need to get the contibutor groups and the pages if required";
+
+	}
 
 	/**
 	 * @ignore

@@ -242,7 +242,53 @@ class _data_source {
 			$this->attributes[$name]->core = TRUE;
 		}
 	}
+	/*
+	 * CONTRIBUTOR PAGES
+	 */
+
+	function get_groups()
+	{
+		
+	$groups = array();
+
+	$this->db->select('value');
+	$this->db->from('registry_object_attributes');
+	$this->db->join('registry_objects', 'registry_objects.registry_object_id = registry_object_attributes.registry_object_id');
+	$this->db->where(array('registry_objects.data_source_id'=>$this->id, 'registry_object_attributes.attribute'=>'group'));
+	$query = $this->db->get();
+
+	if ($query->num_rows() == 0)
+	{
+		return $groups;
+	}
+	else
+	{				
+		foreach($query->result_array() AS $group)
+		{
+			$groups[] =  $group['value'];
+		}
+	}
+
+	return array_unique($groups);
 	
+	}
+
+	function setContributorPages($value)
+	{
+		$data_source_id = $this->id;
+		switch($value)
+		{
+			case 0:
+				echo "we don't want to manage conributor pages for id ".$data_source_id;	
+				break;
+			case 1:
+				echo "we want to auto manage conributor pages for id ".$data_source_id;	
+				break;
+			case 2:
+				echo "we want to manually manage conributor pages for id ".$data_source_id;	
+				break;
+		}
+	}
 	
 	/*
 	 * LOGS

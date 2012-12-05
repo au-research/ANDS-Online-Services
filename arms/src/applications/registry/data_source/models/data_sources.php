@@ -104,8 +104,33 @@ class Data_sources extends CI_Model {
 			}
 		}
 		return $data_sources;	
-	} 	
+	} 
 
+	/**
+	 * Returns groups which this datasource has objects which are contributed by
+	 * 
+	 * @param the data source ID
+	 * @return array of groups or NULL
+	 */
+	function getDataSourceGroups($data_source_id)
+	{
+		$groups = array();
+
+		$query = $this->db->select('group')->where('registry_object_id','data_source_id')->get('data_source_attributes');
+			if ($query->num_rows() == 0)
+			{
+				return $groups;
+			}
+			else
+			{				
+				foreach($query->result_array() AS $group)
+				{
+					$groups[] =  $group['group'];
+				}
+			}
+		//}
+		return $groups;	
+	} 	
 
 	/**
 	 * Returns exactly one data source by URL slug (or NULL)

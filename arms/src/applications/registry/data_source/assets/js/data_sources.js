@@ -190,6 +190,7 @@ function load_datasource(data_source_id){
 			//draw the charts
 			drawCharts();
 			loadDataSourceLogs(data_source_id);
+			loadContributorPages(data_source_id);
 
 			//button toggling at edit level
 			$('#view-datasource  .normal-toggle-button').each(function(){
@@ -340,11 +341,90 @@ function loadHarvestLogs(data_source_id, logid)
 
 }
 
+function loadContributorPages(data_source_id)
+{
+	// alert(data_source_id + " is the datasource id ")
+	$.ajax({
+		url: 'data_source/getContributorGroups/',
+		data: {id:data_source_id},
+		type: 'POST',
+		dataType: 'json',
+		success: function(data){
+			//console.log(data)
+			var contributorsTemplate = "<table class='table table-hover'>"+
+			"<thead><tr><th>GROUP</th></tr></thead>" +
+			"<tbody>" +
+			"{{#items}}" +
+				"<tr ><td>{{group}}</td></tr>" +
+			"{{/items}}" +
+			"</tbody></table>";
+			var output = Mustache.render(contributorsTemplate, data);
+			console.log(output);
+			$('#contributor_groups').html(output);	
+			//$('#contributor_groups').fadeIn(500);		
+		},
+		error: function(data){
+		console.log(data);
+		}
+	});
+	
 
+	
+	return false;
+
+}
 
 function drawCharts(){
 	$('#ro-progression').height('350').html('');
 	$.jqplot('ro-progression',  [[[1, 2],[3,5.12],[5,13.1],[7,33.6],[9,85.9],[11,219.9]]]);
+}
+
+/*
+ * Validate the fields and values 
+ * @params jsonData
+ * @return string
+ */
+function validateFields(jsonData){
+
+	var errorStr = '';
+
+	if(included(jsonData,'create_primary_relationships') && (!included(jsonData,'class_1')||!included(jsonData,'primary_key_1')||!included(jsonData,'service_rel_1')||!included(jsonData,'activity_rel_1')||!included(jsonData,'party_rel_1')||!included(jsonData,'collection_rel_1')))
+	{
+		errorStr = errorStr + "You must provide a class ,registered key and all relationship types for the primary relationship.<br /><br />";
+
+	
+		if(included(jsonData,'class_2') && (!included(jsonData,'primary_key_2')||!included(jsonData,'service_rel_2')||!included(jsonData,'activity_rel_2')||!included(jsonData,'collection_rel_2')||!included(jsonData,'party_rel_2')))
+		{
+			errorStr = errorStr +  "You must provide a registered key and all relationship types for the 2nd primary relationship.<br />";	
+		}
+
+	}
+
+	if(included(jsonData,'push_to_nla') && !included(jsonData,'isil_value'))
+	{
+		errorStr = errorStr + "If you select 'Party records to NLA' you must provide an ISIL value <br />";
+
+	}	
+
+	return  errorStr;
+}
+
+
+function included(arr, obj) {
+    for(var i=0; i<arr.length; i++) {
+        if (arr[i]['name'] == obj) 
+        { 
+        	if(arr[i]['name']=='create_primary_relationships' && !arr[i]['value'])
+        	{
+        		return false;
+        	}
+        	if(!arr[i]['value'])
+        	{
+        		return false;
+        	}
+        	return true;
+        }
+    }
 }
 
 /*
@@ -381,19 +461,33 @@ function load_datasource_edit(data_source_id, active_tab){
 						if($(this).attr('value')=='t' || $(this).attr('value')=='1' || $(this).attr('value')=='true' ){
 						$(this).find('input').attr('checked', 'checked');
 						$('#primary-div').toggle();
-						}else{
-							
-							$(this).find('input').attr('value')=='f'
 						}
-
 						$(this).toggleButtons({
 							width:75,enable:true,
 							onChange:function(){
 								$(this).find('input').attr('checked', 'checked');
 								$('#primary-div').toggle();
 						}
-						});						
-					}else{
+						});	
+				}
+				else if ($(this).attr('class')=='push_to_nla normal-toggle-button')	
+				{
+					if($(this).attr('value')=='t' || $(this).attr('value')=='1' || $(this).attr('value')=='true' ){
+						$(this).find('input').attr('checked', 'checked');
+						$('#nla-push-div').toggle();
+						}
+
+						$(this).toggleButtons({
+							width:75,enable:true,
+							onChange:function(){
+								$(this).find('input').attr('checked', 'checked');
+								$('#nla-push-div').toggle();
+						}
+						});	
+
+
+
+				}else{
 						if($(this).attr('value')=='t' || $(this).attr('value')=='1' || $(this).attr('value')=='true' ){
 							$(this).find('input').attr('checked', 'checked');
 				
@@ -408,17 +502,42 @@ function load_datasource_edit(data_source_id, active_tab){
 				
 
 			});
+
+			$('#edit-datasource  .contributor-page').each(function(){
+				if($('#institution_pages').val()=='') {alert('it has no value'); $('#institution_pages').val('0'); }
+				if($(this).attr('value')== $('#institution_pages').val() ){
+				$(this).attr('checked', 'checked');
+				}
+			});
+
+			$('#edit-datasource  .contributor-page').live().change(function(){
+				$(this).attr('checked', 'checked');
+				$('#institution_pages').val($(this).val());
+			});
 			
-			
+
 			$("#edit-datasource .chzn-select").chosen().change(function(){
 				var input = $('#'+$(this).attr('for'));
 				$(input).val($(this).val());
+
 			});
 			$('#edit-datasource .chzn-select').each(function(){
 				var input = $('#'+$(this).attr('for'));
 				$(this).val($(input).val());
 				$(this).chosen().trigger("liszt:updated");
 			});
+			
+			//initalize the datepicker, format is optional
+			$('#edit-datasource  .datepicker').datepicker({
+				format: 'yyyy-mm-dd'
+			});
+			//triggering the datepicker by focusing on it
+			$('.triggerDatePicker').die().live({
+				click: function(e){
+				$(this).parent().children('input').focus();
+				}
+			});
+
 		}
 	});
 
@@ -437,25 +556,38 @@ $('#save-edit-form').live({
 		$('#edit-datasource #edit-form input, #edit-datasource #edit-form textarea').each(function(){
 			var label = $(this).attr('name');
 			var value = $(this).val();
+
 			if($(this).attr('type')=='checkbox'){
 				var label = $(this).attr('for');
 				var value = $(this).is(':checked');
 			}
-			if(value!='' && value){
+
+			if($(this).attr('type')!='radio'){
+			//if(value!='' && value){
+				console.log(label + " will be set to " + value)
 				jsonData.push({name:label, value:value});
+			//}
 			}
 		});
+
 
 		$('#edit-datasource #edit-form select').each(function(){
 			label = $(this).attr('for');
 			jsonData.push({name:label, value:$(this).val()});
 		});
 
-		$.ajax({
-			url:'data_source/updateDataSource', 
-			type: 'POST',
-			data: jsonData,
-			success: function(data){
+
+
+		var validationErrors = validateFields(jsonData);
+
+		if(!validationErrors)
+		{
+			$.ajax({
+				url:'data_source/updateDataSource', 
+				type: 'POST',
+				data: jsonData,
+				success: function(data){
+
 				
 					if (!data.status == "OK")
 					{
@@ -477,7 +609,11 @@ $('#save-edit-form').live({
 				$('#myModal .modal-body').append("<br/><pre>Could't communicate with server</pre>");
 			}
 		});
-
+		}else{
+			$('#myModal').modal();
+			logErrorOnScreen(validationErrors, $('#myModal .modal-body'));
+			$('#myModal .modal-body').append("<br/>");
+		}
 		/*var jsonString = ""+JSON.stringify(jsonData);
 		$('#myModal .modal-body').html('<pre>'+jsonString+'</pre>');
 		$('#myModal').modal();*/

@@ -22,6 +22,7 @@
 			<xsl:when test="//ro:collection">collections</xsl:when>
 			<xsl:when test="//ro:activity">activities</xsl:when>
 			<xsl:when test="//ro:party/@type='group'">party_multi</xsl:when>
+            
 			<xsl:when test="//ro:party/@type='person'">party_one</xsl:when>		
 			<xsl:when test="//ro:party">party_multi</xsl:when>	
 			<xsl:when test="//ro:service">services</xsl:when>	

@@ -230,6 +230,7 @@
 					</dd>
 					{{/create_primary_relationships}}
 					
+				<!--
 					{{#push_to_nla}}
 					<dt>Push To NLA</dt>
 					<dd>
@@ -239,7 +240,7 @@
 							</div>
 						</p>
 					</dd>
-					{{/push_to_nla}}
+					{{/push_to_nla}} -->
 
 					{{#auto_publish}}
 					<dt>Auto Publish</dt>
@@ -271,8 +272,16 @@
 						</p>
 					</dd>
 					{{/assessement_notification_email}}
+					<dt>Contributor Pages</dt>
+					<dd>
+						<p>
+								<div class="well" id="contributor_groups"></div>
+							</p>
+						</dd>
 
 			 	</dl>
+			 				
+			 
 			 	<h3>Harvester Settings</h3>
 			 	<dl class="dl-horizontal">
 			 		{{#uri}}
@@ -565,7 +574,7 @@
 							<div class="controls">
 								<p class="help-inline">
 								<div class="creat-primary normal-toggle-button" value="{{create_primary_relationships}}">
-    								<input type="checkbox" for="create_primary_relationships" name="create-primary">
+    								<input type="checkbox" for="create_primary_relationships" name="create_primary_relationships">
 								</div>
 
 								</p>
@@ -578,20 +587,25 @@
 								<div class="controls">	
 								<p>
 									Class 			
-    								<select name="class_1">
+ 
+								<select data-placeholder="Choose a Class" tabindex="1" class="chzn-select input-xlarge" for="class_1">
+									<option value=""></option>
+									<option value="party">Party</option>
+									<option value="collection">Collection</option>
+									<option value="service">Service</option>
+									<option value="activity">Activity</option>
+								</select>
+								<input type="text" class="input-small hide" name="class_1"  id="class_1" value="{{class_1}}">									
+
+								Class 			
+    								<select data-placeholder="Choose a Class" tabindex="1" class="chzn-select input-xlarge" for="class_2">
+    								<option value=""></option>	
 									<option value="party">Party</option>
 									<option value="collection">Collection</option>
 									<option value="service">Service</option>
 									<option value="activity">Activity</option>
 								</select>	
-								
-									Class 			
-    								<select name="class_2">
-									<option value="party">Party</option>
-									<option value="collection">Collection</option>
-									<option value="service">Service</option>
-									<option value="activity">Activity</option>
-								</select>	
+								<input type="text" class="input-small hide" name="class_2"  id="class_2" value="{{class_2}}">	
 								</p>
 								</div>
 								
@@ -641,17 +655,27 @@
     											
     					</div>
 
+					<!-- This poush to NLA functionality has been excluded for release 10 as NLA are not using it
 						<div class="control-group">
 							<label class="control-label">Party Records to NLA</label>
 							<div class="controls">
 								<p class="help-inline">
-								<div class="normal-toggle-button" value="{{push_to_nla}}">
+								<div class="push_to_nla normal-toggle-button" value="{{push_to_nla}}">
     								<input type="checkbox" for="push_to_nla">
 								</div>
 								</p>
 							</div>
 						</div>
 
+						<div id="nla-push-div" class="hide">
+							<div class="control-group">					
+								<div class="controls">	
+									<p>
+										ISIL: <input name="isil_value" value="{{isil_value}}"/>
+									</p>
+								</div>
+							</div>	
+						</div> -->
 						<div class="control-group">
 							<label class="control-label">Auto Publish Records</label>
 							<div class="controls">
@@ -680,6 +704,16 @@
 								<input type="text" class="input-xlarge" name="assessement_notification_email" value="{{assessement_notification_email}}">
 							</div>
 						</div>
+						<div class="control-group">
+							<label class="control-label" for="assessement_notification_email">Contributor Pages</label>
+							<div class="controls">
+								<input type="radio" class="contributor-page" name="institution_pages_radio" value="0"><p class="help-inline">Do not have contributor pages</p><br />
+								<input type="radio" class="contributor-page" name="institution_pages_radio" value="1"><p class="help-inline">Auto generate Contributor Pages for all my groups</p><br />
+								<input type="radio" class="contributor-page" name="institution_pages_radio" value="2"><p class="help-inline">Manually manage my Contributor Pages and groups</p><br />
+							<input type="text" class="input-small hide" name="institution_pages"  id="institution_pages" value="{{institution_pages}}">	
+							</div>
+						</div>
+
 					</fieldset>
 				</div>
 				<div id="harvester" class="tab-pane">
@@ -700,7 +734,7 @@
 									<option value="GET">RIF</option>
 									<option value="RIF">RIF OAI-PMH</option>
 								</select>
-								<input type="text" class="input-small hide" name="provider_type" value="{{provider_type}}">
+								<input type="text" class="input-small hide" name="provider_type" id="provider_type" value="{{provider_type}}">
 							</div>
 						</div>
 
@@ -712,7 +746,7 @@
 									<option value="RIF">Harvester DIRECT</option>
 									<option value="RIF OAI-PMH">Harvester OAI-PMH</option>
 								</select>
-								<input type="text" class="input-small hide" name="harvest_method" value="{{harvest_method}}">
+								<input type="text" class="input-small hide" name="harvest_method" id="harvest_method" value="{{harvest_method}}">
 							</div>
 						</div>
 
@@ -731,28 +765,31 @@
 									<option value="INCREMENTAL">Incremental Mode</option>
 									<option value="REFRESH">Full Refresh Mode</option>
 								</select>
-								<input type="text" class="input-small hide" name="advanced_harvest_mode" value="{{advanced_harvest_mode}}">
+								<input type="text" class="input-small hide" name="advanced_harvest_mode" id="advanced_harvest_mode" value="{{advanced_harvest_mode}}">
 							</div>
 						</div>
 
 						<div class="control-group">
 							<label class="control-label" for="harvest_date">Harvest Date</label>
-							<div class="controls">
-								<input type="text" class="input-xlarge" name="harvest_date" value="{{harvest_date}}">
+							<div class="controls">																					
+								<div class="input-append">						
+									<input type="text" class="input-large datepicker" name="harvest_date" value="{{harvest_date}}"/>
+									<button class="triggerDatePicker" type="button"><i class="icon-calendar"></i></button>								
+								</div>
 							</div>
 						</div>
 
 						<div class="control-group">
-							<label class="control-label" for="harvest_date">Harvest Frequency</label>
+							<label class="control-label" for="harvest_frequency">Harvest Frequency</label>
 							<div class="controls">
-								<select data-placeholder="Choose a Harvest Frequency" tabindex="1" class="chzn-select input-xlarge" for="harvest_method">
+								<select data-placeholder="Choose a Harvest Frequency" tabindex="1" class="chzn-select input-xlarge" for="harvest_frequency">
 									<option value=""></option>
 									<option value="daily">daily</option>
 									<option value="weekly">weekly</option>
 									<option value="fortnightly">fortnightly</option>
 									<option value="monthly">monthly</option>
 								</select>
-								<input type="text" class="input-small hide" name="harvest_date" value="{{harvest_frequency}}">
+								<input type="text" class="input-small hide" name="harvest_frequency" id="harvest_frequency" value="{{harvest_frequency}}">
 							</div>
 						</div>
 					</fieldset>
