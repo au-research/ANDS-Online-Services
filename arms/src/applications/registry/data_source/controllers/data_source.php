@@ -285,7 +285,7 @@ class Data_source extends MX_Controller {
 				else if(in_array($attrib, $harvesterParams))
 				{
 					$new_value = '';	
-
+				}
 				else if(in_array($attrib, $primaryRelationship)){
 					$new_value = '';				
 				}	
