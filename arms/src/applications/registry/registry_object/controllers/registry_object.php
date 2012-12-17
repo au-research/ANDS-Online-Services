@@ -57,6 +57,7 @@ class Registry_object extends MX_Controller {
 		$jsonData = array();
 		$jsonData['aaData'] = array();
 
+		//ahmagerd shorthand
 		$limit = ($this->input->post('iDisplayLength') ? (int) $this->input->post('iDisplayLength') : 10);
 		$offset = ($this->input->post('iDisplayStart') ? (int) $this->input->post('iDisplayStart') : 0);
 
@@ -68,7 +69,7 @@ class Registry_object extends MX_Controller {
 		//sort
 		$filters['sort'] = array();
 		$aColumns=array('key', 'title', 'status');
-		for($i=0; $i<intval($this->input->post('iSortingCols')); $i++){
+		for($i=0; $i<intval($this->input->post('iSortingCols')); $i++){//black magic
 			if($this->input->post('bSortable_'.intval($this->input->post('iSortCol_'.$i)))=='true'){
 				$filters['sort'][] = array(
 					$aColumns[intval($this->db->escape_str($this->input->post('iSortCol_'.$i)))] => $this->db->escape_str($this->input->post('sSortDir_'.$i))
@@ -82,7 +83,7 @@ class Registry_object extends MX_Controller {
 		if($ros){
 			foreach($ros as $ro){
 				$jsonData['aaData'][] = array(
-					'key'=>$ro->key,
+					'key'=>$ro->registry_object_id,
 					'Title'=>$ro->list_title,
 					'Status'=>$ro->status,
 					'Options'=>'Options'
@@ -94,13 +95,9 @@ class Registry_object extends MX_Controller {
 		$this->load->model('data_source/data_sources', 'ds');
 		$data_source = $this->ds->getByID($data_source_id);
 
-		
-
 		$jsonData['sEcho']=(int)$this->input->post('sEcho');
 		$jsonData['iTotalRecords'] = (int) $data_source->count_total;
-
 		$hasFilter = false;
-		
 		$jsonData['iTotalDisplayRecords'] = $filters['search'] ? sizeof($ros) : $data_source->count_total;
 		$jsonData['filters'] = $filters;
 
@@ -146,14 +143,18 @@ class Registry_object extends MX_Controller {
 		$data['js_lib'] = array('core');
 		$this->load->view("add_registry_object", $data);
 	}
-	
-	function getLeo($id){
+
+	function edit($registry_object_id){
 		$this->load->model('registry_objects', 'ro');
-		$ro = $this->ro->getByID($id);
-		$ro->enrich();
-		echo $ro->getExtRif();
-		//echo $ro->transformToDC();
+		$ro = $this->ro->getByID($registry_object_id);
+		$data['extrif'] = $ro->getExtRif();
+		$data['content'] = $ro->transformCustomForFORM($data['extrif']);
+		$data['title'] = 'Add Registry Objects';
+		$data['scripts'] = array('add_registry_object');
+		$data['js_lib'] = array('core', 'tinymce', 'datepicker');
+		$this->load->view("add_registry_object", $data);
 	}
+	
 
 	/**
 	 * Get the edit form of a Record

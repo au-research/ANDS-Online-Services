@@ -57,9 +57,9 @@
       <img src="<?php echo base_url();?>/assets/img/ands_logo_white.png" alt="ANDS Logo White" tip="Dashboard" my="top center" at="bottom center"/> 
     </div>
     
-    <div id="search">
+    <!--div id="search">
       <input type="text" placeholder="Search here..."/><button type="submit" class="tip-right" title="Search"><i class="icon-search icon-white"></i></button>
-    </div>
+    </div-->
     <div id="user-nav" class="navbar navbar-inverse">
             <ul class="nav btn-group">
               <?php if($this->user->hasFunction('REGISTRY_USER') && mod_enabled('registry')): ?>

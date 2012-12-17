@@ -1309,8 +1309,6 @@ form {
 	margin-bottom: 0;
 }
 .form-horizontal .control-group {
-	border-top: 1px solid #ffffff;
-	border-bottom: 1px solid #eeeeee;
 	margin-bottom: 0;
 }
 .form-horizontal .control-group:last-child {
@@ -1325,7 +1323,7 @@ form {
 	padding: 10px 0;
 }
 .form-horizontal input[type=text], .form-horizontal input[type=password], .form-horizontal textarea {
-	width: 80%;
+	
 }
 .form-horizontal .form-actions {
 	margin-top: 0;

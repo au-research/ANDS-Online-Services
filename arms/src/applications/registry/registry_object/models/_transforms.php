@@ -89,7 +89,7 @@ class Transforms {
 		if (is_null(self::$extrif_to_form_transformer))
 		{
 			$extRifToForm = new DomDocument();
-			$extRifToForm->load(APP_PATH.'registry_object/transforms/extrif_to_form.xsl');
+			$extRifToForm->load(APP_PATH.'registry_object/transforms/extrif_to_new_form.xsl');
 			$extRifToFormproc = new XSLTProcessor();
 			$extRifToFormproc->importStyleSheet($extRifToForm);
 			self::$extrif_to_form_transformer =	$extRifToFormproc;
