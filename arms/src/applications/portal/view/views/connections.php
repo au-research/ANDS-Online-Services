@@ -9,7 +9,17 @@
 			{
 				if(isset($entry[0]['class']))
 				{
-					$connDiv .= "<p class=".$entry[0]['class']."><a href='?id=".$entry[0]['registry_object_id']."'>".$entry[0]['title']."</a></p>";
+					// Link connections to PUBLISHED objects to their SLUG for SEOness...
+					if ($entry[0]['status'] == PUBLISHED)
+					{
+						$url = base_url() . $entry[0]['slug'];
+					}
+					else
+					{
+						$url = base_url() . "view/?id=" . $entry[0]['registry_object_id'];
+					}
+
+					$connDiv .= "<p class=".$entry[0]['class']."><a href='".$url."'>".$entry[0]['title']."</a></p>";
 				}
 			}
 		}
