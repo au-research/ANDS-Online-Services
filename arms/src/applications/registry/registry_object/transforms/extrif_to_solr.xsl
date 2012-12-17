@@ -35,7 +35,7 @@
 	            <xsl:apply-templates select="extRif:extendedMetadata/extRif:flag"/>
       			<xsl:apply-templates select="extRif:extendedMetadata/extRif:warning_count"/>
       			<xsl:apply-templates select="extRif:extendedMetadata/extRif:error_count"/>
-     			<xsl:apply-templates select="extRif:extendedMetadata/extRif:url_slug"/>
+     			<xsl:apply-templates select="extRif:extendedMetadata/extRif:slug"/>
       			<xsl:apply-templates select="extRif:extendedMetadata/extRif:manually_assessed_flag"/>
       			<xsl:apply-templates select="extRif:extendedMetadata/extRif:gold_status_flag"/>
       			<xsl:apply-templates select="extRif:extendedMetadata/extRif:quality_level"/>
@@ -69,9 +69,9 @@
         </xsl:element>       
     </xsl:template>
     
-    <xsl:template match="extRif:urlSlug">
+    <xsl:template match="extRif:slug">
         <xsl:element name="field">
-            <xsl:attribute name="name">url_slug</xsl:attribute>
+            <xsl:attribute name="name">slug</xsl:attribute>
             <xsl:value-of select="."/>
         </xsl:element>       
     </xsl:template>

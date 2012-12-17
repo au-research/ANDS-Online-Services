@@ -48,7 +48,15 @@ class Search extends MX_Controller {
 			foreach($filters as $key=>$value){
 				$value = urldecode($value);
 				switch($key){
-					case 'q': $this->solr->setOpt('q', $value);break;
+					case 'q': 
+						// Default behaviour is to only return PUBLISHED records
+						// (unless explicitly requested otherwise)
+						if (strpos($value, "status:(") === FALSE)
+						{
+							$value .= " +status:(\"" . PUBLISHED . "\")";
+						}
+						$this->solr->setOpt('q', $value);
+					break;
 					case 'p': 
 						$page = (int)$value;
 						if($page>1){
