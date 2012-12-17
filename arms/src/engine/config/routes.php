@@ -41,6 +41,8 @@
 $route['default_controller'] = $this->config->item('default_controller');
 $route['404_override'] = '';
 
+// Include any application-specific routes (if specified)
+$route = array_merge($route, $this->config->item('app_routes'));
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

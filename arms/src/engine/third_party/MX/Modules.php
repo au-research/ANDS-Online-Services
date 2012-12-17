@@ -94,7 +94,6 @@ class Modules
 			if (empty($class)) return;
 	
 			/* set the module directory */
-			var_dump(APPPATH);
 			$path = APPPATH.'controllers/'.CI::$APP->router->fetch_directory();
 			
 			/* load the controller class */

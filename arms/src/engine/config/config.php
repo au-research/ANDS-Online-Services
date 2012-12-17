@@ -21,11 +21,13 @@ $application_directives = array(
 				"active_application" => "registry",
 				"default_controller" => "auth/dashboard",
 			),
+
 	"portal" => 
 			array(	
 				"base_url" => "%%BASEURL%%/portal/",
 				"active_application" => "portal",
 				"default_controller" => "home/index",
+				"routes" => array("(:any)"=>"core/dispatcher/$1"),
 			)
 );
 
@@ -381,6 +383,7 @@ $default_base_url .= '://'. (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'
 $default_base_url .= str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']);
 
 $config['default_base_url'] = $default_base_url;
+$config['app_routes'] = array();
 
 /* Reroute our requests and setup the CI routing environment based on the active application */
 if (isset($application_directives[$_GET['app']]))
@@ -391,6 +394,7 @@ if (isset($application_directives[$_GET['app']]))
 
 	/* What is the default controller for this app? (will be inserted as the default route) */
 	$config['default_controller'] = $application_directives[$_GET['app']]['default_controller'];
+	$config['app_routes'] = (isset($application_directives[$_GET['app']]['routes']) ? $application_directives[$_GET['app']]['routes'] : array());
 	define("APP_PATH",'./applications/'.$active_application.'/');
 }
 else
