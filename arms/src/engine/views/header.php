@@ -36,6 +36,16 @@
     <link href="<?php echo base_url();?>assets/lib/unicorn_styles/css/unicorn.main.css" rel="stylesheet">
     <link href="<?php echo base_url();?>assets/lib/unicorn_styles/css/unicorn.grey.css" rel="stylesheet">
 
+
+    <!-- additional styles -->
+    <?php
+      if(isset($less)){
+        foreach($less as $s){
+          echo '<link href="'.asset_url('less/'.$s.'.less').'" rel="stylesheet/less" type="text/css">';
+        }
+      }
+    ?>
+
     <!-- The HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
