@@ -4,6 +4,7 @@ class View extends MX_Controller {
 
 	function index(){
 		$data['title']='Research Data Australia';
+		$data['js_lib'] = array('googleapi');
 
 		if (!$this->input->get('slug') && !$this->input->get('id'))
 		{

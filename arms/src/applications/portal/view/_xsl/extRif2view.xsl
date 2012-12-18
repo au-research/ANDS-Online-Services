@@ -131,7 +131,9 @@
                 <div id="key_value"></div>
                 <div id="class"><xsl:value-of select="$objectClass"/></div>       
                 <span id="key"><xsl:value-of select="ro:key"/></span>
-                <span id="keyHash"><xsl:value-of select="//extRif:extendedMetadata/extRif:keyHash"/></span>
+                <span id="status"><xsl:value-of select="//extRif:extendedMetadata/extRif:status"/></span>
+                <span id="slug"><xsl:value-of select="//extRif:extendedMetadata/extRif:slug"/></span>
+                <span id="registry_object_id"><xsl:value-of select="//extRif:extendedMetadata/extRif:id"/></span>
             </div>
 
             <xsl:apply-templates select="ro:collection | ro:activity | ro:party | ro:service"/>
@@ -1152,7 +1154,6 @@
  <xsl:value-of select="." disable-output-escaping="yes"/><br />
 </xsl:template> 
 
-
 <xsl:template match="extRif:rights[@type!='licence'] | ro:description[@type='rights'] | ro:description[@type='accessRights']">
 
  <xsl:if test="./@type='rights'"><h4>Rights statement</h4></xsl:if>
@@ -1190,6 +1191,11 @@
 </p>		
 </xsl:template>
 
+<xsl:template match="extRif:description[@type='hierarchyGraph']" mode="content">
+  <p class="hierarchyGraph" style="display:none;">
+    <xsl:attribute name="data-rootnode"><xsl:value-of select="normalize-space(.)"/></xsl:attribute>
+  </p>
+</xsl:template>
 
 <xsl:template match="extRif:description" mode="content">     
     <div>

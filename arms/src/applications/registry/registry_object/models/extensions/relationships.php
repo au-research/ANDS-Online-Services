@@ -16,8 +16,11 @@ class Relationships_Extension extends ExtensionBase
 
 		$related_keys = array();
 		$sxml = $this->ro->getSimpleXml();
-		foreach ($sxml->xpath('//'.$this->ro->class.'/relatedObject/key') AS $related_object_key)
+		foreach ($sxml->xpath('//'.$this->ro->class.'/relatedObject') AS $related_object)
 		{
+			$related_object_key = (string)$related_object->key;
+			$related_object_type = (string)$related_object->relation[0]['type'];
+
 			$result = $this->db->select('class')->get_where('registry_objects', array('key'=>(string)$related_object_key));
 			$class = NULL;
 			if ($result->num_rows() > 0)
@@ -28,7 +31,14 @@ class Relationships_Extension extends ExtensionBase
 			}
 			$related_keys[] = (string)$related_object_key;
 			
-			$this->db->insert('registry_object_relationships', array("registry_object_id"=>$this->ro->id, "related_object_key" => (string)$related_object_key,'related_object_class'=>$class));
+			$this->db->insert('registry_object_relationships', 
+				array(
+						"registry_object_id"=>$this->ro->id, 
+						"related_object_key" => (string) $related_object_key,
+						'related_object_class'=> (string) $class,
+						"relation_type" => (string) $related_object_type,
+				)
+			);
 		}
 
 		return $related_keys;

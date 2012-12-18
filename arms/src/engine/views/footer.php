@@ -52,6 +52,9 @@
             <script language="javascript" type="text/javascript" src="<?php echo base_url();?>assets/lib/jqplot/jquery.jqplot.min.js"></script>
             <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/lib/jqplot/jquery.jqplot.css" />
             
+        <?php elseif($lib=='googleapi'):?>
+            <script type='text/javascript' src='https://www.google.com/jsapi'></script>
+
         <?php elseif($lib=='tinymce'):?>
             <script type="text/javascript" src="<?php echo base_url();?>assets/lib/tiny_mce/tiny_mce.js"></script>
             <script>

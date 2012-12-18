@@ -275,6 +275,37 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 	}
 
 
+	public function getConnectionGraph()
+	{
+		$this->load->model('connectiontree');
+		$this->load->model('registry_object/registry_objects','ro');
+
+		// Depth away from the current registry object (toward the branches)
+		$depth = (int) ($this->input->get('depth') ?: 2);
+
+		$published_only = $this->input->get('published_only') ?: TRUE;
+
+		if ($this->input->get('key'))
+			{
+				$matching_regobjs = $this->ro->getByKey((string)$this->input->get('key'));
+				if (is_array($matching_regobjs))
+				{
+					$root_registry_object = array_pop($matching_regobjs);
+					echo json_encode(array("status"=>"success", "nodeid"=>$this->input->get('nodeid'),
+										"tree"=>$this->connectiontree->get($root_registry_object, $depth,$published_only)));
+				}
+				else
+				{
+					echo json_encode(array("status"=>"fail", "tree"=>null));
+				}
+
+			}
+			else
+			{
+				echo json_encode(array("status"=>"fail", "tree"=>null));
+			}
+		}
+
 
 
 	/* Setup this controller to handle the expected response format */

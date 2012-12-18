@@ -58,4 +58,62 @@ $(document).ready(function() {
 			window.location = base_url+'search/#!/q='+$(this).val();
 		}
 	});
+
+
+	if (typeof google == 'object') {
+	    google.setOnLoadCallback(function()
+	    {
+			$('.hierarchyGraph').each(function(i){
+				$(this).attr('id', 'hierarchyGraph-' + i);
+
+				var published_only = "true";
+				if ($('#registryObjectMetadata #status').html() != "PUBLISHED")
+				{
+					published_only = "false";
+				}
+
+				$.get(
+					default_base_url + 'registry/services/rda/getConnectionGraph?key=' + $(this).attr('data-rootnode') 
+																				+ "&nodeid=" + 'hierarchyGraph-' + i 
+																				+ "&published_only=" + published_only,
+					function(data)
+					{
+						if (data.status == "success" && data.tree != null)
+						{
+							$("#" + data.nodeid).show();
+							var datatable = new google.visualization.DataTable();
+							var chart = new google.visualization.OrgChart(document.getElementById(data.nodeid));
+							datatable.addColumn('string', 'RegistryObject');
+							datatable.addColumn('string', 'ParentID');
+							datatable.addColumn('string', 'ToolTip');
+							datatable.addColumn('string', 'URL');
+							var selected_row = null;
+							for (var i = 0; i < data.tree.length; i++) {
+								datatable.addRow( data.tree[i] );
+
+								if (($('#registryObjectMetadata #status').html() == "PUBLISHED" && data.tree[i][0].v == $('#registryObjectMetadata #slug').html())
+									||
+									($('#registryObjectMetadata #status').html() != "PUBLISHED" && data.tree[i][0].v == $('#registryObjectMetadata #registry_object_id').html()))
+								{
+									selected_row = i;
+								}
+
+							};
+
+							google.visualization.events.addListener(chart, 'select', function () {
+							   var selection = chart.getSelection();
+							    window.location = base_url + datatable.getValue(selection[0].row, 3);
+								});
+
+					        chart.draw(datatable, {allowHtml:true, nodeClass:"registryObjectHierarchyNode"});
+					        chart.setSelection([{row:selected_row, column:null}]);
+						}
+					},
+					'json'
+				);
+
+			});
+
+		});
+	}
 });

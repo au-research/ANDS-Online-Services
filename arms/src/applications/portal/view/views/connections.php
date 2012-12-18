@@ -3,23 +3,29 @@
 	if (isset($connections_contents))
 	{
 		
-		foreach($connections_contents as $data)
+		foreach($connections_contents as $classes)
 		{
-			foreach($data as $entry)
+			foreach($classes as $classname => $class)
 			{
-				if(isset($entry[0]['class']))
-				{
-					// Link connections to PUBLISHED objects to their SLUG for SEOness...
-					if ($entry[0]['status'] == PUBLISHED)
-					{
-						$url = base_url() . $entry[0]['slug'];
-					}
-					else
-					{
-						$url = base_url() . "view/?id=" . $entry[0]['registry_object_id'];
-					}
+				// XXX: handle count greater than X
+				if (strpos($classname, "_count")) continue;
 
-					$connDiv .= "<p class=".$entry[0]['class']."><a href='".$url."'>".$entry[0]['title']."</a></p>";
+				foreach ($class AS $entry)
+				{
+					if(isset($entry['class']))
+					{
+						// Link connections to PUBLISHED objects to their SLUG for SEOness...
+						if ($entry['status'] == PUBLISHED)
+						{
+							$url = base_url() . $entry['slug'];
+						}
+						else
+						{
+							$url = base_url() . "view/?id=" . $entry['registry_object_id'];
+						}
+
+						$connDiv .= "<p class=".$entry['class']."><a href='".$url."'>".$entry['title']."</a></p>";
+					}
 				}
 			}
 		}

@@ -47,6 +47,18 @@
 	<script type="text/javascript" src="<?php echo asset_url('lib/less-1.3.0.min.js', 'base');?>" type="text/javascript"></script>
 	<script type="text/javascript" src="<?php echo asset_url('lib/mustache.js','base');?>"></script>
 	<script type="text/javascript" src="<?php echo asset_url('lib/jquery.ba-hashchange.min.js', 'base');?>"></script> <!-- Monitoring on Hash Change-->
+    
+    <?php if(isset($js_lib)): ?>
+	    <?php foreach($js_lib as $lib):?>
+	 		<?php if($lib=='googleapi'):?>
+	            <script type='text/javascript' src='https://www.google.com/jsapi'></script>
+	            <script type="text/javascript">
+	            	localGoogle = google;
+	            	google.load("visualization", "1", {packages:["orgchart"]});
+				</script>
+	        <?php endif; ?>
+		<?php endforeach;?>
+	<?php endif; ?>
 
 	<!-- Module-specific styles and scripts -->
     <?php if (isset($scripts)): foreach($scripts as $script):?>
