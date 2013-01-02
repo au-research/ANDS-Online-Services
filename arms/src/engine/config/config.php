@@ -27,7 +27,7 @@ $application_directives = array(
 				"base_url" => "%%BASEURL%%/portal/",
 				"active_application" => "portal",
 				"default_controller" => "home/index",
-				"routes" => array("(:any)"=>"core/dispatcher/$1"),
+				"routes" => array("topic/(:any)" => "topic/view_topic/$1","(:any)"=>"core/dispatcher/$1", ),
 			)
 );
 

@@ -56,6 +56,10 @@
 	</div><!-- right -->		
 	<div class="clear"></div>
 
+	
+	<div class="social">
+		<a href="#"><img src="<?php echo asset_url('images/facebook.png','core');?>" alt="" /></a><a href="#"><img src="<?php echo asset_url('images/twitter.png','core');?>" alt="" /></a> RSS,ATOM and Twitter feeds are now available. Learn more here....
+	</div><!-- social -->
 
 
 <script type="text/x-mustache" id="spotlight_template">

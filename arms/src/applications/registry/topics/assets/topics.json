@@ -1,0 +1,36 @@
+{"topics": 
+	{"tropics" : 
+		{
+			"name":"Tropical Research", 
+			"slug":"tropics",
+			"html":"blah blah...html",
+			"auto_boxes":
+			[
+				{
+					"id":"collections",
+					"heading":"Collections Box 1",
+					"query":"",
+					"record_limit":"3"
+				},
+				{
+					"id":"collections2",
+					"heading":"Collections Box 2",
+					"query":"",
+					"record_limit":"3"
+				}
+			],
+			"manual_boxes":
+			[
+				{
+					"heading":"Other Related Links",
+					"items":
+					[
+						{"url":"http://google.com", "title":"The Google"}
+					]
+				}
+			]
+			
+
+		}
+	}
+}
