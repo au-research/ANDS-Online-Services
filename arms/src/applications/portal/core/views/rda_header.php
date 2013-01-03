@@ -23,18 +23,18 @@
 <body>
 	<div class="header">
 		<div class="head">
-			<a href="#" class="logo"><img src="<?php echo asset_url('images/logo.png','core');?>" alt="" /></a>
+			<a href="<?=base_url('');?>" class="logo"><img src="<?php echo asset_url('images/logo.png','core');?>" alt="Research Data Australia Home Page Link (brought to you by ANDS)" /></a>
 			<div class="tagline">
 				<span>Research Data</span> Australia
 			</div><!-- tagline -->
 			<ul class="top_nav">
-				<li><a href="#">Home</a></li>
-				<li><a href="#">About</a></li>
-				<li><a href="#">Collections</a></li>								
-				<li><a href="#">Parties</a></li>
-				<li><a href="#">Activities</a></li>
-				<li><a href="#">Services</a></li>
+				<li><a href="<?=base_url('');?>">Home</a></li>
+				<li><a href="<?=base_url('search/#!/q=/tab=collection');?>">Collections</a></li>								
+				<li><a href="<?=base_url('search/#!/q=/tab=party');?>">Parties</a></li>
+				<li><a href="<?=base_url('search/#!/q=/tab=activity');?>">Activities</a></li>
+				<li><a href="<?=base_url('search/#!/q=/tab=service');?>">Services</a></li>
 				<li><a href="<?=base_url("topic");?>">Topics</a></li>
+				<li><a href="<?=base_url('home/contact');?>">Contact Us</a></li>
 			</ul><!-- top_nav -->
 			<div class="clear"></div>
 		</div><!-- head -->

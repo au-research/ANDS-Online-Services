@@ -10,8 +10,8 @@
 				'All' => array('facet_value'=>'all','display'=>'All','selected'=>true, 'count'=>0),
 				'collection' => array('facet_value'=>'collection','display'=>'Collections','selected'=>false, 'count'=>0),
 				'party' => array('facet_value'=>'party','display'=>'Parties','selected'=>false, 'count'=>0),
-				'service' => array('facet_value'=>'service','display'=>'Services','selected'=>false, 'count'=>0),
-				'activity' => array('facet_value'=>'activity','display'=>'Activities','selected'=>false, 'count'=>0)
+				'activity' => array('facet_value'=>'activity','display'=>'Activities','selected'=>false, 'count'=>0),
+				'service' => array('facet_value'=>'service','display'=>'Services','selected'=>false, 'count'=>0)
 			);
 			
 			foreach($tabs as $t){
