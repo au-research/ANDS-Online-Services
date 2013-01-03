@@ -74,12 +74,31 @@ class Registry_object extends MX_Controller {
 		if($ro){
 			$data['scripts'] = array();
 			$data['js_lib'] = array('core');
+			$data['title'] = $ro->title;
 			$data['ro'] = $ro;
 			$data['rif_html'] = $ro->transformForHtml();
 			$this->load->view('registry_object_index', $data);
 		}else{
 			show_404('Unable to Find Registry Object ID: '.$ro_id);
 		}
+	}
+
+	public function add(){
+		$data['title'] = 'Add Registry Objects';
+		$data['scripts'] = array('add_registry_object');
+		$data['js_lib'] = array('core');
+		$this->load->view("add_registry_object", $data);
+	}
+
+	public function edit($registry_object_id){
+		$this->load->model('registry_objects', 'ro');
+		$ro = $this->ro->getByID($registry_object_id);
+		$data['extrif'] = $ro->getExtRif();
+		$data['content'] = $ro->transformCustomForFORM($data['extrif']);
+		$data['title'] = 'Add Registry Objects';
+		$data['scripts'] = array('add_registry_object');
+		$data['js_lib'] = array('core', 'tinymce', 'datepicker');
+		$this->load->view("add_registry_object", $data);
 	}
 
 	public function getData($data_source_id, $filter='', $value=''){
@@ -178,23 +197,7 @@ class Registry_object extends MX_Controller {
 		echo $jsonData;
 	}
 
-	function add(){
-		$data['title'] = 'Add Registry Objects';
-		$data['scripts'] = array('add_registry_object');
-		$data['js_lib'] = array('core');
-		$this->load->view("add_registry_object", $data);
-	}
-
-	function edit($registry_object_id){
-		$this->load->model('registry_objects', 'ro');
-		$ro = $this->ro->getByID($registry_object_id);
-		$data['extrif'] = $ro->getExtRif();
-		$data['content'] = $ro->transformCustomForFORM($data['extrif']);
-		$data['title'] = 'Add Registry Objects';
-		$data['scripts'] = array('add_registry_object');
-		$data['js_lib'] = array('core', 'tinymce', 'datepicker');
-		$this->load->view("add_registry_object", $data);
-	}
+	
 	
 
 	/**

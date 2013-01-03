@@ -5,6 +5,12 @@ class Search extends MX_Controller {
 	function index(){
 		$data['title']='Research Data Australia - Search';
 		$data['scripts'] = array('search');
+		$this->load->view('search_layout', $data);
+	}
+
+	function spatial(){
+		$data['title']='Research Data Australia - Search';
+		$data['scripts'] = array('search');
 		//$data['scripts'] = array('home_page');
 		$this->load->view('search_layout', $data);
 	}
@@ -51,10 +57,10 @@ class Search extends MX_Controller {
 					case 'q': 
 						// Default behaviour is to only return PUBLISHED records
 						// (unless explicitly requested otherwise)
-						if (strpos($value, "status:(") === FALSE)
-						{
-							$value .= " +status:(\"" . PUBLISHED . "\")";
-						}
+						// if (strpos($value, "status:(") === FALSE)
+						// {
+						// 	$value .= " +status:(\"" . PUBLISHED . "\")";
+						// }
 						$this->solr->setOpt('q', $value);
 					break;
 					case 'p': 
@@ -76,10 +82,15 @@ class Search extends MX_Controller {
 					case 'subject': 
 						$this->solr->setOpt('subject_value_resolved', $value);
 						break;
+					case 'spatial':
+						$this->solr->setOpt('fq', 'spatial:"Intersects('.$value.')"');
+						break;
 				}
 				
 			}
 		}
+
+		//var_dump($this->solr->constructFieldString());
 
 		/**
 		 * Doing the search

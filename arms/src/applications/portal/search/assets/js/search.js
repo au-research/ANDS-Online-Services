@@ -43,14 +43,13 @@ $(document).ready(function() {
 });
 
 function executeSearch(searchData, searchUrl){
-
 	$.ajax({
 		url:searchUrl, 
 		type: 'POST',
 		data: {filters:searchData},
 		dataType:'json',
 		success: function(data){
-			//console.log(data);
+			console.log(data);
 
 			$('#search-result, .pagination, #facet-result').empty();
 
