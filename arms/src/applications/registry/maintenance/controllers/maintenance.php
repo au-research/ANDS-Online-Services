@@ -54,6 +54,7 @@ class Maintenance extends MX_Controller {
 			$item['title'] = $ds->title;
 			$item['id'] = $ds->id;
 			$item['totalCountDB'] = $this->mm->getTotalRegistryObjectsCount('db', $ds->id); //kinda bad but ok for now
+			$item['totalCountDBPUBLISHED'] = $this->mm->getTotalRegistryObjectsCount('db', $ds->id, 'PUBLISHED');
 			//$item['totalCountSOLR'] = $this->mm->getTotalRegistryObjectsCount('solr', $ds->id); bad bad query
 			if(isset($data_sources_indexed_count[$ds->id])){
 				$item['totalCountSOLR'] = $data_sources_indexed_count[$ds->id];
@@ -103,7 +104,7 @@ class Maintenance extends MX_Controller {
 		$this->load->model('data_source/data_sources', 'ds');
 		$this->load->library('solr');
 
-		$ids = $this->ro->getIDsByDataSourceID($data_source_id);
+		$ids = $this->ro->getIDsByDataSourceID($data_source_id, false, 'PUBLISHED');
 		$i = 0;
 		foreach($ids as $ro_id){
 			try{

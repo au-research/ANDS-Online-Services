@@ -57,6 +57,7 @@
 					<th>id</th>
 					<th>Title</th>
 					<th>Total Registry Count</th>
+					<th>Total Published</th>
 					<th>Total Indexed</th>
 					<th>Total Missing</th>
 					<th>Action</th>
@@ -68,6 +69,7 @@
 					<td>{{id}}</td>
 					<td>{{title}}</td>
 					<td>{{totalCountDB}}</td>
+					<td>{{totalCountDBPUBLISHED}}</td>
 					<td>{{totalCountSOLR}}</td>
 					<td>{{totalMissing}}</td>
 					<td>
