@@ -11,7 +11,7 @@ $(function(){
 		"iDisplayLength": 10,
 		"iDisplayStart": 0,
 		"aoColumns":[
-	        {"sWidth": '50px', "mDataProp": "key"},
+	        {"sWidth": '50px', "mDataProp": "key", "sClass": "key"},
 	        {"sWidth": '300px', "mDataProp": "Title"},
 	        {"sWidth": '100px', "mDataProp": "Status"},
 	        {"sWidth": '260px', "mDataProp": "Options", bSearchable: false, bSortable: false}

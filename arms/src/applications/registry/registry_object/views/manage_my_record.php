@@ -5,7 +5,7 @@
 ?>
 
 <?php  $this->load->view('header');?>
-<input type="hidden" value="<?php echo $data_source->id;?>" id="data_source_id"/>
+<input type="hidden" value="<?php echo $data_source['id'];?>" id="data_source_id"/>
 <div id="content" style="margin-top:45px;margin-left:0px">
 	<div id="content-header">
 		<h1>Manage My Record</h1>
@@ -15,7 +15,7 @@
 	</div>
 	<div id="breadcrumb">
 		<a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a>
-		<a href="#" class="current"><?php echo $data_source->title;?></a>
+		<a href="#" class="current"><?php echo $data_source['title'];?></a>
 		<div style="float:right">
 			<a>Selected <b>3</b> / 146</a>
 		</div>
@@ -27,25 +27,25 @@
 				<ul class="stat-boxes">
 					<li>
 						<div class="right">
-							<strong><?php echo $data_source->count_total;?></strong>
+							<strong><?php echo $data_source['count_total'];?></strong>
 							Records
 						</div>
 					</li>
 					<li class="ds_filter" type="status" _value="APPROVED">
 						<div class="right peity_bar_good">
-							<strong><?php echo $data_source->count_APPROVED;?></strong>
+							<strong><?php echo $data_source['count_APPROVED'];?></strong>
 							APPROVED
 						</div>
 					</li>
 					<li class="ds_filter" type="status" _value="SUBMITTED_FOR_ASSESSMENT">
 						<div class="right peity_bar_good">
-							<strong><?php echo $data_source->count_SUBMITTED_FOR_ASSESSMENT;?></strong>
+							<strong><?php echo $data_source['count_SUBMITTED_FOR_ASSESSMENT'];?></strong>
 							Submitted
 						</div>
 					</li>
 					<li>
 						<div class="right peity_bar_good">
-							<strong><?php echo $data_source->count_PUBLISHED;?></strong>
+							<strong><?php echo $data_source['count_PUBLISHED'];?></strong>
 							Published
 						</div>
 					</li>

@@ -31,16 +31,33 @@ class Registry_object extends MX_Controller {
 			
 			$data_source->updateStats();//TODO: XXX
 
-			$data['data_source'] = $data_source;
+			//$data['data_source'] = $data_source;
+			$data['data_source'] = array(
+				'title'=>$data_source->title,
+				'id'=>$data_source->id,
+				'count_total'=>$data_source->count_total,
+				'count_APPROVED'=>$data_source->count_APPROVED,
+				'count_SUBMITTED_FOR_ASSESSMENT'=>$data_source->count_SUBMITTED_FOR_ASSESSMENT,
+				'count_PUBLISHED'=>$data_source->count_PUBLISHED
+			);
 
 			//MMR
-			$this->load->model('registry_object/registry_objects', 'ro');
-			$ros = $this->ro->getByDataSourceID($data_source_id);
+			//$this->load->model('registry_object/registry_objects', 'ro');
+			//$ros = $this->ro->getByDataSourceID($data_source_id);
 
 		}else{
 			//showing all registry objects for all datasource
-			$data['data_source_title'] = 'Viewing All Registry Objects';
-			$data['data_source_id'] = 0;
+			//TODO: check for privileges
+			$this->load->model('maintenance/maintenance_stat', 'mm');
+			$total = $this->mm->getTotalRegistryObjectsCount('db');
+			$data['data_source'] = array(
+				'title'=>'Viewing All Registry Object',
+				'id'=>'0',
+				'count_total'=>$total,
+				'count_APPROVED'=>0,
+				'count_SUBMITTED_FOR_ASSESSMENT'=>0,
+				'count_PUBLISHED'=>0
+			);
 			//show_error('No Data Source ID provided. use all data source view for relevant roles');
 			
 		}
@@ -49,6 +66,20 @@ class Registry_object extends MX_Controller {
 
 
 		$this->load->view("manage_my_record", $data);
+	}
+
+	public function view($ro_id){
+		$this->load->model('registry_object/registry_objects', 'ro');
+		$ro = $this->ro->getByID($ro_id);
+		if($ro){
+			$data['scripts'] = array();
+			$data['js_lib'] = array('core');
+			$data['ro'] = $ro;
+			$data['rif_html'] = $ro->transformForHtml();
+			$this->load->view('registry_object_index', $data);
+		}else{
+			show_404('Unable to Find Registry Object ID: '.$ro_id);
+		}
 	}
 
 	public function getData($data_source_id, $filter='', $value=''){
@@ -79,11 +110,21 @@ class Registry_object extends MX_Controller {
 
 		//Get Registry Objects
 		$this->load->model('registry_object/registry_objects', 'ro');
-		$ros = $this->ro->getByDataSourceID($data_source_id,$limit,$offset,$filters);
+		if($data_source_id >0) {
+			$ros = $this->ro->getByDataSourceID($data_source_id,$limit,$offset,$filters);
+			$total = (int) $data_source->count_total;
+		}else{
+			$this->load->model('registry_object/registry_objects', 'ro');
+			$ros = $this->ro->getAll($limit, $offset, $filters);
+			$this->load->model('maintenance/maintenance_stat', 'mm');
+			$total = $this->mm->getTotalRegistryObjectsCount('db');
+		}
+
 		if($ros){
 			foreach($ros as $ro){
 				$jsonData['aaData'][] = array(
-					'key'=>$ro->registry_object_id,
+					'key'=>anchor('registry_object/view/'.$ro->registry_object_id, $ro->key),
+					'id'=>$ro->registry_object_id,
 					'Title'=>$ro->list_title,
 					'Status'=>$ro->status,
 					'Options'=>'Options'
@@ -96,9 +137,9 @@ class Registry_object extends MX_Controller {
 		$data_source = $this->ds->getByID($data_source_id);
 
 		$jsonData['sEcho']=(int)$this->input->post('sEcho');
-		$jsonData['iTotalRecords'] = (int) $data_source->count_total;
+		$jsonData['iTotalRecords'] = $total;
 		$hasFilter = false;
-		$jsonData['iTotalDisplayRecords'] = $filters['search'] ? sizeof($ros) : $data_source->count_total;
+		$jsonData['iTotalDisplayRecords'] = $filters['search'] ? sizeof($ros) : $total;
 		$jsonData['filters'] = $filters;
 
         echo json_encode($jsonData);

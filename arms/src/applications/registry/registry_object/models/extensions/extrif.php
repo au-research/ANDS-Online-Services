@@ -20,7 +20,7 @@ class Extrif_Extension extends ExtensionBase
 		$attributes = $xml->attributes(EXTRIF_NAMESPACE);
 
 		// Cannot enrich already enriched RIFCS!!
-		if(true)//! (string) $attributes['enriched'])
+		if(! (string) $attributes['enriched'])//! (string) $attributes['enriched'])
 		{
 			$xml->addAttribute("extRif:enriched","true",EXTRIF_NAMESPACE);
 			$xml->addAttribute("xmlns",RIFCS_NAMESPACE);
@@ -123,7 +123,6 @@ class Extrif_Extension extends ExtensionBase
 			$xslt_processor = Transforms::get_extrif_to_html_transformer();
 			$dom = new DOMDocument();
 			$dataSource = $this->ro->data_source_key;
-			$this->ro->enrich();
 			$dom->loadXML($this->ro->getExtRif());
 			$xslt_processor->setParameter('','dataSource',$dataSource);
 			return $xslt_processor->transformToXML($dom);

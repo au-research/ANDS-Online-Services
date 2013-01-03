@@ -236,6 +236,35 @@ class Registry_objects extends CI_Model {
 					       })));
 	}
 
+	function getAll($limit=10, $offset=0, $args=null)
+	{
+		return $this->_get(array(array('args' => array(
+									'search'=>$args['search'] ? $args['search'] : false,
+									'sort'=>$args['sort'],
+									'filter'=>$args['filter']
+								),
+					       'fn' => function($db, $args) {
+						       $db->select("registry_object_id")
+							       ->from("registry_objects");
+							   	if($args['search']) {
+							   		$db->like('title',$args['search'],'both');
+							   		$db->or_like('key', $args['search'],'both');
+							   	}
+						   		if($args['sort']){
+						   			foreach($args['sort'] as $sort){
+						   				foreach($sort as $key=>$value){
+						   					$db->order_by($key, $value);
+						   				}
+						   			}
+						   		}
+						   		if($args['filter']){
+						   			foreach($args['filter'] as $key=>$value){
+						   				$db->where($key,$value);
+						   			}
+						   		}
+						       return $db;
+					       })),true, $limit, $offset);
+	}
 
 	function getByDataSourceID($data_source_id, $limit=10, $offset=0, $args=null){
 		return $this->_get(array(array('args' => array(
