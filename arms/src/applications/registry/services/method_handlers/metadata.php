@@ -23,14 +23,16 @@ class MetadataMethod extends MethodHandler
 		$fields = array();
 		foreach ($forwarded_params AS $param_name => $_)
 		{
-			$fields[$param_name] = $this->params[$param_name];
+
+			//var_dump($param_name);
+			$fields[str_replace("facet_","facet.",$param_name)] = $this->params[$param_name];
 		}
-		
+
 		if (isset($this->params['debugAttributes']))
 		{
 			unset($this->default_params['fl']);
 		}
-		
+
 		$fields = array_merge($this->default_params, $fields);
 		
 		$CI =& get_instance();
@@ -44,11 +46,26 @@ class MetadataMethod extends MethodHandler
 		$result = $CI->solr->executeSearch(true);
 		
 		if (!isset($this->params['debugQuery']))
+		{			
+			$output = $result['response'];
+		
+			// Special case for the jswidget (which wants to know which internal reference ID the response maps to)
+			if (isset($this->params['int_ref_id']))
+			{
+				$output['params'] = $result['responseHeader']['params'];
+			}
+
+			if (isset($result['facet_counts']))
+			{
+				$output['facet_counts'] = $result['facet_counts'];
+			}
+		}
+		else
 		{
-			$result = $result['response'];
+			$output = $result;
 		}
 		
-		$this->formatter->display($result);
+		$this->formatter->display($output);
    }
    
 }

@@ -53,6 +53,10 @@ function asset_url( $path, $loc = 'modules')
 	}
 }
 
+function registry_url($suffix='')
+{
+	return dirname(base_url()) . '/registry/' . $suffix;
+}
 
 function current_protocol()
 {

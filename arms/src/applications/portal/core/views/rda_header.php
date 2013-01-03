@@ -34,7 +34,7 @@
 				<li><a href="#">Parties</a></li>
 				<li><a href="#">Activities</a></li>
 				<li><a href="#">Services</a></li>
-				<li><a href="#">Topics</a></li>
+				<li><a href="<?=base_url("topic");?>">Topics</a></li>
 			</ul><!-- top_nav -->
 			<div class="clear"></div>
 		</div><!-- head -->

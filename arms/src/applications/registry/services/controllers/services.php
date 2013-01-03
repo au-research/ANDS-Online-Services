@@ -18,6 +18,7 @@ class Services extends MX_Controller {
 	
 	public function _remap($api_key, $params = array())
 	{
+
 		$this->config->load('services');
 		$service_mapping = parse_ini_file(SERVICES_MODULE_PATH . "config.ini", true);
 		log_message('debug', 'Services request received from ' . $_SERVER["REMOTE_ADDR"]);
@@ -63,7 +64,7 @@ class Services extends MX_Controller {
 		
 		$options = $service_mapping[$method];
 		$handler = $this->getMethodHandler($service_mapping[$method]['method_handler']);
-		$handler->initialise($options, $_GET, $formatter);
+		$handler->initialise($options, $this->input->get(), $formatter);
 		$this->output->set_content_type($formatter->output_mimetype());
 		
 		// All the setup is finished! Palm off the handling of the request...

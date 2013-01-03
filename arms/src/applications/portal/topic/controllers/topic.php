@@ -2,13 +2,13 @@
 
 class Topic extends MX_Controller {
 
-
+	var $image_base_url;
 	public function index()
 	{
 		$data['title']='Research Data Australia';
 
 		$data['topics'] = $this->getFromDataFile();
-
+		$data['image_base_url'] = $this->image_base_url;
 		$this->load->view('list_topics', $data);
 	}
 
@@ -40,6 +40,7 @@ class Topic extends MX_Controller {
 		if ($data_file && isset($data_file['topics']))
 		{
 			$topics = $data_file['topics'];
+			$this->image_base_url = $data_file['image_url'];
 		}
 		else
 		{

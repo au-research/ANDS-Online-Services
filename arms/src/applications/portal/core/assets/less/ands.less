@@ -14,8 +14,6 @@
 .registryObjectHierarchyNode
 {
 	cursor: pointer;
-
-
 	/* XXX: Please Style Me! */
 	border-color: #eee;
 }
@@ -42,5 +40,72 @@
 	p.rights {
 		font-weight:normal;
 		word-wrap:break-word;
+	}
+}
+
+.ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+}
+
+div.topic_list {
+	div.topic_display
+	{
+		border:1px double #bdc1c6;
+		margin: 2px;
+		padding: 2px;
+		width: 350px;
+		text-align:center;
+	}
+	a.title {
+		font-size: 18px;
+		line-height: 24px;
+		display: block;
+		font-weight: bold;
+		padding-bottom:5px;
+	}
+}
+
+div.topic_view {
+	margin-top: -35px;
+	table, tbody, tr, td
+	{
+		vertical-align: middle;
+	}
+	table
+	{
+		margin: 5px 0px;
+	}
+	h3
+	{
+		margin-top: 10px;
+	}
+	div > ul.circle
+	{
+		list-style-type: circle;
+		margin-left: 25px;
+	}
+}
+
+.ands_widget_wrapper
+{
+	h2
+	{
+		font-size: 18px;
+		padding:0px;
+		margin:0px;
+	}
+	ul > li a 
+	{
+		color: #EB7700;
+		margin-left: 5px;
+		width:100%;
+	}
+	a.moreLink
+	{
+		margin-left:none;
+		color:#bdc1c6;
 	}
 }
