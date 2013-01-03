@@ -3,12 +3,16 @@
 	xmlns:extRif="http://ands.org.au/standards/rif-cs/extendedRegistryObjects"
 	exclude-result-prefixes="extRif ro">
 	<xsl:output method="html" encoding="UTF-8" indent="yes" omit-xml-declaration="yes"/>
+	<xsl:param name="base_url"/>
+
 	<xsl:template match="ro:registryObject">
 	<xsl:variable name="ro_class">
 		<xsl:apply-templates select="ro:collection | ro:activity | ro:party  | ro:service" mode="getClass"/>
 	</xsl:variable>
+	<xsl:variable name="registry_object_id"><xsl:value-of select="//extRif:id"/></xsl:variable>
+	<xsl:variable name="display_title"><xsl:value-of select="//extRif:displayTitle"/></xsl:variable>
 
-
+	
 	<div id="sidebar">
 		<div id="mode-switch" class="btn-group" style="text-align: center;margin: 10px auto 0px auto;">
 			<button class="btn btn-primary" aro-mode="simple">Simple</button>
@@ -44,15 +48,16 @@
 
 	<div id="content" style="margin-top:45px;">
 		<div id="content-header">
-			<h1>Add Registry Object</h1>
+			<h1><xsl:value-of select="$display_title"/></h1>
 			<div class="btn-group">
 				<a class="btn" title="Manage Files" id="master_export_xml"><i class="icon-download"></i> Export RIFCS</a>
 				<a class="btn btn-primary" title="Manage Files"><i class="icon-white icon-hdd"></i> Save</a>
 			</div>
 		</div>
 		<div id="breadcrumb">
-			<a href="#" title="Go to Home" class="tip-bottom">Home</a>
-			<a href="#" class="current">Add Registry Object</a>
+			<a href="{$base_url}" title="Go to Home" class="tip-bottom">Home</a>
+			<a href="{$base_url}registry_object/view/{$registry_object_id}" title="" class="current"><xsl:value-of select="$display_title"/></a>
+			<a href="#" class="">Edit</a>
 		</div>
 		<form class="form-horizontal" id="edit-form">
 			<xsl:call-template name="recordAdminTab"/>

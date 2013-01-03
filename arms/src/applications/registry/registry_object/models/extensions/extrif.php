@@ -146,6 +146,7 @@ class Extrif_Extension extends ExtensionBase
 			$this->ro->enrich();
 			$dom->loadXML($this->ro->getExtRif());
 			$xslt_processor->setParameter('','dataSource',$dataSource);
+			
 			return $xslt_processor->transformToXML($dom);
 		}
 		catch (Exception $e)
@@ -177,10 +178,11 @@ class Extrif_Extension extends ExtensionBase
 			$dom = new DOMDocument();
 			//$dom->loadXML($this->ro->getXML());
 			$dom->loadXML($rifcs);
+			$xslt_processor->setParameter('','base_url',base_url());
 			return $xslt_processor->transformToXML($dom);
 		}catch (Exception $e)
 		{
-			echo "UNABLE TO TRANSFORM" . BR;	
+			echo "UNABLE TO TRANSFORM" . BR;
 			echo "<pre>" . nl2br($e->getMessage()) . "</pre>" . BR;
 		}
 	}

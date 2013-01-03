@@ -79,8 +79,8 @@ class Registry_object extends MX_Controller {
 			$this->load->model('data_source/data_sources', 'ds');
 			$ds = $this->ds->getByID($ro->data_source_id);
 
-			$data['scripts'] = array();
-			$data['js_lib'] = array('core');
+			$data['scripts'] = array('view_registry_object');
+			$data['js_lib'] = array('core','prettyprint');
 			$data['title'] = $ro->title;
 			$data['ro'] = $ro;
 			$data['ds'] = $ds;
@@ -116,7 +116,7 @@ class Registry_object extends MX_Controller {
 		$data['content'] = $ro->transformCustomForFORM($data['extrif']);
 		$data['title'] = 'Add Registry Objects';
 		$data['scripts'] = array('add_registry_object');
-		$data['js_lib'] = array('core', 'tinymce', 'datepicker');
+		$data['js_lib'] = array('core', 'tinymce', 'datepicker', 'prettyprint');
 		$this->load->view("add_registry_object", $data);
 	}
 
@@ -202,7 +202,7 @@ class Registry_object extends MX_Controller {
 		$ro = $this->ro->getByID($id);
 		$data['xml'] = $ro->getRif();
 		$data['extrif'] = $ro->getExtRif();
-		$data['view'] = $ro->transformForHtml();
+		//$data['view'] = $ro->transformForHtml();
 		$data['id'] = $ro->id;
 		$data['title'] = $ro->getAttribute('list_title');
 		$data['attributes'] = $ro->getAttributes();
@@ -229,6 +229,8 @@ class Registry_object extends MX_Controller {
 		echo $solrDoc;
 	}
 
+
+	//-----------DEPRECATED AFTER THIS LINE -----------------------//
 
 	/**
 	 * Get the edit form of a Record

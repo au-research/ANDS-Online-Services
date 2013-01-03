@@ -15,7 +15,16 @@
 	<div id="content-header">
 		<h1><?php echo $ro->title;?> <?php if($viewing_revision) echo '<small>(Revision '.$revision.')</small>'?></h1>
 		<div class="btn-group">
-			<?php if(!$viewing_revision) echo anchor('registry_object/edit/'.$ro->id, '<i class="icon-edit"></i> Edit', array('class'=>'btn btn-large', 'title'=>'Edit Registry Object'))?>
+			<?php 
+				if(!$viewing_revision) {
+					echo anchor('registry_object/edit/'.$ro->id, '<i class="icon-edit"></i> Edit', array('class'=>'btn btn-large', 'title'=>'Edit Registry Object'));
+				}
+				echo '<a href="javascript:;" class="btn btn-large" id="exportRIFCS"><i class="icon-eject"></i> Export RIFCS';
+				if($viewing_revision){
+					echo ' Revision ('.$revision.')';
+				}
+				echo '</a>';
+			?>
 		</div>
 	</div>
 	<div id="breadcrumb">
@@ -24,6 +33,7 @@
 		<a href="#" class="current"><?php echo $ro->title;?> </a>
 		<?php if($viewing_revision) echo '<a href="#">(Revision '.$revision.')</a>'?></h1>
 	</div>
+	<input class="hide" type="hidden" value="<?php echo $ro->id;?>" id="ro_id"/>
 
 	<div class="container-fluid">
 		<div class="row-fluid">
@@ -65,5 +75,16 @@
 		</div>
 		
 	</div>
+</div>
+
+<div class="modal hide" id="myModal">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">×</button>
+    <h3>Alert</h3>
+  </div>
+  <div class="modal-body"></div>
+  <div class="modal-footer">
+    
+  </div>
 </div>
 <?php $this->load->view('footer');?>

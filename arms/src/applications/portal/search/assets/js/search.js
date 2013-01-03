@@ -32,7 +32,7 @@ $(document).ready(function() {
 				}
 			}
 			/**
-			 * term could be: q, p, tab, group, type, subject, vocabUriFilter, licence, temporal, n, e, s, w
+			 * term could be: q, p, tab, group, type, subject, vocabUriFilter, licence, temporal, n, e, s, w, spatial
 			 * resultSort, limitRows, researchGroupSort, subjectSort, typeSort, licenseSort
 			 */
 		});
