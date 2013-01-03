@@ -166,6 +166,10 @@ class Spatial_Extension extends ExtensionBase
 			elseif($type == 'iso19139dcmiBox')
 			{
 				$tok = strtok($value, ";");
+				$north = null;
+				$south = null;
+				$west  = null;
+				$east  = null;
 				while ($tok !== FALSE)
 				{
 					$keyValue = explode("=",$tok);
@@ -187,16 +191,23 @@ class Spatial_Extension extends ExtensionBase
 					}
 				  	$tok = strtok(";");
 				}
-				if($north == $south && $east == $west){
-					$coords[] = $east.",".$north;	
+				if($north != null && $south != null && $west  != null && $east != null && $north <= 90 && $south >= -90 && $west  >= -180 && $east <= 180){
+					if($north == $south && $east == $west){
+						$coords[] = $east.",".$north;	
+					}
+					else{
+						$coords[] = $east.",".$north." ".$east.",".$south." ".$west.",".$south." ".$west.",".$north." ".$east.",".$north;
+					}
 				}
-				else{
-					$coords[] = $east.",".$north." ".$east.",".$south." ".$west.",".$south." ".$west.",".$north." ".$east.",".$north;
-				}
+
 			}
 			elseif($type == 'iso19139dcmiPoint' || $type == 'dcmiPoint') //"name=Tasman Sea, AU; east=160.0; north=-40.0"
 			{
 				$tok = strtok($value, ";");
+				$north = null;
+				$south = null;
+				$west  = null;
+				$east  = null;
 				while ($tok !== FALSE)
 				{
 					$keyValue = explode("=",$tok);
@@ -210,7 +221,11 @@ class Spatial_Extension extends ExtensionBase
 					}
 				  	$tok = strtok(";");
 				}
-				$coords[] = $east.",".$north;	
+				if($north != null  && $east != null && $north <= 90  && $east <= 180){
+					$coords[] = $east.",".$north;
+				}
+
+					
 			}
 		}		
 		return $coords;

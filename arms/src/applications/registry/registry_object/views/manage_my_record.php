@@ -62,13 +62,13 @@
 			<div class="span12">
 				<div class="widget-box">
 					<div class="widget-title">
-						<h5>All Registry Objects</h5>
+						<h5>SOME All Registry Objects</h5>
 					</div>
 					<div class="widget-content nopadding">
 						<table class="table table-bordered data-table" id="record_table">
 							<thead>
 								<tr>
-									<th>key</th>
+									<th>id</th>
 									<th>Title</th>
 									<th>Status</th>
 									<th>Options</th>

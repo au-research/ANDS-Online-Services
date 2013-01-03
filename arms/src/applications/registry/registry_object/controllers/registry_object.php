@@ -197,8 +197,16 @@ class Registry_object extends MX_Controller {
 		echo $jsonData;
 	}
 
-	
-	
+
+	function get_solr_doc($id){
+		$this->load->model('registry_objects', 'ro');
+		$ro = $this->ro->getByID($id);
+		//$ro->enrich();
+		$solrDoc = $ro->transformForSOLR();
+
+		echo $solrDoc;
+	}
+
 
 	/**
 	 * Get the edit form of a Record

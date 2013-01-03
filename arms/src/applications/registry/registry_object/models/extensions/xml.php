@@ -45,7 +45,7 @@ class XML_Extension extends ExtensionBase
 	
 	function getSimpleXML($record_data_id = NULL)
 	{
-		if (!is_null($this->_simplexml) && $this->_xml->record_data_id == $record_data_id)
+		if (!is_null($this->_simplexml) && !is_null($this->_xml) && $this->_xml->record_data_id == $record_data_id)
 		{
 			return $this->_simplexml;
 		}
@@ -180,7 +180,9 @@ class _xml
 	
 		if ($query->num_rows() == 1)
 		{
-			$result = array_pop($query->result_array());
+			//$result = array_pop($query->result_array());
+			$results = $query->result_array();
+			$result = $results[0];
 			$query->free_result();
 			$this->xml = $result['data'];
 			$this->timestamp = $result['timestamp'];

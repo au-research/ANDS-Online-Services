@@ -6,7 +6,7 @@ class Migrate extends MX_Controller
 	private $input; // pointer to the shell input
 	private $start_time; // time script run (microtime float)
 	private $exec_time; // time execution started
-
+	private $_CI; 	// an internal reference to the CodeIgniter Engine 
 	private $source;
 	
 	function index()
@@ -19,13 +19,12 @@ class Migrate extends MX_Controller
 
 		$num_data_sources = $query->num_rows();
 		
-		echo $num_data_sources . " data sources found. Do you wish to migrate these data sources? [y/n]: ";
+		/*echo $num_data_sources . " data sources found. Do you wish to migrate these data sources? [y/n]: ";
 
 		if ($this->getInput() != 'y'){
 			echo "Exiting..." . NL;
 			return;
-		}
-
+		}*/
 		// Start the clock...
 
 		$this->exec_time = microtime(true);
@@ -37,7 +36,7 @@ class Migrate extends MX_Controller
 			//exit();
 			$data_source = $this->ds->getByKey($result->data_source_key);
 			if($data_source === NULL)
-				$data_source = $this->ds->create($result->data_source_key, $result->title); // XXX: Generate slug.
+				$data_source = $this->ds->create($result->data_source_key, url_title($result->title)); // XXX: Generate slug.
 			
 			$data_source->title = $result->title;
 			$data_source->setAttribute("provider_type", $result->provider_type);
@@ -80,12 +79,23 @@ class Migrate extends MX_Controller
 
 
 			// Now start importing registry objects
-			$this->migrateRegistryObjectsForDatasource($data_source);
+			
+			
 			echo $data_source->key;
 			echo ". complete!" . NL;
+			//exit();
 		}
 
+		foreach($query->result() as $result){
+			$data_source = $this->ds->getByKey($result->data_source_key);
+			//$this->migrateRegistryObjectsForDatasource($data_source);
+			$this->migrateDraftRegistryObjectsForDatasource($data_source);
+		}
 
+		foreach($query->result() as $result){
+			$data_source = $this->ds->getByKey($result->data_source_key);
+			$data_source->updateStats();
+		}
 
 
 	}
@@ -94,7 +104,75 @@ class Migrate extends MX_Controller
 	{
 		$query = $this->source->get_where("dba.tbl_registry_objects", array("data_source_key"=>$data_source->key));
 		$num_records = $query->num_rows();
-		echo "FOUND: ". $num_records . "records" .NL;
+		echo "FOUND: ". $num_records . " records" .NL;
+		$this->_CI->load->model("registry_object/registry_objects", "ro");
+		foreach ($query->result() AS $result)
+		{
+			echo "Importing Record: " . $result->registry_object_key . "." .NL;
+
+			$createdWho = $result->created_who;
+			$recordOwner = $result->record_owner;
+			$harvestId = NULL;
+			if($createdWho == $recordOwner && $createdWho != 'SYSTEM')					// created by direct import
+				$harvestId  = $recordOwner; 
+
+			//create(_data_source $data_source, $registry_object_key, $class, $title, $status, $slug, $record_owner, $harvestID)
+			
+
+			$registry_object = $this->ro->getByKey($result->registry_object_key);
+			if($registry_object) $registry_object = $registry_object[0];
+
+			if($registry_object === NULL)
+				$registry_object = $this->ro->create($data_source, $result->registry_object_key, $result->registry_object_class, $result->display_title, $result->status, $result->url_slug, $recordOwner, $harvestId);
+			
+			
+
+			$registry_object->created = $result->created_when;
+			$registry_object->group = $result->object_group;
+			$registry_object->type = $result->type;
+			$registry_object->list_title = $result->list_title;
+			$query = $this->source->get_where("dba.tbl_raw_records", array("registry_object_key"=>$result->registry_object_key, "data_source"=>$data_source->key));
+			$this->source->order_by("created_when", "desc"); 
+			$this->source->limit(1);
+			foreach ($query->result() AS $result)
+			{
+				$registry_object->updateXML($result->rifcs_fragment);
+			}
+			$registry_object->save();
+			$registry_object->enrich();
+			unset($registry_object);
+			
+		}
+	}
+
+
+
+	function migrateDraftRegistryObjectsForDatasource(_data_source $data_source)
+	{
+		$query = $this->source->get_where("dba.tbl_draft_registry_objects", array("registry_object_data_source"=>$data_source->key));
+		$num_records = $query->num_rows();
+		echo "FOUND: ". $num_records . " records" .NL;
+		$this->_CI->load->model("registry_object/registry_objects", "ro");
+		foreach ($query->result() AS $result)
+		{
+			echo "Importing Draft Record: " . $result->draft_key . "." .NL;
+
+			
+			$recordOwner = $result->draft_owner;
+			$registry_object = $this->ro->create($data_source, $result->draft_key, $result->class, $result->registry_object_title, $result->status, NULL, $recordOwner, $recordOwner);
+			$registry_object->created = $result->date_created;
+			$registry_object->group = $result->registry_object_group;
+			$registry_object->type = $result->registry_object_type;
+			$registry_object->list_title = $result->registry_object_title;	
+			$registryObjects = simplexml_load_string($result->rifcs);
+			$registryObjects->registerXPathNamespace('rif', 'http://ands.org.au/standards/rif-cs/registryObjects');
+			$registryObject = $registryObjects->xpath('//rif:registryObject');
+			$registry_object->updateXML($registryObject[0]->asXML());
+			$registry_object->save();
+			$registry_object->enrich();
+			unset($registry_object);
+			
+		}
 	}
 
 
@@ -104,7 +182,7 @@ class Migrate extends MX_Controller
             
             $this->input = fopen ("php://stdin","r");
             $this->start_time = microtime(true);
-
+			$this->_CI =& get_instance();
             $this->source = $this->load->database('migration', true);
 
             define('IS_CLI_SCRIPT', true);
