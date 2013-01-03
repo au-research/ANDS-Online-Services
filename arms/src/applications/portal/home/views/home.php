@@ -66,7 +66,8 @@
 	<ul class="slides">
 	{{#partners}}
 		<li>
-			<a href="#" class="title">{{{title}}}</a>
+			<img src="{{img_url}}" alt="" />
+			<a href="{{url}}" class="title">{{{title}}}</a>
 			<div class="excerpt">
 				{{{description}}}
 			</div>

@@ -27,8 +27,14 @@
 									<input type="text" placeholder="URL" value="<?php echo $i['url'];?>" name="url">
 									<label>Image URL:</label>
 									<input type="text" placeholder="Image URL" value="<?php echo $i['img_url'];?>" name="img_url">
+									<label>Visible:</label>
+									<select name="visible" required>
+										<option value="no">Hidden</option>
+										<option value="yes" <?php echo $i['visible']=='yes' ? 'selected=selected': '';?>>Visible</option>
+									</select>
 									<label>Content:</label>
-									<textarea name="content"><?php echo $i['content'];?></textarea>
+									<textarea name="content" class="editor"><?php echo $i['content'];?></textarea>
+									
 									<p/>
 								<button type="button" class="btn-primary save" _id="<?php echo $i['id'];?>">Save</button>
 								<button type="button" class="btn-link delete" _id="<?php echo $i['id'];?>">Delete</button>
@@ -47,7 +53,11 @@
 									<label>Image URL:</label>
 									<input type="text" placeholder="Image URL" value="" name="img_url" required>
 									<label>Content:</label>
-									<textarea name="content" required></textarea>
+									<select name="visible" required>
+										<option value="no">Hidden</option>
+										<option value="yes">Visible</option>										
+									</select>
+									<textarea name="content" class="editor" required></textarea>
 									<p/>
 								<button type="button" class="btn-primary add">Add New</button>
 							</fieldset>

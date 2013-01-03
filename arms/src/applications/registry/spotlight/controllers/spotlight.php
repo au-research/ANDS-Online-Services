@@ -3,7 +3,7 @@
 class Spotlight extends MX_Controller {
 
 	function index(){
-		$data['js_lib'] = array('core');
+		$data['js_lib'] = array('core', 'tinymce');
 		$data['scripts'] = array('spotlight');
 		$data['title'] = 'Spotlight CMS';
 		$data['less'] = array('spotlight');
@@ -23,8 +23,12 @@ class Spotlight extends MX_Controller {
 
 	function write($data){
 		$this->load->helper('file');
-		write_file('./applications/registry/spotlight/assets/spotlight.json', $data, 'w');
-		return true;
+		if(write_file('./applications/registry/spotlight/assets/spotlight.json', $data, 'w')){
+			echo 'success';
+		}else{
+			echo 'Unable to write to file. Check File Permission';
+		}
+		
 	}
 
 	function save($id){
@@ -35,6 +39,7 @@ class Spotlight extends MX_Controller {
 			'url'=>$this->input->post('url'),
 			'img_url'=>$this->input->post('img_url'),
 			'content'=>$this->input->post('content'),
+			'visible'=>$this->input->post('visible')
 		);
 		$file = $this->read();
 		$items = $file['items'];
@@ -91,9 +96,9 @@ class Spotlight extends MX_Controller {
 			'url'=>$this->input->post('url'),
 			'img_url'=>$this->input->post('img_url'),
 			'content'=>$this->input->post('content'),
+			'visible'=>$this->input->post('visible')
 		);
 		$new_file['items'][] = $obj;
-
 		$this->write(json_encode($new_file));
 	}
 

@@ -197,42 +197,16 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 	{
 		$partners = array();
 
-		// Which "type" of description do we want?
-		$description_type = 'brief';
-
-		// Get a list of partners which match the $config['services_spotlight_partners_data_source']
-		// which is defined in this module's config directory
-		$this->load->library('solr');
-		$this->solr->setOpt('rows',25); // allow a fairly generous number of results
-		$this->solr->setOpt('q','');
-		$this->solr->addQueryCondition('+data_source_key:"'.$this->config->item('services_spotlight_partners_data_source').'"');
-		$this->solr->setOpt('fl','display_title,description_value,description_type,location');
-		$result = $this->solr->executeSearch(true);
-
-		foreach($result['response']['docs'] AS $p)
-		{
-			// Get a description that matches the specified type (aligning the two lists)
-			$chosen_description = '';
-			if (isset($p['description_type']))
-			{
-				foreach ($p['description_type'] AS $idx => $value)
-				{
-					if ($value == $description_type)
-					{	
-						$chosen_description = $p['description_value'][$idx];
-					}
-				}
-			}
-
-			// Pick the first location on the record as our URL
-			$location = '';
-			if (isset($p['location'][0])) $location = $p['location'][0];
-
-			$partners[] = array('title'=>$p['display_title'],
-								'description'=>$chosen_description,
-								'url'=>$location
-								);
-
+		$this->load->helper('file');
+		$file = read_file('./applications/registry/spotlight/assets/spotlight.json');
+		$file = json_decode($file, true);
+		foreach($file['items'] as $partner){
+			$partners[] = array(
+				'title'=>$partner['title'],
+				'description'=>$partner['content'],
+				'img_url'=>$partner['img_url'],
+				'url'=>$partner['url']
+			);
 		}
 
 		// services_spotlight_partners_data_source
