@@ -19,6 +19,7 @@ function updateStat() {
 	//get Stat
 	$('#stat').css('opacity', '0.5');
 	$.getJSON(base_url+'maintenance/getStat', function(data) {
+		console.log(data);
 		var template = $('#stat-template').html();
 		var output = Mustache.render(template, data);
 		$('#stat').html(output);
@@ -37,6 +38,7 @@ function updateDataSourcesStat(){
 		$('#ds').html(output);
 		$('#dataSourceSelect').chosen();
 		$('.data-table').dataTable({
+			"aaSorting": [[ 5, "desc" ]],
 			"bJQueryUI": true,
 			"sPaginationType": "full_numbers",
 			"sDom": '<""l>t<"F"fp>'
@@ -46,7 +48,7 @@ function updateDataSourcesStat(){
 				$(this).button('loading');
 				var ds_id = $(this).attr('ds_id');
 				$.getJSON(base_url+'maintenance/indexDS/'+ds_id, function(data) {
-					//console.log(data);
+					console.log(data);
 					updateDataSourcesStat();
 				});
 			}
@@ -57,7 +59,7 @@ function updateDataSourcesStat(){
 				$(this).button('loading');
 				var ds_id = $(this).attr('ds_id');
 				$.getJSON(base_url+'maintenance/clearDS/'+ds_id, function(data) {
-					//console.log(data);
+					console.log(data);
 					updateDataSourcesStat();
 				});
 			}

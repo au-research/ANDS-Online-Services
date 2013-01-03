@@ -117,13 +117,15 @@ class Extrif_Extension extends ExtensionBase
 		}
 	}
 	
-	function transformForHtml()
+	function transformForHtml($revision='')
 	{
 		try{
 			$xslt_processor = Transforms::get_extrif_to_html_transformer();
 			$dom = new DOMDocument();
 			$dataSource = $this->ro->data_source_key;
-			$dom->loadXML($this->ro->getExtRif());
+			if($revision=='') {
+				$dom->loadXML($this->ro->getExtRif());
+			}else $dom->loadXML($this->ro->getExtRifDataRecord($revision));
 			$xslt_processor->setParameter('','dataSource',$dataSource);
 			return $xslt_processor->transformToXML($dom);
 		}catch (Exception $e)

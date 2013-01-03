@@ -61,6 +61,7 @@ class Maintenance extends MX_Controller {
 			}else{
 				$item['totalCountSOLR'] = 0;
 			}
+			$item['totalMissing'] =  $item['totalCountDBPUBLISHED'] - $item['totalCountSOLR'];
 			array_push($items, $item);
 		}
 		$data['dataSources'] = $items;

@@ -86,7 +86,6 @@ class Search extends MX_Controller {
 						$this->solr->setOpt('fq', 'spatial:"Intersects('.$value.')"');
 						break;
 				}
-				
 			}
 		}
 

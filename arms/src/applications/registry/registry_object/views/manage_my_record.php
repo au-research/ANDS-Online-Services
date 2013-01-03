@@ -14,7 +14,7 @@
 		</div>
 	</div>
 	<div id="breadcrumb">
-		<a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a>
+		<?php echo anchor('registry_object/', '<i class="icon-home"></i> Home', array('class'=>'tip-bottom', 'title'=>'Go to Home'))?>
 		<a href="#" class="current"><?php echo $data_source['title'];?></a>
 		<div style="float:right">
 			<a>Selected <b>3</b> / 146</a>

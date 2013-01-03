@@ -11,6 +11,10 @@
  */
 class Registry_object extends MX_Controller {
 
+	public function index(){
+		$this->manage();
+	}
+
 
 	/**
 	 * Manage My Records (MMR Screen)
@@ -68,15 +72,30 @@ class Registry_object extends MX_Controller {
 		$this->load->view("manage_my_record", $data);
 	}
 
-	public function view($ro_id){
+	public function view($ro_id, $revision=''){
 		$this->load->model('registry_object/registry_objects', 'ro');
 		$ro = $this->ro->getByID($ro_id);
 		if($ro){
+			$this->load->model('data_source/data_sources', 'ds');
+			$ds = $this->ds->getByID($ro->data_source_id);
+
 			$data['scripts'] = array();
 			$data['js_lib'] = array('core');
 			$data['title'] = $ro->title;
 			$data['ro'] = $ro;
-			$data['rif_html'] = $ro->transformForHtml();
+			$data['ds'] = $ds;
+
+			$data['revision'] = $revision;
+
+			if($revision!=''){
+				$data['viewing_revision'] = true;
+				$data['rif_html'] = $ro->transformForHtml($revision);
+			}else {
+				$data['viewing_revision'] = false;
+				$data['rif_html'] = $ro->transformForHtml();
+			}
+
+			$data['revisions'] = $ro->getAllRevisions();
 			$this->load->view('registry_object_index', $data);
 		}else{
 			show_404('Unable to Find Registry Object ID: '.$ro_id);
@@ -126,6 +145,9 @@ class Registry_object extends MX_Controller {
 				);
 			}
         }
+
+        $this->load->model('data_source/data_sources', 'ds');
+        $data_source = $this->ds->getByID($data_source_id);
 
 		//Get Registry Objects
 		$this->load->model('registry_object/registry_objects', 'ro');
