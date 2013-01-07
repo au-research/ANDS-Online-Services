@@ -124,7 +124,7 @@
 	    	</xsl:choose>
         </xsl:if>
         
-        <!--xsl:if test="not(ro:description[@type='brief']) and not(ro:description[@type='full'])">
+        <xsl:if test="not(ro:description[@type='brief']) and not(ro:description[@type='full'])">
         	<xsl:choose>
 			    <xsl:when test="$output = 'script'">
             		<xsl:text>SetWarnings("errors_description","At least one description (brief and/or full) is required for the Collection.","REQ_DESCRIPTION_FULL");</xsl:text>
@@ -223,8 +223,8 @@
 					<span class="info">Citation data for the collection is recommended.</span>
 			    </xsl:otherwise>
 	    	</xsl:choose>
-        </xsl:if-->         
-        <xsl:apply-templates select="ro:name"/>
+        </xsl:if>         
+        <xsl:apply-templates select="ro:description | ro:coverage | ro:location | ro:name | ro:identifier | ro:subject | ro:relatedObject | ro:relatedInfo | ro:accessPolicy | ro:rights | ro:existenceDates"/>
    </xsl:template>
     
     <xsl:template match="ro:party">

@@ -5,7 +5,7 @@
 ?>
 
 <?php  $this->load->view('header');?>
-<input type="hidden" value="<?php echo $data_source->id;?>" id="data_source_id"/>
+<input type="hidden" value="<?php echo $data_source['id'];?>" id="data_source_id"/>
 <div id="content" style="margin-top:45px;margin-left:0px">
 	<div id="content-header">
 		<h1>Manage My Record</h1>
@@ -27,25 +27,25 @@
 				<ul class="stat-boxes">
 					<li>
 						<div class="right">
-							<strong><?php echo $data_source->count_total;?></strong>
+							<strong><?php echo $data_source['count_total'];?></strong>
 							Records
 						</div>
 					</li>
 					<li class="ds_filter" type="status" _value="APPROVED">
 						<div class="right peity_bar_good">
-							<strong><?php echo $data_source->count_APPROVED;?></strong>
+							<strong><?php echo $data_source['count_APPROVED'];?></strong>
 							APPROVED
 						</div>
 					</li>
 					<li class="ds_filter" type="status" _value="SUBMITTED_FOR_ASSESSMENT">
 						<div class="right peity_bar_good">
-							<strong><?php echo $data_source->count_SUBMITTED_FOR_ASSESSMENT;?></strong>
+							<strong><?php echo $data_source['count_SUBMITTED_FOR_ASSESSMENT'];?></strong>
 							Submitted
 						</div>
 					</li>
 					<li>
 						<div class="right peity_bar_good">
-							<strong><?php echo $data_source->count_PUBLISHED;?></strong>
+							<strong><?php echo $data_source['count_PUBLISHED'];?></strong>
 							Published
 						</div>
 					</li>
@@ -62,7 +62,7 @@
 			<div class="span12">
 				<div class="widget-box">
 					<div class="widget-title">
-						<h5>All Registry Objects</h5>
+						<h5>SOME All Registry Objects</h5>
 					</div>
 					<div class="widget-content nopadding">
 						<table class="table table-bordered data-table" id="record_table">
