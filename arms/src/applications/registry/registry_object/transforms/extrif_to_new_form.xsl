@@ -91,7 +91,7 @@
 	</div>
 
 
-		
+		<input type="hidden" class="hide" id="ro_id" value="{$registry_object_id}"/>
 		<input type="hidden" class="hide" id="ro_class" value="{$ro_class}"/>
 		<input type="hidden" class="hide" id="originatingSource" value="{$ro_class}"/>
 	</xsl:template>
@@ -117,13 +117,13 @@
 				</xsl:variable>
 
 				<div class="control-group">
-					<label class="control-label" for="title">Type</label>
+					<label class="control-label" for="type">Type</label>
 					<div class="controls">
 						<div class="input-prepend">
 							<button class="btn triggerTypeAhead" type="button">
 								<i class="icon-chevron-down"/>
 							</button>
-							<input type="text" class="input-large" name="title" value="{$ro_type}"/>
+							<input type="text" class="input-large" name="type" value="{$ro_type}"/>
 						</div>
 						<p class="help-inline">
 							<small/>
@@ -132,32 +132,32 @@
 				</div>
 
 				<div class="control-group">
-					<label class="control-label" for="title">Data Source</label>
+					<label class="control-label" for="ds">Data Source</label>
 					<div class="controls">
 						<select id="data_sources_select"/>
 						<input type="text" id="data_source_id_value" class="input-small hide"
-							name="title" value="{$dataSourceID}"/>
+							name="ds" value="{$dataSourceID}"/>
 					</div>
 				</div>
 				
 				
 				<div class="control-group">
-					<label class="control-label" for="title">Originating Source</label>
+					<label class="control-label" for="originatingSource">Originating Source</label>
 					<div class="controls">
-						<input type="text" id="originatingSource" name="value" placeholder="Value" value="{originatingSource/text()}"/>
-						<input type="text" id="originatingSource" name="type" placeholder="Type"  value="{originatingSource/@type}"/>
+						<input type="text" id="originatingSource" name="originatingSource" placeholder="Value" value="{ro:originatingSource/text()}"/>
+						<input type="text" id="originatingSource" name="originatingSourceType" placeholder="Type"  value="{ro:originatingSource/@type}"/>
 					</div>
 				</div>
 				
 
 				<div class="control-group">
-					<label class="control-label" for="title">Group</label>
+					<label class="control-label" for="group">Group</label>
 					<div class="controls">
 						<div class="input-prepend">
 							<button class="btn triggerTypeAhead" type="button">
 								<i class="icon-chevron-down"/>
 							</button>
-							<input type="text" class="input-large" name="title" value="{@group}"/>
+							<input type="text" class="input-large" name="group" value="{@group}"/>
 						</div>
 						<p class="help-inline">
 							<small/>
@@ -166,9 +166,9 @@
 				</div>
 
 				<div class="control-group warning">
-					<label class="control-label" for="title">Key</label>
+					<label class="control-label" for="key">Key</label>
 					<div class="controls">
-						<input type="text" class="input-xlarge" name="title" value="{key}"/>
+						<input type="text" class="input-xlarge" name="key" value="{ro:key}"/>
 						<button class="btn btn" id="generate_random_key">
 							<i class="icon-refresh"/> Generate Random Key </button>
 						<p class="help-inline">
@@ -178,10 +178,10 @@
 				</div>
 
 				<div class="control-group">
-					<label class="control-label" for="title">Date Modified</label>
+					<label class="control-label" for="date_modified">Date Modified</label>
 					<div class="controls">
 						<div class="input-append">
-							<input type="text" class="input-large datepicker" name="title"
+							<input type="text" class="input-large datepicker" name="date_modified"
 								value="{$dateModified}"/>
 							<button class="btn triggerDatePicker" type="button">
 								<i class="icon-calendar"/>
@@ -195,10 +195,10 @@
 
 				<xsl:if test="ro:collection">
 					<div class="control-group">
-						<label class="control-label" for="title">Date Accessioned</label>
+						<label class="control-label" for="date_accessioned">Date Accessioned</label>
 						<div class="controls">
 							<div class="input-append">
-								<input type="text" class="input-large datepicker" name="title"
+								<input type="text" class="input-large datepicker" name="date_accessioned"
 									value="{ro:collection/@dateAccessioned}"/>
 								<button class="btn triggerDatePicker" type="button">
 									<i class="icon-calendar"/>

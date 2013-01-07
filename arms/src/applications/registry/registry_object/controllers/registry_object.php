@@ -105,7 +105,7 @@ class Registry_object extends MX_Controller {
 	public function add(){
 		$data['title'] = 'Add Registry Objects';
 		$data['scripts'] = array('add_registry_object');
-		$data['js_lib'] = array('core');
+		$data['js_lib'] = array('core','prettyprint');
 		$this->load->view("add_registry_object", $data);
 	}
 
@@ -114,10 +114,18 @@ class Registry_object extends MX_Controller {
 		$ro = $this->ro->getByID($registry_object_id);
 		$data['extrif'] = $ro->getExtRif();
 		$data['content'] = $ro->transformCustomForFORM($data['extrif']);
-		$data['title'] = 'Add Registry Objects';
+		$data['title'] = 'Edit: '.$ro->title;
 		$data['scripts'] = array('add_registry_object');
 		$data['js_lib'] = array('core', 'tinymce', 'datepicker', 'prettyprint');
 		$this->load->view("add_registry_object", $data);
+	}
+
+	public function validate($registry_object_id){
+		$xml = $this->input->post('xml');
+		$this->load->model('registry_objects', 'ro');
+		$ro = $this->ro->getByID($registry_object_id);
+		$result = $ro->transformForQA(wrapRegistryObjects($xml));
+		echo $result;
 	}
 
 	public function getData($data_source_id, $filter='', $value=''){

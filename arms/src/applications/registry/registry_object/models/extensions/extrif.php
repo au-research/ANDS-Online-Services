@@ -116,6 +116,24 @@ class Extrif_Extension extends ExtensionBase
 			echo "<pre>" . nl2br($e->getMessage()) . "</pre>" . BR;
 		}
 	}
+
+
+	function transformForQA($xml)
+	{
+		try{
+			$xslt_processor = Transforms::get_qa_transformer();
+			$dom = new DOMDocument();
+			//$dom->loadXML($this->ro->getXML());
+			$dom->loadXML($xml);
+			$dataSource = 'a';
+			$xslt_processor->setParameter('','dataSource',$dataSource);
+			return $xslt_processor->transformToXML($dom);
+		}catch (Exception $e)
+		{
+			echo "UNABLE TO TRANSFORM" . BR;	
+			echo "<pre>" . nl2br($e->getMessage()) . "</pre>" . BR;
+		}
+	}
 	
 	function transformForHtml($revision='')
 	{

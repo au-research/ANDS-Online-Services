@@ -283,6 +283,7 @@ function initEditForm(){
 			var currentTab = $(this).parents('.pane');
 			var xml = getRIFCSforTab(currentTab);
 			$('#myModal .modal-body').html('<pre class="prettyprint linenums"><code class="language-xml">' + htmlEntities(formatXml(xml)) + '</code></pre>');
+			prettyPrint();
 			$('#myModal').modal();
 		}
 	});
@@ -295,13 +296,36 @@ function initEditForm(){
 			var allTabs = $('.pane');
 			var xml = '';
 
+			//admin tab
+			var admin = $('#admin');
+			var ro_class = $('#ro_class').val();//hidden value
+			var ro_id = $('#ro_id').val();
+
+			xml += '<registryObject group="'+$('input[name=group]',admin).val()+'">';
+			xml += '<key>'+$('input[name=key]', admin).val()+'</key>';
+			xml += '<originatingSource type="'+$('input[name=originatingSourceType]', admin).val()+'">'+$('input[name=originatingSource]',admin).val()+'</originatingSource>';
+			xml += '<'+ro_class+' type="'+$('input[name=type]',admin).val()+'">';
+
 			$.each(allTabs, function(){
 				xml += getRIFCSforTab(this);
 			});
+
+			xml+='</'+ro_class+'></registryObject>';
 			$('#myModal .modal-header h3').html('<h3>Export RIFCS</h3>');
 			$('#myModal .modal-body').html('<pre class="prettyprint linenums"><code class="language-xml">' + htmlEntities(formatXml(xml)) + '</code></pre>');
 			$('#myModal .modal-footer').html('<button class="btn btn-primary">Download</button>');
+			prettyPrint();
 			$('#myModal').modal();
+
+			//test validation
+			$.ajax({
+				url:base_url+'registry_object/validate/'+ro_id, 
+				type: 'POST',
+				data: {xml:xml},
+				success: function(data){
+					console.log(data);
+				}
+			});
 		}
 	});
 
@@ -364,6 +388,18 @@ function initEditForm(){
 	initDescriptions();
 	initRelatedInfos();
 	bindPartsTooltip();
+	assignFieldID();
+}
+
+function assignFieldID(){
+	var content = $('#content');
+	var i = 0;
+	$('input, .aro_box', content).each(function(){
+		if(!$(this).attr('field_id')){
+			$(this).attr('field_id', i);
+			i++;
+		}
+	});
 }
 
 
@@ -536,7 +572,7 @@ function getRIFCSforTab(tab){
 		 * The name => the "type" attribute of the box
 		 * The type => the input[name=type] of the box display (heading)
 		 */
-		fragment +='<'+$(this).attr('type')+'';
+		fragment +='<'+$(this).attr('type')+' field_id="' +$(this).attr('field_id')+'"';
 		var valid_fragment_meta = ['type', 'dateFrom', 'dateTo', 'style', 'rightsURI'];//valid input type to be put as attributes
 		var this_box = this;
 		$.each(valid_fragment_meta, function(index, value){
@@ -616,7 +652,7 @@ function getRIFCSforTab(tab){
 						//check if there is an input[name="type"] in this box_part so that we can use as a type attribute
 						var type = $('input[name=type]', this).val();
 						if(type){
-							fragment += '<'+$(this).attr('type')+' type="'+$('input[name=type]', this).val()+'">'+$('input[name=value]', this).val()+'</'+$(this).attr('type')+'>';	
+							fragment += '<'+$(this).attr('type')+' field_id="'+$('input[name=value]', this).attr('field_id')+'" type="'+$('input[name=type]', this).val()+'">'+$('input[name=value]', this).val()+'</'+$(this).attr('type')+'>';	
 						}else{
 							var type = $(this).attr('type');
 							fragment += '<'+type+'>'+$('input[name=value]', this).val()+'</'+type+'>';

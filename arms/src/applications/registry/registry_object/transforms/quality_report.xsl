@@ -12,10 +12,10 @@
     <xsl:template match="ro:registryObjects">
 	    <xsl:choose>
 		    <xsl:when test="$output = 'script'">
-		        <script>
+		        <!-- <script> -->
 					<xsl:apply-templates select="ro:registryObject"/>
-					<xsl:text>$("#errors_preview").delay(1100).show();</xsl:text>
-				</script>
+					<!-- <xsl:text>$("#errors_preview").delay(1100).show();</xsl:text> -->
+				<!-- </script> -->
 		    </xsl:when>
 		    <xsl:otherwise>
 		    	<div class="quality-test-results">
@@ -124,7 +124,7 @@
 	    	</xsl:choose>
         </xsl:if>
         
-        <xsl:if test="not(ro:description[@type='brief']) and not(ro:description[@type='full'])">
+        <!--xsl:if test="not(ro:description[@type='brief']) and not(ro:description[@type='full'])">
         	<xsl:choose>
 			    <xsl:when test="$output = 'script'">
             		<xsl:text>SetWarnings("errors_description","At least one description (brief and/or full) is required for the Collection.","REQ_DESCRIPTION_FULL");</xsl:text>
@@ -223,8 +223,8 @@
 					<span class="info">Citation data for the collection is recommended.</span>
 			    </xsl:otherwise>
 	    	</xsl:choose>
-        </xsl:if>         
-        <xsl:apply-templates select="ro:description | ro:coverage | ro:location | ro:name | ro:identifier | ro:subject | ro:relatedObject | ro:relatedInfo | ro:citationInfo | ro:rights"/>
+        </xsl:if-->         
+        <xsl:apply-templates select="ro:name"/>
    </xsl:template>
     
     <xsl:template match="ro:party">
@@ -607,7 +607,8 @@
         <xsl:if test="not(ro:namePart)">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_namePart","Each Name must have at least one Name Part.");</xsl:text>
+            		<!--xsl:text>SetErrors("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_namePart","Each Name must have at least one Name Part.");</xsl:text-->
+            		<xsl:text>{type:error, field_id:</xsl:text><xsl:value-of select="@field_id"/><xsl:text>, msg: 'Each name must have at least one Name Part'},</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="error">Each Name must have at least one Name Part.</span>
@@ -633,7 +634,7 @@
     </xsl:template>
     
     <xsl:template match="ro:namePart">
-        <!--xsl:if test="string-length(@type) = 0 and ancestor::ro:party[@type = 'person']">
+        <xsl:if test="string-length(@type) = 0 and ancestor::ro:party[@type = 'person']">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
             		<xsl:text>SetWarnings("errors_</xsl:text><xsl:value-of select="@field_id"/><xsl:text>_type","A Name Part Type must be specified.");</xsl:text>
@@ -642,7 +643,7 @@
 					<span class="warning">Name Part must have a type.</span>
 			    </xsl:otherwise>
 	    	</xsl:choose>
-        </xsl:if-->
+        </xsl:if>
         <xsl:if test="string-length(@type) &gt; 512">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
