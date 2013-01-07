@@ -60,13 +60,17 @@ class Extrif_Extension extends ExtensionBase
 				
 				// xxx: spatial extents (sanity checking?)
 				$spatialGeometry = $extendedMetadata->addChild("extRif:spatialGeometry", NULL, EXTRIF_NAMESPACE);
+				$sumOfAllAreas = 0;
 				foreach ($this->ro->getLocationAsLonLats() AS $lonLat)
 				{
 					//echo "enriching..." . $extent;
 					$spatialGeometry->addChild("extRif:geometry", $lonLat, EXTRIF_NAMESPACE);
-					$spatialGeometry->addChild("extRif:extent", $this->ro->calcExtent($lonLat), EXTRIF_NAMESPACE);
+					$extents = $this->ro->calcExtent($lonLat);
+					$spatialGeometry->addChild("extRif:extent", $extents['extent'], EXTRIF_NAMESPACE);
+					$sumOfAllAreas += $extents['area'];
+					$spatialGeometry->addChild("extRif:center", $extents['center'], EXTRIF_NAMESPACE);
 				}
-				
+				$spatialGeometry->addChild("extRif:area", $sumOfAllAreas, EXTRIF_NAMESPACE);
 				
 				/* Names EXTRIF */
 				$names = $xml->xpath('//'.$this->ro->class.'/name');

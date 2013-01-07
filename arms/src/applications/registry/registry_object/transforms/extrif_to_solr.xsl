@@ -41,7 +41,7 @@
       			<xsl:apply-templates select="extRif:extendedMetadata/extRif:quality_level"/>
       			<xsl:apply-templates select="extRif:extendedMetadata/extRif:feedType"/>   
                 <xsl:apply-templates select="extRif:extendedMetadata/extRif:lastModifiedBy"/>  
-                <xsl:apply-templates select="extRif:extendedMetadata/extRif:spatialGeometry/extRif:extent"/>
+                <xsl:apply-templates select="extRif:extendedMetadata/extRif:spatialGeometry"/>
                 <xsl:apply-templates select="extRif:extendedMetadata/extRif:broaderSubject" mode="value"/>
                 <xsl:apply-templates select="extRif:extendedMetadata/extRif:broaderSubject" mode="resolved_value"/>
                 <xsl:apply-templates select="extRif:extendedMetadata/extRif:broaderSubject" mode="type"/>
@@ -468,12 +468,8 @@
         </xsl:element>
     </xsl:template>
     
-    <xsl:template match="extRif:extendedMetadata/extRif:spatialGeometry/extRif:extent">
-    	<xsl:element name="field">
-            <xsl:attribute name="name">spatial</xsl:attribute>
-            <xsl:value-of select="."/>
-        </xsl:element>       
-    </xsl:template>
+
+
     <xsl:template match="extRif:description | description" mode="value">
         <xsl:element name="field">
             <xsl:attribute name="name">description_value</xsl:attribute>
@@ -487,17 +483,35 @@
             <xsl:value-of select="@type"/>
         </xsl:element>
     </xsl:template>
-    <!-- ignore list -->
-    <xsl:template match="ro:location/extRif:spatial/extRif:coords | ro:coverage/extRif:spatial/extRif:coords">
+ 
+    <xsl:template match="extRif:extendedMetadata/extRif:spatialGeometry">
+        <xsl:apply-templates/>     
+    </xsl:template>
+
+    <xsl:template match="extRif:extent">
         <xsl:element name="field">
-            <xsl:attribute name="name">spatial_coverage</xsl:attribute>
+            <xsl:attribute name="name">spatial_extent</xsl:attribute>
+            <xsl:value-of select="."/>
+        </xsl:element>
+    </xsl:template>
+
+    <xsl:template match="extRif:geometry">
+        <xsl:element name="field">
+            <xsl:attribute name="name">spatial_coverage_coords</xsl:attribute>
             <xsl:value-of select="."/>
         </xsl:element>
     </xsl:template>
     
-    <xsl:template match="ro:location/extRif:spatial/extRif:center | ro:coverage/extRif:spatial/extRif:center">
+    <xsl:template match="extRif:center">
         <xsl:element name="field">
             <xsl:attribute name="name">spatial_coverage_center</xsl:attribute>
+            <xsl:value-of select="."/>
+        </xsl:element>
+    </xsl:template>
+
+    <xsl:template match="extRif:area">
+        <xsl:element name="field">
+            <xsl:attribute name="name">spatial_coverage_area</xsl:attribute>
             <xsl:value-of select="."/>
         </xsl:element>
     </xsl:template>
@@ -510,7 +524,7 @@
     </xsl:template> 
 
 
-    <xsl:template match="ro:date | ro:description | ro:spatial | ro:text | extRif:geometry"/>
+    <xsl:template match="ro:date | ro:description | ro:spatial | ro:text"/>
 
     
     <xsl:template match="ro:name"/>

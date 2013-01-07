@@ -249,6 +249,7 @@ class Spatial_Extension extends ExtensionBase
 	
 	function calcExtent($coords)
 	{
+		$extents = Array();
 		$north = -90;
 		$south = 90;
 		$west  = 180;
@@ -283,11 +284,16 @@ class Spatial_Extension extends ExtensionBase
 			$tok = strtok(" ");
 		}
 		if($north == $south && $east == $west){
-			return $west." ".$south;	
+			$extents['area'] = 0;
+			$extents['center'] = $west." ".$south;
+			$extents['extent'] = $west." ".$south;	
 		}
 		else{
-			return $west." ".$south." ".$east." ".$north;
-		}			
+			$extents['area'] = ($east - $west) * ($north - $south);
+			$extents['center'] = (($east + $west)/2)." ".(($north + $south)/2);
+			$extents['extent'] = $west." ".$south." ".$east." ".$north;
+		}	
+		return $extents;		
 	}
 	
 	function isValidKmlPolyCoords($coords)

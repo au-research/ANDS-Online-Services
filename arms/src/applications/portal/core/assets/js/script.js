@@ -59,7 +59,7 @@ $(document).ready(function() {
 		}
 	});
 
-
+/*
 	if (typeof google == 'object') {
 	    google.setOnLoadCallback(function()
 	    {
@@ -116,4 +116,5 @@ $(document).ready(function() {
 
 		});
 	}
+	*/
 });

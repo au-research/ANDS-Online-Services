@@ -56,6 +56,9 @@
 	            	google.load("visualization", "1", {packages:["orgchart"]});
 				</script>
 	        <?php endif; ?>
+	        <?php if($lib=='google_map'):?>
+	           <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=drawing&amp;sensor=false"></script>
+	        <?php endif; ?>
 		<?php endforeach;?>
 	<?php endif; ?>
 

@@ -9,10 +9,11 @@ class Search extends MX_Controller {
 	}
 
 	function spatial(){
-		$data['title']='Research Data Australia - Search';
+		$data['title']='Research Data Australia - Spatial Search';
 		$data['scripts'] = array('search');
+		$data['js_lib'] = array('google_map');
 		//$data['scripts'] = array('home_page');
-		$this->load->view('search_layout', $data);
+		$this->load->view('spatial_search_layout', $data);
 	}
 
 	function filter(){
@@ -22,7 +23,7 @@ class Search extends MX_Controller {
 		/**
 		 * Getting the stuffs Ready
 		 */
-		$pp = 15;//per page
+		$pp = 9999;//per page
 		$page = 1;
 		$start = 0;
 		$filters = $this->input->post('filters');
