@@ -488,13 +488,19 @@ class Data_source extends MX_Controller {
 		$log = 'IMPORT LOG' . NL;
 		$log .= 'Harvest Method: Direct import from text posted' . NL;
 		$log .= strlen($xml) . ' characters received...' . NL;
-	
+
 		if (strlen($xml) == 0)
 		{
 			echo json_encode(array("response"=>"failure", "message"=>"Unable to retrieve any content from the specified XML"));
 			return;	
 		}
 		
+		// XXX: && data source has no crosswalk configured
+		if (strpos("<registryObjects",trim($xml)) !== 0)
+		{
+			$xml = wrapRegistryObjects($xml);
+		}
+
 		try
 		{ 
 

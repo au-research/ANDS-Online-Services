@@ -436,6 +436,8 @@ class Registry_objects extends CI_Model {
 	 */
 	public function deleteRegistryObject($target_ro, $dry_run = false)
 	{
+		$reenrich_queue = array();
+
 		// Check target_ro
 		if (!$target_ro instanceof _registry_object)
 		{
@@ -448,15 +450,29 @@ class Registry_objects extends CI_Model {
 
 		if (isPublishedStatus($target_ro->status))
 		{
-			// XXX: Handle URL backup?
+			// Handle URL backup
+			$this->db->where('registry_object_id', $target_ro->id);
+			$this->db->update('url_mappings', array(	"registry_object_id"=>NULL, 
+														"search_title"=>$target_ro->title, 
+														"updated"=>time()
+													));
 
-			// XXX: Add to deleted_records table
+			// Add to deleted_records table
+			$this->db->set(array(
+								'data_source_id'=>$target_ro->data_source_id,
+								'key'=>$target_ro->key,
+								'deleted'=>time(),
+								'title'=>$target_ro->title,
+								'record_data'=>$target_ro->getRif(),
+							));
+			$this->db->insert('deleted_registry_objects');
 
-			// XXX: Re-enrich and reindex related
+			// Re-enrich and reindex related
+			$reenrich_queue = array_merge($target_ro->getRelationships(), $reenrich_queue);
 
 			// Delete from the index
-			$this->_CI->solr->deleteByQueryCondition("id:(\"".$target_ro->id."\")");
-			$this->_CI->solr->commit();
+			$this->solr->deleteByQueryCondition("id:(\"".$target_ro->id."\")");
+			$this->solr->commit();
 		}
 
 		// Delete the actual registry object
@@ -464,14 +480,23 @@ class Registry_objects extends CI_Model {
 		{
 			if (isDraftStatus($target_ro->status))
 			{
+				//$this->db->where('registry_object_id', $target_ro->id);
+				//$this->db->update('registry_objects', array(	"status" => "DELETED"
+				//									));
 				$target_ro->eraseFromDatabase($target_ro->id);
 			}
 			else
 			{
-				//
-				// XXX: erase from database...
-				$this->db->where('registry_object_id', $target_ro->id);
-				$this->db->update('registry_objects', array('status'=>'DELETED'));
+				// Publish records get deleted
+				//$this->db->where('registry_object_id', $target_ro->id);
+				//$this->db->update('registry_objects', array(	"status" => "DELETED"
+				//										));
+				$target_ro->eraseFromDatabase($target_ro->id);
+
+				// And then their related records get reindexed...
+				$this->importer->_enrichRecords($reenrich_queue);
+				$this->importer->_reindexRecords($reenrich_queue);
+				log_message('debug', "Reindexed " . count($reenrich_queue) . " related record(s) when " . $target_ro->key . " was deleted.");
 			}
 		}
 	}

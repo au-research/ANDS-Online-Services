@@ -332,7 +332,7 @@ class Importer {
 	/**
 	 *
 	 */
-	function _reindexRecords(){
+	function _reindexRecords($specific_target_keys = array()){
 		$solrUrl = $this->CI->config->item('solr_url');
 		$solrUpdateUrl = $solrUrl.'update/?wt=json';
 		$this->CI->load->model('registry_objects', 'ro');
@@ -342,18 +342,43 @@ class Importer {
 
 		$deleted_records = array();
 
-		$allAffectedRecords = array_merge($this->importedRecords, $this->affected_records);
-		foreach($allAffectedRecords AS $ro_id){
-			try{
-				$ro = $this->CI->ro->getByID($ro_id);
+		if (is_array($specific_target_keys))
+		{
+			$index_count = 0;
+			$errors = array();
+			/// Called from outside the Importer
+			foreach ($specific_target_keys AS $key)
+			{
+				try{
+					$ro = $this->CI->ro->getPublishedByKey($key);
 
-				// Purge deleted records from the index
-				if ($ro->status == DELETED)
-				{
-					$deleted_records[] = 'id:("' . $ro->id . '")';
+					if ($ro)
+					{
+						$solrXML = $ro->transformForSOLR();
+						$result = curl_post($solrUpdateUrl, $solrXML);
+						$result = json_decode($result);
+						if($result->{'responseHeader'}->{'status'}==0){
+							$index_count++;
+						}
+					}
 				}
-				else
+				catch (Exception $e)
 				{
+					$errors[] = "UNABLE TO Index this registry object id = ".$key . BR . "<pre>" . nl2br($e->getMessage()) . "</pre>";	
+				}
+			}
+			return array("count"=>$this->reindexed_records, "errors"=>$errors);
+		}
+
+
+		else
+		{
+			// Called from inside the Importer
+			$allAffectedRecords = array_merge($this->importedRecords, $this->affected_records);
+			foreach($allAffectedRecords AS $ro_id){
+				try{
+					$ro = $this->CI->ro->getByID($ro_id);
+
 					// XXX: Use the SOLR library, do update in batches
 					$solrXML = $ro->transformForSOLR();
 					$result = curl_post($solrUpdateUrl, $solrXML);
@@ -362,16 +387,11 @@ class Importer {
 						$this->reindexed_records++;
 					}
 				}
+				catch (Exception $e)
+				{
+					$this->error_log[] = "UNABLE TO Index this registry object id = ".$ro_id . BR . "<pre>" . nl2br($e->getMessage()) . "</pre>";	
+				}
 			}
-			catch (Exception $e)
-			{
-				$this->error_log[] = "UNABLE TO Index this registry object id = ".$ro_id . BR . "<pre>" . nl2br($e->getMessage()) . "</pre>";	
-			}
-		}
-
-		if (count($deleted_records) > 0)
-		{
-			$this->solr->deleteByQueryCondition(implode(' OR ', $deleted_records));
 		}
 
 		return curl_post($solrUpdateUrl.'?commit=true', '<commit waitSearcher="false"/>');

@@ -90,6 +90,8 @@ class Core_extension extends ExtensionBase
 	
 	function create()
 	{
+		$this->setAttribute("original_status", $this->getAttribute("status"));
+		
 		$this->db->insert("registry_objects", array("data_source_id" => $this->getAttribute("data_source_id"), 
 													"key" => (string) $this->getAttribute("key"), 
 													"class" => $this->getAttribute("class"),
@@ -158,16 +160,6 @@ class Core_extension extends ExtensionBase
 		return $this;
 	}
 
-	/* Logically marks this record as deleted */
-	function delete()
-	{
-		// Mark this record as recently updated
-		$this->setAttribute("updated", time());
-		$this->setAttribute("status", DELETED);
-		
-		return $this;
-	}
-
 	/* Handles the changing of status soas not to cause inconsistencies */
 	function handleStatusChange($target_status)
 	{
@@ -182,47 +174,43 @@ class Core_extension extends ExtensionBase
 			$existingRegistryObject = $this->_CI->ro->getPublishedByKey($this->ro->key);
 			if ($existingRegistryObject)
 			{
-				// Add the XML content of this draft to the published record (and follow enrichment process, etc.)
-				$this->_CI->load->model('data_source/data_sources', 'ds');
-				//print_pre(wrapRegistryObjects($this->ro->getRif()));
-				$this->_CI->importer->_reset();
-				$this->_CI->importer->setXML(wrapRegistryObjects($this->ro->getRif()));
-				$this->_CI->importer->setDatasource($this->_CI->ds->getByID($this->getAttribute('data_source_id')));
-				$this->_CI->importer->forcePublish();
-				$this->_CI->importer->commit();
-
-				if ($error_log = $this->_CI->importer->getErrors())
-				{
-					throw new Exception("Errors occured whilst migrating to PUBLISHED status: " . NL . $error_log);
-				}
-
 				// Delete this original draft and change this object to point to the PUBLISHED (seamless changeover)
 				$this->ro = $this->_CI->ro->getPublishedByKey($this->getAttribute("key"));
 				$this->_CI->ro->deleteRegistryObject($this->id);
 				$this->id = $this->ro->id;
 				$this->init();
 			}
-			else
+
+			// Add the XML content of this draft to the published record (and follow enrichment process, etc.)
+			$this->_CI->load->model('data_source/data_sources', 'ds');
+			$this->_CI->importer->_reset();
+			$this->_CI->importer->setXML(wrapRegistryObjects($this->ro->getRif()));
+			$this->_CI->importer->setDatasource($this->_CI->ds->getByID($this->getAttribute('data_source_id')));
+			$this->_CI->importer->forcePublish();
+			$this->_CI->importer->commit();
+
+			if ($error_log = $this->_CI->importer->getErrors())
 			{
-				// pass;
+				throw new Exception("Errors occured whilst migrating to PUBLISHED status: " . NL . $error_log);
 			}
 		}
 		// Else, the PUBLISHED record is being converted to a DRAFT
 		{
-			$this->ro->slug = DRAFT_RECORD_SLUG . $this->ro->id;
 			$existingRegistryObject = $this->_CI->ro->getDraftByKey($this->ro->key);
 			if ($existingRegistryObject)
 			{
 				// Delete any existing drafts (effectively overwriting them)
 				$this->_CI->ro->deleteRegistryObject($existingRegistryObject->id);
-
-				// Delete from the index...no longer published
-				$this->_CI->load->library('solr');
-				$this->_CI->solr->deleteByQueryCondition("id:(\"".$this->ro->id."\")");
-				$this->_CI->solr->commit();
 			}
 
-			// pass;
+			// Reenrich related records (reindexes affected records)
+			// XXX: REENRICH RECORDS RELATED TO ME WHEN I CHANGE STATUS
+			/*
+			$reenrich_queue = $target_ro->getRelationships();
+			$this->_CI->importer->_enrichRecords($reenrich_queue);
+			$this->_CI->importer->_reindexRecords($reenrich_queue);
+			*/
+			$this->ro->slug = DRAFT_RECORD_SLUG . $this->ro->id;
 		}
 
 		$this->_initAttribute("original_status", $target_status);

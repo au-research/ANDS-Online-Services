@@ -24,14 +24,23 @@ class Registry_object extends MX_Controller {
 		$this->load->model('data_source/data_sources', 'ds');
 		$data_source = $this->ds->getByID(13);
 
-		$pub_ro = $this->ro->getPublishedByKey("apps.ands.org.au/party-7");
-		$draft_ro = $this->ro->getDraftByKey("apps.ands.org.au/party-7");
-		
+		$pub_ro = $this->ro->getPublishedByKey("apps.ands.org.au/party-2");
+		$draft_ro = $this->ro->getDraftByKey("apps.ands.org.au/party-2");
 
-		//$pub_ro->status = SUBMITTED_FOR_ASSESSMENT;
-		//$pub_ro->save();
-		//$draft_ro->status = PUBLISHED;
-		//$draft_ro->save();
+		if ($pub_ro)
+		{
+	//		print_pre(htmlentities($pub_ro->getRif()));
+		//	$this->ro->deleteRegistryObject($pub_ro);
+		//	$pub_ro->status = DRAFT;
+		//	$pub_ro->save();
+		}
+
+		if($draft_ro)
+		{
+	//		$this->ro->deleteRegistryObject($draft_ro);
+	//		$draft_ro->status = PUBLISHED;
+	//		$draft_ro->save();
+		}
 
 		//$draft_ro->save();
 		//$ro->status = DRAFT;

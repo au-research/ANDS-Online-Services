@@ -12,8 +12,8 @@ class Slug_Extension extends ExtensionBase
 	
 	function generateSlug()
 	{
-		// This function expects a display_title to be present!
-		if (!$this->ro->display_title)
+		// This function expects a title to be present!
+		if (!$this->ro->title)
 		{
 			$this->ro->updateTitles();
 		}
@@ -25,31 +25,45 @@ class Slug_Extension extends ExtensionBase
 		$result = trim(substr($result, 0, self::maxLength));
 		$result = preg_replace("/\s/", "-", $result);
 		
+echo $result;
 		// Check that there are no clashes
 		$query = $this->db->select('registry_object_id')->get_where('url_mappings',array("slug"=> $result));
 		if ($query->num_rows() > 0)
 		{
 			$existing_slug = array_pop($query->result_array());
 			$query->free_result();
-			if ($existing_slug['registry_object_id'] == $this->id)
+
+			// The slug gets abandoned if it's related record is deleted
+			if (!$existing_slug['registry_object_id'])
 			{
-				// XXX: Updated?
+				// Update to point back to us
+				$this->db->where("slug", $result);
+				$this->db->update("url_mappings", array("registry_object_id"=>$this->ro->id, "search_title"=>$this->ro->title, "updated"=>time()));
+
 				$this->ro->slug = $result;
 				$this->ro->save();
 				return $result;
 			}
+			else if ($existing_slug['registry_object_id'] == $this->ro->id)
+			{
+				// This is the same record
+				// Nothing to do?
+			}
 			else
 			{
+				// Not the same record, so lets try and generate a new unique key...
 				// this isn't guaranteed to be unique, but is likely to be
 				$result .= "-" . sha1($this->id);
 				$query = $this->db->select('registry_object_id')->get_where('url_mappings',array("slug"=> $result));
 				if ($query->num_rows() == 0)
 				{
-					$this->db->insert('url_mappings', array("slug"=>$result, "registry_object_id"=>$this->id, "created"=>time(), "updated"=>time()));
+					$this->db->insert('url_mappings', array("slug"=>$result, "registry_object_id"=>$this->id, "search_title"=>$this->ro->title, "created"=>time(), "updated"=>time()));
 				}
 				else
 				{
-					// XXX: Updated?
+					$this->db->where("slug", $result);
+					$this->db->update("url_mappings", array("registry_object_id"=>$this->ro->id, "search_title"=>$this->ro->title, "updated"=>time()));
+
 				}
 				$this->ro->slug = $result;
 				$this->ro->save();
