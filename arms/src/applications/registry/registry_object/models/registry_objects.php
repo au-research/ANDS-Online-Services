@@ -101,13 +101,9 @@ class Registry_objects extends CI_Model {
 		return $results;
 	}
 
-	/**
-	 * Returns exactly one registry object by Key (or NULL)
-	 *
-	 * @param the registry object key
-	 * @return _registry_object object or NULL
-	 */
-	function getByKey($key)
+	
+	// **** DEPRECATED, use getPublishedByKey, etc *****
+	/*function getByKey($key)
 	{
 		$results =  $this->_get(array(array('args' => $key,
 						    'fn' => function($db,$key) {
@@ -117,7 +113,71 @@ class Registry_objects extends CI_Model {
 							    return $db;
 						    })));
 		return is_array($results) ? $results : null;
+	}*/
+
+
+	/**
+	 * Returns exactly one PUBLISHED registry object by Key (or NULL)
+	 *
+	 * @param the registry object key
+	 * @return _registry_object object or NULL
+	 */
+	function getPublishedByKey($key)
+	{
+		$results =  $this->_get(array(array('args' => $key,
+						    'fn' => function($db,$key) {
+							    $db->select("registry_object_id")
+								    ->from("registry_objects")
+								    ->where("key", $key)
+								    ->where("status", PUBLISHED);
+							    return $db;
+						    })),
+							true,
+							1);
+		return is_array($results) ? $results[0] : null;
 	}
+
+	/**
+	 * Returns exactly one DRAFT (or draft-equivalent) registry object by Key (or NULL)
+	 *
+	 * @param the registry object key
+	 * @return _registry_object object or NULL
+	 */
+	function getDraftByKey($key)
+	{
+		$results =  $this->_get(array(array('args' => $key,
+						    'fn' => function($db,$key) {
+							    $db->select("registry_object_id")
+								    ->from("registry_objects")
+								    ->where("key", $key)
+								    ->where_in("status", getDraftStatusGroup());
+							    return $db;
+						    })),
+							true,
+							1);
+		return is_array($results) ? $results[0] : null;
+	}
+
+	/**
+	 * Returns all registry objects with a given key (or NULL)
+	 *
+	 * @param the registry object key
+	 * @return array(_registry_object) or NULL
+	 */
+	function getAllByKey($key)
+	{
+		$results =  $this->_get(array(array('args' => $key,
+						    'fn' => function($db,$key) {
+							    $db->select("registry_object_id")
+								    ->from("registry_objects")
+								    ->where("key", $key);
+							    return $db;
+						    })),
+							true
+							);
+		return is_array($results) ? $results : null;
+	}
+
 
 	/**
 	 * Returns exactly one registry object by Key (or NULL)
@@ -222,6 +282,7 @@ class Registry_objects extends CI_Model {
 	 * Get a number of registry_objects that match the attribute requirement (or an empty array)
 	 *
 	 * @param the data source ID to match by
+	 * @deprecated USE getIDsByDataSourceID() instead
 	 * @return array(_registry_object)
 	 */
 	function getByDataSourceKey($data_source_key)
@@ -366,6 +427,54 @@ class Registry_objects extends CI_Model {
 		}
 	}
 
+
+	/**
+	 * Deletes a RegistryObject 
+	 *
+	 * @param the registry object key
+	 * @return TRUE if delete was successful
+	 */
+	public function deleteRegistryObject($target_ro, $dry_run = false)
+	{
+		// Check target_ro
+		if (!$target_ro instanceof _registry_object)
+		{
+			$target_ro = $this->getByID($target_ro);
+			if (!$target_ro)
+			{
+				throw new Exception("Registry Object targeted for delete does not exist?");
+			}
+		}
+
+		if (isPublishedStatus($target_ro->status))
+		{
+			// XXX: Handle URL backup?
+
+			// XXX: Add to deleted_records table
+
+			// XXX: Re-enrich and reindex related
+
+			// Delete from the index
+			$this->_CI->solr->deleteByQueryCondition("id:(\"".$target_ro->id."\")");
+			$this->_CI->solr->commit();
+		}
+
+		// Delete the actual registry object
+		if (!$dry_run)
+		{
+			if (isDraftStatus($target_ro->status))
+			{
+				$target_ro->eraseFromDatabase($target_ro->id);
+			}
+			else
+			{
+				//
+				// XXX: erase from database...
+				$this->db->where('registry_object_id', $target_ro->id);
+				$this->db->update('registry_objects', array('status'=>'DELETED'));
+			}
+		}
+	}
 
 
 	/**

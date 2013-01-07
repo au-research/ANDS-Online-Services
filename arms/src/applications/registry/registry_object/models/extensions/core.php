@@ -29,7 +29,7 @@ class Core_extension extends ExtensionBase
 		// If we just want more than the core attributes
 		if (!$core_attributes_only)
 		{
-			// Lets get all the rest of the data source attributes
+			// Lets get all the rest of the registry object attributes
 			$query = $this->db->get_where("registry_object_attributes", array('registry_object_id' => $this->id));
 			if ($query->num_rows() > 0)
 			{
@@ -39,6 +39,8 @@ class Core_extension extends ExtensionBase
 				}		
 			}
 		}
+		$this->_initAttribute("original_status", $this->attributes['status']->value);
+
 		return $this;
 
 	}
@@ -104,18 +106,25 @@ class Core_extension extends ExtensionBase
 	
 	function save()
 	{
+		// A status change triggers special business logic
+		if ($this->getAttribute("status") != $this->getAttribute("original_status"))
+		{
+			$this->handleStatusChange($this->getAttribute("status"));
+		}
+
 		// Mark this record as recently updated
 		$this->setAttribute("updated", time());
-		
+
 		foreach($this->attributes AS $attribute)
 		{
 			if ($attribute->dirty)
 			{
 				if ($attribute->core)
-				{
+				{				
 					$this->db->where("registry_object_id", $this->id);
 					$this->db->update("registry_objects", array($attribute->name => $attribute->value));
 					$attribute->dirty = FALSE;
+					
 				}
 				else
 				{
@@ -157,6 +166,66 @@ class Core_extension extends ExtensionBase
 		$this->setAttribute("status", DELETED);
 		
 		return $this;
+	}
+
+	/* Handles the changing of status soas not to cause inconsistencies */
+	function handleStatusChange($target_status)
+	{
+		// Changing between draft statuses, nothing to worry about:
+		if (isDraftStatus($this->getAttribute('original_status')) && isDraftStatus($target_status))
+		{
+			// pass; 
+		}
+		// Else, if the draft is being published:
+		else if (isDraftStatus($this->getAttribute('original_status')) && isPublishedStatus($target_status))
+		{
+			$existingRegistryObject = $this->_CI->ro->getPublishedByKey($this->ro->key);
+			if ($existingRegistryObject)
+			{
+				// Add the XML content of this draft to the published record (and follow enrichment process, etc.)
+				$this->_CI->load->model('data_source/data_sources', 'ds');
+				//print_pre(wrapRegistryObjects($this->ro->getRif()));
+				$this->_CI->importer->_reset();
+				$this->_CI->importer->setXML(wrapRegistryObjects($this->ro->getRif()));
+				$this->_CI->importer->setDatasource($this->_CI->ds->getByID($this->getAttribute('data_source_id')));
+				$this->_CI->importer->forcePublish();
+				$this->_CI->importer->commit();
+
+				if ($error_log = $this->_CI->importer->getErrors())
+				{
+					throw new Exception("Errors occured whilst migrating to PUBLISHED status: " . NL . $error_log);
+				}
+
+				// Delete this original draft and change this object to point to the PUBLISHED (seamless changeover)
+				$this->ro = $this->_CI->ro->getPublishedByKey($this->getAttribute("key"));
+				$this->_CI->ro->deleteRegistryObject($this->id);
+				$this->id = $this->ro->id;
+				$this->init();
+			}
+			else
+			{
+				// pass;
+			}
+		}
+		// Else, the PUBLISHED record is being converted to a DRAFT
+		{
+			$this->ro->slug = DRAFT_RECORD_SLUG . $this->ro->id;
+			$existingRegistryObject = $this->_CI->ro->getDraftByKey($this->ro->key);
+			if ($existingRegistryObject)
+			{
+				// Delete any existing drafts (effectively overwriting them)
+				$this->_CI->ro->deleteRegistryObject($existingRegistryObject->id);
+
+				// Delete from the index...no longer published
+				$this->_CI->load->library('solr');
+				$this->_CI->solr->deleteByQueryCondition("id:(\"".$this->ro->id."\")");
+				$this->_CI->solr->commit();
+			}
+
+			// pass;
+		}
+
+		$this->_initAttribute("original_status", $target_status);
 	}
 
 	/* Removes all trace of the record from the database (use this wisely...) */

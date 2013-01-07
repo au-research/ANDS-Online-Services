@@ -15,6 +15,7 @@ class Importer {
 	private $dataSource;
 	private $start_time;
 	private $partialCommitOnly;
+	private $forcePublish; // used when changing from DRAFT to PUBLISHED (ignore the QA flags, etc)
 	private $status; // status of the currently ingested record
 
 	private $importedRecords;
@@ -188,7 +189,7 @@ class Importer {
 					if (is_null($revision_record_id))
 					{
 						// We are creating a new registryObject
-						$ro = $this->CI->ro->create($this->dataSource, (string)$registryObject->key, $class, "", $this->status, "temporary_slug", $record_owner, $this->harvestID);
+						$ro = $this->CI->ro->create($this->dataSource, (string)$registryObject->key, $class, "", $this->status, "temporary_slug" . time(), $record_owner, $this->harvestID);
 						$this->ingest_new_record++;
 					}
 					else
@@ -226,13 +227,13 @@ class Importer {
 					$ro->updateTitles();
 
 					// Only generate SLUGs for published records
-					if (in_array($this->status, getApprovedStatusGroup()))
+					if (in_array($this->status, getPublishedStatusGroup()))
 					{
 						$ro->generateSlug();
 					}
 					else
 					{
-						$ro->slug = 'draft_record_slug-' . $ro->id;
+						$ro->slug = DRAFT_RECORD_SLUG . $ro->id;
 					}
 					// Save all our attributes to the object
 					$ro->save();
@@ -309,7 +310,8 @@ class Importer {
 		// enrich related records, etc?
 		foreach ($directly_affected_records AS $ro_key)
 		{
-			$registryObjects = $this->CI->ro->getByKey($ro_key);
+			$registryObjects = $this->CI->ro->getAllByKey($ro_key);
+
 			if (is_array($registryObjects))
 			{
 				foreach ($registryObjects AS $ro)
@@ -375,7 +377,6 @@ class Importer {
 		return curl_post($solrUpdateUrl.'?commit=true', '<commit waitSearcher="false"/>');
 	}
 
-
 	/**
 	 * 
 	 */
@@ -383,46 +384,54 @@ class Importer {
 	{
 		$reharvest = true;
 		$revision_record_id = null;
+		$existingRegistryObject = null;
 
-		// Get any existing registry objects with the same key
-		$existingRegistryObjects = $this->CI->ro->getByKey((string)$registryObject->key);
-		if (!is_array($existingRegistryObjects)) return array($reharvest, $revision_record_id);
-
-		foreach ($existingRegistryObjects AS $existingRO)
+		// If there is something existing with the same class of status, overwrite it
+		if (isPublishedStatus($this->status))
 		{
-			// Reject this record if it is already in the feed
-			if ($existingRO->harvest_id == $this->harvestID)
+			$existingRegistryObject = $this->CI->ro->getPublishedByKey((string)$registryObject->key);
+		}
+		elseif (isDraftStatus($this->status))
+		{
+			$existingRegistryObject = $this->CI->ro->getDraftByKey((string)$registryObject->key);
+		}
+		
+
+		if ($existingRegistryObject)
+		{
+
+			// Check for duplicates: Reject this record if it is already in the feed
+			if ($existingRegistryObject->harvest_id == $this->harvestID)
 			{
 				$reharvest = false;
 				$this->error_log[] = "Ignored a record received twice in this harvest: " . $registryObject->key;
 				$this->ingest_duplicate_ignore++;
-				break;
 			}
 
-			// Record ownership, reject if record already exists within the registry
-			if($existingRO->data_source_id != $this->dataSource->id)
+			if($existingRegistryObject->data_source_id == $this->dataSource->id)
+			{	
+				// Add a new revision to this existing registry object
+				$revision_record_id = $existingRegistryObject->id;
+			}
+			else
 			{
+				// Duplicate key in alternate data source
 				$reharvest = false;
 				$this->error_log[] = "Ignored a record already existing in a different data source: " . $registryObject->key;
 				$this->ingest_duplicate_ignore++;
-				break;
-			}
-
-			// Handle overwriting existing records of same "Status group"
-			if (  	
-				(in_array($this->status,  getDraftStatusGroup()) && in_array($existingRO->status,  getDraftStatusGroup()))
-				OR 
-				(in_array($this->status,  getApprovedStatusGroup()) && in_array($existingRO->status,  getApprovedStatusGroup()))
-			)
-			{
-				// We should overwrite the record revision (can only have at most one registry object in each status group)
-				$revision_record_id = $existingRO->registry_object_id;
-				break;
 			}
 
 		}
+		else
+		{
+			// Harvest this as a new registry object
+			$reharvest = true;
+			$revision_record_id = null;
+		}
+	
+	
+		return array($reharvest, $revision_record_id);
 
-		return  array($reharvest, $revision_record_id);
 	}
 
 
@@ -564,6 +573,11 @@ class Importer {
 		 * !QA, AP = PUBLISHED
 		 * !QA, !AP = APPROVED
 		 */
+		if ($this->forcePublish)
+		{
+			return PUBLISHED;
+		}
+
 		if ($data_source->qa_flag === DB_TRUE)
 		{
 			$status = SUBMITTED_FOR_ASSESSMENT;
@@ -581,6 +595,12 @@ class Importer {
 		}
 
 		return $status;
+	}
+
+
+	public function forcePublish()
+	{
+		$this->forcePublish = TRUE;
 	}
 
 	/**
@@ -655,6 +675,8 @@ class Importer {
 		$this->importedRecords = array();
 		$this->affected_records = array();
 		$this->partialCommitOnly = false;
+
+		$this->forcePublish = false;
 
 		$this->ingest_attempts = 0;
 		$this->ingest_successes = 0;

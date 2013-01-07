@@ -16,6 +16,32 @@ class Registry_object extends MX_Controller {
 	}
 
 
+	public function testRecordSuite()
+	{
+		echo "<pre>";
+
+		$this->load->model('registry_object/registry_objects','ro');
+		$this->load->model('data_source/data_sources', 'ds');
+		$data_source = $this->ds->getByID(13);
+
+		$pub_ro = $this->ro->getPublishedByKey("apps.ands.org.au/party-7");
+		$draft_ro = $this->ro->getDraftByKey("apps.ands.org.au/party-7");
+		
+
+		//$pub_ro->status = SUBMITTED_FOR_ASSESSMENT;
+		//$pub_ro->save();
+		//$draft_ro->status = PUBLISHED;
+		//$draft_ro->save();
+
+		//$draft_ro->save();
+		//$ro->status = DRAFT;
+		//$ro->save();
+		echo $pub_ro;
+		echo "<hr/>";
+		echo $draft_ro;
+
+	}
+
 	/**
 	 * Manage My Records (MMR Screen)
 	 * 

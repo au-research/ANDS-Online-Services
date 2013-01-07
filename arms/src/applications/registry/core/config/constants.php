@@ -7,3 +7,5 @@ define('HARVEST_WARNING','warning');
 define('HARVEST_INFO','info');
 define('HARVEST_TEST_MODE','TEST');
 define('HARVEST_COMPLETE','TRUE');
+
+define('DRAFT_RECORD_SLUG','draft_record_');

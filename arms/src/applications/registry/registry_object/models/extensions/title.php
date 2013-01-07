@@ -48,7 +48,14 @@ class Title_Extension extends ExtensionBase
 			
 		}
 		
-		return $this->getTitlesForFragment($name, $this->ro->class);
+		$name = $this->getTitlesForFragment($name, $this->ro->class);
+		if (trim($name['display_title']) == '')
+		{
+			$name['display_title'] = self::DEFAULT_TITLE . " (" . $this->ro->id . ")";
+			$name['list_title'] = $name['display_title'];
+		}
+
+		return $name;
 	}	
 	
 	function getTitlesForFragment (SimpleXMLElement $name, $class)
