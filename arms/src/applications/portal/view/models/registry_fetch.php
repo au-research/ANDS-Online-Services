@@ -38,9 +38,15 @@ class Registry_fetch extends CI_Model
 	{
 		$url = $this->config->item('registry_endpoint') . "getRegistryObject/?slug=" . $slug;
 		$contents = json_decode(file_get_contents($url), true);
+
 		if (isset($contents['data']))
 		{
 			return $contents['data'];
+		}
+		else if (isset($contents['previously_valid_title']))
+		{
+			// Should throw a soft 404...
+			throw new SlugNoLongerValidException($contents['previously_valid_title']);
 		}
 		else
 		{
@@ -58,7 +64,7 @@ class Registry_fetch extends CI_Model
 		}
 		else
 		{
-			throw new Exception("Error whilst fetching registry object: " . $contents['message']);
+			throw new ErrorException("Error whilst fetching registry object: " . $contents['message']);
 		}
 	}
 
@@ -92,3 +98,5 @@ class Registry_fetch extends CI_Model
 	}
 
 }
+
+class SlugNoLongerValidException extends Exception {}

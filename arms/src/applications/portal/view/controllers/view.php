@@ -14,7 +14,15 @@ class View extends MX_Controller {
 		$this->load->model('registry_fetch','registry');
 		if ($this->input->get('slug'))
 		{
-			$extRif = $this->registry->fetchExtRifBySlug($this->input->get('slug'));
+			try
+			{
+				$extRif = $this->registry->fetchExtRifBySlug($this->input->get('slug'));
+			}
+			catch (SlugNoLongerValidException $e)
+			{
+				$this->load->view('soft404', array('previously_valid_title'=>$e->getMessage()));
+				return;
+			}
 			$connections = $this->registry->fetchConnectionsBySlug($this->input->get('slug'));
 		}
 		else if ($this->input->get('id'))

@@ -24,8 +24,7 @@ class Slug_Extension extends ExtensionBase
 		$result = trim(preg_replace("/[\s-]+/", " ", $result));
 		$result = trim(substr($result, 0, self::maxLength));
 		$result = preg_replace("/\s/", "-", $result);
-		
-echo $result;
+
 		// Check that there are no clashes
 		$query = $this->db->select('registry_object_id')->get_where('url_mappings',array("slug"=> $result));
 		if ($query->num_rows() > 0)

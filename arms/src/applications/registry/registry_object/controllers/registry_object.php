@@ -30,7 +30,7 @@ class Registry_object extends MX_Controller {
 		if ($pub_ro)
 		{
 	//		print_pre(htmlentities($pub_ro->getRif()));
-		//	$this->ro->deleteRegistryObject($pub_ro);
+			$this->ro->deleteRegistryObject($pub_ro);
 		//	$pub_ro->status = DRAFT;
 		//	$pub_ro->save();
 		}

@@ -76,9 +76,25 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 		if ($record && count($record) == 1)
 		{
 			echo json_encode($record[0]);
+			return;
 		}
 		else
 		{
+			if ($this->input->get('slug'))
+			{
+				// Check for orphans! (SLUGS whose registry_object has been deleted)
+				$query = $this->db->select('search_title')->get_where('url_mappings',
+											array("slug"=> $this->input->get('slug'), "registry_object_id IS NULL" => null));
+				
+				if ($query->num_rows() > 0)
+				{
+					$orphan_slug = array_pop($query->result_array());
+					$contents = array('previously_valid_title' => $orphan_slug['search_title']);
+					echo json_encode($contents);
+					return;
+				}
+			}
+
 			throw new Exception("No data could be selected for the specified URL/ID");
 		}
 	}
