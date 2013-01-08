@@ -15,6 +15,15 @@ function mod_enforce($module_name)
 	}
 }
 
+function acl_enforce($function_name, $message = '')
+{
+	$_ci =& get_instance();
+	if (!$_ci->user->hasFunction($function_name))
+	{
+		throw new Exception (($message ?: "You do not have permission to use this function (".$function_name.")"));
+	}
+}
+
 function default_exception_handler( $e ) {
 
     $_ci =& get_instance(); // CI super object to access load etc.

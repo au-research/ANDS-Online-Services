@@ -2,6 +2,12 @@
 
 class Spotlight extends MX_Controller {
 
+	function __construct()
+	{
+		parent::__construct();
+		acl_enforce('SPOTLIGHT_CMS_EDITOR');
+	}
+
 	function index(){
 		$data['js_lib'] = array('core', 'tinymce');
 		$data['scripts'] = array('spotlight');
