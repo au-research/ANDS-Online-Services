@@ -29,8 +29,10 @@ class Registry_object extends MX_Controller {
 
 		if ($pub_ro)
 		{
+	//		echo "<font color=red>" . $this->ro->cloneToDraft($pub_ro) . "</font>";
+			
 	//		print_pre(htmlentities($pub_ro->getRif()));
-			$this->ro->deleteRegistryObject($pub_ro);
+		//	$this->ro->deleteRegistryObject($pub_ro);
 		//	$pub_ro->status = DRAFT;
 		//	$pub_ro->save();
 		}

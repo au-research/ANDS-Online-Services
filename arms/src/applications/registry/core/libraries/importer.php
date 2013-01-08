@@ -16,6 +16,8 @@ class Importer {
 	private $start_time;
 	private $partialCommitOnly;
 	private $forcePublish; // used when changing from DRAFT to PUBLISHED (ignore the QA flags, etc)
+	private $forceDraft; 
+
 	private $status; // status of the currently ingested record
 
 	private $importedRecords;
@@ -597,6 +599,10 @@ class Importer {
 		{
 			return PUBLISHED;
 		}
+		else if ($this->forceDraft)
+		{
+			return DRAFT;
+		}
 
 		if ($data_source->qa_flag === DB_TRUE)
 		{
@@ -621,6 +627,11 @@ class Importer {
 	public function forcePublish()
 	{
 		$this->forcePublish = TRUE;
+	}
+
+	public function forceDraft()
+	{
+		$this->forceDraft = TRUE;
 	}
 
 	/**
@@ -697,6 +708,7 @@ class Importer {
 		$this->partialCommitOnly = false;
 
 		$this->forcePublish = false;
+		$this->forceDraft = false; 
 
 		$this->ingest_attempts = 0;
 		$this->ingest_successes = 0;
