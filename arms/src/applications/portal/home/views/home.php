@@ -28,26 +28,8 @@
 		</div><!-- intro_box -->
 	</div><!-- intro -->
 	<div class="right">
-		<h3>Featured research domains</h3>
+		<h3>Spotlight on Research Data Australia</h3>
 		<div class="flexslider" id="spotlight">
-			<!--ul class="slides">
-				<li>
-					<img src="images/t/auscope.jpg" alt="" />
-					<a href="#" class="title">The Australian Plant Phenomics Facility</a>
-					<div class="excerpt">
-						Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua Lorem ipsum dolor sit amet, consectetur adipisicing elit. eiusmod tempor incididunt ut labore et dolore magna aliqua
-					</div>
-					<a href="http://www.australianplantphenomics.com.au"><strong>www.australianplantphenomics.com.au</strong></a>
-				</li>	
-											<li>
-					<img src="images/t/auscope.jpg" alt="" />
-					<a href="#" class="title">The Australian Plant Phenomics Facility2</a>
-					<div class="excerpt">
-						Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua Lorem ipsum dolor sit amet, consectetur adipisicing elit. eiusmod tempor incididunt ut labore et dolore magna aliqua
-					</div>
-					<a href="http://www.australianplantphenomics.com.au"><strong>www.australianplantphenomics.com.au</strong></a>
-				</li>
-			</ul-->
 		</div><!-- flexslider -->
 		<div class="clear"></div>
 		<h3>Who contributes to Research Data Australia?</h3>
