@@ -431,15 +431,16 @@
 			$insertResult = importDoiObject($doiObjects,$urlValue, $client_id, $created_who='SYSTEM', $status='REQUESTED',$xml);
 
 			if(!$insertResult){	
-				// Mint the DOI.					
-				$response = $this->doisRequest("mint",$doiValue, $urlValue, $xml,$client_id);
+				/* Fix: 09/01/2013, DataCite requires metadata FIRST, then DOI call */
+				// Send DataCite the metadata first				
+				$response = $this->doisRequest("update",$doiValue, $urlValue, $xml,$client_id);
 	
 				if( $response )
 				{
 					if( doisGetResponseType($response) == gDOIS_RESPONSE_SUCCESS )
 					{
-						// We have successfully minted the doi through datacite.										
-						$response = $this->doisRequest("update",$doiValue, $urlValue, $xml,$client_id);		
+						// Now ask to mint the DOI								
+						$response = $this->doisRequest("mint",$doiValue, $urlValue, $xml,$client_id);		
 		
 						if(doisGetResponseType($response) == gDOIS_RESPONSE_SUCCESS )			
 						{
