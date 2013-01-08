@@ -217,12 +217,15 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 		$file = read_file('./applications/registry/spotlight/assets/spotlight.json');
 		$file = json_decode($file, true);
 		foreach($file['items'] as $partner){
-			$partners[] = array(
-				'title'=>$partner['title'],
-				'description'=>$partner['content'],
-				'img_url'=>$partner['img_url'],
-				'url'=>$partner['url']
-			);
+			if($partner['visible']=='yes'){
+				$partners[] = array(
+					'title'=>$partner['title'],
+					'description'=>$partner['content'],
+					'img_url'=>$partner['img_url'],
+					'url'=>$partner['url'],
+					'visible'=>$partner['visible']
+				);
+			}
 		}
 
 		// services_spotlight_partners_data_source

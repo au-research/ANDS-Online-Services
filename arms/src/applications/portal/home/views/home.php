@@ -70,8 +70,9 @@
 			<a href="{{url}}" class="title">{{{title}}}</a>
 			<div class="excerpt">
 				{{{description}}}
+				<p><a href="{{{url}}}"><strong>{{{url}}}</strong></a></p>
 			</div>
-			<a href="{{{url}}}"><strong>{{{url}}}</strong></a>
+			
 		</li>
 	{{/partners}}
 	</ul>
