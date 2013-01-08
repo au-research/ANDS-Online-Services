@@ -506,19 +506,18 @@ a.search_map {
 	background: url(images/info.png) no-repeat 9px 23px;
 	float: left;
 }
-.adv_inner .right {
+.adv_inner {
 	width: 600px;
-	float: right;
 	font-weight: bold;
 }
-.adv_inner .right label {
+.adv_inner label {
 	display: inline-block;
 	width: 189px;
 }
-.adv_inner .right .inputs {
+.adv_inner .inputs {
 	padding: 0 0 8px;
 }
-.adv_inner .right input[type="text"] {
+.adv_inner input[type="text"] {
 	border-top: 1px solid #cecece;
 	border-right: 1px solid #eee;
 	border-bottom: 1px solid #dfe1e2;
@@ -528,10 +527,10 @@ a.search_map {
 	width: 380px;
 	padding: 0 10px;
 }
-.adv_inner .right input.s_inputs {
+.adv_inner input.s_inputs {
 	width: 88px;
 }
-.adv_inner .right span.or {
+.adv_inner span.or {
 	display: inline-block;
 	padding: 0 4px;
 }
@@ -540,7 +539,7 @@ a.search_map {
 	padding: 18px 0 0 0;
 	border-top: 1px solid #e8e9e9;
 }
-.adv_inner .right input[type="submit"] {
+.adv_inner input[type="submit"] {
 	color: #fff;
 	font-size: 16px;
 	font-weight: bold;
@@ -548,11 +547,11 @@ a.search_map {
 	border: none;
 	padding: 11px 15px;
 }
-.adv_inner .right .sbuttons {
+.adv_inner .sbuttons {
 	padding: 30px 0 0 0;
 	text-align: left;
 }
-.adv_inner .right .sbuttons a#clear_search {
+.adv_inner .sbuttons a#clear_search {
 	display: inline-block;
 	padding: 10px 0 0 10px;
 	font-weight: bold;

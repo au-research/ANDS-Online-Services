@@ -42,7 +42,7 @@
 	<div class="search">
 		<div class="inner">
 			<form action="/" method="post">
-				<input type="text" id="search_box" name="s" value="Search eg. Something Something Something... Dark Side" onblur="if(this.value.length == 0) this.value='Search eg. Something Something';" onclick="if(this.value == 'Search eg. Something Something') this.value='';" />
+				<input type="text" id="search_box" name="s" value="" placeholder="Search" onclick="if(this.value == 'Search eg. Something Something') this.value='';" />
 				<div class="text_select">
 						<input type="text" name="Subject" autocomplete="off" />
 						<span class="default_value">Subject</span>				
@@ -52,7 +52,7 @@
 							<li>Option 3</li>							
 						</ul>
 				</div><!-- text_select -->
-				<a href="#" class="search_map">Map</a>
+				<a href="javascript:;" class="search_map" id="search_map_toggle">Map</a>
 				<div class="clear buttons">
 					<a href="#" id="ad_st">Advanced Search</a>
 				</div>
@@ -61,40 +61,30 @@
 		<div class="advanced_search">
 			<div class="adv_inner">
 				<form action="/" method="post">
-				<div class="left">
-					<img src="<?php echo asset_url('images/t/map.jpg', 'core');?>" alt="" />
-					<div class="draw_box">
-						<a href="#" class="draw">Start drawing</a>
-						<a href="#" class="play"></a>
-						<span class="draw_input"><input type="text" name="draw_input" /></span>
-						<a href="#" class="info"></a>
-						<div class="clear"></div>	
-					</div>
-				</div><!-- left -->	
-				<div class="right">
 					<p>Find  
-						<select id="record" name="record">
-							<option>Option 1</option>
-							<option>Option 2</option>
-							<option>Option 3</option>
+						<select id="record_tab" name="record">
+							<option value="collection">Collection</option>
+							<option value="party">Parties</option>
+							<option value="activity">Activities</option>
+							<option value="service">Services</option>
 						</select>
 					   that have:
 					</p>
 					<div class="inputs">
 						<label for="words">All of these words:</label>
-						<input type="text" name="words" id="words" /> 
+						<input type="text" name="words" class="adv_all" /> 
 					</div><!-- inputs -->	
 					<div class="inputs">
 						<label for="more_words">One or more of these words:</label>
-						<input type="text" name="more_words" id="more_words" /> 
+						<input type="text" name="more_words" class="adv_input" /> 
 					</div><!-- inputs -->	
 					<div class="inputs">
 						<label for="words_ex">But not these words:</label>
-						<input type="text" name="words_ex" id="words_ex" class="s_inputs" /> 
+						<input type="text" name="words_ex" id="words_ex" class="s_inputs adv_not" /> 
 						<span class="or">OR</span>
-						<input type="text" name="words_ex" class="s_inputs" /> 
+						<input type="text" name="words_ex" class="s_inputs adv_not" /> 
 						<span class="or">OR</span>
-						<input type="text" name="words_ex" class="s_inputs" /> 						
+						<input type="text" name="words_ex" class="s_inputs adv_not" /> 						
 					</div><!-- inputs -->
 					<div class="range_slider_wrap">
 						<p><input type="checkbox" name="rst_range" id="rst_range" value="1" /><label for="rst_range">Restrict temporal range</label></p>
@@ -114,10 +104,10 @@
 						<div id="range_slider"></div>
 					</div><!-- range_slider -->	
 					<div class="sbuttons">
-						<input type="submit" value="Start Search" /> 	
+						<input type="submit" value="Start Search" id="adv_start_search"/> 	
 						<a href="#" id="clear_search">Clear Search</a>
 					</div>
-				</div><!-- right -->
+				
 				</form>	
 				<div class="clear"></div>			
 			</div><!-- adv_inner -->

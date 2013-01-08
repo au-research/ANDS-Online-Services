@@ -1,4 +1,5 @@
 <?php $this->load->view('rda_header');?>
+<div id="searchmap" class="hide"></div>
 <div class="main">
 	<div class="page_title">
 		<h1 id="selected_subject"></h1>
@@ -18,7 +19,7 @@
 				if($t['selected']){
 					$s = 'current';
 				}else $s = '';
-				echo "<a href='javascript:;' class='facet_select ".$s."' facet_type='tab' facet_value=".$t['facet_value'].">".$t['display']."</a>";
+				echo "<a href='javascript:;' class='filter ".$s."' filter_type='tab' filter_value=".$t['facet_value'].">".$t['display']."</a>";
 			}
 		?>
 		
@@ -35,7 +36,7 @@
 	<div id="facet-result"></div>				
 </div><!-- sidebar -->				
 <div class="container_clear"></div>
-<div class="border"></div>
+<!-- <div class="border"></div> -->
 	
 
 <script type="text/x-mustache" id="search-result-template">

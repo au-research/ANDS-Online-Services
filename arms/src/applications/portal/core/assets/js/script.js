@@ -50,13 +50,33 @@ $(document).ready(function() {
     }, function() {
      	$(this).removeClass('exped');
     	$('.advanced_search').slideUp('fast');
-    	return false;   	
+    	return false;
     });
 
     $('#search_box').keypress(function(e){
 		if(e.which==13){//press enter
 			window.location = base_url+'search/#!/q='+$(this).val();
 		}
+	});
+
+	$('#search_map_toggle').click(function(e){
+		window.location = base_url+'search/#!/map=show';
+	});
+
+	$('#adv_start_search').click(function(e){
+		e.preventDefault();
+		var q = '';
+		var all = $('.adv_all').val();
+		var input = $('.adv_input').val();
+		var nots = $('.adv_not');
+		var not = '';
+		$.each(nots, function(e){
+			var v = $(this).val();
+			if(v!='')not +='-'+v+' ';
+		});
+		q += '"'+all+'" '+input+ ' '+not;
+		var tab = $('#record_tab').val();
+		window.location = base_url+'search/#!/q='+q+'/tab='+tab;
 	});
 
 /*
