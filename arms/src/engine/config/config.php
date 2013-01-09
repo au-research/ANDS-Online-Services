@@ -427,6 +427,7 @@ $config['solr_url'] = $ENV['solr_url'];
 
 $config['solr_url']	= 'http://ands3.anu.edu.au:8080/solr1/collection1/';
 
+
 /*
 HTML Purifier config
  */

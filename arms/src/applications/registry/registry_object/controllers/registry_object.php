@@ -270,6 +270,7 @@ class Registry_object extends MX_Controller {
 		$ro = $this->ro->getByID($id);
 		$ro->enrich();
 		//echo $ro->getExtRif();
+		//exit();
 		//$ro->enrich();
 		$solrDoc = $ro->transformForSOLR();
 

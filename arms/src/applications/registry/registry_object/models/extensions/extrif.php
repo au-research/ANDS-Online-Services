@@ -13,14 +13,14 @@ class Extrif_Extension extends ExtensionBase
 	 */
 	function enrich()
 	{
-		$this->_CI->load->model('data_source/data_sources','ds');		
+		$this->_CI->load->model('data_source/data_sources','ds');	
 		$ds = $this->_CI->ds->getByID($this->ro->data_source_id);
 		//same as in relationships.php
 		$xml = $this->ro->getSimpleXML();
 		$attributes = $xml->attributes(EXTRIF_NAMESPACE);
 
 		// Cannot enrich already enriched RIFCS!!
-		if(! (string) $attributes['enriched'])//! (string) $attributes['enriched'])
+		if(true) //! (string) $attributes['enriched'])//! (string) $attributes['enriched'])
 		{
 			$xml->addAttribute("extRif:enriched","true",EXTRIF_NAMESPACE);
 			$xml->addAttribute("xmlns",RIFCS_NAMESPACE);
@@ -72,6 +72,16 @@ class Extrif_Extension extends ExtensionBase
 				}
 				$spatialGeometry->addChild("extRif:area", $sumOfAllAreas, EXTRIF_NAMESPACE);
 				
+				$subjects = $extendedMetadata->addChild("extRif:subjects", NULL, EXTRIF_NAMESPACE);
+				
+				foreach ($this->ro->processSubjects() AS $subject)
+				{
+					$subjects->addChild("extRif:subject", $subject['value'], EXTRIF_NAMESPACE);
+					$subjects->addChild("extRif:subject_type", $subject['type'], EXTRIF_NAMESPACE);
+					$subjects->addChild("extRif:subject_resolved", $subject['resolved'], EXTRIF_NAMESPACE);
+					$subjects->addChild("extRif:subject_uri", $subject['uri'], EXTRIF_NAMESPACE);
+				}
+
 				/* Names EXTRIF */
 				$names = $xml->xpath('//'.$this->ro->class.'/name');
 				
@@ -93,7 +103,7 @@ class Extrif_Extension extends ExtensionBase
 					$description_str = (string) $description;					
 					$this->_CI->load->library('purifier');
 					$clean_html = $this->_CI->purifier->purify_html($description_str);
-					$extrifDescription = $xml->{$this->ro->class}->addChild("extRif:description", $clean_html, EXTRIF_NAMESPACE);
+					$extrifDescription = $extendedMetadata->addChild("extRif:description", $clean_html, EXTRIF_NAMESPACE);
 					$extrifDescription->addAttribute("type", $type);
 				}						
 				$this->ro->updateXML($xml->asXML(),TRUE,'extrif');
