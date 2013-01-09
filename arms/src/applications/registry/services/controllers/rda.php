@@ -209,8 +209,7 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 	/**
 	 * Return a list of Spotlight Partners along with their brief description and location (URL)
 	 */
-	public function getSpotlightPartners()
-	{
+	public function getSpotlightPartners(){
 		$partners = array();
 
 		$this->load->helper('file');

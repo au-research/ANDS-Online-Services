@@ -74,7 +74,8 @@ $(document).ready(function() {
 			var v = $(this).val();
 			if(v!='')not +='-'+v+' ';
 		});
-		q += '"'+all+'" '+input+ ' '+not;
+		if(all!='') q +='"'+all+'" ';
+		q += input+ ' '+not;
 		var tab = $('#record_tab').val();
 		window.location = base_url+'search/#!/q='+q+'/tab='+tab;
 	});

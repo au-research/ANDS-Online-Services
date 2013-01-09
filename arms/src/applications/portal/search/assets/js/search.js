@@ -1,6 +1,7 @@
 var searchData = {};
 var searchUrl = base_url+'search/filter';
 var searchBox = null;
+var map = null;
 $(document).ready(function() {
 
 	/*GET HASH TAG*/
@@ -40,6 +41,7 @@ $(document).ready(function() {
 		executeSearch(searchData, searchUrl);
 	});
 	$(window).hashchange(); //do the hashchange on page load
+	initMap();
 });
 
 function executeSearch(searchData, searchUrl){
@@ -93,7 +95,8 @@ function initSearchPage(){
 
 	//see if we need to init the map
 	if(searchData['map']){
-		initMap();
+		$('#searchmap').show();
+		resetZoomByMap(map);
 	}
 
 	$('#search_map_toggle').unbind('click');
@@ -119,30 +122,29 @@ function initSearchPage(){
 	});
 
 	//populate the advanced search field, BLACK MAGIC, not exactly, just some bad code
-	var q = searchData['q'];
-	all = q.match(/"([^"]+)"/)[1];//anything inside quote
-	$('.adv_all').val(all);
-	rest = q.split(q.match(/"([^"]+)"/)[0]).join('');
-	rest_split = rest.split(" ");
-	var nots = [];
-	var inputs = '';
-	$.each(rest_split, function(){
-		if(this.indexOf('-')==0){//anything starts with - is nots
-			nots.push(this.substring(1,this.length));
-		}else{
-			inputs += this;//anything else is normal
-		}
-	});
-	$('.adv_input').val(inputs);
-	$('.adv_not').each(function(e,k){//populate the nots
-		$(this).val(nots[e]);
-	});
+	if(searchData['q']){
+		var q = searchData['q'];
+		all = q.match(/"([^"]+)"/)[1];//anything inside quote
+		$('.adv_all').val(all);
+		rest = q.split(q.match(/"([^"]+)"/)[0]).join('');
+		rest_split = rest.split(" ");
+		var nots = [];
+		var inputs = '';
+		$.each(rest_split, function(){
+			if(this.indexOf('-')==0){//anything starts with - is nots
+				nots.push(this.substring(1,this.length));
+			}else{
+				inputs += this;//anything else is normal
+			}
+		});
+		$('.adv_input').val(inputs);
+		$('.adv_not').each(function(e,k){//populate the nots
+			$(this).val(nots[e]);
+		});
+	}
 }
 
 function initMap(){
-
-	$('#searchmap').show();
-
 	var latlng = new google.maps.LatLng(-25.397, 133.644);
 		
     var myOptions = {
@@ -157,7 +159,7 @@ function initMap(){
       overviewMapControl: false,
       mapTypeId: google.maps.MapTypeId.ROADMAP
     };
-    var map = new google.maps.Map(document.getElementById("searchmap"),myOptions);
+    map = new google.maps.Map(document.getElementById("searchmap"),myOptions);
     
     
     var drawingManager = new google.maps.drawing.DrawingManager({
@@ -208,6 +210,12 @@ function initMap(){
         }
 
        });
+}
+
+function resetZoomByMap(theMap){
+	google.maps.event.trigger(theMap, 'resize');
+	theMap.setCenter(latlng);
+	theMap.setZoom( map.getZoom() );
 }
 
 function formatSearch()

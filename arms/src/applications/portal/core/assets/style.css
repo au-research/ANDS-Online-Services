@@ -635,7 +635,7 @@ a.search_map {
 }
 .container .right .flexslider .excerpt {
 	padding: 0 0 6px;
-	height:187px;
+	height:165px;
 	overflow:auto;
 }
 .flex-container a:active,.flexslider a:active,.flex-container a:focus,.flexslider a:focus {
@@ -657,7 +657,7 @@ a.search_map {
 }
  /* Hide the slides before the JS is loaded. Avoids image jumping */
 .flexslider .slides img {
-	max-height:200px;
+	height:90px;
 	width:auto!important;
     display:block;
     margin: 0 0 16px;
