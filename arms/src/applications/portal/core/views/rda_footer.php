@@ -37,17 +37,12 @@
     </script>
 
 	<!-- Zoo Scripts Untouched -->
-	<script type="text/javascript" src="<?php echo asset_url('js/jquery-1.7.2.min.js', 'core');?>"></script>
+	<script type="text/javascript" src="<?php echo asset_url('lib/jquery-1.8.3.min.js', 'base');?>"></script>
 	<script type="text/javascript" src="<?php echo asset_url('js/jquery.flexslider-min.js', 'core');?>"></script>
-	<script type="text/javascript" src="<?php echo asset_url('js/jquery-ui.js', 'core');?>"></script>
-	<script type="text/javascript" src="<?php echo asset_url('js/script.js', 'core');?>"></script>
+	
+	<script type="text/javascript" src="<?php echo asset_url('lib/jquery-ui-1.8.23.custom.min.js', 'base');?>"></script>
 
-	<!-- base libraries -->
-	<script type="text/javascript" src="<?php echo asset_url('lib/less-1.3.0.min.js', 'base');?>" type="text/javascript"></script>
-	<script type="text/javascript" src="<?php echo asset_url('lib/mustache.js','base');?>"></script>
-	<script type="text/javascript" src="<?php echo asset_url('lib/jquery.ba-hashchange.min.js', 'base');?>"></script> <!-- Monitoring on Hash Change-->
-    
-    <?php if(isset($js_lib)): ?>
+	 <?php if(isset($js_lib)): ?>
 	    <?php foreach($js_lib as $lib):?>
 	 		<?php if($lib=='googleapi'):?>
 	            <script type='text/javascript' src='https://www.google.com/jsapi'></script>
@@ -59,8 +54,20 @@
 	        <?php if($lib=='google_map'):?>
 	           <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=drawing&amp;sensor=false"></script>
 	        <?php endif; ?>
+	        <?php if($lib=='range_slider'):?>
+	        	<script type="text/javascript" src="<?php echo asset_url('lib/jQRangeSlider/jQAllRangeSliders-min.js', 'base');?>"></script>
+	        <?php endif; ?>
 		<?php endforeach;?>
 	<?php endif; ?>
+
+	<script type="text/javascript" src="<?php echo asset_url('js/script.js', 'core');?>"></script>
+
+	<!-- base libraries -->
+	<script type="text/javascript" src="<?php echo asset_url('lib/less-1.3.0.min.js', 'base');?>" type="text/javascript"></script>
+	<script type="text/javascript" src="<?php echo asset_url('lib/mustache.js','base');?>"></script>
+	<script type="text/javascript" src="<?php echo asset_url('lib/jquery.ba-hashchange.min.js', 'base');?>"></script> <!-- Monitoring on Hash Change-->
+    
+   
 
 	<!-- Module-specific styles and scripts -->
     <?php if (isset($scripts)): foreach($scripts as $script):?>

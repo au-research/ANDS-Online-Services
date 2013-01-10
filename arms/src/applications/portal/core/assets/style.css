@@ -517,7 +517,7 @@ a.search_map {
 .adv_inner .inputs {
 	padding: 0 0 8px;
 }
-.adv_inner input[type="text"] {
+.adv_inner input.b_inputs[type="text"] {
 	border-top: 1px solid #cecece;
 	border-right: 1px solid #eee;
 	border-bottom: 1px solid #dfe1e2;
@@ -548,7 +548,9 @@ a.search_map {
 	padding: 11px 15px;
 }
 .adv_inner .sbuttons {
-	padding: 30px 0 0 0;
+	margin: 18px 0 0 0;
+	padding: 18px 0 0 0;
+	border-top: 1px solid #e8e9e9;
 	text-align: left;
 }
 .adv_inner .sbuttons a#clear_search {
@@ -734,7 +736,7 @@ a.search_map {
     cursor:default;
 }
 /* Control Nav */
-.flex-control-nav {
+/*.flex-control-nav {
     position:absolute;
     bottom:4px;
     right:11px;
@@ -783,7 +785,7 @@ a.search_map {
 .flex-control-thumbs .flex-active {
     opacity:1;
     cursor:default;
-}
+}*/
 
 
 

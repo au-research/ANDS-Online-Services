@@ -16,8 +16,14 @@
 <link rel="stylesheet" href="<?php echo asset_url('style.css','core');?>" type="text/css" media="screen" />
 <link rel="stylesheet" href="<?php echo asset_url('css/jquery-ui.css', 'core');?>" type="text/css" media="screen" />
 
+<link rel="stylesheet" href="<?php echo asset_url('css/flexslider.css', 'core');?>" type="text/css" media="screen" />
+
 <!-- ANDS Less file and general styling correction-->
 <link href="<?php echo asset_url('less/ands.less', 'core');?>" rel="stylesheet/less" type="text/css">
+
+<link rel="stylesheet" href="<?php echo asset_url('lib/jQRangeSlider/css/iThing.css', 'base');?>" type="text/css" media="screen" > 
+
+
 
 </head>
 <body>
@@ -58,6 +64,7 @@
 				</div>
 			</form>
 		</div><!-- inner -->
+
 		<div class="advanced_search">
 			<div class="adv_inner">
 				<form action="/" method="post">
@@ -72,11 +79,11 @@
 					</p>
 					<div class="inputs">
 						<label for="words">All of these words:</label>
-						<input type="text" name="words" class="adv_all" /> 
+						<input type="text" name="words" class="adv_all b_inputs" /> 
 					</div><!-- inputs -->	
 					<div class="inputs">
 						<label for="more_words">One or more of these words:</label>
-						<input type="text" name="more_words" class="adv_input" /> 
+						<input type="text" name="more_words" class="adv_input b_inputs" /> 
 					</div><!-- inputs -->	
 					<div class="inputs">
 						<label for="words_ex">But not these words:</label>
@@ -88,20 +95,9 @@
 					</div><!-- inputs -->
 					<div class="range_slider_wrap">
 						<p><input type="checkbox" name="rst_range" id="rst_range" value="1" /><label for="rst_range">Restrict temporal range</label></p>
-						<p>In the range: From: 
-							<select id="range_l" name="range_l">
-								<option>1544</option>
-								<option>1545</option>
-								<option>1546</option>
-							</select>                
-							To:
-							<select id="range_r" name="range_r">
-								<option>2011</option>
-								<option>2012</option>
-								<option>2013</option>
-							</select>   							
-						</p>
-						<div id="range_slider"></div>
+						<p><br/></p>
+						<div id="slider"></div>
+						<!-- <div id="range_slider"></div> -->
 					</div><!-- range_slider -->	
 					<div class="sbuttons">
 						<input type="submit" value="Start Search" id="adv_start_search"/> 	

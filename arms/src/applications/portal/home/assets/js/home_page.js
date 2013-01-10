@@ -7,6 +7,12 @@ $(document).ready(function() {
 		var template = $('#spotlight_template').html();
 		var output = Mustache.render(template, data);
 		$('#spotlight').html(output);
-		$('.flexslider').flexslider();
+		$('.flexslider').flexslider({
+	    animation: "fade",
+	    controlNav: true,
+	    slideshowSpeed: 4500,
+	    directionNav:false,
+	    pauseOnHover:true
+	  });
 	}
 });

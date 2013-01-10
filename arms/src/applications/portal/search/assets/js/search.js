@@ -124,9 +124,14 @@ function initSearchPage(){
 	//populate the advanced search field, BLACK MAGIC, not exactly, just some bad code
 	if(searchData['q']){
 		var q = searchData['q'];
-		all = q.match(/"([^"]+)"/)[1];//anything inside quote
+		if(q.indexOf('"')!='-1'){
+			all = q.match(/"([^"]+)"/)[1];//anything inside quote
+			rest = q.split(q.match(/"([^"]+)"/)[0]).join('');
+		}else {
+			all ='';
+			rest = q;
+		}
 		$('.adv_all').val(all);
-		rest = q.split(q.match(/"([^"]+)"/)[0]).join('');
 		rest_split = rest.split(" ");
 		var nots = [];
 		var inputs = '';

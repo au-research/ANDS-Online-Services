@@ -35,6 +35,15 @@ $(document).ready(function() {
                 $( "#amount" ).val( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] );
             }
     });
+    $("#slider").editRangeSlider({
+    	bounds:{min: 1544, max: 2012},
+    	defaultValues:{min: 1544, max: 2012},
+    	valueLabels:"change",
+    	type:"number",
+    	arrows:false,
+    	delayOut:400
+	});
+
     $('#clear_search').click(function() {
     	var $form = $(this).parents('form');
     	$form.find('input[type="text"]').val('');
@@ -46,10 +55,12 @@ $(document).ready(function() {
     $('#ad_st').toggle(function() {
     	$(this).addClass('exped');
     	$('.advanced_search').slideDown();
+    	$("#slider").editRangeSlider("resize");
     	return false;
     }, function() {
      	$(this).removeClass('exped');
     	$('.advanced_search').slideUp('fast');
+    	$("#slider").editRangeSlider("resize");
     	return false;
     });
 
@@ -77,7 +88,8 @@ $(document).ready(function() {
 		if(all!='') q +='"'+all+'" ';
 		q += input+ ' '+not;
 		var tab = $('#record_tab').val();
-		window.location = base_url+'search/#!/q='+q+'/tab='+tab;
+		var temporal = $("#slider").editRangeSlider("values");
+		window.location = base_url+'search/#!/q='+q+'/tab='+tab+'/temporal='+Math.round(temporal.min)+'-'+Math.round(temporal.max);
 	});
 
 /*
