@@ -9,3 +9,6 @@ define('HARVEST_TEST_MODE','TEST');
 define('HARVEST_COMPLETE','TRUE');
 
 define('DRAFT_RECORD_SLUG','draft_record_');
+
+define('SUCCESS','SUCCESS');
+define('FAILURE','FAILURE');

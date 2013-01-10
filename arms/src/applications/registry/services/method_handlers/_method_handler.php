@@ -6,7 +6,7 @@ abstract class MethodHandler
 	
 	function initialise($options, $params, $formatter)
 	{
-		$this->params = $params;
+		$this->params = $params ?: array();
 		$this->options = $options;
 		$this->formatter = $formatter;
 		

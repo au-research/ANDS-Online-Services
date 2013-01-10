@@ -1,8 +1,7 @@
 <?php 
 
 /**
- * Web Service API Key registration
- * 
+ * Show API Key
  * 
  * @author Ben Greenwood <ben.greenwood@ands.org.au>
  * @see ands/services/controllers/services
@@ -28,26 +27,25 @@
 				<!-- getRIFCS -->
 			    <div class="box-content">
 			    	
-				    <form action="#" method="POST">
-					  <legend>Register for an API key</legend>
-					  
-					  <label>* <strong>Organisation</strong></label>
-					  <input name="organisation" type="text" class="input-xlarge" required="required" placeholder="Name of your project or institution">
-					  
-					  <label>* <strong>Contact Email Address</strong></label>
-					  <input name="contact_email" type="text" class="input-xlarge" required="required" placeholder="Your email address">
-
-					  <label><strong>Purpose of this API key</strong></label>
-					  <input name="purpose" type="text" class="input-xlarge" placeholder="What cool things are you doing?">
-					  <br/>
-					  <!--
-					  <label class="checkbox">
-					    <input type="checkbox"> I agree to the Web Services Terms of Use
-					  </label>
-					  -->
-					  <input type="submit" name="submit" class="btn">Register my API key</button>
-					</form>
+				   <div class="alert alert-success">
+				   	<strong>Success!</strong> Your API Key has been generated.
+				   </div>
 					
+
+					<p>
+						Your API Key registered to <strong><?=$organisation;?></strong> is:
+					</p>
+					<p>
+						<strong style="text-align:middle;"><?=$api_key;?></strong>
+					</p>
+					<p>
+						Use this API key in all requests to ANDS Web Services. For example:<br/>
+						<a href="<?=base_url('services/'.$api_key.'/getMetadata.json');?>"><?=base_url('services/');?>/</a><a href="<?=base_url('services/'.$api_key.'/getMetadata.json');?>"><strong><?=$api_key;?></strong></a><a href="<?=base_url('services/'.$api_key.'/getMetadata.json');?>">/getMetadata.json</a>
+					</p>
+
+					<p>
+						<a href="<?=base_url('services');?>">Back to Services Documentation Page</a>
+					</p>
 			    </div>
 			    
 			</div>

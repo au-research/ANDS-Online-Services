@@ -6,7 +6,7 @@ class MetadataMethod extends MethodHandler
 	
 	private $default_params = array(
 		'q' => '*:*',
-		'fl' => 'id,key,slug,display_title,status',
+		'fl' => 'id,key,slug,display_title,status,class',
         'wt' => 'json',
         'indent' => 'on',
         'rows' => 20
@@ -65,7 +65,8 @@ class MetadataMethod extends MethodHandler
 			$output = $result;
 		}
 		
-		$this->formatter->display($output);
+		// Bubble back the output status
+		return $this->formatter->display($output);
    }
    
 }

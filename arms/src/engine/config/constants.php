@@ -84,7 +84,9 @@ define('DRAFT', 'DRAFT');
 define('MORE_WORK_REQUIRED', 'MORE_WORK_REQUIRED');
 define('DELETED', 'DELETED');
 
-
+define('ONE_HOUR', 60*60);
+define('ONE_DAY', 60*ONE_HOUR);
+define('ONE_MONTH', 30*ONE_DAY);
 
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */

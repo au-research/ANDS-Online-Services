@@ -53,14 +53,17 @@ class Services extends MX_Controller {
 		if (!$this->check_compatibility($method, $format, $service_mapping))
 		{
 			$formatter->error("Your requested method does not support this format: " . $format);
+			$this->registerServiceRequest($api_key, $params, FAILURE, "Unsupported Format");
 			return;
 		}
 		
-		// TODO: Check that the API key is valid
-		
-		// TODO: Increment the request counter
-		
-		// TODO: If debug mode...
+		// Check that the API key is valid
+		if (!$this->authenticate_api_key($api_key))
+		{
+			$formatter->error("Your API key does not exist or is invalid: " . $api_key);
+			$this->registerServiceRequest($api_key, $params, FAILURE, "Invalid API Key");
+			return;
+		}
 		
 		$options = $service_mapping[$method];
 		$handler = $this->getMethodHandler($service_mapping[$method]['method_handler']);
@@ -68,7 +71,10 @@ class Services extends MX_Controller {
 		$this->output->set_content_type($formatter->output_mimetype());
 		
 		// All the setup is finished! Palm off the handling of the request...
-		$handler->handle();
+		$status = ($handler->handle() ? SUCCESS : FAILURE);
+
+		// Log this request
+		$this->registerServiceRequest($api_key, $params, $status);
 
 		unset($formatter);
 		restore_error_handler();
@@ -87,7 +93,44 @@ class Services extends MX_Controller {
 		$data['js_lib'] = array('core');
 		$data['scripts'] = array();
 		$data['title'] = 'Web Services';
-		$this->load->view('register_api_key', $data);
+		if (!$this->input->post('submit'))
+		{
+			$this->load->view('register_api_key', $data);
+		}
+		else
+		{
+			if (!$this->input->post('organisation') || !$this->input->post('contact_email'))
+			{
+				throw new Exception("One of the mandatory fields (Organisation name or Contact Email) were not entered. Please try again.");
+			}
+			else
+			{
+				// Generate a random API key hash
+				$api_key = substr(md5(mt_rand()), 0, 12);
+
+				$query = $this->db->get_where('api_keys', array('api_key'=>$api_key));
+				if ($query->num_rows == 0)
+				{
+					$this->db->insert('api_keys',
+						array(	'api_key' => $api_key, 
+								'owner_email'=>$this->input->post('contact_email'),
+								'owner_organisation'=>$this->input->post('organisation'),
+								'owner_purpose'=>$this->input->post('purpose'),
+								'created'=>time()
+					));
+				}
+				else
+				{
+					throw new Exception("API Key could not be generated (numeric error = ".$api_key."). Please try again.");
+				}
+
+				$data["api_key"] = $api_key;
+				$data["organisation"] = $this->input->post('organisation');
+
+				$this->load->view('show_api_key', $data);
+
+			}
+		}
 	}
 	
 	private function check_compatibility($method, $format, array $service_mapping)
@@ -109,12 +152,23 @@ class Services extends MX_Controller {
 	private function authenticate_api_key($api_key)
 	{
 		// Do the API key checking here!
-		if (strlen($api_key) != 32)
+		if (strlen($api_key) <= 15 & ctype_alnum($api_key))
 		{
-			// TODO: Check that the API key is valid
-			//
+			// Pretty straightforward check of api_keys table for match
+			$query = $this->db->get_where('api_keys',array('api_key'=>$api_key));
+			if ($query->num_rows() > 0)
+			{
+				return TRUE;
+			}
+			else
+			{
+				return FALSE;
+			}
 		}
-		
+		else
+		{
+			return false;
+		}
 	}
 	
 	private function parse_request_params(array $params)
@@ -201,5 +255,33 @@ class Services extends MX_Controller {
 		return $handler;
 	}
 	
+	/**
+	 * Register a service request and essential information
+	 * about the request for statistical purposes
+	 *
+	 * @param note string 	optionally specifies a note to 
+	 *						be appended to the entry
+	 */
+	private function registerServiceRequest($api_key, $params, $status, $note=null)
+	{
+		$values = array();
+
+		// The server time of the request
+		$values['timestamp'] = time();
+
+		$values['status'] = $status;
+
+		// Details about the user that browsed here
+		$values['ip_address'] = $this->input->ip_address();
+
+		$values['api_key'] = $api_key;
+		$values['service'] = implode($params,"&");
+		$values['params'] = http_build_query($this->input->get());
+
+		// Optionally, a note for whatever use...
+		if ($note) { $values['note'] = $note; }
+
+		$this->db->insert('api_requests', $values);
+	}
 	
 }	
