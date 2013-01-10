@@ -41,7 +41,7 @@
 	<script type="text/javascript" src="<?php echo asset_url('js/jquery.flexslider-min.js', 'core');?>"></script>
 	
 	<script type="text/javascript" src="<?php echo asset_url('lib/jquery-ui-1.8.23.custom.min.js', 'base');?>"></script>
-
+	<script type="text/javascript" src="<?php echo asset_url('lib/jQRangeSlider/jQAllRangeSliders-min.js', 'base');?>"></script>
 	 <?php if(isset($js_lib)): ?>
 	    <?php foreach($js_lib as $lib):?>
 	 		<?php if($lib=='googleapi'):?>
@@ -53,9 +53,6 @@
 	        <?php endif; ?>
 	        <?php if($lib=='google_map'):?>
 	           <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=drawing&amp;sensor=false"></script>
-	        <?php endif; ?>
-	        <?php if($lib=='range_slider'):?>
-	        	<script type="text/javascript" src="<?php echo asset_url('lib/jQRangeSlider/jQAllRangeSliders-min.js', 'base');?>"></script>
 	        <?php endif; ?>
 		<?php endforeach;?>
 	<?php endif; ?>
