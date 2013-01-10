@@ -66,7 +66,55 @@
 						</dl>
 					</div>
 				
+			    </div>		     
+
+
+			    <!-- Get Native Schema format -->
+			    <div class="box-content">
+			    	
+			    	<h3>getNativeFormat</h3>
+			    	
+			    	<div>
+			    		<blockquote>
+							<p class="lead">Get all matching records in the format which they were harvested</p>
+						</blockquote>
+						<dl class="dl-horizontal">
+						  <dt>Service URL: </dt>
+						  <dd><code>.../services/&lt;your API key&gt;/getNativeFormat.json/</code></dd>
+						</dl>
+					</div>
+				
 			    </div>		    
+
+			    <div class="box-content">
+			    	
+			    	<h5>Query Parameters</h5>
+
+			    	<p>
+			    	All web services (except OAI-PMH) support SOLR query parameters. <?=anchor('services/query_schema','View the schema fields');?>   	
+			    	</p>
+				
+			    </div>	
+
+			    <hr/>	
+
+			    <!-- OAI-PMH -->
+			    <div class="box-content">
+			    	
+			    	<h3>OAI-PMH</h3>
+			    	
+			    	<div>
+			    		<blockquote>
+							<p class="lead">XXX</p>
+						</blockquote>
+						<dl class="dl-horizontal">
+						  <dt>Service URL: </dt>
+						  <dd><code>.../services/&lt;your API key&gt;/oai/</code></dd>
+						</dl>
+					</div>
+				
+			    </div>		    
+			    
 			    
 		</div>
 	</div>

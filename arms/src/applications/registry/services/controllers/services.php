@@ -14,7 +14,7 @@ define('SERVICES_MODULE_PATH', APP_PATH.'services/');
  */
 class Services extends MX_Controller {
 	
-	var $reserved_pages = array('register');
+	var $reserved_pages = array('register','query_schema');
 	
 	public function _remap($api_key, $params = array())
 	{
@@ -136,6 +136,14 @@ class Services extends MX_Controller {
 
 			}
 		}
+	}
+
+	public function query_schema()
+	{
+		$data['js_lib'] = array('core');
+		$data['scripts'] = array();
+		$data['title'] = 'Query Schema Fields (SOLR)';
+		$this->load->view('solr_schema_fields', $data);
 	}
 	
 	private function check_compatibility($method, $format, array $service_mapping)
