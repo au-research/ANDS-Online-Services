@@ -40,6 +40,11 @@ class Services extends MX_Controller {
 		// Method i.e. "getRIFCS", Format i.e. "xml"
 		list($method, $format, $options) = $this->parse_request_params($params);
 		
+		if (is_null($format) && isset($service_mapping[$method]['default_format']))
+		{
+			$format = $service_mapping[$method]['default_format'];
+		}
+
 		// Setup our formatter
 		global $formatter;
 		$formatter = $this->getFormatter($format);
@@ -176,7 +181,7 @@ class Services extends MX_Controller {
 
 		// Get the default values (partially malformed requests)
 		$method = $this->config->item('services_default_method');
-		$format = $this->config->item('services_default_format');
+		$format = null;
 
 		// Grab the values from the parameter array
 		// The syntax should be: <method>.<format>/?<query params>
@@ -276,7 +281,7 @@ class Services extends MX_Controller {
 
 		$values['api_key'] = $api_key;
 		$values['service'] = implode($params,"&");
-		$values['params'] = http_build_query($this->input->get());
+		$values['params'] = http_build_query(is_array($this->input->get()) ? $this->input->get() : array());
 
 		// Optionally, a note for whatever use...
 		if ($note) { $values['note'] = $note; }
