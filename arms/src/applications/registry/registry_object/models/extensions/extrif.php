@@ -59,18 +59,22 @@ class Extrif_Extension extends ExtensionBase
 				$extendedMetadata->addChild("extRif:displayLogo", NULL, EXTRIF_NAMESPACE);
 				
 				// xxx: spatial extents (sanity checking?)
-				$spatialGeometry = $extendedMetadata->addChild("extRif:spatialGeometry", NULL, EXTRIF_NAMESPACE);
-				$sumOfAllAreas = 0;
-				foreach ($this->ro->getLocationAsLonLats() AS $lonLat)
+				$spatialLocations = $this->ro->getLocationAsLonLats();
+				if($spatialLocations)
 				{
-					//echo "enriching..." . $extent;
-					$spatialGeometry->addChild("extRif:geometry", $lonLat, EXTRIF_NAMESPACE);
-					$extents = $this->ro->calcExtent($lonLat);
-					$spatialGeometry->addChild("extRif:extent", $extents['extent'], EXTRIF_NAMESPACE);
-					$sumOfAllAreas += $extents['area'];
-					$spatialGeometry->addChild("extRif:center", $extents['center'], EXTRIF_NAMESPACE);
+					$spatialGeometry = $extendedMetadata->addChild("extRif:spatialGeometry", NULL, EXTRIF_NAMESPACE);
+					$sumOfAllAreas = 0;
+					foreach ($spatialLocations AS $lonLat)
+					{
+						//echo "enriching..." . $extent;
+						$spatialGeometry->addChild("extRif:polygon", $lonLat, EXTRIF_NAMESPACE);
+						$extents = $this->ro->calcExtent($lonLat);
+						$spatialGeometry->addChild("extRif:extent", $extents['extent'], EXTRIF_NAMESPACE);
+						$sumOfAllAreas += $extents['area'];
+						$spatialGeometry->addChild("extRif:center", $extents['center'], EXTRIF_NAMESPACE);
+					}
+					$spatialGeometry->addChild("extRif:area", $sumOfAllAreas, EXTRIF_NAMESPACE);
 				}
-				//$spatialGeometry->addChild("extRif:area", $sumOfAllAreas, EXTRIF_NAMESPACE);
 				
 				$subjects = $extendedMetadata->addChild("extRif:subjects", NULL, EXTRIF_NAMESPACE);
 				

@@ -452,28 +452,28 @@
 
     <xsl:template match="extRif:extent">
         <xsl:element name="field">
-            <xsl:attribute name="name">spatial_extent</xsl:attribute>
+            <xsl:attribute name="name">spatial_coverage_extents</xsl:attribute>
             <xsl:value-of select="."/>
         </xsl:element>
     </xsl:template>
 
-    <xsl:template match="extRif:geometry">
+    <xsl:template match="extRif:polygon">
         <xsl:element name="field">
-            <xsl:attribute name="name">spatial_coverage_coords</xsl:attribute>
+            <xsl:attribute name="name">spatial_coverage_polygons</xsl:attribute>
             <xsl:value-of select="."/>
         </xsl:element>
     </xsl:template>
     
     <xsl:template match="extRif:center">
         <xsl:element name="field">
-            <xsl:attribute name="name">spatial_coverage_center</xsl:attribute>
+            <xsl:attribute name="name">spatial_coverage_centres</xsl:attribute>
             <xsl:value-of select="."/>
         </xsl:element>
     </xsl:template>
 
     <xsl:template match="extRif:area">
         <xsl:element name="field">
-            <xsl:attribute name="name">spatial_coverage_area</xsl:attribute>
+            <xsl:attribute name="name">spatial_coverage_area_sum</xsl:attribute>
             <xsl:value-of select="."/>
         </xsl:element>
     </xsl:template>
