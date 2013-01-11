@@ -328,11 +328,11 @@ class Registry_objects extends CI_Model {
 					       })),true, $limit, $offset);
 	}
 
-	function getByDataSourceID($data_source_id, $limit=10, $offset=0, $args=null){
+	function getByDataSourceID($data_source_id, $limit=10, $offset=0, $args=null, $make_ro = true){
 		return $this->_get(array(array('args' => array(
 									'data_source_id'=>$data_source_id,
 									'search'=>$args['search'] ? $args['search'] : false,
-									'sort'=>$args['sort'],
+									'sort'=>$args['sort'] ? $args['sort'] : false,
 									'filter'=>$args['filter']
 								),
 					       'fn' => function($db, $args) {
@@ -356,7 +356,7 @@ class Registry_objects extends CI_Model {
 						   			}
 						   		}
 						       return $db;
-					       })),true, $limit, $offset);
+					       })),$make_ro, $limit, $offset);
 	}
 
 	/**

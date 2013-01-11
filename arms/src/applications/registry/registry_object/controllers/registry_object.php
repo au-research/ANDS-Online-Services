@@ -109,6 +109,83 @@ class Registry_object extends MX_Controller {
 		$this->load->view("manage_my_record", $data);
 	}
 
+	public function hopper($data_source_id = false){
+		$data['title'] = 'Manage My Records';
+		$this->load->model('data_source/data_sources', 'ds');
+		if($data_source_id){
+			$data_source = $this->ds->getByID($data_source_id);
+			if(!$data_source) show_error("Unable to retrieve data source id = ".$data_source_id, 404);
+			
+			$data_source->updateStats();//TODO: XXX
+
+			//$data['data_source'] = $data_source;
+			$data['data_source'] = array(
+				'title'=>$data_source->title,
+				'id'=>$data_source->id,
+				'count_total'=>$data_source->count_total,
+				'count_APPROVED'=>$data_source->count_APPROVED,
+				'count_SUBMITTED_FOR_ASSESSMENT'=>$data_source->count_SUBMITTED_FOR_ASSESSMENT,
+				'count_PUBLISHED'=>$data_source->count_PUBLISHED
+			);
+		}
+		$data['less']=array('mmr_hopper');
+		$data['scripts'] = array('hopper');
+		$data['js_lib'] = array('core');
+		$this->load->view("manage_my_record_hopper", $data);
+	}
+
+	public function get_mmr_data($data_source_id){
+		$this->load->model('data_source/data_sources', 'ds');
+		$this->load->model('registry_object/registry_objects', 'ro');
+		$data_source = $this->ds->getByID($data_source_id);
+		if(!$data_source) show_error("Unable to retrieve data source id = ".$data_source_id, 404);
+		$data_source->updateStats();//TODO: XXX
+		//$data['data_source'] = $data_source;
+		//
+		foreach($data_source->attributes as $attrib=>$value){
+			$jsonData['ds'][$attrib] = $value->value;
+		}
+		$jsonData['valid_statuses'] = $this->ro->valid_status;
+		$jsonData['statuses'] = array();
+		foreach($jsonData['valid_statuses'] as $s){
+			$st = array(
+				'name'=>$s,
+			);
+			switch($s){
+				case 'DRAFT':$st['count']=$data_source->count_DRAFT;break;
+				case 'SUBMITTED_FOR_ASSESSMENT':$st['count']=$data_source->count_SUBMITTED_FOR_ASSESSMENT;break;
+				case 'APPROVED':$st['count']=$data_source->count_APPROVED;break;
+				case 'MORE_WORK_REQUIRED':$st['count']=$data_source->count_MORE_WORK_REQUIRED;break;
+				case 'PUBLISHED':$st['count']=$data_source->count_PUBLISHED;break;
+				//case 'ASSESSMENT_IN_PROGRESS':$st['count']=$data_source->count_ASSESSMENT_IN_PROGRESS;break;
+			}
+			$args['search'] = false;
+			$args['sort'] = false;
+			$args['filter'] = array('status'=>$s);
+			$ros = $this->ro->getByDataSourceID($data_source_id, 10, 0, $args, false);
+			
+			$st['ro'] = array();
+			
+			if($ros){
+				foreach($ros as $r){
+					$registry_object = $this->ro->getByID($r['registry_object_id']);
+					array_push($st['ro'], array(
+							'id'=>$registry_object->id, 
+							'title'=>$registry_object->title
+							));
+				}
+			}
+			if($st['count']>sizeof($ros)){
+				$st['hasMore'] = true;
+			}
+			//$st['ro'] = $this->ro->getByDataSourceID($data_source_id, 10, 0, $args, true);
+			array_push($jsonData['statuses'], $st);
+		}
+
+		$jsonData['total_statuses_count'] = sizeof($jsonData['valid_statuses']);
+		echo json_encode($jsonData);
+	}
+
 	public function view($ro_id, $revision=''){
 		$this->load->model('registry_object/registry_objects', 'ro');
 		$ro = $this->ro->getByID($ro_id);
@@ -264,6 +341,16 @@ class Registry_object extends MX_Controller {
 		echo $jsonData;
 	}
 
+
+	function update($id){
+		$this->load->model('registry_objects', 'ro');
+		$ro = $this->ro->getByID($id);
+		foreach($this->input->post() as $name=>$value){
+			echo 'update '.$id.' set '.$name.' to value:'.$value;
+			if($name=='status') $ro->status = $value;
+			$ro->save();
+		}
+	}
 
 	function get_solr_doc($id){
 		$this->load->model('registry_objects', 'ro');

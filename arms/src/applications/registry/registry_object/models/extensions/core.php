@@ -194,7 +194,7 @@ class Core_extension extends ExtensionBase
 				throw new Exception("Errors occured whilst migrating to PUBLISHED status: " . NL . $error_log);
 			}
 		}
-		// Else, the PUBLISHED record is being converted to a DRAFT
+		else // Else, the PUBLISHED record is being converted to a DRAFT
 		{
 			$existingRegistryObject = $this->_CI->ro->getDraftByKey($this->ro->key);
 			if ($existingRegistryObject)
