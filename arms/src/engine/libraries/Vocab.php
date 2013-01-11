@@ -9,7 +9,6 @@ class Vocab {
 	private $CI;
 	private $resolvingServices;
     private $resolvedArray;
-    private $broaderArray;
 
 	/**
 	 * Construction of this class
@@ -30,7 +29,6 @@ class Vocab {
     	return true;
     }
 
-
 	function resolveSubject($term, $vocabType){
 		
         if($vocabType != '' && array_key_exists($vocabType, $this->resolvingServices))
@@ -38,23 +36,46 @@ class Vocab {
             $resolvingService = $this->resolvingServices[$vocabType]['resolvingService'];
             $uriprefix = $this->resolvingServices[$vocabType]['uriprefix'];
 
-            $content = $this->post($this->constructResorceUriString($resolvingService, $uriprefix, $term));
-		    $json = json_decode($content, false);
-    		if($json){
-    			$this->result = $json;
-                $this->setBroaderSubjects($resolvingService, $uriprefix, $term, $vocabType);
-                $subject['value'] = $json->{'result'}->{'primaryTopic'}->{'prefLabel'}->{'_value'};
-                $subject['about'] = $json->{'result'}->{'primaryTopic'}->{'_about'};
-    			return  $subject;
-    		}else{
-    			$subject['value'] = $term;
-                $subject['about'] = '';
-                return $subject;
-    		}
+            if(isset($this->resolvedArray[$uriprefix][$term]))
+            {
+                return $this->resolvedArray[$uriprefix][$term];
+            }
+            else
+            {
+                $content = $this->post($this->constructResorceUriString($resolvingService, $uriprefix, $term));
+    		    $json = json_decode($content, false);
+        		if($json){
+        			$this->result = $json;
+                    
+                    $subject['uriprefix'] = $uriprefix;
+                    $subject['notation'] = $term;
+                    $subject['value'] = $json->{'result'}->{'primaryTopic'}->{'prefLabel'}->{'_value'};
+                    $subject['about'] = $json->{'result'}->{'primaryTopic'}->{'_about'};
+                    $this->resolvedArray[$uriprefix][$term] = $subject;
+                    $this->resolvedArray[$uriprefix][$term]['broaderTerms'] = array();
+                    $this->setBroaderSubjects($resolvingService, $uriprefix, $term, $vocabType);
+        			return  $subject;
+        		}else{
+        			$subject['uriprefix'] = $uriprefix;
+                    $subject['notation'] = $term;
+                    $subject['value'] = $term;
+                    $subject['about'] = '';
+                    $this->resolvedArray[$uriprefix][$term] = $subject;
+                    return $subject;
+        		}
+            }
         }
-        else{
+        elseif(isset($this->resolvedArray['non-resolvable'][$term]))
+        {
+            return $this->resolvedArray['non-resolvable'][$term];
+        }
+        else
+        {
+            $subject['uriprefix'] = 'non-resolvable';
+            $subject['notation'] = $term;
             $subject['value'] = $term;
             $subject['about'] = '';
+            $this->resolvedArray['non-resolvable'][$term] = $subject;
             return $subject;
         }
 	}
@@ -94,34 +115,54 @@ class Vocab {
                 {
                     
                     $notation = $item->{'broader'}->{'notation'};
-                    $prefLabel = $item->{'broader'}->{'prefLabel'}->{'_value'};
-                    $about = $item->{'broader'}->{'_about'};
-                    if(!array_key_exists($notation, $this->broaderArray))
+                    $subject['notation'] = $notation;
+                    $subject['uriprefix'] = $uriprefix;
+                    $subject['value'] = $item->{'broader'}->{'prefLabel'}->{'_value'};
+                    $subject['about'] = $item->{'broader'}->{'_about'};
+                    $this->resolvedArray[$uriprefix][$term]['broaderTerms'][] = $notation;
+                    if(!isset($this->resolvedArray[$uriprefix][$notation]))
                     {
-                        $this->broaderArray[$notation] = array('type'=>$vocabType, 'value'=>$notation, 'resolved'=>$prefLabel , 'uri' => $about);
+                        $this->resolvedArray[$uriprefix][$notation] = $subject;
+                        $this->resolvedArray[$uriprefix][$notation]['broaderTerms'] = array();
                     }
                 }
                 if(isset($item->{'notation'}))
                 {
                     $notation = $item->{'notation'};
-                    $prefLabel = $item->{'prefLabel'}->{'_value'};
-                    $about = $item->{'_about'};
-                    if(!array_key_exists($notation, $this->broaderArray))
+                    $subject['notation'] = $notation;
+                    $subject['uriprefix'] = $uriprefix;
+                    $subject['value'] = $item->{'prefLabel'}->{'_value'};
+                    $subject['about'] = $item->{'_about'};
+                    $this->resolvedArray[$uriprefix][$term]['broaderTerms'][] = $notation;
+                    if(!isset($this->resolvedArray[$uriprefix][$notation]))
                     {
-                        $this->broaderArray[$notation] = array('type'=>$vocabType, 'value'=>$notation, 'resolved'=>$prefLabel, 'uri' => $about);
+                        $this->resolvedArray[$uriprefix][$notation] = $subject;
+                        $this->resolvedArray[$uriprefix][$notation]['broaderTerms'] = array();
                     }
-
                 } 
                           
             }
-           // $this->getBroaderSubjects($resolvingService, $uriprefix, $term);
-           // return $json->{'result'}->{'primaryTopic'}->{'prefLabel'}->{'_value'};
         }
     }
 
-    function getBroaderSubjects()
+    function getBroaderSubjects($uriprefix, $term)
     {
-        return $this->broaderArray;
+        $result = array();
+        //echo $uriprefix."----".$term;
+        if( isset($this->resolvedArray[$uriprefix][$term]) && isset($this->resolvedArray[$uriprefix][$term]['broaderTerms']))
+        {
+            $broaderTerms = $this->resolvedArray[$uriprefix][$term]['broaderTerms'];
+            //var_dump($broaderTerms);
+            foreach($broaderTerms as $broaderTerm)
+            {
+                if(isset($this->resolvedArray[$uriprefix][$broaderTerm]))
+                {
+                    $broader = $this->resolvedArray[$uriprefix][$broaderTerm];
+                    $result[$broaderTerm] = $this->resolvedArray[$uriprefix][$broaderTerm];
+                }
+            }
+        }
+        return $result;
     }
 
 }

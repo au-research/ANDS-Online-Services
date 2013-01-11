@@ -70,7 +70,7 @@ class Extrif_Extension extends ExtensionBase
 					$sumOfAllAreas += $extents['area'];
 					$spatialGeometry->addChild("extRif:center", $extents['center'], EXTRIF_NAMESPACE);
 				}
-				$spatialGeometry->addChild("extRif:area", $sumOfAllAreas, EXTRIF_NAMESPACE);
+				//$spatialGeometry->addChild("extRif:area", $sumOfAllAreas, EXTRIF_NAMESPACE);
 				
 				$subjects = $extendedMetadata->addChild("extRif:subjects", NULL, EXTRIF_NAMESPACE);
 				

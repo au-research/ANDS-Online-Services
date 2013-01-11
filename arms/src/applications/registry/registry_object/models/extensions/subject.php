@@ -14,7 +14,6 @@ class Subject_Extension extends ExtensionBase
 		$this->_CI->load->library('vocab');
 		$sxml = $this->ro->getSimpleXML();		
 		$subjects = $sxml->xpath('//subject');
-		
 		foreach ($subjects AS $subject)
 		{
 			$type = (string)$subject["type"];
@@ -23,11 +22,17 @@ class Subject_Extension extends ExtensionBase
 			{
 				$resolvedValue = $this->_CI->vocab->resolveSubject($value, $type);
 				$subjectsResolved[$value] = array('type'=>$type, 'value'=>$value, 'resolved'=>$resolvedValue['value'], 'uri'=>$resolvedValue['about']);
+				if($resolvedValue['uriprefix'] != 'non-resolvable')
+				{
+					$broaderSubjects = $this->_CI->vocab->getBroaderSubjects($resolvedValue['uriprefix'],$value);
+					foreach($broaderSubjects as $broaderSubject)
+					{
+						$subjectsResolved[$broaderSubject['notation']] = array('type'=>$type, 'value'=>$broaderSubject['notation'], 'resolved'=>$broaderSubject['value'], 'uri'=>$broaderSubject['about']);
+					}
+				}
 			}
 		}
-		$broaderArray = $this->_CI->vocab->getBroaderSubjects();
-		$allSubjects = array_merge($subjectsResolved,$broaderArray);
-		return $allSubjects;
+		return $subjectsResolved;
 	}
 	
 }
