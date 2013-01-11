@@ -25,7 +25,6 @@ class Vocab {
     function init(){
         $this->resolvingServices = $this->CI->config->item('vocab_resolving_services');
     	$this->resolvedArray = array();
-        $this->broaderArray = array();
     	return true;
     }
 
