@@ -8,6 +8,9 @@ define('HARVEST_INFO','info');
 define('HARVEST_TEST_MODE','TEST');
 define('HARVEST_COMPLETE','TRUE');
 
+define('RIFCS_SCHEME','rif');
+define('EXTRIF_SCHEME','extRif');
+
 define('DRAFT_RECORD_SLUG','draft_record_');
 
 define('SUCCESS','SUCCESS');

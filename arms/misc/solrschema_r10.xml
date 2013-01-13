@@ -103,191 +103,183 @@
     
     <!-- !!The order matters for the transformation to user-friendly schema view!! -->
     
-    <!-- <span class="provided">The unique URL "slug" which is appended to the base url of the portal.
-      For example: http://researchdata.ands.org.au/this_is_the_url_slug  </span> -->
-    <field name="slug" type="string" indexed="true" stored="true"/>
-    
-    <!-- <span class="hidden"></span>-->
-    <field name="text" type="text_general" indexed="true" stored="false" multiValued="true"/>
-    <!-- <span class="provided">A full-text search of the entire record (and ANDS-inferred values)</span> -->
-    <field name="fulltext" type="text_general" indexed="true" stored="false" multiValued="true"/>
-    
-    <!-- Names-->
-    <!--<span class="provided">The title of the record (built from it's nameParts</span>-->
-    <field name="display_title" type="text_en_splitting" indexed="true" stored="true"/>
-    <!--<span class="provided">The alternate title of the record used when the record is displayed in a list</span>-->
-    <field name="list_title" type="text_en_splitting" indexed="true" stored="true"/>
-     
-    <!-- <span class="provided">The class of the record (one of "collection", "party", "activity", "service") </span> -->
-    <field name="class" type="string" indexed="true" stored="true"/>
-
-    <!-- <span class="provided">The key of the record, provided in the RIFCS &lt;key&gt; element </span> -->
-    <field name="key" type="string" indexed="true" stored="true" required="true"/>
-    
-    <!-- <span class="provided">The key of the data source which provided this record </span> -->
-    <field name="data_source_key" type="string" indexed="true" stored="true"/>
+    <!-- USEFUL KEY FIELDS -->
+        <!-- <span class="provided">The unique user-friendly URL "slug" which is appended to the base url of the portal.<br/>
+          For example: http://researchdata.ands.org.au/<this_is_the_url_slug>  </span> -->
+        <field name="slug" type="string" indexed="true" stored="true"/>
        
-    <!-- <span class="inferred">The W3CDTF timestamp representing when the record was most recently updated</span> -->
-    <field name="timestamp" type="date" indexed="true" stored="true" default="NOW"
-      multiValued="false"/>
-    
-    <!--<span class="provided">The group attribute of the registry object (usually the name of the institution/provider)</span>-->
-    <field name="group" type="string" indexed="true" stored="true"/>
-    
-    <!--<span class="provided">The registryObject type attribute (i.e. "dataset" (collections) or "group" (for parties))</span>-->
-    <field name="type" type="string" indexed="true" stored="true"/>
-   
-   
-    <!-- <span class="provided">The values of description elements in the record.</span>-->
-    <field name="description_value" type="text_en_splitting" indexed="true" stored="true"
-      multiValued="true"/>
-    
-    <!-- <span class="provided">The types of description elements in the record.</span>-->
-    <field name="description_type" type="text_en_splitting" indexed="true" stored="true"
-      multiValued="true"/>
-    
-    <!-- <span class="provided">The subject value provided to ANDS (usually an anzsrc code in notation form (i.e. "020103")).</span>-->
-    <field name="subject_value_unresolved" type="text_en_splitting" indexed="true" stored="true"
-      multiValued="true"/>
-    
-    <!-- <span class="provided">The type value of the subject (if any) (i.e. "anzsrc-for").</span>-->
-    <field name="subject_type" type="text_en_splitting" indexed="true" stored="true"
-      multiValued="true"/>
-    
-    <!-- <span class="inferred">The resolved value of the subject (if any) (i.e. "MATHEMATICAL SCIENCES").</span>-->
-    <field name="subject_value_resolved" type="text_en_splitting" indexed="true" stored="true"
-      multiValued="true"/>
-    
-    <!-- <span class="inferred">The resolved URI of the subject (if it is matched in a supported vocabulary).</span>-->
-    <field name="subject_vocab_uri" type="text_en_splitting" indexed="true" stored="true"
-      multiValued="true"/>
-    
-    <!-- <span class="hidden"></span>-->
-    <field name="s_subject_value_resolved" type="alphaOnlySort" indexed="true" stored="false"
-      multiValued="true"/>
-
-
-    <!-- <span class="provided">The identifier value provided to ANDS.</span>-->
-    <field name="identifier_value" type="text_en_splitting" indexed="true" stored="true"
-      multiValued="true"/>
-    <!-- <span class="provided">The type of the identifier provided to ANDS.</span>-->
-    <field name="identifier_type" type="text_en_splitting" indexed="true" stored="true"
-      multiValued="true"/>
-    
-    <!-- <span class="provided">The spatial coverage of this registry object (TODO: rename and change!)</span>-->
-    <field name="spatial" type="location_rpt" indexed="true" stored="true" multiValued="true"/>
-    
-    
-    <!-- <span class="provided">The key of records which this record relates to (note: does NOT include inferred/reverse links)</span> -->
-    <field name="related_object_key" type="text_en_splitting" indexed="true" stored="true"
-      multiValued="true"/>
-    
-    <!-- <span class="provided">The class of records which this record relates to (provided they exist in the registry) (i.e. "collection", "party", etc.).</span> -->
-    <field name="related_object_class" type="text_en_splitting" indexed="true" stored="true"
-      multiValued="true"/>
-    
-    <!-- <span class="provided">The type of records which this record relates to (provided they exist in the registry).</span> -->
-    <field name="related_object_type" type="text_en_splitting" indexed="true" stored="true"
-      multiValued="true"/>
-    
-    <!-- <span class="provided">The title for records which this record relates to (provided they exist in the registry)</span> -->
-    <field name="related_object_display_title" type="text_en_splitting" indexed="true" stored="true"
-      multiValued="true"/>
-    
-    <!-- <span class="provided">The nature of the relation (i.e. "isPartOf")</span> -->
-    <field name="related_object_relation" type="text_en_splitting" indexed="true" stored="true"
-      multiValued="true"/>
-    <field name="related_object_list_title" type="text_en_splitting" indexed="true" stored="true"
-      multiValued="true"/>
-    <field name="related_object_display_logo" type="text_en_splitting" indexed="true" stored="true"
-      multiValued="true"/>
-    
-    <!-- <span class="provided">The originating source for this record </span> -->
-    <field name="originating_source" type="string" indexed="true" stored="true"/>
-
-    <!-- <span class="internal">The unique registry id of the record (generated internally during the ingest process)</span> -->
-    <field name="id" type="string" indexed="true" stored="true" required="true"/>
-    
-    <!-- <span class="internal">The id for the data_source (generated internally when the data source is created)</span> -->
-    <field name="data_source_id" type="string" indexed="true" stored="true" required="true"/>
-    
-    <!-- <span class="internal">The status of the record in the registry (only PUBLISHED records are currently indexed) </span> -->
-    <field name="status" type="string" indexed="true" stored="true"/>
-    
-    
-    
-    
-    
-    
-    
+        <!-- <span class="provided">The key of the record, provided in the RIFCS &lt;key&gt; element </span> -->
+        <field name="key" type="string" indexed="true" stored="true" required="true"/>
         
-    <!-- <span class="hidden">The time that this registry object was indexed (OBSOLETE: use timestamp) </span> -->
-    <field name="date_modified" type="string" indexed="true" stored="true"/>
+        <!-- <span class="provided">The key of the data source which provided this record </span> -->
+        <field name="data_source_key" type="string" indexed="true" stored="true"/>
+
+        <!-- <span class="provided">The class of the record (one of "collection", "party", "activity", "service") </span> -->
+        <field name="class" type="string" indexed="true" stored="true"/>
+
+    <!-- INTERNAL KEY FIELDS -->
+        <!-- <span class="internal">The unique registry id of the record (generated internally during the ingest process)</span> -->
+        <field name="id" type="string" indexed="true" stored="true" required="true"/>
+        
+        <!-- <span class="internal">The id for the data_source (generated internally when the data source is created)</span> -->
+        <field name="data_source_id" type="string" indexed="true" stored="true" required="true"/>
+        
+        <!-- <span class="internal">The status of the record in the registry (only PUBLISHED records are currently indexed) </span> -->
+        <field name="status" type="string" indexed="true" stored="true"/>
+
+        <!-- <span class="inferred">The W3CDTF timestamp representing when the record was most recently updated</span> -->
+        <field name="update_timestamp" type="date" indexed="true" stored="true" default="NOW"
+          multiValued="false"/>
+
+
+    <!-- SEARCH FIELDS -->
+        <!-- <span class="hidden"></span>-->
+        <field name="text" type="text_general" indexed="true" stored="false" multiValued="true"/>
+        <!-- <span class="provided">A full-text search of the entire record (and ANDS-inferred values)</span> -->
+        <field name="fulltext" type="text_general" indexed="true" stored="false" multiValued="true"/>
+        
+
+    <!-- REGISTRY METADATA -->
+        <!--<span class="provided">The group attribute of the registry object (usually the name of the institution/provider)</span>-->
+        <field name="group" type="string" indexed="true" stored="true"/>
+        
+        <!--<span class="provided">The registryObject type attribute (i.e. "dataset" (collections) or "group" (for parties))</span>-->
+        <field name="type" type="string" indexed="true" stored="true"/>
+
+        <!-- <span class="provided">The originating source for this record </span> -->
+        <field name="originating_source" type="string" indexed="true" stored="true"/>
+
+    <!-- LICENSE FACET -->
+        <!-- <span class="provided">A full-text search of the entire record (and ANDS-inferred values)</span> -->
+        <field name="license_class" type="text_general" indexed="true" stored="true" multiValued="true"/>
+        
+
+    <!-- NAMES-->
+        <!--<span class="provided">The title of the record (built from it's nameParts</span>-->
+        <field name="display_title" type="text_en_splitting" indexed="true" stored="true"/>
+        <!--<span class="provided">The alternate title of the record used when the record is displayed in a list</span>-->
+        <field name="list_title" type="text_en_splitting" indexed="true" stored="true"/>
+        
+  
+    <!-- DESCRIPTIONS -->
+        <!-- <span class="provided">The values of description elements in the record.</span>-->
+        <field name="description_value" type="text_en_splitting" indexed="true" stored="true"
+          multiValued="true"/>
+        
+        <!-- <span class="provided">The types of description elements in the record.</span>-->
+        <field name="description_type" type="text_en_splitting" indexed="true" stored="true"
+          multiValued="true"/>
+
+
+    <!-- SUBJECTS -->
+        <!-- <span class="inferred">The resolved value of the subject (if any) (i.e. "MATHEMATICAL SCIENCES").</span>-->
+        <field name="subject_value_resolved" type="text_en_splitting" indexed="true" stored="true"
+          multiValued="true"/>
+
+        <!-- <span class="provided">The subject value provided to ANDS (usually an anzsrc code in notation form (i.e. "020103")).</span>-->
+        <field name="subject_value_unresolved" type="text_en_splitting" indexed="true" stored="true"
+          multiValued="true"/>
+        
+        <!-- <span class="provided">The type value of the subject (if any) (i.e. "anzsrc-for").</span>-->
+        <field name="subject_type" type="text_en_splitting" indexed="true" stored="true"
+          multiValued="true"/>
+        
+        <!-- <span class="inferred">The resolved URI of the subject (if it is matched in a supported vocabulary).</span>-->
+        <field name="subject_vocab_uri" type="text_en_splitting" indexed="true" stored="true"
+          multiValued="true"/>
+        
+        <!-- <span class="hidden"></span>-->
+        <field name="s_subject_value_resolved" type="alphaOnlySort" indexed="true" stored="false"
+          multiValued="true"/>
+
+    <!-- IDENTIFIERS -->
+        <!-- <span class="provided">The identifier value provided to ANDS.</span>-->
+        <field name="identifier_value" type="text_en_splitting" indexed="true" stored="true"
+          multiValued="true"/>
+        <!-- <span class="provided">The type of the identifier provided to ANDS.</span>-->
+        <field name="identifier_type" type="text_en_splitting" indexed="true" stored="true"
+          multiValued="true"/>
     
-    <!-- <span class="hidden">Whether this record should infer it's own reverse links (OBSOLETE: no longer used) </span> -->
-    <field name="reverse_links" type="string" indexed="true" stored="true"/>
-    
-    <!-- <span class="hidden">Internal score used to boost the ranking of results</span>-->
-    <field name="search_base_score" type="sint" indexed="true" stored="true"/>
-    
-    
-    <!-- <span class="hidden"></span> -->
-    <field name="s_list_title" type="alphaOnlySort" indexed="true" stored="false"/>
-    <!-- <span class="hidden"></span> -->
-    <field name="alt_list_title" type="text_en_splitting" indexed="true" stored="true"
-      multiValued="true"/>
-    <!-- <span class="hidden"></span> -->
-    <field name="alt_display_title" type="text_en_splitting" indexed="true" stored="true"
-      multiValued="true"/>
-    
-    <!-- Anything that starts with s_ is alpha only sort-->
-    <!-- <span class="hidden"></span> -->
-    <field name="s_group" type="alphaOnlySort" indexed="true"/>
-    <!-- <span class="hidden"></span> -->
-    <field name="s_type" type="alphaOnlySort" indexed="true"/>
+    <!-- SPATIAL COVERAGE -->
+        <!-- <span class="provided">The spatial coverage of this registry object (SOLR POLYGON format)</span>-->
+        <field name="spatial_coverage_polygons" type="location_rpt" indexed="true" stored="true" multiValued="true"/>
+        
+        <!-- <span class="provided">The extents of spatial coverage of this registry object (a bounding box on each of the spatial_coverage_polygons)</span>-->
+        <field name="spatial_coverage_extents" type="location_rpt" indexed="true" stored="true" multiValued="true"/>
+
+        <!-- <span class="provided">Lat,Long pairs of the centre of each spatial region</span>-->
+        <field name="spatial_coverage_centres" type="location_rpt" indexed="true" stored="true" multiValued="true"/>
+
+        <!-- <span class="provided">The sum of the areas of spatial regions (useful for search relevance sorting)</span>-->
+        <field name="spatial_coverage_area_sum" type="sfloat" indexed="true" stored="true" multiValued="false"/>
     
 
-    <!-- Not sure what to use name part for, but leave for now-->
-    <field name="name_part_type" type="text_en_splitting" indexed="true" stored="true"
-      multiValued="true"/>
-    <field name="name_part" type="text_en_splitting" indexed="true" stored="true" multiValued="true"/>
+    <!-- DATES -->
+        <!-- <span class="provided">Dates related to the registry object indicating a "dateFrom" value</span>-->
+        <field name="date_to" type="tdate" indexed="true" stored="true" multiValued="true"/>
+
+        <!-- <span class="provided">Dates related to the registry object indicating a "dateTo" value</span>-->
+        <field name="date_from" type="tdate" indexed="true" stored="true" multiValued="true"/>
+
+        <!-- <span class="inferred">The year of the earliest date value (for temporal-based search)</span>-->
+        <field name="earliest_year" type="sint" indexed="true" stored="true" multiValued="false"/>
+
+        <!-- <span class="inferred"">The eyar of the latest date value (for temporal-based search)</span>-->
+        <field name="lastest_year" type="sint" indexed="true" stored="true" multiValued="false"/>
 
 
-    <!-- Location all cramped into 1-->
-    <field name="location" type="text_en_splitting" indexed="true" stored="true" multiValued="true"/>
+    <!-- RELATED OBJECTS -->
+        <!-- <span class="provided">The key of records which this record relates to (note: does NOT include inferred/reverse links)</span> -->
+        <field name="related_object_key" type="string" indexed="true" stored="true"
+          multiValued="true"/>
 
-   
-
-
-    <!-- relatedInfo all cramped into 1-->
-    <field name="related_info" type="text_en_splitting" indexed="true" stored="true"
-      multiValued="true"/>
-    <field name="date_from" type="int" indexed="true" stored="true" multiValued="true"/>
-    <field name="date_to" type="int" indexed="true" stored="true" multiValued="true"/>
-
-
-    <field name="spatial_coverage" type="text_en_splitting" indexed="true" stored="true"
-      multiValued="true"/>
-    <field name="spatial_coverage_center" type="text_en_splitting" indexed="true" stored="true"
-      multiValued="true"/>
-
-    <!-- END ANDS Indexed Field-->
-    <field name="flag" type="sint" indexed="true" stored="true"/>
-    <field name="warning_count" type="sint" indexed="true" stored="true"/>
-    <field name="error_count" type="sint" indexed="true" stored="true"/>
-    <field name="manually_assessed_flag" type="sint" indexed="true" stored="true"/>
-    <field name="gold_status_flag" type="sint" indexed="true" stored="true"/>
-    <field name="quality_level" type="sint" indexed="true" stored="true"/>
-
-    <!-- <span class="hidden">TODO: REMOVE</span> -->
-    <field name="feed_type" type="text_en_splitting" indexed="true" stored="true"/>
+        <!-- <span class="inferred">The key of records which this record relates to (note: does NOT include inferred/reverse links)</span> -->
+        <field name="related_object_id" type="string" indexed="true" stored="true"
+          multiValued="true"/>
+        
+        <!-- <span class="provided">The class of records which this record relates to (provided they exist in the registry) (i.e. "collection", "party", etc.).</span> -->
+        <field name="related_object_class" type="string" indexed="true" stored="true"
+          multiValued="true"/>
+        
+        <!-- <span class="provided">The type of records which this record relates to (provided they exist in the registry).</span> -->
+        <field name="related_object_type" type="string" indexed="true" stored="true"
+          multiValued="true"/>
+        
+        <!-- <span class="provided">The title for records which this record relates to (provided they exist in the registry)</span> -->
+        <field name="related_object_display_title" type="string" indexed="true" stored="true"
+          multiValued="true"/>
     
-    <!-- <span class="hidden">TODO: REMOVE</span> -->
-    <field name="last_modified_by" type="text_en_splitting" indexed="true" stored="true"/>
+        <!-- <span class="provided">The nature of the relation (i.e. "isPartOf")</span> -->
+        <field name="related_object_relation" type="text_en_splitting" indexed="true" stored="true"
+          multiValued="true"/>
+      
+  
+    
+    
+    <!-- SEARCH SORT VALUES -->
+        <!-- <span class="hidden"></span> -->
+        <field name="s_list_title" type="alphaOnlySort" indexed="true" stored="false"/>
+        <!-- <span class="hidden"></span> -->
+        <field name="alt_list_title" type="text_en_splitting" indexed="true" stored="true"
+          multiValued="true"/>
+        <!-- <span class="hidden"></span> -->
+        <field name="alt_display_title" type="text_en_splitting" indexed="true" stored="true"
+          multiValued="true"/>
 
-    <!-- <span class="hidden"></span> -->
-    <field name="_version_" type="text_en_splitting" indexed="true" stored="true"
-      multiValued="false"/>
+        <!-- <span class="hidden">Internal score used to boost the ranking of results</span>-->
+        <field name="search_base_score" type="sint" indexed="true" stored="true"/>
+        
+        <!-- Anything that starts with s_ is alpha only sort-->
+        <!-- <span class="hidden"></span> -->
+        <field name="s_group" type="alphaOnlySort" indexed="true"/>
+        <!-- <span class="hidden"></span> -->
+        <field name="s_type" type="alphaOnlySort" indexed="true"/>
+    
+
+
+        <!-- <span class="hidden"></span> -->
+        <field name="_version_" type="text_en_splitting" indexed="true" stored="true"
+          multiValued="false"/>
 
     <!-- Dynamic field definitions allow using convention over configuration
        for fields via the specification of patterns to match field names. 

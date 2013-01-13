@@ -19,10 +19,10 @@
 			<button class="btn" aro-mode="advanced">Advanced</button>
 		</div>
 		<ul id="simple-menu" class="hide">
-			<li class="active"><a href="index.html"><span>General Data Information</span></a></li>
-			<li class=""><a href="index.html"><span>Describe your Data</span></a></li>
-			<li class=""><a href="index.html"><span>Identify your Data</span></a></li>
-			<li class=""><a href="index.html"><span>Citation Info</span></a></li>
+			<li class="active"><a href="#simple_describe" data-toggle="tab"><span>Describe your Data</span></a></li>
+			<li class=""><a href="#simple_link" data-toggle="tab"><span>Link your Data</span></a></li>
+			<li class=""><a href="#simple_citation" data-toggle="tab"><span>Create a Citation</span></a></li>
+			<li class=""><a href="#simple_protect" data-toggle="tab"><span>Protect your Data</span></a></li>
 		</ul>
 		<ul id="advanced-menu" class="">
 			<li class="active"><a href="#admin" data-toggle="tab">Record Administration</a></li>
@@ -60,6 +60,7 @@
 			<a href="#" class="">Edit</a>
 		</div>
 		<form class="form-horizontal" id="edit-form">
+			<xsl:call-template name="simpleDescribeTab" mode="{$ro_class}"/>
 			<xsl:call-template name="recordAdminTab"/>
 			<xsl:call-template name="namesTab"/>
 			<xsl:call-template name="descriptionRightsTab"/>
@@ -98,6 +99,205 @@
 
 	<xsl:template match="ro:collection | ro:activity | ro:party  | ro:service" mode="getClass">
 		<xsl:value-of select="name()"/>
+	</xsl:template>
+
+	<xsl:template name="simpleDescribeTab" mode="collection">
+		<!-- Record Admin-->
+		<div id="simple_describe" class="pane">
+			<fieldset>
+				<legend>Describe your Data</legend>
+
+				<xsl:variable name="simpleRecordName" select="ro:collection/ro:name[@type='primary']/ro:namePart[1]" />
+				<xsl:variable name="simpleRecordType" select="ro:collection/@type" />
+				<xsl:variable name="simpleBriefDescription" select="ro:collection/ro:description" />
+				<xsl:variable name="simpleFullDescription" select="ro:collection/ro:description[@type='full']" />
+				<xsl:variable name="simpleRecordIdentifier" select="ro:collection/ro:identifier[0]" />
+				<xsl:variable name="simpleRecordIdentifierType" select="ro:collection/ro:identifier[0]/@type" />
+				<xsl:variable name="simpleRecordGroup" select="@group" />
+
+
+				<div class="control-group">
+					<label class="control-label" for="simple_collectionTitle">* Collection Title</label>
+					<div class="controls">
+							<input type="text" field-bind="ro:collection/ro:name[@type='primary']/ro:namePart[1]" class="input-xxlarge" name="simpleRecordName" value="{$simpleRecordName}"/>
+						<p class="help-inline">
+							<small></small>
+						</p>
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label class="control-label" for="simple_briefDescription">* Brief Collection Description</label>
+					<div class="controls">
+							<textarea rows="5" class="input-xxlarge" name="simpleBriefDescription"><xsl:value-of select="$simpleBriefDescription"/></textarea>
+						<p class="help-block">
+							<button id="simpleFullDescriptionToggle" class="btn btn-mini btn-info">add an extended description</button>
+						</p>
+					</div>
+				</div>
+
+				<div class="control-group hide">
+					<label class="control-label" for="simpleFullDescription">Full Collection Description</label>
+					<div class="controls">
+							<textarea rows="5" class="input-xxlarge" name="simpleFullDescription" id="simpleFullDescription"><xsl:value-of select="$simpleFullDescription"/></textarea>
+						<p class="help-block">
+							<small></small>
+						</p>
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label class="control-label" for="simpleRecordGroup">* Group/Institution Name</label>
+					<div class="controls">
+						<div class="input-prepend">
+							<button class="btn triggerTypeAhead" type="button">
+								<i class="icon-chevron-down"/>
+							</button>
+							<input type="text" field-bind="ro:collection/@group" class="input-large" name="simpleRecordGroup" value="{$simpleRecordGroup}"/>
+						</div>
+						<p class="help-inline">
+							<small></small>
+						</p>
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label class="control-label" for="simple_collectionTitle">* Type of Collection</label>
+					<div class="controls">
+						<div class="input-prepend">
+							<button class="btn triggerTypeAhead" type="button">
+								<i class="icon-chevron-down"/>
+							</button>
+							<input type="text" field-bind="ro:collection/@type" class="input-large" name="simpleRecordType" value="{$simpleRecordType}"/>
+						</div>
+						<p class="help-inline">
+							<small></small>
+						</p>
+					</div>
+				</div>
+
+
+
+				<hr/>
+				<h4>About the Data</h4>
+
+				<div class="split-left">
+					<div class="control-group">
+						<h5>How is the data identified?</h5>
+						<label class="control-label" for="simple_briefDescription">* Identifier:						</label>
+
+						<div class="controls">
+							<div class="input-prepend">
+								<button class="btn triggerTypeAhead" type="button">
+									<i class="icon-chevron-down"/>
+								</button>
+								<input type="text" field-bind="ro:collection/ro:identifier/@type" class="input-mini" name="simpleRecordIdentifierType" value="{$simpleRecordIdentifierType}" placeholder="type"/>
+							</div>
+
+							<input type="text" field-bind="ro:collection/ro:identifier" class="input-medium" name="simpleRecordIdentifier" value="{$simpleRecordIdentifier}" placeholder="identifier value"/>		
+						</div>
+
+						<div>
+
+							<p class="pull-right" style="margin-right:18px;">
+								<button class="btn btn-mini pull-right" id="simpleAddMoreIdentifiers">
+									<i class="icon-plus"></i> more
+								</button><br/>
+								<button class="btn btn-mini btn-info" style="margin-top:8px;" id="simpleAddMoreIdentifiers">
+									<i class="icon-wrench icon-white"></i> No identifier?
+								</button>
+							</p>
+						</div>
+
+					</div>
+					
+				</div>
+
+				<div class="split-right">
+					<div class="control-group">
+						<h5>What time period does the data cover?</h5>
+						<label class="control-label" for="simple_briefDescription">Data Start Date</label>
+						<div class="controls">
+							<div class="input-append">
+								<input type="text" class="input-large datepicker" name="date_accessioned"
+									value="{ro:collection/@dateAccessioned}"/>
+								<button class="btn triggerDatePicker" type="button">
+									<i class="icon-calendar"/>
+								</button>
+								<p class="help-inline">
+									<small/>
+								</p>
+							</div>
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="simple_briefDescription">Data End Date</label>
+						<div class="controls">
+							<div class="input-append">
+								<input type="text" class="input-large datepicker" name="date_accessioned"
+									value="{ro:collection/@dateAccessioned}"/>
+								<button class="btn triggerDatePicker" type="button">
+									<i class="icon-calendar"/>
+								</button>
+								<p class="help-inline">
+									<small/>
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="clear"><br/></div>
+
+
+				<div class="split-left">
+					<div class="control-group">
+						<h5>Field(s) of Research</h5>
+						<label class="control-label" for="simpleFORSubject">* FOR Category:</label>
+						<div class="controls">
+							<input type="text" class="input-medium" name="simpleFORSubject"
+								value="{ro:collection/@dateAccessioned}"/>
+							
+							<button class="btn btn-mini" style="margin-left:8px;" id="simpleAddMoreIdentifiers">
+								<i class="icon-plus"></i> more
+							</button>
+
+							<p class="help-block">
+								<small>Select the most specific category that applies</small>
+							</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="split-right">
+					<div class="control-group">
+						<h5><br/></h5>
+						<label class="control-label" for="simpleKeywords">Subject Keywords:</label>
+						<div class="controls">
+							<input type="text" class="input-medium" name="simpleFORSubject"
+								value="{ro:collection/@dateAccessioned}"/>
+							
+							<button class="btn btn-mini" style="margin-left:8px;" id="simpleAddMoreIdentifiers">
+								<i class="icon-plus"></i> more
+							</button>
+
+							<p class="help-block">
+								<small>Any topical keywords that will assist searching</small>
+							</p>
+						</div>
+					</div>
+				</div>
+
+			</fieldset>
+
+
+			<div class="center_footer">
+				<button class="btn btn-primary pull-right" id="simpleAddMoreIdentifiers">
+					<i class="icon-share-alt icon-white"></i> Proceed to Link your Data (Step 2)
+				</button>
+			</div>
+			<div class="clear"></div>
+		</div>
 	</xsl:template>
 
 

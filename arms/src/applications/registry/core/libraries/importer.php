@@ -344,7 +344,7 @@ class Importer {
 
 		$deleted_records = array();
 
-		if (is_array($specific_target_keys))
+		if (is_array($specific_target_keys) && count($specific_target_keys) > 0)
 		{
 			$index_count = 0;
 			$errors = array();
@@ -371,12 +371,11 @@ class Importer {
 			}
 			return array("count"=>$this->reindexed_records, "errors"=>$errors);
 		}
-
-
+		// Called from inside the Importer
 		else
 		{
-			// Called from inside the Importer
 			$allAffectedRecords = array_merge($this->importedRecords, $this->affected_records);
+
 			foreach($allAffectedRecords AS $ro_id){
 				try{
 					$ro = $this->CI->ro->getByID($ro_id);
@@ -385,8 +384,21 @@ class Importer {
 					$solrXML = $ro->transformForSOLR();
 					$result = curl_post($solrUpdateUrl, $solrXML);
 					$result = json_decode($result);
+					var_dump($result);
 					if($result->{'responseHeader'}->{'status'}==0){
 						$this->reindexed_records++;
+					}
+					else
+					{
+						if (isset($result->{'error'}->{'msg'}))
+						{
+							$this->error_log[] = "UNABLE TO Index this registry object id = ".$ro_id . BR . 
+												"<pre>" . $result->{'error'}->{'msg'} . "</pre>";
+						}
+						else
+						{
+							$this->error_log[] = "UNABLE TO Index this registry object id = ".$ro_id . BR . "UNKNOWN ERROR";
+						}
 					}
 				}
 				catch (Exception $e)

@@ -21,7 +21,7 @@ class XML_Extension extends ExtensionBase
 		$this->db->where(array('registry_object_id'=>$this->ro->id));
 		$this->db->update('record_data', array('current'=>DB_FALSE));
 
-		$this->db->where(array('registry_object_id'=>$this->ro->id, 'scheme'=>'extRif'));
+		$this->db->where(array('registry_object_id'=>$this->ro->id, 'scheme'=>EXTRIF_SCHEME));
 		$this->db->delete('record_data');
 	}
 
@@ -88,7 +88,7 @@ class XML_Extension extends ExtensionBase
 	function getExtRif()
 	{
 		$data = false;
-		$result = $this->db->select('data')->order_by('timestamp','desc')->limit(1)->get_where('record_data', array('registry_object_id'=>$this->ro->id, 'scheme'=>'extrif'));
+		$result = $this->db->select('data')->order_by('timestamp','desc')->limit(1)->get_where('record_data', array('registry_object_id'=>$this->ro->id, 'scheme'=>EXTRIF_SCHEME));
 		if ($result->num_rows() > 0)
 		{
 			foreach($result->result_array() AS $row)
@@ -102,7 +102,7 @@ class XML_Extension extends ExtensionBase
 
 	function getExtRifDataRecord($id){
 		$data = false;
-		$result = $this->db->select('data')->limit(1)->get_where('record_data', array('id'=>$id, 'scheme'=>'extrif'));
+		$result = $this->db->select('data')->limit(1)->get_where('record_data', array('id'=>$id, 'scheme'=>EXTRIF_SCHEME));
 		if ($result->num_rows() > 0)
 		{
 			foreach($result->result_array() AS $row)
@@ -118,7 +118,7 @@ class XML_Extension extends ExtensionBase
 		if (!is_null($this->_rif)) return $this->_rif->xml;
 
 		$data = false;
-		$result = $this->db->select('data')->order_by('timestamp','desc')->limit(1)->get_where('record_data', array('registry_object_id'=>$this->ro->id, 'scheme'=>'rif'));
+		$result = $this->db->select('data')->order_by('timestamp','desc')->limit(1)->get_where('record_data', array('registry_object_id'=>$this->ro->id, 'scheme'=>RIFCS_SCHEME));
 		if ($result->num_rows() > 0)
 		{
 			foreach($result->result_array() AS $row)
@@ -130,13 +130,51 @@ class XML_Extension extends ExtensionBase
 		return $data;
 	}
 
+
+	function getNativeFormat($record_data_id = NULL)
+	{
+		$data = null;
+		$result = $this->db->select('scheme')->order_by('timestamp','desc')->limit(1)->get_where('record_data', array('registry_object_id'=>$this->ro->id, 'scheme !='=>RIFCS_SCHEME, 'scheme !='=>EXTRIF_SCHEME));
+		if ($result->num_rows() > 0)
+		{
+			foreach($result->result_array() AS $row)
+			{
+				$data = $row['scheme'];
+			}
+		}
+		else
+		{
+			$data = 'rif';
+		}
+		$result->free_result();
+		return $data;
+	}
+
+	function getNativeFormatData($record_data_id = NULL)
+	{
+		$data = null;
+		$result = $this->db->select('data')->order_by('timestamp','desc')->limit(1)->get_where('record_data', array('registry_object_id'=>$this->ro->id, 'scheme !='=>RIFCS_SCHEME, 'scheme !='=>EXTRIF_SCHEME));
+		if ($result->num_rows() > 0)
+		{
+			foreach($result->result_array() AS $row)
+			{
+				$data = $row['data'];
+			}
+		}
+		else
+		{
+			$data = $this->getRif();
+		}
+		$result->free_result();
+		return $data;
+	}
 }
 
 
 
 class _xml
 {
-	const DEFAULT_SCHEME = "rif";
+	const DEFAULT_SCHEME = RIFCS_SCHEME;
 	
 	public $registry_object_id;
 	public $record_data_id;
@@ -145,7 +183,7 @@ class _xml
 	public $xml;
 	public $current;
 	public $timestamp;
-	public $scheme = "rif";
+	public $scheme = RIFCS_SCHEME;
 	
 	function __construct($registry_object_id = NULL, $record_data_id = NULL)
 	{

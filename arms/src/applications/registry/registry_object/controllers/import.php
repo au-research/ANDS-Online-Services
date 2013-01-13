@@ -24,9 +24,12 @@ originatingSource = "http://ands.org.au/"
 name = "This person came from an INI FILE!!!!"
 description = "This is just an example..."
 		');
+		$this->importer->forcePublish();
 		$this->importer->setCrosswalk("benINItoRIFCS");
 		$this->importer->setDatasource($this->ds->getByID(14));
 		$this->importer->commit();
+
+
 
 		print_pre($this->importer->message_log);
 	}

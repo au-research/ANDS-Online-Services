@@ -3,6 +3,10 @@
  */
 var aro_mode, active_tab;
 var editor = 'tinymce';
+
+var SIMPLE_MODE = 'simple';
+var ADVANCED_MODE = 'advanced';
+
 $(function(){
 	$('body').css('background-color', '#454545');
 
@@ -13,6 +17,11 @@ $(function(){
 	$('#mode-switch button').click(function(){
 		var to_mode = $(this).attr('aro-mode');
 		aro_mode = to_mode;
+
+		// Change tab to the first tab of this mode
+		var tab = $('#'+aro_mode+'-menu a:first').attr('href');
+		changeHashTo(aro_mode+'/'+tab.substring(1, tab.length));
+
 		switchMode(aro_mode);
 	});
 
@@ -24,11 +33,17 @@ $(function(){
 			active_tab = words[1];
 
 			switchMode(aro_mode);
-			if(aro_mode=='advanced'){
+			if(aro_mode==ADVANCED_MODE){
 				$('.pane').hide();
 				$('#'+active_tab).show();
 				$('#advanced-menu a').parent().removeClass('active');
 				$('#advanced-menu a[href=#'+active_tab+']').parent().addClass('active');
+			}
+			else if(aro_mode==SIMPLE_MODE){
+				$('.pane').hide();
+				$('#'+active_tab).show();
+				$('#simple-menu a').parent().removeClass('active');
+				$('#simple-menu a[href=#'+active_tab+']').parent().addClass('active');
 			}
 
 		}else{//there is no hash suffix
@@ -82,6 +97,11 @@ $(function(){
 		var tab = $(this).attr('href');
 		changeHashTo('advanced/'+tab.substring(1, tab.length));
 	});
+
+	$('#simple-menu a').click(function(e){
+		var tab = $(this).attr('href');
+		changeHashTo('simple/'+tab.substring(1, tab.length));
+	});
 });
 
 function switchMode(aro_mode){
@@ -89,6 +109,12 @@ function switchMode(aro_mode){
 	$('#'+aro_mode+'-menu').show();
 	$('#mode-switch button').removeClass('btn-primary');
 	$('#mode-switch button[aro-mode='+aro_mode+']').addClass('btn-primary');
+
+	// Reset the values of the inputs to their bound equivalents
+	if (aro_mode==SIMPLE_MODE)
+	{
+		initSimpleModeFields();
+	}
 }	
 
 
@@ -136,7 +162,7 @@ function initEditForm(){
 	 			-> returns a json array of results
 	 *
 	 */
-	$('.input-large').typeahead({
+	$('.input-largeXX').typeahead({
 		source: function(typeahead,query){
 			$.ajax({
 				type: 'GET',
@@ -389,6 +415,23 @@ function initEditForm(){
 	initRelatedInfos();
 	bindPartsTooltip();
 	assignFieldID();
+}
+
+function initSimpleModeFields()
+{
+	/* Show/hide full description field */
+	if ($('#simpleFullDescription').length > 0)
+	{
+		$('#simpleFullDescription').parent().parent().show();
+		$('#simpleFullDescriptionToggle').parent().hide();
+	}
+
+	$('#simpleAddMoreIdentifiers').live({
+		click: function(e){
+			changeHashTo(ADVANCED_MODE+'/identifiers');
+		}
+	})
+
 }
 
 function assignFieldID(){
