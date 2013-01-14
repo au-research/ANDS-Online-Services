@@ -75,6 +75,11 @@ class User {
 	{
 		return $this->hasFunction(AUTH_FUNCTION_LOGGED_IN_ATTRIBUTE);
 	}
+
+	function isLoggedIn()
+	{
+		return $this->loggedIn();
+	}
 	
 	/**
 	 * Return a user-friendly representation of the logged in user

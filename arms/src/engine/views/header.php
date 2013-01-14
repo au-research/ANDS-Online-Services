@@ -141,8 +141,14 @@
       <?php endif; ?>
         
       <?php if($this->user->hasFunction('PUBLIC')): ?>
+      <?php if($this->user->isLoggedIn()): ?>
+        <?php $link = "Logged in as " . $this->user->name() . BR . anchor("auth/logout", "Logout"); ?>
+      <?php else: ?>
+        <?php $link = anchor("auth/login", "Login"); ?>
+      <?php endif; ?>
+
           <li class="btn btn-inverse ">
-            <a href="javascript:;" id="main-nav-user-account" title="aaa"><i class="icon-user icon-white"></i></a>
+            <a href="javascript:;" id="main-nav-user-account" title="<?=htmlentities($link);?>"><i class="icon-user icon-white"></i></a>
           </li>
         <?php endif; ?>
                 

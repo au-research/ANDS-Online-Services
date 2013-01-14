@@ -81,6 +81,19 @@ class Spotlight extends MX_Controller {
 		$this->write(json_encode($new_file));
 	}
 
+	function delete($id){
+		$file = $this->read();
+		$items = $file['items'];
+		$new_file = array('items'=>array());
+		foreach($items as $i){
+			if($i['id']!=$id){
+				$new_file['items'][] = $this->getID($i['id'], $items);
+			}
+		}
+		var_dump($new_file);
+		$this->write(json_encode($new_file));
+	}
+
 	private function checkIsWriteable()
 	{
 		if (file_exists($this->config->item('spotlight_data_file')) && !is_writable($this->config->item('spotlight_data_file')))
@@ -103,19 +116,6 @@ class Spotlight extends MX_Controller {
 		$file = read_file($this->config->item('spotlight_data_file'));
 		//$file = file_get_contents(asset_url('spotlight.json'));
 		return json_decode($file,true);
-	}
-
-	private function delete($id){
-		$file = $this->read();
-		$items = $file['items'];
-		$new_file = array('items'=>array());
-		foreach($items as $i){
-			if($i['id']!=$id){
-				$new_file['items'][] = $this->getID($i['id'], $items);
-			}
-		}
-		var_dump($new_file);
-		$this->write(json_encode($new_file));
 	}
 
 	private function getID($id, $items){
