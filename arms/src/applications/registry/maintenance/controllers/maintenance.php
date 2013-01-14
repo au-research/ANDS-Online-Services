@@ -113,6 +113,9 @@ class Maintenance extends MX_Controller {
 				if($ro){
 					$ro->enrich();//TODO: XXX
 					$solrXML = $ro->transformForSOLR();
+					echo "@@@@@solrXML@@@@@@".NL;
+					echo $solrXML;
+					echo NL."@@@@@@/solrXML@@@@@@".NL;
 					$result = $this->solr->addDoc($solrXML);
 					$result = json_decode($result);
 					$data['results'][$ro_id] = array(
@@ -141,7 +144,7 @@ class Maintenance extends MX_Controller {
 				$data['error'] .= nl2br($e);
 			}
 		}
-		$this->solr->commit();
+		//$this->solr->commit();
 		$data['totalAdded'] = $i;
 		echo json_encode($data);
 	}

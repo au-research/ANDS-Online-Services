@@ -45,7 +45,8 @@
                 <xsl:apply-templates select="extRif:extendedMetadata/extRif:subjects"/>
                 <xsl:apply-templates select="extRif:extendedMetadata/extRif:rights[@licence_group!='']" mode="licence_group"/>        
                 <xsl:apply-templates select="extRif:extendedMetadata/extRif:description" mode="value"/>
-                <xsl:apply-templates select="extRif:extendedMetadata/extRif:description" mode="type"/>  	
+                <xsl:apply-templates select="extRif:extendedMetadata/extRif:description" mode="type"/>
+                <xsl:apply-templates select="extRif:extendedMetadata/extRif:related_object"/>
         	</xsl:when>
         </xsl:choose>
 
@@ -260,13 +261,23 @@
             <xsl:attribute name="name">type</xsl:attribute>
             <xsl:value-of select="@type"/>
         </xsl:element>  
-        <!--xsl:element name="field">
-            <xsl:attribute name="name">date_modified</xsl:attribute>
-            <xsl:value-of select="@dateModified"/>
-        </xsl:element-->  
+        <xsl:element name="field">
+            <xsl:attribute name="name">description</xsl:attribute>
+            <xsl:choose>
+                <xsl:when test="ro:description[@type='brief']">
+                    <xsl:value-of select="ro:description[@type='brief'][1]/text()"/>
+                </xsl:when>
+                <xsl:when test="ro:description[@type = 'full']">
+                    <xsl:value-of select="ro:description[@type = 'full'][1]/text()"/>
+                </xsl:when>
+                <xsl:when test="ro:description">
+                    <xsl:value-of select="ro:description[1]/text()"/>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:element>  
         <xsl:apply-templates select="ro:identifier" mode="value"/>
         <xsl:apply-templates select="ro:identifier" mode="type"/>
-        <xsl:apply-templates select="ro:name"/>
+        <!--<xsl:apply-templates select="ro:name"/>
         
         <xsl:apply-templates select="ro:displayTitle"/>
         <xsl:apply-templates select="ro:listTitle"/>
@@ -274,7 +285,7 @@
         <xsl:apply-templates select="ro:location"/>
         <xsl:apply-templates select="ro:coverage"/>
         
-        <xsl:apply-templates select="ro:relatedObject"/>
+        <xsl:apply-templates select="ro:relatedObject"/-->
         <xsl:apply-templates select="ro:relatedInfo"/>
     </xsl:template>
     
@@ -296,76 +307,57 @@
             <xsl:value-of select="."/><xsl:text> </xsl:text>
     </xsl:template>
     
-    <!-- 
-    
-    <relatedObject>
-    <key>fa2e8fcd8be5337d3b1a64c9af2de5f197920d2a</key>
-    <relation extRif:type="Point of contact" type="pointOfContact"/>
-    <extRif:relatedObjectClass>party</extRif:relatedObjectClass>
-    <extRif:relatedObjectType>group</extRif:relatedObjectType>
-    <extRif:relatedObjectListTitle> CSIRO Division of Marine and Atmospheric Research - Hobart </extRif:relatedObjectListTitle>
-    <extRif:relatedObjectDisplayTitle>CSIRO Division of Marine and Atmospheric Research - Hobart
-    </extRif:relatedObjectDisplayTitle>
-    </relatedObject>
-    
-    -->
-    <xsl:template match="ro:relatedObject">
 
-            <xsl:apply-templates/>
-       
+    <xsl:template match="extRif:related_object">
+            <xsl:apply-templates/>       
     </xsl:template>
     
-    <xsl:template match="ro:relatedObject/ro:key">
+
+    <xsl:template match="extRif:related_object_key">
         <xsl:element name="field">
             <xsl:attribute name="name">related_object_key</xsl:attribute>
             <xsl:value-of select="."/>
         </xsl:element>       
     </xsl:template>
+
+    <xsl:template match="extRif:related_object_id">
+        <xsl:element name="field">
+            <xsl:attribute name="name">related_object_id</xsl:attribute>
+            <xsl:value-of select="."/>
+        </xsl:element>       
+    </xsl:template>
     
-    <xsl:template match="ro:relatedObject/extRif:relatedObjectClass">
+    <xsl:template match="extRif:related_object_class">
         <xsl:element name="field">
             <xsl:attribute name="name">related_object_class</xsl:attribute>
             <xsl:value-of select="."/>
         </xsl:element>       
     </xsl:template>
     
-    <xsl:template match="ro:relatedObject/extRif:relatedObjectType">
+    <xsl:template match="extRif:related_object_type">
         <xsl:element name="field">
             <xsl:attribute name="name">related_object_type</xsl:attribute>
             <xsl:value-of select="."/>
         </xsl:element>       
     </xsl:template>
     
-    <xsl:template match="ro:relatedObject/extRif:relatedObjectListTitle">
-        <xsl:element name="field">
-            <xsl:attribute name="name">related_object_list_title</xsl:attribute>
-            <xsl:value-of select="."/>
-        </xsl:element>       
-    </xsl:template>
-    
-    <xsl:template match="ro:relatedObject/extRif:relatedObjectDisplayTitle">
+    <xsl:template match="extRif:related_object_display_title">
         <xsl:element name="field">
             <xsl:attribute name="name">related_object_display_title</xsl:attribute>
             <xsl:value-of select="."/>
         </xsl:element>       
     </xsl:template>
+    
         
-    <xsl:template match="ro:relatedObject/ro:relation">
-    <xsl:element name="field">
-        <xsl:attribute name="name">related_object_relation</xsl:attribute>
-        <xsl:choose>
-        	<xsl:when test="@extRif:type">
-        		 <xsl:value-of select="@extRif:type"/>
-        	</xsl:when>
-        	<xsl:otherwise>
-        		<xsl:value-of select="@type"/>
-        	</xsl:otherwise>
-        </xsl:choose>       
-    </xsl:element>  
+    <xsl:template match="extRif:related_object_relation">
+        <xsl:element name="field">
+            <xsl:attribute name="name">related_object_relation</xsl:attribute>
+            <xsl:value-of select="."/>
+        </xsl:element>  
     </xsl:template>
 
     
-    <xsl:template match="ro:coverage/ro:temporal/extRif:date[@type = 'dateFrom'] | ro:coverage/ro:temporal/extRif:date[@type = 'dateTo']">
+    <!--xsl:template match="ro:coverage/ro:temporal/extRif:date[@type = 'dateFrom'] | ro:coverage/ro:temporal/extRif:date[@type = 'dateTo']">
 
 	        <xsl:element name="field">	            
 
@@ -378,7 +370,7 @@
 	            <xsl:value-of select="."/>           
 	        </xsl:element>     
 
-    </xsl:template>
+    </xsl:template-->
     
     <xsl:template match="ro:address | ro:electronic | ro:physical | ro:coverage | ro:temporal | extRif:spatial | extRif:subjects">
             <xsl:apply-templates/>
@@ -486,7 +478,7 @@
     </xsl:template> 
 
 
-    <xsl:template match="ro:date | ro:description | ro:spatial | ro:text | ro:subject"/>
+    <xsl:template match="ro:date | ro:description | ro:spatial | ro:text | ro:subject | ro:relatedObject"/>
 
     
     <xsl:template match="ro:name"/>

@@ -30,13 +30,23 @@ class Relationships_Extension extends ExtensionBase
 				$class = $class['class'];
 			}
 			$related_keys[] = (string)$related_object_key;
-			
+			$title =  $this->db->select('title')->get_where('registry_objects', array('key'=>(string)$related_object_key));
+			if ($title->num_rows() > 0)
+			{
+				$title = array_shift($title->result_array());
+				$result->free_result();
+				$title = $title['title'];
+			}
+			else{
+				$title = 'no title';
+			}
 			$this->db->insert('registry_object_relationships', 
 				array(
 						"registry_object_id"=>$this->ro->id, 
 						"related_object_key" => (string) $related_object_key,
 						'related_object_class'=> (string) $class,
 						"relation_type" => (string) $related_object_type,
+						"related_object_title" => (string) $title
 				)
 			);
 		}
@@ -53,6 +63,26 @@ class Relationships_Extension extends ExtensionBase
 			$related_keys[] = $row['related_object_key'];
 		}
 		return $related_keys;
+	}
+
+
+	function getRelatedObjects()
+	{
+		$my_connections = array();
+		$this->db->select('r.title, r.registry_object_id as related_id, a.value as related_object_type, rr.*')
+				 ->from('registry_object_relationships rr')
+				 ->join('registry_objects r','rr.related_object_key = r.key','left')
+				 ->join('registry_object_attributes a','a.registry_object_id = r.registry_object_id')
+				 ->where('rr.registry_object_id',(string)$this->ro->id)
+				 ->where('a.attribute','type')
+				 ->where('r.status','PUBLISHED');
+		$query = $this->db->get();
+		foreach ($query->result_array() AS $row)
+		{
+			$my_connections[] = $row;
+		}
+
+		return $my_connections;
 	}
 	
 	function getRelatedClasses()

@@ -98,6 +98,17 @@ class Extrif_Extension extends ExtensionBase
 					$extrifName->addChild("extRif:displayTitle", $titles['display_title'], EXTRIF_NAMESPACE);
 				}	
 				
+				foreach ($this->ro->getRelatedObjects() AS $relatedObject)
+				{
+					$relatedObj = $extendedMetadata->addChild("extRif:related_object", NULL, EXTRIF_NAMESPACE);
+					$relatedObj->addChild("extRif:related_object_key", $relatedObject['related_object_key'], EXTRIF_NAMESPACE);
+					$relatedObj->addChild("extRif:related_object_id", $relatedObject['related_id'], EXTRIF_NAMESPACE);
+					$relatedObj->addChild("extRif:related_object_class", $relatedObject['related_object_class'], EXTRIF_NAMESPACE);
+					$relatedObj->addChild("extRif:related_object_type", $relatedObject['related_object_type'], EXTRIF_NAMESPACE);
+					$relatedObj->addChild("extRif:related_object_display_title", $relatedObject['title'], EXTRIF_NAMESPACE);
+					$relatedObj->addChild("extRif:related_object_relation", $relatedObject['relation_type'], EXTRIF_NAMESPACE);
+				}
+
 				/* Names EXTRIF */
 				//$descriptions = $xml->xpath('//'.$this->ro->class.'/description');
 				
