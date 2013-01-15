@@ -249,40 +249,129 @@ class _data_source {
 	function get_groups()
 	{
 		
-	$groups = array();
+		$groups = array();
 
-	$this->db->select('value');
-	$this->db->from('registry_object_attributes');
-	$this->db->join('registry_objects', 'registry_objects.registry_object_id = registry_object_attributes.registry_object_id');
-	$this->db->where(array('registry_objects.data_source_id'=>$this->id, 'registry_object_attributes.attribute'=>'group'));
-	$query = $this->db->get();
+		$this->db->select('value');
+		$this->db->from('registry_object_attributes');
+		$this->db->join('registry_objects', 'registry_objects.registry_object_id = registry_object_attributes.registry_object_id');
+		$this->db->where(array('registry_objects.data_source_id'=>$this->id, 'registry_object_attributes.attribute'=>'group'));
+		$query = $this->db->get();
 
-	if ($query->num_rows() == 0)
-	{
-		return $groups;
-	}
-	else
-	{				
-		foreach($query->result_array() AS $group)
+		if ($query->num_rows() == 0)
 		{
-			$groups[] =  $group['value'];
+			return $groups;
 		}
-	}
+		else
+		{				
+			foreach($query->result_array() AS $group)
+			{
+				$groups[] =  $group['value'];
+			}
+		}
 
-	return array_unique($groups);
+		return array_unique($groups);
 	
 	}
+	function get_group_contributor($group)
+	{
+		
+		$contributor = '';
 
-	function setContributorPages($value)
+		$this->db->select('registry_object_id');
+		$this->db->from('institutional_pages');
+		$this->db->where(array('group'=>$group));
+		$query = $this->db->get();
+
+		if ($query->num_rows() == 0)
+		{
+			return $contributor;
+		}
+		else
+		{				
+			foreach($query->result_array() AS $contributors)
+			{
+				$contributor =  $contributors['registry_object_id'];
+			}
+		}
+
+		return $contributor;
+	
+	}	
+
+	 function setContributorPages($value)
 	{
 		$data_source_id = $this->id;
+
+		$this->_CI->load->model("registry_object/registry_objects", "ro");
+
 		switch($value)
 		{
 			case 0:
-				echo "we don't want to manage conributor pages for id ".$data_source_id;	
+				echo "we don't want to manage conributor pages for id ".$data_source_id;
+				//remove any reference to a contibutor page for this datasource from the institutional_pages db table
+					$this->db->delete('institutional_pages', array('id'=>$this->id));
 				break;
 			case 1:
 				echo "we want to auto manage conributor pages for id ".$data_source_id;	
+				// for each group for this datasource that is not already managed by another datasource
+
+					$groups = $this->get_groups();
+					print_r($groups);
+					foreach($groups as $group)
+					{
+						$manageGroup = true;
+						$query = '';
+						//check that another ds is not the authoritive ds
+					//	print($group);
+						$query = $this->db->get_where('institutional_pages', array('group'=>$group));
+					//	print_r($query->num_rows .  " is the result" );
+						if($query->num_rows > 0)
+						{
+							foreach($query->result_array() AS $foundPage)
+							if($foundPage['authorative_data_source_id']==$data_source_id)
+							{
+								//we want to delete this record and reinsert it
+								print("we can delete this record from the database");
+								//$this->db->delete('institutional_pages', array('group'=>$group));
+							}else{
+								//we want to leave this group alone if the group belongs to another ds
+								$manageGroup = false;
+							}
+						}
+
+						if($manageGroup)
+						{
+							$registry_object_key = 'contributor:'.$group;
+							$class= 'party';
+							$title=$group;
+							$slug='defaultSlug';
+							$status='DRAFT';
+							$record_owner = 'SYSTEM';
+							$harvestID = 0;
+							$contributorPage = $this->_CI->ro->getByKey('contributor:'.$group);
+							if(!$contributorPage)
+							{
+								//we need to automatically create the group party record if it dosn't exist
+								$thePage = $this->_CI->ro->create($this, $registry_object_key, $class, $title, $status, $slug, $record_owner, $harvestID);	
+								$registry_object_id = $thePage->id;				
+							}else{
+								$registry_object_id = $contributorPage[0]->id;
+							}
+
+							//we need to add the  group , registry_object_id and autoritive datasource to the institutional_pages table
+							$data = array(
+								"id"=>null,
+								"group"=> (string)$group,
+								"registry_object_id"=>$registry_object_id,
+								"authorative_data_source" => $data_source_id
+								);
+							print_r($data);
+							$insert = $this->db->insert('institutional_pages',$data);
+							print_r($insert);
+						}
+					}
+
+
 				break;
 			case 2:
 				echo "we want to manually manage conributor pages for id ".$data_source_id;	

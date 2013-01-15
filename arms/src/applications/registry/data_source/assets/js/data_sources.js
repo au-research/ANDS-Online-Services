@@ -228,7 +228,7 @@ function loadDataSourceLogs(data_source_id, offset, count)
 		//contentType: 'application/json; charset=utf-8',
 		dataType: 'json',
 		success: function(data){
-			console.log(data);
+			//console.log(data);
 			var logsTemplate = "<table class='table table-hover'>"+
 									"<thead><tr><th>#</th><th>DATE</th><th>TYPE</th><th>LOG</th></tr></thead>" +
 									"<tbody>" +
@@ -343,32 +343,59 @@ function loadHarvestLogs(data_source_id, logid)
 
 function loadContributorPages(data_source_id)
 {
-	// alert(data_source_id + " is the datasource id ")
+
 	$.ajax({
 		url: 'data_source/getContributorGroups/',
 		data: {id:data_source_id},
 		type: 'POST',
 		dataType: 'json',
 		success: function(data){
-			//console.log(data)
-			var contributorsTemplate = "<table class='table table-hover'>"+
-			"<thead><tr><th>GROUP</th></tr></thead>" +
+			//console.log(data.contributorPages)
+			var contributorsTemplate = "<p>"+data.contributorPages+"</p>"+
+			"<table class='table table-hover'>"+
+			"<thead><tr><th align='left'>GROUP</th><th>Contributor Page</th></tr></thead>" +
 			"<tbody>" +
 			"{{#items}}" +
-				"<tr ><td>{{group}}</td></tr>" +
+				"<tr ><td>{{group}}</td><td>{{contributor_page}}</td></tr>" +
 			"{{/items}}" +
 			"</tbody></table>";
 			var output = Mustache.render(contributorsTemplate, data);
-			console.log(output);
-			$('#contributor_groups').html(output);	
-			//$('#contributor_groups').fadeIn(500);		
+			$('#contributor_groups').html(output);				
 		},
 		error: function(data){
 		console.log(data);
 		}
 	});
 	
+	return false;
+}
 
+function loadContributorPagesEdit(data_source_id)
+{
+
+	$.ajax({
+		url: 'data_source/getContributorGroups/',
+		data: {id:data_source_id},
+		type: 'POST',
+		dataType: 'json',
+		success: function(data){
+			//console.log(data.contributorPages)
+			var thePageFields = "{{contributor_page}}"
+			var contributorsTemplate = "<table class='table table-hover'>"+
+			"<thead><tr><th align='left'>GROUP</th><th>Contributor Page</th></tr></thead>" +
+			"<tbody>" +
+			"{{#items}}" +
+				"<tr ><td>{{group}}</td><td>"+thePageFields+"</td></tr>" +
+			"{{/items}}" +
+			"</tbody></table>";
+			var output = Mustache.render(contributorsTemplate, data);
+			$('#contributor_groups').html(output);	
+			$('#contributor_groups2').html(output);				
+		},
+		error: function(data){
+		console.log(data);
+		}
+	});
 	
 	return false;
 
@@ -540,7 +567,7 @@ function load_datasource_edit(data_source_id, active_tab){
 
 		}
 	});
-
+	loadContributorPagesEdit(data_source_id);
 	return false;
 }
 
@@ -564,7 +591,7 @@ $('#save-edit-form').live({
 
 			if($(this).attr('type')!='radio'){
 			//if(value!='' && value){
-				console.log(label + " will be set to " + value)
+				//console.log(label + " will be set to " + value)
 				jsonData.push({name:label, value:value});
 			//}
 			}

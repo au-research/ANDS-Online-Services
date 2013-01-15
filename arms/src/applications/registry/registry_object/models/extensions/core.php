@@ -90,9 +90,12 @@ class Core_extension extends ExtensionBase
 	
 	function create()
 	{
+
 		$this->setAttribute("original_status", $this->getAttribute("status"));
 		
 		$this->db->insert("registry_objects", array("data_source_id" => $this->getAttribute("data_source_id"), 
+
+
 													"key" => (string) $this->getAttribute("key"), 
 													"class" => $this->getAttribute("class"),
 													"title" => $this->getAttribute("title"),
@@ -100,6 +103,7 @@ class Core_extension extends ExtensionBase
 													"slug" => $this->getAttribute("slug"),
 													"record_owner" => $this->getAttribute("record_owner")								
 													));
+
 		$this->ro->id = $this->db->insert_id();
 		$this->id = $this->ro->id;
 		$this->save();

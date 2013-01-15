@@ -152,15 +152,37 @@ class Data_source extends MX_Controller {
 		}	
 		$this->load->model("data_sources","ds");
 		$dataSource = $this->ds->getByID($id);
+		//print($dataSource->attributes['institution_pages']->value);
+		if(isset($dataSource->attributes['institution_pages']->value))
+		{
+			$contributorPages = $dataSource->attributes['institution_pages']->value;
+		} else {
+			$contributorPages = 0;			
+		}
+
+		switch($contributorPages)
+		{
+			case 0:
+				$jsonData['contributorPages'] = "Pages are not managed";	
+				break;
+			case 1:
+				$jsonData['contributorPages'] = "Pages are automatically managed";	
+				break;
+			case 2:
+				$jsonData['contributorPages'] = "Pages are manually managed";;	
+				break;
+		}
+
 		$dataSourceGroups = $dataSource->get_groups();
 		if(sizeof($dataSourceGroups) > 0){
-		foreach($dataSourceGroups as $group){
-			$item = array();
-			$item['group'] = $group;
-			array_push($items, $item);
-		}
-		$jsonData['status'] = 'OK';
-		$jsonData['items'] = $items;
+			foreach($dataSourceGroups as $group){
+				$item = array();
+				$item['group'] = $group;
+				$item['contributor_page'] = $dataSource->get_group_contributor($group);
+				array_push($items, $item);
+			}
+			$jsonData['status'] = 'OK';
+			$jsonData['items'] = $items;
 		}		
 		$jsonData = json_encode($jsonData);
 		echo $jsonData;
@@ -244,9 +266,9 @@ class Data_source extends MX_Controller {
 		
 		$jsonData['status'] = 'OK';
 		$POST = $this->input->post();
-		print("<pre>");
-		print_r($POST);
-		print("</pre>");
+		//print("<pre>");
+		//print_r($POST);
+		//print("</pre>");
 
 		if (isset($POST['data_source_id'])){
 			$id = (int) $this->input->post('data_source_id');

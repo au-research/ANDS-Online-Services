@@ -710,10 +710,12 @@
 								<input type="radio" class="contributor-page" name="institution_pages_radio" value="0"><p class="help-inline">Do not have contributor pages</p><br />
 								<input type="radio" class="contributor-page" name="institution_pages_radio" value="1"><p class="help-inline">Auto generate Contributor Pages for all my groups</p><br />
 								<input type="radio" class="contributor-page" name="institution_pages_radio" value="2"><p class="help-inline">Manually manage my Contributor Pages and groups</p><br />
-							<input type="text" class="input-small hide" name="institution_pages"  id="institution_pages" value="{{institution_pages}}">	
+								<input type="text" class="input-small hide" name="institution_pages"  id="institution_pages" value="{{institution_pages}}">	
+								<p>
+									<div class="well" id="contributor_groups2"></div>
+								</p>
 							</div>
 						</div>
-
 					</fieldset>
 				</div>
 				<div id="harvester" class="tab-pane">
