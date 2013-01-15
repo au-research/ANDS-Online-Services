@@ -145,46 +145,117 @@ class Registry_object extends MX_Controller {
 		foreach($data_source->attributes as $attrib=>$value){
 			$jsonData['ds'][$attrib] = $value->value;
 		}
-		$jsonData['valid_statuses'] = $this->ro->valid_status;
+
+		$jsonData['valid_statuses'] = array(
+			'DRAFT',
+			'MORE_WORK_REQUIRED',
+			'SUBMITTED_FOR_ASSESSMENT',
+			'ASSESSMENT_IN_PROGRESS',
+			'APPROVED',
+			'PUBLISHED'
+		);
+
 		$jsonData['statuses'] = array();
 		foreach($jsonData['valid_statuses'] as $s){
-			$st = array(
-				'name'=>$s,
-			);
+			$args = array();
+			$st = array('display_name'=>str_replace('_', ' ', $s), 'name'=>$s);
 			switch($s){
-				case 'DRAFT':$st['count']=$data_source->count_DRAFT;break;
-				case 'SUBMITTED_FOR_ASSESSMENT':$st['count']=$data_source->count_SUBMITTED_FOR_ASSESSMENT;break;
-				case 'APPROVED':$st['count']=$data_source->count_APPROVED;break;
-				case 'MORE_WORK_REQUIRED':$st['count']=$data_source->count_MORE_WORK_REQUIRED;break;
-				case 'PUBLISHED':$st['count']=$data_source->count_PUBLISHED;break;
-				//case 'ASSESSMENT_IN_PROGRESS':$st['count']=$data_source->count_ASSESSMENT_IN_PROGRESS;break;
+				case 'DRAFT':
+					$st['count']=$data_source->count_DRAFT;
+					$st['connectTo']='SUBMITTED_FOR_ASSESSMENT';
+					break;
+				case 'MORE_WORK_REQUIRED':
+					$st['count']=$data_source->count_MORE_WORK_REQUIRED;
+					$st['connectTo']='DRAFT';
+					break;
+				case 'SUBMITTED_FOR_ASSESSMENT':
+					$st['count']=$data_source->count_SUBMITTED_FOR_ASSESSMENT;
+					$st['connectTo']='ASSESSMENT_IN_PROGRESS';
+					break;
+				case 'APPROVED':
+					$st['count']=$data_source->count_APPROVED;
+					$st['connectTo']='PUBLISHED';
+					break;
+				case 'PUBLISHED':
+					$st['count']=$data_source->count_PUBLISHED;
+					$st['connectTo']='';
+					break;
+				case 'ASSESSMENT_IN_PROGRESS':
+					$st['count']=$data_source->count_ASSESSMENT_IN_PROGRESS;
+					$st['connectTo']='APPROVED';
+					break;
 			}
-			$args['search'] = false;
-			$args['sort'] = false;
+			
+
+			$args['sort'] = array('updated'=>'desc');
+			//$args['search'] = 'kim';
 			$args['filter'] = array('status'=>$s);
-			$ros = $this->ro->getByDataSourceID($data_source_id, 10, 0, $args, false);
+			$offset = 0;
+			$limit = 20;
+			$ros = $this->ro->getByDataSourceID($data_source_id, $limit, $offset, $args, false);
+
 			
 			$st['ro'] = array();
+			$st['offset']=$offset+$limit;
 			
 			if($ros){
 				foreach($ros as $r){
 					$registry_object = $this->ro->getByID($r['registry_object_id']);
 					array_push($st['ro'], array(
 							'id'=>$registry_object->id, 
-							'title'=>$registry_object->title
+							'title'=>$registry_object->title,
+							'status'=>$registry_object->status,
+							'class'=>$registry_object->class,
+							'quality_level'=>$registry_object->quality_level,
+							'updated'=>timeAgo($registry_object->updated),
+							'error_count'=>$registry_object->error_count,
+							'warning_count'=>$registry_object->warning_count,
+							'data_source_id'=>$registry_object->data_source_id
 							));
 				}
 			}
 			if($st['count']>sizeof($ros)){
 				$st['hasMore'] = true;
 			}
-			//$st['ro'] = $this->ro->getByDataSourceID($data_source_id, 10, 0, $args, true);
-			array_push($jsonData['statuses'], $st);
+			$st['ds_id'] = $data_source_id;
+			$jsonData['statuses'][$s] = $st;
 		}
-
-		$jsonData['total_statuses_count'] = sizeof($jsonData['valid_statuses']);
+		$jsonData['ds_id'] = $data_source_id;
+		$jsonData['total_statuses_count'] = sizeof($jsonData['valid_statuses']) -1 ;
 		echo json_encode($jsonData);
 	}
+
+	public function get_more_mmr_data(){
+		header('Cache-Control: no-cache, must-revalidate');
+		header('Content-type: application/json');
+		$this->load->model('registry_object/registry_objects', 'ro');
+		$args['filter'] = array('status'=>$this->input->post('status'));
+		$ros = $this->ro->getByDataSourceID($this->input->post('ds_id'), 10, $this->input->post('offset'), $args, false);
+		$results = array('items'=>array());
+		if($ros){
+			foreach($ros as $r){
+				$registry_object = $this->ro->getByID($r['registry_object_id']);
+				array_push($results['items'], array(
+						'id'=>$registry_object->id, 
+							'title'=>$registry_object->title,
+							'status'=>$registry_object->status,
+							'class'=>$registry_object->class,
+							'quality_level'=>$registry_object->quality_level,
+							'updated'=>timeAgo($registry_object->updated),
+							'error_count'=>$registry_object->error_count,
+							'warning_count'=>$registry_object->warning_count,
+							'data_source_id'=>$registry_object->data_source_id
+						));
+			}
+		}
+		if(sizeof($ros)<10){
+			$results['hasMore']=false;
+		}else{
+			$results['hasMore']=true;
+		}
+		echo json_encode($results);
+	}
+
 
 	public function view($ro_id, $revision=''){
 		$this->load->model('registry_object/registry_objects', 'ro');
@@ -213,6 +284,15 @@ class Registry_object extends MX_Controller {
 			$this->load->view('registry_object_index', $data);
 		}else{
 			show_404('Unable to Find Registry Object ID: '.$ro_id);
+		}
+	}
+
+	public function preview($ro_id, $format='html'){
+		$this->load->model('registry_object/registry_objects', 'ro');
+		$ro = $this->ro->getByID($ro_id);
+		$data['ro']=$ro;
+		if($format=='pane'){
+			$this->load->view('registry_object_preview_pane', $data);
 		}
 	}
 
@@ -342,13 +422,17 @@ class Registry_object extends MX_Controller {
 	}
 
 
-	function update($id){
+	function update(){
+		$affected_ids = $this->input->post('affected_ids');
+		$attributes = $this->input->post('attributes');
 		$this->load->model('registry_objects', 'ro');
-		$ro = $this->ro->getByID($id);
-		foreach($this->input->post() as $name=>$value){
-			echo 'update '.$id.' set '.$name.' to value:'.$value;
-			if($name=='status') $ro->status = $value;
-			$ro->save();
+		foreach($affected_ids as $id){
+			$ro = $this->ro->getByID($id);
+			foreach($attributes as $a){
+				echo 'update '.$id.' set '.$a['name'].' to value:'.$a['value'];
+				if($a['name']=='status') $ro->status = $a['value'];
+				$ro->save();
+			}
 		}
 	}
 

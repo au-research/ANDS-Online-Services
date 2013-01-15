@@ -13,7 +13,7 @@
 class Registry_objects extends CI_Model {
 
 	public $valid_classes = array("collection","activity","party","service");
-	public $valid_status  = array("DRAFT"=>"DRAFT", "PUBLISHED"=>"PUBLISHED", "APPROVED"=>"APPROVED", "SUBMITTED_FOR_ASSESSMENT"=>"SUBMITTED_FOR_ASSESSMENT");
+	public $valid_status  = array("MORE_WORK_REQUIRED"=>"MORE_WORK_REQUIRED", "DRAFT"=>"DRAFT", "SUBMITTED_FOR_ASSESSMENT"=>"SUBMITTED_FOR_ASSESSMENT", "ASSESSMENT_IN_PROGRESS"=>"ASSESSMENT_IN_PROGRESS", "APPROVED"=>"APPROVED", "PUBLISHED"=>"PUBLISHED");
 	public $valid_levels  = array("level_1"=>"1", "level_2"=>"2", "level_3"=>"3", "level_4"=>"4" );
 
 
@@ -331,30 +331,85 @@ class Registry_objects extends CI_Model {
 	function getByDataSourceID($data_source_id, $limit=10, $offset=0, $args=null, $make_ro = true){
 		return $this->_get(array(array('args' => array(
 									'data_source_id'=>$data_source_id,
-									'search'=>$args['search'] ? $args['search'] : false,
-									'sort'=>$args['sort'] ? $args['sort'] : false,
-									'filter'=>$args['filter']
+									'search'=>isset($args['search']) ? $args['search'] : false,
+									'sort'=>isset($args['sort']) ? $args['sort'] : false,
+									'filter'=>isset($args['filter']) ? $args['filter'] : false,
+									'or_filter'=>isset($args['or_filter']) ? $args['or_filter'] : false
 								),
 					       'fn' => function($db, $args) {
-						       $db->select("registry_object_id")
-							       ->from("registry_objects")
-							       ->where("data_source_id", $args['data_source_id']);
-							   	if($args['search']) {
-							   		$db->like('title',$args['search'],'both');
-							   		$db->or_like('key', $args['search'],'both');
-							   	}
+						       $db->select("registry_objects.registry_object_id")
+							       ->from("registry_objects");
+
+						   		$where='`data_source_id` ="'.$args['data_source_id'].'"';
+						   		if($args['filter'] || $args['or_filter']){
+						   			$where.='AND (';
+							   		if($args['filter']){
+							   			foreach($args['filter'] as $key=>$value){
+							   				$where.='`'.$key.'`="'.$value.'"';
+							   			}
+							   		}
+									if($args['or_filter']){
+										foreach($args['or_filter'] as $key=>$value){
+											$where.='OR `'.$key.'`="'.$value.'"';
+										}
+									}
+									if($args['search']){
+										$where.=') AND (';
+										$where.='`registry_objects`.`title` LIKE \'%'.$args['search'].'%\'';
+										//$where.=')';
+									}
+									$where.=')';
+						   		}
+						   		$white_list = array('title', 'class', 'key', 'status', 'slug', 'record_owner');
 						   		if($args['sort']){
-						   			foreach($args['sort'] as $sort){
-						   				foreach($sort as $key=>$value){
+						   			foreach($args['sort'] as $key=>$value){
+						   				if(in_array($key, $white_list)){
 						   					$db->order_by($key, $value);
+						   				}else{
+						   					$db->join('registry_object_attributes', 'registry_objects.registry_object_id = registry_object_attributes.registry_object_id', 'left');
+						   					$db->select('registry_object_attributes.value as v');
+							   				$where.=' AND registry_object_attributes.attribute = "'.$key.'"';
+							   				$db->order_by('v', $value);
 						   				}
+						   				
 						   			}
 						   		}
-						   		if($args['filter']){
-						   			foreach($args['filter'] as $key=>$value){
-						   				$db->where($key,$value);
-						   			}
-						   		}
+						   		//var_dump($where);
+						   		$db->where($where);
+
+						   		// $where = '';
+						   		// if($args['filter']){
+						   		// 	$where.='(';
+						   		// 	foreach($args['filter'] as $key=>$value){
+						   		// 		$where .=$key .'= "' . $value.'" ';
+						   		// 	}
+						   		// 	$where.=')';
+					   			// }
+					   			
+
+					   			// if($args['or_filter']){
+						   		// 	foreach($args['or_filter'] as $key=>$value){
+						   		// 		$where.='OR '.$key.' = "'.$value.'"';
+						   		// 	}
+					   			// }
+					   			// $db->where($where);
+						   		
+						   		// if($args['filter']){
+						   		// 	foreach($args['filter'] as $key=>$value){
+						   		// 		$db->where($key,$value);
+						   		// 	}
+					   			// }
+
+					   			// if($args['or_filter']){
+						   		// 	foreach($args['or_filter'] as $key=>$value){
+						   		// 		$db->or_where($key,$value);
+						   		// 	}
+					   			// }
+						   		
+						   		// if($args['search']) {
+							   	// 	$db->like('title',$args['search'],'both');
+							   	// 	$db->or_like('key', $args['search'],'both');
+							   	// }
 						       return $db;
 					       })),$make_ro, $limit, $offset);
 	}

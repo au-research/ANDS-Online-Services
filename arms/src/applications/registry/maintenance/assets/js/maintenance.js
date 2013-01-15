@@ -4,20 +4,24 @@
 
 $(function(){
 	initView();
-	
+	// setInterval(function(){
+	// 	updateStat();
+	// }, 2000);
+
+	// setInterval(function(){
+	// 	updateDataSourcesStat();
+	// }, 10000);
 });
 
 function initView(){
-
 	updateStat();
 	updateDataSourcesStat();
-	
 }
 
 function updateStat() {
 
 	//get Stat
-	$('#stat').css('opacity', '0.5');
+	// $('#stat').css('opacity', '0.5');
 	$.getJSON(base_url+'maintenance/getStat', function(data) {
 		console.log(data);
 		var template = $('#stat-template').html();

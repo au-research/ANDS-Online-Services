@@ -23,36 +23,66 @@
 	white-space: nowrap;
 }
 
+.tag{
+	font-size:10px;
+	border:1px solid #ccc;
+	padding: 5px 8px;
+	margin:2px 2px;
+	color:black;
+	.light-gradient();
+	&:hover{
+		text-decoration:none;
+		color:#333;
+	}
+	i{
+		margin:-1px;
+	}
+}
+
 .status_DRAFT{
-	border-left:10px solid @status_DRAFT;
+	border-left:5px solid @status_DRAFT;
 }
 .status_PUBLISHED{
-	border-left:10px solid @status_PUBLISHED;
+	border-left:5px solid @status_PUBLISHED;
 }
 .status_SUBMITTED_FOR_ASSESSMENT{
-	border-left:10px solid @status_SUBMITTED_FOR_ASSESSMENT;
+	border-left:5px solid @status_SUBMITTED_FOR_ASSESSMENT;
 }
 .status_ASSESSMENT_IN_PROGRESS{
-	border-left:10px solid @status_ASSESSMENT_IN_PROGRESS;
+	border-left:5px solid @status_ASSESSMENT_IN_PROGRESS;
 }
 .status_APPROVED{
-	border-left:10px solid @status_APPROVED;
+	border-left:5px solid @status_APPROVED;
 }
 .status_MORE_WORK_REQUIRED{
-	border-left:10px solid @status_MORE_WORK_REQUIRED;
+	border-left:5px solid @status_MORE_WORK_REQUIRED;
 }
 .ql_1{
-	border-left:10px solid @ql_1;
+	border-left:5px solid @ql_1;
 }
 .ql_2{
-	border-left:10px solid @ql_2;
+	border-left:5px solid @ql_2;
 }
 .ql_3{
-	border-left:10px solid @ql_3;
+	border-left:5px solid @ql_3;
 }
 .ql_4{
-	border-left:10px solid @ql_4;
+	border-left:5px solid @ql_4;
 }
+
+.class_icon_collection{
+
+}
+.class_icon_party{
+	height:20px;
+	width:20px;
+	background:transparent url('assets/img/party.png') no-repeat right top;
+}
+.class_icon_activity{
+
+}
+
+
 
 .text-shadow{
 	text-shadow: 2px 2px 1px #ffffff;
