@@ -306,7 +306,7 @@
         <xsl:apply-templates select="ro:coverage"/>
         
         <xsl:apply-templates select="ro:relatedObject"/-->
-        <xsl:apply-templates select="ro:relatedInfo"/>
+        <!--xsl:apply-templates select="ro:relatedInfo"/-->
     </xsl:template>
     
     <xsl:template match="ro:location">
@@ -446,7 +446,7 @@
 
     <xsl:template match="extRif:subject_uri">
         <xsl:element name="field">
-            <xsl:attribute name="name">subject_uri</xsl:attribute>
+            <xsl:attribute name="name">subject_vocab_uri</xsl:attribute>
             <xsl:value-of select="."/>
         </xsl:element>
     </xsl:template>
