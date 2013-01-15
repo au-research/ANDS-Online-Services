@@ -92,8 +92,24 @@ class Extrif_Extension extends ExtensionBase
 						$spatialGeometry->addChild("extRif:center", $extents['center'], EXTRIF_NAMESPACE);
 					}
 					$spatialGeometry->addChild("extRif:area", $sumOfAllAreas, EXTRIF_NAMESPACE);
+				}
+
+				$temporalCoverageList = $this->ro->processTemporal();
+				if($temporalCoverageList)
+				{
+					$temporals = $extendedMetadata->addChild("extRif:temporal", NULL, EXTRIF_NAMESPACE);
+					foreach ($temporalCoverageList AS $temporal)
+					{
+						if($temporal['type'] == 'dateFrom')
+							$temporals->addChild("extRif:temporal_date_from", $temporal['value'], EXTRIF_NAMESPACE);
+						if($temporal['type'] == 'dateTo')
+							$temporals->addChild("extRif:temporal_date_to", $temporal['value'], EXTRIF_NAMESPACE);
+					}
+					$temporals->addChild("extRif:temporal_earliest_year", $this->ro->getEarliestAsYear(), EXTRIF_NAMESPACE);
+					$temporals->addChild("extRif:temporal_latest_year", $this->ro->getLatestAsYear(), EXTRIF_NAMESPACE);
 				}	
 				
+
 				foreach ($this->ro->getRelatedObjects() AS $relatedObject)
 				{
 					$relatedObj = $extendedMetadata->addChild("extRif:related_object", NULL, EXTRIF_NAMESPACE);

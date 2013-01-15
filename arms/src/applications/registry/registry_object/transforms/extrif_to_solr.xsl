@@ -31,7 +31,7 @@
                 <xsl:apply-templates select="ro:originatingSource"/>
 	        	<xsl:apply-templates select="extRif:extendedMetadata/extRif:id"/>
                 <xsl:apply-templates select="extRif:extendedMetadata/extRif:dataSourceID"/>
-                <xsl:apply-templates select="extRif:extendedMetadata/extRif:updateTimestamp"/>
+                <!--xsl:apply-templates select="extRif:extendedMetadata/extRif:updateTimestamp"/-->
 
                 <xsl:element name="field">
                     <xsl:attribute name="name">group</xsl:attribute>
@@ -60,6 +60,7 @@
       			<xsl:apply-templates select="extRif:extendedMetadata/extRif:feedType"/>   
                 <xsl:apply-templates select="extRif:extendedMetadata/extRif:lastModifiedBy"/-->  
                 <xsl:apply-templates select="extRif:extendedMetadata/extRif:spatialGeometry"/>
+                <xsl:apply-templates select="extRif:extendedMetadata/extRif:temporal"/>
 
                 <xsl:apply-templates select="extRif:extendedMetadata/extRif:subjects"/>
 
@@ -465,7 +466,7 @@
         </xsl:element>
     </xsl:template>
  
-    <xsl:template match="extRif:extendedMetadata/extRif:spatialGeometry">
+    <xsl:template match="extRif:spatialGeometry">
         <xsl:apply-templates/>     
     </xsl:template>
 
@@ -493,6 +494,38 @@
     <xsl:template match="extRif:area">
         <xsl:element name="field">
             <xsl:attribute name="name">spatial_coverage_area_sum</xsl:attribute>
+            <xsl:value-of select="."/>
+        </xsl:element>
+    </xsl:template>
+
+    <xsl:template match="extRif:temporal">
+        <xsl:apply-templates/>     
+    </xsl:template>
+
+    <xsl:template match="extRif:temporal_date_from">
+        <xsl:element name="field">
+            <xsl:attribute name="name">date_from</xsl:attribute>
+            <xsl:value-of select="."/>
+        </xsl:element>
+    </xsl:template>
+
+    <xsl:template match="extRif:temporal_date_to">
+        <xsl:element name="field">
+            <xsl:attribute name="name">date_to</xsl:attribute>
+            <xsl:value-of select="."/>
+        </xsl:element>
+    </xsl:template>
+
+    <xsl:template match="extRif:temporal_earliest_year">
+        <xsl:element name="field">
+            <xsl:attribute name="name">earliest_year</xsl:attribute>
+            <xsl:value-of select="."/>
+        </xsl:element>
+    </xsl:template>
+
+    <xsl:template match="extRif:temporal_latest_year">
+        <xsl:element name="field">
+            <xsl:attribute name="name">latest_year</xsl:attribute>
             <xsl:value-of select="."/>
         </xsl:element>
     </xsl:template>
