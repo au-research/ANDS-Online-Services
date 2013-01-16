@@ -518,7 +518,7 @@ class Data_source extends MX_Controller {
 		}
 		
 		// XXX: && data source has no crosswalk configured
-		if (strpos("<registryObjects",trim($xml)) !== 0)
+		if (strpos(trim($xml), "<registryObjects") !== 0)
 		{
 			$xml = wrapRegistryObjects($xml);
 		}
