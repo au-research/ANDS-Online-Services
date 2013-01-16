@@ -359,6 +359,7 @@ class Registry_object extends MX_Controller {
 		echo $ro->getExtRif();
 		exit();
 		//$ro->enrich();
+		//$ro->update_quality_metadata();
 		$solrDoc = $ro->transformForSOLR();
 
 		echo $solrDoc;

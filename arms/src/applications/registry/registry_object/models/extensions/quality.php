@@ -35,7 +35,7 @@ class Quality_Extension extends ExtensionBase
 			if($errorElement->item($j)->getAttribute("level") < $level)
 			{
 				$level = $errorElement->item($j)->getAttribute("level");
-				//print "error found".$level."\n";
+				print "error found".$level."\n";
 			}
 		}
 		

@@ -47,11 +47,14 @@ class Core_extension extends ExtensionBase
 	
 	function setAttribute($name, $value = NULL)
 	{
-		if (strlen($name) > self::MAX_NAME_LEN || strlen($value) > self::MAX_VALUE_LEN)
-		{
-			throw new Exception("Attribute name exceeds " . self::MAX_NAME_LEN . " chars or value exceeds " . self::MAX_VALUE_LEN . ". Attribute not set"); 
-		}
+		//if (strlen($name) > self::MAX_NAME_LEN || strlen($value) > self::MAX_VALUE_LEN)
+		//{
+		//	throw new Exception("Attribute name exceeds " . self::MAX_NAME_LEN . " chars or value exceeds " . self::MAX_VALUE_LEN . ". Attribute not set (NAME: ".$name." VALUE: ".$value.")"); 
+		//}
 	
+		if(strlen($value) > self::MAX_VALUE_LEN)
+			$value = substr($value, 0 ,self::MAX_VALUE_LEN);
+
 		// setAttribute
 		if ($value !== NULL)
 		{

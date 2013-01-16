@@ -77,7 +77,7 @@ class Migrate extends MX_Controller
 			$data_source->append_log("IMPORTED FROM: ".$this->source->database, "info");
 			echo "." .NL;
 
-
+			$this->deleteAllrecordsForDataSource($data_source);
 			// Now start importing registry objects
 			
 			
@@ -88,7 +88,7 @@ class Migrate extends MX_Controller
 
 		foreach($query->result() as $result){
 			$data_source = $this->ds->getByKey($result->data_source_key);
-			//$this->migrateRegistryObjectsForDatasource($data_source);
+			$this->migrateRegistryObjectsForDatasource($data_source);
 			$this->migrateDraftRegistryObjectsForDatasource($data_source);
 		}
 
@@ -109,6 +109,7 @@ class Migrate extends MX_Controller
 		foreach ($query->result() AS $result)
 		{
 			echo "Importing Record: " . $result->registry_object_key . "." .NL;
+			$gotXML = false;
 
 			$createdWho = $result->created_who;
 			$recordOwner = $result->record_owner;
@@ -119,27 +120,36 @@ class Migrate extends MX_Controller
 			//create(_data_source $data_source, $registry_object_key, $class, $title, $status, $slug, $record_owner, $harvestID)
 			
 
-			$registry_object = $this->ro->getByKey($result->registry_object_key);
-			if($registry_object) $registry_object = $registry_object[0];
+			$registry_object = $this->ro->getPublishedByKey($result->registry_object_key);
+			//if($registry_object) $registry_object = $registry_object[0];
 
 			if($registry_object === NULL)
 				$registry_object = $this->ro->create($data_source, $result->registry_object_key, $result->registry_object_class, $result->display_title, $result->status, $result->url_slug, $recordOwner, $harvestId);
 			
 			
-
 			$registry_object->created = $result->created_when;
 			$registry_object->group = $result->object_group;
 			$registry_object->type = $result->type;
 			$registry_object->list_title = $result->list_title;
 			$query = $this->source->get_where("dba.tbl_raw_records", array("registry_object_key"=>$result->registry_object_key, "data_source"=>$data_source->key));
-			$this->source->order_by("created_when", "desc"); 
+			//$this->source->order_by("created_when", "desc"); 
 			$this->source->limit(1);
 			foreach ($query->result() AS $result)
 			{
-				$registry_object->updateXML($result->rifcs_fragment);
+				if($result->rifcs_fragment)
+				{
+					$registry_object->updateXML($result->rifcs_fragment);
+					$gotXML = true;
+				}
+
 			}
-			$registry_object->save();
-			$registry_object->enrich();
+			if($gotXML)
+			{
+				$registry_object->save();
+				$registry_object->addRelationships();
+				$registry_object->update_quality_metadata();
+				$registry_object->enrich();
+			}
 			unset($registry_object);
 			
 		}
@@ -169,12 +179,24 @@ class Migrate extends MX_Controller
 			$registryObject = $registryObjects->xpath('//rif:registryObject');
 			$registry_object->updateXML($registryObject[0]->asXML());
 			$registry_object->save();
-			$registry_object->enrich();
 			unset($registry_object);
 			
 		}
 	}
 
+	function deleteAllrecordsForDataSource(_data_source $data_source)
+	{
+		$this->_CI->load->model("registry_object/registry_objects", "rox");
+		$ids = $this->rox->getIDsByDataSourceID($data_source->id, false);
+		if($ids)
+		{
+			foreach($ids as $ro_id){
+			$ro = $this->rox->getByID($ro_id);
+			if($ro)
+				$ro->eraseFromDatabase();
+			}
+		}
+	}
 
 	function __construct()
     {

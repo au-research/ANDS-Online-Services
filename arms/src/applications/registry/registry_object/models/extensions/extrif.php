@@ -17,13 +17,14 @@ class Extrif_Extension extends ExtensionBase
 		$ds = $this->_CI->ds->getByID($this->ro->data_source_id);
 		//same as in relationships.php
 		$xml = $this->ro->getSimpleXML();
-		$attributes = $xml->attributes(EXTRIF_NAMESPACE);
-
+		$rifNS = $xml->getNamespaces();
 		// Cannot enrich already enriched RIFCS!!
-		if(true) //! (string) $attributes['enriched'])//! (string) $attributes['enriched'])
+		if(!isset($rifNS[EXTRIF_NAMESPACE])) //! (string) $attributes['enriched'])//! (string) $attributes['enriched'])
 		{
 			$xml->addAttribute("extRif:enriched","true",EXTRIF_NAMESPACE);
-			$xml->addAttribute("xmlns",RIFCS_NAMESPACE);
+
+			if(isset($rifNS['']) &&  (string)$rifNS[''] != RIFCS_NAMESPACE)
+				$xml->addAttribute("xmlns",RIFCS_NAMESPACE);
 			if (count($xml->key) == 1)
 			{
 				/* EXTENDED METADATA CONTAINER */
@@ -38,17 +39,18 @@ class Extrif_Extension extends ExtensionBase
 	
 				$extendedMetadata->addChild("extRif:displayTitle", $this->ro->title, EXTRIF_NAMESPACE);
 				$extendedMetadata->addChild("extRif:listTitle", $this->ro->list_title, EXTRIF_NAMESPACE);
-				
-				foreach ($xml->{$this->ro->class}->description AS $description)
-				{					
-					$type = (string) $description['type'];
-					$description_str = (string) $description;					
-					$this->_CI->load->library('purifier');
-					$clean_html = $this->_CI->purifier->purify_html($description_str);
-					$extrifDescription = $extendedMetadata->addChild("extRif:description", $clean_html, EXTRIF_NAMESPACE);
-					$extrifDescription->addAttribute("type", $type);
+				if($xml->{$this->ro->class}->description)
+				{
+					foreach ($xml->{$this->ro->class}->description AS $description)
+					{					
+						$type = (string) $description['type'];
+						$description_str = (string) $description;					
+						$this->_CI->load->library('purifier');
+						$clean_html = $this->_CI->purifier->purify_html($description_str);
+						$extrifDescription = $extendedMetadata->addChild("extRif:description", $clean_html, EXTRIF_NAMESPACE);
+						$extrifDescription->addAttribute("type", $type);
+					}
 				}
-
 
 				$subjects = $extendedMetadata->addChild("extRif:subjects", NULL, EXTRIF_NAMESPACE);
 				
@@ -108,7 +110,6 @@ class Extrif_Extension extends ExtensionBase
 					$temporals->addChild("extRif:temporal_earliest_year", $this->ro->getEarliestAsYear(), EXTRIF_NAMESPACE);
 					$temporals->addChild("extRif:temporal_latest_year", $this->ro->getLatestAsYear(), EXTRIF_NAMESPACE);
 				}	
-				
 
 				foreach ($this->ro->getRelatedObjects() AS $relatedObject)
 				{
