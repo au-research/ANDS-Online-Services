@@ -20,7 +20,6 @@ class Quality_Extension extends ExtensionBase
 		$this->ro->error_count = substr_count($quality_metadata, 'class="error');
 		$this->ro->warning_count = substr_count($quality_metadata, 'class="error');
 		$this->ro->setMetadata('quality_html', $quality_metadata);
-		
 		// Get and update our quality LEVELs
 		$quality_metadata = $this->_CI->qa->get_qa_level_test_result($this->ro);
 		

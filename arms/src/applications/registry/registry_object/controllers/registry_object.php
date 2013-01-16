@@ -356,10 +356,10 @@ class Registry_object extends MX_Controller {
 		$this->load->model('registry_objects', 'ro');
 		$ro = $this->ro->getByID($id);
 		$ro->enrich();
-		echo $ro->getExtRif();
+		//echo $ro->getExtRif();
 		//exit();
 		//$ro->enrich();
-		//$ro->update_quality_metadata();
+		$ro->update_quality_metadata();
 		$solrDoc = $ro->transformForSOLR();
 
 		echo $solrDoc;
