@@ -19,11 +19,11 @@ class Extrif_Extension extends ExtensionBase
 		$xml = $this->ro->getSimpleXML();
 		$rifNS = $xml->getNamespaces();
 		// Cannot enrich already enriched RIFCS!!
-		if(!isset($rifNS[EXTRIF_NAMESPACE])) //! (string) $attributes['enriched'])//! (string) $attributes['enriched'])
+		if(true)//!isset($rifNS[EXTRIF_NAMESPACE])) //! (string) $attributes['enriched'])//! (string) $attributes['enriched'])
 		{
 			$xml->addAttribute("extRif:enriched","true",EXTRIF_NAMESPACE);
 
-			if(isset($rifNS['']) &&  (string)$rifNS[''] != RIFCS_NAMESPACE)
+			if(!isset($rifNS['']))
 				$xml->addAttribute("xmlns",RIFCS_NAMESPACE);
 			if (count($xml->key) == 1)
 			{
