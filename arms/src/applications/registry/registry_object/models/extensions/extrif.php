@@ -37,8 +37,8 @@ class Extrif_Extension extends ExtensionBase
 				$extendedMetadata->addChild("extRif:dataSourceID", $this->ro->data_source_id, EXTRIF_NAMESPACE);
 				$extendedMetadata->addChild("extRif:updateTimestamp", $this->ro->updated, EXTRIF_NAMESPACE);					
 	
-				$extendedMetadata->addChild("extRif:displayTitle", $this->ro->title, EXTRIF_NAMESPACE);
-				$extendedMetadata->addChild("extRif:listTitle", $this->ro->list_title, EXTRIF_NAMESPACE);
+				$extendedMetadata->addChild("extRif:displayTitle", str_replace('&', '&amp;' ,$this->ro->title), EXTRIF_NAMESPACE);
+				$extendedMetadata->addChild("extRif:listTitle", str_replace('&', '&amp;' ,$this->ro->list_title), EXTRIF_NAMESPACE);
 				if($xml->{$this->ro->class}->description)
 				{
 					foreach ($xml->{$this->ro->class}->description AS $description)
