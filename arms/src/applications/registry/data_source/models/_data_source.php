@@ -307,24 +307,21 @@ class _data_source {
 		switch($value)
 		{
 			case 0:
-				echo "we don't want to manage conributor pages for id ".$data_source_id;
 				//remove any reference to a contibutor page for this datasource from the institutional_pages db table
-					$this->db->delete('institutional_pages', array('id'=>$this->id));
+				$delete = $this->db->delete('institutional_pages', array('authorative_data_source_id'=>$data_source_id));
 				break;
 			case 1:
-				echo "we want to auto manage conributor pages for id ".$data_source_id;	
 				// for each group for this datasource that is not already managed by another datasource
 
 					$groups = $this->get_groups();
-					print_r($groups);
+					
 					foreach($groups as $group)
 					{
 						$manageGroup = true;
 						$query = '';
 						//check that another ds is not the authoritive ds
-					//	print($group);
 						$query = $this->db->get_where('institutional_pages', array('group'=>$group));
-					//	print_r($query->num_rows .  " is the result" );
+
 						if($query->num_rows > 0)
 						{
 							foreach($query->result_array() AS $foundPage)
@@ -348,7 +345,7 @@ class _data_source {
 							$status='DRAFT';
 							$record_owner = 'SYSTEM';
 							$harvestID = 0;
-							$contributorPage = $this->_CI->ro->getByKey('contributor:'.$group);
+							$contributorPage = $this->_CI->ro->getAllByKey('contributor:'.$group);
 							if(!$contributorPage)
 							{
 								//we need to automatically create the group party record if it dosn't exist
@@ -363,11 +360,9 @@ class _data_source {
 								"id"=>null,
 								"group"=> (string)$group,
 								"registry_object_id"=>$registry_object_id,
-								"authorative_data_source" => $data_source_id
+								"authorative_data_source_id" => $data_source_id
 								);
-							print_r($data);
 							$insert = $this->db->insert('institutional_pages',$data);
-							print_r($insert);
 						}
 					}
 
