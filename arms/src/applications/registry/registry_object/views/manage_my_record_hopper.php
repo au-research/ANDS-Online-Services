@@ -12,7 +12,6 @@
 		<ul class="nav nav-pills">
 			<li class="active"><a href="#">Manage</a></li>
 			<li class=""><a href="#">Report</a></li>
-
 		</ul>
 	</div>
 	<div id="breadcrumb">
@@ -26,10 +25,23 @@
 
 	<div class="container-fluid">
 		<div class="row-fluid">
-			<form class="form-search">
-				<input type="text" class="input-medium search-query" placeholder="search">
-				<button type="submit" class="btn">Search</button>
-			</form>
+			<div class="span6">
+				<form class="form-search" id="search_form">
+					<input type="text" class="input-medium search-query" placeholder="search">
+					<button type="submit" class="btn">Search</button>
+					<div class="btn-group">
+						<button class="btn">Sort</button>
+						<button class="btn dropdown-toggle" data-toggle="dropdown">
+							<span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu">
+							<li><a href="javascript:;" class="sort" sort="updated" value="">Date Modified <span class="icon"></span></a></li>
+							<li><a href="javascript:;" class="sort" sort="quality_level" value="">Quality Level  <span class="icon"></span></a></a></li>
+						</ul>
+					</div>
+					<em>Quick Filters: </em>
+				</form>
+			</div>
 		</div>
 
 		<div class="pool" id="mmr_hopper">
@@ -61,27 +73,32 @@
 		<h5>{{display_name}}</h5>
 		<div class="buttons"><a href="javascript:;" class="show_menu"><i class="icon-chevron-down no-border"></i></a></div>
 		<div class="hide ro_menu">
-			<ul class="nav nav-list">
-				<li><a href="#">Select All</a></li>
+			<ul class="nav nav-list" data_source_id="{{ds_id}}" status="{{name}}">
+				<li><a href="javascript:;" class="op" op="select_all">Select All</a></li>
 				<li><a href="#">Sort by Title</a></li>
 				<li><a href="#">Sort by Date Modified</a></li>
 			</ul>
 		</div>
 	</div>
-	<div class="widget-content nopadding">
+	<div class="widget-content nopadding ">
 		<ul class="sortable" connect_to="{{connectTo}}" status="{{name}}">
-			{{#ro}}
-			<li id="{{id}}" class="status_{{status}}">
+			{{#items}}
+			<li id="{{id}}" class="status_{{status}} ro_item" status="{{status}}">
 			<div class="ro_title"><a ro_id="{{id}}" class="ro_preview">{{title}}</a></div>
 			<div class="ro_content">
 				<p>
-					<span class="tag"><i class="icon icon-time"></i> {{updated}}</span>
-					<img class="tag" src="<?php echo asset_url('img/{{class}}.png', 'base');?>"/> <span class="tag ql_2">2</span>
+					<span class="tag" tip="Last Modified"><i class="icon icon-time"></i> {{updated}}</span>
+					<img class="tag" tip="{{class}}" src="<?php echo asset_url('img/{{class}}.png', 'base');?>"/>
+					<span class="tag ql_{{quality_level}}" tip="Quality Level {{quality_level}}">{{quality_level}}</span>
+					{{#flag}}
+					<span class="tag" tip="Last Modified"><i class="icon icon-flag"></i></span>
+					{{/flag}}
+					{{error_count}}
 				</p>
 			</div>
 			<div class='clearfix'></div>
 			</li>
-			{{/ro}}
+			{{/items}}
 		</ul>
 		{{#hasMore}}
 		<span class="show_more" offset="{{offset}}" ds_id="{{ds_id}}" status="{{name}}">Show More</span>
@@ -97,8 +114,13 @@
 	<div class="ro_title"><a ro_id="{{id}}" class="ro_preview">{{title}}</a></div>
 	<div class="ro_content">
 		<p>
-			<span class="tag"><i class="icon icon-time"></i> {{updated}}</span>
-			<img class="tag" src="<?php echo asset_url('img/{{class}}.png', 'base');?>"/> <span class="tag ql_2">2</span>
+			<span class="tag" tip="Last Modified"><i class="icon icon-time"></i> {{updated}}</span>
+			<img class="tag" tip="{{class}}" src="<?php echo asset_url('img/{{class}}.png', 'base');?>"/>
+			<span class="tag ql_{{quality_level}}" tip="Quality Level {{quality_level}}">{{quality_level}}</span>
+			{{#flag}}
+			<span class="tag" tip="Last Modified"><i class="icon icon-flag"></i></span>
+			{{/flag}}
+			{{error_count}}
 		</p>
 	</div>
 	<div class='clearfix'></div>

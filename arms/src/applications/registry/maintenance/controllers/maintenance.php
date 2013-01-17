@@ -27,8 +27,9 @@ class Maintenance extends MX_Controller {
 
 		$this->load->model('maintenance_stat', 'mm');
 		$data['totalCountDB'] = $this->mm->getTotalRegistryObjectsCount('db');
+		$data['totalCountDBPublished'] = $this->mm->getTotalRegistryObjectsCount('db', '*', 'PUBLISHED');
 		$data['totalCountSOLR'] = $this->mm->getTotalRegistryObjectsCount('solr');
-		$data['notIndexedArray'] = array_diff($this->mm->getAllIDs('db'), $this->mm->getAllIDs('solr'));
+		$data['notIndexedArray'] = array_diff($this->mm->getAllIDs('db', 'PUBLISHED'), $this->mm->getAllIDs('solr'));
 		$data['notIndexed'] = sizeof($data['notIndexedArray']);
 		echo json_encode($data);
 	}

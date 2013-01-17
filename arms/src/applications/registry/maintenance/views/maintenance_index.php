@@ -27,6 +27,12 @@
 				</div>
 			</li>
 			<li>
+				<div class="left peity_bar_good"><span>Database</span>Published</div>
+				<div class="right">
+					<strong>{{totalCountDBPublished}}</strong>
+				</div>
+			</li>
+			<li>
 				<div class="left peity_bar_neutral"><span>SOLR Indexed</span>Registry Objects</div>
 				<div class="right">
 					<strong>{{totalCountSOLR}}</strong>

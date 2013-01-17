@@ -346,6 +346,9 @@ class Registry_objects extends CI_Model {
 							   		if($args['filter']){
 							   			foreach($args['filter'] as $key=>$value){
 							   				$where.='`'.$key.'`="'.$value.'"';
+							   				if($value!=end($args['filter'])){
+							   					$where .='  AND ';
+							   				}
 							   			}
 							   		}
 									if($args['or_filter']){

@@ -16,8 +16,7 @@ class Registry_object extends MX_Controller {
 	}
 
 
-	public function testRecordSuite()
-	{
+	public function testRecordSuite(){
 		echo "<pre>";
 
 		$this->load->model('registry_object/registry_objects','ro');
@@ -53,16 +52,15 @@ class Registry_object extends MX_Controller {
 
 	}
 
-	/**
-	 * Manage My Records (MMR Screen)
-	 * 
-	 * 
-	 * @author Minh Duc Nguyen <minh.nguyen@ands.org.au>
-	 * @package ands/registryobject
-	 * @param data_source_id | optional
-	 * @return [HTML] output
-	 */
-	public function manage($data_source_id = false){
+	public function minhtest(){
+		$this->load->model('registry_object/registry_objects','ro');
+		$ro = $this->ro->getByID(130548);
+		$ro->flag = DB_TRUE;
+		$ro->save();
+	}
+
+	
+	public function manage_table($data_source_id = false){
 		$data['title'] = 'Manage My Records';
 
 		$this->load->model('data_source/data_sources', 'ds');
@@ -109,7 +107,16 @@ class Registry_object extends MX_Controller {
 		$this->load->view("manage_my_record", $data);
 	}
 
-	public function hopper($data_source_id = false){
+	/**
+	 * Manage My Records (MMR Screen)
+	 * 
+	 * 
+	 * @author Minh Duc Nguyen <minh.nguyen@ands.org.au>
+	 * @package ands/registryobject
+	 * @param data_source_id | optional
+	 * @return [HTML] output
+	 */
+	public function manage($data_source_id = false){
 		$data['title'] = 'Manage My Records';
 		$this->load->model('data_source/data_sources', 'ds');
 		if($data_source_id){
@@ -135,25 +142,27 @@ class Registry_object extends MX_Controller {
 	}
 
 	public function get_mmr_data($data_source_id){
+		header('Cache-Control: no-cache, must-revalidate');
+		header('Content-type: application/json');
 		$this->load->model('data_source/data_sources', 'ds');
 		$this->load->model('registry_object/registry_objects', 'ro');
 		$data_source = $this->ds->getByID($data_source_id);
-		if(!$data_source) show_error("Unable to retrieve data source id = ".$data_source_id, 404);
-		$data_source->updateStats();//TODO: XXX
-		//$data['data_source'] = $data_source;
-		//
+
 		foreach($data_source->attributes as $attrib=>$value){
 			$jsonData['ds'][$attrib] = $value->value;
 		}
 
-		$jsonData['valid_statuses'] = array(
-			'DRAFT',
-			'MORE_WORK_REQUIRED',
-			'SUBMITTED_FOR_ASSESSMENT',
-			'ASSESSMENT_IN_PROGRESS',
-			'APPROVED',
-			'PUBLISHED'
-		);
+		$qa = $data_source->qa_flag=='t' ? true : false;
+		$auto_published = $data_source->auto_published=='t' ? true: false;
+
+
+		$jsonData['valid_statuses'] = array('MORE_WORK_REQUIRED', 'DRAFT', 'PUBLISHED');
+		if($qa) {
+			array_push($jsonData['valid_statuses'], 'SUBMITTED_FOR_ASSESSMENT', 'ASSESSMENT_IN_PROGRESS');
+		}
+		if(!$auto_published){
+			array_push($jsonData['valid_statuses'], 'APPROVED');	
+		}
 
 		$jsonData['statuses'] = array();
 		foreach($jsonData['valid_statuses'] as $s){
@@ -162,7 +171,15 @@ class Registry_object extends MX_Controller {
 			switch($s){
 				case 'DRAFT':
 					$st['count']=$data_source->count_DRAFT;
-					$st['connectTo']='SUBMITTED_FOR_ASSESSMENT';
+					if($qa){
+						$st['connectTo']='SUBMITTED_FOR_ASSESSMENT';
+					}else{
+						if(!$auto_published){
+							$st['connectTo']='APPROVED';
+						}else{
+							$st['connectTo']='PUBLISHED';
+						}
+					}
 					break;
 				case 'MORE_WORK_REQUIRED':
 					$st['count']=$data_source->count_MORE_WORK_REQUIRED;
@@ -172,6 +189,10 @@ class Registry_object extends MX_Controller {
 					$st['count']=$data_source->count_SUBMITTED_FOR_ASSESSMENT;
 					$st['connectTo']='ASSESSMENT_IN_PROGRESS';
 					break;
+				case 'ASSESSMENT_IN_PROGRESS':
+					$st['count']=$data_source->count_ASSESSMENT_IN_PROGRESS;
+					$st['connectTo']='APPROVED';
+					break;
 				case 'APPROVED':
 					$st['count']=$data_source->count_APPROVED;
 					$st['connectTo']='PUBLISHED';
@@ -180,58 +201,61 @@ class Registry_object extends MX_Controller {
 					$st['count']=$data_source->count_PUBLISHED;
 					$st['connectTo']='';
 					break;
-				case 'ASSESSMENT_IN_PROGRESS':
-					$st['count']=$data_source->count_ASSESSMENT_IN_PROGRESS;
-					$st['connectTo']='APPROVED';
-					break;
 			}
-			
+			$filters = $this->input->post('filters');
 
-			$args['sort'] = array('updated'=>'desc');
-			//$args['search'] = 'kim';
+			$args['sort'] = isset($filters['sort']) ? $filters['sort'] : array('updated'=>'desc');
+			$args['search'] = isset($filters['search']) ? $filters['search'] : false;
 			$args['filter'] = array('status'=>$s);
+			if(isset($filters['filter'])){
+				$args['filter'] = array_merge($filters['filter'], $args['filter']);
+			}
+
 			$offset = 0;
 			$limit = 20;
-			$ros = $this->ro->getByDataSourceID($data_source_id, $limit, $offset, $args, false);
 
-			
-			$st['ro'] = array();
-			$st['offset']=$offset+$limit;
-			
-			if($ros){
-				foreach($ros as $r){
-					$registry_object = $this->ro->getByID($r['registry_object_id']);
-					array_push($st['ro'], array(
-							'id'=>$registry_object->id, 
-							'title'=>$registry_object->title,
-							'status'=>$registry_object->status,
-							'class'=>$registry_object->class,
-							'quality_level'=>$registry_object->quality_level,
-							'updated'=>timeAgo($registry_object->updated),
-							'error_count'=>$registry_object->error_count,
-							'warning_count'=>$registry_object->warning_count,
-							'data_source_id'=>$registry_object->data_source_id
-							));
-				}
-			}
-			if($st['count']>sizeof($ros)){
-				$st['hasMore'] = true;
-			}
+			$st['offset'] = $offset+$limit;
+
+			$filter = array(
+				'ds_id'=>$data_source_id,
+				'limit'=>20,
+				'offset'=>0,
+				'args'=>$args
+			);
+			$ros = $this->get_ros($filter);
+			$st['items']=$ros['items'];
+			$st['hasMore'] = $ros['hasMore'];
 			$st['ds_id'] = $data_source_id;
 			$jsonData['statuses'][$s] = $st;
 		}
-		$jsonData['ds_id'] = $data_source_id;
-		$jsonData['total_statuses_count'] = sizeof($jsonData['valid_statuses']) -1 ;
+		$jsonData['filters'] = $filters;
 		echo json_encode($jsonData);
 	}
+
+
 
 	public function get_more_mmr_data(){
 		header('Cache-Control: no-cache, must-revalidate');
 		header('Content-type: application/json');
-		$this->load->model('registry_object/registry_objects', 'ro');
+			
 		$args['filter'] = array('status'=>$this->input->post('status'));
-		$ros = $this->ro->getByDataSourceID($this->input->post('ds_id'), 10, $this->input->post('offset'), $args, false);
-		$results = array('items'=>array());
+		$filters = array(
+			'ds_id'=>$this->input->post('ds_id'),
+			'limit'=>10,
+			'offset'=>$this->input->post('offset'),
+			'args'=>$args
+		);
+
+		$results = $this->get_ros($filters);
+		if($results){
+			echo json_encode($results);
+		}
+	}
+
+	public function get_ros($filters){
+		$results['items'] = array();
+		$this->load->model('registry_object/registry_objects', 'ro');
+		$ros = $this->ro->getByDataSourceID($filters['ds_id'], $filters['limit'], $filters['offset'], $filters['args'], false);
 		if($ros){
 			foreach($ros as $r){
 				$registry_object = $this->ro->getByID($r['registry_object_id']);
@@ -244,16 +268,17 @@ class Registry_object extends MX_Controller {
 							'updated'=>timeAgo($registry_object->updated),
 							'error_count'=>$registry_object->error_count,
 							'warning_count'=>$registry_object->warning_count,
-							'data_source_id'=>$registry_object->data_source_id
+							'data_source_id'=>$registry_object->data_source_id,
+							'flag'=>$registry_object->flag
 						));
 			}
-		}
-		if(sizeof($ros)<10){
+		}else return false;
+		if(sizeof($ros)<$filters['limit']){
 			$results['hasMore']=false;
 		}else{
 			$results['hasMore']=true;
 		}
-		echo json_encode($results);
+		return $results;
 	}
 
 
@@ -338,7 +363,7 @@ class Registry_object extends MX_Controller {
 		$filters['search'] = ($this->input->post('sSearch') ? $this->input->post('sSearch') : false);
 
 		//sort
-		$filters['sort'] = array();
+		/*$filters['sort'] = array();
 		$aColumns=array('key', 'title', 'status');
 		for($i=0; $i<intval($this->input->post('iSortingCols')); $i++){//black magic
 			if($this->input->post('bSortable_'.intval($this->input->post('iSortCol_'.$i)))=='true'){
@@ -346,7 +371,7 @@ class Registry_object extends MX_Controller {
 					$aColumns[intval($this->db->escape_str($this->input->post('iSortCol_'.$i)))] => $this->db->escape_str($this->input->post('sSortDir_'.$i))
 				);
 			}
-        }
+        }*/
 
         $this->load->model('data_source/data_sources', 'ds');
         $data_source = $this->ds->getByID($data_source_id);
