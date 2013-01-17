@@ -112,11 +112,8 @@ class Maintenance extends MX_Controller {
 				$ro = $this->ro->getByID($ro_id);
 				if($ro){
 					$ro->enrich();//TODO: XXX
-					$ro->update_quality_metadata();
+					$ro->update_quality_metadata(); // TODO: MOVE IT WHERE BELONGS!!!
 					$solrXML = $ro->transformForSOLR();
-					echo "@@@@@solrXML@@@@@@".NL;
-					echo $solrXML;
-					echo NL."@@@@@@/solrXML@@@@@@".NL;
 					$result = $this->solr->addDoc($solrXML);
 					$result = json_decode($result);
 					$data['results'][$ro_id] = array(

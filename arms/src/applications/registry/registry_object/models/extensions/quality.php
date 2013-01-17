@@ -16,13 +16,15 @@ class Quality_Extension extends ExtensionBase
 		$this->_CI->load->model('registry_object/quality_checker', 'qa');
 		
 		// Get and update our quality metadata 
-		$quality_metadata = $this->_CI->qa->get_quality_test_result($this->ro);
+		$this->ro->addRelationships();
+		$relatedClassStr = $this->ro->getRelatedClassesString();
+		$quality_metadata = $this->_CI->qa->get_quality_test_result($this->ro, $relatedClassStr);
+
 		$this->ro->error_count = substr_count($quality_metadata, 'class="error');
 		$this->ro->warning_count = substr_count($quality_metadata, 'class="error');
 		$this->ro->setMetadata('quality_html', $quality_metadata);
 		// Get and update our quality LEVELs
-		$quality_metadata = $this->_CI->qa->get_qa_level_test_result($this->ro);
-		
+		$quality_metadata = $this->_CI->qa->get_qa_level_test_result($this->ro, $relatedClassStr);
 		// LEO'S BLACK MAGIC FOR DETERMINING THE MAXIMAL LEVEL
 		$reportDoc = new DOMDocument();
 		$reportDoc->loadXML($quality_metadata);
@@ -34,7 +36,7 @@ class Quality_Extension extends ExtensionBase
 			if($errorElement->item($j)->getAttribute("level") < $level)
 			{
 				$level = $errorElement->item($j)->getAttribute("level");
-				print "error found".$level."\n";
+				//print "error found".$level."\n";
 			}
 		}
 		

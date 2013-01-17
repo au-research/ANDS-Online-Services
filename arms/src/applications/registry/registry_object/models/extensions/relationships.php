@@ -45,8 +45,7 @@ class Relationships_Extension extends ExtensionBase
 						"registry_object_id"=>$this->ro->id, 
 						"related_object_key" => (string) $related_object_key,
 						'related_object_class'=> (string) $class,
-						"relation_type" => (string) $related_object_type,
-						"related_object_title" => (string) $title
+						"relation_type" => (string) $related_object_type
 				)
 			);
 		}

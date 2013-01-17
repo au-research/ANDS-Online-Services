@@ -4,7 +4,7 @@
 class Quality_checker extends CI_Model {
 			
 			
-	function get_quality_test_result($registry_object, $output_mode = 'xml')
+	function get_quality_test_result($registry_object, $relatedClassStr, $output_mode = 'xml')
 	{
 		$xslt_processor = Transforms::get_qa_transformer();
 		
@@ -12,18 +12,18 @@ class Quality_checker extends CI_Model {
 		$dom->loadXML(wrapRegistryObjects(str_replace('<?xml version="1.0"?>' , '', $registry_object->getXML())));
 		$xslt_processor->setParameter('', 'dataSource', $registry_object->data_source_id);
 		$xslt_processor->setParameter('', 'output', $output_mode);
-		$xslt_processor->setParameter('', 'relatedObjectClassesStr', $registry_object->getRelatedClassesString()); // XXX: TODO!!!
+		$xslt_processor->setParameter('', 'relatedObjectClassesStr', $relatedClassStr); // XXX: TODO!!!
 		return $xslt_processor->transformToXML($dom);
 	}
 	
-	function get_qa_level_test_result($registry_object)
+	function get_qa_level_test_result($registry_object, $relatedClassStr)
 	{
 		$xslt_processor = Transforms::get_qa_level_transformer();
 		
 		$dom = new DOMDocument();
 		$dom->loadXML(wrapRegistryObjects(str_replace('<?xml version="1.0"?>' , '', $registry_object->getXML())));
-		 
-		$xslt_processor->setParameter('', 'relatedObjectClassesStr', $registry_object->getRelatedClassesString()); // XXX: TODO!!!
+		
+		$xslt_processor->setParameter('', 'relatedObjectClassesStr', $relatedClassStr); // XXX: TODO!!!
 		return $xslt_processor->transformToXML($dom);
 	}
 	

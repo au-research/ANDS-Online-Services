@@ -2,12 +2,15 @@
 <xsl:stylesheet xmlns:ro="http://ands.org.au/standards/rif-cs/registryObjects" xmlns:extRif="http://ands.org.au/standards/rif-cs/extendedRegistryObjects" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0" exclude-result-prefixes="ro extRif">
     <xsl:output method="html" encoding="UTF-8" indent="no" omit-xml-declaration="yes"/>
     <xsl:param name="relatedObjectClassesStr" select="'PartyCollectionActivityService'"/>
+    
+
     <xsl:template match="/">   
     	<div id="qa_level_results" roKey="{ro:registryObjects/ro:registryObject/ro:key}">
 			<xsl:apply-templates select="ro:registryObjects"/>
       	</div>
     </xsl:template>
-      
+
+
     <xsl:template match="ro:registryObjects">
 
 		<span class="qa_ok" level="1">Registry Objects</span>
