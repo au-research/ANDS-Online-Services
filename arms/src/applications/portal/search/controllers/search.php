@@ -77,7 +77,7 @@ class Search extends MX_Controller {
 						$this->solr->setOpt('subject_value_resolved', $value);
 						break;
 					case 'spatial':
-						$this->solr->setOpt('fq', 'spatial:"Intersects('.$value.')"');
+						$this->solr->setOpt('fq', 'spatial_coverage_extents:"Intersects('.$value.')"');
 						break;
 				}
 			}

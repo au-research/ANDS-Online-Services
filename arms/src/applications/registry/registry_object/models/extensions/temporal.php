@@ -46,8 +46,6 @@ class Temporal_Extension extends ExtensionBase
 		if (($timestamp = strtotime($value)) === false) {
 	    	return false;
 		} else {
-	     	//return date('Y-m-d\TH:i:sP', $timestamp);
-	     	//
 	     	$date = getDate($timestamp);
 	     	if($date['year'] > $this->maxYear)
 	     		$this->maxYear = $date['year'];

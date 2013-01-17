@@ -219,7 +219,8 @@ function initMap(){
 
 function resetZoomByMap(theMap){
 	google.maps.event.trigger(theMap, 'resize');
-	theMap.setCenter(latlng);
+	if(searchBox)
+		theMap.setCenter(searchBox.getBounds().getCenter());
 	theMap.setZoom( map.getZoom() );
 }
 
