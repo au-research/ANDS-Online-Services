@@ -126,6 +126,9 @@ class Registry_object extends MX_Controller {
 			$data_source->updateStats();//TODO: XXX
 
 			//$data['data_source'] = $data_source;
+			foreach($data_source->attributes as $a=>$b){
+				$data['data_source'][$a]=$b;
+			}
 			$data['data_source'] = array(
 				'title'=>$data_source->title,
 				'id'=>$data_source->id,
@@ -134,6 +137,7 @@ class Registry_object extends MX_Controller {
 				'count_SUBMITTED_FOR_ASSESSMENT'=>$data_source->count_SUBMITTED_FOR_ASSESSMENT,
 				'count_PUBLISHED'=>$data_source->count_PUBLISHED
 			);
+			$data['ds'] = $data_source;
 		}
 		$data['less']=array('mmr_hopper');
 		$data['scripts'] = array('hopper');
@@ -170,7 +174,7 @@ class Registry_object extends MX_Controller {
 			$st = array('display_name'=>str_replace('_', ' ', $s), 'name'=>$s);
 			switch($s){
 				case 'DRAFT':
-					$st['count']=$data_source->count_DRAFT;
+					$st['ds_count']=$data_source->count_DRAFT;
 					if($qa){
 						$st['connectTo']='SUBMITTED_FOR_ASSESSMENT';
 					}else{
@@ -182,23 +186,23 @@ class Registry_object extends MX_Controller {
 					}
 					break;
 				case 'MORE_WORK_REQUIRED':
-					$st['count']=$data_source->count_MORE_WORK_REQUIRED;
+					$st['ds_count']=$data_source->count_MORE_WORK_REQUIRED;
 					$st['connectTo']='DRAFT';
 					break;
 				case 'SUBMITTED_FOR_ASSESSMENT':
-					$st['count']=$data_source->count_SUBMITTED_FOR_ASSESSMENT;
+					$st['ds_count']=$data_source->count_SUBMITTED_FOR_ASSESSMENT;
 					$st['connectTo']='ASSESSMENT_IN_PROGRESS';
 					break;
 				case 'ASSESSMENT_IN_PROGRESS':
-					$st['count']=$data_source->count_ASSESSMENT_IN_PROGRESS;
+					$st['ds_count']=$data_source->count_ASSESSMENT_IN_PROGRESS;
 					$st['connectTo']='APPROVED';
 					break;
 				case 'APPROVED':
-					$st['count']=$data_source->count_APPROVED;
+					$st['ds_count']=$data_source->count_APPROVED;
 					$st['connectTo']='PUBLISHED';
 					break;
 				case 'PUBLISHED':
-					$st['count']=$data_source->count_PUBLISHED;
+					$st['ds_count']=$data_source->count_PUBLISHED;
 					$st['connectTo']='';
 					break;
 			}
@@ -207,9 +211,25 @@ class Registry_object extends MX_Controller {
 			$args['sort'] = isset($filters['sort']) ? $filters['sort'] : array('updated'=>'desc');
 			$args['search'] = isset($filters['search']) ? $filters['search'] : false;
 			$args['filter'] = array('status'=>$s);
+
+			$white_list = array('title', 'class', 'key', 'status', 'slug', 'record_owner');
+			$filtered_ids = array();
+			$filtered = array();
 			if(isset($filters['filter'])){
-				$args['filter'] = array_merge($filters['filter'], $args['filter']);
+				foreach($filters['filter'] as $key=>$value){
+					if(!in_array($key, $white_list)){
+						$list = $this->ro->getByAttributeDatasource($data_source_id, $key, $value, false, false);
+						if($list) $filtered_ids = array_merge($filtered_ids, $list);
+					}else{
+						$f[$key] = $value;
+						$args['filter'][$key] = $value;
+					}
+				}
+				foreach($filtered_ids as $k){
+					array_push($filtered, $k['registry_object_id']);
+				}
 			}
+			$args['filtered_id']=$filtered;
 
 			$offset = 0;
 			$limit = 20;
@@ -224,6 +244,7 @@ class Registry_object extends MX_Controller {
 			);
 			$ros = $this->get_ros($filter);
 			$st['items']=$ros['items'];
+			$st['count']=$this->get_ros($filter, true);
 			$st['hasMore'] = $ros['hasMore'];
 			$st['ds_id'] = $data_source_id;
 			$jsonData['statuses'][$s] = $st;
@@ -252,10 +273,14 @@ class Registry_object extends MX_Controller {
 		}
 	}
 
-	public function get_ros($filters){
+	public function get_ros($filters, $getCount=false){
 		$results['items'] = array();
 		$this->load->model('registry_object/registry_objects', 'ro');
-		$ros = $this->ro->getByDataSourceID($filters['ds_id'], $filters['limit'], $filters['offset'], $filters['args'], false);
+		if(!$getCount){
+			$ros = $this->ro->getByDataSourceID($filters['ds_id'], $filters['limit'], $filters['offset'], $filters['args'], false);
+		}else{
+			return sizeof($ros = $this->ro->getByDataSourceID($filters['ds_id'], 0, 0, $filters['args'], false));
+		}
 		if($ros){
 			foreach($ros as $r){
 				$registry_object = $this->ro->getByID($r['registry_object_id']);
@@ -641,4 +666,4 @@ class Registry_object extends MX_Controller {
 		echo $jsonData;
 		
 	}
-}	
+}

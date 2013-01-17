@@ -6,8 +6,7 @@ $(function() {
     //filters['search'] = '';
     var sort = {}; sort['updated'] = 'asc';
     filters['sort'] = sort;
-    var filter = {}; filter['class'] = 'collection';
-    filters['filter'] = filter;
+    var filter = {}; filter['class'] = 'collection';filters['filter'] = filter;
 
     init(filters);
 });
@@ -15,7 +14,8 @@ $(function() {
 function init(filters){
     selected_ids = [];
     var data_source_id = $('#data_source_id').val();
-
+    $('.pool').hide();
+     $('#active_filters').html('<em>Loading...</em>');
     $.ajax({
         url:base_url+'registry_object/get_mmr_data/'+data_source_id, 
         type: 'POST',
@@ -30,6 +30,7 @@ function init(filters){
                 $('#'+d).html(output);
                 $('#'+d).parent().show();
             });
+            $('.pool').show();
 
             bindSortables();
             bindPreviews();
@@ -117,7 +118,7 @@ function initLayout(){
         }
     });
 
-    $('#search_form').submit(function(e){
+    $('#search_form').unbind('submit').submit(function(e){
         e.preventDefault();
         e.stopPropagation();
         var search_term = $('input', this).val();
@@ -154,6 +155,35 @@ function initLayout(){
         filters['sort'] = sorting;
         console.log(filters['sort']);
         init(filters);
+    });
+
+    $('#active_filters').html('');
+    if(filters['filter'].length > 0){
+        $('#active_filters').append('<em>Active Filters: </em>');
+    }
+
+    $(filters['filter']).each(function(){
+        $.each(this, function(key, value){
+            $('#active_filters').append('<span class="removeFilter tag" name="'+key+'"><a href="javascript:;">'+key+':'+value+' <i class="icon icon-remove"></i></a></span>');
+        });
+    });
+    $('.removeFilter').unbind('click').click(function(){
+        var name = $(this).attr('name');
+        delete filters['filter'][name];
+        init(filters);
+    });
+
+    $('.filter').unbind('click').click(function(e){
+        if(!$(this).closest('li').hasClass('disabled')){
+            var name = $(this).attr('name');
+            var value = $(this).attr('value');
+            var filter = {}; filter[name] = value;filters['filter'] = filter;
+            console.log(filters);
+            init(filters);
+        }else{
+            e.preventDefault();
+            e.stopPropagation();
+        }
     });
 }
 

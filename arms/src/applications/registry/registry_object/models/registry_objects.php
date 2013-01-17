@@ -230,7 +230,7 @@ class Registry_objects extends CI_Model {
 	 * @param the value that the attribute must match
 	 * @return array(_registry_object)
 	 */
-	function getByAttribute($attribute_name, $value, $core=false)
+	function getByAttribute($attribute_name, $value, $core=false, $make_ro=true)
 	{
 		$args = array('name' => $attribute_name, 'val' => $value);
 		return $core == true ?
@@ -240,7 +240,7 @@ class Registry_objects extends CI_Model {
 								->from("registry_objects")
 								->where($args['name'], $args['val']);
 							return $db;
-						})))
+						})), $make_ro)
 			:
 			$this->_get(array(array('args' => $args,
 						'fn' => function($db,$args) {
@@ -249,7 +249,33 @@ class Registry_objects extends CI_Model {
 								->where("attribute", $args['name'])
 								->where("value", $args['val']);
 							return $db;
-						})))
+						})), $make_ro)
+			;
+	}
+
+	function getByAttributeDatasource($data_source_id, $attribute_name, $value, $core=false, $make_ro=true)
+	{
+		$args = array('name' => $attribute_name, 'val' => $value, 'data_source_id'=>$data_source_id);
+		return $core == true ?
+			$this->_get(array(array('args' => $args,
+						'fn' => function($db,$args) {
+							$db->select("registry_object_id")
+								->from("registry_objects")
+								->where('data_source_id', $args['data_source_id'])
+								->where($args['name'], $args['val']);
+							return $db;
+						})), $make_ro)
+			:
+			$this->_get(array(array('args' => $args,
+						'fn' => function($db,$args) {
+							$db->select("registry_objects.registry_object_id")
+								->from("registry_object_attributes")
+								->join('registry_objects', 'registry_objects.registry_object_id = registry_object_attributes.registry_object_id', 'right')
+								->where('data_source_id', $args['data_source_id'])
+								->where("attribute", $args['name'])
+								->where("value", $args['val']);
+							return $db;
+						})), $make_ro)
 			;
 	}
 
@@ -334,6 +360,7 @@ class Registry_objects extends CI_Model {
 									'search'=>isset($args['search']) ? $args['search'] : false,
 									'sort'=>isset($args['sort']) ? $args['sort'] : false,
 									'filter'=>isset($args['filter']) ? $args['filter'] : false,
+									'filtered_id'=>isset($args['filtered_id']) ? $args['filtered_id'] : false,
 									'or_filter'=>isset($args['or_filter']) ? $args['or_filter'] : false
 								),
 					       'fn' => function($db, $args) {
@@ -341,14 +368,17 @@ class Registry_objects extends CI_Model {
 							       ->from("registry_objects");
 
 						   		$where='`data_source_id` ="'.$args['data_source_id'].'"';
+
+						   		$white_list = array('title', 'class', 'key', 'status', 'slug', 'record_owner');
+						   		
 						   		if($args['filter'] || $args['or_filter']){
 						   			$where.='AND (';
 							   		if($args['filter']){
 							   			foreach($args['filter'] as $key=>$value){
-							   				$where.='`'.$key.'`="'.$value.'"';
-							   				if($value!=end($args['filter'])){
-							   					$where .='  AND ';
-							   				}
+						   					$where.='`'.$key.'`="'.$value.'"';
+						   					if($value!=end($args['filter'])){
+						   						$where .='  AND ';
+						   					}
 							   			}
 							   		}
 									if($args['or_filter']){
@@ -359,11 +389,13 @@ class Registry_objects extends CI_Model {
 									if($args['search']){
 										$where.=') AND (';
 										$where.='`registry_objects`.`title` LIKE \'%'.$args['search'].'%\'';
+										$where.='OR `registry_objects`.`key` LIKE \'%'.$args['search'].'%\'';
+										$where.='OR `registry_objects`.`registry_object_id` LIKE \'%'.$args['search'].'%\'';
 										//$where.=')';
 									}
 									$where.=')';
 						   		}
-						   		$white_list = array('title', 'class', 'key', 'status', 'slug', 'record_owner');
+						   		
 						   		if($args['sort']){
 						   			foreach($args['sort'] as $key=>$value){
 						   				if(in_array($key, $white_list)){
@@ -377,42 +409,13 @@ class Registry_objects extends CI_Model {
 						   				
 						   			}
 						   		}
+
+						   		if($args['filtered_id']){
+						   			$db->where_in('`registry_objects`.`registry_object_id`', $args['filtered_id']);
+						   		}
 						   		//var_dump($where);
 						   		$db->where($where);
 
-						   		// $where = '';
-						   		// if($args['filter']){
-						   		// 	$where.='(';
-						   		// 	foreach($args['filter'] as $key=>$value){
-						   		// 		$where .=$key .'= "' . $value.'" ';
-						   		// 	}
-						   		// 	$where.=')';
-					   			// }
-					   			
-
-					   			// if($args['or_filter']){
-						   		// 	foreach($args['or_filter'] as $key=>$value){
-						   		// 		$where.='OR '.$key.' = "'.$value.'"';
-						   		// 	}
-					   			// }
-					   			// $db->where($where);
-						   		
-						   		// if($args['filter']){
-						   		// 	foreach($args['filter'] as $key=>$value){
-						   		// 		$db->where($key,$value);
-						   		// 	}
-					   			// }
-
-					   			// if($args['or_filter']){
-						   		// 	foreach($args['or_filter'] as $key=>$value){
-						   		// 		$db->or_where($key,$value);
-						   		// 	}
-					   			// }
-						   		
-						   		// if($args['search']) {
-							   	// 	$db->like('title',$args['search'],'both');
-							   	// 	$db->or_like('key', $args['search'],'both');
-							   	// }
 						       return $db;
 					       })),$make_ro, $limit, $offset);
 	}
