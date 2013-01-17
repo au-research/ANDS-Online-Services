@@ -214,6 +214,14 @@
             <xsl:apply-templates select="extRif:description[@type= 'notes']" mode="content"/>   
             <xsl:apply-templates select="extRif:description[not(@type =  'notes' or @type =  'significanceStatement' or @type =  'full' or @type =  'brief' or @type =  'logo' or @type =  'rights' or @type =  'accessRights')]" mode="content"/>
         </div>
+        
+    <!-- HIERARCHY CHART (NEW) -->
+    <div class="hide" id="collectionStructureWrapper">
+      <h4>Collection Structure</h4>
+      <div id="connectionTree"></div>
+      <!--p><i>This record is part of a structured collection.</i></p-->
+      <p></p>
+    </div>
     </xsl:if>
     <a href="javascript:void(0);" class="showall_descriptions hide">More...</a>
     
@@ -457,6 +465,7 @@
         </div>                  
     </xsl:if>
 
+
     <!-- NEW CONNECTION -->
     <!--xsl:if test="//ro:relatedObject"-->
       <div class="right-box" id="connectionsRightBox">
@@ -466,6 +475,7 @@
           <p></p>
       </div>  
     <!--/xsl:if-->
+
 
 
 
@@ -1189,12 +1199,6 @@
         <xsl:attribute name="href"><xsl:value-of select="./@rightsUri"/></xsl:attribute><xsl:value-of select="./@rightsUri"/></a></p>
     </xsl:if>						
 </p>		
-</xsl:template>
-
-<xsl:template match="extRif:description[@type='hierarchyGraph']" mode="content">
-  <p class="hierarchyGraph" style="display:none;">
-    <xsl:attribute name="data-rootnode"><xsl:value-of select="normalize-space(.)"/></xsl:attribute>
-  </p>
 </xsl:template>
 
 <xsl:template match="extRif:description" mode="content">     

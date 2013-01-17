@@ -39,6 +39,7 @@
 	<!-- Zoo Scripts Untouched -->
 	<script type="text/javascript" src="<?php echo asset_url('lib/jquery-1.8.3.min.js', 'base');?>"></script>
 	<script type="text/javascript" src="<?php echo asset_url('js/jquery.flexslider-min.js', 'core');?>"></script>
+
 	
 	<script type="text/javascript" src="<?php echo asset_url('lib/jquery-ui-1.8.23.custom.min.js', 'base');?>"></script>
 	<script type="text/javascript" src="<?php echo asset_url('lib/jQRangeSlider/jQAllRangeSliders-min.js', 'base');?>"></script>
@@ -54,6 +55,15 @@
 	        <?php if($lib=='google_map'):?>
 	           <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=drawing&amp;sensor=false"></script>
 	        <?php endif; ?>
+	        <?php if($lib=='dynatree'):?>
+				<script type="text/javascript" src="<?php echo asset_url('js/jquery.dynatree-1.2.2.js', 'core');?>"></script>
+	    	<?php endif; ?>
+	    	<?php if($lib=='spacetree'):?>
+				<script type="text/javascript" src="<?php echo asset_url('js/spacetree.js', 'core');?>"></script>
+	    	<?php endif; ?>
+	    	<?php if ($lib=='qtip'):?>
+		    	 <script src="<?php echo asset_url('lib/qtip2/jquery.qtip.min.js', 'base');?>" type="text/javascript"></script>
+		    <?php endif; ?>
 		<?php endforeach;?>
 	<?php endif; ?>
 

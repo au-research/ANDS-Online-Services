@@ -17,13 +17,15 @@
 <link rel="stylesheet" href="<?php echo asset_url('css/jquery-ui.css', 'core');?>" type="text/css" media="screen" />
 
 <link rel="stylesheet" href="<?php echo asset_url('css/flexslider.css', 'core');?>" type="text/css" media="screen" />
+<link rel="stylesheet" href="<?php echo asset_url('css/ui.dynatree.css', 'core');?>" type="text/css" media="screen" />
 
 <!-- ANDS Less file and general styling correction-->
 <link href="<?php echo asset_url('less/ands.less', 'core');?>" rel="stylesheet/less" type="text/css">
 
+<!-- Library files -->
+<link rel="stylesheet" href="<?php echo asset_url('lib/qtip2/jquery.qtip.min.css', 'base');?>" type="text/css">
+
 <link rel="stylesheet" href="<?php echo asset_url('lib/jQRangeSlider/css/iThing.css', 'base');?>" type="text/css" media="screen" > 
-
-
 
 </head>
 <body>

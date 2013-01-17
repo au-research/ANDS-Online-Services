@@ -32,6 +32,9 @@ article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
 	display: block;
 }
+small {
+	font-size:0.8em;
+}
 body {
 	line-height: 1;	
 }
@@ -63,11 +66,30 @@ textarea {
 	clear: both; 
 }
 
+/* Class Headers */
+.previewItemHeader
+{
+	color:#94b28a;
+	text-align:center;
+	font-weight:bold;
+	font-size:14px;
+	padding:5px;
+	padding-bottom:15px;
+	opacity:0.4;
+	filter:alpha(opacity=40);
+}
 
+.viewRecordLink 
+{
+	font-size:12px;
+	font-weight:bold;
+	float:right;
+}
 
 /***********************************************************************************/
 /*                                  Main Elements                                  */
 /***********************************************************************************/
+
 a {
 	color:#84a07b;
 	font-weight:normal;

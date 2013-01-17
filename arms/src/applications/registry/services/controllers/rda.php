@@ -267,6 +267,55 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 	}
 
 
+	public function getAncestryGraph()
+	{
+		$this->load->model('connectiontree');
+		$this->load->model('registry_object/registry_objects','ro');
+
+		$depth = 5;
+		$this_registry_object = null;
+		
+		// Get the RO instance for this registry object so we can fetch its graphs
+		if ($this->input->get('slug'))
+		{
+			$this_registry_object = $this->ro->getBySlug($this->input->get('slug'));
+			$published_only = TRUE;
+		}
+		elseif ($this->input->get('registry_object_id'))
+		{
+			$this_registry_object = $this->ro->getByID($this->input->get('registry_object_id'));
+			$published_only = FALSE;
+		}
+
+		if (!$this_registry_object)
+		{
+			throw new Exception("Unable to fetch connection graph for this registry object.");
+		}
+
+		// Loop through to get all immediate ancestors and build their trees
+		$trees = array();
+		$ancestors = $this->connectiontree->getImmediateAncestors($this_registry_object, $published_only);
+		if ($ancestors)
+		{
+			foreach ($this->connectiontree->getImmediateAncestors($this_registry_object, $published_only) AS $ancestor_element)
+			{
+				$root_element_id = $this->connectiontree->getRootAncestor($this->ro->getByID($ancestor_element['registry_object_id']), $published_only);
+				$root_registry_object = $this->ro->getByID($root_element_id->id);
+
+				$trees[] = $this->connectiontree->get($root_registry_object, $depth, $published_only);
+			}
+		}
+		else
+		{
+			$trees[] = $this->connectiontree->get($this_registry_object, $depth, $published_only);
+		}
+
+		// XXX: Option to cleanup & format
+
+		echo json_encode(array("status"=>"success", "trees"=>$trees));
+	}
+
+	/*
 	public function getConnectionGraph()
 	{
 		$this->load->model('connectiontree');
@@ -279,24 +328,20 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 
 		if ($this->input->get('key'))
 			{
-				$matching_regobjs = $this->ro->getByKey((string)$this->input->get('key'));
-				if (is_array($matching_regobjs))
+				$root_registry_object = $this->ro->getPublishedByKey((string)$this->input->get('key'));
+				if (!$root_registry_object && !$published_only)
 				{
-					$root_registry_object = array_pop($matching_regobjs);
-					echo json_encode(array("status"=>"success", "nodeid"=>$this->input->get('nodeid'),
-										"tree"=>$this->connectiontree->get($root_registry_object, $depth,$published_only)));
+					$root_registry_object = $this->ro->getDraftByKey((string)$this->input->get('key'));
 				}
-				else
-				{
-					echo json_encode(array("status"=>"fail", "tree"=>null));
-				}
-
+				echo json_encode(array("status"=>"success", "nodeid"=>$this->input->get('nodeid'),
+										"tree"=>$this->connectiontree->get($root_registry_object, $depth, $published_only)));
 			}
 			else
 			{
 				echo json_encode(array("status"=>"fail", "tree"=>null));
 			}
 		}
+	*/
 
 
 

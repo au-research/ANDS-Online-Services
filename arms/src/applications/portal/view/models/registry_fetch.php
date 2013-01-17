@@ -12,6 +12,15 @@ class Registry_fetch extends CI_Model
 		return $this->_transformByXSL($extrif, 'extRif2view.xsl', $xsl_args);
 	}
 
+	function transformExtrifToHTMLPreview($extrif)
+	{
+		$xsl_args = array(
+			'base_url' => base_url(),
+		);
+
+		return $this->_transformByXSL($extrif, 'extRif2preview.xsl', $xsl_args);
+	}
+
 
 	private function _transformByXSL ($XML, $xslt_filename, $args = array())
 	{
@@ -94,6 +103,34 @@ class Registry_fetch extends CI_Model
 		else
 		{
 			throw new Exception("Error whilst fetching registry object connections: " . $contents['message']);
+		}
+	}
+
+	function fetchAncestryGraphBySLUG($slug)
+	{
+		$url = $this->config->item('registry_endpoint') . "getAncestryGraph/?slug=" . $slug;
+		$contents = json_decode(file_get_contents($url), true);
+		if (isset($contents['trees']))
+		{
+			return $contents['trees'];
+		}
+		else
+		{
+			throw new Exception("Error whilst fetching registry object connection graph: " . $contents['message']);
+		}
+	}
+
+	function fetchAncestryGraphByID($id)
+	{
+		$url = $this->config->item('registry_endpoint') . "getAncestryGraph/?registry_object_id=" . $id;
+		$contents = json_decode(file_get_contents($url), true);
+		if (isset($contents['trees']))
+		{
+			return $contents['trees'];
+		}
+		else
+		{
+			throw new Exception("Error whilst fetching registry object connection graph: " . $contents['message']);
 		}
 	}
 

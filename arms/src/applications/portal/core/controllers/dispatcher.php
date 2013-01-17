@@ -25,10 +25,17 @@ class Dispatcher extends MX_Controller {
 		// Put the method back together and try and locate a matching controller
 		array_unshift($params, $method);
 		$requested_controller = CI::$APP->router->locate($params);
+
 		if(!is_null($requested_controller))
 		{
 			echo Modules::run(implode("/",$params));
 			return;
+		}
+		else if ($params[0] == "preview")
+		{
+			$_GET['slug'] = array_pop($params);
+			$params = array("view","preview");
+			echo Modules::run(implode("/",$params));
 		}
 		else
 		{
