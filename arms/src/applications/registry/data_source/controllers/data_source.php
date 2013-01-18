@@ -29,7 +29,7 @@ class Data_source extends MX_Controller {
 		$data['small_title'] = '';
 
 		$this->load->model("data_sources","ds");
-		$dataSources = $this->ds->getAll(0,0);//get everything
+		$dataSources = $this->ds->getAll(0,0);//get everything  XXX: GetOwnedDataSources
 
 		$items = array();
 		foreach($dataSources as $ds){
@@ -518,7 +518,8 @@ class Data_source extends MX_Controller {
 		}
 		
 		// XXX: && data source has no crosswalk configured
-		if (strpos(trim($xml), "<registryObjects") !== 0)
+		$xml=stripXMLHeader($xml);
+		if (strpos(trim($xml), "<registryObjects") === FALSE)
 		{
 			$xml = wrapRegistryObjects($xml);
 		}

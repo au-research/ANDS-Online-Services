@@ -49,10 +49,16 @@
             <script src="<?php echo base_url();?>assets/lib/jquery.ba-hashchange.js" type="text/javascript"></script>
             <script src="<?php echo base_url();?>assets/lib/bootstrap_toggle_button/jquery.toggle.buttons.js" type="text/javascript"></script>
             <script src="<?php echo base_url();?>assets/lib/qtip2/jquery.qtip.min.js" type="text/javascript"></script>
+      
         <?php elseif($lib=='graph'):?>
+        
             <!--[if lt IE 9]><script language="javascript" type="text/javascript" src="excanvas.js"></script><![endif]-->
             <script language="javascript" type="text/javascript" src="<?php echo base_url();?>assets/lib/jqplot/jquery.jqplot.min.js"></script>
+            <script language="javascript" type="text/javascript" src="<?php echo base_url();?>assets/lib/jqplot/plugins/jqplot.dateAxisRenderer.min.js"></script>
+            <script type="text/javascript" src="<?php echo base_url();?>assets/lib/jqplot/plugins/jqplot.highlighter.min.js"></script>
+            <script type="text/javascript" src="<?php echo base_url();?>assets/lib/jqplot/plugins/jqplot.cursor.min.js"></script>
             <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/lib/jqplot/jquery.jqplot.css" />
+
             
         <?php elseif($lib=='googleapi'):?>
             <script type='text/javascript' src='https://www.google.com/jsapi'></script>

@@ -188,7 +188,7 @@ function load_datasource(data_source_id){
 			});
 
 			//draw the charts
-			drawCharts();
+			drawCharts(data_source_id);
 			loadDataSourceLogs(data_source_id);
 			loadContributorPages(data_source_id);
 
@@ -401,9 +401,47 @@ function loadContributorPagesEdit(data_source_id)
 
 }
 
-function drawCharts(){
-	$('#ro-progression').height('350').html('');
-	$.jqplot('ro-progression',  [[[1, 2],[3,5.12],[5,13.1],[7,33.6],[9,85.9],[11,219.9]]]);
+function drawCharts(data_source_id){
+	
+	/* Draw registry object progression chart */
+	$.ajax({
+		url: 'charts/getRegistryObjectProgression/' + data_source_id,
+		type: 'GET',
+		contentType: 'application/json; charset=utf-8',
+		dataType: 'json',
+		success: function(data){
+			console.log(data);
+
+			$('#ro-progression').height('350').html('');
+
+			var options = {
+				axes:{
+			        xaxis:{
+			              renderer:$.jqplot.DateAxisRenderer, 
+				          tickOptions:{formatString:data.formatString},
+			        },
+			    },
+			    seriesDefaults: {renderer:$.jqplot.BezierCurveRenderer},
+			    series:[{lineWidth:4}],
+			    highlighter: {
+			        show: true,
+			        sizeAdjust: 7.5,
+			        yvalues: 1,
+				    yvalues: 3,
+    				formatString:'%s: %s registry objects'
+			    },
+			    cursor: {
+			        show: false
+			    }
+			};
+
+			$.jqplot('ro-progression', [data.table] , options);
+
+		},
+		failure: function(data){
+			$('#ro-progression').height('350').html('Unable to load chart...');
+		}
+	});
 }
 
 /*
@@ -755,6 +793,7 @@ $('#importRecordsFromURLModal .doImportRecords').live({
 						{
 							$('.modal-body', thisForm).hide();
 							logErrorOnScreen(data.message + "<pre>" + data.log + "</pre>", $('div[name=resultScreen]', thisForm));
+							$('div[name=resultScreen]', thisForm).append("<pre>" + data.log + "</pre>");
 							$('div[name=resultScreen]', thisForm).fadeIn();
 						}
 						$('.modal-footer a').toggle();
@@ -822,6 +861,7 @@ $('#importRecordsFromXMLModal .doImportRecords').live({
 						{
 								$('.modal-body', thisForm).hide();
 								logErrorOnScreen(data.message, $('div[name=resultScreen]', thisForm));
+								$('div[name=resultScreen]', thisForm).append("<pre>" + data.log + "</pre>");
 								$('div[name=resultScreen]', thisForm).fadeIn();
 						}
 						$('.modal-footer a').toggle();
