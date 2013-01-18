@@ -125,8 +125,12 @@ class Data_source extends MX_Controller {
 		}
 
 		$jsonData['item']['statuscounts'] = array();
-		foreach ($this->ro->valid_status AS $status){
-			array_push($jsonData['item']['statuscounts'], array('status' => $status, 'count' =>$dataSource->getAttribute("count_$status")));
+		foreach ($this->ro->valid_status AS $status)
+		{
+			// Hide some fields if there are no registry objects for that status
+			if ($dataSource->getAttribute("count_$status") != 0 OR in_array($status, array(DRAFT, PUBLISHED))){
+				array_push($jsonData['item']['statuscounts'], array('status' => $status, 'count' =>$dataSource->getAttribute("count_$status")));
+			}
 		}
 
 		$jsonData['item']['qlcounts'] = array();
