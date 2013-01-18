@@ -10,7 +10,10 @@ function wrapRegistryObjects($xml)
 	return $return;		
 }
 
-
+function stripXMLHeader($xml)
+{
+  return preg_replace("/<\?xml (.*)\?>/s", "", $xml);
+}
 
 function php2ini($array)
 {

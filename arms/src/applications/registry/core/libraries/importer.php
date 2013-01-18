@@ -384,7 +384,7 @@ class Importer {
 					$solrXML = $ro->transformForSOLR();
 					$result = curl_post($solrUpdateUrl, $solrXML);
 					$result = json_decode($result);
-					var_dump($result);
+
 					if($result->{'responseHeader'}->{'status'}==0){
 						$this->reindexed_records++;
 					}
@@ -407,7 +407,10 @@ class Importer {
 				}
 			}
 		}
+		// Update the data source stats
+		$this->dataSource->updateStats();
 
+		// Finalise the commit
 		return curl_post($solrUpdateUrl.'?commit=true', '<commit waitSearcher="false"/>');
 	}
 
