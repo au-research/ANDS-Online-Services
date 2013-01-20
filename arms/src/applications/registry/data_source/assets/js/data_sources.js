@@ -385,7 +385,7 @@ function loadContributorPagesEdit(data_source_id)
 			"<thead><tr><th align='left'>GROUP</th><th>Contributor Page</th></tr></thead>" +
 			"<tbody>" +
 			"{{#items}}" +
-				"<tr ><td>{{group}}</td><td>"+thePageFields+"</td></tr>" +
+				"<tr ><td>{{group}}</td><td><input type='text' name='{{group}}' value='"+thePageFields+"'/></td></tr>" +
 			"{{/items}}" +
 			"</tbody></table>";
 			var output = Mustache.render(contributorsTemplate, data);
@@ -569,15 +569,15 @@ function load_datasource_edit(data_source_id, active_tab){
 			});
 
 			$('#edit-datasource  .contributor-page').each(function(){
-				if($('#institution_pages').val()=='') {alert('it has no value'); $('#institution_pages').val('0'); }
+				if($('#institution_pages').val()=='') {$('#institution_pages').val('0'); }
 				if($(this).attr('value')== $('#institution_pages').val() ){
-				$(this).attr('checked', 'checked');
+					$(this).attr('checked', 'checked');
 				}
 			});
 
 			$('#edit-datasource  .contributor-page').live().change(function(){
 				$(this).attr('checked', 'checked');
-				$('#institution_pages').val($(this).val());
+				$('#institution_pages').val($(this).val());				
 			});
 			
 
@@ -605,6 +605,7 @@ function load_datasource_edit(data_source_id, active_tab){
 
 		}
 	});
+
 	loadContributorPagesEdit(data_source_id);
 	return false;
 }

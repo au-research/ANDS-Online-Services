@@ -378,7 +378,7 @@ class Data_source extends MX_Controller {
 
 				if($attrib=='institution_pages')
 				{
-					$dataSource->setContributorPages($new_value);
+					$dataSource->setContributorPages($new_value,$POST);
 
 				}
 
