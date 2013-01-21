@@ -17,7 +17,7 @@
     "use strict";
     var WIDGET_NAME = "ANDS Location Capture Widget";
     var WIDGET_NS = "location_widget";
-    var DEFAULT_PROTOCOL = window.location.protocol == 'https:' ?
+    var DEFAULT_PROTOCOL = window.location.protocol === 'https:' ?
 	"https://" :
 	"http://";
     var DEFAULT_SERVICE_POINT = DEFAULT_PROTOCOL +
@@ -378,7 +378,7 @@
 		    html += '<span class="alw_special_tool" id="'+ id + '" title="Clear the marker/region data">clear</span>';
 
 		    // reset
-		    if(widget_data.input_field_orig != null && widget_data.input_field_orig != "") {
+		    if(widget_data.input_field_orig !== null && widget_data.input_field_orig !== "") {
 			id = RESET_MAP_PREFIX + $this.attr('id');
 			$this.on("click", "#" + id, null, function() { resetMap(); });
 			html += '<span class="alw_special_tool" id="' + id + '" title="Reset the map to its initial state">reset</span>';
@@ -495,7 +495,7 @@
 		function tidyLonLatText(lonlatText) {
 		    var cleanLonLatText = lonlatText;
 
-		    if(cleanLonLatText != "") {
+		    if(cleanLonLatText !== "") {
 			// Remove white space from between latitude and longitude.
 			cleanLonLatText = cleanLonLatText.replace(new RegExp('\\s*,\\s*', "g"), ',');
 			// Convert all white space between pairs to spaces.
@@ -514,7 +514,7 @@
 		function getCoordsFromInputField() {
 		    var coords = new Array();
 		    var lonlatText = tidyLonLatText($target.val());
-		    if(lonlatText != "" && validateLonLatText(lonlatText)) {
+		    if(lonlatText !== "" && validateLonLatText(lonlatText)) {
 			var coordsStr = lonlatText.split(' ');
    			for(var i=0; i < coordsStr.length; i++ ) {
 			    // Fill the array with GLatLngs.
@@ -538,14 +538,14 @@
 		function validateLonLatText(lonlatText) {
 		    var valid = true;
 
-		    if(lonlatText != "") {
+		    if(lonlatText !== "") {
 			var coords = lonlatText.split(' ');
 			var lat = null;
 			var lon = null;
 			var coordsPair = null;
 
 			// Test for a two point line.
-			if(coords.length == 2) {
+			if(coords.length === 2) {
 			    setErrorMessage("The coordinates don't represent a point or a region.");
 			    valid = false;
 			}
@@ -570,8 +570,8 @@
 			    }
 
 			    // Test for an open region.
-			    if( i == coords.length-1 ) {
-				if( coords[0] != coords[i] ) {
+			    if( i === coords.length-1 ) {
+				if( coords[0] !== coords[i] ) {
 				    setErrorMessage("The coordinates don't represent a point or a region. To define a region the last point needs to be the same as the first.");
 				    valid = false;
 				}
@@ -602,7 +602,7 @@
 		 */
 		function centreMap() {
 		    var widget_data = $this.data(WIDGET_NS);
-		    if (widget_data.polygon != null) {
+		    if (widget_data.polygon !== null) {
 			var bounds = new google.maps.LatLngBounds();
 			var i;
 
@@ -616,7 +616,7 @@
 		    }
 
 		    // Check for a marker to centre on.
-		    if (widget_data.marker != null) {
+		    if (widget_data.marker !== null) {
 			widget_data.map.setCenter(widget_data.marker.getPosition());
 		    }
 		    $this.data(WIDGET_NS, widget_data);
@@ -642,7 +642,7 @@
 			var coords = getCoordsFromInputField();
 
 			// Check to see if it represents a point.
-			if( coords.length == 1 ) {
+			if( coords.length === 1 ) {
 			    // Show an editable marker on the map.
 			    createMarker(coords[0], true);
 			}
@@ -711,7 +711,7 @@
 		function removeMarker() {
 		    var widget_data = $this.data(WIDGET_NS);
 		    // Check for a marker.
-		    if (widget_data.marker != null) {
+		    if (widget_data.marker !== null) {
 			// Remove the marker overlay.
 			widget_data.marker.setMap(null);
 			widget_data.marker = null;
@@ -862,7 +862,7 @@
 		    for( var i=0; i < coords.length; i++ ) {
  			var pLat = coords[i].lat();
  			var pLng = coords[i].lng();
- 			if(i == 0) {
+ 			if(i === 0) {
 			    polyString =  pLng.toFixed(6) + "," + pLat.toFixed(6);
  			}
 			else {
@@ -880,7 +880,7 @@
 		function removePolygon() {
 		    var widget_data = $this.data(WIDGET_NS);
 		    // Check that we have a reference to the polygon.
-		    if(widget_data.polygon != null ) {
+		    if(widget_data.polygon !== null ) {
 			// Disable editing (even though it is probably already disabled) to enable removal to work.
 			widget_data.polygon.setMap(null);
 			// Remove the reference.
@@ -932,9 +932,9 @@
 		    var searchText = $.trim(searchResultsTextfield.val());
 
 		    var searchResultsDiv = $("#" + ADDRESS_SEARCH_RESULTS_ID_PREFIX + $this.attr('id'));
-		    if( searchText != '' ) {
+		    if( searchText !== '' ) {
 			searchResultsDiv.html('Searching...');
-  			if($("input[name=geocoderSelector]:checked").val()  == 'geocoderSelector.gazetteer') {
+  			if($("input[name=geocoderSelector]:checked").val() === 'geocoderSelector.gazetteer') {
   			    gazetteerGeocoder(searchText);
   			}
   			else{
@@ -957,7 +957,7 @@
 		    var markerBullet = '';
 		    var resultText = "";
 		    var coordString = "";
-		    if(status != google.maps.GeocoderStatus.OK) {
+		    if(status !== google.maps.GeocoderStatus.OK) {
 			resultText = "No locations found";
 		    }
 		    else {
@@ -1006,7 +1006,7 @@
 		    var markerBullet = '&#8226;';
 		    var resultText = "";
 		    var coordString = "";
-		    if(data.items_count == '0') {
+		    if(data.items_count === '0') {
 			resultText = "No locations found";
 		    }
 		    else {
@@ -1016,7 +1016,7 @@
 			    coordString = data.items[i].lng +","+ data.items[i].lat ;
 			    var	typetext = '';
 			    for( var j=0; j < data.items[i].types.length; j++ ) {
-				if(j != 0)
+				if(j !== 0)
 				    typetext += ', '
 				if(widget_data.feature_types[data.items[i].types[j]]){
 				    typetext += widget_data.feature_types[data.items[i].types[j]];
@@ -1194,7 +1194,7 @@
 		    clearMap();
 		    // Redraw the map with values from the input field.
 		    var coords = getCoordsFromInputField();
-		    if (coords.length == 1) {
+		    if (coords.length === 1) {
 			createMarker(coords[0], false);
 		    }
 		    else if (coords.length > 2) {

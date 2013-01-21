@@ -41,7 +41,7 @@
 
 			    	 <em>Step 1.</em> Drop this code somewhere in the &lt;head&gt;&lt;/head&gt; of your web page
 			    	 <pre class="prettyprint">
-&lt;script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&libraries=drawing"&gt;&lt;/script&gt;
+&lt;script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&libraries=drawing&v=3"&gt;&lt;/script&gt;
 &lt;script src='http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.js'&gt;&lt;/script&gt;
 &lt;script type="text/javascript" src="http://services.ands.org.au/api/resolver/location_capture_widget.js"&gt;&lt;/script&gt;
 &lt;link rel="stylesheet" type="text/css" href="http://services.ands.org.au/api/resolver/location_capture_widget.css" /&gt;
