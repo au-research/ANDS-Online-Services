@@ -493,7 +493,7 @@
 		    });
 
 		    // Redraw the map.
-		    setMapFromInputField(false);
+		    setMapFromData(getInputFieldValue(), {centre:true, reset:false});
 
 		    $this.data(WIDGET_NS, widget_data);
 		}
@@ -502,18 +502,14 @@
 		 * Reset the map to initial values, including initial coordinate data
 		 */
 		function resetMap() {
-		    setInputFieldValue(getOriginalInputFieldValue());
-		    resetTools();
-		    centreMap();
+		    setMapFromData(getOriginalInputFieldValue(), {centre:true});
 		}
 
 		/**
 		 * Reset the map to initial values, ignoring (original) coordinate data
 		 */
 		function emptyMap() {
-		    setInputFieldValue('');
-		    resetTools();
-		    centreMap();
+		    setMapFromData('', {centre:true});
 		}
 
 		/**
@@ -612,27 +608,6 @@
 		    return valid;
 		}
 
-		/**
-		 * Clear and rebuild map using coordinate data
-		 * from target, centring as appropriate
-		 * @param (boolean) whether or not to centre the map
-		 */
-		function setMapFromInputField(centred) {
-		    // Clear the map.
-		    clearMap();
-		    // Redraw the map with values from the input field.
-		    var coords = getCoordsFromInputField();
-		    if (coords.length == 1) {
-			createMarker(coords[0], false);
-		    }
-		    else if (coords.length > 2) {
-			createPolygon(coords, false);
-		    }
-
-		    if (centred) {
-			centreMap();
-		    }
-		}
 		/**
 		 * Clear the map, removing:
 		 *   - map markers and polygons
@@ -996,7 +971,7 @@
 		    $this.on("click",
 			     "#" + ADDRESS_SEARCH_RESULTS_ID_PREFIX + $this.attr('id') + " div.alw_search_result",
 			     null,
-			     function() { setMapFromSearchResult($(this).data('coord')); });
+			     function() { setMapFromData($(this).data('coord'), {centre:true}); });
 
 		    $this.on('keypress',
 			     '#' + searchResultsTextfieldId,
@@ -1150,18 +1125,6 @@
 		}
 
 
-		/**
-		 * Set up the map using provided data:
-		 *  - set the input data to the supplied coordString
-		 *  - reset map tools, redraw the map
-		 *  - centre the map on the new coordinates
-		 * @param a set of coordinates to display on the map
-		 */
-		function setMapFromSearchResult(coordString) {
-		    setInputFieldValue(coordString);
-		    resetTools();
-		    centreMap();
-		}
 
 
 		/**
@@ -1224,20 +1187,60 @@
 		}
 
 		/**
+		 * Set up the map using the supplied coordinate data
+		 * @param the coordinate data
+		 * @param options:
+		 *  - validate (default: false). validate coordinate data?
+		 *  - centre (default: false). centre map on data?
+		 *  - reset (default: true). reset tools (before setting up)?
+		function setMapFromData(data, options) {
+		    var defaults = {validate: false, centre: false, reset: true};
+		    options = $.extend({}, defaults, options);
+		    if ((options.validate && validateLonLatText(data)) ||
+			!options.validate) {
+			setInputFieldValue(data);
+			if (options.reset) {
+			    resetTools();
+			}
+			setMapFromInputField(options.centre);
+		    }
+		    else
+		    {
+			showError("Problem setting map with supplied data:<br/>" +
+				  getErrorMessage() + "<br/>Cancel or correct the error and set.",
+				  $msgBox);
+		    }
+		}
+
+		/**
+		 * Clear and rebuild map using coordinate data
+		 * from target, centring as appropriate
+		 * @param (boolean) whether or not to centre the map
+		 */
+		function setMapFromInputField(centred) {
+		    // Clear the map.
+		    clearMap();
+		    // Redraw the map with values from the input field.
+		    var coords = getCoordsFromInputField();
+		    if (coords.length == 1) {
+			createMarker(coords[0], false);
+		    }
+		    else if (coords.length > 2) {
+			createPolygon(coords, false);
+		    }
+
+		    if (centred) {
+			centreMap();
+		    }
+		}
+
+
+		/**
 		 * Redraw the map, using coordinate data set from the data modal
 		 */
 		function setMapFromText() {
-		    var lonlatText = tidyLonLatText($("#" + LONLAT_TEXTAREA_ID_PREFIX + $this.attr('id')).val());
-
-		    if (validateLonLatText(lonlatText)) {
-			setInputFieldValue(lonlatText);
-			resetTools();
-			setMapFromInputField(true);
-		    }
-		    else {
-			var errors = "THERE ARE PROBLEMS WITH THE COORDINATE TEXT:<br/>" + getErrorMessage() + "<br/>Cancel or correct the error and set.";
-			showError(errors, $msgBox);
-		    }
+		    setMapFromData(tidyLonLatText($("#" + LONLAT_TEXTAREA_ID_PREFIX + $this.attr('id')).val()),
+				   {validate:true, centre:true});
 		}
 
 		/**
