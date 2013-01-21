@@ -62,6 +62,12 @@
 	text-decoration: underline;
 }
 
+textarea.alw_tool,textarea.alw_tool:hover
+{
+    color: #333;
+    text-decoration: none;
+}
+
 .alw_special_tool:hover
 {
 	color: #f74313;
