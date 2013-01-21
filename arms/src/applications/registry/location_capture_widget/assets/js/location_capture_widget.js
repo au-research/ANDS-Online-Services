@@ -45,6 +45,13 @@
     var LONLAT_TEXTAREA_ID_PREFIX          = 'alw_lonlat_textarea';
     var INLINE_MESSAGE_ID_PREFIX           = 'alw_msg_';
 
+    var PLUGIN_DEFAULTS = {
+	target: "geoLocation", //final resting place of the target data
+	latLon: false, //starting point for map
+	endpoint: DEFAULT_SERVICE_POINT,
+	gasset_protocol: DEFAULT_PROTOCOL
+    };
+
     /**
      * Is our widget instance initialised?
      * @param the widget container (jquery object)
@@ -73,21 +80,17 @@
 	    if (inited($(this))) {
 		return $(this);
 	    }
-	    var defaults = {
-		target: "geoLocation", //final resting place of the target data
-		latLon: false, //starting point for map
-		endpoint: DEFAULT_SERVICE_POINT,
-		protocol: DEFAULT_PROTOCOL
-	    };
-	    var settings = $.extend({}, defaults, options);
+	    var settings = $.extend({}, PLUGIN_DEFAULTS, options);
+
 	    return this.each(function() {
 		var $this = $(this);
-		var $target;
+		var $target = $("#" + settings.target);
 		$('<div id="' + INLINE_MESSAGE_ID_PREFIX + $this.attr('id') + '"/>').insertBefore($this);
 		var $msgBox = $("#" + INLINE_MESSAGE_ID_PREFIX + $this.attr('id'));
 		$msgBox.hide();
 		$this.addClass('alw_control');
 		$this.removeClass("alw_loaderror");
+
 		if (typeof($this.attr('id')) === 'undefined') {
 		    //need to give it some kind of ID
 		    var wcount = $(".ands_location_map_container").length;
@@ -106,7 +109,6 @@
 		 *  - if it doesn't exist, create it
 		 *  - if it exists, and is being used by another plugin instance, throw an error
 		 */
-		$target = $("#" + settings.target);
 		if (!$target.length) {
 		    $target = $('<input id="' + settings.target +
 				'" name="' + settings.target +
@@ -123,13 +125,11 @@
 			     $this);
 		    return;
 		}
-		//if we're still running, we're good to go
 
 		//set up the initial coordinate data if provided
 		if (settings.latLon !== false) {
 		    $target.val(settings.latLon);
 		}
-
 
 		//set up widget data
 		$this.data(WIDGET_NS, {
@@ -181,16 +181,15 @@
 		 * the ANDS resolver
 		 */
 		function loadFeatureTypes() {
-		    $.getJSON(settings.endpoint + '?feature=state.&callback=?',
-			      function(data) {
-				  addFeatureTypes(data);
-			      });
-
-		    $.getJSON(settings.endpoint + '?feature=feature&callback=?',
-			      function(data) {
-				  addFeatureTypes(data);
-			      });
-
+		    $.each(['state', 'feature'],
+			   function(idx, type) {
+			       var source = settings.endpoint + '?feature=' +
+				   type + '.&callback=?';
+			       $.getJSON(source,
+					 function(data) {
+					     addFeatureTypes(data);
+					 });
+			   });
 		}
 
 		/**
@@ -249,21 +248,21 @@
 
 			// Build any icons we might need.
 			if (!widget_data.pushpin_edit) {
-			    widget_data.pushpin_edit = new google.maps.MarkerImage(settings.protocol + 'maps.google.com/intl/en_us/mapfiles/ms/micons/orange.png',
+			    widget_data.pushpin_edit = new google.maps.MarkerImage(settings.gasset_protocol + 'maps.google.com/intl/en_us/mapfiles/ms/micons/orange.png',
 										   new google.maps.Size(24,32),
 										   new google.maps.Point(0,0),
 										   new google.maps.Point(12,32));
 			}
 
 			if (!widget_data.pushpin) {
-			    widget_data.pushpin = new google.maps.MarkerImage(settings.protocol + 'maps.google.com/intl/en_us/mapfiles/ms/micons/blue.png',
+			    widget_data.pushpin = new google.maps.MarkerImage(settings.gasset_protocol + 'maps.google.com/intl/en_us/mapfiles/ms/micons/blue.png',
 									      new google.maps.Size(24,32),
 									      new google.maps.Point(0,0),
 									      new google.maps.Point(12,32));
 
 			}
 
-			widget_data.shadow = new google.maps.MarkerImage(settings.protocol + 'maps.google.com/intl/en_us/mapfiles/ms/micons/msmarker.shadow.png',
+			widget_data.shadow = new google.maps.MarkerImage(settings.gasset_protocol + 'maps.google.com/intl/en_us/mapfiles/ms/micons/msmarker.shadow.png',
 		    							 new google.maps.Size(24,32),
 									 new google.maps.Point(0,0),
 									 new google.maps.Point(12,32));
@@ -453,8 +452,6 @@
 			       }
 			   });
 
-
-
 		    // =======================================================================
 		    // TIDY UP THE MAP
 		    // =======================================================================
@@ -473,7 +470,6 @@
 
 		    // Redraw the map.
 		    setMapFromData($target.val(), {centre:true, reset:false});
-
 		    $this.data(WIDGET_NS, widget_data);
 		}
 
@@ -507,7 +503,6 @@
 			// Remove any leading and/or trailing spaces.
 			cleanLonLatText = $.trim(cleanLonLatText);
 		    }
-
 		    return cleanLonLatText;
 		}
 
@@ -587,9 +582,8 @@
 		}
 
 		/**
-		 * Clear the map, removing:
-		 *   - map markers and polygons
-		 *   - drawing managers
+		 * Clear the map, removing: map markers, polygons, and the
+		 * drawing manager
 		 */
 		function clearMap() {
 		    // Remove polygons and markers from the map.
@@ -641,7 +635,7 @@
 		    // Set the cursor for dropping a marker.
 		    widget_data.map.setOptions({draggableCursor:"crosshair"});
 
-		    if( !active ) {
+		    if (!active) {
 			setToolActive(tool, true);
 
 			// Get coords from the the input field.
@@ -663,7 +657,6 @@
 												resetTools();
 											    }
    											}));
-   			// Center the map on this marker.
 			centreMap();
 		    }
 		}
@@ -678,7 +671,7 @@
 		    // Remove any previous markers or regions.
 		    clearMap();
 		    var marker = null;
-		    if( editable ) {
+		    if (editable) {
 			// Draw a new editable marker.
 			marker = new google.maps.Marker({
 			    position: latlng,
@@ -718,7 +711,7 @@
 		function removeMarker() {
 		    var widget_data = $this.data(WIDGET_NS);
 		    // Check for a marker.
-		    if (widget_data.marker != null ) {
+		    if (widget_data.marker != null) {
 			// Remove the marker overlay.
 			widget_data.marker.setMap(null);
 			widget_data.marker = null;
@@ -735,9 +728,8 @@
 		    var widget_data = $this.data(WIDGET_NS);
 		    var active = getToolActive(tool);
 		    resetTools();
-		    if( !active ) {
+		    if (!active) {
 			setToolActive(tool, true);
-
 			// Get coords from the input field value.
 			var coords = getCoordsFromInputField();
 
@@ -798,7 +790,6 @@
 						      widget_data.drawing_manager.setMap(null);
 						      resetTools();
 						  });
-
 		}
 
 		/**
@@ -905,7 +896,7 @@
 		function getAddressSearchDialogHTML(welem) {
 		    var mapDialogId = ADDRESS_SEARCH_DIALOG_ID_PREFIX + $this.attr('id');
 		    var html = '<div class="alw_dialog_container" id="' + mapDialogId + '">';
-		    html += '<img class="alw_dialog_back" src="'+ settings.protocol + 'maps.google.com/mapfiles/iws_s.png" alt="" />';
+		    html += '<img class="alw_dialog_back" src="'+ settings.gasset_protocol + 'maps.google.com/mapfiles/iws_s.png" alt="" />';
 		    html += '<div class="alw_dialog_outer">';
 		    html += '<div class="alw_dialog_inner">';
 		    html += '<div class="alw_dialog_content" style="overflow: hidden;">';
@@ -918,8 +909,6 @@
 			'Australian Gazetteer</label>';
 		    html += '<label style="cursor:hand"><input type="radio" id="geocoderSelector.google" name="geocoderSelector" value="geocoderSelector.google" /> ' +
 			'Google</label>';
-
-
 
 		    html += '<div class="alw_dialog_text"><input type="text" id="' + searchResultsTextfieldId + '" style="margin: 0px 0px 0px 0px; width: 210px;" />';
 		    html += '&nbsp;<button type="button" class="alw_button search">search</button></div>';
@@ -1105,7 +1094,7 @@
 		function getLonLatDialogHTML(welem) {
 		    var mapDialogId = LONLAT_DIALOG_ID_PREFIX + $this.attr('id');
 		    var html = '<div class="alw_dialog_container" id="' + mapDialogId + '">';
-		    html += '<img class="alw_dialog_back" src="' + settings.protocol + 'maps.google.com/mapfiles/iws_s.png" alt="" />';
+		    html += '<img class="alw_dialog_back" src="' + settings.gasset_protocol + 'maps.google.com/mapfiles/iws_s.png" alt="" />';
 		    html += '<div class="alw_dialog_outer">';
 		    html += '<div class="alw_dialog_inner">';
 		    html += '<div class="alw_dialog_content">';
@@ -1221,15 +1210,13 @@
 		    makeMapWidget();
 		}) ()
 	    });
-
 	},
     };
 
     $.fn.ands_location_widget = function(method) {
 	if (methods[method]) {
-	    return methods[method].apply(this,
-					 Array.prototype.slice.call(arguments,
-								    1));
+	    return methods[method].apply(
+		this, Array.prototype.slice.call(arguments, 1));
 	}
 	else if (typeof method === 'object' || ! method) {
 	    return methods.init.apply(this, arguments);
