@@ -890,61 +890,6 @@
 		}
 
 		/**
-		 * Create and insert the search modal
-		 * @param the jQuery object to which the modal will be appended
-		 */
-		function getAddressSearchDialogHTML(welem) {
-		    var mapDialogId = ADDRESS_SEARCH_DIALOG_ID_PREFIX + $this.attr('id');
-		    var html = '<div class="alw_dialog_container" id="' + mapDialogId + '">';
-		    html += '<img class="alw_dialog_back" src="'+ settings.gasset_protocol + 'maps.google.com/mapfiles/iws_s.png" alt="" />';
-		    html += '<div class="alw_dialog_outer">';
-		    html += '<div class="alw_dialog_inner">';
-		    html += '<div class="alw_dialog_content" style="overflow: hidden;">';
-
-		    var searchResultsDivId = ADDRESS_SEARCH_RESULTS_ID_PREFIX + $this.attr('id');
-		    var searchResultsTextfieldId = ADDRESS_SEARCH_TEXTFIELD_ID_PREFIX + $this.attr('id');
-		    html += '<div class="alw_dialog_text"><i>Search for a region or place to mark on the map</i></div>';
-
-		    html += '<label style="cursor:hand"><input type="radio" id="geocoderSelector.gazetteer" name="geocoderSelector" checked="checked" value="geocoderSelector.gazetteer" /> ' +
-			'Australian Gazetteer</label>';
-		    html += '<label style="cursor:hand"><input type="radio" id="geocoderSelector.google" name="geocoderSelector" value="geocoderSelector.google" /> ' +
-			'Google</label>';
-
-		    html += '<div class="alw_dialog_text"><input type="text" id="' + searchResultsTextfieldId + '" style="margin: 0px 0px 0px 0px; width: 210px;" />';
-		    html += '&nbsp;<button type="button" class="alw_button search">search</button></div>';
-		    html += '<div id="' + searchResultsDivId + '" style="padding: 0px 0px 0px 8px; margin: 0px 0px 0px 0px; height: 138px; overflow:auto;">';
-		    html += '</div>';
-
-		    html += '</div>';
-		    html += '<div class="alw_buttonbar" style="text-align: left;">';
-		    html += '<button type="button" class="alw_button cancel">cancel</button>';
-		    html += '</div>';
-		    html += '</div>';
-		    html += '</div>';
-		    html += '</div>';
-
-		    welem.append(html);
-
-		    $this.on("click",
-			     "#" + mapDialogId + " div.alw_dialog_text button.alw_button.search",
-			     null,
-			     function() { doSearch(); });
-		    $this.on("click",
-			     "#" + mapDialogId + " div.alw_buttonbar button.alw_button.cancel",
-			     null,
-			     function() { resetTools(); });
-		    $this.on("click",
-			     "#" + ADDRESS_SEARCH_RESULTS_ID_PREFIX + $this.attr('id') + " div.alw_search_result",
-			     null,
-			     function() { setMapFromData($(this).data('coord'), {centre:true}); });
-
-		    $this.on('keypress',
-			     '#' + searchResultsTextfieldId,
-			     null,
-			     function(event) { return checkSearchEvent(event) });
-		}
-
-		/**
 		 * Capture 'enter' keyboard events from the search modal's text
 		 * box, using such events to perform the search
 		 * @param any keypress event on the search modal input text field
@@ -1088,29 +1033,97 @@
 		}
 
 		/**
+		 * Create and insert a modal/dialog thingy
+		 * @param the (jQuery object of an) element to append the dialog to
+		 * @param the dialog id attribute
+		 * @param html for the content div (callback)
+		 * @param html for the toolbar div (callback)
+		 */
+		function makeDialog(append_to, dialog_id, content_for, toolbar_for) {
+		    if (typeof(toolbar_for) !== 'function') {
+			toolbar_for = function() { return ""; }
+		    }
+		    //why you'd want a dialog with no content is beyond me, but just in case...
+		    if (typeof(content_for) !== 'function') {
+			content_for = function() { return ""; }
+		    }
+		    var dialog_shell = $('<div class="alw_dialog_container">');
+		    dialog_shell.attr('id', dialog_id);
+		    dialog_shell.append('<img class="alw_dialog_back src="' + settings.gasset_protocol + 'maps.google.com/mapfiles/iws_s.png" alt="" />');
+		    dialog_shell.append('<div class="alw_dialog_outer">' +
+					'<div class="alw_dialog_inner">' +
+					'<div class="alw_dialog_content">');
+		    dialog_shell.find("div.alw_dialog_content").html(content_for.call());
+		    dialog_shell.find("div.alw_dialog_inner").append('<div class="alw_buttonbar">' +
+								     '<button type="button" class="alw_button cancel">cancel</button>' +
+								     toolbar_for.call() + '</div>');
+		    append_to.append(dialog_shell);
+		}
+
+		/**
+		 * Create and insert the search modal
+		 * @param the jQuery object to which the modal will be appended
+		 */
+		function getAddressSearchDialogHTML(welem) {
+		    var mapDialogId = ADDRESS_SEARCH_DIALOG_ID_PREFIX + $this.attr('id');
+		    var searchResultsDivId = ADDRESS_SEARCH_RESULTS_ID_PREFIX + $this.attr('id');
+		    var searchResultsTextfieldId = ADDRESS_SEARCH_TEXTFIELD_ID_PREFIX + $this.attr('id');
+		    makeDialog(welem,
+			       mapDialogId,
+			       function() {
+				   $(this).css('overflow', 'hidden');
+				   return '<div class="alw_dialog_text"><i>Search for a region or place to mark on the map</i></div>' +
+				       '<label style="cursor:hand">' +
+				       '<input type="radio" id="geocoderSelector.gazetteer" name="geocoderSelector" checked="checked" value="geocoderSelector.gazetteer" /> ' +
+				       'Australian Gazetteer</label>' +
+				       '<label style="cursor:hand">' +
+				       '<input type="radio" id="geocoderSelector.google" name="geocoderSelector" value="geocoderSelector.google" /> ' +
+				       'Google</label>' +
+				       '<div class="alw_dialog_text">' +
+				       '<input type="text" id="' + searchResultsTextfieldId + '" style="margin: 0px; width: 210px;" />' +
+				       '&nbsp;<button type="button" class="alw_button search">search</button></div>' +
+				       '<div id="' + searchResultsDivId + '" style="padding: 0px 0px 0px 8px; margin: 0px 0px 0px 0px; height: 138px; overflow:auto;">' +
+				       '</div></div>';
+			       });
+
+		    $this.on("click",
+			     "#" + mapDialogId + " div.alw_dialog_text button.alw_button.search",
+			     null,
+			     function() { doSearch(); });
+		    $this.on("click",
+			     "#" + mapDialogId + " div.alw_buttonbar button.alw_button.cancel",
+			     null,
+			     function() { resetTools(); });
+		    $this.on("click",
+			     "#" + ADDRESS_SEARCH_RESULTS_ID_PREFIX + $this.attr('id') + " div.alw_search_result",
+			     null,
+			     function() { setMapFromData($(this).data('coord'), {centre:true}); });
+
+		    $this.on('keypress',
+			     '#' + searchResultsTextfieldId,
+			     null,
+			     function(event) { return checkSearchEvent(event) });
+		}
+
+
+		/**
 		 * Create and insert the coordinate input modal
 		 * @param the jQuery object to which the modal will be appended
 		 */
 		function getLonLatDialogHTML(welem) {
 		    var mapDialogId = LONLAT_DIALOG_ID_PREFIX + $this.attr('id');
-		    var html = '<div class="alw_dialog_container" id="' + mapDialogId + '">';
-		    html += '<img class="alw_dialog_back" src="' + settings.gasset_protocol + 'maps.google.com/mapfiles/iws_s.png" alt="" />';
-		    html += '<div class="alw_dialog_outer">';
-		    html += '<div class="alw_dialog_inner">';
-		    html += '<div class="alw_dialog_content">';
-
-		    var lonlatTextareaId = LONLAT_TEXTAREA_ID_PREFIX + $this.attr('id');
-		    html += '<div class="alw_dialog_text"><i>Enter space delimited longitude,latitude pairs</i></div>';
-		    html += '<textarea id="' + lonlatTextareaId + '" style="display: block; margin: auto; width: 278px; height: 174px;"></textarea>';
-
-		    html += '</div>';
-		    html += '<div class="alw_buttonbar" style="text-align: left;">';
-		    html += '<button type="button" class="alw_button cancel">cancel</button>';
-		    html += '&nbsp;<button type="button" class="alw_button set" title="Set the map to show this point or region">set</button>';
-		    html += '</div>';
-		    html += '</div>';
-		    html += '</div>';
-		    html += '</div>';
+		    makeDialog(welem,
+			       mapDialogId,
+			       function() {
+				   var content = $('<div class="alw_dialog_text"><i>Enter space delimited longitude,latitude pairs</i></div>');
+				   var textarea = $('<textarea style="display: block; margin: auto; width: 278px; height: 174px;"></textarea>');
+				   textarea.attr('id', LONLAT_TEXTAREA_ID_PREFIX + $this.attr('id'));
+				   content.append(textarea);
+				   return content;
+			       },
+			       function() {
+				   return '&nbsp;<button type="button" class="alw_button set" title="Set the map to show this point or region">set</button>';
+			      });
 
 		    $this.on("click",
 			     "#" + mapDialogId + " button.alw_button.cancel",
@@ -1120,8 +1133,6 @@
 			     "#" + mapDialogId + " button.alw_button.set",
 			     null,
 			     function() { setMapFromText();});
-
-		    welem.append(html);
 		}
 
 		/**
