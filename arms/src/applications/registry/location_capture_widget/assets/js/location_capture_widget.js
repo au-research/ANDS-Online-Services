@@ -249,23 +249,23 @@
 			// Build any icons we might need.
 			if (!widget_data.pushpin_edit) {
 			    widget_data.pushpin_edit = new google.maps.MarkerImage(settings.gasset_protocol + 'maps.google.com/intl/en_us/mapfiles/ms/micons/orange.png',
-										   new google.maps.Size(24,32),
+										   new google.maps.Size(32,32),
 										   new google.maps.Point(0,0),
-										   new google.maps.Point(12,32));
+										   new google.maps.Point(16,32));
 			}
 
 			if (!widget_data.pushpin) {
 			    widget_data.pushpin = new google.maps.MarkerImage(settings.gasset_protocol + 'maps.google.com/intl/en_us/mapfiles/ms/micons/blue.png',
-									      new google.maps.Size(24,32),
+									      new google.maps.Size(32,32),
 									      new google.maps.Point(0,0),
-									      new google.maps.Point(12,32));
+									      new google.maps.Point(16,32));
 
 			}
 
 			widget_data.shadow = new google.maps.MarkerImage(settings.gasset_protocol + 'maps.google.com/intl/en_us/mapfiles/ms/micons/msmarker.shadow.png',
-		    							 new google.maps.Size(24,32),
+		    							 new google.maps.Size(36,32),
 									 new google.maps.Point(0,0),
-									 new google.maps.Point(12,32));
+									 new google.maps.Point(16,32));
 
 
 
@@ -696,7 +696,8 @@
 			    position: latlng,
 			    map: widget_data.map,
 			    icon : widget_data.pushpin,
-			    shadow: widget_data.shadow
+			    shadow: widget_data.shadow,
+			    clickable: false
 			});
 		    }
 		    widget_data.marker = marker;
