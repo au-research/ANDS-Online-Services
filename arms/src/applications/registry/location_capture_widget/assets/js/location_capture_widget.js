@@ -45,8 +45,6 @@
     var LONLAT_TEXTAREA_ID_PREFIX          = 'alw_lonlat_textarea';
     var INLINE_MESSAGE_ID_PREFIX           = 'alw_msg_';
 
-
-
     /**
      * Is our widget instance initialised?
      * @param the widget container (jquery object)
@@ -73,7 +71,7 @@
 	init: function(options) {
 	    //if we've already been initialised, fail silently
 	    if (inited($(this))) {
-		return;
+		return $(this);
 	    }
 	    var defaults = {
 		target: "geoLocation", //final resting place of the target data
@@ -143,11 +141,11 @@
 		    'geocoder': null,
 		    'error_message': null,
 		    'map': null,
+		    'marker': null,
+		    'drawing_manager': null,
 		    'tools': {},
 		    'feature_types': {},
-		    'drawing_managers': [],
-		    'marker_listeners': [],
-		    'marker': null
+		    'marker_listeners': []
 		});
 
 		/**
@@ -158,7 +156,6 @@
 		    loadFeatureTypes();
 		    getMapControl();
 		}
-
 
 		/**
 		 * Get the widget's error message
@@ -210,7 +207,6 @@
 		    $this.data(WIDGET_NS, widget_data);
 		}
 
-
 		/**
 		 * If invoked with initialisation coordinates,
 		 * save these as the original details for a
@@ -224,28 +220,11 @@
 		}
 
 		/**
-		 * Set the target field's value
-		 * @param the (new) value for the target
-		 */
-		function setInputFieldValue(newValue) {
-		    $target.attr('value', newValue);
-		}
-
-		/**
-		 * Get the target field's value
-		 * @return the target's value
-		 */
-		function getInputFieldValue() {
-		    return $target.val();
-		}
-
-		/**
 		 * Get the original initialisation data
 		 * @return the original initialisation coordinates, or null, or empty string
 		 */
 		function getOriginalInputFieldValue() {
-		    var widget_data = $this.data(WIDGET_NS);
-		    return widget_data.input_field_orig;
+		  return $this.data(WIDGET_NS).input_field_orig;
 		}
 
 		/**
@@ -488,12 +467,12 @@
 			google.maps.event.removeListener(listener);
 		    });
 
-		    $.each(widget_data.drawing_managers, function(idx, manager) {
-			manager.setMap(null);
-		    });
+		    if (widget_data.drawing_manager !== null) {
+			widget_data.drawing_manager.setMap(null);
+		    }
 
 		    // Redraw the map.
-		    setMapFromData(getInputFieldValue(), {centre:true, reset:false});
+		    setMapFromData($target.val(), {centre:true, reset:false});
 
 		    $this.data(WIDGET_NS, widget_data);
 		}
@@ -526,8 +505,7 @@
 			// Convert all white space between pairs to spaces.
 			cleanLonLatText = cleanLonLatText.replace(new RegExp('\\s+',"g"),' ');
 			// Remove any leading and/or trailing spaces.
-			cleanLonLatText = cleanLonLatText.replace(new RegExp('^ '),'');
-			cleanLonLatText = cleanLonLatText.replace(new RegExp(' $'),'');
+			cleanLonLatText = $.trim(cleanLonLatText);
 		    }
 
 		    return cleanLonLatText;
@@ -619,11 +597,10 @@
 		    removePolygon();
 
 		    var widget_data = $this.data(WIDGET_NS);
-		    $.each(widget_data.drawing_managers,
-			   function(idx, manager) {
-			       manager.setMap(null);
-			   });
-		    $this.data(WIDGET_NS, widget_data);
+		    if (widget_data.drawing_manager !== null) {
+			widget_data.drawing_manager.setMap(null);
+			$this.data(WIDGET_NS, widget_data);
+		    }
 		}
 
 		/**
@@ -682,7 +659,7 @@
 											function(e) {
 											    if( e.latLng) {
 		    										// Set the input field and reset the control.
-												setInputFieldValue(e.latLng.lng().toFixed(6) + "," + e.latLng.lat().toFixed(6));
+												$target.val(e.latLng.lng().toFixed(6) + "," + e.latLng.lat().toFixed(6));
 												resetTools();
 											    }
    											}));
@@ -717,7 +694,7 @@
 						      function() {
 							  // Set the input field and reset the control.
 							  var latlng = marker.getPosition();
-							  setInputFieldValue(latlng.lng().toFixed(6) + "," + latlng.lat().toFixed(6));
+							  $target.val(latlng.lng().toFixed(6) + "," + latlng.lat().toFixed(6));
 						      });
 		    }
 		    else {
@@ -732,7 +709,7 @@
 		    widget_data.marker = marker;
 		    $this.data(WIDGET_NS, widget_data);
 		    // Set the input field value to the marker location.
-		    setInputFieldValue(latlng.lng().toFixed(6) + "," + latlng.lat().toFixed(6));
+		    $target.val(latlng.lng().toFixed(6) + "," + latlng.lat().toFixed(6));
 		}
 
 		/**
@@ -903,7 +880,7 @@
 		    }
 		    polyString = polyString + " " + coords[0].lng().toFixed(6) + "," + coords[0].lat().toFixed(6);
 		    // Set the input field value.
-		    setInputFieldValue(polyString);
+		    $target.val(polyString);
 		}
 
 		/**
@@ -920,7 +897,6 @@
 		    }
 		    $this.data(WIDGET_NS, widget_data);
 		}
-
 
 		/**
 		 * Create and insert the search modal
@@ -1087,8 +1063,6 @@
 		    });
 		}
 
-
-
 		/**
 		 * Inject Gazetteer search results into the search modal's results list
 		 * @param search results data from the Gazetteer endpoint
@@ -1123,9 +1097,6 @@
 		    var searchResultsDiv = $("#" + ADDRESS_SEARCH_RESULTS_ID_PREFIX + $this.attr('id'));
 		    searchResultsDiv.html(resultText);
 		}
-
-
-
 
 		/**
 		 * Create and insert the coordinate input modal
@@ -1176,7 +1147,7 @@
 		    if (!active) {
 			setToolActive(tool, true);
 			var lonlatTextarea = $("#" + LONLAT_TEXTAREA_ID_PREFIX + $this.attr('id'));
-			lonlatTextarea.val(getInputFieldValue());
+			lonlatTextarea.val($target.val());
 
 			var dialog = $("#" + LONLAT_DIALOG_ID_PREFIX + $this.attr('id'));
 			dialog.show();
@@ -1199,7 +1170,7 @@
 		    options = $.extend({}, defaults, options);
 		    if ((options.validate && validateLonLatText(data)) ||
 			!options.validate) {
-			setInputFieldValue(data);
+			$target.val(data);
 			if (options.reset) {
 			    resetTools();
 			}
@@ -1234,7 +1205,6 @@
 			centreMap();
 		    }
 		}
-
 
 		/**
 		 * Redraw the map, using coordinate data set from the data modal
