@@ -1,956 +1,1091 @@
 /*
-Copyright 2009 The Australian National University
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+  Copyright 2009 The Australian National University
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
 
-http://www.apache.org/licenses/LICENSE-2.0
+  http://www.apache.org/licenses/LICENSE-2.0
 
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
 *******************************************************************************/
 
-// Globals and constants
-var MCT_TOOL_POINT_PREFIX  = 'mct_tool_point';
-var MCT_TOOL_REGION_PREFIX = 'mct_tool_region';
-var MCT_TOOL_TEXT_PREFIX   = 'mct_tool_text';
-var MCT_TOOL_SEARCH_PREFIX = 'mct_tool_search';
+;(function($) {
+    "use strict";
+    var WIDGET_NAME = "ANDS Location Capture Widget";
+    var WIDGET_NS = "location_widget";
+    var DEFAULT_PROTOCOL = window.location.protocol == 'https:' ?
+	"https://" :
+	"http://";
+    var DEFAULT_SERVICE_POINT = DEFAULT_PROTOCOL +
+	'services.ands.org.au/api/resolver/';
 
-var MCT_CONTROL_ID_PREFIX                  = 'mct_control_';
-var MCT_CANVAS_ID_PREFIX                   = 'mct_canvas_';
-var MCT_ADDRESS_SEARCH_DIALOG_ID_PREFIX    = 'mct_search_';
-var MCT_ADDRESS_SEARCH_TEXTFIELD_ID_PREFIX = 'mct_search_textfield';
-var MCT_ADDRESS_SEARCH_RESULTS_ID_PREFIX   = 'mct_search_results';
-var MCT_LONLAT_DIALOG_ID_PREFIX            = 'mct_lonlat_';
-var MCT_LONLAT_TEXTAREA_ID_PREFIX          = 'mct_lonlat_textarea';
+    //some display constants
+    var POLY_COLOUR      = '#008dce';
+    var EDIT_POLY_COLOUR = '#ff5b00';
+    var OPEN_POLY_COLOUR = '#ff0000';
 
-var MCT_POLY_COLOUR      = '#008dce';
-var MCT_EDIT_POLY_COLOUR = '#ff5b00';
-var MCT_OPEN_POLY_COLOUR = '#ff0000';
+    // Globals and constants
+    var TOOL_POINT_PREFIX  = 'alw_tool_point';
+    var TOOL_REGION_PREFIX = 'alw_tool_region';
+    var TOOL_TEXT_PREFIX   = 'alw_tool_text';
+    var TOOL_SEARCH_PREFIX = 'alw_tool_search';
+    var EMPTY_MAP_PREFIX = "alw_clear";
+    var RESET_MAP_PREFIX = "alw_reset"
 
-var MCT_DEFAULT_PROTOCOL = (window.location.protocol == 'https:' ? "https://" : "http://");
-
-var MCT_DEFAULT_SERVICE_POINT = MCT_DEFAULT_PROTOCOL + 'services.ands.org.au/api/resolver/';
-
-if(typeof(mctInputFields) == 'undefined')
-var mctInputFields = new Array();
-if(typeof(mctMaps) == 'undefined')
-var mctMaps = new Array();
-if(typeof(mctTools) == 'undefined')
-var mctTools = new Array();
-if(typeof(mctOriginalInputFieldValues) == 'undefined')
-var mctOriginalInputFieldValues = new Array();
-if(typeof(mctPushpin) == 'undefined')
-var mctPushpin = null;
-if(typeof(mctEditPushpin) == 'undefined')
-var mctEditPushpin = null;
-if(typeof(mctShadow) == 'undefined')
-var mctShadow = null;
-if(typeof(mctMarkers) == 'undefined')
-var mctMarkers = new Array();
-if(typeof(mctMarkerListeners) == 'undefined')
-var mctMarkerListeners = new Array();
-if(typeof(mctPolygons) == 'undefined')
-var mctPolygons = new Array();
-if(typeof(mctTempPolygons) == 'undefined')
-var mctTempPolygons = new Array();
-if(typeof(mctfeatureTypes) == 'undefined')
-var mctfeatureTypes = new Array();
-if(typeof(mctGeocoder) == 'undefined')
-var mctGeocoder = null;
-if(typeof(mctDrawingManagers) == 'undefined')
-var mctDrawingManagers = new Array(); // probably not useed
-var mctErrorMessage = "";
-
-var mctCurrentMapId = "";
+    var CONTROL_ID_PREFIX                  = 'alw_control_';
+    var CANVAS_ID_PREFIX                   = 'alw_canvas_';
+    var ADDRESS_SEARCH_DIALOG_ID_PREFIX    = 'alw_search_';
+    var ADDRESS_SEARCH_TEXTFIELD_ID_PREFIX = 'alw_search_textfield';
+    var ADDRESS_SEARCH_RESULTS_ID_PREFIX   = 'alw_search_results';
+    var LONLAT_DIALOG_ID_PREFIX            = 'alw_lonlat_';
+    var LONLAT_TEXTAREA_ID_PREFIX          = 'alw_lonlat_textarea';
+    var INLINE_MESSAGE_ID_PREFIX           = 'alw_msg_';
 
 
-function mctMakeMapWidget(mapInputFieldId, lonLat)
-{
-	if(mctfeatureTypes.length == 0)
-	{
-		mctLoadFeatureTypes();
-	}
-	mctSetMapControl(mapInputFieldId, lonLat);
-}
+
+    /**
+     * Is our widget instance initialised?
+     * @param the widget container (jquery object)
+     * @return boolean
+     */
+    function inited(welem) {
+	var widget_data = welem.data(WIDGET_NS);
+	return typeof(widget_data) !== 'undefined';
+    }
+
+    var methods = {
+	//obtain the widget's underlying google map
+	googlemap: function() {
+	    var $this = $(this);
+	    if (inited($this) && false) {
+		var widget_data = $this.data(WIDGET_NS);
+		return widget_data.map;
+	    }
+	    else {
+		alert(WIDGET_NAME + " not initialised!");
+	    }
+	},
+	//default operation: set up the map
+	init: function(options) {
+	    //if we've already been initialised, fail silently
+	    if (inited($(this))) {
+		return;
+	    }
+	    var defaults = {
+		target: "geoLocation", //final resting place of the target data
+		latLon: false, //starting point for map
+		endpoint: DEFAULT_SERVICE_POINT,
+		protocol: DEFAULT_PROTOCOL
+	    };
+	    var settings = $.extend({}, defaults, options);
+	    return this.each(function() {
+		var $this = $(this);
+		var $target;
+		$('<div id="' + INLINE_MESSAGE_ID_PREFIX + $this.attr('id') + '"/>').insertBefore($this);
+		var $msgBox = $("#" + INLINE_MESSAGE_ID_PREFIX + $this.attr('id'));
+		$msgBox.hide();
+		$this.addClass('alw_control');
+		$this.removeClass("alw_loaderror");
+		if (typeof($this.attr('id')) === 'undefined') {
+		    //need to give it some kind of ID
+		    var wcount = $(".ands_location_map_container").length;
+		    if (wcount > 0) {
+			wcount += 1;
+			$this.attr('id','ands_location_map_container-' + wcount);
+		    }
+		    else {
+			$this.attr('id','ands_location_map_container');
+		    }
+		    $this.addClass('ands_location_map_container');
+		}
+
+		/*
+		 * ensure we have a target input that isn't already being used:
+		 *  - if it doesn't exist, create it
+		 *  - if it exists, and is being used by another plugin instance, throw an error
+		 */
+		$target = $("#" + settings.target);
+		if (!$target.length) {
+		    $target = $('<input id="' + settings.target +
+				'" name="' + settings.target +
+				'" data-alwtarget="' + $this.attr('id') +
+				'" type="hidden" />');
+		    $target.insertAfter($this);
+		}
+		else if (typeof($target.data('alwtarget')) !== 'undefined') {
+		    showError('The specified target field `' +
+			      escape(settings.target) + '` is being used as a ' +
+			      'target for another map (id: `' +
+			      $target.data('alwtarget') + '`). ' +
+			      'Review plugin configuration and try again.',
+			     $this);
+		    return;
+		}
+		//if we're still running, we're good to go
+
+		//set up the initial coordinate data if provided
+		if (settings.latLon !== false) {
+		    $target.val(settings.latLon);
+		}
 
 
-function mctGetErrorMessage()
-{
-	return mctErrorMessage;
-}
+		//set up widget data
+		$this.data(WIDGET_NS, {
+		    'input_field_orig': null,
+		    'pushpin': null,
+		    'pushpin_edit': null,
+		    'shadow': null,
+		    'polygon': null,
+		    'geocoder': null,
+		    'error_message': null,
+		    'map': null,
+		    'tools': {},
+		    'feature_types': {},
+		    'drawing_managers': [],
+		    'marker_listeners': [],
+		    'marker': null
+		});
 
-function mctSetErrorMessage(message)
-{
-	mctErrorMessage = message;
-	//console.log(mctErrorMessage);
-}
-
-function mctLoadFeatureTypes()
-{
-	var mctServicePath = (typeof(window.mctServicePath) == 'undefined' ? MCT_DEFAULT_SERVICE_POINT : window.mctServicePath);
-	var requestUrl = mctServicePath + '?feature=state.&callback=?';
-	$.getJSON(requestUrl, function(data) {
-		mctAddFeatureTypes(data);
-	});
-	
-	requestUrl = mctServicePath + '?feature=feature&callback=?';
-	$.getJSON(requestUrl, function(data) {
-		mctAddFeatureTypes(data);
-	});
-
-}
-
-function mctGetOriginalInputFieldValue(controlDivId)
-{
-	return mctOriginalInputFieldValues[controlDivId];
-}
-
-function mctSetOriginalInputFieldValue(controlDivId, value)
-{
-	mctOriginalInputFieldValues[controlDivId] = value;
-}
-
-function mctSetInputFieldValue(controlDivId, newValue)
-{
-	//console.log("mctSetInputFieldValue-------- controlDivId: "+ controlDivId + " newValue: " + newValue);
-	if( mctInputFields[controlDivId] )
-	{
-		mctInputFields[controlDivId].val(newValue);	
-	}
-}
-
-function mctGetInputFieldValue(controlDivId)
-{
-	var value = '';
-	if( mctInputFields[controlDivId] )
-	{
-		value = mctInputFields[controlDivId].val();	
-	}
-	
-	return value;
-}
-
-function mctGetOriginalInputFieldValue(controlDivId)
-{
-	return mctOriginalInputFieldValues[controlDivId];
-}
-
-function mctSetMapControl(mapInputFieldId, lonLat)
-{
-	// Because IE6 and 7 have problems if with the map if we put it on the page before
-	// the required bits of the DOM have loaded we need to delay loading the maps.
-	// We do this by appending the mctGetMapControl calls to the onload handler.
-	// This window.onload stuff is not defined in a public standard but Safari, Firefox, and IE
-	// all exhibit the same behaviour.
-	
-	// Build the map control div.
-
-	var controlDivId = MCT_CONTROL_ID_PREFIX + mapInputFieldId;
-	document.write('<input name="'+mapInputFieldId+'" id="'+mapInputFieldId+'" type="hidden" value="'+lonLat+'">');
-	document.write('<div id="' + controlDivId + '" class="mct_control"></div>');
-	
-	// Add this map to the onload queue.
-	//var onloadQueue = window.onload;
-	//if( typeof onloadQueue == 'function' )
-	//{
-	//	window.onload = function()
-	//	{
-	//		onloadQueue();
-			mctGetMapControl(mapInputFieldId);
-	//	};
-	//}
-	//else
-	//{
-	//	window.onload = function()
-	//	{
-	//		mctGetMapControl(mapInputFieldId);
-	//	};		
-	//}
-}
-
-function mctSetNoDelayMapControl(mapInputFieldId)
-{
-	// Because IE6 and 7 have problems if with the map if we put it on the page before
-	// the required bits of the DOM have loaded we need to delay loading the maps.
-	// We do this by appending the mctGetMapControl calls to the onload handler.
-	// This window.onload stuff is not defined in a public standard but Safari, Firefox, and IE
-	// all exhibit the same behaviour.
-	
-	// Build the map control div.
-	var controlDivId = MCT_CONTROL_ID_PREFIX + mapInputFieldId;
-	mctGetMapControl(mapInputFieldId);
-
-	
-}
+		/**
+		 * Pull down some feature data from the ANDS resolver, and build
+		 * the map and associated controls.
+		 */
+		function makeMapWidget() {
+		    loadFeatureTypes();
+		    getMapControl();
+		}
 
 
-function mctGetMapControl(mapInputFieldId)
-{
-	var map = null;
-	var mapInputField = $('#'+mapInputFieldId);
-	
-	var controlDivId = MCT_CONTROL_ID_PREFIX + mapInputFieldId;
-	var controlDiv = $('#'+controlDivId);
-	
-	try
-	{
-		if( mapInputField)
-		{		
-			// Set the reference to the input field.
-			mctInputFields[controlDivId] = mapInputField;
-			//console.log("mapInputFieldId: "+ mapInputField.val());
+		/**
+		 * Get the widget's error message
+		 * @return (string) any error messages registered
+		 */
+		function getErrorMessage() {
+		    var widget_data = $this.data(WIDGET_NS);
+		    return widget_data.error_message;
+		}
+
+		/**
+		 * Set the widget's error message
+		 * @param the error message
+		 */
+		function setErrorMessage(message) {
+		    var widget_data = $this.data(WIDGET_NS);
+		    widget_data.error_message = message;
+		    $this.data(WIDGET_NS, widget_data);
+		}
+
+		/**
+		 * Pull down map features (states, other cruft) from
+		 * the ANDS resolver
+		 */
+		function loadFeatureTypes() {
+		    $.getJSON(settings.endpoint + '?feature=state.&callback=?',
+			      function(data) {
+				  addFeatureTypes(data);
+			      });
+
+		    $.getJSON(settings.endpoint + '?feature=feature&callback=?',
+			      function(data) {
+				  addFeatureTypes(data);
+			      });
+
+		}
+
+		/**
+		 * Store feature data with the plugin instance
+		 * @param feature data
+		 */
+		function addFeatureTypes(data) {
+		    var widget_data = $this.data(WIDGET_NS);
+		    for (var i=0; i < data.items.length; i++ ) {
+			var title = data.items[i].title;
+			var id = data.items[i].id;
+			widget_data.feature_types[id] = title;
+		    }
+		    $this.data(WIDGET_NS, widget_data);
+		}
+
+
+		/**
+		 * If invoked with initialisation coordinates,
+		 * save these as the original details for a
+		 * 'reset' command to restore
+		 * @param the initial coordinate data
+		 */
+		function setOriginalInputFieldValue(value) {
+		    var widget_data = $this.data(WIDGET_NS);
+		    widget_data.input_field_orig = value;
+		    $this.data(WIDGET_NS, widget_data);
+		}
+
+		/**
+		 * Set the target field's value
+		 * @param the (new) value for the target
+		 */
+		function setInputFieldValue(newValue) {
+		    $target.attr('value', newValue);
+		}
+
+		/**
+		 * Get the target field's value
+		 * @return the target's value
+		 */
+		function getInputFieldValue() {
+		    return $target.val();
+		}
+
+		/**
+		 * Get the original initialisation data
+		 * @return the original initialisation coordinates, or null, or empty string
+		 */
+		function getOriginalInputFieldValue() {
+		    var widget_data = $this.data(WIDGET_NS);
+		    return widget_data.input_field_orig;
+		}
+
+		/**
+		 * Constructs the map container and controls, including various
+		 * settings
+		 */
+		function getMapControl() {
+		    var map = null;
+		    var widget_data = $this.data(WIDGET_NS);
+
+		    try {
 			// Set up for reset map.
-			mctSetOriginalInputFieldValue(controlDivId, mapInputField.val());
-			
+			setOriginalInputFieldValue($target.val());
+
 			// Initialise this instance.
-			var mapCanvasId = MCT_CANVAS_ID_PREFIX + controlDivId;
-			
-			var mapToolBarHTML       = mctGetToolBarHTML(controlDivId);
-			var mapAddressSearchHTML = mctGetAddressSearchDialogHTML(controlDivId);
-			var mapLonLatDialogHTML  = mctGetLonLatDialogHTML(controlDivId);
-			var mapCanvasHTML        = '<div class="mct_canvas" id="' + mapCanvasId + '"></div>';
-					
-			controlDiv.html(mapToolBarHTML + mapAddressSearchHTML + mapLonLatDialogHTML + mapCanvasHTML);	
-			
+			var mapCanvasId = CANVAS_ID_PREFIX + $this.attr('id');
+
+			getToolBarHTML($this);
+			getAddressSearchDialogHTML($this);
+			getLonLatDialogHTML($this);
+			$this.append('<div class="alw_canvas" id="' + mapCanvasId + '"/>');
+
 			// Build any icons we might need.
-			if( !mctEditPushpin)
-			{
-				mctEditPushpin = new google.maps.MarkerImage(MCT_DEFAULT_PROTOCOL + 'maps.google.com/intl/en_us/mapfiles/ms/micons/orange.png',
-					      new google.maps.Size(24,32),
-					      new google.maps.Point(0,0),
-					      new google.maps.Point(12,32));
-			}
-			
-			if( !mctPushpin)
-			{
-				mctPushpin = new google.maps.MarkerImage(MCT_DEFAULT_PROTOCOL + 'maps.google.com/intl/en_us/mapfiles/ms/micons/blue.png',
-					      new google.maps.Size(24,32),
-					      new google.maps.Point(0,0),
-					      new google.maps.Point(12,32));			
+			if (!widget_data.pushpin_edit) {
+			    widget_data.pushpin_edit = new google.maps.MarkerImage(settings.protocol + 'maps.google.com/intl/en_us/mapfiles/ms/micons/orange.png',
+										   new google.maps.Size(24,32),
+										   new google.maps.Point(0,0),
+										   new google.maps.Point(12,32));
 			}
 
-		    mctShadow = new google.maps.MarkerImage(MCT_DEFAULT_PROTOCOL + 'maps.google.com/intl/en_us/mapfiles/ms/micons/msmarker.shadow.png',
-		    		new google.maps.Size(24,32),
-				      new google.maps.Point(0,0),
-				      new google.maps.Point(12,32));
+			if (!widget_data.pushpin) {
+			    widget_data.pushpin = new google.maps.MarkerImage(settings.protocol + 'maps.google.com/intl/en_us/mapfiles/ms/micons/blue.png',
+									      new google.maps.Size(24,32),
+									      new google.maps.Point(0,0),
+									      new google.maps.Point(12,32));
 
-			
-			// Initialise this maps marker and region references.
-			mctMarkers[controlDivId] = null;
-			mctMarkerListeners[controlDivId] = null;
-			mctPolygons[controlDivId] = null;
-			mctTempPolygons[controlDivId] = null;
-		
-			var mapCanvas = $('#'+mapCanvasId);		
-			//console.log("mapCanvas: "+ mapCanvasId);
+			}
+
+			widget_data.shadow = new google.maps.MarkerImage(settings.protocol + 'maps.google.com/intl/en_us/mapfiles/ms/micons/msmarker.shadow.png',
+		    							 new google.maps.Size(24,32),
+									 new google.maps.Point(0,0),
+									 new google.maps.Point(12,32));
+
+
+
+			var mapCanvas = $('#'+mapCanvasId);
 			var myOptions = {
-				      zoom: 3,disableDefaultUI: true,center:new google.maps.LatLng(-27, 133),panControl: true,zoomControl: true,mapTypeControl: true,scaleControl: true,
-				      streetViewControl: false,overviewMapControl: true,mapTypeId: google.maps.MapTypeId.TERRAIN
-				    };
-			map = new google.maps.Map(mapCanvas[0],myOptions);
-			var bounds = new google.maps.LatLngBounds();
-
-			mctMaps[controlDivId] = map;
-			//console.log("mapCanvas: ", map);
+			    zoom: 3,
+			    disableDefaultUI: true,
+			    center:new google.maps.LatLng(-27, 133),
+			    panControl: true,
+			    zoomControl: true,
+			    mapTypeControl: true,
+			    scaleControl: true,
+			    streetViewControl: false,
+			    overviewMapControl: true,
+			    mapTypeId: google.maps.MapTypeId.TERRAIN
+			};
+			map = new google.maps.Map(mapCanvas[0], myOptions);
+		        var bounds = new google.maps.LatLngBounds();
 			// Set the map from any existing values when it's completed loading.
-			//google.maps.event.addListener(map, "load", function()
-			//{
-			mctSetMapFromInputField(controlDivId, true);
-			//});
+		        var loadinglistener = google.maps.event.addListenerOnce(map,
+									    "idle",
+									    function()
+									    {
+										setMapFromInputField(true);
+									    });
 			// Set the default cursors.
 			map.setOptions({draggableCursor:"default"});
-			map.setOptions({raggingCursor:"move"});
-			
-			// Get a geocoder ready for the search.
-			mctGeocoder = new google.maps.Geocoder();
-		}
-	}
-	catch(e)
-	{
-		console.error(e);
-		// The Google Maps API probably didn't load. Not much we can do.
-		if( controlDiv )
-		{
-			controlDiv.className = "mct_loaderror";
-			controlDiv.innerHTML = 'The mapping tool has failed to load. Your browser must allow non-HTTPS content to load on this page in order to use this tool.';
-		}
-	}
-}
-
-function mctGetToolBarHTML(controlDivId)
-{
-	var id = null;
-	html = '<div class="mct_toolbar">';
-	
-	// point
-	id = MCT_TOOL_POINT_PREFIX + controlDivId;
-	mctTools[id] = false;
-	html += '<span class="mct_tool" id="' + id + '" onclick="mctStartPoint(this, \'' + controlDivId + '\');" title="Mark a point on the map">point</span>';
-	
-	// region
-	id = MCT_TOOL_REGION_PREFIX + controlDivId;
-	mctTools[id] = false;
-	html += '<span class="mct_tool" id="' + id + '" onclick="mctStartRegion(this, \'' + controlDivId + '\');" title="Draw a polygon on the map to mark a region">region</span>';
-	
-	// search...
-	id = MCT_TOOL_SEARCH_PREFIX + controlDivId;
-	mctTools[id] = false;
-	html += '<span class="mct_tool" id="' + id + '" onclick="mctShowAddressSearchDialog(this, \'' + controlDivId + '\')" title="Search for a place or region to mark on the map">search...</span>';
-	
-	// coordinates...
-	id = MCT_TOOL_TEXT_PREFIX + controlDivId;
-	mctTools[id] = false;
-	html += '<span class="mct_tool" id="' + id + '" onclick="mctShowLonLatDialog(this, \'' + controlDivId + '\')" title="Enter longitude,latitude pairs to mark a point or a region on the map">coordinates...</span>';
-
-	// clear
-	html += '<span class="mct_special_tool" onclick="mctEmptyMap(\'' + controlDivId + '\')" title="Clear the marker/region data">clear</span>';
-	
-	// reset
-	if( mctGetOriginalInputFieldValue(controlDivId) )
-	{
-		html += '<span class="mct_special_tool" onclick="mctResetMap(\'' + controlDivId + '\')" title="Reset the map to its initial state">reset</span>';	
-	}
-	
-	html += '</div>';
-
-	return html;
-}
-
-function mctSetToolActive(tool, active)
-{
-	mctTools[tool.id] = active;
-	if( active )
-	{
-		tool.className = 'mct_tool_active';
-	}
-	else
-	{
-		tool.className = 'mct_tool';
-	}
-}
-
-function mctGetToolActive(tool)
-{
-	return mctTools[tool.id];
-}
-
-function mctResetTools(controlDivId)
-{
-	var id = null;
-	var object = null;
-
-	// =======================================================================
-	// TIDY UP THE TOOLS
-	// =======================================================================
-	// POINT
-	// -----------------------------------------------------------------------
-	// Set the tool state.
-	
-	id = MCT_TOOL_POINT_PREFIX + controlDivId;
-	object = getObject(id);
-	mctSetToolActive(object, false);
-	
-	// REGION
-	// -----------------------------------------------------------------------
-	// Set the tool state.
-	id = MCT_TOOL_REGION_PREFIX + controlDivId;
-	object = getObject(id);
-	mctSetToolActive(object, false);
-	
-	// TEXT
-	// -----------------------------------------------------------------------
-	// Set the tool state.
-	id = MCT_TOOL_TEXT_PREFIX + controlDivId;
-	object = getObject(id);
-	mctSetToolActive(object, false);
-	
-	// Hide the dialog.
-	id = MCT_LONLAT_DIALOG_ID_PREFIX + controlDivId;
-	object = getObject(id);
-	object.style.display = "none";
-	
-	// Clear the text.
-	id = MCT_LONLAT_TEXTAREA_ID_PREFIX + controlDivId;
-	object = getObject(id);
-	object.value = '';		
-	
-	// SEARCH
-	// -----------------------------------------------------------------------
-	// Set the tool state.
-	id = MCT_TOOL_SEARCH_PREFIX + controlDivId;
-	object = getObject(id);
-	mctSetToolActive(object, false);
-	
-	// Hide the dialog leaving it how it is.
-	id = MCT_ADDRESS_SEARCH_DIALOG_ID_PREFIX + controlDivId;
-	object = getObject(id);
-	object.style.display = "none";
-	
-	// =======================================================================
-	// TIDY UP THE MAP
-	// =======================================================================
-	// Set the cursors back to the default settings.
-	mctMaps[controlDivId].setOptions({draggableCursor:"default"});
-	mctMaps[controlDivId].setOptions({draggingCursor:"move"});
-	
-	// Remove any listeners from the map.
-	if( (markerListener = mctMarkerListeners[controlDivId]) != null )
-	{
-		google.maps.event.removeListener(markerListener);
-	}
-	
-	if( (drawingManager = mctDrawingManagers[controlDivId]) != null )
-	{
-		drawingManager.setMap(null);
-	}
-	
-	// Redraw the map.
-	mctSetMapFromInputField(controlDivId, false);
-}
-
-function mctResetMap(controlDivId)
-{
-	mctSetInputFieldValue(controlDivId, mctGetOriginalInputFieldValue(controlDivId));
-	mctResetTools(controlDivId);
-	mctCentreMap(controlDivId);
-}
-
-function mctEmptyMap(controlDivId)
-{
-	mctSetInputFieldValue(controlDivId, '');
-	mctResetTools(controlDivId);
-	mctCentreMap(controlDivId);
-}
-
-function mctTidyLonLatText(lonlatText)
-{
-	var cleanLonLatText = lonlatText;
-	
-	if( cleanLonLatText != "" )
-	{
-		// Remove white space from between latitude and longitude.
-		cleanLonLatText = cleanLonLatText.replace(new RegExp('\\s*,\\s*', "g"), ',');
-		// Convert all white space between pairs to spaces.
-		cleanLonLatText = cleanLonLatText.replace(new RegExp('\\s+',"g"),' ');
-		// Remove any leading and/or trailing spaces.
-		cleanLonLatText = cleanLonLatText.replace(new RegExp('^ '),'');
-		cleanLonLatText = cleanLonLatText.replace(new RegExp(' $'),'');	
-	}
-	
-	return cleanLonLatText;
-}
-
-function mctGetCoordsFromInputField(controlDivId)
-{
-	var coords = new Array();
-	//console.log("controlDivId" + controlDivId);
-	var lonlatText = mctTidyLonLatText(mctGetInputFieldValue(controlDivId));
-	//console.log("mctGetCoordsFromInputField lonlatText:" + lonlatText + "mctValidateLonLatText: " + mctValidateLonLatText(lonlatText));
-	if( lonlatText != "" && mctValidateLonLatText(lonlatText))
-	{
-		var coordsStr = lonlatText.split(' ');
-   		for( var i=0; i < coordsStr.length; i++ )
-		{
-			// Fill the array with GLatLngs.
-
-			coordsPair = coordsStr[i].split(",");
-			coords[i] = new google.maps.LatLng(coordsPair[1],coordsPair[0]);
-		}	
-	}
-		
-	return coords;
-}
-
-function mctValidateLonLatText(lonlatText)
-{
-	var valid = true;
-	
-	if( lonlatText != "" )
-	{
-		var coords = lonlatText.split(' ');
-		var lat = null;
-		var lon = null;
-		var coordsPair = null;
-   		
-		// Test for a two point line.
-		if( coords.length == 2 )
-		{
-			mctSetErrorMessage("The coordinates don't represent a point or a region.");
-			valid = false;	
-		}
-
-		for( var i=0; i < coords.length && valid; i++ )
-		{
-			// Get the lat and lon.
-			coordsPair = coords[i].split(",");
-			lat = coordsPair[1];
-			lon = coordsPair[0];
-			
-			// Test for numbers.
-			if( isNaN(lat) || isNaN(lon) )
-			{
-				mctSetErrorMessage('Some coordinates are not numbers.');
-				valid = false;
-				break;
-			}
-			// Test the limits.
-			if( Math.abs(lat) > 90 || Math.abs(lon) > 180 )
-			{
-				//console.log("lat: " + lat + " " + Math.abs(lat) + " lon: " + lon + " " + Math.abs(lon))
-				mctSetErrorMessage('Some coordinates have invalid values.');
-				valid = false;
-				break;
-			}
-		
-			// Test for an open region.
-			if( i == coords.length-1 )
-			{
-				if( coords[0] != coords[i] )
-				{
-					mctSetErrorMessage("The coordinates don't represent a point or a region. To define a region the last point needs to be the same as the first.");
-					valid = false;	
-				}
-			}	
-		}
-	}
-	return valid;
-}
-
-function mctSetMapFromInputField(controlDivId, centred)
-{
-	// Clear the map.
-	mctClearMap(controlDivId);
-	// Redraw the map with values from the input field.
-	var coords = mctGetCoordsFromInputField(controlDivId);
-	//console.log("mctSetMapFromInputField: " + coords);
-	if( coords.length == 1 )
-	{
-		mctCreateMarker(coords[0], controlDivId , false);	
-	}	
-	else if( coords.length > 2 )
-	{  
-        mctCreatePolygon(coords, controlDivId, false);
-	}		
-	if( centred )
-	{
-		mctCentreMap(controlDivId);
-	}
-}
-
-function mctClearMap(controlDivId)
-{
-	// Remove any marker from the map.
-	mctRemoveMarker(controlDivId);
-	
-	// Remove any polygon from the map.
-	mctRemovePolygon(controlDivId);
-	
-	if( (drawingManager = mctDrawingManagers[controlDivId]) != null )
-	{
-		drawingManager.setMap(null);
-	}
-}
-
-function mctCentreMap(controlDivId)
-{
-	//console.log("Check for a polygon to centre on.");
-	if( (polygon = mctPolygons[controlDivId]) != null )
-	{
-		var bounds = new google.maps.LatLngBounds();
-		var i;
-
-		// The Bermuda Triangle
-		var polygonCoords = polygon.getPath().getArray();
-		//console.log(polygonCoords);
-		for (i = 0; i < polygonCoords.length; i++) {
-			//console.log(polygonCoords[i]);
-		  bounds.extend(polygonCoords[i]);
-		}
-        //resetZoom();//google map api bug fix
-		mctMaps[controlDivId].fitBounds(bounds);
-	}
-	
-	// Check for a marker to centre on.
-	if( (marker = mctMarkers[controlDivId]) != null )
-	{
-		mctMaps[controlDivId].setCenter(marker.getPosition());
-	}
-}
-
-
-// ===========================================================================
-// POINT
-// ===========================================================================
-function mctStartPoint(tool, controlDivId)
-{
-	var active = mctGetToolActive(tool);
-	mctResetTools(controlDivId);
-	
-	// Set the cursor for dropping a marker.
-	mctMaps[controlDivId].setOptions({draggableCursor:"crosshair"});
-	
-	if( !active )
-	{
-		mctSetToolActive(tool, true);
-		
-		// Get coords from the the input field.
-		var coords = mctGetCoordsFromInputField(controlDivId);
-		
-		// Check to see if it represents a point.
-		if( coords.length == 1 )
-		{
-		    // Show an editable marker on the map.
-			mctCreateMarker(coords[0], controlDivId, true);
-		}
-		
-		// Add a listener with an anonymous function for dropping a new marker on the map.
-		
-		mctMarkerListeners[controlDivId] = google.maps.event.addListener(mctMaps[controlDivId], "click", function(e) 
-		{
-		    if( e.latLng) 
-		    {
-		    	// Set the input field and reset the control.
-				mctSetInputFieldValue(controlDivId, e.latLng.lng().toFixed(6) + "," + e.latLng.lat().toFixed(6)); 
-				mctResetTools(controlDivId);
+			map.setOptions({draggingCursor:"move"});
+			widget_data.map = map;
+			widget_data.geocoder = new google.maps.Geocoder();
+			$this.data(WIDGET_NS, widget_data);
 		    }
-   		});		
-   		// Center the map on this marker.
-		mctCentreMap(controlDivId);		
-	}	
-}
-
-function mctCreateMarker(latlng, controlDivId, editable)
-{
-	// Remove any previous markers or regions.
-	mctClearMap(controlDivId);
-	//console.log("creating Marker");
-	var marker = null;
-    if( editable )
-	{
-		// Draw a new editable marker. 
-	   // marker = new GMarker(latlng, {icon: mctEditPushpin, draggable: true});
-	    marker = new google.maps.Marker({
-	          position: latlng,
-	          map: mctMaps[controlDivId],
-	          icon : mctEditPushpin,
-	          shadow:mctShadow,
-	          draggable : true
-	        });
-	    mctMarkers[controlDivId] = marker;	    
-		// Add a listener with an anonymous function for updating after dragging an editable marker.
-	    google.maps.event.addListener(marker, "dragend", function() 
-		{
-			// Set the input field and reset the control.
-			var latlng = marker.getPosition();
-			mctSetInputFieldValue(controlDivId, latlng.lng().toFixed(6) + "," + latlng.lat().toFixed(6));
-	    });
-    }
-    else
-	{
-		// Draw a new marker. 
-    	marker = new google.maps.Marker({
-	          position: latlng,
-	          map: mctMaps[controlDivId],
-	          icon : mctPushpin,
-	          shadow:mctShadow
-	        });
-	    mctMarkers[controlDivId] = marker;
-    }
-
-	// Set the input field value to the marker location.
-	mctSetInputFieldValue(controlDivId, latlng.lng().toFixed(6) + "," + latlng.lat().toFixed(6)); 
-}
-
-function mctRemoveMarker(controlDivId)
-{
-	// Check for a marker.
-    if( (marker = mctMarkers[controlDivId]) != null )
-	{	
-		// Remove the marker overlay.
-		marker.setMap(null);
-		mctMarkers[controlDivId] = null;
-	}
-}
-
-// ===========================================================================
-// REGION
-// ===========================================================================
-function mctStartRegion(tool, controlDivId)
-{
-	var active = mctGetToolActive(tool);
-	mctCurrentMapId = controlDivId;
-	mctResetTools(controlDivId);	
-	if( !active )
-	{
-		mctSetToolActive(tool, true);
-		
-		// Get coords from the input field value.
-		var coords = mctGetCoordsFromInputField(controlDivId);
-		
-		// Check to see if it represents a region.
-		if( coords.length > 2 )
-		{  
-			mctCreatePolygon(coords, controlDivId, true);
-			mctMarkerListeners[controlDivId] = google.maps.event.addListener(mctMaps[controlDivId], "click", function(e) 
-					{
-					    if( e.latLng) 
-					    {
-					    	mctClearMap(mctCurrentMapId);
-					    	mctBeginDrawing(mctCurrentMapId, e.latLng);	
-					    }
-			   		});	
-			mctCentreMap(controlDivId);	
+		    catch(e) {
+		    	//console.error(e);
+		    	// The Google Maps API probably didn't load. Not much we can do.
+			showError('The mapping tool has failed to load. ' +
+				  'Your browser must allow non-HTTPS content ' +
+				  'to load on this page in order to use this ' +
+				  'tool.' +
+				  '<br/><br/>(JSException: ' + e + ')');
+		    }
 		}
-		else
-			{
-			mctBeginDrawing(controlDivId,'');
+
+		/**
+		 * Display an error message.
+		 * @param the message to display. if undefined, use the
+		 * plugin's `error_message` data
+		 * @param the container to hold the message. if undefined,
+		 * use $this
+		 */
+		function showError(message, container) {
+		    if (typeof(container) === "undefined") {
+			container = $this;
+		    }
+		    if (typeof(message) === "undefined") {
+			message = getErrorMessage();
+		    }
+		    container.addClass("alw_loaderror");
+		    container.html(message);
+		    if (container.is(":hidden"))
+		    {
+			$('<a style="float:right" id = "' + container.attr('id') + '-close" href="#">[X]</a><br/>').prependTo(container);
+			$(document).on("click",
+				       "#" + container.attr('id') + '-close',
+				       function(event) {
+					   event.preventDefault();
+					   $(this).parent().hide();
+					   return false;
+				       });
+			container.show();
+		    }
+		}
+
+		/**
+		 * Create the widget toolbar (point|region|search|coord|clear|reset)
+		 * @param the element to insert the toolbar into
+		 */
+		function getToolBarHTML(welem) {
+		    var id = null;
+		    var html = '<div class="alw_toolbar">';
+		    var widget_data = $this.data(WIDGET_NS);
+
+		    // point
+		    id = TOOL_POINT_PREFIX + $this.attr('id');
+		    widget_data.tools[id] = false;
+		    $this.on("click", "#" + id, null, function() { startPoint("#" + TOOL_POINT_PREFIX + $this.attr('id')); });
+		    html += '<span class="alw_tool" id="' + id + '" title="Mark a point on the map">point</span>';
+
+		    // region
+		    id = TOOL_REGION_PREFIX + $this.attr('id');
+		    $this.on("click", "#" + id, null, function() { startRegion($("#" + TOOL_REGION_PREFIX + $this.attr('id'))); });
+		    widget_data.tools[id] = false;
+		    html += '<span class="alw_tool" id="' + id + '" title="Draw a polygon on the map to mark a region">region</span>';
+
+		    // search...
+		    id = TOOL_SEARCH_PREFIX + $this.attr('id');
+		    widget_data.tools[id] = false;
+		    $this.on("click", "#" + id, null, function() { showAddressSearchDialog($("#" + TOOL_SEARCH_PREFIX + $this.attr('id'))); });
+		    html += '<span class="alw_tool" id="' + id + '" title="Search for a place or region to mark on the map">search...</span>';
+
+		    // coordinates...
+		    id = TOOL_TEXT_PREFIX + $this.attr('id');
+		    $this.on("click", "#" + id, null, function() { showLonLatDialog($("#" + TOOL_TEXT_PREFIX + $this.attr('id'))); });
+		    widget_data.tools[id] = false;
+		    html += '<span class="alw_tool" id="' + id + '" title="Enter longitude,latitude pairs to mark a point or a region on the map">coordinates...</span>';
+
+		    // clear
+		    id = EMPTY_MAP_PREFIX + $this.attr('id');
+		    $this.on("click", "#" + id, null, function() { emptyMap(); });
+		    html += '<span class="alw_special_tool" id="'+ id + '" title="Clear the marker/region data">clear</span>';
+
+		    // reset
+		    if(widget_data.input_field_orig != null && widget_data.input_field_orig != "") {
+			id = RESET_MAP_PREFIX + $this.attr('id');
+			$this.on("click", "#" + id, null, function() { resetMap(); });
+			html += '<span class="alw_special_tool" id="' + id + '" title="Reset the map to its initial state">reset</span>';
+		    }
+
+		    html += '</div>';
+		    $this.data(WIDGET_NS, widget_data);
+		    welem.append(html);
+		}
+
+		/**
+		 * Toggle a tool's active status
+		 * @param Jquery selector, or HTML element for the tool in question
+		 * @param (boolean) what to set the tool's active status to
+		 */
+		function setToolActive(tool, active) {
+		    tool = $(tool);
+		    var widget_data = $this.data(WIDGET_NS);
+		    widget_data.tools[tool.attr('id')] = active;
+		    if (active) {
+			tool.addClass('alw_tool_active').removeClass('alw_tool');
+		    }
+		    else {
+			tool.removeClass('alw_tool_active').addClass('alw_tool');
+		    }
+		    $this.data(WIDGET_NS, widget_data);
+		}
+
+		/**
+		 * Query a tool's active status
+		 * @param Jquery selector, or HTML element for the tool in question
+		 * @return (boolean) the tool's active status
+		 */
+		function getToolActive(tool) {
+		    tool = $(tool);
+		    var widget_data = $this.data(WIDGET_NS);
+		    return widget_data.tools[tool.attr('id')];
+		}
+
+		/**
+		 * Reset tools (and their child data) to default/initial values
+		 */
+		function resetTools() {
+		    var widget_data = $this.data(WIDGET_NS);
+		    var id = null;
+		    var object = null;
+
+		    // =======================================================================
+		    // TIDY UP THE TOOLS
+		    // =======================================================================
+		    $.each([TOOL_POINT_PREFIX,
+			    TOOL_REGION_PREFIX,
+			    TOOL_TEXT_PREFIX,
+			    LONLAT_DIALOG_ID_PREFIX,
+			    LONLAT_TEXTAREA_ID_PREFIX,
+			    TOOL_SEARCH_PREFIX,
+			    ADDRESS_SEARCH_DIALOG_ID_PREFIX],
+			   function(idx, prefix) {
+			       var id = prefix + $this.attr('id');
+			       var object = getObject(id);
+			       setToolActive(object, false);
+
+			       //tool-specific tidying
+			       switch(prefix) {
+			       case LONLAT_DIALOG_ID_PREFIX:
+			       case ADDRESS_SEARCH_DIALOG_ID_PREFIX:
+				   object.hide();
+				   break;
+			       case LONLAT_TEXTAREA_ID_PREFIX:
+				   object.val('');
+				   break;
+			       }
+			   });
+
+
+
+		    // =======================================================================
+		    // TIDY UP THE MAP
+		    // =======================================================================
+		    // Set the cursors back to the default settings.
+		    widget_data.map.setOptions({draggableCursor:"default"});
+		    widget_data.map.setOptions({draggingCursor:"move"});
+
+		    // Remove any listeners from the map.
+		    $.each(widget_data.marker_listeners, function(idx, listener) {
+			google.maps.event.removeListener(listener);
+		    });
+
+		    $.each(widget_data.drawing_managers, function(idx, manager) {
+			manager.setMap(null);
+		    });
+
+		    // Redraw the map.
+		    setMapFromInputField(false);
+
+		    $this.data(WIDGET_NS, widget_data);
+		}
+
+		/**
+		 * Reset the map to initial values, including initial coordinate data
+		 */
+		function resetMap() {
+		    setInputFieldValue(getOriginalInputFieldValue());
+		    resetTools();
+		    centreMap();
+		}
+
+		/**
+		 * Reset the map to initial values, ignoring (original) coordinate data
+		 */
+		function emptyMap() {
+		    setInputFieldValue('');
+		    resetTools();
+		    centreMap();
+		}
+
+		/**
+		 * Clean up coordinate data: remove whitespace
+		 * @param the coordinate data to clean
+		 * @return the cleaned coordinate data
+		 */
+		function tidyLonLatText(lonlatText) {
+		    var cleanLonLatText = lonlatText;
+
+		    if(cleanLonLatText != "") {
+			// Remove white space from between latitude and longitude.
+			cleanLonLatText = cleanLonLatText.replace(new RegExp('\\s*,\\s*', "g"), ',');
+			// Convert all white space between pairs to spaces.
+			cleanLonLatText = cleanLonLatText.replace(new RegExp('\\s+',"g"),' ');
+			// Remove any leading and/or trailing spaces.
+			cleanLonLatText = cleanLonLatText.replace(new RegExp('^ '),'');
+			cleanLonLatText = cleanLonLatText.replace(new RegExp(' $'),'');
+		    }
+
+		    return cleanLonLatText;
+		}
+
+		/**
+		 * Retrieve, clean and validate coordinates from the data target.
+		 * @return clean coordinate data (if also valid, data is an array
+		 * of google.maps.LatLng)
+		 */
+		function getCoordsFromInputField() {
+		    var coords = new Array();
+		    var lonlatText = tidyLonLatText($target.val());
+		    if(lonlatText != "" && validateLonLatText(lonlatText)) {
+			var coordsStr = lonlatText.split(' ');
+   			for(var i=0; i < coordsStr.length; i++ ) {
+			    // Fill the array with GLatLngs.
+			    var coordsPair = coordsStr[i].split(",");
+			    coords[i] = new google.maps.LatLng(coordsPair[1],coordsPair[0]);
+			}
+		    }
+		    return coords;
+		}
+
+		/**
+		 * Validate coordinate data, checking for:
+		 *   - non-numeric data
+		 *   - correct number of points (1 or >2)
+		 *   - valid numeric data (lat > 90; lon > 180)
+		 *   - if >2 points (ie: a polygon), a closed region
+		 *
+		 * @param coordinate pairs
+		 * @return (boolean) whether or not the data is valid
+		 */
+		function validateLonLatText(lonlatText) {
+		    var valid = true;
+
+		    if(lonlatText != "") {
+			var coords = lonlatText.split(' ');
+			var lat = null;
+			var lon = null;
+			var coordsPair = null;
+
+			// Test for a two point line.
+			if(coords.length == 2) {
+			    setErrorMessage("The coordinates don't represent a point or a region.");
+			    valid = false;
 			}
 
+			for(var i=0; i < coords.length && valid; i++ ) {
+			    // Get the lat and lon.
+			    coordsPair = coords[i].split(",");
+			    lat = coordsPair[1];
+			    lon = coordsPair[0];
 
-	}	
-}
+			    // Test for numbers.
+			    if(isNaN(lat) || isNaN(lon)) {
+				setErrorMessage('Some coordinates are not numbers.');
+				valid = false;
+				break;
+			    }
+			    // Test the limits.
+			    if( Math.abs(lat) > 90 || Math.abs(lon) > 180 ) {
+				setErrorMessage('Some coordinates have invalid values.');
+				valid = false;
+				break;
+			    }
 
-function mctBeginDrawing(controlDivId , latLng)
-{
-	// Remove any existing temporary polygon.
-
-	mctCurrentMapId = controlDivId;
-	
-	if(mctMarkerListeners[controlDivId] != null)
-		{
-		google.maps.event.removeListener(mctMarkerListeners[controlDivId]);
+			    // Test for an open region.
+			    if( i == coords.length-1 ) {
+				if( coords[0] != coords[i] ) {
+				    setErrorMessage("The coordinates don't represent a point or a region. To define a region the last point needs to be the same as the first.");
+				    valid = false;
+				}
+			    }
+			}
+		    }
+		    return valid;
 		}
-	
-	var mctDrawingManager = new google.maps.drawing.DrawingManager({
-		  drawingMode: google.maps.drawing.OverlayType.POLYGON,
-		  drawingControl: false,
-		  polygonOptions: {
-		    fillColor: MCT_OPEN_POLY_COLOUR,
-		    paths : [latLng],
-		    fillOpacity: 0.2,
-		    strokeColor: MCT_OPEN_POLY_COLOUR,
-		    strokeWeight: 2,
-		    clickable: true,
-		    zIndex: 1,
-		    editable: true
-		  }
-		});
-	mctDrawingManagers[controlDivId] = mctDrawingManager;
 
-	mctDrawingManager.setMap(mctMaps[controlDivId]);
-	
-	google.maps.event.addListener(mctDrawingManager, 'polygoncomplete', function(polygon) {
-		    mctSavePolygonString(polygon.getPath(), mctCurrentMapId);
-		    polygon.setMap(null);
-		    mctDrawingManager.setMap(null);
-		    mctDrawingManagers[mctCurrentMapId] = null;
-		    mctResetTools(mctCurrentMapId);
-		});
-	
-}
+		/**
+		 * Clear and rebuild map using coordinate data
+		 * from target, centring as appropriate
+		 * @param (boolean) whether or not to centre the map
+		 */
+		function setMapFromInputField(centred) {
+		    // Clear the map.
+		    clearMap();
+		    // Redraw the map with values from the input field.
+		    var coords = getCoordsFromInputField();
+		    if (coords.length == 1) {
+			createMarker(coords[0], false);
+		    }
+		    else if (coords.length > 2) {
+			createPolygon(coords, false);
+		    }
 
-function mctCreatePolygon(coords, controlDivId, editable)
-{
-	// Remove any previous markers or regions.
-	mctClearMap(controlDivId);
-	mctCurrentMapId = controlDivId;
-	//console.log("creating Polygon: " + coords);
-	var polygon = null;
-	if(editable)
-	{
-		polygon = new google.maps.Polygon({
-		    paths: coords,
-		    map : mctMaps[controlDivId],
-		    strokeColor: MCT_OPEN_POLY_COLOUR,
-		    strokeOpacity: 0.7,
-		    strokeWeight: 2,
-		    fillColor: MCT_OPEN_POLY_COLOUR,
-		    fillOpacity: 0.2,
-		    editable : true,
-		    clickable : true
-		  });
+		    if (centred) {
+			centreMap();
+		    }
+		}
+		/**
+		 * Clear the map, removing:
+		 *   - map markers and polygons
+		 *   - drawing managers
+		 */
+		function clearMap() {
+		    // Remove polygons and markers from the map.
+		    removeMarker();
+		    removePolygon();
 
-		google.maps.event.addListener(polygon, 'click', function(e) {
-		    mctSavePolygonString(polygon.getPath(), mctCurrentMapId);
-		});
-		
-		google.maps.event.addListener(polygon, 'mouseup', function(e) {
-		    mctSavePolygonString(polygon.getPath(), mctCurrentMapId);
-		});
-		
-		google.maps.event.addListener(polygon, 'mouseout', function(e) {
-		    mctSavePolygonString(polygon.getPath(), mctCurrentMapId);
-		});
-	}
-	else
-	{   
-		// Create a non-editable, non-clickable region.
-		polygon = new google.maps.Polygon({
+		    var widget_data = $this.data(WIDGET_NS);
+		    $.each(widget_data.drawing_managers,
+			   function(idx, manager) {
+			       manager.setMap(null);
+			   });
+		    $this.data(WIDGET_NS, widget_data);
+		}
+
+		/**
+		 * Centre the map on the current marker (or polygon)
+		 */
+		function centreMap() {
+		    var widget_data = $this.data(WIDGET_NS);
+		    if (widget_data.polygon != null) {
+			var bounds = new google.maps.LatLngBounds();
+			var i;
+
+			// The Bermuda Triangle
+			var polygonCoords = widget_data.polygon.getPath().getArray();
+			for (i = 0; i < polygonCoords.length; i++) {
+			    bounds.extend(polygonCoords[i]);
+			}
+			//resetZoom();//google map api bug fix
+			widget_data.map.fitBounds(bounds);
+		    }
+
+		    // Check for a marker to centre on.
+		    if (widget_data.marker != null) {
+			widget_data.map.setCenter(widget_data.marker.getPosition());
+		    }
+		    $this.data(WIDGET_NS, widget_data);
+		}
+
+		/**
+		 * Create a (single) point marker on the map
+		 * @param the 'point' tool: jQuery selector or HTML object
+		 */
+		function startPoint(tool) {
+		    tool = $(tool);
+		    var widget_data = $this.data(WIDGET_NS);
+		    var active = getToolActive(tool);
+		    resetTools();
+
+		    // Set the cursor for dropping a marker.
+		    widget_data.map.setOptions({draggableCursor:"crosshair"});
+
+		    if( !active ) {
+			setToolActive(tool, true);
+
+			// Get coords from the the input field.
+			var coords = getCoordsFromInputField();
+
+			// Check to see if it represents a point.
+			if( coords.length == 1 ) {
+			    // Show an editable marker on the map.
+			    createMarker(coords[0], true);
+			}
+
+			// Add a listener with an anonymous function for dropping a new marker on the map.
+			widget_data.marker_listeners.push(google.maps.event.addListener(widget_data.map,
+											"click",
+											function(e) {
+											    if( e.latLng) {
+		    										// Set the input field and reset the control.
+												setInputFieldValue(e.latLng.lng().toFixed(6) + "," + e.latLng.lat().toFixed(6));
+												resetTools();
+											    }
+   											}));
+   			// Center the map on this marker.
+			centreMap();
+		    }
+		}
+
+		/**
+		 * Create a new (or edit an existing) marker
+		 * @param coordinates for the marker
+		 * @param whether or not the marker is editable
+		 */
+		function createMarker(latlng, editable) {
+		    var widget_data = $this.data(WIDGET_NS);
+		    // Remove any previous markers or regions.
+		    clearMap();
+		    var marker = null;
+		    if( editable ) {
+			// Draw a new editable marker.
+			marker = new google.maps.Marker({
+			    position: latlng,
+			    map: widget_data.map,
+			    icon : widget_data.pushpin_edit,
+			    shadow: widget_data.shadow,
+			    draggable : true
+			});
+
+			// Add a listener with an anonymous function for updating after dragging an editable marker.
+			google.maps.event.addListener(marker,
+						      "dragend",
+						      function() {
+							  // Set the input field and reset the control.
+							  var latlng = marker.getPosition();
+							  setInputFieldValue(latlng.lng().toFixed(6) + "," + latlng.lat().toFixed(6));
+						      });
+		    }
+		    else {
+			// Draw a new marker.
+    			marker = new google.maps.Marker({
+			    position: latlng,
+			    map: widget_data.map,
+			    icon : widget_data.pushpin,
+			    shadow: widget_data.shadow
+			});
+		    }
+		    widget_data.marker = marker;
+		    $this.data(WIDGET_NS, widget_data);
+		    // Set the input field value to the marker location.
+		    setInputFieldValue(latlng.lng().toFixed(6) + "," + latlng.lat().toFixed(6));
+		}
+
+		/**
+		 * Remove the marker from the map (if one exists)
+		 */
+		function removeMarker() {
+		    var widget_data = $this.data(WIDGET_NS);
+		    // Check for a marker.
+		    if (widget_data.marker != null ) {
+			// Remove the marker overlay.
+			widget_data.marker.setMap(null);
+			widget_data.marker = null;
+		    }
+		    $this.data(WIDGET_NS, widget_data);
+		}
+
+		/**
+		 * Create a polygon region on the map
+		 * @param the 'region' tool: jQuery selector or HTML object
+		 */
+		function startRegion(tool) {
+		    tool = $(tool);
+		    var widget_data = $this.data(WIDGET_NS);
+		    var active = getToolActive(tool);
+		    resetTools();
+		    if( !active ) {
+			setToolActive(tool, true);
+
+			// Get coords from the input field value.
+			var coords = getCoordsFromInputField();
+
+			// Check to see if it represents a region.
+			if( coords.length > 2 ) {
+			    createPolygon(coords, true);
+			    widget_data.marker_listeners.push(google.maps.event.addListener(widget_data.map,
+											    "click",
+											    function(e) {
+												if( e.latLng) {
+												    clearMap();
+												    beginDrawing(e.latLng);
+												}
+											    }));
+			    centreMap();
+			}
+			else {
+			    beginDrawing('');
+			}
+		    }
+		    $this.data(WIDGET_NS, widget_data);
+		}
+
+		/**
+		 * Begin drawing (a polygon) by clicking points in sequence
+		 * @param the coordinate data for the starting point
+		 */
+		function beginDrawing(latLng) {
+		    var widget_data = $this.data(WIDGET_NS);
+		    // Remove any existing temporary polygon.
+		    $.each(widget_data.marker_listeners, function(idx, listener) {
+			google.maps.event.removeListener(listener);
+		    });
+
+		    widget_data.drawing_manager = new google.maps.drawing.DrawingManager({
+			drawingMode: google.maps.drawing.OverlayType.POLYGON,
+			drawingControl: false,
+			polygonOptions: {
+			    fillColor: OPEN_POLY_COLOUR,
+			    paths : [latLng],
+			    fillOpacity: 0.2,
+			    strokeColor: OPEN_POLY_COLOUR,
+			    strokeWeight: 2,
+			    clickable: true,
+			    zIndex: 1,
+			    editable: true
+			}
+		    });
+		    widget_data.drawing_manager.setMap(widget_data.map);
+		    $this.data(WIDGET_NS, widget_data);
+
+		    google.maps.event.addListener(widget_data.drawing_manager,
+						  'polygoncomplete',
+						  function(polygon) {
+						      var widget_data = $this.data(WIDGET_NS);
+						      savePolygonString(polygon.getPath());
+						      polygon.setMap(null);
+						      widget_data.drawing_manager.setMap(null);
+						      resetTools();
+						  });
+
+		}
+
+		/**
+		 * Create a polygon on the map, removing any existing
+		 * markers / regions along the way
+		 * @param coordinate data
+		 * @param (boolean) whether or not the polygon should be
+		 * editable
+		 * (editable polygons have mouse, click event listeners aded,
+		 * non-editable polygons do not)
+		 */
+		function createPolygon(coords, editable) {
+		    var widget_data = $this.data(WIDGET_NS);
+		    // Remove any previous markers or regions.
+		    clearMap();
+		    var polygon = null;
+		    if(editable) {
+			polygon = new google.maps.Polygon({
 			    paths: coords,
-			    map : mctMaps[controlDivId],
-			    strokeColor: MCT_POLY_COLOUR,
+			    map : widget_data.map,
+			    strokeColor: OPEN_POLY_COLOUR,
 			    strokeOpacity: 0.7,
 			    strokeWeight: 2,
-			    fillColor: MCT_POLY_COLOUR,
+			    fillColor: OPEN_POLY_COLOUR,
+			    fillOpacity: 0.2,
+			    editable : true,
+			    clickable : true
+			});
+
+			google.maps.event.addListener(polygon, 'click', function(e) {
+			    savePolygonString(polygon.getPath());
+			});
+
+			google.maps.event.addListener(polygon, 'mouseup', function(e) {
+			    savePolygonString(polygon.getPath());
+			});
+
+			google.maps.event.addListener(polygon, 'mouseout', function(e) {
+			    savePolygonString(polygon.getPath());
+			});
+		    }
+		    else {
+			// Create a non-editable, non-clickable region.
+			polygon = new google.maps.Polygon({
+			    paths: coords,
+			    map : widget_data.map,
+			    strokeColor: POLY_COLOUR,
+			    strokeOpacity: 0.7,
+			    strokeWeight: 2,
+			    fillColor: POLY_COLOUR,
 			    fillOpacity: 0.2,
 			    editable : false
-			  });
-	}
-	mctPolygons[controlDivId] = polygon;
-}
+			});
+		    }
+		    widget_data.polygon = polygon;
+		    $this.data(WIDGET_NS, widget_data);
+		}
 
-function mctSavePolygonString(path, controlDivId)
-{	
-	// Get the coordinates of the polygon vertices.
+		/**
+		 * Derive coordinate data from a polygon, saving
+		 * the data into our input field
+		 * @param an array of coordinates corresponding to
+		 * each vertex of the polygon
+		 */
+		function savePolygonString(path) {
+		    // Get the coordinates of the polygon vertices.
 
-	var coords = path.getArray();
-	//console.log(coords);
-	var polyString = "";
-	for( var i=0; i < coords.length; i++ )
-	{
- 		var pLat = coords[i].lat();
- 		var pLng = coords[i].lng();
- 		if(i == 0)
- 		{
-			polyString =  pLng.toFixed(6) + "," + pLat.toFixed(6);
- 		}
-		else
-		{
-			polyString = polyString + " " + pLng.toFixed(6) + "," + pLat.toFixed(6);
-		}           	
-	} 
-	polyString = polyString + " " + coords[0].lng().toFixed(6) + "," + coords[0].lat().toFixed(6);
-	// Set the input field value.
-	//console.log("polyString: " + polyString);
-	mctSetInputFieldValue(controlDivId, polyString);
-}
+		    var coords = path.getArray();
+		    var polyString = "";
+		    for( var i=0; i < coords.length; i++ ) {
+ 			var pLat = coords[i].lat();
+ 			var pLng = coords[i].lng();
+ 			if(i == 0) {
+			    polyString =  pLng.toFixed(6) + "," + pLat.toFixed(6);
+ 			}
+			else {
+			    polyString = polyString + " " + pLng.toFixed(6) + "," + pLat.toFixed(6);
+			}
+		    }
+		    polyString = polyString + " " + coords[0].lng().toFixed(6) + "," + coords[0].lat().toFixed(6);
+		    // Set the input field value.
+		    setInputFieldValue(polyString);
+		}
 
-function mctRemovePolygon(controlDivId)
-{
-    // Check that we have a reference to the polygon.
-	if( (polygon = mctPolygons[controlDivId]) != null )
-	{
-		// Disable editing (even though it is probably already disabled) to enable removal to work.
-		polygon.setMap(null);
-		// Remove the reference.
-		mctPolygons[controlDivId] = null;
-	}
-}
- 
+		/**
+		 * Remove the polygon from the map
+		 */
+		function removePolygon() {
+		    var widget_data = $this.data(WIDGET_NS);
+		    // Check that we have a reference to the polygon.
+		    if(widget_data.polygon != null ) {
+			// Disable editing (even though it is probably already disabled) to enable removal to work.
+			widget_data.polygon.setMap(null);
+			// Remove the reference.
+			widget_data.polygon = null;
+		    }
+		    $this.data(WIDGET_NS, widget_data);
+		}
 
-// ===========================================================================
-// SEARCH
-// ===========================================================================
- function mctGetAddressSearchDialogHTML(controlDivId)
-{
-	var mapDialogId = MCT_ADDRESS_SEARCH_DIALOG_ID_PREFIX + controlDivId;
-	html = '<div class="mct_dialog_container" id="' + mapDialogId + '">';
-	html += '<img class="mct_dialog_back" src="'+ MCT_DEFAULT_PROTOCOL + 'maps.google.com/mapfiles/iws_s.png" alt="" />';
-	html += '<div class="mct_dialog_outer">';
-	html += '<div class="mct_dialog_inner">';
-	html += '<div class="mct_dialog_content" style="overflow: hidden;">';
-	
-	var searchResultsDivId = MCT_ADDRESS_SEARCH_RESULTS_ID_PREFIX + controlDivId;
-	var searchResultsTextfieldId = MCT_ADDRESS_SEARCH_TEXTFIELD_ID_PREFIX + controlDivId;
-	html += '<div class="mct_dialog_text"><i>Search for a region or place to mark on the map</i></div>';
-	
-	html += '<input type="radio" name="geocoderSelector" checked="checked" value="geocoderSelector.gazetteer" /><label for="geocoderSelector.gazetteer" style="cursor:hand">Australian Gazetteer</label>';
-	html += '<input type="radio" name="geocoderSelector" value="geocoderSelector.google" /><label for="geocoderSelector.google" style="cursor:hand">Google</label>';
-	
-	
-	
-	html += '<div class="mct_dialog_text"><input type="text" id="' + searchResultsTextfieldId + '" style="margin: 0px 0px 0px 0px; width: 210px;" onkeypress="return mctCheckSearchEvent(event, \'' + controlDivId + '\');" />';
-	html += '&nbsp;<button type="button" class="mct_button" onclick="mctDoSearch(\'' + controlDivId + '\')">search</button></div>';
-	html += '<div id="' + searchResultsDivId + '" style="padding: 0px 0px 0px 8px; margin: 0px 0px 0px 0px; height: 138px; overflow:auto;">';
-	html += '</div>';
-	
-	html += '</div>';
-	html += '<div class="mct_buttonbar" style="text-align: left;">';
-	html += '<button type="button" class="mct_button" onclick="mctResetTools(\'' + controlDivId + '\')">cancel</button>';
-	html += '</div>';
-	html += '</div>';
-	html += '</div>';
-	html += '</div>';
 
-	return html;
-}
- 
-function mctCheckSearchEvent(event, controlDivId)
-{
-	result = true;
-	if( event.keyCode == 13 )
-	{
-		result = false;
-		mctDoSearch(controlDivId);
-	}
-	return result;
-}
+		/**
+		 * Create and insert the search modal
+		 * @param the jQuery object to which the modal will be appended
+		 */
+		function getAddressSearchDialogHTML(welem) {
+		    var mapDialogId = ADDRESS_SEARCH_DIALOG_ID_PREFIX + $this.attr('id');
+		    var html = '<div class="alw_dialog_container" id="' + mapDialogId + '">';
+		    html += '<img class="alw_dialog_back" src="'+ settings.protocol + 'maps.google.com/mapfiles/iws_s.png" alt="" />';
+		    html += '<div class="alw_dialog_outer">';
+		    html += '<div class="alw_dialog_inner">';
+		    html += '<div class="alw_dialog_content" style="overflow: hidden;">';
 
-function mctShowAddressSearchDialog(tool, controlDivId)
-{
-	var active = mctGetToolActive(tool);
-	mctResetTools(controlDivId);
+		    var searchResultsDivId = ADDRESS_SEARCH_RESULTS_ID_PREFIX + $this.attr('id');
+		    var searchResultsTextfieldId = ADDRESS_SEARCH_TEXTFIELD_ID_PREFIX + $this.attr('id');
+		    html += '<div class="alw_dialog_text"><i>Search for a region or place to mark on the map</i></div>';
 
-	if( !active )
-	{
-		mctSetToolActive(tool, true);
-		var id = MCT_ADDRESS_SEARCH_DIALOG_ID_PREFIX + controlDivId;
-		var dialog = getObject(id);
-		dialog.style.display = "block";	
-		// Set the focus and select the text.
-		var searchResultsTextfieldId = MCT_ADDRESS_SEARCH_TEXTFIELD_ID_PREFIX + controlDivId;
-		var searchResultsTextfield = getObject(searchResultsTextfieldId);
-		searchResultsTextfield.focus();
-		searchResultsTextfield.select();
-	}
-}
+		    html += '<label style="cursor:hand"><input type="radio" id="geocoderSelector.gazetteer" name="geocoderSelector" checked="checked" value="geocoderSelector.gazetteer" /> ' +
+			'Australian Gazetteer</label>';
+		    html += '<label style="cursor:hand"><input type="radio" id="geocoderSelector.google" name="geocoderSelector" value="geocoderSelector.google" /> ' +
+			'Google</label>';
 
-function mctDoSearch(controlDivId)
-{
-	var searchResultsTextfieldId = MCT_ADDRESS_SEARCH_TEXTFIELD_ID_PREFIX + controlDivId;
-	var searchResultsTextfield = getObject(searchResultsTextfieldId);
-	var searchText = $.trim(searchResultsTextfield.value);
 
-	var searchResultsDivId = MCT_ADDRESS_SEARCH_RESULTS_ID_PREFIX + controlDivId;
-	var searchResultsDiv = getObject(searchResultsDivId);	
-	if( searchText != '' )
-	{		
-		searchResultsDiv.innerHTML = 'Searching...';
-  		mctCurrentMapId = controlDivId;
-  		if($("input[@name=geocoderSelector]:checked").val()  == 'geocoderSelector.gazetteer')
-  		{
-  			mctGazetteerGeocoder(searchText);
-  		}
-  		else{
-  			mctGeocoder.geocode({ 'address': searchText}, function(results, status) {
-  	    	mctAddAddressToMap(results, status);});
-  		}
-	}
-}
 
-function mctAddAddressToMap(results, status)
-{
-    var markerBullet = '';
-	var resultText = "";
-	var coordString = "";
-	//console.log(results);
-	if(status != google.maps.GeocoderStatus.OK) 
-	{
-		resultText = "No locations found";
-	} 
-	else 
-	{	
-		 // Loop through the results		
-		for( var i=0; i < results.length; i++ ) 
-		{
-			var accuracy = results[i].geometry.location_type;
-			//console.log(accuracy);
-			if(results[i].geometry.bounds)
-			{
+		    html += '<div class="alw_dialog_text"><input type="text" id="' + searchResultsTextfieldId + '" style="margin: 0px 0px 0px 0px; width: 210px;" />';
+		    html += '&nbsp;<button type="button" class="alw_button search">search</button></div>';
+		    html += '<div id="' + searchResultsDivId + '" style="padding: 0px 0px 0px 8px; margin: 0px 0px 0px 0px; height: 138px; overflow:auto;">';
+		    html += '</div>';
+
+		    html += '</div>';
+		    html += '<div class="alw_buttonbar" style="text-align: left;">';
+		    html += '<button type="button" class="alw_button cancel">cancel</button>';
+		    html += '</div>';
+		    html += '</div>';
+		    html += '</div>';
+		    html += '</div>';
+
+		    welem.append(html);
+
+		    $this.on("click",
+			     "#" + mapDialogId + " div.alw_dialog_text button.alw_button.search",
+			     null,
+			     function() { doSearch(); });
+		    $this.on("click",
+			     "#" + mapDialogId + " div.alw_buttonbar button.alw_button.cancel",
+			     null,
+			     function() { resetTools(); });
+		    $this.on("click",
+			     "#" + ADDRESS_SEARCH_RESULTS_ID_PREFIX + $this.attr('id') + " div.alw_search_result",
+			     null,
+			     function() { setMapFromSearchResult($(this).data('coord')); });
+
+		    $this.on('keypress',
+			     '#' + searchResultsTextfieldId,
+			     null,
+			     function(event) { return checkSearchEvent(event) });
+		}
+
+		/**
+		 * Capture 'enter' keyboard events from the search modal's text
+		 * box, using such events to perform the search
+		 * @param any keypress event on the search modal input text field
+		 */
+		function checkSearchEvent(event) {
+		    var result = true;
+		    if( event.which === 13 ) {
+			result = false;
+			doSearch();
+		    }
+		    return result;
+		}
+
+		/**
+		 * Activate (and display) the search modal
+		 * @param the toolbar item to activate
+		 */
+		function showAddressSearchDialog(tool) {
+		    tool = $(tool);
+		    var widget_data = $this.data(WIDGET_NS);
+		    var active = getToolActive(tool);
+		    resetTools();
+
+		    if( !active ) {
+			setToolActive(tool, true);
+			var id = ADDRESS_SEARCH_DIALOG_ID_PREFIX + $this.attr('id');
+			var dialog = getObject(id);
+			dialog.show();
+			// Set the focus and select the text.
+			var searchResultsTextfieldId = ADDRESS_SEARCH_TEXTFIELD_ID_PREFIX + $this.attr('id');
+			var searchResultsTextfield = getObject(searchResultsTextfieldId);
+			searchResultsTextfield.focus();
+			searchResultsTextfield.select();
+		    }
+		}
+
+		/**
+		 * Perform a search using either the Gazetteer, or Google
+		 */
+		function doSearch() {
+		    var widget_data = $this.data(WIDGET_NS);
+		    var searchResultsTextfieldId = ADDRESS_SEARCH_TEXTFIELD_ID_PREFIX + $this.attr('id');
+		    var searchResultsTextfield = getObject(searchResultsTextfieldId);
+		    var searchText = $.trim(searchResultsTextfield.val());
+
+		    var searchResultsDivId = ADDRESS_SEARCH_RESULTS_ID_PREFIX + $this.attr('id');
+		    var searchResultsDiv = getObject(searchResultsDivId);
+		    if( searchText != '' ) {
+			searchResultsDiv.html('Searching...');
+  			if($("input[name=geocoderSelector]:checked").val()  == 'geocoderSelector.gazetteer') {
+  			    gazetteerGeocoder(searchText);
+  			}
+  			else{
+			    widget_data.geocoder.geocode({ 'address': searchText},
+							 function(results, status) {
+  							     addAddressToMap(results, status);});
+  			}
+		    }
+		    else {
+			searchResultsDiv.html('Nothing to search on! Try entering some terms in the text box above');
+		    }
+		}
+
+		/**
+		 * Inject google search results into the search modal's results list
+		 * @param the Google geocoded search results
+		 * @param the Google geocoded search status
+		 */
+		function addAddressToMap(results, status) {
+		    var markerBullet = '';
+		    var resultText = "";
+		    var coordString = "";
+		    if(status != google.maps.GeocoderStatus.OK) {
+			resultText = "No locations found";
+		    }
+		    else {
+			// Loop through the results
+			for( var i=0; i < results.length; i++ ) {
+			    var accuracy = results[i].geometry.location_type;
+			    if(results[i].geometry.bounds) {
 				var nE = results[i].geometry.bounds.getNorthEast();
 				var sW = results[i].geometry.bounds.getSouthWest();
 				coordString = nE.lng().toFixed(6) +","+ nE.lat().toFixed(6)+" ";
@@ -958,176 +1093,192 @@ function mctAddAddressToMap(results, status)
 				coordString += sW.lng().toFixed(6) +","+ sW.lat().toFixed(6)+" ";
 				coordString += nE.lng().toFixed(6) +","+ sW.lat().toFixed(6)+" ";
 				coordString += nE.lng().toFixed(6) +","+ nE.lat().toFixed(6);
-				markerBullet = '&#9633;';			
-			}			
-			else
-			{	
+				markerBullet = '&#9633;';
+			    }
+			    else {
 				coordString = results[i].geometry.location.lng().toFixed(6) +","+ results[i].geometry.location.lat().toFixed(6) ;
-				markerBullet = '&#8226;';	
+				markerBullet = '&#8226;';
+			    }
+			    resultText  += '<div class="alw_search_result" data-coord="' + coordString + '" title="Set the map with this search result">' +
+				markerBullet + '&nbsp;' + results[i].formatted_address+'</div>';
 			}
-			//console.log(coordString);
-			resultText  += "<div class='mct_search_result' onclick='mctSetMapFromSearchResult(\""+coordString+"\",\""+mctCurrentMapId+"\");' title=\"Set the map with this search result\">" + markerBullet + "&nbsp;"+ results[i].formatted_address+"</div>";
+		    }
+		    var searchResultsDivId = ADDRESS_SEARCH_RESULTS_ID_PREFIX + $this.attr('id');
+		    var searchResultsDiv = getObject(searchResultsDivId);
+		    searchResultsDiv.html(resultText);
 		}
-	}
-  	var searchResultsDivId = MCT_ADDRESS_SEARCH_RESULTS_ID_PREFIX + mctCurrentMapId;
-	var searchResultsDiv = getObject(searchResultsDivId);	
-	searchResultsDiv.innerHTML = resultText; 
-}
 
-function mctGazetteerGeocoder(searchText)
-{
-	var mctServicePath = (typeof(window.mctServicePath) == 'undefined' ? MCT_DEFAULT_SERVICE_POINT : window.mctServicePath);
-	var requestUrl = mctServicePath + '?searchText=*' + encodeURIComponent(searchText) + '*&limit=14&callback=?';	
-	$.getJSON(requestUrl, function(data) {
-		mctDisplayGazetteerData(data);
-	});
-}
+		/**
+		 * Perform a search against the Gazetteer
+		 * @param the search terms to use
+		 */
+		function gazetteerGeocoder(searchText) {
+		    var requestUrl = settings.endpoint + '?searchText=*' + encodeURIComponent(searchText) + '*&limit=14&callback=?';
+		    $.getJSON(requestUrl, function(data) {
+			displayGazetteerData(data);
+		    });
+		}
 
 
-function mctAddFeatureTypes(data)
-{
-	for( var i=0; i < data.items.length; i++ ) 
-	{
-		var title = data.items[i].title;
-		var	id = data.items[i].id;
-		mctfeatureTypes[id] = title;
-	}
-}
 
-
-function mctDisplayGazetteerData(data)
-{
-	var markerBullet = '&#8226;';
-	var resultText = "";
-	var coordString = "";
-	//console.log(status);
-	if(data.items_count == '0') 
-	{
-		resultText = "No locations found";
-	} 
-	else 
-	{	
-		 // Loop through the results		
-		for( var i=0; i < data.items.length; i++ ) 
-		{
-			pointStr = data.items[i].coords;
-			coordString = data.items[i].lng +","+ data.items[i].lat ;
-			var	typetext = '';
-			for( var j=0; j < data.items[i].types.length; j++ ) 
-			{
+		/**
+		 * Inject Gazetteer search results into the search modal's results list
+		 * @param search results data from the Gazetteer endpoint
+		 */
+		function displayGazetteerData(data) {
+		    var widget_data = $this.data(WIDGET_NS);
+		    var markerBullet = '&#8226;';
+		    var resultText = "";
+		    var coordString = "";
+		    if(data.items_count == '0') {
+			resultText = "No locations found";
+		    }
+		    else {
+			// Loop through the results
+			for( var i=0; i < data.items.length; i++ ) {
+			    var pointStr = data.items[i].coords;
+			    coordString = data.items[i].lng +","+ data.items[i].lat ;
+			    var	typetext = '';
+			    for( var j=0; j < data.items[i].types.length; j++ ) {
 				if(j != 0)
-					typetext += ', '
-				if(mctfeatureTypes[data.items[i].types[j]]){
-					typetext += mctfeatureTypes[data.items[i].types[j]];
+				    typetext += ', '
+				if(widget_data.feature_types[data.items[i].types[j]]){
+				    typetext += widget_data.feature_types[data.items[i].types[j]];
 				}
 				else{
-					typetext += data.items[i].types[j];
+				    typetext += data.items[i].types[j];
 				}
-
+			    }
+			    resultText  += '<div class="alw_search_result" data-coord="' + coordString + '" title="Set the map with this search result">' + markerBullet + '&nbsp;' + data.items[i].title + ' (' + typetext + ')</div>';
 			}
-			//console.log(coordString);
-			resultText  += "<div class='mct_search_result' onclick='mctSetMapFromSearchResult(\""+coordString+"\",\""+mctCurrentMapId+"\");' title=\"Set the map with this search result\">" + markerBullet + "&nbsp;"+ data.items[i].title + " (" + typetext + ")</div>";
+		    }
+		    var searchResultsDivId = ADDRESS_SEARCH_RESULTS_ID_PREFIX + $this.attr('id');
+		    var searchResultsDiv = getObject(searchResultsDivId);
+		    searchResultsDiv.html(resultText);
 		}
+
+
+		/**
+		 * Set up the map using provided data:
+		 *  - set the input data to the supplied coordString
+		 *  - reset map tools, redraw the map
+		 *  - centre the map on the new coordinates
+		 * @param a set of coordinates to display on the map
+		 */
+		function setMapFromSearchResult(coordString) {
+		    setInputFieldValue(coordString);
+		    resetTools();
+		    centreMap();
+		}
+
+
+		/**
+		 * Create and insert the coordinate input modal
+		 * @param the jQuery object to which the modal will be appended
+		 */
+		function getLonLatDialogHTML(welem) {
+		    var mapDialogId = LONLAT_DIALOG_ID_PREFIX + $this.attr('id');
+		    var html = '<div class="alw_dialog_container" id="' + mapDialogId + '">';
+		    html += '<img class="alw_dialog_back" src="' + settings.protocol + 'maps.google.com/mapfiles/iws_s.png" alt="" />';
+		    html += '<div class="alw_dialog_outer">';
+		    html += '<div class="alw_dialog_inner">';
+		    html += '<div class="alw_dialog_content">';
+
+		    var lonlatTextareaId = LONLAT_TEXTAREA_ID_PREFIX + $this.attr('id');
+		    html += '<div class="alw_dialog_text"><i>Enter space delimited longitude,latitude pairs</i></div>';
+		    html += '<textarea id="' + lonlatTextareaId + '" style="display: block; margin: auto; width: 278px; height: 174px;"></textarea>';
+
+		    html += '</div>';
+		    html += '<div class="alw_buttonbar" style="text-align: left;">';
+		    html += '<button type="button" class="alw_button cancel">cancel</button>';
+		    html += '&nbsp;<button type="button" class="alw_button set" title="Set the map to show this point or region">set</button>';
+		    html += '</div>';
+		    html += '</div>';
+		    html += '</div>';
+		    html += '</div>';
+
+		    $this.on("click",
+			     "#" + mapDialogId + " button.alw_button.cancel",
+			     null,
+			     function() { resetTools();});
+		    $this.on("click",
+			     "#" + mapDialogId + " button.alw_button.set",
+			     null,
+			     function() { setMapFromText();});
+
+		    welem.append(html);
+		}
+
+		/**
+		 * Display the coordinate input dialog
+		 * @param the toolbar item to activate
+		 */
+		function showLonLatDialog(tool) {
+		    tool = $(tool);
+		    var active = getToolActive(tool);
+		    resetTools();
+
+		    if( !active ) {
+			setToolActive(tool, true);
+			var lonlatTextarea = getObject(LONLAT_TEXTAREA_ID_PREFIX + $this.attr('id'));
+			lonlatTextarea.value = getInputFieldValue();
+
+			var dialog = getObject(LONLAT_DIALOG_ID_PREFIX + $this.attr('id'));
+			dialog.show();
+			// Set the focus.
+			var lonlatTextarea = getObject(LONLAT_TEXTAREA_ID_PREFIX + $this.attr('id'));
+			lonlatTextarea.focus();
+		    }
+		}
+
+		/**
+		 * Redraw the map, using coordinate data set from the data modal
+		 */
+		function setMapFromText() {
+		    var lonlatTextareaId = LONLAT_TEXTAREA_ID_PREFIX + $this.attr('id');
+		    var lonlatTextarea = $(getObject(lonlatTextareaId)).val();
+		    var lonlatText = tidyLonLatText(lonlatTextarea);
+
+		    if (validateLonLatText(lonlatText)) {
+			setInputFieldValue(lonlatText);
+			resetTools();
+			setMapFromInputField(true);
+		    }
+		    else {
+			var errors = "THERE ARE PROBLEMS WITH THE COORDINATE TEXT:<br/>" + getErrorMessage() + "<br/>Cancel or correct the error and set.";
+			showError(errors, $msgBox);
+		    }
+		}
+
+		/**
+		 * Legacy helper to get a jQuery object from an html ID
+		 */
+		function getObject(ID) {
+		    return $('#'+ID).first();
+		}
+
+		/**
+		 * Finally, we can call the constructor-like function
+		 */
+		(function(){
+		    makeMapWidget();
+		}) ()
+	    });
+
+	},
+    };
+
+    $.fn.ands_location_widget = function(method) {
+	if (methods[method]) {
+	    return methods[method].apply(this,
+					 Array.prototype.slice.call(arguments,
+								    1));
 	}
-  	var searchResultsDivId = MCT_ADDRESS_SEARCH_RESULTS_ID_PREFIX + mctCurrentMapId;
-	var searchResultsDiv = getObject(searchResultsDivId);	
-	searchResultsDiv.innerHTML = resultText;	
-}
-
-
-function mctSetMapFromSearchResult(coordString, controlDivId)
-{
-	// Update the input field coordinates.
-	//console.log("mctSetMapFromSearchResult: " + coordString + "  controlDivId: " + controlDivId);
-	mctSetInputFieldValue(controlDivId, coordString); 
-	// Reset the tools and redraw the map.
-	mctResetTools(controlDivId);
-	// Center the map on this region.
-	mctCentreMap(controlDivId);	
-}
-
-
-// ===========================================================================
-// COORDINATES
-// ===========================================================================
-function mctGetLonLatDialogHTML(controlDivId)
-{
-	var mapDialogId = MCT_LONLAT_DIALOG_ID_PREFIX + controlDivId;
-	html = '<div class="mct_dialog_container" id="' + mapDialogId + '">';
-	html += '<img class="mct_dialog_back" src="' + MCT_DEFAULT_PROTOCOL + 'maps.google.com/mapfiles/iws_s.png" alt="" />';
-	html += '<div class="mct_dialog_outer">';
-	html += '<div class="mct_dialog_inner">';
-	html += '<div class="mct_dialog_content">';
-
-	var lonlatTextareaId = MCT_LONLAT_TEXTAREA_ID_PREFIX + controlDivId;
-	html += '<div class="mct_dialog_text"><i>Enter space delimited longitude,latitude pairs</i></div>';
-	html += '<textarea id="' + lonlatTextareaId + '" style="display: block; margin: auto; width: 278px; height: 174px;"></textarea>';
-
-	html += '</div>';
-	html += '<div class="mct_buttonbar" style="text-align: left;">';
-	html += '<button type="button" class="mct_button" onclick="mctResetTools(\'' + controlDivId + '\')">cancel</button>';
-	html += '&nbsp;<button type="button" class="mct_button" onclick="mctSetMapFromText(\'' + controlDivId + '\')" title="Set the map to show this point or region">set</button>';
-	html += '</div>';
-	html += '</div>';
-	html += '</div>';
-	html += '</div>';
-
-	return html;	
-}
-
-function mctShowLonLatDialog(tool, controlDivId)
-{	
-	var active = mctGetToolActive(tool);
-	mctResetTools(controlDivId);	
-
-	if( !active )
-	{
-		mctSetToolActive(tool, true);
-		var lonlatTextareaId = MCT_LONLAT_TEXTAREA_ID_PREFIX + controlDivId;
-	    var lonlatTextarea = getObject(lonlatTextareaId);
-		lonlatTextarea.value = mctGetInputFieldValue(controlDivId);
-		
-		var id = MCT_LONLAT_DIALOG_ID_PREFIX + controlDivId;
-		var dialog = getObject(id);
-		dialog.style.display = "block";	
-		// Set the focus.
-		var lonlatTextareaId = MCT_LONLAT_TEXTAREA_ID_PREFIX + controlDivId;
-		var lonlatTextarea = getObject(lonlatTextareaId);
-		lonlatTextarea.focus();
+	else if (typeof method === 'object' || ! method) {
+	    return methods.init.apply(this, arguments);
 	}
-}
-
-function mctSetMapFromText(controlDivId)
-{
-	var lonlatTextareaId = MCT_LONLAT_TEXTAREA_ID_PREFIX + controlDivId;
-	var lonlatTextarea = $(getObject(lonlatTextareaId)).val();
-	var lonlatText = mctTidyLonLatText(lonlatTextarea);
-	
-	if( mctValidateLonLatText(lonlatText) )
-	{
-		mctSetInputFieldValue(controlDivId, lonlatText);	
-		mctResetTools(controlDivId);	
-		mctSetMapFromInputField(controlDivId, true);		
+	else {
+	    $.error('Method ' +  method + ' does not exist for the ' + WIDGET_NAME);
 	}
-	else
-	{
-		var errors = "THERE ARE PROBLEMS WITH THE COORDINATE TEXT\n\n" + mctGetErrorMessage() + "\n\nCancel or correct the error and set.";
-		alert(errors);
-	}
-}
-
-function getObject(ID)
-{
-	return $('#'+ID)[0];	
-}
-
-(function(){
-	// Some sanity checking...
-	if (typeof(window.mapInputFieldId) == 'undefined')
-	{
-		alert("ERROR: Loading Map Widget failed. You must specify a mapInputFieldId before invoking the widget. Refer to documentation/examples for further assistance.");
-	}
-	
-	mctMakeMapWidget(mapInputFieldId, (typeof(window.lonLat) == 'undefined' ? '' : window.lonLat));
-	
-}) ()
+    };
+})( jQuery );

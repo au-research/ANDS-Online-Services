@@ -1,4 +1,4 @@
-.mct_control
+.alw_control
 {
 	font-family: verdana, sans-serif;
 	border: 1px solid #000000;
@@ -7,7 +7,7 @@
 	overflow: hidden;
 }
 
-.mct_loaderror
+.alw_loaderror
 {
 	width: 300px;
 	font-size: 11px;
@@ -18,7 +18,7 @@
 	padding: 10px;
 }
 
-.mct_toolbar
+.alw_toolbar
 {
 	line-height: 18px;
 	height: 18px;
@@ -28,7 +28,7 @@
 	border-bottom: 1px solid #333333;
 }
 
-.mct_tool
+.alw_tool
 {
 	padding-left: 8px;
 	padding-right: 8px;
@@ -37,7 +37,7 @@
 	border-right: 1px solid #666666;
 }
 
-.mct_tool_active
+.alw_tool_active
 {
 	padding-left: 8px;
 	padding-right: 8px;
@@ -47,7 +47,7 @@
 	border-right: 1px solid #666666;
 }
 
-.mct_special_tool
+.alw_special_tool
 {
 	padding-left: 8px;
 	padding-right: 8px;
@@ -56,19 +56,19 @@
 	border-right: 1px solid #666666;
 }
 
-.mct_tool:hover, .mct_tool_active:hover
+.alw_tool:hover, .alw_tool_active:hover
 {
 	color: #f68213;
 	text-decoration: underline;
 }
 
-.mct_special_tool:hover
+.alw_special_tool:hover
 {
 	color: #f74313;
 	text-decoration: underline;
 }
 
-.mct_buttonbar
+.alw_buttonbar
 {
 	background: #bbbbbb ;
 	height: 24px;
@@ -78,31 +78,31 @@
 	overflow: hidden;
 }
 
-.mct_button
-{		
-	font-family: verdana, sans-serif;	
+.alw_button
+{
+	font-family: verdana, sans-serif;
 	font-size: 11px;
 	width: 60px;
 }
 
-.mct_canvas
+.alw_canvas
 {
 	width: 440px;
 	height: 320px;
 	overflow: hidden;
 }
 
-.mct_dialog_container
+.alw_dialog_container
 {
 	width: 440px;
-	height: 320px;	
+	height: 320px;
 	position: absolute;
 	z-index: 100;
 	display: none;
 	font-size: 11px;
 }
 
-.mct_dialog_back
+.alw_dialog_back
 {
 	width: 440px;
 	height: 320px;
@@ -110,19 +110,19 @@
 	z-index: 110;
 }
 
-.mct_dialog_outer
+.alw_dialog_outer
 {
 	width: 440px;
 	height: 320px;
 	position: absolute;
 	z-index: 120;
-	
+
 }
 
-.mct_dialog_inner
+.alw_dialog_inner
 {
 	width: 411px;
-	overflow: wrap; 
+	overflow: wrap;
 	margin: auto;
 	margin-top: 40px;
 	color: #000000;
@@ -130,19 +130,19 @@
 	border: 1px solid #000000;
 }
 
-.mct_dialog_content
+.alw_dialog_content
 {
 	height: 208px;
 	white-space: normal;
 	overflow: auto;
 }
 
-.mct_dialog_text
+.alw_dialog_text
 {
 	padding: 4px 8px 4px 8px;
 }
 
-.mct_search_result
+.alw_search_result
 {
 	font-size: 11px;
 	cursor: pointer;
@@ -150,7 +150,7 @@
 	padding: 1px;
 }
 
-.mct_search_result:hover
+.alw_search_result:hover
 {
 	text-decoration: underline;
 }

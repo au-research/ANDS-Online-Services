@@ -4,62 +4,62 @@
     <head>
         <title>MAP WIDGET EXAMPLE</title>
 
-        <script type="text/javascript" src="<?=current_protocol();?>maps.google.com/maps/api/js?sensor=false&libraries=drawing"></script>
-	    <script src='<?=current_protocol();?>ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.js'></script>
-	    
+        <script type="text/javascript" src="<?=current_protocol();?>maps.google.com/maps/api/js?v=3&sensor=false&libraries=drawing"></script>
+	    <script src='<?=current_protocol();?>ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.js'></script>
+
 	    <link rel="stylesheet" type="text/css" href="<?=asset_url('css/location_capture_widget.css');?>" />
     </head>
 <body>
 
 <div style="width: 500px; margin:auto;">
-	
+
 	<h2>My Institution's Dataset Registration Form</h2>
 	<form id="myform">
-		
+
 		<p>
 		Dataset Identifier: <br/>
 		<input type="text" id="datasetId" size="80" />
-		
+
 		</p>
-		
+
 		<p>
 		Dataset Name: <br/>
 		<input type="text" id="datasetName" size="80" />
 		</p>
-		
+
 		<p>
 		Location: <i>(click and draw a point or region | search for a place name)</i><br/>
-		<script type="text/javascript">
-			mapInputFieldId = 'geoLocation';
-			//lonLat = '151.342636,-33.424598 150.502229,-33.424598 150.502229,-34.169249 151.342636,-34.169249 151.342636,-33.424598';
-			mctServicePath = '<?=current_protocol();?>services.ands.org.au/api/resolver/';
-		</script>
-		<script type="text/javascript" src="<?=asset_url('js/location_capture_widget.js');?>"></script>
-
-		</p>
-		
-		<p align="center">
-			<button id="btnSubmit">Submit this form...</button>
+		<div id="mapContainer"></div>
+		<!-- this div is used to test/develop multi-instantiation of this plugin -->
+		<!--<div id="secondMap"></div>-->
 		</p>
 	</form>
-	
+
 
 </div>
 
 <script type="text/javascript">
+$(document).ready(function() {
+  $("#mapContainer").ands_location_widget({latLon:"141.064453,-19.973349 138.251953,-24.527135 142.031250,-24.527135 146.250000,-22.512557 141.064453,-19.973349"});
+  //$("#secondMap").ands_location_widget();
+
+});
+
 // Demo script
 $('#btnSubmit').click(function(e){
-	
-	e.preventDefault();
-	var message = 	"Form data currently contains the following fields:" + "\n"
-				+	"==========" + "\n"
-				+	"datasetId: " + $('#datasetId').val() + "\n\n"
-				+	"datasetName: " + $('#datasetName').val() + "\n\n"
-				+	"geoLocation: " + $('#geoLocation').val() + "\n\n";
-	alert(message);
-	
+
+  e.preventDefault();
+  var message = 	"Form data currently contains the following fields:" + "\n"
+    +	"==========" + "\n"
+    +	"datasetId: " + $('#datasetId').val() + "\n\n"
+    +	"datasetName: " + $('#datasetName').val() + "\n\n"
+    +	"geoLocation: " + $('#geoLocation').val() + "\n\n";
+  alert(message);
+
 });
 </script>
-
+<script type="text/javascript"
+	src="<?=asset_url('js/location_capture_widget.js');?>">
+</script>
 </body>
 </html>
