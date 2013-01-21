@@ -56,6 +56,11 @@
 	border-right: 1px solid #666666;
 }
 
+.alw_special_tool.cleartool
+{
+	color: #fff;
+}
+
 .alw_tool:hover, .alw_tool_active:hover
 {
 	color: #f68213;

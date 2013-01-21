@@ -375,7 +375,7 @@
 		    // clear
 		    id = EMPTY_MAP_PREFIX + $this.attr('id');
 		    $this.on("click", "#" + id, null, function() { emptyMap(); });
-		    html += '<span class="alw_special_tool" id="'+ id + '" title="Clear the marker/region data">clear</span>';
+		    html += '<span class="alw_special_tool cleartool" id="'+ id + '" title="Clear the marker/region data">clear</span>';
 
 		    // reset
 		    if(widget_data.input_field_orig !== null && widget_data.input_field_orig !== "") {
@@ -728,6 +728,7 @@
 		    var widget_data = $this.data(WIDGET_NS);
 		    var active = getToolActive(tool);
 		    resetTools();
+
 		    if (!active) {
 			setToolActive(tool, true);
 			// Get coords from the input field value.
@@ -736,14 +737,6 @@
 			// Check to see if it represents a region.
 			if( coords.length > 2 ) {
 			    createPolygon(coords, true);
-			    widget_data.marker_listeners.push(google.maps.event.addListener(widget_data.map,
-											    "click",
-											    function(e) {
-												if( e.latLng) {
-												    clearMap();
-												    beginDrawing(e.latLng);
-												}
-											    }));
 			    centreMap();
 			}
 			else {
