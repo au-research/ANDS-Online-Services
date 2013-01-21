@@ -90,7 +90,7 @@ class Spotlight extends MX_Controller {
 				$new_file['items'][] = $this->getID($i['id'], $items);
 			}
 		}
-		var_dump($new_file);
+		//var_dump($new_file);
 		$this->write(json_encode($new_file));
 	}
 
