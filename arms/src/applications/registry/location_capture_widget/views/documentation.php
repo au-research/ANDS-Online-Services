@@ -82,13 +82,13 @@
 				   <dd><strong>default:</strong> n/a</dd>
 				   <dd><strong>example:</strong><br/> <code>$("#mapContainer").ands_location_widget('init', {latLon:'-27, 133'});</code></dd>
 				   <dt>endpoint</dt>
-				   <dd>The ANDS resolver service to use, without the protocol. Change this when you want to use your own resolver service.</dd>
+				   <dd>The ANDS resolver service to use. Change this when you want to use your own resolver service.</dd>
 				   <dd><strong>default:</strong> services.ands.org.au/api/resolver/</dd>
-				   <dd><strong>example:</strong><br/> <code>$("#mapContainer").ands_location_widget('init', {endpoint:'localhost.localdomain/myresolver/'});</code></dd>
-				   <dt>protocol</dt>
-				   <dd>The HTTP protocol to use: choose <code>http://</code> or <code>https://</code></dd>
+				   <dd><strong>example:</strong><br/> <code>$("#mapContainer").ands_location_widget('init', {endpoint:'http://localhost.localdomain/myresolver/'});</code></dd>
+				   <dt>gasset_protocol</dt>
+				   <dd>The HTTP protocol to use for google asset (image) requests : choose <code>http://</code> or <code>https://</code></dd>
 				   <dd><strong>default:</strong> (the current window's protocol)</dd>
-				   <dd><strong>example:</strong><br/> <code>$("#mapContainer").ands_location_widget('init', {protocol:'https://'});</code></dd>
+				   <dd><strong>example:</strong><br/> <code>$("#mapContainer").ands_location_widget('init', {gasset_protocol:'https://'});</code></dd>
 				 </dl>
 
 				 <h4>Questions and answers</h4>
