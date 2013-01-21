@@ -24,6 +24,19 @@ function acl_enforce($function_name, $message = '')
 	}
 }
 
+function ds_acl_enforce($ds_id, $message = ''){
+	$_ci =& get_instance();
+	$_ci->load->model('data_source/data_sources', 'ds');
+	$ds = $_ci->ds->getByID($ds_id);
+	if($ds){
+		if (!$_ci->user->hasAffiliation($ds->record_owner)){
+			throw new Exception (($message ?: "You do not have permission to access this data source: ".$ds->title." (".$ds->record_owner.")"));
+		}
+	}else{
+		throw new Exception ("Datasource does not exists!");
+	}
+}
+
 function default_exception_handler( $e ) {
 
     $_ci =& get_instance(); // CI super object to access load etc.

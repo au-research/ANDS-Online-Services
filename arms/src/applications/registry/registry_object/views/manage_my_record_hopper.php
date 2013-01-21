@@ -91,7 +91,7 @@
 <div class="widget-box ro_box" status="{{name}}">
 	<div class="widget-title stick">
 		<span class="icon">{{count}}</span>
-		<h5>{{display_name}}</h5>
+		<h5 class="ellipsis" style="width:60%">{{display_name}}</h5>
 		<div class="buttons"><a href="javascript:;" class="show_menu"><i class="icon-chevron-down no-border"></i></a></div>
 		<div class="hide ro_menu">
 			<ul class="nav nav-list" data_source_id="{{ds_id}}" status="{{name}}">

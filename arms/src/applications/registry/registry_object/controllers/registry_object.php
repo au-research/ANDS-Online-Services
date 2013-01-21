@@ -53,52 +53,7 @@ class Registry_object extends MX_Controller {
 	}
 
 	
-	public function manage_table($data_source_id = false){
-		$data['title'] = 'Manage My Records';
-
-		$this->load->model('data_source/data_sources', 'ds');
-		if($data_source_id){
-			$data_source = $this->ds->getByID($data_source_id);
-			if(!$data_source) show_error("Unable to retrieve data source id = ".$data_source_id, 404);
-			
-			$data_source->updateStats();//TODO: XXX
-
-			//$data['data_source'] = $data_source;
-			$data['data_source'] = array(
-				'title'=>$data_source->title,
-				'id'=>$data_source->id,
-				'count_total'=>$data_source->count_total,
-				'count_APPROVED'=>$data_source->count_APPROVED,
-				'count_SUBMITTED_FOR_ASSESSMENT'=>$data_source->count_SUBMITTED_FOR_ASSESSMENT,
-				'count_PUBLISHED'=>$data_source->count_PUBLISHED
-			);
-
-			//MMR
-			//$this->load->model('registry_object/registry_objects', 'ro');
-			//$ros = $this->ro->getByDataSourceID($data_source_id);
-
-		}else{
-			//showing all registry objects for all datasource
-			//TODO: check for privileges
-			$this->load->model('maintenance/maintenance_stat', 'mm');
-			$total = $this->mm->getTotalRegistryObjectsCount('db');
-			$data['data_source'] = array(
-				'title'=>'Viewing All Registry Object',
-				'id'=>'0',
-				'count_total'=>$total,
-				'count_APPROVED'=>0,
-				'count_SUBMITTED_FOR_ASSESSMENT'=>0,
-				'count_PUBLISHED'=>0
-			);
-			//show_error('No Data Source ID provided. use all data source view for relevant roles');
-			
-		}
-		$data['scripts'] = array('manage_my_record');
-		$data['js_lib'] = array('core', 'tinymce', 'datepicker', 'dataTables');
-
-
-		$this->load->view("manage_my_record", $data);
-	}
+	
 
 	/**
 	 * Manage My Records (MMR Screen)
@@ -110,6 +65,8 @@ class Registry_object extends MX_Controller {
 	 * @return [HTML] output
 	 */
 	public function manage($data_source_id=false){
+		acl_enforce('REGISTRY_USER');
+		ds_acl_enforce($data_source_id);
 		$data['title'] = 'Manage My Records';
 		$this->load->model('data_source/data_sources', 'ds');
 		if($data_source_id){
@@ -129,6 +86,8 @@ class Registry_object extends MX_Controller {
 	}
 
 	public function get_mmr_data($data_source_id){
+		acl_enforce('REGISTRY_USER');
+		ds_acl_enforce($data_source_id);
 		header('Cache-Control: no-cache, must-revalidate');
 		header('Content-type: application/json');
 		$this->load->model('data_source/data_sources', 'ds');
@@ -248,6 +207,8 @@ class Registry_object extends MX_Controller {
 
 
 	public function get_more_mmr_data(){
+		acl_enforce('REGISTRY_USER');
+		ds_acl_enforce($data_source_id);
 		header('Cache-Control: no-cache, must-revalidate');
 		header('Content-type: application/json');
 			
@@ -265,7 +226,7 @@ class Registry_object extends MX_Controller {
 		}
 	}
 
-	public function get_ros($filters, $getCount=false){
+	private function get_ros($filters, $getCount=false){
 		$results['items'] = array();
 		$this->load->model('registry_object/registry_objects', 'ro');
 		if(!$getCount){
@@ -362,6 +323,55 @@ class Registry_object extends MX_Controller {
 		$ro = $this->ro->getByID($registry_object_id);
 		$result = $ro->transformForQA(wrapRegistryObjects($xml));
 		echo $result;
+	}
+
+	public function manage_table($data_source_id = false){
+		acl_enforce('REGISTRY_USER');
+		ds_acl_enforce($data_source_id);
+		$data['title'] = 'Manage My Records';
+
+		$this->load->model('data_source/data_sources', 'ds');
+		if($data_source_id){
+			$data_source = $this->ds->getByID($data_source_id);
+			if(!$data_source) show_error("Unable to retrieve data source id = ".$data_source_id, 404);
+			
+			$data_source->updateStats();//TODO: XXX
+
+			//$data['data_source'] = $data_source;
+			$data['data_source'] = array(
+				'title'=>$data_source->title,
+				'id'=>$data_source->id,
+				'count_total'=>$data_source->count_total,
+				'count_APPROVED'=>$data_source->count_APPROVED,
+				'count_SUBMITTED_FOR_ASSESSMENT'=>$data_source->count_SUBMITTED_FOR_ASSESSMENT,
+				'count_PUBLISHED'=>$data_source->count_PUBLISHED
+			);
+
+			//MMR
+			//$this->load->model('registry_object/registry_objects', 'ro');
+			//$ros = $this->ro->getByDataSourceID($data_source_id);
+
+		}else{
+			//showing all registry objects for all datasource
+			//TODO: check for privileges
+			$this->load->model('maintenance/maintenance_stat', 'mm');
+			$total = $this->mm->getTotalRegistryObjectsCount('db');
+			$data['data_source'] = array(
+				'title'=>'Viewing All Registry Object',
+				'id'=>'0',
+				'count_total'=>$total,
+				'count_APPROVED'=>0,
+				'count_SUBMITTED_FOR_ASSESSMENT'=>0,
+				'count_PUBLISHED'=>0
+			);
+			//show_error('No Data Source ID provided. use all data source view for relevant roles');
+			
+		}
+		$data['scripts'] = array('manage_my_record');
+		$data['js_lib'] = array('core', 'tinymce', 'datepicker', 'dataTables');
+
+
+		$this->load->view("manage_my_record", $data);
 	}
 
 	public function getData($data_source_id, $filter='', $value=''){
