@@ -47,7 +47,7 @@
 
     var PLUGIN_DEFAULTS = {
 	target: "geoLocation", //final resting place of the target data
-	latLon: false, //starting point for map
+	lonLat: false, //starting point for map
 	endpoint: DEFAULT_SERVICE_POINT,
 	gasset_protocol: DEFAULT_PROTOCOL
     };
@@ -127,8 +127,8 @@
 		}
 
 		//set up the initial coordinate data if provided
-		if (settings.latLon !== false) {
-		    $target.val(settings.latLon);
+		if (settings.lonLat !== false) {
+		    $target.val(settings.lonLat);
 		}
 
 		//set up widget data
