@@ -1193,6 +1193,7 @@
 		 *  - validate (default: false). validate coordinate data?
 		 *  - centre (default: false). centre map on data?
 		 *  - reset (default: true). reset tools (before setting up)?
+		 */
 		function setMapFromData(data, options) {
 		    var defaults = {validate: false, centre: false, reset: true};
 		    options = $.extend({}, defaults, options);
