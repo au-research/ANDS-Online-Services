@@ -23,12 +23,21 @@ function init(filters){
         dataType:'JSON',
         data: {'filters':filters},
         success: function(data){
-            console.log(data);
+            //console.log(data);
         
             $.each(data.statuses, function(d){
+                // console.log(this);
                 var template = $('#mmr_status_template').html();
                 var output = Mustache.render(template, this);
                 $('#'+d).html(output);
+                var block = $('#'+d).parent();
+                var num = parseInt($(block).attr('count'));
+                if(!num){
+                    $(block).attr('count', this.count);
+                }else{
+                    num = num + parseInt(this.count);
+                    $(block).attr('count', num);
+                }
                 $('#'+d).parent().show();
             });
             $('.pool').show();
@@ -87,9 +96,26 @@ function constructMMR(data){
 
 function initLayout(){
 
-    var numBlock = $('.block:visible').length;
-    var percentage = Math.ceil(90 / numBlock);
-    $('.block').width(percentage+'%');
+    var spare = [];
+    var remain = 90;
+    $('.block:visible').each(function(){
+        if($(this).attr('count')==0){
+            $(this).width('15%');
+            remain = remain - 15;
+        }else{
+            spare.push(this);
+        }
+    });
+
+    $(spare).each(function(){
+        var percentage = Math.ceil(remain / spare.length);
+        $(this).width(percentage+'%');
+    });
+
+
+    // var numBlock = $('.block:visible').length;
+    // var percentage = Math.ceil(90 / numBlock);
+    // $('.block').width(percentage+'%');
 
     var max_height = 0;
     $('.block').height('auto');
