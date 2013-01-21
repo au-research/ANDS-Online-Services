@@ -459,8 +459,7 @@
 			    TOOL_SEARCH_PREFIX,
 			    ADDRESS_SEARCH_DIALOG_ID_PREFIX],
 			   function(idx, prefix) {
-			       var id = prefix + $this.attr('id');
-			       var object = getObject(id);
+			       var object = $("#" + prefix + $this.attr('id'));
 			       setToolActive(object, false);
 
 			       //tool-specific tidying
@@ -1030,13 +1029,10 @@
 		    resetTools();
 
 		    if( !active ) {
-			setToolActive(tool, true);
-			var id = ADDRESS_SEARCH_DIALOG_ID_PREFIX + $this.attr('id');
-			var dialog = getObject(id);
-			dialog.show();
+		        setToolActive(tool, true);
+		        $("#" + ADDRESS_SEARCH_DIALOG_ID_PREFIX + $this.attr('id')).show();
 			// Set the focus and select the text.
-			var searchResultsTextfieldId = ADDRESS_SEARCH_TEXTFIELD_ID_PREFIX + $this.attr('id');
-			var searchResultsTextfield = getObject(searchResultsTextfieldId);
+			var searchResultsTextfield = $("#" + ADDRESS_SEARCH_TEXTFIELD_ID_PREFIX + $this.attr('id'));
 			searchResultsTextfield.focus();
 			searchResultsTextfield.select();
 		    }
@@ -1047,12 +1043,10 @@
 		 */
 		function doSearch() {
 		    var widget_data = $this.data(WIDGET_NS);
-		    var searchResultsTextfieldId = ADDRESS_SEARCH_TEXTFIELD_ID_PREFIX + $this.attr('id');
-		    var searchResultsTextfield = getObject(searchResultsTextfieldId);
+		    var searchResultsTextfield = $("#" + ADDRESS_SEARCH_TEXTFIELD_ID_PREFIX + $this.attr('id'));
 		    var searchText = $.trim(searchResultsTextfield.val());
 
-		    var searchResultsDivId = ADDRESS_SEARCH_RESULTS_ID_PREFIX + $this.attr('id');
-		    var searchResultsDiv = getObject(searchResultsDivId);
+		    var searchResultsDiv = $("#" + ADDRESS_SEARCH_RESULTS_ID_PREFIX + $this.attr('id'));
 		    if( searchText != '' ) {
 			searchResultsDiv.html('Searching...');
   			if($("input[name=geocoderSelector]:checked").val()  == 'geocoderSelector.gazetteer') {
@@ -1103,8 +1097,7 @@
 				markerBullet + '&nbsp;' + results[i].formatted_address+'</div>';
 			}
 		    }
-		    var searchResultsDivId = ADDRESS_SEARCH_RESULTS_ID_PREFIX + $this.attr('id');
-		    var searchResultsDiv = getObject(searchResultsDivId);
+		    var searchResultsDiv = $("#" + ADDRESS_SEARCH_RESULTS_ID_PREFIX + $this.attr('id'));
 		    searchResultsDiv.html(resultText);
 		}
 
@@ -1152,8 +1145,7 @@
 			    resultText  += '<div class="alw_search_result" data-coord="' + coordString + '" title="Set the map with this search result">' + markerBullet + '&nbsp;' + data.items[i].title + ' (' + typetext + ')</div>';
 			}
 		    }
-		    var searchResultsDivId = ADDRESS_SEARCH_RESULTS_ID_PREFIX + $this.attr('id');
-		    var searchResultsDiv = getObject(searchResultsDivId);
+		    var searchResultsDiv = $("#" + ADDRESS_SEARCH_RESULTS_ID_PREFIX + $this.attr('id'));
 		    searchResultsDiv.html(resultText);
 		}
 
@@ -1218,15 +1210,15 @@
 		    var active = getToolActive(tool);
 		    resetTools();
 
-		    if( !active ) {
+		    if (!active) {
 			setToolActive(tool, true);
-			var lonlatTextarea = getObject(LONLAT_TEXTAREA_ID_PREFIX + $this.attr('id'));
-			lonlatTextarea.value = getInputFieldValue();
+			var lonlatTextarea = $("#" + LONLAT_TEXTAREA_ID_PREFIX + $this.attr('id'));
+			lonlatTextarea.val(getInputFieldValue());
 
-			var dialog = getObject(LONLAT_DIALOG_ID_PREFIX + $this.attr('id'));
+			var dialog = $("#" + LONLAT_DIALOG_ID_PREFIX + $this.attr('id'));
 			dialog.show();
+
 			// Set the focus.
-			var lonlatTextarea = getObject(LONLAT_TEXTAREA_ID_PREFIX + $this.attr('id'));
 			lonlatTextarea.focus();
 		    }
 		}
@@ -1235,9 +1227,7 @@
 		 * Redraw the map, using coordinate data set from the data modal
 		 */
 		function setMapFromText() {
-		    var lonlatTextareaId = LONLAT_TEXTAREA_ID_PREFIX + $this.attr('id');
-		    var lonlatTextarea = $(getObject(lonlatTextareaId)).val();
-		    var lonlatText = tidyLonLatText(lonlatTextarea);
+		    var lonlatText = tidyLonLatText($("#" + LONLAT_TEXTAREA_ID_PREFIX + $this.attr('id')).val());
 
 		    if (validateLonLatText(lonlatText)) {
 			setInputFieldValue(lonlatText);
@@ -1248,13 +1238,6 @@
 			var errors = "THERE ARE PROBLEMS WITH THE COORDINATE TEXT:<br/>" + getErrorMessage() + "<br/>Cancel or correct the error and set.";
 			showError(errors, $msgBox);
 		    }
-		}
-
-		/**
-		 * Legacy helper to get a jQuery object from an html ID
-		 */
-		function getObject(ID) {
-		    return $('#'+ID).first();
 		}
 
 		/**
