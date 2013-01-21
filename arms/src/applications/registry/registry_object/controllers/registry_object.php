@@ -52,13 +52,6 @@ class Registry_object extends MX_Controller {
 
 	}
 
-	public function minhtest(){
-		$this->load->model('registry_object/registry_objects','ro');
-		$ro = $this->ro->getByID(130548);
-		$ro->flag = DB_TRUE;
-		$ro->save();
-	}
-
 	
 	public function manage_table($data_source_id = false){
 		$data['title'] = 'Manage My Records';
@@ -116,7 +109,7 @@ class Registry_object extends MX_Controller {
 	 * @param data_source_id | optional
 	 * @return [HTML] output
 	 */
-	public function manage($data_source_id = false){
+	public function manage($data_source_id=false){
 		$data['title'] = 'Manage My Records';
 		$this->load->model('data_source/data_sources', 'ds');
 		if($data_source_id){
@@ -124,20 +117,10 @@ class Registry_object extends MX_Controller {
 			if(!$data_source) show_error("Unable to retrieve data source id = ".$data_source_id, 404);
 			
 			$data_source->updateStats();//TODO: XXX
-
-			//$data['data_source'] = $data_source;
-			foreach($data_source->attributes as $a=>$b){
-				$data['data_source'][$a]=$b;
-			}
-			$data['data_source'] = array(
-				'title'=>$data_source->title,
-				'id'=>$data_source->id,
-				'count_total'=>$data_source->count_total,
-				'count_APPROVED'=>$data_source->count_APPROVED,
-				'count_SUBMITTED_FOR_ASSESSMENT'=>$data_source->count_SUBMITTED_FOR_ASSESSMENT,
-				'count_PUBLISHED'=>$data_source->count_PUBLISHED
-			);
+			
 			$data['ds'] = $data_source;
+		}else{
+			throw new Exception("Data Source must be provided");
 		}
 		$data['less']=array('mmr_hopper');
 		$data['scripts'] = array('hopper');
@@ -170,6 +153,7 @@ class Registry_object extends MX_Controller {
 
 		$jsonData['statuses'] = array();
 		foreach($jsonData['valid_statuses'] as $s){
+			$no_match = false;
 			$args = array();
 			$st = array('display_name'=>str_replace('_', ' ', $s), 'name'=>$s);
 			switch($s){
@@ -219,7 +203,11 @@ class Registry_object extends MX_Controller {
 				foreach($filters['filter'] as $key=>$value){
 					if(!in_array($key, $white_list)){
 						$list = $this->ro->getByAttributeDatasource($data_source_id, $key, $value, false, false);
-						if($list) $filtered_ids = array_merge($filtered_ids, $list);
+						if($list){
+							$filtered_ids = array_merge($filtered_ids, $list);
+						}else{
+							$no_match = true;
+						}
 					}else{
 						$f[$key] = $value;
 						$args['filter'][$key] = $value;
@@ -231,22 +219,26 @@ class Registry_object extends MX_Controller {
 			}
 			$args['filtered_id']=$filtered;
 
-			$offset = 0;
-			$limit = 20;
+			if(!$no_match){
+				$offset = 0;
+				$limit = 20;
 
-			$st['offset'] = $offset+$limit;
+				$st['offset'] = $offset+$limit;
 
-			$filter = array(
-				'ds_id'=>$data_source_id,
-				'limit'=>20,
-				'offset'=>0,
-				'args'=>$args
-			);
-			$ros = $this->get_ros($filter);
-			$st['items']=$ros['items'];
-			$st['count']=$this->get_ros($filter, true);
-			$st['hasMore'] = $ros['hasMore'];
-			$st['ds_id'] = $data_source_id;
+				$filter = array(
+					'ds_id'=>$data_source_id,
+					'limit'=>20,
+					'offset'=>0,
+					'args'=>$args
+				);
+				$ros = $this->get_ros($filter);
+				$st['items']=$ros['items'];
+				$st['count']=$this->get_ros($filter, true);
+				$st['hasMore'] = $ros['hasMore'];
+				$st['ds_id'] = $data_source_id;
+			}else{
+				$st['count']=0;
+			}
 			$jsonData['statuses'][$s] = $st;
 		}
 		$jsonData['filters'] = $filters;

@@ -54,7 +54,7 @@ class Data_sources extends CI_Model {
 			$id = $query->result_array();
 			return new _data_source($id[0]['data_source_id']);
 		}
-	} 	
+	}
 	
 		/**
 	 * Returns exactly one data source by ID (or NULL)

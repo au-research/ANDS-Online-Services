@@ -6,8 +6,9 @@ $(function() {
     //filters['search'] = '';
     var sort = {}; sort['updated'] = 'asc';
     filters['sort'] = sort;
-    var filter = {}; filter['class'] = 'collection';filters['filter'] = filter;
-
+    // var filter = {}; filter['error_count'] = '1';filter['class']='collection';
+    // filters['filter'] = filter;
+    // console.log(filters);
     init(filters);
 });
 
@@ -158,7 +159,7 @@ function initLayout(){
     });
 
     $('#active_filters').html('');
-    if(filters['filter'].length > 0){
+    if(filters['filter'] && filters['filter'].length > 0){
         $('#active_filters').append('<em>Active Filters: </em>');
     }
 

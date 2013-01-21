@@ -5,7 +5,7 @@
 ?>
 
 <?php  $this->load->view('header');?>
-<input type="hidden" value="<?php echo $data_source['id'];?>" id="data_source_id"/>
+<input type="hidden" value="<?php echo $ds->id;?>" id="data_source_id"/>
 <div id="content" style="margin-top:45px;margin-left:0px">
 	<div id="content-header">
 		<h1>Manage My Record</h1>
@@ -16,7 +16,7 @@
 	</div>
 	<div id="breadcrumb">
 		<?php echo anchor('registry_object/', '<i class="icon-home"></i> Home', array('class'=>'tip-bottom', 'title'=>'Go to Home'))?>
-		<a href="#" class="current"><?php echo $data_source['title'];?></a>
+		<a href="#" class="current"><?php echo $ds->title;?></a>
 		<a href="#">Manage</a>
 		<div style="float:right">
 			<a>Selected <b>3</b> / 146</a>
