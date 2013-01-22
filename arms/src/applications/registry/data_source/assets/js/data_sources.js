@@ -422,7 +422,9 @@ function drawCharts(data_source_id){
 			        },
 			    },
 			    seriesDefaults: {renderer:$.jqplot.BezierCurveRenderer},
-			    series:[{lineWidth:4}],
+			    series:[{lineWidth:4, rendererOptions: {
+                    smooth: true
+                }}],
 			    highlighter: {
 			        show: true,
 			        sizeAdjust: 7.5,
@@ -793,7 +795,7 @@ $('#importRecordsFromURLModal .doImportRecords').live({
 						else
 						{
 							$('.modal-body', thisForm).hide();
-							logErrorOnScreen(data.message + "<pre>" + data.log + "</pre>", $('div[name=resultScreen]', thisForm));
+							logErrorOnScreen(data.message, $('div[name=resultScreen]', thisForm));
 							$('div[name=resultScreen]', thisForm).append("<pre>" + data.log + "</pre>");
 							$('div[name=resultScreen]', thisForm).fadeIn();
 						}

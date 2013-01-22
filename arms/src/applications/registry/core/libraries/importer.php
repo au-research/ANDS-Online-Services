@@ -42,7 +42,7 @@ class Importer {
 	public function Importer()
 	{
 		$this->CI =& get_instance();
-
+		ini_set('memory_limit', '1024M');
 		// setup the DB connection
 		$this->db = $this->CI->db;
 
@@ -337,7 +337,7 @@ class Importer {
 	function _reindexRecords($specific_target_keys = array()){
 		$solrUrl = $this->CI->config->item('solr_url');
 		$solrUpdateUrl = $solrUrl.'update/?wt=json';
-		$this->CI->load->model('registry_objects', 'ro');
+		$this->CI->load->model('registry_object/registry_objects', 'ro');
 		$this->CI->load->model('data_source/data_sources', 'ds');
 
 		$this->CI->load->library('solr');
@@ -379,25 +379,27 @@ class Importer {
 			foreach($allAffectedRecords AS $ro_id){
 				try{
 					$ro = $this->CI->ro->getByID($ro_id);
-
-					// XXX: Use the SOLR library, do update in batches
-					$solrXML = $ro->transformForSOLR();
-					$result = curl_post($solrUpdateUrl, $solrXML);
-					$result = json_decode($result);
-
-					if($result->{'responseHeader'}->{'status'}==0){
-						$this->reindexed_records++;
-					}
-					else
+					if ($ro->status == PUBLISHED)
 					{
-						if (isset($result->{'error'}->{'msg'}))
-						{
-							$this->error_log[] = "UNABLE TO Index this registry object id = ".$ro_id . BR . 
-												"<pre>" . $result->{'error'}->{'msg'} . "</pre>";
+						// XXX: Use the SOLR library, do update in batches
+						$solrXML = $ro->transformForSOLR();
+						$result = curl_post($solrUpdateUrl, $solrXML);
+						$result = json_decode($result);
+
+						if($result->{'responseHeader'}->{'status'}==0){
+							$this->reindexed_records++;
 						}
 						else
 						{
-							$this->error_log[] = "UNABLE TO Index this registry object id = ".$ro_id . BR . "UNKNOWN ERROR";
+							if (isset($result->{'error'}->{'msg'}))
+							{
+								$this->error_log[] = "UNABLE TO Index this registry object id = ".$ro_id . BR . 
+													"<pre>" . $result->{'error'}->{'msg'} . "</pre>";
+							}
+							else
+							{
+								$this->error_log[] = "UNABLE TO Index this registry object id = ".$ro_id . BR . "UNKNOWN ERROR";
+							}
 						}
 					}
 				}
@@ -526,14 +528,18 @@ class Importer {
 	/**
 	 * 
 	 */
-	public function setCrosswalk($crosswalk_name)
+	public function setCrosswalk($crosswalk_metadata_format)
 	{
 		$crosswalks = getCrossWalks();
-		if (isset($crosswalks[$crosswalk_name]))
+		foreach (getCrosswalks() AS $crosswalk)
 		{
-			$this->crosswalk = $crosswalks[$crosswalk_name];
+			if ($crosswalk->metadataFormat() == $crosswalk_metadata_format)
+			{
+				$this->crosswalk = $crosswalk;
+			}
 		}
-		else
+		
+		if (!$this->crosswalk)
 		{
 			throw new Exception("Unable to load crosswalk: " . $crosswalk_name);
 		}
@@ -554,10 +560,14 @@ class Importer {
 	 */
 	private function _validateRIFCS($xml)
 	{
-		$doc = @DOMDocument::loadXML($xml);
+		$lines = explode(NL, $xml);
+		//echo htmlentities(implode(NL, array_slice($lines, 474090, 474120)));
+		$doc = new DOMDocument('1.0','utf-8');
+		$doc->loadXML(utf8_encode(str_replace("&", "&amp;", $xml)), LIBXML_NOENT);
+		//echo htmlentities($xml);
 		if(!$doc)
 		{
-			throw new Exception("Unable to parse XML. Perhaps your XML file is not well-formed?".$xml);
+			throw new Exception("Unable to parse XML. Perhaps your XML file is not well-formed?");
 		}
 
 		// TODO: Does this cache in-memory?
@@ -584,7 +594,7 @@ class Importer {
 	private function _getSimpleXMLFromString($xml)
 	{
 		// Simplexml doesn't play nicely with namespaces :-(
-		$xml = simplexml_load_string($xml, "SimpleXMLElement", 0);
+		$xml = simplexml_load_string(utf8_encode(str_replace("&", "&amp;", $xml)), "SimpleXMLElement", LIBXML_NOENT);
 
 		if ($xml === false)
 		{

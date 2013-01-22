@@ -47,7 +47,14 @@ class Extrif_Extension extends ExtensionBase
 						$description_str = (string) $description;					
 						$this->_CI->load->library('purifier');
 						$clean_html = $this->_CI->purifier->purify_html($description_str);
-						$extrifDescription = $extendedMetadata->addChild("extRif:description", $clean_html, EXTRIF_NAMESPACE);
+						if (strpos($description_str, "<br") !== FALSE)
+						{
+							$extrifDescription = $extendedMetadata->addChild("extRif:description", $clean_html, EXTRIF_NAMESPACE);
+						}
+						else
+						{
+							$extrifDescription = $extendedMetadata->addChild("extRif:description", nl2br($clean_html), EXTRIF_NAMESPACE);
+						}
 						$extrifDescription->addAttribute("type", $type);
 					}
 				}

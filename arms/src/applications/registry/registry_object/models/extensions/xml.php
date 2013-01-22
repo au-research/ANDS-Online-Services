@@ -134,7 +134,7 @@ class XML_Extension extends ExtensionBase
 	function getNativeFormat($record_data_id = NULL)
 	{
 		$data = null;
-		$result = $this->db->select('scheme')->order_by('timestamp','desc')->limit(1)->get_where('record_data', array('registry_object_id'=>$this->ro->id, 'scheme !='=>RIFCS_SCHEME, 'scheme !='=>EXTRIF_SCHEME));
+		$result = $this->db->select('scheme')->order_by('timestamp','desc')->limit(1)->get_where('record_data','registry_object_id = ' . $this->ro->id . ' AND scheme !="'. RIFCS_SCHEME . ' "AND scheme !="' . EXTRIF_SCHEME . '"');
 		if ($result->num_rows() > 0)
 		{
 			foreach($result->result_array() AS $row)
@@ -153,7 +153,7 @@ class XML_Extension extends ExtensionBase
 	function getNativeFormatData($record_data_id = NULL)
 	{
 		$data = null;
-		$result = $this->db->select('data')->order_by('timestamp','desc')->limit(1)->get_where('record_data', array('registry_object_id'=>$this->ro->id, 'scheme !='=>RIFCS_SCHEME, 'scheme !='=>EXTRIF_SCHEME));
+		$result = $this->db->select('data')->order_by('timestamp','desc')->limit(1)->get_where('record_data', 'registry_object_id = ' . $this->ro->id . ' AND scheme !="'. RIFCS_SCHEME . ' "AND scheme !="' . EXTRIF_SCHEME . '"');
 		if ($result->num_rows() > 0)
 		{
 			foreach($result->result_array() AS $row)

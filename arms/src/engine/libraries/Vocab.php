@@ -30,7 +30,7 @@ class Vocab {
 
 	function resolveSubject($term, $vocabType){
 		
-        if($vocabType != '' && array_key_exists($vocabType, $this->resolvingServices))
+        if($vocabType != '' && is_array($this->resolvingServices) && array_key_exists($vocabType, $this->resolvingServices))
         {
             $resolvingService = $this->resolvingServices[$vocabType]['resolvingService'];
             $uriprefix = $this->resolvingServices[$vocabType]['uriprefix'];

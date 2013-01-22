@@ -208,20 +208,20 @@
     <xsl:if test="ro:description">
 
         <div class="descriptions" style="position:relative;clear:both;">
-            <xsl:apply-templates select="extRif:description[@type= 'brief']" mode="content"/>
-            <xsl:apply-templates select="extRif:description[@type= 'full']" mode="content"/>
-            <xsl:apply-templates select="extRif:description[@type= 'significanceStatement']" mode="content"/>       
-            <xsl:apply-templates select="extRif:description[@type= 'notes']" mode="content"/>   
-            <xsl:apply-templates select="extRif:description[not(@type =  'notes' or @type =  'significanceStatement' or @type =  'full' or @type =  'brief' or @type =  'logo' or @type =  'rights' or @type =  'accessRights')]" mode="content"/>
+            <xsl:apply-templates select="../extRif:extendedMetadata/extRif:description[@type= 'brief']" mode="content"/>
+            <xsl:apply-templates select="../extRif:extendedMetadata/extRif:description[@type= 'full']" mode="content"/>
+            <xsl:apply-templates select="../extRif:extendedMetadata/extRif:description[@type= 'significanceStatement']" mode="content"/>       
+            <xsl:apply-templates select="../extRif:extendedMetadata/extRif:description[@type= 'notes']" mode="content"/>   
+            <xsl:apply-templates select="../extRif:extendedMetadata/extRif:description[not(@type =  'notes' or @type =  'significanceStatement' or @type =  'full' or @type =  'brief' or @type =  'logo' or @type =  'rights' or @type =  'accessRights')]" mode="content"/>
         </div>
         
-    <!-- HIERARCHY CHART (NEW) -->
-    <div class="hide" id="collectionStructureWrapper">
-      <h4>Collection Structure</h4>
-      <div id="connectionTree"></div>
-      <!--p><i>This record is part of a structured collection.</i></p-->
-      <p></p>
-    </div>
+        <!-- HIERARCHY CHART (NEW) -->
+        <div class="hide" id="collectionStructureWrapper">
+          <h4>Collection Structure</h4>
+          <div id="connectionTree"></div>
+          <!--p><i>This record is part of a structured collection.</i></p-->
+          <p></p>
+        </div>
     </xsl:if>
     <a href="javascript:void(0);" class="showall_descriptions hide">More...</a>
     

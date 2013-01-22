@@ -461,9 +461,15 @@ class Data_source extends MX_Controller {
 		{ 
 
 			$this->load->model('data_source/data_sources', 'ds');
+			$data_source = $this->ds->getByID($this->input->post('data_source_id'));
 			$this->importer->setXML($xml);
-			// XXX: If crosswalk...
-			$this->importer->setDatasource($this->ds->getByID($this->input->post('data_source_id')));
+
+			if ($data_source->provider_type != RIFCS_SCHEME)
+			{
+				$this->importer->setCrosswalk($data_source->provider_type);
+			}
+
+			$this->importer->setDatasource($data_source);
 			$this->importer->commit();
 
 
@@ -487,7 +493,7 @@ class Data_source extends MX_Controller {
 			$log .= "CRITICAL IMPORT ERROR [HARVEST COULD NOT CONTINUE]" . NL;
 			$log .= $e->getMessage();
 			
-			echo json_encode(array("response"=>"failure", "message"=>"An error occured whilst importing from this URL", "log"=>$log));
+			echo json_encode(array("response"=>"failure", "message"=>"An error occured whilst importing from this URL", "log"=>substr($log,0, 1000)));
 			return;	
 		}	
 	
@@ -521,9 +527,16 @@ class Data_source extends MX_Controller {
 			return;	
 		}
 		
-		// XXX: && data source has no crosswalk configured
+
+		$this->load->model('data_source/data_sources', 'ds');
+		$data_source = $this->ds->getByID($this->input->post('data_source_id'));
+
 		$xml=stripXMLHeader($xml);
-		if (strpos(trim($xml), "<registryObjects") === FALSE)
+		if ($data_source->provider_type != RIFCS_SCHEME)
+		{
+			$this->importer->setCrosswalk($data_source->provider_type);
+		}
+		else if (strpos(trim($xml), "<registryObjects") === FALSE)
 		{
 			$xml = wrapRegistryObjects($xml);
 		}
@@ -531,10 +544,9 @@ class Data_source extends MX_Controller {
 		try
 		{ 
 
-			$this->load->model('data_source/data_sources', 'ds');
 			$this->importer->setXML($xml);
-			// XXX: If crosswalk...
-			$this->importer->setDatasource($this->ds->getByID($this->input->post('data_source_id')));
+
+			$this->importer->setDatasource($data_source);
 			$this->importer->commit();
 
 
@@ -655,7 +667,7 @@ class Data_source extends MX_Controller {
 
 				$this->load->model('data_source/data_sources', 'ds');
 
-				// XXX: If crosswalk...
+				// xxx: this won't work with crosswalk!
 				$rifcsXml = $this->importer->extractRIFCSFromOAI($data);
 
 				if (strpos($rifcsXml, 'registryObject ') === FALSE)
@@ -667,7 +679,12 @@ class Data_source extends MX_Controller {
 				{
 
 					$this->importer->setXML($rifcsXml);
-					// XXX: If crosswalk...
+
+					if ($data_source->provider_type != RIFCS_SCHEME)
+					{
+						$this->importer->setCrosswalk($data_source->provider_type);
+					}
+
 					$this->importer->setHarvestID($harvestId);
 					$this->importer->setDatasource($dataSource);
 

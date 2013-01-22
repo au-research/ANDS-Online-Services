@@ -15,7 +15,12 @@ class Registry_object extends MX_Controller {
 		$this->manage();
 	}
 
-
+	public function test()
+	{
+		$this->load->model('registry_object/registry_objects','ro');
+		$ro = $this->ro->getBySlug('inverted-microscope-olympus-1x-50-for-patch-clamp-exp-eriments');
+		echo $ro->getNativeFormat();
+	}
 	public function testRecordSuite(){
 		echo "<pre>";
 

@@ -46,18 +46,25 @@ class MetadataMethod extends MethodHandler
 		$result = $CI->solr->executeSearch(true);
 		
 		if (!isset($this->params['debugQuery']))
-		{			
-			$output = $result['response'];
-		
-			// Special case for the jswidget (which wants to know which internal reference ID the response maps to)
-			if (isset($this->params['int_ref_id']))
+		{	
+			if (isset($result['response']))
 			{
-				$output['params'] = $result['responseHeader']['params'];
-			}
+				$output = $result['response'];
+			
+				// Special case for the jswidget (which wants to know which internal reference ID the response maps to)
+				if (isset($this->params['int_ref_id']))
+				{
+					$output['params'] = $result['responseHeader']['params'];
+				}
 
-			if (isset($result['facet_counts']))
+				if (isset($result['facet_counts']))
+				{
+					$output['facet_counts'] = $result['facet_counts'];
+				}
+			}
+			else
 			{
-				$output['facet_counts'] = $result['facet_counts'];
+				throw new Exception ("Error: Query interface did not return a response. Check your parameters. ");
 			}
 		}
 		else
