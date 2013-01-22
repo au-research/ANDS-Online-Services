@@ -165,7 +165,7 @@ $(document).ready(function() {
     		connection_params,
 	        function(data)
 	        {
-                if (data.length>=1 && data[0].children.length>0)
+                if (data && data.length>=1 && data[0].children.length>0)
                 {
                   
                      //console.log(data);

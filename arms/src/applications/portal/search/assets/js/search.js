@@ -2,12 +2,16 @@ var searchData = {};
 var searchUrl = base_url+'search/filter';
 var searchBox = null;
 var map = null;
+var pushPin = null;
+var resultPolygons = new Array();
+var markersArray = new Array();
+var polygonsArray = new Array();
 $(document).ready(function() {
 
 	/*GET HASH TAG*/
 	$(window).hashchange(function(){
 		var hash = window.location.hash;
-		
+
 		var hash = location.href.substr(location.href.indexOf("#"));
 		var query = hash.substring(3, hash.length);
 		var words = query.split('/');
@@ -45,13 +49,15 @@ $(document).ready(function() {
 });
 
 function executeSearch(searchData, searchUrl){
+	resultPolygons = new Array();
+	clearOverlays();
 	$.ajax({
 		url:searchUrl, 
 		type: 'POST',
 		data: {filters:searchData},
 		dataType:'json',
 		success: function(data){
-			console.log(data);
+			//console.log(data);
 
 			$('#search-result, .pagination, #facet-result').empty();
 
@@ -69,12 +75,13 @@ function executeSearch(searchData, searchUrl){
 			var template = $('#facet-template').html();
 			var output = Mustache.render(template, data);
 			$('#facet-result').html(output);
-
-			// var docs = data.result.docs;
-			// $(docs).each(function(){
-			// 	//console.log(this);
-			// 	console.log(this.id, this.spatial);
-			// });
+			var docs = data.result.docs;
+			$(docs).each(function(){
+			 	if(this.spatial_coverage_polygons)
+			 	{
+			 	resultPolygons[this.id] = new Array(this.display_title, this.spatial_coverage_polygons[0], this.spatial_coverage_centres[0]);
+			 	}
+			});
 
 			initSearchPage();
 		},
@@ -96,7 +103,8 @@ function initSearchPage(){
 	//see if we need to init the map
 	if(searchData['map']){
 		$('#searchmap').show();
-		resetZoomByMap(map);
+		 processPolygons();
+		 resetZoom();
 	}
 
 	$('#search_map_toggle').unbind('click');
@@ -109,6 +117,8 @@ function initSearchPage(){
 		}else{
 			//no map, show map
 			searchData['map']='show';
+			processPolygons();
+			resetZoom();
 		}
 		changeHashTo(formatSearch());
 	});
@@ -151,7 +161,6 @@ function initSearchPage(){
 
 function initMap(){
 	var latlng = new google.maps.LatLng(-25.397, 133.644);
-		
     var myOptions = {
       zoom: 4,
       center: latlng,
@@ -165,8 +174,13 @@ function initMap(){
       mapTypeId: google.maps.MapTypeId.ROADMAP
     };
     map = new google.maps.Map(document.getElementById("searchmap"),myOptions);
-    
-    
+
+    pushPin = new google.maps.MarkerImage('http://maps.google.com/intl/en_us/mapfiles/ms/micons/blue.png',
+					      new google.maps.Size(32,32),
+					      new google.maps.Point(0,0),
+					      new google.maps.Point(16,32)
+					     );
+
     var drawingManager = new google.maps.drawing.DrawingManager({
         drawingMode: google.maps.drawing.OverlayType.RECTANGLE,
         drawingControl: true,
@@ -217,11 +231,119 @@ function initMap(){
        });
 }
 
-function resetZoomByMap(theMap){
-	google.maps.event.trigger(theMap, 'resize');
+
+function processPolygons(){
+	if(resultPolygons.length)
+	{
+		for(p in resultPolygons)
+		{
+
+			id = p.toString();
+			title = resultPolygons[p][0];
+			polygons = resultPolygons[p][1];
+			centers = resultPolygons[p][2];
+			console.log(id);
+			createResultPolygonWithMarker(polygons, centers, title, id);
+		}
+	}
+}
+
+function createResultPolygonWithMarker(polygons, centers, title, id)
+{
+
+	//var coords = getCoordsFromInputField(polygons);
+	var centerCoords = getPointFromString(centers);
+	var coords = getCoordsFromString(polygons);
+	createMarker(centerCoords, id);	
+    createPolygon(coords, id);
+}
+
+function getCoordsFromString(lonLatStr)
+{
+	var coords = new Array();
+		var coordsStr = lonLatStr.split(' ');
+		
+   		for( var i=0; i < coordsStr.length; i++ )
+		{
+			coordsPair = coordsStr[i].split(",");
+			coords[i] = new google.maps.LatLng(coordsPair[1],coordsPair[0]);
+		}	
+	//}
+	return coords;
+}
+
+function getPointFromString(lonLatStr)
+{
+	lonLatStr = lonLatStr + " ";
+	var coordsStr = lonLatStr.split(' ');
+	coords = new google.maps.LatLng(coordsStr[1],coordsStr[0]);
+	return coords;
+}
+
+function createPolygon(coords, id)
+{
+
+	polygon = new google.maps.Polygon({
+			    paths: coords,
+			    map : map,
+			    strokeColor: '#008dce',
+			    strokeOpacity: 0.7,
+			    strokeWeight: 2,
+			    fillColor: '#008dce',
+			    fillOpacity: 0.2,
+			    editable : false
+			  });
+	polygon.setMap(null);
+	polygonsArray[id] = polygon;
+
+}
+
+function createMarker(latlng, id)
+{
+	var marker = new google.maps.Marker({
+	          position: latlng,
+	          map: map,
+	          icon : pushPin,
+	        });
+	marker.set("id", id);
+	google.maps.event.addListener(marker,"mouseover",function(){
+		clearPolygons();
+		polygonsArray[marker.id].setMap(map);
+	});
+	google.maps.event.addListener(marker,"mouseout",function(){
+		clearPolygons();
+	});
+	markersArray[id] = marker;
+}
+
+
+function clearOverlays() 
+{
+	clearMarkers();
+	clearPolygons();
+}
+
+function clearMarkers()
+{
+  for (m in markersArray) 
+  {
+    markersArray[m].setMap(null);
+  }
+}
+
+function clearPolygons()
+{
+  for (p in polygonsArray) 
+  {
+    polygonsArray[p].setMap(null);
+  }
+}
+
+function resetZoom(){
+	google.maps.event.trigger(map, 'resize');
 	if(searchBox)
-		theMap.setCenter(searchBox.getBounds().getCenter());
-	theMap.setZoom( map.getZoom() );
+		map.setCenter(searchBox.getBounds().getCenter());
+	map.setZoom( map.getZoom() );
 }
 
 function formatSearch()
