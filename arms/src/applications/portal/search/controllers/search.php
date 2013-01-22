@@ -78,6 +78,7 @@ class Search extends MX_Controller {
 						break;
 					case 'spatial':
 						$this->solr->setOpt('fq', 'spatial_coverage_extents:"Intersects('.$value.')"');
+						$this->solr->setOpt('rows', '999');
 						break;
 				}
 			}

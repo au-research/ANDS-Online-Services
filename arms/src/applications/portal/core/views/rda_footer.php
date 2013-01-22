@@ -54,6 +54,7 @@
 	        <?php endif; ?>
 	        <?php if($lib=='google_map'):?>
 	           <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=drawing&amp;sensor=false"></script>
+	           <script type="text/javascript" src="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclusterer/src/markerclusterer_compiled.js"></script>
 	        <?php endif; ?>
 	        <?php if($lib=='dynatree'):?>
 				<script type="text/javascript" src="<?php echo asset_url('js/jquery.dynatree-1.2.2.js', 'core');?>"></script>
