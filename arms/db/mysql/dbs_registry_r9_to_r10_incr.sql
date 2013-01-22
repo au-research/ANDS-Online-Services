@@ -1,14 +1,30 @@
 ALTER TABLE `dbs_registry`.`registry_object_relationships` ADD COLUMN `relation_type` VARCHAR(512) NULL  AFTER `origin` , ADD COLUMN `relation_description` VARCHAR(512) NULL  AFTER `relation_type` ;
 ALTER TABLE `dbs_registry`.`registry_objects` DROP INDEX `key_UNIQUE` ;
 
-CREATE  TABLE `dbs_registry`.`api_requests` (
-  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
-  `status` VARCHAR(32) NULL ,
-  `ip_address` VARCHAR(45) NULL ,
-  `api_key` VARCHAR(45) NULL ,
-  `service` VARCHAR(45) NULL ,
-  `params` VARCHAR(255) NULL ,
-  `timestamp` BIGINT UNSIGNED NULL ,
-  PRIMARY KEY (`id`) );
-ALTER TABLE `dbs_registry`.`api_requests` ADD COLUMN `note` VARCHAR(255) NULL  AFTER `timestamp` ;
+ALTER TABLE `url_mappings` ADD COLUMN 
+  `search_title` varchar(255) DEFAULT NULL AFTER `registry_object_id`;
+
+-- drop the old api_keys table
+drop table `api_keys`;
+
+CREATE TABLE `api_requests` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `status` varchar(32) DEFAULT NULL,
+  `ip_address` varchar(45) DEFAULT NULL,
+  `api_key` varchar(45) DEFAULT NULL,
+  `service` varchar(45) DEFAULT NULL,
+  `params` varchar(255) DEFAULT NULL,
+  `timestamp` bigint(20) unsigned DEFAULT NULL,
+  `note` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=225 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `api_keys` (
+  `api_key` varchar(32) NOT NULL,
+  `owner_email` varchar(45) DEFAULT NULL,
+  `owner_organisation` varchar(45) DEFAULT NULL,
+  `owner_purpose` text,
+  `created` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`api_key`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
