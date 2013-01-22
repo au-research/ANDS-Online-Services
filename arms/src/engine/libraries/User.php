@@ -197,7 +197,17 @@ class User {
 		}
 		return false;
 	}
-	
+
+	function doiappids()
+	{
+ 		$this->CI->load->model('cosi_authentication', 'cosi');
+		$doi_apps = $this->CI->cosi->getDOIAppIdsInAffiliate($this->affiliations());
+		if($doi_apps){	
+   			
+   			return $doi_apps;
+   		}
+	}
+
 	function __construct()
     {
         $this->CI =& get_instance();

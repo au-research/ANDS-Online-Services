@@ -44,6 +44,7 @@ $testDoiPrefix =  $this->config->item('test_doi_prefix');
 							<th>Title</th>	
 							<th>DOI</th>
 							<th></th>
+							<th></th>
 							<th>Status</th>	
 							<th>Last Updated</th>			
 						</tr>
@@ -57,6 +58,9 @@ $testDoiPrefix =  $this->config->item('test_doi_prefix');
 							<td>
 								<?=anchor('http://dx.doi.org/' . $doi->doi_id, $doi->doi_id);?>
 								<?php if(strpos($doi->doi_id ,$testDoiPrefix) === 0) {echo "<br/><span class='muted'><em>Test prefix DOI</em></span>";}  ?>
+							</td>
+							<td>
+								<?=anchor('mydois/updateDoi?doi_id=' . rawurlencode($doi->doi_id), 'Update', array("role"=>"button", "class"=>"btn btn-mini", "data-target"=>"#updateDoiModal", "data-toggle"=>"modal"));?>
 							</td>
 							<td>
 								<?=anchor('mydois/getDoiXml?doi_id=' . rawurlencode($doi->doi_id), 'View XML', array("role"=>"button", "class"=>"btn btn-mini", "data-target"=>"#viewDoiXmlModal", "data-toggle"=>"modal"));?>
@@ -77,6 +81,17 @@ $testDoiPrefix =  $this->config->item('test_doi_prefix');
 </div>
 
 </section>
+<div class="modal hide fade" id="updateDoiModal" tabindex="-1" role="dialog" aria-labelledby="updateDoiModal" aria-hidden="true">
+  <div class="modal-body">
+    <p>Loading...</p>
+    <div class="progress progress-striped active">
+		<div class="bar" style="width: 100%;"></div>
+	</div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+  </div>
+</div>
 
 <div class="modal hide fade" id="viewDoiXmlModal" tabindex="-1" role="dialog" aria-labelledby="viewDoiXmlModal" aria-hidden="true">
   <div class="modal-body">

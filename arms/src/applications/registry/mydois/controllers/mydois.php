@@ -19,7 +19,12 @@ class Mydois extends MX_Controller {
 		$data['js_lib'] = array('core');
 		$data['scripts'] = array();
 		$data['title'] = 'My DOIs List';
-		$this->load->view('input_app_id', $data);
+		if($this->user->loggedIn())
+		{
+			$this->load->view('input_app_id', $data);
+		}else{
+			$this->load->view('login_required', $data);
+		}
 	}
 	
 	function show()
@@ -33,6 +38,13 @@ class Mydois extends MX_Controller {
 		// Validate the appId
 		$appId = $this->input->get_post('app_id');
 		$doiStatus = $this->input->get_post('doi_status');
+		$data['doi_appids'] = $this->user->doiappids();
+
+		if(!in_array($appId, $data['doi_appids'] ))
+		{
+			throw new Exception ('You do not have authorisation to view dois associated with application id '.$appId);  
+		}
+
 		if (!$appId) throw new Exception ('Invalid App ID');  
 		
 		$query = $doi_db->where('app_id',$appId)->select('*')->get('doi_client');
@@ -53,6 +65,7 @@ class Mydois extends MX_Controller {
 		}
 		
 		$data['client'] = $client_obj;
+
 		$this->load->view('list_dois', $data);
 
 	}
@@ -91,6 +104,74 @@ class Mydois extends MX_Controller {
 		
 	}
 	
+	function updateDoi()
+	{
+		$doi_db = $this->load->database('dois', TRUE);
+		
+		// Validate the doi_id
+		$doi_id = rawurldecode($this->input->get_post('doi_id'));
+
+		if (!$doi_id) throw new Exception ('Invalid DOI ID');  
+		
+		$query = $doi_db->where('doi_id',$doi_id)->select('doi_id, url,client_id')->get('doi_objects');
+		if (!$doi_obj = $query->result_array()) throw new Exception ('Invalid DOI ID');  
+		$doi_obj = array_pop($doi_obj);
+		$this->load->view('update_doi',$doi_obj);
+		
+	}
+	function updateDoiUrl()
+	{
+		$doi_db = $this->load->database('dois', TRUE);
+
+		// Validate the url
+		$new_url = rawurldecode($this->input->get_post('new_url'));
+		$old_url = rawurldecode($this->input->get_post('old_url'));
+		$doi_id = rawurldecode($this->input->get_post('doi_id'));
+		$client_id = rawurldecode($this->input->get_post('client_id'));
+
+		$query = $doi_db->where('client_id',$client_id)->select('*')->get('doi_client');
+		if (!$client_obj = $query->result()) throw new Exception ('Invalid Client ID');  
+		$client_obj = array_pop($client_obj);
+
+		if($client_id<10) $client_id = '-'.$client_id;	
+
+		$requestURI =  $this->config->item('gDOIS_SERVICE_BASE_URI');
+		$authstr = $this->config->item('gDOIS_DATACENTRE_NAME_PREFIX').".".$this->config->item('gDOIS_DATACENTRE_NAME_MIDDLE').$client_id.":".$this->config->item('gDOIS_DATACITE_PASSWORD');	
+
+		$context  = array('Content-Type:text/plain;charset=UTF-8','Authorization: Basic '.base64_encode($authstr));
+		$metadata="url=".$new_url."\ndoi=".$doi_id;
+		$requestURI = $this->config->item('gDOIS_SERVICE_BASE_URI')."doi";
+		$result = '';
+		$extrainfo = '';
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_POST,1);
+		curl_setopt($ch, CURLOPT_URL, $requestURI);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);	
+		curl_setopt($ch, CURLOPT_HTTPHEADER,$context);
+		curl_setopt($ch, CURLOPT_POSTFIELDS,$metadata);
+		$result = curl_exec($ch);
+	
+		$curlinfo = curl_getinfo($ch);
+	
+		curl_close($ch);
+	
+		if($result == $this->config->item('gDOIS_RESPONSE_SUCCESS'))
+		{
+			//if its all Ok - update the database and return to the doi listing
+			$data = array(
+               'url' => $new_url,
+            	);
+			$doi_db->where('doi_id', $doi_id);
+			$doi_db->update('doi_objects', $data); 
+
+			redirect('/mydois/show/?app_id='.$client_obj->app_id, 'location');
+		}else{
+			//we got an error back or nothing so we need to tell the user something went wrong
+			if($result) $extrainfo = "The following error message was returned : ".$result;
+			throw new Exception ('Update of the doi was unsuccessful. '.$extrainfo);  
+		}
+	
+	}
 	function getAppIDConfig()
 	{
 		$doi_db = $this->load->database('dois', TRUE);
