@@ -184,10 +184,16 @@ class NHMRC_Parties_to_RIFCS extends Crosswalk
     public function wrapNativeFormat($payload)
     {
         $response = '';
-
-        foreach($payload AS $row)
+        if (is_array($payload))
         {
-            $response .= htmlentities($this->sputcsv($row));
+            foreach($payload AS $row)
+            {
+                $response .= htmlentities($this->sputcsv($row));
+            }
+        }
+        else
+        {
+            return html_entity_decode($payload);
         }
 
         return trim($response);
