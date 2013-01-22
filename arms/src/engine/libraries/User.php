@@ -153,6 +153,11 @@ class User {
 	 */
 	function hasFunction($name)
 	{
+		// Add superuser capabilities
+		if (in_array(AUTH_FUNCTION_SUPERUSER, $this->functions))
+		{
+			return TRUE;
+		}
 		return in_array($name, $this->functions);
 	}
 	
@@ -188,6 +193,10 @@ class User {
 	 */
 	function hasAffiliation($name)
 	{
+		if ($this->functions && in_array(AUTH_FUNCTION_SUPERUSER, $this->functions))
+		{
+			return TRUE;
+		}
 		if ($this->affiliations)
 		{
 			if (in_array($name, $this->affiliations))
@@ -244,6 +253,7 @@ define('AUTH_USER_IDENTIFIER','UNIQUE_USER_IDENTIFIER');
 define('AUTH_FUNCTION_ARRAY', 'registry_functions');
 define('AUTH_FUNCTION_DEFAULT_ATTRIBUTE', 'PUBLIC');
 define('AUTH_FUNCTION_LOGGED_IN_ATTRIBUTE','AUTHENTICATED_USER');
+define('AUTH_FUNCTION_SUPERUSER','REGISTRY_SUPERUSER');
 
 define('AUTH_AFFILIATION_ARRAY', 'registry_affiliations');
 /* End of file User.php */
