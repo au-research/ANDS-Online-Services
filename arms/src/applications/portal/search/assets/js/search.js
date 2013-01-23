@@ -8,6 +8,7 @@ var markersArray = new Array();
 var polygonsArray = new Array();
 var markerClusterer = null;
 var rectangleOptions = null;
+var infowindow = null;
 $(document).ready(function() {
 
 	/*GET HASH TAG*/
@@ -107,6 +108,13 @@ function initSearchPage(){
 		$('#searchmap').show();
 		 processPolygons();
 		 resetZoom();
+		 $('.post').hover(function(){
+		 	//console.log($(this).attr('ro_id'));
+		 	clearPolygons();
+			polygonsArray[$(this).attr('ro_id')].setMap(map);
+		 },function(){
+		 	clearPolygons();
+		 });
 	}
 
 	$('#search_map_toggle').unbind('click');
@@ -176,7 +184,7 @@ function initMap(){
       mapTypeId: google.maps.MapTypeId.ROADMAP
     };
     map = new google.maps.Map(document.getElementById("searchmap"),myOptions);
-
+	infowindow = new google.maps.InfoWindow();
     pushPin = new google.maps.MarkerImage('http://maps.google.com/intl/en_us/mapfiles/ms/micons/blue.png',
 					      new google.maps.Size(32,32),
 					      new google.maps.Point(0,0),
@@ -231,7 +239,7 @@ function initMap(){
         }
 
        });
-     	markerClusterer = new  MarkerClusterer(map);
+     	markerClusterer = new  MarkerClusterer(map, null, {zoomOnClick:false});
 }
 
 
@@ -313,6 +321,9 @@ function createMarker(latlng, id)
 		clearPolygons();
 		polygonsArray[marker.id].setMap(map);
 	});
+	google.maps.event.addListener(marker,"click",function(){
+		showPreviewWindowConent(marker);
+	});
 	google.maps.event.addListener(marker,"mouseout",function(){
 		clearPolygons();
 	});
@@ -337,6 +348,41 @@ function clearMarkers()
   }
 }
 
+function showPreviewWindowConent(mOverlay)
+{
+	roIds = [];
+	// either a marker is passed or a marker_cluster
+    if(typeof mOverlay.id != 'undefined')
+    {
+    	roIds.push(mOverlay.id);
+    	infowindow.setPosition(mOverlay.position);
+    }
+    else if(typeof mOverlay.markers_ != 'undefined')
+    {
+    	$(mOverlay.markers_).each(function(){
+    	roIds.push(this.id);
+    	});
+    	infowindow.setPosition(mOverlay.center_)
+    }
+
+	$.ajax({
+		url:base_url+'view/preview', 
+		data : {roIds:roIds},
+		type: 'POST',
+		dataType:'json',
+		success: function(data){
+			infowindow.setContent(data.html);
+			infowindow.open(map);
+		},
+		error: function(data){
+			//$('body').prepend(data.responseText);
+			console.error("ERROR" + data.responseText);
+			return null;
+		}
+	});
+	
+}
+
 function clearPolygons()
 {
   for (p in polygonsArray) 
@@ -354,6 +400,7 @@ function resetZoom(){
 	}
 	else{
 		var spatialBounds = searchData['spatial'];
+		spatialBounds = decodeURI(spatialBounds);
 		var wsenArray = spatialBounds.split(' ');
 		var sw = new google.maps.LatLng(wsenArray[1],wsenArray[0]);
 		var ne = new google.maps.LatLng(wsenArray[3],wsenArray[2]);
@@ -390,3 +437,27 @@ function formatSearch()
 function changeHashTo(location){
 	window.location.hash = location;
 }
+
+/**
+ * Triggers the clusterclick event and zoom's if the option is set.
+ */
+ClusterIcon.prototype.triggerClusterClick = function() {
+  var markerClusterer = this.cluster_.getMarkerClusterer();
+
+  // Trigger the clusterclick event.
+  google.maps.event.trigger(markerClusterer, 'clusterclick', this.cluster_);
+
+  if (markerClusterer.isZoomOnClick() || this.cluster_.markers_.length > 9) 
+  {
+    // Zoom into the cluster.
+    this.map_.fitBounds(this.cluster_.getBounds());
+  }
+  else if(this.cluster_.markers_.length > 9)
+  {
+	this.map_.fitBounds(this.cluster_.getBounds());
+  }
+  else{
+	showPreviewWindowConent(this.cluster_);
+  }
+
+};

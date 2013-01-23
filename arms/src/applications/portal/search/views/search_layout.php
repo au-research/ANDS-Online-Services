@@ -41,7 +41,7 @@
 
 <script type="text/x-mustache" id="search-result-template">
 {{#docs}}
-	<div class="post">
+	<div class="post" ro_id="{{id}}">
 		<a href="<?php echo base_url();?>{{slug}}" class="title">{{display_title}}</a>
 		<div class="excerpt">
 			{{{description_value}}}

@@ -45,7 +45,6 @@ class View extends MX_Controller {
 	/* Note: do not use exceptions as this will override screen
 			 styles and produce an undesirable error effect */
 	function preview(){
-
 		$this->load->model('registry_fetch','registry');
 
 		if ($this->input->get('slug'))
@@ -54,16 +53,33 @@ class View extends MX_Controller {
 			try
 			{
 				$extRif = $this->registry->fetchExtRifBySlug($this->input->get('slug'));
+				$html = $this->registry->transformExtrifToHTMLPreview($extRif); 
 			}
 			catch (SlugNoLongerValidException $e)
 			{
 				die("Registry object could not be located (perhaps it no longer exists!)");
 			}
 		}
-		else if ($this->input->get($registry_object_id)) {
+		else if ($this->input->get('registry_object_id')) {
 			try
 			{
 				$extRif = $this->registry->fetchExtRifByID($this->input->get('registry_object_id'));
+				$html = $this->registry->transformExtrifToHTMLPreview($extRif);
+			}
+			catch (SlugNoLongerValidException $e)
+			{
+				die("Registry object could not be located (perhaps it no longer exists!)");
+			}
+		}
+		else if ($this->input->post('roIds')) {
+			try
+			{
+				$html = '';
+				foreach($this->input->post('roIds') as $roID)
+				{
+					$extRif = $this->registry->fetchExtRifByID($roID);
+					$html .= $this->registry->transformExtrifToHTMLPreview($extRif);
+				}
 			}
 			catch (SlugNoLongerValidException $e)
 			{
@@ -78,7 +94,7 @@ class View extends MX_Controller {
 		$response = array(
 			"slug" => $this->input->get('slug'),
 			"registry_object_id" => $this->input->get('registry_object_id'),
-			"html" => $this->registry->transformExtrifToHTMLPreview($extRif)
+			"html" => $html
 		);
 
 		echo json_encode($response);
