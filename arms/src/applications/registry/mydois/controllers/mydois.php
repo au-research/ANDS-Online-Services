@@ -132,6 +132,12 @@ class Mydois extends MX_Controller {
 		$query = $doi_db->where('client_id',$client_id)->select('*')->get('doi_client');
 		if (!$client_obj = $query->result()) throw new Exception ('Invalid Client ID');  
 		$client_obj = array_pop($client_obj);
+		
+		$doi_appids = $this->user->doiappids();
+		if(!in_array($client_obj->app_id, $doi_appids))
+		{
+			throw new Exception ('You do not have authorisation to update DOI  '.$doi_id);  
+		}
 
 		if($client_id<10) $client_id = '-'.$client_id;	
 
