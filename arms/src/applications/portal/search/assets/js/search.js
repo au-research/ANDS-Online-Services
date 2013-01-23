@@ -3,7 +3,7 @@ var searchUrl = base_url+'search/filter';
 var searchBox = null;
 var map = null;
 var pushPin = null;
-var resultPolygons = new Array();
+var spatialResult = new Array();
 var markersArray = new Array();
 var polygonsArray = new Array();
 var markerClusterer = null;
@@ -52,7 +52,7 @@ $(document).ready(function() {
 });
 
 function executeSearch(searchData, searchUrl){
-	resultPolygons = new Array();
+	spatialResult = new Array();
 	clearOverlays();
 	$.ajax({
 		url:searchUrl, 
@@ -82,7 +82,7 @@ function executeSearch(searchData, searchUrl){
 			$(docs).each(function(){
 			 	if(this.spatial_coverage_polygons)
 			 	{
-			 	resultPolygons[this.id] = new Array(this.display_title, this.spatial_coverage_polygons[0], this.spatial_coverage_centres[0]);
+			 	spatialResult[this.id] = new Array(this.display_title, this.spatial_coverage_polygons[0], this.spatial_coverage_centres[0]);
 			 	}
 			});
 
@@ -198,7 +198,7 @@ function initMap(){
           position: google.maps.ControlPosition.TOP_CENTER,
           drawingModes: [
            // google.maps.drawing.OverlayType.MARKER,
-           // google.maps.drawing.OverlayType.CIRCLE,
+           //google.maps.drawing.OverlayType.CIRCLE,
             google.maps.drawing.OverlayType.RECTANGLE
           ]
         },
@@ -214,7 +214,6 @@ function initMap(){
       rectangleOptions.strokeOpacity= 0.8;
       rectangleOptions.strokeWeight= 2;
       rectangleOptions.clickable= false;
-      // rectangleOptions.editable= true;
       rectangleOptions.zIndex= 1;     
       
       drawingManager.set('rectangleOptions', rectangleOptions);
@@ -244,9 +243,9 @@ function initMap(){
 
 
 function processPolygons(){
-	if(resultPolygons.length)
+	if(spatialResult.length)
 	{
-		for(p in resultPolygons)
+		for(p in spatialResult)
 		{
 
 			id = p.toString();
@@ -318,6 +317,7 @@ function createMarker(latlng, id)
 	        });
 	marker.set("id", id);
 	google.maps.event.addListener(marker,"mouseover",function(){
+		console.log(marker.id);
 		clearPolygons();
 		polygonsArray[marker.id].setMap(map);
 	});

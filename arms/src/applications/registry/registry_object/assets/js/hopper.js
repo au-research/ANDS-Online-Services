@@ -1,6 +1,4 @@
-var selected_ids=[];
-var select_all='';
-var exclude_ids=[];
+var selected_ids=[],selecting_status;
 var filters = {};
 $(function() {
     //filters['search'] = '';
@@ -10,12 +8,86 @@ $(function() {
     // filters['filter'] = filter;
     // console.log(filters);
     init(filters);
+
+    $(document).on("mousedown", ".sortable li", function(e){
+        if(e.button==2){
+            if(!$(this).hasClass('ro_selected')) click_ro(this, 'select');
+            var status = $(this).attr('status');
+            var menu = $('#context-menu-'+status+' ul');
+            console.log($('.unflag', menu).length);
+            if($('span.flag', this).length){
+                $('.unflag', menu).show();
+            }else{
+                $('.unflag', menu).hide();
+            }
+        }else{
+            click_ro(this, 'toggle');
+        }
+    }).on('click', '.op', function(e){
+        var action = $(this).attr('action');
+        var status = $(this).attr('status');
+        switch(action){
+            case 'select_all':
+                action_list(status, 'select_all');
+                break;
+            case 'to_draft':
+                var attributes = [{
+                    name:'status',
+                    value:'DRAFT'
+                  }];
+                  update(selected_ids, attributes);
+                break;
+            case 'to_submit':
+                var attributes = [{
+                    name:'status',
+                    value:'SUBMITTED_FOR_ASSESSMENT'
+                  }];
+                  update(selected_ids, attributes);
+                break;
+            case 'to_assess':
+                var attributes = [{
+                    name:'status',
+                    value:'ASSESSMENT_IN_PROGRESS'
+                  }];
+                  update(selected_ids, attributes);
+                break;
+            case 'to_approve':
+                var attributes = [{
+                    name:'status',
+                    value:'APPROVED'
+                  }];
+                  update(selected_ids, attributes);
+                break;
+            case 'to_publish':
+                var attributes = [{
+                    name:'status',
+                    value:'PUBLISHED'
+                  }];
+                  update(selected_ids, attributes);
+                break;
+            case 'flag':
+                var attributes = [{
+                    name:'flag',
+                    value:'t'
+                  }];
+                  update(selected_ids, attributes);
+                break;
+            case 'un_flag':
+                var attributes = [{
+                    name:'flag',
+                    value:'f'
+                  }];
+                  update(selected_ids, attributes);
+                break;
+        }
+    });
+
 });
 
 function init(filters){
     selected_ids = [];
     var data_source_id = $('#data_source_id').val();
-    $('.pool').hide();
+    //$('.pool').hide();
      $('#active_filters').html('<em>Loading...</em>');
     $.ajax({
         url:base_url+'registry_object/get_mmr_data/'+data_source_id, 
@@ -23,8 +95,8 @@ function init(filters){
         dataType:'JSON',
         data: {'filters':filters},
         success: function(data){
-            //console.log(data);
-        
+            console.log(data);
+            
             $.each(data.statuses, function(d){
                 // console.log(this);
                 var template = $('#mmr_status_template').html();
@@ -63,15 +135,16 @@ function bindShowMore(){
             type: 'POST',
             data: {ds_id:ds_id,offset:offset,status:status},
             success: function(data){
-                console.log(data);
-                new_offset = offset+10;
-                $(button).attr('offset', new_offset);
+                if(data){
+                    new_offset = offset+10;
+                    $(button).attr('offset', new_offset);
 
-                var template = $('#mmr_data_more').html();
-                var output = Mustache.render(template, data);
-                $('ul[status='+status+']').append(output);
+                    var template = $('#mmr_data_more').html();
+                    var output = Mustache.render(template, data);
+                    $('ul[status='+status+']').append(output);
 
-                if(!data.hasMore) $(button).remove();
+                    if(!data.hasMore) $(button).remove();
+                }
                 bindSortables();
                 bindPreviews();
                 initLayout();
@@ -132,18 +205,6 @@ function initLayout(){
         $(list).slideToggle();
     });
 
-    $('.op').unbind('click').click(function(){
-
-        var op = $(this).attr('op');
-        var ds_id = $(this).closest('.nav-list').attr('data_source_id');
-        var status = $(this).closest('.nav-list').attr('status');
-        switch(op){
-            case 'select_all':
-                select_all=status;
-                $('.sortable[status='+status+'] li').addClass('ro_selected');
-                break;
-        }
-    });
 
     $('#search_form').unbind('submit').submit(function(e){
         e.preventDefault();
@@ -212,28 +273,84 @@ function initLayout(){
             e.stopPropagation();
         }
     });
+
+    $('.context').contextmenu();
+
+    $('.select_all').unbind('click').click(function(){
+        var status = $(this).attr('status');
+        if($('i',this).hasClass('icon-ok-circle')){//deselect
+            $('i',this).removeClass('icon-ok-circle').addClass('icon-ok-sign');
+            action_list(status, 'select_all');
+        }else if($('i',this).hasClass('icon-ok-sign')){//select all
+            $('i',this).removeClass('icon-ok-sign').addClass('icon-ok-circle');
+            action_list(status, 'deselect_all');
+        }
+    });
 }
 
-function bindSortables(){
-    $('.sortable li').unbind('click');
-    $(".sortable li").click(function() {
+function action_list(status, action){
+    var list = $('ul[status='+status+']');
+    if(action=='select_all'){
+        // console.log($('li.ro_item', list).length)
+        $.each($('li.ro_item', list), function(index, val) {
+            $(this).addClass('ro_selected');
+            selected_ids.push($(this).attr('id'));
+        });
+       
+    }else if(action=='deselect_all'){
+        $.each($('li.ro_item', list), function(index, val) {
+            $(this).removeClass('ro_selected');
+            selected_ids = [];
+        });
+    }
+    selected_ids = $.unique(selected_ids);
+    update_selected_list(status);
+    console.log(selected_ids);
+}
 
-        $(this).toggleClass("ro_selected",75);
-        var id = $(this).attr('id');
-        if($(this).attr('status')==select_all){
-            //exclude the item
-            exclude_ids.push($(this).attr('id'));
+function update_selected_list(status){
+    var num = selected_ids.length;
+    var list = $('.ro_box[status='+status+']');
+    var selected = $('div.selected_status', list);
+    if(num>0){
+        var text = num + ' registry objects selected.';
+        selected.html(text);
+        selected.slideDown();
+    }else{
+        selected.slideUp();
+    }
+}
+
+function click_ro(ro_item, action){
+    var ro_id = $(ro_item).attr('id');
+    var status = $(ro_item).attr('status');
+
+    if(status==selecting_status){
+        if($.inArray(ro_id, selected_ids)==-1){
+            selected_ids.push(ro_id);
         }else{
-            //include the item
-            
-            if($.inArray($(this).attr('id'), selected_ids)==-1){
-                selected_ids.push($(this).attr('id'));
-            }else{
-                selected_ids.splice( $.inArray($(this).attr('id'), selected_ids), 1 );
-            }
+            selected_ids.splice( $.inArray(ro_id, selected_ids), 1 );
         }
-        console.log(selected_ids, exclude_ids);
-    });
+    }else{
+        $('.ro_item').removeClass('ro_selected');
+        selecting_status=status;
+        selected_ids=[];//empty
+        selected_ids.push(ro_id);
+    }
+    
+    if(action=='toggle'){
+        $('#'+ro_id).toggleClass('ro_selected', 75);
+    }else if(action=='select'){
+        $('#'+ro_id).addClass('ro_selected', 75);
+    }
+    selected_ids = $.unique(selected_ids);
+    update_selected_list(status)
+    // console.log(selected_ids);
+}
+
+
+function bindSortables(){
+
     $('.sortable').sortable('destroy');
     $('.sortable').each(function(){
         var connect_to = $(this).attr('connect_to');
@@ -245,6 +362,7 @@ function bindSortables(){
             placeholder: "ui-state-highlight",
             scroll:false,
             revert:false,
+            delay:100,
             item:'li.ro_item',
             receive:function(event, ui){
               //console.log(selected_ids);
@@ -260,40 +378,28 @@ function bindSortables(){
               update(selected_ids, attributes);
               //console.log(ui);
             },
-            start: function(e, info) {
-                info.item.after(info.item.siblings('li.ro_selected'));
-                $('li', target).animate({
-                    opacity:0.5,
-                    backgroundColor:'#C1F4E7'
-                });
-                $(target).animate({
-                    backgroundColor:'#C1F4E7'
-                })
-                //info.item.siblings("li.selected").appendTo(info.item);
-            },
-            out: function(e, info) {
-                //info.item.after(info.item.find("li"))
-                $('li', target).animate({
-                    opacity:1,
-                    backgroundColor:'white'
-                });
-                $(target).animate({
-                    backgroundColor:'white'
-                })
-            },
-            stop: function(e, info) {
-                //info.item.after(info.item.find("li"))
-                $('li', target).animate({
-                    opacity:1,
-                    backgroundColor:'white'
-                });
-                $(target).animate({
-                    backgroundColor:'white'
-                })
-            },
-            over: function(e, info){
-                
-            },
+            // start: function(e, info) {
+            //     info.item.after(info.item.siblings('li.ro_selected'));
+            //     $('li', target).animate({
+            //         opacity:0.5,
+            //         backgroundColor:'#C1F4E7'
+            //     });
+            //     $(target).animate({
+            //         backgroundColor:'#C1F4E7'
+            //     })
+            //     //info.item.siblings("li.selected").appendTo(info.item);
+            // },
+            
+            // stop: function(e, info) {
+            //     //info.item.after(info.item.find("li"))
+            //     $('li', target).animate({
+            //         opacity:1,
+            //         backgroundColor:'white'
+            //     });
+            //     $(target).animate({
+            //         backgroundColor:'white'
+            //     });
+            // },
             sort:function(e, ui){
               $(ui.item.context).offset({top:e.pageY-10,left:e.pageX-10});
             }
@@ -309,13 +415,9 @@ function update(ids, attributes){
         type: 'POST',
         data: {affected_ids:ids, attributes:attributes},
         success: function(data){
-            init();
+            init(filters);
         }
     });
-}
-
-function updateAll(data_source_id, exclude, attributes){
-
 }
 
 function bindPreviews(){
@@ -339,20 +441,5 @@ function bindPreviews(){
             hide:{event:'unfocus'},
             style: {classes: 'ui-tooltip-shadow ui-tooltip-bootstrap'}
         });
-    });
-
-    $('.show_menu').click(function(e){
-        e.preventDefault();
-        e.stopPropagation();
-        var content = $(this).closest('.widget-title').find('.ro_menu');
-        if(content){
-            $(this).qtip({
-                content: $(content),
-                position: {my:'top right', at:'left bottom'},
-                show:{ready:true,effect:false,event:'click'},
-                hide:{event:'unfocus'},
-                style: {classes: 'ui-tooltip-shadow ui-tooltip-bootstrap'}
-            }); 
-        }
     });
 }

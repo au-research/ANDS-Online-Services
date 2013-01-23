@@ -25,6 +25,7 @@ class Search extends MX_Controller {
 		/**
 		 * Default Search Parameters for RDA Portal search
 		 */
+		
 		$this->solr->setOpt('rows', $pp);
 		$this->solr->setOpt('defType', 'edismax');
 		$this->solr->setOpt('mm', '3');
@@ -44,17 +45,12 @@ class Search extends MX_Controller {
 		/**
 		 * Setting the SOLR OPTIONS based on the filters sent over AJAX
 		 */
+		
 		if($filters){
 			foreach($filters as $key=>$value){
 				$value = urldecode($value);
 				switch($key){
 					case 'q': 
-						// Default behaviour is to only return PUBLISHED records
-						// (unless explicitly requested otherwise)
-						// if (strpos($value, "status:(") === FALSE)
-						// {
-						// 	$value .= " +status:(\"" . PUBLISHED . "\")";
-						// }
 						$this->solr->setOpt('q', $value);
 					break;
 					case 'p': 
@@ -78,7 +74,6 @@ class Search extends MX_Controller {
 						break;
 					case 'spatial':
 						$this->solr->setOpt('fq', 'spatial_coverage_extents:"Intersects('.$value.')"');
-						$this->solr->setOpt('rows', '999');
 						break;
 				}
 			}

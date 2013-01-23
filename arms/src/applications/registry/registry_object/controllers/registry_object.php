@@ -119,38 +119,48 @@ class Registry_object extends MX_Controller {
 		foreach($jsonData['valid_statuses'] as $s){
 			$no_match = false;
 			$args = array();
-			$st = array('display_name'=>str_replace('_', ' ', $s), 'name'=>$s);
+			$st = array('display_name'=>str_replace('_', ' ', $s), 'name'=>$s, 'menu'=>array());
+			array_push($st['menu'], array('action'=>'select_all', 'display'=>'Select All'));
+			array_push($st['menu'], array('action'=>'flag', 'display'=>'Flag'));
 			switch($s){
 				case 'DRAFT':
 					$st['ds_count']=$data_source->count_DRAFT;
 					if($qa){
 						$st['connectTo']='SUBMITTED_FOR_ASSESSMENT';
+						array_push($st['menu'], array('action'=>'to_submit', 'display'=>'Submit for Assessment'));
 					}else{
 						if(!$auto_published){
 							$st['connectTo']='APPROVED';
+							array_push($st['menu'], array('action'=>'to_approve', 'display'=>'Approve'));
 						}else{
 							$st['connectTo']='PUBLISHED';
+							array_push($st['menu'], array('action'=>'to_publish', 'display'=>'Publish'));
 						}
 					}
 					break;
 				case 'MORE_WORK_REQUIRED':
 					$st['ds_count']=$data_source->count_MORE_WORK_REQUIRED;
 					$st['connectTo']='DRAFT';
+					array_push($st['menu'], array('action'=>'to_draft', 'display'=>'Move to Draft'));
 					break;
 				case 'SUBMITTED_FOR_ASSESSMENT':
 					$st['ds_count']=$data_source->count_SUBMITTED_FOR_ASSESSMENT;
 					$st['connectTo']='ASSESSMENT_IN_PROGRESS';
+					array_push($st['menu'], array('action'=>'to_assess', 'display'=>'Asessment In Progress'));
 					break;
 				case 'ASSESSMENT_IN_PROGRESS':
 					$st['ds_count']=$data_source->count_ASSESSMENT_IN_PROGRESS;
 					$st['connectTo']='APPROVED';
+					array_push($st['menu'], array('action'=>'to_approve', 'display'=>'Approve'));
 					break;
 				case 'APPROVED':
 					$st['ds_count']=$data_source->count_APPROVED;
 					$st['connectTo']='PUBLISHED';
+					array_push($st['menu'], array('action'=>'to_publish', 'display'=>'Publish'));
 					break;
 				case 'PUBLISHED':
 					$st['ds_count']=$data_source->count_PUBLISHED;
+					array_push($st['menu'], array('action'=>'to_draft', 'display'=>'Move to Draft'));
 					$st['connectTo']='';
 					break;
 			}
@@ -213,7 +223,7 @@ class Registry_object extends MX_Controller {
 
 	public function get_more_mmr_data(){
 		acl_enforce('REGISTRY_USER');
-		ds_acl_enforce($data_source_id);
+		ds_acl_enforce($this->input->post('ds_id'));
 		header('Cache-Control: no-cache, must-revalidate');
 		header('Content-type: application/json');
 			
@@ -225,10 +235,10 @@ class Registry_object extends MX_Controller {
 			'args'=>$args
 		);
 
-		$results = $this->get_ros($filters);
+		$results = $this->get_ros($filters, false);
 		if($results){
 			echo json_encode($results);
-		}
+		}else echo json_encode(array('noMore'=>true));
 	}
 
 	private function get_ros($filters, $getCount=false){
@@ -242,7 +252,7 @@ class Registry_object extends MX_Controller {
 		if($ros){
 			foreach($ros as $r){
 				$registry_object = $this->ro->getByID($r['registry_object_id']);
-				array_push($results['items'], array(
+				$item = array(
 						'id'=>$registry_object->id, 
 							'title'=>$registry_object->title,
 							'status'=>$registry_object->status,
@@ -253,7 +263,9 @@ class Registry_object extends MX_Controller {
 							'warning_count'=>$registry_object->warning_count,
 							'data_source_id'=>$registry_object->data_source_id,
 							'flag'=>$registry_object->flag
-						));
+						);
+				if($item['error_count']>0) $item['has_error'] = true;
+				array_push($results['items'], $item);
 			}
 		}else return false;
 		if(sizeof($ros)<$filters['limit']){
@@ -487,7 +499,7 @@ class Registry_object extends MX_Controller {
 			$ro = $this->ro->getByID($id);
 			foreach($attributes as $a){
 				echo 'update '.$id.' set '.$a['name'].' to value:'.$a['value'];
-				if($a['name']=='status') $ro->status = $a['value'];
+				$ro->{$a['name']} = $a['value'];
 				$ro->save();
 			}
 		}

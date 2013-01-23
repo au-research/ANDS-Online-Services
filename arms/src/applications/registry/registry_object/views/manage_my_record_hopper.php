@@ -53,7 +53,7 @@
 							<li <?php echo 'class="'.($ds->count_level_2 > 0 ? '' : 'disabled').'"';?>><a href="javascript:;" class="filter" name="quality_level" value="2">Quality Level 2 (<?php echo $ds->count_level_2;?>)<span class="icon"></span></a></li>
 							<li <?php echo 'class="'.($ds->count_level_3 > 0 ? '' : 'disabled').'"';?>><a href="javascript:;" class="filter" name="quality_level" value="3">Quality Level 3 (<?php echo $ds->count_level_3;?>)<span class="icon"></span></a></li>
 							<li <?php echo 'class="'.($ds->count_level_4 > 0 ? '' : 'disabled').'"';?>><a href="javascript:;" class="filter" name="quality_level" value="4">Quality Level 4 (<?php echo $ds->count_level_4;?>)<span class="icon"></span></a></li>
-
+							<li><a href="javascript:;" class="filter" name="flag" value="t">Flagged <span class="icon"></span></a></li>
 						</ul>
 					</div>
 					<span id="active_filters">
@@ -64,7 +64,6 @@
 			</div>
 
 		</div>
-
 		<div class="pool" id="mmr_hopper">
 			<div class="block hide">
 				<div id="MORE_WORK_REQUIRED"></div>
@@ -92,29 +91,22 @@
 	<div class="widget-title stick">
 		<span class="icon">{{count}}</span>
 		<h5 class="ellipsis" style="width:60%">{{display_name}}</h5>
-		<div class="buttons"><a href="javascript:;" class="show_menu"><i class="icon-chevron-down no-border"></i></a></div>
-		<div class="hide ro_menu">
-			<ul class="nav nav-list" data_source_id="{{ds_id}}" status="{{name}}">
-				<li><a href="javascript:;" class="op" op="select_all">Select All</a></li>
-				<li><a href="#">Sort by Title</a></li>
-				<li><a href="#">Sort by Date Modified</a></li>
-			</ul>
-		</div>
+		<div class="buttons"><a href="javascript:;" class="select_all" status="{{name}}"><i class="icon-ok-circle no-border"></i></a></div>
 	</div>
 	<div class="widget-content nopadding ">
+		<div class='selected_status hide'>asdfasdf</div>
 		<ul class="sortable" connect_to="{{connectTo}}" status="{{name}}">
 			{{#items}}
-			<li id="{{id}}" class="status_{{status}} ro_item" status="{{status}}">
+			<li id="{{id}}" data-toggle="context" data-target="#context-menu-{{status}}" class="status_{{status}} ro_item {{#has_error}}ro_error{{/has_error}}" status="{{status}}">
 			<div class="ro_title"><a ro_id="{{id}}" class="ro_preview">{{title}}</a></div>
-			<div class="ro_content">
+			<div class="ro_content ">
 				<p>
 					<span class="tag" tip="Last Modified"><i class="icon icon-time"></i> {{updated}}</span>
 					<img class="tag" tip="{{class}}" src="<?php echo asset_url('img/{{class}}.png', 'base');?>"/>
 					<span class="tag ql_{{quality_level}}" tip="Quality Level {{quality_level}}">{{quality_level}}</span>
 					{{#flag}}
-					<span class="tag" tip="Last Modified"><i class="icon icon-flag"></i></span>
+					<span class="tag flag" tip="Flagged"><i class="icon icon-flag"></i></span>
 					{{/flag}}
-					{{error_count}}
 				</p>
 			</div>
 			<div class='clearfix'></div>
@@ -126,26 +118,34 @@
 		{{/hasMore}}
 	</div>
 </div>
+
+<div id="context-menu-{{name}}">
+	<ul class="dropdown-menu" role="menu">
+		{{#menu}}
+		<li><a tabindex="-1" href="javascript:;" class="op" action="{{action}}" status="{{name}}">{{display}}<a/></li>
+		{{/menu}}
+		<li class="hide unflag"><a tabindex="-1" href="javascript:;" class="op" action="un_flag" status="{{name}}">Remove Flag<a/></li>
+	</ul>
+</div>
 </script>
 
 
 <script type="text/x-mustache" id="mmr_data_more">
 {{#items}}
-<li id="{{id}}" class="status_{{status}}">
-	<div class="ro_title"><a ro_id="{{id}}" class="ro_preview">{{title}}</a></div>
-	<div class="ro_content">
-		<p>
-			<span class="tag" tip="Last Modified"><i class="icon icon-time"></i> {{updated}}</span>
-			<img class="tag" tip="{{class}}" src="<?php echo asset_url('img/{{class}}.png', 'base');?>"/>
-			<span class="tag ql_{{quality_level}}" tip="Quality Level {{quality_level}}">{{quality_level}}</span>
-			{{#flag}}
-			<span class="tag" tip="Last Modified"><i class="icon icon-flag"></i></span>
-			{{/flag}}
-			{{error_count}}
-		</p>
-	</div>
-	<div class='clearfix'></div>
-	</li>
+<li id="{{id}}" class="status_{{status}} ro_item {{#has_error}}ro_error{{/has_error}}" status="{{status}}">
+<div class="ro_title"><a ro_id="{{id}}" class="ro_preview">{{title}}</a></div>
+<div class="ro_content ">
+	<p>
+		<span class="tag" tip="Last Modified"><i class="icon icon-time"></i> {{updated}}</span>
+		<img class="tag" tip="{{class}}" src="<?php echo asset_url('img/{{class}}.png', 'base');?>"/>
+		<span class="tag ql_{{quality_level}}" tip="Quality Level {{quality_level}}">{{quality_level}}</span>
+		{{#flag}}
+		<span class="tag" tip="Flagged"><i class="icon icon-flag"></i></span>
+		{{/flag}}
+	</p>
+</div>
+<div class='clearfix'></div>
+</li>
 {{/items}}
 </script>
 <?php $this->load->view('footer');?>
