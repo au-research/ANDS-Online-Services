@@ -106,7 +106,7 @@ class Maintenance extends MX_Controller {
 		$this->load->model('data_source/data_sources', 'ds');
 		$this->load->library('solr');
 
-		$ids = $this->ro->getIDsByDataSourceID($data_source_id, false, 'PUBLISHED');
+		$ids = $this->ro->getIDsByDataSourceID($data_source_id, false, PUBLISHED);
 		$i = 0;
 		foreach($ids as $ro_id){
 			try{

@@ -188,13 +188,12 @@ class Solr {
 	function executeSearch($as_array = false){
 		
         $content = $this->post($this->constructFieldString(), 'select');
-
 		$json = json_decode($content, $as_array);
 		if($json){
 			$this->result = $json;
 			return $this->result;
 		}else{
-			throw new Exception('SOLR Query failed....ERROR:'.$content.'<br/> QUERY: '.$fields_string);
+			throw new Exception('SOLR Query failed....ERROR:'.$content.'<br/> QUERY: '.$this->constructFieldString());
 		}
 	}
 

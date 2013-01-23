@@ -302,7 +302,9 @@ class Data_source extends MX_Controller {
 			$valid_attributes = array_merge($valid_attributes, $institutionPages);
 			$valid_attributes =array_unique($valid_attributes);
 
-			foreach($valid_attributes as $attrib){							
+			foreach($valid_attributes as $attrib){	
+				$new_value = null;
+
 				if (isset($POST[$attrib])){					
 
 					$new_value = trim($this->input->post($attrib));
@@ -362,29 +364,28 @@ class Data_source extends MX_Controller {
 				   $resetHarvest = true;
 				} 
 
-				$dataSource->{$attrib} = $new_value;
-
-				if($new_value == '' && $new_value != $dataSource->{$attrib} && in_array($attrib, $harvesterParams))
+				if (!is_null($new_value))
 				{
-					$dataSource->append_log("didn't get value ".$new_value." ".$attrib, 'warning');
-					$dataSource->unsetAttribute($attrib);
+					$dataSource->{$attrib} = $new_value;
+
+
+					if($new_value == '' && $new_value != $dataSource->{$attrib} && in_array($attrib, $harvesterParams))
+					{
+						$dataSource->unsetAttribute($attrib);
+					}
+					else{
+						$dataSource->setAttribute($attrib, $new_value);
+					}
+
+					if($attrib=='institution_pages')
+					{
+						$dataSource->setContributorPages($new_value,$POST);
+					}
+
 				}
-				else{
-					if($new_value)
-					$dataSource->append_log("setAttribute FOR ".$new_value." ".$attrib, 'warning');
-
-					$dataSource->setAttribute($attrib, $new_value);
-				}
-
-				if($attrib=='institution_pages')
-				{
-					$dataSource->setContributorPages($new_value,$POST);
-
-				}
-
-				
+				$dataSource->updateStats();	
 			}		
-			$dataSource->append_log("dataSource->save()", 'warning');	
+	
 			$dataSource->save();
 
 			if($resetHarvest)

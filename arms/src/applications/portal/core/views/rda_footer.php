@@ -63,7 +63,10 @@
 				<script type="text/javascript" src="<?php echo asset_url('js/spacetree.js', 'core');?>"></script>
 	    	<?php endif; ?>
 	    	<?php if ($lib=='qtip'):?>
-		    	 <script src="<?php echo asset_url('lib/qtip2/jquery.qtip.min.js', 'base');?>" type="text/javascript"></script>
+		    	<script src="<?php echo asset_url('lib/qtip2/jquery.qtip.min.js', 'base');?>" type="text/javascript"></script>
+		    <?php endif; ?>
+		    <?php if ($lib=='accordion'): ?>
+		    	<script src="<?php echo asset_url('lib/tiny_accordion/accordion.js', 'base');?>" type="text/javascript"></script>
 		    <?php endif; ?>
 		<?php endforeach;?>
 	<?php endif; ?>

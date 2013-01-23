@@ -95,6 +95,108 @@ $(document).ready(function() {
 	});
 
 
+
+    $('#ands_subject_match').click(function(e){
+        e.preventDefault();
+        updateAccordion($('#suggested_links_accordion'),"Record with matching subjects", "ands_subjects", 0, 10);
+        $( "#dialog-modal" ).dialog({
+          maxHeight: 640,
+          width:600,
+          position: { my: "center", at: "center", of: window },
+          draggable: false, resizable: false,
+          closeText: "x"
+        });
+    });
+
+    $('#ands_identifier_match').click(function(e){
+        e.preventDefault();
+        updateAccordion($('#suggested_links_accordion'),"Record with matching identifiers", "ands_identifiers", 0, 10);
+        $( "#dialog-modal" ).dialog({
+          maxHeight: 640,
+          width:600,
+          position: { my: "center", at: "center", of: window },
+          draggable: false, resizable: false,
+          closeText: "hide"
+        });
+    });
+
+     jQuery('body')
+      .bind(
+       'click',
+       function(e){
+        if(
+         jQuery('#dialog-modal').dialog('isOpen')
+         && !jQuery(e.target).is('.ui-dialog, a')
+         && !jQuery(e.target).closest('.ui-dialog').length
+        ){
+         jQuery('#dialog-modal').dialog('close');
+        }
+       }
+      );
+
+
+
+     $('a.next_accordion_query').live('click', function(e){
+        e.preventDefault();
+        e = $(this);
+        updateAccordion($('#suggested_links_accordion'),$('span.ui-dialog-title', e.parent().parent().parent()).html(), e.attr("data-suggestor"), e.attr("data-start"), e.attr("data-rows"));
+    });
+
+
+
+    function updateAccordion(container, title, suggestor, start, rows)
+    {
+        if (isPublished())
+        {
+            var url_suffix = "view/getSuggestedLinks/"+suggestor+"/"+start+"/"+rows+"/?slug=" + getSLUG();
+        }
+        else
+        {
+            var url_suffix = "view/getSuggestedLinks/"+suggestor+"/"+start+"/"+rows+"/?id=" + getRegistryObjectID();
+        }
+
+
+        $.get(base_url + url_suffix, function(data)
+        {   
+            var ui_dialog = container.parent().parent().parent();
+            $('span.ui-dialog-title', ui_dialog).html(title);
+            container.html("<ul></ul>");
+            for (var link in data['links'])
+            {
+                // This is a link to a record
+                if (data['links'][link]['slug'])
+                {
+                    var ro_class = data['links'][link]['class'];
+                    var icon = '<img src="'+base_url+'assets/core/images/icons/collections.png" alt="collections" class="icon_sml">'
+                    $('ul', container).append('<li>'+icon+'<a href="">'+data['links'][link]['title']+'</a></li>');
+                    var target = $('ul li', container).last();
+                    target.on('click',function(e){e.preventDefault(); $(this).qtip('show');});
+                    generatePreviewTip(target, data['links'][link]['slug'], null);
+                }
+                else
+                {
+                    // This is an external link, XXX: outbound link image?
+                    $('ul', container).append('<li><a href="'+data['links'][link]['url']+'">'+data['links'][link]['title']+'</a></li>');
+                }
+            }
+
+            // Footer for "previous/more"
+            container.append('<hr/>');
+            start = parseInt(start); rows = parseInt(rows);
+            if (start > 0)
+            {
+                container.append('<a style="float:left;" href="#" class="next_accordion_query" data-suggestor="'+suggestor+'" data-start="'+(start-rows)+'" data-rows="'+rows+'">&lt; previous</a>');
+            }
+
+            if(data.count >= (start+rows))
+            {
+                container.append('<a style="float:right;" href="#" class="next_accordion_query" data-suggestor="'+suggestor+'" data-start="'+(rows+start)+'" data-rows="'+rows+'">more &gt;</a>');
+            }
+
+        },'json');
+    }
+
+
 	function getURLParameter(name) 
 	{
 	    return unescape(
@@ -106,13 +208,6 @@ $(document).ready(function() {
     /*************/
     /* view page */
     /*************/
-
-	function getURLSLUG()
-	{
-        return $('#')
-		//return unescape(RegExp('(.*)/(.*)').exec(location.pathname)[2]);
-	}
-
 
     function isPublished()
     {
@@ -303,6 +398,63 @@ $(document).ready(function() {
 	        }, 
 	        'json'
 	);
+
+
+    function generatePreviewTip(element, slug, registry_object_id)
+    {
+        var preview_url;
+        if (isPublished())
+        {
+            preview_url = base_url + "preview/" + slug;
+        }
+        else
+        {
+            preview_url = base_url + "preview/?id=" + registry_object_id;
+        }
+
+        console.log(element);
+
+        /* Prepare the tooltip preview */
+        $('a', element).qtip({
+            content: {
+                text: 'Loading preview...',
+                ajax: {
+                    url: preview_url, 
+                    type: 'GET',
+                    data: { "slug": slug, "registry_object_id": registry_object_id },
+                    success: function(data, status) {
+                        data = $.parseJSON(data);                                       
+                        this.set('content.text', data.html);
+
+                        if (isPublished())
+                        {
+                            $('.viewRecordLink').attr("href",base_url + data.slug);
+                        }
+                        else
+                        {
+                            $('.viewRecordLink').attr("href",base_url+"view/?id=" + data.registry_object_id);
+                        }
+                    } 
+                }
+            },
+            position: {
+                my: 'left center',
+                at: 'right center',
+            },
+            show: {
+                event: 'click',
+                solo: true
+            },
+            hide: {
+                delay: 1000,
+                fixed: true,
+            },
+            style: {
+                classes: 'ui-tooltip-light ui-tooltip-shadow previewPopup',
+                width: 700,
+            }
+        });
+    }
 
 	//setTimeout(function(){alert("Hello")},3000)
 

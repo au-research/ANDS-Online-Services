@@ -14,7 +14,7 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 	// Some internal defaults 
 	const response_format = "application/json";
 	const default_retrieval_scheme = "extrif";
-	const default_retrieval_status = "PUBLISHED";
+	const default_retrieval_status = PUBLISHED;
 
 
 	/**
@@ -165,8 +165,11 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 		// Check that we can actually support this mode of request (ands/ABS/datacite, etc)
 		switch ($this->input->get('suggestor'))
 		{
-			case "ands":
-				$suggestor = "ands_links";
+			case "ands_identifiers":
+				$suggestor = "ands_identifiers";
+			break;
+			case "ands_subjects":
+				$suggestor = "ands_subjects";
 			break;
 			case "datacite":
 				$suggestor = "datacite";
@@ -199,7 +202,7 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 
 		// XXX: TODO: LIMIT and offset (pass to getSuggestedLinks...)
 
-		$links = $registry_object->getSuggestedLinks($suggestor);
+		$links = $registry_object->getSuggestedLinks($suggestor,$this->input->get('start'),$this->input->get('rows'));
 
 		echo json_encode(array("links"=>$links));
 	}

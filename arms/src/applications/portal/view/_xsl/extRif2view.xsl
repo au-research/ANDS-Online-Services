@@ -479,41 +479,26 @@
 
 
 
+  <div id="suggestedLinksRightBox" class="right-box">
+      <div id="infoBox" class="hide"></div>
+      <h2>Suggested Links</h2>
 
-    <xsl:if test="$objectClass='Collection'">
-        <div class="right-box" id="seeAlsoRightBox">
-            <div id="infoBox" class="hide"></div>
-            <h2>Suggested Links</h2>
-            <div id="seeAlso">
-                <img>
-                    <xsl:attribute name="src"><xsl:value-of select="$base_url"/><xsl:text>assets/core/images/ajax-loader.gif</xsl:text></xsl:attribute>
-                    <xsl:attribute name="class">loading-icon</xsl:attribute>
-                    <xsl:attribute name="alt">Loading…</xsl:attribute>
-                </img>
-            </div>
-            <div id="seeAlsoDataCite">
-                <!--img>
-                    <xsl:attribute name="src"><xsl:value-of select="$base_url"/><xsl:text>assets/core/images/ajax-loader.gif</xsl:text></xsl:attribute>
-                    <xsl:attribute name="class">loading-icon</xsl:attribute>
-                    <xsl:attribute name="alt">Loading…</xsl:attribute>
-                </img-->
-            </div>              
-        </div>
-    </xsl:if>
+      <div id="AndsSuggestedLinksBox">
+      %%%%ANDS_SUGGESTED_LINKS%%%%
+      </div>
 
-    <xsl:if test="$objectClass='Party'">
-        <div class="right-box" id="seeAlso-Identifier">
-            <div id="infoBox" class="hide"></div>
-            <h2>Suggested Links</h2>
-            <div id="seeAlso-IdentifierBox">
-                <img>
-                    <xsl:attribute name="src"><xsl:value-of select="$base_url"/><xsl:text>assets/core/images/ajax-loader.gif</xsl:text></xsl:attribute>
-                    <xsl:attribute name="class">loading-icon</xsl:attribute>
-                    <xsl:attribute name="alt">Loading…</xsl:attribute>
-                </img>
-            </div>
+      <xsl:if test="$objectClass='Collection'">
+        <div id="DataCiteSuggestedLinksBox">
+            <!--img>
+                <xsl:attribute name="src"><xsl:value-of select="$base_url"/><xsl:text>assets/core/images/ajax-loader.gif</xsl:text></xsl:attribute>
+                <xsl:attribute name="class">loading-icon</xsl:attribute>
+                <xsl:attribute name="alt">Loading…</xsl:attribute>
+            </img-->
         </div>
-    </xsl:if>   
+      </xsl:if>
+  </div>
+
+
 
 </div> 
 <div class="container_clear"></div>

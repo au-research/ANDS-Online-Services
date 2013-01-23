@@ -8,7 +8,7 @@
 class Suggestor_datacite implements GenericSuggestor
 {
 
-	public function getSuggestedLinksForRegistryObject($registry_object, $start, $rows)
+	public function getSuggestedLinksForRegistryObject(_registry_object $registry_object, $start, $rows)
 	{
 		$CI =& get_instance();
 		return array("XXX: TODO: This is from Datacite suggested links for RO ID: " . $registry_object->id);

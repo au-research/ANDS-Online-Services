@@ -80,6 +80,11 @@ function registry_url($suffix='')
 	return dirname(base_url()) . '/registry/' . $suffix;
 }
 
+function portal_url($suffix='')
+{
+	return dirname(base_url()) . '/portal/' . $suffix;
+}
+
 function current_protocol()
 {
 	$url = parse_url(site_url());

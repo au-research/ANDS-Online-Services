@@ -56,18 +56,19 @@ class Modules
 	public static function run($module) {
 		
 		$method = 'index';
-		
-		if(($pos = strrpos($module, '/')) != FALSE) {
+
+		if(($pos = strpos($module, '/')) != FALSE) {
 			$method = substr($module, $pos + 1);		
 			$module = substr($module, 0, $pos);
 		}
 
 		if($class = self::load($module)) {
-			
+
+			$method = array_shift(explode("/",$method));
 			if (method_exists($class, $method))	{
 				ob_start();
-				$args = func_get_args();
-				$output = call_user_func_array(array($class, $method), array_slice($args, 1));
+				$args = explode("/",array_pop(func_get_args()));
+				$output = call_user_func_array(array($class, $method), array_slice($args, 2));
 				$buffer = ob_get_clean();
 				return ($output !== NULL) ? $output : $buffer;
 			}

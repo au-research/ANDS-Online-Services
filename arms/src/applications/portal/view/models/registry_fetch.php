@@ -106,6 +106,36 @@ class Registry_fetch extends CI_Model
 		}
 	}
 
+	function fetchSuggestedLinksBySlug($slug, $type, $start, $rows)
+	{
+		$url = $this->config->item('registry_endpoint') . "getSuggestedLinks/?slug=" . $slug . "&suggestor=" . $type . "&start=$start&rows=$rows";
+
+		$contents = json_decode(file_get_contents($url), true);
+		if (isset($contents['links']))
+		{
+			return $contents['links'];
+		}
+		else
+		{
+			throw new Exception("Error whilst fetching registry object suggested links: " . $contents['message']);
+		}
+	}
+
+	function fetchSuggestedLinksByID($id, $type, $start, $rows)
+	{
+		$url = $this->config->item('registry_endpoint') . "getSuggestedLinks/?id=" . $id . "&suggestor=" . $type . "&start=".$start."&rows=".$rows;
+
+		$contents = json_decode(file_get_contents($url), true);
+		if (isset($contents['links']))
+		{
+			return $contents['links'];
+		}
+		else
+		{
+			throw new Exception("Error whilst fetching registry object suggested links: " . $contents['message']);
+		}
+	}
+
 	function fetchAncestryGraphBySLUG($slug)
 	{
 		$url = $this->config->item('registry_endpoint') . "getAncestryGraph/?slug=" . $slug;

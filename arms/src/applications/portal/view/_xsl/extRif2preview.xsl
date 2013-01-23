@@ -108,11 +108,11 @@
           <small>
             
             <xsl:choose>
-              <xsl:when test="extRif:description[@type= 'brief']">
-                  <xsl:apply-templates select="extRif:description[@type= 'brief']" mode="content"/>
+              <xsl:when test="../extRif:extendedMetadata/extRif:description[@type= 'brief']">
+                  <xsl:apply-templates select="../extRif:extendedMetadata/extRif:description[@type= 'brief']" mode="content"/>
               </xsl:when>
               <xsl:otherwise>
-                <xsl:apply-templates select="extRif:description[@type= 'full']" mode="content"/>
+                <xsl:apply-templates select="../extRif:extendedMetadata/extRif:description[@type= 'full']" mode="content"/>
               </xsl:otherwise>
             </xsl:choose>
 

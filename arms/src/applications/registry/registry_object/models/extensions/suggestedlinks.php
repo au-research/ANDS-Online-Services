@@ -7,7 +7,7 @@ class Suggestedlinks_Extension extends ExtensionBase
 		parent::__construct($ro_pointer);
 	}		
 	
-	/* XXX: This should be a loader for classes in a seperate directory called "suggestors" 
+	/* This should be a loader for classes in a seperate directory called "suggestors" 
 
 		Workflow should be:
 
@@ -45,17 +45,5 @@ class Suggestedlinks_Extension extends ExtensionBase
 		return $suggested_links;
 
 	}
-	
 
-	function _suggest_ands_links($start=0, $rows=20)
-	{
-		return array();
-		// XXX: TODO: do some stuff here to get ANDS suggested links... (SEE ABOVE FOR REFACTOR)
-	}
-
-	function _suggest_datacite($start=0, $rows=20)
-	{
-		return array();
-		// XXX: TODO: do some stuff here...  (SEE ABOVE FOR REFACTOR)
-	}
 }

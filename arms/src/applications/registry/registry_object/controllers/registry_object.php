@@ -17,9 +17,14 @@ class Registry_object extends MX_Controller {
 
 	public function test()
 	{
+
 		$this->load->model('registry_object/registry_objects','ro');
-		$ro = $this->ro->getBySlug('inverted-microscope-olympus-1x-50-for-patch-clamp-exp-eriments');
-		echo $ro->getNativeFormat();
+		$ros = $this->ro->getByDataSourceID(174, 1000);
+		foreach ($ros AS $ro)
+		{
+			$this->ro->deleteRegistryObject($ro->id);
+		}
+		echo "Done...";
 	}
 	public function testRecordSuite(){
 		echo "<pre>";

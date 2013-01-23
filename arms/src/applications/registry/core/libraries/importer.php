@@ -409,8 +409,12 @@ class Importer {
 				}
 			}
 		}
-		// Update the data source stats
-		$this->dataSource->updateStats();
+
+		if ($this->dataSource)
+		{
+			// Update the data source stats
+			$this->dataSource->updateStats();
+		}
 
 		// Finalise the commit
 		return curl_post($solrUpdateUrl.'?commit=true', '<commit waitSearcher="false"/>');

@@ -28,3 +28,18 @@ CREATE TABLE `api_keys` (
   PRIMARY KEY (`api_key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE `deleted_registry_objects` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `data_source_id` mediumint(8) unsigned NOT NULL,
+  `key` varchar(255) NOT NULL,
+  `deleted` int(10) unsigned NOT NULL,
+  `title` varchar(255) DEFAULT NULL,
+  `record_data` text,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`),
+  KEY `fk_data_source_id_idx` (`data_source_id`),
+  CONSTRAINT `fk_data_source_id` FOREIGN KEY (`data_source_id`) REFERENCES `data_sources` (`data_source_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+
+ALTER TABLE `dbs_registry_migration_test`.`url_mappings` DROP FOREIGN KEY `fk_url_map_to_registry_object` ;
+ALTER TABLE `dbs_registry_migration_test`.`url_mappings` CHANGE COLUMN `registry_object_id` `registry_object_id` MEDIUMINT(8) UNSIGNED NULL  ;

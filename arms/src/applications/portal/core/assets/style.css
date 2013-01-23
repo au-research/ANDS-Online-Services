@@ -368,8 +368,9 @@ a.logo img {
 	background: #a3be99;
 	padding: 29px 0 0 0;
 	position: relative;
-	z-index: 9999;	
+	z-index: 999;	
 }
+
 .search .inner {
 	width: 922px;
 	margin: 0 auto;
@@ -610,6 +611,11 @@ a.search_map {
 }
 .intro_inner {
 	padding: 26px 10px 0 113px;
+}
+.icon_sml
+{
+	padding-right:5px;
+	width:16px;
 }
 #collection_icon {
 	background: url(images/collection.png) no-repeat 22px 36px;	
@@ -1006,7 +1012,11 @@ a.search_map {
 	line-height: 18px;
 	font-weight: bold;
 }
-.sidebar a {
+#suggested_links_accordion ul li
+{
+	padding:10px;
+}
+.sidebar a, #suggested_links_accordion ul li a {
 	color: #eb7700;
 	font-weight: bold;	
 }

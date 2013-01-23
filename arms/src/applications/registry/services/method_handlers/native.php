@@ -37,7 +37,7 @@ class NativeMethod extends MethodHandler
 
 		// Get back a list of IDs for matching registry objects
 		$result = $CI->solr->executeSearch(true);
-	
+
 		$rifcsOutput = array();
 		$CI->load->helper('crosswalks');
 		$crosswalks = getCrossWalks();
@@ -45,8 +45,10 @@ class NativeMethod extends MethodHandler
 		{
 			foreach ($result['response']['docs'] AS $result)
 			{
+			
 				$CI->load->model('registry_object/registry_objects','ro');
-				$registryObject = $CI->ro->getByID($result['id']);
+				$registryObject = $CI->ro->getByID((int) $result['id']);
+
 				if ($registryObject)
 				{
 					$nativeFormat = $registryObject->getNativeFormat();

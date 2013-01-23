@@ -53,6 +53,8 @@ class XML_Extension extends ExtensionBase
 		{
 			$xml = $this->getRif($record_data_id);
 			$this->_simplexml = simplexml_load_string(str_replace('&','&amp;',$xml));
+			$this->_simplexml->registerXPathNamespace("ro", RIFCS_NAMESPACE);
+			$this->_simplexml->registerXPathNamespace("extRif", EXTRIF_NAMESPACE);
 			return $this->_simplexml;
 		}
 	}
