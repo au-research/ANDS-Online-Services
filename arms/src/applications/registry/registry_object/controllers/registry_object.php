@@ -169,6 +169,7 @@ class Registry_object extends MX_Controller {
 					$st['connectTo']='';
 					break;
 			}
+			array_push($st['menu'], array('action'=>'delete', 'display'=>'Delete'));
 			$filters = $this->input->post('filters');
 
 			$args['sort'] = isset($filters['sort']) ? $filters['sort'] : array('updated'=>'desc');
@@ -507,6 +508,15 @@ class Registry_object extends MX_Controller {
 				$ro->{$a['name']} = $a['value'];
 				$ro->save();
 			}
+		}
+	}
+
+	function delete(){
+		$affected_ids = $this->input->post('affected_ids');
+		$this->load->model('registry_objects', 'ro');
+		foreach($affected_ids as $id){
+			$ro = $this->ro->getByID($id);
+			$this->ro->deleteRegistryObject($ro);
 		}
 	}
 

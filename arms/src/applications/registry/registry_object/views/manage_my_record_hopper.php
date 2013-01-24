@@ -122,7 +122,7 @@
 <div id="context-menu-{{name}}">
 	<ul class="dropdown-menu" role="menu">
 		{{#menu}}
-		<li><a tabindex="-1" href="javascript:;" class="op" action="{{action}}" status="{{name}}">{{display}}<a/></li>
+		<li><a tabindex="-1" href="javascript:;" class="op" action="{{action}}" status="{{name}}">{{display}}</a></li>
 		{{/menu}}
 		<li class="hide unflag"><a tabindex="-1" href="javascript:;" class="op" action="un_flag" status="{{name}}">Remove Flag<a/></li>
 	</ul>

@@ -3,7 +3,7 @@ var searchUrl = base_url+'search/filter';
 var searchBox = null;
 var map = null;
 var pushPin = null;
-var spatialResult = new Array();
+var resultPolygons = new Array();
 var markersArray = new Array();
 var polygonsArray = new Array();
 var markerClusterer = null;
@@ -52,7 +52,7 @@ $(document).ready(function() {
 });
 
 function executeSearch(searchData, searchUrl){
-	spatialResult = new Array();
+	resultPolygons = new Array();
 	clearOverlays();
 	$.ajax({
 		url:searchUrl, 
@@ -78,12 +78,16 @@ function executeSearch(searchData, searchUrl){
 			var template = $('#facet-template').html();
 			var output = Mustache.render(template, data);
 			$('#facet-result').html(output);
+
+			//populate spatial result polygons
 			var docs = data.result.docs;
 			$(docs).each(function(){
 			 	if(this.spatial_coverage_polygons)
 			 	{
-			 	spatialResult[this.id] = new Array(this.display_title, this.spatial_coverage_polygons[0], this.spatial_coverage_centres[0]);
+			 		// console.log(this.spatial_coverage_polygons);
+			 	resultPolygons[this.id] = new Array(this.display_title, this.spatial_coverage_polygons[0], this.spatial_coverage_centres[0]);
 			 	}
+
 			});
 
 			initSearchPage();
@@ -198,7 +202,7 @@ function initMap(){
           position: google.maps.ControlPosition.TOP_CENTER,
           drawingModes: [
            // google.maps.drawing.OverlayType.MARKER,
-           //google.maps.drawing.OverlayType.CIRCLE,
+           // google.maps.drawing.OverlayType.CIRCLE,
             google.maps.drawing.OverlayType.RECTANGLE
           ]
         },
@@ -214,6 +218,7 @@ function initMap(){
       rectangleOptions.strokeOpacity= 0.8;
       rectangleOptions.strokeWeight= 2;
       rectangleOptions.clickable= false;
+      // rectangleOptions.editable= true;
       rectangleOptions.zIndex= 1;     
       
       drawingManager.set('rectangleOptions', rectangleOptions);
@@ -238,14 +243,14 @@ function initMap(){
         }
 
        });
-     	markerClusterer = new  MarkerClusterer(map, null, {zoomOnClick:false});
+     markerClusterer = new  MarkerClusterer(map, null, {zoomOnClick:false});
 }
 
 
 function processPolygons(){
-	if(spatialResult.length)
+	if(resultPolygons.length)
 	{
-		for(p in spatialResult)
+		for(p in resultPolygons)
 		{
 
 			id = p.toString();
@@ -317,7 +322,6 @@ function createMarker(latlng, id)
 	        });
 	marker.set("id", id);
 	google.maps.event.addListener(marker,"mouseover",function(){
-		console.log(marker.id);
 		clearPolygons();
 		polygonsArray[marker.id].setMap(map);
 	});
@@ -398,7 +402,7 @@ function resetZoom(){
 		map.setCenter(searchBox.getBounds().getCenter());
 		map.fitBounds(searchBox.getBounds());
 	}
-	else{
+	else if(searchData['spatial']){
 		var spatialBounds = searchData['spatial'];
 		spatialBounds = decodeURI(spatialBounds);
 		var wsenArray = spatialBounds.split(' ');
@@ -417,7 +421,7 @@ function resetZoom(){
 	  	rectangleOptions.bounds = rBounds;
 
 	  	var geoCodeRectangle = new google.maps.Rectangle(rectangleOptions);
-	  	geoCodeRectangle.setMap(map);
+		geoCodeRectangle.setMap(map);
 	  	searchBox = geoCodeRectangle;
 	 	map.setCenter(searchBox.getBounds().getCenter());
 		map.fitBounds(searchBox.getBounds());

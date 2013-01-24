@@ -9,7 +9,7 @@ $(function() {
     // console.log(filters);
     init(filters);
 
-    $(document).on("mousedown", ".sortable li", function(e){
+    $(document).on("click", ".sortable li", function(e){
         if(e.button==2){
             if(!$(this).hasClass('ro_selected')) click_ro(this, 'select');
             var status = $(this).attr('status');
@@ -65,7 +65,13 @@ $(function() {
                   }];
                   update(selected_ids, attributes);
                 break;
+            case 'delete':
+                if(confirm('Are you sure you want to delete '+selected_ids.length+' Registry Objects?')){
+                  delete_ro(selected_ids);
+                }
+                break;
             case 'flag':
+
                 var attributes = [{
                     name:'flag',
                     value:'t'
@@ -414,6 +420,17 @@ function update(ids, attributes){
         url:base_url+'registry_object/update/', 
         type: 'POST',
         data: {affected_ids:ids, attributes:attributes},
+        success: function(data){
+            init(filters);
+        }
+    });
+}
+
+function delete_ro(ids){
+    $.ajax({
+        url:base_url+'registry_object/delete/', 
+        type: 'POST',
+        data: {affected_ids:ids},
         success: function(data){
             init(filters);
         }
