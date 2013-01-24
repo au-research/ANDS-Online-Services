@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<registryObjects xmlns="http://ands.org.au/standards/rif-cs/registryObjects">
+   <registryObject group="University of Southern Queensland">
+      <key>USQ-DataColl-0002</key>
+      <originatingSource>http://researchdata.ands.org.au/registry/orca/register_my_data</originatingSource>
+      <collection type="collection">
+         <name type="primary">
+            <namePart type="">Samples and data from
+                    the Disturbance and resilience in riparian woodlands on the highly modified
+                    Upper Condamine floodplain project</namePart>
+         </name>
+         <description type="full">&lt;p
+                style="text-align: left; margin: 1em 10em 3em"&gt; Remnant ecosystems in
+                agricultural landscapes are poorly understood in terms of their diversity, function
+                and dynamics under altered disturbance regimes, and of how these influence
+                resilience to future disturbance. Understanding native ecosystem responses to novel
+                and multiple disturbances is a crucial foundation for adaptive management to
+                maintain and enhance biodiversity and critical ecosystem services in production
+                landscapes. This is particularly significant where environmental change drives
+                irreversible threshold responses and ecosystem transitions to less functional, or
+                less preferred, alternative ecological states. This research was conducted in
+                remnant riparian woodland ecosystems along a regulated section of the Condamine
+                River, southern Queensland, an ephemeral dryland river system draining an
+                intensively farmed landscape in eastern Australia. Riparian woodland remnants on the
+                Upper Condamine floodplain are subject to significant changes in hydrological
+                regimes and land use intensity. They also exhibit dieback and limited recruitment of
+                canopy species, as well as widespread invasion by the introduced perennial herb
+                Phyla canescens (lippia); however, efforts to address these issues have largely
+                failed to curb ongoing degradation, potentially due to a lack of understanding of
+                the key drivers of ecological change operating in this complex socio-ecological
+                landscape. This research addressed questions about the drivers of floristic
+                composition, functional diversity and woodland condition in fragmented riparian
+                woodland communities associated with a regulated dryland river system, and embedded
+                in a production landscape. In particular, it investigated ecological responses to
+                the range of disturbances (including altered hydrology, land use intensity, resource
+                availability, and key species interactions) prevalent in this highly modified
+                landscape. Two of the four studies presented test the hypothesis that the
+                composition and condition of riparian woodland remnants on the Upper Condamine
+                floodplain are associated with current levels of longitudinal and lateral
+                hydrological connectivity. These studies used a stratified sampling design which
+                partitioned the study area into river sections, and also considered the influence of
+                lateral overbank and overland flood flows, and grazing within ecosystem fragments
+                (remnants). Full floristic sampling and condition assessments of mature Eucalyptus
+                camaldulensis/E. tereticornis trees were conducted at a total of 24 sites in
+                2004/05. Significant patterns in floristic composition, functional diversity and
+                woodland condition were explained by differences in hydrological variability;
+                however, the confounding influence of land use and interaction between
+                within-remnant land use (specifically grazing) and hydrological factors for some
+                measures, indicated response to a complexity of drivers. A third study investigated
+                the influence of local and landscape-scale hydrological and land use variables. It
+                used a Bayesian model averaging (BMA) approach to identify informative model sets of
+                explanatory variables, and key environmental predictors of floristic composition,
+                community structure and ecological condition. A novel method was developed to
+                examine dynamic transitions in species richness and abundance between reciprocal
+                pairs of functional groups; this method used the ratio of species richness (or total
+                abundance) in corresponding pairs of functional trait groups (e.g. C3:C4 species) as
+                a community response variable reflecting the relative importance of each group along
+                the environmental gradients tested. Groundwater decline was the primary predictor of
+                ecosystem response, with lower floristic and functional diversity and more severe
+                dieback associated with increasing depth to groundwater; this result suggests an
+                overarching reliance on shallow groundwater resources for maintenance of ecosystem
+                resilience not previously reported for this ecosystem type in Australia. Lippia
+                abundance and dominant tree condition were also important biotic drivers of
+                ecosystem condition in these communities, and key predictors of floristic
+                composition and functional group richness and abundance transitions. Poor tree
+                condition and loss of hydraulic function was associated with secondary impacts on
+                less well adapted &amp;#39;terrestrial&amp;#39; groundcover species, while the
+                subdominant species Acacia stenophylla responded positively to competitive release
+                due to poor tree function and reduced tree density. Lippia cover was also strongly
+                associated with the density (positively) and mortality (negatively) of mature trees.
+                Small scale species interactions were investigated in a study which tested
+                differences in groundcover vegetation composition and lippia cover, reproductive
+                condition and growth habit between &amp;#39;distance from tree&amp;#39; and
+                topographic position treatments in a riparian woodland on the Upper Condamine
+                floodplain. Sampling was conducted along twelve transects extending from the base of
+                mature Eucalyptus camaldulensis/E. tereticornis trees into canopy gaps. Results
+                indicated that scattered trees play a significant role in facilitating the abundance
+                and condition of lippia in this landscape, with evidence of high lippia abundance,
+                reproductive effort and consolidated clonal growth under trees canopies (described
+                as a &amp;#39;halo&amp;#39; effect). This interaction is likely to play a
+                significant role in the persistence of this mesic, though highly adaptive, species
+                in this drought prone landscape. Lippia cover greater than approximately 20% was
+                also found to have a significant impact on the abundance and diversity of non-lippia
+                species in these grassy woodlands. Results of this research are synthesised in a
+                conceptual resilience-based state and transition &amp;#39;riparian woodland
+                response&amp;#39; model identifying three critical transitions for riparian
+                ecosystem condition and function related to effectively irreversible changes in the
+                landscape: (i) transformation to a lippia-invaded landscape with the introduction,
+                establishment and spread of lippia on the floodplain; (ii) transformation from
+                riparian communities which are well buffered against drought, due to connection with
+                shallow groundwater, to communities reliant on and susceptible to stochastic
+                climatic variability; and (iii) population failure in the dominant functional canopy
+                species complex, Eucalyptus camaldulensis/E. tereticornis, and transformation to
+                non-eucalypt-dominant floodplain ecosystem types such as Acacia stenophylla-dominant
+                woodlands, floodplain grasslands or lippia-dominant herblands with significantly
+                reduced capacity to provide essential ecosystems services in riparian contexts. In
+                conclusion, this research indicates that observed condition in riparian woodlands on
+                the Upper Condamine floodplain is an integrated response to a range of disturbances,
+                but that certain changes (in particular, groundwater decline due to overextraction
+                in combination with extended drought) may be critical to the long-term persistence
+                and function of these remnants. This study indicates the importance of systems-based
+                empirical research to developing better understanding of the function and dynamics
+                of remnant ecosystems in highly modified landscapes subject to both natural and
+                anthropogenic disturbance regimes. The resilience-based approach also focuses
+                attention on the key drivers of stability and critical transitions in these complex
+                socio-ecological systems. Such research is vital to evaluating and predicting
+                changes in remnant native ecosystems and the provision of important ecosystem
+                services, and as a basis for adaptive management in multi-use production
+                landscapes.&lt;/p&gt; </description>
+         <rights>
+            <accessRights>Negotiated
+                    access</accessRights>
+         </rights>
+         <identifier type="local">USQ-DataColl-0002</identifier>
+         <location>
+            <address>
+               <electronic type="email">
+                  <value>Kathryn.Reardon-Smith@usq.edu.au</value>
+               </electronic>
+               <physical type="streetAddress">
+                  <addressPart type="text">Australian Centre for Sustainable Catchments (ACSC) University of Southern Queensland Toowoomba Qld 4350 Australia</addressPart>
+               </physical>
+            </address>
+         </location>
+         <relatedObject>
+            <key>USQ-Party-559</key>
+            <relation type="isOutputOf">
+               <url/>
+            </relation>
+         </relatedObject>
+         <subject type="anzsrc-for">060208</subject>
+         <subject type="anzsrc-for">050104</subject>
+         <coverage>
+            <temporal>
+               <date type="dateFrom" dateFormat="W3CDTF">2004-02-01T00:00:00Z</date>
+               <date type="dateTo" dateFormat="W3CDTF">2011-11-30T00:00:00Z</date>
+            </temporal>
+            <spatial type="kmlPolyCoords">152.1,-27.2 151.3,-27.2 151.3,-28.2 152.1,-28.2 152.1,-27.2</spatial>
+         </coverage>
+         <citationInfo>
+            <citationMetadata>
+               <identifier type="local">USQ-DataColl-0002</identifier>
+               <contributor seq="1">
+                  <namePart type="title">Doctor</namePart>
+                  <namePart type="family">Reardon-Smith</namePart>
+                  <namePart type="given">Kathryn </namePart>
+                  <namePart type="initial">M</namePart>
+               </contributor>
+               <title>Samples and data from the Disturbance and resilience
+                        in riparian woodlands on the highly modified Upper Condamine floodplain
+                        project</title>
+               <edition>1st edn</edition>
+               <publisher>University of Southern Queensland</publisher>
+               <placePublished>Toowoomba</placePublished>
+               <date type="publicationDate">2011</date>
+               <url>http://eprints.usq.edu.au/21345/</url>
+               <context>riparian woodlands; riparian woodland; ecosystem;
+                        Condamine River</context>
+            </citationMetadata>
+         </citationInfo>
+      </collection>
+   </registryObject>
+</registryObjects>

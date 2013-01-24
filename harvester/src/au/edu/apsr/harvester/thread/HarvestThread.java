@@ -26,7 +26,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
+import java.net.URLConnection;
 import java.net.HttpURLConnection;
+import javax.net.ssl.HttpsURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -196,13 +198,27 @@ public abstract class HarvestThread extends TimerTask
      */
     protected InputStream getInputStream(URL url) throws IOException
     {
-        HttpURLConnection conn;
+HttpURLConnection conn;
         InputStream in = null;
         int responseCode = 0;
 
         do
         {
-            conn = (HttpURLConnection)url.openConnection();
+            String protocol = url.getProtocol();
+            boolean secure = "https".equals(protocol);
+            if(secure)
+                conn = (HttpsURLConnection)url.openConnection();
+            else
+                conn = (HttpURLConnection)url.openConnection();
+
+            if (conn instanceof URLConnection) 
+                log.info("This is a URLConnection.");
+            if (conn instanceof HttpURLConnection)
+                log.info("This is a HttpURLConnection.");
+            if (conn instanceof HttpsURLConnection)
+                log.info("This is a HttpsURLConnection.");
+                log.info("Connection object: "+conn.toString());
+
             conn.setConnectTimeout(10000);
             conn.setRequestProperty("User-Agent", "APSRHarvester/1.0");
             conn.setRequestProperty("Accept-Encoding", "compress, gzip, identify");

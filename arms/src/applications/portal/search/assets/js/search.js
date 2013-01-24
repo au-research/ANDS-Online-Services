@@ -60,7 +60,7 @@ function executeSearch(searchData, searchUrl){
 		data: {filters:searchData},
 		dataType:'json',
 		success: function(data){
-			//console.log(data);
+			console.log(data); 
 
 			$('#search-result, .pagination, #facet-result').empty();
 
@@ -108,7 +108,7 @@ function initSearchPage(){
 	});
 
 	//see if we need to init the map
-	if(searchData['map']){
+	if(searchData['map'] || map){
 		$('#searchmap').show();
 		 processPolygons();
 		 resetZoom();
@@ -403,6 +403,7 @@ function resetZoom(){
 		map.fitBounds(searchBox.getBounds());
 	}
 	else if(searchData['spatial']){
+		harvester https support test
 		var spatialBounds = searchData['spatial'];
 		spatialBounds = decodeURI(spatialBounds);
 		var wsenArray = spatialBounds.split(' ');

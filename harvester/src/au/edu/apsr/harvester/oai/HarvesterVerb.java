@@ -94,7 +94,7 @@ public abstract class HarvesterVerb
             /* Load DOM Document */
             factory = DocumentBuilderFactory.newInstance();
             factory.setNamespaceAware(true);
-            factory.setValidating(true);
+            factory.setValidating(false);
             Thread t = Thread.currentThread();
             theThread = t;
             DocumentBuilder builder = factory.newDocumentBuilder();
