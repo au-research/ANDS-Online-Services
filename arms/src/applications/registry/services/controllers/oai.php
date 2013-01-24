@@ -141,7 +141,7 @@ class Oai extends MX_Controller
 		$this->load->model('oai/records', 'records');
 		$start = $this->records->earliest();
 		$ident_details = array('repositoryName' => Oai::REP_NAME,
-				       'baseUrl' => xml_convert(base_url()),
+				       'baseUrl' => base_url(),
 				       'protocolVersion' => Oai::PROT_VER,
 				       'earliestTimestamp' => $start,
 				       'deletedRecord' => 'transient', #persistent?
@@ -310,8 +310,8 @@ class Oai extends MX_Controller
 					$this->output->append_output("\t\t\t<metadata>\n");
 					try
 					{
-					    $this->output->append_output($rec->metadata($format,
-											3));
+					    $this->output->append_output(wrapRegistryObjects($rec->metadata($format,
+											3)));
 					}
 					catch (Exception $e) {/*eek... would be good to log these...*/}
 					$this->output->append_output("\t\t\t</metadata>\n");
@@ -708,9 +708,9 @@ class Oai extends MX_Controller
 
 XMLHEAD;
 		#CI's time helper is crap for just getting a UTC timestamp; using POPHP)
-		$response_date = gmdate('Y-m-d\TH:i:s\+\Z', $this->responseDate);
+		$response_date = gmdate('Y-m-d\TH:i:s\Z', $this->responseDate);
 		$this->output->set_content_type('application/xml');
-		$this->output->set_output($_header);
+		$this->output->set_output(trim($_header));
 		$this->output->append_output(sprintf("\t<responseDate>%s</responseDate>",
 			$response_date) . "\n");
 

@@ -403,7 +403,7 @@ function resetZoom(){
 		map.fitBounds(searchBox.getBounds());
 	}
 	else if(searchData['spatial']){
-		harvester https support test
+		//harvester https support test
 		var spatialBounds = searchData['spatial'];
 		spatialBounds = decodeURI(spatialBounds);
 		var wsenArray = spatialBounds.split(' ');

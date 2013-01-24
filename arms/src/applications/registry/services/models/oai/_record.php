@@ -115,7 +115,7 @@ class _record
 			}
 		}
 
-		return date('c', max(array($created, $updated)));
+		return date('Y-m-d\TH:i:s\Z', max(array($created, $updated)));
 	}
 
 }

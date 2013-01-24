@@ -45,7 +45,7 @@ class Sets extends CI_Model
 		if ($reg_obj)
 		{
 		    $ds = array($this->ds->getByID($reg_obj->data_source_id));
-		    $roa = array($reg_obj->getAttribute("group"));
+		    $roa = array(str_replace(" ", "0x20", $reg_obj->getAttribute("group")));
 		    $roc = array($reg_obj->class);
 		}
 		else
@@ -65,7 +65,7 @@ class Sets extends CI_Model
 		$query = $this->db->distinct()->select("value")
 		    ->get_where("registry_object_attributes",
 				array("attribute" => "group"));
-		$roa = array_map(create_function('$r', 'return $r["value"];'),
+		$roa = array_map(create_function('$r', 'return str_replace(" ", "0x20",$r["value"]);'),
 				 $query->result_array());
 	    }
 
@@ -151,7 +151,7 @@ class Sets extends CI_Model
 		$query = $this->db->distinct()->select("value")
 		    ->get_where("registry_object_attributes",
 				array("attribute" => "group",
-				      "value" => $spec));
+				      "value" => str_replace(" ", "0x20",$spec)));
 		if ($query->num_rows < 0)
 		{
 		    $set = null;
@@ -206,7 +206,7 @@ class Sets extends CI_Model
 				       "registry_object_attributes.registry_object_id = registry_objects.registry_object_id")
 				->get_where("registry_objects",
 					    array("registry_object_attributes.attribute" => "group",
-						  "registry_object_attributes.value" => $sname));
+						  "registry_object_attributes.value" => str_replace("0x20"," ",$sname)));
 			break;
 		case 'class':
 			$query = $this->db->distinct()->select("registry_objects.registry_object_id")

@@ -412,8 +412,6 @@ $(document).ready(function() {
             preview_url = base_url + "preview/?id=" + registry_object_id;
         }
 
-        console.log(element);
-
         /* Prepare the tooltip preview */
         $('a', element).qtip({
             content: {
