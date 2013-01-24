@@ -108,8 +108,13 @@ class _record
 			{
 				$row = $query->result();
 				$$type = $row[0]->value;
+				if (!is_numeric($$type))
+				{
+					$$type = strtotime($$type);
+				}
 			}
 		}
+
 		return date('c', max(array($created, $updated)));
 	}
 

@@ -12,7 +12,7 @@ class Oai extends MX_Controller
 {
 
 	const PROT_VER = "2.0";
-	const ADMIN_EMAIL = "ands.admin.fake@example.com";
+	const ADMIN_EMAIL = "services@ands.org.au";
 	const REP_NAME = "Australian National Data Service (ANDS)";
 	const ERROR  = 'badArgument'; // generic error code for unexpected exceptions
 
