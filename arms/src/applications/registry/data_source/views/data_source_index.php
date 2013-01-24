@@ -750,8 +750,8 @@
 							<label class="control-label" for="harvest_method">Harvest Method</label>
 							<div class="controls">
 								<select data-placeholder="Choose a Harvest Method" tabindex="1" class="chzn-select input-xlarge" for="harvest_method">
-									<option value="RIF">DIRECT (HTTP)</option>
-									<option value="RIF OAI-PMH">Harvested (OAI-PMH)</option>
+									<option value="GET">DIRECT (HTTP)</option>
+									<option value="RIF">Harvested (OAI-PMH)</option>
 								</select>
 								<input type="text" class="input-small hide" name="harvest_method" id="harvest_method" value="{{harvest_method}}">
 							</div>

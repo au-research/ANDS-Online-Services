@@ -26,11 +26,21 @@ class Slug_Extension extends ExtensionBase
 		$result = preg_replace("/\s/", "-", $result);
 
 		// Check that there are no clashes
-		$query = $this->db->select('registry_object_id')->get_where('url_mappings',array("slug"=> $result));
-		if ($query->num_rows() > 0)
+		$query_ro_slugs = $this->db->select('registry_object_id')->get_where('registry_objects',array("slug"=> $result));
+		$query_url_mappings = $this->db->select('registry_object_id')->get_where('url_mappings',array("slug"=> $result));
+		if ($query_ro_slugs->num_rows() > 0 || $query_url_mappings->num_rows())
 		{
-			$existing_slug = array_pop($query->result_array());
-			$query->free_result();
+			if ($query_ro_slugs->num_rows() > 0)
+			{
+				$existing_slug = array_pop($query_ro_slugs->result_array());
+			}
+			else if ($query_url_mappings->num_rows() > 0)
+			{
+				$query_url_mappings = array_pop($query_ro_slugs->result_array());
+			}
+
+			$query_ro_slugs->free_result();
+			$query_url_mappings->free_result();
 
 			// The slug gets abandoned if it's related record is deleted
 			if (!$existing_slug['registry_object_id'])

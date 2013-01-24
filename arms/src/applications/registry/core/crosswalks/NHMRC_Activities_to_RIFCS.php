@@ -21,7 +21,7 @@
 
 class NHMRC_Activities_to_RIFCS extends Crosswalk
 {
-
+    static $GRANT_ADMIN_LOOKUP = array();
     const NHMRC_GROUP = 'National Health and Medical Research Council';
     const NHMRC_ORIGINATING_SOURCE = 'http://www.nhmrc.gov.au/grants/research-funding-statistics-and-data';
     const NHMRC_KEY_PREFIX = 'http://purl.org/au-research/grants/nhmrc/';
@@ -165,7 +165,15 @@ class NHMRC_Activities_to_RIFCS extends Crosswalk
             $registryObject .=         '<relation type="isFundedBy" />' . NL;
             $registryObject .=      '</relatedObject>' . NL;
 
-            // XXX: Relate to NLA identifier for GRANT_ADMIN_INSTITUTION
+            // Relate to key for GRANT_ADMIN_INSTITUTION
+            if ($admin_institution_key = $this->resolveAustralianResearchInstitution($row['GRANT_ADMIN_INSTITUTION']))
+            {
+                // Relate to the GRANT Admin's key
+                $registryObject .=      '<relatedObject>' . NL;
+                $registryObject .=         '<key>'. $admin_institution_key . '</key>' . NL;
+                $registryObject .=         '<relation type="isManagedBy" />' . NL;
+                $registryObject .=      '</relatedObject>' . NL;
+            }
 
             // Include the native format
             $registryObject .=      '<relatedInfo type="'.NATIVE_HARVEST_FORMAT_TYPE.'">' . NL;
@@ -213,6 +221,10 @@ class NHMRC_Activities_to_RIFCS extends Crosswalk
             }
             else
             {
+                if (strlen($csv_value) > 55 && substr($csv_value, 55,1) == " ")
+                {
+                    $csv_value = substr($csv_value,0,55) . substr($csv_value, 56);
+                }
                 $mapped_values[$heading] = $csv_value;
             }
         }
@@ -284,6 +296,32 @@ class NHMRC_Activities_to_RIFCS extends Crosswalk
         }
         
         return $csv;
+    }
+
+    private function resolveAustralianResearchInstitution($name)
+    {
+        // Don't make the same request twice
+        if (isset(NHMRC_Activities_to_RIFCS::$GRANT_ADMIN_LOOKUP[$name]))
+        {
+            return NHMRC_Activities_to_RIFCS::$GRANT_ADMIN_LOOKUP[$name];
+        }
+
+        $CI =& get_instance();
+
+        $solr_query = '+group:("Australian Research Institutions") +display_title:("'.$name.'")';
+        $CI->load->library('solr');
+        $CI->solr->setOpt('q', $solr_query);
+        $result = $CI->solr->executeSearch(true);
+
+        if (isset($result['response']['numFound']) && $result['response']['numFound'] > 0)
+        {
+            return $result['response']['docs'][0]['key'];
+        }
+        else
+        {
+            return null;
+        }
+
     }
 
 }

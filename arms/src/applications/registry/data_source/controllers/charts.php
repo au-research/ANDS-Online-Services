@@ -35,7 +35,6 @@ class Charts extends MX_Controller {
 			// Assume daily entries, if too many, expand to monthly 
 			$date_format = "%b"; // i.e. 4-Jan (formats: http://www.jqplot.com/docs/files/plugins/jqplot-dateAxisRenderer-js.html)
 			$query =  $this->aggregateRecordCreatedProgression($dataSource, ONE_DAY);
-
 			// Condense the chart if too many individual values...
 			if ($query->num_rows() > $this->max_chart_rows)
 			{
@@ -77,8 +76,9 @@ class Charts extends MX_Controller {
 
 	private function aggregateRecordCreatedProgression($_data_source, $interval)
 	{
+	
 		return $query = $this->db->query("SELECT COUNT(*) AS count, FLOOR(value/".$interval.")*".$interval." AS datestamp 
-										FROM dbs_registry.registry_objects NATURAL JOIN registry_object_attributes 
+										FROM registry_objects NATURAL JOIN registry_object_attributes 
 										WHERE data_source_id = ".$_data_source->id." AND attribute='created' GROUP BY datestamp;");
 	}
 

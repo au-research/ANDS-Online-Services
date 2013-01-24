@@ -618,15 +618,13 @@ class _data_source {
 			$created = $this->getAttribute("created");		
 		if($dataSourceURI == '')
 			$dataSourceURI = $this->getAttribute("uri");
-
-		if($providerType == '')
-			$providerType = $this->getAttribute("provider_type");
 		
-		//if($OAISet == '')
-			//$OAISet = $this->getAttribute("oai_set");
+		if($OAISet == '')
+			$OAISet = $this->getAttribute("oai_set");
 
 		if($harvestMethod == '')
 			$harvestMethod = $this->getAttribute("harvest_method");
+		if ($harvestMethod == "rif") $harvestMethod = "RIF"; //crosswalk-introduced bugfix
 	
 		if($harvestDate == '')
 			$harvestDate = $this->getAttribute("harvest_date");
@@ -650,7 +648,7 @@ class _data_source {
 		$harvestRequest .= 'responsetargeturl='.urlencode($responseTargetURI);		
 		$harvestRequest .= '&harvestid='.urlencode($harvestRequestId);
 		$harvestRequest .= '&sourceurl='.urlencode($dataSourceURI);
-		$harvestRequest .= '&method='.urlencode($providerType);
+		$harvestRequest .= '&method='.urlencode($harvestMethod);
 		if( $OAISet )
 		{
 			$harvestRequest .= '&set='.urlencode($OAISet);

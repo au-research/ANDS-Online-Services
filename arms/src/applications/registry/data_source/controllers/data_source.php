@@ -681,9 +681,9 @@ class Data_source extends MX_Controller {
 
 					$this->importer->setXML($rifcsXml);
 
-					if ($data_source->provider_type != RIFCS_SCHEME)
+					if ($dataSource->provider_type != RIFCS_SCHEME)
 					{
-						$this->importer->setCrosswalk($data_source->provider_type);
+						$this->importer->setCrosswalk($dataSource->provider_type);
 					}
 
 					$this->importer->setHarvestID($harvestId);
@@ -711,6 +711,7 @@ class Data_source extends MX_Controller {
 								$dataSource->append_log($this->importer->getMessages(), HARVEST_INFO);	
 							}
 							
+							$dataSource->updateStats();
 							$responseType = 'success';
 						}
 						catch (Exception $e)
