@@ -253,13 +253,13 @@ class Cosi_authentication extends CI_Model {
         }
         $the_affilates_string = trim($the_affilates_string,", ");
 
-        $user_appids = $this->cosi_db->query("SELECT dba.tbl_role_relations.child_role_id 
+        $user_appids = $this->cosi_db->query("SELECT dba.tbl_role_relations.parent_role_id 
                                             FROM dba.tbl_role_relations, dba.tbl_roles
-                                            WHERE dba.tbl_role_relations.parent_role_id IN (".$the_affilates_string.")
-                                            AND dba.tbl_role_relations.child_role_id = dba.tbl_roles.role_id 
+                                            WHERE dba.tbl_role_relations.child_role_id IN (".$the_affilates_string.")
+                                            AND dba.tbl_role_relations.parent_role_id = dba.tbl_roles.role_id 
                                             AND dba.tbl_roles.role_type_id = 'ROLE_DOI_APPID'");
         foreach($user_appids->result() as $r){
-            $doi_appids[] = $r->child_role_id;
+            $doi_appids[] = $r->parent_role_id;
         }
         return $doi_appids;
     }

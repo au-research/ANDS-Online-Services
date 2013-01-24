@@ -40,12 +40,14 @@ class Mydois extends MX_Controller {
 		$doiStatus = $this->input->get_post('doi_status');
 		$data['doi_appids'] = $this->user->doiappids();
 
+		if (!$appId) throw new Exception ('Invalid App ID');  
+		
 		if(!in_array($appId, $data['doi_appids'] ))
 		{
 			throw new Exception ('You do not have authorisation to view dois associated with application id '.$appId);  
 		}
 
-		if (!$appId) throw new Exception ('Invalid App ID');  
+
 		
 		$query = $doi_db->where('app_id',$appId)->select('*')->get('doi_client');
 		if (!$client_obj = $query->result()) throw new Exception ('Invalid App ID');  
