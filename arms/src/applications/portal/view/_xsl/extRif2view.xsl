@@ -470,10 +470,8 @@
     <!--xsl:if test="//ro:relatedObject"-->
       <div class="right-box" id="connectionsRightBox">
           <div id="connectionsInfoBox" class="hide"></div>
-          <h2>Connections</h2>
           <div id="connections">%%%%CONNECTIONS%%%%</div>
-          <p></p>
-      </div>  
+        </div>  
     <!--/xsl:if-->
 
 
@@ -488,7 +486,8 @@
       </div>
 
       <xsl:if test="$objectClass='Collection'">
-        <div id="DataCiteSuggestedLinksBox">
+        <br/><br/>
+        <div id="DataCiteSuggestedLinksBox" class="hide">
             <!--img>
                 <xsl:attribute name="src"><xsl:value-of select="$base_url"/><xsl:text>assets/core/images/ajax-loader.gif</xsl:text></xsl:attribute>
                 <xsl:attribute name="class">loading-icon</xsl:attribute>

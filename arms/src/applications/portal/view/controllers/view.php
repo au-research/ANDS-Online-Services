@@ -2,9 +2,12 @@
 
 class View extends MX_Controller {
 
-	function index(){
+
+	function index()
+	{
 		$data['title']='Research Data Australia';
 		$data['js_lib'] = array('dynatree','qtip');
+		$data['scripts'] = array('view');
 
 		$suggested_links = array();
 		if (!$this->input->get('slug') && !$this->input->get('id'))
@@ -50,6 +53,9 @@ class View extends MX_Controller {
 		$this->load->view('view', $data);
 
 	}
+
+
+
 
 	/* This preview widget is embedded in qtips popups */
 	/* Note: do not use exceptions as this will override screen

@@ -2,7 +2,7 @@
 	$connDiv = '';
 	if (isset($connections_contents))
 	{
-		
+
 		foreach($connections_contents as $classes)
 		{
 			foreach($classes as $classname => $class)
@@ -31,5 +31,12 @@
 		}
 	}
 
-	echo $connDiv;
+	// Only display if there are actually some connections to show...
+	if ($connDiv)
+	{
+		echo "<h2>Connections</h2>";
+		echo $connDiv;
+		echo "<p></p>";
+	}
+
 ?>

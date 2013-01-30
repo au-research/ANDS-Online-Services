@@ -10,7 +10,7 @@ class Suggestor_datacite implements GenericSuggestor
 	const DATACITE_SOLR_URL = 'http://search.datacite.org/api';
 	const DATACITE_URL_PREFIX = 'http://data.datacite.org/';
 	const DATACITE_URL_FIELD = 'doi';
-	const DATACITE_TITLE_LENGTH = 80;
+	const DATACITE_TITLE_LENGTH = 66;
 
 	public function getSuggestedLinksForRegistryObject(_registry_object $registry_object, $start, $rows)
 	{

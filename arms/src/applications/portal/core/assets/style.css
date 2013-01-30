@@ -1012,11 +1012,11 @@ a.search_map {
 	line-height: 18px;
 	font-weight: bold;
 }
-#suggested_links_accordion ul li
+#links_dialog ul li
 {
 	padding:10px;
 }
-.sidebar a, #suggested_links_accordion ul li a {
+.sidebar a, #links_dialog ul li a {
 	color: #eb7700;
 	font-weight: bold;	
 }
