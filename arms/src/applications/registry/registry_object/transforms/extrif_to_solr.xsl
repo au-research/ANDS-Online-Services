@@ -2,7 +2,7 @@
 
 <xsl:stylesheet xmlns:ro="http://ands.org.au/standards/rif-cs/registryObjects" xmlns:extRif="http://ands.org.au/standards/rif-cs/extendedRegistryObjects" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0" exclude-result-prefixes="ro extRif">
 
-    <xsl:output indent="yes" />
+    <xsl:output omit-xml-declaration="yes" indent="yes" />
     <xsl:strip-space elements="*"/>
 
 <xsl:template match="/">
@@ -14,7 +14,7 @@
  </xsl:template> 
 
     <xsl:template match="ro:registryObject">
-        <add>
+    
         <doc>
         <xsl:variable name="roKey">
             <xsl:apply-templates select="ro:key"/>
@@ -70,7 +70,6 @@
         <xsl:apply-templates select="ro:collection | ro:party | ro:activity | ro:service"/>
 
         </doc>
-        </add>
     </xsl:template> 
    
     <xsl:template match="ro:key">

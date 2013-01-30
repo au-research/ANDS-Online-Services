@@ -139,7 +139,32 @@ class Title_Extension extends ExtensionBase
 		if (strlen($display_title) > 255) { $display_title = substr($display_title,0,252) . "..."; }
 		if (strlen($list_title) > 255) { $list_title = substr($list_title,0,252) . "..."; }
 		return array("display_title"=>$display_title, "list_title" => $list_title);		
-	}	
+	}
+
+	/**
+	 * Replace all common words in the title with spaces
+	 * (used to create more specific keyword queries against
+	 * external APIs)
+	 */
+	function titleWithoutCommonWords()
+	{
+		if ($this->ro->title)
+		{
+			/* From L Woods, 2010 */
+			$CommonWords = array (
+				' at ',
+				' the ',
+				' and ',
+				' of ',
+				' in ',
+				' is ',
+				' to ',
+				' a '
+			);
+
+			return str_replace($CommonWords, array_fill(0, count($CommonWords), ' '), $this->ro->title);
+		}
+	}
 		
 }
 	

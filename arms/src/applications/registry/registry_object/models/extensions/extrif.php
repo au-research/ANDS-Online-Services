@@ -143,14 +143,21 @@ class Extrif_Extension extends ExtensionBase
 		}
 	}
 
-	function transformForSOLR()
+	function transformForSOLR($add_tags = true)
 	{
 		try{
 			$xslt_processor = Transforms::get_extrif_to_solr_transformer();
 			$dom = new DOMDocument();
 			//$dom->loadXML($this->ro->getXML());
 			$dom->loadXML($this->ro->getExtRif());
-			return $xslt_processor->transformToXML($dom);
+			if ($add_tags)
+			{
+				return "<add>" . $xslt_processor->transformToXML($dom) . "</add>";
+			}
+			else
+			{
+				return $xslt_processor->transformToXML($dom);
+			}
 		}catch (Exception $e)
 		{
 			echo "UNABLE TO TRANSFORM" . BR;	
