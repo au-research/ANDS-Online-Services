@@ -42,7 +42,14 @@ class Importer {
 	public function Importer()
 	{
 		$this->CI =& get_instance();
+				
+		// This is not a perfect science... the web server can still 
+		// reclaim the worker thread and terminate the PHP script execution....
 		ini_set('memory_limit', '1024M');
+		ini_set('max_execution_time',3*ONE_HOUR);
+		set_time_limit(0);
+		ignore_user_abort(true);
+
 		// setup the DB connection
 		$this->db = $this->CI->db;
 
@@ -56,6 +63,7 @@ class Importer {
 	 */
 	public function commit()
 	{
+		//$this->CI->output->enable_profiler(TRUE);
 		if (is_null($this->start_time))
 		{
 			$this->start_time = microtime(true);
@@ -65,11 +73,13 @@ class Importer {
 		if (!($this->dataSource instanceof _data_source))
 			throw new Exception("No valid data source selected before import commit.");
 
-		// Apply the crosswalk (if applicable)
-		$this->_executeCrosswalk();
+		$this->CI->benchmark->mark('crosswalk_execution_start');
+		
+			// Apply the crosswalk (if applicable)
+			$this->_executeCrosswalk();
+		
+		$this->CI->benchmark->mark('crosswalk_execution_end');
 
-		// Last chance to check valid format of the payload
-		$this->_validateRIFCS($this->xmlPayload);
 
 		// Set a a default HarvestID if necessary
 		if (is_null($this->harvestID)) 
@@ -77,43 +87,74 @@ class Importer {
 			$this->harvestID = "MANUAL-".time();
 		}
 
-		// Build a SimpleXML object from the converted data
-		// We will throw an exception here if the payload isn't well-formed XML (which, by now, it should be)
-		try
-		{
-			$sxml = @$this->_getSimpleXMLFromString($this->xmlPayload);
-		}
-		catch (Exception $e)
-		{
-			throw new Exception("Unable to parse XML into object: " . NL . $e->getMessage());
-		}
-		$sxml->registerXPathNamespace("ro", RIFCS_NAMESPACE);
-	
 		// Decide on the default status for these records
 		$this->status = $this->_getDefaultRecordStatusForDataSource($this->dataSource);
 
-		// Right then, lets start parsing each registryObject & importing! 
-		foreach($sxml->xpath('//ro:registryObject') AS $registryObject)
+		// want to treat the payload as an array of split XML documents, even if it's not
+		// (I reckon that SimpleXML goes memory-ape if it's trying to process a 100k-line XML doc)
+		if (!is_array($this->xmlPayload))
 		{
-			$this->ingest_attempts++;
-			try
-			{
-				$this->_ingestRecord($registryObject);
-			}
-			catch (Exception $e)
-			{
-				$this->ingest_failures++;
-				$this->error_log[] = "Error whilst ingesting record #" . $this->ingest_attempts . ": " . $e->getMessage();
-			}
+			// So fake it
+			$this->xmlPayload = array($this->xmlPayload);
 		}
+
+		$this->CI->benchmark->mark('ingest_stage_1_start');
+			foreach ($this->xmlPayload AS $idx => $payload)
+			{
+
+				// Last chance to check valid format of the payload
+				$this->_validateRIFCS($payload);
+
+				// Build a SimpleXML object from the converted data
+				// We will throw an exception here if the payload isn't well-formed XML (which, by now, it should be)
+				try
+				{
+					$sxml = @$this->_getSimpleXMLFromString($payload);
+				}
+				catch (Exception $e)
+				{
+					throw new Exception("Unable to parse XML into object (registryObject #".$idx."): " . NL . $e->getMessage());
+				}
+				$sxml->registerXPathNamespace("ro", RIFCS_NAMESPACE);
+
+				// Right then, lets start parsing each registryObject & importing! 
+				foreach($sxml->xpath('//ro:registryObject') AS $registryObject)
+				{
+					$this->ingest_attempts++;
+					try
+					{
+						$this->_ingestRecord($registryObject);
+					}
+					catch (Exception $e)
+					{
+						$this->ingest_failures++;
+						$this->error_log[] = "Error whilst ingesting record #" . $this->ingest_attempts . ": " . $e->getMessage();
+					}
+				}
+			}
+		$this->CI->benchmark->mark('ingest_stage_1_end');
+
+
 
 		// Partial commits mean that there is more to come in this harvest...woooah-on donkey
 		if (!$this->partialCommitOnly)
 		{
 			// And now, onto the second stage...
-			$this->_enrichRecords();
-			$this->_reindexRecords();
+			$this->CI->benchmark->mark('ingest_enrich_start');
+				$this->_enrichRecords();
+			$this->CI->benchmark->mark('ingest_enrich_end');
+
+			$this->CI->benchmark->mark('ingest_reindex_start');
+				$this->_reindexRecords();
+			$this->CI->benchmark->mark('ingest_reindex_end');
 		
+			// XXX: Don't do this...it's crappy
+			if ($this->dataSource)
+			{
+				// Update the data source stats
+				$this->dataSource->updateStats();
+			}
+
 			// Finish up by returning our stats...
 			$time_taken = sprintf ("%.3f", (float) (microtime(true) - $this->start_time));
 			$this->message_log[] = "Harvest complete! Took " . ($time_taken) . "s...";
@@ -257,24 +298,6 @@ class Importer {
 		gc_collect_cycles();
 	}
 
-/* XXX: TODO
-	public function deleteRecordsByIDs(array $deleted_record_ids)
-	{
-		$affected_record_ids = array();
-		$this->deleted_records = $deleted_record_ids;
-		foreach($this->deleted_records AS $ro_id)
-		{
-			$ro = $this->CI->ro->getByID($ro_id);
-			$related_keys = $ro->getRelationships();
-			foreach ($related_keys AS $key)
-			{
-
-			}
-			$affected_record_keys = array_merge($affected_record_keys, $ro->getRelationships());
-			$ro->delete();
-		}
-	}
-*/
 	/**
 	 * 
 	 */
@@ -290,8 +313,7 @@ class Importer {
 			// previous relationships are reset by this call
 			$related_keys = $ro->addRelationships();
 			$directly_affected_records = array_merge($related_keys, $directly_affected_records);
-
-			// XXX: re-enrich records which are related to this one
+			// directly affected records are re-enriched below (and reindexed...)
 
 			$ro->update_quality_metadata();
 
@@ -331,93 +353,59 @@ class Importer {
 		gc_collect_cycles();
 	}
 
+
 	/**
 	 *
 	 */
-	function _reindexRecords($specific_target_keys = array()){
-		$solrUrl = $this->CI->config->item('solr_url');
-		$solrUpdateUrl = $solrUrl.'update/?wt=json';
+	function _reindexRecords($specific_target_keys = array())
+	{
+
 		$this->CI->load->model('registry_object/registry_objects', 'ro');
 		$this->CI->load->model('data_source/data_sources', 'ds');
 
 		$this->CI->load->library('solr');
 
-		$deleted_records = array();
-
+		// Called from outside the importer (i.e. $this->importer->_reindexRecords(array_of_keys...))
 		if (is_array($specific_target_keys) && count($specific_target_keys) > 0)
 		{
-			$index_count = 0;
-			$errors = array();
 			/// Called from outside the Importer
 			foreach ($specific_target_keys AS $key)
 			{
-				try{
-					$ro = $this->CI->ro->getPublishedByKey($key);
-
-					if ($ro)
-					{
-						$solrXML = $ro->transformForSOLR();
-						$result = curl_post($solrUpdateUrl, $solrXML);
-						$result = json_decode($result);
-						if($result->{'responseHeader'}->{'status'}==0){
-							$index_count++;
-						}
-					}
-				}
-				catch (Exception $e)
+				$ro = $this->CI->ro->getPublishedByKey($key);
+				if ($ro)
 				{
-					$errors[] = "UNABLE TO Index this registry object id = ".$key . BR . "<pre>" . nl2br($e->getMessage()) . "</pre>";	
+					$this->queueSOLRAdd($ro->transformForSOLR(false));
 				}
+				unset($ro);
+				gc_collect_cycles();
 			}
+			$this->flushSOLRAdd();
+			$this->commitSOLR();
+
 			return array("count"=>$this->reindexed_records, "errors"=>$errors);
 		}
+
 		// Called from inside the Importer
 		else
 		{
 			$allAffectedRecords = array_merge($this->importedRecords, $this->affected_records);
-
 			foreach($allAffectedRecords AS $ro_id){
-				try{
-					$ro = $this->CI->ro->getByID($ro_id);
-					if ($ro->status == PUBLISHED)
-					{
-						// XXX: Use the SOLR library, do update in batches
-						$solrXML = $ro->transformForSOLR();
-						$result = curl_post($solrUpdateUrl, $solrXML);
-						$result = json_decode($result);
 
-						if($result->{'responseHeader'}->{'status'}==0){
-							$this->reindexed_records++;
-						}
-						else
-						{
-							if (isset($result->{'error'}->{'msg'}))
-							{
-								$this->error_log[] = "UNABLE TO Index this registry object id = ".$ro_id . BR . 
-													"<pre>" . $result->{'error'}->{'msg'} . "</pre>";
-							}
-							else
-							{
-								$this->error_log[] = "UNABLE TO Index this registry object id = ".$ro_id . BR . "UNKNOWN ERROR";
-							}
-						}
-					}
-				}
-				catch (Exception $e)
+				$ro = $this->CI->ro->getByID($ro_id);
+				if ($ro && $ro->status == PUBLISHED)
 				{
-					$this->error_log[] = "UNABLE TO Index this registry object id = ".$ro_id . BR . "<pre>" . nl2br($e->getMessage()) . "</pre>";	
+					$this->queueSOLRAdd($ro->transformForSOLR(false));
 				}
+				unset($ro);
+				gc_collect_cycles();
 			}
+
+			// Push through the last chunk...
+			$this->flushSOLRAdd();
+			$this->commitSOLR();
 		}
 
-		if ($this->dataSource)
-		{
-			// Update the data source stats
-			$this->dataSource->updateStats();
-		}
-
-		// Finalise the commit
-		return curl_post($solrUpdateUrl.'?commit=true', '<commit waitSearcher="false"/>');
+		return true;
 	}
 
 	/**
@@ -496,7 +484,7 @@ class Importer {
 			$this->crosswalk->validate($this->xmlPayload);
 
 			// Crosswalk will create <registryObjects> with a <relatedInfo> element appended with the native format
-			$this->xmlPayload = $this->crosswalk->payloadToRIFCS($this->xmlPayload);
+			$this->xmlPayload = $this->crosswalk->payloadToRIFCS($this->xmlPayload, $this->message_log);
 		}
 	}
 
@@ -723,6 +711,68 @@ class Importer {
 		if ($log) return $log; else return FALSE;
 	}
 
+
+	/* * * * 
+	 * SOLR UPDATE FUNCTIONS 
+	 * * * */
+
+	var $solr_queue = array();
+	const SOLR_CHUNK_SIZE = 50;
+	const SOLR_RESPONSE_CODE_OK = 0;
+
+	/**
+	 * Queue up a request to send to SOLR ("chunking" of <add><doc> statements)
+	 */
+	function queueSOLRAdd($doc_statement)
+	{
+		$this->solr_queue[] = $doc_statement;
+		if (count($this->solr_queue) > self::SOLR_CHUNK_SIZE)
+		{
+			$this->flushSOLRAdd();
+		}
+	}
+
+	/**
+	 * Send an update request to SOLR for all <add><doc> statements in the queue...
+	 */
+	function flushSOLRAdd()
+	{
+		if (count($this->solr_queue) == 0) return;
+
+		$solrUrl = $this->CI->config->item('solr_url');
+		$solrUpdateUrl = $solrUrl.'update/?wt=json';
+
+		try{
+
+			$result = json_decode(curl_post($solrUpdateUrl, "<add>" . implode("\n",$this->solr_queue) . "</add>"), true);
+			if($result['responseHeader']['status'] == self::SOLR_RESPONSE_CODE_OK){
+	
+
+				$this->reindexed_records += count($this->solr_queue);
+			}
+			else
+			{
+				// Throw back the SOLR response...
+				throw new Exception(var_export((isset($result['error']['msg']) ? $result['error']['msg'] : $result),true));
+			}
+
+		}
+		catch (Exception $e)
+		{
+			$this->error_log[] = "[INDEX] Error during reindex of registry object..." . BR . "<pre>" . nl2br($e->getMessage()) . "</pre>";	
+		}
+
+		$this->solr_queue = array();
+		return true;
+	}
+
+	function commitSOLR()
+	{
+		$solrUrl = $this->CI->config->item('solr_url');
+		$solrUpdateUrl = $solrUrl.'update/?wt=json';
+		return curl_post($solrUpdateUrl.'?commit=true', '<commit waitSearcher="false"/>');
+	}
+
 	/**
 	 * 
 	 */
@@ -735,7 +785,7 @@ class Importer {
 		$this->importedRecords = array();
 		$this->affected_records = array();
 		$this->partialCommitOnly = false;
-
+		$this->solr_queue = array();
 		$this->forcePublish = false;
 		$this->forceDraft = false; 
 
