@@ -520,7 +520,7 @@ class Oai extends MX_Controller
 	 * @throw OAI_BadToken_Exceptions if the token is invalid (either
 	 * due to formatting, or expiration)
 	 */
-	public function parse_token($token, $for, $max_age=1200)
+	public function parse_token($token, $for, $max_age=120000)
 	{
 		$resume = array();
 		try
