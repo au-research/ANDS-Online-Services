@@ -48,7 +48,7 @@ import au.edu.apsr.harvester.to.Fragment;
 import au.edu.apsr.harvester.to.Harvest;
 import au.edu.apsr.harvester.to.Request;
 import au.edu.apsr.harvester.util.ServletSupport;
-
+import au.edu.apsr.harvester.util.HttpsHack;
 /**
  * An abstract class all harvest classes must extend.
  * 
@@ -198,27 +198,30 @@ public abstract class HarvestThread extends TimerTask
      */
     protected InputStream getInputStream(URL url) throws IOException
     {
-HttpURLConnection conn;
+        HttpURLConnection conn;
         InputStream in = null;
         int responseCode = 0;
 
         do
         {
-            String protocol = url.getProtocol();
+            String protocol = url.getProtocol();  
             boolean secure = "https".equals(protocol);
             if(secure)
-                conn = (HttpsURLConnection)url.openConnection();
+            {
+                try
+                {
+                    HttpsHack.disableCertCheck();
+                    conn = (HttpsURLConnection)url.openConnection();
+                }
+                catch (Exception e)
+                {
+                    throw new IOException("unable to allow connection to url: " + url.toExternalForm());
+                }               
+            }
             else
-                conn = (HttpURLConnection)url.openConnection();
-
-            if (conn instanceof URLConnection) 
-                log.info("This is a URLConnection.");
-            if (conn instanceof HttpURLConnection)
-                log.info("This is a HttpURLConnection.");
-            if (conn instanceof HttpsURLConnection)
-                log.info("This is a HttpsURLConnection.");
-                log.info("Connection object: "+conn.toString());
-
+            {
+                conn = (HttpURLConnection)url.openConnection(); 
+            }
             conn.setConnectTimeout(10000);
             conn.setRequestProperty("User-Agent", "APSRHarvester/1.0");
             conn.setRequestProperty("Accept-Encoding", "compress, gzip, identify");

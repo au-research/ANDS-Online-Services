@@ -26,6 +26,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.net.HttpURLConnection;
+import java.net.URLConnection;
+import javax.net.ssl.HttpsURLConnection;
 import java.net.URL;
 import java.util.Date;
 import java.util.HashMap;
@@ -53,6 +55,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+import au.edu.apsr.harvester.util.HttpsHack;
 
 /**
  * HarvesterVerb is the parent class for each of the OAI verbs.
@@ -256,7 +259,24 @@ public abstract class HarvesterVerb
         int responseCode = 0;
         do
         {
-            con = (HttpURLConnection) url.openConnection();
+            String protocol = url.getProtocol();  
+            boolean secure = "https".equals(protocol);
+            if(secure)
+            {
+                try
+                {
+                    HttpsHack.disableCertCheck();
+                    con = (HttpsURLConnection)url.openConnection();
+                }
+                catch (Exception e)
+                {
+                    throw new IOException("unable to allow connection to url: " + url);
+                }               
+            }
+            else
+            {
+                con = (HttpURLConnection)url.openConnection(); 
+            }
             con.setConnectTimeout(10000);
             con.setRequestProperty("User-Agent", "OAIHarvester/2.0");
             con.setRequestProperty("Accept-Encoding",
