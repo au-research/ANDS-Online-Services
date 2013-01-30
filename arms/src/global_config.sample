@@ -1,7 +1,7 @@
 <?php
 /* SOLR URL */
 $ENV['solr_url'] = "http://ands3.anu.edu.au:8080/solr1/";
-
+$ENV['harvester_base_url'] = "http://ands3.anu.edu.au:8080/harvester/";
 /* ENABLED MODULES */
 $ENV['ENABLED_MODULES'] = array(
 #	'registry',
@@ -103,3 +103,22 @@ $eDBCONF['dois']['swap_pre'] = '';
 $eDBCONF['dois']['autoinit'] = FALSE;
 $eDBCONF['dois']['stricton'] = FALSE;
 $eDBCONF['dois']['save_queries'] = FALSE; 
+
+// Details of the source registry database
+// Note: data will be migrated into the current "registry" database
+$eDBCONF['migration']['hostname'] = 'ands4.anu.edu.au';
+$eDBCONF['migration']['username'] = 'postgres';
+$eDBCONF['migration']['password'] = '1and3demo1pgsql8';
+$eDBCONF['migration']['database'] = 'dbs_demo_orca';
+$eDBCONF['migration']['dbdriver'] = 'postgre';
+$eDBCONF['migration']['dbprefix'] = '';
+$eDBCONF['migration']['pconnect'] = TRUE;
+$eDBCONF['migration']['db_debug'] = TRUE;
+$eDBCONF['migration']['cache_on'] = FALSE;
+$eDBCONF['migration']['cachedir'] = '';
+$eDBCONF['migration']['char_set'] = 'utf8';
+$eDBCONF['migration']['dbcollat'] = 'utf8_general_ci';
+$eDBCONF['migration']['swap_pre'] = '';
+$eDBCONF['migration']['autoinit'] = FALSE;
+$eDBCONF['migration']['stricton'] = FALSE;
+$eDBCONF['migration']['save_queries'] = FALSE;
