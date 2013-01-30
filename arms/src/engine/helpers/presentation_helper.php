@@ -113,3 +113,16 @@ function  timeAgo($timestamp, $granularity=2, $format='Y-m-d H:i:s'){
         }
         else return date($format, $timestamp); 
 }
+
+
+function ellipsis ($string, $length = 64)
+{
+	if (strlen($string) <= $length)
+	{
+		return $string;
+	}
+	else
+	{
+		return substr($string,0, $length-3) . "&hellip;";
+	}
+}
