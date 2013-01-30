@@ -62,28 +62,12 @@ $(function(){
 		$(this).attr('page', page++);
 	});
 
-	//item level binding
-	$('.item').live({
-		mouseenter: function(e){
-			$('.btn-group', this).show();
-		},
-		mouseleave: function(e){
-			$('.btn-group', this).hide();
-		},
-		dblclick: function(e){
-			e.preventDefault();
-			changeHashTo('view/'+$(this).attr('data_source_id'));
-		},
-		click: function(){
-			
-		}
-	});
 
 	//item button binding
 	$('.item-control .btn').live({
 		click: function(e){
 			e.preventDefault();
-			var data_source_id = $(this).parent().parent().attr('data_source_id');
+			var data_source_id = $(this).attr('data_source_id');
 			if($(this).hasClass('view')){
 				changeHashTo('view/'+data_source_id);
 			}else if($(this).hasClass('edit')){
@@ -247,20 +231,18 @@ function loadDataSourceLogs(data_source_id, offset, count)
 			$('#log_summary').html('viewing ' + data.next_offset + ' of ' + data.log_size + ' log entries');
 			$('#log_summary_bottom').html('viewing ' + data.next_offset + ' of ' + data.log_size + ' log entries');
 			var nextOffSet = $('#next_offset').val();
-			if(nextOffSet != 'all')
-			{
-				$('#show_more_log').click(function(){
-				loadMoreSourceLogs(data_source_id, count);
-				});
-			}
-			else{
+			if(nextOffset=='all'){
 				$('#show_more_log').remove();
 			}
-		},
-		error: function(data){
-		console.log(data);
 		}
 	});
+
+	$('#show_more_log').live({
+		click:function(){
+			loadMoreSourceLogs(data_source_id, count);
+		}
+	})
+
 	return false;
 
 }
@@ -292,11 +274,8 @@ function loadMoreSourceLogs(data_source_id, count)
 			$('#log_summary').html('viewing ' + data.next_offset + ' of ' + data.log_size + ' log entries');
 			$('#log_summary_bottom').html('viewing ' + data.next_offset + ' of ' + data.log_size + ' log entries');
 			$('#next_offset').val(offset);
-			$('html, body').animate({"scrollTop": $("#last_row").offset().top}, 800);
+			$('body').animate({"scrollTop": $("#last_row").offset().top}, 100);
 			$('#last_row').before(output);
-		},
-		error: function(data){
-		console.log(data);
 		}
 	});
 	return false;

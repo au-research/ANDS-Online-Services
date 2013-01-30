@@ -11,88 +11,34 @@
  */
 ?>
 <?php $this->load->view('header');?>
-<div class="container" id="main-content">
+<div id="content" style="margin-top:45px;margin-left:0px">
 <section id="browse-datasources" class="hide">
-<div class="row">
-	<div class="span8" id="browse-datasources-left">
-		<div class="box">
-			<div class="box-header clearfix">
-				<h1><?php echo $title;?><small><?php echo $small_title;?></small></h1>
-				<span class="right-widget">
-					<a href="javascript:;" tip="Show/Hide side bar" my="right center" at="left center" id="toggle_side_bar_btn"><i class="icon-tasks"></i></a>
-				</span>
-			</div>
-			<div class="box-content">
-
-				<!-- Toolbar -->
-			    <div class="row-fluid" id="mmr_toolbar">
-			    	<div class="span6">
-			    		<span class="dropdown" id="switch_menu">
-			    		<a class="btn dropdown-toggle" data-toggle="dropdown" data-target="#switch_menu" href="#switch_menu">Switch View <span class="caret"></span></a>
-						  <ul class="dropdown-menu" id="switch_view">
-						    <li><a href="javascript:;" name="thumbnails"><i class="icon-th"></i> Thumbnails View</a></li>
-						    <li><a href="javascript:;" name="lists"><i class="icon-th-list"></i> List View</a></li>
-						  </ul>
-						</span>
-					</div>
-					
-			    	<div class="span6 right-aligned">
-			    		<select data-placeholder="Choose a Datasource to View" tabindex="1" class="chzn-select" id="datasource-chooser">
-							<option value=""></option>
-							<?php
-								foreach($dataSources as $ds){
-									echo '<option value="'.$ds['id'].'">'.$ds['title'].'</option>';
-								}
-							?>
-						</select>
-			    	</div>
-			    </div>
-
-			    <!-- List of items will be displayed here-->
-			    <ul class="lists" id="items"></ul>
-			    
-			    <!-- View More Link -->
-			    <div class="row-fluid">
-					<div class="span12">
-						<div class="well"><a href="javascript:;" id="load_more" page="1">Show More...</a></div>
-					</div>
-				</div>
-
-			</div>
-		</div>
+	<div class="content-header">
+		<h1>Manage My Datasource</h1>
 	</div>
-
-	<div class="span4" id="browse-datasources-right">
-		<div class="box">
-			<div class="box-header clearfix">
-				<h1>Datasources statistics</h1>
-			</div>
-			<div class="box-content">
-				Lorem ipsum tempor Duis Ut non ea voluptate. 
-			</div>
-		</div>
-
-		<div class="box">
-			<div class="box-header clearfix">
-				<h1>Datasources statistics 2</h1>
-			</div>
-			<div class="box-content">
-				Lorem ipsum tempor Duis Ut non ea voluptate. 
-			</div>
-		</div>
-		
+	<div id="breadcrumb">
+		<?php echo anchor('/', '<i class="icon-home"></i> Home', array('class'=>'tip-bottom', 'tip'=>'Go to Home'))?>
+		<?php echo anchor('data_source/manage', 'Manage My Datasource', array('class'=>'current'))?>
 	</div>
-</div>
-	
-	
-
-    
-
-
-
-	<!-- Load More Link -->
-	
-
+	<div class="container-fluid">
+		<div class="row-fluid">
+			<select data-placeholder="Choose a Datasource to View" tabindex="1" class="chzn-select" id="datasource-chooser">
+				<option value=""></option>
+				<?php
+					foreach($dataSources as $ds){
+						echo '<option value="'.$ds['id'].'">'.$ds['title'].'</option>';
+					}
+				?>
+			</select>
+		</div>
+		<div class="row-fluid">
+			<ul class="lists" id="items"></ul>
+		</div>
+		<!--div class="row-fluid">
+			<div class="span12">
+				<div class="well"><a href="javascript:;" id="load_more" page="1">Show More...</a></div>
+			</div>
+		</div-->
 </section>
 
 <section id="view-datasource" class="hide">Loading...</section>
@@ -104,29 +50,28 @@
 
 <section id="datasource-templates">
 <!-- mustache template for list of items-->
+
 <div class="hide" id="items-template">
 	{{#items}}
-		<li>
-		  	<div class="item" data_source_id="{{id}}">
-		  		<div class="item-info"></div>
-		  		<div class="item-snippet">
-			  		<h3>{{title}}</h3>
-			  		{{#counts}}
-				  		{{#status}}
-				  			<span class="tag status_{{status}}">{{status}} ({{count}})</span>
-				  		{{/status}}
-			  		{{/counts}}
-			  	</div>
+		<div class="widget-box">
+			<div class="widget-title">
+				<h5 class="ellipsis"><a class="view" href="#!/view/{{id}}">{{title}}</a></h5>
+			</div>
+			
+			<div class="widget-content">
+				{{#counts}}
+			  		{{#status}}
+			  			<span class="tag status_{{status}}">{{status}} ({{count}})</span>
+			  		{{/status}}
+		  		{{/counts}}
 		  		<div class="btn-group item-control">
-		  			<button class="btn view"><i class="icon-eye-open"></i></button>
-			  		<button class="btn edit"><i class="icon-edit"></i></button>
-			  		<button class="btn delete"><i class="icon-trash"></i></button>
+		  			<button class="btn btn-small view" data_source_id="{{id}}"><i class="icon-eye-open"></i> View</button>
+			  		<button class="btn btn-small edit" data_source_id="{{id}}"><i class="icon-edit"></i> Edit</button>
 				</div>
-		  	</div>
-		  </li>
+			</div>
+		</div>
 	{{/items}}
 </div>
-
 
 
 
@@ -148,24 +93,28 @@
 ?>
 
 	{{#item}}
-<div class="container">
-<div class="row">
+	<div class="content-header">
+		<h1>{{title}}</h1>
+		<!--ul class="nav nav-pills">
+			<li class="active"><a href="#">View</a></li>
+			<li class=""><a href="#">Edit</a></li>
+			<li class=""><a href="#">View History</a></li>
+			<li class=""><a href="#">Delete Records</a></li>
+		</ul-->
+	</div>
+	<div id="breadcrumb">
+		<?php echo anchor('/', '<i class="icon-home"></i> Home', array('class'=>'tip-bottom', 'tip'=>'Go to Home'))?>
+		<?php echo anchor('data_source/manage', 'Manage My Datasource')?>
+		<a href="javascript:;" class="current">{{title}}</a>
+	</div>
+<div class="container-fluid">
+<div class="row-fluid">
 
 	
-	<div class="span8" id="data_source_view_container" data_source_id="">
-		<div class="box">
-		<div class="box-header">
-			<ul class="breadcrumbs">
-				<li><a href="javascript:;"><i class="icon-home"></i></a></li>
-				<li><?php echo anchor('data_source/manage', 'Manage My Datasources');?></li>
-				<li><a href="javascript:;" class="active">{{title}}</a></li>
-			</ul>
-	        <!--h1>{{title}}</h1-->
-	        <div class="clearfix"></div>
-	    </div>
-	    <div class="row-fluid">
+	<div class="span8" id="data_source_view_container" data_source_id="{{data_source_id}}">
+		<div class="widget-box">
 	    	
-	 		<div>
+	 		<div class="widget-content">
 	 			<div class="btn-toolbar">
 					<div class="btn-group" data_source_id="{{data_source_id}}">
 				  		<button class="btn edit"><i class="icon-edit"></i> Edit Data Source</button>
@@ -188,9 +137,9 @@
 	 
 	    	
 
-	    	<div class="">
+	    	<div class="widget-content">
 
-				<h3>Account Administration Information</h3>
+				<h4>Account Administration Information</h4>
 				<dl class="dl-horizontal">
 					<?php 
 					foreach($data_source_view_fields as $key=>$name){
@@ -201,7 +150,7 @@
 					}
 					?>
 			 	</dl>
-			 	<h3>Records Management Settings</h3>
+			 	<h4>Records Management Settings</h4>
 			 	<dl class="dl-horizontal">
 					<dt>Reverse Links</dt>
 					<dd>
@@ -282,7 +231,7 @@
 			 	</dl>
 			 				
 			 
-			 	<h3>Harvester Settings</h3>
+			 	<h4>Harvester Settings</h4>
 			 	<dl class="dl-horizontal">
 			 		{{#uri}}
 					<dt>URI</dt>
@@ -311,13 +260,12 @@
 			 	</dl>
 		 	</div>
 	    </div>
-		</div>
 	</div>
 
 	<div class="span4">
-		<div class="box">
-			<div class="box-header clearfix"><h3>Data Source Status Summary</h3></div>
-			<div class="box-content">
+		<div class="widget-box">
+			<div class="widget-title"><h5>Data Source Status Summary</h5></div>
+			<div class="widget-content nopadding">
 				<ul class="ro-list">
 					{{#statuscounts}}
 				  		{{#status}}
@@ -328,9 +276,9 @@
 			</div>
 		</div>
 
-		<div class="box">
-			<div class="box-header clearfix"><h3>Data Source Quality Summary</h3></div>
-			<div class="box-content">
+		<div class="widget-box">
+			<div class="widget-title"><h5>Data Source Quality Summary</h5></div>
+			<div class="widget-content nopadding">
 				<ul class="ro-list">
 					{{#qlcounts}}
 				  		{{#level}}
@@ -341,9 +289,9 @@
 			</div>
 		</div>
 
-		<div class="box">
-			<div class="box-header clearfix"><h3>Registry Objects Progression</h3></div>
-			<div class="box-content" id="ro-progression">Loading...</div>
+		<div class="widget-box">
+			<div class="widget-title"><h5>Registry Objects Progression</h5></div>
+			<div class="widget-content" id="ro-progression">Loading...</div>
 		</div>
 
 	</div>
@@ -352,8 +300,13 @@
 
 <div class="row">
 	<div class="span12">
-		<h3>Activity Log</h3><h5 id="log_summary"></h5>
-		<div class="well" id="data_source_log_container"></div>
+		<div class="widget-box">
+			<div class="widget-title">
+				<h5>Activity Log</h5>
+				<span class="label label-info" id="log_summary"></span>
+			</div>
+			<div class="widget-content" id="data_source_log_container"></div>
+		</div>
 	</div>
 </div>
 
@@ -482,20 +435,34 @@
 <!-- mustache template for data source edit single-->
 <div class="hide" id="data-source-edit-template">
 {{#item}}
-	<div class="box">
-	<div class="box-header">
-	    <h1>Edit: {{title}}</h1>
-	    <span class="right-widget">
-        	<small><a href="javascript:;" class="close return-to-browse">&times;</a></small>
-        </span>
-        <div class="clearfix"></div>
+<div class="content-header">
+		<h1>{{title}}</h1>
+		<!--ul class="nav nav-pills">
+			<li class="active"><a href="#">View</a></li>
+			<li class=""><a href="#">Edit</a></li>
+			<li class=""><a href="#">View History</a></li>
+			<li class=""><a href="#">Delete Records</a></li>
+		</ul-->
 	</div>
-	<div class="">
-		<ul class="nav nav-tabs">
+	<div id="breadcrumb">
+		<?php echo anchor('/', '<i class="icon-home"></i> Home', array('class'=>'tip-bottom', 'tip'=>'Go to Home'))?>
+		<?php echo anchor('data_source/manage', 'Manage My Datasource')?>
+		<a href="#!/view/{{data_source_id}}" class="">{{title}}</a>
+		<a href="javascript:;" class="current">Edit</a>
+	</div>
+<div class="container-fluid">
+<div class="row-fluid">
+
+	<div class="widget-box">
+		<div class="widget-title">
+		    <ul class="nav nav-tabs">
 		  <li class="active"><a href="#admin" data-toggle="tab">Account Administration Information</a></li>
 		  <li><a href="#records" data-toggle="tab">Records Management Settings</a></li>
 		  <li><a href="#harvester" data-toggle="tab">Harvester Settings</a></li>
 		</ul>
+		</div>
+	<div class="widget-content nopadding">
+		
 
 		<form class="form-horizontal" id="edit-form">
 			<div class="tab-content">
@@ -802,8 +769,11 @@
 					</fieldset>
 				</div>
 			</div>
-			<button class="btn" id="save-edit-form" data-loading-text="Saving..." >Save</button>
-			<button class="btn" id="test-harvest" data-loading-text="Testing Harvest..." >Test Harvest</button>
+
+			<div class="form-actions">
+				<button class="btn btn-primary" id="save-edit-form" data-loading-text="Saving..." >Save</button>
+				<button class="btn" id="test-harvest" data-loading-text="Testing Harvest..." >Test Harvest</button>
+			</div>
 			<div class="modal hide" id="test_harvest_activity_log">
 			  <div class="modal-header">
 			    <button type="button" class="close" data-dismiss="modal">×</button>

@@ -71,7 +71,6 @@ $(function() {
                 }
                 break;
             case 'flag':
-
                 var attributes = [{
                     name:'flag',
                     value:'t'

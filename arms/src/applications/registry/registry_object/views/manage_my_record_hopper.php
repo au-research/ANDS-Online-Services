@@ -7,7 +7,7 @@
 <?php  $this->load->view('header');?>
 <input type="hidden" value="<?php echo $ds->id;?>" id="data_source_id"/>
 <div id="content" style="margin-top:45px;margin-left:0px">
-	<div id="content-header">
+	<div class="content-header">
 		<h1>Manage My Record</h1>
 		<ul class="nav nav-pills">
 			<li class="active"><a href="#">Manage</a></li>

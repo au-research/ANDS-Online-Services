@@ -221,7 +221,7 @@ a:hover {
     border-top-left-radius: 8px;
 }
 
-#content-header {
+.content-header {
 	background-image: -webkit-gradient(linear, 0 0%, 0 100%, from(#FFFFFF), to(#EEEEEE));
 	background-image: -webkit-linear-gradient(top, #FFFFFF 0%, #EEEEEE 100%);
 	background-image: -moz-linear-gradient(top, #FFFFFF 0%, #EEEEEE 100%);
@@ -236,7 +236,7 @@ a:hover {
     z-index: 20;
 }
 
-#content-header h1 {
+.content-header h1 {
     color: #555555;
     font-size: 28px;
     font-weight: normal;
@@ -246,19 +246,26 @@ a:hover {
     position: absolute;
 }
 
-#content-header .btn-group {
+.content-header .btn-group {
 	float: right;
 	right: 20px;
 	position: absolute;
 }
 
-#content-header h1, #content-header .btn-group {
+.content-header .nav-pills {
+	float: right;
+	right: 20px;
+	position: absolute;
 	margin-top: 20px;
 }
-#content-header .btn-group .btn {
+
+.content-header h1, #content-header .btn-group {
+	margin-top: 20px;
+}
+.content-header .btn-group .btn {
 	padding: 11px 14px 9px;
 }
-#content-header .btn-group .btn .label {
+.content-header .btn-group .btn .label {
 	position: absolute;
 	top: -7px;
 }
