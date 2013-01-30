@@ -84,16 +84,16 @@ class NHMRC_Parties_to_RIFCS extends Crosswalk
      *
      * @return string A valid RIFCS XML string (including wrapper)
      */
-    public function payloadToRIFCS($payload)
+    public function payloadToRIFCS($payload, &$log = array())
     {
         unset($payload);
-        $rifcs_elts = '';
-
+        $log[] = "[CROSSWALK] Attempting to execute crosswalk " . $this->identify();
         // First line has the column headings
         $this->csv_headings = array_shift($this->parsed_array);
         // Loop through each row, create a registry object for ecah
     	while($csv_values = array_shift($this->parsed_array))
         {
+
             // Map the column headings to each field, to simplify lookup
             $row = $this->mapCSVHeadings($csv_values);
             if (!isset($row['DW_INDIVIDUAL_ID'])) continue; //skip blank rows
@@ -127,8 +127,6 @@ class NHMRC_Parties_to_RIFCS extends Crosswalk
             $registryObject .=         '<relation type="isParticipantIn" />' . NL;
             $registryObject .=      '</relatedObject>' . NL;
 
-            // XXX: Relate to NLA identifier for GRANT_ADMIN_INSTITUTION
-
             // Include the native format
             $registryObject .=      '<relatedInfo type="'.NATIVE_HARVEST_FORMAT_TYPE.'">' . NL;
             $registryObject .=          '<identifier type="internal">'.$this->metadataFormat().'</identifier>' . NL;
@@ -142,11 +140,13 @@ class NHMRC_Parties_to_RIFCS extends Crosswalk
             $registryObject .=    '</party>' . NL;
             $registryObject .='</registryObject>' . NL;
 
-            $rifcs_elts .= $registryObject . NL;
+            $this->addRegistryObjectToChunkQueue($registryObject);
         }
 
-    	return wrapRegistryObjects($rifcs_elts);
+    	return $this->returnChunks();
     }
+
+
 
     /**
      * Map the column headings to csv fields, creating an 
@@ -199,6 +199,31 @@ class NHMRC_Parties_to_RIFCS extends Crosswalk
         return trim($response);
     }
 
+
+    var $registryObjectChunks = array();
+    const CHUNK_SIZE = 10;
+
+    function addRegistryObjectToChunkQueue($rifcs_xml)
+    {
+        $current_chunk = end($this->registryObjectChunks);
+        if (!$current_chunk || count($current_chunk) == self::CHUNK_SIZE)
+        {
+            $this->registryObjectChunks[] = array($rifcs_xml);
+        }
+        else
+        {
+            $this->registryObjectChunks[count($this->registryObjectChunks)-1][] = $rifcs_xml;
+        }
+    }
+
+    function returnChunks()
+    {
+        foreach ($this->registryObjectChunks AS &$chunk)
+        {
+            $chunk = wrapRegistryObjects(implode(NL, $chunk));
+        }
+        return $this->registryObjectChunks;
+    }
 
     /** 
      * Write out an array to a STRING .csv (from http://php.net/manual/en/function.fputcsv.php) 
