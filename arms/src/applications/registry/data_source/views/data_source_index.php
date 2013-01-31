@@ -73,6 +73,14 @@
 	{{/items}}
 </div>
 
+<script type="text/x-mustache" id="data_source_logs_template">
+	{{#items}}
+		<li class="{{type}}">
+			<a href="javascript:;" class="{{type}}"><i class="icon-list-alt"></i>{{log}} <span>{{date_modified}}</span></a>
+		</li>
+	{{/items}}
+</script>
+
 
 
 
@@ -298,14 +306,19 @@
 
 </div>
 
-<div class="row">
+<div class="row-fluid">
 	<div class="span12">
 		<div class="widget-box">
 			<div class="widget-title">
 				<h5>Activity Log</h5>
 				<span class="label label-info" id="log_summary"></span>
 			</div>
-			<div class="widget-content" id="data_source_log_container"></div>
+			<div class="widget-content nopadding">
+				<ul class="activity-list" id="data_source_log_container"></ul>
+				<ul class="activity-list">
+					<li class="viewall"><a id='show_more_log' class="tip-top" href="javascript:;" data-original-title="View all posts">Show More<i class='icon-arrow-down'></i></a></li>
+				</ul>
+			</div>
 		</div>
 	</div>
 </div>
@@ -315,28 +328,34 @@
 
 <!-- Modal form for importing records from a URL -->
 <div class="modal hide fade" id="importRecordsFromURLModal">
-	
+
 	<div class="modal-header">
 		<a href="javascript:;" class="close" data-dismiss="modal">×</a>
 		<h3>Import Registry Objects from a URL</h3>
 	</div>
-	
+
 	<div class="modal-screen-container">
 		<div name="selectionScreen" class="modal-body">
-			
-			<div class="alert alert-info">
-				Import registry objects from a test feed or backup.
-			</div>
-			
-			
-				<form class="form-horizontal">
-					<label class="control-label">URL to import records from: </label>
-					<div class="controls"><input type="text" name="url" placeholder="http://" /><p class="help-block"><small>Use full URL format (including http://)</small></p></div>
-				</form>
-				
-			<p><span class="label label-info">Note</span> <small>This tool does not support OAI-PMH. You must use the Harvester to import from an OAI-PMH feed.</small></p>
+
+			<div class="alert alert-info">Import registry objects from a test feed or backup.</div>
+
+			<form class="form-horizontal">
+				<label class="control-label">URL to import records from:</label>
+				<div class="controls">
+					<input type="text" name="url" placeholder="http://" />
+					<p class="help-block">
+						<small>Use full URL format (including http://)</small>
+					</p>
+				</div>
+			</form>
+
+			<p>
+				<span class="label label-info">Note</span>
+				<small>
+					This tool does not support OAI-PMH. You must use the Harvester to import from an OAI-PMH feed.
+				</small>
+			</p>
 		</div>
-		
 		<!-- A hidden loading screen -->
 		<div name="loadingScreen" class="modal-body hide loading">
 				<b>Loading XML from: </b><div id="remoteSourceURLDisplay"></div>
@@ -360,49 +379,50 @@
 
 <!-- Modal form for importing records from a URL -->
 <div class="modal hide fade" id="importRecordsFromXMLModal">
-	
+
 	<div class="modal-header">
 		<a href="javascript:;" class="close" data-dismiss="modal">×</a>
 		<h3>Import Registry Objects from pasted XML</h3>
 	</div>
-	
+
 	<div class="modal-screen-container">
 		<div name="selectionScreen" class="modal-body">
-			
-			<div class="alert alert-info">
-				Paste the XML contents into the field below. 
-			</div>
-			
-			
+
+			<div class="alert alert-info">Paste the XML contents into the field below.</div>
+
 			<form class="form-vertical">
 				<fieldset>
-					<label><b>XML to import:</b> </label>
+					<label> <b>XML to import:</b>
+					</label>
 					<textarea name="xml" id="xml_paste" rows="18" style="width:97%;font-family:Courier;font-size:8px;line-height:9px;"></textarea>
 				</fieldset>
 			</form>
-			
-			<p><span class="label label-info">Note</span> <small>This tool is designed for small imports (&lt;100 records). It may fail with larger bulk imports.</small></p>
+
+			<p>
+				<span class="label label-info">Note</span>
+				<small>
+					This tool is designed for small imports (&lt;100 records). It may fail with larger bulk imports.
+				</small>
+			</p>
 		</div>
-		
+
 		<!-- A hidden loading screen -->
-		<div name="loadingScreen" class="modal-body hide loading">
-				<b>Loading XML from: </b><div id="remoteSourceURLDisplay"></div>
-				<div class="progress progress-striped active">
-				  <div class="bar" style="width: 100%;"></div>
-				</div>
+		<div name="loadingScreen" class="modal-body hide loading"> <b>Loading XML from:</b>
+			<div id="remoteSourceURLDisplay"></div>
+			<div class="progress progress-striped active">
+				<div class="bar" style="width: 100%;"></div>
+			</div>
 		</div>
-		
+
 		<!-- A hidden loading screen -->
-		<div name="resultScreen" class="modal-body hide loading">
-		</div>
+		<div name="resultScreen" class="modal-body hide loading"></div>
 	</div>
-	
-	
+
 	<div class="modal-footer">
 		<a href="javascript:;" class="btn btn-primary doImportRecords" data-loading-text="Importing records...">Import Records</a>
 		<a href="#" class="btn hide" data-dismiss="modal">Close</a>
 	</div>
-	
+
 </div>
 
 	{{/item}}
@@ -420,16 +440,6 @@
 </div>
 
 
-<div class="hide" id="datasource-log-template">
-	<table class="table table-hover">
-		<thead><tr><th>#</th><th>TYPE</th><th>LOG</th><th>DATE</th></tr></thead>
-		<tbody>
-		{{#items}}
-			<tr class="{{type}}"><td>{{id}}</td><td>{{type}}</td><td><pre>{{log}}</pre></td><td>{{date_modified}}</td></tr>
-		{{/items}}
-		</tbody>
-	</table>
-</div>
 
 
 <!-- mustache template for data source edit single-->
@@ -795,8 +805,9 @@
 			  </div>
 			</div>
 		</form>
+</div>
+</div>
 
-		
 	</div>
 </div>
 {{/item}}

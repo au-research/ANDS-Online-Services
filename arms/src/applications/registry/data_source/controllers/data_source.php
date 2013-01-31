@@ -193,65 +193,61 @@ class Data_source extends MX_Controller {
 		$jsonData = json_encode($jsonData);
 		echo $jsonData;
 	}
-	
-	public function getDataSourceLogs()
-	{		
+
+
+	/**
+	 * getDataSourceLogs
+	 * @author Minh Duc Nguyen <minh.nguyen@ands.org.au>
+	 * @param [POST] data_source_id [POST] offset [POST] count [POST] log_id
+	 * 
+	 * @return [json] [logs for the data source]
+	 */
+	public function getDataSourceLogs(){
 		header('Cache-Control: no-cache, must-revalidate');
 		header('Content-type: application/json');
-		date_default_timezone_set('Australia/Canberra');
-		$offset = 0;
-		$count = 10;
-		$POST = $this->input->post();
-		$logid = null;
-		
-		if (isset($POST['id'])){
-			$id = (int) $this->input->post('id');
+		// date_default_timezone_set('Australia/Canberra');//???
+
+		$this->load->model('data_sources', 'ds');
+
+		$post = $this->input->post();
+
+		$id = isset($post['id']) ? $post['id'] : 0; //data source id
+		if($id==0) {
+			throw new Exception('Datasource ID must be provided');
+			exit();
 		}
-		
-		if (isset($POST['logid'])){
-			$logid = (int) $this->input->post('logid');
-		}
-		if (isset($POST['offset'])){
-			$offset = (int) $this->input->post('offset');
-		}
-			if (isset($POST['count'])){
-			$count= (int) $this->input->post('count');
-		}
-				
+		$offset = isset($post['offset']) ? (int) $post['offset'] : 10;
+		$count = isset($post['count']) ? (int) $post['count'] : 0;
+		$logid = isset($post['logid']) ? (int) $post['logid'] : null;
+
 		$jsonData = array();
-		$items = array();
-		$this->load->model("data_sources","ds");
 		$dataSource = $this->ds->getByID($id);
 		$dataSourceLogs = $dataSource->get_logs($offset, $count, $logid);
-		$logSize = (int) $dataSource->get_log_size();
-		$jsonData['log_size'] = $logSize;
-		if($logSize > $offset + $count)
-		{
+		$jsonData['log_size'] = $dataSource->get_log_size();
+
+		if($jsonData['log_size'] > ($offset + $count)){
 			$jsonData['next_offset'] = $offset + $count;
-		}
-		else
-		{
+			$jsonData['hasMore'] = true;
+		}else{
 			$jsonData['next_offset'] = 'all';
+			$jsonData['hasMore'] = false;
+		}
+
+		$items = array();
+		if(sizeof($dataSourceLogs) > 0){
+			foreach($dataSourceLogs as $log){
+				$item = array();
+				$item['type'] = $log['type'];
+				$item['log'] = $log['log'];
+				$item['id'] = $log['id'];
+				$item['date_modified'] = timeAgo($log['date_modified']);
+				array_push($items, $item);
+			}
 		}
 		$jsonData['count'] = $count;
-		$jsonData['id'] = $id;
-
-
-
-		if(sizeof($dataSourceLogs) > 0){
-		foreach($dataSourceLogs as $log){
-			$item = array();
-			$item['type'] = $log['type'];
-			$item['log'] = $log['log'];
-			$item['id'] = $log['id'];
-			$item['date_modified'] = date("Y-m-d H:i:s", $log['date_modified']);
-			array_push($items, $item);
-		}
-		$jsonData['status'] = 'OK';
 		$jsonData['items'] = $items;
-		}		
-		$jsonData = json_encode($jsonData);
-		echo $jsonData;
+
+		echo json_encode($jsonData);
 	}
 	
 	/**

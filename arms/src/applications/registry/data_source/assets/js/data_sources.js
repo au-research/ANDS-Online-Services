@@ -198,92 +198,54 @@ function load_datasource(data_source_id){
 	return false;
 }
 
+/**
+ * load the data source log
+ * @param  {[type]} data_source_id [description]
+ * @param  {[type]} offset         [description]
+ * @param  {[type]} count          [description]
+ * @return {[type]}                [description]
+ */
 function loadDataSourceLogs(data_source_id, offset, count)
 {
 	offset = typeof offset !== 'undefined' ? offset : 0;
-	count = typeof count !== 'undefined' ? count : 4;
-	$('#data_source_log_container').html('Loading + + +');
+	count = typeof count !== 'undefined' ? count : 10;
+	// $('#data_source_log_container').html('Loading + + +');
 	//$('#data_source_log_container').slideUp(500);
 
 	$.ajax({
 		url: 'data_source/getDataSourceLogs/',
 		data: {id:data_source_id, offset:offset, count:count},
 		type: 'POST',
-		//contentType: 'application/json; charset=utf-8',
 		dataType: 'json',
 		success: function(data){
-			//console.log(data);
-			var logsTemplate = "<table class='table table-hover'>"+
-									"<thead><tr><th>#</th><th>DATE</th><th>TYPE</th><th>LOG</th></tr></thead>" +
-									"<tbody>" +
-									"{{#items}}" +
-										"<tr class='{{type}}'><td>{{id}}</td><td>{{date_modified}}</td><td>{{type}}</td><td><pre style='width:600px;'>{{log}}</pre></td></tr>" +
-										"{{/items}}" +
-									"<tr id='last_row'><td colspan='3'><a id='show_more_log' class='btn'>Show More<i class='icon-arrow-down'></i></a><input type='hidden' id='log_size' value='{{log_size}}'/><input type='hidden' id='next_offset' value='{{next_offset}}'/></td><td><span id='log_summary_bottom'></span></td></tr></tbody>" +
-								"</table>";
-			//var logsTemplate = $('#datasource-log-template').html();
-			//console.log("##"+logsTemplate+"%%");
+			var logsTemplate = $('#data_source_logs_template').html();
 			var output = Mustache.render(logsTemplate, data);
-			//console.log("##"+output+"%%");
-			$('#data_source_log_container').html(output);
+			$('#data_source_log_container').append(output);
 
 			$('#data_source_log_container').fadeIn(500);
 			$('#log_summary').html('viewing ' + data.next_offset + ' of ' + data.log_size + ' log entries');
-			$('#log_summary_bottom').html('viewing ' + data.next_offset + ' of ' + data.log_size + ' log entries');
-			var nextOffSet = $('#next_offset').val();
-			if(nextOffset=='all'){
+			//$('#log_summary_bottom').html('viewing ' + data.next_offset + ' of ' + data.log_size + ' log entries');
+			$('#show_more_log').attr('next_offset', data.next_offset);
+			if(data.next_offset=='all'){
 				$('#show_more_log').remove();
 			}
+			var bottom_offset = $('#data_source_log_container').offset().top + $('#data_source_log_container').height();
+			$('body').animate({"scrollTop": bottom_offset}, 100);
 		}
 	});
 
-	$('#show_more_log').live({
+	$('#show_more_log').die().live({
 		click:function(){
-			loadMoreSourceLogs(data_source_id, count);
-		}
-	})
-
-	return false;
-
-}
-
-function loadMoreSourceLogs(data_source_id, count)
-{
-
-	count = typeof count !== 'undefined' ? count : 2;
-	//$('#data_source_log_container').slideUp(500);
-	var offset = $('#next_offset').val();
-	$.ajax({
-		url: 'data_source/getDataSourceLogs/',
-		data: {id:data_source_id, offset:offset, count:count},
-		type: 'POST',
-		//contentType: 'application/json; charset=utf-8',
-		dataType: 'json',
-		success: function(data){
-			//console.log(data);
-			var logsTemplate = "{{#items}}" +
-								"<tr class='{{type}}'><td>{{id}}</td><td>{{date_modified}}</td><td>{{type}}</td><td>{{log}}</td></tr>" +
-								"{{/items}}";
-			//var logsTemplate = $('#datasource-log-template').html();
-			var output = Mustache.render(logsTemplate, data);
-			offset = data.next_offset;
-			if(offset == 'all')
-			{
-				$('#show_more_log').remove();
-			}
-			$('#log_summary').html('viewing ' + data.next_offset + ' of ' + data.log_size + ' log entries');
-			$('#log_summary_bottom').html('viewing ' + data.next_offset + ' of ' + data.log_size + ' log entries');
-			$('#next_offset').val(offset);
-			$('body').animate({"scrollTop": $("#last_row").offset().top}, 100);
-			$('#last_row').before(output);
+			var next_offset = $(this).attr('next_offset');
+			loadDataSourceLogs(data_source_id, next_offset, count);
 		}
 	});
+
 	return false;
 
 }
 
-function loadHarvestLogs(data_source_id, logid)
-{
+function loadHarvestLogs(data_source_id, logid){
 	console.log("logID: " + logid);
 	$.ajax({
 		url: 'data_source/getDataSourceLogs/',
@@ -389,7 +351,7 @@ function drawCharts(data_source_id){
 		contentType: 'application/json; charset=utf-8',
 		dataType: 'json',
 		success: function(data){
-			console.log(data);
+			//console.log(data);
 
 			$('#ro-progression').height('350').html('');
 
