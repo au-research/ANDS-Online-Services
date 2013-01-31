@@ -14,6 +14,18 @@ if ( $('#class', metadataContainer).html() == "Collection" )
     initDataciteSeeAlso();
 }
 
+// Internal Suggested Links
+initInternalSuggestedLinks();
+
+
+
+
+
+
+function initInternalSuggestedLinks()
+{
+
+}
 
 
 function initDataciteSeeAlso()
@@ -35,17 +47,10 @@ function initDataciteSeeAlso()
             {
                 if (parseInt(data.count) >= 0)
                 {
-                    datacite_explanation =  "<h3>About DataCite</h3>" + 
-                                            "<div class='about_datacite'>Datacite is a not-for-profit orginisation formed in London on 1 December 2009." +
-                                            "<p>DataCite's aim is to:</p>" +
-                                            "<ul>" +
-                                            "<li>Establish easier access to research data on the internet</li>" +
-                                            "<li>Increase acceptance of research data as legitimate, citable contributions to the scholarly record</li>" +
-                                            "<li>Support data archiving that will permit results to be verified and re-purposed for further study.</li>" +
-                                            "</ul>" +
-                                            "<p>For more information about DataCite, visit <a href='http://datacite.org'>http://datacite.org</a></p></div>";
+                    datacite_explanation = $('#datacite_explanation').html(); // see views/suggested_links.php
 
                     datacite_qmark = "<img class='datacite_help' src='"+base_url+"assets/core/images/question_mark.png' width='12px' />";
+
                     $('#DataCiteSuggestedLinksBox').html(
                                                         '<h4>External Records</h4>' +
                                                         '<h5><a href="#" class="show_accordion" data-title="Records suggested by DataCite" data-suggestor="'+suggestor+'" data-start="0" data-rows="10"> ' + data.count + " records</a> from DataCite " + datacite_qmark + "</h5>"
@@ -140,25 +145,29 @@ function updateLinksDisplay(container, title, suggestor, start, rows)
         else
         {
             container.html("<ul class='links_list'></ul>");
-            var class_icon = getClassIconSrc(data['links'][link]['class']);
-            
-            if (class_icon)
+
+            for (var link in data['links'])
             {
-                var icon = '<img src="'+ class_icon +'" alt="Class Icon" class="icon_sml">';
+                var class_icon = getClassIconSrc(data['links'][link]['class']);
+                
+                if (class_icon)
+                {
+                    var icon = '<img src="'+ class_icon +'" alt="Class Icon" class="icon_sml">';
+                }
+                else
+                {
+                    var icon = '';
+                }
+
+                $('ul', container).append('<li>'+icon+'<a href="">'+data['links'][link]['title']+'</a></li>');
+
+                var target = $('ul li', container).last();
+
+                // Create the tooltip
+                generatePreviewTip(target, data['links'][link]['slug'], null);
+                 // Bind the tooltip show
+                target.on('click',function(e){e.preventDefault(); $(this).qtip('show');});
             }
-            else
-            {
-                var icon = '';
-            }
-
-            $('ul', container).append('<li>'+icon+'<a href="">'+data['links'][link]['title']+'</a></li>');
-
-            var target = $('ul li', container).last();
-
-            // Create the tooltip
-            generatePreviewTip(target, data['links'][link]['slug'], null);
-             // Bind the tooltip show
-            target.on('click',function(e){e.preventDefault(); $(this).qtip('show');});
         }
 
         // Footer for "previous/more"
@@ -405,51 +414,6 @@ function initConnectionGraph()
 
 }
 
-
-
-    $('#ands_subject_match').click(function(e){
-        e.preventDefault();
-        updateAccordion($('#suggested_links_accordion'),"Record with matching subjects", "ands_subjects", 0, 10);
-        $( "#dialog-modal" ).dialog({
-          maxHeight: 640,
-          width:600,
-          position: { my: "center", at: "center", of: window },
-          draggable: false, resizable: false,
-          closeText: "x"
-        });
-    });
-
-    $('#ands_identifier_match').click(function(e){
-        e.preventDefault();
-        updateAccordion($('#suggested_links_accordion'),"Record with matching identifiers", "ands_identifiers", 0, 10);
-        $( "#dialog-modal" ).dialog({
-          maxHeight: 640,
-          width:600,
-          position: { my: "center", at: "center", of: window },
-          draggable: false, resizable: false,
-          closeText: "hide"
-        });
-    });
-
-     jQuery('body')
-      .bind(
-       'click',
-       function(e){
-        if(
-         jQuery('#dialog-modal').dialog('isOpen')
-         && !jQuery(e.target).is('.ui-dialog, a')
-         && !jQuery(e.target).closest('.ui-dialog').length
-        ){
-         jQuery('#dialog-modal').dialog('close');
-        }
-       }
-      );
-
-
-
-
-
-
 function generatePreviewTip(element, slug, registry_object_id)
 {
     var preview_url;
@@ -504,5 +468,19 @@ function generatePreviewTip(element, slug, registry_object_id)
     });
 }
 
+
+jQuery('body')
+.bind(
+'click',
+function(e){
+if(
+ jQuery('#dialog-modal').dialog('isOpen')
+ && !jQuery(e.target).is('.ui-dialog, a')
+ && !jQuery(e.target).closest('.ui-dialog').length
+){
+ jQuery('#dialog-modal').dialog('close');
+}
+}
+);
 
 });
