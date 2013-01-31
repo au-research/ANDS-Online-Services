@@ -58,7 +58,7 @@ function initDataciteSeeAlso()
                             text: datacite_explanation,
                         },
                         style: {
-                            classes: 'ui-tooltip-light ui-tooltip-shadow',
+                            classes: 'ui-tooltip-light ui-tooltip-shadow datacite-about',
                             width: 400,
                         },
                         show: {
@@ -93,12 +93,17 @@ $('.show_accordion').live('click', function(e){
       draggable: false, resizable: false,
       closeText: "hide"
     });
-    updateAccordion($('#links_dialog'),$(this).attr('data-title'), $(this).attr('data-suggestor'), $(this).attr('data-start'), $(this).attr('data-rows'));
+    updateLinksDisplay($('#links_dialog'),$(this).attr('data-title'), $(this).attr('data-suggestor'), $(this).attr('data-start'), $(this).attr('data-rows'));
 });
 
 
-function updateAccordion(container, title, suggestor, start, rows)
+/* Updates the contents of an accordion window */
+function updateLinksDisplay(container, title, suggestor, start, rows)
 {
+    // Loading icon as display loads...
+    container.html(loading_icon);
+
+    // Specify the web service endpoint
     if (isPublished())
     {
         var url_suffix = "view/getSuggestedLinks/"+suggestor+"/"+start+"/"+rows+"/?slug=" + getSLUG();
@@ -107,50 +112,53 @@ function updateAccordion(container, title, suggestor, start, rows)
     {
         var url_suffix = "view/getSuggestedLinks/"+suggestor+"/"+start+"/"+rows+"/?id=" + getRegistryObjectID();
     }
-    container.html(loading_icon);
 
+    // Fire off the request
     $.get(base_url + url_suffix, function(data)
     {   
-        var ui_dialog = container.parent().parent().parent();
-        $('span.ui-dialog-title', ui_dialog).html(title);
+        // Change the title of the dialog box
+        $('span.ui-dialog-title',container.parent().parent().parent()).html(title);
 
+
+        // If we have expandable contents, display our links in the accordion format 
         if ($.inArray(suggestor,ACCORDION_MODE_SUGGESTORS) >= 0)
         {
             container.html("<div class='links_list' id='"+suggestor+"_links_list'></div>");
-            $( "#"+suggestor+"_links_list" ).accordion();
+
+            link_contents = ''
+            for (var link in data['links'])
+            {
+
+                link_contents += decodeURIComponent(data['links'][link]['expanded_html']);
+            }
+
+            $("#"+suggestor+"_links_list",container).append( link_contents ).accordion({ header: "h3" });
+
         }
+
+        // Else we display these as links with preview popups
         else
         {
-             container.html("<ul class='links_list'></ul>");
-        }
-
-        for (var link in data['links'])
-        {
-            if (data['links'][link]['expanded_html'])
+            container.html("<ul class='links_list'></ul>");
+            var class_icon = getClassIconSrc(data['links'][link]['class']);
+            
+            if (class_icon)
             {
-                // Accordion mode...
-                // This is an external link, 
-                var link_contents =  '<h3>'+data['links'][link]['title']+'</h3>';
-                    link_contents += '<div>' + decodeURIComponent(data['links'][link]['expanded_html']) + '</div>';
-                $('div',container).append( link_contents );
-
+                var icon = '<img src="'+ class_icon +'" alt="Class Icon" class="icon_sml">';
             }
             else
             {
-                // This is a link to a record
-                if (data['links'][link]['slug'])
-                {
-                    var ro_class = data['links'][link]['class'];
-                    // XXX: other record types?
-                    var icon = '<img src="'+base_url+'assets/core/images/icons/collections.png" alt="collections" class="icon_sml">'
-                    $('ul', container).append('<li>'+icon+'<a href="">'+data['links'][link]['title']+'</a></li>');
-                    var target = $('ul li', container).last();
-                    target.on('click',function(e){e.preventDefault(); $(this).qtip('show');});
-                    generatePreviewTip(target, data['links'][link]['slug'], null);
-                }
+                var icon = '';
             }
 
+            $('ul', container).append('<li>'+icon+'<a href="">'+data['links'][link]['title']+'</a></li>');
 
+            var target = $('ul li', container).last();
+
+            // Create the tooltip
+            generatePreviewTip(target, data['links'][link]['slug'], null);
+             // Bind the tooltip show
+            target.on('click',function(e){e.preventDefault(); $(this).qtip('show');});
         }
 
         // Footer for "previous/more"
@@ -175,9 +183,7 @@ $('a.next_accordion_query').live('click', function(e){
     updateAccordion($('#links_dialog'), e.attr("data-title"), e.attr("data-suggestor"), e.attr("data-start"), e.attr("data-rows"));
 });
 
-$('.unhide_next').live('click', function(e){
-    e.preventDefault();
-});
+
 
 /*************/
 /* view page */
@@ -196,6 +202,27 @@ function getRegistryObjectID()
 function getSLUG()
 {
     return $('#slug', metadataContainer).html();
+}
+
+function getClassIconSrc(ro_class)
+{
+    switch(ro_class)
+    {
+        case "collection":
+            return base_url+'assets/core/images/icons/collections.png';
+        break;
+        case "party":
+            return base_url+'assets/core/images/icons/parties.png'
+        break;
+        case "service":
+            return base_url+'assets/core/images/icons/services.png'
+        break;
+        case "activity":
+            return base_url+'assets/core/images/icons/activities.png'
+        break;
+        default:
+            return false;
+    }
 }
 
 function traverseAndSelectChildren(tree, select_id)
