@@ -6,7 +6,7 @@ class View extends MX_Controller {
 	function index()
 	{
 		$data['title']='Research Data Australia';
-		$data['js_lib'] = array('dynatree','qtip');
+		$data['js_lib'] = array('dynatree','qtip','accordion');
 		$data['scripts'] = array('view');
 
 		$suggested_links = array();

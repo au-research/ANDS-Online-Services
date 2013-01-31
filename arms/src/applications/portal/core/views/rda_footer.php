@@ -66,7 +66,7 @@
 		    	<script src="<?php echo asset_url('lib/qtip2/jquery.qtip.min.js', 'base');?>" type="text/javascript"></script>
 		    <?php endif; ?>
 		    <?php if ($lib=='accordion'): ?>
-		    	<script src="<?php echo asset_url('lib/tiny_accordion/accordion.js', 'base');?>" type="text/javascript"></script>
+		    	<script src="<?php echo asset_url('lib/tinyaccordion/accordion.js', 'base');?>" type="text/javascript"></script>
 		    <?php endif; ?>
 		<?php endforeach;?>
 	<?php endif; ?>

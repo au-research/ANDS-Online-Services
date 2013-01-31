@@ -3,6 +3,8 @@ $(document).ready(function() {
 // Pointer to DOM element containing metadata about this registryObject
 var metadataContainer = $('#registryObjectMetadata');
 var loading_icon = '<div style="width:100%; padding-top:40px; text-align:center;"><img src="'+base_url+'assets/core/images/ajax-loader.gif" alt="Loading..." /></div>';
+var ACCORDION_MODE_SUGGESTORS = ['datacite'];
+
 // Check if we have a hierarchal connections graph
 initConnectionGraph();
 
@@ -34,14 +36,14 @@ function initDataciteSeeAlso()
                 if (parseInt(data.count) >= 0)
                 {
                     datacite_explanation =  "<h3>About DataCite</h3>" + 
-                                            "<h5>Datacite is a not-for-profit orginisation formed in London on 1 December 2009." +
+                                            "<div class='about_datacite'>Datacite is a not-for-profit orginisation formed in London on 1 December 2009." +
                                             "<p>DataCite's aim is to:</p>" +
                                             "<ul>" +
                                             "<li>Establish easier access to research data on the internet</li>" +
                                             "<li>Increase acceptance of research data as legitimate, citable contributions to the scholarly record</li>" +
                                             "<li>Support data archiving that will permit results to be verified and re-purposed for further study.</li>" +
                                             "</ul>" +
-                                            "<p>For more information about DataCite, visit <a href='http://datacite.org'>http://datacite.org</a></p></h5>";
+                                            "<p>For more information about DataCite, visit <a href='http://datacite.org'>http://datacite.org</a></p></div>";
 
                     datacite_qmark = "<img class='datacite_help' src='"+base_url+"assets/core/images/question_mark.png' width='12px' />";
                     $('#DataCiteSuggestedLinksBox').html(
@@ -95,7 +97,6 @@ $('.show_accordion').live('click', function(e){
 });
 
 
-
 function updateAccordion(container, title, suggestor, start, rows)
 {
     if (isPublished())
@@ -112,27 +113,44 @@ function updateAccordion(container, title, suggestor, start, rows)
     {   
         var ui_dialog = container.parent().parent().parent();
         $('span.ui-dialog-title', ui_dialog).html(title);
-        container.html("<ul class='links_list'></ul>");
+
+        if ($.inArray(suggestor,ACCORDION_MODE_SUGGESTORS) >= 0)
+        {
+            container.html("<div class='links_list' id='"+suggestor+"_links_list'></div>");
+            $( "#"+suggestor+"_links_list" ).accordion();
+        }
+        else
+        {
+             container.html("<ul class='links_list'></ul>");
+        }
+
         for (var link in data['links'])
         {
-            // This is a link to a record
-            if (data['links'][link]['slug'])
+            if (data['links'][link]['expanded_html'])
             {
-                var ro_class = data['links'][link]['class'];
-                // XXX: other record types?
-                var icon = '<img src="'+base_url+'assets/core/images/icons/collections.png" alt="collections" class="icon_sml">'
-                $('ul', container).append('<li>'+icon+'<a href="">'+data['links'][link]['title']+'</a></li>');
-                var target = $('ul li', container).last();
-                target.on('click',function(e){e.preventDefault(); $(this).qtip('show');});
-                generatePreviewTip(target, data['links'][link]['slug'], null);
+                // Accordion mode...
+                // This is an external link, 
+                var link_contents =  '<h3>'+data['links'][link]['title']+'</h3>';
+                    link_contents += '<div>' + decodeURIComponent(data['links'][link]['expanded_html']) + '</div>';
+                $('div',container).append( link_contents );
+
             }
             else
             {
-                // This is an external link, 
-                $('ul', container).append(  '<li><a href="'+data['links'][link]['url']+'" class="unhide_next">'+data['links'][link]['title']+'</a>' +
-                                                '<div class="hide">' + decodeURIComponent(data['links'][link]['expanded_html']) + '</div>' +
-                                            '</li>');
+                // This is a link to a record
+                if (data['links'][link]['slug'])
+                {
+                    var ro_class = data['links'][link]['class'];
+                    // XXX: other record types?
+                    var icon = '<img src="'+base_url+'assets/core/images/icons/collections.png" alt="collections" class="icon_sml">'
+                    $('ul', container).append('<li>'+icon+'<a href="">'+data['links'][link]['title']+'</a></li>');
+                    var target = $('ul li', container).last();
+                    target.on('click',function(e){e.preventDefault(); $(this).qtip('show');});
+                    generatePreviewTip(target, data['links'][link]['slug'], null);
+                }
             }
+
+
         }
 
         // Footer for "previous/more"
@@ -159,7 +177,6 @@ $('a.next_accordion_query').live('click', function(e){
 
 $('.unhide_next').live('click', function(e){
     e.preventDefault();
-    $(this).siblings().first().show();
 });
 
 /*************/
