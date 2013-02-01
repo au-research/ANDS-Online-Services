@@ -68,6 +68,17 @@ class Extrif_Extension extends ExtensionBase
 					$subjects->addChild("extRif:subject_resolved", $subject['resolved'], EXTRIF_NAMESPACE);
 					$subjects->addChild("extRif:subject_uri", $subject['uri'], EXTRIF_NAMESPACE);
 				}
+
+	
+				foreach ($this->ro->processLicence() AS $right)
+				{
+					$theright = $extendedMetadata->addChild("extRif:right", $right['value'], EXTRIF_NAMESPACE);
+					$theright->addAttribute("type", $right['type']);	
+					if(isset($right['rightsUri']))$theright->addAttribute("rightsUri", $right['rightsUri']);					
+					if(isset($right['licence_type']))$theright->addAttribute("licence_type", $right['licence_type']);
+					if(isset($right['licence_group']))$theright->addAttribute("licence_group", $right['licence_group']);					
+				}
+
 				//$extendedMetadata->addChild("extRif:reverseLinks", $this->getReverseLinksStatusforEXTRIF($ds) , EXTRIF_NAMESPACE);
 				
 				//$extendedMetadata->addChild("extRif:flag", ($this->ro->flag === DB_TRUE ? '1' : '0'), EXTRIF_NAMESPACE);
@@ -128,6 +139,7 @@ class Extrif_Extension extends ExtensionBase
 					$relatedObj->addChild("extRif:related_object_display_title", $relatedObject['title'], EXTRIF_NAMESPACE);
 					$relatedObj->addChild("extRif:related_object_relation", $relatedObject['relation_type'], EXTRIF_NAMESPACE);
 				}
+
 
 				/* Names EXTRIF */
 				//$descriptions = $xml->xpath('//'.$this->ro->class.'/description');

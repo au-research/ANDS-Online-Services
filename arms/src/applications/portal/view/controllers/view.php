@@ -21,6 +21,7 @@ class View extends MX_Controller {
 			try
 			{
 				$extRif = $this->registry->fetchExtRifBySlug($this->input->get('slug'));
+
 			}
 			catch (SlugNoLongerValidException $e)
 			{

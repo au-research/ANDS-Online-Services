@@ -35,7 +35,8 @@ class Search extends MX_Controller {
 			'class' => 'Class',
 			'subject_value_resolved' => 'Subjects',
 			'group' => 'Contributed By',
-			'type' => 'Type'
+			'type' => 'Type',
+			'license_class' => 'Licence'
 		);
 		foreach($facets as $facet=>$display){
 			$this->solr->setFacetOpt('field', $facet);
@@ -72,6 +73,9 @@ class Search extends MX_Controller {
 					case 'subject': 
 						$this->solr->setOpt('subject_value_resolved', $value);
 						break;
+					case 'license_class': 
+						$this->solr->setOpt('fq', 'license_class:("'.$value.'")');
+						break;						
 					case 'spatial':
 						$this->solr->setOpt('fq', 'spatial_coverage_extents:"Intersects('.$value.')"');
 						break;

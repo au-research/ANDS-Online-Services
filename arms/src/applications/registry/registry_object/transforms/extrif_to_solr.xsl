@@ -47,7 +47,7 @@
 	            <xsl:apply-templates select="extRif:extendedMetadata/extRif:displayTitle"/> 
                 <xsl:apply-templates select="extRif:extendedMetadata/extRif:listTitle"/> 
 
-                <xsl:apply-templates select="extRif:extendedMetadata/extRif:rights[@licence_group!='']" mode="licence_group"/>        
+                <xsl:apply-templates select="extRif:extendedMetadata/extRif:right[@licence_group!='']" mode="licence_group"/>        
                 <xsl:apply-templates select="extRif:extendedMetadata/extRif:description" mode="value"/>
                 <xsl:apply-templates select="extRif:extendedMetadata/extRif:description" mode="type"/>
 	            <!--xsl:apply-templates select="extRif:extendedMetadata/extRif:flag"/>
@@ -65,6 +65,7 @@
                 <xsl:apply-templates select="extRif:extendedMetadata/extRif:subjects"/>
 
                 <xsl:apply-templates select="extRif:extendedMetadata/extRif:related_object"/>
+
         	</xsl:when>
         </xsl:choose>  
         <xsl:apply-templates select="ro:collection | ro:party | ro:activity | ro:service"/>
@@ -529,9 +530,9 @@
         </xsl:element>
     </xsl:template>
     
-     <xsl:template match="extRif:rights[@licence_group!='']" mode="licence_group">
+     <xsl:template match="extRif:right[@licence_group!='']" mode="licence_group">
         <xsl:element name="field">
-            <xsl:attribute name="name">licence_group</xsl:attribute>
+            <xsl:attribute name="name">license_class</xsl:attribute>
             <xsl:value-of select="@licence_group"/>
         </xsl:element>
     </xsl:template> 
