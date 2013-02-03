@@ -29,8 +29,8 @@ class Data_source extends MX_Controller {
 		$data['small_title'] = '';
 
 		$this->load->model("data_sources","ds");
-		// $dataSources = $this->ds->getAll(0,0);//get everything  XXX: getOwnedDataSources
-		$dataSources = $this->ds->getOwnedDataSources();
+	 	$dataSources = $this->ds->getAll(0,0);//get everything  XXX: getOwnedDataSources
+		//$dataSources = $this->ds->getOwnedDataSources();
 		$items = array();
 		foreach($dataSources as $ds){
 			$item = array();
@@ -751,6 +751,105 @@ class Data_source extends MX_Controller {
 		print("<message> we need to get the contibutor groups and the pages if required</message>\n");
 		print("</response>");
 		return " we need to get the contibutor groups and the pages if required";
+
+	}
+
+
+	function exportDataSource($id)
+	{
+		parse_str($_SERVER['QUERY_STRING'], $_GET);
+		$as = 'xml';
+		$classtring = '';
+		$status = 'All';
+		//$classtring = 'activitycollectionserviceparty';
+		$data = json_decode($this->input->get('data'));
+		foreach($data as $param)
+		{
+			if($param->value == 'yes')
+				$classtring .= $param->name;
+			if($param->name == 'as')
+				$as = $param->value;
+			if($param->name == 'status')
+				$status = $param->value;
+		}
+		$this->load->model("data_sources","ds");
+		$this->load->model("registry_object/registry_objects", "ro");
+		$dataSource = $this->ds->getByID($id);
+		$dsSlug = $dataSource->getAttribute('slug');
+		$rifcs = '';
+		$ids = $this->ro->getIDsByDataSourceID($id, false, $status);
+		if($ids)
+		{
+			$i = 0;
+			foreach($ids as $idx => $ro_id){
+				try{
+					$ro = $this->ro->getByID($ro_id);
+					if($ro && (strpos($classtring, $ro->class) !== false))
+					{
+						$rifcs .= $ro->getRif().NL;
+					}
+				}catch (Exception $e){}
+
+				if ($idx % 100 == 0)
+				{
+					unset($ro);
+					gc_collect_cycles();
+				}
+			}
+		}
+		if($as == 'file')
+		{
+		    $this->load->helper('download');
+		    force_download($dsSlug.'-RIF-CS-Export.xml', wrapRegistryObjects($rifcs));
+		}
+		else
+		{
+		 	header('Cache-Control: no-cache, must-revalidate');
+		 	header('Content-type: application/xml');
+		 	echo wrapRegistryObjects($rifcs);
+		 }
+	}
+
+	function getDataSourceReport($id)
+	{
+		
+		$this->load->model("data_sources","ds");
+		$this->load->model("registry_object/registry_objects", "ro");
+		$dataSource = $this->ds->getByID($id);
+		$ids = $this->ro->getIDsByDataSourceID($id, false, 'All');
+		$report = "<h3>QUALITY REPORT FOR ".$dataSource->title."</h3>";
+		$j = 0;
+		$qa_report = '';
+		if($ids)
+		{
+			$report .= "<h4>record count :".sizeof($ids)."</h4>";
+			$i = 0;
+			foreach($ids as $idx => $ro_id){
+				try{
+					$ro = $this->ro->getByID($ro_id);
+					if($ro)
+					{
+						$text = $ro->getMetadata('quality_html');
+						if($text && $text != '')
+						{
+							//var_dump($text);
+							$j++;
+							$qa_report .= "<a id='".$ro_id. "'>".$ro->title."</a><br/>" .$text ."<br/>";
+							$qa_report .= "<br/>~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~<br/>";
+						}
+					}
+				}catch (Exception $e){}
+
+				if ($idx % 100 == 0)
+				{
+					unset($ro);
+					gc_collect_cycles();
+				}
+			}
+			$report .= "<h4>records with issues :".$j."</h4>";
+			$report .= $qa_report;
+		}
+		echo $report;
 
 	}
 

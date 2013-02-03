@@ -129,7 +129,11 @@
 				  		<button class="btn history"><i class="icon-hdd"></i> View History</button>
 				  		<button class="btn deleteRecord"><i class="icon-trash"></i> Delete Record</button>
 					</div>
-
+					<div class="btn-group pull-right">
+						<a class="btn dropdown-toggle ExportDataSource" data-toggle="modal" href="#exportDataSource" id="exportDS">
+							 Export Records
+						</a>						
+					</div>
 					<div class="btn-group pull-right">
 						<a class="btn dropdown-toggle importRecords" data-toggle="dropdown" href="javascript:;">
 							<i class="icon-download-alt"></i> Import Records <span class="caret"></span>
@@ -423,6 +427,69 @@
 		<a href="#" class="btn hide" data-dismiss="modal">Close</a>
 	</div>
 
+</div>
+
+
+<!-- Modal form for importing records from a URL -->
+<div class="modal hide fade" id="exportDataSource">
+	
+	<div class="modal-header">
+		<a href="javascript:;" class="close" data-dismiss="modal">×</a>
+		<h3>Export Records As RIF-CS</h3>
+	</div>
+	
+	<div class="modal-screen-container">
+		<div name="selectionScreen" class="modal-body">
+			
+			<div class="alert alert-info">
+				Select the type of records you want to export from this datasource. 
+			</div>			
+			<form class="form-vertical" id="data_source_export_form">
+				<fieldset>
+					<label><b>Selection form</b> </label>
+					<input type="checkbox" name="activity" value="yes" checked="checked" />Activities<br/>
+					<input type="checkbox" name="collection" value="yes" checked="checked" />Collections<br/>
+					<input type="checkbox" name="party" value="yes" checked="checked" />Parties<br/>
+					<input type="checkbox" name="service" value="yes" checked="checked" />Services<br/>
+					<br/>
+					<select name="status" data-placeholder="Choose by Status" tabindex="1" class="chzn-select input-xlarge" for="class_1">
+						<option value="All">ALL status</option>
+						<option value="PUBLISHED">PUBLISHED</option>
+						<option value="APPROVED">APPROVED</option>
+						<option value="DRAFT">DRAFT</option>
+						<option value="SUBMITTED_FOR_ASSESSMENT">SUBMITTED_FOR_ASSESSMENT</option>
+						<option value="MORE_WORK_REQUIRED">MORE_WORK_REQUIRED</option>
+						<option value="ASSESSMENT_IN_PROGRESS">ASSESSMENT_IN_PROGRESS</option>
+					</select>
+					<!--label><b>Limit: </b> </label><input type="text" name="limit" value="20" /><br/-->
+				</fieldset>
+			</form>
+		</div>
+		
+		<!-- A hidden loading screen -->
+		<div id="loadingScreen" class="modal-body hide loading">
+				<b>Generating XML...
+				<div class="progress progress-striped active">
+				  <div class="bar" style="width: 100%;"></div>
+				</div>
+		</div>
+		<div id="error-modal" class="modal-body hide loading">
+				<b>Failed to generate export file...</b>
+		</div>
+
+		
+		<!-- A hidden loading screen -->
+		<div name="resultScreen" class="modal-body hide loading">
+		</div>
+	</div>
+	
+	
+	<div class="modal-footer">
+		<a href="javascript:;" class="btn btn-primary exportRecord" type="xml" data-loading-text="Fetching records...">Show me the XML</a>
+		<a href="javascript:;" class="btn btn-primary exportRecord" type="file" data-loading-text="Fetching records...">Get My File</a>
+		<a href="#" class="btn hide" data-dismiss="modal">Close</a>
+	</div>
+	
 </div>
 
 	{{/item}}

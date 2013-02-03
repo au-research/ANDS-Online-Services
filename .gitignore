@@ -6,6 +6,8 @@
 /registry/src/orca/htmlpurifier/
 .DS_Store
 ._*
+.settings
+mysql-connector-java-5.1.22-bin.jar
 .htaccess
 harvester/build/
 harvester/lib/

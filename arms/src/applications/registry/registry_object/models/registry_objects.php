@@ -301,7 +301,10 @@ class Registry_objects extends CI_Model {
 							    return $db;
 						    })),
 					$make_ro);
-		return $make_ro ? $results : array_map(function($r){return $r['registry_object_id'];}, $results);
+		if(is_array($results))
+			return $make_ro ? $results : array_map(function($r){return $r['registry_object_id'];}, $results);
+		else
+			return null;
 	}
 
 	/**

@@ -92,6 +92,33 @@ $(function(){
 			window.history.back();
 		}
 	});
+
+	$('.exportRecord').live({
+		click: function(e){
+		data_source_id = $('#data_source_view_container').attr('data_source_id');
+		type = $(this).attr('type');
+		var data = {};
+		//let's construct the array using the form
+		var form_data  = $('#data_source_export_form').serializeArray();
+		form_data.push({name:"as",value:type});
+		data = JSON.stringify(form_data);
+		window.open(base_url+'data_source/exportDataSource/'+data_source_id+'?data='+data, '_blank');
+		}
+	})
+
+
+	$('.dataSourceReport').live({
+		click: function(e){
+		data_source_id = $('#data_source_view_container').attr('data_source_id');
+		type = $(this).attr('type');
+		var data = {};
+		//let's construct the array using the form
+		var form_data  = $('#data_source_report_form').serializeArray();
+		form_data.push({name:"as",value:type});
+		data = JSON.stringify(form_data);
+		window.open(base_url+'data_source/getDataSourceReport/'+data_source_id+'?data='+data, '_blank');
+		}
+	})
 });
 
 /*
