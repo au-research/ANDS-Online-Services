@@ -73,6 +73,11 @@
 			    	 <h4>Initialisation options</h4>
 				 <p>The ANDS Location Capture widget plugin's <code>init</code> function has the following options:</p>
 				 <dl class="dl-horizontal">
+				   <dt>mode</dt>
+				   <dd>Under normal operation, the widget opens in map view. Use this setting to open either in the 'search' or 'coordinates' dialogue.
+				   <dd><strong>valid modes:</strong> search, coords</dd>
+				   <dd><strong>default:</strong> n/a</dd>
+				   <dd><strong>example:</strong><br/> <code>$("#mapContainer").ands_location_widget('init', {mode:'search'});</code></dd>
 				   <dt>zoom</dt>
 				   <dd>The initial zoom level of the map</dd>
 				   <dd><strong>default:</strong> 3</dd>

@@ -52,7 +52,8 @@
 	gasset_protocol: DEFAULT_PROTOCOL,
 	zoom: 3,                           //starting zoom
 	start: "133, -27",                 //starting point of the map
-	jumpToPoint: true                  //jump to existing point?
+	jumpToPoint: true,                 //jump to existing point?
+        mode: false                        //start in mode (search|coords)
     };
 
     /**
@@ -163,6 +164,17 @@
 		    showError("Invalid start point");
 		    return $this;
 		}
+
+		//check non-default mode, if specified
+		if (settings.mode !== false) {
+		    if (settings.mode !== 'search' &&
+			settings.mode !== 'coords') {
+			showError('Invalid mode: currently, only <i>search</i> and <i>coords</i> are valid modes');
+			return $this;
+		    }
+		}
+
+
 
 
 
@@ -315,6 +327,18 @@
 			widget_data.map = map;
 			widget_data.geocoder = new google.maps.Geocoder();
 			$this.data(WIDGET_NS, widget_data);
+
+			//invoke a user-defined mode (if it exists)
+			if (settings.mode !== false) {
+			    switch(settings.mode) {
+			    case 'search':
+				showAddressSearchDialog($("#" + TOOL_SEARCH_PREFIX + $this.attr('id')));
+				break;
+			    case 'coords':
+				showLonLatDialog($("#" + TOOL_TEXT_PREFIX + $this.attr('id')));
+				break;
+			    }
+			}
 		    }
 		    catch(e) {
 		    	//console.error(e);
