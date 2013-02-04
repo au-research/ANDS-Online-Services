@@ -73,14 +73,22 @@
 			    	 <h4>Initialisation options</h4>
 				 <p>The ANDS Location Capture widget plugin's <code>init</code> function has the following options:</p>
 				 <dl class="dl-horizontal">
+				   <dt>zoom</dt>
+				   <dd>The initial zoom level of the map</dd>
+				   <dd><strong>default:</strong> 3</dd>
+				   <dd><strong>example:</strong><br/> <code>$("#mapContainer").ands_location_widget('init', {zoom:7});</code></dd>
+				   <dt>start</dt>
+				   <dd>The initial map view, given as a string of "<i>longitude</i>, <i>latitude</i>"</dd>
+				   <dd><strong>default:</strong> "133, -27"</dd>
+				   <dd><strong>example:</strong><br/> <code>$("#mapContainer").ands_location_widget('init', {start:"130, -16"});</code></dd>
 				   <dt>target</dt>
 				   <dd>The HTML id attribute of the element to store the final coordinate data in. If no such element exists, it wil be created for you, and inserted immediately after the plugin element.</dd>
 				   <dd><strong>default:</strong> geoLocation</dd>
 				   <dd><strong>example:</strong><br/> <code>$("#mapContainer").ands_location_widget('init', {target:'coordinate_data'});</code></dd>
 				   <dt>lonLat</dt>
-				   <dd>Initial coordinate data to display on the map. Coordinates are specified as a comma-delimited string <code>[lon],[lat]</code>. Coordinate data can be a single point, or an array of points representing a region. Regions should be closed (that is, the first and last points should be the same).</dd>
+				   <dd>Initial coordinate data to display on the map. Coordinates are specified as a comma-delimited string <i>longitude</i>, <i>latitude</i>. Coordinate data can be a single point, or an array of points representing a region. Regions should be closed (that is, the first and last points should be the same).</dd>
 				   <dd><strong>default:</strong> n/a</dd>
-				   <dd><strong>example:</strong><br/> <code>$("#mapContainer").ands_location_widget('init', {lonLat:'-27, 133'});</code></dd>
+				   <dd><strong>example:</strong><br/> <code>$("#mapContainer").ands_location_widget('init', {lonLat:'133, -27'});</code></dd>
 				   <dt>endpoint</dt>
 				   <dd>The ANDS resolver service to use. Change this when you want to use your own resolver service.</dd>
 				   <dd><strong>default:</strong> services.ands.org.au/api/resolver/</dd>

@@ -46,10 +46,12 @@
     var INLINE_MESSAGE_ID_PREFIX           = 'alw_msg_';
 
     var PLUGIN_DEFAULTS = {
-	target: "geoLocation", //final resting place of the target data
-	lonLat: false, //starting point for map
+	target: "geoLocation",              //final resting place of the target data
+	lonLat: false,                      //initial feature
 	endpoint: DEFAULT_SERVICE_POINT,
-	gasset_protocol: DEFAULT_PROTOCOL
+	gasset_protocol: DEFAULT_PROTOCOL,
+	zoom: 3,                           //starting zoom
+	start: "133, -27"                  //starting point of the map
     };
 
     /**
@@ -147,6 +149,21 @@
 		    'feature_types': {},
 		    'marker_listeners': []
 		});
+
+		//set the starting point
+		try {
+		    settings.start = getCoordsFromString(settings.start)[0];
+		    if (!(settings.start instanceof google.maps.LatLng)) {
+			showError("Invalid start point: specify 'start' option as '<i>longitude</i>, <i>latitude</i>'");
+			return $this;
+		    }
+		}
+		catch (e) {
+		    showError("Invalid start point");
+		    return $this;
+		}
+
+
 
 		/**
 		 * Pull down some feature data from the ANDS resolver, and build
@@ -271,9 +288,9 @@
 
 			var mapCanvas = $('#'+mapCanvasId);
 			var myOptions = {
-			    zoom: 3,
+			    zoom: settings.zoom,
 			    disableDefaultUI: true,
-			    center:new google.maps.LatLng(-27, 133),
+			    center: settings.start,
 			    panControl: true,
 			    zoomControl: true,
 			    mapTypeControl: true,
