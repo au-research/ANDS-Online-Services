@@ -151,7 +151,7 @@
 
     <!-- LICENSE FACET -->
         <!-- <span class="provided">A full-text search of the entire record (and ANDS-inferred values)</span> -->
-        <field name="license_class" type="text_general" indexed="true" stored="true" multiValued="true"/>
+        <field name="license_class" type="string" indexed="true" stored="true" multiValued="true"/>
         
 
     <!-- NAMES-->
