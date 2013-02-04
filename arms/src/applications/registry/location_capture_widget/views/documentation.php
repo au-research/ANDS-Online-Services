@@ -89,6 +89,10 @@
 				   <dd>Initial coordinate data to display on the map. Coordinates are specified as a comma-delimited string <i>longitude</i>, <i>latitude</i>. Coordinate data can be a single point, or an array of points representing a region. Regions should be closed (that is, the first and last points should be the same).</dd>
 				   <dd><strong>default:</strong> n/a</dd>
 				   <dd><strong>example:</strong><br/> <code>$("#mapContainer").ands_location_widget('init', {lonLat:'133, -27'});</code></dd>
+				   <dt>jumpToPoint</dt>
+				   <dd>When entering 'point' mode, <code>jumpToPoint</code> defines whether the map view should jump to the existing point, or stay at the current map view.</dd>
+				   <dd><strong>default:</strong> true</dd>
+				   <dd><strong>example:</strong><br/> <code>$("#mapContainer").ands_location_widget('init', {jumpToPoint:false});</code></dd>
 				   <dt>endpoint</dt>
 				   <dd>The ANDS resolver service to use. Change this when you want to use your own resolver service.</dd>
 				   <dd><strong>default:</strong> services.ands.org.au/api/resolver/</dd>

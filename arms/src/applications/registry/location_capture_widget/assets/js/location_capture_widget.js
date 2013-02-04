@@ -51,7 +51,8 @@
 	endpoint: DEFAULT_SERVICE_POINT,
 	gasset_protocol: DEFAULT_PROTOCOL,
 	zoom: 3,                           //starting zoom
-	start: "133, -27"                  //starting point of the map
+	start: "133, -27",                 //starting point of the map
+	jumpToPoint: true                  //jump to existing point?
     };
 
     /**
@@ -437,8 +438,11 @@
 
 		/**
 		 * Reset tools (and their child data) to default/initial values
+		 * @param centre the map as well?
 		 */
-		function resetTools() {
+		function resetTools(centre) {
+		    centre = typeof(centre) === 'undefined' ? true : false;
+
 		    var widget_data = $this.data(WIDGET_NS);
 		    var id = null;
 		    var object = null;
@@ -486,7 +490,7 @@
 		    }
 
 		    // Redraw the map.
-		    setMapFromData($target.val(), {centre:true, reset:false});
+		    setMapFromData($target.val(), {centre:centre, reset:false});
 		    $this.data(WIDGET_NS, widget_data);
 		}
 
@@ -634,7 +638,7 @@
 		    }
 
 		    // Check for a marker to centre on.
-		    if (widget_data.marker !== null) {
+		    if (widget_data.marker !== null && settings.jumpToPoint) {
 			widget_data.map.setCenter(widget_data.marker.getPosition());
 		    }
 		    $this.data(WIDGET_NS, widget_data);
@@ -648,7 +652,7 @@
 		    tool = $(tool);
 		    var widget_data = $this.data(WIDGET_NS);
 		    var active = getToolActive(tool);
-		    resetTools();
+		    resetTools(settings.jumpToPoint);
 
 		    // Set the cursor for dropping a marker.
 		    widget_data.map.setOptions({draggableCursor:"crosshair"});
@@ -672,10 +676,12 @@
 											    if( e.latLng) {
 		    										// Set the input field and reset the control.
 												$target.val(e.latLng.lng().toFixed(6) + "," + e.latLng.lat().toFixed(6));
-												resetTools();
+												resetTools(settings.jumpToPoint);
 											    }
    											}));
-			centreMap();
+			if (settings.jumpToPoint) {
+			    centreMap();
+			}
 		    }
 		}
 
