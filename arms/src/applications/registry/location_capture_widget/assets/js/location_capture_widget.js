@@ -507,13 +507,14 @@
 		}
 
 		/**
-		 * Retrieve, clean and validate coordinates from the data target.
-		 * @return clean coordinate data (if also valid, data is an array
-		 * of google.maps.LatLng)
+		 * return and array of google.map.LatLng objects, created
+		 * from the coordinate string data provided
+		 * @param coordinate string data, format "<lon>, <lat>"
+		 * @return an array of google.maps.LatLng objects
 		 */
-		function getCoordsFromInputField() {
+		function getCoordsFromString(cstr) {
 		    var coords = new Array();
-		    var lonlatText = tidyLonLatText($target.val());
+		    var lonlatText = tidyLonLatText(cstr);
 		    if(lonlatText !== "" && validateLonLatText(lonlatText)) {
 			var coordsStr = lonlatText.split(' ');
    			for(var i=0; i < coordsStr.length; i++ ) {
@@ -639,7 +640,7 @@
 			setToolActive(tool, true);
 
 			// Get coords from the the input field.
-			var coords = getCoordsFromInputField();
+			var coords = getCoordsFromString($target.val());
 
 			// Check to see if it represents a point.
 			if( coords.length === 1 ) {
@@ -733,7 +734,7 @@
 		    if (!active) {
 			setToolActive(tool, true);
 			// Get coords from the input field value.
-			var coords = getCoordsFromInputField();
+			var coords = getCoordsFromString($target.val());
 
 			// Check to see if it represents a region.
 			if( coords.length > 2 ) {
@@ -1187,7 +1188,7 @@
 		    // Clear the map.
 		    clearMap();
 		    // Redraw the map with values from the input field.
-		    var coords = getCoordsFromInputField();
+		    var coords = getCoordsFromString($target.val());
 		    if (coords.length === 1) {
 			createMarker(coords[0], false);
 		    }
