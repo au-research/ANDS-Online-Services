@@ -72,22 +72,15 @@
     </div-->
     <div id="user-nav" class="navbar navbar-inverse">
             <ul class="nav btn-group">
+            
               <?php if($this->user->hasFunction('REGISTRY_USER') && mod_enabled('registry')): ?>
                 <li class="btn btn-inverse dropdown">
-                  <a class="dropdown-toggle" data-toggle="dropdown" href="#">My Records <b class="caret"></b></a>
+                  <a class="dropdown-toggle" data-toggle="dropdown" href="#">My Data <b class="caret"></b></a>
                   <ul class="dropdown-menu pull-right">
-                    <li class=""><?php echo anchor('registry_object/manage', 'Manage My Records');?></li>
-                    <li class=""><a href="#">Add My Records</a></li>
-                    <li class=""><a href="#">Publish My Records</a></li>
-                  </ul>
-                </li>
-              <?php endif; ?>
-
-              <?php if($this->user->hasFunction('REGISTRY_USER') && mod_enabled('registry')): ?>
-                <li class="btn btn-inverse dropdown">
-                  <a class="dropdown-toggle" data-toggle="dropdown" href="#">My Datasources <b class="caret"></b></a>
-                  <ul class="dropdown-menu pull-right">
-                    <li class=""><?php echo anchor('data_source/manage', 'Manage My Datasources');?></li>
+                    <li class=""><?php echo anchor('data_source/manage', 'List My Datasources');?></li>
+                    <li class=""><?php echo anchor('registry_object/add', 'Add Records');?></li>
+                    <li class=""><?php echo anchor('registry_object/publish', 'Publish Records');?></li>
+                    <li class=""><?php echo anchor('data_source/manage', 'Export');?></li>
                     <li class=""><a href="#">Datasources Tools</a></li>
                   </ul>
                 </li>

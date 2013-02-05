@@ -54,6 +54,236 @@ class Data_source extends MX_Controller {
 
 
 	/**
+	 * Manage My Records (MMR Screen)
+	 * 
+	 * 
+	 * @author Minh Duc Nguyen <minh.nguyen@ands.org.au>
+	 * @package ands/registryobject
+	 * @param data_source_id | optional
+	 * @return [HTML] output
+	 */
+	public function manage_records($data_source_id=false){
+		acl_enforce('REGISTRY_USER');
+		ds_acl_enforce($data_source_id);
+		$data['title'] = 'Manage My Records';
+		$this->load->model('data_source/data_sources', 'ds');
+		if($data_source_id){
+			$data_source = $this->ds->getByID($data_source_id);
+			if(!$data_source) show_error("Unable to retrieve data source id = ".$data_source_id, 404);
+			// $data_source->updateStats();//TODO: XXX
+			$data['ds'] = $data_source;
+		}else{
+			throw new Exception("Data Source must be provided");
+		}
+		$data['less']=array('mmr');
+		$data['scripts'] = array('mmr');
+		$data['js_lib'] = array('core');
+		$this->load->view("manage_my_record", $data);
+	}
+
+
+	/**
+	 * Get MMR AJAX data for MMR
+	 *
+	 * @author Minh Duc Nguyen <minh.nguyen@ands.org.au>
+	 * @param  [int] 	$data_source_id
+	 * @return [json]   
+	 */
+	public function get_mmr_data($data_source_id){
+
+		//administrative and loading stuffs
+		acl_enforce('REGISTRY_USER');
+		ds_acl_enforce($data_source_id);
+		header('Cache-Control: no-cache, must-revalidate');
+		header('Content-type: application/json');
+		$this->load->model('data_source/data_sources', 'ds');
+		$this->load->model('registry_object/registry_objects', 'ro');
+
+		//getting the data source and parse into the jsondata array
+		$data_source = $this->ds->getByID($data_source_id);
+		foreach($data_source->attributes as $attrib=>$value){
+			$jsonData['ds'][$attrib] = $value->value;
+		}
+
+		//QA and Auto Publish check, valid_statuses are populated accordingly
+		$qa = $data_source->qa_flag=='t' ? true : false;
+		$auto_published = $data_source->auto_published=='t' ? true: false;
+		$jsonData['valid_statuses'] = array('MORE_WORK_REQUIRED', 'DRAFT', 'PUBLISHED');
+		if($qa) {
+			array_push($jsonData['valid_statuses'], 'SUBMITTED_FOR_ASSESSMENT', 'ASSESSMENT_IN_PROGRESS');
+		}
+		if(!$auto_published){
+			array_push($jsonData['valid_statuses'], 'APPROVED');	
+		}
+
+		//statuses is the main result array
+		$jsonData['statuses'] = array();
+		foreach($jsonData['valid_statuses'] as $s){
+
+			//declarations
+		
+			$args = array();//array for filtering
+			$no_match = false; //check match on filter 
+			
+			$st = array('display_name'=>str_replace('_', ' ', $s), 'name'=>$s, 'menu'=>array());
+			array_push($st['menu'], array('action'=>'select_all', 'display'=>'Select All'));
+			array_push($st['menu'], array('action'=>'flag', 'display'=>'Flag'));
+			switch($s){
+				case 'DRAFT':
+					$st['ds_count']=$data_source->count_DRAFT;
+					if($qa){
+						$st['connectTo']='SUBMITTED_FOR_ASSESSMENT';
+						array_push($st['menu'], array('action'=>'to_submit', 'display'=>'Submit for Assessment'));
+					}else{
+						if(!$auto_published){
+							$st['connectTo']='APPROVED';
+							array_push($st['menu'], array('action'=>'to_approve', 'display'=>'Approve'));
+						}else{
+							$st['connectTo']='PUBLISHED';
+							array_push($st['menu'], array('action'=>'to_publish', 'display'=>'Publish'));
+						}
+					}
+					break;
+				case 'MORE_WORK_REQUIRED':
+					$st['ds_count']=$data_source->count_MORE_WORK_REQUIRED;
+					$st['connectTo']='DRAFT';
+					array_push($st['menu'], array('action'=>'to_draft', 'display'=>'Move to Draft'));
+					break;
+				case 'SUBMITTED_FOR_ASSESSMENT':
+					$st['ds_count']=$data_source->count_SUBMITTED_FOR_ASSESSMENT;
+					$st['connectTo']='ASSESSMENT_IN_PROGRESS';
+					array_push($st['menu'], array('action'=>'to_assess', 'display'=>'Asessment In Progress'));
+					break;
+				case 'ASSESSMENT_IN_PROGRESS':
+					$st['ds_count']=$data_source->count_ASSESSMENT_IN_PROGRESS;
+					$st['connectTo']='APPROVED';
+					array_push($st['menu'], array('action'=>'to_approve', 'display'=>'Approve'));
+					break;
+				case 'APPROVED':
+					$st['ds_count']=$data_source->count_APPROVED;
+					$st['connectTo']='PUBLISHED';
+					array_push($st['menu'], array('action'=>'to_publish', 'display'=>'Publish'));
+					break;
+				case 'PUBLISHED':
+					$st['ds_count']=$data_source->count_PUBLISHED;
+					array_push($st['menu'], array('action'=>'to_draft', 'display'=>'Move to Draft'));
+					$st['connectTo']='';
+					break;
+			}
+			array_push($st['menu'], array('action'=>'delete', 'display'=>'Delete'));
+			$filters = $this->input->post('filters');
+
+			$args['sort'] = isset($filters['sort']) ? $filters['sort'] : array('updated'=>'desc');
+			$args['search'] = isset($filters['search']) ? $filters['search'] : false;
+			$args['filter'] = array('status'=>$s);
+
+			$white_list = array('title', 'class', 'key', 'status', 'slug', 'record_owner');
+			$filtered_ids = array();
+			$filtered = array();
+			if(isset($filters['filter'])){
+				foreach($filters['filter'] as $key=>$value){
+					if(!in_array($key, $white_list)){
+						$list = $this->ro->getByAttributeDatasource($data_source_id, $key, $value, false, false);
+						if($list){
+							$filtered_ids = array_merge($filtered_ids, $list);
+						}else{
+							$no_match = true;
+						}
+					}else{
+						$f[$key] = $value;
+						$args['filter'][$key] = $value;
+					}
+				}
+				foreach($filtered_ids as $k){
+					array_push($filtered, $k['registry_object_id']);
+				}
+			}
+			$args['filtered_id']=$filtered;
+
+			if(!$no_match){
+				$offset = 0;
+				$limit = 20;
+
+				$st['offset'] = $offset+$limit;
+
+				$filter = array(
+					'ds_id'=>$data_source_id,
+					'limit'=>20,
+					'offset'=>0,
+					'args'=>$args
+				);
+				$ros = $this->get_ros($filter);
+				$st['items']=$ros['items'];
+				$st['count']=$this->get_ros($filter, true);
+				$st['hasMore'] = $ros['hasMore'];
+				$st['ds_id'] = $data_source_id;
+			}else{
+				$st['count']=0;
+			}
+			$jsonData['statuses'][$s] = $st;
+		}
+		$jsonData['filters'] = $filters;
+		echo json_encode($jsonData);
+	}
+
+
+
+	public function get_more_mmr_data(){
+		acl_enforce('REGISTRY_USER');
+		ds_acl_enforce($this->input->post('ds_id'));
+		header('Cache-Control: no-cache, must-revalidate');
+		header('Content-type: application/json');
+			
+		$args['filter'] = array('status'=>$this->input->post('status'));
+		$filters = array(
+			'ds_id'=>$this->input->post('ds_id'),
+			'limit'=>10,
+			'offset'=>$this->input->post('offset'),
+			'args'=>$args
+		);
+
+		$results = $this->get_ros($filters, false);
+		if($results){
+			echo json_encode($results);
+		}else echo json_encode(array('noMore'=>true));
+	}
+
+	private function get_ros($filters, $getCount=false){
+		$results['items'] = array();
+		$this->load->model('registry_object/registry_objects', 'ro');
+		if(!$getCount){
+			$ros = $this->ro->getByDataSourceID($filters['ds_id'], $filters['limit'], $filters['offset'], $filters['args'], false);
+		}else{
+			return sizeof($ros = $this->ro->getByDataSourceID($filters['ds_id'], 0, 0, $filters['args'], false));
+		}
+		if($ros){
+			foreach($ros as $r){
+				$registry_object = $this->ro->getByID($r['registry_object_id']);
+				$item = array(
+						'id'=>$registry_object->id, 
+							'title'=>$registry_object->title,
+							'status'=>$registry_object->status,
+							'class'=>$registry_object->class,
+							'quality_level'=>$registry_object->quality_level,
+							'updated'=>timeAgo($registry_object->updated),
+							'error_count'=>$registry_object->error_count,
+							'warning_count'=>$registry_object->warning_count,
+							'data_source_id'=>$registry_object->data_source_id,
+							'flag'=>$registry_object->flag
+						);
+				if($item['error_count']>0) $item['has_error'] = true;
+				array_push($results['items'], $item);
+			}
+		}else return false;
+		if(sizeof($ros)<$filters['limit']){
+			$results['hasMore']=false;
+		}else{
+			$results['hasMore']=true;
+		}
+		return $results;
+	}
+
+	/**
 	 * Get a list of data sources
 	 * 
 	 * 

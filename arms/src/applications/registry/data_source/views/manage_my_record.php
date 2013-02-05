@@ -16,8 +16,8 @@
 	</div>
 	<div id="breadcrumb">
 		<?php echo anchor('registry_object/', '<i class="icon-home"></i> Home', array('class'=>'tip-bottom', 'title'=>'Go to Home'))?>
-		<a href="#" class="current"><?php echo $ds->title;?></a>
-		<a href="#">Manage</a>
+		<?php echo anchor('data_source/manage#!/view/'.$ds->id, $ds->title);?>
+		<a href="#" class="current">Manage My Records</a>
 		<div style="float:right">
 			<a>Selected <b>3</b> / 146</a>
 		</div>

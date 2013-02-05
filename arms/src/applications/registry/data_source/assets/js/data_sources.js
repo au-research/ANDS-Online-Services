@@ -64,7 +64,7 @@ $(function(){
 
 
 	//item button binding
-	$('.item-control .btn').live({
+	$('.btn').live({
 		click: function(e){
 			e.preventDefault();
 			var data_source_id = $(this).attr('data_source_id');
@@ -74,6 +74,10 @@ $(function(){
 				changeHashTo('edit/'+data_source_id);
 			}else if($(this).hasClass('delete')){
 				changeHashTo('delete/'+data_source_id);
+			}else if($(this).hasClass('mmr')){
+				window.location = base_url+'registry_object/manage/'+data_source_id;
+			}else if($(this).hasClass('export')){
+				window.location = base_url+'data_source/export/'+data_source_id;
 			}
 		}
 	});
@@ -186,18 +190,6 @@ function load_datasource(data_source_id){
 			$('#view-datasource').html(output);
 			$('#view-datasource').fadeIn(500);
 
-			//bind the data source action button
-			$('.btn-group button', view).click(function(){
-				var data_source_id = $(this).parent().attr('data_source_id');
-				if($(this).hasClass('edit')){
-					changeHashTo('edit/'+data_source_id);
-				}else if($(this).hasClass('history')){
-					changeHashTo('history/'+data_source_id);
-				}else if($(this).hasClass('delete')){
-					changeHashTo('deleteRecord/'+data_source_id);
-				}
-			});
-
 			//draw the charts
 			drawCharts(data_source_id);
 			loadDataSourceLogs(data_source_id);
@@ -257,7 +249,7 @@ function loadDataSourceLogs(data_source_id, offset, count)
 				$('#show_more_log').remove();
 			}
 			var bottom_offset = $('#data_source_log_container').offset().top + $('#data_source_log_container').height();
-			$('body').animate({"scrollTop": bottom_offset}, 100);
+			//$('body').animate({"scrollTop": bottom_offset}, 100);
 		}
 	});
 

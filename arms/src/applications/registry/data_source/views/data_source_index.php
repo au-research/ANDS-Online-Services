@@ -66,7 +66,8 @@
 		  		{{/counts}}
 		  		<div class="btn-group item-control">
 		  			<button class="btn btn-small view" data_source_id="{{id}}"><i class="icon-eye-open"></i> View</button>
-			  		<button class="btn btn-small edit" data_source_id="{{id}}"><i class="icon-edit"></i> Edit</button>
+		  			<button class="btn btn-small mmr" data_source_id="{{id}}"><i class="icon-folder-open"></i> Manage</button>
+			  		<button class="btn btn-small edit" data_source_id="{{id}}"><i class="icon-edit"></i> Settings</button>
 				</div>
 			</div>
 		</div>
@@ -86,7 +87,7 @@
 
 
 <!-- mustache template for data source view single-->
-<div class="hide" id="data-source-view-template">
+<script type="text/x-mustache"  id="data-source-view-template">
 <?php
 	$data_source_view_fields = array(
 		'key' => 'Key',
@@ -124,10 +125,10 @@
 	    	
 	 		<div class="widget-content">
 	 			<div class="btn-toolbar">
-					<div class="btn-group" data_source_id="{{data_source_id}}">
-				  		<button class="btn edit"><i class="icon-edit"></i> Edit Data Source</button>
-				  		<button class="btn history"><i class="icon-hdd"></i> View History</button>
-				  		<button class="btn deleteRecord"><i class="icon-trash"></i> Delete Record</button>
+					<div class="btn-group">
+				  		<button class="btn edit" data_source_id="{{data_source_id}}"><i class="icon-edit"></i> Edit Settings</button>
+				  		<button class="btn mmr" data_source_id="{{data_source_id}}"><i class="icon-folder-open"></i> Manage Records</button>
+				  		<button class="btn deleteRecord" data_source_id="{{data_source_id}}"><i class="icon-trash"></i> Delete Record</button>
 					</div>
 					<div class="btn-group pull-right">
 						<a class="btn dropdown-toggle ExportDataSource" data-toggle="modal" href="#exportDataSource" id="exportDS">
@@ -493,7 +494,7 @@
 </div>
 
 	{{/item}}
-</div>
+</script>
 
 <!-- Successful import screen mustache template -->
 <div class="hide" id="import-screen-success-report-template">
@@ -510,7 +511,7 @@
 
 
 <!-- mustache template for data source edit single-->
-<div class="hide" id="data-source-edit-template">
+<script type="text/x-mustache"  id="data-source-edit-template">
 {{#item}}
 <div class="content-header">
 		<h1>{{title}}</h1>
@@ -877,7 +878,7 @@
 	</div>
 </div>
 {{/item}}
-</div>
+</script>
 
 
 </section>

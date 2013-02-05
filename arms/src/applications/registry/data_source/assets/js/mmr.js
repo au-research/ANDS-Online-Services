@@ -95,7 +95,7 @@ function init(filters){
     //$('.pool').hide();
      $('#active_filters').html('<em>Loading...</em>');
     $.ajax({
-        url:base_url+'registry_object/get_mmr_data/'+data_source_id, 
+        url:base_url+'data_source/get_mmr_data/'+data_source_id, 
         type: 'POST',
         dataType:'JSON',
         data: {'filters':filters},
@@ -136,7 +136,7 @@ function bindShowMore(){
         var status = $(this).attr('status');
         var button = this;
         $.ajax({
-            url:base_url+'registry_object/get_more_mmr_data/', 
+            url:base_url+'data_source/get_more_mmr_data/', 
             type: 'POST',
             data: {ds_id:ds_id,offset:offset,status:status},
             success: function(data){
