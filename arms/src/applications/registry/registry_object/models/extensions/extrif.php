@@ -14,7 +14,10 @@ class Extrif_Extension extends ExtensionBase
 	function enrich()
 	{
 		$this->_CI->load->model('data_source/data_sources','ds');	
-		$ds = $this->_CI->ds->getByID($this->ro->data_source_id);
+		
+		// Save ourselves some computation by avoiding creating the whole $ds object for 
+		$ds = $this->_CI->ds->getByID($this->ro->data_source_id, FALSE);
+
 		//same as in relationships.php
 		$xml = $this->ro->getSimpleXML();
 		$rifNS = $xml->getNamespaces();
@@ -30,7 +33,7 @@ class Extrif_Extension extends ExtensionBase
 				/* EXTENDED METADATA CONTAINER */
 				$extendedMetadata = $xml->addChild("extRif:extendedMetadata", NULL, EXTRIF_NAMESPACE);
 				$extendedMetadata->addChild("extRif:slug", $this->ro->slug, EXTRIF_NAMESPACE);
-				$extendedMetadata->addChild("extRif:dataSourceKey", $ds->key, EXTRIF_NAMESPACE);
+				$extendedMetadata->addChild("extRif:dataSourceKey", $ds['key'], EXTRIF_NAMESPACE);
 				$extendedMetadata->addChild("extRif:status", $this->ro->status, EXTRIF_NAMESPACE);				
 				$extendedMetadata->addChild("extRif:id", $this->ro->id, EXTRIF_NAMESPACE);
 				//$extendedMetadata->addChild("extRif:dataSourceTitle", $ds->title, EXTRIF_NAMESPACE);				

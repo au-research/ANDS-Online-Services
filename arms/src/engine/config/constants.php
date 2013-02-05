@@ -73,6 +73,19 @@ define('gCOSI_AUTH_LDAP_DN', gCOSI_AUTH_LDAP_UID . ", " . gCOSI_AUTH_LDAP_BASE_D
 define('gSHIBBOLETH_SESSION_INITIATOR', '/Shibboleth.sso/Login');
 
 
+define('AUTH_USER_FRIENDLY_NAME', 'USER_FRIENDLY_NAME');
+define('AUTH_DEFAULT_FRIENDLY_NAME', 'unnamed user');
+define('AUTH_USER_IDENTIFIER','UNIQUE_USER_IDENTIFIER');
+
+
+define('AUTH_FUNCTION_ARRAY', 'registry_functions');
+define('AUTH_FUNCTION_DEFAULT_ATTRIBUTE', 'PUBLIC');
+define('AUTH_FUNCTION_LOGGED_IN_ATTRIBUTE','AUTHENTICATED_USER');
+define('AUTH_FUNCTION_SUPERUSER','REGISTRY_SUPERUSER');
+
+define('AUTH_AFFILIATION_ARRAY', 'registry_affiliations');
+
+
 /*
  * Status for records
  */

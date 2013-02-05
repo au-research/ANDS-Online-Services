@@ -386,17 +386,17 @@
 
 	<div class="modal-header">
 		<a href="javascript:;" class="close" data-dismiss="modal">×</a>
-		<h3>Import Registry Objects from pasted XML</h3>
+		<h3>Import Registry Objects from pasted contents</h3>
 	</div>
 
 	<div class="modal-screen-container">
 		<div name="selectionScreen" class="modal-body">
 
-			<div class="alert alert-info">Paste the XML contents into the field below.</div>
+			<div class="alert alert-info">Paste the registry object contents into the field below</div>
 
 			<form class="form-vertical">
 				<fieldset>
-					<label> <b>XML to import:</b>
+					<label> <b>Data to import:</b>
 					</label>
 					<textarea name="xml" id="xml_paste" rows="18" style="width:97%;font-family:Courier;font-size:8px;line-height:9px;"></textarea>
 				</fieldset>

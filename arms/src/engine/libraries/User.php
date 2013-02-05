@@ -20,7 +20,7 @@ class User {
     	// Dynamically load the authentication_class (as defined in the config file)
     	$this->CI->load->model($this->CI->config->item('authentication_class'), 'auth');
 		$login_response = $this->CI->auth->authenticate($username, $password);
-		
+
 		if ($login_response['result'] == 1)
 		{
 			// Set the user's identifier and friendly name to the session
@@ -79,6 +79,11 @@ class User {
 	function isLoggedIn()
 	{
 		return $this->loggedIn();
+	}
+
+	function isSuperAdmin()
+	{
+		return $this->hasAffiliation(AUTH_FUNCTION_SUPERUSER);
 	}
 	
 	/**
@@ -244,16 +249,4 @@ class User {
 		$this->affiliations = $this->CI->session->userdata(AUTH_AFFILIATION_ARRAY);
 	}
 }
-
-define('AUTH_USER_FRIENDLY_NAME', 'USER_FRIENDLY_NAME');
-define('AUTH_DEFAULT_FRIENDLY_NAME', 'unnamed user');
-define('AUTH_USER_IDENTIFIER','UNIQUE_USER_IDENTIFIER');
-
-
-define('AUTH_FUNCTION_ARRAY', 'registry_functions');
-define('AUTH_FUNCTION_DEFAULT_ATTRIBUTE', 'PUBLIC');
-define('AUTH_FUNCTION_LOGGED_IN_ATTRIBUTE','AUTHENTICATED_USER');
-define('AUTH_FUNCTION_SUPERUSER','REGISTRY_SUPERUSER');
-
-define('AUTH_AFFILIATION_ARRAY', 'registry_affiliations');
 /* End of file User.php */

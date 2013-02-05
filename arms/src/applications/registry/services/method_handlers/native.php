@@ -36,14 +36,14 @@ class NativeMethod extends MethodHandler
 		}
 
 		// Get back a list of IDs for matching registry objects
-		$result = $CI->solr->executeSearch(true);
+		$solr_result = $CI->solr->executeSearch(true);
 
 		$rifcsOutput = array();
 		$CI->load->helper('crosswalks');
 		$crosswalks = getCrossWalks();
-		if (isset($result['response']['docs']) && is_array($result['response']['docs']))
+		if (isset($solr_result['response']['docs']) && is_array($solr_result['response']['docs']))
 		{
-			foreach ($result['response']['docs'] AS $result)
+			foreach ($solr_result['response']['docs'] AS $result)
 			{
 			
 				$CI->load->model('registry_object/registry_objects','ro');
@@ -91,7 +91,7 @@ class NativeMethod extends MethodHandler
 				}
 			}
 		}
-		$rifcsOutput =& $registryObjects;
+		$rifcsOutput = array("numFound" => $solr_result['response']['numFound'], "start"=> $solr_result['response']['start'], "docs"=> &$registryObjects);
 		// Bubble back the output status
 		return $this->formatter->display($rifcsOutput);
    }

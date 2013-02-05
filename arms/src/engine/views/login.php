@@ -31,9 +31,11 @@
 						</div>
 					<?php endif; ?>
 					
-					<?php if (isset($exception)): ?>
+					<?php /* REMOVED - prints user's password to screen */
+					// if (isset($exception)): 
+					if(false): ?>
 						<div class="alert alert-error">
-							<?php echo $exception; ?>
+							<?phpecho $exception; ?>
 						</div>
 					<?php endif; ?>
 

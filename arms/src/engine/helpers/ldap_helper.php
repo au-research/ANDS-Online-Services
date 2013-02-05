@@ -17,7 +17,7 @@ $eLDAPDN = gCOSI_AUTH_LDAP_DN;//"$eLDAPuid, $eLDAPBaseDN";
 		
 			if( $ldapconn && $passphrase != '' )
 			{
-				$ldapbind = ldap_bind($ldapconn, $ldapDN, $passphrase);
+				$ldapbind = @ldap_bind($ldapconn, $ldapDN, $passphrase);
 				if( $ldapbind )
 				{
 					$validCredentials = true;

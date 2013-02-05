@@ -38,6 +38,7 @@ class Core_extension extends ExtensionBase
 					$this->_initAttribute($row->attribute, $row->value);
 				}		
 			}
+			$query->free_result();
 		}
 		$this->_initAttribute("original_status", $this->attributes['status']->value);
 
@@ -280,7 +281,19 @@ class Core_extension extends ExtensionBase
 	{
 		parent::__construct($ro_pointer);
 	}
-	
+
+	 public function __destruct() {
+    	// Explicitly clean up our extensions...
+    	foreach($this->attributes AS $name => $instance)
+    	{
+			$this->attributes[$name] = null;
+    	}
+    	unset($this->attributes);
+    	unset($this->ro);
+		unset($this->_CI);
+		unset($this->db);
+		unset($this->id);
+    }
 }
 
 

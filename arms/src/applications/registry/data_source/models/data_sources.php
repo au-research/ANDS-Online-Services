@@ -42,17 +42,25 @@ class Data_sources extends CI_Model {
 	 * @param the data source ID
 	 * @return _data_source object or NULL
 	 */
-	function getByID($id)
+	function getByID($id, $as_object = true)
 	{
-		$query = $this->db->select("data_source_id")->get_where('data_sources', array('data_source_id'=>$id));
+		$query = $this->db->select("*")->get_where('data_sources', array('data_source_id'=>$id));
 		if ($query->num_rows() == 0)
 		{
 			return NULL;
 		}
 		else
 		{
-			$id = $query->result_array();
-			return new _data_source($id[0]['data_source_id']);
+			$row = $query->result_array();
+			if ($as_object)
+			{
+				return new _data_source($row[0]['data_source_id']);
+			}
+			else
+			{
+				// Just return the DB result
+				return array_pop($row);
+			}
 		}
 	}
 	

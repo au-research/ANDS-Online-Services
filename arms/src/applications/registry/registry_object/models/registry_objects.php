@@ -592,6 +592,24 @@ class Registry_objects extends CI_Model {
 		}
 	}
 
+	public function clearAllFromDatasourceUnsafe($data_source_id)
+	{
+		$reenrich_queue = array();
+
+		$registryObjects = $this->getIDsByDataSourceID($data_source_id);
+
+		foreach($registryObjects AS $target_ro_id)
+		{
+			$target_ro = $this->ro->getByID($target_ro_id);
+			$target_ro->eraseFromDatabase();
+		}
+
+		// Delete from the index
+		$this->solr->deleteByQueryCondition("data_source_id:(\"".$data_source_id."\")");
+		$this->solr->commit();
+
+	}
+
 
 	/**
 	 * @ignore

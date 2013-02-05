@@ -47,6 +47,7 @@ class Importer {
 		// reclaim the worker thread and terminate the PHP script execution....
 		ini_set('memory_limit', '1024M');
 		ini_set('max_execution_time',3*ONE_HOUR);
+
 		set_time_limit(0);
 		ignore_user_abort(true);
 
@@ -63,6 +64,10 @@ class Importer {
 	 */
 	public function commit()
 	{
+		// Enable memory profiling...
+		//ini_set('xdebug.profiler_enable',1);
+		//xdebug_enable();
+
 		//$this->CI->output->enable_profiler(TRUE);
 		if (is_null($this->start_time))
 		{
@@ -303,6 +308,9 @@ class Importer {
 	 */
 	public function _enrichRecords($directly_affected_records = array())
 	{
+		// Keep track of our imported keys...
+		$imported_keys = array();
+
 		// Only enrich records received in this harvest
 		foreach ($this->importedRecords AS $ro_id)
 		{
@@ -312,9 +320,13 @@ class Importer {
 			// add reverse relationships
 			// previous relationships are reset by this call
 			$related_keys = $ro->addRelationships();
-			$directly_affected_records = array_merge($related_keys, $directly_affected_records);
-			// directly affected records are re-enriched below (and reindexed...)
 
+			// directly affected records are re-enriched below (and reindexed...)
+			// we consider any related record keys to be directly affected and reindex them...
+			$directly_affected_records = array_merge($related_keys, $directly_affected_records);
+			$imported_keys[] = $ro->key;
+
+			// Update our quality levels data!
 			$ro->update_quality_metadata();
 
 			// spatial resooultion, center, coords in enrich?
@@ -330,8 +342,10 @@ class Importer {
 		}
 		gc_collect_cycles();
 
+		// Exclude those keys we already processed above
+		$directly_affected_records = array_unique(array_diff($directly_affected_records, $imported_keys));
 
-		// enrich related records, etc?
+		// enrich related records
 		foreach ($directly_affected_records AS $ro_key)
 		{
 			$registryObjects = $this->CI->ro->getAllByKey($ro_key);
@@ -382,7 +396,7 @@ class Importer {
 			$this->flushSOLRAdd();
 			$this->commitSOLR();
 
-			return array("count"=>$this->reindexed_records, "errors"=>$errors);
+			return array("count"=>$this->reindexed_records, "errors"=>array());
 		}
 
 		// Called from inside the Importer
@@ -485,6 +499,10 @@ class Importer {
 
 			// Crosswalk will create <registryObjects> with a <relatedInfo> element appended with the native format
 			$this->xmlPayload = $this->crosswalk->payloadToRIFCS($this->xmlPayload, $this->message_log);
+
+			$temp_crosswalk_name = $this->crosswalk->metadataFormat();
+			unset($this->crosswalk);
+			$this->setCrosswalk($temp_crosswalk_name);
 		}
 	}
 
@@ -552,8 +570,6 @@ class Importer {
 	 */
 	private function _validateRIFCS($xml)
 	{
-		$lines = explode(NL, $xml);
-		//echo htmlentities(implode(NL, array_slice($lines, 474090, 474120)));
 		$doc = new DOMDocument('1.0','utf-8');
 		$doc->loadXML(utf8_encode(str_replace("&", "&amp;", $xml)), LIBXML_NOENT);
 		//echo htmlentities($xml);
@@ -745,9 +761,8 @@ class Importer {
 		try{
 
 			$result = json_decode(curl_post($solrUpdateUrl, "<add>" . implode("\n",$this->solr_queue) . "</add>"), true);
-			if($result['responseHeader']['status'] == self::SOLR_RESPONSE_CODE_OK){
-	
-
+			if($result['responseHeader']['status'] == self::SOLR_RESPONSE_CODE_OK)
+			{
 				$this->reindexed_records += count($this->solr_queue);
 			}
 			else

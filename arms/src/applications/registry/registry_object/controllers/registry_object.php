@@ -17,14 +17,8 @@ class Registry_object extends MX_Controller {
 
 	public function test()
 	{
-
 		$this->load->model('registry_object/registry_objects','ro');
-		$ros = $this->ro->getByDataSourceID(174, 1000);
-		foreach ($ros AS $ro)
-		{
-			$this->ro->deleteRegistryObject($ro->id);
-		}
-		echo "Done...";
+		$this->ro->clearAllFromDatasourceUnsafe(187);
 	}
 	public function testRecordSuite(){
 		echo "<pre>";

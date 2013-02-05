@@ -810,7 +810,7 @@ $('#importRecordsFromXMLModal .doImportRecords').live({
 		var thisForm = $('#importRecordsFromXMLModal');
 		/* fire off the ajax request */
 		$.ajax({
-			url:'importFromXMLPasteToDataSource', 
+			url:'importFromXMLPasteToDataSource', 	//?XDEBUG_TRACE=1', //XDEBUG_PROFILE=1&
 			type: 'POST',
 			data:	{ 
 				xml: $('#xml_paste').val(), 

@@ -108,3 +108,16 @@ function secure_base_url(){
 	$protocol = 'https://';
 	return $protocol.$url['host'].$url['path'];
 }
+
+
+$cycles = 0;
+function clean_cycles()
+{
+	global $cycles;
+	$cycles++;
+	if ($cycles > 100)
+	{
+		gc_collect_cycles();
+		$cycles = 0;
+	}
+}

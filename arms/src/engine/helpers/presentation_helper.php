@@ -26,18 +26,6 @@ function bench($idx = 0)
 }
 
 
-$cycles = 0;
-function clean_cycles()
-{
-	global $cycles;
-	$cycles++;
-	if ($cycles > 100)
-	{
-		gc_collect_cycles();
-		$cycles = 0;
-	}
-}
-
 function curl_post($url, $post)
 {
     $header = array("Content-type:text/xml; charset=utf-8");

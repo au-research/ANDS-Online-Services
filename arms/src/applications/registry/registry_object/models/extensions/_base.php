@@ -10,8 +10,8 @@ abstract class ExtensionBase {
 	function __construct($ro_pointer)
 	{
 		$this->ro = $ro_pointer;
-		$this->_CI =& get_instance();
-		$this->db = $this->_CI->db;
+		$this->_CI = &get_instance();
+		$this->db = &$this->_CI->db;
 		$this->id = &$this->ro->id;
 	}
 	

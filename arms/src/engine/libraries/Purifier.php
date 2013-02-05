@@ -14,8 +14,9 @@ class Purifier {
     }
 
 
-    function init(){
-
+    function init()
+    {
+        /*
         $this->config = HTMLPurifier_Config::createDefault();
         $this->config->set('Core.Encoding', (string) $this->CI->config->item('Core_Encoding')); // replace with your encoding
         $this->config->set('HTML.Doctype', $this->CI->config->item('HTML_Doctype')); // replace with your doctype
@@ -23,21 +24,17 @@ class Purifier {
         $this->config->set('HTML.AllowedAttributes', $this->CI->config->item('HTML_AllowedAttributes')); // sets allowed html attributes that can be used.
         $this->config->set('Cache.DefinitionImpl', null); // disable caching, who cares about performance
         $this->htmlPurifier = new HTMLPurifier($this->config);
-
+        */
     	return true;
     }
 
 
     function purify_html($dirty_html){
+        return $dirty_html;
+        /*
     	$clean_html = $this->htmlPurifier->purify($dirty_html);
-        return $clean_html;
+        unset($this->htmlPurifier); $this->init(); // memory cleanup
+        return $clean_html;*/
     }
-
-    function test(){
-        $dirty_html = '<p>aadsfaasdf</p>';
-        $clean_html = $this->htmlPurifier->purify($dirty_html);
-        return $clean_html;
-    }
-
  
 }

@@ -3,6 +3,7 @@
 class Home extends MX_Controller {
 
 	function index(){
+		ini_set('xdebug.profiler_enable',1);
 		$data['title']='Research Data Australia';
 
 		//solr for counts

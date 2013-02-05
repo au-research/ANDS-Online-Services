@@ -215,6 +215,8 @@ class Cosi_authentication extends CI_Model {
     {
     	$ret = array('organisational_roles'=>array(), 'functional_roles'=>array(), 'activities'=>array());
 
+        $superadmin = false; // superadmins inherit all roles/functions
+
     	$roles = $this->getChildRoles($role_id);
     	foreach ($roles AS $role)
    		{
@@ -226,9 +228,25 @@ class Cosi_authentication extends CI_Model {
     		{
     			$ret['functional_roles'][] = $role['role_id'];
     			$ret['activities'] = array_merge($ret['activities'], $this->getChildActivities($role['role_id']));
+
+                // Check if we're a superuser
+                if ($role['role_id'] == AUTH_FUNCTION_SUPERUSER)
+                {
+                    $superadmin = true;
+                }
     		}
     					
     	}
+
+        // Superadmins get all organisational roles
+        if ($superadmin)
+        {
+            function getOnlyRoleIds(&$item, $key) { $item = $item['role_id']; }
+            $orgRoles = $this->getAllOrganisationalRoles();
+            array_walk( $orgRoles, 'getOnlyRoleIds' );
+
+            $ret['organisational_roles'] = array_merge($ret['organisational_roles'], $orgRoles);
+        }
     	
     	return $ret;
     				

@@ -28,7 +28,8 @@ class Slug_Extension extends ExtensionBase
 		// Check that there are no clashes
 		$query_ro_slugs = $this->db->select('registry_object_id')->get_where('registry_objects',array("slug"=> $result));
 		$query_url_mappings = $this->db->select('registry_object_id')->get_where('url_mappings',array("slug"=> $result));
-		if ($query_ro_slugs->num_rows() > 0 || $query_url_mappings->num_rows())
+
+		if ($query_ro_slugs->num_rows() > 0 || $query_url_mappings->num_rows() > 0)
 		{
 			if ($query_ro_slugs->num_rows() > 0)
 			{
@@ -39,11 +40,9 @@ class Slug_Extension extends ExtensionBase
 				$query_url_mappings = array_pop($query_ro_slugs->result_array());
 			}
 
-			$query_ro_slugs->free_result();
-			$query_url_mappings->free_result();
 
 			// The slug gets abandoned if it's related record is deleted
-			if (!$existing_slug['registry_object_id'])
+			if (!isset($existing_slug) || !$existing_slug['registry_object_id'])
 			{
 				// Update to point back to us
 				$this->db->where("slug", $result);
@@ -57,6 +56,7 @@ class Slug_Extension extends ExtensionBase
 			{
 				// This is the same record
 				// Nothing to do?
+				return $result;
 			}
 			else
 			{

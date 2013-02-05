@@ -77,6 +77,14 @@ abstract class ExtensionBoilerplate
     public function __construct() {
     
     }
+
+    public function __destruct() {
+    	// Explicitly clean up our extensions...
+    	foreach($this->extended_objects AS $class => $instance)
+    	{
+			unset($this->extended_objects[$class]);
+    	}
+    }
 	
     protected function _extends($class) { //the $class is put to enforce passing class name (otherwise class name can be ommited and no error would be rased)
         $args = func_get_args();
