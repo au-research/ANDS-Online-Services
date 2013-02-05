@@ -490,50 +490,42 @@ function load_datasource_edit(data_source_id, active_tab){
 			}
 			
 			$('#edit-datasource  .normal-toggle-button').each(function(){
-				
-				if($(this).attr('class')=='creat-primary normal-toggle-button')
-					{
+
+				if($(this).hasClass('create-primary')){
 						if($(this).attr('value')=='t' || $(this).attr('value')=='1' || $(this).attr('value')=='true' ){
-						$(this).find('input').attr('checked', 'checked');
-						$('#primary-div').toggle();
+							$(this).find('input').attr('checked', 'checked');
+							$('#primary-relationship-form').show();
 						}
 						$(this).toggleButtons({
 							width:75,enable:true,
 							onChange:function(){
 								$(this).find('input').attr('checked', 'checked');
-								$('#primary-div').toggle();
-						}
+								$('#primary-relationship-form').toggle();
+							}
 						});	
-				}
-				else if ($(this).attr('class')=='push_to_nla normal-toggle-button')	
-				{
+				}else if ($(this).hasClass('push_to_nla')){
 					if($(this).attr('value')=='t' || $(this).attr('value')=='1' || $(this).attr('value')=='true' ){
 						$(this).find('input').attr('checked', 'checked');
 						$('#nla-push-div').toggle();
-						}
-
-						$(this).toggleButtons({
-							width:75,enable:true,
-							onChange:function(){
-								$(this).find('input').attr('checked', 'checked');
-								$('#nla-push-div').toggle();
-						}
-						});	
-
-
-
-				}else{
-						if($(this).attr('value')=='t' || $(this).attr('value')=='1' || $(this).attr('value')=='true' ){
-							$(this).find('input').attr('checked', 'checked');
-				
-						}
-						$(this).toggleButtons({
-							width:75,enable:true,
-							onChange:function(){		
-								$(this).find('input').attr('checked', 'checked');
-							}
-						});						
 					}
+					$(this).toggleButtons({
+						width:75,enable:true,
+						onChange:function(){
+							$(this).find('input').attr('checked', 'checked');
+							$('#nla-push-div').toggle();
+						}
+					});
+				}else{
+					if($(this).attr('value')=='t' || $(this).attr('value')=='1' || $(this).attr('value')=='true' ){
+						$(this).find('input').attr('checked', 'checked');
+					}
+					$(this).toggleButtons({
+						width:75,enable:true,
+						onChange:function(){		
+							$(this).find('input').attr('checked', 'checked');
+						}
+					});				
+				}
 				
 
 			});
@@ -614,42 +606,34 @@ $('#save-edit-form').live({
 
 
 
-		var validationErrors = validateFields(jsonData);
+		//var validationErrors = validateFields(jsonData);
 
-		if(!validationErrors)
-		{
-			$.ajax({
-				url:'data_source/updateDataSource', 
-				type: 'POST',
-				data: jsonData,
-				success: function(data){
-
-				
-					if (!data.status == "OK")
-					{
-						$('#myModal').modal();
-						logErrorOnScreen("An error occured whilst saving your changes!", $('#myModal .modal-body'));
-						$('#myModal .modal-body').append("<br/><pre>" + data + "</pre>");
-					}
-					else
-					{
-						changeHashTo('view/'+$('#data_source_view_container').attr('data_source_id'));
-						createGrowl("Your Data Source was successfully updated");
-						updateGrowls();
-					}
+		var form = $('#edit-form');
+		var valid = Core_checkValidForm(form);
+		//console.log(valid);
+		
+		$.ajax({
+			url:'data_source/updateDataSource', 
+			type: 'POST',
+			data: jsonData,
+			success: function(data){
+				if (!data.status == "OK"){
+					$('#myModal').modal();
+					logErrorOnScreen("An error occured whilst saving your changes!", $('#myModal .modal-body'));
+					$('#myModal .modal-body').append("<br/><pre>" + data + "</pre>");
+				}else{
+					changeHashTo('view/'+$('#data_source_view_container').attr('data_source_id'));
+					createGrowl("Your Data Source was successfully updated");
+					updateGrowls();
+				}
 			},
-			error: function()
-			{
+			error: function(){
 				$('#myModal').modal();
 				logErrorOnScreen("An error occured whilst saving your changes!", $('#myModal .modal-body'));
 				$('#myModal .modal-body').append("<br/><pre>Could't communicate with server</pre>");
 			}
 		});
-		}else{
-			$('#myModal').modal();
-			logErrorOnScreen(validationErrors, $('#myModal .modal-body'));
-			$('#myModal .modal-body').append("<br/>");
-		}
+		
 		/*var jsonString = ""+JSON.stringify(jsonData);
 		$('#myModal .modal-body').html('<pre>'+jsonString+'</pre>');
 		$('#myModal').modal();*/

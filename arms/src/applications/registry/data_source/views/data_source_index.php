@@ -617,87 +617,86 @@
 							<label class="control-label">Create Primary Relationships</label>
 							<div class="controls">
 								<p class="help-inline">
-								<div class="creat-primary normal-toggle-button" value="{{create_primary_relationships}}">
-    								<input type="checkbox" for="create_primary_relationships" name="create_primary_relationships">
-								</div>
-
+									<div class="create-primary normal-toggle-button" value="{{create_primary_relationships}}">
+	    								<input type="checkbox" for="create_primary_relationships" name="create_primary_relationships">
+									</div>
 								</p>
 							</div>
 						</div>
 						
-						<div id="primary-div" class="hide">	
-							<div class="control-group">
-						
-								<div class="controls">	
-								<p>
-									Class 			
- 
-								<select data-placeholder="Choose a Class" tabindex="1" class="chzn-select input-xlarge" for="class_1">
-									<option value=""></option>
-									<option value="party">Party</option>
-									<option value="collection">Collection</option>
-									<option value="service">Service</option>
-									<option value="activity">Activity</option>
-								</select>
-								<input type="text" class="input-small hide" name="class_1"  id="class_1" value="{{class_1}}">									
-
-								Class 			
-    								<select data-placeholder="Choose a Class" tabindex="1" class="chzn-select input-xlarge" for="class_2">
-    								<option value=""></option>	
-									<option value="party">Party</option>
-									<option value="collection">Collection</option>
-									<option value="service">Service</option>
-									<option value="activity">Activity</option>
-								</select>	
-								<input type="text" class="input-small hide" name="class_2"  id="class_2" value="{{class_2}}">	
-								</p>
+						<div id="primary-relationship-form">
+							<div class="well">
+								<i>Datasources can have up to 2 primary relationships</i>
+								<div class="clearfix"></div>
+								<div class="pull-left">
+									<div class="control-group">
+										<label class="control-label">Registry Object Key</label>
+										<div class="controls">
+											<input type="text" class="input" name="primary_key_1" value="{{primary_key_1}}"/>
+										</div>
+									</div>
+									<div class="control-group">
+										<label class="control-label">Collection</label>
+										<div class="controls">
+											<input type="text" class="input" name="collection_rel_1" value="{{collection_rel_1}}"/>
+										</div>
+									</div>
+									<div class="control-group">
+										<label class="control-label">Service</label>
+										<div class="controls">
+											<input type="text" class="input" name="service_rel_1" value="{{service_rel_1}}"/>
+										</div>
+									</div>
+									<div class="control-group">
+										<label class="control-label">Activity</label>
+										<div class="controls">
+											<input type="text" class="input" name="activity_rel_1" value="{{activity_rel_1}}"/>
+										</div>
+									</div>
+									<div class="control-group">
+										<label class="control-label">Party</label>
+										<div class="controls">
+											<input type="text" class="input" name="party_rel_1" value="{{party_rel_1}}"/>
+										</div>
+									</div>
 								</div>
-								
-								<div class="controls">	
-								<p>
-									Key: <input name="primary_key_1" value="{{primary_key_1}}"/>
-									Key: <input name="primary_key_2" value="{{primary_key_2}}"/>	
-								</p>						
-    							</div>
-    							
-								<div class="controls">	
-								<p>
-									Relationship From: 
-									Relationship From: 
-								</p>						
-    							</div> 
-    							   							
- 								<div class="controls">	
-								<p>
-									Collection: <input name="collection_rel_1" value="{{collection_rel_1}}"/>
-									Collection: <input name="collection_rel_2" value="{{collection_rel_2}}"/>
-								</p>						
-    							</div> 
-    							     							
-  								<div class="controls">	
-								<p>
-									Service: <input name="service_rel_1" value="{{service_rel_1}}"/>
-									Service: <input name="service_rel_2" value="{{service_rel_2}}"/>
-								</p>						
-    							</div> 
-    							   							
-    							<div class="controls">	
-								<p>
-									Activity: <input name="activity_rel_1" value="{{activity_rel_1}}"/>
-									Activity: <input name="activity_rel_2" value="{{activity_rel_2}}"/>
-								</p>						
-    							</div> 
-    							 							
-    							<div class="controls">	
-								<p>
-									Party: <input name="party_rel_1" value="{{party_rel_1}}"/>
-									Party: <input name="party_rel_2" value="{{party_rel_2}}"/>
-								</p>						
-    							</div> 
-    							     							  							
-    						</div> 	
-    											
-    					</div>
+								<div class="pull-left">
+									<div class="control-group">
+										<label class="control-label">Registry Object Key</label>
+										<div class="controls">
+											<input type="text" class="input" name="primary_key_2" value="{{primary_key_2}}"/>
+										</div>
+									</div>
+									<div class="control-group">
+										<label class="control-label">Collection</label>
+										<div class="controls">
+											<input type="text" class="input" name="collection_rel_2" value="{{collection_rel_2}}"/>
+										</div>
+									</div>
+									<div class="control-group">
+										<label class="control-label">Service</label>
+										<div class="controls">
+											<input type="text" class="input" name="service_rel_2" value="{{service_rel_2}}"/>
+										</div>
+									</div>
+									<div class="control-group">
+										<label class="control-label">Activity</label>
+										<div class="controls">
+											<input type="text" class="input" name="activity_rel_2" value="{{activity_rel_2}}"/>
+										</div>
+									</div>
+									<div class="control-group">
+										<label class="control-label">Party</label>
+										<div class="controls">
+											<input type="text" class="input" name="party_rel_2" value="{{party_rel_2}}"/>
+										</div>
+									</div>
+								</div>
+								<div class="clearfix"></div>
+							</div>
+						</div>
+
+						
 
 					<!-- This poush to NLA functionality has been excluded for release 10 as NLA are not using it
 						<div class="control-group">
