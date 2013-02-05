@@ -125,13 +125,20 @@ class Sets extends CI_Model
 		throw new Oai_BadArgument_Exceptions("malformed set spec '$spec'");
 	    }
 	    $prefix = $split_spec[0];
-	    $spec = $split_spec[1];
+	    $spec = (string)$split_spec[1];
+
 	    switch($prefix)
 	    {
 	    case "datasource":
 		$this->load->model('data_source/Data_sources', 'ds');
 		$ds = $this->ds->getBySlug($spec);
-		$set = $this->_from_ds($ds);
+
+		// Needed to fix returning all records when the datasource doesn't exist - if the datsource is nul then must set up a dummy useless set
+		if($ds){
+			$set = $this->_from_ds($ds);
+		}else{
+			$set='No set';
+		}
 		break;
 	    case "class":
 		$query = $this->db->distinct()->select("class")

@@ -23,6 +23,7 @@ class Records extends CI_Model
 		$args['rawclause'] = array("registry_objects.status in" => "('PUBLISHED', 'DELETED')");
 		$args['clause'] = array();
 		$args['wherein'] = false;
+		$count = '';
 		if ($after)
 		{
 			$args["clause"]["registry_object_attributes.value >="] = $after->getTimestamp();
@@ -43,7 +44,8 @@ class Records extends CI_Model
 			$args["wherein"] = $this->sets->getIDsForSet($set);
 		}
 
-
+		if(!($set&&!$args["wherein"]))
+		{
 		$count = $this->ro->_get(array(array('args' => $args,
 						     'fn' => function($db, $args) {
 							     $db->select("count(distinct(registry_objects.registry_object_id))")
@@ -64,8 +66,8 @@ class Records extends CI_Model
 							     return $db;
 						     })),
 					 false);
-
-		if (!is_array($count))
+		}
+		if (!is_array($count)||$count[0]["count(distinct(registry_objects.registry_object_id))"]==0)
 		{
 			throw new Oai_NoRecordsMatch_Exceptions();
 		}
