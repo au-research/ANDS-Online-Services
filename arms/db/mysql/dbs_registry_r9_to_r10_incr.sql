@@ -1,5 +1,7 @@
-ALTER TABLE `dbs_registry`.`registry_object_relationships` ADD COLUMN `relation_type` VARCHAR(512) NULL  AFTER `origin` , ADD COLUMN `relation_description` VARCHAR(512) NULL  AFTER `relation_type` ;
-ALTER TABLE `dbs_registry`.`registry_objects` DROP INDEX `key_UNIQUE` ;
+USE `dbs_registry`;
+
+ALTER TABLE `registry_object_relationships` ADD COLUMN `relation_type` VARCHAR(512) NULL  AFTER `origin` , ADD COLUMN `relation_description` VARCHAR(512) NULL  AFTER `relation_type` ;
+ALTER TABLE `registry_objects` DROP INDEX `key_UNIQUE` ;
 
 ALTER TABLE `url_mappings` ADD COLUMN 
   `search_title` varchar(255) DEFAULT NULL AFTER `registry_object_id`;
@@ -41,17 +43,21 @@ CREATE TABLE `deleted_registry_objects` (
   CONSTRAINT `fk_data_source_id` FOREIGN KEY (`data_source_id`) REFERENCES `data_sources` (`data_source_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
-ALTER TABLE `dbs_registry_migration_test`.`url_mappings` DROP FOREIGN KEY `fk_url_map_to_registry_object` ;
-ALTER TABLE `dbs_registry_migration_test`.`url_mappings` CHANGE COLUMN `registry_object_id` `registry_object_id` MEDIUMINT(8) UNSIGNED NULL  ;
+ALTER TABLE `url_mappings` DROP FOREIGN KEY `fk_url_map_to_registry_object` ;
+ALTER TABLE `url_mappings` CHANGE COLUMN `registry_object_id` `registry_object_id` MEDIUMINT(8) UNSIGNED NULL  ;
 
 
 
-ALTER TABLE `dbs_registry_migration_test`.`registry_objects` 
+ALTER TABLE `registry_objects` 
 ADD INDEX `key_index` USING HASH (`key` ASC) 
 , ADD INDEX `key_class_index` USING HASH (`key` ASC, `class` ASC) ;
-ALTER TABLE `dbs_registry_migration_test`.`url_mappings` 
+ALTER TABLE `url_mappings` 
 ADD INDEX `slug_INDEX` USING HASH (`slug` ASC) ;
-ALTER TABLE `dbs_registry_migration_test`.`registry_object_metadata` 
+ALTER TABLE `registry_object_metadata` 
 DROP INDEX `idx_reg_metadata` 
 , ADD INDEX `idx_reg_metadata` USING HASH (`registry_object_id` ASC, `attribute` ASC) 
 , DROP INDEX `fk_metadata_to_registry_object` ;
+ALTER TABLE `registry_object_relationships` 
+DROP INDEX `fk_registry_object_relationships` 
+, ADD INDEX `idx_related_object_id` USING HASH (`registry_object_id` ASC) 
+, ADD INDEX `idx_related_object_key` USING HASH (`related_object_key` ASC) ;

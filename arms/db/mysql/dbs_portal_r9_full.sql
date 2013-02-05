@@ -1,4 +1,7 @@
-CREATE  TABLE `dbs_portal`.`page_views` (
+CREATE DATABASE  IF NOT EXISTS `dbs_portal` /*!40100 DEFAULT CHARACTER SET utf8 */;
+USE `dbs_portal`;
+
+CREATE  TABLE `page_views` (
   `id` BIGINT NOT NULL AUTO_INCREMENT ,
   `request_uri` VARCHAR(512) NOT NULL ,
   `timestamp` INT NOT NULL ,
@@ -10,7 +13,7 @@ CREATE  TABLE `dbs_portal`.`page_views` (
   PRIMARY KEY (`id`) );
 
 
-CREATE  TABLE `dbs_portal`.`click_stats` (
+CREATE  TABLE `click_stats` (
   `id` BIGINT NOT NULL AUTO_INCREMENT ,
   `source_url` VARCHAR(512) NOT NULL ,
   `target_url` VARCHAR(512) NOT NULL ,
@@ -22,7 +25,7 @@ CREATE  TABLE `dbs_portal`.`click_stats` (
   PRIMARY KEY (`id`) );
 
 
-CREATE  TABLE `dbs_portal`.`search_terms` (
+CREATE  TABLE `search_terms` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `term` VARCHAR(256) NOT NULL ,
   `timestamp` INT NOT NULL ,
@@ -32,11 +35,11 @@ CREATE  TABLE `dbs_portal`.`search_terms` (
   PRIMARY KEY (`id`) );
 
 
-CREATE  TABLE `dbs_portal`.`search_occurence` (
+CREATE  TABLE `search_occurence` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `term` VARCHAR(256) NOT NULL ,
   `occurence` INT NOT NULL ,
   PRIMARY KEY (`id`) ,
   UNIQUE INDEX `term_UNIQUE` (`term` ASC) );
-ALTER TABLE `dbs_portal`.`search_occurence` 
+ALTER TABLE `search_occurence` 
 ADD INDEX `term_INDEX` USING HASH (`term` ASC) ;
