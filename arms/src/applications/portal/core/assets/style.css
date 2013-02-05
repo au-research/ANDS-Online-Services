@@ -192,6 +192,12 @@ h3 a {
 	line-height:26px;
 	padding:0 0 19px 0;
 }
+.seealso-tooltip h3 a{
+	font-size:16px;	
+	font-weight:normal;	
+	line-height:20px;
+	padding:0 0 19px 0;
+}
 h4,
 h4 a {
 	color:#2f3134;

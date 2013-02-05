@@ -27,78 +27,58 @@ function initInternalSuggestedLinks()
 
 }
 
-
-function initDataciteSeeAlso()
-{
-
-    // Get the suggested link count
-    var suggestor = "datacite";
-    if (isPublished())
-    {
+function initDataciteSeeAlso(){
+    var suggestor = 'datacite';
+    if(isPublished()){
         var url_suffix = "view/getSuggestedLinks/"+suggestor+"/"+0+"/"+0+"/?slug=" + getSLUG();
-    }
-    else
-    {
+    }else{
         var url_suffix = "view/getSuggestedLinks/"+suggestor+"/"+0+"/"+0+"/?id=" + getRegistryObjectID();
     }
 
-    $.get( base_url+url_suffix,
-            function(data)
-            {
-                if (parseInt(data.count) >= 0)
-                {
-                    datacite_explanation = $('#datacite_explanation').html(); // see views/suggested_links.php
-
-                    datacite_qmark = "<img class='datacite_help' src='"+base_url+"assets/core/images/question_mark.png' width='12px' />";
-
-                    $('#DataCiteSuggestedLinksBox').html(
-                                                        '<h4>External Records</h4>' +
-                                                        '<h5><a href="#" class="show_accordion" data-title="Records suggested by DataCite" data-suggestor="'+suggestor+'" data-start="0" data-rows="10"> ' + data.count + " records</a> from DataCite " + datacite_qmark + "</h5>"
-                                                        );
-                    $('#DataCiteSuggestedLinksBox').fadeIn();
-
-                        
-                    $('.datacite_help').qtip({
-                        content: {
-                            text: datacite_explanation,
-                        },
-                        style: {
-                            classes: 'ui-tooltip-light ui-tooltip-shadow datacite-about',
-                            width: 400,
-                        },
-                        show: {
-                            event: 'click',
-                            solo: true
-                        },
-                        hide: {
-                            delay: 1000,
-                            fixed: true,
-                        },
-                        position: {
-                            my: 'bottom right',
-                            at: 'top center',
-                        },
-                    });
-                }
-            },
-            'json'
-    );
-
+    $.ajax({
+        url:base_url+url_suffix,
+        dataType:'json',
+        success:function(data){
+            var count = parseInt(data.count);
+            if(count>=0){
+                datacite_explanation = $('#datacite_explanation').html();
+                datacite_qmark = "<img class='datacite_help' src='"+base_url+"assets/core/images/question_mark.png' width='12px' />";
+                $('#DataCiteSuggestedLinksBox').html('<h4>External Records</h4>' +'<h5><a href="#" class="show_accordion" data-title="Records suggested by DataCite" data-suggestor="'+suggestor+'" data-start="0" data-rows="10"> ' + data.count + " records</a> from DataCite " + datacite_qmark + "</h5>").fadeIn();
+                $('.datacite_help').qtip({
+                    content:{text:datacite_explanation},
+                    style: {
+                        classes: 'ui-tooltip-light ui-tooltip-shadow datacite-about',
+                        width: 400,
+                    },
+                    show:{event:'click',solo:true},
+                    hide:{delay:1000, fixed:true},
+                    position:{my:'bottom right', at:'top center'}
+                });
+            }
+        },
+        error:function(err){
+            console.error(err);
+        }
+    });
 }
+
 
 /* Hook to capture class="show_accordion" */
 /* Note: will grab the current cursor and link target from
          bound data- attributes */
 $('.show_accordion').live('click', function(e){
     e.preventDefault();
-     $( "#links_dialog" ).dialog({
-      maxHeight: 640,
-      width:600,
-      position: { my: "center", at: "center", of: window },
-      draggable: false, resizable: false,
-      closeText: "hide"
-    });
     updateLinksDisplay($('#links_dialog'),$(this).attr('data-title'), $(this).attr('data-suggestor'), $(this).attr('data-start'), $(this).attr('data-rows'));
+    $(this).qtip({
+        content:{text:$('#links_dialog')},
+        style: {
+            classes: 'ui-tooltip-light ui-tooltip-shadow seealso-tooltip'
+        },
+        show:{event:'click',solo:true,ready:'true'},
+        hide:{fixed:true, event:'unfocus'},
+        position:{my:'center right', at:'left center',viewport:$(window)}
+    });
+    
 });
 
 
@@ -138,7 +118,7 @@ function updateLinksDisplay(container, title, suggestor, start, rows)
             }
 
             $("#"+suggestor+"_links_list",container).append( link_contents ).accordion({ header: "h3" });
-
+            $('.show_accordion').qtip('reposition');
         }
 
         // Else we display these as links with preview popups

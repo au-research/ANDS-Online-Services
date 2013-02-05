@@ -14,7 +14,7 @@
 
 <!-- Zoo Stylesheets Untouched -->
 <link rel="stylesheet" href="<?php echo asset_url('style.css','core');?>" type="text/css" media="screen" />
-<link rel="stylesheet" href="<?php echo asset_url('css/jquery-ui.css', 'core');?>" type="text/css" media="screen" />
+<link rel="stylesheet" href="<?php echo asset_url('css/ands-theme/jquery-ui-1.10.0.custom.min.css', 'core');?>" type="text/css" media="screen" />
 
 <link rel="stylesheet" href="<?php echo asset_url('css/flexslider.css', 'core');?>" type="text/css" media="screen" />
 <link rel="stylesheet" href="<?php echo asset_url('css/ui.dynatree.css', 'core');?>" type="text/css" media="screen" />
