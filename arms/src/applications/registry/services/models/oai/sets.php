@@ -97,7 +97,7 @@ class Sets extends CI_Model
 	    {
 		return new _set("datasource",
 				$set->getAttribute("slug"),
-				$set->getAttribute("key"));
+				str_replace("&"," ",$set->getAttribute("title")));
 	    }
 	    else
 	    {
@@ -133,7 +133,7 @@ class Sets extends CI_Model
 		$this->load->model('data_source/Data_sources', 'ds');
 		$ds = $this->ds->getBySlug($spec);
 
-		// Needed to fix returning all records when the datasource doesn't exist - if the datsource is nul then must set up a dummy useless set
+		// Needed to fix returning all records when the datasource doesn't exist - if the datsource is null then must set up a dummy useless set
 		if($ds){
 			$set = $this->_from_ds($ds);
 		}else{
