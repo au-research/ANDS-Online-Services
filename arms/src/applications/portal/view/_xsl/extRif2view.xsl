@@ -420,7 +420,7 @@
 <div class="sidebar">
 
   <xsl:if test="ro:location/ro:address/ro:electronic/@type='url' 
-    or extrRif:right or ro:location/ro:address/ro:electronic/@type='email'  or ro:location/ro:address/ro:physical">     
+    or extRif:right or ro:location/ro:address/ro:electronic/@type='email'  or ro:location/ro:address/ro:physical">     
     <div class="right-box">
         <h2>Access</h2>
         <div class="limitHeight300">
