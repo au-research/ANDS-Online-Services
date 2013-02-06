@@ -8,7 +8,7 @@
 <input type="hidden" value="<?php echo $ds->id;?>" id="data_source_id"/>
 <div id="content" style="margin-top:45px;margin-left:0px">
 	<div class="content-header">
-		<h1>Datasource Quality Report</h1>
+		<h1><?php echo $ds->title;?></h1>
 		<ul class="nav nav-pills">
 			<li class=""><?php echo anchor('data_source/manage#!/view/'.$ds->id,'View');?></li>
 			<li class=""><?php echo anchor('data_source/manage#!/edit/'.$ds->id,'Edit Settings');?></li>

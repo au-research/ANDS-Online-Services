@@ -26,6 +26,9 @@
     <link href="<?php echo base_url();?>assets/css/base.css" rel="stylesheet">
     <link href="<?php echo base_url();?>assets/less/arms.less" rel="stylesheet/less" type="text/css">
 
+    <!-- ANDS print stylesheet-->
+    <link href="<?php echo base_url();?>assets/css/print.css" rel="stylesheet/less" type="text/css" media="print">
+
     <!-- Libraries Styles-->
     <link rel="stylesheet" href="<?php echo base_url();?>assets/lib/chosen/chosen.css">
     <link rel="stylesheet" href="<?php echo base_url();?>assets/lib/bootstrap_toggle_button/jquery.toggle.buttons.css">
