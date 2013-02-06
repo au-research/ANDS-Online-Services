@@ -76,6 +76,7 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 		if ($record && count($record) == 1)
 		{
 			// Contributor pages logic (constants in engine/config/)
+			// XXX: Fix this logic...only "mapped" parties get to be contributor pages!
 			if (strpos($record[0]['key'], CONTRIBUTOR_PAGE_KEY_PREFIX) !== FALSE)
 			{
 				$record[0]['template'] = CONTRIBUTOR_PAGE_TEMPLATE;
