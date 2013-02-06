@@ -50,7 +50,7 @@ class Registry_fetch extends CI_Model
 
 		if (isset($contents['data']))
 		{
-			return $contents['data'];
+			return $contents;
 		}
 		else if (isset($contents['previously_valid_title']))
 		{
@@ -69,7 +69,7 @@ class Registry_fetch extends CI_Model
 		$contents = json_decode(file_get_contents($url), true);
 		if (isset($contents['data']))
 		{
-			return $contents['data'];
+			return $contents;
 		}
 		else
 		{
@@ -161,6 +161,21 @@ class Registry_fetch extends CI_Model
 		else
 		{
 			throw new Exception("Error whilst fetching registry object connection graph: " . $contents['message']);
+		}
+	}
+
+	function fetchContributorPageByID($id, $published_only = true)
+	{
+		$url = $this->config->item('registry_endpoint') . "getContributorPage/?registry_object_id=" . $id . "&published_only=" . (string) $published_only;
+		$contents = json_decode(file_get_contents($url), true);
+		if (isset($contents['data']))
+		{
+			return $contents;
+		}
+		else
+		{
+			var_dump($url);
+			throw new ErrorException("Error whilst fetching contributor page details: " . $contents['message']);
 		}
 	}
 

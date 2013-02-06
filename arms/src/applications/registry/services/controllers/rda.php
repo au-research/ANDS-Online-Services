@@ -45,7 +45,7 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 														),
 						     		  'fn' => function($db, $args) {
 									       $db->distinct()
-										       ->select("record_data.data")
+										       ->select("record_data.data, registry_objects.key, registry_objects.registry_object_id")
 										       ->from("registry_objects")
 										       ->join("record_data",
 											      "record_data.registry_object_id = registry_objects.registry_object_id",
@@ -75,6 +75,12 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 		// We should only have one record returned
 		if ($record && count($record) == 1)
 		{
+			// Contributor pages logic (constants in engine/config/)
+			if (strpos($record[0]['key'], CONTRIBUTOR_PAGE_KEY_PREFIX) !== FALSE)
+			{
+				$record[0]['template'] = CONTRIBUTOR_PAGE_TEMPLATE;
+			}
+
 			echo json_encode($record[0]);
 			return;
 		}
@@ -318,35 +324,27 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 		echo json_encode(array("status"=>"success", "trees"=>$trees));
 	}
 
-	/*
-	public function getConnectionGraph()
+	public function getContributorPage()
 	{
-		$this->load->model('connectiontree');
-		$this->load->model('registry_object/registry_objects','ro');
+		$registry_object_id = $this->input->get('registry_object_id') ?: 0;
+		$published_only = $this->input->get('published_only') ?: true;
 
-		// Depth away from the current registry object (toward the branches)
-		$depth = (int) ($this->input->get('depth') ?: 2);
-
-		$published_only = $this->input->get('published_only') ?: TRUE;
-
-		if ($this->input->get('key'))
-			{
-				$root_registry_object = $this->ro->getPublishedByKey((string)$this->input->get('key'));
-				if (!$root_registry_object && !$published_only)
-				{
-					$root_registry_object = $this->ro->getDraftByKey((string)$this->input->get('key'));
-				}
-				echo json_encode(array("status"=>"success", "nodeid"=>$this->input->get('nodeid'),
-										"tree"=>$this->connectiontree->get($root_registry_object, $depth, $published_only)));
-			}
-			else
-			{
-				echo json_encode(array("status"=>"fail", "tree"=>null));
-			}
+		if (!$registry_object_id)
+		{
+			throw new Exception("Unable to get contributor page information: invalid ID");
 		}
-	*/
+
+		$contributor_page_data = array("Test"=>"Some test data");
+		// XXX: go fetch this record with ->getByID()
+		// XXX: Do some checking that this is actually a contributor page using a new model in data_sources/ ??
+		// XXX: use the functions in the model to get the precanned values, from SOLR/wherever...
+		// XXX: remember to pass along $published_only so draft contributor pages look reasonableish!
+
+		echo json_encode(array("data" => $contributor_page_data));
 
 
+
+	}
 
 	/* Setup this controller to handle the expected response format */
 	public function __construct()

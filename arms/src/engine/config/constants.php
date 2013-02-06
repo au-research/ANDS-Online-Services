@@ -101,5 +101,8 @@ define('ONE_HOUR', 60*60);
 define('ONE_DAY', 60*ONE_HOUR);
 define('ONE_MONTH', 30*ONE_DAY);
 
+define('CONTRIBUTOR_PAGE_TEMPLATE', 'contributor');
+define('CONTRIBUTOR_PAGE_KEY_PREFIX', 'a61e9d0d');
+
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */
