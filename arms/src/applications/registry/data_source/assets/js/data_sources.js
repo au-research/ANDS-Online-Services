@@ -78,6 +78,8 @@ $(function(){
 				window.location = base_url+'data_source/manage_records/'+data_source_id;
 			}else if($(this).hasClass('export')){
 				window.location = base_url+'data_source/export/'+data_source_id;
+			}else if($(this).hasClass('report')){
+				window.location = base_url+'data_source/report/'+data_source_id;
 			}
 		}
 	});

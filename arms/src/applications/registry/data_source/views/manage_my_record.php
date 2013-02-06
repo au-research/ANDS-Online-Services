@@ -13,12 +13,14 @@
 			<li class=""><?php echo anchor('data_source/manage#!/view/'.$ds->id,'View');?></li>
 			<li class=""><?php echo anchor('data_source/manage#!/edit/'.$ds->id,'Edit Settings');?></li>
 			<li class="active mmr"><a href="#">Manage Records</a></li>
+			<li class=""><?php echo anchor('data_source/report/'.$ds->id,'Quality Report');?></li>
 		</ul>
 	</div>
 	<div id="breadcrumb">
-		<?php echo anchor('registry_object/', '<i class="icon-home"></i> Home', array('class'=>'tip-bottom', 'title'=>'Go to Home'))?>
+		<?php echo anchor('/', '<i class="icon-home"></i> Home', array('class'=>'tip-bottom', 'title'=>'Go to Home'))?>
+		<?php echo anchor('data_source/manage/', 'List My Datasources');?>
 		<?php echo anchor('data_source/manage#!/view/'.$ds->id, $ds->title);?>
-		<a href="#" class="current">Manage My Records</a>
+		<a href="#" class="current">Manage Records</a>
 		<div style="float:right">
 			<a>Selected <b>3</b> / 146</a>
 		</div>

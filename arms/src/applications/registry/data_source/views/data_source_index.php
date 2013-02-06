@@ -18,7 +18,7 @@
 	</div>
 	<div id="breadcrumb">
 		<?php echo anchor('/', '<i class="icon-home"></i> Home', array('class'=>'tip-bottom', 'tip'=>'Go to Home'))?>
-		<?php echo anchor('data_source/manage', 'Manage My Datasource', array('class'=>'current'))?>
+		<?php echo anchor('data_source/manage', 'List My Datasources', array('class'=>'current'))?>
 	</div>
 	<div class="container-fluid">
 		<div class="row-fluid">
@@ -108,11 +108,12 @@
 			<li class="active view page-control" data_source_id="{{data_source_id}}"><a href="#">View</a></li>
 			<li class="edit page-control" data_source_id="{{data_source_id}}"><a href="#">Edit Settings</a></li>
 			<li class="mmr page-control" data_source_id="{{data_source_id}}"><a href="#">Manage Records</a></li>
+			<li class="report page-control" data_source_id="{{data_source_id}}"><a href="#">Quality Report</a></li>
 		</ul>
 	</div>
 	<div id="breadcrumb">
 		<?php echo anchor('/', '<i class="icon-home"></i> Home', array('class'=>'tip-bottom', 'tip'=>'Go to Home'))?>
-		<?php echo anchor('data_source/manage', 'Manage My Datasource')?>
+		<?php echo anchor('data_source/manage', 'List My Datasources')?>
 		<a href="javascript:;" class="current">{{title}}</a>
 	</div>
 <div class="container-fluid">
@@ -518,11 +519,12 @@
 			<li class="view page-control" data_source_id="{{data_source_id}}"><a href="#">View</a></li>
 			<li class="active edit page-control" data_source_id="{{data_source_id}}"><a href="#">Edit Settings</a></li>
 			<li class="mmr page-control" data_source_id="{{data_source_id}}"><a href="#">Manage Records</a></li>
+			<li class="report page-control" data_source_id="{{data_source_id}}"><a href="#">Quality Report</a></li>
 		</ul>
 	</div>
 	<div id="breadcrumb">
 		<?php echo anchor('/', '<i class="icon-home"></i> Home', array('class'=>'tip-bottom', 'tip'=>'Go to Home'))?>
-		<?php echo anchor('data_source/manage', 'Manage My Datasource')?>
+		<?php echo anchor('data_source/manage', 'List My Datasources')?>
 		<a href="#!/view/{{data_source_id}}" class="">{{title}}</a>
 		<a href="javascript:;" class="current">Edit</a>
 	</div>

@@ -1040,11 +1040,41 @@ class Data_source extends MX_Controller {
 		 }
 	}
 
-	function getDataSourceReport($id)
-	{
-		
-		$this->load->model("data_sources","ds");
+	function report($id){
+		//$data['report'] = $this->getDataSourceReport($id);
+		$data['title'] = 'Datasource Report';
+		$data['scripts'] = array();
+		$data['js_lib'] = array('core');
+
+		$this->load->model("data_source/data_sources","ds");
 		$this->load->model("registry_object/registry_objects", "ro");
+
+		$report = array();
+		$data['ds'] = $this->ds->getByID($id);
+		$ids = $this->ro->getIDsByDataSourceID($id, false, 'All');
+
+		if($ids){
+			$data['record_count'] = sizeof($ids);
+			$problems=0;
+			foreach($ids as $idx=>$ro_id){
+				try{
+					$ro=$this->ro->getByID($ro_id);
+					$report[$ro_id] = array('title'=>$ro->title,'id'=>$ro->id,'report'=>$ro ? $ro->getMetadata('quality_html') : '');
+				}catch(Exception $e){
+					throw Exception($e);
+				}
+				if($idx % 100 == 0){
+					unset($ro);
+					gc_collect_cycles();
+				}
+			}
+		}
+		$data['report'] = $report;
+		$this->load->view('report', $data);
+	}
+
+	function getDataSourceReport($id){
+		
 		$dataSource = $this->ds->getByID($id);
 		$ids = $this->ro->getIDsByDataSourceID($id, false, 'All');
 		$report = "<h3>QUALITY REPORT FOR ".$dataSource->title."</h3>";
