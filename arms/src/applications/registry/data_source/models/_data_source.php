@@ -161,8 +161,16 @@ class _data_source {
 
 		foreach($this->attributes AS $attribute)
 		{
+
+			if($attribute->name=='title') 
+			{
+				//if the user has changed the datasource's title then we need to update the datsources slug based on that title;
+				$this->setSlug($attribute->value);
+			}
+
 			if ($attribute->dirty)
 			{
+				
 				if ($attribute->core)
 				{
 					$theUpdate=array();
@@ -196,12 +204,42 @@ class _data_source {
 						unset($this->attributes[$attribute->name]);
 					}
 				}
+
+
 			}
 		}
 		return $this;
 	}
 	
-	
+	function setSlug($title)
+	{
+
+		$result = strtolower($title);	
+		$result = preg_replace("/[^a-z0-9\s-]/", "", $result);
+		$result = trim(preg_replace("/[\s-]+/", " ", $result));
+		$result = trim(substr($result, 0, self::MAX_VALUE_LEN));
+		$result = preg_replace("/\s/", "-", $result);
+
+		$query_ds_slugs = $this->db->select('data_source_id')->get_where('data_sources',array("slug"=> $result));
+
+		if($query_ds_slugs->num_rows==0){
+
+			$this->setAttribute("slug", $result);
+
+		}
+		else if($query_ds_slugs->num_rows>0)
+		{
+			$existing_slug = array_pop($query_ds_slugs->result_array());
+
+			if($existing_slug['data_source_id']!=$this->id)
+			{
+				$this->setAttribute("slug", $result."-");
+			}
+
+		}
+
+	}
+
 	function getAttribute($name, $graceful = TRUE)
 	{
 		if (isset($this->attributes[$name]) && $this->attributes[$name] != NULL) 

@@ -52,6 +52,25 @@ class Data_source extends MX_Controller {
 		$this->index();
 	}
 
+	/**
+	 * Sets the slugs for all datasources
+	 * 
+	 * 
+	 * @author Liz Woods
+	 * @param [
+	 * @todo ACL on which data source you have access to, error handling
+	 * @return 
+	 */
+	public function setDatasourceSlugs(){
+
+		$this->load->model("data_sources","ds");
+	 	$dataSources = $this->ds->getAll(0,0);//get everything  XXX: getOwnedDataSources
+		foreach($dataSources as $ds){
+			$ds->setSlug($ds->title);
+			$ds->save();
+		}	
+		 	
+	}
 
 	/**
 	 * Manage My Records (MMR Screen)
