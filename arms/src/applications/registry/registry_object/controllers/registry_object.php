@@ -119,7 +119,17 @@ class Registry_object extends MX_Controller {
 		$this->load->model('registry_objects', 'ro');
 		$ro = $this->ro->getByID($registry_object_id);
 		$result = $ro->transformForQA(wrapRegistryObjects($xml));
-		echo $result;
+		$response['title'] = 'QA Result';
+		$scripts = preg_split('/(\)\;)|(\;\\n)/', $result, -1, PREG_SPLIT_NO_EMPTY);
+		foreach($scripts as $script)
+		{
+			$matches = preg_split('/(\"\,\")|(\(\")|(\"\))/', $script.")", -1, PREG_SPLIT_NO_EMPTY);
+			if(sizeof($matches) > 3)
+				$response[$matches[0]][] = Array('field'=>$matches[1],'message'=>$matches[2],'qafield'=>$matches[3]);
+			elseif(sizeof($matches) == 3)
+				$response[$matches[0]][] = Array('field'=>$matches[1],'message'=>$matches[2]);
+		}
+		echo json_encode($response);
 	}
 
 	public function manage_table($data_source_id = false){
