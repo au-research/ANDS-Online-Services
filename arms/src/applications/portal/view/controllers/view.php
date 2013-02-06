@@ -8,7 +8,7 @@ class View extends MX_Controller {
 	{
 		if (!$this->input->get('slug') && !$this->input->get('id'))
 		{
-			throw new Exception("Registry object could not be located (no SLUG or ID specified!)");
+			redirect('/');
 		}
 
 		$this->load->model('registry_fetch','registry');

@@ -402,6 +402,7 @@ else
 	$active_application = "unknown";
 	$base_url = "";
 }
+$config['active_application'] = $active_application;
 
 $config['modules_locations'] = array(
        'applications/'.$active_application . '/' => '../../applications/'.$active_application . '/',

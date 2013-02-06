@@ -41,6 +41,14 @@ class Dispatcher extends MX_Controller {
 		{
 			// If no match, assume it is a SLUG view request
 			$_GET['slug'] = array_pop($params);
+
+			// Quick fix for missing slash (might not work on "domain root" installations?)
+			if ($this->config->item('active_application') == $_GET['slug'] || !$_GET['slug'])
+			{
+				echo Modules::run("home");
+				return;
+			}
+
 			$params = array("view");
 			echo Modules::run(implode("/",$params));
 			return;
