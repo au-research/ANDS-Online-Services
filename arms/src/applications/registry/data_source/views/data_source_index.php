@@ -105,10 +105,10 @@
 	<div class="content-header">
 		<h1>{{title}}</h1>
 		<ul class="nav nav-pills">
-			<li class="active view page-control" data_source_id="{{data_source_id}}"><a href="#">View</a></li>
-			<li class="edit page-control" data_source_id="{{data_source_id}}"><a href="#">Edit Settings</a></li>
+			<li class="active view page-control" data_source_id="{{data_source_id}}"><a href="#">Status</a></li>
 			<li class="mmr page-control" data_source_id="{{data_source_id}}"><a href="#">Manage Records</a></li>
 			<li class="report page-control" data_source_id="{{data_source_id}}"><a href="#">Quality Report</a></li>
+			<li class="edit page-control" data_source_id="{{data_source_id}}"><a href="#">Settings</a></li>
 		</ul>
 	</div>
 	<div id="breadcrumb">
@@ -513,13 +513,13 @@
 <!-- mustache template for data source edit single-->
 <script type="text/x-mustache"  id="data-source-edit-template">
 {{#item}}
-<div class="content-header">
+	<div class="content-header">
 		<h1>{{title}}</h1>
 		<ul class="nav nav-pills">
-			<li class="view page-control" data_source_id="{{data_source_id}}"><a href="#">View</a></li>
-			<li class="active edit page-control" data_source_id="{{data_source_id}}"><a href="#">Edit Settings</a></li>
+			<li class="view page-control" data_source_id="{{data_source_id}}"><a href="#">Status</a></li>
 			<li class="mmr page-control" data_source_id="{{data_source_id}}"><a href="#">Manage Records</a></li>
 			<li class="report page-control" data_source_id="{{data_source_id}}"><a href="#">Quality Report</a></li>
+			<li class="active edit page-control" data_source_id="{{data_source_id}}"><a href="#">Settings</a></li>
 		</ul>
 	</div>
 	<div id="breadcrumb">

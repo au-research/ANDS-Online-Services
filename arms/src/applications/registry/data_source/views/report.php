@@ -10,10 +10,10 @@
 	<div class="content-header">
 		<h1><?php echo $ds->title;?></h1>
 		<ul class="nav nav-pills">
-			<li class=""><?php echo anchor('data_source/manage#!/view/'.$ds->id,'View');?></li>
-			<li class=""><?php echo anchor('data_source/manage#!/edit/'.$ds->id,'Edit Settings');?></li>
+			<li class=""><?php echo anchor('data_source/manage#!/view/'.$ds->id,'Status');?></li>
 			<li class=""><?php echo anchor('data_source/manage_records/'.$ds->id,'Manage Records');?></li>
 			<li class="active"><?php echo anchor('data_source/report/'.$ds->id,'Quality Reports');?></li>
+			<li class=""><?php echo anchor('data_source/manage#!/edit/'.$ds->id,'Settings');?></li>
 		</ul>
 	</div>
 	<div id="breadcrumb">
