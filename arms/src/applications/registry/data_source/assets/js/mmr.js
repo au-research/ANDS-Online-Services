@@ -1,12 +1,28 @@
 var selected_ids=[],selecting_status;
 var filters = {};
 $(function() {
-    //filters['search'] = '';
-    var sort = {}; sort['updated'] = 'asc';
-    filters['sort'] = sort;
-    // var filter = {}; filter['error_count'] = '1';filter['class']='collection';
-    // filters['filter'] = filter;
-    // console.log(filters);
+
+    //check if there's any get variable
+    var $_GET = {};
+    document.location.search.replace(/\??(?:([^=]+)=([^&]*)&?)/g, function () {
+        function decode(s) {
+            return decodeURIComponent(s.split("+").join(" "));
+        }
+
+        $_GET[decode(arguments[1])] = decode(arguments[2]);
+    });
+    //console.log($_GET["filters"]);
+
+    //if filters are determined in the get variable, they will be json string, parse them and use them instead of default
+    if($_GET['filters']){
+        filters = jQuery.parseJSON($_GET['filters']);
+    }else{
+        var sort = {}; sort['updated'] = 'asc';
+        filters['sort'] = sort;
+        // var filter = {}; filter['status'] = 'PUBLISHED';
+        // filters['filter'] = filter;
+    }
+    //console.log(JSON.stringify(filters, null, 2));
     init(filters);
 
     $(document).on("click", ".sortable li", function(e){
@@ -260,6 +276,7 @@ function initLayout(){
             $('#active_filters').append('<span class="removeFilter tag" name="'+key+'"><a href="javascript:;">'+key+':'+value+' <i class="icon icon-remove"></i></a></span>');
         });
     });
+
     $('.removeFilter').unbind('click').click(function(){
         var name = $(this).attr('name');
         delete filters['filter'][name];

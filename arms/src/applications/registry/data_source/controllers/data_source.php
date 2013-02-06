@@ -135,6 +135,9 @@ class Data_source extends MX_Controller {
 			array_push($jsonData['valid_statuses'], 'APPROVED');	
 		}
 
+		$filters = $this->input->post('filters');
+		if(isset($filters['filter']['status'])) $jsonData['valid_statuses'] = array($filters['filter']['status']);
+
 		//statuses is the main result array
 		$jsonData['statuses'] = array();
 		foreach($jsonData['valid_statuses'] as $s){
@@ -190,7 +193,7 @@ class Data_source extends MX_Controller {
 					break;
 			}
 			array_push($st['menu'], array('action'=>'delete', 'display'=>'Delete'));
-			$filters = $this->input->post('filters');
+			
 
 			$args['sort'] = isset($filters['sort']) ? $filters['sort'] : array('updated'=>'desc');
 			$args['search'] = isset($filters['search']) ? $filters['search'] : false;

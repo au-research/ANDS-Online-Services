@@ -211,7 +211,7 @@ function load_datasource(data_source_id){
 			$('.ro-list li').click(function(){
 				var type = $(this).attr('type');
 				var name = $(this).attr('name');
-				var url_to = base_url+'registry_object/manage/'+data_source_id+'/'+suffix+'browse/thumbnails/'+type+'='+name;
+				var url_to = base_url+'data_source/manage_records/'+data_source_id+'/?filters={"sort":{"updated":"asc"},"filter":{"'+type+'":"'+name+'"}}';
 				window.location = url_to;
 			});
 		}
