@@ -64,7 +64,7 @@ $(function(){
 
 
 	//item button binding
-	$('.btn').live({
+	$('.page-control').live({
 		click: function(e){
 			e.preventDefault();
 			var data_source_id = $(this).attr('data_source_id');
@@ -75,7 +75,7 @@ $(function(){
 			}else if($(this).hasClass('delete')){
 				changeHashTo('delete/'+data_source_id);
 			}else if($(this).hasClass('mmr')){
-				window.location = base_url+'registry_object/manage/'+data_source_id;
+				window.location = base_url+'data_source/manage_records/'+data_source_id;
 			}else if($(this).hasClass('export')){
 				window.location = base_url+'data_source/export/'+data_source_id;
 			}

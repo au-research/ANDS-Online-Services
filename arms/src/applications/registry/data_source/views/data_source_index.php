@@ -65,9 +65,9 @@
 			  		{{/status}}
 		  		{{/counts}}
 		  		<div class="btn-group item-control">
-		  			<button class="btn btn-small view" data_source_id="{{id}}"><i class="icon-eye-open"></i> View</button>
-		  			<button class="btn btn-small mmr" data_source_id="{{id}}"><i class="icon-folder-open"></i> Manage</button>
-			  		<button class="btn btn-small edit" data_source_id="{{id}}"><i class="icon-edit"></i> Settings</button>
+		  			<button class="btn btn-small view page-control" data_source_id="{{id}}"><i class="icon-eye-open"></i> View</button>
+		  			<button class="btn btn-small mmr page-control" data_source_id="{{id}}"><i class="icon-folder-open"></i> Manage</button>
+			  		<button class="btn btn-small edit page-control" data_source_id="{{id}}"><i class="icon-edit"></i> Settings</button>
 				</div>
 			</div>
 		</div>
@@ -104,12 +104,11 @@
 	{{#item}}
 	<div class="content-header">
 		<h1>{{title}}</h1>
-		<!--ul class="nav nav-pills">
-			<li class="active"><a href="#">View</a></li>
-			<li class=""><a href="#">Edit</a></li>
-			<li class=""><a href="#">View History</a></li>
-			<li class=""><a href="#">Delete Records</a></li>
-		</ul-->
+		<ul class="nav nav-pills">
+			<li class="active view page-control" data_source_id="{{data_source_id}}"><a href="#">View</a></li>
+			<li class="edit page-control" data_source_id="{{data_source_id}}"><a href="#">Edit Settings</a></li>
+			<li class="mmr page-control" data_source_id="{{data_source_id}}"><a href="#">Manage Records</a></li>
+		</ul>
 	</div>
 	<div id="breadcrumb">
 		<?php echo anchor('/', '<i class="icon-home"></i> Home', array('class'=>'tip-bottom', 'tip'=>'Go to Home'))?>
@@ -126,9 +125,9 @@
 	 		<div class="widget-content">
 	 			<div class="btn-toolbar">
 					<div class="btn-group">
-				  		<button class="btn edit" data_source_id="{{data_source_id}}"><i class="icon-edit"></i> Edit Settings</button>
-				  		<button class="btn mmr" data_source_id="{{data_source_id}}"><i class="icon-folder-open"></i> Manage Records</button>
-				  		<button class="btn deleteRecord" data_source_id="{{data_source_id}}"><i class="icon-trash"></i> Delete Record</button>
+				  		<button class="btn edit page-control" data_source_id="{{data_source_id}}"><i class="icon-edit"></i> Edit Settings</button>
+				  		<button class="btn mmr page-control" data_source_id="{{data_source_id}}"><i class="icon-folder-open"></i> Manage Records</button>
+				  		<button class="btn deleteRecord page-control" data_source_id="{{data_source_id}}"><i class="icon-trash"></i> Delete Record</button>
 					</div>
 					<div class="btn-group pull-right">
 						<a class="btn dropdown-toggle ExportDataSource" data-toggle="modal" href="#exportDataSource" id="exportDS">
@@ -515,12 +514,11 @@
 {{#item}}
 <div class="content-header">
 		<h1>{{title}}</h1>
-		<!--ul class="nav nav-pills">
-			<li class="active"><a href="#">View</a></li>
-			<li class=""><a href="#">Edit</a></li>
-			<li class=""><a href="#">View History</a></li>
-			<li class=""><a href="#">Delete Records</a></li>
-		</ul-->
+		<ul class="nav nav-pills">
+			<li class="view page-control" data_source_id="{{data_source_id}}"><a href="#">View</a></li>
+			<li class="active edit page-control" data_source_id="{{data_source_id}}"><a href="#">Edit Settings</a></li>
+			<li class="mmr page-control" data_source_id="{{data_source_id}}"><a href="#">Manage Records</a></li>
+		</ul>
 	</div>
 	<div id="breadcrumb">
 		<?php echo anchor('/', '<i class="icon-home"></i> Home', array('class'=>'tip-bottom', 'tip'=>'Go to Home'))?>

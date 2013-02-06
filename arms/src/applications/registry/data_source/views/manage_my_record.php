@@ -10,8 +10,9 @@
 	<div class="content-header">
 		<h1>Manage My Record</h1>
 		<ul class="nav nav-pills">
-			<li class="active"><a href="#">Manage</a></li>
-			<li class=""><a href="#">Report</a></li>
+			<li class=""><?php echo anchor('data_source/manage#!/view/'.$ds->id,'View');?></li>
+			<li class=""><?php echo anchor('data_source/manage#!/edit/'.$ds->id,'Edit Settings');?></li>
+			<li class="active mmr"><a href="#">Manage Records</a></li>
 		</ul>
 	</div>
 	<div id="breadcrumb">
