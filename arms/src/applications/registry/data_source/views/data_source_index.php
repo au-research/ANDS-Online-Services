@@ -848,8 +848,8 @@
 			</div>
 
 			<div class="form-actions">
-				<button class="btn btn-primary" id="save-edit-form" data-loading-text="Saving..." >Save</button>
-				<button class="btn" id="test-harvest" data-loading-text="Testing Harvest..." >Test Harvest</button>
+				<button class="btn btn-primary" id="save-edit-form" data-loading-text="Saving..." data_source_id="{{data_source_id}}">Save</button>
+				<button class="btn" id="test-harvest" data-loading-text="Testing Harvest..." data_source_id="{{data_source_id}}">Test Harvest</button>
 			</div>
 			<div class="modal hide" id="test_harvest_activity_log">
 			  <div class="modal-header">

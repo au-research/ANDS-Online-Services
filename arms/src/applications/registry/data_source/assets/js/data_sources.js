@@ -572,8 +572,8 @@ $('#save-edit-form').live({
 		e.preventDefault();
 		var jsonData = [];
 		$(this).button('loading');
-		
-		jsonData.push({name:'data_source_id', value:$('#data_source_view_container').attr('data_source_id')});
+		var ds_id = $(this).attr('data_source_id')
+		jsonData.push({name:'data_source_id', value:ds_id});
 		
 		$('#edit-datasource #edit-form input, #edit-datasource #edit-form textarea').each(function(){
 			var label = $(this).attr('name');
@@ -616,7 +616,7 @@ $('#save-edit-form').live({
 					logErrorOnScreen("An error occured whilst saving your changes!", $('#myModal .modal-body'));
 					$('#myModal .modal-body').append("<br/><pre>" + data + "</pre>");
 				}else{
-					changeHashTo('view/'+$('#data_source_view_container').attr('data_source_id'));
+					changeHashTo('view/'+ds_id);
 					createGrowl("Your Data Source was successfully updated");
 					updateGrowls();
 				}
@@ -670,8 +670,8 @@ $('#test-harvest').live({
 		e.preventDefault();
 		var jsonData = [];
 		$(this).button('Running...');
-		
-		jsonData.push({name:'data_source_id', value:$('#data_source_view_container').attr('data_source_id')});
+		var ds_id = $(this).attr('data_source_id');
+		jsonData.push({name:'data_source_id', value:ds_id});
 		
 		$('#edit-datasource #edit-form input, #edit-datasource #edit-form textarea').each(function(){
 			var label = $(this).attr('name');
