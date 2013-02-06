@@ -108,7 +108,7 @@ function initSearchPage(){
 	});
 
 	//see if we need to init the map
-	if(searchData['map'] || map){
+	if(searchData['map']){
 		$('#searchmap').show();
 		 processPolygons();
 		 resetZoom();
