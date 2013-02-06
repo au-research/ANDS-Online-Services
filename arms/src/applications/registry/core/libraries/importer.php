@@ -540,6 +540,8 @@ class Importer {
 	 */
 	public function setCrosswalk($crosswalk_metadata_format)
 	{
+		if (!$crosswalk_metadata_format) { return; }
+		
 		$crosswalks = getCrossWalks();
 		foreach (getCrosswalks() AS $crosswalk)
 		{

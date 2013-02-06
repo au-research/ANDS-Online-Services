@@ -170,6 +170,10 @@
         <field name="description_type" type="text_en_splitting" indexed="true" stored="true"
           multiValued="true"/>
 
+        <!-- <span class="provided">The description used for displaying search results.</span>-->
+        <field name="description" type="text_en_splitting" indexed="true" stored="true"
+          multiValued="false"/>
+          
 
     <!-- SUBJECTS -->
         <!-- <span class="inferred">The resolved value of the subject (if any) (i.e. "MATHEMATICAL SCIENCES").</span>-->
