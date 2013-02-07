@@ -13,8 +13,13 @@ class View extends MX_Controller {
 
 		$this->load->model('registry_fetch','registry');
 
+
 		// Published records are always referenced by SLUG 
 		// XXX: or key!?  <not yet implemented>
+
+		$this->load->library('stats');
+		$this->stats->registerPageView();
+
 		if ($this->input->get('slug'))
 		{
 			try

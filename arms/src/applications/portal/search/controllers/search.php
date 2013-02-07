@@ -46,8 +46,9 @@ class Search extends MX_Controller {
 		/**
 		 * Setting the SOLR OPTIONS based on the filters sent over AJAX
 		 */
-		
+
 		if($filters){
+					$filteredSearch = false;
 			foreach($filters as $key=>$value){
 				$value = urldecode($value);
 				switch($key){
@@ -60,27 +61,35 @@ class Search extends MX_Controller {
 							$start = $pp * ($page-1);
 						}
 						$this->solr->setOpt('start', $start);
+						$filteredSearch = true;
 						break;
 					case 'tab': 
 						if($value!='all') $this->solr->setOpt('fq', 'class:("'.$value.'")');
+						$filteredSearch = true;
 						break;
 					case 'group': 
 						$this->solr->setOpt('fq', 'group:("'.$value.'")');
+						$filteredSearch = true;
 						break;
 					case 'type': 
 						$this->solr->setOpt('fq', 'type:'.$value);
+						$filteredSearch = true;
 						break;
-					case 'subject': 
+					case 'subject_value_resolved': 
 						$this->solr->setOpt('subject_value_resolved', $value);
+						$filteredSearch = true;
 						break;
 					case 'license_class': 
 						$this->solr->setOpt('fq', 'license_class:("'.$value.'")');
+						$filteredSearch = true;
 						break;						
 					case 'spatial':
 						$this->solr->setOpt('fq', 'spatial_coverage_extents:"Intersects('.$value.')"');
+						$filteredSearch = true;
 						break;
 				}
 			}
+			
 		}
 
 		//var_dump($this->solr->constructFieldString());
@@ -91,6 +100,7 @@ class Search extends MX_Controller {
 		$data['solr_result'] = $this->solr->executeSearch();
 
 
+
 		/**
 		 * Getting the results back
 		 */
@@ -98,6 +108,16 @@ class Search extends MX_Controller {
 		$data['result'] = $this->solr->getResult();
 		$data['numFound'] = $this->solr->getNumFound();
 		$data['timeTaken'] = $data['solr_header']->{'QTime'} / 1000;
+
+		/**
+		 * Register the search term
+		 */
+		if(!$filteredSearch) 
+		{
+			$this->stats->registerSearchTerm($this->solr->getOpt('q'));
+			$this->stats->registerSearchStats($this->solr->getOpt('q'),$data['numFound']);
+
+		}
 
 		/**
 		 * House cleaning on the facet_results

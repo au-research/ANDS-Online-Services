@@ -120,7 +120,28 @@ class Stats {
 		$this->db->insert('search_terms', $values);
 	}
 
+	/**
+	 * Register a term that has been searched for with it's reulting hits
+	 *
+	 * @param search_term 	the term being searched for
+	 * @param occurence		the number of registry objects returned
+	 */
+	public function registerSearchStats($search_term, $occurence)
+	{
+		$values = array();
 
+		// The server time of the request
+		$values['timestamp'] = time();
+
+		// The term which was searched for
+		$values['term'] = $search_term;
+
+		// The number of objects returned from the search
+		$values['occurence'] = $occurence;		
+	
+
+		$this->db->insert('search_occurence', $values);
+	}
 
 	/**
 	 * Updated the search_occurence to sync the number of terms
