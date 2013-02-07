@@ -15,6 +15,9 @@
 <section id="browse-datasources" class="hide">
 	<div class="content-header">
 		<h1>Manage My Datasource</h1>
+		<div class="btn-group">
+			<a class="btn btn-small" id="open_add_ds_form" data-toggle="modal" href="#AddNewDS"><i class="icon-plus"></i> Add New Datasource</a>
+		</div>
 	</div>
 	<div id="breadcrumb">
 		<?php echo anchor('/', '<i class="icon-home"></i> Home', array('class'=>'tip-bottom', 'tip'=>'Go to Home'))?>
@@ -39,6 +42,57 @@
 				<div class="well"><a href="javascript:;" id="load_more" page="1">Show More...</a></div>
 			</div>
 		</div-->
+	</div>
+
+	<div class="modal hide fade" id="AddNewDS">
+	
+		<div class="modal-header">
+			<a href="javascript:;" class="close" data-dismiss="modal">×</a>
+			<h3>Add New Datasource</h3>
+		</div>
+		
+		<div class="modal-screen-container">
+			<div class="modal-body">
+				
+				<div class="alert alert-info">
+					Please provide the key and the title for the data source
+				</div>			
+
+				<form action="#" method="get" class="form-vertical">
+					<div class="control-group">
+						<label class="control-label">Key</label>
+						<div class="controls">
+							<input type="text" name="data_source_key" required>
+							<span class="help-block">Key has to be unique</span>
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" name="title">Title</label>
+						<div class="controls"><input required type="text" name="title"></div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" name="title">Owner</label>
+						<div class="controls">
+							<select name="record_owner">
+								<?php foreach($this->user->affiliations() as $a):?>
+								<option value="<?php echo $a;?>"><?php echo $a;?></option>
+								<?php endforeach;?>
+							</select>
+						</div>
+					</div>
+				</form>
+
+			</div>
+		</div>
+		
+		
+		<div class="modal-footer">
+			<a id="AddNewDS_confirm" href="javascript:;" class="btn btn-primary" data-loading-text="Saving...">Save</a>
+			<a href="#" class="btn hide" data-dismiss="modal">Close</a>
+		</div>
+
+		
+	</div>
 </section>
 
 <section id="view-datasource" class="hide">Loading...</section>
@@ -298,6 +352,19 @@
 				  			<li class="ql_{{level}}" name="{{level}}" type="quality_level"><span class="name">Quality Level {{level}}</span> <span class="num">{{count}}</span></li>
 				  		{{/level}}
 			  		{{/qlcounts}}
+				</ul>
+			</div>
+		</div>
+
+		<div class="widget-box">
+			<div class="widget-title"><h5>Data Source Class Summary</h5></div>
+			<div class="widget-content nopadding">
+				<ul class="ro-list">
+					{{#classcounts}}
+				  		{{#class}}
+				  			<li class="" name="{{class}}" type="class"><span class="name">{{class}}</span> <span class="num">{{count}}</span></li>
+				  		{{/class}}
+			  		{{/classcounts}}
 				</ul>
 			</div>
 		</div>

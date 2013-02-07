@@ -250,6 +250,7 @@ a:hover {
 	float: right;
 	right: 20px;
 	position: absolute;
+	margin-top:20px;
 }
 
 .content-header .nav-pills {

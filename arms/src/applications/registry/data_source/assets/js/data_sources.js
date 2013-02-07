@@ -101,30 +101,63 @@ $(function(){
 
 	$('.exportRecord').live({
 		click: function(e){
-		data_source_id = $('#data_source_view_container').attr('data_source_id');
-		type = $(this).attr('type');
-		var data = {};
-		//let's construct the array using the form
-		var form_data  = $('#data_source_export_form').serializeArray();
-		form_data.push({name:"as",value:type});
-		data = JSON.stringify(form_data);
-		window.open(base_url+'data_source/exportDataSource/'+data_source_id+'?data='+data, '_blank');
+			data_source_id = $('#data_source_view_container').attr('data_source_id');
+			type = $(this).attr('type');
+			var data = {};
+			//let's construct the array using the form
+			var form_data  = $('#data_source_export_form').serializeArray();
+			form_data.push({name:"as",value:type});
+			data = JSON.stringify(form_data);
+			window.open(base_url+'data_source/exportDataSource/'+data_source_id+'?data='+data, '_blank');
 		}
 	})
 
 
 	$('.dataSourceReport').live({
 		click: function(e){
-		data_source_id = $('#data_source_view_container').attr('data_source_id');
-		type = $(this).attr('type');
-		var data = {};
-		//let's construct the array using the form
-		var form_data  = $('#data_source_report_form').serializeArray();
-		form_data.push({name:"as",value:type});
-		data = JSON.stringify(form_data);
-		window.open(base_url+'data_source/getDataSourceReport/'+data_source_id+'?data='+data, '_blank');
+			data_source_id = $('#data_source_view_container').attr('data_source_id');
+			type = $(this).attr('type');
+			var data = {};
+			//let's construct the array using the form
+			var form_data  = $('#data_source_report_form').serializeArray();
+			form_data.push({name:"as",value:type});
+			data = JSON.stringify(form_data);
+			window.open(base_url+'data_source/getDataSourceReport/'+data_source_id+'?data='+data, '_blank');
 		}
-	})
+	});
+
+	
+	$('#AddNewDS_confirm').live({
+		click: function(e){
+			var form = $('#AddNewDS form');
+			Core_bindFormValidation(form);
+			if($(form).attr('valid')=='true'){
+				var key = $('input[name=data_source_key]', form).val();
+				$.ajax({
+					url:base_url+'services/registry/check_unique/data_source_key', 
+					type: 'POST',
+					data: {key:key},
+					success: function(data){
+						if(data==0){
+							//console.log('is unique');
+							var title = $('input[name=title]',form).val();
+							var record_owner = $('select[name=record_owner]').val()
+							$.ajax({
+								url:base_url+'data_source/add',
+								type: 'POST',
+								data: {key:key,title:title,record_owner:record_owner},
+								success:function(data){
+									window.location = base_url+'data_source/manage#!/view/'+data;
+								}
+							});
+						}else{
+							$('input[name=data_source_key]').closest('div.control-group').removeClass('success').addClass('error');
+						}
+					}
+				});
+			}
+		}
+	});
 });
 
 /*

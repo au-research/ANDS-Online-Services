@@ -151,10 +151,12 @@ function bindShowMore(){
         var offset = parseInt($(this).attr('offset'));
         var status = $(this).attr('status');
         var button = this;
+        var filter = JSON.stringify(filters, null, 2);
+        console.log(filters);
         $.ajax({
             url:base_url+'data_source/get_more_mmr_data/', 
             type: 'POST',
-            data: {ds_id:ds_id,offset:offset,status:status},
+            data: {ds_id:ds_id,offset:offset,filter:filter,status:status},
             success: function(data){
                 if(data){
                     new_offset = offset+10;

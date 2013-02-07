@@ -206,19 +206,17 @@ class Data_source extends MX_Controller {
 				foreach($filters['filter'] as $key=>$value){
 					if(!in_array($key, $white_list)){
 						$list = $this->ro->getByAttributeDatasource($data_source_id, $key, $value, false, false);
-						if($list){
-							$filtered_ids = array_merge($filtered_ids, $list);
-						}else{
-							$no_match = true;
-						}
+						$filtered_ids = array_merge($filtered_ids, $list);
 					}else{
 						$f[$key] = $value;
 						$args['filter'][$key] = $value;
 					}
 				}
+
 				foreach($filtered_ids as $k){
 					array_push($filtered, $k['registry_object_id']);
 				}
+
 			}
 			$args['filtered_id']=$filtered;
 
@@ -241,6 +239,7 @@ class Data_source extends MX_Controller {
 				$st['ds_id'] = $data_source_id;
 			}else{
 				$st['count']=0;
+				$st['items'] = array();
 			}
 			$jsonData['statuses'][$s] = $st;
 		}
@@ -391,10 +390,27 @@ class Data_source extends MX_Controller {
 		foreach ($this->ro->valid_levels AS $level){
 			array_push($jsonData['item']['qlcounts'], array('level' => $level, 'count' =>$dataSource->getAttribute("count_level_$level")));
 		}
+
+		$jsonData['item']['classcounts'] = array();
+		foreach($this->ro->valid_classes as $class){
+			array_push($jsonData['item']['classcounts'], array('class' => $class, 'count' =>$dataSource->getAttribute("count_$class")));
+		}
 		
 		$jsonData = json_encode($jsonData);
 		echo $jsonData;
 	}
+
+
+	public function add(){
+		$this->load->model('data_sources', 'ds');
+		$ds = $this->ds->create($this->input->post('key'), url_title($this->input->post('title')));
+		$ds->setAttribute('title', $this->input->post('title'));
+		$ds->setAttribute('record_owner', $this->input->post('record_owner'));
+		$ds->save();
+		$ds->updateStats();
+		echo $ds->id;
+	}
+
 	
 	public function getContributorGroups()
 	{

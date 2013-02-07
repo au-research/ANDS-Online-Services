@@ -383,6 +383,7 @@ function Core_bindFormValidation(form){
 	$(form).attr('valid', false);
 	$('input,textarea', form).each(function(){
 		Core_checkValidField(form, this);
+		Core_checkValidForm(form);
 		$(this).die().live({
 			blur: function(){
 				Core_checkValidField(form, this);
@@ -410,6 +411,14 @@ function Core_checkValidField(form, field){
 				}
 			}
 
+			if(field.minLength>0){//minlength is specified
+				if($(field).val().length<field.minLength){
+					valid = false;
+				}else{
+					valid = true;
+				}
+			}
+
 			if($(field).attr('type')=='email'){//email validation
 				if(validateEmail($(field).val())){
 					valid = true;
@@ -418,7 +427,7 @@ function Core_checkValidField(form, field){
 				}
 			}else{
 				valid = true;
-			}			
+			}		
 		}
 
 		if(valid){

@@ -92,6 +92,29 @@ class Registry extends MX_Controller {
 		echo $str;
 	}
 
+	/**
+	 * check a key to see uniqueness
+	 * @param  string $type data_source_key || registry_object_key
+	 * @param  string $key  
+	 * @return [total]
+	 */
+	public function check_unique($type){
+		$this->load->database();
+		$key = $this->input->post('key');
+		if($type=='data_source_key'){
+			$this->db->select('key');
+			$this->db->from('data_sources');
+			$this->db->where('key', $key);
+			$total =  $this->db->count_all_results();
+		}else if($type=='registry_object_key'){
+			$this->db->select('key');
+			$this->db->from('registry_objects');
+			$this->db->where('key', $key);
+			$total =  $this->db->count_all_results();
+		}
+		echo $total;
+	}
+
 	/*
 	 * get_datasources_list
 	 * 

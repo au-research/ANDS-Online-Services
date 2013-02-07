@@ -409,7 +409,6 @@ class Registry_objects extends CI_Model {
 							   				$where.=' AND registry_object_attributes.attribute = "'.$key.'"';
 							   				$db->order_by('v', $value);
 						   				}
-						   				
 						   			}
 						   		}
 
