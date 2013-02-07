@@ -12,7 +12,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 *******************************************************************************/
-
+/* ANDS Location Capture Widget - v1.1 */
 ;(function($) {
     "use strict";
     var WIDGET_NAME = "ANDS Location Capture Widget";

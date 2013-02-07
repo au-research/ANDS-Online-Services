@@ -146,7 +146,7 @@
 
 			    	 <br/><br/>
 			    	<h4>Download Sourcecode</h4>
-			    	 <a class="btn btn-success" href="<?=asset_url('location_capture_widget_v0.1.zip');?>"><i class="icon-download icon-white"></i> &nbsp;Download Now - v0.1</a>
+			    	 <a class="btn btn-success" href="<?=asset_url('location_capture_widget_v1.1.zip');?>"><i class="icon-download icon-white"></i> &nbsp;Download Now - v1.1</a>
 
 			    	 <br/><br/>
 					<h4>License</h4>
