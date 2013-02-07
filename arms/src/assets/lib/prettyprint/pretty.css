@@ -3,7 +3,7 @@
 .pun, .opn, .clo { color: #93a1a1; }
 .fun { color: #dc322f; }
 .str, .atv { color: #D14; }
-.kwd, .prettyprint .tag { color: #1e347b; }
+.kwd, .prettyprint .tag { color: #1e347b; border:none; background-color:transparent; padding:0px;}
 .typ, .atn, .dec, .var { color: teal; }
 .pln { color: #48484c; }
 
@@ -11,6 +11,12 @@
   padding: 8px;
   background-color: #f7f7f9;
   border: 1px solid #e1e1e8;
+}
+
+.prettyprint .tag 
+{
+  border:none; 
+  background-color:transparent;
 }
 .prettyprint.linenums {
   -webkit-box-shadow: inset 40px 0 0 #fbfbfc, inset 41px 0 0 #ececf0;

@@ -7,17 +7,84 @@
 	    src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.js"></script>
     <script type="text/javascript" src="js/vocab_widget.js"></script>
     <link rel="stylesheet" type="text/css" href="css/vocab_widget.css" />
+    <style>
+      body
+      {
+        font-family: Verdana;
+        font-size:8px;
+        background-color:#efefef;
+        margin-top:100px;
+      }
+      div.container
+      {
+        width: 750px; 
+        height: 500px;
+        margin:auto;
+      }
+
+      div.formarea
+      {
+        width: 500px; 
+        padding:30px; 
+        border: 1px solid #999;
+      }
+
+      form 
+      {
+        font-size:10px;
+      }
+
+      div.formfields 
+      {
+        padding:20px;
+      }
+
+      dl dt {
+        font-weight:bold;
+      }
+      dl dd {
+        margin-left:0px;
+        margin-bottom:10px;
+      }
+
+    </style>
   </head>
   <body>
-    <div style="width: 500px; margin:auto;">
-      <h2>ANDS Vocabulary widget demonstrator</h2>
-      <form id="myform">
-	<input type="text" id="vocab" value="" size="40" />
-      </form>
+
+    <div class="container">
+
+      <div class="formarea">
+
+        <h1>Example Data Classification/Submission System</h1>
+        <hr/>
+        
+        <div class="formfields">
+          <form id="myform">
+    	       
+            <dl>
+              <dt>Chief Investigator Name:</dt>
+              <dd><input type="text" name="cia_name" value="Joe Bloggs" size="40" /></dd>
+
+              <dt>Project Name:</dt>
+              <dd><input type="text" name="project_name" value="Coral community and extent mapping of the Wide Bay - Burnett Coastal fringe project" size="40" /></dd>
+
+              <dt>ANZSRC Field of Research:</dt>
+              <dd><input type="text" id="anzsrc-vocab" name="anzsrc-for" value="" size="40" /></dd>
+            </dl>
+
+             <i>(autocomplete; begin typing something (e.g. "BIOL"))</i>
+
+            <p><input type="submit"/></p>
+          </form>
+        </div>
+
+      </div>
+
     </div>
+
     <script type="text/javascript">
       $(document).ready(function() {
-	$("#vocab").ands_vocab_widget({cache: false});
+	       $("#anzsrc-vocab").ands_vocab_widget({cache: false, target_field: 'label'});
       });
     </script>
   </body>

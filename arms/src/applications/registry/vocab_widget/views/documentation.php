@@ -17,15 +17,20 @@
 			<div class="row-fluid">
 				<div class="span8">
 				    <div class="alert alert-info">
-					  <strong>Developer Zone!</strong> Some basic web development knowledge may be needed to implement this widget.
+					  <strong>Developer Zone!</strong><br/> Some basic web development knowledge may be needed to implement this widget.
 				    </div>
 			    	 <h4>What is this widget?</h4>
 			    	 <p>
-				   The ANDS Vocabulary Widget allows you to instantly query the ANDS SISSvoc vocabulary. Currently, all concepts can be queried and retrieved (exploring concept hierarchy via "broaden" / "narrow" coming soon).
-			    	 </p>
-				 <p>
-				   The widget has been written in the style of a jQuery plugin, allowing complete control over styling and functionality with just a few lines of javascript.
-				 </p>
+				   		The ANDS Vocabulary Widget allows you to instantly add Data Classification capabilities to your data capture tools through the ANDS Vocabulary Service. 
+				   	 </p>
+					 <p>
+					   	The widget has been written in the style of a jQuery plugin, allowing complete control over styling and functionality with just a few lines of javascript.
+					 </p>
+					 <p>
+					   	Currently the widget offers the ability to create a navigable "autocomplete", meaning that users can be prompted to use appropriate controlled vocabulary classifications when inputting data. 
+
+					   	Tree-style concept browsing (such as that used in the RDA "Browse" screen) is coming soon. 
+					 </p>
 			    	 <p>
 			    		 <a target="_blank" class="btn btn-success" href="<?=asset_url('demo.html');?>"><i class="icon-circle-arrow-right icon-white"></i> View the Demo</a>
 			    	 </p>
@@ -145,16 +150,17 @@
 			    	<h5>Enrich your web forms in seconds...</h5>
 				<p>
 				  <a href="<?=asset_url('demo.html');?>"><img src="<?=asset_url('img/vocab_widget_screenshot.png');?>" class="img-rounded" alt="Resolution of Place Names" /></a>
-						<small class="pull-right"><em>Query the ANDS SISSvoc service to retrieve vocabulary concepts.</em></small>
+						<small class="pull-right"><em>Allow data capture tools to quickly classify data through supported vocabularies (FOR, RIFCS, etc).</em></small>
 				</p>
 
 			    	 <br/><br/>
 			    	<h4>Download Sourcecode</h4>
-			    	 <a class="btn btn-success" href="<?=asset_url('ands_vocab_widget.zip');?>""><i class="icon-download icon-white"></i> &nbsp;Download Now - v0.1</a>
+			    	 <a class="btn btn-success" href="<?=asset_url('ands_vocab_widget.zip');?>"><i class="icon-download icon-white"></i> &nbsp;Download Now - v0.1</a>
 
 			    	 <br/><br/>
 					<h4>License</h4>
-			    	 Licensed under the Apache License, Version 2.0. <br/>
+			    	 Apache License, Version 2.0: <br/>
+
 			    	 <a href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a>
 
 			    </div>

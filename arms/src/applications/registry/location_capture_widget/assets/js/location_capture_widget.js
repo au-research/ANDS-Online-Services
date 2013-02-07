@@ -211,10 +211,10 @@
 		 * the ANDS resolver
 		 */
 		function loadFeatureTypes() {
-		    $.each(['state', 'feature'],
+		    $.each(['state.', 'feature'],
 			   function(idx, type) {
 			       var source = settings.endpoint + '?feature=' +
-				   type + '.&callback=?';
+				   type + '&callback=?';
 			       $.getJSON(source,
 					 function(data) {
 					     addFeatureTypes(data);

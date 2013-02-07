@@ -53,7 +53,7 @@ limitations under the License.
 	    fields: ['label', 'notation', 'about'],
 
 	    //what data field should be stored upon selection?
-	    target_field: "notation",
+	    target_field: "label",
 
 	},
 	settings = $.extend({}, defaults, options);
