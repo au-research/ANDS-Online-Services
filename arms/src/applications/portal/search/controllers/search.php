@@ -6,6 +6,10 @@ class Search extends MX_Controller {
 		$data['title']='Research Data Australia - Search';
 		$data['scripts'] = array('search');
 		$data['js_lib'] = array('google_map', 'range_slider');
+
+		$this->load->library('stats');
+		$this->stats->registerPageView();		
+		
 		$this->load->view('search_layout', $data);
 	}
 

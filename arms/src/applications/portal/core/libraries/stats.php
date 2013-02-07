@@ -16,7 +16,7 @@ class Stats {
 	 * @param note string 	optionally specifies a note to 
 	 *						be appended to the entry
 	 */
-	public function registerPageView($note=null)
+	public function registerPageView($registry_object_id=null)
 	{
 		$values = array();
 
@@ -45,8 +45,8 @@ class Stats {
 			$values['login_identifier'] = $this->CI->user->identifier();
 		}
 
-		// Optionally, a note for whatever use...
-		if ($note) { $values['note'] = $note; }
+		// Optionally, if this page is a view of a registry object
+		if ($registry_object_id) { $values['registry_object_id'] = $registry_object_id; }
 
 		$this->db->insert('page_views', $values);
 	}

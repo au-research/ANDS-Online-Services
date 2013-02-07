@@ -20,7 +20,9 @@ class Home extends MX_Controller {
 		foreach($classes as $class=>$num){
 			$data[$class] = $num;
 		}
-		
+
+		$this->load->library('stats');
+		$this->stats->registerPageView();		
 		//spotlights
 		
 		$data['scripts'] = array('home_page');

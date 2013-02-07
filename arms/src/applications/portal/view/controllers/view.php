@@ -17,8 +17,8 @@ class View extends MX_Controller {
 		// Published records are always referenced by SLUG 
 		// XXX: or key!?  <not yet implemented>
 
-		$this->load->library('stats');
-		$this->stats->registerPageView();
+
+
 
 		if ($this->input->get('slug'))
 		{
@@ -42,7 +42,11 @@ class View extends MX_Controller {
 		if (!isset($extRif['data']) || !$extRif['data'])
 		{
 			$this->load->view('soft404');
+			return;
 		}
+		$this->load->library('stats');
+		$this->stats->registerPageView($extRif['registry_object_id']);
+
 
 		// Check if we have a specific rendering template
 		if(isset($extRif['template']) && $extRif['template'] == CONTRIBUTOR_PAGE_TEMPLATE)
