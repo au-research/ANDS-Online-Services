@@ -12,7 +12,7 @@
 ?>
 <?php $this->load->view('header');?>
 <div id="content" style="margin-top:45px;margin-left:0px">
-	<div id="content-header">
+	<div class="content-header">
 		<h1><?php echo $ro->title;?> <?php if($viewing_revision) echo '<small>(Revision '.$revision.')</small>'?></h1>
 		<div class="btn-group">
 			<?php 
@@ -31,7 +31,7 @@
 		<?php echo anchor('registry_object/', '<i class="icon-home"></i> Home', array('class'=>'tip-bottom', 'title'=>'Go to Home'))?>
 		<?php echo anchor('registry_object/manage/'.$ds->id, $ds->title, array('class'=>'', 'title'=>''))?>
 		<a href="#" class="current"><?php echo $ro->title;?> </a>
-		<?php if($viewing_revision) echo '<a href="#">(Revision '.$revision.')</a>'?></h1>
+		<?php if($viewing_revision) echo '<a href="#">(Revision '.$revision.')</a>'?>
 	</div>
 	<input class="hide" type="hidden" value="<?php echo $ro->id;?>" id="ro_id"/>
 

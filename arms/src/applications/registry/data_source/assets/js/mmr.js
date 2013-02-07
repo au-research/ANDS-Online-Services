@@ -471,7 +471,7 @@ function bindPreviews(){
             style: {
                 width:750
             },
-            position: {viewport: $('.pool')},
+            position: {viewport: $(window)},
             show:{ready:true,effect:false,event:'click'},
             hide:{event:'unfocus'},
             style: {classes: 'ui-tooltip-shadow ui-tooltip-bootstrap'}
