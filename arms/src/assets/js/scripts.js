@@ -77,10 +77,52 @@ $(document).ready(function(){
 				at: at
 			},
 			style: {
-				classes: 'ui-tooltip-jtools ui-tooltip-shadow'
+				classes: 'ui-tooltip-bootstrap ui-tooltip-shadow'
 			}
 		}, event); // Pass through our original event to qTip
 	});
+
+	$('#main-nav-search').click(function(e){
+		e.preventDefault();
+		$('#navbar-search-form').toggle('slide',{direction:'right'});
+	});
+
+	$('#navbar-search-form input').keypress(function(e){
+		if(e.which==13){//enter
+			var query = $(this).val();
+			$(this).qtip({
+				content:{
+					text: 'Loading...', // The text to use whilst the AJAX request is loading},
+					ajax: {
+						url: base_url+'services/registry/search?query='+query, // URL to the local file
+						type: 'GET', // POST or GET
+						data: {}, // Data to pass along with your request
+						success: function(data,status){
+							
+							if(data.length>0){
+								var html = '<div class="dropdown"><ul class="nav nav-list">';
+								$.each(data, function(){
+									var h ='<li class=""><a href="'+base_url+'registry_object/view/'+this.subtext+'">'+this.value+'</a></li>';
+									html +=h
+								});
+								html+='</ul></div>';
+								this.set('content.text', html);
+							}else{
+								this.set('content.text', 'No Result!');
+							}
+						}
+					}
+				},
+				show:{ready:true},
+				position:{my:'top right',at:'bottom left'},
+				hide:{fixed:true,event:'unfocus'},
+				style:{classes:'ui-tooltip-bootstrap ui-tooltip-shadow'}
+			});
+		}
+	});
+
+	$('#navbar-search-form').submit(function() {return false});
+	
 
 
 	//jgrowl
@@ -288,6 +330,8 @@ $(document).ready(function(){
 			$('#affiliation_signup').addClass('disabled');
 		}
 	});
+
+
 });
 
 jQuery.fn.extend({

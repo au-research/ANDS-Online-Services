@@ -147,6 +147,7 @@ $(function(){
 								type: 'POST',
 								data: {key:key,title:title,record_owner:record_owner},
 								success:function(data){
+									$('#AddNewDS').modal('hide');
 									window.location = base_url+'data_source/manage#!/view/'+data;
 								}
 							});

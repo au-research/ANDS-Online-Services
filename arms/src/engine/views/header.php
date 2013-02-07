@@ -81,10 +81,7 @@
                   <a class="dropdown-toggle" data-toggle="dropdown" href="#">My Data <b class="caret"></b></a>
                   <ul class="dropdown-menu pull-right">
                     <li class=""><?php echo anchor('data_source/manage', 'List My Datasources');?></li>
-                    <li class=""><?php echo anchor('registry_object/add', 'Add Records');?></li>
-                    <li class=""><?php echo anchor('registry_object/publish', 'Publish Records');?></li>
-                    <li class=""><?php echo anchor('data_source/manage', 'Export');?></li>
-                    <li class=""><a href="#">Datasources Tools</a></li>
+                    <li class=""><?php echo anchor('registry_object/add', '<i class="icon icon-minus"></i> Add Records');?></li>
                   </ul>
                 </li>
               <?php endif; ?>
@@ -131,7 +128,11 @@
         <?php endif; ?>
           
         <?php if($this->user->hasFunction('REGISTRY_USER') && mod_enabled('registry')): ?>
+          <form class="navbar-search pull-left hide" id="navbar-search-form">
+            <input type="text" class="search-query" placeholder="Search">
+          </form>
           <li class="btn btn-inverse">
+
             <a href="javascript:;" id="main-nav-search"><i class="icon-search icon-white"></i></a>
           </li>
       <?php endif; ?>

@@ -2028,6 +2028,9 @@
       this.lookup()
       return false
   }
+  , updater: function (item) {
+      return item
+    }
 
   }
 

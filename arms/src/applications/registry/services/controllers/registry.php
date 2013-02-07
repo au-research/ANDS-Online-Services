@@ -73,6 +73,28 @@ class Registry extends MX_Controller {
 		echo $vocab_results;
 	}
 
+	public function search(){
+		header('Cache-Control: no-cache, must-revalidate');
+		header('Content-type: application/json');
+
+		$this->load->database();
+		$like = $this->input->get('query');
+		$this->db->select('registry_object_id, title');
+		$this->db->from('registry_objects');
+		$this->db->like('title', $like);
+		$this->db->limit(10);
+		$query = $this->db->get();
+
+		$vocab_results = array();
+		foreach($query->result() as $row){
+			$item = array('value'=>$row->title, 'subtext'=>$row->registry_object_id);
+			array_push($vocab_results, $item);
+		}
+
+		$vocab_results = json_encode($vocab_results);
+		echo $vocab_results;
+	}
+
 	/*
 	 * get_random_key
 	 * 
