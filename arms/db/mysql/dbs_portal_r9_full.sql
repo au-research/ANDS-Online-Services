@@ -10,7 +10,7 @@ CREATE  TABLE `page_views` (
   `login_identifier` VARCHAR(256) NULL ,
   `referer` VARCHAR(512) NULL ,
   `note` VARCHAR(256) NULL ,
-  PRIMARY KEY (`id`) );
+  PRIMARY KEY (`id`) ) ENGINE=MyISAM;
 
 
 CREATE  TABLE `click_stats` (
@@ -22,7 +22,7 @@ CREATE  TABLE `click_stats` (
   `user_agent` VARCHAR(512) NULL ,
   `login_identifier` VARCHAR(256) NULL ,
   `note` VARCHAR(256) NULL ,
-  PRIMARY KEY (`id`) );
+  PRIMARY KEY (`id`) ) ENGINE=MyISAM;
 
 
 CREATE  TABLE `search_terms` (
@@ -32,7 +32,7 @@ CREATE  TABLE `search_terms` (
   `ip_address` VARCHAR(45) NULL ,
   `user_agent` VARCHAR(256) NULL ,
   `login_identifier` VARCHAR(256) NULL ,
-  PRIMARY KEY (`id`) );
+  PRIMARY KEY (`id`) ) ENGINE=MyISAM;
 
 
 CREATE  TABLE `search_occurence` (
@@ -40,6 +40,6 @@ CREATE  TABLE `search_occurence` (
   `term` VARCHAR(256) NOT NULL ,
   `occurence` INT NOT NULL ,
   PRIMARY KEY (`id`) ,
-  UNIQUE INDEX `term_UNIQUE` (`term` ASC) );
+  UNIQUE INDEX `term_UNIQUE` (`term` ASC) ) ENGINE=MyISAM;
 ALTER TABLE `search_occurence` 
 ADD INDEX `term_INDEX` USING HASH (`term` ASC) ;

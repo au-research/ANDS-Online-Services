@@ -17,6 +17,8 @@ limitations under the License.
 	- Modify This File
 ======================================*/
 
+define('ACL_MODE_ONLY', true);
+
 /*====================================
 	LOCAL WEB SERVER ENVIRONMENT
 ====================================*/

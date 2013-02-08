@@ -73,6 +73,7 @@ $menu = new menu('mCOSI_ADMIN', 'Administration', gROOT_MENU_ID);
 $menu->margin_class = $eThemes[$eTheme][1];
 addMenu($menu);
 
+
 	// =============================================================================
 	// Role List
 	$activity = new activity('aCOSI_ROLE_LIST', 'List Roles', 'admin/role_list.php');
@@ -112,11 +113,7 @@ addMenu($menu);
 	$activity->only_show_if_active= true;
 	addActivity($activity);
 
-	$activity = new activity('aORCA_RUN_TASKS', 'Background Task Manager', 'orca/maintenance/show_tasks.php');
-	$activity->menu_id = 'mCOSI_ADMIN';
-	addActivity($activity);
-
-	// =============================================================================
+/*	// =============================================================================
 	// Documentation
 	$menu = new menu('mCOSI_DOCUMENTATION', 'Styles Documentation', 'mCOSI_ADMIN');
 	addMenu($menu);
@@ -150,11 +147,14 @@ addMenu($menu);
 		//$activity = new activity('aEXAMPLE_THEME_TWO', 'Example Theme Two', 'admin/documentation/themeexample_two.php');
 		//$activity->menu_id = 'mCOSI_DOCUMENTATION';
 		//addActivity($activity);
-
+*/
 // END - COSI ##################################################################
 
 
 
+
+if (!ACL_ONLY_MODE)
+{
 
 // BEGIN - ORCA ################################################################
 /*******************************************************************************
@@ -166,6 +166,10 @@ $Revision: 1634 $
 $menu = new menu('mORCA_CONTAINER', 'Collections Registry', gROOT_MENU_ID);
 $menu->margin_class = 'marginLeftLightYellow';
 addMenu($menu);
+
+	$activity = new activity('aORCA_RUN_TASKS', 'Background Task Manager', 'orca/maintenance/show_tasks.php');
+	$activity->menu_id = 'mCOSI_ADMIN';
+	addActivity($activity);
 
 	/*
 	// =============================================================================
@@ -670,6 +674,10 @@ addMenu($menu);
 			$activity->menu_id = 'mORCA_REPORTING';
 			//$activity->only_show_if_active= true;
 			addActivity($activity);		
+
+
+
+
 	// =============================================================================
 	// PIDS IP Administration
 	$menu = new menu('mORCA_PIDS_ADMINISTRATION', 'PIDS IP Administration', gROOT_MENU_ID);
@@ -723,6 +731,9 @@ addMenu($menu);
 		$activity = new activity('aORCA_STATISTIC_VIEWS', 'Get Registry Object Statistics', 'http://'.eHOST.'/'.eROOT_DIR.'/orca/services/data_statistics_xls.php');
 		$activity->no_check_ssl= true;
 		addActivity($activity);
+
+
+} // END if(ACL_MODE_ONLY)
 
 // Tidy up
 // -----------------------------------------------------------------------------

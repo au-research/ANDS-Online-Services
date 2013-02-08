@@ -18,7 +18,7 @@ require '_includes/init.php';
 // Page processing
 // -----------------------------------------------------------------------------
 
-responseRedirect("orca/search.php");
+responseRedirect("login.php");
 
 // -----------------------------------------------------------------------------
 // Begin the XHTML response. Any redirects must occur before this point.

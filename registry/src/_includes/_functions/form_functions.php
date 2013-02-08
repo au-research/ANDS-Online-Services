@@ -273,7 +273,7 @@ function isNumber($csvIn, &$xslParam, &$xslErrors)
 		 }
 		 else
 		 {
-		 	if ( $tempValue <> "" ) { validateRange("number", $tempValue, $tempLabel, $key, $value, &$xslParam, &$xslErrors); }
+		 	if ( $tempValue <> "" ) { validateRange("number", $tempValue, $tempLabel, $key, $value, $xslParam, $xslErrors); }
 		 }
 		}
 	}
@@ -332,7 +332,7 @@ function isInteger($csvIn, &$xslParam, &$xslErrors)
 			}
 			else
 			{
-				if ( $tempValue <> "" ) { validateRange("integer", $tempValue, $tempLabel, $key, $value, &$xslParam, &$xslErrors); }
+				if ( $tempValue <> "" ) { validateRange("integer", $tempValue, $tempLabel, $key, $value, $xslParam, $xslErrors); }
 			}
 		}
 	}
@@ -381,7 +381,7 @@ function isDate($csvIn, &$xslParam, &$xslErrors)
 			}
 			else
 			{
-				if ( $tempValue <> "" ) { validateRange("date", $tempValue, $tempLabel, $key, $value, &$xslParam, &$xslErrors); }
+				if ( $tempValue <> "" ) { validateRange("date", $tempValue, $tempLabel, $key, $value, $xslParam, $xslErrors); }
 			}
 		}
 	}
@@ -430,7 +430,7 @@ function isTime($csvIn, &$xslParam, &$xslErrors)
 			}
 			else
 			{
-				if ( $tempValue <> "" ) { validateRange("time", $tempValue, $tempLabel, $key, $value, &$xslParam, &$xslErrors); }
+				if ( $tempValue <> "" ) { validateRange("time", $tempValue, $tempLabel, $key, $value, $xslParam, $xslErrors); }
 			}
 		}
 	}
@@ -478,7 +478,7 @@ function isDateTime($csvIn, &$xslParam, &$xslErrors)
 				$intValidationErrors++;
 			}
 			{
-				if ( $tempValue <> "" ) { validateRange("datetime", $tempValue, $tempLabel, $key, $value, &$xslParam, &$xslErrors); }
+				if ( $tempValue <> "" ) { validateRange("datetime", $tempValue, $tempLabel, $key, $value, $xslParam, $xslErrors); }
 			}
 		}
 	}

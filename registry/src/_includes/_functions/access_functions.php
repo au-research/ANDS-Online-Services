@@ -60,12 +60,12 @@ function getAllUserRoleIDs($role_id)
 	if( $role_id && (isRoleEnabled($role_id) || !isCosiUser($role_id)) )
 	{
 		// Starting with their user role.
-		addRole($role_id, &$userRoleIDs);
+		addRole($role_id, $userRoleIDs);
 		
 		// If this user role uses built-in authentication then give thenm the special COSI_BUILT_IN_USERS role.
 		if( getUserAuthenticationService($role_id) == gAUTHENTICATION_BUILT_IN )
 		{
-			addRole(gCOSI_BUILT_IN_USERS, &$userRoleIDs);
+			addRole(gCOSI_BUILT_IN_USERS, $userRoleIDs);
 		}		
 			
 		// Add roles based on affiliations.
@@ -74,7 +74,7 @@ function getAllUserRoleIDs($role_id)
 		// ---------------------------------------------------------------------
 		if( haveShibbolethAttributes() ) 
 		{
-			addRole(gSHIB_AUTHENTICATED, &$userRoleIDs);
+			addRole(gSHIB_AUTHENTICATED, $userRoleIDs);
 				
 			// Add additional roles for shibboleth attributes here...
 		}	
@@ -82,18 +82,18 @@ function getAllUserRoleIDs($role_id)
 		// ---------------------------------------------------------------------
 		if( getSessionVar(sLDAP_ATTRIBUTES) )
 		{
-			addRole(gLDAP_AUTHENTICATED, &$userRoleIDs);
+			addRole(gLDAP_AUTHENTICATED, $userRoleIDs);
 			
 			$LDAPattribute = null;
 			if( $LDAPattribute = getLDAPAttribute('affiliation') )
 			{
 				if( in_array('staff', $LDAPattribute) )
 				{
-					addRole(gLDAP_STAFF, &$userRoleIDs);
+					addRole(gLDAP_STAFF, $userRoleIDs);
 				}
 				if( in_array('student', $LDAPattribute) )
 				{
-					addRole(gLDAP_STUDENT, &$userRoleIDs);
+					addRole(gLDAP_STUDENT, $userRoleIDs);
 				}
 				// Add additional roles for LDAP 'affiliation' here...
 			}
@@ -102,7 +102,7 @@ function getAllUserRoleIDs($role_id)
 			{
 				if( in_array('General Staff', $LDAPattribute) )
 				{
-					addRole(gLDAP_STAFF_ANU_GENERAL, &$userRoleIDs);
+					addRole(gLDAP_STAFF_ANU_GENERAL, $userRoleIDs);
 				}
 				// Add additional roles for LDAP 'anustafftype' here...
 			}
@@ -113,7 +113,7 @@ function getAllUserRoleIDs($role_id)
 	return $userRoleIDs;
 }
 
-function addRole($role_id, $userRoleIDs)
+function addRole($role_id, &$userRoleIDs)
 {
 	if( isRoleEnabled($role_id) )
 	{
@@ -121,7 +121,7 @@ function addRole($role_id, $userRoleIDs)
 		$userRoleIDs[count($userRoleIDs)] = $role_id;
 	
 		// Recursively add all parent functional and organisational role_ids.
-		addParentRoleIDs($role_id, &$userRoleIDs);
+		addParentRoleIDs($role_id, $userRoleIDs);
 	}
 }
 
@@ -542,10 +542,10 @@ function getRelatedRoleIDs($role_id)
 	$roleIDs = array();
 	
 	// Recursively add all parent functional and organisational role_ids.
-	addParentRoleIDs($role_id, &$roleIDs);
+	addParentRoleIDs($role_id, $roleIDs);
 	
 	// Recursively add all child functional and organisational role_ids.
-	addChildRoleIDs($role_id, &$roleIDs);
+	addChildRoleIDs($role_id, $roleIDs);
 	
 	return $roleIDs;
 }
