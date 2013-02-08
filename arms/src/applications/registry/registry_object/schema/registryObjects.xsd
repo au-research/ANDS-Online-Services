@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema version="1.3" 
+<xsd:schema version="1.4" 
             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
             xmlns="http://ands.org.au/standards/rif-cs/registryObjects"
             targetNamespace="http://ands.org.au/standards/rif-cs/registryObjects"
@@ -27,6 +27,12 @@
     <xsd:annotation>
         <xsd:documentation xml:lang="en">
             Change history
+            v1.4 - 15 October 2012
+                 * add new dates element
+                 * add new relatedInfo format element
+                 * add new version element to citationMetadata 
+                 * removed edition element from citationMetadata
+                 * changed various citationMetadata fields from mandatory to optional
             v1.3 - 12 September 2011
                 * add new rights element
                 * add new existenceDate element

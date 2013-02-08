@@ -37,6 +37,12 @@
                     </xsd:annotation>
                 </xsd:element>
 
+                <xsd:element name="dates" type="datesType" minOccurs="0" maxOccurs="unbounded">
+                    <xsd:annotation>
+                        <xsd:documentation xml:lang="en">Dates associated with an event in the life cycle of the data collection object as provided for in Dublin Core and other metadata standards.</xsd:documentation>
+                    </xsd:annotation>
+                </xsd:element>
+
                 <xsd:element name="location" type="locationType" minOccurs="0" maxOccurs="unbounded">
                     <xsd:annotation>
                         <xsd:documentation xml:lang="en">
@@ -94,7 +100,8 @@
                     </xsd:annotation>
                 </xsd:element>
 
-                <xsd:element name="citationInfo" type="citationInfoType" minOccurs="0" maxOccurs="unbounded">
+                <xsd:element name="citationInfo" type="citationInfoType" minOccurs="0"
+                    maxOccurs="unbounded">
                     <xsd:annotation>
                         <xsd:documentation xml:lang="en">
                             A full citation string or metadata that can be used to generate a citation
