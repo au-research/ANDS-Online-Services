@@ -40,6 +40,7 @@ $(function() {
             click_ro(this, 'toggle');
         }
     }).on('click', '.op', function(e){
+        console.log("right-click");
         var action = $(this).attr('action');
         var status = $(this).attr('status');
         switch(action){
@@ -96,6 +97,20 @@ $(function() {
             case 'un_flag':
                 var attributes = [{
                     name:'flag',
+                    value:'f'
+                  }];
+                  update(selected_ids, attributes);
+                break;
+            case 'set_gold_status_flag':
+                var attributes = [{
+                    name:'gold_status_flag',
+                    value:'t'
+                  }];
+                  update(selected_ids, attributes);
+                break;
+            case 'un_set_gold_status_flag':
+                var attributes = [{
+                    name:'gold_status_flag',
                     value:'f'
                   }];
                   update(selected_ids, attributes);
@@ -440,6 +455,7 @@ function update(ids, attributes){
         data: {affected_ids:ids, attributes:attributes},
         success: function(data){
             init(filters);
+            //console.log(data);
         }
     });
 }

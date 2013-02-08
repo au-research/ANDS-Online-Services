@@ -150,6 +150,7 @@ class Data_source extends MX_Controller {
 			$st = array('display_name'=>str_replace('_', ' ', $s), 'name'=>$s, 'menu'=>array());
 			array_push($st['menu'], array('action'=>'select_all', 'display'=>'Select All'));
 			array_push($st['menu'], array('action'=>'flag', 'display'=>'Flag'));
+			array_push($st['menu'], array('action'=>'set_gold_status_flag', 'display'=>'Gold Standard'));
 			switch($s){
 				case 'DRAFT':
 					$st['ds_count']=$data_source->count_DRAFT;
@@ -290,7 +291,8 @@ class Data_source extends MX_Controller {
 							'error_count'=>$registry_object->error_count,
 							'warning_count'=>$registry_object->warning_count,
 							'data_source_id'=>$registry_object->data_source_id,
-							'flag'=>$registry_object->flag
+							'flag'=>$registry_object->flag,
+							'gold_status_flag'=>$registry_object->gold_status_flag
 						);
 				if($item['error_count']>0) $item['has_error'] = true;
 				array_push($results['items'], $item);

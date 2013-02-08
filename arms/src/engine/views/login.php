@@ -20,7 +20,7 @@
 				<div class="box-header clearfix">
 					<h1>Login</h1>
 					<div class="right-widget">
-						<a href="javascript:;" id="showBuiltInLoginForm"><i class="icon-chevron-down"></i></a>
+						<?php printAlternativeLoginControl($authenticators); ?>						
 					</div>
 				</div>
 				<div class="box-content">
@@ -35,41 +35,81 @@
 					// if (isset($exception)): 
 					if(false): ?>
 						<div class="alert alert-error">
-							<?phpecho $exception; ?>
+							<?php echo $exception; ?>
 						</div>
 					<?php endif; ?>
-
-					<img src="<?php echo asset_url('img/aaf_logo.gif');?>" style="display:block;margin:10px auto;"/>
-					<a href="<?php echo secure_host_url();?><?php echo gSHIBBOLETH_SESSION_INITIATOR;?>?target=<?php echo secure_base_url();?>auth/setUser" class="btn btn-primary btn-block">Login using Australian Access Federation (AAF) credentials</a>
-
+					<?php 
+					prinfLoginForm($authenticators, $default_authenticator, '');
+					printAlternativeLoginForms($authenticators, $default_authenticator);
+					?>
+					
 				</div>
 			</div>
 		</div>
 		<div class="span3"></div>
-	</div>
-
-
-	<div class="hide" id="BuiltInLoginForm">
-		<form class="form" action="<?=base_url("auth/login");?>" method="post">
-		  <div class="control-group">
-		    <div class="controls">
-		    	<label>Username</label>
-		    	<input type="text" id="inputUsername" name="inputUsername" placeholder="Username">
-		    </div>
-		  </div>
-		  <div class="control-group">
-		    <div class="controls">
-		    	<label>Password</label>
-		    	<input type="password" id="inputPassword" name="inputPassword" placeholder="Password">
-		    </div>
-		  </div>
-		  <div class="control-group">
-		    <div class="controls">
-		    	<button type="submit" class="btn btn-primary btn-block">Login using local credentials</button>
-		    </div>
-		  </div>
-		</form>
-	</div>
+	</div>	
 </div>
 
+
+
 <?php $this->load->view('footer');?>
+
+
+<?php
+
+function prinfLoginForm($authenticators, $authenticator , $class)
+{
+	
+	if($authenticator == gCOSI_AUTH_METHOD_SHIBBOLETH)
+	{
+		print "<div class='".$class."' id='".$authenticator."_LoginForm'>";
+		print "	<img src='".asset_url('img/aaf_logo.gif')."' style='display:block;margin:10px auto;'/>";
+		print "	<a href='".secure_host_url().gSHIBBOLETH_SESSION_INITIATOR."?target=".secure_base_url()."auth/setUser' class='btn btn-primary btn-block'>Login using ".$authenticators[$authenticator]."</a>";
+		print "</div>";
+	}
+	else
+	{
+		print "<div class='".$class."' id='".$authenticator."_LoginForm'>";
+		print "	<form class='form' action='".base_url("auth/login")."' method='post'>";
+		print "	  <div class='control-group'>";
+		print "	    <div class='controls'>";
+		print "	    	<label>Username</label>";
+		print "	    	<input type='text' id='inputUsername' name='inputUsername' placeholder='Username'>";
+		print "	    </div>";
+		print "	  </div>";
+		print "	  <div class='control-group'>";
+		print "	    <div class='controls'>";
+		print "	    	<label>Password</label>";
+		print "	    	<input type='password' id='inputPassword' name='inputPassword' placeholder='Password'>";
+		print "	    </div>";
+		print "	  </div>";
+		print "	  <div class='control-group'>";
+		print "	    <div class='controls'>";
+		print "	    	<button type='submit' class='btn btn-primary btn-block'>Login using ".$authenticators[$authenticator]."</button>";
+		print "	    </div>";
+		print "	  </div>";
+		print "	</form>";
+		print "</div>";
+	}
+
+}
+
+function printAlternativeLoginControl($authenticators)
+{
+	
+	print "<a class='dropdown-toggle pull-right' data-toggle='dropdown' href='#'>Alternative Login<b class='caret'></b></a>";
+	print "<ul class='dropdown-menu'>";
+		foreach($authenticators as $key => $value){
+			print "<li class=''><a href='javascript:;' class='loginSelector' id='".$key."'>".$value."</a></li>";
+		}
+	print "</ul>";
+}
+
+function printAlternativeLoginForms($authenticators, $default_authenticator)
+{
+	foreach($authenticators as $key => $value){
+		if($key != $default_authenticator)
+			prinfLoginForm($authenticators, $key, ' ');
+	}
+}
+?>

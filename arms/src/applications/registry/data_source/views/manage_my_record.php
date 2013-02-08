@@ -110,6 +110,9 @@
 					{{#flag}}
 					<span class="tag flag" tip="Flagged"><i class="icon icon-flag"></i></span>
 					{{/flag}}
+					{{#gold_status_flag}}
+					<span class="tag gold_status_flag" tip="Gold Standard"><i class="icon icon-star-empty"></i></span>
+					{{/gold_status_flag}}
 				</p>
 			</div>
 			<div class='clearfix'></div>
@@ -128,6 +131,7 @@
 		<li><a tabindex="-1" href="javascript:;" class="op" action="{{action}}" status="{{name}}">{{display}}</a></li>
 		{{/menu}}
 		<li class="hide unflag"><a tabindex="-1" href="javascript:;" class="op" action="un_flag" status="{{name}}">Remove Flag<a/></li>
+		<li class="hide unsetgoldstatus"><a tabindex="-1" href="javascript:;" class="op" action="un_set_gold_status_flag" status="{{name}}">Remove Gold Status<a/></li>
 	</ul>
 </div>
 </script>
@@ -145,6 +149,9 @@
 		{{#flag}}
 		<span class="tag" tip="Flagged"><i class="icon icon-flag"></i></span>
 		{{/flag}}
+		{{#gold_status_flag}}
+		<span class="tag gold_status_flag" tip="Gold Standard"><i class="icon icon-star-empty"></i></span>
+		{{/gold_status_flag}}
 	</p>
 </div>
 <div class='clearfix'></div>

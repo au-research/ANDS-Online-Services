@@ -5,7 +5,14 @@ class Auth extends CI_Controller {
 		$data['title'] = 'Login';
 		$data['js_lib'] = array('core');
 		$data['scripts'] = array();
+		//$config['authenticators'] = Array('Built in' => gCOSI_AUTH_METHOD_BUILT_IN, 'LDAP'=> gCOSI_AUTH_METHOD_LDAP, 'Shibboleth'=>gCOSI_AUTH_METHOD_SHIBBOLETH);
+		//$config['default_authenticator'] = gCOSI_AUTH_METHOD_BUILT_IN;
 		
+
+		$this->CI =& get_instance();
+		$data['default_authenticator'] = $this->CI->config->item('default_authenticator');
+		$data['authenticators'] = $this->CI->config->item('authenticators');
+		 
 		
 		if ($this->input->post('inputUsername') || $this->input->post('inputPassword') && !$this->user->loggedIn())
 		{
