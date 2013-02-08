@@ -11,7 +11,15 @@ $config[ENGINE_ENABLED_MODULE_LIST] = &$config['ENABLED_MODULES'];
 
 
 $config['authenticators'] = Array(gCOSI_AUTH_METHOD_BUILT_IN => 'Built in Authentiction', gCOSI_AUTH_METHOD_LDAP=>'LDAP', gCOSI_AUTH_METHOD_SHIBBOLETH => 'Australian Access Federation (AAF) credentials');
-$config['default_authenticator'] = gCOSI_AUTH_METHOD_SHIBBOLETH;
+if (isset($config['shibboleth_sp']) && $config['shibboleth_sp'])
+{
+	$config['default_authenticator'] = gCOSI_AUTH_METHOD_SHIBBOLETH;
+}
+else
+{
+	$config['default_authenticator'] = gCOSI_AUTH_METHOD_BUILT_IN;
+}
+
 
 /* For multiple-application environments, this "app" will be matched 
 by the $_GET['app'] which is rewritten in .htaccess. The array key is
