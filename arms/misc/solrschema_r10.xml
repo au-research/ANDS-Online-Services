@@ -173,14 +173,14 @@
         <!-- <span class="provided">The description used for displaying search results.</span>-->
         <field name="description" type="text_en_splitting" indexed="true" stored="true"
           multiValued="false"/>
-          
 
     <!-- SUBJECTS -->
         <!-- <span class="inferred">The resolved value of the subject (if any) (i.e. "MATHEMATICAL SCIENCES").</span>-->
         <field name="subject_value_resolved" type="text_en_splitting" indexed="true" stored="true"
           multiValued="true"/>
 
-        <!-- <span class="provided">The subject value provided to ANDS (usually an anzsrc code in notation form (i.e. "020103")).</span>-->
+        <!-- <span class="provided">The subject value provided to ANDS (usually an anzsrc code in notation form (i.e. 
+"020103")).</span>-->
         <field name="subject_value_unresolved" type="text_en_splitting" indexed="true" stored="true"
           multiValued="true"/>
         
@@ -206,9 +206,10 @@
     
     <!-- SPATIAL COVERAGE -->
         <!-- <span class="provided">The spatial coverage of this registry object (SOLR POLYGON format)</span>-->
-        <field name="spatial_coverage_polygons" type="location_rpt" indexed="true" stored="true" multiValued="true"/>
+        <field name="spatial_coverage_polygons" type="text_en_splitting" indexed="false" stored="true" multiValued="true"/>
         
-        <!-- <span class="provided">The extents of spatial coverage of this registry object (a bounding box on each of the spatial_coverage_polygons)</span>-->
+        <!-- <span class="provided">The extents of spatial coverage of this registry object (a bounding box on each of the 
+spatial_coverage_polygons)</span>-->
         <field name="spatial_coverage_extents" type="location_rpt" indexed="true" stored="true" multiValued="true"/>
 
         <!-- <span class="provided">Lat,Long pairs of the centre of each spatial region</span>-->
@@ -229,19 +230,22 @@
         <field name="earliest_year" type="sint" indexed="true" stored="true" multiValued="false"/>
 
         <!-- <span class="inferred"">The eyar of the latest date value (for temporal-based search)</span>-->
-        <field name="lastest_year" type="sint" indexed="true" stored="true" multiValued="false"/>
+        <field name="latest_year" type="sint" indexed="true" stored="true" multiValued="false"/>
 
 
     <!-- RELATED OBJECTS -->
-        <!-- <span class="provided">The key of records which this record relates to (note: does NOT include inferred/reverse links)</span> -->
+        <!-- <span class="provided">The key of records which this record relates to (note: does NOT include inferred/reverse 
+links)</span> -->
         <field name="related_object_key" type="string" indexed="true" stored="true"
           multiValued="true"/>
 
-        <!-- <span class="inferred">The key of records which this record relates to (note: does NOT include inferred/reverse links)</span> -->
+        <!-- <span class="inferred">The key of records which this record relates to (note: does NOT include inferred/reverse 
+links)</span> -->
         <field name="related_object_id" type="string" indexed="true" stored="true"
           multiValued="true"/>
         
-        <!-- <span class="provided">The class of records which this record relates to (provided they exist in the registry) (i.e. "collection", "party", etc.).</span> -->
+        <!-- <span class="provided">The class of records which this record relates to (provided they exist in the registry) (i.e. 
+"collection", "party", etc.).</span> -->
         <field name="related_object_class" type="string" indexed="true" stored="true"
           multiValued="true"/>
         
