@@ -125,8 +125,27 @@ class View extends MX_Controller {
 		$contributorData = $this->registry->fetchContributorPageByID($extRif['registry_object_id'], $published_only);
 
 		// XXX: Do some witchcraft to render this into the template, probably str_replace('')  (see above)
+
+		// Render the connections box
+		if ($this->input->get('slug'))
+		{
+			$connections = $this->registry->fetchConnectionsBySlug($this->input->get('slug'));
+			$suggested_links['identifiers'] = $this->registry->fetchSuggestedLinksBySlug($this->input->get('slug'), "ands_identifiers",0 ,0);
+			$suggested_links['subjects'] = $this->registry->fetchSuggestedLinksBySlug($this->input->get('slug'), "ands_subjects",0 ,0);
+		}
+		else
+		{
+			$connections = $this->registry->fetchConnectionsByID($this->input->get('id'));
+			$suggested_links['identifiers'] = $this->registry->fetchSuggestedLinksByID($this->input->get('id'), "ands_identifiers");
+			$suggested_links['subjects'] = $this->registry->fetchSuggestedLinksByID($this->input->get('id'), "ands_subjects");
+		}
+
+		$data['connections_contents'] = $connections;
+		$connDiv = $this->load->view('connections', $data, true);
+
 		$data['some_random_data_for_the_view_to_parse'] = $contributorData['data'];
-		$data['registry_object_contents'] = htmlentities($extRif['data']);
+
+		$data['registry_object_contents'] = $this->registry->transformExtrifToHTMLContributorRecord($extRif['data']);
 
 		$this->load->view('contributor_view', $data);
 	}
