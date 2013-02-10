@@ -26,6 +26,12 @@
 					</div>
 				</div>
 			</div>
+			<div>
+				<p>
+					<a href="<?php echo portal_url();?>" class="btn btn-primary" target="_blank">
+					<i class="icon-globe icon icon-white"></i> Visit Research Data Australia</a>
+				</p>
+			</div>
 		</div>
 	</div>
 
