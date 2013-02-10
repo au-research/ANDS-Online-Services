@@ -81,8 +81,8 @@ class View extends MX_Controller {
 		else
 		{
 			$connections = $this->registry->fetchConnectionsByID($this->input->get('id'));
-			$suggested_links['identifiers'] = $this->registry->fetchSuggestedLinksByID($this->input->get('id'), "ands_identifiers");
-			$suggested_links['subjects'] = $this->registry->fetchSuggestedLinksByID($this->input->get('id'), "ands_subjects");
+			$suggested_links['identifiers'] = $this->registry->fetchSuggestedLinksByID($this->input->get('id'), "ands_identifiers",0 ,0);
+			$suggested_links['subjects'] = $this->registry->fetchSuggestedLinksByID($this->input->get('id'), "ands_subjects",0 ,0);
 		}
 
 		// Render the connections box
@@ -136,8 +136,8 @@ class View extends MX_Controller {
 		else
 		{
 			$connections = $this->registry->fetchConnectionsByID($this->input->get('id'));
-			$suggested_links['identifiers'] = $this->registry->fetchSuggestedLinksByID($this->input->get('id'), "ands_identifiers");
-			$suggested_links['subjects'] = $this->registry->fetchSuggestedLinksByID($this->input->get('id'), "ands_subjects");
+			$suggested_links['identifiers'] = $this->registry->fetchSuggestedLinksByID($this->input->get('id'), "ands_identifiers",0 ,0);
+			$suggested_links['subjects'] = $this->registry->fetchSuggestedLinksByID($this->input->get('id'), "ands_subjects",0 ,0);
 		}
 
 		$data['connections_contents'] = $connections;
