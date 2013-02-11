@@ -6,6 +6,7 @@ var loading_icon = '<div style="width:100%; padding-top:40px; text-align:center;
 var ACCORDION_MODE_SUGGESTORS = ['datacite'];
 
 // Check if we have a hierarchal connections graph
+setRegistryLink();
 initConnectionGraph();
 drawMap();
 
@@ -84,7 +85,13 @@ $('.show_accordion').live('click', function(e){
     
 });
 
-
+function setRegistryLink()
+{
+    var registryLink = $('#registryLink').attr('href');
+    var regObjId = getRegistryObjectID();
+    var newRef = registryLink + 'registry_object/view/' + regObjId;
+    $('#registryLink').attr('href', newRef);
+}
 /* Updates the contents of an accordion window */
 function updateLinksDisplay(container, title, suggestor, start, rows)
 {
@@ -464,7 +471,7 @@ function generatePreviewTip(element, slug, registry_object_id)
             
             //draw coverages
             var coverages = $('p.coverage');
-            console.log(coverages.html());
+            //console.log(coverages.html());
             //console.log(coverages.text());
             
             var mapContainsOnlyMarkers = true; // if there is only marker, then zoom out to a default depth (markers get "bounded" at max zoom level)
