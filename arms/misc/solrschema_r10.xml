@@ -198,7 +198,7 @@
 
     <!-- IDENTIFIERS -->
         <!-- <span class="provided">The identifier value provided to ANDS.</span>-->
-        <field name="identifier_value" type="text_en_splitting" indexed="true" stored="true"
+        <field name="identifier_value" type="" indexed="true" stored="true"
           multiValued="true"/>
         <!-- <span class="provided">The type of the identifier provided to ANDS.</span>-->
         <field name="identifier_type" type="text_en_splitting" indexed="true" stored="true"
@@ -213,7 +213,7 @@ spatial_coverage_polygons)</span>-->
         <field name="spatial_coverage_extents" type="location_rpt" indexed="true" stored="true" multiValued="true"/>
 
         <!-- <span class="provided">Lat,Long pairs of the centre of each spatial region</span>-->
-        <field name="spatial_coverage_centres" type="location_rpt" indexed="true" stored="true" multiValued="true"/>
+        <field name="spatial_coverage_centres" type="text_en_splitting" indexed="false" stored="true" multiValued="true"/>
 
         <!-- <span class="provided">The sum of the areas of spatial regions (useful for search relevance sorting)</span>-->
         <field name="spatial_coverage_area_sum" type="sfloat" indexed="true" stored="true" multiValued="false"/>
