@@ -718,8 +718,9 @@ a:hover {
     margin: 0;
 }
 .widget-title .buttons {
-	float: right;
-	margin: 8px 10px 0 0;
+	position:absolute;
+	top:8px;
+	right:10px;
 }
 .widget-title .label {
 	padding: 3px 5px 2px;

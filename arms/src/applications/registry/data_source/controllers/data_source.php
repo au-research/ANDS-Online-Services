@@ -236,6 +236,7 @@ class Data_source extends MX_Controller {
 				$ros = $this->get_ros($filter);
 				$st['items']=$ros['items'];
 				$st['count']=$this->get_ros($filter, true);
+				if($st['count']==0) $st['noResult']=true;
 				$st['hasMore'] = $ros['hasMore'];
 				$st['ds_id'] = $data_source_id;
 			}else{

@@ -118,6 +118,9 @@
 			<div class='clearfix'></div>
 			</li>
 			{{/items}}
+			{{#noResult}}
+			There are no result
+			{{/noResult}}
 		</ul>
 		{{#hasMore}}
 		<span class="show_more" offset="{{offset}}" ds_id="{{ds_id}}" status="{{name}}">Show More</span>
