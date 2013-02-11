@@ -146,7 +146,7 @@ class Registry_fetch extends CI_Model
 
 	function fetchAncestryGraphBySLUG($slug)
 	{
-		$url = $this->config->item('registry_endpoint') . "getAncestryGraph/?slug=" . $slug;
+		$url = $this->config->item('registry_endpoint') . "getAncestryGraph/?slug=".$slug;
 		$contents = json_decode(file_get_contents($url), true);
 		if (isset($contents['trees']))
 		{
@@ -187,6 +187,28 @@ class Registry_fetch extends CI_Model
 		}
 	}
 
+
+	function fetchContributorData($group)
+	{
+		$url = $this->config->item('registry_endpoint') . "getContributorData/?slug=".$group;
+
+
+ 		$facetsForGroup = json_decode(file_get_contents($url), true);
+
+
+
+ 		if (isset($facetsForGroup['contents']))
+		{
+			return $facetsForGroup;
+		}
+		else
+		{
+			var_dump($url);
+			throw new ErrorException("Error whilst fetching contributor page details: " . $facetsForGroup['message']);
+		}
+	
+		return $facetsForGroup;
+	}
 }
 
 class SlugNoLongerValidException extends Exception {}

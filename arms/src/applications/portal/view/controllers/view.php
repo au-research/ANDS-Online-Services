@@ -122,31 +122,22 @@ class View extends MX_Controller {
 
 		// In here, go get the information/precanned text, etc.
 		// we have $this->registry-> which gives us the functions in models/registry_fetch.php
-		$contributorData = $this->registry->fetchContributorPageByID($extRif['registry_object_id'], $published_only);
 
+
+		$data['contentData'] = $this->registry->fetchContributorData($this->input->get('slug'));
+		$contentDiv = $this->load->view('contentData', $data, true);
 		// XXX: Do some witchcraft to render this into the template, probably str_replace('')  (see above)
 
-		// Render the connections box
-		if ($this->input->get('slug'))
-		{
-			$connections = $this->registry->fetchConnectionsBySlug($this->input->get('slug'));
-			$suggested_links['identifiers'] = $this->registry->fetchSuggestedLinksBySlug($this->input->get('slug'), "ands_identifiers",0 ,0);
-			$suggested_links['subjects'] = $this->registry->fetchSuggestedLinksBySlug($this->input->get('slug'), "ands_subjects",0 ,0);
-		}
-		else
-		{
-			$connections = $this->registry->fetchConnectionsByID($this->input->get('id'));
-			$suggested_links['identifiers'] = $this->registry->fetchSuggestedLinksByID($this->input->get('id'), "ands_identifiers",0 ,0);
-			$suggested_links['subjects'] = $this->registry->fetchSuggestedLinksByID($this->input->get('id'), "ands_subjects",0 ,0);
-		}
 
-		$data['connections_contents'] = $connections;
+
+	//	$data['connections_contents'] = $contentData;
+	//	print_r($contentData);
 		$connDiv = $this->load->view('connections', $data, true);
 
-		$data['some_random_data_for_the_view_to_parse'] = $contributorData['data'];
+		//$data['some_random_data_for_the_view_to_parse'] = $contributorData['data'];
 
 		$data['registry_object_contents'] = $this->registry->transformExtrifToHTMLContributorRecord($extRif['data']);
-
+		$data['registry_object_contents'] = str_replace('%%%%CONTENTS%%%%', $contentDiv, $data['registry_object_contents']);
 		$this->load->view('contributor_view', $data);
 	}
 

@@ -276,20 +276,15 @@
 				
 			<!-- Registry Content -->
 			<div class="right-box" id="contentRightBox">
-				<h3>Registry Content</h3>
-			
       				<div id="contents">
       				%%%%CONTENTS%%%%
-      				</div>
-			
+      				</div>			
 			</div>	
 				
 				
 			<!-- Subjects Covered -->
 			<div class="right-box" id="subjectRightBox">
-	
-			<h3>Subjects Covered</h3>
-				%%%%SUBJECTS_COVERED%%%%
+					%%%%SUBJECTS_COVERED%%%%
 			</div>	
 			
 			<!-- Research Groups: -->

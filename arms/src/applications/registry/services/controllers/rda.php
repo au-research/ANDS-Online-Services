@@ -216,6 +216,39 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 		echo json_encode(array("links"=>$links));
 	}
 
+	/**
+	 * Fetch a list of registry contents by group
+	 *
+	 * XXX: TODO
+	 */
+	public function getContributorData()
+	{
+		$contents = array();
+
+		// Get the RO instance for this registry object so we can fetch its contributor datat
+		$this->load->model('registry_object/registry_objects', 'ro');
+		
+		if ($this->input->get('slug'))
+		{
+			$registry_object = $this->ro->getBySlug($this->input->get('slug'));
+		}
+		elseif ($this->input->get('registry_object_id'))
+		{
+			$registry_object = $this->ro->getByID($this->input->get('registry_object_id'));
+		}
+
+		if (!$registry_object)
+		{
+			throw new Exception("Unable to fetch suggested links for this registry object.");
+		}
+		
+
+		// XXX: TODO: LIMIT and offset (pass to getSuggestedLinks...)
+	
+		$contents = $registry_object->getContributorData($group='Auscope');
+
+		echo json_encode(array("contents"=>$contents));
+	}
 
 
 	/**
@@ -337,7 +370,7 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 			throw new Exception("Unable to get contributor page information: invalid ID");
 		}
 
-		$contributor_page_data = array("Test"=>"Some test data");
+		$contributor_page_data = getContributorData();
 		// XXX: go fetch this record with ->getByID()
 		// XXX: Do some checking that this is actually a contributor page using a new model in data_sources/ ??
 		// XXX: use the functions in the model to get the precanned values, from SOLR/wherever...
