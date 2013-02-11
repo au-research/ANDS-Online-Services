@@ -19,11 +19,6 @@
 				if(!$viewing_revision) {
 					echo anchor('registry_object/edit/'.$ro->id, '<i class="icon-edit"></i> Edit', array('class'=>'btn btn-large', 'title'=>'Edit Registry Object'));
 				}
-				echo '<a href="javascript:;" class="btn btn-large" id="exportRIFCS"><i class="icon-eject"></i> Export RIFCS';
-				if($viewing_revision){
-					echo ' Revision ('.$revision.')';
-				}
-				echo '</a>';
 			?>
 		</div>
 	</div>
@@ -58,8 +53,18 @@
 							<tr><th>Title</th><td><?php echo $ro->title;?></td></tr>
 							<tr><th>Status</th><td><?php echo $ro->status;?></td></tr>
 							<tr><th>Key</th><td><?php echo $ro->key;?></td></tr>
-							<tr><th>ID</th><td><?php echo $ro->id;?></td></tr>
+							<tr><th>ID</th><td><?php echo $ro->id;?></td></tr>						
 							<tr><th>slug</th><td><?php echo $ro->slug;?></td></tr>
+							<tr><td></td><td></td></tr>
+							<?php 
+								echo '<tr><th>RIFCS Format</th><td><a href="javascript:;" class="btn btn-small" id="exportRIFCS"><i class="icon-eject"></i> Export RIFCS';
+								if($viewing_revision){
+									echo ' Revision ('.$revision.')';
+								}
+								echo '</td></a>';
+								if($native_format != '') {
+									echo '<tr><th>Native Format</th><td><a href="javascript:;" class="btn btn-small" id="exportNative"><i class="icon-eject"></i>Export '.$native_format.'</a></td></tr>';
+								}?>
 						</table>
 					</div>
 				</div>

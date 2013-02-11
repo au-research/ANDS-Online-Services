@@ -100,6 +100,41 @@ class Data_source extends MX_Controller {
 		$this->load->view("manage_my_record", $data);
 	}
 
+	public function history($data_source_id=false){
+		acl_enforce('REGISTRY_USER');
+		ds_acl_enforce($data_source_id);
+		$data['title'] = 'Datasource History';
+		$data['scripts'] = array();
+		$data['js_lib'] = array('core');
+
+		$this->load->model("data_source/data_sources","ds");
+		$this->load->model("registry_object/registry_objects", "ro");
+
+		$report = array();
+		$data['ds'] = $this->ds->getByID($data_source_id);
+		$ids = $this->ro->getByAttributeDatasource($data_source_id, 'status', 'deleted');
+
+		if($ids){
+			$data['record_count'] = sizeof($ids);
+			$problems=0;
+			foreach($ids as $idx=>$ro_id){
+				try{
+					$ro=$this->ro->getByAttributeDatasource($data_source_id);
+					$report[$ro_id] = array('title'=>$ro->title,'id'=>$ro->id,'report'=>$ro ? $ro->getMetadata('status') : '');
+				}catch(Exception $e){
+					throw Exception($e);
+				}
+				if($idx % 100 == 0){
+					unset($ro);
+					gc_collect_cycles();
+				}
+			}
+		}
+		$data['report'] = $report;
+		$this->load->view('history', $data);
+	}
+
+
 
 	/**
 	 * Get MMR AJAX data for MMR

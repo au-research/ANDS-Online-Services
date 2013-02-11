@@ -197,7 +197,7 @@
 					<div class="btn-group">
 				  		<button class="btn edit page-control" data_source_id="{{data_source_id}}"><i class="icon-edit"></i> Edit Settings</button>
 				  		<button class="btn mmr page-control" data_source_id="{{data_source_id}}"><i class="icon-folder-open"></i> Manage Records</button>
-				  		<!--button class="btn deleteRecord page-control" data_source_id="{{data_source_id}}"><i class="icon-trash"></i> Delete Record</button-->
+				  		<button class="btn history page-control" data_source_id="{{data_source_id}}"><i class="icon-time"></i> View History</button>
 					</div>
 					<div class="btn-group pull-right">
 						<a class="btn dropdown-toggle ExportDataSource" data-toggle="modal" href="#exportDataSource" id="exportDS">

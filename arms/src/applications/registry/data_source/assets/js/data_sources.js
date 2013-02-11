@@ -75,8 +75,8 @@ $(function(){
 				changeHashTo('edit/'+data_source_id);
 			}else if($(this).hasClass('settings')){
 				changeHashTo('settings/'+data_source_id);
-			}else if($(this).hasClass('delete')){
-				changeHashTo('delete/'+data_source_id);
+			}else if($(this).hasClass('history')){
+				window.location = base_url+'data_source/history/'+data_source_id;
 			}else if($(this).hasClass('mmr')){
 				window.location = base_url+'data_source/manage_records/'+data_source_id;
 			}else if($(this).hasClass('export')){

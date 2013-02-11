@@ -9,3 +9,12 @@ $(function(){
 		});
 	});
 });
+
+$(function(){
+	$('#exportNative').click(function(){
+		$.getJSON(base_url+'registry_object/get_native_record/'+$('#ro_id').val(), function(data){
+			$('#myModal .modal-body').html('<textarea style="width:95%;height:300px;margin:0 auto;">' + data.txt + '</textarea>');
+			$('#myModal').modal();
+		});
+	});
+});

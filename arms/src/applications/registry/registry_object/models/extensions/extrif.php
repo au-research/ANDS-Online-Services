@@ -205,8 +205,8 @@ class Extrif_Extension extends ExtensionBase
 			$dom = new DOMDocument();
 			$dataSource = $this->ro->data_source_key;
 			if($revision=='') {
-				$dom->loadXML($this->ro->getExtRif());
-			}else $dom->loadXML($this->ro->getExtRifDataRecord($revision));
+				$dom->loadXML(wrapRegistryObjects($this->ro->getRif()));
+			}else $dom->loadXML(wrapRegistryObjects($this->ro->getRif($revision)));
 			$xslt_processor->setParameter('','dataSource',$dataSource);
 			return $xslt_processor->transformToXML($dom);
 		}catch (Exception $e)

@@ -75,9 +75,19 @@ class Registry_object extends MX_Controller {
 			if($revision!=''){
 				$data['viewing_revision'] = true;
 				$data['rif_html'] = $ro->transformForHtml($revision);
+				$data['native_format'] = $ro->getNativeFormat($revision);
+				if($ro->getNativeFormat($revision) != 'rif')
+				{
+					$data['naitive_text'] = $ro->getNativeFormatData($revision);
+				}
 			}else {
 				$data['viewing_revision'] = false;
 				$data['rif_html'] = $ro->transformForHtml();
+				$data['native_format'] = $ro->getNativeFormat();
+				if($ro->getNativeFormat($revision) != 'rif')
+				{
+					$data['naitive_text'] = $ro->getNativeFormatData();
+				}
 			}
 
 			$data['revisions'] = $ro->getAllRevisions();
@@ -279,6 +289,15 @@ class Registry_object extends MX_Controller {
 		$jsonData = json_encode($jsonData);
 		echo $jsonData;
 	}
+
+	public function get_native_record($id){
+		$this->load->model('registry_objects', 'ro');
+		$ro = $this->ro->getByID($id);
+		$data['txt'] = $ro->getNativeFormatData($id);
+		$jsonData = json_encode($data);
+		echo $jsonData;
+	}
+
 
 
 	function update(){
