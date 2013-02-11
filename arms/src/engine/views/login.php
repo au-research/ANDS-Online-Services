@@ -16,14 +16,17 @@
 	<div class="row">
 		<div class="span3">&nbsp;</div>
 		<div class="span6">
-			<div class="box">
-				<div class="box-header clearfix">
-					<h1>Login</h1>
+			<div class="widget-box">
+				<div class="widget-title">
+					<h5>Login</h5>
+					<div class="buttons">
+						<?php printAlternativeLoginControl($authenticators); ?>
+					</div>
 					<div class="right-widget">
-						<?php printAlternativeLoginControl($authenticators); ?>						
+												
 					</div>
 				</div>
-				<div class="box-content">
+				<div class="widget-content">
 					
 					<?php if (isset($error_message)): ?>
 						<div class="alert alert-error">
@@ -39,7 +42,7 @@
 						</div>
 					<?php endif; ?>
 					<?php 
-					prinfLoginForm($authenticators, $default_authenticator, '');
+					prinfLoginForm($authenticators, $default_authenticator, 'loginForm');
 					printAlternativeLoginForms($authenticators, $default_authenticator);
 					?>
 					
@@ -96,8 +99,8 @@ function prinfLoginForm($authenticators, $authenticator , $class)
 
 function printAlternativeLoginControl($authenticators)
 {
-	print "<div class='dropdown'>";
-	print "<a class='dropdown-toggle pull-right' data-toggle='dropdown' href='#'>Alternative Login<b class='caret'></b></a>";
+	print "<div class='btn-group'>";
+	print "<a class='btn btn-small dropdown-toggle ' data-toggle='dropdown' href='#'>Alternative Login <b class='caret'></b></a>";
 	print "<ul class='dropdown-menu'>";
 		foreach($authenticators as $key => $value){
 			print "<li class=''><a href='javascript:;' class='loginSelector' id='".$key."'>".$value."</a></li>";
@@ -110,7 +113,7 @@ function printAlternativeLoginForms($authenticators, $default_authenticator)
 {
 	foreach($authenticators as $key => $value){
 		if($key != $default_authenticator)
-			prinfLoginForm($authenticators, $key, '');
+			prinfLoginForm($authenticators, $key, 'loginForm hide');
 	}
 }
 ?>

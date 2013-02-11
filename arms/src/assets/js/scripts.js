@@ -87,6 +87,13 @@ $(document).ready(function(){
 		$('#navbar-search-form').toggle('slide',{direction:'right'});
 	});
 
+	$('.loginSelector').click(function(e){
+		e.preventDefault();
+		var auth = $(this).attr('id');
+		$('.loginForm').hide();
+		$('#'+auth+'_LoginForm').fadeIn();
+	});
+
 	$('#navbar-search-form input').keypress(function(e){
 		if(e.which==13){//enter
 			var query = $(this).val();
