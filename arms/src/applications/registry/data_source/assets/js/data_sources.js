@@ -28,6 +28,7 @@ $(function(){
 				switch(action){
 					case 'browse' : browse(words[1]);break;
 					case 'view': load_datasource(words[1]);break;
+					case 'settings': load_datasource_settings(words[1]);break;
 					case 'edit': load_datasource_edit(words[1], words[2]);break;
 					case 'delete': load_datasource_delete(words[1]);break;
 					default: logErrorOnScreen('this functionality is currently being worked on');break;
@@ -72,6 +73,8 @@ $(function(){
 				changeHashTo('view/'+data_source_id);
 			}else if($(this).hasClass('edit')){
 				changeHashTo('edit/'+data_source_id);
+			}else if($(this).hasClass('settings')){
+				changeHashTo('settings/'+data_source_id);
 			}else if($(this).hasClass('delete')){
 				changeHashTo('delete/'+data_source_id);
 			}else if($(this).hasClass('mmr')){
@@ -81,6 +84,13 @@ $(function(){
 			}else if($(this).hasClass('report')){
 				window.location = base_url+'data_source/report/'+data_source_id;
 			}
+		}
+	});
+
+	$('.activity-list a').live({
+		click:function(e){
+			e.preventDefault();
+			$(this).next('.log').slideToggle();
 		}
 	});
 
@@ -227,7 +237,7 @@ function load_datasource(data_source_id){
 			$('#view-datasource').fadeIn(500);
 
 			//draw the charts
-			drawCharts(data_source_id);
+			// drawCharts(data_source_id);
 			loadDataSourceLogs(data_source_id);
 			loadContributorPages(data_source_id);
 
@@ -273,6 +283,7 @@ function loadDataSourceLogs(data_source_id, offset, count)
 		type: 'POST',
 		dataType: 'json',
 		success: function(data){
+			console.log(data);
 			var logsTemplate = $('#data_source_logs_template').html();
 			var output = Mustache.render(logsTemplate, data);
 			$('#data_source_log_container').append(output);
@@ -488,6 +499,40 @@ function included(arr, obj) {
         	return true;
         }
     }
+}
+
+function load_datasource_settings(data_source_id){
+	$('#view-datasource').html('Loading');
+	$('#browse-datasources').slideUp(500);
+	$.ajax({
+		url: 'data_source/getDataSource/'+data_source_id,
+		type: 'GET',
+		contentType: 'application/json; charset=utf-8',
+		dataType: 'json',
+		success: function(data){
+			//console.log(data);
+			var template = $('#data-source-settings-template').html();
+			var output = Mustache.render(template, data);
+			var view = $('#view-datasource');
+			$('#settings-datasource').html(output);
+			$('#settings-datasource').fadeIn(500);
+
+			$('#settings-datasource  .normal-toggle-button').each(function(){
+				if($(this).attr('value')=='t' || $(this).attr('value')=='1' || $(this).attr('value')=='true' ){
+					$(this).find('input').attr('checked', 'checked');
+				}
+				$(this).toggleButtons({
+					width:75,enable:false
+				});
+			});
+
+			//draw the charts
+			// drawCharts(data_source_id);
+			//loadDataSourceLogs(data_source_id);
+			loadContributorPages(data_source_id);
+		}
+	});
+	return false;
 }
 
 /*

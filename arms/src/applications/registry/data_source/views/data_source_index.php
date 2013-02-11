@@ -96,6 +96,7 @@
 </section>
 
 <section id="view-datasource" class="hide">Loading...</section>
+<section id="settings-datasource" class="hide">Loading...</section>
 <section id="edit-datasource" class="hide">Loading...</section>
 
 </div>
@@ -121,7 +122,7 @@
 		  		<div class="btn-group item-control">
 		  			<button class="btn btn-small view page-control" data_source_id="{{id}}"><i class="icon-eye-open"></i> View</button>
 		  			<button class="btn btn-small mmr page-control" data_source_id="{{id}}"><i class="icon-folder-open"></i> Manage</button>
-			  		<button class="btn btn-small edit page-control" data_source_id="{{id}}"><i class="icon-edit"></i> Settings</button>
+			  		<button class="btn btn-small settings page-control" data_source_id="{{id}}"><i class="icon-edit"></i> Settings</button>
 				</div>
 			</div>
 		</div>
@@ -131,7 +132,10 @@
 <script type="text/x-mustache" id="data_source_logs_template">
 	{{#items}}
 		<li class="{{type}}">
-			<a href="javascript:;" class="{{type}}"><i class="icon-list-alt"></i>{{log}} <span>{{date_modified}}</span></a>
+			<a href="javascript:;" class="{{type}}"><i class="icon-list-alt"></i>{{log_snippet}}<span>{{date_modified}}</span></a>
+			<div class="log hide">
+				{{log}}
+			</div>
 		</li>
 	{{/items}}
 </script>
@@ -201,9 +205,277 @@
 					</div>
 				</div>
 			</div>
-	 
-	    	
 
+			<div class="widget-title">
+				<h5>Activity Log</h5>
+				<span class="label label-info" id="log_summary"></span>
+			</div>
+			<div class="widget-content nopadding">
+				<ul class="activity-list" id="data_source_log_container"></ul>
+				<ul class="activity-list">
+					<li class="viewall"><a id='show_more_log' class="tip-top" href="javascript:;" data-original-title="View all posts">Show More<i class='icon-arrow-down'></i></a></li>
+				</ul>
+			</div>
+	 
+	    </div>
+	</div>
+
+	<div class="span4">
+		<div class="widget-box">
+			<div class="widget-title"><h5>Data Source Status Summary</h5></div>
+			<div class="widget-content nopadding">
+				<ul class="ro-list">
+					{{#statuscounts}}
+				  		{{#status}}
+				  			<li class="status_{{status}}" name="{{status}}" type="status"><span class="name">{{status}}</span><span class="num">{{count}}</span></li>
+				  		{{/status}}
+			  		{{/statuscounts}}
+				</ul>
+			</div>
+		</div>
+
+		<div class="widget-box">
+			<div class="widget-title"><h5>Data Source Class Summary</h5></div>
+			<div class="widget-content nopadding">
+				<ul class="ro-list">
+					{{#classcounts}}
+				  		{{#class}}
+				  			<li class="" name="{{class}}" type="class"><span class="name"><img tip="{{class}}" src="<?php echo asset_url('img/{{class}}.png', 'base');?>"/>{{class}}</span> <span class="num">{{count}}</span></li>
+				  		{{/class}}
+			  		{{/classcounts}}
+				</ul>
+			</div>
+		</div>
+
+		<div class="widget-box">
+			<div class="widget-title"><h5>Data Source Quality Summary</h5></div>
+			<div class="widget-content nopadding">
+				<ul class="ro-list">
+					{{#qlcounts}}
+				  		{{#level}}
+				  			<li class="ql_{{level}}" name="{{level}}" type="quality_level"><span class="name">Quality Level {{level}}</span> <span class="num">{{count}}</span></li>
+				  		{{/level}}
+			  		{{/qlcounts}}
+				</ul>
+			</div>
+		</div>
+
+		
+
+
+	</div>
+
+</div>
+
+
+</div>
+
+<!-- Modal form for importing records from a URL -->
+<div class="modal hide fade" id="importRecordsFromURLModal">
+
+	<div class="modal-header">
+		<a href="javascript:;" class="close" data-dismiss="modal">×</a>
+		<h3>Import Registry Objects from a URL</h3>
+	</div>
+
+	<div class="modal-screen-container">
+		<div name="selectionScreen" class="modal-body">
+
+			<div class="alert alert-info">Import registry objects from a test feed or backup.</div>
+
+			<form class="form-horizontal">
+				<label class="control-label">URL to import records from:</label>
+				<div class="controls">
+					<input type="text" name="url" placeholder="http://" />
+					<p class="help-block">
+						<small>Use full URL format (including http://)</small>
+					</p>
+				</div>
+			</form>
+
+			<p>
+				<span class="label label-info">Note</span>
+				<small>
+					This tool does not support OAI-PMH. You must use the Harvester to import from an OAI-PMH feed.
+				</small>
+			</p>
+		</div>
+		<!-- A hidden loading screen -->
+		<div name="loadingScreen" class="modal-body hide loading">
+				<b>Loading XML from: </b><div id="remoteSourceURLDisplay"></div>
+				<div class="progress progress-striped active">
+				  <div class="bar" style="width: 100%;"></div>
+				</div>
+		</div>
+		
+		<!-- A hidden loading screen -->
+		<div name="resultScreen" class="modal-body hide loading">
+		</div>
+	</div>
+	
+	
+	<div class="modal-footer">
+		<a href="javascript:;" class="btn btn-primary doImportRecords" data-loading-text="Importing records...">Import Records</a>
+		<a href="#" class="btn hide" data-dismiss="modal">Close</a>
+	</div>
+	
+</div>
+
+<!-- Modal form for importing records from a URL -->
+<div class="modal hide fade" id="importRecordsFromXMLModal">
+
+	<div class="modal-header">
+		<a href="javascript:;" class="close" data-dismiss="modal">×</a>
+		<h3>Import Registry Objects from pasted contents</h3>
+	</div>
+
+	<div class="modal-screen-container">
+		<div name="selectionScreen" class="modal-body">
+
+			<div class="alert alert-info">Paste the registry object contents into the field below</div>
+
+			<form class="form-vertical">
+				<fieldset>
+					<label> <b>Data to import:</b>
+					</label>
+					<textarea name="xml" id="xml_paste" rows="18" style="width:97%;font-family:Courier;font-size:8px;line-height:9px;"></textarea>
+				</fieldset>
+			</form>
+
+			<p>
+				<span class="label label-info">Note</span>
+				<small>
+					This tool is designed for small imports (&lt;100 records). It may fail with larger bulk imports.
+				</small>
+			</p>
+		</div>
+
+		<!-- A hidden loading screen -->
+		<div name="loadingScreen" class="modal-body hide loading"> <b>Loading XML from:</b>
+			<div id="remoteSourceURLDisplay"></div>
+			<div class="progress progress-striped active">
+				<div class="bar" style="width: 100%;"></div>
+			</div>
+		</div>
+
+		<!-- A hidden loading screen -->
+		<div name="resultScreen" class="modal-body hide loading"></div>
+	</div>
+
+	<div class="modal-footer">
+		<a href="javascript:;" class="btn btn-primary doImportRecords" data-loading-text="Importing records...">Import Records</a>
+		<a href="#" class="btn hide" data-dismiss="modal">Close</a>
+	</div>
+
+</div>
+
+
+<!-- Modal form for importing records from a URL -->
+<div class="modal hide fade" id="exportDataSource">
+	
+	<div class="modal-header">
+		<a href="javascript:;" class="close" data-dismiss="modal">×</a>
+		<h3>Export Records As RIF-CS</h3>
+	</div>
+	
+	<div class="modal-screen-container">
+		<div name="selectionScreen" class="modal-body">
+			
+			<div class="alert alert-info">
+				Select the type of records you want to export from this datasource. 
+			</div>			
+			<form class="form-vertical" id="data_source_export_form">
+				<fieldset>
+					<label><b>Selection form</b> </label>
+					<input type="checkbox" name="activity" value="yes" checked="checked" />Activities<br/>
+					<input type="checkbox" name="collection" value="yes" checked="checked" />Collections<br/>
+					<input type="checkbox" name="party" value="yes" checked="checked" />Parties<br/>
+					<input type="checkbox" name="service" value="yes" checked="checked" />Services<br/>
+					<br/>
+					<select name="status" data-placeholder="Choose by Status" tabindex="1" class="chzn-select input-xlarge" for="class_1">
+						<option value="All">ALL status</option>
+						<option value="PUBLISHED">PUBLISHED</option>
+						<option value="APPROVED">APPROVED</option>
+						<option value="DRAFT">DRAFT</option>
+						<option value="SUBMITTED_FOR_ASSESSMENT">SUBMITTED_FOR_ASSESSMENT</option>
+						<option value="MORE_WORK_REQUIRED">MORE_WORK_REQUIRED</option>
+						<option value="ASSESSMENT_IN_PROGRESS">ASSESSMENT_IN_PROGRESS</option>
+					</select>
+					<!--label><b>Limit: </b> </label><input type="text" name="limit" value="20" /><br/-->
+				</fieldset>
+			</form>
+		</div>
+		
+		<!-- A hidden loading screen -->
+		<div id="loadingScreen" class="modal-body hide loading">
+				<b>Generating XML...
+				<div class="progress progress-striped active">
+				  <div class="bar" style="width: 100%;"></div>
+				</div>
+		</div>
+		<div id="error-modal" class="modal-body hide loading">
+				<b>Failed to generate export file...</b>
+		</div>
+
+		
+		<!-- A hidden loading screen -->
+		<div name="resultScreen" class="modal-body hide loading">
+		</div>
+	</div>
+	
+	
+	<div class="modal-footer">
+		<a href="javascript:;" class="btn btn-primary exportRecord" type="xml" data-loading-text="Fetching records...">Show me the XML</a>
+		<a href="javascript:;" class="btn btn-primary exportRecord" type="file" data-loading-text="Fetching records...">Get My File</a>
+		<a href="#" class="btn hide" data-dismiss="modal">Close</a>
+	</div>
+	
+</div>
+
+	{{/item}}
+</script>
+
+<script type="text/x-mustache"  id="data-source-settings-template">
+<?php
+	$data_source_view_fields = array(
+		'key' => 'Key',
+		'title' => 'Title',
+		'record_owner' => 'Record Owner',
+		'contact_name' => 'Contact Name',
+		'contact_email' => 'Contact Email',
+		'notes' => 'Notes',
+		'created_when' => 'Created When',
+		'created_who' => 'Created Who'
+	);
+?>
+
+	{{#item}}
+	<div class="content-header">
+		<h1>{{title}}</h1>
+		<ul class="nav nav-pills">
+			<li class="view page-control" data_source_id="{{data_source_id}}"><a href="#">Status</a></li>
+			<li class="mmr page-control" data_source_id="{{data_source_id}}"><a href="#">Manage Records</a></li>
+			<li class="report page-control" data_source_id="{{data_source_id}}"><a href="#">Quality Report</a></li>
+			<li class="active settings page-control" data_source_id="{{data_source_id}}"><a href="#">Settings</a></li>
+		</ul>
+	</div>
+	<div id="breadcrumb">
+		<?php echo anchor('/', '<i class="icon-home"></i> Home', array('class'=>'tip-bottom', 'tip'=>'Go to Home'))?>
+		<?php echo anchor('data_source/manage', 'List My Datasources')?>
+		<a href="#!/view/{{data_source_id}}">{{title}}</a>
+		<a href="javascript:;" class="current">Settings</a>
+	</div>
+<div class="container-fluid">
+<div class="row-fluid">
+
+	
+	<div class="span8" id="data_source_view_container" data_source_id="{{data_source_id}}">
+		<div class="widget-box">
+	    	
+	 		<div class='widget-content'>
+	 			<a href="javascript:;" class="page-control edit btn btn-primary" data_source_id="{{data_source_id}}">Edit Settings</a>
+	 		</div>
+	 
 	    	<div class="widget-content">
 
 				<h4>Account Administration Information</h4>
@@ -246,17 +518,6 @@
 					</dd>
 					{{/create_primary_relationships}}
 					
-				<!--
-					{{#push_to_nla}}
-					<dt>Push To NLA</dt>
-					<dd>
-						<p>
-							<div class="normal-toggle-button" value="{{push_to_nla}}">
-								<input type="checkbox" for="push_to_nla" >
-							</div>
-						</p>
-					</dd>
-					{{/push_to_nla}} -->
 
 					{{#auto_publish}}
 					<dt>Auto Publish</dt>
@@ -288,13 +549,7 @@
 						</p>
 					</dd>
 					{{/assessement_notification_email}}
-					<dt>Contributor Pages</dt>
-					<dd>
-						<p>
-								<div class="well" id="contributor_groups"></div>
-							</p>
-						</dd>
-
+					
 			 	</dl>
 			 				
 			 
@@ -331,68 +586,13 @@
 
 	<div class="span4">
 		<div class="widget-box">
-			<div class="widget-title"><h5>Data Source Status Summary</h5></div>
-			<div class="widget-content nopadding">
-				<ul class="ro-list">
-					{{#statuscounts}}
-				  		{{#status}}
-				  			<li class="status_{{status}}" name="{{status}}" type="status"><span class="name">{{status}}</span><span class="num">{{count}}</span></li>
-				  		{{/status}}
-			  		{{/statuscounts}}
-				</ul>
-			</div>
-		</div>
-
-		<div class="widget-box">
-			<div class="widget-title"><h5>Data Source Quality Summary</h5></div>
-			<div class="widget-content nopadding">
-				<ul class="ro-list">
-					{{#qlcounts}}
-				  		{{#level}}
-				  			<li class="ql_{{level}}" name="{{level}}" type="quality_level"><span class="name">Quality Level {{level}}</span> <span class="num">{{count}}</span></li>
-				  		{{/level}}
-			  		{{/qlcounts}}
-				</ul>
-			</div>
-		</div>
-
-		<div class="widget-box">
-			<div class="widget-title"><h5>Data Source Class Summary</h5></div>
-			<div class="widget-content nopadding">
-				<ul class="ro-list">
-					{{#classcounts}}
-				  		{{#class}}
-				  			<li class="" name="{{class}}" type="class"><span class="name">{{class}}</span> <span class="num">{{count}}</span></li>
-				  		{{/class}}
-			  		{{/classcounts}}
-				</ul>
-			</div>
-		</div>
-
-		<div class="widget-box">
-			<div class="widget-title"><h5>Registry Objects Progression</h5></div>
-			<div class="widget-content" id="ro-progression">Loading...</div>
-		</div>
-
-	</div>
-
-</div>
-
-<div class="row-fluid">
-	<div class="span12">
-		<div class="widget-box">
-			<div class="widget-title">
-				<h5>Activity Log</h5>
-				<span class="label label-info" id="log_summary"></span>
-			</div>
-			<div class="widget-content nopadding">
-				<ul class="activity-list" id="data_source_log_container"></ul>
-				<ul class="activity-list">
-					<li class="viewall"><a id='show_more_log' class="tip-top" href="javascript:;" data-original-title="View all posts">Show More<i class='icon-arrow-down'></i></a></li>
-				</ul>
+			<div class="widget-title"><h5>Contributor Pages</h5></div>
+			<div class="widget-content">
+				<div class="well" id="contributor_groups"></div>
 			</div>
 		</div>
 	</div>
+
 </div>
 
 
@@ -586,7 +786,7 @@
 			<li class="view page-control" data_source_id="{{data_source_id}}"><a href="#">Status</a></li>
 			<li class="mmr page-control" data_source_id="{{data_source_id}}"><a href="#">Manage Records</a></li>
 			<li class="report page-control" data_source_id="{{data_source_id}}"><a href="#">Quality Report</a></li>
-			<li class="active edit page-control" data_source_id="{{data_source_id}}"><a href="#">Settings</a></li>
+			<li class="active settings page-control" data_source_id="{{data_source_id}}"><a href="#">Settings</a></li>
 		</ul>
 	</div>
 	<div id="breadcrumb">

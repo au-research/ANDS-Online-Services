@@ -13,7 +13,7 @@
 			<li class=""><?php echo anchor('data_source/manage#!/view/'.$ds->id,'Status');?></li>
 			<li class="active mmr"><a href="#">Manage Records</a></li>
 			<li class=""><?php echo anchor('data_source/report/'.$ds->id,'Quality Report');?></li>
-			<li class=""><?php echo anchor('data_source/manage#!/edit/'.$ds->id,'Settings');?></li>
+			<li class=""><?php echo anchor('data_source/manage#!/settings/'.$ds->id,'Settings');?></li>
 		</ul>
 	</div>
 	<div id="breadcrumb">

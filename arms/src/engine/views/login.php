@@ -96,20 +96,21 @@ function prinfLoginForm($authenticators, $authenticator , $class)
 
 function printAlternativeLoginControl($authenticators)
 {
-	
+	print "<div class='dropdown'>";
 	print "<a class='dropdown-toggle pull-right' data-toggle='dropdown' href='#'>Alternative Login<b class='caret'></b></a>";
 	print "<ul class='dropdown-menu'>";
 		foreach($authenticators as $key => $value){
 			print "<li class=''><a href='javascript:;' class='loginSelector' id='".$key."'>".$value."</a></li>";
 		}
 	print "</ul>";
+	print "</div>";
 }
 
 function printAlternativeLoginForms($authenticators, $default_authenticator)
 {
 	foreach($authenticators as $key => $value){
 		if($key != $default_authenticator)
-			prinfLoginForm($authenticators, $key, ' ');
+			prinfLoginForm($authenticators, $key, '');
 	}
 }
 ?>
