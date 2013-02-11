@@ -813,7 +813,7 @@ class Data_source extends MX_Controller {
 
 
 			// data source log append...
-			$dataSource->append_log("Records were manually imported from a URL" . NL . $log, ($error_log ? HARVEST_ERROR : null));
+			$data_source->append_log("Records were manually imported from a URL" . NL . $log, ($error_log ? HARVEST_ERROR : null));
 		}
 		catch (Exception $e)
 		{
@@ -890,7 +890,7 @@ class Data_source extends MX_Controller {
 			$log .= $this->importer->getMessages();
 
 			// data source log append...
-			$dataSource->append_log("Records were manually imported from an XML paste" . NL . $log, ($error_log ? HARVEST_ERROR : null));
+			$data_source->append_log("Records were manually imported from an XML paste" . NL . $log, ($error_log ? HARVEST_ERROR : null));
 		}
 		catch (Exception $e)
 		{
