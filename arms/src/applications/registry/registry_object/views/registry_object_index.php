@@ -62,7 +62,7 @@
 									echo ' Revision ('.$revision.')';
 								}
 								echo '</td></a>';
-								if($native_format != '') {
+								if($native_format != 'rif') {
 									echo '<tr><th>Native Format</th><td><a href="javascript:;" class="btn btn-small" id="exportNative"><i class="icon-eject"></i>Export '.$native_format.'</a></td></tr>';
 								}?>
 						</table>
