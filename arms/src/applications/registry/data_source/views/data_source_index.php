@@ -166,7 +166,7 @@
 			<li class="active view page-control" data_source_id="{{data_source_id}}"><a href="#">Status</a></li>
 			<li class="mmr page-control" data_source_id="{{data_source_id}}"><a href="#">Manage Records</a></li>
 			<li class="report page-control" data_source_id="{{data_source_id}}"><a href="#">Quality Report</a></li>
-			<li class="edit page-control" data_source_id="{{data_source_id}}"><a href="#">Settings</a></li>
+			<li class="settings page-control" data_source_id="{{data_source_id}}"><a href="#">Settings</a></li>
 		</ul>
 	</div>
 	<div id="breadcrumb">
