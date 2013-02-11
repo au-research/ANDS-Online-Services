@@ -697,7 +697,7 @@ $('#save-edit-form').live({
 					logErrorOnScreen("An error occured whilst saving your changes!", $('#myModal .modal-body'));
 					$('#myModal .modal-body').append("<br/><pre>" + data + "</pre>");
 				}else{
-					changeHashTo('view/'+ds_id);
+					changeHashTo('settings/'+ds_id);
 					createGrowl("Your Data Source was successfully updated");
 					updateGrowls();
 				}

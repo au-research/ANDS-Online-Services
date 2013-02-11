@@ -573,19 +573,23 @@ class Data_source extends MX_Controller {
 		{
 			$dataSource = $this->ds->getByID($id);
 		}
-	    $harvesterParams = array('uri','provider_type','harvest_method','harvest_date','oai_set');
-	    $primaryRelationship = array('class_1','class_2','primary_key_1','primary_key_2','collection_rel_1','collection_rel_2','activity_rel_1','activity_rel_2','party_rel_1','party_rel_2','service_rel_1','service_rel_2');
-		$institutionPages = array('institution_pages');
+
 		$resetHarvest = false;
 
 		// XXX: This doesn't handle "new" attribute creation? Probably need a whilelist to allow new values to be posted. //**whitelist**//
 		if ($dataSource)
 		{
-			$valid_attributes = array_merge(array_keys($dataSource->attributes()), $harvesterParams);
 
+			$stockAttributes = array('title','record_owner','contact_name', 'contact_email', 'provider_type');
+		    $harvesterParams = array('uri','harvest_method','harvest_date','oai_set');
+		    $primaryRelationship = array('class_1','class_2','primary_key_1','primary_key_2','collection_rel_1','collection_rel_2','activity_rel_1','activity_rel_2','party_rel_1','party_rel_2','service_rel_1','service_rel_2');
+			$institutionPages = array('institution_pages');
+
+			$valid_attributes = array_merge(array_keys($dataSource->attributes()), $harvesterParams);
 			$valid_attributes = array_merge($valid_attributes, $primaryRelationship);
 			$valid_attributes = array_merge($valid_attributes, $institutionPages);
-			$valid_attributes =array_unique($valid_attributes);
+			$valid_attributes = array_merge($valid_attributes, $stockAttributes);
+			$valid_attributes = array_unique($valid_attributes);
 
 			foreach($valid_attributes as $attrib){	
 				$new_value = null;
