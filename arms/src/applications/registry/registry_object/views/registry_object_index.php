@@ -28,8 +28,8 @@
 		</div>
 	</div>
 	<div id="breadcrumb">
-		<?php echo anchor('registry_object/', '<i class="icon-home"></i> Home', array('class'=>'tip-bottom', 'title'=>'Go to Home'))?>
-		<?php echo anchor('registry_object/manage/'.$ds->id, $ds->title, array('class'=>'', 'title'=>''))?>
+		<?php echo anchor('data_source/', '<i class="icon-home"></i> Home', array('class'=>'tip-bottom', 'title'=>'Go to Home'))?>
+		<?php echo anchor('data_source/manage#!/view/'.$ds->id, $ds->title, array('class'=>'', 'title'=>''))?>
 		<a href="#" class="current"><?php echo $ro->title;?> </a>
 		<?php if($viewing_revision) echo '<a href="#">(Revision '.$revision.')</a>'?>
 	</div>
@@ -41,6 +41,14 @@
 				<?php echo $rif_html;?>
 			</div>
 			<div class="span4">
+
+				<div>
+					<center>
+					<?php if($ro->status=='PUBLISHED'){$anchor = portal_url().$ro->slug;}else{$anchor = portal_url().'view/?id='.$ro->id ;} ?>
+					<?php echo anchor($anchor, '<i class="icon-globe icon icon-white"></i> View in Research Data Australia', array('class'=>'btn btn-primary'));?>
+					</center>
+				</div>
+
 				<div class="widget-box">
 					<div class="widget-title">
 						<h5>Metadata</h5>

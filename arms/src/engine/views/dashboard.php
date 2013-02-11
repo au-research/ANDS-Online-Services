@@ -17,20 +17,22 @@
 		<div class="span12">
 			<div class="box">
 				<div class="box-header clearfix">
-					<h1>ANDS Registry Dashboard</h1>
+					<h1>ANDS Registry Dashboard</h1>	
+
+					<a href="<?php echo portal_url();?>" style="margin-top:5px;" class="btn btn-info pull-right" target="_blank">
+					<i class="icon-globe icon icon-white"></i> Visit Research Data Australia</a>
+
 				</div>
 				<div class="box-content">
+
+
 					<div class="well">
 						<p>You are now logged in as <strong><?=$this->user->name();?></strong><br/>
 						using the authentication provider's identifier of <strong><?=$this->user->localIdentifier();?></strong></p> <p>You can <em>Logout</em> by clicking the user icon in the upper right of your screen.</p>			
 					</div>
+
+
 				</div>
-			</div>
-			<div>
-				<p>
-					<a href="<?php echo portal_url();?>" class="btn btn-primary" target="_blank">
-					<i class="icon-globe icon icon-white"></i> Visit Research Data Australia</a>
-				</p>
 			</div>
 		</div>
 	</div>
@@ -82,6 +84,38 @@
 			</div>
 		</div>
 
+	<?php
+	if(mod_enabled('registry')){
+	?>
+		<div class="span6">
+			<div class="box">
+				<div class="box-header clearfix">
+					<h1>My Data Sources</h1>
+				</div>
+				<div class="box-content">
+						<?php
+							if(sizeof($data_sources)>0){
+								echo '<ul>';
+								$i=0;
+								for(; $i < sizeof($data_sources) && $i < 7; $i++){
+									echo '<li><a href="'.registry_url('data_source/manage#!/view/'.$data_sources[$i]->id).'">'.$data_sources[$i]->title . "</a></li>";
+								}
+								if ($i < sizeof($data_sources))
+								{
+									echo '<li><a href="'.registry_url('data_source/manage').'">More...</a></li>';
+								}
+								echo '</ul>';
+							}else{
+								echo 'You are not associated with any data sources yet!';
+							}
+						?>
+				</div>
+			</div>
+		</div>
+	<?php
+	}
+	?>
+
 		<div class="span6">
 			<div class="box">
 				<div class="box-header clearfix">
@@ -109,96 +143,6 @@
 		</div>
 	</div>
 
-</div>
-
-<div class="container hide">
-	<div class="row">
-		<div class="span2">&nbsp;</div>
-		<div class="span8">
-			<div class="box">
-				<div class="box-header clearfix">
-					<h1>ANDS Registry Dashboard</h1>
-				</div>
-				
-				<div class="box-content">
-					<div class="hero-unit">
-						  
-						
-						
-					</div>
-					<span class="label label-important">DEBUG</span>
-					<div class="row">
-					      <div class="span3">
-					      	<h3>My Affiliations</h3>
-					      	<p>
-					      		<?php
-					      			if($hasAffiliation){
-					      				foreach($this->user->affiliations() AS $role){
-											echo $role . "<BR/>";
-										}
-					      			}else{
-					      				echo 'You currently do not have any affiliation with any organisation';
-					      			}
-
-					      			echo '<div class="well">';
-					      			echo '<select id="organisational_roles">';
-					      			foreach($available_organisations as $o){
-					      				echo '<option value="'.$o['role_id'].'">'.$o['name'].'</option>';
-					      			}
-					      			echo '</select>';
-					      			echo '<button class="btn" id="affiliation_signup" localIdentifier="'.$this->user->localIdentifier().'">Affiliate with this Organisation</button>';
-					      			echo '</div>';
-					      		?>
-
-					      	</p>
-					      </div>
-					      <div class="span3">
-					      	<h3>My Functions</h3>
-					      	<p>
-					      		<?php
-					      			foreach($this->user->functions() AS $org)
-									{
-										echo $org . "<BR/>";
-									}
-					      		?>
-					      	</p>
-					      </div>
-				    </div>
-				    <div class="row">
-				    	<?php if (mod_enabled('data_source')): ?>
-					      <div class="span3">
-					      	<h3>My Data Sources</h3>
-					      	<p>
-					      		<?php
-					      			if(sizeof($my_datasources)>0){
-					      				foreach($my_datasources AS $ds){
-											echo $ds->title . " (".$ds->key.")" . "<BR/>";
-										}
-					      			}else{
-					      				echo "You can't manage any data source unless you are affiliate with an organisation";
-					      			}
-					      		?>
-					      	</p>
-					      </div>
-					   <?php endif; ?>
-					   <?php if (mod_enabled('vocab_service')): ?>
-					      <div class="span3">
-					      	<h3>My Vocabularies</h3>
-					      	<p>
-					      		<?php
-									
-					      			
-					      		?>
-					      	</p>
-					      </div>
-					   <?php endif; ?>
-				    </div>
-				</div>
-			</div>
-		</div>
-		<div class="span2">&nbsp;</div>
-		
-	</div>
 </div>
 
 <div class="modal hide" id="myModal">

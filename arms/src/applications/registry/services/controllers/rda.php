@@ -190,7 +190,7 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 		}
 
 		// Some validation on the target registry object
-		if (! $this->input->get('slug') && ! $this->input->get('registry_object_id'))
+		if (! $this->input->get('slug') && !$this->input->get('id'))
 		{ 
 			throw new Exception("Invalid URL SLUG or registry_object_id specified.");
 		}
@@ -201,17 +201,15 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 		{
 			$registry_object = $this->ro->getBySlug($this->input->get('slug'));
 		}
-		elseif ($this->input->get('registry_object_id'))
+		elseif ($this->input->get('id'))
 		{
-			$registry_object = $this->ro->getByID($this->input->get('registry_object_id'));
+			$registry_object = $this->ro->getByID($this->input->get('id'));
 		}
 
 		if (!$registry_object)
 		{
 			throw new Exception("Unable to fetch suggested links for this registry object.");
 		}
-
-		// XXX: TODO: LIMIT and offset (pass to getSuggestedLinks...)
 
 		$links = $registry_object->getSuggestedLinks($suggestor,$this->input->get('start'),$this->input->get('rows'));
 

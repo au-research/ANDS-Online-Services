@@ -15,12 +15,6 @@
 			</table>
 			<?php echo anchor('registry_object/view/'.$ro->id, '<i class="icon-eye-open icon icon-white"></i> View Registry Object', array('class'=>'btn btn-primary'));?>
 			<?php echo anchor('registry_object/edit/'.$ro->id, '<i class="icon-edit icon"></i> Edit', array('class'=>'btn'));?>
-			<hr />
-			<p>
-
-				<?php if($ro->status=='PUBLISHED'){$anchor = portal_url().$ro->slug;}else{$anchor = portal_url().'view/?id='.$ro->id ;} ?>
-				<?php echo anchor($anchor, '<i class="icon-globe icon icon-white"></i> View in Research Data Australia', array('class'=>'btn btn-primary'));?>
-			</p>
 		</div>
 	</div>
 </div>

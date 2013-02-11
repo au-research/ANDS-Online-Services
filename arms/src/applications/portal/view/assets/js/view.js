@@ -18,6 +18,8 @@ if ( $('#class', metadataContainer).html() == "Collection" )
 // Internal Suggested Links
 initInternalSuggestedLinks();
 
+/*if (isPublished()) { $('#draft_status').removeClass("hide"); }*/
+
 
 
 

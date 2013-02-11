@@ -184,6 +184,7 @@ function browse(view){
 		$('#items').removeClass();
 		$('#items').addClass(view);
 		$('#browse-datasources').slideDown();
+		$('#datasource-chooser').focus();
 	}else{
 		logErrorOnScreen('invalid View Argument');
 	}

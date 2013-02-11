@@ -137,6 +137,14 @@ class Auth extends CI_Controller {
 				asort($data['available_organisations']);
 			}
 
+			if (mod_enabled('registry'))
+			{
+				$db = $this->load->database( 'registry', TRUE );
+				$this->db = $db;
+				$this->load->model('data_source/data_sources','ds');
+				$data['data_sources']=$this->ds->getOwnedDataSources();
+			}
+
 			$this->load->view('dashboard', $data);
 		}
 		else 

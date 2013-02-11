@@ -12,7 +12,7 @@
 class Registry_object extends MX_Controller {
 
 	public function index(){
-		$this->manage();
+		redirect(registry_url());
 	}
 
 	public function test()

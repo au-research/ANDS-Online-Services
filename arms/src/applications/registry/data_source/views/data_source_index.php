@@ -14,7 +14,7 @@
 <div id="content" style="margin-top:45px;margin-left:0px">
 <section id="browse-datasources" class="hide">
 	<div class="content-header">
-		<h1>Manage My Datasource</h1>
+		<h1>Manage My Datasources</h1>
 		<div class="btn-group">
 			<a class="btn btn-small" id="open_add_ds_form" data-toggle="modal" href="#AddNewDS"><i class="icon-plus"></i> Add New Datasource</a>
 		</div>
@@ -174,9 +174,9 @@
 	<div class="content-header">
 		<h1>{{title}}</h1>
 		<ul class="nav nav-pills">
-			<li class="active view page-control" data_source_id="{{data_source_id}}"><a href="#">Status</a></li>
+			<li class="active view page-control" data_source_id="{{data_source_id}}"><a href="#">Dashboard</a></li>
 			<li class="mmr page-control" data_source_id="{{data_source_id}}"><a href="#">Manage Records</a></li>
-			<li class="report page-control" data_source_id="{{data_source_id}}"><a href="#">Quality Report</a></li>
+			<li class="report page-control" data_source_id="{{data_source_id}}"><a href="#">Reports</a></li>
 			<li class="settings page-control" data_source_id="{{data_source_id}}"><a href="#">Settings</a></li>
 		</ul>
 	</div>
@@ -197,7 +197,7 @@
 					<div class="btn-group">
 				  		<button class="btn edit page-control" data_source_id="{{data_source_id}}"><i class="icon-edit"></i> Edit Settings</button>
 				  		<button class="btn mmr page-control" data_source_id="{{data_source_id}}"><i class="icon-folder-open"></i> Manage Records</button>
-				  		<button class="btn deleteRecord page-control" data_source_id="{{data_source_id}}"><i class="icon-trash"></i> Delete Record</button>
+				  		<!--button class="btn deleteRecord page-control" data_source_id="{{data_source_id}}"><i class="icon-trash"></i> Delete Record</button-->
 					</div>
 					<div class="btn-group pull-right">
 						<a class="btn dropdown-toggle ExportDataSource" data-toggle="modal" href="#exportDataSource" id="exportDS">
@@ -464,9 +464,9 @@
 	<div class="content-header">
 		<h1>{{title}}</h1>
 		<ul class="nav nav-pills">
-			<li class="view page-control" data_source_id="{{data_source_id}}"><a href="#">Status</a></li>
+			<li class="view page-control" data_source_id="{{data_source_id}}"><a href="#">Dashboard</a></li>
 			<li class="mmr page-control" data_source_id="{{data_source_id}}"><a href="#">Manage Records</a></li>
-			<li class="report page-control" data_source_id="{{data_source_id}}"><a href="#">Quality Report</a></li>
+			<li class="report page-control" data_source_id="{{data_source_id}}"><a href="#">Reports</a></li>
 			<li class="active settings page-control" data_source_id="{{data_source_id}}"><a href="#">Settings</a></li>
 		</ul>
 	</div>
@@ -794,9 +794,9 @@
 	<div class="content-header">
 		<h1>{{title}}</h1>
 		<ul class="nav nav-pills">
-			<li class="view page-control" data_source_id="{{data_source_id}}"><a href="#">Status</a></li>
+			<li class="view page-control" data_source_id="{{data_source_id}}"><a href="#">Dashboard</a></li>
 			<li class="mmr page-control" data_source_id="{{data_source_id}}"><a href="#">Manage Records</a></li>
-			<li class="report page-control" data_source_id="{{data_source_id}}"><a href="#">Quality Report</a></li>
+			<li class="report page-control" data_source_id="{{data_source_id}}"><a href="#">Reports</a></li>
 			<li class="active settings page-control" data_source_id="{{data_source_id}}"><a href="#">Settings</a></li>
 		</ul>
 	</div>

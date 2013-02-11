@@ -1,4 +1,5 @@
 <?php
+
 	$connDiv = '';
 	if (isset($connections_contents))
 	{

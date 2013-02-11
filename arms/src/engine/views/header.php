@@ -67,12 +67,12 @@
 
 
     <div id="header">
-      <img src="<?php echo base_url();?>/assets/img/ands_logo_white.png" alt="ANDS Logo White" tip="Dashboard" my="top center" at="bottom center"/> 
+      <a href="<?=base_url();?>" title="Back to Dashboard">
+        <img src="<?php echo base_url();?>/assets/img/ands_logo_white.png" alt="ANDS Logo White"/> 
+      </a>
     </div>
     
-    <!--div id="search">
-      <input type="text" placeholder="Search here..."/><button type="submit" class="tip-right" title="Search"><i class="icon-search icon-white"></i></button>
-    </div-->
+
     <div id="user-nav" class="navbar navbar-inverse">
             <ul class="nav btn-group">
             
@@ -80,8 +80,8 @@
                 <li class="btn btn-inverse dropdown">
                   <a class="dropdown-toggle" data-toggle="dropdown" href="#">My Data <b class="caret"></b></a>
                   <ul class="dropdown-menu pull-right">
-                    <li class=""><?php echo anchor('data_source/manage', 'List My Datasources');?></li>
-                    <li class=""><?php echo anchor('registry_object/add', '<i class="icon icon-plus"></i> Add New Records');?></li>
+                    <li class=""><?php echo anchor('data_source/manage', 'Manage My Datasources');?></li>
+                    <li class="pull-right"><?php echo anchor('registry_object/add', '<i class="icon icon-plus"></i> Add New Record');?></li>
                   </ul>
                 </li>
               <?php endif; ?>

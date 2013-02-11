@@ -85,6 +85,7 @@ $(document).ready(function(){
 	$('#main-nav-search').click(function(e){
 		e.preventDefault();
 		$('#navbar-search-form').toggle('slide',{direction:'right'});
+		$('#navbar-search-form input').focus();
 	});
 
 	$('.loginSelector').click(function(e){
@@ -121,7 +122,7 @@ $(document).ready(function(){
 					}
 				},
 				show:{ready:true},
-				position:{my:'top right',at:'bottom left'},
+				position:{my:'top center',at:'bottom center'},
 				hide:{fixed:true,event:'unfocus'},
 				style:{classes:'ui-tooltip-bootstrap ui-tooltip-shadow'}
 			});

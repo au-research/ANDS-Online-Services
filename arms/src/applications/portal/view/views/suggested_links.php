@@ -1,5 +1,4 @@
 <?php
-
 if ($suggested_links_contents)
 {
 	$output = '';
