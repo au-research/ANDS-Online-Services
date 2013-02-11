@@ -616,6 +616,7 @@ class Data_source extends MX_Controller {
 		{
 
 			$stockAttributes = array('title','record_owner','contact_name', 'contact_email', 'provider_type');
+			$extendedAttributes = array('allow_reverse_internal_links','allow_reverse_external_links','auto_publish','qa_flag');
 		    $harvesterParams = array('uri','harvest_method','harvest_date','oai_set');
 		    $primaryRelationship = array('class_1','class_2','primary_key_1','primary_key_2','collection_rel_1','collection_rel_2','activity_rel_1','activity_rel_2','party_rel_1','party_rel_2','service_rel_1','service_rel_2');
 			$institutionPages = array('institution_pages');
@@ -624,6 +625,7 @@ class Data_source extends MX_Controller {
 			$valid_attributes = array_merge($valid_attributes, $primaryRelationship);
 			$valid_attributes = array_merge($valid_attributes, $institutionPages);
 			$valid_attributes = array_merge($valid_attributes, $stockAttributes);
+			$valid_attributes = array_merge($valid_attributes, $extendedAttributes);
 			$valid_attributes = array_unique($valid_attributes);
 
 			foreach($valid_attributes as $attrib){	
@@ -810,7 +812,8 @@ class Data_source extends MX_Controller {
 			$log .= $this->importer->getMessages();
 
 
-			// XXX: data source log append...
+			// data source log append...
+			$dataSource->append_log("Records were manually imported from a URL" . NL . $log, ($error_log ? HARVEST_ERROR : null));
 		}
 		catch (Exception $e)
 		{
@@ -886,7 +889,8 @@ class Data_source extends MX_Controller {
 			$log .= "====================" . NL;
 			$log .= $this->importer->getMessages();
 
-			// XXX: data source log append...
+			// data source log append...
+			$dataSource->append_log("Records were manually imported from an XML paste" . NL . $log, ($error_log ? HARVEST_ERROR : null));
 		}
 		catch (Exception $e)
 		{
