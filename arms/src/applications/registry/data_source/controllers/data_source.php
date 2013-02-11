@@ -344,7 +344,7 @@ class Data_source extends MX_Controller {
 			$item['counts'] = array();
 			foreach ($this->ro->valid_status AS $status){
 				if($ds->getAttribute("count_$status")>0){
-					array_push($item['counts'], array('status' => $status, 'count' =>$ds->getAttribute("count_$status")));
+					array_push($item['counts'], array('status' => $status, 'count' =>$ds->getAttribute("count_$status"), 'name'=>readable($status)));
 				}
 			}
 
@@ -355,7 +355,7 @@ class Data_source extends MX_Controller {
 
 			$item['classcounts'] = array();
 			foreach($this->ro->valid_classes as $class){
-				if($ds->getAttribute("count_$class")>0)array_push($item['classcounts'], array('class' => $class, 'count' =>$ds->getAttribute("count_$class")));
+				if($ds->getAttribute("count_$class")>0)array_push($item['classcounts'], array('class' => $class, 'count' =>$ds->getAttribute("count_$class"),'name'=>readable($class)));
 			}
 
 			$item['key']=$ds->key;
@@ -400,7 +400,7 @@ class Data_source extends MX_Controller {
 		{
 			// Hide some fields if there are no registry objects for that status
 			if ($dataSource->getAttribute("count_$status") != 0 OR in_array($status, array(DRAFT, PUBLISHED))){
-				array_push($jsonData['item']['statuscounts'], array('status' => $status, 'count' =>$dataSource->getAttribute("count_$status")));
+				array_push($jsonData['item']['statuscounts'], array('status' => $status, 'count' =>$dataSource->getAttribute("count_$status"),'name'=>readable($status)));
 			}
 		}
 
@@ -411,7 +411,7 @@ class Data_source extends MX_Controller {
 
 		$jsonData['item']['classcounts'] = array();
 		foreach($this->ro->valid_classes as $class){
-			array_push($jsonData['item']['classcounts'], array('class' => $class, 'count' =>$dataSource->getAttribute("count_$class")));
+			array_push($jsonData['item']['classcounts'], array('class' => $class, 'count' =>$dataSource->getAttribute("count_$class"),'name'=>readable($class)));
 		}
 		
 		$jsonData = json_encode($jsonData);

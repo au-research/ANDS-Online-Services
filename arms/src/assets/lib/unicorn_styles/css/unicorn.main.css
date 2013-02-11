@@ -1070,7 +1070,8 @@ a:hover {
     background-color: #FBFBFB;
 }
 .activity-list li a span {
-    color: #AAAAAA;
+    color: #999;
+    float:right;
     font-size: 11px;
     font-style: italic;
 }

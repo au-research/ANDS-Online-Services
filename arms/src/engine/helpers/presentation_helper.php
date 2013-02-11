@@ -114,3 +114,18 @@ function ellipsis ($string, $length = 64)
 		return substr($string,0, $length-3) . "&hellip;";
 	}
 }
+
+function readable($text){
+	switch($text){
+		case "DRAFT": return 'Drafts';break;
+		case "SUBMITTED_FOR_ASSESSMENT": return 'Submitted for Assessment';break;
+		case "ASSESSMENT_IN_PROGRESS": return 'Assessment In Progress';break;
+		case "APPROVED": return 'Approved Records';break;
+		case "PUBLISHED": return 'Published Records';break;
+		case "MORE_WORK_REQUIRED": return 'More Work Required';break;
+		case "collection": return 'Collections';break;
+		case "party": return 'Parties';break;
+		case "service": return 'Services';break;
+		case "activity": return 'Activities';break;
+	}
+}

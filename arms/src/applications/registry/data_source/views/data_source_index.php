@@ -121,13 +121,13 @@
 				<p></p>
 				{{#counts}}
 			  		{{#status}}
-			  			<span class="tag status_{{status}}">{{status}} ({{count}})</span>
+			  			<span class="tag status_{{status}}">{{name}} ({{count}})</span>
 			  		{{/status}}
 		  		{{/counts}}
 
 		  		{{#classcounts}}
 			  		{{#class}}
-			  			<span class="tag name"><img tip="{{class}}" src="<?php echo asset_url('img/{{class}}.png', 'base');?>"/>{{count}}</span>
+			  			<span class="tag name"><img tip="{{class}}" src="<?php echo asset_url('img/{{class}}.png', 'base');?>"/>{{name}}</span>
 			  		{{/class}}
 		  		{{/classcounts}}
 		  		<div class="btn-group item-control">
@@ -143,9 +143,9 @@
 <script type="text/x-mustache" id="data_source_logs_template">
 	{{#items}}
 		<li class="{{type}}">
-			<a href="javascript:;" class="{{type}}"><i class="icon-list-alt"></i>{{log_snippet}}<span>{{date_modified}}</span></a>
+			<a href="javascript:;" class="{{type}}"><i class="icon-list-alt"></i>{{log_snippet}} <span class="label">{{date_modified}}</span></a>
 			<div class="log hide">
-				{{log}}
+				<pre>{{log}}</pre>
 			</div>
 		</li>
 	{{/items}}
@@ -238,7 +238,7 @@
 				<ul class="ro-list">
 					{{#statuscounts}}
 				  		{{#status}}
-				  			<li class="status_{{status}}" name="{{status}}" type="status"><span class="name">{{status}}</span><span class="num">{{count}}</span></li>
+				  			<li class="status_{{status}}" name="{{status}}" type="status"><span class="name">{{name}}</span><span class="num">{{count}}</span></li>
 				  		{{/status}}
 			  		{{/statuscounts}}
 				</ul>
@@ -251,7 +251,7 @@
 				<ul class="ro-list">
 					{{#classcounts}}
 				  		{{#class}}
-				  			<li class="" name="{{class}}" type="class"><span class="name"><img tip="{{class}}" src="<?php echo asset_url('img/{{class}}.png', 'base');?>"/>{{class}}</span> <span class="num">{{count}}</span></li>
+				  			<li class="" name="{{class}}" type="class"><span class="name"><img tip="{{class}}" src="<?php echo asset_url('img/{{class}}.png', 'base');?>"/> {{name}}</span> <span class="num">{{count}}</span></li>
 				  		{{/class}}
 			  		{{/classcounts}}
 				</ul>
