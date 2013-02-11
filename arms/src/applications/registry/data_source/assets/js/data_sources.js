@@ -206,6 +206,7 @@ function load_more(page){
 		contentType: 'application/json; charset=utf-8',
 		dataType: 'json',
 		success: function(data){
+			console.log(data);
 			var itemsTemplate = $('#items-template').html();
 			var output = Mustache.render(itemsTemplate, data);
 			$('#items').append(output);

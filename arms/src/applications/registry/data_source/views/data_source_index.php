@@ -114,11 +114,22 @@
 			</div>
 			
 			<div class="widget-content">
+				<strong>Key:</strong> {{key}}<br/>
+				{{#record_owner}}
+					<strong>Record Owner:</strong> {{record_owner}}
+				{{/record_owner}}
+				<p></p>
 				{{#counts}}
 			  		{{#status}}
 			  			<span class="tag status_{{status}}">{{status}} ({{count}})</span>
 			  		{{/status}}
 		  		{{/counts}}
+
+		  		{{#classcounts}}
+			  		{{#class}}
+			  			<span class="tag name"><img tip="{{class}}" src="<?php echo asset_url('img/{{class}}.png', 'base');?>"/>{{count}}</span>
+			  		{{/class}}
+		  		{{/classcounts}}
 		  		<div class="btn-group item-control">
 		  			<button class="btn btn-small view page-control" data_source_id="{{id}}"><i class="icon-eye-open"></i> View</button>
 		  			<button class="btn btn-small mmr page-control" data_source_id="{{id}}"><i class="icon-folder-open"></i> Manage</button>

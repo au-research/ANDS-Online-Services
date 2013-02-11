@@ -346,6 +346,21 @@ class Data_source extends MX_Controller {
 					array_push($item['counts'], array('status' => $status, 'count' =>$ds->getAttribute("count_$status")));
 				}
 			}
+
+			$item['qlcounts'] = array();
+			foreach ($this->ro->valid_levels AS $level){
+				array_push($item['qlcounts'], array('level' => $level, 'count' =>$ds->getAttribute("count_level_$level")));
+			}
+
+			$item['classcounts'] = array();
+			foreach($this->ro->valid_classes as $class){
+				if($ds->getAttribute("count_$class")>0)array_push($item['classcounts'], array('class' => $class, 'count' =>$ds->getAttribute("count_$class")));
+			}
+
+			$item['key']=$ds->key;
+			$item['record_owner']=$ds->record_owner;
+			$item['notes']=$ds->notes;
+
 			array_push($items, $item);
 		}
 		
