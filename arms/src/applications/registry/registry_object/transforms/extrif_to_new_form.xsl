@@ -47,7 +47,7 @@
 	</div>
 
 	<div id="content" style="margin-top:45px;">
-		<div id="content-header">
+		<div class="content-header">
 			<h1><xsl:value-of select="$display_title"/></h1>
 			<div class="btn-group">
 				<a class="btn" title="Manage Files" id="master_export_xml"><i class="icon-download"></i> Export RIFCS</a>
