@@ -22,106 +22,201 @@ limitations under the License.
  * Requires cURL PHP extensions. PHP5.2+, PHP5.4 recommended
  */
 
-// Setup HTTP headers so jQuery/browser interprets as JSON
-header('Cache-Control: private, must-revalidate');
-header('Content-type: application/json');
-
 // some constants
-define("BASE_URL", "http://devl.ands.org.au:8080/sissvoc/api/anzsrc-for");
-define("SEARCH_URL", BASE_URL . "/concept.json");
-define("NARROW_URL", BASE_URL . "/concept/allNarrower.json"); #future use
-define("BROAD_URL", BASE_URL . "/concept/allBroader.json"); #future use
+define("BASE_URL", "http://devl.ands.org.au:8080/sissvoc/api/");
+define("SEARCH_URL", "/concept.json?anycontains=");
+define("NARROW_URL", "/concept/allNarrower.json?uri=");
+define("BROAD_URL", "/concept/allBroader.json?uri="); #future use
 define("MAX_RESULTS", 200); #sisvoc only returns 200 items
 
-$valid_actions = array("search"); #future use: narrow, broaden, list(?)
+class VocabProxy
+{
 
-// Some defaults
-$jsonData['status'] = 'ERROR';
-$jsonData['message'] = 'action must be defined';
-$limit = 100; #a mildly sane limit
-$callback = "function";
-$action = false;
-$lookfor = false;
-$url = false;
-$data = false;
+	//actions this proxy can execute
+	private $valid_actions = array(
+		"search" => array(
+			'url' => SEARCH_URL,
+			'queryprocessor' => false),
+		"narrow" => array(
+			'url' => NARROW_URL,
+			'queryprocessor' => false));
 
-// Parse parameters
-if (isset($_REQUEST['action'])) {
-	if (in_array($_REQUEST['action'], $valid_actions)) {
-		$action = $_REQUEST['action'];
-		$jsonData['message'] = 'action: ' . $action;
+	//what we send back
+	private $jsonData = array('status' => 'ERROR',
+				  'message' => 'action must be defined');
+
+	// Some defaults
+	private $repository = "anzsrc-for";
+	private $limit = 100; #a mildly sane limit
+	private $callback = "function";
+	private $action = false;
+	private $lookfor = false;
+
+	/**
+	 * Proxy is an atomic object: it gets instantiated, runs, and prints
+	 * output all in one fell swoop.
+	 */
+	public function __construct() {
+		// Setup HTTP headers so jQuery/browser interprets as JSON
+		header('Cache-Control: private, must-revalidate');
+		header('Content-type: application/json');
+
+		//configure the action query processor callables; this can't be done up-front
+		$valid_actions['search']['queryprocessor'] = function($e) { return urlencode($e); };
+
+		if ($this->setup()) {
+			$this->handle();
+		}
+		$this->display();
 	}
-	else {
-		$jsonData['message'] .= " and valid: one of " .
-			implode(", ", $valid_actions);
-	}
-}
 
-if ($action) {
-	if (isset($_REQUEST['lookfor'])) {
-		$lookfor = rawurlencode($_REQUEST['lookfor']);
-		$jsonData['message'] .= " (" . $lookfor . ")";
-	}
+	/**
+	 * Handle the request by querying the action url
+	 * with specified parameters
+	 */
+	private function handle() {
+		$data = false;
+		$url = $this->urlFor($this->action);
 
-	if (isset($_REQUEST['limit'])) {
-		if (is_numeric($_REQUEST['limit'])) {
-			$limit = $_REQUEST['limit'];
-			if ($limit > MAX_RESULTS) {
-				$jsonData['warning'] = "only retrieving first " .
-					MAX_RESULTS . " matches";
-				$limit = MAX_RESULTS;
+		if ($url) {
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_URL, $url);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt($ch, CURLOPT_FAILONERROR, TRUE);
+			curl_setopt($ch, CURLOPT_BINARYTRANSFER, TRUE);
+			$data = json_decode(curl_exec($ch), true) or die(curl_error($ch));
+			if ($data != null) {
+				$this->jsonData['status'] = 'OK';
 			}
 		}
-		else {
-			$jsonData['warning'] = "limit must be numeric: " .
-				"falling back to default limit";
+		if ($data && $this->jsonData['status'] == "OK") {
+			$this->jsonData['items'] = array_map(function($i) {
+					$i['label'] = $i['prefLabel']['_value'];
+					$i['about'] = $i['_about'];
+					unset($i['_about'],
+					      $i['broader'],
+					      $i['prefLabel']);
+					return $i;
+				},
+				array_slice($data['result']['items'],
+					    0,
+					    $this->limit));
+			$this->jsonData['count'] = count($this->jsonData['items']);
 		}
-		$jsonData['limit'] = $limit;
 	}
 
-	if (isset($_REQUEST['callback'])) {
-		$callback = $_REQUEST['callback'];
+	/**
+	 * Is the supplied action valid?
+	 * @param the action
+	 * @return true if valid, false otherwise
+	 */
+	private function isValidAction($action) {
+		return array_key_exists($action, $this->valid_actions);
+	}
+
+	/**
+	 * Get the endpoint url for the specified action
+	 * @param the action
+	 * @return the URL to query, or false if the action isn't valid
+	 */
+	private function urlFor($action) {
+		if ($this->isValidAction($action)) {
+			$validAction = $this->valid_actions[$action];
+			$processor = $validAction['queryprocessor'];
+			$querystring = is_callable($processor) ?
+				call_user_func($processor, $this->lookfor) :
+				$this->lookfor;
+
+			return sprintf("%s%s%s%s",
+				       BASE_URL,
+				       $this->repository,
+				       $validAction['url'],
+				       $querystring);
+		}
+		else {
+			return false;
+		}
+	}
+
+	/**
+	 * A "kitchen sink" setup routine:
+	 *  - parses $_REQUEST params for expected data:
+	 *     - repsitory
+	 *     - action
+	 *     - lookfor
+	 *     - limit
+	 *     - callback
+	 *  - initialises internal variables based on request data
+	 *  - sets message response accordingly
+	 * @return true if preconditions met, false otherwise
+	 */
+	private function setup() {
+		if (isset($_REQUEST['repository'])) {
+			//strip leading "../", and normalise "/"
+			$this->repository = preg_replace(
+				"/\/+/",
+				"/",
+				preg_replace(
+					"/^(\.\.\/)+/",
+					"",
+					$_REQUEST['repository']));
+		}
+		if (isset($_REQUEST['action'])) {
+			if ($this->isValidAction($_REQUEST['action'])) {
+				$this->action = $_REQUEST['action'];
+				$this->jsonData['message'] = 'action: ' .
+					$this->action;
+			}
+			else {
+				$this->jsonData['message'] .= " and valid: " .
+					"one of " .
+					implode(", ", $this->valid_actions);
+			}
+		}
+
+		if ($this->action) {
+			if (isset($_REQUEST['lookfor'])) {
+				$this->lookfor = rawurlencode($_REQUEST['lookfor']);
+				$this->jsonData['message'] .= " (" . $_REQUEST['lookfor'] . ")";
+			}
+
+			if (isset($_REQUEST['limit'])) {
+				if (is_numeric($_REQUEST['limit'])) {
+					$this->limit = $_REQUEST['limit'];
+					if ($this->limit > MAX_RESULTS) {
+						$this->jsonData['warning'] = "only retrieving first " .
+							MAX_RESULTS . " matches";
+						$this->limit = MAX_RESULTS;
+					}
+				}
+				else {
+					$this->jsonData['warning'] = "limit must be numeric: " .
+						"falling back to default limit of " . $this->limit;
+				}
+				$this->jsonData['limit'] = $this->limit;
+			}
+
+			if (isset($_REQUEST['callback'])) {
+				$this->callback = $_REQUEST['callback'];
+			}
+			return true;
+		}
+		else {
+			return false;
+		}
+
+	}
+
+	/**
+	 * Dump a whole bunch of JSON to STDOUT
+	 */
+	private function display() {
+		$this->jsonData = (defined(PHP_VERSION_ID) && PHP_VERSION_ID >= 50400) ?
+			json_encode($this->jsonData, JSON_UNESCAPED_SLASHES) :
+			str_replace('\/','/', json_encode($this->jsonData));
+		echo $this->callback . "(" . $this->jsonData . ");";
 	}
 }
 
-
-if ($action === "search" && $lookfor !== false) {
-	$url = SEARCH_URL . "?anycontains=" . urlencode($lookfor);
-}
-
-// Send the query (curl)
-if ($url) {
-	$ch = curl_init() or die(curl_error());
-	curl_setopt($ch, CURLOPT_URL, $url);
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-	curl_setopt($ch, CURLOPT_FAILONERROR, TRUE);
-	curl_setopt($ch, CURLOPT_BINARYTRANSFER, TRUE);
-	$data = json_decode(curl_exec($ch), true) or die(curl_error());
-	if ($data != null) {
-		$jsonData['status'] = 'OK';
-	}
-}
-
-// Parse the response: strip out some crud, use sensible labels
-if ($data && $jsonData['status'] == "OK") {
-	$jsonData['items'] = array_map(function($i) {
-			$i['label'] = $i['prefLabel']['_value'];
-			$i['about'] = $i['_about'];
-			unset($i['_about'],
-			      $i['broader'],
-			      $i['prefLabel']);
-			return $i;
-		},
-		array_slice($data['result']['items'],
-			    0,
-			    $limit));
-	$jsonData['count'] = count($jsonData['items']);
-}
-
-// Send the response as JSONP: if we have PHP 5.4, we can unescape
-// slashes. Otherwise, str_replace to the... er... rescue?
-$jsonData = (defined(PHP_VERSION_ID) && PHP_VERSION_ID >= 50400) ?
-	json_encode($jsonData, JSON_UNESCAPED_SLASHES) :
-	str_replace('\/','/', json_encode($jsonData));
-echo $callback . "(" . $jsonData . ");";
+$proxy = new VocabProxy();
 ?>
