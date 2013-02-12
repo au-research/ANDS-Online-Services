@@ -3,6 +3,9 @@
 
 <h2>Topics listed in Research Data Australia</h2>
 
+<p><em>Topics pages collate areas of research interest together, and associate research datasets,
+people and activities from within the Australian Research Data Commons.</em></p>
+
 <ul class="topic_list">
 <?php
 foreach ($topics AS $key => $topic)
