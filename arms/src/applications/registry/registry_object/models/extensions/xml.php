@@ -116,11 +116,18 @@ class XML_Extension extends ExtensionBase
 		return $data;
 	}
 
-	function getRif(){
-		if (!is_null($this->_rif)) return $this->_rif->xml;
+	function getRif($revision_id = null){
+
+		if ($revision_id)
+		{
+			$result = $this->db->select('data')->get_where('record_data', array('id'=>$revision_id, 'scheme'=>RIFCS_SCHEME));
+		}
+		else
+		{
+			$result = $this->db->select('data')->order_by('timestamp','desc')->limit(1)->get_where('record_data', array('registry_object_id'=>$this->ro->id, 'scheme'=>RIFCS_SCHEME));
+		}
 
 		$data = false;
-		$result = $this->db->select('data')->order_by('timestamp','desc')->limit(1)->get_where('record_data', array('registry_object_id'=>$this->ro->id, 'scheme'=>RIFCS_SCHEME));
 		if ($result->num_rows() > 0)
 		{
 			foreach($result->result_array() AS $row)
@@ -131,7 +138,6 @@ class XML_Extension extends ExtensionBase
 		$result->free_result();
 		return $data;
 	}
-
 
 	function getNativeFormat($record_data_id = NULL)
 	{
