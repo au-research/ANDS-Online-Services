@@ -9,7 +9,8 @@ class Registry_fetch extends CI_Model
 			'base_url' => base_url(),
 		);
 
-		return $this->_transformByXSL($extrif, 'extRif2view.xsl', $xsl_args);
+		// Add one level of entity decoding here 
+		return html_entity_decode($this->_transformByXSL($extrif, 'extRif2view.xsl', $xsl_args));
 	}
 
 	function transformExtrifToHTMLPreview($extrif)

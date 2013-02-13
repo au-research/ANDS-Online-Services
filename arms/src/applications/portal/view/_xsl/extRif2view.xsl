@@ -62,7 +62,7 @@
         <xsl:text>  /  </xsl:text>
         <a>
            <xsl:attribute name="href">
-               <xsl:value-of select="$base_url"/>view/group/?group=<xsl:value-of select="$theGroup"/>&amp;groupName=<xsl:value-of select="./@group"/>
+               <xsl:value-of select="$base_url"/>view/group/?group=<xsl:value-of select="$theGroup"/>&amp;amp;groupName=<xsl:value-of select="./@group"/>
            </xsl:attribute><xsl:value-of select="$group"/></a>				
        </xsl:if>
 
@@ -227,7 +227,7 @@
     
     <!-- DISPLAY RELATED INFO -->
     <xsl:if test="ro:relatedInfo">
-        <p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text></p>
+        <p><xsl:text disable-output-escaping="yes">&amp;amp;nbsp;</xsl:text></p>
         <h4>More Information</h4>
         <xsl:apply-templates select="ro:relatedInfo"/> 
     </xsl:if>
@@ -288,7 +288,7 @@
   <xsl:if test="ro:subject">
     <div style="position:relative;clear:both">
         <!--<p><b>Subjects:</b>-->
-        <p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text></p>
+        <p><xsl:text disable-output-escaping="yes">&amp;amp;nbsp;</xsl:text></p>
         <h4>Subjects</h4>
         <!-- ANZSRC SUBJECTS -->
         <xsl:if test="ro:subject/@type='anzsrc-for' or ro:subject/@type='anzsrc-seo' or ro:subject/@type='anzsrc-toa'">
@@ -326,7 +326,7 @@
         <div id="citation" style="position:relative;clear:both;">
             <xsl:choose>
                 <xsl:when test="ro:citationInfo/ro:citationMetadata">
-                    <p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text></p>
+                    <p><xsl:text disable-output-escaping="yes">&amp;amp;nbsp;</xsl:text></p>
                     <h4>How to Cite this Collection</h4>
                        <!--   <a title="Add this article to your Mendeley library" target="_blank">
                        <xsl:attribute name="href">
@@ -336,7 +336,7 @@
                         <xsl:apply-templates select="ro:citationInfo/ro:citationMetadata"/> 
                     </xsl:when>
                     <xsl:when test="ro:citationInfo/ro:fullCitation">
-                        <p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text></p>
+                        <p><xsl:text disable-output-escaping="yes">&amp;amp;nbsp;</xsl:text></p>
                         <h4>How to Cite this Collection</h4>
                         <xsl:apply-templates select="ro:citationInfo/ro:fullCitation"/>
                     </xsl:when>
@@ -345,10 +345,10 @@
                         <span class="Z3988">    
                             <xsl:attribute name="title">
                                 <xsl:text>ctx_ver=Z39.88-2004</xsl:text>
-                                <xsl:text>&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Adc</xsl:text>
-                                <xsl:text>&amp;rfr_id=info%3Asid%2FANDS</xsl:text>
-                                <xsl:text>&amp;rft.title=</xsl:text><xsl:value-of select="//ro:displayTitle"/>
-                                <xsl:text>&amp;rft.description=</xsl:text><xsl:value-of select="//ro:displayTitle"/>
+                                <xsl:text>&amp;amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Adc</xsl:text>
+                                <xsl:text>&amp;amp;rfr_id=info%3Asid%2FANDS</xsl:text>
+                                <xsl:text>&amp;amp;rft.title=</xsl:text><xsl:value-of select="//ro:displayTitle"/>
+                                <xsl:text>&amp;amp;rft.description=</xsl:text><xsl:value-of select="//ro:displayTitle"/>
                             </xsl:attribute>
                         </span><span class="Z3988"></span>      
                     </xsl:otherwise>                        
@@ -360,7 +360,7 @@
 
     <!-- DISPLAY DATES -->
     <xsl:if test="extRif:dates">
-        <p><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text></p>
+        <p><xsl:text disable-output-escaping="yes">&amp;amp;nbsp;</xsl:text></p>
         <h4>Dates</h4> 
         <table>
             <xsl:apply-templates select="extRif:dates"/>
@@ -959,10 +959,10 @@
     <span class="Z3988">    
         <xsl:attribute name="title">
             <xsl:text>ctx_ver=Z39.88-2004</xsl:text>
-            <xsl:text>&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Adc</xsl:text>
-            <xsl:text>&amp;rfr_id=info%3Asid%2FANDS</xsl:text>
-            <xsl:text>&amp;rft.title=</xsl:text><xsl:value-of select="//ro:displayTitle"/>
-            <xsl:text>&amp;rft.description=</xsl:text><xsl:value-of select="."/>
+            <xsl:text>&amp;amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Adc</xsl:text>
+            <xsl:text>&amp;amp;rfr_id=info%3Asid%2FANDS</xsl:text>
+            <xsl:text>&amp;amp;rft.title=</xsl:text><xsl:value-of select="//ro:displayTitle"/>
+            <xsl:text>&amp;amp;rft.description=</xsl:text><xsl:value-of select="."/>
         </xsl:attribute>
     </span>
     <span class="Z3988">
@@ -1018,14 +1018,14 @@
 <span class="Z3988">   
    <xsl:attribute name="title">
        <xsl:text>ctx_ver=Z39.88-2004</xsl:text>
-       <xsl:text>&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Adc</xsl:text>
-       <xsl:text>&amp;rfr_id=info%3Asid%2FANDS</xsl:text>
-       <xsl:text>&amp;rft.contributor=</xsl:text><xsl:apply-templates select="ro:contributor"/>
-       <xsl:text>&amp;rft.title=</xsl:text><xsl:value-of select="./ro:title"/> 
-       <xsl:text>&amp;rft.place=</xsl:text><xsl:value-of select="./ro:placePublished"/>
-       <xsl:text>&amp;rft_id=</xsl:text><xsl:value-of select="./ro:url"/>
-       <xsl:text>&amp;rft.edition=</xsl:text><xsl:value-of select="./ro:version"/>.
-       <xsl:text>&amp;rft.description=</xsl:text><xsl:value-of select="./ro:context"/>
+       <xsl:text>&amp;amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Adc</xsl:text>
+       <xsl:text>&amp;amp;rfr_id=info%3Asid%2FANDS</xsl:text>
+       <xsl:text>&amp;amp;rft.contributor=</xsl:text><xsl:apply-templates select="ro:contributor"/>
+       <xsl:text>&amp;amp;rft.title=</xsl:text><xsl:value-of select="./ro:title"/> 
+       <xsl:text>&amp;amp;rft.place=</xsl:text><xsl:value-of select="./ro:placePublished"/>
+       <xsl:text>&amp;amp;rft_id=</xsl:text><xsl:value-of select="./ro:url"/>
+       <xsl:text>&amp;amp;rft.edition=</xsl:text><xsl:value-of select="./ro:version"/>.
+       <xsl:text>&amp;amp;rft.description=</xsl:text><xsl:value-of select="./ro:context"/>
    </xsl:attribute>
 </span>
 <span class="Z3988">
