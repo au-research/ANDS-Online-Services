@@ -239,18 +239,50 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 
 		if (!$registry_object)
 		{
+			throw new Exception("Unable to fetch contributor data registry object.");
+		}
+		
+
+		// XXX: TODO: LIMIT and offset (pass to getSuggestedLinks...)
+			$this->load->library('solr');
+		$contents = $registry_object->getContributorData();
+
+		echo json_encode(array("contents"=>$contents));
+	}
+
+	/**
+	 * Fetch canned text for contributor page
+	 *
+	 * XXX: TODO
+	 */
+	public function getContributorText()
+	{
+		$cannedText = array();
+
+		// Get the RO instance for this registry object so we can fetch its contributor datat
+		$this->load->model('registry_object/registry_objects', 'ro');
+		
+		if ($this->input->get('slug'))
+		{
+			$registry_object = $this->ro->getBySlug($this->input->get('slug'));
+		}
+		elseif ($this->input->get('registry_object_id'))
+		{
+			$registry_object = $this->ro->getByID($this->input->get('registry_object_id'));
+		}
+
+		if (!$registry_object)
+		{
 			throw new Exception("Unable to fetch suggested links for this registry object.");
 		}
 		
 
 		// XXX: TODO: LIMIT and offset (pass to getSuggestedLinks...)
 	
-		$contents = $registry_object->getContributorData($group='Auscope');
+		$cannedText = $registry_object->getContributorText($group='Auscope');
 
-		echo json_encode(array("contents"=>$contents));
+		echo json_encode(array("theText"=>$cannedText));
 	}
-
-
 	/**
 	 * Return a list of Spotlight Partners along with their brief description and location (URL)
 	 */

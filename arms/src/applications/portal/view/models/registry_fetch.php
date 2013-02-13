@@ -195,8 +195,6 @@ class Registry_fetch extends CI_Model
 
  		$facetsForGroup = json_decode(file_get_contents($url), true);
 
-
-
  		if (isset($facetsForGroup['contents']))
 		{
 			return $facetsForGroup;
@@ -209,6 +207,25 @@ class Registry_fetch extends CI_Model
 	
 		return $facetsForGroup;
 	}
+	function fetchContributorText($group)
+	{
+		$url = $this->config->item('registry_endpoint') . "getContributorText/?slug=".$group;
+
+ 		$cannedText = json_decode(file_get_contents($url), true);
+
+ 		if (isset($cannedText['theText']))
+		{
+			return $cannedText;
+		}
+		else
+		{
+			var_dump($url);
+			throw new ErrorException("Error whilst fetching contributor page details: " . $cannedText);
+		}
+	
+		return $cannedText;
+	}
+
 }
 
 class SlugNoLongerValidException extends Exception {}

@@ -55,6 +55,17 @@ class Solr {
         }
     }
 
+   /**
+     * Manually unsset the option for solr search
+     * @param string $field 
+     * @param string $value
+     */
+    function clearOpt($field){
+        if(isset($this->options[$field])){          
+           unset($this->options[$field]);
+        }
+    }
+
     /**
      * get the existing option
      * @param  string $field 

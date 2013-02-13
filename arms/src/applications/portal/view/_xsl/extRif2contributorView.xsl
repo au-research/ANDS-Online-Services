@@ -151,7 +151,6 @@
 <div class="post">
 
     <!-- DISPLAY DESCRIPTIONS -->
-    <xsl:if test="ro:description">
 
 
             <div class="descriptions" style="position:relative;clear:both;">
@@ -161,13 +160,12 @@
             	<xsl:if test="extRif:description/@type='researchAreas'"><h2>Research and Key Research Areas</h2></xsl:if>				
 				<xsl:apply-templates select="extRif:description[@type= 'researchAreas']" mode="content"/>
 				 <h2>Research Data Profile</h2>
-                 <div id="cannedShowcase"></div>
+                 %%%%CANNED_TEXT%%%%
 				<xsl:apply-templates select="extRif:description[@type= 'researchDataProfile']" mode="content"/>	
 	            <xsl:if test="extRif:description/@type='researchSupport'"><h2>Research Support</h2></xsl:if>						
 				<xsl:apply-templates select="extRif:description[@type= 'researchSupport']" mode="content"/>							
             </div>   
 
-    </xsl:if>
   <xsl:if test="ro:identifier">
             <div style="position:relative;clear:both;"><p><b>Identifiers:</b></p>
            	 	<div id="identifiers">
@@ -200,7 +198,7 @@
   
 
 
- 
+
 
 
       
@@ -275,49 +273,25 @@
 		</xsl:if>
 				
 			<!-- Registry Content -->
-			<div class="right-box" id="contentRightBox">
-      				<div id="contents">
-      				%%%%CONTENTS%%%%
-      				</div>			
-			</div>	
-				
-				
-			<!-- Subjects Covered -->
-			<div class="right-box" id="subjectRightBox">
-					%%%%SUBJECTS_COVERED%%%%
-			</div>	
-			
-			<!-- Research Groups: -->
-			<div class="right-box" id="groupsRightBox">
-		
-			<h3>Research Groups</h3>
-				%%%%RESEARCH_GROUPS%%%%
-			</div>	
-			
-			<!-- Last 5 Collections Added: -->
-			<div class="right-box" id="addedRightBox">
-	
-			<h3>Last 5 Collections Added</h3>
-				%%%%COLLECTIONS_ADDED%%%%
-			</div>					
+      				%%%%CONTENTS%%%%			
 
 			<!-- Top 5 Most Visited Collections: -->
-			<div class="right-box" id="visitedRightBox">
+		<!--	<div class="right-box" id="visitedRightBox">
 	
 			<h3>Top 5 Most Visited Collections</h3>
 			<div id="collectionsVisited">
 			%%%%COLLECTIONS_VISITED%%%%
 			</div>
-			</div>
+			</div> -->
 			
 				<!-- Top 5 Most Cited Collections: -->
-			<div class="right-box" id="citedRightBox">
+		<!--	<div class="right-box" id="citedRightBox">
 	
 			<h3>Top 5 Most Cited Collections</h3>
 			<div id="collectionsCited">
 				%%%%COLLECTIONS_CITED%%%%
 			</div>
-			</div>				
+			</div>		-->		
 
 </div> 
 <div class="container_clear"></div>

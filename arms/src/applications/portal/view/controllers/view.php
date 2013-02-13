@@ -118,6 +118,7 @@ class View extends MX_Controller {
 		// You are viewing a published record if $this->input->get('slug') is set
 		// You are viewing a draft record if $this->input->get('id') is set
 		// (draft records include data/statistics including other draft records)
+		
 		$published_only = ($this->input->get('slug') ? true : false);
 
 		// In here, go get the information/precanned text, etc.
@@ -126,18 +127,20 @@ class View extends MX_Controller {
 
 		$data['contentData'] = $this->registry->fetchContributorData($this->input->get('slug'));
 		$contentDiv = $this->load->view('contentData', $data, true);
+
 		// XXX: Do some witchcraft to render this into the template, probably str_replace('')  (see above)
 
+		$data['cannedText'] = $this->registry->fetchContributorText($this->input->get('slug'));
+		$cannedTextDiv = $this->load->view('cannedText', $data, true);
 
 
-	//	$data['connections_contents'] = $contentData;
-	//	print_r($contentData);
 		$connDiv = $this->load->view('connections', $data, true);
 
 		//$data['some_random_data_for_the_view_to_parse'] = $contributorData['data'];
 
 		$data['registry_object_contents'] = $this->registry->transformExtrifToHTMLContributorRecord($extRif['data']);
 		$data['registry_object_contents'] = str_replace('%%%%CONTENTS%%%%', $contentDiv, $data['registry_object_contents']);
+		$data['registry_object_contents'] = str_replace('%%%%CANNED_TEXT%%%%', $cannedTextDiv, $data['registry_object_contents']);	
 		$this->load->view('contributor_view', $data);
 	}
 
