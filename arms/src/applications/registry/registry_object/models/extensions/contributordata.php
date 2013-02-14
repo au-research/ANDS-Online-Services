@@ -51,6 +51,7 @@ class ContributorData_Extension extends ExtensionBase
 		$this->_CI->solr->setOpt('fq', 'type:("group")');
 		$groups = $this->_CI->solr->executeSearch();
 		foreach($groups->{'response'}->{'docs'} as $group){
+			if($group->{'slug'}!=$this->ro->getAttribute('slug'))
 			$contributorData['groups'][$group->{'list_title'}] = $group->{'slug'};
 		}
 
