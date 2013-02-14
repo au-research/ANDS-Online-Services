@@ -227,7 +227,7 @@
     
     <!-- DISPLAY RELATED INFO -->
     <xsl:if test="ro:relatedInfo">
-        <p><xsl:text disable-output-escaping="yes">&amp;amp;nbsp;</xsl:text></p>
+        <p><xsl:text>&amp;amp;nbsp;</xsl:text></p>
         <h4>More Information</h4>
         <xsl:apply-templates select="ro:relatedInfo"/> 
     </xsl:if>
@@ -288,7 +288,7 @@
   <xsl:if test="ro:subject">
     <div style="position:relative;clear:both">
         <!--<p><b>Subjects:</b>-->
-        <p><xsl:text disable-output-escaping="yes">&amp;amp;nbsp;</xsl:text></p>
+        <p><xsl:text>&amp;amp;nbsp;</xsl:text></p>
         <h4>Subjects</h4>
         <!-- ANZSRC SUBJECTS -->
         <xsl:if test="ro:subject/@type='anzsrc-for' or ro:subject/@type='anzsrc-seo' or ro:subject/@type='anzsrc-toa'">
@@ -326,7 +326,7 @@
         <div id="citation" style="position:relative;clear:both;">
             <xsl:choose>
                 <xsl:when test="ro:citationInfo/ro:citationMetadata">
-                    <p><xsl:text disable-output-escaping="yes">&amp;amp;nbsp;</xsl:text></p>
+                    <p><xsl:text>&amp;amp;nbsp;</xsl:text></p>
                     <h4>How to Cite this Collection</h4>
                        <!--   <a title="Add this article to your Mendeley library" target="_blank">
                        <xsl:attribute name="href">
@@ -339,7 +339,7 @@
                         </div>
                     </xsl:when>
                     <xsl:when test="ro:citationInfo/ro:fullCitation">
-                        <p><xsl:text disable-output-escaping="yes">&amp;amp;nbsp;</xsl:text></p>
+                        <p><xsl:text>&amp;amp;nbsp;</xsl:text></p>
                         <h4>How to Cite this Collection</h4>
                         <h5>Full Citation:</h5>
                         <div class="citationDisplay">
@@ -366,7 +366,7 @@
 
     <!-- DISPLAY DATES -->
     <xsl:if test="extRif:dates">
-        <p><xsl:text disable-output-escaping="yes">&amp;amp;nbsp;</xsl:text></p>
+        <p><xsl:text>&amp;amp;nbsp;</xsl:text></p>
         <h4>Dates</h4> 
         <table>
             <xsl:apply-templates select="extRif:dates"/>
