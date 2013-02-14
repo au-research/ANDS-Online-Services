@@ -928,11 +928,11 @@ class Data_source extends MX_Controller {
 		$data_source = $this->ds->getByID($this->input->post('data_source_id'));
 
 		$xml=stripXMLHeader($xml);
-		if ($data_source->provider_type != RIFCS_SCHEME)
+		if ($data_source->provider_type && $data_source->provider_type != RIFCS_SCHEME)
 		{
 			$this->importer->setCrosswalk($data_source->provider_type);
 		}
-		else if (strpos(trim($xml), "<registryObjects") === FALSE)
+		else if (strpos($xml, "<registryObjects") === FALSE)
 		{
 			$xml = wrapRegistryObjects($xml);
 		}
