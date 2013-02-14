@@ -25,6 +25,11 @@ function bench($idx = 0)
 	}
 }
 
+function first_line($string)
+{
+	return strtok($string, "\r\n");
+}
+
 
 function curl_post($url, $post)
 {

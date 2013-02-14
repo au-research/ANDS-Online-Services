@@ -627,7 +627,7 @@ class Data_source extends MX_Controller {
 			foreach($dataSourceLogs as $log){
 				$item = array();
 				$item['type'] = $log['type'];
-				$item['log_snippet'] = ellipsis($log['log']);
+				$item['log_snippet'] = first_line($log['log']);
 				$item['log'] = $log['log'];
 				$item['id'] = $log['id'];
 				$item['date_modified'] = timeAgo($log['date_modified']);
