@@ -333,12 +333,18 @@
                         http://www.mendeley.com/import/?url=<xsl:value-of select="ro:citationInfo/ro:citationMetadata/ro:url"/>
                         </xsl:attribute> 
                         <img src="http://www.mendeley.com/graphics/mendeley.png"/></a> -->
-                        <xsl:apply-templates select="ro:citationInfo/ro:citationMetadata"/> 
+                        <h5>Citation (Metadata):</h5>
+                        <div class="citationDisplay">
+                          <xsl:apply-templates select="ro:citationInfo/ro:citationMetadata"/> 
+                        </div>
                     </xsl:when>
                     <xsl:when test="ro:citationInfo/ro:fullCitation">
                         <p><xsl:text disable-output-escaping="yes">&amp;amp;nbsp;</xsl:text></p>
                         <h4>How to Cite this Collection</h4>
-                        <xsl:apply-templates select="ro:citationInfo/ro:fullCitation"/>
+                        <h5>Full Citation:</h5>
+                        <div class="citationDisplay">
+                          <xsl:apply-templates select="ro:citationInfo/ro:fullCitation"/>
+                        </div>
                     </xsl:when>
                     <xsl:otherwise >
                         <!-- If we have found an empty citation element build the openURL using the object display title -->
@@ -369,22 +375,18 @@
     
     <!-- DISPLAY IDENTIFIERS -->
     <xsl:if test="ro:identifier">
-        <p></p>
-        <h4>Identifiers</h4>
-        <div id="identifiers">
-
-
-         <xsl:apply-templates select="ro:identifier[@type='doi']" mode = "doi"/>
-         <xsl:apply-templates select="ro:identifier[@type='ark']" mode = "ark"/>      
-         <xsl:apply-templates select="ro:identifier[@type='AU-ANL:PEAU']" mode = "nla"/>  
-         <xsl:apply-templates select="ro:identifier[@type='handle']" mode = "handle"/>   
-         <xsl:apply-templates select="ro:identifier[@type='purl']" mode = "purl"/>
-         <xsl:apply-templates select="ro:identifier[@type='uri']" mode = "uri"/> 
-         <xsl:apply-templates select="ro:identifier[not(@type =  'doi' or @type =  'ark' or @type =  'AU-ANL:PEAU' or @type =  'handle' or @type =  'purl' or @type =  'uri')]" mode="other"/>                                                
-
-
-     </div>
- </xsl:if>   
+      <p></p>
+      <h4>Identifiers</h4>
+      <div id="identifiers">
+        <xsl:apply-templates select="ro:identifier[@type='doi']" mode="doi_prefixedLink"/>
+        <xsl:apply-templates select="ro:identifier[@type='ark']" mode="ark_prefixedLink"/>      
+        <xsl:apply-templates select="ro:identifier[@type='AU-ANL:PEAU']" mode="nla_prefixedLink"/>  
+        <xsl:apply-templates select="ro:identifier[@type='handle']" mode="handle_prefixedLink"/>   
+        <xsl:apply-templates select="ro:identifier[@type='purl']" mode="purl_prefixedLink"/>
+        <xsl:apply-templates select="ro:identifier[@type='uri']" mode="uri_prefixedLink"/> 
+        <xsl:apply-templates select="ro:identifier[not(@type =  'doi' or @type =  'ark' or @type =  'AU-ANL:PEAU' or @type =  'handle' or @type =  'purl' or @type =  'uri')]" mode="other_prefixedLink"/> 
+      </div>
+    </xsl:if>   
         <!--div style="position:relative;clear:both;" class="no_print">
             <p> <a>
                 <xsl:attribute name="href"><xsl:value-of select="$orca_view"/>?key=<xsl:value-of select="$key"/></xsl:attribute>
@@ -597,362 +599,277 @@
       <xsl:if test="./ro:title">
           <xsl:value-of select="./ro:title"/><br/>
       </xsl:if>
-      <xsl:apply-templates select="./ro:identifier[@type='doi']" mode = "doi"/>
-      <xsl:apply-templates select="./ro:identifier[@type='ark']" mode = "ark"/>    	
-      <xsl:apply-templates select="./ro:identifier[@type='AU-ANL:PEAU']" mode = "nla"/>  
-      <xsl:apply-templates select="./ro:identifier[@type='handle']" mode = "handle"/>   
-      <xsl:apply-templates select="./ro:identifier[@type='purl']" mode = "purl"/>
-      <xsl:apply-templates select="./ro:identifier[@type='uri']" mode = "uri"/> 
-      <xsl:apply-templates select="./ro:identifier[not(@type =  'doi' or @type =  'ark' or @type =  'AU-ANL:PEAU' or @type =  'handle' or @type =  'purl' or @type =  'uri')]" mode="other"/>			            	
+      <xsl:apply-templates select="./ro:identifier[@type='doi']" mode = "doi_prefixedLink"/>
+      <xsl:apply-templates select="./ro:identifier[@type='ark']" mode = "ark_prefixedLink"/>    	
+      <xsl:apply-templates select="./ro:identifier[@type='AU-ANL:PEAU']" mode = "nla_prefixedLink"/>  
+      <xsl:apply-templates select="./ro:identifier[@type='handle']" mode = "handle_prefixedLink"/>   
+      <xsl:apply-templates select="./ro:identifier[@type='purl']" mode = "purl_prefixedLink"/>
+      <xsl:apply-templates select="./ro:identifier[@type='uri']" mode = "uri_prefixedLink"/> 
+      <xsl:apply-templates select="./ro:identifier[not(@type =  'doi' or @type =  'ark' or @type =  'AU-ANL:PEAU' or @type =  'handle' or @type =  'purl' or @type =  'uri')]" mode="other_prefixedLink"/>			            	
 
-      <xsl:if test="./ro:format">
+      <!--xsl:if test="./ro:format">
+    
+        <p> Format
        <xsl:apply-templates select="./ro:format"/>
-   </xsl:if>
+     </p>
+      </xsl:if-->
    <xsl:if test="./ro:notes">
+    <p>
        <xsl:apply-templates select="./ro:notes"/>
+      </p>
    </xsl:if>
 </p>        
 </xsl:template>
-<xsl:template match="ro:format">
-    <xsl:apply-templates select="./extRif:identifier[@type='Doi']" mode = "formatdoi"/>
-    <xsl:apply-templates select="./extRif:identifier[@type='Ark']" mode = "formatark"/>    	
-    <xsl:apply-templates select="./extRif:identifier[@type='AU-ANL:PEAU']" mode = "formatnla"/>  
-    <xsl:apply-templates select="./extRif:identifier[@type='Handle']" mode = "formathandle"/>   
-    <xsl:apply-templates select="./extRif:identifier[@type='Purl']" mode = "formatpurl"/>
-    <xsl:apply-templates select="./extRif:identifier[@type='Uri']" mode = "formaturi"/> 
-    <xsl:apply-templates select="./extRif:identifier[not(@type =  'Doi' or @type =  'Ark' or @type =  'AU-ANL:PEAU' or @type =  'Handle' or @type =  'Purl' or @type =  'Uri')]" mode="formatother"/>			            	                          	
-</xsl:template>
+
+<!--xsl:template match="ro:format">
+  <p>
+    <xsl:apply-templates select="./ro:identifier[@type='Doi']" mode = "doi_prefixedLink"/>
+    <xsl:apply-templates select="./ro:identifier[@type='Ark']" mode = "ark_prefixedLink"/>    	
+    <xsl:apply-templates select="./ro:identifier[@type='AU-ANL:PEAU']" mode = "nla_prefixedLink"/>  
+    <xsl:apply-templates select="./ro:identifier[@type='Handle']" mode = "handle_prefixedLink"/>   
+    <xsl:apply-templates select="./ro:identifier[@type='Purl']" mode = "purl_prefixedLink"/>
+    <xsl:apply-templates select="./ro:identifier[@type='Uri']" mode = "uri_prefixedLink"/> 
+    <xsl:apply-templates select="./ro:identifier[not(@type =  'Doi' or @type =  'Ark' or @type =  'AU-ANL:PEAU' or @type =  'Handle' or @type =  'Purl' or @type =  'Uri')]" mode="other_prefixedLink"/>			            	                          
+  </p>	
+</xsl:template-->
 
 
 
 
-<xsl:template match="ro:identifier" mode="ark">
-    <p>
-        ARK: 
-        <xsl:variable name="theidentifier">    			
-           <xsl:choose>	
-               <xsl:when test="string-length(substring-after(.,'http://'))>0">
-                 <xsl:value-of select="(substring-after(.,'http://'))"/>
-             </xsl:when>	    							
-
-             <xsl:otherwise>
-                 <xsl:value-of select="."/>
-             </xsl:otherwise>		
-         </xsl:choose>
-     </xsl:variable>  
-     <xsl:if test="string-length(substring-after(.,'/ark:/'))>0">    			     
-       <a>
-        <xsl:attribute name="class">identifier</xsl:attribute>
-        <xsl:attribute name="href"><xsl:text>http://</xsl:text> <xsl:value-of select="$theidentifier"/></xsl:attribute>
-        <xsl:attribute name="title"><xsl:text>Resolve this ARK identifier</xsl:text></xsl:attribute>    				
-        <xsl:value-of select="."/>
-    </a>
-</xsl:if>
-<xsl:if test="string-length(substring-after(.,'/ark:/'))&lt;1">
-  <a class="identifier"><xsl:value-of select="."/></a>
-</xsl:if>
-</p>	 
-
-</xsl:template>
-<xsl:template match="extRif:identifier" mode="formatark">
-    <p>
-        Format ARK: 
-        <xsl:variable name="theidentifier">    			
-           <xsl:choose>	
-               <xsl:when test="string-length(substring-after(.,'http://'))>0">
-                 <xsl:value-of select="(substring-after(.,'http://'))"/>
-             </xsl:when>	    							
-
-             <xsl:otherwise>
-                 <xsl:value-of select="."/>
-             </xsl:otherwise>		
-         </xsl:choose>
-     </xsl:variable>  
-     <xsl:if test="string-length(substring-after(.,'/ark:/'))>0">    			     
-       <a>
-        <xsl:attribute name="class">identifier</xsl:attribute>
-        <xsl:attribute name="href"><xsl:text>http://</xsl:text> <xsl:value-of select="$theidentifier"/></xsl:attribute>
-        <xsl:attribute name="title"><xsl:text>Resolve this ARK identifier</xsl:text></xsl:attribute>    				
-        <xsl:value-of select="."/>
-    </a>
-</xsl:if>
-<xsl:if test="string-length(substring-after(.,'/ark:/'))&lt;1">
-  <a class="identifier"><xsl:value-of select="."/></a>
-</xsl:if>
-</p>	 
-
-</xsl:template>
-<xsl:template match="ro:identifier" mode="nla">
-    <p>
-       NLA: 
-       <xsl:variable name="theidentifier">    			
-           <xsl:choose>				
-               <xsl:when test="string-length(substring-after(.,'nla.gov.au/'))>0">
-                 <xsl:value-of select="substring-after(.,'nla.gov.au/')"/>
-             </xsl:when>		     	
-             <xsl:otherwise>
-                 <xsl:value-of select="."/>
-             </xsl:otherwise>		
-         </xsl:choose>
-     </xsl:variable>  
-     <xsl:if test="string-length(substring-after(.,'nla.party'))>0">		
-      <a>
-        <xsl:attribute name="class">identifier</xsl:attribute>
-        <xsl:attribute name="href"><xsl:text>http://nla.gov.au/</xsl:text> <xsl:value-of select="$theidentifier"/></xsl:attribute>
-        <xsl:attribute name="title"><xsl:text>View the record for this party in Trove</xsl:text></xsl:attribute>    				
-        <xsl:value-of select="."/>
-    </a>
-</xsl:if> 
-<xsl:if test="string-length(substring-after(.,'nla.party'))&lt;1">		
-  <a class="identifier"><xsl:value-of select="."/></a>
-</xsl:if> 
-</p>
-
-</xsl:template>
-<xsl:template match="ro:identifier" mode="doi">   		
-    <p>			
-        DOI: 
-        <xsl:variable name="theidentifier">    			
-           <xsl:choose>				
-               <xsl:when test="string-length(substring-after(.,'doi.org/'))>0">
-                 <xsl:value-of select="substring-after(.,'doi.org/')"/>
-             </xsl:when>		     	
-             <xsl:otherwise>
-                 <xsl:value-of select="."/>
-             </xsl:otherwise>		
-         </xsl:choose>
-     </xsl:variable> 
 
 
-     <xsl:if test="string-length(substring-after(.,'10.'))>0">		
-        <a>
-            <xsl:attribute name="class">identifier</xsl:attribute>
-            <xsl:attribute name="href"><xsl:text>http://dx.doi.org/</xsl:text> <xsl:value-of select="$theidentifier"/></xsl:attribute>
-            <xsl:attribute name="title"><xsl:text>Resolve this DOI</xsl:text></xsl:attribute>    				
-            <xsl:value-of select="."/>
-        </a>
-    </xsl:if>
+<!--
+  - <identifier/@type>_resolveURL = The URL which would be displayed which, if clicked in an anchor, resolves the identifier
+  - <identifier/@type>_prefixedLink = "Handle: <a href=<resolveURL>..."
+-->
 
-    <xsl:if test="string-length(substring-after(.,'10.'))&lt;1">		
-       <a class="identifier"><xsl:value-of select="."/></a>
-   </xsl:if> 	
-</p>			 			
-
-
-</xsl:template>
-
-<xsl:template match="extRif:identifier" mode="formatdoi">   		
-    <p>			
-        Format DOI: 
-        <xsl:variable name="theidentifier">    			
-           <xsl:choose>				
-               <xsl:when test="string-length(substring-after(.,'doi.org/'))>0">
-                 <xsl:value-of select="substring-after(.,'doi.org/')"/>
-             </xsl:when>		     	
-             <xsl:otherwise>
-                 <xsl:value-of select="."/>
-             </xsl:otherwise>		
-         </xsl:choose>
-     </xsl:variable> 
-
-
-     <xsl:if test="string-length(substring-after(.,'10.'))>0">		
-        <a>
-            <xsl:attribute name="class">identifier</xsl:attribute>
-            <xsl:attribute name="href"><xsl:text>http://dx.doi.org/</xsl:text> <xsl:value-of select="$theidentifier"/></xsl:attribute>
-            <xsl:attribute name="title"><xsl:text>Resolve this DOI</xsl:text></xsl:attribute>    				
-            <xsl:value-of select="."/>
-        </a>
-    </xsl:if>
-
-    <xsl:if test="string-length(substring-after(.,'10.'))&lt;1">		
-       <a class="identifier"><xsl:value-of select="."/></a>
-   </xsl:if> 	
-</p>			 			
-
-
-</xsl:template>
-
-<xsl:template match="ro:identifier" mode="handle">      
-   <p>			
-    Handle: 
-    <xsl:variable name="theidentifier">    			
-       <xsl:choose>
-          <xsl:when test="string-length(substring-after(.,'hdl:'))>0">
-             <xsl:text>http://hdl.handle.net/</xsl:text><xsl:value-of select="substring-after(.,'hdl:')"/>
-         </xsl:when> 
-         <xsl:when test="string-length(substring-after(.,'hdl.handle.net/'))>0">
-             <xsl:text>http://hdl.handle.net/</xsl:text><xsl:value-of select="substring-after(.,'hdl.handle.net/')"/>
-         </xsl:when>   			     	     				
-         <xsl:when test="string-length(substring-after(.,'http:'))>0">
-             <xsl:text></xsl:text><xsl:value-of select="."/>
-         </xsl:when>    										     	
-         <xsl:otherwise>
-             <xsl:text>http://hdl.handle.net/</xsl:text><xsl:value-of select="."/>
-         </xsl:otherwise>		
-     </xsl:choose>
- </xsl:variable>
-
-
- <a>
-    <xsl:attribute name="class">identifier</xsl:attribute>
-    <xsl:attribute name="href"> <xsl:value-of select="$theidentifier"/></xsl:attribute>
-    <xsl:attribute name="title"><xsl:text>Resolve this handle</xsl:text></xsl:attribute>    				
-    <xsl:value-of select="."/>
-</a> 
-</p>
-</xsl:template>
-<xsl:template match="extRif:identifier" mode="formathandle">      
-   <p>			
-      Format Handle: 
-      <xsl:variable name="theidentifier">    			
-       <xsl:choose>
-          <xsl:when test="string-length(substring-after(.,'hdl:'))>0">
-             <xsl:text>http://hdl.handle.net/</xsl:text><xsl:value-of select="substring-after(.,'hdl:')"/>
-         </xsl:when> 
-         <xsl:when test="string-length(substring-after(.,'hdl.handle.net/'))>0">
-             <xsl:text>http://hdl.handle.net/</xsl:text><xsl:value-of select="substring-after(.,'hdl.handle.net/')"/>
-         </xsl:when>   			     	     				
-         <xsl:when test="string-length(substring-after(.,'http:'))>0">
-             <xsl:text></xsl:text><xsl:value-of select="."/>
-         </xsl:when>    										     	
-         <xsl:otherwise>
-             <xsl:text>http://hdl.handle.net/</xsl:text><xsl:value-of select="."/>
-         </xsl:otherwise>		
-     </xsl:choose>
- </xsl:variable>
-
- <a>
-    <xsl:attribute name="class">identifier</xsl:attribute>
-    <xsl:attribute name="href"> <xsl:value-of select="$theidentifier"/></xsl:attribute>
-    <xsl:attribute name="title"><xsl:text>Resolve this handle</xsl:text></xsl:attribute>    				
-    <xsl:value-of select="."/>
-</a> 
-</p>
-</xsl:template>
-<xsl:template match="ro:identifier" mode="purl">     
-    <p>			
-      PURL: 
-      <xsl:variable name="theidentifier">    			
-        <xsl:choose>				
-           <xsl:when test="string-length(substring-after(.,'purl.org/'))>0">
-              <a class="identifier"><xsl:value-of select="substring-after(.,'purl.org/')"/></a>
-          </xsl:when>		     	
-          <xsl:otherwise>
-              <a class="identifier"><xsl:value-of select="."/></a>
-          </xsl:otherwise>		
-      </xsl:choose>
-  </xsl:variable>   	   			
-  <a>
-    <xsl:attribute name="class">identifier</xsl:attribute>
-    <xsl:attribute name="href"><xsl:text>http://purl.org/</xsl:text> <xsl:value-of select="$theidentifier"/></xsl:attribute>
-    <xsl:attribute name="title"><xsl:text>Resolve this purl identifier</xsl:text></xsl:attribute>    				
-    <xsl:value-of select="."/>
-</a> 
-</p>
-</xsl:template>
-<xsl:template match="extRif:identifier" mode="formatpurl">     
-    <p>			
-      Format PURL: 
-      <xsl:variable name="theidentifier">    			
-        <xsl:choose>				
-           <xsl:when test="string-length(substring-after(.,'purl.org/'))>0">
-              <a class="identifier"><xsl:value-of select="substring-after(.,'purl.org/')"/></a>
-          </xsl:when>		     	
-          <xsl:otherwise>
-              <a class="identifier"><xsl:value-of select="."/></a>
-          </xsl:otherwise>		
-      </xsl:choose>
-  </xsl:variable>   	   			
-  <a>
-    <xsl:attribute name="class">identifier</xsl:attribute>
-    <xsl:attribute name="href"><xsl:text>http://purl.org/</xsl:text> <xsl:value-of select="$theidentifier"/></xsl:attribute>
-    <xsl:attribute name="title"><xsl:text>Resolve this purl identifier</xsl:text></xsl:attribute>    				
-    <xsl:value-of select="."/>
-</a> 
-</p>
-</xsl:template>
-<xsl:template match="ro:identifier" mode="uri">    
-  <p> 			
-      URI: 
-      <xsl:variable name="theidentifier">    			
-        <xsl:choose>				
-           <xsl:when test="string-length(substring-after(.,'http'))>0">
-              <a class="identifier"><xsl:value-of select="."/></a>
-          </xsl:when>		     	
-          <xsl:otherwise>
-            <a>
-                <xsl:attribute name="class">identifier</xsl:attribute>
-                <xsl:attribute name="href"><xsl:value-of select="."/></xsl:attribute>
-                <xsl:value-of select="."/>
-            </a>
-        </xsl:otherwise>		
-    </xsl:choose>
-</xsl:variable>   	        			
-<a>
-    <xsl:attribute name="href"><xsl:value-of select="$theidentifier"/></xsl:attribute>
-    <xsl:attribute name="title"><xsl:text>Resolve this uri</xsl:text></xsl:attribute>    				
-    <xsl:value-of select="."/>  
-</a>   		 
-</p>
-</xsl:template> 
-<xsl:template match="extRif:identifier" mode="formaturi">    
-  <p> 			
-   Format	URI: 
-   <xsl:variable name="theidentifier">    			
-    <xsl:choose>				
-     <xsl:when test="string-length(substring-after(.,'http'))>0">
-      <a class="identifier"><xsl:value-of select="."/></a>
-  </xsl:when>		     	
+<!-- HANDLE IDENTIFIER DISPLAY MODES -->
+<xsl:template match="ro:identifier" mode="handle_resolveURL">
+  <xsl:choose>
+  <xsl:when test="string-length(substring-after(.,'hdl:'))>0">
+     <xsl:text>http://hdl.handle.net/</xsl:text><xsl:value-of select="substring-after(.,'hdl:')"/>
+  </xsl:when> 
+  <xsl:when test="string-length(substring-after(.,'hdl.handle.net/'))>0">
+     <xsl:text>http://hdl.handle.net/</xsl:text><xsl:value-of select="substring-after(.,'hdl.handle.net/')"/>
+  </xsl:when>                          
+  <xsl:when test="string-length(substring-after(.,'http:'))>0">
+     <xsl:text></xsl:text><xsl:value-of select="."/>
+  </xsl:when>                              
   <xsl:otherwise>
-    <a>
-        <xsl:attribute name="class">identifier</xsl:attribute>
-        <xsl:attribute name="href"><xsl:value-of select="."/></xsl:attribute>
-        <xsl:value-of select="."/>
-    </a>
-</xsl:otherwise>		
-</xsl:choose>
-</xsl:variable>   	        			
-<a>
-    <xsl:attribute name="href"><xsl:value-of select="$theidentifier"/></xsl:attribute>
-    <xsl:attribute name="title"><xsl:text>Resolve this uri</xsl:text></xsl:attribute>    				
-    <xsl:value-of select="."/>  
-</a>   		 
-</p>
-</xsl:template> 
-<xsl:template match="ro:identifier" mode="other">   
-   <p>  			 			 	    			 			
-     <!--  <xsl:attribute name="name"><xsl:value-of select="./@type"/></xsl:attribute>  -->
-     <xsl:choose>
-         <xsl:when test="./@type='arc' or ./@type='abn' or ./@type='isil'">
-             <xsl:value-of select="translate(./@type,'abcdefghijklmnopqrstuvwxyz','ABCDEFGHIJKLMNOPQRSTUVWXYZ')"/>: <xsl:value-of select="."/>  
-         </xsl:when>
-         <xsl:when test="./@type='local'">
-             Local: <a class="identifier"><xsl:value-of select="."/></a>
-         </xsl:when>  
-         <xsl:otherwise>
-           <xsl:value-of select="./@type"/>: <a class="identifier"><xsl:value-of select="."/></a>
-       </xsl:otherwise>
-   </xsl:choose>
-</p>
-</xsl:template>  
-<xsl:template match="extRif:identifier" mode="formatother">   
-   <p>  Format 			 			 	    			 			
-     <!--  <xsl:attribute name="name"><xsl:value-of select="./@type"/></xsl:attribute>  -->
-     <xsl:choose>
-         <xsl:when test="./@type='arc' or ./@type='abn' or ./@type='isil'">
-             <xsl:value-of select="translate(./@type,'abcdefghijklmnopqrstuvwxyz','ABCDEFGHIJKLMNOPQRSTUVWXYZ')"/>: <xsl:value-of select="."/>  
-         </xsl:when>
-         <xsl:when test="./@type='local'">
-             Local: <a class="identifier"><xsl:value-of select="."/></a>
-         </xsl:when>  
-         <xsl:otherwise>
+     <xsl:text>http://hdl.handle.net/</xsl:text><xsl:value-of select="."/>
+  </xsl:otherwise>   
+  </xsl:choose>
+</xsl:template>
 
-           <xsl:value-of select="./@type"/>: <a class="identifier"><xsl:value-of select="."/></a>
-       </xsl:otherwise>
-   </xsl:choose>
-</p>
-</xsl:template>   
+<xsl:template match="ro:identifier" mode="handle_prefixedLink">
+
+  <xsl:variable name="theidentifier">    			
+    <xsl:apply-templates select="." mode="handle_resolveURL" />
+  </xsl:variable>
+
+  Handle: 
+  <a>
+    <xsl:attribute name="class">identifier</xsl:attribute>
+    <xsl:attribute name="href"> <xsl:value-of select="$theidentifier"/></xsl:attribute>
+    <xsl:attribute name="title"><xsl:text>Resolve this handle</xsl:text></xsl:attribute>    				
+    <xsl:value-of select="."/>
+  </a> 
+</xsl:template>
+
+
+
+
+<!-- DOI IDENTIFIER DISPLAY MODES -->
+<xsl:template match="ro:identifier" mode="doi_resolveURL">
+  <xsl:choose>       
+    <xsl:when test="string-length(substring-after(.,'doi.org/'))>1">
+      <xsl:text>http://dx.doi.org/</xsl:text><xsl:value-of select="substring-after(.,'doi.org/')"/>
+    </xsl:when>          
+    <xsl:otherwise>
+      <xsl:text>http://dx.doi.org/</xsl:text><xsl:value-of select="."/>
+    </xsl:otherwise>   
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template match="ro:identifier" mode="doi_prefixedLink">
+
+  <xsl:variable name="theidentifier">         
+    <xsl:apply-templates select="." mode="doi_resolveURL" />
+  </xsl:variable>
+
+  DOI: 
+
+  <xsl:if test="string-length(substring-after(.,'10.'))>0">    
+    <a>
+      <xsl:attribute name="class">identifier</xsl:attribute>
+      <xsl:attribute name="href"><xsl:value-of select="$theidentifier"/></xsl:attribute>
+      <xsl:attribute name="title"><xsl:text>Resolve this DOI</xsl:text></xsl:attribute>            
+      <xsl:value-of select="."/>
+    </a>
+  </xsl:if>
+  <xsl:if test="string-length(substring-after(.,'10.'))&lt;1">    
+    <a class="identifier"><xsl:value-of select="."/></a>
+  </xsl:if>  
+</xsl:template>
+
+
+
+
+<!-- NLA IDENTIFIER DISPLAY MODES -->
+<xsl:template match="ro:identifier" mode="nla_resolveURL">
+  <xsl:choose>       
+    <xsl:when test="string-length(substring-after(.,'nla.gov.au/'))>0">
+      <xsl:text>http://nla.gov.au/</xsl:text><xsl:value-of select="substring-after(.,'nla.gov.au/')"/>
+    </xsl:when>          
+    <xsl:otherwise>
+      <xsl:value-of select="."/>
+    </xsl:otherwise>   
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template match="ro:identifier" mode="nla_prefixedLink">
+
+  <xsl:variable name="theidentifier">         
+    <xsl:apply-templates select="." mode="nla_resolveURL" />
+  </xsl:variable>
+
+  NLA: 
+
+  <xsl:if test="string-length(substring-after(.,'nla.party'))>0">    
+    <a>
+      <xsl:attribute name="class">identifier</xsl:attribute>
+      <xsl:attribute name="href"> <xsl:value-of select="$theidentifier"/></xsl:attribute>
+      <xsl:attribute name="title"><xsl:text>View the record for this party in Trove</xsl:text></xsl:attribute>            
+      <xsl:value-of select="."/>
+    </a>
+  </xsl:if>
+  <xsl:if test="string-length(substring-after(.,'nla.party'))&lt;1">    
+    <a class="identifier"><xsl:value-of select="."/></a>
+  </xsl:if>  
+</xsl:template>
+
+
+
+<!-- PURL IDENTIFIER DISPLAY MODES -->
+<xsl:template match="ro:identifier" mode="purl_resolveURL">
+  <xsl:choose>       
+    <xsl:when test="string-length(substring-after(.,'purl.org/'))>0">
+      <xsl:text>http://purl.org/</xsl:text><xsl:value-of select="substring-after(.,'purl.org/')"/>
+    </xsl:when>          
+    <xsl:otherwise>
+      <xsl:text>http://nla.gov.au/</xsl:text><xsl:value-of select="."/>
+    </xsl:otherwise>   
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template match="ro:identifier" mode="purl_prefixedLink">
+
+  <xsl:variable name="theidentifier">         
+    <xsl:apply-templates select="." mode="purl_resolveURL" />
+  </xsl:variable>
+
+  PURL: 
+
+   
+    <a>
+      <xsl:attribute name="class">identifier</xsl:attribute>
+      <xsl:attribute name="href"> <xsl:value-of select="$theidentifier"/></xsl:attribute>
+      <xsl:attribute name="title"><xsl:text>Resolve this purl identifier</xsl:text></xsl:attribute>            
+      <xsl:value-of select="."/>
+    </a>
+</xsl:template>
+
+
+<!-- URI IDENTIFIER DISPLAY MODES -->
+<xsl:template match="ro:identifier" mode="uri_resolveURL">
+  <xsl:choose>       
+    <xsl:when test="string-length(substring-after(.,'http'))>0">
+      <xsl:value-of select="."/>
+    </xsl:when>          
+    <xsl:otherwise>
+      <xsl:text>http://</xsl:text><xsl:value-of select="."/>
+    </xsl:otherwise>   
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template match="ro:identifier" mode="uri_prefixedLink">
+
+  <xsl:variable name="theidentifier">         
+    <xsl:apply-templates select="." mode="uri_resolveURL" />
+  </xsl:variable>
+
+  URI: 
+
+    <a>
+      <xsl:attribute name="class">identifier</xsl:attribute>
+      <xsl:attribute name="href"> <xsl:value-of select="$theidentifier"/></xsl:attribute>
+      <xsl:attribute name="title"><xsl:text>Resolve this URI</xsl:text></xsl:attribute>            
+      <xsl:value-of select="."/>
+    </a>
+</xsl:template>
+
+
+<!-- ARK IDENTIFIER DISPLAY MODES -->
+<xsl:template match="ro:identifier" mode="ark_resolveURL">      
+  <xsl:choose> 
+     <xsl:when test="string-length(substring-after(.,'http://'))>0">
+       <xsl:value-of select="(substring-after(.,'http://'))"/>
+   </xsl:when>                    
+
+   <xsl:otherwise>
+       <xsl:value-of select="."/>
+   </xsl:otherwise>   
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template match="ro:identifier" mode="ark_prefixedLink">
+
+  <xsl:variable name="theidentifier">         
+    <xsl:apply-templates select="." mode="ark_resolveURL" />
+  </xsl:variable>
+
+  ARK: 
+
+  <xsl:if test="string-length(substring-after(.,'/ark:/'))>0">    
+    <a>
+      <xsl:attribute name="class">identifier</xsl:attribute>
+      <xsl:attribute name="href"> <xsl:value-of select="$theidentifier"/></xsl:attribute>
+      <xsl:attribute name="title"><xsl:text>Resolve this ARK identifier</xsl:text></xsl:attribute>            
+      <xsl:value-of select="."/>
+    </a>
+  </xsl:if>
+  <xsl:if test="string-length(substring-after(.,'/ark:/'))&lt;1">    
+    <a class="identifier"><xsl:value-of select="."/></a>
+  </xsl:if>  
+</xsl:template>
+
+
+
+<!-- OTHER IDENTIFIER DISPLAY MODES -->
+<xsl:template match="ro:identifier" mode="other_resolveURL">
+  <xsl:value-of select="."/>
+</xsl:template>
+
+
+<xsl:template match="ro:identifier" mode="other_prefixedLink">
+  <xsl:variable name="theidentifier">         
+    <xsl:apply-templates select="." mode="uri_resolveURL" />
+  </xsl:variable>
+  <xsl:choose>
+     <xsl:when test="./@type='arc' or ./@type='abn' or ./@type='isil'">
+         <xsl:value-of select="translate(./@type,'abcdefghijklmnopqrstuvwxyz','ABCDEFGHIJKLMNOPQRSTUVWXYZ')"/>: <xsl:value-of select="."/>  
+     </xsl:when>
+     <xsl:when test="./@type='local'">
+         Local: <a class="identifier"><xsl:value-of select="."/></a>
+     </xsl:when>  
+     <xsl:otherwise>
+       <xsl:value-of select="./@type"/>: <a class="identifier"><xsl:value-of select="."/></a>
+   </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+
+
 
 <xsl:template match="ro:citationInfo/ro:fullCitation">
     <p><xsl:value-of select="."/></p>
@@ -969,6 +886,12 @@
     </span>     
 </xsl:template>
 
+
+
+<!-- Reordering of citationMetadata - CC-447 -->
+<!-- Contributor (Year): Title. Publisher. Identifier Type: Identifier Value.
+      <resolved identifier>
+-->
 <xsl:template match="ro:citationInfo/ro:citationMetadata">
    <p>
     <xsl:if test="./ro:contributor">
@@ -976,14 +899,30 @@
     </xsl:if>
     <xsl:if test="./ro:date">
         (
-        <xsl:apply-templates select="//ro:citationMetadata/ro:date"/>               
-        )           
+        <xsl:apply-templates select="./ro:date"/>               
+        ):           
     </xsl:if>   
     <xsl:if test="./ro:title != ''">
         <xsl:text> </xsl:text>
         <xsl:value-of select="./ro:title"/>.
     </xsl:if>
-    <xsl:if test="./ro:version != ''">
+    <xsl:if test="./ro:publisher != ''">
+        <xsl:text> </xsl:text>      
+        <xsl:value-of select="./ro:publisher"/>.
+    </xsl:if>
+    <xsl:if test="./ro:identifier != ''">
+       <xsl:apply-templates select="./ro:identifier[@type = 'doi']"  mode="doi_prefixedLink"/>  
+       <xsl:apply-templates select="./ro:identifier[@type = 'uri']"  mode="uri_prefixedLink"/>  
+       <xsl:apply-templates select="./ro:identifier[@type = 'URL']"  mode="uri_prefixedLink"/> 
+       <xsl:apply-templates select="./ro:identifier[@type = 'url']"  mode="uri_prefixedLink"/>   
+       <xsl:apply-templates select="./ro:identifier[@type = 'purl']"  mode="purl_prefixedLink"/>   
+       <xsl:apply-templates select="./ro:identifier[@type = 'handle']"  mode="handle_prefixedLink"/> 
+       <xsl:apply-templates select="./ro:identifier[@type = 'AU-ANL:PEAU']"  mode="nla_prefixedLink"/>
+       <xsl:apply-templates select="./ro:identifier[@type = 'ark']"  mode="ark_prefixedLink"/>  
+       <xsl:apply-templates select="./ro:identifier[@type != 'doi' and @type != 'uri' and @type != 'URL' and @type != 'url' and @type != 'purl' and @type != 'handle' and @type != 'AU-ANL:PEAU' and @type != 'ark']"  mode="other_prefixedLink"/>
+       <xsl:text>.</xsl:text>
+   </xsl:if>
+    <!--xsl:if test="./ro:version != ''">
         <xsl:text> </xsl:text>
         <xsl:value-of select="./ro:version"/>.
     </xsl:if>   
@@ -1002,17 +941,28 @@
     <xsl:if test="./ro:context != ''">
         <xsl:text> </xsl:text>      
         , <xsl:value-of select="./ro:context"/>
-    </xsl:if>
-    <xsl:if test="./ro:identifier != ''">,         
-       <xsl:apply-templates select="./ro:identifier[@type = 'doi']"  mode="doi"/>	
-       <xsl:apply-templates select="./ro:identifier[@type = 'uri']"  mode="uri"/>	 
-       <xsl:apply-templates select="./ro:identifier[@type = 'URL']"  mode="uri"/>	
-       <xsl:apply-templates select="./ro:identifier[@type = 'url']"  mode="uri"/>	  
-       <xsl:apply-templates select="./ro:identifier[@type = 'purl']"  mode="purl"/>	  
-       <xsl:apply-templates select="./ro:identifier[@type = 'handle']"  mode="handle"/>	
-       <xsl:apply-templates select="./ro:identifier[@type = 'AU-ANL:PEAU']"  mode="nla"/>
-       <xsl:apply-templates select="./ro:identifier[@type = 'ark']"  mode="ark"/>  
-       <xsl:apply-templates select="./ro:identifier[@type != 'doi' and @type != 'uri' and @type != 'URL' and @type != 'url' and @type != 'purl' and @type != 'handle' and @type != 'AU-ANL:PEAU' and @type != 'ark']"  mode="other"/>				
+    </xsl:if-->
+    <xsl:if test="./ro:identifier != ''">
+      <xsl:variable name="theResolvedURL">
+        <xsl:apply-templates select="./ro:identifier[@type = 'doi']"  mode="doi_resolveURL"/>  
+        <xsl:apply-templates select="./ro:identifier[@type = 'uri']"  mode="uri_resolveURL"/>  
+        <xsl:apply-templates select="./ro:identifier[@type = 'URL']"  mode="uri_resolveURL"/> 
+        <xsl:apply-templates select="./ro:identifier[@type = 'url']"  mode="uri_resolveURL"/>   
+        <xsl:apply-templates select="./ro:identifier[@type = 'purl']"  mode="purl_resolveURL"/>   
+        <xsl:apply-templates select="./ro:identifier[@type = 'handle']"  mode="handle_resolveURL"/> 
+        <xsl:apply-templates select="./ro:identifier[@type = 'AU-ANL:PEAU']"  mode="nla_resolveURL"/>
+        <xsl:apply-templates select="./ro:identifier[@type = 'ark']"  mode="ark_resolveURL"/>  
+        <xsl:apply-templates select="./ro:identifier[@type != 'doi' and @type != 'uri' and @type != 'URL' and @type != 'url' and @type != 'purl' and @type != 'handle' and @type != 'AU-ANL:PEAU' and @type != 'ark']"  mode="other_resolveURL"/>
+      </xsl:variable>
+
+      <br/>
+      <a>
+        <xsl:attribute name="class">identifier</xsl:attribute>
+        <xsl:attribute name="href"><xsl:value-of select="$theResolvedURL"/></xsl:attribute>
+        <xsl:attribute name="title"><xsl:text>Resolve this identifier</xsl:text></xsl:attribute>            
+        <xsl:value-of select="$theResolvedURL"/>
+      </a>
+
    </xsl:if>
 </p>
 <span class="Z3988">   
@@ -1047,8 +997,9 @@
     </xsl:if>
     <xsl:if test="./ro:namePart/@type=''">
         <xsl:value-of select="./ro:namePart[@type='']"/>.
-    </xsl:if>         
-    <xsl:if test="./ro:namePart[not (@type)]">
+    </xsl:if>
+    <!-- catch-all statement for dodgy data -->
+    <xsl:if test="./ro:namePart[not (@type)] | ./ro:namePart[not(@type='familiy') and not(@type='given') and not(@type='initial') and not(@type='full') and not(@type='')]">
         <xsl:value-of select="./ro:namePart"/>.
     </xsl:if>                
 </xsl:template> 
