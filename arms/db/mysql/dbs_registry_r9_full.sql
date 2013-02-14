@@ -72,7 +72,7 @@ CREATE TABLE `data_source_attributes` (
   PRIMARY KEY (`id`),
   KEY `fk_data_sources` (`data_source_id`),
   CONSTRAINT `fk_attribute_data_source` FOREIGN KEY (`data_source_id`) REFERENCES `data_sources` (`data_source_id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=3220 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -91,7 +91,7 @@ CREATE TABLE `data_source_logs` (
   PRIMARY KEY (`id`),
   KEY `fk_data_source` (`data_source_id`),
   CONSTRAINT `fk_log_data_source` FOREIGN KEY (`data_source_id`) REFERENCES `data_sources` (`data_source_id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=3609 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -108,7 +108,7 @@ CREATE TABLE `data_sources` (
   PRIMARY KEY (`data_source_id`),
   UNIQUE KEY `key_UNIQUE` (`key`),
   UNIQUE KEY `slug_UNIQUE` (`slug`)
-) ENGINE=InnoDB AUTO_INCREMENT=127 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -145,7 +145,7 @@ CREATE TABLE `harvest_requests` (
   KEY `fk_harvest_request_data_source` (`data_source_id`),
   KEY `fk_harvest_data_source` (`data_source_id`),
   CONSTRAINT `fk_harvest_data_source` FOREIGN KEY (`data_source_id`) REFERENCES `data_sources` (`data_source_id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=891 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -186,7 +186,7 @@ CREATE TABLE `record_data` (
   KEY `fk_record_data_registry_object` (`registry_object_id`),
   KEY `registry_object_id_UNIQUE` (`registry_object_id`,`id`),
   CONSTRAINT `fk_record_data_registry_object` FOREIGN KEY (`registry_object_id`) REFERENCES `registry_objects` (`registry_object_id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=671256 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -205,7 +205,7 @@ CREATE TABLE `registry_object_attributes` (
   KEY `idx_reg_attr` (`registry_object_id`,`attribute`),
   KEY `fk_attr_to_registry_object` (`registry_object_id`),
   CONSTRAINT `fk_attr_to_registry_object` FOREIGN KEY (`registry_object_id`) REFERENCES `registry_objects` (`registry_object_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=252579 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -224,7 +224,7 @@ CREATE TABLE `registry_object_metadata` (
   KEY `idx_reg_metadata` (`registry_object_id`,`attribute`),
   KEY `fk_metadata_to_registry_object` (`registry_object_id`),
   CONSTRAINT `fk_metadata_to_registry_object` FOREIGN KEY (`registry_object_id`) REFERENCES `registry_objects` (`registry_object_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=25373 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -243,7 +243,7 @@ CREATE TABLE `registry_object_relationships` (
   PRIMARY KEY (`id`),
   KEY `idx_related_object_pair` (`registry_object_id`,`related_object_key`),
   KEY `fk_registry_object_relationships` (`registry_object_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1942431 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -268,7 +268,7 @@ CREATE TABLE `registry_objects` (
   KEY `idx_ro_class` (`class`),
   KEY `fk_registry_object_data_source` (`data_source_id`),
   CONSTRAINT `fk_registry_object_data_source` FOREIGN KEY (`data_source_id`) REFERENCES `data_sources` (`data_source_id`) ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=36782 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -317,7 +317,7 @@ CREATE TABLE `spatial_extents` (
   PRIMARY KEY (`id`),
   KEY `fk_spatial_extent_registry_object` (`registry_object_id`),
   CONSTRAINT `fk_spatial_extent_registry_object` FOREIGN KEY (`registry_object_id`) REFERENCES `registry_objects` (`registry_object_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -345,7 +345,7 @@ CREATE TABLE `tbl_terms` (
   UNIQUE KEY `id_UNIQUE` (`id`),
   KEY `fk_tbl_terms_1_idx` (`vocabulary_identifier`),
   CONSTRAINT `fk_tbl_terms_1` FOREIGN KEY (`vocabulary_identifier`) REFERENCES `tbl_vocabularies` (`identifier`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=415 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -366,7 +366,7 @@ CREATE TABLE `tbl_vocabularies` (
   `id` mediumint(8) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`),
   UNIQUE KEY `identifier_UNIQUE` (`identifier`)
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -387,7 +387,7 @@ CREATE TABLE `url_mappings` (
   KEY `idx_url_to_registry_object` (`registry_object_id`),
   KEY `fk_url_map_to_registry_object` (`registry_object_id`),
   CONSTRAINT `fk_url_map_to_registry_object` FOREIGN KEY (`registry_object_id`) REFERENCES `registry_objects` (`registry_object_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=38200 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -413,7 +413,7 @@ CREATE TABLE `vocab_metadata` (
   `record_owner` varchar(512) DEFAULT NULL,
   `status` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 

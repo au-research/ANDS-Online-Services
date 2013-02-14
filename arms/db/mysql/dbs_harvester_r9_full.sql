@@ -34,7 +34,7 @@ CREATE TABLE `fragment` (
   UNIQUE KEY `fragment_id` (`fragment_id`),
   KEY `fk_fragment_1_idx` (`harvest_id`),
   CONSTRAINT `fk_fragment_1` FOREIGN KEY (`harvest_id`) REFERENCES `harvest` (`harvest_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=2431 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -91,7 +91,7 @@ CREATE TABLE `provider` (
   `provider_id` int(11) NOT NULL AUTO_INCREMENT,
   `source_url` varchar(256) DEFAULT NULL,
   PRIMARY KEY (`provider_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -106,7 +106,7 @@ CREATE TABLE `request` (
   `request` varchar(24) DEFAULT NULL,
   PRIMARY KEY (`request_id`),
   UNIQUE KEY `request_id` (`request_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
