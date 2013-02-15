@@ -75,8 +75,8 @@ $(function(){
 				changeHashTo('edit/'+data_source_id);
 			}else if($(this).hasClass('settings')){
 				changeHashTo('settings/'+data_source_id);
-			}else if($(this).hasClass('history')){
-				window.location = base_url+'data_source/history/'+data_source_id;
+			}else if($(this).hasClass('mdr')){
+				window.location = base_url+'data_source/manage_deleted_records/'+data_source_id;
 			}else if($(this).hasClass('mmr')){
 				window.location = base_url+'data_source/manage_records/'+data_source_id;
 			}else if($(this).hasClass('export')){
@@ -121,7 +121,6 @@ $(function(){
 			window.open(base_url+'data_source/exportDataSource/'+data_source_id+'?data='+data, '_blank');
 		}
 	})
-
 
 	$('.dataSourceReport').live({
 		click: function(e){

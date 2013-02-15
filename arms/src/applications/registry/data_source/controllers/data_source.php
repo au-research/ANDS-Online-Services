@@ -100,27 +100,25 @@ class Data_source extends MX_Controller {
 		$this->load->view("manage_my_record", $data);
 	}
 
-	public function history($data_source_id=false){
+	public function manage_deleted_records($data_source_id=false, $offset=0, $limit=10){
 		acl_enforce('REGISTRY_USER');
 		ds_acl_enforce($data_source_id);
-		$data['title'] = 'Datasource History';
-		$data['scripts'] = array();
-		$data['js_lib'] = array('core');
+		$data['title'] = 'Manage Deleted Records';
+		$data['scripts'] = array('ds_history');
+		$data['js_lib'] = array('core','prettyprint');
 
 		$this->load->model("data_source/data_sources","ds");
 		$this->load->model("registry_object/registry_objects", "ro");
 
-		$report = array();
+		$deletedRecords = array();
 		$data['ds'] = $this->ds->getByID($data_source_id);
-		$ids = $this->ro->getByAttributeDatasource($data_source_id, 'status', 'deleted');
-
-		if($ids){
-			$data['record_count'] = sizeof($ids);
-			$problems=0;
-			foreach($ids as $idx=>$ro_id){
+		$ids = $this->ro->getDeletedRegistryObjects($data_source_id);
+		$data['record_count'] = sizeof($ids);
+		if(sizeof($ids) > 0){
+			
+			foreach($ids as $idx=>$ro){
 				try{
-					$ro=$this->ro->getByAttributeDatasource($data_source_id);
-					$report[$ro_id] = array('title'=>$ro->title,'id'=>$ro->id,'report'=>$ro ? $ro->getMetadata('status') : '');
+					$deletedRecords[$ro['key']][$idx] = array('title'=>$ro['title'],'key'=>$ro['key'],'id'=>$ro['id'],'record_data'=>wrapRegistryObjects($ro['record_data']), 'deleted_date'=>timeAgo($ro['deleted']));
 				}catch(Exception $e){
 					throw Exception($e);
 				}
@@ -130,8 +128,11 @@ class Data_source extends MX_Controller {
 				}
 			}
 		}
-		$data['report'] = $report;
-		$this->load->view('history', $data);
+		$data['record_count'] = sizeof($deletedRecords);
+		$data['deleted_records'] = array_slice($deletedRecords, $offset, $limit);
+		$data['offset'] = $offset;
+		$data['limit'] = $limit;
+		$this->load->view('manage_deleted_records', $data);
 	}
 
 
@@ -990,6 +991,79 @@ class Data_source extends MX_Controller {
 		{
 			
 			$log .= "CRITICAL IMPORT ERROR [HARVEST COULD NOT CONTINUE]" . NL;
+			$log .= $e->getMessage();
+			
+			echo json_encode(array("response"=>"failure", "message"=>"An error occured whilst importing from the specified XML", "log"=>$log));
+			return;	
+		}	
+		
+	
+		echo json_encode(array("response"=>"success", "message"=>"Import completed successfully!", "log"=>$log));	
+			
+	}
+
+	/**
+	 * Importing (Leo's reinstate based on ... Ben's import from XML Paste)
+	 * 
+	 * 
+	 * @author Ben Greenwood <ben.greenwood@anu.edu.au>
+	 * @param [POST] xml A blob of XML data to parse and import
+	 * @todo ACL on which data source you have access to, error handling
+	 * @return [JSON] result of the saving [VOID] 
+	 */
+	function reinstateRecordforDataSource()
+	{
+		$this->load->library('importer');
+
+		$deletedRegistryObjectId = $this->input->post('deleted_registry_object_id');
+
+		$xml = $this->input->post('xml');
+
+		$log = 'REINSTATE RECORD LOG' . NL;
+		$log .= 'deleted Registry Object ID: '.$deletedRegistryObjectId . NL;
+		$this->load->model('data_source/data_sources', 'ds');
+		$data_source = $this->ds->getByID($this->input->post('data_source_id'));
+		$this->load->model("registry_object/registry_objects", "ro");
+
+		$deletedRo = $this->ro->getDeletedRegistryObject($deletedRegistryObjectId);
+		if($deletedRo)
+		{
+		$xml = wrapRegistryObjects($deletedRo[0]['record_data']);
+		$log .= 'RIF_CS:::'.$deletedRo[0]['record_data'].':::RIF_CS' . NL;
+		}
+		else{
+			$log .= 'record is missing' . NL;
+			echo json_encode(array("response"=>"failure", "message"=>"Record is missing", "log"=>$log));
+			return;
+		}
+		try
+		{ 
+
+			$this->importer->setXML($xml);
+
+			$this->importer->setDatasource($data_source);
+			$this->importer->commit();
+
+
+			if ($error_log = $this->importer->getErrors())
+			{
+				$log .= NL . "ERRORS DURING IMPORT" . NL;
+				$log .= "====================" . NL ;
+				$log .= $error_log;
+			}
+
+			$log .= "IMPORT COMPLETED" . NL;
+			$log .= "====================" . NL;
+			$log .= $this->importer->getMessages();
+
+			// data source log append...
+			$this->ro->removeDeletedRegistryObject($deletedRegistryObjectId);
+			$data_source->append_log("Record was reinstated " . NL . $log, ($error_log ? HARVEST_ERROR : null));
+		}
+		catch (Exception $e)
+		{
+			
+			$log .= "CRITICAL IMPORT ERROR [IMPORT COULD NOT CONTINUE]" . NL;
 			$log .= $e->getMessage();
 			
 			echo json_encode(array("response"=>"failure", "message"=>"An error occured whilst importing from the specified XML", "log"=>$log));

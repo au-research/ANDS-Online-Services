@@ -658,6 +658,42 @@ class Registry_objects extends CI_Model {
 		}
 	}
 
+	public function getDeletedRegistryObjects($data_source_id)
+	{
+		$query = $this->db->get_where('deleted_registry_objects', array("data_source_id" => $data_source_id));
+		if ($query->num_rows() == 0)
+		{
+			return NULL;
+		}
+		else
+		{
+			return $query->result_array();
+		}
+	
+	}
+
+
+	public function getDeletedRegistryObject($id)
+	{
+		$query = $this->db->get_where('deleted_registry_objects', array("id" => $id));
+		if ($query->num_rows() == 0)
+		{
+			return NULL;
+		}
+		else
+		{
+			return $query->result_array();
+		}
+	
+	}
+
+	public function removeDeletedRegistryObject($id)
+	{
+		$this->db->where("id", $id)->delete('deleted_registry_objects');
+		return;
+	}
+
+
 	public function clearAllFromDatasourceUnsafe($data_source_id)
 	{
 		$reenrich_queue = array();
