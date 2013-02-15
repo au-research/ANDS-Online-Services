@@ -374,12 +374,18 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 		$ancestors = $this->connectiontree->getImmediateAncestors($this_registry_object, $published_only);
 		if ($ancestors)
 		{
+			$unique_ancestors = array();
 			foreach ($this->connectiontree->getImmediateAncestors($this_registry_object, $published_only) AS $ancestor_element)
 			{
 				$root_element_id = $this->connectiontree->getRootAncestor($this->ro->getByID($ancestor_element['registry_object_id']), $published_only);
 				$root_registry_object = $this->ro->getByID($root_element_id->id);
 
-				$trees[] = $this->connectiontree->get($root_registry_object, $depth, $published_only);
+				// Only generate the tree if this is a unique ancestor
+				if (!isset($unique_ancestors[$root_registry_object->id]))
+				{
+					$unique_ancestors[$root_registry_object->id] = true;
+					$trees[] = $this->connectiontree->get($root_registry_object, $depth, $published_only);
+				}
 			}
 		}
 		else
@@ -388,7 +394,6 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 		}
 
 		// XXX: Option to cleanup & format
-
 		echo json_encode(array("status"=>"success", "trees"=>$trees));
 	}
 
