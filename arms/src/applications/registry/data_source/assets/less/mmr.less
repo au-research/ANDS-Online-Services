@@ -2,8 +2,9 @@
 	.sortable{
 		list-style-type: none; margin: 0;
 		width:100%;
+		position:relative;
 		li{
-			
+			position:relative;
 			display:block;
 			min-height:40px;
 			background:white;
@@ -30,6 +31,11 @@
 				p{
 					margin-bottom:0;
 				}
+			}
+			.contextmenu{
+				position:absolute;
+				top:5px;
+				right:5px;
 			}
 		}
 		li.ui-state-highlight {background:#FEFFD2;}
@@ -61,6 +67,12 @@
 	}
 }
 
+#status_message{
+	text-align:center;
+	padding:5px 10px;
+	position: relative; left: -50%;
+}
+
 .widget-box{
 	position:relative;
 	.widget-title{
@@ -76,14 +88,28 @@
 	}
 
 }
-
+.pool::-webkit-scrollbar { 
+    display: none; 
+}
 .pool{
+	margin:0 auto;
+	position:relative;
+	overflow:auto;
 	.block{
-		margin:0 10px;
+		position:relative;
+		margin:0 5px;
+		text-align:left;
 		float:left;
+		min-width:200px;
+	}
+	.droppable li{
+		background: #C1F4E7;
 	}
 }
 
 .ui-tooltip-default{
 	max-width:750px;
+}
+.helper{
+	z-index:1000000;
 }

@@ -357,7 +357,73 @@ class Registry_objects extends CI_Model {
 					       })),true, $limit, $offset);
 	}
 
-	function getByDataSourceID($data_source_id, $limit=10, $offset=0, $args=null, $make_ro = true){
+	function getByDataSourceID($data_source_id, $limit=10, $offset=0, $args=null, $make_ro=true){
+		
+		$white_list = array('title', 'class', 'key', 'status', 'slug', 'record_owner');
+		$filtered = array();
+		if($args['filter']){
+			foreach($args['filter'] as $key=>$value){
+				if(!in_array($key, $white_list)){
+					$filtered = array_merge($filtered, $this->getByAttributeDatasource($data_source_id, $key, $value, false, false));
+				}
+			}
+		}
+		$where_in = array(); 
+		foreach($filtered as $f){
+			array_push($where_in, $f['registry_object_id']);
+		}
+		// var_dump($where_in);
+
+		return $this->_get(array(array('args' => array(
+									'data_source_id'=>$data_source_id,
+									'search'=>isset($args['search']) ? $args['search'] : false,
+									'sort'=>isset($args['sort']) ? $args['sort'] : false,
+									'filter'=>isset($args['filter']) ? $args['filter'] : false,
+									'where_in'=>isset($where_in) ? $where_in : false
+								),
+					       'fn' => function($db, $args) {
+						       	$db->select("registry_objects.registry_object_id")->from("registry_objects");
+						       	$db->where('data_source_id', $args['data_source_id']);
+
+							   	if($args['search']) {
+							   		// $db->where('(title LIKE \'%'.$args['search'].'%\' || key LIKE \'%'.$args['search'].'%\' || id LIKE \'%'.$args['search'].'%\')');
+							   		$db->like('title', $args['search']);
+							   	}
+
+							   	$white_list = array('title', 'class', 'key', 'status', 'slug', 'record_owner');
+						   		if($args['sort']){
+						   			foreach($args['sort'] as $key=>$value){
+						   				$db->join('registry_object_attributes', 'registry_objects.registry_object_id = registry_object_attributes.registry_object_id', 'left');
+						   				$db->select('registry_object_attributes.value as v');
+						   				$db->where('registry_object_attributes.attribute', $key);
+						   				if(in_array($key, $white_list)){
+						   					$db->order_by($key, $value);
+						   				}else{
+						   					$db->order_by('v', $value);
+						   				}
+						   			}
+						   		}
+
+						   		if($args['filter']){
+						   			foreach($args['filter'] as $key=>$value){
+						   				if(in_array($key, $white_list)){
+						   					$db->where($key,$value);
+						   				}
+						   			}
+						   			//var_dump($args['where_in']);
+						   			
+						   		}
+						   		if($args['where_in']){
+						   			if(sizeof($args['where_in'])>0){
+						   				$db->where_in('registry_objects.registry_object_id',$args['where_in']);
+						   			}else return false;
+						   		}
+						       return $db;
+					       })),$make_ro, $limit, $offset);
+	}
+
+
+	function getByDataSourceID_old($data_source_id, $limit=10, $offset=0, $args=null, $make_ro = true){
 		return $this->_get(array(array('args' => array(
 									'data_source_id'=>$data_source_id,
 									'search'=>isset($args['search']) ? $args['search'] : false,
@@ -386,7 +452,7 @@ class Registry_objects extends CI_Model {
 							   		}
 									if($args['or_filter']){
 										foreach($args['or_filter'] as $key=>$value){
-											$where.='OR `'.$key.'`="'.$value.'"';
+											$where.=' OR `'.$key.'`="'.$value.'"';
 										}
 									}
 									if($args['search']){
@@ -415,6 +481,7 @@ class Registry_objects extends CI_Model {
 						   		if($args['filtered_id']){
 						   			$db->where_in('`registry_objects`.`registry_object_id`', $args['filtered_id']);
 						   		}
+						   		// var_dump($args['filtered_id']);
 						   		//var_dump($where);
 						   		$db->where($where);
 

@@ -1,4 +1,4 @@
-var selected_ids=[],selecting_status;
+var selected_ids=[],selecting_status,select_all=false;
 var filters = {};
 $(function() {
 
@@ -8,7 +8,6 @@ $(function() {
         function decode(s) {
             return decodeURIComponent(s.split("+").join(" "));
         }
-
         $_GET[decode(arguments[1])] = decode(arguments[2]);
     });
     //console.log($_GET["filters"]);
@@ -17,32 +16,43 @@ $(function() {
     if($_GET['filters']){
         filters = jQuery.parseJSON($_GET['filters']);
     }else{
-        var sort = {}; sort['updated'] = 'asc';
+        var sort = {}; sort['updated'] = 'desc';
         filters['sort'] = sort;
-        // var filter = {}; filter['status'] = 'PUBLISHED';
-        // filters['filter'] = filter;
+         // var filter = {}; filter['status'] = 'PUBLISHED';
+         // var or_filter = {};or_filter['status'] = 'DRAFT';
+         // filters['filter'] = filter;
+         // filters['or_filter'] = or_filter;
     }
     //console.log(JSON.stringify(filters, null, 2));
     init(filters);
 
-    $(document).on("click", ".sortable li", function(e){
-        if(e.button==2){
+    $(document).on('mouseup', '.sortable li', function(e){
+        if(e.which==3){
+            e.preventDefault();
             if(!$(this).hasClass('ro_selected')) click_ro(this, 'select');
-            var status = $(this).attr('status');
-            var menu = $('#context-menu-'+status+' ul');
-            console.log($('.unflag', menu).length);
-            if($('span.flag', this).length){
-                $('.unflag', menu).show();
-            }else{
-                $('.unflag', menu).hide();
-            }
-        }else{
-            click_ro(this, 'toggle');
+            $('.contextmenu',this).click();
         }
-    }).on('click', '.op', function(e){
-        console.log("right-click");
+    }).on('dblclick', '.sortable li', function(e){
+        window.location = base_url+'registry_object/view/'+$(this).attr('id');
+    }).on('click','.sortable li',function(e){
+        if(e.metaKey || e.ctrlKey){
+            click_ro(this, 'select');
+        }else if(e.shiftKey){
+            click_ro(this, 'select_until');
+        }else{
+            if(!$(this).hasClass('ro_selected')){
+                click_ro(this, 'select_1');    
+            }else{
+                click_ro(this, 'toggle');
+            }
+        }
+    });
+
+    $(document).on('click', '.op', function(e){
+
         var action = $(this).attr('action');
         var status = $(this).attr('status');
+
         switch(action){
             case 'select_all':
                 action_list(status, 'select_all');
@@ -124,7 +134,8 @@ function init(filters){
     selected_ids = [];
     var data_source_id = $('#data_source_id').val();
     //$('.pool').hide();
-     $('#active_filters').html('<em>Loading...</em>');
+    $('#status_message').html('<em>Loading...</em>');
+    $('#status_message').show();
     $.ajax({
         url:base_url+'data_source/get_mmr_data/'+data_source_id, 
         type: 'POST',
@@ -155,6 +166,7 @@ function init(filters){
             bindShowMore();
             initLayout();
             $('.stick').sticky();
+            $('#status_message').hide();
         }
     });
 
@@ -191,28 +203,15 @@ function bindShowMore(){
     });
 }
 
-function constructMMR(data){
-    var mmr_data = [];
-    mmr_data.status = [];
-    console.log(data);
-    total_column = data.total_statuses_count;
-    $.each(data.statuses, function(){
-        var status = {status:this.name, count:this.count, ro:this.ro, hasMore:this.hasMore, offset:this.offset+10,connectTo:this.connectTo,sub_ro:this.sub_ro,hasSub:this.hasSub};
-        mmr_data.status.push(status);
-    });
-    mmr_data.span_count = Math.floor(12 / total_column);
-    mmr_data.ds_id = data.ds.data_source_id;
-    return mmr_data;
-}
 
 function initLayout(){
 
     var spare = [];
-    var remain = 90;
+    var remain = 95;
     $('.block:visible').each(function(){
         if($(this).attr('count')==0){
-            $(this).width('15%');
-            remain = remain - 15;
+            $(this).width('10%');
+            remain = remain - 10;
         }else{
             spare.push(this);
         }
@@ -224,6 +223,8 @@ function initLayout(){
     });
 
 
+
+
     // var numBlock = $('.block:visible').length;
     // var percentage = Math.ceil(90 / numBlock);
     // $('.block').width(percentage+'%');
@@ -233,15 +234,12 @@ function initLayout(){
     $('.block').each(function(){
         if($(this).height() > max_height) max_height = $(this).height();
     });
+    $('.pool').height(max_height+50);
     //$('.ro_box[status=SUBMITTED_FOR_ASSESSMENT], .ro_box[status=APPROVED], .ro_box[status=ASSESSMENT_IN_PROGRESS],.ro_box[status=PUBLISHED]').height(max_height);
     //var draft_height = $('.ro_box[status=DRAFT]').height() + max_height - $('.ro_box[status=DRAFT]').parent('.block').height();
    // $('.ro_box[status=DRAFT]').height(draft_height);
     // 
     // 
-    $('span.icon').unbind('click').click(function(){
-        var list = $(this).closest('.widget-box').find('.widget-content');
-        $(list).slideToggle();
-    });
 
 
     $('#search_form').unbind('submit').submit(function(e){
@@ -304,7 +302,10 @@ function initLayout(){
         if(!$(this).closest('li').hasClass('disabled')){
             var name = $(this).attr('name');
             var value = $(this).attr('value');
-            var filter = {}; filter[name] = value;filters['filter'] = filter;
+            var filter = {}; filter[name] = value;
+            if(filters['filter']){
+                filters['filter'][name] = value;
+            }else filters['filter'] = filter;
             console.log(filters);
             init(filters);
         }else{
@@ -313,56 +314,110 @@ function initLayout(){
         }
     });
 
-    $('.context').contextmenu();
+    $('.selector_menu').qtip({
+        content:{
+            text: function(){
+                return $('.selecting_menu',this).html();
+            }
+        },
+        position: {viewport: $(window)},
+        show:{ready:false,effect:false,event:'click'},
+        hide:{event:'unfocus'},
+        style: {classes: 'ui-tooltip-shadow ui-tooltip-bootstrap'}
+    });
 
-    $('.select_all').unbind('click').click(function(){
-        var status = $(this).attr('status');
-        if($('i',this).hasClass('icon-ok-circle')){//deselect
-            $('i',this).removeClass('icon-ok-circle').addClass('icon-ok-sign');
-            action_list(status, 'select_all');
-        }else if($('i',this).hasClass('icon-ok-sign')){//select all
-            $('i',this).removeClass('icon-ok-sign').addClass('icon-ok-circle');
-            action_list(status, 'deselect_all');
+    $('.selector_btn').die().live({
+        click:function(){
+            var status = $(this).attr('status');
+            var list = $('.sortable[status='+status+']');
+            if($(this).hasClass('select_all')){
+                action_list(status, 'select_all');
+            }else if($(this).hasClass('select_display')){
+                action_list(status, 'select_display');
+            }else if($(this).hasClass('select_none')){
+                action_list(status, 'select_none');
+            }else if($(this).hasClass('select_flagged')){
+                action_list(status, 'select_flagged');
+            }
         }
     });
+
+    if(select_all){
+        var list = $('.sortable[status='+select_all+']');
+        $.each($('li.ro_item', list), function(index, val) {
+            $(this).addClass('ro_selected');
+        });
+    }
+
+    $('.status_field:visible').each(function(){
+        var total = $('li.ro_item',this).length;
+        $('.select_display span', this).html(total);
+    });
+
+    // $('.context').contextmenu();
+
 }
 
 function action_list(status, action){
     var list = $('ul[status='+status+']');
-    if(action=='select_all'){
+    selecting_status = status;
+    if(action=='select_display'){
+        select_all = false;
         // console.log($('li.ro_item', list).length)
         $.each($('li.ro_item', list), function(index, val) {
             $(this).addClass('ro_selected');
-            selected_ids.push($(this).attr('id'));
+            if($.inArray($(this).attr('id'), selected_ids)==-1){
+                selected_ids.push($(this).attr('id'));
+            }
         });
        
-    }else if(action=='deselect_all'){
+    }else if(action=='select_none'){
+        selecting_status = '';
+        select_all = false;
         $.each($('li.ro_item', list), function(index, val) {
             $(this).removeClass('ro_selected');
             selected_ids = [];
         });
+    }else if(action=='select_all'){
+        select_all = status;
+        $.each($('li.ro_item', list), function(index, val) {
+            $(this).addClass('ro_selected');
+        });
     }
     selected_ids = $.unique(selected_ids);
     update_selected_list(status);
-    console.log(selected_ids);
+    // console.log(selected_ids);
 }
 
 function update_selected_list(status){
     var num = selected_ids.length;
     var list = $('.ro_box[status='+status+']');
-    var selected = $('div.selected_status', list);
+    // var selected = $('div.selected_status', list);
+    var selected = $('#status_message');
     if(num>0){
         var text = num + ' registry objects selected.';
         selected.html(text);
-        selected.slideDown();
+        selected.show();
     }else{
-        selected.slideUp();
+        selected.hide(50);
     }
 }
 
 function click_ro(ro_item, action){
     var ro_id = $(ro_item).attr('id');
     var status = $(ro_item).attr('status');
+
+    if(action=='select_1'){
+        selected_ids = [];//empty
+    }else if(action=='select_until'){
+        var until = $('#'+ro_id).prevAll('.ro_selected').attr('id');
+        if(until){
+            var in_between = $('#'+ro_id).prevUntil('#'+until);
+            $.each(in_between,function(){
+                //TODO:XXXX
+            });
+        }
+    }
 
     if(status==selecting_status){
         if($.inArray(ro_id, selected_ids)==-1){
@@ -378,17 +433,89 @@ function click_ro(ro_item, action){
     }
     
     if(action=='toggle'){
-        $('#'+ro_id).toggleClass('ro_selected', 75);
+        $('#'+ro_id).toggleClass('ro_selected');
     }else if(action=='select'){
-        $('#'+ro_id).addClass('ro_selected', 75);
+        $('#'+ro_id).addClass('ro_selected');
+    }else if(action=='select_1'){
+        $('.sortable li').removeClass('ro_selected');
+        $('#'+ro_id).addClass('ro_selected');
     }
     selected_ids = $.unique(selected_ids);
     update_selected_list(status)
-    // console.log(selected_ids);
+    //console.log(selected_ids);
 }
 
 
 function bindSortables(){
+
+    $('.sortable li').draggable('destroy');
+
+    $('.sortable').each(function(){
+        var status = $(this).attr('status');
+        var from = '.sortable[status='+status+'] li';
+        var connect_to = $(this).attr('connect_to');
+        var target = $('.sortable[status='+connect_to+']');
+
+        var ds_id = $('#data_source_id').val();
+
+        $('li', this).draggable({
+            cursor: "move",cursorAt:{top:-5,left:-5},scroll:true,
+            helper: function(e){
+                return $( "<span class='label label-info helper'>"+selected_ids.length+"</span>" );
+            },
+            connectToSortable: target
+        });
+        $('li', this).bind('contextmenu', function(){return false;})
+        .bind('mouseover',function(){
+            $('.contextmenu', this).show();
+        })
+        .bind('mouseout',function(){
+            $('.contextmenu', this).hide();
+        });
+        $('.contextmenu').unbind('click').click(function(e){
+            e.preventDefault();
+            e.stopPropagation();
+            // if($(this).parent('li').length==1) click_ro($(this).parent('li'),'select');
+            var context_status = $(this).attr('status');
+            $(this).qtip({
+                content: {
+                    text: 'Loading...',
+                    ajax:{
+                        url: base_url+'data_source/get_mmr_menu',
+                        type: 'POST',
+                        data: {data_source_id:ds_id,status:context_status,affected_ids:selected_ids,selecting_status:selecting_status}
+                    }
+                },
+                position: {viewport: $(window)},
+                show:{ready:true,effect:false,event:'click'},
+                hide:{event:'unfocus'},
+                style: {classes: 'ui-tooltip-shadow ui-tooltip-bootstrap'}
+            });
+        });
+
+
+        $(target).droppable({
+            accept: from,
+            hoverClass:"droppable",
+            drop: function( event, ui ) {
+                if(selecting_status==status){
+                    var attributes = [{
+                        name:'status',
+                        value:connect_to
+                    }];
+                    update(selected_ids, attributes);
+                    var text = selected_ids.length+' registry objects have been moved to '+connect_to;
+                    $('#status_message').html(text);
+                }
+            }
+        });
+    });
+}
+
+
+
+
+function bindSortables_old(){
 
     $('.sortable').sortable('destroy');
     $('.sortable').each(function(){
@@ -400,9 +527,10 @@ function bindSortables(){
             connectWith: target,
             placeholder: "ui-state-highlight",
             scroll:false,
-            revert:false,
+            revert:'invalid',
             delay:100,
-            item:'li.ro_item',
+            item:'li.ro_selected',
+            helper: false,
             receive:function(event, ui){
               //console.log(selected_ids);
               var attributes = [{
@@ -417,30 +545,8 @@ function bindSortables(){
               update(selected_ids, attributes);
               //console.log(ui);
             },
-            // start: function(e, info) {
-            //     info.item.after(info.item.siblings('li.ro_selected'));
-            //     $('li', target).animate({
-            //         opacity:0.5,
-            //         backgroundColor:'#C1F4E7'
-            //     });
-            //     $(target).animate({
-            //         backgroundColor:'#C1F4E7'
-            //     })
-            //     //info.item.siblings("li.selected").appendTo(info.item);
-            // },
-            
-            // stop: function(e, info) {
-            //     //info.item.after(info.item.find("li"))
-            //     $('li', target).animate({
-            //         opacity:1,
-            //         backgroundColor:'white'
-            //     });
-            //     $(target).animate({
-            //         backgroundColor:'white'
-            //     });
-            // },
             sort:function(e, ui){
-              $(ui.item.context).offset({top:e.pageY-10,left:e.pageX-10});
+                $(ui.item.context).offset({top:e.pageY-10,left:e.pageX-10});
             }
         });
     });
@@ -449,13 +555,21 @@ function bindSortables(){
 
 
 function update(ids, attributes){
+    if(select_all){
+        ids = select_all;
+        url = base_url+'registry_object/update/all';
+        data = {data_source_id:$('#data_source_id').val(),select_all:select_all, attributes:attributes};
+    }else{
+        url = base_url+'registry_object/update/'
+        data = {affected_ids:ids, attributes:attributes};
+    }
     $.ajax({
-        url:base_url+'registry_object/update/', 
+        url:url, 
         type: 'POST',
-        data: {affected_ids:ids, attributes:attributes},
+        data: data,
         success: function(data){
             init(filters);
-            //console.log(data);
+            console.log(data);
         }
     });
 }

@@ -300,16 +300,31 @@ class Registry_object extends MX_Controller {
 
 
 
-	function update(){
-		$affected_ids = $this->input->post('affected_ids');
-		$attributes = $this->input->post('attributes');
+	function update($all = false){
 		$this->load->model('registry_objects', 'ro');
+		$attributes = $this->input->post('attributes');
+		if(!$all){
+			$affected_ids = $this->input->post('affected_ids');
+			$attributes = $this->input->post('attributes');
+		}else{
+			$data_source_id = $this->input->post('data_source_id');
+			$select_all = $this->input->post('select_all');
+			$ids = $this->ro->getByAttributeDatasource($data_source_id, 'status', $select_all, true, false);
+			$affected_ids = array();
+			foreach($ids as $id){
+				array_push($affected_ids, $id['registry_object_id']);
+			}
+		}
+
 		foreach($affected_ids as $id){
 			$ro = $this->ro->getByID($id);
 			foreach($attributes as $a){
-				echo 'update '.$id.' set '.$a['name'].' to value:'.$a['value'];
-				$ro->{$a['name']} = $a['value'];
-				$ro->save();
+				$ro->setAttribute($a['name'], $a['value']);
+				if($ro->save()){
+					echo 'update '.$ro->id.' set '.$a['name'].' to value:'.$a['value'];
+				}else{
+					echo 'failed';
+				}
 			}
 		}
 	}

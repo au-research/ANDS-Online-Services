@@ -89,7 +89,7 @@ class Data_source extends MX_Controller {
 		if($data_source_id){
 			$data_source = $this->ds->getByID($data_source_id);
 			if(!$data_source) show_error("Unable to retrieve data source id = ".$data_source_id, 404);
-			// $data_source->updateStats();//TODO: XXX
+			$data_source->updateStats();//TODO: XXX
 			$data['ds'] = $data_source;
 		}else{
 			throw new Exception("Data Source must be provided");
@@ -147,7 +147,7 @@ class Data_source extends MX_Controller {
 
 		//administrative and loading stuffs
 		acl_enforce('REGISTRY_USER');
-		ds_acl_enforce($data_source_id);
+		// ds_acl_enforce($data_source_id);
 		header('Cache-Control: no-cache, must-revalidate');
 		header('Content-type: application/json');
 		$this->load->model('data_source/data_sources', 'ds');
@@ -184,6 +184,9 @@ class Data_source extends MX_Controller {
 			
 			$st = array('display_name'=>str_replace('_', ' ', $s), 'name'=>$s, 'menu'=>array());
 			array_push($st['menu'], array('action'=>'select_all', 'display'=>'Select All'));
+			array_push($st['menu'], array('action'=>'select', 'display'=>'Select'));
+			array_push($st['menu'], array('action'=>'view', 'display'=>'<i class="icon icon-eye-open"></i> View this Registry Object'));
+			array_push($st['menu'], array('action'=>'edit', 'display'=>'<i class="icon icon-edit"></i> Edit this Registry Object'));
 			array_push($st['menu'], array('action'=>'flag', 'display'=>'Flag'));
 			array_push($st['menu'], array('action'=>'set_gold_status_flag', 'display'=>'Gold Standard'));
 			switch($s){
@@ -233,28 +236,32 @@ class Data_source extends MX_Controller {
 
 			$args['sort'] = isset($filters['sort']) ? $filters['sort'] : array('updated'=>'desc');
 			$args['search'] = isset($filters['search']) ? $filters['search'] : false;
+			$args['or_filter'] = isset($filters['or_filter']) ? $filters['or_filter'] : false;
 			$args['filter'] = array('status'=>$s);
+			$args['filter'] = isset($filters['filter']) ? array_merge($filters['filter'], array('status'=>$s)) : array('status'=>$s);
 
-			$white_list = array('title', 'class', 'key', 'status', 'slug', 'record_owner');
-			$filtered_ids = array();
-			$filtered = array();
-			if(isset($filters['filter'])){
-				foreach($filters['filter'] as $key=>$value){
-					if(!in_array($key, $white_list)){
-						$list = $this->ro->getByAttributeDatasource($data_source_id, $key, $value, false, false);
-						$filtered_ids = array_merge($filtered_ids, $list);
-					}else{
-						$f[$key] = $value;
-						$args['filter'][$key] = $value;
-					}
-				}
+			// $white_list = array('title', 'class', 'key', 'status', 'slug', 'record_owner');
+			// $filtered_ids = array();
+			// $filtered = array();
+			// if(isset($filters['filter'])){
+			// 	foreach($filters['filter'] as $key=>$value){
+			// 		if(!in_array($key, $white_list)){
+			// 			$list = $this->ro->getByAttributeDatasource($data_source_id, $key, $value, false, false);
+			// 			$filtered_ids = array_merge($filtered_ids, $list);
+			// 		}else{
+			// 			if($key=='status'){
+			// 				if($s!=$value) $no_match = true;
+			// 			}
+			// 		}
+			// 	}
 
-				foreach($filtered_ids as $k){
-					array_push($filtered, $k['registry_object_id']);
-				}
 
-			}
-			$args['filtered_id']=$filtered;
+			// 	foreach($filtered_ids as $k){
+			// 		array_push($filtered, $k['registry_object_id']);
+			// 	}
+
+			// }
+			// $args['filtered_id']=$filtered;
 
 			if(!$no_match){
 				$offset = 0;
@@ -277,6 +284,7 @@ class Data_source extends MX_Controller {
 			}else{
 				$st['count']=0;
 				$st['items'] = array();
+				$st['noResult']=true;
 			}
 			$jsonData['statuses'][$s] = $st;
 		}
@@ -284,11 +292,9 @@ class Data_source extends MX_Controller {
 		echo json_encode($jsonData);
 	}
 
-
-
 	public function get_more_mmr_data(){
 		acl_enforce('REGISTRY_USER');
-		ds_acl_enforce($this->input->post('ds_id'));
+		// ds_acl_enforce($this->input->post('ds_id'));
 		header('Cache-Control: no-cache, must-revalidate');
 		header('Content-type: application/json');
 			
@@ -317,6 +323,7 @@ class Data_source extends MX_Controller {
 		if($ros){
 			foreach($ros as $r){
 				$registry_object = $this->ro->getByID($r['registry_object_id']);
+				
 				$item = array(
 						'id'=>$registry_object->id, 
 							'title'=>$registry_object->title,
@@ -327,10 +334,10 @@ class Data_source extends MX_Controller {
 							'error_count'=>$registry_object->error_count,
 							'warning_count'=>$registry_object->warning_count,
 							'data_source_id'=>$registry_object->data_source_id,
-							'flag'=>$registry_object->flag,
-							'gold_status_flag'=>$registry_object->gold_status_flag
 						);
 				if($item['error_count']>0) $item['has_error'] = true;
+				if($registry_object->flag=='t') $item['has_flag'] = true;
+				if($registry_object->gold_status_flag=='t') $item['has_gold'] = true;
 				array_push($results['items'], $item);
 			}
 		}else return false;
@@ -340,6 +347,93 @@ class Data_source extends MX_Controller {
 			$results['hasMore']=true;
 		}
 		return $results;
+	}
+
+	public function get_mmr_menu(){
+		// header('Cache-Control: no-cache, must-revalidate');
+		// header('Content-type: application/json');
+		$this->load->model('data_source/data_sources', 'ds');
+		$this->load->model('registry_object/registry_objects', 'ro');
+
+		$data_source_id = $this->input->post('data_source_id');
+		$status = $this->input->post('status');
+		$selecting_status = $this->input->post('selecting_status') ? $this->input->post('selecting_status') : false;
+		$affected_ids = $this->input->post('affected_ids') ? $this->input->post('affected_ids') : array();
+
+		$data_source = $this->ds->getByID($data_source_id);
+
+
+		if($selecting_status!=$status){
+			$affected_ids=array();
+		}
+
+		$menu = array();
+		if(sizeof($affected_ids) == 0){
+			$menu['nothing'] = 'Select a Registry Object';
+		}else if(sizeof($affected_ids) == 1){
+			$menu['edit'] = 'Edit Registry Object';
+			$menu['view'] = 'View Registry Object';
+		}
+
+		$hasFlag = false;
+		$hasGold = false;
+		foreach($affected_ids as $id){
+			$ro = $this->ro->getByID($id);
+			if($ro->flag=='t') $hasFlag = true;
+			if($ro->gold_status_flag=='t') $hasGold = true;
+		}
+
+		if($hasFlag) $menu['un_flag'] = 'Remove Flag';
+		if($hasGold) $menu['un_set_gold_status_flag'] = 'Remove Gold Status';
+
+		//QA and Auto Publish check
+		$qa = $data_source->qa_flag=='t' ? true : false;
+		$auto_published = $data_source->auto_published=='t' ? true: false;
+
+		if(sizeof($affected_ids)>=1){
+			$menu['flag'] = 'Flag';
+			$menu['set_gold_status_flag'] = 'Set Gold Status';
+			switch($status){
+				case 'DRAFT':
+					if($qa){
+						$menu['to_submit'] = 'Submit for Assessment';
+					}else{
+						if(!$auto_published){
+							$menu['to_approve'] = 'Approve';
+						}else{
+							$menu['to_publish'] = 'Publish';
+						}
+					}
+					break;
+				case 'MORE_WORK_REQUIRED':
+					$menu['to_draft'] = 'Move to Draft';
+					break;
+				case 'SUBMITTED_FOR_ASSESSMENT':
+					$menu['to_assess'] = 'Assessment In Progress';
+					break;
+				case 'ASSESSMENT_IN_PROGRESS':
+					$menu['to_approve'] = 'Approve';
+					break;
+				case 'APPROVED':
+					$menu['to_publish'] = 'Publish';
+					break;
+				case 'PUBLISHED':
+					$menu['to_draft'] = 'Move to Draft';
+					break;
+			}
+			$menu['delete'] = 'Delete Registry Object';
+		}
+
+
+
+		$html = '';
+		$html .='<ul class="nav nav-tabs nav-stacked">';
+		foreach($menu as $action=>$display){
+			$html .='<li><a tabindex="-1" href="javascript:;" class="op" action="'.$action.'" status="'.$status.'">'.$display.'</a></li>';
+		}
+		$html .='</ul>';
+		echo $html;
+		
 	}
 
 	/**

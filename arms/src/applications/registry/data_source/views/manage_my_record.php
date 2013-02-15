@@ -21,11 +21,8 @@
 		<?php echo anchor('data_source/manage/', 'List My Datasources');?>
 		<?php echo anchor('data_source/manage#!/view/'.$ds->id, $ds->title);?>
 		<a href="#" class="current">Manage Records</a>
-		<div style="float:right">
-			<a>Selected <b>3</b> / 146</a>
-		</div>
 	</div>
-
+	
 	<div class="container-fluid">
 		<div class="row-fluid">
 			<div class="span6">
@@ -39,7 +36,7 @@
 						</button>
 						<ul class="dropdown-menu">
 							<li><a href="javascript:;" class="sort" sort="updated" value="">Date Modified <span class="icon"></span></a></li>
-							<li><a href="javascript:;" class="sort" sort="quality_level" value="">Quality Level  <span class="icon"></span></a></a></li>
+							<li><a href="javascript:;" class="sort" sort="quality_level" value="">Quality Level  <span class="icon"></span></a></li>
 						</ul>
 					</div>
 					<div class="btn-group">
@@ -65,24 +62,29 @@
 					
 				</form>
 			</div>
+			<div class="span6">
+				<div style="position: absolute; left: 50%;">
+					<div id="status_message" class="alert alert-info hide">Loading</div>
+				</div>
+			</div>
 
 		</div>
 		<div class="pool" id="mmr_hopper">
 			<div class="block hide">
-				<div id="MORE_WORK_REQUIRED"></div>
-				<div id="DRAFT"></div>
+				<div id="MORE_WORK_REQUIRED" class='status_field'></div>
+				<div id="DRAFT" class='status_field'></div>
 			</div>
 			<div class="block hide">
-				<div id="SUBMITTED_FOR_ASSESSMENT"></div>
+				<div id="SUBMITTED_FOR_ASSESSMENT" class='status_field'></div>
 			</div>
 			<div class="block hide">
-				<div id="ASSESSMENT_IN_PROGRESS"></div>
+				<div id="ASSESSMENT_IN_PROGRESS" class='status_field'></div>
 			</div>
 			<div class="block hide">
-				<div id="APPROVED"></div>
+				<div id="APPROVED" class='status_field'></div>
 			</div>
 			<div class="block hide">
-				<div id="PUBLISHED"></div>
+				<div id="PUBLISHED" class='status_field'></div>
 			</div>
 		</div>
 		<div class="clearfix"></div>
@@ -92,9 +94,19 @@
 <script type="text/x-mustache" id="mmr_status_template">
 <div class="widget-box ro_box" status="{{name}}">
 	<div class="widget-title stick">
-		<span class="icon">{{count}}</span>
+		<span class="icon selector_menu" status="{{name}}">
+			{{count}}
+			<div class="hide selecting_menu">
+				<ul class="nav nav-tabs nav-stacked">
+					<li><a href="javascript:;" status="{{name}}" class="selector_btn select_all">Select All {{count}}</a></li>
+					<li><a href="javascript:;" status="{{name}}" class="selector_btn select_display">Select <span>0</span> Displayed </a></li>
+					<li><a href="javascript:;" status="{{name}}" class="selector_btn select_none">Select None</a></li>
+					<li><a href="javascript:;" status="{{name}}" class="selector_btn select_flagged">Select Flagged</a></li>
+				</ul>
+			</div>
+		</span>
+		<div class="buttons"><a href="javascript:;" class="contextmenu" status="{{name}}"><i class="icon-wrench no-border"></i></a></div>
 		<h5 class="ellipsis" style="width:60%">{{display_name}}</h5>
-		<div class="buttons"><a href="javascript:;" class="select_all" status="{{name}}"><i class="icon-ok-circle no-border"></i></a></div>
 	</div>
 	<div class="widget-content nopadding ">
 		<div class='selected_status hide'>asdfasdf</div>
@@ -107,14 +119,15 @@
 					<span class="tag" tip="Last Modified"><i class="icon icon-time"></i> {{updated}}</span>
 					<img class="tag" tip="{{class}}" src="<?php echo asset_url('img/{{class}}.png', 'base');?>"/>
 					<span class="tag ql_{{quality_level}}" tip="Quality Level {{quality_level}}">{{quality_level}}</span>
-					{{#flag}}
+					{{#has_flag}}
 					<span class="tag flag" tip="Flagged"><i class="icon icon-flag"></i></span>
-					{{/flag}}
-					{{#gold_status_flag}}
+					{{/has_flag}}
+					{{#has_gold}}
 					<span class="tag gold_status_flag" tip="Gold Standard"><i class="icon icon-star-empty"></i></span>
-					{{/gold_status_flag}}
+					{{/has_gold}}
 				</p>
 			</div>
+			<div class="contextmenu hide" status="{{name}}"><button class="btn btn-small"><i class="icon icon-wrench"></i></button></div>
 			<div class='clearfix'></div>
 			</li>
 			{{/items}}
@@ -122,16 +135,6 @@
 		</ul>
 		{{#hasMore}}<span class="show_more" offset="{{offset}}" ds_id="{{ds_id}}" status="{{name}}">Show More</span>{{/hasMore}}
 	</div>
-</div>
-
-<div id="context-menu-{{name}}">
-	<ul class="dropdown-menu" role="menu">
-		{{#menu}}
-		<li><a tabindex="-1" href="javascript:;" class="op" action="{{action}}" status="{{name}}">{{display}}</a></li>
-		{{/menu}}
-		<li class="hide unflag"><a tabindex="-1" href="javascript:;" class="op" action="un_flag" status="{{name}}">Remove Flag<a/></li>
-		<li class="hide unsetgoldstatus"><a tabindex="-1" href="javascript:;" class="op" action="un_set_gold_status_flag" status="{{name}}">Remove Gold Status<a/></li>
-	</ul>
 </div>
 </script>
 
