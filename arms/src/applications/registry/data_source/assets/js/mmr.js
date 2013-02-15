@@ -366,18 +366,12 @@ function action_list(status, action){
         // console.log($('li.ro_item', list).length)
         $.each($('li.ro_item', list), function(index, val) {
             $(this).addClass('ro_selected');
-            if($.inArray($(this).attr('id'), selected_ids)==-1){
-                selected_ids.push($(this).attr('id'));
-            }
         });
        
     }else if(action=='select_none'){
         selecting_status = '';
         select_all = false;
-        $.each($('li.ro_item', list), function(index, val) {
-            $(this).removeClass('ro_selected');
-            selected_ids = [];
-        });
+        $('.ro_selected').removeClass('ro_selected');
     }else if(action=='select_all'){
         select_all = status;
         $.each($('li.ro_item', list), function(index, val) {
@@ -390,6 +384,12 @@ function action_list(status, action){
 }
 
 function update_selected_list(status){
+    selected_ids = [];
+    selecting_status = status;
+    $('.ro_selected').each(function(){
+        selected_ids.push($(this).attr('id'));
+    });
+
     var num = selected_ids.length;
     var list = $('.ro_box[status='+status+']');
     // var selected = $('div.selected_status', list);
@@ -406,31 +406,6 @@ function update_selected_list(status){
 function click_ro(ro_item, action){
     var ro_id = $(ro_item).attr('id');
     var status = $(ro_item).attr('status');
-
-    if(action=='select_1'){
-        selected_ids = [];//empty
-    }else if(action=='select_until'){
-        var until = $('#'+ro_id).prevAll('.ro_selected').attr('id');
-        if(until){
-            var in_between = $('#'+ro_id).prevUntil('#'+until);
-            $.each(in_between,function(){
-                //TODO:XXXX
-            });
-        }
-    }
-
-    if(status==selecting_status){
-        if($.inArray(ro_id, selected_ids)==-1){
-            selected_ids.push(ro_id);
-        }else{
-            selected_ids.splice( $.inArray(ro_id, selected_ids), 1 );
-        }
-    }else{
-        $('.ro_item').removeClass('ro_selected');
-        selecting_status=status;
-        selected_ids=[];//empty
-        selected_ids.push(ro_id);
-    }
     
     if(action=='toggle'){
         $('#'+ro_id).toggleClass('ro_selected');
@@ -439,9 +414,13 @@ function click_ro(ro_item, action){
     }else if(action=='select_1'){
         $('.sortable li').removeClass('ro_selected');
         $('#'+ro_id).addClass('ro_selected');
+    }else if(action=='select_until'){
+        $('#'+ro_id).addClass('ro_selected');
+        var prev = $('#'+ro_id).prevAll('.ro_selected').attr('id');
+        $('#'+ro_id).prevUntil('#'+prev).addClass('ro_selected');
     }
     selected_ids = $.unique(selected_ids);
-    update_selected_list(status)
+    update_selected_list(status);
     //console.log(selected_ids);
 }
 
