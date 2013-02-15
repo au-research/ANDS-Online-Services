@@ -163,7 +163,7 @@ class View extends MX_Controller {
 			try
 			{
 				$extRif = $this->registry->fetchExtRifBySlug($this->input->get('slug'));
-				$html = $this->registry->transformExtrifToHTMLPreview($extRif); 
+				$html = $this->registry->transformExtrifToHTMLPreview($extRif['data']); 
 			}
 			catch (SlugNoLongerValidException $e)
 			{
@@ -174,7 +174,7 @@ class View extends MX_Controller {
 			try
 			{
 				$extRif = $this->registry->fetchExtRifByID($this->input->get('registry_object_id'));
-				$html = $this->registry->transformExtrifToHTMLPreview($extRif);
+				$html = $this->registry->transformExtrifToHTMLPreview($extRif['data']);
 			}
 			catch (SlugNoLongerValidException $e)
 			{
@@ -188,7 +188,7 @@ class View extends MX_Controller {
 				foreach($this->input->post('roIds') as $roID)
 				{
 					$extRif = $this->registry->fetchExtRifByID($roID);
-					$html .= $this->registry->transformExtrifToHTMLPreview($extRif);
+					$html .= $this->registry->transformExtrifToHTMLPreview($extRif['data']);
 				}
 			}
 			catch (SlugNoLongerValidException $e)

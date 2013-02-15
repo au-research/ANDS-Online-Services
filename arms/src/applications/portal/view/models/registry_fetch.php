@@ -155,6 +155,7 @@ class Registry_fetch extends CI_Model
 		}
 		else
 		{
+			var_dump($url);
 			throw new Exception("Error whilst fetching registry object connection graph: " . $contents['message']);
 		}
 	}
