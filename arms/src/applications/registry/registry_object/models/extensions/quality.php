@@ -61,4 +61,12 @@ class Quality_Extension extends ExtensionBase
 			$this->db->insert('registry_object_metadata', array('registry_object_id'=>$this->id, 'attribute'=>$name, 'value'=>$value));
 		}
 	}
+
+	function get_quality_text(){
+		$query = $this->db->get_where("registry_object_metadata", array('registry_object_id' => $this->id, 'attribute' => 'level_html'));
+		if($query->num_rows()==1){
+			$result = $query->result();
+			return $result[0]->value;
+		}else return false;
+	}
 }

@@ -362,9 +362,90 @@ function initLayout(){
         $('.select_display span', this).html(total);
     });
 
+    $('.tipQA').live('mouseover', function(){
+        $(this).qtip({
+            content: {
+                text: 'Loading...', // The text to use whilst the AJAX request is loading
+                ajax: {
+                    url: base_url+'registry_object/get_quality_view/', // URL to the local file
+                    type: 'POST', // POST or GET
+                    data: {
+                        ro_id: $(this).attr('ro_id')
+                    }, // Data to pass along with your request
+                    loading:false,
+                    success: function(data, status) {
+                        this.set('content.text', data);
+                        formatTip(this);
+                    }
+                }
+            },
+            position: {viewport: $(window)},
+            show: {
+                //event: 'click',
+                ready: true,
+                solo:true,
+                effect: function(offset) {
+                    $(this).show(); // "this" refers to the tooltip
+                }
+            },
+            hide: {
+                fixed:true,
+                delay: 400
+            },
+            style: {classes: 'ui-tooltip-shadow ui-tooltip-bootstrap'},
+            overwrite: false
+        });
+    });
+
     // $('.context').contextmenu();
 
 }
+
+function formatTip(tt){
+    var tooltip = $('#ui-tooltip-'+tt.id+'-content');
+    
+    //wrap around the current tooltip with a div
+    for(var i=1;i<=3;i++){
+        $('*[level='+i+']', tooltip).wrapAll('<div class="qa_container" qld="'+i+'"></div>');
+    }
+    //add the toggle header
+    $('.qa_container', tooltip).prepend('<div class="toggleQAtip"></div>');
+    $('.toggleQAtip', tooltip).each(function(){
+        if ($(this).parent().attr('qld') == 5)
+            $(this).text('Gold Standard Record');
+        else if($(this).parent().attr('qld') == 1)
+            $(this).text('Quality Level 1 - Required RIF-CS Schema Elements');
+        else if($(this).parent().attr('qld') == 2)
+            $(this).html('Quality Level 2 - required Metadata Content Requirements.' );
+        else if($(this).parent().attr('qld') == 3)
+             $(this).html('Quality Level 3 - recommended Metadata Content Requirements.' );
+    });
+    //hide all qa
+    $('.qa_container', tooltip).each(function(){
+        $(this).children('.qa_ok, .qa_error').hide();
+    });
+    //show the first qa that has error
+    var showThisQA = $('.qa_error:first', tooltip).parent();
+    $(showThisQA).children().show();
+    //coloring the qa that has error, the one that doesn't have error will be the default one
+    $('.qa_container', tooltip).each(function(){
+        if($(this).children('.qa_error').length>0){//has an error
+            //$(this).children('.toggleQAtip').addClass('hasError');
+            $(this).addClass('warning');
+        }else{
+            $(this).addClass('success');
+        }
+    });
+    //bind the toggle header to open all the qa inside
+    $('.toggleQAtip', tooltip).click(function(){
+        $(this).parent().children('.qa_ok, .qa_error').slideToggle('fast', function(){
+            tt.reposition();//fix the positioning
+        });
+    });
+    $('.qa_ok').addClass('success');
+    $('.qa_error').addClass('warning');
+}
+
 
 function action_list(status, action){
     var list = $('ul[status='+status+']');

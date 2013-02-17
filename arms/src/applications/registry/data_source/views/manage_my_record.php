@@ -118,7 +118,7 @@
 				<p>
 					<span class="tag" tip="Last Modified"><i class="icon icon-time"></i> {{updated}}</span>
 					<img class="tag" tip="{{class}}" src="<?php echo asset_url('img/{{class}}.png', 'base');?>"/>
-					<span class="tag ql_{{quality_level}}" tip="Quality Level {{quality_level}}">{{quality_level}}</span>
+					<span class="tag ql_{{quality_level}} tipQA" ro_id='{{id}}'>{{quality_level}}</span>
 					{{#has_flag}}
 					<span class="tag flag" tip="Flagged"><i class="icon icon-flag"></i></span>
 					{{/has_flag}}

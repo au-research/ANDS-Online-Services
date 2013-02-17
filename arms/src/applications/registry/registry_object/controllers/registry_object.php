@@ -290,6 +290,12 @@ class Registry_object extends MX_Controller {
 		echo $jsonData;
 	}
 
+	public function get_quality_view(){
+		$this->load->model('registry_objects', 'ro');
+		$ro = $this->ro->getByID($this->input->post('ro_id'));
+		echo $ro->get_quality_text();
+	}
+
 	public function get_native_record($id){
 		$this->load->model('registry_objects', 'ro');
 		$ro = $this->ro->getByID($id);
