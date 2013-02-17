@@ -1,6 +1,8 @@
 <?php
 
 	$connDiv = '';
+	$conn = array();
+
 	if (isset($connections_contents))
 	{
 
@@ -25,10 +27,42 @@
 							$url = base_url() . "view/?id=" . $entry['registry_object_id'];
 						}
 
-						$connDiv .= "<p class=".$entry['class']."><a href='".$url."'>".$entry['title']."</a></p>";
+
+						if(!isset($conn[$entry['class']]))
+						{
+							$conn[$entry['class']] = "<p class=".$entry['class']."><a href='".$url."'>".$entry['title']."</a></p>";
+						}else{
+							$conn[$entry['class']] .= "<p class=".$entry['class']."><a href='".$url."'>".$entry['title']."</a></p>";
+						}
 					}
 				}
 			}
+		}
+
+		foreach($conn as $connections => $value)
+		{
+			switch($connections){
+				case "contributor":
+					$heading = "<h3>Contributed by</h3>";
+					break;
+				case "party_one":
+					$heading = "<h3>Researchers</h3>";
+					break;	
+				case "party_multi":
+					$heading = "<h3>Research Groups</h3>";
+					break;	
+				case "activity":
+					$heading = "<h3>Activities</h3>";
+					break;	
+				case "service":
+					$heading = "<h3>Services</h3>";
+					break;
+				case "collection":
+					$heading = "<h3>Collections</h3>";
+					break;																						
+			}
+			$connDiv .= $heading;
+			$connDiv .= $value;	
 		}
 	}
 
