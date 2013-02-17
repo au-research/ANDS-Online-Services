@@ -364,7 +364,11 @@ class Registry_objects extends CI_Model {
 		if($args['filter']){
 			foreach($args['filter'] as $key=>$value){
 				if(!in_array($key, $white_list)){
-					$filtered = array_merge($filtered, $this->getByAttributeDatasource($data_source_id, $key, $value, false, false));
+					if(sizeof($filtered)==0){
+						$filtered = $this->getByAttributeDatasource($data_source_id, $key, $value, false, false);
+					}else{
+						$filtered = array_intersect($filtered, $this->getByAttributeDatasource($data_source_id, $key, $value, false, false));
+					}
 				}
 			}
 		}
@@ -410,8 +414,6 @@ class Registry_objects extends CI_Model {
 						   					$db->where($key,$value);
 						   				}
 						   			}
-						   			//var_dump($args['where_in']);
-						   			
 						   		}
 						   		if($args['where_in']){
 						   			if(sizeof($args['where_in'])>0){

@@ -131,7 +131,7 @@ $(function() {
 });
 
 function init(filters){
-    selected_ids = [];
+
     var data_source_id = $('#data_source_id').val();
     //$('.pool').hide();
     $('#status_message').html('<em>Loading...</em>');
@@ -160,6 +160,14 @@ function init(filters){
                 $('#'+d).parent().show();
             });
             $('.pool').show();
+
+            $.each(selected_ids, function(){
+                $('#'+this).addClass('active');
+                $('#'+this).removeClass('active', 3000);
+            });
+            selected_ids = [];
+            selecting_status = '';
+            select_all = false;
 
             bindSortables();
             bindPreviews();
@@ -237,7 +245,7 @@ function initLayout(){
     $('.pool').height(max_height+50);
     //$('.ro_box[status=SUBMITTED_FOR_ASSESSMENT], .ro_box[status=APPROVED], .ro_box[status=ASSESSMENT_IN_PROGRESS],.ro_box[status=PUBLISHED]').height(max_height);
     //var draft_height = $('.ro_box[status=DRAFT]').height() + max_height - $('.ro_box[status=DRAFT]').parent('.block').height();
-   // $('.ro_box[status=DRAFT]').height(draft_height);
+    // $('.ro_box[status=DRAFT]').height(draft_height);
     // 
     // 
 
@@ -380,7 +388,6 @@ function action_list(status, action){
     }
     selected_ids = $.unique(selected_ids);
     update_selected_list(status);
-    // console.log(selected_ids);
 }
 
 function update_selected_list(status){
@@ -391,6 +398,8 @@ function update_selected_list(status){
     });
 
     var num = selected_ids.length;
+    if(select_all) num = parseInt($('#'+status+' .count').html());
+    console.log(num);
     var list = $('.ro_box[status='+status+']');
     // var selected = $('div.selected_status', list);
     var selected = $('#status_message');
@@ -440,11 +449,16 @@ function bindSortables(){
         $('li', this).draggable({
             cursor: "move",cursorAt:{top:-5,left:-5},scroll:true,
             helper: function(e){
-                return $( "<span class='label label-info helper'>"+selected_ids.length+"</span>" );
+                var list = $(this).parents('.status_field');
+                if(select_all){
+                    total = $('.count', list).text();
+                }else total = selected_ids.length;
+                return $( "<span class='label label-info helper'>"+total+"</span>" );
             },
             connectToSortable: target
         });
-        $('li', this).bind('contextmenu', function(){return false;})
+        $('li', this)
+        .bind('contextmenu', function(){return false;})
         .bind('mouseover',function(){
             $('.contextmenu', this).show();
         })
@@ -473,7 +487,7 @@ function bindSortables(){
         });
 
 
-        $(target).droppable({
+        $(target).parents('.status_field').droppable({
             accept: from,
             hoverClass:"droppable",
             drop: function( event, ui ) {
@@ -483,8 +497,6 @@ function bindSortables(){
                         value:connect_to
                     }];
                     update(selected_ids, attributes);
-                    var text = selected_ids.length+' registry objects have been moved to '+connect_to;
-                    $('#status_message').html(text);
                 }
             }
         });
@@ -538,17 +550,22 @@ function update(ids, attributes){
         ids = select_all;
         url = base_url+'registry_object/update/all';
         data = {data_source_id:$('#data_source_id').val(),select_all:select_all, attributes:attributes};
+        total = parseInt($('#'+select_all+' .count').html());
     }else{
         url = base_url+'registry_object/update/'
         data = {affected_ids:ids, attributes:attributes};
+        total = selected_ids.length
     }
+
+    var text = total+' registry objects updating...';
+    $('#status_message').html(text);
     $.ajax({
         url:url, 
         type: 'POST',
         data: data,
         success: function(data){
             init(filters);
-            console.log(data);
+            // $('#status_message').html(data.msg);
         }
     });
 }

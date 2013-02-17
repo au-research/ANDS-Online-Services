@@ -95,7 +95,7 @@
 <div class="widget-box ro_box" status="{{name}}">
 	<div class="widget-title stick">
 		<span class="icon selector_menu" status="{{name}}">
-			{{count}}
+			<span class="count">{{count}}</span>
 			<div class="hide selecting_menu">
 				<ul class="nav nav-tabs nav-stacked">
 					<li><a href="javascript:;" status="{{name}}" class="selector_btn select_all">Select All {{count}}</a></li>
