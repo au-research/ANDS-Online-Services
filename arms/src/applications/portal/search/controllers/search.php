@@ -119,7 +119,7 @@ class Search extends MX_Controller {
 		if(!$filteredSearch) 
 		{
 			$this->stats->registerSearchTerm($this->solr->getOpt('q'));
-			//$this->stats->registerSearchStats($this->solr->getOpt('q'),$data['numFound']);
+			$this->stats->registerSearchStats($this->solr->getOpt('q'),$data['numFound']);
 
 		}
 

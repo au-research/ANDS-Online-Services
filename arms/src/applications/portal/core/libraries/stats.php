@@ -140,7 +140,7 @@ class Stats {
 		$values['occurence'] = $occurence;		
 	
 
-		$this->db->insert('search_occurence', $values);
+		$this->db->insert('search_result_counts', $values);
 	}
 
 	/**
