@@ -111,8 +111,8 @@
 				   <tbody>
 				     <tr>
 				       <td>mode <span class="pull-right badge badge-info">S</span></td>
-				       <td>"search", "narrow"</td>
-				       <td>Vocab widget mode: 'search' provides an autocomplete widget on an HTML <code>input</code> element, while 'browse' populates an HTML <code>select</code> element with appropriate data</td>
+				       <td>"search"</td>
+				       <td>Vocab widget mode: <code>search</code> provides an autocomplete widget on an HTML input element, while <code>narrow</code> populates an HTML select element with appropriate data</td>
 				     </tr>
 				     <tr>
 				       <td>repository <span class="pull-right badge badge-info">S</span></td>
