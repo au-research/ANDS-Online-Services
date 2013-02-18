@@ -23,7 +23,8 @@ limitations under the License.
  */
 
 // some constants
-define("BASE_URL", "http://devl.ands.org.au:8080/sissvoc/api/");
+define("BASE_URL", "http://devl.ands.org.au:8080/sissvoc/api/"); //use this for testing rifcs
+//define("BASE_URL", "http://ands3.anu.edu.au:8080/sissvoc/api/"); //use this for testing anzsrc-for
 define("SEARCH_URL", "/concept.json?anycontains=");
 define("NARROW_URL", "/concept/allNarrower.json?uri=");
 define("BROAD_URL", "/concept/allBroader.json?uri="); #future use
