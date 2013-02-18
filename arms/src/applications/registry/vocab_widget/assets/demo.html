@@ -17,24 +17,24 @@
       }
       div.container
       {
-        width: 750px; 
+        width: 750px;
         height: 500px;
         margin:auto;
       }
 
       div.formarea
       {
-        width: 500px; 
-        padding:30px; 
+        width: 500px;
+        padding:30px;
         border: 1px solid #999;
       }
 
-      form 
+      form
       {
         font-size:10px;
       }
 
-      div.formfields 
+      div.formfields
       {
         padding:20px;
       }
@@ -57,34 +57,51 @@
 
         <h1>Example Data Classification/Submission System</h1>
         <hr/>
-        
+
         <div class="formfields">
-          <form id="myform">
-    	       
-            <dl>
-              <dt>Chief Investigator Name:</dt>
-              <dd><input type="text" name="cia_name" value="Joe Bloggs" size="40" /></dd>
+          <form id="searchform">
+	    <fieldset>
+	      <legend>Details</legend>
+              <dl>
+		<dt>Chief Investigator Name:</dt>
+		<dd><input type="text" name="cia_name" value="Joe Bloggs" size="40" /></dd>
 
-              <dt>Project Name:</dt>
-              <dd><input type="text" name="project_name" value="Coral community and extent mapping of the Wide Bay - Burnett Coastal fringe project" size="40" /></dd>
+		<dt>Project Name:</dt>
+		<dd><input type="text" name="project_name" value="Coral community and extent mapping of the Wide Bay - Burnett Coastal fringe project" size="40" /></dd>
+	      </dl>
+	    </fieldset>
+	    <fieldset>
+	      <legend>Vocab widget: ANZSRC searching</legend>
+	      <dl>
+		<dt>ANZSRC Field of Research:</dt>
+		<dd><input type="text" id="anzsrc-vocab" name="anzsrc-for" value="" size="40" /></dd>
+	      </dl>
 
-              <dt>ANZSRC Field of Research:</dt>
-              <dd><input type="text" id="anzsrc-vocab" name="anzsrc-for" value="" size="40" /></dd>
-            </dl>
-
-             <i>(autocomplete; begin typing something (e.g. "BIOL"))</i>
-
+	      <i>(autocomplete; begin typing something (e.g. "BIOL"))</i>
+	    </fieldset>
+	    <fieldset>
+	      <legend>Vocab widget: RIFCS narrowing</legend>
+	      <dl>
+		<dt>RIFCS Identifier Type:</dt>
+		<dd><select id="rifcs-idtype" name="rifcs-id-for" value=""></select></dd>
+	      </dl>
+	    </fieldset>
             <p><input type="submit"/></p>
           </form>
         </div>
-
       </div>
-
     </div>
 
     <script type="text/javascript">
       $(document).ready(function() {
-	       $("#anzsrc-vocab").ands_vocab_widget({cache: false, target_field: 'label'});
+//	       $("#anzsrc-vocab").ands_vocab_widget({cache: false, target_field: 'label'});
+	       $("#rifcs-idtype").ands_vocab_widget({mode:"narrow",
+	       					     mode_params:"http://purl.org/au-research/vocabulary/RIFCS/1.4/RIFCSIdentifierType",
+	       					     repository:"rifcs",
+	       					     cache: false,
+	       					     fields: ['definition'],
+	       					     target_field: 'label'});
+
       });
     </script>
   </body>
