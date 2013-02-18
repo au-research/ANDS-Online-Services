@@ -21,15 +21,16 @@
 				    </div>
 			    	 <h4>What is this widget?</h4>
 			    	 <p>
-				   		The ANDS Vocabulary Widget allows you to instantly add Data Classification capabilities to your data capture tools through the ANDS Vocabulary Service. 
+				   		The ANDS Vocabulary Widget allows you to instantly add Data Classification capabilities to your data capture tools through the ANDS Vocabulary Service.
 				   	 </p>
 					 <p>
 					   	The widget has been written in the style of a jQuery plugin, allowing complete control over styling and functionality with just a few lines of javascript.
 					 </p>
 					 <p>
-					   	Currently the widget offers the ability to create a navigable "autocomplete", meaning that users can be prompted to use appropriate controlled vocabulary classifications when inputting data. 
-
-					   	Tree-style concept browsing (such as that used in the RDA "Browse" screen) is coming soon. 
+					   	Currently the widget can run in <strong>search</strong> or <strong>narrow</strong> mode. Search mode creates a navigable "autocomplete" widget, with users able to search for the appropriate controlled vocabulary classification when inputting data. Narrowing provides similar functionality by populating a select list with items comprising a base vocabulary classification URI.
+					 </p>
+					 <p>
+					   	Tree-style concept browsing (such as that used in the RDA "Browse" screen) is coming soon.
 					 </p>
 			    	 <p>
 			    		 <a target="_blank" class="btn btn-success" href="<?=asset_url('demo.html');?>"><i class="icon-circle-arrow-right icon-white"></i> View the Demo</a>
@@ -47,10 +48,16 @@
 </pre>
 			    	 </p>
 				 <p>
-				   Ensure there is a text input box ready to accept user input:
+				   For search mode, ensure there is a text input box ready to accept user input:
 				 </p>
 <pre class="prettyprint pre-scrollable">
-  &lt;input type="text" id="vocabInput"&gt;
+&lt;input type="text" id="vocabInput"&gt;
+</pre>
+				 <p>
+				   Narrow mode requires a select element:
+				 </p>
+<pre class="prettyprint pre-scrollable">
+&lt;select id="vocabInput"&gt;&lt;/select&gt;
 </pre>
 				 <p>
 				   Then, either inside a <code>$(document).ready()</code> handler, or at the bottom of your document, call the plugin on a jQuery selector:
@@ -63,6 +70,19 @@
   &lt;/script&gt;
 </pre>
                                  <p>
+				   For narrow mode, some default settings need to be overridden (see table below for more details):
+				 </p>
+<pre class="prettyprint pre-scrollable">
+  &lt;script text="text/javascript"&gt;
+    $(document).ready(function() {
+      $("#vocabInput").ands_vocab_widget({
+          mode:'narrow',
+          mode_params:'http://purl.org/au-research/vocabulary/RIFCS/1.4/RIFCSIdentifierType',
+	  fields:['definition']});
+    }
+  &lt;/script&gt;
+</pre>
+                                 <p>
 				   The plugin accepts a suite of options, detailed below.
 				 </p>
 
@@ -70,8 +90,12 @@
 			    	 <p>
 				   The following options can be passed into the plugin using a Javascript hash/object, such as <code>$("#vocabInput").ands_vocab_widget({cache: false});</code>. Be sure to quote strings, and separate multiple options with a comma (<code>,</code>).
 			    	 </p>
+				 <p>
+				   Some options are specific to the chosen mode; the tables below are grouped in a way that makes this easy to comprehend
+				 </p>
 				 <table class="table" style="font-size:0.9em">
 				   <caption>
+				     <h4>Common options</h4>
 				     <strong>Legend:</strong>
 				     <span class="badge badge-info">S</span>: String,
 				     <span class="badge badge-info">I</span>: Integer,
@@ -80,26 +104,71 @@
 				   </caption>
 				   <thead>
 				     <tr>
-				       <th style="width:25%">Option</th>
-				       <th>Default value</th>
-				       <th>Description</th>
+				       <th style="width:20%;text-align:left">Option</th>
+				       <th style="text-align:left">Default value</th>
+				       <th style="text-align:left">Description</th>
 				   </thead>
 				   <tbody>
 				     <tr>
-				       <td>endpoint <span class="pull-right badge badge-info">S</span></td>
-				       <td>"http://services.ands.org.au/api/resolver/vocab_widget/"</td>
-				       <td>Location (absolute URL) of the (JSONP) SISSvoc provider.</td>
+				       <td>mode <span class="pull-right badge badge-info">S</span></td>
+				       <td>"search", "narrow"</td>
+				       <td>Vocab widget mode: 'search' provides an autocomplete widget on an HTML <code>input</code> element, while 'browse' populates an HTML <code>select</code> element with appropriate data</td>
 				     </tr>
 				     <tr>
-				       <td>mode <span class="pull-right badge badge-info">S</span></td>
-				       <td>"search"</td>
-				       <td>Reserved for future use. Currently, only "search" is allowed.</td>
+				       <td>repository <span class="pull-right badge badge-info">S</span></td>
+				       <td>anzsrc-for</td>
+				       <td>The SISSvoc repository to query</td>
 				     </tr>
 				     <tr>
 				       <td>max_results <span class="pull-right badge badge-info">I</span></td>
 				       <td>100</td>
 				       <td>At most, how many results should be returned?</td>
 				     </tr>
+				     <tr>
+				       <td>cache <span class="pull-right badge badge-info">B</span></td>
+				       <td>true</td>
+				       <td>Cache SISSvoc responses?</td>
+				     </tr>
+				     <tr>
+				       <td>error_msg <span class="pull-right badge badge-info">S</span> <span class="pull-right badge badge-info">B</span></td>
+				       <td>"ANDS Vocabulary Widget service error"</td>
+				       <td>Message title to display (via a js 'alert' call) when an error is encountered. Set to <span class="badge badge-info">B</span> <code>false</code> to suppress such messages</td>
+				     </tr>
+				     <tr>
+				       <td>fields <span class="pull-right badge badge-info">[S]</span></td>
+				       <td>["label", "notation", "about"]</td>
+				       <td>Which fields do you want to display? Available fields are defined by the chosen repository.<br/>
+				       <div class="alert alert-small"><strong>Note:</strong> refer to mode-specific settings for further details</div></td>
+				     </tr>
+				     <tr>
+				       <td>target <span class="pull-right badge badge-info">S</span></td>
+				       <td>"notation"</td>
+				       <td>What data field should be stored upon selection?</td>
+				     </tr>
+				     <tr>
+				       <td>endpoint <span class="pull-right badge badge-info">S</span></td>
+				       <td>"http://services.ands.org.au/api/resolver/vocab_widget/"</td>
+				       <td>Location (absolute URL) of the (JSONP) SISSvoc provider.</td>
+				     </tr>
+				   </tbody>
+				 </table>
+
+				 <table class="table" style="font-size:0.9em">
+				   <caption>
+				     <h4>"Search" mode options</h4>
+				     <strong>Legend:</strong>
+				     <span class="badge badge-info">S</span>: String,
+				     <span class="badge badge-info">I</span>: Integer,
+				     <span class="badge badge-info">B</span>: Boolean,
+				     <span class="badge badge-info">[n]</span>: Array of 'n'
+				   </caption>
+				   <thead>
+				     <tr>
+				       <th style="width:20%;text-align:left">Option</th>
+				       <th style="text-align:left">Default value</th>
+				       <th style="text-align:left">Description</th>
+				   </thead>
+				   <tbody>
 				     <tr>
 				       <td>min_chars <span class="pull-right badge badge-info">I</span></td>
 				       <td>3</td>
@@ -111,37 +180,53 @@
 				       <td>How long to wait (after initial user input) before executing the search? Provide in milliseconds</td>
 				     </tr>
 				     <tr>
-				       <td>cache <span class="pull-right badge badge-info">B</span></td>
-				       <td>true</td>
-				       <td>Cache search results?</td>
-				     </tr>
-				     <tr>
 				       <td>nohits_msg <span class="pull-right badge badge-info">S</span> <span class="pull-right badge badge-info">B</span></td>
 				       <td>"No matches found"</td>
 				       <td>Message to display when no matching concepts are found. Set to <span class="badge badge-info">B</span> <code>false</code> to suppress such messages</td>
-				     </tr>
-				     <tr>
-				       <td>error_msg <span class="pull-right badge badge-info">S</span> <span class="pull-right badge badge-info">B</span></td>
-				       <td>"ANDS Vocabulary Widget service error"</td>
-				       <td>Message title to display when an error is encountered. Set to <span class="badge badge-info">B</span> <code>false</code> to suppress such messages</td>
 				     </tr>
 				     <tr>
 				       <td>list_class <span class="pull-right badge badge-info">S</span></td>
 				       <td>"ands_vocab_list"</td>
 				       <td>CSS 'class' references for the dropdown list. Separate multiple classes by spaces</td>
 				     </tr>
+				   </tbody>
+				 </table>
+
+
+				 <table class="table" style="font-size:0.9em">
+				   <caption>
+				     <h4>"Narrow" mode options</h4>
+				     <strong>Legend:</strong>
+				     <span class="badge badge-info">S</span>: String,
+				     <span class="badge badge-info">I</span>: Integer,
+				     <span class="badge badge-info">B</span>: Boolean,
+				     <span class="badge badge-info">[n]</span>: Array of 'n'
+				   </caption>
+				   <thead>
+				     <tr>
+				       <th style="width:20%;text-align:left">Option</th>
+				       <th style="text-align:left">Default value</th>
+				       <th style="text-align:left">Description</th>
+				   </thead>
+				   <tbody>
+				     <tr>
+				       <td>mode_params <span class="pull-right badge badge-info">S</span></td>
+				       <td>"http://purl.org/au-research/vocabulary/RIFCS/1.4/RIFCSIdentifierType"</td>
+				       <td>For narrow mode, <code>mode_params</code> defines the vocabulary item upon which to narrow.</td>
+				     </tr>
 				     <tr>
 				       <td>fields <span class="pull-right badge badge-info">[S]</span></td>
 				       <td>["label", "notation", "about"]</td>
-				       <td>Which fields do you want to display? currently ('label', 'notation', 'about') are available</td>
+				       <td>In narrow mode, this option <strong>must be overriden</strong> to be a single-element array of string  <span class="badge badge-info">[S]</span>. This selection defines the label for the select list options.</td>
 				     </tr>
 				     <tr>
 				       <td>target <span class="pull-right badge badge-info">S</span></td>
 				       <td>"notation"</td>
-				       <td>What data field should be stored upon selection?</td>
+				       <td>What data field should be stored upon selection? In narrow mode, this field is used as the <code>value</code> attribute for the select list options</td>
 				     </tr>
 				   </tbody>
 				 </table>
+
 			    </div>
 
 
