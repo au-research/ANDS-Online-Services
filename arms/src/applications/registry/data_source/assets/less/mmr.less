@@ -32,7 +32,7 @@
 					margin-bottom:0;
 				}
 			}
-			.contextmenu{
+			.right-menu{
 				position:absolute;
 				top:5px;
 				right:5px;
@@ -117,17 +117,21 @@
 	z-index:1000000;
 }
 
-.qa_ok{display:block;border:1px solid;}
-.qa_error{display:block;border:1px solid;}
-.qa_container{border:1px solid black;margin:2px 1px;padding:4px;}
-.toggleQAtip{font-size:16px;padding:5px 2px;cursor:pointer;line-height: 18px;}
-.hasError{background:#C92020; color:white;}
-.info, .success, .warning, .error, .validation {
-    border: 1px solid;
-    background-repeat: no-repeat;
-    background-position: 97% 15px;
-    margin: 7px auto;
-    padding: 10px 20px 15px 10px;
+
+.qa_container{
+	border:1px solid black;margin:2px 1px;padding:4px;
+	.qa_ok{display:block;border:1px solid;}
+	.qa_error{display:block;border:1px solid;}
+	.toggleQAtip{font-size:16px;padding:5px 2px;cursor:pointer;line-height: 18px;}
+	.hasError{background:#C92020; color:white;}
+	.info, .success, .warning, .error, .validation {
+	    border: 1px solid;
+	    background-repeat: no-repeat;
+	    background-position: 97% 15px;
+	    margin: 7px auto;
+	    padding: 10px 20px 15px 10px;
+	}
+	
 }
 .info {
     color: #00529B;
@@ -144,4 +148,40 @@
 .error {
     color: #D8000C;
     background-color: #FFBABA;
+}
+
+.tags{
+	margin:0 auto;
+	li{
+		display:inline-block;
+		border:1px solid #ccc;
+		padding: 2px 10px;
+		padding-right:15px;
+		margin:2px;
+		cursor:pointer;
+		position:relative;
+		.light-gradient();
+		span{
+			position: absolute;
+			top:2px;right:0;
+			opacity:0.5;
+			&:hover{
+				opacity:1.0;
+			}
+		}
+		&:hover{
+			border:1px solid #ddd;
+		}
+	}
+}
+
+.light-gradient{
+	background: #F8F8F8;
+	background: -moz-linear-gradient(top, #F8F8F8 0%, #E3E3E3 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#F8F8F8), color-stop(100%, #E3E3E3));
+	background: -webkit-linear-gradient(top, #F8F8F8 0%, #E3E3E3 100%);
+	background: -o-linear-gradient(top, #F8F8F8 0%, #E3E3E3 100%);
+	background: -ms-linear-gradient(top, #F8F8F8 0%, #E3E3E3 100%);
+	background: linear-gradient(top, #F8F8F8 0%, #E3E3E3 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f8f8f8', endColorstr='#e3e3e3',GradientType=0 );
 }

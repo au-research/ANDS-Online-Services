@@ -304,6 +304,40 @@ class Registry_object extends MX_Controller {
 		echo $jsonData;
 	}
 
+	public function get_tag_menu(){
+		$this->load->model('registry_objects', 'ro');
+		$ro = $this->ro->getByID($this->input->post('ro_id'));
+		$data['ro'] = $ro;
+		$this->load->view('tagging_interface', $data);
+	}
+
+	public function tag($action){
+		$this->load->model('registry_objects', 'ro');
+		$ro_id = $this->input->post('ro_id');
+		$tag = $this->input->post('tag');
+		$ro = $this->ro->getByID($ro_id);
+		$separator = ';;';
+		if($action=='add' && $tag!=''){
+			if($ro->tag){
+				$tags = explode(';;', $ro->tag);
+				array_push($tags, $tag);
+				$ro->tag = implode(';;', $tags);
+				$ro->save();
+			}else{
+				$ro->tag = $tag;
+				$ro->save();
+			}
+		}else if($action=='remove'){
+			$tags = explode(';;', $ro->tag);
+			$key = array_search($tag,$tags);
+			if($key!==false){
+			    unset($tags[$key]);
+			}
+			$ro->tag = implode(';;', $tags);
+			$ro->save();
+		}
+	}
+
 
 
 	function update($all = false){

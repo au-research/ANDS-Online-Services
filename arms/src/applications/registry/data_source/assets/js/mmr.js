@@ -362,16 +362,16 @@ function initLayout(){
         $('.select_display span', this).html(total);
     });
 
+   
+
     $('.tipQA').live('mouseover', function(){
         $(this).qtip({
             content: {
                 text: 'Loading...', // The text to use whilst the AJAX request is loading
                 ajax: {
-                    url: base_url+'registry_object/get_quality_view/', // URL to the local file
-                    type: 'POST', // POST or GET
-                    data: {
-                        ro_id: $(this).attr('ro_id')
-                    }, // Data to pass along with your request
+                    url: base_url+'registry_object/get_quality_view/', 
+                    type: 'POST',
+                    data: {ro_id: $(this).attr('ro_id')},
                     loading:false,
                     success: function(data, status) {
                         this.set('content.text', data);
@@ -390,14 +390,12 @@ function initLayout(){
             },
             hide: {
                 fixed:true,
-                delay: 400
+                delay: 800
             },
             style: {classes: 'ui-tooltip-shadow ui-tooltip-bootstrap'},
             overwrite: false
         });
     });
-
-    // $('.context').contextmenu();
 
 }
 
@@ -480,7 +478,7 @@ function update_selected_list(status){
 
     var num = selected_ids.length;
     if(select_all) num = parseInt($('#'+status+' .count').html());
-    console.log(num);
+    // console.log(num);
     var list = $('.ro_box[status='+status+']');
     // var selected = $('div.selected_status', list);
     var selected = $('#status_message');
@@ -511,7 +509,7 @@ function click_ro(ro_item, action){
     }
     selected_ids = $.unique(selected_ids);
     update_selected_list(status);
-    //console.log(selected_ids);
+    // console.log(selected_ids);
 }
 
 
@@ -541,15 +539,17 @@ function bindSortables(){
         $('li', this)
         .bind('contextmenu', function(){return false;})
         .bind('mouseover',function(){
-            $('.contextmenu', this).show();
+            $('.right-menu', this).show();
         })
         .bind('mouseout',function(){
-            $('.contextmenu', this).hide();
+            $('.right-menu', this).hide();
         });
         $('.contextmenu').unbind('click').click(function(e){
             e.preventDefault();
             e.stopPropagation();
-            // if($(this).parent('li').length==1) click_ro($(this).parent('li'),'select');
+            if($(this).closest('li').length==1) {
+                click_ro($(this).closest('li'),'select');
+            }
             var context_status = $(this).attr('status');
             $(this).qtip({
                 content: {
@@ -558,6 +558,73 @@ function bindSortables(){
                         url: base_url+'data_source/get_mmr_menu',
                         type: 'POST',
                         data: {data_source_id:ds_id,status:context_status,affected_ids:selected_ids,selecting_status:selecting_status}
+                    }
+                },
+                position: {viewport: $(window)},
+                show:{ready:true,effect:false,event:'click'},
+                hide:{event:'unfocus'},
+                style: {classes: 'ui-tooltip-shadow ui-tooltip-bootstrap'}
+            });
+        });
+
+        $('.tipTag').unbind('click').click(function(e){
+            e.preventDefault();
+            e.stopPropagation();
+            var ro_id = $(this).attr('ro_id');
+            if($(this).closest('li').length==1) {
+                click_ro($(this).closest('li'),'select');
+            }
+            $(this).qtip({
+                content: {
+                    text: 'Loading...',
+                    ajax:{
+                        url: base_url+'registry_object/get_tag_menu',
+                        type: 'POST',
+                        data: {ro_id:ro_id},
+                        success: function(data, status) {
+                            this.set('content.text', data);
+                            var tooltip = $('#ui-tooltip-'+this.id+'-content');
+                            $('.tag_form').submit(function(e){
+                                e.preventDefault();
+                                e.stopPropagation();
+                                var ro_id = $(this).attr('ro_id');
+                                var tag = $('input', this).val();
+                                var tag_html = '<li>'+tag+'<span class="hide"><i class="icon icon-remove"></i></span></li>';
+                                $('.tags', tooltip).append(tag_html);
+                                $('.notag').hide();
+                                 $.ajax({
+                                    url:base_url+'registry_object/tag/add', 
+                                    type: 'POST',
+                                    data: {ro_id:ro_id,tag:tag},
+                                    success: function(data){
+                                        // console.log(data);
+                                        // $('#status_message').html(data.msg);
+                                    }
+                                });
+                                // console.log('add tag: '+tag+' to id :'+ro_id);
+                            });
+                            $('.tags li').die().live({
+                                mouseover: function(){
+                                    $('span', this).show();
+                                },
+                                mouseout: function(){
+                                    $('span', this).hide();
+                                },
+                                click: function(){
+                                    // console.log('remove tag: '+$(this).text()+' from id:'+$(this).parent().attr('ro_id'));
+                                    $.ajax({
+                                        url:base_url+'registry_object/tag/remove', 
+                                        type: 'POST',
+                                        data: {ro_id:ro_id,tag:$(this).text()},
+                                        success: function(data){
+                                            // console.log(data);
+                                            // $('#status_message').html(data.msg);
+                                        }
+                                    });
+                                    $(this).remove();                                    
+                                }
+                            });
+                        }
                     }
                 },
                 position: {viewport: $(window)},
