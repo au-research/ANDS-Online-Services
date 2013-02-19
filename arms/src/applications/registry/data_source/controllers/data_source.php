@@ -1029,7 +1029,6 @@ class Data_source extends MX_Controller {
 		if($deletedRo)
 		{
 		$xml = wrapRegistryObjects($deletedRo[0]['record_data']);
-		$log .= 'RIF_CS:::'.$deletedRo[0]['record_data'].':::RIF_CS' . NL;
 		}
 		else{
 			$log .= 'record is missing' . NL;

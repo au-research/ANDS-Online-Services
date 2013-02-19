@@ -10,6 +10,7 @@ $(function(){
 			rifcs = rifcs.replace(/&lt;/g, '<');
 			rifcs = rifcs.replace(/&gt;/g, '>');
 			rifcs = rifcs.replace(/&gamp;/g, '&');
+			$('#myModal .undelete_record').show();
 			$('#myModal .modal-body').html('<pre class="prettyprint linenums"><code class="language-xml">' + htmlEntities(formatXml(rifcs)) + '</code></pre>');
 			prettyPrint();
 		}
@@ -24,6 +25,7 @@ $(function(){
 	$('.undelete_record').live({
 		click: function(e){
 			var recordKey = $(this).attr('record_key');
+			var button = $(this);
 			$('#myModal').modal();
 			$('#myModal .modal-body').html('');
 			$('div[name=resultScreen] #myModal').html('');
@@ -41,6 +43,8 @@ $(function(){
 							{
 								output = Mustache.render($('#import-screen-success-report-template').html(), data);
 								$('#myModal .modal-body').html(output);
+								deleteEntry(recordKey);
+								button.hide();
 							}
 							else
 							{
@@ -57,5 +61,19 @@ $(function(){
 		}
 	});
 
+	function deleteEntry(recordKey)
+	{
+		var li = $('#'+recordKey).parent();
+		if($(li).parent().children('li').length == 1)
+		{ 
+			var parentKey = $(li).attr('parentkey');
+			console.log(parentKey);
+			console.info($('#'+parentKey));
+			$('#'+parentKey).remove();
+		}
+		else{
+			$(li).remove();
+		}
+	}
 
 });

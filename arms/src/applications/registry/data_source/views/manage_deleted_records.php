@@ -40,7 +40,7 @@
 						echo "There are ".$record_count."deleted records found."; 
 					}								
 				 foreach($deleted_records as $key=>$history):?>
-					<div class="widget-box">
+					<div class="widget-box" id=<?php echo '"'.$key.'"' ?>>
 						<div class="widget-title">	
 						<h5><?php echo 'Regsitry Object Key: '.$key;?></h5>						
 						<div class="btn-group">
@@ -49,7 +49,7 @@
 							</a>
 								<ul class="dropdown-menu">
 									<?php foreach($history as $id=>$r):?>
-										<li>
+										<li parentKey=<?php echo '"'.$key.'"' ?>
 										<h5><?php echo $r['title']."(deted on:" .$r['deleted_date'].")"?></h5>
 										
 										<?php echo "<button class='btn btn-small viewrecord' record_key='".$r['id']."'><i class='icon icon-eye-open'></i> View RIF-CS</button>";?>								
