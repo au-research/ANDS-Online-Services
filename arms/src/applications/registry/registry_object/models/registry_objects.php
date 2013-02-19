@@ -642,7 +642,11 @@ class Registry_objects extends CI_Model {
 				//$this->db->where('registry_object_id', $target_ro->id);
 				//$this->db->update('registry_objects', array(	"status" => "DELETED"
 				//									));
-				$target_ro->eraseFromDatabase($target_ro->id);
+				$this->load->model('data_source/data_sources', 'ds');
+				$data_source = $this->ds->getByID($target_ro->data_source_id);
+				$log = $target_ro->eraseFromDatabase($target_ro->id);
+				$data_source->append_log("eraseFromDatabase " . $log, 'info');
+
 			}
 			else
 			{
@@ -650,8 +654,10 @@ class Registry_objects extends CI_Model {
 				//$this->db->where('registry_object_id', $target_ro->id);
 				//$this->db->update('registry_objects', array(	"status" => "DELETED"
 				//										));
-				$target_ro->eraseFromDatabase($target_ro->id);
-
+				$this->load->model('data_source/data_sources', 'ds');
+				$data_source = $this->ds->getByID($target_ro->data_source_id);
+				$log = $target_ro->eraseFromDatabase($target_ro->id);
+				$data_source->append_log("eraseFromDatabase " . $log, 'info');
 				// And then their related records get reindexed...
 				$this->importer->_enrichRecords($reenrich_queue);
 				$this->importer->_reindexRecords($reenrich_queue);

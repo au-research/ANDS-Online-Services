@@ -1030,7 +1030,7 @@ class Data_source extends MX_Controller {
 
 			// data source log append...
 			$this->ro->removeDeletedRegistryObject($deletedRegistryObjectId);
-			$data_source->append_log("Record was reinstated " . NL . $log, ($error_log ? HARVEST_ERROR : null));
+			$data_source->append_log($log, ($error_log ? HARVEST_ERROR : null));
 		}
 		catch (Exception $e)
 		{
