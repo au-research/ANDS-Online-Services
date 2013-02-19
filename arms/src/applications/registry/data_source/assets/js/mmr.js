@@ -601,7 +601,6 @@ function bindSortables(){
                                         // $('#status_message').html(data.msg);
                                     }
                                 });
-                                // console.log('add tag: '+tag+' to id :'+ro_id);
                             });
                             $('.tags li').die().live({
                                 mouseover: function(){
