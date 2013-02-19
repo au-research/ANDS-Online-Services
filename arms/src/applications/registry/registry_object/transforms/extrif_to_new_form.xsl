@@ -51,7 +51,7 @@
 			<h1><xsl:value-of select="$display_title"/></h1>
 			<div class="btn-group">
 				<a class="btn" title="Manage Files" id="master_export_xml"><i class="icon-download"></i> Export RIFCS</a>
-				<a class="btn btn-primary" title="Manage Files"><i class="icon-white icon-hdd"></i> Save</a>
+				<a class="btn btn-primary" title="Manage Files" id="save"><i class="icon-white icon-hdd"></i> Save</a>
 			</div>
 		</div>
 		<div id="breadcrumb">
@@ -630,7 +630,7 @@
 				<xsl:apply-templates
 					select="ro:collection/ro:relatedObject | ro:activity/ro:relatedObject | ro:party/ro:relatedObject  | ro:service/ro:relatedObject"/>
 				<div class="separate_line"/>
-				<button class="btn btn-primary addNew" type="relatedobject">
+				<button class="btn btn-primary addNew" type="relatedObject">
 					<i class="icon-plus icon-white"/> Add Related Object </button>
 				<button class="btn export_xml btn-info"> Export XML fragment </button>
 			</fieldset>
@@ -808,7 +808,7 @@
 	</xsl:template>
 
 	<xsl:template match="ro:collection/ro:relatedObject | ro:activity/ro:relatedObject | ro:party/ro:relatedObject  | ro:service/ro:relatedObject">
-		<div class="aro_box" type="relatedobject">
+		<div class="aro_box" type="relatedObject">
 			<div class="aro_box_display clearfix">
 				<a href="javascript:;" class="toggle">
 					<i class="icon-minus"/>
@@ -1224,7 +1224,7 @@
 			</div>
 		</div>
 
-		<div class="aro_box template" type="relatedobject">
+		<div class="aro_box template" type="relatedObject">
 			<div class="aro_box_display clearfix">
 				<a href="javascript:;" class="toggle">
 					<i class="icon-minus"/>

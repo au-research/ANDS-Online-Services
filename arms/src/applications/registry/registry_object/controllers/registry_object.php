@@ -125,6 +125,8 @@ class Registry_object extends MX_Controller {
 	}
 
 	public function validate($registry_object_id){
+		header('Cache-Control: no-cache, must-revalidate');
+		header('Content-type: application/json');
 		$xml = $this->input->post('xml');
 		$this->load->model('registry_objects', 'ro');
 		$ro = $this->ro->getByID($registry_object_id);
