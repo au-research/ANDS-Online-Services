@@ -727,7 +727,7 @@ function getRIFCSforTab(tab, hasField){
 						var type = $('input[name=type]', this).val();
 						if(type){
 							fragment += '<'+$(this).attr('type')
-							if(hasField) fragment += 'field_id="' +$(this).attr('field_id')+'"';
+							if(hasField) fragment += ' field_id="' +$(this).attr('field_id')+'"';
 							fragment += ' type="'+$('input[name=type]', this).val()+'">'+$('input[name=value]', this).val()+'</'+$(this).attr('type')+'>';	
 						}else{
 							var type = $(this).attr('type');

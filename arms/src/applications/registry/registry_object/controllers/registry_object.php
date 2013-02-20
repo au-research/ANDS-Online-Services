@@ -136,10 +136,8 @@ class Registry_object extends MX_Controller {
 		foreach($scripts as $script)
 		{
 			$matches = preg_split('/(\"\,\")|(\(\")|(\"\))/', $script.")", -1, PREG_SPLIT_NO_EMPTY);
-			if(sizeof($matches) > 3)
-				$response[$matches[0]][] = Array('field'=>$matches[1],'message'=>$matches[2],'qafield'=>$matches[3]);
-			elseif(sizeof($matches) == 3)
-				$response[$matches[0]][] = Array('field'=>$matches[1],'message'=>$matches[2]);
+			if(sizeof($matches) > 2)
+				$response[$matches[0]][] = Array('field_id'=>$matches[1],'message'=>$matches[2]);
 		}
 		echo json_encode($response);
 	}
