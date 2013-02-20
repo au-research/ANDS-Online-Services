@@ -134,10 +134,10 @@ class Stats {
 		$values['timestamp'] = time();
 
 		// The term which was searched for
-		$values['term'] = $search_term;
+		$values['search_term'] = $search_term;
 
 		// The number of objects returned from the search
-		$values['occurence'] = $occurence;		
+		$values['occurrence'] = $occurence;		
 	
 
 		$this->db->insert('search_result_counts', $values);

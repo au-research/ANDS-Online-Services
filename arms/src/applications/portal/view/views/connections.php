@@ -45,6 +45,9 @@
 				case "contributor":
 					$heading = "<h3>Contributed by</h3>";
 					break;
+				case "party":
+					$heading = "<h3>Researchers</h3>";
+					break;					
 				case "party_one":
 					$heading = "<h3>Researchers</h3>";
 					break;	
@@ -59,7 +62,10 @@
 					break;
 				case "collection":
 					$heading = "<h3>Collections</h3>";
-					break;																						
+					break;	
+				default:
+					$heading = 	"<h3>".$connections."</h3>";	
+					break;																			
 			}
 			$connDiv .= $heading;
 			$connDiv .= $value;	

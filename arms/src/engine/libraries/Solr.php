@@ -148,6 +148,8 @@ class Solr {
             {
                 $tuples[$value_pair_list[$i]] = $value_pair_list[$i+1];
             }
+           // echo $facet_field;
+          //  print_r($tuples);
             return $tuples;
         }
         else

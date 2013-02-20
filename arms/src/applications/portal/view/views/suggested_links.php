@@ -19,7 +19,7 @@ if ($suggested_links_contents)
 
 	if ($output)
 	{
-		$output = "<h4>Internal Records</h4>"  .  $output;
+		$output = "<h2>Suggested Links</h2><h4>Internal Records</h4>"  .  $output;
 		echo $output;
 	}
 

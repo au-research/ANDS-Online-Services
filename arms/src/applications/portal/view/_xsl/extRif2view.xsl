@@ -459,7 +459,7 @@
 
   <div id="suggestedLinksRightBox" class="right-box">
       <div id="infoBox" class="hide"></div>
-      <h2>Suggested Links</h2>
+
 
       <div id="AndsSuggestedLinksBox">
       %%%%ANDS_SUGGESTED_LINKS%%%%
