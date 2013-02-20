@@ -116,7 +116,7 @@
 	<xsl:if test="not(ro:name[@type='primary'])">
         	<xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetWarnings("tab_name","At least one primary name is required for the Collection record.","REQ_PRIMARY_NAME");</xsl:text>
+            		<xsl:text>SetWarnings("tab_names","At least one primary name is required for the Collection record.","REQ_PRIMARY_NAME");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="warning">At least one primary name is required for the Collection record.</span>
@@ -127,7 +127,7 @@
         <xsl:if test="not(ro:description[@type='brief']) and not(ro:description[@type='full'])">
         	<xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetWarnings("tab_description","At least one description (brief and/or full) is required for the Collection.","REQ_DESCRIPTION_FULL");</xsl:text>
+            		<xsl:text>SetWarnings("tab_descriptions_rights","At least one description (brief and/or full) is required for the Collection.","REQ_DESCRIPTION_FULL");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="warning">At least one description (brief and/or full) is required for the Collection.</span>
@@ -137,7 +137,7 @@
        <xsl:if test="not(ro:description[@type='rights']) and not(ro:description[@type='accessRights']) and not(ro:rights)">
         	<xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetWarnings("tab_description","At least one description of the rights, licences or access rights relating to the Collection is required.","REQ_RIGHT");</xsl:text>
+            		<xsl:text>SetWarnings("tab_descriptions_rights","At least one description of the rights, licences or access rights relating to the Collection is required.","REQ_RIGHT");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="warning">At least one description of the rights, licences or access rights relating to the Collection is required.</span>
@@ -147,7 +147,7 @@
         <xsl:if test="not(ro:location/ro:address)">
         	<xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetWarnings("tab_location","At least one location address is required for the Collection.","REQ_LOCATION_ADDRESS");</xsl:text>
+            		<xsl:text>SetWarnings("tab_locations","At least one location address is required for the Collection.","REQ_LOCATION_ADDRESS");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="warning">At least one location address is required for the Collection.</span>
@@ -156,7 +156,7 @@
         </xsl:if>  
         
         <xsl:if test="not(ro:relatedObject/ro:key[@roclass = 'Activity']) and $output = 'script'">
-            <xsl:text>SetInfos("tab_relatedObject","The Collection must be related to at least one Activity record where available.</xsl:text><xsl:value-of select="$CA_roError_cont"/><xsl:text>","REC_RELATED_OBJECT_ACTIVITY");</xsl:text>
+            <xsl:text>SetInfos("tab_relatedObjects","The Collection must be related to at least one Activity record where available.</xsl:text><xsl:value-of select="$CA_roError_cont"/><xsl:text>","REC_RELATED_OBJECT_ACTIVITY");</xsl:text>
 		</xsl:if>
 		
         <xsl:if test="not(contains($relatedObjectClassesStr, 'Activity') or ro:relatedObject/ro:key[@roclass = 'Activity'] or ro:relatedObject/ro:key[@roclass = 'activity']) and $output = 'html'">
@@ -164,7 +164,7 @@
         </xsl:if>
         
         <xsl:if test="not(ro:relatedObject/ro:key[@roclass = 'Party']) and $output = 'script'">
-            <xsl:text>SetWarnings("tab_relatedObject","The Collection must be related to at least one Party record.</xsl:text><xsl:value-of select="$CP_roError_cont"/><xsl:text>","REQ_RELATED_OBJECT_PARTY");</xsl:text>
+            <xsl:text>SetWarnings("tab_relatedObjects","The Collection must be related to at least one Party record.</xsl:text><xsl:value-of select="$CP_roError_cont"/><xsl:text>","REQ_RELATED_OBJECT_PARTY");</xsl:text>
         </xsl:if>
         
         <xsl:if test="not(contains($relatedObjectClassesStr, 'Party') or ro:relatedObject/ro:key[@roclass = 'Party'] or ro:relatedObject/ro:key[@roclass = 'party']) and $output = 'html'">
@@ -174,7 +174,7 @@
         <xsl:if test="not(ro:identifier)">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetInfos("tab_identifier","At least one identifier is recommended for the Collection.","REC_IDENTIFIER");</xsl:text>
+            		<xsl:text>SetInfos("tab_identifiers","At least one identifier is recommended for the Collection.","REC_IDENTIFIER");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="info">At least one identifier is recommended for the Collection.</span>
@@ -185,7 +185,7 @@
         <xsl:if test="not(ro:subject) or not(ro:subject[string-length(.) &gt; 0] and ro:subject[string-length(@type) &gt; 0])">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetInfos("tab_subject","At least one subject (e.g. anzsrc-for code) is recommended for the Collection.","REC_SUBJECT");</xsl:text>
+            		<xsl:text>SetInfos("tab_subjects","At least one subject (e.g. anzsrc-for code) is recommended for the Collection.","REC_SUBJECT");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="info">At least one subject (e.g. anzsrc-for code) is recommended for the Collection.</span>
@@ -196,7 +196,7 @@
         <xsl:if test="not(ro:coverage/ro:spatial)">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetInfos("tab_coverage","At least one spatial coverage for the Collection is recommended.","REC_SPATIAL_COVERAGE");</xsl:text>
+            		<xsl:text>SetInfos("tab_coverages","At least one spatial coverage for the Collection is recommended.","REC_SPATIAL_COVERAGE");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="info">At least one spatial coverage for the Collection is recommended.</span>
@@ -207,7 +207,7 @@
         <xsl:if test="not(ro:coverage/ro:temporal/ro:date[@type='dateFrom']) and not(ro:coverage/ro:temporal/ro:date[@type = 'dateTo'])">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetInfos("tab_coverage","At least one temporal coverage entry for the collection is recommended.","REC_TEMPORAL_COVERAGE");</xsl:text>
+            		<xsl:text>SetInfos("tab_coverages","At least one temporal coverage entry for the collection is recommended.","REC_TEMPORAL_COVERAGE");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="info">At least one temporal coverage entry for the collection is recommended.</span>
@@ -217,7 +217,7 @@
          <xsl:if test="not(ro:citationInfo)">
         	<xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetInfos("tab_citationInfo","Citation data for the collection is recommended.","REC_CITATION");</xsl:text>
+            		<xsl:text>SetInfos("tab_citationInfos","Citation data for the collection is recommended.","REC_CITATION");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="info">Citation data for the collection is recommended.</span>
@@ -242,7 +242,7 @@
 	<xsl:if test="not(ro:name[@type='primary'])">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetWarnings("tab_name","At least one primary name is required for the Party record.","REQ_PRIMARY_NAME");</xsl:text>
+            		<xsl:text>SetWarnings("tab_names","At least one primary name is required for the Party record.","REQ_PRIMARY_NAME");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="warning">At least one primary name is required for the Party record.</span>
@@ -253,7 +253,7 @@
         <xsl:if test="not(ro:identifier)">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetInfos("tab_identifier","At least one identifier is recommended for the Party.","REC_IDENTIFIER");</xsl:text>
+            		<xsl:text>SetInfos("tab_identifiers","At least one identifier is recommended for the Party.","REC_IDENTIFIER");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="info">At least one identifier is recommended for the Party.</span>
@@ -264,7 +264,7 @@
         <xsl:if test="not(ro:location/ro:address)">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetInfos("tab_location","At least one location address is recommended for the Party.","REC_LOCATION_ADDRESS");</xsl:text>
+            		<xsl:text>SetInfos("tab_locations","At least one location address is recommended for the Party.","REC_LOCATION_ADDRESS");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="info">At least one location address is recommended for the Party.</span>
@@ -273,7 +273,7 @@
         </xsl:if>    
                
         <xsl:if test="not(ro:relatedObject/ro:key[@roclass = 'Activity']) and $output = 'script'">
-            <xsl:text>SetInfos("tab_relatedObject","It is recommended that the Party be related to at least one Activity record.</xsl:text><xsl:value-of select="$PA_roError_cont"/><xsl:text>","REC_RELATED_OBJECT_ACTIVITY");</xsl:text>
+            <xsl:text>SetInfos("tab_relatedObjects","It is recommended that the Party be related to at least one Activity record.</xsl:text><xsl:value-of select="$PA_roError_cont"/><xsl:text>","REC_RELATED_OBJECT_ACTIVITY");</xsl:text>
 		</xsl:if>
 		
         <xsl:if test="not(contains($relatedObjectClassesStr, 'Activity') or ro:relatedObject/ro:key[@roclass = 'Activity'] or ro:relatedObject/ro:key[@roclass = 'activity']) and $output = 'html'">
@@ -281,7 +281,7 @@
         </xsl:if>
         
         <xsl:if test="not(ro:relatedObject/ro:key[@roclass = 'Collection']) and $output = 'script'">
-            <xsl:text>SetWarnings("tab_relatedObject","The Party must be related to at least one Collection record.</xsl:text><xsl:value-of select="$PC_roError_cont"/><xsl:text>","REQ_RELATED_OBJECT_COLLECTION");</xsl:text>
+            <xsl:text>SetWarnings("tab_relatedObjects","The Party must be related to at least one Collection record.</xsl:text><xsl:value-of select="$PC_roError_cont"/><xsl:text>","REQ_RELATED_OBJECT_COLLECTION");</xsl:text>
         </xsl:if>
         
         <xsl:if test="not(contains($relatedObjectClassesStr, 'Collection') or ro:relatedObject/ro:key[@roclass = 'Collection'] or ro:relatedObject/ro:key[@roclass = 'collection']) and $output = 'html'">
@@ -291,7 +291,7 @@
         <xsl:if test="not(ro:description[@type='brief']) and not(ro:description[@type='full'])">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetInfos("tab_description","At least one description (brief and/or full) is recommended for the Party.","REC_DESCRIPTION_FULL");</xsl:text>
+            		<xsl:text>SetInfos("tab_descriptions_rights","At least one description (brief and/or full) is recommended for the Party.","REC_DESCRIPTION_FULL");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="info">At least one description (brief and/or full) is recommended for the Party.</span>
@@ -302,7 +302,7 @@
         <xsl:if test="not(ro:subject) or not(ro:subject[string-length(.) &gt; 0] and ro:subject[string-length(@type) &gt; 0])">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetInfos("tab_subject","At least one subject (e.g. anzsrc-for code) is recommended for the Party.","REC_SUBJECT");</xsl:text>
+            		<xsl:text>SetInfos("tab_subjects","At least one subject (e.g. anzsrc-for code) is recommended for the Party.","REC_SUBJECT");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="info">At least one subject (e.g. anzsrc-for code) is recommended for the Party.</span>
@@ -337,7 +337,7 @@
 	<xsl:if test="not(ro:name[@type='primary'])">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetWarnings("tab_name","At least one primary name is required for the Activity record.","REQ_PRIMARY_NAME");</xsl:text>
+            		<xsl:text>SetWarnings("tab_names","At least one primary name is required for the Activity record.","REQ_PRIMARY_NAME");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="warning">At least one primary name is required for the Activity record.</span>
@@ -348,7 +348,7 @@
         <xsl:if test="not(ro:description[@type='brief']) and not(ro:description[@type='full'])">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetWarnings("tab_description","At least one description (brief and/or full) is required for the Activity.","REQ_DESCRIPTION_FULL");</xsl:text>
+            		<xsl:text>SetWarnings("tab_descriptions_rights","At least one description (brief and/or full) is required for the Activity.","REQ_DESCRIPTION_FULL");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="warning">At least one description (brief and/or full) is required for the Activity.</span>
@@ -359,7 +359,7 @@
         <xsl:if test="not(ro:location/ro:address)">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetInfos("tab_location","At least one location address is recommended for the Activity.","REC_LOCATION_ADDRESS");</xsl:text>
+            		<xsl:text>SetInfos("tab_locations","At least one location address is recommended for the Activity.","REC_LOCATION_ADDRESS");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="info">At least one location address is recommended for the Activity.</span>
@@ -368,7 +368,7 @@
         </xsl:if>    
         
         <xsl:if test="not(ro:relatedObject/ro:key[@roclass = 'Party']) and $output = 'script'">
-            <xsl:text>SetWarnings("tab_relatedObject","The Activity must be related to at least one Party record.</xsl:text><xsl:value-of select="$AP_roError_cont"/><xsl:text>","REQ_RELATED_OBJECT_PARTY");</xsl:text>
+            <xsl:text>SetWarnings("tab_relatedObjects","The Activity must be related to at least one Party record.</xsl:text><xsl:value-of select="$AP_roError_cont"/><xsl:text>","REQ_RELATED_OBJECT_PARTY");</xsl:text>
 		</xsl:if>
 		
         <xsl:if test="not(contains($relatedObjectClassesStr, 'Party') or ro:relatedObject/ro:key[@roclass = 'Party'] or ro:relatedObject/ro:key[@roclass = 'party']) and $output = 'html'">
@@ -376,7 +376,7 @@
         </xsl:if>
               
        <xsl:if test="not(ro:relatedObject/ro:key[@roclass = 'Collection']) and $output = 'script'">
-            <xsl:text>SetInfos("tab_relatedObject","The Activity must be related to at least one Collection record if available.</xsl:text><xsl:value-of select="$AC_roError_cont"/><xsl:text>","REC_RELATED_OBJECT_COLLECTION");</xsl:text>
+            <xsl:text>SetInfos("tab_relatedObjects","The Activity must be related to at least one Collection record if available.</xsl:text><xsl:value-of select="$AC_roError_cont"/><xsl:text>","REC_RELATED_OBJECT_COLLECTION");</xsl:text>
         </xsl:if>
         
         <xsl:if test="not(contains($relatedObjectClassesStr, 'Collection') or ro:relatedObject/ro:key[@roclass = 'Collection'] or ro:relatedObject/ro:key[@roclass = 'collection']) and $output = 'html'">
@@ -385,7 +385,7 @@
         <xsl:if test="not(ro:subject) or not(ro:subject[string-length(.) &gt; 0] and ro:subject[string-length(@type) &gt; 0])">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetInfos("tab_subject","At least one subject (e.g. anzsrc-for code) is recommended for the Activity.","REC_SUBJECT");</xsl:text>
+            		<xsl:text>SetInfos("tab_subjects","At least one subject (e.g. anzsrc-for code) is recommended for the Activity.","REC_SUBJECT");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="info">At least one subject (e.g. anzsrc-for code) is recommended for the Activity.</span>
@@ -420,7 +420,7 @@
 	<xsl:if test="not(ro:name[@type='primary'])">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetWarnings("tab_name","At least one primary name is required for the Service record.","REQ_PRIMARY_NAME");</xsl:text>
+            		<xsl:text>SetWarnings("tab_names","At least one primary name is required for the Service record.","REQ_PRIMARY_NAME");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="warning">At least one primary name is required for the Service record.</span>
@@ -429,7 +429,7 @@
         </xsl:if>
         
         <xsl:if test="not(ro:relatedObject/ro:key[@roclass = 'Party']) and $output = 'script'">
-            <xsl:text>SetInfos("tab_relatedObject","It is recommended that the Service be related to at least one Party record.</xsl:text><xsl:value-of select="$SP_roError_cont"/><xsl:text>", "REC_RELATED_OBJECT_PARTY");</xsl:text>
+            <xsl:text>SetInfos("tab_relatedObjects","It is recommended that the Service be related to at least one Party record.</xsl:text><xsl:value-of select="$SP_roError_cont"/><xsl:text>", "REC_RELATED_OBJECT_PARTY");</xsl:text>
 		</xsl:if>
 		
         <xsl:if test="not(contains($relatedObjectClassesStr, 'Party') or ro:relatedObject/ro:key[@roclass = 'Party'] or ro:relatedObject/ro:key[@roclass = 'party']) and $output = 'html'">
@@ -437,7 +437,7 @@
         </xsl:if>
         
         <xsl:if test="not(ro:relatedObject/ro:key[@roclass = 'Collection']) and $output = 'script'">
-            <xsl:text>SetWarnings("tab_relatedObject","The Service must be related to at least one Collection record.</xsl:text><xsl:value-of select="$SC_roError_cont"/><xsl:text>","REQ_RELATED_OBJECT_COLLECTION");</xsl:text>
+            <xsl:text>SetWarnings("tab_relatedObjects","The Service must be related to at least one Collection record.</xsl:text><xsl:value-of select="$SC_roError_cont"/><xsl:text>","REQ_RELATED_OBJECT_COLLECTION");</xsl:text>
         </xsl:if>
         
         <xsl:if test="not(contains($relatedObjectClassesStr, 'Collection') or ro:relatedObject/ro:key[@roclass = 'Collection'] or ro:relatedObject/ro:key[@roclass = 'collection']) and $output = 'html'">
@@ -447,7 +447,7 @@
         <xsl:if test="not(ro:description[@type='brief']) and not(ro:description[@type='full'])">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetInfos("tab_description","At least one description (brief and/or full) is recommended for the Service.","REC_DESCRIPTION_FULL");</xsl:text>
+            		<xsl:text>SetInfos("tab_descriptions_rights","At least one description (brief and/or full) is recommended for the Service.","REC_DESCRIPTION_FULL");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="info">At least one description (brief and/or full) is recommended for the Service.</span>
@@ -458,7 +458,7 @@
         <xsl:if test="not(ro:location/ro:address/ro:electronic)">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetInfos("tab_location","At least one electronic address is required for the Service if available.","REC_LOCATION_ADDRESS_ELECTRONIC");</xsl:text>
+            		<xsl:text>SetInfos("tab_locations","At least one electronic address is required for the Service if available.","REC_LOCATION_ADDRESS_ELECTRONIC");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="info">At least one electronic address is required for the Service if available.</span>

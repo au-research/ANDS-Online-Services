@@ -38,7 +38,7 @@
 				<li><a href="#accesspolicies" data-toggle="tab">Accesspolicy</a></li>
 			</xsl:if>
 			<xsl:if test="$ro_class = 'collection'">
-				<li><a href="#citationinfos" data-toggle="tab">Citation Info</a></li>
+				<li><a href="#citationInfos" data-toggle="tab">Citation Info</a></li>
 			</xsl:if>
 			<xsl:if test="$ro_class != 'collection'">
 				<li><a href="#existencedates" data-toggle="tab">Existence Dates</a></li>
@@ -51,6 +51,7 @@
 			<h1><xsl:value-of select="$display_title"/></h1>
 			<div class="btn-group">
 				<a class="btn" title="Manage Files" id="master_export_xml"><i class="icon-download"></i> Export RIFCS</a>
+				<a class="btn btn-primary" title="Manage Files" id="validate">Validate</a>
 				<a class="btn btn-primary" title="Manage Files" id="save"><i class="icon-white icon-hdd"></i> Save</a>
 			</div>
 		</div>
@@ -74,7 +75,7 @@
 				<xsl:call-template name="accesspolicyTab"/>
 			</xsl:if>
 			<xsl:if test="$ro_class = 'collection'">
-				<xsl:call-template name="citationinfoTab"/>
+				<xsl:call-template name="citationInfoTab"/>
 			</xsl:if>
 			<xsl:if test="$ro_class != 'collection'">
 				<xsl:call-template name="ExistenceDatesTab"/>
@@ -524,8 +525,8 @@
 	</xsl:template>
 
 
-	<xsl:template name="citationinfoTab">
-		<div id="citationinfos" class="pane">
+	<xsl:template name="citationInfoTab">
+		<div id="citationInfos" class="pane">
 			<fieldset>
 				<legend>Citation Info</legend>
 				<xsl:apply-templates select="ro:collection/ro:citationInfo"/>

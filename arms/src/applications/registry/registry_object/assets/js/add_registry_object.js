@@ -11,7 +11,7 @@ $(function(){
 	$('body').css('background-color', '#454545');
 
 	//mode
-	aro_mode = 'simple';
+	aro_mode = 'advanced';
 	$('.pane').hide();
 	switchMode(aro_mode);
 	$('#mode-switch button').click(function(){
@@ -111,11 +111,10 @@ function switchMode(aro_mode){
 	$('#mode-switch button[aro-mode='+aro_mode+']').addClass('btn-primary');
 
 	// Reset the values of the inputs to their bound equivalents
-	if (aro_mode==SIMPLE_MODE)
-	{
+	if (aro_mode==SIMPLE_MODE){
 		initSimpleModeFields();
 	}
-}	
+}
 
 
 
@@ -363,7 +362,7 @@ function initEditForm(){
 			xml += '<'+ro_class+' type="'+$('input[name=type]',admin).val()+'">';
 
 			$.each(allTabs, function(){
-				xml += getRIFCSforTab(this,true);
+				xml += getRIFCSforTab(this,false);
 			});
 
 			xml+='</'+ro_class+'></registryObject>';
@@ -374,8 +373,19 @@ function initEditForm(){
 			$('#myModal').modal();
 
 			//test validation
+			// $.ajax({
+			// 	url:base_url+'registry_object/validate/'+ro_id, 
+			// 	type: 'POST',
+			// 	data: {xml:xml},
+			// 	success: function(data){
+			// 		console.log(data);
+			// 	}
+			// });
+
+			
+			//saving
 			$.ajax({
-				url:base_url+'registry_object/validate/'+ro_id, 
+				url:base_url+'registry_object/save/'+ro_id, 
 				type: 'POST',
 				data: {xml:xml},
 				success: function(data){
@@ -384,6 +394,74 @@ function initEditForm(){
 			});
 		}
 	})
+
+	$('#validate').die().live({
+		click: function(e){
+			e.preventDefault();
+			if(editor=='tinymce') tinyMCE.triggerSave();//so that we can get the tinymce textarea.value without using tinymce.getContents
+			var allTabs = $('.pane');
+			var xml = '';
+
+			//admin tab
+			var admin = $('#admin');
+			var ro_class = $('#ro_class').val();//hidden value
+			var ro_id = $('#ro_id').val();
+
+			xml += '<registryObject group="'+$('input[name=group]',admin).val()+'">';
+			xml += '<key>'+$('input[name=key]', admin).val()+'</key>';
+			xml += '<originatingSource type="'+$('input[name=originatingSourceType]', admin).val()+'">'+$('input[name=originatingSource]',admin).val()+'</originatingSource>';
+			xml += '<'+ro_class+' type="'+$('input[name=type]',admin).val()+'">';
+
+			$.each(allTabs, function(){
+				xml += getRIFCSforTab(this,true);
+			});
+
+			xml+='</'+ro_class+'></registryObject>';
+			prettyPrint();
+
+			//validate
+			$.ajax({
+				url:base_url+'registry_object/validate/'+ro_id, 
+				type: 'POST',
+				data: {xml:xml},
+				success: function(data){
+					$('.alert').remove();
+					if(data.SetInfos) $.each(data.SetInfos, function(e,i){addValidationMessage(i, 'info');});
+					if(data.SetErrors) $.each(data.SetErrors, function(e,i){addValidationMessage(i, 'error');});
+					if(data.SetWarnings) $.each(data.SetWarnings, function(e,i){addValidationMessage(i, 'warning');});
+
+					var allTabs = $('.pane');
+					$('#advanced-menu .label').remove();
+					$.each(allTabs, function(){
+						var count_info = $('.alert-info', this).length;
+						var count_error = $('.alert-error', this).length;
+						var count_warning = $('.alert-warning', this).length;
+						var id = $(this).attr('id');
+						if(count_info > 0) addValidationTag(id, 'info', count_info);
+						if(count_error > 0) addValidationTag(id, 'important', count_error);
+						if(count_warning > 0) addValidationTag(id, 'warning', count_warning);
+					});
+				}
+			});
+		}
+	});
+
+	function addValidationMessage(tt, type){
+		var name = tt.field_id;
+		var message = tt.message;
+		console.log(name, message);
+		if(name.match("^tab_")){
+			var tab = name.replace('tab_','');
+			$('#'+tab).prepend('<div class="alert alert-'+type+'">'+message+'</div>');
+		}else{
+			$('*[field_id='+name+']').append('<div class="alert alert-'+type+'">'+message+'</div>');
+		}
+	}
+
+	function addValidationTag(pane, type, num){
+		var menu_item = $('a[href="#'+pane+'"]');
+		$(menu_item).append('<span class="label label-'+type+'">'+num+'</span>')
+	}
 
 
 	//Load external XML modal dialog
@@ -612,6 +690,7 @@ function initEditor(){
 		    theme : "advanced",
 		    mode : "specific_textareas",
 		    editor_selector : "editor",
+		    entity_encoding : "raw",
 		    theme_advanced_toolbar_location : "top",
 		    theme_advanced_buttons1 : "bold,italic,underline,separator,link,separator,justifyleft,justifycenter,justifyright,justifyfull,separator,outdent,indent,separator,undo,redo,code",
 		    theme_advanced_buttons2 : "",

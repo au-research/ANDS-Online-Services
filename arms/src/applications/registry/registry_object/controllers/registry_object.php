@@ -142,6 +142,16 @@ class Registry_object extends MX_Controller {
 		echo json_encode($response);
 	}
 
+	public function save($registry_object_id){
+		$xml = $this->input->post('xml');
+		$this->load->model('registry_objects', 'ro');
+		$ro = $this->ro->getByID($registry_object_id);
+		echo $xml;
+		$ro->updateXML($xml);
+		$ro->save();
+		$ro->enrich();
+	}
+
 	public function manage_table($data_source_id = false){
 		acl_enforce('REGISTRY_USER');
 		ds_acl_enforce($data_source_id);
