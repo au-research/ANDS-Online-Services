@@ -685,6 +685,11 @@ function initRelatedInfos(){
  */
 
 function initEditor(){
+	$('.editor').each(function(){
+		var text = $(this).val();
+		var decoded = $('<div/>').html(text).text();
+		$(this).val(decoded);
+	});
 	if(editor=='tinymce'){
 		tinyMCE.init({
 		    theme : "advanced",
