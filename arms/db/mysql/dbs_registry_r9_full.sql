@@ -88,6 +88,7 @@ CREATE TABLE `data_source_logs` (
   `date_modified` int(10) unsigned DEFAULT NULL,
   `type` varchar(45) DEFAULT NULL,
   `log` text,
+  `class` varchar(45) DEFAULT NULL,  
   PRIMARY KEY (`id`),
   KEY `fk_data_source` (`data_source_id`),
   CONSTRAINT `fk_log_data_source` FOREIGN KEY (`data_source_id`) REFERENCES `data_sources` (`data_source_id`) ON DELETE CASCADE ON UPDATE NO ACTION

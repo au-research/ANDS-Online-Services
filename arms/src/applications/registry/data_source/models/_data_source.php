@@ -462,9 +462,9 @@ class _data_source {
 	/*
 	 * LOGS
 	 */
-	function append_log($log_message, $log_type = "message")
+	function append_log($log_message, $log_type = "info", $log_class="data_source")
 	{
-		$this->db->insert("data_source_logs", array("data_source_id" => $this->id, "date_modified" => time(), "type" => $log_type, "log" => $log_message));
+		$this->db->insert("data_source_logs", array("data_source_id" => $this->id, "date_modified" => time(), "type" => $log_type, "log" => $log_message, "class" => $log_class));
 		return $this->db->insert_id();
 	}
 	
