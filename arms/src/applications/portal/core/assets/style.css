@@ -174,7 +174,7 @@ h1 a {
 	font-size:31px;	
 	font-weight: bold;	
 	line-height:37px;
-	padding:0 0 26px 0;
+	padding:0 0 16px 0;
 }
 h2,
 h2 a {
@@ -182,7 +182,7 @@ h2 a {
 	font-size:26px;	
 	font-weight: bold;
 	line-height:32px;
-	padding:0 0 23px 0;
+	padding:0 0 13px 0;
 }
 h3,
 h3 a {
@@ -190,13 +190,13 @@ h3 a {
 	font-size:21px;	
 	font-weight:bold;	
 	line-height:26px;
-	padding:0 0 19px 0;
+	padding:0 0 9px 0;
 }
 .seealso-tooltip h3 a{
 	font-size:16px;	
 	font-weight:normal;	
 	line-height:20px;
-	padding:0 0 19px 0;
+	padding:0 0 9px 0;
 }
 h4,
 h4 a {
@@ -229,7 +229,7 @@ h6 a {
 	clear:both;
 }
 p {
-	padding:0 0 19px;
+	padding:0 0 8px;
 }
 .content {
 	padding:20px 0 0 0;
@@ -605,7 +605,7 @@ a.search_map {
 .container {
 	width: 922px;
 	margin: 0 auto;	
-	padding: 42px 0 0 0;
+	padding: 10px 0 0 0;
 	position: relative;
 }
 .less_padding {
@@ -1023,7 +1023,6 @@ a.search_map {
 .sidebar {
 	font-size: 15px;
 	line-height: 18px;
-	font-weight: bold;
 }
 #links_dialog ul li
 {
