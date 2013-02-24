@@ -172,6 +172,9 @@ class Core_extension extends ExtensionBase
 	function handleStatusChange($target_status)
 	{
 		// Changing between draft statuses, nothing to worry about:
+		$this->_CI->load->model('data_source/data_sources', 'ds');
+		$data_source = $this->_CI->ds->getByID($this->getAttribute('data_source_id'));
+
 		if (isDraftStatus($this->getAttribute('original_status')) && isDraftStatus($target_status))
 		{
 			// pass; 
@@ -190,11 +193,12 @@ class Core_extension extends ExtensionBase
 			}
 
 			// Add the XML content of this draft to the published record (and follow enrichment process, etc.)
-			$this->_CI->load->model('data_source/data_sources', 'ds');
+			
 			$this->_CI->importer->_reset();
 			$this->_CI->importer->setXML(wrapRegistryObjects($this->ro->getRif()));
-			$this->_CI->importer->setDatasource($this->_CI->ds->getByID($this->getAttribute('data_source_id')));
+			$this->_CI->importer->setDatasource($data_source);
 			$this->_CI->importer->forcePublish();
+			$this->_CI->importer->statusAlreadyChanged = true;
 			$this->_CI->importer->commit();
 
 			if ($error_log = $this->_CI->importer->getErrors())
