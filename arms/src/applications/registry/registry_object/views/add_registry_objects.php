@@ -69,15 +69,15 @@
 		<span class="button" id="collection">Add a Collection</span>	
 	</div>
 	<div class="addButton party">
-		<p class="info">A Collection is a blah blah blah</p>
+		<p class="info">A Party is a blah blah blah</p>
 		<span class="button" id="party">Add a Party</span>
 	</div>
 	<div class="addButton activity">
-		<p class="info">A Collection is a blah blah blah</p>
+		<p class="info">An Activity is a blah blah blah</p>
 		<span class="button" id="activity">Add a Activity</span>
 	</div>
 	<div class="addButton service">
-		<p class="info">A Collection is a blah blah blah</p>
+		<p class="info">A Service is a blah blah blah</p>
 		<span class="button" id="service">Add a Service</span>
 	</div>
 </div>
