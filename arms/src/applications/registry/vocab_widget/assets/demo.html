@@ -86,6 +86,14 @@
 		<dd><select id="rifcs-idtype" name="rifcs-id-for" value=""></select></dd>
 	      </dl>
 	    </fieldset>
+	    <fieldset>
+	      <legend>Vocab widget: RIFCS narrowing w/ autocomplete</legend>
+	      <dl>
+		<dt>RIFCS Identifier Type:</dt>
+		<dd><input type="text" size="40" id="rifcs-idtype-input" name="rifcs-id-for-input" value="" /></dd>
+	      </dl>
+	      <i>(autocomplete; begin typing something (e.g. "ABN"), or press the down arrow to browse selections)</i>
+	    </fieldset>
             <p><input type="submit"/></p>
           </form>
         </div>
@@ -101,6 +109,12 @@
 	       					     cache: false,
 	       					     fields: ['definition'],
 	       					     target_field: 'label'});
+	       $("#rifcs-idtype-input").ands_vocab_widget({mode:"narrow",
+	       						   mode_params:"http://purl.org/au-research/vocabulary/RIFCS/1.4/RIFCSIdentifierType",
+	       						   repository:"rifcs",
+	       						   cache: false,
+							   fields: ['label', 'definition', 'about'],
+							   target_field: 'label'});
 
       });
     </script>

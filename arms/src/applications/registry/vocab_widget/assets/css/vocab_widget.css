@@ -15,7 +15,6 @@ ul.ands_vocab_list li {
     padding: .2em .8em .2em .4em;
     font-size: 0.8em;
     margin-bottom: 1em;
-
 }
 
 
@@ -35,10 +34,19 @@ ul.ands_vocab_list li span[role="label"] {
     width:80%;
 }
 
-ul.ands_vocab_list li span[role="notation"] {
+ul.ands_vocab_list li span[role="definition"] {
     float:right;
 }
 
 ul.ands_vocab_list li span[role="about"] {
     font-style: italic;
+    display:block;
+    clear:both;
+}
+
+
+ul.ands_vocab_list.rifcs li span[role="label"] {
+    font-weight: bold;
+    float:left;
+    width:20%;
 }

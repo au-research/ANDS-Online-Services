@@ -52,15 +52,82 @@
 		return false;
 	    },
 
+	    _makelist: function(persist) {
+		if (typeof(persist) === 'undefined') {
+		    persist = false;
+		}
+		this._list = $('<ul />')
+		    .attr('id', this._container.attr('id') + this.settings._wid)
+		    .addClass(this.settings.list_class)
+		    .addClass(this.settings.repository)
+		    .addClass(this.mode)
+		    .data('persist', persist)
+		    .hide();
+		this._list.insertAfter(this._container);
+		this._container.attr('autocomplete', 'off');
+	    },
+
+	    /**
+	     * silly wrapper to provide input buffering.
+	     * `lookup` makes the ajax call
+	     */
+	    vocab_lookup: function (event) {
+		//this._reset();
+		if (this._container.data('ands_vocab_timer')) {
+		    clearTimeout(this._container.data('ands_vocab_timer'));
+		}
+		this._container.data('ands_vocab_timer',
+				     setTimeout(this.lookup(),
+						this.settings.delay));
+	    },
+
+	    /**
+	     * reset the list
+	     */
+	    _reset: function() {
+		if (!this._list.data('persist')) {
+		    this._list.empty();
+		}
+		this._list.hide();
+	    },
+
+	    /**
+	     * generate the display for a vocab item (i.e. list item)
+	     */
+	    vocab_item: function(data) {
+		var item = $('<li role="vocab_item" />');
+		item.data(WIDGET_DATA, data);
+		$.each(this.settings.fields, function(idx, field) {
+		    if (typeof(data[field]) !== 'undefined') {
+			item.append('<span role="' + field + '">' +
+				    data[field] +
+				    '</span>');
+		    }
+		});
+		return item;
+	    },
+
+	    /**
+	     * once a selection has been made, we need to do something with it
+	     */
+	    handle_selection: function(event) {
+		var data = $(event.target).parent().data(WIDGET_DATA);
+		if (typeof(data[this.settings.target_field]) !== 'undefined') {
+		    this._container.val(data[this.settings.target_field]);
+		    this._reset();
+		}
+		else {
+		    this._err({status: 404,
+			       responseText: 'item is missing target field (' +
+			       this.settings.target_field + ')'});
+		}
+	    }
 	});
 
 	var SearchHandler = VocabHandler.extend({
 	    init: function(container, settings) {
 		this._super(container, settings);
-
-		$('<ul id="' + container.attr('id') + settings._wid + '"' +
-		  'class="' + settings.list_class + '" />').insertAfter(container);
-		this._list = $("ul#" + container.attr('id') + settings._wid).hide();
+		this._makelist();
 
 		if (!this._container.is("input[type='text']")) {
 		    // we only like being attached to input elements when searching
@@ -75,7 +142,15 @@
 
 	    ready: function() {
 		var handler = this;
-		this._container.bind("keydown", function() { handler.vocab_lookup(); });
+		this._container.bind("keydown", function(e) {
+		    if (e.which == '27') {
+			handler._reset();
+			handler._container.val('');
+		    }
+		    else {
+			handler.vocab_lookup(e);
+		    }
+		});
 	    },
 
 	    detach: function() {
@@ -141,100 +216,121 @@
 			error: function(xhr) { handler._err(xhr) },
 		    });
 		}
-	    },
-
-	    /**
-	     * generate the display for a vocab item (i.e. list item)
-	     */
-	    vocab_item: function(data) {
-		var item = $('<li role="vocab_item" />');
-		item.data('ands_vocab_data', data);
-		$.each(this.settings.fields, function(idx, field) {
-		    if (typeof(data[field]) !== 'undefined') {
-			item.append('<span role="' + field + '">' +
-				    data[field] +
-				    '</span>');
-		    }
-		});
-		return item;
-	    },
-
-
-	    /**
-	     * reset the list
-	     */
-	    _reset: function() {
-		this._list.empty();
-		this._list.hide();
-	    },
-
-
-	    /**
-	     * once a selection has been made, we need to do something with it
-	     */
-	    handle_selection: function(event) {
-		var data = $(event.target).parent().data('ands_vocab_data');
-		if (typeof(data[this.settings.target_field]) !== 'undefined') {
-		    this._container.val(data[this.settings.target_field]);
-		    this._reset();
-		}
-		else {
-		    this._err({status: 404,
-			       responseText: 'item is missing target field (' +
-			       this.settings.target_field + ')'});
-		}
-	    },
-
-	    /**
-	     * silly wrapper to provide input buffering.
-	     * `lookup` makes the ajax call
-	     */
-	    vocab_lookup: function (event) {
-		this._reset();
-		if (this._container.data('ands_vocab_timer')) {
-		    clearTimeout(this._container.data('ands_vocab_timer'));
-		}
-		this._container.data('ands_vocab_timer',
-				     setTimeout(this.lookup(),
-						this.settings.delay));
-	    },
-
-
+	    }
 	});
 
 	var NarrowHandler = VocabHandler.extend({
 	    init: function(container, settings) {
 		this._super(container, settings);
+		this._ctype = this._container.get(0).tagName;
+		if (this._container.is("select")) {
+		    if (this.settings.fields.length > 1) {
+			this._err({status:500,
+				   responseText:"'fields' setting must be a " +
+				   "single element array when mode isn't " +
+				   "'search'"});
+		    }
 
-		if (!this._container.is("select")) {
+		    this._container.empty()
+			.append('<option value=""></option>');
+
+		}
+		else if (this._container.is("input")) {
+		    this._makelist(true);
+		    this._preplist();
+		}
+		else {
 		    this._err({status:500,
-			       responseText: "must be attached to a select " +
-			       "element when mode isn't 'search'"});
+			       responseText: "in 'narrow' mode, the plugin " +
+			       "must be attached to a select " +
+			       "or input element"});
 		}
 
-		if (this.settings.fields.length > 1) {
-		    this._err({status:500,
-			       responseText:"'fields' setting must be a single" +
-			       " element array when mode isn't 'search'"});
-		}
-
-		this._container.empty().append('<option value=""></option>');
 	    },
 
-	    ready: function() {
+	    _preplist: function() {
 		var handler = this;
-		var url = this.settings.endpoint +
+		$.ajax({
+		    url: this._url(),
+		    cache: this.settings.cache,
+		    dataType:"jsonp",
+		    success: function(data) {
+			if (data.status === "OK") {
+			    $.each(data.items, function(idx, item) {
+				handler._list.append(handler.vocab_item(item));
+			    });
+			}
+			else {
+			    handler._err({status:500,
+					  responseText:data.message});
+			}
+			handler._container.bind("keyup", function(e) {
+			    handler.vocab_lookup(e);
+			});
+			handler._list
+			    .children('li[role="vocab_item"]')
+			    .bind('click', function(event) { handler.handle_selection(event)});
+		    },
+		    error: function(xhr) { handler._err(xhr) }
+		});
+
+	    },
+
+	    lookup: function() {
+		var handler = this;
+		var lookfor = this._container.val().toLowerCase();
+		if (lookfor.length) {
+		    this._list.children('li').hide();
+		    this._list.show();
+		    var matches = $.grep(this._list.children('li[role="vocab_item"]'),
+					 function(e,i) {
+					     var item = $(e);
+					     var data = item.data(WIDGET_DATA);
+					     for (var fi in handler.settings.fields) {
+						 var field = handler.settings.fields[fi];
+						 if ((typeof(data[field]) !== 'undefined') &&
+						     data[field].substring(0,lookfor.length).toLowerCase() === lookfor) {
+						     return true;
+						 }
+					     }
+					     return false;
+					 });
+		    $(matches).show();
+		}
+	    },
+
+	    _url: function() {
+		return this.settings.endpoint +
 		    "?action=" + this.settings.mode +
 		    "&repository=" + this.settings.repository +
 		    "&limit=" + this.settings.max_results +
 		    "&lookfor=" + this.settings.mode_params;
-		$.ajax({
-		    url: url,
-		    cache: this.settings.cache,
-		    dataType: "jsonp",
-		    success: function(data) { handler.process(data) },
-		    error: function(xhr) { handler._err(xhr) },
-		});
+	    },
+
+	    ready: function() {
+		var handler = this;
+		if (this._ctype === 'SELECT') {
+		    var url = this._url();
+		    $.ajax({
+			url: url,
+			cache: this.settings.cache,
+			dataType: "jsonp",
+			success: function(data) { handler.process(data) },
+			error: function(xhr) { handler._err(xhr) },
+		    });
+		}
+		else {
+
+		    this._container.on("keydown", function(e) {
+			if (e.which == '40') {
+			    handler._list.show();
+			}
+			else if (e.which == '27') {
+			    handler._container.val('');
+			    handler._list.hide();
+			}
+		    });
+		}
 	    },
 
 	    process: function(data) {
@@ -253,10 +349,16 @@
 		}
 	    },
 
+	    detach: function() {
+		if (this._ctype === 'INPUT') {
+		    this._container.unbind("keyup");
+		}
+	    }
 	});
 
 	var WIDGET_NAME = "ANDS Vocabulary Widget service";
 	var WIDGET_ID = "_vocab_widget_list";
+	var WIDGET_DATA = "ands_vocab_data";
 	var defaults = {
 	    //location (absolute URL) of the jsonp proxy
 	    endpoint: 'http://ands3.anu.edu.au/workareas/smcphill/ands-online-services/arms/src/registry/vocab_widget/proxy/',
