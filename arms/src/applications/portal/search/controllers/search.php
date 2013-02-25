@@ -89,6 +89,7 @@ class Search extends MX_Controller {
 						break;						
 					case 'spatial':
 						$this->solr->setOpt('fq', 'spatial_coverage_extents:"Intersects('.$value.')"');
+						$this->solr->setOpt('rows', 200);
 						$filteredSearch = true;
 						break;
 				}
@@ -146,6 +147,7 @@ class Search extends MX_Controller {
 				if($facet!='class'){
 					array_push($data['facet_result'], array('label'=>$display, 'facet_type'=>$facet, 'values'=>$facet_values));
 				}else{
+					array_push($data['facet_result'], array('label'=>$display, 'facet_type'=>$facet, 'values'=>$facet_values));
 					$data['selected_tab'] = $facet;
 				}
 			}

@@ -57,75 +57,33 @@
   </xsl:template>
 
   <xsl:template match="ro:collection | ro:activity | ro:party | ro:service">
+    <div itemscope="" itemType="http://schema.org/Thing">
+      <xsl:choose>
+         <xsl:when test="../extRif:extendedMetadata/extRif:displayTitle!=''">
+            <xsl:apply-templates select="../extRif:extendedMetadata/extRif:displayTitle"/>	
+        </xsl:when>
+        <xsl:otherwise>
+          <div class="page_title" id="displaytitle">
+            <h3 itemprop="name"><xsl:value-of select="../ro:key"/></h3>
+          </div>
+        </xsl:otherwise> 
+      </xsl:choose>    
 
-       <div class="previewItemHeader">
-        PREVIEW
-        </div>
+      <!-- DISPLAY LOGO -->
+      <xsl:apply-templates select="../extRif:extendedMetadata/extRif:displayLogo"/>
+      <!-- DISPLAY ALTERNATE TITLES/NAMES -->
+      <xsl:apply-templates select="ro:name[@type='alternative']/ro:displayTitle"/>
 
-            <div itemscope="" itemType="http://schema.org/Thing">
+      <div class="post">
 
-	 	<!--div id="tag_view" class="hide">
-	 	<span id="tag_lists">
-			<xsl:for-each select="//extRif:tags/extRif:tag">
-				<xsl:if test="position()&gt;1">	| </xsl:if>
-		 		<span class="tag_text"> <xsl:value-of select="."/></span>
-			</xsl:for-each>
-			</span>
-		<div id="add_tag_button"><input type="button" id="tag_add" value="Add Tag"/></div> 
-			<div id="add_tag_form">
-			<div id='tag_close'> <br /></div>
-				<p><input type="text" name="new_tag" id="new_tag" value=""/><br />
-				<span id='tagError' class='tagFormError'><br /></span></p>
-				 <div id="captcha_id"></div>
-				<p><input type="button" id="tag_submit" name="tag_submit" value="Submit"/></p>
-			</div>
-		</div-->    
+          <!-- DISPLAY DESCRIPTIONS -->
 
-     <xsl:choose>
+          
+          </div>
 
-       <xsl:when test="../extRif:extendedMetadata/extRif:displayTitle!=''">
-          <xsl:apply-templates select="../extRif:extendedMetadata/extRif:displayTitle"/>	
-      </xsl:when>
-      <xsl:otherwise>
-        <div class="page_title" id="displaytitle">
-          <h3 itemprop="name"><xsl:value-of select="../ro:key"/></h3>
-        </div>
-      </xsl:otherwise> 
-</xsl:choose>    
-
-<!-- DISPLAY LOGO -->
-<xsl:apply-templates select="../extRif:extendedMetadata/extRif:displayLogo"/>
-
-<!-- DISPLAY ALTERNATE TITLES/NAMES -->
-<xsl:apply-templates select="ro:name[@type='alternative']/ro:displayTitle"/>
-
-<div class="post">
-
-    <!-- DISPLAY DESCRIPTIONS -->
-    <xsl:if test="ro:description">
-
-        <div class="descriptions" style="position:relative;clear:both;">
-          <small>
-            
-            <xsl:choose>
-              <xsl:when test="../extRif:extendedMetadata/extRif:description[@type= 'brief']">
-                  <xsl:apply-templates select="../extRif:extendedMetadata/extRif:description[@type= 'brief']" mode="content"/>
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:apply-templates select="../extRif:extendedMetadata/extRif:description[@type= 'full']" mode="content"/>
-              </xsl:otherwise>
-            </xsl:choose>
-
-          </small>
-        </div>
-        
-    </xsl:if>
-    <a href="javascript:void(0);" class="showall_descriptions hide">More...</a>
-    
-    </div>
-
-    <a href="" class="viewRecordLink">View Full Record</a> 
-</div>
+          <a href="" class="viewRecordLink">View Full Record</a> 
+          <div class="clearfix"></div>
+      </div>
 
 
 </xsl:template>

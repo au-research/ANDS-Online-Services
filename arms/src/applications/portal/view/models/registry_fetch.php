@@ -13,13 +13,16 @@ class Registry_fetch extends CI_Model
 		return html_entity_decode(html_entity_decode($this->_transformByXSL($extrif, 'extRif2view.xsl', $xsl_args)));
 	}
 
-	function transformExtrifToHTMLPreview($extrif)
+	function transformExtrifToHTMLPreview($extrif, $lite=false)
 	{
 		$xsl_args = array(
 			'base_url' => base_url(),
 		);
-
-		return html_entity_decode(html_entity_decode($this->_transformByXSL($extrif, 'extRif2preview.xsl', $xsl_args)));
+		if($lite){
+			return html_entity_decode(html_entity_decode($this->_transformByXSL($extrif, 'extRif2previewLite.xsl', $xsl_args)));
+		}else{
+			return html_entity_decode(html_entity_decode($this->_transformByXSL($extrif, 'extRif2preview.xsl', $xsl_args)));
+		}
 	}
 
 	function transformExtrifToHTMLContributorRecord($extrif)

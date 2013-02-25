@@ -188,7 +188,7 @@ class View extends MX_Controller {
 				foreach($this->input->post('roIds') as $roID)
 				{
 					$extRif = $this->registry->fetchExtRifByID($roID);
-					$html .= $this->registry->transformExtrifToHTMLPreview($extRif['data']);
+					$html .= $this->registry->transformExtrifToHTMLPreview($extRif['data'], true);
 				}
 			}
 			catch (SlugNoLongerValidException $e)

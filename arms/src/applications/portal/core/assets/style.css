@@ -905,7 +905,7 @@ a.search_map {
 	color: #fff;
 	background: #eb7700;
 }
-.tabs a.tabs_nav {
+.tabs a.toggle_sidebar {
 	width: 39px;
 	height: 38px;
 	position: absolute;
@@ -915,7 +915,7 @@ a.search_map {
 	padding: 0;
 	margin: 0;
 }
-.tabs a.tabs_nav:hover {
+.tabs a.toggle_sidebar:hover {
 	background-color: transparent;
 }
 .results_navi {

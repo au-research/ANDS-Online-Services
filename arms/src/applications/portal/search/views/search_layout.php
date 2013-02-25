@@ -1,6 +1,6 @@
 <?php $this->load->view('rda_header');?>
-<div id="searchmap" class="hide"></div>
 <div class="main">
+	<div id="searchmap" class="hide"></div>
 	<div class="page_title">
 		<h1 id="selected_subject"></h1>
 		<h3 id="selected_group"></h3>
@@ -23,10 +23,9 @@
 			}
 		?>
 		
-		<a href="#" class="tabs_nav"></a>	
+		<a href="javascript:;" class="toggle_sidebar"></a>	
 		<div class="clear"></div>
 	</div>
-	
 	<div class="pagination"></div>
 	<div id="search-result"></div>
 	<div class="pagination"></div>

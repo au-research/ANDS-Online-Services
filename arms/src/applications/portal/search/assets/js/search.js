@@ -87,7 +87,6 @@ function executeSearch(searchData, searchUrl){
 			 		// console.log(this.spatial_coverage_polygons);
 			 	resultPolygons[this.id] = new Array(this.display_title, this.spatial_coverage_polygons[0], this.spatial_coverage_centres[0]);
 			 	}
-
 			});
 
 			initSearchPage();
@@ -110,6 +109,10 @@ function initSearchPage(){
 	//see if we need to init the map
 	if(searchData['map']){
 		$('#searchmap').show();
+		$('.container').css({margin:'0',width:'100%',padding:'0'});
+		$('.main').css({width:'100%',padding:'0'});
+		$('.sidebar').addClass('mapmode_sidebar');
+		$('#search-result, .pagination, .page_title, .tabs').hide();
 		 processPolygons();
 		 resetZoom();
 		 $('.post').hover(function(){
@@ -119,7 +122,21 @@ function initSearchPage(){
 		 },function(){
 		 	clearPolygons();
 		 });
+	}else{
+		$('#searchmap').hide();
+		$('.container').css({margin:'0 auto',width:'922px',padding:'10px 0 0 0'});
+		$('.main').css({width:'633px',padding:'20px 0 0 0'});
+		$('.sidebar').removeClass('mapmode_sidebar');
+		$('#search-result, .pagination, .page_title, .tabs').show();
 	}
+
+	$('.toggle_sidebar').unbind('click').click(function(e){
+		e.preventDefault();
+		$('.sidebar').toggle();
+		if(searchData['map']){
+
+		}
+	});
 
 	$('#search_map_toggle').unbind('click');
 	$('#search_map_toggle').click(function(e){
@@ -205,7 +222,39 @@ function ellipsis (string, length)
 	}
 }
 
+function SidebarToggle(controlDiv, map) {
+	// Set CSS styles for the DIV containing the control
+	// Setting padding to 5 px will offset the control
+	// from the edge of the map.
+	controlDiv.style.padding = '5px';
+
+	// Set CSS for the control border.
+	var controlUI = document.createElement('div');
+	controlUI.style.backgroundColor = 'white';
+	controlUI.style.borderStyle = 'solid';
+	controlUI.style.borderWidth = '2px';
+	controlUI.style.cursor = 'pointer';
+	controlUI.style.textAlign = 'center';
+	controlUI.title = 'Click to set the map to Home';
+	controlDiv.appendChild(controlUI);
+
+	// Set CSS for the control interior.
+	var controlText = document.createElement('div');
+	controlText.style.fontFamily = 'Arial,sans-serif';
+	controlText.style.fontSize = '12px';
+	controlText.style.paddingLeft = '4px';
+	controlText.style.paddingRight = '4px';
+	controlText.innerHTML = '<strong>Show/Hide Facet</strong>';
+	controlUI.appendChild(controlText);
+
+	// Setup the click event listeners: simply set the map to Chicago.
+	google.maps.event.addDomListener(controlUI, 'click', function() {
+	$('.sidebar').toggle();
+	});
+}
+
 function initMap(){
+
 	var latlng = new google.maps.LatLng(-25.397, 133.644);
     var myOptions = {
       zoom: 4,
@@ -219,7 +268,17 @@ function initMap(){
       overviewMapControl: false,
       mapTypeId: google.maps.MapTypeId.ROADMAP
     };
+
+    
+
     map = new google.maps.Map(document.getElementById("searchmap"),myOptions);
+
+    var homeControlDiv = document.createElement('div');
+  	var homeControl = new SidebarToggle(homeControlDiv, map);
+
+  	homeControlDiv.index = 1;
+  	map.controls[google.maps.ControlPosition.TOP_RIGHT].push(homeControlDiv);
+
 	infowindow = new google.maps.InfoWindow();
     pushPin = new google.maps.MarkerImage('http://maps.google.com/intl/en_us/mapfiles/ms/micons/blue.png',
 					      new google.maps.Size(32,32),
