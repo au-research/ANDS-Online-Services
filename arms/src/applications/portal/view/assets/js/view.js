@@ -25,7 +25,6 @@ initInternalSuggestedLinks();
 
 
 
-
 function initInternalSuggestedLinks()
 {
 

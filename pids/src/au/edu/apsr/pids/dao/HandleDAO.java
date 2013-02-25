@@ -65,8 +65,7 @@ public class HandleDAO
         "FROM handles " +
         "WHERE data = ? " +
         "AND CAST(CAST(SUBSTRING(handle FROM ?) AS TEXT) AS BIGINT) > ? " + 
-        "ORDER BY CAST(CAST(SUBSTRING(handle FROM ?) AS TEXT) AS BIGINT) " +
-        "LIMIT 1000";
+        "ORDER BY CAST(CAST(SUBSTRING(handle FROM ?) AS TEXT) AS BIGINT)";
 
     private static final String SELECT_SINGLE_HANDLE_SQL = 
         "SELECT handle, idx, type, data " + 

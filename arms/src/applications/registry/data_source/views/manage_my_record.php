@@ -127,7 +127,10 @@
 					{{/has_gold}}
 				</p>
 			</div>
-			<div class="contextmenu hide" status="{{name}}"><button class="btn btn-small"><i class="icon icon-wrench"></i></button></div>
+			<div class="btn-group btn-group-vertical right-menu hide">
+				<button class="contextmenu btn btn-small" status="{{name}}"><i class="icon icon-wrench"></i></button>
+				<button class="tipTag btn btn-small" ro_id="{{id}}"><i class="icon icon-tag"></i></button>
+			</div>
 			<div class='clearfix'></div>
 			</li>
 			{{/items}}

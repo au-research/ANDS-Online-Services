@@ -1,5 +1,6 @@
 USE `dbs_portal`;
 
+DROP TABLE IF EXISTS `search_result_counts`;
 CREATE TABLE `search_result_counts` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `occurrence` int(11) DEFAULT NULL,

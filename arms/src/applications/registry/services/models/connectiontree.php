@@ -3,6 +3,7 @@
 class ConnectionTree extends CI_Model
 {
 	public $parent_relationships = array("isPartOf");
+	public $recursed_parents = array(); // used to stop circular recursion
 	public $child_relationships = array("hasPart");
 	public $default_relation_type = "isRootElementOf";
 	public $max_width = 5;
@@ -18,7 +19,7 @@ class ConnectionTree extends CI_Model
 		{
 
 			$this->root_ro_key = $root_registry_object->key;
-			$relationship_tree = $this->getChildren($root_registry_object->id, $depth);
+			$relationship_tree = $this->getChildren($root_registry_object->id, $depth, array($root_registry_object->id));
 
 			$relationship_tree = array(
 				//"id" => $root_registry_object->id,
@@ -153,7 +154,18 @@ class ConnectionTree extends CI_Model
 				$this_registry_object = $this->ro->getDraftByKey($ancestors[0]['key']);
 			}
 
-			return $this->getRootAncestor($this_registry_object, $published_only);
+			
+
+			// prevent infinite recursion
+			if (!isset($this->recursed_parents[$this_registry_object->id]))
+			{
+				$this->recursed_parents[$this_registry_object->id] = true;
+				return $this->getRootAncestor($this_registry_object, $published_only);
+			}
+			else
+			{
+				return $root_registry_object;
+			}
 		}
 		else
 		{
@@ -162,7 +174,7 @@ class ConnectionTree extends CI_Model
 	}
 
 
-	function getChildren($root_registry_object_id, $depth)
+	function getChildren($root_registry_object_id, $depth, $accumulated_ids = array())
 	{
 		$my_children = array();
 		$depth--;
@@ -187,21 +199,23 @@ class ConnectionTree extends CI_Model
 
 		foreach ($query->result_array() AS $row)
 		{
-			if ($depth > 0)
+			if ($depth > 0 && !isset($accumulated_ids[$row['registry_object_id']]))
 			{
-				$row['children'] = $this->getChildren($row['registry_object_id'], $depth);	
+				$accumulated_ids[$row['registry_object_id']] = true;
+				$row['children'] = $this->getChildren($row['registry_object_id'], $depth, $accumulated_ids);
+			
+				$my_children[] = array(
+					//"id"=>$row['registry_object_id'],
+					"title"=>$row['title'],
+					"registry_object_id"=>$row['registry_object_id'],
+					"class"=>$row['class'],
+					"slug"=>$row['slug'],
+					"status"=>$row['status'],
+					"relation_type"=>$row['relation_type'],
+					"children" => $row['children']
+				);
 			}
-			$my_children[] = array(
-				//"id"=>$row['registry_object_id'],
-				"title"=>$row['title'],
-				"registry_object_id"=>$row['registry_object_id'],
-				"class"=>$row['class'],
-				"slug"=>$row['slug'],
-				"status"=>$row['status'],
-				"relation_type"=>$row['relation_type'],
-				"children" => $row['children']
-			);
-			//$my_children[$row['registry_object_id']] = $row;
+			
 		}
 
 		/* Inverse relationships (i.e. `b` isPartOf `a`) */
@@ -219,20 +233,24 @@ class ConnectionTree extends CI_Model
 
 		foreach ($query->result_array() AS $row)
 		{
-			if ($depth > 0)
+			if ($depth > 0 && !isset($accumulated_ids[$row['registry_object_id']]))
 			{
-				$row['children'] = $this->getChildren($row['registry_object_id'], $depth);	
+				$accumulated_ids[$row['registry_object_id']] = true;
+				$row['children'] = $this->getChildren($row['registry_object_id'], $depth, $accumulated_ids);
+
+				$my_children[] = array(
+					//"id"=>$row['registry_object_id'],
+					"title"=>$row['title'],
+					"registry_object_id"=>$row['registry_object_id'],
+					"class"=>$row['class'],
+					"slug"=>$row['slug'],
+					"status"=>$row['status'],
+					"relation_type"=>$row['relation_type'],
+					"children" => $row['children']
+				);
 			}
-			$my_children[] = array(
-				//"id"=>$row['registry_object_id'],
-				"title"=>$row['title'],
-				"registry_object_id"=>$row['registry_object_id'],
-				"class"=>$row['class'],
-				"slug"=>$row['slug'],
-				"status"=>$row['status'],
-				"relation_type"=>$row['relation_type'],
-				"children" => $row['children']
-			);
+
+			
 			//$my_children[$row['registry_object_id']] = $row;
 		}
 

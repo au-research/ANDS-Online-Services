@@ -50,9 +50,9 @@ class Search extends MX_Controller {
 		/**
 		 * Setting the SOLR OPTIONS based on the filters sent over AJAX
 		 */
-
+		$filteredSearch = false;
 		if($filters){
-					$filteredSearch = false;
+					
 			foreach($filters as $key=>$value){
 				$value = urldecode($value);
 				switch($key){
@@ -130,17 +130,24 @@ class Search extends MX_Controller {
 		foreach($facets as $facet=>$display){
 			$facet_values = array();
 			$solr_facet_values = $this->solr->getFacetResult($facet);
-			foreach($solr_facet_values AS $title => $count){
-				$facet_values[] = array(
-					'title' => $title,
-					'count' => $count
-				);
-			}
-			// little bit different with class being tab
-			if($facet!='class'){
-				array_push($data['facet_result'], array('label'=>$display, 'facet_type'=>$facet, 'values'=>$facet_values));
-			}else{
-				$data['selected_tab'] = $facet;
+			if(count($solr_facet_values)>0)
+			{
+				foreach($solr_facet_values AS $title => $count){
+					if($count>0)
+					{
+					$facet_values[] = array(
+						'title' => $title,
+						'count' => $count
+					);
+					}
+				}
+
+				// little bit different with class being tab
+				if($facet!='class'){
+					array_push($data['facet_result'], array('label'=>$display, 'facet_type'=>$facet, 'values'=>$facet_values));
+				}else{
+					$data['selected_tab'] = $facet;
+				}
 			}
 		}
 

@@ -125,6 +125,8 @@ class Registry_object extends MX_Controller {
 	}
 
 	public function validate($registry_object_id){
+		header('Cache-Control: no-cache, must-revalidate');
+		header('Content-type: application/json');
 		$xml = $this->input->post('xml');
 		$this->load->model('registry_objects', 'ro');
 		$ro = $this->ro->getByID($registry_object_id);
@@ -134,12 +136,20 @@ class Registry_object extends MX_Controller {
 		foreach($scripts as $script)
 		{
 			$matches = preg_split('/(\"\,\")|(\(\")|(\"\))/', $script.")", -1, PREG_SPLIT_NO_EMPTY);
-			if(sizeof($matches) > 3)
-				$response[$matches[0]][] = Array('field'=>$matches[1],'message'=>$matches[2],'qafield'=>$matches[3]);
-			elseif(sizeof($matches) == 3)
-				$response[$matches[0]][] = Array('field'=>$matches[1],'message'=>$matches[2]);
+			if(sizeof($matches) > 2)
+				$response[$matches[0]][] = Array('field_id'=>$matches[1],'message'=>$matches[2]);
 		}
 		echo json_encode($response);
+	}
+
+	public function save($registry_object_id){
+		$xml = $this->input->post('xml');
+		$this->load->model('registry_objects', 'ro');
+		$ro = $this->ro->getByID($registry_object_id);
+		echo $xml;
+		$ro->updateXML($xml);
+		$ro->save();
+		$ro->enrich();
 	}
 
 	public function manage_table($data_source_id = false){
@@ -302,6 +312,40 @@ class Registry_object extends MX_Controller {
 		$data['txt'] = $ro->getNativeFormatData($id);
 		$jsonData = json_encode($data);
 		echo $jsonData;
+	}
+
+	public function get_tag_menu(){
+		$this->load->model('registry_objects', 'ro');
+		$ro = $this->ro->getByID($this->input->post('ro_id'));
+		$data['ro'] = $ro;
+		$this->load->view('tagging_interface', $data);
+	}
+
+	public function tag($action){
+		$this->load->model('registry_objects', 'ro');
+		$ro_id = $this->input->post('ro_id');
+		$tag = $this->input->post('tag');
+		$ro = $this->ro->getByID($ro_id);
+		$separator = ';;';
+		if($action=='add' && $tag!=''){
+			if($ro->tag){
+				$tags = explode(';;', $ro->tag);
+				array_push($tags, $tag);
+				$ro->tag = implode(';;', $tags);
+				$ro->save();
+			}else{
+				$ro->tag = $tag;
+				$ro->save();
+			}
+		}else if($action=='remove'){
+			$tags = explode(';;', $ro->tag);
+			$key = array_search($tag,$tags);
+			if($key!==false){
+			    unset($tags[$key]);
+			}
+			$ro->tag = implode(';;', $tags);
+			$ro->save();
+		}
 	}
 
 

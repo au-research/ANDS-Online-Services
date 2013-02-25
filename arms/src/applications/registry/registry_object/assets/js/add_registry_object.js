@@ -11,7 +11,7 @@ $(function(){
 	$('body').css('background-color', '#454545');
 
 	//mode
-	aro_mode = 'simple';
+	aro_mode = 'advanced';
 	$('.pane').hide();
 	switchMode(aro_mode);
 	$('#mode-switch button').click(function(){
@@ -111,11 +111,10 @@ function switchMode(aro_mode){
 	$('#mode-switch button[aro-mode='+aro_mode+']').addClass('btn-primary');
 
 	// Reset the values of the inputs to their bound equivalents
-	if (aro_mode==SIMPLE_MODE)
-	{
+	if (aro_mode==SIMPLE_MODE){
 		initSimpleModeFields();
 	}
-}	
+}
 
 
 
@@ -307,7 +306,7 @@ function initEditForm(){
 			e.preventDefault();
 			if(editor=='tinymce') tinyMCE.triggerSave();//so that we can get the tinymce textarea.value without using tinymce.getContents
 			var currentTab = $(this).parents('.pane');
-			var xml = getRIFCSforTab(currentTab);
+			var xml = getRIFCSforTab(currentTab,false);
 			$('#myModal .modal-body').html('<pre class="prettyprint linenums"><code class="language-xml">' + htmlEntities(formatXml(xml)) + '</code></pre>');
 			prettyPrint();
 			$('#myModal').modal();
@@ -333,7 +332,37 @@ function initEditForm(){
 			xml += '<'+ro_class+' type="'+$('input[name=type]',admin).val()+'">';
 
 			$.each(allTabs, function(){
-				xml += getRIFCSforTab(this);
+				xml += getRIFCSforTab(this,false);
+			});
+
+			xml+='</'+ro_class+'></registryObject>';
+			$('#myModal .modal-header h3').html('<h3>Export RIFCS</h3>');
+			$('#myModal .modal-body').html('<pre class="prettyprint linenums"><code class="language-xml">' + htmlEntities(formatXml(xml)) + '</code></pre>');
+			$('#myModal .modal-footer').html('<button class="btn btn-primary">Download</button>');
+			prettyPrint();
+			$('#myModal').modal();
+		}
+	});
+
+	$('#save').die().live({
+		click: function(e){
+			e.preventDefault();
+			if(editor=='tinymce') tinyMCE.triggerSave();//so that we can get the tinymce textarea.value without using tinymce.getContents
+			var allTabs = $('.pane');
+			var xml = '';
+
+			//admin tab
+			var admin = $('#admin');
+			var ro_class = $('#ro_class').val();//hidden value
+			var ro_id = $('#ro_id').val();
+
+			xml += '<registryObject group="'+$('input[name=group]',admin).val()+'">';
+			xml += '<key>'+$('input[name=key]', admin).val()+'</key>';
+			xml += '<originatingSource type="'+$('input[name=originatingSourceType]', admin).val()+'">'+$('input[name=originatingSource]',admin).val()+'</originatingSource>';
+			xml += '<'+ro_class+' type="'+$('input[name=type]',admin).val()+'">';
+
+			$.each(allTabs, function(){
+				xml += getRIFCSforTab(this,false);
 			});
 
 			xml+='</'+ro_class+'></registryObject>';
@@ -344,8 +373,19 @@ function initEditForm(){
 			$('#myModal').modal();
 
 			//test validation
+			// $.ajax({
+			// 	url:base_url+'registry_object/validate/'+ro_id, 
+			// 	type: 'POST',
+			// 	data: {xml:xml},
+			// 	success: function(data){
+			// 		console.log(data);
+			// 	}
+			// });
+
+			
+			//saving
 			$.ajax({
-				url:base_url+'registry_object/validate/'+ro_id, 
+				url:base_url+'registry_object/save/'+ro_id, 
 				type: 'POST',
 				data: {xml:xml},
 				success: function(data){
@@ -353,7 +393,75 @@ function initEditForm(){
 				}
 			});
 		}
+	})
+
+	$('#validate').die().live({
+		click: function(e){
+			e.preventDefault();
+			if(editor=='tinymce') tinyMCE.triggerSave();//so that we can get the tinymce textarea.value without using tinymce.getContents
+			var allTabs = $('.pane');
+			var xml = '';
+
+			//admin tab
+			var admin = $('#admin');
+			var ro_class = $('#ro_class').val();//hidden value
+			var ro_id = $('#ro_id').val();
+
+			xml += '<registryObject group="'+$('input[name=group]',admin).val()+'">';
+			xml += '<key>'+$('input[name=key]', admin).val()+'</key>';
+			xml += '<originatingSource type="'+$('input[name=originatingSourceType]', admin).val()+'">'+$('input[name=originatingSource]',admin).val()+'</originatingSource>';
+			xml += '<'+ro_class+' type="'+$('input[name=type]',admin).val()+'">';
+
+			$.each(allTabs, function(){
+				xml += getRIFCSforTab(this,true);
+			});
+
+			xml+='</'+ro_class+'></registryObject>';
+			prettyPrint();
+
+			//validate
+			$.ajax({
+				url:base_url+'registry_object/validate/'+ro_id, 
+				type: 'POST',
+				data: {xml:xml},
+				success: function(data){
+					$('.alert').remove();
+					if(data.SetInfos) $.each(data.SetInfos, function(e,i){addValidationMessage(i, 'info');});
+					if(data.SetErrors) $.each(data.SetErrors, function(e,i){addValidationMessage(i, 'error');});
+					if(data.SetWarnings) $.each(data.SetWarnings, function(e,i){addValidationMessage(i, 'warning');});
+
+					var allTabs = $('.pane');
+					$('#advanced-menu .label').remove();
+					$.each(allTabs, function(){
+						var count_info = $('.alert-info', this).length;
+						var count_error = $('.alert-error', this).length;
+						var count_warning = $('.alert-warning', this).length;
+						var id = $(this).attr('id');
+						if(count_info > 0) addValidationTag(id, 'info', count_info);
+						if(count_error > 0) addValidationTag(id, 'important', count_error);
+						if(count_warning > 0) addValidationTag(id, 'warning', count_warning);
+					});
+				}
+			});
+		}
 	});
+
+	function addValidationMessage(tt, type){
+		var name = tt.field_id;
+		var message = tt.message;
+		console.log(name, message);
+		if(name.match("^tab_")){
+			var tab = name.replace('tab_','');
+			$('#'+tab).prepend('<div class="alert alert-'+type+'">'+message+'</div>');
+		}else{
+			$('*[field_id='+name+']').append('<div class="alert alert-'+type+'">'+message+'</div>');
+		}
+	}
+
+	function addValidationTag(pane, type, num){
+		var menu_item = $('a[href="#'+pane+'"]');
+		$(menu_item).append('<span class="label label-'+type+'">'+num+'</span>')
+	}
 
 
 	//Load external XML modal dialog
@@ -577,11 +685,17 @@ function initRelatedInfos(){
  */
 
 function initEditor(){
+	$('.editor').each(function(){
+		var text = $(this).val();
+		var decoded = $('<div/>').html(text).text();
+		$(this).val(decoded);
+	});
 	if(editor=='tinymce'){
 		tinyMCE.init({
 		    theme : "advanced",
 		    mode : "specific_textareas",
 		    editor_selector : "editor",
+		    entity_encoding : "raw",
 		    theme_advanced_toolbar_location : "top",
 		    theme_advanced_buttons1 : "bold,italic,underline,separator,link,separator,justifyleft,justifycenter,justifyright,justifyfull,separator,outdent,indent,separator,undo,redo,code",
 		    theme_advanced_buttons2 : "",
@@ -600,7 +714,7 @@ function initEditor(){
  * @returns: [string] RIFCS fragment ready for validation
  */
 
-function getRIFCSforTab(tab){
+function getRIFCSforTab(tab, hasField){
 	var currentTab = $(tab);
 	var boxes = $('.aro_box', currentTab);
 	var xml = '';
@@ -615,7 +729,8 @@ function getRIFCSforTab(tab){
 		 * The name => the "type" attribute of the box
 		 * The type => the input[name=type] of the box display (heading)
 		 */
-		fragment +='<'+$(this).attr('type')+' field_id="' +$(this).attr('field_id')+'"';
+		fragment +='<'+$(this).attr('type')+'';
+		if(hasField) fragment +=' field_id="' +$(this).attr('field_id')+'"';
 		var valid_fragment_meta = ['type', 'dateFrom', 'dateTo', 'style', 'rightsURI'];//valid input type to be put as attributes
 		var this_box = this;
 		$.each(valid_fragment_meta, function(index, value){
@@ -695,7 +810,9 @@ function getRIFCSforTab(tab){
 						//check if there is an input[name="type"] in this box_part so that we can use as a type attribute
 						var type = $('input[name=type]', this).val();
 						if(type){
-							fragment += '<'+$(this).attr('type')+' field_id="'+$('input[name=value]', this).attr('field_id')+'" type="'+$('input[name=type]', this).val()+'">'+$('input[name=value]', this).val()+'</'+$(this).attr('type')+'>';	
+							fragment += '<'+$(this).attr('type')
+							if(hasField) fragment += ' field_id="' +$(this).attr('field_id')+'"';
+							fragment += ' type="'+$('input[name=type]', this).val()+'">'+$('input[name=value]', this).val()+'</'+$(this).attr('type')+'>';	
 						}else{
 							var type = $(this).attr('type');
 							fragment += '<'+type+'>'+$('input[name=value]', this).val()+'</'+type+'>';
@@ -752,7 +869,6 @@ function getRIFCSforTab(tab){
 						});
 					}else{
 						//there is no parts, spatial?
-
 					}
 						
 					subbox_fragment +='</'+subbox_type+'>';//closing tag
@@ -776,5 +892,6 @@ function getRIFCSforTab(tab){
 		xml += fragment;
 		
 	});
+	 // xml=xml.replace(/<[\^>]+><\/[\S]+>/gim, "");
 	return xml;
 }

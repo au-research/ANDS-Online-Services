@@ -241,52 +241,25 @@ class Data_source extends MX_Controller {
 			$args['filter'] = array('status'=>$s);
 			$args['filter'] = isset($filters['filter']) ? array_merge($filters['filter'], array('status'=>$s)) : array('status'=>$s);
 
-			// $white_list = array('title', 'class', 'key', 'status', 'slug', 'record_owner');
-			// $filtered_ids = array();
-			// $filtered = array();
-			// if(isset($filters['filter'])){
-			// 	foreach($filters['filter'] as $key=>$value){
-			// 		if(!in_array($key, $white_list)){
-			// 			$list = $this->ro->getByAttributeDatasource($data_source_id, $key, $value, false, false);
-			// 			$filtered_ids = array_merge($filtered_ids, $list);
-			// 		}else{
-			// 			if($key=='status'){
-			// 				if($s!=$value) $no_match = true;
-			// 			}
-			// 		}
-			// 	}
+			
+			$offset = 0;
+			$limit = 20;
 
+			$st['offset'] = $offset+$limit;
 
-			// 	foreach($filtered_ids as $k){
-			// 		array_push($filtered, $k['registry_object_id']);
-			// 	}
-
-			// }
-			// $args['filtered_id']=$filtered;
-
-			if(!$no_match){
-				$offset = 0;
-				$limit = 20;
-
-				$st['offset'] = $offset+$limit;
-
-				$filter = array(
-					'ds_id'=>$data_source_id,
-					'limit'=>20,
-					'offset'=>0,
-					'args'=>$args
-				);
-				$ros = $this->get_ros($filter);
-				$st['items']=$ros['items'];
-				$st['count']=$this->get_ros($filter, true);
-				if($st['count']==0) $st['noResult']=true;
-				$st['hasMore'] = $ros['hasMore'];
-				$st['ds_id'] = $data_source_id;
-			}else{
-				$st['count']=0;
-				$st['items'] = array();
-				$st['noResult']=true;
-			}
+			$filter = array(
+				'ds_id'=>$data_source_id,
+				'limit'=>20,
+				'offset'=>0,
+				'args'=>$args
+			);
+			$ros = $this->get_ros($filter);
+			$st['items']=$ros['items'];
+			$st['count']=$this->get_ros($filter, true);
+			if($st['count']==0) $st['noResult']=true;
+			$st['hasMore'] = $ros['hasMore'];
+			$st['ds_id'] = $data_source_id;
+			
 			$jsonData['statuses'][$s] = $st;
 		}
 		$jsonData['filters'] = $filters;
@@ -295,7 +268,7 @@ class Data_source extends MX_Controller {
 
 	public function get_more_mmr_data(){
 		acl_enforce('REGISTRY_USER');
-		// ds_acl_enforce($this->input->post('ds_id'));
+		ds_acl_enforce($this->input->post('ds_id'));
 		header('Cache-Control: no-cache, must-revalidate');
 		header('Content-type: application/json');
 			
@@ -654,7 +627,7 @@ class Data_source extends MX_Controller {
 			foreach($dataSourceLogs as $log){
 				$item = array();
 				$item['type'] = $log['type'];
-				$item['log_snippet'] = ellipsis($log['log']);
+				$item['log_snippet'] = first_line($log['log']);
 				$item['log'] = $log['log'];
 				$item['id'] = $log['id'];
 				$item['date_modified'] = timeAgo($log['date_modified']);
@@ -955,11 +928,11 @@ class Data_source extends MX_Controller {
 		$data_source = $this->ds->getByID($this->input->post('data_source_id'));
 
 		$xml=stripXMLHeader($xml);
-		if ($data_source->provider_type != RIFCS_SCHEME)
+		if ($data_source->provider_type && $data_source->provider_type != RIFCS_SCHEME)
 		{
 			$this->importer->setCrosswalk($data_source->provider_type);
 		}
-		else if (strpos(trim($xml), "<registryObjects") === FALSE)
+		else if (strpos($xml, "<registryObjects") === FALSE)
 		{
 			$xml = wrapRegistryObjects($xml);
 		}
@@ -1029,7 +1002,6 @@ class Data_source extends MX_Controller {
 		if($deletedRo)
 		{
 		$xml = wrapRegistryObjects($deletedRo[0]['record_data']);
-		$log .= 'RIF_CS:::'.$deletedRo[0]['record_data'].':::RIF_CS' . NL;
 		}
 		else{
 			$log .= 'record is missing' . NL;
@@ -1058,7 +1030,7 @@ class Data_source extends MX_Controller {
 
 			// data source log append...
 			$this->ro->removeDeletedRegistryObject($deletedRegistryObjectId);
-			$data_source->append_log("Record was reinstated " . NL . $log, ($error_log ? HARVEST_ERROR : null));
+			$data_source->append_log($log, ($error_log ? HARVEST_ERROR : null));
 		}
 		catch (Exception $e)
 		{

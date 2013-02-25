@@ -19,7 +19,7 @@ class Registry_fetch extends CI_Model
 			'base_url' => base_url(),
 		);
 
-		return $this->_transformByXSL($extrif, 'extRif2preview.xsl', $xsl_args);
+		return html_entity_decode(html_entity_decode($this->_transformByXSL($extrif, 'extRif2preview.xsl', $xsl_args)));
 	}
 
 	function transformExtrifToHTMLContributorRecord($extrif)

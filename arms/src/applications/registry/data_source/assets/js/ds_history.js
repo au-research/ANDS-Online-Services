@@ -1,6 +1,13 @@
 /**
  */
 $(function(){
+	$('.activity-list a').live({
+		click:function(e){
+			e.preventDefault();
+			$(this).next('.more').slideToggle('fast');
+		}
+	});
+
 	$('.viewrecord').click(function(){
 		var recordKey = $(this).attr('record_key');
 		$('#myModal .modal-body').html('');
@@ -10,6 +17,7 @@ $(function(){
 			rifcs = rifcs.replace(/&lt;/g, '<');
 			rifcs = rifcs.replace(/&gt;/g, '>');
 			rifcs = rifcs.replace(/&gamp;/g, '&');
+			$('#myModal .undelete_record').show();
 			$('#myModal .modal-body').html('<pre class="prettyprint linenums"><code class="language-xml">' + htmlEntities(formatXml(rifcs)) + '</code></pre>');
 			prettyPrint();
 		}
@@ -24,6 +32,7 @@ $(function(){
 	$('.undelete_record').live({
 		click: function(e){
 			var recordKey = $(this).attr('record_key');
+			var button = $(this);
 			$('#myModal').modal();
 			$('#myModal .modal-body').html('');
 			$('div[name=resultScreen] #myModal').html('');
@@ -41,6 +50,8 @@ $(function(){
 							{
 								output = Mustache.render($('#import-screen-success-report-template').html(), data);
 								$('#myModal .modal-body').html(output);
+								deleteEntry(recordKey);
+								button.hide();
 							}
 							else
 							{
@@ -57,5 +68,15 @@ $(function(){
 		}
 	});
 
+	function deleteEntry(recordKey){
+		var button = $('#'+recordKey);
+		var list = $('#'+recordKey).closest('li');
+		var count = $('a', list).length;
+		if(count==1){
+			$(list).closest('.widget-box').remove();
+		}else{
+			$(list).remove();
+		}
+	}
 
 });

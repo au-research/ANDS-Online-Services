@@ -172,6 +172,9 @@ class Core_extension extends ExtensionBase
 	function handleStatusChange($target_status)
 	{
 		// Changing between draft statuses, nothing to worry about:
+		$this->_CI->load->model('data_source/data_sources', 'ds');
+		$data_source = $this->_CI->ds->getByID($this->getAttribute('data_source_id'));
+
 		if (isDraftStatus($this->getAttribute('original_status')) && isDraftStatus($target_status))
 		{
 			// pass; 
@@ -190,11 +193,12 @@ class Core_extension extends ExtensionBase
 			}
 
 			// Add the XML content of this draft to the published record (and follow enrichment process, etc.)
-			$this->_CI->load->model('data_source/data_sources', 'ds');
+			
 			$this->_CI->importer->_reset();
 			$this->_CI->importer->setXML(wrapRegistryObjects($this->ro->getRif()));
-			$this->_CI->importer->setDatasource($this->_CI->ds->getByID($this->getAttribute('data_source_id')));
+			$this->_CI->importer->setDatasource($data_source);
 			$this->_CI->importer->forcePublish();
+			$this->_CI->importer->statusAlreadyChanged = true;
 			$this->_CI->importer->commit();
 
 			if ($error_log = $this->_CI->importer->getErrors())
@@ -228,14 +232,21 @@ class Core_extension extends ExtensionBase
 	function eraseFromDatabase()
 	{
 		$this->db->delete('registry_object_relationships', array('registry_object_id'=>$this->id));
+		$log = NL."registry_object_relationships: " .$this->db->_error_message();
 		$this->db->delete('registry_object_metadata', array('registry_object_id'=>$this->id));
+		$log .= NL."registry_object_metadata: " .$this->db->_error_message();
 		$this->db->delete('registry_object_attributes', array('registry_object_id'=>$this->id));
+		$log .= NL."registry_object_attributes: " .$this->db->_error_message();
 		$this->db->delete('record_data', array('registry_object_id'=>$this->id));
+		$log .= NL."record_data: " .$this->db->_error_message();
 		$this->db->delete('url_mappings', array('registry_object_id'=>$this->id));
-		$this->db->delete('spatial_extents', array('registry_object_id'=>$this->id));
+		$log .= NL."url_mappings: " .$this->db->_error_message();
+		//TODO: do we still need this table??
+		//$this->db->delete('spatial_extents', array('registry_object_id'=>$this->id));
+		//$log .= NL."spatial_extents: " .$this->db->_error_message();
 		$this->db->delete('registry_objects', array('registry_object_id'=>$this->id));
-
-		return $this;
+		$log .= NL."registry_objects: " .$this->db->_error_message();
+		return $log;
 	}
 	
 	

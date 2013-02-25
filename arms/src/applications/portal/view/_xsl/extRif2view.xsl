@@ -404,7 +404,7 @@
 <div class="sidebar">
 <h3 id="draft_status" class="hide" style="font-color:#FF6688;">DRAFT PREVIEW</h3>
   <xsl:if test="ro:location/ro:address/ro:electronic/@type='url' 
-    or extRif:right or ro:location/ro:address/ro:electronic/@type='email'  or ro:location/ro:address/ro:physical">     
+    or extRif:right or ro:location/ro:address/ro:electronic/@type='email' or ro:location/ro:address/ro:physical">     
     <div class="right-box">
         
         <h2>Access</h2>
@@ -459,7 +459,7 @@
 
   <div id="suggestedLinksRightBox" class="right-box">
       <div id="infoBox" class="hide"></div>
-      <h2>Suggested Links</h2>
+
 
       <div id="AndsSuggestedLinksBox">
       %%%%ANDS_SUGGESTED_LINKS%%%%

@@ -2,6 +2,7 @@
 
 	$connDiv = '';
 	$conn = array();
+	$count = array();
 
 	if (isset($connections_contents))
 	{
@@ -11,7 +12,10 @@
 			foreach($classes as $classname => $class)
 			{
 				// XXX: handle count greater than X
-				if (strpos($classname, "_count")) continue;
+				if (strpos($classname, "_count")) {
+					$count[$classname] = $class;
+					continue;
+				}
 
 				foreach ($class AS $entry)
 				{
@@ -27,10 +31,8 @@
 							$url = base_url() . "view/?id=" . $entry['registry_object_id'];
 						}
 
-
-						if(!isset($conn[$entry['class']]))
-						{
-							$conn[$entry['class']] = "<p class=".$entry['class']."><a href='".$url."'>".$entry['title']."</a></p>";
+						if(!isset($conn[$entry['class']])){
+							$conn[$entry['class']] = "<p class=".$entry['class']."><a href='".$url."' class='view_connection' type=>".$entry['title']."</a></p>";
 						}else{
 							$conn[$entry['class']] .= "<p class=".$entry['class']."><a href='".$url."'>".$entry['title']."</a></p>";
 						}
@@ -41,10 +43,14 @@
 
 		foreach($conn as $connections => $value)
 		{
+			$footer = '';
 			switch($connections){
 				case "contributor":
 					$heading = "<h3>Contributed by</h3>";
 					break;
+				case "party":
+					$heading = "<h3>Researchers</h3>";
+					break;					
 				case "party_one":
 					$heading = "<h3>Researchers</h3>";
 					break;	
@@ -59,10 +65,15 @@
 					break;
 				case "collection":
 					$heading = "<h3>Collections</h3>";
-					break;																						
+					if($count[$connections.'_count'] > 6) $footer = '<p><a href="javascript:;" class="view_all_connection">View All '.$count[$connections.'_count']. ' Collections</a></p>';
+					break;	
+				default:
+					$heading = 	"<h3>".$connections."</h3>";	
+					break;																			
 			}
 			$connDiv .= $heading;
 			$connDiv .= $value;	
+			$connDiv .= $footer;
 		}
 	}
 

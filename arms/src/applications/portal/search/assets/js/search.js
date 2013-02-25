@@ -171,6 +171,38 @@ function initSearchPage(){
 			$(this).val(nots[e]);
 		});
 	}
+
+	$('.excerpt').each(function(){
+		$thecontent = $(this).html();
+		$newContent = ellipsis($thecontent, 200);
+		if($thecontent!=$newContent) 
+			{ 
+				$newContent = '<div class="hide" fullExcerpt="true">'+$thecontent+'</div>' + $newContent + '';
+			}
+		$(this).html($newContent);
+		}
+	);
+
+	$('.showmore_excerpt').click(function(){	
+		$(this).parent().html($(this).parent().children(0).html());
+	})
+
+	
+}
+
+
+function ellipsis (string, length)
+{
+	if (string.length <= length)
+	{
+		return string;
+	}
+	else
+	{
+		var trimmedString = string.substr(0, length-3);
+		trimmedString = trimmedString.substr(0, Math.min(trimmedString.length, trimmedString.lastIndexOf(" "))) + '&hellip;';
+		return trimmedString + '<span class="showmore_excerpt"><br /><a href="javascript:void(0);">More &hellip;</a></span>';
+	}
 }
 
 function initMap(){

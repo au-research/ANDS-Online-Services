@@ -34,6 +34,8 @@ class Importer {
 	public $affected_records;
 	public $deleted_records;
 
+	public $statusAlreadyChanged = false;
+
 	public $error_log = array();
 	public $message_log = array();
 
@@ -244,7 +246,15 @@ class Importer {
 					{
 						// The registryObject exists, just add a new revision to it?
 						$ro = $this->CI->ro->getByID($revision_record_id);
+
+						// GEt rid of status change recursion on DRAFT->PUBLISHED
+						if($this->statusAlreadyChanged)
+						{
+							$ro->original_status = $this->status;
+						}
 						$ro->status = $this->status;
+						
+						
 						$ro->harvest_id = $this->harvestID;
 						$ro->class = $class;
 						$ro->record_owner = $record_owner;
@@ -435,6 +445,10 @@ class Importer {
 		if (isPublishedStatus($this->status))
 		{
 			$existingRegistryObject = $this->CI->ro->getPublishedByKey((string)$registryObject->key);
+			if (!$existingRegistryObject)
+			{
+				$existingRegistryObject = $this->CI->ro->getDraftByKey((string)$registryObject->key);
+			}
 		}
 		elseif (isDraftStatus($this->status))
 		{
@@ -805,7 +819,7 @@ class Importer {
 		$this->solr_queue = array();
 		$this->forcePublish = false;
 		$this->forceDraft = false; 
-
+		$this->statusAlreadyChanged = false;
 		$this->ingest_attempts = 0;
 		$this->ingest_successes = 0;
 		$this->ingest_failures = 0;
