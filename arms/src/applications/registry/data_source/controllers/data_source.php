@@ -24,12 +24,12 @@ class Data_source extends MX_Controller {
 	
 	public function index(){
 		//$this->output->enable_profiler(TRUE);
-		
-		$data['title'] = 'Manage My Datasources....';
+		acl_enforce('REGISTRY_USER');
+		$data['title'] = 'Manage My Datasources';
 		$data['small_title'] = '';
 
 		$this->load->model("data_sources","ds");
-	 	$dataSources = $this->ds->getAll(0,0);//get everything  XXX: getOwnedDataSources
+	 	$dataSources = $this->ds->getOwnedDataSources();//get everything  XXX: getOwnedDataSources
 		//$dataSources = $this->ds->getOwnedDataSources();
 		$items = array();
 		foreach($dataSources as $ds){

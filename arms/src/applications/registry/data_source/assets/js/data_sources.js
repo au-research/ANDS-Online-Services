@@ -7,7 +7,6 @@
  * @package ands/datasource
  * 
  */
-
 $(function(){
 
 	/*
@@ -52,7 +51,6 @@ $(function(){
 		changeHashTo('browse/'+$(this).attr('name'));
 		currentView = $(this).attr('name');
 	});
-
 	load_more(1);//init the load_more function | load the first page
 
 	//load_more button binding, once clicked will increment the page value

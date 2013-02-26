@@ -67,13 +67,14 @@
 
 
     <div id="header">
-      <a href="<?=base_url();?>" title="Back to Dashboard">
+      <a href="<?php echo base_url();?>" title="Back to Dashboard" tip="Back to Dashboard" my="center left" at="center right">
         <img src="<?php echo base_url();?>/assets/img/ands_logo_white.png" alt="ANDS Logo White"/> 
       </a>
     </div>
     
 
     <div id="user-nav" class="navbar navbar-inverse">
+
             <ul class="nav btn-group">
             
               <?php if($this->user->hasFunction('REGISTRY_USER') && mod_enabled('registry')): ?>
