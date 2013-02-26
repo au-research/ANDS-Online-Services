@@ -111,5 +111,3 @@
 			</div><!-- adv_inner -->
 		</div><!-- advanced_search -->
 	</div><!-- search -->
-
-	<div class="container">

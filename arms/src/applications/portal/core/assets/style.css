@@ -612,6 +612,10 @@ a.search_map {
 	padding-top: 21px;
 	padding-bottom: 21px;
 }
+.no_padding {
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
 .intro {
 	width: 418px;
 	float: left;
@@ -1062,7 +1066,7 @@ a.search_map {
 /*                             Footer								               */
 /***********************************************************************************/
 .footer {
-	background: #2f3134;
+	background: rgb(48,49,53);
 	border-top: 9px solid #94b28a;
 	color: #fafafa;
 }

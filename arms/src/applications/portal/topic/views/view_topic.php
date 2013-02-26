@@ -1,5 +1,5 @@
 <?php $this->load->view('rda_header');?>
-
+<div class="container">
 <?php
 if (isset($topic))
 {
@@ -93,4 +93,5 @@ else
 }
 ?>
 
+</div>
 <?php $this->load->view('rda_footer');?>

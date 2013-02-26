@@ -1,4 +1,6 @@
 <?php $this->load->view('rda_header');?>
+<div class="container less_padding">
+<div id="searchmap" class="hide"></div>
 <div class="main">
 	<div id="searchmap" class="hide"></div>
 	<div class="page_title">
@@ -69,5 +71,5 @@
 </div>
 {{/facet_result}}
 </script>
-
+</div>
 <?php $this->load->view('rda_footer');?>

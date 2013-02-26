@@ -1,4 +1,5 @@
-<?php $this->load->view('rda_header');?>
+<?php $this->load->view('rda_header');?>	
+<div class="container">
 <div class="topic_list">
 
 <h2>Topics listed in Research Data Australia</h2>
@@ -23,4 +24,5 @@ foreach ($topics AS $key => $topic)
 </div>
 
 <div>&nbsp;</div>
+</div>
 <?php $this->load->view('rda_footer');?>
