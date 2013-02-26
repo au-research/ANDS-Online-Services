@@ -578,17 +578,24 @@ ClusterIcon.prototype.triggerClusterClick = function() {
   // Trigger the clusterclick event.
   google.maps.event.trigger(markerClusterer, 'clusterclick', this.cluster_);
 
-  if (markerClusterer.isZoomOnClick() || this.cluster_.markers_.length > 9) 
-  {
+  var identical = checkIdenticalMarkers(this.cluster_);
+  if (!identical){
     // Zoom into the cluster.
     this.map_.fitBounds(this.cluster_.getBounds());
-  }
-  else if(this.cluster_.markers_.length > 9)
-  {
-	this.map_.fitBounds(this.cluster_.getBounds());
   }
   else{
 	showPreviewWindowConent(this.cluster_);
   }
 
 };
+
+function checkIdenticalMarkers(cluster){
+	var identical = true;
+	$.each(cluster.markers_, function(){
+		if(!this.position.equals(cluster.markers_[0].position)) {
+			identical = false;
+			return identical;
+		}
+	});
+	return identical;
+}
