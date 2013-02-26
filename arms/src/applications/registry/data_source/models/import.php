@@ -170,6 +170,7 @@ class Import extends CI_Model {
 		}
 		catch (Exception $e)
 		{
+			$data_source->append_log("UNABLE TO HARVEST FROM THIS DATA SOURCE" . NL . $e->getMessage() . NL ,"importer", "HARVEST_ERROR");
 			throw new Exception ("UNABLE TO HARVEST FROM THIS DATA SOURCE" . NL . $e->getMessage() . NL);
 		}
 
@@ -212,6 +213,7 @@ class Import extends CI_Model {
 		$doc = @DOMDocument::loadXML($xml);
 		if(!$doc)
 		{
+			$data_source->append_log("Unable to parse XML. Perhaps your XML file is not well-formed?".$xml,"importer", "HARVEST_ERROR");
 			throw new Exception("Unable to parse XML. Perhaps your XML file is not well-formed?".$xml);
 		}
 		libxml_use_internal_errors(true);
@@ -229,6 +231,7 @@ class Import extends CI_Model {
 			    $error_string .= TAB . "Line " .$error->line . ": " . $error->message;
 			}
 			libxml_clear_errors();
+			$data_source->append_log("Unable to validate XML document against schema: " . NL . $error_string ,"importer", "HARVEST_ERROR");		
 			throw new Exception("Unable to validate XML document against schema: " . NL . $error_string);
 		}
 	}

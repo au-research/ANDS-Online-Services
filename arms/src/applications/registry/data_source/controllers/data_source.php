@@ -832,8 +832,10 @@ class Data_source extends MX_Controller {
 	 */
 	function importFromURLtoDataSource()
 	{
-		 $this->load->library('importer');
-		
+		$this->load->library('importer');
+		$this->load->model('data_source/data_sources', 'ds');		
+		$data_source = $this->ds->getByID($this->input->post('data_source_id'));	
+			
 		$log = 'IMPORT LOG' . NL;
 		//$log .= 'URI: ' . $this->input->post('url') . NL;
 		$log .= 'Harvest Method: Direct import from URL' . NL;
@@ -841,6 +843,7 @@ class Data_source extends MX_Controller {
 		$url = $this->input->post('url');
 		if (!preg_match("/^https?:\/\/.*/",$url))
 		{
+			$data_source->append_log("URL must be valid http:// or https:// resource. Please try again.".$errmsg, HARVEST_ERROR, "importer","DOCUMENT_LOAD_ERROR");
 			echo json_encode(array("response"=>"failure", "message"=>"URL must be valid http:// or https:// resource. Please try again."));
 			return;	
 		}
@@ -848,6 +851,7 @@ class Data_source extends MX_Controller {
 		$xml = @file_get_contents($this->input->post('url'));
 		if (strlen($xml) == 0)
 		{
+			$data_source->append_log("Unable to retrieve any content from the specified URL", HARVEST_ERROR, "importer","DOCUMENT_LOAD_ERROR");			
 			echo json_encode(array("response"=>"failure", "message"=>"Unable to retrieve any content from the specified URL"));
 			// todo: http error?
 			return;	
@@ -856,8 +860,8 @@ class Data_source extends MX_Controller {
 		try
 		{ 
 
-			$this->load->model('data_source/data_sources', 'ds');
-			$data_source = $this->ds->getByID($this->input->post('data_source_id'));
+
+
 			$this->importer->setXML($xml);
 
 			if ($data_source->provider_type != RIFCS_SCHEME)
@@ -889,7 +893,7 @@ class Data_source extends MX_Controller {
 			
 			$log .= "CRITICAL IMPORT ERROR [HARVEST COULD NOT CONTINUE]" . NL;
 			$log .= $e->getMessage();
-			
+			$data_source->append_log("An error occured whilst importing from this URL", HARVEST_ERROR, "importer","IMPORT_ERROR");				
 			echo json_encode(array("response"=>"failure", "message"=>"An error occured whilst importing from this URL", "log"=>substr($log,0, 1000)));
 			return;	
 		}	
