@@ -43,11 +43,11 @@
 
     <xsl:variable name="theTitle">	
         <xsl:choose>
-            <xsl:when test="string-length(/extRif:extendedMetadata/extRif:displayTitle)>30">
-                <xsl:value-of select="substring(/extRif:extendedMetadata/extRif:displayTitle,0,30)"/>...
+            <xsl:when test="string-length(extRif:extendedMetadata/extRif:displayTitle)>30">
+                <xsl:value-of select="substring(extRif:extendedMetadata/extRif:displayTitle,0,30)"/>...
             </xsl:when>
             <xsl:otherwise>
-                <xsl:value-of select="/extRif:extendedMetadata/extRif:displayTitle"/>
+                <xsl:value-of select="extRif:extendedMetadata/extRif:displayTitle"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
