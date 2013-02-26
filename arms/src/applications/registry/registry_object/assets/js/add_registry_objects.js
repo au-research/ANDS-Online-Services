@@ -39,8 +39,6 @@ $(function(){
 				originating_source = $('input[name=originatingSource]').val();
 
 				var data = {data_source_id:data_source_id, registry_object_key:registry_object_key, ro_class:ro_class, type:type, group:group, originating_source:originating_source};
-
-<<<<<<< Updated upstream
 				$.ajax({
 					type: 'POST',
 					url: base_url+'registry_object/add_new',
@@ -56,22 +54,6 @@ $(function(){
 					}
 				});
 			}
-=======
-			$.ajax({
-				type: 'POST',
-				url: base_url+'registry_object/add_new',
-				data:{data:data},
-				dataType:'JSON',
-				success:function(data){
-					$("#AddNewDS").modal('hide');
-					//1console.log(data);
-					if(data.success) window.location = base_url+'registry_object/edit/'+data.ro_id+'#!/advanced/admin';
-				},
-				error:function(data){
-					console.log("error: " + data);
-				}
-			});
->>>>>>> Stashed changes
 		}
 	});
 
