@@ -67,10 +67,6 @@ function executeSearch(searchData, searchUrl){
 			if(numFound==0){
 				$('.sidebar').hide();
 			}else {
-				console.log(numFound);
-				if(numFound > 200){
-					$('.sidebar').prepend(numFound);
-				}
 				$('.sidebar').show();
 			}
 
