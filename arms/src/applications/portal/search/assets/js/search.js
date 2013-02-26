@@ -62,6 +62,12 @@ function executeSearch(searchData, searchUrl){
 		success: function(data){
 			console.log(data); 
 
+			var numFound = data.result.numFound;
+
+			if(numFound==0){
+				$('.sidebar').hide();
+			}else $('.sidebar').show();
+
 			$('#search-result, .pagination, #facet-result').empty();
 
 			//search result
@@ -145,6 +151,11 @@ function initSearchPage(){
 			//already map, hide map
 			$('#searchmap').hide();
 			delete searchData['map'];
+			delete searchData['spatial'];
+			if(searchBox!=null){
+				searchBox.setMap(null);
+				searchBox = null;
+			}
 		}else{
 			//no map, show map
 			searchData['map']='show';
@@ -188,6 +199,13 @@ function initSearchPage(){
 			$(this).val(nots[e]);
 		});
 	}
+
+	$('#search_box').unbind('keypress').keypress(function(e){
+		if(e.which==13){//press enter
+			searchData['q']=$(this).val();
+			changeHashTo(formatSearch());
+		}
+	});
 
 	$('.excerpt').each(function(){
 		$thecontent = $(this).html();

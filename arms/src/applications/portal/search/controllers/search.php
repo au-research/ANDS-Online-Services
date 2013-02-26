@@ -80,7 +80,7 @@ class Search extends MX_Controller {
 						$filteredSearch = true;
 						break;
 					case 'subject_value_resolved': 
-						$this->solr->setOpt('subject_value_resolved', $value);
+						$this->solr->setOpt('fq', 'subject_value_resolved:("'.$value.'")');
 						$filteredSearch = true;
 						break;
 					case 'license_class': 
@@ -89,8 +89,11 @@ class Search extends MX_Controller {
 						break;						
 					case 'spatial':
 						$this->solr->setOpt('fq', 'spatial_coverage_extents:"Intersects('.$value.')"');
-						$this->solr->setOpt('rows', 200);
 						$filteredSearch = true;
+						break;
+					case 'map':
+						$this->solr->setOpt('fq', 'spatial_coverage_extents:(*)');
+						$this->solr->setOpt('rows', 200);
 						break;
 				}
 			}
@@ -147,7 +150,7 @@ class Search extends MX_Controller {
 				if($facet!='class'){
 					array_push($data['facet_result'], array('label'=>$display, 'facet_type'=>$facet, 'values'=>$facet_values));
 				}else{
-					array_push($data['facet_result'], array('label'=>$display, 'facet_type'=>$facet, 'values'=>$facet_values));
+					array_push($data['facet_result'], array('label'=>$display, 'facet_type'=>'tab', 'values'=>$facet_values));
 					$data['selected_tab'] = $facet;
 				}
 			}
