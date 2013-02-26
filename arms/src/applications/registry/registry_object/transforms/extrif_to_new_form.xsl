@@ -29,6 +29,7 @@
 			<li><a href="#names" data-toggle="tab">Names</a></li>
 			<li><a href="#descriptions_rights" data-toggle="tab">Descriptions/Rights</a></li>
 			<li><a href="#identifiers" data-toggle="tab">Identifiers</a></li>
+			<li><a href="#dates" data-toggle="tab">Dates</a></li>
 			<li><a href="#locations" data-toggle="tab">Locations</a></li>
 			<li><a href="#coverages" data-toggle="tab">Coverage</a></li>
 			<li><a href="#relatedObjects" data-toggle="tab">Related Objects</a></li>
@@ -66,6 +67,7 @@
 			<xsl:call-template name="namesTab"/>
 			<xsl:call-template name="descriptionRightsTab"/>
 			<xsl:call-template name="identifiersTab"/>
+			<xsl:call-template name="datesTab"/>
 			<xsl:call-template name="locationsTab"/>
 			<xsl:call-template name="coverageTab"/>
 			<xsl:call-template name="relatedObjectsTab"/>
@@ -432,6 +434,72 @@
 		</div>
 	</xsl:template>
 
+	<xsl:template name="datesTab">
+		<div id="dates" class="pane">
+			<fieldset>
+				<legend>Dates</legend>
+
+				<xsl:apply-templates
+					select="ro:collection/ro:dates | ro:activity/ro:dates | ro:party/ro:dates  | ro:service/ro:dates"/>
+				<div class="separate_line"/>
+
+				<button class="btn btn-primary addNew" type="dates">
+					<i class="icon-plus icon-white"/> Add Dates </button>
+				<button class="btn export_xml btn-info"> Export XML fragment </button>
+			</fieldset>
+		</div>
+	</xsl:template>
+
+
+	<xsl:template match="ro:collection/ro:dates | ro:activity/ro:dates | ro:party/ro:dates  | ro:service/ro:dates">
+		<div class="aro_box" type="dates">
+			<div class="aro_box_display clearfix">
+
+				<div class="control-group">
+					<label class="control-label" for="title">Type: </label>
+					<div class="controls">
+						<input type="text" class="input-small" name="type" placeholder="Type"
+							value="{@type}"/>
+						<button class="btn btn-mini btn-danger remove">
+							<i class="icon-remove icon-white"/>
+						</button>
+						<p class="help-inline">
+							<small/>
+						</p>
+					</div>
+				</div>
+
+				<xsl:apply-templates select="ro:date" mode="dates" />
+
+				<div class="separate_line"/>
+				<div class="controls">
+					<button class="btn btn-primary addNew" type="dates_date">
+						<i class="icon-plus icon-white"></i> Add new Date
+					</button>
+				</div>
+			</div>
+
+		</div>
+	</xsl:template>
+	
+	<xsl:template match="ro:date" mode="dates">
+		<div class="aro_box_part" type="dates_date">
+			<div>
+				<label class="control-label" for="title">Date: </label>
+				<input type="text" class="input-small" name="type" value="{@type}"/>
+				<input type="text" class="input-xlarge" name="value" value="{text()}"/>
+				<button class="btn btn-mini btn-danger remove">
+					<i class="icon-remove icon-white"/>
+				</button>
+			
+				<p class="help-inline">
+					<small/>
+				</p>
+
+			</div>
+		</div>
+	</xsl:template>					
+						
 	<xsl:template match="ro:collection/@type | ro:activity/@type | ro:party/@type  | ro:service/@type">
 		<xsl:value-of select="."/>
 	</xsl:template>
@@ -1664,6 +1732,63 @@
 					</li>
 				</ul>
 			</div>
+		</div>
+
+		<div class="aro_box_part template" type="dates">
+			<div class="aro_box" type="dates">
+			<div class="aro_box_display clearfix">
+				<div class="controls">
+
+						<div class="control-group">
+							<label class="control-label" for="title">Type: </label>
+							<div class="controls">
+								<input type="text" class="input-small" name="type" placeholder="dc.created" value=""/>
+								<button class="btn btn-mini btn-danger remove">
+									<i class="icon-remove icon-white"/>
+								</button>
+								<p class="help-inline">
+									<small/>
+								</p>
+							</div>
+						</div>
+					
+						<div class="aro_box_part" type="dates_date">
+							<label class="control-label" for="title">Date: </label>
+							<input type="text" class="input-small" name="type" placeholder="dateFrom" value="dateFrom"/>
+							<input type="text" class="input-xlarge" name="value" placeholder="Date Value" value="01-01-2000T00:00:00Z"/>
+							<button class="btn btn-mini btn-danger remove">
+								<i class="icon-remove icon-white"/>
+							</button>
+						</div>
+						<div class="aro_box_part" type="dates_date">	
+							<label class="control-label" for="title">Date: </label>
+							<input type="text" class="input-small" name="type" placeholder="dateTo" value="dateTo"/>
+							<input type="text" class="input-xlarge" name="value" placeholder="Date Value" value="01-01-2001T00:00:00Z"/>
+							<button class="btn btn-mini btn-danger remove">
+								<i class="icon-remove icon-white"/>
+							</button>
+						</div>
+
+					<div class="separate_line"/>
+					<div class="controls">
+						<button class="btn btn-primary addNew" type="dates_date">
+							<i class="icon-plus icon-white"></i> Add new Date
+						</button>
+					</div>
+
+				</div>
+			</div>
+
+			</div>
+		</div>
+
+		<div class="aro_box_part template" type="dates_date">
+			<label class="control-label" for="title">Date: </label>
+			<input type="text" class="input-small" name="type" placeholder="Date Type" value=""/>
+			<input type="text" class="input-xlarge" name="value" placeholder="Date Value" value=""/>
+			<button class="btn btn-mini btn-danger remove">
+				<i class="icon-remove icon-white"/>
+			</button>
 		</div>
 		
 		<div class="aro_box_part template" type="date">

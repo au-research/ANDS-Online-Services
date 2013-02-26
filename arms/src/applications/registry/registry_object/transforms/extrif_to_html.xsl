@@ -114,6 +114,19 @@
 			</tr>
 		</xsl:if>
 
+		<xsl:choose>
+			<xsl:when test="ro:dates">
+				<tr>
+					<td>Dates:</td>
+					<td>
+						<table class="subtable">
+							<xsl:apply-templates select="ro:dates"/>
+						</table>
+					</td>
+				</tr>
+			</xsl:when>
+	 	</xsl:choose>
+
 		<xsl:if test="ro:identifier">
 			<tr>
 				<td>Identifiers:</td>

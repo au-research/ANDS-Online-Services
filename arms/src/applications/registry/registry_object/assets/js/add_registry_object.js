@@ -735,7 +735,7 @@ function getRIFCSforTab(tab, hasField){
 		var this_box = this;
 		$.each(valid_fragment_meta, function(index, value){
 			var fragment_meta = '';
-			var input_field = $('input[name='+value+']',this_box);
+			var input_field = $('input[name='+value+']', this_box);
 			if($(input_field).length>0 && $(input_field).val()!=''){
 				fragment_meta += ' '+value+'="'+$(input_field).val()+'"';
 			}
@@ -745,7 +745,8 @@ function getRIFCSforTab(tab, hasField){
 		//finish fragment header
 
 		//onto the body of the fragment
-		var parts = $(this).children('.aro_box_part');
+		var parts = $('.aro_box_part',this);
+
 		if(parts.length > 0){//if there is a part, data is spread out in parts
 			$.each(parts, function(){
 
@@ -758,6 +759,7 @@ function getRIFCSforTab(tab, hasField){
 				 */
 
 				if($(this).attr('type')){//if type is there for this part
+
 					//deal with the type
 					var type = $(this).attr('type');
 					if(type=='relation'){//special case for related object relation
@@ -806,6 +808,12 @@ function getRIFCSforTab(tab, hasField){
 								});
 								fragment +='</'+$(this).attr('type')+'>';
 							});
+					}else if(type=='dates_date'){
+
+							fragment += '<date type="'+$('input[name=type]', this).val()+'" dateFormat="W3CDTF">';
+							fragment += $('input[name=value]', this).val();
+							fragment +='</date>';
+						
 					}else{//generic
 						//check if there is an input[name="type"] in this box_part so that we can use as a type attribute
 						var type = $('input[name=type]', this).val();

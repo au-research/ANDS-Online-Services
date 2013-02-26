@@ -63,6 +63,7 @@
 					<xsl:call-template name="namesTab"/>
 					<xsl:call-template name="descriptionRightsTab"/>
 					<xsl:call-template name="identifiersTab"/>
+					<xsl:call-template name="datesTab"/>
 					<xsl:call-template name="locationsTab"/>
 					<xsl:call-template name="coverageTab"/>
 					<xsl:call-template name="relatedObjectsTab"/>
@@ -274,6 +275,22 @@
 
 				<button class="btn btn-primary addNew" type="name">
 					<i class="icon-plus icon-white"/> Add Name </button>
+				<button class="btn export_xml btn-info"> Export XML fragment </button>
+			</fieldset>
+		</div>
+	</xsl:template>
+
+	<xsl:template name="datesTab">
+		<div id="dates" class="tab-pane">
+			<fieldset>
+				<legend>Dates</legend>
+
+				<xsl:apply-templates
+					select="ro:collection/ro:dates | ro:activity/ro:dates | ro:party/ro:dates  | ro:service/ro:dates"/>
+				<div class="separate_line"/>
+
+				<button class="btn btn-primary addNew" type="dates">
+					<i class="icon-plus icon-white"/> Add Dates </button>
 				<button class="btn export_xml btn-info"> Export XML fragment </button>
 			</fieldset>
 		</div>

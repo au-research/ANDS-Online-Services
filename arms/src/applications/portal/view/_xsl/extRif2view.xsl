@@ -68,11 +68,18 @@
 
        <xsl:if test="$theGroup = ''">
         <xsl:text>  /  </xsl:text>
-        <a href="{$base_url}search/browse/{./@group}" class="crumb"><xsl:value-of select="$group"/></a>			
+        <a href="{$base_url}search/#!/group={./@group}" class="crumb"><xsl:value-of select="$group"/></a>			
     </xsl:if>
 
     <xsl:text>  /  </xsl:text>
-    <a href="{$base_url}search/browse/{./@group}/{$objectClass}" class="crumb"><xsl:value-of select="$objectClass"/></a>
+    <a>
+      <xsl:attribute name="href">
+        <xsl:value-of select="$base_url"/>search/#!/group=<xsl:value-of select="./@group"/>/tab=<xsl:value-of select="translate($objectClass,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')"/>
+      </xsl:attribute>
+      <xsl:attribute name="class">crumb</xsl:attribute>
+      <xsl:value-of select="$objectClass"/>
+    </a>
+
     <!--li><xsl:value-of select="$theTitle"/></li-->
 
 
@@ -173,9 +180,16 @@
 
 
             <xsl:for-each select="//ro:existenceDates">
-              <xsl:if test="./ro:startDate"><xsl:value-of select="./ro:startDate"/></xsl:if>
-              -
-              <xsl:if test="./ro:endDate"><xsl:value-of select="./ro:endDate"/></xsl:if><br/>
+              <xsl:choose>
+                <xsl:when test="extRif:friendly_date">
+                  <xsl:value-of select="extRif:friendly_date"/><br/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:if test="./ro:startDate"><xsl:value-of select="./ro:startDate"/></xsl:if>
+                  -
+                  <xsl:if test="./ro:endDate"><xsl:value-of select="./ro:endDate"/></xsl:if><br/>
+                </xsl:otherwise>
+              </xsl:choose>
           </xsl:for-each>
 
 
@@ -270,8 +284,7 @@
         </xsl:if>
 
         <xsl:if test="ro:coverage/ro:temporal/ro:date">
-            <xsl:apply-templates select="ro:coverage/ro:temporal/ro:date[@type = 'datefrom'] | ro:coverage/ro:temporal/ro:date[@type = 'dateFrom'] "/>
-            <xsl:apply-templates select="ro:coverage/ro:temporal/ro:date[@type = 'dateTo']"/>
+          <xsl:apply-templates select="ro:coverage/ro:temporal[ro:date]" mode="date" />
         </xsl:if>
         
         <xsl:if test="ro:location[@datefrom!=''] | ro:location[@dateFrom!=''] | ro:location[@dateTo!='']">
@@ -365,12 +378,13 @@
 
 
     <!-- DISPLAY DATES -->
-    <xsl:if test="extRif:dates">
+    <xsl:if test="ro:dates">
         <p><xsl:text>&amp;amp;nbsp;</xsl:text></p>
         <h4>Dates</h4> 
         <table>
-            <xsl:apply-templates select="extRif:dates"/>
+            <xsl:apply-templates select="ro:dates"/>
         </table>  
+        <p>&amp;amp;nbsp;</p>
     </xsl:if>           
     
     <!-- DISPLAY IDENTIFIERS -->
@@ -503,9 +517,16 @@
     <div class="page_title" id="displaytitle">
        <h1><xsl:value-of select="."/></h1>
        <xsl:for-each select="//ro:existenceDates">
-          <xsl:if test="./ro:startDate"><xsl:value-of select="./ro:startDate"/></xsl:if>
-          - 
-          <xsl:if test="./ro:endDate"><xsl:value-of select="./ro:endDate"/></xsl:if><br/>
+         <xsl:choose>
+          <xsl:when test="extRif:friendly_date">
+            <xsl:value-of select="extRif:friendly_date"/><br/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:if test="./ro:startDate"><xsl:value-of select="./ro:startDate"/></xsl:if>
+            -
+            <xsl:if test="./ro:endDate"><xsl:value-of select="./ro:endDate"/></xsl:if><br/>
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:for-each>     
   </div>			
 
@@ -544,15 +565,16 @@
     <p class="spatial_coverage_center hide"><xsl:value-of select="."/></p>
 </xsl:template>
 
-<xsl:template match="ro:date">  
-    <xsl:if test="./@type = 'dateFrom'">
-        From 
-    </xsl:if>
-    <xsl:if test="./@type = 'dateTo'">
-        to  
-    </xsl:if>     
-    <xsl:value-of select="."/>       
+<xsl:template match="ro:temporal/ro:date">
+  <xsl:if test="./@type = 'dateFrom'">
+      From 
+  </xsl:if>
+  <xsl:if test="./@type = 'dateTo'">
+      to  
+  </xsl:if>     
+  <xsl:value-of select="."/>       
 </xsl:template> 
+
 <xsl:template match="ro:location[@datefrom!=''] | ro:location[@dateFrom!=''] | ro:location[@dateTo!='']">  
    <xsl:if test="./@datefrom != ''">
     From         <xsl:value-of select="./@datefrom"/>     
@@ -1118,7 +1140,16 @@
      </div>
  </xsl:template> 
 
-
+  <xsl:template match="ro:temporal" mode="date">
+    <xsl:choose>
+      <xsl:when test="extRif:friendly_date">
+        <p><xsl:value-of select="extRif:friendly_date" /></p>
+      </xsl:when>
+      <xsl:otherwise>
+       <p><xsl:apply-templates select="ro:date"/></p>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
 
  <xsl:template match="ro:location/ro:address/ro:electronic/@type">		
   <xsl:if test=".='email'">	
@@ -1126,16 +1157,24 @@
 </xsl:if>				
 </xsl:template> 
 
-<xsl:template match="extRif:dates">
-  <tr><td><xsl:value-of select="./@etype"/>:  <td>    </td>  </td><td>
+<xsl:template match="ro:dates">
 
-  <xsl:if test="./extRif:date/@type!='dateTo'"> 
-      <xsl:value-of select="./extRif:date[@type!='dateTo']"/> 
-  </xsl:if>      
-  <xsl:if test="./extRif:date/@type='dateTo'"> to 
-    <xsl:value-of select="./extRif:date[@type='dateTo']"/> 
-</xsl:if>
-</td></tr>
+  <xsl:choose>
+    <xsl:when test="./extRif:friendly_date">
+      <p><xsl:value-of select="./extRif:friendly_date"/></p>
+    </xsl:when>
+    <xsl:otherwise>
+
+      <xsl:if test="./ro:date/@type!='dateTo'"> 
+          <xsl:value-of select="./ro:date[@type!='dateTo']"/> 
+      </xsl:if>      
+      <xsl:if test="./ro:date/@type='dateTo'"> to 
+        <xsl:value-of select="./ro:date[@type='dateTo']"/> 
+      </xsl:if>
+
+    </xsl:otherwise>
+  </xsl:choose>
+
 </xsl:template>
 
 <xsl:template match="extRif:extendedMetadata" priority="-1" />

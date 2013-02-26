@@ -17,7 +17,7 @@ class Title_Extension extends ExtensionBase
 		
 		if (is_null($sxml))
 		{
-			$sxml = simplexml_load_string($this->ro->getRif());
+			$sxml = $this->ro->getSimpleXML();
 		}
 		
 		$titles = $this->getTitlesForRegistryObject($sxml);
@@ -49,6 +49,7 @@ class Title_Extension extends ExtensionBase
 		}
 		
 		$name = $this->getTitlesForFragment($name, $this->ro->class);
+
 		if (trim($name['display_title']) == '')
 		{
 			$name['display_title'] = self::DEFAULT_TITLE . " (" . $this->ro->id . ")";
@@ -58,7 +59,7 @@ class Title_Extension extends ExtensionBase
 		return $name;
 	}	
 	
-	function getTitlesForFragment (SimpleXMLElement $name, $class)
+	function getTitlesForFragment ($name, $class)
 	{
 		$list_title = self::DEFAULT_TITLE;
 		$display_title = self::DEFAULT_TITLE;

@@ -42,6 +42,7 @@ class Extrif_Extension extends ExtensionBase
 	
 				$extendedMetadata->addChild("extRif:displayTitle", str_replace('&', '&amp;' ,$this->ro->title), EXTRIF_NAMESPACE);
 				$extendedMetadata->addChild("extRif:listTitle", str_replace('&', '&amp;' ,$this->ro->list_title), EXTRIF_NAMESPACE);
+				
 				if($xml->{$this->ro->class}->description)
 				{
 					foreach ($xml->{$this->ro->class}->description AS $description)
@@ -144,6 +145,9 @@ class Extrif_Extension extends ExtensionBase
 					$relatedObj->addChild("extRif:related_object_display_title", $relatedObject['title'], EXTRIF_NAMESPACE);
 					$relatedObj->addChild("extRif:related_object_relation", $relatedObject['relation_type'], EXTRIF_NAMESPACE);
 				}
+
+				// Friendlify dates =)
+				$xml = $this->ro->extractDatesForDisplay($xml);
 
 
 				/* Names EXTRIF */
