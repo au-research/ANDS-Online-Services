@@ -43,7 +43,7 @@
        </img>
       </div>
       </div> 
-      <div class="ro_preview_description">
+      <div class="ro_preview_description hide">
         <xsl:value-of select="extRif:extendedMetadata/extRif:description" disable-output-escaping="yes"/>
       </div> 
       <div class="ro_preview_footer">

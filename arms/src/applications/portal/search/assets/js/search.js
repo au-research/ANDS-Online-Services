@@ -60,13 +60,19 @@ function executeSearch(searchData, searchUrl){
 		data: {filters:searchData},
 		dataType:'json',
 		success: function(data){
-			console.log(data); 
+			// console.log(data); 
 
 			var numFound = data.result.numFound;
 
 			if(numFound==0){
 				$('.sidebar').hide();
-			}else $('.sidebar').show();
+			}else {
+				console.log(numFound);
+				if(numFound > 200){
+					$('.sidebar').prepend(numFound);
+				}
+				$('.sidebar').show();
+			}
 
 			$('#search-result, .pagination, #facet-result').empty();
 
@@ -492,6 +498,12 @@ function showPreviewWindowConent(mOverlay)
 		success: function(data){
 			infowindow.setContent(data.html);
 			infowindow.open(map);
+			$('.ro_preview_header').unbind('click').click(function(){
+				$(this).next('.ro_preview_description').slideToggle(200, function(){
+					// console.log(infowindow);
+					google.maps.event.trigger(infowindow, 'content_changed');
+				});
+			});
 		},
 		error: function(data){
 			//$('body').prepend(data.responseText);
@@ -499,7 +511,6 @@ function showPreviewWindowConent(mOverlay)
 			return null;
 		}
 	});
-	
 }
 
 function clearPolygons()

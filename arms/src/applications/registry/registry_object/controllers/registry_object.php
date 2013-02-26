@@ -153,8 +153,8 @@ class Registry_object extends MX_Controller {
 		$ro = $this->ro->getByID($registry_object_id);
 		echo $xml;
 		$ro->updateXML($xml);
-		$ro->save();
 		$ro->enrich();
+		$ro->save();
 	}
 
 
