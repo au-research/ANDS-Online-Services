@@ -391,7 +391,13 @@ function getCoordsFromString(lonLatStr)
 		{
 			coordsPair = coordsStr[i].split(",");
 			coords[i] = new google.maps.LatLng(coordsPair[1],coordsPair[0]);
-		}	
+		}
+		//check if first point is the same as last... if not copy fist coords to the end.
+		//if(coordsStr.length > 1 && coordsStr[0] !== coordsStr[i-1])
+		//{
+		//	coordsPair = coordsStr[0].split(",");
+		//	coords[i] = new google.maps.LatLng(coordsPair[1],coordsPair[0]);
+		//}
 	//}
 	return coords;
 }
