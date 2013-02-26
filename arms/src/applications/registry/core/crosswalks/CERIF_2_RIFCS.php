@@ -15,11 +15,17 @@ class CERIF_2_RIFCS extends Crosswalk{
 
 	function __construct(){
 		$this -> rifcs =  simplexml_load_string($this::RIFCS_WRAPPER);
+		require_once(APP_PATH . "core/crosswalks/_CFClasses.php");
 	}
 
 	public function identify()
 	{
 		return "CERIF to RIF-CS Crosswalk";
+	}
+
+	public function metadataFormat()
+	{
+		return "cerif2rifcs_v1";
 	}
 
 	public function payloadToRIFCS($payload)

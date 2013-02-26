@@ -298,18 +298,18 @@
   </xsl:if>
 
   <!-- DISPLAY SUBJECTS -->
-  <xsl:if test="ro:subject">
+  <xsl:if test="../extRif:extendedMetadata/extRif:subjects/extRif:subject">
     <div style="position:relative;clear:both">
         <!--<p><b>Subjects:</b>-->
         <p><xsl:text>&amp;amp;nbsp;</xsl:text></p>
         <h4>Subjects</h4>
         <!-- ANZSRC SUBJECTS -->
-        <xsl:if test="ro:subject/@type='anzsrc-for' or ro:subject/@type='anzsrc-seo' or ro:subject/@type='anzsrc-toa'">
+        <xsl:if test="../extRif:extendedMetadata/extRif:subjects/extRif:subject/extRif:subject_type ='anzsrc-for' or ../extRif:extendedMetadata/extRif:subjects/extRif:subject/extRif:subject_type='anzsrc-seo' or ../extRif:extendedMetadata/extRif:subjects/extRif:subject/extRif:subject_type='anzsrc-toa'">
             <p class="subject_type">ANZSRC</p>
             <div class="tags">
-                <xsl:for-each select="ro:subject">      
-                    <xsl:sort select="./@type"/>
-                    <xsl:if test="@type='anzsrc-for'or @type='anzsrc-seo' or @type='anzsrc-toa'">
+                <xsl:for-each select="../extRif:extendedMetadata/extRif:subjects/extRif:subject">      
+                    <xsl:sort select="extRif:subject_type"/>
+                    <xsl:if test="extRif:subject_type='anzsrc-for' or extRif:subject_type='anzsrc-seo' or extRif:subject_type='anzsrc-toa'">
                         <xsl:apply-templates select="."/>
                     </xsl:if>
                 </xsl:for-each>
@@ -317,12 +317,12 @@
         </xsl:if>
 
         <!-- OTHER SUBJECTS -->
-        <xsl:if test="ro:subject/@type!='anzsrc-for' and ro:subject/@type!='anzsrc-seo' and ro:subject/@type!='anzsrc-toa'">
+        <xsl:if test="../extRif:extendedMetadata/extRif:subjects/extRif:subject/extRif:subject_type!='anzsrc-for' and ../extRif:extendedMetadata/extRif:subjects/extRif:subject/extRif:subject_type!='anzsrc-seo' and ../extRif:extendedMetadata/extRif:subjects/extRif:subject/extRif:subject_type!='anzsrc-toa'">
             <p>Keywords</p> 
             <div class="tags">
-                <xsl:for-each select="ro:subject">      
-                    <xsl:sort select="./@type"/>
-                    <xsl:if test="@type!='anzsrc-for'and @type!='anzsrc-seo' and @type!='anzsrc-toa'">
+                <xsl:for-each select="../extRif:extendedMetadata/extRif:subjects/extRif:subject">      
+                    <xsl:sort select="extRif:subject_type"/>
+                    <xsl:if test="extRif:subject_type!='anzsrc-for'and extRif:subject_type!='anzsrc-seo' and extRif:subject_type!='anzsrc-toa'">
                         <xsl:apply-templates select="."/>
                     </xsl:if>
                 </xsl:for-each>
@@ -461,7 +461,8 @@
                 </xsl:if>           
 
             </div>
-        </div>                  
+        </div>      
+        <p><br/></p>            
     </xsl:if>
 
 
@@ -607,17 +608,11 @@
 </xsl:if> 
 </xsl:template>
 
-<xsl:template match="ro:subject">   
-    <a href="javascript:void(0);" class="subjectFilter" id="{@extRif:resolvedValue}" title="{.}">
-        <xsl:choose>
-            <xsl:when test="@extRif:resolvedValue != ''">
-                <xsl:value-of select="@extRif:resolvedValue"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:value-of select="."/>
-            </xsl:otherwise>
-        </xsl:choose>
-    </a>      
+<xsl:template match="extRif:subject">   
+  <a href="{$base_url}search/#!/subject_value_resolved={extRif:subject_resolved}/" class="subjectFilter" id="{extRif:subject_resolved}" title="{extRif:subject_resolved}">
+    <xsl:value-of select="extRif:subject_resolved"/>
+  </a>
+
 </xsl:template>
 
 <xsl:template match="ro:relatedInfo">

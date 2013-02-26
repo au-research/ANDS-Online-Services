@@ -62,7 +62,7 @@
                 <xsl:apply-templates select="extRif:extendedMetadata/extRif:spatialGeometry"/>
                 <xsl:apply-templates select="extRif:extendedMetadata/extRif:temporal"/>
 
-                <xsl:apply-templates select="extRif:extendedMetadata/extRif:subjects"/>
+                <xsl:apply-templates select="extRif:extendedMetadata/extRif:subjects/extRif:subject"/>
 
                 <xsl:apply-templates select="extRif:extendedMetadata/extRif:related_object"/>
 
@@ -423,7 +423,7 @@
     </xsl:template>
       
     
-    <xsl:template match="extRif:subject">
+    <xsl:template match="extRif:subject_value">
         <xsl:element name="field">
             <xsl:attribute name="name">subject_value_unresolved</xsl:attribute>
             <xsl:value-of select="."/>

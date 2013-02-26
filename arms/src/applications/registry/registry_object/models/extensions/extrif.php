@@ -69,10 +69,11 @@ class Extrif_Extension extends ExtensionBase
 				
 				foreach ($this->ro->processSubjects() AS $subject)
 				{
-					$subjects->addChild("extRif:subject", $subject['value'], EXTRIF_NAMESPACE);
-					$subjects->addChild("extRif:subject_type", $subject['type'], EXTRIF_NAMESPACE);
-					$subjects->addChild("extRif:subject_resolved", $subject['resolved'], EXTRIF_NAMESPACE);
-					$subjects->addChild("extRif:subject_uri", $subject['uri'], EXTRIF_NAMESPACE);
+					$subject_node = $subjects->addChild("extRif:subject", "", EXTRIF_NAMESPACE);
+					$subject_node->addChild("extRif:subject_value", $subject['value'], EXTRIF_NAMESPACE);
+					$subject_node->addChild("extRif:subject_type", $subject['type'], EXTRIF_NAMESPACE);
+					$subject_node->addChild("extRif:subject_resolved", $subject['resolved'], EXTRIF_NAMESPACE);
+					$subject_node->addChild("extRif:subject_uri", $subject['uri'], EXTRIF_NAMESPACE);
 				}
 
 	
