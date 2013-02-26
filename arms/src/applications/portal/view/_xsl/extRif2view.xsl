@@ -392,13 +392,18 @@
       <p></p>
       <h4>Identifiers</h4>
       <div id="identifiers">
-        <xsl:apply-templates select="ro:identifier[@type='doi']" mode="doi_prefixedLink"/>
-        <xsl:apply-templates select="ro:identifier[@type='ark']" mode="ark_prefixedLink"/>      
-        <xsl:apply-templates select="ro:identifier[@type='AU-ANL:PEAU']" mode="nla_prefixedLink"/>  
-        <xsl:apply-templates select="ro:identifier[@type='handle']" mode="handle_prefixedLink"/>   
-        <xsl:apply-templates select="ro:identifier[@type='purl']" mode="purl_prefixedLink"/>
-        <xsl:apply-templates select="ro:identifier[@type='uri']" mode="uri_prefixedLink"/> 
-        <xsl:apply-templates select="ro:identifier[not(@type =  'doi' or @type =  'ark' or @type =  'AU-ANL:PEAU' or @type =  'handle' or @type =  'purl' or @type =  'uri')]" mode="other_prefixedLink"/> 
+        <xsl:for-each select="ro:identifier">
+          <p>
+            <xsl:apply-templates select="current()[@type='doi']" mode="doi_prefixedLink"/>
+            <xsl:apply-templates select="current()[@type='ark']" mode="ark_prefixedLink"/>      
+            <xsl:apply-templates select="current()[@type='AU-ANL:PEAU']" mode="nla_prefixedLink"/>  
+            <xsl:apply-templates select="current()[@type='handle']" mode="handle_prefixedLink"/>   
+            <xsl:apply-templates select="current()[@type='purl']" mode="purl_prefixedLink"/>
+            <xsl:apply-templates select="current()[@type='uri']" mode="uri_prefixedLink"/> 
+            <xsl:apply-templates select="current()[@type='orcid']" mode = "orcid_prefixedLink"/>
+            <xsl:apply-templates select="current()[not(@type =  'doi' or @type =  'ark' or @type =  'AU-ANL:PEAU' or @type =  'handle' or @type =  'purl' or @type =  'uri' or @type = 'orcid')]" mode="other_prefixedLink"/> 
+          </p>
+        </xsl:for-each>
       </div>
     </xsl:if>   
         <!--div style="position:relative;clear:both;" class="no_print">
@@ -622,12 +627,13 @@
           <xsl:value-of select="./ro:title"/><br/>
       </xsl:if>
       <xsl:apply-templates select="./ro:identifier[@type='doi']" mode = "doi_prefixedLink"/>
+      <xsl:apply-templates select="./ro:identifier[@type='orcid']" mode = "orcid_prefixedLink"/>
       <xsl:apply-templates select="./ro:identifier[@type='ark']" mode = "ark_prefixedLink"/>    	
       <xsl:apply-templates select="./ro:identifier[@type='AU-ANL:PEAU']" mode = "nla_prefixedLink"/>  
       <xsl:apply-templates select="./ro:identifier[@type='handle']" mode = "handle_prefixedLink"/>   
       <xsl:apply-templates select="./ro:identifier[@type='purl']" mode = "purl_prefixedLink"/>
       <xsl:apply-templates select="./ro:identifier[@type='uri']" mode = "uri_prefixedLink"/> 
-      <xsl:apply-templates select="./ro:identifier[not(@type =  'doi' or @type =  'ark' or @type =  'AU-ANL:PEAU' or @type =  'handle' or @type =  'purl' or @type =  'uri')]" mode="other_prefixedLink"/>			            	
+      <xsl:apply-templates select="./ro:identifier[not(@type =  'doi' or @type =  'ark' or @type =  'AU-ANL:PEAU' or @type =  'handle' or @type =  'purl' or @type =  'uri' or @type='orcid')]" mode="other_prefixedLink"/>			            	
 
       <!--xsl:if test="./ro:format">
     
@@ -695,6 +701,13 @@
     <xsl:attribute name="href"> <xsl:value-of select="$theidentifier"/></xsl:attribute>
     <xsl:attribute name="title"><xsl:text>Resolve this handle</xsl:text></xsl:attribute>    				
     <xsl:value-of select="."/>
+    &amp;amp;nbsp;
+      <img class="identifier_logo">
+            <xsl:attribute name="src"><xsl:value-of select="$base_url"/>
+              <xsl:text>assets/core/images/icons/handle_icon.png</xsl:text>
+            </xsl:attribute>
+            <xsl:attribute name="alt">Handle icon</xsl:attribute>
+      </img>
   </a> 
 </xsl:template>
 
@@ -703,6 +716,7 @@
 
 <!-- DOI IDENTIFIER DISPLAY MODES -->
 <xsl:template match="ro:identifier" mode="doi_resolveURL">
+
   <xsl:choose>       
     <xsl:when test="string-length(substring-after(.,'doi.org/'))>1">
       <xsl:text>http://dx.doi.org/</xsl:text><xsl:value-of select="substring-after(.,'doi.org/')"/>
@@ -726,7 +740,13 @@
       <xsl:attribute name="class">identifier</xsl:attribute>
       <xsl:attribute name="href"><xsl:value-of select="$theidentifier"/></xsl:attribute>
       <xsl:attribute name="title"><xsl:text>Resolve this DOI</xsl:text></xsl:attribute>            
-      <xsl:value-of select="."/>
+      <xsl:value-of select="."/>&amp;amp;nbsp;
+      <img class="identifier_logo">
+            <xsl:attribute name="src"><xsl:value-of select="$base_url"/>
+              <xsl:text>assets/core/images/icons/doi_icon.png</xsl:text>
+            </xsl:attribute>
+            <xsl:attribute name="alt">DOI icon</xsl:attribute>
+      </img>
     </a>
   </xsl:if>
   <xsl:if test="string-length(substring-after(.,'10.'))&lt;1">    
@@ -734,6 +754,42 @@
   </xsl:if>  
 </xsl:template>
 
+
+<!-- DOI IDENTIFIER DISPLAY MODES -->
+<xsl:template match="ro:identifier" mode="orcid_resolveURL">
+
+  <xsl:choose>       
+    <xsl:when test="string-length(substring-after(.,'orcid.org/'))>1">
+      <xsl:text>http://orcid.org/</xsl:text><xsl:value-of select="substring-after(.,'orcid.org/')"/>
+    </xsl:when>          
+    <xsl:otherwise>
+      <xsl:text>http://orcid.org/</xsl:text><xsl:value-of select="."/>
+    </xsl:otherwise>   
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template match="ro:identifier" mode="orcid_prefixedLink">
+
+  <xsl:variable name="theidentifier">         
+    <xsl:apply-templates select="." mode="orcid_resolveURL" />
+  </xsl:variable>
+
+  ORCID: 
+ 
+  <a>
+    <xsl:attribute name="class">identifier</xsl:attribute>
+    <xsl:attribute name="href"><xsl:value-of select="$theidentifier"/></xsl:attribute>
+    <xsl:attribute name="title"><xsl:text>Resolve this ORCID</xsl:text></xsl:attribute>            
+    <xsl:value-of select="."/>&amp;amp;nbsp;
+    <img class="identifier_logo">
+          <xsl:attribute name="src"><xsl:value-of select="$base_url"/>
+            <xsl:text>assets/core/images/icons/orcid_icon.png</xsl:text>
+          </xsl:attribute>
+          <xsl:attribute name="alt">ORCID icon</xsl:attribute>
+    </img>
+  </a>
+
+</xsl:template>
 
 
 
@@ -762,7 +818,13 @@
       <xsl:attribute name="class">identifier</xsl:attribute>
       <xsl:attribute name="href"> <xsl:value-of select="$theidentifier"/></xsl:attribute>
       <xsl:attribute name="title"><xsl:text>View the record for this party in Trove</xsl:text></xsl:attribute>            
-      <xsl:value-of select="."/>
+      <xsl:value-of select="."/>&amp;amp;nbsp;
+      <img class="identifier_logo">
+            <xsl:attribute name="src"><xsl:value-of select="$base_url"/>
+              <xsl:text>assets/core/images/icons/nla_icon.png</xsl:text>
+            </xsl:attribute>
+            <xsl:attribute name="alt">Trove icon</xsl:attribute>
+      </img>
     </a>
   </xsl:if>
   <xsl:if test="string-length(substring-after(.,'nla.party'))&lt;1">    
@@ -797,7 +859,13 @@
       <xsl:attribute name="class">identifier</xsl:attribute>
       <xsl:attribute name="href"> <xsl:value-of select="$theidentifier"/></xsl:attribute>
       <xsl:attribute name="title"><xsl:text>Resolve this purl identifier</xsl:text></xsl:attribute>            
-      <xsl:value-of select="."/>
+      <xsl:value-of select="."/>&amp;amp;nbsp;
+      <img class="identifier_logo">
+            <xsl:attribute name="src"><xsl:value-of select="$base_url"/>
+              <xsl:text>assets/core/images/icons/external_link.png</xsl:text>
+            </xsl:attribute>
+            <xsl:attribute name="alt">External Link</xsl:attribute>
+      </img>
     </a>
 </xsl:template>
 
@@ -826,7 +894,13 @@
       <xsl:attribute name="class">identifier</xsl:attribute>
       <xsl:attribute name="href"> <xsl:value-of select="$theidentifier"/></xsl:attribute>
       <xsl:attribute name="title"><xsl:text>Resolve this URI</xsl:text></xsl:attribute>            
-      <xsl:value-of select="."/>
+      <xsl:value-of select="."/>&amp;amp;nbsp;
+      <img class="identifier_logo">
+            <xsl:attribute name="src"><xsl:value-of select="$base_url"/>
+              <xsl:text>assets/core/images/icons/external_link.png</xsl:text>
+            </xsl:attribute>
+            <xsl:attribute name="alt">External Link</xsl:attribute>
+      </img>
     </a>
 </xsl:template>
 
@@ -941,7 +1015,8 @@
        <xsl:apply-templates select="./ro:identifier[@type = 'handle']"  mode="handle_prefixedLink"/> 
        <xsl:apply-templates select="./ro:identifier[@type = 'AU-ANL:PEAU']"  mode="nla_prefixedLink"/>
        <xsl:apply-templates select="./ro:identifier[@type = 'ark']"  mode="ark_prefixedLink"/>  
-       <xsl:apply-templates select="./ro:identifier[@type != 'doi' and @type != 'uri' and @type != 'URL' and @type != 'url' and @type != 'purl' and @type != 'handle' and @type != 'AU-ANL:PEAU' and @type != 'ark']"  mode="other_prefixedLink"/>
+       <xsl:apply-templates select="current()[@type='orcid']" mode = "orcid_prefixedLink"/>
+       <xsl:apply-templates select="./ro:identifier[@type != 'doi' and @type != 'uri' and @type != 'URL' and @type != 'url' and @type != 'purl' and @type != 'handle' and @type != 'AU-ANL:PEAU' and @type != 'ark' and @type!='orcid']"  mode="other_prefixedLink"/>
        <xsl:text>.</xsl:text>
    </xsl:if>
     <!--xsl:if test="./ro:version != ''">
@@ -974,7 +1049,8 @@
         <xsl:apply-templates select="./ro:identifier[@type = 'handle']"  mode="handle_resolveURL"/> 
         <xsl:apply-templates select="./ro:identifier[@type = 'AU-ANL:PEAU']"  mode="nla_resolveURL"/>
         <xsl:apply-templates select="./ro:identifier[@type = 'ark']"  mode="ark_resolveURL"/>  
-        <xsl:apply-templates select="./ro:identifier[@type != 'doi' and @type != 'uri' and @type != 'URL' and @type != 'url' and @type != 'purl' and @type != 'handle' and @type != 'AU-ANL:PEAU' and @type != 'ark']"  mode="other_resolveURL"/>
+        <xsl:apply-templates select="./ro:identifier[@type = 'orcid']"  mode="orcid_resolveURL"/>  
+        <xsl:apply-templates select="./ro:identifier[@type != 'doi' and @type != 'uri' and @type != 'URL' and @type != 'url' and @type != 'purl' and @type != 'handle' and @type != 'AU-ANL:PEAU' and @type != 'ark' and @type != 'orcid']"  mode="other_resolveURL"/>
       </xsl:variable>
 
       <br/>
