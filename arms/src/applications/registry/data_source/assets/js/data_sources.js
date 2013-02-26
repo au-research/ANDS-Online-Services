@@ -166,6 +166,19 @@ $(function(){
 			}
 		}
 	});
+
+
+ 	$('.log_error').live({
+ 		click: function(e){
+       	var title = $(this).attr('type');
+       	var description = $(this).attr('description');
+       	output = formatErrorDesciption(description, title);
+       	$('#logModal').modal();			
+		$('#logModal .modal-body').html(output);
+
+ 		} 
+ 	} );
+
 });
 
 /*
@@ -257,8 +270,11 @@ function load_datasource(data_source_id){
 				var url_to = base_url+'data_source/manage_records/'+data_source_id+'/?filters={"sort":{"updated":"asc"},"filter":{"'+type+'":"'+name+'"}}';
 				window.location = url_to;
 			});
+
+
 		}
 	});
+
 	return false;
 }
 
@@ -928,3 +944,267 @@ $('#importRecordsFromXMLModal .doImportRecords').live({
 		
 	}
 });
+function formatErrorDesciption(description, title)
+{
+
+descContent = '<HR><h3>Error Description:</h3><HR>';
+   if(title == 'DOCUMENT_LOAD_ERROR')
+   {
+       descContent += '<div align="center" width="100%"></div><br>';
+       descContent += 'Title: <b><i>XML Document failed to load</i></b>';
+
+       if(description.indexOf("I/O warning") > 0)
+       {
+           descContent += '<p>';
+           descContent += '&nbsp;&nbsp;&nbsp;&nbsp;There was a problem communicating with the datasource provider. Host could not be found.';
+           descContent += '<p>';
+           descContent += '<b><i>Resolution Suggestion:</i></b>';
+           descContent += '<p>';
+           descContent += '&nbsp;&nbsp;&nbsp;&nbsp;- Ensure you have specified the correct URI.';
+           descContent += '<p><br>';
+           descContent += '<HR>';
+       }
+       else if(description.indexOf("Extra content at") > 0 /*|| description.indexOf("Opening and ending tag mismatch") > 0*/)
+       {
+           descContent += '<p>';
+           descContent += '&nbsp;&nbsp;&nbsp;&nbsp;Your xml document failed to load, as the xml document contains additional content that does not validate against the xml schema.<br/>';
+           descContent += '<p><br>';
+           descContent += '<b><i>Resolution Suggestion:</i></b>';
+           descContent += '<p>';
+           descContent += '&nbsp;&nbsp;&nbsp;&nbsp;- All XML tags must be nested properly.';
+           descContent += '<br>';
+           descContent += '&nbsp;&nbsp;&nbsp;&nbsp;- Ensure that all your records are structured correctly';
+           descContent += '<br>';
+           descContent += '&nbsp;&nbsp;&nbsp;&nbsp;- Ensure all your parent and child nodes are correctly formatted (open and closed objects)';
+           descContent += '<p><br>';
+           descContent += '<b><i>Internal References:</i></b>';
+           descContent += '<p>';
+           descContent += '&nbsp;&nbsp;&nbsp;&nbsp;<a target=\'_blank\' href=\'http://www.w3.org/TR/1998/REC-xml-19980210.html\'>- XML Specifications</a>';
+           descContent += '<br>';
+           descContent += '&nbsp;&nbsp;&nbsp;&nbsp;<a target=\'_blank\' href=\'http://ands.org.au/guides/cpguide/cpgrelatedobject.html\'>- Content Providers Guide (Related Objects)</a>';
+           descContent += '<br>';
+           descContent += '&nbsp;&nbsp;&nbsp;&nbsp;<a target=\'_blank\' href=\'http://ands.org.au/guides/content-providers-guide.html\'>- Content Providers Guide</a>';
+           descContent += '<p><br>';
+           descContent += '<b><i>External References:</i></b>';
+           descContent += '<p>';
+           descContent += '&nbsp;&nbsp;&nbsp;&nbsp;<a target=\'_blank\' href=\'http://www.tizag.com/xmlTutorial/xmlparent.php\'>- XML Parent information</a>';
+           descContent += '<br>';
+           descContent += '&nbsp;&nbsp;&nbsp;&nbsp;<a target=\'_blank\' href=\'http://www.tizag.com/xmlTutorial/xmlchild.php\'>- XML Child information</a>';
+           descContent += '<p><br>';
+           descContent += '<HR>';
+       }
+       else if(description.indexOf("Premature end of data") > 0)
+       {
+           descContent += '<p>';
+           descContent += '&nbsp;&nbsp;&nbsp;&nbsp;Your xml document failed to load, as the XML may not be correctly formed.';
+           descContent += '<p>';
+           descContent += '&nbsp;&nbsp;&nbsp;&nbsp;Your xml document contains possible elements with no closing tags';
+           descContent += '<p><br>';
+           descContent += '<b><i>Resolution Suggestion:</i></b>';
+           descContent += '<p>';
+           descContent += '&nbsp;&nbsp;&nbsp;&nbsp;- Ensure that all your objects have been closed correctly. For example if you have an open tag \'&lt;key&gt;\' ensure you have a closed tag \'&lt;/key&gt;\'';
+           descContent += '<p><br>';
+           descContent += '<b><i>Internal References:</i></b>';
+           descContent += '<p>';
+           descContent += '&nbsp;&nbsp;&nbsp;&nbsp;<a target=\'_blank\' href=\'http://ands.org.au/guides/content-providers-guide.html\'>- Content Providers Guide</a>';
+           descContent += '<br>';
+           descContent += '&nbsp;&nbsp;&nbsp;&nbsp;<a target=\'_blank\' href=\'http://services.ands.org.au/documentation/rifcs/schemadocs/registryObjects.html\'>- RIF-CS Documentation</a>';
+           descContent += '<p><br>';
+           descContent += '<HR>';
+       }
+       else if(description.indexOf("Opening and ending tag mismatch") > 0)
+       {
+           descContent += '<p>';
+           descContent += '&nbsp;&nbsp;&nbsp;&nbsp;Your xml document failed to load, as the xml document contains an opening element tag that does not match it\'s corresponding closing tag.<br/>';
+           descContent += '<p><br>';
+           descContent += '<b><i>Resolution Suggestion:</i></b>';
+           descContent += '<p>';
+           descContent += '&nbsp;&nbsp;&nbsp;&nbsp;- Ensure that all your opening and closing tags are correctly formatted and titled';
+           descContent += '<p><br>';
+           descContent += '<b><i>Internal References:</i></b>';
+           descContent += '<p>';
+           descContent += '&nbsp;&nbsp;&nbsp;&nbsp;<a target=\'_blank\' href=\'http://services.ands.org.au/documentation/rifcs/schemadocs/registryObjects.html\'>RIF-CS Documentation</a>';
+           descContent += '<p><br>';
+           descContent += '<HR>';
+       }
+       else if(description.indexOf("expected") > 0 || description.indexOf("Start tag expected") > 0)
+       {
+           descContent += '<p>';
+           descContent += '&nbsp;&nbsp;&nbsp;&nbsp;Your xml document failed to load, as the xml document contains an error that could not be defined.<br/>';
+           descContent += '<p><br>';
+           descContent += '<b><i>Resolution Suggestion:</i></b>';
+           descContent += '<p>';
+           descContent += '&nbsp;&nbsp;&nbsp;&nbsp;- Ensure that all your opening and closing tags are correctly formatted and titled';
+           descContent += '<br>';
+           descContent += '&nbsp;&nbsp;&nbsp;&nbsp;- Ensure that all your records are structured correctly';
+           descContent += '<p><br>';
+           descContent += '<b><i>Internal References:</i></b>';
+           descContent += '<p>';
+           descContent += '&nbsp;&nbsp;&nbsp;&nbsp;<a target=\'_blank\' href=\'http://services.ands.org.au/documentation/rifcs/schemadocs/registryObjects.html\'>RIF-CS Documentation</a>';
+           descContent += '<p><br>';
+           descContent += '<HR>';
+       }
+       else if(description.indexOf("Namespace prefix xsi") > 0)
+       {
+           descContent += '<p>'
+           descContent += '&nbsp;&nbsp;&nbsp;&nbsp;Your xml document failed to load, as the xml document does not contain an xml Namespace.<br/>';
+           descContent += '<p><br>';
+           descContent += '<b><i>Resolution Suggestion:</i></b>';
+           descContent += '<p>';
+           descContent += '&nbsp;&nbsp;&nbsp;&nbsp;- Ensure that \'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"\' has been defined prior to the xml schemaLocation, within your XML document.';
+           descContent += '<p><br>';
+           descContent += '<HR>';
+       }
+       else
+       {
+           
+           descContent += '<p>';
+           descContent += '&nbsp;&nbsp;&nbsp;&nbsp;Your xml document failed to load due to an indeterminable error.';
+           descContent += '<p>';
+           descContent += '<b><i>Resolution Suggestion:</i></b>';
+           descContent += '<p>';
+           descContent += '&nbsp;&nbsp;&nbsp;&nbsp;- Review your xml document and ensure that the xml is correctly formed.';
+           descContent += '<p><br>';
+           descContent += '<b><i>Internal References:</i></b>';
+           descContent += '<p>';
+           descContent += '&nbsp;&nbsp;&nbsp;&nbsp;<a target=\'_blank\' href=\'http://services.ands.org.au/documentation/rifcs/schemadocs/registryObjects.html\'>RIF-CS Documentation</a>';
+           descContent += '<p><br>';
+           descContent += '<HR>';
+           
+           //descContent += description;
+       }
+   }
+   else if(title == 'DOCUMENT_VALIDATION_ERROR')
+   {
+       descContent += '<div align="center" width="100%"></div><br>';
+       descContent += 'Title: <b><i>Document Validation Error</i></b>';
+       if(description.indexOf("Character content other than whitespace is not allowed") > 0)
+       {
+           descContent += '<p>'
+           descContent += '&nbsp;&nbsp;&nbsp;&nbsp;Your xml document failed to validate against the RIF-CS schema, the document contains characters that are not valid.<br/>';
+           descContent += '<p><br>';
+           descContent += '<b><i>Resolution Suggestion:</i></b>';
+           descContent += '<p>';
+           descContent += '&nbsp;&nbsp;&nbsp;&nbsp;- Ensure that all your xml file does not contain any invalid characters.<br />';
+           descContent += '<HR>';
+       }
+       else if(description.indexOf("required but missing") > 0 || description.indexOf("is not allowed") > 0)
+       {
+           descContent += '<p>'
+           descContent += '&nbsp;&nbsp;&nbsp;&nbsp;Your xml document failed to validate against the RIF-CS schema, the document contains an element attribute that is required but is missing.<br/>';
+           descContent += '<p><br>';
+           descContent += '<b><i>Resolution Suggestion:</i></b>';
+           descContent += '<p>';
+           descContent += '&nbsp;&nbsp;&nbsp;&nbsp;- Ensure that all your records within your xml document have all required elements and their associated attributes.';
+           descContent += '<br>';
+           descContent += '&nbsp;&nbsp;&nbsp;&nbsp;- Ensure that all registry Object attributes are correctly spelled and labeled.';
+           descContent += '<p><br>';
+           descContent += '<b><i>Internal References:</i></b>';
+           descContent += '<br>';
+           descContent += '&nbsp;&nbsp;&nbsp;&nbsp;<a target=\'_blank\' href=\'http://ands.org.au/guides/cpguide/cpgrelatedobject.html\'>- Content Providers Guide (Related Objects)</a>';
+           descContent += '<br>';
+           descContent += '&nbsp;&nbsp;&nbsp;&nbsp;<a target=\'_blank\' href=\'http://ands.org.au/guides/content-providers-guide.html\'>- Content Providers Guide</a>';
+           descContent += '<p><br>';
+           descContent += '<HR>';
+       }
+       else if(description.indexOf("Character content other than whitespace is not allowed because") > 0) // done
+       {
+           descContent += '<p>'
+           descContent += '&nbsp;&nbsp;&nbsp;&nbsp;Your xml document failed to validate against the RIF-CS schema, the document contains characters that are not valid.<br/>';
+           descContent += '<p><br>';
+           descContent += '<b><i>Resolution Suggestion:</i></b>';
+           descContent += '<p>';
+           descContent += '&nbsp;&nbsp;&nbsp;&nbsp;- Ensure that your xml file does not contain any invalid characters';
+           descContent += '<p><br>';
+           descContent += '<HR>';
+       }
+       else if(description.indexOf("element is not expected") > 0)
+       {
+           descContent += '<p>'
+           descContent += '&nbsp;&nbsp;&nbsp;&nbsp;Your xml document failed to validate against the RIF-CS schema, the document contains an element that does not exist.<br/>';
+           descContent += '<p><br>';
+           descContent += '<b><i>Resolution Suggestion:</i></b>';
+           descContent += '<p>';
+           descContent += '&nbsp;&nbsp;&nbsp;&nbsp;- Ensure that all your records within your document have valid elements specified.';
+           descContent += '<p><br>';
+           descContent += '<b><i>Internal References:</i></b>';
+           descContent += '<br>';
+           descContent += '&nbsp;&nbsp;&nbsp;&nbsp;<a target=\'_blank\' href=\'http://services.ands.org.au/documentation/rifcs/schemadocs/registryObjects.html\'>- RIF-CS Documentation</a>';
+           descContent += '<br>';
+           descContent += '&nbsp;&nbsp;&nbsp;&nbsp;<a target=\'_blank\' href=\'http://ands.org.au/guides/content-providers-guide.html\'>- Content Providers Guide</a>';
+           descContent += '<p><br>';
+           descContent += '<HR>';
+       }
+
+       else if(description.indexOf("Missing child element") > 0)
+       {
+           descContent += '<p>'
+           descContent += '&nbsp;&nbsp;&nbsp;&nbsp;Your xml document failed to validate against the RIF-CS schema, the document is missing a child element<br/>';
+           descContent += '<p><br>';
+           descContent += '<b><i>Resolution Suggestion:</i></b>';
+           descContent += '<p>';
+           descContent += '&nbsp;&nbsp;&nbsp;&nbsp;- Ensure that all your records within your xml document have valid elements</li>';
+           descContent += '<p><br>';
+           descContent += '<b><i>Internal References:</i></b>';
+           descContent += '<br>';
+           descContent += '&nbsp;&nbsp;&nbsp;&nbsp;<a target=\'_blank\' href=\'http://services.ands.org.au/documentation/rifcs/schemadocs/registryObjects.html\'>- RIF-CS Documentation</a>';
+           descContent += '<p><br>';
+           descContent += '<b><i>External References:</i></b>';
+           descContent += '<p>';
+           descContent += '&nbsp;&nbsp;&nbsp;&nbsp;<a target=\'_blank\' href=\'http://www.tizag.com/xmlTutorial/xmlchild.php\'>- XML Child information</a>';
+           descContent += '<p><br>';
+           descContent += '<HR>';
+           
+       }
+
+       else
+       {
+           
+           descContent += '<p>';
+           descContent += '&nbsp;&nbsp;&nbsp;&nbsp;Your xml document failed to validate against the RIF-CS schema, due to an indeterminable error.';
+           descContent += '<p>';
+           descContent += '<b><i>Resolution Suggestion:</i></b>';
+           descContent += '<p>';
+           descContent += '&nbsp;&nbsp;&nbsp;&nbsp;- Review your xml document and ensure that the xml is correctly formed.';
+           descContent += '<p><br>';
+           descContent += '<b><i>Internal References:</i></b>';
+           descContent += '<p>';
+           descContent += '&nbsp;&nbsp;&nbsp;&nbsp;<a target=\'_blank\' href=\'http://services.ands.org.au/documentation/rifcs/schemadocs/registryObjects.html\'>RIF-CS Documentation</a>';
+           descContent += '<p><br>';
+           descContent += '<HR>';
+           
+           //descContent += description;
+       }
+
+
+   }
+   else if(title == 'HARVESTER_ERROR')
+   {
+       descContent += '<div align="center" width="100%"></div><br>';
+       descContent += 'Title: <b><i>Harvester Error</i></b>';
+
+       if(description.indexOf("UnknownHostException:") > 0)
+       {
+           descContent += '<p>'
+           descContent += '&nbsp;&nbsp;&nbsp;&nbsp;There was a problem communicating with the datasource provider. Host could not be found<br/>';
+           descContent += '<p><br>';
+           descContent += '<b><i>Resolution Suggestion:</i></b>';
+           descContent += '<p>';
+           descContent += '&nbsp;&nbsp;&nbsp;&nbsp;- Ensure that the url you provided is valid and available';
+           descContent += '<p><br>';
+           descContent += '<HR>';
+          
+       } else {
+          
+           descContent += '<p>' + description + '</p>';
+       }
+   }
+   else
+   {
+       descContent = '<h3>'+title+'</h3>';
+
+   }
+   //if(descContent=="<HR><h3>Error Description:</h3><HR>")
+   descContent += description;
+	return descContent;
+}

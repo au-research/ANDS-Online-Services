@@ -142,10 +142,19 @@
 </div>
 
 <script type="text/x-mustache" id="data_source_logs_template">
+<div class="modal hide" id="logModal">
+			  <div class="modal-header">
+			    <button type="button" class="close" data-dismiss="modal">×</button>
+			  </div>
+			  <div class="modal-body"></div>
+			  <div class="modal-footer"></div></div>
 	{{#items}}
 		<li class="{{type}}">
 			<a href="javascript:;" class="{{type}}"><i class="icon-list-alt"></i>{{log_snippet}} <span class="label">{{date_modified}}</span></a>
 			<div class="log hide">
+
+				<div class="log_error {{harvester_error_type}}" type="{{harvester_error_type}}" description="{{log}}"></div>
+
 				<pre>{{log}}</pre>
 			</div>
 		</li>

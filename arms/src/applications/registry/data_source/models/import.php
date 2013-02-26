@@ -129,6 +129,7 @@ class Import extends CI_Model {
 		}
 		catch (Exception $e)
 		{
+			$data_source->append_log("UNABLE TO HARVEST FROM THIS DATA SOURCE" . NL . $e->getMessage() . NL ,"importer", "HARVEST_ERROR");
 			throw new Exception ("UNABLE TO HARVEST FROM THIS DATA SOURCE" . NL . $e->getMessage() . NL);
 		}
 

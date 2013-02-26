@@ -462,9 +462,9 @@ class _data_source {
 	/*
 	 * LOGS
 	 */
-	function append_log($log_message, $log_type = "info", $log_class="data_source")
+	function append_log($log_message, $log_type = "info", $log_class="data_source", $harvester_error_type=NULL)
 	{
-		$this->db->insert("data_source_logs", array("data_source_id" => $this->id, "date_modified" => time(), "type" => $log_type, "log" => $log_message, "class" => $log_class));
+		$this->db->insert("data_source_logs", array("data_source_id" => $this->id, "date_modified" => time(), "type" => $log_type, "log" => $log_message, "class" => $log_class,"harvester_error_type" => $harvester_error_type));
 		return $this->db->insert_id();
 	}
 	
@@ -620,7 +620,7 @@ class _data_source {
 	{
 		$runErrors = '';
 		$harvesterBaseURI = $this->_CI->config->item('harvester_base_url');
-		$this->append_log("A new harvest has been scheduled", 'info');
+		$this->append_log("A new harvest has been scheduled", 'info','harvester');
 		$resultMessage = new DOMDocument();
 
 		$result = $resultMessage->load($harvesterBaseURI.$harvestRequest);
@@ -628,7 +628,7 @@ class _data_source {
 		$logID = 0;
 		if( $errors )
 		{
-			$logID = $this->append_log("harvestRequest Error[1]: ".$errors['message']);
+			$logID = $this->append_log("harvestRequest Error[1]: ".$errors['message'],HARVEST_ERROR,'harvester');
 		}
 		else
 		{
@@ -637,10 +637,10 @@ class _data_source {
 			
 			if( $responseType != 'SUCCESS' )
 			{
-				$logID = $this->append_log("harvestRequest Error[2]: ".$message, "error");
+				$logID = $this->append_log("harvestRequest Error[2]: ".$message, "error", 'harvester');
 			}
 			else{
-				//$logID = $this->append_log("harvestRequest Success: ".$message, "message");
+				//$logID = $this->append_log("harvestRequest Success: ".$message, "message", 'harvester');
 			}
 		}
 		return $logID;

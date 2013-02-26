@@ -631,6 +631,7 @@ class Data_source extends MX_Controller {
 				$item['log'] = $log['log'];
 				$item['id'] = $log['id'];
 				$item['date_modified'] = timeAgo($log['date_modified']);
+				$item['harvester_error_type'] = $log['harvester_error_type'];				
 				array_push($items, $item);
 			}
 		}
@@ -881,7 +882,7 @@ class Data_source extends MX_Controller {
 
 
 			// data source log append...
-			$data_source->append_log("Records were manually imported from a URL" . NL . $log, ($error_log ? HARVEST_ERROR : null));
+			$data_source->append_log("Records were manually imported from a URL" . NL . $log, ($error_log ? HARVEST_ERROR : null),"importer", ($error_log ? "HARVEST_ERROR" : null));
 		}
 		catch (Exception $e)
 		{
@@ -958,7 +959,7 @@ class Data_source extends MX_Controller {
 			$log .= $this->importer->getMessages();
 
 			// data source log append...
-			$data_source->append_log("Records were manually imported from an XML paste" . NL . $log, ($error_log ? HARVEST_ERROR : null));
+			$data_source->append_log("Records were manually imported from an XML paste" . NL . $log, ($error_log ? HARVEST_ERROR : null),"importer", ($error_log ? "HARVEST_ERROR" : null));
 		}
 		catch (Exception $e)
 		{
@@ -1030,7 +1031,7 @@ class Data_source extends MX_Controller {
 
 			// data source log append...
 			$this->ro->removeDeletedRegistryObject($deletedRegistryObjectId);
-			$data_source->append_log($log, ($error_log ? HARVEST_ERROR : null));
+			$data_source->append_log($log, ($error_log ? HARVEST_ERROR : null),"registry_object");
 		}
 		catch (Exception $e)
 		{
@@ -1127,7 +1128,7 @@ class Data_source extends MX_Controller {
 
 			if($errmsg)
 			{
-				$dataSource->append_log("HARVESTER RESPONDED UNEXPECTEDLY: ".$errmsg, HARVEST_ERROR);
+				$dataSource->append_log("HARVESTER RESPONDED UNEXPECTEDLY: ".$errmsg, HARVEST_ERROR, "harvester","HARVESTER_ERROR");
 			}
 			else
 			{	
@@ -1141,8 +1142,9 @@ class Data_source extends MX_Controller {
 
 				if (strpos($rifcsXml, 'registryObject ') === FALSE)
 				{
-					$dataSource->append_log("CRITICAL ERROR: Could not extract data from OAI feed. Check your provider.", HARVEST_ERROR);
-					$dataSource->append_log($rifcsXml, HARVEST_ERROR);	
+					//$dataSource->append_log("CRITICAL ERROR: Could not extract data from OAI feed. Check your provider.", HARVEST_ERROR, "harvester");
+					$dataSource->append_log("CRITICAL ERROR: Could not extract data from OAI feed. Check your provider.", HARVEST_ERROR, "harvester","HARVESTER_ERROR");					
+					//	$dataSource->append_log($rifcsXml, HARVEST_ERROR, "harvester");	
 				}
 				else
 				{
@@ -1171,12 +1173,12 @@ class Data_source extends MX_Controller {
 
 							if($this->importer->getErrors())
 							{
-								$dataSource->append_log($this->importer->getErrors(), HARVEST_WARNING);	
+								$dataSource->append_log($this->importer->getErrors(), HARVEST_WARNING, "harvester","HARVESTER_ERROR");	
 							}
 
 							if($this->importer->getMessages())
 							{
-								$dataSource->append_log($this->importer->getMessages(), HARVEST_INFO);	
+								$dataSource->append_log($this->importer->getMessages(), HARVEST_INFO, "harvester", "INFO");	
 							}
 							
 							$dataSource->updateStats();
@@ -1184,7 +1186,7 @@ class Data_source extends MX_Controller {
 						}
 						catch (Exception $e)
 						{
-							$dataSource->append_log("CRITICAL ERROR: " . NL . $e->getMessages() . NL . $this->importer->getErrors(), HARVEST_ERROR);	
+							$dataSource->append_log("CRITICAL ERROR: " . NL . $e->getMessages() . NL . $this->importer->getErrors(), HARVEST_ERROR, "harvester","HARVESTER_ERROR");	
 						}
 					}	
 				}

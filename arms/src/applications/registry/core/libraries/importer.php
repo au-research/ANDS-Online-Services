@@ -83,7 +83,7 @@ class Importer {
 		$this->CI->benchmark->mark('crosswalk_execution_start');
 		
 			// Apply the crosswalk (if applicable)
-			$this->_executeCrosswalk();
+		$this->_executeCrosswalk();
 		
 		$this->CI->benchmark->mark('crosswalk_execution_end');
 
@@ -588,16 +588,17 @@ class Importer {
 	{
 		$doc = new DOMDocument('1.0','utf-8');
 		$doc->loadXML(utf8_encode(str_replace("&", "&amp;", $xml)), LIBXML_NOENT);
-		//echo htmlentities($xml);
+
 		if(!$doc)
 		{
+			$this->dataSource->append_log("Unable to parse XML. Perhaps your XML file is not well-formed?", HARVEST_ERROR, "importer","DOCUMENT_LOAD_ERROR");
 			throw new Exception("Unable to parse XML. Perhaps your XML file is not well-formed?");
 		}
 
 		// TODO: Does this cache in-memory?
 		libxml_use_internal_errors(true);
 		$validation_status = $doc->schemaValidate(APP_PATH . "registry_object/schema/registryObjects.xsd");
-		
+
 		if ($validation_status === TRUE) 
 		{
 			return TRUE;
@@ -610,6 +611,8 @@ class Importer {
 			    $error_string .= TAB . "Line " .$error->line . ": " . $error->message;
 			}
 			libxml_clear_errors();
+
+			$this->dataSource->append_log("Unable to validate XML document against schema: ".$error_string, HARVEST_ERROR, "importer","DOCUMENT_VALIDATION_ERROR");
 			throw new Exception("Unable to validate XML document against schema: " . NL . $error_string);
 		}
 	}
