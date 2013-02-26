@@ -125,6 +125,12 @@ $(function() {
                   }];
                   update(selected_ids, attributes);
                 break;
+            case 'view':
+                window.location = base_url+'registry_object/view/'+selected_ids[0];
+                break;
+            case 'edit':
+                window.location = base_url+'registry_object/edit/'+selected_ids[0]+'#!/advanced/admin';
+                break;
         }
     });
 
