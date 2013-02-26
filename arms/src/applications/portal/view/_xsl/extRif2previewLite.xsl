@@ -29,31 +29,9 @@
  </xsl:variable>		 
 
  <xsl:template match="ro:registryObject">
-
-    <xsl:variable name="group">	
-        <xsl:choose>
-            <xsl:when test="string-length(./@group)>30">
-                <xsl:value-of select="substring(./@group,0,30)"/>...
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:value-of select="./@group"/>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>	
-
-    <xsl:variable name="theTitle">	
-        <xsl:choose>
-            <xsl:when test="string-length(extRif:extendedMetadata/extRif:displayTitle)>30">
-                <xsl:value-of select="substring(extRif:extendedMetadata/extRif:displayTitle,0,30)"/>...
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:value-of select="extRif:extendedMetadata/extRif:displayTitle"/>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
     <div class="ro_preview">
       <div class="ro_preview_header">
-       <xsl:value-of select="$theTitle"/>
+       <xsl:value-of select="extRif:extendedMetadata/extRif:displayTitle"/>
        <div class="right_icon">
          <img class="icon-heading">
            <xsl:attribute name="src"><xsl:value-of select="$base_url"/>
@@ -72,8 +50,6 @@
             <a href="{$base_url}{extRif:extendedMetadata/extRif:slug}">View Full Record</a> 
       </div>
     </div> 
-
   </xsl:template>
-
 
 </xsl:stylesheet>
