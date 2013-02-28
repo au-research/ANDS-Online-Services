@@ -16,8 +16,8 @@ $('.show_all').click(function(){
 
 // Check if we have a hierarchal connections graph
 setRegistryLink();
-//initConnectionGraph();
-//drawMap();
+initConnectionGraph();
+drawMap();
 
 // If we're a collection, then hit DataCite for SeeAlso
 if ( $('#class', metadataContainer).html() == "Collection" )
