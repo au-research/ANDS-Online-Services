@@ -809,6 +809,7 @@
 <xsl:template match="extRif:description" mode="content">     
     <div>
        <xsl:attribute name="class"><xsl:value-of select="@type"/></xsl:attribute>
+       <h4><xsl:value-of select="@type"/></h4>
        <p>
          <xsl:if test="@type='deliverymethod'">
              Delivery Method : 
