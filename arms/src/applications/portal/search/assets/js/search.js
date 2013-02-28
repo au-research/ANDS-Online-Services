@@ -315,13 +315,14 @@ function initMap(){
            // google.maps.drawing.OverlayType.MARKER,
            // google.maps.drawing.OverlayType.CIRCLE,
             google.maps.drawing.OverlayType.RECTANGLE
-          ]
+          ],
         },
         rectangleOptions:{
         	fillColor: '#FF0000'
         }
       });
       drawingManager.setMap(map);
+      drawingManager.setDrawingMode(null);
       rectangleOptions = drawingManager.get('rectangleOptions');
       rectangleOptions.fillColor= '#FF0000';
       rectangleOptions.strokeColor= "#FF0000";
@@ -333,7 +334,12 @@ function initMap(){
       rectangleOptions.zIndex= 1;     
       
       drawingManager.set('rectangleOptions', rectangleOptions);
-    
+     google.maps.event.addListener(map, 'click', function(e) {
+     	if(infowindow)
+     	{
+     		infowindow.close();
+ 		}
+ 	});
      google.maps.event.addListener(drawingManager, 'overlaycomplete', function(e) {
          if (e.type == google.maps.drawing.OverlayType.RECTANGLE) {
           // Switch back to non-drawing mode after drawing a shape.
