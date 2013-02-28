@@ -21,8 +21,7 @@
 			<input type="hidden" name="doi_id" value="<?=$doi_id?>"/>
 			<input type="hidden" name="client_id" value="<?=$client_id?>"/>
 			<br/>
-			<button type="submit" class="btn">Update the DOI</button>
-			    	  
+			<button type="submit" class="btn">Update the DOI</button> 	  			    	  
 		</form>
 	</div>
 

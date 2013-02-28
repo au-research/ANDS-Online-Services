@@ -168,6 +168,7 @@ class Mydois extends MX_Controller {
 			//if its all Ok - update the database and return to the doi listing
 			$data = array(
                'url' => $new_url,
+               'updated_when' => "NOW()",
             	);
 			$doi_db->where('doi_id', $doi_id);
 			$doi_db->update('doi_objects', $data); 
