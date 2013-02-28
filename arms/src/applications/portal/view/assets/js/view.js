@@ -5,6 +5,15 @@ var metadataContainer = $('#registryObjectMetadata');
 var loading_icon = '<div style="width:100%; padding-top:40px; text-align:center;"><img src="'+base_url+'assets/core/images/ajax-loader.gif" alt="Loading..." /></div>';
 var ACCORDION_MODE_SUGGESTORS = ['datacite'];
 
+
+$('.descriptions').css({overflow:'hidden',height:'270px'}).append($('<div class="descriptions_overflow"></>'));
+$('.descriptions').after('<div class="show_all">Show All Descriptions</div>');
+$('.show_all').click(function(){
+    $(this).remove();
+    $('.descriptions_overflow').remove();
+    $('.descriptions').css({height:'auto'});
+});
+
 // Check if we have a hierarchal connections graph
 setRegistryLink();
 //initConnectionGraph();
@@ -23,7 +32,6 @@ initInternalSuggestedLinks();
 if($('.view_all_connection').length>0){
    initConnections(); 
 }
-
 
 /*if (isPublished()) { $('#draft_status').removeClass("hide"); }*/
 
@@ -87,6 +95,41 @@ function bindPaginationConnection(tt){
     });
 }
 
+/*if (isPublished()) { $('#draft_status').removeClass("hide"); }*/
+
+function initConnections(){
+    $('.view_all_connection').live('click', function(){
+        var slug = $(this).attr('ro_slug');
+        var relation_type = $(this).attr('relation_type');
+        $(this).qtip({
+            content: {
+                text: 'Loading...', // The text to use whilst the AJAX request is loading
+                ajax: {
+                    url: base_url+'view/getConnections/?slug='+slug+'&relation_type='+relation_type,
+                    type: 'POST',
+                    data: {ro_id: $(this).attr('ro_id')},
+                    loading:false,
+                    success: function(data, status) {
+                        this.set('content.text', data);
+                    }
+                }
+            },
+            position: {viewport: $(window)},
+            show: {
+                event: 'click',
+                ready: true,
+                solo:true,
+                effect: function(offset) {$(this).show();}
+            },
+            hide: {
+                fixed:true,
+                event:'unfocus',
+            },
+            style: {classes: 'ui-tooltip-light ui-tooltip-shadow previewPopup', width:750},
+            overwrite: false
+        });
+    });
+}
 
 
 
