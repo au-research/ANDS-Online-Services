@@ -1129,7 +1129,7 @@ class Data_source extends MX_Controller {
 			}
 			$this->load->model("data_sources","ds");
 			$dataSource = $this->ds->getByHarvestID($harvestId);
-
+			$dataSource->append_log("HARVESTER TRYING TO PUT DATA: ".$errmsg, HARVEST_MSG, "harvester","HARVESTER_ERROR");
 			if($errmsg)
 			{
 				$dataSource->append_log("HARVESTER RESPONDED UNEXPECTEDLY: ".$errmsg, HARVEST_ERROR, "harvester","HARVESTER_ERROR");
@@ -1166,6 +1166,10 @@ class Data_source extends MX_Controller {
 					if ($done != HARVEST_COMPLETE)
 					{
 						$this->importer->setPartialCommitOnly(TRUE);
+					}
+					else
+					{
+						$this->importer->setPartialCommitOnly(FALSE);
 					}
 
 

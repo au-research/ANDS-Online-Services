@@ -34,10 +34,10 @@ class Title_Extension extends ExtensionBase
 		// Pick a name, given preference to the primary name
 		$name = '';
 
-		$names = $sxml->xpath('//'.$this->ro->class.'/name[@type="primary"]');
+		$names = $sxml->xpath('//ro:'.$this->ro->class.'/ro:name[@type="primary"]');
 		if (count($names) == 0)
 		{
-			$names = $sxml->xpath('//'.$this->ro->class.'/name');
+			$names = $sxml->xpath('//ro:'.$this->ro->class.'/ro:name');
 		}
 		
 		if (count($names) > 0)
@@ -45,10 +45,12 @@ class Title_Extension extends ExtensionBase
 			// Pick the first one (this used to be undeterministic, 
 			// but this could result in multiple SLUGs which is stupid)
 			$name = $names[0];
-			
+			$name = $this->getTitlesForFragment($name, $this->ro->class);
 		}
-		
-		$name = $this->getTitlesForFragment($name, $this->ro->class);
+		else
+		{
+			$name = array('display_title'=>'');
+		}
 
 		if (trim($name['display_title']) == '')
 		{
@@ -59,7 +61,7 @@ class Title_Extension extends ExtensionBase
 		return $name;
 	}	
 	
-	function getTitlesForFragment ($name, $class)
+	function getTitlesForFragment (SimpleXMLElement $name, $class)
 	{
 		$list_title = self::DEFAULT_TITLE;
 		$display_title = self::DEFAULT_TITLE;

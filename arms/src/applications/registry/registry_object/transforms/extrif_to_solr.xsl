@@ -452,14 +452,14 @@
     </xsl:template>
 
 
-    <xsl:template match="extRif:description | description" mode="value">
+    <xsl:template match="extRif:description" mode="value">
         <xsl:element name="field">
             <xsl:attribute name="name">description_value</xsl:attribute>
             <xsl:value-of select="."/>
         </xsl:element>       
     </xsl:template>
     
-    <xsl:template match="extRif:description | description" mode="type">
+    <xsl:template match="extRif:description" mode="type">
         <xsl:element name="field">
             <xsl:attribute name="name">description_type</xsl:attribute>
             <xsl:value-of select="@type"/>

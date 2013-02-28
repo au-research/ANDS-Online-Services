@@ -42,7 +42,8 @@ class Extrif_Extension extends ExtensionBase
 	
 				$extendedMetadata->addChild("extRif:displayTitle", str_replace('&', '&amp;' ,$this->ro->title), EXTRIF_NAMESPACE);
 				$extendedMetadata->addChild("extRif:listTitle", str_replace('&', '&amp;' ,$this->ro->list_title), EXTRIF_NAMESPACE);
-				
+				$theDescription = '';
+				$theDescriptionType = '';
 				if($xml->{$this->ro->class}->description)
 				{
 					foreach ($xml->{$this->ro->class}->description AS $description)
@@ -51,6 +52,7 @@ class Extrif_Extension extends ExtensionBase
 						$description_str = (string) $description;					
 						$this->_CI->load->library('purifier');
 						$clean_html = $this->_CI->purifier->purify_html($description_str);
+						$encoded_html = '';
 						if (strpos($description_str, "<br") !== FALSE)
 						{
 							$encoded_html = htmlentities($clean_html);
@@ -62,7 +64,31 @@ class Extrif_Extension extends ExtensionBase
 							$extrifDescription = $extendedMetadata->addChild("extRif:description", $encoded_html, EXTRIF_NAMESPACE);
 						}
 						$extrifDescription->addAttribute("type", $type);
+
+						if($type == 'brief' && $theDescriptionType != 'brief')
+						{
+							$theDescription = $encoded_html;
+							$theDescriptionType = $type;
+						}
+						else if($type == 'full' && ($theDescriptionType != 'brief' || $theDescriptionType != 'full'))
+						{
+							$theDescription = $encoded_html;
+							$theDescriptionType = $type;
+						}
+						else if($type != '' && $theDescriptionType == '')
+						{
+							$theDescription = $encoded_html;
+							$theDescriptionType = $type;
+						}
+						else if($theDescription == '')
+						{
+							$theDescription = $encoded_html;
+							$theDescriptionType = $type;
+						}
 					}
+					$extrifTheDescription = $extendedMetadata->addChild("extRif:the_description", $theDescription, EXTRIF_NAMESPACE);
+					$this->ro->set_metadata('the_description',$theDescription);
+
 				}
 
 				$subjects = $extendedMetadata->addChild("extRif:subjects", NULL, EXTRIF_NAMESPACE);
