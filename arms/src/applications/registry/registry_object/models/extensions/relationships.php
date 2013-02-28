@@ -16,7 +16,7 @@ class Relationships_Extension extends ExtensionBase
 
 		$related_keys = array();
 		$sxml = $this->ro->getSimpleXml();
-		foreach ($sxml->xpath('//'.$this->ro->class.'/relatedObject') AS $related_object)
+		foreach ($sxml->xpath('//'.$this->ro->class.'/ro:relatedObject') AS $related_object)
 		{
 			$related_object_key = (string)$related_object->key;
 			$related_object_type = (string)$related_object->relation[0]['type'];
