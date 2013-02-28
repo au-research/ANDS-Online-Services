@@ -77,12 +77,14 @@ class View extends MX_Controller {
 			$connections = $this->registry->fetchConnectionsBySlug($this->input->get('slug'));
 			$suggested_links['identifiers'] = $this->registry->fetchSuggestedLinksBySlug($this->input->get('slug'), "ands_identifiers",0 ,0);
 			$suggested_links['subjects'] = $this->registry->fetchSuggestedLinksBySlug($this->input->get('slug'), "ands_subjects",0 ,0);
+			$data['ro_slug'] = $this->input->get('slug');
 		}
 		else
 		{
 			$connections = $this->registry->fetchConnectionsByID($this->input->get('id'));
 			$suggested_links['identifiers'] = $this->registry->fetchSuggestedLinksByID($this->input->get('id'), "ands_identifiers",0 ,0);
 			$suggested_links['subjects'] = $this->registry->fetchSuggestedLinksByID($this->input->get('id'), "ands_subjects",0 ,0);
+			$data['ro_id'] = $this->input->get('id');
 		}
 
 		// Render the connections box
@@ -226,7 +228,27 @@ class View extends MX_Controller {
 		}
 	}
 
-
+	function getConnections(){
+		$this->load->model('registry_fetch','registry');
+		$limit = 6;
+		$page = ($this->input->get('page')) ? $this->input->get('page') : 1;
+		$offset = ($page * $limit) - $limit;
+		if ($this->input->get('slug')){
+			$connections = ($this->registry->fetchConnectionsBySlug($this->input->get('slug'), $limit, $offset, $this->input->get('relation_type')));
+			$data['related_identity_type']='slug';
+		}
+		else if ($this->input->get('id')){
+			$connections = ($this->registry->fetchConnectionsByID($this->input->get('id')));
+			$data['related_identity_type']='registry_object_id';
+		}
+		$data['currentPage'] = $page;
+		$data['totalPage'] = ceil(($connections[0][$this->input->get('relation_type').'_count'])/$limit);
+		$data['totalResults'] = $connections[0][$this->input->get('relation_type').'_count'];
+		$data['slug'] = $this->input->get('slug');
+		$data['connections_contents'] = $connections[0];
+		$data['relation_type'] = $this->input->get('relation_type');
+		$this->load->view('connections_all', $data);
+	}
 
 
 	function getSuggestedLinks($suggestor, $start, $rows)

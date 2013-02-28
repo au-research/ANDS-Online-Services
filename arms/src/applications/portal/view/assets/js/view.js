@@ -7,8 +7,8 @@ var ACCORDION_MODE_SUGGESTORS = ['datacite'];
 
 // Check if we have a hierarchal connections graph
 setRegistryLink();
-initConnectionGraph();
-drawMap();
+//initConnectionGraph();
+//drawMap();
 
 // If we're a collection, then hit DataCite for SeeAlso
 if ( $('#class', metadataContainer).html() == "Collection" )
@@ -19,8 +19,73 @@ if ( $('#class', metadataContainer).html() == "Collection" )
 // Internal Suggested Links
 initInternalSuggestedLinks();
 
+//Connections
+if($('.view_all_connection').length>0){
+   initConnections(); 
+}
+
+
 /*if (isPublished()) { $('#draft_status').removeClass("hide"); }*/
 
+function initConnections(){
+    $('.view_all_connection').live('click', function(){
+        var slug = $(this).attr('ro_slug');
+        var relation_type = $(this).attr('relation_type');
+        $(this).qtip({
+            content: {
+                text: 'Loading...',
+                ajax: {
+                    url: base_url+'view/getConnections/?slug='+slug+'&relation_type='+relation_type,
+                    type: 'POST',
+                    data: {ro_id: $(this).attr('ro_id')},
+                    loading:true,
+                    once: false,
+                    success: function(data, status) {
+                        this.set('content.text', data);
+                        formatConnectionTip(this);
+                    }
+                }
+            },
+            position: {viewport: $(window)},
+            show: {
+                event: 'click',
+                ready: true,
+                solo: true
+            },
+            hide: {
+                fixed:true,
+                event:'unfocus',
+            },
+            style: {classes: 'ui-tooltip-light ui-tooltip-shadow previewPopup', width:750},
+            overwrite: false
+        });
+    });
+}
+
+function formatConnectionTip(tt){
+    var tooltip = $('#ui-tooltip-'+tt.id+'-content');
+    bindPaginationConnection(tooltip);
+}
+
+function bindPaginationConnection(tt){
+    $('.ro_preview_header', tt).click(function(e){
+        e.preventDefault();
+        $(this).next('.ro_preview_description').slideToggle();
+    });
+    $('.goto').on('click',function(e){
+        var slug = $(this).attr('ro_slug');
+        var page = $(this).attr('page');
+        var relation_type = $(this).attr('relation_type');
+        $.ajax({
+            url:base_url+'view/getConnections/?slug='+slug+'&relation_type='+relation_type+'&page='+page, 
+            type: 'GET',
+            success: function(data){
+                $(tt).html(data);
+                bindPaginationConnection(tt);
+            }
+        });
+    });
+}
 
 
 

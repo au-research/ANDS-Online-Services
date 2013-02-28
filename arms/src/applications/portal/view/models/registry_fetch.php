@@ -89,9 +89,12 @@ class Registry_fetch extends CI_Model
 		}
 	}
 
-	function fetchConnectionsBySlug($slug)
+	function fetchConnectionsBySlug($slug, $limit=6, $offset=0, $type_filter=null)
 	{
 		$url = $this->config->item('registry_endpoint') . "getConnections/?slug=" . $slug;
+		if($limit!=6) $url.='&limit='.$limit;
+		if($offset!=0) $url.='&offset='.$offset;
+		if($type_filter!=null) $url.='&type_filter='.$type_filter;
 
 		$contents = json_decode(file_get_contents($url), true);
 		if (isset($contents['connections']))

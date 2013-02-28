@@ -105,6 +105,7 @@ class Connections_Extension extends ExtensionBase
 					}
 				}
 			}
+			// $connection['description'] = $this->_getDescription($connection['registry_object_id']);
 
 			// Continue on for all types:
 			/* - Check the constraints */
@@ -138,6 +139,9 @@ class Connections_Extension extends ExtensionBase
 				if (is_array($list))
 				{
 					$ordered_connections[$name] = array_slice($list, $offset, $limit);
+					foreach($ordered_connections[$name] as &$connection){
+						$connection['description'] = $this->_getDescription($connection['registry_object_id']);
+					}
 				}
 			}
 		}
@@ -145,6 +149,13 @@ class Connections_Extension extends ExtensionBase
 		return array($ordered_connections);
 	}
 
+	function _getDescription($id){
+		$this->db->select('value')->from('registry_object_metadata')->where('registry_object_id', $id)->where('attribute', 'the_description')->limit(1);
+		$query = $this->db->get();
+		foreach($query->result() as $row){
+			return $row->value;
+		}
+	}
 
 
 	function _getExplicitLinks()
