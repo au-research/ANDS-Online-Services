@@ -239,13 +239,14 @@ class Spatial_Extension extends ExtensionBase
 					$south = floatval($gCoords['south']);
 					$west  = floatval($gCoords['west']);
 					$east  = floatval($gCoords['east']);
-				}
-				if($north == $south && $east == $west)
-				{
-					$coords[] = $east.",".$north;	
-				}
-				else{
-					$coords[] = $east.",".$north." ".$east.",".$south." ".$west.",".$south." ".$west.",".$north." ".$east.",".$north;
+				
+					if($north == $south && $east == $west)
+					{
+						$coords[] = $east.",".$north;	
+					}
+					else{
+						$coords[] = $east.",".$north." ".$east.",".$south." ".$west.",".$south." ".$west.",".$north." ".$east.",".$north;
+					}
 				}
 			}
 		}	
