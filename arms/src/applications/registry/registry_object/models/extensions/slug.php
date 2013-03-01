@@ -2,7 +2,7 @@
 
 class Slug_Extension extends ExtensionBase
 {
-	const maxLength = 255;
+	const maxLength = 200;
 	
 	function __construct($ro_pointer)
 	{
