@@ -5,14 +5,15 @@ var metadataContainer = $('#registryObjectMetadata');
 var loading_icon = '<div style="width:100%; padding-top:40px; text-align:center;"><img src="'+base_url+'assets/core/images/ajax-loader.gif" alt="Loading..." /></div>';
 var ACCORDION_MODE_SUGGESTORS = ['datacite'];
 
-
-$('.descriptions').css({overflow:'hidden',height:'270px'}).append($('<div class="descriptions_overflow"></>'));
-$('.descriptions').after('<div class="show_all">Show All Descriptions</div>');
-$('.show_all').click(function(){
-    $(this).remove();
-    $('.descriptions_overflow').remove();
-    $('.descriptions').css({height:'auto'});
-});
+if($('.descriptions').children().height()>270){
+    $('.descriptions').css({overflow:'hidden',height:'270px'}).append($('<div class="descriptions_overflow"></>'));
+    $('.descriptions').after('<div class="show_all">Show All Descriptions</div>');
+    $('.show_all').click(function(){
+        $(this).remove();
+        $('.descriptions_overflow').remove();
+        $('.descriptions').css({height:'auto'});
+    });
+}
 
 // Check if we have a hierarchal connections graph
 setRegistryLink();
@@ -47,7 +48,6 @@ function initConnections(){
                     type: 'POST',
                     data: {ro_id: $(this).attr('ro_id')},
                     loading:true,
-                    once: false,
                     success: function(data, status) {
                         this.set('content.text', data);
                         formatConnectionTip(this);
@@ -70,17 +70,18 @@ function initConnections(){
     });
 }
 
+$('body').on('click', '.ro_preview_header', function(e){
+    e.preventDefault();
+    $(this).next('.ro_preview_description').slideToggle();
+});
+
 function formatConnectionTip(tt){
     var tooltip = $('#ui-tooltip-'+tt.id+'-content');
     bindPaginationConnection(tooltip);
 }
 
 function bindPaginationConnection(tt){
-    $('.ro_preview_header', tt).click(function(e){
-        e.preventDefault();
-        $(this).next('.ro_preview_description').slideToggle();
-    });
-    $('.goto').on('click',function(e){
+    $('.goto', tt).on('click',function(e){
         var slug = $(this).attr('ro_slug');
         var page = $(this).attr('page');
         var relation_type = $(this).attr('relation_type');
@@ -96,41 +97,6 @@ function bindPaginationConnection(tt){
 }
 
 /*if (isPublished()) { $('#draft_status').removeClass("hide"); }*/
-
-function initConnections(){
-    $('.view_all_connection').live('click', function(){
-        var slug = $(this).attr('ro_slug');
-        var relation_type = $(this).attr('relation_type');
-        $(this).qtip({
-            content: {
-                text: 'Loading...', // The text to use whilst the AJAX request is loading
-                ajax: {
-                    url: base_url+'view/getConnections/?slug='+slug+'&relation_type='+relation_type,
-                    type: 'POST',
-                    data: {ro_id: $(this).attr('ro_id')},
-                    loading:false,
-                    success: function(data, status) {
-                        this.set('content.text', data);
-                    }
-                }
-            },
-            position: {viewport: $(window)},
-            show: {
-                event: 'click',
-                ready: true,
-                solo:true,
-                effect: function(offset) {$(this).show();}
-            },
-            hide: {
-                fixed:true,
-                event:'unfocus',
-            },
-            style: {classes: 'ui-tooltip-light ui-tooltip-shadow previewPopup', width:750},
-            overwrite: false
-        });
-    });
-}
-
 
 
 function initInternalSuggestedLinks()
@@ -151,7 +117,7 @@ function initDataciteSeeAlso(){
         dataType:'json',
         success:function(data){
             var count = parseInt(data.count);
-            if(count>=0){
+            if(count>0){
                 datacite_explanation = $('#datacite_explanation').html();
                 datacite_qmark = "<img class='datacite_help' src='"+base_url+"assets/core/images/question_mark.png' width='12px' />";
                 $('#DataCiteSuggestedLinksBox').html('<h4>External Records</h4>' +'<h5><a href="#" class="show_accordion" data-title="Records suggested by DataCite" data-suggestor="'+suggestor+'" data-start="0" data-rows="10"> ' + data.count + " records</a> from DataCite " + datacite_qmark + "</h5>").fadeIn();
@@ -567,7 +533,7 @@ function generatePreviewTip(element, slug, registry_object_id)
 
 
     function drawMap(){//drawing the map on the left side
-        if($('#spatial_coverage_map')){//if there is a coverage
+        if($('p.coverage').length>0){//if there is a coverage
             var latlng = new google.maps.LatLng(-25.397, 133.644);
             var myOptions = {
               zoom: 2,disableDefaultUI: true,center:latlng,panControl: true,zoomControl: true,mapTypeControl: true,scaleControl: true,

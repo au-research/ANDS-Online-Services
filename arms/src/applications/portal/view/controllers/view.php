@@ -234,11 +234,11 @@ class View extends MX_Controller {
 		$page = ($this->input->get('page')) ? $this->input->get('page') : 1;
 		$offset = ($page * $limit) - $limit;
 		if ($this->input->get('slug')){
-			$connections = ($this->registry->fetchConnectionsBySlug($this->input->get('slug'), 10, 0, $this->input->get('relation_type')));
+			$connections = $this->registry->fetchConnectionsBySlug($this->input->get('slug'), 10, $offset, $this->input->get('relation_type'));
 			$data['related_identity_type']='slug';
 		}
 		else if ($this->input->get('id')){
-			$connections = ($this->registry->fetchConnectionsByID($this->input->get('id')));
+			$connections = $this->registry->fetchConnectionsByID($this->input->get('id'), 10, $offset, $this->input->get('relation_type'));
 			$data['related_identity_type']='registry_object_id';
 		}
 
