@@ -527,29 +527,6 @@ function initDescriptionDisplay()
     // Hide multiple descriptions, with option to display all
     $('.descriptions div:gt(0)').hide();
 
-<<<<<<< HEAD
-    function drawMap(){//drawing the map on the left side
-        if($('p.coverage').length>0){//if there is a coverage
-            var latlng = new google.maps.LatLng(-25.397, 133.644);
-            var myOptions = {
-              zoom: 2,disableDefaultUI: true,center:latlng,panControl: true,zoomControl: true,mapTypeControl: true,scaleControl: true,
-              streetViewControl: false,overviewMapControl: true,mapTypeId: google.maps.MapTypeId.TERRAIN
-            };
-            var map2 = new google.maps.Map(document.getElementById("spatial_coverage_map"),myOptions);
-            var bounds = new google.maps.LatLngBounds();
-            
-            //draw coverages
-            var coverages = $('p.coverage');
-            //console.log(coverages.html());
-            //console.log(coverages.text());
-            
-            var mapContainsOnlyMarkers = true; // if there is only marker, then zoom out to a default depth (markers get "bounded" at max zoom level)
-            var locationText = [];
-            
-            $.each(coverages, function(){
-                setTimeout('500');
-                coverage = $(this).html();
-=======
     if ($('.descriptions div').length > 1)
     {
         $('.descriptions').after('<div class="show_all">Show All Descriptions</div>');
@@ -559,7 +536,7 @@ function initDescriptionDisplay()
         // If there is only one description, don't display a type
         $('.descriptions div h5').hide();
     }
->>>>>>> Clean up description displays
+
 
     $('.show_all').click(function(){
         $(this).remove();
