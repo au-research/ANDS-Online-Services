@@ -122,15 +122,10 @@
 				<p></p>
 				{{#counts}}
 			  		{{#status}}
-			  			<span class="tag status_{{status}}">{{name}} ({{count}})</span>
+			  			<span class="tag goto status_{{status}}" type="status" name="{{status}}" data_source_id="{{id}}">{{name}} ({{count}})</span>
 			  		{{/status}}
 		  		{{/counts}}
 
-		  		{{#classcounts}}
-			  		{{#class}}
-			  			<span class="tag name"><img tip="{{class}}" src="<?php echo asset_url('img/{{class}}.png', 'base');?>"/>{{name}}</span>
-			  		{{/class}}
-		  		{{/classcounts}}
 		  		<div class="btn-group item-control">
 		  			<button class="btn btn-small view page-control" data_source_id="{{id}}"><i class="icon-eye-open"></i> View</button>
 		  			<button class="btn btn-small mmr page-control" data_source_id="{{id}}"><i class="icon-folder-open"></i> Manage</button>

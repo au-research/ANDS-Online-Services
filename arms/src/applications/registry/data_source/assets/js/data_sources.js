@@ -134,7 +134,7 @@ $(function(){
 	});
 
 	
-	$('#AddNewDS_confirm').live({
+	$('#AddNewDS_confirm').on({
 		click: function(e){
 			var form = $('#AddNewDS form');
 			Core_bindFormValidation(form);
@@ -221,6 +221,13 @@ function load_more(page){
 			var itemsTemplate = $('#items-template').html();
 			var output = Mustache.render(itemsTemplate, data);
 			$('#items').append(output);
+			$('.goto').click(function(){
+				var type = $(this).attr('type');
+				var name = $(this).attr('name');
+				var data_source_id = $(this).attr('data_source_id');
+				var url_to = base_url+'data_source/manage_records/'+data_source_id+'/?filters={"sort":{"updated":"asc"},"filter":{"'+type+'":"'+name+'"}}';
+				window.location = url_to;
+			});
 		}
 	});
 }

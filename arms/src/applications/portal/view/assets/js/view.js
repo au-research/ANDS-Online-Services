@@ -566,11 +566,8 @@ function drawMap(){//drawing the map on the left side
         
         $.each(coverages, function(){
             setTimeout('500');
-            coverage = $(this).html();
-
+            coverage = $(this).text();
             split = coverage.split(' ');
-            //console.log(split.length);
-            
             if(split.length>1)
             {
                 mapContainsOnlyMarkers = false;
@@ -589,11 +586,7 @@ function drawMap(){//drawing the map on the left side
                     fillOpacity: 0.35
                 });
                 poly.setMap(map2);
-            }else
-            {
-                //console.log(split);
-                
-                //MARKERSSS
+            }else{
                 var marker = new google.maps.Marker({
                     map: map2,
                     position: stringToLatLng($(this).html()),
@@ -601,11 +594,10 @@ function drawMap(){//drawing the map on the left side
                     raiseOnDrag:false,
                     visible:true
                 });
-                // CC-197/CC-304 - Center map on markers
                 bounds.extend(stringToLatLng($(this).html()));
             }
         });
-        //console.log(locationText);
+
         //draw centers
         var centers = $('p.spatial_coverage_center');
         $.each(centers, function(){
@@ -628,8 +620,8 @@ function drawMap(){//drawing the map on the left side
             // we still want a "good" fit if there are multiple markers, but 
             // if we're zoomed to close, lets zoom out once the map loads!
             var listener = google.maps.event.addListenerOnce(map2, "idle", function() { 
-                  if (map2.getZoom() > 3) map2.setZoom(3); 
-                });
+                if (map2.getZoom() > 3) map2.setZoom(3); 
+            });
         }
     }
 }
