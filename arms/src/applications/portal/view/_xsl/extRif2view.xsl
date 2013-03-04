@@ -237,7 +237,6 @@
           <p></p>
         </div>
     </xsl:if>
-    <a href="javascript:void(0);" class="showall_descriptions hide">More...</a>
     
     <!-- DISPLAY RELATED INFO -->
     <xsl:if test="ro:relatedInfo">
@@ -1203,12 +1202,26 @@
 <xsl:template match="extRif:description" mode="content">     
     <div>
        <xsl:attribute name="class"><xsl:value-of select="@type"/></xsl:attribute>
-       <h4><xsl:value-of select="@type"/></h4>
+       <xsl:choose>
+        <xsl:when test="@type = 'full'">
+          <h5 class="lightgrey">Full Description</h5>
+        </xsl:when>
+        <xsl:when test="@type ='brief'">
+          <h5 class="lightgrey">Brief Description</h5>
+        </xsl:when>
+        <xsl:when test="@type ='note'">
+          <h5 class="lightgrey">Note</h5>
+        </xsl:when>
+        <xsl:when test="@type ='significantStatement'">
+          <h5 class="lightgrey">Significance Statement</h5>
+        </xsl:when>
+       </xsl:choose>
        <p>
          <xsl:if test="@type='deliverymethod'">
              Delivery Method : 
          </xsl:if>
-         <xsl:value-of select="." disable-output-escaping="yes"/></p>
+         <xsl:value-of select="." disable-output-escaping="yes"/>
+       </p>
      </div>
  </xsl:template> 
 
