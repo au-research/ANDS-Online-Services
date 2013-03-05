@@ -21,10 +21,111 @@
 	    },
 
 	    /**
+	     * A set of rules that should be checked to ensure correct
+	     * operation.
+	     *
+	     * This function should definitely be overridden by subclasses; the
+	     * preconditions found here are generic. Call super() first,
+	     * capture the result and ammend the array before returning.
+	     *
+	     * @return an array of validation callables and the associated data
+	     * to validate, a js object with the following properties:
+	     *   - fields: and array of configuration fields to check
+	     *   - descripiton: a brief description of the test; used for error
+	     *     output
+	     *   - test: a closure that takes a single value (iterated over
+	     *     fields) and returns bool true/false depending on validation
+	     *     status
+	     */
+	    preconditions: function() {
+		return [
+		    {
+			fields: ["min_chars", "max_results", "delay"],
+			description: "a positive integer",
+			test: function(val) { return typeof(val) === 'number' && val === ~~Number(val) && val >= 0; }
+		    },
+		    {
+			fields: ["cache"],
+			description: "a boolean",
+			test: function(val) { return typeof(val) === 'boolean'; }
+		    },
+		    {
+			fields: ["mode"],
+			description: "one of <search,narrow,advanced>",
+			test: function(val) { return val === 'search' || val === 'narrow' || val === 'advanced'; }
+		    },
+		    {
+			fields: ["endpoint"],
+			description: "a URL",
+			test: function(val) { var urlre = new RegExp("^(http|https)\://.*$"); return urlre.test(val); }
+		    },
+		    {
+			fields: ["list_class", "repository"],
+			description: "a string",
+			test: function(val) { return typeof(val) === 'undefined' || typeof(val) === 'string'; }
+		    }
+		];
+	    },
+
+	    /**
+	     * Validates the handler for operation: reads in
+	     * this.preconditions() and iterates over the rules to process
+	     * @param the js object that holds the `fields` defined in
+	     * this.preconditions(). If not provided, `this.settings` is used.
+	     * @return bool, true or false depending on the outcome of
+	     * validating preconditions.
+	     */
+	    validate: function(settings) {
+		var options = typeof(settings) === 'undefined' ? this.settings : settings;
+
+		var is_valid = true;
+		var handler = this;
+		$.each(this.preconditions(), function(ridx, rule) {
+		    $.each(rule.fields, function(fidx, field) {
+			try {
+			    is_valid = is_valid && rule.test(options[field]);
+			}
+			catch (e) {
+			    is_valid = false;
+			}
+			if (!is_valid) {
+			    handler._throwing(field, rule.description, options);
+			    return false;
+			}
+		    });
+		    if (!is_valid) {
+			return false;
+		    }
+		});
+	    },
+
+
+	    /**
+	     * simplistic throwable template for input validation
+	     */
+	    _throwing: function(val, rule, settings) {
+		throw "'" + val + "' must be " + rule + " (was: " + settings[val] + ")";
+	    },
+
+	    /**
+	     * 'Facade' of sorts for this.do_ready(); this calls the validator,
+	     * subsequently invoking `this.do_ready()` if validation passes.
+	     * @return bool false is validation failed. might throw an exception as well.
+	     */
+	    ready: function() {
+		if (this.validate()) {
+		    return this.do_ready();
+		}
+		else {
+		    return false;
+		}
+	    },
+
+	    /**
 	     * Implemented by subclasses; prep widget
 	     * for user interaction
 	     */
-	    ready: function() {
+	    do_ready: function() {
 		return false;
 	    },
 
@@ -125,6 +226,22 @@
 	});
 
 	var SearchHandler = VocabHandler.extend({
+	    preconditions: function() {
+		var preconds = this._super();
+		preconds.push({
+		    fields: ["fields"],
+		    description: "an array of strings",
+		    test: function(val) { return Object.prototype.toString.call(val) === "[object Array]"; }
+		    });
+		preconds.push({
+		    fields: ["mode"],
+		    description: "mode 'search'",
+		    test: function(val) { return val === 'search'; }
+		});
+
+		return preconds;
+	    },
+
 	    init: function(container, settings) {
 		this._super(container, settings);
 		this._makelist();
@@ -140,7 +257,7 @@
 		this._container.attr("autocomplete", "off");
 	    },
 
-	    ready: function() {
+	    do_ready: function() {
 		var handler = this;
 		this._container.bind("keydown", function(e) {
 		    if (e.which == '27') {
@@ -220,6 +337,23 @@
 	});
 
 	var NarrowHandler = VocabHandler.extend({
+	    preconditions: function() {
+		var preconds = this._super();
+		preconds.push({
+		    fields: ["mode_params"],
+		    description: "mode-specific parameters",
+		    test: function(val) { return (typeof(val) !== 'undefined'); }
+		});
+		preconds.push({
+		    fields: ["mode"],
+		    description: "mode 'narrow'",
+		    test: function(val) { return val === 'narrow'; }
+		});
+
+		return preconds;
+	    },
+
+
 	    init: function(container, settings) {
 		this._super(container, settings);
 		this._ctype = this._container.get(0).tagName;
@@ -307,7 +441,7 @@
 		    "&lookfor=" + this.settings.mode_params;
 	    },
 
-	    ready: function() {
+	    do_ready: function() {
 		var handler = this;
 		if (this._ctype === 'SELECT') {
 		    var url = this._url();
@@ -420,86 +554,8 @@
 	settings._wname = WIDGET_NAME;
 	settings._wid = WIDGET_ID;
 
-	/**
-	 * simplistic throwable template for input validation
-	 */
-	function _throwing(val, rule) {
-	    throw "'" + val + "' must be " + rule + " (was: " + settings[val] + ")";
-	}
-
-	/**
-	 * some very simple input validation
-	 */
-	function valid_input() {
-	    var is_valid = true;
-	    var container = $(this);
-	    var validation_rules = [
-		{
-		    fields: ["min_chars", "max_results", "delay"],
-		    description: "a positive integer",
-		    test: function(val) { return typeof(val) === 'number' && val === ~~Number(val) && val >= 0; }
-		},
-		{
-		    fields: ["cache"],
-		    description: "a boolean",
-		    test: function(val) { return typeof(val) === 'boolean'; }
-		},
-		{
-		    fields: ["mode"],
-		    description: "one of <search,narrow>",
-		    test: function(val) { return val === 'search' || val === 'narrow'; }
-		},
-		{
-		    fields: ["endpoint"],
-		    description: "a URL",
-		    test: function(val) { var urlre = new RegExp("^(http|https)\://.*$"); return urlre.test(val); }
-		},
-		{
-		    fields: ["list_class", "repository"],
-		    description: "a string",
-		    test: function(val) { return typeof(val) === 'undefined' || typeof(val) === 'string'; }
-		},
-		{
-		    fields: ["fields"],
-		    description: "an array of strings",
-		    test: function(val) { return Object.prototype.toString.call(val) === "[object Array]"; }
-		},
-		{
-		    fields: ["mode_params"],
-		    description: "non-search mode parameters",
-		    test: function(val) { return ((typeof(val) !== 'undefined' && settings['mode'] !== 'search') || settings['mode'] === 'search'); }
-		},
-	    ];
-
-	    $.each(validation_rules, function(ridx, rule) {
-		$.each(rule.fields, function(fidx, field) {
-		    try {
-			is_valid = is_valid && rule.test(settings[field]);
-		    }
-		    catch (e) {
-			is_valid = false;
-		    }
-		    if (!is_valid) {
-			_throwing(field, rule.description);
-			return false;
-		    }
-		});
-		if (!is_valid) {
-		    return false;
-		}
-	    });
-
-	    return is_valid;
-	}
-
-	var is_ok = false;
-	try {
-	    is_ok = valid_input();
-	}
-	catch (e) { }
-
 	var handler;
-	if (is_ok) {
+	try {
 	    return this.each(function() {
 		var $this = $(this);
 		switch(settings.mode) {
@@ -513,22 +569,16 @@
 		handler.ready();
 	    });
 	}
-	else {
-	    try {
-		//we know this will fail...
-		valid_input();
-	    }
-	    catch (err) {
-		alert(WIDGET_NAME + ': \r\n' + err + '\r\n(reload the page before retrying)');
-	    }
-	    //lose focus and unbind to avoid continuous errors
-	    try {
-		handler.detach();
-	    }
-	    catch (e) {}
-	    $(this).blur();
-	    return false;
+	catch (err) {
+	    alert(WIDGET_NAME + ': \r\n' + err + '\r\n(reload the page before retrying)');
 	}
+	//lose focus and unbind to avoid continuous errors
+	try {
+	    handler.detach();
+	}
+	catch (e) {}
+	$(this).blur();
+	return false;
     };
 
     /* Simple JavaScript Inheritance
