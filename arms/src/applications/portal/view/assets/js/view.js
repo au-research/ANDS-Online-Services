@@ -10,6 +10,7 @@ setRegistryLink();
 initDescriptionDisplay();
 initConnectionGraph();
 drawMap();
+initConnections(); 
 
 // If we're a collection, then hit DataCite for SeeAlso
 if ( $('#class', metadataContainer).html() == "Collection" )
@@ -20,14 +21,20 @@ if ( $('#class', metadataContainer).html() == "Collection" )
 // Internal Suggested Links
 initInternalSuggestedLinks();
 
-//Connections
-if($('.view_all_connection').length>0){
-   initConnections(); 
-}
+
 
 /*if (isPublished()) { $('#draft_status').removeClass("hide"); }*/
 
 function initConnections(){
+
+    $('.preview_connection').each(function(){
+        if($('a', this).attr('slug')!=''){
+            generatePreviewTip($(this), $('a',this).attr('slug'), null, $('a', this).attr('relation_type'));
+        }else if($('a', this).attr('draft_id')!=''){
+            generatePreviewTip($(this), null, $('a',this).attr('draft_id'), $('a', this).attr('relation_type'));
+        }
+    });
+
     $('.view_all_connection').live('click', function(){
         var slug = $(this).attr('ro_slug');
         var relation_type = $(this).attr('relation_type');
@@ -156,6 +163,7 @@ function setRegistryLink()
     var newRef = registryLink + 'registry_object/view/' + regObjId;
     $('#registryLink').attr('href', newRef);
 }
+
 /* Updates the contents of an accordion window */
 function updateLinksDisplay(container, title, suggestor, start, rows)
 {
@@ -218,7 +226,7 @@ function updateLinksDisplay(container, title, suggestor, start, rows)
                 var target = $('ul li', container).last();
 
                 // Create the tooltip
-                generatePreviewTip(target, data['links'][link]['slug'], null);
+                generatePreviewTip(target, data['links'][link]['slug'], null,false);
                  // Bind the tooltip show
                 target.on('click',function(e){e.preventDefault(); $(this).qtip('show');});
             }
@@ -468,7 +476,7 @@ function initConnectionGraph()
 
 }
 
-function generatePreviewTip(element, slug, registry_object_id)
+function generatePreviewTip(element, slug, registry_object_id, relation_type)
 {
     var preview_url;
     if (isPublished())
@@ -479,7 +487,6 @@ function generatePreviewTip(element, slug, registry_object_id)
     {
         preview_url = base_url + "preview/?id=" + registry_object_id;
     }
-
     /* Prepare the tooltip preview */
     $('a', element).qtip({
         content: {
@@ -492,13 +499,14 @@ function generatePreviewTip(element, slug, registry_object_id)
                     data = $.parseJSON(data);                                       
                     this.set('content.text', data.html);
 
-                    if (isPublished())
-                    {
+                    if (isPublished()){
                         $('.viewRecordLink').attr("href",base_url + data.slug);
-                    }
-                    else
-                    {
+                    }else{
                         $('.viewRecordLink').attr("href",base_url+"view/?id=" + data.registry_object_id);
+                    }
+
+                    if(relation_type){
+                        $('.previewItemHeader').html(relation_type);
                     }
                 } 
             }
@@ -506,6 +514,7 @@ function generatePreviewTip(element, slug, registry_object_id)
         position: {
             my: 'left center',
             at: 'right center',
+            viewport: $(window)
         },
         show: {
             event: 'click',
@@ -519,7 +528,7 @@ function generatePreviewTip(element, slug, registry_object_id)
             classes: 'ui-tooltip-light ui-tooltip-shadow previewPopup',
             width: 700,
         }
-    });
+    }).on('click', function(e){e.preventDefault();return false;});
 }
 
 function initDescriptionDisplay()

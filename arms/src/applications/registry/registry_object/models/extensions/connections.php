@@ -145,7 +145,6 @@ class Connections_Extension extends ExtensionBase
 				}
 			}
 		}
-
 		return array($ordered_connections);
 	}
 

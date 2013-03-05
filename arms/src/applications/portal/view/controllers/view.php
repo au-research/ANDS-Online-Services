@@ -241,7 +241,7 @@ class View extends MX_Controller {
 			$connections = $this->registry->fetchConnectionsByID($this->input->get('id'), 10, $offset, $this->input->get('relation_type'));
 			$data['related_identity_type']='registry_object_id';
 		}
-
+		$connections = $connections['connections'];
 		$data['currentPage'] = $page;
 		$data['totalPage'] = ceil(($connections[0][$this->input->get('relation_type').'_count'])/$limit);
 		$data['totalResults'] = $connections[0][$this->input->get('relation_type').'_count'];

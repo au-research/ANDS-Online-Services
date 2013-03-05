@@ -99,7 +99,7 @@ class Registry_fetch extends CI_Model
 		$contents = json_decode(file_get_contents($url), true);
 		if (isset($contents['connections']))
 		{
-			return $contents['connections'];
+			return $contents;
 		}
 		else
 		{
@@ -117,7 +117,7 @@ class Registry_fetch extends CI_Model
 		$contents = json_decode(file_get_contents($url), true);
 		if (isset($contents['connections']))
 		{
-			return $contents['connections'];
+			return $contents;
 		}
 		else
 		{

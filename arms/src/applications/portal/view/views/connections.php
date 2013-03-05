@@ -6,8 +6,8 @@
 
 	if (isset($connections_contents))
 	{
-
-		foreach($connections_contents as $classes)
+		$from_class = $connections_contents['class'];
+		foreach($connections_contents['connections'] as $classes)
 		{
 			foreach($classes as $classname => $class)
 			{
@@ -22,19 +22,22 @@
 					if(isset($entry['class']))
 					{
 						// Link connections to PUBLISHED objects to their SLUG for SEOness...
-						if ($entry['status'] == PUBLISHED)
-						{
+						if ($entry['status'] == PUBLISHED){
 							$url = base_url() . $entry['slug'];
+							$preview = 'slug='.$entry['slug'];
 						}
-						else
-						{
+						else{
 							$url = base_url() . "view/?id=" . $entry['registry_object_id'];
+							$preview = 'draft_id='.$entry['registry_object_id'];
 						}
 
+						//relationship
+						$relationship = format_relationship($from_class, $entry['relation_type'], $entry['origin']);
+
 						if(!isset($conn[$entry['class']])){
-							$conn[$entry['class']] = "<p class=".$entry['class']."><a href='".$url."' class='view_connection' type=>".$entry['title']."</a></p>";
+							$conn[$entry['class']] = '<p class="'.$entry['class'].' preview_connection"><a href="'.$url.'" '.$preview.' relation_type="'.$relationship.'">'.$entry['title'].'</a></p>';
 						}else{
-							$conn[$entry['class']] .= "<p class=".$entry['class']."><a href='".$url."'>".$entry['title']."</a></p>";
+							$conn[$entry['class']] .= '<p class="'.$entry['class'].' preview_connection"><a href="'.$url.'" '.$preview.' relation_type="'.$relationship.'">'.$entry['title'].'</a></p>';
 						}
 					}
 				}
