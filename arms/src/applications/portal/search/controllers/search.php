@@ -93,7 +93,7 @@ class Search extends MX_Controller {
 						break;
 					case 'map':
 						$this->solr->setOpt('fq', 'spatial_coverage_extents:(*)');
-						$this->solr->setOpt('rows', 200);
+						$this->solr->setOpt('rows', 100);
 						break;
 				}
 			}

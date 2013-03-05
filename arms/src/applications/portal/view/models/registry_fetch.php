@@ -128,7 +128,6 @@ class Registry_fetch extends CI_Model
 	function fetchSuggestedLinksBySlug($slug, $type, $start, $rows)
 	{
 		$url = $this->config->item('registry_endpoint') . "getSuggestedLinks/?slug=" . $slug . "&suggestor=" . $type . "&start=$start&rows=$rows";
-
 		$contents = json_decode(file_get_contents($url), true);
 		if (isset($contents['links']))
 		{

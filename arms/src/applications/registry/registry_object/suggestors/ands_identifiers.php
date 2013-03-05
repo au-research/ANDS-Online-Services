@@ -60,12 +60,37 @@ class Suggestor_ands_identifiers implements GenericSuggestor
 				$links[] = array("url"=>portal_url($doc['slug']),
 								"title"=>$doc['display_title'],
 								"class"=>$doc['class'],
+								"description"=>$doc['description'],
 								"slug"=>$doc['slug']);
 			}
+			if(!$rows) $rows=10;
+			$pagination = array();
+			if($start==0){
+				$currentPage = 1;
+			}else{
+				$currentPage = ceil($start/$rows)+1;
+			}
+			$totalPage = ceil($result['response']['numFound'] / (int) $rows);
+
+			if($currentPage!=1){
+				$prev = $start-$rows;
+				$next = $start+$rows;
+			}else if($currentPage==$totalPage){
+				$prev = $start-$rows;
+				$next = false;
+			}else{
+				$prev = false;
+				$next = $start+$rows;
+			}
+			$pagination = array("currentPage"=>$currentPage,"totalPage"=>$totalPage);
+			if($prev) $pagination['prev']=$prev;
+			if($next) $pagination['next']=$next;
 
 			$suggestions = array(
 				"count" => $result['response']['numFound'],
-				"links" => $links
+				"links" => $links,
+				"pagination" => $pagination,
+				"suggestor" => 'ands_identifiers'
 			);
 		}
 		return $suggestions;

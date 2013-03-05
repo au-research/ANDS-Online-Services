@@ -26,7 +26,6 @@ initInternalSuggestedLinks();
 /*if (isPublished()) { $('#draft_status').removeClass("hide"); }*/
 
 function initConnections(){
-
     $('.preview_connection').each(function(){
         if($('a', this).attr('slug')!=''){
             generatePreviewTip($(this), $('a',this).attr('slug'), null, $('a', this).attr('relation_type'));
@@ -40,7 +39,7 @@ function initConnections(){
         var relation_type = $(this).attr('relation_type');
         $(this).qtip({
             content: {
-                text: 'Loading...',
+                text: loading_icon,
                 ajax: {
                     url: base_url+'view/getConnections/?slug='+slug+'&relation_type='+relation_type,
                     type: 'POST',
@@ -52,7 +51,7 @@ function initConnections(){
                     }
                 }
             },
-            position: {viewport: $(window)},
+            position: {viewport: $(window),my: 'right center',at: 'left center'},
             show: {
                 event: 'click',
                 ready: true,
@@ -62,15 +61,18 @@ function initConnections(){
                 fixed:true,
                 event:'unfocus',
             },
-            style: {classes: 'ui-tooltip-light ui-tooltip-shadow previewPopup', width:750},
+            style: {classes: 'ui-tooltip-light ui-tooltip-shadow previewPopup'},
             overwrite: false
         });
     });
 }
 
-$('body').on('click', '.ro_preview_header', function(e){
+$(document).on('click', '.ro_preview_header', function(e){
     e.preventDefault();
     $(this).next('.ro_preview_description').slideToggle();
+}).on('click', 'a.suggestor_paging',function(e){
+    e.preventDefault();
+    updateLinksDisplay($('#links_dialog'), 'Suggested Links', $(this).attr('suggestor'), $(this).attr('offset'), 10);
 });
 
 function formatConnectionTip(tt){
@@ -169,82 +171,19 @@ function updateLinksDisplay(container, title, suggestor, start, rows)
 {
     // Loading icon as display loads...
     container.html(loading_icon);
-
     // Specify the web service endpoint
-    if (isPublished())
-    {
+    if (isPublished()){
         var url_suffix = "view/getSuggestedLinks/"+suggestor+"/"+start+"/"+rows+"/?slug=" + getSLUG();
-    }
-    else
-    {
+    }else{
         var url_suffix = "view/getSuggestedLinks/"+suggestor+"/"+start+"/"+rows+"/?id=" + getRegistryObjectID();
     }
 
     // Fire off the request
-    $.get(base_url + url_suffix, function(data)
-    {   
-        // Change the title of the dialog box
-        $('span.ui-dialog-title',container.parent().parent().parent()).html(title);
-
-
-        // If we have expandable contents, display our links in the accordion format 
-        if ($.inArray(suggestor,ACCORDION_MODE_SUGGESTORS) >= 0)
-        {
-            container.html("<div class='links_list' id='"+suggestor+"_links_list'></div>");
-
-            link_contents = ''
-            for (var link in data['links'])
-            {
-
-                link_contents += decodeURIComponent(data['links'][link]['expanded_html']);
-            }
-
-            $("#"+suggestor+"_links_list",container).append( link_contents ).accordion({ header: "h3" });
-            $('.show_accordion').qtip('reposition');
-        }
-
-        // Else we display these as links with preview popups
-        else
-        {
-            container.html("<ul class='links_list'></ul>");
-
-            for (var link in data['links'])
-            {
-                var class_icon = getClassIconSrc(data['links'][link]['class']);
-                
-                if (class_icon)
-                {
-                    var icon = '<img src="'+ class_icon +'" alt="Class Icon" class="icon_sml">';
-                }
-                else
-                {
-                    var icon = '';
-                }
-
-                $('ul', container).append('<li>'+icon+'<a href="">'+data['links'][link]['title']+'</a></li>');
-
-                var target = $('ul li', container).last();
-
-                // Create the tooltip
-                generatePreviewTip(target, data['links'][link]['slug'], null,false);
-                 // Bind the tooltip show
-                target.on('click',function(e){e.preventDefault(); $(this).qtip('show');});
-            }
-        }
-
-        // Footer for "previous/more"
-        container.append('<hr/>');
-        start = parseInt(start); rows = parseInt(rows);
-        if (start > 0)
-        {
-            container.append('<a style="float:left;" href="#" class="next_accordion_query" data-title="'+title+'" data-suggestor="'+suggestor+'" data-start="'+(start-rows)+'" data-rows="'+rows+'">&lt; previous</a>');
-        }
-
-        if(data.count >= (start+rows))
-        {
-            container.append('<a style="float:right;" href="#" class="next_accordion_query" data-title="'+title+'" data-suggestor="'+suggestor+'" data-start="'+(rows+start)+'" data-rows="'+rows+'">more &gt;</a>');
-        }
-
+    $.get(base_url + url_suffix, function(data){   
+        log(data);
+        var template = $('#link_list_template').html();
+        var output = Mustache.render(template, data);
+        container.html(output);
     },'json');
 }
 
@@ -525,8 +464,7 @@ function generatePreviewTip(element, slug, registry_object_id, relation_type)
             fixed: true,
         },
         style: {
-            classes: 'ui-tooltip-light ui-tooltip-shadow previewPopup',
-            width: 700,
+            classes: 'ui-tooltip-light ui-tooltip-shadow previewPopup'
         }
     }).on('click', function(e){e.preventDefault();return false;});
 }

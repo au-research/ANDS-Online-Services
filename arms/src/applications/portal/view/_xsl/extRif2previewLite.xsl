@@ -31,17 +31,16 @@
  <xsl:template match="ro:registryObject">
     <div class="ro_preview">
       <div class="ro_preview_header">
-       <xsl:value-of select="extRif:extendedMetadata/extRif:displayTitle"/>
-       <div class="right_icon">
-         <img class="icon-heading">
+        <img class="icon-heading">
            <xsl:attribute name="src"><xsl:value-of select="$base_url"/>
            <xsl:text>assets/core/images/icons/</xsl:text>
            <xsl:value-of select="$objectClassType"/>
            <xsl:text>.png</xsl:text></xsl:attribute>
            <xsl:attribute name="alt"><xsl:value-of select="$objectClassType"/></xsl:attribute>
-           <xsl:attribute name="style"><xsl:text>width:50%; float:right;</xsl:text></xsl:attribute>
+          <!--  <xsl:attribute name="style"><xsl:text>width:50%; float:right;</xsl:text></xsl:attribute> -->
        </img>
-      </div>
+        <div class="title"><xsl:value-of select="extRif:extendedMetadata/extRif:displayTitle"/></div>
+       <div class="clear"></div>
       </div> 
       <div class="ro_preview_description hide">
         <xsl:value-of select="extRif:extendedMetadata/extRif:description" disable-output-escaping="yes"/>

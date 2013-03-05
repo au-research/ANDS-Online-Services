@@ -10,9 +10,8 @@
 		}else{
 			$relation_link = base_url().'?id='.$conn['registry_object_id'];
 		}
-		$html.='<div class="ro_preview_header">'.$conn['title'].'<img class="icon-heading" src="'.base_url().'assets/core/images/icons/'.$conn['class'].'s.png"/></div>';
-		$html.='<div class="ro_preview_description hide">'.htmlspecialchars_decode(htmlspecialchars_decode($conn['description'])).'</div>';
-		$html.='<div class="ro_preview_footer"><a href="'.$relation_link.'">View Full Record</a></div>';
+		$html.='<div class="ro_preview_header"><img class="icon-heading" src="'.base_url().'assets/core/images/icons/'.$conn['class'].'s.png"/><div class="title">'.$conn['title'].'</div><div class="clear"></div></div>';
+		$html.='<div class="ro_preview_description hide">'.htmlspecialchars_decode(htmlspecialchars_decode($conn['description'])).'<div class="ro_preview_footer"><a href="'.$relation_link.'">View Full Record</a></div></div>';
 		$html.='</div>';
 	}
 

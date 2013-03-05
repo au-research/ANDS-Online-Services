@@ -1,3 +1,36 @@
+<script type="text/x-mustache" id="link_list_template">
+{{#links}}
+<div class="ro_preview">
+	<div class="ro_preview_header">
+		<img class="icon-heading" src="<?php echo base_url();?>assets/core/images/icons/{{class}}s.png"/>
+		<div class="title">{{title}}</div>
+	</div>
+	<div class="ro_preview_description hide">
+		{{description}}
+		<div class="ro_preview_footer">
+			<a href="{{url}}">View Full Record</a>
+		</div>
+	</div>
+</div>
+{{/links}}
+{{#pagination}}
+<div class="pagination" style="display:block;">
+	<div class="results_navi">
+		<div class='results'>{{count}} results</div>
+		<div class="page_navi">Page: {{currentPage}}/{{totalPage}} | 
+			{{#prev}}
+				<a href="javascript:;" class="suggestor_paging" offset={{prev}} suggestor="{{suggestor}}">Prev</a>
+			{{/prev}}
+			{{#next}}
+				<a href="javascript:;" class="suggestor_paging" offset="{{next}}" suggestor="{{suggestor}}">Next</a>
+			{{/next}}
+		</div>
+		<div class="clear"></div>
+	</div>
+	</div>
+</div>
+{{/pagination}}
+</script>
 
 <div class="footer">
 		<div class="foot">

@@ -183,27 +183,33 @@ div.topic_view {
 }
 
 .ro_preview{
-	border: 1px solid #ddd;
-	margin: 0px 0px 10px 0px;
-	padding: 5px;
+	padding: 10px 0 0px 0;
+	border-top:1px solid #eee;
 	.ro_preview_header{
 		padding: 3px 0px;
 		font-size: 14px;
 		font-weight: bold;
-		margin: 0 0 10px 0;
-		line-height: 20px;
+		margin: 0 0 5px 0;
+		line-height: 15px;
 		cursor: pointer;
 		&:hover{
 			color:#eb7700;
 		}
 		.icon-heading{
+			position:absolute;
 			width:25px;
-			float:right;
+		}
+		.title{
+			margin-left:35px;
+			line-height:25px;
 		}
 	}
 	.ro_preview_footer{
 		margin:10px 0;
 	}
+}
+.ro_preview:first-child{
+	border-top:none;
 }
 
 .descriptions{
