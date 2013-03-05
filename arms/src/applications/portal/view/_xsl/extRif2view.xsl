@@ -214,7 +214,10 @@
 <xsl:apply-templates select="../extRif:extendedMetadata/extRif:displayLogo"/>
 
 <!-- DISPLAY ALTERNATE TITLES/NAMES -->
-<xsl:apply-templates select="ro:name[@type='alternative']/ro:displayTitle"/>
+<xsl:apply-templates select="ro:name[@type='alternative']"/>
+
+<xsl:apply-templates select="ro:name[@type='abbreviated']"/>
+
 
 <div class="post">
 
@@ -263,20 +266,20 @@
             </xsl:choose>
         </xsl:variable>
         <p><b><xsl:value-of select="$coverageLabel"/></b></p>
-              <xsl:if test="../extRif:extendedMetadata/extRif:spatialGeometry/extRif:polygon">          
-                <div id="spatial_coverage_map"></div>
-              </xsl:if>
-              <xsl:apply-templates select="../extRif:extendedMetadata/extRif:spatialGeometry/extRif:polygon"/>   
-              <xsl:apply-templates select="../extRif:extendedMetadata/extRif:spatialGeometry/extRif:center"/>
+            <xsl:if test="../extRif:extendedMetadata/extRif:spatialGeometry/extRif:polygon">          
+              <div id="spatial_coverage_map"></div>
+            </xsl:if>
+            <xsl:apply-templates select="../extRif:extendedMetadata/extRif:spatialGeometry/extRif:polygon"/>   
+            <xsl:apply-templates select="../extRif:extendedMetadata/extRif:spatialGeometry/extRif:center"/>
 
             
             <xsl:for-each select="ro:coverage/ro:spatial[@type!='iso19139dcmiBox' and @type!='gmlKmlPolyCoords' and @type!='kmlPolyCoords']">
-             <p class="coverage_text"><xsl:value-of select="./@type"/>: <xsl:value-of select="."/></p>
-         </xsl:for-each>
+              <p class="coverage_text"><xsl:value-of select="./@type"/>: <xsl:value-of select="."/></p>
+            </xsl:for-each>
 
-         <xsl:for-each select="ro:location/ro:spatial[@type!='iso19139dcmiBox' and @type!='gmlKmlPolyCoords' and @type!='kmlPolyCoords']">
-             <p class="coverage_text"><xsl:value-of select="./@type"/>: <xsl:value-of select="."/></p>
-         </xsl:for-each>          
+            <xsl:for-each select="ro:location/ro:spatial[@type!='iso19139dcmiBox' and @type!='gmlKmlPolyCoords' and @type!='kmlPolyCoords']">
+              <p class="coverage_text"><xsl:value-of select="./@type"/>: <xsl:value-of select="."/></p>
+            </xsl:for-each>          
 
          <xsl:if test="ro:coverage/ro:temporal/ro:date | ro:location[@dateFrom!=''] | ro:location[@datefrom!=''] | ro:location[@dateTo!=''] | ro:coverage/ro:temporal/ro:text">
             <br/><b>Temporal Coverage:</b><br />
@@ -549,9 +552,21 @@
     </xsl:if>  
 </xsl:template> 
 
-<xsl:template match="ro:name[@type='alternative']/ro:displayTitle">   
-    <p class="alt_displayTitle"><xsl:value-of select="."/></p>
+<xsl:template match="ro:name[@type='alternative']">   
+    <p class="alt_displayTitle"><xsl:apply-templates/></p>
 </xsl:template> 
+
+<xsl:template match="ro:name[@type='abbreviated']">   
+    <p class="abbrev_displayTitle"><xsl:apply-templates/></p>
+</xsl:template>
+
+<xsl:template match="ro:namePart[last()]">
+    <xsl:value-of select="."/>    
+</xsl:template>
+
+<xsl:template match="ro:namePart">
+    <xsl:value-of select="."/><xsl:text>, </xsl:text>    
+</xsl:template>
 
 <xsl:template match="ro:title">
     <xsl:value-of select="."/>    
