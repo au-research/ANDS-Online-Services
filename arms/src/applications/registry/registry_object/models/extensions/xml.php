@@ -263,7 +263,8 @@ class _xml
 												'data' => $xml,
 												'timestamp' => time(),
 												'current' => ($current ? "TRUE" : "FALSE"),
-												'scheme' => $scheme
+												'scheme' => $scheme,
+												'hash' => $newHash
 											));
 			}
 		}
@@ -273,7 +274,8 @@ class _xml
 												'data' => $xml,
 												'timestamp' => time(),
 												'current' => ($current ? "TRUE" : "FALSE"),
-												'scheme' => $scheme
+												'scheme' => $scheme,
+												'hash' => $newHash
 											));
 
 		}													

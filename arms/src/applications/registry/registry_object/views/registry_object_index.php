@@ -13,7 +13,7 @@
 <?php $this->load->view('header');?>
 <div id="content" style="margin-top:45px;margin-left:0px">
 	<div class="content-header">
-		<h1><?php echo $ro->title;?> <?php if($viewing_revision) echo '<small>(Revision '.$revision.')</small>'?></h1>
+		<h1><?php echo $ro->title;?> <?php if($viewing_revision) echo '<small>('.$revisionInfo.')</small>'?></h1>
 		<div class="btn-group">
 			<?php 
 				if(!$viewing_revision) {
@@ -26,7 +26,7 @@
 		<?php echo anchor('data_source/', '<i class="icon-home"></i> Home', array('class'=>'tip-bottom', 'title'=>'Go to Home'))?>
 		<?php echo anchor('data_source/manage#!/view/'.$ds->id, $ds->title, array('class'=>'', 'title'=>''))?>
 		<a href="#" class="current"><?php echo $ro->title;?> </a>
-		<?php if($viewing_revision) echo '<a href="#">(Revision '.$revision.')</a>'?>
+		<?php if($viewing_revision) echo '<a href="#">('.$revisionInfo.')</a>'?>
 	</div>
 	<input class="hide" type="hidden" value="<?php echo $ro->id;?>" id="ro_id"/>
 
@@ -51,17 +51,13 @@
 					<div class="widget-content">
 						<table class="table table-bordered table-striped">
 							<tr><th>Title</th><td><?php echo $ro->title;?></td></tr>
-							<tr><th>Status</th><td><?php echo $ro->status;?></td></tr>
+							<tr><th>Status</th><td><?php echo (!$currentRevision ?'SUPECEEDED':$ro->status);?></td></tr>
 							<tr><th>Key</th><td><?php echo $ro->key;?></td></tr>
 							<tr><th>ID</th><td><?php echo $ro->id;?></td></tr>						
 							<tr><th>slug</th><td><?php echo $ro->slug;?></td></tr>
 							<tr><td></td><td></td></tr>
 							<?php 
-								echo '<tr><th>RIFCS Format</th><td><a href="javascript:;" class="btn btn-small" id="exportRIFCS"><i class="icon-eject"></i> Export RIFCS';
-								if($viewing_revision){
-									echo ' Revision ('.$revision.')';
-								}
-								echo '</td></a>';
+								echo '<tr><th>RIFCS Format</th><td><a href="javascript:;" class="btn btn-small" id="exportRIFCS"><i class="icon-eject"></i> Export RIFCS</td></a>';
 								if($native_format != 'rif') {
 									echo '<tr><th>Native Format</th><td><a href="javascript:;" class="btn btn-small" id="exportNative"><i class="icon-eject"></i>Export '.$native_format.'</a></td></tr>';
 								}?>
@@ -76,8 +72,8 @@
 					<div class="widget-content">
 						<ul>
 						<?php
-							foreach($revisions as $time=>$id){
-								echo '<li>'.anchor('registry_object/view/'.$ro->id.'/'.$id, $time).'</li>';
+							foreach($revisions as $time=>$revision){
+								echo '<li>'.anchor('registry_object/view/'.$ro->id.'/'.$revision['id'], $time.$revision['current']).'</li>';
 							}
 						?>
 						</ul>

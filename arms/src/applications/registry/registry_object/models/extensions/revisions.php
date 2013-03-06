@@ -17,7 +17,6 @@ class Revisions_extension extends ExtensionBase
 	{
 		date_default_timezone_set('GMT');
 		$this->db->where(array('registry_object_id' => $this->ro->id, 'scheme'=>RIFCS_SCHEME));
-		$this->db->where('current != TRUE');
 		$this->db->order_by('timestamp', 'desc');
 		$this->db->select('*')->from('record_data');
 		$result = $this->db->get();	
@@ -25,9 +24,21 @@ class Revisions_extension extends ExtensionBase
 		foreach($result->result_array() AS $r)
 		{
 			$time = date("F j, Y, g:i a", $r['timestamp']);
-			$revisions[$time] = $r['id'];
+			if($r['current'] == TRUE) $r['current'] = ' (current version)';
+			else $r['current'] = '';
+			$revisions[$time] = $r;
 		}
 		$result->free_result();
 		return $revisions;
+	}
+
+
+	function getRevision($revision_id)
+	{
+		date_default_timezone_set('GMT');
+		$this->db->where(array('registry_object_id' => $this->ro->id, 'id'=>$revision_id, 'scheme'=>RIFCS_SCHEME));
+		$this->db->select('*')->from('record_data');
+		$revision = $this->db->get();	
+		return $revision->result_array();
 	}
 }

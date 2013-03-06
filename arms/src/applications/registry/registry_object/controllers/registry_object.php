@@ -76,6 +76,14 @@ class Registry_object extends MX_Controller {
 				$data['viewing_revision'] = true;
 				$data['rif_html'] = $ro->transformForHtml($revision);
 				$data['native_format'] = $ro->getNativeFormat($revision);
+				$revRecord = $ro->getRevision($revision);
+				$time = date("F j, Y, g:i a", $revRecord[0]['timestamp']);
+				$data['currentRevision'] = $revRecord[0]['current'];
+				if($revRecord[0]['current'] == TRUE)
+					$data['revisionInfo'] = 'Current Revision '.$time;
+				else
+					$data['revisionInfo'] = 'Revision '.$time;	
+
 				if($ro->getNativeFormat($revision) != 'rif')
 				{
 					$data['naitive_text'] = $ro->getNativeFormatData($revision);
