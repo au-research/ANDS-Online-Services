@@ -93,8 +93,15 @@ $(function() {
                   update(selected_ids, attributes);
                 break;
             case 'delete':
-                if(confirm('Are you sure you want to delete '+selected_ids.length+' Registry Objects?')){
-                  delete_ro(selected_ids);
+                if($(this).attr('ro_id')){
+                    if(confirm('Are you sure you want to delete this Registry Objects?')){
+                        deleting = [$(this).attr('ro_id')];
+                        delete_ro(deleting);
+                    }
+                }else{
+                    if(confirm('Are you sure you want to delete '+selected_ids.length+' Registry Objects?')){
+                     delete_ro(selected_ids);
+                    }
                 }
                 break;
             case 'flag':

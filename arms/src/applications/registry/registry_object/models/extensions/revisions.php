@@ -17,6 +17,7 @@ class Revisions_extension extends ExtensionBase
 	{
 		date_default_timezone_set('GMT');
 		$this->db->where(array('registry_object_id' => $this->ro->id, 'scheme'=>RIFCS_SCHEME));
+		$this->db->where('current != TRUE');
 		$this->db->order_by('timestamp', 'desc');
 		$this->db->select('*')->from('record_data');
 		$result = $this->db->get();	

@@ -243,17 +243,41 @@ class _xml
 		if (is_null($scheme)) { $scheme = self::DEFAULT_SCHEME; }
 		
 		$this->xml = $xml;
+		$newHash = md5($xml);
+		$oldHash = '';
 		$this->current = $current;
 		$this->scheme = $scheme;
-		
-		$this->db->insert('record_data', array(
+		$this->db->select('hash')
+		if($current == TRUE)
+		{
+			$query = $this->db->select('*')->from('record_data')->where(array('registry_object_id' => $this->registry_object_id, 'scheme'=>$scheme, 'current'=>TRUE));
+			if ($query->num_rows() == 1)
+			{
+				$results = $query->result_array();
+				$result = $results[0];
+				$query->free_result();
+				$oldHash = $result['hash'];
+			}
+			if($oldHash != $newHash){
+				$this->db->insert('record_data', array(
 												'registry_object_id'=>$this->registry_object_id,
 												'data' => $xml,
 												'timestamp' => time(),
 												'current' => ($current ? "TRUE" : "FALSE"),
 												'scheme' => $scheme
 											));
-													
+			}
+		}
+		else{
+				$this->db->insert('record_data', array(
+												'registry_object_id'=>$this->registry_object_id,
+												'data' => $xml,
+												'timestamp' => time(),
+												'current' => ($current ? "TRUE" : "FALSE"),
+												'scheme' => $scheme
+											));
+
+		}													
 	}
 }
 	

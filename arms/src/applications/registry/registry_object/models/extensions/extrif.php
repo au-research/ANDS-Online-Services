@@ -291,7 +291,8 @@ class Extrif_Extension extends ExtensionBase
 			$xslt_processor = Transforms::get_extrif_to_form_transformer();
 			$dom = new DOMDocument();
 			//$dom->loadXML($this->ro->getXML());
-			$dom->loadXML($rifcs);
+			$dom->loadXML(utf8_encode(str_replace("&", "&amp;", $rifcs)), LIBXML_NOENT);
+			//$dom->loadXML($rifcs);
 			$xslt_processor->setParameter('','base_url',base_url());
 			return $xslt_processor->transformToXML($dom);
 		}catch (Exception $e)
