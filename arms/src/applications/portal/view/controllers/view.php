@@ -278,9 +278,6 @@ class View extends MX_Controller {
 
 	}
 
-
-
-
 	private function checkCustomTemplate($extRifResponse)
 	{
 		// Check if we have a specific rendering template

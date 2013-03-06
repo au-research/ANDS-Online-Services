@@ -710,7 +710,6 @@
     <xsl:attribute name="href"> <xsl:value-of select="$theidentifier"/></xsl:attribute>
     <xsl:attribute name="title"><xsl:text>Resolve this handle</xsl:text></xsl:attribute>    				
     <xsl:value-of select="."/>
-    &amp;amp;nbsp;
       <img class="identifier_logo">
             <xsl:attribute name="src"><xsl:value-of select="$base_url"/>
               <xsl:text>assets/core/images/icons/handle_icon.png</xsl:text>
@@ -749,7 +748,7 @@
       <xsl:attribute name="class">identifier</xsl:attribute>
       <xsl:attribute name="href"><xsl:value-of select="$theidentifier"/></xsl:attribute>
       <xsl:attribute name="title"><xsl:text>Resolve this DOI</xsl:text></xsl:attribute>            
-      <xsl:value-of select="."/>&amp;amp;nbsp;
+      <xsl:value-of select="."/>
       <img class="identifier_logo">
             <xsl:attribute name="src"><xsl:value-of select="$base_url"/>
               <xsl:text>assets/core/images/icons/doi_icon.png</xsl:text>
@@ -789,7 +788,7 @@
     <xsl:attribute name="class">identifier</xsl:attribute>
     <xsl:attribute name="href"><xsl:value-of select="$theidentifier"/></xsl:attribute>
     <xsl:attribute name="title"><xsl:text>Resolve this ORCID</xsl:text></xsl:attribute>            
-    <xsl:value-of select="."/>&amp;amp;nbsp;
+    <xsl:value-of select="."/>
     <img class="identifier_logo">
           <xsl:attribute name="src"><xsl:value-of select="$base_url"/>
             <xsl:text>assets/core/images/icons/orcid_icon.png</xsl:text>
@@ -827,7 +826,7 @@
       <xsl:attribute name="class">identifier</xsl:attribute>
       <xsl:attribute name="href"> <xsl:value-of select="$theidentifier"/></xsl:attribute>
       <xsl:attribute name="title"><xsl:text>View the record for this party in Trove</xsl:text></xsl:attribute>            
-      <xsl:value-of select="."/>&amp;amp;nbsp;
+      <xsl:value-of select="."/>
       <img class="identifier_logo">
             <xsl:attribute name="src"><xsl:value-of select="$base_url"/>
               <xsl:text>assets/core/images/icons/nla_icon.png</xsl:text>
@@ -868,7 +867,7 @@
       <xsl:attribute name="class">identifier</xsl:attribute>
       <xsl:attribute name="href"> <xsl:value-of select="$theidentifier"/></xsl:attribute>
       <xsl:attribute name="title"><xsl:text>Resolve this purl identifier</xsl:text></xsl:attribute>            
-      <xsl:value-of select="."/>&amp;amp;nbsp;
+      <xsl:value-of select="."/>
       <img class="identifier_logo">
             <xsl:attribute name="src"><xsl:value-of select="$base_url"/>
               <xsl:text>assets/core/images/icons/external_link.png</xsl:text>
@@ -903,7 +902,7 @@
       <xsl:attribute name="class">identifier</xsl:attribute>
       <xsl:attribute name="href"> <xsl:value-of select="$theidentifier"/></xsl:attribute>
       <xsl:attribute name="title"><xsl:text>Resolve this URI</xsl:text></xsl:attribute>            
-      <xsl:value-of select="."/>&amp;amp;nbsp;
+      <xsl:value-of select="."/>
       <img class="identifier_logo">
             <xsl:attribute name="src"><xsl:value-of select="$base_url"/>
               <xsl:text>assets/core/images/icons/external_link.png</xsl:text>
