@@ -106,6 +106,16 @@ class Registry_object extends MX_Controller {
 		}
 	}
 
+	public function gold_standard(){
+		$this->load->model('registry_object/registry_objects', 'ro');
+		$gold_ros = $this->ro->getByAttribute('gold_status_flag', 't');
+		$data['ros'] = $gold_ros;
+		$data['title']='Gold Standard Records';
+		$data['js_lib']=array('core');
+		$data['list_title']='Gold Standard Records';
+		$this->load->view('registry_object_list', $data);
+	}
+
 	public function add(){
 		$data['title'] = 'Add Registry Objects';
 		$data['scripts'] = array('add_registry_objects');
