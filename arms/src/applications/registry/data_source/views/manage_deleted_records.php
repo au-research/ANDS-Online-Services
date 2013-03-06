@@ -76,7 +76,6 @@
 		<div class="clearfix"></div>
 	</div>
 </div>
-<?php echo 'limit:'.$limit.'  offset: '.$offset; ?>
 <div class="modal hide" id="myModal">
   	<div class="modal-header">
     	<button type="button" class="close" data-dismiss="modal">×</button>

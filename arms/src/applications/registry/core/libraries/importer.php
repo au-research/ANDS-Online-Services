@@ -234,9 +234,9 @@ class Importer {
 
 					// XXX: Record owner should only be system if this is a harvest?
 					$record_owner = "SYSTEM";
-					if($this->user->isLoggedIn())
+					if($this->CI->user->isLoggedIn())
 					{
-						$record_owner = $this->user->identifier();
+						$record_owner = $this->CI->user->identifier();
 					}
 					if (is_null($revision_record_id))
 					{

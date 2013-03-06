@@ -249,7 +249,7 @@ class _xml
 		$this->scheme = $scheme;
 		if($current == TRUE)
 		{
-			$query = $this->db->select('*')->from('record_data')->where(array('registry_object_id' => $this->registry_object_id, 'scheme'=>$scheme))->order_by('id DESC')->limit(1);
+			$query = $this->db->select('*')->from('record_data')->where(array('registry_object_id' => $this->registry_object_id, 'scheme'=>$scheme))->order_by('id DESC')->limit(1)->get();
 			if ($query->num_rows() > 0)
 			{
 				$results = $query->result_array();

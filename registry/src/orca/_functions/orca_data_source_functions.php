@@ -578,6 +578,7 @@ function cancelHarvestRequest($harvestRequestId, $dataSourceKey)
 		if( $runErrors )
 		{
 			$actions .= ">>ERRORS\n";
+			$errors = deleteHarvestRequest($harvestRequestId);
 			$actions .= $runErrors;
 		}
 		else
