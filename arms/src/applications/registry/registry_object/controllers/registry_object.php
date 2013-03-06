@@ -80,9 +80,9 @@ class Registry_object extends MX_Controller {
 				$time = date("F j, Y, g:i a", $revRecord[0]['timestamp']);
 				$data['currentRevision'] = $revRecord[0]['current'];
 				if($revRecord[0]['current'] == TRUE)
-					$data['revisionInfo'] = 'Current Revision '.$time;
+					$data['revisionInfo'] = 'Current Version: '.$time;
 				else
-					$data['revisionInfo'] = 'Revision '.$time;	
+					$data['revisionInfo'] = 'Revision: '.$time;	
 
 				if($ro->getNativeFormat($revision) != 'rif')
 				{
