@@ -420,6 +420,23 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 
 
 	}
+	public function getSlugFromKey()
+	{
+		$key = $this->input->get("key");
+
+		$this->db->select("slug")->from("registry_objects")->where("key",$key);
+		$query = $this->db->get();
+
+		if ($query->num_rows() > 0)
+		{
+			$result = $query->result_array();
+			echo json_encode($result);
+		}
+		else
+		{
+			echo json_encode(array());
+		}
+	}
 
 	/* Setup this controller to handle the expected response format */
 	public function __construct()

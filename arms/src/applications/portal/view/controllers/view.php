@@ -6,19 +6,21 @@ class View extends MX_Controller {
 	/* DEFAULT VIEW HANDLER -- WILL FETCH EXTRIF AND HAND OVER TO A RENDERER (BELOW) */
 	function index()
 	{
-		if (!$this->input->get('slug') && !$this->input->get('id'))
+
+		// Published records are always referenced by SLUG
+		// (for backwards compatibility, we can also redirect based on a key)
+		if ($this->input->get('key'))
 		{
-			redirect('/');
+			$this->handleRedirectFromKeyToSlug($this->input->get('key'));
+			return;
+		}
+		else if (!$this->input->get('slug') && !$this->input->get('id'))
+		{			
+			$this->load->view('soft404');
+			return;
 		}
 
 		$this->load->model('registry_fetch','registry');
-
-
-		// Published records are always referenced by SLUG 
-		// XXX: or key!?  <not yet implemented>
-
-
-
 
 		if ($this->input->get('slug'))
 		{
@@ -289,6 +291,25 @@ class View extends MX_Controller {
 		else
 		{
 			$this->renderDefaultViewPage($extRifResponse);
+		}
+	}
+
+
+	private function handleRedirectFromKeyToSlug($key)
+	{
+		if ($key)
+		{
+			$this->load->model('registry_fetch','registry');
+			$slug = $this->registry->getSlugFromKey($key);
+			if ($slug)
+			{
+				redirect("/" . $slug);
+			}
+			else
+			{
+				$this->load->view('soft404');
+				return;
+			}
 		}
 	}
 
