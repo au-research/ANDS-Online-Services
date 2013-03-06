@@ -468,16 +468,18 @@ class _data_source {
 		return $this->db->insert_id();
 	}
 	
-	function get_logs($offset = 0, $count = 10, $logid=null)
+	function get_logs($offset = 0, $count = 10, $logid=null, $log_class='all', $log_type='all')
 	{
 		$logs = array();
+		$this->db->from('data_source_logs');
+		$this->db->limit($count, $offset);
+		$this->db->where('data_source_id', $this->id);
+		if($logid) $this->db->where('id >=', $logid);
+		if($log_class!='all') $this->db->where('class', $log_class);
+		if($log_type!='all') $this->db->where('type', $log_type);
 		$this->db->order_by("id", "desc"); 
-		if($logid)
-			$query = $this->db->get_where("data_source_logs", array("data_source_id"=>$this->id, "id >=" => $logid));
-		else
-			$query = $this->db->get_where("data_source_logs", array("data_source_id"=>$this->id), $count, $offset);
-		if ($query->num_rows() > 0)
-		{
+		$query = $this->db->get();
+		if ($query->num_rows() > 0){
 			foreach ($query->result_array() AS $row)
 			{
 				$logs[] = $row;		
@@ -498,6 +500,15 @@ class _data_source {
 		$this->db->where(array("data_source_id" => $this->id));
 		$this->db->delete("data_source_logs");
 		return;
+	}
+
+	function getHarvesterStatus(){
+		$query = $this->db->get_where("harvest_requests", array("data_source_id"=>$this->id,));
+		if($query->num_rows()>0){
+			foreach($query->result_array() as $row){
+				return $row;
+			}
+		}
 	}
 	
 	function getHarvestRequests($id = null)
@@ -534,6 +545,7 @@ class _data_source {
 		$this->db->delete("harvest_requests", array("id" => $harvestRequestId));
 		return;		
 	}
+
 	
 	/*
 	 * 	STATS

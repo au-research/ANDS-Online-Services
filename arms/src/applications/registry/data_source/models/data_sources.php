@@ -82,7 +82,7 @@ class Data_sources extends CI_Model {
 			$id = $query->result_array();
 			return new _data_source($id[0]['data_source_id']);
 		}
-	} 	
+	}
 
 	/**
 	 * Returns data sources which this user has ownership of by virtue of their

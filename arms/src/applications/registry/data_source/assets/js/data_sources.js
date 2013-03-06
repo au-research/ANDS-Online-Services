@@ -217,7 +217,6 @@ function load_more(page){
 		contentType: 'application/json; charset=utf-8',
 		dataType: 'json',
 		success: function(data){
-			console.log(data);
 			var itemsTemplate = $('#items-template').html();
 			var output = Mustache.render(itemsTemplate, data);
 			$('#items').append(output);
@@ -248,6 +247,7 @@ function load_datasource(data_source_id){
 		contentType: 'application/json; charset=utf-8',
 		dataType: 'json',
 		success: function(data){
+			log(data);
 			//console.log(data);
 			var template = $('#data-source-view-template').html();
 			var output = Mustache.render(template, data);
@@ -296,22 +296,22 @@ function loadDataSourceLogs(data_source_id, offset, count)
 {
 	offset = typeof offset !== 'undefined' ? offset : 0;
 	count = typeof count !== 'undefined' ? count : 10;
-	// $('#data_source_log_container').html('Loading + + +');
-	//$('#data_source_log_container').slideUp(500);
-
+	
+	var log_class = $('select.log-class').val();
+	var log_type = $('select.log-type').val();
+	log(log_class, log_type, offset, count);
 	$.ajax({
 		url: 'data_source/getDataSourceLogs/',
-		data: {id:data_source_id, offset:offset, count:count},
+		data: {id:data_source_id, offset:offset, count:count, log_class:log_class, log_type:log_type},
 		type: 'POST',
 		dataType: 'json',
 		success: function(data){
-			console.log(data);
 			var logsTemplate = $('#data_source_logs_template').html();
 			var output = Mustache.render(logsTemplate, data);
 			$('#data_source_log_container').append(output);
 
 			$('#data_source_log_container').fadeIn(500);
-			$('#log_summary').html('viewing ' + data.next_offset + ' of ' + data.log_size + ' log entries');
+			$('#log_summary').html('Viewing ' + data.next_offset + ' of ' + data.log_size + ' log entries');
 			//$('#log_summary_bottom').html('viewing ' + data.next_offset + ' of ' + data.log_size + ' log entries');
 			$('#show_more_log').attr('next_offset', data.next_offset);
 			if(data.next_offset=='all'){
@@ -329,12 +329,17 @@ function loadDataSourceLogs(data_source_id, offset, count)
 		}
 	});
 
-	return false;
+	$('select.log-class, select.log-type').off('change').on('change',function(){
+		$('#data_source_log_container').empty();
+		loadDataSourceLogs(data_source_id);
+	});
 
+	return false;
 }
 
+
+
 function loadHarvestLogs(data_source_id, logid){
-	console.log("logID: " + logid);
 	$.ajax({
 		url: 'data_source/getDataSourceLogs/',
 		data: {id:data_source_id, logid:logid},

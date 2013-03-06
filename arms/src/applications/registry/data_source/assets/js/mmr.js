@@ -334,7 +334,7 @@ function initLayout(){
                 return $('.selecting_menu',this).html();
             }
         },
-        position: {viewport: $(window)},
+        position: {viewport: $(window), my:'left center'},
         show:{ready:false,effect:false,event:'click'},
         hide:{event:'unfocus'},
         style: {classes: 'ui-tooltip-shadow ui-tooltip-bootstrap'}
@@ -385,7 +385,7 @@ function initLayout(){
                     }
                 }
             },
-            position: {viewport: $(window)},
+            position: {viewport: $(window), my:'left center'},
             show: {
                 //event: 'click',
                 ready: true,
@@ -566,7 +566,7 @@ function bindSortables(){
                         data: {data_source_id:ds_id,status:context_status,affected_ids:selected_ids,selecting_status:selecting_status}
                     }
                 },
-                position: {viewport: $(window)},
+                position: {viewport: $(window), my:'left center'},
                 show:{ready:true,effect:false,event:'click'},
                 hide:{event:'unfocus'},
                 style: {classes: 'ui-tooltip-shadow ui-tooltip-bootstrap'}
@@ -632,7 +632,7 @@ function bindSortables(){
                         }
                     }
                 },
-                position: {viewport: $(window)},
+                position: {viewport: $(window), my:'left center'},
                 show:{ready:true,effect:false,event:'click'},
                 hide:{event:'unfocus'},
                 style: {classes: 'ui-tooltip-shadow ui-tooltip-bootstrap'}
@@ -750,7 +750,7 @@ function bindPreviews(){
             style: {
                 width:750
             },
-            position: {viewport: $(window)},
+            position: {viewport: $(window), my:'left center'},
             show:{ready:true,effect:false,event:'click'},
             hide:{event:'unfocus'},
             style: {classes: 'ui-tooltip-shadow ui-tooltip-bootstrap'}

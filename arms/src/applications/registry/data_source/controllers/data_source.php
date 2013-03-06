@@ -303,7 +303,6 @@ class Data_source extends MX_Controller {
 							'title'=>$registry_object->title,
 							'status'=>$registry_object->status,
 							'class'=>$registry_object->class,
-							'quality_level'=>$registry_object->quality_level,
 							'updated'=>timeAgo($registry_object->updated),
 							'error_count'=>$registry_object->error_count,
 							'warning_count'=>$registry_object->warning_count,
@@ -311,7 +310,11 @@ class Data_source extends MX_Controller {
 						);
 				if($item['error_count']>0) $item['has_error'] = true;
 				if($registry_object->flag=='t') $item['has_flag'] = true;
-				if($registry_object->gold_status_flag=='t') $item['has_gold'] = true;
+				if($registry_object->gold_status_flag=='t'){
+					$item['has_gold'] = true;
+				}else{
+					$item['quality_level'] = $registry_object->quality_level;
+				}
 				array_push($results['items'], $item);
 			}
 		}else return false;
@@ -517,6 +520,14 @@ class Data_source extends MX_Controller {
 			array_push($jsonData['item']['classcounts'], array('class' => $class, 'count' =>$dataSource->getAttribute("count_$class"),'name'=>readable($class)));
 		}
 		
+		$harvesterStatus = $dataSource->getHarvesterStatus();
+		$date = new DateTime($harvesterStatus['next_harvest']);
+		$date = $date->format('Y-m-d H:i:s');
+		$jsonData['item']['harvester_status'] = array(
+			'status'=>$harvesterStatus['status'],
+			'next_harvest'=> $date
+		);
+
 		$jsonData = json_encode($jsonData);
 		echo $jsonData;
 	}
@@ -608,10 +619,12 @@ class Data_source extends MX_Controller {
 		$offset = isset($post['offset']) ? (int) $post['offset'] : 10;
 		$count = isset($post['count']) ? (int) $post['count'] : 0;
 		$logid = isset($post['logid']) ? (int) $post['logid'] : null;
+		$log_class = isset($post['log_class']) ? $post['log_class'] : 'all';
+		$log_type = isset($post['log_type']) ? $post['log_type'] : 'all';
 
 		$jsonData = array();
 		$dataSource = $this->ds->getByID($id);
-		$dataSourceLogs = $dataSource->get_logs($offset, $count, $logid);
+		$dataSourceLogs = $dataSource->get_logs($offset, $count, $logid, $log_class, $log_type);
 		$jsonData['log_size'] = $dataSource->get_log_size();
 
 		if($jsonData['log_size'] > ($offset + $count)){

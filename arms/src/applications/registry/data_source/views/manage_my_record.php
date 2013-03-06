@@ -118,12 +118,14 @@
 				<p>
 					<span class="tag" tip="Last Modified"><i class="icon icon-time"></i> {{updated}}</span>
 					<img class="tag" tip="{{class}}" src="<?php echo asset_url('img/{{class}}.png', 'base');?>"/>
-					<span class="tag ql_{{quality_level}} tipQA" ro_id='{{id}}'>{{quality_level}}</span>
+					{{#quality_level}}
+						<span class="tag ql_{{quality_level}} tipQA" ro_id='{{id}}'>{{quality_level}}</span>
+					{{/quality_level}}
 					{{#has_flag}}
-					<span class="tag flag" tip="Flagged"><i class="icon icon-flag"></i></span>
+						<span class="tag flag" tip="Flagged"><i class="icon icon-flag"></i></span>
 					{{/has_flag}}
 					{{#has_gold}}
-					<span class="tag gold_status_flag" tip="Gold Standard"><i class="icon icon-star-empty"></i></span>
+						<span class="tag gold_status_flag" tip="<h5>Gold Standard</h5><p>The following record has been verified<br/> as an exemplary record <br/>by the ANDS Metadata Assessment Group.</p>"><i class="icon icon-star-empty"></i></span>
 					{{/has_gold}}
 				</p>
 			</div>

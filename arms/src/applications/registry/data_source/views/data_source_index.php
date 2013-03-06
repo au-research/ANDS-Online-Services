@@ -157,9 +157,6 @@
 </script>
 
 
-
-
-
 <!-- mustache template for data source view single-->
 <script type="text/x-mustache"  id="data-source-view-template">
 <?php
@@ -222,14 +219,32 @@
 				</div>
 			</div>
 
+			{{#harvester_status}}
+			<div class="widget-content alert">A harvest is scheduled: <b>{{next_harvest}}</b></div>	
+			{{/harvester_status}}
 			<div class="widget-title">
 				<h5>Activity Log</h5>
-				<span class="label label-info" id="log_summary"></span>
+				<div class="pull-right">
+					<select class="log-class">
+						<option value="all">All</option>
+						<option value="harvester">Harvester</option>
+						<option value="data_source">Data Source</option>
+						<option value="registry_object">Registry Objects</option>
+						<option value="importer">Importer</option>
+					</select>
+					<select class="log-type">
+						<option value="all">All</option>
+						<option value="error">Errors</option>
+						<option value="message">Message</option>
+						<option value="warning">Warning</option>
+						<option value="info">Info</option>
+					</select>
+				</div>
 			</div>
 			<div class="widget-content nopadding">
 				<ul class="activity-list" id="data_source_log_container"></ul>
 				<ul class="activity-list">
-					<li class="viewall"><a id='show_more_log' class="tip-top" href="javascript:;" data-original-title="View all posts">Show More<i class='icon-arrow-down'></i></a></li>
+					<li class="viewall"><a id='show_more_log' class="tip-top" href="javascript:;" data-original-title="View all posts">Show More<i class='icon-arrow-down'></i> <span class="label label-info" id="log_summary"></span></a></li>
 				</ul>
 			</div>
 	 
