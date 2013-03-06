@@ -167,6 +167,7 @@
 				<p><input type="button" id="tag_submit" name="tag_submit" value="Submit"/></p>
 			</div>
 		</div-->    
+  <div class="page_title" id="displaytitle">
 
      <xsl:choose>
 
@@ -175,10 +176,9 @@
       </xsl:when>
       <xsl:otherwise>
 
-        <div class="page_title" id="displaytitle">
+      
 
             <h1 itemprop="name"><xsl:value-of select="../ro:key"/></h1>
-
 
             <xsl:for-each select="//ro:existenceDates">
               <xsl:choose>
@@ -192,32 +192,31 @@
                 </xsl:otherwise>
               </xsl:choose>
           </xsl:for-each>
+          <div class="right_icon">
+            <img class="icon-heading">
+               <xsl:attribute name="src"><xsl:value-of select="$base_url"/>
+               <xsl:text>assets/core/images/</xsl:text>
+               <xsl:value-of select="$objectClassType"/>
+               <xsl:text>.png</xsl:text>
+           </xsl:attribute>
+           <xsl:attribute name="alt"><xsl:value-of select="$objectClassType"/></xsl:attribute>
+          </img>
 
+          </div> 
 
-      </div>
+        </xsl:otherwise> 
 
-      <div class="right_icon">
-        <img class="icon-heading">
-           <xsl:attribute name="src"><xsl:value-of select="$base_url"/>
-           <xsl:text>assets/core/images/</xsl:text>
-           <xsl:value-of select="$objectClassType"/>
-           <xsl:text>.png</xsl:text>
-       </xsl:attribute>
-       <xsl:attribute name="alt"><xsl:value-of select="$objectClassType"/></xsl:attribute>
-   </img>
-</div> 
-
-</xsl:otherwise> 
-
-</xsl:choose>    
-
-<!-- DISPLAY LOGO -->
-<xsl:apply-templates select="../extRif:extendedMetadata/extRif:displayLogo"/>
+        </xsl:choose>   
+    </div> 
 
 <!-- DISPLAY ALTERNATE TITLES/NAMES -->
 <xsl:apply-templates select="ro:name[@type='alternative']"/>
 
 <xsl:apply-templates select="ro:name[@type='abbreviated']"/>
+
+
+<!-- DISPLAY LOGO -->
+<xsl:apply-templates select="../extRif:extendedMetadata/extRif:displayLogo"/>
 
 
 <div class="post">
@@ -538,7 +537,6 @@
           </xsl:otherwise>
         </xsl:choose>
       </xsl:for-each>     
-  </div>			
 
 
 </xsl:template>
@@ -555,7 +553,7 @@
 </xsl:template> 
 
 <xsl:template match="ro:name[@type='alternative']">   
-    <p class="alt_displayTitle"><xsl:apply-templates/></p>
+    <p class="alt_displayTitle">Also known as: <xsl:apply-templates/></p>
 </xsl:template> 
 
 <xsl:template match="extRif:logo">
@@ -563,7 +561,7 @@
 </xsl:template> 
 
 <xsl:template match="ro:name[@type='abbreviated']">   
-    <p class="abbrev_displayTitle"><xsl:apply-templates/></p>
+    <p class="abbrev_displayTitle">Also known as: <xsl:apply-templates/></p>
 </xsl:template>
 
 <xsl:template match="ro:namePart[last()]">

@@ -23,14 +23,14 @@ class Suggestor_ands_subjects implements GenericSuggestor
 		$my_subjects = array('');
 		foreach($sxml->{strtolower($registry_object->class)}->subject AS $subject)
 		{
-			$my_subjects[] = '"' . (string) $subject . '"';
+			$my_subjects[] = '"' . (string) $subject . '" OR';
 		}
-		$subject_search_query = implode(" +subject_value_unresolved:", $my_subjects);
+		$subject_search_query = "(" . substr(implode(" subject_value_resolved:", $my_subjects), 0, -3) . ")";
 
 
 		// But exclude already related objects
 		$my_relationships = array_map(function($elt){ return '"' . $elt . '"'; }, $registry_object->getRelationships());
-		$my_relationships[] = $registry_object->key;
+		$my_relationships[] = '"' . $registry_object->key . '"';
 		array_unshift($my_relationships, ''); // prepend an element so that 
 		$relationship_search_query = " " . implode(" -key:", $my_relationships);
 
