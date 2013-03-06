@@ -91,7 +91,7 @@
 	{
 		echo "<h2>Connections</h2>";
 		echo $connDiv;
-		echo "<p></p>";
+		echo "<p><br/></p>";
 	}
 
 ?>

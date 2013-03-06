@@ -307,7 +307,7 @@
         <h4>Subjects</h4>
         <!-- ANZSRC SUBJECTS -->
         <xsl:if test="../extRif:extendedMetadata/extRif:subjects/extRif:subject/extRif:subject_type ='anzsrc-for' or ../extRif:extendedMetadata/extRif:subjects/extRif:subject/extRif:subject_type='anzsrc-seo' or ../extRif:extendedMetadata/extRif:subjects/extRif:subject/extRif:subject_type='anzsrc-toa'">
-            <p class="subject_type">ANZSRC</p>
+            <p class="subject_type">Field of Research</p>
             <div class="tags">
                 <xsl:for-each select="../extRif:extendedMetadata/extRif:subjects/extRif:subject">      
                     <xsl:sort select="extRif:subject_type"/>
@@ -317,6 +317,7 @@
                 </xsl:for-each>
             </div>
         </xsl:if>
+        
 
         <!-- OTHER SUBJECTS -->
         <xsl:if test="../extRif:extendedMetadata/extRif:subjects/extRif:subject/extRif:subject_type!='anzsrc-for' and ../extRif:extendedMetadata/extRif:subjects/extRif:subject/extRif:subject_type!='anzsrc-seo' and ../extRif:extendedMetadata/extRif:subjects/extRif:subject/extRif:subject_type!='anzsrc-toa'">
