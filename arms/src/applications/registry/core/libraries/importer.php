@@ -234,8 +234,10 @@ class Importer {
 
 					// XXX: Record owner should only be system if this is a harvest?
 					$record_owner = "SYSTEM";
-
-					
+					if($this->user->isLoggedIn())
+					{
+						$record_owner = $this->user->identifier();
+					}
 					if (is_null($revision_record_id))
 					{
 						// We are creating a new registryObject
@@ -265,8 +267,10 @@ class Importer {
 					$ro->created_who = $record_owner;
 					$ro->data_source_key = $this->dataSource->key;
 					$ro->group = (string) $registryObject['group'];
-					$ro->setAttribute("harvest_id", $this->harvestID);
-
+					if($this->harvestID)
+					{
+						$ro->setAttribute("harvest_id", $this->harvestID);
+					}
 					// Clean up all previous versions (set = FALSE, "prune" extRif)
 					$ro->cleanupPreviousVersions();
 

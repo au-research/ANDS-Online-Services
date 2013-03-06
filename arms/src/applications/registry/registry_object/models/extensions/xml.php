@@ -247,11 +247,10 @@ class _xml
 		$oldHash = '';
 		$this->current = $current;
 		$this->scheme = $scheme;
-		$this->db->select('hash')
 		if($current == TRUE)
 		{
-			$query = $this->db->select('*')->from('record_data')->where(array('registry_object_id' => $this->registry_object_id, 'scheme'=>$scheme, 'current'=>TRUE));
-			if ($query->num_rows() == 1)
+			$query = $this->db->select('*')->from('record_data')->where(array('registry_object_id' => $this->registry_object_id, 'scheme'=>$scheme))->order_by('id DESC')->limit(1);
+			if ($query->num_rows() > 0)
 			{
 				$results = $query->result_array();
 				$result = $results[0];
