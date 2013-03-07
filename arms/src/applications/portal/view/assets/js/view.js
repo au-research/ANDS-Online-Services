@@ -5,9 +5,11 @@ var metadataContainer = $('#registryObjectMetadata');
 var loading_icon = '<div style="width:100%; padding-top:40px; text-align:center;"><img src="'+base_url+'assets/core/images/ajax-loader.gif" alt="Loading..." /></div>';
 var ACCORDION_MODE_SUGGESTORS = ['datacite'];
 
-// Check if we have a hierarchal connections graph
 setRegistryLink();
 initDescriptionDisplay();
+drawRegistryIcon();
+
+// Check if we have a hierarchal connections graph
 initConnectionGraph();
 drawMap();
 initConnections(); 
@@ -21,9 +23,17 @@ if ( $('#class', metadataContainer).html() == "Collection" )
 // Internal Suggested Links
 initInternalSuggestedLinks();
 
-
-
 /*if (isPublished()) { $('#draft_status').removeClass("hide"); }*/
+
+function drawRegistryIcon(){
+    var icon = $('<img />').attr('src', base_url+'assets/core/images/icons/'+$('#class_type').text()+'.png').attr('class', 'right_icon').width(35);
+    if($('.sidebar h2').length > 0){
+        //if there is a heading in the sidebar, put the icon beside it
+        $('.sidebar h2:first').append(icon);
+    }else{
+        $('.sidebar').append(icon);
+    }
+}
 
 function initConnections(){
     $('.preview_connection').each(function(){

@@ -32,8 +32,12 @@
 						}
 
 						//relationship
-						$relationship = format_relationship($from_class, $entry['relation_type'], $entry['origin']);
-
+						if(isset($entry['relation_type'])){
+							$relationship = format_relationship($from_class, $entry['relation_type'], $entry['origin']);
+						}else{
+							$relationship = 'Contributor';
+						}
+						
 						if(!isset($conn[$entry['class']])){
 							$conn[$entry['class']] = '<p class="'.$entry['class'].' preview_connection"><a href="'.$url.'" '.$preview.' relation_type="'.$relationship.'">'.$entry['title'].'</a></p>';
 						}else{

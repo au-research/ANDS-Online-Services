@@ -141,6 +141,7 @@
                 <span id="status"><xsl:value-of select="//extRif:extendedMetadata/extRif:status"/></span>
                 <span id="slug"><xsl:value-of select="//extRif:extendedMetadata/extRif:slug"/></span>
                 <span id="registry_object_id"><xsl:value-of select="//extRif:extendedMetadata/extRif:id"/></span>
+                <span id="class_type"><xsl:value-of select="$objectClassType"/></span>
             </div>
 
             <xsl:apply-templates select="ro:collection | ro:activity | ro:party | ro:service"/>
@@ -510,7 +511,7 @@
 <!--  the following templates will format the view page content -->
 <xsl:template match="extRif:displayTitle">   
 
-<div class="right_icon">
+<!-- <div class="right_icon">
    <img class="icon-heading">
      <xsl:attribute name="src"><xsl:value-of select="$base_url"/>
      <xsl:text>assets/core/images/icons/</xsl:text>
@@ -518,11 +519,12 @@
      <xsl:text>.png</xsl:text></xsl:attribute>
      <xsl:attribute name="alt"><xsl:value-of select="$objectClassType"/></xsl:attribute>
  </img>
-</div>   
-
-
+</div>   --> 
 
     <div class="page_title" id="displaytitle">
+
+      <xsl:apply-templates select="../extRif:logo"/>
+
        <h1><xsl:value-of select="."/></h1>
        <xsl:for-each select="//ro:existenceDates">
          <xsl:choose>
@@ -554,6 +556,10 @@
 
 <xsl:template match="ro:name[@type='alternative']">   
     <p class="alt_displayTitle"><xsl:apply-templates/></p>
+</xsl:template> 
+
+<xsl:template match="extRif:logo">
+    <img class="logo" src="{.}"/>
 </xsl:template> 
 
 <xsl:template match="ro:name[@type='abbreviated']">   
