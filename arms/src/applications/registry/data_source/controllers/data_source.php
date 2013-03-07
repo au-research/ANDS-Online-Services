@@ -699,10 +699,9 @@ class Data_source extends MX_Controller {
 
 			$stockAttributes = array('title','record_owner','contact_name', 'contact_email', 'provider_type');
 			$extendedAttributes = array('allow_reverse_internal_links','allow_reverse_external_links','auto_publish','qa_flag');
-		    $harvesterParams = array('uri','harvest_method','harvest_date','oai_set');
+		    $harvesterParams = array('uri','harvest_method','harvest_date','oai_set', 'advanced_harvest_mode','harvest_frequency');
 		    $primaryRelationship = array('class_1','class_2','primary_key_1','primary_key_2','collection_rel_1','collection_rel_2','activity_rel_1','activity_rel_2','party_rel_1','party_rel_2','service_rel_1','service_rel_2');
 			$institutionPages = array('institution_pages');
-
 			$valid_attributes = array_merge(array_keys($dataSource->attributes()), $harvesterParams);
 			$valid_attributes = array_merge($valid_attributes, $primaryRelationship);
 			$valid_attributes = array_merge($valid_attributes, $institutionPages);
@@ -1091,7 +1090,7 @@ class Data_source extends MX_Controller {
 			$dataSource = $this->ds->getByID($id);
 		}
 
-		// XXX: This doesn't handle "new" attribute creation? Probably need a whilelist to allow new values to be posted. //**whitelist**//
+		// XXX: This doesn't handle "new" attribute creation? Probably need a whitelist to allow new values to be posted. //**whitelist**//
 		if ($dataSource)
 		{
 			$dataSourceURI = $this->input->post("uri");

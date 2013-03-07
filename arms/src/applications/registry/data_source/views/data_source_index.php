@@ -452,8 +452,8 @@
 	
 	
 	<div class="modal-footer">
-		<a href="javascript:;" class="btn btn-primary exportRecord" type="xml" data-loading-text="Fetching records...">Show me the XML</a>
-		<a href="javascript:;" class="btn btn-primary exportRecord" type="file" data-loading-text="Fetching records...">Get My File</a>
+		<a href="javascript:;" class="btn btn-primary exportRecord" type="xml" data-loading-text="Fetching records...">View RIF-CS in Browser</a>
+		<a href="javascript:;" class="btn btn-primary exportRecord" type="file" data-loading-text="Fetching records...">Download RIF-CS</a>
 		<a href="#" class="btn hide" data-dismiss="modal">Close</a>
 	</div>
 	
@@ -606,6 +606,16 @@
 					<dt>OAI-PMH Set</dt>
 					<dd>{{oai_set}}</dd>
 					{{/oai_set}}
+
+					{{#advanced_harvest_mode}}
+					<dt>Advanced Harvest Mode</dt>
+					<dd>{{advanced_harvest_mode}}</dd>
+					{{/advanced_harvest_mode}}
+
+					{{#harvest_frequency}}
+					<dt>Harvest Frequency</dt>
+					<dd>{{harvest_frequency}}</dd>
+					{{/harvest_frequency}}
 			 	</dl>
 		 	</div>
 	    </div>
