@@ -127,6 +127,9 @@
         <!-- <span class="internal">The status of the record in the registry (only PUBLISHED records are currently indexed) </span> -->
         <field name="status" type="string" indexed="true" stored="true"/>
 
+        <!-- <span class="internal">The logo of the record in the registry (only PUBLISHED records are currently indexed) </span> -->
+        <field name="logo" type="string" indexed="true" stored="true"/>
+
         <!-- <span class="inferred">The W3CDTF timestamp representing when the record was most recently updated</span> -->
         <field name="update_timestamp" type="date" indexed="true" stored="true" default="NOW"
           multiValued="false"/>

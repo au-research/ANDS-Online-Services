@@ -43,7 +43,7 @@
       </xsl:choose>
   </xsl:variable>	
 
-  <xsl:variable name="theTitle">	
+  <xsl:variable name="theTitle">
       <xsl:choose>
           <xsl:when test="string-length(/extRif:extendedMetadata/extRif:displayTitle)>30">
               <xsl:value-of select="substring(/extRif:extendedMetadata/extRif:displayTitle,0,30)"/>...

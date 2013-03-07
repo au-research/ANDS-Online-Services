@@ -49,7 +49,13 @@ class Extrif_Extension extends ExtensionBase
 					foreach ($xml->{$this->ro->class}->description AS $description)
 					{					
 						$type = (string) $description['type'];
-						$description_str = (string) $description;					
+						$description_str = (string) $description;
+
+						//add logo to the extrif
+						if($type=='logo'){
+							$extendedMetadata->addChild("extrif:logo", $description, EXTRIF_NAMESPACE);
+						}
+
 						$this->_CI->load->library('purifier');
 						$clean_html = $this->_CI->purifier->purify_html($description_str);
 						$encoded_html = '';
