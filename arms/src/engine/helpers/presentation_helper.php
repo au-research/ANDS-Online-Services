@@ -135,13 +135,14 @@ function ellipsis ($string, $length = 64)
 }
 
 function readable($text){
+	$text = strtolower($text);
 	switch($text){
-		case "DRAFT": return 'Drafts';break;
-		case "SUBMITTED_FOR_ASSESSMENT": return 'Submitted for Assessment';break;
-		case "ASSESSMENT_IN_PROGRESS": return 'Assessment In Progress';break;
-		case "APPROVED": return 'Approved Records';break;
-		case "PUBLISHED": return 'Published Records';break;
-		case "MORE_WORK_REQUIRED": return 'More Work Required';break;
+		case "draft": return 'Drafts';break;
+		case "submitted_for_assessment": return 'Submitted for Assessment';break;
+		case "assessment_in_progress": return 'Assessment In Progress';break;
+		case "approved": return 'Approved Records';break;
+		case "published": return 'Published Records';break;
+		case "more_work_required": return 'More Work Required';break;
 		case "collection": return 'Collections';break;
 		case "party": return 'Parties';break;
 		case "service": return 'Services';break;

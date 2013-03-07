@@ -418,21 +418,17 @@
 			<form class="form-vertical" id="data_source_export_form">
 				<fieldset>
 					<label><b>Selection form</b> </label>
-					<input type="checkbox" name="activity" value="yes" checked="checked" />Activities<br/>
-					<input type="checkbox" name="collection" value="yes" checked="checked" />Collections<br/>
-					<input type="checkbox" name="party" value="yes" checked="checked" />Parties<br/>
-					<input type="checkbox" name="service" value="yes" checked="checked" />Services<br/>
-					<br/>
-					<select name="status" data-placeholder="Choose by Status" tabindex="1" class="chzn-select input-xlarge" for="class_1">
-						<option value="All">ALL status</option>
-						<option value="PUBLISHED">PUBLISHED</option>
-						<option value="APPROVED">APPROVED</option>
-						<option value="DRAFT">DRAFT</option>
-						<option value="SUBMITTED_FOR_ASSESSMENT">SUBMITTED_FOR_ASSESSMENT</option>
-						<option value="MORE_WORK_REQUIRED">MORE_WORK_REQUIRED</option>
-						<option value="ASSESSMENT_IN_PROGRESS">ASSESSMENT_IN_PROGRESS</option>
-					</select>
-					<!--label><b>Limit: </b> </label><input type="text" name="limit" value="20" /><br/-->
+					<label class="checkbox"><input type="checkbox" name="ro_class" value="activity" checked="checked" /><?php echo readable('activity');?></label>
+					<label class="checkbox"><input type="checkbox" name="ro_class" value="collection" checked="checked" /><?php echo readable('Collection');?></label>
+					<label class="checkbox"><input type="checkbox" name="ro_class" value="party" checked="checked" /><?php echo readable('Party');?></label>
+					<label class="checkbox"><input type="checkbox" name="ro_class" value="service" checked="checked" /><?php echo readable('Service');?></label>
+					<hr/>
+					<label class="checkbox"><input type="checkbox" name="ro_status" value="PUBLISHED" checked="checked" /><?php echo readable('PUBLISHED');?></label>
+					<label class="checkbox"><input type="checkbox" name="ro_status" value="APPROVED" checked="checked" /><?php echo readable('APPROVED');?></label>
+					<label class="checkbox"><input type="checkbox" name="ro_status" value="DRAFT" checked="checked" /><?php echo readable('DRAFT');?></label>
+					<label class="checkbox"><input type="checkbox" name="ro_status" value="SUBMITTED_FOR_ASSESSMENT" checked="checked" /><?php echo readable('SUBMITTED_FOR_ASSESSMENT');?></label>
+					<label class="checkbox"><input type="checkbox" name="ro_status" value="MORE_WORK_REQUIRED" checked="checked" /><?php echo readable('MORE_WORK_REQUIRED');?></label>
+					<label class="checkbox"><input type="checkbox" name="ro_status" value="ASSESSMENT_IN_PROGRESS" checked="checked"/><?php echo readable('assessment_in_progress');?></label>
 				</fieldset>
 			</form>
 		</div>

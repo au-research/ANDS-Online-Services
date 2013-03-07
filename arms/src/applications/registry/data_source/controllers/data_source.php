@@ -1253,31 +1253,31 @@ class Data_source extends MX_Controller {
 		parse_str($_SERVER['QUERY_STRING'], $_GET);
 		$as = 'xml';
 		$classtring = '';
-		$status = 'All';
+		$statusstring = '';
 		//$classtring = 'activitycollectionserviceparty';
 		$data = json_decode($this->input->get('data'));
 		foreach($data as $param)
 		{
-			if($param->value == 'yes')
-				$classtring .= $param->name;
+			if($param->name == 'ro_class')
+				$classtring .= $param->value;
 			if($param->name == 'as')
 				$as = $param->value;
-			if($param->name == 'status')
-				$status = $param->value;
+			if($param->name == 'ro_status')
+				$statusstring .= $param->value;
 		}
 		$this->load->model("data_sources","ds");
 		$this->load->model("registry_object/registry_objects", "ro");
 		$dataSource = $this->ds->getByID($id);
 		$dsSlug = $dataSource->getAttribute('slug');
 		$rifcs = '';
-		$ids = $this->ro->getIDsByDataSourceID($id, false, $status);
+		$ids = $this->ro->getIDsByDataSourceID($id, false, 'All');
 		if($ids)
 		{
 			$i = 0;
 			foreach($ids as $idx => $ro_id){
 				try{
 					$ro = $this->ro->getByID($ro_id);
-					if($ro && (strpos($classtring, $ro->class) !== false))
+					if($ro && (strpos($classtring, $ro->class) !== false) && (strpos($statusstring, $ro->status) !== false))
 					{
 						$rifcs .= $ro->getRif().NL;
 					}
