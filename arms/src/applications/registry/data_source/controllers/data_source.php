@@ -625,7 +625,7 @@ class Data_source extends MX_Controller {
 		$jsonData = array();
 		$dataSource = $this->ds->getByID($id);
 		$dataSourceLogs = $dataSource->get_logs($offset, $count, $logid, $log_class, $log_type);
-		$jsonData['log_size'] = $dataSource->get_log_size();
+		$jsonData['log_size'] = $dataSource->get_log_size($log_type);
 
 		if($jsonData['log_size'] > ($offset + $count)){
 			$jsonData['next_offset'] = $offset + $count;

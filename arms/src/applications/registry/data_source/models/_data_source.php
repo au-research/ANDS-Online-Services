@@ -488,10 +488,11 @@ class _data_source {
 		return $logs;
 	}
 	
-	function get_log_size()
+	function get_log_size($log_type)
 	{
 		$this->db->from("data_source_logs");
 		$this->db->where(array("data_source_id"=>$this->id));
+		if($log_type!='all') $this->db->where('type', $log_type);
 		return $this->db->count_all_results();
 	}
 	

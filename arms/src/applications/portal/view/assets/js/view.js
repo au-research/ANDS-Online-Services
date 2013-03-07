@@ -26,12 +26,14 @@ initInternalSuggestedLinks();
 /*if (isPublished()) { $('#draft_status').removeClass("hide"); }*/
 
 function drawRegistryIcon(){
-    var icon = $('<img />').attr('src', base_url+'assets/core/images/icons/'+$('#class_type').text()+'.png').attr('class', 'right_icon').width(35);
-    if($('.sidebar h2').length > 0){
-        //if there is a heading in the sidebar, put the icon beside it
-        $('.sidebar h2:first').append(icon);
-    }else{
-        $('.sidebar').append(icon);
+    if($('#class_type').length > 0){
+        var icon = $('<img />').attr('src', base_url+'assets/core/images/icons/'+$('#class_type').text()+'.png').attr('class', 'right_icon').width(35);
+        if($('.sidebar h2').length > 0){
+            //if there is a heading in the sidebar, put the icon beside it
+            $('.sidebar h2:first').append(icon);
+        }else{
+            $('.sidebar').append(icon);
+        }
     }
 }
 

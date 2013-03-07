@@ -297,12 +297,12 @@ function loadDataSourceLogs(data_source_id, offset, count)
 	offset = typeof offset !== 'undefined' ? offset : 0;
 	count = typeof count !== 'undefined' ? count : 10;
 	
-	var log_class = $('select.log-class').val();
+	//var log_class = $('select.log-class').val();
 	var log_type = $('select.log-type').val();
-	log(log_class, log_type, offset, count);
+	// log(log_class, log_type, offset, count);
 	$.ajax({
 		url: 'data_source/getDataSourceLogs/',
-		data: {id:data_source_id, offset:offset, count:count, log_class:log_class, log_type:log_type},
+		data: {id:data_source_id, offset:offset, count:count, log_type:log_type},
 		type: 'POST',
 		dataType: 'json',
 		success: function(data){
@@ -310,12 +310,14 @@ function loadDataSourceLogs(data_source_id, offset, count)
 			var output = Mustache.render(logsTemplate, data);
 			$('#data_source_log_container').append(output);
 
+			$('#show_more_log').show();
+
 			$('#data_source_log_container').fadeIn(500);
 			$('#log_summary').html('Viewing ' + data.next_offset + ' of ' + data.log_size + ' log entries');
 			//$('#log_summary_bottom').html('viewing ' + data.next_offset + ' of ' + data.log_size + ' log entries');
 			$('#show_more_log').attr('next_offset', data.next_offset);
 			if(data.next_offset=='all'){
-				$('#show_more_log').remove();
+				$('#show_more_log').hide();
 			}
 			var bottom_offset = $('#data_source_log_container').offset().top + $('#data_source_log_container').height();
 			//$('body').animate({"scrollTop": bottom_offset}, 100);

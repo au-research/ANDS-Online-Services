@@ -225,19 +225,9 @@
 			<div class="widget-title">
 				<h5>Activity Log</h5>
 				<div class="pull-right">
-					<select class="log-class">
-						<option value="all">All</option>
-						<option value="harvester">Harvester</option>
-						<option value="data_source">Data Source</option>
-						<option value="registry_object">Registry Objects</option>
-						<option value="importer">Importer</option>
-					</select>
 					<select class="log-type">
 						<option value="all">All</option>
 						<option value="error">Errors</option>
-						<option value="message">Message</option>
-						<option value="warning">Warning</option>
-						<option value="info">Info</option>
 					</select>
 				</div>
 			</div>
