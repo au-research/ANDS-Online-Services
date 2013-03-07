@@ -369,7 +369,6 @@ class Data_source extends MX_Controller {
 
 		if(sizeof($affected_ids)>=1){
 			$menu['flag'] = 'Flag';
-			$menu['set_gold_status_flag'] = 'Set Gold Status';
 			switch($status){
 				case 'DRAFT':
 					if($qa){
@@ -396,6 +395,7 @@ class Data_source extends MX_Controller {
 					break;
 				case 'PUBLISHED':
 					$menu['to_draft'] = 'Move to Draft';
+					$menu['set_gold_status_flag'] = 'Set Gold Status';
 					break;
 			}
 			$menu['delete'] = 'Delete Registry Object';
