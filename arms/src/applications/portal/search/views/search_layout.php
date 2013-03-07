@@ -44,6 +44,9 @@
 {{#docs}}
 	<div class="post" ro_id="{{id}}">
 		<a href="<?php echo base_url();?>{{slug}}" class="title">{{display_title}}</a>
+		{{#logo}}
+			<img src="{{logo}}" class="logo"/>
+		{{/logo}}
 		<div class="excerpt">
 			{{{description_value}}}
 		</div>
