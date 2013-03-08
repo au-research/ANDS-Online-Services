@@ -15,6 +15,23 @@ class Registry_objects extends CI_Model {
 	public $valid_classes = array("collection","activity","party","service");
 	public $valid_status  = array("MORE_WORK_REQUIRED"=>"MORE_WORK_REQUIRED", "DRAFT"=>"DRAFT", "SUBMITTED_FOR_ASSESSMENT"=>"SUBMITTED_FOR_ASSESSMENT", "ASSESSMENT_IN_PROGRESS"=>"ASSESSMENT_IN_PROGRESS", "APPROVED"=>"APPROVED", "PUBLISHED"=>"PUBLISHED");
 	public $valid_levels  = array("level_1"=>"1", "level_2"=>"2", "level_3"=>"3", "level_4"=>"4" );
+	
+	static $classes = array("collection"=>"Collection", "party"=>"Party", "service"=>"Service", "activity"=>"Activity");
+	static $statuses  = array(
+		"MORE_WORK_REQUIRED"=>"More Work Required", 
+		"DRAFT"=>"Draft", 
+		"SUBMITTED_FOR_ASSESSMENT"=>"Submitted for Assessment", 
+		"ASSESSMENT_IN_PROGRESS"=>"Assessment in Progress", 
+		"APPROVED"=>"Approved", 
+		"PUBLISHED"=>"Published"
+	);
+	static $quality_levels = array(
+		"1" => "Quality Level 1",
+		"2" => "Quality Level 2",
+		"3" => "Quality Level 3",
+		"4" => "Gold Standard Record"
+	);
+	
 
 
 	/**

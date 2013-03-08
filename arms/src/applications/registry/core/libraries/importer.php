@@ -258,12 +258,12 @@ class Importer {
 						
 						
 						$ro->harvest_id = $this->harvestID;
-						$ro->class = $class;
 						$ro->record_owner = $record_owner;
 
 						$this->ingest_new_revision++;
 					}
 
+					$ro->class = $class;
 					$ro->created_who = $record_owner;
 					$ro->data_source_key = $this->dataSource->key;
 					$ro->group = (string) $registryObject['group'];
@@ -283,10 +283,11 @@ class Importer {
 					}
 
 					// Order is important here!
+					$registryObject->addAttribute("xmlns",RIFCS_NAMESPACE);
 					$ro->updateXML($registryObject->asXML());
 
 					// Generate the list and display titles first, then the SLUG
-					$ro->updateTitles();
+					$ro->updateTitles($ro->getSimpleXML());
 
 					// Only generate SLUGs for published records
 					if (in_array($this->status, getPublishedStatusGroup()))

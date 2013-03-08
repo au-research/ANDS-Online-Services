@@ -33,7 +33,6 @@ class Title_Extension extends ExtensionBase
 		
 		// Pick a name, given preference to the primary name
 		$name = '';
-
 		$names = $sxml->xpath('//ro:'.$this->ro->class.'/ro:name[@type="primary"]');
 		if (count($names) == 0)
 		{

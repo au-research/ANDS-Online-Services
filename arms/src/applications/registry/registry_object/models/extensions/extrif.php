@@ -20,14 +20,21 @@ class Extrif_Extension extends ExtensionBase
 
 		//same as in relationships.php
 		$xml = $this->ro->getSimpleXML();
+
+		// f@%!$ing dirty hack...
+		if ($xml->registryObject)
+		{
+			$xml = $xml->registryObject;
+		}
+
 		$rifNS = $xml->getNamespaces();
+		if(!isset($rifNS['']))
+			$xml->addAttribute("xmlns",RIFCS_NAMESPACE);
+
 		// Cannot enrich already enriched RIFCS!!
 		if(true)//!isset($rifNS[EXTRIF_NAMESPACE])) //! (string) $attributes['enriched'])//! (string) $attributes['enriched'])
 		{
 			$xml->addAttribute("extRif:enriched","true",EXTRIF_NAMESPACE);
-
-			if(!isset($rifNS['']))
-				$xml->addAttribute("xmlns",RIFCS_NAMESPACE);
 			if (count($xml->key) == 1)
 			{
 				/* EXTENDED METADATA CONTAINER */

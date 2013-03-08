@@ -64,11 +64,15 @@ class XML_Extension extends ExtensionBase
 	{
 		$_xml = new _xml($this->ro->id);
 		$_xml->update($data, $current, $scheme); 
+
 		$this->_xml = $_xml;
 		if (is_null($scheme)) {
 			$this->_rif =& $_xml;
 		}
-		$this->_simplexml = simplexml_load_string($_xml->xml);
+
+		$this->_simplexml = simplexml_load_string(str_replace('&','&amp;',$_xml->xml));
+		$this->_simplexml->registerXPathNamespace("ro", RIFCS_NAMESPACE);
+		$this->_simplexml->registerXPathNamespace("extRif", EXTRIF_NAMESPACE);
 	}
 	
 	
