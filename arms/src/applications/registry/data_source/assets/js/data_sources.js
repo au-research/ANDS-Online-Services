@@ -277,8 +277,6 @@ function load_datasource(data_source_id){
 				var url_to = base_url+'data_source/manage_records/'+data_source_id+'/?filters={"sort":{"updated":"asc"},"filter":{"'+type+'":"'+name+'"}}';
 				window.location = url_to;
 			});
-
-
 		}
 	});
 
@@ -554,7 +552,15 @@ function load_datasource_settings(data_source_id){
 					width:75,enable:false
 				});
 			});
+		$('.checkbox_view1').each(function(){
+			var whatsThere = $(this).html();
+			$(this).html('<i class="icon icon-ok"></i> '+whatsThere);
+		});
 
+		$('.checkbox_view0').each(function(){
+			var whatsThere = $(this).html();
+			$(this).html('<i class="icon icon-remove"></i> '+whatsThere);
+		});		
 			//draw the charts
 			// drawCharts(data_source_id);
 			//loadDataSourceLogs(data_source_id);
@@ -597,6 +603,8 @@ function load_datasource_edit(data_source_id, active_tab){
 						if($(this).attr('value')=='t' || $(this).attr('value')=='1' || $(this).attr('value')=='true' ){
 							$(this).find('input').attr('checked', 'checked');
 							$('#primary-relationship-form').show();
+						}else{
+							$('#primary-relationship-form').hide();
 						}
 						$(this).toggleButtons({
 							width:75,enable:true,

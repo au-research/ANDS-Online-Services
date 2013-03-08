@@ -461,7 +461,7 @@
 		'contact_name' => 'Contact Name',
 		'contact_email' => 'Contact Email',
 		'notes' => 'Notes',
-		'created_when' => 'Created When',
+		'created' => 'Created When',
 		'created_who' => 'Created Who'
 	);
 ?>
@@ -501,7 +501,7 @@
 					foreach($data_source_view_fields as $key=>$name){
 						echo '{{#'.$key.'}}';
 						echo '<dt>'.$name.'</dt>';
-						echo '<dd>{{'.$key.'}}</dd>';
+						echo '<dd> {{'.$key.'}} </dd>';
 						echo '{{/'.$key.'}}';
 					}
 					?>
@@ -511,16 +511,13 @@
 					<dt>Reverse Links</dt>
 					<dd>
 						<p>
-							<div class="normal-toggle-button" value="{{allow_reverse_internal_links}}">
-								<input type="checkbox" for="allow_reverse_internal_links" >
-							</div>
-							Allow Reverse Internal Links
+							
+							<div class="checkbox_view{{allow_reverse_internal_links}}">Allow Reverse Internal Links </div> 
+					
 						</p>
 						<p>
-							<div class="normal-toggle-button" value="{{allow_reverse_external_links}}">
-								<input type="checkbox" for="allow_reverse_external_links" >
-							</div>
-							Allow Reverse External Links
+			
+							<div class="checkbox_view{{allow_reverse_external_links}}"> Allow Reverse External Links</div>
 						</p>
 					</dd>
 
@@ -528,9 +525,7 @@
 					<dt>Create Primary Relationships</dt>
 					<dd>
 						<p>
-							<div class="normal-toggle-button" value="{{create_primary_relationships}}">
-								<input type="checkbox" for="create_primary_relationships" >
-							</div>
+							<div class="checkbox_view{{create_primary_relationships}}"> </div>
 						</p>
 					</dd>
 					{{/create_primary_relationships}}
@@ -540,9 +535,8 @@
 					<dt>Auto Publish</dt>
 					<dd>
 						<p>
-							<div class="normal-toggle-button" value="{{auto_publish}}">
-								<input type="checkbox" for="auto_publish" >
-							</div>
+							<div class="checkbox_view{{auto_publish}}">		
+															</div>
 						</p>
 					</dd>
 					{{/auto_publish}}
@@ -551,9 +545,7 @@
 					<dt>Quality Assessment Required</dt>
 					<dd>
 						<p>
-							<div class="normal-toggle-button" value="{{qa_flag}}">
-								<input type="checkbox" for="qa_flag" >
-							</div>
+							<div class="checkbox_view{{qa_flag}}">			</div>
 						</p>
 					</dd>
 					{{/qa_flag}}

@@ -538,6 +538,16 @@ class Data_source extends MX_Controller {
 		$ds = $this->ds->create($this->input->post('key'), url_title($this->input->post('title')));
 		$ds->setAttribute('title', $this->input->post('title'));
 		$ds->setAttribute('record_owner', $this->input->post('record_owner'));
+		foreach($ds->stockAttributes as $key=>$value)
+		{
+			if(!isset($ds->attributes[$key]))
+			$ds->setAttribute($key, $value);
+		}
+		foreach($ds->extendedAttributes as $key=>$value)
+		{
+			if(!isset($ds->attributes[$key]))			
+			$ds->setAttribute($key, $value);
+		}		
 		$ds->save();
 		$ds->updateStats();
 		echo $ds->id;
@@ -697,16 +707,11 @@ class Data_source extends MX_Controller {
 		if ($dataSource)
 		{
 
-			$stockAttributes = array('title','record_owner','contact_name', 'contact_email', 'provider_type');
-			$extendedAttributes = array('allow_reverse_internal_links','allow_reverse_external_links','auto_publish','qa_flag');
-		    $harvesterParams = array('uri','harvest_method','harvest_date','oai_set', 'advanced_harvest_mode','harvest_frequency');
-		    $primaryRelationship = array('class_1','class_2','primary_key_1','primary_key_2','collection_rel_1','collection_rel_2','activity_rel_1','activity_rel_2','party_rel_1','party_rel_2','service_rel_1','service_rel_2');
-			$institutionPages = array('institution_pages');
-			$valid_attributes = array_merge(array_keys($dataSource->attributes()), $harvesterParams);
-			$valid_attributes = array_merge($valid_attributes, $primaryRelationship);
-			$valid_attributes = array_merge($valid_attributes, $institutionPages);
-			$valid_attributes = array_merge($valid_attributes, $stockAttributes);
-			$valid_attributes = array_merge($valid_attributes, $extendedAttributes);
+			$valid_attributes = array_merge(array_keys($dataSource->attributes()), array_keys($dataSource->harvesterParams));
+			$valid_attributes = array_merge($valid_attributes, array_keys($dataSource->primaryRelationship));
+			$valid_attributes = array_merge($valid_attributes, array_keys($dataSource->institutionPages));
+			$valid_attributes = array_merge($valid_attributes, array_keys($dataSource->stockAttributes));
+			$valid_attributes = array_merge($valid_attributes, array_keys($dataSource->extendedAttributes));
 			$valid_attributes = array_unique($valid_attributes);
 
 			foreach($valid_attributes as $attrib){	
@@ -717,14 +722,14 @@ class Data_source extends MX_Controller {
 					$new_value = trim($this->input->post($attrib));
 
 				}
-				else if(in_array($attrib, $harvesterParams))
+				else if(in_array($attrib, $dataSource->harvesterParams))
 				{
 					$new_value = '';	
 				}
-				else if(in_array($attrib, $primaryRelationship)){
+				else if(in_array($attrib, $dataSource->primaryRelationship)){
 					$new_value = '';				
 				}	
-				if($this->input->post('create_primary_relationships')=='false')
+				if($this->input->post('save_relationships')=='false')
 				{
 					switch($attrib){
 						case 'class_1':
@@ -766,7 +771,7 @@ class Data_source extends MX_Controller {
 				if($new_value=='true') $new_value=DB_TRUE;
 				if($new_value=='false'){$new_value=DB_FALSE;} 
 
-				if($new_value != $dataSource->{$attrib} && in_array($attrib, $harvesterParams))
+				if($new_value != $dataSource->{$attrib} && in_array($attrib, $dataSource->harvesterParams))
 				{
 				   $resetHarvest = true;
 				} 
@@ -776,7 +781,7 @@ class Data_source extends MX_Controller {
 					$dataSource->{$attrib} = $new_value;
 
 
-					if($new_value == '' && $new_value != $dataSource->{$attrib} && in_array($attrib, $harvesterParams))
+					if($new_value == '' && $new_value != $dataSource->{$attrib} && in_array($attrib, $dataSource->harvesterParams))
 					{
 						$dataSource->unsetAttribute($attrib);
 					}
