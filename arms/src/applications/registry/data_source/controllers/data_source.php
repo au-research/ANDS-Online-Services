@@ -521,12 +521,13 @@ class Data_source extends MX_Controller {
 		}
 		
 		$harvesterStatus = $dataSource->getHarvesterStatus();
-		$date = new DateTime($harvesterStatus['next_harvest']);
-		$date = $date->format('Y-m-d H:i:s');
-		$jsonData['item']['harvester_status'] = array(
-			'status'=>$harvesterStatus['status'],
-			'next_harvest'=> $date
-		);
+		//$date = new DateTime($harvesterStatus['next_harvest']);
+		//$date = $date->format('Y-m-d H:i:s');
+		$jsonData['item']['harvester_status'] = $harvesterStatus;
+		//array(
+		//	'status'=>$harvesterStatus['status'],
+		//	'next_harvest'=> $date
+		//);
 
 		$jsonData = json_encode($jsonData);
 		echo $jsonData;
@@ -664,6 +665,34 @@ class Data_source extends MX_Controller {
 		echo json_encode($jsonData);
 	}
 	
+
+
+	
+
+	public function cancelHarvestRequest(){
+		header('Cache-Control: no-cache, must-revalidate');
+		header('Content-type: application/json');
+		// date_default_timezone_set('Australia/Canberra');//???
+
+		$this->load->model('data_sources', 'ds');
+		$jsonData = array();
+		$post = $this->input->post();
+		$id = isset($post['id']) ? $post['id'] : 0; //data source id
+		$harvest_id = isset($post['harvest_id']) ? $post['harvest_id'] : 0; //data source id
+		if($harvest_id==0 || $id == 0) {
+			//throw new Exception('Datasource ID must be provided');
+			//exit();
+			$jsonData['log'] = $post;
+		}
+
+
+		$dataSource = $this->ds->getByID($id);
+		$jsonData['data_source_id'] = $id;
+		$jsonData['harvest_id'] = $harvest_id;
+		$jsonData['log'] = $dataSource->cancelHarvestRequest($harvest_id);
+
+		echo json_encode($jsonData);
+	}
 	/**
 	 * Save a data source
 	 * 
@@ -1146,7 +1175,7 @@ class Data_source extends MX_Controller {
 			}
 			$this->load->model("data_sources","ds");
 			$dataSource = $this->ds->getByHarvestID($harvestId);
-			$dataSource->append_log("HARVESTER TRYING TO PUT DATA: ".$errmsg, HARVEST_MSG, "harvester","HARVESTER_ERROR");
+			$dataSource->append_log("HARVESTER TRYING TO PUT DATA:".NL." Completed: ".$done.NL." mode: ".$mode , HARVEST_MSG, "harvester","HARVESTER_INFO");
 			if($errmsg)
 			{
 				$dataSource->append_log("HARVESTER RESPONDED UNEXPECTEDLY: ".$errmsg, HARVEST_ERROR, "harvester","HARVESTER_ERROR");
@@ -1180,7 +1209,7 @@ class Data_source extends MX_Controller {
 					$this->importer->setHarvestID($harvestId);
 					$this->importer->setDatasource($dataSource);
 
-					if ($done != HARVEST_COMPLETE)
+					if ($done != TRUE)
 					{
 						$this->importer->setPartialCommitOnly(TRUE);
 					}
@@ -1190,7 +1219,7 @@ class Data_source extends MX_Controller {
 					}
 
 
-					if ($mode != HARVEST_TEST_MODE)
+					if ($mode == "HARVEST")
 					{
 						try
 						{
@@ -1216,10 +1245,23 @@ class Data_source extends MX_Controller {
 					}	
 				}
 			}
-
-			if(!$nextHarvestDate && $done == HARVEST_COMPLETE || $mode == HARVEST_TEST_MODE)
+			if($done == TRUE || $mode != "HARVEST")
 			{
-				$dataSource->deleteHarvestRequest($harvestId);
+				$dataSource->append_log("HARVEST COMPLETED", HARVEST_MSG, "harvester","HARVESTER_INFO");	
+
+				//$dataSource->deleteHarvestRequest($harvestId);
+				$dataSource->cancelHarvestRequest($harvestId);
+				if($dataSource->advanced_harvest_mode == 'REFRESH')
+				{
+					$dataSource->append_log("HARVEST MODE REFRESH: ".NL."new Harvest ID: ".$harvestId, HARVEST_MSG, "harvester","HARVESTER_INFO");
+					$dataSource->deleteOldRecords($harvestId);
+				} 
+			}
+
+			if($done == TRUE && $nextHarvestDate)
+			{
+				$dataSource->requestHarvest(null,null,null,null,null,null,$nextHarvestDate);
+				//reschedule!
 			}
 			
 		}
@@ -1339,6 +1381,7 @@ class Data_source extends MX_Controller {
 		$data['report'] = $report;
 		$this->load->view('report', $data);
 	}
+
 
 	function getDataSourceReport($id){
 		

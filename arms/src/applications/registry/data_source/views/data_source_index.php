@@ -220,7 +220,7 @@
 			</div>
 
 			{{#harvester_status}}
-			<div class="widget-content alert">A harvest is scheduled: <b>{{next_harvest}}</b></div>	
+			<div class="widget-content alert">A harvest is scheduled: <b>{{next_harvest}}</b> <button class="btn delete delete_harvest pull-right" data_source_id="{{data_source_id}}" harvest_id="{{id}}"><i class="icon-remove"></i> Delete Harvest</button></div>	
 			{{/harvester_status}}
 			<div class="widget-title">
 				<h5>Activity Log</h5>
@@ -1121,6 +1121,7 @@
 							<div class="controls">
 								<select data-placeholder="Choose a Harvest Frequency" tabindex="1" class="chzn-select input-xlarge" for="harvest_frequency">
 									<option value=""></option>
+									<option value="hourly">hourly</option>
 									<option value="daily">daily</option>
 									<option value="weekly">weekly</option>
 									<option value="fortnightly">fortnightly</option>

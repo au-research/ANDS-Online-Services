@@ -512,9 +512,10 @@ class _data_source {
 	function getHarvesterStatus(){
 		$query = $this->db->get_where("harvest_requests", array("data_source_id"=>$this->id,));
 		if($query->num_rows()>0){
-			foreach($query->result_array() as $row){
-				return $row;
-			}
+			return $query->result_array();
+			//foreach($query->result_array() as $row){
+			//	return $row;
+			//}
 		}
 	}
 	
@@ -553,7 +554,20 @@ class _data_source {
 		return;		
 	}
 
-	
+	function deleteOldRecords($harvest_id)
+	{
+		$this->append_log("TRYING TO REMOVE RECORDS FROM PREVIOUS HARVEST FROM DS: ".$this->id, HARVEST_INFO, "harvester","HARVESTER_INFO");	
+		$this->_CI->load->model("registry_object/registry_objects", "ro");
+		$oldRegistryObjects = $this->_CI->ro->getRecordsInDataSourceFromOldHarvest($this->id, $harvest_id);
+		foreach($oldRegistryObjects AS $target_ro_id)
+		{
+			$target_ro = $this->_CI->ro->getByID($target_ro_id);
+			$log = $target_ro->eraseFromDatabase();
+			if($log)
+				$this->append_log("ERROR REMOVING RECORD FROM PREVIOUS HARVEST: " .$target_ro_id, HARVEST_INFO, "harvester", "HARVESTER_INFO");
+		}
+		$this->append_log("REMOVING RECORDS FROM PREVIOUS HARVEST: " .sizeof($oldRegistryObjects)."DELETED", HARVEST_INFO, "harvester","HARVESTER_INFO");	
+	}
 	/*
 	 * 	STATS
 	 */
@@ -639,9 +653,9 @@ class _data_source {
 	{
 		$runErrors = '';
 		$harvesterBaseURI = $this->_CI->config->item('harvester_base_url');
-		$this->append_log("A new harvest has been scheduled", 'info','harvester');
+		
 		$resultMessage = new DOMDocument();
-
+		$message = "";
 		$result = $resultMessage->load($harvesterBaseURI.$harvestRequest);
 		$errors = error_get_last();
 		$logID = 0;
@@ -659,7 +673,7 @@ class _data_source {
 				$logID = $this->append_log("harvestRequest Error[2]: ".$message, "error", 'harvester');
 			}
 			else{
-				//$logID = $this->append_log("harvestRequest Success: ".$message, "message", 'harvester');
+				$logID = $this->append_log("harvestRequest Success: ".$message, "message", 'harvester');
 			}
 		}
 		return $logID;
@@ -724,21 +738,18 @@ class _data_source {
 	{
 
 	// Get the harvest request.
-	$harvestRequest = getHarvestRequests($harvestRequestId, null);
-	
-	$actions  = "DELETE HARVEST REQUEST\n";
-	$actions .= "Harvest Request ID: $harvestRequestId\n";
-	$actions .= "Submitted: ".formatDateTimeWithMask($harvestRequest[0]['created_when'], eDCT_FORMAT_ISO8601_DATE_TIMESEC)."\n";
-	$actions .= "Last Status Update: ".formatDateTimeWithMask($harvestRequest[0]['modified_when'], eDCT_FORMAT_ISO8601_DATE_TIMESEC)."\n";
-	$actions .= "Status: ".$harvestRequest[0]['status']."\n";
+	//$harvestRequest = getHarvestRequests($harvestRequestId, null);
+	$actions  = "DELETE HARVEST REQUEST".NL;
+	$actions .= "Harvest Request ID: ".$harvestRequestId.NL;
+
 	
 	
-	if( $harvestRequest )
+	if( $harvestRequestId )
 	{
 		$harvesterBaseURI = $this->_CI->config->item('harvester_base_url');
 		
 		// Submit a deleteHarvestRequest to the harvester.
-		$request = $harvesterBaseURI."deleteHarvestRequest?harvestid=".esc($harvestRequestId);
+		$request = $harvesterBaseURI."deleteHarvestRequest?harvestid=".$harvestRequestId;
 		
 		// Submit the request.
 		$runErrors = '';
@@ -747,7 +758,7 @@ class _data_source {
 		$errors = error_get_last();
 		if( $errors )
 		{
-			$runErrors = "deleteHarvestRequest Error[1]: ".$errors['message']."\n";
+			$runErrors = "deleteHarvestRequest Error[1]: ".$errors['message'].NL;
 		}
 		else
 		{
@@ -756,40 +767,43 @@ class _data_source {
 			
 			if( $responseType != 'SUCCESS' )
 			{
-				$runErrors = "deleteHarvestRequest Error[2]: $message";
+				//maybe it was already deleted...
+				$runErrors = "deleteHarvestRequest Error[2]: ".$message;
 			}
 		}
 		
 		if( $runErrors )
 		{
-			$actions .= ">>ERRORS\n";
+			$actions .= ">>ERRORS".NL;
 			$actions .= $runErrors;
 		}
 		else
 		{
-			$actions .= ">>SUCCESS\n";
+			$actions .= ">>SUCCESS".NL;
 			// Remove the entry.
-			$errors = deleteHarvestRequest($harvestRequestId);
-			if( $errors )
-			{
-				$actions .= $errors;
-			}
+			
+
+
+		}
+		$errors = $this->deleteHarvestRequest($harvestRequestId);
+		if( $errors )
+		{
+			$actions .= $runErrors.NL.$errors;
 		}
 	}
 	else
 	{
-		$actions .= ">>ERRORS\n";
+		$actions .= ">>ERRORS".NL;
 		$actions .= 'The harvest request does not exist.';
 	}
 
 	// Log the activity.
-	append_log($actions, "message");
+	$logID = $this->append_log("CANCEL HARVEST REQUEST: ".$actions, "message", 'harvester');
+	return $actions;
+	
 	}
-	
-	
+
 }
-
-
 /**
  * Data Source Attribute
  * 

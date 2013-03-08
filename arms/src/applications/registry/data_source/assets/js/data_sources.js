@@ -120,6 +120,28 @@ $(function(){
 		}
 	})
 
+
+	$('.delete_harvest').live({
+		click: function(e){
+			data_source_id = $(this).attr('data_source_id');
+			harvest_id = $(this).attr('harvest_id');
+			button = $(this);
+			$.ajax({
+				url: base_url+'data_source/cancelHarvestRequest/',
+				data: {id:data_source_id, harvest_id:harvest_id},
+				type: 'POST',
+				dataType: 'json',
+				success: function(data){
+					//console.log(data);
+					$(button).parent().fadeOut();
+				},
+				failure: function(data){
+					//console.log(data);
+				}
+			});
+		}
+	})
+
 	$('.dataSourceReport').live({
 		click: function(e){
 			data_source_id = $('#data_source_view_container').attr('data_source_id');
@@ -247,7 +269,7 @@ function load_datasource(data_source_id){
 		contentType: 'application/json; charset=utf-8',
 		dataType: 'json',
 		success: function(data){
-			log(data);
+			//log(data);
 			//console.log(data);
 			var template = $('#data-source-view-template').html();
 			var output = Mustache.render(template, data);

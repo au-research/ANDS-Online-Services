@@ -307,6 +307,29 @@ class Registry_objects extends CI_Model {
 			return null;
 	}
 
+	function getOldHarvestedRecordIDsByDataSourceID($data_source_id, $harvest_id, $make_ro=false)
+	{
+		$results =  $this->_get(array(array('args' => array('data_source_id'=>$data_source_id, 'harvest_id'=>$harvest_id),
+						    'fn' => function($db, $args) {
+							$db->select("registry_objects.registry_object_id")
+								->from("registry_object_attributes")
+								->join('registry_objects', 'registry_objects.registry_object_id = registry_object_attributes.registry_object_id', 'right')
+								->where('data_source_id', $args['data_source_id'])
+								->where("attribute", "harvest_id")
+								->where("value !=", "")
+								->where("value !=", $args['harvest_id']);
+							return $db;
+						    })),
+					$make_ro);
+		if(is_array($results))
+			return $make_ro ? $results : array_map(function($r){return $r['registry_object_id'];}, $results);
+		else
+			return null;
+	}
+
+
+
+
 	/**
 	 * Get a number of registry_objects that match the attribute requirement (or an empty array)
 	 *
@@ -645,6 +668,7 @@ class Registry_objects extends CI_Model {
 				$this->load->model('data_source/data_sources', 'ds');
 				$data_source = $this->ds->getByID($target_ro->data_source_id);
 				$log = $target_ro->eraseFromDatabase($target_ro->id);
+				if($log)
 				$data_source->append_log("eraseFromDatabase " . $log, 'info', 'registry_object');
 
 			}
@@ -657,6 +681,7 @@ class Registry_objects extends CI_Model {
 				$this->load->model('data_source/data_sources', 'ds');
 				$data_source = $this->ds->getByID($target_ro->data_source_id);
 				$log = $target_ro->eraseFromDatabase($target_ro->id);
+				if($log)
 				$data_source->append_log("eraseFromDatabase " . $log, 'info', 'registry_object');
 				// And then their related records get reindexed...
 				$this->importer->_enrichRecords($reenrich_queue);
@@ -718,6 +743,13 @@ class Registry_objects extends CI_Model {
 		$this->solr->deleteByQueryCondition("data_source_id:(\"".$data_source_id."\")");
 		$this->solr->commit();
 
+	}
+
+	public function getRecordsInDataSourceFromOldHarvest($data_source_id, $harvest_id)
+	{
+
+		$oldRegistryObjects = $this->getOldHarvestedRecordIDsByDataSourceID($data_source_id, $harvest_id);
+		return $oldRegistryObjects;
 	}
 
 

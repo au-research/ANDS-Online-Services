@@ -232,20 +232,26 @@ class Core_extension extends ExtensionBase
 	function eraseFromDatabase()
 	{
 		$this->db->delete('registry_object_relationships', array('registry_object_id'=>$this->id));
-		$log = NL."registry_object_relationships: " .$this->db->_error_message();
+		if($error = $this->db->_error_message())
+		$log = NL."registry_object_relationships: " .$error;
 		$this->db->delete('registry_object_metadata', array('registry_object_id'=>$this->id));
-		$log .= NL."registry_object_metadata: " .$this->db->_error_message();
+		if($error = $this->db->_error_message())
+		$log .= NL."registry_object_metadata: " .$error;
 		$this->db->delete('registry_object_attributes', array('registry_object_id'=>$this->id));
-		$log .= NL."registry_object_attributes: " .$this->db->_error_message();
+		if($error = $this->db->_error_message())
+		$log .= NL."registry_object_attributes: " .$error;
 		$this->db->delete('record_data', array('registry_object_id'=>$this->id));
-		$log .= NL."record_data: " .$this->db->_error_message();
+		if($error = $this->db->_error_message())
+		$log .= NL."record_data: " .$error;
 		$this->db->delete('url_mappings', array('registry_object_id'=>$this->id));
-		$log .= NL."url_mappings: " .$this->db->_error_message();
+		if($error = $this->db->_error_message())
+		$log .= NL."url_mappings: " .$error;
 		//TODO: do we still need this table??
 		//$this->db->delete('spatial_extents', array('registry_object_id'=>$this->id));
 		//$log .= NL."spatial_extents: " .$this->db->_error_message();
 		$this->db->delete('registry_objects', array('registry_object_id'=>$this->id));
-		$log .= NL."registry_objects: " .$this->db->_error_message();
+		if($error = $this->db->_error_message())
+		$log .= NL."registry_objects: " .$error;
 		return $log;
 	}
 	

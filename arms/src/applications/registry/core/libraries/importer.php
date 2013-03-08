@@ -333,25 +333,28 @@ class Importer {
 
 			// add reverse relationships
 			// previous relationships are reset by this call
-			$related_keys = $ro->addRelationships();
+			if($ro)
+			{
+				$related_keys = $ro->addRelationships();
 
-			// directly affected records are re-enriched below (and reindexed...)
-			// we consider any related record keys to be directly affected and reindex them...
-			$directly_affected_records = array_merge($related_keys, $directly_affected_records);
-			$imported_keys[] = $ro->key;
+				// directly affected records are re-enriched below (and reindexed...)
+				// we consider any related record keys to be directly affected and reindex them...
+				$directly_affected_records = array_merge($related_keys, $directly_affected_records);
+				$imported_keys[] = $ro->key;
 
-			// Update our quality levels data!
-			$ro->update_quality_metadata();
+				// Update our quality levels data!
+				$ro->update_quality_metadata();
 
-			// spatial resooultion, center, coords in enrich?
-			$ro->determineSpatialExtents();
+				// spatial resooultion, center, coords in enrich?
+				$ro->determineSpatialExtents();
 
-			// vocab indexing resolution
+				// vocab indexing resolution
 
-			// Generate extrif
-			$ro->enrich();
+				// Generate extrif
+				$ro->enrich();
 
-			unset($ro);
+				unset($ro);
+			}
 			clean_cycles();
 		}
 		gc_collect_cycles();
