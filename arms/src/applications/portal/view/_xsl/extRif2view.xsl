@@ -537,9 +537,8 @@
             <xsl:if test="./ro:endDate"><xsl:value-of select="./ro:endDate"/></xsl:if><br/>
           </xsl:otherwise>
         </xsl:choose>
-      </xsl:for-each>     
-
-
+      </xsl:for-each> 
+    </div>
 </xsl:template>
 
 <xsl:template match="extRif:displayLogo">
