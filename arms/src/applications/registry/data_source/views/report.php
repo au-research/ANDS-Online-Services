@@ -26,13 +26,20 @@
 	<div class="container-fluid">
 		<div class="row-fluid">
 			<div class="span12">
+				
+				<div class="alert" id="printButtonWarning">
+				  <strong>Careful!</strong> Printing this report may contain many pages. Please consider the environment!
+				  <a href="javascript:window.print()" id="printButton" class="btn pull-right btn-small text-center btn-inverse">Print this Report <i class="icon-white icon-print"></i></a>
+				
+				</div>
+
 				<?php foreach($report as $id=>$r):?>
-					<div class="widget-box">
+					<div class="widget-box quality_div">
 						<div class="widget-title">
 							<h5><?php echo $r['title'];?></h5>
-
+							<div class="pull-right"><span class="label label-inverse"><?php echo $r['status'];?></span> <span class="label label-inverse">Quality Level: <?php echo $r['quality_level']; ?></span></div>
 						</div>
-						<div class="widget-content quality_report">
+						<div class="widget-content print_quality_report quality_report">
 							<?php echo $r['report'];?>
 							<div class="btn-group">
 								<?php echo anchor('registry_object/view/'.$r['id'], '<i class="icon-eye-open"></i> View', array('class'=>'btn'));?>
@@ -41,6 +48,7 @@
 						</div>
 					</div>
 				<?php endforeach;?>
+
 			</div>
 		</div>
 		<div class="clearfix"></div>

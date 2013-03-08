@@ -970,6 +970,7 @@ class Data_source extends MX_Controller {
 
 		if (strlen($xml) == 0)
 		{
+			$data_source->append_log("An error occured whilst importing from pasted contents" . NL ."Unable to retrieve any content from the specified XML", HARVEST_ERROR, "importer","IMPORT_ERROR");		
 			echo json_encode(array("response"=>"failure", "message"=>"Unable to retrieve any content from the specified XML"));
 			return;	
 		}
@@ -1016,7 +1017,8 @@ class Data_source extends MX_Controller {
 			
 			$log .= "CRITICAL IMPORT ERROR [HARVEST COULD NOT CONTINUE]" . NL;
 			$log .= $e->getMessage();
-			
+
+			$data_source->append_log("An error occured whilst importing from pasted contents" . NL . $log, HARVEST_ERROR, "importer","IMPORT_ERROR");		
 			echo json_encode(array("response"=>"failure", "message"=>"An error occured whilst importing from the specified XML", "log"=>$log));
 			return;	
 		}	
@@ -1349,7 +1351,8 @@ class Data_source extends MX_Controller {
 		 }
 	}
 
-	function report($id){
+	/* Leo's quality report */
+	function quality_report($id){
 		//$data['report'] = $this->getDataSourceReport($id);
 		$data['title'] = 'Datasource Report';
 		$data['scripts'] = array();
@@ -1368,7 +1371,7 @@ class Data_source extends MX_Controller {
 			foreach($ids as $idx=>$ro_id){
 				try{
 					$ro=$this->ro->getByID($ro_id);
-					$report[$ro_id] = array('title'=>$ro->title,'id'=>$ro->id,'report'=>$ro ? $ro->getMetadata('quality_html') : '');
+					$report[$ro_id] = array('quality_level'=>$ro->quality_level,'title'=>$ro->title,'status'=>$ro->status,'id'=>$ro->id,'report'=>$ro ? $ro->getMetadata('quality_html') : '');
 				}catch(Exception $e){
 					throw Exception($e);
 				}
@@ -1380,6 +1383,24 @@ class Data_source extends MX_Controller {
 		}
 		$data['report'] = $report;
 		$this->load->view('report', $data);
+	}
+
+
+	/* Ben's chart report */
+	function report($id){
+		//$data['report'] = $this->getDataSourceReport($id);
+		$data['title'] = 'Datasource Report';
+		$data['scripts'] = array('ds_chart');
+		$data['js_lib'] = array('core','googleapi');
+		$data['less']=array('charts');
+
+		$this->load->model("data_source/data_sources","ds");
+		$this->load->model("registry_object/registry_objects", "ro");
+
+		$data['status_tabs'] = Registry_objects::$statuses;
+		$data['ds'] = $this->ds->getByID($id);
+
+		$this->load->view('chart_report', $data);
 	}
 
 

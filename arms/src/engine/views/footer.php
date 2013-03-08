@@ -62,6 +62,10 @@
             
         <?php elseif($lib=='googleapi'):?>
             <script type='text/javascript' src='https://www.google.com/jsapi'></script>
+            <script type="text/javascript">
+                localGoogle = google;
+                google.load("visualization", "1", {packages:["corechart"]});
+            </script>
 
         <?php elseif($lib=='tinymce'):?>
             <script type="text/javascript" src="<?php echo base_url();?>assets/lib/tiny_mce/tiny_mce.js"></script>

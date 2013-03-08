@@ -149,3 +149,19 @@ function readable($text){
 		case "activity": return 'Activities';break;
 	}
 }
+
+function array_to_TABCSV($data)
+{
+    $outstream = fopen("php://temp", 'r+');
+    foreach($data AS $row)
+    {
+    	fputcsv($outstream, $row, "\t", '"');
+    }
+    rewind($outstream);
+    $csv = '';
+    while (($buffer = fgets($outstream, 4096)) !== false) {
+    	$csv .= $buffer;
+    }
+    fclose($outstream);
+    return $csv;
+}

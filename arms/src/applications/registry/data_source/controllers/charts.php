@@ -83,6 +83,176 @@ class Charts extends MX_Controller {
 	}
 
 
+	public function getDataSourceQualityChart($data_source_id, $status = 'ALL', $as_csv = false)
+	{
+		$chart_result = array();
+
+		$constraints = array($data_source_id);
+		if ($status != 'ALL') { $constraints[] = $status; }
+
+		$query = $this->db->query("SELECT count(*) AS count, `value`, `class`
+							FROM registry_objects ro 
+							JOIN registry_object_attributes ra ON ra.registry_object_id = ro.registry_object_id 
+							WHERE data_source_id=? AND ra.attribute = 'quality_level' " . ($status != 'ALL' ? "AND ro.status = ? " : '') . "
+							GROUP BY `value`, `class`;", $constraints);
+
+		$this->load->model("registry_object/registry_objects");
+		foreach (Registry_objects::$classes AS $c => $c_label)
+		{
+			$chart_result[$c_label] = array();
+			foreach (Registry_objects::$quality_levels AS $q => $q_label)
+			{
+				if ($q_label == "Gold Standard Record")
+				{
+					$gs_query = $this->db->query("SELECT count(*) AS count
+							FROM registry_objects ro 
+							JOIN registry_object_attributes ra ON ra.registry_object_id = ro.registry_object_id 
+							WHERE 
+							class = ? 
+							AND data_source_id=? 
+							AND ra.attribute = 'gold_status_flag' 
+							AND ra.value = 't' " . 
+							($status != 'ALL' ? "AND ro.status = ? " : '') . ";", array_merge(array($c), $constraints));
+					
+					$gs_query = array_pop($gs_query->result_array());
+					$chart_result[$c_label][$q_label] = (int) $gs_query['count'];
+				}
+				else
+				{
+					$chart_result[$c_label][$q_label] = 0;
+				}
+			}
+		}
+
+		foreach ($query->result() AS $row)
+		{
+			if (isset($chart_result[Registry_objects::$classes[$row->class]]))
+			{
+				$chart_result[Registry_objects::$classes[$row->class]][Registry_objects::$quality_levels[$row->value]] = (int) $row->count;
+			}
+		}
+
+		// Default, deliver as JSON
+		if (!$as_csv)
+		{
+			echo json_encode($chart_result);
+		}
+		else
+		{
+			$header_row = array("");
+			foreach (Registry_objects::$quality_levels AS $q => $q_label)
+			{
+				array_push($header_row, $q_label);
+			}
+			$rows = array($header_row);
+			foreach ($chart_result AS $class => $results)
+			{
+				array_unshift($results, $class);
+				$rows[] = $results;
+			}
+
+			// We'll be outputting a CSV
+			header('Content-type: application/ms-excel');
+			header('Content-Disposition: attachment; filename="datasource_quality_'.$data_source_id.'.xls"');
+			$data = array_merge($rows);
+			echo array_to_TABCSV($data);
+		}
+
+	}
+
+
+	public function getDataSourceStatusChart($data_source_id, $as_csv = false)
+	{
+		$chart_result = array();
+
+		$query = $this->db->query("SELECT count(*) AS count, `status`, `class`
+							FROM registry_objects ro 
+							WHERE data_source_id=?
+							GROUP BY `status`, `class`;", array($data_source_id));
+
+
+		$this->load->model("registry_object/registry_objects");
+		foreach (Registry_objects::$classes AS $c => $c_label)
+		{
+			$chart_result[$c_label] = array();
+			$chart_result[$c_label][] = array('Status','Number of Records');
+			foreach (Registry_objects::$statuses AS $class)
+			{
+				$chart_result[$c_label][] = array($class, 0);
+			}
+		}
+
+		foreach ($query->result() AS $row)
+		{
+			if (isset($chart_result[Registry_objects::$classes[$row->class]]))
+			{
+				foreach ($chart_result[Registry_objects::$classes[$row->class]] AS &$entry)
+				{
+					if ($entry[0] == Registry_objects::$statuses[$row->status])
+						$entry[1] = (int) $row->count;
+				}
+
+			}
+		}
+		
+		// Default: JSON response
+		if (!$as_csv)
+		{
+			$clean_result = array();
+			foreach($chart_result AS $class => $result)
+			{
+				$show = false;
+				foreach ($result AS $label => $value)
+				{
+					if ($value[1] > 0)
+					{
+						$show = true;
+					}
+				}
+				if ($show)
+				{
+					$clean_result[$class] = $result;
+				}
+			}
+			echo json_encode($clean_result);
+		}
+		else
+		{
+			/* Map back to a CSV file for excel dump */
+			$rows = array();
+			$columns = array('');
+			foreach ($chart_result AS $class => $values)
+			{
+				$row = array($class);
+				foreach ($values AS $value)
+				{
+					$status = $value[0];
+					$value = $value[1];
+					if (is_integer($value))
+					{
+						if (!isset($columns[$status]))
+						{
+							$columns[$status] = $status;
+						}
+
+						$row[] = $value;
+					}
+
+				}
+
+				$rows[] = $row;
+			}
+
+			// We'll be outputting a CSV
+			header('Content-type: application/ms-excel');
+			header('Content-Disposition: attachment; filename="datasource_status_'.$data_source_id.'.xls"');
+			$data = array_merge(array(array_values($columns)), $rows);
+			echo array_to_TABCSV($data);
+
+		}
+	}
+
+
 
 	/**
 	 * Get a list of data sources
