@@ -47,26 +47,21 @@ function updateDataSourcesStat(){
 			"sPaginationType": "full_numbers",
 			"sDom": '<""l>t<"F"fp>'
 		});
-		$('button.reindex_ds').die().live({
-			click:function(){
-				$(this).button('loading');
-				var ds_id = $(this).attr('ds_id');
-				$.getJSON(base_url+'maintenance/indexDS/'+ds_id, function(data) {
-					console.log(data);
-					updateDataSourcesStat();
-				});
-			}
-		});
 
-		$('button.clearindex_ds').die().live({
-			click:function(){
-				$(this).button('loading');
-				var ds_id = $(this).attr('ds_id');
-				$.getJSON(base_url+'maintenance/clearDS/'+ds_id, function(data) {
-					console.log(data);
-					updateDataSourcesStat();
-				});
+		$('button.task').on('click',function(){
+			$(this).button('loading');
+			var op = $(this).attr('op');
+			var ds_id = $(this).attr('ds_id');
+			var url;
+			switch(op){
+				case 'index_ds':url = base_url+'maintenance/indexDS/'+ds_id;break;
+				case 'enrich_ds':url = base_url+'maintenance/enrichDS/'+ds_id;break;
+				case 'clear_ds':url = base_url+'maintenance/clearDS/'+ds_id;break;
 			}
+			$.getJSON(url, function(data) {
+				console.log(data);
+				updateDataSourcesStat();
+			});
 		});
 	});
 }

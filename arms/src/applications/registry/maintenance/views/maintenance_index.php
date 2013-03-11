@@ -80,8 +80,9 @@
 					<td>{{totalMissing}}</td>
 					<td>
 						<div class="btn-group">
-							<button class="btn task reindex_ds" ds_id="{{id}}" data-loading-text="Reindexing">ReIndex</button>
-							<button class="btn task btn-danger clearindex_ds" ds_id="{{id}}" data-loading-text="Clearing">Clear</button>
+							<button class="btn task" op="index_ds" ds_id="{{id}}" data-loading-text="Reindexing">ReIndex</button>
+							<button class="btn task" op="enrich_ds" ds_id="{{id}}" data-loading-text="Re Enriching">ReEnrich</button>
+							<button class="btn task btn-danger" op="clear_ds" ds_id="{{id}}" data-loading-text="Clearing">Clear Index</button>
 						</div>
 					</td>
 				</tr>
