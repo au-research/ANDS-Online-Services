@@ -48,7 +48,7 @@
 			<img src="{{logo}}" class="logo"/>
 		{{/logo}}
 		<div class="excerpt">
-			{{{description_value}}}
+			{{description}}
 		</div>
 	</div>
 {{/docs}}

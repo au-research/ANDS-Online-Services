@@ -133,10 +133,23 @@ $(function() {
                   update(selected_ids, attributes);
                 break;
             case 'view':
-                window.location = base_url+'registry_object/view/'+selected_ids[0];
+                if($(this).attr('ro_id')){
+                    window.location = base_url+'registry_object/view/'+$(this).attr('ro_id');
+                }else window.location = base_url+'registry_object/view/'+selected_ids[0];
                 break;
             case 'edit':
-                window.location = base_url+'registry_object/edit/'+selected_ids[0]+'#!/advanced/admin';
+                if($(this).attr('ro_id')){
+                    window.location = base_url+'registry_object/edit/'+$(this).attr('ro_id')+'#!/advanced/admin';
+                }else window.location = base_url+'registry_object/edit/'+selected_ids[0]+'#!/advanced/admin';
+                break;
+            case 'advance_status':
+                var status_to = $(this).attr('to');
+                var attributes = [{
+                    name:'status',
+                    value:status_to
+                  }];
+                var updating = [$(this).attr('ro_id')];
+                  update(updating, attributes);
                 break;
         }
     });
@@ -553,9 +566,11 @@ function bindSortables(){
         .bind('contextmenu', function(){return false;})
         .bind('mouseover',function(){
             $('.right-menu', this).show();
+            $('.toolbar', this).css({opacity:1.0});
         })
         .bind('mouseout',function(){
             $('.right-menu', this).hide();
+            $('.toolbar', this).css({opacity:0.2});
         });
         $('.contextmenu').unbind('click').click(function(e){
             e.preventDefault();

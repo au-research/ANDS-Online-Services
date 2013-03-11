@@ -105,7 +105,7 @@
 				</ul>
 			</div>
 		</span>
-		<div class="buttons"><a href="javascript:;" class="contextmenu" status="{{name}}"><i class="icon-wrench no-border"></i></a></div>
+		<div class="buttons"><a href="javascript:;" class="contextmenu" status="{{name}}"><i class="icon-chevron-down no-border"></i></a></div>
 		<h5 class="ellipsis" style="width:60%">{{display_name}}</h5>
 	</div>
 	<div class="widget-content nopadding ">
@@ -114,10 +114,10 @@
 			{{#items}}
 			<li id="{{id}}" data-toggle="context" data-target="#context-menu-{{status}}" class="status_{{status}} ro_item {{#has_error}}ro_error{{/has_error}}" status="{{status}}">
 			<div class="ro_title"><a ro_id="{{id}}" class="ro_preview">{{title}}</a></div>
+			<img class="class_icon" tip="{{class}}" src="<?php echo asset_url('img/{{class}}.png', 'base');?>"/>
 			<div class="ro_content ">
-				<p>
-					<span class="tag" tip="Last Modified"><i class="icon icon-time"></i> {{updated}}</span>
-					<img class="tag" tip="{{class}}" src="<?php echo asset_url('img/{{class}}.png', 'base');?>"/>
+				<div>
+					<span class="tag" tip="Last Modified: {{updated}}"><i class="icon icon-time"></i></span>
 					{{#quality_level}}
 						<span class="tag ql_{{quality_level}} tipQA" ro_id='{{id}}'>{{quality_level}}</span>
 					{{/quality_level}}
@@ -127,11 +127,17 @@
 					{{#has_gold}}
 						<span class="tag gold_status_flag" tip="<h5>Gold Standard</h5><p>The following record has been verified<br/> as an exemplary record <br/>by the ANDS Metadata Assessment Group.</p>"><i class="icon icon-star-empty"></i></span>
 					{{/has_gold}}
-				</p>
-			</div>
-			<div class="btn-group btn-group-vertical right-menu hide">
-				<button class="contextmenu btn btn-small" status="{{name}}"><i class="icon icon-wrench"></i></button>
-				<button class="tipTag btn btn-small" ro_id="{{id}}"><i class="icon icon-tag"></i></button>
+				</div>
+				<div class="toolbar">
+					<div class="btn-group">
+						<button class="btn btn-small op" action="view" tip="View" ro_id="{{id}}"><i class="icon icon-search"></i></button>
+						<button class="btn btn-small op" action="edit" tip="Edit" ro_id="{{id}}"><i class="icon icon-edit"></i></button>
+						<!--button class="tipTag btn btn-small" ro_id="{{id}}"><i class="icon icon-tag"></i></button-->
+						<button class="btn btn-small op" action="advance_status" to="{{connectTo}}" tip="Advance Status" ro_id="{{id}}"><i class="icon icon-share-alt"></i></button>
+						<button class="contextmenu btn btn-small" status="{{name}}" tip="More Action"><i class="icon icon-wrench"></i></button>
+					</div>
+				</div>
+				<div class="clearfix"></div>
 			</div>
 			<div class='clearfix'></div>
 			</li>

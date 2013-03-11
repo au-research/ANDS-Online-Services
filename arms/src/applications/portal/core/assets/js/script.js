@@ -37,6 +37,14 @@ $(document).ready(function() {
             }
     });
     $("#slider").editRangeSlider({
+    	scales: [
+  // Primary scale
+  {
+    first: function(val){ return val; },
+    next: function(val){ return val + 50; },
+    stop: function(val){ return false; },
+    label: function(val){ return val; }
+  }],
     	bounds:{min: 1544, max: 2012},
     	defaultValues:{min: 1544, max: 2012},
     	valueLabels:"change",
@@ -89,8 +97,19 @@ $(document).ready(function() {
 		if(all!='') q +='"'+all+'" ';
 		q += input+ ' '+not;
 		var tab = $('#record_tab').val();
-		var temporal = $("#slider").editRangeSlider("values");
-		window.location = base_url+'search/#!/q='+q+'/tab='+tab+'/temporal='+Math.round(temporal.min)+'-'+Math.round(temporal.max);
+		
+		var url = base_url+'search/#!/q='+q+'/tab='+tab;
+		if($('#rst_range').prop('checked')){
+			var temporal = $("#slider").editRangeSlider("values");
+			url += '/temporal='+Math.round(temporal.min)+'-'+Math.round(temporal.max);
+		}
+		window.location = url;
+	});
+
+	$('#slider').hide();
+	$('#rst_range').on('change',function(){
+		$('#slider').toggle();
+		$('#slider').editRangeSlider('resize');
 	});
 
 

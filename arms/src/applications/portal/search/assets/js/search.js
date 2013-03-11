@@ -14,10 +14,10 @@ $(document).ready(function() {
 	/*GET HASH TAG*/
 	$(window).hashchange(function(){
 		var hash = window.location.hash;
-
 		var hash = location.href.substr(location.href.indexOf("#"));
 		var query = hash.substring(3, hash.length);
 		var words = query.split('/');
+		$('.tabs').hide();
 		$('#search_box, #selected_group, #selected_subject').empty();
 		searchData = {};
 		$.each(words, function(){
@@ -26,6 +26,7 @@ $(document).ready(function() {
 			var value = string[1];
 			if(term && value) {
 				searchData[term] = value;
+				value = decodeURIComponent(value);
 				switch(term){
 					case 'q': 
 						$('#search_box').val(value);
@@ -107,6 +108,9 @@ function executeSearch(searchData, searchUrl){
 }
 
 function initSearchPage(){
+
+	$('.tabs').show();
+
 	//bind the facets
 	$('.filter').click(function(){
 		searchData[$(this).attr('filter_type')] = encodeURIComponent($(this).attr('filter_value'));
@@ -178,6 +182,7 @@ function initSearchPage(){
 	//populate the advanced search field, BLACK MAGIC, not exactly, just some bad code
 	if(searchData['q']){
 		var q = searchData['q'];
+		q = decodeURIComponent(q);
 		if(q.indexOf('"')!='-1'){
 			all = q.match(/"([^"]+)"/)[1];//anything inside quote
 			rest = q.split(q.match(/"([^"]+)"/)[0]).join('');
@@ -193,10 +198,10 @@ function initSearchPage(){
 			if(this.indexOf('-')==0){//anything starts with - is nots
 				nots.push(this.substring(1,this.length));
 			}else{
-				inputs += this;//anything else is normal
+				inputs += this+' ';//anything else is normal
 			}
 		});
-		$('.adv_input').val(inputs);
+		$('.adv_input').val($.trim(inputs));
 		$('.adv_not').each(function(e,k){//populate the nots
 			$(this).val(nots[e]);
 		});
@@ -562,7 +567,7 @@ function formatSearch()
 {
 	var query_string = '#!/';
 	$.each(searchData, function(i, v){
-		query_string += i + '=' + v + '/';
+		query_string += i + '=' + encodeURIComponent(v) + '/';
 	})
 	return query_string;
 }

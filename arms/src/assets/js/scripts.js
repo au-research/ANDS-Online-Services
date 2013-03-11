@@ -74,7 +74,8 @@ $(document).ready(function(){
 			},
 			position: {
 				my: my, // Use the corner...
-				at: at
+				at: at,
+				viewport: $(window)
 			},
 			style: {
 				classes: 'ui-tooltip-bootstrap ui-tooltip-shadow'

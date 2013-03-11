@@ -74,7 +74,7 @@
 
 	
 	<script type="text/javascript" src="<?php echo asset_url('lib/jquery-ui-1.8.23.custom.min.js', 'base');?>"></script>
-	<script type="text/javascript" src="<?php echo asset_url('lib/jQRangeSlider/jQAllRangeSliders-min.js', 'base');?>"></script>
+	<script type="text/javascript" src="<?php echo asset_url('lib/jQRangeSlider/jQAllRangeSliders-withRuler-min.js', 'base');?>"></script>
 	 <?php if(isset($js_lib)): ?>
 	    <?php foreach($js_lib as $lib):?>
 	 		<?php if($lib=='googleapi'):?>
