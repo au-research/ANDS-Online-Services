@@ -46,7 +46,7 @@ CREATE TABLE `deleted_registry_objects` (
 ALTER TABLE `url_mappings` DROP FOREIGN KEY `fk_url_map_to_registry_object` ;
 ALTER TABLE `url_mappings` CHANGE COLUMN `registry_object_id` `registry_object_id` MEDIUMINT(8) UNSIGNED NULL  ;
 
-ALTER TABLE `data_source_logs` ADD COLUMN `class` varchar(45) NOT NULL;
+ALTER TABLE `data_source_logs` CHANGE COLUMN `class` `class` varchar(45) NOT NULL;
 ALTER TABLE `data_source_logs` ADD COLUMN `harvester_error_type` varchar(45) NOT NULL;
 
 
