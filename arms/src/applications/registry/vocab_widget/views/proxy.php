@@ -25,8 +25,8 @@ limitations under the License.
 // some constants
 define("BASE_URL", "http://ands3.anu.edu.au:8080/sissvoc/api/");
 define("SEARCH_URL", "/concept.json?anycontains=");
-define("NARROW_URL", "/concept/allNarrower.json?uri=");
-define("BROAD_URL", "/concept/allBroader.json?uri="); #future use
+define("NARROW_URL", "/concept/narrower.json?uri=");
+define("BROAD_URL", "/concept/broader.json?uri="); #future use
 define("MAX_RESULTS", 200); #sisvoc only returns 200 items
 
 class VocabProxy
