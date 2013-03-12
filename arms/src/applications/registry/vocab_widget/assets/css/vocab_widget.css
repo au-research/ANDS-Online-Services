@@ -18,10 +18,12 @@ ul.ands_vocab_list li {
 }
 
 
-ul.ands_vocab_list li[role="vocab_error"] {
+ul.ands_vocab_list li[role="vocab_error"], .error {
     background-color: #FFAAAA;
     margin-bottom: 0px;
 }
+
+div.error { padding:0.5em }
 
 ul.ands_vocab_list li[role="vocab_item"]:hover {
     background-color: #CFCFCF;
