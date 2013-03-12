@@ -1,4 +1,4 @@
-ul.ands_vocab_list {
+ul.vocab_list {
     z-index: 1;
     width: 300px;
     max-height: 300px;
@@ -10,7 +10,7 @@ ul.ands_vocab_list {
     padding: 2px;
 }
 
-ul.ands_vocab_list li {
+ul.vocab_list li {
     line-height: 2;
     padding: .2em .8em .2em .4em;
     font-size: 0.8em;
@@ -18,36 +18,36 @@ ul.ands_vocab_list li {
 }
 
 
-ul.ands_vocab_list li[role="vocab_error"], .error {
+ul.vocab_list li[role="vocab_error"], .error {
     background-color: #FFAAAA;
     margin-bottom: 0px;
 }
 
 div.error { padding:0.5em }
 
-ul.ands_vocab_list li[role="vocab_item"]:hover {
+ul.vocab_list li[role="vocab_item"]:hover {
     background-color: #CFCFCF;
     cursor: pointer;
 }
 
-ul.ands_vocab_list li span[role="label"] {
+ul.vocab_list li span[role="label"] {
     font-weight: bold;
     float:left;
     width:80%;
 }
 
-ul.ands_vocab_list li span[role="definition"] {
+ul.vocab_list li span[role="definition"] {
     float:right;
 }
 
-ul.ands_vocab_list li span[role="about"] {
+ul.vocab_list li span[role="about"] {
     font-style: italic;
     display:block;
     clear:both;
 }
 
 
-ul.ands_vocab_list.rifcs li span[role="label"] {
+ul.vocab_list.rifcs li span[role="label"] {
     font-weight: bold;
     float:left;
     width:20%;
