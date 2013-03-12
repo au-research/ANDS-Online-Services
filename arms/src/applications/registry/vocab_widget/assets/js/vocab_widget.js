@@ -15,9 +15,9 @@
 ;(function($) {
     var WIDGET_NAME = "ANDS Vocabulary Widget service";
     var WIDGET_ID = "_vocab_widget_list";
-    var WIDGET_DATA = "ands_vocab_data";
+    var WIDGET_DATA = "vocab_data";
 
-    $.fn.ands_vocab_widget = function(options, param) {
+    $.fn.vocab_widget = function(options, param) {
 	param = typeof(param) === 'undefined' ? false : param;
 
 	var defaults = {
@@ -27,9 +27,9 @@
 	    //sisvoc repository to query. (proxy defaults to 'anzsrc-for' if none supplied)
 	    repository: 'anzsrc-for',
 
-	    //currently, 'search' and 'narrow' are available. in future,
+	    //currently, 'search' and 'narrow', and 'advanced' are available. in future,
 	    //'broad', 'concepts' modes will be added
-	    mode: "search",
+	    mode: "",
 
 	    //search doesn't require any parameters, but narrow does (and broaden will)
 	    //in the latter case, the parameter is the URI to narrow/broaden on
@@ -56,7 +56,7 @@
 	    error_msg: WIDGET_NAME + " error.",
 
 	    //provide CSS 'class' references. Separate multiple classes by spaces
-	    list_class: "ands_vocab_list",
+	    list_class: "vocab_list",
 
 	    //which fields do you want to display? check the repository for available fields
 	    //nb:
@@ -97,10 +97,19 @@
 		    case 'advanced':
 			handler = new AdvancedHandler($this, settings);
 			break;
+		    default:
+			_alert('Unknown mode "' + settings.mode + '"');
+			break;
 		    }
 
-		    handler.ready();
-		    $this.data('_handler', handler);
+		    if (typeof(handler) !== 'undefined') {
+			handler.ready();
+			$this.data('_handler', handler);
+		    }
+		    else {
+			_alert('Handler not initialised');
+		    }
+
 		});
 	    }
 	    catch (err) {
@@ -398,10 +407,10 @@
 	 */
 	vocab_lookup: function (event) {
 	    //this._reset();
-	    if (this._container.data('ands_vocab_timer')) {
-		clearTimeout(this._container.data('ands_vocab_timer'));
+	    if (this._container.data('vocab_timer')) {
+		clearTimeout(this._container.data('vocab_timer'));
 	    }
-	    this._container.data('ands_vocab_timer',
+	    this._container.data('vocab_timer',
 				 setTimeout(this.lookup(),
 					    this.settings.delay));
 	},
