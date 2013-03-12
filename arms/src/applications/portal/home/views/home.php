@@ -49,7 +49,7 @@
 	</div>
 	
 	<div class="social">
-		<a href="#"><img src="<?php echo asset_url('images/facebook.png','core');?>" alt="" /></a><a href="#"><img src="<?php echo asset_url('images/twitter.png','core');?>" alt="" /></a> RSS,ATOM and Twitter feeds are now available. Learn more here....
+		<a href="feed/rss"><img src="<?php echo asset_url('images/rss.png','core');?>" alt="" /></a><a href="https://twitter.com/andsdata"><img src="<?php echo asset_url('images/twitter.png','core');?>" alt="" /></a>
 	</div><!-- social -->
 
 
