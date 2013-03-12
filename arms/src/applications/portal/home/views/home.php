@@ -33,11 +33,20 @@
 		</div><!-- flexslider -->
 		<div class="clear"></div>
 		<h3>Who contributes to Research Data Australia?</h3>
-		<p>61 research organisations from around Australia contribute information to Research Data Australia.</p> 			
-		<a href="#"><strong>See All</strong></a>
+		<p><?php echo sizeof($groups);?> research organisations from around Australia contribute information to Research Data Australia.</p> 			
+		<a href="javascript:;" id="show_who_contributes"><strong>See All</strong></a>
 	</div><!-- right -->		
 	<div class="clear"></div>
 
+	<div class="hide" id="who_contributes">
+		<ul>
+		<?php 
+			foreach($groups as $g=>$count){
+				echo '<li><a href="search#!/q='.$g.'">'.$g.' ('.$count.')</a></li>';
+			}
+		?>
+		</ul>
+	</div>
 	
 	<div class="social">
 		<a href="#"><img src="<?php echo asset_url('images/facebook.png','core');?>" alt="" /></a><a href="#"><img src="<?php echo asset_url('images/twitter.png','core');?>" alt="" /></a> RSS,ATOM and Twitter feeds are now available. Learn more here....

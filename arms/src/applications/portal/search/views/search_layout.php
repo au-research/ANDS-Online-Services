@@ -38,7 +38,6 @@
 </div><!-- sidebar -->				
 <div class="container_clear"></div>
 <!-- <div class="border"></div> -->
-	
 
 <script type="text/x-mustache" id="search-result-template">
 {{#docs}}

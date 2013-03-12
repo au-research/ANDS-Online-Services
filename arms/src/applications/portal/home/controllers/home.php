@@ -12,6 +12,7 @@ class Home extends MX_Controller {
 		//$this->solr->setOpt('fq', 'status:PUBLISHED');
 		$this->solr->setOpt('rows','0');
 		$this->solr->setFacetOpt('field', 'class');
+		$this->solr->setFacetOpt('field', 'group');
 		$this->solr->executeSearch();
 
 		//classes
@@ -21,11 +22,19 @@ class Home extends MX_Controller {
 			$data[$class] = $num;
 		}
 
+		//groups
+		$groups = $this->solr->getFacetResult('group');
+		$data['groups'] = array();
+		foreach($groups as $group=>$num){
+			$data['groups'][$group] = $num;
+		}
+
 		$this->load->library('stats');
 		$this->stats->registerPageView();		
 		//spotlights
 		
 		$data['scripts'] = array('home_page');
+		$data['js_lib'] = array('qtip');
 		$this->load->view('home', $data);
 	}
 

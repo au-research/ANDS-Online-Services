@@ -48,7 +48,7 @@ function updateDataSourcesStat(){
 			"sDom": '<""l>t<"F"fp>'
 		});
 
-		$('button.task').on('click',function(){
+		$(document).on('click','button.task',function(){
 			$(this).button('loading');
 			var op = $(this).attr('op');
 			var ds_id = $(this).attr('ds_id');

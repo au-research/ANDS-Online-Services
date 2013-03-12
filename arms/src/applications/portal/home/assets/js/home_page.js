@@ -15,4 +15,17 @@ $(document).ready(function() {
 	    pauseOnHover:true
 	  });
 	}
+
+	$('#show_who_contributes').qtip({
+		content: {
+			text: $('#who_contributes')
+		},
+		show:{solo:true,event:'click'},
+	    hide:{delay:1000, fixed:true,event:'unfocus'},
+	    position:{my:'bottom right', at:'top center', viewport:$(window)},
+	    style: {
+	        classes: 'ui-tooltip-light ui-tooltip-shadow previewPopup',
+	        width: 650
+	    }
+	});
 });

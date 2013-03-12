@@ -1,6 +1,7 @@
 /**
  * ANDS less file for compilation on deployment
  */
+html{overflow-y: scroll}
 
 .container{
 
@@ -252,6 +253,7 @@ div.topic_view {
 	position:relative;
 	.descriptions_overflow{
 		/*
+		AWESOME GRADIENT (Minh likes, Ben no likes)
 		-ms-filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0,startColorStr='#00ffffff',endColorStr='#ffffffff');
 		background-image: -webkit-gradient(linear,left top,left bottom,from(rgba(255,255,255,0)),to(rgba(255,255,255,1.0)));
 		background-image: -moz-linear-gradient(top center,rgba(255,255,255,0) 20%,rgba(255,255,255,1.0) 95%);
@@ -278,4 +280,21 @@ div.topic_view {
 	text-transform: uppercase;
 	z-index:999;
 	margin:0 0 15px 0;
+}
+
+#who_contributes{
+	margin: 0px auto;
+	ul{
+		-webkit-column-count: 3;
+		-webkit-column-gap: 10px;
+		-webkit-column-fill: auto;
+		-moz-column-count: 3;
+		-moz-column-gap: 10px;
+		-moz-column-fill: auto;
+		column-count: 3;
+		column-gap: 15px;
+		column-fill: auto;
+		font-size:13px;
+		line-height:23px;
+	}
 }
