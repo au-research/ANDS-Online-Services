@@ -27,6 +27,7 @@ define("BASE_URL", "http://ands3.anu.edu.au:8080/sissvoc/api/");
 define("SEARCH_URL", "/concept.json?anycontains=");
 define("NARROW_URL", "/concept/narrower.json?uri=");
 define("BROAD_URL", "/concept/broader.json?uri="); #future use
+define("TOP_URL", "/topConcepts.json");
 define("MAX_RESULTS", 200); #sisvoc only returns 200 items
 
 class VocabProxy
@@ -39,18 +40,27 @@ class VocabProxy
 			'queryprocessor' => false),
 		"narrow" => array(
 			'url' => NARROW_URL,
+			'queryprocessor' => false),
+		"top" => array(
+			'url' => TOP_URL,
 			'queryprocessor' => false));
+
+	//sort callables per action; initialised by constructor
+	private $action_sort = array(
+		"search" => false,
+		"narrow" => false,
+		"top" => false);
 
 	//what we send back
 	private $jsonData = array('status' => 'ERROR',
 				  'message' => 'action must be defined');
 
 	// Some defaults
-	private $repository = "anzsrc-for";
 	private $limit = 100; #a mildly sane limit
 	private $callback = "function";
 	private $action = false;
 	private $lookfor = false;
+	private $repository = false;
 
 	/**
 	 * Proxy is an atomic object: it gets instantiated, runs, and prints
@@ -63,6 +73,13 @@ class VocabProxy
 
 		//configure the action query processor callables; this can't be done up-front
 		$valid_actions['search']['queryprocessor'] = function($e) { return urlencode($e); };
+		$valid_actions['top']['queryprocessor'] = function($e) { return ""; };
+
+		$this->action_sort['top'] = function($e1, $e2) {
+			$l1 = (int)$e1['notation'];
+			$l2 = (int)$e2['notation'];
+			return $l1 < $l2 ? -1 : 1;
+		};
 
 		if ($this->setup()) {
 			$this->handle();
@@ -90,6 +107,13 @@ class VocabProxy
 			}
 		}
 		if ($data && $this->jsonData['status'] == "OK") {
+			$items = (array)$data['result']['items'];
+			if (is_callable($this->action_sort[$this->action]))
+			{
+				usort($items,
+				      $this->action_sort[$this->action]);
+			}
+
 			$this->jsonData['items'] = array_map(function($i) {
 					$i['label'] = $i['prefLabel']['_value'];
 					$i['about'] = $i['_about'];
@@ -98,7 +122,7 @@ class VocabProxy
 					      $i['prefLabel']);
 					return $i;
 				},
-				array_slice($data['result']['items'],
+				array_slice($items,
 					    0,
 					    $this->limit));
 			$this->jsonData['count'] = count($this->jsonData['items']);
