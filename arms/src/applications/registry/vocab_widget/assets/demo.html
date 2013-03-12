@@ -147,7 +147,7 @@ var widget = elem.vocab_widget({mode:'advanced'});
 widget.vocab_widget('repository', 'rifcs');
 widget.vocab_widget('cache', false);
 //set up some handlers
-elem.on('narrow.avw', function(event, data) {
+elem.on('narrow.vocab.ands', function(event, data) {
     var list = elem.append('&lt;ul /&gt;');
     $.each(data.items, function(idx, e) {
 	var link = $('&lt;a href="' + e['about'] + '"&gt;' +
@@ -158,7 +158,7 @@ elem.on('narrow.avw', function(event, data) {
 	list.append(item);
     });
 });
-elem.on('error.avw', function(event, xhr) {
+elem.on('error.vocab.ands', function(event, xhr) {
     elem.addClass('error')
 	.empty()
 	.text('There was an error retrieving vocab data: ' + xhr);
@@ -204,7 +204,7 @@ widget.vocab_widget('narrow',
 	  widget.vocab_widget('repository', 'rifcs');
 	  widget.vocab_widget('cache', false);
 	  //set up some handlers
-	  elem.on('narrow.avw', function(event, data) {
+	  elem.on('narrow.vocab.ands', function(event, data) {
 	      var list = elem.append('<ul />');
 	      $.each(data.items, function(idx, e) {
 		  var link = $('<a href="' + e['about'] + '">' +
@@ -215,7 +215,7 @@ widget.vocab_widget('narrow',
 		  list.append(item);
 	      });
 	  });
-	  elem.on('error.avw', function(event, xhr) {
+	  elem.on('error.vocab.ands', function(event, xhr) {
 	      elem.addClass('error')
 		  .empty()
 		  .text('There was an error retrieving vocab data: ' + xhr);

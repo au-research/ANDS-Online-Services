@@ -756,8 +756,8 @@
 		url: this._url('search', opts),
 		cache: this.settings.cache,
 		dataType: "jsonp",
-		success: function(data) { handler._container.trigger('search.avw', data); },
-		error: function(xhr) { handler._container.trigger('error.avw', xhr); },
+		success: function(data) { handler._container.trigger('search.vocab.ands', data); },
+		error: function(xhr) { handler._container.trigger('error.vocab.ands', xhr); },
 	    });
 	},
 
@@ -767,8 +767,8 @@
 		url: this._url('narrow', opts),
 		cache: this.settings.cache,
 		dataType: "jsonp",
-		success: function(data) { handler._container.trigger('narrow.avw', data); },
-		error: function(xhr) { handler._container.trigger('error.avw', xhr); },
+		success: function(data) { handler._container.trigger('narrow.vocab.ands', data); },
+		error: function(xhr) { handler._container.trigger('error.vocab.ands', xhr); },
 	    });
 	}
     });

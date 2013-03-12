@@ -97,7 +97,7 @@
     widget.vocab_widget('repository', 'rifcs');
 
     //set up some handlers
-    elem.on('narrow.avw', function(event, data) {
+    elem.on('narrow.vocab.ands, function(event, data) {
         var list = elem.append('&lt;ul /&gt;');
         $.each(data.items, function(idx, e) {
 	    var link = $('&lt;a href="' + e['about'] + '"&gt;' +
@@ -108,7 +108,7 @@
 	    list.append(item);
         });
     });
-    elem.on('error.avw', function(event, xhr) {
+    elem.on('error.vocab.ands, function(event, xhr) {
         elem.addClass('error')
 	    .empty()
 	    .text('There was an error retrieving vocab data: ' + xhr);
@@ -292,7 +292,7 @@ $(...).vocab_widget('[option name]', [option value]);
 				   When run in advance mode, events are fired to allow you to hook into the workflow and implement your customisations as you see fit.
 				 </p>
 				 <div class="alert alert-info">
-				   Plugin event are placed in the <code>avw</code> namespace (AVW = ANDS Vocab Widget)
+				   Plugin event are placed in the <code>vocab.ands</code> namespace
 				 </div>
 				 <table class="table" style="font-size:0.9em">
 				   <thead>
@@ -303,7 +303,7 @@ $(...).vocab_widget('[option name]', [option value]);
 				   </thead>
 				   <tbody style="font-size:0.9em">
 				     <tr>
-				       <td>search.avw</td>
+				       <td>search.vocab.ands</td>
 				       <td>
 					 <ol>
 					   <li>JS Event object</li>
@@ -326,7 +326,7 @@ $(...).vocab_widget('[option name]', [option value]);
 				       </td>
 				     </tr>
 				     <tr>
-				       <td>narrow.avw</td>
+				       <td>narrow.vocab.ands</td>
 				       <td>
 					 <ol>
 					   <li>JS Event object</li>
@@ -349,7 +349,7 @@ $(...).vocab_widget('[option name]', [option value]);
 				       </td>
 				     </tr>
 				     <tr>
-				       <td>error.avw</td>
+				       <td>error.vocab.ands</td>
 				       <td>
 					 <ol>
 					   <li>JS Event object</li>
