@@ -23,6 +23,7 @@ limitations under the License.
  */
 
 // some constants
+define("SOLR_URL", "http://ands3.anu.edu.au:8080/solr1/collection1/select?wt=phps&rows=0&q=subject_vocab_uri%%3A(%%22%s%%22)");
 define("BASE_URL", "http://ands3.anu.edu.au:8080/sissvoc/api/");
 define("SEARCH_URL", "/concept.json?anycontains=");
 define("NARROW_URL", "/concept/narrower.json?uri=");
@@ -41,14 +42,17 @@ class VocabProxy
 		"search" => array(
 			'url' => SEARCH_URL,
 			'queryprocessor' => false,
+			'itemprocessor' => false,
 			'sortprocessor' => false),
 		"narrow" => array(
 			'url' => NARROW_URL,
 			'queryprocessor' => false,
+			'itemprocessor' => false,
 			'sortprocessor' => false),
 		"top" => array(
 			'url' => TOP_URL,
 			'queryprocessor' => false,
+			'itemprocessor' => false,
 			'sortprocessor' => false));
 
 	//what we send back
@@ -89,6 +93,40 @@ class VocabProxy
 			$l2 = (int)$e2['notation'];
 			return $l1 <= $l2 ? -1 : 1;
 		};
+
+		/**
+		 * Set up item processors; this is used to inject solr term counts based on the
+		 * vocab's 'about' URL. Note: this mightn't be the best way to go... awfully hard coded
+		 */
+		foreach($this->valid_actions as &$action)
+		{
+			$action['itemprocessor'] = function($items) {
+				return array_map(function($e)  {
+						if (array_key_exists('about', $e) &&
+						    substr($e['about'], 0, 7) === 'http://')
+						{
+							$count_url = sprintf(SOLR_URL,$e['about']);
+							$solr_response = unserialize(file_get_contents($count_url));
+							try
+							{
+								$e['count'] = $solr_response['response']['numFound'];
+							}
+							catch (Exception $e)
+							{
+								$e['count'] = 0;
+							}
+						}
+						else
+						{
+							$e['count'] = 0;
+						}
+						return $e;
+					},
+					$items);
+			};
+		}
+
+
 
 		if ($this->setup()) {
 			$this->handle();
@@ -134,6 +172,11 @@ class VocabProxy
 				array_slice($items,
 					    0,
 					    $this->limit));
+			if (is_callable($this->valid_actions[$this->action]['itemprocessor']))
+			{
+				$this->jsonData['items'] = call_user_func($this->valid_actions[$this->action]['itemprocessor'],
+									  $this->jsonData['items']);
+			}
 			$this->jsonData['count'] = count($this->jsonData['items']);
 		}
 	}
