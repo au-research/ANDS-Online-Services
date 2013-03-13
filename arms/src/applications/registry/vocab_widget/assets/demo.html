@@ -173,6 +173,20 @@ widget.vocab_widget('narrow',
 		<p>RIFCS Identifier types:</p>
 	      </div>
 	    </fieldset>
+	    <fieldset>
+	      <legend>Vocab widget: tree mode  <button type="link" class="note-toggle">?</button></legend>
+	      <div class="note">
+		This form section is using the widget with no helpers; it outputs a list of known <code>rifcs</code> identifier types:
+		<pre>
+var elem = $("#vocab-advanced");
+var widget = elem.vocab_widget({mode:'advanced'});
+widget.vocab_widget('repository', 'rifcs');
+widget.vocab_widget('cache', false);
+		</pre>
+	      </div>
+	      <div id="vocab-tree">
+	      </div>
+	    </fieldset>
             <p><input type="submit"/></p>
           </form>
         </div>
@@ -182,50 +196,130 @@ widget.vocab_widget('narrow',
     <script type="text/javascript">
       /* this handler is for the plugin */
       $(document).ready(function() {
+	  function searchmode() {
 	       $("#anzsrc-vocab").vocab_widget({mode: 'search',
 						cache: false,
 						repository: 'anzsrc-for',
 						target_field: 'label'});
-	       $("#rifcs-idtype").vocab_widget({mode:"narrow",
-	       					mode_params:"http://purl.org/au-research/vocabulary/RIFCS/1.4/RIFCSIdentifierType",
-	       					repository:"rifcs",
-	       					cache: false,
-	       					fields: ['definition'],
-	       					target_field: 'label'});
-	       $("#rifcs-idtype-input").vocab_widget({mode:"narrow",
-						      mode_params:"http://purl.org/au-research/vocabulary/RIFCS/1.4/RIFCSIdentifierType",
-						      repository:"rifcs",
-						      cache: false,
-						      fields: ['label', 'definition', 'about'],
-						      target_field: 'label'});
+	  }
 
-	  var elem = $("#vocab-advanced");
-	  var widget = elem.vocab_widget({mode:'advanced'});
-	  widget.vocab_widget('repository', 'rifcs');
-	  widget.vocab_widget('cache', false);
-	  //set up some handlers
-	  elem.on('narrow.vocab.ands', function(event, data) {
-	      var list = elem.append('<ul />');
-	      $.each(data.items, function(idx, e) {
-		  var link = $('<a href="' + e['about'] + '">' +
-			       e['label'] + '</a>');
-		  var item = $('<li />');
-		  item.append(link).append(' (' + e.definition + ')');
-		  item.data('data', e);
-		  list.append(item);
+	  function narrowmode() {
+	      $("#rifcs-idtype").vocab_widget({mode:"narrow",
+	       				       mode_params:"http://purl.org/au-research/vocabulary/RIFCS/1.4/RIFCSIdentifierType",
+	       				       repository:"rifcs",
+	       				       cache: false,
+	       				       fields: ['definition'],
+	       				       target_field: 'label'});
+	      $("#rifcs-idtype-input").vocab_widget({mode:"narrow",
+						     mode_params:"http://purl.org/au-research/vocabulary/RIFCS/1.4/RIFCSIdentifierType",
+						     repository:"rifcs",
+						     cache: false,
+						     fields: ['label', 'definition', 'about'],
+						     target_field: 'label'});
+	  }
+
+	  function advancedmode() {
+	      var elem = $("#vocab-advanced");
+	      var widget = elem.vocab_widget({mode:'advanced'});
+	      widget.vocab_widget('repository', 'rifcs');
+	      widget.vocab_widget('cache', false);
+	      //set up some handlers
+	      elem.on('narrow.vocab.ands', function(event, data) {
+		  var list = elem.append('<ul />');
+		  $.each(data.items, function(idx, e) {
+		      var link = $('<a href="' + e['about'] + '">' +
+				   e['label'] + '</a>');
+		      var item = $('<li />');
+		      item.append(link).append(' (' + e.definition + ')');
+		      item.data('data', e);
+		      list.append(item);
+		  });
 	      });
-	  });
-	  elem.on('error.vocab.ands', function(event, xhr) {
-	      elem.addClass('error')
-		  .empty()
-		  .text('There was an error retrieving vocab data: ' + xhr);
-	  });
+	      elem.on('error.vocab.ands', function(event, xhr) {
+		  elem.addClass('error')
+		      .empty()
+		      .text('There was an error retrieving vocab data: ' + xhr);
+	      });
 
-	  //now, perform the vocab lookup
-	  widget.vocab_widget('narrow',
-			      'http://purl.org/au-research/vocabulary/RIFCS/1.4/RIFCSIdentifierType');
+	      //now, perform the vocab lookup
+	      widget.vocab_widget('narrow',
+				  'http://purl.org/au-research/vocabulary/RIFCS/1.4/RIFCSIdentifierType');
+	  }
 
+	  function treemode() {
+	      var subclick = function(ev) {
+		  ev.stopPropagation();
+		  var target = $(ev.target);
+		  var itemdata = target.data('vocab');
 
+		  switch(target.data('treestate')) {
+		  case "init":
+		      target.addClass('tree_loading');
+		      widget.vocab_widget('narrow',
+					  {uri:itemdata['about'], callee:target});
+		      target.removeClass('tree_closed').addClass('tree_open');
+		      target.data('treestate', 'open');
+		      break;
+		  case "open":
+		      target.removeClass('tree_open').addClass('tree_closed');
+		      target.find('ul').slideUp(100);
+		      target.data('treestate', 'closed');
+		      break;
+		  case "closed":
+		      target.removeClass('tree_closed').addClass('tree_open');
+		      target.find('ul').slideDown(150);
+		      target.data('treestate', 'open');
+		      break;
+		  }
+	      };
+
+	      var treeitems = function(list, idx, item) {
+		  list.hide();
+		  var titem = $('<li></li>');
+		  titem.data('treestate', 'init')
+		      .addClass('tree_closed')
+		      .data('vocab', item);
+		  titem.text(item['label'] + ' (' + item['count'] + ')');
+		  if (item['count'] > 0) {
+		      titem.on('click', subclick);
+		  }
+		  else {
+		      titem.data('treestate', 'empty')
+			  .removeClass('tree_closed')
+			  .addClass('tree_empty');
+		  }
+		  titem.prepend('<ins/>');
+		  list.append(titem).slideDown(150);
+	      };
+
+	      var elem = $("#vocab-tree");
+	      var treelist = $('<ul />').addClass('vocab_tree');
+	      elem.append(treelist);
+	      var widget = elem.vocab_widget({mode:'advanced', repository:'anzsrc-for'});
+
+	      elem.on('narrow.vocab.ands', function(event, data) {
+		  var subitem = $(event.target);
+		  subitem.removeClass('tree_loading');
+		  var sublist = $('<ul />');
+		  subitem.append(sublist);
+		  $.each(data.items, function(idx, item) {
+		      treeitems(sublist, idx, item);
+		  });
+	      });
+
+	      elem.on('top.vocab.ands', function(event, data) {
+		  $.each(data.items, function(idx, item) {
+		      treeitems(treelist, idx, item);
+		  });
+	      });
+	      widget.vocab_widget('top');
+
+	  }
+
+	  searchmode();
+	  narrowmode();
+	  advancedmode();
+	  treemode();
       });
 
       /* this handler is for the demonstration helpers */

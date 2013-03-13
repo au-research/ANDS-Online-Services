@@ -767,12 +767,29 @@
 
 	__act: function(action, opts) {
 	    var handler = this;
+	    var uri;
+	    var callee;
+	    if (typeof(opts['uri']) !== 'undefined') {
+		uri = opts['uri'];
+	    }
+	    else {
+		uri = opts;
+	    }
+
+	    if (typeof(opts['callee']) !== 'undefined') {
+		callee = opts['callee'];
+	    }
+	    else {
+		callee = handler._container;
+	    }
+
+
 	    $.ajax({
-		url: this.__url(action, opts),
+		url: this.__url(action, uri),
 		cache: this.settings.cache,
 		dataType: "jsonp",
-		success: function(data) { handler._container.trigger(action + '.vocab.ands', data); },
-		error: function(xhr) { handler._container.trigger('error.vocab.ands', xhr); },
+		success: function(data) { callee.trigger(action + '.vocab.ands', data); },
+		error: function(xhr) { callee.trigger('error.vocab.ands', xhr); },
 	    });
 	}
     });
