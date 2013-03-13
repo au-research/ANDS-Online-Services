@@ -90,12 +90,15 @@
         <?php elseif($lib=='context_menu'):?>
             <script src="<?php echo base_url();?>assets/lib/bootstrap-contextmenu.js" type="text/javascript"></script>
 
+         <?php elseif($lib=='vocab_widget'):?>
+            <script src="<?php echo base_url();?>assets/vocab_widget/js/vocab_widget.js" type="text/javascript"></script>
+
   
   		<?php endif; ?>
 
     <?php endforeach;?>
 
-
+ 
 	<!-- ARMS scripts -->
     
 	<script src="<?php echo base_url();?>assets/js/scripts.js"></script>

@@ -5,10 +5,13 @@
 	<xsl:output method="html" encoding="UTF-8" indent="yes" omit-xml-declaration="yes"/>
 	<xsl:param name="base_url"/>
 
-	<xsl:template match="ro:registryObject">
+
 	<xsl:variable name="ro_class">
-		<xsl:apply-templates select="ro:collection | ro:activity | ro:party  | ro:service" mode="getClass"/>
+		<xsl:apply-templates select="ro:registryObject/ro:collection | ro:registryObject/ro:activity | ro:registryObject/ro:party  | ro:registryObject/ro:service" mode="getClass"/>
 	</xsl:variable>
+
+	<xsl:template match="ro:registryObject">
+
 	<xsl:variable name="registry_object_id"><xsl:value-of select="//extRif:id"/></xsl:variable>
 	<xsl:variable name="display_title"><xsl:value-of select="//extRif:displayTitle"/></xsl:variable>
 
@@ -322,12 +325,8 @@
 				<div class="control-group">
 					<label class="control-label" for="type">Type</label>
 					<div class="controls">
-						<div class="input-prepend">
-							<button class="btn triggerTypeAhead" type="button">
-								<i class="icon-chevron-down"/>
-							</button>
-							<input type="text" class="input-large" name="type" value="{$ro_type}"/>
-						</div>
+						<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
+						<input type="text" id="{generate-id()}_value" class="rifcs-type" vocab="{concat('RIFCS',$ro_class,'Type')}" name="type" value="{$ro_type}"/>
 						<p class="help-inline">
 							<small/>
 						</p>
@@ -348,7 +347,10 @@
 					<label class="control-label" for="originatingSource">Originating Source</label>
 					<div class="controls">
 						<input type="text" id="originatingSource" name="originatingSource" placeholder="Value" value="{ro:originatingSource/text()}"/>
-						<input type="text" id="originatingSource" name="originatingSourceType" placeholder="Type"  value="{ro:originatingSource/@type}"/>
+						<span>
+						<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
+						<input type="text" id="originatingSource" class="rifcs-type" vocab="RIFCSOriginatingSourceType" name="originatingSourceType" placeholder="Type"  value="{ro:originatingSource/@type}"/>
+						</span>
 					</div>
 				</div>
 				

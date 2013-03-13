@@ -523,6 +523,7 @@ function initEditForm(){
 	initRelatedInfos();
 	bindPartsTooltip();
 	assignFieldID();
+	initVocabWidgets();
 }
 
 function initSimpleModeFields()
@@ -540,6 +541,38 @@ function initSimpleModeFields()
 		}
 	})
 
+}
+
+
+function initVocabWidgets(){
+
+	$(".rifcs-type").each(function(){		
+		var elem = $(this);
+		var widget = elem.ands_vocab_widget({mode:'advanced'});
+		var vocab = _getVocab(elem.attr('vocab'));
+		elem.on('narrow.avw', function(event, data) {	
+		var dataArray = Array();	
+			$.each(data.items, function(idx, e) {
+				dataArray.push({value:e.label, subtext:e.definition});
+			});
+			elem.typeahead({source:dataArray});
+		});
+
+		elem.on('error.avw', function(event, xhr) {
+			console.log(xhr);
+		});
+		widget.ands_vocab_widget('repository', 'rifcs');
+		widget.ands_vocab_widget('narrow', "http://purl.org/au-research/vocabulary/RIFCS/1.4/" + vocab);		 
+	});
+}
+
+function _getVocab(vocab)
+{
+	vocab = vocab.replace("collection", "Collection");
+	vocab = vocab.replace("party", "Party");
+	vocab = vocab.replace("service", "Service");
+	vocab = vocab.replace("activity", "Activity");
+	return vocab;
 }
 
 function assignFieldID(){

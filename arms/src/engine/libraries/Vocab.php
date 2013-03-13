@@ -96,7 +96,7 @@ class Vocab {
     }
 
     function constructBroaderUriString($resolvingService, $uriprefix, $term){
-        $broaderQueryComp = 'allBroader.json?uri=';
+        $broaderQueryComp = 'concept/allBroader.json?uri=';
         $uri = $resolvingService.$broaderQueryComp.urlencode($uriprefix.$term);
         return $uri;
     }
@@ -147,11 +147,9 @@ class Vocab {
     function getBroaderSubjects($uriprefix, $term)
     {
         $result = array();
-        //echo $uriprefix."----".$term;
         if( isset($this->resolvedArray[$uriprefix][$term]) && isset($this->resolvedArray[$uriprefix][$term]['broaderTerms']))
         {
             $broaderTerms = $this->resolvedArray[$uriprefix][$term]['broaderTerms'];
-            //var_dump($broaderTerms);
             foreach($broaderTerms as $broaderTerm)
             {
                 if(isset($this->resolvedArray[$uriprefix][$broaderTerm]))

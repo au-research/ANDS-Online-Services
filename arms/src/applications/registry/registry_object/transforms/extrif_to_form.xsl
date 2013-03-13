@@ -172,7 +172,7 @@
 							<button class="btn triggerTypeAhead" type="button">
 								<i class="icon-chevron-down"/>
 							</button>
-							<input type="text" class="input-large" name="title" value="{$ro_type}"/>
+							<input type="text" class="input-large rifcs-type" vocab="RIFCSCollectionType" name="title" value="{$ro_type}"/>
 						</div>
 						<p class="help-inline">
 							<small/>
