@@ -134,6 +134,9 @@
 		case 'narrow':
 		    handler._narrow(param);
 		    break;
+		case 'top':
+		    handler._top(param);
+		    break;
 		default:
 		    if (typeof(defaults[op]) !== 'undefined')
 		    {
@@ -742,7 +745,7 @@
 	    this._super(container, settings);
 	},
 
-	_url: function(mode, lookfor) {
+	__url: function(mode, lookfor) {
 	    return this.settings.endpoint +
 		"?action=" + mode +
 		"&repository=" + this.settings.repository +
@@ -751,23 +754,24 @@
 	},
 
 	_search: function(opts) {
-	    var handler = this;
-	    $.ajax({
-		url: this._url('search', opts),
-		cache: this.settings.cache,
-		dataType: "jsonp",
-		success: function(data) { handler._container.trigger('search.vocab.ands', data); },
-		error: function(xhr) { handler._container.trigger('error.vocab.ands', xhr); },
-	    });
+	    this.__act('search', opts);
 	},
 
 	_narrow: function(opts) {
+	    this.__act('narrow', opts);
+	},
+
+	_top: function(opts) {
+	    this.__act('top', opts);
+	},
+
+	__act: function(action, opts) {
 	    var handler = this;
 	    $.ajax({
-		url: this._url('narrow', opts),
+		url: this.__url(action, opts),
 		cache: this.settings.cache,
 		dataType: "jsonp",
-		success: function(data) { handler._container.trigger('narrow.vocab.ands', data); },
+		success: function(data) { handler._container.trigger(action + '.vocab.ands', data); },
 		error: function(xhr) { handler._container.trigger('error.vocab.ands', xhr); },
 	    });
 	}
