@@ -33,23 +33,23 @@ define("MAX_RESULTS", 200); #sisvoc only returns 200 items
 class VocabProxy
 {
 
-	//actions this proxy can execute
+	/*
+	 * @var actions this proxy can execute; processor callbacks are
+	 * initialised by the constructor
+	 */
 	private $valid_actions = array(
 		"search" => array(
 			'url' => SEARCH_URL,
-			'queryprocessor' => false),
+			'queryprocessor' => false,
+			'sortprocessor' => false),
 		"narrow" => array(
 			'url' => NARROW_URL,
-			'queryprocessor' => false),
+			'queryprocessor' => false,
+			'sortprocessor' => false),
 		"top" => array(
 			'url' => TOP_URL,
-			'queryprocessor' => false));
-
-	//sort callables per action; initialised by constructor
-	private $action_sort = array(
-		"search" => false,
-		"narrow" => false,
-		"top" => false);
+			'queryprocessor' => false,
+			'sortprocessor' => false));
 
 	//what we send back
 	private $jsonData = array('status' => 'ERROR',
@@ -71,14 +71,23 @@ class VocabProxy
 		header('Cache-Control: private, must-revalidate');
 		header('Content-type: application/json');
 
-		//configure the action query processor callables; this can't be done up-front
-		$valid_actions['search']['queryprocessor'] = function($e) { return urlencode($e); };
-		$valid_actions['top']['queryprocessor'] = function($e) { return ""; };
+		/**
+		 * Set up the query processors:
+		 *  - for 'search', we want to urlencode the query.
+		 *  - for 'narrow', we have a URI, so we don't want to mess with that
+		 *  - for 'top', we don't need (or want) a query: silently drop it
+		 */
+		$this->valid_actions['search']['queryprocessor'] = function($e) { return urlencode($e); };
+		$this->valid_actions['top']['queryprocessor'] = function($e) { return ""; };
 
-		$this->action_sort['top'] = function($e1, $e2) {
+		/**
+		 * Set up sort processors:
+		 *  - for 'top', we want terms sorted by notation
+		 */
+		$this->valid_actions['top']['sortprocessor'] = function($e1, $e2) {
 			$l1 = (int)$e1['notation'];
 			$l2 = (int)$e2['notation'];
-			return $l1 < $l2 ? -1 : 1;
+			return $l1 <= $l2 ? -1 : 1;
 		};
 
 		if ($this->setup()) {
@@ -108,10 +117,10 @@ class VocabProxy
 		}
 		if ($data && $this->jsonData['status'] == "OK") {
 			$items = (array)$data['result']['items'];
-			if (is_callable($this->action_sort[$this->action]))
+			if (is_callable($this->valid_actions[$this->action]['sortprocessor']))
 			{
 				usort($items,
-				      $this->action_sort[$this->action]);
+				      $this->valid_actions[$this->action]['sortprocessor']);
 			}
 
 			$this->jsonData['items'] = array_map(function($i) {
