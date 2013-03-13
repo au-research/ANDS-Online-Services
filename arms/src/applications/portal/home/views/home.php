@@ -34,7 +34,7 @@
 		<div class="clear"></div>
 		<h3>Who contributes to Research Data Australia?</h3>
 		<p><?php echo sizeof($groups);?> research organisations from around Australia contribute information to Research Data Australia.</p> 			
-		<a href="javascript:;" id="show_who_contributes"><strong>See All</strong></a>
+		<a href="home/contributors" id=""><strong>See All</strong></a>
 	</div><!-- right -->		
 	<div class="clear"></div>
 

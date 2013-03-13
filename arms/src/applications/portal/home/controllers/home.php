@@ -30,12 +30,35 @@ class Home extends MX_Controller {
 		}
 
 		$this->load->library('stats');
-		$this->stats->registerPageView();		
+		$this->stats->registerPageView();
 		//spotlights
 		
 		$data['scripts'] = array('home_page');
 		$data['js_lib'] = array('qtip');
 		$this->load->view('home', $data);
+	}
+
+	function contributors(){
+		//solr for counts
+		$this->load->library('solr');
+		$this->solr->setOpt('q', '*:*');
+		//$this->solr->setOpt('fq', 'status:PUBLISHED');
+		$this->solr->setOpt('rows','0');
+		$this->solr->setFacetOpt('field', 'class');
+		$this->solr->setFacetOpt('field', 'group');
+		$this->solr->executeSearch();
+
+		//groups
+		$groups = $this->solr->getFacetResult('group');
+		$data['groups'] = array();
+		foreach($groups as $group=>$num){
+			$data['groups'][$group] = $num;
+		}
+
+		$this->load->library('stats');
+		$this->stats->registerPageView();
+
+		$this->load->view('who_contributes', $data);
 	}
 
 	function about(){
