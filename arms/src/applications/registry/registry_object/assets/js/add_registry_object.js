@@ -275,9 +275,11 @@ function initEditForm(){
 				}
 			}
 			//found it, geez
-
+			//
+			
 			//add the DOM
-			$(template).clone().removeClass('template').insertBefore(where).hide().slideDown();
+			var new_dom = $(template).clone().removeClass('template').insertBefore(where).hide().slideDown();
+			initVocabWidgets(new_dom);
 
 			//@TODO: check if it's inside a tooltip and perform reposition
 
@@ -523,7 +525,7 @@ function initEditForm(){
 	initRelatedInfos();
 	bindPartsTooltip();
 	assignFieldID();
-	initVocabWidgets();
+	initVocabWidgets($(document));
 }
 
 function initSimpleModeFields()
@@ -544,13 +546,17 @@ function initSimpleModeFields()
 }
 
 
-function initVocabWidgets(){
-
-	$(".rifcs-type").each(function(){		
+function initVocabWidgets(container){
+	var container_elem;
+	if(container){
+		container_elem = container;
+	}else container_elem = $(body);
+	$(".rifcs-type", container_elem).each(function(){
+		//log(this, 'bind vocab widget');
 		var elem = $(this);
-		var widget = elem.ands_vocab_widget({mode:'advanced'});
+		var widget = elem.vocab_widget({mode:'advanced'});
 		var vocab = _getVocab(elem.attr('vocab'));
-		elem.on('narrow.avw', function(event, data) {	
+		elem.on('narrow.vocab.ands', function(event, data) {	
 		var dataArray = Array();	
 			$.each(data.items, function(idx, e) {
 				dataArray.push({value:e.label, subtext:e.definition});
@@ -558,11 +564,11 @@ function initVocabWidgets(){
 			elem.typeahead({source:dataArray});
 		});
 
-		elem.on('error.avw', function(event, xhr) {
+		elem.on('error.vocab.ands', function(event, xhr) {
 			console.log(xhr);
 		});
-		widget.ands_vocab_widget('repository', 'rifcs');
-		widget.ands_vocab_widget('narrow', "http://purl.org/au-research/vocabulary/RIFCS/1.4/" + vocab);		 
+		widget.vocab_widget('repository', 'rifcs');
+		widget.vocab_widget('narrow', "http://purl.org/au-research/vocabulary/RIFCS/1.4/" + vocab);		 
 	});
 }
 
