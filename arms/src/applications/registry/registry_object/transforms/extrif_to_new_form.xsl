@@ -460,8 +460,10 @@
 				<div class="control-group">
 					<label class="control-label" for="title">Type: </label>
 					<div class="controls">
-						<input type="text" class="input-small" name="type" placeholder="Type"
-							value="{@type}"/>
+						<div>
+							<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
+							<input type="text" class="input-small rifcs-type" vocab="RIFCSDatesType" name="type" placeholder="Type" value="{@type}"/>
+						</div>
 						<button class="btn btn-mini btn-danger remove">
 							<i class="icon-remove icon-white"/>
 						</button>
@@ -488,7 +490,10 @@
 		<div class="aro_box_part" type="dates_date">
 			<div>
 				<label class="control-label" for="title">Date: </label>
-				<input type="text" class="input-small" name="type" value="{@type}"/>
+				<span>
+					<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
+					<input type="text" class="input-small rifcs-type" vocab="RIFCSTemporalCoverageDateType" name="type" placeholder="Type" value="{@type}"/>
+				</span>
 				<input type="text" class="input-xlarge" name="value" value="{text()}"/>
 				<button class="btn btn-mini btn-danger remove">
 					<i class="icon-remove icon-white"/>
@@ -858,9 +863,15 @@
 	<xsl:template match="ro:collection/ro:subject  | ro:activity/ro:subject  | ro:party/ro:subject   | ro:service/ro:subject">
 		<div class="aro_box" type="subject">
 			<div class="aro_box_display clearfix">
-				<div class="controls"> Type: <input type="text" class="input-small" name="type"
-						placeholder="Type" value="{@type}"/> Value: <input type="text"
-						class="input-xlarge" name="value" value="{text()}"/>
+				<div class="controls">
+					<span>Type:
+						<button class="btn triggerTypeAhead" id="{generate-id()}_type" type="button"><span class="caret"></span></button>
+						<input type="text" class="input-small subject-type" vocab="RIFCSSubjectType" name="subject_type" placeholder="type" value="{@type}"/>
+					</span>
+					<span>Value:
+						<button class="btn" id="{generate-id()}_value" type="button"><span class="caret"></span></button>
+						<input type="text" class="input-xlarge subject-value" vocab="" name="subject_value" placeholder="value" value="{text()}"/>
+					</span>
 					<button class="btn btn-mini btn-danger remove">
 						<i class="icon-remove icon-white"/>
 					</button>
@@ -1019,8 +1030,14 @@
 	<xsl:template match="ro:date" mode="coverage">
 		<div class="aro_box_part" type="coverage_date">
 			<label class="control-label" for="title">Date: </label>
-			<input type="text" class="input-small" name="type" placeholder="Date Type" value="{@type}"/>
-			<input type="text" class="input-small" name="dateFormat" placeholder="Date Format" value="{@dateFormat}"/>
+			<span>
+				<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
+				<input type="text" class="input-small rifcs-type" vocab="RIFCSTemporalCoverageDateType" name="type" placeholder="Date Type" value=""/>
+			</span>
+			<span>
+				<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
+				<input type="text" class="input-small rifcs-type" vocab="RIFCSDateFormat" name="type" placeholder="Date Format" value=""/>
+			</span>
 			<input type="text" class="input-xlarge" name="value" placeholder="Date Value" value="{text()}"/>
 			<button class="btn btn-mini btn-danger remove">
 				<i class="icon-remove icon-white"/>
@@ -1031,7 +1048,10 @@
 	<xsl:template match="ro:date">
 		<div class="aro_box_part" type="date">
 			<label class="control-label" for="title">Date: </label>
-			<input type="text" class="input-xlarge" name="type" placeholder="Date Type" value="{@type}"/>
+			<span>
+				<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
+				<input type="text" class="input-small rifcs-type" vocab="RIFCSTemporalCoverageDateType" name="type" placeholder="Date Type" value=""/>
+			</span>
 			<input type="text" class="input-xlarge" name="value" placeholder="Date Value" value="{text()}"/>
 			<button class="btn btn-mini btn-danger remove">
 				<i class="icon-remove icon-white"/>
@@ -1056,7 +1076,7 @@
 				<div class="controls">
 					<span>
 						<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
-						<input type="text" class="rifcs-type" vocab="{concat('RIFCS',$ro_class,'RelationType')}" name="type" placeholder="Type" value="{@type}"/>
+						<input type="text" class="input-small rifcs-type" vocab="{concat('RIFCS',$ro_class,'RelationType')}" name="type" placeholder="Type" value="{@type}"/>
 					</span>
 					<input type="text" class="input-xlarge" name="description"
 						placeholder="Description" value="{description}"/>
@@ -1078,8 +1098,11 @@
 		<div class="aro_box_part" type="spatial">
 			<div class="control-group">
 				<label class="control-label" for="title">Spatial: </label>
-				<div class="controls">
-					<input type="text" class="input-small" name="type" value="{@type}"/>
+				<div class="controls">					
+					<span>
+						<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
+						<input type="text" class="input-small rifcs-type" vocab="RIFCSSpatialType" name="type" placeholder="Type" value="{@type}"/>
+					</span>
 					<input type="text" class="input-xlarge" name="value" value="{text()}"/>
 					<button class="btn btn-mini btn-danger remove">
 						<i class="icon-remove icon-white"/>
@@ -1130,7 +1153,7 @@
 					<input type="text" class="input-small rifcs-type" vocab="RIFCSPhysicalAddressType" name="type" placeholder="Type" value="{@type}"/>
 				</span>
 				<button class="btn btn-primary showParts"><i class="icon-chevron-right icon-white"></i></button>
-				<div class="parts hide" type="addressParts">
+				<div class="aro_box_part" type="addressParts">
 					<xsl:apply-templates select="ro:addressPart"/>
 					<div class="separate_line"/>
 					<button class="btn btn-primary addNew" type="addressPart">
@@ -1145,9 +1168,15 @@
 		<div class="aro_box_part" type="arg">
 			<label class="control-label" for="title">Arg: </label>
 			<div class="control-group">
-				<input type="text" class="input-small" name="type" placeholder="Type" value="{@type}"/>
+				<span>
+					<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
+					<input type="text" class="input-small rifcs-type" vocab="RIFCSArgType" name="type" placeholder="Type" value="{@type}"/>
+				</span>
 				<input type="text" class="input-xlarge" name="required"  placeholder="Required" value="{@required}"/>
-				<input type="text" class="input-xlarge" name="use"  placeholder="Use" value="{@use}"/>
+				<span>
+					<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
+					<input type="text" class="input-small rifcs-type" vocab="RIFCSArgUse" name="use"  placeholder="Use" value="{@use}"/>
+				</span>
 				<input type="text" class="input-xlarge" name="value"  placeholder="Value" value="{text()}"/>
 				<button class="btn btn-mini btn-danger remove">
 					<i class="icon-remove icon-white"></i>
@@ -1159,8 +1188,10 @@
 	<xsl:template match="ro:addressPart">
 		<div class="aro_box_part" type="addressPart">
 			<div class="control-group">
-				<input type="text" class="input-small" name="type" placeholder="Type"
-					value="{@type}"/>
+				<span>
+					<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
+					<input type="text" class="input-small rifcs-type" vocab="RIFCSPhysicalAddressPartType" name="type" placeholder="Type" value="{@type}"/>
+				</span>
 				<input type="text" class="input-xlarge" name="value" placeholder="value"
 					value="{text()}"/>
 				<button class="btn btn-mini btn-danger remove">
@@ -1297,14 +1328,18 @@
 		<div class="aro_box template" type="subject">
 			<div class="aro_box_display  clearfix">
 				<div class="controls">
-					<input type="text" class="input-small" name="type" placeholder="Type" value=""/>
-					<input type="text" class="input-xlarge" name="value" value=""/>
+					<span>Type:
+						<button class="btn triggerTypeAhead" id="{generate-id()}_type" type="button"><span class="caret"></span></button>
+						<input type="text" class="input-small subject-type" vocab="RIFCSSubjectType" name="subject_type" placeholder="type" value="{@type}"/>
+					</span>
+					<span>  Value:
+						<button class="btn" id="{generate-id()}_value" type="button"><span class="caret"></span></button>
+						<input type="text" class="input-xlarge subject-value" vocab="" name="subject_value" placeholder="value" value="{text()}"/>
+					</span>
 					<button class="btn btn-mini btn-danger remove">
 						<i class="icon-remove icon-white"/>
 					</button>
-					<p class="help-inline">
-						<small/>
-					</p>
+					<p class="help-inline"><small/></p>
 				</div>
 			</div>
 		</div>
@@ -1312,7 +1347,10 @@
 		<div class="aro_box template" type="identifier">
 			<div class="aro_box_display  clearfix">
 				<div class="controls">
-					<input type="text" class="input-small" name="type" placeholder="Type" value=""/>
+					<span>
+						<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
+						<input type="text" class="input-small rifcs-type" vocab="RIFCSIdentifierType" name="type" placeholder="Type" value=""/>
+					</span>
 					<input type="text" class="input-xlarge" name="value" value=""/>
 					<button class="btn btn-mini btn-danger remove">
 						<i class="icon-remove icon-white"/>
@@ -1416,8 +1454,8 @@
 					<label class="control-label" for="title">Identifier: </label>
 					<div class="controls">
 						<span>
-						<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
-						<input type="text" class="input-small rifcs-type" vocab="RIFCSIdentifierType" name="identifier_type" placeholder="Identifier Type" value=""/>
+							<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
+							<input type="text" class="input-small rifcs-type" vocab="RIFCSIdentifierType" name="identifier_type" placeholder="Identifier Type" value=""/>
 						</span>
 						<input type="text" class="input-xlarge" name="identifier"
 							placeholder="Identifier" value=""/>
@@ -1494,7 +1532,10 @@
 			<div class="control-group">
 				<label class="control-label" for="title">Spatial: </label>
 				<div class="controls">
-					<input type="text" class="input-small" name="type" placeholder="Type" value=""/>
+					<span>
+						<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
+						<input type="text" class="input-small rifcs-type" vocab="RIFCSSpatialType" name="type" placeholder="Type" value=""/>
+					</span>
 					<input type="text" class="input-xlarge" name="value" placeholder="Value"
 						value=""/>
 					<button class="btn btn-mini btn-danger remove">
@@ -1546,9 +1587,15 @@
 		<div class="aro_box_part template" type="arg">
 			<label class="control-label" for="title">Arg: </label>
 			<div class="control-group">
-				<input type="text" class="input-small" name="type" placeholder="Type" value=""/>
+				<span>
+					<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
+					<input type="text" class="input-small rifcs-type" vocab="RIFCSArgType" name="type" placeholder="Type" value=""/>
+				</span>
 				<input type="text" class="input-xlarge" name="required"  placeholder="Required" value=""/>
-				<input type="text" class="input-xlarge" name="use"  placeholder="Use" value=""/>
+				<span>
+					<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
+					<input type="text" class="input-small rifcs-type" vocab="RIFCSArgUse" name="use"  placeholder="Use" value=""/>
+				</span>
 				<input type="text" class="input-xlarge" name="value"  placeholder="Value" value=""/>
 				<button class="btn btn-mini btn-danger remove">
 					<i class="icon-remove icon-white"></i>
@@ -1558,7 +1605,10 @@
 
 		<div class="aro_box_part template" type="addressPart">
 			<div class="control-group">
-				<input type="text" class="input-small" name="type" placeholder="Type" value=""/>
+				<span>
+					<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
+					<input type="text" class="input-small rifcs-type" vocab="RIFCSPhysicalAddressPartType" name="type" placeholder="Type" value=""/>
+				</span>
 				<input type="text" class="input-xlarge" name="value" placeholder="value" value=""/>
 				<button class="btn btn-mini btn-danger remove">
 					<i class="icon-remove icon-white"/>
@@ -1709,7 +1759,10 @@
 		</div>	
 			
 		<div class="aro_box template" type="date">
-			<input type="text" class="input-xlarge" name="type" placeholder="Date Type" value=""/>
+			<span>
+				<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
+				<input type="text" class="input-xlarge rifcs-type" vocab="RIFCSTemporalCoverageDateType" name="type" placeholder="Date Type" value=""/>
+			</span>
 			<input type="text" class="input-xlarge" name="value" placeholder="Date Value" value=""/>
 			<button class="btn btn-mini btn-danger remove">
 				<i class="icon-remove icon-white"/>
@@ -1747,6 +1800,7 @@
 		
 		<div class="aro_box template" type="temporal">
 			<div class="separate_line"/>	
+			<h1>Temporal Coverage</h1>
 			<div class="btn-group dropup">
 				<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"> <i class="icon-envelope icon-white"></i> Add Date Value</button>
 				<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
@@ -1783,25 +1837,22 @@
 
 		<div class="aro_box_part template" type="dates">
 			<div class="aro_box" type="dates">
-			<div class="aro_box_display clearfix">
-				<div class="controls">
-
-						<div class="control-group">
-							<label class="control-label" for="title">Type: </label>
-							<div class="controls">
-								<input type="text" class="input-small" name="type" placeholder="dc.created" value=""/>
-								<button class="btn btn-mini btn-danger remove">
-									<i class="icon-remove icon-white"/>
-								</button>
-								<p class="help-inline">
-									<small/>
-								</p>
-							</div>
-						</div>
-					
+					<div>
+						<label class="control-label" for="title">Date Type: </label>
+						<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
+						<input type="text" class="input-small rifcs-type" vocab="RIFCSDatesType" name="type" placeholder="Date Type" value=""/>
+						<button class="btn btn-mini btn-danger remove">
+							<i class="icon-remove icon-white"/>
+						</button>
+						<p class="help-inline"></p>
+					</div>
+					<div>				
 						<div class="aro_box_part" type="dates_date">
 							<label class="control-label" for="title">Date: </label>
-							<input type="text" class="input-small" name="type" placeholder="dateFrom" value="dateFrom"/>
+							<span>
+								<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
+								<input type="text" class="input-small rifcs-type" vocab="RIFCSTemporalCoverageDateType" name="type" placeholder="Date Type" value=""/>
+							</span>
 							<input type="text" class="input-xlarge" name="value" placeholder="Date Value" value="01-01-2000T00:00:00Z"/>
 							<button class="btn btn-mini btn-danger remove">
 								<i class="icon-remove icon-white"/>
@@ -1809,29 +1860,31 @@
 						</div>
 						<div class="aro_box_part" type="dates_date">	
 							<label class="control-label" for="title">Date: </label>
-							<input type="text" class="input-small" name="type" placeholder="dateTo" value="dateTo"/>
+							<span>
+								<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
+								<input type="text" class="input-small rifcs-type" vocab="RIFCSTemporalCoverageDateType" name="type" placeholder="Date Type" value=""/>
+							</span>
 							<input type="text" class="input-xlarge" name="value" placeholder="Date Value" value="01-01-2001T00:00:00Z"/>
 							<button class="btn btn-mini btn-danger remove">
 								<i class="icon-remove icon-white"/>
 							</button>
 						</div>
-
+					</div>
 					<div class="separate_line"/>
 					<div class="controls">
 						<button class="btn btn-primary addNew" type="dates_date">
 							<i class="icon-plus icon-white"></i> Add new Date
 						</button>
 					</div>
-
-				</div>
-			</div>
-
 			</div>
 		</div>
 
 		<div class="aro_box_part template" type="dates_date">
 			<label class="control-label" for="title">Date: </label>
-			<input type="text" class="input-small" name="type" placeholder="Date Type" value=""/>
+			<span>
+				<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
+				<input type="text" class="input-small rifcs-type" vocab="RIFCSTemporalCoverageDateType" name="type" placeholder="Date Type" value=""/>
+			</span>
 			<input type="text" class="input-xlarge" name="value" placeholder="Date Value" value=""/>
 			<button class="btn btn-mini btn-danger remove">
 				<i class="icon-remove icon-white"/>
@@ -1840,7 +1893,10 @@
 		
 		<div class="aro_box_part template" type="date">
 			<label class="control-label" for="title">Date: </label>
-			<input type="text" class="input-xlarge" name="type" placeholder="Date Type" value=""/>
+			<span>
+				<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
+				<input type="text" class="input-small rifcs-type" vocab="RIFCSTemporalCoverageDateType" name="type" placeholder="Date Type" value=""/>
+			</span>
 			<input type="text" class="input-xlarge" name="value" placeholder="Date Value" value=""/>
 			<button class="btn btn-mini btn-danger remove">
 				<i class="icon-remove icon-white"/>
@@ -1849,8 +1905,14 @@
 		
 		<div class="aro_box_part template" type="coverage_date">
 			<label class="control-label" >Date: </label>
-			<input type="text" class="input-xlarge" name="type" placeholder="Date Type" value=""/>
-			<input type="text" class="input-xlarge" name="dateFormat" placeholder="Date Format" value=""/>
+			<span>
+				<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
+				<input type="text" class="input-small rifcs-type" vocab="RIFCSTemporalCoverageDateType" name="type" placeholder="Date Type" value=""/>
+			</span>
+			<span>
+				<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
+				<input type="text" class="input-small rifcs-type" vocab="RIFCSDateFormat" name="type" placeholder="Date Format" value=""/>
+			</span>
 			<input type="text" class="input-xlarge" name="value" placeholder="Date Value" value=""/>
 			<button class="btn btn-mini btn-danger remove">
 				<i class="icon-remove icon-white"/>
