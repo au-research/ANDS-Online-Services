@@ -61,15 +61,9 @@ function executeSearch(searchData, searchUrl){
 		data: {filters:searchData},
 		dataType:'json',
 		success: function(data){
-			log(data)
+			log(data.facet_result)
 
 			var numFound = data.result.numFound;
-
-			if(numFound==0){
-				$('.sidebar').hide();
-			}else {
-				$('.sidebar').show();
-			}
 
 			$('#search-result, .pagination, #facet-result').empty();
 

@@ -97,7 +97,6 @@ class Search extends MX_Controller {
 						break;
 				}
 			}
-			
 		}
 
 		//var_dump($this->solr->constructFieldString());
@@ -132,22 +131,22 @@ class Search extends MX_Controller {
 		foreach($facets as $facet=>$display){
 			$facet_values = array();
 			$solr_facet_values = $this->solr->getFacetResult($facet);
-			if(count($solr_facet_values)>0)
-			{
+			if(count($solr_facet_values)>0){
 				foreach($solr_facet_values AS $title => $count){
-					if($count>0)
-					{
-					$facet_values[] = array(
-						'title' => $title,
-						'count' => $count
-					);
+					if($count>0){
+						$facet_values[] = array(
+							'title' => $title,
+							'count' => $count
+						);
 					}
 				}
-
 				array_push($data['facet_result'], array('label'=>$display, 'facet_type'=>$facet, 'values'=>$facet_values));
 				if($facet=='class'){
 					$data['selected_tab'] = $facet;
 				}
+			}else if(isset($filters[$facet])){//for selected facet, always display this
+				$facet_values[] = array('title'=>$filters[$facet], 'count'=>0);
+				array_push($data['facet_result'], array('label'=>$display, 'facet_type'=>$facet, 'values'=>$facet_values));
 			}
 		}
 
