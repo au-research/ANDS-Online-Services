@@ -25,8 +25,8 @@ $(document).ready(function() {
 			var term = string[0];
 			var value = string[1];
 			if(term && value) {
-				searchData[term] = value;
 				value = decodeURIComponent(value);
+				searchData[term] = value;
 				switch(term){
 					case 'q': 
 						$('#search_box').val(value);
@@ -61,7 +61,7 @@ function executeSearch(searchData, searchUrl){
 		data: {filters:searchData},
 		dataType:'json',
 		success: function(data){
-			// console.log(data); 
+			log(data)
 
 			var numFound = data.result.numFound;
 
@@ -113,6 +113,7 @@ function initSearchPage(){
 
 	//bind the facets
 	$('.filter').click(function(){
+		searchData['p']=1;
 		searchData[$(this).attr('filter_type')] = encodeURIComponent($(this).attr('filter_value'));
 		//searchData.push({label:$(this).attr('facet_type'),value:encodeURIComponent($(this).attr('facet_value'))});
 		changeHashTo(formatSearch());
@@ -124,6 +125,7 @@ function initSearchPage(){
 		$('.container').css({margin:'0',width:'100%',padding:'0'});
 		$('.main').css({width:'100%',padding:'0'});
 		$('.sidebar').addClass('mapmode_sidebar');
+		$('.facet_class').show();
 		$('#search-result, .pagination, .page_title, .tabs').hide();
 		 processPolygons();
 		 resetZoom();
@@ -138,6 +140,7 @@ function initSearchPage(){
 		$('#searchmap').hide();
 		$('.container').css({margin:'0 auto',width:'922px',padding:'10px 0 0 0'});
 		$('.main').css({width:'633px',padding:'20px 0 0 0'});
+		$('.facet_class').hide();
 		$('.sidebar').removeClass('mapmode_sidebar');
 		$('#search-result, .pagination, .page_title, .tabs').show();
 	}
@@ -149,6 +152,24 @@ function initSearchPage(){
 
 		}
 	});
+
+	var selecting_facets = ['group','type','licence'];
+
+	$.each(selecting_facets,function(){
+		if(searchData[this]){
+			var facet_value = decodeURIComponent(searchData[this]);
+			var facet_div = $('div.facet_'+this);
+			$('.filter[filter_value="'+facet_value+'"]',facet_div).addClass('remove_facet').before('<img class="remove_facet" filter_type="'+this+'" src="'+base_url+'assets/core/images/delete.png"/>');
+		}
+	});
+
+	$('.remove_facet').off().on('click',function(){
+		var filter_type = $(this).attr('filter_type');
+		delete(searchData[filter_type]);
+		searchData['p']=1;
+		changeHashTo(formatSearch());
+	});
+
 
 	$('#search_map_toggle').unbind('click');
 	$('#search_map_toggle').click(function(e){
@@ -567,7 +588,7 @@ function formatSearch()
 {
 	var query_string = '#!/';
 	$.each(searchData, function(i, v){
-		query_string += i + '=' + encodeURIComponent(v) + '/';
+		query_string += i + '=' + (v) + '/';
 	})
 	return query_string;
 }

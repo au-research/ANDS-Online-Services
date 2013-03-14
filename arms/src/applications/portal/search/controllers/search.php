@@ -34,10 +34,10 @@ class Search extends MX_Controller {
 		$this->solr->setOpt('defType', 'edismax');
 		$this->solr->setOpt('mm', '3');
 		$this->solr->setOpt('q.alt', '*:*');
-		$this->solr->setOpt('qf', 'id^100 display_title^50 list_title^50 fulltext^1.2');
+		$this->solr->setOpt('qf', 'id^10 group^8 display_title^5 list_title^5 fulltext^1.2');
 		$facets = array(
 			'class' => 'Class',
-			'subject_value_resolved' => 'Subjects',
+			//'subject_value_resolved' => 'Subjects',
 			'group' => 'Contributed By',
 			'type' => 'Type',
 			'license_class' => 'Licence'
@@ -144,11 +144,8 @@ class Search extends MX_Controller {
 					}
 				}
 
-				// little bit different with class being tab
-				if($facet!='class'){
-					array_push($data['facet_result'], array('label'=>$display, 'facet_type'=>$facet, 'values'=>$facet_values));
-				}else{
-					array_push($data['facet_result'], array('label'=>$display, 'facet_type'=>'tab', 'values'=>$facet_values));
+				array_push($data['facet_result'], array('label'=>$display, 'facet_type'=>$facet, 'values'=>$facet_values));
+				if($facet=='class'){
 					$data['selected_tab'] = $facet;
 				}
 			}

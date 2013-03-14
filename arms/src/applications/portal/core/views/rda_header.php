@@ -37,12 +37,12 @@
 			</div><!-- tagline -->
 			<ul class="top_nav">
 				<li><a href="<?=base_url('');?>">Home</a></li>
+				<li><a href="<?=base_url('browse');?>">Browse</a></li>
 				<li><a href="<?=base_url('search/#!/q=/tab=collection');?>">Collections</a></li>								
 				<li><a href="<?=base_url('search/#!/q=/tab=party');?>">Parties</a></li>
 				<li><a href="<?=base_url('search/#!/q=/tab=activity');?>">Activities</a></li>
 				<li><a href="<?=base_url('search/#!/q=/tab=service');?>">Services</a></li>
 				<li><a href="<?=base_url("topic");?>">Topics</a></li>
-				<li><a href="<?=base_url('home/contact');?>">Contact Us</a></li>
 			</ul><!-- top_nav -->
 			<div class="clear"></div>
 		</div><!-- head -->

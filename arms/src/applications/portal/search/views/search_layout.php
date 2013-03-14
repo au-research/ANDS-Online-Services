@@ -34,6 +34,12 @@
 
 </div><!-- main -->
 <div class="sidebar">
+	<div id="selected" class="hide">
+		<div class="widget selected">
+			<h3 class="widget_title">Selected</h3>
+			<ul></ul>
+		</div>
+	</div>
 	<div id="facet-result"></div>				
 </div><!-- sidebar -->				
 <div class="container_clear"></div>
@@ -63,7 +69,7 @@
 
 <script type="text/x-mustache" id="facet-template">
 {{#facet_result}}
-<div class="widget">
+<div class="widget facet_{{facet_type}}">
 	<h3 class="widget_title">{{label}}</h3>
 	<ul>
 		{{#values}}
