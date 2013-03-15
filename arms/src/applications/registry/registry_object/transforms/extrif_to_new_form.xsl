@@ -865,12 +865,12 @@
 			<div class="aro_box_display clearfix">
 				<div class="controls">
 					<span>Type:
-						<button class="btn triggerTypeAhead" id="{generate-id()}_type" type="button"><span class="caret"></span></button>
-						<input type="text" class="input-small subject-type" vocab="RIFCSSubjectType" name="subject_type" placeholder="type" value="{@type}"/>
+						<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
+						<input type="text" class="input-small rifcs-type" id="{generate-id()}_type" vocab="RIFCSSubjectType" name="subject_type" placeholder="type" value="{@type}"/>
 					</span>
 					<span>Value:
-						<button class="btn" id="{generate-id()}_value" type="button"><span class="caret"></span></button>
-						<input type="text" class="input-xlarge subject-value" vocab="" name="subject_value" placeholder="value" value="{text()}"/>
+						<button class="btn triggerTypeAhead"  type="button"><span class="caret"></span></button>
+						<input type="text" class="input-xlarge subject-value" id="{generate-id()}_value" vocab="" name="subject_value" placeholder="value" value="{text()}"/>
 					</span>
 					<button class="btn btn-mini btn-danger remove">
 						<i class="icon-remove icon-white"/>
@@ -1099,11 +1099,12 @@
 			<div class="control-group">
 				<label class="control-label" for="title">Spatial: </label>
 				<div class="controls">					
-					<span>
-						<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
+					<span>Type:						
 						<input type="text" class="input-small rifcs-type" vocab="RIFCSSpatialType" name="type" placeholder="Type" value="{@type}"/>
-					</span>
-					<input type="text" class="input-xlarge" name="value" value="{text()}"/>
+						<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
+					</span>Value:
+						<input type="text" class="input-xlarge spatial_value" name="value" placeholder="Value" value="{text()}"/>
+						<button class="btn triggerMapWidget" type="button"><i class="icon-globe"></i></button>
 					<button class="btn btn-mini btn-danger remove">
 						<i class="icon-remove icon-white"/>
 					</button>
@@ -1329,12 +1330,12 @@
 			<div class="aro_box_display  clearfix">
 				<div class="controls">
 					<span>Type:
-						<button class="btn triggerTypeAhead" id="{generate-id()}_type" type="button"><span class="caret"></span></button>
-						<input type="text" class="input-small subject-type" vocab="RIFCSSubjectType" name="subject_type" placeholder="type" value="{@type}"/>
+						<button class="btn triggerTypeAhead"  type="button"><span class="caret"></span></button>
+						<input type="text" class="input-small rifcs-type" id="{generate-id()}_type" vocab="RIFCSSubjectType" name="subject_type" placeholder="type" value="{@type}"/>
 					</span>
 					<span>  Value:
-						<button class="btn" id="{generate-id()}_value" type="button"><span class="caret"></span></button>
-						<input type="text" class="input-xlarge subject-value" vocab="" name="subject_value" placeholder="value" value="{text()}"/>
+						<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
+						<input type="text" class="input-xlarge subject-value" id="{generate-id()}_value" vocab="" name="subject_value" placeholder="value" value="{text()}"/>
 					</span>
 					<button class="btn btn-mini btn-danger remove">
 						<i class="icon-remove icon-white"/>
@@ -1532,12 +1533,12 @@
 			<div class="control-group">
 				<label class="control-label" for="title">Spatial: </label>
 				<div class="controls">
-					<span>
+					<span>Type:						
+						<input type="text" class="input-small rifcs-type" vocab="RIFCSSpatialType" name="type" placeholder="Type" value="{@type}"/>
 						<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
-						<input type="text" class="input-small rifcs-type" vocab="RIFCSSpatialType" name="type" placeholder="Type" value=""/>
-					</span>
-					<input type="text" class="input-xlarge" name="value" placeholder="Value"
-						value=""/>
+					</span>Value:
+						<input type="text" class="input-xlarge spatial_value" name="value" placeholder="Value" value="{text()}"/>
+						<button class="btn triggerMapWidget" type="button"><i class="icon-globe"></i></button>
 					<button class="btn btn-mini btn-danger remove">
 						<i class="icon-remove icon-white"/>
 					</button>

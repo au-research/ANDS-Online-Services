@@ -526,6 +526,7 @@ function initEditForm(){
 	bindPartsTooltip();
 	assignFieldID();
 	initVocabWidgets($(document));
+	initMapWidget($(document))
 }
 
 function initSimpleModeFields()
@@ -550,17 +551,35 @@ function initVocabWidgets(container){
 	var container_elem;
 	if(container){
 		container_elem = container;
-	}else container_elem = $(body);
+	}else container_elem = $(document);
 	$(".rifcs-type", container_elem).each(function(){
 		//log(this, 'bind vocab widget');
 		var elem = $(this);
 		var widget = elem.vocab_widget({mode:'advanced'});
 		var vocab = _getVocab(elem.attr('vocab'));
 		elem.on('narrow.vocab.ands', function(event, data) {	
-		var dataArray = Array();	
-			$.each(data.items, function(idx, e) {
-				dataArray.push({value:e.label, subtext:e.definition});
-			});
+		var dataArray = Array();
+			if(vocab == 'RIFCSSubjectType')
+			{				
+				$.each(data.items, function(idx, e) {
+					dataArray.push({value:e.notation, subtext:e.definition});
+				});
+				elem.die().live({
+						click: function(e){
+							initSubjectWidget(elem.attr('id'));
+						},
+						change: function(e){
+							initSubjectWidget(elem.attr('id'));
+						}
+					});
+				initSubjectWidget(elem.attr('id'));
+			}	
+			else
+			{
+				$.each(data.items, function(idx, e) {
+					dataArray.push({value:e.label, subtext:e.definition});
+				});
+			}
 			elem.typeahead({source:dataArray});
 		});
 
@@ -580,6 +599,48 @@ function _getVocab(vocab)
 	vocab = vocab.replace("activity", "Activity");
 	return vocab;
 }
+
+function initSubjectWidget(id)
+{
+	var elem = $('#'+id.replace("_type","_value"));
+	var vocabElem = $('#'+id.replace("_value","_type"));
+	var vocab = vocabElem.val();
+	var term = 	elem.attr('vocab')
+	var dataArray = Array();
+	// WE MIGHT NEED A WHITE LIST HERE
+	if(vocab == 'anzsrc-for' || vocab =='anzsrc-seo')
+	{
+		var widget = elem.vocab_widget({mode:'advanced',cache: false, repository: vocab});
+		elem.on('search.vocab.ands', function(event, data) {	
+			var dataArray = Array();
+					$.each(data.items, function(idx, e) {
+						dataArray.push({value:e.notation, subtext:e.label});
+					});
+				elem.typeahead({source:dataArray});
+			});
+		widget.vocab_widget('search', term);	
+	}
+
+}
+
+function initMapWidget(container)
+{
+
+	var container_elem;
+	if(container){
+		container_elem = container;
+	}else container_elem = $(document);
+	$(".spatial_value", container_elem).each(function(){
+		//log(this, 'bind vocab widget');
+		var elem = $(this);
+		//console.log(elem.val());
+		elem.ands_location_widget({
+  		lonLat:elem.val()
+	});
+
+	});
+}
+
 
 function assignFieldID(){
 	var content = $('#content');

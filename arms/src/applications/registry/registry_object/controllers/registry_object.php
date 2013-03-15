@@ -143,7 +143,7 @@ class Registry_object extends MX_Controller {
 		$data['content'] = $ro->transformCustomForFORM($data['extrif']);
 		$data['title'] = 'Edit: '.$ro->title;
 		$data['scripts'] = array('add_registry_object');
-		$data['js_lib'] = array('core', 'tinymce', 'datepicker', 'prettyprint','vocab_widget');
+		$data['js_lib'] = array('core', 'tinymce', 'datepicker', 'prettyprint','vocab_widget','google_map','location_capture_widget');
 		$this->load->view("add_registry_object", $data);
 	}
 
