@@ -576,19 +576,19 @@ function load_datasource_settings(data_source_id){
 			});
 		$('.checkbox_view1').each(function(){
 			var whatsThere = $(this).html();
-			$(this).html('<i class="icon icon-ok"></i> '+whatsThere);
+			$(this).html('<span class="label"><i class="icon icon-ok"></i> On </span> '+ '&nbsp;' + whatsThere);
 		});
 		$('.checkbox_viewt').each(function(){
 			var whatsThere = $(this).html();
-			$(this).html('<i class="icon icon-ok"></i> '+whatsThere);
+			$(this).html('<span class="label"><i class="icon icon-ok"></i> On </span> '+ ' &nbsp;' + whatsThere);
 		});
 		$('.checkbox_view0').each(function(){
 			var whatsThere = $(this).html();
-			$(this).html('<i class="icon icon-remove"></i> '+whatsThere);
+			$(this).html('<span class="label"><i class="icon icon-remove"></i> Off </span> ' + '&nbsp; ' + whatsThere);
 		});
 		$('.checkbox_viewf').each(function(){
 			var whatsThere = $(this).html();
-			$(this).html('<i class="icon icon-remove"></i> '+whatsThere);
+			$(this).html('<span class="label"><i class="icon icon-remove"></i> Off </span> ' + '&nbsp; ' + whatsThere);
 		});					
 			//draw the charts
 			// drawCharts(data_source_id);
