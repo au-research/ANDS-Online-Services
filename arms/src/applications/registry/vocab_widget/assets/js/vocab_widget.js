@@ -480,117 +480,6 @@
 	}
     });
 
-    var SearchHandler = VocabHandler.extend({
-	preconditions: function() {
-	    var preconds = this._super();
-	    preconds.push({
-		fields: ["fields"],
-		description: "an array of strings",
-		test: function(val) { return Object.prototype.toString.call(val) === "[object Array]"; }
-	    });
-	    preconds.push({
-		fields: ["mode"],
-		description: "mode 'search'",
-		test: function(val) { return val === 'search'; }
-	    });
-
-	    return preconds;
-	},
-
-	init: function(container, settings) {
-	    this._super(container, settings);
-	    this._makelist();
-
-	    if (!this._container.is("input[type='text']")) {
-		// we only like being attached to input elements when searching
-		this._err({status: 500,
-			   responseText: "must be attached to a text " +
-			   "input element when mode is 'search'"});
-		return false;
-	    }
-	    //disable autocomplete; interferes with our autocomplete
-	    this._container.attr("autocomplete", "off");
-	},
-
-	do_ready: function() {
-	    var handler = this;
-	    this._container.bind("keydown", function(e) {
-		if (e.which == '27') {
-		    handler._reset();
-		    handler._container.val('');
-		}
-		else {
-		    handler.vocab_lookup(e);
-		}
-	    });
-	},
-
-	detach: function() {
-	    this._container.unbind("keydown");
-	},
-
-	/**
-	 * let's do something with the provided data
-	 */
-	process: function(data) {
-	    var handler = this;
-
-	    if (data.status !== "OK") {
-		this._err({status: 500, responseText: data.message});
-	    }
-	    else {
-		this._reset();
-		if (data.count === 0 &&
-		    typeof(this.settings['nohits_msg']) !== 'boolean' &&
-		    typeof(this.settings['nohits_msg']) !== false) {
-		    this._list.append('<li role="vocab_error">' +
-				      this.settings['nohits_msg'] +
-				      '</li>');
-		}
-		else if (data.count === 0 &&
-			 typeof(this.settings['nohits_msg']) === 'boolean' &&
-			 this.settings['nohits_msg'] === false) {
-		    this._list.empty();
-		}
-		else if (data.count > 0) {
-		    $.each(data.items, function(idx, item) {
-			handler._list.append(handler.vocab_item(item));
-		    });
-		}
-		else {
-		    this._list.append('<li role="vocab_error">' +
-				      'Hmmm... something went wrong here.' +
-				      ' Try again?</li>');
-		}
-		this._list.show()
-		    .children('li[role="vocab_item"]')
-		    .bind('click', function(event) { handler.handle_selection(event)});
-	    }
-	},
-
-	/**
-	 * make the ajax call using the plugin settings + input value.
-	 * calls `process` on success, `_err` on error
-	 */
-	lookup: function() {
-	    if (this._container.val().length >= this.settings.min_chars) {
-		var handler = this;
-		var url = this.settings.endpoint +
-		    "?action=" + this.settings.mode +
-		    "&repository=" + this.settings.repository +
-		    "&limit=" + this.settings.max_results +
-		    "&lookfor=" + this._container.val();
-		$.ajax({
-		    url: url,
-		    cache: this.settings.cache,
-		    dataType: "jsonp",
-		    success: function(data) { handler.process(data) },
-		    error: function(xhr) { handler._err(xhr) },
-		});
-	    }
-	}
-    });
-
     var AdvancedHandler = VocabHandler.extend({
 	/*
 	 * Advanced mode assumes nothing!
@@ -968,6 +857,122 @@
 	detach: function() {
 	    if (this._ctype === 'INPUT') {
 		this._container.unbind("keyup");
+	    }
+	}
+    });
+
+    var SearchHandler = AdvancedHandler.extend({
+	preconditions: function() {
+	    var preconds = this._super();
+	    preconds.push({
+		fields: ["fields"],
+		description: "an array of strings",
+		test: function(val) {
+		    return Object.prototype.toString.call(val) === "[object Array]";
+		}
+	    });
+	    preconds.push({
+		fields: ["mode"],
+		description: "mode 'search'",
+		test: function(val) { return val === 'search'; }
+	    });
+
+	    return preconds;
+	},
+
+	init: function(container, settings) {
+	    this._super(container, settings);
+	    this._makelist();
+
+	    if (!this._container.is("input[type='text']")) {
+		// we only like being attached to input elements when searching
+		this._err({status: 500,
+			   responseText: "must be attached to a text " +
+			   "input element when mode is 'search'"});
+		return false;
+	    }
+	    //disable autocomplete; interferes with our autocomplete
+	    this._container.attr("autocomplete", "off");
+	},
+
+	do_ready: function() {
+	    var handler = this;
+	    this._container.bind("keydown", function(e) {
+		if (e.which == '27') {
+		    handler._reset();
+		    handler._container.val('');
+		}
+		else {
+		    handler.vocab_lookup(e);
+		}
+	    });
+	},
+
+	detach: function() {
+	    this._container.unbind("keydown");
+	},
+
+	/**
+	 * let's do something with the provided data
+	 */
+	process: function(data) {
+	    var handler = this;
+
+	    if (data.status !== "OK") {
+		this._err({status: 500, responseText: data.message});
+	    }
+	    else {
+		this._reset();
+		if (data.count === 0 &&
+		    typeof(this.settings['nohits_msg']) !== 'boolean' &&
+		    typeof(this.settings['nohits_msg']) !== false) {
+		    this._list.append('<li role="vocab_error">' +
+				      this.settings['nohits_msg'] +
+				      '</li>');
+		}
+		else if (data.count === 0 &&
+			 typeof(this.settings['nohits_msg']) === 'boolean' &&
+			 this.settings['nohits_msg'] === false) {
+		    this._list.empty();
+		}
+		else if (data.count > 0) {
+		    $.each(data.items, function(idx, item) {
+			handler._list.append(handler.vocab_item(item));
+		    });
+		}
+		else {
+		    this._list.append('<li role="vocab_error">' +
+				      'Hmmm... something went wrong here.' +
+				      ' Try again?</li>');
+		}
+		this._list.show()
+		    .children('li[role="vocab_item"]')
+		    .bind('click', function(event) { handler.handle_selection(event)});
+	    }
+	},
+
+	/**
+	 * make the ajax call using the plugin settings + input value.
+	 * calls `process` on success, `_err` on error
+	 */
+	lookup: function() {
+	    if (this._container.val().length >= this.settings.min_chars) {
+		var handler = this;
+		var url = this.settings.endpoint +
+		    "?action=" + this.settings.mode +
+		    "&repository=" + this.settings.repository +
+		    "&limit=" + this.settings.max_results +
+		    "&lookfor=" + this._container.val();
+		handler._container.on('search.vocab.ands',
+				      function(event, data) {
+					  handler.process(data);
+				      });
+		handler._container.on('error.vocab.ands',
+				      function(event, xhr) {
+					  handler._err(xhr);
+				      });
+		handler._search({callee: this._container,
+				 uri: this._container.val()});
 	    }
 	}
     });
