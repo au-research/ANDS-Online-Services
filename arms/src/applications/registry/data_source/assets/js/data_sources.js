@@ -578,11 +578,18 @@ function load_datasource_settings(data_source_id){
 			var whatsThere = $(this).html();
 			$(this).html('<i class="icon icon-ok"></i> '+whatsThere);
 		});
-
+		$('.checkbox_viewt').each(function(){
+			var whatsThere = $(this).html();
+			$(this).html('<i class="icon icon-ok"></i> '+whatsThere);
+		});
 		$('.checkbox_view0').each(function(){
 			var whatsThere = $(this).html();
 			$(this).html('<i class="icon icon-remove"></i> '+whatsThere);
-		});		
+		});
+		$('.checkbox_viewf').each(function(){
+			var whatsThere = $(this).html();
+			$(this).html('<i class="icon icon-remove"></i> '+whatsThere);
+		});					
 			//draw the charts
 			// drawCharts(data_source_id);
 			//loadDataSourceLogs(data_source_id);
