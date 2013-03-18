@@ -102,6 +102,12 @@ $(function(){
 		var tab = $(this).attr('href');
 		changeHashTo('simple/'+tab.substring(1, tab.length));
 	});
+
+	$('input').live('keypress',function(event){
+		if (event.keyCode == 10 || event.keyCode == 13) {
+        	event.preventDefault();
+    	}
+	});
 });
 
 function switchMode(aro_mode){
@@ -237,7 +243,7 @@ function initEditForm(){
 	 * 
 	 */
 	$('.remove').die().live({
-		click:function(){
+		mouseup:function(e){
 			var target = $(this).parents('.aro_box_part')[0];
 			if($(target).length==0) target = $(this).parents('.aro_box')[0];
 			$(target).fadeOut(500, function(){
@@ -253,7 +259,7 @@ function initEditForm(){
 	 * template is a div.template[type=] where type is defined in the @type attribute of the button itself
 	 */
 	$('.addNew').die().live({
-		click:function(e){
+		mouseup:function(e){
 			e.stopPropagation();
 			e.preventDefault();
 			var what = $(this).attr('type');
@@ -275,7 +281,6 @@ function initEditForm(){
 				}
 			}
 			//found it, geez
-			//
 			
 			//add the DOM
 			var new_dom = $(template).clone().removeClass('template').insertBefore(where).hide().slideDown();
@@ -400,53 +405,60 @@ function initEditForm(){
 	$('#validate').die().live({
 		click: function(e){
 			e.preventDefault();
-			if(editor=='tinymce') tinyMCE.triggerSave();//so that we can get the tinymce textarea.value without using tinymce.getContents
-			var allTabs = $('.pane');
-			var xml = '';
-
-			//admin tab
-			var admin = $('#admin');
-			var ro_class = $('#ro_class').val();//hidden value
-			var ro_id = $('#ro_id').val();
-
-			xml += '<registryObject group="'+$('input[name=group]',admin).val()+'">';
-			xml += '<key>'+$('input[name=key]', admin).val()+'</key>';
-			xml += '<originatingSource type="'+$('input[name=originatingSourceType]', admin).val()+'">'+$('input[name=originatingSource]',admin).val()+'</originatingSource>';
-			xml += '<'+ro_class+' type="'+$('input[name=type]',admin).val()+'">';
-
-			$.each(allTabs, function(){
-				xml += getRIFCSforTab(this,true);
-			});
-
-			xml+='</'+ro_class+'></registryObject>';
-			prettyPrint();
-
-			//validate
-			$.ajax({
-				url:base_url+'registry_object/validate/'+ro_id, 
-				type: 'POST',
-				data: {xml:xml},
-				success: function(data){
-					$('.alert').remove();
-					if(data.SetInfos) $.each(data.SetInfos, function(e,i){addValidationMessage(i, 'info');});
-					if(data.SetErrors) $.each(data.SetErrors, function(e,i){addValidationMessage(i, 'error');});
-					if(data.SetWarnings) $.each(data.SetWarnings, function(e,i){addValidationMessage(i, 'warning');});
-
-					var allTabs = $('.pane');
-					$('#advanced-menu .label').remove();
-					$.each(allTabs, function(){
-						var count_info = $('.alert-info', this).length;
-						var count_error = $('.alert-error', this).length;
-						var count_warning = $('.alert-warning', this).length;
-						var id = $(this).attr('id');
-						if(count_info > 0) addValidationTag(id, 'info', count_info);
-						if(count_error > 0) addValidationTag(id, 'important', count_error);
-						if(count_warning > 0) addValidationTag(id, 'warning', count_warning);
-					});
-				}
-			});
+			validate();
 		}
 	});
+
+	validate();
+
+	function validate(){
+		if(editor=='tinymce') tinyMCE.triggerSave();//so that we can get the tinymce textarea.value without using tinymce.getContents
+		var allTabs = $('.pane');
+		var xml = '';
+
+		//admin tab
+		var admin = $('#admin');
+		var ro_class = $('#ro_class').val();//hidden value
+		var ro_id = $('#ro_id').val();
+
+		xml += '<registryObject group="'+$('input[name=group]',admin).val()+'">';
+		xml += '<key>'+$('input[name=key]', admin).val()+'</key>';
+		xml += '<originatingSource type="'+$('input[name=originatingSourceType]', admin).val()+'">'+$('input[name=originatingSource]',admin).val()+'</originatingSource>';
+		xml += '<'+ro_class+' type="'+$('input[name=type]',admin).val()+'">';
+
+		$.each(allTabs, function(){
+			xml += getRIFCSforTab(this,true);
+		});
+
+		xml+='</'+ro_class+'></registryObject>';
+		prettyPrint();
+
+		//validate
+		$.ajax({
+			url:base_url+'registry_object/validate/'+ro_id, 
+			type: 'POST',
+			data: {xml:xml},
+			success: function(data){
+				$('.alert').remove();
+				if(data.SetInfos) $.each(data.SetInfos, function(e,i){addValidationMessage(i, 'info');});
+				if(data.SetErrors) $.each(data.SetErrors, function(e,i){addValidationMessage(i, 'error');});
+				if(data.SetWarnings) $.each(data.SetWarnings, function(e,i){addValidationMessage(i, 'warning');});
+
+				var allTabs = $('.pane');
+				$('#advanced-menu .label').remove();
+				$.each(allTabs, function(){
+					var count_info = $('.alert-info', this).length;
+					var count_error = $('.alert-error', this).length;
+					var count_warning = $('.alert-warning', this).length;
+					var id = $(this).attr('id');
+					if(count_info > 0) addValidationTag(id, 'info', count_info);
+					if(count_error > 0) addValidationTag(id, 'important', count_error);
+					if(count_warning > 0) addValidationTag(id, 'warning', count_warning);
+				});
+			}
+		});
+	}
+
 
 	function addValidationMessage(tt, type){
 		var name = tt.field_id;

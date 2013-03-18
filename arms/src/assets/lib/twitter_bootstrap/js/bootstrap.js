@@ -1817,23 +1817,25 @@
       return this
     }
 
-  , lookup: function (event) {
+  , lookup: function (showall) {
       var that = this
         , items
         , q
         , value
-
+        
       this.query = this.$element.val()
+
+      this.process(this.source)
 
       if (typeof this.source == "function") {
         value = this.source(this, this.query)
         if (value) this.process(value)
       } else {
-        this.process(this.source)
+        if(showall) this.process(this.source, showall)
       }
     }
 
-  , process: function (results) {
+  , process: function (results, showall) {
       var that = this
         , items
         , q
@@ -1842,7 +1844,7 @@
           this.strings = false
 
       this.query = this.$element.val()
-
+      if(showall) this.query = '';
 
       /*if (!this.query) {
         return this.shown ? this.hide() : this
@@ -2025,7 +2027,7 @@
   , focus: function(e){
       e.stopPropagation()
       e.preventDefault()
-      this.lookup()
+      this.lookup(true)
       return false
   }
   , updater: function (item) {

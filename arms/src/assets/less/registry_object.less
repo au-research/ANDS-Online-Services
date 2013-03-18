@@ -292,8 +292,33 @@ a.manage_ds_link{
 	margin-bottom:0px;
 }
 
+span.inputs_group{
+	position:relative;
+	input.inner_input{
+		padding-right:70px;
+	}
+	input.inner_input_type{
+		position:absolute;
+		top:-1px;
+		right:5px;
+	}
+}
+
+input[name=type]{
+	width: 45px;
+	height: 10px;
+	font-size: 10px;
+	cursor:text;
+	background:#eee;
+}
+
+button.remove{
+	margin:0 4px;
+}
+
 .aro_box{
 	border:1px solid #d6d6d6;
+	padding:5px;
 	margin:5px 0px;
 	background:#e5e5e5;
 	cursor:pointer;
@@ -307,7 +332,9 @@ a.manage_ds_link{
 		.ellipsis();
 	}
 	.aro_box_display{
-		a{
+		position:relative;
+		a.toggle{
+			margin:-5px 0px -5px -5px;
 			&:hover{
 				background:#d6d6d6;
 			}
@@ -317,6 +344,14 @@ a.manage_ds_link{
 			line-height:30px;
 			padding:5px 10px;
 			margin:0px;
+		}
+		input[name=type]{
+			float:left;
+			margin-top:9px;
+		}
+		button.remove{
+			position:absolute;
+			top:5px;right:5px;
 		}
 		.control-group{
 			float:right;

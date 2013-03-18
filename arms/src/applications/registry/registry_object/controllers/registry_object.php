@@ -99,6 +99,7 @@ class Registry_object extends MX_Controller {
 			}
 
 			$data['revisions'] = $ro->getAllRevisions();
+			$data['quality_text'] = $ro->get_quality_text();
 			$this->load->view('registry_object_index', $data);
 		}else{
 			show_404('Unable to Find Registry Object ID: '.$ro_id);
