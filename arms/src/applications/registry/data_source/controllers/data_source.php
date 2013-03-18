@@ -548,7 +548,12 @@ class Data_source extends MX_Controller {
 		{
 			if(!isset($ds->attributes[$key]))			
 			$ds->setAttribute($key, $value);
-		}		
+		}	
+		foreach($ds->harvesterParams as $key=>$value)
+		{
+			if(!isset($ds->attributes[$key]))			
+			$ds->setAttribute($key, $value);
+		}			
 		$ds->save();
 		$ds->updateStats();
 		echo $ds->id;

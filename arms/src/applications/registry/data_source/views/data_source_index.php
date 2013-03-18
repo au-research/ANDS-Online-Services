@@ -167,7 +167,7 @@
 		'contact_name' => 'Contact Name',
 		'contact_email' => 'Contact Email',
 		'notes' => 'Notes',
-		'created_when' => 'Created When',
+		//'created_when' => 'Created When',
 		'created_who' => 'Created Who'
 	);
 ?>
@@ -461,7 +461,7 @@
 		'contact_name' => 'Contact Name',
 		'contact_email' => 'Contact Email',
 		'notes' => 'Notes',
-		'created' => 'Created When',
+		//'created' => 'Created When',
 		'created_who' => 'Created Who'
 	);
 ?>
@@ -579,6 +579,11 @@
 					<dd>{{harvest_method}}</dd>
 					{{/harvest_method}}
 
+					{{#advanced_harvest_mode}}
+					<dt>Advanced Harvest Mode</dt>
+					<dd>{{advanced_harvest_mode}}</dd>
+					{{/advanced_harvest_mode}}
+					
 					{{#harvest_date}}
 					<dt>Harvest Date</dt>
 					<dd>{{harvest_date}}</dd>
@@ -589,10 +594,6 @@
 					<dd>{{oai_set}}</dd>
 					{{/oai_set}}
 
-					{{#advanced_harvest_mode}}
-					<dt>Advanced Harvest Mode</dt>
-					<dd>{{advanced_harvest_mode}}</dd>
-					{{/advanced_harvest_mode}}
 
 					{{#harvest_frequency}}
 					<dt>Harvest Frequency</dt>
