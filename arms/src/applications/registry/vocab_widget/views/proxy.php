@@ -161,6 +161,7 @@ class VocabProxy
 		if ($this->debug)
 		{
 			$this->jsonData['message'] .= " [$url]";
+			echo $url;
 		}
 
 		if ($url) {
@@ -184,7 +185,11 @@ class VocabProxy
 			}
 
 			$this->jsonData['items'] = array_map(function($i) {
+					if (is_string($i)) {
+						return false;
+					}
 					$i['label'] = $i['prefLabel']['_value'];
+
 					$i['about'] = $i['_about'];
 					if (array_key_exists('broader', $i) &&
 					    is_array($i['broader']))
@@ -210,6 +215,10 @@ class VocabProxy
 				array_slice($items,
 					    0,
 					    $this->limit));
+			$this->jsonData['items'] = array_values(array_filter($this->jsonData['items'],
+									     function($e) {
+										     return $e !== false;
+									     }));
 			if (is_callable($this->valid_actions[$this->action]['itemprocessor']))
 			{
 				$this->jsonData['items'] = call_user_func($this->valid_actions[$this->action]['itemprocessor'],
