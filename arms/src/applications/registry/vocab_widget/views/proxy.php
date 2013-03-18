@@ -27,6 +27,7 @@ define("SOLR_URL", "http://ands3.anu.edu.au:8080/solr1/collection1/select?wt=php
 define("BASE_URL", "http://ands3.anu.edu.au:8080/sissvoc/api/");
 define("SEARCH_URL", "/concept.json?anycontains=");
 define("NARROW_URL", "/concept/narrower.json?uri=");
+define("ALLNARROW_URL", "/concept/allNarrower.json?uri=");
 define("BROAD_URL", "/concept/broader.json?uri="); #future use
 define("TOP_URL", "/topConcepts.json");
 define("MAX_RESULTS", 200); #sisvoc only returns 200 items
@@ -41,6 +42,11 @@ class VocabProxy
 	private $valid_actions = array(
 		"search" => array(
 			'url' => SEARCH_URL,
+			'queryprocessor' => false,
+			'itemprocessor' => false,
+			'sortprocessor' => false),
+		"allnarrow" => array(
+			'url' => ALLNARROW_URL,
 			'queryprocessor' => false,
 			'itemprocessor' => false,
 			'sortprocessor' => false),
@@ -65,6 +71,7 @@ class VocabProxy
 	private $action = false;
 	private $lookfor = false;
 	private $repository = false;
+	private $debug = false;
 
 	/**
 	 * Proxy is an atomic object: it gets instantiated, runs, and prints
@@ -86,13 +93,22 @@ class VocabProxy
 
 		/**
 		 * Set up sort processors:
-		 *  - for 'top', we want terms sorted by notation
+		 *  - for 'top', 'narrow', and 'allnarrow' we want terms sorted by notation, or label
 		 */
-		$this->valid_actions['top']['sortprocessor'] = function($e1, $e2) {
-			$l1 = (int)$e1['notation'];
-			$l2 = (int)$e2['notation'];
-			return $l1 <= $l2 ? -1 : 1;
-		};
+		foreach (array('top', 'allnarrow') as $action) {
+		    $this->valid_actions[$action]['sortprocessor'] = function($e1, $e2) {
+			if (array_key_exists('notation', $e1))
+			{
+			    $l1 = (int)$e1['notation'];
+			    $l2 = (int)$e2['notation'];
+			    return $l1 <= $l2 ? -1 : 1;
+			}
+			else
+			{
+			    return;
+			}
+		    };
+		}
 
 		/**
 		 * Set up item processors; this is used to inject solr term counts based on the
@@ -142,6 +158,11 @@ class VocabProxy
 		$data = false;
 		$url = $this->urlFor($this->action);
 
+		if ($this->debug)
+		{
+			$this->jsonData['message'] .= " [$url]";
+		}
+
 		if ($url) {
 			$ch = curl_init();
 			curl_setopt($ch, CURLOPT_URL, $url);
@@ -155,6 +176,7 @@ class VocabProxy
 		}
 		if ($data && $this->jsonData['status'] == "OK") {
 			$items = (array)$data['result']['items'];
+
 			if (is_callable($this->valid_actions[$this->action]['sortprocessor']))
 			{
 				usort($items,
@@ -164,8 +186,24 @@ class VocabProxy
 			$this->jsonData['items'] = array_map(function($i) {
 					$i['label'] = $i['prefLabel']['_value'];
 					$i['about'] = $i['_about'];
+					if (array_key_exists('broader', $i) &&
+					    is_array($i['broader']))
+
+					{
+					    $i['broader'] = $i['broader']['_about'];
+					}
+
+
+					if (!array_key_exists('narrower', $i))
+					{
+					    $i['narrower'] = false;
+					}
+					else
+					{
+					    $i['narrower'] = (array)$i['narrower'];
+					}
+
 					unset($i['_about'],
-					      $i['broader'],
 					      $i['prefLabel']);
 					return $i;
 				},
@@ -227,6 +265,8 @@ class VocabProxy
 	 * @return true if preconditions met, false otherwise
 	 */
 	private function setup() {
+		$this->debug = isset($_REQUEST['debug']);
+
 		if (isset($_REQUEST['repository'])) {
 			//strip leading "../", and normalise "/"
 			$this->repository = preg_replace(
@@ -246,7 +286,7 @@ class VocabProxy
 			else {
 				$this->jsonData['message'] .= " and valid: " .
 					"one of " .
-					implode(", ", $this->valid_actions);
+					implode(", ", array_keys($this->valid_actions));
 			}
 		}
 

@@ -769,6 +769,7 @@
 	    var handler = this;
 	    var uri;
 	    var callee;
+	    var uaction = action;
 	    if (typeof(opts['uri']) !== 'undefined') {
 		uri = opts['uri'];
 	    }
@@ -783,9 +784,14 @@
 		callee = handler._container;
 	    }
 
+	    if (typeof(opts['all'] !== 'undefined') &&
+	       opts['all'] === true) {
+		uaction = "all" + action;
+	    }
+
 
 	    $.ajax({
-		url: this.__url(action, uri),
+		url: this.__url(uaction, uri),
 		cache: this.settings.cache,
 		dataType: "jsonp",
 		success: function(data) { callee.trigger(action + '.vocab.ands', data); },
