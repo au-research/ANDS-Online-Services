@@ -575,159 +575,6 @@
 	}
     });
 
-    var NarrowHandler = VocabHandler.extend({
-	preconditions: function() {
-	    var preconds = this._super();
-	    preconds.push({
-		fields: ["mode_params"],
-		description: "mode-specific parameters",
-		test: function(val) { return (typeof(val) !== 'undefined'); }
-	    });
-	    preconds.push({
-		fields: ["mode"],
-		description: "mode 'narrow'",
-		test: function(val) { return val === 'narrow'; }
-	    });
-
-	    return preconds;
-	},
-
-
-	init: function(container, settings) {
-	    this._super(container, settings);
-	    if (this._container.is("select")) {
-		if (this.settings.fields.length > 1) {
-		    this._err({status:500,
-			       responseText:"'fields' setting must be a " +
-			       "single element array when mode isn't " +
-			       "'search'"});
-		}
-
-		this._container.empty()
-		    .append('<option value=""></option>');
-
-	    }
-	    else if (this._container.is("input")) {
-		this._makelist(true);
-		this._preplist();
-	    }
-	    else {
-		this._err({status:500,
-			   responseText: "in 'narrow' mode, the plugin " +
-			   "must be attached to a select " +
-			   "or input element"});
-	    }
-
-	},
-
-	_preplist: function() {
-	    var handler = this;
-	    $.ajax({
-		url: this._url(),
-		cache: this.settings.cache,
-		dataType:"jsonp",
-		success: function(data) {
-		    if (data.status === "OK") {
-			$.each(data.items, function(idx, item) {
-			    handler._list.append(handler.vocab_item(item));
-			});
-		    }
-		    else {
-			handler._err({status:500,
-				      responseText:data.message});
-		    }
-		    handler._container.bind("keyup", function(e) {
-			handler.vocab_lookup(e);
-		    });
-		    handler._list
-			.children('li[role="vocab_item"]')
-			.bind('click', function(event) { handler.handle_selection(event)});
-		},
-		error: function(xhr) { handler._err(xhr) }
-	    });
-
-	},
-
-	lookup: function() {
-	    var handler = this;
-	    var lookfor = this._container.val().toLowerCase();
-	    if (lookfor.length) {
-		this._list.children('li').hide();
-		this._list.show();
-		var matches = $.grep(this._list.children('li[role="vocab_item"]'),
-				     function(e,i) {
-					 var item = $(e);
-					 var data = item.data(WIDGET_DATA);
-					 for (var fi in handler.settings.fields) {
-					     var field = handler.settings.fields[fi];
-					     if ((typeof(data[field]) !== 'undefined') &&
-						 data[field].substring(0,lookfor.length).toLowerCase() === lookfor) {
-						 return true;
-					     }
-					 }
-					 return false;
-				     });
-		$(matches).show();
-	    }
-	},
-
-	_url: function() {
-	    return this.settings.endpoint +
-		"?action=" + this.settings.mode +
-		"&repository=" + this.settings.repository +
-		"&limit=" + this.settings.max_results +
-		"&lookfor=" + this.settings.mode_params;
-	},
-
-	do_ready: function() {
-	    var handler = this;
-	    if (this._ctype === 'SELECT') {
-		var url = this._url();
-		$.ajax({
-		    url: url,
-		    cache: this.settings.cache,
-		    dataType: "jsonp",
-		    success: function(data) { handler.process(data) },
-		    error: function(xhr) { handler._err(xhr) },
-		});
-	    }
-	    else {
-
-		this._container.on("keydown", function(e) {
-		    if (e.which == '40') {
-			handler._list.show();
-		    }
-		    else if (e.which == '27') {
-			handler._container.val('');
-			handler._list.hide();
-		    }
-		});
-	    }
-	},
-
-	process: function(data) {
-	    var handler = this;
-	    if (data.status === "OK") {
-		$.each(data.items, function(idx, item) {
-		    var val = item[handler.settings.target_field];
-		    var label = item[handler.settings.fields[0]];
-		    handler._container.append('<option value="' + val + '">' +
-					      label + '</option>');
-		});
-	    }
-	    else {
-		handler._err({status:500,
-			      responseText:data.message});
-	    }
-	},
-
-	detach: function() {
-	    if (this._ctype === 'INPUT') {
-		this._container.unbind("keyup");
-	    }
-	}
-    });
-
     var AdvancedHandler = VocabHandler.extend({
 	/*
 	 * Advanced mode assumes nothing!
@@ -944,5 +791,167 @@
 	},
 
     });
+
+    var NarrowHandler = AdvancedHandler.extend({
+	preconditions: function() {
+	    var preconds = this._super();
+	    preconds.push({
+		fields: ["mode_params"],
+		description: "mode-specific parameters",
+		test: function(val) { return (typeof(val) !== 'undefined'); }
+	    });
+	    preconds.push({
+		fields: ["mode"],
+		description: "mode 'narrow'",
+		test: function(val) { return val === 'narrow'; }
+	    });
+
+	    return preconds;
+	},
+
+
+	init: function(container, settings) {
+	    this._super(container, settings);
+	    if (this._container.is("select")) {
+		if (this.settings.fields.length > 1) {
+		    this._err({status:500,
+			       responseText:"'fields' setting must be a " +
+			       "single element array when mode isn't " +
+			       "'search'"});
+		}
+
+		this._container.empty()
+		    .append('<option value=""></option>');
+
+	    }
+	    else if (this._container.is("input")) {
+		this._makelist(true);
+		this._preplist();
+	    }
+	    else {
+		this._err({status:500,
+			   responseText: "in 'narrow' mode, the plugin " +
+			   "must be attached to a select " +
+			   "or input element"});
+	    }
+
+	},
+
+	_preplist: function() {
+	    var handler = this;
+	    handler._container
+		.one('narrow.vocab.ands',
+		     function(event, data) {
+			 if (data.status === "OK") {
+			     $.each(data.items, function(idx, item) {
+				 handler._list.append(handler.vocab_item(item));
+			     });
+			 }
+			 else {
+			     handler._err({status:500,
+					   responseText:data.message});
+			 }
+			 handler._container.bind("keyup", function(e) {
+			     handler.vocab_lookup(e);
+			 });
+			 handler._list
+			     .children('li[role="vocab_item"]')
+			     .bind('click',
+				   function(event) {
+				       handler.handle_selection(event)
+				   });
+		     });
+
+	    handler._container.one('error.vocab.ands',
+				   function(event, xhr) {
+				       handler._err(xhr);
+				   });
+
+	    this.__call();
+
+	},
+
+	__call: function(callee) {
+	    if (typeof(callee) === 'undefined') {
+		callee = this._container;
+	    }
+	    return this._narrow({uri:this.settings.mode_params,
+				 callee:callee});
+	},
+
+	lookup: function() {
+	    var handler = this;
+	    var lookfor = this._container.val().toLowerCase();
+	    var matches;
+	    if (lookfor.length) {
+		this._list.children('li').hide();
+		this._list.show();
+		matches = $.grep(this._list.children('li[role="vocab_item"]'),
+				 function(e,i) {
+				     var item = $(e);
+				     var data = item.data(WIDGET_DATA);
+				     for (var fi in handler.settings.fields) {
+					 var field = handler.settings.fields[fi];
+					 if ((typeof(data[field]) !== 'undefined') &&
+					     data[field].substring(0,lookfor.length).toLowerCase() === lookfor) {
+					     return true;
+					 }
+				     }
+				     return false;
+				 });
+		$(matches).show();
+	    }
+	},
+
+	do_ready: function() {
+	    var handler = this;
+	    handler._container.on('narrow.vocab.ands',
+				  function(event, data) {
+				      handler.process(data);
+				  });
+	    handler._container.on('error.vocab.ands',
+				  function(event, xhr) {
+				      handler._err(xhr);
+				  });
+	    if (this._ctype === 'SELECT') {
+		this.__call();
+	    }
+	    else {
+
+		this._container.on("keydown", function(e) {
+		    if (e.which == '40') {
+			handler._list.show();
+		    }
+		    else if (e.which == '27') {
+			handler._container.val('');
+			handler._list.hide();
+		    }
+		});
+	    }
+	},
+
+	process: function(data) {
+	    var handler = this;
+	    if (data.status === "OK") {
+		$.each(data.items, function(idx, item) {
+		    var val = item[handler.settings.target_field];
+		    var label = item[handler.settings.fields[0]];
+		    handler._container.append('<option value="' + val + '">' +
+					      label + '</option>');
+		});
+	    }
+	    else {
+		handler._err({status:500,
+			      responseText:data.message});
+	    }
+	},
+
+	detach: function() {
+	    if (this._ctype === 'INPUT') {
+		this._container.unbind("keyup");
+	    }
+	}
+    });
+
 
 })( jQuery );
