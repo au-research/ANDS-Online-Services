@@ -58,8 +58,8 @@
 	    //provide CSS 'class' references. Separate multiple classes by spaces
 	    list_class: "vocab_list",
 
-	    //which fields do you want to display? check the repository for available fields
-	    //nb:
+	    //which fields do you want to display? check the repository for
+	    //available fields. nb:
 	    //  - anzsrc-for uses [label, notation, about]
 	    //  - rifcs uses [label, definition, about]
 	    //
@@ -128,7 +128,8 @@
 		var $this = $(this);
 		var handler = $this.data('_handler');
 		if (typeof(handler) === 'undefined' || handler._mode() !== 'advanced') {
-		    _alert('Advanced plugin handler not found; instantiate with "{mode:\'advanced\'}" before using');
+		    _alert('Advanced plugin handler not found; ' +
+			   'instantiate with "{mode:\'advanced\'}" before using');
 		}
 		switch(op) {
 		case 'search':
@@ -180,7 +181,8 @@
      */
     // Inspired by base2 and Prototype
     (function() {
-	var initializing = false, fnTest = /xyz/.test(function(){xyz;}) ? /\b_super\b/ : /.*/;
+	var initializing = false;
+	var fnTest = /xyz/.test(function(){xyz;}) ? /\b_super\b/ : /.*/;
 
 	// The base Class implementation (does nothing)
 	this.Class = function(){};
@@ -280,7 +282,11 @@
 		{
 		    fields: ["min_chars", "max_results", "delay"],
 		    description: "a positive integer",
-		    test: function(val) { return typeof(val) === 'number' && val === ~~Number(val) && val >= 0; }
+		    test: function(val) {
+			return (typeof(val) === 'number' &&
+				val === ~~Number(val) &&
+				val >= 0);
+		    }
 		},
 		{
 		    fields: ["cache"],
@@ -290,17 +296,27 @@
 		{
 		    fields: ["mode"],
 		    description: "one of <search,narrow,tree,advanced>",
-		    test: function(val) { return val === 'search' || val === 'narrow' || val === 'advanced' || val === 'tree'; }
+		    test: function(val) {
+			return (val === 'search' ||
+				val === 'narrow' ||
+				val === 'advanced' ||
+				val === 'tree');
+		    }
 		},
 		{
 		    fields: ["endpoint"],
 		    description: "a URL",
-		    test: function(val) { return new RegExp("^(http|https)\://.*$").test(val); }
+		    test: function(val) {
+			return new RegExp("^(http|https)\://.*$").test(val);
+		    }
 		},
 		{
 		    fields: ["list_class", "repository"],
 		    description: "a string",
-		    test: function(val) { return typeof(val) === 'undefined' || typeof(val) === 'string'; }
+		    test: function(val) {
+			return (typeof(val) === 'undefined' ||
+				typeof(val) === 'string');
+		    }
 		}
 	    ];
 	},
@@ -666,7 +682,9 @@
 	    preconds.push({
 		fields: ["repository"],
 		description: "a string",
-		test: function(val) { return typeof(val) === 'undefined' || typeof(val) === 'string'; }
+		test: function(val) {
+		    return typeof(val) === 'undefined' || typeof(val) === 'string';
+		}
 	    });
 	    preconds.push({
 		fields: ["mode"],
@@ -893,7 +911,8 @@
 				     for (var fi in handler.settings.fields) {
 					 var field = handler.settings.fields[fi];
 					 if ((typeof(data[field]) !== 'undefined') &&
-					     data[field].substring(0,lookfor.length).toLowerCase() === lookfor) {
+					     data[field].substring(0,lookfor.length)
+					     .toLowerCase() === lookfor) {
 					     return true;
 					 }
 				     }
