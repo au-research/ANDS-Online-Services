@@ -161,7 +161,6 @@ class VocabProxy
 		if ($this->debug)
 		{
 			$this->jsonData['message'] .= " [$url]";
-			echo $url;
 		}
 
 		if ($url) {
