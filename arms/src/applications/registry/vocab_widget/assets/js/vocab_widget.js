@@ -749,11 +749,15 @@
 	},
 
 	__url: function(mode, lookfor) {
-	    return this.settings.endpoint +
+	    var url =  this.settings.endpoint +
 		"?action=" + mode +
 		"&repository=" + this.settings.repository +
-		"&limit=" + this.settings.max_results +
-		"&lookfor=" + lookfor;
+		"&limit=" + this.settings.max_results;
+	    if (typeof(lookfor) !== 'undefined' &&
+	       lookfor !== false) {
+		url = url + "&lookfor=" + lookfor;
+	    }
+	    return url;
 	},
 
 	_search: function(opts) {
@@ -773,6 +777,11 @@
 	    var uri;
 	    var callee;
 	    var uaction = action;
+
+	    if (typeof(opts) === 'undefined') {
+		opts = false;
+	    }
+
 	    if (typeof(opts['uri']) !== 'undefined') {
 		uri = opts['uri'];
 	    }
@@ -803,16 +812,7 @@
 	}
     });
 
-    /**
-     * This 'handler' (like all the UI handlers) is a big dirty hack. It's
-     * really a wrapper around the AdvancedHandler (perhaps they should extend
-     * it instead?), and keeps it's own instance of the widget under
-     * this._widget to work with.
-     *
-     * Good test for doing it "the right way"... certainly better than the
-     * current search/narrow handlers
-     */
-    var TreeHandler = VocabHandler.extend({
+    var TreeHandler = AdvancedHandler.extend({
 
 	preconditions: function() {
 	    var preconds = new Array();
@@ -835,14 +835,11 @@
 	},
 
 	do_ready: function() {
-	    var container = this;
+	    var handler = this;
 	    var elem = $("<div />");
 	    var treelist = $('<ul />').addClass('vocab_tree');
 	    elem.append(treelist);
-	    container._widget = elem.vocab_widget({
-		mode:'advanced',
-		repository:this.settings.repository,
-		cache:this.settings.cache});
+
 	    /**
 	     * This gets fired when the user clicks on a toplevel vocab,
 	     * triggering a 'get all narrow terms'. This callback is responsible for
@@ -851,28 +848,28 @@
 	     * our data has a flat array of items; these can be used to build a tree,
 	     * using the 'broader' item key as a reference to that item's parent [about key]
 	     */
-	    elem.on('narrow.vocab.ands', function(event, data) {
+	    handler._container.on('narrow.vocab.ands', function(event, data) {
 		var subitem = $(event.target);
 		var sublist = $('<ul />');
 		subitem.append(sublist);
 		$.each(data.items, function(idx, item) {
-		    container._treeitems(sublist, idx, item);
+		    handler._treeitems(sublist, idx, item);
 		});
 	    });
 
-	    elem.on('top.vocab.ands', function(event, data) {
+	    handler._container.on('top.vocab.ands', function(event, data) {
 		$.each(data.items, function(idx, item) {
-		    container._treeitems(treelist, idx, item);
+		    handler._treeitems(treelist, idx, item);
 		});
 	    });
 
-	    container._widget.vocab_widget('top');
-	    container._container.append(elem);
+	    handler._top();
+	    handler._container.append(elem);
 
 	},
 
 	_subclick: function(ev) {
-	    var container = this;
+	    var handler = this;
 	    ev.stopPropagation();
 	    var target = $(ev.target);
 	    var itemdata = target.data('vocab');
@@ -884,9 +881,7 @@
 		 * else will be either open, closed, or a leaf node (which
 		 * we don't interact with)
 		 */
-		container._widget.vocab_widget(
-		    'narrow',
-		    {uri:itemdata['about'], callee:target});
+		handler._narrow({uri:itemdata['about'], callee:target});
 		target.removeClass('tree_closed').addClass('tree_open');
 		target.data('treestate', 'open');
 		break;
@@ -912,7 +907,7 @@
 	},
 
 	_treeitems: function(list, idx, item) {
-	    var container = this;
+	    var handler = this;
 	    var titem = $('<li></li>');
 	    var icon = $('<ins/>');
 
@@ -932,7 +927,7 @@
 	    }
 
 	    titem.on('click', function(event) {
-		container._subclick(event);
+		handler._subclick(event);
 	    });
 
 	    if (item['count'] === 0) {
