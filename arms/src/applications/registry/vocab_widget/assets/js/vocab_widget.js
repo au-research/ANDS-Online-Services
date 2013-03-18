@@ -95,7 +95,7 @@
 			handler = new NarrowHandler($this, settings);
 			break;
 		    case 'advanced':
-			handler = new AdvancedHandler($this, settings);
+			handler = new VocabHandler($this, settings);
 			break;
 		    case 'tree':
 			handler = new TreeHandler($this, settings);
@@ -260,65 +260,8 @@
 	    }
 	},
 
-	/**
-	 * A set of rules that should be checked to ensure correct
-	 * operation.
-	 *
-	 * This function should definitely be overridden by subclasses; the
-	 * preconditions found here are generic. Call super() first,
-	 * capture the result and ammend the array before returning.
-	 *
-	 * @return an array of validation callables and the associated data
-	 * to validate, a js object with the following properties:
-	 *   - fields: and array of configuration fields to check
-	 *   - descripiton: a brief description of the test; used for error
-	 *     output
-	 *   - test: a closure that takes a single value (iterated over
-	 *     fields) and returns bool true/false depending on validation
-	 *     status
-	 */
 	preconditions: function() {
-	    return [
-		{
-		    fields: ["min_chars", "max_results", "delay"],
-		    description: "a positive integer",
-		    test: function(val) {
-			return (typeof(val) === 'number' &&
-				val === ~~Number(val) &&
-				val >= 0);
-		    }
-		},
-		{
-		    fields: ["cache"],
-		    description: "a boolean",
-		    test: function(val) { return typeof(val) === 'boolean'; }
-		},
-		{
-		    fields: ["mode"],
-		    description: "one of <search,narrow,tree,advanced>",
-		    test: function(val) {
-			return (val === 'search' ||
-				val === 'narrow' ||
-				val === 'advanced' ||
-				val === 'tree');
-		    }
-		},
-		{
-		    fields: ["endpoint"],
-		    description: "a URL",
-		    test: function(val) {
-			return new RegExp("^(http|https)\://.*$").test(val);
-		    }
-		},
-		{
-		    fields: ["list_class", "repository"],
-		    description: "a string",
-		    test: function(val) {
-			return (typeof(val) === 'undefined' ||
-				typeof(val) === 'string');
-		    }
-		}
-	    ];
+	    return [];
 	},
 
 	/**
@@ -408,6 +351,134 @@
 	    return false;
 	},
 
+	__url: function(mode, lookfor) {
+	    var url =  this.settings.endpoint +
+		"?action=" + mode +
+		"&repository=" + this.settings.repository +
+		"&limit=" + this.settings.max_results;
+	    if (typeof(lookfor) !== 'undefined' &&
+	       lookfor !== false) {
+		url = url + "&lookfor=" + lookfor;
+	    }
+	    return url;
+	},
+
+	_search: function(opts) {
+	    this.__act('search', opts);
+	},
+
+	_narrow: function(opts) {
+	    this.__act('narrow', opts);
+	},
+
+	_top: function(opts) {
+	    this.__act('top', opts);
+	},
+
+	__act: function(action, opts) {
+	    var handler = this;
+	    var uri;
+	    var callee;
+	    var uaction = action;
+
+	    if (typeof(opts) === 'undefined') {
+		opts = false;
+	    }
+
+	    if (typeof(opts['uri']) !== 'undefined') {
+		uri = opts['uri'];
+	    }
+	    else {
+		uri = opts;
+	    }
+
+	    if (typeof(opts['callee']) !== 'undefined') {
+		callee = opts['callee'];
+	    }
+	    else {
+		callee = handler._container;
+	    }
+
+	    if (typeof(opts['all'] !== 'undefined') &&
+	       opts['all'] === true) {
+		uaction = "all" + action;
+	    }
+
+
+	    $.ajax({
+		url: this.__url(uaction, uri),
+		cache: this.settings.cache,
+		dataType: "jsonp",
+		success: function(data) { callee.trigger(action + '.vocab.ands', data); },
+		error: function(xhr) { callee.trigger('error.vocab.ands', xhr); },
+	    });
+	}
+    });
+
+    var UIHandler = VocabHandler.extend({
+
+	/**
+	 * A set of rules that should be checked to ensure correct
+	 * operation.
+	 *
+	 * This function should definitely be overridden by subclasses; the
+	 * preconditions found here are generic. Call super() first,
+	 * capture the result and ammend the array before returning.
+	 *
+	 * @return an array of validation callables and the associated data
+	 * to validate, a js object with the following properties:
+	 *   - fields: and array of configuration fields to check
+	 *   - descripiton: a brief description of the test; used for error
+	 *     output
+	 *   - test: a closure that takes a single value (iterated over
+	 *     fields) and returns bool true/false depending on validation
+	 *     status
+	 */
+	preconditions: function() {
+	    return [
+		{
+		    fields: ["min_chars", "max_results", "delay"],
+		    description: "a positive integer",
+		    test: function(val) {
+			return (typeof(val) === 'number' &&
+				val === ~~Number(val) &&
+				val >= 0);
+		    }
+		},
+		{
+		    fields: ["cache"],
+		    description: "a boolean",
+		    test: function(val) { return typeof(val) === 'boolean'; }
+		},
+		{
+		    fields: ["mode"],
+		    description: "one of <search,narrow,tree,advanced>",
+		    test: function(val) {
+			return (val === 'search' ||
+				val === 'narrow' ||
+				val === 'advanced' ||
+				val === 'tree');
+		    }
+		},
+		{
+		    fields: ["endpoint"],
+		    description: "a URL",
+		    test: function(val) {
+			return new RegExp("^(http|https)\://.*$").test(val);
+		    }
+		},
+		{
+		    fields: ["list_class", "repository"],
+		    description: "a string",
+		    test: function(val) {
+			return (typeof(val) === 'undefined' ||
+				typeof(val) === 'string');
+		    }
+		}
+	    ];
+	},
+
+
 	_makelist: function(persist) {
 	    if (typeof(persist) === 'undefined') {
 		persist = false;
@@ -480,91 +551,8 @@
 	}
     });
 
-    var AdvancedHandler = VocabHandler.extend({
-	/*
-	 * Advanced mode assumes nothing!
-	 */
-	preconditions: function() {
-	    return [];
-	},
 
-	/**
-	 * Advanced mode is never 'ready'; instead, specific actions are
-	 * invoked
-	 */
-	do_ready: function() {
-	    return;
-	},
-
-	init: function(container, settings) {
-	    this._super(container, settings);
-	},
-
-	__url: function(mode, lookfor) {
-	    var url =  this.settings.endpoint +
-		"?action=" + mode +
-		"&repository=" + this.settings.repository +
-		"&limit=" + this.settings.max_results;
-	    if (typeof(lookfor) !== 'undefined' &&
-	       lookfor !== false) {
-		url = url + "&lookfor=" + lookfor;
-	    }
-	    return url;
-	},
-
-	_search: function(opts) {
-	    this.__act('search', opts);
-	},
-
-	_narrow: function(opts) {
-	    this.__act('narrow', opts);
-	},
-
-	_top: function(opts) {
-	    this.__act('top', opts);
-	},
-
-	__act: function(action, opts) {
-	    var handler = this;
-	    var uri;
-	    var callee;
-	    var uaction = action;
-
-	    if (typeof(opts) === 'undefined') {
-		opts = false;
-	    }
-
-	    if (typeof(opts['uri']) !== 'undefined') {
-		uri = opts['uri'];
-	    }
-	    else {
-		uri = opts;
-	    }
-
-	    if (typeof(opts['callee']) !== 'undefined') {
-		callee = opts['callee'];
-	    }
-	    else {
-		callee = handler._container;
-	    }
-
-	    if (typeof(opts['all'] !== 'undefined') &&
-	       opts['all'] === true) {
-		uaction = "all" + action;
-	    }
-
-
-	    $.ajax({
-		url: this.__url(uaction, uri),
-		cache: this.settings.cache,
-		dataType: "jsonp",
-		success: function(data) { callee.trigger(action + '.vocab.ands', data); },
-		error: function(xhr) { callee.trigger('error.vocab.ands', xhr); },
-	    });
-	}
-    });
-
-    var TreeHandler = AdvancedHandler.extend({
+    var TreeHandler = VocabHandler.extend({
 
 	preconditions: function() {
 	    var preconds = new Array();
@@ -699,7 +687,7 @@
 
     });
 
-    var NarrowHandler = AdvancedHandler.extend({
+    var NarrowHandler = UIHandler.extend({
 	preconditions: function() {
 	    var preconds = this._super();
 	    preconds.push({
@@ -861,7 +849,7 @@
 	}
     });
 
-    var SearchHandler = AdvancedHandler.extend({
+    var SearchHandler = UIHandler.extend({
 	preconditions: function() {
 	    var preconds = this._super();
 	    preconds.push({
