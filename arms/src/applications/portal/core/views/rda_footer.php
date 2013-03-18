@@ -7,6 +7,7 @@
 	</div>
 	<div class="ro_preview_description hide">
 		{{description}}
+		{{{expanded_html}}}
 		<div class="ro_preview_footer">
 			<a href="{{url}}">View Full Record</a>
 		</div>
@@ -22,7 +23,7 @@
 				<a href="javascript:;" class="suggestor_paging" offset={{prev}} suggestor="{{suggestor}}">Prev</a>
 			{{/prev}}
 			{{#next}}
-				<a href="javascript:;" class="suggestor_paging" offset="{{next}}" suggestor="{{suggestor}}">Next</a>
+				<a href="javascript:;" class="suggestor_paging" offset={{next}} suggestor="{{suggestor}}">Next</a>
 			{{/next}}
 		</div>
 		<div class="clear"></div>

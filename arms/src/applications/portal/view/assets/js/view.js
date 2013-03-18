@@ -190,6 +190,8 @@ function updateLinksDisplay(container, title, suggestor, start, rows)
         var url_suffix = "view/getSuggestedLinks/"+suggestor+"/"+start+"/"+rows+"/?id=" + getRegistryObjectID();
     }
 
+    log(base_url+url_suffix);
+
     // Fire off the request
     $.get(base_url + url_suffix, function(data){   
         log(data);

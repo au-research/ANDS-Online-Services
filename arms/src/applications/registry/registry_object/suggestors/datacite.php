@@ -70,15 +70,40 @@ class Suggestor_datacite implements GenericSuggestor
 				$links[] = array("url"=>self::DATACITE_URL_PREFIX . $doc[self::DATACITE_URL_FIELD],
 								"title"=>ellipsis($doc['title'][0], self::DATACITE_TITLE_LENGTH),
 								"class"=>"external",
-								"expanded_html"=>rawurlencode($CI->load->view("registry_object/datacite_preview", $doc, true)));
+								"expanded_html"=>$CI->load->view("registry_object/datacite_preview", $doc, true)
+								);
 			}
 		}
 
+		if(!$rows) $rows=10;
+		$pagination = array();
+		if($start==0){
+			$currentPage = 1;
+		}else{
+			$currentPage = ceil($start/$rows)+1;
+		}
+		$totalPage = ceil($content['response']['numFound'] / (int) $rows);
+
+		if($currentPage!=1){
+			$prev = $start-$rows;
+			$next = $start+$rows;
+		}else if($currentPage==$totalPage){
+			$prev = $start-$rows;
+			$next = false;
+		}else{
+			$prev = false;
+			$next = $start+$rows;
+		}
+		$pagination = array("currentPage"=>$currentPage,"totalPage"=>$totalPage);
+		if($prev) $pagination['prev']=$prev;
+		if($next) $pagination['next']=$next;
 
 
 		$response = array(
 				"count"=>$found, 
 				"links"=>$links,
+				"pagination"=>$pagination,
+				"suggestor"=>"datacite"
 		);
 
 		return $response;
