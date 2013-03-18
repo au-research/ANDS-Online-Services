@@ -33,13 +33,13 @@ class XML_Extension extends ExtensionBase
 	{
 		if (!is_null($this->_xml) && $this->_xml->record_data_id == $record_data_id)
 		{
-			return $this->_xml->xml;
+			return str_replace('&','&amp;',$this->_xml->xml);
 		}
 		else
 		{
 			$this->_xml = new _xml($this->ro->id, $record_data_id);
 			//return html_entity_decode($this->_xml->xml, ENT_QUOTES, "utf-8");
-			return $this->_xml->xml;
+			return str_replace('&','&amp;',$this->_xml->xml);
 		}
 	}
 	

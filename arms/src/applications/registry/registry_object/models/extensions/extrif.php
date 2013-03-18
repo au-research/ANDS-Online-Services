@@ -210,7 +210,7 @@ class Extrif_Extension extends ExtensionBase
 			$xslt_processor = Transforms::get_extrif_to_solr_transformer();
 			$dom = new DOMDocument();
 			//$dom->loadXML($this->ro->getXML());
-			$dom->loadXML($this->ro->getExtRif());
+			$dom->loadXML(str_replace('&','&amp;',$this->ro->getExtRif()));
 			if ($add_tags)
 			{
 				return "<add>" . $xslt_processor->transformToXML($dom) . "</add>";

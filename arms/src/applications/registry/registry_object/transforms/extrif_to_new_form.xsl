@@ -555,7 +555,6 @@
 		</div>
 	</xsl:template>
 
-
 	<xsl:template name="descriptionRightsTab">
 		<div id="descriptions_rights" class="pane">
 			<fieldset>
@@ -845,7 +844,7 @@
 					</span>
 					<span>Value:
 						<button class="btn triggerTypeAhead"  type="button"><span class="caret"></span></button>
-						<input type="text" class="input-xlarge subject-value" id="{generate-id()}_value" vocab="" name="subject_value" placeholder="value" value="{text()}"/>
+						<input type="text" class="input-xlarge subject-value" id="{generate-id()}_value" vocab="{@type}" name="subject_value" placeholder="value" value="{text()}"/>
 					</span>
 					<button class="btn btn-mini btn-danger remove">
 						<i class="icon-remove icon-white"/>
@@ -1289,11 +1288,11 @@
 				<div class="controls">
 					<span>Type:
 						<button class="btn triggerTypeAhead"  type="button"><span class="caret"></span></button>
-						<input type="text" class="input-small rifcs-type" id="{generate-id()}_type" vocab="RIFCSSubjectType" name="subject_type" placeholder="type" value="{@type}"/>
+						<input type="text" class="input-small rifcs-type" id="{generate-id()}_type" vocab="RIFCSSubjectType" name="subject_type" placeholder="type" value=""/>
 					</span>
 					<span>  Value:
 						<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
-						<input type="text" class="input-xlarge subject-value" id="{generate-id()}_value" vocab="" name="subject_value" placeholder="value" value="{text()}"/>
+						<input type="text" class="input-xlarge subject-value" id="{generate-id()}_value" vocab="local" name="subject_value" placeholder="value" value=""/>
 					</span>
 					<button class="btn btn-mini btn-danger remove">
 						<i class="icon-remove icon-white"/>
@@ -1493,10 +1492,10 @@
 				<label class="control-label" for="title">Spatial: </label>
 				<div class="controls">
 					<span>Type:						
-						<input type="text" class="input-small rifcs-type" vocab="RIFCSSpatialType" name="type" placeholder="Type" value="{@type}"/>
+						<input type="text" class="input-small rifcs-type" vocab="RIFCSSpatialType" name="type" placeholder="Type" value=""/>
 						<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
 					</span>Value:
-						<input type="text" class="input-xlarge spatial_value" name="value" placeholder="Value" value="{text()}"/>
+						<input type="text" class="input-xlarge spatial_value" name="value" placeholder="Value" value=""/>
 						<button class="btn triggerMapWidget" type="button"><i class="icon-globe"></i></button>
 					<button class="btn btn-mini btn-danger remove">
 						<i class="icon-remove icon-white"/>

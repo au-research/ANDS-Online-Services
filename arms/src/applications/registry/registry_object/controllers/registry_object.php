@@ -134,12 +134,14 @@ class Registry_object extends MX_Controller {
 		$this->load->model("data_source/data_sources","ds");
 
 		$data['ownedDatasource'] = $this->ds->getOwnedDataSources();
+
 		$this->load->view("add_registry_objects", $data);
 	}
 
 	public function edit($registry_object_id){
 		$this->load->model('registry_objects', 'ro');
 		$ro = $this->ro->getByID($registry_object_id);
+		ds_acl_enforce($ro->data_source_id);
 		$data['extrif'] = $ro->getExtRif();
 		$data['content'] = $ro->transformCustomForFORM($data['extrif']);
 		$data['title'] = 'Edit: '.$ro->title;

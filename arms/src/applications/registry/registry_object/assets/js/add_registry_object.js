@@ -285,6 +285,7 @@ function initEditForm(){
 			//add the DOM
 			var new_dom = $(template).clone().removeClass('template').insertBefore(where).hide().slideDown();
 			initVocabWidgets(new_dom);
+			initMapWidget(new_dom);
 
 			//@TODO: check if it's inside a tooltip and perform reposition
 
@@ -643,13 +644,26 @@ function initMapWidget(container)
 		container_elem = container;
 	}else container_elem = $(document);
 	$(".spatial_value", container_elem).each(function(){
-		//log(this, 'bind vocab widget');
-		var elem = $(this);
-		//console.log(elem.val());
-		elem.ands_location_widget({
-  		lonLat:elem.val()
-	});
 
+		var typeInput = $(this).parent().find('input[name=type]');
+				log(typeInput);
+		typeInput.on({
+			change: function(e){
+				log(typeInput);
+				initMapWidget($(this).parent());
+			}
+		});
+		var type = typeInput.val();
+log("type " + type);
+		if(type == 'gmlKmlPolyCoords')
+		{
+			log(type);
+			var elem = $(this);
+		//console.log(elem.val());
+			elem.ands_location_widget({
+  			lonLat:elem.val()
+			});
+		}
 	});
 }
 

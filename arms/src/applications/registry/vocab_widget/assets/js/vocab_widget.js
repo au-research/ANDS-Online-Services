@@ -22,7 +22,7 @@
 
 	var defaults = {
 	    //location (absolute URL) of the jsonp proxy
-	    endpoint: 'http://ands3.anu.edu.au/workareas/smcphill/ands-online-services/arms/src/registry/vocab_widget/proxy/',
+	    endpoint: 'http://ands3.anu.edu.au/workareas/leo/ands/arms/src/registry/vocab_widget/proxy/',
 
 	    //sisvoc repository to query. (proxy defaults to 'anzsrc-for' if none supplied)
 	    repository: 'anzsrc-for',
