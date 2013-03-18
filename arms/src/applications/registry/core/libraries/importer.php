@@ -109,9 +109,6 @@ class Importer {
 			foreach ($this->xmlPayload AS $idx => $payload)
 			{
 
-				// Last chance to check valid format of the payload
-				$this->_validateRIFCS($payload);
-
 				// Build a SimpleXML object from the converted data
 				// We will throw an exception here if the payload isn't well-formed XML (which, by now, it should be)
 				try
@@ -122,6 +119,10 @@ class Importer {
 				{
 					throw new Exception("Unable to parse XML into object (registryObject #".$idx."): " . NL . $e->getMessage());
 				}
+
+				// Last chance to check valid format of the payload
+				$this->_validateRIFCS($payload);	
+							
 				$sxml->registerXPathNamespace("ro", RIFCS_NAMESPACE);
 
 				// Right then, lets start parsing each registryObject & importing! 
