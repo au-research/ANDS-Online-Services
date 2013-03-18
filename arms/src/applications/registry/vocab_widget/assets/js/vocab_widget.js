@@ -97,14 +97,17 @@
 		    case 'advanced':
 			handler = new AdvancedHandler($this, settings);
 			break;
+		    case 'tree':
+			handler = new TreeHandler($this, settings);
+			break;
 		    default:
 			_alert('Unknown mode "' + settings.mode + '"');
 			break;
 		    }
 
 		    if (typeof(handler) !== 'undefined') {
-			handler.ready();
 			$this.data('_handler', handler);
+			handler.ready();
 		    }
 		    else {
 			_alert('Handler not initialised');
@@ -286,8 +289,8 @@
 		},
 		{
 		    fields: ["mode"],
-		    description: "one of <search,narrow,advanced>",
-		    test: function(val) { return val === 'search' || val === 'narrow' || val === 'advanced'; }
+		    description: "one of <search,narrow,tree,advanced>",
+		    test: function(val) { return val === 'search' || val === 'narrow' || val === 'advanced' || val === 'tree'; }
 		},
 		{
 		    fields: ["endpoint"],
@@ -799,4 +802,152 @@
 	    });
 	}
     });
+
+    /**
+     * This 'handler' (like all the UI handlers) is a big dirty hack. It's
+     * really a wrapper around the AdvancedHandler (perhaps they should extend
+     * it instead?), and keeps it's own instance of the widget under
+     * this._widget to work with.
+     *
+     * Good test for doing it "the right way"... certainly better than the
+     * current search/narrow handlers
+     */
+    var TreeHandler = VocabHandler.extend({
+
+	preconditions: function() {
+	    var preconds = new Array();
+	    preconds.push({
+		fields: ["repository"],
+		description: "a string",
+		test: function(val) { return typeof(val) === 'undefined' || typeof(val) === 'string'; }
+	    });
+	    preconds.push({
+		fields: ["mode"],
+		description: "mode 'tree'",
+		test: function(val) { return val === 'tree'; }
+	    });
+
+	    return preconds;
+	},
+
+	detach: function() {
+	    this._container.empty();
+	},
+
+	do_ready: function() {
+	    var container = this;
+	    var elem = $("<div />");
+	    var treelist = $('<ul />').addClass('vocab_tree');
+	    elem.append(treelist);
+	    container._widget = elem.vocab_widget({
+		mode:'advanced',
+		repository:this.settings.repository,
+		cache:this.settings.cache});
+	    /**
+	     * This gets fired when the user clicks on a toplevel vocab,
+	     * triggering a 'get all narrow terms'. This callback is responsible for
+	     * building the entire tree for that toplevel term.
+	     *
+	     * our data has a flat array of items; these can be used to build a tree,
+	     * using the 'broader' item key as a reference to that item's parent [about key]
+	     */
+	    elem.on('narrow.vocab.ands', function(event, data) {
+		var subitem = $(event.target);
+		var sublist = $('<ul />');
+		subitem.append(sublist);
+		$.each(data.items, function(idx, item) {
+		    container._treeitems(sublist, idx, item);
+		});
+	    });
+
+	    elem.on('top.vocab.ands', function(event, data) {
+		$.each(data.items, function(idx, item) {
+		    container._treeitems(treelist, idx, item);
+		});
+	    });
+
+	    container._widget.vocab_widget('top');
+	    container._container.append(elem);
+
+	},
+
+	_subclick: function(ev) {
+	    var container = this;
+	    ev.stopPropagation();
+	    var target = $(ev.target);
+	    var itemdata = target.data('vocab');
+
+	    switch(target.data('treestate')) {
+	    case "init":
+		/*
+		 * this will only happen on the toplevel nodes; everything
+		 * else will be either open, closed, or a leaf node (which
+		 * we don't interact with)
+		 */
+		container._widget.vocab_widget(
+		    'narrow',
+		    {uri:itemdata['about'], callee:target});
+		target.removeClass('tree_closed').addClass('tree_open');
+		target.data('treestate', 'open');
+		break;
+	    case "open":
+		target.removeClass('tree_open').addClass('tree_closed');
+		target.find('ul').slideUp(100);
+		target.data('treestate', 'closed');
+		break;
+	    case "closed":
+		target.removeClass('tree_closed').addClass('tree_open');
+		target.find('ul').slideDown(150);
+		target.data('treestate', 'open');
+		break;
+	    }
+	    /*
+	     * our <ins> fellows can trigger a click, but we don't want to
+	     * advertise those...
+	     */
+	    if (typeof(ev.srcElement) !== 'undefined' &&
+		typeof($(ev.target).data('vocab') !== 'undefined' )) {
+		target.trigger('treeselect.vocab.ands', ev);
+	    }
+	},
+
+	_treeitems: function(list, idx, item) {
+	    var container = this;
+	    var titem = $('<li></li>');
+	    var icon = $('<ins/>');
+
+	    list.hide();
+	    titem.data('treestate', 'init')
+		.addClass('tree_closed')
+		.data('vocab', item)
+		.attr('data-vocab-node', item.about);
+
+	    titem.text(item['label'] + ' (' + item['count'] + ')');
+
+	    if (item.narrower === false)
+	    {
+		titem.data('treestate', 'ignore')
+		    .removeClass('tree_closed')
+		    .addClass('tree_leaf');
+	    }
+
+	    titem.on('click', function(event) {
+		container._subclick(event);
+	    });
+
+	    if (item['count'] === 0) {
+		titem.addClass('tree_empty');
+	    }
+
+	    titem.prepend(icon);
+	    icon.on('click', function(e) {
+		e.preventDefault();
+		e.stopPropagation();
+		$(e.target).parent().click();
+	    });
+	    list.append(titem).slideDown(150);
+	},
+
+    });
+
 })( jQuery );

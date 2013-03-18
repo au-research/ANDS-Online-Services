@@ -178,11 +178,14 @@ widget.vocab_widget('narrow',
 	      <div class="note">
 		This form section is using the widget with no helpers; it outputs a list of known <code>rifcs</code> identifier types:
 		<pre>
-var elem = $("#vocab-advanced");
-var widget = elem.vocab_widget({mode:'advanced'});
-widget.vocab_widget('repository', 'rifcs');
-widget.vocab_widget('cache', false);
-		</pre>
+$("#vocab-tree").vocab_widget({mode:'tree',
+			       repository:'anzsrc-for'})
+    .on('treeselect.vocab.ands', function(event) {
+	var target = $(event.target);
+	var data = target.data('vocab');
+	alert('You clicked ' + data.label + '\r\n<' + data.about + '>');
+    });
+</pre>
 	      </div>
 	      <div id="vocab-tree">
 	      </div>
@@ -247,111 +250,20 @@ widget.vocab_widget('cache', false);
 	  }
 
 	  function treemode() {
-
-	      var subclick = function(ev) {
-		  ev.stopPropagation();
-		  var target = $(ev.target);
-		  var itemdata = target.data('vocab');
-
-		  switch(target.data('treestate')) {
-		  case "init":
-		      /*
-		       * this will only happen on the toplevel nodes; everything
-		       * else will be either open, closed, or a leaf node (which
-		       * we don't interact with)
-		       */
-		      widget.vocab_widget('narrow',
-					  {uri:itemdata['about'], callee:target});
-		      target.removeClass('tree_closed').addClass('tree_open');
-		      target.data('treestate', 'open');
-		      break;
-		  case "open":
-		      target.removeClass('tree_open').addClass('tree_closed');
-		      target.find('ul').slideUp(100);
-		      target.data('treestate', 'closed');
-		      break;
-		  case "closed":
-		      target.removeClass('tree_closed').addClass('tree_open');
-		      target.find('ul').slideDown(150);
-		      target.data('treestate', 'open');
-		      break;
-		  }
-		  target.trigger('treeselect.vocab.ands', ev);
-	      };
-
-	      var treeitems = function(list, idx, item) {
-		  list.hide();
-
-		  var titem = $('<li></li>');
-		  var icon = $('<ins/>');
-		  titem.data('treestate', 'init')
-		      .addClass('tree_closed')
-		      .data('vocab', item)
-		      .attr('data-vocab-node', item.about);
-
-		  titem.text(item['label'] + ' (' + item['count'] + ')');
-
-		  if (item.narrower === false)
-		  {
-		      titem.data('treestate', 'ignore')
-			  .removeClass('tree_closed')
-			  .addClass('tree_leaf');
-		  }
-
-		  titem.on('click', subclick);
-		  if (item['count'] === 0) {
-		      titem.addClass('tree_empty');
-		  }
-
-		  titem.prepend(icon);
-		  icon.on('click', function(e) {
-		      e.preventDefault();
-		      e.stopPropagation();
-		      $(e.target).parent().click();
+	  $("#vocab-tree").vocab_widget({mode:'tree',
+					 repository:'anzsrc-for'})
+		  .on('treeselect.vocab.ands', function(event) {
+		      var target = $(event.target);
+		      var data = target.data('vocab');
+		      alert('You clicked ' + data.label + '\r\n<' + data.about + '>');
 		  });
-		  list.append(titem).slideDown(150);
-	      };
-
-	      var elem = $("#vocab-tree");
-	      var treelist = $('<ul />').addClass('vocab_tree');
-	      elem.append(treelist);
-	      var widget = elem.vocab_widget({mode:'advanced', repository:'anzsrc-for'});
-
-	      /**
-	       * This gets fired when the user clicks on a toplevel vocab,
-	       * triggering a 'get all narrow terms'. This callback is responsible for
-	       * building the entire tree for that toplevel term.
-	       *
-	       * our data has a flat array of items; these can be used to build a tree,
-	       * using the 'broader' item key as a reference to that item's parent [about key]
-	       */
-	      elem.on('narrow.vocab.ands', function(event, data) {
-		  var subitem = $(event.target);
-		  var sublist = $('<ul />');
-		  subitem.append(sublist);
-		  $.each(data.items, function(idx, item) {
-		      treeitems(sublist, idx, item);
-		  });
-	      });
-
-	      elem.on('top.vocab.ands', function(event, data) {
-		  $.each(data.items, function(idx, item) {
-		      treeitems(treelist, idx, item);
-		  });
-	      });
-
-	      elem.on('treeselect.vocab.ands', function(event) {
-		  console.log(['selection made', event]);
-	      });
-
-	      widget.vocab_widget('top');
-
 	  }
 
 	  searchmode();
 	  narrowmode();
 	  advancedmode();
 	  treemode();
+
       });
 
       /* this handler is for the demonstration helpers */
