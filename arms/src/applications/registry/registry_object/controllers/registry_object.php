@@ -435,6 +435,20 @@ class Registry_object extends MX_Controller {
 			foreach($attributes as $a){
 				$ro->setAttribute($a['name'], $a['value']);
 				if($ro->save()){
+					if($a['name']=='status'&&$a['value']=='SUBMITTED_FOR_ASSESSMENT')
+					{
+						$data_source_id = $ro->getAttribute('data_source_id');
+						$this->load->model('data_source', 'ds');
+						$data_source = $this->ds->getByID($data_source_id);
+						if($data_source->count_SUBMITTED_FOR_ASSESSMENT>1)
+						{
+							$assessment_notify_email_addr = $data_source->getAttribute('assessment_notify_email_addr');	
+							if($assessment_notify_email_addr)
+							{
+								echo "we need to tell someone ".$assessment_notify_email_addr." about this";
+							}				
+						}
+					}
 					echo 'update '.$ro->id.' set '.$a['name'].' to value:'.$a['value'];
 				}else{
 					echo 'failed';

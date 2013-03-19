@@ -550,14 +550,14 @@
 					</dd>
 					{{/qa_flag}}
 
-					{{#assessement_notification_email}}
+					{{#assessment_notify_email_addr}}
 					<dt>Assessment Notification Email</dt>
 					<dd>
 						<p>
-							{{assessement_notification_email}}
+							{{assessment_notify_email_addr}}
 						</p>
 					</dd>
-					{{/assessement_notification_email}}
+					{{/assessment_notify_email_addr}}
 					
 			 	</dl>
 			 				
@@ -1030,13 +1030,13 @@
 						</div>
 
 						<div class="control-group">
-							<label class="control-label" for="assessement_notification_email">Assessment Notification Email</label>
+							<label class="control-label" for="assessment_notify_email_addr">Assessment Notification Email</label>
 							<div class="controls">
-								<input type="text" class="input-xlarge" name="assessement_notification_email" value="{{assessement_notification_email}}">
+								<input type="text" class="input-xlarge" name="assessment_notify_email_addr" value="{{assessment_notify_email_addr}}">
 							</div>
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="assessement_notification_email">Contributor Pages</label>
+							<label class="control-label" for="institution_pages">Contributor Pages</label>
 							<div class="controls">
 								<input type="radio" class="contributor-page" name="institution_pages_radio" value="0"><p class="help-inline">Do not have contributor pages</p><br />
 								<input type="radio" class="contributor-page" name="institution_pages_radio" value="1"><p class="help-inline">Auto generate Contributor Pages for all my groups</p><br />

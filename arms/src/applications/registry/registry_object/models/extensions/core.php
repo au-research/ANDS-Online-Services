@@ -231,6 +231,7 @@ class Core_extension extends ExtensionBase
 	/* Removes all trace of the record from the database (use this wisely...) */
 	function eraseFromDatabase()
 	{
+		$log ='';
 		$this->db->delete('registry_object_relationships', array('registry_object_id'=>$this->id));
 		if($error = $this->db->_error_message())
 		$log = NL."registry_object_relationships: " .$error;

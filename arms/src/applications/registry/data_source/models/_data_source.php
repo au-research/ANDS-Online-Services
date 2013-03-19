@@ -48,7 +48,7 @@ class _data_source {
 	const MAX_VALUE_LEN = 255;
 
 	public $stockAttributes = array('title'=>'','record_owner'=>'','contact_name'=>'-----', 'contact_email'=>'-----', 'provider_type'=>'RIF','notes'=>'-----');
-	public $extendedAttributes = array('allow_reverse_internal_links'=>true,'allow_reverse_external_links'=>true,'auto_publish'=>true,'qa_flag'=>false,'create_primary_relationships'=>false);
+	public $extendedAttributes = array('allow_reverse_internal_links'=>true,'allow_reverse_external_links'=>true,'auto_publish'=>true,'qa_flag'=>false,'create_primary_relationships'=>false,'assessment_notify_email_addr'=>'');
 	public $harvesterParams = array('uri'=>'----- ','harvest_method'=>'DIRECT','harvest_date'=>'','oai_set'=>'','advanced_harvest_mode'=>'STANDARD');
 	public $primaryRelationship = array('class_1','class_2','primary_key_1','primary_key_2','collection_rel_1','collection_rel_2','activity_rel_1','activity_rel_2','party_rel_1','party_rel_2','service_rel_1','service_rel_2');
 	public $institutionPages = array('institution_pages');
