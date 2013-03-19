@@ -79,6 +79,7 @@
 		<dd><input type="text" name="project_name" value="Coral community and extent mapping of the Wide Bay - Burnett Coastal fringe project" size="40" /></dd>
 	      </dl>
 	    </fieldset>
+	    <a name="search"></a>
 	    <fieldset>
 	      <legend>Vocab widget: ANZSRC searching <button type="link" class="note-toggle">?</button></legend>
 	      <div class="note">
@@ -98,6 +99,7 @@ $("#anzsrc-vocab").vocab_widget({
 
 	      <i>(autocomplete; begin typing something (e.g. "BIOL"))</i>
 	    </fieldset>
+	    <a name="narrow-select"></a>
 	    <fieldset>
 	      <legend>Vocab widget: RIFCS narrowing <button type="link" class="note-toggle">?</button></legend>
 	      <div class="note">
@@ -117,6 +119,7 @@ $("#rifcs-idtype").vocab_widget({
 		<dd><select id="rifcs-idtype" name="rifcs-id-for" value=""></select></dd>
 	      </dl>
 	    </fieldset>
+	    <a name="narrow-input"></a>
 	    <fieldset>
 	      <legend>Vocab widget: RIFCS narrowing w/ autocomplete <button type="link" class="note-toggle">?</button></legend>
 	      <div class="note">
@@ -137,12 +140,31 @@ $("#rifcs-idtype-input").vocab_widget({
 	      </dl>
 	      <i>(autocomplete; begin typing something (e.g. "ABN"), or press the down arrow to browse selections)</i>
 	    </fieldset>
+	    <a name="tree"></a>
 	    <fieldset>
-	      <legend>Vocab widget: advanced use  <button type="link" class="note-toggle">?</button></legend>
+	      <legend>Vocab widget: tree mode  <button type="link" class="note-toggle">?</button></legend>
+	      <div class="note">
+		This section illustrates the use of the vocab widget as a tree browse list. Clicking a listed term toggles the state of that branch, fetching child data as required. A 'treeselect.vocab.ands' even gets fired when a list item (but not it's icon) is clicked.
+		<pre>
+$("#vocab-tree").vocab_widget({mode:'tree',
+			       repository:'anzsrc-for'})
+    .on('treeselect.vocab.ands', function(event) {
+	var target = $(event.target);
+	var data = target.data('vocab');
+	alert('You clicked ' + data.label + '\r\n<' + data.about + '>');
+    });
+</pre>
+	      </div>
+	      <div id="vocab-tree">
+	      </div>
+	    </fieldset>
+	    <a name="core"></a>
+	    <fieldset>
+	      <legend>Vocab widget: core use  <button type="link" class="note-toggle">?</button></legend>
 	      <div class="note">
 		This form section is using the widget with no helpers; it outputs a list of known <code>rifcs</code> identifier types:
 		<pre>
-var elem = $("#vocab-advanced");
+var elem = $("#vocab-core");
 var widget = elem.vocab_widget({repository:'rifcs', cache: false});
 //set up some handlers
 elem.on('narrow.vocab.ands', function(event, data) {
@@ -167,25 +189,8 @@ widget.vocab_widget('narrow',
 		    'http://purl.org/au-research/vocabulary/RIFCS/1.4/RIFCSIdentifierType');
 		</pre>
 	      </div>
-	      <div id="vocab-advanced">
+	      <div id="vocab-core">
 		<p>RIFCS Identifier types:</p>
-	      </div>
-	    </fieldset>
-	    <fieldset>
-	      <legend>Vocab widget: tree mode  <button type="link" class="note-toggle">?</button></legend>
-	      <div class="note">
-		This section illustrates the use of the vocab widget as a tree browse list. Clicking a listed term toggles the state of that branch, fetching child data as required. A 'treeselect.vocab.ands' even gets fired when a list item (but not it's icon) is clicked.
-		<pre>
-$("#vocab-tree").vocab_widget({mode:'tree',
-			       repository:'anzsrc-for'})
-    .on('treeselect.vocab.ands', function(event) {
-	var target = $(event.target);
-	var data = target.data('vocab');
-	alert('You clicked ' + data.label + '\r\n<' + data.about + '>');
-    });
-</pre>
-	      </div>
-	      <div id="vocab-tree">
 	      </div>
 	    </fieldset>
             <p><input type="submit"/></p>
@@ -219,8 +224,8 @@ $("#vocab-tree").vocab_widget({mode:'tree',
 						     target_field: 'label'});
 	  }
 
-	  function advancedmode() {
-	      var elem = $("#vocab-advanced");
+	  function coremode() {
+	      var elem = $("#vocab-core");
 	      var widget = elem.vocab_widget({repository:'rifcs', cache: false});
 	      //set up some handlers
 	      elem.on('narrow.vocab.ands', function(event, data) {
@@ -257,9 +262,17 @@ $("#vocab-tree").vocab_widget({mode:'tree',
 
 	  searchmode();
 	  narrowmode();
-	  advancedmode();
 	  treemode();
+	  coremode();
+	  $(document).trigger('loaded.internal');
 
+      });
+
+      $(document).on('loaded.internal', function() {
+	  var hash = window.location.hash;
+	  if (typeof(hash) !== 'undefined') {
+	      $('a[name="' + hash + '"]').click();
+	  }
       });
 
       /* this handler is for the demonstration helpers */
