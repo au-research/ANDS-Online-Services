@@ -1263,21 +1263,14 @@
 		</div>
 
 		<div class="aro_box template" type="subject">
-			<div class="aro_box_display  clearfix">
-				<div class="controls">
-					<span>Type:
-						<button class="btn triggerTypeAhead"  type="button"><span class="caret"></span></button>
-						<input type="text" class="input-small rifcs-type" id="{generate-id()}_type" vocab="RIFCSSubjectType" name="subject_type" placeholder="type" value=""/>
-					</span>
-					<span>  Value:
-						<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
-						<input type="text" class="input-xlarge subject-value" id="{generate-id()}_value" vocab="local" name="subject_value" placeholder="value" value=""/>
-					</span>
-					<button class="btn btn-mini btn-danger remove">
-						<i class="icon-remove icon-white"/>
-					</button>
-					<p class="help-inline"><small/></p>
-				</div>
+			<div class="aro_box_display clearfix">
+				<span class="inputs_group">
+					<input type="text" class="input-xlarge inner_input" placeholder="Value" value="" name="value"/>
+					<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSSubjectType" name="type" placeholder="type" value=""/>
+				</span>
+				<button class="btn btn-mini btn-danger remove" type="button">
+					<i class="icon-remove icon-white"/>
+				</button>
 			</div>
 		</div>
 

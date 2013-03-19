@@ -20,6 +20,8 @@ else
 	$config['default_authenticator'] = gCOSI_AUTH_METHOD_BUILT_IN;
 }
 
+//fix logging out thing, expire in 3 hours
+$config['sess_expiration'] = time()+10800000;
 
 /* For multiple-application environments, this "app" will be matched 
 by the $_GET['app'] which is rewritten in .htaccess. The array key is
