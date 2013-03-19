@@ -325,6 +325,7 @@
 				<div class="control-group">
 					<label class="control-label" for="type">Type</label>
 					<div class="controls">
+						<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
 						<input type="text" id="{generate-id()}_value" class="rifcs-type" vocab="{concat('RIFCS',$ro_class,'Type')}" name="type" value="{$ro_type}"/>
 						<p class="help-inline">
 							<small/>
@@ -345,9 +346,10 @@
 				<div class="control-group">
 					<label class="control-label" for="originatingSource">Originating Source</label>
 					<div class="controls">
-						<span class="inputs_group">
-							<input type="text" id="originatingSource" name="originatingSource" placeholder="Value" value="{ro:originatingSource/text()}" class="inner_input"/>
-							<input type="text" id="originatingSource" class="inner_input_type rifcs-type" vocab="RIFCSOriginatingSourceType" name="originatingSourceType" placeholder="Type"  value="{ro:originatingSource/@type}"/>
+						<input type="text" id="originatingSource" name="originatingSource" placeholder="Value" value="{ro:originatingSource/text()}"/>
+						<span>
+						<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
+						<input type="text" id="originatingSource" class="rifcs-type" vocab="RIFCSOriginatingSourceType" name="originatingSourceType" placeholder="Type"  value="{ro:originatingSource/@type}"/>
 						</span>
 					</div>
 				</div>
@@ -500,12 +502,27 @@
 	<xsl:template match="ro:collection/ro:name | ro:activity/ro:name | ro:party/ro:name  | ro:service/ro:name">
 		<div class="aro_box" type="name">
 			<div class="aro_box_display clearfix">
-				<a href="javascript:;" class="toggle"><i class="icon-plus"/></a>
-				<input type="text" class="input-small rifcs-type" vocab="RIFCSNameType" name="type" placeholder="Type" value="{@type}"/>
+				<a href="javascript:;" class="toggle">
+					<i class="icon-plus"/>
+				</a>
 				<h1/>
-				<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
+				<div class="control-group">
+					<label class="control-label" for="title">Type: </label>
+					<div class="controls">
+						<span>
+							<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
+							<input type="text" class="input-xlarge rifcs-type" vocab="RIFCSNameType" name="type" placeholder="Type" value="{@type}"/>
+						</span>
+						<button class="btn btn-mini btn-danger remove">
+							<i class="icon-remove icon-white"/>
+						</button>
+						<p class="help-inline">
+							<small/>
+						</p>
+					</div>
+				</div>
 			</div>
-
+			
 			<xsl:apply-templates select="ro:namePart"/>
 			<div class="separate_line"/>
 			<div class="controls hide">
@@ -521,10 +538,11 @@
 			<div class="control-group">
 				<label class="control-label" for="title">Name Part: </label>
 				<div class="controls">
-					<span class="inputs_group">
-						<input type="text" name="value" class="inner_input" value="{text()}"/>
-						<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSNamePartType" name="type" placeholder="Type" value="{@type}"/>
+					<span>
+						<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
+						<input type="text" class="input-xlarge rifcs-type" vocab="RIFCSNamePartType" name="type" placeholder="Type" value="{@type}"/>
 					</span>
+					<input type="text" class="input-xlarge" name="value" value="{text()}"/>
 					<button class="btn btn-mini btn-danger remove">
 						<i class="icon-remove icon-white"/>
 					</button>
@@ -535,6 +553,7 @@
 			</div>
 		</div>
 	</xsl:template>
+
 
 	<xsl:template name="descriptionRightsTab">
 		<div id="descriptions_rights" class="pane">
@@ -592,15 +611,25 @@
 
 	<xsl:template match="ro:collection/ro:description | ro:activity/ro:description | ro:party/ro:description  | ro:service/ro:description">
 		<div class="aro_box" type="description">
-			<div class="aro_box_display clearfix">
-				<input type="text" class="input-small rifcs-type" vocab="RIFCSDescriptionType" name="type" placeholder="Type" value="{@type}"/>
-				<h1>Description</h1>
-				<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
-			</div>
+			<h1>Description</h1>
+			<p>
+				<span>
+					<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
+					<input type="text" class="input-xlarge rifcs-type" vocab="RIFCSDescriptionType" name="type" placeholder="Type" value="{@type}"/>
+				</span>
+				<button class="btn btn-mini btn-danger remove">
+					<i class="icon-remove icon-white"/>
+				</button>
+			</p>
+			<p>
+				<textarea name="value" class="editor">
+					<xsl:apply-templates select="text()"/>
+				</textarea>
+			</p>
 
-			<textarea name="value" class="editor">
-				<xsl:value-of disable-output-escaping="yes" select="text()"/>
-			</textarea>
+			<p class="help-inline">
+				<small/>
+			</p>
 		</div>
 	</xsl:template>
 
@@ -815,13 +844,20 @@
 	<xsl:template match="ro:collection/ro:subject  | ro:activity/ro:subject  | ro:party/ro:subject   | ro:service/ro:subject">
 		<div class="aro_box" type="subject">
 			<div class="aro_box_display clearfix">
-				<span class="inputs_group">
-					<input type="text" class="input-xlarge inner_input" placeholder="Value" value="{text()}" name="value"/>
-					<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSSubjectType" name="type" placeholder="type" value="{@type}"/>
-				</span>
-				<button class="btn btn-mini btn-danger remove" type="button">
-					<i class="icon-remove icon-white"/>
-				</button>
+				<div class="controls">
+					<span>Type:
+						<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
+						<input type="text" class="input-small rifcs-type" id="{generate-id()}_type" vocab="RIFCSSubjectType" name="subject_type" placeholder="type" value="{@type}"/>
+					</span>
+					<span>Value:
+						<button class="btn triggerTypeAhead"  type="button"><span class="caret"></span></button>
+						<input type="text" class="input-xlarge subject-value" id="{generate-id()}_value" vocab="{@type}" name="subject_value" placeholder="value" value="{text()}"/>
+					</span>
+					<button class="btn btn-mini btn-danger remove">
+						<i class="icon-remove icon-white"/>
+					</button>
+					<p class="help-inline"><small/></p>
+				</div>
 			</div>
 		</div>
 	</xsl:template>
@@ -829,13 +865,19 @@
 	<xsl:template match="ro:collection/ro:identifier  | ro:activity/ro:identifier  | ro:party/ro:identifier   | ro:service/ro:identifier">
 		<div class="aro_box" type="identifier">
 			<div class="aro_box_display clearfix">
-				<span class="inputs_group">
-					<input type="text" class="input-xlarge inner_input" placeholder="Value" value="{text()}" name="value"/>
-					<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSIdentifierType" name="type" placeholder="type" value="{@type}"/>
-				</span>
-				<button class="btn btn-mini btn-danger remove" type="button">
-					<i class="icon-remove icon-white"/>
-				</button>
+				<div class="controls">
+					<span>
+					<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
+					<input type="text" class="input-small rifcs-type" vocab="RIFCSIdentifierType" name="identifier_type" placeholder="type" value="{@type}"/>
+					</span>
+					<input type="text" class="input-xlarge" name="value" value="{text()}"/>
+					<button class="btn btn-mini btn-danger remove">
+						<i class="icon-remove icon-white"/>
+					</button>
+					<p class="help-inline">
+						<small/>
+					</p>
+				</div>
 			</div>
 		</div>
 	</xsl:template>
@@ -1150,24 +1192,19 @@
 
 	<!-- BLANK TEMPLATE -->
 	<xsl:template name="blankTemplate">
+
 		<div class="aro_box template" type="name">
-
-			
 			<div class="aro_box_display clearfix">
-				<a href="javascript:;" class="toggle"><i class="icon-minus"/></a>
-				<input type="text" class="input-small rifcs-type" vocab="RIFCSNameType" name="type" placeholder="Type" value=""/>
+				<a href="javascript:;" class="toggle">
+					<i class="icon-minus"/>
+				</a>
 				<h1/>
-				<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
-			</div>
-
-			
-			<div class="aro_box_part" type="namePart">
 				<div class="control-group">
-					<label class="control-label" for="title">Name Part: </label>
+					<label class="control-label" for="title">Type: </label>
 					<div class="controls">
-						<span class="inputs_group">
-							<input type="text" name="value" class="inner_input" value="" placeholder="Value"/>
-							<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSNamePartType" name="type" placeholder="Type" value=""/>
+						<span>
+							<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
+							<input type="text" class="input-xlarge rifcs-type" vocab="RIFCSNameType" name="type" placeholder="Type" value=""/>
 						</span>
 						<button class="btn btn-mini btn-danger remove">
 							<i class="icon-remove icon-white"/>
@@ -1178,24 +1215,40 @@
 					</div>
 				</div>
 			</div>
-
-			<div class="separate_line"/>
-			<div class="controls">
-				<button class="btn btn-primary addNew" type="namePart">
-					<i class="icon-plus icon-white"></i> Add Name Part
-				</button>
+			<div class="aro_box_part" type="namePart">
+				<div class="control-group">
+					<label class="control-label" for="title">Name Part: </label>
+					<div class="controls">
+						<span>
+							<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
+							<input type="text" class="input-xlarge rifcs-type" vocab="RIFCSNamePartType" name="type" placeholder="Type" value=""/>
+						</span>
+						<input type="text" class="input-xlarge" name="value" placeholder="Value"
+							value=""/>
+						<button class="btn btn-mini btn-danger remove">
+							<i class="icon-remove icon-white"/>
+						</button>
+						<p class="help-inline">
+							<small/>
+						</p>
+					</div>
+				</div>
 			</div>
-
+			<div class="separate_line"/>
+			<button class="btn btn-primary addNew" type="namePart">
+				<i class="icon-plus icon-white"/> Add Name Part </button>
 		</div>
 
 		<div class="aro_box_part template" type="namePart">
 			<div class="control-group">
 				<label class="control-label" for="title">Name Part: </label>
 				<div class="controls">
-					<span class="inputs_group">
-						<input type="text" name="value" class="inner_input" value="" placeholder="Value"/>
-						<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSNamePartType" name="type" placeholder="Type" value=""/>
+					<span>
+						<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
+						<input type="text" class="input-xlarge rifcs-type" vocab="RIFCSNamePartType" name="type" placeholder="Type" value=""/>
 					</span>
+					<input type="text" class="input-xlarge" name="value" placeholder="Value"
+						value=""/>
 					<button class="btn btn-mini btn-danger remove">
 						<i class="icon-remove icon-white"/>
 					</button>
@@ -1207,12 +1260,23 @@
 		</div>
 
 		<div class="aro_box template" type="description">
-			<div class="aro_box_display clearfix">
-				<input type="text" class="input-small rifcs-type" vocab="RIFCSDescriptionType" name="type" placeholder="Type" value=""/>
-				<h1>Description</h1>
-				<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
-			</div>
-			<textarea name="value" class=""/>
+			<h1>Description</h1>
+			<p>
+				<span>
+					<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
+					<input type="text" class="input-xlarge rifcs-type" vocab="RIFCSDescriptionType" name="type" placeholder="Type" value=""/>
+				</span>
+				<button class="btn btn-mini btn-danger remove">
+					<i class="icon-remove icon-white"/>
+				</button>
+			</p>
+			<p>
+				<textarea name="value" class=""/>
+			</p>
+
+			<p class="help-inline">
+				<small/>
+			</p>
 		</div>
 
 		<div class="aro_box template" type="rights">	
@@ -1238,26 +1302,32 @@
 		</div>
 
 		<div class="aro_box template" type="subject">
-			<div class="aro_box_display clearfix">
-				<span class="inputs_group">
-					<input type="text" class="input-xlarge inner_input" placeholder="Value" value="" name="value"/>
-					<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSSubjectType" name="type" placeholder="type" value=""/>
-				</span>
-				<button class="btn btn-mini btn-danger remove" type="button">
-					<i class="icon-remove icon-white"/>
-				</button>
+			<div class="aro_box_display  clearfix">
+				<div class="controls">
+					<span>Type:
+						<button class="btn triggerTypeAhead"  type="button"><span class="caret"></span></button>
+						<input type="text" class="input-small rifcs-type" id="{generate-id()}_type" vocab="RIFCSSubjectType" name="subject_type" placeholder="type" value=""/>
+					</span>
+					<span>  Value:
+						<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
+						<input type="text" class="input-xlarge subject-value" id="{generate-id()}_value" vocab="local" name="subject_value" placeholder="value" value=""/>
+					</span>
+					<button class="btn btn-mini btn-danger remove">
+						<i class="icon-remove icon-white"/>
+					</button>
+					<p class="help-inline"><small/></p>
+				</div>
 			</div>
 		</div>
 
-
-
 		<div class="aro_box template" type="identifier">
-			<div class="aro_box_display clearfix">
+			<div class="aro_box_display  clearfix">
 				<div class="controls">
-					<span class="inputs_group">
-						<input type="text" class="input-xlarge inner_input" placeholder="Value" value="" name="value"/>
-						<input type="text" class="inner_input_type rifcs-type btn" vocab="RIFCSIdentifierType" name="type" placeholder="type" value=""/>
+					<span>
+						<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
+						<input type="text" class="input-small rifcs-type" vocab="RIFCSIdentifierType" name="type" placeholder="Type" value=""/>
 					</span>
+					<input type="text" class="input-xlarge" name="value" value=""/>
 					<button class="btn btn-mini btn-danger remove">
 						<i class="icon-remove icon-white"/>
 					</button>

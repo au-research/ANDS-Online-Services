@@ -213,7 +213,7 @@ class View extends MX_Controller {
 		$response = array(
 			"slug" => $this->input->get('slug'),
 			"registry_object_id" => $this->input->get('registry_object_id'),
-			"html" => $html
+			"html" => "<div class='previewbox'>".$html."</div>"
 		);
 
 		echo json_encode($response);

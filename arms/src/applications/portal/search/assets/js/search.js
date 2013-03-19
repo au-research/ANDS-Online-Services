@@ -518,7 +518,9 @@ function showPreviewWindowConent(mOverlay)
 		type: 'POST',
 		dataType:'json',
 		success: function(data){
+
 			infowindow.setContent(data.html);
+			infowindow.setOptions({maxWidth:500});
 			infowindow.open(map);
 			$('.ro_preview_header').unbind('click').click(function(){
 				$(this).next('.ro_preview_description').slideToggle(200, function(){

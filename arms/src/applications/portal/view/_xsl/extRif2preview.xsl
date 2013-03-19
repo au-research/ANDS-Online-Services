@@ -263,13 +263,13 @@
 </p>        
 </xsl:template>
 <xsl:template match="ro:format">
-    <xsl:apply-templates select="./extRif:identifier[@type='Doi']" mode = "formatdoi"/>
-    <xsl:apply-templates select="./extRif:identifier[@type='Ark']" mode = "formatark"/>    	
-    <xsl:apply-templates select="./extRif:identifier[@type='AU-ANL:PEAU']" mode = "formatnla"/>  
-    <xsl:apply-templates select="./extRif:identifier[@type='Handle']" mode = "formathandle"/>   
-    <xsl:apply-templates select="./extRif:identifier[@type='Purl']" mode = "formatpurl"/>
-    <xsl:apply-templates select="./extRif:identifier[@type='Uri']" mode = "formaturi"/> 
-    <xsl:apply-templates select="./extRif:identifier[not(@type =  'Doi' or @type =  'Ark' or @type =  'AU-ANL:PEAU' or @type =  'Handle' or @type =  'Purl' or @type =  'Uri')]" mode="formatother"/>			            	                          	
+    <xsl:apply-templates select="./ro:identifier[@type='Doi']" mode = "formatdoi"/>
+    <xsl:apply-templates select="./ro:identifier[@type='Ark']" mode = "formatark"/>    	
+    <xsl:apply-templates select="./ro:identifier[@type='AU-ANL:PEAU']" mode = "formatnla"/>  
+    <xsl:apply-templates select="./ro:identifier[@type='Handle']" mode = "formathandle"/>   
+    <xsl:apply-templates select="./ro:identifier[@type='Purl']" mode = "formatpurl"/>
+    <xsl:apply-templates select="./ro:identifier[@type='Uri']" mode = "formaturi"/> 
+    <xsl:apply-templates select="./ro:identifier[not(@type =  'Doi' or @type =  'Ark' or @type =  'AU-ANL:PEAU' or @type =  'Handle' or @type =  'Purl' or @type =  'Uri')]" mode="formatother"/>			            	                          	
 </xsl:template>
 
 
@@ -303,7 +303,7 @@
 </p>	 
 
 </xsl:template>
-<xsl:template match="extRif:identifier" mode="formatark">
+<xsl:template match="ro:identifier" mode="formatark">
     <p>
         Format ARK: 
         <xsl:variable name="theidentifier">    			
@@ -390,7 +390,7 @@
 
 </xsl:template>
 
-<xsl:template match="extRif:identifier" mode="formatdoi">   		
+<xsl:template match="ro:identifier" mode="formatdoi">   		
     <p>			
         Format DOI: 
         <xsl:variable name="theidentifier">    			
@@ -545,7 +545,7 @@
 </a>   		 
 </p>
 </xsl:template> 
-<xsl:template match="extRif:identifier" mode="formaturi">    
+<xsl:template match="ro:identifier" mode="formaturi">    
   <p> 			
    Format	URI: 
    <xsl:variable name="theidentifier">    			
@@ -585,7 +585,7 @@
    </xsl:choose>
 </p>
 </xsl:template>  
-<xsl:template match="extRif:identifier" mode="formatother">   
+<xsl:template match="ro:identifier" mode="formatother">   
    <p>  Format 			 			 	    			 			
      <!--  <xsl:attribute name="name"><xsl:value-of select="./@type"/></xsl:attribute>  -->
      <xsl:choose>
@@ -769,7 +769,7 @@
  <xsl:value-of select="." disable-output-escaping="yes"/><br />
 </xsl:template> 
 
-<xsl:template match="extRif:rights[@type!='licence'] | ro:description[@type='rights'] | ro:description[@type='accessRights']">
+<xsl:template match="ro:rights[@type!='licence'] | ro:description[@type='rights'] | ro:description[@type='accessRights']">
 
  <xsl:if test="./@type='rights'"><h4>Rights statement</h4></xsl:if>
  <xsl:if test="./@type='accessRights'"><h4>Access rights</h4></xsl:if>
@@ -782,7 +782,7 @@
 </p>	
 
 </xsl:template>	
-<xsl:template match="extRif:rights[@type='licence']">
+<xsl:template match="ro:rights[@type='licence']">
   <p class="rights">
      <xsl:if test="string-length(substring-after(./@licence_type,'CC-'))>0">
         <img id="licence_logo" style="width:130px;">
@@ -806,7 +806,7 @@
 </p>		
 </xsl:template>
 
-<xsl:template match="extRif:description" mode="content">     
+<xsl:template match="ro:description" mode="content">     
     <div>
        <xsl:attribute name="class"><xsl:value-of select="@type"/></xsl:attribute>
        <h4><xsl:value-of select="@type"/></h4>
