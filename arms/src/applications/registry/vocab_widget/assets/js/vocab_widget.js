@@ -12,6 +12,10 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 *******************************************************************************/
+/**
+ * Note: this plugin uses a derivative work from http://www.jstree.com/,
+ * specifically the image sprite `../img/d.png`
+ */
 ;(function($) {
     var WIDGET_NAME = "ANDS Vocabulary Widget service";
     var WIDGET_ID = "_vocab_widget_list";

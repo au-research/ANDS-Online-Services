@@ -1,3 +1,7 @@
+/**
+ * Note: this plugin uses a derivative work from http://www.jstree.com/,
+ * specifically the image sprite `../img/d.png`
+ */
 ul.vocab_list {
     z-index: 1;
     width: 300px;
