@@ -28,11 +28,10 @@
 	    //location (absolute URL) of the jsonp proxy
 	    endpoint: 'http://ands3.anu.edu.au/workareas/leo/ands/arms/src/registry/vocab_widget/proxy/',
 
-	    //sisvoc repository to query. (proxy defaults to 'anzsrc-for' if none supplied)
-	    repository: 'anzsrc-for',
+	    //sisvoc repository to query.
+	    repository: '',
 
-	    //currently, 'search' and 'narrow', and 'advanced' are available. in future,
-	    //'broad', 'concepts' modes will be added
+	    //UI helper mode. currently, 'search' and 'narrow', and 'tree' are available
 	    mode: "",
 
 	    //search doesn't require any parameters, but narrow does (and broaden will)
@@ -98,14 +97,13 @@
 		    case 'narrow':
 			handler = new NarrowHandler($this, settings);
 			break;
-		    case 'advanced':
-			handler = new VocabHandler($this, settings);
-			break;
 		    case 'tree':
 			handler = new TreeHandler($this, settings);
 			break;
+		    case 'advanced':
 		    default:
-			_alert('Unknown mode "' + settings.mode + '"');
+			settings.mode = 'core';
+			handler = new VocabHandler($this, settings);
 			break;
 		    }
 
@@ -131,9 +129,11 @@
 		var op = options;
 		var $this = $(this);
 		var handler = $this.data('_handler');
-		if (typeof(handler) === 'undefined' || handler._mode() !== 'advanced') {
-		    _alert('Advanced plugin handler not found; ' +
-			   'instantiate with "{mode:\'advanced\'}" before using');
+		if (typeof(handler) === 'undefined' ||
+		    handler._mode() !== 'core') {
+		    _alert('Plugin handler not found; ' +
+			   'instantiate with no arguments before using, ' +
+			   'or use a UI helper mode');
 		}
 		switch(op) {
 		case 'search':
@@ -176,8 +176,6 @@
 	$(this).blur();
 	return false;
     };
-
-
 
     /* Simple JavaScript Inheritance
      * By John Resig http://ejohn.org/
@@ -347,9 +345,18 @@
 		this.settings['error_msg'] === false) {
 	    }
 	    else {
-		alert(this.settings['error_msg'] + "\r\n\r\n"
+		var cid = this._container.attr('id');
+		var footer;
+		if (typeof(cid) === 'undefined') {
+		    footer = "[Bound element has no id attribute; " +
+			"If you add one, I'll report it here.]";
+		}
+		else {
+		    footer = '(id: ' + cid + ')';
+		}
+		alert(this.settings['error_msg'] + "\r\n"
 		      + xhr.responseText +
-		      "\r\n(id:" + this._container.attr('id') + ")");
+		      "\r\n" + footer);
 	    }
 	    this._container.blur();
 	    return false;
@@ -481,7 +488,6 @@
 		}
 	    ];
 	},
-
 
 	_makelist: function(persist) {
 	    if (typeof(persist) === 'undefined') {
@@ -968,6 +974,4 @@
 	    }
 	}
     });
-
-
 })( jQuery );

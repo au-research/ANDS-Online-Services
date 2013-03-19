@@ -143,7 +143,7 @@ $("#rifcs-idtype-input").vocab_widget({
 		This form section is using the widget with no helpers; it outputs a list of known <code>rifcs</code> identifier types:
 		<pre>
 var elem = $("#vocab-advanced");
-var widget = elem.vocab_widget({mode:'advanced'});
+var widget = elem.vocab_widget();
 widget.vocab_widget('repository', 'rifcs');
 widget.vocab_widget('cache', false);
 //set up some handlers
@@ -223,7 +223,7 @@ $("#vocab-tree").vocab_widget({mode:'tree',
 
 	  function advancedmode() {
 	      var elem = $("#vocab-advanced");
-	      var widget = elem.vocab_widget({mode:'advanced'});
+	      var widget = elem.vocab_widget(); //we go into advanced mode by default now
 	      widget.vocab_widget('repository', 'rifcs');
 	      widget.vocab_widget('cache', false);
 	      //set up some handlers
