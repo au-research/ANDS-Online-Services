@@ -623,27 +623,25 @@
 
 	<xsl:template match="ro:collection/ro:rights | ro:activity/ro:rights | ro:party/ro:rights  | ro:service/ro:rights">
 		<div class="aro_box" type="rights">
-			<h1>Rights</h1>
-			<p>
-				<div class="aro_box_part" type="rightStatement">
-					<input type="text" class="input-xlarge" name="rightsUri" placeholder="Rights Uri" value="{rightStatement/@rightsURI}"/>
-					<input type="text" class="input-xlarge" name="value" placeholder="Value" value="{rightStatement/text()}"/>
-				</div>
-				<div class="aro_box_part" type="licence">
-					<input type="text" class="input-xlarge" name="rightsUri" placeholder="Rights Uri" value="{licence/@rightsURI}"/>
-					<input type="text" class="input-xlarge" name="value" placeholder="Value" value="{licence/text()}"/>
-				</div>			
-				<div class="aro_box_part" type="accessRights">
-					<input type="text" class="input-xlarge" name="rightsUri" placeholder="Rights Uri" value="{accessRights/@rightsURI}"/>
-					<input type="text" class="input-xlarge" name="value" placeholder="Value" value="{accessRights/text()}"/>
-				</div>
-			</p>
-			<button class="btn btn-mini btn-danger remove">
-				<i class="icon-remove icon-white"/>
-			</button>
-			<p class="help-inline">
-				<small/>
-			</p>
+			<div class="aro_box_display clearfix">
+				<h1>Rights</h1>
+				<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
+			</div>
+			<div class="aro_box_part" type="rightStatement">
+				<label>Rights Statement</label>
+				<input type="text" class="input-xlarge" name="rightsUri" placeholder="Rights Uri" value="{ro:rightStatement/@rightsUri}"/>
+				<input type="text" class="input-xlarge" name="value" placeholder="Value" value="{ro:rightStatement/text()}"/>
+			</div>
+			<div class="aro_box_part" type="licence">
+				<label>Licence</label>
+				<input type="text" class="input-xlarge" name="rightsUri" placeholder="Rights Uri" value="{ro:licence/@rightsUri}"/>
+				<input type="text" class="input-xlarge" name="value" placeholder="Value" value="{ro:licence/text()}"/>
+			</div>		
+			<div class="aro_box_part" type="accessRights">
+				<label>Access Rights</label>
+				<input type="text" class="input-xlarge" name="rightsUri" placeholder="Rights Uri" value="{ro:accessRights/@rightsUri}"/>
+				<input type="text" class="input-xlarge" name="value" placeholder="Value" value="{ro:accessRights/text()}"/>
+			</div>
 		</div>
 	</xsl:template>
 
@@ -1235,31 +1233,25 @@
 		</div>
 
 		<div class="aro_box template" type="rights">	
+			<div class="aro_box_display clearfix">
 				<h1>Rights</h1>
-				<p>
-					<div class="aro_box_part" type="rightsStatement">
-						<label class="control-label" >rightsStatement: </label>
-						<input type="text" class="input-xlarge" name="rightsUri" placeholder="Rights Uri" value=""/>
-						<input type="text" class="input-xlarge" name="value" placeholder="value" value=""/>
-					</div>
-					<div class="aro_box_part" type="licence">
-						<label class="control-label" >licence: </label>
-						<input type="text" class="input-xlarge" name="rightsUri" placeholder="Rights Uri" value=""/>
-						<input type="text" class="input-xlarge" name="value" placeholder="Value" value=""/>
-					</div>			
-					<div class="aro_box_part" type="accessRights">
-						<label class="control-label" >rightsUri: </label>
-						<input type="text" class="input-xlarge" name="rightsUri" placeholder="Rights Uri" value=""/>
-						<input type="text" class="input-xlarge" name="value" placeholder="Value" value=""/>
-					</div>
-				</p>
-				<p class="help-inline">
-					<small/>
-				</p>
-
-			<button class="btn btn-mini btn-danger remove">
-				<i class="icon-remove icon-white"/>
-			</button>
+				<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
+			</div>
+			<div class="aro_box_part" type="rightStatement">
+				<label>Rights Statement</label>
+				<input type="text" class="input-xlarge" name="rightsUri" placeholder="Rights Uri" value="{ro:rightStatement/@rightsURI}"/>
+				<input type="text" class="input-xlarge" name="value" placeholder="Value" value="{ro:rightStatement/text()}"/>
+			</div>
+			<div class="aro_box_part" type="licence">
+				<label>Licence</label>
+				<input type="text" class="input-xlarge" name="rightsUri" placeholder="Rights Uri" value="{licence/@rightsURI}"/>
+				<input type="text" class="input-xlarge" name="value" placeholder="Value" value="{licence/text()}"/>
+			</div>		
+			<div class="aro_box_part" type="accessRights">
+				<label>Access Rights</label>
+				<input type="text" class="input-xlarge" name="rightsUri" placeholder="Rights Uri" value="{accessRights/@rightsURI}"/>
+				<input type="text" class="input-xlarge" name="value" placeholder="Value" value="{accessRights/text()}"/>
+			</div>
 		</div>
 
 		<div class="aro_box template" type="subject">

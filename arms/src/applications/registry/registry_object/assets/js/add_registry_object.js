@@ -915,7 +915,7 @@ function getRIFCSforTab(tab, hasField){
 							fragment += $('input[name=value]', this).val();
 							fragment +='</'+$(this).attr('type')+'>';
 						});
-					}else if(type=='rightsStatement' || type=='licence' || type=='accessRights' ){
+					}else if(type=='rightStatement' || type=='licence' || type=='accessRights' ){
 						 	fragment += '<'+$(this).attr('type')+' rightsUri="'+$('input[name=rightsUri]', this).val()+'">'+$('input[name=value]', this).val()+'</'+$(this).attr('type')+'>';	
 					}else if(type=='contributor'){
 							var contributors = $('.aro_box', this);//tooltip not init
