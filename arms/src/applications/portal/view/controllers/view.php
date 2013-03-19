@@ -98,7 +98,12 @@ class View extends MX_Controller {
 		$suggestedLinksDiv = $this->load->view('suggested_links', $data, true);
 
 		// Generate the view page contents
-		$data['registry_object_contents'] = $this->registry->transformExtrifToHTMLStandardRecord($extRif['data']);
+		$data['registry_object_contents'] = str_replace('&amp;','&', $this->registry->transformExtrifToHTMLStandardRecord($extRif['data']));
+		$data['registry_object_contents'] = str_replace('&amp;','&', $data['registry_object_contents']);
+		$data['registry_object_contents'] = str_replace('&amp;','&', $data['registry_object_contents']);
+		$data['registry_object_contents'] = str_replace('&lt;','<', $data['registry_object_contents']);
+		$data['registry_object_contents'] = str_replace('&gt;','>', $data['registry_object_contents']);
+		// well this was really uggly... we should fix it at ingest!
 		$data['registry_object_contents'] = str_replace('%%%%CONNECTIONS%%%%', $connDiv, $data['registry_object_contents']);
 		$data['registry_object_contents'] = str_replace('%%%%ANDS_SUGGESTED_LINKS%%%%', $suggestedLinksDiv, $data['registry_object_contents']);
 
