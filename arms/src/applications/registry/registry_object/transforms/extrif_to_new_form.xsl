@@ -454,53 +454,36 @@
 	<xsl:template match="ro:collection/ro:dates | ro:activity/ro:dates | ro:party/ro:dates  | ro:service/ro:dates">
 		<div class="aro_box" type="dates">
 			<div class="aro_box_display clearfix">
-
-				<div class="control-group">
-					<label class="control-label" for="title">Type: </label>
-					<div class="controls">
-						<div>
-							<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
-							<input type="text" class="input-small rifcs-type" vocab="RIFCSDatesType" name="type" placeholder="Type" value="{@type}"/>
-						</div>
-						<button class="btn btn-mini btn-danger remove">
-							<i class="icon-remove icon-white"/>
-						</button>
-						<p class="help-inline">
-							<small/>
-						</p>
-					</div>
-				</div>
-
-				<xsl:apply-templates select="ro:date" mode="dates" />
-
-				<div class="separate_line"/>
-				<div class="controls">
-					<button class="btn btn-primary addNew" type="dates_date">
-						<i class="icon-plus icon-white"></i> Add new Date
-					</button>
-				</div>
+				<a href="javascript:;" class="toggle"><i class="icon-minus"/></a>
+				<input type="text" class="input-small rifcs-type" vocab="RIFCSDatesType" name="type" placeholder="Date Type" value="{@type}"/>
+				<h1/>
+				<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
 			</div>
 
+			<xsl:apply-templates select="ro:date" mode="dates" />
+			<div class="separate_line"/>
+			<div class="controls">
+				<button class="btn btn-primary addNew" type="dates_date">
+					<i class="icon-plus icon-white"></i> Add new Date
+				</button>
+			</div>
+			
 		</div>
 	</xsl:template>
 	
 	<xsl:template match="ro:date" mode="dates">
 		<div class="aro_box_part" type="dates_date">
-			<div>
+			<div class="control-group">
 				<label class="control-label" for="title">Date: </label>
-				<span>
-					<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
-					<input type="text" class="input-small rifcs-type" vocab="RIFCSTemporalCoverageDateType" name="type" placeholder="Type" value="{@type}"/>
-				</span>
-				<input type="text" class="input-xlarge" name="value" value="{text()}"/>
-				<button class="btn btn-mini btn-danger remove">
-					<i class="icon-remove icon-white"/>
-				</button>
-			
-				<p class="help-inline">
-					<small/>
-				</p>
-
+				<div class="controls">
+					<span class="inputs_group">
+						<input type="text" name="value" class="inner_input datepicker" value="{text()}"/>
+						<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSTemporalCoverageDateType" name="type" placeholder="Type" value="{@type}"/>
+					</span>
+					<button class="btn btn-mini btn-danger remove">
+						<i class="icon-remove icon-white"/>
+					</button>
+				</div>
 			</div>
 		</div>
 	</xsl:template>					
@@ -1760,58 +1743,66 @@
 
 		<div class="aro_box_part template" type="dates">
 			<div class="aro_box" type="dates">
-					<div>
-						<label class="control-label" for="title">Date Type: </label>
-						<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
-						<input type="text" class="input-small rifcs-type" vocab="RIFCSDatesType" name="type" placeholder="Date Type" value=""/>
-						<button class="btn btn-mini btn-danger remove">
-							<i class="icon-remove icon-white"/>
-						</button>
-						<p class="help-inline"></p>
-					</div>
-					<div>				
-						<div class="aro_box_part" type="dates_date">
-							<label class="control-label" for="title">Date: </label>
-							<span>
-								<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
-								<input type="text" class="input-small rifcs-type" vocab="RIFCSTemporalCoverageDateType" name="type" placeholder="Date Type" value=""/>
+				<div class="aro_box_display clearfix">
+					<a href="javascript:;" class="toggle"><i class="icon-minus"/></a>
+					<input type="text" class="input-small rifcs-type" vocab="RIFCSDatesType" name="type" placeholder="Date Type" value=""/>
+					<h1/>
+					<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
+				</div>
+
+				<div class="aro_box_part" type="dates_date">
+					<div class="control-group">
+						<label class="control-label" for="title">Date: </label>
+						<div class="controls">
+							<span class="inputs_group">
+								<input type="text" name="value" class="inner_input datepicker"  value=""/>
+								<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSTemporalCoverageDateType" name="type" placeholder="Type" value="dateFrom"/>
 							</span>
-							<input type="text" class="input-xlarge" name="value" placeholder="Date Value" value="01-01-2000T00:00:00Z"/>
-							<button class="btn btn-mini btn-danger remove">
-								<i class="icon-remove icon-white"/>
-							</button>
-						</div>
-						<div class="aro_box_part" type="dates_date">	
-							<label class="control-label" for="title">Date: </label>
-							<span>
-								<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
-								<input type="text" class="input-small rifcs-type" vocab="RIFCSTemporalCoverageDateType" name="type" placeholder="Date Type" value=""/>
-							</span>
-							<input type="text" class="input-xlarge" name="value" placeholder="Date Value" value="01-01-2001T00:00:00Z"/>
 							<button class="btn btn-mini btn-danger remove">
 								<i class="icon-remove icon-white"/>
 							</button>
 						</div>
 					</div>
-					<div class="separate_line"/>
-					<div class="controls">
-						<button class="btn btn-primary addNew" type="dates_date">
-							<i class="icon-plus icon-white"></i> Add new Date
-						</button>
+				</div>
+				<div class="aro_box_part" type="dates_date">
+					<div class="control-group">
+						<label class="control-label" for="title">Date: </label>
+						<div class="controls">
+							<span class="inputs_group">
+								<input type="text" name="value" class="inner_input datepicker" value=""/>
+								<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSTemporalCoverageDateType" name="type" placeholder="Type" value="dateTo"/>
+							</span>
+							<button class="btn btn-mini btn-danger remove">
+								<i class="icon-remove icon-white"/>
+							</button>
+						</div>
 					</div>
+				</div>
+				<div class="separate_line"/>
+				<div class="controls">
+					<button class="btn btn-primary addNew" type="dates_date">
+						<i class="icon-plus icon-white"></i> Add new Date
+					</button>
+				</div>
 			</div>
+
 		</div>
 
 		<div class="aro_box_part template" type="dates_date">
-			<label class="control-label" for="title">Date: </label>
-			<span>
-				<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
-				<input type="text" class="input-small rifcs-type" vocab="RIFCSTemporalCoverageDateType" name="type" placeholder="Date Type" value=""/>
-			</span>
-			<input type="text" class="input-xlarge" name="value" placeholder="Date Value" value=""/>
-			<button class="btn btn-mini btn-danger remove">
-				<i class="icon-remove icon-white"/>
-			</button>
+			<div class="aro_box_part" type="dates_date">
+				<div class="control-group">
+					<label class="control-label" for="title">Date: </label>
+					<div class="controls">
+						<span class="inputs_group">
+							<input type="text" name="value" class="inner_input datepicker" value=""/>
+							<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSTemporalCoverageDateType" name="type" placeholder="Type" value=""/>
+						</span>
+						<button class="btn btn-mini btn-danger remove">
+							<i class="icon-remove icon-white"/>
+						</button>
+					</div>
+				</div>
+			</div>
 		</div>
 		
 		<div class="aro_box_part template" type="date">

@@ -301,6 +301,20 @@ function initEditForm(){
 				initEditor();
 			}
 
+			if(what=='dates_date'){
+				//initalize the datepicker, format is optional
+				$('input.datepicker').datepicker({
+					format: 'yyyy-mm-dd'
+				});
+				
+				//triggering the datepicker by focusing on it
+				$('.triggerDatePicker').die().live({
+					click: function(e){
+						$(this).parent().children('input').focus();
+					}
+				});
+			}
+
 			//bind the tooltip parts UI in case of adding a new element with show Parts Elements
 			bindPartsTooltip();
 		}
@@ -519,6 +533,7 @@ function initEditForm(){
 	$('input.datepicker').datepicker({
 		format: 'yyyy-mm-dd'
 	});
+
 	//triggering the datepicker by focusing on it
 	$('.triggerDatePicker').die().live({
 		click: function(e){
