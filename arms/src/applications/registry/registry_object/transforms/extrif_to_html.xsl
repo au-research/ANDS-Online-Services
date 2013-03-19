@@ -395,13 +395,13 @@
 			<td colspan="2">
 				<table class="subtable1">
 		
-					<xsl:if test="./title">
+					<xsl:if test="ro:title">
 			         	<xsl:apply-templates select="ro:title"/>
 					</xsl:if>
 			
 					<xsl:apply-templates select="ro:identifier"/>
 					
-					<xsl:if test="./notes">
+					<xsl:if test="ro:notes">
 			         	<xsl:apply-templates select="ro:notes"/>
 					</xsl:if>
 				</table>

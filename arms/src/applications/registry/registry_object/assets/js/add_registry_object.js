@@ -301,7 +301,7 @@ function initEditForm(){
 				initEditor();
 			}
 
-			if(what=='dates_date'){
+			if(what=='dates_date' || what=='dates'){
 				//initalize the datepicker, format is optional
 				$('input.datepicker').datepicker({
 					format: 'yyyy-mm-dd'
@@ -811,6 +811,10 @@ function initRelatedInfos(){
 			todisplay = $('input[name=identifier]', ri).val();
 		}
 		$(display).html(todisplay);
+	});
+
+	$('input', relatedInfos).off().on('blur',function(){
+		initRelatedInfos();
 	});
 }
 
