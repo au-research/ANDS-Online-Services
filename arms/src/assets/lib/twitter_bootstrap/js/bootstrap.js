@@ -1789,12 +1789,13 @@
       else text = val
 
       this.$element.val(text)
-
+      this.$element.change();
       if (typeof this.onselect == "function")
           this.onselect(val)
 
       return this.hide()
     }
+
 
   , show: function () {
       var pos = $.extend({}, this.$element.offset(), {

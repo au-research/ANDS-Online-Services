@@ -352,7 +352,7 @@ function initEditForm(){
 		}
 	});
 
-	$('#save').die().live({
+	$('#save').off().on({
 		click: function(e){
 			e.preventDefault();
 			if(editor=='tinymce') tinyMCE.triggerSave();//so that we can get the tinymce textarea.value without using tinymce.getContents
@@ -390,20 +390,22 @@ function initEditForm(){
 			// 	}
 			// });
 
-			
 			//saving
 			$.ajax({
 				url:base_url+'registry_object/save/'+ro_id, 
 				type: 'POST',
 				data: {xml:xml},
 				success: function(data){
-					console.log(data);
+					log(data);
+				},
+				error: function(data){
+					log(data);
 				}
 			});
 		}
 	})
 
-	$('#validate').die().live({
+	$('#validate').off().on({
 		click: function(e){
 			e.preventDefault();
 			validate();
@@ -577,15 +579,12 @@ function initVocabWidgets(container){
 				$.each(data.items, function(idx, e) {
 					dataArray.push({value:e.notation, subtext:e.definition});
 				});
-				elem.die().live({
-						click: function(e){
-							initSubjectWidget(elem.attr('id'));
-						},
-						change: function(e){
-							initSubjectWidget(elem.attr('id'));
-						}
-					});
-				initSubjectWidget(elem.attr('id'));
+				$(elem).off().on("change",function(e){
+					// $(elem).prev().val('');
+					initSubjectWidget(elem);
+				});
+				
+				initSubjectWidget(elem);
 			}	
 			else
 			{
@@ -613,27 +612,30 @@ function _getVocab(vocab)
 	return vocab;
 }
 
-function initSubjectWidget(id)
-{
-	var elem = $('#'+id.replace("_type","_value"));
-	var vocabElem = $('#'+id.replace("_value","_type"));
-	var vocab = vocabElem.val();
-	var term = 	elem.attr('vocab')
+function initSubjectWidget(elem){
+	var vocab_type = elem;
+	var vocab_value = $(elem).prev();
+
+	var vocab = vocab_type.val();
+	var vocab_term = $(vocab_value).val();
+	var term = vocab_value.attr('vocab');
+
 	var dataArray = Array();
 	// WE MIGHT NEED A WHITE LIST HERE
-	if(vocab == 'anzsrc-for' || vocab =='anzsrc-seo')
-	{
-		var widget = elem.vocab_widget({mode:'advanced',cache: false, repository: vocab});
-		elem.on('search.vocab.ands', function(event, data) {	
-			var dataArray = Array();
-					$.each(data.items, function(idx, e) {
-						dataArray.push({value:e.notation, subtext:e.label});
-					});
-				elem.typeahead({source:dataArray});
-			});
-		widget.vocab_widget('search', term);	
-	}
 
+	if(vocab == 'anzsrc-for' || vocab =='anzsrc-seo'){
+		var widget = vocab_value.vocab_widget({mode:'advanced',cache: false, repository: vocab});
+		vocab_value.one('search.vocab.ands', function(event, data) {	
+			var dataArray = Array();
+			$.each(data.items, function(idx, e) {
+				dataArray.push({value:e.notation, subtext:e.label});
+			});
+			log(dataArray);
+			vocab_value.typeahead({source:dataArray});
+			vocab_value.data('typeahead').source = dataArray;
+		});
+		widget.vocab_widget('search', '');	
+	}
 }
 
 function initMapWidget(container)
@@ -811,23 +813,19 @@ function initRelatedInfos(){
  */
 
 function initEditor(){
-	$('.editor').each(function(){
-		var text = $(this).val();
-		var decoded = $('<div/>').html(text).text();
-		$(this).val(decoded);
-	});
+	
 	if(editor=='tinymce'){
 		tinyMCE.init({
 		    theme : "advanced",
 		    mode : "specific_textareas",
 		    editor_selector : "editor",
-		    entity_encoding : "raw",
 		    theme_advanced_toolbar_location : "top",
 		    theme_advanced_buttons1 : "bold,italic,underline,separator,link,separator,justifyleft,justifycenter,justifyright,justifyfull,separator,outdent,indent,separator,undo,redo,code",
 		    theme_advanced_buttons2 : "",
 		    theme_advanced_buttons3 : "",
 		    height:"250px",
-		    width:"600px"
+		    width:"600px",
+		    forced_root_block : ''
 		});
 	}
 }

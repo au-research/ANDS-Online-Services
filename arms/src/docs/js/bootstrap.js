@@ -1493,7 +1493,7 @@
       this.$element.val(val)
       return this.hide()
     }
-
+  
   , show: function () {
       var pos = $.extend({}, this.$element.offset(), {
         height: this.$element[0].offsetHeight

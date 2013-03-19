@@ -54,6 +54,7 @@
 							<li <?php echo 'class="'.($ds->count_level_3 > 0 ? '' : 'disabled').'"';?>><a href="javascript:;" class="filter" name="quality_level" value="3">Quality Level 3 (<?php echo $ds->count_level_3;?>)<span class="icon"></span></a></li>
 							<li <?php echo 'class="'.($ds->count_level_4 > 0 ? '' : 'disabled').'"';?>><a href="javascript:;" class="filter" name="quality_level" value="4">Quality Level 4 (<?php echo $ds->count_level_4;?>)<span class="icon"></span></a></li>
 							<li><a href="javascript:;" class="filter" name="flag" value="t">Flagged <span class="icon"></span></a></li>
+							<li><a href="javascript:;" class="filter" name="tag" value="">Tagged <span class="icon"></span></a></li>
 						</ul>
 					</div>
 					<span id="active_filters">
@@ -132,7 +133,7 @@
 					<div class="btn-group">
 						<button class="btn btn-small op" action="view" tip="View" ro_id="{{id}}"><i class="icon icon-search"></i></button>
 						<button class="btn btn-small op" action="edit" tip="Edit" ro_id="{{id}}"><i class="icon icon-edit"></i></button>
-						<!--button class="tipTag btn btn-small" ro_id="{{id}}"><i class="icon icon-tag"></i></button-->
+						<button class="tipTag btn btn-small" ro_id="{{id}}"><i class="icon icon-tag"></i></button>
 						<button class="btn btn-small op" action="advance_status" to="{{connectTo}}" tip="Advance Status" ro_id="{{id}}"><i class="icon icon-share-alt"></i></button>
 						<button class="contextmenu btn btn-small" status="{{name}}" tip="More Action"><i class="icon icon-wrench"></i></button>
 					</div>

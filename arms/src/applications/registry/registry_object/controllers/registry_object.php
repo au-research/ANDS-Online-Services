@@ -143,7 +143,13 @@ class Registry_object extends MX_Controller {
 		$ro = $this->ro->getByID($registry_object_id);
 		ds_acl_enforce($ro->data_source_id);
 		$data['extrif'] = $ro->getExtRif();
+
 		$data['content'] = $ro->transformCustomForFORM($data['extrif']);
+		$data['content'] = str_replace('&amp;','&', $data['content']);
+		$data['content'] = str_replace('&amp;','&', $data['content']);
+		$data['content'] = str_replace('&lt;','<', $data['content']);
+		$data['content'] = str_replace('&gt;','>', $data['content']);
+		
 		$data['title'] = 'Edit: '.$ro->title;
 		$data['scripts'] = array('add_registry_object');
 		$data['js_lib'] = array('core', 'tinymce', 'datepicker', 'prettyprint','vocab_widget','google_map','location_capture_widget');
@@ -172,10 +178,13 @@ class Registry_object extends MX_Controller {
 		$xml = $this->input->post('xml');
 		$this->load->model('registry_objects', 'ro');
 		$ro = $this->ro->getByID($registry_object_id);
-		echo $xml;
 		$ro->updateXML($xml);
 		$ro->enrich();
-		$ro->save();
+		if($ro->save()){
+			echo 'success saved';
+		}else{
+			echo 'save failed';
+		}
 	}
 
 

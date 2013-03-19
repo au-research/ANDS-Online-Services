@@ -304,12 +304,14 @@ span.inputs_group{
 	}
 }
 
-input[name=type]{
+input[name=type], input.inner_input_type{
 	width: 45px;
 	height: 10px;
 	font-size: 10px;
 	cursor:text;
-	background:#eee;
+	background:#eee url(../img/down_caret.gif) no-repeat;
+	background-position: 55px;
+	padding-right:20px;
 }
 
 button.remove{
@@ -348,6 +350,9 @@ button.remove{
 		input[name=type]{
 			float:left;
 			margin-top:9px;
+		}
+		input.inner_input_type{
+			margin-top:0px;
 		}
 		button.remove{
 			position:absolute;

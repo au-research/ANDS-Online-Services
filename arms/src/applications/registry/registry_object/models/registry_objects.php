@@ -288,9 +288,13 @@ class Registry_objects extends CI_Model {
 							$db->select("registry_objects.registry_object_id")
 								->from("registry_object_attributes")
 								->join('registry_objects', 'registry_objects.registry_object_id = registry_object_attributes.registry_object_id', 'right')
-								->where('data_source_id', $args['data_source_id'])
-								->where("attribute", $args['name'])
-								->where("value", $args['val']);
+								->where('data_source_id', $args['data_source_id']);
+
+							if($args['name']=='tag'){
+								$db->where("attribute", "tag")->where("value !=", "");
+							}else{
+								$db->where("attribute", $args['name'])->where("value", $args['val']);
+							}
 							return $db;
 						})), $make_ro)
 			;
@@ -412,7 +416,7 @@ class Registry_objects extends CI_Model {
 				}
 			}
 		}
-		$where_in = array(); 
+		$where_in = array();
 		foreach($filtered as $f){
 			array_push($where_in, $f['registry_object_id']);
 		}
