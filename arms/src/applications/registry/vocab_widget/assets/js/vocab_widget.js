@@ -101,6 +101,7 @@
 			handler = new TreeHandler($this, settings);
 			break;
 		    case 'advanced':
+		    case 'core':
 		    default:
 			settings.mode = 'core';
 			handler = new VocabHandler($this, settings);
@@ -363,12 +364,18 @@
 	},
 
 	__url: function(mode, lookfor) {
+	  if (typeof(this.settings.repository) === 'undefined' ||
+	      this.settings.repository === '') {
+	    this._err({status: 500,
+		       responseText:"No repository set"});
+
+	    }
 	    var url =  this.settings.endpoint +
 		"?action=" + mode +
 		"&repository=" + this.settings.repository +
 		"&limit=" + this.settings.max_results;
 	    if (typeof(lookfor) !== 'undefined' &&
-	       lookfor !== false) {
+		lookfor !== false) {
 		url = url + "&lookfor=" + lookfor;
 	    }
 	    return url;
