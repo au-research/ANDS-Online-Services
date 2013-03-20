@@ -301,18 +301,19 @@ span.inputs_group{
 		position:absolute;
 		top:-1px;
 		right:5px;
+		margin-top:0px;
+		width: 45px;
+		height: 10px;
+		font-size: 10px;
+		padding-right:15px;
 	}
 }
 
-input[name=type], input.inner_input_type{
-	width: 45px;
-	height: 10px;
-	font-size: 10px;
-	cursor:text;
-	background:#eee url(../img/down_caret.gif) no-repeat;
-	background-position: 55px;
-	padding-right:20px;
+input.rifcs-type{
+	background:#e9e9e9 url(../img/down_caret.gif) no-repeat;
+	background-position: 98% 50%;
 }
+
 
 button.remove{
 	margin:0 4px;
@@ -347,12 +348,12 @@ button.remove{
 			padding:5px 10px;
 			margin:0px;
 		}
-		input[name=type]{
+		input.rifcs-type{
 			float:left;
-			margin-top:9px;
+			margin:5px 0px;
 		}
 		input.inner_input_type{
-			margin-top:0px;
+			margin:0;
 		}
 		button.remove{
 			position:absolute;
@@ -364,6 +365,7 @@ button.remove{
 			margin-bottom:0px;
 		}
 	}
+
 	.aro_subbox{
 		margin:10px 0px;
 		padding:5px;
