@@ -706,8 +706,7 @@
 				<xsl:apply-templates
 					select="ro:collection/ro:coverage | ro:activity/ro:coverage | ro:party/ro:coverage  | ro:service/ro:coverage"/>
 				<div class="separate_line"/>
-				<button class="btn btn-primary addNew" type="coverage">
-					<i class="icon-plus icon-white"/> Add Coverage </button>
+				<button class="btn btn-primary addNew" type="coverage"><i class="icon-plus icon-white"/> Add Coverage </button>
 				<button class="btn export_xml btn-info"> Export XML fragment </button>
 			</fieldset>
 		</div>
@@ -840,111 +839,81 @@
 
 	<xsl:template match="ro:collection/ro:location | ro:activity/ro:location | ro:party/ro:location  | ro:service/ro:location">
 		<div class="aro_box" type="location">
+
 			<div class="aro_box_display clearfix">
-				<a href="javascript:;" class="toggle">
-					<i class="icon-minus"/>
-				</a>
-				<h1/>
-				<div class="control-group">
-					<div class="controls">
-						<input type="text" class="input-small" name="dateFrom" placeholder="dateFrom" value="{@dateFrom}"/>
-						<input type="text" class="input-small" name="dateTo" placeholder="dateTo" value="{@dateTo}"/>
-						<button class="btn btn-mini btn-danger remove">
-							<i class="icon-remove icon-white"/>
-						</button>
-						<p class="help-inline">
-							<small/>
-						</p>
-					</div>
-				</div>
+				<a href="javascript:;" class="toggle"><i class="icon-minus"/></a>
+				<input type="text" class="input-small rifcs-type" vocab="RIFCSLocationType" name="type" placeholder="Type" value="{@type}"/>
+				<input type="text" class="input-small datepicker" name="dateFrom" placeholder="dateFrom" value="{@dateFrom}"/>
+				<input type="text" class="input-small datepicker" name="dateTo" placeholder="dateTo" value="{@dateTo}"/>
+				<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
 			</div>
+
 			<div class="aro_subbox" type="address">
 				<h1>Address</h1>
 				<xsl:apply-templates select="ro:address"/>
 				<div class="separate_line"/>
-
-				<div class="btn-group dropup">
-					<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"> <i class="icon-envelope icon-white"></i> Add Address</button>
-					<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-						<span class="caret"/>
-					</button>
-					<ul class="dropdown-menu">
-						<li>
-							<a href="javascript:;" class="addNew" type="electronic">Add Electronic
-								Address</a>
-						</li>
-						<li>
-							<a href="javascript:;" class="addNew" type="physical">Add Physical
-								Address</a>
-						</li>
-					</ul>
+				<div class="btn-group">
+					<a href="javascript:;" class="btn btn-primary addNew" type="electronic"><i class="icon icon-white icon-plus"></i> Electronic Address</a>
+					<a href="javascript:;" class="btn btn-primary addNew" type="physical"><i class="icon icon-white icon-plus"></i> Physical Address</a>
 				</div>
-
 			</div>
 
 			<div class="aro_subbox" type="spatial">
 				<h1>Spatial Location</h1>
 				<xsl:apply-templates select="ro:spatial"/>
 				<div class="separate_line"/>
-				<button class="btn btn-primary addNew" type="spatial">
-					<i class="icon-map-marker icon-white"/> Add Spatial Location </button>
+				<button class="btn btn-primary addNew" type="spatial"><i class="icon-map-marker icon-white"/> Add Spatial Location </button>
 			</div>
+
 		</div>
 	</xsl:template>
 
 	<xsl:template match="ro:collection/ro:coverage | ro:activity/ro:coverage | ro:party/ro:coverage  | ro:service/ro:coverage">
 		<div class="aro_box" type="coverage">
+			<div class="aro_box_display clearfix">
+				<h1/>
+				<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
+			</div>
 			<xsl:apply-templates select="ro:temporal"/>
 			<xsl:apply-templates select="ro:spatial"/>
 			<div class="separate_line"/>	
-			<div class="btn-group dropup">
-				<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"> <i class="icon-envelope icon-white"></i> Add Coverage</button>
-				<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-					<span class="caret"/>
-				</button>
-				<ul class="dropdown-menu">
-					<li>
-						<a href="javascript:;" class="addNew" type="temporal">Add Temporal Coverage</a>
-					</li>
-					<li>
-						<a href="javascript:;" class="addNew" type="spatial">Add Spatial Coverage</a>
-					</li>
-				</ul>
+			<div class="btn-group">
+				<a href="javascript:;" class="btn btn-primary addNew" type="temporal"><i class="icon-white icon-plus"></i> Add Temporal Coverage</a>
+				<a href="javascript:;" class="btn btn-primary  addNew" type="spatial"><i class="icon-white icon-plus"></i> Add Spatial Coverage</a>
 			</div>
 		</div>
 	</xsl:template>
 
 
 	<xsl:template match="ro:temporal">
-		<div class="aro_box" type="temporal">
+		<div class="aro_box_part" type="temporal">
 			<div class="aro_box_display clearfix">
-				<h1>Temporal Coverage</h1>
-				<div class="control-group">
-					<div class="controls">
-						<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
-					</div>
+			</div>
+			<xsl:apply-templates select="ro:date" mode="coverage"/>
+			<xsl:apply-templates select="ro:text"/>
+			<div class="separate_line"/>
+			<div class="controls">
+				<div class="btn-group">
+					<a href="javascript:;" class="btn btn-primary addNew" type="coverage_date"><i class="icon-white icon-plus"></i> Date</a>
+					<a href="javascript:;" class="btn btn-primary addNew" type="text"><i class="icon-white icon-plus"></i> Text</a>
 				</div>
 			</div>
-			<xsl:apply-templates select="date" mode="coverage"/>
-			<xsl:apply-templates select="text"/>
 		</div>
 	</xsl:template>
 
 	<xsl:template match="ro:date" mode="coverage">
 		<div class="aro_box_part" type="coverage_date">
-			<label class="control-label" for="title">Date: </label>
-			<span>
-				<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
-				<input type="text" class="input-small rifcs-type" vocab="RIFCSTemporalCoverageDateType" name="type" placeholder="Date Type" value=""/>
-			</span>
-			<span>
-				<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
-				<input type="text" class="input-small rifcs-type" vocab="RIFCSDateFormat" name="type" placeholder="Date Format" value=""/>
-			</span>
-			<input type="text" class="input-xlarge" name="value" placeholder="Date Value" value="{text()}"/>
-			<button class="btn btn-mini btn-danger remove">
-				<i class="icon-remove icon-white"/>
-			</button>
+			<div class="control-group">
+				<label class="control-label" for="title">Date: </label>
+				<div class="controls">
+					<span class="inputs_group">
+						<input type="text" class="inner_input" name="value" placeholder="Date Value" value="{text()}"/>
+						<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSTemporalCoverageDateType" name="type" placeholder="Date Type" value="{@type}"/>
+					</span>
+					<input type="text" class="input-small rifcs-type" vocab="RIFCSDateFormat" name="dateFormat" placeholder="Date Format" value="{@dateFormat}"/>
+					<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
+				</div>
+			</div>
 		</div>
 	</xsl:template>
 	
@@ -964,11 +933,13 @@
 	
 	<xsl:template match="ro:text">
 		<div class="aro_box_part" type="text">
-			<label class="control-label" for="title">Text: </label>
-			<input type="text" class="input-xlarge" name="value" placeholder="Date Value" value="{text()}"/>
-			<button class="btn btn-mini btn-danger remove">
-				<i class="icon-remove icon-white"/>
-			</button>
+			<div class="control-group">
+				<label class="control-label" for="title">Text: </label>
+				<div class="controls">
+					<input type="text" class="input-large" name="value" placeholder="Date Value" value="{text()}"/>
+					<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
+				</div>
+			</div>
 		</div>
 	</xsl:template>
 
@@ -991,19 +962,13 @@
 		<div class="aro_box_part" type="spatial">
 			<div class="control-group">
 				<label class="control-label" for="title">Spatial: </label>
-				<div class="controls">					
-					<span>Type:						
-						<input type="text" class="input-small rifcs-type" vocab="RIFCSSpatialType" name="type" placeholder="Type" value="{@type}"/>
-						<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
-					</span>Value:
-						<input type="text" class="input-xlarge spatial_value" name="value" placeholder="Value" value="{text()}"/>
-						<button class="btn triggerMapWidget" type="button"><i class="icon-globe"></i></button>
-					<button class="btn btn-mini btn-danger remove">
-						<i class="icon-remove icon-white"/>
-					</button>
-					<p class="help-inline">
-						<small/>
-					</p>
+				<div class="controls">
+					<span class="inputs_group">
+						<input type="text" class="inner_input spatial_value" name="value" placeholder="Value" value="{text()}"/>
+						<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSSpatialType" name="type" placeholder="Type" value="{@type}"/>
+					</span>
+					<button class="btn triggerMapWidget" type="button"><i class="icon-globe"></i></button>
+					<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
 				</div>
 			</div>
 		</div>
@@ -1016,38 +981,35 @@
 
 	<xsl:template match="ro:electronic">
 		<div class="aro_box_part" type="electronic">
-			<label class="control-label" for="title">Electronic Address: </label>
 			<div class="control-group">
-				<span>
-					<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
-					<input type="text" class="input-small rifcs-type" vocab="RIFCSElectronicAddressType" name="type" placeholder="Type" value="{@type}"/>
-				</span>
-				<input type="text" class="input-xlarge" name="value" placeholder="Value"
-					value="{ro:value}"/>
-				<xsl:if test="ancestor::ro:service">
-					<button class="btn btn-primary showParts"><i class="icon-chevron-right icon-white"></i></button>
-					<div class="parts hide">
-						<xsl:apply-templates select="ro:arg"/>
-						<div class="separate_line"/>
-						<button class="btn btn-primary addNew" type="arg">
-							<i class="icon-plus icon-white"></i> Add Args
-						</button>
-					</div>
-				</xsl:if>
+				<label class="control-label" for="title">Electronic Address: </label>
+				<div class="controls">
+					<span class="inputs_group">
+						<input type="text" class="inner_input" name="value" placeholder="Value" value="{ro:value}"/>
+						<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSElectronicAddressType" name="type" placeholder="Type" value="{@type}"/>
+					</span>
+					<xsl:if test="ancestor::ro:service">
+						<button class="btn btn-primary showParts"><i class="icon-chevron-right icon-white"></i></button>
+						<div class="parts hide">
+							<xsl:apply-templates select="ro:arg"/>
+							<div class="separate_line"/>
+							<button class="btn btn-primary addNew" type="arg">
+								<i class="icon-plus icon-white"></i> Add Args
+							</button>
+						</div>
+					</xsl:if>
+					<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
+				</div>
 			</div>
 		</div>
 	</xsl:template>
 
 	<xsl:template match="ro:physical">
 		<div class="aro_box_part" type="physical">
-			<label class="control-label" for="title">Physical Address: </label>
 			<div class="control-group">
-				<span>
-					<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
-					<input type="text" class="input-small rifcs-type" vocab="RIFCSPhysicalAddressType" name="type" placeholder="Type" value="{@type}"/>
-				</span>
-				<button class="btn btn-primary showParts"><i class="icon-chevron-right icon-white"></i></button>
-				<div class="aro_box_part" type="addressParts">
+				<label class="control-label" for="title">Physical Address: </label>
+				<div class="controls">
+					<input type="text" class="input rifcs-type" vocab="RIFCSPhysicalAddressType" name="type" placeholder="Type" value="{@type}"/>
 					<xsl:apply-templates select="ro:addressPart"/>
 					<div class="separate_line"/>
 					<button class="btn btn-primary addNew" type="addressPart">
@@ -1082,23 +1044,18 @@
 	<xsl:template match="ro:addressPart">
 		<div class="aro_box_part" type="addressPart">
 			<div class="control-group">
-				<span>
-					<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
-					<input type="text" class="input-small rifcs-type" vocab="RIFCSPhysicalAddressPartType" name="type" placeholder="Type" value="{@type}"/>
+				<span class="inputs_group">
+					<input type="text" class="inner_input" name="value" placeholder="value" value="{text()}"/>
+					<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSPhysicalAddressPartType" name="type" placeholder="Type" value="{@type}"/>
 				</span>
-				<input type="text" class="input-xlarge" name="value" placeholder="value"
-					value="{text()}"/>
-				<button class="btn btn-mini btn-danger remove">
-					<i class="icon-remove icon-white"/>
-				</button>
+				<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
 			</div>
 		</div>
 	</xsl:template>
 
 	<xsl:template match="ro:accessPolicy">
 		<div class="aro_box" type="accessPolicy">
-			<input type="text" class="input-xlarge" name="value" placeholder="value"
-				value="{text()}"/>
+			<input type="text" class="input-xlarge" name="value" placeholder="value" value="{text()}"/>
 		</div>
 	</xsl:template>
 
@@ -1106,7 +1063,6 @@
 	<xsl:template name="blankTemplate">
 		<div class="aro_box template" type="name">
 
-			
 			<div class="aro_box_display clearfix">
 				<a href="javascript:;" class="toggle"><i class="icon-minus"/></a>
 				<input type="text" class="input-small rifcs-type" vocab="RIFCSNameType" name="type" placeholder="Type" value=""/>
@@ -1114,7 +1070,6 @@
 				<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
 			</div>
 
-			
 			<div class="aro_box_part" type="namePart">
 				<div class="control-group">
 					<label class="control-label" for="title">Name Part: </label>
@@ -1303,107 +1258,80 @@
 		</div>
 
 		<div class="aro_box template" type="location">
-			<div class="aro_box_display clearfix">
-				<a href="javascript:;" class="toggle">
-					<i class="icon-minus"/>
-				</a>
-				<h1/>
-				<div class="control-group">
 
-					<div class="controls">
-						<input type="text" class="input-small" name="dateFrom" placeholder="dateFrom" value=""/>
-						<input type="text" class="input-small" name="dateTo" placeholder="dateTo" value=""/>
-						<button class="btn btn-mini btn-danger remove">
-							<i class="icon-remove icon-white"/>
-						</button>
-						<p class="help-inline">
-							<small/>
-						</p>
-					</div>
-				</div>
-			</div>			
+			<div class="aro_box_display clearfix">
+				<a href="javascript:;" class="toggle"><i class="icon-minus"/></a>
+				<input type="text" class="input-small rifcs-type" vocab="RIFCSLocationType" name="type" placeholder="Type" value=""/>
+				<input type="text" class="input-small datepicker" name="dateFrom" placeholder="dateFrom" value=""/>
+				<input type="text" class="input-small datepicker" name="dateTo" placeholder="dateTo" value=""/>
+				<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
+			</div>
+
 			<div class="aro_subbox" type="address">
 				<h1>Address</h1>
-				<xsl:apply-templates select="ro:address"/>
 				<div class="separate_line"/>
-				<div class="btn-group dropup">
-					<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"> <i class="icon-envelope icon-white"></i> Add Address</button>
-					<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-						<span class="caret"/>
-					</button>
-					<ul class="dropdown-menu">
-						<li>
-							<a href="javascript:;" class="addNew" type="electronic">Add Electronic
-								Address</a>
-						</li>
-						<li>
-							<a href="javascript:;" class="addNew" type="physical">Add Physical
-								Address</a>
-						</li>
-					</ul>
+				<div class="btn-group">
+					<a href="javascript:;" class="btn btn-primary addNew" type="electronic"><i class="icon icon-white icon-plus"></i> Electronic Address</a>
+					<a href="javascript:;" class="btn btn-primary addNew" type="physical"><i class="icon icon-white icon-plus"></i> Physical Address</a>
 				</div>
-			</div>		
+			</div>
+
 			<div class="aro_subbox" type="spatial">
 				<h1>Spatial Location</h1>
-				<xsl:apply-templates select="ro:spatial"/>
 				<div class="separate_line"/>
-				<button class="btn btn-primary addNew" type="spatial">
-					<i class="icon-map-marker icon-white"/> Add Spatial Location </button>
+				<button class="btn btn-primary addNew" type="spatial"><i class="icon-map-marker icon-white"/> Add Spatial Location </button>
 			</div>
+
 		</div>
 
 		<div class="aro_box_part template" type="spatial">
 			<div class="control-group">
 				<label class="control-label" for="title">Spatial: </label>
 				<div class="controls">
-					<span>Type:						
-						<input type="text" class="input-small rifcs-type" vocab="RIFCSSpatialType" name="type" placeholder="Type" value=""/>
-						<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
-					</span>Value:
-						<input type="text" class="input-xlarge spatial_value" name="value" placeholder="Value" value=""/>
-						<button class="btn triggerMapWidget" type="button"><i class="icon-globe"></i></button>
-					<button class="btn btn-mini btn-danger remove">
-						<i class="icon-remove icon-white"/>
-					</button>
-					<p class="help-inline">
-						<small/>
-					</p>
+					<span class="inputs_group">
+						<input type="text" class="inner_input spatial_value" name="value" placeholder="Value" value=""/>
+						<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSSpatialType" name="type" placeholder="Type" value=""/>
+					</span>
+					<button class="btn triggerMapWidget" type="button"><i class="icon-globe"></i></button>
+					<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
 				</div>
 			</div>
 		</div>
 
 		<div class="aro_box_part template" type="electronic">
-			<label class="control-label" for="title">Electronic Address: </label>
 			<div class="control-group">
-				<span>
-					<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
-					<input type="text" class="input-small rifcs-type" vocab="RIFCSElectronicAddressType" name="type" placeholder="Type" value=""/>
-				</span>
-				<input type="text" class="input-xlarge" name="value" placeholder="Value" value=""/>
-				<xsl:if test="ro:service">
-					<button class="btn btn-primary showParts"><i class="icon-chevron-right icon-white"></i></button>
-					<div class="parts hide">
-						<div class="separate_line"/>
-						<button class="btn btn-primary addNew" type="arg">
-							<i class="icon-plus icon-white"></i> Add Args
-						</button>
-					</div>
-				</xsl:if>
+				<label class="control-label" for="title">Electronic Address: </label>
+				<div class="controls">
+					<span class="inputs_group">
+						<input type="text" class="inner_input" name="value" placeholder="Value" value=""/>
+						<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSElectronicAddressType" name="type" placeholder="Type" value=""/>
+					</span>
+					<xsl:if test="ancestor::ro:service">
+						<button class="btn btn-primary showParts"><i class="icon-chevron-right icon-white"></i></button>
+						<div class="parts hide">
+							<xsl:apply-templates select="ro:arg"/>
+							<div class="separate_line"/>
+							<button class="btn btn-primary addNew" type="arg">
+								<i class="icon-plus icon-white"></i> Add Args
+							</button>
+						</div>
+					</xsl:if>
+					<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
+				</div>
 			</div>
 		</div>
+
 		<div class="aro_box_part template" type="physical">
-			<label class="control-label" for="title">Physical Address: </label>
 			<div class="control-group">
-				<span>
-					<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
-					<input type="text" class="input-small rifcs-type" vocab="RIFCSPhysicalAddressType" name="type" placeholder="Type" value=""/>
-				</span>
-				<button class="btn btn-primary showParts"><i class="icon-chevron-right icon-white"></i></button>
-				<div class="parts hide" type="addressParts">
-					<div class="separate_line"/>
-					<button class="btn btn-primary addNew" type="addressPart">
-						<i class="icon-plus icon-white"></i> Add Address Part
-					</button>
+				<label class="control-label" for="title">Physical Address: </label>
+				<div class="controls">
+					<input type="text" class="input rifcs-type" vocab="RIFCSPhysicalAddressType" name="type" placeholder="Address Type" value=""/>
+					<div class="aro_box_part" type="addressParts">
+						<div class="separate_line"/>
+						<button class="btn btn-primary addNew" type="addressPart">
+							<i class="icon-plus icon-white"></i> Add Address Part
+						</button>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -1429,16 +1357,12 @@
 
 		<div class="aro_box_part template" type="addressPart">
 			<div class="control-group">
-				<span>
-					<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
-					<input type="text" class="input-small rifcs-type" vocab="RIFCSPhysicalAddressPartType" name="type" placeholder="Type" value=""/>
+				<span class="inputs_group">
+					<input type="text" class="inner_input" name="value" placeholder="value" value=""/>
+					<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSPhysicalAddressPartType" name="type" placeholder="Type" value=""/>
 				</span>
-				<input type="text" class="input-xlarge" name="value" placeholder="value" value=""/>
-				<button class="btn btn-mini btn-danger remove">
-					<i class="icon-remove icon-white"/>
-				</button>
+				<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
 			</div>
-
 		</div>
 
 		<div class="aro_box template" type="accessPolicy">
@@ -1622,40 +1546,47 @@
 			</div>
 		</div>
 		
-		<div class="aro_box template" type="temporal">
-			<div class="separate_line"/>	
-			<h1>Temporal Coverage</h1>
-			<div class="btn-group dropup">
-				<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"> <i class="icon-envelope icon-white"></i> Add Date Value</button>
-				<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-					<span class="caret"/>
-				</button>
-				<ul class="dropdown-menu">
-					<li>
-						<a href="javascript:;" class="addNew" type="coverage_date">Date</a>
-					</li>
-					<li>
-						<a href="javascript:;" class="addNew" type="text">Text</a>
-					</li>
-				</ul>
+		<div class="aro_box_part template" type="temporal">
+			<div class="aro_box_part" type="coverage_date">
+				<div class="control-group">
+					<label class="control-label" for="title">Date: </label>
+					<div class="controls">
+						<span class="inputs_group">
+							<input type="text" class="inner_input" name="value" placeholder="Date Value" value=""/>
+							<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSTemporalCoverageDateType" name="type" placeholder="Date Type" value="dateFrom"/>
+						</span>
+						<input type="text" class="input-small rifcs-type" vocab="RIFCSDateFormat" name="dateFormat" placeholder="Date Format" value="W3CDTF"/>
+						<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
+					</div>
+				</div>
+			</div>
+			<div class="aro_box_part" type="coverage_date">
+				<div class="control-group">
+					<label class="control-label" for="title">Date: </label>
+					<div class="controls">
+						<span class="inputs_group">
+							<input type="text" class="inner_input" name="value" placeholder="Date Value" value=""/>
+							<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSTemporalCoverageDateType" name="type" placeholder="Date Type" value="dateTo"/>
+						</span>
+						<input type="text" class="input-small rifcs-type" vocab="RIFCSDateFormat" name="dateFormat" placeholder="Date Format" value="W3CDTF"/>
+						<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
+					</div>
+				</div>
+			</div>
+			<div class="separate_line"/>
+			<div class="controls">
+				<div class="btn-group">
+					<a href="javascript:;" class="btn btn-primary addNew" type="coverage_date"><i class="icon-white icon-plus"></i> Date</a>
+					<a href="javascript:;" class="btn btn-primary addNew" type="text"><i class="icon-white icon-plus"></i> Text</a>
+				</div>
 			</div>
 		</div>
 		
 		<div class="aro_box template" type="coverage">
-			<div class="separate_line"/>	
-			<div class="btn-group dropup">
-				<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"> <i class="icon-envelope icon-white"></i> Add Coverage</button>
-				<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-					<span class="caret"/>
-				</button>
-				<ul class="dropdown-menu">
-					<li>
-						<a href="javascript:;" class="addNew" type="temporal">Add Temporal Coverage</a>
-					</li>
-					<li>
-						<a href="javascript:;" class="addNew" type="spatial">Add Spatial Coverage</a>
-					</li>
-				</ul>
+			<div class="separate_line"/>
+			<div class="btn-group">
+				<a href="javascript:;" class="btn btn-primary addNew" type="temporal"><i class="icon-white icon-plus"></i> Add Temporal Coverage</a>
+				<a href="javascript:;" class="btn btn-primary  addNew" type="spatial"><i class="icon-white icon-plus"></i> Add Spatial Coverage</a>
 			</div>
 		</div>
 
@@ -1736,27 +1667,27 @@
 		</div>
 		
 		<div class="aro_box_part template" type="coverage_date">
-			<label class="control-label" >Date: </label>
-			<span>
-				<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
-				<input type="text" class="input-small rifcs-type" vocab="RIFCSTemporalCoverageDateType" name="type" placeholder="Date Type" value=""/>
-			</span>
-			<span>
-				<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
-				<input type="text" class="input-small rifcs-type" vocab="RIFCSDateFormat" name="type" placeholder="Date Format" value=""/>
-			</span>
-			<input type="text" class="input-xlarge" name="value" placeholder="Date Value" value=""/>
-			<button class="btn btn-mini btn-danger remove">
-				<i class="icon-remove icon-white"/>
-			</button>
+			<div class="control-group">
+				<label class="control-label" for="title">Date: </label>
+				<div class="controls">
+					<span class="inputs_group">
+						<input type="text" class="inner_input" name="value" placeholder="Date Value" value=""/>
+						<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSTemporalCoverageDateType" name="type" placeholder="Date Type" value=""/>
+					</span>
+					<input type="text" class="input-small rifcs-type" vocab="RIFCSDateFormat" name="dateFormat" placeholder="Date Format" value="W3CDTF"/>
+					<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
+				</div>
+			</div>
 		</div>
 		
 		<div class="aro_box_part template" type="text">
-			<label class="control-label" for="title">Text: </label>
-			<input type="text" class="input-xlarge" name="value" placeholder="Date Value" value=""/>
-			<button class="btn btn-mini btn-danger remove">
-				<i class="icon-remove icon-white"/>
-			</button>
+			<div class="control-group">
+				<label class="control-label" for="title">Text: </label>
+				<div class="controls">
+					<input type="text" class="input-large" name="value" placeholder="Date Value" value=""/>
+					<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
+				</div>
+			</div>
 		</div>
 		
 

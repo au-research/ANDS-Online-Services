@@ -480,7 +480,7 @@ function initEditForm(){
 	function addValidationMessage(tt, type){
 		var name = tt.field_id;
 		var message = tt.message;
-		console.log(name, message);
+		// log(name, message);
 		if(name.match("^tab_")){
 			var tab = name.replace('tab_','');
 			$('#'+tab).prepend('<div class="alert alert-'+type+'">'+message+'</div>');
@@ -890,11 +890,11 @@ function getRIFCSforTab(tab, hasField){
 		//finish fragment header
 
 		//onto the body of the fragment
-		var parts = $('.aro_box_part',this);
+		var parts = $(this).children('.aro_box_part');
+		var subbox = $('.aro_subbox', this);
 
-		if(parts.length > 0){//if there is a part, data is spread out in parts
+		if(parts.length > 0 && subbox.length==0){//if there is a part, data is spread out in parts
 			$.each(parts, function(){
-
 				/*
 				 * If there is a part
 				 * Usually there will be a type attribute for these part
@@ -902,7 +902,6 @@ function getRIFCSforTab(tab, hasField){
 				 * Generic case have 2 outcome, a tag with type attribute and no type attribute
 				 * If there is no type attribute for the part itself, it's an element <name>value</name> thing
 				 */
-
 				if($(this).attr('type')){//if type is there for this part
 
 					//deal with the type
@@ -937,28 +936,43 @@ function getRIFCSforTab(tab, hasField){
 							fragment +='</'+$(this).attr('type')+'>';
 						});
 					}else if(type=='rightStatement' || type=='licence' || type=='accessRights' ){
-						 	fragment += '<'+$(this).attr('type')+' rightsUri="'+$('input[name=rightsUri]', this).val()+'">'+$('input[name=value]', this).val()+'</'+$(this).attr('type')+'>';	
+						 fragment += '<'+$(this).attr('type')+' rightsUri="'+$('input[name=rightsUri]', this).val()+'">'+$('input[name=value]', this).val()+'</'+$(this).attr('type')+'>';	
 					}else if(type=='contributor'){
-							var contributors = $('.aro_box', this);//tooltip not init
-							if($('button.showParts', this).attr('aria-describedby')){//tooltip has been init
-								var contributors = $('#'+$('button.showParts', this).attr('aria-describedby')+' .ui-tooltip-content .aro_box');
-							}
-							$.each(contributors, function(){
-								fragment += '<'+$(this).attr('type')+' seq="'+$('input[name=seq]', this).val()+'" >';
-								var contrib_name_part = $('.aro_box_part', this);
-								$.each(contrib_name_part, function(){
-									fragment += '<'+$(this).attr('type')+' type="'+$('input[name=type]', this).val()+'" >';
-									fragment += $('input[name=value]', this).val();
-									fragment +='</'+$(this).attr('type')+'>';
-								});
+						var contributors = $('.aro_box', this);//tooltip not init
+						if($('button.showParts', this).attr('aria-describedby')){//tooltip has been init
+							var contributors = $('#'+$('button.showParts', this).attr('aria-describedby')+' .ui-tooltip-content .aro_box');
+						}
+						$.each(contributors, function(){
+							fragment += '<'+$(this).attr('type')+' seq="'+$('input[name=seq]', this).val()+'" >';
+							var contrib_name_part = $('.aro_box_part', this);
+							$.each(contrib_name_part, function(){
+								fragment += '<'+$(this).attr('type')+' type="'+$('input[name=type]', this).val()+'" >';
+								fragment += $('input[name=value]', this).val();
 								fragment +='</'+$(this).attr('type')+'>';
 							});
+							fragment +='</'+$(this).attr('type')+'>';
+						});
 					}else if(type=='dates_date'){
-
-							fragment += '<date type="'+$('input[name=type]', this).val()+'" dateFormat="W3CDTF">';
-							fragment += $('input[name=value]', this).val();
-							fragment +='</date>';
-						
+						fragment += '<date type="'+$('input[name=type]', this).val()+'" dateFormat="W3CDTF">';
+						fragment += $('input[name=value]', this).val();
+						fragment +='</date>';
+					}else if(type=='temporal'){
+						fragment+='<temporal';
+						if(hasField) fragment += ' field_id="' +$(this).attr('field_id')+'"';
+						fragment+='>';
+						var dates = $('.aro_box_part[type=coverage_date]', this);
+						$.each(dates, function(){
+							fragment += '<date';
+							if(hasField) fragment += ' field_id="' +$(this).attr('field_id')+'"';
+							fragment += ' type="'+$('input[name=type]', this).val()+'" dateFormat="'+$('input[name=dateFormat]', this).val()+'">'+$('input[name=value]', this).val()+'</date>';	
+						});
+						var texts = $('.aro_box_part[type=text]', this);
+						$.each(texts, function(){
+							fragment += '<text';
+							if(hasField) fragment += ' field_id="' +$(this).attr('field_id')+'"';
+							fragment += '>'+$('input[name=value]', this).val()+'</text>';	
+						});
+						fragment+='</temporal>';
 					}else{//generic
 						//check if there is an input[name="type"] in this box_part so that we can use as a type attribute
 						var type = $('input[name=type]', this).val();
@@ -975,69 +989,61 @@ function getRIFCSforTab(tab, hasField){
 					fragment += '<'+$('input', this).attr('name')+'>'+$('input', this).val()+'</'+$('input', this).attr('name')+'>';
 				}
 			});
-		}else{//there is no part
-			//check if there is any subbox content, this is a special case for LOCATION
-			var sub_content = $(this).children('.aro_subbox');
-			if(sub_content.length >0){
-				//there are subcontent, for location
-				$.each(sub_content, function(){
-					var subbox_type = $(this).attr('type');
-					var subbox_fragment ='';
-
-					subbox_fragment +='<'+subbox_type+'>';
-					var parts = $(this).children('.aro_box_part');
-					if(parts.length>0){
-						$.each(parts, function(){
-							var this_fragment = '';
-							this_fragment +='<'+$(this).attr('type')+' type="'+$('input[name=type]', this).val()+'">';//opening tag
-							if($(this).attr('type')=='electronic'){
-								this_fragment +='<value>'+$('input[name=value]',this).val()+'</value>';
-								//deal with args here
-								var args = $('.aro_box_part', this);
-								if($('button.showParts', this).attr('aria-describedby')){//tooltip has been init
-									var args = $('#'+$('button.showParts', this).attr('aria-describedby')+' .ui-tooltip-content .aro_box_part');
-								}
-								$.each(args, function(){
-									this_fragment += '<'+$(this).attr('type')+' type="'+$('input[name=type]', this).val()+'" required="'+$('input[name=required]', this).val()+'" use="'+$('input[name=use]', this).val()+'">';
-									this_fragment += $('input[name=value]', this).val();
-									this_fragment +='</'+$(this).attr('type')+'>';
-								});
-							}else if($(this).attr('type')=='physical'){
-								//deal with address parts here
-								var address_parts = $('.aro_box_part', this);
-								if($('button.showParts', this).attr('aria-describedby')){//tooltip has been init
-									var address_parts = $('#'+$('button.showParts', this).attr('aria-describedby')+' .ui-tooltip-content .aro_box_part');
-								}
-								$.each(address_parts, function(){
-									this_fragment += '<'+$(this).attr('type')+' type="'+$('input[name=type]', this).val()+'">';
-									this_fragment += $('input[name=value]', this).val();
-									this_fragment +='</'+$(this).attr('type')+'>';
-								});
-								
-							}else{
-								//duh, if the type of this fragment being neither physical nor electronic, we have a problem here
-							}
-							this_fragment +='</'+$(this).attr('type')+'>';//closing tag
-							subbox_fragment+=this_fragment;
-						});
-					}else{
-						//there is no parts, spatial?
-					}
-						
-					subbox_fragment +='</'+subbox_type+'>';//closing tag
-					fragment+=subbox_fragment;//add the sub box fragments to the main fragment
-				});
-				
-			}else{//data is right at this level, grab it!
-				//check if there's a text area
-				if($('textarea', this).length>0){
-					fragment += htmlEntities($('textarea', this).val());
-				}else if($('input[name=value]', this).length>0){
-					fragment += $('input[name=value]', this).val();//there's no textarea, just normal input
-				}
+		}else if(subbox.length==0){//data is right at this level, grab it!
+			//check if there's a text area
+			if($('textarea', this).length>0){
+				fragment += htmlEntities($('textarea', this).val());
+			}else if($('input[name=value]', this).length>0){
+				fragment += $('input[name=value]', this).val();//there's no textarea, just normal input
 			}
-			
 		}
+			
+		//check if there is any subbox content, this is a special case for LOCATION
+		var sub_content = $(this).children('.aro_subbox');
+		if(sub_content.length >0){
+			//there are subcontent, for location
+			$.each(sub_content, function(){
+				var subbox_type = $(this).attr('type');
+				var subbox_fragment ='';
+
+				subbox_fragment +='<'+subbox_type+'>';
+				var parts = $(this).children('.aro_box_part');
+				if(parts.length>0){
+					$.each(parts, function(){
+						var this_fragment = '';
+						this_fragment +='<'+$(this).attr('type')+' type="'+$('input[name=type]', this).val()+'">';//opening tag
+						if($(this).attr('type')=='electronic'){
+							this_fragment +='<value>'+$('input[name=value]',this).val()+'</value>';
+							//deal with args here
+							var args = $('.aro_box_part', this);
+							$.each(args, function(){
+								this_fragment += '<'+$(this).attr('type')+' type="'+$('input[name=type]', this).val()+'" required="'+$('input[name=required]', this).val()+'" use="'+$('input[name=use]', this).val()+'">';
+								this_fragment += $('input[name=value]', this).val();
+								this_fragment +='</'+$(this).attr('type')+'>';
+							});
+						}else if($(this).attr('type')=='physical'){
+							//deal with address parts here
+							var address_parts = $('.aro_box_part', this);
+							$.each(address_parts, function(){
+								this_fragment += '<'+$(this).attr('type')+' type="'+$('input[name=type]', this).val()+'">';
+								this_fragment += $('input[name=value]', this).val();
+								this_fragment +='</'+$(this).attr('type')+'>';
+							});
+						}else{
+							//duh, if the type of this fragment being neither physical nor electronic, IT IS NOTHING!
+						}
+						this_fragment +='</'+$(this).attr('type')+'>';//closing tag
+						subbox_fragment+=this_fragment;
+					});
+				}else{
+					//no parts found
+				}
+					
+				subbox_fragment +='</'+subbox_type+'>';//closing tag
+				fragment+=subbox_fragment;//add the sub box fragments to the main fragment
+			});
+		}
+
 		fragment +='</'+$(this).attr('type')+'>';
 
 		//SCENARIO on Access Policies

@@ -22,6 +22,7 @@ else
 
 //fix logging out thing, expire in 3 hours
 $config['sess_expiration'] = time()+10800000;
+$config['sess_expiration'] = 0;
 
 /* For multiple-application environments, this "app" will be matched 
 by the $_GET['app'] which is rewritten in .htaccess. The array key is
