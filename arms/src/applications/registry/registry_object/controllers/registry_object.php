@@ -438,9 +438,10 @@ class Registry_object extends MX_Controller {
 				array_push($affected_ids, $id['registry_object_id']);
 			}
 		}
-
+		$sentMail = false;
 		foreach($affected_ids as $id){
 			$ro = $this->ro->getByID($id);
+	
 			foreach($attributes as $a){
 				$ro->setAttribute($a['name'], $a['value']);
 				if($ro->save()){
@@ -449,14 +450,12 @@ class Registry_object extends MX_Controller {
 						$data_source_id = $ro->getAttribute('data_source_id');
 						$this->load->model('data_source', 'ds');
 						$data_source = $this->ds->getByID($data_source_id);
-						if($data_source->count_SUBMITTED_FOR_ASSESSMENT>1)
-						{
-							$assessment_notify_email_addr = $data_source->getAttribute('assessment_notify_email_addr');	
-							if($assessment_notify_email_addr)
-							{
-								echo "we need to tell someone ".$assessment_notify_email_addr." about this";
-							}				
+						if($data_source->count_SUBMITTED_FOR_ASSESSMENT<2 && !$sentMail)
+						{		
+							$this->ro->emailAssessor($data_source);
+							$sentMail = true;
 						}
+						
 					}
 					echo 'update '.$ro->id.' set '.$a['name'].' to value:'.$a['value'];
 				}else{
@@ -475,6 +474,7 @@ class Registry_object extends MX_Controller {
 		}
 	}
 
+	
 
 	function get_solr_doc($id){
 		$this->load->model('registry_objects', 'ro');

@@ -604,6 +604,22 @@ class Registry_objects extends CI_Model {
 	}
 
 	/**
+	 * XXX:
+	 */	
+	function emailAssessor($data_source){		
+		$to = $data_source->getAttribute('assessment_notify_email_addr');	
+		if($to)
+		{
+			$subject = "Records from ".$data_source->title." are ready for your assessment";
+			$message = $data_source->title." has submitted records for your assessment. You can access the records on the Manage Records page within the registry";
+			$headers = 'From: "Automated Email" <services@ands.org.au>' . "\r\n" .
+	    	'Reply-To: "ANDS Services" <services@ands.org.au>' . "\r\n" .
+	    	'X-Mailer: PHP/' . phpversion();
+			mail ($to ,$subject ,$message, $headers);
+		}				
+	}	
+
+	/**
 	  * XXX: 
 	  */ 
 	function cloneToDraft($registry_object)

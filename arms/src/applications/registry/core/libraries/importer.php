@@ -242,7 +242,16 @@ class Importer {
 					if (is_null($revision_record_id))
 					{
 						// We are creating a new registryObject
+
+
 						$ro = $this->CI->ro->create($this->dataSource, (string)$registryObject->key, $class, "", $this->status, "temporary_slug" . time(), $record_owner, $this->harvestID);
+
+						if($this->dataSource->qa_flag===DB_TRUE && $this->ingest_new_record<1)
+						{
+		
+							$this->CI->ro->emailAssessor($this->dataSource);
+						
+						}
 						$this->ingest_new_record++;
 					}
 					else
@@ -301,6 +310,9 @@ class Importer {
 					}
 					// Save all our attributes to the object
 					$ro->save();
+
+					//if this is ds has the qa flag set we need to check if this is the first submitted for assesmment record and if so email the notify address
+
 
 					// Add this record to our counts, etc.
 					$this->importedRecords[] = $ro->id;
