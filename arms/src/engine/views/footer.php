@@ -94,6 +94,7 @@
             <script src="<?php echo base_url();?>assets/vocab_widget/js/vocab_widget.js" type="text/javascript"></script>
         
         <?php elseif($lib=='location_capture_widget'):?>
+            <link href="<?php echo base_url();?>assets/location_capture_widget/css/location_capture_widget.css" rel="stylesheet" type="text/css">
             <script src="<?php echo base_url();?>assets/location_capture_widget/js/location_capture_widget.js" type="text/javascript"></script>
 
         <?php elseif($lib=='google_map'):?>

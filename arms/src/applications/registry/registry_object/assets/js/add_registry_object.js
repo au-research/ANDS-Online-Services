@@ -663,7 +663,6 @@ function initMapWidget(container)
 	$(".spatial_value", container_elem).each(function(){
 
 		var typeInput = $(this).parent().find('input[name=type]');
-				log(typeInput);
 		typeInput.on({
 			change: function(e){
 				log(typeInput);
@@ -671,14 +670,17 @@ function initMapWidget(container)
 			}
 		});
 		var type = typeInput.val();
-log("type " + type);
-		if(type == 'gmlKmlPolyCoords')
+
+		if(type == 'gmlKmlPolyCoords' || type == 'kmlPolyCoords')
 		{
-			log(type);
+			log("type " + type);
 			var elem = $(this);
-		//console.log(elem.val());
-			elem.ands_location_widget({
-  			lonLat:elem.val()
+
+			var fiedId = elem.attr('field_id');
+			elem.attr('id',fiedId+"_input");
+			elem.after('<div id="'+fiedId+'_map" class="map_widget"></div>');
+			$('#'+fiedId+'_map').ands_location_widget({
+  			target:fiedId+"_input"
 			});
 		}
 	});
