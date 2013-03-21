@@ -644,8 +644,7 @@ function initSubjectWidget(elem){
 	}
 }
 
-function initMapWidget(container)
-{
+function initMapWidget(container){
 
 	var container_elem;
 	if(container){
@@ -654,7 +653,7 @@ function initMapWidget(container)
 	$(".spatial_value", container_elem).each(function(){
 
 		var typeInput = $(this).parent().find('input[name=type]');
-		typeInput.on({
+		typeInput.one({
 			change: function(e){
 				log(typeInput);
 				initMapWidget($(this).parent());
@@ -662,17 +661,16 @@ function initMapWidget(container)
 		});
 		var type = typeInput.val();
 
-		if(type == 'gmlKmlPolyCoords' || type == 'kmlPolyCoords')
-		{
-			log("type " + type);
-			var elem = $(this);
-
-			var fiedId = elem.attr('field_id');
-			elem.attr('id',fiedId+"_input");
-			elem.after('<div id="'+fiedId+'_map" class="map_widget"></div>');
+		var controls = $(this).closest('.controls');
+		if(type == 'gmlKmlPolyCoords' || type == 'kmlPolyCoords'){
+			var fiedId = $(this).attr('field_id');
+			$(this).attr('id',fiedId+"_input");
+			controls.append('<div id="'+fiedId+'_map" class="map_widget"></div>');
 			$('#'+fiedId+'_map').ands_location_widget({
-  			target:fiedId+"_input"
+  				target:fiedId+"_input"
 			});
+		}else{
+			$('.map_widget', controls).remove();
 		}
 	});
 }
@@ -858,7 +856,6 @@ function getRIFCSforTab(tab, hasField){
 		var fragment ='';
 		var fragment_type = '';
 
-
 		/*
 		 * Getting the fragment header
 		 * In the form of <name> or <name type="sometype">
@@ -876,7 +873,7 @@ function getRIFCSforTab(tab, hasField){
 			if($(input_field).length>0 && $(input_field).val()!=''){
 				fragment_meta += ' '+value+'="'+$(input_field).val()+'"';
 			}
-			if(this_fragment_type!='citationMetadata') fragment +=fragment_meta;
+			if(this_fragment_type!='citationMetadata' && this_fragment_type!='coverage') fragment +=fragment_meta;
 		});
 		fragment +='>';
 		//finish fragment header

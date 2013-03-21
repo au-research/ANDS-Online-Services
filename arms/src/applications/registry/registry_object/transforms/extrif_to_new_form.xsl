@@ -1006,6 +1006,7 @@
 			<div class="btn-group">
 				<a href="javascript:;" class="btn btn-primary addNew" type="temporal"><i class="icon-white icon-plus"></i> Add Temporal Coverage</a>
 				<a href="javascript:;" class="btn btn-primary  addNew" type="spatial"><i class="icon-white icon-plus"></i> Add Spatial Coverage</a>
+
 			</div>
 		</div>
 	</xsl:template>
@@ -1014,15 +1015,18 @@
 	<xsl:template match="ro:temporal">
 		<div class="aro_box_part" type="temporal">
 			<div class="aro_box_display clearfix">
+
 			</div>
 			<xsl:apply-templates select="ro:date" mode="coverage"/>
 			<xsl:apply-templates select="ro:text"/>
 			<div class="separate_line"/>
 			<div class="controls">
 				<div class="btn-group">
-					<a href="javascript:;" class="btn btn-primary addNew" type="coverage_date"><i class="icon-white icon-plus"></i> Date</a>
-					<a href="javascript:;" class="btn btn-primary addNew" type="text"><i class="icon-white icon-plus"></i> Text</a>
+					<a href="javascript:;" class="btn btn-mini btn-primary addNew" type="coverage_date"><i class="icon-white icon-plus"></i> Date</a>
+					<a href="javascript:;" class="btn btn-mini btn-primary addNew" type="text"><i class="icon-white icon-plus"></i> Text</a>
+					<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
 				</div>
+
 			</div>
 		</div>
 	</xsl:template>
@@ -1670,8 +1674,9 @@
 			<div class="separate_line"/>
 			<div class="controls">
 				<div class="btn-group">
-					<a href="javascript:;" class="btn btn-primary addNew" type="coverage_date"><i class="icon-white icon-plus"></i> Date</a>
-					<a href="javascript:;" class="btn btn-primary addNew" type="text"><i class="icon-white icon-plus"></i> Text</a>
+					<a href="javascript:;" class="btn btn-mini btn-primary addNew" type="coverage_date"><i class="icon-white icon-plus"></i> Date</a>
+					<a href="javascript:;" class="btn btn-mini btn-primary addNew" type="text"><i class="icon-white icon-plus"></i> Text</a>
+					<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
 				</div>
 			</div>
 		</div>
