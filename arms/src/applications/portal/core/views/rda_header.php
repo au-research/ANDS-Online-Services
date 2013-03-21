@@ -18,7 +18,7 @@
 
 <link rel="stylesheet" href="<?php echo asset_url('css/flexslider.css', 'core');?>" type="text/css" media="screen" />
 <link rel="stylesheet" href="<?php echo asset_url('css/ui.dynatree.css', 'core');?>" type="text/css" media="screen" />
-
+<link rel="stylesheet" type="text/css" href="../applications/registry/vocab_widget/assets/css/vocab_widget.css"  media="screen" />
 <!-- ANDS Less file and general styling correction-->
 <link href="<?php echo asset_url('less/ands.less', 'core');?>" rel="stylesheet/less" type="text/css">
 
@@ -37,7 +37,7 @@
 			</div><!-- tagline -->
 			<ul class="top_nav">
 				<li><a href="<?=base_url('');?>">Home</a></li>
-				<li><a href="<?=base_url('browse');?>">Browse</a></li>
+				<li><a href="<?=base_url('rdabrowse');?>">Browse</a></li>
 				<li><a href="<?=base_url('search/#!/q=/tab=collection');?>">Collections</a></li>								
 				<li><a href="<?=base_url('search/#!/q=/tab=party');?>">Parties</a></li>
 				<li><a href="<?=base_url('search/#!/q=/tab=activity');?>">Activities</a></li>
