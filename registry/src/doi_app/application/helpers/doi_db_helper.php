@@ -192,8 +192,7 @@
 
 	function updateDoiObjectAttributes($doi_id,$publisher,$publish_year,$languageValue,$versionValue,$rightsValue,$xml)
 	{
-		$updateTime = 'now()';
-		$data = array('publisher' => $publisher,'publication_year' => $publish_year,'language' => $languageValue,'version' => $versionValue,'rights' => $rightsValue,'datacite_xml'=>$xml, 'updated_when' => $updateTime);
+		$data = array('publisher' => $publisher,'publication_year' => $publish_year,'language' => $languageValue,'version' => $versionValue,'rights' => $rightsValue,'datacite_xml'=>$xml);
 		$where = "doi_id = '".$doi_id."'";
 		$CI =& get_instance();
     	$query_str = $CI->db->update_string('doi_objects', $data, $where); 
@@ -231,7 +230,7 @@
 			}
 			if(count($iprange)>1)
 			{
-				if($ip_address>=$iprange[0]&&$ip_address<=$iprange[1]) return $row->client_id;			
+				if(ip2long($ip_address)>=ip2long($iprange[0])&&ip2long($ip_address)<=ip2long($iprange[1])) return $row->client_id;			
 			}
 			else
 			{
