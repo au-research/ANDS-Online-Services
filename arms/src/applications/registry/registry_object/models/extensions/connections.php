@@ -110,7 +110,7 @@ class Connections_Extension extends ExtensionBase
 			// Continue on for all types:
 			/* - Check the constraints */
 			$class_valid = (is_null($specific_type) || ($connection['class'] == $specific_type));
-			$status_valid = true;//(!$published_only || ($connection['status'] == PUBLISHED));
+			$status_valid = (!$published_only || ($connection['status'] == PUBLISHED));
 			if ($class_valid && $status_valid)
 			{
 
