@@ -60,7 +60,9 @@ class Extrif_Extension extends ExtensionBase
 
 						//add logo to the extrif
 						if($type=='logo'){
-							$extendedMetadata->addChild("extrif:logo", $description, EXTRIF_NAMESPACE);
+							$logoRef = $this->getLogoUrl($description);
+							$extendedMetadata->addChild("extrif:logo", $logoRef, EXTRIF_NAMESPACE);
+							$this->ro->set_metadata('the_logo', $logoRef);
 						}
 
 						$this->_CI->load->library('purifier');
@@ -174,7 +176,7 @@ class Extrif_Extension extends ExtensionBase
 					$temporals->addChild("extRif:temporal_earliest_year", $this->ro->getEarliestAsYear(), EXTRIF_NAMESPACE);
 					$temporals->addChild("extRif:temporal_latest_year", $this->ro->getLatestAsYear(), EXTRIF_NAMESPACE);
 				}	
-
+/*
 				foreach ($this->ro->getRelatedObjects() AS $relatedObject)
 				{
 					$relatedObj = $extendedMetadata->addChild("extRif:related_object", NULL, EXTRIF_NAMESPACE);
@@ -184,8 +186,9 @@ class Extrif_Extension extends ExtensionBase
 					$relatedObj->addChild("extRif:related_object_type", $relatedObject['related_object_type'], EXTRIF_NAMESPACE);
 					$relatedObj->addChild("extRif:related_object_display_title", $relatedObject['title'], EXTRIF_NAMESPACE);
 					$relatedObj->addChild("extRif:related_object_relation", $relatedObject['relation_type'], EXTRIF_NAMESPACE);
+					$relatedObj->addChild("extRif:related_object_logo", $relatedObject['the_logo'], EXTRIF_NAMESPACE);
 				}
-
+*/
 				// Friendlify dates =)
 				$xml = $this->ro->extractDatesForDisplay($xml);
 
@@ -315,8 +318,13 @@ class Extrif_Extension extends ExtensionBase
 		}
 	}
 	
-	
-	
+	function getLogoUrl($str)
+	{
+		$urlStr = '';
+		if(preg_match('%(https?://[^\s^"^\'^&]+|[^\/\s^"^\'^&]+www\.[^\s^"^\'^&]+)%', $str, $url)) 
+			$urlStr = $url[0];
+		return $urlStr;    
+	}	
 	function getReverseLinksStatusforEXTRIF($ds) 
 	{
 		$reverseLinks = 'NONE';

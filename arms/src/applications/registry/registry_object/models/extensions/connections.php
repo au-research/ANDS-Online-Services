@@ -110,7 +110,7 @@ class Connections_Extension extends ExtensionBase
 			// Continue on for all types:
 			/* - Check the constraints */
 			$class_valid = (is_null($specific_type) || ($connection['class'] == $specific_type));
-			$status_valid = (!$published_only || ($connection['status'] == PUBLISHED));
+			$status_valid = true;//(!$published_only || ($connection['status'] == PUBLISHED));
 			if ($class_valid && $status_valid)
 			{
 
@@ -141,6 +141,7 @@ class Connections_Extension extends ExtensionBase
 					$ordered_connections[$name] = array_slice($list, $offset, $limit);
 					foreach($ordered_connections[$name] as &$connection){
 						$connection['description'] = $this->_getDescription($connection['registry_object_id']);
+						$connection['logo'] = $this->_getLogo($connection['registry_object_id']);					
 					}
 				}
 			}
@@ -156,6 +157,14 @@ class Connections_Extension extends ExtensionBase
 		}
 	}
 
+
+	function _getLogo($id){
+		$this->db->select('value')->from('registry_object_metadata')->where('registry_object_id', $id)->where('attribute', 'the_logo')->limit(1);
+		$query = $this->db->get();
+		foreach($query->result() as $row){
+			return $row->value;
+		}
+	}
 
 	function _getExplicitLinks()
 	{

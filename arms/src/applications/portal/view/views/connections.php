@@ -22,6 +22,10 @@
 					if(isset($entry['class']))
 					{
 						// Link connections to PUBLISHED objects to their SLUG for SEOness...
+						$logo = '';
+						if(isset($entry['logo'])){
+							$logo = '<img class="related_logo" src="'.$entry['logo'].'"/>';
+						}
 						if ($entry['status'] == PUBLISHED){
 							$url = base_url() . $entry['slug'];
 							$preview = 'slug='.$entry['slug'];
@@ -37,11 +41,11 @@
 						}else{
 							$relationship = 'Contributor';
 						}
-						
+
 						if(!isset($conn[$entry['class']])){
-							$conn[$entry['class']] = '<p class="'.$entry['class'].' preview_connection"><a href="'.$url.'" '.$preview.' relation_type="'.$relationship.'">'.$entry['title'].'</a></p>';
+							$conn[$entry['class']] = $logo.'<p class="'.$entry['class'].' preview_connection"><a href="'.$url.'" '.$preview.' relation_type="'.$relationship.'">'.$entry['title'].'</a></p>';
 						}else{
-							$conn[$entry['class']] .= '<p class="'.$entry['class'].' preview_connection"><a href="'.$url.'" '.$preview.' relation_type="'.$relationship.'">'.$entry['title'].'</a></p>';
+							$conn[$entry['class']] .= $logo.'<p class="'.$entry['class'].' preview_connection"><a href="'.$url.'" '.$preview.' relation_type="'.$relationship.'">'.$entry['title'].'</a></p>';
 						}
 					}
 				}
