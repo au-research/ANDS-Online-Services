@@ -234,92 +234,83 @@ function initEditForm(){
 		}
 	});
 
-	
+	$(document).on('mouseup', '.remove',function(e){
+		/*
+		 * Remove the parent element
+		 * If a part is found, remove the part
+		 * If no part is found, remove the box
+		 * 
+		 */
+		var target = $(this).parent('.aro_box');
+		if($(target).length==0) target = $(this).parents('.aro_box_part')[0];
+		if($(target).length==0) target = $(this).parents('.aro_box')[0];
+		$(target).fadeOut(500, function(){
+			$(target).remove();
+		});
+	}).on('mouseup', '.addNew',function(e){
+		/*
+		 * Add a new Element
+		 * find a div.separate_line among the parents previous divs
+		 * template is a div.template[type=] where type is defined in the @type attribute of the button itself
+		 */
+		e.stopPropagation();
+		e.preventDefault();
+		var what = $(this).attr('type');
+		var template = $('.template[type='+what+']')[0];
+		var where = $(this).prevAll('.separate_line')[0];
 
-	/*
-	 * Remove the parent element
-	 * If a part is found, remove the part
-	 * If no part is found, remove the box
-	 * 
-	 */
-	$('.remove').die().live({
-		mouseup:function(e){
-			var target = $(this).parents('.aro_box_part')[0];
-			if($(target).length==0) target = $(this).parents('.aro_box')[0];
-			$(target).fadeOut(500, function(){
-				$(target).remove();
-			});
-			//@TODO: check if it's inside a tooltip and perform reposition
-		}
-	});
-
-	/*
-	 * Add a new Element
-	 * find a div.separate_line among the parents previous divs
-	 * template is a div.template[type=] where type is defined in the @type attribute of the button itself
-	 */
-	$('.addNew').die().live({
-		mouseup:function(e){
-			e.stopPropagation();
-			e.preventDefault();
-			var what = $(this).attr('type');
-			var template = $('.template[type='+what+']')[0];
-			var where = $(this).prevAll('.separate_line')[0];
-
-			//FIND THE SEPARATE LINE!!!
-			//@TODO: badly need an algorithm | refactor | or an easier way
-			if(!where){//if there is no separate line found, go out 1 layer and find it
-				where = $(this).parent().prevAll('.separate_line')[0];
+		//FIND THE SEPARATE LINE!!!
+		//@TODO: badly need an algorithm | refactor | or an easier way
+		if(!where){//if there is no separate line found, go out 1 layer and find it
+			where = $(this).parent().prevAll('.separate_line')[0];
+			if(!where){
+				where = $(this).parent().parent().prevAll('.separate_line')[0];
 				if(!where){
-					where = $(this).parent().parent().prevAll('.separate_line')[0];
+					where = $(this).parent().parent().parent().prevAll('.separate_line')[0];
 					if(!where){
-						where = $(this).parent().parent().parent().prevAll('.separate_line')[0];
-						if(!where){
-							where= $(this).parent().parent().parent().parent().prevAll('.separate_line')[0];
-						}
+						where= $(this).parent().parent().parent().parent().prevAll('.separate_line')[0];
 					}
 				}
 			}
-			//found it, geez
-			
-			//add the DOM
-			var new_dom = $(template).clone().removeClass('template').insertBefore(where).hide().slideDown();
-			initVocabWidgets(new_dom);
-			initMapWidget(new_dom);
-
-			//@TODO: check if it's inside a tooltip and perform reposition
-
-
-			/*
-			 * Reason for this:
-			 	- We don't want to init the editor onto hidden template element
-			 	- We keep template element without the class editor
-			 		And only add the class editor upon addition of the element
-			 */
-			if(what=='description' || what=='rights'){
-				$('#descriptions_rights textarea').addClass('editor');
-				initEditor();
-			}
-
-			if(what=='dates_date' || what=='dates'){
-				//initalize the datepicker, format is optional
-				$('input.datepicker').datepicker({
-					format: 'yyyy-mm-dd'
-				});
-				
-				//triggering the datepicker by focusing on it
-				$('.triggerDatePicker').die().live({
-					click: function(e){
-						$(this).parent().children('input').focus();
-					}
-				});
-			}
-
-			//bind the tooltip parts UI in case of adding a new element with show Parts Elements
-			bindPartsTooltip();
 		}
-	});
+		//found it, geez
+		
+		//add the DOM
+		var new_dom = $(template).clone().removeClass('template').insertBefore(where).hide().slideDown();
+		initVocabWidgets(new_dom);
+		initMapWidget(new_dom);
 
+		//@TODO: check if it's inside a tooltip and perform reposition
+
+
+		/*
+		 * Reason for this:
+		 	- We don't want to init the editor onto hidden template element
+		 	- We keep template element without the class editor
+		 		And only add the class editor upon addition of the element
+		 */
+		if(what=='description' || what=='rights'){
+			$('#descriptions_rights textarea').addClass('editor');
+			initEditor();
+		}
+
+		if(what=='dates_date' || what=='dates' || what=='date'){
+			//initalize the datepicker, format is optional
+			$('input.datepicker').datepicker({
+				format: 'yyyy-mm-dd'
+			});
+			
+			//triggering the datepicker by focusing on it
+			$('.triggerDatePicker').die().live({
+				click: function(e){
+					$(this).parent().children('input').focus();
+				}
+			});
+		}
+
+		//bind the tooltip parts UI in case of adding a new element with show Parts Elements
+		bindPartsTooltip();
+	});
 	
 
 	//Export XML button for currentTab in pretty print and modal
@@ -874,7 +865,8 @@ function getRIFCSforTab(tab, hasField){
 		 * The name => the "type" attribute of the box
 		 * The type => the input[name=type] of the box display (heading)
 		 */
-		fragment +='<'+$(this).attr('type')+'';
+		var this_fragment_type = $(this).attr('type');
+		fragment +='<'+this_fragment_type+'';
 		if(hasField) fragment +=' field_id="' +$(this).attr('field_id')+'"';
 		var valid_fragment_meta = ['type', 'dateFrom', 'dateTo', 'style', 'rightsURI'];//valid input type to be put as attributes
 		var this_box = this;
@@ -884,7 +876,7 @@ function getRIFCSforTab(tab, hasField){
 			if($(input_field).length>0 && $(input_field).val()!=''){
 				fragment_meta += ' '+value+'="'+$(input_field).val()+'"';
 			}
-			fragment +=fragment_meta;
+			if(this_fragment_type!='citationMetadata') fragment +=fragment_meta;
 		});
 		fragment +='>';
 		//finish fragment header
@@ -906,6 +898,7 @@ function getRIFCSforTab(tab, hasField){
 
 					//deal with the type
 					var type = $(this).attr('type');
+
 					if(type=='relation'){//special case for related object relation
 						fragment += '<'+type+' type="'+$('input[name=type]',this).val()+'">';
 						if($('input[name=description]', this).val()!=''){//if the relation has a description
@@ -926,27 +919,21 @@ function getRIFCSforTab(tab, hasField){
 							fragment += '<notes>'+$('input[name=notes]', this).val()+'</notes>';
 						}
 					}else if(type=='date'){
-						var dates = $('.aro_box', this);//tooltip not init
-						if($('button.showParts', this).attr('aria-describedby')){//tooltip has been init
-							var dates = $('#'+$('button.showParts', this).attr('aria-describedby')+' .ui-tooltip-content .aro_box');
-						}
+						var dates = $('.aro_box_part[type=date]', this);
 						$.each(dates, function(){
-							fragment += '<'+$(this).attr('type')+' type="'+$('input[name=type]', this).val()+'" >';
+							fragment += '<'+$(this).attr('type')+' type="'+$('input[name=type]', this).val()+'">';
 							fragment += $('input[name=value]', this).val();
 							fragment +='</'+$(this).attr('type')+'>';
 						});
 					}else if(type=='rightStatement' || type=='licence' || type=='accessRights' ){
 						 fragment += '<'+$(this).attr('type')+' rightsUri="'+$('input[name=rightsUri]', this).val()+'">'+$('input[name=value]', this).val()+'</'+$(this).attr('type')+'>';	
 					}else if(type=='contributor'){
-						var contributors = $('.aro_box', this);//tooltip not init
-						if($('button.showParts', this).attr('aria-describedby')){//tooltip has been init
-							var contributors = $('#'+$('button.showParts', this).attr('aria-describedby')+' .ui-tooltip-content .aro_box');
-						}
+						var contributors = $('.aro_box_part[type=contributor]', this);//tooltip not init
 						$.each(contributors, function(){
-							fragment += '<'+$(this).attr('type')+' seq="'+$('input[name=seq]', this).val()+'" >';
+							fragment += '<'+$(this).attr('type')+' seq="'+$('input[name=seq]', this).val()+'">';
 							var contrib_name_part = $('.aro_box_part', this);
 							$.each(contrib_name_part, function(){
-								fragment += '<'+$(this).attr('type')+' type="'+$('input[name=type]', this).val()+'" >';
+								fragment += '<'+$(this).attr('type')+' type="'+$('input[name=type]', this).val()+'">';
 								fragment += $('input[name=value]', this).val();
 								fragment +='</'+$(this).attr('type')+'>';
 							});
@@ -1038,7 +1025,6 @@ function getRIFCSforTab(tab, hasField){
 				}else{
 					//no parts found
 				}
-					
 				subbox_fragment +='</'+subbox_type+'>';//closing tag
 				fragment+=subbox_fragment;//add the sub box fragments to the main fragment
 			});
@@ -1047,6 +1033,10 @@ function getRIFCSforTab(tab, hasField){
 		fragment +='</'+$(this).attr('type')+'>';
 
 		//SCENARIO on Access Policies
+
+		if($(this).attr('type')=='fullCitation' || $(this).attr('type')=='citationMetadata'){
+			fragment = '<citationInfo>'+fragment+'</citationInfo>';
+		}
 
 		xml += fragment;
 		

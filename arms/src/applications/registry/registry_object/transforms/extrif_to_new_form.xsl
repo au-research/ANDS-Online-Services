@@ -517,7 +517,8 @@
 	</xsl:template>
 
 	<xsl:template match="ro:namePart">
-		<div class="aro_box_part hide" type="namePart">
+		<xsl:param name="hide" select="'hide'"/>
+		<div class="aro_box_part {$hide}" type="namePart">
 			<div class="control-group">
 				<label class="control-label" for="title">Name Part: </label>
 				<div class="controls">
@@ -525,12 +526,7 @@
 						<input type="text" name="value" class="inner_input" value="{text()}"/>
 						<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSNamePartType" name="type" placeholder="Type" value="{@type}"/>
 					</span>
-					<button class="btn btn-mini btn-danger remove">
-						<i class="icon-remove icon-white"/>
-					</button>
-					<p class="help-inline">
-						<small/>
-					</p>
+					<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
 				</div>
 			</div>
 		</div>
@@ -574,19 +570,149 @@
 				<legend>Citation Info</legend>
 				<xsl:apply-templates select="ro:collection/ro:citationInfo"/>
 				<div class="separate_line"/>
-				<div class="btn-group dropup">
-					<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"> <i class="icon-pencil icon-white"></i> Add Citation Info</button>
-					<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-						<span class="caret"/>
-					</button>
-					<ul class="dropdown-menu">
-						<li><a href="javascript:;" class="addNew" type="fullCitation">Add Full Citation</a></li>
-						<li><a href="javascript:;" class="addNew" type="citationMetadata">Add Citation Metadata</a></li>
-					</ul>
+				<div class="btn-group">
+					<a href="javascript:;" class="btn btn-primary addNew" type="fullCitation">Add Full Citation</a>
+					<a href="javascript:;" class="btn btn-primary addNew" type="citationMetadata">Add Citation Metadata</a>
 					<button class="btn export_xml btn-info"> Export XML fragment </button>
 				</div>
 				
 			</fieldset>
+		</div>
+	</xsl:template>
+
+	<xsl:template match="ro:collection/ro:citationInfo">
+		<xsl:apply-templates select="ro:fullCitation"/>
+		<xsl:apply-templates select="ro:citationMetadata"/>
+	</xsl:template>
+
+	<xsl:template match="ro:fullCitation">
+		<div class="aro_box" type="fullCitation">
+			<div class="aro_box_display clearfix">
+				<a href="javascript:;" class="toggle"><i class="icon-minus"></i></a>
+				<input type="text" class="input-small rifcs-type" vocab="RIFCSCitationStyle" name="type" placeholder="Style" value="{@type}"/>
+				<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
+				<h1>Full Citation</h1>
+			</div>
+			<textarea name="value" place-holder="value" rows="6"><xsl:value-of select="text()"/></textarea>
+		</div>
+	</xsl:template>
+
+	<xsl:template match="ro:citationMetadata">
+		<div class="aro_box" type="citationMetadata">
+			<div class="aro_box_display clearfix">
+				<a href="javascript:;" class="toggle"><i class="icon-minus"></i></a><h1>Citation Metadata</h1>
+			</div>
+			<div class="aro_box_part" type="identifier">
+				<div class="control-group">
+				<label class="control-label">Identifier:</label>
+					<div class="controls">
+						<span class="inputs_group">
+							<input type="text" class="inner_input" name="value" placeholder="Identifier" value="{ro:identifier/text()}"/>
+							<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSCitationIdentifierType" name="type" placeholder="Type" value="{ro:identifier/@type}"/>
+						</span>
+					</div>
+				</div>
+			</div>
+
+			<div class="aro_box_part" type="title">
+				<div class="control-group">
+				<label class="control-label">Title:</label>
+					<div class="controls">
+						<input type="text" class="input-xlarge" name="value" placeholder="Title" value="{ro:title/text()}"/>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="aro_box_part" type="edition">
+				<div class="control-group">
+				<label class="control-label">Edition:</label>
+					<div class="controls">
+						<input type="text" class="input-xlarge" name="value" placeholder="Edition" value="{ro:edition/text()}"/>
+					</div>
+				</div>
+			</div>
+
+			<div class="aro_box_part" type="placePublished">
+				<div class="control-group">
+				<label class="control-label">Place Published:</label>
+					<div class="controls">
+						<input type="text" class="input-xlarge" name="value" placeholder="Place Published" value="{ro:placePublished/text()}"/>
+					</div>
+				</div>
+			</div>
+
+			<div class="aro_box_part" type="publisher">
+				<div class="control-group">
+				<label class="control-label">Publisher:</label>
+					<div class="controls">
+						<input type="text" class="input-xlarge" name="value" placeholder="Publisher" value="{ro:publisher/text()}"/>
+					</div>
+				</div>
+			</div>
+
+			<div class="aro_box_part" type="url">
+				<div class="control-group">
+				<label class="control-label">URL:</label>
+					<div class="controls">
+						<input type="text" class="input-xlarge" name="value" placeholder="URL" value="{ro:url/text()}"/>
+					</div>
+				</div>
+			</div>
+
+			<div class="aro_box_part" type="context">
+				<div class="control-group">
+				<label class="control-label">Context:</label>
+					<div class="controls">
+						<input type="text" class="input-xlarge" name="value" placeholder="Context" value="{ro:context/text()}"/>
+					</div>
+				</div>
+			</div>
+
+			<div class="aro_box_part" type="contributor">
+				<div class="control-group">
+				<label class="control-label">Contributors:</label>
+					<div class="controls">
+						<div class="aro_box_part">
+							<xsl:apply-templates select="ro:contributor"/>
+							<div class="separate_line"/>
+							<button class="btn btn-primary addNew" type="contributor">
+								<i class="icon-plus icon-white"></i> Add Contributor
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="aro_box_part" type="date">
+				<div class="control-group">
+				<label class="control-label">Dates:</label>
+					<div class="controls">
+						<div class="aro_box_part">
+							<xsl:apply-templates select="ro:date"/>
+							<div class="separate_line"/>
+							<button class="btn btn-primary addNew" type="date">
+								<i class="icon-plus icon-white"></i> Add Date
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</xsl:template>
+
+	<xsl:template match="ro:contributor">
+		<div class="aro_box_part" type="contributor">
+		Contributor: <input type="text" class="input-small" name="seq" placeholder="Seq" value="{@seq}"/>
+			<xsl:apply-templates select="ro:namePart">
+				<xsl:with-param name="hide" value="''"/>
+			</xsl:apply-templates>
+			<div class="separate_line"/>
+			<div class="controls">
+				<button class="btn btn-primary addNew" type="namePart"><i class="icon-plus icon-white"/> Add NamePart </button>
+				<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/> Remove this contributor</button>
+			</div>
+			<hr/>
 		</div>
 	</xsl:template>
 
@@ -919,15 +1045,11 @@
 	
 	<xsl:template match="ro:date">
 		<div class="aro_box_part" type="date">
-			<label class="control-label" for="title">Date: </label>
-			<span>
-				<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
-				<input type="text" class="input-small rifcs-type" vocab="RIFCSTemporalCoverageDateType" name="type" placeholder="Date Type" value=""/>
+			<span class="inputs_group">
+				<input type="text" class="inner_input datepicker" name="value" placeholder="Date Value" value="{text()}"/>
+				<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSTemporalCoverageDateType" name="type" placeholder="Date Type" value="{@type}"/>
 			</span>
-			<input type="text" class="input-xlarge" name="value" placeholder="Date Value" value="{text()}"/>
-			<button class="btn btn-mini btn-danger remove">
-				<i class="icon-remove icon-white"/>
-			</button>
+			<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
 		</div>
 	</xsl:template>
 	
@@ -1072,18 +1194,12 @@
 
 			<div class="aro_box_part" type="namePart">
 				<div class="control-group">
-					<label class="control-label" for="title">Name Part: </label>
 					<div class="controls">
 						<span class="inputs_group">
-							<input type="text" name="value" class="inner_input" value="" placeholder="Value"/>
+							<input type="text" name="value" class="inner_input" value="" placeholder="Name Part Value"/>
 							<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSNamePartType" name="type" placeholder="Type" value=""/>
 						</span>
-						<button class="btn btn-mini btn-danger remove">
-							<i class="icon-remove icon-white"/>
-						</button>
-						<p class="help-inline">
-							<small/>
-						</p>
+						<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
 					</div>
 				</div>
 			</div>
@@ -1102,15 +1218,10 @@
 				<label class="control-label" for="title">Name Part: </label>
 				<div class="controls">
 					<span class="inputs_group">
-						<input type="text" name="value" class="inner_input" value="" placeholder="Value"/>
+						<input type="text" name="value" class="inner_input" value="" placeholder="Name Part Value"/>
 						<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSNamePartType" name="type" placeholder="Type" value=""/>
 					</span>
-					<button class="btn btn-mini btn-danger remove">
-						<i class="icon-remove icon-white"/>
-					</button>
-					<p class="help-inline">
-						<small/>
-					</p>
+					<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
 				</div>
 			</div>
 		</div>
@@ -1371,16 +1482,12 @@
 
 		<div class="aro_box template" type="fullCitation">
 			<div class="aro_box_display clearfix">
-				<a href="javascript:;" class="toggle"><i class="icon-minus"></i></a><h1>Full Citation</h1>
-				<div class="control-group">
-					<label class="control-label">Style: </label>
-					<div class="controls">
-						<input type="text" class="input-small" name="style" placeholder="style" value=""/>
-						<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
-					</div>
-				</div>
+				<a href="javascript:;" class="toggle"><i class="icon-minus"></i></a>
+				<input type="text" class="input-small rifcs-type" vocab="RIFCSCitationStyle" name="type" placeholder="Style" value="{@type}"/>
+				<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
+				<h1>Full Citation</h1>
 			</div>
-			<textarea name="value" place-holder="value" class="input-xlarge"></textarea>
+			<textarea name="value" place-holder="value" rows="6"></textarea>
 		</div>
 
 
@@ -1393,11 +1500,10 @@
 				<div class="control-group">
 				<label class="control-label">Identifier:</label>
 					<div class="controls">
-						<span>
-							<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
-							<input type="text" class="input-small rifcs-type" vocab="RIFCSIdentifierType" name="type" placeholder="Type" value=""/>
+						<span class="inputs_group">
+							<input type="text" class="inner_input" name="value" placeholder="Identifier" value=""/>
+							<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSCitationIdentifierType" name="type" placeholder="Type" value=""/>
 						</span>
-						<input type="text" class="input-xlarge" name="value" placeholder="Identifier" value=""/>
 					</div>
 				</div>
 			</div>
@@ -1458,76 +1564,64 @@
 			</div>
 
 			<div class="aro_box_part" type="contributor">
-				<div class="control-group"><div class="controls">
-					<button class="btn btn-primary showParts">Contributors <i class="icon-chevron-right icon-white"></i></button>
-					<div class="parts hide">
-						<div class="separate_line"/>
-						<button class="btn btn-primary addNew" type="contributor">
-							<i class="icon-plus icon-white"></i> Add Contributor
-						</button>
-					</div>
-				</div></div>
-			</div>
-
-			<div class="aro_box_part" type="date">
-				<div class="control-group"><div class="controls">
-					<button class="btn btn-primary showParts">Date <i class="icon-chevron-right icon-white"></i></button>
-					<div class="parts hide">
-						<div class="separate_line"/>
-						<button class="btn btn-primary addNew" type="date">
-							<i class="icon-plus icon-white"></i> Add Date
-						</button>
-					</div>
-				</div></div>
-			</div>
-
-		</div>
-
-
-		<div class="aro_box template" type="contributor">
-			<div class="aro_box_display clearfix">
-				Seq: <input type="text" class="input-small" name="seq" placeholder="Seq" value=""/>
-					<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
-			</div>
-
-			<div class="aro_box_part" type="namePart">
 				<div class="control-group">
-					<label class="control-label" for="title">Name Part: </label>
+				<label class="control-label">Contributors:</label>
 					<div class="controls">
-						<input type="text" class="input-small" name="type" placeholder="Type" value=""/>
-						<input type="text" class="input-xlarge" name="value" placeholder="Value" value=""/>
-						<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
+						<div class="aro_box_part">
+							<div class="separate_line"/>
+							<button class="btn btn-primary addNew" type="contributor">
+								<i class="icon-plus icon-white"></i> Add Contributor
+							</button>
+						</div>
 					</div>
 				</div>
 			</div>
 
+			<div class="aro_box_part" type="date">
+				<div class="control-group">
+				<label class="control-label">Dates:</label>
+					<div class="controls">
+						<div class="aro_box_part">
+							<div class="separate_line"/>
+							<button class="btn btn-primary addNew" type="date"><i class="icon-plus icon-white"></i> Add Date</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+
+		<div class="aro_box_part template" type="contributor">
+			Contributor: <input type="text" class="input-small" name="seq" placeholder="Seq" value=""/>
+			<div class="aro_box_part" type="namePart">
+				<div class="control-group">
+					<label class="control-label" for="title">Name Part: </label>
+					<div class="controls">
+						<span class="inputs_group">
+							<input type="text" name="value" class="inner_input" value="" placeholder="Value"/>
+							<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSNamePartType" name="type" placeholder="Type" value=""/>
+						</span>
+						<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
+					</div>
+				</div>
+			</div>
 			<div class="separate_line"/>
-			<button class="btn btn-primary addNew" type="namePart"><i class="icon-plus icon-white"/> Add NamePart </button>
-		
+			<div class="controls">
+				<button class="btn btn-primary addNew" type="namePart"><i class="icon-plus icon-white"/> Add NamePart </button>
+				<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/> Remove this contributor</button>
+			</div>
+			<hr/>
 		</div>	
 			
-		<div class="aro_box template" type="date">
-			<span>
-				<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
-				<input type="text" class="input-xlarge rifcs-type" vocab="RIFCSTemporalCoverageDateType" name="type" placeholder="Date Type" value=""/>
+		<div class="aro_box_part template" type="date">
+			<span class="inputs_group">
+				<input type="text" class="inner_input datepicker" name="value" placeholder="Date Value" value=""/>
+				<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSTemporalCoverageDateType" name="type" placeholder="Date Type" value=""/>
 			</span>
-			<input type="text" class="input-xlarge" name="value" placeholder="Date Value" value=""/>
-			<button class="btn btn-mini btn-danger remove">
-				<i class="icon-remove icon-white"/>
-			</button>
+			<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
 		</div>
 		
-	
-			
-		<div class="aro_box_part template" type="citationInfo">
-			<div class="control-group">
-				<div class="separate_line"/>
-				<button class="btn btn-primary addNew" type="fullCitation">
-					<i class="icon-plus icon-white"/> Add Full Citation </button>
-				<button class="btn btn-primary addNew" type="citationMetadata">
-					<i class="icon-plus icon-white"/> Add Citation Metadata </button>
-			</div>
-		</div>
 		
 		<div class="aro_box template" type="existenceDate">
 			<div class="aro_box_display clearfix">
@@ -1654,17 +1748,6 @@
 			</div>
 		</div>
 		
-		<div class="aro_box_part template" type="date">
-			<label class="control-label" for="title">Date: </label>
-			<span>
-				<button class="btn triggerTypeAhead" type="button"><span class="caret"></span></button>
-				<input type="text" class="input-small rifcs-type" vocab="RIFCSTemporalCoverageDateType" name="type" placeholder="Date Type" value=""/>
-			</span>
-			<input type="text" class="input-xlarge" name="value" placeholder="Date Value" value=""/>
-			<button class="btn btn-mini btn-danger remove">
-				<i class="icon-remove icon-white"/>
-			</button>
-		</div>
 		
 		<div class="aro_box_part template" type="coverage_date">
 			<div class="control-group">
