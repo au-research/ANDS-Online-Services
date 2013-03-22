@@ -917,6 +917,13 @@
 								<i>Datasources can have up to 2 primary relationships</i>
 								<div class="clearfix"></div>
 								<div class="pull-left">
+								<div class="control-group">
+										<label class="control-label">Class</label>
+										<div class="controls">
+											<input type="text" class="rifcs-type" vocab="RIFCSClass" name="class_1" placeholder="Class" value="{{class_1}}"/>
+										</div>
+									</div>
+									
 									<div class="control-group">
 										<label class="control-label">Registry Object Key</label>
 										<div class="controls">
@@ -926,29 +933,35 @@
 									<div class="control-group">
 										<label class="control-label">Collection</label>
 										<div class="controls">
-											<input type="text" class="input" name="collection_rel_1" value="{{collection_rel_1}}"/>
+											<input type="text" class="rifcs-type" vocab="RIFCScollectionRelationType" name="collection_rel_1" placeholder="Relation Type" value="{{collection_rel_1}}"/>
 										</div>
 									</div>
 									<div class="control-group">
 										<label class="control-label">Service</label>
 										<div class="controls">
-											<input type="text" class="input" name="service_rel_1" value="{{service_rel_1}}"/>
+											<input type="text" class="rifcs-type" vocab="RIFCSserviceRelationType" name="service_rel_1" placeholder="Relation Type" value="{{service_rel_1}}"/>
 										</div>
 									</div>
 									<div class="control-group">
 										<label class="control-label">Activity</label>
 										<div class="controls">
-											<input type="text" class="input" name="activity_rel_1" value="{{activity_rel_1}}"/>
+											<input type="text" class="rifcs-type" vocab="RIFCSactivityRelationType" name="activity_rel_1" placeholder="Relation Type" value="{{activity_rel_1}}"/>
 										</div>
 									</div>
 									<div class="control-group">
 										<label class="control-label">Party</label>
 										<div class="controls">
-											<input type="text" class="input" name="party_rel_1" value="{{party_rel_1}}"/>
+											<input type="text" class="rifcs-type" vocab="RIFCSpartyRelationType" name="party_rel_1" placeholder="Relation Type" value="{{party_rel_1}}"/>
 										</div>
 									</div>
 								</div>
 								<div class="pull-left">
+								<div class="control-group">
+										<label class="control-label">Class</label>
+									<div class="controls">
+											<input type="text" class="rifcs-type" vocab="RIFCSClass" name="class_2" placeholder="Class" value="{{class_2}}"/>
+										</div>
+									</div>
 									<div class="control-group">
 										<label class="control-label">Registry Object Key</label>
 										<div class="controls">
@@ -958,25 +971,25 @@
 									<div class="control-group">
 										<label class="control-label">Collection</label>
 										<div class="controls">
-											<input type="text" class="input" name="collection_rel_2" value="{{collection_rel_2}}"/>
+											<input type="text" class="rifcs-type" vocab="RIFCScollectionRelationType" name="collection_rel_2" placeholder="Relation Type" value="{{collection_rel_2}}"/>
 										</div>
 									</div>
 									<div class="control-group">
 										<label class="control-label">Service</label>
 										<div class="controls">
-											<input type="text" class="input" name="service_rel_2" value="{{service_rel_2}}"/>
+											<input type="text" class="rifcs-type" vocab="RIFCSserviceRelationType" name="service_rel_2" placeholder="Relation Type" value="{{service_rel_2}}"/>
 										</div>
 									</div>
 									<div class="control-group">
 										<label class="control-label">Activity</label>
 										<div class="controls">
-											<input type="text" class="input" name="activity_rel_2" value="{{activity_rel_2}}"/>
+											<input type="text" class="rifcs-type" vocab="RIFCSactivityRelationType" name="activity_rel_2" placeholder="Relation Type" value="{{activity_rel_2}}"/>
 										</div>
 									</div>
 									<div class="control-group">
 										<label class="control-label">Party</label>
 										<div class="controls">
-											<input type="text" class="input" name="party_rel_2" value="{{party_rel_2}}"/>
+											<input type="text" class="rifcs-type" vocab="RIFCSpartyRelationType" name="party_rel_2" placeholder="Relation Type" value="{{party_rel_2}}"/>
 										</div>
 									</div>
 								</div>

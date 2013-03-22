@@ -358,8 +358,65 @@ function loadDataSourceLogs(data_source_id, offset, count)
 
 	return false;
 }
+function _getVocab(vocab)
+{
+	vocab = vocab.replace("collection", "Collection");
+	vocab = vocab.replace("party", "Party");
+	vocab = vocab.replace("service", "Service");
+	vocab = vocab.replace("activity", "Activity");
+	return vocab;
+}
+function initVocabWidgets(container){
+	var container_elem;
+	if(container){
+		container_elem = container;
+	}else container_elem = $(document);
+	$(".rifcs-type", container_elem).each(function(){
+		//log(this, 'bind vocab widget');
+		var elem = $(this);
+		var widget = elem.vocab_widget({mode:'advanced'});
+		var vocab = _getVocab(elem.attr('vocab'));
+		var dataArray = Array();
+		if(vocab == 'RIFCSClass')
+		{				
+			dataArray.push({value:'Party', subtext:'Party'});
+			dataArray.push({value:'Activity', subtext:'Activity'});			
+			dataArray.push({value:'Collection', subtext:'Collection'});
+			dataArray.push({value:'Service', subtext:'Service'});
+			elem.typeahead({source:dataArray});
+		}else{
+			elem.on('narrow.vocab.ands', function(event, data) {	
 
+				if(vocab == 'RIFCSSubjectType')
+				{				
+					$.each(data.items, function(idx, e) {
+						dataArray.push({value:e.notation, subtext:e.definition});
+					});
+					$(elem).off().on("change",function(e){
+						// $(elem).prev().val('');
+						initSubjectWidget(elem);
+					});
+				
+					initSubjectWidget(elem);
+				}	
+				else
+				{
+					$.each(data.items, function(idx, e) {
+						dataArray.push({value:e.label, subtext:e.definition});
+					});
+				}
+				elem.typeahead({source:dataArray});
+			});
 
+			elem.on('error.vocab.ands', function(event, xhr) {
+			//console.log(xhr);
+		});
+		widget.vocab_widget('repository', 'rifcs');
+		widget.vocab_widget('narrow', "http://purl.org/au-research/vocabulary/RIFCS/1.4/" + vocab);	
+		}	 
+	});
+
+}
 
 function loadHarvestLogs(data_source_id, logid){
 	$.ajax({
@@ -703,6 +760,8 @@ function load_datasource_edit(data_source_id, active_tab){
 				$(this).parent().children('input').focus();
 				}
 			});
+
+			initVocabWidgets('#primary-relationship-form');
 
 		}
 	});
