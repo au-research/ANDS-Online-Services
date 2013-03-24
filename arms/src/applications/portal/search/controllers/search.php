@@ -37,7 +37,7 @@ class Search extends MX_Controller {
 		$this->solr->setOpt('qf', 'id^10 group^8 display_title^5 list_title^5 fulltext^1.2');
 		$facets = array(
 			'class' => 'Class',
-			//'subject_value_resolved' => 'Subjects',
+			'subject_value_resolved' => 'Subjects',
 			'group' => 'Contributed By',
 			'type' => 'Type',
 			'license_class' => 'Licence'
@@ -46,6 +46,7 @@ class Search extends MX_Controller {
 			$this->solr->setFacetOpt('field', $facet);
 		}
 		$this->solr->setFacetOpt('mincount','1');
+		$this->solr->setFacetOpt('limit','100');
 
 		/**
 		 * Setting the SOLR OPTIONS based on the filters sent over AJAX
@@ -159,9 +160,9 @@ class Search extends MX_Controller {
 		$pagi .= '<div class="page_navi">';
 		$pagi .=  'Page: '.$page.'/'.ceil($data['numFound'] / $pp).'   |  ';
 		$pagi .=  '<a href="javascript:void(0);" class="filter" filter_type="p" filter_value="1">First</a>';
-		if($page > 1){
-			//$pagi .=  '<a href="javascript:void(0);"> &lt;</a>';
-		}
+		// if($page > 1){
+		// 	$pagi .=  '<a href="javascript:void(0);"> &lt;</a>';
+		// }
 		for ($x = ($page - $range); $x < (($page + $range) + 1); $x++) {
 			if (($x > 0) && ($x <= ceil($data['numFound'] / $pp))) { //if it's valid
 				if($x==$page){//if we're on current
@@ -171,10 +172,10 @@ class Search extends MX_Controller {
 				}
 			}
 		}
-		//if not on last page, show Next
-		if($page < ceil($data['numFound'] / $pp)){
-			//$pagi .=  '<a href="javascript:void(0);">&gt;</a>';
-		}
+		// if not on last page, show Next
+		// if($page < ceil($data['numFound'] / $pp)){
+		// 	$pagi .=  '<a href="javascript:void(0);">&gt;</a>';
+		// }
 		$pagi .=  '<a href="javascript:void(0);" class="filter" filter_type="p" filter_value="'.ceil($data['numFound'] / $pp).'">Last</a>';
 		$pagi .=  '</div>';
 		$data['pagination'] = $pagi;

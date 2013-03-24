@@ -1043,6 +1043,11 @@ a.search_map {
 	padding: 4px 0;
 }
 
+.sidebar ul li a.show-all-facet {
+	font-weight:normal;
+	color:#eb7700;
+}
+
 .sidebar ul li a:hover {
 	color: #eb7700;
 }

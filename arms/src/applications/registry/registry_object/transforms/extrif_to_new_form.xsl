@@ -356,15 +356,7 @@
 				<div class="control-group">
 					<label class="control-label" for="group">Group</label>
 					<div class="controls">
-						<div class="input-prepend">
-							<button class="btn triggerTypeAhead" type="button">
-								<i class="icon-chevron-down"/>
-							</button>
-							<input type="text" class="input-large" name="group" value="{@group}"/>
-						</div>
-						<p class="help-inline">
-							<small/>
-						</p>
+						<input type="text" class="input-xlarge" name="group" value="{@group}"/>
 					</div>
 				</div>
 

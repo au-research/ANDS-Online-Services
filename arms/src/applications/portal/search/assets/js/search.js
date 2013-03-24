@@ -142,12 +142,9 @@ function initSearchPage(){
 	$('.toggle_sidebar').unbind('click').click(function(e){
 		e.preventDefault();
 		$('.sidebar').toggle();
-		if(searchData['map']){
-
-		}
 	});
 
-	var selecting_facets = ['group','type','licence'];
+	var selecting_facets = ['group','type','license_class','subject_value_resolved'];
 
 	$.each(selecting_facets,function(){
 		if(searchData[this]){
@@ -164,6 +161,17 @@ function initSearchPage(){
 		changeHashTo(formatSearch());
 	});
 
+
+	$('#facet-result ul').each(function(){
+		if($('li', this).length>10){
+			$('li:gt(10)', this).hide();
+			$(this).append('<li><a href="javascript:;" class="show-all-facet">Show More...</a></li>');
+			$('.show-all-facet').click(function(){
+				$(this).parent().siblings().show();
+				$(this).parent().remove();
+			});
+		}
+	});
 
 	$('#search_map_toggle').unbind('click');
 	$('#search_map_toggle').click(function(e){

@@ -108,6 +108,7 @@ $(function(){
         	event.preventDefault();
     	}
 	});
+	validate();
 });
 
 function switchMode(aro_mode){
@@ -345,7 +346,7 @@ function initEditForm(){
 			xml += '<'+ro_class+' type="'+$('input[name=type]',admin).val()+'">';
 
 			$.each(allTabs, function(){
-				xml += getRIFCSforTab(this,false);
+				xml += getRIFCSforTab(this,true);
 			});
 
 			xml+='</'+ro_class+'></registryObject>';
@@ -417,74 +418,6 @@ function initEditForm(){
 		}
 	});
 
-	validate();
-
-	function validate(){
-		if(editor=='tinymce') tinyMCE.triggerSave();//so that we can get the tinymce textarea.value without using tinymce.getContents
-		var allTabs = $('.pane');
-		var xml = '';
-
-		//admin tab
-		var admin = $('#admin');
-		var ro_class = $('#ro_class').val();//hidden value
-		var ro_id = $('#ro_id').val();
-
-		xml += '<registryObject group="'+$('input[name=group]',admin).val()+'">';
-		xml += '<key>'+$('input[name=key]', admin).val()+'</key>';
-		xml += '<originatingSource type="'+$('input[name=originatingSourceType]', admin).val()+'">'+$('input[name=originatingSource]',admin).val()+'</originatingSource>';
-		xml += '<'+ro_class+' type="'+$('input[name=type]',admin).val()+'">';
-
-		$.each(allTabs, function(){
-			xml += getRIFCSforTab(this,true);
-		});
-
-		xml+='</'+ro_class+'></registryObject>';
-		prettyPrint();
-
-		//validate
-		$.ajax({
-			url:base_url+'registry_object/validate/'+ro_id, 
-			type: 'POST',
-			data: {xml:xml},
-			success: function(data){
-				$('.alert').remove();
-				if(data.SetInfos) $.each(data.SetInfos, function(e,i){addValidationMessage(i, 'info');});
-				if(data.SetErrors) $.each(data.SetErrors, function(e,i){addValidationMessage(i, 'error');});
-				if(data.SetWarnings) $.each(data.SetWarnings, function(e,i){addValidationMessage(i, 'warning');});
-
-				var allTabs = $('.pane');
-				$('#advanced-menu .label').remove();
-				$.each(allTabs, function(){
-					var count_info = $('.alert-info', this).length;
-					var count_error = $('.alert-error', this).length;
-					var count_warning = $('.alert-warning', this).length;
-					var id = $(this).attr('id');
-					if(count_info > 0) addValidationTag(id, 'info', count_info);
-					if(count_error > 0) addValidationTag(id, 'important', count_error);
-					if(count_warning > 0) addValidationTag(id, 'warning', count_warning);
-				});
-			}
-		});
-	}
-
-
-	function addValidationMessage(tt, type){
-		var name = tt.field_id;
-		var message = tt.message;
-		// log(name, message);
-		if(name.match("^tab_")){
-			var tab = name.replace('tab_','');
-			$('#'+tab).prepend('<div class="alert alert-'+type+'">'+message+'</div>');
-		}else{
-			$('*[field_id='+name+']').append('<div class="alert alert-'+type+'">'+message+'</div>');
-		}
-	}
-
-	function addValidationTag(pane, type, num){
-		var menu_item = $('a[href="#'+pane+'"]');
-		$(menu_item).append('<span class="label label-'+type+'">'+num+'</span>')
-	}
-
 
 	//Load external XML modal dialog
 	$('#load_xml').die().live({
@@ -548,6 +481,76 @@ function initEditForm(){
 	assignFieldID();
 	initVocabWidgets($(document));
 	initMapWidget($(document))
+}
+
+function validate(){
+	if(editor=='tinymce') tinyMCE.triggerSave();//so that we can get the tinymce textarea.value without using tinymce.getContents
+	var allTabs = $('.pane');
+	var xml = '';
+
+	//admin tab
+	var admin = $('#admin');
+	var ro_class = $('#ro_class').val();//hidden value
+	var ro_id = $('#ro_id').val();
+
+	xml += '<registryObject group="'+$('input[name=group]',admin).val()+'">';
+	xml += '<key>'+$('input[name=key]', admin).val()+'</key>';
+	xml += '<originatingSource type="'+$('input[name=originatingSourceType]', admin).val()+'">'+$('input[name=originatingSource]',admin).val()+'</originatingSource>';
+	xml += '<'+ro_class+' type="'+$('input[name=type]',admin).val()+'">';
+
+	$.each(allTabs, function(){
+		xml += getRIFCSforTab(this,true);
+	});
+
+	xml+='</'+ro_class+'></registryObject>';
+	prettyPrint();
+
+	//validate
+	$.ajax({
+		url:base_url+'registry_object/validate/'+ro_id, 
+		type: 'POST',
+		data: {xml:xml},
+		success: function(data){
+			$('.alert').remove();
+			if(data.SetInfos) $.each(data.SetInfos, function(e,i){addValidationMessage(i, 'info');});
+			if(data.SetErrors) $.each(data.SetErrors, function(e,i){addValidationMessage(i, 'error');});
+			if(data.SetWarnings) $.each(data.SetWarnings, function(e,i){addValidationMessage(i, 'warning');});
+
+			var allTabs = $('.pane');
+			$('#advanced-menu .label').remove();
+			$.each(allTabs, function(){
+				var count_info = $('.alert-info', this).length;
+				var count_error = $('.alert-error', this).length;
+				var count_warning = $('.alert-warning', this).length;
+				var id = $(this).attr('id');
+				if(count_info > 0) addValidationTag(id, 'info', count_info);
+				if(count_error > 0) addValidationTag(id, 'important', count_error);
+				if(count_warning > 0) addValidationTag(id, 'warning', count_warning);
+			});
+		}
+	});
+}
+
+
+function addValidationMessage(tt, type){
+	var name = tt.field_id;
+	var message = tt.message;
+    var message = $('<div />').html(message).text();
+
+	log(name, message);
+	if(name.match("^tab_")){
+		var tab = name.replace('tab_','');
+		$('#'+tab).prepend('<div class="alert alert-'+type+'">'+message+'</div>');
+	}else{
+		var field = $('*[field_id='+name+']');
+		$(field).append('<div class="alert alert-'+type+'">'+message+'</div>');
+		$(field).addClass('error');
+	}
+}
+
+function addValidationTag(pane, type, num){
+	var menu_item = $('a[href="#'+pane+'"]');
+	$(menu_item).append('<span class="label label-'+type+'">'+num+'</span>')
 }
 
 function initSimpleModeFields()
@@ -636,7 +639,7 @@ function initSubjectWidget(elem){
 			$.each(data.items, function(idx, e) {
 				dataArray.push({value:e.notation, subtext:e.label});
 			});
-			log(dataArray);
+			// log(dataArray);
 			vocab_value.typeahead({source:dataArray});
 			vocab_value.data('typeahead').source = dataArray;
 		});

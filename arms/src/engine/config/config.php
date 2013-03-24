@@ -21,8 +21,13 @@ else
 }
 
 //fix logging out thing, expire in 3 hours
-$config['sess_expiration'] = time()+10800000;
-$config['sess_expiration'] = 0;
+$config['sess_cookie_name']     = 'arms';
+$config['sess_expiration']      = 10800;
+$config['sess_encrypt_cookie']  = TRUE;
+$config['sess_use_database']    = TRUE;
+$config['sess_match_ip']        = FALSE;
+$config['sess_match_useragent'] = TRUE;
+$config['sess_time_to_update']  = 300;
 
 /* For multiple-application environments, this "app" will be matched 
 by the $_GET['app'] which is rewritten in .htaccess. The array key is
