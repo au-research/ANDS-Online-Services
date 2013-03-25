@@ -150,7 +150,7 @@ class Registry_object_search extends MX_Controller {
 			$params['class'] = $class;
 		}
 		if ($ds !== false) {
-			$params['ds'] = $source;
+			$params['ds'] = $ds;
 		}
 		foreach (self::$parameters as $param) {
 			$cond = $param['conditions'];
