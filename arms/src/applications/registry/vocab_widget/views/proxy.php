@@ -22,8 +22,19 @@ limitations under the License.
  * Requires cURL PHP extensions. PHP5.2+, PHP5.4 recommended
  */
 // some constants
-define("SOLR_URL", "http://ands3.anu.edu.au:8080/solr1/collection1/select?wt=phps&rows=0&q=subject_vocab_uri%%3A(%%22%s%%22)");
-define("BASE_URL", "http://ands3.anu.edu.au:8080/sissvoc/api/");
+if (isset($solr_base) && !empty($solr_base)) {
+    define("SOLR_URL", $solr_base . "select?wt=phps&rows=0&q=subject_vocab_uri%%3A(%%22%s%%22)+%s+%s");
+}
+else {
+    define("SOLR_URL", "http://ands3.anu.edu.au:8080/solr1/collection1/select?wt=phps&rows=0&q=subject_vocab_uri%%3A(%%22%s%%22)+%s+%s");
+}
+if (isset($sissvoc_base) && !empty($sissvoc_base)) {
+    define("BASE_URL", $sissvoc_base);
+}
+else {
+    define("BASE_URL", "http://ands3.anu.edu.au:8080/sissvoc/api/");
+}
+
 define("SEARCH_URL", "/concept.json?anycontains=");
 define("NARROW_URL", "/concept/narrower.json?uri=");
 define("ALLNARROW_URL", "/concept/allNarrower.json?uri=");
