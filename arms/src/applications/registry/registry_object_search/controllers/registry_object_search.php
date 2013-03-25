@@ -124,10 +124,10 @@ class Registry_object_search extends MX_Controller {
 			 * to generate results. The best way to approach this
 			 * is probably by building up a `$pipeline` array that
 			 * can be fed to $this->ro->_get()...
-			 *  - field: where key like '%%%s%%' || where title like '%%%s%%'
+			 *  - field: where_like($params['key'], $params['term'])
 			 *  - onlyPublished->yes: where('status', "PUBLISHED")
-			 *  - class: where('class', $class)
-			 *  - ds: where('data_source_id', $this->ds->getByKey($ds))
+			 *  - class: where('class', $params['class'])
+			 *  - ds: where('data_source_id', $this->ds->getByKey($params['ds'])->id)
 			 */
 		}
 	}
