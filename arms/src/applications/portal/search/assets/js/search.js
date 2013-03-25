@@ -148,6 +148,7 @@ function initSearchPage(){
 	
 
 
+
 	$('#search_map_toggle').unbind('click');
 	$('#search_map_toggle').click(function(e){
 		e.preventDefault();

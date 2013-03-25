@@ -65,3 +65,6 @@ DROP INDEX `fk_registry_object_relationships`
 , ADD INDEX `idx_related_object_key` USING HASH (`related_object_key` ASC) ;
 ALTER TABLE `record_data` ADD COLUMN 
   `hash` varchar(45) NOT NULL DEFAULT 'unhashed' AFTER `scheme`;
+
+ALTER TABLE `data_source_attributes` CHANGE COLUMN `value` `value` VARCHAR(512) NULL DEFAULT NULL  ;
+ALTER TABLE `registry_object_attributes` CHANGE COLUMN `value` `value` VARCHAR(512) NULL DEFAULT NULL  ;

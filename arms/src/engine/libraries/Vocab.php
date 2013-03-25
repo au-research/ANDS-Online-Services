@@ -185,7 +185,11 @@ class Vocab {
         return $content;
     }
 
+<<<<<<< Updated upstream
     function getNumCollections($uri,$filters){
+=======
+    function getNumCollections($uri){
+>>>>>>> Stashed changes
         $CI =& get_instance();
         $CI->load->library('solr');
         $CI->solr->setOpt('rows', 0);
@@ -193,6 +197,7 @@ class Vocab {
         $CI->solr->setOpt('q.alt', '*:*');
         $CI->solr->clearOpt('fq');
         $CI->solr->setOpt('fq', 'subject_vocab_uri:("'.$uri.'")');
+<<<<<<< Updated upstream
         if($filters){
             foreach($filters as $key=>$value){
                 $value = urldecode($value);
@@ -218,21 +223,34 @@ class Vocab {
                 }
             }
         }
+=======
+>>>>>>> Stashed changes
         $CI->solr->executeSearch();
         return $CI->solr->getNumFound();
     }
 
 
     //RDA usage
+<<<<<<< Updated upstream
     function getTopLevel($vocab, $filters){
         header('Cache-Control: no-cache, must-revalidate');
         header('Content-type: application/json');
         $content = $this->post($this->constructUriString('resource', $this->resolvingServices[$vocab], ''));
+=======
+    function getTopLevel(){
+        header('Cache-Control: no-cache, must-revalidate');
+        header('Content-type: application/json');
+        $content = $this->post($this->constructUriString('resource', $this->resolvingServices['anzsrc-for'], ''));
+>>>>>>> Stashed changes
         if($json = json_decode($content, false)){
             foreach($json->{'result'}->{'primaryTopic'}->{'hasTopConcept'} as $concept){
                 $concept_uri = $concept->{'_about'};
                 $uri['uriprefix']=$concept->{'_about'};
+<<<<<<< Updated upstream
                 $uri['resolvingService']=$this->resolvingServices[$vocab]['resolvingService'];
+=======
+                $uri['resolvingService']=$this->resolvingServices['anzsrc-for']['resolvingService'];
+>>>>>>> Stashed changes
                 
                 $resolved_concept = json_decode($this->getResource($uri));
 
@@ -240,12 +258,20 @@ class Vocab {
                 $c['notation'] = $resolved_concept->{'result'}->{'primaryTopic'}->{'notation'};
                 $c['prefLabel'] = $resolved_concept->{'result'}->{'primaryTopic'}->{'prefLabel'}->{'_value'};
                 $c['uri'] = $resolved_concept->{'result'}->{'primaryTopic'}->{'_about'};
+<<<<<<< Updated upstream
                 $c['collectionNum'] = $this->getNumCollections($c['uri'],$filters);
+=======
+                $c['collectionNum'] = $this->getNumCollections($c['uri']);
+>>>>>>> Stashed changes
 
                 $tree['topConcepts'][] = $c;
             }
         }
+<<<<<<< Updated upstream
         return ($tree);
+=======
+        var_dump($tree);
+>>>>>>> Stashed changes
     }
 
 }
