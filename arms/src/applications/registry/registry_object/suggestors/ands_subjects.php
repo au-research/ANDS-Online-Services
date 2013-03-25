@@ -21,9 +21,12 @@ class Suggestor_ands_subjects implements GenericSuggestor
 
 		// Subject matches
 		$my_subjects = array('');
-		foreach($sxml->{strtolower($registry_object->class)}->subject AS $subject)
+		if($sxml->{strtolower($registry_object->class)}->subject)
 		{
-			$my_subjects[] = '"' . (string) $subject . '" OR';
+			foreach($sxml->{strtolower($registry_object->class)}->subject AS $subject)
+			{
+				$my_subjects[] = '"' . (string) $subject . '" OR';
+			}
 		}
 		$subject_search_query = "(" . substr(implode(" subject_value_resolved:", $my_subjects), 0, -3) . ")";
 

@@ -77,14 +77,17 @@ class Maintenance extends MX_Controller {
 		$this->load->model('data_source/data_sources', 'ds');
 
 		$ids = $this->ro->getIDsByDataSourceID($data_source_id);
-		foreach($ids as $ro_id){
-			try{
-				$ro = $this->ro->getByID($ro_id);
-				if($ro->getRif()){
-					$ro->enrich();
+		if($ids)
+		{
+			foreach($ids as $ro_id){
+				try{
+					$ro = $this->ro->getByID($ro_id);
+					if($ro->getRif()){
+						$ro->enrich();
+					}
+				}catch (Exception $e){
+					echo "<pre>error in: $e" . nl2br($e->getMessage()) . "</pre>" . BR;
 				}
-			}catch (Exception $e){
-				echo "<pre>error in: $e" . nl2br($e->getMessage()) . "</pre>" . BR;
 			}
 		}
 	}
@@ -108,43 +111,46 @@ class Maintenance extends MX_Controller {
 
 		$ids = $this->ro->getIDsByDataSourceID($data_source_id, false, PUBLISHED);
 		$i = 0;
-		foreach($ids as $ro_id){
-			try{
-				$ro = $this->ro->getByID($ro_id);
-				if($ro){
-					$ro->enrich();//TODO: XXX
-					$ro->update_quality_metadata(); // TODO: MOVE IT WHERE BELONGS!!!
-					$solrXML = $ro->transformForSOLR();
-					$result = $this->solr->addDoc($solrXML);
-					$result = json_decode($result);
-					$data['results'][$ro_id] = array(
-						'result'=>$result->{'responseHeader'}->{'status'},
-						'QTime'=>$result->{'responseHeader'}->{'QTime'}
-					);
-					if($result->{'responseHeader'}->{'status'}!=0){
-						$data['results'][$ro_id]['msg'] = $result->{'error'}->{'msg'};
-						$data['error'] .= $result->{'error'}->{'msg'};
+		if($ids)
+		{
+			foreach($ids as $ro_id){
+				try{
+					$ro = $this->ro->getByID($ro_id);
+					if($ro){
+						$ro->enrich();//TODO: XXX
+						$ro->update_quality_metadata(); // TODO: MOVE IT WHERE BELONGS!!!
+						$solrXML = $ro->transformForSOLR();
+						$result = $this->solr->addDoc($solrXML);
+						$result = json_decode($result);
+						$data['results'][$ro_id] = array(
+							'result'=>$result->{'responseHeader'}->{'status'},
+							'QTime'=>$result->{'responseHeader'}->{'QTime'}
+						);
+						if($result->{'responseHeader'}->{'status'}!=0){
+							$data['results'][$ro_id]['msg'] = $result->{'error'}->{'msg'};
+							$data['error'] .= $result->{'error'}->{'msg'};
+						}else{
+							//success
+							$i++;
+						}
 					}else{
-						//success
-						$i++;
+						$data['results'][$ro_id] = array(
+							'result'=>'Not Found!',
+							'QTime'=>0
+						);
+						$data['error'] .= 'RO not found: '. $ro_id.'<br/>';
 					}
-				}else{
+				}catch (Exception $e){
 					$data['results'][$ro_id] = array(
-						'result'=>'Not Found!',
+						'result'=>"<pre>" . nl2br($e) . "</pre>",
 						'QTime'=>0
 					);
-					$data['error'] .= 'RO not found: '. $ro_id.'<br/>';
+					$data['error'] .= nl2br($e);
 				}
-			}catch (Exception $e){
-				$data['results'][$ro_id] = array(
-					'result'=>"<pre>" . nl2br($e) . "</pre>",
-					'QTime'=>0
-				);
-				$data['error'] .= nl2br($e);
 			}
+			$this->solr->commit();
+			$data['totalAdded'] = $i;
 		}
-		$this->solr->commit();
-		$data['totalAdded'] = $i;
 		echo json_encode($data);
 	}
 

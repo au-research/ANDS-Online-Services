@@ -12,8 +12,9 @@ class Subject_Extension extends ExtensionBase
 	{
 		$subjectsResolved = array();
 		$this->_CI->load->library('vocab');
-		$sxml = $this->ro->getSimpleXML();		
-		$subjects = $sxml->xpath('//subject');
+		$sxml = $this->ro->getSimpleXML();			
+		$sxml->registerXPathNamespace("ro", RIFCS_NAMESPACE);
+		$subjects = $sxml->xpath('//ro:subject');
 		foreach ($subjects AS $subject)
 		{
 			$type = (string)$subject["type"];

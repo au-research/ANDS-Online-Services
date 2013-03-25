@@ -135,7 +135,7 @@ class Registry_fetch extends CI_Model
 		}
 		else
 		{
-			throw new Exception("Error whilst fetching registry object suggested links: " . $contents['message']);
+			throw new Exception("Error whilst fetching registry object suggested links by slug: " . $contents['message']);
 		}
 	}
 
@@ -150,7 +150,7 @@ class Registry_fetch extends CI_Model
 		}
 		else
 		{
-			throw new Exception("Error whilst fetching registry object suggested links: " . $contents['message']);
+			throw new Exception("Error whilst fetching registry object suggested links by ID: " .$url."  ". $contents['message']);
 		}
 	}
 

@@ -12,8 +12,9 @@ class Spatial_Extension extends ExtensionBase
 	{
 		$extents = array();
 		
-		$sxml = $this->ro->getSimpleXML();		
-		$spatial_elts = $sxml->xpath('//spatial');
+		$sxml = $this->ro->getSimpleXML();	
+		$sxml->registerXPathNamespace("ro", RIFCS_NAMESPACE);
+		$spatial_elts = $sxml->xpath('//ro:spatial');
 		
 		foreach ($spatial_elts AS $spatial)
 		{
@@ -149,8 +150,9 @@ class Spatial_Extension extends ExtensionBase
 	{
 		$coords = array();
 		
-		$sxml = $this->ro->getSimpleXML();		
-		$spatial_elts = $sxml->xpath('//spatial');
+		$sxml = $this->ro->getSimpleXML();	
+		$sxml->registerXPathNamespace("ro", RIFCS_NAMESPACE);	
+		$spatial_elts = $sxml->xpath('//ro:spatial');
 		
 		foreach ($spatial_elts AS $spatial)
 		{

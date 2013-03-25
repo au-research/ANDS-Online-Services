@@ -33,7 +33,7 @@ class Importer {
 	public $reindexed_records;
 	public $affected_records;
 	public $deleted_records;
-
+	public $standardLog;
 	public $statusAlreadyChanged = false;
 
 	public $error_log = array();
@@ -179,6 +179,7 @@ class Importer {
 			}
 			
 			$this->message_log[] = "Reindexed record count: " . $this->reindexed_records;
+			$this->message_log[] = $this->standardLog;
 		}
 
 	}
@@ -310,7 +311,7 @@ class Importer {
 					}
 					// Save all our attributes to the object
 					$ro->save();
-
+					$ro->enrich();
 					//if this is ds has the qa flag set we need to check if this is the first submitted for assesmment record and if so email the notify address
 
 

@@ -178,7 +178,7 @@ class Registry_object extends MX_Controller {
 		$xml = $this->input->post('xml');
 		$this->load->model('registry_objects', 'ro');
 		$ro = $this->ro->getByID($registry_object_id);
-		$ro->updateXML($xml);
+		$ro->updateXML(wrapRegistryObjects($xml));
 		$ro->enrich();
 		if($ro->save()){
 			echo 'success saved';

@@ -27,8 +27,9 @@ class Dates_Extension extends ExtensionBase
 		$this->minYear = 9999999;
 		$this->maxYear = 0;
 		$temporalArray = array();
-		$sxml = $this->ro->getSimpleXML();		
-		$temporals = $sxml->xpath('//date');
+		$sxml = $this->ro->getSimpleXML();
+		$sxml->registerXPathNamespace("ro", RIFCS_NAMESPACE);
+		$temporals = $sxml->xpath('//ro:date');
 		foreach ($temporals AS $temporal)
 		{
 			$type = (string)$temporal["type"];
@@ -71,7 +72,8 @@ class Dates_Extension extends ExtensionBase
 	{
 
 		/* Attempt to find a "nice" display for dates elements ('whole of collection dates') */
-		$dates = $sxml->xpath('//dates');
+		$sxml->registerXPathNamespace("ro", RIFCS_NAMESPACE);
+		$dates = $sxml->xpath('//ro:dates');
 		foreach ($dates AS $date)
 		{
 			// Determine the prefix for this date:
@@ -103,7 +105,8 @@ class Dates_Extension extends ExtensionBase
 		}
 
 		/* Attempt to find a "nice" display for temporal coverage dates */
-		$temporals = $sxml->xpath('//coverage/temporal');
+		$sxml->registerXPathNamespace("ro", RIFCS_NAMESPACE);
+		$temporals = $sxml->xpath('//ro:coverage/ro:temporal');
 		foreach ($temporals AS $date)
 		{
 			// Determine the prefix for this date:
@@ -120,7 +123,8 @@ class Dates_Extension extends ExtensionBase
 		}
 
 		/* Attempt to find a "nice" display for existenceDates */
-		$existenceDates = $sxml->xpath('//existenceDates');
+		$sxml->registerXPathNamespace("ro", RIFCS_NAMESPACE);
+		$existenceDates = $sxml->xpath('//ro:existenceDates');
 		foreach ($existenceDates AS $date)
 		{
 			$start = '';

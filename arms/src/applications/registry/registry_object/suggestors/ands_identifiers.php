@@ -20,10 +20,14 @@ class Suggestor_ands_identifiers implements GenericSuggestor
 		$sxml = $registry_object->getSimpleXML();
 
 		// Identifier matches (if another object has the same identifier)
+		//var_dump($sxml);
 		$my_identifiers = array('');
-		foreach($sxml->{strtolower($registry_object->class)}->identifier AS $identifier)
+		if($sxml->{strtolower($registry_object->class)}->identifier)
 		{
-			$my_identifiers[] = '"' . (string) $identifier . '"';
+			foreach($sxml->{strtolower($registry_object->class)}->identifier AS $identifier)
+			{
+				$my_identifiers[] = '"' . (string) $identifier . '"';
+			}
 		}
 		$identifier_search_query = implode(" +identifier_value:", $my_identifiers);
 

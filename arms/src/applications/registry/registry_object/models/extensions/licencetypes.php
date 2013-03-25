@@ -20,16 +20,15 @@ class LicenceTypes_Extension extends ExtensionBase
 	function processLicence()
 	{
 		$rights = array();
-		$sxml = $this->ro->getSimpleXML();		
-		foreach ($sxml->xpath('//'.$this->ro->class.'/rights') AS $theRights)
+		$sxml = $this->ro->getSimpleXML();	
+		$sxml->registerXPathNamespace("ro", RIFCS_NAMESPACE);	
+		foreach ($sxml->xpath('//ro:'.$this->ro->class.'/ro:rights') AS $theRights)
 		{
 			$right = array();
 			foreach($theRights as $key=>$theRight)
 			{
 				$right['value']= (string)$theRight;
-
 				$right['type'] = (string)$key;
-
 				if((string)$theRight['rightsUri']!='') $right['rightsUri'] = (string)$theRight['rightsUri'];
 
 				if($right['type']=='licence')
@@ -49,7 +48,7 @@ class LicenceTypes_Extension extends ExtensionBase
 
 		}
 
-		foreach ($sxml->xpath('//'.$this->ro->class.'/description') AS $theRightsDescription)
+		foreach ($sxml->xpath('//ro:'.$this->ro->class.'/ro:description') AS $theRightsDescription)
 		{
 
 				if($theRightsDescription['type']=='rights'||$theRightsDescription['type']=='accessRights')
@@ -68,7 +67,8 @@ class LicenceTypes_Extension extends ExtensionBase
 					$rights[] = $right;
 				}
 		
-		}		
+		}	
+
 		return $rights;
 
 	}

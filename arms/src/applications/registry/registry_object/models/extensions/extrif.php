@@ -20,17 +20,23 @@ class Extrif_Extension extends ExtensionBase
 
 		//same as in relationships.php
 		$xml = $this->ro->getSimpleXML();
-
 		// f@%!$ing dirty hack...
 		if ($xml->registryObject)
 		{
-			$xml = $xml->registryObject;
+			$xml = new SimpleXMLElement($xml->registryObject->asXML());
 		}
-
-		$rifNS = $xml->getNamespaces();
-		if(!isset($rifNS['']))
+	    
+		$nsDefined = false;
+		$rifNS = $xml->getNamespaces(true);
+		foreach($rifNS as $ns)
+		{
+			if($ns == RIFCS_NAMESPACE)
+				$nsDefined = true;
+		}
+		if(!$nsDefined)
+		{
 			$xml->addAttribute("xmlns",RIFCS_NAMESPACE);
-
+		}
 		// Cannot enrich already enriched RIFCS!!
 		if(true)//!isset($rifNS[EXTRIF_NAMESPACE])) //! (string) $attributes['enriched'])//! (string) $attributes['enriched'])
 		{
@@ -176,7 +182,7 @@ class Extrif_Extension extends ExtensionBase
 					$temporals->addChild("extRif:temporal_earliest_year", $this->ro->getEarliestAsYear(), EXTRIF_NAMESPACE);
 					$temporals->addChild("extRif:temporal_latest_year", $this->ro->getLatestAsYear(), EXTRIF_NAMESPACE);
 				}	
-/*
+
 				foreach ($this->ro->getRelatedObjects() AS $relatedObject)
 				{
 					$relatedObj = $extendedMetadata->addChild("extRif:related_object", NULL, EXTRIF_NAMESPACE);
@@ -188,7 +194,7 @@ class Extrif_Extension extends ExtensionBase
 					$relatedObj->addChild("extRif:related_object_relation", $relatedObject['relation_type'], EXTRIF_NAMESPACE);
 					$relatedObj->addChild("extRif:related_object_logo", $relatedObject['the_logo'], EXTRIF_NAMESPACE);
 				}
-*/
+
 				// Friendlify dates =)
 				$xml = $this->ro->extractDatesForDisplay($xml);
 
@@ -198,7 +204,7 @@ class Extrif_Extension extends ExtensionBase
 				
 						
 				$this->ro->updateXML($xml->asXML(),TRUE,'extrif');
-				return $this;
+				//return $this;
 			}
 			else
 			{
