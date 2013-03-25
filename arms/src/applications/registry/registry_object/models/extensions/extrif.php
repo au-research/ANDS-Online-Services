@@ -35,7 +35,13 @@ class Extrif_Extension extends ExtensionBase
 		}
 		if(!$nsDefined)
 		{
-			$xml->addAttribute("xmlns",RIFCS_NAMESPACE);
+			try{
+			@$xml->addAttribute("xmlns",RIFCS_NAMESPACE);
+			}
+			catch(Exception $e)
+			{
+				//ignore this
+			}
 		}
 		// Cannot enrich already enriched RIFCS!!
 		if(true)//!isset($rifNS[EXTRIF_NAMESPACE])) //! (string) $attributes['enriched'])//! (string) $attributes['enriched'])
@@ -192,7 +198,7 @@ class Extrif_Extension extends ExtensionBase
 					$relatedObj->addChild("extRif:related_object_type", $relatedObject['related_object_type'], EXTRIF_NAMESPACE);
 					$relatedObj->addChild("extRif:related_object_display_title", $relatedObject['title'], EXTRIF_NAMESPACE);
 					$relatedObj->addChild("extRif:related_object_relation", $relatedObject['relation_type'], EXTRIF_NAMESPACE);
-					$relatedObj->addChild("extRif:related_object_logo", $relatedObject['the_logo'], EXTRIF_NAMESPACE);
+					//$relatedObj->addChild("extRif:related_object_logo", $relatedObject['the_logo'], EXTRIF_NAMESPACE);
 				}
 
 				// Friendlify dates =)
