@@ -26,7 +26,7 @@
 
 	var defaults = {
 	    //location (absolute URL) of the jsonp proxy
-	    endpoint: 'http://ands3.anu.edu.au/workareas/leo/ands/arms/src/registry/vocab_widget/proxy/',
+	    endpoint: 'http://ands3.anu.edu.au/workareas/smcphill/ands-online-services/arms/src/registry/vocab_widget/proxy/',
 
 	    //sisvoc repository to query.
 	    repository: '',
@@ -71,7 +71,11 @@
 
 	    //what data field should be stored upon selection?
 	    //in narrow mode, this is the option's value attribute
-	    target_field: "label"
+	    target_field: "label",
+
+	    //solr count query fragment injector and operator
+	    sqc: "",
+	    sqc_op: ""
 	};
 
 	var settings;
@@ -377,6 +381,10 @@
 	    if (typeof(lookfor) !== 'undefined' &&
 		lookfor !== false) {
 		url = url + "&lookfor=" + lookfor;
+	    }
+	    if (typeof(this.settings.sqc) !== 'undefined' &&
+		this.settings.sqc !== '') {
+		url = url + "&sqc=" + this.settings.sqc;
 	    }
 	    return url;
 	},

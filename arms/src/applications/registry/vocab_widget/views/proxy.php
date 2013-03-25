@@ -84,6 +84,13 @@ class VocabProxy
 	private $debug = false;
 
 	/**
+	 * these have to be public because my dodgy count injector code uses (a
+	 * reference to) $this in a closure
+	 */
+	public $solr_query_callback = false;
+	public $solr_query_callback_op = false;
+
+	/**
 	 * Proxy is an atomic object: it gets instantiated, runs, and prints
 	 * output all in one fell swoop.
 	 */
@@ -126,15 +133,23 @@ class VocabProxy
 		 */
 		foreach($this->valid_actions as &$action)
 		{
-			$action['itemprocessor'] = function($items) {
-				return array_map(function($e)  {
+			$handler = $this;
+			$action['itemprocessor'] = function($items) use($handler) {
+				return array_map(function($e) use($handler) {
 						if (array_key_exists('about', $e) &&
 						    substr($e['about'], 0, 7) === 'http://')
 						{
-							$count_url = sprintf(SOLR_URL,$e['about']);
-							$solr_response = unserialize(file_get_contents($count_url));
+							if ($handler->solr_query_callback !== false) {
+								$count_url = sprintf(SOLR_URL,$e['about'],
+										     $handler->solr_query_callback_op,
+										     $handler->solr_query_callback);
+							}
+							else {
+								$count_url = sprintf(SOLR_URL,$e['about'], "", "");
+							}
 							try
 							{
+								$solr_response = unserialize(file_get_contents($count_url));
 								$e['count'] = $solr_response['response']['numFound'];
 							}
 							catch (Exception $e)
@@ -278,12 +293,27 @@ class VocabProxy
 	 *     - lookfor
 	 *     - limit
 	 *     - callback
+	 *     - sqc
+	 *     - sqc_op
 	 *  - initialises internal variables based on request data
 	 *  - sets message response accordingly
 	 * @return true if preconditions met, false otherwise
 	 */
 	private function setup() {
 		$this->debug = isset($_REQUEST['debug']);
+
+		if (isset($_REQUEST['sqc']) &&
+		    !empty($_REQUEST['sqc'])) {
+			$this->solr_query_callback = rawurlencode($_REQUEST['sqc']);
+
+			if (isset($_REQUEST['sqc_op']) &&
+			    !empty($_REQUEST['sqc_op'])) {
+				$this->solr_query_callback_op = $_REQUEST['sqc_op'];
+			}
+			else {
+				$this->solr_query_callback_op = "AND";
+			}
+		}
 
 		if (isset($_REQUEST['repository'])) {
 			//strip leading "../", and normalise "/"
