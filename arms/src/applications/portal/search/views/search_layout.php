@@ -79,5 +79,20 @@
 </div>
 {{/facet_result}}
 </script>
+
+<script type="text/x-mustache" id="top-level-template">
+<div class="widget facet_subject_vocab_uri">
+	<h3 class="widget_title">Subjects</h3>
+	<a href="javascript:;" id="browse-more-subject">Browse More Subjects</a>
+	<ul>
+		{{#topConcepts}}
+			<li><a href="javascript:;" class="filter" filter_type="subject_vocab_uri" filter_value="{{uri}}">{{prefLabel}} ({{collectionNum}})</a></li>
+		{{/topConcepts}}
+	</ul>
+</div>
+</script>
+
+
+
 </div>
 <?php $this->load->view('rda_footer');?>

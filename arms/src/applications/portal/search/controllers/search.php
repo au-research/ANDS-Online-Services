@@ -37,7 +37,7 @@ class Search extends MX_Controller {
 		$this->solr->setOpt('qf', 'id^10 group^8 display_title^5 list_title^5 fulltext^1.2');
 		$facets = array(
 			'class' => 'Class',
-			'subject_value_resolved' => 'Subjects',
+			//'subject_value_resolved' => 'Subjects',
 			'group' => 'Contributed By',
 			'type' => 'Type',
 			'license_class' => 'Licence'
@@ -82,6 +82,10 @@ class Search extends MX_Controller {
 						break;
 					case 'subject_value_resolved': 
 						$this->solr->setOpt('fq', 'subject_value_resolved:("'.$value.'")');
+						$filteredSearch = true;
+						break;
+					case 'subject_vocab_uri':
+						$this->solr->setOpt('fq', 'subject_vocab_uri:("'.$value.'")');
 						$filteredSearch = true;
 						break;
 					case 'license_class': 
@@ -189,5 +193,11 @@ class Search extends MX_Controller {
 
 		//return the result to the client
 		echo json_encode($data);
+	}
+
+	function getTopLevel(){
+		$this->load->library('vocab');
+		$filters = $this->input->post('filters');
+		echo json_encode($this->vocab->getTopLevel('anzsrc-for', $filters));
 	}
 }

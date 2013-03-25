@@ -89,6 +89,16 @@ class Vocab {
         return $content;
     }
 
+    function constructUriString($type, $vocab, $term){
+        //$type can be resource or concept
+        if($type=='resource'){
+            $resourceQueryComp = 'resource.json?uri=';
+        }else if($type=='broader'){
+            $resourceQueryComp = 'concept/allBroader.json?uri=';
+        }
+        return $vocab['resolvingService'].$resourceQueryComp.$vocab['uriprefix'].$term;
+    }
+
     function constructResorceUriString($resolvingService, $uriprefix, $term){
         $resourceQueryComp = 'resource.json?uri=';
         $uri = $resolvingService.$resourceQueryComp.urlencode($uriprefix.$term);
@@ -160,6 +170,82 @@ class Vocab {
             }
         }
         return $result;
+    }
+
+    function getResource($vocab_uri){
+        $curl_uri = $vocab_uri['resolvingService'].'resource.json?uri='.$vocab_uri['uriprefix'];
+        //echo $curl_uri;
+        $ch = curl_init();
+        //set the url, number of POST vars, POST data
+        curl_setopt($ch,CURLOPT_URL,$curl_uri);//post to SOLR
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);//return to variable
+        $content = curl_exec($ch);//execute the curl
+        //echo 'json received+<pre>'.$content.'</pre>';
+        curl_close($ch);//close the curl
+        return $content;
+    }
+
+    function getNumCollections($uri,$filters){
+        $CI =& get_instance();
+        $CI->load->library('solr');
+        $CI->solr->setOpt('rows', 0);
+        $CI->solr->setOpt('q','*:*');
+        $CI->solr->setOpt('q.alt', '*:*');
+        $CI->solr->clearOpt('fq');
+        $CI->solr->setOpt('fq', 'subject_vocab_uri:("'.$uri.'")');
+        if($filters){
+            foreach($filters as $key=>$value){
+                $value = urldecode($value);
+                switch($key){
+                    case 'q': 
+                        $CI->solr->setOpt('q', $value);
+                        break;
+                    case 'tab': 
+                        if($value!='all') $CI->solr->setOpt('fq', 'class:("'.$value.'")');
+                        break;
+                    case 'group': 
+                        $CI->solr->setOpt('fq', 'group:("'.$value.'")');
+                        break;
+                    case 'type': 
+                        $CI->solr->setOpt('fq', 'type:'.$value);
+                        break;
+                    case 'license_class': 
+                        $CI->solr->setOpt('fq', 'license_class:("'.$value.'")');
+                        break;             
+                    case 'spatial':
+                        $CI->solr->setOpt('fq', 'spatial_coverage_extents:"Intersects('.$value.')"');
+                        break;
+                }
+            }
+        }
+        $CI->solr->executeSearch();
+        return $CI->solr->getNumFound();
+    }
+
+
+    //RDA usage
+    function getTopLevel($vocab, $filters){
+        header('Cache-Control: no-cache, must-revalidate');
+        header('Content-type: application/json');
+        $content = $this->post($this->constructUriString('resource', $this->resolvingServices[$vocab], ''));
+        if($json = json_decode($content, false)){
+            foreach($json->{'result'}->{'primaryTopic'}->{'hasTopConcept'} as $concept){
+                $concept_uri = $concept->{'_about'};
+                $uri['uriprefix']=$concept->{'_about'};
+                $uri['resolvingService']=$this->resolvingServices[$vocab]['resolvingService'];
+                
+                $resolved_concept = json_decode($this->getResource($uri));
+
+                $notation = $resolved_concept->{'result'}->{'primaryTopic'}->{'notation'};
+                $c['notation'] = $resolved_concept->{'result'}->{'primaryTopic'}->{'notation'};
+                $c['prefLabel'] = $resolved_concept->{'result'}->{'primaryTopic'}->{'prefLabel'}->{'_value'};
+                $c['uri'] = $resolved_concept->{'result'}->{'primaryTopic'}->{'_about'};
+                $c['collectionNum'] = $this->getNumCollections($c['uri'],$filters);
+
+                $tree['topConcepts'][] = $c;
+            }
+        }
+        return ($tree);
     }
 
 }

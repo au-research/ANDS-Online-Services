@@ -156,7 +156,7 @@ class Maintenance extends MX_Controller {
 
 	function clearDS($data_source_id){
 		$this->load->library('solr');
-		echo $this->solr->clear($data_source_id);
+		$result = $this->solr->clear($data_source_id);
 	}
 	
 	/**

@@ -61,7 +61,6 @@ function executeSearch(searchData, searchUrl){
 		data: {filters:searchData},
 		dataType:'json',
 		success: function(data){
-			log(data.facet_result)
 
 			var numFound = data.result.numFound;
 
@@ -85,13 +84,10 @@ function executeSearch(searchData, searchUrl){
 			//populate spatial result polygons
 			var docs = data.result.docs;
 			$(docs).each(function(){
-			 	if(this.spatial_coverage_polygons)
-			 	{
-			 		// console.log(this.spatial_coverage_polygons);
-			 	resultPolygons[this.id] = new Array(this.display_title, this.spatial_coverage_polygons[0], this.spatial_coverage_centres[0]);
+			 	if(this.spatial_coverage_polygons){
+			 		resultPolygons[this.id] = new Array(this.display_title, this.spatial_coverage_polygons[0], this.spatial_coverage_centres[0]);
 			 	}
 			});
-
 			initSearchPage();
 		},
 		error: function(data){
@@ -101,17 +97,27 @@ function executeSearch(searchData, searchUrl){
 	});
 }
 
+$(document).on('click', '.filter',function(e){
+	searchData['p']=1;
+	searchData[$(this).attr('filter_type')] = encodeURIComponent($(this).attr('filter_value'));
+	//searchData.push({label:$(this).attr('facet_type'),value:encodeURIComponent($(this).attr('facet_value'))});
+	changeHashTo(formatSearch());
+}).on('click', '.remove_facet', function(e){
+	var filter_type = $(this).attr('filter_type');
+	delete(searchData[filter_type]);
+	searchData['p']=1;
+	changeHashTo(formatSearch());
+}).on('click', '.toggle_sidebar', function(e){
+	e.preventDefault();
+	$('.sidebar').toggle();
+	$('.main').toggleClass('full-width');
+});
+
+
 function initSearchPage(){
+	getTopLevelFacet();
 
 	$('.tabs').show();
-
-	//bind the facets
-	$('.filter').click(function(){
-		searchData['p']=1;
-		searchData[$(this).attr('filter_type')] = encodeURIComponent($(this).attr('filter_value'));
-		//searchData.push({label:$(this).attr('facet_type'),value:encodeURIComponent($(this).attr('facet_value'))});
-		changeHashTo(formatSearch());
-	});
 
 	//see if we need to init the map
 	if(searchData['map']){
@@ -139,39 +145,8 @@ function initSearchPage(){
 		$('#search-result, .pagination, .page_title, .tabs').show();
 	}
 
-	$('.toggle_sidebar').unbind('click').click(function(e){
-		e.preventDefault();
-		$('.sidebar').toggle();
-	});
+	
 
-	var selecting_facets = ['group','type','license_class','subject_value_resolved'];
-
-	$.each(selecting_facets,function(){
-		if(searchData[this]){
-			var facet_value = decodeURIComponent(searchData[this]);
-			var facet_div = $('div.facet_'+this);
-			$('.filter[filter_value="'+facet_value+'"]',facet_div).addClass('remove_facet').before('<img class="remove_facet" filter_type="'+this+'" src="'+base_url+'assets/core/images/delete.png"/>');
-		}
-	});
-
-	$('.remove_facet').off().on('click',function(){
-		var filter_type = $(this).attr('filter_type');
-		delete(searchData[filter_type]);
-		searchData['p']=1;
-		changeHashTo(formatSearch());
-	});
-
-
-	$('#facet-result ul').each(function(){
-		if($('li', this).length>10){
-			$('li:gt(10)', this).hide();
-			$(this).append('<li><a href="javascript:;" class="show-all-facet">Show More...</a></li>');
-			$('.show-all-facet').click(function(){
-				$(this).parent().siblings().show();
-				$(this).parent().remove();
-			});
-		}
-	});
 
 	$('#search_map_toggle').unbind('click');
 	$('#search_map_toggle').click(function(e){
@@ -250,9 +225,44 @@ function initSearchPage(){
 
 	$('.showmore_excerpt').click(function(){	
 		$(this).parent().html($(this).parent().children(0).html());
-	})
+	});
+}
 
-	
+function getTopLevelFacet(){
+	$.ajax({
+		url:base_url+'search/getTopLevel', 
+		type: 'POST',
+		data: {filters:searchData},
+		success: function(data){
+			var template = $('#top-level-template').html();
+			var output = Mustache.render(template, data);
+			$('#facet-result').prepend(output);
+			postSearch();
+		}
+	});
+}
+
+function postSearch(){
+	$('#facet-result ul').each(function(){
+		if($('li', this).length>6){
+			$('li:gt(5)', this).hide();
+			$(this).append('<li><a href="javascript:;" class="show-all-facet">Show More...</a></li>');
+			$('.show-all-facet').click(function(){
+				$(this).parent().siblings().show();
+				$(this).parent().remove();
+			});
+		}
+	});
+
+	var selecting_facets = ['group','type','license_class','subject_value_resolved', 'subject_vocab_uri'];
+
+	$.each(selecting_facets,function(){
+		if(searchData[this]){
+			var facet_value = decodeURIComponent(searchData[this]);
+			var facet_div = $('div.facet_'+this);
+			$('.filter[filter_value="'+facet_value+'"]',facet_div).addClass('remove_facet').before('<img class="remove_facet" filter_type="'+this+'" src="'+base_url+'assets/core/images/delete.png"/>');
+		}
+	});
 }
 
 
