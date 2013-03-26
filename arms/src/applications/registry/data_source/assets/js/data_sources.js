@@ -466,10 +466,10 @@ function loadContributorPages(data_source_id)
 			//console.log(data.contributorPages)
 			var contributorsTemplate = "<p>"+data.contributorPages+"</p>"+
 			"<table class='table table-hover'>"+
-			"<thead><tr><th align='left'>GROUP</th><th>Contributor Page</th></tr></thead>" +
+			"<thead><tr><th align='left'>GROUP</th><th>Contributor Page Key</th></tr></thead>" +
 			"<tbody>" +
 			"{{#items}}" +
-				"<tr ><td>{{group}}</td><td>{{contributor_page}}</td></tr>" +
+				"<tr ><td>{{group}}</td><td>{{{contributor_page}}}</td></tr>" +
 			"{{/items}}" +
 			"</tbody></table>";
 			var output = Mustache.render(contributorsTemplate, data);
@@ -483,22 +483,20 @@ function loadContributorPages(data_source_id)
 	return false;
 }
 
-function loadContributorPagesEdit(data_source_id)
+function loadContributorPagesEdit(data_source_id,inst_pages)
 {
-
 	$.ajax({
-		url: 'data_source/getContributorGroups/',
-		data: {id:data_source_id},
+		url: 'data_source/getContributorGroupsEdit/',
+		data: {id:data_source_id,inst_pages:inst_pages},
 		type: 'POST',
 		dataType: 'json',
 		success: function(data){
-			//console.log(data.contributorPages)
-			var thePageFields = "{{contributor_page}}"
+			//console.log(data)
 			var contributorsTemplate = "<table class='table table-hover'>"+
-			"<thead><tr><th align='left'>GROUP</th><th>Contributor Page</th></tr></thead>" +
+			"<thead><tr><th align='left'>GROUP</th><th>Contributor Page Key</th></tr></thead>" +
 			"<tbody>" +
-			"{{#items}}" +
-				"<tr ><td>{{group}}</td><td><input type='text' name='{{group}}' value='"+thePageFields+"'/></td></tr>" +
+			"{{#items}}" + 
+			"<tr ><td>{{group}}</td><td>{{{contributor_page}}}</td></tr>" + 
 			"{{/items}}" +
 			"</tbody></table>";
 			var output = Mustache.render(contributorsTemplate, data);
@@ -730,12 +728,14 @@ function load_datasource_edit(data_source_id, active_tab){
 				if($('#institution_pages').val()=='') {$('#institution_pages').val('0'); }
 				if($(this).attr('value')== $('#institution_pages').val() ){
 					$(this).attr('checked', 'checked');
-				}
+					var inst_pages = $('#institution_pages').val();
+					loadContributorPagesEdit(data_source_id,inst_pages);				}
 			});
 
 			$('#edit-datasource  .contributor-page').live().change(function(){
 				$(this).attr('checked', 'checked');
-				$('#institution_pages').val($(this).val());				
+				$('#institution_pages').val($(this).val());		
+				loadContributorPagesEdit(data_source_id,$(this).val());			
 			});
 			
 
@@ -764,9 +764,9 @@ function load_datasource_edit(data_source_id, active_tab){
 			initVocabWidgets('#primary-relationship-form');
 
 		}
+
 	});
 
-	loadContributorPagesEdit(data_source_id);
 	return false;
 }
 

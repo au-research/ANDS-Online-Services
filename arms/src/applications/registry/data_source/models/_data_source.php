@@ -321,21 +321,29 @@ class _data_source {
 		
 		$contributor = '';
 
-		$this->db->select('registry_object_id');
-		$this->db->from('institutional_pages');
-		$this->db->where(array('group'=>$group));
+		$this->db->select('registry_objects.key,institutional_pages.authorative_data_source_id');
+		$this->db->from('registry_objects');
+		$this->db->join('institutional_pages', 'institutional_pages.registry_object_id = registry_objects.registry_object_id');
+		$this->db->where(array('institutional_pages.group'=>$group,));
+	
 		$query = $this->db->get();
+
 
 		if ($query->num_rows() == 0)
 		{
+
 			return $contributor;
 		}
 		else
 		{				
 			foreach($query->result_array() AS $contributors)
 			{
-				$contributor =  $contributors['registry_object_id'];
+				
+				$contributor['key'] =  $contributors['key'];
+				$contributor['authorative_data_source_id'] = $contributors['authorative_data_source_id']; 
+
 			}
+
 		}
 
 		return $contributor;
@@ -442,20 +450,25 @@ class _data_source {
 						{
 							
 							$registry_object_key = $inputvalues[str_replace(" ","_",$group)];
-
-							$contributorPage = $this->_CI->ro->getAllByKey($registry_object_key);
-						
-							if($contributorPage)
+							if($registry_object_key!='')
 							{
-								$registry_object_id = $contributorPage[0]->id;
-								//we need to add the  group , registry_object_id and autoritive datasource to the institutional_pages table
-								$data = array(
-									"id"=>null,
-									"group"=> (string)$group,
-									"registry_object_id"=>$registry_object_id,
-									"authorative_data_source_id" => $data_source_id
-									);
-								$insert = $this->db->insert('institutional_pages',$data);
+								$contributorPage = $this->_CI->ro->getAllByKey($registry_object_key);
+				
+								if(isset($contributorPage[0]->id))
+								{
+									$registry_object_id = $contributorPage[0]->id;
+									//we need to add the  group , registry_object_id and autoritive datasource to the institutional_pages table
+									$data = array(
+										"id"=>null,
+										"group"=> (string)$group,
+										"registry_object_id"=>$registry_object_id,
+										"authorative_data_source_id" => $data_source_id
+										);
+									$insert = $this->db->insert('institutional_pages',$data);
+								}else{
+									//how do we deal with the fact that its not a valid key?
+									echo "not a valid registry party object";
+								}
 							}
 						}
 					}

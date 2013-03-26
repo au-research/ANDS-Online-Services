@@ -559,7 +559,95 @@ class Data_source extends MX_Controller {
 		echo $ds->id;
 	}
 
-	
+public function getContributorGroupsEdit()
+	{
+		header('Cache-Control: no-cache, must-revalidate');
+		header('Content-type: application/json');
+		date_default_timezone_set('Australia/Canberra');
+
+		$POST = $this->input->post();
+		$items = array();
+		
+		if (isset($POST['id'])){
+			$id = (int) $this->input->post('id');
+		}	
+
+		$this->load->model("data_sources","ds");
+		$dataSource = $this->ds->getByID($id);
+		//print($dataSource->attributes['institution_pages']->value);
+		if(isset($dataSource->attributes['institution_pages']->value))
+		{
+			$contributorPages = $dataSource->attributes['institution_pages']->value;
+		} else {
+			$contributorPages = 0;			
+		}
+		if (isset($POST['inst_pages'])){
+			$contributorPages = (int) $this->input->post('inst_pages');
+		}	
+		switch($contributorPages)
+		{
+			case 0:
+				$jsonData['contributorPages'] = "Pages are not managed";	
+				break;
+			case 1:
+				$jsonData['contributorPages'] = "Pages are automatically managed";	
+				break;
+			case 2:
+				$jsonData['contributorPages'] = "Pages are manually managed";;	
+				break;
+		}
+
+		$dataSourceGroups = $dataSource->get_groups();
+		if(sizeof($dataSourceGroups) > 0){
+			foreach($dataSourceGroups as $group){
+				$item = array();
+				$group_contributor = array();
+				$item['group'] = $group;
+				$group_contributor = $dataSource->get_group_contributor($group);
+				if($contributorPages=="1")
+				{
+					if(isset($group_contributor["key"]))
+					{
+					if($group_contributor["authorative_data_source_id"]==$id)
+					{
+						if($group_contributor["key"]=="contributor:".$group)
+						{
+							$item['contributor_page'] = "<a href='#'> ".$group_contributor["key"]."</a>";
+						}else{
+							$item['contributor_page'] = 'Page will be auto generated on save';
+						}
+					}else{
+						$item['contributor_page'] = $group_contributor["key"]."(<em>Managed by another datasource</em>)";
+					}
+					}else{
+						$item['contributor_page'] = 'Page will be auto generated on save';
+					}	
+				}
+				else if($contributorPages=="2")
+				{
+					if(isset($group_contributor["key"]))
+					{
+						if($group_contributor["authorative_data_source_id"]==$id)
+						{
+							$item['contributor_page'] = "<input type='text' name='".$group."' value='".$group_contributor["key"]."'/>";
+						}else{
+							$item['contributor_page'] = $group_contributor["key"]."(<em>Managed by another datasource</em>)";
+						}
+					}else{
+						$item['contributor_page'] = "<input type='text' name='".$group."' value=''/>";
+					}
+				
+				}else{
+					$item['contributor_page'] = "";
+				}			
+				array_push($items, $item);
+			}
+			$jsonData['status'] = 'OK';
+			$jsonData['items'] = $items;
+		}		
+		$jsonData = json_encode($jsonData);
+		echo $jsonData;
+	}	
 	public function getContributorGroups()
 	{
 		header('Cache-Control: no-cache, must-revalidate');
@@ -598,9 +686,23 @@ class Data_source extends MX_Controller {
 		$dataSourceGroups = $dataSource->get_groups();
 		if(sizeof($dataSourceGroups) > 0){
 			foreach($dataSourceGroups as $group){
+
 				$item = array();
+				$group_contributor = array();
 				$item['group'] = $group;
-				$item['contributor_page'] = $dataSource->get_group_contributor($group);
+				$group_contributor = $dataSource->get_group_contributor($group);
+				if(isset($group_contributor["key"]))
+				{
+					if($group_contributor["authorative_data_source_id"]==$id)
+					{
+						$item['contributor_page'] = "<a href='#'> ".$group_contributor["key"]."</a>";
+					}else{
+						$item['contributor_page'] = $group_contributor["key"]."(<em>Managed by another datasource</em>)";
+					}
+				}else{
+					$item['contributor_page'] = '<em>Not managed</em>';
+				}
+				
 				array_push($items, $item);
 			}
 			$jsonData['status'] = 'OK';
