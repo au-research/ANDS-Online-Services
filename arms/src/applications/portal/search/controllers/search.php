@@ -5,7 +5,7 @@ class Search extends MX_Controller {
 	function index(){
 		$data['title']='Research Data Australia - Search';
 		$data['scripts'] = array('search');
-		$data['js_lib'] = array('google_map', 'range_slider');
+		$data['js_lib'] = array('google_map', 'range_slider','vocab_widget','qtip');
 
 		$this->load->library('stats');
 		$this->stats->registerPageView();		
@@ -34,7 +34,8 @@ class Search extends MX_Controller {
 		$this->solr->setOpt('defType', 'edismax');
 		$this->solr->setOpt('mm', '3');
 		$this->solr->setOpt('q.alt', '*:*');
-		$this->solr->setOpt('qf', 'id^10 group^8 display_title^5 list_title^5 fulltext^1.2');
+		$this->solr->setOpt('fl', '*, score');
+		$this->solr->setOpt('qf', 'id^1 group^0.8 display_title^0.5 list_title^0.5 fulltext^0.2');
 		$facets = array(
 			'class' => 'Class',
 			//'subject_value_resolved' => 'Subjects',
@@ -82,6 +83,10 @@ class Search extends MX_Controller {
 						break;
 					case 'subject_value_resolved': 
 						$this->solr->setOpt('fq', 'subject_value_resolved:("'.$value.'")');
+						$filteredSearch = true;
+						break;
+					case 's_subject_value_resolved': 
+						$this->solr->setOpt('fq', 's_subject_value_resolved:("'.$value.'")');
 						$filteredSearch = true;
 						break;
 					case 'subject_vocab_uri':
@@ -184,15 +189,114 @@ class Search extends MX_Controller {
 		$pagi .=  '</div>';
 		$data['pagination'] = $pagi;
 
-		/**
-		 * Debugging
-		 */
 		$data['options'] = $this->solr->getOptions();
 		$data['facet_counts'] = $this->solr->getFacet();
 		$data['fieldstrings'] = $this->solr->constructFieldString();
 
 		//return the result to the client
 		echo json_encode($data);
+	}
+
+	function getAllSubjects($vocab_type){
+		$filters = $this->input->post('filters');
+		$subjects_categories = $this->config->item('subjects_categories');
+		$list = $subjects_categories[$vocab_type]['list'];
+		$result = array();
+		foreach($list as $l){
+			$result_type = $this->getAllSubjectsForType($l, $filters);
+			$result_list = (isset($result_type['list']) ? $result_type['list'] : array());
+			$result = array_merge($result, $result_list);
+		}
+
+		$azTree = array();
+		$azTree['0-9']=array('subjects'=>array(), 'total'=>0, 'display'=>'0-9');
+		foreach(range('A', 'Z') as $i){$azTree[$i]=array('subjects'=>array(), 'total'=>0, 'display'=>$i);}
+
+		foreach($result as $r){
+			if(ctype_alnum($r['value'])){
+				$first = strtoupper($r['value'][0]);
+				if(is_numeric($first)){$first='0-9';}
+				$azTree[$first]['total']++;
+				array_push($azTree[$first]['subjects'], $r);
+			}
+		}
+		$data['azTree'] = $azTree;
+		$this->load->view('subjectfacet-tree', $data);
+	}
+
+	function getAllSubjectsForType($type, $filters){
+		$this->load->library('solr');
+		$this->solr->setOpt('q', '*:*');
+		$this->solr->setOpt('defType', 'edismax');
+		$this->solr->setOpt('mm', '3');
+		$this->solr->setOpt('q.alt', '*:*');
+		$this->solr->setOpt('fl', '*, score');
+		$this->solr->setOpt('qf', 'id^1 group^0.8 display_title^0.5 list_title^0.5 fulltext^0.2');
+		$this->solr->setOpt('rows', '0');
+
+		$this->solr->clearOpt('fq');
+
+		if($filters){
+            foreach($filters as $key=>$value){
+                $value = urldecode($value);
+                switch($key){
+                    case 'q': 
+                        $this->solr->setOpt('q', $value);
+                        break;
+                    case 'tab': 
+                        if($value!='all') $this->solr->setOpt('fq', 'class:("'.$value.'")');
+                        break;
+                    case 'group': 
+                        $this->solr->setOpt('fq', 'group:("'.$value.'")');
+                        break;
+                    case 'type': 
+                        $this->solr->setOpt('fq', 'type:'.$value);
+                        break;
+                    case 's_subject_value_resolved': 
+						$this->solr->setOpt('fq', 's_subject_value_resolved:("'.$value.'")');
+						$filteredSearch = true;
+						break;
+					case 'subject_vocab_uri':
+						$this->solr->setOpt('fq', 'subject_vocab_uri:("'.$value.'")');
+						$filteredSearch = true;
+						break;
+                    case 'license_class': 
+                        $this->solr->setOpt('fq', 'license_class:("'.$value.'")');
+                        break;             
+                    case 'spatial':
+                        $this->solr->setOpt('fq', 'spatial_coverage_extents:"Intersects('.$value.')"');
+                        break;
+                }
+            }
+        }
+        $this->solr->setOpt('fq', 'subject_type:"'.$type.'"');
+		$this->solr->setFacetOpt('pivot', 'subject_type,s_subject_value_resolved');
+		$this->solr->setFacetOpt('sort', 's_subject_value_resolved');
+		$this->solr->setFacetOpt('limit', '25000');
+		$content = $this->solr->executeSearch();
+		$facets = $this->solr->getFacet();
+		$facet_pivots = $facets->{'facet_pivot'}->{'subject_type,s_subject_value_resolved'};
+		//echo json_encode($facet_pivots);
+		$result = array();
+		$result[$type] = array();
+		
+		foreach($facet_pivots as $p){
+			if($p->{'value'}==$type){
+				$result[$type] = array('count'=>$p->{'count'}, 'list'=>array());
+				foreach($p->{'pivot'} as $pivot){
+					array_push($result[$type]['list'], array('value'=>$pivot->{'value'}, 'count'=>$pivot->{'count'}));
+				}
+				$result[$type]['size'] = sizeof($result[$type]['list']);
+				// echo json_encode($p->{'pivot'});
+			}
+		}
+		return $result[$type];
+	}
+
+	function getsubjectfacet(){
+		$filters = $this->input->post('filters');
+		$data['subjectType'] = $this->input->post('subjectType');
+		$this->load->view('subjectfacet', $data);
 	}
 
 	function getTopLevel(){

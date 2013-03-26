@@ -7,7 +7,7 @@
 		<h1 id="selected_subject"></h1>
 		<h3 id="selected_group"></h3>
 	</div>
-	<div class="tabs">
+	<div class="tabs" class="hide">
 		<?php
 			$tabs = array(
 				'All' => array('facet_value'=>'all','display'=>'All','selected'=>true, 'count'=>0),
@@ -28,6 +28,7 @@
 		<a href="javascript:;" class="toggle_sidebar"></a>	
 		<div class="clear"></div>
 	</div>
+	
 	<div class="pagination"></div>
 	<div id="search-result"></div>
 	<div class="pagination"></div>
@@ -91,8 +92,6 @@
 	</ul>
 </div>
 </script>
-
-
 
 </div>
 <?php $this->load->view('rda_footer');?>

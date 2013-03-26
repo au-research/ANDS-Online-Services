@@ -382,9 +382,11 @@
 		lookfor !== false) {
 		url = url + "&lookfor=" + lookfor;
 	    }
-	    if (typeof(this.settings.sqc) !== 'undefined' &&
-		this.settings.sqc !== '') {
-		url = url + "&sqc=" + this.settings.sqc;
+	    if (typeof(this.settings.sqc) !== 'undefined' && this.settings.sqc !== '') {
+			url = url + "&sqc=" + this.settings.sqc;
+			if(typeof(this.settings.sqc_op) !== 'undefined' && this.settings.sqc_op!==''){
+				url = url+'&sqc_op=' + this.settings.sqc_op;
+			} 
 	    }
 	    return url;
 	},

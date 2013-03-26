@@ -9,6 +9,7 @@ var polygonsArray = new Array();
 var markerClusterer = null;
 var rectangleOptions = null;
 var infowindow = null;
+var subjectType = 'anzsrc-for';
 $(document).ready(function() {
 
 	/*GET HASH TAG*/
@@ -20,6 +21,7 @@ $(document).ready(function() {
 		$('.tabs').hide();
 		$('#search_box, #selected_group, #selected_subject').empty();
 		searchData = {};
+		fieldString = '';
 		$.each(words, function(){
 			var string = this.split('=');
 			var term = string[0];
@@ -61,7 +63,9 @@ function executeSearch(searchData, searchUrl){
 		data: {filters:searchData},
 		dataType:'json',
 		success: function(data){
-
+			$.each(data.solr_result.response.docs, function(){
+				// log(this.list_title, this.score);
+			});
 			var numFound = data.result.numFound;
 
 			$('#search-result, .pagination, #facet-result').empty();
@@ -91,8 +95,7 @@ function executeSearch(searchData, searchUrl){
 			initSearchPage();
 		},
 		error: function(data){
-			//$('body').prepend(data.responseText);
-			console.error(data.responseText);
+			$('#search-result').html('There was a problem connecting to the server. Please try again in a little while...');
 		}
 	});
 }
@@ -111,7 +114,86 @@ $(document).on('click', '.filter',function(e){
 	e.preventDefault();
 	$('.sidebar').toggle();
 	$('.main').toggleClass('full-width');
+}).on('click', '#browse-more-subject', function(e){
+	$(this).qtip({
+		content: {
+			text: 'Loading...',
+			ajax: {
+				url: base_url+'search/getsubjectfacet', 
+				type: 'POST', // POST or GET
+				data: {filters:searchData, subjectType:subjectType}, // Data to pass along with your request
+				success: function(data, status) {
+					this.set('content.text', data);
+					loadSubjectBrowse(subjectType);
+
+				  //   $("#subjectfacet-search").vocab_widget({
+					 //    mode: 'search',
+					 //    cache: false,
+					 //    repository: 'anzsrc-for',
+					 //    target_field: 'label'});
+
+				  //   $('li[role=vocab_item]').on('click',function(){
+						// searchData['subject_vocab_uri'] = encodeURIComponent($('span[role=about]', this).text());
+						// changeHashTo(formatSearch());
+				  //   });
+				}
+			},
+			title: {
+				text: 'Subjects',
+				button: true
+			}
+		},
+		
+		show:{solo:true,ready:true,event:'click'},
+	    hide:false,
+	    position:{my:'top right', at:'bottom left'},
+	    style: {
+	        classes: 'ui-tooltip-light ui-tooltip-shadow seealso-tooltip',
+	        width: 400,
+	    }
+	});
+}).on('change', '#subjectfacet-select', function(){
+	subjectType = $(this).val();
+	loadSubjectBrowse($(this).val());
+}).on('click', '.vocab_tree_standard ins', function(){
+	$(this).siblings('ul').toggle();
+	$(this).parent().toggleClass('tree_closed').toggleClass('tree_open');
+}).on('click', '.tree_leaf', function(){
+	if(!$(this).hasClass('tree_empty')){
+		searchData['s_subject_value_resolved']=$(this).attr('vocab_value');
+		changeHashTo(formatSearch());
+	}
 });
+
+function loadSubjectBrowse(val){
+	if(val!='anzsrc-for'){
+		$('#subjectfacet').html('Loading...');
+		$.ajax({
+			url:base_url+'search/getAllSubjects/'+val, 
+			type: 'POST',
+			data: {filters:searchData},
+			success: function(data){
+				$('#subjectfacet').html(data);
+			}
+		});
+	}else{
+		$('#subjectfacet div').remove();
+	$('#subjectfacet').append($('<div/>'));
+		var sqc = '';
+		if(searchData['q']) sqc += searchData['q'];
+		if(searchData['tab']) sqc += '+class:("'+searchData['tab']+'")';
+		if(searchData['group']) sqc += '+group:("'+searchData['group']+'")';
+		if(searchData['type']) sqc += '+type:("'+searchData['type']+'")';
+		sqc += '&defType=edismax';
+		$('#subjectfacet div').vocab_widget({mode:'tree', repository:'anzsrc-for', sqc:sqc})
+		.on('treeselect.vocab.ands', function(event) {
+			var target = $(event.target);
+			var data = target.data('vocab');
+			searchData['subject_vocab_uri'] = encodeURIComponent(data.about);
+			changeHashTo(formatSearch());
+	    });
+	}
+}
 
 
 function initSearchPage(){
@@ -144,9 +226,6 @@ function initSearchPage(){
 		$('.sidebar').removeClass('mapmode_sidebar');
 		$('#search-result, .pagination, .page_title, .tabs').show();
 	}
-
-	
-
 
 
 	$('#search_map_toggle').unbind('click');
@@ -227,6 +306,8 @@ function initSearchPage(){
 	$('.showmore_excerpt').click(function(){	
 		$(this).parent().html($(this).parent().children(0).html());
 	});
+
+	
 }
 
 function getTopLevelFacet(){
@@ -235,9 +316,12 @@ function getTopLevelFacet(){
 		type: 'POST',
 		data: {filters:searchData},
 		success: function(data){
+			log(data);
 			var template = $('#top-level-template').html();
 			var output = Mustache.render(template, data);
 			$('#facet-result').prepend(output);
+		},
+		complete:function(data){
 			postSearch();
 		}
 	});
@@ -256,7 +340,6 @@ function postSearch(){
 	});
 
 	var selecting_facets = ['group','type','license_class','subject_value_resolved', 'subject_vocab_uri'];
-
 	$.each(selecting_facets,function(){
 		if(searchData[this]){
 			var facet_value = decodeURIComponent(searchData[this]);
@@ -269,12 +352,9 @@ function postSearch(){
 
 function ellipsis (string, length)
 {
-	if (string.length <= length)
-	{
+	if (string.length <= length){
 		return string;
-	}
-	else
-	{
+	}else{
 		var trimmedString = string.substr(0, length-3);
 		trimmedString = trimmedString.substr(0, Math.min(trimmedString.length, trimmedString.lastIndexOf(" "))) + '&hellip;';
 		return trimmedString + '<span class="showmore_excerpt"><br /><a href="javascript:void(0);">More &hellip;</a></span>';
@@ -308,7 +388,7 @@ function SidebarToggle(controlDiv, map) {
 
 	// Setup the click event listeners: simply set the map to Chicago.
 	google.maps.event.addDomListener(controlUI, 'click', function() {
-	$('.sidebar').toggle();
+		$('.sidebar').toggle();
 	});
 }
 
@@ -603,7 +683,7 @@ function formatSearch()
 {
 	var query_string = '#!/';
 	$.each(searchData, function(i, v){
-		query_string += i + '=' + (v) + '/';
+		query_string += i + '=' + encodeURIComponent(v) + '/';
 	})
 	return query_string;
 }
