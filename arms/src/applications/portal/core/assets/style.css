@@ -1034,13 +1034,14 @@ a.search_map {
 }
 .sidebar a, #links_dialog ul li a {
 	color: #eb7700;
-	font-weight: bold;	
+	
 }
 
 .sidebar ul li a {
 	color: #2f3134;	
 	display: inline-block;
 	padding: 4px 0;
+	position:relative;
 }
 
 .sidebar ul li a.show-all-facet {
@@ -1067,6 +1068,20 @@ a.search_map {
 	padding: 0 0 22px;
 }
 
+.sidebar a.remove_facet{
+	color: #eb7700;
+	padding-left:20px;
+}
+
+.sidebar a, .sidebar li{
+	position:relative;
+}
+
+.sidebar img.remove_facet{
+	position:absolute;
+	left:0px;
+	top:3px;
+}
 
 
 /***********************************************************************************/

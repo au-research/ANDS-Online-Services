@@ -103,10 +103,16 @@ function executeSearch(searchData, searchUrl){
 $(document).on('click', '.filter',function(e){
 	searchData['p']=1;
 	searchData[$(this).attr('filter_type')] = encodeURIComponent($(this).attr('filter_value'));
+	if($(this).attr('filter_type')=='subject_vocab_uri'){
+		searchData['subject_vocab_uri_display'] = $(this).text();
+	}
 	//searchData.push({label:$(this).attr('facet_type'),value:encodeURIComponent($(this).attr('facet_value'))});
 	changeHashTo(formatSearch());
 }).on('click', '.remove_facet', function(e){
 	var filter_type = $(this).attr('filter_type');
+	if($(this).attr('filter_type')=='subject_vocab_uri'){
+		delete(searchData['subject_vocab_uri_display']);
+	}
 	delete(searchData[filter_type]);
 	searchData['p']=1;
 	changeHashTo(formatSearch());
@@ -161,6 +167,7 @@ $(document).on('click', '.filter',function(e){
 }).on('click', '.tree_leaf', function(){
 	if(!$(this).hasClass('tree_empty')){
 		searchData['s_subject_value_resolved']=$(this).attr('vocab_value');
+		searchData['p'] = 1;
 		changeHashTo(formatSearch());
 	}
 });
@@ -174,6 +181,17 @@ function loadSubjectBrowse(val){
 			data: {filters:searchData},
 			success: function(data){
 				$('#subjectfacet').html(data);
+				$('#subjectfacet ul.vocab_tree_standard ul').each(function(){
+					$('li:gt(10)', this).hide();
+				});
+				$('#subjectfacet ul.vocab_tree_standard ul').append('<li class="show_next_10" current="10">Show More..</li>');
+				$('.show_next_10').click(function(){
+					var current = $(this).attr('current');
+					var next = parseInt(current) + 10;
+					var theList = $(this).parent();
+					$('li:lt('+next+')', theList).show();
+					$(this).attr('current', next);
+				});
 			}
 		});
 	}else{
@@ -190,6 +208,8 @@ function loadSubjectBrowse(val){
 			var target = $(event.target);
 			var data = target.data('vocab');
 			searchData['subject_vocab_uri'] = encodeURIComponent(data.about);
+			searchData['subject_vocab_uri_display'] = data.label;
+			searchData['p'] = 1;
 			changeHashTo(formatSearch());
 	    });
 	}
@@ -316,10 +336,9 @@ function getTopLevelFacet(){
 		type: 'POST',
 		data: {filters:searchData},
 		success: function(data){
-			log(data);
 			var template = $('#top-level-template').html();
 			var output = Mustache.render(template, data);
-			$('#facet-result').prepend(output);
+			$('#top_concepts').html(output);
 		},
 		complete:function(data){
 			postSearch();
@@ -328,7 +347,7 @@ function getTopLevelFacet(){
 }
 
 function postSearch(){
-	$('#facet-result ul').each(function(){
+	$('.sidebar ul').each(function(){
 		if($('li', this).length>6){
 			$('li:gt(5)', this).hide();
 			$(this).append('<li><a href="javascript:;" class="show-all-facet">Show More...</a></li>');
@@ -339,7 +358,7 @@ function postSearch(){
 		}
 	});
 
-	var selecting_facets = ['group','type','license_class','subject_value_resolved', 'subject_vocab_uri'];
+	var selecting_facets = ['group','type','license_class'];
 	$.each(selecting_facets,function(){
 		if(searchData[this]){
 			var facet_value = decodeURIComponent(searchData[this]);
@@ -347,6 +366,16 @@ function postSearch(){
 			$('.filter[filter_value="'+facet_value+'"]',facet_div).addClass('remove_facet').before('<img class="remove_facet" filter_type="'+this+'" src="'+base_url+'assets/core/images/delete.png"/>');
 		}
 	});
+
+	if(searchData['s_subject_value_resolved']){
+		var html = '<li><img src="'+base_url+'assets/core/images/delete.png" filter_type="s_subject_value_resolved" class="remove_facet"/><a href="javascript:;" class="filter remove_facet" filter_type="s_subject_value_resolved">'+searchData['s_subject_value_resolved']+'</a></li>';
+		$('.facet_subjects ul').prepend(html);
+	}
+
+	if(searchData['subject_vocab_uri']){
+		var html = '<li><img src="'+base_url+'assets/core/images/delete.png" filter_type="subject_vocab_uri" class="remove_facet" filter_type="subject_vocab_uri"/><a href="javascript:;" class="filter remove_facet" filter_type="subject_vocab_uri">'+searchData['subject_vocab_uri_display']+'</a></li>';
+		$('.facet_subjects ul').prepend(html);
+	}
 }
 
 

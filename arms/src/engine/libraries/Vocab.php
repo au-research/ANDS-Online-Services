@@ -230,6 +230,7 @@ class Vocab {
         header('Cache-Control: no-cache, must-revalidate');
         header('Content-type: application/json');
         $content = $this->post($this->constructUriString('resource', $this->resolvingServices[$vocab], ''));
+        $tree = array();
         if($json = json_decode($content, false)){
             foreach($json->{'result'}->{'primaryTopic'}->{'hasTopConcept'} as $concept){
                 $concept_uri = $concept->{'_about'};
@@ -244,7 +245,7 @@ class Vocab {
                 if($c['collectionNum'] > 0) $tree['topConcepts'][] = $c;
             }
         }
-        return ($tree);
+        return $tree;
     }
 
 }
