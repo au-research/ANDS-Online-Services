@@ -167,8 +167,11 @@
 		'contact_name' => 'Contact Name',
 		'contact_email' => 'Contact Email',
 		'notes' => 'Notes',
-		//'created_when' => 'Created When',
-		'created_who' => 'Created Who'
+		'created_when' => 'Created When',
+		'created_who' => 'Created Who',
+		'modified_when' => 'Modified When',
+		'modified_who'	=> 'Modified Who',
+		'updated' => 'Updated'
 	);
 ?>
 

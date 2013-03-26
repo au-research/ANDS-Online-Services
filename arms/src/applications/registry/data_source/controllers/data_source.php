@@ -608,17 +608,18 @@ public function getContributorGroupsEdit()
 				{
 					if(isset($group_contributor["key"]))
 					{
-					if($group_contributor["authorative_data_source_id"]==$id)
-					{
-						if($group_contributor["key"]=="contributor:".$group)
-						{
-							$item['contributor_page'] = "<a href='#'> ".$group_contributor["key"]."</a>";
+						if($group_contributor["authorative_data_source_id"]==$id)
+						{	
+							//echo "contributor:".$group ." is the key and ".$group_contributor["key"]." is the got key";
+							if($group_contributor["key"]=="Contributor:".$group)
+							{
+								$item['contributor_page'] = "<a href='#'> ".$group_contributor["key"]."</a>";
+							}else{
+								$item['contributor_page'] = 'Page will be auto generated on save';
+							}
 						}else{
-							$item['contributor_page'] = 'Page will be auto generated on save';
+							$item['contributor_page'] = $group_contributor["key"]."(<em>Managed by another datasource</em>)";
 						}
-					}else{
-						$item['contributor_page'] = $group_contributor["key"]."(<em>Managed by another datasource</em>)";
-					}
 					}else{
 						$item['contributor_page'] = 'Page will be auto generated on save';
 					}	
