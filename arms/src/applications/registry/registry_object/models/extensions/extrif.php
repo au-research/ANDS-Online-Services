@@ -65,13 +65,16 @@ class Extrif_Extension extends ExtensionBase
 				$theDescriptionType = '';
 				if($xml->{$this->ro->class}->description)
 				{
+					$logoAdded = false;
 					foreach ($xml->{$this->ro->class}->description AS $description)
 					{					
 						$type = (string) $description['type'];
 						$description_str = (string) $description;
 
 						//add logo to the extrif
-						if($type=='logo'){
+						
+						if($type=='logo' && !$logoAdded){
+							$logoAdded = true;
 							$logoRef = $this->getLogoUrl($description);
 							$extendedMetadata->addChild("extrif:logo", $logoRef, EXTRIF_NAMESPACE);
 							$this->ro->set_metadata('the_logo', $logoRef);

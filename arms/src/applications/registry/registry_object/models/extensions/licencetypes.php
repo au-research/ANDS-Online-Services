@@ -21,7 +21,7 @@ class LicenceTypes_Extension extends ExtensionBase
 	{
 		$rights = array();
 		$sxml = $this->ro->getSimpleXML();	
-		$sxml->registerXPathNamespace("ro", RIFCS_NAMESPACE);	
+		$sxml->registerXPathNamespace("ro", RIFCS_NAMESPACE);
 		foreach ($sxml->xpath('//ro:'.$this->ro->class.'/ro:rights') AS $theRights)
 		{
 			$right = array();
@@ -47,7 +47,7 @@ class LicenceTypes_Extension extends ExtensionBase
 			}
 
 		}
-
+		$sxml->registerXPathNamespace("ro", RIFCS_NAMESPACE);
 		foreach ($sxml->xpath('//ro:'.$this->ro->class.'/ro:description') AS $theRightsDescription)
 		{
 

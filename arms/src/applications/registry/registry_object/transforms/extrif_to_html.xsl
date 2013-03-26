@@ -6,8 +6,8 @@
 	<xsl:param name="dataSource"/>
 	<xsl:param name="dateCreated"/>
 
-	<xsl:template match="ro:registryObjects">
-			<xsl:apply-templates select="ro:registryObject"/>
+	<xsl:template match="/">
+			<xsl:apply-templates select="//ro:registryObject"/>
 	</xsl:template>
 
 	<xsl:template match="ro:registryObject">

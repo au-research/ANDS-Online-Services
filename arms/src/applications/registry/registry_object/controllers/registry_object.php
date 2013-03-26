@@ -100,6 +100,8 @@ class Registry_object extends MX_Controller {
 
 			$data['revisions'] = $ro->getAllRevisions();
 			$data['quality_text'] = $ro->get_quality_text();
+			//var_dump($data);
+			//exit();
 			$this->load->view('registry_object_index', $data);
 		}else{
 			show_404('Unable to Find Registry Object ID: '.$ro_id);
@@ -141,6 +143,17 @@ class Registry_object extends MX_Controller {
 	public function edit($registry_object_id){
 		$this->load->model('registry_objects', 'ro');
 		$ro = $this->ro->getByID($registry_object_id);
+		// WORKFLOW (???)
+		if($ro->status == PUBLISHED)
+		{
+			$roKey = $ro->key;
+			if(!($ro = $this->ro->getDraftByKey($roKey)))	
+				$ro = $this->ro->cloneToDraft($registry_object_id);
+		}
+		//else{
+
+		//}
+
 		ds_acl_enforce($ro->data_source_id);
 		$data['extrif'] = $ro->getExtRif();
 
@@ -175,6 +188,8 @@ class Registry_object extends MX_Controller {
 	}
 
 	public function save($registry_object_id){
+		// might have to add a draft instead of saving the published!!
+		// WORKFLOW!!!!!!!!!!!!!!!
 		$xml = $this->input->post('xml');
 		$this->load->model('registry_objects', 'ro');
 		$ro = $this->ro->getByID($registry_object_id);

@@ -661,7 +661,7 @@ class _data_source {
 	}
 	
 	
-	function submitHarvestRequest($harvestRequest)
+	function submitHarvestRequest($harvestRequest, $msg, $harvestId)
 	{
 		$runErrors = '';
 		$harvesterBaseURI = $this->_CI->config->item('harvester_base_url');
@@ -673,7 +673,7 @@ class _data_source {
 		$logID = 0;
 		if( $errors )
 		{
-			$logID = $this->append_log("harvestRequest Error[1]: ".$errors['message'],HARVEST_ERROR,'harvester');
+			$logID = $this->append_log("Unable to communicate with Harvester: ".$errors['message'],HARVEST_ERROR,'harvester');
 		}
 		else
 		{
@@ -682,21 +682,22 @@ class _data_source {
 			
 			if( $responseType != 'SUCCESS' )
 			{
-				$logID = $this->append_log("harvestRequest Error[2]: ".$message, "error", 'harvester');
+				$logID = $this->append_log("Unable to Schedule Harvest: ".NL.$msg.NL.$message, HARVEST_ERROR, 'harvester');
 			}
 			else{
-				$logID = $this->append_log("harvestRequest Success: ".$message, "message", 'harvester');
+				$logID = $this->append_log("A new harvest has been scheduled: ' (harvestID: ".$harvestId.")".NL.$msg, HARVEST_INFO, 'harvester');
 			}
 		}
 		return $logID;
 	}
+
+
 	
 	function requestHarvest($created = '', $updated = '', $dataSourceURI = '', $providerType = '', $OAISet = '', $harvestMethod = '', $harvestDate = '', 			
 		$harvestFrequency = '', $advancedHarvestingMethod = '', $nextHarvest = '', $testOnly = false)
 	{
 		$dataSource = $this->id;
 		$responseTargetURI = base_url('data_source/putharvestData');
-		
 		if($created == '')
 			$created = $this->getAttribute("created");		
 		if($dataSourceURI == '')
@@ -722,11 +723,20 @@ class _data_source {
 			$nextHarvest = $harvestDate;	
 
 		$status = "SCHEDULED FOR ". ($nextHarvest ? $nextHarvest : "NOW");
-		
+
 		$mode = 'harvest'; if( $testOnly ){ $mode = 'test'; }		
 		
 		$harvestRequestId = $this->insertHarvestRequest($harvestFrequency, $OAISet, $created, $updated, $nextHarvest, $status);
 		
+		if($nextHarvest)
+			$msg = 'for: '.$nextHarvest;
+		else
+			$msg = 'for: '.date("d-m-Y H:i:s");	
+		$msg .= NL.'URI: '.$dataSourceURI;
+		$msg .= NL.'Provider Type: '.$providerType;
+		$msg .= NL.'Harvest Method: '.$harvestMethod;
+		$msg .= NL.'Harvest Mode: '.$mode;
+
 		$harvestRequest  = 'requestHarvest?';
 		$harvestRequest .= 'responsetargeturl='.urlencode($responseTargetURI);		
 		$harvestRequest .= '&harvestid='.urlencode($harvestRequestId);
@@ -742,16 +752,15 @@ class _data_source {
 		$harvestRequest .= '&ahm='.urlencode($advancedHarvestingMethod);
 		
 		// Submit the request.
-		$logID = $this->submitHarvestRequest($harvestRequest);
+		$logID = $this->submitHarvestRequest($harvestRequest, $msg, $harvestRequestId);
 	    return $logID;
 	}
 	
-	function cancelHarvestRequest($harvestRequestId)
+	function cancelHarvestRequest($harvestRequestId, $createLog = true)
 	{
 
 	// Get the harvest request.
 	//$harvestRequest = getHarvestRequests($harvestRequestId, null);
-	$actions  = "DELETE HARVEST REQUEST".NL;
 	$actions .= "Harvest Request ID: ".$harvestRequestId.NL;
 
 	
@@ -809,8 +818,9 @@ class _data_source {
 		$actions .= 'The harvest request does not exist.';
 	}
 
-	// Log the activity.
-	$logID = $this->append_log("CANCEL HARVEST REQUEST: ".$actions, "message", 'harvester');
+	// Log the activity unless it's TEST (it wouldn't exist by then anyway).
+	if($createLog)
+		$logID = $this->append_log("Harvest successfully cancelled".NL.$actions, "message", 'harvester');
 	return $actions;
 	
 	}

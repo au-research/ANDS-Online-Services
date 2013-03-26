@@ -10,6 +10,11 @@
 		<xsl:apply-templates select="ro:registryObject/ro:collection | ro:registryObject/ro:activity | ro:registryObject/ro:party  | ro:registryObject/ro:service" mode="getClass"/>
 	</xsl:variable>
 
+
+	<xsl:template match="/">
+			<xsl:apply-templates select="//ro:registryObject"/>
+	</xsl:template>
+
 	<xsl:template match="ro:registryObject">
 
 	<xsl:variable name="registry_object_id"><xsl:value-of select="//extRif:id"/></xsl:variable>

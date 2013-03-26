@@ -734,8 +734,8 @@ public function getContributorGroupsEdit()
 			throw new Exception('Datasource ID must be provided');
 			exit();
 		}
-		$offset = isset($post['offset']) ? (int) $post['offset'] : 10;
-		$count = isset($post['count']) ? (int) $post['count'] : 0;
+		$offset = isset($post['offset']) ? (int) $post['offset'] : 0;
+		$count = isset($post['count']) ? (int) $post['count'] : 10;
 		$logid = isset($post['logid']) ? (int) $post['logid'] : null;
 		$log_class = isset($post['log_class']) ? $post['log_class'] : 'all';
 		$log_type = isset($post['log_type']) ? $post['log_type'] : 'all';
@@ -796,7 +796,7 @@ public function getContributorGroupsEdit()
 		$dataSource = $this->ds->getByID($id);
 		$jsonData['data_source_id'] = $id;
 		$jsonData['harvest_id'] = $harvest_id;
-		$jsonData['log'] = $dataSource->cancelHarvestRequest($harvest_id);
+		$jsonData['log'] = $dataSource->cancelHarvestRequest($harvest_id, true);
 
 		echo json_encode($jsonData);
 	}
@@ -938,7 +938,7 @@ public function getContributorGroupsEdit()
 
 			if($resetHarvest)
 			{
-				$dataSource->requestHarvest();	
+				$dataSource->requestHarvest();
 			}
 		}
 		
@@ -988,24 +988,26 @@ public function getContributorGroupsEdit()
 		$this->load->library('importer');
 		$this->load->model('data_source/data_sources', 'ds');		
 		$data_source = $this->ds->getByID($this->input->post('data_source_id'));	
-			
+		$slogTitle =  'Import from URL completed successfully'.NL;	
+		$elogTitle = 'An error occurred whilst importing from the specified URL'.NL;
 		$log = 'IMPORT LOG' . NL;
 		//$log .= 'URI: ' . $this->input->post('url') . NL;
 		$log .= 'Harvest Method: Direct import from URL' . NL;
 		
 		$url = $this->input->post('url');
+		$log .= "URL: ".$url.NL;
 		if (!preg_match("/^https?:\/\/.*/",$url))
 		{
-			$data_source->append_log("URL must be valid http:// or https:// resource. Please try again.".$errmsg, HARVEST_ERROR, "importer","DOCUMENT_LOAD_ERROR");
-			echo json_encode(array("response"=>"failure", "message"=>"URL must be valid http:// or https:// resource. Please try again."));
+			$data_source->append_log($elogTitle.$log.NL."URL must be valid http:// or https:// resource. Please try again.", HARVEST_ERROR, "importer","DOCUMENT_LOAD_ERROR");
+			echo json_encode(array("response"=>"failure", "message"=>"URL must be valid http:// or https:// resource. Please try again.", "log"=>substr($elogTitle.$log,0, 1000)));
 			return;	
 		}
 		
 		$xml = @file_get_contents($this->input->post('url'));
 		if (strlen($xml) == 0)
 		{
-			$data_source->append_log("Unable to retrieve any content from the specified URL", HARVEST_ERROR, "importer","DOCUMENT_LOAD_ERROR");			
-			echo json_encode(array("response"=>"failure", "message"=>"Unable to retrieve any content from the specified URL"));
+			$data_source->append_log($elogTitle.$log.NL."Unable to retrieve any content from the specified URL", HARVEST_ERROR, "importer","DOCUMENT_LOAD_ERROR");			
+			echo json_encode(array("response"=>"failure", "message"=>"Unable to retrieve any content from the specified URL", "log"=>substr($elogTitle.$log,0, 1000)));
 			// todo: http error?
 			return;	
 		}
@@ -1028,25 +1030,19 @@ public function getContributorGroupsEdit()
 
 			if ($error_log = $this->importer->getErrors())
 			{
-				$log .= "ERRORS DURING IMPORT" . NL;
-				$log .= "====================" . NL ;
-				$log .= $error_log . NL;
+				$data_source->append_log($elogTitle.$log.$error_log, HARVEST_ERROR ,"HARVEST_ERROR");
+			}
+			else{
+				$data_source->append_log($slogTitle.$log.$this->importer->getMessages(), HARVEST_INFO,"HARVEST_INFO");
 			}
 
-			$log .= "IMPORT COMPLETED" . NL;
-			$log .= "====================" . NL;
-			$log .= $this->importer->getMessages();
-
-
-			// data source log append...
-			$data_source->append_log("Records were manually imported from a URL" . NL . $log, ($error_log ? HARVEST_ERROR : null),"importer", ($error_log ? "HARVEST_ERROR" : null));
 		}
 		catch (Exception $e)
 		{
 			
 			$log .= "CRITICAL IMPORT ERROR [HARVEST COULD NOT CONTINUE]" . NL;
 			$log .= $e->getMessage();
-			$data_source->append_log("An error occured whilst importing from this URL", HARVEST_ERROR, "importer","IMPORT_ERROR");				
+			$data_source->append_log($log, HARVEST_ERROR, "importer","IMPORT_ERROR");				
 			echo json_encode(array("response"=>"failure", "message"=>"An error occured whilst importing from this URL", "log"=>substr($log,0, 1000)));
 			return;	
 		}	
@@ -1070,15 +1066,16 @@ public function getContributorGroupsEdit()
 		
 
 		$xml = $this->input->post('xml');
-
+		$slogTitle =  'Import from XML content completed successfully'.NL;	
+		$elogTitle = 'An error occurred whilst importing from the specified XML'.NL;
 		$log = 'IMPORT LOG' . NL;
-		$log .= 'Harvest Method: Direct import from text posted' . NL;
+		$log .= 'Harvest Method: Direct import from XML content' . NL;
 		$log .= strlen($xml) . ' characters received...' . NL;
 
 		if (strlen($xml) == 0)
 		{
-			$data_source->append_log("An error occured whilst importing from pasted contents" . NL ."Unable to retrieve any content from the specified XML", HARVEST_ERROR, "importer","IMPORT_ERROR");		
-			echo json_encode(array("response"=>"failure", "message"=>"Unable to retrieve any content from the specified XML"));
+			$data_source->append_log($elogTitle.$log.NL ."Unable to retrieve any content from the specified XML", HARVEST_ERROR, "importer","IMPORT_ERROR");		
+			echo json_encode(array("response"=>"failure", "message"=>"Unable to retrieve any content from the specified XML", "log"=>substr($elogTitle.$log,0, 1000)));
 			return;	
 		}
 		
@@ -1107,17 +1104,19 @@ public function getContributorGroupsEdit()
 
 			if ($error_log = $this->importer->getErrors())
 			{
-				$log .= NL . "ERRORS DURING IMPORT" . NL;
-				$log .= "====================" . NL ;
-				$log .= $error_log;
+				$data_source->append_log($elogTitle.$log.NL.$error_log,  HARVEST_ERROR, "importer", "HARVEST_ERROR" );
+			}
+			else{
+				$log .= "IMPORT COMPLETED" . NL;
+				$log .= "====================" . NL;
+				$log .= $this->importer->getMessages();
+				$data_source->append_log($slogTitle.$log.NL,  HARVEST_INFO, "importer", "HARVEST_INFO" );
 			}
 
-			$log .= "IMPORT COMPLETED" . NL;
-			$log .= "====================" . NL;
-			$log .= $this->importer->getMessages();
+
 
 			// data source log append...
-			$data_source->append_log("Records were manually imported from an XML paste" . NL . $log, ($error_log ? HARVEST_ERROR : null),"importer", ($error_log ? "HARVEST_ERROR" : null));
+			
 		}
 		catch (Exception $e)
 		{
@@ -1125,8 +1124,8 @@ public function getContributorGroupsEdit()
 			$log .= "CRITICAL IMPORT ERROR [HARVEST COULD NOT CONTINUE]" . NL;
 			$log .= $e->getMessage();
 
-			$data_source->append_log("An error occured whilst importing from pasted contents" . NL . $log, HARVEST_ERROR, "importer","IMPORT_ERROR");		
-			echo json_encode(array("response"=>"failure", "message"=>"An error occured whilst importing from the specified XML", "log"=>$log));
+			$data_source->append_log($elogTitle.$log, HARVEST_ERROR, "importer","IMPORT_ERROR");		
+			echo json_encode(array("response"=>"failure", "message"=>"An error occured whilst importing from the specified XML", "log"=>substr($elogTitle.$log,0, 1000)));
 			return;	
 		}	
 		
@@ -1197,7 +1196,7 @@ public function getContributorGroupsEdit()
 			
 			$log .= "CRITICAL IMPORT ERROR [IMPORT COULD NOT CONTINUE]" . NL;
 			$log .= $e->getMessage();
-			
+			$data_source->append_log($log, HARVEST_ERROR ,"registry_object");
 			echo json_encode(array("response"=>"failure", "message"=>"An error occured whilst importing from the specified XML", "log"=>$log));
 			return;	
 		}	
@@ -1261,12 +1260,19 @@ public function getContributorGroupsEdit()
 		date_default_timezone_set('Australia/Canberra');
 		$responseType = 'error';
 		$message = 'THANK YOU';
+		$logMsg = 'Harvest completed successfully';
+		$logMsgErr = 'An error occurred whilst trying to harvest records';
+
 		$harvestId = false;
 		if (isset($POST['harvestid'])){
 			$harvestId = (int) $this->input->post('harvestid');
 		}
 		if($harvestId)
 		{
+			
+		$logMsg .= ' (harvestID: '.$harvestId.')';
+		$logMsgErr .= ' (harvestID: '.$harvestId.')';
+
 			if (isset($POST['content'])){
 				$data =  $this->input->post('content');
 			}
@@ -1282,12 +1288,19 @@ public function getContributorGroupsEdit()
 			if (isset($POST['mode'])){
 				$mode =  strtoupper($this->input->post('mode'));
 			}
+
+			if($mode == 'TEST')
+			{
+				$logMsg = 'Test harvest completed successfully';
+				$logMsgErr = 'An error occurred whilst testing harvester settings';
+			}
+
 			$this->load->model("data_sources","ds");
 			$dataSource = $this->ds->getByHarvestID($harvestId);
-			$dataSource->append_log("HARVESTER TRYING TO PUT DATA:".NL." Completed: ".$done.NL." mode: ".$mode , HARVEST_MSG, "harvester","HARVESTER_INFO");
+			//$dataSource->append_log("HARVESTER TRYING TO PUT DATA:".NL." Completed: ".$done.NL." mode: ".$mode , HARVEST_MSG, "harvester","HARVESTER_INFO");
 			if($errmsg)
 			{
-				$dataSource->append_log("HARVESTER RESPONDED UNEXPECTEDLY: ".$errmsg, HARVEST_ERROR, "harvester","HARVESTER_ERROR");
+				$dataSource->append_log($logMsgErr.NL."HARVESTER RESPONDED UNEXPECTEDLY: ".$errmsg, HARVEST_ERROR, "harvester","HARVESTER_ERROR");
 			}
 			else
 			{	
@@ -1302,7 +1315,7 @@ public function getContributorGroupsEdit()
 				if (strpos($rifcsXml, 'registryObject ') === FALSE)
 				{
 					//$dataSource->append_log("CRITICAL ERROR: Could not extract data from OAI feed. Check your provider.", HARVEST_ERROR, "harvester");
-					$dataSource->append_log("CRITICAL ERROR: Could not extract data from OAI feed. Check your provider.", HARVEST_ERROR, "harvester","HARVESTER_ERROR");					
+					$dataSource->append_log($logMsgErr.NL."CRITICAL ERROR: Could not extract data from OAI feed. Check your provider.", HARVEST_ERROR, "harvester","HARVESTER_ERROR");					
 					//	$dataSource->append_log($rifcsXml, HARVEST_ERROR, "harvester");	
 				}
 				else
@@ -1336,12 +1349,11 @@ public function getContributorGroupsEdit()
 
 							if($this->importer->getErrors())
 							{
-								$dataSource->append_log($this->importer->getErrors(), HARVEST_WARNING, "harvester","HARVESTER_ERROR");	
+								$dataSource->append_log($logMsgErr.NL.$this->importer->getMessages().NL.$this->importer->getErrors(), HARVEST_ERROR, "harvester", "HARVESTER_ERROR");	
 							}
-
-							if($this->importer->getMessages())
+							else
 							{
-								$dataSource->append_log($this->importer->getMessages(), HARVEST_INFO, "harvester", "INFO");	
+								$dataSource->append_log($logMsg.NL.$this->importer->getMessages(), HARVEST_INFO, "harvester", "HARVESTER_INFO");	
 							}
 							
 							$dataSource->updateStats();
@@ -1349,20 +1361,25 @@ public function getContributorGroupsEdit()
 						}
 						catch (Exception $e)
 						{
-							$dataSource->append_log("CRITICAL ERROR: " . NL . $e->getMessages() . NL . $this->importer->getErrors(), HARVEST_ERROR, "harvester","HARVESTER_ERROR");	
+							$dataSource->append_log($logMsgErr.NL."CRITICAL ERROR: " . NL . $e->getMessages() . NL . $this->importer->getErrors(), HARVEST_ERROR, "harvester","HARVESTER_ERROR");	
 						}
+					}
+					else{
+						$dataSource->append_log($logMsg, HARVEST_MSG, "harvester", "HARVESTER_INFO");	
 					}	
 				}
 			}
 			if($done == TRUE || $mode != "HARVEST")
 			{
-				$dataSource->append_log("HARVEST COMPLETED", HARVEST_MSG, "harvester","HARVESTER_INFO");	
+				// TODO: make up a better way to display log for multiple OAI chunks
+				//if($mode == "HARVEST")
+				//$dataSource->append_log($logMsg.NL."IMPORT COMPLETED", HARVEST_MSG, "harvester","HARVESTER_INFO");	
 
 				//$dataSource->deleteHarvestRequest($harvestId);
-				$dataSource->cancelHarvestRequest($harvestId);
+				$dataSource->cancelHarvestRequest($harvestId,false);
 				if($dataSource->advanced_harvest_mode == 'REFRESH')
 				{
-					$dataSource->append_log("HARVEST MODE REFRESH: ".NL."new Harvest ID: ".$harvestId, HARVEST_MSG, "harvester","HARVESTER_INFO");
+					$dataSource->append_log($logMsg.NL."HARVEST MODE REFRESH: ".NL."new Harvest ID: ".$harvestId, HARVEST_MSG, "harvester","HARVESTER_INFO");
 					$dataSource->deleteOldRecords($harvestId);
 				} 
 			}

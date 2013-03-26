@@ -2122,7 +2122,7 @@ function getRelatedXml($dataSource,$rifcs,$objectClass){
 
 	$rifObject = new DomDocument();
 	//var_dump($rifcs);
-	$rifObject->loadXML($rifcs);
+	$rifObject->loadXML(str_replace('&','&amp;',$rifcs));
 	$theclasses = $rifObject->getElementsByTagName($objectClass);
 	if($theclasses->length<1) 	$theclasses = $rifObject->getElementsByTagName($objectClass = strtolower($objectClass));
 	$therelations = $rifObject->getElementsByTagName('relatedObject');

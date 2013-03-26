@@ -3,6 +3,11 @@
 	xmlns:extRif="http://ands.org.au/standards/rif-cs/extendedRegistryObjects"
 	exclude-result-prefixes="extRif ro">
 	<xsl:output method="xml" encoding="UTF-8" indent="yes" omit-xml-declaration="yes"/>
+
+	<xsl:template match="/">
+			<xsl:apply-templates select="//ro:registryObject"/>
+	</xsl:template>
+	
 	<xsl:template match="ro:registryObject">
 		<xsl:variable name="ro_class">
 			<xsl:apply-templates select="ro:collection | ro:activity | ro:party  | ro:service" mode="getClass"/>

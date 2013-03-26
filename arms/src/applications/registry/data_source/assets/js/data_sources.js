@@ -16,7 +16,7 @@ $(function(){
 	 *			#!/edit/115
 	 *			#!/delete/115
 	 */
-
+	var timer;  
 	$(window).hashchange(function(){
 		var hash = location.hash;
 		if(hash.indexOf(suffix)==0){//if the hash starts with a particular suffix
@@ -418,13 +418,19 @@ function initVocabWidgets(container){
 
 }
 
-function loadHarvestLogs(data_source_id, logid){
+function loadHarvestLogs(logid, refresh){
+	if(refresh !== 'undefined' && refresh == true)
+	{
+		log("refreshing...");
+		$('#test_harvest_activity_log .modal-body').html('');
+	}
 	$.ajax({
 		url: 'data_source/getDataSourceLogs/',
-		data: {id:data_source_id, logid:logid},
+		data: {id: $('#data_source_id_input').val(), logid:logid},
 		type: 'POST',
 		dataType: 'json',
 		success: function(data){
+			log("DATA:" + data);
 			var logsTemplate = "<table class='table table-hover'>"+
 			"<thead><tr><th>#</th><th>DATE</th><th>TYPE</th><th>LOG</th></tr></thead>" +
 			"<tbody>" +
@@ -435,23 +441,18 @@ function loadHarvestLogs(data_source_id, logid){
 			var output = Mustache.render(logsTemplate, data);
 			$('#test_harvest_activity_log .modal-body').html(output);
 			$.each(data.items, function(i, v) {
-			    if (v.log.indexOf("TEST HARVEST COMPLETED") >= 0) {
+				timer = window.setTimeout(function(){loadHarvestLogs(logid)}, 2000);
+			    if (v.log.indexOf("Test harvest completed successfully") >= 0) {
+			    	window.clearTimeOut(timer);
 			        return false;
-			    }
-			    setTimeout(function(){loadHarvestLogs(data_source_id, logid)}, 2000);
-			});
-			
-			
+			    }			    
+			});			
 		},
 		error: function(data){
 		console.log(data);
 		}
-	});
-	
-
-	
+	});	
 	return false;
-
 }
 
 function loadContributorPages(data_source_id)
@@ -893,12 +894,12 @@ $('#test-harvest').live({
 			url:'data_source/testHarvest', 
 			type: 'POST',
 			data: jsonData,
-			success: function(data){	
-				console.log(data);
+			success: function(data){
+				//console.log(data);
 					if (data.status == "OK")
 					{
 						$('#test_harvest_activity_log').modal();
-						loadHarvestLogs($('#data_source_view_container').attr('data_source_id'), data.logid);
+						loadHarvestLogs(data.logid, true);
 					}
 					else
 					{

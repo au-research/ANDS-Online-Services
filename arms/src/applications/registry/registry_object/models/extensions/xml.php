@@ -67,8 +67,8 @@ class XML_Extension extends ExtensionBase
 			{
 				$this->_simplexml->addAttribute("xmlns",RIFCS_NAMESPACE);
 			}
-			//if(!$extNsDefined)	
-			//$this->_simplexml->registerXPathNamespace("extRif", EXTRIF_NAMESPACE);
+			$this->_simplexml->registerXPathNamespace("ro", RIFCS_NAMESPACE);
+			$this->_simplexml->registerXPathNamespace("extRif", EXTRIF_NAMESPACE);
 			
 			return $this->_simplexml;
 		}

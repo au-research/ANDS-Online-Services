@@ -165,6 +165,7 @@ class Importer {
 
 			// Finish up by returning our stats...
 			$time_taken = sprintf ("%.3f", (float) (microtime(true) - $this->start_time));
+			$this->message_log[] = NL;
 			$this->message_log[] = "Harvest complete! Took " . ($time_taken) . "s...";
 			$this->message_log[] = "Registry Object(s) in feed: " . $this->ingest_attempts;
 			$this->message_log[] = "Registry Object(s) created: " . $this->ingest_new_record;
@@ -485,7 +486,7 @@ class Importer {
 			if ($existingRegistryObject->harvest_id == $this->harvestID)
 			{
 				$reharvest = false;
-				$this->error_log[] = "Ignored a record received twice in this harvest: " . $registryObject->key;
+				$this->message_log[] = "Ignored a record received twice in this harvest: " . $registryObject->key;
 				$this->ingest_duplicate_ignore++;
 			}
 
@@ -498,7 +499,7 @@ class Importer {
 			{
 				// Duplicate key in alternate data source
 				$reharvest = false;
-				$this->error_log[] = "Ignored a record already existing in a different data source: " . $registryObject->key;
+				$this->message_log[] = "Ignored a record already existing in a different data source: " . $registryObject->key;
 				$this->ingest_duplicate_ignore++;
 			}
 
@@ -613,7 +614,7 @@ class Importer {
 
 		if(!$doc)
 		{
-			$this->dataSource->append_log("Unable to parse XML. Perhaps your XML file is not well-formed?", HARVEST_ERROR, "importer","DOCUMENT_LOAD_ERROR");
+			//$this->dataSource->append_log("Unable to parse XML. Perhaps your XML file is not well-formed?", HARVEST_ERROR, "importer","DOCUMENT_LOAD_ERROR");
 			throw new Exception("Unable to parse XML. Perhaps your XML file is not well-formed?");
 		}
 
@@ -634,7 +635,7 @@ class Importer {
 			}
 			libxml_clear_errors();
 
-			$this->dataSource->append_log("Unable to validate XML document against schema: ".$error_string, HARVEST_ERROR, "importer","DOCUMENT_VALIDATION_ERROR");
+			//$this->dataSource->append_log("Unable to validate XML document against schema: ".$error_string, HARVEST_ERROR, "importer","DOCUMENT_VALIDATION_ERROR");
 			throw new Exception("Unable to validate XML document against schema: " . NL . $error_string);
 		}
 	}

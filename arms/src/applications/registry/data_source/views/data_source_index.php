@@ -800,6 +800,7 @@
 <!-- mustache template for data source edit single-->
 <script type="text/x-mustache"  id="data-source-edit-template">
 {{#item}}
+<input type="hidden" id="data_source_id_input" value="{{data_source_id}}"/>
 	<div class="content-header">
 		<h1>{{title}}</h1>
 		<ul class="nav nav-pills">
