@@ -93,6 +93,12 @@ class Search extends MX_Controller {
 						$this->solr->setOpt('fq', 'subject_vocab_uri:("'.$value.'")');
 						$filteredSearch = true;
 						break;
+					case 'temporal':
+						$date = explode('-', $value);
+						$this->solr->setOpt('fq', 'earliest_year:['.$date[0].' TO *]');
+						$this->solr->setOpt('fq', 'latest_year:[* TO '.$date[1].']');
+						$filteredSearch = true;
+						break;
 					case 'license_class': 
 						$this->solr->setOpt('fq', 'license_class:("'.$value.'")');
 						$filteredSearch = true;

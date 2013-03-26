@@ -72,6 +72,8 @@ function asset_url( $path, $loc = 'modules')
 		else{
 			return base_url( 'assets/' . $path );
 		}
+	}else if($loc =='base_path'){
+		return $CI->config->item('default_base_url').$path;
 	}
 }
 

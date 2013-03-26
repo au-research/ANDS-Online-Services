@@ -101,8 +101,8 @@
 		    <?php if ($lib=='accordion'): ?>
 		    	<script src="<?php echo asset_url('lib/tinyaccordion/accordion.js', 'base');?>" type="text/javascript"></script>
 		    <?php endif; ?>
-		    <?php if ($lib=='vocab_widget'): ?>    	
-		    	<script src="../../applications/registry/vocab_widget/assets/js/vocab_widget.js" type="text/javascript"></script>
+		    <?php if ($lib=='vocab_widget'): ?>
+		    	<script src="<?php echo asset_url('applications/registry/vocab_widget/assets/js/vocab_widget.js', 'base_path')?>" type="text/javascript"></script>
 
 		    <?php endif; ?>		    
 		<?php endforeach;?>
