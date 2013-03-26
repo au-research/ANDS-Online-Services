@@ -27,30 +27,22 @@ $(document).ready(function() {
 			}
 		});
 	});
-    $( "#range_slider" ).slider({
-            range: true,
-            min: 0,
-            max: 500,
-            values: [ 75, 300 ],
-            slide: function( event, ui ) {
-                $( "#amount" ).val( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] );
-            }
-    });
+
     $("#slider").editRangeSlider({
     	scales: [
-  // Primary scale
-  {
-    first: function(val){ return val; },
-    next: function(val){ return val + 50; },
-    stop: function(val){ return false; },
-    label: function(val){ return val; }
-  }],
+		  // Primary scale
+		  {
+		    first: function(val){ return val; },
+		    next: function(val){ return val + 50; },
+		    stop: function(val){ return false; },
+		    label: function(val){ return val; }
+		  }],
     	bounds:{min: 1544, max: 2012},
     	defaultValues:{min: 1544, max: 2012},
     	valueLabels:"change",
     	type:"number",
     	arrows:false,
-    	delayOut:400
+    	delayOut:200
 	});
 
     $('#clear_search').click(function() {

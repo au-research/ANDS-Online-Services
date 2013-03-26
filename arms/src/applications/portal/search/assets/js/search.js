@@ -131,17 +131,6 @@ $(document).on('click', '.filter',function(e){
 				success: function(data, status) {
 					this.set('content.text', data);
 					loadSubjectBrowse(subjectType);
-
-				  //   $("#subjectfacet-search").vocab_widget({
-					 //    mode: 'search',
-					 //    cache: false,
-					 //    repository: 'anzsrc-for',
-					 //    target_field: 'label'});
-
-				  //   $('li[role=vocab_item]').on('click',function(){
-						// searchData['subject_vocab_uri'] = encodeURIComponent($('span[role=about]', this).text());
-						// changeHashTo(formatSearch());
-				  //   });
 				}
 			},
 			title: {
@@ -305,6 +294,15 @@ function initSearchPage(){
 		});
 	}
 
+	if(searchData['temporal']){
+		$('#rst_range').attr('checked', 'checked');
+		$('#slider').show();
+		$('#slider').editRangeSlider('resize');
+		var temporal = searchData['temporal'].split('-');
+		$("#slider").editRangeSlider("min",parseInt(temporal[0]));
+		$("#slider").editRangeSlider("max",parseInt(temporal[1]));
+	}	
+
 	$('#search_box').unbind('keypress').keypress(function(e){
 		if(e.which==13){//press enter
 			searchData['q']=$(this).val();
@@ -373,7 +371,13 @@ function postSearch(){
 	}
 
 	if(searchData['subject_vocab_uri']){
-		var html = '<li><img src="'+base_url+'assets/core/images/delete.png" filter_type="subject_vocab_uri" class="remove_facet" filter_type="subject_vocab_uri"/><a href="javascript:;" class="filter remove_facet" filter_type="subject_vocab_uri">'+searchData['subject_vocab_uri_display']+'</a></li>';
+		var html = '<li><img src="'+base_url+'assets/core/images/delete.png" filter_type="subject_vocab_uri" class="remove_facet"/><a href="javascript:;" class="filter remove_facet" filter_type="subject_vocab_uri">'+searchData['subject_vocab_uri_display']+'</a></li>';
+		$('.facet_subjects ul').prepend(html);
+	}
+
+	if(searchData['temporal']){
+		var temporal = searchData['temporal'].split('-');
+		var html = '<li><img src="'+base_url+'assets/core/images/delete.png" filter_type="temporal" class="remove_facet"/><a href="javascript:;" class="filter remove_facet" filter_type="temporal">'+temporal[0]+'-'+temporal[1]+'</a></li>';
 		$('.facet_subjects ul').prepend(html);
 	}
 }

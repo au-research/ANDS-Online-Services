@@ -565,6 +565,13 @@ a.search_map {
 }
 .adv_inner input.s_inputs {
 	width: 88px;
+	border-top: 1px solid #cecece;
+	border-right: 1px solid #eee;
+	border-bottom: 1px solid #dfe1e2;
+	border-left: 1px solid #eee;
+	background: #fefefe;
+	padding: 0 10px;
+	height: 38px;
 }
 .adv_inner span.or {
 	display: inline-block;

@@ -212,6 +212,12 @@ class Vocab {
                         break;
                     case 'license_class': 
                         $CI->solr->setOpt('fq', 'license_class:("'.$value.'")');
+                        break;
+                    case 'temporal':
+                        $date = explode('-', $value);
+                        $CI->solr->setOpt('fq', 'earliest_year:['.$date[0].' TO *]');
+                        $CI->solr->setOpt('fq', 'latest_year:[* TO '.$date[1].']');
+                        $filteredSearch = true;
                         break;             
                     case 'spatial':
                         $CI->solr->setOpt('fq', 'spatial_coverage_extents:"Intersects('.$value.')"');
