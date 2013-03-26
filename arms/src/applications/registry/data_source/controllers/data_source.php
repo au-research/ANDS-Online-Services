@@ -1258,18 +1258,21 @@ public function getContributorGroupsEdit()
 		$mode = false;
 		header("Content-Type: text/xml; charset=UTF-8", true);
 		date_default_timezone_set('Australia/Canberra');
+
 		$responseType = 'error';
 		$message = 'THANK YOU';
 		$logMsg = 'Harvest completed successfully';
 		$logMsgErr = 'An error occurred whilst trying to harvest records';
-
 		$harvestId = false;
 		if (isset($POST['harvestid'])){
 			$harvestId = (int) $this->input->post('harvestid');
 		}
 		if($harvestId)
 		{
-			
+		$this->load->model("data_sources","ds");
+		$dataSource = $this->ds->getByHarvestID($harvestId);
+
+
 		$logMsg .= ' (harvestID: '.$harvestId.')';
 		$logMsgErr .= ' (harvestID: '.$harvestId.')';
 
@@ -1295,8 +1298,7 @@ public function getContributorGroupsEdit()
 				$logMsgErr = 'An error occurred whilst testing harvester settings';
 			}
 
-			$this->load->model("data_sources","ds");
-			$dataSource = $this->ds->getByHarvestID($harvestId);
+
 			//$dataSource->append_log("HARVESTER TRYING TO PUT DATA:".NL." Completed: ".$done.NL." mode: ".$mode , HARVEST_MSG, "harvester","HARVESTER_INFO");
 			if($errmsg)
 			{
@@ -1308,65 +1310,76 @@ public function getContributorGroupsEdit()
 				$this->load->library('importer');	
 
 				$this->load->model('data_source/data_sources', 'ds');
-
+				$rifcsXml = '';
 				// xxx: this won't work with crosswalk!
-				$rifcsXml = $this->importer->extractRIFCSFromOAI($data);
+				
 
-				if (strpos($rifcsXml, 'registryObject ') === FALSE)
+				$OAIPMHDocument = new DOMDocument();
+				$result = $OAIPMHDocument->loadXML($data);
+				if( $result == false )
 				{
-					//$dataSource->append_log("CRITICAL ERROR: Could not extract data from OAI feed. Check your provider.", HARVEST_ERROR, "harvester");
-					$dataSource->append_log($logMsgErr.NL."CRITICAL ERROR: Could not extract data from OAI feed. Check your provider.", HARVEST_ERROR, "harvester","HARVESTER_ERROR");					
-					//	$dataSource->append_log($rifcsXml, HARVEST_ERROR, "harvester");	
+					$log = "Document Load Error: ".$errors['message']."\n";
+					$dataSource->append_log($logMsgErr.NL.$log.NL."CRITICAL ERROR: Could not Load XML from OAI feed. Check your provider.", HARVEST_ERROR, "harvester","HARVESTER_ERROR");					
 				}
 				else
 				{
-
-					$this->importer->setXML($rifcsXml);
-
-					if ($dataSource->provider_type != RIFCS_SCHEME)
+					$rifcsXml = $this->importer->extractRIFCSFromOAI($data);
+					if (strpos($rifcsXml, 'registryObject ') === FALSE)
 					{
-						$this->importer->setCrosswalk($dataSource->provider_type);
-					}
-
-					$this->importer->setHarvestID($harvestId);
-					$this->importer->setDatasource($dataSource);
-
-					if ($done != TRUE)
-					{
-						$this->importer->setPartialCommitOnly(TRUE);
+						//$dataSource->append_log("CRITICAL ERROR: Could not extract data from OAI feed. Check your provider.", HARVEST_ERROR, "harvester");
+						$dataSource->append_log($logMsgErr.NL."CRITICAL ERROR: Could not extract data from OAI feed. Check your provider.", HARVEST_ERROR, "harvester","HARVESTER_ERROR");					
+						//	$dataSource->append_log($rifcsXml, HARVEST_ERROR, "harvester");	
 					}
 					else
 					{
-						$this->importer->setPartialCommitOnly(FALSE);
-					}
 
+						$this->importer->setXML($rifcsXml);
 
-					if ($mode == "HARVEST")
-					{
-						try
+						if ($dataSource->provider_type != RIFCS_SCHEME)
 						{
-							$this->importer->commit();
+							$this->importer->setCrosswalk($dataSource->provider_type);
+						}
 
-							if($this->importer->getErrors())
-							{
-								$dataSource->append_log($logMsgErr.NL.$this->importer->getMessages().NL.$this->importer->getErrors(), HARVEST_ERROR, "harvester", "HARVESTER_ERROR");	
-							}
-							else
-							{
-								$dataSource->append_log($logMsg.NL.$this->importer->getMessages(), HARVEST_INFO, "harvester", "HARVESTER_INFO");	
-							}
-							
-							$dataSource->updateStats();
-							$responseType = 'success';
-						}
-						catch (Exception $e)
+						$this->importer->setHarvestID($harvestId);
+						$this->importer->setDatasource($dataSource);
+
+						if ($done != TRUE)
 						{
-							$dataSource->append_log($logMsgErr.NL."CRITICAL ERROR: " . NL . $e->getMessages() . NL . $this->importer->getErrors(), HARVEST_ERROR, "harvester","HARVESTER_ERROR");	
+							$this->importer->setPartialCommitOnly(TRUE);
 						}
+						else
+						{
+							$this->importer->setPartialCommitOnly(FALSE);
+						}
+
+
+						if ($mode == "HARVEST")
+						{
+							try
+							{
+								$this->importer->commit();
+
+								if($this->importer->getErrors())
+								{
+									$dataSource->append_log($logMsgErr.NL.$this->importer->getMessages().NL.$this->importer->getErrors(), HARVEST_ERROR, "harvester", "HARVESTER_ERROR");	
+								}
+								else
+								{
+									$dataSource->append_log($logMsg.NL.$this->importer->getMessages(), HARVEST_INFO, "harvester", "HARVESTER_INFO");	
+								}
+								
+								$dataSource->updateStats();
+								$responseType = 'success';
+							}
+							catch (Exception $e)
+							{
+								$dataSource->append_log($logMsgErr.NL."CRITICAL ERROR: " . NL . $e->getMessages() . NL . $this->importer->getErrors(), HARVEST_ERROR, "harvester","HARVESTER_ERROR");	
+							}
+						}
+						else{
+							$dataSource->append_log($logMsg, HARVEST_MSG, "harvester", "HARVESTER_INFO");	
+						}	
 					}
-					else{
-						$dataSource->append_log($logMsg, HARVEST_MSG, "harvester", "HARVESTER_INFO");	
-					}	
 				}
 			}
 			if($done == TRUE || $mode != "HARVEST")
