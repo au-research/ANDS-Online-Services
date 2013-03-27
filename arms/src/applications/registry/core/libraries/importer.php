@@ -464,17 +464,18 @@ class Importer {
 		$existingRegistryObject = null;
 
 		// If there is something existing with the same class of status, overwrite it
-		if (isPublishedStatus($this->status))
-		{
-			$existingRegistryObject = $this->CI->ro->getPublishedByKey((string)$registryObject->key);
-			if (!$existingRegistryObject)
-			{
-				$existingRegistryObject = $this->CI->ro->getDraftByKey((string)$registryObject->key);
-			}
-		}
-		elseif (isDraftStatus($this->status))
+		if (isDraftStatus($this->status))
 		{
 			$existingRegistryObject = $this->CI->ro->getDraftByKey((string)$registryObject->key);
+		}
+		elseif (isPublishedStatus($this->status))
+		{
+			// If there is a draft, add to this one
+			$existingRegistryObject = $this->CI->ro->getDraftByKey((string)$registryObject->key);
+			if (!$existingRegistryObject)
+			{
+				$existingRegistryObject = $this->CI->ro->getPublishedByKey((string)$registryObject->key);
+			}
 		}
 		
 

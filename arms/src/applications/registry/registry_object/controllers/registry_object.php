@@ -15,48 +15,6 @@ class Registry_object extends MX_Controller {
 		redirect(registry_url());
 	}
 
-	public function test()
-	{
-		$this->load->model('registry_object/registry_objects','ro');
-		$this->ro->clearAllFromDatasourceUnsafe(187);
-	}
-	public function testRecordSuite(){
-		echo "<pre>";
-
-		$this->load->model('registry_object/registry_objects','ro');
-		$this->load->model('data_source/data_sources', 'ds');
-		$data_source = $this->ds->getByID(13);
-
-		$pub_ro = $this->ro->getPublishedByKey("apps.ands.org.au/party-2");
-		$draft_ro = $this->ro->getDraftByKey("apps.ands.org.au/party-2");
-
-		if ($pub_ro)
-		{
-	//		echo "<font color=red>" . $this->ro->cloneToDraft($pub_ro) . "</font>";
-			
-	//		print_pre(htmlentities($pub_ro->getRif()));
-		//	$this->ro->deleteRegistryObject($pub_ro);
-		//	$pub_ro->status = DRAFT;
-		//	$pub_ro->save();
-		}
-
-		if($draft_ro)
-		{
-	//		$this->ro->deleteRegistryObject($draft_ro);
-	//		$draft_ro->status = PUBLISHED;
-	//		$draft_ro->save();
-		}
-
-		//$draft_ro->save();
-		//$ro->status = DRAFT;
-		//$ro->save();
-		echo $pub_ro;
-		echo "<hr/>";
-		echo $draft_ro;
-
-	}
-
-
 	public function view($ro_id, $revision=''){
 		$this->load->model('registry_object/registry_objects', 'ro');
 		$ro = $this->ro->getByID($ro_id);
@@ -143,17 +101,25 @@ class Registry_object extends MX_Controller {
 	public function edit($registry_object_id){
 		$this->load->model('registry_objects', 'ro');
 		$ro = $this->ro->getByID($registry_object_id);
-		// WORKFLOW (???)
-		//if($ro->status == PUBLISHED)
-		//{
-	//		$roKey = $ro->key;
-	//		if(!($ro = $this->ro->getDraftByKey($roKey)))	
-	//			$ro = $this->ro->cloneToDraft($registry_object_id);
-	//	}
-		//else{
 
-		//}
+		if($ro->status == PUBLISHED)
+		{
+			if(!($ro = $this->ro->getDraftByKey($ro->key)))
+			{
+				$ro = $this->ro->cloneToDraft($registry_object_id);
+			}
+			else
+			{
+				$ro->status = DRAFT;
+				$ro->save();
+			}
+		}
 
+		if ($ro->id != $registry_object_id)
+		{
+			header("Location: " . registry_url('registry_object/edit/' . $ro->id));
+		}
+		
 		ds_acl_enforce($ro->data_source_id);
 		$data['extrif'] = $ro->getExtRif();
 
@@ -191,14 +157,33 @@ class Registry_object extends MX_Controller {
 		// might have to add a draft instead of saving the published!!
 		// WORKFLOW!!!!!!!!!!!!!!!
 		$xml = $this->input->post('xml');
+		$this->load->library('importer');
+
 		$this->load->model('registry_objects', 'ro');
+		$this->load->model('data_source/data_sources', 'ds');
 		$ro = $this->ro->getByID($registry_object_id);
-		$ro->updateXML(wrapRegistryObjects($xml));
-		$ro->enrich();
-		if($ro->save()){
-			echo 'success saved';
-		}else{
-			echo 'save failed';
+		if (!$ro)
+		{
+			throw new Exception("No registry object exists with that ID!");
+		}
+
+		$ds = $this->ds->getByID($ro->data_source_id);
+
+		$this->importer->forceDraft();
+		$this->importer->setXML(wrapRegistryObjects($xml));
+		$this->importer->setDatasource($ds);
+		$this->importer->commit();
+
+
+		$error_log = $this->importer->getErrors();
+
+		if ($error_log)
+		{
+			echo "Errors during saving this registry object! " . BR . implode($error_log, BR);
+		}
+		else
+		{
+			echo "Success";
 		}
 	}
 

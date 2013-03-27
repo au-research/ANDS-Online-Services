@@ -64,6 +64,11 @@ class Registry_fetch extends CI_Model
 		{
 			return $contents;
 		}
+		else if (isset($contents['redirect_registry_object_slug']))
+		{
+			header("Location: " . portal_url($contents['redirect_registry_object_slug']));
+			exit();
+		}
 		else if (isset($contents['previously_valid_title']))
 		{
 			// Should throw a soft 404...

@@ -182,6 +182,7 @@ class Core_extension extends ExtensionBase
 		// Else, if the draft is being published:
 		else if (isDraftStatus($this->getAttribute('original_status')) && isPublishedStatus($target_status))
 		{
+			$xml = $this->ro->getRif();
 			$existingRegistryObject = $this->_CI->ro->getPublishedByKey($this->ro->key);
 			if ($existingRegistryObject)
 			{
@@ -195,7 +196,7 @@ class Core_extension extends ExtensionBase
 			// Add the XML content of this draft to the published record (and follow enrichment process, etc.)
 			
 			$this->_CI->importer->_reset();
-			$this->_CI->importer->setXML(wrapRegistryObjects($this->ro->getRif()));
+			$this->_CI->importer->setXML($xml);
 			$this->_CI->importer->setDatasource($data_source);
 			$this->_CI->importer->forcePublish();
 			$this->_CI->importer->statusAlreadyChanged = true;

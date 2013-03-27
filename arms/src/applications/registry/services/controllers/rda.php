@@ -91,8 +91,21 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 		}
 		else
 		{
+
 			if ($this->input->get('slug'))
 			{
+
+				// Check for redirects from old slugs
+				$query = $this->db->query("SELECT * FROM url_mappings u JOIN registry_objects r ON r.registry_object_id = u.registry_object_id WHERE u.slug = ?", $this->input->get('slug'));
+				
+				if ($query->num_rows() > 0)
+				{
+					$orphan_slug = array_pop($query->result_array());
+					$contents = array('redirect_registry_object_slug' => $orphan_slug['slug']);
+					echo json_encode($contents);
+					return;
+				}
+
 				// Check for orphans! (SLUGS whose registry_object has been deleted)
 				$query = $this->db->select('search_title')->get_where('url_mappings',
 											array("slug"=> $this->input->get('slug'), "registry_object_id IS NULL" => null));
