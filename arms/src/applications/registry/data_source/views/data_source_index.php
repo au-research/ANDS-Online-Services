@@ -305,7 +305,7 @@
 	<div class="modal-screen-container">
 		<div name="selectionScreen" class="modal-body">
 
-			<div class="alert alert-info">Import registry objects from a test feed or backup.</div>
+			<div class="alert alert-info">Import registry objects from a test feed or RIFCS XML file.</div>
 
 			<form class="form-horizontal">
 				<label class="control-label">URL to import records from:</label>
@@ -316,11 +316,11 @@
 					</p>
 				</div>
 			</form>
-
+			<p></p>
 			<p>
 				<span class="label label-info">Note</span>
 				<small>
-					This tool does not support OAI-PMH. You must use the Harvester to import from an OAI-PMH feed.
+					This tool will import RIFCS from an XML file using an Advanced Harvest Mode of Standard. For all other operations (such as OAI-PMH), please configure a Harvest from the Data Source Settings page. 
 				</small>
 			</p>
 		</div>
@@ -366,12 +366,17 @@
 				</fieldset>
 			</form>
 
+			<p></p>
 			<p>
 				<span class="label label-info">Note</span>
+				<small>
+					This tool will import pasted RIFCS contents using an Advanced Harvest Mode of Standard. For all other operations (such as OAI-PMH), please configure a Harvest from the Data Source Settings page. 
+				</small>
 				<small>
 					This tool is designed for small imports (&lt;100 records). It may fail with larger bulk imports.
 				</small>
 			</p>
+			
 		</div>
 
 		<!-- A hidden loading screen -->

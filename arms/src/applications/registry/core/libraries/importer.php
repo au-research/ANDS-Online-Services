@@ -295,8 +295,7 @@ class Importer {
 					}
 
 					// Order is important here!
-					$registryObject->addAttribute("xmlns",RIFCS_NAMESPACE);
-					$ro->updateXML($registryObject->asXML());
+					$ro->updateXML(wrapRegistryObjects($registryObject->asXML()));
 
 					// Generate the list and display titles first, then the SLUG
 					$ro->updateTitles($ro->getSimpleXML());

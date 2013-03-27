@@ -144,12 +144,12 @@ class Registry_object extends MX_Controller {
 		$this->load->model('registry_objects', 'ro');
 		$ro = $this->ro->getByID($registry_object_id);
 		// WORKFLOW (???)
-		if($ro->status == PUBLISHED)
-		{
-			$roKey = $ro->key;
-			if(!($ro = $this->ro->getDraftByKey($roKey)))	
-				$ro = $this->ro->cloneToDraft($registry_object_id);
-		}
+		//if($ro->status == PUBLISHED)
+		//{
+	//		$roKey = $ro->key;
+	//		if(!($ro = $this->ro->getDraftByKey($roKey)))	
+	//			$ro = $this->ro->cloneToDraft($registry_object_id);
+	//	}
 		//else{
 
 		//}

@@ -5,7 +5,7 @@
 	<xsl:output method="xml" encoding="UTF-8" indent="yes" omit-xml-declaration="yes"/>
 
 	<xsl:template match="/">
-			<xsl:apply-templates select="//ro:registryObject"/>
+		<xsl:apply-templates select="//ro:registryObject"/>
 	</xsl:template>
 	
 	<xsl:template match="ro:registryObject">

@@ -96,8 +96,8 @@ class View extends MX_Controller {
 		// Render the suggested links
 		$data['suggested_links_contents'] = $suggested_links;
 		$suggestedLinksDiv = $this->load->view('suggested_links', $data, true);
-		//echo($extRif['data']);
 		//exit();
+
 		// Generate the view page contents
 		$data['registry_object_contents'] = str_replace('&amp;','&', $this->registry->transformExtrifToHTMLStandardRecord($extRif['data']));
 		$data['registry_object_contents'] = str_replace('&amp;','&', $data['registry_object_contents']);

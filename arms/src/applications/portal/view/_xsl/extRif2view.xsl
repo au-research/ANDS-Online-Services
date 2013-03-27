@@ -5,7 +5,6 @@
     <xsl:strip-space elements="*"/>
     <xsl:param name="dataSource" select="//extRif:extendedMetadata/extRif:dataSourceKey"/>
     <xsl:param name="dateCreated"/>
-    <xsl:param name="base_url" select="'https://test.ands.org.au/orca/'"/>  
     <xsl:param name="orca_view"/>  
     <xsl:param name="theGroup"/>
     <xsl:param name="key"/>        

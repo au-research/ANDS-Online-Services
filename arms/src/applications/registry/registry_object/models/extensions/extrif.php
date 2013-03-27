@@ -16,33 +16,23 @@ class Extrif_Extension extends ExtensionBase
 		$this->_CI->load->model('data_source/data_sources','ds');	
 		
 		// Save ourselves some computation by avoiding creating the whole $ds object for 
-		$ds = $this->_CI->ds->getByID($this->ro->data_source_id, FALSE);
+		$ds = $this->_CI->ds->getByID($this->ro->data_source_id);
 
 		//same as in relationships.php
 		$xml = $this->ro->getSimpleXML();
-		// f@%!$ing dirty hack...
-		if ($xml->registryObject)
-		{
-			$xml = new SimpleXMLElement($xml->registryObject->asXML());
+
+		// Reset our namespace object (And go down one level from the wrapper if needed)
+		$xml = simplexml_load_string(($xml->registryObject ? $xml->registryObject->asXML() : $xml->asXML()));
+
+		// Clone across the namespace (if applicable)
+		$namespaces = $xml->getNamespaces(true);
+		if ( !in_array(RIFCS_NAMESPACE, $namespaces) )
+		{    
+			$xml->addAttribute("xmlns",RIFCS_NAMESPACE);
 		}
-	    
-		$nsDefined = false;
-		$rifNS = $xml->getNamespaces(true);
-		foreach($rifNS as $ns)
-		{
-			if($ns == RIFCS_NAMESPACE)
-				$nsDefined = true;
-		}
-		if(!$nsDefined)
-		{
-			try{
-			@$xml->addAttribute("xmlns",RIFCS_NAMESPACE);
-			}
-			catch(Exception $e)
-			{
-				//ignore this
-			}
-		}
+
+		$xml = simplexml_load_string($xml->asXML());
+
 		// Cannot enrich already enriched RIFCS!!
 		if(true)//!isset($rifNS[EXTRIF_NAMESPACE])) //! (string) $attributes['enriched'])//! (string) $attributes['enriched'])
 		{
@@ -52,7 +42,7 @@ class Extrif_Extension extends ExtensionBase
 				/* EXTENDED METADATA CONTAINER */
 				$extendedMetadata = $xml->addChild("extRif:extendedMetadata", NULL, EXTRIF_NAMESPACE);
 				$extendedMetadata->addChild("extRif:slug", $this->ro->slug, EXTRIF_NAMESPACE);
-				$extendedMetadata->addChild("extRif:dataSourceKey", $ds['key'], EXTRIF_NAMESPACE);
+				$extendedMetadata->addChild("extRif:dataSourceKey", $ds->key, EXTRIF_NAMESPACE);
 				$extendedMetadata->addChild("extRif:status", $this->ro->status, EXTRIF_NAMESPACE);				
 				$extendedMetadata->addChild("extRif:id", $this->ro->id, EXTRIF_NAMESPACE);
 				//$extendedMetadata->addChild("extRif:dataSourceTitle", $ds->title, EXTRIF_NAMESPACE);				
@@ -211,7 +201,8 @@ class Extrif_Extension extends ExtensionBase
 				/* Names EXTRIF */
 				//$descriptions = $xml->xpath('//'.$this->ro->class.'/description');
 				
-						
+				//$ds->append_log(var_export($xml->asXML(), true));
+
 				$this->ro->updateXML($xml->asXML(),TRUE,'extrif');
 				//return $this;
 			}

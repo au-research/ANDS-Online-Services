@@ -82,6 +82,8 @@ class Registry extends MX_Controller {
 		$this->db->select('registry_object_id, title');
 		$this->db->from('registry_objects');
 		$this->db->like('title', $like);
+		$this->db->or_like('key', $like);
+		$this->db->or_like('slug', $like);
 		$this->db->limit(10);
 		$query = $this->db->get();
 

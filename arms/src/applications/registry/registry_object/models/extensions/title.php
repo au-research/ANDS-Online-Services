@@ -50,11 +50,6 @@ class Title_Extension extends ExtensionBase
 		}
 		else
 		{
-			$name = array('display_title'=>'');
-		}
-
-		if (trim($name['display_title']) == '')
-		{
 			$name['display_title'] = self::DEFAULT_TITLE . " (" . $this->ro->id . ")";
 			$name['list_title'] = $name['display_title'];
 		}

@@ -16,7 +16,7 @@ $(function() {
     if($_GET['filters']){
         filters = jQuery.parseJSON($_GET['filters']);
     }else{
-        var sort = {}; sort['updated'] = 'desc';
+        var sort = {}; sort['updated'] = 'asc';
         filters['sort'] = sort;
          // var filter = {}; filter['status'] = 'PUBLISHED';
          // var or_filter = {};or_filter['status'] = 'DRAFT';
