@@ -613,7 +613,7 @@ public function getContributorGroupsEdit()
 							//echo "contributor:".$group ." is the key and ".$group_contributor["key"]." is the got key";
 							if($group_contributor["key"]=="Contributor:".$group)
 							{
-								$item['contributor_page'] = "<a href='#'> ".$group_contributor["key"]."</a>";
+								$item['contributor_page'] = "<a href='../registry_object/view/".$group_contributor["registry_object_id"]."'> ".$group_contributor["key"]."</a>";
 							}else{
 								$item['contributor_page'] = 'Page will be auto generated on save';
 							}
@@ -696,7 +696,8 @@ public function getContributorGroupsEdit()
 				{
 					if($group_contributor["authorative_data_source_id"]==$id)
 					{
-						$item['contributor_page'] = "<a href='#'> ".$group_contributor["key"]."</a>";
+						$theAnchor = anchor('registry_object/view/'.$group_contributor["registry_object_id"]);
+						$item['contributor_page'] = "<a href='../registry_object/view/".$group_contributor["registry_object_id"]."'> ".$group_contributor["key"]."</a>";
 					}else{
 						$item['contributor_page'] = $group_contributor["key"]."(<em>Managed by another datasource</em>)";
 					}

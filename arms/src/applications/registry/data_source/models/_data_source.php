@@ -321,7 +321,7 @@ class _data_source {
 		
 		$contributor = '';
 
-		$this->db->select('registry_objects.key,institutional_pages.authorative_data_source_id');
+		$this->db->select('registry_objects.registry_object_id,registry_objects.key,institutional_pages.authorative_data_source_id');
 		$this->db->from('registry_objects');
 		$this->db->join('institutional_pages', 'institutional_pages.registry_object_id = registry_objects.registry_object_id');
 		$this->db->where(array('institutional_pages.group'=>$group,));
@@ -341,7 +341,7 @@ class _data_source {
 				
 				$contributor['key'] =  $contributors['key'];
 				$contributor['authorative_data_source_id'] = $contributors['authorative_data_source_id']; 
-
+				$contributor['registry_object_id'] = $contributors['registry_object_id']; 
 			}
 
 		}
@@ -369,7 +369,6 @@ class _data_source {
 				// for each group for this datasource that is not already managed by another datasource
 					foreach($groups as $group)
 					{
-
 						$query = '';
 						$manageGroup[$group] = true;	
 						//check that another ds is not the authoritive ds
@@ -379,15 +378,13 @@ class _data_source {
 						if($query->num_rows > 0)
 						{
 							foreach($query->result_array() AS $foundPage)
-							{ 
-					
+							{ 				
 								if($foundPage['authorative_data_source_id']==$data_source_id)
 								{
 									//we want to delete this record and reinsert it								
 									$this->db->delete('institutional_pages', array('group'=>$group));
 								}else{
 									//we want to leave this group alone if the group belongs to another ds
-
 									$manageGroup[$group] = false;
 								}			
 							}
@@ -406,12 +403,11 @@ class _data_source {
 								$this->_CI->importer->setDatasource($this);
 								$the_key = $this->_CI->importer->commit();
 								$this->_CI->importer->forceDraft();		
-								$contributorPage = $this->_CI->ro->getAllByKey($registry_object_key);		
-
+								$contributorPage = $this->_CI->ro->getAllByKey($registry_object_key);	
+								//we need to mail services that this page has been created??	
 							} 
 
 							$registry_object_id = $contributorPage[0]->id;
-	
 							//we need to add the  group , registry_object_id and autoritive datasource to the institutional_pages table
 							$data = array(
 								"id"=>null,
@@ -424,7 +420,6 @@ class _data_source {
 					}
 				break;
 			case "2":
-
 				// for each group for this datasource that is not already managed by another datasource
 					foreach($groups as $group)
 					{
@@ -445,7 +440,6 @@ class _data_source {
 								$manageGroup = false;
 							}
 						}
-
 						if($manageGroup)
 						{
 							
