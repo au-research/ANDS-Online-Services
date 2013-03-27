@@ -1,7 +1,8 @@
 <?php $this->load->view('rda_header');?>	
+
 <div class="container">
 
-<h2>Browse Research Data Australia</h2>
+<h1>Browse Research Data Australia</h1>
 <dl>
 	<dt>ANZSRC Field of Research:</dt>
 	<dd><input type="text" id="anzsrc-vocab" name="anzsrc-for" value="" size="40" /><br /> <i>(autocomplete; begin typing something (e.g. "BIOL"))</i></dd>

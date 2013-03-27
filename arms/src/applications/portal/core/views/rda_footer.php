@@ -2,7 +2,7 @@
 {{#links}}
 <div class="ro_preview">
 	<div class="ro_preview_header">
-		<img class="icon-heading" src="<?php echo base_url();?>assets/core/images/icons/{{class}}s.png"/>
+		<img class="icon-heading" src="<?php echo base_url();?>assets/core/images/{{class}}.png"/>
 		<div class="title">{{title}}</div>
 	</div>
 	<div class="ro_preview_description hide">
@@ -103,7 +103,6 @@
 		    <?php endif; ?>
 		    <?php if ($lib=='vocab_widget'): ?>
 		    	<script src="<?php echo asset_url('applications/registry/vocab_widget/assets/js/vocab_widget.js', 'base_path')?>" type="text/javascript"></script>
-
 		    <?php endif; ?>		    
 		<?php endforeach;?>
 	<?php endif; ?>

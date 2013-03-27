@@ -174,7 +174,7 @@ class Vocab {
 
     function getResource($vocab_uri){
         $curl_uri = $vocab_uri['resolvingService'].'resource.json?uri='.$vocab_uri['uriprefix'];
-        //echo $curl_uri;
+        // echo $curl_uri;
         $ch = curl_init();
         //set the url, number of POST vars, POST data
         curl_setopt($ch,CURLOPT_URL,$curl_uri);//post to SOLR
@@ -252,6 +252,13 @@ class Vocab {
             }
         }
         return $tree;
+    }
+
+    function getConceptDetail($vocab, $url){
+        $vocab_uri['resolvingService'] = $this->resolvingServices[$vocab]['resolvingService'];
+        $vocab_uri['uriprefix'] = $url;
+        $content = $this->getResource($vocab_uri);
+        return $content;
     }
 
 }

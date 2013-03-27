@@ -438,14 +438,27 @@ a.logo img {
 }
 a.search_map {
 	display: inline-block;
-	width: 211px;
-	height: 30px;
+	width: 229px;
+	height: 48px;
 	background: url(images/search_map.png) no-repeat 0 0;
 	float: left;
 	color: #3f3f3f;
 	font-weight: bold;	
 	padding: 16px 0 0 18px;	
 }
+
+a.browse_button{
+	display:inline-block;
+	width:229px;
+	height:48px;
+	float:left;
+	color: #3f3f3f;
+	font-weight: bold;	
+	padding: 16px 0 0 18px;	
+	background: url(images/blank_button_gradient.png) no-repeat 0 0;
+	margin-right:10px;
+}
+
 .buttons {
 	text-align: center;
 	padding: 5px 0 0 0;
@@ -610,8 +623,8 @@ a.search_map {
 /*                             Content List			                               */
 /***********************************************************************************/
 .container {
-	width: 922px;
-	margin: 0 auto;	
+	width: 960px;
+	margin: 35px auto 0px; auto	
 	padding: 10px 0 0 0;
 	position: relative;
 }
@@ -1100,7 +1113,7 @@ a.search_map {
 	color: #fafafa;
 }
 .foot {
-	width: 522px;
+	width: 960px;
 	margin: 0 auto;
 	padding: 43px 400px 26px 0;
 	position: relative;	

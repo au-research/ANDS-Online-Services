@@ -4,13 +4,12 @@
 <meta charset="UTF-8" />
 <title>
 	<?php
-		if(isset($title)){
-			echo $title;
-		}else{
-			echo 'Research Data Australia';
-		}
+		echo (isset($title) ? $title : 'Research Data Australia');
 	?>
 </title>
+
+<link rel="stylesheet" href="<?php echo asset_url('css/knacss.css', 'core');?>" type="text/css" media="screen" />
+
 
 <!-- Zoo Stylesheets Untouched -->
 <link rel="stylesheet" href="<?php echo asset_url('style.css','core');?>" type="text/css" media="screen" />
@@ -18,7 +17,6 @@
 
 <link rel="stylesheet" href="<?php echo asset_url('css/flexslider.css', 'core');?>" type="text/css" media="screen" />
 <link rel="stylesheet" href="<?php echo asset_url('css/ui.dynatree.css', 'core');?>" type="text/css" media="screen" />
-<link rel="stylesheet" type="text/css" href="../../applications/registry/vocab_widget/assets/css/vocab_widget.css"  media="screen" />
 <link rel="stylesheet" type="text/css" href="<?php echo asset_url('applications/registry/vocab_widget/assets/css/vocab_widget.css', 'base_path')?>"  media="screen" />
 <!-- ANDS Less file and general styling correction-->
 <link href="<?php echo asset_url('less/ands.less', 'core');?>" rel="stylesheet/less" type="text/css">
@@ -38,7 +36,6 @@
 			</div><!-- tagline -->
 			<ul class="top_nav">
 				<li><a href="<?=base_url('');?>">Home</a></li>
-				<li><a href="<?=base_url('rdabrowse');?>">Browse</a></li>
 				<li><a href="<?=base_url('search/#!/q=/tab=collection');?>">Collections</a></li>								
 				<li><a href="<?=base_url('search/#!/q=/tab=party');?>">Parties</a></li>
 				<li><a href="<?=base_url('search/#!/q=/tab=activity');?>">Activities</a></li>
@@ -50,22 +47,12 @@
 	</div><!-- header -->
 	<div class="search">
 		<div class="inner">
-			<form action="/" method="post">
-				<input type="text" id="search_box" name="s" value="" placeholder="Search" onclick="if(this.value == 'Search eg. Something Something') this.value='';" />
-				<div class="text_select">
-						<input type="text" name="Subject" autocomplete="off" />
-						<span class="default_value">Subject</span>				
-						<ul>
-							<li>Option 1</li>
-							<li>Option 2</li>							
-							<li>Option 3</li>							
-						</ul>
-				</div><!-- text_select -->
-				<a href="javascript:;" class="search_map" id="search_map_toggle">Map</a>
-				<div class="clear buttons">
-					<a href="#" id="ad_st">Advanced Search</a>
-				</div>
-			</form>
+			<input type="text" id="search_box" name="s" value="" placeholder="Search"/>
+			<a class="browse_button" href="<?php echo base_url('browse');?>">Browse By Subjects</a>
+			<a href="javascript:;" class="search_map" id="search_map_toggle">Map</a>
+			<div class="clear buttons">
+				<a href="#" id="ad_st">Advanced Search</a>
+			</div>
 		</div><!-- inner -->
 
 		<div class="advanced_search">

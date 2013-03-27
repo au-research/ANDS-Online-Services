@@ -79,10 +79,7 @@ function initConnections(){
     });
 }
 
-$(document).on('click', '.ro_preview_header', function(e){
-    e.preventDefault();
-    $(this).next('.ro_preview_description').slideToggle();
-}).on('click', 'a.suggestor_paging',function(e){
+$(document).on('click', 'a.suggestor_paging',function(e){
     e.preventDefault();
     updateLinksDisplay($('#links_dialog'), 'Suggested Links', $(this).attr('suggestor'), $(this).attr('offset'), 10);
 });
