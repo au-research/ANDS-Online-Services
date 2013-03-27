@@ -20,14 +20,6 @@ else
 	$config['default_authenticator'] = gCOSI_AUTH_METHOD_BUILT_IN;
 }
 
-//fix logging out thing, expire in 3 hours
-$config['sess_cookie_name']     = 'arms';
-$config['sess_expiration']      = 0;
-$config['sess_encrypt_cookie']  = FALSE;
-$config['sess_use_database']    = TRUE;
-$config['sess_match_ip']        = FALSE;
-$config['sess_match_useragent'] = FALSE;
-$config['sess_time_to_update']  = 10000;
 
 /* For multiple-application environments, this "app" will be matched 
 by the $_GET['app'] which is rewritten in .htaccess. The array key is
@@ -284,15 +276,17 @@ $config['encryption_key'] = 'dlk;df093uhjnkdfsa94123jknasdjklsda8921kljjlk';
 | 'sess_time_to_update'		= how many seconds between CI refreshing Session Information
 |
 */
-$config['sess_cookie_name']		= 'ands_session';
-$config['sess_expiration']		= 0;
+
+//fix logging out thing, expire in a long time!
+$config['sess_cookie_name']     = 'arms';
+$config['sess_expiration']      = 0;
 $config['sess_expire_on_close']	= FALSE;
-$config['sess_encrypt_cookie']	= FALSE;
-$config['sess_use_database']	= TRUE;
+$config['sess_encrypt_cookie']  = FALSE;
 $config['sess_table_name']		= 'sessions';
-$config['sess_match_ip']		= FALSE;
-$config['sess_match_useragent']	= TRUE;
-$config['sess_time_to_update']	= 300;
+$config['sess_use_database']    = TRUE;
+$config['sess_match_ip']        = FALSE;
+$config['sess_match_useragent'] = FALSE;
+$config['sess_time_to_update']  = 10000;
 
 /*
 |--------------------------------------------------------------------------
