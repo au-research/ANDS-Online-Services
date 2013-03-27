@@ -394,7 +394,7 @@ class _data_source {
 							$registry_object_key = 'Contributor:'.$group;
 							$data_source_key = $this->key;
 							$title=$group;
-							$contributorPage = $this->_CI->ro->getAllByKey('contributor:'.$group);
+							$contributorPage = $this->_CI->ro->getAllByKey('Contributor:'.$group);
 							if(!$contributorPage)
 							{
 								//we need to automatically create the group party record if it dosn't exist				
