@@ -220,6 +220,7 @@ class Data_source extends MX_Controller {
 					$st['ds_count']=$data_source->count_ASSESSMENT_IN_PROGRESS;
 					$st['connectTo']='APPROVED';
 					array_push($st['menu'], array('action'=>'to_approve', 'display'=>'Approve'));
+					array_push($st['menu'], array('action'=>'to_moreworkrequired', 'display'=>'More Work Required'));
 					break;
 				case 'APPROVED':
 					$st['ds_count']=$data_source->count_APPROVED;
@@ -389,6 +390,7 @@ class Data_source extends MX_Controller {
 					break;
 				case 'ASSESSMENT_IN_PROGRESS':
 					$menu['to_approve'] = 'Approve';
+					$menu['to_moreworkrequired'] = 'More Work Required';
 					break;
 				case 'APPROVED':
 					$menu['to_publish'] = 'Publish';

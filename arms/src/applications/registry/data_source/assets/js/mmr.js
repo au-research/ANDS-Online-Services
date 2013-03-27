@@ -92,6 +92,13 @@ $(function() {
                   }];
                   update(selected_ids, attributes);
                 break;
+            case 'to_moreworkrequired':
+                var attributes = [{
+                    name:'status',
+                    value:'MORE_WORK_REQUIRED'
+                  }];
+                  update(selected_ids, attributes);
+                break;
             case 'delete':
                 if($(this).attr('ro_id')){
                     if(confirm('Are you sure you want to delete this Registry Objects?')){

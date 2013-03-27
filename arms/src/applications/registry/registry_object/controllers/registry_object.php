@@ -108,11 +108,12 @@ class Registry_object extends MX_Controller {
 			{
 				$ro = $this->ro->cloneToDraft($registry_object_id);
 			}
-			else
-			{
-				$ro->status = DRAFT;
-				$ro->save();
-			}
+		}
+		
+		if ($ro->status != DRAFT)
+		{
+			$ro->status = DRAFT;
+			$ro->save();
 		}
 
 		if ($ro->id != $registry_object_id)
