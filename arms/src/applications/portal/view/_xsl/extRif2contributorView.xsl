@@ -187,23 +187,18 @@
  </div>
 
 </div>	
-      	<div id="item-view-inner" class="clearfix">
-	
-        
- 	
 
+
+      	<!--
+          REMOVED BY BEN - NOT SURE WHAT'S GOING ON HERE, BUT IT BREAKS THE LAYOUT COMPLETELY
+        
+        <div id="item-view-inner" class="clearfix">
+	
         <div class="clearfix"></div>  
 
         <xsl:apply-templates select="ro:name[@type='alternative']/ro:displayTitle"/>
   
-
-
-
-
-
-      
-
-		<!--<div style="position:relative;clear:both;">
+		<div style="position:relative;clear:both;">
 		<hr class="grey"/>
 		<p>
 			<div class='rss_icon' style="margin-top:2px;"></div> Subscribe to a feed of collections from this contributor. 
@@ -227,8 +222,8 @@
 			ATOM
 			</a>
 		</p>
-       	</div> -->
-     	</div>
+       	</div>
+     	</div> -->
      	
         <!--  we will now transform the rights handside stuff -->
 
