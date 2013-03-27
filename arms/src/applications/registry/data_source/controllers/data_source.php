@@ -1275,8 +1275,7 @@ public function getContributorGroupsEdit()
 		$dataSource = $this->ds->getByHarvestID($harvestId);
 
 
-		$logMsg .= ' (harvestID: '.$harvestId.')';
-		$logMsgErr .= ' (harvestID: '.$harvestId.')';
+
 
 			if (isset($POST['content'])){
 				$data =  $this->input->post('content');
@@ -1300,7 +1299,8 @@ public function getContributorGroupsEdit()
 				$logMsgErr = 'An error occurred whilst testing harvester settings';
 			}
 
-
+			$logMsg .= ' (harvestID: '.$harvestId.')';
+			$logMsgErr .= ' (harvestID: '.$harvestId.')';
 			//$dataSource->append_log("HARVESTER TRYING TO PUT DATA:".NL." Completed: ".$done.NL." mode: ".$mode , HARVEST_MSG, "harvester","HARVESTER_INFO");
 			if($errmsg)
 			{
@@ -1315,17 +1315,20 @@ public function getContributorGroupsEdit()
 				$rifcsXml = '';
 				// xxx: this won't work with crosswalk!
 				
+				$xml = simplexml_load_string(utf8_encode(str_replace("&", "&amp;", $data)), "SimpleXMLElement", LIBXML_NOENT);
 
-				$OAIPMHDocument = new DOMDocument();
-				$result = $OAIPMHDocument->loadXML($data);
-				if( $result == false )
+				if ($xml === false)
 				{
-					$log = "Document Load Error: ".$errors['message']."\n";
-					$dataSource->append_log($logMsgErr.NL.$log.NL."CRITICAL ERROR: Could not Load XML from OAI feed. Check your provider.", HARVEST_ERROR, "harvester","HARVESTER_ERROR");					
+					$exception_message = "Could not parse Registry Object XML" . NL;
+					foreach(libxml_get_errors() as $error) {
+        				$exception_message .= NL.$error->message;
+        			}
+					$log = "Document Load Error: ".$exception_message.NL;
+					$dataSource->append_log($logMsgErr.NL.$log.NL."CRITICAL ERROR: Could not Load XML from OAI feed. Check your provider.".NL.$exception_message, HARVEST_ERROR, "harvester","HARVESTER_ERROR");					
 				}
 				else
 				{
-					$rifcsXml = $this->importer->extractRIFCSFromOAI($data);
+					$rifcsXml = $this->importer->extractRIFCSFromFeed($data);
 					if (strpos($rifcsXml, 'registryObject ') === FALSE)
 					{
 						//$dataSource->append_log("CRITICAL ERROR: Could not extract data from OAI feed. Check your provider.", HARVEST_ERROR, "harvester");

@@ -679,7 +679,7 @@ class _data_source {
 				$logID = $this->append_log("Unable to Schedule Harvest: ".NL.$msg.NL.$message, HARVEST_ERROR, 'harvester');
 			}
 			else{
-				$logID = $this->append_log("A new harvest has been scheduled: ' (harvestID: ".$harvestId.")".NL.$msg, HARVEST_INFO, 'harvester');
+				$logID = $this->append_log("A new harvest has been scheduled: (harvest ID: ".$harvestId.")".NL.$msg, HARVEST_INFO, 'harvester');
 			}
 		}
 		return $logID;
@@ -770,8 +770,9 @@ class _data_source {
 		$runErrors = '';
 		$resultMessage = new DOMDocument();
 		$result = $resultMessage->load($request);
-		$errors = error_get_last();
-		if( $errors )
+		$errors = error_get_last(); 
+
+		if( $errors)
 		{
 			$runErrors = "deleteHarvestRequest Error[1]: ".$errors['message'].NL;
 		}
@@ -779,8 +780,8 @@ class _data_source {
 		{
 			$responseType = strtoupper($resultMessage->getElementsByTagName("response")->item(0)->getAttribute("type"));
 			$message = $resultMessage->getElementsByTagName("message")->item(0)->nodeValue;
-			
-			if( $responseType != 'SUCCESS' )
+			// if No harvest record found means the harvester already deleted the harvest... so it's not really an error.
+			if( $responseType != 'SUCCESS' && (strpos($message, 'No harvest record found for harvest') === false))
 			{
 				//maybe it was already deleted...
 				$runErrors = "deleteHarvestRequest Error[2]: ".$message;

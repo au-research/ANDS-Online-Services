@@ -68,6 +68,13 @@
 
 				<div class="widget-box">
 					<div class="widget-title">
+						<h5>Quailty Report</h5>
+					</div>
+					<?php echo $quality_text;?>
+				</div>
+
+				<div class="widget-box">
+					<div class="widget-title">
 						<h5>Revision</h5>
 					</div>
 					<div class="widget-content">

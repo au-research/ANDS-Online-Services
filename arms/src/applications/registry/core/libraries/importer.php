@@ -720,7 +720,7 @@ class Importer {
 			$oai_feed = utf8_decode($oai_feed);
 		}*/
 		$result = '';
-
+		//$sxml = $this._getSimpleXMLFromString($oai_feed);
 		$sxml = simplexml_load_string($oai_feed);
 		if($sxml)
 		{
