@@ -18,12 +18,7 @@ $(function() {
     }else{
         var sort = {}; sort['updated'] = 'desc';
         filters['sort'] = sort;
-         // var filter = {}; filter['status'] = 'PUBLISHED';
-         // var or_filter = {};or_filter['status'] = 'DRAFT';
-         // filters['filter'] = filter;
-         // filters['or_filter'] = or_filter;
     }
-    //console.log(JSON.stringify(filters, null, 2));
     init(filters);
 
     $(document).on('mouseup', '.sortable li', function(e){
@@ -175,7 +170,6 @@ function init(filters){
         dataType:'JSON',
         data: {'filters':filters},
         success: function(data){
-            console.log(data);
             
             $.each(data.statuses, function(d){
                 // console.log(this);
@@ -203,7 +197,6 @@ function init(filters){
             select_all = false;
 
             bindSortables();
-            bindPreviews();
             bindShowMore();
             initLayout();
             $('.stick').sticky();
@@ -237,7 +230,6 @@ function bindShowMore(){
                     if(!data.hasMore) $(button).remove();
                 }
                 bindSortables();
-                bindPreviews();
                 initLayout();
             }
         });
@@ -760,29 +752,5 @@ function delete_ro(ids){
         success: function(data){
             init(filters);
         }
-    });
-}
-
-function bindPreviews(){
-    $('.ro_preview').click(function(e){
-        e.preventDefault();
-        e.stopPropagation();
-        var ro_id = $(this).attr('ro_id');
-         $(this).qtip({
-            content: {
-                text: 'Loading...',
-                ajax: {
-                    url: base_url+'registry_object/preview/'+ro_id+'/pane',
-                    type: 'GET'
-                }
-            },
-            style: {
-                width:750
-            },
-            position: {viewport: $(window), my:'left center'},
-            show:{ready:true,effect:false,event:'click'},
-            hide:{event:'unfocus'},
-            style: {classes: 'ui-tooltip-shadow ui-tooltip-bootstrap'}
-        });
     });
 }

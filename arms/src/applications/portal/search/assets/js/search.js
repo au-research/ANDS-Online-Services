@@ -185,7 +185,7 @@ function loadSubjectBrowse(val){
 		});
 	}else{
 		$('#subjectfacet div').remove();
-	$('#subjectfacet').append($('<div/>'));
+		$('#subjectfacet').append($('<div/>'));
 		var sqc = '';
 		if(searchData['q']) sqc += searchData['q'];
 		if(searchData['tab']) sqc += '+class:("'+searchData['tab']+'")';

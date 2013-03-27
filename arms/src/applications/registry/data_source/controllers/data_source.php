@@ -301,13 +301,14 @@ class Data_source extends MX_Controller {
 				
 				$item = array(
 						'id'=>$registry_object->id, 
-							'title'=>$registry_object->title,
-							'status'=>$registry_object->status,
-							'class'=>$registry_object->class,
-							'updated'=>timeAgo($registry_object->updated),
-							'error_count'=>$registry_object->error_count,
-							'warning_count'=>$registry_object->warning_count,
-							'data_source_id'=>$registry_object->data_source_id,
+						'key'=>$registry_object->key,
+						'title'=>$registry_object->title,
+						'status'=>$registry_object->status,
+						'class'=>$registry_object->class,
+						'updated'=>timeAgo($registry_object->updated),
+						'error_count'=>$registry_object->error_count,
+						'warning_count'=>$registry_object->warning_count,
+						'data_source_id'=>$registry_object->data_source_id,
 						);
 				if($item['error_count']>0) $item['has_error'] = true;
 				if($registry_object->flag=='t') $item['has_flag'] = true;

@@ -5,6 +5,8 @@ $(document).ready(function() {
 	$("#vocab-tree").vocab_widget({mode:'tree',repository:'anzsrc-for'})
 	.on('treeselect.vocab.ands', function(event) {
 		var target = $(event.target);
+		$('.tree_current').removeClass('tree_current');
+		target.addClass('tree_current');
 		var data = target.data('vocab');
 		// alert('You clicked ' + data.label + '\r\n<' + data.about + '>');
 		loadVocabDetail(data.about);
