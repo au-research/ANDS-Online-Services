@@ -77,7 +77,17 @@ function processRelatedObjects()
                 var status = this.status;
                 var origin = this.origin;
                 //log("id:" + id + ", key:" + key + ", title:" + title + ", status:" + status + ", origin:" + origin);
-                $('.resolvable_key[key_value="'+key+'"] span.resolvedRelated').html("   TITLE: " + title);
+                if(origin == 'EXPLICIT')
+                {
+                    $('.resolvable_key[key_value="'+key+'"] span.resolvedRelated').html(" <b>  TITLE: " + title + "</b>");
+                }
+                else if(origin == 'REVERSE_EXT'){
+                    //<table id="related_objects_table">
+                    // ADD REVERSE LINKS to the bottom of the table with EXTERNAL REVERSE DISPLAYED
+                }
+                else if(origin == 'REVERSE_INT'){
+                    // ADD REVERSE LINKS to the bottom of the table with INTERNAL REVERSE DISPLAYED
+                }
             });
 
         }

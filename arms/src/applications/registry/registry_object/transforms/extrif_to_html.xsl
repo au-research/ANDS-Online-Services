@@ -165,7 +165,7 @@
 			<tr>
 				<td>Related Objects:</td>
 				<td>
-					<table class="subtable">
+					<table class="subtable" id="related_objects_table">
 						<xsl:apply-templates select="ro:relatedObject"/>
 					</table>
 				</td>
