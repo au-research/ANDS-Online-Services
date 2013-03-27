@@ -17,6 +17,7 @@ $(function(){
 	});
 
 	formatTip($('#qa_level_results'));
+    processRelatedObjects();
 });
 
 function formatTip(tt){
@@ -60,4 +61,27 @@ function formatTip(tt){
     });
     $('.qa_ok').addClass('success');
     $('.qa_error').addClass('warning');
+}
+
+function processRelatedObjects()
+{
+    $.ajax({
+        type: 'GET',
+        url: base_url+'registry_object/getConnections/'+$('#registry_object_id').val(),
+        dataType: 'json',
+        success: function(data){
+            $.each(data.connections, function(){
+                var id = this.registry_object_id;
+                var title = this.title;
+                var key = this.key;
+                var status = this.status;
+                var origin = this.origin;
+                //log("id:" + id + ", key:" + key + ", title:" + title + ", status:" + status + ", origin:" + origin);
+                $('.resolvable_key[key_value="'+key+'"] span.resolvedRelated').html("   TITLE: " + title);
+            });
+
+        }
+    });
+
+
 }

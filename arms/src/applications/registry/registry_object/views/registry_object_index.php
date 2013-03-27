@@ -62,6 +62,7 @@
 									echo '<tr><th>Native Format</th><td><a href="javascript:;" class="btn btn-small" id="exportNative"><i class="icon-eject"></i>Export '.$native_format.'</a></td></tr>';
 								}
 							?>
+							<input type="hidden" id="registry_object_id" value="<?php echo $ro_id;?>"/>
 						</table>
 					</div>
 				</div>

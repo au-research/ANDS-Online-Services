@@ -26,6 +26,7 @@ class Registry_object extends MX_Controller {
 			$data['js_lib'] = array('core','prettyprint');
 			$data['title'] = $ro->title;
 			$data['ro'] = $ro;
+			$data['ro_id'] = $ro_id;
 			$data['ds'] = $ds;
 
 			$data['revision'] = $revision;
@@ -656,5 +657,18 @@ class Registry_object extends MX_Controller {
 		$jsonData = json_encode($jsonData);
 		echo $jsonData;
 		
+	}
+
+	public function getConnections($ro_id)
+	{
+		$connections = array();
+		$status = array(); 
+		$this->load->model('registry_object/registry_objects', 'ro');
+		$ro = $this->ro->getByID($ro_id);
+		if($ro){
+			$connections = $ro->getAllRelatedObjects();
+		}
+		$status['count'] = sizeof($connections);
+		echo json_encode(array("status"=>$status,"connections"=>$connections));
 	}
 }
