@@ -67,7 +67,6 @@ function executeSearch(searchData, searchUrl){
 				// log(this.list_title, this.score);
 			});
 			var numFound = data.result.numFound;
-
 			$('#search-result, .pagination, #facet-result').empty();
 
 			//search result
@@ -311,13 +310,18 @@ function initSearchPage(){
 	});
 
 	$('.excerpt').each(function(){
-		$thecontent = $(this).html();
-		$newContent = ellipsis($thecontent, 200);
-		if($thecontent!=$newContent) 
-			{ 
-				$newContent = '<div class="hide" fullExcerpt="true">'+$thecontent+'</div>' + $newContent + '';
-			}
-		$(this).html($newContent);
+		// This will unencode the encoded entities, but also hide any random HTML'ed elements
+		$(this).html(htmlDecode(htmlDecode(htmlDecode($(this).html()))));
+		$(this).html($(this).directText());
+
+		var thecontent = $(this).html();
+		var newContent = ellipsis(thecontent, 200);
+		if(thecontent!=newContent) 
+		{ 
+			newContent = '<div class="hide" fullExcerpt="true">'+thecontent+'</div>' + newContent + '';
+		}
+
+		$(this).html(newContent);
 		}
 	);
 
@@ -327,6 +331,33 @@ function initSearchPage(){
 
 	
 }
+
+// decode htmlentities()
+function htmlDecode(value) {
+   return (typeof value === 'undefined') ? '' : $('<div/>').html(value).text();
+}
+
+function recurseGetText() { 
+	if (this.nodeType == 3)
+	{
+		return this.nodeValue;
+	}
+	else
+	{
+		if (typeof $(this).contents == 'function' && $(this).contents().length > 0)
+		{
+			return $(this).contents().map(recurseGetText).get().join();
+		}
+	}
+	return this.nodeType == 3 ? this.nodeValue : undefined;
+}
+
+// get any text inside the element $(this).directText()
+$.fn.directText=function(delim) {
+  if (!delim) delim = '';
+  return this.contents().map(recurseGetText).get().join(delim);
+};
+
 
 function getTopLevelFacet(){
 	$.ajax({

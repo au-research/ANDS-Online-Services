@@ -6,7 +6,7 @@
 		<ul>
 			<?php 
 				foreach($groups as $g=>$count){
-					echo '<li><a href="search#!/q='.$g.'">'.$g.' ('.$count.')</a></li>';
+					echo '<li><a href="'.base_url('search#!/q='.$g.'"').'>'.$g.' ('.$count.')</a></li>';
 				}
 			?>
 		</ul>
