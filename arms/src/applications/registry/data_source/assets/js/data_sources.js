@@ -449,7 +449,7 @@ function loadHarvestLogs(logid, refresh){
 			});			
 		},
 		error: function(data){
-		console.log(data);
+		//console.log(data);
 		}
 	});	
 	return false;
@@ -477,7 +477,7 @@ function loadContributorPages(data_source_id)
 			$('#contributor_groups').html(output);				
 		},
 		error: function(data){
-		console.log(data);
+		//console.log(data);
 		}
 	});
 	
@@ -576,8 +576,11 @@ function validateFields(jsonData){
 		{
 			errorStr = errorStr +  "You must provide a registered key and all relationship types for the 2nd primary relationship.<br />";	
 		}
+	}
 
-
+	if(!included(jsonData,'title'))
+	{
+		errorStr = errorStr + "You must provide a title. <br />";
 
 	}
 
@@ -596,7 +599,7 @@ function validateFields(jsonData){
 	{
 		errorStr = errorStr + "You have not provided a valid assessment notification email address<br />";
 	}
-	
+
 	return  errorStr;
 }
 
@@ -767,10 +770,26 @@ function load_datasource_edit(data_source_id, active_tab){
 			
 
 			$("#edit-datasource .chzn-select").chosen().change(function(){
+				if($(this).attr('for')=='harvest_method')
+				{
+					if($(this).val()=="GET")
+					{
+						$("#advanced option[value='INCREMENTAL']").remove();
+						$("#advanced").trigger("liszt:updated");
+					}
+					if($(this).val()=="RIF")
+					{
+						$("#advanced option[value='INCREMENTAL']").remove();						
+						$("#advanced").append('<option value="INCREMENTAL">Incremental Mode</option>');
+						$("#advanced").trigger("liszt:updated");						
+					}
+				}
+
 				var input = $('#'+$(this).attr('for'));
 				$(input).val($(this).val());
 
 			});
+
 			$('#edit-datasource .chzn-select').each(function(){
 				var input = $('#'+$(this).attr('for'));
 				$(this).val($(input).val());

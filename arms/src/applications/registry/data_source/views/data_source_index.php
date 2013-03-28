@@ -1102,7 +1102,7 @@
 						<div class="control-group">
 							<label class="control-label" for="harvest_method">Harvest Method</label>
 							<div class="controls">
-								<select data-placeholder="Choose a Harvest Method" tabindex="1" class="chzn-select input-xlarge" for="harvest_method">
+								<select data-placeholder="Choose a Harvest Method" tabindex="1" class="chzn-select input-xlarge" for="harvest_method" id="harvest">
 									<option value="GET">DIRECT (HTTP)</option>
 									<option value="RIF">Harvested (OAI-PMH)</option>
 								</select>
@@ -1120,7 +1120,7 @@
 						<div class="control-group">
 							<label class="control-label" for="advanced_harvest_mode">Advanced Harvest Mode</label>
 							<div class="controls">
-								<select data-placeholder="Choose an Advanced Harvest Mode" tabindex="1" class="chzn-select input-xlarge" for="advanced_harvest_mode">
+								<select data-placeholder="Choose an Advanced Harvest Mode" tabindex="1" class="chzn-select input-xlarge" for="advanced_harvest_mode" id="advanced">
 									<option value="STANDARD">Standard Mode</option>
 									<option value="INCREMENTAL">Incremental Mode</option>
 									<option value="REFRESH">Full Refresh Mode</option>
