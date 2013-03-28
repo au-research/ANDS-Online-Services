@@ -441,10 +441,11 @@ function loadHarvestLogs(logid, refresh){
 			var output = Mustache.render(logsTemplate, data);
 			$('#test_harvest_activity_log .modal-body').html(output);
 			$.each(data.items, function(i, v) {
-				timer = window.setTimeout(function(){loadHarvestLogs(logid)}, 2000);
-			    if (v.log.indexOf("Test harvest completed successfully") >= 0) {
-			    	window.clearTimeOut(timer);
+
+			    if (v.log.indexOf("Test harvest completed successfully") >= 0||v.log.indexOf("error") >= 0) {
 			        return false;
+			    }else{
+			    	timer = window.setTimeout(function(){loadHarvestLogs(logid)}, 2000);
 			    }			    
 			});			
 		},
