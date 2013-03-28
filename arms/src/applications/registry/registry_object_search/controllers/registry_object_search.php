@@ -19,9 +19,9 @@ class Registry_object_search extends MX_Controller {
 		array('name' => 'field',
 		      'conditions' => 'key|title',
 		      'required' => true),
-		array('name' => 'term',
-		      'conditions' => '.+',
-		      'required' => true),
+		// array('name' => 'term',
+		//       'conditions' => '.+',
+		//       'required' => true),
 		array('name' => 'onlyPublished',
 		      'conditions' => 'yes|no',
 		      'required' => false,
@@ -121,11 +121,11 @@ class Registry_object_search extends MX_Controller {
 			// echo self::to_json($params);
 			$args = array();
 			$filter = array();
-			if(isset($params['class'])){
+			if(isset($params['class']) && $params['class']!='all'){
 				$filter['class'] = $params['class'];
 			}
 			if(isset($params['ds'])) $args['data_source_id'] = $params['ds'];
-			if(isset($params['field']) && $params['field']=='title'){
+			if(isset($params['field']) && $params['field']=='title' && isset($params['term'])){
 				$args['search'] = $params['term'];
 			}
 			$args['filter'] = $filter;
@@ -133,14 +133,19 @@ class Registry_object_search extends MX_Controller {
 
 			$results = array();
 			$results['params'] = $params;
-			foreach($ros as $ro){
-				$results['results'][] = array(
-					'id'=>$ro->id,
-					'title'=>$ro->title,
-					'key'=>$ro->key,
-					'class'=>$ro->class
-				);
+			if($ros){
+				foreach($ros as $ro){
+					$results['results'][] = array(
+						'id'=>$ro->id,
+						'title'=>$ro->title,
+						'key'=>$ro->key,
+						'class'=>$ro->class
+					);
+				}
+			}else{
+				$results['no_result'] = true;
 			}
+			
 			echo self::to_json($results);
 			/**
 			 * depending on parameters, we'll do some different gets

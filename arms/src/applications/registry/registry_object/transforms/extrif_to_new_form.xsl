@@ -1303,9 +1303,9 @@
 				<div class="control-group">
 					<label class="control-label" for="title">Key: </label>
 					<div class="controls">
-						<div class="input_append">
-							<input type="text" class="span2" name="key" value="" placeholder="Related Object Key"/>
-							<button class="btn" type="button"><i class='icon icon-search'></i> Search for a related Object</button>
+						<div class="input-append">
+							<input type="text" class="input-xlarge" name="key" value="" placeholder="Related Object Key"/>
+							<button class="btn search_related_btn" type="button"><i class='icon icon-search'></i> Search</button>
 						</div>
 					</div>
 				</div>

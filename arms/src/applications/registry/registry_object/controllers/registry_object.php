@@ -227,6 +227,10 @@ class Registry_object extends MX_Controller {
  		echo json_encode($jsondata);
 	}
 
+	public function related_object_search_form(){
+		$this->load->view('related_object_search_form');
+	}
+
 	public function manage_table($data_source_id = false){
 		acl_enforce('REGISTRY_USER');
 		ds_acl_enforce($data_source_id);

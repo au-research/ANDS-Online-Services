@@ -109,7 +109,71 @@ $(function(){
     	}
 	});
 	validate();
+
+
+	$(document).on('click','.search_related_btn', function(){
+		var target = $(this).prev('input');
+		var qtipTarget = $(this);
+		$(this).qtip({
+			content: {
+				text: 'Loading...', // The text to use whilst the AJAX request is loading
+				ajax: {
+					url: base_url+'registry_object/related_object_search_form', // URL to the local file
+					type: 'GET',
+					data: {},
+					success: function(data, status) {
+						this.set('content.text', data);
+						bindSearchRelatedEvents(this, target);
+					}
+				}
+			},
+			show:{solo:true,ready:true,event:'click'},
+		    hide:{delay:1500, fixed:true,event:'unfocus'},
+		    position:{my:'left center', at:'right center',viewport:$(window)},
+		    style: {
+		        classes: 'ui-tooltip-light ui-tooltip-shadow'
+		    }
+		});
+	});
 });
+
+function bindSearchRelatedEvents(tt, target){
+	var tooltip = $('#ui-tooltip-'+tt.id+'-content');
+	$('.input_search_related', tooltip).keypress(function(e) {
+	    if(e.which == 13) {
+	        $(this).next('.search_related').click();
+	    }
+	});
+	$('.search_related', tooltip).click(function(){
+		var term = $('input', tooltip).val();
+		// data_source_id_value
+		var ds_option = '';
+		if($('#ds_option').attr('checked')=='checked'){
+			ds_option = '/'+$('#data_source_id_value').val();
+		}
+		var published_option = '';
+		if($('#published_option').attr('checked')=='checked'){
+			published_option = '&onlyPublished=yes';
+		}
+		var class_option = $('#class_related_search_option').val();
+		$.ajax({
+			url:base_url+'registry_object_search/search/'+class_option+ds_option+'?field=title&term='+term+published_option, 
+			type: 'GET',
+			success: function(data){
+				var template = $('#related_object_search_result').html();
+				var output = Mustache.render(template, data);
+				$('#result', tooltip).html(output);
+				$('.select_related').click(function(){
+					$(target).val($(this).attr('key'));
+					tt.hide();
+				});
+			}
+		});
+	});
+	$('.show_advanced_search_related', tooltip).click(function(){
+		$('#advanced',tooltip).toggle();
+	});
+}
 
 function switchMode(aro_mode){
 	$('#sidebar ul').hide();
@@ -616,20 +680,7 @@ function initVocabWidgets(container){
 
 function initRelatedObjects(){
 	//var names = $('#names .aro_box[type=name]');
-	// $('.search_related_btn').on('click',function(e){
-	// 	var target = $(this).prev('input');
-	// 	$.ajax({
-	// 		url:base_url+'registry_object/',
-	// 		type: 'POST',
-	// 		data: jsonData,
-	// 		success: function(data){
-				
-	// 		},
-	// 		error: function(data){
-				
-	// 		}
-	// 	});
-	// });
+	
 }
 
 function _getVocab(vocab)
