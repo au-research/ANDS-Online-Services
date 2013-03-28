@@ -2,8 +2,8 @@
 <div class="container">
 	<div class="line grid1-2">
 		<div class="vocab-tree-left">
-			<p>ANZSRC Field of Research:</p>
-			<input type="text" id="anzsrc-vocab" name="anzsrc-for" value="" size="25" placeholder="Search"/>
+			<p><strong>ANZSRC Field of Research:</strong></p>
+			<!--input type="text" id="anzsrc-vocab" name="anzsrc-for" value="" size="25" placeholder="Search"/-->
 			<p></p>
 			<div id="vocab-tree"></div>
 		</div>

@@ -48,8 +48,8 @@
 	<div class="search">
 		<div class="inner">
 			<input type="text" id="search_box" name="s" value="" placeholder="Search"/>
-			<a class="browse_button" href="<?php echo base_url('browse');?>">Browse By Subjects</a>
-			<a href="javascript:;" class="search_map" id="search_map_toggle">Map</a>
+			<a class="browse_button" href="<?php echo base_url('browse');?>">Browse by Subject Area</a>
+			<a href="javascript:;" class="search_map" id="search_map_toggle">Browse by Map Coverage</a>
 			<div class="clear buttons">
 				<a href="#" id="ad_st">Advanced Search</a>
 			</div>

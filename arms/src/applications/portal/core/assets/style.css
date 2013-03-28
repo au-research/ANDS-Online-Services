@@ -436,6 +436,7 @@ a.logo img {
 	background: #a3be99;
 	cursor: pointer;
 }
+
 a.search_map {
 	display: inline-block;
 	width: 229px;
@@ -455,7 +456,7 @@ a.browse_button{
 	color: #3f3f3f;
 	font-weight: bold;	
 	padding: 16px 0 0 18px;	
-	background: url(images/blank_button_gradient.png) no-repeat 0 0;
+	background: url(images/search_subjects.png) no-repeat 0 0;
 	margin-right:10px;
 }
 
