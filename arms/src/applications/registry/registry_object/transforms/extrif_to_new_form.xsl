@@ -947,7 +947,10 @@
 				<div class="control-group">
 					<label class="control-label" for="title">Key: </label>
 					<div class="controls">
-						<input type="text" class="input-xlarge" name="key" value="{ro:key}" placeholder="Related Object Key"/>
+						<div class="input-append">
+							<input type="text" class="input-xlarge" name="key" value="{ro:key}" placeholder="Related Object Key"/>
+							<button class="btn search_related_btn" type="button"><i class='icon icon-search'></i> Search</button>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -1300,18 +1303,23 @@
 				<div class="control-group">
 					<label class="control-label" for="title">Key: </label>
 					<div class="controls">
-						<input type="text" class="input-xlarge" name="key" value="" placeholder="Related Object Key"/>
+						<div class="input_append">
+							<input type="text" class="span2" name="key" value="" placeholder="Related Object Key"/>
+							<button class="btn" type="button"><i class='icon icon-search'></i> Search for a related Object</button>
+						</div>
 					</div>
 				</div>
 			</div>
 
-			<div class="control-group">
-				<label class="control-label" for="title">Relation: </label>
-				<div class="controls">
-					<input type="text" class="rifcs-type" vocab="{concat('RIFCS',$ro_class,'RelationType')}" name="type" placeholder="Relation Type" value=""/>
-					<input type="text" class="inner_input input-large" name="description" placeholder="Description" value=""/>
-					<input type="text" class="input-small" name="url" placeholder="URL" value=""/>
-					<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/> </button>
+			<div class="aro_box_part" type="relation">
+				<div class="control-group">
+					<label class="control-label" for="title">Relation: </label>
+					<div class="controls">
+						<input type="text" class="rifcs-type" vocab="{concat('RIFCS',$ro_class,'RelationType')}" name="type" placeholder="Relation Type" value=""/>
+						<input type="text" class="inner_input input-large" name="description" placeholder="Description" value=""/>
+						<input type="text" class="input-small" name="url" placeholder="URL" value=""/>
+						<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/> </button>
+					</div>
 				</div>
 			</div>
 

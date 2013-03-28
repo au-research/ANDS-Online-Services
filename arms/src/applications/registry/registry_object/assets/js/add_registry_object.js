@@ -477,10 +477,12 @@ function initEditForm(){
 	initNames();
 	initDescriptions();
 	initRelatedInfos();
+	initRelatedObjects();
 	bindPartsTooltip();
 	assignFieldID();
 	initVocabWidgets($(document));
 	initMapWidget($(document))
+
 }
 
 function validate(){
@@ -610,6 +612,24 @@ function initVocabWidgets(container){
 		widget.vocab_widget('repository', 'rifcs');
 		widget.vocab_widget('narrow', "http://purl.org/au-research/vocabulary/RIFCS/1.4/" + vocab);		 
 	});
+}
+
+function initRelatedObjects(){
+	//var names = $('#names .aro_box[type=name]');
+	// $('.search_related_btn').on('click',function(e){
+	// 	var target = $(this).prev('input');
+	// 	$.ajax({
+	// 		url:base_url+'registry_object/',
+	// 		type: 'POST',
+	// 		data: jsonData,
+	// 		success: function(data){
+				
+	// 		},
+	// 		error: function(data){
+				
+	// 		}
+	// 	});
+	// });
 }
 
 function _getVocab(vocab)
@@ -876,7 +896,7 @@ function getRIFCSforTab(tab, hasField){
 			if($(input_field).length>0 && $(input_field).val()!=''){
 				fragment_meta += ' '+value+'="'+$(input_field).val()+'"';
 			}
-			if(this_fragment_type!='citationMetadata' && this_fragment_type!='coverage') fragment +=fragment_meta;
+			if(this_fragment_type!='citationMetadata' && this_fragment_type!='coverage' && this_fragment_type!='relatedObject') fragment +=fragment_meta;
 		});
 		fragment +='>';
 		//finish fragment header

@@ -118,7 +118,30 @@ class Registry_object_search extends MX_Controller {
 
 		//for completeness, ensure params is an array before continuing.
 		if (is_array($params)) {
-			echo self::to_json($params);
+			// echo self::to_json($params);
+			$args = array();
+			$filter = array();
+			if(isset($params['class'])){
+				$filter['class'] = $params['class'];
+			}
+			if(isset($params['ds'])) $args['data_source_id'] = $params['ds'];
+			if(isset($params['field']) && $params['field']=='title'){
+				$args['search'] = $params['term'];
+			}
+			$args['filter'] = $filter;
+			$ros = $this->ro->filter_by($args, 100);
+
+			$results = array();
+			$results['params'] = $params;
+			foreach($ros as $ro){
+				$results['results'][] = array(
+					'id'=>$ro->id,
+					'title'=>$ro->title,
+					'key'=>$ro->key,
+					'class'=>$ro->class
+				);
+			}
+			echo self::to_json($results);
 			/**
 			 * depending on parameters, we'll do some different gets
 			 * to generate results. The best way to approach this

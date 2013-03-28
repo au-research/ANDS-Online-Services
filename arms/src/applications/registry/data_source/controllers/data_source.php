@@ -290,10 +290,13 @@ class Data_source extends MX_Controller {
 	private function get_ros($filters, $getCount=false){
 		$results['items'] = array();
 		$this->load->model('registry_object/registry_objects', 'ro');
+		$filters['args']['data_source_id'] = $filters['ds_id'];
 		if(!$getCount){
-			$ros = $this->ro->getByDataSourceID($filters['ds_id'], $filters['limit'], $filters['offset'], $filters['args'], false);
+			//$ros = $this->ro->getByDataSourceID($filters['ds_id'], $filters['limit'], $filters['offset'], $filters['args'], false);
+			$ros = $this->ro->filter_by($filters['args'], $filters['limit'], $filters['offset'], false);
 		}else{
-			return sizeof($ros = $this->ro->getByDataSourceID($filters['ds_id'], 0, 0, $filters['args'], false));
+			//return sizeof($ros = $this->ro->getByDataSourceID($filters['ds_id'], 0, 0, $filters['args'], false));
+			return sizeof($ros = $this->ro->filter_by($filters['args'], 0, 0, false));
 		}
 		if($ros){
 			foreach($ros as $r){
