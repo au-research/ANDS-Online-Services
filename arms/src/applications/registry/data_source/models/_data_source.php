@@ -562,7 +562,8 @@ class _data_source {
 
 	function deleteOldRecords($harvest_id)
 	{
-		$this->append_log("TRYING TO REMOVE RECORDS FROM PREVIOUS HARVEST FROM DS: ".$this->id, HARVEST_INFO, "harvester","HARVESTER_INFO");	
+		//$this->append_log("TRYING TO REMOVE RECORDS FROM PREVIOUS HARVEST FROM DS: ".$this->id, HARVEST_INFO, "harvester","HARVESTER_INFO");	
+		//
 		$this->_CI->load->model("registry_object/registry_objects", "ro");
 		$oldRegistryObjects = $this->_CI->ro->getRecordsInDataSourceFromOldHarvest($this->id, $harvest_id);
 		foreach($oldRegistryObjects AS $target_ro_id)
@@ -572,7 +573,7 @@ class _data_source {
 			if($log)
 				$this->append_log("ERROR REMOVING RECORD FROM PREVIOUS HARVEST: " .$target_ro_id, HARVEST_INFO, "harvester", "HARVESTER_INFO");
 		}
-		$this->append_log("REMOVING RECORDS FROM PREVIOUS HARVEST: " .sizeof($oldRegistryObjects)."DELETED", HARVEST_INFO, "harvester","HARVESTER_INFO");	
+		$this->append_log("REMOVING RECORDS FROM PREVIOUS HARVEST: " .sizeof($oldRegistryObjects)." DELETED", HARVEST_INFO, "harvester","HARVESTER_INFO");	
 	}
 	/*
 	 * 	STATS

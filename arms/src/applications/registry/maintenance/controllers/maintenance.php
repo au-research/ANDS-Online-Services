@@ -110,53 +110,54 @@ class Maintenance extends MX_Controller {
 		$this->load->library('solr');
 
 		$ids = $this->ro->getIDsByDataSourceID($data_source_id, false, PUBLISHED);
+
 		$i = 0;
+		$response = '';
+		$errors = '';
+		$solrXML = '';
 		if($ids)
 		{
-			foreach($ids as $ro_id){
+			
+			$chunkSize = 400; 
+			$arraySize = sizeof($ids);
+			for($i = 0 ; $i < $arraySize ; $i++)
+			{
+				$roId = $ids[$i];	
 				try{
-					$ro = $this->ro->getByID($ro_id);
-					if($ro){
-						$ro->enrich();//TODO: XXX
-						$ro->update_quality_metadata(); // TODO: MOVE IT WHERE BELONGS!!!
-						$solrXML = $ro->transformForSOLR();
-						$result = $this->solr->addDoc($solrXML);
-						$result = json_decode($result);
-						$data['results'][$ro_id] = array(
-							'result'=>$result->{'responseHeader'}->{'status'},
-							'QTime'=>$result->{'responseHeader'}->{'QTime'}
-						);
-						if($result->{'responseHeader'}->{'status'}!=0){
-							$data['results'][$ro_id]['msg'] = $result->{'error'}->{'msg'};
-							$data['error'] .= $result->{'error'}->{'msg'};
-						}else{
-							//success
-							$i++;
+					$ro = $this->ro->getByID($roId);
+					if($ro)
+					{
+						$solrXML .= $ro->transformForSOLR();
+						if(($i % $chunkSize == 0 && $i != 0) || $i == ($arraySize -1))
+						{
+							$result = $this->solr->addDoc("<add>".$solrXML."</add>");
+							$response .= $result.NL;
+							$this->solr->commit();
+							$solrXML = '';
 						}
-					}else{
-						$data['results'][$ro_id] = array(
-							'result'=>'Not Found!',
-							'QTime'=>0
-						);
-						$data['error'] .= 'RO not found: '. $ro_id.'<br/>';
 					}
-				}catch (Exception $e){
-					$data['results'][$ro_id] = array(
-						'result'=>"<pre>" . nl2br($e) . "</pre>",
-						'QTime'=>0
-					);
-					$data['error'] .= nl2br($e);
+				}
+				catch (Exception $e)
+				{
+					$errors .= nl2br($e).NL;
 				}
 			}
-			$this->solr->commit();
+
+			$data['results'] = $response;
+			$data['errors'] = $errors;
 			$data['totalAdded'] = $i;
+			echo json_encode($data);
 		}
-		echo json_encode($data);
+
 	}
 
 	function clearDS($data_source_id){
+		header('Cache-Control: no-cache, must-revalidate');
+		header('Content-type: application/json');
 		$this->load->library('solr');
-		$result = $this->solr->clear($data_source_id);
+		$data['result'] = $this->solr->clear($data_source_id);
+		echo json_encode($data);
+
 	}
 	
 	/**

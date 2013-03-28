@@ -1331,7 +1331,7 @@ public function getContributorGroupsEdit()
 				}
 				else
 				{
-					$rifcsXml = $this->importer->extractRIFCSFromFeed($data);
+					$rifcsXml = $this->importer->getRifcsFromFeed($data);
 					if (strpos($rifcsXml, 'registryObject ') === FALSE)
 					{
 						//$dataSource->append_log("CRITICAL ERROR: Could not extract data from OAI feed. Check your provider.", HARVEST_ERROR, "harvester");

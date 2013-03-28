@@ -253,7 +253,6 @@ class Solr {
         }else{
             $query = '*:*';
         }
-        echo $query;
 
         $result = curl_post($this->solr_url.'update?commit=true&wt=json', '<delete><query>'.$query.'</query></delete>');    
         //$result .= curl_post($this->solr_url.'update?optimize=true', '<optimize waitFlush="false" waitSearcher="false"/>');

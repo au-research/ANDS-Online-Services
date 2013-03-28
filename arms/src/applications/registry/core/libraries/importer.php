@@ -712,7 +712,7 @@ class Importer {
 	/**
 	 * 
 	 */
-	public function extractRIFCSFromOAI($oai_feed)
+	public function getRifcsFromFeed($oai_feed)
 	{
 
 		/*if(substr($oai_feed, 0, 1) != '<')

@@ -240,6 +240,68 @@
         </div>
     </xsl:if>
     
+<!-- DISPLAY CITATION INFORMATION -->
+    <xsl:choose>
+      <xsl:when test="ro:citationInfo">
+        <div id="citation" style="position:relative;clear:both;">
+            <xsl:choose>
+                <xsl:when test="ro:citationInfo/ro:citationMetadata">
+                    <p><xsl:text>&amp;amp;nbsp;</xsl:text></p>
+                    <h4>How to Cite this Collection</h4>
+                       <!--   <a title="Add this article to your Mendeley library" target="_blank">
+                       <xsl:attribute name="href">
+                        http://www.mendeley.com/import/?url=<xsl:value-of select="ro:citationInfo/ro:citationMetadata/ro:url"/>
+                        </xsl:attribute> 
+                        <img src="http://www.mendeley.com/graphics/mendeley.png"/></a> -->
+                        <h5>Citation (Metadata):</h5>
+                        <div class="citationDisplay">
+                          <xsl:apply-templates select="ro:citationInfo/ro:citationMetadata"/> 
+                        </div>
+                    </xsl:when>
+                    <xsl:when test="ro:citationInfo/ro:fullCitation">
+                        <p><xsl:text>&amp;amp;nbsp;</xsl:text></p>
+                        <h4>How to Cite this Collection</h4>
+                        <h5>Full Citation:</h5>
+                        <div class="citationDisplay">
+                          <xsl:apply-templates select="ro:citationInfo/ro:fullCitation"/>
+                        </div>
+                    </xsl:when>
+                    <xsl:otherwise >
+                        <!-- If we have found an empty citation element build the openURL using the object display title -->
+                        <span class="Z3988">    
+                            <xsl:attribute name="title">
+                                <xsl:text>ctx_ver=Z39.88-2004</xsl:text>
+                                <xsl:text>&amp;amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Adc</xsl:text>
+                                <xsl:text>&amp;amp;rfr_id=info%3Asid%2FANDS</xsl:text>
+                                <xsl:text>&amp;amp;rft.title=</xsl:text><xsl:value-of select="//ro:displayTitle"/>
+                                <xsl:text>&amp;amp;rft.description=</xsl:text><xsl:value-of select="//ro:displayTitle"/>
+                            </xsl:attribute>
+                        </span><span class="Z3988"></span>      
+                    </xsl:otherwise>                        
+                </xsl:choose>   
+            </div>          
+        </xsl:when>
+    </xsl:choose>
+    
+    <xsl:if test="ro:identifier">
+      <p></p>
+      <h4>Identifiers</h4>
+      <div id="identifiers">
+        <xsl:for-each select="ro:identifier">
+          <p>
+            <xsl:apply-templates select="current()[@type='doi']" mode="doi_prefixedLink"/>
+            <xsl:apply-templates select="current()[@type='ark']" mode="ark_prefixedLink"/>      
+            <xsl:apply-templates select="current()[@type='AU-ANL:PEAU']" mode="nla_prefixedLink"/>  
+            <xsl:apply-templates select="current()[@type='handle']" mode="handle_prefixedLink"/>   
+            <xsl:apply-templates select="current()[@type='purl']" mode="purl_prefixedLink"/>
+            <xsl:apply-templates select="current()[@type='uri']" mode="uri_prefixedLink"/> 
+            <xsl:apply-templates select="current()[@type='orcid']" mode = "orcid_prefixedLink"/>
+            <xsl:apply-templates select="current()[not(@type =  'doi' or @type =  'ark' or @type =  'AU-ANL:PEAU' or @type =  'handle' or @type =  'purl' or @type =  'uri' or @type = 'orcid')]" mode="other_prefixedLink"/> 
+          </p>
+        </xsl:for-each>
+      </div>
+    </xsl:if>
+
     <!-- DISPLAY RELATED INFO -->
     <xsl:if test="ro:relatedInfo">
         <p><xsl:text>&amp;amp;nbsp;</xsl:text></p>
@@ -335,48 +397,6 @@
     </div>  
 </xsl:if>
 
-<!-- DISPLAY CITATION INFORMATION -->
-<xsl:choose>
-    <xsl:when test="ro:citationInfo">
-        <div id="citation" style="position:relative;clear:both;">
-            <xsl:choose>
-                <xsl:when test="ro:citationInfo/ro:citationMetadata">
-                    <p><xsl:text>&amp;amp;nbsp;</xsl:text></p>
-                    <h4>How to Cite this Collection</h4>
-                       <!--   <a title="Add this article to your Mendeley library" target="_blank">
-                       <xsl:attribute name="href">
-                        http://www.mendeley.com/import/?url=<xsl:value-of select="ro:citationInfo/ro:citationMetadata/ro:url"/>
-                        </xsl:attribute> 
-                        <img src="http://www.mendeley.com/graphics/mendeley.png"/></a> -->
-                        <h5>Citation (Metadata):</h5>
-                        <div class="citationDisplay">
-                          <xsl:apply-templates select="ro:citationInfo/ro:citationMetadata"/> 
-                        </div>
-                    </xsl:when>
-                    <xsl:when test="ro:citationInfo/ro:fullCitation">
-                        <p><xsl:text>&amp;amp;nbsp;</xsl:text></p>
-                        <h4>How to Cite this Collection</h4>
-                        <h5>Full Citation:</h5>
-                        <div class="citationDisplay">
-                          <xsl:apply-templates select="ro:citationInfo/ro:fullCitation"/>
-                        </div>
-                    </xsl:when>
-                    <xsl:otherwise >
-                        <!-- If we have found an empty citation element build the openURL using the object display title -->
-                        <span class="Z3988">    
-                            <xsl:attribute name="title">
-                                <xsl:text>ctx_ver=Z39.88-2004</xsl:text>
-                                <xsl:text>&amp;amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Adc</xsl:text>
-                                <xsl:text>&amp;amp;rfr_id=info%3Asid%2FANDS</xsl:text>
-                                <xsl:text>&amp;amp;rft.title=</xsl:text><xsl:value-of select="//ro:displayTitle"/>
-                                <xsl:text>&amp;amp;rft.description=</xsl:text><xsl:value-of select="//ro:displayTitle"/>
-                            </xsl:attribute>
-                        </span><span class="Z3988"></span>      
-                    </xsl:otherwise>                        
-                </xsl:choose>   
-            </div>          
-        </xsl:when>
-    </xsl:choose>
 
 
     <!-- DISPLAY DATES -->
@@ -390,24 +410,7 @@
     </xsl:if>           
     
     <!-- DISPLAY IDENTIFIERS -->
-    <xsl:if test="ro:identifier">
-      <p></p>
-      <h4>Identifiers</h4>
-      <div id="identifiers">
-        <xsl:for-each select="ro:identifier">
-          <p>
-            <xsl:apply-templates select="current()[@type='doi']" mode="doi_prefixedLink"/>
-            <xsl:apply-templates select="current()[@type='ark']" mode="ark_prefixedLink"/>      
-            <xsl:apply-templates select="current()[@type='AU-ANL:PEAU']" mode="nla_prefixedLink"/>  
-            <xsl:apply-templates select="current()[@type='handle']" mode="handle_prefixedLink"/>   
-            <xsl:apply-templates select="current()[@type='purl']" mode="purl_prefixedLink"/>
-            <xsl:apply-templates select="current()[@type='uri']" mode="uri_prefixedLink"/> 
-            <xsl:apply-templates select="current()[@type='orcid']" mode = "orcid_prefixedLink"/>
-            <xsl:apply-templates select="current()[not(@type =  'doi' or @type =  'ark' or @type =  'AU-ANL:PEAU' or @type =  'handle' or @type =  'purl' or @type =  'uri' or @type = 'orcid')]" mode="other_prefixedLink"/> 
-          </p>
-        </xsl:for-each>
-      </div>
-    </xsl:if>   
+   
         <!--div style="position:relative;clear:both;" class="no_print">
             <p> <a>
                 <xsl:attribute name="href"><xsl:value-of select="$orca_view"/>?key=<xsl:value-of select="$key"/></xsl:attribute>
