@@ -756,7 +756,7 @@ class _data_source {
 
 	// Get the harvest request.
 	//$harvestRequest = getHarvestRequests($harvestRequestId, null);
-	$actions .= "Harvest Request ID: ".$harvestRequestId.NL;
+	$actions = "Harvest Request ID: ".$harvestRequestId.NL;
 
 	
 	

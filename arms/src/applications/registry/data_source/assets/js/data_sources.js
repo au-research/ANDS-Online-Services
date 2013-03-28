@@ -16,7 +16,7 @@ $(function(){
 	 *			#!/edit/115
 	 *			#!/delete/115
 	 */
-	var timer;  
+	 
 	$(window).hashchange(function(){
 		var hash = location.hash;
 		if(hash.indexOf(suffix)==0){//if the hash starts with a particular suffix
@@ -445,7 +445,7 @@ function loadHarvestLogs(logid, refresh){
 			    if (v.log.indexOf("Test harvest completed successfully") >= 0||v.log.indexOf("error") >= 0) {
 			        return false;
 			    }else{
-			    	timer = window.setTimeout(function(){loadHarvestLogs(logid)}, 2000);
+			    	window.setTimeout(function(){loadHarvestLogs(logid)}, 2000);
 			    }			    
 			});			
 		},
