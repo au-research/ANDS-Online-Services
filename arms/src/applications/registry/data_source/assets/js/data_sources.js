@@ -577,33 +577,59 @@ function validateFields(jsonData){
 			errorStr = errorStr +  "You must provide a registered key and all relationship types for the 2nd primary relationship.<br />";	
 		}
 
+
+
 	}
 
 	if(included(jsonData,'push_to_nla') && !included(jsonData,'isil_value'))
 	{
 		errorStr = errorStr + "If you select 'Party records to NLA' you must provide an ISIL value <br />";
 
-	}	
+	}
 
+	if(included(jsonData,'contact_email')&&!validateEmail(jsonData,'contact_email'))
+	{
+		errorStr = errorStr + "You have not provided a valid contact email address<br />";
+	}
+
+	if(included(jsonData,'assessment_notify_email_addr')&&!validateEmail(jsonData,'assessment_notify_email_addr'))
+	{
+		errorStr = errorStr + "You have not provided a valid assessment notification email address<br />";
+	}
+	
 	return  errorStr;
 }
 
 
 function included(arr, obj) {
     for(var i=0; i<arr.length; i++) {
+
         if (arr[i]['name'] == obj) 
         { 
         	if(arr[i]['name']=='create_primary_relationships' && !arr[i]['value'])
         	{
         		return false;
         	}
-        	if(!arr[i]['value'])
+        	if(!arr[i]['value']||arr[i]['value']=='')
         	{
         		return false;
         	}
         	return true;
         }
     }
+}
+
+function validateEmail(arr, obj) 
+{
+    var re = /\S+@\S+\.\S+/;
+
+    for(var i=0; i<arr.length; i++) {
+        if (arr[i]['name'] == obj) 
+        { 
+        return re.test(arr[i]['value']);	
+        }
+    }
+    
 }
 
 function load_datasource_settings(data_source_id){
@@ -805,34 +831,40 @@ $('#save-edit-form').live({
 
 
 
-		//var validationErrors = validateFields(jsonData);
+		var validationErrors = validateFields(jsonData);
 
-		var form = $('#edit-form');
-		var valid = Core_checkValidForm(form);
-		//console.log(valid);
+		if(validationErrors)
+		{
+				$('#myModal').modal();
+				logErrorOnScreen(validationErrors, $('#myModal .modal-body'));
+				//$('#myModal .modal-body').append("<br/><pre>Could't communicate with server</pre>");		
+		}else{
+			var form = $('#edit-form');
+			var valid = Core_checkValidForm(form);
+			//console.log(valid);
 		
-		$.ajax({
-			url:'data_source/updateDataSource', 
-			type: 'POST',
-			data: jsonData,
-			success: function(data){
-				if (!data.status == "OK"){
+			$.ajax({
+				url:'data_source/updateDataSource', 
+				type: 'POST',
+				data: jsonData,
+				success: function(data){
+					if (!data.status == "OK"){
+						$('#myModal').modal();
+						logErrorOnScreen("An error occured whilst saving your changes!", $('#myModal .modal-body'));
+						$('#myModal .modal-body').append("<br/><pre>" + data + "</pre>");
+					}else{
+						changeHashTo('settings/'+ds_id);
+						createGrowl("Your Data Source was successfully updated");
+						updateGrowls();
+					}
+				},
+				error: function(){
 					$('#myModal').modal();
 					logErrorOnScreen("An error occured whilst saving your changes!", $('#myModal .modal-body'));
-					$('#myModal .modal-body').append("<br/><pre>" + data + "</pre>");
-				}else{
-					changeHashTo('settings/'+ds_id);
-					createGrowl("Your Data Source was successfully updated");
-					updateGrowls();
+					$('#myModal .modal-body').append("<br/><pre>Could't communicate with server</pre>");
 				}
-			},
-			error: function(){
-				$('#myModal').modal();
-				logErrorOnScreen("An error occured whilst saving your changes!", $('#myModal .modal-body'));
-				$('#myModal .modal-body').append("<br/><pre>Could't communicate with server</pre>");
-			}
-		});
-		
+			});
+		}
 		/*var jsonString = ""+JSON.stringify(jsonData);
 		$('#myModal .modal-body').html('<pre>'+jsonString+'</pre>');
 		$('#myModal').modal();*/
