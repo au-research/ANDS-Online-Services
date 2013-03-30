@@ -532,7 +532,12 @@ function click_ro(ro_item, action){
     }else if(action=='select_until'){
         $('#'+ro_id).addClass('ro_selected');
         var prev = $('#'+ro_id).prevAll('.ro_selected').attr('id');
-        $('#'+ro_id).prevUntil('#'+prev).addClass('ro_selected');
+        if(prev){
+            $('#'+ro_id).prevUntil('#'+prev).addClass('ro_selected');
+        }else if(until = $('#'+ro_id).nextUntil('.ro_selected')){
+            $(until).addClass('ro_selected');
+        }
+        
     }
     selected_ids = $.unique(selected_ids);
     update_selected_list(status);
