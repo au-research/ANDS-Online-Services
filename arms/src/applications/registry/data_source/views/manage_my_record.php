@@ -106,35 +106,38 @@
 				</ul>
 			</div>
 		</span>
-		<div class="buttons"><a href="javascript:;" class="contextmenu" status="{{name}}"><i class="icon-chevron-down no-border"></i></a></div>
 		<h5 class="ellipsis" style="width:60%">{{display_name}}</h5>
+		<div class="buttons"><a href="javascript:;" class="contextmenu" status="{{name}}"><i class="icon-chevron-down no-border"></i></a></div>
+		
 	</div>
 	<div class="widget-content nopadding">
 		<div class='selected_status hide'>asdfasdf</div>
 		<ul class="sortable" connect_to="{{connectTo}}" status="{{name}}">
 			{{#items}}
 			<li id="{{id}}" data-toggle="context" data-target="#context-menu-{{status}}" class="status_{{status}} ro_item {{#has_error}}ro_error{{/has_error}}" status="{{status}}">
-			<div class="ro_title"><a ro_id="{{id}}" class="tip" tip="<b>{{title}}</b> - {{key}}">{{title}}</a></div>
-			<img class="class_icon" tip="{{class}}" src="<?php echo asset_url('img/{{class}}.png', 'base');?>"/>
-			<div class="right_content">
-				{{#has_flag}}
-					<span class="tag flag" tip="Flagged"><i class="icon icon-flag"></i></span>
-				{{/has_flag}}
-				{{#has_gold}}
-					<span class="tag gold_status_flag" tip="<h5>Gold Standard</h5><p>The following record has been verified<br/> as an exemplary record <br/>by the ANDS Metadata Assessment Group.</p>"><i class="icon icon-star-empty"></i></span>
-				{{/has_gold}}
-				{{#quality_level}}
-					<span class="tag ql_{{quality_level}} tipQA" ro_id='{{id}}'>{{quality_level}}</span>
-				{{/quality_level}}
+			<div class="ro_item_header">
+				<div class="ro_title"><a ro_id="{{id}}" class="tip" tip="<b>{{title}}</b> - {{key}}">{{title}}</a></div>
+				<img class="class_icon" tip="{{class}}" src="<?php echo asset_url('img/{{class}}.png', 'base');?>"/>
+				<div class="right_content">
+					{{#has_flag}}
+						<span class="tag no-border-tag flag" tip="Flagged"><i class="icon icon-flag"></i></span>
+					{{/has_flag}}
+					{{#has_gold}}
+						<span class="tag gold_status_flag" tip="<h5>Gold Standard</h5><p>The following record has been verified<br/> as an exemplary record <br/>by the ANDS Metadata Assessment Group.</p>"><i class="icon icon-star"></i></span>
+					{{/has_gold}}
+					{{#quality_level}}
+						<span class="tag ql_{{quality_level}} tipQA" ro_id='{{id}}'>{{quality_level}}</span>
+					{{/quality_level}}
+				</div>
 			</div>
 			<div class="ro_content ">
 				<div class="toolbar">
 					<div class="btn-group">
 						<button class="btn btn-small op" action="view" tip="View" ro_id="{{id}}"><i class="icon icon-search"></i></button>
 						<button class="btn btn-small op" action="edit" tip="Edit" ro_id="{{id}}"><i class="icon icon-edit"></i></button>
-						<button class="tipTag btn btn-small" ro_id="{{id}}"><i class="icon icon-tag"></i></button>
+						<!--button class="tipTag btn btn-small" ro_id="{{id}}"><i class="icon icon-tag"></i></button-->
 						<button class="btn btn-small op" action="advance_status" to="{{connectTo}}" tip="Advance Status" ro_id="{{id}}"><i class="icon icon-share-alt"></i></button>
-						<button class="contextmenu btn btn-small" status="{{name}}" tip="More Action"><i class="icon icon-wrench"></i></button>
+						<button class="contextmenu btn btn-small" status="{{name}}" tip="More Action">More</button>
 					</div>
 				</div>
 				<div class="clearfix"></div>

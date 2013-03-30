@@ -239,28 +239,28 @@ function bindShowMore(){
 
 function initLayout(){
 
-    var spare = [];
-    var remain = 95;
-    $('.block:visible').each(function(){
-        if($(this).attr('count')==0){
-            $(this).width('10%');
-            remain = remain - 10;
-        }else{
-            spare.push(this);
-        }
-    });
+    // var spare = [];
+    // var remain = 95;
+    // $('.block:visible').each(function(){
+    //     if($(this).attr('count')==0){
+    //         $(this).width('20%');
+    //         remain = remain - 20;
+    //     }else{
+    //         spare.push(this);
+    //     }
+    // });
 
-    $(spare).each(function(){
-        var percentage = Math.ceil(remain / spare.length);
-        $(this).width(percentage+'%');
-    });
-
-
+    // $(spare).each(function(){
+    //     var percentage = Math.ceil(remain / spare.length);
+    //     $(this).width(percentage+'%');
+    // });
 
 
-    // var numBlock = $('.block:visible').length;
-    // var percentage = Math.ceil(90 / numBlock);
-    // $('.block').width(percentage+'%');
+
+
+    var numBlock = $('.block:visible').length;
+    var percentage = Math.ceil(95 / numBlock);
+    $('.block').width(percentage+'%');
 
     var max_height = 0;
     $('.block').height('auto');
@@ -587,7 +587,7 @@ function bindSortables(){
                         data: {data_source_id:ds_id,status:context_status,affected_ids:selected_ids,selecting_status:selecting_status}
                     }
                 },
-                position: {viewport: $(window), my:'left center'},
+                position: {viewport: $(window), my:'left center', at:'right center'},
                 show:{ready:true,effect:false,event:'click'},
                 hide:{event:'unfocus'},
                 style: {classes: 'ui-tooltip-shadow ui-tooltip-bootstrap'}
