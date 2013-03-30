@@ -16,6 +16,45 @@ $(function(){
 		});
 	});
 
+    $('.tag_form').submit(function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        var ro_id = $(this).attr('ro_id');
+        var tag = $('input', this).val();
+        var tag_html = '<li>'+tag+'<span class="hide"><i class="icon icon-remove"></i></span></li>';
+        $('.tags').append(tag_html);
+        $('.notag').hide();
+         $.ajax({
+            url:base_url+'registry_object/tag/add', 
+            type: 'POST',
+            data: {ro_id:ro_id,tag:tag},
+            success: function(data){
+                // console.log(data);
+                // $('#status_message').html(data.msg);
+            }
+        });
+    });
+    $('.tags li').die().live({
+        mouseover: function(){
+            $('span', this).show();
+        },
+        mouseout: function(){
+            $('span', this).hide();
+        },
+        click: function(){
+            var text = $(this).text();
+            var ro_id = $(this).parent().attr('ro_id');
+            $.ajax({
+                url:base_url+'registry_object/tag/remove', 
+                type: 'POST',
+                data: {ro_id:ro_id,tag:text},
+                success: function(data){
+                    $(this).remove();
+                }
+            });                             
+        }
+    });
+
 	formatTip($('#qa_level_results'));
     processRelatedObjects();
 });
@@ -43,16 +82,20 @@ function formatTip(tt){
     $('.qa_container', tooltip).each(function(){
         $(this).children('.qa_ok, .qa_error').hide();
     });
+    
     //show the first qa that has error
-    var showThisQA = $('.qa_error:first', tooltip).parent();
-    $(showThisQA).children().show();
+    // var showThisQA = $('.qa_error:first', tooltip).parent();
+    // $(showThisQA).children().show();
+    
     //coloring the qa that has error, the one that doesn't have error will be the default one
     $('.qa_container', tooltip).each(function(){
         if($(this).children('.qa_error').length>0){//has an error
             //$(this).children('.toggleQAtip').addClass('hasError');
             $(this).addClass('warning');
+            $('.toggleQAtip', this).prepend('<span class="label label-important"><i class="icon-white icon-info-sign"></i></span> ');
         }else{
             $(this).addClass('success');
+            $('.toggleQAtip', this).prepend('<span class="label label-success"><i class="icon-white icon-ok"></i></span> ');
         }
     });
     //bind the toggle header to open all the qa inside

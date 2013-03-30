@@ -69,9 +69,20 @@
 
 				<div class="widget-box">
 					<div class="widget-title">
-						<h5>Quailty Report</h5>
+						<h5>Tags Management</h5>
 					</div>
-					<?php echo $quality_text;?>
+					<div class="widget-content">
+						<?php $data['ro'] = $ro; $this->load->view('tagging_interface', $data);?>
+					</div>
+				</div>
+
+				<div class="widget-box">
+					<div class="widget-title">
+						<h5>Quality Report</h5>
+					</div>
+					<div class="widget-content nopadding">
+						<?php echo $quality_text;?>
+					</div>
 				</div>
 
 				<div class="widget-box">

@@ -455,8 +455,10 @@ function formatTip(tt){
         if($(this).children('.qa_error').length>0){//has an error
             //$(this).children('.toggleQAtip').addClass('hasError');
             $(this).addClass('warning');
+            $('.toggleQAtip', this).prepend('<span class="label label-important"><i class="icon-white icon-info-sign"></i></span> ');
         }else{
             $(this).addClass('success');
+            $('.toggleQAtip', this).prepend('<span class="label label-success"><i class="icon-white icon-ok"></i></span> ');
         }
     });
     //bind the toggle header to open all the qa inside
