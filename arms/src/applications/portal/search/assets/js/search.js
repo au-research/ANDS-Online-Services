@@ -18,7 +18,7 @@ $(document).ready(function() {
 		var hash = location.href.substr(location.href.indexOf("#"));
 		var query = hash.substring(3, hash.length);
 		var words = query.split('/');
-		$('.tabs').hide();
+		// $('.tabs').hide();
 		$('#search_box, #selected_group, #selected_subject').empty();
 		searchData = {};
 		fieldString = '';

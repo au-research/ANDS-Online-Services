@@ -36,6 +36,7 @@
 			</div><!-- tagline -->
 			<ul class="top_nav">
 				<li><a href="<?=base_url('');?>">Home</a></li>
+				<li><a href="<?=base_url("home/about");?>">About</a></li>
 				<li><a href="<?=base_url('search/#!/q=/tab=collection');?>">Collections</a></li>								
 				<li><a href="<?=base_url('search/#!/q=/tab=party');?>">Parties</a></li>
 				<li><a href="<?=base_url('search/#!/q=/tab=activity');?>">Activities</a></li>
