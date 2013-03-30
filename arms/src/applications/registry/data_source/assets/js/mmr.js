@@ -559,7 +559,12 @@ function bindSortables(){
                 if(select_all){
                     total = $('.count', list).text();
                 }else total = selected_ids.length;
+                // log(selected_ids.length);
                 return $( "<span class='label label-info helper'>"+total+"</span>" );
+            },
+            start: function(e, ui){
+                click_ro(e.currentTarget, 'select');
+                $(ui.helper[0]).html(selected_ids.length)
             },
             connectToSortable: target
         });
