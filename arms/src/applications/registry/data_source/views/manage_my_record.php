@@ -25,10 +25,17 @@
 	
 	<div class="container-fluid">
 		<div class="row-fluid">
-			<div class="span6">
-				<form class="form-search" id="search_form">
-					<input type="text" class="input-medium search-query" placeholder="search">
-					<button type="submit" class="btn">Search</button>
+			<div class="span12">
+
+				<div class="btn-toolbar mmr_toolbar">
+
+					<form class="form-search pull-left" id="search_form">
+						<div class="input-prepend">
+							<button type="submit" class="btn">Search</button>
+							<input type="text" class="input-medium search-query" placeholder="Keywords">
+						</div>
+					</form>
+					
 					<div class="btn-group">
 						<button class="btn">Sort</button>
 						<button class="btn dropdown-toggle" data-toggle="dropdown">
@@ -57,18 +64,18 @@
 							<li><a href="javascript:;" class="filter" name="tag" value="">Tagged <span class="icon"></span></a></li>
 						</ul>
 					</div>
+
+
 					<span id="active_filters">
 						
 					</span>
-					
-				</form>
-			</div>
-			<div class="span6">
-				<div style="position: absolute; left: 50%;">
-					<div id="status_message" class="alert alert-info hide">Loading</div>
 				</div>
 			</div>
-
+			
+			<div style="position: absolute; left: 50%;">
+				<div id="status_message" class="alert alert-info hide">Loading</div>
+			</div>
+			
 		</div>
 		<div class="pool" id="mmr_hopper">
 			<div class="block hide">
