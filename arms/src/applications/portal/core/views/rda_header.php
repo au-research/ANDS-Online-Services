@@ -30,9 +30,9 @@
 <body>
 	<div class="header">
 		<div class="head">
-			<a href="<?=base_url('');?>" class="logo"><img src="<?php echo asset_url('images/logo.png','core');?>" alt="Research Data Australia Home Page Link (brought to you by ANDS)" /></a>
+			<a href="http://ands.org.au" class="logo"><img src="<?php echo asset_url('images/logo.png','core');?>" alt="Research Data Australia Home Page Link (brought to you by ANDS)" /></a>
 			<div class="tagline">
-				<span>Research Data</span> Australia
+				<a href="<?php echo base_url();?>"><span>Research Data</span> Australia</a>
 			</div><!-- tagline -->
 			<ul class="top_nav">
 				<li><a href="<?=base_url('');?>">Home</a></li>
@@ -60,10 +60,11 @@
 				<form action="/" method="post">
 					<p>Find  
 						<select id="record_tab" name="record">
-							<option value="collection">Collection</option>
+							<option value="collection">Collections</option>
 							<option value="party">Parties</option>
 							<option value="activity">Activities</option>
 							<option value="service">Services</option>
+							<option value="all">All Records</option>
 						</select>
 					   that have:
 					</p>

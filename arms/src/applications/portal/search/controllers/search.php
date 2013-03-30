@@ -48,6 +48,7 @@ class Search extends MX_Controller {
 		}
 		$this->solr->setFacetOpt('mincount','1');
 		$this->solr->setFacetOpt('limit','100');
+		$this->solr->setFacetOpt('sort','index');
 
 		/**
 		 * Setting the SOLR OPTIONS based on the filters sent over AJAX

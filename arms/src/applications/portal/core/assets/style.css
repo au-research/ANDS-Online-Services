@@ -342,6 +342,9 @@ a.logo img {
 	line-height: 38px;
 	padding: 6px 0 0 13px;
 }
+.tagline a{
+	color:white;
+}
 .tagline span {
 	color:#eb7700;
 }
