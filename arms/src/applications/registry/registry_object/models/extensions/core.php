@@ -182,7 +182,7 @@ class Core_extension extends ExtensionBase
 		// Else, if the draft is being published:
 		else if (isDraftStatus($this->getAttribute('original_status')) && isPublishedStatus($target_status))
 		{
-			$xml = $this->ro->getRif();
+			$xml = html_entity_decode($this->ro->getRif());
 			$existingRegistryObject = $this->_CI->ro->getPublishedByKey($this->ro->key);
 			if ($existingRegistryObject)
 			{
