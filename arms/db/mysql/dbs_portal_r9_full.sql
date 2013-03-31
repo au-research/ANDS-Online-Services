@@ -1,6 +1,3 @@
---CREATE DATABASE  IF NOT EXISTS `dbs_portal` /*!40100 DEFAULT CHARACTER SET utf8 */;
---USE `dbs_portal`;
-
 DROP TABLE IF EXISTS `page_views`;
 CREATE  TABLE `page_views` (
   `id` BIGINT NOT NULL AUTO_INCREMENT ,
