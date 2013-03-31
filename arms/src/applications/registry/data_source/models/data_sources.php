@@ -97,7 +97,16 @@ class Data_sources extends CI_Model {
 		$affiliations = $this->user->affiliations();
 		if (is_array($affiliations) && count($affiliations) > 0)
 		{
-			$query = $this->db->select('data_source_id')->where('attribute','record_owner')->where_in('value',$affiliations)->get('data_source_attributes');
+			$affiliations = array_map(function($item){ return "'$item'"; }, $affiliations);
+			if ($this->user->hasFunction('REGISTRY_SUPERUSER'))
+			{
+				$query = $this->db->query("SELECT data_source_id FROM data_source_attributes WHERE `attribute` = 'record_owner'");	
+			}
+			else
+			{
+				$query = $this->db->select('data_source_id')->where('attribute','record_owner')->where_in('value',$affiliations)->get('data_source_attributes');
+			}
+
 			if ($query->num_rows() == 0)
 			{
 				return $data_sources;
