@@ -25,12 +25,12 @@ class Data_source extends MX_Controller {
 	public function index(){
 		//$this->output->enable_profiler(TRUE);
 		acl_enforce('REGISTRY_USER');
+		
 		$data['title'] = 'Manage My Datasources';
 		$data['small_title'] = '';
 
 		$this->load->model("data_sources","ds");
-	 	$dataSources = $this->ds->getOwnedDataSources();//get everything  XXX: getOwnedDataSources
-		//$dataSources = $this->ds->getOwnedDataSources();
+	 	$dataSources = $this->ds->getOwnedDataSources();
 		$items = array();
 		foreach($dataSources as $ds){
 			$item = array();
@@ -84,6 +84,7 @@ class Data_source extends MX_Controller {
 	public function manage_records($data_source_id=false){
 		acl_enforce('REGISTRY_USER');
 		ds_acl_enforce($data_source_id);
+
 		$data['title'] = 'Manage My Records';
 		$this->load->model('data_source/data_sources', 'ds');
 		if($data_source_id){
@@ -103,6 +104,7 @@ class Data_source extends MX_Controller {
 	public function manage_deleted_records($data_source_id=false, $offset=0, $limit=10){
 		acl_enforce('REGISTRY_USER');
 		ds_acl_enforce($data_source_id);
+
 		$data['title'] = 'Manage Deleted Records';
 		$data['scripts'] = array('ds_history');
 		$data['js_lib'] = array('core','prettyprint');
@@ -148,6 +150,7 @@ class Data_source extends MX_Controller {
 
 		//administrative and loading stuffs
 		acl_enforce('REGISTRY_USER');
+		ds_acl_enforce($data_source_id);
 		// ds_acl_enforce($data_source_id);
 		header('Cache-Control: no-cache, must-revalidate');
 		header('Content-type: application/json');
@@ -338,6 +341,7 @@ class Data_source extends MX_Controller {
 		$this->load->model('registry_object/registry_objects', 'ro');
 
 		$data_source_id = $this->input->post('data_source_id');
+		ds_acl_enforce($data_source_id);
 		$status = $this->input->post('status');
 		$selecting_status = $this->input->post('selecting_status') ? $this->input->post('selecting_status') : false;
 		$affected_ids = $this->input->post('affected_ids') ? $this->input->post('affected_ids') : array();
@@ -495,6 +499,7 @@ class Data_source extends MX_Controller {
 	public function getDataSource($id){
 		header('Cache-Control: no-cache, must-revalidate');
 		header('Content-type: application/json');
+		set_exception_handler('json_exception_handler');
 
 		$jsonData = array();
 		$jsonData['status'] = 'OK';
@@ -502,6 +507,7 @@ class Data_source extends MX_Controller {
 		$this->load->model("data_sources","ds");
 		$this->load->model("registry_object/registry_objects", "ro");
 		$dataSource = $this->ds->getByID($id);
+		ds_acl_enforce($id);
 
 		foreach($dataSource->attributes as $attrib=>$value){
 			$jsonData['item'][$attrib] = $value->value;
@@ -838,12 +844,14 @@ public function getContributorGroupsEdit()
 		$this->load->model("registry_object/registry_objects", "ro");
 		
 		if ($id == 0) {
-			 $jsonData['status'] = "ERROR: Invalid data source ID"; 
+			 $jsonData['status'] = "ERROR"; $jsonData['message'] = "Invalid data source ID"; 
 		}
 		else 
 		{
 			$dataSource = $this->ds->getByID($id);
 		}
+		acl_enforce('REGISTRY_USER');
+		ds_acl_enforce($id);
 
 		$resetHarvest = false;
 

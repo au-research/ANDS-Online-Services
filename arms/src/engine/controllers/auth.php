@@ -120,12 +120,6 @@ class Auth extends CI_Controller {
 			if(sizeof($this->user->affiliations())>0){
 				$data['hasAffiliation']=true;
 			}else $data['hasAffiliation']=false;
-
-			if (mod_enabled('data_source'))
-			{
-				$this->load->model('data_source/data_sources','ds');
-				$data['my_datasources'] = $this->ds->getOwnedDataSources();
-			}
 			
 			if (mod_enabled('vocab_service'))
 			{

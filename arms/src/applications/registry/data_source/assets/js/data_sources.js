@@ -9,6 +9,23 @@
  */
 $(function(){
 
+	// Default error handler
+	$.ajaxSetup({
+		dataType: 'json',
+		error: function(data)
+		{
+			try
+			{
+				data = $.parseJSON(data.responseText);
+				checkResponse(data);
+				return;
+			}
+			catch (e)
+			{
+				logErrorOnScreen("An unknown error occured whilst communicating with the server.");
+			}
+		}
+	});
 	/*
 	 * suffix is determined in footer.php
 	 * Example: #!/browse/lists/
@@ -685,6 +702,15 @@ function load_datasource_settings(data_source_id){
 	return false;
 }
 
+function checkResponse(data)
+{
+	if (data.status == "ERROR")
+	{
+		console.log(data.message);
+		logErrorOnScreen(data.message);
+	}
+}
+
 /*
  * Load a datasource edit view (redundancy)
  * @TODO: refactor
@@ -702,8 +728,13 @@ function load_datasource_edit(data_source_id, active_tab){
 		type: 'GET',
 		contentType: 'application/json; charset=utf-8',
 		dataType: 'json',
+		error: function(data)
+		{
+			checkReponse(data);
+		},
 		success: function(data){
 			//console.log(data);
+
 			var template = $('#data-source-edit-template').html();
 			var output = Mustache.render(template, data);
 			$('#edit-datasource').html(output);
@@ -1106,6 +1137,8 @@ $('#importRecordsFromXMLModal .doImportRecords').live({
 						
 		
 	}
+
+
 });
 function formatErrorDesciption(description, title)
 {

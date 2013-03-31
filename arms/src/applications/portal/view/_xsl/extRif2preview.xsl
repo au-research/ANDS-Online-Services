@@ -84,11 +84,11 @@
      <xsl:choose>
 
        <xsl:when test="../extRif:extendedMetadata/extRif:displayTitle!=''">
-          <xsl:apply-templates select="../extRif:extendedMetadata/extRif:displayTitle"/>	
+          <xsl:apply-templates select="../extRif:extendedMetadata/extRif:displayTitle"/>
       </xsl:when>
       <xsl:otherwise>
         <div class="page_title" id="displaytitle">
-          <h3 itemprop="name"><xsl:value-of select="../ro:key"/></h3>
+          <a href="" class="viewRecordLink"><h3 itemprop="name"><xsl:value-of select="../ro:key"/></h3></a>
         </div>
       </xsl:otherwise> 
 </xsl:choose>    
@@ -124,7 +124,7 @@
     
     </div>
 
-    <a href="" class="viewRecordLink">View Full Record</a> 
+    <a href="" class="viewRecord viewRecordLink">View Full Record</a> 
 </div>
 
 
@@ -134,20 +134,24 @@
 <xsl:template match="extRif:displayTitle">   
 
   <div class="right_icon">
-     <img class="icon-heading">
+     <a class="viewRecord" href="">
+      <xsl:attribute name="title"><xsl:value-of select="$objectClassType"/></xsl:attribute>
+
+      <img class="icon-heading">
        <xsl:attribute name="src"><xsl:value-of select="$base_url"/>
        <xsl:text>assets/core/images/icons/</xsl:text>
        <xsl:value-of select="$objectClassType"/>
        <xsl:text>.png</xsl:text></xsl:attribute>
        <xsl:attribute name="alt"><xsl:value-of select="$objectClassType"/></xsl:attribute>
        <xsl:attribute name="style"><xsl:text>width:50%; float:right;</xsl:text></xsl:attribute>
-   </img>
+     </img>
+   </a>
   </div>   
 
 
 
     <div class="page_title" id="displaytitle">
-       <h4><xsl:value-of select="."/></h4>
+       <h4><a href="" class="viewRecord"><xsl:value-of select="."/></a></h4>
     </div>			
 
 

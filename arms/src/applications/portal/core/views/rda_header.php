@@ -30,12 +30,11 @@
 <body>
 	<div class="header">
 		<div class="head">
-			<a href="http://ands.org.au" class="logo"><img src="<?php echo asset_url('images/logo.png','core');?>" alt="Research Data Australia Home Page Link (brought to you by ANDS)" /></a>
+			<a href="<?php echo base_url();?>" class="logo"><img src="<?php echo asset_url('images/logo.png','core');?>" alt="Research Data Australia Home Page Link (brought to you by ANDS)" /></a>
 			<div class="tagline">
 				<a href="<?php echo base_url();?>"><span>Research Data</span> Australia</a>
 			</div><!-- tagline -->
 			<ul class="top_nav">
-				<li><a href="<?=base_url('');?>">Home</a></li>
 				<li><a href="<?=base_url("home/about");?>">About</a></li>
 				<li><a href="<?=base_url('search/#!/q=/tab=collection');?>">Collections</a></li>								
 				<li><a href="<?=base_url('search/#!/q=/tab=party');?>">Parties</a></li>
@@ -51,12 +50,14 @@
 			<input type="text" id="search_box" name="s" value="" placeholder="Search"/>
 			<a class="browse_button" href="<?php echo base_url('browse');?>">Browse by Subject Area</a>
 			<a href="javascript:;" class="search_map" id="search_map_toggle">Browse by Map Coverage</a>
-			<div class="clear buttons">
+			<div class="clear" style="margin-left:312px; padding-bottom:4px;"><a href="#" id="ad_st">Advanced Search</a></div>
+			<!--div class="clear buttons">
 				<a href="#" id="ad_st">Advanced Search</a>
-			</div>
+			</div-->
 		</div><!-- inner -->
 
 		<div class="advanced_search">
+			<div class="ad_close"><a href="#">x</a></div>
 			<div class="adv_inner">
 				<form action="/" method="post">
 					<p>Find  

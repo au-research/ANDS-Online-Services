@@ -19,12 +19,13 @@ function logErrorOnScreen(error, target){
 	var template = $('#error-template').html();
 	var output = Mustache.render(template, $("<div/>").html(error).html());
 	if (!target){
-		$('#main-content').prepend(output);
+		$('#content').prepend(output);
 	}
 	else{
 		target.html(output);
 	}
 }
+
 $(document).ready(function(){
 	$('#main-nav-user-account').qtip({
 		content: {

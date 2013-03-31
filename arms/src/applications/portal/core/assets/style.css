@@ -494,6 +494,21 @@ a.browse_button{
 /***********************************************************************************/
 /*                            Advanced Search				                       */
 /***********************************************************************************/
+#ad_st {
+	color:#3f3f3f;
+	font-weight:bold;
+	font-size:0.8em;
+	background: #9bb692;
+}
+#ad_st.exped {
+	color: #f4f5f6;
+}
+.ad_close { 
+	float:right;
+	margin-right:200px;
+	color:#3f3f3f;
+}
+
 .advanced_search {
 	width: 100%;
 	background: #f4f5f6;
