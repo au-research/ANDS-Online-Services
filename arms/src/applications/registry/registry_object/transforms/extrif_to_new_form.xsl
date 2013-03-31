@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:ro="http://ands.org.au/standards/rif-cs/registryObjects" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:extRif="http://ands.org.au/standards/rif-cs/extendedRegistryObjects"
 	exclude-result-prefixes="extRif ro">
@@ -18,7 +18,7 @@
 	<xsl:template match="ro:registryObject">
 
 	<xsl:variable name="registry_object_id"><xsl:value-of select="//extRif:id"/></xsl:variable>
-	<xsl:variable name="display_title"><xsl:value-of select="//extRif:displayTitle"/></xsl:variable>
+	<xsl:variable name="display_title"><xsl:value-of select="//extRif:displayTitle" disable-output-escaping="yes" /></xsl:variable>
 
 	
 	<div id="sidebar">

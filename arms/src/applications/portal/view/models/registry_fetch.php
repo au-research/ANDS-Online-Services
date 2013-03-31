@@ -9,8 +9,8 @@ class Registry_fetch extends CI_Model
 			'base_url' => base_url(),
 		);
 
-		// Add two levels of entity decoding here 
-		return html_entity_decode(html_entity_decode($this->_transformByXSL($extrif, 'extRif2view.xsl', $xsl_args)));
+		// Add a level of entity decoding here 
+		return html_entity_decode($this->_transformByXSL($extrif, 'extRif2view.xsl', $xsl_args));
 	}
 
 	function transformExtrifToHTMLPreview($extrif, $lite=false)
@@ -19,9 +19,9 @@ class Registry_fetch extends CI_Model
 			'base_url' => base_url(),
 		);
 		if($lite){
-			return html_entity_decode(html_entity_decode($this->_transformByXSL($extrif, 'extRif2previewLite.xsl', $xsl_args)));
+			return html_entity_decode($this->_transformByXSL($extrif, 'extRif2previewLite.xsl', $xsl_args));
 		}else{
-			return html_entity_decode(html_entity_decode($this->_transformByXSL($extrif, 'extRif2preview.xsl', $xsl_args)));
+			return html_entity_decode($this->_transformByXSL($extrif, 'extRif2preview.xsl', $xsl_args));
 		}
 	}
 
@@ -38,7 +38,7 @@ class Registry_fetch extends CI_Model
 	{
 		$xsl = new DomDocument();
 		$document = new DomDocument();
-		$document->loadXML(utf8_encode(str_replace("&", "&amp;", $XML)), LIBXML_NOENT);
+		$document->loadXML($XML, LIBXML_NOENT);
 		$xsl->load(APP_PATH . 'view/_xsl/'. $xslt_filename);
 		$proc = new XSLTProcessor();
 		$proc->importStyleSheet($xsl);
@@ -197,7 +197,6 @@ class Registry_fetch extends CI_Model
 		}
 		else
 		{
-			var_dump($url);
 			throw new ErrorException("Error whilst fetching contributor page details: " . $contents['message']);
 		}
 	}
@@ -234,7 +233,6 @@ class Registry_fetch extends CI_Model
 		}
 		else
 		{
-			var_dump($url);
 			throw new ErrorException("Error whilst fetching contributor page details: " . $cannedText);
 		}
 	

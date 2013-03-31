@@ -1,12 +1,30 @@
 <?php
 
+function addXMLDeclarationUTF8($xml)
+{
+  if(strpos($xml,'<?xml') === false)
+  {
+    return '<?xml version="1.0" encoding="UTF-8"?>'.NL. $xml;
+  }
+  else
+  {
+    // Clean whatever is there (might be crud!)
+    return addXMLDeclarationUTF8(removeXMLDeclaration($xml));
+  }
+}
+
+function removeXMLDeclaration($xml)
+{
+  return preg_replace('/<\?xml(.*)\?>/' , '', $xml);
+}
+
 function wrapRegistryObjects($xml)
 {
 	
 	$return = $xml;
   if(strpos($xml,'<registryObjects') === false)
   {
-  	$return = '<registryObjects xmlns="http://ands.org.au/standards/rif-cs/registryObjects" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects http://services.ands.org.au/documentation/rifcs/schema/registryObjects.xsd">' . NL; 
+  	$return = '<?xml version="1.0" encoding="UTF-8"?>'.NL.'<registryObjects xmlns="http://ands.org.au/standards/rif-cs/registryObjects" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects http://services.ands.org.au/documentation/rifcs/schema/registryObjects.xsd">' . NL; 
   	$return .= $xml;
   	$return .= '</registryObjects>';
   }

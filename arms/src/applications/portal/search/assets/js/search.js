@@ -310,6 +310,7 @@ function initSearchPage(){
 	});
 
 	$('.excerpt').each(function(){
+		
 		// This will unencode the encoded entities, but also hide any random HTML'ed elements
 		$(this).html(htmlDecode(htmlDecode(htmlDecode($(this).html()))));
 		$(this).html($(this).directText());
@@ -324,6 +325,9 @@ function initSearchPage(){
 		$(this).html(newContent);
 		}
 	);
+
+	// Clean up encoding issues in titles
+	$('.post a.title').each(function(){$(this).html(htmlDecode($(this).html()));})
 
 	$('.showmore_excerpt').click(function(){	
 		$(this).parent().html($(this).parent().children(0).html());

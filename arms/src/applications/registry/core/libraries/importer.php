@@ -108,16 +108,18 @@ class Importer {
 		$this->CI->benchmark->mark('ingest_stage_1_start');
 			foreach ($this->xmlPayload AS $idx => $payload)
 			{
+				// Escape XML entities from the start...
+				$payload = str_replace("&", "&amp;", $payload);
 
 				// Build a SimpleXML object from the converted data
 				// We will throw an exception here if the payload isn't well-formed XML (which, by now, it should be)
 				try
 				{
-					$sxml = @$this->_getSimpleXMLFromString($payload);
+					$sxml = $this->_getSimpleXMLFromString($payload);
 				}
 				catch (Exception $e)
 				{
-					throw new Exception("Unable to parse XML into object (registryObject #".$idx."): " . NL . $e->getMessage());
+					throw new Exception("Unable to parse XML into object (registryObject #".($idx+1)."): " . NL . $e->getMessage());
 				}
 
 				// Last chance to check valid format of the payload
@@ -235,17 +237,16 @@ class Importer {
 						unset($ro_xml->relatedInfo[$nativeHarvestIdx]);
 					}
 
-					// XXX: Record owner should only be system if this is a harvest?
+					//  Record owner should only be system if this is a harvest
 					$record_owner = "SYSTEM";
 					if($this->CI->user->isLoggedIn())
 					{
 						$record_owner = $this->CI->user->identifier();
 					}
+
 					if (is_null($revision_record_id))
 					{
 						// We are creating a new registryObject
-
-
 						$ro = $this->CI->ro->create($this->dataSource, (string)$registryObject->key, $class, "", $this->status, "temporary_slug" . time(), $record_owner, $this->harvestID);
 
 						if($this->dataSource->qa_flag===DB_TRUE && $this->ingest_new_record<1)
@@ -309,9 +310,15 @@ class Importer {
 					{
 						$ro->slug = DRAFT_RECORD_SLUG . $ro->id;
 					}
+
 					// Save all our attributes to the object
 					$ro->save();
-					$ro->enrich();
+					
+
+					// WTF IS THIS DOING HERE? 
+					// $ro->enrich(); 
+
+
 					//if this is ds has the qa flag set we need to check if this is the first submitted for assesmment record and if so email the notify address
 
 
@@ -549,7 +556,6 @@ class Importer {
 	public function setXML($payload)
 	{
 		$this->xmlPayload = $payload;
-		log_message('debug', 'Loaded XML fragment of ' . count($payload) . ' chars into memory.');
 		return;
 	}
 
@@ -610,7 +616,7 @@ class Importer {
 	private function _validateRIFCS($xml)
 	{
 		$doc = new DOMDocument('1.0','utf-8');
-		$doc->loadXML(utf8_encode(str_replace("&", "&amp;", $xml)), LIBXML_NOENT);
+		$doc->loadXML($xml);
 
 		if(!$doc)
 		{
@@ -624,6 +630,7 @@ class Importer {
 
 		if ($validation_status === TRUE) 
 		{
+			libxml_use_internal_errors(false);
 			return TRUE;
 		}
 		else
@@ -634,6 +641,7 @@ class Importer {
 			    $error_string .= TAB . "Line " .$error->line . ": " . $error->message;
 			}
 			libxml_clear_errors();
+			libxml_use_internal_errors(false);
 
 			//$this->dataSource->append_log("Unable to validate XML document against schema: ".$error_string, HARVEST_ERROR, "importer","DOCUMENT_VALIDATION_ERROR");
 			throw new Exception("Unable to validate XML document against schema: " . NL . $error_string);
@@ -643,8 +651,7 @@ class Importer {
 
 	private function _getSimpleXMLFromString($xml)
 	{
-		// Simplexml doesn't play nicely with namespaces :-(
-		$xml = simplexml_load_string(utf8_encode(str_replace("&", "&amp;", $xml)), "SimpleXMLElement", LIBXML_NOENT);
+		$xml = simplexml_load_string($xml);
 
 		if ($xml === false)
 		{

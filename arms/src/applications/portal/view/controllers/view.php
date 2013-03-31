@@ -99,11 +99,14 @@ class View extends MX_Controller {
 		//exit();
 
 		// Generate the view page contents
-		$data['registry_object_contents'] = str_replace('&amp;','&', $this->registry->transformExtrifToHTMLStandardRecord($extRif['data']));
-		$data['registry_object_contents'] = str_replace('&amp;','&', $data['registry_object_contents']);
+		$data['registry_object_contents'] = $this->registry->transformExtrifToHTMLStandardRecord($extRif['data']);
+
+		// Leo's suspect-looking decoding (html_entity_decode() in registry_fetch)
+		/*$data['registry_object_contents'] = str_replace('&amp;','&', $data['registry_object_contents']);
 		$data['registry_object_contents'] = str_replace('&amp;','&', $data['registry_object_contents']);
 		$data['registry_object_contents'] = str_replace('&lt;','<', $data['registry_object_contents']);
-		$data['registry_object_contents'] = str_replace('&gt;','>', $data['registry_object_contents']);
+		$data['registry_object_contents'] = str_replace('&gt;','>', $data['registry_object_contents']);*/
+
 		// well this was really uggly... we should fix it at ingest!
 		$data['registry_object_contents'] = str_replace('%%%%CONNECTIONS%%%%', $connDiv, $data['registry_object_contents']);
 		$data['registry_object_contents'] = str_replace('%%%%ANDS_SUGGESTED_LINKS%%%%', $suggestedLinksDiv, $data['registry_object_contents']);
@@ -135,13 +138,19 @@ class View extends MX_Controller {
 		// we have $this->registry-> which gives us the functions in models/registry_fetch.php
 
 
-		$data['contentData'] = $this->registry->fetchContributorData($this->input->get('slug'));
-		$contentDiv = $this->load->view('contentData', $data, true);
+		if ($this->input->get('slug'))
+		{
+			$data['contentData'] = $this->registry->fetchContributorData((string)$this->input->get('slug'));
+			$contentDiv = $this->load->view('contentData', $data, true);
+			$data['cannedText'] = $this->registry->fetchContributorText((string)$this->input->get('slug'));
+			$cannedTextDiv = $this->load->view('cannedText', $data, true);
+		}
+		else
+		{
+			// XXX: TODO FOR ID-based get
+			// 
+		}
 
-		// XXX: Do some witchcraft to render this into the template, probably str_replace('')  (see above)
-
-		$data['cannedText'] = $this->registry->fetchContributorText($this->input->get('slug'));
-		$cannedTextDiv = $this->load->view('cannedText', $data, true);
 
 
 		$connDiv = $this->load->view('connections', $data, true);

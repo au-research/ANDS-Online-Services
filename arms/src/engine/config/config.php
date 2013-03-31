@@ -48,6 +48,8 @@ $_GET['app'] = (!isset($_GET['app']) || $_GET['app'] == "" ? $default_applicatio
 
 /* Where in the world are we anyway? */
 date_default_timezone_set('Australia/Canberra');
+ini_set( 'default_charset', 'UTF-8' );
+
 /*
 |--------------------------------------------------------------------------
 | Index File

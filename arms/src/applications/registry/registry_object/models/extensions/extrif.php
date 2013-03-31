@@ -14,7 +14,7 @@ class Extrif_Extension extends ExtensionBase
 	function enrich()
 	{
 		$this->_CI->load->model('data_source/data_sources','ds');	
-		
+		$this->_CI->load->library('purifier');
 		// Save ourselves some computation by avoiding creating the whole $ds object for 
 		$ds = $this->_CI->ds->getByID($this->ro->data_source_id);
 
@@ -22,7 +22,9 @@ class Extrif_Extension extends ExtensionBase
 		$xml = $this->ro->getSimpleXML();
 
 		// Reset our namespace object (And go down one level from the wrapper if needed)
-		$xml = simplexml_load_string(($xml->registryObject ? $xml->registryObject->asXML() : $xml->asXML()));
+		$xml =  addXMLDeclarationUTF8(($xml->registryObject ? $xml->registryObject->asXML() : $xml->asXML()));
+
+		$xml = simplexml_load_string($xml);
 
 		// Clone across the namespace (if applicable)
 		$namespaces = $xml->getNamespaces(true);
@@ -31,8 +33,7 @@ class Extrif_Extension extends ExtensionBase
 			$xml->addAttribute("xmlns",RIFCS_NAMESPACE);
 		}
 
-		$xml = simplexml_load_string($xml->asXML());
-
+		$xml = simplexml_load_string( addXMLDeclarationUTF8($xml->asXML()) );
 		// Cannot enrich already enriched RIFCS!!
 		if(true)//!isset($rifNS[EXTRIF_NAMESPACE])) //! (string) $attributes['enriched'])//! (string) $attributes['enriched'])
 		{
@@ -49,8 +50,8 @@ class Extrif_Extension extends ExtensionBase
 				$extendedMetadata->addChild("extRif:dataSourceID", $this->ro->data_source_id, EXTRIF_NAMESPACE);
 				$extendedMetadata->addChild("extRif:updateTimestamp", $this->ro->updated, EXTRIF_NAMESPACE);					
 	
-				$extendedMetadata->addChild("extRif:displayTitle", str_replace('&', '&amp;' ,$this->ro->title), EXTRIF_NAMESPACE);
-				$extendedMetadata->addChild("extRif:listTitle", str_replace('&', '&amp;' ,$this->ro->list_title), EXTRIF_NAMESPACE);
+				$extendedMetadata->addChild("extRif:displayTitle", str_replace('&', '&amp;' , $this->ro->title), EXTRIF_NAMESPACE);
+				$extendedMetadata->addChild("extRif:listTitle", str_replace('&', '&amp;' , $this->ro->list_title), EXTRIF_NAMESPACE);
 				$theDescription = '';
 				$theDescriptionType = '';
 				if($xml->{$this->ro->class}->description)
@@ -70,17 +71,17 @@ class Extrif_Extension extends ExtensionBase
 							$this->ro->set_metadata('the_logo', $logoRef);
 						}
 
-						$this->_CI->load->library('purifier');
-						$clean_html = $this->_CI->purifier->purify_html($description_str);
+						
+						$clean_html = $this->_CI->purifier->purify_html( $description_str );
 						$encoded_html = '';
 						if (strpos($description_str, "<br") !== FALSE)
 						{
-							$encoded_html = htmlentities($clean_html);
+							$encoded_html = $clean_html;
 							$extrifDescription = $extendedMetadata->addChild("extRif:description", $encoded_html, EXTRIF_NAMESPACE);
 						}
 						else
 						{
-							$encoded_html = htmlentities(nl2br($clean_html));
+							$encoded_html = $clean_html;
 							$extrifDescription = $extendedMetadata->addChild("extRif:description", $encoded_html, EXTRIF_NAMESPACE);
 						}
 						$extrifDescription->addAttribute("type", $type);
@@ -210,117 +211,6 @@ class Extrif_Extension extends ExtensionBase
 			{
 				throw new Exception ("Unable to enrich RIFCS. Not valid RIFCS XML");
 			}
-		}
-	}
-
-	function transformForSOLR($add_tags = true)
-	{
-		try{
-			$xslt_processor = Transforms::get_extrif_to_solr_transformer();
-			$dom = new DOMDocument();
-			//$dom->loadXML($this->ro->getXML());
-			$dom->loadXML(str_replace('&','&amp;',$this->ro->getExtRif()));
-			if ($add_tags)
-			{
-				return "<add>" . $xslt_processor->transformToXML($dom) . "</add>";
-			}
-			else
-			{
-				return $xslt_processor->transformToXML($dom);
-			}
-		}catch (Exception $e)
-		{
-			echo "UNABLE TO TRANSFORM" . BR;	
-			echo "<pre>" . nl2br($e->getMessage()) . "</pre>" . BR;
-		}
-	}
-
-
-	function transformForQA($xml)
-	{
-		try{
-			$xslt_processor = Transforms::get_qa_transformer();
-			$dom = new DOMDocument();
-			//$dom->loadXML($this->ro->getXML());
-			$dom->loadXML($xml);
-			$dataSource = 'a';
-			$xslt_processor->setParameter('','dataSource',$dataSource);
-			return $xslt_processor->transformToXML($dom);
-		}catch (Exception $e)
-		{
-			echo "UNABLE TO TRANSFORM" . BR;	
-			echo "<pre>" . nl2br($e->getMessage()) . "</pre>" . BR;
-		}
-	}
-	
-	function transformForHtml($revision='')
-	{
-		try{
-			$xslt_processor = Transforms::get_extrif_to_html_transformer();
-			$dom = new DOMDocument();
-			$dataSource = $this->ro->data_source_key;
-			if($revision=='') {
-				$dom->loadXML(wrapRegistryObjects($this->ro->getRif()));
-			}else $dom->loadXML(wrapRegistryObjects($this->ro->getRif($revision)));
-			$xslt_processor->setParameter('','dataSource',$dataSource);
-			return $xslt_processor->transformToXML($dom);
-		}catch (Exception $e)
-		{
-			echo "UNABLE TO TRANSFORM" . BR;	
-			echo "<pre>" . nl2br($e->getMessage()) . "</pre>" . BR;
-		}
-	}
-	
-	
-	function transformForFORM()
-	{
-		try{
-			$xslt_processor = Transforms::get_extrif_to_form_transformer();
-			$dom = new DOMDocument();
-			//$dom->loadXML($this->ro->getXML());
-			$dataSource = $this->ro->data_source_key;
-			$this->ro->enrich();
-			$dom->loadXML($this->ro->getExtRif());
-			$xslt_processor->setParameter('','dataSource',$dataSource);
-			
-			return $xslt_processor->transformToXML($dom);
-		}
-		catch (Exception $e)
-		{
-			echo "UNABLE TO TRANSFORM" . BR;	
-			echo "<pre>" . nl2br($e->getMessage()) . "</pre>" . BR;
-		}
-	}
-	
-	function transformToDC()
-	{
-		try{
-			$xslt_processor = Transforms::get_extrif_to_dc_transformer();
-			$dom = new DOMDocument();
-			$this->ro->enrich();
-			$dom->loadXML($this->ro->getExtRif());
-			//$dom->loadXML(str_replace('&','&amp;',$this->ro->getExtRif()));
-			return $xslt_processor->transformToXML($dom);
-		}catch (Exception $e)
-		{
-			echo "UNABLE TO TRANSFORM" . BR;	
-			echo "<pre>" . nl2br($e->getMessage()) . "</pre>" . BR;
-		}
-	}
-
-	function transformCustomForFORM($rifcs){
-		try{
-			$xslt_processor = Transforms::get_extrif_to_form_transformer();
-			$dom = new DOMDocument();
-			//$dom->loadXML($this->ro->getXML());
-			$dom->loadXML(utf8_encode(str_replace("&", "&amp;", $rifcs)), LIBXML_NOENT);
-			//$dom->loadXML($rifcs);
-			$xslt_processor->setParameter('','base_url',base_url());
-			return $xslt_processor->transformToXML($dom);
-		}catch (Exception $e)
-		{
-			echo "UNABLE TO TRANSFORM" . BR;
-			echo "<pre>" . nl2br($e->getMessage()) . "</pre>" . BR;
 		}
 	}
 	

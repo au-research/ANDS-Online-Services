@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:ro="http://ands.org.au/standards/rif-cs/registryObjects" xmlns:extRif="http://ands.org.au/standards/rif-cs/extendedRegistryObjects" exclude-result-prefixes="ro extRif">
     <xsl:output method="html" encoding="UTF-8" indent="no" omit-xml-declaration="yes"/>
@@ -41,17 +41,6 @@
           </xsl:otherwise>
       </xsl:choose>
   </xsl:variable>	
-
-  <xsl:variable name="theTitle">
-      <xsl:choose>
-          <xsl:when test="string-length(/extRif:extendedMetadata/extRif:displayTitle)>30">
-              <xsl:value-of select="substring(/extRif:extendedMetadata/extRif:displayTitle,0,30)"/>...
-          </xsl:when>
-          <xsl:otherwise>
-              <xsl:value-of select="/extRif:extendedMetadata/extRif:displayTitle"/>
-          </xsl:otherwise>
-      </xsl:choose>
-  </xsl:variable>
 
 
   <div class="breadcrumb">
@@ -246,7 +235,7 @@
         <div id="citation" style="position:relative;clear:both;">
             <xsl:choose>
                 <xsl:when test="ro:citationInfo/ro:citationMetadata">
-                    <p><xsl:text>&amp;amp;nbsp;</xsl:text></p>
+                    <p><xsl:text>&amp;nbsp;</xsl:text></p>
                     <h4>How to Cite this Collection</h4>
                        <!--   <a title="Add this article to your Mendeley library" target="_blank">
                        <xsl:attribute name="href">
@@ -259,7 +248,7 @@
                         </div>
                     </xsl:when>
                     <xsl:when test="ro:citationInfo/ro:fullCitation">
-                        <p><xsl:text>&amp;amp;nbsp;</xsl:text></p>
+                        <p><xsl:text>&amp;nbsp;</xsl:text></p>
                         <h4>How to Cite this Collection</h4>
                         <h5>Full Citation:</h5>
                         <div class="citationDisplay">
@@ -273,8 +262,8 @@
                                 <xsl:text>ctx_ver=Z39.88-2004</xsl:text>
                                 <xsl:text>&amp;amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Adc</xsl:text>
                                 <xsl:text>&amp;amp;rfr_id=info%3Asid%2FANDS</xsl:text>
-                                <xsl:text>&amp;amp;rft.title=</xsl:text><xsl:value-of select="//ro:displayTitle"/>
-                                <xsl:text>&amp;amp;rft.description=</xsl:text><xsl:value-of select="//ro:displayTitle"/>
+                                <xsl:text>&amp;amp;rft.title=</xsl:text><xsl:value-of select="//extRif:displayTitle"/>
+                                <xsl:text>&amp;amp;rft.description=</xsl:text><xsl:value-of select="//extRif:displayTitle"/>
                             </xsl:attribute>
                         </span><span class="Z3988"></span>      
                     </xsl:otherwise>                        
@@ -304,7 +293,7 @@
 
     <!-- DISPLAY RELATED INFO -->
     <xsl:if test="ro:relatedInfo">
-        <p><xsl:text>&amp;amp;nbsp;</xsl:text></p>
+        <p><xsl:text>&amp;nbsp;</xsl:text></p>
         <h4>More Information</h4>
         <xsl:apply-templates select="ro:relatedInfo"/> 
     </xsl:if>
@@ -364,7 +353,7 @@
   <xsl:if test="../extRif:extendedMetadata/extRif:subjects/extRif:subject">
     <div style="position:relative;clear:both">
         <!--<p><b>Subjects:</b>-->
-        <p><xsl:text>&amp;amp;nbsp;</xsl:text></p>
+        <p><xsl:text>&amp;nbsp;</xsl:text></p>
         <h4>Subjects</h4>
         <!-- ANZSRC SUBJECTS -->
         <xsl:if test="../extRif:extendedMetadata/extRif:subjects/extRif:subject/extRif:subject_type ='anzsrc-for' or ../extRif:extendedMetadata/extRif:subjects/extRif:subject/extRif:subject_type='anzsrc-seo' or ../extRif:extendedMetadata/extRif:subjects/extRif:subject/extRif:subject_type='anzsrc-toa'">
@@ -401,12 +390,12 @@
 
     <!-- DISPLAY DATES -->
     <xsl:if test="ro:dates">
-        <p><xsl:text>&amp;amp;nbsp;</xsl:text></p>
+        <p><xsl:text>&amp;nbsp;</xsl:text></p>
         <h4>Dates</h4> 
         <table>
             <xsl:apply-templates select="ro:dates"/>
         </table>  
-        <p>&amp;amp;nbsp;</p>
+        <p>&amp;nbsp;</p>
     </xsl:if>           
     
     <!-- DISPLAY IDENTIFIERS -->
@@ -526,8 +515,8 @@
     <div class="page_title" id="displaytitle">
 
       <xsl:apply-templates select="../extRif:logo"/>
-
-       <h1><xsl:value-of select="."/></h1>
+      
+       <h1><xsl:value-of select="." disable-output-escaping="no"/></h1>
        <xsl:for-each select="//ro:existenceDates">
          <xsl:choose>
           <xsl:when test="extRif:friendly_date">
@@ -1233,14 +1222,14 @@
         <xsl:when test="@type ='note'">
           <h5 class="lightgrey">Note</h5>
         </xsl:when>
-        <xsl:when test="@type ='significantStatement'">
+        <xsl:when test="@type ='significanceStatement'">
           <h5 class="lightgrey">Significance Statement</h5>
+        </xsl:when>
+        <xsl:when test="@type = 'deliverymethod'">
+          <h5 class="lightgrey">Delivery Method</h5>
         </xsl:when>
        </xsl:choose>
        <p>
-         <xsl:if test="@type='deliverymethod'">
-             Delivery Method : 
-         </xsl:if>
          <xsl:value-of select="." disable-output-escaping="yes"/>
        </p>
      </div>

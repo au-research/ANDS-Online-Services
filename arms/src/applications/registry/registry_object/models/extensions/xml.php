@@ -31,35 +31,36 @@ class XML_Extension extends ExtensionBase
 	 
 	function getXML($record_data_id = NULL)
 	{
-		if (!is_null($this->_xml) && $this->_xml->record_data_id == $record_data_id)
+		if (!is_null($this->_xml) && (is_null($record_data_id) || $this->_xml->record_data_id == $record_data_id))
 		{
-			return str_replace('&','&amp;',$this->_xml->xml);
+			return $this->_xml->xml;
 		}
 		else
 		{
 			$this->_xml = new _xml($this->ro->id, $record_data_id);
-			//return html_entity_decode($this->_xml->xml, ENT_QUOTES, "utf-8");
-			return str_replace('&','&amp;',$this->_xml->xml);
+			return $this->_xml->xml;
 		}
 	}
 	
 	function getSimpleXML($record_data_id = NULL)
 	{
-		if (!is_null($this->_simplexml) && !is_null($this->_xml) && $this->_xml->record_data_id == $record_data_id)
+		if (!is_null($this->_simplexml) && (is_null($record_data_id) || (!is_null($this->_xml) && ($this->_xml->record_data_id == $record_data_id))))
 		{
 			return $this->_simplexml;
 		}
 		else
 		{
+
 			$xml = $this->getRif($record_data_id);
-			$this->_simplexml = simplexml_load_string(str_replace('&','&amp;',$xml));
+			$this->_simplexml = simplexml_load_string($xml);
+			$this->_simplexml->registerXPathNamespace("ro", RIFCS_NAMESPACE);
+			$this->_simplexml->registerXPathNamespace("extRif", EXTRIF_NAMESPACE);
+
+			// Backwards compatibility with "unwrapped" RIFCS
 			if ($this->_simplexml->registryObject)
 			{
 				$this->_simplexml = $this->_simplexml->registryObject;
 			}
-
-			$this->_simplexml->registerXPathNamespace("ro", RIFCS_NAMESPACE);
-			$this->_simplexml->registerXPathNamespace("extRif", EXTRIF_NAMESPACE);
 			
 			return $this->_simplexml;
 		}
@@ -75,8 +76,7 @@ class XML_Extension extends ExtensionBase
 		if (is_null($scheme)) {
 			$this->_rif =& $_xml;
 		}
-
-		$this->_simplexml = simplexml_load_string(str_replace('&','&amp;',$_xml->xml));
+		$this->_simplexml = simplexml_load_string($_xml->xml);
 		$this->_simplexml->registerXPathNamespace("ro", RIFCS_NAMESPACE);
 		$this->_simplexml->registerXPathNamespace("extRif", EXTRIF_NAMESPACE);
 	}

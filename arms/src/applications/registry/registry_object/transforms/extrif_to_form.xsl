@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:ro="http://ands.org.au/standards/rif-cs/registryObjects" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:extRif="http://ands.org.au/standards/rif-cs/extendedRegistryObjects"
 	exclude-result-prefixes="extRif ro">

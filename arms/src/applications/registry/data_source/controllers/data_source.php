@@ -305,7 +305,7 @@ class Data_source extends MX_Controller {
 				$item = array(
 						'id'=>$registry_object->id, 
 						'key'=>$registry_object->key,
-						'title'=>$registry_object->title,
+						'title'=>html_entity_decode($registry_object->title),
 						'status'=>$registry_object->status,
 						'class'=>$registry_object->class,
 						'updated'=>timeAgo($registry_object->updated),

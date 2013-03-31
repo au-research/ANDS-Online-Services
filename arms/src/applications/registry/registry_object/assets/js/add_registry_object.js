@@ -909,6 +909,7 @@ function initEditor(){
 		    theme_advanced_buttons3 : "",
 		    height:"250px",
 		    width:"600px",
+		    entity_encoding : "raw",
 		    forced_root_block : ''
 		});
 	}
@@ -1037,14 +1038,14 @@ function getRIFCSforTab(tab, hasField){
 						if(type){
 							fragment += '<'+$(this).attr('type')
 							if(hasField) fragment += ' field_id="' +$(this).attr('field_id')+'"';
-							fragment += ' type="'+$('input[name=type]', this).val()+'">'+$('input[name=value]', this).val()+'</'+$(this).attr('type')+'>';	
+							fragment += ' type="'+$('input[name=type]', this).val()+'">'+htmlEntities($('input[name=value]', this).val())+'</'+$(this).attr('type')+'>';	
 						}else{
 							var type = $(this).attr('type');
 							fragment += '<'+type+'>'+$('input[name=value]', this).val()+'</'+type+'>';
 						}
 					}
 				}else{//it's an element
-					fragment += '<'+$('input', this).attr('name')+'>'+$('input', this).val()+'</'+$('input', this).attr('name')+'>';
+					fragment += '<'+$('input', this).attr('name')+'>'+htmlEntities($('input', this).val())+'</'+$('input', this).attr('name')+'>';
 				}
 			});
 		}else if(subbox.length==0){//data is right at this level, grab it!

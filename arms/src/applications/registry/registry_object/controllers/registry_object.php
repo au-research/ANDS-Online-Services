@@ -16,6 +16,7 @@ class Registry_object extends MX_Controller {
 	}
 
 	public function view($ro_id, $revision=''){
+
 		$this->load->model('registry_object/registry_objects', 'ro');
 		$ro = $this->ro->getByID($ro_id);
 		if($ro){
@@ -103,6 +104,8 @@ class Registry_object extends MX_Controller {
 		$this->load->model('registry_objects', 'ro');
 		$ro = $this->ro->getByID($registry_object_id);
 
+		if(!$ro) { throw new Exception("This Registry Object ID does not exist!"); }
+
 		if($ro->status == PUBLISHED)
 		{
 			if(!($ro = $this->ro->getDraftByKey($ro->key)))
@@ -123,13 +126,9 @@ class Registry_object extends MX_Controller {
 		}
 		
 		ds_acl_enforce($ro->data_source_id);
-		$data['extrif'] = $ro->getExtRif();
 
+		$data['extrif'] = $ro->getExtRif();
 		$data['content'] = $ro->transformCustomForFORM($data['extrif']);
-		$data['content'] = str_replace('&amp;','&', $data['content']);
-		$data['content'] = str_replace('&amp;','&', $data['content']);
-		$data['content'] = str_replace('&lt;','<', $data['content']);
-		$data['content'] = str_replace('&gt;','>', $data['content']);
 		
 		$data['title'] = 'Edit: '.$ro->title;
 		$data['scripts'] = array('add_registry_object');
@@ -156,14 +155,17 @@ class Registry_object extends MX_Controller {
 	}
 
 	public function save($registry_object_id){
+		set_exception_handler('json_exception_handler');
+
 		// might have to add a draft instead of saving the published!!
-		// WORKFLOW!!!!!!!!!!!!!!!
+		// WORKFLOW!!!!!!!!!!!!!!
 		$xml = $this->input->post('xml');
 		$this->load->library('importer');
 
 		$this->load->model('registry_objects', 'ro');
 		$this->load->model('data_source/data_sources', 'ds');
 		$ro = $this->ro->getByID($registry_object_id);
+
 		if (!$ro)
 		{
 			throw new Exception("No registry object exists with that ID!");
@@ -190,6 +192,7 @@ class Registry_object extends MX_Controller {
 	}
 
 
+	/* XXX: Leo to fix ... use importer! */
 	public function add_new(){
 		header('Cache-Control: no-cache, must-revalidate');
 		header('Content-type: application/json');
@@ -369,7 +372,7 @@ class Registry_object extends MX_Controller {
 		$data['revisions'] = $ro->getAllRevisions();
 
 		//preview link for iframe in preview, show published view if published, show draft preview if in draft
-		$data['preview_link'] = 'http://demo.ands.org.au/'.$ro->slug;
+		$data['preview_link'] = portal_url() . $ro->slug;
 
 		$jsonData = array();
 		$jsonData['status'] = 'OK';

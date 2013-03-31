@@ -10,6 +10,7 @@ initDescriptionDisplay();
 drawRegistryIcon();
 
 // Check if we have a hierarchal connections graph
+initViewPage();
 initConnectionGraph();
 drawMap();
 initConnections(); 
@@ -24,6 +25,12 @@ if ( $('#class', metadataContainer).html() == "Collection" )
 initInternalSuggestedLinks();
 
 /*if (isPublished()) { $('#draft_status').removeClass("hide"); }*/
+
+
+function initViewPage()
+{
+ //   $('#displaytitle').each(function(){console.log($(this));});
+}
 
 function drawRegistryIcon(){
     if($('#class_type').length > 0){
