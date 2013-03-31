@@ -1,5 +1,5 @@
-CREATE DATABASE  IF NOT EXISTS `dbs_harvester` /*!40100 DEFAULT CHARACTER SET latin1 */;
-USE `dbs_harvester`;
+-- CREATE DATABASE  IF NOT EXISTS `dbs_harvester` /*!40100 DEFAULT CHARACTER SET latin1 */;
+-- USE `dbs_harvester`;
 -- MySQL dump 10.13  Distrib 5.5.24, for osx10.5 (i386)
 --
 -- Host: ands3.anu.edu.au    Database: dbs_harvester

@@ -1,4 +1,4 @@
-USE `dbs_portal`;
+-- USE `dbs_portal`;
 
 DROP TABLE IF EXISTS `search_result_counts`;
 CREATE TABLE `search_result_counts` (
