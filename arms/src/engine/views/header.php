@@ -122,6 +122,7 @@
               <?php endif; ?>
               <?php if ($this->user->hasFunction('AUTHENTICATED_USER')): ?>
                   <li class=""><?php echo anchor('location_capture_widget/', 'Location Capture Widget');?></li>
+                  <li class=""><?php echo anchor('vocab_widget/', 'Vocabulary Service Widget');?></li>
                 <?php endif; ?>
               <?php if ($this->user->hasFunction('SPOTLIGHT_CMS_EDITOR')): ?>
                   <li class=""><?php echo anchor('spotlight/', 'Spotlight CMS Editor');?></li>
