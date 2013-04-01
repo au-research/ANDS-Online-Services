@@ -414,7 +414,7 @@ function initEditForm(){
 			});
 
 			xml+='</'+ro_class+'></registryObject>';
-			$('#myModal .modal-header h3').html('<h3>Export RIFCS</h3>');
+			$('#myModal .modal-header h3').html('<h3>Save &amp; Validate Registry Object</h3>');
 			$('#myModal .modal-body').html('<pre class="prettyprint linenums"><code class="language-xml">' + htmlEntities(formatXml(xml)) + '</code></pre>');
 			$('#myModal .modal-footer').html('<button class="btn btn-primary">Download</button>');
 			prettyPrint();
@@ -444,9 +444,12 @@ function initEditForm(){
 			});
 
 			xml+='</'+ro_class+'></registryObject>';
-			$('#myModal .modal-header h3').html('<h3>Export RIFCS</h3>');
-			$('#myModal .modal-body').html('<pre class="prettyprint linenums"><code class="language-xml">' + htmlEntities(formatXml(xml)) + '</code></pre>');
-			$('#myModal .modal-footer').html('<button class="btn btn-primary">Download</button>');
+			$('#myModal .modal-header h3').html('<h3>Save &amp; Validate Registry Object</h3>');
+			$('#myModal .modal-body').html('<div style="width:100%; margin:both; text-align:center;">' + 
+											'<img src="'+base_url+'assets/img/ajax-loader.gif" style="padding-top:25px;" />' +
+											'<p></p><p><small>Saving your Registry Object...</small></p>' +
+											'</div>');
+			$('#myModal .modal-footer').html('');
 			prettyPrint();
 			$('#myModal').modal();
 

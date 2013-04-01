@@ -137,6 +137,7 @@ class Registry_object extends MX_Controller {
 	}
 
 	public function validate($registry_object_id){
+		set_exception_handler('json_exception_handler');
 		header('Cache-Control: no-cache, must-revalidate');
 		header('Content-type: application/json');
 		$xml = $this->input->post('xml');
@@ -157,8 +158,6 @@ class Registry_object extends MX_Controller {
 	public function save($registry_object_id){
 		set_exception_handler('json_exception_handler');
 
-		// might have to add a draft instead of saving the published!!
-		// WORKFLOW!!!!!!!!!!!!!!
 		$xml = $this->input->post('xml');
 		$this->load->library('importer');
 
@@ -183,11 +182,11 @@ class Registry_object extends MX_Controller {
 
 		if ($error_log)
 		{
-			echo "Errors during saving this registry object! " . BR . implode($error_log, BR);
+			throw new Exception("Errors during saving this registry object! " . BR . implode($error_log, BR));
 		}
 		else
 		{
-			echo "Success";
+			echo json_encode(array("status"=>"success"));
 		}
 	}
 
@@ -211,6 +210,7 @@ class Registry_object extends MX_Controller {
 
 		} 
 		else{
+			// XXX: this is BAD -- must use the importer!!!
 			$ro = $this->ro->create($ds, $data['registry_object_key'], $data['ro_class'], "", 'DRAFT', urlencode($data['registry_object_key']), $record_owner, '');
 			$ro->group = $data['group'];
 			$ro->type = $data['type'];

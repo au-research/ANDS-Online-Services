@@ -280,7 +280,7 @@
 
 				<button class="btn btn-primary addNew" type="name">
 					<i class="icon-plus icon-white"/> Add Name </button>
-				<button class="btn export_xml btn-info"> Export XML fragment </button>
+				<button class="hide btn export_xml btn-info"> Export XML fragment </button>
 			</fieldset>
 		</div>
 	</xsl:template>
@@ -296,7 +296,7 @@
 
 				<button class="btn btn-primary addNew" type="dates">
 					<i class="icon-plus icon-white"/> Add Dates </button>
-				<button class="btn export_xml btn-info"> Export XML fragment </button>
+				<button class="hide btn export_xml btn-info"> Export XML fragment </button>
 			</fieldset>
 		</div>
 	</xsl:template>
@@ -375,7 +375,7 @@
 					<i class="icon-plus icon-white"/> Add Description </button>
 				<button class="btn btn-primary addNew" type="rights">
 					<i class="icon-plus icon-white"/> Add Rights </button>
-				<button class="btn export_xml btn-info"> Export XML fragment </button>
+				<button class="hide btn export_xml btn-info"> Export XML fragment </button>
 			</fieldset>
 		</div>
 	</xsl:template>
@@ -388,7 +388,7 @@
 				<div class="separate_line"/>
 				<button class="btn btn-primary addNew" type="accesspolicy">
 					<i class="icon-plus icon-white"/> Add Access Policy </button>
-				<button class="btn export_xml btn-info"> Export XML fragment </button>
+				<button class="hide btn export_xml btn-info"> Export XML fragment </button>
 			</fieldset>
 		</div>
 	</xsl:template>
@@ -409,7 +409,7 @@
 						<li><a href="javascript:;" class="addNew" type="fullCitation">Add Full Citation</a></li>
 						<li><a href="javascript:;" class="addNew" type="citationMetadata">Add Citation Metadata</a></li>
 					</ul>
-					<button class="btn export_xml btn-info"> Export XML fragment </button>
+					<button class="hide btn export_xml btn-info"> Export XML fragment </button>
 				</div>
 				
 			</fieldset>
@@ -473,7 +473,7 @@
 				<div class="separate_line"/>
 				<button class="btn btn-primary addNew" type="subject">
 					<i class="icon-plus icon-white"/> Add Subject </button>
-				<button class="btn export_xml btn-info"> Export XML fragment </button>
+				<button class="hide btn export_xml btn-info"> Export XML fragment </button>
 			</fieldset>
 		</div>
 	</xsl:template>
@@ -488,7 +488,7 @@
 				<div class="separate_line"/>
 				<button class="btn btn-primary addNew" type="identifier">
 					<i class="icon-plus icon-white"/> Add Identifier </button>
-				<button class="btn export_xml btn-info"> Export XML fragment </button>
+				<button class="hide btn export_xml btn-info"> Export XML fragment </button>
 			</fieldset>
 		</div>
 	</xsl:template>
@@ -502,7 +502,7 @@
 				<div class="separate_line"/>
 				<button class="btn btn-primary addNew" type="relatedobject">
 					<i class="icon-plus icon-white"/> Add Related Object </button>
-				<button class="btn export_xml btn-info"> Export XML fragment </button>
+				<button class="hide btn export_xml btn-info"> Export XML fragment </button>
 			</fieldset>
 		</div>
 	</xsl:template>
@@ -516,7 +516,7 @@
 				<div class="separate_line"/>
 				<button class="btn btn-primary addNew" type="relatedinfo">
 					<i class="icon-plus icon-white"/> Add related Info </button>
-				<button class="btn export_xml btn-info"> Export XML fragment </button>
+				<button class="hide btn export_xml btn-info"> Export XML fragment </button>
 			</fieldset>
 		</div>
 	</xsl:template>
@@ -530,7 +530,7 @@
 				<div class="separate_line"/>
 				<button class="btn btn-primary addNew" type="location">
 					<i class="icon-plus icon-white"/> Add Location </button>
-				<button class="btn export_xml btn-info"> Export XML fragment </button>
+				<button class="hide btn export_xml btn-info"> Export XML fragment </button>
 			</fieldset>
 		</div>
 	</xsl:template>
@@ -544,7 +544,7 @@
 				<div class="separate_line"/>
 				<button class="btn btn-primary addNew" type="coverage">
 					<i class="icon-plus icon-white"/> Add Coverage </button>
-				<button class="btn export_xml btn-info"> Export XML fragment </button>
+				<button class="hide btn export_xml btn-info"> Export XML fragment </button>
 			</fieldset>
 		</div>
 	</xsl:template>
@@ -557,7 +557,7 @@
 				<div class="separate_line"/>
 				<button class="btn btn-primary addNew" type="existenceDate">
 					<i class="icon-plus icon-white"/> Add Existence Date </button>
-				<button class="btn export_xml btn-info"> Export XML fragment </button>
+				<button class="hide btn export_xml btn-info"> Export XML fragment </button>
 			</fieldset>
 		</div>
 	</xsl:template>
