@@ -23,8 +23,19 @@
 		</div>
 	</div>
 	<div id="breadcrumb">
-		<?php echo anchor('data_source/', '<i class="icon-home"></i> Home', array('class'=>'tip-bottom', 'title'=>'Go to Home'))?>
-		<?php echo anchor('data_source/manage#!/view/'.$ds->id, $ds->title, array('class'=>'', 'title'=>''))?>
+		<?php 
+			if ($this->user->hasFunction('REGISTRY_USERaaa')) 
+			{
+				// // User has registry access...links can be more specific
+				echo anchor('data_source/', '<i class="icon-home"></i> Home', array('class'=>'tip-bottom', 'title'=>'Go to Home'));
+				echo anchor('data_source/manage#!/view/'.$ds->id, $ds->title, array('class'=>'', 'title'=>''));
+			}
+			else
+			{
+				// Just a guest user, take them to the *real* home page, no link to data source
+				echo anchor('/', '<i class="icon-home"></i> Home', array('class'=>'tip-bottom', 'title'=>'Go to Home'));
+			}
+		?>
 		<a href="#" class="current"><?php echo $ro->title;?> </a>
 		<?php if($viewing_revision) echo '<a href="#">('.$revisionInfo.')</a>'?>
 	</div>
