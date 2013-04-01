@@ -24,7 +24,7 @@
 	</div>
 	<div id="breadcrumb">
 		<?php 
-			if ($this->user->hasFunction('REGISTRY_USERaaa')) 
+			if ($this->user->hasFunction('REGISTRY_USER')) 
 			{
 				// // User has registry access...links can be more specific
 				echo anchor('data_source/', '<i class="icon-home"></i> Home', array('class'=>'tip-bottom', 'title'=>'Go to Home'));
