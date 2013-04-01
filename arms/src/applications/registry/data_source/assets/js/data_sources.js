@@ -294,6 +294,9 @@ function load_datasource(data_source_id){
 			$('#view-datasource').html(output);
 			$('#view-datasource').fadeIn(500);
 
+			var title = data.item.title;
+			document.title = title;
+
 			//draw the charts
 			// drawCharts(data_source_id);
 			loadDataSourceLogs(data_source_id);
@@ -661,10 +664,14 @@ function load_datasource_settings(data_source_id){
 		contentType: 'application/json; charset=utf-8',
 		dataType: 'json',
 		success: function(data){
-			//console.log(data);
+			
 			var template = $('#data-source-settings-template').html();
 			var output = Mustache.render(template, data);
 			var view = $('#view-datasource');
+
+			var title = data.item.title;
+			document.title = title + ' - Settings';
+
 			$('#settings-datasource').html(output);
 			$('#settings-datasource').fadeIn(500);
 
@@ -676,22 +683,22 @@ function load_datasource_settings(data_source_id){
 					width:75,enable:false
 				});
 			});
-		$('.checkbox_view1').each(function(){
-			var whatsThere = $(this).html();
-			$(this).html('<span class="label"><i class="icon icon-ok"></i> On </span> '+ '&nbsp;' + whatsThere);
-		});
-		$('.checkbox_viewt').each(function(){
-			var whatsThere = $(this).html();
-			$(this).html('<span class="label"><i class="icon icon-ok"></i> On </span> '+ ' &nbsp;' + whatsThere);
-		});
-		$('.checkbox_view0').each(function(){
-			var whatsThere = $(this).html();
-			$(this).html('<span class="label"><i class="icon icon-remove"></i> Off </span> ' + '&nbsp; ' + whatsThere);
-		});
-		$('.checkbox_viewf').each(function(){
-			var whatsThere = $(this).html();
-			$(this).html('<span class="label"><i class="icon icon-remove"></i> Off </span> ' + '&nbsp; ' + whatsThere);
-		});					
+			$('.checkbox_view1').each(function(){
+				var whatsThere = $(this).html();
+				$(this).html('<span class="label"><i class="icon icon-ok"></i> On </span> '+ '&nbsp;' + whatsThere);
+			});
+			$('.checkbox_viewt').each(function(){
+				var whatsThere = $(this).html();
+				$(this).html('<span class="label"><i class="icon icon-ok"></i> On </span> '+ ' &nbsp;' + whatsThere);
+			});
+			$('.checkbox_view0').each(function(){
+				var whatsThere = $(this).html();
+				$(this).html('<span class="label"><i class="icon icon-remove"></i> Off </span> ' + '&nbsp; ' + whatsThere);
+			});
+			$('.checkbox_viewf').each(function(){
+				var whatsThere = $(this).html();
+				$(this).html('<span class="label"><i class="icon icon-remove"></i> Off </span> ' + '&nbsp; ' + whatsThere);
+			});					
 			//draw the charts
 			// drawCharts(data_source_id);
 			//loadDataSourceLogs(data_source_id);
@@ -738,6 +745,10 @@ function load_datasource_edit(data_source_id, active_tab){
 			var output = Mustache.render(template, data);
 			$('#edit-datasource').html(output);
 			$('#edit-datasource').fadeIn(500);
+
+			var title = data.item.title;
+			document.title = title + ' - Edit Settings';
+
 			if(active_tab && $('#'+active_tab).length > 0){//if an active tab is specified and exists
 				$('.nav-tabs li a[href=#'+active_tab+']').click();
 			}
