@@ -19,7 +19,7 @@
 -- Table structure for table `sessions`
 --
 
-DROP TABLE IF EXISTS `sessions`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sessions` (
@@ -37,7 +37,7 @@ CREATE TABLE `sessions` (
 -- Table structure for table `vocab_change_history`
 --
 
-DROP TABLE IF EXISTS `vocab_change_history`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `vocab_change_history` (
@@ -53,7 +53,7 @@ CREATE TABLE `vocab_change_history` (
 -- Table structure for table `vocab_metadata`
 --
 
-DROP TABLE IF EXISTS `vocab_metadata`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `vocab_metadata` (
@@ -80,7 +80,7 @@ CREATE TABLE `vocab_metadata` (
 -- Table structure for table `vocab_version_formats`
 --
 
-DROP TABLE IF EXISTS `vocab_version_formats`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `vocab_version_formats` (
@@ -97,7 +97,7 @@ CREATE TABLE `vocab_version_formats` (
 -- Table structure for table `vocab_versions`
 --
 
-DROP TABLE IF EXISTS `vocab_versions`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `vocab_versions` (

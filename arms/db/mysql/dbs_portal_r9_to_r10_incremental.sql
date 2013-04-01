@@ -1,4 +1,3 @@
-DROP TABLE IF EXISTS `search_result_counts`;
 CREATE TABLE `search_result_counts` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `occurrence` int(11) DEFAULT NULL,
@@ -7,3 +6,4 @@ CREATE TABLE `search_result_counts` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1
 
+ALTER TABLE `page_views` ADD COLUMN `registry_object_id` int(11) DEFAULT NULL;

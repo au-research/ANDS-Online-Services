@@ -5,7 +5,7 @@ ALTER TABLE `registry_objects` DROP INDEX `key_UNIQUE` ;
 ALTER TABLE `url_mappings` ADD COLUMN 
   `search_title` varchar(255) DEFAULT NULL AFTER `registry_object_id`;
 
-DROP TABLE IF EXISTS `api_requests`;
+
 CREATE TABLE `api_requests` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `status` varchar(32) DEFAULT NULL,
@@ -18,7 +18,7 @@ CREATE TABLE `api_requests` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=225 DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `api_keys`;
+
 CREATE TABLE `api_keys` (
   `api_key` varchar(32) NOT NULL,
   `owner_email` varchar(45) DEFAULT NULL,
@@ -28,7 +28,7 @@ CREATE TABLE `api_keys` (
   PRIMARY KEY (`api_key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `deleted_registry_objects`;
+
 CREATE TABLE `deleted_registry_objects` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `data_source_id` mediumint(8) unsigned NOT NULL,

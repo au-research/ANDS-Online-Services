@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS `page_views`;
+
 CREATE  TABLE `page_views` (
   `id` BIGINT NOT NULL AUTO_INCREMENT ,
   `request_uri` VARCHAR(512) NOT NULL ,
@@ -11,7 +11,7 @@ CREATE  TABLE `page_views` (
   PRIMARY KEY (`id`) ) ENGINE=MyISAM;
 
 
-DROP TABLE IF EXISTS `click_stats`;
+
 CREATE  TABLE `click_stats` (
   `id` BIGINT NOT NULL AUTO_INCREMENT ,
   `source_url` VARCHAR(512) NOT NULL ,
@@ -24,7 +24,7 @@ CREATE  TABLE `click_stats` (
   PRIMARY KEY (`id`) ) ENGINE=MyISAM;
 
 
-DROP TABLE IF EXISTS `search_terms`;
+
 CREATE  TABLE `search_terms` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `term` VARCHAR(256) NOT NULL ,
@@ -35,7 +35,7 @@ CREATE  TABLE `search_terms` (
   PRIMARY KEY (`id`) ) ENGINE=MyISAM;
 
 
-DROP TABLE IF EXISTS `search_occurence`;
+
 CREATE  TABLE `search_occurence` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `term` VARCHAR(256) NOT NULL ,

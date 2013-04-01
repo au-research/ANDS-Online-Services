@@ -19,7 +19,7 @@
 -- Table structure for table `fragment`
 --
 
-DROP TABLE IF EXISTS `fragment`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `fragment` (
@@ -39,7 +39,7 @@ CREATE TABLE `fragment` (
 -- Table structure for table `harvest`
 --
 
-DROP TABLE IF EXISTS `harvest`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `harvest` (
@@ -65,7 +65,7 @@ CREATE TABLE `harvest` (
 -- Table structure for table `harvest_parameter`
 --
 
-DROP TABLE IF EXISTS `harvest_parameter`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `harvest_parameter` (
@@ -82,7 +82,7 @@ CREATE TABLE `harvest_parameter` (
 -- Table structure for table `provider`
 --
 
-DROP TABLE IF EXISTS `provider`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `provider` (
@@ -96,7 +96,7 @@ CREATE TABLE `provider` (
 -- Table structure for table `request`
 --
 
-DROP TABLE IF EXISTS `request`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `request` (
@@ -111,7 +111,7 @@ CREATE TABLE `request` (
 -- Table structure for table `schedule`
 --
 
-DROP TABLE IF EXISTS `schedule`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `schedule` (

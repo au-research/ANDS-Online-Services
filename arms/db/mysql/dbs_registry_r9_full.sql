@@ -19,7 +19,7 @@
 -- Table structure for table `api_keys`
 --
 
-DROP TABLE IF EXISTS `api_keys`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `api_keys` (
@@ -36,7 +36,7 @@ CREATE TABLE `api_keys` (
 -- Table structure for table `background_tasks`
 --
 
-DROP TABLE IF EXISTS `background_tasks`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `background_tasks` (
@@ -59,7 +59,7 @@ CREATE TABLE `background_tasks` (
 -- Table structure for table `data_source_attributes`
 --
 
-DROP TABLE IF EXISTS `data_source_attributes`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `data_source_attributes` (
@@ -77,7 +77,7 @@ CREATE TABLE `data_source_attributes` (
 -- Table structure for table `data_source_logs`
 --
 
-DROP TABLE IF EXISTS `data_source_logs`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `data_source_logs` (
@@ -97,7 +97,7 @@ CREATE TABLE `data_source_logs` (
 -- Table structure for table `data_sources`
 --
 
-DROP TABLE IF EXISTS `data_sources`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `data_sources` (
@@ -114,7 +114,7 @@ CREATE TABLE `data_sources` (
 -- Table structure for table `harvest_parameter`
 --
 
-DROP TABLE IF EXISTS `harvest_parameter`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `harvest_parameter` (
@@ -128,7 +128,7 @@ CREATE TABLE `harvest_parameter` (
 -- Table structure for table `harvest_requests`
 --
 
-DROP TABLE IF EXISTS `harvest_requests`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `harvest_requests` (
@@ -151,7 +151,7 @@ CREATE TABLE `harvest_requests` (
 -- Table structure for table `institutional_pages`
 --
 
-DROP TABLE IF EXISTS `institutional_pages`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `institutional_pages` (
@@ -170,7 +170,7 @@ CREATE TABLE `institutional_pages` (
 -- Table structure for table `record_data`
 --
 
-DROP TABLE IF EXISTS `record_data`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `record_data` (
@@ -192,7 +192,7 @@ CREATE TABLE `record_data` (
 -- Table structure for table `registry_object_attributes`
 --
 
-DROP TABLE IF EXISTS `registry_object_attributes`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `registry_object_attributes` (
@@ -211,7 +211,7 @@ CREATE TABLE `registry_object_attributes` (
 -- Table structure for table `registry_object_metadata`
 --
 
-DROP TABLE IF EXISTS `registry_object_metadata`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `registry_object_metadata` (
@@ -230,7 +230,7 @@ CREATE TABLE `registry_object_metadata` (
 -- Table structure for table `registry_object_relationships`
 --
 
-DROP TABLE IF EXISTS `registry_object_relationships`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `registry_object_relationships` (
@@ -249,7 +249,7 @@ CREATE TABLE `registry_object_relationships` (
 -- Table structure for table `registry_objects`
 --
 
-DROP TABLE IF EXISTS `registry_objects`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `registry_objects` (
@@ -274,7 +274,7 @@ CREATE TABLE `registry_objects` (
 -- Table structure for table `search_statistics`
 --
 
-DROP TABLE IF EXISTS `search_statistics`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `search_statistics` (
@@ -288,7 +288,7 @@ CREATE TABLE `search_statistics` (
 -- Table structure for table `sessions`
 --
 
-DROP TABLE IF EXISTS `sessions`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sessions` (
@@ -306,7 +306,7 @@ CREATE TABLE `sessions` (
 -- Table structure for table `spatial_extents`
 --
 
-DROP TABLE IF EXISTS `spatial_extents`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `spatial_extents` (
@@ -323,7 +323,7 @@ CREATE TABLE `spatial_extents` (
 -- Table structure for table `tbl_terms`
 --
 
-DROP TABLE IF EXISTS `tbl_terms`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tbl_terms` (
@@ -351,7 +351,7 @@ CREATE TABLE `tbl_terms` (
 -- Table structure for table `tbl_vocabularies`
 --
 
-DROP TABLE IF EXISTS `tbl_vocabularies`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tbl_vocabularies` (
@@ -372,7 +372,7 @@ CREATE TABLE `tbl_vocabularies` (
 -- Table structure for table `url_mappings`
 --
 
-DROP TABLE IF EXISTS `url_mappings`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `url_mappings` (
@@ -393,7 +393,7 @@ CREATE TABLE `url_mappings` (
 -- Table structure for table `vocab_metadata`
 --
 
-DROP TABLE IF EXISTS `vocab_metadata`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `vocab_metadata` (
