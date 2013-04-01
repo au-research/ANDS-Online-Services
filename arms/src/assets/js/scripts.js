@@ -14,6 +14,15 @@ function changeHashTo(hash){
 	window.location.hash = suffix+hash;
 }
 
+function checkResponse(data)
+{
+	if (data.status == "ERROR")
+	{
+		console.log(data.message);
+		logErrorOnScreen(data.message);
+	}
+}
+
 
 function logErrorOnScreen(error, target){
 	var template = $('#error-template').html();
@@ -369,11 +378,20 @@ jQuery.fn.extend({
 
 
 $.ajaxSetup({
-    error: function(err) {
-        //do stuff when things go wrong
-        console.error(err);
-        logErrorOnScreen(err.responseText);
-    }
+	dataType: 'json',
+	error: function(data)
+	{
+		try
+		{
+			data = $.parseJSON(data.responseText);
+			checkResponse(data);
+			return;
+		}
+		catch (e)
+		{
+			logErrorOnScreen("An unknown error occured whilst communicating with the server.");
+		}
+	}
 });
 
 // implement JSON.stringify serialization

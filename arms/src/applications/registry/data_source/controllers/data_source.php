@@ -323,6 +323,14 @@ class Data_source extends MX_Controller {
 				}else{
 					$item['quality_level'] = $registry_object->quality_level;
 				}
+				switch($item['status']){
+					case 'DRAFT': $item['editable'] = true; $item['advance']=true;break;
+					case 'MORE_WORK_REQUIRED': $item['editable'] = true; $item['advance']=true;break;
+					case 'SUBMITTED_FOR_ASSESSMENT': $item['advance']=true; break;
+					case 'ASSESSMENT_IN_PROGRESS': $item['advance']=true; break;
+					case 'APPROVED': $item['editable'] = true; $item['advance']=true;break;
+					case 'PUBLISHED': $item['editable'] = true; break;
+				}
 				array_push($results['items'], $item);
 			}
 		}else return false;
@@ -357,7 +365,6 @@ class Data_source extends MX_Controller {
 		if(sizeof($affected_ids) == 0){
 			$menu['nothing'] = 'Select a Registry Object';
 		}else if(sizeof($affected_ids) == 1){
-			$menu['edit'] = 'Edit Registry Object';
 			$menu['view'] = 'View Registry Object';
 		}
 
@@ -389,9 +396,11 @@ class Data_source extends MX_Controller {
 							$menu['to_publish'] = 'Publish';
 						}
 					}
+					$menu['edit'] = 'Edit Registry Object';
 					break;
 				case 'MORE_WORK_REQUIRED':
 					$menu['to_draft'] = 'Move to Draft';
+					$menu['edit'] = 'Edit Registry Object';
 					break;
 				case 'SUBMITTED_FOR_ASSESSMENT':
 					$menu['to_assess'] = 'Assessment In Progress';
@@ -401,10 +410,12 @@ class Data_source extends MX_Controller {
 					$menu['to_moreworkrequired'] = 'More Work Required';
 					break;
 				case 'APPROVED':
+					$menu['edit'] = 'Edit Registry Object';
 					$menu['to_publish'] = 'Publish';
 					break;
 				case 'PUBLISHED':
 					$menu['to_draft'] = 'Move to Draft';
+					$menu['edit'] = 'Edit Registry Object';
 					$menu['set_gold_status_flag'] = 'Set Gold Status';
 					break;
 			}
@@ -533,14 +544,12 @@ class Data_source extends MX_Controller {
 		}
 		
 		$harvesterStatus = $dataSource->getHarvesterStatus();
-		//$date = new DateTime($harvesterStatus['next_harvest']);
-		//$date = $date->format('Y-m-d H:i:s');
 		$jsonData['item']['harvester_status'] = $harvesterStatus;
-		//array(
-		//	'status'=>$harvesterStatus['status'],
-		//	'next_harvest'=> $date
-		//);
-
+		foreach($jsonData['item']['harvester_status'] as &$ss){
+			$date = new DateTime($ss['next_harvest']);
+			$date = $date->format('Y-m-d H:i:s');
+			$ss['next_harvest'] = $date;
+		}
 		$jsonData = json_encode($jsonData);
 		echo $jsonData;
 	}

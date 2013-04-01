@@ -28,6 +28,7 @@
     <script>
         localStorage.clear();
         var base_url = '<?php echo base_url();?>';
+        var real_base_url = "<?php echo $this->config->item('default_base_url');?>";
         var suffix = '<?php echo url_suffix();?>';
         var editor = '';
     </script>

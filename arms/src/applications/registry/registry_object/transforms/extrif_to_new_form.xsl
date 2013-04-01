@@ -733,10 +733,10 @@
 				<h1>Rights</h1>
 				<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
 			</div>
-			<div class="aro_box_part" type="rightStatement">
+			<div class="aro_box_part" type="rightsStatement">
 				<label>Rights Statement</label>
-				<input type="text" class="input-xlarge" name="rightsUri" placeholder="Rights Uri" value="{ro:rightStatement/@rightsUri}"/>
-				<input type="text" class="input-xlarge" name="value" placeholder="Value" value="{ro:rightStatement/text()}"/>
+				<input type="text" class="input-xlarge" name="rightsUri" placeholder="Rights Uri" value="{ro:rightsStatement/@rightsUri}"/>
+				<input type="text" class="input-xlarge" name="value" placeholder="Value" value="{ro:rightsStatement/text()}"/>
 			</div>
 			<div class="aro_box_part" type="licence">
 				<label>Licence</label>
@@ -1244,10 +1244,10 @@
 				<h1>Rights</h1>
 				<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
 			</div>
-			<div class="aro_box_part" type="rightStatement">
+			<div class="aro_box_part" type="rightsStatement">
 				<label>Rights Statement</label>
-				<input type="text" class="input-xlarge" name="rightsUri" placeholder="Rights Uri" value="{ro:rightStatement/@rightsURI}"/>
-				<input type="text" class="input-xlarge" name="value" placeholder="Value" value="{ro:rightStatement/text()}"/>
+				<input type="text" class="input-xlarge" name="rightsUri" placeholder="Rights Uri" value="{ro:rightsStatement/@rightsURI}"/>
+				<input type="text" class="input-xlarge" name="value" placeholder="Value" value="{ro:rightsStatement/text()}"/>
 			</div>
 			<div class="aro_box_part" type="licence">
 				<label>Licence</label>

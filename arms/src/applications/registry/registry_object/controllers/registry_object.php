@@ -165,8 +165,7 @@ class Registry_object extends MX_Controller {
 		$this->load->model('data_source/data_sources', 'ds');
 		$ro = $this->ro->getByID($registry_object_id);
 
-		if (!$ro)
-		{
+		if (!$ro){
 			throw new Exception("No registry object exists with that ID!");
 		}
 
@@ -177,15 +176,11 @@ class Registry_object extends MX_Controller {
 		$this->importer->setDatasource($ds);
 		$this->importer->commit();
 
-
 		$error_log = $this->importer->getErrors();
-
-		if ($error_log)
-		{
+		if ($error_log){
 			throw new Exception("Errors during saving this registry object! " . BR . implode($error_log, BR));
 		}
-		else
-		{
+		else{
 			echo json_encode(array("status"=>"success"));
 		}
 	}

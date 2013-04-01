@@ -519,9 +519,6 @@ class _data_source {
 		$query = $this->db->get_where("harvest_requests", array("data_source_id"=>$this->id,));
 		if($query->num_rows()>0){
 			return $query->result_array();
-			//foreach($query->result_array() as $row){
-			//	return $row;
-			//}
 		}
 	}
 	

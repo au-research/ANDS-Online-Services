@@ -446,7 +446,7 @@ function initEditForm(){
 			xml+='</'+ro_class+'></registryObject>';
 			$('#myModal .modal-header h3').html('<h3>Save &amp; Validate Registry Object</h3>');
 			$('#myModal .modal-body').html('<div style="width:100%; margin:both; text-align:center;">' + 
-											'<img src="'+base_url+'assets/img/ajax-loader.gif" style="padding-top:25px;" />' +
+											'<img src="'+real_base_url+'assets/img/ajax-loader.gif" style="padding-top:25px;" />' +
 											'<p></p><p><small>Saving your Registry Object...</small></p>' +
 											'</div>');
 			$('#myModal .modal-footer').html('');
@@ -470,9 +470,11 @@ function initEditForm(){
 				data: {xml:xml},
 				success: function(data){
 					log(data);
+					$('#myModal .modal-body').html(data.message);
 				},
 				error: function(data){
-					log(data);
+					data = $.parseJSON(data.responseText);
+					$('#myModal .modal-body').html(data.message);
 				}
 			});
 		}

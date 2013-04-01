@@ -145,9 +145,12 @@
 				<div class="toolbar">
 					<div class="btn-group">
 						<button class="btn btn-small op" action="view" tip="View" ro_id="{{id}}"><i class="icon icon-search"></i></button>
-						<button class="btn btn-small op" action="edit" tip="Edit" ro_id="{{id}}"><i class="icon icon-edit"></i></button>
-						<!--button class="tipTag btn btn-small" ro_id="{{id}}"><i class="icon icon-tag"></i></button-->
-						<button class="btn btn-small op" action="advance_status" to="{{connectTo}}" tip="Advance Status" ro_id="{{id}}"><i class="icon icon-share-alt"></i></button>
+						{{#editable}}
+							<button class="btn btn-small op" action="edit" tip="Edit" ro_id="{{id}}"><i class="icon icon-edit"></i></button>
+						{{/editable}}
+						{{#advance}}
+							<button class="btn btn-small op" action="advance_status" to="{{connectTo}}" tip="Advance Status" ro_id="{{id}}"><i class="icon icon-share-alt"></i></button>
+						{{/advance}}
 						<button class="contextmenu btn btn-small" status="{{name}}" tip="More Action">More</button>
 					</div>
 				</div>
