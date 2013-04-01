@@ -854,7 +854,7 @@
 							<label class="control-label" for="title">Title</label>
 							<div class="controls">
 								<input type="text" class="input-xlarge" name="title" value="{{title}}">
-								<p class="help-inline"><small>Help</small></p>
+								<p class="help-inline"><small></small></p>
 							</div>
 						</div>
 
