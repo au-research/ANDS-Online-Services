@@ -223,7 +223,7 @@
 			</div>
 
 			{{#harvester_status}}
-			<div class="widget-content alert">A harvest is scheduled: <b>{{next_harvest}}</b> <button class="btn delete delete_harvest pull-right" data_source_id="{{data_source_id}}" harvest_id="{{id}}"><i class="icon-remove"></i> Delete Harvest</button></div>	
+			<div class="widget-content alert">A harvest is scheduled: <b>{{next_harvest}}</b> <button class="btn delete delete_harvest pull-right" data_source_id="{{data_source_id}}" harvest_id="{{id}}"><i class="icon-remove"></i> Cancel Harvest</button></div>	
 			{{/harvester_status}}
 			<div class="widget-title">
 				<h5>Activity Log</h5>

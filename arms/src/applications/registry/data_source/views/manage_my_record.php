@@ -69,6 +69,10 @@
 					<span id="active_filters">
 						
 					</span>
+
+					<div class="btn-group pull-right" style="margin-right:35px;">
+				  		<button class="btn btn-mini mdr page-control op" action="manage_deleted_records" data_source_id="<?php echo $ds->id;?>"><i class="icon-time"></i> View Deleted Records</button>
+					</div>
 				</div>
 			</div>
 			

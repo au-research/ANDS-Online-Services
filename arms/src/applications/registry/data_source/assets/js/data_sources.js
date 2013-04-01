@@ -728,7 +728,7 @@ function load_datasource_edit(data_source_id, active_tab){
 		dataType: 'json',
 		error: function(data)
 		{
-			checkReponse(data);
+			checkResponse(data);
 		},
 		success: function(data){
 			//console.log(data);

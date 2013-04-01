@@ -22,7 +22,7 @@
 			<div class="span12">
 				<?php
 					if($record_count == 0){
-						echo "No deleted records were found."; 
+						echo "No deleted records were found. <a href='javascript:window.history.back();'>Go Back</a>.";  
 					}elseif($record_count == 1){
 						echo $record_count."deleted record"; 
 					}else{

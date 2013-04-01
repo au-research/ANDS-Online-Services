@@ -153,6 +153,10 @@ $(function() {
                 var updating = [$(this).attr('ro_id')];
                   update(updating, attributes);
                 break;
+            case 'manage_deleted_records':
+                var data_source_id = $(this).attr('data_source_id');
+                window.location = base_url+'data_source/manage_deleted_records/'+data_source_id;
+                break;
         }
     });
 
