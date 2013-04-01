@@ -19,7 +19,7 @@ class Importer {
 	private $forceDraft; 
 
 	private $status; // status of the currently ingested record
-
+	public $isImporting = false; // flag stating whether the importer is running
 	private $importedRecords;
 
 	public $ingest_attempts;
@@ -69,6 +69,7 @@ class Importer {
 		// Enable memory profiling...
 		//ini_set('xdebug.profiler_enable',1);
 		//xdebug_enable();
+		$this->isImporting = true;
 
 		//$this->CI->output->enable_profiler(TRUE);
 		if (is_null($this->start_time))
@@ -78,7 +79,10 @@ class Importer {
 
 		// Some sanity checks
 		if (!($this->dataSource instanceof _data_source))
+		{
 			throw new Exception("No valid data source selected before import commit.");
+			$this->isImporting = false;
+		}
 
 		$this->CI->benchmark->mark('crosswalk_execution_start');
 		
@@ -119,6 +123,7 @@ class Importer {
 				}
 				catch (Exception $e)
 				{
+					$this->isImporting = false;
 					throw new Exception("Unable to parse XML into object (registryObject #".($idx+1)."): " . NL . $e->getMessage());
 				}
 
@@ -185,6 +190,7 @@ class Importer {
 			$this->message_log[] = $this->standardLog;
 		}
 
+		$this->isImporting = false;
 	}
 
 
@@ -268,7 +274,9 @@ class Importer {
 							$ro->original_status = $this->status;
 						}
 						$ro->status = $this->status;
-						
+
+						// Trigger a save on the new registryObject (to make handleStatusChange get called here)
+						$ro->save(); // this will cause the $ro pointer to be updated to the "active" version of the record
 						
 						$ro->harvest_id = $this->harvestID;
 						$ro->record_owner = $record_owner;
@@ -722,12 +730,7 @@ class Importer {
 	public function getRifcsFromFeed($oai_feed)
 	{
 
-		/*if(substr($oai_feed, 0, 1) != '<')
-		{
-			$oai_feed = utf8_decode($oai_feed);
-		}*/
 		$result = '';
-		//$sxml = $this._getSimpleXMLFromString($oai_feed);
 		$sxml = simplexml_load_string($oai_feed);
 		if($sxml)
 		{
@@ -852,6 +855,7 @@ class Importer {
 		$this->importedRecords = array();
 		$this->affected_records = array();
 		$this->partialCommitOnly = false;
+		$this->isImporting = false;
 		$this->solr_queue = array();
 		$this->forcePublish = false;
 		$this->forceDraft = false; 

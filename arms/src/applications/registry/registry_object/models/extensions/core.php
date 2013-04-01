@@ -193,18 +193,25 @@ class Core_extension extends ExtensionBase
 				$this->init();
 			}
 
-			// Add the XML content of this draft to the published record (and follow enrichment process, etc.)
-			
-			$this->_CI->importer->_reset();
-			$this->_CI->importer->setXML($xml);
-			$this->_CI->importer->setDatasource($data_source);
-			$this->_CI->importer->forcePublish();
-			$this->_CI->importer->statusAlreadyChanged = true;
-			$this->_CI->importer->commit();
-
-			if ($error_log = $this->_CI->importer->getErrors())
+			// If the importer is already running
+			if ($this->_CI->importer->isImporting)
 			{
-				throw new Exception("Errors occured whilst migrating to PUBLISHED status: " . NL . $error_log);
+				// other actions will occur in the existing importer run...
+			}
+			else
+			{
+				// Add the XML content of this draft to the published record (and follow enrichment process, etc.)
+				$this->_CI->importer->_reset();
+				$this->_CI->importer->setXML($xml);
+				$this->_CI->importer->setDatasource($data_source);
+				$this->_CI->importer->forcePublish();
+				$this->_CI->importer->statusAlreadyChanged = true;
+				$this->_CI->importer->commit();
+
+				if ($error_log = $this->_CI->importer->getErrors())
+				{
+					throw new Exception("Errors occured whilst migrating to PUBLISHED status: " . NL . $error_log);
+				}
 			}
 		}
 		else // Else, the PUBLISHED record is being converted to a DRAFT
