@@ -438,7 +438,6 @@ function initVocabWidgets(container){
 function loadHarvestLogs(logid, refresh){
 	if(refresh !== 'undefined' && refresh == true)
 	{
-		log("refreshing...");
 		$('#test_harvest_activity_log .modal-body').html('');
 	}
 	$.ajax({
@@ -447,7 +446,6 @@ function loadHarvestLogs(logid, refresh){
 		type: 'POST',
 		dataType: 'json',
 		success: function(data){
-			log("DATA:" + data);
 			var logsTemplate = "<table class='table table-hover'>"+
 			"<thead><tr><th>#</th><th>DATE</th><th>TYPE</th><th>LOG</th></tr></thead>" +
 			"<tbody>" +

@@ -8,9 +8,9 @@ $(function(){
 	// 	updateStat();
 	// }, 2000);
 
-	// setInterval(function(){
-	// 	updateDataSourcesStat();
-	// }, 10000);
+	 setInterval(function(){
+	 	updateStat();
+	 }, 10000);
 });
 
 function initView(){

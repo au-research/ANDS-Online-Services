@@ -97,7 +97,7 @@ class Maintenance extends MX_Controller {
 	 * @param  int $data_source_id 
 	 * @return json result
 	 */
-	function indexDS($data_source_id){
+	function indexDS($data_source_id, $logit = false){
 		header('Cache-Control: no-cache, must-revalidate');
 		header('Content-type: application/json');
 
@@ -146,20 +146,50 @@ class Maintenance extends MX_Controller {
 			$data['results'] = $response;
 			$data['errors'] = $errors;
 			$data['totalAdded'] = $i;
-			echo json_encode($data);
 		}
-
+		if(!$logit)
+			echo json_encode($data);
+		else
+			return json_encode($data);
 	}
 
-	function clearDS($data_source_id){
+	function clearDS($data_source_id, $logit = false){
 		header('Cache-Control: no-cache, must-revalidate');
 		header('Content-type: application/json');
 		$this->load->library('solr');
 		$data['result'] = $this->solr->clear($data_source_id);
-		echo json_encode($data);
-
+		if(!$logit)
+			echo json_encode($data);
+		else
+			return json_encode($data);
 	}
 	
+	function clearAll()
+	{
+		
+		$data = array();
+		$data['logs'] = '';
+		$this->load->model('data_source/data_sources', 'ds');
+		$dsIds = $this->ds->getAll(0);
+		$data_sources = $this->ds->getAll(0);
+		foreach($data_sources as $ds){
+			$data['logs'] .= $this->clearDS($ds->id, true);
+		}
+		echo json_encode($data);
+	}
+
+	function indexAll()
+	{
+		
+		$data = array();
+		$data['logs'] = '';
+		$this->load->model('data_source/data_sources', 'ds');
+		$data_sources = $this->ds->getAll(0);
+		foreach($data_sources as $ds){
+			$data['logs'] .= $this->indexDS($ds->id, true);
+		}
+		echo json_encode($data);
+	}
 	/**
 	 * @ignore
 	 */
