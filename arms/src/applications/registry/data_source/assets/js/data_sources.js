@@ -587,12 +587,13 @@ function validateFields(jsonData){
 	{
 		errorStr = errorStr + "You must provide a class ,registered key and all relationship types for the primary relationship.<br /><br />";
 
-	
-		if(included(jsonData,'class_2') && (!included(jsonData,'primary_key_2')||!included(jsonData,'service_rel_2')||!included(jsonData,'activity_rel_2')||!included(jsonData,'collection_rel_2')||!included(jsonData,'party_rel_2')))
-		{
-			errorStr = errorStr +  "You must provide a registered key and all relationship types for the 2nd primary relationship.<br />";	
-		}
 	}
+	
+	if(included(jsonData,'class_2') && (!included(jsonData,'primary_key_2')||!included(jsonData,'service_rel_2')||!included(jsonData,'activity_rel_2')||!included(jsonData,'collection_rel_2')||!included(jsonData,'party_rel_2')))
+	{
+		errorStr = errorStr +  "You must provide a registered key and all relationship types for the 2nd primary relationship.<br />";	
+	}
+	
 
 	if(!included(jsonData,'title'))
 	{

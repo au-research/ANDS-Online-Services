@@ -904,6 +904,34 @@ public function getContributorGroupsEdit()
 				
 				}
 
+				if($this->input->post('class_2')=='')
+				{
+					switch($attrib){
+						case 'primary_key_2':
+						case 'service_rel_2':
+						case 'activity_rel_2':
+						case 'collection_rel_2':
+						case 'party_rel_2':		
+							$new_value = '';
+							break;
+						default:
+							break;
+					}
+				}
+				if($this->input->post('class_1')=='')
+				{
+					switch($attrib){
+						case 'primary_key_1':
+						case 'service_rel_1':
+						case 'activity_rel_1':
+						case 'collection_rel_1':
+						case 'party_rel_1':		
+							$new_value = '';
+							break;
+						default:
+							break;
+					}
+				}
 
 			/*	this push to nla functionality has been removed as NLA aren't using it and the ds admins were getting confused
 
