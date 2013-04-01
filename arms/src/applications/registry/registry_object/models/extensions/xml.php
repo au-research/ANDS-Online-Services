@@ -53,14 +53,15 @@ class XML_Extension extends ExtensionBase
 
 			$xml = $this->getRif($record_data_id);
 			$this->_simplexml = simplexml_load_string($xml);
+
+			$namespaces = $this->_simplexml->getNamespaces(true);
+			if ( !in_array(RIFCS_NAMESPACE, $namespaces) )
+			{    
+				$this->_simplexml->addAttribute("xmlns",RIFCS_NAMESPACE);
+			}
+
 			$this->_simplexml->registerXPathNamespace("ro", RIFCS_NAMESPACE);
 			$this->_simplexml->registerXPathNamespace("extRif", EXTRIF_NAMESPACE);
-
-			// Backwards compatibility with "unwrapped" RIFCS
-			if ($this->_simplexml->registryObject)
-			{
-				$this->_simplexml = $this->_simplexml->registryObject;
-			}
 			
 			return $this->_simplexml;
 		}
