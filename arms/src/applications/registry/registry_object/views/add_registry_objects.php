@@ -33,7 +33,7 @@
 			<div class="control-group">
 				<label class="control-label">Data source</label>
 				<div class="controls">
-					<select class="chosen" name="data_source_id" required>
+					<select name="data_source_id" required>
 						<?php foreach($ownedDatasource as $ds):?>
 							<option value="<?php echo $ds->id;?>"><?php echo $ds->title;?></option>
 						<?php endforeach;?>

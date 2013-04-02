@@ -204,6 +204,7 @@ class Registry_object extends MX_Controller {
 	public function add_new(){
 		header('Cache-Control: no-cache, must-revalidate');
 		header('Content-type: application/json');
+		$this->load->library('importer');
 		$data = $this->input->post('data');
 		
 		$this->load->model('registry_objects', 'ro');
@@ -218,24 +219,31 @@ class Registry_object extends MX_Controller {
 		$jsondata['message'] = 'do datasource';
 
 		} 
-		else{
-			// XXX: this is BAD -- must use the importer!!!
-			$ro = $this->ro->create($ds, $data['registry_object_key'], $data['ro_class'], "", 'DRAFT', urlencode($data['registry_object_key']), $record_owner, '');
-			$ro->group = $data['group'];
-			$ro->type = $data['type'];
+		else{	
+			$this->importer->setDatasource($ds);
 			$xml = "<registryObject group='".$data['group']."'>".NL;
 	  		$xml .= "<key>".$data['registry_object_key']."</key>".NL;
 	  		$xml .= "<originatingSource type=''>".$data['originating_source']."</originatingSource>".NL;
 	  		$xml .= "<".$data['ro_class']." type='".$data['type']."'>".NL;
 	  		$xml .= "</".$data['ro_class'].">".NL;
 			$xml .= "</registryObject>";
-			$ro->updateXML($xml);
-			$ro->save();
-			$ro->enrich();
-			$jsondata['success'] = true;
-			$jsondata['message'] = 'new Registry Object with id ' . $ro->id . ' was created';
+			$this->importer->setXML(wrapRegistryObjects($xml));
+			$this->importer->commit();
+			$error_log = $this->importer->getErrors();
+			if($error_log)
+			{
+				$jsondata['success'] = false;
+				$jsondata['message'] = $error_log;			
+			}
+			else{
+				$jsondata['success'] = true;
+				$ro = $this->ro->getDraftByKey($data['registry_object_key']);
+				if(!$ro)
+				$ro = $this->ro->getPublishedByKey($data['registry_object_key']);
+				$jsondata['ro_id'] = $ro->id;
+				$jsondata['message'] = 'new Registry Object with id ' . $ro->id . ' was created';	
+			}
 		} 
-		$jsondata['ro_id'] = $ro->id;
  		echo json_encode($jsondata);
 	}
 

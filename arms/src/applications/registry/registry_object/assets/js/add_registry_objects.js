@@ -4,7 +4,7 @@ $(function(){
 	$('.addButton').live({
 		click:function(e){
 			e.preventDefault();
-			console.log($(this).attr('id'));
+			//console.log($(this).attr('id'));
 			var ro_class = $(this).attr('id');
 			$('#AddNewDS_confirm').attr('ro_class', ro_class);
 			$('#AddNewDS_confirm').html('Add New '+ro_class);
@@ -12,8 +12,24 @@ $(function(){
 			Core_bindFormValidation($('#AddNewDS form'));
 		}
 	});	
+/*
+	$('#generate_random_key').die().live({
+		click:function(e){
+			console.log("base_url" + base_url);
+			// e.preventDefault();
+			var input = $(this).prev('input');
+			$.ajax({
+				type: 'GET',
+				url: base_url+'services/registry/get_random_key/',
+				success:function(data){
+					console.log(data);
+					$(input).val(data);
+				}
+			});
+		}
+	}); */
 
-	$('#generate_random_key').live({
+	$('#generate_random_key').die().live({
 		click:function(e){
 			e.preventDefault();
 			var input = $(this).prev('input');
@@ -21,12 +37,16 @@ $(function(){
 				type: 'GET',
 				url: base_url+'services/registry/get_random_key/',
 				success:function(data){
-					console.log("random Key:" + data);
 					$(input).val(data)
+				},
+				error:function(data){
+					console.log(data.responseText);
+					$(input).val(data.responseText);
 				}
 			});
 		}
 	});
+
 	$('#AddNewDS_confirm').die().live({
 		click:function(e){
 			e.preventDefault();
