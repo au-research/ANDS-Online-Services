@@ -643,8 +643,8 @@ a.browse_button{
 /***********************************************************************************/
 .container {
 	width: 960px;
-	margin: 35px auto 0px; auto	
-	padding: 10px 0 0 0;
+	margin: 35px auto 35px auto;	
+	padding: 10px 0 10px 0;
 	position: relative;
 }
 .less_padding {

@@ -20,6 +20,7 @@ $(document).ready(function() {
 		var words = query.split('/');
 		// $('.tabs').hide();
 		$('#search_box, #selected_group, #selected_subject').empty();
+		$('div.qtip:visible').qtip('hide');
 		searchData = {};
 		fieldString = '';
 

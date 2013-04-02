@@ -48,9 +48,9 @@
 		</ul>
 	</div>
 	
-	<div class="social">
+	<!--div class="social">
 		<a href="feed/rss"><img src="<?php echo asset_url('images/rss.png','core');?>" alt="" /></a><a href="https://twitter.com/andsdata"><img src="<?php echo asset_url('images/twitter.png','core');?>" alt="" /></a>
-	</div><!-- social -->
+	</div-->
 
 
 <script type="text/x-mustache" id="spotlight_template">

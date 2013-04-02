@@ -31,7 +31,4 @@
 	<p>If you are interested in contributing to Research Data Australia please email <a href="mailto:services@ands.org.au">services@ands.org.au</a></p>
 	
 </div><!-- container -->
-<div class="social">
-	<a href="#"><img src="<?php echo asset_url('images/facebook.png');?>" alt="" /></a><a href="#"><img src="<?php echo asset_url('images/twitter.png');?>" alt="" /></a> RSS,ATOM and Twitter feeds are now available. Learn more here....
-</div><!-- social -->
 <?php $this->load->view('rda_footer');?>
