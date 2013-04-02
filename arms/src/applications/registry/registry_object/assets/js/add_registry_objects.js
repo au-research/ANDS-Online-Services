@@ -12,22 +12,13 @@ $(function(){
 			Core_bindFormValidation($('#AddNewDS form'));
 		}
 	});	
-/*
-	$('#generate_random_key').die().live({
-		click:function(e){
-			console.log("base_url" + base_url);
-			// e.preventDefault();
-			var input = $(this).prev('input');
-			$.ajax({
-				type: 'GET',
-				url: base_url+'services/registry/get_random_key/',
-				success:function(data){
-					console.log(data);
-					$(input).val(data);
-				}
-			});
-		}
-	}); */
+    $('input[name=key]').on({
+    	blur: function(e){
+    		log('st')
+    		e.preventDefault();
+    		$('.alert-error').hide();
+    	}
+    });
 
 	$('#generate_random_key').live({
 		click:function(e){
