@@ -362,27 +362,39 @@
         <!--<p><b>Subjects:</b>-->
         <p><xsl:text>&amp;nbsp;</xsl:text></p>
         <h4>Subjects</h4>
+
         <!-- ANZSRC SUBJECTS -->
-        <xsl:if test="../extRif:extendedMetadata/extRif:subjects/extRif:subject/extRif:subject_type ='anzsrc-for' or ../extRif:extendedMetadata/extRif:subjects/extRif:subject/extRif:subject_type='anzsrc-seo' or ../extRif:extendedMetadata/extRif:subjects/extRif:subject/extRif:subject_type='anzsrc-toa'">
+        <xsl:if test="../extRif:extendedMetadata/extRif:subjects/extRif:subject/extRif:subject_type ='anzsrc-for'">
             <p class="subject_type">Field of Research</p>
             <div class="tags">
                 <xsl:for-each select="../extRif:extendedMetadata/extRif:subjects/extRif:subject">      
                     <xsl:sort select="extRif:subject_type"/>
-                    <xsl:if test="extRif:subject_type='anzsrc-for' or extRif:subject_type='anzsrc-seo' or extRif:subject_type='anzsrc-toa'">
+                    <xsl:if test="extRif:subject_type='anzsrc-for'">
                         <xsl:apply-templates select="."/>
                     </xsl:if>
                 </xsl:for-each>
             </div>
         </xsl:if>
-        
+
+        <xsl:if test="../extRif:extendedMetadata/extRif:subjects/extRif:subject/extRif:subject_type ='anzsrc-seo'">
+            <p class="subject_type">Socio-economic Objective</p>
+            <div class="tags">
+                <xsl:for-each select="../extRif:extendedMetadata/extRif:subjects/extRif:subject">      
+                    <xsl:sort select="extRif:subject_type"/>
+                    <xsl:if test="extRif:subject_type='anzsrc-seo'">
+                        <xsl:apply-templates select="."/>
+                    </xsl:if>
+                </xsl:for-each>
+            </div>
+        </xsl:if>
 
         <!-- OTHER SUBJECTS -->
-        <xsl:if test="../extRif:extendedMetadata/extRif:subjects/extRif:subject/extRif:subject_type!='anzsrc-for' and ../extRif:extendedMetadata/extRif:subjects/extRif:subject/extRif:subject_type!='anzsrc-seo' and ../extRif:extendedMetadata/extRif:subjects/extRif:subject/extRif:subject_type!='anzsrc-toa'">
+        <xsl:if test="../extRif:extendedMetadata/extRif:subjects/extRif:subject/extRif:subject_type!='anzsrc-for' and ../extRif:extendedMetadata/extRif:subjects/extRif:subject/extRif:subject_type!='anzsrc-seo'">
             <p>Keywords</p> 
             <div class="tags">
                 <xsl:for-each select="../extRif:extendedMetadata/extRif:subjects/extRif:subject">      
                     <xsl:sort select="extRif:subject_type"/>
-                    <xsl:if test="extRif:subject_type!='anzsrc-for'and extRif:subject_type!='anzsrc-seo' and extRif:subject_type!='anzsrc-toa'">
+                    <xsl:if test="extRif:subject_type!='anzsrc-for'and extRif:subject_type!='anzsrc-seo'">
                         <xsl:apply-templates select="."/>
                     </xsl:if>
                 </xsl:for-each>
