@@ -227,6 +227,7 @@ class Registry_object extends MX_Controller {
 	  		$xml .= "<".$data['ro_class']." type='".$data['type']."'>".NL;
 	  		$xml .= "</".$data['ro_class'].">".NL;
 			$xml .= "</registryObject>";
+			$this->importer->forceDraft();
 			$this->importer->setXML(wrapRegistryObjects($xml));
 			$this->importer->commit();
 			$error_log = $this->importer->getErrors();
