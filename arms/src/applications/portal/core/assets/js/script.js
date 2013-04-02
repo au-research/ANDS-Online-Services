@@ -109,7 +109,7 @@ $(document).ready(function() {
 	$(document).on('click', '.ro_preview_header', function(e){
     	e.preventDefault();
     	$(this).next('.ro_preview_description').slideToggle();
-	})
+	});
 
 
 	function getURLParameter(name) 

@@ -386,7 +386,7 @@ function initEditForm(){
 				type: 'GET',
 				url: base_url+'services/registry/get_random_key/',
 				success:function(data){
-					$(input).val(data)
+					$(input).val(data.key);
 				}
 			});
 		}

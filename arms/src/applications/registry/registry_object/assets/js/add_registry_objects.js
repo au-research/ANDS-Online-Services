@@ -14,7 +14,6 @@ $(function(){
 	});	
     $('input[name=key]').on({
     	blur: function(e){
-    		log('st')
     		e.preventDefault();
     		$('.alert-error').hide();
     	}
