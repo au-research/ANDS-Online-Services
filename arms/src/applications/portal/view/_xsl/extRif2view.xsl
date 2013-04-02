@@ -195,16 +195,16 @@
         </xsl:otherwise> 
 
         </xsl:choose>   
+
+        <!-- DISPLAY ALTERNATE TITLES/NAMES -->
+        <xsl:apply-templates select="ro:name[@type='alternative']"/>
+
+        <xsl:apply-templates select="ro:name[@type='abbreviated']"/>
+
+        <!-- DISPLAY LOGO -->
+        <xsl:apply-templates select="../extRif:extendedMetadata/extRif:displayLogo"/>
+
     </div> 
-
-<!-- DISPLAY ALTERNATE TITLES/NAMES -->
-<xsl:apply-templates select="ro:name[@type='alternative']"/>
-
-<xsl:apply-templates select="ro:name[@type='abbreviated']"/>
-
-
-<!-- DISPLAY LOGO -->
-<xsl:apply-templates select="../extRif:extendedMetadata/extRif:displayLogo"/>
 
 
 <div class="post">
@@ -512,8 +512,6 @@
  </img>
 </div>   --> 
 
-    <div class="page_title" id="displaytitle">
-
       <xsl:apply-templates select="../extRif:logo"/>
       
        <h1><xsl:value-of select="." disable-output-escaping="no"/></h1>
@@ -529,7 +527,6 @@
           </xsl:otherwise>
         </xsl:choose>
       </xsl:for-each> 
-    </div>
 </xsl:template>
 
 <xsl:template match="extRif:displayLogo">
