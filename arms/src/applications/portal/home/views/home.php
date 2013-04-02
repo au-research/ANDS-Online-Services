@@ -28,7 +28,7 @@
 		</div><!-- intro_box -->
 	</div><!-- intro -->
 	<div class="right">
-		<h3>Spotlight on Research Data Australia</h3>
+		<h3>Spotlight on research data</h3>
 		<div class="flexslider" id="spotlight">
 		</div><!-- flexslider -->
 		<div class="clear"></div>
