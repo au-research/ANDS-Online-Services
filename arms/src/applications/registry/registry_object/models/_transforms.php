@@ -11,6 +11,7 @@ class Transforms {
 	static $extrif_to_form_transformer = NULL;
 	static $feed_to_rif_transformer = NULL;
 	static $extrif_to_dc_transformer = NULL;
+	static $form_to_cleanrif_transformer = NULL;
 	
 
 	static function get_qa_transformer()
@@ -110,6 +111,20 @@ class Transforms {
 		}
 
 		return self::$get_feed_to_rif_transformer;
+	}
+
+	static function get_form_to_cleanrif_transformer()
+	{
+		if (is_null(self::$form_to_cleanrif_transformer))
+		{
+			$cleanEmtyTags = new DomDocument();
+			$cleanEmtyTags->load(APP_PATH.'registry_object/transforms/clean_empty_tags.xsl');
+			$cleanEmtyTagsproc = new XSLTProcessor();
+			$cleanEmtyTagsproc->importStyleSheet($cleanEmtyTags);
+			self::$form_to_cleanrif_transformer =	$cleanEmtyTagsproc;
+		}
+
+		return self::$form_to_cleanrif_transformer;
 	}
 	
 }		

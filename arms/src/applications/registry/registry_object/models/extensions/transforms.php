@@ -101,5 +101,20 @@ class Transforms_Extension extends ExtensionBase
 		}
 	}
 
+	function cleanRFCSofEmptyTags($rifcs){
+		try{
+			$xslt_processor = Transforms::get_form_to_cleanrif_transformer();
+			$dom = new DOMDocument();
+			//$dom->loadXML($this->ro->getXML());
+			$dom->loadXML($rifcs);
+			//$dom->loadXML($rifcs);
+			return html_entity_decode($xslt_processor->transformToXML($dom));
+		}catch (Exception $e)
+		{
+			echo "UNABLE TO TRANSFORM" . BR;
+			echo "<pre>" . nl2br($e->getMessage()) . "</pre>" . BR;
+		}
+	}
+
 }
 	
