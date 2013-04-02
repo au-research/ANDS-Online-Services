@@ -57,7 +57,7 @@
 
 				<div class="widget-box">
 					<div class="widget-title">
-						<h5>Metadata</h5>
+						<h5>Registry Metadata</h5>
 					</div>
 					<div class="widget-content">
 						<table class="table table-bordered table-striped">
