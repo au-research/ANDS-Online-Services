@@ -233,7 +233,7 @@ function initSearchPage(){
 		 });
 	}else{
 		$('#searchmap').hide();
-		$('.container').css({margin:'0 auto',width:'922px',padding:'10px 0 0 0'});
+		$('.container').css({margin:'0 auto',width:'960px',padding:'10px 0 0 0'});
 		$('.main').css({width:'633px',padding:'20px 0 0 0'});
 		$('.facet_class').hide();
 		$('.sidebar').removeClass('mapmode_sidebar');

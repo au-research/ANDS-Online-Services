@@ -170,7 +170,6 @@ pre {
 }
 h1,
 h1 a {
-	color:#2f3134;
 	font-size:31px;	
 	font-weight: bold;	
 	line-height:37px;
@@ -178,7 +177,6 @@ h1 a {
 }
 h2,
 h2 a {
-	color:#2f3134;
 	font-size:26px;	
 	font-weight: bold;
 	line-height:32px;
@@ -186,7 +184,6 @@ h2 a {
 }
 h3,
 h3 a {
-	color:#9ab790;
 	font-size:21px;	
 	font-weight:bold;	
 	line-height:26px;
@@ -200,7 +197,6 @@ h3 a {
 }
 h4,
 h4 a {
-	color:#2f3134;
 	font-size:18px;	
 	font-weight:bold;		
 	line-height:22px;
@@ -208,7 +204,6 @@ h4 a {
 }
 h5,
 h5 a {
-	color:#2f3134;
 	font-size:13px;	
 	font-weight:bold;		
 	line-height:16px;
@@ -381,7 +376,7 @@ a.logo img {
 }
 
 .search .inner {
-	width: 922px;
+	width: 960px;
 	margin: 0 auto;
 }
 .search .inner input[type="text"] {
@@ -995,6 +990,7 @@ a.browse_button{
 	margin: 0 0 0 5px;
 	color: #eb7700;
 }
+
 .post {
 	font-size: 15px;
 	line-height: 21px;
@@ -1002,11 +998,15 @@ a.browse_button{
 	border-top: 1px solid #edf0f2;
 	margin-top:8px;
 }
+
+.post:first-child{
+	border-top:none;
+}
+
 #first_post {
 	border-top: none;
 }
 .post a.title {
-	color: #2f3134;
 	font-size: 18px;
 	line-height: 24px;
 	display: block;
@@ -1051,7 +1051,7 @@ a.browse_button{
 /*                                  Sidebar		                                  */
 /***********************************************************************************/
 .sidebar {
-	width: 210px;
+	width: 260px;
 	float: right;
 	padding: 20px 0 0 0;
 }
@@ -1073,26 +1073,13 @@ a.browse_button{
 {
 	padding:10px;
 }
-.sidebar a, #links_dialog ul li a {
-	color: #eb7700;
-	
-}
 
 .sidebar ul li a {
-	color: #2f3134;	
 	display: inline-block;
 	padding: 4px 0;
 	position:relative;
 }
 
-.sidebar ul li a.show-all-facet {
-	font-weight:normal;
-	color:#84a07b;
-}
-
-.sidebar ul li a:hover {
-	color: #eb7700;
-}
 .sidebar span {
 	color: #cdd2d5;
 }
