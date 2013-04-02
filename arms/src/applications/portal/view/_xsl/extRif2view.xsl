@@ -299,7 +299,7 @@
 
     
     <!-- DISPLAY COVERAGE (SPATIAL AND TEMPORAL) -->            
-    <xsl:if test="ro:coverage/ro:spatial or ro:location/ro:spatial or ro:coverage/ro:temporal">
+    <xsl:if test="ro:coverage/ro:spatial or ro:location/ro:spatial">
         <xsl:variable name="coverageLabel">
             <xsl:choose>
                 <xsl:when test="(ro:coverage/ro:spatial or ro:location[@type='coverage']) and ro:location/ro:spatial">
@@ -308,13 +308,17 @@
                 <xsl:when test="ro:location/ro:spatial">
                     <xsl:text>Location:</xsl:text>
                 </xsl:when>
-                <xsl:when test="ro:coverage/ro:spatial or ro:coverage/ro:temporal">
+                <xsl:when test="ro:coverage/ro:spatial">
                     <xsl:text>Spatial Coverage:</xsl:text>
                 </xsl:when>
                 
             </xsl:choose>
         </xsl:variable>
-        <p><b><xsl:value-of select="$coverageLabel"/></b></p>
+          
+
+          <p>&amp;nbsp;</p>
+          <h4><xsl:value-of select="$coverageLabel"/></h4>
+
             <xsl:if test="../extRif:extendedMetadata/extRif:spatialGeometry/extRif:polygon">          
               <div id="spatial_coverage_map"></div>
             </xsl:if>
@@ -330,8 +334,12 @@
               <p class="coverage_text"><xsl:value-of select="./@type"/>: <xsl:value-of select="."/></p>
             </xsl:for-each>          
 
-         <xsl:if test="ro:coverage/ro:temporal/ro:date | ro:location[@dateFrom!=''] | ro:location[@datefrom!=''] | ro:location[@dateTo!=''] | ro:coverage/ro:temporal/ro:text">
-            <br/><b>Temporal Coverage:</b><br />
+      </xsl:if>
+
+      <xsl:if test="ro:coverage/ro:temporal or ro:location[@dateFrom!=''] or ro:location[@dateTo!='']">
+
+        <xsl:if test="ro:coverage/ro:temporal/ro:date | ro:location[@dateFrom!=''] | ro:location[@datefrom!=''] | ro:location[@dateTo!=''] | ro:coverage/ro:temporal/ro:text">
+            <p>&amp;nbsp;</p><h4>Temporal Coverage:</h4>
         </xsl:if>
 
         <xsl:if test="ro:coverage/ro:temporal/ro:date">
@@ -344,9 +352,9 @@
 
        <xsl:if test="ro:coverage/ro:temporal/ro:text">
           <xsl:apply-templates select="ro:coverage/ro:temporal/ro:text"/> 
-
       </xsl:if> 
-  </xsl:if>
+
+    </xsl:if>
 
   <!-- DISPLAY SUBJECTS -->
   <xsl:if test="../extRif:extendedMetadata/extRif:subjects/extRif:subject">
