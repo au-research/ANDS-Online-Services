@@ -172,9 +172,8 @@ class Registry_object extends MX_Controller {
 		$ds = $this->ds->getByID($ro->data_source_id);
 
 		$this->importer->forceDraft();
-		//echo($xml);
 		$xml = $ro->cleanRFCSofEmptyTags($xml);
-		//echo($xml);
+
 		$this->importer->setXML(wrapRegistryObjects($xml));
 		$this->importer->setDatasource($ds);
 		$this->importer->commit();
@@ -184,7 +183,19 @@ class Registry_object extends MX_Controller {
 			throw new Exception("Errors during saving this registry object! " . BR . implode($error_log, BR));
 		}
 		else{
-			echo json_encode(array("status"=>"success"));
+
+			$this->load->model('data_source', 'ds');
+			$ds = $this->ds->getByID($ro->data_source_id);
+			$qa = $ds->qa_flag=='t' ? true : false;
+			echo json_encode(
+				array(
+					"status"=>"success",
+					"ro_status"=>"DRAFT",
+					"ro_id"=>$ro->id,
+					"ro_quality_level"=>$ro->quality_level,
+					"qa_$ro->quality_level"=>true,
+					"qa"=>$ro->get_quality_text()
+					));
 		}
 	}
 

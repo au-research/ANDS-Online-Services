@@ -22,6 +22,8 @@ $(document).ready(function() {
 		$('#search_box, #selected_group, #selected_subject').empty();
 		searchData = {};
 		fieldString = '';
+
+		
 		$.each(words, function(){
 			var string = this.split('=');
 			var term = string[0];
@@ -47,7 +49,7 @@ $(document).ready(function() {
 			 * resultSort, limitRows, researchGroupSort, subjectSort, typeSort, licenseSort
 			 */
 		});
-
+		$('.container').hide();
 		executeSearch(searchData, searchUrl);
 	});
 	$(window).hashchange(); //do the hashchange on page load
@@ -57,12 +59,14 @@ $(document).ready(function() {
 function executeSearch(searchData, searchUrl){
 	resultPolygons = new Array();
 	clearOverlays();
+	
 	$.ajax({
 		url:searchUrl, 
 		type: 'POST',
 		data: {filters:searchData},
 		dataType:'json',
 		success: function(data){
+			$('.container').show();
 			$.each(data.solr_result.response.docs, function(){
 				// log(this.list_title, this.score);
 			});
