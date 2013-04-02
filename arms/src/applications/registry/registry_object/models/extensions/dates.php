@@ -55,6 +55,13 @@ class Dates_Extension extends ExtensionBase
 	function getWTCdate($value)
 	{
 		date_default_timezone_set('UTC');
+		// "Year and only year" (i.e. 1960) will be treated as HH SS by default
+		if (strlen($value) == 4)
+		{
+			// Assume this is a year:
+			$value = "Jan 1 " . $value;
+		}
+
 		if (($timestamp = strtotime($value)) === false) {
 	    	return false;
 		} else {
