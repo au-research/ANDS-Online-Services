@@ -25,7 +25,7 @@
 			}
 		?>
 		
-		<a href="javascript:;" class="toggle_sidebar"></a>	
+		<!-- <a href="javascript:;" class="toggle_sidebar"></a>	 -->
 		<div class="clear"></div>
 	</div>
 	
