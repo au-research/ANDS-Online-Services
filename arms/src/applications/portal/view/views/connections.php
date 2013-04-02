@@ -24,7 +24,11 @@
 						// Link connections to PUBLISHED objects to their SLUG for SEOness...
 						$logo = '';
 						if(isset($entry['logo'])){
-							$logo = '<img class="related_logo" src="'.$entry['logo'].'"/>';
+
+							if (!in_array($entry['logo'], $this->config->item('banned_images')))
+							{
+								$logo = '<img class="related_logo" src="'.$entry['logo'].'"/>';
+							}
 						}
 						if ($entry['status'] == PUBLISHED){
 							$url = base_url() . $entry['slug'];

@@ -5,6 +5,10 @@ $config['registry_endpoint'] =  dirname(base_url()) . "/registry/services/rda/";
 
 $config['topics_datafile'] =  dirname(base_url()) . "/registry/assets/topics/topics.json";
 
+$config['banned_images'] = array(
+	'http://services.ands.org.au/documentation/logos/nhmrc_stacked.jpg'
+);
+
 
 //======================================
 // SUBJECT CATEGORIES for FACET SEARCHING
