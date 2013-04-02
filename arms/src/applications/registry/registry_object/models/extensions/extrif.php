@@ -63,7 +63,6 @@ class Extrif_Extension extends ExtensionBase
 						$description_str = (string) $description;
 
 						//add logo to the extrif
-						
 						if($type=='logo' && !$logoAdded){
 							$logoAdded = true;
 							$logoRef = $this->getLogoUrl($description);
@@ -71,10 +70,12 @@ class Extrif_Extension extends ExtensionBase
 							$this->ro->set_metadata('the_logo', $logoRef);
 						}
 
-						
-						$clean_html = $this->_CI->purifier->purify_html( $description_str );
+						// Clean the HTML with purifier, but decode entities first (else they wont be picked up in the first place)
+						$clean_html = htmlentities(htmlentities($this->_CI->purifier->purify_html( html_entity_decode(html_entity_decode($description_str)) )));
 						$encoded_html = '';
-						if (strpos($description_str, "<br") !== FALSE)
+
+						// Check for <br/>'s
+						if (strpos($description_str, "&lt;br") !== FALSE)
 						{
 							$encoded_html = $clean_html;
 							$extrifDescription = $extendedMetadata->addChild("extRif:description", $encoded_html, EXTRIF_NAMESPACE);
