@@ -204,6 +204,8 @@ class Registry_object extends MX_Controller {
 	public function add_new(){
 		header('Cache-Control: no-cache, must-revalidate');
 		header('Content-type: application/json');
+		set_exception_handler('json_exception_handler');
+
 		$this->load->library('importer');
 		$data = $this->input->post('data');
 		
@@ -216,10 +218,15 @@ class Registry_object extends MX_Controller {
 		$jsondata['message'] = '';
 		$jsondata['ro_id'] = null;
 		if(!$ds){
-		$jsondata['message'] = 'do datasource';
-
+			$jsondata['message'] = 'do datasource';
 		} 
 		else{	
+			$ro = $this->ro->getDraftByKey($data['registry_object_key']);
+			if($ro)
+			{
+				throw new Exception("A registry object with this key already exists. Registry Object keys must be unique!");
+			}
+
 			$this->importer->setDatasource($ds);
 			$xml = "<registryObject group='".$data['group']."'>".NL;
 	  		$xml .= "<key>".$data['registry_object_key']."</key>".NL;
@@ -233,14 +240,12 @@ class Registry_object extends MX_Controller {
 			$error_log = $this->importer->getErrors();
 			if($error_log)
 			{
-				$jsondata['success'] = false;
-				$jsondata['message'] = $error_log;			
+				throw new Exception($error_log);			
 			}
-			else{
+			else
+			{
 				$jsondata['success'] = true;
 				$ro = $this->ro->getDraftByKey($data['registry_object_key']);
-				if(!$ro)
-				$ro = $this->ro->getPublishedByKey($data['registry_object_key']);
 				$jsondata['ro_id'] = $ro->id;
 				$jsondata['message'] = 'new Registry Object with id ' . $ro->id . ' was created';	
 			}
