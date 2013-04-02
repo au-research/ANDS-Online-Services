@@ -49,11 +49,11 @@
 
 <script type="text/x-mustache" id="search-result-template">
 {{#docs}}
-	<div class="post" ro_id="{{id}}">
-		<a href="<?php echo base_url();?>{{slug}}" class="title">{{display_title}}</a>
+	<div class="post clear" ro_id="{{id}}">
 		{{#logo}}
 			<img src="{{logo}}" class="logo right"/>
 		{{/logo}}
+		<a href="<?php echo base_url();?>{{slug}}" class="title">{{display_title}}</a>
 		<div class="excerpt">
 			{{description}}
 		</div>

@@ -1,5 +1,6 @@
 $(document).ready(function() {
 
+
 // Pointer to DOM element containing metadata about this registryObject
 var metadataContainer = $('#registryObjectMetadata');
 var loading_icon = '<div style="width:100%; padding-top:40px; text-align:center;"><img src="'+base_url+'assets/core/images/ajax-loader.gif" alt="Loading..." /></div>';
@@ -29,6 +30,7 @@ initInternalSuggestedLinks();
 
 function initViewPage()
 {
+    $('img.logo').error(function() { console.log("error loading image: " + $(this).attr('src')); $(this).addClass('hide'); })
  //   $('#displaytitle').each(function(){console.log($(this));});
 }
 

@@ -917,7 +917,7 @@ a.browse_button{
 	padding: 20px 0 0 0;	
 }
 .main .page_title {
-	padding: 0 0 24px;
+	padding: 0 0 0px;
 }
 .main .page_title h1 {
 	padding: 0 0 4px 0;
@@ -969,6 +969,7 @@ a.browse_button{
 	font-size: 12px;
 	font-weight: bold;
 	line-height: 16px;	
+	clear:both;
 }
 .results_navi .results {
 	width: 300px;
@@ -999,6 +1000,7 @@ a.browse_button{
 	line-height: 21px;
 	padding: 22px 0;
 	border-top: 1px solid #edf0f2;
+	margin-top:8px;
 }
 #first_post {
 	border-top: none;

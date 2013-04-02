@@ -172,7 +172,7 @@ class Registry_object extends MX_Controller {
 		$ds = $this->ds->getByID($ro->data_source_id);
 
 		$this->importer->forceDraft();
-		$xml = $ro->cleanRFCSofEmptyTags($xml);
+		$xml = $ro->cleanRIFCSofEmptyTags($xml);
 
 		$this->importer->setXML(wrapRegistryObjects($xml));
 		$this->importer->setDatasource($ds);

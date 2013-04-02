@@ -82,7 +82,7 @@ class Extrif_Extension extends ExtensionBase
 						}
 						else
 						{
-							$encoded_html = $clean_html;
+							$encoded_html = nl2br($clean_html);
 							$extrifDescription = $extendedMetadata->addChild("extRif:description", $encoded_html, EXTRIF_NAMESPACE);
 						}
 						$extrifDescription->addAttribute("type", $type);

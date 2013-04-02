@@ -203,11 +203,10 @@
 
         <!-- DISPLAY LOGO -->
         <xsl:apply-templates select="../extRif:extendedMetadata/extRif:displayLogo"/>
-
     </div> 
 
 
-<div class="post">
+<div class="post clear">
 
     <!-- DISPLAY DESCRIPTIONS -->
     <xsl:if test="ro:description">

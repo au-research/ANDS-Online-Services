@@ -333,6 +333,9 @@ function initSearchPage(){
 	// Clean up encoding issues in titles
 	$('.post a.title').each(function(){$(this).html(htmlDecode($(this).html()));})
 
+	// Hide logos which point to invalid resources. 
+	$('.post img').error(function() { console.log("error loading image: " + $(this).attr('src')); $(this).addClass('hide'); })
+
 	$('.showmore_excerpt').click(function(){	
 		$(this).parent().html($(this).parent().children(0).html());
 	});
