@@ -58,7 +58,7 @@ class Registry_fetch extends CI_Model
 	function fetchExtrifBySlug($slug)
 	{
 		$url = $this->config->item('registry_endpoint') . "getRegistryObject/?slug=" . $slug;
-		$contents = json_decode(file_get_contents($url), true);
+		$contents = json_decode(@file_get_contents($url), true);
 
 		if (isset($contents['data']))
 		{
@@ -76,14 +76,21 @@ class Registry_fetch extends CI_Model
 		}
 		else
 		{
-			throw new Exception("Error whilst fetching registry object: " . $contents['message']);
+			if($contents['message'])
+			{
+				throw new Exception("Error whilst fetching registry object: " . $contents['message']);
+			}
+			else
+			{
+				throw new Exception("Error whilst fetching registry object: No response from registry when requesting this SLUG");
+			}
 		}
 	}
 
 	function fetchExtrifByID($id)
 	{
 		$url = $this->config->item('registry_endpoint') . "getRegistryObject/?registry_object_id=" . $id;
-		$contents = json_decode(file_get_contents($url), true);
+		$contents = json_decode(@file_get_contents($url), true);
 		if (isset($contents['data']))
 		{
 			return $contents;
@@ -101,7 +108,7 @@ class Registry_fetch extends CI_Model
 		if($offset!=0) $url.='&offset='.$offset;
 		if($type_filter!=null) $url.='&type_filter='.$type_filter;
 
-		$contents = json_decode(file_get_contents($url), true);
+		$contents = json_decode(@file_get_contents($url), true);
 		if (isset($contents['connections']))
 		{
 			return $contents;
@@ -119,7 +126,7 @@ class Registry_fetch extends CI_Model
 		if($offset!=0) $url.='&offset='.$offset;
 		if($type_filter!=null) $url.='&type_filter='.$type_filter;
 		
-		$contents = json_decode(file_get_contents($url), true);
+		$contents = json_decode(@file_get_contents($url), true);
 		if (isset($contents['connections']))
 		{
 			return $contents;
@@ -133,7 +140,7 @@ class Registry_fetch extends CI_Model
 	function fetchSuggestedLinksBySlug($slug, $type, $start, $rows)
 	{
 		$url = $this->config->item('registry_endpoint') . "getSuggestedLinks/?slug=" . $slug . "&suggestor=" . $type . "&start=$start&rows=$rows";
-		$contents = json_decode(file_get_contents($url), true);
+		$contents = json_decode(@file_get_contents($url), true);
 		if (isset($contents['links']))
 		{
 			return $contents['links'];
@@ -148,7 +155,7 @@ class Registry_fetch extends CI_Model
 	{
 		$url = $this->config->item('registry_endpoint') . "getSuggestedLinks/?id=" . $id . "&suggestor=" . $type . "&start=".$start."&rows=".$rows;
 
-		$contents = json_decode(file_get_contents($url), true);
+		$contents = json_decode(@file_get_contents($url), true);
 		if (isset($contents['links']))
 		{
 			return $contents['links'];
@@ -162,7 +169,7 @@ class Registry_fetch extends CI_Model
 	function fetchAncestryGraphBySLUG($slug)
 	{
 		$url = $this->config->item('registry_endpoint') . "getAncestryGraph/?slug=".$slug;
-		$contents = json_decode(file_get_contents($url), true);
+		$contents = json_decode(@file_get_contents($url), true);
 		if (isset($contents['trees']))
 		{
 			return $contents['trees'];
@@ -176,7 +183,7 @@ class Registry_fetch extends CI_Model
 	function fetchAncestryGraphByID($id)
 	{
 		$url = $this->config->item('registry_endpoint') . "getAncestryGraph/?registry_object_id=" . $id;
-		$contents = json_decode(file_get_contents($url), true);
+		$contents = json_decode(@file_get_contents($url), true);
 		if (isset($contents['trees']))
 		{
 			return $contents['trees'];
@@ -190,7 +197,7 @@ class Registry_fetch extends CI_Model
 	function fetchContributorPageByID($id, $published_only = true)
 	{
 		$url = $this->config->item('registry_endpoint') . "getContributorPage/?registry_object_id=" . $id . "&published_only=" . (string) $published_only;
-		$contents = json_decode(file_get_contents($url), true);
+		$contents = json_decode(@file_get_contents($url), true);
 		if (isset($contents['data']))
 		{
 			return $contents;
@@ -207,7 +214,7 @@ class Registry_fetch extends CI_Model
 		$url = $this->config->item('registry_endpoint') . "getContributorData/?slug=".$group;
 
 
- 		$facetsForGroup = json_decode(file_get_contents($url), true);
+ 		$facetsForGroup = json_decode(@file_get_contents($url), true);
 
  		if (isset($facetsForGroup['contents']))
 		{
@@ -225,7 +232,7 @@ class Registry_fetch extends CI_Model
 	{
 		$url = $this->config->item('registry_endpoint') . "getContributorText/?slug=".$group;
 
- 		$cannedText = json_decode(file_get_contents($url), true);
+ 		$cannedText = json_decode(@file_get_contents($url), true);
 
  		if (isset($cannedText['theText']))
 		{
@@ -242,7 +249,7 @@ class Registry_fetch extends CI_Model
 	function getSlugFromKey($key)
 	{
 		$url = $this->config->item('registry_endpoint') . "getSlugFromKey/?key=" . $key;
- 		$response = json_decode(file_get_contents($url), true);
+ 		$response = json_decode(@file_get_contents($url), true);
  		if (isset($response[0]['slug']))
  		{
  			return $response[0]['slug'];

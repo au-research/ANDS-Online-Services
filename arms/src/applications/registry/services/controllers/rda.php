@@ -28,6 +28,8 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 	 */
 	public function getRegistryObject()
 	{
+		set_exception_handler('json_exception_handler');
+		
 		$this->load->model('registry_object/Registry_objects', 'ro');
 
 		// Some validation on input

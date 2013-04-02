@@ -75,10 +75,6 @@ function curl_file_get_contents($URL)
 }
 
 
-function url_suffix(){
-	return '#!/';
-}
-
 function formatResponse($response, $format='xml'){
 	header('Cache-Control: no-cache, must-revalidate');
 	if($format=='xml'){

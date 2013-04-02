@@ -54,7 +54,6 @@ function default_exception_handler( $e ) {
 set_exception_handler('default_exception_handler');
 
 function json_exception_handler( $e ) {
-	header("HTTP/1.0 400 Bad Request");
     echo json_encode(array("status"=>"ERROR", "message"=> $e->getMessage()));
 }
 
@@ -111,6 +110,11 @@ function secure_base_url(){
 	$protocol = 'https://';
 	return $protocol.$url['host'].$url['path'];
 }
+
+function url_suffix(){
+	return '#!/';
+}
+
 
 
 $cycles = 0;

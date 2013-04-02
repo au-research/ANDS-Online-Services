@@ -36,7 +36,7 @@ class Topic extends MX_Controller {
 	private function getFromDataFile()
 	{
 		$topics = array();
-		$data_file = json_decode(file_get_contents($this->config->item('topics_datafile')), true);
+		$data_file = json_decode(@file_get_contents($this->config->item('topics_datafile')), true);
 		if ($data_file && isset($data_file['topics']))
 		{
 			$topics = $data_file['topics'];
