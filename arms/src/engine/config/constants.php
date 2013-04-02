@@ -76,6 +76,7 @@ define('gSHIBBOLETH_SESSION_INITIATOR', '/Shibboleth.sso/Login');
 define('AUTH_USER_FRIENDLY_NAME', 'USER_FRIENDLY_NAME');
 define('AUTH_DEFAULT_FRIENDLY_NAME', 'unnamed user');
 define('AUTH_USER_IDENTIFIER','UNIQUE_USER_IDENTIFIER');
+define('AUTH_METHOD','AUTH_METHOD');
 
 
 define('AUTH_FUNCTION_ARRAY', 'registry_functions');

@@ -143,7 +143,12 @@
         
       <?php if($this->user->hasFunction('PUBLIC')): ?>
       <?php if($this->user->isLoggedIn()): ?>
-        <?php $link = "Logged in as " . $this->user->name() . BR . anchor("auth/logout", "Logout"); ?>
+        <?php $link = "Logged in as <strong>" . $this->user->name() . '</strong>' . BR .
+                  '<div class="pull-right">' .
+                  ($this->user->authMethod() == gCOSI_AUTH_METHOD_BUILT_IN ? anchor("auth/change_password", "Change Password") . " / " : "") . 
+                  anchor("auth/logout", "Logout") .
+                  '</div>';
+        ?>
       <?php else: ?>
         <?php $link = anchor("auth/login", "Login"); ?>
       <?php endif; ?>
@@ -157,3 +162,9 @@
         </div>
 
 
+        <?php 
+        if ($this->session->flashdata('message'))
+        {
+          echo BR.'<div class="alert alert-success"><strong>Message: </strong>'. $this->session->flashdata('message') . '</div>';
+        }
+        ?>

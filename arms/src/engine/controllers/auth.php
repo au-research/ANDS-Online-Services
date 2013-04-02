@@ -171,4 +171,44 @@ class Auth extends CI_Controller {
 		}
 	}
 
+	/* Interface for COSI built-in users to change their password from the default */
+	public function change_password()
+	{
+		$data['title'] = 'Change Built-in Password';
+		$data['js_lib'] = array('core');
+		$data['scripts'] = array();
+
+		if (!$this->user->loggedIn() || !$this->user->authMethod() == gCOSI_AUTH_METHOD_BUILT_IN)
+		{
+			throw new Exception("Unable to change password unless you are logged in as a built-in COSI user!");
+		}
+
+		if ($this->config->item('authentication_class') != 'cosi_authentication')
+		{
+			throw new Exception("Unable to change password unless the authentication framework is COSI!");
+		}
+
+		if ($this->input->post('password'))
+		{
+			if ($this->input->post('password') != $this->input->post('password_confirm'))
+			{
+				$data['error'] = "Both passwords must match! Please try again...";
+			}
+			elseif (strlen($this->input->post('password')) < 6)
+			{
+				$data['error'] = "Password must be 6 characters or longer! Please try again...";
+			}
+			else
+			{
+				$this->load->model('cosi_authentication', 'cosi');
+				$this->cosi->updatePassword($this->user->localIdentifier(), $this->input->post('password'));
+				$this->session->set_flashdata('message', 'Your password has been updated. This will be effective from your next login.');
+				redirect('/');
+			}
+		}
+
+		$this->load->view('change_password_form', $data);
+		
+	}
+
 }

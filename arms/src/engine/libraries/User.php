@@ -24,8 +24,11 @@ class User {
 		if ($login_response['result'] == 1)
 		{
 			// Set the user's identifier and friendly name to the session
-			$this->CI->session->set_userdata(array(	AUTH_USER_IDENTIFIER	 => $login_response['user_identifier'] . "::",
-												AUTH_USER_FRIENDLY_NAME	 => $login_response['name']));
+			$this->CI->session->set_userdata(array(
+				AUTH_USER_IDENTIFIER	 => $login_response['user_identifier'] . "::",
+				AUTH_USER_FRIENDLY_NAME	 => $login_response['name'],
+				AUTH_METHOD 			 =>	$login_response['authentication_service_id'],
+			));
 			
 			// And extract the functions and affiliations							
 			$this->appendFunction(array_merge(array(AUTH_FUNCTION_LOGGED_IN_ATTRIBUTE),$login_response['functional_roles']));
@@ -118,7 +121,11 @@ class User {
 		}
 	}
 	
-	
+	function authMethod()
+	{
+		return $this->CI->session->userdata(AUTH_METHOD);
+	}	
+
 	/**
 	 * Return the local portion of the user's identifier
 	 */

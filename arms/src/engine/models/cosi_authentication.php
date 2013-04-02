@@ -70,6 +70,7 @@ class Cosi_authentication extends CI_Model {
                                                         "role_type_id"=>"ROLE_USER",    
                                                         "enabled"=>'t'
                                                     ));
+                $result['auth_method'] = $method;
             }
         }
     												
@@ -107,6 +108,7 @@ class Cosi_authentication extends CI_Model {
     				
 					return array(	
 									'result'=>1,
+                                    'authentication_service_id'=>$method,
     								'message'=>'Success',
 									'user_identifier'=>$result->row(1)->role_id,
 					    			'name'=>$result->row(1)->name,
@@ -133,6 +135,7 @@ class Cosi_authentication extends CI_Model {
 			$user_results = $this->getRolesAndActivitiesByRoleID ($username);   				
 			return array(	
 							'result'=>1,
+                            'authentication_service_id'=>$method,
     						'message'=>'Success',
 							'user_identifier'=>$username,
 					    	'name'=>$result->row(1)->name,
@@ -179,6 +182,7 @@ class Cosi_authentication extends CI_Model {
 					
 					return array(	
 									'result'=>1,
+                                    'authentication_service_id'=>$method,
 									'message'=>'Success',
 									'user_identifier'=>$username,
 					    			'name'=>(isset($LDAPAttributes['cn'][0]) ? $LDAPAttributes['cn'][0] : $result->row(1)->name), // implementation specific
@@ -308,6 +312,12 @@ class Cosi_authentication extends CI_Model {
         if($query){
             return true;
         }else return false;
+    }
+
+    public function updatePassword($username, $password)
+    {
+        $this->cosi_db->where("role_id", $username)->update("dba.tbl_authentication_built_in", array('passphrase_sha1' => sha1($password)));
+        return TRUE;
     }
     
     
