@@ -17,7 +17,9 @@
 		<div class="alert alert-info">
 			Please provide the required information for the registry object
 		</div>			
-
+		<div class="alert alert-error hide">
+			An Error Occured while adding your record
+		</div>
 		<form action="#" method="get" class="form-vertical">
 			<div class="control-group">
 				<label class="control-label" for="key">Key</label>

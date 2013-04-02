@@ -29,7 +29,7 @@ $(function(){
 		}
 	}); */
 
-	$('#generate_random_key').die().live({
+	$('#generate_random_key').live({
 		click:function(e){
 			e.preventDefault();
 			var input = $(this).prev('input');
@@ -37,11 +37,11 @@ $(function(){
 				type: 'GET',
 				url: base_url+'services/registry/get_random_key/',
 				success:function(data){
-					$(input).val(data)
+					$('.alert-error').hide();
+					$(input).val(data.key)
 				},
 				error:function(data){
 					console.log(data.responseText);
-					$(input).val(data.responseText);
 				}
 			});
 		}
@@ -65,9 +65,15 @@ $(function(){
 					data:{data:data},
 					dataType:'JSON',
 					success:function(data){
-						$("#AddNewDS").modal('hide');
-						//console.log(data);
-						if(data.success) window.location = base_url+'registry_object/edit/'+data.ro_id+'#!/advanced/admin';
+						if(data.status != 'ERROR')
+						{
+							$("#AddNewDS").modal('hide');
+							if(data.success) window.location = base_url+'registry_object/edit/'+data.ro_id+'#!/advanced/admin';
+						}
+						else{
+							$('.alert-error').html(data.message);
+							$('.alert-error').show();
+						}
 					},
 					error:function(data){
 						console.log("error: " + data);

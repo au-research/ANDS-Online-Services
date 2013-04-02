@@ -105,15 +105,17 @@ class Registry extends MX_Controller {
 	 * prints out a random key that is unique
 	 */
 	public function get_random_key($length=52){
+		header('Cache-Control: no-cache, must-revalidate');
+		header('Content-type: application/json');
 		$chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";	
 		$str='';
 		$size = strlen( $chars );
 		for( $i = 0; $i < $length; $i++ ) {
 			$str .= $chars[ rand( 0, $size - 1 ) ];
 		}
-
-		//@TODO: need some db checking
-		echo $str;
+		$jsonData['key'] = $str;
+		$jsonData = json_encode($jsonData);
+		echo $jsonData;
 	}
 
 	/**
