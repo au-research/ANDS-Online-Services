@@ -113,7 +113,7 @@ $(document).ready(function(){
 				content:{
 					text: 'Loading...', // The text to use whilst the AJAX request is loading},
 					ajax: {
-						url: base_url+'services/registry/search?query='+query, // URL to the local file
+						url: base_url+'services/registry/search?query='+encodeURIComponent(query), // URL to the local file
 						type: 'GET', // POST or GET
 						data: {}, // Data to pass along with your request
 						success: function(data,status){

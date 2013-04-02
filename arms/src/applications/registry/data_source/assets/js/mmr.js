@@ -402,6 +402,7 @@ function initLayout(){
                     type: 'POST',
                     data: {ro_id: $(this).attr('ro_id')},
                     loading:false,
+                    dataType: 'text',
                     success: function(data, status) {
                         this.set('content.text', data);
                         formatTip(this);
@@ -600,7 +601,8 @@ function bindSortables(){
                     ajax:{
                         url: base_url+'data_source/get_mmr_menu',
                         type: 'POST',
-                        data: {data_source_id:ds_id,status:context_status,affected_ids:selected_ids,selecting_status:selecting_status}
+                        data: {data_source_id:ds_id,status:context_status,affected_ids:selected_ids,selecting_status:selecting_status},
+                        dataType: 'html'
                     }
                 },
                 position: {viewport: $(window), my:'left center', at:'right center'},
@@ -623,6 +625,7 @@ function bindSortables(){
                     ajax:{
                         url: base_url+'registry_object/get_tag_menu',
                         type: 'POST',
+                        dataType: 'text',
                         data: {ro_id:ro_id},
                         success: function(data, status) {
                             this.set('content.text', data);
@@ -753,6 +756,7 @@ function update(ids, attributes){
         url:url, 
         type: 'POST',
         data: data,
+        dataType: 'text',
         success: function(data){
             init(filters);
             // $('#status_message').html(data.msg);
