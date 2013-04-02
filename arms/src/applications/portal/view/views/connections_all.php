@@ -22,12 +22,12 @@
 	$html.= '<div class="results_navi"><div class="results">'.$totalResults.' related</div>';
 	$html.= '<div class="page_navi">Page: '.$currentPage.'/'.$totalPage .' | ';
 	if($currentPage!=1){
-		$html.='<a href="javascript:;" class="goto" page="'.$prevPage.'" relation_type="'.$relation_type.'" ro_slug="'.$slug.'">Prev</a>';
-		$html.='<a href="javascript:;" class="goto" page="'.$nextPage.'" relation_type="'.$relation_type.'" ro_slug="'.$slug.'">Next</a>';
+		$html.='<a href="javascript:;" class="goto" page="'.$prevPage.'" relation_type="'.$relation_type.'" ro_slug="'.$slug.'" ro_id="'.$id.'">Prev</a>';
+		$html.='<a href="javascript:;" class="goto" page="'.$nextPage.'" relation_type="'.$relation_type.'" ro_slug="'.$slug.'" ro_id="'.$id.'">Next</a>';
 	}else if($currentPage==$totalPage){
-		$html.='<a href="javascript:;" class="goto" page="'.$prevPage.'" relation_type="'.$relation_type.'" ro_slug="'.$slug.'">Prev</a>';
+		$html.='<a href="javascript:;" class="goto" page="'.$prevPage.'" relation_type="'.$relation_type.'" ro_slug="'.$slug.'" ro_id="'.$id.'">Prev</a>';
 	}else{
-		$html.='<a href="javascript:;" class="goto" page="'.$nextPage.'" relation_type="'.$relation_type.'" ro_slug="'.$slug.'">Next</a>';
+		$html.='<a href="javascript:;" class="goto" page="'.$nextPage.'" relation_type="'.$relation_type.'" ro_slug="'.$slug.'" ro_id="'.$id.'">Next</a>';
 	}
 	$html.= '</div><div class="clear"></div></div></div>';
 

@@ -57,12 +57,17 @@ function initConnections(){
 
     $('.view_all_connection').live('click', function(){
         var slug = $(this).attr('ro_slug');
+        var id = $(this).attr('ro_id');
         var relation_type = $(this).attr('relation_type');
+        if(slug != '')
+            var url = base_url+'view/getConnections/?slug='+slug+'&relation_type='+relation_type;
+        if(id != '')
+            var url = base_url+'view/getConnections/?id='+id+'&relation_type='+relation_type
         $(this).qtip({
             content: {
                 text: loading_icon,
                 ajax: {
-                    url: base_url+'view/getConnections/?slug='+slug+'&relation_type='+relation_type,
+                    url: url,
                     type: 'POST',
                     data: {ro_id: $(this).attr('ro_id')},
                     loading:true,
@@ -101,10 +106,17 @@ function formatConnectionTip(tt){
 function bindPaginationConnection(tt){
     $('.goto', tt).on('click',function(e){
         var slug = $(this).attr('ro_slug');
+        var id = $(this).attr('ro_id');
         var page = $(this).attr('page');
         var relation_type = $(this).attr('relation_type');
+
+        if(slug != '')
+            var url = base_url+'view/getConnections/?slug='+slug+'&relation_type='+relation_type+'&page='+page;
+        if(id != '')
+            var url = base_url+'view/getConnections/?id='+id+'&relation_type='+relation_type+'&page='+page;
+
         $.ajax({
-            url:base_url+'view/getConnections/?slug='+slug+'&relation_type='+relation_type+'&page='+page, 
+            url: url, 
             type: 'GET',
             success: function(data){
                 $(tt).html(data);

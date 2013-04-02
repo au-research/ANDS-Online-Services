@@ -71,7 +71,8 @@ class View extends MX_Controller {
 		$data['title']='Research Data Australia';
 		$data['js_lib'] = array('dynatree','qtip','google_map');
 		$data['scripts'] = array('view');
-
+		$data['ro_slug'] = '';
+		$data['ro_id'] = '';
 		$suggested_links = array();
 
 		if ($this->input->get('slug'))
@@ -263,6 +264,7 @@ class View extends MX_Controller {
 		$data['totalPage'] = ceil(($connections[0][$this->input->get('relation_type').'_count'])/$limit);
 		$data['totalResults'] = $connections[0][$this->input->get('relation_type').'_count'];
 		$data['slug'] = $this->input->get('slug');
+		$data['id'] = $this->input->get('id');
 		$data['connections_contents'] = $connections[0];
 		$data['relation_type'] = $this->input->get('relation_type');
 		$this->load->view('connections_all', $data);
