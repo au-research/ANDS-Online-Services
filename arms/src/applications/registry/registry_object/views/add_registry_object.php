@@ -38,6 +38,7 @@
 
 <div class="alert alert-info">
 	<b>Note:</b> This record has been saved in <u>DRAFT state</u>
+	
 </div>
 
 </script>

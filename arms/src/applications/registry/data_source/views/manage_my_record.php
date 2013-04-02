@@ -169,23 +169,39 @@
 
 <script type="text/x-mustache" id="mmr_data_more">
 {{#items}}
-<li id="{{id}}" class="status_{{status}} ro_item {{#has_error}}ro_error{{/has_error}}" status="{{status}}">
-<div class="ro_title"><a ro_id="{{id}}" class="ro_preview">{{title}}</a></div>
-<div class="ro_content ">
-	<p>
-		<span class="tag" tip="Last Modified"><i class="icon icon-time"></i> {{updated}}</span>
-		<img class="tag" tip="{{class}}" src="<?php echo asset_url('img/{{class}}.png', 'base');?>"/>
-		<span class="tag ql_{{quality_level}}" tip="Quality Level {{quality_level}}">{{quality_level}}</span>
-		{{#flag}}
-		<span class="tag" tip="Flagged"><i class="icon icon-flag"></i></span>
-		{{/flag}}
-		{{#gold_status_flag}}
-		<span class="tag gold_status_flag" tip="Gold Standard"><i class="icon icon-star-empty"></i></span>
-		{{/gold_status_flag}}
-	</p>
-</div>
-<div class='clearfix'></div>
-</li>
+<li id="{{id}}" data-toggle="context" data-target="#context-menu-{{status}}" class="status_{{status}} ro_item {{#has_error}}ro_error{{/has_error}}" status="{{status}}">
+	<div class="ro_item_header">
+		<div class="ro_title"><a ro_id="{{id}}" class="tip" tip="<b>{{title}}</b> - {{key}}">{{title}}</a></div>
+		<img class="class_icon" tip="{{class}}" src="<?php echo asset_url('img/{{class}}.png', 'base');?>"/>
+		<div class="right_content">
+			{{#has_flag}}
+				<span class="tag no-border-tag flag" tip="Flagged"><i class="icon icon-flag"></i></span>
+			{{/has_flag}}
+			{{#has_gold}}
+				<span class="tag gold_status_flag" tip="<h5>Gold Standard</h5><p>The following record has been verified<br/> as an exemplary record <br/>by the ANDS Metadata Assessment Group.</p>"><i class="icon icon-star"></i></span>
+			{{/has_gold}}
+			{{#quality_level}}
+				<span class="tag ql_{{quality_level}} tipQA" ro_id='{{id}}'>{{quality_level}}</span>
+			{{/quality_level}}
+		</div>
+	</div>
+	<div class="ro_content ">
+		<div class="toolbar">
+			<div class="btn-group">
+				<button class="btn btn-small op" action="view" tip="View" ro_id="{{id}}"><i class="icon icon-search"></i></button>
+				{{#editable}}
+					<button class="btn btn-small op" action="edit" tip="Edit" ro_id="{{id}}"><i class="icon icon-edit"></i></button>
+				{{/editable}}
+				{{#advance}}
+					<button class="btn btn-small op" action="advance_status" to="{{connectTo}}" tip="Advance Status" ro_id="{{id}}"><i class="icon icon-share-alt"></i></button>
+				{{/advance}}
+				<button class="contextmenu btn btn-small" status="{{name}}" tip="More Action">More</button>
+			</div>
+		</div>
+		<div class="clearfix"></div>
+	</div>
+	<div class='clearfix'></div>
+	</li>
 {{/items}}
 </script>
 <?php $this->load->view('footer');?>

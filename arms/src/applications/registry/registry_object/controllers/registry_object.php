@@ -187,7 +187,7 @@ class Registry_object extends MX_Controller {
 			$this->load->model('data_source', 'ds');
 			$ds = $this->ds->getByID($ro->data_source_id);
 			$qa = $ds->qa_flag=='t' ? true : false;
-			echo json_encode(
+			$result = 
 				array(
 					"status"=>"success",
 					"ro_status"=>"DRAFT",
@@ -195,7 +195,9 @@ class Registry_object extends MX_Controller {
 					"ro_quality_level"=>$ro->quality_level,
 					"qa_$ro->quality_level"=>true,
 					"qa"=>$ro->get_quality_text()
-					));
+					);
+			if($qa) $result['qa'] = true;
+			echo json_encode($result);
 		}
 	}
 
