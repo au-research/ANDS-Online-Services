@@ -27,6 +27,7 @@ class NHMRC_Merged_File_to_RIFCS extends Crosswalk
     const NHMRC_PARTY_PREFIX = 'http://nhmrc.gov.au/person/';
     const NHMRC_PROGRAM_TYPE_GROUP = 'Infrastructure Support';
     const NHMRC_NLA_KEY = 'http://nla.gov.au/nla.party-616216';
+    const NHMRC_LOGO = 'http://services.ands.org.au/documentation/logos/nhmrc_stacked.jpg';
     const NHMRC_MIN_GRANT_YR = 2009;
 
     private $parsed_array = array();
@@ -175,6 +176,7 @@ class NHMRC_Merged_File_to_RIFCS extends Crosswalk
 
             // The string created above
             $registryObject .=      '<description type="notes">'.trim($description).'</description>' . NL;
+            $registryObject .=      '<description type="logo">'.self::NHMRC_LOGO.'</description>' . NL;
 
             // Include our subjects
             $registryObject .=      '<subject type="local">'.$activity['BROAD_RESEARCH_AREA'].'</subject>' . NL;
@@ -263,6 +265,7 @@ class NHMRC_Merged_File_to_RIFCS extends Crosswalk
             $registryObject .=          '<namePart type="given">'.$party['FIRST_NAME'].'</namePart>' . NL;
             $registryObject .=      '</name>' . NL;
 
+            $registryObject .=      '<description type="logo">'.self::NHMRC_LOGO.'</description>' . NL;
             if ($party['grants'] && count($party['grants']) > 0)
             {
 
