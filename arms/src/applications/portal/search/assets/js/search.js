@@ -415,6 +415,7 @@ function postSearch(){
 
 	if(searchData['subject_vocab_uri']){
 		var html = '<li><img src="'+base_url+'assets/core/images/delete.png" filter_type="subject_vocab_uri" class="remove_facet"/><a href="javascript:;" class="filter remove_facet" filter_type="subject_vocab_uri">'+searchData['subject_vocab_uri_display']+'</a></li>';
+		$('.filter[filter_value="'+decodeURIComponent(searchData['subject_vocab_uri'])+'"]').remove();
 		$('.facet_subjects ul').prepend(html);
 	}
 
