@@ -69,7 +69,7 @@ $(document).ready(function() {
 
     $('#search_box').keypress(function(e){
 		if(e.which==13){//press enter
-			window.location = base_url+'search/#!/q='+$(this).val();
+			window.location = base_url+'search/#!/q='+encodeURIComponent($(this).val());
 		}
 	});
 
