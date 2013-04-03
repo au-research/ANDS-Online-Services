@@ -131,6 +131,27 @@ $(document).ready(function() {
 	        (RegExp(name + '=' + '(.+?)(&|$)').exec(location.search)||[,null])[1]
 	    );
 	}
+
+	function recurseGetText() { 
+		if (this.nodeType == 3)
+		{
+			return this.nodeValue;
+		}
+		else
+		{
+			if (typeof $(this).contents == 'function' && $(this).contents().length > 0)
+			{
+				return $(this).contents().map(recurseGetText).get().join();
+			}
+		}
+		return this.nodeType == 3 ? this.nodeValue : undefined;
+	}
+
+	// get any text inside the element $(this).directText()
+	$.fn.directText=function(delim) {
+	  if (!delim) delim = '';
+	  return this.contents().map(recurseGetText).get().join(delim);
+	};
 	//setTimeout(function(){alert("Hello")},3000)
 });
 // usage: log('inside coolFunc',this,arguments);
@@ -142,3 +163,9 @@ window.log = function(){
     console.log( Array.prototype.slice.call(arguments) );
   }
 };
+
+
+// decode htmlentities()
+function htmlDecode(value) {
+	return (typeof value === 'undefined') ? '' : $('<div/>').html(value).text();
+}

@@ -351,32 +351,6 @@ function initSearchPage(){
 	
 }
 
-// decode htmlentities()
-function htmlDecode(value) {
-   return (typeof value === 'undefined') ? '' : $('<div/>').html(value).text();
-}
-
-function recurseGetText() { 
-	if (this.nodeType == 3)
-	{
-		return this.nodeValue;
-	}
-	else
-	{
-		if (typeof $(this).contents == 'function' && $(this).contents().length > 0)
-		{
-			return $(this).contents().map(recurseGetText).get().join();
-		}
-	}
-	return this.nodeType == 3 ? this.nodeValue : undefined;
-}
-
-// get any text inside the element $(this).directText()
-$.fn.directText=function(delim) {
-  if (!delim) delim = '';
-  return this.contents().map(recurseGetText).get().join(delim);
-};
-
 
 function getTopLevelFacet(){
 	$.ajax({

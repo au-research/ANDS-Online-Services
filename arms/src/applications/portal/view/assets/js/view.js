@@ -467,8 +467,14 @@ function generatePreviewTip(element, slug, registry_object_id, relation_type)
                 type: 'GET',
                 data: { "slug": slug, "registry_object_id": registry_object_id },
                 success: function(data, status) {
-                    data = $.parseJSON(data);                                       
-                    this.set('content.text', data.html);
+                    data = $.parseJSON(data);                
+                    
+                    // Clean up any HTML rubbish...                   
+                    var temp = $('<span/>');
+                    temp.html(data.html);
+                    $("div.descriptions", temp).html(htmlDecode(htmlDecode($("div.descriptions", temp).directText())));
+
+                    this.set('content.text', temp.html());     
 
                     if (isPublished()){
                         $('.viewRecordLink').attr("href",base_url + data.slug);

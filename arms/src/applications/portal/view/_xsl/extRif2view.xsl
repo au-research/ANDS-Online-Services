@@ -860,7 +860,7 @@
       <xsl:text>http://purl.org/</xsl:text><xsl:value-of select="substring-after(.,'purl.org/')"/>
     </xsl:when>          
     <xsl:otherwise>
-      <xsl:text>http://nla.gov.au/</xsl:text><xsl:value-of select="."/>
+      <xsl:text>http://purl.org/</xsl:text><xsl:value-of select="."/>
     </xsl:otherwise>   
   </xsl:choose>
 </xsl:template>
