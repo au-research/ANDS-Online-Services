@@ -227,9 +227,9 @@
 			{{/harvester_status}}
 			<div class="widget-title">
 				<h5>Activity Log</h5>
-				<div class="pull-right">
-					<select class="log-type">
-						<option value="all">All</option>
+				<div class="pull-right" style="margin-top:4px; margin-right:4px;">
+					<select class="log-type btn-mini">
+						<option value="all">All Logs</option>
 						<option value="error">Errors</option>
 					</select>
 				</div>
