@@ -35,9 +35,10 @@ body {
 	line-height: 1;	
 }
 
-.facet_group ol, .facet_group ul {
+.facet_group ol, .facet_group ul, .facet_result ul, .ands_widget_wrapper ul, .widget ul {
 	list-style: none !important;
 }
+
 
 .main ul {
 	list-style: disc;

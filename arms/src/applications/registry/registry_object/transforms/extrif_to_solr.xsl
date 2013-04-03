@@ -293,14 +293,14 @@
         <xsl:element name="field">
             <xsl:attribute name="name">description</xsl:attribute>
             <xsl:choose>
-                <xsl:when test="ro:description[@type='brief']">
-                    <xsl:value-of select="ro:description[@type='brief'][1]/text()"/>
+                <xsl:when test="//extRif:description[@type='brief']">
+                    <xsl:value-of select="//extRif:description[@type='brief'][1]/text()"/>
                 </xsl:when>
-                <xsl:when test="ro:description[@type = 'full']">
-                    <xsl:value-of select="ro:description[@type = 'full'][1]/text()"/>
+                <xsl:when test="//extRif:description[@type = 'full']">
+                    <xsl:value-of select="//extRif:description[@type = 'full'][1]/text()"/>
                 </xsl:when>
-                <xsl:when test="ro:description">
-                    <xsl:value-of select="ro:description[1]/text()"/>
+                <xsl:when test="//extRif:description">
+                    <xsl:value-of select="//extRif:description[1]/text()"/>
                 </xsl:when>
             </xsl:choose>
         </xsl:element>  
