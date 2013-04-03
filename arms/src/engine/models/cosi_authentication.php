@@ -49,9 +49,11 @@ class Cosi_authentication extends CI_Model {
     												));
 		if($result->num_rows() > 0){
 			$method = trim($result->row(1)->authentication_service_id);
-		}else{
+		}
+        else
+        {
             if($method==gCOSI_AUTH_METHOD_SHIBBOLETH){
-                //create user 
+                //create user if this is the first shib login
                 
                 $data = array(
                     'role_id' => $username,
@@ -70,7 +72,6 @@ class Cosi_authentication extends CI_Model {
                                                         "role_type_id"=>"ROLE_USER",    
                                                         "enabled"=>'t'
                                                     ));
-                $result['auth_method'] = $method;
             }
         }
     												
@@ -137,6 +138,7 @@ class Cosi_authentication extends CI_Model {
 							'result'=>1,
                             'authentication_service_id'=>$method,
     						'message'=>'Success',
+                            'auth_method' => $method,
 							'user_identifier'=>$username,
 					    	'name'=>$result->row(1)->name,
     						'last_login'=>$result->row(1)->last_login,
