@@ -265,7 +265,9 @@ class NHMRC_Merged_File_to_RIFCS extends Crosswalk
             $registryObject .=          '<namePart type="given">'.$party['FIRST_NAME'].'</namePart>' . NL;
             $registryObject .=      '</name>' . NL;
 
-            $registryObject .=      '<description type="logo">'.self::NHMRC_LOGO.'</description>' . NL;
+            //$registryObject .=      '<description type="logo">'.self::NHMRC_LOGO.'</description>' . NL;
+            // Get rid of NHMRC logo for parties
+
             if ($party['grants'] && count($party['grants']) > 0)
             {
 
