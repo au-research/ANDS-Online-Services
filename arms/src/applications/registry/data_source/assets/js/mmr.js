@@ -573,7 +573,11 @@ function bindSortables(){
                 return $( "<span class='label label-info helper'>"+total+"</span>" );
             },
             start: function(e, ui){
-                click_ro(e.currentTarget, 'select');
+                if(e.shiftKey){
+                    click_ro(e.currentTarget, 'select_until');
+                }else{
+                    click_ro(e.currentTarget, 'select');
+                }
                 $(ui.helper[0]).html(selected_ids.length)
             },
             connectToSortable: target
