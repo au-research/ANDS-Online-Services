@@ -217,7 +217,6 @@ function bindShowMore(){
         var status = $(this).attr('status');
         var button = this;
         var filter = JSON.stringify(filters, null, 2);
-        console.log(filters);
         $.ajax({
             url:base_url+'data_source/get_more_mmr_data/', 
             type: 'POST',

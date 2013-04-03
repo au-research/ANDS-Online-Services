@@ -275,16 +275,21 @@ class Data_source extends MX_Controller {
 		ds_acl_enforce($this->input->post('ds_id'));
 		header('Cache-Control: no-cache, must-revalidate');
 		header('Content-type: application/json');
-			
+		
+		$filters = $this->input->post('filters');
+		$args['sort'] = isset($filters['sort']) ? $filters['sort'] : array('updated'=>'desc');
+		$args['search'] = isset($filters['search']) ? $filters['search'] : false;
+		$args['or_filter'] = isset($filters['or_filter']) ? $filters['or_filter'] : false;
 		$args['filter'] = array('status'=>$this->input->post('status'));
-		$filters = array(
+		$args['filter'] = isset($filters['filter']) ? array_merge($filters['filter'], array('status'=>$this->input->post('status'))) : array('status'=>$this->input->post('status'));
+		$filter = array(
 			'ds_id'=>$this->input->post('ds_id'),
 			'limit'=>10,
 			'offset'=>$this->input->post('offset'),
 			'args'=>$args
 		);
 
-		$results = $this->get_ros($filters, false);
+		$results = $this->get_ros($filter, false);
 		if($results){
 			echo json_encode($results);
 		}else echo json_encode(array('noMore'=>true));
