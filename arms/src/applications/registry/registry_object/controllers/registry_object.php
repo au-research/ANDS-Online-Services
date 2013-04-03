@@ -388,8 +388,8 @@ class Registry_object extends MX_Controller {
 	public function get_record($id){
 		$this->load->model('registry_objects', 'ro');
 		$ro = $this->ro->getByID($id);
-		$data['xml'] = $ro->getRif();
-		$data['extrif'] = $ro->getExtRif();
+		$data['xml'] = html_entity_decode($ro->getRif());
+		$data['extrif'] = html_entity_decode($ro->getExtRif());
 		//$data['view'] = $ro->transformForHtml();
 		$data['id'] = $ro->id;
 		$data['title'] = $ro->getAttribute('list_title');
