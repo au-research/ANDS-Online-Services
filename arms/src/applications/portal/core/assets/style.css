@@ -22,9 +22,6 @@ time, mark, audio, video {
 	margin: 0;
 	padding: 0;
 	border: 0;
-	font-size: 100%;
-	vertical-align: baseline;
-	-webkit-text-size-adjust:none;
 }
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure, 
@@ -37,9 +34,15 @@ small {
 body {
 	line-height: 1;	
 }
-ol, ul {
-	list-style: none;
+
+.facet_group ol, .facet_group ul {
+	list-style: none !important;
 }
+
+.main ul {
+	list-style: disc;
+}
+
 blockquote, q {
 	quotes: none;
 }
@@ -228,10 +231,18 @@ p {
 .content {
 	padding:20px 0 0 0;
 }
+/*
 .content ol,
 .content ul {
-	padding:8px 0;
+	padding:0 0;
 }
+.content ol li,
+.content ul li {
+	list-style:disc;
+	margin:0 0 0 13px;
+	padding:3px 0 3px 8px;
+}
+*/
 .content img {
 	max-width:100%;
 	height:auto;
@@ -274,12 +285,7 @@ p {
 	padding:10px 14px;
 	border:1px solid #f1f1f1;
 }
-.content ol li,
-.content ul li {
-	list-style:disc;
-	margin:0 0 0 13px;
-	padding:3px 0 3px 8px;
-}
+
 .content strong {
 	color:#333;
 }

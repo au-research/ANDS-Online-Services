@@ -117,7 +117,7 @@ class Importer {
 				// Clean up non-UTF8 characters by trying to translate them
 
 				// If we have php-mbstring enabled, convert to UTF-8 (fixes crash on curly quotes!)
-				if (function_exists($payload))
+				if (function_exists('mb_convert_encoding'))
 				{
 					$payload = mb_convert_encoding($payload,"UTF-8"); 
 				}
