@@ -199,7 +199,7 @@ function loadSubjectBrowse(val){
 		$('#subjectfacet').append($('<div/>'));
 		var sqc = '';
 		if(searchData['q']) sqc += searchData['q'];
-		if(searchData['tab']) sqc += '+class:("'+searchData['tab']+'")';
+		if(searchData['tab'] && searchData['tab']!='all') sqc += '+class:("'+searchData['tab']+'")';
 		if(searchData['group']) sqc += '+group:("'+searchData['group']+'")';
 		if(searchData['type']) sqc += '+type:("'+searchData['type']+'")';
 		sqc += '&defType=edismax';

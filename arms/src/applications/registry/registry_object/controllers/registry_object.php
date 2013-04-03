@@ -506,6 +506,7 @@ class Registry_object extends MX_Controller {
 			$ro = $this->ro->getByID($id);
 			$this->ro->deleteRegistryObject($ro);
 		}
+
 	}
 
 	
