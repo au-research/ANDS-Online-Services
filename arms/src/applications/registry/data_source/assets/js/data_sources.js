@@ -149,7 +149,7 @@ $(function(){
 				type: 'POST',
 				dataType: 'json',
 				success: function(data){
-					//console.log(data);
+					checkResponse(data);
 					$(button).parent().fadeOut();
 				},
 				failure: function(data){
@@ -184,6 +184,7 @@ $(function(){
 					type: 'POST',
 					data: {key:key},
 					success: function(data){
+						checkResponse(data);
 						if(data==0){
 							//console.log('is unique');
 							var title = $('input[name=title]',form).val();
@@ -256,6 +257,7 @@ function load_more(page){
 		contentType: 'application/json; charset=utf-8',
 		dataType: 'json',
 		success: function(data){
+			checkResponse(data);
 			var itemsTemplate = $('#items-template').html();
 			var output = Mustache.render(itemsTemplate, data);
 			$('#items').append(output);
@@ -286,6 +288,7 @@ function load_datasource(data_source_id){
 		contentType: 'application/json; charset=utf-8',
 		dataType: 'json',
 		success: function(data){
+			checkResponse(data);
 			//log(data);
 			//console.log(data);
 			var template = $('#data-source-view-template').html();
@@ -346,6 +349,7 @@ function loadDataSourceLogs(data_source_id, offset, count)
 		type: 'POST',
 		dataType: 'json',
 		success: function(data){
+			checkResponse(data);
 			var logsTemplate = $('#data_source_logs_template').html();
 			var output = Mustache.render(logsTemplate, data);
 			$('#data_source_log_container').append(output);
@@ -542,7 +546,7 @@ function drawCharts(data_source_id){
 		dataType: 'json',
 		success: function(data){
 			//console.log(data);
-
+			checkResponse(data);
 			$('#ro-progression').height('350').html('');
 
 			var options = {
@@ -664,7 +668,7 @@ function load_datasource_settings(data_source_id){
 		contentType: 'application/json; charset=utf-8',
 		dataType: 'json',
 		success: function(data){
-			
+			checkResponse(data);
 			var template = $('#data-source-settings-template').html();
 			var output = Mustache.render(template, data);
 			var view = $('#view-datasource');
@@ -740,7 +744,8 @@ function load_datasource_edit(data_source_id, active_tab){
 		},
 		success: function(data){
 			//console.log(data);
-
+			checkResponse(data);
+			
 			var template = $('#data-source-edit-template').html();
 			var output = Mustache.render(template, data);
 			$('#edit-datasource').html(output);

@@ -31,6 +31,7 @@ class Data_source extends MX_Controller {
 
 		$this->load->model("data_sources","ds");
 	 	$dataSources = $this->ds->getOwnedDataSources();
+
 		$items = array();
 		foreach($dataSources as $ds){
 			$item = array();
@@ -38,6 +39,7 @@ class Data_source extends MX_Controller {
 			$item['id'] = $ds->id;
 			array_push($items, $item);
 		}
+
 		$data['dataSources'] = $items;
 		$data['scripts'] = array('data_sources');
 		$data['js_lib'] = array('core', 'graph', 'datepicker','vocab_widget');
@@ -564,6 +566,7 @@ class Data_source extends MX_Controller {
 
 
 	public function add(){
+
 		$this->load->model('data_sources', 'ds');
 		$ds = $this->ds->create($this->input->post('key'), url_title($this->input->post('title')));
 		$ds->setAttribute('title', $this->input->post('title'));
@@ -867,6 +870,7 @@ public function getContributorGroupsEdit()
 		{
 			$dataSource = $this->ds->getByID($id);
 		}
+		// ACL enforcement
 		acl_enforce('REGISTRY_USER');
 		ds_acl_enforce($id);
 
@@ -1049,6 +1053,11 @@ public function getContributorGroupsEdit()
 		$this->load->library('importer');
 		$this->load->model('data_source/data_sources', 'ds');		
 		$data_source = $this->ds->getByID($this->input->post('data_source_id'));	
+
+		// ACL enforcement
+		acl_enforce('REGISTRY_USER');
+		ds_acl_enforce((int)$this->input->post('data_source_id'));
+
 		$slogTitle =  'Import from URL completed successfully'.NL;	
 		$elogTitle = 'An error occurred whilst importing from the specified URL'.NL;
 		$log = 'IMPORT LOG' . NL;
@@ -1129,6 +1138,11 @@ public function getContributorGroupsEdit()
 		$xml = $this->input->post('xml');
 		$slogTitle =  'Import from XML content completed successfully'.NL;	
 		$elogTitle = 'An error occurred whilst importing from the specified XML'.NL;
+
+		// ACL enforcement
+		acl_enforce('REGISTRY_USER');
+		ds_acl_enforce((int)$this->input->post('data_source_id'));
+
 		$log = 'IMPORT LOG' . NL;
 		$log .= 'Harvest Method: Direct import from XML content' . NL;
 		$log .= strlen($xml) . ' characters received...' . NL;
@@ -1216,6 +1230,11 @@ public function getContributorGroupsEdit()
 		$log .= 'deleted Registry Object ID: '.$deletedRegistryObjectId . NL;
 		$this->load->model('data_source/data_sources', 'ds');
 		$data_source = $this->ds->getByID($this->input->post('data_source_id'));
+
+		// ACL enforcement
+		acl_enforce('REGISTRY_USER');
+		ds_acl_enforce((int)$this->input->post('data_source_id'));
+
 		$this->load->model("registry_object/registry_objects", "ro");
 
 		$deletedRo = $this->ro->getDeletedRegistryObject($deletedRegistryObjectId);
@@ -1281,6 +1300,10 @@ public function getContributorGroupsEdit()
 		if (isset($POST['data_source_id'])){
 			$id = (int) $this->input->post('data_source_id');
 		}
+
+		// ACL enforcement
+		acl_enforce('REGISTRY_USER');
+		ds_acl_enforce((int)$this->input->post('data_source_id'));
 
 		$this->load->model("data_sources","ds");
 		$this->load->model("registry_object/registry_objects", "ro");
@@ -1598,6 +1621,10 @@ public function getContributorGroupsEdit()
 		$this->load->model("data_source/data_sources","ds");
 		$this->load->model("registry_object/registry_objects", "ro");
 
+		// ACL enforcement
+		acl_enforce('REGISTRY_USER');
+		ds_acl_enforce((int)$id);
+
 		$data['status_tabs'] = Registry_objects::$statuses;
 		$data['ds'] = $this->ds->getByID($id);
 
@@ -1608,6 +1635,11 @@ public function getContributorGroupsEdit()
 	function getDataSourceReport($id){
 		
 		$dataSource = $this->ds->getByID($id);
+
+		// ACL enforcement
+		acl_enforce('REGISTRY_USER');
+		ds_acl_enforce((int)$id);
+		
 		$ids = $this->ro->getIDsByDataSourceID($id, false, 'All');
 		$report = "<h3>QUALITY REPORT FOR ".$dataSource->title."</h3>";
 		$j = 0;
