@@ -1,6 +1,6 @@
 <?php
 
-echo '<h3><a href="#">'.$title[0].'</a></h3>';
+//echo '<h3><a href="#">'.$title[0].'</a></h3>';
 echo '<div>';
 
 if(isset($description)){
@@ -24,6 +24,6 @@ if(isset($resourceTypeGeneral)){
 
 echo '<a href="http://data.datacite.org/'.$doi.'" class="button" target="_blank">View DataCite Metadata</a>';
 echo '<div style="float:right;position:relative;"><a href="http://dx.doi.org/'.$doi.'" class="button" target="_blank">View record webpage</a></div>';
-echo '</div>';
+echo '</div><br/>';
 
 ?>
