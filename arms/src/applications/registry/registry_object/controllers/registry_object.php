@@ -527,11 +527,19 @@ class Registry_object extends MX_Controller {
 	function delete(){
 		$affected_ids = $this->input->post('affected_ids');
 		$this->load->model('registry_objects', 'ro');
+		$this->load->model('data_source/data_sources', 'ds');
+
+		$affected_ds = array();
 		foreach($affected_ids as $id){
 			$ro = $this->ro->getByID($id);
+			$affected_ds[] = $ro->data_source_id;
 			$this->ro->deleteRegistryObject($ro);
 		}
 
+		foreach($affected_ds as $ds_id){
+			$ds = $this->ds->getByID($ds_id);
+			$ds->updateStats();
+		}
 	}
 
 	
