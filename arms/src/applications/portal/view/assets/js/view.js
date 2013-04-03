@@ -3,7 +3,7 @@ $(document).ready(function() {
 
 // Pointer to DOM element containing metadata about this registryObject
 var metadataContainer = $('#registryObjectMetadata');
-var loading_icon = '<div style="width:100%; padding-top:40px; text-align:center;"><img src="'+base_url+'assets/core/images/ajax-loader.gif" alt="Loading..." /></div>';
+var loading_icon = '<div style="width:100%; padding:40px; text-align:center;"><img src="'+base_url+'assets/core/images/ajax-loader.gif" alt="Loading..." /><br/><br/><center><b>Loading...</b></center></div>';
 var ACCORDION_MODE_SUGGESTORS = ['datacite'];
 
 setRegistryLink();
