@@ -262,8 +262,10 @@ class _xml
 		$oldHash = '';
 		$this->current = $current;
 		$this->scheme = $scheme;
+
 		if($current == TRUE)
 		{
+
 			$query = $this->db->select('*')->from('record_data')->where(array('registry_object_id' => $this->registry_object_id, 'scheme'=>$scheme))->order_by('id DESC')->limit(1)->get();
 			if ($query->num_rows() > 0)
 			{
@@ -272,18 +274,24 @@ class _xml
 				$query->free_result();
 				$oldHash = $result['hash'];
 			}
+			
 			if($oldHash != $newHash){
 				$this->db->insert('record_data', array(
-												'registry_object_id'=>$this->registry_object_id,
-												'data' => $xml,
-												'timestamp' => time(),
-												'current' => ($current ? "TRUE" : "FALSE"),
-												'scheme' => $scheme,
-												'hash' => $newHash
-											));
+													'registry_object_id'=>$this->registry_object_id,
+													'data' => $xml,
+													'timestamp' => time(),
+													'current' => ($current ? "TRUE" : "FALSE"),
+													'scheme' => $scheme,
+													'hash' => $newHash
+												));
+			}
+			else
+			{
+				$this->db->where('id', $result['id'])->update('record_data',array('current'=>"TRUE"));
 			}
 		}
-		else{
+		else
+		{
 				$this->db->insert('record_data', array(
 												'registry_object_id'=>$this->registry_object_id,
 												'data' => $xml,

@@ -4,6 +4,7 @@
 
     <xsl:output omit-xml-declaration="yes" indent="yes" />
     <xsl:strip-space elements="*"/>
+    <xsl:output method="xml" encoding="UTF-8" />
 
 <xsl:template match="/">
     <xsl:apply-templates/>

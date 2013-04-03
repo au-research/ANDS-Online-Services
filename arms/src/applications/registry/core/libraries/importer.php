@@ -114,6 +114,13 @@ class Importer {
 			{
 				// Escape XML entities from the start...
 				$payload = str_replace("&", "&amp;", $payload);
+				// Clean up non-UTF8 characters by trying to translate them
+
+				// If we have php-mbstring enabled, convert to UTF-8 (fixes crash on curly quotes!)
+				if (function_exists($payload))
+				{
+					$payload = mb_convert_encoding($payload,"UTF-8"); 
+				}
 
 				// Build a SimpleXML object from the converted data
 				// We will throw an exception here if the payload isn't well-formed XML (which, by now, it should be)
@@ -814,7 +821,6 @@ class Importer {
 		$solrUpdateUrl = $solrUrl.'update/?wt=json';
 
 		try{
-
 			$result = json_decode(curl_post($solrUpdateUrl, "<add>" . implode("\n",$this->solr_queue) . "</add>"), true);
 			if($result['responseHeader']['status'] == self::SOLR_RESPONSE_CODE_OK)
 			{
