@@ -76,6 +76,8 @@
 	
 	<script type="text/javascript" src="<?php echo asset_url('lib/jquery-ui-1.8.23.custom.min.js', 'base');?>"></script>
 	<script type="text/javascript" src="<?php echo asset_url('lib/jQRangeSlider/jQAllRangeSliders-withRuler-min.js', 'base');?>"></script>
+	<script src="<?php echo asset_url('lib/qtip2/jquery.qtip.min.js', 'base');?>" type="text/javascript"></script>
+
 	 <?php if(isset($js_lib)): ?>
 	    <?php foreach($js_lib as $lib):?>
 	 		<?php if($lib=='googleapi'):?>
@@ -95,9 +97,6 @@
 	    	<?php if($lib=='spacetree'):?>
 				<script type="text/javascript" src="<?php echo asset_url('js/spacetree.js', 'core');?>"></script>
 	    	<?php endif; ?>
-	    	<?php if ($lib=='qtip'):?>
-		    	<script src="<?php echo asset_url('lib/qtip2/jquery.qtip.min.js', 'base');?>" type="text/javascript"></script>
-		    <?php endif; ?>
 		    <?php if ($lib=='accordion'): ?>
 		    	<script src="<?php echo asset_url('lib/tinyaccordion/accordion.js', 'base');?>" type="text/javascript"></script>
 		    <?php endif; ?>
