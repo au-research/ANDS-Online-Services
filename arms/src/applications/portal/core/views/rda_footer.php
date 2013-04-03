@@ -2,15 +2,23 @@
 {{#links}}
 <div class="ro_preview">
 	<div class="ro_preview_header">
-		<img class="icon-heading" src="<?php echo base_url();?>assets/core/images/{{class}}.png"/>
-		<div class="title">{{title}}</div>
+
+		{{#class}}
+			<img class="icon-heading" src="<?php echo base_url();?>assets/core/images/{{class}}.png"/>
+		{{/class}}
+		{{^class}}
+			<img class="icon-heading" src="<?php echo base_url();?>assets/core/images/icons/external_link.png"/>
+		{{/class}}
+		<div class="title">{{{title}}}</div>
 	</div>
 	<div class="ro_preview_description hide">
 		{{description}}
 		{{{expanded_html}}}
+		{{#display_footer}}
 		<div class="ro_preview_footer">
 			<a href="{{url}}">View Full Record</a>
 		</div>
+		{{/display_footer}}
 	</div>
 </div>
 {{/links}}

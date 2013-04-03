@@ -213,6 +213,17 @@ function updateLinksDisplay(container, title, suggestor, start, rows)
     // Fire off the request
     $.get(base_url + url_suffix, function(data){   
         log(data);
+
+        // Cleanup data 
+        for (var link in data.links)
+        {
+            //data.links[link].title = htmlDecode(data.links[link].title);
+            if (data.links[link].class == "external")
+            {
+                data.links[link].class = null;
+            } 
+            data.links[link].display_footer = (suggestor == 'datacite' ? null : 'true');
+        }
         var template = $('#link_list_template').html();
         var output = Mustache.render(template, data);
         container.html(output);
