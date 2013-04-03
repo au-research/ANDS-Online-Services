@@ -30,7 +30,7 @@
 					?>
 
 					<div class="middle">
-						<form action="#" method="post" class="form-vertical password-change-form">
+						<form action="#" method="post" class="form-vertical password-change-form" autocomplete = "off">
 							<div class="control-group">
 								<label class="control-label">New Password:</label>
 								<div class="controls">
