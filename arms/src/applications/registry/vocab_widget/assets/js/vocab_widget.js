@@ -665,13 +665,9 @@
 		target.data('treestate', 'open');
 		break;
 	    }
-	    /*
-	     * our <ins> fellows can trigger a click, but we don't want to
-	     * advertise those...
-	     */
-	    if (typeof(ev.srcElement) !== 'undefined' &&
-		typeof($(ev.target).data('vocab') !== 'undefined' )) {
-		target.trigger('treeselect.vocab.ands', ev);
+
+	    if($(ev.target).is('span')){
+	    	target.trigger('treeselect.vocab.ands', ev);
 	    }
 	},
 
@@ -686,7 +682,7 @@
 		.data('vocab', item)
 		.attr('data-vocab-node', item.about);
 
-	    titem.text(item['label'] + ' (' + item['count'] + ')');
+	    titem.html('<span>'+item['label']+'</span>' + ' (' + item['count'] + ')');
 
 	    if (item.narrower === false)
 	    {

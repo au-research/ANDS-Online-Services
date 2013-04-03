@@ -52,7 +52,7 @@ $(document).ready(function() {
 			 * resultSort, limitRows, researchGroupSort, subjectSort, typeSort, licenseSort
 			 */
 		});
-		$('.container').hide();
+		
 		executeSearch(searchData, searchUrl);
 	});
 	$(window).hashchange(); //do the hashchange on page load
@@ -62,14 +62,14 @@ $(document).ready(function() {
 function executeSearch(searchData, searchUrl){
 	resultPolygons = new Array();
 	clearOverlays();
-	
+	$('.container').css({opacity:0.5});
 	$.ajax({
 		url:searchUrl, 
 		type: 'POST',
 		data: {filters:searchData},
 		dataType:'json',
 		success: function(data){
-			$('.container').show();
+			$('.container').css({opacity:1});
 			$.each(data.solr_result.response.docs, function(){
 				// log(this.list_title, this.score);
 			});
@@ -159,9 +159,9 @@ $(document).on('click', '.filter',function(e){
 }).on('click', '.vocab_tree_standard ins', function(){
 	$(this).siblings('ul').toggle();
 	$(this).parent().toggleClass('tree_closed').toggleClass('tree_open');
-}).on('click', '.tree_leaf', function(){
+}).on('click', '.vocab_tree_standard .tree_leaf span', function(e){
 	if(!$(this).hasClass('tree_empty')){
-		searchData['s_subject_value_resolved']=$(this).attr('vocab_value');
+		searchData['s_subject_value_resolved']=$(this).parent().attr('vocab_value');
 		searchData['p'] = 1;
 		changeHashTo(formatSearch());
 	}
@@ -205,7 +205,7 @@ function loadSubjectBrowse(val){
 		sqc += '&defType=edismax';
 		$('#subjectfacet div').vocab_widget({mode:'tree', repository:'anzsrc-for', sqc:sqc})
 		.on('treeselect.vocab.ands', function(event) {
-			var target = $(event.target);
+			var target = $(event.target).parent();
 			var data = target.data('vocab');
 			searchData['subject_vocab_uri'] = encodeURIComponent(data.about);
 			searchData['subject_vocab_uri_display'] = data.label;

@@ -103,7 +103,7 @@ class Search extends MX_Controller {
 					case 'license_class': 
 						$this->solr->setOpt('fq', 'license_class:("'.$value.'")');
 						$filteredSearch = true;
-						break;						
+						break;
 					case 'spatial':
 						$this->solr->setOpt('fq', 'spatial_coverage_extents:"Intersects('.$value.')"');
 						$filteredSearch = true;
@@ -283,12 +283,12 @@ class Search extends MX_Controller {
             }
         }
         $this->solr->setOpt('fq', 'subject_type:"'.$type.'"');
-		$this->solr->setFacetOpt('pivot', 'subject_type,s_subject_value_resolved');
-		$this->solr->setFacetOpt('sort', 's_subject_value_resolved');
+		$this->solr->setFacetOpt('pivot', 'subject_type,subject_value_resolved');
+		$this->solr->setFacetOpt('sort', 'subject_value_resolved');
 		$this->solr->setFacetOpt('limit', '25000');
 		$content = $this->solr->executeSearch();
 		$facets = $this->solr->getFacet();
-		$facet_pivots = $facets->{'facet_pivot'}->{'subject_type,s_subject_value_resolved'};
+		$facet_pivots = $facets->{'facet_pivot'}->{'subject_type,subject_value_resolved'};
 		//echo json_encode($facet_pivots);
 		$result = array();
 		$result[$type] = array();

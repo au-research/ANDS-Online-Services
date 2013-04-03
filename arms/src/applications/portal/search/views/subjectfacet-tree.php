@@ -8,7 +8,7 @@
 			<?php foreach($t['subjects'] as $l):?>
 				<li class="tree_leaf <?php echo ($l['count']==0) ? 'tree_empty' : '';?>" vocab_value="<?php echo $l['value'];?>">
 					<ins></ins>
-					<?php echo $l['value'];?> (<?php echo $l['count'];?>)
+					<span><?php echo $l['value'];?> (<?php echo $l['count'];?>)</span>
 				</li>
 			<?php endforeach;?>
 			</ul>
