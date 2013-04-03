@@ -24,10 +24,10 @@
 	</div>
 	<div id="breadcrumb">
 		<?php 
-			if ($this->user->hasFunction('REGISTRY_USER')) 
+			if ($this->user->hasFunction('REGISTRY_USER') && $this->user->hasAffiliation($ds->record_owner)) 
 			{
 				// // User has registry access...links can be more specific
-				echo anchor('data_source/', '<i class="icon-home"></i> Home', array('class'=>'tip-bottom', 'title'=>'Go to Home'));
+				echo anchor('/', '<i class="icon-home"></i> Home', array('class'=>'tip-bottom', 'title'=>'Go to Home'));
 				echo anchor('data_source/manage#!/view/'.$ds->id, $ds->title, array('class'=>'', 'title'=>''));
 			}
 			else
