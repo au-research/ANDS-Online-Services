@@ -35,7 +35,7 @@ body {
 	line-height: 1;	
 }
 
-.facet_group ol, .facet_group ul, .facet_result ul, .ands_widget_wrapper ul, .widget ul, ul.topic_list {
+.facet_group ol, .facet_group ul, .facet_result ul, .ands_widget_wrapper ul, .widget ul, ul.topic_list, ul.top_nav {
 	list-style: none !important;
 }
 
