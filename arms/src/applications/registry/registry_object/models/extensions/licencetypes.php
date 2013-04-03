@@ -2,6 +2,7 @@
 
 class LicenceTypes_Extension extends ExtensionBase
 {
+
 	function __construct($ro_pointer)
 	{
 		parent::__construct($ro_pointer);
@@ -73,15 +74,32 @@ class LicenceTypes_Extension extends ExtensionBase
 
 	}
 
+
+	// Temporary workaround for storing "groupings" of licence identifiers
+	// XXX: Long term solution should use a vocabulary service (such as ANDS's)
+	private static $licence_groups = array(
+        "GPL" => "Open Licence",
+        "CC-BY-SA" => "Open Licence",
+        "CC-BY-ND" => "Non-Derivative Licence",
+        "CC-BY-NC-SA" => "Non-Commercial Licence",
+        "CC-BY-NC-ND" => "Non-Derivative Licence",
+        "CC-BY-NC" => "Non-Commercial Licence",
+        "CC-BY" => "Open Licence",
+        "AusGOALRestrictive" => "Restrictive Licence",
+        "NoLicence" => "No Licence"
+        
+    );
+    
 	function getLicenceGroup($licence_type)
 	{
-		$licence_group = '';
-		$query =  $this->db->select('parent_term_identifier')->get_where('tbl_terms', array('identifier'=>(string)$licence_type, 'vocabulary_identifier'=>'RIFCSLicenceType'));
-		foreach ($query->result_array() AS $row)
+		if (isset(self::$licence_groups[(string)$licence_type]))
 		{
-			$licence_group = $row['parent_term_identifier'];
-		}		
-		return $licence_group;
+			return self::$licence_groups[(string)$licence_type];
+		}
+		else
+		{
+			return '';
+		}
 
 	}
 
