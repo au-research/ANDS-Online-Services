@@ -565,6 +565,7 @@ function initMap(){
 
        });
      markerClusterer = new  MarkerClusterer(map, null, {zoomOnClick:false});
+     map.setCenter(latlng);
 }
 
 
@@ -734,6 +735,7 @@ function resetZoom(){
 	if(searchBox)
 	{
 		map.setCenter(searchBox.getBounds().getCenter());
+		console.log("if searchBox lat:" + searchBox.getBounds().getCenter().lat() + " lng: " + searchBox.getBounds().getCenter().lng());
 		map.fitBounds(searchBox.getBounds());
 	}
 	else if(searchData['spatial']){
@@ -759,6 +761,7 @@ function resetZoom(){
 		geoCodeRectangle.setMap(map);
 	  	searchBox = geoCodeRectangle;
 	 	map.setCenter(searchBox.getBounds().getCenter());
+	 	console.log("no searchBox: lat:" + searchBox.getBounds().getCenter().lat() + " lng: " + searchBox.getBounds().getCenter().lng());
 		map.fitBounds(searchBox.getBounds());
 	}
 

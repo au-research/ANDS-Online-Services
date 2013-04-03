@@ -759,9 +759,16 @@ function update(ids, attributes){
         url:url, 
         type: 'POST',
         data: data,
-        dataType: 'text',
+        dataType: 'JSON',
         success: function(data){
-            init(filters);
+            if(data.status=='error'){
+                $('#status_message').removeClass('alert-info').addClass('alert-error');
+                $('#status_message').html(data.error_message);
+            }else if(data.status=='success'){
+                $('#status_message').removeClass('alert-error').addClass('alert-info');
+                $('#status_message').html(data.success_message);
+                init(filters);
+            }
             // $('#status_message').html(data.msg);
         }
     });

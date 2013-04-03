@@ -458,8 +458,18 @@ class Registry_object extends MX_Controller {
 
 
 	function update($all = false){
+		set_exception_handler('json_exception_handler');
+		header('Cache-Control: no-cache, must-revalidate');
+		header('Content-type: application/json');
+		$jsonData = array();
+		$jsondata['status'] = 'success';
+		$jsondata['error_message'] = '<ul class="error_mesage">';
+		$jsondata['success_message'] = '<ul class="success_mesage">';
+		$jsondata['success_count'] = 0;
+		$jsondata['error_count'] = 0;
 		$this->load->model('registry_objects', 'ro');
 		$attributes = $this->input->post('attributes');
+
 		if(!$all){
 			$affected_ids = $this->input->post('affected_ids');
 			$attributes = $this->input->post('attributes');
@@ -477,26 +487,41 @@ class Registry_object extends MX_Controller {
 			$ro = $this->ro->getByID($id);
 	
 			foreach($attributes as $a){
-				$ro->setAttribute($a['name'], $a['value']);
-				if($ro->save()){
-					if($a['name']=='status'&&$a['value']=='SUBMITTED_FOR_ASSESSMENT')
+				try{
+					$ro->setAttribute($a['name'], $a['value']);
+
+					if($ro->save())
 					{
-						$data_source_id = $ro->getAttribute('data_source_id');
-						$this->load->model('data_source', 'ds');
-						$data_source = $this->ds->getByID($data_source_id);
-						if($data_source->count_SUBMITTED_FOR_ASSESSMENT<2 && !$sentMail)
-						{		
-							$this->ro->emailAssessor($data_source);
-							$sentMail = true;
+						if($a['name']=='status'&&$a['value']=='SUBMITTED_FOR_ASSESSMENT')
+						{
+							$data_source_id = $ro->getAttribute('data_source_id');
+							$this->load->model('data_source', 'ds');
+							$data_source = $this->ds->getByID($data_source_id);
+							if($data_source->count_SUBMITTED_FOR_ASSESSMENT<2 && !$sentMail)
+							{		
+								$this->ro->emailAssessor($data_source);
+								$sentMail = true;
+							}							
 						}
-						
+						$jsondata['success_count']++;
+						$jsondata['success_message'] .= '<li>Updated '.$ro->key.' set '.$a['name'].' to value:'.$a['value']."</li>";
+					}else{
+						$jsondata['error_count']++;
+						$jsondata['error_message'] .= '<li>Failed to update '.$ro->key.' set '.$a['name'].' to value:'.$a['value']."</li>";
+						$jsondata['status'] = 'error';
 					}
-					echo 'update '.$ro->id.' set '.$a['name'].' to value:'.$a['value'];
-				}else{
-					echo 'failed';
+				}
+				catch(Exception $e)
+				{
+					$jsondata['status'] = 'error';
+					$jsondata['error_count']++;
+					$jsondata['error_message'] .= "<li>".$e->getMessage()."</li>";
 				}
 			}
 		}
+		$jsondata['error_message'] .= '</ul>';
+		$jsondata['success_message'] .= '</ul>';
+		echo json_encode($jsondata);
 	}
 
 	function delete(){

@@ -184,7 +184,12 @@ class Core_extension extends ExtensionBase
 		{
 			$xml = html_entity_decode($this->ro->getRif());
 			$existingRegistryObject = $this->_CI->ro->getPublishedByKey($this->ro->key);
-			if ($existingRegistryObject)
+			if($existingRegistryObject && $existingRegistryObject->getAttribute('data_source_id') != $this->getAttribute('data_source_id'))
+			{
+				$otherDs = $this->_CI->ds->getByID($existingRegistryObject->getAttribute('data_source_id'));
+				throw new Exception("Registry Object with key ".$this->ro->key." already exists in the ".NL.$otherDs->title." Datasource");
+			}
+			else if ($existingRegistryObject)
 			{
 				// Delete this original draft and change this object to point to the PUBLISHED (seamless changeover)
 				$this->ro = $this->_CI->ro->getPublishedByKey($this->getAttribute("key"));
