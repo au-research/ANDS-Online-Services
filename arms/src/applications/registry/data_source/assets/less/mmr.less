@@ -3,7 +3,16 @@
 		list-style-type: none; margin: 0;
 		width:100%;
 		position:relative;
-		li{
+
+		li.no_records{
+			padding-top:12px;
+			font-size:1em;
+			text-align:center;
+			background-color:#efefef;
+		}
+
+		li.ro_item{
+
 			position:relative;
 			display:block;
 			min-height:70px;
@@ -12,7 +21,6 @@
 			font-size:0.8em;
 			&:hover{
 				cursor:pointer;
-				
 			}
 
 			.ro_title{
@@ -132,8 +140,9 @@
 		float:left;
 	}
 	.droppable li{
-		background: #C1F4E7;
+		background: #C1F4E7 !important;
 	}
+
 }
 
 .ui-tooltip-default{

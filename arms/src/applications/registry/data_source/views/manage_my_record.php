@@ -159,7 +159,7 @@
 			<div class='clearfix'></div>
 			</li>
 			{{/items}}
-			{{#noResult}}<small style="margin-left:-20px;"><i>There are no records which match this status</i></small>{{/noResult}}
+			{{#noResult}}<li class="no_records"><small><i>There are no records which match this status</i></small></li>{{/noResult}}
 		</ul>
 		{{#hasMore}}<span class="show_more" offset="{{offset}}" ds_id="{{ds_id}}" status="{{name}}">Show More</span>{{/hasMore}}
 	</div>
