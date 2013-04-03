@@ -48,6 +48,7 @@
 	<div class="search">
 		<div class="inner">
 			<input type="text" id="search_box" name="s" value="" placeholder="Search"/>
+			<img src="<?php echo base_url('assets/core/images/delete.png');?>" class="clearAll" tip="Clear Search"/>
 			<a class="browse_button" href="<?php echo base_url('browse');?>">Browse by Subject Area</a>
 			<a href="javascript:;" class="search_map" id="search_map_toggle">Browse by Map Coverage</a>
 			<div class="clear" style="margin-left:312px; padding-bottom:4px;"><a href="#" id="ad_st">Advanced Search</a></div>

@@ -44,6 +44,8 @@ $(document).ready(function() {
 						$('.tabs a[filter_value='+value+']').addClass('current');
 						break;
 				}
+				if(!searchData['q']) $('search_box').val('');
+				$('.clearAll').show();
 			}
 			/**
 			 * term could be: q, p, tab, group, type, subject, vocabUriFilter, licence, temporal, n, e, s, w, spatial
@@ -163,6 +165,11 @@ $(document).on('click', '.filter',function(e){
 		searchData['p'] = 1;
 		changeHashTo(formatSearch());
 	}
+}).on('click','.clearAll',function(e){
+	e.preventDefault();
+	searchData = {};
+	changeHashTo(formatSearch());
+	$(this).hide();
 });
 
 function loadSubjectBrowse(val){
@@ -424,6 +431,7 @@ function postSearch(){
 		var html = '<li><img src="'+base_url+'assets/core/images/delete.png" filter_type="temporal" class="remove_facet"/><a href="javascript:;" class="filter remove_facet" filter_type="temporal">'+temporal[0]+'-'+temporal[1]+'</a></li>';
 		$('.facet_subjects ul').prepend(html);
 	}
+
 }
 
 

@@ -378,6 +378,7 @@ a.logo img {
 .search .inner {
 	width: 960px;
 	margin: 0 auto;
+	position:relative;
 }
 .search .inner input[type="text"] {
 	background: url(images/search_text.png) no-repeat 0 0;

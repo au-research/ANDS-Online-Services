@@ -1,5 +1,18 @@
 $(document).ready(function() {
 
+	$('*[tip]').qtip({
+		content: {
+			text: function(api) {
+				// Retrieve content from custom attribute of the $('.selector') elements.
+				return $(this).attr('tip');
+			}
+		},
+		position:{my:'left center', at:'right center'},
+		style: {
+	        classes: 'ui-tooltip-light'
+	    }
+	});
+
 	$('.text_select').each(function() {
 		var $this = $(this),
 			$input = $this.find('input'),
