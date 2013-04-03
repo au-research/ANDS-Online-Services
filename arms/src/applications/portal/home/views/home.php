@@ -2,30 +2,43 @@
 <div class="container">
 	<div class="intro">
 		<h3>What’s in Research Data Australia</h3>
-		<div class="intro_box">
-			<div class="intro_inner" id="collection_icon">
-				<h4><a href="<?=base_url('search/#!/q=/tab=collection');?>">Collections <span>(<?php echo $collection;?>)</span></a></h4>
-				Research datasets or collections of research materials.
-			</div><!-- intro_inner -->
-		</div><!-- intro_box -->
-		<div class="intro_box">
-			<div class="intro_inner" id="party_icon">
-				<h4><a href="<?=base_url('search/#!/q=/tab=party');?>">Parties <span>(<?php echo $party;?>)</span></a></h4>
-				Researchers or research organisations that create or maintain research datasets or collections.
-			</div><!-- intro_inner -->
-		</div>
-		<div class="intro_box">
-			<div class="intro_inner" id="activity_icon">
-				<h4><a href="<?=base_url('search/#!/q=/tab=activity');?>">Activities <span>(<?php echo $activity;?>)</span></a></h4>
-				Projects or programs that create research datasets or collections.
-			</div><!-- intro_inner -->
-		</div><!-- intro_box -->
-		<div class="intro_box">
-			<div class="intro_inner" id="service_icon">
-				<h4><a href="<?=base_url('search/#!/q=/tab=service');?>">Services <span>(<?php echo $service;?>)</span></a></h4>
-				Services that support the creation or use of research datasets or collections.
-			</div><!-- intro_inner -->
-		</div><!-- intro_box -->
+		
+		<a href="<?=base_url('search/#!/q=/tab=collection');?>">
+			<div class="intro_box">
+				<div class="intro_inner" id="collection_icon">
+					<h4>Collections <span>(<?php echo $collection;?>)</span></h4>
+					Research datasets or collections of research materials.
+				</div><!-- intro_inner -->
+			</div>
+		</a><!-- intro_box -->
+
+		<a href="<?=base_url('search/#!/q=/tab=party');?>">
+			<div class="intro_box">
+				<div class="intro_inner" id="party_icon">
+					<h4>Parties <span>(<?php echo $party;?>)</span></h4>
+					Researchers or research organisations that create or maintain research datasets or collections.
+				</div><!-- intro_inner -->
+			</div>
+		</a><!-- intro_box -->
+
+		<a href="<?=base_url('search/#!/q=/tab=activity');?>">
+			<div class="intro_box">
+				<div class="intro_inner" id="activity_icon">
+					<h4>Activities <span>(<?php echo $activity;?>)</span></h4>
+					Projects or programs that create research datasets or collections.
+				</div><!-- intro_inner -->
+			</div>
+		</a><!-- intro_box -->
+
+		<a href="<?=base_url('search/#!/q=/tab=service');?>">
+			<div class="intro_box">
+				<div class="intro_inner" id="service_icon">
+					<h4>Services <span>(<?php echo $service;?>)</span></h4>
+					Services that support the creation or use of research datasets or collections.
+				</div><!-- intro_inner -->
+			</div>
+		</a><!-- intro_box -->
+
 	</div><!-- intro -->
 	<div class="right">
 		<h3>Spotlight on research data</h3>
