@@ -489,7 +489,7 @@ function generatePreviewTip(element, slug, registry_object_id, relation_type)
                     this.set('content.text', temp.html());     
 
                     if (isPublished()){
-                        $('.viewRecordLink').attr("href",base_url + data.slug);
+                        $('.viewRecordLink, .viewRecord').attr("href",base_url + data.slug);
                     }else{
                         $('.viewRecordLink').attr("href",base_url+"view/?id=" + data.registry_object_id);
                     }
