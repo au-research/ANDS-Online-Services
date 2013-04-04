@@ -60,7 +60,7 @@ class Search extends MX_Controller {
 				$value = urldecode($value);
 				switch($key){
 					case 'q': 
-						$this->solr->setOpt('q', $value);
+						$this->solr->setOpt('q', '*'.$value.'*');
 					break;
 					case 'p': 
 						$page = (int)$value;
