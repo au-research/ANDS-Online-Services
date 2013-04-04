@@ -465,7 +465,7 @@ function initVocabWidgets(container){
 }
 
 function loadHarvestLogs(logid, refresh){
-				log("loadHarvestLogs: " + logid);	
+	log("loadHarvestLogs: " + logid);	
 	if(refresh !== 'undefined' && refresh == true)
 	{
 		$('#test_harvest_activity_log .modal-body').html('');
