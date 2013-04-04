@@ -485,21 +485,23 @@ class Importer {
 		$revision_record_id = null;
 		$existingRegistryObject = null;
 
-		// If there is something existing with the same class of status, overwrite it
+		// If there is a draft, add to this one
 		if (isDraftStatus($this->status))
 		{
-			$existingRegistryObject = $this->CI->ro->getDraftByKey((string)$registryObject->key);
-		}
-		elseif (isPublishedStatus($this->status))
-		{
-			// If there is a draft, add to this one
 			$existingRegistryObject = $this->CI->ro->getDraftByKey((string)$registryObject->key);
 			if (!$existingRegistryObject)
 			{
 				$existingRegistryObject = $this->CI->ro->getPublishedByKey((string)$registryObject->key);
 			}
 		}
-		
+		else if (isPublishedStatus($this->status))
+		{
+			$existingRegistryObject = $this->CI->ro->getPublishedByKey((string)$registryObject->key);
+			if (!$existingRegistryObject)
+			{
+				$existingRegistryObject = $this->CI->ro->getDraftByKey((string)$registryObject->key);
+			}
+		}
 
 		if ($existingRegistryObject)
 		{
@@ -514,8 +516,16 @@ class Importer {
 
 			if($existingRegistryObject->data_source_id == $this->dataSource->id)
 			{	
-				// Add a new revision to this existing registry object
-				$revision_record_id = $existingRegistryObject->id;
+				if ((isDraftStatus($this->status) && isDraftStatus($existingRegistryObject->status)) || 
+					(isPublishedStatus($this->status) && isPublishedStatus($existingRegistryObject->status)))
+				{
+					// Add a new revision to this existing registry object
+					$revision_record_id = $existingRegistryObject->id;
+				}
+				else
+				{
+					$revision_record_id = null;
+				}
 			}
 			else
 			{
@@ -529,7 +539,6 @@ class Importer {
 		else
 		{
 			// Harvest this as a new registry object
-			$reharvest = true;
 			$revision_record_id = null;
 		}
 	
