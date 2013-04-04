@@ -481,7 +481,7 @@ function initMap(){
   	homeControlDiv.index = 1;
   	map.controls[google.maps.ControlPosition.TOP_RIGHT].push(homeControlDiv);
 
-	infowindow = new google.maps.InfoWindow();
+	infowindow = new google.maps.InfoWindow({disableAutoPan: true});
     pushPin = new google.maps.MarkerImage('http://maps.google.com/intl/en_us/mapfiles/ms/micons/blue.png',
 					      new google.maps.Size(32,32),
 					      new google.maps.Point(0,0),
@@ -632,6 +632,7 @@ function createMarker(latlng, id)
 		polygonsArray[marker.id].setMap(map);
 	});
 	google.maps.event.addListener(marker,"click",function(){
+		
 		showPreviewWindowConent(marker);
 	});
 	google.maps.event.addListener(marker,"mouseout",function(){
