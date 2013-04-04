@@ -786,7 +786,8 @@ public function getContributorGroupsEdit()
 			$jsonData['next_offset'] = 'all';
 			$jsonData['hasMore'] = false;
 		}
-
+		$jsonData['last_log_id'] = '';
+		$lastLogIdSet = false;
 		$items = array();
 		if(sizeof($dataSourceLogs) > 0){
 			foreach($dataSourceLogs as $log){
@@ -795,6 +796,11 @@ public function getContributorGroupsEdit()
 				$item['log_snippet'] = first_line($log['log']);
 				$item['log'] = $log['log'];
 				$item['id'] = $log['id'];
+				if(!$lastLogIdSet)
+				{
+				$jsonData['last_log_id'] = $log['id'];
+				$lastLogIdSet = true;	
+				}
 				$item['date_modified'] = timeAgo($log['date_modified']);
 				$item['harvester_error_type'] = $log['harvester_error_type'];				
 				array_push($items, $item);

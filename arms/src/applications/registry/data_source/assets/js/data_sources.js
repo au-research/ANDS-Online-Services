@@ -7,6 +7,9 @@
  * @package ands/datasource
  * 
  */
+var lastLogId = null;
+var logTimer = 1000;
+var doLoadLogs = false;
 $(function(){
 
 	// Default error handler
@@ -35,6 +38,9 @@ $(function(){
 	 */
 	 
 	$(window).hashchange(function(){
+		lastLogId = null;
+		logTimer = 1000;
+		doLoadLogs = false;
 		var hash = location.hash;
 		if(hash.indexOf(suffix)==0){//if the hash starts with a particular suffix
 			var words = hash.substring(suffix.length, hash.length).split('/');
@@ -302,6 +308,7 @@ function load_datasource(data_source_id){
 
 			//draw the charts
 			// drawCharts(data_source_id);
+			doLoadLogs = true;
 			loadDataSourceLogs(data_source_id);
 			loadContributorPages(data_source_id);
 
@@ -339,47 +346,62 @@ function loadDataSourceLogs(data_source_id, offset, count)
 {
 	offset = typeof offset !== 'undefined' ? offset : 0;
 	count = typeof count !== 'undefined' ? count : 10;
-	
 	//var log_class = $('select.log-class').val();
 	var log_type = $('select.log-type').val();
 	// log(log_class, log_type, offset, count);
-	$.ajax({
-		url: 'data_source/getDataSourceLogs/',
-		data: {id:data_source_id, offset:offset, count:count, log_type:log_type},
-		type: 'POST',
-		dataType: 'json',
-		success: function(data){
-			checkResponse(data);
-			var logsTemplate = $('#data_source_logs_template').html();
-			var output = Mustache.render(logsTemplate, data);
-			$('#data_source_log_container').append(output);
+	if(doLoadLogs)
+	{
+		$.ajax({
+			url: 'data_source/getDataSourceLogs/',
+			data: {id:data_source_id, offset:offset, count:count, log_type:log_type},
+			type: 'POST',
+			dataType: 'json',
+			success: function(data){
+				checkResponse(data);
+				var logsTemplate = $('#data_source_logs_template').html();
+				if(offset == 0)
+				lastLogId = data.last_log_id;
+				var output = Mustache.render(logsTemplate, data);
+				$('#data_source_log_container').append(output);
 
-			$('#show_more_log').show();
+				$('#show_more_log').show();
 
-			$('#data_source_log_container').fadeIn(500);
-			$('#log_summary').html('Viewing ' + data.next_offset + ' of ' + data.log_size + ' log entries');
-			//$('#log_summary_bottom').html('viewing ' + data.next_offset + ' of ' + data.log_size + ' log entries');
-			$('#show_more_log').attr('next_offset', data.next_offset);
-			if(data.next_offset=='all'){
-				$('#show_more_log').hide();
+				$('#data_source_log_container').fadeIn(500);
+				$('#log_summary').html('Viewing ' + data.next_offset + ' of ' + data.log_size + ' log entries');
+				//$('#log_summary_bottom').html('viewing ' + data.next_offset + ' of ' + data.log_size + ' log entries');
+				$('#show_more_log').attr('next_offset', data.next_offset);
+				if(data.next_offset=='all'){
+					$('#show_more_log').hide();
+				}
+				var bottom_offset = $('#data_source_log_container').offset().top + $('#data_source_log_container').height();
+				//$('body').animate({"scrollTop": bottom_offset}, 100);
+				//logTimer = 2000
+				if(lastLogId)
+				{
+					logTimer = 2000;
+					window.setTimeout(function(){loadTopLogs(data_source_id)}, logTimer);
+				}
+				else{
+					logTimer = logTimer * 2;
+					window.setTimeout(function(){loadDataSourceLogs(data_source_id, offset, count)}, logTimer);
+				}
 			}
-			var bottom_offset = $('#data_source_log_container').offset().top + $('#data_source_log_container').height();
-			//$('body').animate({"scrollTop": bottom_offset}, 100);
-		}
-	});
+		});
 
-	$('#show_more_log').die().live({
-		click:function(){
-			var next_offset = $(this).attr('next_offset');
-			loadDataSourceLogs(data_source_id, next_offset, count);
-		}
-	});
 
-	$('select.log-class, select.log-type').off('change').on('change',function(){
-		$('#data_source_log_container').empty();
-		loadDataSourceLogs(data_source_id);
-	});
+		$('#show_more_log').die().live({
+			click:function(){
+				var next_offset = $(this).attr('next_offset');
+				loadDataSourceLogs(data_source_id, next_offset, count);
+			}
+		});
 
+		$('select.log-class, select.log-type').off('change').on('change',function(){
+			$('#data_source_log_container').empty();
+			loadDataSourceLogs(data_source_id);
+		});
+	}
+	log("loadDataSourceLogs::: data_source_id:" + data_source_id + " lastLogId:" + lastLogId + " logTimer: " + logTimer);	
 	return false;
 }
 function _getVocab(vocab)
@@ -443,6 +465,7 @@ function initVocabWidgets(container){
 }
 
 function loadHarvestLogs(logid, refresh){
+				log("loadHarvestLogs: " + logid);	
 	if(refresh !== 'undefined' && refresh == true)
 	{
 		$('#test_harvest_activity_log .modal-body').html('');
@@ -476,6 +499,39 @@ function loadHarvestLogs(logid, refresh){
 		}
 	});	
 	return false;
+}
+
+function loadTopLogs(data_source_id)
+{
+	if(doLoadLogs)
+	{
+		$.ajax({
+			url: 'data_source/getDataSourceLogs/',
+			data: {id: data_source_id, logid:lastLogId},
+			type: 'POST',
+			dataType: 'json',
+			success: function(data){
+				var logsTemplate = $('#data_source_logs_template').html();
+				var output = Mustache.render(logsTemplate, data);
+				if(data.last_log_id != '' && lastLogId != data.last_log_id)
+				{
+					logTimer = 1000;
+					lastLogId = data.last_log_id;
+				}
+				else{
+					logTimer = logTimer * 2;
+				}
+				$('#data_source_log_container').prepend(output);
+				window.setTimeout(function(){loadTopLogs(data_source_id)}, logTimer);		    		
+			},
+			error: function(data){
+			//console.log(data);
+			}
+		});
+	}
+	log("loadTopLogs::: data_source_id:" + data_source_id + " lastLogId:" + lastLogId + " logTimer: " + logTimer);	
+	return false;
+
 }
 
 function loadContributorPages(data_source_id)
@@ -964,6 +1020,8 @@ $('#importFromHarvesterLink').live({
 				logErrorOnScreen("An error occured whilst testing your harvest!");
 			}
 		});
+		logTimer = 1000;
+		loadDataSourceLogs($('#data_source_view_container').attr('data_source_id'));
 
 	}
 });
@@ -997,7 +1055,7 @@ $('#test-harvest').live({
 					if (data.status == "OK")
 					{
 						$('#test_harvest_activity_log').modal();
-						loadHarvestLogs(data.logid, true);
+						loadHarvestLogs(data.logid-1, true);
 					}
 					else
 					{
@@ -1081,7 +1139,8 @@ $('#importRecordsFromURLModal .doImportRecords').live({
 			}
 				
 		);
-						
+		logTimer = 1000;
+		loadDataSourceLogs($('#data_source_view_container').attr('data_source_id'));			
 		
 	}
 });
@@ -1149,7 +1208,8 @@ $('#importRecordsFromXMLModal .doImportRecords').live({
 			}
 				
 		);
-						
+		logTimer = 1000;
+		loadDataSourceLogs($('#data_source_view_container').attr('data_source_id'));			
 		
 	}
 

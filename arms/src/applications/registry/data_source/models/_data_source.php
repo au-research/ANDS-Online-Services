@@ -486,7 +486,7 @@ class _data_source {
 		$this->db->from('data_source_logs');
 		$this->db->limit($count, $offset);
 		$this->db->where('data_source_id', $this->id);
-		if($logid) $this->db->where('id >=', $logid);
+		if($logid) $this->db->where('id >', $logid);
 		if($log_class!='all') $this->db->where('class', $log_class);
 		if($log_type!='all') $this->db->where('type', $log_type);
 		$this->db->order_by("id", "desc"); 
