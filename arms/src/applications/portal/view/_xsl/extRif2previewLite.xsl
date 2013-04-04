@@ -44,9 +44,9 @@
         <div class="title"><a href="{$base_url}{extRif:extendedMetadata/extRif:slug}"><xsl:value-of select="extRif:extendedMetadata/extRif:displayTitle"/></a></div>
        <div class="clear"></div>
       </div> 
-      <div class="ro_preview_description">
-        <xsl:value-of select="extRif:extendedMetadata/extRif:description" disable-output-escaping="yes"/>
-      </div> 
+      <!-- <div class="ro_preview_description">
+        <xsl:value-of select="extRif:extendedMetadata/extRif:the_description" disable-output-escaping="yes"/>
+      </div>  -->
     </div> 
   </xsl:template>
 
