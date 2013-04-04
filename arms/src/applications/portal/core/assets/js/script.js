@@ -137,11 +137,15 @@ $(document).ready(function() {
 		{
 			return this.nodeValue;
 		}
+		else if (this.nodeType == 1 && this.nodeName.toLowerCase() == "br")
+		{
+			return '<br/>';
+		}
 		else
 		{
 			if (typeof $(this).contents == 'function' && $(this).contents().length > 0)
 			{
-				return $(this).contents().map(recurseGetText).get().join();
+				return $(this).contents().map(recurseGetText).get().join(' ');
 			}
 		}
 		return this.nodeType == 3 ? this.nodeValue : undefined;
@@ -149,7 +153,7 @@ $(document).ready(function() {
 
 	// get any text inside the element $(this).directText()
 	$.fn.directText=function(delim) {
-	  if (!delim) delim = '';
+	  if (!delim) delim = ' ';
 	  return this.contents().map(recurseGetText).get().join(delim);
 	};
 	//setTimeout(function(){alert("Hello")},3000)

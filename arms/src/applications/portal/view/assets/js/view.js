@@ -483,7 +483,8 @@ function generatePreviewTip(element, slug, registry_object_id, relation_type)
                     // Clean up any HTML rubbish...                   
                     var temp = $('<span/>');
                     temp.html(data.html);
-                    $("div.descriptions", temp).html(htmlDecode(htmlDecode($("div.descriptions", temp).directText())));
+                    $("div.descriptions", temp).html($("div.descriptions", temp).text());
+                    $("div.descriptions", temp).html($("div.descriptions", temp).directText());
 
                     this.set('content.text', temp.html());     
 
