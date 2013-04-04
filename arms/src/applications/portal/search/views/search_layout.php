@@ -53,6 +53,7 @@
 		{{#logo}}
 			<img src="{{logo}}" class="logo right"/>
 		{{/logo}}
+		<img src="<?php echo base_url();?>assets/img/{{class}}.png" class="class_icon"/>
 		<a href="<?php echo base_url();?>{{slug}}" class="title">{{display_title}}</a>
 		<div class="excerpt">
 			{{description}}
