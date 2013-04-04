@@ -170,6 +170,11 @@ $(document).on('click', '.filter',function(e){
 	searchData = {};
 	changeHashTo(formatSearch());
 	$(this).hide();
+}).on('click', '.post', function(e){
+	e.preventDefault();
+	var url = $('a.title', this).attr('href');
+	window.location = url;
+	// $('a.title', this).click();
 });
 
 function loadSubjectBrowse(val){
@@ -329,8 +334,7 @@ function initSearchPage(){
 
 		var thecontent = $(this).html();
 		var newContent = ellipsis(thecontent, 200);
-		if(thecontent!=newContent) 
-		{ 
+		if(thecontent!=newContent){ 
 			newContent = '<div class="hide" fullExcerpt="true">'+thecontent+'</div>' + newContent + '';
 		}
 
@@ -409,14 +413,14 @@ function postSearch(){
 }
 
 
-function ellipsis (string, length)
-{
+function ellipsis (string, length){
 	if (string.length <= length){
 		return string;
 	}else{
 		var trimmedString = string.substr(0, length-3);
 		trimmedString = trimmedString.substr(0, Math.min(trimmedString.length, trimmedString.lastIndexOf(" "))) + '&hellip;';
-		return trimmedString + '<span class="showmore_excerpt"><br /><a href="javascript:void(0);">More &hellip;</a></span>';
+		// return trimmedString + '<span class="showmore_excerpt"><br /><a href="javascript:void(0);">More &hellip;</a></span>';
+		return trimmedString;
 	}
 }
 
