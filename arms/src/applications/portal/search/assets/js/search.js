@@ -543,7 +543,7 @@ function initMap(){
 
        });
      markerClusterer = new  MarkerClusterer(map, null, {zoomOnClick:false});
-     map.setCenter(latlng);
+     window.setTimeout(function(){log("centering"); map.setCenter(new google.maps.LatLng(-25.397, 133.644))}, 100);
 }
 
 
