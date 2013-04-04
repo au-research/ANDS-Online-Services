@@ -53,6 +53,7 @@ $(document).ready(function() {
 			 */
 		});
 		
+
 		executeSearch(searchData, searchUrl);
 	});
 	$(window).hashchange(); //do the hashchange on page load
@@ -481,7 +482,27 @@ function initMap(){
   	homeControlDiv.index = 1;
   	map.controls[google.maps.ControlPosition.TOP_RIGHT].push(homeControlDiv);
 
-	infowindow = new google.maps.InfoWindow({disableAutoPan: true});
+	var boxOptions = {
+        content: "boxText"
+        ,alignBottom :true
+        ,disableAutoPan: false
+        ,maxWidth: 0
+        ,pixelOffset: new google.maps.Size(-140, 0)
+        ,zIndex: null
+        ,boxStyle: { 
+          background: "white"
+          ,opacity: 1
+         }
+        ,closeBoxMargin: "10px 2px 2px 2px"
+        ,closeBoxURL: "http://www.google.com/intl/en_us/mapfiles/close.gif"
+        ,infoBoxClearance: new google.maps.Size(1, 1)
+        ,isHidden: false
+        ,pane: "floatPane"
+        ,enableEventPropagation: false
+    };
+
+    infowindow = new InfoBox(boxOptions);
+
     pushPin = new google.maps.MarkerImage('http://maps.google.com/intl/en_us/mapfiles/ms/micons/blue.png',
 					      new google.maps.Size(32,32),
 					      new google.maps.Point(0,0),
@@ -543,7 +564,7 @@ function initMap(){
 
        });
      markerClusterer = new  MarkerClusterer(map, null, {zoomOnClick:false});
-     window.setTimeout(function(){log("centering"); map.setCenter(new google.maps.LatLng(-25.397, 133.644))}, 100);
+     window.setTimeout(function(){map.setCenter(new google.maps.LatLng(-25.397, 133.644))}, 100);
 }
 
 
@@ -682,16 +703,8 @@ function showPreviewWindowConent(mOverlay)
 		type: 'POST',
 		dataType:'json',
 		success: function(data){
-
-			infowindow.setContent(data.html);
-			infowindow.setOptions({maxWidth:500});
-			infowindow.open(map);
-			$('.ro_preview_header').unbind('click').click(function(){
-				$(this).next('.ro_preview_description').slideToggle(200, function(){
-					// console.log(infowindow);
-					google.maps.event.trigger(infowindow, 'content_changed');
-				});
-			});
+			infowindow.setContent(data.html);//
+			infowindow.open(map);			
 		},
 		error: function(data){
 			//$('body').prepend(data.responseText);

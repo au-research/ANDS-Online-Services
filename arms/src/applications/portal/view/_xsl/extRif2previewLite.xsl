@@ -31,23 +31,22 @@
  <xsl:template match="ro:registryObject">
     <div class="ro_preview">
       <div class="ro_preview_header">
-        <img class="icon-heading">
-           <xsl:attribute name="src"><xsl:value-of select="$base_url"/>
-           <xsl:text>assets/core/images/icons/</xsl:text>
-           <xsl:value-of select="$objectClassType"/>
-           <xsl:text>.png</xsl:text></xsl:attribute>
-           <xsl:attribute name="alt"><xsl:value-of select="$objectClassType"/></xsl:attribute>
-          <!--  <xsl:attribute name="style"><xsl:text>width:50%; float:right;</xsl:text></xsl:attribute> -->
-       </img>
-        <div class="title"><xsl:value-of select="extRif:extendedMetadata/extRif:displayTitle"/></div>
+        <a href="{$base_url}{extRif:extendedMetadata/extRif:slug}">
+          <img class="icon-heading">
+             <xsl:attribute name="src"><xsl:value-of select="$base_url"/>
+             <xsl:text>assets/core/images/icons/</xsl:text>
+             <xsl:value-of select="$objectClassType"/>
+             <xsl:text>.png</xsl:text></xsl:attribute>
+             <xsl:attribute name="alt"><xsl:value-of select="$objectClassType"/></xsl:attribute>
+            <!--  <xsl:attribute name="style"><xsl:text>width:50%; float:right;</xsl:text></xsl:attribute> -->
+         </img>
+        </a>
+        <div class="title"><a href="{$base_url}{extRif:extendedMetadata/extRif:slug}"><xsl:value-of select="extRif:extendedMetadata/extRif:displayTitle"/></a></div>
        <div class="clear"></div>
       </div> 
-      <div class="ro_preview_description hide">
+      <div class="ro_preview_description">
         <xsl:value-of select="extRif:extendedMetadata/extRif:description" disable-output-escaping="yes"/>
       </div> 
-      <div class="ro_preview_footer">
-            <a href="{$base_url}{extRif:extendedMetadata/extRif:slug}">View Full Record</a> 
-      </div>
     </div> 
   </xsl:template>
 
