@@ -1022,6 +1022,8 @@ public function getContributorGroupsEdit()
 	 */
 	function triggerHarvest()
 	{
+		header('Cache-Control: no-cache, must-revalidate');
+		header('Content-type: application/json');
 		$jsonData = array("status"=>"ERROR");
 
 		$this->load->model("data_sources","ds");
