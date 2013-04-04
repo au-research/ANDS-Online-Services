@@ -815,7 +815,6 @@ function load_datasource_edit(data_source_id, active_tab){
 			}
 			
 			$('#edit-datasource  .normal-toggle-button').each(function(){
-
 				if($(this).hasClass('create-primary')){
 						if($(this).attr('value')=='t' || $(this).attr('value')=='1' || $(this).attr('value')=='true' ){
 							$(this).find('input').attr('checked', 'checked');
@@ -842,6 +841,96 @@ function load_datasource_edit(data_source_id, active_tab){
 							$('#nla-push-div').toggle();
 						}
 					});
+				}else if($(this).hasClass('manual_publish')){
+					if($(this).attr('value')=='t' || $(this).attr('value')=='1' || $(this).attr('value')=='true' ){
+						$(this).find('input').attr('checked', 'checked');
+						$('#manual_publish').toggle();
+					}
+					$(this).toggleButtons({
+						width:75,enable:true,
+						onChange:function(e){								
+							$(this).find('input').attr('checked', 'checked');
+							$('#manual_publish').toggle();	
+							var val = $('#check_manual_publish').attr('checked');
+							if(val)
+							{					
+								$('#myModal').modal();
+								data = "Checking the ‘Manually Publish Records’ checkbox will require you to <br />manually publish your approved records via the Manage My Records screen."
+								data2 = "<br /><a href='#' class='btn' data-dismiss='modal'>OK</a>";
+								$('#myModal .modal-body').html("<br/><pre>" + data + "</pre> " + data2);
+							}else{
+								
+								$('#myModal').modal();
+								data = "Unchecking the ‘Manually Publish Records’ checkbox <br />will cause your approved records to be published automatically. <br/>This means your records will be publically visible in <br />Research Data Australia immediately after being approved.";
+								data2 = "<br /><a href='#' class='btn' data-dismiss='modal'>OK</a>";
+								$('#myModal .modal-body').html("<br/><pre>" + data + "</pre> " + data2);
+							}
+						}
+					});
+
+				}else if($(this).hasClass('qa_flag')){			
+					if($(this).attr('value')=='t' || $(this).attr('value')=='1' || $(this).attr('value')=='true' ){
+						$(this).find('input').attr('checked', 'checked');
+						$('#qa_flag').toggle();
+					}
+					$(this).toggleButtons({
+						width:75,enable:true,
+						onChange:function(){
+							$(this).find('input').attr('checked', 'checked');
+							var val = ($('#check_qa_flag').attr('checked'));
+							
+							$('#qa_flag').toggle();
+							if(val)
+							{					
+								if($('#qa_flag_set').html()=="no")
+								{
+								$('#myModal').modal();
+								data = "Checking the ‘Quality Assessment Required’ checkbox will <br/>send any records entered into the ANDS registry from this data source <br />through the Quality Assessment workflow."
+								data2 = "<br /><a href='#' class='btn' data-dismiss='modal'>OK</a>";
+								$('#myModal .modal-body').html("<br/><pre>" + data + "</pre> " + data2);
+								}else{
+									$('#qa_flag_set').html("no");
+								}
+							}else{
+								var publishStr = '';
+								var submittedAssessment = '.';
+								var assessmentProgress = '.';
+
+								$('.publish_count').each(function(){	
+									if($(this).attr('id')=="Submitted for Assessment")
+									{
+										submittedAssessment = $(this).html();
+									}
+									if($(this).attr('id')=="Assessment in Progress")
+									{
+										assessmentProgress = $(this).html();
+									}
+								});	
+					
+								if(submittedAssessment!='.')
+								{
+									publishStr = submittedAssessment + " <em>' Submitted for Assessment'</em> ";
+									if(assessmentProgress!='.') publishStr = publishStr + " and <br />";
+								}	
+								if(assessmentProgress!='.')
+								{
+									publishStr = publishStr + assessmentProgress + " <em>'Assessment in Progress'</em> ";
+								}		
+
+								if (publishStr ==''){
+									publishStr = " 0 ";
+								}	
+								var pubStat = " published ";								
+								var status = $('#check_manual_publish').attr('checked');
+								if(status){pubStat = " approved ";}
+								$('#myModal').modal();
+								data = "Unchecking the ‘Quality Assessment Required’ checkbox will cause <br />"+publishStr+"records to be automatically"+pubStat+". <br />It will also prevent any future records from being sent through <br />the Quality Assessment workflow.";
+								data2 = "<br /><a href='#' class='btn' data-dismiss='modal'>OK</a> <a href='#' class='btn cancel_qa'  data-dismiss='modal'>Cancel</a>";
+								$('#myModal .modal-body').html("<br/><pre>" + data + "</pre> " + data2);
+							}							
+						}
+				});
+			
 				}else{
 					if($(this).attr('value')=='t' || $(this).attr('value')=='1' || $(this).attr('value')=='true' ){
 						$(this).find('input').attr('checked', 'checked');
@@ -851,7 +940,8 @@ function load_datasource_edit(data_source_id, active_tab){
 						onChange:function(){		
 							$(this).find('input').attr('checked', 'checked');
 						}
-					});				
+					});	
+
 				}
 				
 
@@ -919,6 +1009,14 @@ function load_datasource_edit(data_source_id, active_tab){
 	return false;
 }
 
+$('.cancel_qa').live({
+	click:function(e){
+		$('#qa_flag_set').html("yes");
+		$('.qa_flag').trigger('click');	
+		$('.qa_flag').attr('value', true);	
+		$('#check_qa_flag').attr('checked', 'checked');			
+	}
+});
 
 $('#save-edit-form').live({
 	click: function(e){
@@ -935,12 +1033,23 @@ $('#save-edit-form').live({
 			if($(this).attr('type')=='checkbox'){
 				var label = $(this).attr('for');
 				var value = $(this).is(':checked');
+				//if(label=='qa_flag'||label=='manual_publish')
+				//{
+					//var old_value = $('#'+label+'_old').html();
+					//if(old_value=='f'){old_value=false;}
+					//if(old_value=='t'){old_value=true;}
+					//if(value!=old_value)
+					//{					
+						//alert (label + "::" + value + ' old::'+ $('#'+label+'_old').html());
+					//}
+				//}
 			}
 
 			if($(this).attr('type')!='radio'){
 			//if(value!='' && value){
 				//console.log(label + " will be set to " + value)
 				jsonData.push({name:label, value:value});
+
 			//}
 			}
 		});

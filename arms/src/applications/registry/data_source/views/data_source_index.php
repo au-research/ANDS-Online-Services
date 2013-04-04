@@ -549,6 +549,16 @@
 					</dd>
 					{{/auto_publish}}
 
+					{{#manual_publish}}
+					<dt>Manually Publish</dt>
+					<dd>
+						<p>
+							<div class="checkbox_view{{manual_publish}}">		
+															</div>
+						</p>
+					</dd>
+					{{/manual_publish}}
+
 					{{#qa_flag}}
 					<dt>Quality Assessment Required</dt>
 					<dd>
@@ -1029,24 +1039,46 @@
 								</div>
 							</div>	
 						</div> -->
-						<div class="control-group">
+
+
+					{{#statuscounts}}
+				  		{{#status}}
+				  			<span id="{{{name}}}" class="publish_count hidden">{{count}}</span>
+				  		{{/status}}
+			  		{{/statuscounts}}
+								
+					<div class="control-group">
 							<label class="control-label">Auto Publish Records</label>
 							<div class="controls">
 								<p class="help-inline">
-								<div class="normal-toggle-button" value="{{auto_publish}}">
+								<div class="normal-toggle-button auto_publish" value="{{auto_publish}}">
     								<input type="checkbox" for="auto_publish">
 								</div>
+								<!-- <span id="auto_publish_old">{{auto_publish}}</span> -->
 								</p>								
 							</div>
 						</div>
+						<div class="control-group">
+							<label class="control-label">Manually Publish Records</label>
+							<div class="controls">
+								<p class="help-inline">
+								<div class="normal-toggle-button manual_publish" value="{{manual_publish}}">
+    								<input type="checkbox" for="manual_publish" id="check_manual_publish">
+								</div>
 
+								<!-- <span id="manual_publish_old">{{manual_publish}}</span> -->
+								</p>								
+							</div>
+						</div>
 						<div class="control-group">
 							<label class="control-label">Quality Assessment Required</label>
 							<div class="controls">
 								<p class="help-inline">
-								<div class="normal-toggle-button" value="{{qa_flag}}">
-    								<input type="checkbox" for="qa_flag">
+								<div class="normal-toggle-button qa_flag" value="{{qa_flag}}">
+    								<input type="checkbox" for="qa_flag" id="check_qa_flag">     																
 								</div>
+								<!-- <span id="qa_flag_old">{{qa_flag}}</span>  --> 
+								<span class="hidden" id="qa_flag_set">no</span>
 								</p>
 							</div>
 						</div>

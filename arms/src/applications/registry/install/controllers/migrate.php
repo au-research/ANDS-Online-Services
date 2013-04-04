@@ -58,6 +58,12 @@ class Migrate extends MX_Controller
 			$data_source->setAttribute("allow_reverse_external_links", $result->allow_reverse_external_links);
 			$data_source->setAttribute("assessement_notify_email_addr", $result->assessement_notification_email_addr);
 			$data_source->setAttribute("auto_publish", $result->auto_publish);
+			if($result->auto_publish)
+			{
+				$data_source->setAttribute("manual_publish", false);
+			}else{
+				$data_source->setAttribute("manual_publish", true);
+			}
 			$data_source->setAttribute("qa_flag", $result->qa_flag);
 			$data_source->setAttribute("create_primary_relationships", $result->create_primary_relationships);
 			$data_source->setAttribute("primary_key_1", $result->primary_key_1);

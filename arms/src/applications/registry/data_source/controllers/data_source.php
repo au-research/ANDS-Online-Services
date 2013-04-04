@@ -168,11 +168,12 @@ class Data_source extends MX_Controller {
 		//QA and Auto Publish check, valid_statuses are populated accordingly
 		$qa = $data_source->qa_flag=='t' ? true : false;
 		$auto_published = $data_source->auto_published=='t' ? true: false;
+		$manual_publish = $data_source->manual_publish=='t' ? true: false;
 		$jsonData['valid_statuses'] = array('MORE_WORK_REQUIRED', 'DRAFT', 'PUBLISHED');
 		if($qa) {
 			array_push($jsonData['valid_statuses'], 'SUBMITTED_FOR_ASSESSMENT', 'ASSESSMENT_IN_PROGRESS');
 		}
-		if(!$auto_published){
+		if(!$auto_published||$manual_publish){
 			array_push($jsonData['valid_statuses'], 'APPROVED');	
 		}
 
@@ -202,7 +203,7 @@ class Data_source extends MX_Controller {
 						$st['connectTo']='SUBMITTED_FOR_ASSESSMENT';
 						array_push($st['menu'], array('action'=>'to_submit', 'display'=>'Submit for Assessment'));
 					}else{
-						if(!$auto_published){
+						if(!$auto_published||$manual_publish){
 							$st['connectTo']='APPROVED';
 							array_push($st['menu'], array('action'=>'to_approve', 'display'=>'Approve'));
 						}else{
@@ -389,6 +390,7 @@ class Data_source extends MX_Controller {
 		//QA and Auto Publish check
 		$qa = $data_source->qa_flag=='t' ? true : false;
 		$auto_published = $data_source->auto_published=='t' ? true: false;
+		$manual_publish = $data_source->manual_publish=='t' ? true: false;
 
 		if(sizeof($affected_ids)>=1){
 			$menu['flag'] = 'Flag';
@@ -397,7 +399,7 @@ class Data_source extends MX_Controller {
 					if($qa){
 						$menu['to_submit'] = 'Submit for Assessment';
 					}else{
-						if(!$auto_published){
+						if(!$auto_published||$manual_publish){
 							$menu['to_approve'] = 'Approve';
 						}else{
 							$menu['to_publish'] = 'Publish';
