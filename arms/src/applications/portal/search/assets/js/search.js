@@ -565,28 +565,11 @@ function initMap(){
        });
 
 	var styles = [[{
-	    url: 'http://www.piste-ciclabili.com//test/markercluster/gfx/marker30.png',
-	    width: 30, height: 30,
+	    url: base_url+'assets/search/img/pin.png',
+	    width: 30, height: 34,
 	    opt_anchor: [15, 15],
 	    opt_textColor: '#222222',
 	    opt_textSize: 13
-	  }, {
-	    url: 'http://www.piste-ciclabili.com//test/markercluster/gfx/marker40.png', // ok
-	    width: 40, height: 40,
-	    opt_anchor: [20, 20],
-	    opt_textColor: '#111111',
-	    opt_textSize: 15
-	  }	, {
-	    url: 'http://www.piste-ciclabili.com//test/markercluster/gfx/marker50.png', 
-	    width: 50, height: 50,
-	    opt_anchor: [25, 25],
-	    opt_textColor: '#000000',
-	    opt_textSize: 17
-	  }, {
-	    url: 'http://www.piste-ciclabili.com//test/markercluster/gfx/marker60.png',
-	    width: 60, height: 60,
-	    opt_anchor: [30, 30],
-	    opt_textSize: 18
 	  }]];
 
 	markerClusterer = new MarkerClusterer(map, null, { maxZoom: 12, gridSize: 50, styles: styles[0]});
