@@ -539,7 +539,7 @@
 					{{/create_primary_relationships}}
 					
 
-					{{#auto_publish}}
+			<!--		{{#auto_publish}}
 					<dt>Auto Publish</dt>
 					<dd>
 						<p>
@@ -547,7 +547,7 @@
 															</div>
 						</p>
 					</dd>
-					{{/auto_publish}}
+					{{/auto_publish}} -->
 
 					{{#manual_publish}}
 					<dt>Manually Publish</dt>
