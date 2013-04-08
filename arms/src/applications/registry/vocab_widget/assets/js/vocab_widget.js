@@ -79,7 +79,7 @@
 	};
 
 	// Default changes if we're running within the ANDS environments
-	if (typeof(window.real_base_url) != 'undefined')
+	if (typeof(window.real_base_url) !== 'undefined')
 	{
 		defaults['endpoint'] = window.real_base_url + 'registry/vocab_widget/proxy/';
 	}
@@ -139,7 +139,7 @@
 	    return this.each(function() {
 		var op = options;
 		var $this = $(this);
-		var handler = $this.data('_handler');
+		handler = $this.data('_handler');
 		if (typeof(handler) === 'undefined' ||
 		    handler._mode() !== 'core') {
 		    _alert('Plugin handler not found; ' +
