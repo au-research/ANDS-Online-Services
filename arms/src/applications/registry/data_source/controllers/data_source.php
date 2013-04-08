@@ -860,9 +860,9 @@ public function getContributorGroupsEdit()
 		
 		$jsonData['status'] = 'OK';
 		$POST = $this->input->post();
-		print("<pre>");
-		print_r($POST);
-		print("</pre>");
+		//print("<pre>");
+		//print_r($POST);
+		//print("</pre>");
 
 		if (isset($POST['data_source_id'])){
 			$id = (int) $this->input->post('data_source_id');
