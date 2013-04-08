@@ -42,6 +42,9 @@ function ds_acl_enforce($ds_id, $message = ''){
 
 function default_error_handler($errno, $errstr, $errfile, $errline)
 {
+	// Ignore E_STRICT mode
+	if ($errno = E_STRICT) { return true; }
+	
 	if (ENVIRONMENT == "development")
 	{
 		throw new Exception($errstr . NL . "on line " . $errline . " (" . $errfile .")");

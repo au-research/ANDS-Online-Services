@@ -37,7 +37,7 @@
 					  <br/>
 					  
 					  <?php
-					  	if (isset($associated_app_ids)):
+					  	if (isset($associated_app_ids) && $associated_app_ids):
 					  ?>
 					    <p>
 					  	or select from associated DOI App IDs:
