@@ -16,12 +16,13 @@ class Registry_object_search extends MX_Controller {
 	 * for the main `search` function.
 	 */
 	private static $parameters = array(
-		array('name' => 'field',
-		      'conditions' => 'key|title',
+		//we don't seem to need this anymore: search does key and title, indiscriminately indiscriminantly.
+		//array('name' => 'field',
+		//      'conditions' => 'key|title',
+		//      'required' => true),
+		array('name' => 'term',
+		      'conditions' => '.*',
 		      'required' => true),
-		// array('name' => 'term',
-		//       'conditions' => '.+',
-		//       'required' => true),
 		array('name' => 'onlyPublished',
 		      'conditions' => 'yes|no',
 		      'required' => false,
@@ -77,9 +78,7 @@ class Registry_object_search extends MX_Controller {
 
 		$this->load->model('data_source/data_sources', 'ds');
 		echo self::to_json(array_map(function($ds) {
-					$key = $ds->attributes['key']->value;
-					$name = $ds->attributes['title']->value;
-					return array($key => $name);
+					return array($ds->getID() => $ds->attributes['key']->value);
 				},
 				(array)$this->ds->getAll(0)));
 	}
@@ -118,16 +117,20 @@ class Registry_object_search extends MX_Controller {
 
 		//for completeness, ensure params is an array before continuing.
 		if (is_array($params)) {
-			// echo self::to_json($params);
 			$args = array();
 			$filter = array();
-			if(isset($params['class']) && $params['class']!='all'){
+
+			if (isset($params['class']) &&
+			   $params['class'] !== 'all') {
 				$filter['class'] = $params['class'];
 			}
-			if(isset($params['ds'])) $args['data_source_id'] = $params['ds'];
-			if(isset($params['field']) && $params['field']=='title' && isset($params['term'])){
-				$args['search'] = $params['term'];
+
+			if (isset($params['ds'])) {
+				$args['data_source_id'] = $params['ds'];
 			}
+
+			$args['search'] = $params['term'];
+
 			$args['filter'] = $filter;
 			$ros = $this->ro->filter_by($args, 100);
 
@@ -143,9 +146,9 @@ class Registry_object_search extends MX_Controller {
 					);
 				}
 			}else{
-				$results['no_result'] = true;
+				$results['results'] = array();
 			}
-			
+
 			echo self::to_json($results);
 			/**
 			 * depending on parameters, we'll do some different gets
@@ -174,12 +177,14 @@ class Registry_object_search extends MX_Controller {
 	 */
 	private function _search_params($class, $ds)
 	{
-		if ($class !== false) {
+		if ($class !== false && $class !== 'all') {
 			$params['class'] = $class;
 		}
-		if ($ds !== false) {
+
+		if ($ds !== false && $ds !== 'all') {
 			$params['ds'] = $ds;
 		}
+
 		foreach (self::$parameters as $param) {
 			$cond = $param['conditions'];
 			$name = $param['name'];
