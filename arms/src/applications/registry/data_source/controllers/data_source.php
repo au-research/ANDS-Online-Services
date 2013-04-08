@@ -860,9 +860,9 @@ public function getContributorGroupsEdit()
 		
 		$jsonData['status'] = 'OK';
 		$POST = $this->input->post();
-		//print("<pre>");
-		//print_r($POST);
-		//print("</pre>");
+		print("<pre>");
+		print_r($POST);
+		print("</pre>");
 
 		if (isset($POST['data_source_id'])){
 			$id = (int) $this->input->post('data_source_id');
@@ -980,10 +980,43 @@ public function getContributorGroupsEdit()
 				if($new_value=='true') $new_value=DB_TRUE;
 				if($new_value=='false'){$new_value=DB_FALSE;} 
 
+				//echo $attrib." is the attribute";
+
 				if($new_value != $dataSource->{$attrib} && in_array($attrib, $dataSource->harvesterParams))
 				{
 				   $resetHarvest = true;
 				} 
+
+				if($new_value != '' && $attrib == 'qa_flag' && $new_value != $dataSource->{$attrib})
+				{
+					//we need to check if we have turned it on or off and then change record statuses accordingly
+					$jsonData['qa_flag'] = "changed from ".$dataSource->{$attrib}." to ".$new_value;
+
+
+				}
+
+				//we need to check if we have turned manually publish to NO  - if so set all records of this datasource from Approved to Published
+				if($attrib == 'manual_publish' && $new_value == 'f' && $new_value != $dataSource->{$attrib})
+				{					
+					$jsonData['manual_publish'] = "changed from ".$dataSource->{$attrib}." to ".$new_value;
+					//so lets get all of the objects for this ds that have a status of "Approved"
+					$jsonData['ds_id'] = $dataSource->id;
+
+					$jsonData['ro'] = $this->ro->getByAttributeDatasource($dataSource->id, 'original_status', 'Approved');
+					//$ros = $jsonData['ro'];
+					//foreach($ros as $approved_ro)
+					//{
+					//	$ro = $this->ro->getByID($approved_ro);
+					//	if ($ro->status == APPROVED)
+					//	{
+					//		$ro->status = PUBLISHED;
+					//		$ro->save();
+					//	}
+
+					//}
+
+				}
+
 
 				if (!is_null($new_value))
 				{
@@ -1014,7 +1047,7 @@ public function getContributorGroupsEdit()
 				$dataSource->requestHarvest();
 			}
 		}
-		
+		//$jsonData['attributes'] = $dataSource->attributes();
 		$jsonData = json_encode($jsonData);
 		echo $jsonData;
 	}

@@ -920,9 +920,9 @@ function load_datasource_edit(data_source_id, active_tab){
 								if (publishStr ==''){
 									publishStr = " 0 ";
 								}	
-								var pubStat = " published ";								
+								var pubStat = " published";								
 								var status = $('#check_manual_publish').attr('checked');
-								if(status){pubStat = " approved ";}
+								if(status){pubStat = " approved";}
 								$('#myModal').modal();
 								data = "Unchecking the ‘Quality Assessment Required’ checkbox will cause <br />"+publishStr+"records to be automatically"+pubStat+". <br />It will also prevent any future records from being sent through <br />the Quality Assessment workflow.";
 								data2 = "<br /><a href='#' class='btn' data-dismiss='modal'>OK</a> <a href='#' class='btn cancel_qa'  data-dismiss='modal'>Cancel</a>";
@@ -1079,6 +1079,7 @@ $('#save-edit-form').live({
 				type: 'POST',
 				data: jsonData,
 				success: function(data){
+					console.log(data);
 					if (!data.status == "OK"){
 						$('#myModal').modal();
 						logErrorOnScreen("An error occured whilst saving your changes!", $('#myModal .modal-body'));
@@ -1089,7 +1090,8 @@ $('#save-edit-form').live({
 						updateGrowls();
 					}
 				},
-				error: function(){
+				error: function(data){
+					console.log(data)
 					$('#myModal').modal();
 					logErrorOnScreen("An error occured whilst saving your changes!", $('#myModal .modal-body'));
 					$('#myModal .modal-body').append("<br/><pre>Could't communicate with server</pre>");

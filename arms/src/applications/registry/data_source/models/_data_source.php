@@ -107,10 +107,6 @@ class _data_source {
 				{
 					$this->_initAttribute($row->attribute, $row->value);
 
-					if($row->attribute=='auto_publish'){
-											if($row->value=="t"||$row->value==1) $this->_initAttribute('manual_publish', FALSE);
-											if($row->value=="f"||$row->value==0) $this->_initAttribute('manual_publish', TRUE);
-					}
 				}		
 			}
 		}
@@ -491,7 +487,7 @@ class _data_source {
 		$this->db->from('data_source_logs');
 		$this->db->limit($count, $offset);
 		$this->db->where('data_source_id', $this->id);
-		if($logid) $this->db->where('id >', $logid);
+		if($logid) $this->db->where('id >=', $logid);
 		if($log_class!='all') $this->db->where('class', $log_class);
 		if($log_type!='all') $this->db->where('type', $log_type);
 		$this->db->order_by("id", "desc"); 
@@ -524,6 +520,9 @@ class _data_source {
 		$query = $this->db->get_where("harvest_requests", array("data_source_id"=>$this->id,));
 		if($query->num_rows()>0){
 			return $query->result_array();
+			//foreach($query->result_array() as $row){
+			//	return $row;
+			//}
 		}
 	}
 	

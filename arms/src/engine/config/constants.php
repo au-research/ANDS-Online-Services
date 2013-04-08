@@ -39,6 +39,7 @@ define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 define('EXTRIF_NAMESPACE', "http://ands.org.au/standards/rif-cs/extendedRegistryObjects");
 define('RIFCS_NAMESPACE', "http://ands.org.au/standards/rif-cs/registryObjects");
 define('OAI_NAMESPACE', "http://www.openarchives.org/OAI/2.0/");
+define('RIFCS_SCHEME','rif');
 
 define('BR','<br/>');
 define('NL',"\n");
