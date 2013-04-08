@@ -946,15 +946,10 @@
   ARK: 
 
   <xsl:if test="string-length(substring-after(.,'/ark:/'))>0">    
-    <a>
-      <xsl:attribute name="class">identifier</xsl:attribute>
-      <xsl:attribute name="href"> <xsl:value-of select="$theidentifier"/></xsl:attribute>
-      <xsl:attribute name="title"><xsl:text>Resolve this ARK identifier</xsl:text></xsl:attribute>            
-      <xsl:value-of select="."/>
-    </a>
+    <xsl:value-of select="$theidentifier"/>
   </xsl:if>
   <xsl:if test="string-length(substring-after(.,'/ark:/'))&lt;1">    
-    <a class="identifier"><xsl:value-of select="."/></a>
+    <xsl:value-of select="."/>
   </xsl:if>  
 </xsl:template>
 
@@ -975,10 +970,10 @@
          <xsl:value-of select="translate(./@type,'abcdefghijklmnopqrstuvwxyz','ABCDEFGHIJKLMNOPQRSTUVWXYZ')"/>: <xsl:value-of select="."/>  
      </xsl:when>
      <xsl:when test="./@type='local'">
-         Local: <a class="identifier"><xsl:value-of select="."/></a>
+         Local: <xsl:value-of select="."/>
      </xsl:when>  
      <xsl:otherwise>
-       <xsl:value-of select="./@type"/>: <a class="identifier"><xsl:value-of select="."/></a>
+       <xsl:value-of select="./@type"/>: <xsl:value-of select="."/>
    </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
