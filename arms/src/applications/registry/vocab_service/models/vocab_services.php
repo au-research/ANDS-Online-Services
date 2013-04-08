@@ -16,6 +16,8 @@
 class Vocab_services extends CI_Model {
 		
 	
+	private $vocab_db = null;
+
 	/**
 	 * Returns exactly one vocab by ID (or NULL)
 	 * 
@@ -26,7 +28,7 @@ class Vocab_services extends CI_Model {
 	function getByID($id)
 	{
 
-		$query = $this->db->select()->get_where('vocab_metadata', array('id'=>$id));
+		$query = $this->vocab_db->select()->get_where('vocab_metadata', array('id'=>$id));
 		if ($query->num_rows() == 0)
 		{
 			return NULL;
@@ -46,7 +48,7 @@ class Vocab_services extends CI_Model {
 	 */	
 	function getVersionsByID($id)
 	{
-		$query = $this->db->order_by('date_added desc')->select()->get_where('vocab_versions', array('vocab_id'=>$id,'status !='=>'RETIRED'));
+		$query = $this->vocab_db->order_by('date_added desc')->select()->get_where('vocab_versions', array('vocab_id'=>$id,'status !='=>'RETIRED'));
 		
 		if ($query->num_rows() == 0){
 			return NULL;
@@ -59,7 +61,7 @@ class Vocab_services extends CI_Model {
 	}
 
 	function getVersionByID($id){
-		$query = $this->db->get_where('vocab_versions', array('id'=>$id), 1, 0);
+		$query = $this->vocab_db->get_where('vocab_versions', array('id'=>$id), 1, 0);
 		if($query->num_rows()==0){
 			return NULL;
 		}else{
@@ -78,7 +80,7 @@ class Vocab_services extends CI_Model {
 	function getAvailableFormatsByID($id)
 	{
 		$qry = 'SELECT distinct(format) FROM dbs_vocabs.vocab_version_formats  WHERE version_id IN(SELECT id FROM dbs_vocabs.vocab_versions WHERE vocab_id = '.$id.' AND (status = "current" OR status = "superseded" OR status="pending-add"));';
-		$query = $this->db->query($qry);
+		$query = $this->vocab_db->query($qry);
 		
 		if ($query->num_rows() == 0)
 		{
@@ -100,7 +102,7 @@ class Vocab_services extends CI_Model {
 	function getDownloadableByFormat($id, $format)
 	{
 		$qry = 'SELECT f.*, v.title, v.status from dbs_vocabs.vocab_version_formats f, dbs_vocabs.vocab_versions v WHERE f.format=\''.$format.'\' AND v.vocab_id='.$id.' AND f.version_id = v.id order by status asc;';
-		$query = $this->db->query($qry);
+		$query = $this->vocab_db->query($qry);
 		
 		if ($query->num_rows() == 0)
 		{
@@ -123,7 +125,7 @@ class Vocab_services extends CI_Model {
 	function getVersionByID_old($id)
 	{
 		$qry = 'SELECT * FROM vocab_versions, vocab_version_formats WHERE vocab_versions.id = '.$id.' AND vocab_version_formats.version_id = vocab_versions.id';
-		$query = $this->db->query($qry);
+		$query = $this->vocab_db->query($qry);
 		
 		if ($query->num_rows() == 0)
 		{
@@ -144,7 +146,7 @@ class Vocab_services extends CI_Model {
 
 
 	function getVocabIDbyVersion($version_id){
-		$query = $this->db->select()->get_where('vocab_versions', array('id'=>$version_id));
+		$query = $this->vocab_db->select()->get_where('vocab_versions', array('id'=>$version_id));
 		if($query->num_rows()==0){
 			return null;
 		}else{
@@ -161,7 +163,7 @@ class Vocab_services extends CI_Model {
 	 */	
 	function getFormatByVersion($id)
 	{
-		$query = $this->db->select()->get_where('vocab_version_formats', array('version_id'=>$id));
+		$query = $this->vocab_db->select()->get_where('vocab_version_formats', array('version_id'=>$id));
 		
 		if ($query->num_rows() == 0){
 			return NULL;
@@ -174,7 +176,7 @@ class Vocab_services extends CI_Model {
 	}	
 
 	function getFormatByID($format_id){
-		$query = $this->db->get_where('vocab_version_formats', array('id'=>$format_id));
+		$query = $this->vocab_db->get_where('vocab_version_formats', array('id'=>$format_id));
 		if($query->num_rows()==0){
 			return false;
 		}else{
@@ -192,7 +194,7 @@ class Vocab_services extends CI_Model {
 	function deleteFormat($id)
 	{
 		$qry = 'DELETE FROM vocab_version_formats WHERE id = '.$id;
-		$query = $this->db->query($qry);
+		$query = $this->vocab_db->query($qry);
 		
 		if ($query){
 			return true;
@@ -206,8 +208,8 @@ class Vocab_services extends CI_Model {
 		$data = array(
 			'status'=>'pending-delete'
 		);
-		$this->db->where('id', $id);
-		$this->db->update('vocab_versions', $data);
+		$this->vocab_db->where('id', $id);
+		$this->vocab_db->update('vocab_versions', $data);
 		
 		return true;
 	}
@@ -221,8 +223,8 @@ class Vocab_services extends CI_Model {
 				$data = array(
 					'status'=>'superseded'
 				);
-				$this->db->where('id', $version->id);
-				$this->db->update('vocab_versions', $data);
+				$this->vocab_db->where('id', $version->id);
+				$this->vocab_db->update('vocab_versions', $data);
 			}
 
 			//delete all pending delete
@@ -230,8 +232,8 @@ class Vocab_services extends CI_Model {
 				$data = array(
 					'status'=>'RETIRED'
 				);
-				$this->db->where('id', $version->id);
-				$this->db->update('vocab_versions', $data);
+				$this->vocab_db->where('id', $version->id);
+				$this->vocab_db->update('vocab_versions', $data);
 			}
 
 			//make all pending-add superseded
@@ -239,13 +241,13 @@ class Vocab_services extends CI_Model {
 				$data = array(
 					'status'=>'superseded'
 				);
-				$this->db->where('id', $version->id);
-				$this->db->update('vocab_versions', $data);
+				$this->vocab_db->where('id', $version->id);
+				$this->vocab_db->update('vocab_versions', $data);
 			}
 		}
 
 		//now we have a set of all superseded, find the latest date_added to become the current
-		$latestVersionQuery = $this->db->order_by('date_added', 'desc')->get_where('vocab_versions', array('vocab_id'=>$vocab_id, 'status'=>'superseded'),1,0);
+		$latestVersionQuery = $this->vocab_db->order_by('date_added', 'desc')->get_where('vocab_versions', array('vocab_id'=>$vocab_id, 'status'=>'superseded'),1,0);
 		if($latestVersionQuery->num_rows()>0){
 			//there is a latest version
 			$result = $latestVersionQuery->result();
@@ -256,8 +258,8 @@ class Vocab_services extends CI_Model {
 			$data = array(
 				'status'=>'current'
 			);
-			$this->db->where('id', $latestVersion_id);
-			$this->db->update('vocab_versions', $data);
+			$this->vocab_db->where('id', $latestVersion_id);
+			$this->vocab_db->update('vocab_versions', $data);
 		}
 	}
 
@@ -270,8 +272,8 @@ class Vocab_services extends CI_Model {
 				$data = array(
 					'status'=>'superseded'
 				);
-				$this->db->where('id', $version->id);
-				$this->db->update('vocab_versions', $data);
+				$this->vocab_db->where('id', $version->id);
+				$this->vocab_db->update('vocab_versions', $data);
 			}
 
 			//supersede pending delete
@@ -279,18 +281,18 @@ class Vocab_services extends CI_Model {
 				$data = array(
 					'status'=>'superseded'
 				);
-				$this->db->where('id', $version->id);
-				$this->db->update('vocab_versions', $data);
+				$this->vocab_db->where('id', $version->id);
+				$this->vocab_db->update('vocab_versions', $data);
 			}
 
 			//delete all pending add
 			if($version->status=="pending-add"){
-				$this->db->delete('vocab_versions', array('id' => $version->id)); 
+				$this->vocab_db->delete('vocab_versions', array('id' => $version->id)); 
 			}
 		}
 
 		//now we have a set of all superseded, find the latest date_added to become the current
-		$latestVersionQuery = $this->db->order_by('date_added', 'desc')->get_where('vocab_versions', array('vocab_id'=>$vocab_id, 'status'=>'superseded'),1,0);
+		$latestVersionQuery = $this->vocab_db->order_by('date_added', 'desc')->get_where('vocab_versions', array('vocab_id'=>$vocab_id, 'status'=>'superseded'),1,0);
 		if($latestVersionQuery->num_rows()>0){
 			//there is a latest version
 			$result = $latestVersionQuery->result();
@@ -301,8 +303,8 @@ class Vocab_services extends CI_Model {
 			$data = array(
 				'status'=>'current'
 			);
-			$this->db->where('id', $latestVersion_id);
-			$this->db->update('vocab_versions', $data);
+			$this->vocab_db->where('id', $latestVersion_id);
+			$this->vocab_db->update('vocab_versions', $data);
 		}
 	}
 
@@ -312,15 +314,15 @@ class Vocab_services extends CI_Model {
 		$data = array(
 			'status'=>'RETIRED'
 		);
-		$this->db->where('id', $vocab_id);
-		$this->db->update('vocab_metadata', $data);
+		$this->vocab_db->where('id', $vocab_id);
+		$this->vocab_db->update('vocab_metadata', $data);
 
 		//set all version to retire
 		$data = array(
 			'status'=>'RETIRED'
 		);
-		$this->db->where('vocab_id', $vocab_id);
-		$this->db->update('vocab_versions', $data);
+		$this->vocab_db->where('vocab_id', $vocab_id);
+		$this->vocab_db->update('vocab_versions', $data);
 
 		//delete all formats
 	}
@@ -334,7 +336,7 @@ class Vocab_services extends CI_Model {
 	function addFormat($version_id,$format,$type,$value)
 	{
 		$qry = 'INSERT INTO vocab_version_formats (`version_id`,`type`,`value`,`format`) VALUES (\''.$version_id.'\',\''.$type.'\',\''.$value.'\',\''.$format.'\')';
-		$query = $this->db->query($qry);
+		$query = $this->vocab_db->query($qry);
 		
 		if ($query){
 			return true;
@@ -348,8 +350,8 @@ class Vocab_services extends CI_Model {
 		/*$data = array(
            'status' => 'superseded'
         );
-        $this->db->where('status !=', 'RETIRED');
-		$this->db->update('vocab_versions', $data);*/
+        $this->vocab_db->where('status !=', 'RETIRED');
+		$this->vocab_db->update('vocab_versions', $data);*/
 		
 		//and then we add the version
 		$data = array(
@@ -358,8 +360,8 @@ class Vocab_services extends CI_Model {
 			'vocab_id'=>$vocab_id
 		);
 
-		$this->db->insert('vocab_versions', $data);
-		return $this->db->insert_id();
+		$this->vocab_db->insert('vocab_versions', $data);
+		return $this->vocab_db->insert_id();
 	}
 
 	function addBlankVocab($record_owner){
@@ -367,15 +369,15 @@ class Vocab_services extends CI_Model {
 			'record_owner'=>$record_owner,
 			'status'=>'DRAFT'
 		);
-		$this->db->insert('vocab_metadata', $data);
+		$this->vocab_db->insert('vocab_metadata', $data);
 
-		$last_id = $this->db->insert_id();
+		$last_id = $this->vocab_db->insert_id();
 
 		/*$data = array(
 			'vocab_id'=>$last_id,
 			'description'=>'Initial vocabulary creation'
 		);
-		$this->db->insert('vocab_change_history', $data);*/
+		$this->vocab_db->insert('vocab_change_history', $data);*/
 
 		return $last_id;
 	}
@@ -386,7 +388,7 @@ class Vocab_services extends CI_Model {
 			'description'=>$description
 		);
 
-		$this->db->insert('vocab_change_history', $data);
+		$this->vocab_db->insert('vocab_change_history', $data);
 		return true;
 	}
 
@@ -394,8 +396,8 @@ class Vocab_services extends CI_Model {
 		$data = array(
 			'title' => $version['title']
         );
-        $this->db->where('id', $version['id']);
-		$this->db->update('vocab_versions', $data); 
+        $this->vocab_db->where('id', $version['id']);
+		$this->vocab_db->update('vocab_versions', $data); 
 
 	}
 
@@ -409,7 +411,7 @@ class Vocab_services extends CI_Model {
 	function getChangesByID($id)
 	{
 
-		$query = $this->db->select()->order_by('change_date desc')->get_where('vocab_change_history', array('vocab_id'=>$id));
+		$query = $this->vocab_db->select()->order_by('change_date desc')->get_where('vocab_change_history', array('vocab_id'=>$id));
 
 		if ($query->num_rows() == 0)
 		{
@@ -435,9 +437,9 @@ class Vocab_services extends CI_Model {
 	{
 	 	$matches = array();
 		if($limit==0){
-			$query = $this->db->order_by('title', 'asc')->select("title, id")->get('vocab_metadata');
+			$query = $this->vocab_db->order_by('title', 'asc')->select("title, id")->get('vocab_metadata');
 		}else{
-			$query = $this->db->order_by('title', 'asc')->select("title, id")->get('vocab_metadata', $limit, $offset);
+			$query = $this->vocab_db->order_by('title', 'asc')->select("title, id")->get('vocab_metadata', $limit, $offset);
 		}
 		
 		if ($query->num_rows() > 0)
@@ -456,9 +458,9 @@ class Vocab_services extends CI_Model {
 	{
 	 	$matches = array();
 		if($limit==0){
-			$query = $this->db->order_by('title','asc')->get_where('vocab_metadata', array('status'=>'PUBLISHED'));
+			$query = $this->vocab_db->order_by('title','asc')->get_where('vocab_metadata', array('status'=>'PUBLISHED'));
 		}else{
-			$query = $this->db->order_by('title','asc')->get_where('vocab_metadata', array('status'=>'PUBLISHED'), $limit, $offset);
+			$query = $this->vocab_db->order_by('title','asc')->get_where('vocab_metadata', array('status'=>'PUBLISHED'), $limit, $offset);
 		}
 
 		
@@ -487,10 +489,10 @@ class Vocab_services extends CI_Model {
 		if (is_array($affiliations) && count($affiliations) > 0)
 		{
 			if($limit == 0){
-				$query = $this->db->select('id')->where_in('record_owner',$affiliations)->get('vocab_metadata');
+				$query = $this->vocab_db->select('id')->where_in('record_owner',$affiliations)->get('vocab_metadata');
 			}
 			else{
-				$query = $this->db->select('id')->where_in('record_owner',$affiliations)->where('status !=','DRAFT')->where('status !=','RETIRED')->get('vocab_metadata', $limit, $offset);
+				$query = $this->vocab_db->select('id')->where_in('record_owner',$affiliations)->where('status !=','DRAFT')->where('status !=','RETIRED')->get('vocab_metadata', $limit, $offset);
 			}
 			
 			if ($query->num_rows() == 0){
@@ -510,7 +512,7 @@ class Vocab_services extends CI_Model {
 		$vocabs = array();
 		$affiliations = $this->user->affiliations();
 		if (is_array($affiliations) && count($affiliations) > 0){
-			$query = $this->db->select('id')->where_in('record_owner',$affiliations)->where('status', 'DRAFT')->get('vocab_metadata');
+			$query = $this->vocab_db->select('id')->where_in('record_owner',$affiliations)->where('status', 'DRAFT')->get('vocab_metadata');
 			if ($query->num_rows() == 0){
 				return $vocabs;
 			}
@@ -549,9 +551,9 @@ class Vocab_services extends CI_Model {
 		$vocabs = array();
 		$localIdentifier = $role_id;
 		if($getDrafts){
-			$query = $this->db->get_where('vocab_metadata', array('record_owner' => $localIdentifier));
+			$query = $this->vocab_db->get_where('vocab_metadata', array('record_owner' => $localIdentifier));
 		}else{
-			$query = $this->db->get_where('vocab_metadata', array('record_owner' => $localIdentifier,'status'=>'PUBLISHED'));
+			$query = $this->vocab_db->get_where('vocab_metadata', array('record_owner' => $localIdentifier,'status'=>'PUBLISHED'));
 		}
 		if($query->num_rows()==0){
 			return $vocabs;
@@ -590,7 +592,7 @@ class Vocab_services extends CI_Model {
 	{
 
 		parent::__construct();
-		$this->load->database('vocabs',TRUE);
+		$this->vocab_db = $this->load->database('vocabs',TRUE);
 		include_once("_vocab.php");
 
 	}	

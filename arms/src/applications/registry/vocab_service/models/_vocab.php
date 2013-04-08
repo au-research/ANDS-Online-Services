@@ -11,28 +11,6 @@
  * "Core" attributes must be initialised before a registry
  * object can be created. 
  * 
- * <code>
- * 	// Creating a new data source 
-	$ds = new _data_source();
-		
-		// Compulsory attributes
-		$ds->_initAttribute("key","test.test3", TRUE);
-		$ds->_initAttribute("slug","testtest3", TRUE);
-		
-		// Some extras
-		$ds->setAttribute("record_owner","Tran");
-
-		$ds->create();
-		print "New DS received ID " . $ds->getID();
-
-		
-		// Updating a data source
-
-		$ds = new _data_source(5);
-		$ds->record_owner = "Bob";
-		print $ds->save();
- * </code>
- * 
  * @author Ben Greenwood <ben.greenwood@ands.org.au>
  * @package ands/datasource
  * @subpackage helpers
@@ -56,7 +34,7 @@ class _vocab {
 		
 		$this->id = $id;				// Set this object's ID
 		$this->_CI =& get_instance();	// Get a pointer to the framework's instance
-		$this->db =& $this->_CI->db;	// Shorthand pointer to database
+		$this->db =&  $this->_CI->load->database('vocabs',TRUE);	// Shorthand pointer to database
 		
 		if (!is_null($id))
 		{
