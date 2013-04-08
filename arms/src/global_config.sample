@@ -24,6 +24,9 @@ $ENV['vocab_resolving_services'] =  array(
 // Note: enables AAF login (if Shibboleth 2 is properly configured)
 $ENV['shibboleth_sp'] = false;
 
+// Session Timeout (how long before the user is automatically logged out)
+$ENV['session_timeout'] = 7200; // 2 hours of inactivity before logout...
+
 
 /* DATABASE CONFIGURATION */
 $eDBCONF = array();
