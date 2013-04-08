@@ -73,7 +73,8 @@
     </div>
     
 
-    <div id="user-nav" class="navbar navbar-inverse">
+    <?php try { $this->user; ?>
+      <div id="user-nav" class="navbar navbar-inverse">
 
             <ul class="nav btn-group">
             
@@ -161,10 +162,11 @@
             </ul>
         </div>
 
-
         <?php 
         if ($this->session->flashdata('message'))
         {
           echo BR.'<div class="alert alert-success"><strong>Message: </strong>'. $this->session->flashdata('message') . '</div>';
         }
         ?>
+
+    <?php } catch (Exception $e) {} ?> 

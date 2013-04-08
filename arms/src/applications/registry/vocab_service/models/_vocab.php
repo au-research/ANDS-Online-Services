@@ -34,7 +34,7 @@ class _vocab {
 		
 		$this->id = $id;				// Set this object's ID
 		$this->_CI =& get_instance();	// Get a pointer to the framework's instance
-		$this->db =&  $this->_CI->load->database('vocabs',TRUE);	// Shorthand pointer to database
+		$this->db = $this->_CI->load->database('vocabs',TRUE);	// Shorthand pointer to database
 		
 		if (!is_null($id))
 		{

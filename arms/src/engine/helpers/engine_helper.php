@@ -37,6 +37,24 @@ function ds_acl_enforce($ds_id, $message = ''){
 	}
 }
 
+
+/* Error handling */
+
+function default_error_handler($errno, $errstr, $errfile, $errline)
+{
+	if (ENVIRONMENT == "development")
+	{
+		throw new Exception($errstr . NL . "on line " . $errline . " (" . $errfile .")");
+	}
+	else
+	{
+		throw new Exception("An unexpected system error has occured. Please try again or report this error to the system administrator.");
+	}
+	return true;   /* Don't execute PHP internal error handler */
+
+}
+set_error_handler("default_error_handler");
+
 function default_exception_handler( $e ) {
 
     $_ci =& get_instance(); // CI super object to access load etc.
