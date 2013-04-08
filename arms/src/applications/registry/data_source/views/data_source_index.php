@@ -16,9 +16,11 @@
 <section id="browse-datasources" class="hide">
 	<div class="content-header">
 		<h1>Manage My Datasources</h1>
-		<div class="btn-group">
-			<a class="btn btn-small" id="open_add_ds_form" data-toggle="modal" href="#AddNewDS"><i class="icon-plus"></i> Add New Datasource</a>
-		</div>
+		<?php if($this->user->hasFunction('REGISTRY_SUPERUSER')): ?>
+			<div class="btn-group">
+				<a class="btn btn-small" id="open_add_ds_form" data-toggle="modal" href="#AddNewDS"><i class="icon-plus"></i> Add New Datasource</a>
+			</div>
+		<?php endif; ?>
 	</div>
 	<div id="breadcrumb">
 		<?php echo anchor('/', '<i class="icon-home"></i> Home', array('class'=>'tip-bottom', 'tip'=>'Go to Home'))?>
