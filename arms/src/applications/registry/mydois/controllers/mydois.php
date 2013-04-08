@@ -19,8 +19,25 @@ class Mydois extends MX_Controller {
 		$data['js_lib'] = array('core');
 		$data['scripts'] = array();
 		$data['title'] = 'My DOIs List';
+		$data['associated_app_ids'] = array();
+
 		if($this->user->loggedIn())
 		{
+			$cosi_db = $this->load->database('cosi', TRUE);
+			$cosi_db->distinct()->select('parent_role_id')
+					->where_in('child_role_id', $this->user->affiliations())
+					->where('role_type_id', 'ROLE_DOI_APPID      ', 'after')
+					->join('dba.tbl_roles', 'role_id = parent_role_id')
+					->from('dba.tbl_role_relations');
+			$query = $cosi_db->get();
+
+			if ($query->num_rows() > 0)
+			{
+				foreach ($query->result() AS $result)
+				{
+					$data['associated_app_ids'][] = $result->parent_role_id;
+				}
+			}
 			$this->load->view('input_app_id', $data);
 		}else{
 			$this->load->view('login_required', $data);
@@ -37,6 +54,10 @@ class Mydois extends MX_Controller {
 		
 		// Validate the appId
 		$appId = $this->input->get_post('app_id');
+		if (!$appId)
+		{
+			$appId = $this->input->get_post('app_id_select');
+		}
 		$doiStatus = $this->input->get_post('doi_status');
 		$data['doi_appids'] = $this->user->doiappids();
 

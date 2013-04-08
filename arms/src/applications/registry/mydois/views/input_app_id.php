@@ -35,6 +35,25 @@
 						endif;
 					  ?>
 					  <br/>
+					  
+					  <?php
+					  	if (isset($associated_app_ids)):
+					  ?>
+					    <p>
+					  	or select from associated DOI App IDs:
+						  <select name="app_id_select">
+							<option value=""></option>
+							<?php
+								foreach ($associated_app_ids AS $app_id)
+								{
+									echo "<option value='".$app_id."'>" . $app_id . "</option>";
+								}
+							?>
+						  </select>
+						</p>
+					  <?php endif; ?>
+
+
 			    	  <button type="submit" class="btn">List My DOIs</button>
 			    	  
 			    	 </form>

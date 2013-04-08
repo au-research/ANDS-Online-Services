@@ -90,6 +90,25 @@
                 </li>
               <?php endif; ?>
 
+              <?php if($this->user->hasFunction('AUTHENTICATED_USER') && (mod_enabled('pids') || mod_enabled('mydois'))): ?>
+                <li class="btn btn-inverse dropdown">
+                  <a class="dropdown-toggle" data-toggle="dropdown" href="#">Identifiers <b class="caret"></b></a>
+                  <ul class="dropdown-menu pull-right">
+
+                    <?php if (mod_enabled('pids') && $this->config->item('gPIDS_URL_PREFIX')): ?>
+                      <li class=""><?php echo anchor($this->config->item('gPIDS_URL_PREFIX'), 'My Persistent Identifers (PIDS)', array("target"=>"_blank"));?></li>
+                    <?php endif; ?>
+
+                    <?php if ($this->user->hasFunction('AUTHENTICATED_USER') && mod_enabled('mydois')): ?>
+                      <li>
+                        <?php echo anchor('mydois', 'My Digital Object Identifiers (DOI)');?>
+                      </li>
+                    <?php endif; ?>
+
+                  </ul>
+                </li>
+              <?php endif; ?>
+
               <?php if($this->user->hasFunction('PUBLIC')):?>
               <li class="btn btn-inverse dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">Vocabularies <b class="caret"></b></a>
@@ -114,9 +133,6 @@
               
               <?php if ($this->user->hasFunction('REGISTRY_SUPERUSER')): ?>
                   <li class=""><?php echo anchor('administration/', 'Administration Panel');?></li>
-              <?php endif; ?>
-              <?php if (($this->user->hasFunction('DOIS_USER') || $this->user->hasFunction('AUTHENTICATED_USER')) && mod_enabled('mydois')): ?>
-                <li class=""><?php echo anchor('mydois/', 'DOI Query Tool');?></li>
               <?php endif; ?>
               <?php if (($this->user->hasFunction('PUBLIC')) && mod_enabled('abs_sdmx_querytool')): ?>
                 <li class=""><?php echo anchor('abs_sdmx_querytool/', 'ABS SDMX Query Tool');?></li>
