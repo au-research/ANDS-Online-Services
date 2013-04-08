@@ -27,9 +27,7 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 	 * @param $_GET[status] A specific status to select (default is PUBLISHED)
 	 */
 	public function getRegistryObject()
-	{
-		set_exception_handler('json_exception_handler');
-		
+	{	
 		$this->load->model('registry_object/Registry_objects', 'ro');
 
 		// Some validation on input
@@ -459,7 +457,7 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
     	parent::__construct();
 
     	// JSON output at all times?
-    	$this->output->set_content_type(rda::response_format);
+    	//$this->output->set_content_type(rda::response_format);
 
     	// Set our exception handler to function in JSON mode
     	set_exception_handler('json_exception_handler');
