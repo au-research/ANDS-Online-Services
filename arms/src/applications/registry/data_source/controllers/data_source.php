@@ -42,7 +42,7 @@ class Data_source extends MX_Controller {
 
 		$data['dataSources'] = $items;
 		$data['scripts'] = array('data_sources');
-		$data['js_lib'] = array('core', 'graph', 'datepicker','vocab_widget');
+		$data['js_lib'] = array('core', 'datepicker','vocab_widget');
 
 		$this->load->view("data_source_index", $data);
 	}

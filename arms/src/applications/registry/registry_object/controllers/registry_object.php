@@ -256,7 +256,13 @@ class Registry_object extends MX_Controller {
 	}
 
 	public function related_object_search_form(){
-		$this->load->view('related_object_search_form');
+		header('Cache-Control: no-cache, must-revalidate');
+		header('Content-type: application/json');
+		set_exception_handler('json_exception_handler');
+		$jsonData = array();
+		$jsonData['success'] = true;
+		$jsonData['html_data'] = $this->load->view('related_object_search_form', '', true);
+		echo json_encode($jsonData);
 	}
 
 	public function manage_table($data_source_id = false){

@@ -54,11 +54,9 @@
 		
 		<div class="modal-screen-container">
 			<div class="modal-body">
-				
 				<div class="alert alert-info">
 					Please provide the key and the title for the data source
-				</div>			
-
+				</div>
 				<form action="#" method="get" class="form-vertical">
 					<div class="control-group">
 						<label class="control-label">Key</label>
@@ -85,20 +83,16 @@
 
 			</div>
 		</div>
-		
-		
 		<div class="modal-footer">
 			<a id="AddNewDS_confirm" href="javascript:;" class="btn btn-primary" data-loading-text="Saving...">Save</a>
 			<a href="#" class="btn hide" data-dismiss="modal">Close</a>
 		</div>
-
-		
 	</div>
 </section>
 
-<section id="view-datasource" class="hide">Loading...</section>
-<section id="settings-datasource" class="hide">Loading...</section>
-<section id="edit-datasource" class="hide">Loading...</section>
+<section id="view-datasource" class="hide"></section>
+<section id="settings-datasource" class="hide"></section>
+<section id="edit-datasource" class="hide"></section>
 
 </div>
 <!-- end of main content container -->
@@ -138,22 +132,22 @@
 
 <script type="text/x-mustache" id="data_source_logs_template">
 <div class="modal hide" id="logModal">
-			  <div class="modal-header">
-			    <button type="button" class="close" data-dismiss="modal">×</button>
-			  </div>
-			  <div class="modal-body"></div>
-			  <div class="modal-footer"></div></div>
-	{{#items}}
-		<li class="{{type}}">
-			<a href="javascript:;" class="{{type}}"><i class="icon-list-alt"></i>{{log_snippet}} <span class="label">{{date_modified}}</span></a>
-			<div class="log hide">
+	<div class="modal-header">
+    	<button type="button" class="close" data-dismiss="modal">×</button>
+  	</div>
+  	<div class="modal-body"></div>
+  	<div class="modal-footer"></div>
+</div>
 
-				<div class="log_error {{harvester_error_type}}" type="{{harvester_error_type}}" description="{{log}}"></div>
-
-				<pre>{{log}}</pre>
-			</div>
-		</li>
-	{{/items}}
+{{#items}}
+	<li class="{{type}}">
+		<a href="javascript:;" class="{{type}}"><i class="icon-list-alt"></i>{{log_snippet}} <span class="label">{{date_modified}}</span></a>
+		<div class="log hide">
+			<div class="log_error {{harvester_error_type}}" type="{{harvester_error_type}}" description="{{log}}"></div>
+			<pre>{{log}}</pre>
+		</div>
+	</li>
+{{/items}}
 </script>
 
 
@@ -175,124 +169,120 @@
 	);
 ?>
 
-	{{#item}}
-	<div class="content-header">
-		<h1>{{title}}</h1>
-		<ul class="nav nav-pills">
-			<li class="active view page-control" data_source_id="{{data_source_id}}"><a href="#">Dashboard</a></li>
-			<li class="mmr page-control" data_source_id="{{data_source_id}}"><a href="#">Manage Records</a></li>
-			<li class="report page-control" data_source_id="{{data_source_id}}"><a href="#">Reports</a></li>
-			<li class="settings page-control" data_source_id="{{data_source_id}}"><a href="#">Settings</a></li>
-		</ul>
-	</div>
-	<div id="breadcrumb">
-		<?php echo anchor('/', '<i class="icon-home"></i> Home', array('class'=>'tip-bottom', 'tip'=>'Go to Home'))?>
-		<?php echo anchor('data_source/manage', 'List My Datasources')?>
-		<a href="javascript:;" class="current">{{title}}</a>
-	</div>
+{{#item}}
+<div class="content-header">
+	<h1>{{title}}</h1>
+	<ul class="nav nav-pills">
+		<li class="active view page-control" data_source_id="{{data_source_id}}"><a href="#">Dashboard</a></li>
+		<li class="mmr page-control" data_source_id="{{data_source_id}}"><a href="#">Manage Records</a></li>
+		<li class="report page-control" data_source_id="{{data_source_id}}"><a href="#">Reports</a></li>
+		<li class="settings page-control" data_source_id="{{data_source_id}}"><a href="#">Settings</a></li>
+	</ul>
+</div>
+
+<div id="breadcrumb">
+	<?php echo anchor('/', '<i class="icon-home"></i> Home', array('class'=>'tip-bottom', 'tip'=>'Go to Home'))?>
+	<?php echo anchor('data_source/manage', 'List My Datasources')?>
+	<a href="javascript:;" class="current">{{title}}</a>
+</div>
+
 <div class="container-fluid">
-<div class="row-fluid">
+	<div class="row-fluid">
 
-	
-	<div class="span8" id="data_source_view_container" data_source_id="{{data_source_id}}">
-		<div class="widget-box">
-	    	
-	 		<div class="widget-content">
-	 			<div class="btn-toolbar">
-					<div class="btn-group">
-				  		<button class="btn edit page-control" data_source_id="{{data_source_id}}"><i class="icon-edit"></i> Edit Settings</button>
-				  		<button class="btn mmr page-control" data_source_id="{{data_source_id}}"><i class="icon-folder-open"></i> Manage Records</button>
-				  		<button class="btn mdr page-control" data_source_id="{{data_source_id}}"><i class="icon-time"></i> View Deleted Records</button>
+		<div class="span8" id="data_source_view_container" data_source_id="{{data_source_id}}">
+			<div class="widget-box">
+		    	
+		 		<div class="widget-content">
+		 			<div class="btn-toolbar">
+						<div class="btn-group">
+					  		<button class="btn edit page-control" data_source_id="{{data_source_id}}"><i class="icon-edit"></i> Edit Settings</button>
+					  		<button class="btn mmr page-control" data_source_id="{{data_source_id}}"><i class="icon-folder-open"></i> Manage Records</button>
+					  		<button class="btn mdr page-control" data_source_id="{{data_source_id}}"><i class="icon-time"></i> View Deleted Records</button>
+						</div>
+						<div class="btn-group pull-right">
+							<a class="btn dropdown-toggle ExportDataSource" data-toggle="modal" href="#exportDataSource" id="exportDS">
+								 Export Records
+							</a>						
+						</div>
+						<div class="btn-group pull-right">
+							<a class="btn dropdown-toggle importRecords" data-toggle="dropdown" href="javascript:;">
+								<i class="icon-download-alt"></i> Import Records <span class="caret"></span>
+							</a>
+							<ul class="dropdown-menu">
+								<li><a data-toggle="modal" href="#importRecordsFromURLModal" id="importFromURLLink">From a URL</a></li>
+								<li><a data-toggle="modal" href="#importRecordsFromXMLModal" id="importFromXMLLink">From XML Contents</a></li>
+								<li><a href="" id="importFromHarvesterLink">From the Harvester</a></li>
+							</ul>
+						</div>
 					</div>
-					<div class="btn-group pull-right">
-						<a class="btn dropdown-toggle ExportDataSource" data-toggle="modal" href="#exportDataSource" id="exportDS">
-							 Export Records
-						</a>						
+				</div>
+
+				{{#harvester_status}}
+				<div class="widget-content alert">A harvest is scheduled: <b>{{next_harvest}}</b> <button class="btn delete delete_harvest pull-right" data_source_id="{{data_source_id}}" harvest_id="{{id}}"><i class="icon-remove"></i> Cancel Harvest</button></div>	
+				{{/harvester_status}}
+				<div class="widget-title">
+					<h5>Activity Log</h5>
+					<div class="pull-right" style="margin-top:4px; margin-right:4px;">
+						<select class="log-type btn-mini">
+							<option value="all">All Logs</option>
+							<option value="error">Errors</option>
+						</select>
 					</div>
-					<div class="btn-group pull-right">
-						<a class="btn dropdown-toggle importRecords" data-toggle="dropdown" href="javascript:;">
-							<i class="icon-download-alt"></i> Import Records <span class="caret"></span>
-						</a>
-						<ul class="dropdown-menu">
-							<li><a data-toggle="modal" href="#importRecordsFromURLModal" id="importFromURLLink">From a URL</a></li>
-							<li><a data-toggle="modal" href="#importRecordsFromXMLModal" id="importFromXMLLink">From XML Contents</a></li>
-							<li><a href="" id="importFromHarvesterLink">From the Harvester</a></li>
-						</ul>
-					</div>
+				</div>
+				<div class="widget-content nopadding">
+					<ul class="activity-list" id="data_source_log_container"></ul>
+					<ul class="activity-list">
+						<li class="viewall"><a id='show_more_log' class="tip-top" href="javascript:;" data-original-title="View all posts">Show More<i class='icon-arrow-down'></i> <span class="label label-info" id="log_summary"></span></a></li>
+					</ul>
+				</div>
+		 
+		    </div>
+		</div>
+
+		<div class="span4">
+			<div class="widget-box">
+				<div class="widget-title"><h5>Data Source Status Summary</h5></div>
+				<div class="widget-content nopadding">
+					<ul class="ro-list">
+						{{#statuscounts}}
+					  		{{#status}}
+					  			<li class="status_{{status}}" name="{{status}}" type="status"><span class="name">{{name}}</span><span class="num">{{count}}</span></li>
+					  		{{/status}}
+				  		{{/statuscounts}}
+					</ul>
 				</div>
 			</div>
 
-			{{#harvester_status}}
-			<div class="widget-content alert">A harvest is scheduled: <b>{{next_harvest}}</b> <button class="btn delete delete_harvest pull-right" data_source_id="{{data_source_id}}" harvest_id="{{id}}"><i class="icon-remove"></i> Cancel Harvest</button></div>	
-			{{/harvester_status}}
-			<div class="widget-title">
-				<h5>Activity Log</h5>
-				<div class="pull-right" style="margin-top:4px; margin-right:4px;">
-					<select class="log-type btn-mini">
-						<option value="all">All Logs</option>
-						<option value="error">Errors</option>
-					</select>
+			<div class="widget-box">
+				<div class="widget-title"><h5>Data Source Class Summary</h5></div>
+				<div class="widget-content nopadding">
+					<ul class="ro-list">
+						{{#classcounts}}
+					  		{{#class}}
+					  			<li class="" name="{{class}}" type="class"><span class="name"><img tip="{{class}}" src="<?php echo asset_url('img/{{class}}.png', 'base');?>"/> {{name}}</span> <span class="num">{{count}}</span></li>
+					  		{{/class}}
+				  		{{/classcounts}}
+					</ul>
 				</div>
 			</div>
-			<div class="widget-content nopadding">
-				<ul class="activity-list" id="data_source_log_container"></ul>
-				<ul class="activity-list">
-					<li class="viewall"><a id='show_more_log' class="tip-top" href="javascript:;" data-original-title="View all posts">Show More<i class='icon-arrow-down'></i> <span class="label label-info" id="log_summary"></span></a></li>
-				</ul>
+
+			<div class="widget-box">
+				<div class="widget-title"><h5>Data Source Quality Summary</h5></div>
+				<div class="widget-content nopadding">
+					<ul class="ro-list">
+						{{#qlcounts}}
+					  		{{#level}}
+					  			<li class="ql_{{level}}" name="{{level}}" type="quality_level"><span class="name">Quality Level {{level}}</span> <span class="num">{{count}}</span></li>
+					  		{{/level}}
+				  		{{/qlcounts}}
+					</ul>
+				</div>
 			</div>
-	 
-	    </div>
+
+		</div>
 	</div>
-
-	<div class="span4">
-		<div class="widget-box">
-			<div class="widget-title"><h5>Data Source Status Summary</h5></div>
-			<div class="widget-content nopadding">
-				<ul class="ro-list">
-					{{#statuscounts}}
-				  		{{#status}}
-				  			<li class="status_{{status}}" name="{{status}}" type="status"><span class="name">{{name}}</span><span class="num">{{count}}</span></li>
-				  		{{/status}}
-			  		{{/statuscounts}}
-				</ul>
-			</div>
-		</div>
-
-		<div class="widget-box">
-			<div class="widget-title"><h5>Data Source Class Summary</h5></div>
-			<div class="widget-content nopadding">
-				<ul class="ro-list">
-					{{#classcounts}}
-				  		{{#class}}
-				  			<li class="" name="{{class}}" type="class"><span class="name"><img tip="{{class}}" src="<?php echo asset_url('img/{{class}}.png', 'base');?>"/> {{name}}</span> <span class="num">{{count}}</span></li>
-				  		{{/class}}
-			  		{{/classcounts}}
-				</ul>
-			</div>
-		</div>
-
-		<div class="widget-box">
-			<div class="widget-title"><h5>Data Source Quality Summary</h5></div>
-			<div class="widget-content nopadding">
-				<ul class="ro-list">
-					{{#qlcounts}}
-				  		{{#level}}
-				  			<li class="ql_{{level}}" name="{{level}}" type="quality_level"><span class="name">Quality Level {{level}}</span> <span class="num">{{count}}</span></li>
-				  		{{/level}}
-			  		{{/qlcounts}}
-				</ul>
-			</div>
-		</div>
-
-		
-
-
-	</div>
-
 </div>
 
-
-</div>
 
 <!-- Modal form for importing records from a URL -->
 <div class="modal hide fade" id="importRecordsFromURLModal">
@@ -398,8 +388,6 @@
 
 </div>
 
-
-<!-- Modal form for importing records from a URL -->
 <div class="modal hide fade" id="exportDataSource">
 	
 	<div class="modal-header">
@@ -430,24 +418,7 @@
 				</fieldset>
 			</form>
 		</div>
-		
-		<!-- A hidden loading screen -->
-		<div id="loadingScreen" class="modal-body hide loading">
-				<b>Generating XML...
-				<div class="progress progress-striped active">
-				  <div class="bar" style="width: 100%;"></div>
-				</div>
-		</div>
-		<div id="error-modal" class="modal-body hide loading">
-				<b>Failed to generate export file...</b>
-		</div>
-
-		
-		<!-- A hidden loading screen -->
-		<div name="resultScreen" class="modal-body hide loading">
-		</div>
 	</div>
-	
 	
 	<div class="modal-footer">
 		<a href="javascript:;" class="btn btn-primary exportRecord" type="xml" data-loading-text="Fetching records...">View RIF-CS in Browser</a>
@@ -771,22 +742,7 @@
 				</fieldset>
 			</form>
 		</div>
-		
-		<!-- A hidden loading screen -->
-		<div id="loadingScreen" class="modal-body hide loading">
-				<b>Generating XML...
-				<div class="progress progress-striped active">
-				  <div class="bar" style="width: 100%;"></div>
-				</div>
-		</div>
-		<div id="error-modal" class="modal-body hide loading">
-				<b>Failed to generate export file...</b>
-		</div>
-
-		
-		<!-- A hidden loading screen -->
-		<div name="resultScreen" class="modal-body hide loading">
-		</div>
+	
 	</div>
 	
 	

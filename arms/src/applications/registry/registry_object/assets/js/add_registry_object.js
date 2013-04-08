@@ -122,7 +122,7 @@ $(function(){
 					type: 'GET',
 					data: {},
 					success: function(data, status) {
-						this.set('content.text', data);
+						this.set('content.text', data.html_data);
 						bindSearchRelatedEvents(this, target);
 					}
 				}
@@ -320,7 +320,8 @@ function initEditForm(){
 		 */
 		e.stopPropagation();
 		e.preventDefault();
-		var what = $(this).attr('type');
+		var what = $(this).attr('add_new_type');
+		log(what);
 		var template = $('.template[type='+what+']')[0];
 		var where = $(this).prevAll('.separate_line')[0];
 
@@ -612,7 +613,7 @@ function addValidationMessage(tt, type){
 	var message = tt.message;
     var message = $('<div />').html(message).text();
 
-	log(name, message);
+	// log(name, message);
 	if(name.match("^tab_")){
 		var tab = name.replace('tab_','');
 		$('#'+tab).prepend('<div class="alert alert-'+type+'">'+message+'</div>');

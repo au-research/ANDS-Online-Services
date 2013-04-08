@@ -302,7 +302,7 @@ function load_datasource(data_source_id){
 			var view = $('#view-datasource');
 			$('#view-datasource').html(output);
 			$('#view-datasource').fadeIn(500);
-
+			
 			var title = data.item.title;
 			document.title = title;
 
@@ -373,11 +373,10 @@ function loadDataSourceLogs(data_source_id, offset, count)
 				if(data.next_offset=='all'){
 					$('#show_more_log').hide();
 				}
-				var bottom_offset = $('#data_source_log_container').offset().top + $('#data_source_log_container').height();
+				// var bottom_offset = $('#data_source_log_container').offset().top + $('#data_source_log_container').height();
 				//$('body').animate({"scrollTop": bottom_offset}, 100);
 				//logTimer = 2000
-				if(lastLogId)
-				{
+				if(lastLogId){
 					logTimer = 2000;
 					window.setTimeout(function(){loadTopLogs(data_source_id)}, logTimer);
 				}

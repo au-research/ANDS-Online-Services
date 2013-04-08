@@ -424,7 +424,7 @@
 					select="ro:collection/ro:name | ro:activity/ro:name | ro:party/ro:name  | ro:service/ro:name"/>
 				<div class="separate_line"/>
 
-				<button class="btn btn-primary addNew" type="name">
+				<button class="btn btn-primary addNew" type="name" add_new_type="name">
 					<i class="icon-plus icon-white"/> Add Name </button>
 				<button class="hide btn export_xml btn-info"> Export XML fragment </button>
 			</fieldset>
@@ -440,7 +440,7 @@
 					select="ro:collection/ro:dates | ro:activity/ro:dates | ro:party/ro:dates  | ro:service/ro:dates"/>
 				<div class="separate_line"/>
 
-				<button class="btn btn-primary addNew" type="dates">
+				<button class="btn btn-primary addNew" type="dates" add_new_type="dates">
 					<i class="icon-plus icon-white"/> Add Dates </button>
 				<button class="hide btn export_xml btn-info"> Export XML fragment </button>
 			</fieldset>
@@ -506,7 +506,7 @@
 			<xsl:apply-templates select="ro:namePart"/>
 			<div class="separate_line"/>
 			<div class="controls hide">
-				<button class="btn btn-primary addNew" type="namePart">
+				<button class="btn btn-primary addNew" type="namePart" add_new_type="namePart">
 					<i class="icon-plus icon-white"></i> Add Name Part
 				</button>
 			</div>
@@ -538,9 +538,9 @@
 				<xsl:apply-templates
 					select="ro:collection/ro:rights | ro:activity/ro:rights | ro:party/ro:rights  | ro:service/ro:rights"/>
 				<div class="separate_line"/>
-				<button class="btn btn-primary addNew" type="description">
+				<button class="btn btn-primary addNew" type="description" add_new_type="description">
 					<i class="icon-plus icon-white"/> Add Description </button>
-				<button class="btn btn-primary addNew" type="rights">
+				<button class="btn btn-primary addNew" type="rights" add_new_type="rights">
 					<i class="icon-plus icon-white"/> Add Rights </button>
 				<button class="hide btn export_xml btn-info"> Export XML fragment </button>
 			</fieldset>
@@ -553,7 +553,7 @@
 				<legend>Access Policy</legend>
 				<xsl:apply-templates select="ro:service/ro:accessPolicy"/>
 				<div class="separate_line"/>
-				<button class="btn btn-primary addNew" type="accesspolicy">
+				<button class="btn btn-primary addNew" type="accesspolicy" add_new_type="accesspolicy">
 					<i class="icon-plus icon-white"/> Add Access Policy </button>
 				<button class="hide btn export_xml btn-info"> Export XML fragment </button>
 			</fieldset>
@@ -568,8 +568,8 @@
 				<xsl:apply-templates select="ro:collection/ro:citationInfo"/>
 				<div class="separate_line"/>
 				<div class="btn-group">
-					<a href="javascript:;" class="btn btn-primary addNew" type="fullCitation">Add Full Citation</a>
-					<a href="javascript:;" class="btn btn-primary addNew" type="citationMetadata">Add Citation Metadata</a>
+					<a href="javascript:;" class="btn btn-primary addNew" type="fullCitation" add_new_type="fullCitation">Add Full Citation</a>
+					<a href="javascript:;" class="btn btn-primary addNew" type="citationMetadata" add_new_type="citationMetadata">Add Citation Metadata</a>
 					<button class="hide btn export_xml btn-info"> Export XML fragment </button>
 				</div>
 				
@@ -673,7 +673,7 @@
 						<div class="aro_box_part">
 							<xsl:apply-templates select="ro:contributor"/>
 							<div class="separate_line"/>
-							<button class="btn btn-primary addNew" type="contributor">
+							<button class="btn btn-primary addNew" type="contributor" add_new_type="contributor">
 								<i class="icon-plus icon-white"></i> Add Contributor
 							</button>
 						</div>
@@ -688,7 +688,7 @@
 						<div class="aro_box_part">
 							<xsl:apply-templates select="ro:date"/>
 							<div class="separate_line"/>
-							<button class="btn btn-primary addNew" type="date">
+							<button class="btn btn-primary addNew" type="date" add_new_type="date">
 								<i class="icon-plus icon-white"></i> Add Date
 							</button>
 						</div>
@@ -706,7 +706,7 @@
 			</xsl:apply-templates>
 			<div class="separate_line"/>
 			<div class="controls">
-				<button class="btn btn-primary addNew" type="namePart"><i class="icon-plus icon-white"/> Add NamePart </button>
+				<button class="btn btn-primary addNew" type="namePart" add_new_type="namePart"><i class="icon-plus icon-white"/> Add NamePart </button>
 				<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/> Remove this contributor</button>
 			</div>
 			<hr/>
@@ -758,7 +758,7 @@
 				<xsl:apply-templates
 					select="ro:collection/ro:subject | ro:activity/ro:subject | ro:party/ro:subject  | ro:service/ro:subject"/>
 				<div class="separate_line"/>
-				<button class="btn btn-primary addNew" type="subject">
+				<button class="btn btn-primary addNew" type="subject" add_new_type="subject">
 					<i class="icon-plus icon-white"/> Add Subject </button>
 				<button class="hide btn export_xml btn-info"> Export XML fragment </button>
 			</fieldset>
@@ -773,7 +773,7 @@
 				<xsl:apply-templates
 					select="ro:collection/ro:identifier | ro:activity/ro:identifier | ro:party/ro:identifier  | ro:service/ro:identifier"/>
 				<div class="separate_line"/>
-				<button class="btn btn-primary addNew" type="identifier">
+				<button class="btn btn-primary addNew" type="identifier" add_new_type="identifier">
 					<i class="icon-plus icon-white"/> Add Identifier </button>
 				<button class="hide btn export_xml btn-info"> Export XML fragment </button>
 			</fieldset>
@@ -787,7 +787,7 @@
 				<xsl:apply-templates
 					select="ro:collection/ro:relatedObject | ro:activity/ro:relatedObject | ro:party/ro:relatedObject  | ro:service/ro:relatedObject"/>
 				<div class="separate_line"/>
-				<button class="btn btn-primary addNew" type="relatedObject">
+				<button class="btn btn-primary addNew" type="relatedObject" add_new_type="relatedObject">
 					<i class="icon-plus icon-white"/> Add Related Object </button>
 				<button class="hide btn export_xml btn-info"> Export XML fragment </button>
 			</fieldset>
@@ -801,7 +801,7 @@
 				<xsl:apply-templates
 					select="ro:collection/ro:relatedInfo | ro:activity/ro:relatedInfo | ro:party/ro:relatedInfo | ro:service/ro:relatedInfo"/>
 				<div class="separate_line"/>
-				<button class="btn btn-primary addNew" type="relatedinfo">
+				<button class="btn btn-primary addNew" type="relatedinfo" add_new_type="relatedinfo">
 					<i class="icon-plus icon-white"/> Add related Info </button>
 				<button class="hide btn export_xml btn-info"> Export XML fragment </button>
 			</fieldset>
@@ -815,7 +815,7 @@
 				<xsl:apply-templates
 					select="ro:collection/ro:location | ro:activity/ro:location | ro:party/ro:location  | ro:service/ro:location"/>
 				<div class="separate_line"/>
-				<button class="btn btn-primary addNew" type="location">
+				<button class="btn btn-primary addNew" type="location" add_new_type="location">
 					<i class="icon-plus icon-white"/> Add Location </button>
 				<button class="hide btn export_xml btn-info"> Export XML fragment </button>
 			</fieldset>
@@ -829,7 +829,7 @@
 				<xsl:apply-templates
 					select="ro:collection/ro:coverage | ro:activity/ro:coverage | ro:party/ro:coverage  | ro:service/ro:coverage"/>
 				<div class="separate_line"/>
-				<button class="btn btn-primary addNew" type="coverage"><i class="icon-plus icon-white"/> Add Coverage </button>
+				<button class="btn btn-primary addNew" type="coverage" add_new_type="coverage"><i class="icon-plus icon-white"/> Add Coverage </button>
 				<button class="hide btn export_xml btn-info"> Export XML fragment </button>
 			</fieldset>
 		</div>
@@ -841,7 +841,7 @@
 				<legend>Existence dates</legend>
 				<xsl:apply-templates select="ro:activity/ro:existenceDates | ro:party/ro:existenceDates  | ro:service/ro:existenceDates"/>
 				<div class="separate_line"/>
-				<button class="btn btn-primary addNew" type="existenceDate">
+				<button class="btn btn-primary addNew" type="existenceDate" add_new_type="existenceDate">
 					<i class="icon-plus icon-white"/> Add Existence Date </button>
 				<button class="hide btn export_xml btn-info"> Export XML fragment </button>
 			</fieldset>
@@ -958,7 +958,7 @@
 			<xsl:apply-templates select="ro:relation"/>
 			<div class="separate_line"/>
 			<div class="controls">
-				<button class="btn btn-primary addNew" type="relation"><i class="icon-plus icon-white"/> Add Relation </button>
+				<button class="btn btn-primary addNew" type="relation" add_new_type="relation"><i class="icon-plus icon-white"/> Add Relation </button>
 			</div>
 		</div>
 	</xsl:template>
@@ -979,8 +979,8 @@
 				<xsl:apply-templates select="ro:address"/>
 				<div class="separate_line"/>
 				<div class="btn-group">
-					<a href="javascript:;" class="btn btn-primary addNew" type="electronic"><i class="icon icon-white icon-plus"></i> Electronic Address</a>
-					<a href="javascript:;" class="btn btn-primary addNew" type="physical"><i class="icon icon-white icon-plus"></i> Physical Address</a>
+					<a href="javascript:;" class="btn btn-primary addNew" type="electronic" add_new_type="electronic"><i class="icon icon-white icon-plus"></i> Electronic Address</a>
+					<a href="javascript:;" class="btn btn-primary addNew" type="physical" add_new_type="physical"><i class="icon icon-white icon-plus"></i> Physical Address</a>
 				</div>
 			</div>
 
@@ -988,7 +988,7 @@
 				<h1>Spatial Location</h1>
 				<xsl:apply-templates select="ro:spatial"/>
 				<div class="separate_line"/>
-				<button class="btn btn-primary addNew" type="spatial"><i class="icon-map-marker icon-white"/> Add Spatial Location </button>
+				<button class="btn btn-primary addNew" type="spatial" add_new_type="spatial"><i class="icon-map-marker icon-white"/> Add Spatial Location </button>
 			</div>
 
 		</div>
@@ -1004,8 +1004,8 @@
 			<xsl:apply-templates select="ro:spatial"/>
 			<div class="separate_line"/>	
 			<div class="btn-group">
-				<a href="javascript:;" class="btn btn-primary addNew" type="temporal"><i class="icon-white icon-plus"></i> Add Temporal Coverage</a>
-				<a href="javascript:;" class="btn btn-primary  addNew" type="spatial"><i class="icon-white icon-plus"></i> Add Spatial Coverage</a>
+				<a href="javascript:;" class="btn btn-primary addNew" type="temporal" add_new_type="temporal"><i class="icon-white icon-plus"></i> Add Temporal Coverage</a>
+				<a href="javascript:;" class="btn btn-primary  addNew" type="spatial" add_new_type="spatial"><i class="icon-white icon-plus"></i> Add Spatial Coverage</a>
 
 			</div>
 		</div>
@@ -1022,8 +1022,8 @@
 			<div class="separate_line"/>
 			<div class="controls">
 				<div class="btn-group">
-					<a href="javascript:;" class="btn btn-mini btn-primary addNew" type="coverage_date"><i class="icon-white icon-plus"></i> Date</a>
-					<a href="javascript:;" class="btn btn-mini btn-primary addNew" type="text"><i class="icon-white icon-plus"></i> Text</a>
+					<a href="javascript:;" class="btn btn-mini btn-primary addNew" type="coverage_date" add_new_type="coverage_date"><i class="icon-white icon-plus"></i> Date</a>
+					<a href="javascript:;" class="btn btn-mini btn-primary addNew" type="text" add_new_type="text"><i class="icon-white icon-plus"></i> Text</a>
 					<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
 				</div>
 
@@ -1119,7 +1119,7 @@
 						<div class="parts hide">
 							<xsl:apply-templates select="ro:arg"/>
 							<div class="separate_line"/>
-							<button class="btn btn-primary addNew" type="arg">
+							<button class="btn btn-primary addNew" type="arg" add_new_type="arg">
 								<i class="icon-plus icon-white"></i> Add Args
 							</button>
 						</div>
@@ -1138,7 +1138,7 @@
 					<input type="text" class="input rifcs-type" vocab="RIFCSPhysicalAddressType" name="type" placeholder="Type" value="{@type}"/>
 					<xsl:apply-templates select="ro:addressPart"/>
 					<div class="separate_line"/>
-					<button class="btn btn-primary addNew" type="addressPart">
+					<button class="btn btn-primary addNew" type="addressPart" add_new_type="addressPart">
 						<i class="icon-plus icon-white"></i> Add Address Part
 					</button>
 				</div>
@@ -1210,7 +1210,7 @@
 
 			<div class="separate_line"/>
 			<div class="controls">
-				<button class="btn btn-primary addNew" type="namePart">
+				<button class="btn btn-primary addNew" type="namePart" add_new_type="namePart">
 					<i class="icon-plus icon-white"></i> Add Name Part
 				</button>
 			</div>
@@ -1325,7 +1325,7 @@
 
 			<div class="separate_line"/>
 			<div class="controls">
-				<button class="btn btn-primary addNew" type="relation"><i class="icon-plus icon-white"/> Add Relation </button>
+				<button class="btn btn-primary addNew" type="relation" add_new_type="relation"><i class="icon-plus icon-white"/> Add Relation </button>
 			</div>
 		</div>
 
@@ -1391,15 +1391,15 @@
 				<h1>Address</h1>
 				<div class="separate_line"/>
 				<div class="btn-group">
-					<a href="javascript:;" class="btn btn-primary addNew" type="electronic"><i class="icon icon-white icon-plus"></i> Electronic Address</a>
-					<a href="javascript:;" class="btn btn-primary addNew" type="physical"><i class="icon icon-white icon-plus"></i> Physical Address</a>
+					<a href="javascript:;" class="btn btn-primary addNew" type="electronic" add_new_type="electronic"><i class="icon icon-white icon-plus"></i> Electronic Address</a>
+					<a href="javascript:;" class="btn btn-primary addNew" type="physical" add_new_type="physical"><i class="icon icon-white icon-plus"></i> Physical Address</a>
 				</div>
 			</div>
 
 			<div class="aro_subbox" type="spatial">
 				<h1>Spatial Location</h1>
 				<div class="separate_line"/>
-				<button class="btn btn-primary addNew" type="spatial"><i class="icon-map-marker icon-white"/> Add Spatial Location </button>
+				<button class="btn btn-primary addNew" type="spatial" add_new_type="spatial"><i class="icon-map-marker icon-white"/> Add Spatial Location </button>
 			</div>
 
 		</div>
@@ -1431,7 +1431,7 @@
 						<div class="parts hide">
 							<xsl:apply-templates select="ro:arg"/>
 							<div class="separate_line"/>
-							<button class="btn btn-primary addNew" type="arg">
+							<button class="btn btn-primary addNew" type="arg" add_new_type="arg">
 								<i class="icon-plus icon-white"></i> Add Args
 							</button>
 						</div>
@@ -1448,7 +1448,7 @@
 					<input type="text" class="input rifcs-type" vocab="RIFCSPhysicalAddressType" name="type" placeholder="Address Type" value=""/>
 					<div class="aro_box_part" type="addressParts">
 						<div class="separate_line"/>
-						<button class="btn btn-primary addNew" type="addressPart">
+						<button class="btn btn-primary addNew" type="addressPart" add_new_type="addressPart">
 							<i class="icon-plus icon-white"></i> Add Address Part
 						</button>
 					</div>
@@ -1578,7 +1578,7 @@
 					<div class="controls">
 						<div class="aro_box_part">
 							<div class="separate_line"/>
-							<button class="btn btn-primary addNew" type="contributor">
+							<button class="btn btn-primary addNew" type="contributor" add_new_type="contributor">
 								<i class="icon-plus icon-white"></i> Add Contributor
 							</button>
 						</div>
@@ -1592,7 +1592,7 @@
 					<div class="controls">
 						<div class="aro_box_part">
 							<div class="separate_line"/>
-							<button class="btn btn-primary addNew" type="date"><i class="icon-plus icon-white"></i> Add Date</button>
+							<button class="btn btn-primary addNew" type="date" add_new_type="date"><i class="icon-plus icon-white"></i> Add Date</button>
 						</div>
 					</div>
 				</div>
@@ -1617,7 +1617,7 @@
 			</div>
 			<div class="separate_line"/>
 			<div class="controls">
-				<button class="btn btn-primary addNew" type="namePart"><i class="icon-plus icon-white"/> Add NamePart </button>
+				<button class="btn btn-primary addNew" type="namePart" add_new_type="namePart"><i class="icon-plus icon-white"/> Add NamePart </button>
 				<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/> Remove this contributor</button>
 			</div>
 			<hr/>
@@ -1679,8 +1679,8 @@
 			<div class="separate_line"/>
 			<div class="controls">
 				<div class="btn-group">
-					<a href="javascript:;" class="btn btn-mini btn-primary addNew" type="coverage_date"><i class="icon-white icon-plus"></i> Date</a>
-					<a href="javascript:;" class="btn btn-mini btn-primary addNew" type="text"><i class="icon-white icon-plus"></i> Text</a>
+					<a href="javascript:;" class="btn btn-mini btn-primary addNew" type="coverage_date" add_new_type="coverage_date"><i class="icon-white icon-plus"></i> Date</a>
+					<a href="javascript:;" class="btn btn-mini btn-primary addNew" type="text" add_new_type="text"><i class="icon-white icon-plus"></i> Text</a>
 					<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
 				</div>
 			</div>
@@ -1689,8 +1689,8 @@
 		<div class="aro_box template" type="coverage">
 			<div class="separate_line"/>
 			<div class="btn-group">
-				<a href="javascript:;" class="btn btn-primary addNew" type="temporal"><i class="icon-white icon-plus"></i> Add Temporal Coverage</a>
-				<a href="javascript:;" class="btn btn-primary  addNew" type="spatial"><i class="icon-white icon-plus"></i> Add Spatial Coverage</a>
+				<a href="javascript:;" class="btn btn-primary addNew" type="temporal" add_new_type="temporal"><i class="icon-white icon-plus"></i> Add Temporal Coverage</a>
+				<a href="javascript:;" class="btn btn-primary  addNew" type="spatial" add_new_type="spatial"><i class="icon-white icon-plus"></i> Add Spatial Coverage</a>
 			</div>
 		</div>
 
@@ -1733,7 +1733,7 @@
 				</div>
 				<div class="separate_line"/>
 				<div class="controls">
-					<button class="btn btn-primary addNew" type="dates_date">
+					<button class="btn btn-primary addNew" type="dates_date" add_new_type="dates_date">
 						<i class="icon-plus icon-white"></i> Add new Date
 					</button>
 				</div>
