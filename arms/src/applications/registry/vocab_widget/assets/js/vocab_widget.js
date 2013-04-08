@@ -78,6 +78,12 @@
 	    sqc_op: ""
 	};
 
+	// Default changes if we're running within the ANDS environments
+	if (typeof(window.real_base_url) != 'undefined')
+	{
+		defaults['endpoint'] = window.real_base_url + 'registry/vocab_widget/proxy/';
+	}
+
 	var settings;
 	var handler;
 
