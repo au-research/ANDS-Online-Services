@@ -475,7 +475,7 @@ function initMap(){
     
 
     map = new google.maps.Map(document.getElementById("searchmap"),myOptions);
-
+	
     var homeControlDiv = document.createElement('div');
   	var homeControl = new SidebarToggle(homeControlDiv, map);
 
@@ -543,6 +543,12 @@ function initMap(){
      		infowindow.close();
  		}
  	});
+     google.maps.event.addListener(map, 'zoom_changed', function(e) {
+     	if(infowindow)
+     	{
+     		infowindow.close();
+ 		}
+ 	});
      google.maps.event.addListener(drawingManager, 'overlaycomplete', function(e) {
          if (e.type == google.maps.drawing.OverlayType.RECTANGLE) {
           // Switch back to non-drawing mode after drawing a shape.
@@ -566,16 +572,18 @@ function initMap(){
 
 	var styles = [[{
 	    url: base_url+'assets/search/img/pin.png',
-	    width: 30, height: 34,
-	    opt_anchor: [15, 15],
-	    opt_textColor: '#222222',
-	    opt_textSize: 13
+	    width: 80, height: 54,
+	    anchor: [23, 23],
+	    textColor: 'black',
+	    textSize: '10'
 	  }]];
 
 	markerClusterer = new MarkerClusterer(map, null, { maxZoom: 12, gridSize: 50, styles: styles[0]});
 
      //markerClusterer = new  MarkerClusterer(map, null, {zoomOnClick:false});
-     window.setTimeout(function(){map.setCenter(new google.maps.LatLng(-25.397, 133.644))}, 100);
+     window.setTimeout(function(){
+     	map.setCenter(new google.maps.LatLng(-25.397, 133.644)); 
+     }, 500);
 }
 
 
@@ -768,6 +776,18 @@ function resetZoom(){
 		map.fitBounds(searchBox.getBounds());
 	}
 
+}
+function findClusters()
+{
+	return $('div', $('#searchmap')).filter(function() {
+	    var self = $(this);
+	    return self.css('background-image').match(/pin\.png/);
+	});
+}
+
+function clearClusters()
+{
+	$.each(findClusters(), function(i, val) { $(val).html(''); });
 }
 
 function formatSearch()

@@ -1207,6 +1207,7 @@ ClusterIcon.prototype.createCss = function(pos) {
   style.push('background-image:url(' + this.url_ + ');');
   var backgroundPosition = this.backgroundPosition_ ? this.backgroundPosition_ : '0 0';
   style.push('background-position:' + backgroundPosition + ';');
+  style.push('background-repeat:no-repeat;');
 
   if (typeof this.anchor_ === 'object') {
     if (typeof this.anchor_[0] === 'number' && this.anchor_[0] > 0 &&
@@ -1230,7 +1231,7 @@ ClusterIcon.prototype.createCss = function(pos) {
   }
 
   var txtColor = this.textColor_ ? this.textColor_ : 'black';
-  var txtSize = this.textSize_ ? this.textSize_ : 11;
+  var txtSize = this.textSize_ ? this.textSize_ : 9;
 
   style.push('cursor:pointer; top:' + pos.y + 'px; left:' +
       pos.x + 'px; color:' + txtColor + '; position:absolute; font-size:' +
