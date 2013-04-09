@@ -986,34 +986,57 @@ public function getContributorGroupsEdit()
 				{
 				   $resetHarvest = true;
 				} 
-
-				if($new_value != '' && $attrib == 'qa_flag' && $new_value != $dataSource->{$attrib})
+				
+				//we need to check if we have turned it on or off and then change record statuses accordingly
+				if($new_value == 'f' && $attrib == 'qa_flag' && $new_value != $dataSource->{$attrib})
 				{
-					//we need to check if we have turned it on or off and then change record statuses accordingly
 					$jsonData['qa_flag'] = "changed from ".$dataSource->{$attrib}." to ".$new_value;
+					$newStatus = PUBLISHED;
+					$manual_publish = $this->input->post('manual_publish');
+					if($manual_publish=="true"||$manual_publish=="t")$newStatus = APPROVED;
+					//get all objects with submitted for assessment status for this ds and change status to the new status
+					$ros = '';
+					$ros = $this->ro->getByAttributeDatasource($dataSource->id, 'status', SUBMITTED_FOR_ASSESSMENT, true);
+					$jsonData['ros'] = $ros; 
+					if($ros)
+					foreach($ros as $submitted_ro)
+					{
+						$ro = $this->ro->getByID($submitted_ro->id);
+						$jsonData[$submitted_ro->id]=$ro->status;
+						$ro->status = $newStatus;
+						$ro->save();
 
-
+					} 
+					//get all objects with assessment in progress status for this ds and change status to the new status
+					$roa = '';
+					$roa = $this->ro->getByAttributeDatasource($dataSource->id, 'status', ASSESSMENT_IN_PROGRESS, true);
+					$jsonData['roa'] = $roa; 					
+					if($roa)
+					foreach($roa as $progress_ro)
+					{
+						$ro = $this->ro->getByID($progress_ro->id);
+						$jsonData[$progress_ro->id]=$ro->status;
+						$ro->status = $newStatus;
+						$ro->save();
+					}				
 				}
 
 				//we need to check if we have turned manually publish to NO  - if so set all records of this datasource from Approved to Published
 				if($attrib == 'manual_publish' && $new_value == 'f' && $new_value != $dataSource->{$attrib})
 				{					
 					$jsonData['manual_publish'] = "changed from ".$dataSource->{$attrib}." to ".$new_value;
-					//so lets get all of the objects for this ds that have a status of "Approved"
+					//so lets get all of the objects for this ds that have a status of "Approved" nad change the status to published
 					$jsonData['ds_id'] = $dataSource->id;
-
-					$jsonData['ro'] = $this->ro->getByAttributeDatasource($dataSource->id, 'original_status', 'Approved');
-					//$ros = $jsonData['ro'];
-					//foreach($ros as $approved_ro)
-					//{
-					//	$ro = $this->ro->getByID($approved_ro);
-					//	if ($ro->status == APPROVED)
-					//	{
-					//		$ro->status = PUBLISHED;
-					//		$ro->save();
-					//	}
-
-					//}
+					$rop = '';
+					$rop = $this->ro->getByAttributeDatasource($dataSource->id, 'status', APPROVED, true);
+					$jsonData['rop'] = $rop; 	
+					if($rop)
+					foreach($rop as $approved_ro)
+					{
+						$ro = $this->ro->getByID($approved_ro->id);
+						$ro->status = PUBLISHED;
+						$ro->save();					
+					}
 
 				}
 

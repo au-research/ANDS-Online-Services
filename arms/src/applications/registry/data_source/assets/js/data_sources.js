@@ -895,12 +895,12 @@ function load_datasource_edit(data_source_id, active_tab){
 								var submittedAssessment = '.';
 								var assessmentProgress = '.';
 
-								$('.publish_count').each(function(){	
+								$('.publish_count').each(function(){
 									if($(this).attr('id')=="Submitted for Assessment")
 									{
 										submittedAssessment = $(this).html();
 									}
-									if($(this).attr('id')=="Assessment in Progress")
+									if($(this).attr('id')=="Assessment In Progress")
 									{
 										assessmentProgress = $(this).html();
 									}
@@ -908,7 +908,7 @@ function load_datasource_edit(data_source_id, active_tab){
 					
 								if(submittedAssessment!='.')
 								{
-									publishStr = submittedAssessment + " <em>' Submitted for Assessment'</em> ";
+									publishStr = submittedAssessment + " <em>'Submitted for Assessment'</em> ";
 									if(assessmentProgress!='.') publishStr = publishStr + " and <br />";
 								}	
 								if(assessmentProgress!='.')
