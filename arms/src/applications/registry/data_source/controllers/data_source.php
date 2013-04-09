@@ -1534,7 +1534,7 @@ public function getContributorGroupsEdit()
 						$this->importer->setHarvestID($harvestId);
 						$this->importer->setDatasource($dataSource);
 
-						if ($done != TRUE)
+						if ($done != 'TRUE')
 						{
 							$this->importer->setPartialCommitOnly(TRUE);
 						}
@@ -1544,7 +1544,7 @@ public function getContributorGroupsEdit()
 						}
 
 
-						if ($mode == "HARVEST")
+						if($mode == "HARVEST")
 						{
 							try
 							{
@@ -1568,12 +1568,12 @@ public function getContributorGroupsEdit()
 							}
 						}
 						else{
-							$dataSource->append_log($logMsg, HARVEST_MSG, "harvester", "HARVESTER_INFO");	
+							$dataSource->append_log($logMsg, HARVEST_INFO, "harvester", "HARVESTER_INFO");	
 						}	
 					}
 				}
 			}
-			if($done == TRUE || $mode != "HARVEST")
+			if($done == 'TRUE' || $mode != "HARVEST")
 			{
 				// TODO: make up a better way to display log for multiple OAI chunks
 				//if($mode == "HARVEST")
@@ -1583,12 +1583,12 @@ public function getContributorGroupsEdit()
 				$dataSource->cancelHarvestRequest($harvestId,false);
 				if($dataSource->advanced_harvest_mode == 'REFRESH')
 				{
-					$dataSource->append_log($logMsg.NL."HARVEST MODE REFRESH: ".NL."new Harvest ID: ".$harvestId, HARVEST_MSG, "harvester","HARVESTER_INFO");
+					$dataSource->append_log($logMsg.NL."HARVEST MODE REFRESH: ".NL."new Harvest ID: ".$harvestId, HARVEST_INFO, "harvester","HARVESTER_INFO");
 					$dataSource->deleteOldRecords($harvestId);
 				} 
 			}
 
-			if($done == TRUE && $nextHarvestDate)
+			if($done == 'TRUE' && $nextHarvestDate)
 			{
 				$dataSource->requestHarvest(null,null,null,null,null,null,$nextHarvestDate);
 				//reschedule!
