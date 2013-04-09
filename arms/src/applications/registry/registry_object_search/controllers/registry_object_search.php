@@ -127,6 +127,11 @@ class Registry_object_search extends MX_Controller {
 				$filter['class'] = $params['class'];
 			}
 
+			if (isset($params['onlyPublished']) &&
+			    $params['onlyPublished'] === 'yes') {
+			    $filter['status'] = "PUBLISHED";
+			}
+
 			if (isset($params['ds'])) {
 				$args['data_source_id'] = $params['ds'];
 			}
@@ -144,7 +149,9 @@ class Registry_object_search extends MX_Controller {
 						'id'=>$ro->id,
 						'title'=>$ro->title,
 						'key'=>$ro->key,
-						'class'=>$ro->class
+						'class'=>$ro->class,
+						'status'=> ucwords(strtolower(str_replace('_', ' ', $ro->status))),
+						'color'=>Registry_objects::$status_colors[$ro->status]
 					);
 				}
 			}else{
