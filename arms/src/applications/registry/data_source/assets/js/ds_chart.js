@@ -5,6 +5,8 @@ $(document).ready(function() {
 	google.setOnLoadCallback(drawStatusCharts);
 
 	$('#quality_report_status_dropdown').on('change',function(e){
+		$('#detailed_report_link').attr('href', $('#detailed_report_link').attr('data-default-href') + '/' + this.value);
+		$('#download_report_link').attr('href', $('#download_report_link').attr('data-default-href') + '/' + this.value + '/true');
 		drawChart(null, this.value);
 	});
 
@@ -78,7 +80,7 @@ $(document).ready(function() {
 									if (colorChart[_quality])
 									{
 										chosenColourChart.push(colorChart[_quality]);
-										colorChart[_quality] = false;
+									//	colorChart[_quality] = false;
 
 									}
 								}
@@ -112,9 +114,9 @@ $(document).ready(function() {
 				  colors: chosenColourChart,
 				  hAxis: {title: "",format:'##%'},
 				  vAxis: {title: "Class"},
-				  chartArea:{left:100, width:"68%"},
-				  height: 250,
-				  legend: {position: 'right'},
+				  chartArea:{left:100},
+				  height: 200,
+				  legend: {position: 'none'},
 				  backgroundColor: '#f9f9f9',
 				};
 				var dataView = new google.visualization.DataView(chart_data);
@@ -136,6 +138,14 @@ $(document).ready(function() {
 
 					var chart = new google.visualization.BarChart(document.getElementById('overall_chart_div'));
 					chart.draw(dataView, options);
+
+					var legendBar = '';
+					$.each(colorChart, function(i, val)
+					{
+						legendBar += '<i class="legend-icon" style="background-color:'+ val +'">&nbsp;</i> ' + i;
+					});
+
+					$('#quality_status_legend').html(legendBar);
 				}
 				else
 				{
@@ -156,14 +166,27 @@ $(document).ready(function() {
 			dataType: 'json',
 			success: function(data)
 			{
+				var colorChart = {
+					"More Work Required": "#6A4A3C", 
+					"Draft": "#cc6600", 
+					"Submitted for Assessment": "#688EDE", 
+					"Assessment in Progress": "#0B2E59", 
+					"Approved": "#EDD155", 
+					"Published": "#32CD32"
+				}
+
 				$.each(data, function(i, val)
 				{
+					var chosenColourChart =  $.map(colorChart, function (value, key) { return value; });
+
 					var table_data = google.visualization.arrayToDataTable(val);
 					var options = {
-			          title: i,
+			          title: i + " Records",
+			          colors: chosenColourChart,
 			          chartArea: { width: 300, height:250 },
 					  backgroundColor: '#f9f9f9',
 			          pieSliceText: 'label',
+			          sliceVisibilityThreshold:0,
 			          legend: { position: 'none'},
 			          pieSliceTextStyle: { fontSize: 13},
 			          titleTextStyle: { fontSize: 12 } ,
@@ -174,6 +197,14 @@ $(document).ready(function() {
 			        var chart = new google.visualization.PieChart(document.getElementById('status_chart_'+i));
 		       		chart.draw(table_data, options);
 				});
+
+				var legendBar = '';
+				$.each(colorChart, function(i, val)
+				{
+					legendBar += '<i class="legend-icon" style="background-color:'+ val +'">&nbsp;</i> ' + i;
+				});
+
+				$('#status_charts').before('<div class="clear chart-legend">'+legendBar+'</div>');
      		}
      	});
 	}

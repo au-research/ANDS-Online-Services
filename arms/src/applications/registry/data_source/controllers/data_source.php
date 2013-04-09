@@ -1198,6 +1198,8 @@ public function getContributorGroupsEdit()
 	 */
 	function importFromXMLPasteToDataSource()
 	{
+		set_exception_handler('json_exception_handler');
+
 		$this->load->library('importer');
 		
 
@@ -1213,16 +1215,15 @@ public function getContributorGroupsEdit()
 		$log .= 'Harvest Method: Direct import from XML content' . NL;
 		$log .= strlen($xml) . ' characters received...' . NL;
 
+		$this->load->model('data_source/data_sources', 'ds');
+		$data_source = $this->ds->getByID($this->input->post('data_source_id'));
+
 		if (strlen($xml) == 0)
 		{
 			$data_source->append_log($elogTitle.$log.NL ."Unable to retrieve any content from the specified XML", HARVEST_ERROR, "importer","IMPORT_ERROR");		
 			echo json_encode(array("response"=>"failure", "message"=>"Unable to retrieve any content from the specified XML", "log"=>substr($elogTitle.$log,0, 1000)));
 			return;	
 		}
-		
-
-		$this->load->model('data_source/data_sources', 'ds');
-		$data_source = $this->ds->getByID($this->input->post('data_source_id'));
 
 		$xml=stripXMLHeader($xml);
 		if ($data_source->provider_type && $data_source->provider_type != RIFCS_SCHEME)
@@ -1642,41 +1643,52 @@ public function getContributorGroupsEdit()
 	}
 
 	/* Leo's quality report */
-	function quality_report($id){
+	function quality_report($id, $status_filter = null){
 		//$data['report'] = $this->getDataSourceReport($id);
 		$data['title'] = 'Datasource Report';
 		$data['scripts'] = array();
+		$data['less']=array('charts');
 		$data['js_lib'] = array('core');
 
 		$this->load->model("data_source/data_sources","ds");
 		$this->load->model("registry_object/registry_objects", "ro");
 
+		if ($status_filter)
+		{
+			$data['filter'] = "Quality report for " . readable($status_filter);
+		}
+
 		$report = array();
 		$data['ds'] = $this->ds->getByID($id);
 		$ids = $this->ro->getIDsByDataSourceID($id, false, 'All');
+		acl_enforce('REGISTRY_USER');
+		ds_acl_enforce((int)$id);
 
 		if($ids){
 			$data['record_count'] = sizeof($ids);
 			$problems=0;
+			$replacements = array("recommended"=>"<u>recommended</u>", "required"=>"<u>required</u>", "must be"=>"<u>must be</u>");
 			foreach($ids as $idx=>$ro_id){
 				try{
 					$ro=$this->ro->getByID($ro_id);
-					$report[$ro_id] = array('quality_level'=>$ro->quality_level,'title'=>$ro->title,'status'=>$ro->status,'id'=>$ro->id,'report'=>$ro ? $ro->getMetadata('quality_html') : '');
+					if (!$status_filter || $ro->status == $status_filter)
+					{
+						$report_html = $ro ? str_replace(array_keys($replacements), array_values($replacements), $ro->getMetadata('quality_html')) : '';
+						$report[$ro_id] = array('quality_level'=>$ro->quality_level, 'class'=>$ro->class, 'title'=>$ro->title,'status'=>$ro->status,'id'=>$ro->id,'report'=>$report_html);
+					}
 				}catch(Exception $e){
 					throw Exception($e);
 				}
-				if($idx % 100 == 0){
-					unset($ro);
-					gc_collect_cycles();
-				}
+				unset($ro);
+				clean_cycles();
 			}
 		}
 		$data['report'] = $report;
-		$this->load->view('report', $data);
+		$this->load->view('detailed_quality_report', $data);
 	}
 
 
-	/* Ben's chart report */
+	/* Ben's chart report dashboard (google charts) */
 	function report($id){
 		//$data['report'] = $this->getDataSourceReport($id);
 		$data['title'] = 'Datasource Report';

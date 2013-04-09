@@ -16,6 +16,15 @@ class Registry_objects extends CI_Model {
 	public $valid_status  = array("MORE_WORK_REQUIRED"=>"MORE_WORK_REQUIRED", "DRAFT"=>"DRAFT", "SUBMITTED_FOR_ASSESSMENT"=>"SUBMITTED_FOR_ASSESSMENT", "ASSESSMENT_IN_PROGRESS"=>"ASSESSMENT_IN_PROGRESS", "APPROVED"=>"APPROVED", "PUBLISHED"=>"PUBLISHED");
 	public $valid_levels  = array("level_1"=>"1", "level_2"=>"2", "level_3"=>"3", "level_4"=>"4" );
 	
+	static $status_colors = array(
+		"MORE_WORK_REQUIRED"=>"#6A4A3C", 
+		"DRAFT"=>"#c60", 
+		"SUBMITTED_FOR_ASSESSMENT"=>"#688EDE", 
+		"ASSESSMENT_IN_PROGRESS"=>"#0B2E59", 
+		"APPROVED"=>"#EDD155", 
+		"PUBLISHED"=>"#32CD32"
+	);
+
 	static $classes = array("collection"=>"Collection", "party"=>"Party", "service"=>"Service", "activity"=>"Activity");
 	static $statuses  = array(
 		"MORE_WORK_REQUIRED"=>"More Work Required", 

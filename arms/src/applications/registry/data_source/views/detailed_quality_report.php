@@ -33,11 +33,20 @@
 				
 				</div>
 
+				<?php if(isset($filter)): ?>
+				<h3>
+				  <strong><?=$filter;?></strong>
+				</h3>
+				<?php endif; ?>
+
+				<?php if(!$report) { echo "<i>No records to display</i>"; } ?>
 				<?php foreach($report as $id=>$r):?>
 					<div class="widget-box quality_div">
 						<div class="widget-title">
-							<h5><?php echo $r['title'];?></h5>
-							<div class="pull-right"><span class="label label-inverse"><?php echo $r['status'];?></span> <span class="label label-inverse">Quality Level: <?php echo $r['quality_level']; ?></span></div>
+							<h4>
+								<?php echo $r['title'];?>
+								<span class="label label-inverse pull-right"><?php echo $r['status'];?></span> <span class="label label-inverse pull-right">Quality Level: <?php echo $r['quality_level']; ?></span>  <span class="label label-inverse pull-right"><?php echo ucfirst($r['class']); ?></span>
+							</h4>
 						</div>
 						<div class="widget-content print_quality_report quality_report">
 							<?php echo $r['report'];?>

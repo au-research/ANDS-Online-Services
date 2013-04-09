@@ -144,7 +144,7 @@ class Charts extends MX_Controller {
 			{
 				array_push($header_row, $q_label);
 			}
-			$rows = array($header_row);
+			$rows = array(array(readable($status) . " Records"), $header_row);
 			foreach ($chart_result AS $class => $results)
 			{
 				array_unshift($results, $class);

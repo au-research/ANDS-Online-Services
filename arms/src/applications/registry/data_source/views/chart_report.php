@@ -26,21 +26,30 @@
 	<div class="container-fluid">
 		<div class="row-fluid">
 			<div class="span12">
-				<div class="box">
-
-					<div class="pull-right">
-						<span class="label"><i class="icon-question-sign icon-white"></i> <a target="_blank" style="color:white;" href="http://ands.org.au/resource/metadata-content-requirements.html#qualitylevels">Quality Level Definitions</a></span>
-					
-					  <select id="quality_report_status_dropdown">
+				<center>
+					<h5>Data Source Reports for <?=$ds->title;?> filtered by status: 
+					<select id="quality_report_status_dropdown">
 					  	<option value="">All Records</option>
 						<?php foreach($status_tabs as $status=>$label):?>
 						    <option value="<?=$status;?>"><?=$label;?></option>
 						<?php endforeach;?>
-					  </select>
-					  
+					</select></h5>
+				</center>
+			</div>
+		</div>
+		<div class="row-fluid">
+			<div class="span12">
+				<div class="box">
+
+					<div class="pull-right">
+						<span class="label"><i class="icon-question-sign icon-white"></i> <a target="_blank" style="color:white;" href="http://ands.org.au/resource/metadata-content-requirements.html#qualitylevels">Quality Level Definitions</a></span>				  
 					</div>
 
-					<h4>Record Quality Overview <small>(<a href="<?=base_url('data_source/quality_report/'.$ds->id);?>">printable quality report</a> / <a href="<?=base_url('data_source/charts/getDataSourceQualityChart/'.$ds->id.'/ALL/csv');?>">download</a>)</small></h4>
+					<h4><a id="download_report_link" data-default-href="<?=base_url('data_source/charts/getDataSourceQualityChart/'.$ds->id.'/');?>" href="<?=base_url('data_source/charts/getDataSourceQualityChart/'.$ds->id.'/ALL/true');?>" title="Download Excel Report"><img src="<?=asset_url('img/excel.png','base');?>" /></a> 
+						Record Quality Overview <small>(<a id="detailed_report_link" data-default-href="<?=base_url('data_source/quality_report/'.$ds->id);?>" href="<?=base_url('data_source/quality_report/'.$ds->id);?>">view detailed quality report</a>)</small></h4>
+					<div id="quality_status_legend" class="chart-legend">
+
+					</div>
 					<div id="overall_chart_div" style="width:80%; margin:auto; min-height:250px;">
 						<i>Loading data source quality information...</i>
 					</div>
@@ -56,7 +65,8 @@
 			<div class="span12">
 				<div class="box">
 
-					<h4>Record Status Overview <small>(<a href="<?=base_url('data_source/charts/getDataSourceStatusChart/'.$ds->id.'/csv');?>">download</a>)</small></h4>
+					<h4><a href="<?=base_url('data_source/charts/getDataSourceStatusChart/'.$ds->id.'/csv');?>" title="Download Excel Report"><img src="<?=asset_url('img/excel.png','base');?>" /></a> 
+						Record Status Overview</h4>
 					
 					<div id="status_charts">
 					</div>

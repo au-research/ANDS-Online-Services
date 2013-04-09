@@ -133,6 +133,7 @@ function ellipsis ($string, $length = 64)
 function readable($text){
 	$text = strtolower($text);
 	switch($text){
+        case "all": return 'All'; break;
 		case "draft": return 'Drafts';break;
 		case "submitted_for_assessment": return 'Submitted for Assessment';break;
 		case "assessment_in_progress": return 'Assessment In Progress';break;
