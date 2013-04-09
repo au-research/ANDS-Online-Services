@@ -175,7 +175,6 @@ $(document).on('click', '.filter',function(e){
 	e.preventDefault();
 	var url = $('a.title', this).attr('href');
 	window.location = url;
-	// $('a.title', this).click();
 });
 
 function loadSubjectBrowse(val){

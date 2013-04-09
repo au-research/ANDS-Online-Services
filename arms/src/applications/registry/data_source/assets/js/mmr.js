@@ -10,7 +10,6 @@ $(function() {
         }
         $_GET[decode(arguments[1])] = decode(arguments[2]);
     });
-    //console.log($_GET["filters"]);
 
     //if filters are determined in the get variable, they will be json string, parse them and use them instead of default
     if($_GET['filters']){
@@ -176,7 +175,6 @@ function init(filters){
         success: function(data){
             
             $.each(data.statuses, function(d){
-                // console.log(this);
                 var template = $('#mmr_status_template').html();
                 var output = Mustache.render(template, this);
                 $('#'+d).html(output);
@@ -313,7 +311,6 @@ function initLayout(){
         var sorting = {};
         sorting[sort] = value;
         filters['sort'] = sorting;
-        console.log(filters['sort']);
         init(filters);
     });
 
@@ -342,7 +339,6 @@ function initLayout(){
             if(filters['filter']){
                 filters['filter'][name] = value;
             }else filters['filter'] = filter;
-            console.log(filters);
             init(filters);
         }else{
             e.preventDefault();
@@ -481,7 +477,6 @@ function action_list(status, action){
     selecting_status = status;
     if(action=='select_display'){
         select_all = false;
-        // console.log($('li.ro_item', list).length)
         $.each($('li.ro_item', list), function(index, val) {
             $(this).addClass('ro_selected');
         });
@@ -509,7 +504,6 @@ function update_selected_list(status){
 
     var num = selected_ids.length;
     if(select_all) num = parseInt($('#'+status+' .count').html());
-    // console.log(num);
     var list = $('.ro_box[status='+status+']');
     // var selected = $('div.selected_status', list);
     var selected = $('#status_message');
@@ -545,7 +539,6 @@ function click_ro(ro_item, action){
     }
     selected_ids = $.unique(selected_ids);
     update_selected_list(status);
-    // console.log(selected_ids);
 }
 
 
@@ -646,8 +639,7 @@ function bindSortables(){
                                     type: 'POST',
                                     data: {ro_id:ro_id,tag:tag},
                                     success: function(data){
-                                        // console.log(data);
-                                        // $('#status_message').html(data.msg);
+                                        
                                     }
                                 });
                             });
@@ -659,14 +651,11 @@ function bindSortables(){
                                     $('span', this).hide();
                                 },
                                 click: function(){
-                                    // console.log('remove tag: '+$(this).text()+' from id:'+$(this).parent().attr('ro_id'));
                                     $.ajax({
                                         url:base_url+'registry_object/tag/remove', 
                                         type: 'POST',
                                         data: {ro_id:ro_id,tag:$(this).text()},
                                         success: function(data){
-                                            // console.log(data);
-                                            // $('#status_message').html(data.msg);
                                         }
                                     });
                                     $(this).remove();                                    
@@ -719,7 +708,6 @@ function bindSortables_old(){
             item:'li.ro_selected',
             helper: false,
             receive:function(event, ui){
-              //console.log(selected_ids);
               var attributes = [{
                   name:'status',
                   value:$(this).attr('status')
@@ -730,7 +718,6 @@ function bindSortables_old(){
                     marginleft:'0'
                 });
               update(selected_ids, attributes);
-              //console.log(ui);
             },
             sort:function(e, ui){
                 $(ui.item.context).offset({top:e.pageY-10,left:e.pageX-10});
