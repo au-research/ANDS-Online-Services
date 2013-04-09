@@ -891,6 +891,7 @@ public function getContributorGroupsEdit()
 	 */
 	public function updateDataSource(){
 		
+		set_exception_handler('json_exception_handler');
 		$jsonData = array();
 		$dataSource = NULL;
 		$id = NULL; 
@@ -1031,7 +1032,7 @@ public function getContributorGroupsEdit()
 					$jsonData['qa_flag'] = "changed from ".$dataSource->{$attrib}." to ".$new_value;
 					$newStatus = PUBLISHED;
 					$manual_publish = $this->input->post('manual_publish');
-					if($manual_publish=="true"||$manual_publish=="t")$newStatus = APPROVED;
+					if($manual_publish=="true"||$manual_publish=="t") $newStatus = APPROVED;
 					//get all objects with submitted for assessment status for this ds and change status to the new status
 					$ros = '';
 					$ros = $this->ro->getByAttributeDatasource($dataSource->id, 'status', SUBMITTED_FOR_ASSESSMENT, true);

@@ -516,8 +516,9 @@ class Importer {
 
 			if($existingRegistryObject->data_source_id == $this->dataSource->id)
 			{	
-				if ((isDraftStatus($this->status) && isDraftStatus($existingRegistryObject->status)) || 
-					(isPublishedStatus($this->status) && isPublishedStatus($existingRegistryObject->status)))
+				if ($this->statusAlreadyChanged || 
+					((isDraftStatus($this->status) && isDraftStatus($existingRegistryObject->status)) || 
+					(isPublishedStatus($this->status) && isPublishedStatus($existingRegistryObject->status))))
 				{
 					// Add a new revision to this existing registry object
 					$revision_record_id = $existingRegistryObject->id;

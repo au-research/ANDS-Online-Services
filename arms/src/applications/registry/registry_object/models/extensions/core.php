@@ -207,7 +207,7 @@ class Core_extension extends ExtensionBase
 			{
 				// Add the XML content of this draft to the published record (and follow enrichment process, etc.)
 				$this->_CI->importer->_reset();
-				$this->_CI->importer->setXML($xml);
+				$this->_CI->importer->setXML(wrapRegistryObjects($xml));
 				$this->_CI->importer->setDatasource($data_source);
 				$this->_CI->importer->forcePublish();
 				$this->_CI->importer->statusAlreadyChanged = true;
