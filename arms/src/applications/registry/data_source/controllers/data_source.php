@@ -841,9 +841,16 @@ public function getContributorGroupsEdit()
 		echo json_encode($jsonData);
 	}
 
+	/**
+	 * Sets the manual_publish attribute for a datasource based on the auto_publish attribute
+	 * 
+	 * 
+	 * @author Liz
+	 * @param 
+	 * @todo ACL on which data source you have access to, error handling, new attributes
+	 * @return 
+	 */
 	public function change_auto_publish_attribute(){
-
-		echo "Hello world";
 		$this->load->model("data_sources","ds");
 		$all_ds = $this->ds->getAll();
 		foreach($all_ds as $a_ds)
@@ -851,38 +858,28 @@ public function getContributorGroupsEdit()
 			$attributes = $a_ds->attributes;
 			if(isset($attributes['auto_publish']))
 			{	
-				if(!isset($attributes['manual_publish']))
-				{
-					echo "we do not have manual _publish<br />";
-				} else {
-
-					echo "we have manual _publish ".$attributes['manual_publish']."<br />";
-				}
 				print("<pre>");
 				print("Auto publish = ".$attributes['auto_publish']);
 				print("</pre>");
 				print("--------------------------------------------");
 
-				if($attributes['auto_publish']=='auto_publish: f')
+				if($attributes['auto_publish']=='auto_publish: f'||$attributes['auto_publish']=='auto_publish: 0')
 				{				
 					$a_ds->setAttribute('manual_publish',DB_TRUE);
-
-					echo "we want to set manual publish to true <br />";
+					echo "We have set manual publish to true for ds ".$a_ds->id."<br />";
 				}else{
 					$a_ds->setAttribute('manual_publish',DB_FALSE);
-					echo "we want to set manual publish to false <br />";
+					echo "We have set manual publish to false  for ds ".$a_ds->id."<br />";
 				}
-
-
 			}else{
 					$a_ds->setAttribute('manual_publish',DB_FALSE);
-					echo "we want to set manual publish to false <br />";
+					echo "We have set manual publish to false  for ds ".$a_ds->id."<br />";
 			}
 			$a_ds->setAttribute('auto_publish',null);
 			$a_ds->save();
-		}
-		
+		}		
 	}
+	
 	/**
 	 * Save a data source
 	 * 
