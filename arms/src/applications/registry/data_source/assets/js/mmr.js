@@ -392,6 +392,10 @@ function initLayout(){
         $(this).qtip({
             content: {
                 text: 'Loading...', // The text to use whilst the AJAX request is loading
+                title: {
+                    text: 'Quality Report',
+                    button: 'Close'
+                },
                 ajax: {
                     url: base_url+'registry_object/get_quality_view/', 
                     type: 'POST',

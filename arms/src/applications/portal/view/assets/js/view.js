@@ -66,6 +66,10 @@ function initConnections(){
         $(this).qtip({
             content: {
                 text: loading_icon,
+                title: {
+                    text: 'Connections',
+                    button: 'Close'
+                },
                 ajax: {
                     url: url,
                     type: 'POST',
@@ -153,6 +157,10 @@ function initDataciteSeeAlso(){
                 $('#DataCiteSuggestedLinksBox').html('<h4>External Records</h4>' +'<h5><a href="#" class="show_accordion" data-title="Records suggested by DataCite" data-suggestor="'+suggestor+'" data-start="0" data-rows="10"> ' + data.count + " records</a> from DataCite " + datacite_qmark + "</h5>").fadeIn();
                 $('.datacite_help').qtip({
                     content:{text:datacite_explanation},
+                    title: {
+                        text: 'See Also DataCite',
+                        button: 'Close'
+                    },
                     style: {
                         classes: 'ui-tooltip-light ui-tooltip-shadow datacite-about',
                         width: 400,
@@ -175,9 +183,14 @@ function initDataciteSeeAlso(){
          bound data- attributes */
 $('.show_accordion').live('click', function(e){
     e.preventDefault();
+    var qTitle = $(this).attr('data-title');
     updateLinksDisplay($('#links_dialog'),$(this).attr('data-title'), $(this).attr('data-suggestor'), $(this).attr('data-start'), $(this).attr('data-rows'));
     $(this).qtip({
         content:{text:$('#links_dialog')},
+        title: {
+            text: qTitle,
+            button: 'Close'
+        },
         style: {
             classes: 'ui-tooltip-light ui-tooltip-shadow seealso-tooltip'
         },
@@ -402,6 +415,10 @@ function initConnectionGraph()
                             $('#' + node.li.id).qtip({
                                 content: {
                                     text: 'Loading preview...',
+                                    title: {
+                                        text: 'Preview',
+                                        button: 'Close'
+                                    },
                                     ajax: {
                                         url: preview_url, 
                                         type: 'GET',
@@ -473,6 +490,10 @@ function generatePreviewTip(element, slug, registry_object_id, relation_type)
     $('a', element).qtip({
         content: {
             text: 'Loading preview...',
+            title: {
+                text: 'Preview',
+                button: 'Close'
+            },
             ajax: {
                 url: preview_url, 
                 type: 'GET',

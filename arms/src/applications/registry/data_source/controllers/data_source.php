@@ -837,6 +837,7 @@ public function getContributorGroupsEdit()
 		$jsonData['data_source_id'] = $id;
 		$jsonData['harvest_id'] = $harvest_id;
 		$jsonData['log'] = $dataSource->cancelHarvestRequest($harvest_id, true);
+		
 
 		echo json_encode($jsonData);
 	}
@@ -1445,11 +1446,12 @@ public function getContributorGroupsEdit()
 	{
 		$POST = $this->input->post();
 		$done = false;
-		$mode = false;
+		$mode = 'MODE';
 		header("Content-Type: text/xml; charset=UTF-8", true);
 		date_default_timezone_set('Australia/Canberra');
-
 		$responseType = 'error';
+		$nextHarvestDate = '';
+		$errmsg = '';
 		$message = 'THANK YOU';
 		$logMsg = 'Harvest completed successfully';
 		$logMsgErr = 'An error occurred whilst trying to harvest records';
@@ -1461,10 +1463,7 @@ public function getContributorGroupsEdit()
 		{
 		$this->load->model("data_sources","ds");
 		$dataSource = $this->ds->getByHarvestID($harvestId);
-
-
-
-
+		
 			if (isset($POST['content'])){
 				$data =  $this->input->post('content');
 			}
@@ -1480,7 +1479,6 @@ public function getContributorGroupsEdit()
 			if (isset($POST['mode'])){
 				$mode =  strtoupper($this->input->post('mode'));
 			}
-
 			if($mode == 'TEST')
 			{
 				$logMsg = 'Test harvest completed successfully';

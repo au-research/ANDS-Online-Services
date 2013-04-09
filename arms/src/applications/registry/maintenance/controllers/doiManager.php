@@ -15,7 +15,7 @@ class doiManager extends MX_Controller
 		$this->exec_time = microtime(true);
 		set_error_handler(array(&$this, 'cli_error_handler'));
 		echo "Connected to DOI database..." . NL;
-		$this->source->where("created_when <= NOW() - INTERVAL '400 WEEK'");
+		$this->source->where("created_when <= NOW() - INTERVAL '4 WEEK'");
 		$this->source->like('doi_id',$this->testDOIprefix); //10.422501 10.5072
 		$query = $this->source->delete('doi_objects');
 		$dois = $this->source->affected_rows();		

@@ -142,7 +142,7 @@ $(document).on('click', '.filter',function(e){
 			},
 			title: {
 				text: 'Subjects',
-				button: true
+				button: 'Close'
 			}
 		},
 		
