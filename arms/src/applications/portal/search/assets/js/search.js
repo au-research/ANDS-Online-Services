@@ -55,9 +55,9 @@ $(document).ready(function() {
 		
 
 		executeSearch(searchData, searchUrl);
+		initMap();
 	});
 	$(window).hashchange(); //do the hashchange on page load
-	initMap();
 });
 
 function executeSearch(searchData, searchUrl){
@@ -583,7 +583,7 @@ function initMap(){
      //markerClusterer = new  MarkerClusterer(map, null, {zoomOnClick:false});
      window.setTimeout(function(){
      	map.setCenter(new google.maps.LatLng(-25.397, 133.644)); 
-     }, 500);
+     }, 200);
 }
 
 
