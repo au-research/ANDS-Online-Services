@@ -63,7 +63,8 @@ class Registry_object_search extends MX_Controller {
 
 		$this->load->model('registry_object/registry_objects', 'ro');
 		echo self::to_json(array_map(function($t) {
-					return array($t => ucfirst($t));
+					return array('key' => $t,
+						     'label' => ucfirst($t));
 				},
 				$this->ro->valid_classes));
 	}
@@ -78,7 +79,8 @@ class Registry_object_search extends MX_Controller {
 
 		$this->load->model('data_source/data_sources', 'ds');
 		echo self::to_json(array_map(function($ds) {
-					return array($ds->getID() => $ds->attributes['key']->value);
+					return array('key' => $ds->getID(),
+						     'label' => $ds->attributes['title']->value);
 				},
 				(array)$this->ds->getAll(0)));
 	}
