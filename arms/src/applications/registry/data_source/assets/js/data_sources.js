@@ -512,19 +512,14 @@ function loadTopLogs(data_source_id)
 			success: function(data){
 				var logsTemplate = $('#data_source_logs_template').html();
 				var output = Mustache.render(logsTemplate, data);
-				if(data.last_log_id != '' && lastLogId != data.last_log_id)
-				{
+				if(data.last_log_id != '' && lastLogId != data.last_log_id){
 					logTimer = 1000;
 					lastLogId = data.last_log_id;
-				}
-				else{
+				}else{
 					logTimer = logTimer * 2;
 				}
 				$('#data_source_log_container').prepend(output);
 				window.setTimeout(function(){loadTopLogs(data_source_id)}, logTimer);		    		
-			},
-			error: function(data){
-			//console.log(data);
 			}
 		});
 	}
