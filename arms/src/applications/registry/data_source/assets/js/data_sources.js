@@ -428,7 +428,7 @@ function initVocabWidgets(container){
 			dataArray.push({value:'Activity', subtext:'Activity'});			
 			dataArray.push({value:'Collection', subtext:'Collection'});
 			dataArray.push({value:'Service', subtext:'Service'});
-			elem.typeahead({source:dataArray});
+			elem.typeahead({source:dataArray,items:16});
 		}else{
 			elem.on('narrow.vocab.ands', function(event, data) {	
 
@@ -450,7 +450,7 @@ function initVocabWidgets(container){
 						dataArray.push({value:e.label, subtext:e.definition});
 					});
 				}
-				elem.typeahead({source:dataArray});
+				elem.typeahead({source:dataArray,items:16});
 			});
 
 			elem.on('error.vocab.ands', function(event, xhr) {
