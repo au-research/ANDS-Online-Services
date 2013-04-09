@@ -57,7 +57,7 @@ class Migrate extends MX_Controller
 			$data_source->setAttribute("allow_reverse_internal_links", $result->allow_reverse_internal_links);
 			$data_source->setAttribute("allow_reverse_external_links", $result->allow_reverse_external_links);
 			$data_source->setAttribute("assessement_notify_email_addr", $result->assessement_notification_email_addr);
-			$data_source->setAttribute("auto_publish", $result->auto_publish);
+			//$data_source->setAttribute("auto_publish", $result->auto_publish);
 			if($result->auto_publish)
 			{
 				$data_source->setAttribute("manual_publish", false);

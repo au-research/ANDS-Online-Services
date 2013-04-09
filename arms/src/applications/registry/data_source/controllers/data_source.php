@@ -167,13 +167,12 @@ class Data_source extends MX_Controller {
 
 		//QA and Auto Publish check, valid_statuses are populated accordingly
 		$qa = $data_source->qa_flag=='t' ? true : false;
-		$auto_published = $data_source->auto_published=='t' ? true: false;
 		$manual_publish = $data_source->manual_publish=='t' ? true: false;
 		$jsonData['valid_statuses'] = array('MORE_WORK_REQUIRED', 'DRAFT', 'PUBLISHED');
 		if($qa) {
 			array_push($jsonData['valid_statuses'], 'SUBMITTED_FOR_ASSESSMENT', 'ASSESSMENT_IN_PROGRESS');
 		}
-		if(!$auto_published||$manual_publish){
+		if($manual_publish){
 			array_push($jsonData['valid_statuses'], 'APPROVED');	
 		}
 
@@ -203,7 +202,7 @@ class Data_source extends MX_Controller {
 						$st['connectTo']='SUBMITTED_FOR_ASSESSMENT';
 						array_push($st['menu'], array('action'=>'to_submit', 'display'=>'Submit for Assessment'));
 					}else{
-						if(!$auto_published||$manual_publish){
+						if($manual_publish){
 							$st['connectTo']='APPROVED';
 							array_push($st['menu'], array('action'=>'to_approve', 'display'=>'Approve'));
 						}else{
@@ -389,7 +388,6 @@ class Data_source extends MX_Controller {
 
 		//QA and Auto Publish check
 		$qa = $data_source->qa_flag=='t' ? true : false;
-		$auto_published = $data_source->auto_published=='t' ? true: false;
 		$manual_publish = $data_source->manual_publish=='t' ? true: false;
 
 		if(sizeof($affected_ids)>=1){
@@ -399,7 +397,7 @@ class Data_source extends MX_Controller {
 					if($qa){
 						$menu['to_submit'] = 'Submit for Assessment';
 					}else{
-						if(!$auto_published||$manual_publish){
+						if($manual_publish){
 							$menu['to_approve'] = 'Approve';
 						}else{
 							$menu['to_publish'] = 'Publish';
@@ -841,6 +839,49 @@ public function getContributorGroupsEdit()
 		$jsonData['log'] = $dataSource->cancelHarvestRequest($harvest_id, true);
 
 		echo json_encode($jsonData);
+	}
+
+	public function change_auto_publish_attribute(){
+
+		echo "Hello world";
+		$this->load->model("data_sources","ds");
+		$all_ds = $this->ds->getAll();
+		foreach($all_ds as $a_ds)
+		{
+			$attributes = $a_ds->attributes;
+			if(isset($attributes['auto_publish']))
+			{	
+				if(!isset($attributes['manual_publish']))
+				{
+					echo "we do not have manual _publish<br />";
+				} else {
+
+					echo "we have manual _publish ".$attributes['manual_publish']."<br />";
+				}
+				print("<pre>");
+				print("Auto publish = ".$attributes['auto_publish']);
+				print("</pre>");
+				print("--------------------------------------------");
+
+				if($attributes['auto_publish']=='auto_publish: f')
+				{				
+					$a_ds->setAttribute('manual_publish',DB_TRUE);
+
+					echo "we want to set manual publish to true <br />";
+				}else{
+					$a_ds->setAttribute('manual_publish',DB_FALSE);
+					echo "we want to set manual publish to false <br />";
+				}
+
+
+			}else{
+					$a_ds->setAttribute('manual_publish',DB_FALSE);
+					echo "we want to set manual publish to false <br />";
+			}
+			$a_ds->setAttribute('auto_publish',null);
+			$a_ds->save();
+		}
+		
 	}
 	/**
 	 * Save a data source

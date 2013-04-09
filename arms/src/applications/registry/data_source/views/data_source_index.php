@@ -517,17 +517,6 @@
 					</dd>
 					{{/create_primary_relationships}}
 					
-
-			<!--		{{#auto_publish}}
-					<dt>Auto Publish</dt>
-					<dd>
-						<p>
-							<div class="checkbox_view{{auto_publish}}">		
-															</div>
-						</p>
-					</dd>
-					{{/auto_publish}} -->
-
 					{{#manual_publish}}
 					<dt>Manually Publish</dt>
 					<dd>
@@ -1011,17 +1000,6 @@
 				  		{{/status}}
 			  		{{/statuscounts}}
 								
-				<!--	<div class="control-group">
-							<label class="control-label">Auto Publish Records</label>
-							<div class="controls">
-								<p class="help-inline">
-								<div class="normal-toggle-button auto_publish" value="{{auto_publish}}">
-    								<input type="checkbox" for="auto_publish">
-								</div>
-							<span id="auto_publish_old">{{auto_publish}}</span>
-								</p>								
-							</div> 
-						</div>-->
 						<div class="control-group">
 							<label class="control-label">Manually Publish Records</label>
 							<div class="controls">

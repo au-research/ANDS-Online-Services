@@ -723,7 +723,7 @@ class Importer {
 		}
 		else
 		{
-			if ($data_source->auto_publish === DB_FALSE||$data_source->manual_publish === DB_TRUE)
+			if ($data_source->manual_publish === DB_TRUE)
 			{
 				$status = APPROVED;
 			}
