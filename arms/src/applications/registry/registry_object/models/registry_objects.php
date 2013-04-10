@@ -289,6 +289,7 @@ class Registry_objects extends CI_Model {
 								->from("registry_objects")
 								->where('data_source_id', $args['data_source_id'])
 								->where($args['name'], $args['val']);
+
 							return $db;
 						})), $make_ro)
 			:
@@ -410,27 +411,51 @@ class Registry_objects extends CI_Model {
 					       })),true, $limit, $offset);
 	}
 
+	function getByAttributeSQL($key, $value){
+		$CI =& get_instance();
+		
+		if($key=='tag'){
+			$result = $CI->db->select('registry_object_id')->from('registry_object_attributes')->where('attribute', $key)->where('value !=', '')->get();
+		}else{
+			$result = $CI->db->select('registry_object_id')->from('registry_object_attributes')->where('attribute', $key)->where('value', $value)->get();
+		}
+		$res = array();
+		foreach($result->result() as $r){
+			array_push($res, array('registry_object_id'=>$r->registry_object_id));
+		}
+		return $res;
+	}
+
 	function filter_by($args, $limit=10, $offset=0, $make_ro=true){
 		$white_list = array('title', 'class', 'key', 'status', 'slug', 'record_owner');
 		$filtered = array();
+		$filtering = false;
 		if($args['filter']){
 			foreach($args['filter'] as $key=>$value){
-				if(!in_array($key, $white_list)){
-					if(sizeof($filtered)==0){
-						$filtered = $this->getByAttribute($key, $value, false, false);
-					}else{
-						$filtered = array_intersect($filtered, $this->getByAttribute($key, $value, false, false));
+				if(in_array($key, $white_list)){
+					$ff = $this->getByAttributeDatasource($args['data_source_id'], $key, $value, false, false);
+				}else{
+					$ff = $this->getByAttributeSQL($key, $value);
+					$filtering = true;
+				}
+
+				if($ff && is_array($ff)){
+					foreach($ff as $f){
+						if(!in_array($f['registry_object_id'], $filtered)){
+							array_push($filtered, $f['registry_object_id']);
+						}
 					}
 				}
 			}
 		}
-		$where_in = array();
-		if($filtered){
-			foreach($filtered as $f){
-				array_push($where_in, $f['registry_object_id']);
-			}
-		}
-
+		$where_in = $filtered;
+		if($filtering && sizeof($where_in)==0) return array();
+		// $where_in = array();
+		// if($filtered){
+		// 	foreach($filtered as $f){
+		// 		array_push($where_in, $f['registry_object_id']);
+		// 	}
+		// }
 		return $this->_get(array(array('args' => array(
 									'data_source_id'=>isset($args['data_source_id']) ? $args['data_source_id'] : false,
 									'search'=>isset($args['search']) ? $args['search'] : false,
