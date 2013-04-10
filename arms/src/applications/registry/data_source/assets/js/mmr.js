@@ -101,7 +101,8 @@ $(function() {
                     }
                 }else{
                     if(select_all){
-                        if(confirm('Are you sure you want to delete All Registry Objects in this status')){
+                        var num = parseInt($('#'+status+' .count').html());
+                        if(confirm('Are you sure you want to delete '+num+' Registry Objects')){
                             delete_ro(false, select_all, data_source_id);
                         }
                     }else{
@@ -536,6 +537,7 @@ function click_ro(ro_item, action){
 
     if(action=='toggle'){
         $('#'+ro_id).toggleClass('ro_selected');
+        select_all = false;
     }else if(action=='select'){
         $('#'+ro_id).addClass('ro_selected');
     }else if(action=='select_1'){
