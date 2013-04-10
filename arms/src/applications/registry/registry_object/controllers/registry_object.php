@@ -536,13 +536,10 @@ class Registry_object extends MX_Controller {
 		header('Content-type: application/json');
 
 		$affected_ids = $this->input->post('affected_ids');
-		$select_all = $this->input->post('select_all');
+		$select_all = $this->input->post('select_all')=='true' ? true : false;
 		$data_source_id = $this->input->post('data_source_id');
 		$this->load->model('registry_objects', 'ro');
 		$this->load->model('data_source/data_sources', 'ds');
-
-		var_dump($select_all);
-		var_dump($data_source_id);
 
 		if($select_all){
 			$affected_ros = $this->ro->getByAttributeDatasource($data_source_id, 'status', $select_all, true, true);
@@ -558,7 +555,6 @@ class Registry_object extends MX_Controller {
 
 		$ds = $this->ds->getByID($data_source_id);
 		$ds->updateStats();
-
 	}
 
 	
