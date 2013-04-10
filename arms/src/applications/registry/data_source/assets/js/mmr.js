@@ -101,7 +101,7 @@ $(function() {
                     }
                 }else{
                     if(select_all){
-                        if(confirm('Are you sure you want to delete All Registry Objects in this status: '+select_all)){
+                        if(confirm('Are you sure you want to delete All Registry Objects in this status')){
                             delete_ro(false, select_all, data_source_id);
                         }
                     }else{
