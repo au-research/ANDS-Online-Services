@@ -530,6 +530,10 @@ function click_ro(ro_item, action){
     var ro_id = $(ro_item).attr('id');
     var status = $(ro_item).attr('status');
     
+    if(selecting_status!=status){
+        $('.sortable li').removeClass('ro_selected');
+    }
+
     if(action=='toggle'){
         $('#'+ro_id).toggleClass('ro_selected');
     }else if(action=='select'){
@@ -538,14 +542,15 @@ function click_ro(ro_item, action){
         $('.sortable li').removeClass('ro_selected');
         $('#'+ro_id).addClass('ro_selected');
     }else if(action=='select_until'){
-        $('#'+ro_id).addClass('ro_selected');
-        var prev = $('#'+ro_id).prevAll('.ro_selected').attr('id');
-        if(prev){
-            $('#'+ro_id).prevUntil('#'+prev).addClass('ro_selected');
-        }else if(until = $('#'+ro_id).nextUntil('.ro_selected')){
-            $(until).addClass('ro_selected');
+        if(selecting_status==status){
+            var prev = $('#'+ro_id).prevAll('.ro_selected').attr('id');
+            if(prev){
+                $('#'+ro_id).prevUntil('#'+prev).addClass('ro_selected');
+            }else if(until = $('#'+ro_id).nextUntil('.ro_selected')){
+                $(until).addClass('ro_selected');
+            }
         }
-        
+        $('#'+ro_id).addClass('ro_selected');
     }
     selected_ids = $.unique(selected_ids);
     update_selected_list(status);
