@@ -82,8 +82,7 @@ public function send(){
 		$this->load->library('email');
 
 		$this->email->from($email, $name);
-		//$this->email->to('services@ands.org.au');
-		$this->email->to('liz.woods@ands.org.au');
+		$this->email->to('services@ands.org.au');
 		$this->email->subject('RDA Contact Us');
 		$this->email->message($content);
 
