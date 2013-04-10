@@ -35,15 +35,22 @@ function initViewPage()
 }
 
 function drawRegistryIcon(){
-    if($('#class_type').length > 0){
-        var icon = $('<img />').attr('src', base_url+'assets/core/images/icons/'+$('#class_type').text()+'.png').attr('class', 'right_icon').width(35);
-        if($('.sidebar h2').length > 0){
-            //if there is a heading in the sidebar, put the icon beside it
-            $('.sidebar h2:first').append(icon);
-        }else{
-            $('.sidebar').append(icon);
-        }
+    if($('#class_type').length > 0){      
+        var icon = $('<img />').attr('src', base_url+'assets/core/images/icons/'+$('#class_type').text()+'.png').attr('class', 'left_icon icontip').css('margin-top','-2px').height(16);
+
+            //if there is a title, put the icon beside it
+            $('.breadcrumb').append(' ').append(icon);
+       
     }
+    var theType  = $('#class_type').text()
+    $('.icontip').qtip({    
+        content:$('#'+theType+'_explanation').html(),
+        show: 'mouseover',
+        hide: 'mouseout',
+        style: {
+        classes: 'ui-tooltip-light ui-tooltip-shadow'
+        }
+    })
 }
 
 function initConnections(){

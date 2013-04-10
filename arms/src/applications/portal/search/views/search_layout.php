@@ -32,6 +32,22 @@
 	<div class="pagination"></div>
 	<div id="search-result"></div>
 	<div class="pagination"></div>
+<div id="collection_explanation" class="hide">
+	<strong>Collection</strong><br />
+	Research dataset or collection of research materials.
+</div>
+<div id="activity_explanation" class="hide">
+	<strong>Activity</strong><br />
+	Project or program that creates research datasets or collections.
+</div>
+<div id="service_explanation" class="hide">
+	<strong>Service</strong><br />
+	Service that supports the creation or use of research datasets or collections.
+</div>
+<div id="party_explanation" class="hide">
+	<strong>Party</strong><br />
+	Researcher or research organisation that creates or maintains research datasets or collections.
+</div>
 
 </div><!-- main -->
 <div class="sidebar">
@@ -53,7 +69,7 @@
 		{{#logo}}
 			<img src="{{logo}}" class="logo right"/>
 		{{/logo}}
-		<img src="<?php echo base_url();?>assets/img/{{class}}.png" class="class_icon"/>
+		<img src="<?php echo base_url();?>assets/img/{{class}}.png" class="class_icon icontip_{{class}}" type="{{class}}"/>
 		<a href="<?php echo base_url();?>{{slug}}" class="title">{{display_title}}</a>
 		<div class="excerpt">
 			{{description}}

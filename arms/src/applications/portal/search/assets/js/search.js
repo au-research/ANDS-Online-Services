@@ -352,7 +352,17 @@ function initSearchPage(){
 		$(this).parent().html($(this).parent().children(0).html());
 	});
 
-	
+	$('.class_icon').each(function(){
+		var theType = $(this).attr('type');
+	    $('.icontip_'+theType).qtip({    
+        	content: $('#'+theType+'_explanation').html(),
+        	show: 'mouseover',
+        	hide: 'mouseout',
+        	style: {
+        	classes: 'ui-tooltip-light ui-tooltip-shadow'
+        	}
+    	})	
+	})
 }
 
 
