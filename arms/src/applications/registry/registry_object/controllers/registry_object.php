@@ -531,21 +531,34 @@ class Registry_object extends MX_Controller {
 	}
 
 	function delete(){
+		set_exception_handler('json_exception_handler');
+		header('Cache-Control: no-cache, must-revalidate');
+		header('Content-type: application/json');
+
 		$affected_ids = $this->input->post('affected_ids');
+		$select_all = $this->input->post('select_all');
+		$data_source_id = $this->input->post('data_source_id');
 		$this->load->model('registry_objects', 'ro');
 		$this->load->model('data_source/data_sources', 'ds');
 
-		$affected_ds = array();
-		foreach($affected_ids as $id){
-			$ro = $this->ro->getByID($id);
-			$affected_ds[] = $ro->data_source_id;
-			$this->ro->deleteRegistryObject($ro);
+		var_dump($select_all);
+		var_dump($data_source_id);
+
+		if($select_all){
+			$affected_ros = $this->ro->getByAttributeDatasource($data_source_id, 'status', $select_all, true, true);
+			foreach($affected_ros as $r){
+				$this->ro->deleteRegistryObject($r);
+			}
+		}else{
+			foreach($affected_ids as $id){
+				$ro = $this->ro->getByID($id);
+				$this->ro->deleteRegistryObject($ro);
+			}
 		}
 
-		foreach($affected_ds as $ds_id){
-			$ds = $this->ds->getByID($ds_id);
-			$ds->updateStats();
-		}
+		$ds = $this->ds->getByID($data_source_id);
+		$ds->updateStats();
+
 	}
 
 	

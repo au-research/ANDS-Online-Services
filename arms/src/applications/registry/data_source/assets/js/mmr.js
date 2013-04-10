@@ -97,11 +97,17 @@ $(function() {
                 if($(this).attr('ro_id')){
                     if(confirm('Are you sure you want to delete this Registry Objects?')){
                         deleting = [$(this).attr('ro_id')];
-                        delete_ro(deleting);
+                        delete_ro(deleting, false);
                     }
                 }else{
-                    if(confirm('Are you sure you want to delete '+selected_ids.length+' Registry Objects?')){
-                     delete_ro(selected_ids);
+                    if(select_all){
+                        if(confirm('Are you sure you want to delete All Registry Objects in this status: '+select_all)){
+                            delete_ro(false, select_all, data_source_id);
+                        }
+                    }else{
+                        if(confirm('Are you sure you want to delete '+selected_ids.length+' Registry Objects?')){
+                            delete_ro(selected_ids, false);
+                        }
                     }
                 }
                 break;
@@ -760,16 +766,16 @@ function update(ids, attributes){
                 $('#status_message').html(data.success_message);
                 init(filters);
             }
-            // $('#status_message').html(data.msg);
         }
     });
 }
 
-function delete_ro(ids){
+function delete_ro(ids, selectAll){
+    var data_source_id = $('#data_source_id').val();
     $.ajax({
         url:base_url+'registry_object/delete/', 
         type: 'POST',
-        data: {affected_ids:ids},
+        data: {affected_ids:ids, select_all:selectAll, data_source_id:data_source_id},
         success: function(data){
             init(filters);
         }
