@@ -125,6 +125,66 @@ $(document).ready(function() {
 	});
 
 
+	$('#contact-send-button').live({
+
+		click: function(e){
+			clear = true;
+			$.each($('#contact-us-form input, #contact-content'), function(){
+				if($(this).val()=='') {
+					clear=false;
+					 $(this).qtip({
+        				content:$(this).attr('title'),
+        				style: {classes: 'ui-tooltip-light ui-tooltip-shadow seealso-tooltip',width: '250px'},
+						show:{ready:'true'},
+						hide:{event:'focus'},
+    				}); 
+				}else{
+					$(this).qtip("disable");
+				}
+				
+			});
+			if($('#contact-email').val()!='')
+			{
+				if($('#contact-email').val()!='' && !validateEmail($('#contact-email').val()))
+				{
+				 	clear=false;
+				 	$('#contact-email').qtip({
+        			content:"The provided email address was not valid",
+        			style: {classes: 'ui-tooltip-light ui-tooltip-shadow seealso-tooltip',width: '250px'},
+					show:{ready:'true'},
+					hide:{event:'focus'},
+    				}); 
+    			}else{
+    				$('#contact-email').qtip("disable");
+				
+    			}					
+			}	
+
+			if(clear){ 
+		 	$.ajax({
+		  		type:"POST",
+		  		url: base_url+"/home/send/",
+		  		data:"name="+$('#contact-name').val()+"&email="+$('#contact-email').val()+"&content="+$('#contact-content').val(),   
+		  			success:function(msg){
+		  				$('#contact-us-form').html(msg);
+		  			},
+		  			error:function(msg){
+		  			}
+	  			});
+			}
+		}
+	});
+
+function validateEmail(email) 
+{
+    var re = /\S+@\S+\.\S+/;
+
+
+     return re.test(email);	
+
+
+    
+}
 	function getURLParameter(name) 
 	{
 	    return unescape(
