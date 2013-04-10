@@ -474,6 +474,7 @@ class Registry_object extends MX_Controller {
 		$jsondata['success_count'] = 0;
 		$jsondata['error_count'] = 0;
 		$this->load->model('registry_objects', 'ro');
+		$this->load->model('data_source/data_sources', 'ds');
 		$attributes = $this->input->post('attributes');
 
 		if(!$all){
@@ -501,10 +502,8 @@ class Registry_object extends MX_Controller {
 						if($a['name']=='status'&&$a['value']=='SUBMITTED_FOR_ASSESSMENT')
 						{
 							$data_source_id = $ro->getAttribute('data_source_id');
-							$this->load->model('data_source', 'ds');
 							$data_source = $this->ds->getByID($data_source_id);
-							if($data_source->count_SUBMITTED_FOR_ASSESSMENT<2 && !$sentMail)
-							{		
+							if(($data_source->count_SUBMITTED_FOR_ASSESSMENT < 2) && !$sentMail){		
 								$this->ro->emailAssessor($data_source);
 								$sentMail = true;
 							}							
@@ -517,14 +516,17 @@ class Registry_object extends MX_Controller {
 						$jsondata['status'] = 'error';
 					}
 				}
-				catch(Exception $e)
-				{
+				catch(Exception $e){
 					$jsondata['status'] = 'error';
 					$jsondata['error_count']++;
 					$jsondata['error_message'] .= "<li>".$e->getMessage()."</li>";
 				}
 			}
 		}
+
+		$ds = $this->ds->getByID($this->input->post('data_source_id'));
+		$ds->updateStats();
+
 		$jsondata['error_message'] .= '</ul>';
 		$jsondata['success_message'] .= '</ul>';
 		echo json_encode($jsondata);

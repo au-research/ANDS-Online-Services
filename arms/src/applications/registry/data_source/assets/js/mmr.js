@@ -753,7 +753,7 @@ function update(ids, attributes){
         total = parseInt($('#'+select_all+' .count').html());
     }else{
         url = base_url+'registry_object/update/'
-        data = {affected_ids:ids, attributes:attributes};
+        data = {affected_ids:ids, attributes:attributes, data_source_id:$('#data_source_id').val()};
         total = selected_ids.length
     }
 
