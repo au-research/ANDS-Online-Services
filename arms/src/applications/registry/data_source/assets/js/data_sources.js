@@ -38,7 +38,6 @@ $(function(){
 	 */
 	 
 	$(window).hashchange(function(){
-		lastLogId = null;
 		logTimer = 1000;
 		doLoadLogs = false;
 		var hash = location.hash;
@@ -288,6 +287,7 @@ function load_more(page){
 function load_datasource(data_source_id){
 	$('#view-datasource').html('Loading');
 	$('#browse-datasources').slideUp(500);
+	lastLogId = null;
 	$.ajax({
 		url: 'data_source/getDataSource/'+data_source_id,
 		type: 'GET',
@@ -502,7 +502,7 @@ function loadHarvestLogs(logid, refresh){
 
 function loadTopLogs(data_source_id)
 {
-	if(doLoadLogs)
+	if(doLoadLogs && lastLogId)
 	{
 		$.ajax({
 			url: 'data_source/getDataSourceLogs/',
@@ -1126,7 +1126,7 @@ $('#importFromHarvesterLink').live({
 			}
 		});
 		logTimer = 1000;
-		loadDataSourceLogs($('#data_source_view_container').attr('data_source_id'));
+		//loadDataSourceLogs($('#data_source_view_container').attr('data_source_id'));
 
 	}
 });
