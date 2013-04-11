@@ -220,13 +220,9 @@ class View extends MX_Controller {
 					}
 				}
 			}
-			catch (SlugNoLongerValidException $e)
-			{
-				die("Registry object could not be located (perhaps it no longer exists!)");
-			}
 			catch (ErrorException $e)
 			{
-				$html .= "<div class='ro_preview'><div class='ro_preview_header'>".$e." (".$currRoID.")</div></div>";
+				$html .= "<div class='ro_preview'><div class='ro_preview_header'>ERROR</div><div class='title'".$e['message']." (".$currRoID.")</div></div></div>";
 			}
 		}
 		else 
