@@ -13,6 +13,15 @@ $(document).ready(function() {
 	    }
 	});
 
+	if ($.browser.msie && $.browser.version <= 9.0) {
+		$('#who_contributes li').css({
+			float:'left',
+			width:'310px',
+			listStyleType:'none'
+		});
+		$('#who_contributes').addClass('clearfix');
+	}
+
 	$('.text_select').each(function() {
 		var $this = $(this),
 			$input = $this.find('input'),
