@@ -27,6 +27,11 @@ initInternalSuggestedLinks();
 
 /*if (isPublished()) { $('#draft_status').removeClass("hide"); }*/
 
+$('.subject_vocab_filter').click(function(e){
+    e.preventDefault();
+    window.location = base_url+'search'+suffix+'subject_vocab_uri='+encodeURIComponent($(this).attr('vocab_uri'))+'/subject_vocab_uri_display='+encodeURIComponent($(this).text());
+});
+
 
 function initViewPage()
 {

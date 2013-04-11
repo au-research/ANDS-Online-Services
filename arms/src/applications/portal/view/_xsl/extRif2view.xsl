@@ -634,10 +634,18 @@
 </xsl:template>
 
 <xsl:template match="extRif:subject">   
-  <a href="{$base_url}search/#!/subject_value_resolved={extRif:subject_resolved}/" class="subjectFilter" id="{extRif:subject_resolved}" title="{extRif:subject_resolved}">
-    <xsl:value-of select="extRif:subject_resolved"/>
-  </a>
-
+  <xsl:choose>
+    <xsl:when test="extRif:subject_type = 'anzsrc-for'">
+      <a href="{$base_url}search/#!/subject_vocab_uri={extRif:subject_uri}" vocab_uri="{extRif:subject_uri}" class="subject_vocab_filter" id="{extRif:subject_resolved}" title="{extRif:subject_resolved}">
+        <xsl:value-of select="extRif:subject_resolved"/>
+      </a>
+    </xsl:when>
+    <xsl:otherwise>
+    <a href="{$base_url}search/#!/s_subject_value_resolved={extRif:subject_resolved}/" class="subjectFilter" id="{extRif:subject_resolved}" title="{extRif:subject_resolved}">
+      <xsl:value-of select="extRif:subject_resolved"/>
+    </a>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <xsl:template match="ro:relatedInfo">
