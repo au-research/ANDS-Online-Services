@@ -17,7 +17,7 @@ class ContributorText_Extension extends ExtensionBase
 		//$this->_CI->solr->setOpt('rows','0');
 		$this->_CI->solr->setFacetOpt('field', 'class');
 		$this->_CI->solr->setFacetOpt('field', 'subject_value_resolved');		
-		$this->_CI->solr->setFacetOpt('mincount','1');
+		$this->_CI->solr->setFacetOpt('mincount','0');
 		$this->_CI->solr->executeSearch();
 		$groupName = $this->ro->getAttribute('group');
 		//$group = (string)$group;
@@ -29,11 +29,11 @@ class ContributorText_Extension extends ExtensionBase
 		foreach($classes as $class=>$num){
 			$contributorData['contents'][$class] = $num;
 		}
-
 		$collectionCount = $contributorData['contents']['collection'];
 		if($collectionCount==0)
 		{
 			$collectionCount = 'no';
+			$collectionWord = 'collections';			
 		}	
 		elseif($collectionCount==1)
 		{
@@ -56,7 +56,7 @@ class ContributorText_Extension extends ExtensionBase
 	
 		$subjectStr='';
 		$subjectWord = 'areas';
-		if($subjectNum<1)
+		if($subjectNum<1||$collectionCount=='no')
 		{
 			$subjectStr = ".";
 		}
@@ -91,7 +91,7 @@ class ContributorText_Extension extends ExtensionBase
 			$groupStr = $groupCount. '	 research groups have been actively involved in collecting data and creating metadata records for the data.';
 		}
 
-		$theText = '<p>To date, ' .urlencode($groupName). ' has ';
+		$theText = '<p>To date, ' .$groupName. ' has ';
 		if($collectionCount!='no'){
 			$theText .=  '<a id="hp-count-collection" href="'.portal_url().'search#!/tab=collection/group='.urlencode($groupName).'">' .$collectionCount .' '.$collectionWord.'</a> in RDA';
 		}else{
