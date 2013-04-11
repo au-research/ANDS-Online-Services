@@ -134,7 +134,7 @@
 						<span class="tag ql_{{quality_level}} tipQA" ro_id='{{id}}'>{{quality_level}}</span>
 					{{/quality_level}}
 					{{#has_error}}
-						<a href="javascript:;" class="btn btn-mini btn-danger tipError" ro_id="{{id}}"><i class="icon-white icon-question-sign"></i></a>
+						<a href="javascript:;" class="btn btn-mini btn-danger tipError" ro_id="{{id}}"><i class="icon-white icon-exclamation-sign"></i></a>
 					{{/has_error}}
 				</div>
 			</div>
