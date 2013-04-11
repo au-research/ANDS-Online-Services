@@ -252,6 +252,10 @@ function initSearchPage(){
 		$('#search-result, .pagination, .page_title, .tabs').show();
 	}
 
+	if(typeof searchData['q']=='undefined') {
+		$('#search_box').val('');
+	}
+
 
 	$('#search_map_toggle').unbind('click');
 	$('#search_map_toggle').click(function(e){
