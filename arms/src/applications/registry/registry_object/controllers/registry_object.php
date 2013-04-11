@@ -435,6 +435,9 @@ class Registry_object extends MX_Controller {
 	}
 
 	public function tag($action){
+		set_exception_handler('json_exception_handler');
+		header('Cache-Control: no-cache, must-revalidate');
+		header('Content-type: application/json');
 		$this->load->model('registry_objects', 'ro');
 		$ro_id = $this->input->post('ro_id');
 		$tag = $this->input->post('tag');
@@ -450,6 +453,7 @@ class Registry_object extends MX_Controller {
 				$ro->tag = $tag;
 				$ro->save();
 			}
+			$jsonData['status'] = 'success';
 		}else if($action=='remove'){
 			$tags = explode(';;', $ro->tag);
 			$key = array_search($tag,$tags);
@@ -458,7 +462,9 @@ class Registry_object extends MX_Controller {
 			}
 			$ro->tag = implode(';;', $tags);
 			$ro->save();
+			$jsonData['status'] = 'success';
 		}
+		echo json_encode($jsonData);
 	}
 
 

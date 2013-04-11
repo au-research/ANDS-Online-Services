@@ -44,12 +44,13 @@ $(function(){
         click: function(){
             var text = $(this).text();
             var ro_id = $(this).parent().attr('ro_id');
+            var li_item = $(this);
             $.ajax({
                 url:base_url+'registry_object/tag/remove', 
                 type: 'POST',
                 data: {ro_id:ro_id,tag:text},
                 success: function(data){
-                    $(this).remove();
+                    li_item.remove();
                 }
             });                             
         }
