@@ -10,15 +10,18 @@ class Relationships_Extension extends ExtensionBase
 	
 	function addRelationships()
 	{
+
 		// Delete any old relationships (we only run this on ingest, so its a once-off update)
 		$this->db->where(array('registry_object_id' => $this->ro->id));
 		$this->db->delete('registry_object_relationships');	
 
 		$related_keys = array();
 		$sxml = $this->ro->getSimpleXml();
+
 		$sxml->registerXPathNamespace("ro", RIFCS_NAMESPACE);
-		foreach ($sxml->xpath('//ro:'.$this->ro->class.'/ro:relatedObject') AS $related_object)
+		foreach ($sxml->xpath('//ro:relatedObject') AS $related_object)
 		{
+				throw new Exception("ohheyder");
 			$related_object_key = (string)$related_object->key;
 			$related_object_type = (string)$related_object->relation[0]['type'];
 

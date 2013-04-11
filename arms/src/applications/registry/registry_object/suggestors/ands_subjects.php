@@ -18,7 +18,11 @@ class Suggestor_ands_subjects implements GenericSuggestor
 		// 		 in SOLR index).
 
 		$sxml = $registry_object->getSimpleXML();
-
+		if ($sxml->registryObject)
+		{
+			$sxml = $sxml->registryObject;
+		}
+		
 		// Subject matches
 		$my_subjects = array('');
 		if($sxml->{strtolower($registry_object->class)}->subject)

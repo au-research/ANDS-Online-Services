@@ -18,6 +18,10 @@ class Suggestor_ands_identifiers implements GenericSuggestor
 		// 		 in SOLR index).
 
 		$sxml = $registry_object->getSimpleXML();
+		if ($sxml->registryObject)
+		{
+			$sxml = $sxml->registryObject;
+		}
 
 		// Identifier matches (if another object has the same identifier)
 		//var_dump($sxml);
@@ -34,7 +38,7 @@ class Suggestor_ands_identifiers implements GenericSuggestor
 		// But exclude already related objects
 		$my_relationships = array_map(function($elt){ return '"' . $elt . '"'; }, $registry_object->getRelationships());
 		$my_relationships[] = $registry_object->key;
-		array_unshift($my_relationships, ''); // prepend an element so that 
+		array_unshift($my_relationships, ''); // prepend an element so that implode works
 		$relationship_search_query = " " . implode(" -key:", $my_relationships);
 
 		$suggestions = $this->getSuggestionsBySolrQuery($relationship_search_query . " AND " . $identifier_search_query, $start, $rows);
