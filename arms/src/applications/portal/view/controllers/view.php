@@ -201,8 +201,8 @@ class View extends MX_Controller {
 			}
 		}
 		else if ($this->input->post('roIds')) {
-			try
-			{
+			//try
+			//{
 				$html = '';
 				foreach($this->input->post('roIds') as $roID)
 				{
@@ -217,11 +217,11 @@ class View extends MX_Controller {
 
 					}
 				}
-			}
-			catch (SlugNoLongerValidException $e)
-			{
-				die("Registry object could not be located (perhaps it no longer exists!)");
-			}
+			//}
+			//catch (SlugNoLongerValidException $e)
+			//{
+			//	die("Registry object could not be located (perhaps it no longer exists!)");
+			//}
 		}
 		else 
 		{
