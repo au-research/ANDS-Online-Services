@@ -755,21 +755,28 @@ class Importer {
 	{
 
 		$result = '';
-		$sxml = simplexml_load_string($oai_feed);
-		if($sxml)
-		{
-			
-			@$sxml->registerXPathNamespace("oai", OAI_NAMESPACE);
-			@$sxml->registerXPathNamespace("ro", RIFCS_NAMESPACE);
-
-			$registryObjects = $sxml->xpath('//ro:registryObject');
-			foreach ($registryObjects AS $ro)
+		try{
+		//$sxml = simplexml_load_string($oai_feed);
+			$sxml = $this->_getSimpleXMLFromString($oai_feed);
+			if($sxml)
 			{
-				$result .= $ro->asXML();
+				
+				@$sxml->registerXPathNamespace("oai", OAI_NAMESPACE);
+				@$sxml->registerXPathNamespace("ro", RIFCS_NAMESPACE);
+
+				$registryObjects = $sxml->xpath('//ro:registryObject');
+				foreach ($registryObjects AS $ro)
+				{
+					$result .= $ro->asXML();
+				}
+
+				$result = wrapRegistryObjects($result);
+
 			}
-
-			$result = wrapRegistryObjects($result);
-
+		}
+		catch(Exception $e)
+		{
+			return $e;
 		}
 		return $result;
 	}

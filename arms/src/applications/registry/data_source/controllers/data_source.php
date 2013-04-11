@@ -1491,6 +1491,11 @@ public function getContributorGroupsEdit()
 			if($errmsg)
 			{
 				$dataSource->append_log($logMsgErr.NL."HARVESTER RESPONDED UNEXPECTEDLY: ".$errmsg, HARVEST_ERROR, "harvester","HARVESTER_ERROR");
+				if($mode == "TEST")
+				{
+					$dataSource->cancelHarvestRequest($harvestId,false);
+				}			
+					
 			}
 			else
 			{	
@@ -1510,7 +1515,7 @@ public function getContributorGroupsEdit()
         				$exception_message .= NL.$error->message;
         			}
 					$log = "Document Load Error: ".$exception_message.NL;
-					$dataSource->append_log($logMsgErr.NL.$log.NL."CRITICAL ERROR: Could not Load XML from OAI feed. Check your provider.".NL.$exception_message, HARVEST_ERROR, "harvester","HARVESTER_ERROR");					
+					$dataSource->append_log($logMsgErr.NL.$log.NL."CRITICAL ERROR: Could not Load XML from URL feed. Check your provider.".NL.$exception_message, HARVEST_ERROR, "harvester","HARVESTER_ERROR");					
 				}
 				else
 				{
@@ -1518,7 +1523,7 @@ public function getContributorGroupsEdit()
 					if (strpos($rifcsXml, 'registryObject ') === FALSE)
 					{
 						//$dataSource->append_log("CRITICAL ERROR: Could not extract data from OAI feed. Check your provider.", HARVEST_ERROR, "harvester");
-						$dataSource->append_log($logMsgErr.NL."CRITICAL ERROR: Could not extract data from OAI feed. Check your provider.", HARVEST_ERROR, "harvester","HARVESTER_ERROR");					
+						$dataSource->append_log($logMsgErr.NL."CRITICAL ERROR: Could not extract data from URL feed. Check your provider.", HARVEST_ERROR, "harvester","HARVESTER_ERROR");					
 						//	$dataSource->append_log($rifcsXml, HARVEST_ERROR, "harvester");	
 					}
 					else
@@ -1576,8 +1581,7 @@ public function getContributorGroupsEdit()
 			if($done == 'TRUE' || $mode != "HARVEST")
 			{
 				// TODO: make up a better way to display log for multiple OAI chunks
-				//if($mode == "HARVEST")
-				//$dataSource->append_log($logMsg.NL."IMPORT COMPLETED", HARVEST_MSG, "harvester","HARVESTER_INFO");	
+
 
 				//$dataSource->deleteHarvestRequest($harvestId);
 				$dataSource->cancelHarvestRequest($harvestId,false);
