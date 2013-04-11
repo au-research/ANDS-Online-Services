@@ -328,7 +328,15 @@ function initLayout(){
 
     $(filters['filter']).each(function(){
         $.each(this, function(key, value){
-            $('#active_filters').append('<span class="removeFilter tag" name="'+key+'"><a href="javascript:;">'+key+':'+value+' <i class="icon icon-remove"></i></a></span>');
+            var text = value;
+            if(key==='tag'){
+                text = 'Tagged';
+            }else if(key==='flag'){
+                text = 'Flagged';
+            }else if(key==='quality_level'){
+                text = 'Quality Level '+value;
+            }
+            $('#active_filters').append('<span class="removeFilter tag" name="'+key+'"><a href="javascript:;">'+text+' <i class="icon icon-remove"></i></a></span>');
         });
     });
 
