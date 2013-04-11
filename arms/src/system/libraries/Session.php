@@ -73,7 +73,7 @@ class CI_Session {
     /**
     * Destroys the session and erases session storage
     */
-    function destroy()
+    function sess_destroy()
     {
         //unset($_SESSION);
         session_unset();
