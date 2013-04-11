@@ -1062,7 +1062,6 @@ $('#save-edit-form').live({
 		{
 				$('#myModal').modal();
 				logErrorOnScreen(validationErrors, $('#myModal .modal-body'));
-				//$('#myModal .modal-body').append("<br/><pre>Could't communicate with server</pre>");		
 		}else{
 			var form = $('#edit-form');
 			var valid = Core_checkValidForm(form);
@@ -1073,7 +1072,6 @@ $('#save-edit-form').live({
 				type: 'POST',
 				data: jsonData,
 				success: function(data){
-					console.log(data);
 					if (!data.status == "OK"){
 						$('#myModal').modal();
 						logErrorOnScreen("An error occured whilst saving your changes!", $('#myModal .modal-body'));

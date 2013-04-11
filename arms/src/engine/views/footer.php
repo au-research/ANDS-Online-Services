@@ -19,7 +19,7 @@
 
     <!-- Mustache Template that should be used everywhere-->
     <div id="error-template" class="hide">
-        <div class="alert alert-error"><button type="button" class="close" data-dismiss="alert">×</button>{{{.}}}</div>
+        <div class="alert alert-error">{{{.}}}</div>
     </div>
   
     <!-- The javascripts Libraries

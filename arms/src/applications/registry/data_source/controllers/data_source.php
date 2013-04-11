@@ -167,7 +167,7 @@ class Data_source extends MX_Controller {
 
 		//QA and Auto Publish check, valid_statuses are populated accordingly
 		$qa = $data_source->qa_flag=='t' || $data_source->qa_flag==DB_TRUE ? true : false;
-		$manual_publish = $data_source->manual_publish=='t' || $data_source->manual_publish==DB_TRUE ? true: false;
+		$manual_publish = ($data_source->manual_publish=='t' || $data_source->manual_publish==DB_TRUE) ? true: false;
 		$jsonData['valid_statuses'] = array('MORE_WORK_REQUIRED', 'DRAFT', 'PUBLISHED');
 		if($qa) {
 			array_push($jsonData['valid_statuses'], 'SUBMITTED_FOR_ASSESSMENT', 'ASSESSMENT_IN_PROGRESS');
@@ -223,8 +223,13 @@ class Data_source extends MX_Controller {
 					break;
 				case 'ASSESSMENT_IN_PROGRESS':
 					$st['ds_count']=$data_source->count_ASSESSMENT_IN_PROGRESS;
-					$st['connectTo']='APPROVED';
-					array_push($st['menu'], array('action'=>'to_approve', 'display'=>'Approve'));
+					if($manual_publish){
+						$st['connectTo']='APPROVED';
+						array_push($st['menu'], array('action'=>'to_approve', 'display'=>'Approve'));
+					}else{
+						$st['connectTo']='PUBLISHED';
+						array_push($st['menu'], array('action'=>'to_publish', 'display'=>'Publish'));
+					}
 					array_push($st['menu'], array('action'=>'to_moreworkrequired', 'display'=>'More Work Required'));
 					break;
 				case 'APPROVED':
@@ -388,8 +393,7 @@ class Data_source extends MX_Controller {
 
 		//QA and Auto Publish check
 		$qa = $data_source->qa_flag=='t' ? true : false;
-		$manual_publish = $data_source->manual_publish=='t' ? true: false;
-
+		$manual_publish = ($data_source->manual_publish=='t' || $data_source->manual_publish==DB_TRUE) ? true: false;
 		if(sizeof($affected_ids)>=1){
 			$menu['flag'] = 'Flag';
 			switch($status){
@@ -413,7 +417,11 @@ class Data_source extends MX_Controller {
 					$menu['to_assess'] = 'Assessment In Progress';
 					break;
 				case 'ASSESSMENT_IN_PROGRESS':
-					$menu['to_approve'] = 'Approve';
+					if($manual_publish){
+						$menu['to_approve'] = 'Approve';
+					}else{
+						$menu['to_publish'] = 'Publish';
+					}
 					$menu['to_moreworkrequired'] = 'More Work Required';
 					break;
 				case 'APPROVED':

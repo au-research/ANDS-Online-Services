@@ -488,7 +488,11 @@
 					foreach($data_source_view_fields as $key=>$name){
 						echo '{{#'.$key.'}}';
 						echo '<dt>'.$name.'</dt>';
-						echo '<dd> {{'.$key.'}} </dd>';
+						echo '<dd>{{'.$key.'}}&nbsp;</dd>';
+						echo '{{/'.$key.'}}';
+						echo '{{^'.$key.'}}';
+						echo '<dt>'.$name.'</dt>';
+						echo '<dd><i>not configured</i></dd>';
 						echo '{{/'.$key.'}}';
 					}
 					?>
@@ -552,7 +556,7 @@
 			 	<dl class="dl-horizontal">
 			 		{{#uri}}
 					<dt>URI</dt>
-					<dd>{{uri}}</dd>
+					<dd>{{uri}}&nbsp;</dd>
 					{{/uri}}
 
 					{{#provider_type}}
