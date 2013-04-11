@@ -250,6 +250,7 @@ function initSearchPage(){
 		$('.facet_class').hide();
 		$('.sidebar').removeClass('mapmode_sidebar');
 		$('#search-result, .pagination, .page_title, .tabs').show();
+		$('html,body').animate({scrollTop: $('body').offset().top}, 750);//scroll to top
 	}
 
 	if(typeof searchData['q']=='undefined') {
