@@ -1,4 +1,6 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+define('IS_AJAX', isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest');
 /**
  * CodeIgniter
  *
@@ -38,7 +40,7 @@ class CI_Session {
 	var $cookie_path				= '';
 	var $cookie_domain				= '';
 	var $cookie_secure				= FALSE;
-	var $sess_time_to_update		= 300;
+	var $sess_time_to_update		= 3000000;
 	var $encryption_key				= '';
 	var $flashdata_key				= 'flash';
 	var $time_reference				= 'time';
@@ -93,10 +95,7 @@ class CI_Session {
 
 		// Set the session length. If the session expiration is
 		// set to zero we'll set the expiration two years from now.
-		if ($this->sess_expiration == 0)
-		{
-			$this->sess_expiration = (60*60*24*365*2);
-		}
+		$this->sess_expiration = (60*60*24*365*2);
 		
 		// Set the cookie name
 		$this->sess_cookie_name = $this->cookie_prefix.$this->sess_cookie_name;
@@ -342,7 +341,8 @@ class CI_Session {
 	 */
 	function sess_update()
 	{
-        if ( $this->CI->input->is_ajax_request() ){
+
+        if ( $this->CI->input->is_ajax_request() || IS_AJAX ){
             return;
        	}
 		// We only update the session every five minutes by default
@@ -417,6 +417,8 @@ class CI_Session {
 					$this->cookie_domain,
 					0
 				);
+
+		$this->userdata = array();
 	}
 
 	// --------------------------------------------------------------------
