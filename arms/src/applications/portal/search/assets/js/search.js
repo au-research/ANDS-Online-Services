@@ -356,7 +356,7 @@ function initSearchPage(){
 	$('.post a.title').each(function(){$(this).html(htmlDecode($(this).html()));})
 
 	// Hide logos which point to invalid resources. 
-	$('.post img').error(function() { console.log("error loading image: " + $(this).attr('src')); $(this).addClass('hide'); })
+	$('.post img').error(function() { log("error loading image: " + $(this).attr('src')); $(this).addClass('hide'); })
 
 	$('.showmore_excerpt').click(function(){	
 		$(this).parent().html($(this).parent().children(0).html());
@@ -727,34 +727,39 @@ function showPreviewWindowConent(mOverlay)
 {
 	roIds = [];
 	// either a marker is passed or a marker_cluster
+	
     if(typeof mOverlay.id != 'undefined')
     {
+    	log(mOverlay);
     	roIds.push(mOverlay.id);
     	infowindow.setPosition(mOverlay.position);
     }
     else if(typeof mOverlay.markers_ != 'undefined')
     {
+    	log(mOverlay);
     	$(mOverlay.markers_).each(function(){
     	roIds.push(this.id);
     	});
     	infowindow.setPosition(mOverlay.center_)
     }
-
-	$.ajax({
-		url:base_url+'view/preview', 
-		data : {roIds:roIds},
-		type: 'POST',
-		dataType:'json',
-		success: function(data){
-			infowindow.setContent(data.html);//
-			infowindow.open(map);			
-		},
-		error: function(data){
-			//$('body').prepend(data.responseText);
-			console.error("ERROR" + data.responseText);
-			return null;
-		}
-	});
+    if(roIds)
+    {
+		$.ajax({
+			url:base_url+'view/preview', 
+			data : {roIds:roIds},
+			type: 'POST',
+			dataType:'json',
+			success: function(data){
+				infowindow.setContent(data.html);//
+				infowindow.open(map);			
+			},
+			error: function(data){
+				//$('body').prepend(data.responseText);
+				console.error("ERROR" + data.responseText);
+				return null;
+			}
+		});
+	}
 }
 
 function clearPolygons()
@@ -771,7 +776,7 @@ function resetZoom(){
 	if(searchBox)
 	{
 		map.setCenter(searchBox.getBounds().getCenter());
-		console.log("if searchBox lat:" + searchBox.getBounds().getCenter().lat() + " lng: " + searchBox.getBounds().getCenter().lng());
+		//log("if searchBox lat:" + searchBox.getBounds().getCenter().lat() + " lng: " + searchBox.getBounds().getCenter().lng());
 		map.fitBounds(searchBox.getBounds());
 	}
 	else if(searchData['spatial']){
@@ -797,7 +802,7 @@ function resetZoom(){
 		geoCodeRectangle.setMap(map);
 	  	searchBox = geoCodeRectangle;
 	 	map.setCenter(searchBox.getBounds().getCenter());
-	 	console.log("no searchBox: lat:" + searchBox.getBounds().getCenter().lat() + " lng: " + searchBox.getBounds().getCenter().lng());
+	 	//log("no searchBox: lat:" + searchBox.getBounds().getCenter().lat() + " lng: " + searchBox.getBounds().getCenter().lng());
 		map.fitBounds(searchBox.getBounds());
 	}
 

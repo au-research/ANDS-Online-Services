@@ -30,7 +30,7 @@ initInternalSuggestedLinks();
 
 function initViewPage()
 {
-    $('img.logo').error(function() { console.log("error loading image: " + $(this).attr('src')); $(this).addClass('hide'); })
+    $('img.logo').error(function() { log("error loading image: " + $(this).attr('src')); $(this).addClass('hide'); })
  //   $('#displaytitle').each(function(){console.log($(this));});
 }
 
