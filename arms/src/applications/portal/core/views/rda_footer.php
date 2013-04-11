@@ -96,7 +96,7 @@
 				</script>
 	        <?php endif; ?>
 	        <?php if($lib=='google_map'):?>
-	           <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=drawing&amp;sensor=false"></script>
+	           <script type="text/javascript" src="<?php echo $this->config->item('protocol');?>://maps.googleapis.com/maps/api/js?libraries=drawing&amp;sensor=false"></script>
 	           <script type="text/javascript" src="<?php echo asset_url('lib/markerclusterer.js', 'base');?>"></script>
 	        <?php endif; ?>
 	        <?php if($lib=='dynatree'):?>

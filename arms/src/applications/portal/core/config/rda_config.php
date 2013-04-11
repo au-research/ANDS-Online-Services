@@ -9,6 +9,7 @@ $config['banned_images'] = array(
 	'http://services.ands.org.au/documentation/logos/nhmrc_stacked.jpg'
 );
 
+$config['protocol'] = 'https';//((strpos(base_url(), "http://") === 0) ? "http" : "https");
 
 //======================================
 // SUBJECT CATEGORIES for FACET SEARCHING
