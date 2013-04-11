@@ -1,4 +1,4 @@
-var selected_ids=[],selecting_status,select_all=false;
+var selected_ids=[],selecting_status,select_all=false,processing=false;
 var filters = {};
 $(function() {
 
@@ -46,6 +46,7 @@ $(function() {
 
         var action = $(this).attr('action');
         var status = $(this).attr('status');
+        if(processing) return;
 
         switch(action){
             case 'select_all':
@@ -164,6 +165,7 @@ $(function() {
                 window.location = base_url+'data_source/manage_deleted_records/'+data_source_id;
                 break;
         }
+
     });
 
 });
@@ -551,6 +553,7 @@ function action_list(status, action){
     }
     selected_ids = $.unique(selected_ids);
     update_selected_list(status);
+    $(".qtip").qtip("api").hide();
 }
 
 function update_selected_list(status){
@@ -681,7 +684,7 @@ function bindSortables(){
                         name:'status',
                         value:connect_to
                     }];
-                    update(selected_ids, attributes);
+                    if(!processing) update(selected_ids, attributes);
                 }
             }
         });
@@ -729,6 +732,8 @@ function bindSortables_old(){
 
 
 function update(ids, attributes){
+    processing = true;
+    $(".qtip").qtip("api").hide();
     if(select_all){
         ids = select_all;
         url = base_url+'registry_object/update/all';
@@ -748,6 +753,7 @@ function update(ids, attributes){
         data: data,
         dataType: 'JSON',
         success: function(data){
+            processing = false;
             if(data.status=='error'){
                 $('#status_message').removeClass('alert-info').addClass('alert-error');
                 $('#status_message').html(data.error_message);
@@ -762,6 +768,7 @@ function update(ids, attributes){
 
 function delete_ro(ids, selectAll){
     var data_source_id = $('#data_source_id').val();
+    $(".qtip").qtip("api").hide();
     $.ajax({
         url:base_url+'registry_object/delete/', 
         type: 'POST',
