@@ -171,6 +171,8 @@ class Core_extension extends ExtensionBase
 	/* Handles the changing of status soas not to cause inconsistencies */
 	function handleStatusChange($target_status)
 	{
+		$this->_CI->load->library('Solr');
+
 		// Changing between draft statuses, nothing to worry about:
 		$this->_CI->load->model('data_source/data_sources', 'ds');
 		$data_source = $this->_CI->ds->getByID($this->getAttribute('data_source_id'));
@@ -236,6 +238,9 @@ class Core_extension extends ExtensionBase
 			$this->_CI->importer->_reindexRecords($reenrich_queue);
 			*/
 			$this->ro->slug = DRAFT_RECORD_SLUG . $this->ro->id;
+
+			//remove the record from the index
+			$this->_CI->solr->deleteByQueryCondition('id:'.$this->ro->id);
 		}
 
 		$this->_initAttribute("original_status", $target_status);
