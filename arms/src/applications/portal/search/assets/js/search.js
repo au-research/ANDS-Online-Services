@@ -232,6 +232,11 @@ function initSearchPage(){
 		$('.container').css({margin:'0',width:'100%',padding:'0'});
 		$('.main').css({width:'100%',padding:'0'});
 		$('.sidebar').addClass('mapmode_sidebar');
+
+		if ($.browser.msie && $.browser.version <= 9.0) {
+			$('.sidebar').css({opacity:1,background:'#fff'});
+		}
+
 		$('.facet_class').show();
 		$('#search-result, .pagination, .page_title, .tabs').hide();
 		 processPolygons();
@@ -629,10 +634,11 @@ function createResultPolygonWithMarker(polygons, centers, title, id)
 
 function getCoordsFromString(lonLatStr)
 {
+	
 	var coords = new Array();
+	if(lonLatStr){
 		var coordsStr = lonLatStr.split(' ');
-		
-   		for( var i=0; i < coordsStr.length; i++ )
+		for( var i=0; i < coordsStr.length; i++ )
 		{
 			coordsPair = coordsStr[i].split(",");
 			coords[i] = new google.maps.LatLng(coordsPair[1],coordsPair[0]);
@@ -643,7 +649,8 @@ function getCoordsFromString(lonLatStr)
 		//	coordsPair = coordsStr[0].split(",");
 		//	coords[i] = new google.maps.LatLng(coordsPair[1],coordsPair[0]);
 		//}
-	//}
+	}
+//}
 	return coords;
 }
 
