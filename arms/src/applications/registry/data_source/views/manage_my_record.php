@@ -37,20 +37,14 @@
 					</form>
 					
 					<div class="btn-group">
-						<button class="btn">Sort</button>
-						<button class="btn dropdown-toggle" data-toggle="dropdown">
-							<span class="caret"></span>
-						</button>
+						<button class="btn dropdown-toggle" data-toggle="dropdown">Sort <span class="caret"></span></button>
 						<ul class="dropdown-menu">
 							<li><a href="javascript:;" class="sort" sort="updated" value="">Date Modified <span class="icon"></span></a></li>
 							<li><a href="javascript:;" class="sort" sort="quality_level" value="">Quality Level  <span class="icon"></span></a></li>
 						</ul>
 					</div>
 					<div class="btn-group">
-						<button class="btn">Filter</button>
-						<button class="btn dropdown-toggle" data-toggle="dropdown">
-							<span class="caret"></span>
-						</button>
+						<button class="btn dropdown-toggle" data-toggle="dropdown">Filter <span class="caret"></span></button>
 						<ul class="dropdown-menu">
 							<li <?php echo 'class="'.($ds->count_collection > 0 ? '' : 'disabled').'"';?>><a href="javascript:;" class="filter" name="class" value="collection">Collections (<?php echo $ds->count_collection;?>)<span class="icon"></span></a></li>
 							<li <?php echo 'class="'.($ds->count_party > 0 ? '' : 'disabled').'"';?>><a href="javascript:;" class="filter" name="class" value="party">Parties (<?php echo $ds->count_party;?>)<span class="icon"></span></a></li>
