@@ -112,12 +112,13 @@ $(document).ready(function() {
 				  sliceVisibilityThreshold:0,
 				  isStacked:true,
 				  colors: chosenColourChart,
-				  hAxis: {title: "",format:'##%'},
-				  vAxis: {title: "Class"},
+				  hAxis: {title: "",format:'##%' },
+				  vAxis: {title: "Class" },
 				  chartArea:{left:100},
 				  height: 200,
 				  legend: {position: 'none'},
 				  backgroundColor: '#f9f9f9',
+				  fontName:"'Arial'"
 				};
 				var dataView = new google.visualization.DataView(chart_data);
 
@@ -190,6 +191,7 @@ $(document).ready(function() {
 			          legend: { position: 'none'},
 			          pieSliceTextStyle: { fontSize: 13},
 			          titleTextStyle: { fontSize: 12 } ,
+			          fontName:"'Arial'"
 			        };
 
 			        $('#status_charts').append('<div id="status_chart_'+i+'" class="status_report_chart"></div>');
