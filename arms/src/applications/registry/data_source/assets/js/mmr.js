@@ -172,7 +172,7 @@ function init(filters){
 
     var data_source_id = $('#data_source_id').val();
     //$('.pool').hide();
-    $('#status_message').html('<em>Loading...</em>');
+    $('#status_message').html('<em>Loading...</em> <img src="'+base_url+'assets/img/ajax-loader.gif" alt="Loading..Please wait.."/>');
     $('#status_message').show();
     $.ajax({
         url:base_url+'data_source/get_mmr_data/'+data_source_id, 
@@ -757,7 +757,7 @@ function update(ids, attributes){
         total = selected_ids.length
     }
 
-    var text = total+' registry objects updating...';
+    var text = total+' registry objects updating...<img src="'+base_url+'assets/img/ajax-loader.gif" alt="Loading..Please wait.."/>';
     $('#status_message').html(text);
     $.ajax({
         url:url, 

@@ -93,3 +93,15 @@ function format_relationship($from_class, $relationship_type, $origin=false){
 		return (isset($typeArray[$from_class][$relationship_type]) ? $typeArray[$from_class][$relationship_type][1] : $relationship_type);
 	}else return (isset($typeArray[$from_class][$relationship_type]) ? $typeArray[$from_class][$relationship_type][0] : $relationship_type);
 }
+
+/*
+ * escapeSolrValue
+ * escaping sensitive items in a solr query
+ */
+function escapeSolrValue($string){
+    //$string = urldecode($string);
+    $match = array('\\','&', '|', '!', '(', ')', '{', '}', '[', ']', '^', '~', '*', '?', ':', '"', ';');
+    $replace = array('\\\\','&', '\\|', '\\!', '\\(', '\\)', '\\{', '\\}', '\\[', '\\]', '\\^', '\\~', '\\*', '\\?', '\\:', '\\"', '\\;');
+    $string = str_replace($match, $replace, $string);
+    return $string;
+}
