@@ -6,7 +6,6 @@ class View extends MX_Controller {
 	/* DEFAULT VIEW HANDLER -- WILL FETCH EXTRIF AND HAND OVER TO A RENDERER (BELOW) */
 	function index()
 	{
-
 		// Published records are always referenced by SLUG
 		// (for backwards compatibility, we can also redirect based on a key)
 		if ($this->input->get('key'))

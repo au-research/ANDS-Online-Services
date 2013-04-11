@@ -73,7 +73,7 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 								);
 
 		// We should only have one record returned
-		if ($record && count($record) == 1)
+		if ($record && count($record) > 0)
 		{
 			// Contributor pages logic (constants in engine/config/)
 
@@ -101,6 +101,11 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 				if ($query->num_rows() > 0)
 				{
 					$orphan_slug = array_pop($query->result_array());
+					if ($orphan_slug['slug'] == $this->input->get('slug'))
+					{
+						throw new Exception("Error: Unable to fetch extRif, despite active SLUG mapping.");
+					}
+					
 					$contents = array('redirect_registry_object_slug' => $orphan_slug['slug']);
 					echo json_encode($contents);
 					return;
