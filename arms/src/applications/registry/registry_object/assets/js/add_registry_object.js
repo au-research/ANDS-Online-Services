@@ -471,7 +471,6 @@ function initEditForm(){
 				type: 'POST',
 				data: {xml:xml},
 				success: function(data){
-					log(data);
 					if(data.status=='success'){
 						var template = $('#save-record-template').html();
 						var output = Mustache.render(template, data);

@@ -699,8 +699,9 @@ function createMarker(latlng, id)
 
 function clearOverlays() 
 {
-	if(markerClusterer)
+	if(typeof markerClusterer!= 'undefined'){
 		markerClusterer.clearMarkers();
+	}
 	clearMarkers();
 	clearPolygons();
 }
