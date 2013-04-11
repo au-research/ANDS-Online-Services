@@ -69,4 +69,12 @@ class Quality_Extension extends ExtensionBase
 			return $result[0]->value;
 		}else return false;
 	}
+
+	function get_validation_text(){
+		$query = $this->db->get_where("registry_object_metadata", array('registry_object_id' => $this->id, 'attribute' => 'quality_html'));
+		if($query->num_rows()==1){
+			$result = $query->result();
+			return $result[0]->value;
+		}else return false;
+	}
 }

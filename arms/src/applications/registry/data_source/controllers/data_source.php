@@ -327,7 +327,7 @@ class Data_source extends MX_Controller {
 				if($registry_object->flag=='t') $item['has_flag'] = true;
 				if($registry_object->gold_status_flag=='t'){
 					$item['has_gold'] = true;
-				}else{
+				}else if($item['error_count']==0){
 					$item['quality_level'] = $registry_object->quality_level;
 				}
 				switch($item['status']){

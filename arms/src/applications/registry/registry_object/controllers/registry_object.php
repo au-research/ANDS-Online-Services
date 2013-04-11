@@ -419,6 +419,12 @@ class Registry_object extends MX_Controller {
 		echo $ro->get_quality_text();
 	}
 
+	public function get_validation_text(){
+		$this->load->model('registry_objects', 'ro');
+		$ro = $this->ro->getByID($this->input->post('ro_id'));
+		echo $ro->get_validation_text();
+	}
+
 	public function get_native_record($id){
 		$this->load->model('registry_objects', 'ro');
 		$ro = $this->ro->getByID($id);

@@ -403,7 +403,7 @@ function initLayout(){
 
    
 
-    $('.tipQA').live('mouseover', function(){
+    $('.tipQA').on('mouseover', function(){
         $(this).qtip({
             content: {
                 text: 'Loading...', // The text to use whilst the AJAX request is loading
@@ -420,6 +420,45 @@ function initLayout(){
                     success: function(data, status) {
                         this.set('content.text', data);
                         formatTip(this);
+                    }
+                }
+            },
+            position: {viewport: $(window), my:'left center'},
+            show: {
+                //event: 'click',
+                ready: true,
+                solo:true,
+                effect: function(offset) {
+                    $(this).show(); // "this" refers to the tooltip
+                }
+            },
+            hide: {
+                fixed:true,
+                delay: 800
+            },
+            style: {classes: 'ui-tooltip-shadow ui-tooltip-bootstrap'},
+            overwrite: false
+        });
+    });
+
+    $('.tipError').on('mouseover', function(){
+        $(this).qtip({
+            content: {
+                text: 'Loading...', // The text to use whilst the AJAX request is loading
+                title: {
+                    text: 'Errors',
+                    button: 'Close'
+                },
+                ajax: {
+                    url: base_url+'registry_object/get_validation_text/', 
+                    type: 'POST',
+                    data: {ro_id: $(this).attr('ro_id')},
+                    loading:false,
+                    dataType: 'text',
+                    success: function(data, status) {
+                        this.set('content.text', data);
+                        $('.quality-test-results span').hide();
+                        $('.quality-test-results span.error').css({display:'block'}).show();
                     }
                 }
             },
@@ -632,70 +671,6 @@ function bindSortables(){
                 style: {classes: 'ui-tooltip-shadow ui-tooltip-bootstrap'}
             });
         });
-
-        $('.tipTag').unbind('click').click(function(e){
-            e.preventDefault();
-            e.stopPropagation();
-            var ro_id = $(this).attr('ro_id');
-            if($(this).closest('li').length==1) {
-                click_ro($(this).closest('li'),'select');
-            }
-            $(this).qtip({
-                content: {
-                    text: 'Loading...',
-                    ajax:{
-                        url: base_url+'registry_object/get_tag_menu',
-                        type: 'POST',
-                        dataType: 'text',
-                        data: {ro_id:ro_id},
-                        success: function(data, status) {
-                            this.set('content.text', data);
-                            var tooltip = $('#ui-tooltip-'+this.id+'-content');
-                            $('.tag_form').submit(function(e){
-                                e.preventDefault();
-                                e.stopPropagation();
-                                var ro_id = $(this).attr('ro_id');
-                                var tag = $('input', this).val();
-                                var tag_html = '<li>'+tag+'<span class="hide"><i class="icon icon-remove"></i></span></li>';
-                                $('.tags', tooltip).append(tag_html);
-                                $('.notag').hide();
-                                 $.ajax({
-                                    url:base_url+'registry_object/tag/add', 
-                                    type: 'POST',
-                                    data: {ro_id:ro_id,tag:tag},
-                                    success: function(data){
-                                        
-                                    }
-                                });
-                            });
-                            $('.tags li').die().live({
-                                mouseover: function(){
-                                    $('span', this).show();
-                                },
-                                mouseout: function(){
-                                    $('span', this).hide();
-                                },
-                                click: function(){
-                                    $.ajax({
-                                        url:base_url+'registry_object/tag/remove', 
-                                        type: 'POST',
-                                        data: {ro_id:ro_id,tag:$(this).text()},
-                                        success: function(data){
-                                        }
-                                    });
-                                    $(this).remove();                                    
-                                }
-                            });
-                        }
-                    }
-                },
-                position: {viewport: $(window), my:'left center'},
-                show:{ready:true,effect:false,event:'click'},
-                hide:{event:'unfocus'},
-                style: {classes: 'ui-tooltip-shadow ui-tooltip-bootstrap'}
-            });
-        });
-
 
         $(target).parents('.status_field').droppable({
             accept: from,

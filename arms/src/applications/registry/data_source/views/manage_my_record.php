@@ -119,7 +119,7 @@
 		<div class='selected_status hide'>asdfasdf</div>
 		<ul class="sortable" connect_to="{{connectTo}}" status="{{name}}">
 			{{#items}}
-			<li id="{{id}}" data-toggle="context" data-target="#context-menu-{{status}}" class="status_{{status}} ro_item {{#has_error}}ro_error{{/has_error}}" status="{{status}}">
+			<li id="{{id}}" data-toggle="context" data-target="#context-menu-{{status}}" class="status_{{status}} ro_item" status="{{status}}">
 			<div class="ro_item_header">
 				<div class="ro_title"><a ro_id="{{id}}" class="tip" tip="<b>{{title}}</b> - {{key}}">{{title}}</a></div>
 				<img class="class_icon" tip="{{class}}" src="<?php echo asset_url('img/{{class}}.png', 'base');?>"/>
@@ -133,6 +133,9 @@
 					{{#quality_level}}
 						<span class="tag ql_{{quality_level}} tipQA" ro_id='{{id}}'>{{quality_level}}</span>
 					{{/quality_level}}
+					{{#has_error}}
+						<a href="javascript:;" class="btn btn-mini btn-danger tipError" ro_id="{{id}}"><i class="icon-white icon-question-sign"></i></a>
+					{{/has_error}}
 				</div>
 			</div>
 			<div class="ro_content ">

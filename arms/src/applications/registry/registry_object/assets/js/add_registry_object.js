@@ -472,10 +472,14 @@ function initEditForm(){
 				data: {xml:xml},
 				success: function(data){
 					log(data);
-					var template = $('#save-record-template').html();
-					var output = Mustache.render(template, data);
-					$('#myModal .modal-body').html(output);
-					formatQA($('#myModal .qa'));
+					if(data.status=='success'){
+						var template = $('#save-record-template').html();
+						var output = Mustache.render(template, data);
+						$('#myModal .modal-body').html(output);
+						formatQA($('#myModal .qa'));
+					}else{
+						$('#myModal .modal-body').html(data.message);
+					}
 				},
 				error: function(data){
 					data = $.parseJSON(data.responseText);
