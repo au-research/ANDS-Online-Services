@@ -201,11 +201,13 @@ class View extends MX_Controller {
 			}
 		}
 		else if ($this->input->post('roIds')) {
-			//try
-			//{
+			$currRoID = null;
+			try
+			{
 				$html = '';
 				foreach($this->input->post('roIds') as $roID)
 				{
+					$currRoID = $roID;
 					$extRif = $this->registry->fetchExtRifByID($roID);
 					if($extRif['data'])
 					{
@@ -217,11 +219,15 @@ class View extends MX_Controller {
 
 					}
 				}
-			//}
-			//catch (SlugNoLongerValidException $e)
-			//{
-			//	die("Registry object could not be located (perhaps it no longer exists!)");
-			//}
+			}
+			catch (SlugNoLongerValidException $e)
+			{
+				die("Registry object could not be located (perhaps it no longer exists!)");
+			}
+			catch (ErrorException $e)
+			{
+				$html .= "<div class='ro_preview'><div class='ro_preview_header'>".$e." (".$currRoID.")</div></div>";
+			}
 		}
 		else 
 		{
