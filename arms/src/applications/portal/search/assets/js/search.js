@@ -730,13 +730,13 @@ function showPreviewWindowConent(mOverlay)
 	
     if(typeof mOverlay.id != 'undefined')
     {
-    	log(mOverlay);
+    	//log(mOverlay);
     	roIds.push(mOverlay.id);
     	infowindow.setPosition(mOverlay.position);
     }
     else if(typeof mOverlay.markers_ != 'undefined')
     {
-    	log(mOverlay);
+    	//log(mOverlay);
     	$(mOverlay.markers_).each(function(){
     	roIds.push(this.id);
     	});
