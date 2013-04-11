@@ -96,7 +96,7 @@
                   <ul class="dropdown-menu pull-right">
 
                     <?php if (mod_enabled('pids') && $this->config->item('gPIDS_URL_PREFIX')): ?>
-                      <li class=""><?php echo anchor($this->config->item('gPIDS_URL_PREFIX'), 'My Persistent Identifers (PIDS) <i class="icon-share"></i>', array("target"=>"_blank"));?></li>
+                      <li class=""><?php echo anchor($this->config->item('gPIDS_URL_PREFIX'), 'My Persistent Identifiers (PIDS) <i class="icon-share"></i>', array("target"=>"_blank"));?></li>
                     <?php endif; ?>
 
                     <?php if ($this->user->hasFunction('AUTHENTICATED_USER') && mod_enabled('mydois')): ?>
