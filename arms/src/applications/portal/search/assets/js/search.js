@@ -699,19 +699,21 @@ function createMarker(latlng, id)
 
 function clearOverlays() 
 {
-	if(typeof markerClusterer!= 'undefined'){
-		markerClusterer.clearMarkers();
+	if(typeof markerClusterer!= 'undefined' && markerClusterer){
+		markerClusterer.clearMarkers();		
 	}
 	clearMarkers();
 	clearPolygons();
 }
 
-function clearMarkers()
-{
-  for (m in markersArray) 
-  {
-    markersArray[m].setMap(null);
-  }
+function clearMarkers(){
+	if(markersArray.length>0){
+	  for (m in markersArray){
+	  	if(markersArray[m]){
+	    	markersArray[m].setMap(null);
+		}
+	  }
+	}
 }
 
 function showPreviewWindowConent(mOverlay)
@@ -750,10 +752,11 @@ function showPreviewWindowConent(mOverlay)
 
 function clearPolygons()
 {
-  for (p in polygonsArray) 
-  {
-    polygonsArray[p].setMap(null);
-  }
+	if(polygonsArray.length>0){
+	  for (p in polygonsArray){
+	    polygonsArray[p].setMap(null);
+	  }
+	}
 }
 
 function resetZoom(){
