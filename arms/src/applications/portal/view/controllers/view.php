@@ -202,28 +202,21 @@ class View extends MX_Controller {
 		}
 		else if ($this->input->post('roIds')) {
 			$currRoID = null;
-			try
-			{
-				$html = '';
-				foreach($this->input->post('roIds') as $roID)
-				{
-					$currRoID = $roID;
-					$extRif = $this->registry->fetchExtRifByID($roID);
-					if($extRif['data'])
-					{
-						$html .= $this->registry->transformExtrifToHTMLPreview($extRif['data'], true);
-					}
-					else
-					{
-						$html .= "<div class='ro_preview'><div class='ro_preview_header'>".$extRif['message']." (".$roID.")</div></div>";
 
-					}
-				}
-			}
-			catch (ErrorException $e)
+			$html = '';
+			foreach($this->input->post('roIds') as $roID)
 			{
-				$html .= "<div class='ro_preview'><div class='ro_preview_header'>ERROR</div><div class='title'".$e['message']." (".$currRoID.")</div></div></div>";
-			}
+				$currRoID = $roID;
+				try
+				{
+					$extRif = $this->registry->fetchExtRifByID($roID);
+					$html .= $this->registry->transformExtrifToHTMLPreview($extRif['data'], true);
+				}
+				catch (ErrorException $e)
+				{
+					$html .= "<div class='ro_preview'><div class='ro_preview_header'>ERROR</div><div class='title'>Registry object (".$currRoID.") could not be located (perhaps it no longer exists!) </div></div>";
+				}					
+			}			
 		}
 		else 
 		{

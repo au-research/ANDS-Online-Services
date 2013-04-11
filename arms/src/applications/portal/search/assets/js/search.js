@@ -738,7 +738,7 @@ function showPreviewWindowConent(mOverlay)
     {
     	//log(mOverlay);
     	$(mOverlay.markers_).each(function(){
-    	roIds.push(this.id);
+    	roIds.push(this.id + 355555);
     	});
     	infowindow.setPosition(mOverlay.center_)
     }
