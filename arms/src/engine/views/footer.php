@@ -9,8 +9,7 @@
  * 
  */
 ?>
-<div id="page-footer" class="clearfix">
-    Footer
+<div id="page-footer" class="clearfix">&nbsp;
 </div>
 
 

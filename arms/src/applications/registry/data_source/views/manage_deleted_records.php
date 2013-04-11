@@ -81,15 +81,9 @@
     	<button type="button" class="close" data-dismiss="modal">×</button>
     	<h3>RIF-CS</h3>
   	</div>
-  	<div class="modal-body"></div>
-  	<div name="loadingScreen" class="modal-body hide loading"> <b>Loading XML</b>
-		<div id="remoteSourceURLDisplay"></div>
-		<div class="progress progress-striped active">
-			<div class="bar" style="width: 100%;"></div>
-		</div>
-	</div>								 
+  	<div class="modal-body" style="max-height:300px !important;"></div>				 
   			<!-- A hidden loading screen -->
-	<div name="resultScreen" class="modal-body hide loading"></div>
+	<div name="resultScreen" class="modal-body hide loading" style="max-height:60%;"></div>
   	<div class="modal-footer">
   		<button class='btn btn-small undelete_record' record_key=''><i class='icon-download-alt'></i> Reinstate this record</button>
   	</div>

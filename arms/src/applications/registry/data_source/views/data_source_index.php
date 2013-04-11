@@ -24,7 +24,7 @@
 	</div>
 	<div id="breadcrumb">
 		<?php echo anchor('/', '<i class="icon-home"></i> Home', array('class'=>'tip-bottom', 'tip'=>'Go to Home'))?>
-		<?php echo anchor('data_source/manage', 'List My Datasources', array('class'=>'current'))?>
+		<?php echo anchor('data_source/manage', 'Manage My Datasources', array('class'=>'current'))?>
 	</div>
 	<div class="container-fluid">
 		<div class="row-fluid">
@@ -184,7 +184,7 @@
 
 <div id="breadcrumb">
 	<?php echo anchor('/', '<i class="icon-home"></i> Home', array('class'=>'tip-bottom', 'tip'=>'Go to Home'))?>
-	<?php echo anchor('data_source/manage', 'List My Datasources')?>
+	<?php echo anchor('data_source/manage', 'Manage My Datasources')?>
 	<a href="javascript:;" class="current">{{title}}</a>
 </div>
 
@@ -465,7 +465,7 @@
 	</div>
 	<div id="breadcrumb">
 		<?php echo anchor('/', '<i class="icon-home"></i> Home', array('class'=>'tip-bottom', 'tip'=>'Go to Home'))?>
-		<?php echo anchor('data_source/manage', 'List My Datasources')?>
+		<?php echo anchor('data_source/manage', 'Manage My Datasources')?>
 		<a href="#!/view/{{data_source_id}}">{{title}}</a>
 		<a href="javascript:;" class="current">Settings</a>
 	</div>
@@ -787,7 +787,7 @@
 	</div>
 	<div id="breadcrumb">
 		<?php echo anchor('/', '<i class="icon-home"></i> Home', array('class'=>'tip-bottom', 'tip'=>'Go to Home'))?>
-		<?php echo anchor('data_source/manage', 'List My Datasources')?>
+		<?php echo anchor('data_source/manage', 'Manage My Datasources')?>
 		<a href="#!/view/{{data_source_id}}" class="">{{title}}</a>
 		<a href="javascript:;" class="current">Edit</a>
 	</div>

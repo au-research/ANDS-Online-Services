@@ -1136,7 +1136,7 @@ a.browse_button{
 .foot .small {
 	color: #dadada;
 	font-size: 11px;
-	line-height: 13px;
+	line-height: 1.2em;
 }
 a.gov_logo {
 	display: block;
