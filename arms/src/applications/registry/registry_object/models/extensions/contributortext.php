@@ -10,7 +10,6 @@ class ContributorText_Extension extends ExtensionBase
 
 	function getContributorText()
 	{
-
 		$this->_CI->load->library('solr');
 		$this->_CI->solr->setOpt('q', '*:*');
 		$this->_CI->solr->setOpt('fq', 'group:("'.$this->ro->getAttribute('group').'")');
@@ -79,6 +78,7 @@ class ContributorText_Extension extends ExtensionBase
 
 		$this->_CI->solr->setOpt('fq', 'type:("group")');
 		$groups = $this->_CI->solr->executeSearch();
+		$contributorData['groups'] = array();
 		foreach($groups->{'response'}->{'docs'} as $group){
 			$contributorData['groups'][$group->{'list_title'}] = '';
 		}

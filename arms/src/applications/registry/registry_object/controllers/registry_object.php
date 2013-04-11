@@ -508,7 +508,6 @@ class Registry_object extends MX_Controller {
 			foreach($attributes as $a){
 				try{
 					$ro->setAttribute($a['name'], $a['value']);
-
 					if($ro->save())
 					{
 						if($a['name']=='status'&&$a['value']=='SUBMITTED_FOR_ASSESSMENT')

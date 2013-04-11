@@ -21,7 +21,6 @@ class Relationships_Extension extends ExtensionBase
 		$sxml->registerXPathNamespace("ro", RIFCS_NAMESPACE);
 		foreach ($sxml->xpath('//ro:relatedObject') AS $related_object)
 		{
-				throw new Exception("ohheyder");
 			$related_object_key = (string)$related_object->key;
 			$related_object_type = (string)$related_object->relation[0]['type'];
 

@@ -241,7 +241,7 @@ class Registry_fetch extends CI_Model
 		}
 		else
 		{
-			throw new ErrorException("Error whilst fetching contributor page details: " . $cannedText);
+			throw new ErrorException("Error whilst fetching contributor page details: " . var_export($cannedText,true));
 		}
 	
 		return $cannedText;
