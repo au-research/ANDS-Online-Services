@@ -12,7 +12,7 @@
 	</div>
 	<div id="breadcrumb">
 		<?php echo anchor('/', '<i class="icon-home"></i> Home', array('class'=>'tip-bottom', 'title'=>'Go to Home'))?>
-		<?php echo anchor('data_source/manage/', 'List My Datasources');?>
+		<?php echo anchor('data_source/manage/', 'Manage My Datasources');?>
 		<?php echo anchor('data_source/manage#!/view/'.$ds->id, $ds->title);?>
 		<a href="#" class="current"><?php echo $title;?></a>
 	</div>
