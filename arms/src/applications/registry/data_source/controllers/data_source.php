@@ -905,7 +905,6 @@ public function getContributorGroupsEdit()
 		$dataSource = NULL;
 		$id = NULL; 
 		
-		
 		$jsonData['status'] = 'OK';
 		$POST = $this->input->post();
 		//print("<pre>");
@@ -937,8 +936,8 @@ public function getContributorGroupsEdit()
 		{
 
 			$valid_attributes = array_merge(array_keys($dataSource->attributes()), array_keys($dataSource->harvesterParams));
-			$valid_attributes = array_merge($valid_attributes, array_keys($dataSource->primaryRelationship));
-			$valid_attributes = array_merge($valid_attributes, array_keys($dataSource->institutionPages));
+			$valid_attributes = array_merge($valid_attributes, $dataSource->primaryRelationship);
+			$valid_attributes = array_merge($valid_attributes, $dataSource->institutionPages);
 			$valid_attributes = array_merge($valid_attributes, array_keys($dataSource->stockAttributes));
 			$valid_attributes = array_merge($valid_attributes, array_keys($dataSource->extendedAttributes));
 			$valid_attributes = array_unique($valid_attributes);
@@ -1094,7 +1093,7 @@ public function getContributorGroupsEdit()
 					$dataSource->{$attrib} = $new_value;
 
 
-					if($new_value == '' && $new_value != $dataSource->{$attrib} && in_array($attrib, array_keys($dataSource->harvesterParams)))
+					if($new_value != $dataSource->{$attrib} && in_array($attrib, array_keys($dataSource->harvesterParams)))
 					{
 						$dataSource->unsetAttribute($attrib);
 						$resetHarvest = true;
@@ -1154,13 +1153,14 @@ public function getContributorGroupsEdit()
 		
 		echo json_encode($jsonData);
 	}
-	
+	/* was good for testing...
 	function requestNewharvest($data_source_id)
 	{
 		$this->load->model("data_sources","ds");
 		$dataSource = $this->ds->getByID($data_source_id);
 		$dataSource->requestNewharvest();
 	}
+	*/
 	/**
 	 * Importing (Ben's import from URL)
 	 * 
