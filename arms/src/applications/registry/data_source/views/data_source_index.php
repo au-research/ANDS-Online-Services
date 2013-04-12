@@ -827,8 +827,17 @@
 
 						<div class="control-group">
 							<label class="control-label" for="record_owner">Record Owner</label>
-							<div class="controls">
-								<input type="text" class="input-xlarge" name="record_owner" value="{{record_owner}}">
+							<div class="controls">			
+								<select data-placeholder="Choose a Record Owner" tabindex="1" class="chzn-select input-xlarge" for="record_owner" style="width72px">
+								<?php foreach($this->user->affiliations() as $a):?>
+								<option value="<?php echo $a;?>"><?php echo $a;?></option>
+								<?php endforeach;?>
+								</select>
+								<input type="text" class="input-small hide" name="record_owner" id="record_owner" value="{{record_owner}}">
+
+
+
+
 							</div>
 						</div>
 
@@ -855,7 +864,7 @@
 						
 					</fieldset>
 				</div>
-				<div id="records" class="tab-pane">
+				<div id="records" class="tab-pane ">
 					<fieldset>
 						<legend>Records Management Settings</legend>
 						<div class="control-group">
