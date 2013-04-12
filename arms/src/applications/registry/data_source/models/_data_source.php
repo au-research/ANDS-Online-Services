@@ -525,24 +525,22 @@ class _data_source {
 			//}
 		}
 	}
-	
-	function getHarvestRequests($id = null)
+
+	function requestNewharvest()
 	{
-		$harvestRequests = array();
-		$this->db->from("harvest_requests");
-		if($id != null)
-		$query = $this->db->where(array("data_source_id"=>$this->id, "id"=>$id));
-		else 
-		$query = $this->db->where(array("data_source_id"=>$this->id));
-		if ($query->num_rows() > 0)
+
+		$oldRequests = $this->getHarvesterStatus();
+		if($oldRequests)
 		{
-			foreach ($query->result_array() AS $row)
-			{
-				$harvestRequests[] = $row;		
+			foreach($oldRequests as $request)
+			{	
+				$this->deleteHarvestRequest($request['id']);
 			}
+			$this->requestHarvest();
 		}
-		return $harvestRequests;		
+
 	}
+	
 	// TODO continue here!!!
 	function insertHarvestRequest($harvestFrequency, $oaiSet, $created, $updated, $nextHarvest, $status)
 	{
@@ -563,16 +561,17 @@ class _data_source {
 
 	function deleteOldRecords($harvest_id)
 	{
-		//$this->append_log("TRYING TO REMOVE RECORDS FROM PREVIOUS HARVEST FROM DS: ".$this->id, HARVEST_INFO, "harvester","HARVESTER_INFO");	
-		//
 		$this->_CI->load->model("registry_object/registry_objects", "ro");
 		$oldRegistryObjects = $this->_CI->ro->getRecordsInDataSourceFromOldHarvest($this->id, $harvest_id);
-		foreach($oldRegistryObjects AS $target_ro_id)
+		if($oldRegistryObjects)
 		{
-			$target_ro = $this->_CI->ro->getByID($target_ro_id);
-			$log = $target_ro->eraseFromDatabase();
-			if($log)
-				$this->append_log("ERROR REMOVING RECORD FROM PREVIOUS HARVEST: " .$target_ro_id, HARVEST_INFO, "harvester", "HARVESTER_INFO");
+			foreach($oldRegistryObjects AS $target_ro_id)
+			{
+				$target_ro = $this->_CI->ro->getByID($target_ro_id);
+				$log = $target_ro->eraseFromDatabase();
+				if($log)
+					$this->append_log("ERROR REMOVING RECORD FROM PREVIOUS HARVEST: " .$target_ro_id, HARVEST_INFO, "harvester", "HARVESTER_INFO");
+			}
 		}
 		$this->append_log("REMOVING RECORDS FROM PREVIOUS HARVEST: " .sizeof($oldRegistryObjects)." DELETED", HARVEST_INFO, "harvester","HARVESTER_INFO");	
 	}
@@ -690,7 +689,7 @@ class _data_source {
 
 	
 	function requestHarvest($created = '', $updated = '', $dataSourceURI = '', $providerType = '', $OAISet = '', $harvestMethod = '', $harvestDate = '', 			
-		$harvestFrequency = '', $advancedHarvestingMethod = '', $nextHarvest = '', $testOnly = false)
+		$harvestFrequency = '', $advancedHarvestMode = '', $nextHarvest = '', $testOnly = false)
 	{
 		$dataSource = $this->id;
 		$responseTargetURI = base_url('data_source/putharvestData');
@@ -704,17 +703,18 @@ class _data_source {
 
 		if($harvestMethod == '')
 			$harvestMethod = $this->getAttribute("harvest_method");
+
 		if ($harvestMethod == "rif") $harvestMethod = "RIF"; //crosswalk-introduced bugfix
 	
 		if($harvestDate == '')
 			$harvestDate = $this->getAttribute("harvest_date");
 
 		if($harvestFrequency == '')
-			$harvestFrequency = $this->getAttribute("harvest_frequency");
-			
-        if($advancedHarvestingMethod = '')
-        	$advancedHarvestingMethod = $this->getAttribute("advanced_harvesting_mode");
-		
+			$harvestFrequency = $this->getAttribute("harvest_frequency");	
+        
+        if($advancedHarvestMode == '')
+        	$advancedHarvestMode = $this->getAttribute("advanced_harvest_mode");
+
         if($nextHarvest == '')
 			$nextHarvest = $harvestDate;	
 
@@ -745,7 +745,7 @@ class _data_source {
 		$harvestRequest .= '&date='.urlencode($harvestDate);
 		$harvestRequest .= '&frequency='.urlencode($harvestFrequency);
 		$harvestRequest .= '&mode='.urlencode($mode);
-		$harvestRequest .= '&ahm='.urlencode($advancedHarvestingMethod);
+		$harvestRequest .= '&ahm='.urlencode($advancedHarvestMode);
 		
 		// Submit the request.
 		$logID = $this->submitHarvestRequest($harvestRequest, $msg, $harvestRequestId);

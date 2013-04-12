@@ -951,7 +951,7 @@ public function getContributorGroupsEdit()
 					$new_value = trim($this->input->post($attrib));
 
 				}
-				else if(in_array($attrib, $dataSource->harvesterParams))
+				else if(in_array($attrib, array_keys($dataSource->harvesterParams)))
 				{
 					$new_value = '';	
 				}
@@ -1030,7 +1030,7 @@ public function getContributorGroupsEdit()
 
 				//echo $attrib." is the attribute";
 
-				if($new_value != $dataSource->{$attrib} && in_array($attrib, $dataSource->harvesterParams))
+				if($new_value != $dataSource->{$attrib} && in_array($attrib, array_keys($dataSource->harvesterParams)))
 				{
 				   $resetHarvest = true;
 				} 
@@ -1094,12 +1094,14 @@ public function getContributorGroupsEdit()
 					$dataSource->{$attrib} = $new_value;
 
 
-					if($new_value == '' && $new_value != $dataSource->{$attrib} && in_array($attrib, $dataSource->harvesterParams))
+					if($new_value == '' && $new_value != $dataSource->{$attrib} && in_array($attrib, array_keys($dataSource->harvesterParams)))
 					{
 						$dataSource->unsetAttribute($attrib);
+						$resetHarvest = true;
 					}
 					else{
 						$dataSource->setAttribute($attrib, $new_value);
+						$resetHarvest = true;
 					}
 
 					if($attrib=='institution_pages')
@@ -1115,7 +1117,7 @@ public function getContributorGroupsEdit()
 
 			if($resetHarvest)
 			{
-				$dataSource->requestHarvest();
+				$dataSource->requestNewHarvest();
 			}
 		}
 		//$jsonData['attributes'] = $dataSource->attributes();
@@ -1153,6 +1155,12 @@ public function getContributorGroupsEdit()
 		echo json_encode($jsonData);
 	}
 	
+	function requestNewharvest($data_source_id)
+	{
+		$this->load->model("data_sources","ds");
+		$dataSource = $this->ds->getByID($data_source_id);
+		$dataSource->requestNewharvest();
+	}
 	/**
 	 * Importing (Ben's import from URL)
 	 * 
@@ -1472,6 +1480,8 @@ public function getContributorGroupsEdit()
 		$this->load->model("data_sources","ds");
 		$dataSource = $this->ds->getByHarvestID($harvestId);
 		
+
+
 			if (isset($POST['content'])){
 				$data =  $this->input->post('content');
 			}
@@ -1492,6 +1502,8 @@ public function getContributorGroupsEdit()
 				$logMsg = 'Test harvest completed successfully';
 				$logMsgErr = 'An error occurred whilst testing harvester settings';
 			}
+
+
 
 			$logMsg .= ' (harvestID: '.$harvestId.')';
 			$logMsgErr .= ' (harvestID: '.$harvestId.')';
@@ -1588,22 +1600,15 @@ public function getContributorGroupsEdit()
 			}
 			if($done == 'TRUE' || $mode != "HARVEST")
 			{
-				// TODO: make up a better way to display log for multiple OAI chunks
-
-
-				//$dataSource->deleteHarvestRequest($harvestId);
 				$dataSource->cancelHarvestRequest($harvestId,false);
 				if($dataSource->advanced_harvest_mode == 'REFRESH')
-				{
-					$dataSource->append_log($logMsg.NL."HARVEST MODE REFRESH: ".NL."new Harvest ID: ".$harvestId, HARVEST_INFO, "harvester","HARVESTER_INFO");
+				{	
 					$dataSource->deleteOldRecords($harvestId);
 				} 
 			}
-
-			if($done == 'TRUE' && $nextHarvestDate)
+			if($done == 'TRUE' && $nextHarvestDate != '')
 			{
-				$dataSource->requestHarvest(null,null,null,null,null,null,$nextHarvestDate);
-				//reschedule!
+				$dataSource->requestHarvest('','','','','','', $nextHarvestDate);
 			}
 			
 		}
