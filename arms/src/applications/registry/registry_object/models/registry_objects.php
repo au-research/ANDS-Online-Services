@@ -636,6 +636,10 @@ class Registry_objects extends CI_Model {
 			}
 		}
 
+		//delete index
+		$this->load->library('Solr');
+		$this->solr->deleteByQueryCondition('id:'.$target_ro->id);
+
 		if (isPublishedStatus($target_ro->status))
 		{
 			// Handle URL backup
