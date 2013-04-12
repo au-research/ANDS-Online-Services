@@ -21,6 +21,12 @@ else
 }
 
 
+// Default resolver
+if (!isset($config['sissvoc_url']))
+{
+	$config['sissvoc_url'] = "http://ands3.anu.edu.au:8080/sissvoc/api/";
+}
+
 /* For multiple-application environments, this "app" will be matched 
 by the $_GET['app'] which is rewritten in .htaccess. The array key is
 the full match (above). The active_application is the subfolder within 
