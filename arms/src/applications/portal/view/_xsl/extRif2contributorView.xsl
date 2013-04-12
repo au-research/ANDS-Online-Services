@@ -72,7 +72,6 @@
 
     <xsl:text>  /  </xsl:text>
     <a href="{$base_url}search/browse/{./@group}/{$objectClass}" class="crumb"><xsl:value-of select="$objectClass"/></a>
- 
   </div>	
 
             <!--  the following hidden elements dfine content to be used in further ajax calls -->
@@ -85,6 +84,7 @@
                 <span id="status"><xsl:value-of select="//extRif:extendedMetadata/extRif:status"/></span>
                 <span id="slug"><xsl:value-of select="//extRif:extendedMetadata/extRif:slug"/></span>
                 <span id="registry_object_id"><xsl:value-of select="//extRif:extendedMetadata/extRif:id"/></span>
+                <span id="class_type"><xsl:value-of select="$objectClassType"/></span>
             </div>
 			
 
@@ -118,16 +118,7 @@
           <xsl:apply-templates select="../extRif:extendedMetadata/extRif:displayTitle"/>	
       </xsl:when>
       <xsl:otherwise>
-      <div class="right_icon">
-        <img class="icon-heading">
-           <xsl:attribute name="src"><xsl:value-of select="$base_url"/>
-           <xsl:text>assets/core/images/icons/</xsl:text>
-           <xsl:value-of select="$objectClassType"/>
-           <xsl:text>.png</xsl:text>
-       </xsl:attribute>
-       <xsl:attribute name="alt"><xsl:value-of select="$objectClassType"/></xsl:attribute>
-   </img>
-</div> 
+ 
 
    <div class="page_title" id="displaytitle">
        <h1><xsl:value-of select="../ro:key"/>.....</h1>
@@ -309,7 +300,7 @@
 <!--  the following templates will format the view page content -->
 <xsl:template match="extRif:displayTitle">   
 
-<div class="right_icon">
+<!-- <div class="right_icon">
    <img class="icon-heading">
      <xsl:attribute name="src"><xsl:value-of select="$base_url"/>
      <xsl:text>assets/core/images/icons/</xsl:text>
@@ -317,7 +308,7 @@
      <xsl:text>.png</xsl:text></xsl:attribute>
      <xsl:attribute name="alt"><xsl:value-of select="$objectClassType"/></xsl:attribute>
  </img>
-</div>   
+</div>   -->
 
 
 
