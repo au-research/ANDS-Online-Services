@@ -1033,7 +1033,8 @@ public function getContributorGroupsEdit()
 				//echo $attrib." is the attribute";
 
 				if($new_value != $dataSource->{$attrib} && in_array($attrib, array_keys($dataSource->harvesterParams)))
-				{
+				{	
+				   //var_dump(array($attrib, $dataSource->{$attrib}, $new_value));
 				   $resetHarvest = true;
 				} 
 
@@ -1101,18 +1102,6 @@ public function getContributorGroupsEdit()
 				if (!is_null($new_value))
 				{
 					$dataSource->{$attrib} = $new_value;
-
-
-					if($new_value != $dataSource->{$attrib} && in_array($attrib, array_keys($dataSource->harvesterParams)))
-					{
-						$dataSource->unsetAttribute($attrib);
-						$resetHarvest = true;
-					}
-					else{
-						$dataSource->setAttribute($attrib, $new_value);
-						$resetHarvest = true;
-					}
-
 					if($attrib=='institution_pages')
 					{
 						$dataSource->setContributorPages($new_value,$POST);
