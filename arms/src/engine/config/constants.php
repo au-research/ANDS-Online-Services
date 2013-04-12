@@ -87,6 +87,11 @@ define('AUTH_FUNCTION_SUPERUSER','REGISTRY_SUPERUSER');
 
 define('AUTH_AFFILIATION_ARRAY', 'registry_affiliations');
 
+/* classes for records */
+define('COLLECTION','collection');
+define('PARTY','party');
+define('ACTIVITY','activity');
+define('SERVICE','service');
 
 /*
  * Status for records
