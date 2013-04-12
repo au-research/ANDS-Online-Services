@@ -953,7 +953,7 @@ public function getContributorGroupsEdit()
 				}
 				else if(in_array($attrib, array_keys($dataSource->harvesterParams)))
 				{
-					$new_value = '';	
+					$new_value = $dataSource->harvesterParams[$attrib];	
 				}
 				else if(in_array($attrib, $dataSource->primaryRelationship)){
 					$new_value = '';				
