@@ -18,6 +18,7 @@ class Relationships_Extension extends ExtensionBase
 		$related_keys = array();
 		$sxml = $this->ro->getSimpleXml();
 
+		/* Explicit relationships */
 		$sxml->registerXPathNamespace("ro", RIFCS_NAMESPACE);
 		foreach ($sxml->xpath('//ro:relatedObject') AS $related_object)
 		{
@@ -49,6 +50,35 @@ class Relationships_Extension extends ExtensionBase
 						"related_object_key" => (string) $related_object_key,
 						'related_object_class'=> (string) $class,
 						"relation_type" => (string) $related_object_type
+				)
+			);
+		}
+
+		/* Create primary relationships links */
+		$ds = $this->_CI->ds->getByID($this->ro->data_source_id);
+
+		if ($ds->create_primary_relationships == DB_TRUE && $ds->primary_key_1 && $ds->primary_key_1 != $this->ro->key)
+		{
+			$this_relationship = $ds->{strtolower($this->ro->class) . "_rel_1"};
+			$this->db->insert('registry_object_relationships', 
+				array(
+						"registry_object_id"=>$this->ro->id, 
+						"related_object_key" => (string) $ds->primary_key_1,
+						'related_object_class'=> (string) $ds->class_1,
+						"relation_type" => (string) $this_relationship
+				)
+			);
+		}
+
+		if ($ds->create_primary_relationships == DB_TRUE && $ds->primary_key_2 && $ds->primary_key_2 != $this->ro->key)
+		{
+			$this_relationship = $ds->{strtolower($this->ro->class) . "_rel_2"};
+			$this->db->insert('registry_object_relationships', 
+				array(
+						"registry_object_id"=>$this->ro->id, 
+						"related_object_key" => (string) $ds->primary_key_2,
+						'related_object_class'=> (string) $ds->class_2,
+						"relation_type" => (string) $this_relationship
 				)
 			);
 		}

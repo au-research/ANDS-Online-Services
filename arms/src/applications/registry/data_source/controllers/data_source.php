@@ -930,6 +930,7 @@ public function getContributorGroupsEdit()
 		ds_acl_enforce($id);
 
 		$resetHarvest = false;
+		$resetPrimaryRelationships = false; // reindex all records if the primary relationship information has changed!
 
 		// XXX: This doesn't handle "new" attribute creation? Probably need a whilelist to allow new values to be posted. //**whitelist**//
 		if ($dataSource)
@@ -946,18 +947,23 @@ public function getContributorGroupsEdit()
 				$new_value = null;
 
 				if (isset($POST[$attrib])){					
-
 					$new_value = trim($this->input->post($attrib));
-
 				}
 				else if(in_array($attrib, array_keys($dataSource->harvesterParams)))
 				{
 					$new_value = $dataSource->harvesterParams[$attrib];	
 				}
 				else if(in_array($attrib, $dataSource->primaryRelationship)){
-					$new_value = '';				
-				}	
-				if($this->input->post('save_relationships')=='false')
+					$new_value = '';		
+				}
+
+
+
+				if($new_value=='true'){$new_value=DB_TRUE;}
+				if($new_value=='false'){$new_value=DB_FALSE;} 
+
+				// If primary relationships are disabled, unset all the relationship settings
+				if($this->input->post('create_primary_relationships')=='false')
 				{
 					switch($attrib){
 						case 'class_1':
@@ -1024,15 +1030,19 @@ public function getContributorGroupsEdit()
 
 			*/
 
-				if($new_value=='true') $new_value=DB_TRUE;
-				if($new_value=='false'){$new_value=DB_FALSE;} 
-
 				//echo $attrib." is the attribute";
 
 				if($new_value != $dataSource->{$attrib} && in_array($attrib, array_keys($dataSource->harvesterParams)))
 				{
 				   $resetHarvest = true;
 				} 
+
+
+				if($new_value != $dataSource->{$attrib} && in_array($attrib, $dataSource->primaryRelationship))
+				{
+				   $resetPrimaryRelationships = true;
+				} 
+				
 				
 				//we need to check if we have turned it on or off and then change record statuses accordingly
 				if($new_value == 'f' && $attrib == 'qa_flag' && $new_value != $dataSource->{$attrib})
@@ -1117,6 +1127,11 @@ public function getContributorGroupsEdit()
 			if($resetHarvest)
 			{
 				$dataSource->requestNewHarvest();
+			}
+
+			if($resetPrimaryRelationships)
+			{
+				$dataSource->reindexAllRecords();
 			}
 		}
 		//$jsonData['attributes'] = $dataSource->attributes();
