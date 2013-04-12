@@ -733,7 +733,7 @@ function bindSortables_old(){
 
 function update(ids, attributes){
     processing = true;
-    $(".qtip").qtip("api").hide();
+    // $(".qtip").qtip("api").hide();
     if(select_all){
         ids = select_all;
         url = base_url+'registry_object/update/all';
@@ -768,7 +768,7 @@ function update(ids, attributes){
 
 function delete_ro(ids, selectAll){
     var data_source_id = $('#data_source_id').val();
-    $(".qtip").qtip("api").hide();
+    // $(".qtip").qtip("api").hide();
     $.ajax({
         url:base_url+'registry_object/delete/', 
         type: 'POST',
