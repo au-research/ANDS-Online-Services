@@ -46,6 +46,7 @@ class Home extends MX_Controller {
 		$this->solr->setOpt('rows','0');
 		$this->solr->setFacetOpt('field', 'class');
 		$this->solr->setFacetOpt('field', 'group');
+		$this->solr->setFacetOpt('sort', 'group asc');
 		$this->solr->executeSearch();
 
 		//groups
