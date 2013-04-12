@@ -149,6 +149,7 @@ class Search extends MX_Controller {
 			$facet_values = array();
 			$solr_facet_values = $this->solr->getFacetResult($facet);
 			if(count($solr_facet_values)>0){
+				uksort($solr_facet_values, "strnatcasecmp");
 				foreach($solr_facet_values AS $title => $count){
 					if($count>0){
 						$facet_values[] = array(
