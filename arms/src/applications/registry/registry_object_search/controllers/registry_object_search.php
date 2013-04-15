@@ -11,6 +11,17 @@
  */
 class Registry_object_search extends MX_Controller {
 
+
+	function demo()
+	{
+		$data['title'] = 'Registry Object search widget';
+		$data['scripts'] = array('rosearch_loader');
+		$data['js_lib'] = array('core', 'rosearch_widget', 'prettyprint');
+
+		$this->load->view("demo", $data);
+	}
+
+
 	/**
 	 * @var The only (HTTP Request) parameters we're going to be interested in
 	 * for the main `search` function.
