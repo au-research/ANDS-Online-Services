@@ -844,7 +844,8 @@ public function getContributorGroupsEdit()
 		$dataSource = $this->ds->getByID($id);
 		$jsonData['data_source_id'] = $id;
 		$jsonData['harvest_id'] = $harvest_id;
-		$jsonData['log'] = $dataSource->cancelHarvestRequest($harvest_id, true);
+		if($dataSource)
+			$jsonData['log'] = $dataSource->cancelHarvestRequest($harvest_id, true);
 		
 
 		echo json_encode($jsonData);
@@ -1150,7 +1151,7 @@ public function getContributorGroupsEdit()
 			else 
 			{
 				$dataSource = $this->ds->getByID($id);
-				$dataSource->requestHarvest();
+				$dataSource->requestHarvest('','','','','','','','','','',false,true);
 				$jsonData['status'] = "OK";
 			}
 		}

@@ -1131,14 +1131,19 @@
 							<div class="controls">
 								<select data-placeholder="Choose a Harvest Frequency" tabindex="1" class="chzn-select input-xlarge" for="harvest_frequency">
 									<option value=""></option>
+									<option value="">once only</option>
 									<option value="hourly">hourly</option>
 									<option value="daily">daily</option>
 									<option value="weekly">weekly</option>
 									<option value="fortnightly">fortnightly</option>
 									<option value="monthly">monthly</option>
+
 								</select>
 								<input type="text" class="input-small hide" name="harvest_frequency" id="harvest_frequency" value="{{harvest_frequency}}">
 							</div>
+						</div>
+						<div class="form-actions">
+							<button class="btn" id="test-harvest" data-loading-text="Testing Harvest..." data_source_id="{{data_source_id}}">Test Harvest</button>
 						</div>
 					</fieldset>
 				</div>
@@ -1146,7 +1151,7 @@
 
 			<div class="form-actions">
 				<button class="btn btn-primary" id="save-edit-form" data-loading-text="Saving..." data_source_id="{{data_source_id}}">Save</button>
-				<button class="btn" id="test-harvest" data-loading-text="Testing Harvest..." data_source_id="{{data_source_id}}">Test Harvest</button>
+				
 			</div>
 			<div class="modal hide" id="test_harvest_activity_log">
 			  <div class="modal-header">

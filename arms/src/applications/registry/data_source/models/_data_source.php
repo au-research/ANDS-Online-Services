@@ -49,7 +49,7 @@ class _data_source {
 
 	public $stockAttributes = array('title'=>'','record_owner'=>'','contact_name'=>' ', 'contact_email'=>' ', 'provider_type'=>RIFCS_SCHEME,'notes'=>'');
 	public $extendedAttributes = array('allow_reverse_internal_links'=>true,'allow_reverse_external_links'=>true,'manual_publish'=>false,'qa_flag'=>true,'create_primary_relationships'=>false,'assessment_notify_email_addr'=>'','created'=>'','updated'=>'');
-	public $harvesterParams = array('provider_type'=>'RIFCS','uri'=>'http://','harvest_method'=>'DIRECT','harvest_date'=>'','oai_set'=>'','advanced_harvest_mode'=>'STANDARD','harvest_frequency'=>'daily');
+	public $harvesterParams = array('provider_type'=>'RIFCS','uri'=>'http://','harvest_method'=>'DIRECT','harvest_date'=>'','oai_set'=>'','advanced_harvest_mode'=>'STANDARD','harvest_frequency'=>'');
 	public $primaryRelationship = array('class_1','class_2','primary_key_1','primary_key_2','collection_rel_1','collection_rel_2','activity_rel_1','activity_rel_2','party_rel_1','party_rel_2','service_rel_1','service_rel_2');
 	public $institutionPages = array('institution_pages');
 	
@@ -710,7 +710,7 @@ class _data_source {
 
 	
 	function requestHarvest($created = '', $updated = '', $dataSourceURI = '', $providerType = '', $OAISet = '', $harvestMethod = '', $harvestDate = '', 			
-		$harvestFrequency = '', $advancedHarvestMode = '', $nextHarvest = '', $testOnly = false)
+		$harvestFrequency = '', $advancedHarvestMode = '', $nextHarvest = '', $testOnly = false, $immeadiate=false)
 	{
 		$dataSource = $this->id;
 		$responseTargetURI = base_url('data_source/putharvestData');
@@ -767,7 +767,16 @@ class _data_source {
 			$harvestRequest .= '&set='.urlencode($OAISet);
 		}
 		$harvestRequest .= '&date='.urlencode($harvestDate);
-		$harvestRequest .= '&frequency='.urlencode($harvestFrequency);
+
+		if($immeadiate)
+		{
+			$harvestRequest .= '&frequency=';
+		}
+		else
+		{
+			$harvestRequest .= '&frequency='.urlencode($harvestFrequency);
+		}
+
 		$harvestRequest .= '&mode='.urlencode($mode);
 		$harvestRequest .= '&ahm='.urlencode($advancedHarvestMode);
 		
