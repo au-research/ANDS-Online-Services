@@ -1,12 +1,12 @@
 <?php
 /**
  * Core Template File (footer)
- * 
- * 
+ *
+ *
  * @author Minh Duc Nguyen <minh.nguyen@ands.org.au>
  * @see ands/
  * @package ands/
- * 
+ *
  */
 ?>
 <div id="page-footer" class="clearfix">&nbsp;
@@ -20,7 +20,7 @@
     <div id="error-template" class="hide">
         <div class="alert alert-error">{{{.}}}</div>
     </div>
-  
+
     <!-- The javascripts Libraries
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
@@ -32,7 +32,7 @@
         var editor = '';
     </script>
     <?php foreach($js_lib as $lib):?>
-    	
+
         <?php if($lib=='core'):?>
             <script src="<?php echo base_url();?>assets/lib/jquery-1.7.2.min.js"></script>
             <script src="<?php echo base_url();?>assets/lib/less-1.3.0.min.js" type="text/javascript"></script>
@@ -48,10 +48,10 @@
             <script src="<?php echo base_url();?>assets/lib/jquery.ba-hashchange.js" type="text/javascript"></script>
             <script src="<?php echo base_url();?>assets/lib/bootstrap_toggle_button/jquery.toggle.buttons.js" type="text/javascript"></script>
             <script src="<?php echo base_url();?>assets/lib/qtip2/jquery.qtip.min.js" type="text/javascript"></script>
-            
-      
+
+
         <?php elseif($lib=='graph'):?>
-        
+
             <!--[if lt IE 9]><script language="javascript" type="text/javascript" src="excanvas.js"></script><![endif]-->
             <script language="javascript" type="text/javascript" src="<?php echo base_url();?>assets/lib/jqplot/jquery.jqplot.min.js"></script>
             <script language="javascript" type="text/javascript" src="<?php echo base_url();?>assets/lib/jqplot/plugins/jqplot.dateAxisRenderer.min.js"></script>
@@ -59,7 +59,7 @@
             <script type="text/javascript" src="<?php echo base_url();?>assets/lib/jqplot/plugins/jqplot.cursor.min.js"></script>
             <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/lib/jqplot/jquery.jqplot.css" />
 
-            
+
         <?php elseif($lib=='googleapi'):?>
             <script type='text/javascript' src='https://www.google.com/jsapi'></script>
             <script type="text/javascript">
@@ -76,23 +76,24 @@
         <?php elseif($lib=='datepicker'):?>
             <script type="text/javascript" src="<?php echo base_url();?>assets/lib/bootstrap_datepicker/js/bootstrap-datepicker.js"></script>
             <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/lib/bootstrap_datepicker/css/datepicker.css" />
-        
+
         <?php elseif($lib=='prettyprint'):?>
             <script type="text/javascript" src="<?php echo base_url();?>assets/lib/prettyprint/pretty.js"></script>
             <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/lib/prettyprint/pretty.css" />
 
         <?php elseif($lib=='dataTables'):?>
             <script type="text/javascript" src="<?php echo base_url();?>assets/lib/dataTable/js/jquery.dataTables.js"></script>
-        
+
         <?php elseif($lib=='abs_sdmx_querytool'):?>
             <script type="text/javascript" src="<?php echo base_url();?>assets/js/abs_sdmx_querytool.js"></script>
-            
+
         <?php elseif($lib=='context_menu'):?>
             <script src="<?php echo base_url();?>assets/lib/bootstrap-contextmenu.js" type="text/javascript"></script>
 
         <?php elseif($lib=='vocab_widget'):?>
+            <link href="<?php echo base_url();?>assets/vocab_widget/css/vocab_widget.css" rel="stylesheet" type="text/css">
             <script src="<?php echo base_url();?>assets/vocab_widget/js/vocab_widget.js" type="text/javascript"></script>
-        
+
         <?php elseif($lib=='location_capture_widget'):?>
             <link href="<?php echo base_url();?>assets/location_capture_widget/css/location_capture_widget.css" rel="stylesheet" type="text/css">
             <script src="<?php echo base_url();?>assets/location_capture_widget/js/location_capture_widget.js" type="text/javascript"></script>
@@ -103,14 +104,14 @@
 
         <?php elseif($lib=='google_map'):?>
             <script src="http://maps.googleapis.com/maps/api/js?libraries=drawing&amp;sensor=false" type="text/javascript"></script>
-        
+
         <?php endif; ?>
 
     <?php endforeach;?>
 
- 
+
 	<!-- ARMS scripts -->
-    
+
 	<script src="<?php echo base_url();?>assets/js/scripts.js"></script>
 
 
@@ -118,12 +119,12 @@
     <?php if (isset($scripts)): foreach($scripts as $script):?>
         <script src="<?php echo asset_url('js/' . $script);?>.js"></script>
     <?php endforeach; endif; ?>
-    
+
     <?php if (isset($styles)): foreach($styles as $style):?>
     	<link rel="stylesheet" type="text/css" href="<?php echo asset_url('css/' . $style);?>.css" />
     <?php endforeach; endif; ?>
 
-    
+
 
 	<!-- Bootstrap javascripts, need to be placed after all else -->
     <script src="<?php echo base_url();?>assets/lib/twitter_bootstrap/js/bootstrap.js"></script>
