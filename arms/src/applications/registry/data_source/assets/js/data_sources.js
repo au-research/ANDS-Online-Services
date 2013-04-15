@@ -631,12 +631,75 @@ function drawCharts(data_source_id){
 	});
 }
 
+function validatePrimary_1(jsonData, ds_id, errorStr){
+	//we need to check the key exists and is published and is from this ds
+
+	for(var i=0; i<jsonData.length; i++) {
+      	 if (jsonData[i]['name'] == 'primary_key_1') 
+        {        	
+        	var theKey = jsonData[i]['value'];       	
+        }
+    }
+	$.ajax({
+		url:'data_source/get_datasource_object', 
+		type: 'POST',
+		data:	{ 
+			key: theKey, 
+			data_source_id: ds_id
+		}, 
+		dataType: 'json',
+		success: function(data){
+			//console.log(data.status);
+			if(data.message)
+			{
+				errorStr = data.message + " 1. <br />";	
+			}
+		},
+		error: function(data){
+			errorStr = errorStr + "Could not validate the primaty key given";
+		},
+  	async: false
+	});
+	return errorStr;	
+}
+function validatePrimary_2(jsonData, ds_id, errorStr){
+	//we need to check the key exists and is published and is from this ds
+
+	for(var i=0; i<jsonData.length; i++) {
+      	 if (jsonData[i]['name'] == 'primary_key_2') 
+        {        	
+        	var theKey = jsonData[i]['value'];       	
+        }
+    }
+	$.ajax({
+		url:'data_source/get_datasource_object', 
+		type: 'POST',
+		data:	{ 
+			key: theKey, 
+			data_source_id: ds_id
+		}, 
+		dataType: 'json',
+		success: function(data){
+			//console.log(data.status);
+			if(data.message)
+			{
+				errorStr = data.message + " 2. <br />";	
+			}	
+		},
+		error: function(data){
+			errorStr = errorStr + "Could not validate the primaty key given";
+		},
+  	async: false
+	});
+	return errorStr;	
+}
+
 /*
  * Validate the fields and values 
  * @params jsonData
  * @return string
  */
-function validateFields(jsonData){
+function validateFields(jsonData, ds_id){
 
 	var errorStr = '';
 
@@ -645,12 +708,20 @@ function validateFields(jsonData){
 		errorStr = errorStr + "You must provide a class ,registered key and all relationship types for the primary relationship.<br /><br />";
 
 	}
-	
+
+	if(included(jsonData,'create_primary_relationships') && (included(jsonData,'class_1')&&included(jsonData,'primary_key_1')&&included(jsonData,'service_rel_1')&&included(jsonData,'activity_rel_1')&&included(jsonData,'party_rel_1')&&included(jsonData,'collection_rel_1')))
+	{
+		errorStr = errorStr + validatePrimary_1(jsonData, ds_id, errorStr);
+	}
+
 	if(included(jsonData,'class_2') && (!included(jsonData,'primary_key_2')||!included(jsonData,'service_rel_2')||!included(jsonData,'activity_rel_2')||!included(jsonData,'collection_rel_2')||!included(jsonData,'party_rel_2')))
 	{
 		errorStr = errorStr +  "You must provide a registered key and all relationship types for the 2nd primary relationship.<br />";	
 	}
-	
+	if(included(jsonData,'create_primary_relationships') && (included(jsonData,'class_2')&&included(jsonData,'primary_key_2')&&included(jsonData,'service_rel_2')&&included(jsonData,'activity_rel_2')&&included(jsonData,'party_rel_2')&&included(jsonData,'collection_rel_2')))
+	{
+		errorStr = errorStr + validatePrimary_2(jsonData, ds_id, errorStr);
+	}	
 
 	if(!included(jsonData,'title'))
 	{
@@ -1056,12 +1127,13 @@ $('#save-edit-form').live({
 
 
 
-		var validationErrors = validateFields(jsonData);
+		var validationErrors = validateFields(jsonData, ds_id);
 
 		if(validationErrors)
 		{
-				$('#myModal').modal();
-				logErrorOnScreen(validationErrors, $('#myModal .modal-body'));
+			$('#myModal').modal();
+			logErrorOnScreen(validationErrors, $('#myModal .modal-body'));
+				
 		}else{
 			var form = $('#edit-form');
 			var valid = Core_checkValidForm(form);

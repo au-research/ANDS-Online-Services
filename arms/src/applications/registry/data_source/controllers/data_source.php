@@ -1812,7 +1812,37 @@ public function getContributorGroupsEdit()
 		echo $report;
 
 	}
+	/**
+	 * Get published record for this ds ; AJAX data for edit data_source settings primary links
+	 *
+	 * @author Liz Woods 
+	 * @param  [int] 	$data_source_id
+	 * @param  [string] $key
+	 * @return [json]   
+	 */
+	public function get_datasource_object(){
 
+		$data_source_id = $this->input->post('data_source_id');
+		$key = $this->input->post('key');
+
+		//administrative and loading stuffs
+		acl_enforce('REGISTRY_USER');
+		ds_acl_enforce($data_source_id);
+		$jsonData['status'] = "OK";
+		$jsonData['message'] = '';
+		header('Cache-Control: no-cache, must-revalidate');
+		header('Content-type: application/json');
+		$this->load->model('data_source/data_sources', 'ds');
+		$this->load->model('registry_object/registry_objects', 'ro');
+		$data_source = $this->ds->getByID($data_source_id);
+		$registry_object = $this->ro->getPublishedByKey($key);
+		if($registry_object==null||$data_source->id!=$data_source_id)
+			{$jsonData['message'] = "You must provide a published registry object
+key from within this data source for primary relationship";}
+		
+		echo json_encode($jsonData);
+
+	}
 	/**
 	 * @ignore
 	 */
