@@ -41,7 +41,7 @@ function initViewPage()
 
 function drawRegistryIcon(){
     if($('#class_type').length > 0){      
-        var icon = $('<img />').attr('src', base_url+'assets/core/images/icons/'+$('#class_type').text()+'.png').attr('class', 'left_icon icontip').css('margin-top','-2px').height(16);
+        var icon = $('<img />').attr('src', base_url+'assets/core/images/icons/'+$('#class_type').text()+'.png').attr('class', 'left_icon icontip').css('margin-top','-2px').height(16).width(16);
 
             //if there is a title, put the icon beside it
             $('.breadcrumb').append(' ').append(icon);
@@ -243,9 +243,9 @@ function updateLinksDisplay(container, title, suggestor, start, rows)
         for (var link in data.links)
         {
             //data.links[link].title = htmlDecode(data.links[link].title);
-            if (data.links[link].class == "external")
+            if (data.links[link]["class"] == "external")
             {
-                data.links[link].class = null;
+                data.links[link]["class"] = null;
             } 
             data.links[link].display_footer = (suggestor == 'datacite' ? null : 'true');
         }
@@ -396,19 +396,19 @@ function initConnectionGraph()
     			        onRender: function(node, nodeSpan) {
 
                             /* Change the icon in the tree */
-    			        	if (node.data.class=="collection")
+    			        	if (node.data['class']=="collection")
     			        	{
     					    	$(nodeSpan).find("span.dynatree-icon").css("background-position", "-38px -155px");
     					    }
-                            else if (node.data.class=="party")
+                            else if (node.data['class']=="party")
                             {
                                 $(nodeSpan).find("span.dynatree-icon").css("background-position", "-19px -155px");
                             }
-                            else if (node.data.class=="service")
+                            else if (node.data['class']=="service")
                             {
                                 $(nodeSpan).find("span.dynatree-icon").css("background-position", "0px -156px");
                             }
-                            else if (node.data.class=="activity")
+                            else if (node.data['class']=="activity")
                             {
                                 $(nodeSpan).find("span.dynatree-icon").css("background-position", "-57px -155px");
                             }
