@@ -101,12 +101,10 @@ class Relationships_Extension extends ExtensionBase
 	function getRelatedObjects()
 	{
 		$my_connections = array();
-		$this->db->select('r.title, r.registry_object_id as related_id, a.value as related_object_type, rr.*')
+		$this->db->select('r.title, r.registry_object_id as related_id, r.class as class, rr.*')
 				 ->from('registry_object_relationships rr')
 				 ->join('registry_objects r','rr.related_object_key = r.key','left')
-				 ->join('registry_object_attributes a','a.registry_object_id = r.registry_object_id')
 				 ->where('rr.registry_object_id',(string)$this->ro->id)
-				 ->where('a.attribute','type')
 				 ->where('r.status','PUBLISHED');
 		$query = $this->db->get();
 		foreach ($query->result_array() AS $row)

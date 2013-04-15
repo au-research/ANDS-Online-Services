@@ -45,7 +45,7 @@
 					    <input type="checkbox"> I agree to the Web Services Terms of Use
 					  </label>
 					  -->
-					  <input type="submit" name="submit" class="btn">Register my API key</button>
+					  <input type="submit" name="submit" class="btn" value="Register my API key" />
 					</form>
 					
 			    </div>
