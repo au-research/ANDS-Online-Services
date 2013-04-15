@@ -273,7 +273,7 @@ function initSearchPage(){
 			delete searchData['spatial'];
 			if(searchBox!=null){
 				searchBox.setMap(null);
-				searchBox = null;
+				//searchBox = null;
 			}
 		}else{
 			//no map, show map
@@ -477,132 +477,138 @@ function SidebarToggle(controlDiv, map) {
 
 function initMap(){
 
-	var latlng = new google.maps.LatLng(-25.397, 133.644);
-    var myOptions = {
-      zoom: 4,
-      center: latlng,
-      disableDefaultUI: true,
-      panControl: true,
-      zoomControl: true,
-      mapTypeControl: true,
-      scaleControl: true,
-      streetViewControl: false,
-      overviewMapControl: false,
-      mapTypeId: google.maps.MapTypeId.ROADMAP
-    };
 
-    
+	if(searchBox){
+		searchBox.setMap(null);
+		searchBox = null;
+	}
+	if(!map)
+	{
+		var latlng = new google.maps.LatLng(-25.397, 133.644);
+	    var myOptions = {
+	      zoom: 4,
+	      center: latlng,
+	      disableDefaultUI: true,
+	      panControl: true,
+	      zoomControl: true,
+	      mapTypeControl: true,
+	      scaleControl: true,
+	      streetViewControl: false,
+	      overviewMapControl: false,
+	      mapTypeId: google.maps.MapTypeId.ROADMAP
+	    };
 
-    map = new google.maps.Map(document.getElementById("searchmap"),myOptions);
-	
-    var homeControlDiv = document.createElement('div');
-  	var homeControl = new SidebarToggle(homeControlDiv, map);
+	    
 
-  	homeControlDiv.index = 1;
-  	map.controls[google.maps.ControlPosition.TOP_RIGHT].push(homeControlDiv);
+	    map = new google.maps.Map(document.getElementById("searchmap"),myOptions);
+		
+	    var homeControlDiv = document.createElement('div');
+	  	var homeControl = new SidebarToggle(homeControlDiv, map);
 
-	var boxOptions = {
-        content: "boxText"
-        ,alignBottom :true
-        ,disableAutoPan: false
-        ,maxWidth: 0
-        ,pixelOffset: new google.maps.Size(-140, 0)
-        ,zIndex: null
-        ,boxStyle: { 
-          background: "white"
-          ,opacity: 1
-         }
-        ,closeBoxMargin: "10px 2px 2px 2px"
-        ,closeBoxURL: "http://www.google.com/intl/en_us/mapfiles/close.gif"
-        ,infoBoxClearance: new google.maps.Size(1, 1)
-        ,isHidden: false
-        ,pane: "floatPane"
-        ,enableEventPropagation: false
-    };
+	  	homeControlDiv.index = 1;
+	  	map.controls[google.maps.ControlPosition.TOP_RIGHT].push(homeControlDiv);
 
-    infowindow = new InfoBox(boxOptions);
+		var boxOptions = {
+	        content: "boxText"
+	        ,alignBottom :true
+	        ,disableAutoPan: false
+	        ,maxWidth: 0
+	        ,pixelOffset: new google.maps.Size(-140, 0)
+	        ,zIndex: null
+	        ,boxStyle: { 
+	          background: "white"
+	          ,opacity: 1
+	         }
+	        ,closeBoxMargin: "10px 2px 2px 2px"
+	        ,closeBoxURL: "http://www.google.com/intl/en_us/mapfiles/close.gif"
+	        ,infoBoxClearance: new google.maps.Size(1, 1)
+	        ,isHidden: false
+	        ,pane: "floatPane"
+	        ,enableEventPropagation: false
+	    };
 
-    pushPin = new google.maps.MarkerImage('http://maps.google.com/intl/en_us/mapfiles/ms/micons/blue.png',
-					      new google.maps.Size(32,32),
-					      new google.maps.Point(0,0),
-					      new google.maps.Point(16,32)
-					     );
+	    infowindow = new InfoBox(boxOptions);
 
-    var drawingManager = new google.maps.drawing.DrawingManager({
-        drawingMode: google.maps.drawing.OverlayType.RECTANGLE,
-        drawingControl: true,
-        drawingControlOptions: {
-          position: google.maps.ControlPosition.TOP_CENTER,
-          drawingModes: [
-           // google.maps.drawing.OverlayType.MARKER,
-           // google.maps.drawing.OverlayType.CIRCLE,
-            google.maps.drawing.OverlayType.RECTANGLE
-          ],
-        },
-        rectangleOptions:{
-        	fillColor: '#FF0000'
-        }
-      });
-      drawingManager.setMap(map);
-      drawingManager.setDrawingMode(null);
-      rectangleOptions = drawingManager.get('rectangleOptions');
-      rectangleOptions.fillColor= '#FF0000';
-      rectangleOptions.strokeColor= "#FF0000";
-      rectangleOptions.fillOpacity= 0.1;
-      rectangleOptions.strokeOpacity= 0.8;
-      rectangleOptions.strokeWeight= 2;
-      rectangleOptions.clickable= false;
-      // rectangleOptions.editable= true;
-      rectangleOptions.zIndex= 1;     
-      
-      drawingManager.set('rectangleOptions', rectangleOptions);
-     google.maps.event.addListener(map, 'click', function(e) {
-     	if(infowindow)
-     	{
-     		infowindow.close();
- 		}
- 	});
-     google.maps.event.addListener(map, 'zoom_changed', function(e) {
-     	if(infowindow)
-     	{
-     		infowindow.close();
- 		}
- 	});
-     google.maps.event.addListener(drawingManager, 'overlaycomplete', function(e) {
-         if (e.type == google.maps.drawing.OverlayType.RECTANGLE) {
-          // Switch back to non-drawing mode after drawing a shape.
-        if(searchBox != null)
-        {
-        	searchBox.setMap(null);
-        }
-        drawingManager.setDrawingMode(null);
-        var geoCodeRectangle = e.overlay;
-        searchBox = geoCodeRectangle;
-        var bnds = geoCodeRectangle.getBounds();
-        var n = bnds.getNorthEast().lat().toFixed(6);
-    	var e = bnds.getNorthEast().lng().toFixed(6);
-    	var s = bnds.getSouthWest().lat().toFixed(6);
-    	var w = bnds.getSouthWest().lng().toFixed(6);
-        searchData['spatial'] = w + ' ' + s + ' ' + e + ' ' + n;
-        changeHashTo(formatSearch());
-        }
+	    pushPin = new google.maps.MarkerImage('http://maps.google.com/intl/en_us/mapfiles/ms/micons/blue.png',
+						      new google.maps.Size(32,32),
+						      new google.maps.Point(0,0),
+						      new google.maps.Point(16,32)
+						     );
 
-       });
+	    var drawingManager = new google.maps.drawing.DrawingManager({
+	        drawingMode: google.maps.drawing.OverlayType.RECTANGLE,
+	        drawingControl: true,
+	        drawingControlOptions: {
+	          position: google.maps.ControlPosition.TOP_CENTER,
+	          drawingModes: [
+	           // google.maps.drawing.OverlayType.MARKER,
+	           // google.maps.drawing.OverlayType.CIRCLE,
+	            google.maps.drawing.OverlayType.RECTANGLE
+	          ],
+	        },
+	        rectangleOptions:{
+	        	fillColor: '#FF0000'
+	        }
+	      });
+	      drawingManager.setMap(map);
+	      drawingManager.setDrawingMode(null);
+	      rectangleOptions = drawingManager.get('rectangleOptions');
+	      rectangleOptions.fillColor= '#FF0000';
+	      rectangleOptions.strokeColor= "#FF0000";
+	      rectangleOptions.fillOpacity= 0.1;
+	      rectangleOptions.strokeOpacity= 0.8;
+	      rectangleOptions.strokeWeight= 2;
+	      rectangleOptions.clickable= false;
+	      // rectangleOptions.editable= true;
+	      rectangleOptions.zIndex= 1;     
+	      
+	      drawingManager.set('rectangleOptions', rectangleOptions);
+	     google.maps.event.addListener(map, 'click', function(e) {
+	     	if(infowindow)
+	     	{
+	     		infowindow.close();
+	 		}
+	 	});
+	     google.maps.event.addListener(map, 'zoom_changed', function(e) {
+	     	if(infowindow)
+	     	{
+	     		infowindow.close();
+	 		}
+	 	});
+	     google.maps.event.addListener(drawingManager, 'overlaycomplete', function(e) {
+	         if (e.type == google.maps.drawing.OverlayType.RECTANGLE) {
+	          // Switch back to non-drawing mode after drawing a shape.
+	        drawingManager.setDrawingMode(null);
+	        if(searchBox){
+	        	searchBox.setMap(null);
+	        }
+	        var geoCodeRectangle = e.overlay;
+	        searchBox = geoCodeRectangle;
+	        var bnds = geoCodeRectangle.getBounds();
+	        var n = bnds.getNorthEast().lat().toFixed(6);
+	    	var e = bnds.getNorthEast().lng().toFixed(6);
+	    	var s = bnds.getSouthWest().lat().toFixed(6);
+	    	var w = bnds.getSouthWest().lng().toFixed(6);
+	    	searchBox.setMap(map);
+	        searchData['spatial'] = w + ' ' + s + ' ' + e + ' ' + n;
+	        changeHashTo(formatSearch());
+	        }
 
-	var styles = [[{
-	    url: base_url+'assets/search/img/pin.png',
-	    width: 80, height: 54,
-	    anchor: [23, 23],
-	    textColor: 'black',
-	    textSize: '10'
-	  }]];
+	       });
 
-	markerClusterer = new MarkerClusterer(map, null, { maxZoom: 12, gridSize: 50, styles: styles[0]});
+		var styles = [[{
+		    url: base_url+'assets/search/img/pin.png',
+		    width: 80, height: 54,
+		    anchor: [23, 23],
+		    textColor: 'black',
+		    textSize: '10'
+		  }]];
 
-     //markerClusterer = new  MarkerClusterer(map, null, {zoomOnClick:false});
-     window.setTimeout(function(){
-     	map.setCenter(new google.maps.LatLng(-25.397, 133.644)); 
-     }, 200);
+		markerClusterer = new MarkerClusterer(map, null, { maxZoom: 12, gridSize: 50, styles: styles[0]});
+	    window.setTimeout(function(){
+	    	map.setCenter(new google.maps.LatLng(-25.397, 133.644)); 
+	    }, 200);
+	}
 }
 
 
@@ -775,9 +781,11 @@ function resetZoom(){
 	google.maps.event.trigger(map, 'resize');
 	if(searchBox)
 	{
-		map.setCenter(searchBox.getBounds().getCenter());
+		//map.setCenter(searchBox.getBounds().getCenter());
+		searchBox.setMap(map);
+		log(searchBox);
 		//log("if searchBox lat:" + searchBox.getBounds().getCenter().lat() + " lng: " + searchBox.getBounds().getCenter().lng());
-		map.fitBounds(searchBox.getBounds());
+		//map.fitBounds(searchBox.getBounds());
 	}
 	else if(searchData['spatial']){
 		//harvester https support test
@@ -801,9 +809,11 @@ function resetZoom(){
 	  	var geoCodeRectangle = new google.maps.Rectangle(rectangleOptions);
 		geoCodeRectangle.setMap(map);
 	  	searchBox = geoCodeRectangle;
-	 	map.setCenter(searchBox.getBounds().getCenter());
+	  	//searchBox.setMap(null);
+	 	//map.setCenter(rBounds.getCenter);
+
 	 	//log("no searchBox: lat:" + searchBox.getBounds().getCenter().lat() + " lng: " + searchBox.getBounds().getCenter().lng());
-		map.fitBounds(searchBox.getBounds());
+		//map.fitBounds(searchBox.getBounds());
 	}
 
 }
