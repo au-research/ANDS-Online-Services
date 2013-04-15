@@ -920,13 +920,13 @@ function load_datasource_edit(data_source_id, active_tab){
 							if(val)
 							{					
 								$('#myModal').modal();
-								data = "Checking the ‘Manually Publish Records’ checkbox will require you to <br />manually publish your approved records via the Manage My Records screen."
+								data = "Enabling the ‘Manually Publish Records’ iption will require you to <br />manually publish your approved records via the Manage My Records screen."
 								data2 = "<br /><a href='#' class='btn' data-dismiss='modal'>OK</a>";
 								$('#myModal .modal-body').html("<br/><pre>" + data + "</pre> " + data2);
 							}else{
 								
 								$('#myModal').modal();
-								data = "Unchecking the ‘Manually Publish Records’ checkbox <br />will cause your approved records to be published automatically. <br/>This means your records will be publically visible in <br />Research Data Australia immediately after being approved.";
+								data = "Disabling the ‘Manually Publish Records’ option <br />will cause your approved records to be published automatically. <br/>This means your records will be publically visible in <br />Research Data Australia immediately after being approved.";
 								data2 = "<br /><a href='#' class='btn' data-dismiss='modal'>OK</a>";
 								$('#myModal .modal-body').html("<br/><pre>" + data + "</pre> " + data2);
 							}
@@ -950,7 +950,7 @@ function load_datasource_edit(data_source_id, active_tab){
 								if($('#qa_flag_set').html()=="no")
 								{
 								$('#myModal').modal();
-								data = "Checking the ‘Quality Assessment Required’ checkbox will <br/>send any records entered into the ANDS registry from this data source <br />through the Quality Assessment workflow."
+								data = "Enabling the ‘Quality Assessment Required’ option will <br/>send any records entered into the ANDS registry from this data source <br />through the Quality Assessment workflow."
 								data2 = "<br /><a href='#' class='btn' data-dismiss='modal'>OK</a>";
 								$('#myModal .modal-body').html("<br/><pre>" + data + "</pre> " + data2);
 								}else{
@@ -989,7 +989,7 @@ function load_datasource_edit(data_source_id, active_tab){
 								var status = $('#check_manual_publish').attr('checked');
 								if(status){pubStat = " approved";}
 								$('#myModal').modal();
-								data = "Unchecking the ‘Quality Assessment Required’ checkbox will cause <br />"+publishStr+"records to be automatically"+pubStat+". <br />It will also prevent any future records from being sent through <br />the Quality Assessment workflow.";
+								data = "Disabling the ‘Quality Assessment Required’ option will cause <br />"+publishStr+"records to be automatically"+pubStat+". <br />It will also prevent any future records from being sent through <br />the Quality Assessment workflow.";
 								data2 = "<br /><a href='#' class='btn' data-dismiss='modal'>OK</a> <a href='#' class='btn cancel_qa'  data-dismiss='modal'>Cancel</a>";
 								$('#myModal .modal-body').html("<br/><pre>" + data + "</pre> " + data2);
 							}							
