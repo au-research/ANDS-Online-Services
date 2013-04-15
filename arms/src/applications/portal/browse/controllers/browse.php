@@ -50,7 +50,8 @@ class Browse extends MX_Controller {
 				'title'=>$d->{'list_title'},
 				'class'=>$d->{'class'},
 				'description'=>$d->{'description'},
-				'url'=> base_url($d->{'slug'})
+				'url'=> base_url($d->{'slug'}),
+				'display_footer' => true
 			);
 			array_push($items, $item);
 		}
