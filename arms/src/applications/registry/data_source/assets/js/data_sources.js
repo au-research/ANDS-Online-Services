@@ -920,7 +920,7 @@ function load_datasource_edit(data_source_id, active_tab){
 							if(val)
 							{					
 								$('#myModal').modal();
-								data = "Enabling the ‘Manually Publish Records’ iption will require you to <br />manually publish your approved records via the Manage My Records screen."
+								data = "Enabling the ‘Manually Publish Records’ option will require you to <br />manually publish your approved records via the Manage My Records screen."
 								data2 = "<br /><a href='#' class='btn' data-dismiss='modal'>OK</a>";
 								$('#myModal .modal-body').html("<br/><pre>" + data + "</pre> " + data2);
 							}else{
