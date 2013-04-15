@@ -61,6 +61,7 @@ class Registry_fetch extends CI_Model
 
 		$contents = json_decode(@file_get_contents($url), true);
 
+
 		if (isset($contents['data']))
 		{
 			return $contents;
@@ -79,6 +80,10 @@ class Registry_fetch extends CI_Model
 		{
 			if($contents['message'])
 			{
+				if($contents['message']=='404')
+				{
+					throw new PageNotValidException($contents['message']);
+				}
 				throw new Exception("Error whilst fetching registry object: " . $contents['message']);
 			}
 			else
@@ -98,6 +103,10 @@ class Registry_fetch extends CI_Model
 		}
 		else
 		{
+			if($contents['message']=='404')
+			{
+				throw new PageNotValidException($contents['message']);
+			}
 			throw new ErrorException("Error whilst fetching registry object: " . $contents['message']);
 		}
 	}
@@ -262,5 +271,5 @@ class Registry_fetch extends CI_Model
 	}
 
 }
-
+class PageNotValidException extends Exception {}
 class SlugNoLongerValidException extends Exception {}

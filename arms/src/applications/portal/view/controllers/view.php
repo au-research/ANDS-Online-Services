@@ -32,11 +32,26 @@ class View extends MX_Controller {
 				$this->load->view('soft404', array('previously_valid_title'=>$e->getMessage()));
 				return;
 			}
+			catch (PageNotValidException $e)
+			{			
+				header("HTTP/1.1 404 Not Found");
+				$this->load->view('soft404', array('message'=>$e->getMessage()));
+				return;
+			}			
 		}
 		// Draft records are always referenced by ID
 		else if ($this->input->get('id'))
 		{
-			$extRif = $this->registry->fetchExtRifByID($this->input->get('id'));
+			try
+			{
+				$extRif = $this->registry->fetchExtRifByID($this->input->get('id'));
+			}
+			catch (PageNotValidException $e)
+			{			
+				header("HTTP/1.1 404 Not Found");
+				$this->load->view('soft404', array('message'=>$e->getMessage()));
+				return;
+			}						
 		}
 
 		// Check we actually got some data back (would probably have an exception before this)

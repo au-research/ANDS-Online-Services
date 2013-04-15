@@ -123,8 +123,10 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 					return;
 				}
 			}
-
-			throw new Exception("No data could be selected for the specified URL/ID");
+			$contents = array('message'=>'404');
+			echo json_encode($contents);
+			return;
+			//throw new Exception("No data could be selected for the specified URL/ID");
 		}
 	}
 
