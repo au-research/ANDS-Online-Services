@@ -30,16 +30,16 @@
 					?>
 
 					<div class="middle">
-						<form action="#" method="post" class="form-vertical password-change-form" autocomplete = "off">
+						<form action="#" method="post" class="form-vertical password-change-form" autocomplete="off">
 							<div class="control-group">
 								<label class="control-label">New Password:</label>
 								<div class="controls">
-									<input type="password" name="password" required />
+									<input type="password" name="password" required autocomplete="off"  />
 								</div>
 							</div>
 							<div class="control-group">
 								<label class="control-label" name="title">Confirm New Password:</label>
-								<div class="controls"><input required type="password" name="password_confirm" /></div>
+								<div class="controls"><input required type="password" name="password_confirm" autocomplete="off" /></div>
 							</div>
 							<input type="submit" class="btn btn-primary" data-loading-text="Updating..." value="Update Password" />
 						</form>
