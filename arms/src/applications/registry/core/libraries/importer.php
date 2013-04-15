@@ -676,24 +676,19 @@ class Importer {
 
 	private function _getSimpleXMLFromString($xml)
 	{
-		try
-		{
-			$xml = simplexml_load_string($xml);
+		libxml_use_internal_errors(true);
+		$xml = simplexml_load_string($xml);
 
-			if ($xml === false)
-			{
-				$exception_message = "Could not parse Registry Object XML" . NL;
-				foreach(libxml_get_errors() as $error) {
-	        		$exception_message .= "\t" . $error->message;
-				}
-				throw new Exception($exception_message);	
-			}
-			return $xml;
-		}
-		catch (Exception $e)
+		if ($xml === false)
 		{
-			throw new Exception("Could not read any valid XML from input (unable to parse XML). Please check your data provider. ");
+			$exception_message = "Could not parse Registry Object XML" . NL;
+			foreach(libxml_get_errors() as $error) {
+        		$exception_message .= "    " . $error->message;
+			}
+			libxml_use_internal_errors(false);
+			throw new Exception($exception_message);	
 		}
+		return $xml;
 	}
 
 
