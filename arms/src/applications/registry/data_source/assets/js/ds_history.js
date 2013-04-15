@@ -38,7 +38,7 @@ $(function(){
 			$('div[name=resultScreen] #myModal').html('');
 			/* fire off the ajax request */
 			$.ajax({
-				url: base_url + 'data_source/reinstateRecordforDataSource', 	//?XDEBUG_TRACE=1', //XDEBUG_PROFILE=1&
+				url: base_url + 'data_source/reinstateRecordforDataSource', 	
 				type: 'POST',
 				data:	{ 
 					deleted_registry_object_id: recordKey,
@@ -51,7 +51,7 @@ $(function(){
 								output = Mustache.render($('#import-screen-success-report-template').html(), data);
 								$('#myModal .modal-body').html(output);
 								deleteEntry(recordKey);
-								button.hide();
+								$('.undelete_record').hide();
 							}
 							else
 							{
