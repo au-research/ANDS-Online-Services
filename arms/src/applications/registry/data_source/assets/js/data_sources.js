@@ -1083,6 +1083,14 @@ $('.cancel_qa').live({
 	}
 });
 
+$('#cancel-edit-form').live({
+	click: function(e){
+		var ds_id = $(this).attr('data_source_id')
+		changeHashTo('settings/'+ds_id);
+	}
+});
+
+
 $('#save-edit-form').live({
 	click: function(e){
 		e.preventDefault();

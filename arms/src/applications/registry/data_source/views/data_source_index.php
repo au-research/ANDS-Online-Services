@@ -1137,7 +1137,6 @@
 									<option value="weekly">weekly</option>
 									<option value="fortnightly">fortnightly</option>
 									<option value="monthly">monthly</option>
-
 								</select>
 								<input type="text" class="input-small hide" name="harvest_frequency" id="harvest_frequency" value="{{harvest_frequency}}">
 							</div>
@@ -1151,7 +1150,7 @@
 
 			<div class="form-actions">
 				<button class="btn btn-primary" id="save-edit-form" data-loading-text="Saving..." data_source_id="{{data_source_id}}">Save</button>
-				
+				<button class="btn btn-primary" id="cancel-edit-form" data-loading-text="Cancel..." data_source_id="{{data_source_id}}">Cancel</button>				
 			</div>
 			<div class="modal hide" id="test_harvest_activity_log">
 			  <div class="modal-header">

@@ -1484,7 +1484,7 @@ public function getContributorGroupsEdit()
 		{
 		$this->load->model("data_sources","ds");
 		$dataSource = $this->ds->getByHarvestID($harvestId);
-		
+
 
 
 			if (isset($POST['content'])){
@@ -1508,7 +1508,7 @@ public function getContributorGroupsEdit()
 				$logMsgErr = 'An error occurred whilst testing harvester settings';
 			}
 
-
+		
 
 			$logMsg .= ' (harvestID: '.$harvestId.')';
 			$logMsgErr .= ' (harvestID: '.$harvestId.')';
@@ -1530,21 +1530,27 @@ public function getContributorGroupsEdit()
 				$this->load->model('data_source/data_sources', 'ds');
 				$rifcsXml = '';
 				// xxx: this won't work with crosswalk!
-				
-				$xml = simplexml_load_string(utf8_encode(str_replace("&", "&amp;", $data)), "SimpleXMLElement", LIBXML_NOENT);
-
+				try{
+					$xml = simplexml_load_string(utf8_encode(str_replace("&", "&amp;", $data)), "SimpleXMLElement", LIBXML_NOENT);
+				}
+				catch(Exception $e)
+				{
+					$xml = false;
+					//$logMsgErr .= $e->getMessage();
+				}
 				if ($xml === false)
 				{
 					$exception_message = "Could not parse Registry Object XML" . NL;
 					foreach(libxml_get_errors() as $error) {
         				$exception_message .= NL.$error->message;
         			}
-					$log = "Document Load Error: ".$exception_message.NL;
-					$dataSource->append_log($logMsgErr.NL.$log.NL."CRITICAL ERROR: Could not Load XML from URL feed. Check your provider.".NL.$exception_message, HARVEST_ERROR, "harvester","HARVESTER_ERROR");					
+					$logMsgErr .= NL."Document Load Error: ".$exception_message.NL;
+					$dataSource->append_log($logMsgErr."CRITICAL ERROR: Could not Load XML from URL feed. Check your provider.".NL.$exception_message, HARVEST_ERROR, "harvester","HARVESTER_ERROR");					
 				}
 				else
 				{
 					$rifcsXml = $this->importer->getRifcsFromFeed($data);
+					
 					if (strpos($rifcsXml, 'registryObject ') === FALSE)
 					{
 						//$dataSource->append_log("CRITICAL ERROR: Could not extract data from OAI feed. Check your provider.", HARVEST_ERROR, "harvester");
