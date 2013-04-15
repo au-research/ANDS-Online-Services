@@ -36,6 +36,12 @@
 						</a>
 					</p>
 
+					<p>
+						<a href="<?=base_url('administration/nla_pullback');?>" alt="API Log">
+							NLA Party Pullback (Manual Trigger)
+						</a>
+					</p>
+
 			    </div>
 			    
 			</div>

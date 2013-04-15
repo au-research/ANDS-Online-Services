@@ -19,6 +19,41 @@ class Administration extends MX_Controller {
 		$this->load->view('admin_panel', $data);
 	}
 
+	public function triggerNLAHarvest()
+	{
+		echo "Executing pullback script...<i>this may take several minutes (depending on server load)</i>" .BR.BR; ob_flush();flush();
+		echo nl2br(file_get_contents(base_url('maintenance/nlaPullback'))); ob_flush(); flush();
+	}
+
+	public function nla_pullback()
+	{
+		$data['js_lib'] = array('core');
+		$data['scripts'] = array();
+		$data['title'] = 'Registry Administration - NLA Party Pullback';
+		
+		$this->load->config('nla_pullback');
+		$this->load->model('data_source/data_sources', 'ds');
+
+		$ds = $this->ds->getByKey($this->config->item('nlaPartyDataSourceKey'));
+
+		$data['data_source_url'] = base_url('data_source/manage#!/view/' . $ds->id);
+
+
+		$data['pullback_entries'] = array();
+		$this->db->distinct('registry_object_id')->select('roa.registry_object_id, key, title, roa.value AS "created"')
+				->join('registry_object_attributes roa', 'roa.registry_object_id = ro.registry_object_id')
+				->from('registry_objects ro')
+				->where('data_source_id', $ds->id)
+				->where('roa.attribute = "updated"')
+				->order_by('roa.value', 'DESC')
+				->limit(100);
+		$query = $this->db->get();
+		if ($query->num_rows()) { foreach($query->result_array() AS $result) $data['pullback_entries'][] = $result; }
+
+		$this->load->view('nla_pullback', $data);
+	}
+
+
 	public function api_log()
 	{
 		$data['js_lib'] = array('core');
@@ -63,4 +98,9 @@ class Administration extends MX_Controller {
 		$this->load->view('api_keys', $data);
 	}
 
+	public function __construct()
+	{
+		parent::__construct();
+		acl_enforce('REGISTRY_SUPERUSER');
+	}
 }
