@@ -208,7 +208,7 @@ function loadSubjectBrowse(val){
 		if(searchData['group']) sqc += '+group:("'+searchData['group']+'")';
 		if(searchData['type']) sqc += '+type:("'+searchData['type']+'")';
 		sqc += '&defType=edismax';
-		$('#subjectfacet div').vocab_widget({mode:'tree', repository:'anzsrc-for', sqc:sqc})
+		$('#subjectfacet div').vocab_widget({mode:'tree', repository:'anzsrc-for', sqc:sqc, endpoint: window.default_base_url + 'registry/vocab_widget/proxy/'})
 		.on('treeselect.vocab.ands', function(event) {
 			var target = $(event.target).parent();
 			var data = target.data('vocab');
