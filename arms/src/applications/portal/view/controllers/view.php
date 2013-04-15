@@ -214,7 +214,7 @@ class View extends MX_Controller {
 				}
 				catch (ErrorException $e)
 				{
-					$html .= "<div class='ro_preview'><div class='ro_preview_header'>ERROR</div><div class='title'>Registry object (".$currRoID.") could not be located (perhaps it no longer exists!) </div></div>";
+					$html .= "<div class='ro_preview'><div class='ro_preview_header'></div><div class='title'><i>Oops! The record at this location is missing - perhaps it was removed from the registry? (#".$currRoID.")</i> </div></div>";
 				}					
 			}			
 		}
