@@ -18,6 +18,13 @@ function removeXMLDeclaration($xml)
   return preg_replace('/<\?xml(.*)\?>/' , '', $xml);
 }
 
+
+function unWrapRegistryObjects($xml)
+{
+  return preg_replace(array ('/<\?xml(.*)\?>/','/<registryObjects(.*)">/','/<\/registryObjects>/') , '', $xml);
+}
+
+
 function wrapRegistryObjects($xml)
 {
 	

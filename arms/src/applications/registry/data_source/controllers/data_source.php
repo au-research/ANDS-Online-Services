@@ -1683,7 +1683,7 @@ public function getContributorGroupsEdit()
 					$ro = $this->ro->getByID($ro_id);
 					if($ro && (strpos($classtring, $ro->class) !== false) && (strpos($statusstring, $ro->status) !== false))
 					{
-						$rifcs .= $ro->getRif().NL;
+						$rifcs .= unWrapRegistryObjects($ro->getRif()).NL;
 					}
 				}catch (Exception $e){}
 
