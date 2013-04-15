@@ -36,6 +36,21 @@ class Administration extends MX_Controller {
 
 		$ds = $this->ds->getByKey($this->config->item('nlaPartyDataSourceKey'));
 
+		if (!$this->config->item('nlaPartyDataSourceKey'))
+		{
+			echo "Not configured for NLA pullback - check your config options (registry/core/config/nla_pullback.php). Aborting..." .NL;
+			return;
+		}
+
+		if (!$ds)
+		{
+			$ds = $this->ds->create($this->config->item('nlaPartyDataSourceKey'), url_title($this->config->item('nlaPartyDataSourceDefaultTitle')));
+			$ds->setAttribute('title', $this->config->item('nlaPartyDataSourceDefaultTitle'));
+			$ds->setAttribute('record_owner', 'SYSTEM');
+			$ds->save();
+			$ds->updateStats();
+		}
+
 		$data['data_source_url'] = base_url('data_source/manage#!/view/' . $ds->id);
 
 

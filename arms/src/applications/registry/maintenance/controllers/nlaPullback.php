@@ -179,13 +179,23 @@ class nlaPullback extends MX_Controller
 		$this->nlaPartyDataSourceKey = $this->config->item('nlaPartyDataSourceKey'); 
 		$this->nlaServiceURI = $this->config->item('nlaServiceURI');
 
+		if (!$this->nlaPartyDataSourceKey)
+		{
+			echo "Not configured for NLA pullback - check your config options. Aborting..." .NL;
+			return;
+		}
+
 		/* Check the target datasource */
 		$this->_CI->load->model('data_source/data_sources', 'ds');
 		$this->dataSource = $this->_CI->ds->getByKey($this->nlaPartyDataSourceKey);
 		if (!$this->dataSource)
 		{
-			echo "ERROR: Unable to match key for target NLA Pullback data source. Aborting..." .NL;
-			return;
+			$this->dataSource = $this->ds->create($this->nlaPartyDataSourceKey, $this->config->item('nlaPartyDataSourceDefaultTitle'));
+			$this->dataSource->setAttribute('title', $this->config->item('nlaPartyDataSourceDefaultTitle'));
+			$this->dataSource->setAttribute('record_owner', 'SYSTEM');
+			$this->dataSource->save();
+			$this->dataSource->updateStats();
+			echo "ERROR: Unable to match key for target NLA Pullback data source. Creating a new one..." .NL;
 		}
     }
 
