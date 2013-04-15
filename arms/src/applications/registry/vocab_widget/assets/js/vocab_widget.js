@@ -647,6 +647,13 @@
 	    var handler = this;
 	    ev.stopPropagation();
 	    var target = $(ev.target);
+
+	    if (target.is('span'))
+	    {
+		target = target.parent();
+		ev.target = target;
+	    }
+
 	    var itemdata = target.data('vocab');
 
 	    switch(target.data('treestate')) {
@@ -672,7 +679,7 @@
 		break;
 	    }
 
-	    if($(ev.target).is('span')){
+	    if (target.is('li')) {
 	    	target.trigger('treeselect.vocab.ands', ev);
 	    }
 	},
