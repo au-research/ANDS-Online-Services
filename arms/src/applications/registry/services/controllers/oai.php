@@ -310,8 +310,8 @@ class Oai extends MX_Controller
 					$this->output->append_output("\t\t\t<metadata>\n");
 					try
 					{
-					    $this->output->append_output(wrapRegistryObjects($rec->metadata($format,
-											3)));
+					    $this->output->append_output( removeXMLDeclaration(wrapRegistryObjects($rec->metadata($format,
+											3))));
 					}
 					catch (Exception $e) {/*eek... would be good to log these...*/}
 					$this->output->append_output("\t\t\t</metadata>\n");
@@ -399,6 +399,7 @@ class Oai extends MX_Controller
 			$this->load->model('oai/Sets', 'sets');
 			$set = $this->sets->getBySpec($from_set);
 		}
+
 
 		if (!$supplied_format)
 		{

@@ -133,7 +133,6 @@ class Sets extends CI_Model
 		$this->load->model('data_source/Data_sources', 'ds');
 
 		$ds = $this->ds->getBySlug($spec);
-		echo $ds;
 		// Needed to fix returning all records when the datasource doesn't exist - if the datsource is null then must set up a dummy useless set
 		if($ds){
 			$set = $this->_from_ds($ds);
