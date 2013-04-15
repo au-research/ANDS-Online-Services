@@ -43,9 +43,9 @@
 				<?php foreach($report as $id=>$r):?>
 					<div class="widget-box quality_div">
 						<div class="widget-title">
+							<span class="label label-inverse pull-right"><?php echo $r['status'];?></span> <span class="label label-inverse pull-right">Quality Level: <?php echo $r['quality_level']; ?></span>  <span class="label label-inverse pull-right"><?php echo ucfirst($r['class']); ?></span>
 							<h4>
 								<?php echo $r['title'];?>
-								<span class="label label-inverse pull-right"><?php echo $r['status'];?></span> <span class="label label-inverse pull-right">Quality Level: <?php echo $r['quality_level']; ?></span>  <span class="label label-inverse pull-right"><?php echo ucfirst($r['class']); ?></span>
 							</h4>
 						</div>
 						<div class="widget-content print_quality_report quality_report">
