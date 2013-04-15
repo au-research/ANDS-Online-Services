@@ -1,14 +1,11 @@
 $(document).ready(function() {
 
-	$("#anzsrc-vocab").vocab_widget({mode: 'search',cache: false,repository: 'anzsrc-for',target_field: 'label'});
-
-	$("#vocab-tree").vocab_widget({mode:'tree',repository:'anzsrc-for'})
+	$("#vocab-tree").vocab_widget({mode:'tree',repository:'anzsrc-for', endpoint:  window.default_base_url + '/registry/vocab_widget/proxy/'})
 	.on('treeselect.vocab.ands', function(event) {
 		var target = $(event.target);
 		$('.tree_current').removeClass('tree_current');
 		target.addClass('tree_current');
 		var data = target.data('vocab');
-		// alert('You clicked ' + data.label + '\r\n<' + data.about + '>');
 		loadVocabDetail(data.about);
 	});
 });
