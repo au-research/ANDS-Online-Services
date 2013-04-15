@@ -1600,7 +1600,7 @@ public function getContributorGroupsEdit()
 							}
 							catch (Exception $e)
 							{
-								$dataSource->append_log($logMsgErr.NL."CRITICAL ERROR: " . NL . $e->getMessages() . NL . $this->importer->getErrors(), HARVEST_ERROR, "harvester","HARVESTER_ERROR");	
+								$dataSource->append_log($logMsgErr.NL."CRITICAL ERROR: " . NL . $e->getMessage() . NL . $this->importer->getErrors(), HARVEST_ERROR, "harvester","HARVESTER_ERROR");	
 							}
 						}
 						else{
