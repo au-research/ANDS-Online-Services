@@ -7,13 +7,11 @@ class RIFInterface extends FormatHandler
 	
 	function display($payload)
 	{
-		echo "<?xml version=\"1.0\"?>".NL;
-		echo wrapRegistryObjects(implode($payload,"\n"));
+		echo wrapRegistryObjects(implode($payload,NL));
 	}
     
 	function error($message)
 	{
-		echo '<?xml version="1.0" ?>'.NL;
 		echo wrapRegistryObjects('');
 	}
 	

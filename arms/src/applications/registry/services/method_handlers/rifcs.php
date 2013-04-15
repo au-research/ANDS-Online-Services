@@ -47,7 +47,7 @@ class RIFCSMethod extends MethodHandler
 				$registryObject = $CI->ro->getByID($result['id']);
 				if ($registryObject)
 				{
-					$rifcsOutput[] .= "  " . $registryObject->getRif();
+					$rifcsOutput[] .= str_repeat(" ",8) . trim(unWrapRegistryObjects($registryObject->getRif()));
 				}
 			}
 		}
