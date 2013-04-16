@@ -27,7 +27,10 @@ $(function() {
             $('.contextmenu',this).click();
         }
     }).on('dblclick', '.sortable li', function(e){
-        window.location = base_url+'registry_object/view/'+$(this).attr('id');
+        if ($(this).attr('id'))
+        {
+            window.location = base_url+'registry_object/view/'+$(this).attr('id');
+        }
     }).on('click','.sortable li',function(e){
         if(e.metaKey || e.ctrlKey){
             click_ro(this, 'select');
@@ -644,7 +647,7 @@ function bindSortables(){
 
         var ds_id = $('#data_source_id').val();
 
-        $('li', this).draggable({
+        $('li.ro_item', this).draggable({
             cursor: "move",cursorAt:{top:-5,left:-5},scroll:true,
             helper: function(e){
                 var list = $(this).parents('.status_field');
@@ -659,7 +662,7 @@ function bindSortables(){
                 }else{
                     click_ro(e.currentTarget, 'select');
                 }
-                $(ui.helper[0]).html(selected_ids.length + " record" + (selected_ids.length > 1 ? "s" : "") )
+                $(ui.helper[0]).html(selected_ids.length + " record" + (selected_ids.length == 1 ? "" : "s") )
             },
             connectToSortable: target
         });
