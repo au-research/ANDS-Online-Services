@@ -173,6 +173,13 @@
   -moz-border-radius: 4px;
   border-radius: 4px;
 }
+
+.bootstrap-datetimepicker-widget td span.timepicker-tz { width: 100%;float:none; }
+
+.timepicker .timepicker-tz ul.unstyled { max-height: 15em; overflow-y: scroll; }
+
+.timepicker .timepicker-tz ul.unstyled li.alert.alert-small { margin-bottom:5px; padding:5px;}
+
 .bootstrap-datetimepicker-widget td span:hover {
   background: #eeeeee;
 }

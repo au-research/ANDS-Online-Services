@@ -1,14 +1,388 @@
+
+(function($) {
+  /**
+   * This script gives you the zone info key representing your device's time zone setting.
+   *
+   * @name jsTimezoneDetect
+   * @version 1.0.5
+   * @author Jon Nylander
+   * @license MIT License - http://www.opensource.org/licenses/mit-license.php
+   *
+   * For usage and examples, visit:
+   * http://pellepim.bitbucket.org/jstz/
+   *
+   * Copyright (c) Jon Nylander
+   */
+  var jstz = (function () {
+    'use strict';
+    var HEMISPHERE_SOUTH = 's',
+
+    /**
+     * Gets the offset in minutes from UTC for a certain date.
+     * @param {Date} date
+     * @returns {Number}
+     */
+    get_date_offset = function (date) {
+      var offset = -date.getTimezoneOffset();
+      return (offset !== null ? offset : 0);
+    },
+
+    get_date = function (year, month, date) {
+      var d = new Date();
+      if (year !== undefined) {
+        d.setFullYear(year);
+      }
+      d.setMonth(month);
+      d.setDate(date);
+      return d;
+    },
+
+    get_january_offset = function (year) {
+      return get_date_offset(get_date(year, 0 ,2));
+    },
+
+    get_june_offset = function (year) {
+      return get_date_offset(get_date(year, 5, 2));
+    },
+
+    /**
+     * Private method.
+     * Checks whether a given date is in daylight saving time.
+     * If the date supplied is after august, we assume that we're checking
+     * for southern hemisphere DST.
+     * @param {Date} date
+     * @returns {Boolean}
+     */
+    date_is_dst = function (date) {
+      var is_southern = date.getMonth() > 7,
+      base_offset = is_southern ? get_june_offset(date.getFullYear()) :
+        get_january_offset(date.getFullYear()),
+      date_offset = get_date_offset(date),
+      is_west = base_offset < 0,
+      dst_offset = base_offset - date_offset;
+
+      if (!is_west && !is_southern) {
+        return dst_offset < 0;
+      }
+
+      return dst_offset !== 0;
+    },
+
+    /**
+     * This function does some basic calculations to create information about
+     * the user's timezone. It uses REFERENCE_YEAR as a solid year for which
+     * the script has been tested rather than depend on the year set by the
+     * client device.
+     *
+     * Returns a key that can be used to do lookups in jstz.olson.timezones.
+     * eg: "720,1,2".
+     *
+     * @returns {String}
+     */
+
+    lookup_key = function () {
+      var january_offset = get_january_offset(),
+      june_offset = get_june_offset(),
+      diff = january_offset - june_offset;
+
+      if (diff < 0) {
+        return january_offset + ",1";
+      } else if (diff > 0) {
+        return june_offset + ",1," + HEMISPHERE_SOUTH;
+      }
+
+      return january_offset + ",0";
+    },
+
+    /**
+     * Uses get_timezone_info() to formulate a key to use in the olson.timezones dictionary.
+     *
+     * Returns a primitive object on the format:
+     * {'timezone': TimeZone, 'key' : 'the key used to find the TimeZone object'}
+     *
+     * @returns Object
+     */
+    determine = function () {
+      var key = lookup_key();
+      return new jstz.TimeZone(jstz.olson.timezones[key]);
+    },
+
+    offset = function() {
+      return lookup_key();
+    },
+
+    timezones = function() {
+      return jstz.olson.timezones;
+    },
+
+    /**
+     * This object contains information on when daylight savings starts for
+     * different timezones.
+     *
+     * The list is short for a reason. Often we do not have to be very specific
+     * to single out the correct timezone. But when we do, this list comes in
+     * handy.
+     *
+     * Each value is a date denoting when daylight savings starts for that timezone.
+     */
+    dst_start_for = function (tz_name) {
+
+      var ru_pre_dst_change = new Date(2010, 6, 15, 1, 0, 0, 0), // In 2010 Russia had DST, this allows us to detect Russia :)
+      dst_starts = {
+        'America/Denver': new Date(2011, 2, 13, 3, 0, 0, 0),
+        'America/Mazatlan': new Date(2011, 3, 3, 3, 0, 0, 0),
+        'America/Chicago': new Date(2011, 2, 13, 3, 0, 0, 0),
+        'America/Mexico_City': new Date(2011, 3, 3, 3, 0, 0, 0),
+        'America/Asuncion': new Date(2012, 9, 7, 3, 0, 0, 0),
+        'America/Santiago': new Date(2012, 9, 3, 3, 0, 0, 0),
+        'America/Campo_Grande': new Date(2012, 9, 21, 5, 0, 0, 0),
+        'America/Montevideo': new Date(2011, 9, 2, 3, 0, 0, 0),
+        'America/Sao_Paulo': new Date(2011, 9, 16, 5, 0, 0, 0),
+        'America/Los_Angeles': new Date(2011, 2, 13, 8, 0, 0, 0),
+        'America/Santa_Isabel': new Date(2011, 3, 5, 8, 0, 0, 0),
+        'America/Havana': new Date(2012, 2, 10, 2, 0, 0, 0),
+        'America/New_York': new Date(2012, 2, 10, 7, 0, 0, 0),
+        'Europe/Helsinki': new Date(2013, 2, 31, 5, 0, 0, 0),
+        'Pacific/Auckland': new Date(2011, 8, 26, 7, 0, 0, 0),
+        'America/Halifax': new Date(2011, 2, 13, 6, 0, 0, 0),
+        'America/Goose_Bay': new Date(2011, 2, 13, 2, 1, 0, 0),
+        'America/Miquelon': new Date(2011, 2, 13, 5, 0, 0, 0),
+        'America/Godthab': new Date(2011, 2, 27, 1, 0, 0, 0),
+        'Europe/Moscow': ru_pre_dst_change,
+        'Asia/Amman': new Date(2013, 2, 29, 1, 0, 0, 0),
+        'Asia/Beirut': new Date(2013, 2, 31, 2, 0, 0, 0),
+        'Asia/Damascus': new Date(2013, 3, 6, 2, 0, 0, 0),
+        'Asia/Jerusalem': new Date(2013, 2, 29, 5, 0, 0, 0),
+        'Asia/Yekaterinburg': ru_pre_dst_change,
+        'Asia/Omsk': ru_pre_dst_change,
+        'Asia/Krasnoyarsk': ru_pre_dst_change,
+        'Asia/Irkutsk': ru_pre_dst_change,
+        'Asia/Yakutsk': ru_pre_dst_change,
+        'Asia/Vladivostok': ru_pre_dst_change,
+        'Asia/Baku': new Date(2013, 2, 31, 4, 0, 0),
+        'Asia/Yerevan': new Date(2013, 2, 31, 3, 0, 0),
+        'Asia/Kamchatka': ru_pre_dst_change,
+        'Asia/Gaza': new Date(2010, 2, 27, 4, 0, 0),
+        'Africa/Cairo': new Date(2010, 4, 1, 3, 0, 0),
+        'Europe/Minsk': ru_pre_dst_change,
+        'Pacific/Apia': new Date(2010, 10, 1, 1, 0, 0, 0),
+        'Pacific/Fiji': new Date(2010, 11, 1, 0, 0, 0),
+        'Australia/Perth': new Date(2008, 10, 1, 1, 0, 0, 0)
+      };
+
+      return dst_starts[tz_name];
+    };
+
+    return {
+      determine: determine,
+      offset: offset,
+      timezones: timezones,
+      date_is_dst: date_is_dst,
+      dst_start_for: dst_start_for
+    };
+  }());
+
+  /**
+   * Simple object to perform ambiguity check and to return name of time zone.
+   */
+  jstz.TimeZone = function (tz_name) {
+    'use strict';
+    /**
+     * The keys in this object are timezones that we know may be ambiguous after
+     * a preliminary scan through the olson_tz object.
+     *
+     * The array of timezones to compare must be in the order that daylight savings
+     * starts for the regions.
+     */
+    var AMBIGUITIES = {
+      'America/Denver':       ['America/Denver', 'America/Mazatlan'],
+      'America/Chicago':      ['America/Chicago', 'America/Mexico_City'],
+      'America/Santiago':     ['America/Santiago', 'America/Asuncion', 'America/Campo_Grande'],
+      'America/Montevideo':   ['America/Montevideo', 'America/Sao_Paulo'],
+      'Asia/Beirut':          ['Asia/Amman', 'Asia/Jerusalem', 'Asia/Beirut', 'Europe/Helsinki','Asia/Damascus'],
+      'Pacific/Auckland':     ['Pacific/Auckland', 'Pacific/Fiji'],
+      'America/Los_Angeles':  ['America/Los_Angeles', 'America/Santa_Isabel'],
+      'America/New_York':     ['America/Havana', 'America/New_York'],
+      'America/Halifax':      ['America/Goose_Bay', 'America/Halifax'],
+      'America/Godthab':      ['America/Miquelon', 'America/Godthab'],
+      'Asia/Dubai':           ['Europe/Moscow'],
+      'Asia/Dhaka':           ['Asia/Yekaterinburg'],
+      'Asia/Jakarta':         ['Asia/Omsk'],
+      'Asia/Shanghai':        ['Asia/Krasnoyarsk', 'Australia/Perth'],
+      'Asia/Tokyo':           ['Asia/Irkutsk'],
+      'Australia/Brisbane':   ['Asia/Yakutsk'],
+      'Pacific/Noumea':       ['Asia/Vladivostok'],
+      'Pacific/Tarawa':       ['Asia/Kamchatka', 'Pacific/Fiji'],
+      'Pacific/Tongatapu':    ['Pacific/Apia'],
+      'Asia/Baghdad':         ['Europe/Minsk'],
+      'Asia/Baku':            ['Asia/Yerevan','Asia/Baku'],
+      'Africa/Johannesburg':  ['Asia/Gaza', 'Africa/Cairo']
+    },
+
+    timezone_name = tz_name,
+
+    /**
+     * Checks if a timezone has possible ambiguities. I.e timezones that are similar.
+     *
+     * For example, if the preliminary scan determines that we're in America/Denver.
+     * We double check here that we're really there and not in America/Mazatlan.
+     *
+     * This is done by checking known dates for when daylight savings start for different
+     * timezones during 2010 and 2011.
+     */
+    ambiguity_check = function () {
+      var ambiguity_list = AMBIGUITIES[timezone_name],
+      length = ambiguity_list.length,
+      i = 0,
+      tz = ambiguity_list[0];
+
+      for (; i < length; i += 1) {
+        tz = ambiguity_list[i];
+
+        if (jstz.date_is_dst(jstz.dst_start_for(tz))) {
+          timezone_name = tz;
+          return;
+        }
+      }
+    },
+
+    /**
+     * Checks if it is possible that the timezone is ambiguous.
+     */
+    is_ambiguous = function () {
+      return typeof (AMBIGUITIES[timezone_name]) !== 'undefined';
+    };
+
+    if (is_ambiguous()) {
+      ambiguity_check();
+    }
+
+    return {
+      name: function () {
+        return timezone_name;
+      }
+    };
+  };
+
+  jstz.olson = {};
+
+  /*
+   * The keys in this dictionary are comma separated as such:
+   *
+   * First the offset compared to UTC time in minutes.
+   *
+   * Then a flag which is 0 if the timezone does not take daylight savings into account and 1 if it
+   * does.
+   *
+   * Thirdly an optional 's' signifies that the timezone is in the southern hemisphere,
+   * only interesting for timezones with DST.
+   *
+   * The mapped arrays is used for constructing the jstz.TimeZone object from within
+   * jstz.determine_timezone();
+   */
+  jstz.olson.timezones = {
+    '-720,0'   : 'Pacific/Majuro',
+    '-660,0'   : 'Pacific/Pago_Pago',
+    '-600,1'   : 'America/Adak',
+    '-600,0'   : 'Pacific/Honolulu',
+    '-570,0'   : 'Pacific/Marquesas',
+    '-540,0'   : 'Pacific/Gambier',
+    '-540,1'   : 'America/Anchorage',
+    '-480,1'   : 'America/Los_Angeles',
+    '-480,0'   : 'Pacific/Pitcairn',
+    '-420,0'   : 'America/Phoenix',
+    '-420,1'   : 'America/Denver',
+    '-360,0'   : 'America/Guatemala',
+    '-360,1'   : 'America/Chicago',
+    '-360,1,s' : 'Pacific/Easter',
+    '-300,0'   : 'America/Bogota',
+    '-300,1'   : 'America/New_York',
+    '-270,0'   : 'America/Caracas',
+    '-240,1'   : 'America/Halifax',
+    '-240,0'   : 'America/Santo_Domingo',
+    '-240,1,s' : 'America/Santiago',
+    '-210,1'   : 'America/St_Johns',
+    '-180,1'   : 'America/Godthab',
+    '-180,0'   : 'America/Argentina/Buenos_Aires',
+    '-180,1,s' : 'America/Montevideo',
+    '-120,0'   : 'America/Noronha',
+    '-120,1'   : 'America/Noronha',
+    '-60,1'    : 'Atlantic/Azores',
+    '-60,0'    : 'Atlantic/Cape_Verde',
+    '0,0'      : 'UTC',
+    '0,1'      : 'Europe/London',
+    '60,1'     : 'Europe/Berlin',
+    '60,0'     : 'Africa/Lagos',
+    '60,1,s'   : 'Africa/Windhoek',
+    '120,1'    : 'Asia/Beirut',
+    '120,0'    : 'Africa/Johannesburg',
+    '180,0'    : 'Asia/Baghdad',
+    '180,1'    : 'Europe/Moscow',
+    '210,1'    : 'Asia/Tehran',
+    '240,0'    : 'Asia/Dubai',
+    '240,1'    : 'Asia/Baku',
+    '270,0'    : 'Asia/Kabul',
+    '300,1'    : 'Asia/Yekaterinburg',
+    '300,0'    : 'Asia/Karachi',
+    '330,0'    : 'Asia/Kolkata',
+    '345,0'    : 'Asia/Kathmandu',
+    '360,0'    : 'Asia/Dhaka',
+    '360,1'    : 'Asia/Omsk',
+    '390,0'    : 'Asia/Rangoon',
+    '420,1'    : 'Asia/Krasnoyarsk',
+    '420,0'    : 'Asia/Jakarta',
+    '480,0'    : 'Asia/Shanghai',
+    '480,1'    : 'Asia/Irkutsk',
+    '525,0'    : 'Australia/Eucla',
+    '525,1,s'  : 'Australia/Eucla',
+    '540,1'    : 'Asia/Yakutsk',
+    '540,0'    : 'Asia/Tokyo',
+    '570,0'    : 'Australia/Darwin',
+    '570,1,s'  : 'Australia/Adelaide',
+    '600,0'    : 'Australia/Brisbane',
+    '600,1'    : 'Asia/Vladivostok',
+    '600,1,s'  : 'Australia/Sydney',
+    '630,1,s'  : 'Australia/Lord_Howe',
+    '660,1'    : 'Asia/Kamchatka',
+    '660,0'    : 'Pacific/Noumea',
+    '690,0'    : 'Pacific/Norfolk',
+    '720,1,s'  : 'Pacific/Auckland',
+    '720,0'    : 'Pacific/Tarawa',
+    '765,1,s'  : 'Pacific/Chatham',
+    '780,0'    : 'Pacific/Tongatapu',
+    '780,1,s'  : 'Pacific/Apia',
+    '840,0'    : 'Pacific/Kiritimati'
+  };
+
+  // Monkey patching Date to provide iso8601 for non-conforming browsers
+  // c.f. http://stackoverflow.com/a/8563517/664095
+  if (!Date.prototype.toISOString) {
+    Date.prototype.toISOString = function() {
+        function pad(n) { return n < 10 ? '0' + n : n }
+        return this.getUTCFullYear() + '-'
+            + pad(this.getUTCMonth() + 1) + '-'
+            + pad(this.getUTCDate()) + 'T'
+            + pad(this.getUTCHours()) + ':'
+            + pad(this.getUTCMinutes()) + ':'
+            + pad(this.getUTCSeconds()) + 'Z';
+    };
+  }
+
+
 /**
  * @license
  * =========================================================
- * bootstrap-datetimepicker.js 
+ * ands-datetimepicker.js
+ * bootstrap-datetimepicker.js
  * http://www.eyecon.ro/bootstrap-datepicker
  * =========================================================
- * Copyright 2012 Stefan Petre
+ * Copyright 2013 Australian National Data Service (ANDS)
  *
- * Contributions:
+ * (Copyright 2012 Stefan Petre)
+ *
+ * (Contributions:
  *  - Andrew Rowls
- *  - Thiago de Arruda
+ *  - Thiago de Arruda)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,16 +397,13 @@
  * limitations under the License.
  * =========================================================
  */
-
-(function($) {
-
   // Picker object
   var smartPhone = (window.orientation != undefined);
   var DateTimePicker = function(element, options) {
     this.id = dpgId++;
     this.init(element, options);
   };
-  
+
   var dateToDate = function(dt) {
     if (typeof dt === 'string') {
       return new Date(dt);
@@ -41,6 +412,8 @@
   };
 
   DateTimePicker.prototype = {
+    jstz: jstz,
+
     constructor: DateTimePicker,
 
     init: function(element, options) {
@@ -52,6 +425,7 @@
       this.language = options.language in dates ? options.language : 'en'
       this.pickDate = options.pickDate;
       this.pickTime = options.pickTime;
+      this.pickTZ = options.pickTZ;
       this.isInput = this.$element.is('input');
       this.component = false;
       if (this.$element.is('.input-append') || this.$element.is('.input-prepend'))
@@ -60,7 +434,7 @@
       if (!this.format) {
         if (this.isInput) this.format = this.$element.data('format');
         else this.format = this.$element.find('input').data('format');
-        if (!this.format) this.format = 'MM/dd/yyyy';
+        if (!this.format) this.format = 'yyyy/MM/dd';
       }
       this._compileFormat();
       if (this.component) {
@@ -77,7 +451,16 @@
         icon.removeClass(this.timeIcon);
         icon.addClass(this.dateIcon);
       }
-      this.widget = $(getTemplate(this.timeIcon, options.pickDate, options.pickTime, options.pick12HourFormat, options.pickSeconds, options.collapse)).appendTo('body');
+      var templateopts = {
+	timeIcon: this.timeIcon,
+	pickDate: options.pickDate,
+	pickTime: options.pickTime,
+	pick12Hr: options.pick12HourFormat,
+	pickSec: options.pickSeconds,
+	pickTZ: options.pickTZ,
+	collapse: options.collapse,
+	currTZ: {name: this.jstz.determine().name(), offset: this.jstz.offset()}};
+      this.widget = $(getTemplate(templateopts)).appendTo('body');
       this.minViewMode = options.minViewMode||this.$element.data('date-minviewmode')||0;
       if (typeof this.minViewMode === 'string') {
         switch (this.minViewMode) {
@@ -116,6 +499,7 @@
       this.fillHours();
       this.fillMinutes();
       this.fillSeconds();
+      this.fillTZ(jstz.timezones());
       this.update();
       this.showMode();
       this._attachDatePickerEvents();
@@ -206,7 +590,7 @@
       if (!date) this.setValue(null);
       else this.setValue(date.valueOf());
     },
-    
+
     setStartDate: function(date) {
       if (date instanceof Date) {
         this.startDate = date;
@@ -222,7 +606,7 @@
         this.update();
       }
     },
-    
+
     setEndDate: function(date) {
       if (date instanceof Date) {
         this.endDate = date;
@@ -344,14 +728,14 @@
       var startMonth = typeof this.startDate === 'object' ? this.startDate.getUTCMonth() : -1;
       var endYear  = typeof this.endDate === 'object' ? this.endDate.getUTCFullYear() : Infinity;
       var endMonth = typeof this.endDate === 'object' ? this.endDate.getUTCMonth() : 12;
-      
+
       this.widget.find('.datepicker-days').find('.disabled').removeClass('disabled');
       this.widget.find('.datepicker-months').find('.disabled').removeClass('disabled');
       this.widget.find('.datepicker-years').find('.disabled').removeClass('disabled');
-      
+
       this.widget.find('.datepicker-days th:eq(1)').text(
         dates[this.language].months[month] + ' ' + year);
-          
+
       var prevMonth = UTCDate(year, month-1, 28, 0, 0, 0, 0);
       var day = DPGlobal.getDaysInMonth(
         prevMonth.getUTCFullYear(), prevMonth.getUTCMonth());
@@ -363,7 +747,7 @@
       if ((year == endYear && month >= endMonth) || year > endYear) {
         this.widget.find('.datepicker-days th:eq(2)').addClass('disabled');
       }
-      
+
       var nextMonth = new Date(prevMonth.valueOf());
       nextMonth.setUTCDate(nextMonth.getUTCDate() + 42);
       nextMonth = nextMonth.valueOf();
@@ -410,7 +794,7 @@
         this.widget.find('.datepicker-months th:eq(0)').addClass('disabled');
       }
       if (currentYear + 1 > endYear) {
-        this.widget.find('.datepicker-months th:eq(2)').addClass('disabled'); 
+        this.widget.find('.datepicker-months th:eq(2)').addClass('disabled');
       }
       for (var i = 0; i < 12; i++) {
         if ((year == startYear && startMonth > i) || (year < startYear)) {
@@ -504,6 +888,36 @@
         html += '</tr>';
       }
       table.html(html);
+    },
+
+    fillTZ: function(timezones) {
+      var list = this.widget.find(
+	'.timepicker .timepicker-tz ul');
+      list.parent().hide();
+      list.append('<li class="alert alert-small"><small>' +
+		  'UTC offset shown in decimal hours' +
+		  '</small></li>');
+      list.append('<li class="alert alert-small"><small>' +
+		  '<strong>*</strong> = DST timezone (applied as required)' +
+		  '</small></li>');
+      $.each(timezones, function(idx, tz) {
+	var li = $('<li/>');
+	var button = $('<button class="btn btn-block" />');
+	button.data('offset', idx);
+	button.data('tz', tz);
+	var offset = idx.split(',')[0]/60;
+	if (idx.substr(0,1) !== '-') {
+	  offset = "+" + parseFloat(offset).toFixed(1);
+	}
+	if (tz !== "UTC") {
+	  button.html(tz + (idx.split(',')[1] == 1 ? '<strong>*</strong>' : '') + ' <small>(' + offset + ')</small>');
+	}
+	else {
+	  button.html(tz + (idx.split(',')[1] == 1 ? '<strong>*</strong>' : ''));
+	}
+	li.append(button);
+	list.append(li);
+      });
     },
 
     fillTime: function() {
@@ -669,6 +1083,24 @@
         this.widget.find('.timepicker .timepicker-seconds').show();
       },
 
+      showTZ: function() {
+        this.widget.find('.timepicker .timepicker-picker').hide();
+        this.widget.find('.timepicker .timepicker-tz').show();
+      },
+
+      selectTZ: function(e) {
+	var tgt = $(e.target);
+	if (tgt.is('button')) {
+	  var tz = tgt.data('tz');
+	  var offset = tgt.data('offset');
+	  var label = $('span.timepicker-tz');
+	  label.html('<i class="icon-globe"> </i> ' + tz);
+	  $('.timepicker .timepicker-tz').hide();
+	  $('.timepicker-picker').show();
+	  $('.timepicker-picker .timepicker-tz').show();
+	}
+      },
+
       selectHour: function(e) {
         var tgt = $(e.target);
         var value = parseInt(tgt.text(), 10);
@@ -680,7 +1112,7 @@
             if (value === 12) value = 0;
             else value = value % 12;
           }
-        } 
+        }
         this._date.setUTCHours(value);
         this.actions.showPicker.call(this);
       },
@@ -701,6 +1133,9 @@
     },
 
     doAction: function(e) {
+      if ($(e.target).parent().is('button')) {
+	$(e.target).parent().trigger('click');
+      }
       e.stopPropagation();
       e.preventDefault();
       if (!this._date) this._date = UTCDate(1970, 0, 0, 0, 0, 0, 0);
@@ -1036,22 +1471,22 @@
         $(document).off('mousedown.datetimepicker' + this.id);
       }
     },
-    
+
     _isInFixed: function() {
       if (this.$element) {
         var parents = this.$element.parents();
         var inFixed = false;
-        for (var i=0; i<parents.length; i++) { 
-            if ($(parents[i]).css('position') == 'fixed') { 
-                inFixed = true; 
-                break; 
-            }  
+        for (var i=0; i<parents.length; i++) {
+            if ($(parents[i]).css('position') == 'fixed') {
+                inFixed = true;
+                break;
+            }
         };
-        return inFixed;        
+        return inFixed;
       } else {
         return false;
       }
-    }    
+    }
   };
 
   $.fn.datetimepicker = function ( option, val ) {
@@ -1073,6 +1508,7 @@
     pickTime: true,
     pick12HourFormat: false,
     pickSeconds: true,
+    pickTZ: true,
     startDate: -Infinity,
     endDate: Infinity,
     collapse: true
@@ -1124,30 +1560,36 @@
     else return Array(l - s.length + 1).join(c || ' ') + s;
   }
 
-  function getTemplate(timeIcon, pickDate, pickTime, is12Hours, showSeconds, collapse) {
-    if (pickDate && pickTime) {
+  function getTemplate(opts) {
+    if (opts.pickDate && opts.pickTime) {
       return (
         '<div class="bootstrap-datetimepicker-widget dropdown-menu">' +
           '<ul>' +
-            '<li' + (collapse ? ' class="collapse in"' : '') + '>' +
+            '<li' + (opts.collapse ? ' class="collapse in"' : '') + '>' +
               '<div class="datepicker">' +
                 DPGlobal.template +
               '</div>' +
             '</li>' +
-            '<li class="picker-switch accordion-toggle"><a><i class="' + timeIcon + '"></i></a></li>' +
-            '<li' + (collapse ? ' class="collapse"' : '') + '>' +
+            '<li class="picker-switch accordion-toggle"><a><i class="' + opts.timeIcon + '"></i></a></li>' +
+            '<li' + (opts.collapse ? ' class="collapse"' : '') + '>' +
               '<div class="timepicker">' +
-                TPGlobal.getTemplate(is12Hours, showSeconds) +
+                TPGlobal.getTemplate({do12: opts.pick12Hr,
+				      doSec: opts.pickSec,
+				      doTz: opts.pickTZ,
+				      currTz: opts.currTZ}) +
               '</div>' +
             '</li>' +
           '</ul>' +
         '</div>'
       );
-    } else if (pickTime) {
+    } else if (opts.pickTime) {
       return (
         '<div class="bootstrap-datetimepicker-widget dropdown-menu">' +
           '<div class="timepicker">' +
-            TPGlobal.getTemplate(is12Hours, showSeconds) +
+            TPGlobal.getTemplate({do12: opts.pick12Hr,
+				  doSec: opts.pickSec,
+				  doTz: opts.pickTZ,
+				  currTz: opts.currTZ}) +
           '</div>' +
         '</div>'
       );
@@ -1189,7 +1631,7 @@
     getDaysInMonth: function (year, month) {
       return [31, (DPGlobal.isLeapYear(year) ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month]
     },
-    headTemplate: 
+    headTemplate:
       '<thead>' +
         '<tr>' +
           '<th class="prev">&lsaquo;</th>' +
@@ -1221,31 +1663,44 @@
   var TPGlobal = {
     hourTemplate: '<span data-action="showHours" data-time-component="hours" class="timepicker-hour"></span>',
     minuteTemplate: '<span data-action="showMinutes" data-time-component="minutes" class="timepicker-minute"></span>',
-    secondTemplate: '<span data-action="showSeconds" data-time-component="seconds" class="timepicker-second"></span>'
+    secondTemplate: '<span data-action="showSeconds" data-time-component="seconds" class="timepicker-second"></span>',
+    tzTemplate: function(opts) {
+      var wrapper = $('<div />');
+      var container = $('<span data-action="showTZ" class="timepicker-tz"/>');
+      container.html('<i class="icon-globe"> </i> ' + opts.current.name);
+      wrapper.append(container);
+      return wrapper.html();
+      /*
+      return '<span class="timepicker-tz"><i class="icon-globe"> </i> ' +
+	opts.current.name + ' (UTC ' + (opts.current.offset.substr(0,1) === '-' ? '' : '+') +
+	parseFloat(opts.current.offset.split(',')[0]/60).toFixed(1) +')' +
+	'</span>';
+      */
+    }
   };
-  TPGlobal.getTemplate = function(is12Hours, showSeconds) {
+  TPGlobal.getTemplate = function(opts) {
     return (
     '<div class="timepicker-picker">' +
       '<table class="table-condensed"' +
-        (is12Hours ? ' data-hour-format="12"' : '') +
+        (opts.do12 ? ' data-hour-format="12"' : '') +
         '>' +
         '<tr>' +
           '<td><a href="#" class="btn" data-action="incrementHours"><i class="icon-chevron-up"></i></a></td>' +
           '<td class="separator"></td>' +
           '<td><a href="#" class="btn" data-action="incrementMinutes"><i class="icon-chevron-up"></i></a></td>' +
-          (showSeconds ?
+          (opts.doSec ?
           '<td class="separator"></td>' +
           '<td><a href="#" class="btn" data-action="incrementSeconds"><i class="icon-chevron-up"></i></a></td>': '')+
-          (is12Hours ? '<td class="separator"></td>' : '') +
+          (opts.do12 ? '<td class="separator"></td>' : '') +
         '</tr>' +
         '<tr>' +
           '<td>' + TPGlobal.hourTemplate + '</td> ' +
           '<td class="separator">:</td>' +
           '<td>' + TPGlobal.minuteTemplate + '</td> ' +
-          (showSeconds ?
+          (opts.doSec ?
           '<td class="separator">:</td>' +
           '<td>' + TPGlobal.secondTemplate + '</td>' : '') +
-          (is12Hours ?
+          (opts.do12 ?
           '<td class="separator"></td>' +
           '<td>' +
           '<button type="button" class="btn btn-primary" data-action="togglePeriod"></button>' +
@@ -1255,11 +1710,17 @@
           '<td><a href="#" class="btn" data-action="decrementHours"><i class="icon-chevron-down"></i></a></td>' +
           '<td class="separator"></td>' +
           '<td><a href="#" class="btn" data-action="decrementMinutes"><i class="icon-chevron-down"></i></a></td>' +
-          (showSeconds ?
+          (opts.doSec ?
           '<td class="separator"></td>' +
           '<td><a href="#" class="btn" data-action="decrementSeconds"><i class="icon-chevron-down"></i></a></td>': '') +
-          (is12Hours ? '<td class="separator"></td>' : '') +
+          (opts.do12 ? '<td class="separator"></td>' : '') +
         '</tr>' +
+	(opts.doTz ?
+	 '<tr>' +
+	   '<td colspan="' + ( opts.doSec ? '5' : '4' ) + '">' +
+	     TPGlobal.tzTemplate({timezones: opts.tzs, current:opts.currTz}) +
+	   '</td>' +
+	 '</tr>' : '') +
       '</table>' +
     '</div>' +
     '<div class="timepicker-hours" data-action="selectHour">' +
@@ -1270,13 +1731,18 @@
       '<table class="table-condensed">' +
       '</table>'+
     '</div>'+
-    (showSeconds ?
+    (opts.doSec ?
     '<div class="timepicker-seconds" data-action="selectSecond">' +
       '<table class="table-condensed">' +
       '</table>'+
+    '</div>': '') +
+    (opts.doTz ?
+    '<div class="timepicker-tz" data-action="selectTZ">' +
+      '<ul class="unstyled">' +
+      '</ul>'+
     '</div>': '')
     );
   }
 
 
-})(window.jQuery)
+})( jQuery )
