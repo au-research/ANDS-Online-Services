@@ -536,9 +536,10 @@
 	    if (this._container.data('vocab_timer')) {
 		clearTimeout(this._container.data('vocab_timer'));
 	    }
+	    var handler = this;
 	    this._container.data('vocab_timer',
-				 setTimeout(this.lookup(),
-					    this.settings.delay));
+				 setTimeout(function() {handler.lookup()},
+					    handler.settings.delay));
 	},
 
 	/**
@@ -837,15 +838,15 @@
 
 	do_ready: function() {
 	    var handler = this;
-	    handler._container.on('narrow.vocab.ands',
-				  function(event, data) {
-				      handler.process(data);
-				  });
 	    handler._container.on('error.vocab.ands',
 				  function(event, xhr) {
 				      handler._err(xhr);
 				  });
 	    if (this._ctype === 'SELECT') {
+	      handler._container.on('narrow.vocab.ands',
+				    function(event, data) {
+				      handler.process(data);
+				    });
 		this.__call();
 	    }
 	    else {
