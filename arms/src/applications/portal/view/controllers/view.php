@@ -230,7 +230,11 @@ class View extends MX_Controller {
 				catch (ErrorException $e)
 				{
 					$html .= "<div class='ro_preview'><div class='ro_preview_header'></div><div class='title'><i>Oops! The record at this location is missing - perhaps it was removed from the registry? (#".$currRoID.")</i> </div></div>";
-				}					
+				}		
+				catch (PageNotValidException $e)
+				{			
+					$html .= "<div class='ro_preview'><div class='ro_preview_header'></div><div class='title'><i>Oops! The record at this location is missing - perhaps it was removed from the registry? (#".$currRoID.")</i> </div></div>";
+				}						
 			}			
 		}
 		else 
