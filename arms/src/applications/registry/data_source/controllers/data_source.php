@@ -1526,44 +1526,6 @@ public function getContributorGroupsEdit()
 			}
 			else
 			{	
-//http://dl.dropbox.com/u/49073372/R8_Test_Data.xml 
-//http://dl.dropbox.com/u/49073372/DuplicateRecordsRIFCS.XML
-//http://dl.dropbox.com/u/49073372/Collection%20Large%20Citation%20Full%20Element.XML	
-
-
-/*
-				$rifcsXml = '';
-				// xxx: this won't work with crosswalk!
-				try{
-					$xml = simplexml_load_string(utf8_encode(str_replace("&", "&amp;", $data)), "SimpleXMLElement", LIBXML_NOENT);
-				}
-				catch(Exception $e)
-				{
-					$xml = false;
-					//$logMsgErr .= $e->getMessage();
-				}
-				if ($xml === false)
-				{
-					$exception_message = "Could not parse Registry Object XML" . NL;
-					foreach(libxml_get_errors() as $error) {
-        				$exception_message .= NL.$error->message;
-        			}
-					$logMsgErr .= NL."Document Load Error: ".$exception_message.NL;
-					$dataSource->append_log($logMsgErr."CRITICAL ERROR: Could not Load XML from URL feed. Check your provider.".NL.$exception_message, HARVEST_ERROR, "harvester","HARVESTER_ERROR");					
-				}
-				else
-				{
-					$rifcsXml = $this->importer->getRifcsFromFeed($data);
-					
-					if (strpos($rifcsXml, 'registryObject ') === FALSE)
-					{
-						//$dataSource->append_log("CRITICAL ERROR: Could not extract data from OAI feed. Check your provider.", HARVEST_ERROR, "harvester");
-						$dataSource->append_log($logMsgErr.NL."CRITICAL ERROR: Could not extract data from URL feed. Check your provider.", HARVEST_ERROR, "harvester","HARVESTER_ERROR");					
-						//	$dataSource->append_log($rifcsXml, HARVEST_ERROR, "harvester");	
-					}
-					else
-					{
-*/
 				$this->load->library('importer');	
 				$this->load->model('data_source/data_sources', 'ds');
 
