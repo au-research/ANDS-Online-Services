@@ -377,6 +377,7 @@ class _data_source {
 	function setContributorPages($value,$inputvalues)
 	{
 		$data_source_id = $this->id;
+		$data_source_title = $this->title;
 
 		$this->_CI->load->model("registry_object/registry_objects", "ro");
 		$this->_CI->load->model("registry_object/rifcs_generator", "rifcs");
@@ -427,8 +428,15 @@ class _data_source {
 								$this->_CI->importer->setDatasource($this);
 								$the_key = $this->_CI->importer->commit();
 								$this->_CI->importer->forceDraft();		
-								$contributorPage = $this->_CI->ro->getAllByKey($registry_object_key);	
-								//we need to mail services that this page has been created??	
+								$contributorPage = $this->_CI->ro->getAllByKey($registry_object_key);
+								//we need to email services that we have created this page	
+								$subject = $title." contributor page has been generated under datasource ".$this->title;
+								$message = '<a href="'.base_url().'registry_object/view/'.$contributorPage[0]->id.'">'.$registry_object_key .'</a>';
+								$to = 'services@ands.org.au';
+								//$to = 'liz.woods@ands.org.au';
+								$headers  = 'MIME-Version: 1.0' . "\r\n";
+								$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+								mail($to, $subject, $message, $headers);	
 							} 
 
 							$registry_object_id = $contributorPage[0]->id;
@@ -483,6 +491,13 @@ class _data_source {
 										"authorative_data_source_id" => $data_source_id
 										);
 									$insert = $this->db->insert('institutional_pages',$data);
+									$subject = $contributorPage[0]->title." has been mapped as a contributor page for group ".$group." under datasource ".$data_source_title;
+									$message = '<a href="'.base_url().'registry_object/view/'.$contributorPage[0]->id.'">'.$contributorPage[0]->key .'</a>';
+									$to = 'services@ands.org.au';
+									//$to = 'liz.woods@ands.org.au';
+									$headers  = 'MIME-Version: 1.0' . "\r\n";
+									$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+									mail($to, $subject, $message, $headers);									
 								}else{
 									//how do we deal with the fact that its not a valid key?
 									echo "not a valid registry party object";
