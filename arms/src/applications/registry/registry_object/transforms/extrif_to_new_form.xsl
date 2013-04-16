@@ -586,7 +586,7 @@
 		<div class="aro_box" type="fullCitation">
 			<div class="aro_box_display clearfix">
 				<a href="javascript:;" class="toggle"><i class="icon-minus"></i></a>
-				<input type="text" class="input-small rifcs-type" vocab="RIFCSCitationStyle" name="type" placeholder="Style" value="{@type}"/>
+				<input type="text" class="input-small rifcs-type" vocab="RIFCSCitationStyle" name="style" placeholder="Style" value="{@style}"/>
 				<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
 				<h1>Full Citation</h1>
 			</div>
@@ -1446,7 +1446,7 @@
 				<label class="control-label" for="title">Physical Address: </label>
 				<div class="controls">
 					<input type="text" class="input rifcs-type" vocab="RIFCSPhysicalAddressType" name="type" placeholder="Address Type" value=""/>
-					<div class="aro_box_part" type="addressParts">
+					<div class="aro_box_part" type="addressPart">
 						<div class="separate_line"/>
 						<button class="btn btn-primary addNew" type="addressPart" add_new_type="addressPart">
 							<i class="icon-plus icon-white"></i> Add Address Part
@@ -1492,7 +1492,7 @@
 		<div class="aro_box template" type="fullCitation">
 			<div class="aro_box_display clearfix">
 				<a href="javascript:;" class="toggle"><i class="icon-minus"></i></a>
-				<input type="text" class="input-small rifcs-type" vocab="RIFCSCitationStyle" name="type" placeholder="Style" value="{@type}"/>
+				<input type="text" class="input-small rifcs-type" vocab="RIFCSCitationStyle" name="style" placeholder="Style" value="{@style}"/>
 				<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
 				<h1>Full Citation</h1>
 			</div>

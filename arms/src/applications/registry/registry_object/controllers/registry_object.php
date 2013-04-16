@@ -556,7 +556,10 @@ class Registry_object extends MX_Controller {
 		header('Content-type: application/json');
 
 		$affected_ids = $this->input->post('affected_ids');
-		$select_all = $this->input->post('select_all')=='true' ? true : false;
+		// $select_all is the status, not a boolean?
+		//$select_all = $this->input->post('select_all')=='true' ? true : false;
+
+		$select_all = $this->input->post('select_all');
 		$data_source_id = $this->input->post('data_source_id');
 		$this->load->model('registry_objects', 'ro');
 		$this->load->model('data_source/data_sources', 'ds');
@@ -567,9 +570,12 @@ class Registry_object extends MX_Controller {
 				$this->ro->deleteRegistryObject($r);
 			}
 		}else{
-			foreach($affected_ids as $id){
-				$ro = $this->ro->getByID($id);
-				$this->ro->deleteRegistryObject($ro);
+			if ($affected_ids)
+			{
+				foreach($affected_ids as $id){
+					$ro = $this->ro->getByID($id);
+					$this->ro->deleteRegistryObject($ro);
+				}
 			}
 		}
 

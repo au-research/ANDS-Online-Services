@@ -504,9 +504,10 @@ function loadTopLogs(data_source_id)
 {
 	if(doLoadLogs && lastLogId)
 	{
+		var log_type = $('select.log-type').val();
 		$.ajax({
 			url: 'data_source/getDataSourceLogs/',
-			data: {id: data_source_id, logid:lastLogId},
+			data: {id: data_source_id, logid:lastLogId, log_type:log_type},
 			type: 'POST',
 			dataType: 'json',
 			success: function(data){

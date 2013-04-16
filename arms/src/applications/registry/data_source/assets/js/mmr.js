@@ -99,18 +99,18 @@ $(function() {
                 break;
             case 'delete':
                 if($(this).attr('ro_id')){
-                    if(confirm('Are you sure you want to delete this Registry Objects?')){
+                    if(confirm('Are you sure you want to delete this record?')){
                         deleting = [$(this).attr('ro_id')];
                         delete_ro(deleting, false);
                     }
                 }else{
                     if(select_all){
                         var num = parseInt($('#'+status+' .count').html());
-                        if(confirm('Are you sure you want to delete '+num+' Registry Objects')){
+                        if(confirm('Are you sure you want to delete '+num+' records?')){
                             delete_ro(false, select_all, data_source_id);
                         }
                     }else{
-                        if(confirm('Are you sure you want to delete '+selected_ids.length+' Registry Objects?')){
+                        if(confirm('Are you sure you want to delete '+selected_ids.length+' records?')){
                             delete_ro(selected_ids, false);
                         }
                     }
@@ -588,7 +588,7 @@ function update_selected_list(status){
     // var selected = $('div.selected_status', list);
     var selected = $('#status_message');
     if(num>0){
-        var text = num + ' registry objects selected.';
+        var text = num + ' records selected.';
         selected.html(text);
         selected.show();
     }else{
@@ -770,7 +770,7 @@ function update(ids, attributes){
         total = selected_ids.length
     }
 
-    var text = total+' registry objects updating...<img src="'+base_url+'assets/img/ajax-loader.gif" alt="Loading..Please wait.."/>';
+    var text = total+' records updating...<img src="'+base_url+'assets/img/ajax-loader.gif" alt="Loading..Please wait.."/>';
     $('#status_message').html(text);
     $.ajax({
         url:url, 

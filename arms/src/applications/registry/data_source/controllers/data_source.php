@@ -191,8 +191,8 @@ class Data_source extends MX_Controller {
 			$st = array('display_name'=>str_replace('_', ' ', $s), 'name'=>$s, 'menu'=>array());
 			array_push($st['menu'], array('action'=>'select_all', 'display'=>'Select All'));
 			array_push($st['menu'], array('action'=>'select', 'display'=>'Select'));
-			array_push($st['menu'], array('action'=>'view', 'display'=>'<i class="icon icon-eye-open"></i> View this Registry Object'));
-			array_push($st['menu'], array('action'=>'edit', 'display'=>'<i class="icon icon-edit"></i> Edit this Registry Object'));
+			array_push($st['menu'], array('action'=>'view', 'display'=>'<i class="icon icon-eye-open"></i> View this Record'));
+			array_push($st['menu'], array('action'=>'edit', 'display'=>'<i class="icon icon-edit"></i> Edit this Record'));
 			array_push($st['menu'], array('action'=>'flag', 'display'=>'Flag'));
 			array_push($st['menu'], array('action'=>'set_gold_status_flag', 'display'=>'Gold Standard'));
 			switch($s){
@@ -375,9 +375,9 @@ class Data_source extends MX_Controller {
 
 		$menu = array();
 		if(sizeof($affected_ids) == 0){
-			$menu['nothing'] = 'Select a Registry Object';
+			$menu['nothing'] = 'You must first select a Record';
 		}else if(sizeof($affected_ids) == 1){
-			$menu['view'] = 'View Registry Object';
+			$menu['view'] = 'View Record';
 		}
 
 		$hasFlag = false;
@@ -407,11 +407,11 @@ class Data_source extends MX_Controller {
 							$menu['to_publish'] = 'Publish';
 						}
 					}
-					$menu['edit'] = 'Edit Registry Object';
+					$menu['edit'] = 'Edit Record';
 					break;
 				case 'MORE_WORK_REQUIRED':
 					$menu['to_draft'] = 'Move to Draft';
-					$menu['edit'] = 'Edit Registry Object';
+					$menu['edit'] = 'Edit Record';
 					break;
 				case 'SUBMITTED_FOR_ASSESSMENT':
 					$menu['to_assess'] = 'Assessment In Progress';
@@ -425,16 +425,16 @@ class Data_source extends MX_Controller {
 					$menu['to_moreworkrequired'] = 'More Work Required';
 					break;
 				case 'APPROVED':
-					$menu['edit'] = 'Edit Registry Object';
+					$menu['edit'] = 'Edit Record';
 					$menu['to_publish'] = 'Publish';
 					break;
 				case 'PUBLISHED':
 					$menu['to_draft'] = 'Move to Draft';
-					$menu['edit'] = 'Edit Registry Object';
+					$menu['edit'] = 'Edit Record';
 					$menu['set_gold_status_flag'] = 'Set Gold Status';
 					break;
 			}
-			$menu['delete'] = 'Delete Registry Object';
+			$menu['delete'] = 'Delete Record';
 		}
 
 
@@ -1821,8 +1821,7 @@ public function getContributorGroupsEdit()
 		$data_source = $this->ds->getByID($data_source_id);
 		$registry_object = $this->ro->getPublishedByKey($key);
 		if($registry_object==null||$data_source->id!=$data_source_id)
-			{$jsonData['message'] = "You must provide a published registry object
-key from within this data source for primary relationship";}
+			{$jsonData['message'] = "Primary Relationship can only be configured to relate to a PUBLISHED record key from this data source.";}
 		
 		echo json_encode($jsonData);
 

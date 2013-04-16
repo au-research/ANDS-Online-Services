@@ -696,6 +696,22 @@ class _data_source {
 		}
 	}
 	
+	function consolidateHarvestLogs($harvestId, $prepended_message = '')
+	{
+		$this->db->select('log')->from('data_source_logs')->where(array('data_source_id'=>$this->id, 'class'=>'harvester'))->like('harvestID: ' . $harvestId, 'both');
+		$query = $this->db->get();
+
+		$accumulated_log = '';
+		if ($query->num_rows() > 0)
+		{
+			foreach ($query->result_array() AS $result)
+			{
+				$accumulated_log .= $result['log'] . NL;
+			}
+		}
+
+		echo $accumulated_log;
+	}
 	
 	function submitHarvestRequest($harvestRequest, $msg, $harvestId)
 	{

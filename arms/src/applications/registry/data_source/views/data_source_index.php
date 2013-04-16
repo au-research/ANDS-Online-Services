@@ -173,10 +173,10 @@
 <div class="content-header">
 	<h1>{{title}}</h1>
 	<ul class="nav nav-pills">
-		<li class="active view page-control" data_source_id="{{data_source_id}}"><a href="#">Dashboard</a></li>
-		<li class="mmr page-control" data_source_id="{{data_source_id}}"><a href="#">Manage Records</a></li>
-		<li class="report page-control" data_source_id="{{data_source_id}}"><a href="#">Reports</a></li>
-		<li class="settings page-control" data_source_id="{{data_source_id}}"><a href="#">Settings</a></li>
+		<li class="active view page-control" data_source_id="{{data_source_id}}"><a href="<?=base_url('data_source/manage#!/view/');?>/{{data_source_id}}">Dashboard</a></li>
+		<li class="mmr page-control" data_source_id="{{data_source_id}}"><a href="<?=base_url('data_source/manage_records/');?>/{{data_source_id}}">Manage Records</a></li>
+		<li class="report page-control" data_source_id="{{data_source_id}}"><a href="<?=base_url('data_source/report/');?>/{{data_source_id}}">Reports</a></li>
+		<li class="settings page-control" data_source_id="{{data_source_id}}"><a href="<?=base_url('data_source/manage#!/settings/');?>/{{data_source_id}}">Settings</a></li>
 	</ul>
 </div>
 
@@ -455,10 +455,10 @@
 	<div class="content-header">
 		<h1>{{title}}</h1>
 		<ul class="nav nav-pills">
-			<li class="view page-control" data_source_id="{{data_source_id}}"><a href="#">Dashboard</a></li>
-			<li class="mmr page-control" data_source_id="{{data_source_id}}"><a href="#">Manage Records</a></li>
-			<li class="report page-control" data_source_id="{{data_source_id}}"><a href="#">Reports</a></li>
-			<li class="active settings page-control" data_source_id="{{data_source_id}}"><a href="#">Settings</a></li>
+			<li class="view page-control" data_source_id="{{data_source_id}}"><a href="<?=base_url('data_source/manage#!/view/');?>/{{data_source_id}}">Dashboard</a></li>
+			<li class="mmr page-control" data_source_id="{{data_source_id}}"><a href="<?=base_url('data_source/manage_records/');?>/{{data_source_id}}">Manage Records</a></li>
+			<li class="report page-control" data_source_id="{{data_source_id}}"><a href="<?=base_url('data_source/report/');?>/{{data_source_id}}">Reports</a></li>
+			<li class="active settings page-control" data_source_id="{{data_source_id}}"><a href="<?=base_url('data_source/manage#!/settings/');?>/{{data_source_id}}">Settings</a></li>
 		</ul>
 	</div>
 	<div id="breadcrumb">
@@ -777,10 +777,10 @@
 	<div class="content-header">
 		<h1>{{title}}</h1>
 		<ul class="nav nav-pills">
-			<li class="view page-control" data_source_id="{{data_source_id}}"><a href="#">Dashboard</a></li>
-			<li class="mmr page-control" data_source_id="{{data_source_id}}"><a href="#">Manage Records</a></li>
-			<li class="report page-control" data_source_id="{{data_source_id}}"><a href="#">Reports</a></li>
-			<li class="active settings page-control" data_source_id="{{data_source_id}}"><a href="#">Settings</a></li>
+			<li class="active view page-control" data_source_id="{{data_source_id}}"><a href="<?=base_url('data_source/manage#!/view/');?>/{{data_source_id}}">Dashboard</a></li>
+			<li class="mmr page-control" data_source_id="{{data_source_id}}"><a href="<?=base_url('data_source/manage_records/');?>/{{data_source_id}}">Manage Records</a></li>
+			<li class="report page-control" data_source_id="{{data_source_id}}"><a href="<?=base_url('data_source/report/');?>/{{data_source_id}}">Reports</a></li>
+			<li class="active settings page-control" data_source_id="{{data_source_id}}"><a href="<?=base_url('data_source/manage#!/settings/');?>/{{data_source_id}}">Settings</a></li>
 		</ul>
 	</div>
 	<div id="breadcrumb">
