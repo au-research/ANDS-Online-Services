@@ -632,8 +632,15 @@ function bindSortables(){
     $('.sortable').each(function(){
         var status = $(this).attr('status');
         var from = '.sortable[status='+status+'] li';
-        var connect_to = $(this).attr('connect_to');
-        var target = $('.sortable[status='+connect_to+']');
+
+
+        // Multiple connectors (ASSESSMENT needs to be able to be dragged in both directions)
+        var connect_to = $(this).attr('connect_to').split(",");
+        var target = $();
+
+        $(connect_to).each(function(){
+            target = target.add('.sortable[status="'+this+'"]');
+        });
 
         var ds_id = $('#data_source_id').val();
 
@@ -644,7 +651,6 @@ function bindSortables(){
                 if(select_all){
                     total = $('.count', list).text();
                 }else total = selected_ids.length;
-                // log(selected_ids.length);
                 return $( "<span class='label label-info helper'>"+total+"</span>" );
             },
             start: function(e, ui){
@@ -653,7 +659,7 @@ function bindSortables(){
                 }else{
                     click_ro(e.currentTarget, 'select');
                 }
-                $(ui.helper[0]).html(selected_ids.length)
+                $(ui.helper[0]).html(selected_ids.length + " record" + (selected_ids.length > 1 ? "s" : "") )
             },
             connectToSortable: target
         });
@@ -698,7 +704,7 @@ function bindSortables(){
                 if(selecting_status==status){
                     var attributes = [{
                         name:'status',
-                        value:connect_to
+                        value:$('.ro_box', this).attr('status') // what status are we actually dropping on?
                     }];
                     if(!processing) update(selected_ids, attributes);
                 }

@@ -224,7 +224,7 @@ class Data_source extends MX_Controller {
 				case 'ASSESSMENT_IN_PROGRESS':
 					$st['ds_count']=$data_source->count_ASSESSMENT_IN_PROGRESS;
 					if($manual_publish){
-						$st['connectTo']='APPROVED';
+						$st['connectTo']='APPROVED,MORE_WORK_REQUIRED';
 						array_push($st['menu'], array('action'=>'to_approve', 'display'=>'Approve'));
 					}else{
 						$st['connectTo']='PUBLISHED';
@@ -1544,15 +1544,7 @@ public function getContributorGroupsEdit()
 				$this->importer->setHarvestID($harvestId);
 				$this->importer->setDatasource($dataSource);
 
-				if ($done != 'TRUE')
-				{
-					$this->importer->setPartialCommitOnly(TRUE);
-				}
-				else
-				{
-					$this->importer->setPartialCommitOnly(FALSE);
-				}
-
+				$this->importer->setPartialCommitOnly(TRUE);
 
 				if($mode == "HARVEST")
 				{
@@ -1599,6 +1591,11 @@ public function getContributorGroupsEdit()
 					{
 						$dataSource->requestHarvest();
 					}
+
+					// The importer will only get the last OAI chunk! so reindex the lot...
+					$dataSource->reindexAllRecords();
+					$dataSource->updateStats();
+
 				}
 			}
 			
