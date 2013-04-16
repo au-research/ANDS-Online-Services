@@ -15,20 +15,20 @@
 
 <section id="browse-datasources" class="hide">
 	<div class="content-header">
-		<h1>Manage My Datasources</h1>
+		<h1>Manage My Data Sources</h1>
 		<?php if($this->user->hasFunction('REGISTRY_SUPERUSER')): ?>
 			<div class="btn-group">
-				<a class="btn btn-small" id="open_add_ds_form" data-toggle="modal" href="#AddNewDS"><i class="icon-plus"></i> Add New Datasource</a>
+				<a class="btn btn-small" id="open_add_ds_form" data-toggle="modal" href="#AddNewDS"><i class="icon-plus"></i> Add New Data Source</a>
 			</div>
 		<?php endif; ?>
 	</div>
 	<div id="breadcrumb">
 		<?php echo anchor('/', '<i class="icon-home"></i> Home', array('class'=>'tip-bottom', 'tip'=>'Go to Home'))?>
-		<?php echo anchor('data_source/manage', 'Manage My Datasources', array('class'=>'current'))?>
+		<?php echo anchor('data_source/manage', 'Manage My Data Sources', array('class'=>'current'))?>
 	</div>
 	<div class="container-fluid">
 		<div class="row-fluid">
-			<select data-placeholder="Choose a Datasource to View" tabindex="1" class="chzn-select" id="datasource-chooser">
+			<select data-placeholder="Choose a Data Source to View" tabindex="1" class="chzn-select" id="datasource-chooser">
 				<option value=""></option>
 				<?php
 					foreach($dataSources as $ds){
@@ -51,7 +51,7 @@
 	
 		<div class="modal-header">
 			<a href="javascript:;" class="close" data-dismiss="modal">×</a>
-			<h3>Add New Datasource</h3>
+			<h3>Add New Data Source</h3>
 		</div>
 		
 		<div class="modal-screen-container">
@@ -107,27 +107,25 @@
 	{{#items}}
 		<div class="widget-box">
 			<div class="widget-title">
-				<h5 class="ellipsis"><a class="view" href="#!/view/{{id}}">{{title}}</a></h5>
+				<h5 class="ellipsis"><a title="{{key}}" class="view" href="#!/view/{{id}}">{{title}}</a> {{#record_owner}}({{record_owner}}){{/record_owner}}</h5>
 			</div>
-			
+			<div class="btn-group item-control">
+	  			<button class="btn btn-small view page-control" data_source_id="{{id}}"><i class="icon-eye-open"></i> View</button>
+	  			<button class="btn btn-small mmr page-control" data_source_id="{{id}}"><i class="icon-folder-open"></i> Manage</button>
+		  		<button class="btn btn-small settings page-control" data_source_id="{{id}}"><i class="icon-edit"></i> Settings</button>
+			</div>
+
 			<div class="widget-content">
-				<strong>Key:</strong> {{key}}<br/>
-				{{#record_owner}}
-					<strong>Record Owner:</strong> {{record_owner}}
-				{{/record_owner}}
-				<p></p>
 				{{#counts}}
 			  		{{#status}}
 			  			<span class="tag goto status_{{status}}" type="status" name="{{status}}" data_source_id="{{id}}">{{name}} ({{count}})</span>
 			  		{{/status}}
 		  		{{/counts}}
-
-		  		<div class="btn-group item-control">
-		  			<button class="btn btn-small view page-control" data_source_id="{{id}}"><i class="icon-eye-open"></i> View</button>
-		  			<button class="btn btn-small mmr page-control" data_source_id="{{id}}"><i class="icon-folder-open"></i> Manage</button>
-			  		<button class="btn btn-small settings page-control" data_source_id="{{id}}"><i class="icon-edit"></i> Settings</button>
-				</div>
+		  		{{^counts}}
+		  			<span class="tag goto status_PUBLISHED" type="status" name="PUBLISHED" data_source_id="{{id}}">Published Records (0)</span>
+		  		{{/counts}}
 			</div>
+
 		</div>
 	{{/items}}
 </div>

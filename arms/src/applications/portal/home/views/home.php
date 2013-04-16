@@ -47,19 +47,10 @@
 		<div class="clear"></div>
 		<h3>Who contributes to Research Data Australia?</h3>
 		<p><?php echo sizeof($groups);?> research organisations from around Australia contribute information to Research Data Australia.</p> 			
-		<a href="home/contributors" id=""><strong>See All</strong></a>
+		<a href="<?=base_url('home/contributors');?>" id=""><strong>See All</strong></a>
 	</div><!-- right -->		
 	<div class="clear"></div>
 
-	<div class="hide" id="who_contributes">
-		<ul>
-		<?php 
-			foreach($groups as $g=>$count){
-				echo '<li><a href="search#!/q='.$g.'">'.$g.' ('.$count.')</a></li>';
-			}
-		?>
-		</ul>
-	</div>
 	
 	<!--div class="social">
 		<a href="feed/rss"><img src="<?php echo asset_url('images/rss.png','core');?>" alt="" /></a><a href="https://twitter.com/andsdata"><img src="<?php echo asset_url('images/twitter.png','core');?>" alt="" /></a>

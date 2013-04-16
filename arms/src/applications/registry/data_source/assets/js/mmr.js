@@ -182,7 +182,13 @@ function init(filters){
         dataType:'JSON',
         data: {'filters':filters},
         success: function(data){
-            
+
+            // If we are filtering by status, hide all other status boxes
+            if($(data.statuses).size() === 1)
+            {
+                resetBlocks();
+            }
+
             $.each(data.statuses, function(d){
                 var template = $('#mmr_status_template').html();
                 var output = Mustache.render(template, this);
@@ -197,7 +203,6 @@ function init(filters){
                 }
                 $('#'+d).parent().show();
             });
-            $('.pool').show();
 
             $.each(selected_ids, function(){
                 $('#'+this).addClass('active');
@@ -215,6 +220,14 @@ function init(filters){
         }
     });
 
+}
+
+function resetBlocks()
+{
+    $('.pool .block').each(function(){
+        $(this).hide();
+        $(this).removeAttr('count');
+    });
 }
 
 function bindShowMore(){
@@ -332,9 +345,9 @@ function initLayout(){
         $.each(this, function(key, value){
             var text = value;
             if(key==='tag'){
-                text = 'Tagged';
+                text = 'Records with Tags';
             }else if(key==='flag'){
-                text = 'Flagged';
+                text = 'Flagged Records';
             }else if(key==='quality_level'){
                 if(value == 4)
                 text = 'Gold Standard Records';

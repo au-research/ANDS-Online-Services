@@ -62,7 +62,17 @@
 					<div class="widget-content">
 						<table class="table table-bordered table-striped">
 							<tr><th>Title</th><td><?php echo $ro->title;?></td></tr>
-							<tr><th>Status</th><td><?php if($viewing_revision && !$currentRevision) echo 'SUPERSEDED'; else echo $ro->status;?></td></tr>
+							
+							<?php if(!($viewing_revision && !$currentRevision))
+							{
+								echo "<tr><th>Status</th><td>" . $ro->status . "</td></tr>"; 
+							}
+							else
+							{
+								echo "<tr><th>Status</th><td style='background-color:#FF6633; color:white;'><b>SUPERSEDED</b></td></tr>"; 
+							}
+							?>
+
 							<tr><th>Data Source</th><td><?php echo $ds->title;?></td></tr>
 							<tr><th>Key</th><td><?php echo $ro->key;?></td></tr>
 							<tr><th>ID</th><td><?php echo $ro->id;?></td></tr>						

@@ -46,16 +46,35 @@
 					<div class="btn-group">
 						<button class="btn dropdown-toggle" data-toggle="dropdown">Filter <span class="caret"></span></button>
 						<ul class="dropdown-menu">
+							<li <?php echo 'class="'.($ds->count_DRAFT > 0 ? '' : 'disabled').'"';?>><a href="javascript:;" class="filter" name="status" value="DRAFT">Draft (<?php echo $ds->count_DRAFT;?>)<span class="icon"></span></a></li>
+							
+							<?php if ($ds->qa_flag==DB_TRUE):  ?>
+								<li <?php echo 'class="'.($ds->count_SUBMITTED_FOR_ASSESSMENT > 0 ? '' : 'disabled').'"';?>><a href="javascript:;" class="filter" name="status" value="SUBMITTED_FOR_ASSESSMENT">Submitted For Assessment (<?php echo $ds->count_SUBMITTED_FOR_ASSESSMENT;?>)<span class="icon"></span></a></li>
+								<li <?php echo 'class="'.($ds->count_ASSESSMENT_IN_PROGRESS > 0 ? '' : 'disabled').'"';?>><a href="javascript:;" class="filter" name="status" value="ASSESSMENT_IN_PROGRESS">Assessment in Progress (<?php echo $ds->count_ASSESSMENT_IN_PROGRESS;?>)<span class="icon"></span></a></li>
+							
+							<?php endif; ?>
+
+							<?php if ($ds->manual_publish==DB_TRUE):  ?>
+								<li <?php echo 'class="'.($ds->count_APPROVED > 0 ? '' : 'disabled').'"';?>><a href="javascript:;" class="filter" name="status" value="APPROVED">Approved (<?php echo $ds->count_APPROVED;?>)<span class="icon"></span></a></li>
+							<?php endif; ?>
+
+							
+
+							<li <?php echo 'class="'.($ds->count_PUBLISHED > 0 ? '' : 'disabled').'"';?>><a href="javascript:;" class="filter" name="status" value="PUBLISHED">Published (<?php echo $ds->count_PUBLISHED;?>)<span class="icon"></span></a></li>
+							<li class="divider"></li>
 							<li <?php echo 'class="'.($ds->count_collection > 0 ? '' : 'disabled').'"';?>><a href="javascript:;" class="filter" name="class" value="collection">Collections (<?php echo $ds->count_collection;?>)<span class="icon"></span></a></li>
 							<li <?php echo 'class="'.($ds->count_party > 0 ? '' : 'disabled').'"';?>><a href="javascript:;" class="filter" name="class" value="party">Parties (<?php echo $ds->count_party;?>)<span class="icon"></span></a></li>
 							<li <?php echo 'class="'.($ds->count_service > 0 ? '' : 'disabled').'"';?>><a href="javascript:;" class="filter" name="class" value="service">Services (<?php echo $ds->count_service;?>)<span class="icon"></span></a></li>
 							<li <?php echo 'class="'.($ds->count_activity > 0 ? '' : 'disabled').'"';?>><a href="javascript:;" class="filter" name="class" value="activity">Activities (<?php echo $ds->count_activity;?>)<span class="icon"></span></a></li>
+							<li class="divider"></li>
 							<li <?php echo 'class="'.($ds->count_level_1 > 0 ? '' : 'disabled').'"';?>><a href="javascript:;" class="filter" name="quality_level" value="1">Quality Level 1 (<?php echo $ds->count_level_1;?>)<span class="icon"></span></a></li>
 							<li <?php echo 'class="'.($ds->count_level_2 > 0 ? '' : 'disabled').'"';?>><a href="javascript:;" class="filter" name="quality_level" value="2">Quality Level 2 (<?php echo $ds->count_level_2;?>)<span class="icon"></span></a></li>
 							<li <?php echo 'class="'.($ds->count_level_3 > 0 ? '' : 'disabled').'"';?>><a href="javascript:;" class="filter" name="quality_level" value="3">Quality Level 3 (<?php echo $ds->count_level_3;?>)<span class="icon"></span></a></li>
 							<li <?php echo 'class="'.($ds->count_level_4 > 0 ? '' : 'disabled').'"';?>><a href="javascript:;" class="filter" name="quality_level" value="4">Gold Standard (<?php echo $ds->count_level_4;?>)<span class="icon"></span></a></li>
-							<li><a href="javascript:;" class="filter" name="flag" value="t">Flagged <span class="icon"></span></a></li>
-							<li><a href="javascript:;" class="filter" name="tag" value="">Tagged <span class="icon"></span></a></li>
+							<li class="divider"></li>
+							<li><a href="javascript:;" class="filter" name="flag" value="t">Flagged Records <span class="icon"></span></a></li>
+							<li><a href="javascript:;" class="filter" name="tag" value="">Records with Tags <span class="icon"></span></a></li>
+							
 						</ul>
 					</div>
 
