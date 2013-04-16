@@ -158,7 +158,7 @@ class Connections_Extension extends ExtensionBase
 
 		$allow_reverse_internal_links = ($ds->allow_reverse_internal_links == "t");
 		$allow_reverse_external_links = ($ds->allow_reverse_external_links == "t");
-		
+
 		$connections = array_merge($connections, $this->_getExplicitLinks());
 
 		/* Step 2 - Internal reverse links */
@@ -172,6 +172,9 @@ class Connections_Extension extends ExtensionBase
 		{
 			$connections = array_merge($connections, $this->_getExternalReverseLinks());
 		}
+
+		/* Step 4 - Contributor */
+		$connections = array_merge($connections, $this->_getContributorLinks());
 
 		return $connections;
 	}
@@ -198,7 +201,7 @@ class Connections_Extension extends ExtensionBase
 		/* Step 1 - Straightforward link relationships */
 		$my_connections = array();
 
-		$this->db->select('r.registry_object_id, r.key, r.class, r.title, r.slug, r.status, rr.relation_type, rr.relation_description')
+		$this->db->select('r.registry_object_id, r.key, r.class, r.title, r.slug, r.status, rr.relation_type, rr.relation_description, rr.origin')
 				 ->from('registry_object_relationships rr')
 				 ->join('registry_objects r','rr.related_object_key = r.key')
 				 ->where('rr.registry_object_id',$this->id);
@@ -206,7 +209,10 @@ class Connections_Extension extends ExtensionBase
 
 		foreach ($query->result_array() AS $row)
 		{
-			$row['origin'] = "EXPLICIT";
+			if (!$row['origin'])
+			{
+				$row['origin'] = "EXPLICIT";
+			}
 			$my_connections[] = $row;
 		}
 

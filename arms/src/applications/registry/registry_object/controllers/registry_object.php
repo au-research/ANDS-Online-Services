@@ -29,7 +29,6 @@ class Registry_object extends MX_Controller {
 			$data['ro'] = $ro;
 			$data['ro_id'] = $ro_id;
 			$data['ds'] = $ds;
-
 			$data['revision'] = $revision;
 
 			if($revision!=''){

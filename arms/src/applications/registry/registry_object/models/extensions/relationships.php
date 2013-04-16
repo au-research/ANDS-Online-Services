@@ -20,30 +20,27 @@ class Relationships_Extension extends ExtensionBase
 
 		/* Explicit relationships */
 		$sxml->registerXPathNamespace("ro", RIFCS_NAMESPACE);
+		$explicit_keys = array();
 		foreach ($sxml->xpath('//ro:relatedObject') AS $related_object)
 		{
 			$related_object_key = (string)$related_object->key;
 			$related_object_type = (string)$related_object->relation[0]['type'];
 
-			$result = $this->db->select('class')->get_where('registry_objects', array('key'=>(string)$related_object_key));
+			$result = $this->db->select('class, title')->get_where('registry_objects', array('key'=>(string)$related_object_key));
+			
 			$class = NULL;
+			$title = 'no title';
+
 			if ($result->num_rows() > 0)
 			{
-				$class = array_shift($result->result_array());
+				$record = array_shift($result->result_array());
 				$result->free_result();
-				$class = $class['class'];
+				$class = $record['class'];
+				$title = $record['title'];
 			}
-			$related_keys[] = (string)$related_object_key;
-			$title =  $this->db->select('title')->get_where('registry_objects', array('key'=>(string)$related_object_key));
-			if ($title->num_rows() > 0)
-			{
-				$title = array_shift($title->result_array());
-				$result->free_result();
-				$title = $title['title'];
-			}
-			else{
-				$title = 'no title';
-			}
+			
+			$explicit_keys[] = (string) $related_object_key;
+
 			$this->db->insert('registry_object_relationships', 
 				array(
 						"registry_object_id"=>$this->ro->id, 
@@ -57,7 +54,7 @@ class Relationships_Extension extends ExtensionBase
 		/* Create primary relationships links */
 		$ds = $this->_CI->ds->getByID($this->ro->data_source_id);
 
-		if ($ds->create_primary_relationships == DB_TRUE && $ds->primary_key_1 && $ds->primary_key_1 != $this->ro->key)
+		if ($ds->create_primary_relationships == DB_TRUE && $ds->primary_key_1 && $ds->primary_key_1 != $this->ro->key && !in_array($ds->primary_key_1, $explicit_keys))
 		{
 			$this_relationship = $ds->{strtolower($this->ro->class) . "_rel_1"};
 			$this->db->insert('registry_object_relationships', 
@@ -65,12 +62,13 @@ class Relationships_Extension extends ExtensionBase
 						"registry_object_id"=>$this->ro->id, 
 						"related_object_key" => (string) $ds->primary_key_1,
 						'related_object_class'=> (string) $ds->class_1,
-						"relation_type" => (string) $this_relationship
+						"relation_type" => (string) $this_relationship,
+						"origin" => PRIMARY_RELATIONSHIP
 				)
 			);
 		}
 
-		if ($ds->create_primary_relationships == DB_TRUE && $ds->primary_key_2 && $ds->primary_key_2 != $this->ro->key)
+		if ($ds->create_primary_relationships == DB_TRUE && $ds->primary_key_2 && $ds->primary_key_2 != $this->ro->key && !in_array($ds->primary_key_2, $explicit_keys))
 		{
 			$this_relationship = $ds->{strtolower($this->ro->class) . "_rel_2"};
 			$this->db->insert('registry_object_relationships', 
@@ -78,7 +76,8 @@ class Relationships_Extension extends ExtensionBase
 						"registry_object_id"=>$this->ro->id, 
 						"related_object_key" => (string) $ds->primary_key_2,
 						'related_object_class'=> (string) $ds->class_2,
-						"relation_type" => (string) $this_relationship
+						"relation_type" => (string) $this_relationship,
+						"origin" => PRIMARY_RELATIONSHIP
 				)
 			);
 		}

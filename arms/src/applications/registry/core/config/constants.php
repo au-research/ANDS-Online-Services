@@ -15,3 +15,5 @@ define('DRAFT_RECORD_SLUG','draft_record_');
 
 define('SUCCESS','SUCCESS');
 define('FAILURE','FAILURE');
+
+define('PRIMARY_RELATIONSHIP','PRIMARY');

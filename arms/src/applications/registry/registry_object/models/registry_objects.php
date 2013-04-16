@@ -471,8 +471,9 @@ class Registry_objects extends CI_Model {
 						       	}
 
 							   	if($args['search']) {
-							   		// $db->where('(title LIKE \'%'.$args['search'].'%\' || key LIKE \'%'.$args['search'].'%\' || id LIKE \'%'.$args['search'].'%\')');
-							   		$db->like('title', $args['search']);
+							   		$db->where('(`title` LIKE \'%'.$args['search'].'%\' || `key` LIKE \'%'.$args['search'].'%\' || `registry_objects`.`registry_object_id` LIKE \'%'.$args['search'].'%\')');
+							   		//$db->like('title', $args['search']);
+							   		//$db->or_like('key', $args['search']);
 							   	}
 
 							   	$white_list = array('title', 'class', 'key', 'status', 'slug', 'record_owner');
