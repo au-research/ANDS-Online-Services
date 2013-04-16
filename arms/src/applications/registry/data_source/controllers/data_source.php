@@ -1477,6 +1477,7 @@ public function getContributorGroupsEdit()
 		$logMsg = 'Harvest completed successfully';
 		$logMsgErr = 'An error occurred whilst trying to harvest records';
 		$harvestId = false;
+		$gotData = false;
 		if (isset($POST['harvestid'])){
 			$harvestId = (int) $this->input->post('harvestid');
 		}
@@ -1592,6 +1593,7 @@ public function getContributorGroupsEdit()
 								}
 								else
 								{
+									$gotData = true;
 									$dataSource->append_log($logMsg.NL.$this->importer->getMessages(), HARVEST_INFO, "harvester", "HARVESTER_INFO");	
 								}
 								
@@ -1609,17 +1611,20 @@ public function getContributorGroupsEdit()
 					}
 				}
 			}
-			if($done == 'TRUE' || $mode != "HARVEST")
+			if($done == 'TRUE')
 			{
 				$dataSource->cancelHarvestRequest($harvestId,false);
-				if($dataSource->advanced_harvest_mode == 'REFRESH')
-				{	
-					$dataSource->deleteOldRecords($harvestId);
-				} 
-			}
-			if($done == 'TRUE' && $nextHarvestDate != '')
-			{
-				$dataSource->requestHarvest('','','','','','', $nextHarvestDate);
+				if($mode == 'HARVEST')
+				{
+					if($dataSource->advanced_harvest_mode == 'REFRESH' && $gotData)
+					{	
+						$dataSource->deleteOldRecords($harvestId);
+					} 
+					if($nextHarvestDate != '')
+					{
+						$dataSource->requestHarvest('','','','','','', $nextHarvestDate);
+					}
+				}
 			}
 			
 		}
