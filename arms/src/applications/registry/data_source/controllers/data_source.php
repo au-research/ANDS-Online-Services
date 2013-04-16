@@ -1382,6 +1382,7 @@ public function getContributorGroupsEdit()
 			$this->importer->setXML($xml);
 
 			$this->importer->setDatasource($data_source);
+			$this->importer->forceDraft();
 			$this->importer->commit();
 
 
