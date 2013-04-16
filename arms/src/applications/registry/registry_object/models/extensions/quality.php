@@ -42,7 +42,14 @@ class Quality_Extension extends ExtensionBase
 		
 		$level = $level-1;
 		// GOLD STANDARD SHOULD BE 4!!! XXX: TODO:
-		$this->ro->quality_level = $level;
+		if($this->ro->gold_status_flag == 't')
+		{
+			$this->ro->quality_level = 4;
+		}
+		else
+		{
+			$this->ro->quality_level = $level;
+		}
 		$this->ro->setMetadata('level_html',$quality_metadata);
 		
 		$this->ro->save();

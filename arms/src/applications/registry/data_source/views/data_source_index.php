@@ -280,7 +280,7 @@
 					<ul class="ro-list">
 						{{#qlcounts}}
 					  		{{#level}}
-					  			<li class="ql_{{level}}" name="{{level}}" type="quality_level"><span class="name">Quality Level {{level}}</span> <span class="num">{{count}}</span></li>
+					  			<li class="ql_{{level}}" name="{{level}}" type="quality_level"><span class="name">{{title}}</span> <span class="num">{{count}}</span></li>
 					  		{{/level}}
 				  		{{/qlcounts}}
 					</ul>

@@ -507,6 +507,14 @@ class Registry_object extends MX_Controller {
 			foreach($attributes as $a){
 				try{
 					$ro->setAttribute($a['name'], $a['value']);
+					if($a['name']=='gold_status_flag'&&$a['value']=='t')
+					{
+						$ro->setAttribute('quality_level',4);						
+					}
+					if($a['name']=='gold_status_flag'&&$a['value']=='f')
+					{
+						$ro->update_quality_metadata();						
+					}
 					if($ro->save())
 					{
 						if($a['name']=='status'&&$a['value']=='SUBMITTED_FOR_ASSESSMENT')

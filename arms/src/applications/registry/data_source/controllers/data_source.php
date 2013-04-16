@@ -492,7 +492,7 @@ class Data_source extends MX_Controller {
 
 			$item['qlcounts'] = array();
 			foreach ($this->ro->valid_levels AS $level){
-				array_push($item['qlcounts'], array('level' => $level, 'count' =>$ds->getAttribute("count_level_$level")));
+				array_push($item['qlcounts'], array('level' => $level, 'title' => ($level==4 ? 'Gold Standard Records' : 'Quality Level '.$level), 'count' =>$ds->getAttribute("count_level_$level")));
 			}
 
 			$item['classcounts'] = array();
@@ -550,7 +550,7 @@ class Data_source extends MX_Controller {
 
 		$jsonData['item']['qlcounts'] = array();
 		foreach ($this->ro->valid_levels AS $level){
-			array_push($jsonData['item']['qlcounts'], array('level' => $level, 'count' =>$dataSource->getAttribute("count_level_$level")));
+			array_push($jsonData['item']['qlcounts'], array('level' => $level, 'title' => ($level==4 ? 'Gold Standard Records' : 'Quality Level '.$level), 'count' =>$dataSource->getAttribute("count_level_$level")));
 		}
 
 		$jsonData['item']['classcounts'] = array();
@@ -1151,6 +1151,7 @@ public function getContributorGroupsEdit()
 			else 
 			{
 				$dataSource = $this->ds->getByID($id);
+				$dataSource->calcelAllharvests();
 				$dataSource->requestHarvest('','','','','','','','','','',false,true);
 				$jsonData['status'] = "OK";
 			}
@@ -1623,6 +1624,10 @@ public function getContributorGroupsEdit()
 					if($nextHarvestDate != '')
 					{
 						$dataSource->requestHarvest('','','','','','', $nextHarvestDate);
+					}
+					else if($dataSource->harvest_frequency != '')
+					{
+						$dataSource->requestHarvest();
 					}
 				}
 			}

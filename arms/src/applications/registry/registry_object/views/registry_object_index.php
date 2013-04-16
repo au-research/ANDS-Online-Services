@@ -63,6 +63,7 @@
 						<table class="table table-bordered table-striped">
 							<tr><th>Title</th><td><?php echo $ro->title;?></td></tr>
 							<tr><th>Status</th><td><?php if($viewing_revision && !$currentRevision) echo 'SUPERSEDED'; else echo $ro->status;?></td></tr>
+							<tr><th>Data Source</th><td><?php echo $ds->title;?></td></tr>
 							<tr><th>Key</th><td><?php echo $ro->key;?></td></tr>
 							<tr><th>ID</th><td><?php echo $ro->id;?></td></tr>						
 							<tr><th>slug</th><td><?php echo $ro->slug;?></td></tr>

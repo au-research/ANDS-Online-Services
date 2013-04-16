@@ -566,6 +566,12 @@ class _data_source {
 
 	function requestNewharvest()
 	{
+		$this->calcelAllharvests();
+		$this->requestHarvest();
+	}
+
+	function calcelAllharvests()
+	{
 		$oldRequests = $this->getHarvesterStatus();
 		if($oldRequests)
 		{
@@ -574,7 +580,6 @@ class _data_source {
 				$this->deleteHarvestRequest($request['id']);
 			}			
 		}
-		$this->requestHarvest();
 	}
 	
 	// TODO continue here!!!
@@ -781,14 +786,14 @@ class _data_source {
 		{
 			$harvestRequest .= '&set='.urlencode($OAISet);
 		}
-		$harvestRequest .= '&date='.urlencode($harvestDate);
-
 		if($immeadiate)
 		{
+			$harvestRequest .= '&date=';
 			$harvestRequest .= '&frequency=';
 		}
 		else
 		{
+			$harvestRequest .= '&date='.urlencode($harvestDate);
 			$harvestRequest .= '&frequency='.urlencode($harvestFrequency);
 		}
 

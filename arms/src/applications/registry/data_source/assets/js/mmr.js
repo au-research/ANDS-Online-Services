@@ -336,6 +336,9 @@ function initLayout(){
             }else if(key==='flag'){
                 text = 'Flagged';
             }else if(key==='quality_level'){
+                if(value == 4)
+                text = 'Gold Standard Records';
+                else
                 text = 'Quality Level '+value;
             }
             $('#active_filters').append('<span class="removeFilter tag" name="'+key+'"><a href="javascript:;">'+text+' <i class="icon icon-remove"></i></a></span>');
