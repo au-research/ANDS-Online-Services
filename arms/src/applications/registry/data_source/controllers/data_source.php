@@ -1526,10 +1526,12 @@ public function getContributorGroupsEdit()
 			}
 			else
 			{	
-	
-				$this->load->library('importer');	
+//http://dl.dropbox.com/u/49073372/R8_Test_Data.xml 
+//http://dl.dropbox.com/u/49073372/DuplicateRecordsRIFCS.XML
+//http://dl.dropbox.com/u/49073372/Collection%20Large%20Citation%20Full%20Element.XML	
 
-				$this->load->model('data_source/data_sources', 'ds');
+
+/*
 				$rifcsXml = '';
 				// xxx: this won't work with crosswalk!
 				try{
@@ -1561,56 +1563,61 @@ public function getContributorGroupsEdit()
 					}
 					else
 					{
+*/
+				$this->load->library('importer');	
+				$this->load->model('data_source/data_sources', 'ds');
 
-						$this->importer->setXML($rifcsXml);
+				$recordCount = preg_match_all("/<metadata>(.*?)<\/metadata>/", $data, $matches); 
+				if($recordCount === false || $recordCount == 0)
+					$this->importer->setXML($data);
+				else
+					$this->importer->setXML($matches);
 
-						if ($dataSource->provider_type != RIFCS_SCHEME)
+				if ($dataSource->provider_type != RIFCS_SCHEME)
+				{
+					$this->importer->setCrosswalk($dataSource->provider_type);
+				}
+
+				$this->importer->setHarvestID($harvestId);
+				$this->importer->setDatasource($dataSource);
+
+				if ($done != 'TRUE')
+				{
+					$this->importer->setPartialCommitOnly(TRUE);
+				}
+				else
+				{
+					$this->importer->setPartialCommitOnly(FALSE);
+				}
+
+
+				if($mode == "HARVEST")
+				{
+					try
+					{
+						$this->importer->commit();
+
+						if($this->importer->getErrors())
 						{
-							$this->importer->setCrosswalk($dataSource->provider_type);
-						}
-
-						$this->importer->setHarvestID($harvestId);
-						$this->importer->setDatasource($dataSource);
-
-						if ($done != 'TRUE')
-						{
-							$this->importer->setPartialCommitOnly(TRUE);
+							$dataSource->append_log($logMsgErr.NL.$this->importer->getMessages().NL.$this->importer->getErrors(), HARVEST_ERROR, "harvester", "HARVESTER_ERROR");	
 						}
 						else
 						{
-							$this->importer->setPartialCommitOnly(FALSE);
+							$gotData = true;
+							$dataSource->append_log($logMsg.NL.$this->importer->getMessages(), HARVEST_INFO, "harvester", "HARVESTER_INFO");	
 						}
-
-
-						if($mode == "HARVEST")
-						{
-							try
-							{
-								$this->importer->commit();
-
-								if($this->importer->getErrors())
-								{
-									$dataSource->append_log($logMsgErr.NL.$this->importer->getMessages().NL.$this->importer->getErrors(), HARVEST_ERROR, "harvester", "HARVESTER_ERROR");	
-								}
-								else
-								{
-									$gotData = true;
-									$dataSource->append_log($logMsg.NL.$this->importer->getMessages(), HARVEST_INFO, "harvester", "HARVESTER_INFO");	
-								}
-								
-								$dataSource->updateStats();
-								$responseType = 'success';
-							}
-							catch (Exception $e)
-							{
-								$dataSource->append_log($logMsgErr.NL."CRITICAL ERROR: " . NL . $e->getMessage() . NL . $this->importer->getErrors(), HARVEST_ERROR, "harvester","HARVESTER_ERROR");	
-							}
-						}
-						else{
-							$dataSource->append_log($logMsg, HARVEST_INFO, "harvester", "HARVESTER_INFO");	
-						}	
+						
+						$dataSource->updateStats();
+						$responseType = 'success';
+					}
+					catch (Exception $e)
+					{
+						$dataSource->append_log($logMsgErr.NL."CRITICAL ERROR: " . NL . $e->getMessage() . NL . $this->importer->getErrors(), HARVEST_ERROR, "harvester","HARVESTER_ERROR");	
 					}
 				}
+				else{
+					$dataSource->append_log($logMsg, HARVEST_INFO, "harvester", "HARVESTER_INFO");	
+				}	
 			}
 			if($done == 'TRUE')
 			{
