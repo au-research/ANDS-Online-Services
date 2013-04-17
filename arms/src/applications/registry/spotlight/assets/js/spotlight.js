@@ -23,6 +23,7 @@ $(function(){
 			$.ajax({
 				url:base_url+'spotlight/saveOrder', 
 				type: 'POST',
+				dataType: "html",
 				data: {data:array},
 				success: function(data){
 					//console.log(data)
@@ -51,9 +52,10 @@ $(function(){
 			url:base_url+'spotlight/save/'+id, 
 			type: 'POST',
 			data: jsonData,
+			dataType: "html",
 			success: function(data){
 				if(data=='success') {
-					document.location.reload(true);
+					location.reload();
 				} else alert(data);
 			}
 		});
@@ -65,9 +67,10 @@ $(function(){
 			$.ajax({
 				url:base_url+'spotlight/delete/'+id, 
 				type: 'POST',
+				dataType: "html",
 				success: function(data){
 					if(data=='success') {
-					document.location.reload(true);
+						window.location.reload(true);
 					} else alert(data);
 				}
 			});
@@ -83,6 +86,7 @@ $(function(){
 		$.ajax({
 			url:base_url+'spotlight/add/', 
 			type: 'POST',
+			dataType: "html",
 			data: jsonData,
 			success: function(data){
 				if(data=='success') {
@@ -90,29 +94,14 @@ $(function(){
 				} else alert(data);
 			}
 		});
-	})
-	/*$.getJSON(base_url+'assets/spotlight/spotlight.json',function(data){
-		var template = $('#spotlight-template').html();
-		var output = Mustache.render(template, data);
-		$('#item_list').html(output);
-
-		$('#item_list ul').sortable({
-			stop: function(ev, ui){
-				var array = $(this).sortable('toArray');
-				console.log(array);
-			}
-		});
-
-		json = data;
-		console.log(json);
-		save(json);
-	});*/
+	});
 });
 
 function save(jsonData){
 	$.ajax({
 		url:base_url+'spotlight/save', 
 		type: 'POST',
+		dataType: "html",
 		data: {data:jsonData},
 		success: function(data){
 			console.log(data)
