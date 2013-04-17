@@ -74,7 +74,7 @@
 							?>
 
 							<tr><th>Data Source</th><td><?php echo $ds->title;?></td></tr>
-							<tr><th>Key</th><td><?php echo $ro->key;?></td></tr>
+							<tr><th>Key</th><td style="width:100%; word-break:break-all;"><?php echo $ro->key;?></td></tr>
 							<tr><th>ID</th><td><?php echo $ro->id;?></td></tr>						
 							<tr><th>slug</th><td><?php echo $ro->slug;?></td></tr>
 							<tr><th>Quality Assessed</th><td><?php echo ($ro->getAttribute('manually_assessed') ? $ro->getAttribute('manually_assessed') : 'no')?></td></tr>
@@ -90,6 +90,9 @@
 					</div>
 				</div>
 
+				<?php 
+				if ($this->user->hasFunction('REGISTRY_STAFF')):
+				?>
 				<div class="widget-box">
 					<div class="widget-title">
 						<h5>Tags Management</h5>
@@ -98,15 +101,24 @@
 						<?php $data['ro'] = $ro; $this->load->view('tagging_interface', $data);?>
 					</div>
 				</div>
+				<?php
+				endif;
+				?>
 
-				<div class="widget-box">
-					<div class="widget-title">
-						<h5>Quality Report</h5>
+				<?php 
+				if ($this->user->hasFunction('REGISTRY_USER') && $this->user->hasAffiliation($ds->record_owner)):
+				?>
+					<div class="widget-box">
+						<div class="widget-title">
+							<h5>Quality Report</h5>
+						</div>
+						<div class="widget-content nopadding">
+							<?php echo $quality_text;?>
+						</div>
 					</div>
-					<div class="widget-content nopadding">
-						<?php echo $quality_text;?>
-					</div>
-				</div>
+				<?php
+				endif;
+				?>
 
 				<div class="widget-box">
 					<div class="widget-title">

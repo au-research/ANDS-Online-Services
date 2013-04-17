@@ -94,7 +94,11 @@
 				</div>
 				<div class="box-content">
 						<?php
-							if(sizeof($data_sources)>0){
+							if(!$this->user->hasFunction('REGISTRY_USER'))
+							{
+								echo 'You are not registered as a Data Source Administrator.';
+							}
+							elseif(sizeof($data_sources)>0){
 								echo '<ul>';
 								$i=0;
 								for(; $i < sizeof($data_sources) && $i < 7; $i++){

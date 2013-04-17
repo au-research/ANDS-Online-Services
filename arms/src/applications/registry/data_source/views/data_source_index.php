@@ -100,9 +100,17 @@
 <!-- end of main content container -->
 
 
-<section id="datasource-templates">
-<!-- mustache template for list of items-->
+<div class="modal hide" id="logModal">
+	<div class="modal-header"><button type="button" class="close" data-dismiss="modal">×</button>
+		<h4>Data Source Harvest error</h4>
+  	</div>
+  	<div class="modal-body"></div>
+  	<div class="modal-footer"></div>
+</div>
 
+<section id="datasource-templates">
+
+<!-- mustache template for list of items-->
 <div class="hide" id="items-template">
 	{{#items}}
 		<div class="widget-box">
@@ -130,21 +138,88 @@
 	{{/items}}
 </div>
 
-<script type="text/x-mustache" id="data_source_logs_template">
-<div class="modal hide" id="logModal">
-	<div class="modal-header">
-    	<button type="button" class="close" data-dismiss="modal">×</button>
-  	</div>
-  	<div class="modal-body"></div>
-  	<div class="modal-footer"></div>
+
+<!-- Error Templates -->
+<div class="hide" id="harvesterErrorTpl">
+
+<h4>Harvester Error</h4>
+
+<p><b>There was a problem communicating with the data source provider. </b></p>
+
+<p>
+	<b>Ensure that</b>
+<ul class="padded_list">
+	<li>The URL you provided is valid (including http:// or https://). </li>
+	<li>The URL you provided is available on the internet (i.e. not an internal intranet link). </li>
+	<li>If an OAI-PMH provider, the response is a valid OAI response. </li>
+	<li>If a HTTPS provider, the server is NOT using self-signed certificates. </li>
+</ul></p>
+
 </div>
 
+<div class="hide" id="documentLoadErrorTpl">
+<h4>Document Load Error</h4>
+
+<p><b>Your XML document failed to load, as the XML may not be correctly formed. </b></p>
+
+<p>
+	<b>Ensure that</b>
+<ul class="padded_list">
+	<li>All XML tags are nested properly.</li>
+	<li>All your records are structured correctly.</li>
+	<li>All your parent and child nodes are correctly formatted.</li>
+	<li>All your objects have been closed correctly. For example if you have an open tag <code>&lt;key&gt;</code> ensure you have a closed tag <code>&lt;/key&gt;</code>.</li>
+	<li><code>xmlns:xsi="http://www.w3.org/2001/XMLSchemainstance"</code> has been defined prior to the <code>xml:schemaLocation</code>, within your XML document.</li>
+</ul></p>
+
+<p>
+	<b>References</b>
+<ul class="normal">
+	<li><a href="http://www.w3.org/TR/REC-xml/" target="_blank">XML Specifications</a></li>
+	<li><a href="http://ands.org.au/guides/content-providers-guide.html" target="_blank">ANDS Content Providers Guide</a></li>
+	<li><a href="http://www.tizag.com/xmlTutorial/xmlparent.php" target="_blank">XML Parent information</a></li>
+	<li><a href="http://www.tizag.com/xmlTutorial/xmlchild.php" target="_blank">XML Child information</a></li>
+	<li><a href="http://services.ands.org.au/documentation/rifcs/schemadocs/registryObjects.html" target="_blank">RIF-CS Schema Documentation</a></li>
+</ul>
+</p>
+
+</div>
+
+<div class="hide" id="validationErrorTpl">
+
+<h4>Document Validation Error</h4>
+
+<p><b>Your XML document failed to validate against the RIF-CS schema </b></p>
+
+<p>
+	<b>Ensure that</b>
+<ul class="padded_list">
+	<li>All the records within your XML document have all the required elements and their associated attributes.</li>
+	<li>All registry object elements and their associated attributes are correctly spelled and labelled.</li>
+	<li>All the records within your XML document contain ONLY valid RIF-CS elements.</li>
+	<li>Your XML file does not contain any invalid characters.</li>
+</ul></p>
+
+<p>
+	<b>References</b>
+<ul class="normal">
+	<li><a href="http://ands.org.au/guides/content-providers-guide.html" target="_blank">ANDS Content Providers Guide</a></li>
+	<li><a href="http://services.ands.org.au/documentation/rifcs/schemadocs/registryObjects.html" target="_blank">RIF-CS Schema Documentation</a></li>
+</ul>
+</p>
+
+</div>
+
+<script type="text/x-mustache" id="data_source_logs_template">
 {{#items}}
 	<li class="{{type}}">
-		<a href="javascript:;" class="{{type}}"><i class="icon-list-alt"></i>{{log_snippet}} <span class="label">{{date_modified}}</span></a>
-		<div class="log hide">
-			<div class="log_error {{harvester_error_type}}" type="{{harvester_error_type}}" description="{{log}}"></div>
-			<pre>{{log}}</pre>
+		<a href="javascript:;" class="expand_log {{type}}"><i class="icon-list-alt"></i>{{log_snippet}} <span class="label">{{date_modified}}</span></a>
+		<div class="log hide">			
+			 {{#harvester_error_type}}
+			 	<img data-error-type="{{harvester_error_type}}" style="float:right; cursor:pointer;" class="more_error_detail" src="<?=asset_url('img/Question-mark-icon.png','base');?>" alt="more about this error" />
+			 {{/harvester_error_type}}
+			<pre style="width:95%; float:left;">{{log}}</pre>
+			<br class="clear"/>
 		</div>
 	</li>
 {{/items}}
@@ -228,7 +303,7 @@
 			<div class="widget-box">
 				<div class="widget-title">
 					<h5 id="activity_log_title">Activity Log</h5>
-					<div class="pull-right" style="margin-top:4px; margin-right:4px;">
+					<div id="activity_log_switcher" class="pull-right" style="margin-left:10px; margin-top:4px; margin-right:4px; line-height:16px;">
 						<select class="log-type btn-mini">
 							<option value="all">All Logs</option>
 							<option value="error">Errors</option>

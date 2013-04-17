@@ -96,6 +96,13 @@ class Registry_object extends MX_Controller {
 
 		$data['ownedDatasource'] = $this->ds->getOwnedDataSources();
 
+		acl_enforce('REGISTRY_USER');
+		if(count($data['ownedDatasource']) == 0)
+		{
+			// XXX: This should redirect to DS affiliation screen!
+			throw new Exception("Unable to Add Records - you are not yet affiliated with any data sources! Contact the registry owner.");
+		}
+
 		$this->load->view("add_registry_objects", $data);
 	}
 
@@ -104,6 +111,9 @@ class Registry_object extends MX_Controller {
 		$ro = $this->ro->getByID($registry_object_id);
 
 		if(!$ro) { throw new Exception("This Registry Object ID does not exist!"); }
+
+		acl_enforce('REGISTRY_USER');
+		ds_acl_enforce($ro->data_source_id);
 
 		if($ro->status == PUBLISHED)
 		{
@@ -123,8 +133,6 @@ class Registry_object extends MX_Controller {
 		{
 			header("Location: " . registry_url('registry_object/edit/' . $ro->id));
 		}
-		
-		ds_acl_enforce($ro->data_source_id);
 
 		$data['extrif'] = $ro->getExtRif();
 		$data['content'] = $ro->transformCustomForFORM($data['extrif']);
@@ -168,6 +176,9 @@ class Registry_object extends MX_Controller {
 			throw new Exception("No registry object exists with that ID!");
 		}
 
+		acl_enforce('REGISTRY_USER');
+		ds_acl_enforce($ro->data_source_id);
+
 		$ds = $this->ds->getByID($ro->data_source_id);
 
 		$this->importer->forceDraft();
@@ -209,6 +220,9 @@ class Registry_object extends MX_Controller {
 
 		$this->load->library('importer');
 		$data = $this->input->post('data');
+
+		acl_enforce('REGISTRY_USER');
+		ds_acl_enforce($data['data_source_id']);
 		
 		$this->load->model('registry_objects', 'ro');
 		$record_owner = $this->user->identifier();
