@@ -131,9 +131,7 @@ function processRelatedObjects()
             }
 
             $.each(data.connections, function(){
-            if(showRelated < maxRelated)
-            {
-                showRelated++;            
+       
                 var id = this.registry_object_id;
                 var title = this.title;
                 var key = this.key;
@@ -141,17 +139,19 @@ function processRelatedObjects()
                 var origin = this.origin;
                 var relationship = this.relation_type
 
+                var revStr = '';
                 if(id)
                 {
                     var linkTitle = '<a href="' + base_url + 'registry_object/view/'+id+'">'+title+'</a>'; 
                     title = linkTitle;
                 }
-                if(origin == 'EXPLICIT')
+                if(origin == 'REVERSE_EXT'||origin == 'REVERSE_INT')
                 {
-                                        $('#rorow').show();
-                    $('.resolvedRelated[key_value="'+key+'"]').html(title );
+                    revStr = "<em> (Automatically generated reverse link) </em>"
                 }
-                else if(origin == 'REVERSE_EXT'||origin == 'REVERSE_INT'){
+
+                if(showRelated < maxRelated){
+                    showRelated++;     
                     $('#rorow').show();
                     var keyFound = false;
                     $('.resolvable_key').each(function(){
@@ -169,40 +169,13 @@ function processRelatedObjects()
                                         '</tr>' +
                                         '<tr><td class="attribute">Relation:</td>' +
                                         '<td class="valueAttribute"><table class="subtable1"><tr><td>type:</td><td>'+
-                                        relationship+'<em> (Automatically generated reverse link) </em></td></tr></table></td>' +
+                                        relationship+revStr+'</td></tr></table></td>' +
                                         '</tr>' +
                                         '</table></tr></td></table>';
-                        $('#related_objects_table').last().append(newRow)                        
-                    }
-                                      
-                }
-               else if(origin == 'PRIMARY'){
-                    $('#rorow').show();
-                    var keyFound = false;
-                    $('.resolvable_key').each(function(){
-                        if($(this).attr('key_value')==key){
-                                keyFound=true;
-                        }
-                    });
-                    if(!keyFound)
-                    {
-                         var newRow = '<table class="subtable">' +                                      
-                                        '<tr><td><table class="subtable1">'+
-                                        '<tr><td></td><td class="resolvedRelated" >'+title+'</td></tr>'+
-                                        '<tr><td class="attribute">Key</td>' +
-                                        '<td class="valueAttribute resolvable_key" key_value="'+ key +'">'+key+'</td>' +
-                                        '</tr>' +
-                                        '<tr><td class="attribute">Relation:</td>' +
-                                        '<td class="valueAttribute"><table class="subtable1"><tr><td>type:</td><td>'+
-                                        relationship+'</td></tr></table></td>' +
-                                        '</tr>' +
-                                        '</table></tr></td></table>';
-                        $('#related_objects_table').last().append(newRow)                        
-                    }
-                                      
-                }  
-               } 
-             
+                        $('#related_objects_table').last().append(newRow)  
+                    } 
+                 }  
+ 
             });
 
             if(moreToShow!='')
@@ -213,6 +186,5 @@ function processRelatedObjects()
         }
                       
     });
-
 
 }

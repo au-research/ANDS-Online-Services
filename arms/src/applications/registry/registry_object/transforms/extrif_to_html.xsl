@@ -77,7 +77,7 @@
 		</tr>
 	</xsl:template-->
 	
-	<xsl:template match="ro:relatedObject/ro:key">
+<!--	<xsl:template match="ro:relatedObject/ro:key">
 		<tr>
 			<td></td><td class="resolvedRelated" key_value="{.}"></td>
 		</tr>	
@@ -87,10 +87,10 @@
 			<td class="valueAttribute resolvable_key" key_value="{.}">
 				<xsl:value-of select="."/>
 			</td>
-		</tr>
+		</tr> 
 
 
-	</xsl:template>
+	</xsl:template>-->
 	
 	<xsl:template match="ro:originatingSource">
 		<xsl:value-of select="."/>
@@ -162,9 +162,9 @@
 				<td>Related Objects:</td>
 				<td>
 					<table class="subtable" id="related_objects_table">
-					<xsl:if test="ro:relatedObject">
+					<!-- <xsl:if test="ro:relatedObject">
 						<xsl:apply-templates select="ro:relatedObject"/>
-					</xsl:if>
+					</xsl:if> -->
 					</table>
 				</td>
 			</tr>
