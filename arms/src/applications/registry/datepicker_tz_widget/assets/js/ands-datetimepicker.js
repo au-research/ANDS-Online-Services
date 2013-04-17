@@ -892,30 +892,39 @@
     },
 
     fillTZ: function(timezones) {
+      var dstlabel = ' <span class="label label-info"><small>DST</small></span>';
       var list = this.widget.find(
 	'.timepicker .timepicker-tz ul');
       list.parent().hide();
       list.append('<li class="alert alert-small"><small>' +
-		  'UTC offset shown in decimal hours' +
-		  '</small></li>');
-      list.append('<li class="alert alert-small"><small>' +
-		  '<strong>*</strong> = DST timezone (applied as required)' +
+		  dstlabel + ':  DST timezone (applied as required)' +
 		  '</small></li>');
       $.each(timezones, function(idx, tz) {
-	var li = $('<li/>');
-	var button = $('<button class="btn btn-block" />');
-	button.data('offset', idx);
-	button.data('tz', tz);
+	tz = tz.replace('_',' ');
 	var offset = idx.split(',')[0]/60;
+	var isdst = idx.split(',')[1] === "1";
+	var li = $('<li/>');
+	var button = $('<button class="btn btn-block" ' +
+		       'data-offset="' + idx + '" data-tz="' + tz + '" />');
+
+	offset = parseFloat(offset).toFixed(2);
 	if (idx.substr(0,1) !== '-') {
-	  offset = "+" + parseFloat(offset).toFixed(1);
+	  offset = "+" + offset;
 	}
+
+	var minutes = (offset.split('.')[1]/100 * 60).toString();
+	if (minutes.length === 1) {
+	  minutes = "0" + minutes;
+	}
+	offset = offset.split('.')[0] + ':' + minutes;
+
 	if (tz !== "UTC") {
-	  button.html(tz + (idx.split(',')[1] == 1 ? '<strong>*</strong>' : '') + ' <small>(' + offset + ')</small>');
+	  button.html(tz + (isdst ? dstlabel : '') + ' <small>(' + offset + ')</small>');
 	}
 	else {
-	  button.html(tz + (idx.split(',')[1] == 1 ? '<strong>*</strong>' : ''));
+	  button.html(tz + (isdst ? dstlabel : ''));
 	}
+
 	li.append(button);
 	list.append(li);
       });
@@ -1668,7 +1677,7 @@
     tzTemplate: function(opts) {
       var wrapper = $('<div />');
       var container = $('<span data-action="showTZ" class="timepicker-tz"/>');
-      container.html('<i class="icon-globe"> </i> ' + opts.current.name);
+      container.html('<i class="icon-globe"> </i> ' + opts.current.name.replace('_', ' '));
       wrapper.append(container);
       return wrapper.html();
       /*
