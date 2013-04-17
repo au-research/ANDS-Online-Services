@@ -1476,10 +1476,11 @@ public function getContributorGroupsEdit()
 		$nextHarvestDate = '';
 		$errmsg = '';
 		$message = 'THANK YOU';
-		$logMsg = 'Harvest completed successfully';
-		$logMsgErr = 'An error occurred whilst trying to harvest records';
 		$harvestId = false;
 		$gotData = false;
+		$logMsg = 'Harvest completed successfully';
+		$logMsgErr = 'An error occurred whilst trying to harvest records';
+
 		if (isset($POST['harvestid'])){
 			$harvestId = (int) $this->input->post('harvestid');
 		}
@@ -1487,7 +1488,7 @@ public function getContributorGroupsEdit()
 		{
 		$this->load->model("data_sources","ds");
 		$dataSource = $this->ds->getByHarvestID($harvestId);
-
+		$dataSource->harvest_method;
 
 
 			if (isset($POST['content'])){
@@ -1505,17 +1506,21 @@ public function getContributorGroupsEdit()
 			if (isset($POST['mode'])){
 				$mode =  strtoupper($this->input->post('mode'));
 			}
+
 			if($mode == 'TEST')
 			{
-				$logMsg = 'Test harvest completed successfully';
-				$logMsgErr = 'An error occurred whilst testing harvester settings';
+				$logMsg = 'Test harvest completed successfully (harvest ID: '.$harvestId.')' . NL . ' ---';
+				$logMsgErr = 'An error occurred whilst testing harvester settings (harvest ID: '.$harvestId.')';
 			}
 
+			// OAI requests get a different message
+			if ($mode == 'HARVEST' && $dataSource->harvest_method == 'RIF')
+			{
+				$logMsg = 'Received some new records from the OAI provider... (harvest ID: '.$harvestId.')' . NL . ' ---';
+				$logMsgErr = 'An error occurred whilst receiving records from the OAI provider... (harvest ID: '.$harvestId.')';
+			}
 		
 
-			$logMsg .= ' (harvestID: '.$harvestId.')';
-			$logMsgErr .= ' (harvestID: '.$harvestId.')';
-			//$dataSource->append_log("HARVESTER TRYING TO PUT DATA:".NL." Completed: ".$done.NL." mode: ".$mode , HARVEST_MSG, "harvester","HARVESTER_INFO");
 			if($errmsg)
 			{
 				$dataSource->append_log($logMsgErr.NL."HARVESTER RESPONDED UNEXPECTEDLY: ".$errmsg, HARVEST_ERROR, "harvester","HARVESTER_ERROR");
@@ -1530,11 +1535,26 @@ public function getContributorGroupsEdit()
 				$this->load->library('importer');	
 				$this->load->model('data_source/data_sources', 'ds');
 
-				$recordCount = preg_match_all("/<metadata>(.*?)<\/metadata>/", $data, $matches); 
-				if($recordCount === false || $recordCount == 0)
-					$this->importer->setXML($data);
+				$recordCount = preg_match_all("/<metadata>(.*?)<\/metadata>/sm", $data, $matches);
+
+				if(!$recordCount)
+				{
+					if (strpos('<error code="noRecordsMatch">',$data) !== FALSE)
+					{
+						$logMsg .= NL . "\tOAI Provider returned no matching records.";
+						$mode = "CANCELLED";
+						$done = true;
+					}
+					else
+					{
+						// Probably a DIRECT harvest?
+						$this->importer->setXML($data);
+					}
+				}
 				else
-					$this->importer->setXML($matches);
+				{
+					$this->importer->setXML($matches[1]);
+				}
 
 				if ($dataSource->provider_type != RIFCS_SCHEME)
 				{
@@ -1544,7 +1564,10 @@ public function getContributorGroupsEdit()
 				$this->importer->setHarvestID($harvestId);
 				$this->importer->setDatasource($dataSource);
 
-				$this->importer->setPartialCommitOnly(TRUE);
+				if ($dataSource->harvest_method == 'RIF')
+				{
+					$this->importer->setPartialCommitOnly(TRUE);
+				}
 
 				if($mode == "HARVEST")
 				{
@@ -1552,25 +1575,31 @@ public function getContributorGroupsEdit()
 					{
 						$this->importer->commit();
 
+
 						if($this->importer->getErrors())
 						{
-							$dataSource->append_log($logMsgErr.NL.$this->importer->getMessages().NL.$this->importer->getErrors(), HARVEST_ERROR, "harvester", "HARVESTER_ERROR");	
+							$dataSource->append_log($logMsgErr.NL.$this->importer->getMessages().NL.$this->importer->getErrors(), HARVEST_ERROR, 'harvester', "HARVESTER_ERROR");	
 						}
 						else
 						{
+							if($dataSource->harvest_method == 'RIF')
+							{
+								$logMsg = 'Received ' . $this->importer->ingest_attempts. ' new records from the OAI provider... (harvest ID: '.$harvestId.')' . NL . ' ---';
+							}
+
 							$gotData = true;
-							$dataSource->append_log($logMsg.NL.$this->importer->getMessages(), HARVEST_INFO, "harvester", "HARVESTER_INFO");	
+							$dataSource->append_log($logMsg.NL.$this->importer->getMessages(), HARVEST_INFO, 'oai', "HARVESTER_INFO");	
 						}
 						
-						$dataSource->updateStats();
 						$responseType = 'success';
 					}
 					catch (Exception $e)
 					{
-						$dataSource->append_log($logMsgErr.NL."CRITICAL ERROR: " . NL . $e->getMessage() . NL . $this->importer->getErrors(), HARVEST_ERROR, "harvester","HARVESTER_ERROR");	
+						$dataSource->append_log($logMsgErr.NL."CRITICAL ERROR: " . NL . $e->getMessage() . NL . $this->importer->getErrors(), HARVEST_ERROR, 'harvester',"HARVESTER_ERROR");	
 					}
 				}
-				else{
+				else
+				{
 					$dataSource->append_log($logMsg, HARVEST_INFO, "harvester", "HARVESTER_INFO");	
 				}	
 			}
@@ -1591,11 +1620,6 @@ public function getContributorGroupsEdit()
 					{
 						$dataSource->requestHarvest();
 					}
-
-					// The importer will only get the last OAI chunk! so reindex the lot...
-					$dataSource->reindexAllRecords();
-					$dataSource->updateStats();
-
 				}
 			}
 			
@@ -1611,6 +1635,46 @@ public function getContributorGroupsEdit()
 		print('<timestamp>'.date("Y-m-d H:i:s").'</timestamp>'."\n");
 		print("<message>".$message."</message>\n");
 		print("</response>");
+		flush(); ob_flush();
+
+		// Continue post-harvest cleanup...
+		if ($done =='TRUE' && $mode =='HARVEST')
+		{
+
+			if ($dataSource->harvest_method == 'RIF')
+			{
+				$harvested_record_count = 0;
+				$this->db->select('value')->from('registry_object_attributes')->where(array('attribute'=>'harvest_id','value'=>$harvestId));
+				$query = $this->db->get();
+				$harvested_record_count = $query->num_rows();
+
+				if ($harvested_record_count < 300)
+				{
+					$log_estimate = 'less than a minute';
+				}
+				else
+				{
+					// estimate 0.2s per record ingest speed
+					$log_estimate = "+/- " . ceil($harvested_record_count / (60*5)) . " minutes";
+				}
+
+				$dataSource->append_log($harvested_record_count . ' records received from OAI Provider. Ingesting them into the registry... (harvest ID: '.$harvestId.')' . NL 
+										. "* This should take " . $log_estimate . NL . ' --- ' . NL . $dataSource->consolidateHarvestLogs($harvestId)
+										, HARVEST_INFO, "harvester", "HARVESTER_INFO");
+
+				// The importer will only get the last OAI chunk! so reindex the lot...
+				$dataSource->reindexAllRecords();
+				$dataSource->updateStats();
+
+				$dataSource->append_log('Harvest complete! '.$harvested_record_count.' records harvested and ingested into the registry...  (harvest ID: '.$harvestId.')', HARVEST_INFO, "harvester", "HARVESTER_INFO");
+			}
+			else
+			{
+				// clean-up after harvest?
+			}
+		}
+
+
 	}
 
 
@@ -1619,7 +1683,7 @@ public function getContributorGroupsEdit()
 	{
 		$POST = $this->input->post();
 		print_r($POST);
-				print('<?xml version="1.0" encoding="UTF-8"?>'."\n");
+		print('<?xml version="1.0" encoding="UTF-8"?>'."\n");
 		print('<response type="">'."\n");
 		print('<timestamp>'.date("Y-m-d H:i:s").'</timestamp>'."\n");
 		print("<message> we need to get the contibutor groups and the pages if required</message>\n");

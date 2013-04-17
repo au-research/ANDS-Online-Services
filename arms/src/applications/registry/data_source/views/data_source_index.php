@@ -227,7 +227,7 @@
 
 			<div class="widget-box">
 				<div class="widget-title">
-					<h5>Activity Log</h5>
+					<h5 id="activity_log_title">Activity Log</h5>
 					<div class="pull-right" style="margin-top:4px; margin-right:4px;">
 						<select class="log-type btn-mini">
 							<option value="all">All Logs</option>
@@ -447,7 +447,7 @@
 		'contact_email' => 'Contact Email',
 		'notes' => 'Notes',
 		//'created' => 'Created When',
-		'created_who' => 'Created Who'
+		//'created_who' => 'Created Who'
 	);
 ?>
 
@@ -777,7 +777,7 @@
 	<div class="content-header">
 		<h1>{{title}}</h1>
 		<ul class="nav nav-pills">
-			<li class="active view page-control" data_source_id="{{data_source_id}}"><a href="<?=base_url('data_source/manage#!/view/');?>/{{data_source_id}}">Dashboard</a></li>
+			<li class="view page-control" data_source_id="{{data_source_id}}"><a href="<?=base_url('data_source/manage#!/view/');?>/{{data_source_id}}">Dashboard</a></li>
 			<li class="mmr page-control" data_source_id="{{data_source_id}}"><a href="<?=base_url('data_source/manage_records/');?>/{{data_source_id}}">Manage Records</a></li>
 			<li class="report page-control" data_source_id="{{data_source_id}}"><a href="<?=base_url('data_source/report/');?>/{{data_source_id}}">Reports</a></li>
 			<li class="active settings page-control" data_source_id="{{data_source_id}}"><a href="<?=base_url('data_source/manage#!/settings/');?>/{{data_source_id}}">Settings</a></li>

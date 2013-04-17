@@ -18,7 +18,6 @@ function checkResponse(data)
 {
 	if (data.status == "ERROR")
 	{
-		console.log(data.message);
 		logErrorOnScreen(data.message);
 	}
 }
@@ -145,9 +144,16 @@ $(document).ready(function(){
 
 
 	//jgrowl
-	window.createGrowl = function(persistent,text_data) {
+	window.createGrowl = function(wrapAlert,text_data, target) {
+		if (wrapAlert)
+		{
+			text_data = "<div class='alert alert-info' style='margin-bottom:0px;'>" + text_data + "</div>";
+		}
         // Use the last visible jGrowl qtip as our positioning target
-        var target = $('.qtip.jgrowl:visible:last');
+        if (!target)
+        {
+        	var target = $('.qtip.jgrowl:visible:last');
+        }
 
         // Create your jGrowl qTip...
         $(document.body).qtip({
@@ -204,6 +210,7 @@ $(document).ready(function(){
             },
             style: {
                 classes: 'jgrowl ui-tooltip-bootstrap ui-tooltip-rounded',
+                width: 360,
                 // Some nice visual classes
                 tip: false // No tips for this one (optional ofcourse)
             },

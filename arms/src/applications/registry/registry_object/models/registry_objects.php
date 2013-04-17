@@ -612,7 +612,7 @@ class Registry_objects extends CI_Model {
 
 		if ($error_log = $this->importer->getErrors())
 		{
-			throw new Exception("Errors occured whilst migrating to PUBLISHED status: " . NL . $error_log);
+			throw new Exception("Errors occured whilst cloning the record to DRAFT status: " . NL . $error_log);
 		}
 		
 		return $this->getDraftByKey($registry_object->key);

@@ -113,7 +113,8 @@ class Importer {
 			foreach ($this->xmlPayload AS $idx => $payload)
 			{
 				// Escape XML entities from the start...
-				$payload = str_replace("&", "&amp;", $payload);
+				$payload = $this->cleanSchemaLocation(str_replace("&", "&amp;", $payload));
+
 				// Clean up non-UTF8 characters by trying to translate them
 
 				// If we have php-mbstring enabled, convert to UTF-8 (fixes crash on curly quotes!)
@@ -741,6 +742,11 @@ class Importer {
 	public function forceDraft()
 	{
 		$this->forceDraft = TRUE;
+	}
+
+	public function cleanSchemaLocation($string)
+	{
+		return preg_replace('/ xsi:schemaLocation=".*?"/sm','', $string);
 	}
 
 	/**

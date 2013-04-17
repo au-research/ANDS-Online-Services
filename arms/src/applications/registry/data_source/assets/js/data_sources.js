@@ -504,6 +504,7 @@ function loadTopLogs(data_source_id)
 {
 	if(doLoadLogs && lastLogId)
 	{
+		$('#activity_log_title').append(' <img src="'+base_url+'assets/img/ajax-loader.gif" alt="Loading..Please wait.."/>')
 		var log_type = $('select.log-type').val();
 		$.ajax({
 			url: 'data_source/getDataSourceLogs/',
@@ -511,6 +512,7 @@ function loadTopLogs(data_source_id)
 			type: 'POST',
 			dataType: 'json',
 			success: function(data){
+				$('#activity_log_title img').fadeOut(900);
 				var logsTemplate = $('#data_source_logs_template').html();
 				var output = Mustache.render(logsTemplate, data);
 				if(data.last_log_id != '' && lastLogId != data.last_log_id){
@@ -524,7 +526,6 @@ function loadTopLogs(data_source_id)
 			}
 		});
 	}
-	log("loadTopLogs::: data_source_id:" + data_source_id + " lastLogId:" + lastLogId + " logTimer: " + logTimer);	
 	return false;
 
 }
@@ -1158,8 +1159,8 @@ $('#save-edit-form').live({
 						logErrorOnScreen("An error occured whilst saving your changes!", $('#myModal .modal-body'));
 						$('#myModal .modal-body').append("<br/><pre>" + data + "</pre>");
 					}else{
-						changeHashTo('settings/'+ds_id);
-						createGrowl("Your Data Source was successfully updated");
+						changeHashTo('view/'+ds_id);
+						createGrowl(true, "Data Source settings were successfully updated");
 						updateGrowls();
 					}
 				},
@@ -1192,10 +1193,11 @@ $('#importFromHarvesterLink').live({
 			data: jsonData,
 			dataType: 'json',
 			success: function(data){
+				checkResponse(data);
 				if (data.status == "OK")
 				{
 					changeHashTo('view/'+$('#data_source_view_container').attr('data_source_id'));
-					createGrowl("Your harvest was successfully queued for harvest. Check the Activity Log below.");
+					createGrowl(true, "<center>Your harvest been queued. <br/>Check the Activity Log for details.</center>");
 					updateGrowls();
 				}
 			},

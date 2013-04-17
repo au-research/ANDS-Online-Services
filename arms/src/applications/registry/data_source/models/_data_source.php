@@ -515,8 +515,23 @@ class _data_source {
 	 */
 	function append_log($log_message, $log_type = "info", $log_class="data_source", $harvester_error_type=NULL)
 	{
-		$this->db->insert("data_source_logs", array("data_source_id" => $this->id, "date_modified" => time(), "type" => $log_type, "log" => $log_message, "class" => $log_class,"harvester_error_type" => $harvester_error_type));
+		$this->db->insert("data_source_logs", 
+			array("data_source_id" => $this->id, "date_modified" => time(), "type" => $log_type, "log" => $this->clean_log_message($log_message), "class" => $log_class,"harvester_error_type" => $harvester_error_type));
 		return $this->db->insert_id();
+	}
+
+	private function clean_log_message($log_message)
+	{
+		// Some crude logic to try and clean up the log message if we have a heap of duplicate records (rubbish Geonetwork OAI providers)
+		if (strlen($log_message) > 500)
+		{
+			$log_message = preg_replace('/Ignored a record received twice in this harvest.*\n/', '',$log_message,-1, $replacements);
+			if ($replacements)
+			{
+				$log_message .= NL .$replacements . " duplicate record(s) were ignored in the harvest feed.";
+			}
+		}
+		return $log_message;
 	}
 	
 	function get_logs($offset = 0, $count = 10, $logid=null, $log_class='all', $log_type='all')
@@ -698,7 +713,7 @@ class _data_source {
 	
 	function consolidateHarvestLogs($harvestId, $prepended_message = '')
 	{
-		$this->db->select('log')->from('data_source_logs')->where(array('data_source_id'=>$this->id, 'class'=>'harvester'))->like('harvestID: ' . $harvestId, 'both');
+		$this->db->select('log')->from('data_source_logs')->where(array('data_source_id'=>$this->id, 'class'=>'oai'))->like('log', 'harvest ID: ' . $harvestId, 'both')->order_by('id','DESC');
 		$query = $this->db->get();
 
 		$accumulated_log = '';
@@ -706,11 +721,13 @@ class _data_source {
 		{
 			foreach ($query->result_array() AS $result)
 			{
+				$result['log'] = preg_replace('/Received .*? new records from the OAI provider.*\n.*---.*\n/sm', '',$result['log'],-1, $replacements);
 				$accumulated_log .= $result['log'] . NL;
 			}
 		}
 
-		echo $accumulated_log;
+		$this->db->delete('data_source_logs', array('data_source_id'=>$this->id, 'class'=>'oai'));
+		return $accumulated_log;
 	}
 	
 	function submitHarvestRequest($harvestRequest, $msg, $harvestId)
@@ -734,10 +751,10 @@ class _data_source {
 			
 			if( $responseType != 'SUCCESS' )
 			{
-				$logID = $this->append_log("Unable to Schedule Harvest: ".NL.$msg.NL.$message, HARVEST_ERROR, 'harvester');
+				$logID = $this->append_log("Unable to Schedule Harvest ".NL.$msg.NL.$message, HARVEST_ERROR, 'harvester');
 			}
 			else{
-				$logID = $this->append_log("A new harvest has been scheduled: (harvest ID: ".$harvestId.")".NL.$msg, HARVEST_INFO, 'harvester');
+				$logID = $this->append_log("A new harvest has been scheduled (harvest ID: ".$harvestId.")".NL.$msg, HARVEST_INFO, 'harvester');
 			}
 		}
 		return $logID;
@@ -785,9 +802,9 @@ class _data_source {
 		$harvestRequestId = $this->insertHarvestRequest($harvestFrequency, $OAISet, $created, $updated, $nextHarvest, $status);
 		
 		if($nextHarvest)
-			$msg = 'for: '.$nextHarvest;
+			$msg = 'Schedule for: '.$nextHarvest;
 		else
-			$msg = 'for: '.date("d-m-Y H:i:s");	
+			$msg = 'Scheduled for: '.date("d-m-Y H:i:s");	
 		$msg .= NL.'URI: '.$dataSourceURI;
 		$msg .= NL.'Provider Type: '.$providerType;
 		$msg .= NL.'Harvest Method: '.$harvestMethod;
