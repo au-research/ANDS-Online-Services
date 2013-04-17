@@ -444,7 +444,7 @@
 		cache: this.settings.cache,
 		dataType: "jsonp",
 		success: function(data) { callee.trigger(action + '.vocab.ands', data); },
-		error: function(xhr) { callee.trigger('error.vocab.ands', xhr); },
+		error: function(xhr) { callee.trigger('error.vocab.ands', xhr); }
 	    });
 	}
     });
@@ -646,6 +646,7 @@
 
 	_subclick: function(ev) {
 	    var handler = this;
+	    var fire = true;
 	    ev.stopPropagation();
 	    var target = $(ev.target);
 
@@ -653,6 +654,13 @@
 	    {
 		target = target.parent();
 		ev.target = target;
+	    }
+
+	    if (target.is('ins'))
+	    {
+		target = target.parent();
+		ev.target = target;
+		fire = false;
 	    }
 
 	    var itemdata = target.data('vocab');
@@ -680,7 +688,7 @@
 		break;
 	    }
 
-	    if (target.is('li')) {
+	    if (target.is('li') && fire === true) {
 	    	target.trigger('treeselect.vocab.ands', ev);
 	    }
 	},
@@ -717,7 +725,8 @@
 	    icon.on('click', function(e) {
 		e.preventDefault();
 		e.stopPropagation();
-		$(e.target).parent().click();
+	        //invoke the subclick but we won't fire the event
+		handler._subclick(e);
 	    });
 	    list.append(titem).slideDown(150);
 	},

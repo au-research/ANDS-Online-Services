@@ -210,7 +210,7 @@ function loadSubjectBrowse(val){
 		sqc += '&defType=edismax';
 		$('#subjectfacet div').vocab_widget({mode:'tree', repository:'anzsrc-for', sqc:sqc, endpoint: window.default_base_url + 'registry/vocab_widget/proxy/'})
 		.on('treeselect.vocab.ands', function(event) {
-			var target = $(event.target).parent();
+			var target = $(event.target);
 			var data = target.data('vocab');
 			searchData['subject_vocab_uri'] = encodeURIComponent(data.about);
 			searchData['subject_vocab_uri_display'] = data.label;
