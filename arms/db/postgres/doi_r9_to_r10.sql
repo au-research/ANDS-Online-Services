@@ -1,0 +1,10 @@
+ALTER TABLE doi_alternate_identifiers DROP CONSTRAINT "doi_id";
+ALTER TABLE doi_contributors DROP CONSTRAINT "doi_id";
+ALTER TABLE doi_creators DROP CONSTRAINT "doi_id";
+ALTER TABLE doi_dates DROP CONSTRAINT "doi_id";
+ALTER TABLE doi_descriptions DROP CONSTRAINT "doi_id";
+ALTER TABLE doi_formats DROP CONSTRAINT "doi_id";
+ALTER TABLE doi_related_identifiers DROP CONSTRAINT "doi_id";
+ALTER TABLE doi_resource_types DROP CONSTRAINT "doi_id";
+ALTER TABLE doi_sizes DROP CONSTRAINT "doi_id";
+ALTER TABLE doi_subjects DROP CONSTRAINT "doi_id";
