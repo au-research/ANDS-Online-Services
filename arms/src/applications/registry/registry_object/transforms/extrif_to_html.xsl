@@ -49,16 +49,7 @@
 				</tr>	
 			
 				<xsl:apply-templates select="ro:collection | ro:activity | ro:party | ro:service"/>
-				
-				
-				<tr>
-					<td>Created When:</td>
-					<td>
-						<xsl:value-of select="$dateCreated"/>
-					</td>
-				</tr>
-				
-		
+						
 			</tbody>
 		</table>
 	</xsl:template>
@@ -88,12 +79,17 @@
 	
 	<xsl:template match="ro:relatedObject/ro:key">
 		<tr>
+			<td></td><td class="resolvedRelated" key_value="{.}"></td>
+		</tr>	
+		<tr>
 			<td class="attribute">
 				<xsl:value-of select="name()"/><xsl:text>: </xsl:text></td>
 			<td class="valueAttribute resolvable_key" key_value="{.}">
-				<xsl:value-of select="."/><span class="resolvedRelated"></span>
+				<xsl:value-of select="."/>
 			</td>
 		</tr>
+
+
 	</xsl:template>
 	
 	<xsl:template match="ro:originatingSource">
@@ -161,16 +157,18 @@
 		</xsl:if>
 		
 		
-		<xsl:if test="ro:relatedObject">
-			<tr>
+
+			<tr class="hide" id="rorow">
 				<td>Related Objects:</td>
 				<td>
 					<table class="subtable" id="related_objects_table">
+					<xsl:if test="ro:relatedObject">
 						<xsl:apply-templates select="ro:relatedObject"/>
+					</xsl:if>
 					</table>
 				</td>
 			</tr>
-		</xsl:if>
+
 		
 		
 		<xsl:if test="ro:subject">

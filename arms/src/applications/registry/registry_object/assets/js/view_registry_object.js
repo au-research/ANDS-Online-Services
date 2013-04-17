@@ -114,23 +114,48 @@ function processRelatedObjects()
         url: base_url+'registry_object/getConnections/'+$('#registry_object_id').val(),
         dataType: 'json',
         success: function(data){
+                            console.log(data.connections)
             $.each(data.connections, function(){
                 var id = this.registry_object_id;
                 var title = this.title;
                 var key = this.key;
                 var status = this.status;
                 var origin = this.origin;
-                //log("id:" + id + ", key:" + key + ", title:" + title + ", status:" + status + ", origin:" + origin);
+                var relationship = this.relation_type
+
+                if(id)
+                {
+                    var linkTitle = '<a href="' + base_url + 'registry_object/view/'+id+'">'+title+'</a>'; 
+                    title = linkTitle;
+                }
                 if(origin == 'EXPLICIT')
                 {
-                    $('.resolvable_key[key_value="'+key+'"] span.resolvedRelated').html(" <b>  TITLE: " + title + "</b>");
+                    $('.resolvedRelated[key_value="'+key+'"]').html(title );
                 }
-                else if(origin == 'REVERSE_EXT'){
-                    //<table id="related_objects_table">
-                    // ADD REVERSE LINKS to the bottom of the table with EXTERNAL REVERSE DISPLAYED
-                }
-                else if(origin == 'REVERSE_INT'){
-                    // ADD REVERSE LINKS to the bottom of the table with INTERNAL REVERSE DISPLAYED
+                else if(origin == 'REVERSE_EXT'||origin == 'REVERSE_INT'){
+                    $('#rorow').show();
+                    var keyFound = false;
+                    $('.resolvable_key').each(function(){
+                        if($(this).attr('key_value')==key){
+                                keyFound=true;
+                        }
+                    });
+                    if(!keyFound)
+                    {
+                         var newRow = '<table class="subtable">' +                                      
+                                        '<tr><td><table class="subtable1">'+
+                                        '<tr><td></td><td class="resolvedRelated" >'+title+'</td></tr>'+
+                                        '<tr><td class="attribute">Key</td>' +
+                                        '<td class="valueAttribute resolvable_key" key_value="'+ key +'">'+key+'</td>' +
+                                        '</tr>' +
+                                        '<tr><td class="attribute">Relation:</td>' +
+                                        '<td class="valueAttribute"><table class="subtable1"><tr><td>type:</td><td>'+
+                                        relationship+'<em> (Automatically generated reverse link) </em></td></tr></table></td>' +
+                                        '</tr>' +
+                                        '</table></tr></td></table>';
+                        $('#related_objects_table').last().append(newRow)                        
+                    }
+                                      
                 }
             });
 
