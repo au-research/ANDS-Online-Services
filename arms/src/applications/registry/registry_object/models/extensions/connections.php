@@ -230,7 +230,8 @@ class Connections_Extension extends ExtensionBase
 						 ->from('registry_object_relationships rr')
 						 ->join('registry_objects r','rr.registry_object_id = r.registry_object_id')
 						 ->where('rr.related_object_key',$this->ro->key)
-						 ->where('r.data_source_id',$this->ro->data_source_id);
+						 ->where('r.data_source_id',$this->ro->data_source_id)
+						 ->where('rr.origin !=','PRIMARY');
 		$query = $this->db->get();
 
 		foreach ($query->result_array() AS $row)

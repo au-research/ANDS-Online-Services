@@ -114,8 +114,26 @@ function processRelatedObjects()
         url: base_url+'registry_object/getConnections/'+$('#registry_object_id').val(),
         dataType: 'json',
         success: function(data){
-                            console.log(data.connections)
+             var maxRelated = 0
+             var showRelated = 0;
+             var moreToShow = '';
+            if(data.connections.length>10)
+            {
+                maxRelated = 10;
+                numToShow = data.connections.length - 10;
+                moreToShow = '<table class="subtable">' +                                      
+                            '<tr><td><table class="subtable1">'+
+                            '<tr><td></td><td class="resolvedRelated" > There are '+numToShow+' more related objects</td></tr>'+                                     
+                            '</table></tr></td></table>';
+ 
+            }else{
+                 maxRelated = data.connections.length;
+            }
+
             $.each(data.connections, function(){
+            if(showRelated < maxRelated)
+            {
+                showRelated++;            
                 var id = this.registry_object_id;
                 var title = this.title;
                 var key = this.key;
@@ -130,6 +148,7 @@ function processRelatedObjects()
                 }
                 if(origin == 'EXPLICIT')
                 {
+                                        $('#rorow').show();
                     $('.resolvedRelated[key_value="'+key+'"]').html(title );
                 }
                 else if(origin == 'REVERSE_EXT'||origin == 'REVERSE_INT'){
@@ -157,9 +176,42 @@ function processRelatedObjects()
                     }
                                       
                 }
+               else if(origin == 'PRIMARY'){
+                    $('#rorow').show();
+                    var keyFound = false;
+                    $('.resolvable_key').each(function(){
+                        if($(this).attr('key_value')==key){
+                                keyFound=true;
+                        }
+                    });
+                    if(!keyFound)
+                    {
+                         var newRow = '<table class="subtable">' +                                      
+                                        '<tr><td><table class="subtable1">'+
+                                        '<tr><td></td><td class="resolvedRelated" >'+title+'</td></tr>'+
+                                        '<tr><td class="attribute">Key</td>' +
+                                        '<td class="valueAttribute resolvable_key" key_value="'+ key +'">'+key+'</td>' +
+                                        '</tr>' +
+                                        '<tr><td class="attribute">Relation:</td>' +
+                                        '<td class="valueAttribute"><table class="subtable1"><tr><td>type:</td><td>'+
+                                        relationship+'</td></tr></table></td>' +
+                                        '</tr>' +
+                                        '</table></tr></td></table>';
+                        $('#related_objects_table').last().append(newRow)                        
+                    }
+                                      
+                }  
+               } 
+             
             });
 
+            if(moreToShow!='')
+            {
+                $('#related_objects_table').last().append(moreToShow)     
+            }
+                              
         }
+                      
     });
 
 
