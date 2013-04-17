@@ -306,7 +306,7 @@
     '-180,0'   : 'America/Argentina/Buenos_Aires',
     '-180,1,s' : 'America/Montevideo',
     '-120,0'   : 'America/Noronha',
-    '-120,1'   : 'America/Noronha',
+//    '-120,1'   : 'America/Noronha',
     '-60,1'    : 'Atlantic/Azores',
     '-60,0'    : 'Atlantic/Cape_Verde',
     '0,0'      : 'UTC',
@@ -333,8 +333,8 @@
     '420,0'    : 'Asia/Jakarta',
     '480,0'    : 'Asia/Shanghai',
     '480,1'    : 'Asia/Irkutsk',
-    '525,0'    : 'Australia/Eucla',
-    '525,1,s'  : 'Australia/Eucla',
+    '525,0'    : 'Australia/Perth',
+//    '525,1,s'  : 'Australia/Eucla',
     '540,1'    : 'Asia/Yakutsk',
     '540,0'    : 'Asia/Tokyo',
     '570,0'    : 'Australia/Darwin',
@@ -356,8 +356,8 @@
 
   // Monkey patching Date to provide iso8601 for non-conforming browsers
   // c.f. http://stackoverflow.com/a/8563517/664095
-  if (!Date.prototype.toISOString) {
-    Date.prototype.toISOString = function() {
+  if (!Date.prototype.getISO8601) {
+    Date.prototype.getISO8601 = function() {
         function pad(n) { return n < 10 ? '0' + n : n }
         return this.getUTCFullYear() + '-'
             + pad(this.getUTCMonth() + 1) + '-'
@@ -434,7 +434,7 @@
       if (!this.format) {
         if (this.isInput) this.format = this.$element.data('format');
         else this.format = this.$element.find('input').data('format');
-        if (!this.format) this.format = 'yyyy/MM/dd';
+        if (!this.format) this.format = 'iso8601';
       }
       this._compileFormat();
       if (this.component) {
@@ -451,6 +451,7 @@
         icon.removeClass(this.timeIcon);
         icon.addClass(this.dateIcon);
       }
+      this._timezone = {name: this.jstz.determine().name(), offset: this.jstz.offset()};
       var templateopts = {
 	timeIcon: this.timeIcon,
 	pickDate: options.pickDate,
@@ -459,7 +460,7 @@
 	pickSec: options.pickSeconds,
 	pickTZ: options.pickTZ,
 	collapse: options.collapse,
-	currTZ: {name: this.jstz.determine().name(), offset: this.jstz.offset()}};
+	currTZ: this._timezone};
       this.widget = $(getTemplate(templateopts)).appendTo('body');
       this.minViewMode = options.minViewMode||this.$element.data('date-minviewmode')||0;
       if (typeof this.minViewMode === 'string') {
@@ -1095,9 +1096,8 @@
 	  var offset = tgt.data('offset');
 	  var label = $('span.timepicker-tz');
 	  label.html('<i class="icon-globe"> </i> ' + tz);
-	  $('.timepicker .timepicker-tz').hide();
-	  $('.timepicker-picker').show();
-	  $('.timepicker-picker .timepicker-tz').show();
+	  this._timezone = {name: tz, offset: offset};
+          this.actions.showPicker.call(this);
 	}
       },
 
@@ -1529,6 +1529,7 @@
   };
 
   var dateFormatComponents = {
+    iso8601: {property: 'ISO8601', getPattern: function() { return '(\\d{4}-\\d{2}-\\d{2}T\\d{2}\\:\\d{2}\\:\\d{2}\\+Z)\\b';}},
     dd: {property: 'UTCDate', getPattern: function() { return '(0?[1-9]|[1-2][0-9]|3[0-1])\\b';}},
     MM: {property: 'UTCMonth', getPattern: function() {return '(0?[1-9]|1[0-2])\\b';}},
     yy: {property: 'UTCYear', getPattern: function() {return '(\\d{2})\\b'}},
