@@ -325,6 +325,7 @@ class Importer {
 					else
 					{
 						$ro->slug = DRAFT_RECORD_SLUG . $ro->id;
+						$ro->setAttribute("manually_assessed", 'no');
 					}
 
 					// Save all our attributes to the object

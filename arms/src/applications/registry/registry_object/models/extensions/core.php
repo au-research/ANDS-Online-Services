@@ -179,7 +179,10 @@ class Core_extension extends ExtensionBase
 
 		if (isDraftStatus($this->getAttribute('original_status')) && isDraftStatus($target_status))
 		{
-			// pass; 
+			if($this->getAttribute('original_status') == 'ASSESSMENT_IN_PROGRESS' && $target_status == 'APPROVED')
+				$this->setAttribute("manually_assessed", 'yes');
+			if($target_status == 'DRAFT')
+				$this->setAttribute("manually_assessed", 'no');
 		}
 		// Else, if the draft is being published:
 		else if (isDraftStatus($this->getAttribute('original_status')) && isPublishedStatus($target_status))
@@ -194,9 +197,17 @@ class Core_extension extends ExtensionBase
 			else if ($existingRegistryObject)
 			{
 				// Delete this original draft and change this object to point to the PUBLISHED (seamless changeover)
+				$manuallyAssessed = $this->getAttribute('manually_assessed');
 				$this->ro = $this->_CI->ro->getPublishedByKey($this->getAttribute("key"));
+
+				if($this->getAttribute('original_status') == 'ASSESSMENT_IN_PROGRESS' || $manuallyAssessed == 'yes')
+				{
+					$this->ro->setAttribute("manually_assessed", 'yes');
+					$this->ro->save();
+				}
 				$this->_CI->ro->deleteRegistryObject($this->id);
 				$this->id = $this->ro->id;
+
 				$this->init();
 			}
 
@@ -214,7 +225,11 @@ class Core_extension extends ExtensionBase
 				$this->_CI->importer->forcePublish();
 				$this->_CI->importer->statusAlreadyChanged = true;
 				$this->_CI->importer->commit();
-
+				if($this->getAttribute('original_status') == 'ASSESSMENT_IN_PROGRESS' || $this->getAttribute('manually_assessed') == 'yes')
+				{
+					$this->ro = $this->_CI->ro->getPublishedByKey($this->getAttribute("key"));
+					$this->ro->setAttribute("manually_assessed", 'yes');
+				}
 				if ($error_log = $this->_CI->importer->getErrors())
 				{
 					throw new Exception("Errors occured whilst migrating to PUBLISHED status: " . NL . $error_log);
