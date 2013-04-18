@@ -118,7 +118,7 @@
 				<h5 class="ellipsis"><a title="{{key}}" class="view" href="#!/view/{{id}}">{{title}}</a> {{#record_owner}}({{record_owner}}){{/record_owner}}</h5>
 			</div>
 			<div class="btn-group item-control">
-	  			<button class="btn btn-small view page-control" data_source_id="{{id}}"><i class="icon-eye-open"></i> View</button>
+	  			<button class="btn btn-small view page-control" data_source_id="{{id}}"><i class="icon-eye-open"></i> Dashboard</button>
 	  			<button class="btn btn-small mmr page-control" data_source_id="{{id}}"><i class="icon-folder-open"></i> Manage</button>
 		  		<button class="btn btn-small settings page-control" data_source_id="{{id}}"><i class="icon-edit"></i> Settings</button>
 			</div>
