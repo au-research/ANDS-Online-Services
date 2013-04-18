@@ -1609,11 +1609,7 @@ public function getContributorGroupsEdit()
 					{	
 						$dataSource->deleteOldRecords($harvestId);
 					} 
-					if($nextHarvestDate != '')
-					{
-						$dataSource->requestHarvest('','','','','','', $nextHarvestDate);
-					}
-					else if($dataSource->harvest_frequency != '')
+					if($dataSource->harvest_frequency != '')
 					{
 						$dataSource->requestHarvest();
 					}

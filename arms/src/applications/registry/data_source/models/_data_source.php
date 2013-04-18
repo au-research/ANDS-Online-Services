@@ -763,7 +763,7 @@ class _data_source {
 
 	
 	function requestHarvest($created = '', $updated = '', $dataSourceURI = '', $providerType = '', $OAISet = '', $harvestMethod = '', $harvestDate = '', 			
-		$harvestFrequency = '', $advancedHarvestMode = '', $nextHarvest = '', $testOnly = false, $immeadiate=false)
+		$harvestFrequency = '', $advancedHarvestMode = '', $nextHarvest = '', $testOnly = false, $immediate=false)
 	{
 		$dataSource = $this->id;
 		$responseTargetURI = base_url('data_source/putharvestData');
@@ -795,20 +795,47 @@ class _data_source {
         if($nextHarvest == '')
 			$nextHarvest = $harvestDate;	
 
-		$status = "SCHEDULED FOR ". ($nextHarvest ? $nextHarvest : "NOW");
+		
+		
+		if($immediate)
+		{
+			$nextHarvest = date('c',time());
+		}
+		elseif(strtotime($nextHarvest) < time())
+		{
 
-		$mode = 'harvest'; if( $testOnly ){ $mode = 'test'; }		
-		
-		$harvestRequestId = $this->insertHarvestRequest($harvestFrequency, $OAISet, $created, $updated, $nextHarvest, $status);
-		
+			if($harvestFrequency == 'hourly')
+				$nextHarvest = date('c', time()+60*60);
+			elseif($harvestFrequency == 'daily')
+				$nextHarvest = date('c', strtotime('+1 day',time()));
+			elseif($harvestFrequency == 'weekly')
+				$nextHarvest = date('c', strtotime('+1 week',time()));
+			elseif($harvestFrequency == 'fortnightly')
+				$nextHarvest = date('c', strtotime('+2 week',time()));
+			elseif($harvestFrequency == 'monthly')
+				$nextHarvest = date('c', strtotime('+1 wmonth',time()));
+		}
+
+		$mode = 'harvest'; if( $testOnly ){ $mode = 'test'; }	
+
 		if($nextHarvest)
 			$msg = 'Schedule for: '.$nextHarvest;
 		else
-			$msg = 'Scheduled for: '.date("d-m-Y H:i:s");	
+			$msg = '???Scheduled for: '.date("d-m-Y H:i:s");	
+
+		$status = "SCHEDULED FOR ". $nextHarvest;	
+		
+		$harvestRequestId = $this->insertHarvestRequest($harvestFrequency, $OAISet, $created, $updated, $nextHarvest, $status);
+		
+
+
+
+
 		$msg .= NL.'URI: '.$dataSourceURI;
 		$msg .= NL.'Provider Type: '.$providerType;
 		$msg .= NL.'Harvest Method: '.$harvestMethod;
 		$msg .= NL.'Harvest Mode: '.$mode;
+		$msg .= NL.'harvest Frequency: '.$harvestFrequency;
 
 		$harvestRequest  = 'requestHarvest?';
 		$harvestRequest .= 'responsetargeturl='.urlencode($responseTargetURI);		
@@ -819,20 +846,13 @@ class _data_source {
 		{
 			$harvestRequest .= '&set='.urlencode($OAISet);
 		}
-		if($immeadiate)
+		$harvestRequest .= '&mode='.urlencode($mode);
+		$harvestRequest .= '&ahm='.urlencode($advancedHarvestMode);
+		if(!$immediate)
 		{
-			$harvestRequest .= '&date=';
-			$harvestRequest .= '&frequency=';
-		}
-		else
-		{
-			$harvestRequest .= '&date='.urlencode($harvestDate);
 			$harvestRequest .= '&frequency='.urlencode($harvestFrequency);
 		}
 
-		$harvestRequest .= '&mode='.urlencode($mode);
-		$harvestRequest .= '&ahm='.urlencode($advancedHarvestMode);
-		
 		// Submit the request.
 		//$logID = 0;
 		//if($dataSourceURI && $dataSourceURI != 'http://')

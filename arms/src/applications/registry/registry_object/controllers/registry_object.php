@@ -206,7 +206,7 @@ class Registry_object extends MX_Controller {
 					"qa_$ro->quality_level"=>true,
 					"qa"=>$ro->get_quality_text()
 					);
-			//if($qa) $result['qa'] = true; WHISKY TANGO FOXTROT
+			if($qa) $result['qa'] = true;
 			echo json_encode($result);
 		}
 	}
