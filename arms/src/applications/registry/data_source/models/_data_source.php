@@ -821,7 +821,7 @@ class _data_source {
 		if($nextHarvest)
 			$msg = 'Schedule for: '.$nextHarvest;
 		else
-			$msg = '???Scheduled for: '.date("d-m-Y H:i:s");	
+			$msg = 'Scheduled for: '.date("d-m-Y H:i:s");	
 
 		$status = "SCHEDULED FOR ". $nextHarvest;	
 		
@@ -850,6 +850,7 @@ class _data_source {
 		$harvestRequest .= '&ahm='.urlencode($advancedHarvestMode);
 		if(!$immediate)
 		{
+			$harvestRequest .= '&date='.urlencode($nextHarvest);
 			$harvestRequest .= '&frequency='.urlencode($harvestFrequency);
 		}
 
