@@ -9,6 +9,7 @@
  * @package ands/registry_object
  * 
  */
+date_default_timezone_set('Australia/Melbourne');
 ?>
 <?php $this->load->view('header');?>
 <div id="content" style="margin-top:45px;margin-left:0px">
@@ -75,12 +76,15 @@
 								echo "<tr><th>Status</th><td style='background-color:#FF6633; color:white;'><b>SUPERSEDED</b></td></tr>"; 
 							}
 							?>
-
 							<tr><th>Data Source</th><td><?php echo $ds->title;?></td></tr>
 							<tr><th>Key</th><td style="width:100%; word-break:break-all;"><?php echo $ro->key;?></td></tr>
 							<tr><th>ID</th><td><?php echo $ro->id;?></td></tr>						
 							<tr><th>slug</th><td><?php echo $ro->slug;?></td></tr>
-							<tr><th>Quality Assessed</th><td><?php echo ($ro->getAttribute('manually_assessed') ? $ro->getAttribute('manually_assessed') : 'no')?></td></tr>
+							<tr><th>Last edited by</th><td><?php echo $ro->getAttribute('created_who'); ?></td></tr>
+							<tr><th>Date last changed</th><td><?php echo date("j F Y, g:i a", (int)$ro->getAttribute('updated')); ?></td></tr>
+							<tr><th>Date created</th><td><?php echo date("j F Y, g:i a", (int)$ro->getAttribute('created')); ?></td></tr>
+							<tr><th>Feed type</th><td><?php echo (strpos($ro->getAttribute('harvest_id'),'MANUAL') === 0 ? 'manual entry' : 'harvest');?></td></tr>
+							<tr><th>Quality Assessed</th><td><?php echo ($ro->getAttribute('manually_assessed') ? $ro->getAttribute('manually_assessed') : 'no');?></td></tr>
 							<tr><td></td><td></td></tr>
 							<tr><th>RIFCS Format</th><td><a href="javascript:;" class="btn btn-small" id="exportRIFCS"><i class="icon-eject"></i> Export RIFCS</a></td></tr>
 							<?php 
