@@ -43,12 +43,12 @@
 				</div>
 			</div>
 
-			<div class="control-group">
+	<div class="control-group hidden">
 				<label class="control-label" for="key">Originating Source</label>
 				<div class="controls">
-					<input required type="text" class="input-xlarge" name="originatingSource" value="">
+					<input required type="text" class="input-xlarge" name="originatingSource" value="<?php echo base_url();?>/orca/register_my_data">
 				</div>
-			</div>
+			</div> 
 
 			<div class="control-group">
 				<label class="control-label" for="key">Group</label>
