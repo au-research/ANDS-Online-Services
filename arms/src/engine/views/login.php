@@ -48,13 +48,16 @@
 				</div>
 
 			</div>
-			<div class="widget" style="text-align:center">
-				<a href="<?php echo portal_url();?>" class="btn btn-info pull-center" target="_blank">
-				<i class="icon-globe icon icon-white"></i> Visit Research Data Australia</a>
-			</div>
+
 		</div>
 
-		<div class="span3"></div>
+
+		<div class="pull-right widget-box" style="clear:right;padding:20px">
+
+			<a href="<?php echo portal_url();?>" class="btn btn-info pull-center" target="_blank">
+			<i class="icon-globe icon icon-white"></i> Visit Research Data Australia</a>
+	
+		</div>
 	</div>	
 </div>
 
