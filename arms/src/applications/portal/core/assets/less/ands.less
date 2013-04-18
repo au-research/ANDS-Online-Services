@@ -201,6 +201,7 @@ div.topic_view {
 
 .previewPopup{
 	max-width:800px;
+	min-width:550px
 }
 
 .previewbox{
@@ -440,4 +441,19 @@ img.clearAll{
 		line-height:22px;
 		padding: 0 0 5px;
 	}
+}
+
+/***********************************************************************************/
+/*                             Overriding styles for qtip css	for preview popup	               */
+/***********************************************************************************/
+.ui-tooltip-light .ui-tooltip-titlebar{
+	background-color:#ffffff;
+}
+.ui-tooltip-titlebar{
+	position:relative;
+	min-height:18px;
+	padding:5px 35px 5px 10px;
+	overflow:hidden;
+	border-width:0 0 1px;
+	font-weight:700
 }
