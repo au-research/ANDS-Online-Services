@@ -488,10 +488,10 @@
             <xsl:when test="string-length(@type) &gt; 512">
 	            <xsl:choose>
 				    <xsl:when test="$output = 'script'">
-	                	<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Type must be less than 512 characters.");</xsl:text>
+	                	<xsl:text>SetWarnings("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Type must be less than 512 characters.");</xsl:text>
 				    </xsl:when>
 				    <xsl:otherwise>
-						<span class="error">Subject Type must be less than 512 characters.</span>
+						<span class="warning">Subject Type must be less than 512 characters.</span>
 				    </xsl:otherwise>
 		    	</xsl:choose>
             </xsl:when>
@@ -522,10 +522,10 @@
             <xsl:when test="string-length(.) &gt; 512">
 	            <xsl:choose>
 				    <xsl:when test="$output = 'script'">
-                		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Subject must be less than 512 characters.");</xsl:text>
+                		<xsl:text>SetWarnings("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Subject must be less than 512 characters.");</xsl:text>
 				    </xsl:when>
 				    <xsl:otherwise>
-						<span class="error">Subject must be less than 512 characters.</span>
+						<span class="warning">Subject must be less than 512 characters.</span>
 				    </xsl:otherwise>
 		    	</xsl:choose>
             </xsl:when>
@@ -571,10 +571,10 @@
             <xsl:when test="string-length(.) &gt; 12000">
                 <xsl:choose>
 				    <xsl:when test="$output = 'script'">
-               			 <xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Description Value must be less than 12000 characters.");</xsl:text>
+               			 <xsl:text>SetWarnings("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Description Value must be less than 12000 characters.");</xsl:text>
 				    </xsl:when>
 				    <xsl:otherwise>
-						<span class="error">Description must be less than 12000 characters.</span>
+						<span class="warning">Description must be less than 12000 characters.</span>
 				    </xsl:otherwise>
 		    	</xsl:choose>
             </xsl:when>
@@ -622,10 +622,10 @@
         <xsl:if test="string-length(@type) &gt; 512">
         	<xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Name must be less than 512 characters.");</xsl:text>
+            		<xsl:text>SetWarnings("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Name must be less than 512 characters.");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
-					<span class="error">Name must be less than 512 characters.</span>
+					<span class="warning">Name must be less than 512 characters.</span>
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>
@@ -646,10 +646,10 @@
         <xsl:if test="string-length(@type) &gt; 512">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-					<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Name Part type must be less than 512 characters");</xsl:text>          							
+					<xsl:text>SetWarnings("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Name Part type must be less than 512 characters");</xsl:text>          							
 			    </xsl:when>
 			    <xsl:otherwise>
-					<span class="error">Name Part type must be less than 512 characters.</span>
+					<span class="warning">Name Part type must be less than 512 characters.</span>
 			    </xsl:otherwise>
 	    	</xsl:choose>	    	
         </xsl:if>
@@ -675,10 +675,10 @@
         <xsl:if test="string-length(.) &gt; 512">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-	    			<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Name Part must be less than 512 characters.");</xsl:text>
+	    			<xsl:text>SetWarnings("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Name Part must be less than 512 characters.");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
-					<span class="error">Name Part must be less than 512 characters.</span>
+					<span class="warning">Name Part must be less than 512 characters.</span>
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>
@@ -742,10 +742,10 @@
         <xsl:if test="string-length(ro:value) &gt; 512">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-	    			<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Electronic Address must be less than 512 characters.");</xsl:text>
+	    			<xsl:text>SetWarnings("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Electronic Address must be less than 512 characters.");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
-					<span class="error">Electronic Address must be less than 512 characters.</span>
+					<span class="warning">Electronic Address must be less than 512 characters.</span>
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>
@@ -812,10 +812,10 @@
         <xsl:if test="string-length(.) &gt; 512">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Address Part must be less than 512 characters.");</xsl:text>
+            		<xsl:text>SetWarnings("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Address Part must be less than 512 characters.");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
-					<span class="error">Address Part must be less than 512 characters.</span>
+					<span class="warning">Address Part must be less than 512 characters.</span>
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>
@@ -869,10 +869,10 @@
     	<xsl:if test="string-length(ro:name) &gt; 512">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Name must be less than 512 characters.");</xsl:text>
+            		<xsl:text>SetWarnings("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Name must be less than 512 characters.");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
-					<span class="error">Electronic Address Arg. Name must be less than 512 characters.</span>
+					<span class="warning">Electronic Address Arg. Name must be less than 512 characters.</span>
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>
@@ -972,10 +972,10 @@
         <xsl:if test="string-length(@type) &gt; 512">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Relation type must be less than 512 characters");</xsl:text>
+            		<xsl:text>SetWarnings("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Relation type must be less than 512 characters");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
-					<span class="error">Relation type must be less than 512 characters.</span>
+					<span class="warning">Relation type must be less than 512 characters.</span>
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>
@@ -986,10 +986,10 @@
         <xsl:if test="string-length(.) &gt; 512">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Relation Description must be less than 512 characters.");</xsl:text>
+            		<xsl:text>SetWarnings("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Relation Description must be less than 512 characters.");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
-					<span class="error">Relation Description must be less than 512 characters.</span>
+					<span class="warning">Relation Description must be less than 512 characters.</span>
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>
@@ -999,10 +999,10 @@
         <xsl:if test="string-length(.) &gt; 512">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-           			<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Relation URL must be less than 512 characters.");</xsl:text>
+           			<xsl:text>SetWarnings("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Relation URL must be less than 512 characters.");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
-					<span class="error">Relation URL must be less than 512 characters.</span>
+					<span class="warning">Relation URL must be less than 512 characters.</span>
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>
@@ -1138,10 +1138,10 @@
         <xsl:if test="string-length(.) &gt; 512">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Temporal Coverage Date value must be less than 512 characters.");</xsl:text>
+            		<xsl:text>SetWarnings("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Temporal Coverage Date value must be less than 512 characters.");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
-					<span class="error">Temporal Coverage Date value must be less than 512 characters.</span>
+					<span class="warning">Temporal Coverage Date value must be less than 512 characters.</span>
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>
@@ -1201,10 +1201,10 @@
         <xsl:if test="string-length(.) &gt; 512">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Temporal Coverage Text value must be less than 512 characters.");</xsl:text>
+            		<xsl:text>SetWarnings("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Temporal Coverage Text value must be less than 512 characters.");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
-					<span class="error">Temporal Coverage Text value must be less than 512 characters.</span>
+					<span class="warning">Temporal Coverage Text value must be less than 512 characters.</span>
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>
@@ -1224,10 +1224,10 @@
         <xsl:if test="string-length(.) &gt; 512">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Spatial Coverage value must be less than 512 characters.");</xsl:text>
+            		<xsl:text>SetWarnings("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Spatial Coverage value must be less than 512 characters.");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
-					<span class="error">Spatial Coverage value must be less than 512 characters.</span>
+					<span class="warning">Spatial Coverage value must be less than 512 characters.</span>
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>
@@ -1267,10 +1267,10 @@
         <xsl:if test="string-length(.) &gt; 512">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Spatial Location value must be less than 512 characters.");</xsl:text>
+            		<xsl:text>SetWarnings("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Spatial Location value must be less than 512 characters.");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
-					<span class="error">Spatial Location value must be less than 512 characters.</span>
+					<span class="warning">Spatial Location value must be less than 512 characters.</span>
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>
@@ -1314,10 +1314,10 @@
         <xsl:if test="string-length(.) &gt; 512">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Full Citation must be less than 512 characters.");</xsl:text>
+            		<xsl:text>SetWarnings("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Full Citation must be less than 512 characters.");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
-					<span class="error">Full Citation must be less than 512 characters.</span>
+					<span class="warning">Full Citation must be less than 512 characters.</span>
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>
@@ -1394,10 +1394,10 @@
         <xsl:if test="string-length(.) &gt; 512">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Existence Date must be less than 512 characters.");</xsl:text>
+            		<xsl:text>SetWarnings("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Existence Date must be less than 512 characters.");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
-					<span class="error">Existence End Date must be less than 512 characters.</span>
+					<span class="warning">Existence End Date must be less than 512 characters.</span>
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>
@@ -1432,10 +1432,10 @@
         <xsl:if test="string-length(.) &gt; 12000">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Rights Statement must be less than 12000 characters.");</xsl:text>
+            		<xsl:text>SetWarnings("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Rights Statement must be less than 12000 characters.");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
-					<span class="error">Rights Statement must be less than 12000 characters.</span>
+					<span class="warning">Rights Statement must be less than 12000 characters.</span>
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>
@@ -1455,20 +1455,20 @@
         <xsl:if test="string-length(.) &gt; 12000">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Licence must be less than 12000 characters.");</xsl:text>
+            		<xsl:text>SetWarnings("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Licence must be less than 12000 characters.");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
-					<span class="error">Licence must be less than 12000 characters.</span>
+					<span class="warning">Licence must be less than 12000 characters.</span>
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>
         <xsl:if test="string-length(@rightsUri) &gt; 512">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-           			<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Rights URI must be less than 512 characters.");</xsl:text>
+           			<xsl:text>SetWarnings("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Rights URI must be less than 512 characters.");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
-					<span class="error">Licence Rights URI must be less than 512 characters.</span>
+					<span class="warning">Licence Rights URI must be less than 512 characters.</span>
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>
@@ -1478,7 +1478,7 @@
         <xsl:if test="string-length(.) &gt; 12000">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Access Rights must be less than 12000 characters.");</xsl:text>
+            		<xsl:text>SetWarnings("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Access Rights must be less than 12000 characters.");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="error">Access Rights must be less than 12000 characters.</span>
@@ -1488,10 +1488,10 @@
         <xsl:if test="string-length(@rightsUri) &gt; 512">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-           			<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Rights URI must be less than 512 characters.");</xsl:text>
+           			<xsl:text>SetWarnings("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Rights URI must be less than 512 characters.");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
-					<span class="error">Access Rights URI must be less than 512 characters.</span>
+					<span class="warning">Access Rights URI must be less than 512 characters.</span>
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>
@@ -1593,10 +1593,10 @@
         <xsl:if test="string-length(.) &gt; 512">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Name Part must be less than 512 characters.");</xsl:text>
+            		<xsl:text>SetWarnings("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Name Part must be less than 512 characters.");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
-					<span class="error">Citation Metadata Contributor Name Part must be less than 512 character.</span>
+					<span class="warning">Citation Metadata Contributor Name Part must be less than 512 character.</span>
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>
@@ -1626,10 +1626,10 @@
         <xsl:if test="string-length(.) &gt; 512">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Date must be less than 512 characters.");</xsl:text>
+            		<xsl:text>SetWarnings("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Date must be less than 512 characters.");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
-					<span class="error">Citation Metadata Date must be less than 512 characters.</span>
+					<span class="warning">Citation Metadata Date must be less than 512 characters.</span>
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>
@@ -1669,10 +1669,10 @@
 	    <xsl:if test="string-length(.) &gt; 512">
 	        <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-	        		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Title must be less than 512 characters.");</xsl:text>
+	        		<xsl:text>SetWarnings("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Title must be less than 512 characters.");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
-					<span class="error">Citation Metadata Title must be less than 512 characters.</span>
+					<span class="warning">Citation Metadata Title must be less than 512 characters.</span>
 			    </xsl:otherwise>
 	    	</xsl:choose>
 	    </xsl:if>
@@ -1692,10 +1692,10 @@
 	    <xsl:if test="string-length(.) &gt; 512">
 	        <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-	        		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","URL must be less than 512 characters.");</xsl:text>
+	        		<xsl:text>SetWarnings("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","URL must be less than 512 characters.");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
-					<span class="error">Citation Metadata URL must be less than 512 characters.</span>
+					<span class="warning">Citation Metadata URL must be less than 512 characters.</span>
 			    </xsl:otherwise>
 	    	</xsl:choose>
 	    </xsl:if>
@@ -1715,10 +1715,10 @@
 	    <xsl:if test="string-length(.) &gt; 512">
 	        <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-	        		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Context must be less than 512 characters.");</xsl:text>
+	        		<xsl:text>SetWarnings("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Context must be less than 512 characters.");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
-					<span class="error">Citation Metadata Context must be less than 512 characters.</span>
+					<span class="warning">Citation Metadata Context must be less than 512 characters.</span>
 			    </xsl:otherwise>
 	    	</xsl:choose>
 	    </xsl:if>
@@ -1738,10 +1738,10 @@
 	    <xsl:if test="string-length(.) &gt; 512">
 	        <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-	        		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Edition must be less than 512 characters");</xsl:text>
+	        		<xsl:text>SetWarnings("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Edition must be less than 512 characters");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
-					<span class="error">Citation Metadata Edition must be less than 512 characters.</span>
+					<span class="warning">Citation Metadata Edition must be less than 512 characters.</span>
 			    </xsl:otherwise>
 	    	</xsl:choose>
 	    </xsl:if>
@@ -1774,10 +1774,10 @@
 	    <xsl:if test="string-length(.) &gt; 512">
 	        <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-	        		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Place Published must be less than 512 characters.");</xsl:text>
+	        		<xsl:text>SetWarnings("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Place Published must be less than 512 characters.");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
-					<span class="error">Citation Metadata Place Published must be less than 512 characters.</span>
+					<span class="warning">Citation Metadata Place Published must be less than 512 characters.</span>
 			    </xsl:otherwise>
 	    	</xsl:choose>
 	    </xsl:if>

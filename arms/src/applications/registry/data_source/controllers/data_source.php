@@ -962,7 +962,7 @@ public function getContributorGroupsEdit()
 
 				if($new_value=='true'){$new_value=DB_TRUE;}
 				if($new_value=='false'){$new_value=DB_FALSE;} 
-
+				if($attrib == 'uri'){$providerURI = $new_value;}
 				// If primary relationships are disabled, unset all the relationship settings
 				if($this->input->post('create_primary_relationships')=='false')
 				{
@@ -1114,7 +1114,7 @@ public function getContributorGroupsEdit()
 	
 			$dataSource->save();
 
-			if($resetHarvest)
+			if($resetHarvest && ($providerURI != '' || $providerURI != 'http://'))
 			{
 				$dataSource->requestNewHarvest();
 			}
@@ -1524,11 +1524,7 @@ public function getContributorGroupsEdit()
 			if($errmsg)
 			{
 				$dataSource->append_log($logMsgErr.NL."HARVESTER RESPONDED UNEXPECTEDLY: ".$errmsg, HARVEST_ERROR, "harvester","HARVESTER_ERROR");
-				if($mode == "TEST")
-				{
-					$dataSource->cancelHarvestRequest($harvestId,false);
-				}			
-					
+				$done = 'TRUE';			
 			}
 			else
 			{	
@@ -1596,6 +1592,7 @@ public function getContributorGroupsEdit()
 					catch (Exception $e)
 					{
 						$dataSource->append_log($logMsgErr.NL."CRITICAL ERROR: " . NL . $e->getMessage() . NL . $this->importer->getErrors(), HARVEST_ERROR, 'harvester',"HARVESTER_ERROR");	
+						$done = 'TRUE';
 					}
 				}
 				else
@@ -1638,7 +1635,7 @@ public function getContributorGroupsEdit()
 		flush(); ob_flush();
 
 		// Continue post-harvest cleanup...
-		if ($done =='TRUE' && $mode =='HARVEST')
+		if ($done =='TRUE' && $mode =='HARVEST' && $gotData)
 		{
 
 			if ($dataSource->harvest_method == 'RIF')
