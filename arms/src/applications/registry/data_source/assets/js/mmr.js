@@ -357,7 +357,7 @@ function initLayout(){
                 else
                 text = 'Quality Level '+value;
             }
-            $('#active_filters').append('<span class="removeFilter tag" name="'+key+'"><a href="javascript:;">'+text+' <i class="icon icon-remove"></i></a></span>');
+            $('#active_filters').append('<span class="btn removeFilter" name="'+key+'"><a href="javascript:;">'+text+' <i class="icon icon-remove"></i></a></span>');
         });
     });
 
