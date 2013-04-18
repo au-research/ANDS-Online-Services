@@ -117,51 +117,57 @@ class Core_extension extends ExtensionBase
 	function save()
 	{
 		// A status change triggers special business logic
-		if ($this->getAttribute("status") != $this->getAttribute("original_status"))
+		//echo $this->getAttribute("status"). " " .$this->getAttribute("original_status") ;
+		if($this->getAttribute("status") == 'DRAFT' && $this->getAttribute("original_status") == 'PUBLISHED')
 		{
-			$this->handleStatusChange($this->getAttribute("status"));
+			//$this->_CI->load->model('registry_objects', 'ro');
+			$draftRecord = $this->_CI->ro->cloneToDraft($this->id);
+
 		}
-
-		// Mark this record as recently updated
-		$this->setAttribute("updated", time());
-
-		foreach($this->attributes AS $attribute)
+		else
 		{
-			if ($attribute->dirty)
+			if ($this->getAttribute("status") != $this->getAttribute("original_status"))
 			{
-				if ($attribute->core)
-				{				
-					$this->db->where("registry_object_id", $this->id);
-					$this->db->update("registry_objects", array($attribute->name => $attribute->value));
-					$attribute->dirty = FALSE;
-					
-				}
-				else
-				{
+				$this->handleStatusChange($this->getAttribute("status"));
+			}
 
-					if ($attribute->value !== NULL)
+			// Mark this record as recently updated
+			$this->setAttribute("updated", time());
+
+			foreach($this->attributes AS $attribute)
+			{
+				if ($attribute->dirty)
+				{
+					if ($attribute->core)
+					{				
+						$this->db->where("registry_object_id", $this->id);
+						$this->db->update("registry_objects", array($attribute->name => $attribute->value));
+						$attribute->dirty = FALSE;						
+					}
+					else
 					{
-						if ($attribute->new)
+						if ($attribute->value !== NULL)
 						{
-							$this->db->insert("registry_object_attributes", array("registry_object_id" => $this->id, "attribute" => $attribute->name, "value"=>$attribute->value));
-							$attribute->dirty = FALSE;
-							$attribute->new = FALSE;
+							if ($attribute->new)
+							{
+								$this->db->insert("registry_object_attributes", array("registry_object_id" => $this->id, "attribute" => $attribute->name, "value"=>$attribute->value));
+								$attribute->dirty = FALSE;
+								$attribute->new = FALSE;
+							}
+							else
+							{
+								$this->db->where(array("registry_object_id" => $this->id, "attribute" => $attribute->name));
+								$this->db->update("registry_object_attributes", array("value"=>$attribute->value));
+								$attribute->dirty = FALSE;
+							}
 						}
 						else
 						{
 							$this->db->where(array("registry_object_id" => $this->id, "attribute" => $attribute->name));
-							$this->db->update("registry_object_attributes", array("value"=>$attribute->value));
-							$attribute->dirty = FALSE;
-						}
+							$this->db->delete("registry_object_attributes");
+							unset($this->attributes[$attribute->name]);
+						}						
 					}
-					else
-					{
-						$this->db->where(array("registry_object_id" => $this->id, "attribute" => $attribute->name));
-						$this->db->delete("registry_object_attributes");
-						unset($this->attributes[$attribute->name]);
-					}
-						
-					
 				}
 			}
 		}

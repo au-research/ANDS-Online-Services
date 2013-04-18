@@ -239,7 +239,7 @@ class Data_source extends MX_Controller {
 					break;
 				case 'PUBLISHED':
 					$st['ds_count']=$data_source->count_PUBLISHED;
-					array_push($st['menu'], array('action'=>'to_draft', 'display'=>'Move to Draft'));
+					array_push($st['menu'], array('action'=>'to_draft', 'display'=>'Create Draft Copy'));
 					$st['connectTo']='';
 					break;
 			}
@@ -429,7 +429,7 @@ class Data_source extends MX_Controller {
 					$menu['to_publish'] = 'Publish';
 					break;
 				case 'PUBLISHED':
-					$menu['to_draft'] = 'Move to Draft';
+					$menu['to_draft'] = 'Create Draft Copy';
 					$menu['edit'] = 'Edit Record';
 					$menu['set_gold_status_flag'] = 'Set Gold Status';
 					break;
