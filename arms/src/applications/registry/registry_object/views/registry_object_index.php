@@ -13,7 +13,9 @@
 <?php $this->load->view('header');?>
 <div id="content" style="margin-top:45px;margin-left:0px">
 	<div class="content-header">
-		<h1><?php echo $ro->title;?> <?php if($viewing_revision) echo '<small>('.$revisionInfo.')</small>'?></h1>
+		
+		<h1 style="position:relative;padding-right:80px"><?php echo $ro->title;?> <?php if($viewing_revision) echo '<small>('.$revisionInfo.')</small>'?></h1>
+
 		<div class="btn-group">
 			<?php 
 				if(!$viewing_revision) {
@@ -21,8 +23,9 @@
 				}
 			?>
 		</div>
+
 	</div>
-	<div id="breadcrumb">
+	<div id="breadcrumb" style="clear:both;">
 		<?php 
 			if ($this->user->hasFunction('REGISTRY_USER') && $this->user->hasAffiliation($ds->record_owner)) 
 			{

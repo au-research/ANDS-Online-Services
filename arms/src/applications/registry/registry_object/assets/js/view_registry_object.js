@@ -120,11 +120,6 @@ function processRelatedObjects()
             if(data.connections.length>10)
             {
                 maxRelated = 10;
-                numToShow = data.connections.length - 10;
-                moreToShow = '<table class="subtable">' +                                      
-                            '<tr><td><table class="subtable1">'+
-                            '<tr><td></td><td class="resolvedRelated" > There are '+numToShow+' more related objects</td></tr>'+                                     
-                            '</table></tr></td></table>';
  
             }else{
                  maxRelated = data.connections.length;
@@ -150,6 +145,13 @@ function processRelatedObjects()
                     revStr = "<em> (Automatically generated reverse link) </em>"
                 }
 
+                if (origin=='EXPLICIT') {
+                     $('#rorow').show();
+                     showRelated++;
+                     $('.resolvedRelated[key_value="'+key+'"]').html(title );
+                }
+                else
+                {
                 if(showRelated < maxRelated){
                     showRelated++;     
                     $('#rorow').show();
@@ -163,7 +165,7 @@ function processRelatedObjects()
                     {
                          var newRow = '<table class="subtable">' +                                      
                                         '<tr><td><table class="subtable1">'+
-                                        '<tr><td></td><td class="resolvedRelated" >'+title+'</td></tr>'+
+                                        '<tr><td>Title:</td><td class="resolvedRelated" >'+title+'</td></tr>'+
                                         '<tr><td class="attribute">Key</td>' +
                                         '<td class="valueAttribute resolvable_key" key_value="'+ key +'">'+key+'</td>' +
                                         '</tr>' +
@@ -174,12 +176,18 @@ function processRelatedObjects()
                                         '</table></tr></td></table>';
                         $('#related_objects_table').last().append(newRow)  
                     } 
+                 }
                  }  
  
             });
 
-            if(moreToShow!='')
+            if(data.connections.length > showRelated)
             {
+                numToShow = data.connections.length - showRelated;
+                moreToShow = '<table class="subtable">' +                                      
+                            '<tr><td><table class="subtable1">'+
+                            '<tr><td></td><td class="resolvedRelated" > There are '+numToShow+' more related objects</td></tr>'+                                     
+                            '</table></tr></td></table>';
                 $('#related_objects_table').last().append(moreToShow)     
             }
                               
