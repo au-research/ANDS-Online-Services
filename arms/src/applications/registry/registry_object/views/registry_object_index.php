@@ -59,59 +59,6 @@ date_default_timezone_set('Australia/Melbourne');
 					</center>
 				</div>
 
-				<div class="widget-box">
-					<div class="widget-title">
-						<h5>Registry Metadata</h5>
-					</div>
-					<div class="widget-content">
-						<table class="table table-bordered table-striped">
-							<tr><th>Title</th><td><?php echo $ro->title;?></td></tr>
-							
-							<?php if(!($viewing_revision && !$currentRevision))
-							{
-								echo "<tr><th>Status</th><td>" . $ro->status . "</td></tr>"; 
-							}
-							else
-							{
-								echo "<tr><th>Status</th><td style='background-color:#FF6633; color:white;'><b>SUPERSEDED</b></td></tr>"; 
-							}
-							?>
-							<tr><th>Data Source</th><td><?php echo $ds->title;?></td></tr>
-							<tr><th>Key</th><td style="width:100%; word-break:break-all;"><?php echo $ro->key;?></td></tr>
-							<tr><th>ID</th><td><?php echo $ro->id;?></td></tr>						
-							<tr><th>slug</th><td><?php echo $ro->slug;?></td></tr>
-							<tr><th>Last edited by</th><td><?php echo $ro->getAttribute('created_who'); ?></td></tr>
-							<tr><th>Date last changed</th><td><?php echo date("j F Y, g:i a", (int)$ro->getAttribute('updated')); ?></td></tr>
-							<tr><th>Date created</th><td><?php echo date("j F Y, g:i a", (int)$ro->getAttribute('created')); ?></td></tr>
-							<tr><th>Feed type</th><td><?php echo (strpos($ro->getAttribute('harvest_id'),'MANUAL') === 0 ? 'manual entry' : 'harvest');?></td></tr>
-							<tr><th>Quality Assessed</th><td><?php echo ($ro->getAttribute('manually_assessed') ? $ro->getAttribute('manually_assessed') : 'no');?></td></tr>
-							<tr><td></td><td></td></tr>
-							<tr><th>RIFCS Format</th><td><a href="javascript:;" class="btn btn-small" id="exportRIFCS"><i class="icon-eject"></i> Export RIFCS</a></td></tr>
-							<?php 
-								if($native_format != 'rif') {
-									echo '<tr><th>Native Format</th><td><a href="javascript:;" class="btn btn-small" id="exportNative"><i class="icon-eject"></i>Export '.$native_format.'</a></td></tr>';
-								}
-							?>
-							<input type="hidden" id="registry_object_id" value="<?php echo $ro_id;?>"/>
-						</table>
-					</div>
-				</div>
-
-				<?php 
-				if ($this->user->hasFunction('REGISTRY_STAFF')):
-				?>
-				<div class="widget-box">
-					<div class="widget-title">
-						<h5>Tags Management</h5>
-					</div>
-					<div class="widget-content">
-						<?php $data['ro'] = $ro; $this->load->view('tagging_interface', $data);?>
-					</div>
-				</div>
-				<?php
-				endif;
-				?>
-
 				<?php 
 				if ($this->user->hasFunction('REGISTRY_USER') && $this->user->hasAffiliation($ds->record_owner)):
 				?>
@@ -142,6 +89,72 @@ date_default_timezone_set('Australia/Melbourne');
 
 					</div>
 				</div>
+
+				<?php 
+				if ($this->user->hasFunction('REGISTRY_STAFF')):
+				?>
+				<div class="widget-box">
+					<div class="widget-title">
+						<h5>Tags Management</h5>
+					</div>
+					<div class="widget-content">
+						<?php $data['ro'] = $ro; $this->load->view('tagging_interface', $data);?>
+					</div>
+				</div>
+
+				<?php
+				endif;
+				?>
+				<?php 
+				if ($this->user->hasFunction('REGISTRY_USER') && $this->user->hasAffiliation($ds->record_owner)):
+				?>
+				<div class="widget-box">
+					<div class="widget-title">
+						<h5>Registry Metadata</h5>
+					</div>
+					<div class="widget-content">
+						<table class="table table-bordered table-striped">
+							<tr><th>Title</th><td><?php echo $ro->title;?></td></tr>
+							
+							<?php if(!($viewing_revision && !$currentRevision))
+							{
+								echo "<tr><th>Status</th><td>" . $ro->status . "</td></tr>"; 
+							}
+							else
+							{
+								echo "<tr><th>Status</th><td style='background-color:#FF6633; color:white;'><b>SUPERSEDED</b></td></tr>"; 
+							}
+							?>
+							<tr><th>Data Source</th><td><?php echo $ds->title;?></td></tr>
+							<tr><th>Key</th><td style="width:100%; word-break:break-all;"><?php echo $ro->key;?></td></tr>
+							<?php 
+							if ($this->user->hasFunction('REGISTRY_STAFF')):
+							?>
+								<tr><th>ID</th><td><?php echo $ro->id;?></td></tr>
+							<?php
+							endif;
+							?>						
+							<tr><th>slug</th><td><?php echo $ro->slug;?></td></tr>
+							<tr><th>Last edited by</th><td><?php echo $ro->getAttribute('created_who'); ?></td></tr>
+							<tr><th>Date last changed</th><td><?php echo date("j F Y, g:i a", (int)$ro->getAttribute('updated')); ?></td></tr>
+							<tr><th>Date created</th><td><?php echo date("j F Y, g:i a", (int)$ro->getAttribute('created')); ?></td></tr>
+							<tr><th>Feed type</th><td><?php echo (strpos($ro->getAttribute('harvest_id'),'MANUAL') === 0 ? 'Manual entry' : 'Harvest');?></td></tr>
+							<tr><th>Quality Assessed</th><td><?php echo ($ro->getAttribute('manually_assessed') ? $ro->getAttribute('manually_assessed') : 'no');?></td></tr>
+							<tr><td></td><td></td></tr>
+							<tr><th>RIFCS Format</th><td><a href="javascript:;" class="btn btn-small" id="exportRIFCS"><i class="icon-eject"></i> Export RIFCS</a></td></tr>
+							<?php 
+								if($native_format != 'rif') {
+									echo '<tr><th>Native Format</th><td><a href="javascript:;" class="btn btn-small" id="exportNative"><i class="icon-eject"></i>Export '.$native_format.'</a></td></tr>';
+								}
+							?>
+							<input type="hidden" id="registry_object_id" value="<?php echo $ro_id;?>"/>
+						</table>
+					</div>
+				</div>
+				<?php
+				endif;
+				?>
+				
 			</div>
 		</div>
 		
