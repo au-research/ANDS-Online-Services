@@ -519,39 +519,47 @@ class Registry_object extends MX_Controller {
 			$ro = $this->ro->getByID($id);
 	
 			foreach($attributes as $a){
-				try{
-					$ro->setAttribute($a['name'], $a['value']);
-					if($a['name']=='gold_status_flag'&&$a['value']=='t')
-					{
-						$ro->setAttribute('quality_level',4);						
-					}
-					if($a['name']=='gold_status_flag'&&$a['value']=='f')
-					{
-						$ro->update_quality_metadata();						
-					}
-					if($ro->save())
-					{
-						if($a['name']=='status'&&$a['value']=='SUBMITTED_FOR_ASSESSMENT')
-						{
-							$data_source_id = $ro->getAttribute('data_source_id');
-							$data_source = $this->ds->getByID($data_source_id);
-							if(($data_source->count_SUBMITTED_FOR_ASSESSMENT < 2) && !$sentMail){		
-								$this->ro->emailAssessor($data_source);
-								$sentMail = true;
-							}							
-						}
-						$jsondata['success_count']++;
-						$jsondata['success_message'] .= '<li>Updated '.$ro->key.' set '.$a['name'].' to value:'.$a['value']."</li>";
-					}else{
-						$jsondata['error_count']++;
-						$jsondata['error_message'] .= '<li>Failed to update '.$ro->key.' set '.$a['name'].' to value:'.$a['value']."</li>";
-						$jsondata['status'] = 'error';
-					}
-				}
-				catch(Exception $e){
-					$jsondata['status'] = 'error';
+				if($a['name']=='status' && ($a['value']=='APPROVED' || $a['value']=='PUBLISHED') && $ro->error_count > 0)
+				{
 					$jsondata['error_count']++;
-					$jsondata['error_message'] .= "<li>".$e->getMessage()."</li>";
+					$jsondata['error_message'] .= "<li>Registry Object ".$ro->title." Contains Error(s)</li>";
+				}
+				else
+				{
+					try{
+						$ro->setAttribute($a['name'], $a['value']);
+						if($a['name']=='gold_status_flag'&&$a['value']=='t')
+						{
+							$ro->setAttribute('quality_level',4);						
+						}
+						if($a['name']=='gold_status_flag'&&$a['value']=='f')
+						{
+							$ro->update_quality_metadata();						
+						}
+						if($ro->save())
+						{
+							if($a['name']=='status'&&$a['value']=='SUBMITTED_FOR_ASSESSMENT')
+							{
+								$data_source_id = $ro->getAttribute('data_source_id');
+								$data_source = $this->ds->getByID($data_source_id);
+								if(($data_source->count_SUBMITTED_FOR_ASSESSMENT < 2) && !$sentMail){		
+									$this->ro->emailAssessor($data_source);
+									$sentMail = true;
+								}							
+							}
+							$jsondata['success_count']++;
+							$jsondata['success_message'] .= '<li>Updated '.$ro->title.' set '.$a['name'].' to value:'.$a['value']."</li>";
+						}else{
+							$jsondata['error_count']++;
+							$jsondata['error_message'] .= '<li>Failed to update '.$ro->title.' set '.$a['name'].' to value:'.$a['value']."</li>";
+							$jsondata['status'] = 'error';
+						}
+					}
+					catch(Exception $e){
+						$jsondata['status'] = 'error';
+						$jsondata['error_count']++;
+						$jsondata['error_message'] .= "<li>".$e->getMessage()."</li>";
+					}
 				}
 			}
 		}

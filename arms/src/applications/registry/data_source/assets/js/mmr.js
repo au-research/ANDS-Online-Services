@@ -177,8 +177,9 @@ function init(filters){
 
     var data_source_id = $('#data_source_id').val();
     //$('.pool').hide();
-    $('#status_message').html('<em>Loading...</em> <img src="'+base_url+'assets/img/ajax-loader.gif" alt="Loading..Please wait.."/>');
-    $('#status_message').show();
+    //$('#status_message').removeClass('alert-error').addClass('alert-info');
+    //$('#status_message').html('<em>Loading...</em> <img src="'+base_url+'assets/img/ajax-loader.gif" alt="Loading..Please wait.."/>');
+    //$('#status_message').show();
     $.ajax({
         url:base_url+'data_source/get_mmr_data/'+data_source_id, 
         type: 'POST',
@@ -219,7 +220,11 @@ function init(filters){
             bindShowMore();
             initLayout();
             $('.stick').sticky();
-            $('#status_message').hide();
+            window.setTimeout(function(){
+                $('#status_message').removeClass('alert-error').addClass('alert-info');
+                $('#status_message').hide();
+            }, 2000);
+
         }
     });
 
@@ -772,6 +777,7 @@ function update(ids, attributes){
 
     var text = total+' records updating...<img src="'+base_url+'assets/img/ajax-loader.gif" alt="Loading..Please wait.."/>';
     $('#status_message').html(text);
+    $('#status_message').show();
     $.ajax({
         url:url, 
         type: 'POST',
@@ -783,8 +789,17 @@ function update(ids, attributes){
                 $('#status_message').removeClass('alert-info').addClass('alert-error');
                 $('#status_message').html(data.error_message);
             }else if(data.status=='success'){
-                $('#status_message').removeClass('alert-error').addClass('alert-info');
-                $('#status_message').html(data.success_message);
+                if(data.error_count != '0')
+                {
+                    $('#status_message').removeClass('alert-info').addClass('alert-error');
+                    $('#status_message').html(data.error_message);
+                }
+                else{
+                    $('#status_message').removeClass('alert-error').addClass('alert-info');
+                    $('#status_message').html(data.success_message);
+                }
+                    $('#status_message').show();
+                
                 init(filters);
             }
         }
