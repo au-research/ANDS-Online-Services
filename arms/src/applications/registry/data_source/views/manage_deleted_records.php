@@ -9,6 +9,12 @@
 <div id="content" style="margin-top:45px;margin-left:0px">
 	<div class="content-header">
 		<h1><?php echo $ds->title;?> <small>Deleted Records</small></h1>
+		<ul class="nav nav-pills">
+			<li class=""><?php echo anchor('data_source/manage#!/view/'.$ds->id,'Dashboard');?></li>
+			<li class=""><?php echo anchor('data_source/manage_records/'.$ds->id,'Manage Records');?></li>
+			<li class=""><?php echo anchor('data_source/report/'.$ds->id,'Reports');?></li>
+			<li class=""><?php echo anchor('data_source/manage#!/settings/'.$ds->id,'Settings');?></li>
+		</ul>
 	</div>
 	<div id="breadcrumb">
 		<?php echo anchor('/', '<i class="icon-home"></i> Home', array('class'=>'tip-bottom', 'title'=>'Go to Home'))?>
