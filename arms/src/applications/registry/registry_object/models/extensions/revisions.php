@@ -15,7 +15,7 @@ class Revisions_extension extends ExtensionBase
 	
 	function getAllRevisions()
 	{
-		date_default_timezone_set('GMT');
+		//date_default_timezone_set('GMT');
 		$this->db->where(array('registry_object_id' => $this->ro->id, 'scheme'=>RIFCS_SCHEME));
 		$this->db->order_by('timestamp', 'desc');
 		$this->db->select('*')->from('record_data');
@@ -35,7 +35,7 @@ class Revisions_extension extends ExtensionBase
 
 	function getRevision($revision_id)
 	{
-		date_default_timezone_set('GMT');
+		//date_default_timezone_set('GMT');
 		$this->db->where(array('registry_object_id' => $this->ro->id, 'id'=>$revision_id, 'scheme'=>RIFCS_SCHEME));
 		$this->db->select('*')->from('record_data');
 		$revision = $this->db->get();	
