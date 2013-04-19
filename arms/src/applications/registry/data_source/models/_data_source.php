@@ -796,36 +796,33 @@ class _data_source {
 			$nextHarvest = $harvestDate;	
 
 		
-		
+		date_default_timezone_set('UTC');
 		if($immediate)
 		{
-			$nextHarvest = date('c',time());
+			$nextHarvest = date("Y-m-d\TH:i:s\Z",time());
 		}
 		elseif(strtotime($nextHarvest) < time())
 		{
 
 			if($harvestFrequency == 'hourly')
-				$nextHarvest = date('c', time()+60*60);
+				$nextHarvest = date("Y-m-d\TH:i:s\Z", time()+60*60);
 			elseif($harvestFrequency == 'daily')
-				$nextHarvest = date('c', strtotime('+1 day',time()));
+				$nextHarvest = date("Y-m-d\TH:i:s\Z", strtotime('+1 day',time()));
 			elseif($harvestFrequency == 'weekly')
-				$nextHarvest = date('c', strtotime('+1 week',time()));
+				$nextHarvest = date("Y-m-d\TH:i:s\Z", strtotime('+1 week',time()));
 			elseif($harvestFrequency == 'fortnightly')
-				$nextHarvest = date('c', strtotime('+2 week',time()));
+				$nextHarvest = date("Y-m-d\TH:i:s\Z", strtotime('+2 week',time()));
 			elseif($harvestFrequency == 'monthly')
-				$nextHarvest = date('c', strtotime('+1 wmonth',time()));
+				$nextHarvest = date("Y-m-d\TH:i:s\Z", strtotime('+1 wmonth',time()));
 		}
 
 		$mode = 'harvest'; if( $testOnly ){ $mode = 'test'; }	
-
-		if($nextHarvest)
-			$msg = 'Schedule for: '.$nextHarvest;
-		else
-			$msg = 'Scheduled for: '.date("d-m-Y H:i:s");	
-
-		$status = "SCHEDULED FOR ". $nextHarvest;	
+		date_default_timezone_set('Australia/Melbourne');
+		$dispDateTime = date("j F Y, g:i a"	,strtotime($nextHarvest));
+		$msg = 'Scheduled for: '.$dispDateTime;
+		$status = "SCHEDULED FOR ". $dispDateTime;	
 		
-		$harvestRequestId = $this->insertHarvestRequest($harvestFrequency, $OAISet, $created, $updated, $nextHarvest, $status);
+		$harvestRequestId = $this->insertHarvestRequest($harvestFrequency, $OAISet, $created, $updated, $dispDateTime, $status);
 		
 
 

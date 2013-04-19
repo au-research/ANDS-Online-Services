@@ -560,14 +560,14 @@ class Data_source extends MX_Controller {
 		
 		$harvesterStatus = $dataSource->getHarvesterStatus();
 		$jsonData['item']['harvester_status'] = $harvesterStatus;
-		if ($jsonData['item']['harvester_status'])
+		/*if ($jsonData['item']['harvester_status'])
 		{
 			foreach($jsonData['item']['harvester_status'] as &$ss){
 				$date = new DateTime($ss['next_harvest']);
 				$date = $date->format('Y-m-d H:i:s');
 				$ss['next_harvest'] = $date;
 			}
-		}
+		}*/
 		$jsonData = json_encode($jsonData);
 		echo $jsonData;
 	}
