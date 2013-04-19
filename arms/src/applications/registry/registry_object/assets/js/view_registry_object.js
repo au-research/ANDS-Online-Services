@@ -150,7 +150,11 @@ function processRelatedObjects()
                      showRelated++;
                      $('.resolvedRelated[key_value="'+key+'"]').html(title );
                 }
-                else
+                else if (origin=='CONTRIBUTOR')
+                {
+                     showRelated++;
+                }
+                else(origin!='CONTRIBUTOR')
                 {
                 if(showRelated < maxRelated){
                     showRelated++;     
