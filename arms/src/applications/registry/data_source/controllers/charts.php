@@ -126,7 +126,7 @@ class Charts extends MX_Controller {
 
 		foreach ($query->result() AS $row)
 		{
-			if (isset($chart_result[Registry_objects::$classes[$row->class]]))
+			if (isset($chart_result[Registry_objects::$classes[$row->class]]) && isset(Registry_objects::$quality_levels[$row->value]))
 			{
 				$chart_result[Registry_objects::$classes[$row->class]][Registry_objects::$quality_levels[$row->value]] = (int) $row->count;
 			}
