@@ -819,7 +819,7 @@ class _data_source {
 		$mode = 'harvest'; if( $testOnly ){ $mode = 'test'; }	
 		date_default_timezone_set('Australia/Melbourne');
 		$dispDateTime = date("j F Y, g:i a"	,strtotime($nextHarvest));
-		$msg = 'Scheduled for: '.$dispDateTime;
+		$msg = 'Scheduled for: '.$dispDateTime ." (".$nextHarvest.")";
 		$status = "SCHEDULED FOR ". $dispDateTime;	
 		
 		$harvestRequestId = $this->insertHarvestRequest($harvestFrequency, $OAISet, $created, $updated, $dispDateTime, $status);

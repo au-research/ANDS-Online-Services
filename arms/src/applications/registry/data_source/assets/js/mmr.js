@@ -795,10 +795,11 @@ function update(ids, attributes){
                     $('#status_message').html(data.error_message);
                 }
                 else{
-                    $('#status_message').removeClass('alert-error').addClass('alert-info');
-                    $('#status_message').html(data.success_message);
+                  // $('#status_message').removeClass('alert-error').addClass('alert-info');
+                  // $('#status_message').html(data.success_message);
                 }
-                    $('#status_message').show();
+
+                 $('#status_message').show();
                 
                 init(filters);
             }

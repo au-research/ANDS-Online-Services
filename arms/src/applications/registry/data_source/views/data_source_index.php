@@ -216,7 +216,7 @@
 		<a href="javascript:;" class="expand_log {{type}}"><i class="icon-list-alt"></i>{{log_snippet}} <span class="label">{{date_modified}}</span></a>
 		<div class="log hide">			
 			 {{#harvester_error_type}}
-			 	<img data-error-type="{{harvester_error_type}}" style="float:right; cursor:pointer;" class="more_error_detail" src="<?=asset_url('img/Question-mark-icon.png','base');?>" alt="more about this error" />
+			 	<img data-error-type="{{harvester_error_type}}" style="float:right; cursor:pointer;" class="more_error_detail {{harvester_error_type}}" src="<?=asset_url('img/Question-mark-icon.png','base');?>" alt="more about this error" />
 			 {{/harvester_error_type}}
 			<pre style="width:95%; float:left;">{{log}}</pre>
 			<br class="clear"/>

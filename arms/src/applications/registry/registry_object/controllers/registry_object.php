@@ -519,10 +519,15 @@ class Registry_object extends MX_Controller {
 			$ro = $this->ro->getByID($id);
 	
 			foreach($attributes as $a){
-				if($a['name']=='status' && ($a['value']=='APPROVED' || $a['value']=='PUBLISHED') && $ro->error_count > 0)
+				if($a['name']=='status' && $ro->status == 'DRAFT' && $ro->error_count > 0)
 				{
 					$jsondata['error_count']++;
-					$jsondata['error_message'] .= "<li>Registry Object ".$ro->title." Contains Error(s)</li>";
+					$jsondata['error_message'] .= "<li>Registry Object contains error(s): ".$ro->title."</li>";
+				}
+				elseif($a['name']=='status' && ($a['value']=='APPROVED' || $a['value']=='PUBLISHED') && $ro->error_count > 0)
+				{
+					$jsondata['error_count']++;
+					$jsondata['error_message'] .= "<li>Registry Object contains error(s): ".$ro->title."</li>";
 				}
 				else
 				{
