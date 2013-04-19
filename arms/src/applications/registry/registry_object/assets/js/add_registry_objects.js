@@ -6,9 +6,14 @@ $(function(){
 			e.preventDefault();
 			//console.log($(this).attr('id'));
 			var ro_class = $(this).attr('id');
+			var theInput = '<input type="text" class="input-xlarge rifcs-type" vocab="RIFCS'+ro_class+'Type" name="type" value="" required>';
+			$('#ro_type').html(theInput);
 			$('#AddNewDS_confirm').attr('ro_class', ro_class);
 			$('#AddNewDS_confirm').html('Add New '+ro_class);
+
 			$("#AddNewDS").modal('show');
+			initVocabWidgets();
+
 			Core_bindFormValidation($('#AddNewDS form'));
 		}
 	});	
@@ -74,4 +79,40 @@ $(function(){
 	});
 
 
+
 });
+
+function _getVocab(vocab)
+{
+	vocab = vocab.replace("collection", "Collection");
+	vocab = vocab.replace("party", "Party");
+	vocab = vocab.replace("service", "Service");
+	vocab = vocab.replace("activity", "Activity");
+	return vocab;
+}
+function initVocabWidgets(container){
+	var container_elem;
+	if(container){
+		container_elem = container;
+	}else container_elem = $(document);
+	$(".rifcs-type", container_elem).each(function(){
+		var elem = $(this);
+		var widget = elem.vocab_widget({mode:'advanced'});
+		var vocab = _getVocab(elem.attr('vocab'));
+		var dataArray = Array();
+
+		elem.on('narrow.vocab.ands', function(event, data) {	
+		
+			$.each(data.items, function(idx, e) {
+				dataArray.push({value:e.label, subtext:e.definition});
+			});
+				
+			elem.typeahead({source:dataArray,items:16});
+		});
+
+		widget.vocab_widget('repository', 'rifcs');
+		widget.vocab_widget('narrow', "http://purl.org/au-research/vocabulary/RIFCS/1.4/" + vocab);	
+		//}	 
+	});
+
+}

@@ -5,6 +5,7 @@
 ?>
 
 <?php  $this->load->view('header');?>
+
 <div class="modal hide fade" id="AddNewDS">
 	<div class="modal-header">
 	<a href="javascript:;" class="close" data-dismiss="modal">×</a>
@@ -12,6 +13,7 @@
 </div>
 
 <div class="modal-screen-container">
+
 	<div class="modal-body">
 		
 		<div class="alert alert-info">
@@ -21,7 +23,7 @@
 			An Error Occured while adding your record
 		</div>
 		<form action="#" method="get" class="form-vertical">
-			<div class="control-group">
+			<div class="control-group" style="background-color:#ffffff;margin-bottom:10px;padding:0em">
 				<label class="control-label" for="key">Key</label>
 				<div class="controls">
 					<div class="input-append">
@@ -35,7 +37,7 @@
 			<div class="control-group">
 				<label class="control-label">Data source</label>
 				<div class="controls">
-					<select name="data_source_id" required>
+					<select name="data_source_id" required class="input-xlarge">
 						<?php foreach($ownedDatasource as $ds):?>
 							<option value="<?php echo $ds->id;?>"><?php echo $ds->title;?></option>
 						<?php endforeach;?>
@@ -43,28 +45,26 @@
 				</div>
 			</div>
 
-	<div class="control-group hidden">
+			<div class="control-group hidden">
 				<label class="control-label" for="key">Originating Source</label>
 				<div class="controls">
 					<input required type="text" class="input-xlarge" name="originatingSource" value="<?php echo base_url();?>/orca/register_my_data">
 				</div>
 			</div> 
 
-			<div class="control-group">
+			<div class="control-group" style="background-color:#ffffff;margin-bottom:10px;padding:0em">
 				<label class="control-label" for="key">Group</label>
 				<div class="controls">
 					<input required type="text" class="input-xlarge" name="group" value="">
 				</div>
 			</div>
 
-			<div class="control-group">
+			<div class="control-group" style="background-color:#ffffff;margin-bottom:10px;padding:0em">
 				<label class="control-label" for="key">Type</label>
-				<div class="controls">
-					<input required type="text" class="input-xlarge" name="type" value="">
+				<div class="controls" id="ro_type">
+					
 				</div>
 			</div>
-
-
 			</div>
 
 

@@ -89,7 +89,7 @@ class Registry_object extends MX_Controller {
 	public function add(){
 		$data['title'] = 'Add Registry Objects';
 		$data['scripts'] = array('add_registry_objects');
-		$data['js_lib'] = array('core','prettyprint');
+		$data['js_lib'] = array('core','prettyprint','vocab_widget');
 		$data['content'] = "ADD NEW";
 
 		$this->load->model("data_source/data_sources","ds");
