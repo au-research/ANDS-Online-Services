@@ -511,7 +511,7 @@ function generatePreviewTip(element, slug, registry_object_id, relation_type)
                 type: 'GET',
                 data: { "slug": slug, "registry_object_id": registry_object_id },
                 success: function(data, status) {
-                    data = $.parseJSON(data);                
+                    data = $.parseJSON(data);        
                     
                     // Clean up any HTML rubbish...                   
                     var temp = $('<span/>');
@@ -519,17 +519,19 @@ function generatePreviewTip(element, slug, registry_object_id, relation_type)
                     $("div.descriptions", temp).html($("div.descriptions", temp).text());
                     $("div.descriptions", temp).html($("div.descriptions", temp).directText());
 
-                    this.set('content.text', temp.html());     
-
+                    this.set('content.text', temp.html());    
                     if (isPublished()){
-                        $('.viewRecordLink, .viewRecord').attr("href",base_url + data.slug);
-                    }else{
-                        $('.viewRecordLink').attr("href",base_url+"view/?id=" + data.registry_object_id);
-                    }
+                        $('.viewRecordLink'+data.slug).attr("href",base_url + data.slug);
+                        if(relation_type){
+                         $('.previewItemHeader'+data.slug).html(relation_type);
+                        }                       
 
-                    if(relation_type){
-                        $('.previewItemHeader').html(relation_type);
-                    }
+                    }else{
+                        $('.viewRecordLink'+data.registry_object_id).attr("href",base_url+"view/?id=" + data.registry_object_id);
+                        if(relation_type){
+                            $('.previewItemHeader'+data.registry_object_id).html(relation_type);
+                        }
+                    }                   
                 } 
             }
         },
@@ -540,7 +542,6 @@ function generatePreviewTip(element, slug, registry_object_id, relation_type)
         },
         show: {
             event: 'click',
-            solo: true
         },
         hide: {
             delay: 1000,
@@ -549,7 +550,7 @@ function generatePreviewTip(element, slug, registry_object_id, relation_type)
         style: {
             classes: 'ui-tooltip-light ui-tooltip-shadow previewPopup',
             width: 550
-        }
+        },
     }).on('click', function(e){e.preventDefault();return false;});
 }
 

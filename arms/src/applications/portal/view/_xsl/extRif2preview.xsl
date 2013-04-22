@@ -27,7 +27,13 @@
          <xsl:when test="//ro:service">services</xsl:when>	
      </xsl:choose>		
  </xsl:variable>		 
-
+    <xsl:variable name="object_identifier" >
+      <xsl:choose>
+             <xsl:when test="//extRif:extendedMetadata/extRif:status = 'PUBLISHED'"> <xsl:value-of select="//extRif:extendedMetadata/extRif:slug"/> </xsl:when>
+             <xsl:when test="//extRif:extendedMetadata/extRif:status != 'PUBLISHED'"> <xsl:value-of select="//extRif:extendedMetadata/extRif:id"/> </xsl:when>
+      </xsl:choose>
+ </xsl:variable>
+ 
  <xsl:template match="ro:registryObject">
 
     <xsl:variable name="group">	
@@ -58,7 +64,10 @@
 
   <xsl:template match="ro:collection | ro:activity | ro:party | ro:service">
 
-       <div class="previewItemHeader">
+       <div class="previewItemHeader ">
+                <xsl:attribute name="class">
+               <xsl:text>previewItemHeader</xsl:text><xsl:text> </xsl:text> <xsl:text>previewItemHeader</xsl:text><xsl:value-of select="$object_identifier"/>
+           </xsl:attribute>
         PREVIEW
         </div>
 
@@ -124,7 +133,10 @@
     
     </div>
 
-    <a href="" class="viewRecord viewRecordLink">View Full Record</a> 
+    <a href="">
+      <xsl:attribute name="class">
+        <xsl:text>viewRecord viewRecordLink viewRecordLink</xsl:text><xsl:value-of select="$object_identifier"/>
+      </xsl:attribute>View Full Record</a> 
 </div>
 
 
