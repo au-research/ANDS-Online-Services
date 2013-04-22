@@ -392,7 +392,7 @@
 			url = url + "&sqc=" + this.settings.sqc;
 			if(typeof(this.settings.sqc_op) !== 'undefined' && this.settings.sqc_op!==''){
 				url = url+'&sqc_op=' + this.settings.sqc_op;
-			} 
+			}
 	    }
 	    return url;
 	},
@@ -572,7 +572,10 @@
 	 * once a selection has been made, we need to do something with it
 	 */
 	handle_selection: function(event) {
-	    var data = $(event.target).parent().data(WIDGET_DATA);
+	    var target = $(event.target);
+	    var data = target.is('li') ? target.data(WIDGET_DATA)
+		: target.parent().data(WIDGET_DATA);
+
 	    if (typeof(data[this.settings.target_field]) !== 'undefined') {
 		this._container.val(data[this.settings.target_field]);
 		this._reset();
