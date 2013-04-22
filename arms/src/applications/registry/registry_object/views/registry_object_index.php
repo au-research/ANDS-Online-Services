@@ -16,7 +16,12 @@ date_default_timezone_set('Australia/Melbourne');
 	<div class="content-header">
 		
 		<h1 style="position:relative;padding-right:80px"><?php echo $ro->title;?> <?php if($viewing_revision) echo '<small>('.$revisionInfo.')</small>'?></h1>
-
+		<ul class="nav nav-pills" style="padding-right:80px;padding-top:5px;">
+			<li class=""><?php echo anchor('data_source/manage#!/view/'.$ds->id,'Dashboard');?></li>
+			<li class=""><?php echo anchor('data_source/manage_records/'.$ds->id,'Manage Records');?></li>
+			<li class=""><?php echo anchor('data_source/report/'.$ds->id,'Reports');?></li>
+			<li class=""><?php echo anchor('data_source/manage#!/settings/'.$ds->id,'Settings');?></li>
+		</ul>
 		<div class="btn-group">
 			<?php 
 				if(!$viewing_revision) {
