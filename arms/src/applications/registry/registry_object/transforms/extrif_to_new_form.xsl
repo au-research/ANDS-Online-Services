@@ -598,6 +598,7 @@
 		<div class="aro_box" type="citationMetadata">
 			<div class="aro_box_display clearfix">
 				<a href="javascript:;" class="toggle"><i class="icon-minus"></i></a><h1>Citation Metadata</h1>
+				<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
 			</div>
 			<div class="aro_box_part" type="identifier">
 				<div class="control-group">
@@ -891,7 +892,7 @@
 					<div class="controls">
 						<span class="inputs_group">
 							<input type="text" class="inner_input input-large" name="identifier" placeholder="Identifier" value="{ro:identifier/text()}"/>
-							<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSIdentifierType" name="identifier_type" placeholder="Identifier Type" value="{ro:identifier/@type}"/>
+							<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSRelatedInformationIdentifierType" name="identifier_type" placeholder="Identifier Type" value="{ro:identifier/@type}"/>
 						</span>
 					</div>
 				</div>
@@ -970,7 +971,14 @@
 				<a href="javascript:;" class="toggle"><i class="icon-minus"/></a>
 				<input type="text" class="input-small rifcs-type" vocab="RIFCSLocationType" name="type" placeholder="Type" value="{@type}"/>
 				<input type="text" class="input-small datepicker" name="dateFrom" placeholder="dateFrom" value="{@dateFrom}"/>
+				<button class="btn triggerDatePicker" type="button">
+					<i class="icon-calendar"/>
+				</button>
 				<input type="text" class="input-small datepicker" name="dateTo" placeholder="dateTo" value="{@dateTo}"/>
+				<button class="btn triggerDatePicker" type="button">
+					<i class="icon-calendar"/>
+				</button>
+
 				<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
 			</div>
 
@@ -1133,7 +1141,10 @@
 	<xsl:template match="ro:physical">
 		<div class="aro_box_part" type="physical">
 			<div class="control-group">
-				<label class="control-label" for="title">Physical Address: </label>
+				<div class="aro_box_display clearfix">
+					<label class="control-label" for="title">Physical Address: </label>
+					<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
+				</div>
 				<div class="controls">
 					<input type="text" class="input rifcs-type" vocab="RIFCSPhysicalAddressType" name="type" placeholder="Type" value="{@type}"/>
 					<xsl:apply-templates select="ro:addressPart"/>
@@ -1143,6 +1154,7 @@
 					</button>
 				</div>
 			</div>
+
 		</div>
 	</xsl:template>
 
@@ -1362,8 +1374,7 @@
 					<div class="controls">
 						<span class="inputs_group">
 							<input type="text" class="inner_input input-large" name="identifier" placeholder="Identifier" value=""/>
-							<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSIdentifierType" name="identifier_type" placeholder="Identifier Type" value=""/>
-							<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSNamePartType" name="type" placeholder="Type" value=""/>
+							<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSRelatedInformationIdentifierType" name="identifier_type" placeholder="Identifier Type" value=""/>
 						</span>
 					</div>
 				</div>
@@ -1382,8 +1393,18 @@
 			<div class="aro_box_display clearfix">
 				<a href="javascript:;" class="toggle"><i class="icon-minus"/></a>
 				<input type="text" class="input-small rifcs-type" vocab="RIFCSLocationType" name="type" placeholder="Type" value=""/>
-				<input type="text" class="input-small datepicker" name="dateFrom" placeholder="dateFrom" value=""/>
-				<input type="text" class="input-small datepicker" name="dateTo" placeholder="dateTo" value=""/>
+				<div class="input-append">
+					<input type="text" class="input-large datepicker" name="dateFrom" placeholder="dateFrom" value=""/>
+					<button class="btn triggerDatePicker" type="button">
+						<i class="icon-calendar"/>
+					</button>
+				</div>
+				<div class="input-append">
+					<input type="text" class="input-large datepicker" name="dateTo" placeholder="dateTo" value=""/>
+					<button class="btn triggerDatePicker" type="button">
+						<i class="icon-calendar"/>
+					</button>
+				</div>
 				<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
 			</div>
 
@@ -1443,7 +1464,10 @@
 
 		<div class="aro_box_part template" type="physical">
 			<div class="control-group">
-				<label class="control-label" for="title">Physical Address: </label>
+				<div class="aro_box_display clearfix">
+					<label class="control-label" for="title">Physical Address: </label>
+					<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
+				</div>
 				<div class="controls">
 					<input type="text" class="input rifcs-type" vocab="RIFCSPhysicalAddressType" name="type" placeholder="Address Type" value=""/>
 					<div class="aro_box_part" type="addressPart">
@@ -1504,6 +1528,7 @@
 		<div class="aro_box template" type="citationMetadata">
 			<div class="aro_box_display clearfix">
 				<a href="javascript:;" class="toggle"><i class="icon-minus"></i></a><h1>Citation Metadata</h1>
+				<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
 			</div>
 			<div class="aro_box_part" type="identifier">
 				<div class="control-group">
@@ -1597,7 +1622,7 @@
 					</div>
 				</div>
 			</div>
-
+			
 		</div>
 
 

@@ -3,7 +3,7 @@
  */
 var aro_mode, active_tab;
 var editor = 'tinymce';
-
+var fieldID = 1;
 var SIMPLE_MODE = 'simple';
 var ADVANCED_MODE = 'advanced';
 
@@ -343,6 +343,7 @@ function initEditForm(){
 		
 		//add the DOM
 		var new_dom = $(template).clone().removeClass('template').insertBefore(where).hide().slideDown();
+		assignFieldID(new_dom);
 		initVocabWidgets(new_dom);
 		initMapWidget(new_dom);
 
@@ -542,6 +543,14 @@ function initEditForm(){
 		}
 	});
 
+	$('.triggerMapWidget').die().live({
+		click: function(e){
+			var typeInput = $(this).parent().parent().find('input[name=type]');
+			$(typeInput).val('kmlPolyCoords');
+			initMapWidget($(this).parent().parent());
+		}
+	});
+
 	//Various calls to initialize different tabs
 	/*
 	 	@TODO: 
@@ -558,7 +567,8 @@ function initEditForm(){
 	bindPartsTooltip();
 	assignFieldID();
 	initVocabWidgets($(document));
-	initMapWidget($(document))
+	initMapWidget($(document));
+
 
 }
 
@@ -737,25 +747,27 @@ function initMapWidget(container){
 	if(container){
 		container_elem = container;
 	}else container_elem = $(document);
+	
 	$(".spatial_value", container_elem).each(function(){
 
 		var typeInput = $(this).parent().find('input[name=type]');
 		typeInput.one({
 			change: function(e){
-				log(typeInput);
+				
 				initMapWidget($(this).parent());
 			}
 		});
 		var type = typeInput.val();
-
 		var controls = $(this).closest('.controls');
-		if(type == 'gmlKmlPolyCoords' || type == 'kmlPolyCoords'){
-			var fiedId = $(this).attr('field_id');
-			$(this).attr('id',fiedId+"_input");
-			controls.append('<div id="'+fiedId+'_map" class="map_widget"></div>');
-			$('#'+fiedId+'_map').ands_location_widget({
-  				target:fiedId+"_input"
-			});
+		if(type === 'gmlKmlPolyCoords' || type === 'kmlPolyCoords'){
+			var fieldId = $(this).attr('field_id');
+			$(this).attr('id',fieldId+"_input");
+			if ($("#"+fieldId+"_map").length === 0) {
+				controls.append('<div id="'+fieldId+'_map" class="map_widget"></div>');
+				$('#'+fieldId+'_map').ands_location_widget({
+  					target:fieldId+"_input"
+				});
+			}
 		}else{
 			$('.map_widget', controls).remove();
 		}
@@ -763,13 +775,20 @@ function initMapWidget(container){
 }
 
 
-function assignFieldID(){
-	var content = $('#content');
-	var i = 0;
-	$('input, .aro_box', content).each(function(){
-		if(!$(this).attr('field_id')){
-			$(this).attr('field_id', i);
-			i++;
+function assignFieldID(chunk){
+	var content;
+	if (typeof(chunk) === 'undefined') {
+		content = $('#content');
+	}
+	else {
+		content = chunk;
+
+	}
+
+	$('input, .aro_box, .aro_box_part', content).each(function(){
+		if(!$(this).attr('field_id') || typeof(chunk) !== 'undefined') {
+			fieldID++;
+			$(this).attr('field_id', fieldID);
 		}
 	});
 }
