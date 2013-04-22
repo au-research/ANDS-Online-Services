@@ -32,10 +32,10 @@ function format_relationship($from_class, $relationship_type, $origin=false){
 		"isAvaiableThrough" =>array("Available through", "Makes available"),	
 		"isProducedBy" =>array("Produced by", "Produces"),
 		"produces" =>array("Produces", "Produced by"),
-		"isOperatedOn" =>array("Operated on", "Operates on"),
+		"isOperatedOnBy" =>array("Operated on", "Operates on"),
 		"hasPrincipalInvestigator" =>array("Principal investigator", "Principal investigator of"),
 		"isPrincipalInvestigator" =>array("Principal investigator of", "Principal investigator"),
-
+		"hasValueAddedBy" =>array("Value added by", "Adds value"),
 	);
 	$typeArray['party'] = array(
 		"hasAssociationWith" => array("Associated with", "Associated with"),
@@ -55,7 +55,7 @@ function format_relationship($from_class, $relationship_type, $origin=false){
 		"makesAvailable" =>array("Makes available", "Available through"),
 		"isEnrichedBy" =>array("Enriched by", "Enriches"),
 		"hasPrincipalInvestigator" =>array("Principal investigator", "Principal investigator of"),
-		"isPrincipalInvestigator" =>array("Principal investigator of", "Principal investigator"),
+		"isPrincipalInvestigatorOf" =>array("Principal investigator of", "Principal investigator"),
 	);
 	$typeArray['service'] = array(
 		"hasAssociationWith" =>  array("Associated with", "Associated with"),
@@ -71,6 +71,7 @@ function format_relationship($from_class, $relationship_type, $origin=false){
 		"produces" =>array("Produces", "Produced by"),
 		"isProducedBy" =>array("Produced by", "Produces"),
 		"operatesOn" =>array("Operates on", "Operated by"),
+		"isOperatedOnBy" =>array("Operated on", "Operates on"),		
 		"addsValueTo" =>array("Adds value to", "Value added by"),
 		"hasPrincipalInvestigator" =>array("Principal investigator", "Principal investigator of"),
 		"isPrincipalInvestigator" =>array("Principal investigator of", "Principal investigator"),
