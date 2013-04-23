@@ -16,6 +16,8 @@ class Mydois extends MX_Controller {
 
 	function index()
 	{
+		acl_enforce('DOI_USER');
+
 		$data['js_lib'] = array('core');
 		$data['scripts'] = array();
 		$data['title'] = 'My DOIs List';
@@ -46,6 +48,8 @@ class Mydois extends MX_Controller {
 	
 	function show()
 	{
+		acl_enforce('DOI_USER');
+		
 		$doi_db = $this->load->database('dois', TRUE);
 		
 		$data['js_lib'] = array('core');
@@ -95,6 +99,8 @@ class Mydois extends MX_Controller {
 
 	function getActivityLog()
 	{
+		acl_enforce('DOI_USER');
+		
 		$doi_db = $this->load->database('dois', TRUE);
 		
 		// Validate the appId
@@ -113,6 +119,8 @@ class Mydois extends MX_Controller {
 	
 	function getDoiXml()
 	{
+		acl_enforce('DOI_USER');
+		
 		$doi_db = $this->load->database('dois', TRUE);
 		
 		// Validate the doi_id
@@ -129,6 +137,8 @@ class Mydois extends MX_Controller {
 	
 	function updateDoi()
 	{
+		acl_enforce('DOI_USER');
+		
 		$doi_db = $this->load->database('dois', TRUE);
 		
 		// Validate the doi_id
@@ -144,6 +154,8 @@ class Mydois extends MX_Controller {
 	}
 	function updateDoiUrl()
 	{
+		acl_enforce('DOI_USER');
+		
 		$doi_db = $this->load->database('dois', TRUE);
 
 		// Validate the url
@@ -204,6 +216,8 @@ class Mydois extends MX_Controller {
 	}
 	function getAppIDConfig()
 	{
+		acl_enforce('DOI_USER');
+		
 		$doi_db = $this->load->database('dois', TRUE);
 		
 		// Validate the appId

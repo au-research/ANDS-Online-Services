@@ -14,3 +14,7 @@ INSERT INTO dba.tbl_role_relations ("parent_role_id", "child_role_id") VALUES ('
 -- optional, only if COSI previously installed -
 INSERT INTO dba.tbl_role_relations ("parent_role_id", "child_role_id") VALUES ('REGISTRY_SUPERUSER', 'COSI_ADMIN');
 INSERT INTO dba.tbl_role_relations ("parent_role_id", "child_role_id") VALUES ('REGISTRY_USER', 'ORCA_SOURCE_ADMIN');
+
+-- missing roles
+INSERT INTO dba.tbl_roles ("role_id","role_type_id","name","enabled") VALUES ('PORTAL_STAFF','ROLE_FUNCTIONAL','Portal/CMS Staff Member', TRUE);
+INSERT INTO dba.tbl_roles ("role_id","role_type_id","name","enabled") VALUES ('DOI_USER','ROLE_FUNCTIONAL','DOI Service User', TRUE);

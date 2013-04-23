@@ -865,10 +865,13 @@ class _data_source {
 
 	// Get the harvest request.
 	//$harvestRequest = getHarvestRequests($harvestRequestId, null);
-	$actions = "Harvest Request ID: ".$harvestRequestId.NL;
+	$actions = "Harvest Request ID: " .$harvestRequestId.NL;
+	$actions .= NL.'URI: ' . $this->getAttribute("uri");
+	$actions .= NL.'Provider Type: ' . $this->getAttribute("provider_type");
+	$actions .= NL.'Harvest Method: ' . $this->getAttribute("harvest_method");
+	$actions .= NL.'Harvest Mode: ' . $this->getAttribute("advanced_harvest_mode");
+	$actions .= NL.'harvest Frequency: ' . $this->getAttribute("harvest_frequency");
 
-	
-	
 	if( $harvestRequestId )
 	{
 		$harvesterBaseURI = $this->_CI->config->item('harvester_base_url');
@@ -878,9 +881,15 @@ class _data_source {
 		
 		// Submit the request.
 		$runErrors = '';
-		$resultMessage = new DOMDocument();
-		$result = $resultMessage->load($request);
-		$errors = error_get_last(); 
+		try
+		{
+			$resultMessage = new DOMDocument();
+			$result = $resultMessage->load($request);
+		}
+		catch (Exception $e)
+		{
+			$errors = $e->getMessage();
+		}
 
 		if( $errors)
 		{
@@ -900,16 +909,12 @@ class _data_source {
 		
 		if( $runErrors )
 		{
-			$actions .= ">>ERRORS".NL;
+			$actions .= ">>ERROR DURING CANCELLATION".NL;
 			$actions .= $runErrors;
 		}
 		else
 		{
-			$actions .= ">>SUCCESS".NL;
-			// Remove the entry.
-			
-
-
+			$actions .= "Cancelled at: " . display_date() . NL;
 		}
 		$errors = $this->deleteHarvestRequest($harvestRequestId);
 		if( $errors )
@@ -925,7 +930,7 @@ class _data_source {
 
 	// Log the activity unless it's TEST (it wouldn't exist by then anyway).
 	if($createLog)
-		$logID = $this->append_log("Harvest successfully cancelled".NL.$actions, "message", 'harvester');
+		$logID = $this->append_log("A harvest was cancelled".NL.$actions, "message", 'harvester');
 	return $actions;
 	
 	}

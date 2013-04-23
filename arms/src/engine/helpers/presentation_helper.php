@@ -6,6 +6,16 @@ function print_pre($var)
 	echo "</pre>";
 } 
 
+function display_date($timestamp=0)
+{
+    if (!$timestamp)
+    {
+        $timestamp = time();
+    }
+
+    return date("j F Y, g:i a", $timestamp);
+}
+
 	
 $BENCHMARK_TIME = array();
 function bench($idx = 0)

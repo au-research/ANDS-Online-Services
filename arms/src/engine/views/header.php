@@ -99,7 +99,7 @@
                       <li class=""><?php echo anchor($this->config->item('gPIDS_URL_PREFIX'), 'My Persistent Identifiers (PIDS) <i class="icon-share"></i>', array("target"=>"_blank"));?></li>
                     <?php endif; ?>
 
-                    <?php if ($this->user->hasFunction('AUTHENTICATED_USER') && mod_enabled('mydois')): ?>
+                    <?php if ($this->user->hasFunction('DOI_USER') && mod_enabled('mydois')): ?>
                       <li>
                         <?php echo anchor('mydois', 'My Digital Object Identifiers (DOI)');?>
                       </li>
