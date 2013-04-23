@@ -466,7 +466,7 @@ function initEditForm(){
 			// });
 
 			//saving
-
+			log(xml);
 			$.ajax({
 				url:base_url+'registry_object/save/'+ro_id, 
 				type: 'POST',
@@ -1096,14 +1096,17 @@ function getRIFCSforTab(tab, hasField){
 			$.each(sub_content, function(){
 				var subbox_type = $(this).attr('type');
 				var subbox_fragment ='';
+				if(subbox_type !== 'spatial')
+					subbox_fragment +='<'+subbox_type+'>';
 
-				subbox_fragment +='<'+subbox_type+'>';
 				var parts = $(this).children('.aro_box_part');
 				if(parts.length>0){
 					$.each(parts, function(){
 						var this_fragment = '';
-						this_fragment +='<'+$(this).attr('type')+' type="'+$('input[name=type]', this).val()+'">';//opening tag
+						//opening tag
+						log($(this).attr('type'));
 						if($(this).attr('type')=='electronic'){
+							this_fragment +='<'+$(this).attr('type')+' type="'+$('input[name=type]', this).val()+'">';
 							this_fragment +='<value>'+$('input[name=value]',this).val()+'</value>';
 							//deal with args here
 							var args = $('.aro_box_part', this);
@@ -1112,24 +1115,35 @@ function getRIFCSforTab(tab, hasField){
 								this_fragment += $('input[name=value]', this).val();
 								this_fragment +='</'+$(this).attr('type')+'>';
 							});
+							this_fragment +='</'+$(this).attr('type')+'>';//closing tag
 						}else if($(this).attr('type')=='physical'){
 							//deal with address parts here
 							var address_parts = $('.aro_box_part', this);
+							this_fragment +='<'+$(this).attr('type')+' type="'+$('input[name=type]', this).val()+'">';
 							$.each(address_parts, function(){
 								this_fragment += '<'+$(this).attr('type')+' type="'+$('input[name=type]', this).val()+'">';
 								this_fragment += $('input[name=value]', this).val();
 								this_fragment +='</'+$(this).attr('type')+'>';
 							});
-						}else{
-							//duh, if the type of this fragment being neither physical nor electronic, IT IS NOTHING!
+							this_fragment +='</'+$(this).attr('type')+'>';//closing tag
 						}
-						this_fragment +='</'+$(this).attr('type')+'>';//closing tag
+						else if($(this).attr('type')=='spatial'){
+							this_fragment += '<'+$(this).attr('type')+' type="'+$('input[name=type]', this).val()+'">';
+							this_fragment += $('input[name=value]', this).val();
+							this_fragment += '</'+$(this).attr('type')+'>';
+						}
+						else{
+							//duh, if the type of this fragment being neither physical nor electronic, IT IS NOTHING!
+							//or SPATIAL!!
+						}
+						
 						subbox_fragment+=this_fragment;
 					});
 				}else{
 					//no parts found
 				}
-				subbox_fragment +='</'+subbox_type+'>';//closing tag
+				if(subbox_type !== 'spatial')
+					subbox_fragment +='</'+subbox_type+'>';//closing tag
 				fragment+=subbox_fragment;//add the sub box fragments to the main fragment
 			});
 		}
