@@ -360,8 +360,8 @@ function initEditForm(){
 			$('#descriptions_rights textarea').addClass('editor');
 			initEditor();
 		}
-
-		if(what=='dates_date' || what=='dates' || what=='date'){
+		log("what;; " + what);
+		if(what=='dates_date' || what=='dates' || what=='date' || what == 'location'){
 			//initalize the datepicker, format is optional
 			$('input.datepicker').datepicker({
 				format: 'yyyy-mm-dd'

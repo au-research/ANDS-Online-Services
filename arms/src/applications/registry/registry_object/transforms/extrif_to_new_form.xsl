@@ -970,15 +970,18 @@
 			<div class="aro_box_display clearfix">
 				<a href="javascript:;" class="toggle"><i class="icon-minus"/></a>
 				<input type="text" class="input-small rifcs-type" vocab="RIFCSLocationType" name="type" placeholder="Type" value="{@type}"/>
-				<input type="text" class="input-small datepicker" name="dateFrom" placeholder="dateFrom" value="{@dateFrom}"/>
-				<button class="btn triggerDatePicker" type="button">
-					<i class="icon-calendar"/>
-				</button>
-				<input type="text" class="input-small datepicker" name="dateTo" placeholder="dateTo" value="{@dateTo}"/>
-				<button class="btn triggerDatePicker" type="button">
-					<i class="icon-calendar"/>
-				</button>
-
+				<div class="input-append">
+				<input type="text" class="input-large datepicker" name="dateFrom" placeholder="dateFrom" value="{@dateFrom}"/>
+					<button class="btn triggerDatePicker" type="button">
+						<i class="icon-calendar"/>
+					</button>
+				</div>
+				<div class="input-append">
+				<input type="text" class="input-large datepicker" name="dateTo" placeholder="dateTo" value="{@dateTo}"/>
+					<button class="btn triggerDatePicker" type="button">
+						<i class="icon-calendar"/>
+					</button>
+				</div>
 				<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
 			</div>
 
