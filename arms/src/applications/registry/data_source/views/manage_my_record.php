@@ -84,7 +84,10 @@
 					</span>
 
 					<div class="btn-group pull-right" style="margin-right:35px;">
-				  		<button class="btn btn-mini mdr page-control op" action="manage_deleted_records" data_source_id="<?php echo $ds->id;?>"><i class="icon-time"></i> View Deleted Records</button>
+				  		<button class="btn btn-mini mdr page-control op" action="manage_deleted_records" data_source_id="<?php echo $ds->id;?>"><i class="icon-time"></i> View Deleted Records</button><br />
+				  		<a href="http://ands3.anu.edu.au/workareas/liz/ands/ands/arms/src/registry/registry_object/add">
+				  			<button class="btn btn-mini mdr page-control op" data_source_id="<?php echo $ds->id;?>"><i class="icon-plus"></i>  Add New Record    </button>
+				  		</a>
 					</div>
 				</div>
 			</div>
