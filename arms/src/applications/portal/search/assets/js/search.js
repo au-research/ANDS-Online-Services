@@ -169,6 +169,7 @@ $(document).on('click', '.filter',function(e){
 }).on('click','.clearAll',function(e){
 	e.preventDefault();
 	searchData = {};
+	$('.adv_input').val('');
 	changeHashTo(formatSearch());
 	$(this).hide();
 }).on('click', '.post', function(e){
