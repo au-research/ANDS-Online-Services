@@ -27,7 +27,7 @@ CREATE TABLE `api_keys` (
   `created` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`api_key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
+INSERT INTO `api_keys` VALUES ('api','services@ands.org.au','ANDS -Internal API requests','ANDS -Internal API requests',0);
 
 CREATE TABLE `deleted_registry_objects` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -67,3 +67,5 @@ ALTER TABLE `record_data` ADD COLUMN
 
 ALTER TABLE `data_source_attributes` CHANGE COLUMN `value` `value` VARCHAR(512) NULL DEFAULT NULL  ;
 ALTER TABLE `registry_object_attributes` CHANGE COLUMN `value` `value` VARCHAR(512) NULL DEFAULT NULL  ;
+
+
