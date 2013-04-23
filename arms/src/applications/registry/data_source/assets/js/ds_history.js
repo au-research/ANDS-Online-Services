@@ -51,7 +51,7 @@ $(function(){
 								output = Mustache.render($('#import-screen-success-report-template').html(), data);
 								$('#myModal .modal-body').html(output);
 								deleteEntry(recordKey);
-								$('.undelete_record').hide();
+								$('#myModal .undelete_record').hide();
 							}
 							else
 							{

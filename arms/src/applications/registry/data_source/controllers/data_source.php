@@ -1201,11 +1201,14 @@ public function getContributorGroupsEdit()
 			return;	
 		}
 		
-		$xml = @file_get_contents($this->input->post('url'));
-		if (strlen($xml) == 0)
+		try
+		{
+			$xml = @file_get_contents($this->input->post('url'));
+		}
+		catch (Exception $e)
 		{
 			$data_source->append_log($elogTitle.$log.NL."Unable to retrieve any content from the specified URL", HARVEST_ERROR, "importer","DOCUMENT_LOAD_ERROR");			
-			echo json_encode(array("response"=>"failure", "message"=>"Unable to retrieve any content from the specified URL", "log"=>substr($elogTitle.$log,0, 1000)));
+			echo json_encode(array("response"=>"failure", "message"=>"Unable to retrieve any content from the specified URL.", "log"=>substr($elogTitle.$log,0, 1000)));
 			// todo: http error?
 			return;	
 		}
