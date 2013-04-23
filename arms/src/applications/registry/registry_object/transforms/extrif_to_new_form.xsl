@@ -1083,7 +1083,7 @@
 				<label class="control-label" for="title">Relation: </label>
 				<div class="controls">
 					<input type="text" class="rifcs-type" vocab="{concat('RIFCS',$ro_class,'RelationType')}" name="type" placeholder="Relation Type" value="{@type}"/>
-					<input type="text" class="inner_input input-large" name="description" placeholder="Description" value="{description}"/>
+					<input type="text" class="inner_input input-large" name="description" placeholder="Description" value="{ro:description}"/>
 					<input type="text" class="input-small" name="url" placeholder="URL" value="{ro:url}"/>
 					<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/> </button>
 				</div>

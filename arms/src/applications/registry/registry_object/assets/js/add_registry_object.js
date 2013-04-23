@@ -466,7 +466,7 @@ function initEditForm(){
 			// });
 
 			//saving
-			log(xml);
+			//log(xml);
 			$.ajax({
 				url:base_url+'registry_object/save/'+ro_id, 
 				type: 'POST',
@@ -1104,7 +1104,7 @@ function getRIFCSforTab(tab, hasField){
 					$.each(parts, function(){
 						var this_fragment = '';
 						//opening tag
-						log($(this).attr('type'));
+						//log($(this).attr('type'));
 						if($(this).attr('type')=='electronic'){
 							this_fragment +='<'+$(this).attr('type')+' type="'+$('input[name=type]', this).val()+'">';
 							this_fragment +='<value>'+$('input[name=value]',this).val()+'</value>';
