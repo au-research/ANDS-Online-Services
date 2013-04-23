@@ -262,16 +262,22 @@ function load_more(page){
 		dataType: 'json',
 		success: function(data){
 			checkResponse(data);
-			var itemsTemplate = $('#items-template').html();
-			var output = Mustache.render(itemsTemplate, data);
-			$('#items').append(output);
-			$('.goto').click(function(){
-				var type = $(this).attr('type');
-				var name = $(this).attr('name');
-				var data_source_id = $(this).attr('data_source_id');
-				var url_to = base_url+'data_source/manage_records/'+data_source_id+'/?filters={"sort":{"updated":"desc"},"filter":{"'+type+'":"'+name+'"}}';
-				window.location = url_to;
-			});
+			if(data.items.length==1&&page==1)
+			{
+				var url_to = base_url+'data_source/#!/view/'+data.items[0]['id'];
+				window.location = url_to;				
+			} else { 
+				var itemsTemplate = $('#items-template').html();
+				var output = Mustache.render(itemsTemplate, data);
+				$('#items').append(output);
+				$('.goto').click(function(){
+					var type = $(this).attr('type');
+					var name = $(this).attr('name');
+					var data_source_id = $(this).attr('data_source_id');
+					var url_to = base_url+'data_source/manage_records/'+data_source_id+'/?filters={"sort":{"updated":"desc"},"filter":{"'+type+'":"'+name+'"}}';
+					window.location = url_to;
+				});
+			}
 		}
 	});
 }
