@@ -14,51 +14,57 @@
 
 <div class="container" id="main-content">
 	<div class="row">
-		<div class="span3">&nbsp;</div>
-		<div class="span6">
-			<div class="widget-box">
-				<div class="widget-title">
-					<h5>Login</h5>
-					<div class="buttons">
-						<?php printAlternativeLoginControl($authenticators); ?>
-					</div>
-					<div class="right-widget">
-												
-					</div>
-				</div>
-				<div class="widget-content">
-					
-					<?php if (isset($error_message)): ?>
-						<div class="alert alert-error">
-							<?php echo $error_message; ?>
-						</div>
-					<?php endif; ?>
-					
-					<?php /* REMOVED - prints user's password to screen */
-					// if (isset($exception)): 
-					if(false): ?>
-						<div class="alert alert-error">
-							Error: <?php echo $exception->getMessage(); ?>
-						</div>
-					<?php endif; ?>
-					<?php 
-					prinfLoginForm($authenticators, $default_authenticator, 'loginForm');
-					printAlternativeLoginForms($authenticators, $default_authenticator);
-					?>
-				</div>
+			<div class="span3">&nbsp;</div>
 
+			<div class="span6">
+				<div class="widget-box">
+					<div class="widget-title">
+						<h5>Login</h5>
+						<div class="buttons">
+							<?php printAlternativeLoginControl($authenticators); ?>
+						</div>
+						<div class="right-widget">
+													
+						</div>
+					</div>
+					<div class="widget-content">
+						
+						<?php if (isset($error_message)): ?>
+							<div class="alert alert-error">
+								<?php echo $error_message; ?>
+							</div>
+						<?php endif; ?>
+						<?php /* REMOVED - prints user's password to screen */
+						// if (isset($exception)): 
+						if(false): ?>
+							<div class="alert alert-error">
+								Error: <?php echo $exception->getMessage(); ?>
+							</div>
+						<?php endif; ?>
+						<?php 
+						prinfLoginForm($authenticators, $default_authenticator, 'loginForm');
+						printAlternativeLoginForms($authenticators, $default_authenticator);
+						?>
+					</div>
+
+				</div>
 			</div>
 
+			<div class="span3 pull-right">
+			</div>
+	</div>
+
+
+	<div class="row">
+		<div class="span3">&nbsp;</div>
+		<div class="span6">
+			<div class="alert alert-info">
+				<center>
+					<small>Not sure what this is? <a href="<?php echo portal_url();?>" target="_blank" style="color:inherit;">Perhaps you're looking for: <b>Research Data Australia</b> <i class="icon-globe icon"></i> </a></small>
+				</center>
+			</div>
 		</div>
-
-
-		<div class="pull-right widget-box" style="clear:right;padding:20px">
-
-			<a href="<?php echo portal_url();?>" class="btn btn-info pull-center" target="_blank">
-			<i class="icon-globe icon icon-white"></i> Visit Research Data Australia</a>
-	
-		</div>
-	</div>	
+	</div>
 </div>
 
 
@@ -74,6 +80,7 @@ function prinfLoginForm($authenticators, $authenticator , $class)
 	if($authenticator == gCOSI_AUTH_METHOD_SHIBBOLETH)
 	{
 		print "<div class='".$class."' id='".$authenticator."_LoginForm'>";
+		print "<small>Log into the ANDS Online Services Dashboard using your AAF credentials:</small>";
 		print "	<img src='".asset_url('img/aaf_logo.gif')."' style='display:block;margin:10px auto;'/>";
 		print "	<a href='".secure_host_url().gSHIBBOLETH_SESSION_INITIATOR."?target=".secure_base_url()."auth/setUser' class='btn btn-primary btn-block'>Login using ".$authenticators[$authenticator]."</a>";
 		print "</div>";
