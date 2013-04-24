@@ -160,10 +160,20 @@ class View extends MX_Controller {
 			$data['cannedText'] = $this->registry->fetchContributorText((string)$this->input->get('slug'));
 			$cannedTextDiv = $this->load->view('cannedText', $data, true);
 		}
+		/*
+		XXX: Todo-> fix this for draft records
+		else if ($this->input->get('ia'))
+		{
+			$data['contentData'] = $this->registry->fetchContributorData((string)$this->input->get('id'));
+			$contentDiv = $this->load->view('contentData', $data, true);
+			$data['cannedText'] = $this->registry->fetchContributorText((string)$this->input->get('id'));
+			$cannedTextDiv = $this->load->view('cannedText', $data, true);
+		}
+		*/
 		else
 		{
-			// XXX: TODO FOR ID-based get
-			// 
+			$contentDiv = "<i class='lightgrey'>Contributor page data will be generated when this page is published</i>";
+			$cannedTextDiv = "<i class='lightgrey'>Contributor page details will be generated when this page is published</i>";
 		}
 
 
@@ -269,7 +279,7 @@ class View extends MX_Controller {
 
 	function getConnections(){
 		$this->load->model('registry_fetch','registry');
-		$limit = 6;
+		$limit = 5;
 		$page = ($this->input->get('page')) ? $this->input->get('page') : 1;
 		$offset = ($page * $limit) - $limit;
 		if ($this->input->get('slug')){

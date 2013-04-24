@@ -952,30 +952,25 @@
 						<div class="control-group">
 							<label class="control-label">Reverse Links</label>
 							<div class="controls">
-								<p class="help-inline">
+
 								<div class="normal-toggle-button" value="{{allow_reverse_internal_links}}">
     								<input type="checkbox" for="allow_reverse_internal_links">
 								</div>
 								<p class="help-inline">Allow reverse internal Links</p>
-								</p>
-
-								<p class="help-inline">
+								<br/><br/>
 								<div class="normal-toggle-button" value="{{allow_reverse_external_links}}">
     								<input type="checkbox" for="allow_reverse_external_links">
 								</div>
 								<p class="help-inline">Allow reverse external Links</p>
-								</p>
 							</div>
 						</div>
 
 						<div class="control-group">
 							<label class="control-label">Create Primary Relationships</label>
 							<div class="controls">
-								<p class="help-inline">
-									<div class="create-primary normal-toggle-button" value="{{create_primary_relationships}}">
-	    								<input type="checkbox" for="create_primary_relationships" name="create_primary_relationships">
-									</div>
-								</p>
+								<div class="create-primary normal-toggle-button" value="{{create_primary_relationships}}">
+    								<input type="checkbox" for="create_primary_relationships" name="create_primary_relationships">
+								</div>
 							</div>
 						</div>
 						
@@ -984,22 +979,24 @@
 								<i>Datasources can have up to 2 primary relationships</i>
 								<div class="clearfix"></div>
 								<div class="pull-left">
-								<div class="control-group">
+									<div class="control-group hide">
 										<label class="control-label">Class</label>
 										<div class="controls">
-											<input type="text" class="rifcs-type" vocab="RIFCSClass" name="class_1" placeholder="Class" value="{{class_1}}"/>
+											<input type="text" class="rifcs-type" vocab="RIFCSClass" name="class_1" placeholder="Class" value="n/a"/>
 										</div>
 									</div>
 									
 									<div class="control-group">
-										<label class="control-label">Registry Object Key</label>
+										<label class="control-label"><br/><br/>Registry Object Key</label>
 										<div class="controls">
-											<input type="text" class="input" name="primary_key_1" value="{{primary_key_1}}"/>
+											<span class="help-block">Relate all records to:</span>
+											<input type="text" class="input ro_search" name="primary_key_1" id="primary_key_1" value="{{primary_key_1}}"/>
 										</div>
 									</div>
 									<div class="control-group">
-										<label class="control-label">Collection</label>
+										<label class="control-label"><br/><br/>Collection</label>
 										<div class="controls">
+											<span class="help-block">With the following relation types:</span>
 											<input type="text" class="rifcs-type" vocab="RIFCScollectionRelationType" name="collection_rel_1" placeholder="Relation Type" value="{{collection_rel_1}}"/>
 										</div>
 									</div>
@@ -1023,21 +1020,23 @@
 									</div>
 								</div>
 								<div class="pull-left">
-								<div class="control-group">
+								<div class="control-group hide">
 										<label class="control-label">Class</label>
 									<div class="controls">
-											<input type="text" class="rifcs-type" vocab="RIFCSClass" name="class_2" placeholder="Class" value="{{class_2}}"/>
+											<input type="text" class="rifcs-type" vocab="RIFCSClass" name="class_2" placeholder="Class" value="n/a"/>
 										</div>
 									</div>
 									<div class="control-group">
-										<label class="control-label">Registry Object Key</label>
+										<label class="control-label"><br/><br/>Registry Object Key</label>
 										<div class="controls">
-											<input type="text" class="input" name="primary_key_2" value="{{primary_key_2}}"/>
+											<span class="help-block">Relate all records to:</span>
+											<input type="text" class="input ro_search" name="primary_key_2" id="primary_key_2" value="{{primary_key_2}}"/>
 										</div>
 									</div>
 									<div class="control-group">
-										<label class="control-label">Collection</label>
+										<label class="control-label"><br/><br/>Collection</label>
 										<div class="controls">
+											<span class="help-block">With the following relation types:</span>
 											<input type="text" class="rifcs-type" vocab="RIFCScollectionRelationType" name="collection_rel_2" placeholder="Relation Type" value="{{collection_rel_2}}"/>
 										</div>
 									</div>
@@ -1098,13 +1097,9 @@
 						<div class="control-group">
 							<label class="control-label">Manually Publish Records</label>
 							<div class="controls">
-								<p class="help-inline">
 								<div class="normal-toggle-button manual_publish" value="{{manual_publish}}">
     								<input type="checkbox" for="manual_publish" id="check_manual_publish">
-								</div>
-
-								<!-- <span id="manual_publish_old">{{manual_publish}}</span> -->
-								</p>								
+								</div>	
 							</div>
 						</div>
 
@@ -1113,11 +1108,9 @@
 							<div class="control-group">
 								<label class="control-label">Quality Assessment Required</label>
 								<div class="controls">
-									<p class="help-inline">
-										<div class="normal-toggle-button qa_flag" value="{{qa_flag}}">
-		    								<input type="checkbox" for="qa_flag" id="check_qa_flag">     																
-										</div>
-									</p>
+									<div class="normal-toggle-button qa_flag" value="{{qa_flag}}">
+	    								<input type="checkbox" for="qa_flag" id="check_qa_flag">     																
+									</div>
 								</div>
 							</div>
 
@@ -1152,7 +1145,7 @@
 							</div>
 						</div>
 
-						<div class="control-group">
+						<div class="control-group <?php if(!$this->user->hasFunction('REGISTRY_SUPERUSER')) { echo 'hide'; }?>">
 							<label class="control-label" for="provider_type">Provider Type</label>
 							<div class="controls">
 								<select data-placeholder="Choose a Provider Type" tabindex="1" class="chzn-select input-xlarge" for="provider_type">
@@ -1181,7 +1174,7 @@
 							</div>
 						</div>
 
-						<div class="control-group">
+						<div class="control-group" id="oai_set_container">
 							<label class="control-label" for="oai_set">OAI Set</label>
 							<div class="controls">
 								<input type="text" class="input-xlarge" name="oai_set" value="{{oai_set}}" length="512">

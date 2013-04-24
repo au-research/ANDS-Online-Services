@@ -671,7 +671,7 @@ public function getContributorGroupsEdit()
 
 		$dataSourceGroups = $dataSource->get_groups();
 		if(sizeof($dataSourceGroups) > 0){
-			foreach($dataSourceGroups as $group){
+			foreach($dataSourceGroups as $idx => $group){
 				$item = array();
 				$group_contributor = array();
 				$item['group'] = $group;
@@ -690,7 +690,8 @@ public function getContributorGroupsEdit()
 								$item['contributor_page'] = 'Page will be auto generated on save';
 							}
 						}else{
-							$item['contributor_page'] = $group_contributor["key"]."(<em>Managed by another datasource</em>)";
+							$other_ds = $this->ds->getByID($group_contributor["authorative_data_source_id"]);
+							$item['contributor_page'] = "(<em>Already managed by ".$other_ds->title ." who is managing the group</em>)";
 						}
 					}else{
 						$item['contributor_page'] = 'Page will be auto generated on save';
@@ -702,12 +703,13 @@ public function getContributorGroupsEdit()
 					{
 						if($group_contributor["authorative_data_source_id"]==$id)
 						{
-							$item['contributor_page'] = "<input type='text' name='".$group."' value='".$group_contributor["key"]."'/>";
+							$item['contributor_page'] = "<input type='text' name='contributor_pages[".$idx."]' value='".$group_contributor["key"]."' class='ro_search'/>";
 						}else{
-							$item['contributor_page'] = $group_contributor["key"]."(<em>Managed by another datasource</em>)";
+							$other_ds = $this->ds->getByID($group_contributor["authorative_data_source_id"]);
+							$item['contributor_page'] = "(<em>Already managed by ".$other_ds->title ." who is managing the group</em>)";
 						}
 					}else{
-						$item['contributor_page'] = "<input type='text' name='".$group."' value=''/>";
+						$item['contributor_page'] = "<input type='text' name='contributor_pages[".$idx."]' value='' class='ro_search'/>";
 					}
 				
 				}else{
@@ -725,7 +727,7 @@ public function getContributorGroupsEdit()
 	{
 		header('Cache-Control: no-cache, must-revalidate');
 		header('Content-type: application/json');
-		date_default_timezone_set('Australia/Canberra');
+		reset_timezone();
 
 		$POST = $this->input->post();
 		$items = array();
@@ -979,7 +981,11 @@ public function getContributorGroupsEdit()
 			foreach($valid_attributes as $attrib){	
 				$new_value = null;
 
-				if (isset($POST[$attrib])){					
+				if (is_integer($attrib) && $attrib == 0)
+				{
+					continue;
+				}
+				else if (isset($POST[$attrib])){					
 					$new_value = trim($this->input->post($attrib));
 				}
 				else if(in_array($attrib, array_keys($dataSource->harvesterParams)))
@@ -1019,7 +1025,7 @@ public function getContributorGroupsEdit()
 				
 				}
 
-				if($this->input->post('class_2')=='')
+				if($this->input->post('primary_key_2')=='')
 				{
 					switch($attrib){
 						case 'primary_key_2':
@@ -1033,7 +1039,7 @@ public function getContributorGroupsEdit()
 							break;
 					}
 				}
-				if($this->input->post('class_1')=='')
+				if($this->input->post('primary_key_1')=='')
 				{
 					switch($attrib){
 						case 'primary_key_1':
@@ -1916,7 +1922,7 @@ public function getContributorGroupsEdit()
 		$data_source = $this->ds->getByID($data_source_id);
 		$registry_object = $this->ro->getPublishedByKey($key);
 		if($registry_object==null||$data_source->id!=$data_source_id)
-			{$jsonData['message'] = "Primary Relationship can only be configured to relate to a PUBLISHED record key from this data source.";}
+			{$jsonData['message'] = "You must provide a published registry object key from within this data source for primary relationship.";}
 		
 		echo json_encode($jsonData);
 

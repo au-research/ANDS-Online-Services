@@ -4,41 +4,48 @@
   $.fn.toggleButtons = function (opt) {
     var $element, $labelEnabled, options, active, styleActive, styleDisabled, enable;
     this.each(function () {
+
       $element = $(this);
 
       options = $.extend({}, $.fn.toggleButtons.defaults, opt);
 
-      $element.addClass('toggle-button');
+      if (!$.browser.msie)
+      {
+       
+        $element.addClass('toggle-button');
 
-      if(options.animated)
-        $element.addClass('toggle-button-animated');
+        if(options.animated)
+          $element.addClass('toggle-button-animated');
 
-      $element.css('width', options.width);
+        $element.css('width', options.width);
 
-      $labelEnabled = $('<label></label>').attr('for', $element.find('input').attr('id'));
+        $labelEnabled = $('<label></label>').attr('for', $element.find('input').attr('id'));
 
-      $element.append($labelEnabled);
+        $element.append($labelEnabled);
 
-      $element.attr("data-enabled", options.label.enabled === undefined ? "ON" : options.label.enabled);
-      $element.attr("data-disabled", options.label.disabled === undefined ? "OFF " : options.label.disabled);
+        $element.attr("data-enabled", options.label.enabled === undefined ? "ON" : options.label.enabled);
+        $element.attr("data-disabled", options.label.disabled === undefined ? "OFF " : options.label.disabled);
 
-      active = $element.find('input').is(':checked');
+        active = $element.find('input').is(':checked');
 
-      if (!active)
-        $element.addClass('disabled');
+        if (!active)
+          $element.addClass('disabled');
 
-      styleActive = options.style.enabled === undefined ? "" : options.style.enabled;
-      styleDisabled = options.style.disabled === undefined ? "" : options.style.disabled;
-      enable = options.enable;
+        styleActive = options.style.enabled === undefined ? "" : options.style.enabled;
+        styleDisabled = options.style.disabled === undefined ? "" : options.style.disabled;
+        enable = options.enable;
 
-      if (active && styleActive !== undefined)
-        $element.addClass(styleActive);
-      if (!active && styleDisabled !== undefined)
-        $element.addClass(styleDisabled);
+        if (active && styleActive !== undefined)
+          $element.addClass(styleActive);
+        if (!active && styleDisabled !== undefined)
+          $element.addClass(styleDisabled);
+
+      }
 
       $element.on('click', function (e) {
+
         if ($(e.target).is('input'))
-          return true;
+          return options.onChange($(e.target), $(e.target).is(':checked'), e);
 
         e.stopPropagation();
         $(this).find('label').click();

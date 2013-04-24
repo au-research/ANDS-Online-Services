@@ -266,7 +266,7 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 		
 
 		// XXX: TODO: LIMIT and offset (pass to getSuggestedLinks...)
-			$this->load->library('solr');
+		$this->load->library('solr');
 		$contents = $registry_object->getContributorData();
 
 		echo json_encode(array("contents"=>$contents));

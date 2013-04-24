@@ -545,8 +545,8 @@ function loadContributorPages(data_source_id)
 		success: function(data){
 			//console.log(data.contributorPages)
 			var contributorsTemplate = "<p>"+data.contributorPages+"</p>"+
-			"<table class='table table-hover'>"+
-			"<thead><tr><th align='left'>GROUP</th><th>Contributor Page Key</th></tr></thead>" +
+			"<table class='table table-hover headings-left'>"+
+			"<thead><tr><th class='align-left'>GROUP</th><th class='align-left'>Contributor Page Key</th></tr></thead>" +
 			"<tbody>" +
 			"{{#items}}" +
 				"<tr ><td>{{group}}</td><td>{{{contributor_page}}}</td></tr>" +
@@ -573,7 +573,7 @@ function loadContributorPagesEdit(data_source_id,inst_pages)
 		success: function(data){
 			//console.log(data)
 			var contributorsTemplate = "<table class='table table-hover'>"+
-			"<thead><tr><th align='left'>GROUP</th><th>Contributor Page Key</th></tr></thead>" +
+			"<thead><tr><th class='align-left'>GROUP</th><th class='align-left'>Contributor Page Key</th></tr></thead>" +
 			"<tbody>" +
 			"{{#items}}" + 
 			"<tr ><td>{{group}}</td><td>{{{contributor_page}}}</td></tr>" + 
@@ -581,7 +581,8 @@ function loadContributorPagesEdit(data_source_id,inst_pages)
 			"</tbody></table>";
 			var output = Mustache.render(contributorsTemplate, data);
 			$('#contributor_groups').html(output);	
-			$('#contributor_groups2').html(output);				
+			$('#contributor_groups2').html(output);	
+			bind_ro_search();
 		},
 		error: function(data){
 		console.log(data);
@@ -693,7 +694,7 @@ function validatePrimary_2(jsonData, ds_id, errorStr){
 			}	
 		},
 		error: function(data){
-			errorStr = errorStr + "Could not validate the primaty key given";
+			errorStr = errorStr + "Could not validate the primary key given";
 		},
   	async: false
 	});
@@ -709,22 +710,22 @@ function validateFields(jsonData, ds_id){
 
 	var errorStr = '';
 
-	if(included(jsonData,'create_primary_relationships') && (!included(jsonData,'class_1')||!included(jsonData,'primary_key_1')||!included(jsonData,'service_rel_1')||!included(jsonData,'activity_rel_1')||!included(jsonData,'party_rel_1')||!included(jsonData,'collection_rel_1')))
+	if(included(jsonData,'create_primary_relationships') && (!included(jsonData,'primary_key_1')||!included(jsonData,'service_rel_1')||!included(jsonData,'activity_rel_1')||!included(jsonData,'party_rel_1')||!included(jsonData,'collection_rel_1')))
 	{
-		errorStr = errorStr + "You must provide a class ,registered key and all relationship types for the primary relationship.<br /><br />";
+		errorStr = errorStr + "You must provide a key and specify all relationtypes for the primary relationship.<br /><br />";
 
 	}
 
-	if(included(jsonData,'create_primary_relationships') && (included(jsonData,'class_1')&&included(jsonData,'primary_key_1')&&included(jsonData,'service_rel_1')&&included(jsonData,'activity_rel_1')&&included(jsonData,'party_rel_1')&&included(jsonData,'collection_rel_1')))
+	if(included(jsonData,'create_primary_relationships') && (included(jsonData,'primary_key_1')&&included(jsonData,'service_rel_1')&&included(jsonData,'activity_rel_1')&&included(jsonData,'party_rel_1')&&included(jsonData,'collection_rel_1')))
 	{
 		errorStr = errorStr + validatePrimary_1(jsonData, ds_id, errorStr);
 	}
 
-	if(included(jsonData,'class_2') && (!included(jsonData,'primary_key_2')||!included(jsonData,'service_rel_2')||!included(jsonData,'activity_rel_2')||!included(jsonData,'collection_rel_2')||!included(jsonData,'party_rel_2')))
+	if(included(jsonData,'primary_key_2') && (!included(jsonData,'primary_key_2')||!included(jsonData,'service_rel_2')||!included(jsonData,'activity_rel_2')||!included(jsonData,'collection_rel_2')||!included(jsonData,'party_rel_2')))
 	{
-		errorStr = errorStr +  "You must provide a registered key and all relationship types for the 2nd primary relationship.<br />";	
+		errorStr = errorStr +  "You must provide a key and specify all relationtypes for the primary relationship.<br />";	
 	}
-	if(included(jsonData,'create_primary_relationships') && (included(jsonData,'class_2')&&included(jsonData,'primary_key_2')&&included(jsonData,'service_rel_2')&&included(jsonData,'activity_rel_2')&&included(jsonData,'party_rel_2')&&included(jsonData,'collection_rel_2')))
+	if(included(jsonData,'create_primary_relationships') && (included(jsonData,'primary_key_2')&&included(jsonData,'service_rel_2')&&included(jsonData,'activity_rel_2')&&included(jsonData,'party_rel_2')&&included(jsonData,'collection_rel_2')))
 	{
 		errorStr = errorStr + validatePrimary_2(jsonData, ds_id, errorStr);
 	}	
@@ -886,6 +887,8 @@ function load_datasource_edit(data_source_id, active_tab){
 			}
 			
 			$('#edit-datasource  .normal-toggle-button').each(function(){
+				
+
 				if($(this).hasClass('create-primary')){
 						if($(this).attr('value')=='t' || $(this).attr('value')=='1' || $(this).attr('value')=='true' ){
 							$(this).find('input').attr('checked', 'checked');
@@ -1027,6 +1030,16 @@ function load_datasource_edit(data_source_id, active_tab){
 			});
 
 			$('#edit-datasource  .contributor-page').live().change(function(){
+				if ($(this).val() != '0')
+				{
+					var alert_message = "";
+					if ($(this).val() == '1')
+					{
+						alert_message += "Contributor pages will be generated for the new group(s) located in this data source. ";
+					}
+					alert_message += "The contributor home page will be a public web document representing your organisation. ANDS advises that you should use only approved text and consult appropriate authorities within your organisation.";
+					alert(alert_message);
+				}
 				$(this).attr('checked', 'checked');
 				$('#institution_pages').val($(this).val());		
 				loadContributorPagesEdit(data_source_id,$(this).val());			
@@ -1043,6 +1056,10 @@ function load_datasource_edit(data_source_id, active_tab){
 				if($(this).attr('for')=='harvest_method')
 				{
 					updateHarvestAvailableOptions($(this));
+				}
+				else if($(this).attr('for')=='provider_type')
+				{
+					$('#'+$(this).attr('for')).val("rif");
 				}
 
 
@@ -1082,6 +1099,22 @@ function load_datasource_edit(data_source_id, active_tab){
 	return false;
 }
 
+function bind_ro_search()
+{
+	$(".ro_search").each(function(){
+		if ($(this).attr('name').match(/contributor/))
+		{
+			console.log($('#data_source_id_input').val());
+			$(this).ro_search_widget({ endpoint: base_url + "registry_object_search/", 'class': "party", ds: $('#data_source_id_input').val() });
+		}
+		else
+		{
+			$(this).ro_search_widget({ endpoint: base_url + "registry_object_search/", 'class': "collection", ds: $('#data_source_id_input').val() });
+		}
+		
+	});
+}
+
 function updateHarvestAvailableOptions($harvest_method)
 {
 	if($harvest_method.val()=="GET")
@@ -1089,13 +1122,15 @@ function updateHarvestAvailableOptions($harvest_method)
 		$("#advanced option[value='INCREMENTAL']").remove();
 		$("#advanced").trigger("liszt:updated");
 		$("#test-harvest").hide();
+		$("#oai_set_container").val("").hide();
 	}
 	if($harvest_method.val()=="RIF")
 	{
 		$("#advanced option[value='INCREMENTAL']").remove();						
 		$("#advanced").append('<option value="INCREMENTAL">Incremental Mode</option>');
 		$("#advanced").trigger("liszt:updated");		
-		$("#test-harvest").show();				
+		$("#test-harvest").show();
+		$("#oai_set_container").show();
 	}
 }
 
@@ -1180,10 +1215,11 @@ $('#save-edit-form').live({
 				type: 'POST',
 				data: jsonData,
 				success: function(data){
-					if (!data.status == "OK"){
+					log(data.status);
+					if (data.status != "OK"){
 						$('#myModal').modal();
 						logErrorOnScreen("An error occured whilst saving your changes!", $('#myModal .modal-body'));
-						$('#myModal .modal-body').append("<br/><pre>" + data + "</pre>");
+						$('#myModal .modal-body').append("<br/><pre>" + data.message + "</pre>");
 					}else{
 						changeHashTo('view/'+ds_id);
 						createGrowl(true, "Data Source settings were successfully updated");

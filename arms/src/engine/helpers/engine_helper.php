@@ -143,7 +143,8 @@ function utc_timezone()
 
 function reset_timezone()
 {
-	date_default_timezone_set($this->config->item('default_tz'));
+	$CI =& get_instance();
+	date_default_timezone_set($CI->config->item('default_tz'));
 }
 
 $cycles = 0;

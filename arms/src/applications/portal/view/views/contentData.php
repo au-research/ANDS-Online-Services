@@ -12,7 +12,7 @@
 
 							$url = base_url() . "search/#!/tab=".$content."/group=".$contentData['contents']['contributor'] ;
 					
-							$contentDiv .= "<p><a href='".$url."'>".$content." " .$value."</a></p>";	
+							$contentDiv .= "<p><a href='".$url."'>".$value . " " . ucfirst($content)."</a></p>";	
 
 		}
 	}
@@ -31,9 +31,9 @@
 		$subjectDiv .= "<ul>";
 		foreach($contentData['contents']['subjects'] as $subject=> $value)
 		{
-							$url = base_url() . "view/?id=an anchor" ;
+							$url = portal_url().'search#!/tab=all/group='.$contentData['contents']['contributor'].'/s_subject_value_resolved='.rawurlencode($subject);
 					
-							$subjectDiv .= '<li><a href="javascript:;" class="filter" filter_type="subject_value_resolved" filter_value="'.$subject.'">'.$subject.' '.$value.'</a></li>';		
+							$subjectDiv .= '<li><a href="'.$url.'" class="filter">'.$subject.' <i class="grey">('.$value.')</i></a></li>';		
 
 		}
 		$subjectDiv .= "</ul>";		

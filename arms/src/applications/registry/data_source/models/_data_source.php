@@ -49,7 +49,7 @@ class _data_source {
 
 	public $stockAttributes = array('title'=>'','record_owner'=>'','contact_name'=>' ', 'contact_email'=>' ', 'provider_type'=>RIFCS_SCHEME,'notes'=>'');
 	public $extendedAttributes = array('allow_reverse_internal_links'=>true,'allow_reverse_external_links'=>true,'manual_publish'=>false,'qa_flag'=>true,'create_primary_relationships'=>false,'assessment_notify_email_addr'=>'','created'=>'','updated'=>'');
-	public $harvesterParams = array('provider_type'=>'RIFCS','uri'=>'http://','harvest_method'=>'DIRECT','harvest_date'=>'','oai_set'=>'','advanced_harvest_mode'=>'STANDARD','harvest_frequency'=>'');
+	public $harvesterParams = array('provider_type'=>'rif','uri'=>'http://','harvest_method'=>'GET','harvest_date'=>'','oai_set'=>'','advanced_harvest_mode'=>'STANDARD','harvest_frequency'=>'');
 	public $primaryRelationship = array('class_1','class_2','primary_key_1','primary_key_2','collection_rel_1','collection_rel_2','activity_rel_1','activity_rel_2','party_rel_1','party_rel_2','service_rel_1','service_rel_2');
 	public $institutionPages = array('institution_pages');
 	
@@ -395,6 +395,7 @@ class _data_source {
 				// for each group for this datasource that is not already managed by another datasource
 					foreach($groups as $group)
 					{
+						$manageGroup = array();
 						$query = '';
 						$manageGroup[$group] = true;	
 						//check that another ds is not the authoritive ds
@@ -475,13 +476,21 @@ class _data_source {
 						}
 						if($manageGroup)
 						{
-							
-							$registry_object_key = $inputvalues[str_replace(" ","_",$group)];
+							// Turn the indexed input array back into associative values
+							foreach($inputvalues['contributor_pages'] AS $page_idx => $contributor_value)
+							{
+								if (isset($groups[$page_idx]))
+								{
+									$inputvalues[$groups[$page_idx]] = $contributor_value;
+								}
+							}
+
+							$registry_object_key = $inputvalues[$group];
 							if($registry_object_key!='')
 							{
 								$contributorPage = $this->_CI->ro->getAllByKey($registry_object_key);
 				
-								if(isset($contributorPage[0]->id))
+								if(isset($contributorPage[0]->id) && $contributorPage[0]->class == "party")
 								{
 									$registry_object_id = $contributorPage[0]->id;
 									//we need to add the  group , registry_object_id and autoritive datasource to the institutional_pages table
@@ -501,7 +510,7 @@ class _data_source {
 									mail($to, $subject, $message, $headers);									
 								}else{
 									//how do we deal with the fact that its not a valid key?
-									echo "not a valid registry party object";
+									throw new Exception("Could not save contributor for \"$group\".".NL."Record \"$registry_object_key\" does not seem to be a valid Party record?");
 								}
 							}
 						}

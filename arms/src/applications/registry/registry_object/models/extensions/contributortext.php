@@ -62,15 +62,15 @@ class ContributorText_Extension extends ExtensionBase
 		elseif($subjectNum==1)
 		{
 			$subjectWord = 'area';		
-			$subjectStr = ', which covers the subject '.$subjectWord.' <a href="'.base_url().'search#!/tab=All/group='.urlencode($group).'/subject='.$subjectCount[0].'">'.$subjectCount[0].'</a>.';
+			$subjectStr = ', which covers the subject '.$subjectWord.' <a href="'.portal_url().'search#!/tab=all/group='.rawurlencode($group).'/s_subject_value_resolved='.rawurlencode($subjectCount[0]).'">'.$subjectCount[0].'</a>.';
 		}
 		elseif($subjectNum==2)
 		{
-			$subjectStr = ', which covers 	'.$subjectNum.' subject '.$subjectWord.' including <a href="'.base_url().'search#!/tab=All/group='.urlencode($groupName).'/subject='.$subjectCount[0].'">'.$subjectCount[0].'</a> and <a href="'.base_url().'search#!/tab=All/group='.urlencode($groupName).'/subject='.$subjectCount[1].'">'.$subjectCount[1].'</a>.';
+			$subjectStr = ', which covers 	'.$subjectNum.' subject '.$subjectWord.' including <a href="'.portal_url().'search#!/tab=all/group='.rawurlencode($groupName).'/s_subject_value_resolved='.rawurlencode($subjectCount[0]).'">'.$subjectCount[0].'</a> and <a href="'.portal_url().'search#!/tab=all/group='.rawurlencode($groupName).'/s_subject_value_resolved='.rawurlencode($subjectCount[1]).'">'.$subjectCount[1].'</a>.';
 		}	
 		else 
 		{
-			$subjectStr = ', which covers 	'.$subjectNum.' subject '.$subjectWord.' including <a href="'.base_url().'search#!/tab=All/group='.urlencode($groupName).'/subject='.$subjectCount[0].'">'.$subjectCount[0].'</a>, <a href="'.base_url().'search#!/tab=All/group='.urlencode($groupName).'/subject='.$subjectCount[1].'">'.$subjectCount[1].'</a> and <a href="'.base_url().'search#!/tab=All/group='.urlencode($groupName).'/subject='.$subjectCount[2].'">'.$subjectCount[2].'</a>.';	
+			$subjectStr = ', which covers 	'.$subjectNum.' subject '.$subjectWord.' including <a href="'.portal_url().'search#!/tab=all/group='.rawurlencode($groupName).'/s_subject_value_resolved='.rawurlencode($subjectCount[0]).'">'.$subjectCount[0].'</a>, <a href="'.portal_url().'search#!/tab=all/group='.rawurlencode($groupName).'/s_subject_value_resolved='.rawurlencode($subjectCount[1]).'">'.$subjectCount[1].'</a> and <a href="'.portal_url().'search#!/tab=all/group='.rawurlencode($groupName).'/s_subject_value_resolved='.rawurlencode($subjectCount[2]).'">'.$subjectCount[2].'</a>.';	
 		}
 	
 
@@ -93,11 +93,11 @@ class ContributorText_Extension extends ExtensionBase
 
 		$theText = '<p>To date, ' .$groupName. ' has ';
 		if($collectionCount!='no'){
-			$theText .=  '<a id="hp-count-collection" href="'.portal_url().'search#!/tab=collection/group='.urlencode($groupName).'">' .$collectionCount .' '.$collectionWord.'</a> in RDA';
+			$theText .=  '<a id="hp-count-collection" href="'.portal_url().'search#!/tab=collection/group='.rawurlencode($groupName).'">' .$collectionCount .' '.$collectionWord.'</a> in RDA';
 		}else{
 			$theText .=   ' '.$collectionCount .' '.$collectionWord.' in RDA';
 		}
-		$theText .= $subjectStr.' ' .$groupStr. ' All the Collections, Parties, Activities and Services associated with ' .urldecode($groupName). '  can be accessed from the Registry Contents box on the right hand side of this page.</p>';
+		$theText .= $subjectStr.' ' .$groupStr. ' All the Collections, Parties, Activities and Services associated with ' .rawurldecode($groupName). '  can be accessed from the Registry Contents box on the right hand side of this page.</p>';
 
 		return $theText;
 

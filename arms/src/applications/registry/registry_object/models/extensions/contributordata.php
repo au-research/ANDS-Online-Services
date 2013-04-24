@@ -34,7 +34,7 @@ class ContributorData_Extension extends ExtensionBase
 		$classes = $this->_CI->solr->getFacetResult('class');
 
 		foreach($classes as $class=>$num){
-			$contributorData['contents'][$class] = $num;
+			$contributorData['contents'][readable($class)] = $num;
 		}
 
 
