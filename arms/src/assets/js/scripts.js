@@ -402,6 +402,7 @@ $.ajaxSetup({
 });
 
 // implement JSON.stringify serialization
+var JSON = {}
 JSON.stringify = JSON.stringify || function (obj) {
     var t = typeof (obj);
     if (t != "object" || obj === null) {
