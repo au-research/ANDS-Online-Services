@@ -73,17 +73,21 @@ $(document).ready(function() {
     	$form.find('input[type="checkbox"]').removeAttr('checked');
     	$form.find('option').attr('selected', false);
     	$form.find('select').find('option').first().attr('selected', true);
+		$("#slider").editRangeSlider("min",1544);
+		$("#slider").editRangeSlider("max",2012);
+		$("#slider").hide();
     	return false;
     });
+
     $('#ad_st').toggle(function() {
     	$(this).addClass('exped');
     	$('.advanced_search').slideDown();
+    	$("#slider").editRangeSlider("valueLabels","hide");
     	$("#slider").editRangeSlider("resize");
-    	return false;
+     	return false;
     }, function() {
      	$(this).removeClass('exped');
     	$('.advanced_search').slideUp('fast');
-    	$("#slider").editRangeSlider("resize");
     	return false;
     });
 
