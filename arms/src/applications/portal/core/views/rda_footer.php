@@ -26,7 +26,7 @@
 <div class="pagination" style="display:block;">
 	<div class="results_navi">
 		<div class='results'>{{count}} results</div>
-		<div class="page_navi">Page: {{currentPage}}/{{totalPage}} | 
+		<div class="page_navi">Page: {{currentPage}}/{{totalPage}} <span id="separater">|</span> 
 			{{#prev}}
 				<a href="javascript:;" class="suggestor_paging" offset={{prev}} suggestor="{{suggestor}}">Prev</a>
 			{{/prev}}

@@ -87,16 +87,22 @@ class Suggestor_datacite implements GenericSuggestor
 		if($currentPage!=1){
 			$prev = $start-$rows;
 			$next = $start+$rows;
+		}
+		else if($currentPage==1&&$totalPage==1){
+			$prev = false;
+			$next = false;
 		}else if($currentPage==$totalPage){
 			$prev = $start-$rows;
 			$next = false;
 		}else{
 			$prev = false;
 			$next = $start+$rows;
+			$debug = '1';
 		}
 		$pagination = array("currentPage"=>$currentPage,"totalPage"=>$totalPage);
 		if($prev) $pagination['prev']=$prev;
 		if($next) $pagination['next']=$next;
+		if($start==10)$pagination['prev']='0';
 
 
 		$response = array(

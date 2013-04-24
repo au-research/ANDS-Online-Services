@@ -252,7 +252,12 @@ function updateLinksDisplay(container, title, suggestor, start, rows)
         var template = $('#link_list_template').html();
         var output = Mustache.render(template, data);
         container.html(output);
+        if(!$('.suggestor_paging').html())
+        {
+            $('#separater').html('')
+        }
     },'json');
+
 }
 
 $('a.next_accordion_query').live('click', function(e){
