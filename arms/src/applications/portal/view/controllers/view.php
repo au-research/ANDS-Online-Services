@@ -279,15 +279,17 @@ class View extends MX_Controller {
 
 	function getConnections(){
 		$this->load->model('registry_fetch','registry');
-		$limit = 5;
+		$limit = 10;
 		$page = ($this->input->get('page')) ? $this->input->get('page') : 1;
+		if (!$this->input->get('relation_type')) throw new Exception("Must specify relation_type for getConnections request");
+
 		$offset = ($page * $limit) - $limit;
 		if ($this->input->get('slug')){
-			$connections = $this->registry->fetchConnectionsBySlug($this->input->get('slug'), 10, $offset, $this->input->get('relation_type'));
+			$connections = $this->registry->fetchConnectionsBySlug($this->input->get('slug'), $limit, $offset, $this->input->get('relation_type'));
 			$data['related_identity_type']='slug';
 		}
 		else if ($this->input->get('id')){
-			$connections = $this->registry->fetchConnectionsByID($this->input->get('id'), 10, $offset, $this->input->get('relation_type'));
+			$connections = $this->registry->fetchConnectionsByID($this->input->get('id'), $limit, $offset, $this->input->get('relation_type'));
 			$data['related_identity_type']='registry_object_id';
 		}
 		$connections = $connections['connections'];
