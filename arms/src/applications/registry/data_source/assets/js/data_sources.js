@@ -1033,33 +1033,35 @@ function load_datasource_edit(data_source_id, active_tab){
 			});
 			
 
-			$("#edit-datasource .chzn-select").chosen().change(function(){
-				if($(this).attr('for')=='harvest_method')
-				{
-					if($(this).val()=="GET")
-					{
-						$("#advanced option[value='INCREMENTAL']").remove();
-						$("#advanced").trigger("liszt:updated");
-					}
-					if($(this).val()=="RIF")
-					{
-						$("#advanced option[value='INCREMENTAL']").remove();						
-						$("#advanced").append('<option value="INCREMENTAL">Incremental Mode</option>');
-						$("#advanced").trigger("liszt:updated");						
-					}
-				}
-
-				var input = $('#'+$(this).attr('for'));
-				$(input).val($(this).val());
-
-			});
-
+			// Update harvest options once the chzn are setup
 			$('#edit-datasource .chzn-select').each(function(){
+
 				var input = $('#'+$(this).attr('for'));
 				$(this).val($(input).val());
-				$(this).chosen().trigger("liszt:updated");
+
+				// Setup the form options on first load
+				if($(this).attr('for')=='harvest_method')
+				{
+					updateHarvestAvailableOptions($(this));
+				}
+
+
+				// And then trigger it for all subsequent changes
+				$(this).chosen().change(function(){
+
+					var input = $('#'+$(this).attr('for'));
+					$(input).val($(this).val());
+
+					if($(this).attr('for')=='harvest_method')
+					{
+						updateHarvestAvailableOptions($(this));
+					}
+				});
+				$(this).trigger("liszt:updated");
 			});
 			
+
+
 			//initalize the datepicker, format is optional
 			$('#edit-datasource  .datepicker').datepicker({
 				format: 'yyyy-mm-dd'
@@ -1080,6 +1082,23 @@ function load_datasource_edit(data_source_id, active_tab){
 	return false;
 }
 
+function updateHarvestAvailableOptions($harvest_method)
+{
+	if($harvest_method.val()=="GET")
+	{
+		$("#advanced option[value='INCREMENTAL']").remove();
+		$("#advanced").trigger("liszt:updated");
+		$("#test-harvest").hide();
+	}
+	if($harvest_method.val()=="RIF")
+	{
+		$("#advanced option[value='INCREMENTAL']").remove();						
+		$("#advanced").append('<option value="INCREMENTAL">Incremental Mode</option>');
+		$("#advanced").trigger("liszt:updated");		
+		$("#test-harvest").show();				
+	}
+}
+
 $('.cancel_qa').live({
 	click:function(e){
 		$('#qa_flag_set').html("yes");
@@ -1092,7 +1111,10 @@ $('.cancel_qa').live({
 $('#cancel-edit-form').live({
 	click: function(e){
 		var ds_id = $(this).attr('data_source_id')
-		changeHashTo('settings/'+ds_id);
+		if (confirm("All unsaved changes will be lost. Do you want to continue?"))
+		{
+			changeHashTo('settings/'+ds_id);
+		}
 	}
 });
 

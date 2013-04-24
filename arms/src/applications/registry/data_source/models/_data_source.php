@@ -118,7 +118,8 @@ class _data_source {
 	{
 		if (strlen($name) > self::MAX_NAME_LEN || strlen($value) > self::MAX_VALUE_LEN)
 		{
-			throw new Exception("Attribute name exceeds " . self::MAX_NAME_LEN . " chars or value exceeds " . self::MAX_VALUE_LEN . ". Attribute not set"); 
+			$value = substr($value, 0, self::MAX_VALUE_LEN);
+			//throw new Exception("Attribute name exceeds " . self::MAX_NAME_LEN . " chars or value exceeds " . self::MAX_VALUE_LEN . ". Attribute not set"); 
 		}
 	
 		// setAttribute
@@ -818,6 +819,7 @@ class _data_source {
 
 		$mode = 'harvest'; if( $testOnly ){ $mode = 'test'; }	
 		date_default_timezone_set('Australia/Melbourne');
+
 		$dispDateTime = date("j F Y, g:i a"	,strtotime($nextHarvest));
 		$msg = 'Scheduled for: '.$dispDateTime ." (".$nextHarvest.")";
 		$status = "SCHEDULED FOR ". $dispDateTime;	
@@ -865,12 +867,13 @@ class _data_source {
 
 	// Get the harvest request.
 	//$harvestRequest = getHarvestRequests($harvestRequestId, null);
-	$actions = "Harvest Request ID: " .$harvestRequestId.NL;
+	$actions = "Cancelled at: " . display_date() . NL;
+	$actions .= "Harvest Request ID: " .$harvestRequestId.NL;
 	$actions .= NL.'URI: ' . $this->getAttribute("uri");
 	$actions .= NL.'Provider Type: ' . $this->getAttribute("provider_type");
 	$actions .= NL.'Harvest Method: ' . $this->getAttribute("harvest_method");
 	$actions .= NL.'Harvest Mode: ' . $this->getAttribute("advanced_harvest_mode");
-	$actions .= NL.'harvest Frequency: ' . $this->getAttribute("harvest_frequency");
+	$actions .= NL.'Harvest Frequency: ' . ($this->getAttribute("harvest_frequency") ?: "once-off") . NL;
 
 	if( $harvestRequestId )
 	{
@@ -881,10 +884,12 @@ class _data_source {
 		
 		// Submit the request.
 		$runErrors = '';
+		$errors = '';
 		try
 		{
+			$dom_xml = file_get_contents($request);
 			$resultMessage = new DOMDocument();
-			$result = $resultMessage->load($request);
+			$result = $resultMessage->loadXML($dom_xml);
 		}
 		catch (Exception $e)
 		{
@@ -912,10 +917,7 @@ class _data_source {
 			$actions .= ">>ERROR DURING CANCELLATION".NL;
 			$actions .= $runErrors;
 		}
-		else
-		{
-			$actions .= "Cancelled at: " . display_date() . NL;
-		}
+
 		$errors = $this->deleteHarvestRequest($harvestRequestId);
 		if( $errors )
 		{
@@ -930,7 +932,7 @@ class _data_source {
 
 	// Log the activity unless it's TEST (it wouldn't exist by then anyway).
 	if($createLog)
-		$logID = $this->append_log("A harvest was cancelled".NL.$actions, "message", 'harvester');
+		$logID = $this->append_log("A scheduled harvest was cancelled".NL.$actions, "message", 'harvester');
 	return $actions;
 	
 	}

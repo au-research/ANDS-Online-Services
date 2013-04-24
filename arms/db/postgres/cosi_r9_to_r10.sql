@@ -4,7 +4,7 @@ INSERT INTO dba.tbl_role_types VALUES ('ROLE_DOI_APPID      ','DOI Application I
 INSERT INTO dba.tbl_roles ("role_id","role_type_id","name","enabled") VALUES ('REGISTRY_USER','ROLE_FUNCTIONAL','Registry Data Source Admin', TRUE);
 INSERT INTO dba.tbl_roles ("role_id","role_type_id","name","enabled") VALUES ('REGISTRY_STAFF','ROLE_FUNCTIONAL','Registry Staff Member', TRUE);
 INSERT INTO dba.tbl_roles ("role_id","role_type_id","name","enabled") VALUES ('REGISTRY_SUPERUSER','ROLE_FUNCTIONAL','Registry Superuser', TRUE);
-INSERT INTO dba.tbl_roles ("role_id","role_type_id","name","enabled") VALUES ('SPOTLIGHT_CMS_EDITOR','ROLE_FUNCTIONAL','Spotlight CMS Editor', TRUE);
+--INSERT INTO dba.tbl_roles ("role_id","role_type_id","name","enabled") VALUES ('SPOTLIGHT_CMS_EDITOR','ROLE_FUNCTIONAL','Spotlight CMS Editor', TRUE);
 
 -- senior roles inherit permissions
 INSERT INTO dba.tbl_role_relations ("parent_role_id", "child_role_id") VALUES ('REGISTRY_USER', 'REGISTRY_STAFF');

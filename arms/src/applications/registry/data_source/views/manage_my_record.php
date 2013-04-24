@@ -170,7 +170,9 @@
 						{{#advance}}
 							<button class="btn btn-small op" action="advance_status" to="{{connectTo}}" tip="Advance Status" ro_id="{{id}}"><i class="icon icon-share-alt"></i></button>
 						{{/advance}}
-						<button class="contextmenu btn btn-small" status="{{name}}" tip="More Action">More</button>
+						{{^noMoreOptions}}
+							<button class="contextmenu btn btn-small" status="{{name}}" tip="More Action">More</button>
+						{{/noMoreOptions}}
 					</div>
 				</div>
 				<div class="clearfix"></div>

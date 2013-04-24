@@ -53,7 +53,8 @@ $default_application = 'registry';
 $_GET['app'] = (!isset($_GET['app']) || $_GET['app'] == "" ? $default_application : $_GET['app']);
 
 /* Where in the world are we anyway? */
-date_default_timezone_set('Australia/Canberra');
+$config['default_tz'] = 'Australia/Canberra';
+date_default_timezone_set($config['default_tz']);
 ini_set( 'default_charset', 'UTF-8' );
 
 /*

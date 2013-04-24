@@ -136,7 +136,15 @@ function url_suffix(){
 	return '#!/';
 }
 
+function utc_timezone()
+{
+	date_default_timezone_set('UTC');
+}
 
+function reset_timezone()
+{
+	date_default_timezone_set($this->config->item('default_tz'));
+}
 
 $cycles = 0;
 function clean_cycles()

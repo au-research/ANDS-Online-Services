@@ -259,6 +259,9 @@
 	<?php echo anchor('/', '<i class="icon-home"></i> Home', array('class'=>'tip-bottom', 'tip'=>'Go to Home'))?>
 	<?php echo anchor('data_source/manage', 'Manage My Datasources')?>
 	<a href="javascript:;" class="current">{{title}}</a>
+	<div class="pull-right">
+		<span class="label"><i class="icon-question-sign icon-white"></i> <a target="_blank" style="color:white;" href="http://ands.org.au/guides/cpguide/cpgdsaaccount.html ">Help</a></span>
+	</div>
 </div>
 
 <div class="container-fluid">
@@ -541,6 +544,9 @@
 		<?php echo anchor('data_source/manage', 'Manage My Datasources')?>
 		<a href="#!/view/{{data_source_id}}">{{title}}</a>
 		<a href="javascript:;" class="current">Settings</a>
+		<div class="pull-right">
+			<span class="label"><i class="icon-question-sign icon-white"></i> <a target="_blank" style="color:white;" href="http://ands.org.au/guides/cpguide/cpgdsaaccount.html ">Help</a></span>
+		</div>
 	</div>
 <div class="container-fluid">
 <div class="row-fluid">
@@ -863,6 +869,9 @@
 		<?php echo anchor('data_source/manage', 'Manage My Datasources')?>
 		<a href="#!/view/{{data_source_id}}" class="">{{title}}</a>
 		<a href="javascript:;" class="current">Edit</a>
+		<div class="pull-right">
+			<span class="label"><i class="icon-question-sign icon-white"></i> <a target="_blank" style="color:white;" href="http://ands.org.au/guides/cpguide/cpgdsaaccount.html ">Help</a></span>
+		</div>
 	</div>
 <div class="container-fluid">
 <div class="row-fluid">
@@ -1098,25 +1107,27 @@
 								</p>								
 							</div>
 						</div>
-						<div class="control-group">
-							<label class="control-label">Quality Assessment Required</label>
-							<div class="controls">
-								<p class="help-inline">
-								<div class="normal-toggle-button qa_flag" value="{{qa_flag}}">
-    								<input type="checkbox" for="qa_flag" id="check_qa_flag">     																
-								</div>
-								<!-- <span id="qa_flag_old">{{qa_flag}}</span>  --> 
-								<span class="hidden" id="qa_flag_set">no</span>
-								</p>
-							</div>
-						</div>
 
-						<div class="control-group">
-							<label class="control-label" for="assessment_notify_email_addr">Assessment Notification Email</label>
-							<div class="controls">
-								<input type="text" class="input-xlarge" name="assessment_notify_email_addr" value="{{assessment_notify_email_addr}}">
+						<span class="hidden" id="qa_flag_set">no</span>
+						<?php if ($this->user->hasFunction('REGISTRY_STAFF')): ?>
+							<div class="control-group">
+								<label class="control-label">Quality Assessment Required</label>
+								<div class="controls">
+									<p class="help-inline">
+										<div class="normal-toggle-button qa_flag" value="{{qa_flag}}">
+		    								<input type="checkbox" for="qa_flag" id="check_qa_flag">     																
+										</div>
+									</p>
+								</div>
 							</div>
-						</div>
+
+							<div class="control-group">
+								<label class="control-label" for="assessment_notify_email_addr">Assessment Notification Email</label>
+								<div class="controls">
+									<input type="text" class="input-xlarge" name="assessment_notify_email_addr" value="{{assessment_notify_email_addr}}">
+								</div>
+							</div>
+						<?php endif; ?>
 						<div class="control-group">
 							<label class="control-label" for="institution_pages">Contributor Pages</label>
 							<div class="controls">
@@ -1173,7 +1184,7 @@
 						<div class="control-group">
 							<label class="control-label" for="oai_set">OAI Set</label>
 							<div class="controls">
-								<input type="text" class="input-xlarge" name="oai_set" value="{{oai_set}}">
+								<input type="text" class="input-xlarge" name="oai_set" value="{{oai_set}}" length="512">
 							</div>
 						</div>
 
@@ -1203,9 +1214,8 @@
 							<label class="control-label" for="harvest_frequency">Harvest Frequency</label>
 							<div class="controls">
 								<select data-placeholder="Choose a Harvest Frequency" tabindex="1" class="chzn-select input-xlarge" for="harvest_frequency">
-									<option value=""></option>
 									<option value="">once only</option>
-									<option value="hourly">hourly</option>
+									<?php if ($this->user->hasFunction('REGISTRY_SUPERUSER')) { echo '<option value="hourly">hourly</option>'; } ?>
 									<option value="daily">daily</option>
 									<option value="weekly">weekly</option>
 									<option value="fortnightly">fortnightly</option>

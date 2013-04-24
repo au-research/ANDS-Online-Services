@@ -16,19 +16,26 @@ date_default_timezone_set('Australia/Melbourne');
 	<div class="content-header">
 		
 		<h1 style="position:relative;padding-right:80px"><?php echo $ro->title;?> <?php if($viewing_revision) echo '<small>('.$revisionInfo.')</small>'?></h1>
-		<ul class="nav nav-pills" style="padding-right:80px;padding-top:5px;">
-			<li class=""><?php echo anchor('data_source/manage#!/view/'.$ds->id,'Dashboard');?></li>
-			<li class=""><?php echo anchor('data_source/manage_records/'.$ds->id,'Manage Records');?></li>
-			<li class=""><?php echo anchor('data_source/report/'.$ds->id,'Reports');?></li>
-			<li class=""><?php echo anchor('data_source/manage#!/settings/'.$ds->id,'Settings');?></li>
-		</ul>
-		<div class="btn-group">
-			<?php 
-				if(!$viewing_revision) {
-					echo anchor('registry_object/edit/'.$ro->id, '<i class="icon-edit"></i> Edit', array('class'=>'btn btn-large', 'title'=>'Edit Registry Object'));
-				}
-			?>
-		</div>
+		
+		<?php 
+		if ($this->user->hasFunction('REGISTRY_USER') && $this->user->hasAffiliation($ds->record_owner)):
+		?>
+			<ul class="nav nav-pills" style="padding-right:80px;padding-top:5px;">
+				<li class=""><?php echo anchor('data_source/manage#!/view/'.$ds->id,'Dashboard');?></li>
+				<li class=""><?php echo anchor('data_source/manage_records/'.$ds->id,'Manage Records');?></li>
+				<li class=""><?php echo anchor('data_source/report/'.$ds->id,'Reports');?></li>
+				<li class=""><?php echo anchor('data_source/manage#!/settings/'.$ds->id,'Settings');?></li>
+			</ul>
+			<div class="btn-group">
+				<?php 
+					if(!$viewing_revision) {
+						echo anchor('registry_object/edit/'.$ro->id, '<i class="icon-edit"></i> Edit', array('class'=>'btn btn-large', 'title'=>'Edit Registry Object'));
+					}
+				?>
+			</div>
+		<?php 
+		endif;
+		?>
 
 	</div>
 	<div id="breadcrumb" style="clear:both;">
@@ -37,7 +44,7 @@ date_default_timezone_set('Australia/Melbourne');
 			{
 				// // User has registry access...links can be more specific
 				echo anchor('/', '<i class="icon-home"></i> Home', array('class'=>'tip-bottom', 'title'=>'Go to Home'));
-				echo anchor('data_source/manage#!/view/'.$ds->id, $ds->title, array('class'=>'', 'title'=>''));
+				echo anchor('data_source/manage#!/view/'.$ds->id, ($ds->title ?: "unnamed datasource"), array('class'=>'', 'title'=>''));
 			}
 			else
 			{
@@ -82,6 +89,7 @@ date_default_timezone_set('Australia/Melbourne');
 				<div class="widget-box">
 					<div class="widget-title">
 						<h5>Revision</h5>
+						<a href="javascript:;" class="btn btn-small pull-right" style="margin-top:5px; margin-right:5px;" id="exportRIFCS"><i class="icon-eject"></i> Show RIFCS</a>
 					</div>
 					<div class="widget-content">
 						<ul>
@@ -110,6 +118,7 @@ date_default_timezone_set('Australia/Melbourne');
 				<?php
 				endif;
 				?>
+
 				<?php 
 				if ($this->user->hasFunction('REGISTRY_USER') && $this->user->hasAffiliation($ds->record_owner)):
 				?>
@@ -146,7 +155,6 @@ date_default_timezone_set('Australia/Melbourne');
 							<tr><th>Feed type</th><td><?php echo (strpos($ro->getAttribute('harvest_id'),'MANUAL') === 0 ? 'Manual entry' : 'Harvest');?></td></tr>
 							<tr><th>Quality Assessed</th><td><?php echo ($ro->getAttribute('manually_assessed') ? $ro->getAttribute('manually_assessed') : 'no');?></td></tr>
 							<tr><td></td><td></td></tr>
-							<tr><th>RIFCS Format</th><td><a href="javascript:;" class="btn btn-small" id="exportRIFCS"><i class="icon-eject"></i> Export RIFCS</a></td></tr>
 							<?php 
 								if($native_format != 'rif') {
 									echo '<tr><th>Native Format</th><td><a href="javascript:;" class="btn btn-small" id="exportNative"><i class="icon-eject"></i>Export '.$native_format.'</a></td></tr>';

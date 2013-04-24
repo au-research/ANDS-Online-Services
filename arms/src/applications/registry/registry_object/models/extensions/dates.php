@@ -54,7 +54,7 @@ class Dates_Extension extends ExtensionBase
 
 	function getWTCdate($value)
 	{
-		date_default_timezone_set('UTC');
+		utc_timezone();
 		// "Year and only year" (i.e. 1960) will be treated as HH SS by default
 		if (strlen($value) == 4)
 		{
@@ -72,6 +72,8 @@ class Dates_Extension extends ExtensionBase
 	     		$this->minYear = $date['year'];
 	     	return date('Y-m-d\TH:i:s\Z', $timestamp);
 		}
+
+		reset_timezone();
 	}
 
 
@@ -222,6 +224,8 @@ class Dates_Extension extends ExtensionBase
 
 	function nicifyDate($w3cdtf)
 	{
+		utc_timezone();
+
 		$time = strtotime($w3cdtf);
 		if (!$time) { return false; }
 
@@ -243,6 +247,8 @@ class Dates_Extension extends ExtensionBase
 			// Assume friendly display of full date and time
 			return date("Y-m-d H:i", $time); 	// i.e.  March 10, 2001, 5:16 pm
 		}
+
+		reset_timezone();
 
 	}
 

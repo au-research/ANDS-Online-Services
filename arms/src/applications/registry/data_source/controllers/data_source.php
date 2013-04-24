@@ -217,20 +217,26 @@ class Data_source extends MX_Controller {
 					array_push($st['menu'], array('action'=>'to_draft', 'display'=>'Move to Draft'));
 					break;
 				case 'SUBMITTED_FOR_ASSESSMENT':
-					$st['ds_count']=$data_source->count_SUBMITTED_FOR_ASSESSMENT;
-					$st['connectTo']='ASSESSMENT_IN_PROGRESS';
-					array_push($st['menu'], array('action'=>'to_assess', 'display'=>'Asessment In Progress'));
+					if ($this->user->hasFunction('REGISTRY_STAFF'))
+					{
+						$st['ds_count']=$data_source->count_SUBMITTED_FOR_ASSESSMENT;
+						$st['connectTo']='ASSESSMENT_IN_PROGRESS';
+						array_push($st['menu'], array('action'=>'to_assess', 'display'=>'Asessment In Progress'));
+					}
 					break;
 				case 'ASSESSMENT_IN_PROGRESS':
 					$st['ds_count']=$data_source->count_ASSESSMENT_IN_PROGRESS;
-					if($manual_publish){
-						$st['connectTo']='APPROVED,MORE_WORK_REQUIRED';
-						array_push($st['menu'], array('action'=>'to_approve', 'display'=>'Approve'));
-					}else{
-						$st['connectTo']='PUBLISHED';
-						array_push($st['menu'], array('action'=>'to_publish', 'display'=>'Publish'));
+					if ($this->user->hasFunction('REGISTRY_STAFF'))
+					{
+						if($manual_publish){
+							$st['connectTo']='APPROVED,MORE_WORK_REQUIRED';
+							array_push($st['menu'], array('action'=>'to_approve', 'display'=>'Approve'));
+						}else{
+							$st['connectTo']='PUBLISHED';
+							array_push($st['menu'], array('action'=>'to_publish', 'display'=>'Publish'));
+						}
+						array_push($st['menu'], array('action'=>'to_moreworkrequired', 'display'=>'More Work Required'));
 					}
-					array_push($st['menu'], array('action'=>'to_moreworkrequired', 'display'=>'More Work Required'));
 					break;
 				case 'APPROVED':
 					$st['ds_count']=$data_source->count_APPROVED;
@@ -338,8 +344,8 @@ class Data_source extends MX_Controller {
 				switch($item['status']){
 					case 'DRAFT': $item['editable'] = true; $item['advance']=true;break;
 					case 'MORE_WORK_REQUIRED': $item['editable'] = true; $item['advance']=true;break;
-					case 'SUBMITTED_FOR_ASSESSMENT': $item['advance']=true; break;
-					case 'ASSESSMENT_IN_PROGRESS': $item['advance']=true; break;
+					case 'SUBMITTED_FOR_ASSESSMENT': if($this->user->hasFunction('REGISTRY_STAFF')) { $item['advance']=true; } else { $item['noMoreOptions'] = true; } break;
+					case 'ASSESSMENT_IN_PROGRESS': if($this->user->hasFunction('REGISTRY_STAFF')) { $item['advance']=true; } else { $item['noMoreOptions'] = true; } break;
 					case 'APPROVED': $item['editable'] = true; $item['advance']=true;break;
 					case 'PUBLISHED': $item['editable'] = true; break;
 				}
@@ -388,14 +394,19 @@ class Data_source extends MX_Controller {
 			if($ro->gold_status_flag=='t') $hasGold = true;
 		}
 
-		if($hasFlag) $menu['un_flag'] = 'Remove Flag';
-		if($hasGold) $menu['un_set_gold_status_flag'] = 'Remove Gold Status';
 
 		//QA and Auto Publish check
 		$qa = $data_source->qa_flag=='t' ? true : false;
 		$manual_publish = ($data_source->manual_publish=='t' || $data_source->manual_publish==DB_TRUE) ? true: false;
 		if(sizeof($affected_ids)>=1){
-			$menu['flag'] = 'Flag';
+			if($hasFlag)
+			{
+				$menu['un_flag'] = 'Remove Flag';
+			}
+			else
+			{
+				$menu['flag'] = 'Flag';
+			}
 			switch($status){
 				case 'DRAFT':
 					if($qa){
@@ -408,33 +419,54 @@ class Data_source extends MX_Controller {
 						}
 					}
 					$menu['edit'] = 'Edit Record';
-					break;
+					$menu['delete'] = 'Delete Record';
+				break;
 				case 'MORE_WORK_REQUIRED':
 					$menu['to_draft'] = 'Move to Draft';
 					$menu['edit'] = 'Edit Record';
-					break;
+					$menu['delete'] = 'Delete Record';
+				break;
 				case 'SUBMITTED_FOR_ASSESSMENT':
-					$menu['to_assess'] = 'Assessment In Progress';
-					break;
-				case 'ASSESSMENT_IN_PROGRESS':
-					if($manual_publish){
-						$menu['to_approve'] = 'Approve';
-					}else{
-						$menu['to_publish'] = 'Publish';
+					if ($this->user->hasFunction('REGISTRY_STAFF'))
+					{
+						$menu['to_assess'] = 'Assessment In Progress';
 					}
-					$menu['to_moreworkrequired'] = 'More Work Required';
-					break;
+				break;
+				case 'ASSESSMENT_IN_PROGRESS':
+					if ($this->user->hasFunction('REGISTRY_STAFF'))
+					{
+						if($manual_publish){
+							$menu['to_approve'] = 'Approve';
+						}else{
+							$menu['to_publish'] = 'Publish';
+						}
+						$menu['to_moreworkrequired'] = 'More Work Required';
+					}
+				break;
 				case 'APPROVED':
+
 					$menu['edit'] = 'Edit Record';
 					$menu['to_publish'] = 'Publish';
+					$menu['delete'] = 'Delete Record';
 					break;
 				case 'PUBLISHED':
 					$menu['to_draft'] = 'Create Draft Copy';
 					$menu['edit'] = 'Edit Record';
-					$menu['set_gold_status_flag'] = 'Set Gold Status';
-					break;
+					if ($this->user->hasFunction('REGISTRY_STAFF'))
+					{
+						if($hasGold)
+						{
+							$menu['un_set_gold_status_flag'] = 'Remove Gold Status';
+						}
+						else
+						{
+							$menu['set_gold_status_flag'] = 'Set Gold Status';
+						}
+					}
+
+					$menu['delete'] = 'Delete Record';
+				break;
 			}
-			$menu['delete'] = 'Delete Record';
 		}
 
 
@@ -1114,6 +1146,9 @@ public function getContributorGroupsEdit()
 	
 			$dataSource->save();
 
+			$dataSource->append_log("The data source settings were updated..." . NL . NL .
+									"Data Source was updated by: " . $this->user->name() . " (" . $this->user->localIdentifier() . ") at " . display_date());
+
 			if($resetHarvest && ($providerURI != '' || $providerURI != 'http://'))
 			{
 				$dataSource->requestNewHarvest();
@@ -1317,7 +1352,7 @@ public function getContributorGroupsEdit()
 				$log .= "IMPORT COMPLETED" . NL;
 				$log .= "====================" . NL;
 				$log .= $this->importer->getMessages();
-				$data_source->append_log($slogTitle.$log.NL,  HARVEST_INFO, "importer", "HARVEST_INFO" );
+				$data_source->append_log($slogTitle.$log.NL,  HARVEST_INFO, "importer", "HARVESTER_INFO" );
 			}
 
 

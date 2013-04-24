@@ -6,7 +6,7 @@ class Spotlight extends MX_Controller {
 	{
 		parent::__construct();
 		$this->load->config('spotlight');
-		acl_enforce('SPOTLIGHT_CMS_EDITOR');
+		acl_enforce('PORTAL_STAFF');
 	}
 
 	function index(){
@@ -83,6 +83,7 @@ class Spotlight extends MX_Controller {
 
 	function delete($id){
 		$file = $this->read();
+		$items = $file['items'];
 		$items = $file['items'];
 		$new_file = array('items'=>array());
 		foreach($items as $i){
