@@ -391,6 +391,9 @@ function initLayout(){
         content:{
             text: function(){
                 return $('.selecting_menu',this).html();
+            },
+            onRender: function() {
+                $('a', this.elements.content).click(this.hide);
             }
         },
         position: {viewport: $(window), my:'left center'},
@@ -560,6 +563,7 @@ function action_list(status, action){
     var list = $('ul[status='+status+']');
     selecting_status = status;
     if(action=='select_display'){
+        $('.sortable li').removeClass('ro_selected');
         select_all = false;
         $.each($('li.ro_item', list), function(index, val) {
             $(this).addClass('ro_selected');
@@ -570,6 +574,7 @@ function action_list(status, action){
         select_all = false;
         $('.ro_selected').removeClass('ro_selected');
     }else if(action=='select_all'){
+        $('.sortable li').removeClass('ro_selected');
         select_all = status;
         $.each($('li.ro_item', list), function(index, val) {
             $(this).addClass('ro_selected');
