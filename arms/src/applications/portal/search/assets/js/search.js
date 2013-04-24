@@ -109,7 +109,7 @@ function executeSearch(searchData, searchUrl){
 
 $(document).on('click', '.filter',function(e){
 	searchData['p']=1;
-	searchData[$(this).attr('filter_type')] = encodeURIComponent($(this).attr('filter_value'));
+	searchData[$(this).attr('filter_type')] = $(this).attr('filter_value');
 	if($(this).attr('filter_type')=='subject_vocab_uri'){
 		searchData['subject_vocab_uri_display'] = $(this).text();
 	}
