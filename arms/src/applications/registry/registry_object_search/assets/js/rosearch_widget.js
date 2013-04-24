@@ -24,7 +24,7 @@
 	    //search a specific class (by default)
 	    'class': "all",
 	    //search a specific datasource (by default)
-	    'ds': "all",
+	    'datasource': "all",
 	    //where is the search proxy?
 	    'endpoint': "http://ands3.anu.edu.au/workareas/smcphill/ands-online-services/arms/src/registry/registry_object_search/",
 	    /**
@@ -300,18 +300,19 @@
 		      function(types) {
 			  $.each(types, function(idx, t) {
 			      var opt = $('<option value="' + t.key + '">' + t.label + '</option>');
-			      if (t.key === handler.settings['class']) {
+			      if (t.key.toString() === handler.settings['class'].toString()) {
 				  opt.prop('selected', true);
 			      }
 
 			      $("#" + handler._uids['classid']).append(opt);
 			  });
 		      });
+
 	    $.getJSON(this.settings.endpoint + 'sources/',
 		      function(sources) {
 			  $.each(sources, function(idx, s) {
 			      var source = $('<option value="' + s.key + '">' + s.label + '</option>');
-			      if (s.key === handler.settings['ds']) {
+			      if (s.key.toString() === handler.settings['datasource'].toString()) {
 				  source.prop('selected', true);
 			      }
 			      $("#" + handler._uids['dsid']).append(source);
