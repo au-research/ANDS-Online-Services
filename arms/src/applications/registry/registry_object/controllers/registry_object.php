@@ -193,7 +193,8 @@ class Registry_object extends MX_Controller {
 			throw new Exception("Errors during saving this registry object! " . BR . implode($error_log, BR));
 		}
 		else{
-
+			// Fetch updated registry object!
+			$ro = $this->ro->getByID($registry_object_id);
 			$this->load->model('data_source', 'ds');
 			$ds = $this->ds->getByID($ro->data_source_id);
 			$qa = $ds->qa_flag=='t' ? true : false;
@@ -201,12 +202,13 @@ class Registry_object extends MX_Controller {
 				array(
 					"status"=>"success",
 					"ro_status"=>"DRAFT",
+					"title"=>$ro->title,
 					"ro_id"=>$ro->id,
 					"ro_quality_level"=>$ro->quality_level,
 					"qa_$ro->quality_level"=>true,
 					"qa"=>$ro->get_quality_text()
 					);
-			if($qa) $result['qa'] = true;
+			//if($qa) $result['qa'] = true;
 			echo json_encode($result);
 		}
 	}

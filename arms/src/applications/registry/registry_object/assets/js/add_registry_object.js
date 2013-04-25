@@ -47,7 +47,8 @@ $(function(){
 			}
 
 		}else{//there is no hash suffix
-			
+			 location.hash = suffix + ADVANCED_MODE + "/" + "admin";
+			 $(window).hashchange();
 		}
 	});
 	$(window).hashchange();//initial hashchange event
@@ -277,7 +278,7 @@ function initEditForm(){
 	 * Replace the data source text input field with a chosen() select
 	 * @TODO: ACL on which data source is accessible on services/registry/get_datasources_list
 	 */
-	var selected_data_source = $('#data_source_id_value').val();
+	/*var selected_data_source = $('#data_source_id_value').val();
 	$.ajax({
 		type: 'GET',
 		dataType : 'json',
@@ -291,13 +292,25 @@ function initEditForm(){
 				var selected = '';
 				if(id==selected_data_source){
 					selected='selected=selected';
+
+					// Update the header link
+					$('.data_source_link').html(title);
+					$('.data_source_link').attr("href",base_url + "data_source/manage_records/" + id);
+					$('.data_source_link').fadeIn();
 				}
 				$('#data_sources_select').append('<option value="'+id+'" '+selected+'>'+title+'</option>');
 			});
 			//284 is the default width for input-xlarge + padding
-			$('#data_sources_select').width('284').chosen();
+			$('#data_sources_select').width('284').chosen().trigger("liszt:update");
+
 		}
 	});
+	$('#data_sources_select').change(function(){
+		var chosenvalue = $(":selected", this);
+		$('.data_source_link').html(chosenvalue.html());
+		$('.data_source_link').attr("href",base_url + "data_source/manage_records/" + chosenvalue.val());
+//		$(".data_source_title")
+	})*/
 
 	$(document).on('mouseup', '.remove',function(e){
 		/*
@@ -475,6 +488,8 @@ function initEditForm(){
 					if(data.status=='success'){
 						var template = $('#save-record-template').html();
 						var output = Mustache.render(template, data);
+						console.log($('.record_title'));
+						$('.record_title').html(data.title);
 						$('#myModal .modal-body').html(output);
 						formatQA($('#myModal .qa'));
 					}else{
