@@ -18,15 +18,8 @@ CREATE TABLE `api_requests` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=225 DEFAULT CHARSET=utf8;
 
-
-CREATE TABLE `api_keys` (
-  `api_key` varchar(32) NOT NULL,
-  `owner_email` varchar(45) DEFAULT NULL,
-  `owner_organisation` varchar(45) DEFAULT NULL,
-  `owner_purpose` text,
-  `created` bigint(20) DEFAULT NULL,
-  PRIMARY KEY (`api_key`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+ALTER TABLE `api_keys` DROP COLUMN `owner_token`;
+ALTER TABLE `api_keys` ADD COLUMN `created` bigint(20) DEFAULT NULL;
 INSERT INTO `api_keys` VALUES ('api','services@ands.org.au','ANDS -Internal API requests','ANDS -Internal API requests',0);
 
 CREATE TABLE `deleted_registry_objects` (
