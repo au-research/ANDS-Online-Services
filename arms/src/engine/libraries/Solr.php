@@ -199,7 +199,6 @@ class Solr {
 	 * @return array results
 	 */
 	function executeSearch($as_array = false){
-        var_dump($this->options);
         $content = $this->post($this->constructFieldString(), 'select');
 		$json = json_decode($content, $as_array);
 		if($json){
