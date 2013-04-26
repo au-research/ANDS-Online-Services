@@ -193,38 +193,40 @@ class Vocab {
         $CI->solr->setOpt('q.alt', '*:*');
         $CI->solr->setOpt('qf', 'id^10 group^8 display_title^5 list_title^5 fulltext^1.2');
         $CI->solr->clearOpt('fq');
-        $CI->solr->setOpt('fq', 'subject_vocab_uri:("'.$uri.'")');
+
         if($filters){
             foreach($filters as $key=>$value){
                 $value = urldecode($value);
                 switch($key){
                     case 'q': 
-                        $CI->solr->setOpt('q', $value);
+                        $CI->solr->setOpt('q', "+fulltext:(*" . $value . "*)");
                         break;
                     case 'tab': 
-                        if($value!='all') $CI->solr->setOpt('fq', 'class:("'.$value.'")');
+                        if($value!='all') $CI->solr->addQueryCondition('+class:("'.$value.'")');
                         break;
                     case 'group': 
-                        $CI->solr->setOpt('fq', 'group:("'.$value.'")');
+                        $CI->solr->addQueryCondition('+group:("'.$value.'")');
                         break;
                     case 'type': 
-                        $CI->solr->setOpt('fq', 'type:'.$value);
+                        $CI->solr->addQueryCondition('+type:'.$value);
                         break;
                     case 'license_class': 
-                        $CI->solr->setOpt('fq', 'license_class:("'.$value.'")');
+                        $CI->solr->addQueryCondition('+license_class:("'.$value.'")');
                         break;
                     case 'temporal':
                         $date = explode('-', $value);
-                        $CI->solr->setOpt('fq', 'earliest_year:['.$date[0].' TO *]');
-                        $CI->solr->setOpt('fq', 'latest_year:[* TO '.$date[1].']');
+                        $CI->solr->addQueryCondition('+earliest_year:['.$date[0].' TO *]');
+                        $CI->solr->addQueryCondition('+latest_year:[* TO '.$date[1].']');
                         $filteredSearch = true;
                         break;             
                     case 'spatial':
-                        $CI->solr->setOpt('fq', 'spatial_coverage_extents:"Intersects('.$value.')"');
+                        $CI->solr->addQueryCondition('+spatial_coverage_extents:"Intersects('.$value.')"');
                         break;
                 }
             }
+            $CI->solr->addQueryCondition('+subject_vocab_uri:("'.$uri.'")');
         }
+
         $CI->solr->executeSearch();
         return $CI->solr->getNumFound();
         // return $CI->solr->constructFieldString();

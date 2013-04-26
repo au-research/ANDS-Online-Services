@@ -164,7 +164,7 @@ class Solr {
      * @return array
      */
 	function search($term){
-		$this->options['q']='fulltext:'.$term;
+		$this->options['q']='+fulltext:'.$term;
 		return $this->executeSearch();
 	}
 
@@ -185,10 +185,10 @@ class Solr {
         foreach($this->options as $key=>$value) {
             if(is_array($value)){
                 foreach($value as $v){
-                   $fields_string .= $key.'='.$v.'&';
+                   $fields_string .= $key.'='.rawurlencode($v).'&';
                 }
             }else{
-                $fields_string .= $key.'='.$value.'&';
+                $fields_string .= $key.'='.rawurlencode($value).'&';
             }
         }//build the string
         return $fields_string;
@@ -199,7 +199,7 @@ class Solr {
 	 * @return array results
 	 */
 	function executeSearch($as_array = false){
-		
+	//    var_dump($this->constructFieldString());
         $content = $this->post($this->constructFieldString(), 'select');
 		$json = json_decode($content, $as_array);
 		if($json){

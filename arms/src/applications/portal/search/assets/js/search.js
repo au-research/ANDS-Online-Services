@@ -204,12 +204,12 @@ function loadSubjectBrowse(val){
 		$('#subjectfacet div').remove();
 		$('#subjectfacet').append($('<div/>'));
 		var sqc = '';
-		if(searchData['q']) sqc += searchData['q'];
-		if(searchData['tab'] && searchData['tab']!='all') sqc += '+class:("'+searchData['tab']+'")';
+		if(searchData['q']) sqc += "+fulltext:(*" + searchData['q'] + "*)";
+		if(searchData['tab'] && searchData['tab']!='all') sqc += ' +class:("'+searchData['tab']+'")';
 		if(searchData['group']) sqc += '+group:("'+searchData['group']+'")';
 		if(searchData['type']) sqc += '+type:("'+searchData['type']+'")';
 		sqc += '&defType=edismax';
-		$('#subjectfacet div').vocab_widget({mode:'tree', repository:'anzsrc-for', sqc:sqc, endpoint: window.default_base_url + 'registry/vocab_widget/proxy/'})
+		$('#subjectfacet div').vocab_widget({mode:'tree', repository:'anzsrc-for', sqc:encodeURIComponent(sqc), endpoint: window.default_base_url + 'registry/vocab_widget/proxy/'})
 		.on('treeselect.vocab.ands', function(event) {
 			var target = $(event.target);
 			var data = target.data('vocab');

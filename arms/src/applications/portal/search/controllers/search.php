@@ -33,9 +33,16 @@ class Search extends MX_Controller {
 		$this->solr->setOpt('rows', $pp);
 		$this->solr->setOpt('defType', 'edismax');
 		$this->solr->setOpt('mm', '3');
-		$this->solr->setOpt('q.alt', '*:*');
 		$this->solr->setOpt('fl', '*, score');
 		$this->solr->setOpt('qf', 'id^1 group^0.8 display_title^0.5 list_title^0.5 fulltext^0.2');
+
+		if (!isset($filters["q"]))
+		{
+			$this->solr->setOpt('q.alt', '*:*');
+			$this->solr->setOpt('sort', 's_list_title asc');
+		}
+
+
 		$facets = array(
 			'class' => 'Class',
 			//'subject_value_resolved' => 'Subjects',
@@ -60,7 +67,7 @@ class Search extends MX_Controller {
 				$value = urldecode($value);
 				switch($key){
 					case 'q': 
-						$this->solr->setOpt('q', '(*'.$value.'*)');
+						$this->solr->setOpt('q', '+fulltext:(*'.$value.'*)');
 					break;
 					case 'p': 
 						$page = (int)$value;
@@ -71,45 +78,45 @@ class Search extends MX_Controller {
 						$filteredSearch = true;
 						break;
 					case 'tab': 
-						if($value!='all') $this->solr->setOpt('fq', 'class:("'.$value.'")');
+						if($value!='all') $this->solr->addQueryCondition('+class:("'.$value.'")');
 						$filteredSearch = true;
 						break;
 					case 'group': 
-						$this->solr->setOpt('fq', 'group:("'.$value.'")');
+						$this->solr->addQueryCondition('+group:("'.$value.'")');
 						$filteredSearch = true;
 						break;
 					case 'type': 
-						$this->solr->setOpt('fq', 'type:'.$value);
+						$this->solr->addQueryCondition('+type:'.$value);
 						$filteredSearch = true;
 						break;
 					case 'subject_value_resolved': 
-						$this->solr->setOpt('fq', 'subject_value_resolved:("'.$value.'")');
+						$this->solr->addQueryCondition('+subject_value_resolved:("'.$value.'")');
 						$filteredSearch = true;
 						break;
 					case 's_subject_value_resolved': 
-						$this->solr->setOpt('fq', 's_subject_value_resolved:("'.$value.'")');
+						$this->solr->addQueryCondition('+s_subject_value_resolved:("'.$value.'")');
 						$filteredSearch = true;
 						break;
 					case 'subject_vocab_uri':
-						$this->solr->setOpt('fq', 'subject_vocab_uri:("'.$value.'")');
+						$this->solr->addQueryCondition('+subject_vocab_uri:("'.$value.'")');
 						$filteredSearch = true;
 						break;
 					case 'temporal':
 						$date = explode('-', $value);
-						$this->solr->setOpt('fq', 'earliest_year:['.$date[0].' TO *]');
-						$this->solr->setOpt('fq', 'latest_year:[* TO '.$date[1].']');
+						$this->solr->addQueryCondition('+earliest_year:['.$date[0].' TO *]');
+						$this->solr->addQueryCondition('+latest_year:[* TO '.$date[1].']');
 						$filteredSearch = true;
 						break;
 					case 'license_class': 
-						$this->solr->setOpt('fq', 'license_class:("'.$value.'")');
+						$this->solr->addQueryCondition('+license_class:("'.$value.'")');
 						$filteredSearch = true;
 						break;
 					case 'spatial':
-						$this->solr->setOpt('fq', 'spatial_coverage_extents:"Intersects('.$value.')"');
+						$this->solr->addQueryCondition('+spatial_coverage_extents:"Intersects('.$value.')"');
 						$filteredSearch = true;
 						break;
 					case 'map':
-						$this->solr->setOpt('fq', 'spatial_coverage_extents:(*)');
+						$this->solr->addQueryCondition('+spatial_coverage_extents:(*)');
 						$this->solr->setOpt('rows', 100);
 						break;
 				}
@@ -249,41 +256,41 @@ class Search extends MX_Controller {
                 $value = urldecode($value);
                 switch($key){
                     case 'q': 
-                        $this->solr->setOpt('q', $value);
+                        $this->solr->setOpt('q', "+fulltext:(*" . $value . "*)");
                         break;
                     case 'tab': 
-                        if($value!='all') $this->solr->setOpt('fq', 'class:("'.$value.'")');
+                        if($value!='all') $this->solr->addQueryCondition('+class:("'.$value.'")');
                         break;
                     case 'group': 
-                        $this->solr->setOpt('fq', 'group:("'.$value.'")');
+                        $this->solr->addQueryCondition('+group:("'.$value.'")');
                         break;
                     case 'type': 
-                        $this->solr->setOpt('fq', 'type:'.$value);
+                        $this->solr->addQueryCondition('+type:'.$value);
                         break;
                     case 's_subject_value_resolved': 
-						$this->solr->setOpt('fq', 's_subject_value_resolved:("'.$value.'")');
+						$this->solr->addQueryCondition('+s_subject_value_resolved:("'.$value.'")');
 						$filteredSearch = true;
 						break;
 					case 'subject_vocab_uri':
-						$this->solr->setOpt('fq', 'subject_vocab_uri:("'.$value.'")');
+						$this->solr->addQueryCondition('+subject_vocab_uri:("'.$value.'")');
 						$filteredSearch = true;
 						break;
 					case 'temporal':
 						$date = explode('-', $value);
-						$this->solr->setOpt('fq', 'earliest_year:['.$date[0].' TO *]');
-						$this->solr->setOpt('fq', 'latest_year:[* TO '.$date[1].']');
+						$this->solr->addQueryCondition('+earliest_year:['.$date[0].' TO *]');
+						$this->solr->addQueryCondition('+latest_year:[* TO '.$date[1].']');
 						$filteredSearch = true;
 						break;
                     case 'license_class': 
-                        $this->solr->setOpt('fq', 'license_class:("'.$value.'")');
+                        $this->solr->addQueryCondition('+license_class:("'.$value.'")');
                         break;             
                     case 'spatial':
-                        $this->solr->setOpt('fq', 'spatial_coverage_extents:"Intersects('.$value.')"');
+                        $this->solr->addQueryCondition('+spatial_coverage_extents:"Intersects('.$value.')"');
                         break;
                 }
             }
         }
-        $this->solr->setOpt('fq', 'subject_type:"'.$type.'"');
+        $this->solr->addQueryCondition('+subject_type:"'.$type.'"');
 		$this->solr->setFacetOpt('pivot', 'subject_type,subject_value_resolved');
 		$this->solr->setFacetOpt('sort', 'subject_value_resolved');
 		$this->solr->setFacetOpt('limit', '25000');
