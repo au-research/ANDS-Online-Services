@@ -38,7 +38,7 @@ class Search extends MX_Controller {
 
 		if (!isset($filters["q"]))
 		{
-			$this->solr->setOpt('q.alt', '*:*');
+			$this->solr->setOpt('q', '*:*');
 			$this->solr->setOpt('sort', 's_list_title asc');
 		}
 

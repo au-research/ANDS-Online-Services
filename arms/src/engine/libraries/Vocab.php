@@ -192,15 +192,16 @@ class Vocab {
         $CI->solr->setOpt('mm', '3');
         $CI->solr->setOpt('q.alt', '*:*');
         $CI->solr->setOpt('qf', 'id^10 group^8 display_title^5 list_title^5 fulltext^1.2');
-        $CI->solr->clearOpt('fq');
+        $CI->solr->setOpt('q', "");
 
         if($filters){
+            if (isset($filters["q"]))
+            {
+                $CI->solr->setOpt('q', "+fulltext:(*" . rawurldecode($filters["q"]) . "*)");
+            }
             foreach($filters as $key=>$value){
-                $value = urldecode($value);
+                $value = rawurldecode($value);
                 switch($key){
-                    case 'q': 
-                        $CI->solr->setOpt('q', "+fulltext:(*" . $value . "*)");
-                        break;
                     case 'tab': 
                         if($value!='all') $CI->solr->addQueryCondition('+class:("'.$value.'")');
                         break;
@@ -224,9 +225,8 @@ class Vocab {
                         break;
                 }
             }
-            $CI->solr->addQueryCondition('+subject_vocab_uri:("'.$uri.'")');
         }
-
+        $CI->solr->addQueryCondition('+subject_vocab_uri:("'.$uri.'")');
         $CI->solr->executeSearch();
         return $CI->solr->getNumFound();
         // return $CI->solr->constructFieldString();

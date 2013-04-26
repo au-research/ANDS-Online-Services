@@ -32,12 +32,12 @@ class Browse extends MX_Controller {
 			$start = $this->input->post('start');
 		}else $start = 0;
 
+	//	var_dump('+subject_vocab_uri:("'.$url.'")');
 		$this->load->library('solr');
-		$this->solr->setOpt('defType', 'edismax');
-		$this->solr->setOpt('mm', '3');
+		//$this->solr->setOpt('defType', 'edismax');
+		//$this->solr->setOpt('mm', '3');
 		$this->solr->setOpt('start', $start);
-		$this->solr->setOpt('q.alt', '*:*');
-		$this->solr->setOpt('fq', 'subject_vocab_uri:("'.$url.'")');
+		$this->solr->setOpt('q', '+subject_vocab_uri:("'.$url.'")');
 		$data['solr_result'] = $this->solr->executeSearch();
 		$data['solr_header'] = $this->solr->getHeader();
 		$data['result'] = $this->solr->getResult();
@@ -53,7 +53,7 @@ class Browse extends MX_Controller {
 				'url'=> base_url($d->{'slug'}),
 				'display_footer' => true
 			);
-			array_push($items, $item);
+			$items[] = $item;
 		}
 		$result['links'] = $items;
 
