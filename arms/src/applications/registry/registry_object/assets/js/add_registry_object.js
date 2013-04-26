@@ -478,7 +478,7 @@ function initEditForm(){
 			// });
 
 			//saving
-			log(xml);
+			//log(xml);
 			$.ajax({
 				url:base_url+'registry_object/save/'+ro_id, 
 				type: 'POST',
@@ -487,7 +487,7 @@ function initEditForm(){
 					if(data.status=='success'){
 						var template = $('#save-record-template').html();
 						var output = Mustache.render(template, data);
-						console.log($('.record_title'));
+						//console.log($('.record_title'));
 						$('.record_title').html(data.title);
 						$('#myModal .modal-body').html(output);
 						formatQA($('#myModal .qa'));
@@ -601,7 +601,11 @@ function validate(){
 	xml += '<originatingSource type="'+$('input[name=originatingSourceType]', admin).val()+'">'+$('input[name=originatingSource]',admin).val()+'</originatingSource>';
 	xml += '<'+ro_class+' type="'+$('input[name=type]',admin).val()+'">';
 
-	$.each(allTabs, function(){
+    $('.error' ,allTabs).each(function(){
+        $(this).removeClass('error');
+    });
+
+	$.each(allTabs, function(){		
 		xml += getRIFCSforTab(this,true);
 	});
 
@@ -609,7 +613,7 @@ function validate(){
 	prettyPrint();
 
 	//validate
-	log(xml);
+	//log(xml);
 	$.ajax({
 		url:base_url+'registry_object/validate/'+ro_id, 
 		type: 'POST',
@@ -985,7 +989,7 @@ function getRIFCSforTab(tab, hasField){
 		 * The type => the input[name=type] of the box display (heading)
 		 */
 		var this_fragment_type = $(this).attr('type');
-		log("FRAGMENT TYPE: " + this_fragment_type);
+		//log("FRAGMENT TYPE: " + this_fragment_type);
 		fragment +='<'+this_fragment_type+'';
 		if(hasField) fragment +=' field_id="' +$(this).attr('field_id')+'"';
 		var valid_fragment_meta = ['type', 'dateFrom', 'dateTo', 'style', 'rightsURI'];//valid input type to be put as attributes
@@ -1018,7 +1022,6 @@ function getRIFCSforTab(tab, hasField){
 
 					//deal with the type
 					var type = $(this).attr('type');
-					log("TYPE:" + type);
 					if(type=='relation'){//special case for related object relation
 						fragment += '<'+type+' type="'+$('input[name=type]',this).val()+'">';
 						if($('input[name=description]', this).val()!=''){//if the relation has a description
@@ -1041,7 +1044,7 @@ function getRIFCSforTab(tab, hasField){
 					}else if(type=='date'){
 						var dates = $('.aro_box_part[type=date]', this);
 						$.each(dates, function(){
-							fragment += '<'+$(this).attr('type')+' type="'+$('input[name=type]', this).val()+'">';
+							fragment += '<'+$(this).attr('type')+' field_id="' +$(this).attr('field_id')+'" type="'+$('input[name=type]', this).val()+'">';
 							fragment += $('input[name=value]', this).val();
 							fragment +='</'+$(this).attr('type')+'>';
 						});
@@ -1050,17 +1053,17 @@ function getRIFCSforTab(tab, hasField){
 					}else if(type=='contributor'){
 						var contributors = $('.aro_box_part[type=contributor]', this);//tooltip not init
 						$.each(contributors, function(){
-							fragment += '<'+$(this).attr('type')+' seq="'+$('input[name=seq]', this).val()+'">';
+							fragment += '<'+$(this).attr('type')+' field_id="' +$(this).attr('field_id')+'" seq="'+$('input[name=seq]', this).val()+'">';
 							var contrib_name_part = $('.aro_box_part', this);
 							$.each(contrib_name_part, function(){
-								fragment += '<'+$(this).attr('type')+' type="'+$('input[name=type]', this).val()+'">';
+								fragment += '<'+$(this).attr('type')+' field_id="' +$(this).attr('field_id')+'" type="'+$('input[name=type]', this).val()+'">';
 								fragment += $('input[name=value]', this).val();
 								fragment +='</'+$(this).attr('type')+'>';
 							});
 							fragment +='</'+$(this).attr('type')+'>';
 						});
 					}else if(type=='dates_date'){
-						fragment += '<date type="'+$('input[name=type]', this).val()+'" dateFormat="W3CDTF">';
+						fragment += '<date field_id="' +$(this).attr('field_id')+'" type="'+$('input[name=type]', this).val()+'" dateFormat="W3CDTF">';
 						fragment += $('input[name=value]', this).val();
 						fragment +='</date>';
 					}else if(type=='temporal'){
@@ -1089,7 +1092,7 @@ function getRIFCSforTab(tab, hasField){
 							fragment += ' type="'+$('input[name=type]', this).val()+'">'+htmlEntities($('input[name=value]', this).val())+'</'+$(this).attr('type')+'>';	
 						}else{
 							var type = $(this).attr('type');
-							fragment += '<'+type+'>'+$('input[name=value]', this).val()+'</'+type+'>';
+							fragment += '<'+type+' field_id="' +$(this).attr('field_id')+'">'+$('input[name=value]', this).val()+'</'+type+'>';
 						}
 					}
 				}else{//it's an element
@@ -1120,14 +1123,13 @@ function getRIFCSforTab(tab, hasField){
 					$.each(parts, function(){
 						var this_fragment = '';
 						//opening tag
-						//log($(this).attr('type'));
 						if($(this).attr('type')=='electronic'){
-							this_fragment +='<'+$(this).attr('type')+' type="'+$('input[name=type]', this).val()+'">';
+							this_fragment +='<'+$(this).attr('type')+' type="'+$('input[name=type]', this).val()+'" field_id="' +$(this).attr('field_id')+'">';
 							this_fragment +='<value>'+$('input[name=value]',this).val()+'</value>';
 							//deal with args here
 							var args = $('.aro_box_part', this);
 							$.each(args, function(){
-								this_fragment += '<'+$(this).attr('type')+' type="'+$('input[name=type]', this).val()+'" required="'+$('input[name=required]', this).val()+'" use="'+$('input[name=use]', this).val()+'">';
+								this_fragment += '<'+$(this).attr('type')+' field_id="' +$(this).attr('field_id')+'" type="'+$('input[name=type]', this).val()+'" required="'+$('input[name=required]', this).val()+'" use="'+$('input[name=use]', this).val()+'">';
 								this_fragment += $('input[name=value]', this).val();
 								this_fragment +='</'+$(this).attr('type')+'>';
 							});
@@ -1135,16 +1137,16 @@ function getRIFCSforTab(tab, hasField){
 						}else if($(this).attr('type')=='physical'){
 							//deal with address parts here
 							var address_parts = $('.aro_box_part', this);
-							this_fragment +='<'+$(this).attr('type')+' type="'+$('input[name=type]', this).val()+'">';
+							this_fragment +='<'+$(this).attr('type')+' field_id="' +$(this).attr('field_id')+'" type="'+$('input[name=type]', this).val()+'">';
 							$.each(address_parts, function(){
-								this_fragment += '<'+$(this).attr('type')+' type="'+$('input[name=type]', this).val()+'">';
+								this_fragment += '<'+$(this).attr('type')+' field_id="' +$(this).attr('field_id')+'" type="'+$('input[name=type]', this).val()+'">';
 								this_fragment += $('input[name=value]', this).val();
 								this_fragment +='</'+$(this).attr('type')+'>';
 							});
 							this_fragment +='</'+$(this).attr('type')+'>';//closing tag
 						}
 						else if($(this).attr('type')=='spatial'){
-							this_fragment += '<'+$(this).attr('type')+' type="'+$('input[name=type]', this).val()+'">';
+							this_fragment += '<'+$(this).attr('type')+' field_id="' +$(this).attr('field_id')+'" type="'+$('input[name=type]', this).val()+'">';
 							this_fragment += $('input[name=value]', this).val();
 							this_fragment += '</'+$(this).attr('type')+'>';
 						}

@@ -10,6 +10,9 @@
             <xsl:apply-templates select="@* | node()" />
         </xsl:copy>
     </xsl:template>
+
+    <xsl:template match="@field_id | @tab_id"/>
+
     
     <!-- Note: No checks for @lang/@seq attributes -->
     <xsl:template match="location[not(@dateFrom) and not(@dateTo) and not(@type) and not(spatial/@type) and not(spatial/text()) and not(address/electronic/@type = '') and not(address/electronic/value/text()) and not(address/electronic/arg/value/text()) and not(address/electronic/arg/required/text()) and not(address/electronic/arg/@type) and not(address/electronic/arg/use/text()) and not(address/physical/@type) and not(address/physical/addressPart/@type) and not(address/physical/addressPart/text())]"/>
