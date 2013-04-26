@@ -609,6 +609,7 @@ function validate(){
 	prettyPrint();
 
 	//validate
+	log(xml);
 	$.ajax({
 		url:base_url+'registry_object/validate/'+ro_id, 
 		type: 'POST',

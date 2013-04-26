@@ -834,9 +834,14 @@
 			<fieldset>
 				<legend>Coverage</legend>
 				<xsl:apply-templates
-					select="ro:collection/ro:coverage | ro:activity/ro:coverage | ro:party/ro:coverage  | ro:service/ro:coverage"/>
-				<div class="separate_line"/>
-				<button class="btn btn-primary addNew" type="coverage" add_new_type="coverage"><i class="icon-plus icon-white"/> Add Coverage </button>
+				select="ro:collection/ro:coverage | ro:activity/ro:coverage | ro:party/ro:coverage | ro:service/ro:coverage"/>
+				<div class="aro_box" type="coverage">
+					<div class="separate_line"/>
+					<div class="btn-group">
+						<a href="javascript:;" class="btn btn-primary addNew" type="temporal" add_new_type="temporal"><i class="icon-white icon-plus"></i> Add Temporal Coverage</a>
+						<a href="javascript:;" class="btn btn-primary addNew" type="spatial" add_new_type="spatial"><i class="icon-white icon-plus"></i> Add Spatial Coverage</a>
+					</div>
+				</div>
 				<button class="hide btn export_xml btn-info"> Export XML fragment </button>
 			</fieldset>
 		</div>
@@ -1032,12 +1037,6 @@
 			</div>
 			<xsl:apply-templates select="ro:temporal"/>
 			<xsl:apply-templates select="ro:spatial"/>
-			<div class="separate_line"/>	
-			<div class="btn-group">
-				<a href="javascript:;" class="btn btn-primary addNew" type="temporal" add_new_type="temporal"><i class="icon-white icon-plus"></i> Add Temporal Coverage</a>
-				<a href="javascript:;" class="btn btn-primary  addNew" type="spatial" add_new_type="spatial"><i class="icon-white icon-plus"></i> Add Spatial Coverage</a>
-
-			</div>
 		</div>
 	</xsl:template>
 
