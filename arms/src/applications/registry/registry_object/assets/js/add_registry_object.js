@@ -613,12 +613,13 @@ function validate(){
 	prettyPrint();
 
 	//validate
-	//log(xml);
+	log(xml);
 	$.ajax({
 		url:base_url+'registry_object/validate/'+ro_id, 
 		type: 'POST',
 		data: {xml:xml},
 		success: function(data){
+			log(data);
 			$('.alert:not(.persist)').remove();
 			if(data.SetInfos) $.each(data.SetInfos, function(e,i){addValidationMessage(i, 'info');});
 			if(data.SetErrors) $.each(data.SetErrors, function(e,i){addValidationMessage(i, 'error');});
@@ -804,12 +805,13 @@ function assignFieldID(chunk){
 
 	}
 
-	$('input, .aro_box, .aro_box_part', content).each(function(){
-		if(!$(this).attr('field_id') || typeof(chunk) !== 'undefined') {
+	$('input, .aro_box:not(.template), .aro_box_part:not(.template)', content).each(function(){
+		if(!$(this).attr('field_id')) {
 			fieldID++;
 			$(this).attr('field_id', fieldID);
 		}
 	});
+
 }
 
 
@@ -1096,7 +1098,7 @@ function getRIFCSforTab(tab, hasField){
 						}
 					}
 				}else{//it's an element
-					fragment += '<'+$('input', this).attr('name')+'>'+htmlEntities($('input', this).val())+'</'+$('input', this).attr('name')+'>';
+					fragment += '<'+$('input', this).attr('name')+' field_id="' +$(this).attr('field_id')+'">'+htmlEntities($('input', this).val())+'</'+$('input', this).attr('name')+'>';
 				}
 			});
 		}else if(subbox.length==0){//data is right at this level, grab it!
