@@ -80,7 +80,7 @@
 					break;
 				case "collection":
 					$heading = "<h3>Collections</h3>";
-					if($count[$connections.'_count'] > 6){
+					if($count[$connections.'_count'] > 5){
 						$footer = '<p><a href="javascript:;" class="view_all_connection" relation_type="'.$connections.'" ro_slug="'.$ro_slug.'" ro_id="'.$ro_id.'">View All '.$count[$connections.'_count']. ' Collections</a></p>';
 					}
 					break;	

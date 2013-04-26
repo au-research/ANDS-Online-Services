@@ -16,6 +16,7 @@
 {{/no_result}}
 </ul>
 </script>
+
 <script type="text/x-mustache"  id="save-record-template">
 <div class="alert alert-success alert-block">This draft has been saved successfully</div>
 

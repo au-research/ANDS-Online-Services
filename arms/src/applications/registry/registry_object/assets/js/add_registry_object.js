@@ -615,7 +615,7 @@ function validate(){
 		type: 'POST',
 		data: {xml:xml},
 		success: function(data){
-			$('.alert').remove();
+			$('.alert:not(.persist)').remove();
 			if(data.SetInfos) $.each(data.SetInfos, function(e,i){addValidationMessage(i, 'info');});
 			if(data.SetErrors) $.each(data.SetErrors, function(e,i){addValidationMessage(i, 'error');});
 			if(data.SetWarnings) $.each(data.SetWarnings, function(e,i){addValidationMessage(i, 'warning');});

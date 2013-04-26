@@ -60,7 +60,7 @@
 		<div class="span6">
 			<div class="alert alert-info">
 				<center>
-					<small>Not sure what this is? <a href="<?php echo portal_url();?>" target="_blank" style="color:inherit;">Perhaps you're looking for: <b>Research Data Australia</b> <i class="icon-globe icon"></i> </a></small>
+					<small>Not sure what this is? <a href="<?php echo portal_url();?>" target="_blank" style="color:inherit;">Maybe you're looking for: <b>Research Data Australia</b> <i class="icon-globe icon"></i></a></small>
 				</center>
 			</div>
 		</div>

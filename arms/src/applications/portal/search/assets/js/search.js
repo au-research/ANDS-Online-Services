@@ -395,8 +395,8 @@ function getTopLevelFacet(){
 
 function postSearch(){
 	$('.sidebar ul').each(function(){
-		if($('li', this).length>6){
-			$('li:gt(5)', this).hide();
+		if($('li', this).length>5){
+			$('li:gt(4)', this).hide();
 			$(this).append('<li><a href="javascript:;" class="show-all-facet">Show More...</a></li>');
 			$('.show-all-facet').click(function(){
 				$(this).parent().siblings().show();

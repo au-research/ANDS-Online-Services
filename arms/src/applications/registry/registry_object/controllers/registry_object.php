@@ -108,12 +108,15 @@ class Registry_object extends MX_Controller {
 
 	public function edit($registry_object_id){
 		$this->load->model('registry_objects', 'ro');
+		$this->load->model("data_source/data_sources","ds");
+
 		$ro = $this->ro->getByID($registry_object_id);
 
 		if(!$ro) { throw new Exception("This Registry Object ID does not exist!"); }
 
 		acl_enforce('REGISTRY_USER');
 		ds_acl_enforce($ro->data_source_id);
+		$ds = $this->ds->getByID($ro->data_source_id);
 
 		if($ro->status == PUBLISHED)
 		{
@@ -136,6 +139,7 @@ class Registry_object extends MX_Controller {
 
 		$data['extrif'] = $ro->getExtRif();
 		$data['content'] = $ro->transformCustomForFORM($data['extrif']);
+		$data['ds'] = $ds;
 		
 		$data['title'] = 'Edit: '.$ro->title;
 		$data['scripts'] = array('add_registry_object');

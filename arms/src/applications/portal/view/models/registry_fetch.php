@@ -111,7 +111,7 @@ class Registry_fetch extends CI_Model
 		}
 	}
 
-	function fetchConnectionsBySlug($slug, $limit=6, $offset=0, $type_filter=null)
+	function fetchConnectionsBySlug($slug, $limit=5, $offset=0, $type_filter=null)
 	{
 		$url = $this->config->item('registry_endpoint') . "getConnections/?slug=" . $slug;
 		if($limit!=6) $url.='&limit='.$limit;
@@ -129,7 +129,7 @@ class Registry_fetch extends CI_Model
 		}
 	}
 
-	function fetchConnectionsByID($id, $limit=6, $offset=0, $type_filter=null)
+	function fetchConnectionsByID($id, $limit=5, $offset=0, $type_filter=null)
 	{
 		$url = $this->config->item('registry_endpoint') . "getConnections/?registry_object_id=" . $id;
 		if($limit!=6) $url.='&limit='.$limit;

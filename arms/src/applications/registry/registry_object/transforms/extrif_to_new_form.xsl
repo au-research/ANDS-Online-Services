@@ -114,7 +114,13 @@
 	<xsl:template name="simpleDescribeTab" mode="collection">
 		<!-- Record Admin-->
 		<div id="simple_describe" class="pane">
-			<fieldset>
+			
+			<br/>
+			<span class="alert persist"><strong>A much simpler record editor is coming soon!</strong> In the meantime, please use the <a href="#!/advanced/admin">Advanced Mode</a> to edit records.</span>
+			<p><br/>
+				<img src="{$base_url}assets/img/under_construction.gif" />
+			</p>
+			<fieldset class="hide">
 				<legend>Describe your Data</legend>
 
 				<xsl:variable name="simpleRecordName" select="ro:collection/ro:name[@type='primary']/ro:namePart[1]" />
@@ -298,16 +304,16 @@
 					</div>
 				</div>
 
-			</fieldset>
-
-
 			<div class="center_footer">
 				<button class="btn btn-primary pull-right" id="simpleAddMoreIdentifiers">
 					<i class="icon-share-alt icon-white"></i> Proceed to Link your Data (Step 2)
 				</button>
 			</div>
+			</fieldset>
+
 			<div class="clear"></div>
 		</div>
+
 	</xsl:template>
 
 
