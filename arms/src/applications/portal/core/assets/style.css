@@ -325,12 +325,13 @@ input, select, textarea {
 	padding: 15px 0 18px;
 }
 .head {
-	width: 922px;
+	width: 955px;
 	margin: 0 auto;
 }
 a.logo {
 	display: block;
-	float: left;
+	float: right;
+	margin-left:28px;
 }
 a.logo img {
 	display: block;
@@ -341,9 +342,12 @@ a.logo img {
 	font-size: 22px;
 	font-weight: bold;
 	line-height: 38px;
-	padding: 6px 0 0 13px;
+	padding: 6px 0 0 0;
 }
 .tagline a{
+	color:white;
+}
+.tagline a:hover{
 	color:white;
 }
 .tagline span {
@@ -389,9 +393,8 @@ a.logo img {
 .search .inner input[type="text"] {
 	background: url(images/search_text.png) no-repeat 0 0;
 	width: 402px;
-	padding: 0 10px 0 35px;
+	padding: 0 10px 0 29px;
 	height: 50px;
-	line-height:50px;
 	border: none;
 	color: #3f3f3f;
 	font-weight: bold;
@@ -710,7 +713,7 @@ a.browse_button{
 /*                             Research Domains Slider				               */
 /***********************************************************************************/
 .container .right {
-	width: 432px;
+	width: 470px;
 	float: right;
 	padding: 0 0 0 0;
 }

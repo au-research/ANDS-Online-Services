@@ -2,7 +2,7 @@
 <?php
 if (isset($result_list))
 { ?>
-	<p> we need to show our list of results here </p>
+	<p> Loading result list... </p>
 <?php
 }else{ 
 	?>

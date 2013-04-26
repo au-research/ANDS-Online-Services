@@ -1,17 +1,6 @@
 $(document).ready(function() {
+	initTips();
 
-	$('*[tip]').qtip({
-		content: {
-			text: function(api) {
-				// Retrieve content from custom attribute of the $('.selector') elements.
-				return $(this).attr('tip');
-			}
-		},
-		position:{my:'left center', at:'right center'},
-		style: {
-	        classes: 'ui-tooltip-light'
-	    }
-	});
 
 	if ($.browser.msie && $.browser.version <= 9.0) {
 		$('#who_contributes li').css({
@@ -93,6 +82,9 @@ $(document).ready(function() {
 
     $('.ad_close > a').live('click', function(e){ e.preventDefault(); $('#ad_st').click(); });
 
+    $('#searchTrigger').live('click', function(){
+    	window.location = base_url+'search/#!/q='+encodeURIComponent($('#search_box').val());
+    });
     $('#search_box').keypress(function(e){
 		if(e.which==13){//press enter
 			window.location = base_url+'search/#!/q='+encodeURIComponent($(this).val());
@@ -241,6 +233,37 @@ window.log = function(){
   }
 };
 
+function initTips(selector)
+{
+	var qSelector = $('*[tip]');
+	if (selector)
+	{
+		qSelector = $(selector);
+	}
+	qSelector.qtip({
+		content: {
+			text: function(api) {
+				// Retrieve content from custom attribute of the $('.selector') elements.
+				return $(this).attr('tip');
+			}
+		},
+		position:{my:'left center', at:'right center'},
+		style: {
+	        classes: 'ui-tooltip-light'
+	    }
+	});
+
+}
+
+/* Not used currently, but would be better than scattered strings... :-( 
+function initExplanations()
+{
+	var explanations = {}
+	explanations["collection"] = "Research dataset or collection of research materials.";
+	explanations["party"] = "Researcher or research organisation that creates or maintains research datasets or collections.";
+	explanations["services"] = "Service that supports the creation or use of research datasets or collections.";
+	explanations["activities"] = "Project or program that creates research datasets or collections.";
+}*/
 
 // decode htmlentities()
 function htmlDecode(value) {

@@ -28,7 +28,7 @@
 			<div class="span12">
 				
 				<div class="alert" id="printButtonWarning">
-				  <strong>Careful!</strong> Printing this report may contain many pages. Please consider the environment!
+				  Printing this report may contain many pages.
 				  <a href="javascript:window.print()" id="printButton" class="btn pull-right btn-small text-center btn-inverse">Print this Report <i class="icon-white icon-print"></i></a>
 				
 				</div>

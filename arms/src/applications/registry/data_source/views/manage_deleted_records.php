@@ -28,12 +28,10 @@
 			<div class="span12">
 				<?php
 					if($record_count == 0){
-						echo "No deleted records were found. <a href='javascript:window.history.back();'>Go Back</a>.";  
-					}elseif($record_count == 1){
-						echo $record_count."deleted record"; 
+						echo "No recoverable records were found. Only records which have previously been PUBLISHED are able to be recovered.  <a href='javascript:window.history.back();'>Go Back</a>.";  
 					}else{
-						echo "There are <b>".$record_count."</b> deleted records found."; 
-					}								
+						echo "<b>".$record_count."</b> recoverable record".($record_count!=1 ? "s" : "")." found."; 
+					}					
 				 foreach($deleted_records as $key=>$history):?>
 					<div class="widget-box">
 						<div class="widget-title"><h5><?php echo 'Deleted Key: '.$key;?></h5></div>
@@ -41,8 +39,8 @@
 							<ul class="activity-list">
 								<?php foreach($history as $id=>$r):?>
 									<li>
-										<a href="javascript:;">
-											<?php echo $r['title']."<span class='label'>(deleted on:" .$r['deleted_date'].")</span>"?>
+										<a style="color:#0088cc;" href="#">
+											<?php echo $r['title']." <span class='label'>(deleted on:" .$r['deleted_date'].")</span>"?>
 										</a>
 										<div class="more hide" style="padding:5px">
 											<div class="btn-group">

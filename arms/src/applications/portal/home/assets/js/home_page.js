@@ -8,7 +8,7 @@ $(document).ready(function() {
 		$('#spotlight').html(output);
 		$('.flexslider').flexslider({
 	    animation: "fade",
-	    controlNav: true,
+	    controlNav: false,
 	    slideshowSpeed: 4500,
 	    directionNav:false,
 	    pauseOnHover:true

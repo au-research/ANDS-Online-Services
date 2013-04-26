@@ -288,7 +288,7 @@
 							</a>
 							<ul class="dropdown-menu">
 								<li><a data-toggle="modal" href="#importRecordsFromURLModal" id="importFromURLLink">From a URL</a></li>
-								<li><a data-toggle="modal" href="#importRecordsFromXMLModal" id="importFromXMLLink">From XML Contents</a></li>
+								<li><a data-toggle="modal" href="#importRecordsFromXMLModal" id="importFromXMLLink">From pasted XML</a></li>
 								<li><a href="" id="importFromHarvesterLink">From the Harvester</a></li>
 							</ul>
 						</div>

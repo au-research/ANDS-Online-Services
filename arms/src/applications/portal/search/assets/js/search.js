@@ -58,6 +58,11 @@ $(document).ready(function() {
 		initMap();
 	});
 	$(window).hashchange(); //do the hashchange on page load
+
+	 initExplanations('collection');
+	 initExplanations('party');
+	 initExplanations('service');
+	 initExplanations('activity');
 });
 
 function executeSearch(searchData, searchUrl){
@@ -337,6 +342,11 @@ function initSearchPage(){
 		}
 	});
 
+	$('#searchTrigger').unbind('click').live('click', function(){
+		searchData['q']=$('#search_box').val();
+		changeHashTo(formatSearch());
+    });
+
 	$('.excerpt').each(function(){
 		
 		// This will unencode the encoded entities, but also hide any random HTML'ed elements
@@ -364,18 +374,21 @@ function initSearchPage(){
 	});
 
 	$('.class_icon').each(function(){
-		var theType = $(this).attr('type');
-	    $('.icontip_'+theType).qtip({    
-        	content: $('#'+theType+'_explanation').html(),
-        	show: 'mouseover',
-        	hide: 'mouseout',
-        	style: {
-        	classes: 'ui-tooltip-light ui-tooltip-shadow'
-        	}
-    	})	
+		initExplanations($(this).attr('type'));
 	})
 }
 
+function initExplanations(theType)
+{
+    $('.icontip_'+theType).qtip({    
+    	content: $('#'+theType+'_explanation').html(),
+    	show: 'mouseover',
+    	hide: 'mouseout',
+    	style: {
+    	classes: 'ui-tooltip-light ui-tooltip-shadow'
+    	}
+	})	
+}
 
 function getTopLevelFacet(){
 	$.ajax({
@@ -410,27 +423,27 @@ function postSearch(){
 		if(searchData[this]){
 			var facet_value = decodeURIComponent(searchData[this]);
 			var facet_div = $('div.facet_'+this);
-			$('.filter[filter_value="'+facet_value+'"]',facet_div).addClass('remove_facet').before('<img class="remove_facet" filter_type="'+this+'" src="'+base_url+'assets/core/images/delete.png"/>');
+			$('.filter[filter_value="'+facet_value+'"]',facet_div).attr('tip', "Click to deselect this search constraint").addClass('remove_facet').before('<img class="remove_facet" tip="Deselect this search constraint" filter_type="'+this+'" src="'+base_url+'assets/core/images/delete.png"/>');
 		}
 	});
 
 	if(searchData['s_subject_value_resolved']){
-		var html = '<li><img src="'+base_url+'assets/core/images/delete.png" filter_type="s_subject_value_resolved" class="remove_facet"/><a href="javascript:;" class="filter remove_facet" filter_type="s_subject_value_resolved">'+searchData['s_subject_value_resolved']+'</a></li>';
+		var html = '<li><img src="'+base_url+'assets/core/images/delete.png" filter_type="s_subject_value_resolved" tip="Deselect this search constraint" class="remove_facet"/><a href="javascript:;" class="filter remove_facet" tip="Deselect this search constraint" filter_type="s_subject_value_resolved">'+searchData['s_subject_value_resolved']+'</a></li>';
 		$('.facet_subjects ul').prepend(html);
 	}
 
 	if(searchData['subject_vocab_uri']){
-		var html = '<li><img src="'+base_url+'assets/core/images/delete.png" filter_type="subject_vocab_uri" class="remove_facet"/><a href="javascript:;" class="filter remove_facet" filter_type="subject_vocab_uri">'+searchData['subject_vocab_uri_display']+'</a></li>';
+		var html = '<li><img src="'+base_url+'assets/core/images/delete.png" filter_type="subject_vocab_uri" class="remove_facet" tip="Deselect this search constraint" /><a href="javascript:;" class="filter remove_facet" tip="Deselect this search constraint" filter_type="subject_vocab_uri">'+searchData['subject_vocab_uri_display']+'</a></li>';
 		$('.filter[filter_value="'+decodeURIComponent(searchData['subject_vocab_uri'])+'"]').remove();
 		$('.facet_subjects ul').prepend(html);
 	}
 
 	if(searchData['temporal']){
 		var temporal = searchData['temporal'].split('-');
-		var html = '<li><img src="'+base_url+'assets/core/images/delete.png" filter_type="temporal" class="remove_facet"/><a href="javascript:;" class="filter remove_facet" filter_type="temporal">'+temporal[0]+'-'+temporal[1]+'</a></li>';
+		var html = '<li><img src="'+base_url+'assets/core/images/delete.png" filter_type="temporal" class="remove_facet" /><a href="javascript:;" class="filter remove_facet" tip="Deselect this search constraint" filter_type="temporal">'+temporal[0]+'-'+temporal[1]+'</a></li>';
 		$('.facet_subjects ul').prepend(html);
 	}
-
+	initTips('a.remove_facet');
 }
 
 

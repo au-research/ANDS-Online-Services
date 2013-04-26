@@ -55,6 +55,7 @@ class Home extends MX_Controller {
 		foreach($groups as $group=>$num){
 			$data['groups'][$group] = $num;
 		}
+		ksort($data['groups'], SORT_FLAG_CASE | SORT_NATURAL);
 
 		$this->load->library('stats');
 		$this->stats->registerPageView();

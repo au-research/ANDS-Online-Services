@@ -30,10 +30,10 @@
 <body>
 	<div class="header">
 		<div class="head">
-			<a href="<?php echo base_url();?>" class="logo"><img src="<?php echo asset_url('images/logo.png','core');?>" alt="Research Data Australia Home Page Link (brought to you by ANDS)" /></a>
 			<div class="tagline">
 				<a href="<?php echo base_url();?>"><span>Research Data</span> Australia</a>
 			</div><!-- tagline -->
+			<a href="<?php echo "http://www.ands.org.au/"; ?>" target="_blank" class="logo"><img src="<?php echo asset_url('images/logo.png','core');?>" alt="Research Data Australia Home Page Link (brought to you by ANDS)" /></a>
 			<ul class="top_nav">
 				<li><a href="<?=base_url("home/about");?>">About</a></li>
 				<li><a href="<?=base_url('search/#!/q=/tab=collection');?>">Collections</a></li>								
@@ -47,8 +47,9 @@
 	</div><!-- header -->
 	<div class="search">
 		<div class="inner">
-			<input type="text" id="search_box" name="s" value="" placeholder="Search"/>
-			<img src="<?php echo base_url('assets/core/images/delete.png');?>" class="clearAll" tip="Clear Search"/>
+			<img src="<?php echo base_url('assets/core/images/search_icon_hover.png');?>" id="searchTrigger" tip="Click me to search!"/>
+			<input type="text" id="search_box" name="s" value="" placeholder="Search for Research Data"/>
+			<img src="<?php echo base_url('assets/core/images/delete.png');?>" class="clearAll" tip="Clear current search"/>
 			<a class="browse_button" href="<?php echo base_url('browse');?>">Browse by Subject Area</a>
 			<a href="javascript:;" class="search_map" id="search_map_toggle">Browse by Map Coverage</a>
 			<div class="clear" style="margin-left:312px; padding-bottom:4px;"><a href="#" id="ad_st">Advanced Search</a></div>

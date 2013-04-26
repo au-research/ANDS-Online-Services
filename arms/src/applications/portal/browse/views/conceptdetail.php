@@ -1,4 +1,4 @@
-<h2><?php echo $vocab;?> / <?php echo $prefLabel;?> (<?php echo $notation;?>)</h2>
+<h2><?php echo $vocab;?> / <?php echo $prefLabel;?></h2>
 
 <?php $p = $r->{'result'}->{'primaryTopic'};?>
 

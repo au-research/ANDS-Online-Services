@@ -29,6 +29,11 @@ function loadSearchResult(about, start){
 		type: 'POST',
 		data:{url:about, start:start},
 		success: function(data){
+			for (l in data.links)
+			{
+				data.links[l].description = htmlDecode(data.links[l].description);
+			}
+
 			var template = $('#link_list_template').html();
 			var output = Mustache.render(template, data);
 			$('#vocab_search_result').html(output);
