@@ -157,6 +157,7 @@ class Registry_object extends MX_Controller {
 		$result = $ro->transformForQA(wrapRegistryObjects($xml));
 		$response['title'] = 'QA Result';
 		$scripts = preg_split('/(\)\;)|(\;\\n)/', $result, -1, PREG_SPLIT_NO_EMPTY);
+		$response['result '] = $result ;
 		foreach($scripts as $script)
 		{
 			$matches = preg_split('/(\"\,\")|(\(\")|(\"\))/', $script.")", -1, PREG_SPLIT_NO_EMPTY);

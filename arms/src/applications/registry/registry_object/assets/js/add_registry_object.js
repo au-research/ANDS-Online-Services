@@ -334,7 +334,6 @@ function initEditForm(){
 		e.stopPropagation();
 		e.preventDefault();
 		var what = $(this).attr('add_new_type');
-		log(what);
 		var template = $('.template[type='+what+']')[0];
 		var where = $(this).prevAll('.separate_line')[0];
 
@@ -359,7 +358,7 @@ function initEditForm(){
 		assignFieldID(new_dom);
 		initVocabWidgets(new_dom);
 		initMapWidget(new_dom);
-
+		log(new_dom);
 		//@TODO: check if it's inside a tooltip and perform reposition
 
 
@@ -373,7 +372,6 @@ function initEditForm(){
 			$('#descriptions_rights textarea').addClass('editor');
 			initEditor();
 		}
-		log("what;; " + what);
 		if(what=='dates_date' || what=='dates' || what=='date' || what == 'location'){
 			//initalize the datepicker, format is optional
 			$('input.datepicker').datepicker({
@@ -440,6 +438,7 @@ function initEditForm(){
 	$('#save').off().on({
 		click: function(e){
 			e.preventDefault();
+			validate();
 			if(editor=='tinymce') tinyMCE.triggerSave();//so that we can get the tinymce textarea.value without using tinymce.getContents
 			var allTabs = $('.pane');
 			var xml = '';
@@ -479,7 +478,7 @@ function initEditForm(){
 			// });
 
 			//saving
-			//log(xml);
+			log(xml);
 			$.ajax({
 				url:base_url+'registry_object/save/'+ro_id, 
 				type: 'POST',
@@ -985,6 +984,7 @@ function getRIFCSforTab(tab, hasField){
 		 * The type => the input[name=type] of the box display (heading)
 		 */
 		var this_fragment_type = $(this).attr('type');
+		log("FRAGMENT TYPE: " + this_fragment_type);
 		fragment +='<'+this_fragment_type+'';
 		if(hasField) fragment +=' field_id="' +$(this).attr('field_id')+'"';
 		var valid_fragment_meta = ['type', 'dateFrom', 'dateTo', 'style', 'rightsURI'];//valid input type to be put as attributes
@@ -1017,7 +1017,7 @@ function getRIFCSforTab(tab, hasField){
 
 					//deal with the type
 					var type = $(this).attr('type');
-
+					log("TYPE:" + type);
 					if(type=='relation'){//special case for related object relation
 						fragment += '<'+type+' type="'+$('input[name=type]',this).val()+'">';
 						if($('input[name=description]', this).val()!=''){//if the relation has a description

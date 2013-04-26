@@ -224,7 +224,7 @@
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>         
-        <xsl:apply-templates select="ro:description | ro:coverage | ro:location | ro:name | ro:identifier | ro:subject | ro:relatedObject | ro:relatedInfo | ro:accessPolicy | ro:rights | ro:existenceDates"/>
+        <xsl:apply-templates select="ro:description | ro:coverage | ro:location | ro:name | ro:identifier | ro:subject | ro:relatedObject | ro:relatedInfo | ro:accessPolicy | ro:rights | ro:existenceDates | ro:citationInfo"/>
    </xsl:template>
     
     <xsl:template match="ro:party">
