@@ -358,7 +358,7 @@ function initEditForm(){
 		assignFieldID(new_dom);
 		initVocabWidgets(new_dom);
 		initMapWidget(new_dom);
-		log(new_dom);
+		//log(new_dom);
 		//@TODO: check if it's inside a tooltip and perform reposition
 
 
@@ -528,7 +528,7 @@ function initEditForm(){
 		click: function(e){
 			var rifcs = $('textarea#load_xml_rifcs').val();
 			var ro_id = $('#ro_id').val();
-			console.log(ro_id);
+			//console.log(ro_id);
 			if(rifcs!=''){
 				$('#view-ro .tab-content[name=edit]').html('Loading...');
 				$.ajax({
@@ -613,13 +613,13 @@ function validate(){
 	prettyPrint();
 
 	//validate
-	log(xml);
+	//log(xml);
 	$.ajax({
 		url:base_url+'registry_object/validate/'+ro_id, 
 		type: 'POST',
 		data: {xml:xml},
 		success: function(data){
-			log(data);
+			//log(data);
 			$('.alert:not(.persist)').remove();
 			if(data.SetInfos) $.each(data.SetInfos, function(e,i){addValidationMessage(i, 'info');});
 			if(data.SetErrors) $.each(data.SetErrors, function(e,i){addValidationMessage(i, 'error');});
@@ -714,7 +714,7 @@ function initVocabWidgets(container){
 		});
 
 		elem.on('error.vocab.ands', function(event, xhr) {
-			console.log(xhr);
+			log(xhr);
 		});
 		widget.vocab_widget('repository', 'rifcs');
 		widget.vocab_widget('narrow', "http://purl.org/au-research/vocabulary/RIFCS/1.4/" + vocab);		 
@@ -805,7 +805,7 @@ function assignFieldID(chunk){
 
 	}
 
-	$('input, .aro_box:not(.template), .aro_box_part:not(.template)', content).each(function(){
+	$('div, input, .aro_box:not(.template), .aro_box_part:not(.template)', content).each(function(){
 		if(!$(this).attr('field_id')) {
 			fieldID++;
 			$(this).attr('field_id', fieldID);
@@ -1035,13 +1035,13 @@ function getRIFCSforTab(tab, hasField){
 						fragment += '</'+type+'>';
 					}else if(type=='relatedInfo'){//special case for relatedInfo
 						//identifier is required
-						fragment += '<identifier type="'+$('input[name=identifier_type]', this).val()+'">'+$('input[name=identifier]', this).val()+'</identifier>';
+						fragment += '<identifier field_id="' +$(this).attr('field_id')+'" type="'+$('input[name=identifier_type]', this).val()+'">'+$('input[name=identifier]', this).val()+'</identifier>';
 						//title and notes are not required, but useful nonetheless
 						if($('input[name=title]', this).val()!=''){
-							fragment += '<title>'+$('input[name=title]', this).val()+'</title>';
+							fragment += '<title field_id="' +$(this).attr('field_id')+'">'+$('input[name=title]', this).val()+'</title>';
 						}
 						if($('input[name=notes]', this).val()!=''){
-							fragment += '<notes>'+$('input[name=notes]', this).val()+'</notes>';
+							fragment += '<notes field_id="' +$(this).attr('field_id')+'">'+$('input[name=notes]', this).val()+'</notes>';
 						}
 					}else if(type=='date'){
 						var dates = $('.aro_box_part[type=date]', this);
