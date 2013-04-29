@@ -43,11 +43,14 @@ $(document).ready(function() {
   <h3>The options</h3>
   <dl class="dl-horizontal">
     <dt>class</dt>
-    <dd>default Registry object class to filter by (activity, party, collection, service). defaults to 'all'.</dd>
+    <dd>Registry object class to filter by (activity, party, collection, service). Defaults to 'all'.</dd>
     <dt>datasource</dt>
-    <dd>default Datasource ID to filter by. defaults to 'all'.</dd>
+    <dd>Datasource ID to filter by. Defaults to 'all'.</dd>
+    <dt>lock_presets</dt>
+    <dd>If <em>class</em> or <em>datasource</em> are set [to something other than 'all'], should the selection be locked? Defaults to boolean <code>false</code>.</dd>
+    <dd>URL for the search service. Defaults to <code>/registry/registry_object_search/</code></dd>
     <dt>endpoint</dt>
-    <dd>URL for the search service. defaults to <code>/registry/registry_object_search/</code></dd>
+    <dd>URL for the search service. Defaults to <code>/registry/registry_object_search/</code></dd>
     <dt>error_msg</dt>
     <dd>Error message title. set to boolean <code>false</code> to suppress error messages (displayed using javascript alert)</dd>
     <dt>target_field</dt>

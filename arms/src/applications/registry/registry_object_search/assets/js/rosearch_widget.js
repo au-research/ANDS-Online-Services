@@ -38,6 +38,11 @@
 	     * (id|title|key|class)
 	     */
 	    'target_field': "key",
+	    /*
+	     * if default values are supplied for 'class' and 'datasource',
+	     * should we lock the corresponding form elements?
+	     */
+	    'lock_presets': false
 	};
 
 	// Default changes if we're running within the ANDS environments
@@ -318,6 +323,12 @@
 			      $("#" + handler._uids['dsid']).append(source);
 			  });
 		      });
+
+	    $("#" + handler._uids['classid']).prop('disabled',
+	    					   handler.settings['lock_presets'] && handler.settings['class'] !== 'all');
+
+	    $("#" + handler._uids['dsid']).prop('disabled',
+	    					handler.settings['lock_presets'] && handler.settings['datasource'] !== 'all');
 
 	    var modal = this._modal;
 	    this._button.on('click', function() {
