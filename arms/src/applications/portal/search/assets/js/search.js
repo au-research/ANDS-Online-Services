@@ -374,7 +374,7 @@ function initSearchPage(){
 	});
 
 	$('.class_icon').each(function(){
-		initExplanations($(this).attr('type'));
+		//initExplanations($(this).attr('type'));
 	})
 }
 

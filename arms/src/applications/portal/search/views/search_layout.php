@@ -70,7 +70,7 @@
 			<img src="{{logo}}" class="logo right"/>
 		{{/logo}}
 		<img src="<?php echo base_url();?>assets/img/{{class}}.png" class="class_icon icontip_{{class}}" type="{{class}}"/>
-		<a href="<?php echo base_url();?>{{slug}}" class="title">{{display_title}}</a>
+		<a href="<?php echo base_url();?>{{slug}}" class="title">{{list_title}}</a>
 		<div class="excerpt">
 			{{description}}
 		</div>

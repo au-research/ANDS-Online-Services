@@ -434,7 +434,7 @@
 
 <!--  we will now transform the right hand stuff -->
 <div class="sidebar">
-<h3 id="draft_status" class="hide" style="font-color:#FF6688;">DRAFT PREVIEW</h3>
+<h3 id="draft_status" class="hide" style="color:#FF6688;">DRAFT PREVIEW</h3>
   <xsl:if test="ro:location/ro:address/ro:electronic/@type='url' 
     or ro:rights or ro:location/ro:address/ro:electronic/@type='email' or ro:location/ro:address/ro:physical">     
     <div class="right-box">

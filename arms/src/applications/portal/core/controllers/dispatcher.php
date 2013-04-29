@@ -33,7 +33,14 @@ class Dispatcher extends MX_Controller {
 		}
 		else if ($params[0] == "preview")
 		{
-			$_GET['slug'] = array_pop($params);
+			if (!isset($_GET['slug'])) 
+			{
+				$_GET['slug'] = array_pop($params);
+				if ($_GET['slug'] == "preview")
+				{
+					$_GET['slug'] = null;
+				}
+			}
 			$params = array("view","preview");
 			echo Modules::run(implode("/",$params));
 		}

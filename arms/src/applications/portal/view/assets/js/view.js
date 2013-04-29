@@ -5,6 +5,7 @@ $(document).ready(function() {
 var metadataContainer = $('#registryObjectMetadata');
 var loading_icon = '<div style="width:100%; padding:40px; text-align:center;"><img src="'+base_url+'assets/core/images/ajax-loader.gif" alt="Loading..." /><br/><br/><center><b>Loading...</b></center></div>';
 var ACCORDION_MODE_SUGGESTORS = ['datacite'];
+var draftText = '<small class="lightgrey">[DRAFT]</small> ';
 
 setRegistryLink();
 initDescriptionDisplay();
@@ -25,7 +26,7 @@ if ( $('#class', metadataContainer).html() == "Collection" )
 // Internal Suggested Links
 initInternalSuggestedLinks();
 
-/*if (isPublished()) { $('#draft_status').removeClass("hide"); }*/
+if (!isPublished()) { $('#draft_status').removeClass("hide"); }
 
 $('.subject_vocab_filter').click(function(e){
     e.preventDefault();
@@ -60,10 +61,15 @@ function drawRegistryIcon(){
 
 function initConnections(){
     $('.preview_connection').each(function(){
-        if($('a', this).attr('slug')!=''){
+        if(typeof $('a', this).attr('slug')!=='undefined'){
+
             generatePreviewTip($(this), $('a',this).attr('slug'), null, $('a', this).attr('relation_type'));
+
         }else if($('a', this).attr('draft_id')!=''){
+
             generatePreviewTip($(this), null, $('a',this).attr('draft_id'), $('a', this).attr('relation_type'));
+            $('a', this).prepend(draftText);
+
         }
     });
 
@@ -182,9 +188,6 @@ function initDataciteSeeAlso(){
                     position:{my:'bottom right', at:'top center'}
                 });
             }
-        },
-        error:function(err){
-            console.error(err);
         }
     });
 }
@@ -377,7 +380,7 @@ function initConnectionGraph()
 
     			        onDblClick: function(node) {
     			        	// Change to view this record
-    			        	if (isPublished())
+    			        	if (node.data.status=='PUBLISHED')
     			        	{
     			        		window.location = base_url + node.data.slug;
     			        	}
@@ -400,6 +403,17 @@ function initConnectionGraph()
 
     			        onRender: function(node, nodeSpan) {
 
+                            var preview_url;
+                            if (node.data.status=='PUBLISHED')
+                            {
+                                preview_url = base_url + "preview/" + node.data.slug;
+                            }
+                            else
+                            {
+                                $('a', nodeSpan).prepend(draftText);
+                                preview_url = base_url + "preview/?registry_object_id=" + node.data.registry_object_id;
+                            }
+
                             /* Change the icon in the tree */
     			        	if (node.data['class']=="collection")
     			        	{
@@ -418,16 +432,6 @@ function initConnectionGraph()
                                 $(nodeSpan).find("span.dynatree-icon").css("background-position", "-57px -155px");
                             }
 
-                            var preview_url;
-                            if (isPublished())
-                            {
-                                preview_url = base_url + "preview/" + node.data.slug;
-                            }
-                            else
-                            {
-                                preview_url = base_url + "preview/?id=" + node.data.registry_object_id;
-                            }
-
                             /* Prepare the tooltip preview */
                             $('#' + node.li.id).qtip({
                                 content: {
@@ -439,12 +443,12 @@ function initConnectionGraph()
                                     ajax: {
                                         url: preview_url, 
                                         type: 'GET',
-                                        data: { "slug": node.data.slug, "registry_object_id": node.data.registry_object_id },
+                                        //data: { "slug": node.data.slug, "registry_object_id": node.data.registry_object_id },
                                         success: function(data, status) {
                                             data = $.parseJSON(data);                                       
                                             this.set('content.text', data.html);
 
-                                            if (isPublished())
+                                            if (data.slug)
                                             {
                                                 $('.viewRecord').attr("href",base_url + data.slug);
                                             }
@@ -495,13 +499,13 @@ function initConnectionGraph()
 function generatePreviewTip(element, slug, registry_object_id, relation_type)
 {
     var preview_url;
-    if (isPublished())
+    if (slug != null)
     {
         preview_url = base_url + "preview/" + slug;
     }
     else
     {
-        preview_url = base_url + "preview/?id=" + registry_object_id;
+        preview_url = base_url + "preview/?registry_object_id=" + registry_object_id;
     }
     /* Prepare the tooltip preview */
     $('a', element).qtip({
@@ -514,7 +518,7 @@ function generatePreviewTip(element, slug, registry_object_id, relation_type)
             ajax: {
                 url: preview_url, 
                 type: 'GET',
-                data: { "slug": slug, "registry_object_id": registry_object_id },
+               // data: { "slug": slug, "registry_object_id": registry_object_id },
                 success: function(data, status) {
                     data = $.parseJSON(data);        
                     

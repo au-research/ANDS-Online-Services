@@ -598,7 +598,7 @@ class Registry_object extends MX_Controller {
 		$this->load->model('registry_objects', 'ro');
 		$this->load->model('data_source/data_sources', 'ds');
 
-		if($select_all){
+		if($select_all != "false"){
 			$affected_ros = $this->ro->getByAttributeDatasource($data_source_id, 'status', $select_all, true, true);
 			foreach($affected_ros as $r){
 				$this->ro->deleteRegistryObject($r);
