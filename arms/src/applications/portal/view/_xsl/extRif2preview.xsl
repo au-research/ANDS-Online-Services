@@ -111,7 +111,7 @@
 <div class="post">
 
     <!-- DISPLAY DESCRIPTIONS -->
-    <xsl:if test="ro:description">
+    <xsl:if test="../extRif:extendedMetadata/extRif:description">
 
         <div class="descriptions" style="position:relative;clear:both;">
           <small>
