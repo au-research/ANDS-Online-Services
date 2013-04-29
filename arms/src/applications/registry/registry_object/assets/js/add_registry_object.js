@@ -805,13 +805,12 @@ function assignFieldID(chunk){
 
 	}
 
-	$('div, input, .aro_box:not(.template), .aro_box_part:not(.template)', content).each(function(){
-		if(!$(this).attr('field_id')) {
+	$('input, .aro_box, .aro_box_part', content).each(function(){
+		if(!$(this).attr('field_id') || typeof(chunk) !== 'undefined') {
 			fieldID++;
 			$(this).attr('field_id', fieldID);
 		}
 	});
-
 }
 
 
@@ -991,7 +990,6 @@ function getRIFCSforTab(tab, hasField){
 		 * The type => the input[name=type] of the box display (heading)
 		 */
 		var this_fragment_type = $(this).attr('type');
-		//log("FRAGMENT TYPE: " + this_fragment_type);
 		fragment +='<'+this_fragment_type+'';
 		if(hasField) fragment +=' field_id="' +$(this).attr('field_id')+'"';
 		var valid_fragment_meta = ['type', 'dateFrom', 'dateTo', 'style', 'rightsURI'];//valid input type to be put as attributes
@@ -1037,6 +1035,16 @@ function getRIFCSforTab(tab, hasField){
 						//identifier is required
 						fragment += '<identifier field_id="' +$(this).attr('field_id')+'" type="'+$('input[name=identifier_type]', this).val()+'">'+$('input[name=identifier]', this).val()+'</identifier>';
 						//title and notes are not required, but useful nonetheless
+						// TO DO: find out where did you go wrong :-)
+						if($('input[name=format_identifier]', this).val() != ''){
+							fragment += '<format>';
+							var formatIdentifiers = $('input[name=format_identifier]', this);
+							$.each(formatIdentifiers, function(){
+								var ident = $(this);
+								fragment += '<identifier field_id="' +ident.attr('field_id')+'" type="'+ident.next('input[name="format_identifier_type"]').val()+'">'+ident.val()+'</identifier>';
+							});
+							fragment += '</format>';
+						}
 						if($('input[name=title]', this).val()!=''){
 							fragment += '<title field_id="' +$(this).attr('field_id')+'">'+$('input[name=title]', this).val()+'</title>';
 						}
