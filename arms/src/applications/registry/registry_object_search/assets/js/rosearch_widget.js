@@ -327,8 +327,8 @@
 	    this._modal.on('hidden', function() {
 		modal.find('div.results').empty();
 		$("#" + handler._uids['txtid']).val('');
-		$("#" + handler._uids['classid']).val('all');
-		$("#" + handler._uids['dsid']).val('all');
+		$("#" + handler._uids['classid']).val(handler.settings['class']);
+		$("#" + handler._uids['dsid']).val(handler.settings['datasource']);
 		$("#" + handler._uids['pubid']).prop('checked', true);
 	    });
 
