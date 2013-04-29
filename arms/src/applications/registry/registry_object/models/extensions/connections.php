@@ -94,13 +94,13 @@ class Connections_Extension extends ExtensionBase
 				{
 					if (isset($row['value']))
 					{
-						if(in_array($row['value'],$this->party_one_types))
-						{
-							$connection['class'] = "party_one";
-						}
-						elseif (in_array($row['value'],$this->party_multi_types))
+						if (in_array($row['value'],$this->party_multi_types))
 						{
 							$connection['class'] = "party_multi";
+						}
+						else
+						{
+							$connection['class'] = "party_one";
 						}
 					}
 				}

@@ -65,18 +65,33 @@
 					break;
 				case "party":
 					$heading = "<h3>Researchers</h3>";
+					if($count[$connections.'_count'] > 5){
+						$footer = '<p><a href="javascript:;" class="view_all_connection" relation_type="'.$connections.'">View All '.$count[$connections.'_count']. ' Researchers</a></p>';
+					}
 					break;					
 				case "party_one":
 					$heading = "<h3>Researchers</h3>";
+					if($count[$connections.'_count'] > 5){
+						$footer = '<p><a href="javascript:;" class="view_all_connection" relation_type="'.$connections.'">View All '.$count[$connections.'_count']. ' Researchers</a></p>';
+					}
 					break;	
 				case "party_multi":
 					$heading = "<h3>Research Groups</h3>";
+					if($count[$connections.'_count'] > 5){
+						$footer = '<p><a href="javascript:;" class="view_all_connection" relation_type="'.$connections.'">View All '.$count[$connections.'_count']. ' Research Groups</a></p>';
+					}
 					break;	
 				case "activity":
 					$heading = "<h3>Activities</h3>";
+					if($count[$connections.'_count'] > 5){
+						$footer = '<p><a href="javascript:;" class="view_all_connection" relation_type="'.$connections.'">View All '.$count[$connections.'_count']. ' Activities</a></p>';
+					}
 					break;	
 				case "service":
 					$heading = "<h3>Services</h3>";
+					if($count[$connections.'_count'] > 5){
+						$footer = '<p><a href="javascript:;" class="view_all_connection" relation_type="'.$connections.'">View All '.$count[$connections.'_count']. ' Services</a></p>';
+					}
 					break;
 				case "collection":
 					$heading = "<h3>Collections</h3>";

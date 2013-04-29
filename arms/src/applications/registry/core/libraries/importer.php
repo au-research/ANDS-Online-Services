@@ -297,6 +297,7 @@ class Importer {
 					$ro->created_who = $record_owner;
 					$ro->data_source_key = $this->dataSource->key;
 					$ro->group = (string) $registryObject['group'];
+					$ro->type = (string) $ro_xml['type'];
 					if($this->harvestID)
 					{
 						$ro->setAttribute("harvest_id", $this->harvestID);
