@@ -48,7 +48,6 @@ $(document).ready(function() {
     <dd>Datasource ID to filter by. Defaults to 'all'.</dd>
     <dt>lock_presets</dt>
     <dd>If <em>class</em> or <em>datasource</em> are set [to something other than 'all'], should the selection be locked? Defaults to boolean <code>false</code>.</dd>
-    <dd>URL for the search service. Defaults to <code>/registry/registry_object_search/</code></dd>
     <dt>endpoint</dt>
     <dd>URL for the search service. Defaults to <code>/registry/registry_object_search/</code></dd>
     <dt>error_msg</dt>
