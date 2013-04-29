@@ -94,7 +94,15 @@ function initConnections(){
                     data: {ro_id: $(this).attr('ro_id')},
                     loading:true,
                     success: function(data, status) {
-                        this.set('content.text', data);
+                        
+                        // Clean up any HTML rubbish...                   
+                        var temp = $('<span/>');
+                        temp.html(data);
+                        $("div.descriptions", temp).html($("div.descriptions", temp).text());
+                        $("div.descriptions", temp).html($("div.descriptions", temp).directText());
+
+                        this.set('content.text', temp.html());    
+
                         formatConnectionTip(this);
                     }
                 }
