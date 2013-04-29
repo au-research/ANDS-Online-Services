@@ -30,7 +30,6 @@
 				<div class="alert" id="printButtonWarning">
 				  Printing this report may contain many pages.
 				  <a href="javascript:window.print()" id="printButton" class="btn pull-right btn-small text-center btn-inverse">Print this Report <i class="icon-white icon-print"></i></a>
-				
 				</div>
 
 				<?php if(isset($filter)): ?>
@@ -39,6 +38,10 @@
 				</h3>
 				<?php endif; ?>
 
+				<small>
+					<span class="label">This report indicates which recommended/required fields are missing from your records.</span>
+				</small>
+
 				<?php if(!$report) { echo "<i>No records to display</i>"; } ?>
 				<?php foreach($report as $id=>$r):?>
 					<div class="widget-box quality_div">
@@ -46,7 +49,7 @@
 							<span class="label label-inverse pull-right"><?php echo $r['status'];?></span> <span class="label label-inverse pull-right">Quality Level: <?php echo $r['quality_level']; ?></span>  <span class="label label-inverse pull-right"><?php echo ucfirst($r['class']); ?></span>
 							<h4>
 								<?php echo $r['title'];?>
-							</h4>
+							</h4>`
 						</div>
 						<div class="widget-content print_quality_report quality_report">
 							<?php echo $r['report'];?>

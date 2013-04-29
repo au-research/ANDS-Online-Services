@@ -552,7 +552,7 @@
 <div class="row-fluid">
 
 	
-	<div class="span8" id="data_source_view_container" data_source_id="{{data_source_id}}">
+	<div class="span12" id="data_source_view_container" data_source_id="{{data_source_id}}">
 		<div class="widget-box">
 	    	
 	 		<div class='widget-content'>
@@ -562,7 +562,7 @@
 	    	<div class="widget-content">
 
 				<h4>Account Administration Information</h4>
-				<dl class="dl-horizontal">
+				<dl class="dl-horizontal dl-wide">
 					<?php 
 					foreach($data_source_view_fields as $key=>$name){
 						echo '{{#'.$key.'}}';
@@ -577,7 +577,7 @@
 					?>
 			 	</dl>
 			 	<h4>Records Management Settings</h4>
-			 	<dl class="dl-horizontal">
+			 	<dl class="dl-horizontal dl-wide">
 					<dt>Reverse Links</dt>
 					<dd>
 						<p>
@@ -628,11 +628,15 @@
 					</dd>
 					{{/assessment_notify_email_addr}}
 					
-			 	</dl>
-			 				
+		 		</dl>
+
+		 		<p>&nbsp;</p>
+			 	<h4>Contributor Pages <span class="label"><a href="http://ands.org.au/resource/contributor-hp-help.pdf" class="white" target="_blank"><i class="icon icon-white icon-question-sign"></i></a></span></h4> 
+				<div class="" id="contributor_groups"></div>
+			 	
 			 
 			 	<h4>Harvester Settings</h4>
-			 	<dl class="dl-horizontal">
+			 	<dl class="dl-horizontal dl-wide">
 			 		{{#uri}}
 					<dt>URI</dt>
 					<dd>{{uri}}&nbsp;</dd>
@@ -669,17 +673,8 @@
 					<dd>{{harvest_frequency}}</dd>
 					{{/harvest_frequency}}
 			 	</dl>
-		 	</div>
-	    </div>
-	</div>
-
-	<div class="span4">
-		<div class="widget-box">
-			<div class="widget-title"><h5>Contributor Pages</h5></div>
-			<div class="widget-content">
-				<div class="well" id="contributor_groups"></div>
 			</div>
-		</div>
+	    </div>
 	</div>
 
 </div>
@@ -940,7 +935,7 @@
 						<div class="control-group">
 							<label class="control-label" for="notes">Notes</label>
 							<div class="controls">
-								<textarea class="input-xlarge" name="notes">{{notes}}</textarea>
+								<textarea class="input-xxlarge" name="notes">{{notes}}</textarea>
 							</div>
 						</div>
 						
@@ -1117,7 +1112,7 @@
 							<div class="control-group">
 								<label class="control-label" for="assessment_notify_email_addr">Assessment Notification Email</label>
 								<div class="controls">
-									<input type="text" class="input-xlarge" name="assessment_notify_email_addr" value="{{assessment_notify_email_addr}}">
+									<input type="text" class="input-xxlarge" name="assessment_notify_email_addr" value="{{assessment_notify_email_addr}}">
 								</div>
 							</div>
 						<?php endif; ?>
@@ -1141,7 +1136,7 @@
 						<div class="control-group">
 							<label class="control-label" for="uri">URI</label>
 							<div class="controls">
-								<input type="text" class="input-xlarge" name="uri" value="{{uri}}">
+								<input type="text" class="input-xxlarge" name="uri" value="{{uri}}">
 							</div>
 						</div>
 
@@ -1177,7 +1172,7 @@
 						<div class="control-group" id="oai_set_container">
 							<label class="control-label" for="oai_set">OAI Set</label>
 							<div class="controls">
-								<input type="text" class="input-xlarge" name="oai_set" value="{{oai_set}}" length="512">
+								<input type="text" class="input-xxlarge" name="oai_set" value="{{oai_set}}" length="512">
 							</div>
 						</div>
 
@@ -1197,7 +1192,7 @@
 							<label class="control-label" for="harvest_date">Harvest Date</label>
 							<div class="controls">																					
 								<div class="input-append">						
-									<input type="text" class="input-large datepicker" name="harvest_date" value="{{harvest_date}}"/>
+									<input type="text" class="input-xlarge datepicker" name="harvest_date" value="{{harvest_date}}"/>
 									<button class="triggerDatePicker" type="button"><i class="icon-calendar"></i></button>								
 								</div>
 							</div>

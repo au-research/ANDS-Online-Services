@@ -22,7 +22,7 @@
 
 	
 	<div id="sidebar">
-		<div id="mode-switch" class="btn-group" style="text-align: center;margin: 10px auto 0px auto;">
+		<div id="mode-switch" class="btn-group" style="display:none; text-align: center;margin: 10px auto 0px auto;">
 			<button class="btn btn-primary" aro-mode="simple">Simple</button>
 			<button class="btn" aro-mode="advanced">Advanced</button>
 		</div>

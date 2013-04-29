@@ -1793,7 +1793,7 @@ public function getContributorGroupsEdit()
 		 }
 	}
 
-	/* Leo's quality report */
+	/* Printable quality report */
 	function quality_report($id, $status_filter = null){
 		//$data['report'] = $this->getDataSourceReport($id);
 		$data['title'] = 'Datasource Report';
@@ -1825,7 +1825,7 @@ public function getContributorGroupsEdit()
 					if (!$status_filter || $ro->status == $status_filter)
 					{
 						$report_html = $ro ? str_replace(array_keys($replacements), array_values($replacements), $ro->getMetadata('quality_html')) : '';
-						$report[$ro_id] = array('quality_level'=>$ro->quality_level, 'class'=>$ro->class, 'title'=>$ro->title,'status'=>$ro->status,'id'=>$ro->id,'report'=>$report_html);
+						$report[$ro_id] = array('quality_level'=>($ro->quality_level == 4 ? 'Gold Standard' : $ro->quality_level), 'class'=>$ro->class, 'title'=>$ro->title,'status'=>readable($ro->status),'id'=>$ro->id,'report'=>$report_html);
 					}
 				}catch(Exception $e){
 					throw Exception($e);
@@ -1834,9 +1834,19 @@ public function getContributorGroupsEdit()
 				clean_cycles();
 			}
 		}
+		uasort($report, array($this, 'cmpByQualityLevel'));
 		$data['report'] = $report;
 		$this->load->view('detailed_quality_report', $data);
 	}
+
+	function cmpByQualityLevel($a, $b)
+	{
+	    if ($a['quality_level'] == $b['quality_level']) {
+	        return ($a['class'] < $b['class']) ? -1 : 1;
+	    }
+	    return ($a['quality_level'] < $b['quality_level']) ? -1 : 1;
+	}
+
 
 
 	/* Ben's chart report dashboard (google charts) */
