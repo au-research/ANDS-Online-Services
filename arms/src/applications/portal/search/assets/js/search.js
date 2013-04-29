@@ -420,7 +420,7 @@ function postSearch(){
 		}
 	});
 
-	var selecting_facets = ['group','type','license_class'];
+	var selecting_facets = ['class', 'group','type','license_class'];
 	$.each(selecting_facets,function(){
 		if(searchData[this]){
 			var facet_value = decodeURIComponent(searchData[this]);
@@ -610,6 +610,8 @@ function initMap(){
 	        changeHashTo(formatSearch());
 	        }
 
+	        map.setCenter(new google.maps.LatLng(-25.397, 133.644));
+
 	       });
 
 		var styles = [[{
@@ -620,10 +622,10 @@ function initMap(){
 		    textSize: '10'
 		  }]];
 
-		markerClusterer = new MarkerClusterer(map, null, { maxZoom: 12, gridSize: 50, styles: styles[0]});
+		markerClusterer = new MarkerClusterer(map, null, { maxZoom: 12, gridSize: 100, styles: styles[0]});
 	    window.setTimeout(function(){
 	    	map.setCenter(new google.maps.LatLng(-25.397, 133.644));
-	    }, 200);
+	    }, 500);
 	}
 }
 

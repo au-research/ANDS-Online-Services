@@ -223,13 +223,16 @@ class Vocab {
                     case 'spatial':
                         $CI->solr->addQueryCondition('+spatial_coverage_extents:"Intersects('.$value.')"');
                         break;
+                    case 'map':
+                        $CI->solr->addQueryCondition('+spatial_coverage_area_sum:[0.00001 TO *]');
+                        break;
                 }
             }
         }
         $CI->solr->addQueryCondition('+subject_vocab_uri:("'.$uri.'")');
         $CI->solr->executeSearch();
         return $CI->solr->getNumFound();
-        // return $CI->solr->constructFieldString();
+     //    return $CI->solr->constructFieldString();
     }
 
 

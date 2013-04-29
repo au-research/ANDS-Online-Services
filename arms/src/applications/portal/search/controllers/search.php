@@ -85,6 +85,10 @@ class Search extends MX_Controller {
 						$this->solr->addQueryCondition('+group:("'.$value.'")');
 						$filteredSearch = true;
 						break;
+					case 'class': 
+						$this->solr->addQueryCondition('+class:'.$value);
+						$filteredSearch = true;
+						break;
 					case 'type': 
 						$this->solr->addQueryCondition('+type:'.$value);
 						$filteredSearch = true;
@@ -116,15 +120,15 @@ class Search extends MX_Controller {
 						$filteredSearch = true;
 						break;
 					case 'map':
-						$this->solr->addQueryCondition('+spatial_coverage_extents:(*)');
-						$this->solr->setOpt('rows', 100);
+						$this->solr->addQueryCondition('+spatial_coverage_area_sum:[0.00001 TO *]');
+						$this->solr->setOpt('rows', 1000);
 						$this->solr->setOpt('fl', 'id,logo,class,slug,display_title,description,spatial_coverage_area_sum,spatial_coverage_centres,spatial_coverage_extents,spatial_coverage_polygons');
 						break;
 				}
 			}
 		}
 
-		//var_dump($this->solr->constructFieldString());
+//		var_dump($this->solr->constructFieldString());
 
 		/**
 		 * Doing the search
@@ -292,6 +296,9 @@ class Search extends MX_Controller {
                     case 'spatial':
                         $this->solr->addQueryCondition('+spatial_coverage_extents:"Intersects('.$value.')"');
                         break;
+                    case 'map':
+						$this->solr->addQueryCondition('+spatial_coverage_area_sum:[0.00001 TO *]');
+						break;
                 }
             }
         }
