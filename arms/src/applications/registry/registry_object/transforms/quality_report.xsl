@@ -1221,16 +1221,6 @@
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>
-        <xsl:if test="string-length(.) &gt; 512">
-            <xsl:choose>
-			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetWarnings("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Spatial Coverage value must be less than 512 characters.");</xsl:text>
-			    </xsl:when>
-			    <xsl:otherwise>
-					<span class="warning">Spatial Coverage value must be less than 512 characters.</span>
-			    </xsl:otherwise>
-	    	</xsl:choose>
-        </xsl:if>
         <xsl:if test="string-length(@type) = 0">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
@@ -1261,16 +1251,6 @@
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="error">Spatial Location must have a value.</span>
-			    </xsl:otherwise>
-	    	</xsl:choose>
-        </xsl:if>
-        <xsl:if test="string-length(.) &gt; 512">
-            <xsl:choose>
-			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetWarnings("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Spatial Location value must be less than 512 characters.");</xsl:text>
-			    </xsl:when>
-			    <xsl:otherwise>
-					<span class="warning">Spatial Location value must be less than 512 characters.</span>
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>
