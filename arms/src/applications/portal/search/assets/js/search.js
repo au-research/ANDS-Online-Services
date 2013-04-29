@@ -24,7 +24,7 @@ $(document).ready(function() {
 		searchData = {};
 		fieldString = '';
 
-		
+
 		$.each(words, function(){
 			var string = this.split('=');
 			var term = string[0];
@@ -33,10 +33,10 @@ $(document).ready(function() {
 				value = decodeURIComponent(value);
 				searchData[term] = value;
 				switch(term){
-					case 'q': 
+					case 'q':
 						$('#search_box').val(value);
 						break;
-					case 'group': 
+					case 'group':
 						$('#selected_group').html(decodeURIComponent(value));
 						break;
 					case 'tab':
@@ -52,7 +52,7 @@ $(document).ready(function() {
 			 * resultSort, limitRows, researchGroupSort, subjectSort, typeSort, licenseSort
 			 */
 		});
-		
+
 
 		executeSearch(searchData, searchUrl);
 		initMap();
@@ -70,15 +70,12 @@ function executeSearch(searchData, searchUrl){
 	clearOverlays();
 	$('.container').css({opacity:0.5});
 	$.ajax({
-		url:searchUrl, 
+		url:searchUrl,
 		type: 'POST',
 		data: {filters:searchData},
 		dataType:'json',
 		success: function(data){
 			$('.container').css({opacity:1});
-			$.each(data.solr_result.response.docs, function(){
-				// log(this.list_title, this.score);
-			});
 			var numFound = data.result.numFound;
 			$('#search-result, .pagination, #facet-result').empty();
 
@@ -137,7 +134,7 @@ $(document).on('click', '.filter',function(e){
 		content: {
 			text: 'Loading...',
 			ajax: {
-				url: base_url+'search/getsubjectfacet', 
+				url: base_url+'search/getsubjectfacet',
 				type: 'POST', // POST or GET
 				data: {filters:searchData, subjectType:subjectType}, // Data to pass along with your request
 				success: function(data, status) {
@@ -150,7 +147,7 @@ $(document).on('click', '.filter',function(e){
 				button: 'Close'
 			}
 		},
-		
+
 		show:{solo:true,ready:true,event:'click'},
 	    hide:false,
 	    position:{my:'top right', at:'bottom left'},
@@ -187,7 +184,7 @@ function loadSubjectBrowse(val){
 	if(val!='anzsrc-for'){
 		$('#subjectfacet').html('Loading...');
 		$.ajax({
-			url:base_url+'search/getAllSubjects/'+val, 
+			url:base_url+'search/getAllSubjects/'+val,
 			type: 'POST',
 			data: {filters:searchData},
 			success: function(data){
@@ -262,6 +259,12 @@ function initSearchPage(){
 		$('.sidebar').removeClass('mapmode_sidebar');
 		$('#search-result, .pagination, .page_title, .tabs').show();
 		$('html,body').animate({scrollTop: $('body').offset().top}, 750);//scroll to top
+
+	        //we don't need this in map view, and it seems to block completion of the processing
+	        //of the AJAX portal/search/filter POST... (~8s delay)
+	        $('.class_icon').each(function(){
+		    initExplanations($(this).attr('type'));
+		})
 	}
 
 	if(typeof searchData['q']=='undefined') {
@@ -333,7 +336,7 @@ function initSearchPage(){
 		var temporal = searchData['temporal'].split('-');
 		$("#slider").editRangeSlider("min",parseInt(temporal[0]));
 		$("#slider").editRangeSlider("max",parseInt(temporal[1]));
-	}	
+	}
 
 	$('#search_box').unbind('keypress').keypress(function(e){
 		if(e.which==13){//press enter
@@ -348,14 +351,14 @@ function initSearchPage(){
     });
 
 	$('.excerpt').each(function(){
-		
+
 		// This will unencode the encoded entities, but also hide any random HTML'ed elements
 		$(this).html(htmlDecode(htmlDecode(htmlDecode($(this).html()))));
 		$(this).html($(this).directText());
 
 		var thecontent = $(this).html();
 		var newContent = ellipsis(thecontent, 200);
-		if(thecontent!=newContent){ 
+		if(thecontent!=newContent){
 			newContent = '<div class="hide" fullExcerpt="true">'+thecontent+'</div>' + newContent + '';
 		}
 
@@ -366,33 +369,29 @@ function initSearchPage(){
 	// Clean up encoding issues in titles
 	$('.post a.title').each(function(){$(this).html(htmlDecode($(this).html()));})
 
-	// Hide logos which point to invalid resources. 
+	// Hide logos which point to invalid resources.
 	$('.post img').error(function() { log("error loading image: " + $(this).attr('src')); $(this).addClass('hide'); })
 
-	$('.showmore_excerpt').click(function(){	
+	$('.showmore_excerpt').click(function(){
 		$(this).parent().html($(this).parent().children(0).html());
 	});
-
-	$('.class_icon').each(function(){
-		//initExplanations($(this).attr('type'));
-	})
 }
 
 function initExplanations(theType)
 {
-    $('.icontip_'+theType).qtip({    
+    $('.icontip_'+theType).qtip({
     	content: $('#'+theType+'_explanation').html(),
     	show: 'mouseover',
     	hide: 'mouseout',
     	style: {
     	classes: 'ui-tooltip-light ui-tooltip-shadow'
     	}
-	})	
+	})
 }
 
 function getTopLevelFacet(){
 	$.ajax({
-		url:base_url+'search/getTopLevel', 
+		url:base_url+'search/getTopLevel',
 		type: 'POST',
 		data: {filters:searchData},
 		success: function(data){
@@ -512,10 +511,10 @@ function initMap(){
 	      mapTypeId: google.maps.MapTypeId.ROADMAP
 	    };
 
-	    
+
 
 	    map = new google.maps.Map(document.getElementById("searchmap"),myOptions);
-		
+
 	    var homeControlDiv = document.createElement('div');
 	  	var homeControl = new SidebarToggle(homeControlDiv, map);
 
@@ -529,7 +528,7 @@ function initMap(){
 	        ,maxWidth: 0
 	        ,pixelOffset: new google.maps.Size(-140, 0)
 	        ,zIndex: null
-	        ,boxStyle: { 
+	        ,boxStyle: {
 	          background: "white"
 	          ,opacity: 1
 	         }
@@ -574,8 +573,8 @@ function initMap(){
 	      rectangleOptions.strokeWeight= 2;
 	      rectangleOptions.clickable= false;
 	      // rectangleOptions.editable= true;
-	      rectangleOptions.zIndex= 1;     
-	      
+	      rectangleOptions.zIndex= 1;
+
 	      drawingManager.set('rectangleOptions', rectangleOptions);
 	     google.maps.event.addListener(map, 'click', function(e) {
 	     	if(infowindow)
@@ -620,7 +619,7 @@ function initMap(){
 
 		markerClusterer = new MarkerClusterer(map, null, { maxZoom: 12, gridSize: 50, styles: styles[0]});
 	    window.setTimeout(function(){
-	    	map.setCenter(new google.maps.LatLng(-25.397, 133.644)); 
+	    	map.setCenter(new google.maps.LatLng(-25.397, 133.644));
 	    }, 200);
 	}
 }
@@ -648,13 +647,13 @@ function createResultPolygonWithMarker(polygons, centers, title, id)
 	//var coords = getCoordsFromInputField(polygons);
 	var centerCoords = getPointFromString(centers);
 	var coords = getCoordsFromString(polygons);
-	createMarker(centerCoords, id);	
+	createMarker(centerCoords, id);
     createPolygon(coords, id);
 }
 
 function getCoordsFromString(lonLatStr)
 {
-	
+
 	var coords = new Array();
 	if(lonLatStr){
 		var coordsStr = lonLatStr.split(' ');
@@ -713,7 +712,7 @@ function createMarker(latlng, id)
 		polygonsArray[marker.id].setMap(map);
 	});
 	google.maps.event.addListener(marker,"click",function(){
-		
+
 		showPreviewWindowConent(marker);
 	});
 	google.maps.event.addListener(marker,"mouseout",function(){
@@ -724,10 +723,10 @@ function createMarker(latlng, id)
 }
 
 
-function clearOverlays() 
+function clearOverlays()
 {
 	if(typeof markerClusterer!= 'undefined' && markerClusterer){
-		markerClusterer.clearMarkers();		
+		markerClusterer.clearMarkers();
 	}
 	clearMarkers();
 	clearPolygons();
@@ -747,7 +746,7 @@ function showPreviewWindowConent(mOverlay)
 {
 	roIds = [];
 	// either a marker is passed or a marker_cluster
-	
+
     if(typeof mOverlay.id != 'undefined')
     {
     	//log(mOverlay);
@@ -765,13 +764,13 @@ function showPreviewWindowConent(mOverlay)
     if(roIds)
     {
 		$.ajax({
-			url:base_url+'view/preview', 
+			url:base_url+'view/preview',
 			data : {roIds:roIds},
 			type: 'POST',
 			dataType:'json',
 			success: function(data){
 				infowindow.setContent(data.html);//
-				infowindow.open(map);			
+				infowindow.open(map);
 			},
 			error: function(data){
 				//$('body').prepend(data.responseText);

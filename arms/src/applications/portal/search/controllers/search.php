@@ -118,6 +118,7 @@ class Search extends MX_Controller {
 					case 'map':
 						$this->solr->addQueryCondition('+spatial_coverage_extents:(*)');
 						$this->solr->setOpt('rows', 100);
+						$this->solr->setOpt('fl', 'id,logo,class,slug,display_title,description,spatial_coverage_area_sum,spatial_coverage_centres,spatial_coverage_extents,spatial_coverage_polygons');
 						break;
 				}
 			}
@@ -127,8 +128,12 @@ class Search extends MX_Controller {
 
 		/**
 		 * Doing the search
+		 * smcphill 20130429: shouldn't need to store the entire result
+		 * in 'solr_result'; all the relevant bits get added to $data
+		 * later on (I think...)
 		 */
-		$data['solr_result'] = $this->solr->executeSearch();
+		//$data['solr_result'] = $this->solr->executeSearch();
+		$this->solr->executeSearch();
 
 
 
