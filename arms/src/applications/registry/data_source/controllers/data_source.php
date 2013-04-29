@@ -431,6 +431,10 @@ class Data_source extends MX_Controller {
 					{
 						$menu['to_assess'] = 'Assessment In Progress';
 					}
+					if ($this->user->hasFunction('REGISTRY_SUPERUSER'))
+					{
+						$menu['delete'] = 'Delete Record';
+					}
 				break;
 				case 'ASSESSMENT_IN_PROGRESS':
 					if ($this->user->hasFunction('REGISTRY_STAFF'))
@@ -441,6 +445,10 @@ class Data_source extends MX_Controller {
 							$menu['to_publish'] = 'Publish';
 						}
 						$menu['to_moreworkrequired'] = 'More Work Required';
+						if ($this->user->hasFunction('REGISTRY_SUPERUSER'))
+						{
+							$menu['delete'] = 'Delete Record';
+						}
 					}
 				break;
 				case 'APPROVED':
