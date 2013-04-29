@@ -65,11 +65,13 @@
  * © 2011 Colin Snover <http://zetafleet.com>
  * Released under MIT license.
  */
-(function(d,e){var r=d.parse,a=[1,4,5,6,7,10,11]
-d.parse=function(n){var f,t,c,i,o=0
-if(t=/^(\d{4}|[+\-]\d{6})(?:-(\d{2})(?:-(\d{2}))?)?(?:T(\d{2}):(\d{2})(?::(\d{2})(?:\.(\d{3}))?)?(?:(Z)|([+\-])(\d{2})(?::(\d{2}))?)?)?$/.exec(n)){for(i=0;c=a[i];++i)t[c]=+t[c]||0
-t[2]=(+t[2]||1)-1,t[3]=+t[3]||1,t[8]!=="Z"&&t[9]!==e&&(o=t[10]*60+t[11],t[9]==="+"&&(o=0-o)),f=d.UTC(t[1],t[2],t[3],t[4],t[5]+o,t[6],t[7])}else f=r?r(n):0/0
-return f}})(Date)
+/**
+ * Date.parse with progressive enhancement for ISO 8601 <https://github.com/csnover/js-iso8601>
+ * © 2011 Colin Snover <http://zetafleet.com>
+ * Released under MIT license.
+ */
+(function (Date, undefined) {
+}(Date));
 /**
  * @name jsTimezoneDetect
  * @version 1.0.5
@@ -90,6 +92,42 @@ return{determine:c,offset:A,timezones:o,date_is_dst:t,dst_start_for:u}}()
 jstz.TimeZone=function(a){"use strict"
 var i={"America/Denver":["America/Denver","America/Mazatlan"],"America/Chicago":["America/Chicago","America/Mexico_City"],"America/Santiago":["America/Santiago","America/Asuncion","America/Campo_Grande"],"America/Montevideo":["America/Montevideo","America/Sao_Paulo"],"Asia/Beirut":["Asia/Amman","Asia/Jerusalem","Asia/Beirut","Europe/Helsinki","Asia/Damascus"],"Pacific/Auckland":["Pacific/Auckland","Pacific/Fiji"],"America/Los_Angeles":["America/Los_Angeles","America/Santa_Isabel"],"America/New_York":["America/Havana","America/New_York"],"America/Halifax":["America/Goose_Bay","America/Halifax"],"America/Godthab":["America/Miquelon","America/Godthab"],"Asia/Dubai":["Europe/Moscow"],"Asia/Dhaka":["Asia/Yekaterinburg"],"Asia/Jakarta":["Asia/Omsk"],"Asia/Shanghai":["Asia/Krasnoyarsk","Australia/Perth"],"Asia/Tokyo":["Asia/Irkutsk"],"Australia/Brisbane":["Asia/Yakutsk"],"Pacific/Noumea":["Asia/Vladivostok"],"Pacific/Tarawa":["Asia/Kamchatka","Pacific/Fiji"],"Pacific/Tongatapu":["Pacific/Apia"],"Asia/Baghdad":["Europe/Minsk"],"Asia/Baku":["Asia/Yerevan","Asia/Baku"],"Africa/Johannesburg":["Asia/Gaza","Africa/Cairo"]},e=a,r=function(){for(var a=i[e],r=a.length,n=0,t=a[0];r>n;n+=1)if(t=a[n],jstz.date_is_dst(jstz.dst_start_for(t)))return e=t,void 0},n=function(){return typeof i[e]!="undefined"}
 return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones={"-720,0":"Pacific/Majuro","-660,0":"Pacific/Pago_Pago","-600,1":"America/Adak","-600,0":"Pacific/Honolulu","-570,0":"Pacific/Marquesas","-540,0":"Pacific/Gambier","-540,1":"America/Anchorage","-480,1":"America/Los_Angeles","-480,0":"Pacific/Pitcairn","-420,0":"America/Phoenix","-420,1":"America/Denver","-360,0":"America/Guatemala","-360,1":"America/Chicago","-360,1,s":"Pacific/Easter","-300,0":"America/Bogota","-300,1":"America/New_York","-270,0":"America/Caracas","-240,1":"America/Halifax","-240,0":"America/Santo_Domingo","-240,1,s":"America/Santiago","-210,1":"America/St_Johns","-180,1":"America/Godthab","-180,0":"America/Argentina/Buenos_Aires","-180,1,s":"America/Montevideo","-120,0":"America/Noronha","-60,1":"Atlantic/Azores","-60,0":"Atlantic/Cape_Verde","0,0":"UTC","0,1":"Europe/London","60,1":"Europe/Berlin","60,0":"Africa/Lagos","60,1,s":"Africa/Windhoek","120,1":"Asia/Beirut","120,0":"Africa/Johannesburg","180,0":"Asia/Baghdad","180,1":"Europe/Moscow","210,1":"Asia/Tehran","240,0":"Asia/Dubai","240,1":"Asia/Baku","270,0":"Asia/Kabul","300,1":"Asia/Yekaterinburg","300,0":"Asia/Karachi","330,0":"Asia/Kolkata","345,0":"Asia/Kathmandu","360,0":"Asia/Dhaka","360,1":"Asia/Omsk","390,0":"Asia/Rangoon","420,1":"Asia/Krasnoyarsk","420,0":"Asia/Jakarta","480,0":"Asia/Shanghai","480,1":"Asia/Irkutsk","525,0":"Australia/Perth","540,1":"Asia/Yakutsk","540,0":"Asia/Tokyo","570,0":"Australia/Darwin","570,1,s":"Australia/Adelaide","600,0":"Australia/Brisbane","600,1":"Asia/Vladivostok","600,1,s":"Australia/Sydney","630,1,s":"Australia/Lord_Howe","660,1":"Asia/Kamchatka","660,0":"Pacific/Noumea","690,0":"Pacific/Norfolk","720,1,s":"Pacific/Auckland","720,0":"Pacific/Tarawa","765,1,s":"Pacific/Chatham","780,0":"Pacific/Tongatapu","780,1,s":"Pacific/Apia","840,0":"Pacific/Kiritimati"};
+    var origParse = Date.parse, numericKeys = [ 1, 4, 5, 6, 7, 10, 11 ];
+    Date.parse = function (date) {
+        var timestamp, struct, minutesOffset = 0;
+
+        // ES5 §15.9.4.2 states that the string should attempt to be parsed as a Date Time String Format string
+        // before falling back to any implementation-specific date parsing, so that’s what we do, even if native
+        // implementations could be faster
+        //              1 YYYY                2 MM       3 DD           4 HH    5 mm       6 ss        7 msec        8 Z 9 ±    10 tzHH    11 tzmm
+        if ((struct = /^(\d{4}|[+\-]\d{6})(?:-(\d{2})(?:-(\d{2}))?)?(?:T(\d{2}):(\d{2})(?::(\d{2})(?:\.(\d{3}))?)?(?:(Z)|([+\-])(\d{2})(?::(\d{2}))?)?)?$/.exec(date))) {
+            // avoid NaN timestamps caused by “undefined” values being passed to Date.UTC
+            for (var i = 0, k; (k = numericKeys[i]); ++i) {
+                struct[k] = +struct[k] || 0;
+            }
+
+            // allow undefined days and months
+            struct[2] = (+struct[2] || 1) - 1;
+            struct[3] = +struct[3] || 1;
+
+            if (struct[8] !== 'Z' && struct[9] !== undefined) {
+                minutesOffset = struct[10] * 60 + struct[11];
+
+                if (struct[9] === '+') {
+                    minutesOffset = 0 - minutesOffset;
+                }
+            }
+
+            timestamp = Date.UTC(struct[1], struct[2], struct[3], struct[4], struct[5] + minutesOffset, struct[6], struct[7]);
+        }
+        else {
+            timestamp = origParse ? origParse(date) : NaN;
+        }
+
+        return timestamp;
+    };
+
+
   /**
    * With all that frameworky stuff out of the way, let's move on to the real code
    */
@@ -169,7 +207,7 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
       });
       this.fillTZ(zones);
 
-      this.update();
+      this.setup();
       this.set();
 
       this.showMode();
@@ -251,10 +289,10 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
       return hours + minutes;
     },
 
-    // this updates the text box with the value of this._date
+    // this sets the text box value with the value of this._date
     set: function() {
-      var formatted = '';
-      if (!this._unset) formatted = this._date.toISOString().replace(/\.?\d*Z$/, 'Z');
+	console.log(this._date);
+	var formatted = !this._unset ? this._date.toISOString().replace(/\.?\d*Z$/, 'Z') : '';
       if (!this.isInput) {
         if (this.component){
           var input = this.$element.find('input');
@@ -268,14 +306,14 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
     // this sets the value of this._date to the supplied newDate,
     // and resets the view (this.fillDate(), this.fillTime()) after
     // calling this.set()
-    setValue: function(newDate) {
+    propagate: function(newDate) {
       if (!newDate) {
         this._unset = true;
       } else {
         this._unset = false;
       }
       if (typeof newDate === 'string') {
-	console.log('setting date from string');
+	  console.log('setting date from string: ' + newDate);
         this._date = this.parseDate(newDate);
       } else if(newDate) {
 	console.log('setting date from object');
@@ -292,8 +330,8 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
     },
 
     setDate: function(date) {
-      if (!date) this.setValue(null);
-      else this.setValue(date.valueOf());
+      if (!date) this.propagate(null);
+      else this.propagate(date.valueOf());
     },
 
     place: function(){
@@ -327,8 +365,8 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
     // and resets this._date accordingly.
     // the view is the reset (via this.fillDate(),
     // this.fillTime())
-    update: function(){
-      console.log('updating');
+    setup: function(){
+      console.log('setting up');
       var dateStr;
       if (this.isInput) {
         dateStr = this.$element.val();
@@ -336,7 +374,7 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
         dateStr = this.$element.find('input').val();
       }
       if (dateStr) {
-	console.log('(update) setting date from string');
+	console.log('(update) setting date from string: ' + dateStr);
         this._date = this.parseDate(dateStr);
 	this.set();
       }
@@ -345,6 +383,7 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
     },
 
     parseDate: function(str) {
+	console.log([str, Date.parse(str)]);
       return Date.parse(str);
     },
 
@@ -535,7 +574,6 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
       var table = timeComponents.closest('table');
       var hour = this._date.getHours();
       console.log('hour: ' + hour + ' (' + this._date + ')');
-      var period = 'AM';
 
       hour = padLeft(hour.toString(), 2, '0');
       var minute = padLeft(this._date.getMinutes().toString(), 2, '0');
@@ -636,13 +674,6 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
 
       decrementSeconds: function(e) {
         this._date.addSeconds(-1);
-      },
-
-      togglePeriod: function(e) {
-        var hour = this._date.getHours();
-        if (hour >= 12) hour -= 12;
-        else hour += 12;
-        this._date.setHours(hour);
       },
 
       showPicker: function() {
@@ -811,17 +842,17 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
       var input = $(e.target);
       var val = input.val();
       if (this._formatPattern.test(val)) {
-        this.update();
-        this.setValue(this._date.getTime());
+        this.setup();
+        this.propagate(this._date.getTime());
         this.notifyChange();
         this.set();
       } else if (val && val.trim()) {
-        this.setValue(this._date.getTime());
+        this.propagate(this._date.getTime());
         if (this._date) this.set();
         else input.val('');
       } else {
         if (this._date) {
-          this.setValue(null);
+          this.propagate(null);
           // unset the date when the input is
           // erased
           this.notifyChange();
