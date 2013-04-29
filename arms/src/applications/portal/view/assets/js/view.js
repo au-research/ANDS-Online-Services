@@ -240,7 +240,6 @@ function updateLinksDisplay(container, title, suggestor, start, rows)
 
     // Fire off the request
     $.get(base_url + url_suffix, function(data){   
-        log(data);
 
         // Cleanup data 
         for (var link in data.links)

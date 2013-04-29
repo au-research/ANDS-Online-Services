@@ -24,7 +24,7 @@
 	if($currentPage!=1){
 		$html.='<a href="javascript:;" class="goto" page="'.$prevPage.'" relation_type="'.$relation_type.'" ro_slug="'.$slug.'" ro_id="'.$id.'">Prev</a>';
 		$html.='<a href="javascript:;" class="goto" page="'.$nextPage.'" relation_type="'.$relation_type.'" ro_slug="'.$slug.'" ro_id="'.$id.'">Next</a>';
-	}else if($currentPage==$totalPage){
+	}else if($currentPage==$totalPage && $currentPage > 1){
 		$html.='<a href="javascript:;" class="goto" page="'.$prevPage.'" relation_type="'.$relation_type.'" ro_slug="'.$slug.'" ro_id="'.$id.'">Prev</a>';
 	}else{
 		$html.='<a href="javascript:;" class="goto" page="'.$nextPage.'" relation_type="'.$relation_type.'" ro_slug="'.$slug.'" ro_id="'.$id.'">Next</a>';
