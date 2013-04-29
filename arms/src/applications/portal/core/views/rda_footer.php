@@ -63,8 +63,8 @@
 				<li><a href="<?=base_url('search/#!/q=/tab=activity');?>">All Activities</a></li>
 				<li><a href="<?=base_url('search/#!/q=/tab=service');?>">All Services</a></li>				
 				<li><a href="<?=base_url('topic/');?>">All Topics</a></li>
-				<li><a href="<?=registry_url('');?>" target="_blank">ANDS Online Services</a></li>
-				<li id="registryLink"><a href="<?=registry_url('');?>" target="_blank">Registry View</a></li>												
+				<li id="registryViewLink"><a href="<?=registry_url('');?>" target="_blank">(Registry View)</a></li>	
+				<li id="registryLink"><a href="<?=registry_url('');?>" target="_blank">ANDS Online Services</a></li>											
 			</ul>
 			<div class="clear"></div>
 		</div><!-- inner -->

@@ -1184,6 +1184,10 @@ a.footer_logo {
 
 #registryLink{
 	float: right;
+}
+
+#registryViewLink{
+	float: right;
 	font-style: italic;
 	display:none;
 }
