@@ -314,14 +314,14 @@ class Data_source extends MX_Controller {
 		$filters['args']['data_source_id'] = $filters['ds_id'];
 		if(!$getCount){
 			//$ros = $this->ro->getByDataSourceID($filters['ds_id'], $filters['limit'], $filters['offset'], $filters['args'], false);
-			$ros = $this->ro->filter_by($filters['args'], $filters['limit'], $filters['offset'], false);
+			$ros = $this->ro->filter_by($filters['args'], $filters['limit'], $filters['offset'], true);
 		}else{
 			//return sizeof($ros = $this->ro->getByDataSourceID($filters['ds_id'], 0, 0, $filters['args'], false));
 			return sizeof($ros = $this->ro->filter_by($filters['args'], 0, 0, false));
 		}
 		if($ros){
 			foreach($ros as $r){
-				$registry_object = $this->ro->getByID($r['registry_object_id']);
+				$registry_object = $r; //$this->ro->getByID($r['registry_object_id']);
 				
 				$item = array(
 						'id'=>$registry_object->id, 

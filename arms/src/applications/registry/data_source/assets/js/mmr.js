@@ -219,7 +219,7 @@ function init(filters){
             bindSortables();
             bindShowMore();
             initLayout();
-            $('.stick').sticky();
+           // $('.stick').sticky();
             window.setTimeout(function(){
                 $('#status_message').removeClass('alert-error').addClass('alert-info');
                 $('#status_message').hide();

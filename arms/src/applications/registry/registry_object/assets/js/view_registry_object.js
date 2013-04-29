@@ -142,7 +142,7 @@ function processRelatedObjects()
                     var linkTitle = '<a href="' + base_url + 'registry_object/view/'+id+'">'+title+'</a>'; 
                     title = linkTitle;
                 }
-                if(origin == 'REVERSE_EXT'||origin == 'REVERSE_INT')
+                if(origin == 'REVERSE_EXT'|| origin == 'REVERSE_INT')
                 {
                     revStr = "<em> (Automatically generated reverse link) </em>"
                 }
