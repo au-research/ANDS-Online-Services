@@ -869,7 +869,8 @@ public function getContributorGroupsEdit()
 	public function cancelHarvestRequest(){
 		header('Cache-Control: no-cache, must-revalidate');
 		header('Content-type: application/json');
-		// date_default_timezone_set('Australia/Canberra');//???
+		set_time_limit(3);
+		ignore_user_abort(FALSE);
 
 		$this->load->model('data_sources', 'ds');
 		$jsonData = array();
@@ -887,8 +888,9 @@ public function getContributorGroupsEdit()
 		$jsonData['data_source_id'] = $id;
 		$jsonData['harvest_id'] = $harvest_id;
 		if($dataSource)
+		{
 			$jsonData['log'] = $dataSource->cancelHarvestRequest($harvest_id, true);
-		
+		}
 
 		echo json_encode($jsonData);
 	}

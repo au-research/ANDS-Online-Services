@@ -282,7 +282,10 @@ class Importer {
 						{
 							$ro->original_status = $this->status;
 						}
-						$ro->status = $this->status;
+						
+						// Records which have already progressed through the QA workflow will be reharvested back to existing status
+						// i.e. if the record already exists, leave it's status unchanged
+						//$ro->status = $this->status;
 
 						// Trigger a save on the new registryObject (to make handleStatusChange get called here)
 						$ro->save(); // this will cause the $ro pointer to be updated to the "active" version of the record

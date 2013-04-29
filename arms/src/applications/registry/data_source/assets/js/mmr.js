@@ -310,6 +310,17 @@ function initLayout(){
         e.preventDefault();
         e.stopPropagation();
         var search_term = $('input', this).val();
+        if (search_term != '' && filters['search']!=search_term)
+        {
+            $('button', this).html('<i class="icon icon-remove"></i> Search');
+        }
+        else
+        {
+            $('button', this).html('Search');
+            $('input', this).val('');
+            search_term = '';
+        }
+
         filters['search']=search_term;
         init(filters);
     });
