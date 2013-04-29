@@ -1181,3 +1181,9 @@ a.footer_logo {
 .foot_nav ul li a:hover {
 	color: #fff;
 }
+
+#registryLink{
+	float: right;
+	font-style: italic;
+	display:none;
+}

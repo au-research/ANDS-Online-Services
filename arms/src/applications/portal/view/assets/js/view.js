@@ -226,10 +226,11 @@ $('.show_accordion').live('click', function(e){
 
 function setRegistryLink()
 {
-    var registryLink = $('#registryLink').attr('href');
+    var registryLink = $('#registryLink').find('a').attr('href');
     var regObjId = getRegistryObjectID();
     var newRef = registryLink + 'registry_object/view/' + regObjId;
-    $('#registryLink').attr('href', newRef);
+    $('#registryLink').find('a').attr('href', newRef);
+    $('#registryLink').show();
 }
 
 /* Updates the contents of an accordion window */

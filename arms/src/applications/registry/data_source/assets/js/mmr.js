@@ -779,7 +779,7 @@ function update(ids, attributes){
         data = {affected_ids:ids, attributes:attributes, data_source_id:$('#data_source_id').val()};
         total = selected_ids.length
     }
-
+    $("html, body").animate({ scrollTop: 0 }, "slow");
     var text = total+' records updating...<img src="'+base_url+'assets/img/ajax-loader.gif" alt="Loading..Please wait.."/>';
     $('#status_message').html(text);
     $('#status_message').show();
