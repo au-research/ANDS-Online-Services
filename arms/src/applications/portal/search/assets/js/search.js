@@ -271,6 +271,9 @@ function initSearchPage(){
 		$('#search_box').val('');
 	}
 
+	/* Question Mark For license facet */
+	$('h3', '.facet_license_class').append(' <a target="_blank" href="http://www.ands.edu.au/guides/cpguide/cpgrights.html"> <img src="'+base_url+'assets/core/images/question_mark.png" width="14px"></a>');
+
 
 	$('#search_map_toggle').unbind('click');
 	$('#search_map_toggle').click(function(e){
