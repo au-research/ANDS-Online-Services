@@ -99,18 +99,18 @@ $(function() {
                 break;
             case 'delete':
                 if($(this).attr('ro_id')){
-                    if(confirm('Are you sure you want to delete this record?')){
+                    if(confirm('Are you sure you want to delete this record?' + "\n" + "NOTE: Non-PUBLISHED records cannot be recovered once deleted.")){
                         deleting = [$(this).attr('ro_id')];
                         delete_ro(deleting, false);
                     }
                 }else{
                     if(select_all){
                         var num = parseInt($('#'+status+' .count').html());
-                        if(confirm('Are you sure you want to delete '+num+' records?')){
+                        if(confirm('Are you sure you want to delete '+num+' records?' + "\nNOTE: Non-PUBLISHED records cannot be recovered once deleted.")){
                             delete_ro(false, select_all, data_source_id);
                         }
                     }else{
-                        if(confirm('Are you sure you want to delete '+selected_ids.length+' records?')){
+                        if(confirm('Are you sure you want to delete '+selected_ids.length+' records?' + "\nNOTE: Non-PUBLISHED records cannot be recovered once deleted.")){
                             delete_ro(selected_ids, false);
                         }
                     }

@@ -16,11 +16,16 @@
 			<li class=""><?php echo anchor('data_source/manage#!/settings/'.$ds->id,'Settings');?></li>
 		</ul>
 	</div>
+
 	<div id="breadcrumb">
+		<div class="pull-right">
+			<span class="label"><i class="icon-question-sign icon-white"></i><a target="_blank" style="color:white;" href="http://ands.org.au/guides/cpguide/cpgdsaaccount.html ">New to this screen? Take a tour!</a></span>
+		</div>
 		<?php echo anchor('/', '<i class="icon-home"></i> Home', array('class'=>'tip-bottom', 'title'=>'Go to Home'))?>
 		<?php echo anchor('data_source/manage/', 'Manage My Datasources');?>
 		<?php echo anchor('data_source/manage#!/view/'.$ds->id, $ds->title);?>
 		<a href="#" class="current">Manage Records</a>
+
 	</div>
 	
 	<div class="container-fluid">
