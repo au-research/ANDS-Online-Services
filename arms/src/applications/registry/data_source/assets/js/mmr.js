@@ -704,21 +704,30 @@ function bindSortables(){
                 click_ro($(this).closest('li'),'select');
             }
             var context_status = $(this).attr('status');
-            $(this).qtip({
-                content: {
-                    text: 'Loading...',
-                    ajax:{
-                        url: base_url+'data_source/get_mmr_menu',
-                        type: 'POST',
-                        data: {data_source_id:ds_id,status:context_status,affected_ids:selected_ids,selecting_status:selecting_status},
-                        dataType: 'html'
-                    }
-                },
-                position: {viewport: $(window), my:'left center', at:'right center'},
-                show:{ready:true,effect:false,event:'click'},
-                hide:{event:'unfocus'},
-                style: {classes: 'ui-tooltip-shadow ui-tooltip-bootstrap'}
-            });
+
+            console.log(selected_ids);
+            if (selected_ids.length == 0)
+            {
+
+            }
+            else
+            {
+                $(this).qtip({
+                    content: {
+                        text: 'Loading...',
+                        ajax:{
+                            url: base_url+'data_source/get_mmr_menu',
+                            type: 'POST',
+                            data: {data_source_id:ds_id,status:context_status,affected_ids:selected_ids,selecting_status:selecting_status},
+                            dataType: 'html'
+                        }
+                    },
+                    position: {viewport: $(window), my:'left center', at:'right center'},
+                    show:{ready:true,effect:false,event:'click'},
+                    hide:{event:'unfocus'},
+                    style: {classes: 'ui-tooltip-shadow ui-tooltip-bootstrap'}
+                });
+            }
         });
 
         $(target).parents('.status_field').droppable({

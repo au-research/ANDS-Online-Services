@@ -17,6 +17,7 @@ class Importer {
 	private $partialCommitOnly;
 	private $forcePublish; // used when changing from DRAFT to PUBLISHED (ignore the QA flags, etc)
 	private $forceDraft; 
+	private $maintainStatus;
 
 	private $status; // status of the currently ingested record
 	public $isImporting = false; // flag stating whether the importer is running
@@ -277,19 +278,22 @@ class Importer {
 						// The registryObject exists, just add a new revision to it?
 						$ro = $this->CI->ro->getByID($revision_record_id);
 
-						// GEt rid of status change recursion on DRAFT->PUBLISHED
-						if($this->statusAlreadyChanged)
-						{
-							$ro->original_status = $this->status;
-						}
-						
-						// Records which have already progressed through the QA workflow will be reharvested back to existing status
-						// i.e. if the record already exists, leave it's status unchanged
-						//$ro->status = $this->status;
+						if (!$this->maintainStatus)
+						{	
+							// GEt rid of status change recursion on DRAFT->PUBLISHED
+							if($this->statusAlreadyChanged)
+							{
+								$ro->original_status = $this->status;
+							}
+							
+							// Records which have already progressed through the QA workflow will be reharvested back to existing status
+							// i.e. if the record already exists, leave it's status unchanged
+							$ro->status = $this->status;
 
-						// Trigger a save on the new registryObject (to make handleStatusChange get called here)
-						$ro->save(); // this will cause the $ro pointer to be updated to the "active" version of the record
-						
+							// Trigger a save on the new registryObject (to make handleStatusChange get called here)
+							$ro->save(); // this will cause the $ro pointer to be updated to the "active" version of the record
+						}
+
 						$ro->harvest_id = $this->harvestID;
 						$ro->record_owner = $record_owner;
 
@@ -737,6 +741,11 @@ class Importer {
 		$this->forcePublish = TRUE;
 	}
 
+	public function maintainStatus()
+	{
+		$this->maintainStatus = TRUE;
+	}
+
 	public function forceDraft()
 	{
 		$this->forceDraft = TRUE;
@@ -896,7 +905,7 @@ class Importer {
 		$this->ingest_new_revision = 0;
 		$this->ingest_new_record = 0;
 		$this->reindexed_records = 0;
-
+		$this->maintainStatus = false;
 		$this->error_log = array();
 		$this->message_log = array();
 

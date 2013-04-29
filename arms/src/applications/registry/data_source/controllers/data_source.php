@@ -1270,7 +1270,7 @@ public function getContributorGroupsEdit()
 
 
 			$this->importer->setXML($xml);
-
+			$this->importer->maintainStatus(); // records which already exist are harvested into their same status
 			if ($data_source->provider_type != RIFCS_SCHEME)
 			{
 				$this->importer->setCrosswalk($data_source->provider_type);
@@ -1317,7 +1317,7 @@ public function getContributorGroupsEdit()
 		set_exception_handler('json_exception_handler');
 
 		$this->load->library('importer');
-		
+		$this->importer->maintainStatus(); // records which already exist are harvested into their same status
 
 		$xml = $this->input->post('xml');
 		$slogTitle =  'Import from XML content completed successfully'.NL;	
@@ -1583,6 +1583,7 @@ public function getContributorGroupsEdit()
 			else
 			{	
 				$this->load->library('importer');	
+				$this->importer->maintainStatus(); // records which already exist are harvested into their same status
 				$this->load->model('data_source/data_sources', 'ds');
 
 				$recordCount = preg_match_all("/<metadata>(.*?)<\/metadata>/sm", $data, $matches);
