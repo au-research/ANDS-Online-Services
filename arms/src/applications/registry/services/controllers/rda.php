@@ -153,7 +153,7 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 		}
 
 		// Some filter variables
-		$limit = ($this->input->get('limit') ? $this->input->get('limit') : 6);
+		$limit = ($this->input->get('limit') ? $this->input->get('limit') : 5);
 		$offset = ($this->input->get('offset') ? $this->input->get('offset') : null);
 		$type_filter = ($this->input->get('type_filter') ? $this->input->get('type_filter') : null);
 
