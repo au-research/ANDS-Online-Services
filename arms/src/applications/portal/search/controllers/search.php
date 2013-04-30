@@ -121,8 +121,8 @@ class Search extends MX_Controller {
 						break;
 					case 'map':
 						$this->solr->addQueryCondition('+spatial_coverage_area_sum:[0.00001 TO *]');
-						$this->solr->setOpt('rows', 1000);
-						$this->solr->setOpt('fl', 'id,logo,class,slug,display_title,description,spatial_coverage_area_sum,spatial_coverage_centres,spatial_coverage_extents,spatial_coverage_polygons');
+						$this->solr->setOpt('rows', 1500);
+						$this->solr->setOpt('fl', 'id,spatial_coverage_area_sum,spatial_coverage_centres,spatial_coverage_extents,spatial_coverage_polygons');
 						break;
 				}
 			}

@@ -1,4 +1,6 @@
 <?php $this->load->view('rda_header');?>
+<div id="search_loading" class="hide"><h3>Loading...</h3></div>
+<div id="search_notice" class="hide"></div>
 <div class="container less_padding">
 <div id="searchmap" class="hide"></div>
 <div class="main">
@@ -62,6 +64,17 @@
 </div><!-- sidebar -->				
 <div class="container_clear"></div>
 <!-- <div class="border"></div> -->
+
+<script type="text/x-mustache" id="search-trunc-template">
+{{#trunc}}
+	Displaying top {{returned}} of {{found}} records found: refine search to remove this notice.
+{{/trunc}}
+</script>
+
+<script type="text/x-mustache" id="search-noterms-template">
+Please define a search region using the box tool (<span style="display: inline-block; "><div style="top:3px; width: 16px; height: 16px; overflow: hidden; position: relative; "><img style="position: absolute; left: 0px; top: -16px; -webkit-user-select: none; border: 0px; padding: 0px; margin: 0px; width: auto; height: auto; " src="https://maps.gstatic.com/mapfiles/drawing.png" draggable="false"></div></span>), or specify some search terms.<br/>
+Only records which have coverage of the search region will be displayed.
+</script>
 
 <script type="text/x-mustache" id="search-result-template">
 {{#docs}}

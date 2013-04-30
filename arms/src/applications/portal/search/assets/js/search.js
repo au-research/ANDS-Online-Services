@@ -68,47 +68,90 @@ $(document).ready(function() {
 function executeSearch(searchData, searchUrl){
 	resultPolygons = new Array();
 	clearOverlays();
-	$('.container').css({opacity:0.5});
-	$.ajax({
-		url:searchUrl,
-		type: 'POST',
-		data: {filters:searchData},
-		dataType:'json',
-		success: function(data){
-			$('.container').css({opacity:1});
-			var numFound = data.result.numFound;
-			$('#search-result, .pagination, #facet-result').empty();
-
-
-			//search result
-			var template = $('#search-result-template').html();
-			var output = Mustache.render(template, data.result);
-			$('#search-result').html(output);
-
-			//pagination
-			var template = $('#pagination-template').html();
-			var output = Mustache.render(template, data);
-			$('.pagination').html(output);
-
-			//facet
-			var template = $('#facet-template').html();
-			var output = Mustache.render(template, data);
-			$('#facet-result').html(output);
-
-			//populate spatial result polygons
-			var docs = data.result.docs;
-			$(docs).each(function(){
-				//console.log(this.list_title + " (" + this.score + ")");
-			 	if(this.spatial_coverage_polygons){
-			 		resultPolygons[this.id] = new Array(this.display_title, this.spatial_coverage_polygons[0], this.spatial_coverage_centres[0]);
-			 	}
-			});
-			initSearchPage();
-		},
-		error: function(data){
-			$('#search-result').html('There was a problem connecting to the server. Please try again in a little while...');
+        //if we're in the map view, don't fire a search unless we have
+        //search terms, or spatial coverage data.
+        if (typeof(searchData['map']) !== 'undefined' &&
+	    searchData['map'] === 'show' &&
+	    typeof(searchData['q']) === 'undefined' &&
+	    typeof(searchData['spatial']) === 'undefined') {
+	        var template = $('#search-noterms-template').html();
+	        var output = Mustache.render(template);
+	        if (output.trim().length > 0) {
+	                $('#search_notice').html(output).removeClass('hide').removeClass('warning').addClass('info');
 		}
-	});
+	        else {
+		        $('#search_notice:not(.hide)').empty().addClass('hide');
+		}
+	        initSearchPage();
+	        $('.sidebar.mapmode_sidebar').hide();
+	}
+        else {
+	        $('.container').css({opacity:0.5});
+	        $('#search_loading.hide').removeClass('hide');
+	        //add loading placeholder
+		$.ajax({
+			url:searchUrl,
+			type: 'POST',
+			data: {filters:searchData},
+			dataType:'json',
+			success: function(data){
+				var numFound = data.result.numFound;
+			        var numReturned = data.result.docs.length;
+				$('#search-result, .pagination, #facet-result, #search_notice').empty();
+
+			        //truncated results notice; only display on map view
+			        if (typeof(searchData['map']) !== 'undefined' &&
+				    searchData['map'] === 'show') {
+			          var template = $('#search-trunc-template').html();
+			          var truncdata = {trunc: (numFound !== numReturned),
+						   found: numFound,
+						   returned: numReturned};
+			          var output = Mustache.render(template, truncdata);
+			          if (output.trim().length > 0) {
+			            $('#search_notice').html(output).removeClass('hide').removeClass('info').addClass('warning');
+				  }
+			          else {
+				    $('#search_notice:not(.hide)').empty().addClass('hide');
+				  }
+				}
+			        else {
+				  $('#search_notice:not(.hide)').empty().addClass('hide');
+				}
+
+				//search result
+				var template = $('#search-result-template').html();
+				var output = Mustache.render(template, data.result);
+				$('#search-result').html(output);
+
+				//pagination
+				var template = $('#pagination-template').html();
+				var output = Mustache.render(template, data);
+				$('.pagination').html(output);
+
+				//facet
+				var template = $('#facet-template').html();
+				var output = Mustache.render(template, data);
+				$('#facet-result').html(output);
+
+				//populate spatial result polygons
+				var docs = data.result.docs;
+				$(docs).each(function(){
+				 	if(this.spatial_coverage_polygons){
+				 		resultPolygons[this.id] = new Array(this.display_title, this.spatial_coverage_polygons[0], this.spatial_coverage_centres[0]);
+				 	}
+				});
+				initSearchPage();
+			        $('.sidebar.mapmode_sidebar').show();
+			},
+			error: function(data){
+				$('#search-result').html('There was a problem connecting to the server. Please try again in a little while...');
+			}
+		}).always(function() {
+		            //remove loading placeholder
+			    $('.container').css({opacity:1});
+			    $('#search_loading').addClass('hide');
+		});
+	}
 }
 
 $(document).on('click', '.filter',function(e){
@@ -282,6 +325,7 @@ function initSearchPage(){
 		e.preventDefault();
 		if(searchData['map']){
 			//already map, hide map
+		        $('#search_notice').addClass('hide');
 			$('#searchmap').hide();
 			delete searchData['map'];
 			delete searchData['spatial'];
@@ -525,7 +569,6 @@ function initMap(){
 
 	  	homeControlDiv.index = 1;
 	  	map.controls[google.maps.ControlPosition.TOP_RIGHT].push(homeControlDiv);
-
 		var boxOptions = {
 	        content: "boxText"
 	        ,alignBottom :true
@@ -798,7 +841,9 @@ function clearPolygons()
 }
 
 function resetZoom(){
-	google.maps.event.trigger(map, 'resize');
+        if (typeof(map) !== 'undefined' && map !== null) {
+	  google.maps.event.trigger(map, 'resize');
+	}
 	if(searchBox)
 	{
 		//map.setCenter(searchBox.getBounds().getCenter());
