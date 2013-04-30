@@ -30,7 +30,7 @@ class Registry_object extends MX_Controller {
 			$data['ro_id'] = $ro_id;
 			$data['ds'] = $ds;
 			$data['revision'] = $revision;
-		
+
 			if($revision!=''){
 				$data['viewing_revision'] = true;
 				$data['rif_html'] = $ro->transformForHtml($revision);
@@ -565,6 +565,10 @@ class Registry_object extends MX_Controller {
 						if($a['name']=='gold_status_flag'&&$a['value']=='f')
 						{
 							$ro->update_quality_metadata();						
+						}
+						if($a['name']=='status')
+						{
+							$ro->flag = 'f';
 						}
 						if($ro->save())
 						{
