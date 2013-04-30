@@ -256,7 +256,7 @@ class Importer {
 					$record_owner = "SYSTEM";
 					if($this->CI->user->isLoggedIn())
 					{
-						$record_owner = $this->CI->user->identifier();
+						$record_owner = $this->CI->user->name() . " (" . $this->CI->user->localIdentifier() . ")";
 					}
 
 					if (is_null($revision_record_id))

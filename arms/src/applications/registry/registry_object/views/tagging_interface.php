@@ -10,7 +10,7 @@
 		?>
 	</ul>
 	<?php if(!$ro->tag):?>
-		<div class="notag">This registry object has no tags</div>
+		<div class="notag">This record has no tags</div>
 	<?php endif;?>
 </div>
 <hr/>
