@@ -398,7 +398,9 @@
 					</xsl:if>
 			
 					<xsl:apply-templates select="ro:identifier"/>
-					
+					<xsl:if test="ro:format">
+			         	<xsl:apply-templates select="ro:format"/>
+					</xsl:if>
 					<xsl:if test="ro:notes">
 			         	<xsl:apply-templates select="ro:notes"/>
 					</xsl:if>

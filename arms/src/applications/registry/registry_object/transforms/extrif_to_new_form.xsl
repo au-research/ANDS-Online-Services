@@ -389,7 +389,7 @@
 						<div class="input-append">
 							<input type="text" class="input-large datepicker" name="date_modified"
 								value="{$dateModified}"/>
-							<button class="btn triggerDatePicker" type="button">
+							<button class="btn triggerDatePicker adminDatePicker" type="button">
 								<i class="icon-calendar"/>
 							</button>
 							<p class="help-inline">
@@ -406,7 +406,7 @@
 							<div class="input-append">
 								<input type="text" class="input-large datepicker" name="date_accessioned"
 									value="{ro:collection/@dateAccessioned}"/>
-								<button class="btn triggerDatePicker" type="button">
+								<button class="btn triggerDatePicker adminDatePicker" type="button">
 									<i class="icon-calendar"/>
 								</button>
 								<p class="help-inline">
@@ -708,6 +708,20 @@
 	<xsl:template match="ro:contributor">
 		<div class="aro_box_part" type="contributor">
 		Contributor: <input type="text" class="input-small" name="seq" placeholder="Seq" value="{@seq}"/>
+			<xsl:if test="not(ro:namePart)">
+				<div class="aro_box_part" type="namePart">
+					<div class="control-group">
+						<label class="control-label" for="title">Name Part: </label>
+						<div class="controls">
+							<span class="inputs_group">
+								<input type="text" name="value" class="inner_input" value=""/>
+								<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSNamePartType" name="type" placeholder="Type" value=""/>
+							</span>
+							<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
+						</div>
+					</div>
+				</div>
+			</xsl:if>
 			<xsl:apply-templates select="ro:namePart">
 				<xsl:with-param name="hide" value="''"/>
 			</xsl:apply-templates>
@@ -915,14 +929,12 @@
 						<xsl:otherwise>
 							<div class="control-group">
 								<label class="control-label" for="title">Format: </label>
-								<div class="aro_box clearfix">
 									<div class="controls">
 										<div class="separate_line"/>
-										<button class="btn btn-primary addNew" type="format-identifier" add_new_type="format-identifier">
-											<i class="icon-plus icon-white"></i> Add Format
+										<button class="btn btn-primary addNew" type="format_identifier" add_new_type="format_identifier">
+											<i class="icon-plus icon-white"></i> Add Format Identifier
 										</button>
 									</div>
-								</div>
 							</div>
 						</xsl:otherwise>
 					</xsl:choose>
@@ -1001,13 +1013,13 @@
 				<a href="javascript:;" class="toggle"><i class="icon-minus"/></a>
 				<div class="input-append">
 				<input type="text" class="input-large datepicker" name="dateFrom" placeholder="dateFrom" value="{@dateFrom}"/>
-					<button class="btn triggerDatePicker" type="button">
+					<button class="btn triggerDatePicker locationDatePicker" type="button">
 						<i class="icon-calendar"/>
 					</button>
 				</div>
 				<div class="input-append">
 				<input type="text" class="input-large datepicker" name="dateTo" placeholder="dateTo" value="{@dateTo}"/>
-					<button class="btn triggerDatePicker" type="button">
+					<button class="btn triggerDatePicker locationDatePicker" type="button">
 						<i class="icon-calendar"/>
 					</button>
 				</div>
@@ -1226,29 +1238,28 @@
 
 
 	<xsl:template match="ro:format">
-		<div class="control-group">
-			<label class="control-label" for="title">Format: </label>
-			<xsl:apply-templates select="ro:identifier"/>				
-			<div class="separate_line"/>
+		<label class="control-label" for="title">Format: </label>
 			<div class="controls">
+				<xsl:apply-templates select="ro:identifier"/>				
+				<div class="separate_line"/>
 				<button class="btn btn-primary addNew" type="format_identifier" add_new_type="format_identifier">
-				<i class="icon-plus icon-white"></i> Add Identifier
+				<i class="icon-plus icon-white"></i> Add Format Identifier
 				</button>
 			</div>
-		</div>
 	</xsl:template>
 
 
 	<xsl:template match="ro:format/ro:identifier">
-	<div class="aro_box_part" type="format_identifier">
-		<div class="control-group">	
-			<span class="inputs_group">
-				<input type="text" class="inner_input input-large" name="format_identifier" placeholder="Format Identifier" value="{text()}"/>
-				<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSRelatedInformationIdentifierType" name="format_identifier_type" placeholder="Type" value="{@type}"/>
-			</span>
-			<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>	
+		<div class="aro_box_part">
+			<div class="aro_box_part clearfix" type="format_identifier">
+				<label class="control-label" for="title"></label>						
+				<span class="inputs_group">
+					<input type="text" class="inner_input input-large" name="format_identifier" placeholder="Format Identifier" value="{text()}"/>
+					<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSRelatedInformationIdentifierType" name="format_identifier_type" placeholder="Type" value="{@type}"/>
+				</span>
+				<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>	
+			</div>
 		</div>
-	</div>
 	</xsl:template>
 
 
@@ -1437,14 +1448,12 @@
 				</div>
 				<div class="control-group">
 					<label class="control-label" for="title">Format: </label>
-	
-						<div class="controls">
-							<div class="separate_line"/>
-							<button class="btn btn-primary addNew" type="format_identifier" add_new_type="format_identifier">
-								<i class="icon-plus icon-white"></i> Add Format
-							</button>
-						</div>
-	
+					<div class="controls">
+						<div class="separate_line"/>
+						<button class="btn btn-primary addNew" type="format_identifier" add_new_type="format_identifier">
+							<i class="icon-plus icon-white"></i> Add Format
+						</button>
+					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label" for="title">Notes: </label>
@@ -1456,12 +1465,14 @@
 		</div>
 
 	<div class="aro_box_part template" type="format_identifier">
-		<label class="control-label" for="title">Identifier: </label>						
-		<span class="inputs_group">
-			<input type="text" class="inner_input input-large" name="format_identifier" placeholder="Format Identifier" value=""/>
-			<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSRelatedInformationIdentifierType" name="format_identifier_type" placeholder="Type" value=""/>
-		</span>
-		<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>	
+		<div class="aro_box_part">
+			<label class="control-label" for="title"></label>						
+			<span class="inputs_group">
+				<input type="text" class="inner_input input-large" name="format_identifier" placeholder="Format Identifier" value=""/>
+				<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSRelatedInformationIdentifierType" name="format_identifier_type" placeholder="Type" value=""/>
+			</span>
+			<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>	
+		</div>
 	</div>
 
 		<div class="aro_box template" type="location">
@@ -1470,13 +1481,13 @@
 				<a href="javascript:;" class="toggle"><i class="icon-minus"/></a>
 				<div class="input-append">
 					<input type="text" class="input-large datepicker" name="dateFrom" placeholder="dateFrom" value=""/>
-					<button class="btn triggerDatePicker" type="button">
+					<button class="btn triggerDatePicker locationDatePicker" type="button">
 						<i class="icon-calendar"/>
 					</button>
 				</div>
 				<div class="input-append">
 					<input type="text" class="input-large datepicker" name="dateTo" placeholder="dateTo" value=""/>
-					<button class="btn triggerDatePicker" type="button">
+					<button class="btn triggerDatePicker locationDatePicker" type="button">
 						<i class="icon-calendar"/>
 					</button>
 				</div>

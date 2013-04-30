@@ -188,7 +188,12 @@ function switchMode(aro_mode){
 	}
 }
 
-
+function addNew(template, where)
+{
+	var new_dom = $(template).clone().removeClass('template').insertBefore(where).hide().slideDown();
+	assignFieldID(new_dom);
+	initVocabWidgets(new_dom);
+}							
 
 /*
  * Initialize the edit form, ready to be use upon completion
@@ -352,7 +357,7 @@ function initEditForm(){
 			}
 		}
 		//found it, geez
-		
+		log(where);
 		//add the DOM
 		var new_dom = $(template).clone().removeClass('template').insertBefore(where).hide().slideDown();
 		assignFieldID(new_dom);
@@ -990,6 +995,7 @@ function getRIFCSforTab(tab, hasField){
 		 * The type => the input[name=type] of the box display (heading)
 		 */
 		var this_fragment_type = $(this).attr('type');
+		log("FRAGMENT TYPE " + this_fragment_type);
 		fragment +='<'+this_fragment_type+'';
 		if(hasField) fragment +=' field_id="' +$(this).attr('field_id')+'"';
 		var valid_fragment_meta = ['type', 'dateFrom', 'dateTo', 'style', 'rightsURI'];//valid input type to be put as attributes
@@ -1019,7 +1025,7 @@ function getRIFCSforTab(tab, hasField){
 				 * If there is no type attribute for the part itself, it's an element <name>value</name> thing
 				 */
 				if($(this).attr('type')){//if type is there for this part
-
+					
 					//deal with the type
 					var type = $(this).attr('type');
 					if(type=='relation'){//special case for related object relation
@@ -1036,9 +1042,10 @@ function getRIFCSforTab(tab, hasField){
 						fragment += '<identifier field_id="' +$(this).attr('field_id')+'" type="'+$('input[name=identifier_type]', this).val()+'">'+$('input[name=identifier]', this).val()+'</identifier>';
 						//title and notes are not required, but useful nonetheless
 						// TO DO: find out where did you go wrong :-)
-						if($('input[name=format_identifier]', this).val() != ''){
+						var formatIdentifiers = $('input[name=format_identifier]', this);
+						if(formatIdentifiers.length > 0){
+							
 							fragment += '<format>';
-							var formatIdentifiers = $('input[name=format_identifier]', this);
 							$.each(formatIdentifiers, function(){
 								var ident = $(this);
 								fragment += '<identifier field_id="' +ident.attr('field_id')+'" type="'+ident.next('input[name="format_identifier_type"]').val()+'">'+ident.val()+'</identifier>';
@@ -1065,11 +1072,20 @@ function getRIFCSforTab(tab, hasField){
 						$.each(contributors, function(){
 							fragment += '<'+$(this).attr('type')+' field_id="' +$(this).attr('field_id')+'" seq="'+$('input[name=seq]', this).val()+'">';
 							var contrib_name_part = $('.aro_box_part', this);
+							if(contrib_name_part.length === 0)
+							{
+								var template = $('.template[type=namePart]')[0];
+								var where = $('.separate_line', this);
+								addNew(template, where);
+
+							}
+							var contrib_name_part = $('.aro_box_part', this);
 							$.each(contrib_name_part, function(){
 								fragment += '<'+$(this).attr('type')+' field_id="' +$(this).attr('field_id')+'" type="'+$('input[name=type]', this).val()+'">';
 								fragment += $('input[name=value]', this).val();
 								fragment +='</'+$(this).attr('type')+'>';
 							});
+							
 							fragment +='</'+$(this).attr('type')+'>';
 						});
 					}else if(type=='dates_date'){
