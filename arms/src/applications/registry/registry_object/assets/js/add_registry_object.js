@@ -357,7 +357,7 @@ function initEditForm(){
 			}
 		}
 		//found it, geez
-		log(where);
+		//log(where);
 		//add the DOM
 		var new_dom = $(template).clone().removeClass('template').insertBefore(where).hide().slideDown();
 		assignFieldID(new_dom);
@@ -995,7 +995,7 @@ function getRIFCSforTab(tab, hasField){
 		 * The type => the input[name=type] of the box display (heading)
 		 */
 		var this_fragment_type = $(this).attr('type');
-		log("FRAGMENT TYPE " + this_fragment_type);
+		//log("FRAGMENT TYPE " + this_fragment_type);
 		fragment +='<'+this_fragment_type+'';
 		if(hasField) fragment +=' field_id="' +$(this).attr('field_id')+'"';
 		var valid_fragment_meta = ['type', 'dateFrom', 'dateTo', 'style', 'rightsURI'];//valid input type to be put as attributes
