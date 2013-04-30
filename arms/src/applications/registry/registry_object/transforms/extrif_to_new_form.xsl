@@ -1561,13 +1561,11 @@
 					<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
 				</div>
 				<div class="controls">
-					<input type="text" class="input rifcs-type" vocab="RIFCSPhysicalAddressType" name="type" placeholder="Address Type" value=""/>
-					<div class="aro_box_part" type="addressPart">
+					<input type="text" class="input rifcs-type" vocab="RIFCSPhysicalAddressType" name="type" placeholder="Address Type" value=""/>				
 						<div class="separate_line"/>
 						<button class="btn btn-primary addNew" type="addressPart" add_new_type="addressPart">
 							<i class="icon-plus icon-white"></i> Add Address Part
-						</button>
-					</div>
+						</button>					
 				</div>
 			</div>
 		</div>
@@ -1751,11 +1749,11 @@
 		
 		<div class="aro_box template" type="existenceDates">
 			<div class="aro_box_part" type="startDate">
-				<legend>Start Date</legend>
-				<span class="inputs_group">
-					<input type="text" class="inner_input datepicker"  name="value" placeholder="startDate Value" value=""/>
-					<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSDateFormat" name="dateFormat" placeholder="startDate dateFormat" value=""/>
-				</span>
+					<legend>Start Date</legend>
+					<span class="inputs_group">
+						<input type="text" class="inner_input datepicker"  name="value" placeholder="startDate Value" value=""/>
+						<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSDateFormat" name="dateFormat" placeholder="startDate dateFormat" value=""/>
+					</span>
 			</div>
 			<div class="aro_box_part" type="endDate">
 				<legend>End Date</legend>
