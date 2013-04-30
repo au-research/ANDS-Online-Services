@@ -61,4 +61,8 @@ ALTER TABLE `record_data` ADD COLUMN
 ALTER TABLE `data_source_attributes` CHANGE COLUMN `value` `value` VARCHAR(512) NULL DEFAULT NULL  ;
 ALTER TABLE `registry_object_attributes` CHANGE COLUMN `value` `value` VARCHAR(512) NULL DEFAULT NULL  ;
 
+ALTER TABLE `registry_object_attributes` 
+DROP INDEX `idx_reg_attr_val` 
+, ADD INDEX `idx_reg_attr_val` USING HASH (`attribute` ASC, `value`(255) ASC) ;
+
 

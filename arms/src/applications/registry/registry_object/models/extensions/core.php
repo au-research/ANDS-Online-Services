@@ -209,27 +209,22 @@ class Core_extension extends ExtensionBase
 				if($this->getAttribute('original_status') === 'ASSESSMENT_IN_PROGRESS' || $manuallyAssessed === 'yes')
 				{
 					$this->ro->setAttribute("manually_assessed", 'yes');
-					$saveRo = true;
 				}
 				if($this->getAttribute('gold_status_flag') === 't')
 				{
 					$this->ro->setAttribute("gold_status_flag", 'f');
-					$saveRo = true;
 				}
-				if(strpos($this->ro->getAttribute('harvest_id'),'MANUAL') !== 0)
-				{
-					$harvestId = $this->ro->getAttribute('harvest_id');
-					$this->ro->setAttribute('harvest_id', 'MANUAL-'.$harvestId);
-					$saveRo = true;
-				}
-				if($saveRo)
-					$this->ro->save();
+
+
+				$this->ro->harvest_id = $this->getAttribute('harvest_id');
+				$this->ro->save();
 
 				$this->_CI->ro->deleteRegistryObject($this->id);
 				$this->id = $this->ro->id;
 
 				$this->init();
 			}
+
 
 			// If the importer is already running
 			if ($this->_CI->importer->isImporting)
@@ -250,6 +245,7 @@ class Core_extension extends ExtensionBase
 					$this->ro = $this->_CI->ro->getPublishedByKey($this->getAttribute("key"));
 					$this->ro->setAttribute("manually_assessed", 'yes');
 				}
+
 				if ($error_log = $this->_CI->importer->getErrors())
 				{
 					throw new Exception("Errors occured whilst migrating to PUBLISHED status: " . NL . $error_log);

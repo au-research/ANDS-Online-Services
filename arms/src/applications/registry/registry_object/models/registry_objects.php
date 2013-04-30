@@ -411,14 +411,25 @@ class Registry_objects extends CI_Model {
 					       })),true, $limit, $offset);
 	}
 
-	function getByAttributeSQL($key, $value){
+	function getByAttributeSQL($key, $value, $data_source_id = ""){
 		$CI =& get_instance();
 		
 		if($key=='tag'){
-			$result = $CI->db->select('registry_object_id')->from('registry_object_attributes')->where('attribute', $key)->where('value !=', '')->get();
+			$result = $CI->db->select('ra.registry_object_id')->from('registry_object_attributes ra')->where('attribute', $key)->where('value !=', '');
+			if ($data_source_id)
+			{
+				$result->join('registry_objects r','ra.registry_object_id = r.registry_object_id')->where('data_source_id', $data_source_id);
+			}
+			$result = $result->get();
 		}else{
-			$result = $CI->db->select('registry_object_id')->from('registry_object_attributes')->where('attribute', $key)->where('value', $value)->get();
+			$result = $CI->db->select('ra.registry_object_id')->from('registry_object_attributes ra')->where('attribute', $key)->where('value', $value);
+			if ($data_source_id)
+			{
+				$result->join('registry_objects r','ra.registry_object_id = r.registry_object_id')->where('data_source_id', $data_source_id);
+			}
+			$result = $result->get();
 		}
+
 		$res = array();
 		foreach($result->result() as $r){
 			array_push($res, array('registry_object_id'=>$r->registry_object_id));
@@ -436,7 +447,7 @@ class Registry_objects extends CI_Model {
 				if(in_array($key, $white_list) && array_key_exists('data_source_id', $args)){
 					$ff = $this->getByAttributeDatasource($args['data_source_id'], $key, $value, false, false);
 				}else{
-					$ff = $this->getByAttributeSQL($key, $value);
+					$ff = $this->getByAttributeSQL($key, $value, $args['data_source_id']);
 					$filtering = true;
 				}
 
@@ -540,12 +551,13 @@ class Registry_objects extends CI_Model {
 		$ro->_initAttribute("status",$status, TRUE);
 		$ro->_initAttribute("slug",$slug, TRUE);
 		$ro->_initAttribute("record_owner",$record_owner, TRUE);
+		$ro->create();
 
 		// Some extras
 		$ro->setAttribute("created",time());
 		$ro->setAttribute("harvest_id", $harvestID);
+		$ro->save();
 
-		$ro->create();
 		return $ro;
 	}
 

@@ -1,4 +1,4 @@
-var selected_ids=[],selecting_status,select_all=false,processing=false;
+var selected_ids=[],selecting_status,select_all=false,processing=false,selected_some=true;
 var filters = {};
 $(function() {
 
@@ -11,6 +11,7 @@ $(function() {
         $_GET[decode(arguments[1])] = decode(arguments[2]);
     });
 
+    bindClickables();
     //if filters are determined in the get variable, they will be json string, parse them and use them instead of default
     if($_GET['filters']){
         filters = jQuery.parseJSON($_GET['filters']);
@@ -18,158 +19,8 @@ $(function() {
         var sort = {}; sort['updated'] = 'desc';
         filters['sort'] = sort;
     }
+
     init(filters);
-
-    $(document).on('mouseup', '.sortable li', function(e){
-        if(e.which==3){
-            e.preventDefault();
-            if(!$(this).hasClass('ro_selected')) click_ro(this, 'select');
-            $('.contextmenu',this).click();
-        }
-    }).on('dblclick', '.sortable li', function(e){
-        if ($(this).attr('id'))
-        {
-            window.location = base_url+'registry_object/view/'+$(this).attr('id');
-        }
-    }).on('click','.sortable li',function(e){
-        if(e.metaKey || e.ctrlKey){
-            click_ro(this, 'select');
-        }else if(e.shiftKey){
-            click_ro(this, 'select_until');
-        }else{
-            if(!$(this).hasClass('ro_selected')){
-                click_ro(this, 'select_1');    
-            }else{
-                click_ro(this, 'toggle');
-            }
-        }
-    });
-
-    $(document).on('click', '.op', function(e){
-
-        var action = $(this).attr('action');
-        var status = $(this).attr('status');
-        if(processing) return;
-
-        switch(action){
-            case 'select_all':
-                action_list(status, 'select_all');
-                break;
-            case 'to_draft':
-                var attributes = [{
-                    name:'status',
-                    value:'DRAFT'
-                  }];
-                  update(selected_ids, attributes);
-                break;
-            case 'to_submit':
-                var attributes = [{
-                    name:'status',
-                    value:'SUBMITTED_FOR_ASSESSMENT'
-                  }];
-                  update(selected_ids, attributes);
-                break;
-            case 'to_assess':
-                var attributes = [{
-                    name:'status',
-                    value:'ASSESSMENT_IN_PROGRESS'
-                  }];
-                  update(selected_ids, attributes);
-                break;
-            case 'to_approve':
-                var attributes = [{
-                    name:'status',
-                    value:'APPROVED'
-                  }];
-                  update(selected_ids, attributes);
-                break;
-            case 'to_publish':
-                var attributes = [{
-                    name:'status',
-                    value:'PUBLISHED'
-                  }];
-                  update(selected_ids, attributes);
-                break;
-            case 'to_moreworkrequired':
-                var attributes = [{
-                    name:'status',
-                    value:'MORE_WORK_REQUIRED'
-                  }];
-                  update(selected_ids, attributes);
-                break;
-            case 'delete':
-                if($(this).attr('ro_id')){
-                    if(confirm('Are you sure you want to delete this record?' + "\n" + "NOTE: Non-PUBLISHED records cannot be recovered once deleted.")){
-                        deleting = [$(this).attr('ro_id')];
-                        delete_ro(deleting, false);
-                    }
-                }else{
-                    if(select_all){
-                        var num = parseInt($('#'+status+' .count').html());
-                        if(confirm('Are you sure you want to delete '+num+' records?' + "\nNOTE: Non-PUBLISHED records cannot be recovered once deleted.")){
-                            delete_ro(false, select_all, data_source_id);
-                        }
-                    }else{
-                        if(confirm('Are you sure you want to delete '+selected_ids.length+' records?' + "\nNOTE: Non-PUBLISHED records cannot be recovered once deleted.")){
-                            delete_ro(selected_ids, false);
-                        }
-                    }
-                }
-                break;
-            case 'flag':
-                var attributes = [{
-                    name:'flag',
-                    value:'t'
-                  }];
-                  update(selected_ids, attributes);
-                break;
-            case 'un_flag':
-                var attributes = [{
-                    name:'flag',
-                    value:'f'
-                  }];
-                  update(selected_ids, attributes);
-                break;
-            case 'set_gold_status_flag':
-                var attributes = [{
-                    name:'gold_status_flag',
-                    value:'t'
-                  }];
-                  update(selected_ids, attributes);
-                break;
-            case 'un_set_gold_status_flag':
-                var attributes = [{
-                    name:'gold_status_flag',
-                    value:'f'
-                  }];
-                  update(selected_ids, attributes);
-                break;
-            case 'view':
-                if($(this).attr('ro_id')){
-                    window.location = base_url+'registry_object/view/'+$(this).attr('ro_id');
-                }else window.location = base_url+'registry_object/view/'+selected_ids[0];
-                break;
-            case 'edit':
-                if($(this).attr('ro_id')){
-                    window.location = base_url+'registry_object/edit/'+$(this).attr('ro_id')+'#!/advanced/admin';
-                }else window.location = base_url+'registry_object/edit/'+selected_ids[0]+'#!/advanced/admin';
-                break;
-            case 'advance_status':
-                var status_to = $(this).attr('to');
-                var attributes = [{
-                    name:'status',
-                    value:status_to
-                  }];
-                var updating = [$(this).attr('ro_id')];
-                  update(updating, attributes);
-                break;
-            case 'manage_deleted_records':
-                var data_source_id = $(this).attr('data_source_id');
-                window.location = base_url+'data_source/manage_deleted_records/'+data_source_id;
-                break;
-        }
-
-    });
 
 });
 
@@ -219,7 +70,11 @@ function init(filters){
             bindSortables();
             bindShowMore();
             initLayout();
-           // $('.stick').sticky();
+        
+            // Set the action (drop-down) icon to be select records by default
+            bind_select_all();
+       
+            // $('.stick').sticky();
             window.setTimeout(function(){
                 $('#status_message').removeClass('alert-error').addClass('alert-info');
                 $('#status_message').hide();
@@ -244,11 +99,12 @@ function bindShowMore(){
         var offset = parseInt($(this).attr('offset'));
         var status = $(this).attr('status');
         var button = this;
-        var filter = JSON.stringify(filters, null, 2);
+       // var filter = JSON.stringify(filters, null, 2);
+
         $.ajax({
             url:base_url+'data_source/get_more_mmr_data/', 
             type: 'POST',
-            data: {ds_id:ds_id,offset:offset,filter:filter,status:status},
+            data: {ds_id:ds_id,offset:offset,filters:filters,status:status},
             success: function(data){
                 if(data){
                     new_offset = offset+10;
@@ -257,11 +113,11 @@ function bindShowMore(){
                     var template = $('#mmr_data_more').html();
                     var output = Mustache.render(template, data);
                     $('ul[status='+status+']').append(output);
-
                     if(!data.hasMore) $(button).remove();
                 }
-                bindSortables();
                 initLayout();
+                bindClickables();
+                bindSortables();
             }
         });
     });
@@ -398,16 +254,44 @@ function initLayout(){
         }
     });
 
+    $('.contextmenu').click(function(e){
+            e.preventDefault();
+            e.stopPropagation();
+
+            if($(this).closest('li').length==1) {
+                click_ro($(this).closest('li'),'select');
+            }
+            var context_status = $(this).attr('status');
+            $(this).qtip({
+                content: {
+                    text: 'Loading...',
+                    ajax:{
+                        url: base_url+'data_source/get_mmr_menu',
+                        type: 'POST',
+                        data: {data_source_id:$('#data_source_id').val(),status:context_status,affected_ids:selected_ids,selecting_status:selecting_status},
+                        dataType: 'html'
+                    },
+                    onRender: function() {
+                        $('a', this.elements.content).click(function(){$(this).hide();});
+                    }
+                },
+                position: {viewport: $(window), my:'left center', at:'right center'},
+                show:{ready:true,effect:false,event:'click'},
+                hide:{event:'unfocus'},
+                style: {classes: 'ui-tooltip-shadow ui-tooltip-bootstrap'}
+            });
+        });
+
     $('.selector_menu').qtip({
         content:{
             text: function(){
                 return $('.selecting_menu',this).html();
             },
             onRender: function() {
-                $('a', this.elements.content).click(this.hide);
+                $('a', this.elements.content).click(this.hide());
             }
         },
-        position: {viewport: $(window), my:'left center'},
+        position: {viewport: $(window), my:'left center', at:'right center'},
         show:{ready:false,effect:false,event:'click'},
         hide:{event:'unfocus'},
         style: {classes: 'ui-tooltip-shadow ui-tooltip-bootstrap'}
@@ -426,6 +310,7 @@ function initLayout(){
             }else if($(this).hasClass('select_flagged')){
                 action_list(status, 'select_flagged');
             }
+            $(".selector_menu").qtip("hide");
         }
     });
 
@@ -474,7 +359,7 @@ function initLayout(){
             },
             hide: {
                 fixed:true,
-                delay: 800
+                delay: 1200
             },
             style: {classes: 'ui-tooltip-shadow ui-tooltip-bootstrap'},
             overwrite: false
@@ -537,9 +422,9 @@ function formatTip(tt){
         else if($(this).parent().attr('qld') == 1)
             $(this).text('Quality Level 1 - Required RIF-CS Schema Elements');
         else if($(this).parent().attr('qld') == 2)
-            $(this).html('Quality Level 2 - required Metadata Content Requirements.' );
+            $(this).html('Quality Level 2 - Required Metadata Content Requirements.' );
         else if($(this).parent().attr('qld') == 3)
-             $(this).html('Quality Level 3 - recommended Metadata Content Requirements.' );
+             $(this).html('Quality Level 3 - Recommended Metadata Content Requirements.' );
     });
     //hide all qa
     $('.qa_container', tooltip).each(function(){
@@ -575,11 +460,9 @@ function action_list(status, action){
     selecting_status = status;
     if(action=='select_display'){
         $('.sortable li').removeClass('ro_selected');
-        select_all = false;
         $.each($('li.ro_item', list), function(index, val) {
             $(this).addClass('ro_selected');
         });
-       
     }else if(action=='select_none'){
         selecting_status = '';
         select_all = false;
@@ -593,7 +476,6 @@ function action_list(status, action){
     }
     selected_ids = $.unique(selected_ids);
     update_selected_list(status);
-    $(".qtip").qtip("api").hide();
 }
 
 function update_selected_list(status){
@@ -604,15 +486,23 @@ function update_selected_list(status){
     });
 
     var num = selected_ids.length;
-    if(select_all) num = parseInt($('#'+status+' .count').html());
+    if(select_all)
+    {
+        num = parseInt($('#'+status+' .count').html());
+        num -=  $('.sortable[status='+select_all+'] li:not(.ro_selected)').length;
+    }
+
     var list = $('.ro_box[status='+status+']');
     // var selected = $('div.selected_status', list);
     var selected = $('#status_message');
     if(num>0){
+        bind_get_options_menu();
         var text = num + ' records selected.';
         selected.html(text);
         selected.show();
     }else{
+        select_all = false;
+        bind_select_all();
         selected.hide(50);
     }
 }
@@ -620,14 +510,13 @@ function update_selected_list(status){
 function click_ro(ro_item, action){
     var ro_id = $(ro_item).attr('id');
     var status = $(ro_item).attr('status');
-    
+
     if(selecting_status!=status){
         $('.sortable li').removeClass('ro_selected');
     }
 
     if(action=='toggle'){
         $('#'+ro_id).toggleClass('ro_selected');
-        select_all = false;
     }else if(action=='select'){
         $('#'+ro_id).addClass('ro_selected');
     }else if(action=='select_1'){
@@ -644,6 +533,7 @@ function click_ro(ro_item, action){
         }
         $('#'+ro_id).addClass('ro_selected');
     }
+
     selected_ids = $.unique(selected_ids);
     update_selected_list(status);
 }
@@ -687,6 +577,7 @@ function bindSortables(){
             },
             connectToSortable: target
         });
+
         $('li', this)
         .bind('contextmenu', function(){return false;})
         .bind('mouseover',function(){
@@ -696,38 +587,6 @@ function bindSortables(){
         .bind('mouseout',function(){
             $('.right-menu', this).hide();
             $('.toolbar', this).css({opacity:0.2});
-        });
-        $('.contextmenu').unbind('click').click(function(e){
-            e.preventDefault();
-            e.stopPropagation();
-            if($(this).closest('li').length==1) {
-                click_ro($(this).closest('li'),'select');
-            }
-            var context_status = $(this).attr('status');
-
-            console.log(selected_ids);
-            if (selected_ids.length == 0)
-            {
-
-            }
-            else
-            {
-                $(this).qtip({
-                    content: {
-                        text: 'Loading...',
-                        ajax:{
-                            url: base_url+'data_source/get_mmr_menu',
-                            type: 'POST',
-                            data: {data_source_id:ds_id,status:context_status,affected_ids:selected_ids,selecting_status:selecting_status},
-                            dataType: 'html'
-                        }
-                    },
-                    position: {viewport: $(window), my:'left center', at:'right center'},
-                    show:{ready:true,effect:false,event:'click'},
-                    hide:{event:'unfocus'},
-                    style: {classes: 'ui-tooltip-shadow ui-tooltip-bootstrap'}
-                });
-            }
         });
 
         $(target).parents('.status_field').droppable({
@@ -747,43 +606,218 @@ function bindSortables(){
 }
 
 
+function bind_get_options_menu()
+{
+    if (!selected_some) 
+    {
+        $('.primarycontextmenu').qtip("destroy").click(function(e){
+            e.preventDefault();
+            var context_status = $(this).attr('status');
 
-
-function bindSortables_old(){
-
-    $('.sortable').sortable('destroy');
-    $('.sortable').each(function(){
-        var connect_to = $(this).attr('connect_to');
-        var target = $('.sortable[status='+connect_to+']');
-        // var target = $('.sortable');
-
-        $(this).sortable({
-            connectWith: target,
-            placeholder: "ui-state-highlight",
-            scroll:false,
-            revert:'invalid',
-            delay:100,
-            item:'li.ro_selected',
-            helper: false,
-            receive:function(event, ui){
-              var attributes = [{
-                  name:'status',
-                  value:$(this).attr('status')
-              }];
-              if(selected_ids.length==0) selected_ids.push(ui.item[0].id);
-              $('li', target).animate({
-                    opacity:1,
-                    marginleft:'0'
-                });
-              update(selected_ids, attributes);
-            },
-            sort:function(e, ui){
-                $(ui.item.context).offset({top:e.pageY-10,left:e.pageX-10});
-            }
+            $(this).qtip({
+                content: {
+                    text: 'Loading...',
+                    ajax:{
+                        url: base_url+'data_source/get_mmr_menu',
+                        type: 'POST',
+                        data: {data_source_id:$('#data_source_id').val(),status:context_status,affected_ids:selected_ids,selecting_status:selecting_status},
+                        dataType: 'html'
+                    },
+                    onRender: function() {
+                        $('a', this.elements.content).click(this.hide());
+                    }
+                },
+                position: {viewport: $(window), my:'left center', at:'right center'},
+                show:{ready:true,effect:false,event:'click'},
+                hide:{event:'unfocus'},
+                style: {classes: 'ui-tooltip-shadow ui-tooltip-bootstrap'}
+            });
         });
-    });
-    
+        selected_some=true;
+    }
 }
+
+
+function bind_select_all()
+{
+    if (selected_some)
+    {
+        $('.primarycontextmenu').qtip("destroy").unbind('click').qtip({
+            content:{
+                text: function(){
+                    return $('.selecting_menu',this.parent().parent()).html();
+                },
+                onRender: function() {
+                    $('a', this.elements.content).click(function(){$(this).hide()});
+                }
+            },
+            position: {viewport: $(window), my:'left center'},
+            show:{ready:false,effect:false,event:'click'},
+            hide:{event:'unfocus'},
+            style: {classes: 'ui-tooltip-shadow ui-tooltip-bootstrap'}
+        });
+        selected_some=false;
+    }
+}
+
+function bindClickables()
+{
+    $(document).off('mouseup dblclick click', '.sortable li');
+    $(document).off('click','.op');
+
+    $(document).on('mouseup', '.sortable li', function(e){
+        if(e.which==3){
+            e.preventDefault();
+            $('.contextmenu',this).click();
+        }
+    }).on('dblclick', '.sortable li', function(e){
+        if ($(this).attr('id'))
+        {
+            window.location = base_url+'registry_object/view/'+$(this).attr('id');
+        }
+    }).on('click','.sortable li',function(e){
+        if(e.metaKey || e.ctrlKey){
+            click_ro(this, 'select');
+        }else if(e.shiftKey){
+            click_ro(this, 'select_until');
+        }else{
+            if(!$(this).hasClass('ro_selected')){
+                click_ro(this, 'select_1');
+            }else{
+                click_ro(this, 'toggle');
+            }
+        }
+    });
+
+
+    $(document).on('click', '.op', function(e){
+
+        var action = $(this).attr('action');
+        var status = $(this).attr('status');
+        if(processing) return;
+
+        switch(action){
+            case 'select_all':
+                action_list(status, 'select_all');
+                break;
+            case 'to_draft':
+                var attributes = [{
+                    name:'status',
+                    value:'DRAFT'
+                  }];
+                  update(selected_ids, attributes);
+                break;
+            case 'to_submit':
+                var attributes = [{
+                    name:'status',
+                    value:'SUBMITTED_FOR_ASSESSMENT'
+                  }];
+                  update(selected_ids, attributes);
+                break;
+            case 'to_assess':
+                var attributes = [{
+                    name:'status',
+                    value:'ASSESSMENT_IN_PROGRESS'
+                  }];
+                  update(selected_ids, attributes);
+                break;
+            case 'to_approve':
+                var attributes = [{
+                    name:'status',
+                    value:'APPROVED'
+                  }];
+                  update(selected_ids, attributes);
+                break;
+            case 'to_publish':
+                var attributes = [{
+                    name:'status',
+                    value:'PUBLISHED'
+                  }];
+                  update(selected_ids, attributes);
+                break;
+            case 'to_moreworkrequired':
+                var attributes = [{
+                    name:'status',
+                    value:'MORE_WORK_REQUIRED'
+                  }];
+                  update(selected_ids, attributes);
+                break;
+            case 'delete':
+                if($(this).attr('ro_id')){
+                    if(confirm('Are you sure you want to delete this record?' + "\n" + "NOTE: Non-PUBLISHED records cannot be recovered once deleted.")){
+                        deleting = [$(this).attr('ro_id')];
+                        delete_ro(deleting, false);
+                    }
+                }else{
+                    if(select_all){
+                        var num = parseInt($('#'+status+' .count').html());
+                        num -=  $('.sortable[status='+select_all+'] li:not(.ro_selected)').length;
+                        if(confirm('Are you sure you want to delete '+num+' records?' + "\nNOTE: Non-PUBLISHED records cannot be recovered once deleted.")){
+                            delete_ro(false, select_all, data_source_id);
+                        }
+                    }else{
+                        if(confirm('Are you sure you want to delete '+selected_ids.length+' records?' + "\nNOTE: Non-PUBLISHED records cannot be recovered once deleted.")){
+                            delete_ro(selected_ids, false);
+                        }
+                    }
+                }
+                break;
+            case 'flag':
+                var attributes = [{
+                    name:'flag',
+                    value:'t'
+                  }];
+                  update(selected_ids, attributes);
+                break;
+            case 'un_flag':
+                var attributes = [{
+                    name:'flag',
+                    value:'f'
+                  }];
+                  update(selected_ids, attributes);
+                break;
+            case 'set_gold_status_flag':
+                var attributes = [{
+                    name:'gold_status_flag',
+                    value:'t'
+                  }];
+                  update(selected_ids, attributes);
+                break;
+            case 'un_set_gold_status_flag':
+                var attributes = [{
+                    name:'gold_status_flag',
+                    value:'f'
+                  }];
+                  update(selected_ids, attributes);
+                break;
+            case 'view':
+                if($(this).attr('ro_id')){
+                    window.location = base_url+'registry_object/view/'+$(this).attr('ro_id');
+                }else window.location = base_url+'registry_object/view/'+selected_ids[0];
+                break;
+            case 'edit':
+                if($(this).attr('ro_id')){
+                    window.location = base_url+'registry_object/edit/'+$(this).attr('ro_id')+'#!/advanced/admin';
+                }else window.location = base_url+'registry_object/edit/'+selected_ids[0]+'#!/advanced/admin';
+                break;
+            case 'advance_status':
+                var status_to = $(this).attr('to');
+                var attributes = [{
+                    name:'status',
+                    value:status_to
+                  }];
+                var updating = [$(this).attr('ro_id')];
+                  update(updating, attributes);
+                break;
+            case 'manage_deleted_records':
+                var data_source_id = $(this).attr('data_source_id');
+                window.location = base_url+'data_source/manage_deleted_records/'+data_source_id;
+                break;
+        }
+
+    });
+}
+
 
 
 function update(ids, attributes){
@@ -792,8 +826,17 @@ function update(ids, attributes){
     if(select_all){
         ids = select_all;
         url = base_url+'registry_object/update/all';
-        data = {data_source_id:$('#data_source_id').val(),select_all:select_all, attributes:attributes};
+
+        // specifically exclude deselected records!
+        var excluded_records = []
+        $('.sortable[status='+select_all+'] li:not(.ro_selected)').each(function()
+        {
+            excluded_records.push($(this).attr('id'));
+        });
+
+        data = {data_source_id:$('#data_source_id').val(),filters:filters,select_all:select_all,excluded_records:excluded_records,attributes:attributes};
         total = parseInt($('#'+select_all+' .count').html());
+        total -=  $('.sortable[status='+select_all+'] li:not(.ro_selected)').length;
     }else{
         url = base_url+'registry_object/update/'
         data = {affected_ids:ids, attributes:attributes, data_source_id:$('#data_source_id').val()};
@@ -832,13 +875,20 @@ function update(ids, attributes){
     });
 }
 
+
 function delete_ro(ids, selectAll){
     var data_source_id = $('#data_source_id').val();
-    // $(".qtip").qtip("api").hide();
+    var excluded_records = []
+
+    $('.sortable[status='+select_all+'] li:not(.ro_selected)').each(function()
+    {
+        excluded_records.push($(this).attr('id'));
+    });
+
     $.ajax({
         url:base_url+'registry_object/delete/', 
         type: 'POST',
-        data: {affected_ids:ids, select_all:selectAll, data_source_id:data_source_id},
+        data: {affected_ids:ids, filters:filters, select_all:selectAll, excluded_records: excluded_records, data_source_id:data_source_id},
         success: function(data){
             init(filters);
         }

@@ -149,7 +149,6 @@ class Data_source extends MX_Controller {
 	 * @return [json]   
 	 */
 	public function get_mmr_data($data_source_id){
-
 		//administrative and loading stuffs
 		acl_enforce('REGISTRY_USER');
 		ds_acl_enforce($data_source_id);
@@ -274,7 +273,7 @@ class Data_source extends MX_Controller {
 			$st['items']=$ros['items'];
 			$st['count']=$this->get_ros($filter, true);
 			if($st['count']==0) $st['noResult']=true;
-			$st['hasMore'] = $ros['hasMore'];
+			$st['hasMore'] = ($st['count'] > $limit + $offset);
 			$st['ds_id'] = $data_source_id;
 			
 			$jsonData['statuses'][$s] = $st;
@@ -342,16 +341,45 @@ class Data_source extends MX_Controller {
 					$item['quality_level'] = $registry_object->quality_level;
 				}
 				switch($item['status']){
-					case 'DRAFT': $item['editable'] = true; $item['advance']=true;break;
-					case 'MORE_WORK_REQUIRED': $item['editable'] = true; $item['advance']=true;break;
-					case 'SUBMITTED_FOR_ASSESSMENT': if($this->user->hasFunction('REGISTRY_STAFF')) { $item['advance']=true; } else { $item['noMoreOptions'] = true; } break;
-					case 'ASSESSMENT_IN_PROGRESS': if($this->user->hasFunction('REGISTRY_STAFF')) { $item['advance']=true; } else { $item['noMoreOptions'] = true; } break;
-					case 'APPROVED': $item['editable'] = true; $item['advance']=true;break;
-					case 'PUBLISHED': $item['editable'] = true; break;
+					case 'DRAFT': 
+						$item['editable'] = true; 
+						$item['advance']=true;
+						$item['connectTo']='SUBMITTED_FOR_ASSESSMENT';
+					break;
+					case 'MORE_WORK_REQUIRED': 
+						$item['editable'] = true; 
+						$item['advance']=true;
+					break;
+					case 'SUBMITTED_FOR_ASSESSMENT': 
+						if($this->user->hasFunction('REGISTRY_STAFF')) { 
+							$item['advance']=true; 
+							$item['connectTo']='ASSESSMENT_IN_PROGRESS';
+						} else { 
+							$item['noMoreOptions'] = true; 
+						} 
+					break;
+					case 'ASSESSMENT_IN_PROGRESS': 
+						if($this->user->hasFunction('REGISTRY_STAFF')) { 
+							$item['advance']=true; 
+							$item['connectTo']='ASSESSMENT_IN_PROGRESS';
+						} else { 
+							$item['noMoreOptions'] = true; 
+						} 
+					break;
+					case 'APPROVED': 
+						$item['editable'] = true; 
+						$item['advance']=true;
+						$item['connectTo']='PUBLISHED';
+						break;
+					case 'PUBLISHED': 
+						$item['editable'] = true;
+					break;
 				}
 				array_push($results['items'], $item);
 			}
 		}else return false;
+
+		/* This doesn't work, sizeof($ros) is already filtered... */
 		if(sizeof($ros)<$filters['limit']){
 			$results['hasMore']=false;
 		}else{
@@ -381,7 +409,7 @@ class Data_source extends MX_Controller {
 
 		$menu = array();
 		if(sizeof($affected_ids) == 0){
-			$menu['nothing'] = 'You must first select a Record';
+			$menu['nothing'] = 'You must first select a record';
 		}else if(sizeof($affected_ids) == 1){
 			$menu['view'] = 'View Record';
 		}
@@ -433,7 +461,9 @@ class Data_source extends MX_Controller {
 					}
 					if ($this->user->hasFunction('REGISTRY_SUPERUSER'))
 					{
-						$menu['delete'] = 'Delete Record';
+						$menu['to_draft'] = '* Move to Draft';
+						$menu['edit'] = '* Edit Record';
+						$menu['delete'] = '* Delete Record';
 					}
 				break;
 				case 'ASSESSMENT_IN_PROGRESS':
@@ -447,7 +477,9 @@ class Data_source extends MX_Controller {
 						$menu['to_moreworkrequired'] = 'More Work Required';
 						if ($this->user->hasFunction('REGISTRY_SUPERUSER'))
 						{
-							$menu['delete'] = 'Delete Record';
+							$menu['to_draft'] = '* Move to Draft';
+							$menu['edit'] = '* Edit Record';
+							$menu['delete'] = '* Delete Record';
 						}
 					}
 				break;
@@ -482,7 +514,14 @@ class Data_source extends MX_Controller {
 		$html = '';
 		$html .='<ul class="nav nav-tabs nav-stacked">';
 		foreach($menu as $action=>$display){
-			$html .='<li><a tabindex="-1" href="javascript:;" class="op" action="'.$action.'" status="'.$status.'">'.$display.'</a></li>';
+			if ($action != "nothing")
+			{
+				$html .='<li><a tabindex="-1" href="javascript:;" class="op" action="'.$action.'" status="'.$status.'">'.$display.'</a></li>';
+			}
+			else
+			{
+				$html .= $display . "<br/><small><em>(the block around the record turns blue when selected)</em></small>";
+			}
 		}
 		$html .='</ul>';
 		echo $html;

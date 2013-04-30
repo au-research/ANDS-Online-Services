@@ -44,7 +44,7 @@ date_default_timezone_set('Australia/Melbourne');
 			{
 				// // User has registry access...links can be more specific
 				echo anchor('/', '<i class="icon-home"></i> Home', array('class'=>'tip-bottom', 'title'=>'Go to Home'));
-				echo anchor('data_source/manage#!/view/'.$ds->id, ($ds->title ?: "unnamed datasource"), array('class'=>'', 'title'=>''));
+				echo anchor('data_source/manage_records/'.$ds->id, ($ds->title ?: "unnamed datasource"), array('class'=>'', 'title'=>''));
 			}
 			else
 			{

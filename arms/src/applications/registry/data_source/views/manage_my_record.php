@@ -129,19 +129,19 @@
 			<span class="count">{{count}}</span>
 			<div class="hide selecting_menu">
 				<ul class="nav nav-tabs nav-stacked">
-					<li><a href="javascript:;" status="{{name}}" class="selector_btn select_all">Select All {{count}}</a></li>
-					<li><a href="javascript:;" status="{{name}}" class="selector_btn select_display">Select <span>0</span> Displayed </a></li>
+					<li><a href="javascript:;" status="{{name}}" class="selector_btn select_all">Select All ({{count}})</a></li>
+					<li><a href="javascript:;" status="{{name}}" class="selector_btn select_display">Select Visible (<span>0</span>)</a></li>
 					<li><a href="javascript:;" status="{{name}}" class="selector_btn select_none">Select None</a></li>
 					<li><a href="javascript:;" status="{{name}}" class="selector_btn select_flagged">Select Flagged</a></li>
 				</ul>
 			</div>
 		</span>
 		<h5 class="ellipsis" style="width:60%">{{display_name}}</h5>
-		<div class="buttons"><a href="javascript:;" class="contextmenu" status="{{name}}"><i class="icon-chevron-down no-border"></i></a></div>
+		<div class="buttons"><a href="javascript:;" class="primarycontextmenu" status="{{name}}"><i class="icon-chevron-down no-border"></i></a></div>
 		
 	</div>
 	<div class="widget-content nopadding">
-		<div class='selected_status hide'>asdfasdf</div>
+		<div class='selected_status hide'></div>
 		<ul class="sortable" connect_to="{{connectTo}}" status="{{name}}">
 			{{#items}}
 			<li id="{{id}}" data-toggle="context" data-target="#context-menu-{{status}}" class="status_{{status}} ro_item" status="{{status}}">
@@ -174,7 +174,7 @@
 							<button class="btn btn-small op" action="advance_status" to="{{connectTo}}" tip="Advance Status" ro_id="{{id}}"><i class="icon icon-share-alt"></i></button>
 						{{/advance}}
 						{{^noMoreOptions}}
-							<button class="contextmenu btn btn-small" status="{{name}}" tip="More Action">More</button>
+							<button class="contextmenu btn btn-small" status="{{name}}" tip="More Actions">More</button>
 						{{/noMoreOptions}}
 					</div>
 				</div>
@@ -185,7 +185,7 @@
 			{{/items}}
 			{{#noResult}}<li class="no_records"><small><i>There are no records which match this status</i></small></li>{{/noResult}}
 		</ul>
-		{{#hasMore}}<span class="show_more" offset="{{offset}}" ds_id="{{ds_id}}" status="{{name}}">Show More</span>{{/hasMore}}
+		{{#hasMore}}<span class="show_more" offset="{{offset}}" ds_id="{{ds_id}}" status="{{name}}"><small>Show More</small></span>{{/hasMore}}
 	</div>
 </div>
 </script>
@@ -193,7 +193,7 @@
 
 <script type="text/x-mustache" id="mmr_data_more">
 {{#items}}
-<li id="{{id}}" data-toggle="context" data-target="#context-menu-{{status}}" class="status_{{status}} ro_item {{#has_error}}ro_error{{/has_error}}" status="{{status}}">
+<li id="{{id}}" data-toggle="context" data-target="#context-menu-{{status}}" class="status_{{status}} ro_item" status="{{status}}">
 	<div class="ro_item_header">
 		<div class="ro_title"><a ro_id="{{id}}" class="tip" tip="<b>{{title}}</b> - {{key}}">{{title}}</a></div>
 		<img class="class_icon" tip="{{class}}" src="<?php echo asset_url('img/{{class}}.png', 'base');?>"/>
@@ -207,6 +207,9 @@
 			{{#quality_level}}
 				<span class="tag ql_{{quality_level}} tipQA" ro_id='{{id}}'>{{quality_level}}</span>
 			{{/quality_level}}
+			{{#has_error}}
+				<a href="javascript:;" class="btn btn-mini btn-danger tipError" ro_id="{{id}}"><i class="icon-white icon-exclamation-sign"></i></a>
+			{{/has_error}}
 		</div>
 	</div>
 	<div class="ro_content ">
@@ -219,13 +222,15 @@
 				{{#advance}}
 					<button class="btn btn-small op" action="advance_status" to="{{connectTo}}" tip="Advance Status" ro_id="{{id}}"><i class="icon icon-share-alt"></i></button>
 				{{/advance}}
-				<button class="contextmenu btn btn-small" status="{{name}}" tip="More Action">More</button>
+				{{^noMoreOptions}}
+					<button class="contextmenu btn btn-small" status="{{status}}" tip="More Actions">More</button>
+				{{/noMoreOptions}}
 			</div>
 		</div>
 		<div class="clearfix"></div>
 	</div>
 	<div class='clearfix'></div>
-	</li>
+</li>	
 {{/items}}
 </script>
 <?php $this->load->view('footer');?>

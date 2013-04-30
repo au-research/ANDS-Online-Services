@@ -79,6 +79,7 @@ function executeSearch(searchData, searchUrl){
 			var numFound = data.result.numFound;
 			$('#search-result, .pagination, #facet-result').empty();
 
+
 			//search result
 			var template = $('#search-result-template').html();
 			var output = Mustache.render(template, data.result);
@@ -97,6 +98,7 @@ function executeSearch(searchData, searchUrl){
 			//populate spatial result polygons
 			var docs = data.result.docs;
 			$(docs).each(function(){
+				//console.log(this.list_title + " (" + this.score + ")");
 			 	if(this.spatial_coverage_polygons){
 			 		resultPolygons[this.id] = new Array(this.display_title, this.spatial_coverage_polygons[0], this.spatial_coverage_centres[0]);
 			 	}
@@ -263,8 +265,8 @@ function initSearchPage(){
 	        //we don't need this in map view, and it seems to block completion of the processing
 	        //of the AJAX portal/search/filter POST... (~8s delay)
 	        $('.class_icon').each(function(){
-		    initExplanations($(this).attr('type'));
-		})
+			    initExplanations($(this).attr('type'));
+			})
 	}
 
 	if(typeof searchData['q']=='undefined') {

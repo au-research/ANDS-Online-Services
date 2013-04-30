@@ -35,6 +35,11 @@ class CI_Session {
         $this->_sess_run();
     }
 
+    function all_userdata()
+    {
+        return $_SESSION;
+    }
+
     /**
     * Regenerates session id
     */

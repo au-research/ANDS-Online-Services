@@ -30,7 +30,7 @@ class Registry_object extends MX_Controller {
 			$data['ro_id'] = $ro_id;
 			$data['ds'] = $ds;
 			$data['revision'] = $revision;
-
+		
 			if($revision!=''){
 				$data['viewing_revision'] = true;
 				$data['rif_html'] = $ro->transformForHtml($revision);
@@ -510,15 +510,33 @@ class Registry_object extends MX_Controller {
 		$attributes = $this->input->post('attributes');
 
 		if(!$all){
+
 			$affected_ids = $this->input->post('affected_ids');
 			$attributes = $this->input->post('attributes');
+
 		}else{
+
+			/* SELECT ALL-style update -- must use the filters to determine what's on-screen */
 			$data_source_id = $this->input->post('data_source_id');
 			$select_all = $this->input->post('select_all');
-			$ids = $this->ro->getByAttributeDatasource($data_source_id, 'status', $select_all, true, false);
+			$excluded_records = $this->input->post('excluded_records') ?: array();
+			$filters = $this->input->post('filters');
+
+			$args = array();
+			$args['sort'] = isset($filters['sort']) ? $filters['sort'] : array('updated'=>'desc');
+			$args['search'] = isset($filters['search']) ? $filters['search'] : false;
+			$args['or_filter'] = isset($filters['or_filter']) ? $filters['or_filter'] : false;
+			$args['filter'] = isset($filters['filter']) ? array_merge($filters['filter'], array('status'=>$this->input->post('select_all'))) : array('status'=>$this->input->post('select_all'));
+			$args['data_source_id'] = $data_source_id;
+
+			$registryObjects = $this->ro->filter_by($args, 0, 0, true);
+
 			$affected_ids = array();
-			foreach($ids as $id){
-				array_push($affected_ids, $id['registry_object_id']);
+			foreach($registryObjects as $ro){
+				if (!in_array($ro->registry_object_id, $excluded_records))
+				{
+					array_push($affected_ids, $ro->registry_object_id);
+				}
 			}
 		}
 		$sentMail = false;
@@ -595,13 +613,27 @@ class Registry_object extends MX_Controller {
 
 		$select_all = $this->input->post('select_all');
 		$data_source_id = $this->input->post('data_source_id');
+		$excluded_records = $this->input->post('excluded_records') ?: array();
 		$this->load->model('registry_objects', 'ro');
 		$this->load->model('data_source/data_sources', 'ds');
 
 		if($select_all != "false"){
-			$affected_ros = $this->ro->getByAttributeDatasource($data_source_id, 'status', $select_all, true, true);
+
+			$filters = $this->input->post('filters');
+
+			$args = array();
+			$args['sort'] = isset($filters['sort']) ? $filters['sort'] : array('updated'=>'desc');
+			$args['search'] = isset($filters['search']) ? $filters['search'] : false;
+			$args['or_filter'] = isset($filters['or_filter']) ? $filters['or_filter'] : false;
+			$args['filter'] = isset($filters['filter']) ? array_merge($filters['filter'], array('status'=>$this->input->post('select_all'))) : array('status'=>$this->input->post('select_all'));
+			$args['data_source_id'] = $data_source_id;
+			$affected_ros = $this->ro->filter_by($args, 0, 0, true);
+
 			foreach($affected_ros as $r){
-				$this->ro->deleteRegistryObject($r);
+				if (!in_array($r->registry_object_id, $excluded_records))
+				{
+					$this->ro->deleteRegistryObject($r);
+				}
 			}
 		}else{
 			if ($affected_ids)

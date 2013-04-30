@@ -294,7 +294,6 @@ class Importer {
 							$ro->save(); // this will cause the $ro pointer to be updated to the "active" version of the record
 						}
 
-						$ro->harvest_id = $this->harvestID;
 						$ro->record_owner = $record_owner;
 
 						$this->ingest_new_revision++;
@@ -305,10 +304,7 @@ class Importer {
 					$ro->data_source_key = $this->dataSource->key;
 					$ro->group = (string) $registryObject['group'];
 					$ro->type = (string) $ro_xml['type'];
-					if($this->harvestID)
-					{
-						$ro->setAttribute("harvest_id", $this->harvestID);
-					}
+
 					// Clean up all previous versions (set = FALSE, "prune" extRif)
 					$ro->cleanupPreviousVersions();
 
