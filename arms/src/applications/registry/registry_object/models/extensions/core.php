@@ -205,19 +205,19 @@ class Core_extension extends ExtensionBase
 				// Delete this original draft and change this object to point to the PUBLISHED (seamless changeover)
 				$manuallyAssessed = $this->getAttribute('manually_assessed');
 				$this->ro = $this->_CI->ro->getPublishedByKey($this->getAttribute("key"));
-				$saveRo = false;
+
 				if($this->getAttribute('original_status') === 'ASSESSMENT_IN_PROGRESS' || $manuallyAssessed === 'yes')
 				{
 					$this->ro->setAttribute("manually_assessed", 'yes');
 				}
-				if($this->getAttribute('gold_status_flag') === 't')
+				if($this->ro->getAttribute('gold_status_flag') === 't')
 				{
 					$this->ro->setAttribute("gold_status_flag", 'f');
 				}
 
-
 				$this->ro->harvest_id = $this->getAttribute('harvest_id');
 				$this->ro->save();
+
 
 				$this->_CI->ro->deleteRegistryObject($this->id);
 				$this->id = $this->ro->id;

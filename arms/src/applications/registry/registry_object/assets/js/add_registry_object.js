@@ -483,7 +483,7 @@ function initEditForm(){
 			// });
 
 			//saving
-			//log(xml);
+			log(xml);
 			$.ajax({
 				url:base_url+'registry_object/save/'+ro_id, 
 				type: 'POST',
@@ -995,7 +995,7 @@ function getRIFCSforTab(tab, hasField){
 		 * The type => the input[name=type] of the box display (heading)
 		 */
 		var this_fragment_type = $(this).attr('type');
-		//log("FRAGMENT TYPE " + this_fragment_type);
+		log("FRAGMENT TYPE " + this_fragment_type);
 		fragment +='<'+this_fragment_type+'';
 		if(hasField) fragment +=' field_id="' +$(this).attr('field_id')+'"';
 		var valid_fragment_meta = ['type', 'dateFrom', 'dateTo', 'style', 'rightsURI'];//valid input type to be put as attributes
@@ -1028,6 +1028,7 @@ function getRIFCSforTab(tab, hasField){
 					
 					//deal with the type
 					var type = $(this).attr('type');
+					log("type: " + type);
 					if(type=='relation'){//special case for related object relation
 						fragment += '<'+type+' type="'+$('input[name=type]',this).val()+'">';
 						if($('input[name=description]', this).val()!=''){//if the relation has a description
@@ -1065,6 +1066,10 @@ function getRIFCSforTab(tab, hasField){
 							fragment += $('input[name=value]', this).val();
 							fragment +='</'+$(this).attr('type')+'>';
 						});
+					}else if(type=='startDate' || type=='endDate'){
+							fragment += '<'+$(this).attr('type')+' field_id="' +$(this).attr('field_id')+'" dateFormat="'+$('input[name=dateFormat]', this).val()+'">';
+							fragment += $('input[name=value]', this).val();
+							fragment +='</'+$(this).attr('type')+'>';
 					}else if(type=='rightStatement' || type=='licence' || type=='accessRights' ){
 						 fragment += '<'+$(this).attr('type')+' rightsUri="'+$('input[name=rightsUri]', this).val()+'">'+$('input[name=value]', this).val()+'</'+$(this).attr('type')+'>';	
 					}else if(type=='contributor'){

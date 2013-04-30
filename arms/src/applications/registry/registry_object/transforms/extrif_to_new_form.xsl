@@ -867,7 +867,7 @@
 				<legend>Existence dates</legend>
 				<xsl:apply-templates select="ro:activity/ro:existenceDates | ro:party/ro:existenceDates  | ro:service/ro:existenceDates"/>
 				<div class="separate_line"/>
-				<button class="btn btn-primary addNew" type="existenceDate" add_new_type="existenceDate">
+				<button class="btn btn-primary addNew" type="existenceDates" add_new_type="existenceDates">
 					<i class="icon-plus icon-white"/> Add Existence Date </button>
 				<button class="hide btn export_xml btn-info"> Export XML fragment </button>
 			</fieldset>
@@ -876,21 +876,27 @@
 
 
 	<xsl:template match="ro:activity/ro:existenceDates | ro:party/ro:existenceDates  | ro:service/ro:existenceDates">
-		<div class="aro_box" type="existenceDate">
-			<div class="aro_box_display clearfix">
-				<div class="controls">
-					<input type="text" class="input-small" name="startDate_type" placeholder="startDate Type" value="{startDate/@type}"/>
-					<input type="text" class="input-xlarge" name="startDate_value" placeholder="startDate Value" value="{startDate/text()}"/>
-					<input type="text" class="input-small" name="endDate_type" placeholder="endDate Type" value="{endDate/@type}"/>
-					<input type="text" class="input-xlarge" name="endDate_value" placeholder="endDate Value" value="{endDate/text()}"/>
-					<button class="btn btn-mini btn-danger remove">
-						<i class="icon-remove icon-white"/>
-					</button>
-					<p class="help-inline">
-						<small/>
-					</p>
-				</div>
+		<div class="aro_box" type="existenceDates">
+			<div class="aro_box_part" type="startDate">
+					<legend>Start Date</legend>
+					<span class="inputs_group">
+						<input type="text" class="inner_input datepicker"  name="value" placeholder="startDate Value" value="{ro:startDate/text()}"/>
+						<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSDateFormat" name="dateFormat" placeholder="startDate dateFormat" value="{ro:startDate/@dateFormat}"/>
+					</span>
 			</div>
+			<div class="aro_box_part" type="endDate">
+				<legend>End Date</legend>
+				<span class="inputs_group">
+					<input type="text" class="inner_input datepicker" name="value" placeholder="endDate Value" value="{ro:endDate/text()}"/>
+					<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSDateFormat" name="dateFormat" placeholder="endDate dateFormat" value="{ro:endDate/@dateFormat}"/>
+				</span>
+			</div>
+			<button class="btn btn-mini btn-danger remove">
+				<i class="icon-remove icon-white"/>
+			</button>
+			<p class="help-inline">
+				<small/>
+			</p>
 		</div>
 	</xsl:template>
 
@@ -1743,21 +1749,27 @@
 		</div>
 		
 		
-		<div class="aro_box template" type="existenceDate">
-			<div class="aro_box_display clearfix">
-				<div class="controls">
-					<input type="text" class="input-small" name="startDate_type" placeholder="startDate Type" value=""/>
-					<input type="text" class="input-xlarge" name="startDate_value" placeholder="startDate Value" value=""/>
-					<input type="text" class="input-small" name="endDate_type" placeholder="endDate Type" value=""/>
-					<input type="text" class="input-xlarge" name="endDate_value" placeholder="endDate Value" value=""/>
-					<button class="btn btn-mini btn-danger remove">
-						<i class="icon-remove icon-white"/>
-					</button>
-					<p class="help-inline">
-						<small/>
-					</p>
-				</div>
+		<div class="aro_box template" type="existenceDates">
+			<div class="aro_box_part" type="startDate">
+				<legend>Start Date</legend>
+				<span class="inputs_group">
+					<input type="text" class="inner_input datepicker"  name="value" placeholder="startDate Value" value=""/>
+					<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSDateFormat" name="dateFormat" placeholder="startDate dateFormat" value=""/>
+				</span>
 			</div>
+			<div class="aro_box_part" type="endDate">
+				<legend>End Date</legend>
+				<span class="inputs_group">
+					<input type="text" class="inner_input datepicker" name="value" placeholder="endDate Value" value=""/>
+					<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSDateFormat" name="dateFormat" placeholder="endDate dateFormat" value=""/>
+				</span>
+			</div>
+			<button class="btn btn-mini btn-danger remove">
+				<i class="icon-remove icon-white"/>
+			</button>
+			<p class="help-inline">
+				<small/>
+			</p>
 		</div>
 		
 		<div class="aro_box_part template" type="temporal">

@@ -201,7 +201,7 @@
 					<td>Existence Dates:</td>
 					<td>
 						<table class="subtable">
-							<xsl:apply-templates select="ro:existenceDates"/>
+							<xsl:apply-templates select="ro:existenceDates/ro:startDate | ro:existenceDates/ro:endDate "/>
 						</table>
 					</td>
 				</tr>
