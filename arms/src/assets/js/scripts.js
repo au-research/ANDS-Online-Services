@@ -22,6 +22,13 @@ function checkResponse(data)
 	}
 }
 
+$("#dashboard-datasource-chooser").chosen();
+$('#dashboard-datasource-chooser').live({
+	change: function(e){
+		window.location = 'data_source/manage#!/view/'+$(this).val();
+	}
+});
+
 
 function logErrorOnScreen(error, target){
 	var template = $('#error-template').html();
@@ -195,7 +202,7 @@ $(document).ready(function(){
                 persistent: false
             },
             hide: {
-                event: false,
+                event: 'unfocus click',
                 // Don't hide it on a regular event
                 effect: function(api) {
                     // Do a regular fadeOut, but add some spice!
@@ -246,6 +253,11 @@ $(document).ready(function(){
             if(!i) { pos = api.cache.finalPos; }
         });
     };
+
+    if (typeof(displayGrowl) !== 'undefined' && displayGrowl)
+    {
+    	createGrowl(true, displayGrowl, $('#user-nav'));
+    }
 
     // Setup our timer function
     function timer(event) {

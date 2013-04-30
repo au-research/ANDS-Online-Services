@@ -67,7 +67,7 @@
 
 
     <div id="header">
-      <a href="<?php echo base_url();?>" title="Back to Dashboard" tip="Back to Dashboard" my="center left" at="center right">
+      <a href="<?php echo base_url();?>" title="Back to ANDS Online Services Dashboard" tip="Back to ANDS Online Services Dashboard" my="center left" at="center right">
         <img src="<?php echo base_url();?>/assets/img/ands_logo_white.png" alt="ANDS Logo White"/> 
       </a>
     </div>

@@ -14,32 +14,46 @@
 
 <div class="container" id="main-content">
 	<div class="row">
-		<div class="span12">
+
+		<div class="span7">
 			<div class="box">
 				<div class="box-header clearfix">
-					<h1>ANDS Services Dashboard</h1>	
-
-					<a href="<?php echo portal_url();?>" style="margin-top:5px;" class="btn btn-info pull-right" target="_blank">
-					<i class="icon-globe icon icon-white"></i> Visit Research Data Australia</a>
+					<h1>ANDS Online Services Dashboard</h1>	
 
 				</div>
 				<div class="box-content">
+					<h4>ANDS Online Services News</h4>
+					<p><small><strong>Welcome to ANDS Online Services Release 10!</strong></small></p>
+					<p><small>We are pleased to welcome you to your new ANDS Online Services dashboard. 
+						Release 10 introduces a complete rewrite of the ANDS Registry system, with a focus on performance and improved usability.</small></p>
 
+					<p><small>Most of the software features are unchanged, but you might find them in new areas of the screen. To help you find your 
+						way around, we've created a number of helpful intructions and videos: </small></p>
 
-					<div class="well">
-						<p>You are now logged in as <strong><?=$this->user->name();?></strong><br/>
-						using the authentication provider's identifier of <strong><?=$this->user->localIdentifier();?></strong></p> <p>You can <em>Logout</em> by clicking the user icon in the upper right of your screen.</p>			
-					</div>
+					<p><small>
+					<ul>
+						<li>Day 1 Help - ANDS Registry (<em>PDF</em>)</li>
+						<li>Finding your way - ANDS Registry(<em>video</em>)</li>
+						<li>ANDS R10 Walkthrough (<em>webinar recording</em>)</li>
+						<li><a href="http://ands.org.au/guides/content-providers-guide.html" target="_blank">ANDS Content Providers Guide</a> (<em>web page</em>)</li>
+						<li><a href="http://ands.org.au/resource/ands-faq.html" target="_blank">ANDS Online Services FAQ</a> (<em>web page</em>)</li>
+					</ul>
+					</small></p>
+
+					<p><small>To get started, click on the My Data link at the top of the screen and take a look around! You can always get back to this dashboard by clicking on the ANDS logo (top left).</small></p>
+
+					<p><small>As always, the ANDS Services Support team is here to help! If your question isn't answered by your Client Liaison Officer or the 
+						<a href="http://ands.org.au/resource/ands-faq.html" target="_blank">FAQ</a>, please contact ANDS Services Support at 
+						<a href="mailto:services@ands.org.au" target="_blank">services@ands.org.au</a>.</small></p>
 
 
 				</div>
 			</div>
 		</div>
-	</div>
 
-	<div class="row">
-		<div class="span6 hide">
-			<div class="box">
+		<div class="span5">
+			
+			<div class="box hide">
 				<div class="box-header clearfix">
 					<h1>Affiliations</h1>
 				</div>
@@ -82,15 +96,18 @@
 					<button class="btn" id="confirmAddOrganisation">Add</button>
 				</form>
 			</div>
-		</div>
+	
 
 	<?php
 	if(mod_enabled('registry')){
 	?>
-		<div class="span6">
+
 			<div class="box">
 				<div class="box-header clearfix">
 					<h1>My Data Sources</h1>
+
+					<a href="<?php echo portal_url();?>" style="margin-top:5px;" class="btn btn-info pull-right" target="_blank">
+					<i class="icon-globe icon icon-white"></i> Visit Research Data Australia</a>
 				</div>
 				<div class="box-content">
 						<?php
@@ -101,26 +118,34 @@
 							elseif(sizeof($data_sources)>0){
 								echo '<ul>';
 								$i=0;
-								for(; $i < sizeof($data_sources) && $i < 7; $i++){
+								for($i=0; $i < sizeof($data_sources) && $i < 7; $i++){
 									echo '<li><a href="'.registry_url('data_source/manage#!/view/'.$data_sources[$i]->id).'">'.$data_sources[$i]->title . "</a></li>";
 								}
+								echo '</ul>';
+
 								if ($i < sizeof($data_sources))
 								{
-									echo '<li><a href="'.registry_url('data_source/manage').'">More...</a></li>';
+									echo '<div style="margin-left:20px;">';
+									echo '<select data-placeholder="Choose a Data Source to View" class="chzn-select" id="dashboard-datasource-chooser">';
+									echo '	<option value=""></option>';
+									foreach($data_sources as $ds){
+										echo '<option value="'.$ds->id.'">'.$ds->title.'</option>';
+									}
+									echo '</select>';
+									echo '</div>';
 								}
-								echo '</ul>';
+								
 							}else{
 								echo 'You are not associated with any data sources yet!';
 							}
 						?>
 				</div>
 			</div>
-		</div>
+
 	<?php
 	}
 	?>
 
-		<div class="span6">
 			<div class="box">
 				<div class="box-header clearfix">
 					<h1>My Vocabularies</h1>
@@ -146,7 +171,6 @@
 			</div>
 		</div>
 	</div>
-
 </div>
 
 <div class="modal hide" id="myModal">
@@ -172,6 +196,21 @@ var $buoop = {vs:{i:7,f:3.6,o:10.6,s:4,n:9}}
 	 document.body.appendChild(e); 
 	} 
 </script> 
+
+<?php 
+/* Dirty hack to detect first login and display the growl notification */
+if (isset($_SERVER["HTTP_REFERER"]) && strpos($_SERVER["HTTP_REFERER"], "login") !== FALSE)
+{
+?>
+<script type="text/javascript"> 
+	var displayGrowl = "<p>Welcome <strong><?=$this->user->name();?></strong></p>"+
+						"<p>You are now successfully logged in using your authentication provider's token of: <strong><?=$this->user->localIdentifier();?></strong></p>"+
+						"<p>You can logout at any time by clicking on the user icon at the top right of the screen.</p>";
+
+</script> 
+<?php
+}
+?>
 
 
 <?php $this->load->view('footer');?>

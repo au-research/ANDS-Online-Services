@@ -18,9 +18,13 @@ function mod_enforce($module_name)
 function acl_enforce($function_name, $message = '')
 {
 	$_ci =& get_instance();
-	if (!$_ci->user->hasFunction($function_name))
+	if (!$_ci->user->isLoggedIn())
 	{
-		throw new Exception (($message ?: "You do not have permission to use this function (".$function_name.")"));
+		throw new Exception (($message ?: "Access to this function requires you to be logged in. Perhaps you have been automatically logged out?"));
+	}
+	else if (!$_ci->user->hasFunction($function_name))
+	{
+		throw new Exception (($message ?: "You do not have permission to use this function (".$function_name."). Perhaps you have been logged out?"));
 	}
 }
 
