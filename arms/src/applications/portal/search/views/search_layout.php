@@ -82,11 +82,17 @@ Only records which have coverage of the search region will be displayed.
 		{{#logo}}
 			<img src="{{logo}}" class="logo right"/>
 		{{/logo}}
-		<img src="<?php echo base_url();?>assets/img/{{class}}.png" class="class_icon icontip_{{class}}" type="{{class}}"/>
-		<a href="<?php echo base_url();?>{{slug}}" class="title">{{list_title}}</a>
-		<div class="excerpt">
-			{{description}}
-		</div>
+		{{#class}}
+			<img src="<?php echo base_url();?>assets/img/{{class}}.png" class="class_icon icontip_{{class}}" type="{{class}}"/>
+	        {{/class}}
+		{{#list_title}}
+			<a href="<?php echo base_url();?>{{slug}}" class="title">{{list_title}}</a>
+		{{/list_title}}
+		{{#description}}
+			<div class="excerpt">
+			  {{description}}
+			</div>
+	        {{/description}}
 	</div>
 {{/docs}}
 </script>
