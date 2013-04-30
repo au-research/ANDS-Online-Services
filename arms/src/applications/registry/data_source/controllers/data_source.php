@@ -507,6 +507,7 @@ class Data_source extends MX_Controller {
 					$menu['delete'] = 'Delete Record';
 				break;
 			}
+			$menu['select_none'] = 'Deselect Record(s)';
 		}
 
 

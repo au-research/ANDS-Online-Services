@@ -701,6 +701,9 @@ function bindClickables()
             case 'select_all':
                 action_list(status, 'select_all');
                 break;
+            case 'select_none':
+                action_list(status, 'select_none');
+                break;
             case 'to_draft':
                 var attributes = [{
                     name:'status',
