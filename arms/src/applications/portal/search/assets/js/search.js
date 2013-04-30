@@ -824,7 +824,8 @@ function showPreviewWindowConent(mOverlay)
 			},
 			error: function(data){
 				//$('body').prepend(data.responseText);
-				console.error("ERROR" + data.responseText);
+				//console.error("ERROR" + data.responseText);
+			        log("ERROR" + data.responseText);
 				return null;
 			}
 		});
