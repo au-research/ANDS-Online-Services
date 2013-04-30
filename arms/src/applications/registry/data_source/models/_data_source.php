@@ -744,15 +744,25 @@ class _data_source {
 	{
 		$runErrors = '';
 		$harvesterBaseURI = $this->_CI->config->item('harvester_base_url');
-		
-		$resultMessage = new DOMDocument();
 		$message = "";
-		$result = $resultMessage->load($harvesterBaseURI.$harvestRequest);
-		$errors = error_get_last();
+		$logInfo = array();
+		$logInfo['error'] = '';
 		$logID = 0;
+		$errors = '';
+		try
+		{
+			$dom_xml = file_get_contents($harvesterBaseURI.$harvestRequest);
+			$resultMessage = new DOMDocument();
+			$result = $resultMessage->loadXML($dom_xml);
+		}
+		catch (Exception $e)
+		{
+			$errors = $e->getMessage();
+			$logInfo['error'] = $errors;
+		}
 		if( $errors )
 		{
-			$logID = $this->append_log("Unable to communicate with Harvester: ".$errors['message'],HARVEST_ERROR,'harvester');
+			$logID = $this->append_log("Unable to communicate with Harvester: ".NL.$errors ,HARVEST_ERROR,'harvester');
 		}
 		else
 		{
@@ -767,7 +777,8 @@ class _data_source {
 				$logID = $this->append_log("A new harvest has been scheduled (harvest ID: ".$harvestId.")".NL.$msg, HARVEST_INFO, 'harvester');
 			}
 		}
-		return $logID;
+		$logInfo['logId'] = $logID;
+		return $logInfo;
 	}
 
 
@@ -866,9 +877,12 @@ class _data_source {
 		//$logID = 0;
 		//if($dataSourceURI && $dataSourceURI != 'http://')
 		//{
-		$logID = $this->submitHarvestRequest($harvestRequest, $msg, $harvestRequestId);
+		$logInfo = $this->submitHarvestRequest($harvestRequest, $msg, $harvestRequestId);
+		if($logInfo['error'] != ''){
+			$errors = $this->deleteHarvestRequest($harvestRequestId);
+		}
 		//}
-	    return $logID;
+	    return $logInfo['logId'];
 	}
 	
 	function cancelHarvestRequest($harvestRequestId, $createLog = true)
