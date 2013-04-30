@@ -179,7 +179,8 @@ function initLayout(){
 
         filters['search']=search_term;
         init(filters);
-    });
+    })
+    $('#search_form .search-query').on('focus', function(){ $('button', $(this).parent()).html('Search'); });
 
     //init filters
     $('.sort').find('span').removeClass('icon-chevron-down').removeClass('icon-chevron-up');
