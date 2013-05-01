@@ -669,8 +669,24 @@ function addValidationMessage(tt, type){
 		var tab = name.replace('tab_','');
 		$('#'+tab).prepend('<div class="alert alert-'+type+'">'+message+'</div>');
 	}else{
-		var field = $('*[field_id='+name+']');
-		$(field).append('<div class="alert alert-'+type+'">'+message+'</div>');
+
+		if (typeof(tt.sub_field_id) !== 'undefined')
+		{
+			var field = $('*[name='+tt.sub_field_id+']','*[field_id='+name+']');
+		}
+		else
+		{
+			var field = $('*[field_id='+name+']');
+		}
+		var containerfield = field.parents('div.controls');
+		if (containerfield.length > 0)
+		{
+			$(containerfield).append('<div class="alert alert-'+type+'">'+message+'</div>');
+		}
+		else
+		{
+			$(field).append('<div class="alert alert-'+type+'">'+message+'</div>');
+		}
 		$(field).addClass('error');
 	}
 }

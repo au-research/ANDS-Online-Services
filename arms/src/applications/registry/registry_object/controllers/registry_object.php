@@ -62,7 +62,7 @@ class Registry_object extends MX_Controller {
 
 				if($this->user->hasAffiliation($ds->record_owner))
 				{
-					$data['action_bar'] = $this->generateStatusActionBar($ro);
+					$data['action_bar'] = $this->generateStatusActionBar($ro, $ds);
 				}
 
 			}
@@ -178,7 +178,17 @@ class Registry_object extends MX_Controller {
 		{
 			$matches = preg_split('/(\"\,\")|(\(\")|(\"\))/', $script.")", -1, PREG_SPLIT_NO_EMPTY);
 			if(sizeof($matches) > 2)
-				$response[$matches[0]][] = Array('field_id'=>$matches[1],'message'=>$matches[2]);
+			{
+				$match_response = array('field_id'=>$matches[1],'message'=>$matches[2]);
+				if (isset($matches[3]))
+				{
+					if (strtoupper($matches[3]) != $matches[3])
+					{
+						$match_response['sub_field_id'] = $matches[3];
+					}
+				}
+				$response[$matches[0]][] = $match_response;
+			}
 		}
 		echo json_encode($response);
 	}
@@ -886,17 +896,29 @@ class Registry_object extends MX_Controller {
 
 
 	/* Generate a list of actions which can be performed on the record (based on your role/status) */
-	private function generateStatusActionBar(_registry_object $ro)
+	private function generateStatusActionBar(_registry_object $ro, _data_source $data_source)
 	{
 		$actions = array();
-
+		$qa = $data_source->qa_flag=='t' ? true : false;
+		$manual_publish = ($data_source->manual_publish=='t' || $data_source->manual_publish==DB_TRUE) ? true: false;
 		if ($this->user->hasFunction('REGISTRY_USER'))
 		{
 
 			switch($ro->status){
 
 				case 'DRAFT': 
-					$actions[] = 'SUBMITTED_FOR_ASSESSMENT';
+					if($qa)
+					{
+						$actions[] = 'SUBMITTED_FOR_ASSESSMENT';
+					}
+					elseif ($manual_publish)
+					{
+						$actions[] = 'APPROVED';
+					}
+					else
+					{
+						$actions[] = 'PUBLISHED';
+					}	
 				break;
 
 				case 'MORE_WORK_REQUIRED': 
