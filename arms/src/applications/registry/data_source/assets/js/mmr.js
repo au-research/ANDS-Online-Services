@@ -809,6 +809,10 @@ function bindClickables()
                 break;
             case 'advance_status':
                 var status_to = $(this).attr('to');
+                if (status_to.search(/,/) >= 0)
+                {
+                    status_to.split(/,/).pop();
+                }
                 var attributes = [{
                     name:'status',
                     value:status_to

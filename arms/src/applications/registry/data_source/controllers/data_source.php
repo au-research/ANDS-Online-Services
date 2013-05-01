@@ -349,6 +349,7 @@ class Data_source extends MX_Controller {
 					case 'MORE_WORK_REQUIRED': 
 						$item['editable'] = true; 
 						$item['advance']=true;
+						$item['connectTo']='DRAFT';
 					break;
 					case 'SUBMITTED_FOR_ASSESSMENT': 
 						if($this->user->hasFunction('REGISTRY_STAFF')) { 
@@ -361,7 +362,7 @@ class Data_source extends MX_Controller {
 					case 'ASSESSMENT_IN_PROGRESS': 
 						if($this->user->hasFunction('REGISTRY_STAFF')) { 
 							$item['advance']=true; 
-							$item['connectTo']='ASSESSMENT_IN_PROGRESS';
+							$item['connectTo']='APPROVED';
 						} else { 
 							$item['noMoreOptions'] = true; 
 						} 

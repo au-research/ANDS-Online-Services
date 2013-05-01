@@ -176,8 +176,8 @@ function initDataciteSeeAlso(){
         success:function(data){
             var count = parseInt(data.count);
             if(count>0){
-                datacite_explanation = $('#datacite_explanation').html();
-                datacite_qmark = "<img class='datacite_help' src='"+base_url+"assets/core/images/question_mark.png' width='12px' />";
+                var datacite_explanation = $('#datacite_explanation').html();
+                var datacite_qmark = "<img class='datacite_help' src='"+base_url+"assets/core/images/question_mark.png' width='12px' />";
                 $('#DataCiteSuggestedLinksBox').html('<h4>External Records</h4>' +'<h5><a href="#" class="show_accordion" data-title="Records suggested by DataCite" data-suggestor="'+suggestor+'" data-start="0" data-rows="10"> ' + data.count + " records</a> from DataCite " + datacite_qmark + "</h5>").fadeIn();
                 $('.datacite_help').qtip({
                     content:{text:datacite_explanation},
