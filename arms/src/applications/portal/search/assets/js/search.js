@@ -147,6 +147,10 @@ function executeSearch(searchData, searchUrl){
 
 				//populate spatial result polygons
 				var docs = data.result.docs;
+				//this iteration is what causes the 'slow script' detection warning message
+				//in MSIE v8. On my local machine, this message started to appear around the 500
+				//record mark. 
+				//more information: http://support.microsoft.com/kb/175500
 				$(docs).each(function(){
 				 	if(this.spatial_coverage_polygons){
 				 		resultPolygons[this.id] = new Array(this.display_title, this.spatial_coverage_polygons[0], this.spatial_coverage_centres[0]);
