@@ -152,37 +152,33 @@ function processRelatedObjects()
                      showRelated++;
                      $('.resolvedRelated[key_value="'+key+'"]').html(title );
                 }
-                else if (origin=='CONTRIBUTOR')
-                {
-                     showRelated++;
-                }
-                else(origin!='CONTRIBUTOR')
-                {
-                if(showRelated < maxRelated){
-                    showRelated++;     
-                    $('#rorow').show();
-                    var keyFound = false;
-                    $('.resolvable_key').each(function(){
-                        if($(this).attr('key_value')==key){
-                                keyFound=true;
-                        }
-                    });
-                    if(!keyFound)
+                else 
                     {
-                         var newRow = '<table class="subtable">' +                                      
-                                        '<tr><td><table class="subtable1">'+
-                                        '<tr><td>Title:</td><td class="resolvedRelated" >'+title+'</td></tr>'+
-                                        '<tr><td class="attribute">Key</td>' +
-                                        '<td class="valueAttribute resolvable_key" key_value="'+ key +'">'+key+'</td>' +
-                                        '</tr>' +
-                                        '<tr><td class="attribute">Relation:</td>' +
-                                        '<td class="valueAttribute"><table class="subtable1"><tr><td>type:</td><td>'+
-                                        relationship+revStr+'</td></tr></table></td>' +
-                                        '</tr>' +
-                                        '</table></tr></td></table>';
-                        $('#related_objects_table').last().append(newRow)  
-                    } 
-                 }
+                    if(showRelated < maxRelated){
+                        showRelated++;     
+                        $('#rorow').show();
+                        var keyFound = false;
+                        $('.resolvable_key').each(function(){
+                            if($(this).attr('key_value')==key){
+                                    keyFound=true;
+                            }
+                        });
+                        if(!keyFound)
+                        {
+                             var newRow = '<table class="subtable">' +                                      
+                                            '<tr><td><table class="subtable1">'+
+                                            '<tr><td>Title:</td><td class="resolvedRelated" >'+title+'</td></tr>'+
+                                            '<tr><td class="attribute">Key</td>' +
+                                            '<td class="valueAttribute resolvable_key" key_value="'+ key +'">'+key+'</td>' +
+                                            '</tr>' +
+                                            '<tr><td class="attribute">Relation:</td>' +
+                                            '<td class="valueAttribute"><table class="subtable1"><tr><td>type:</td><td>'+
+                                            relationship+revStr+'</td></tr></table></td>' +
+                                            '</tr>' +
+                                            '</table></tr></td></table>';
+                            $('#related_objects_table').last().append(newRow)  
+                        } 
+                     }
                  }  
  
             });

@@ -843,7 +843,7 @@ class Registry_object extends MX_Controller {
 		$this->load->model('registry_object/registry_objects', 'ro');
 		$ro = $this->ro->getByID($ro_id);
 		if($ro){
-			$connections = $ro->getAllRelatedObjects();
+			$connections = $ro->getAllRelatedObjects(true); // allow drafts ?
 		}
 		$status['count'] = sizeof($connections);
 		echo json_encode(array("status"=>$status,"connections"=>$connections));

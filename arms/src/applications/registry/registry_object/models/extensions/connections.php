@@ -150,7 +150,7 @@ class Connections_Extension extends ExtensionBase
 	}
 
 
-	function getAllRelatedObjects()
+	function getAllRelatedObjects($allow_drafts = false)
 	{
 		$connections = array();
 		$this->_CI->load->model('data_source/data_sources','ds');
@@ -159,22 +159,22 @@ class Connections_Extension extends ExtensionBase
 		$allow_reverse_internal_links = ($ds->allow_reverse_internal_links == "t");
 		$allow_reverse_external_links = ($ds->allow_reverse_external_links == "t");
 
-		$connections = array_merge($connections, $this->_getExplicitLinks());
+		$connections = array_merge($connections, $this->_getExplicitLinks($allow_drafts));
 
 		/* Step 2 - Internal reverse links */
 		if ($allow_reverse_internal_links)
 		{
-			$connections = array_merge($connections, $this->_getInternalReverseLinks());
+			$connections = array_merge($connections, $this->_getInternalReverseLinks($allow_drafts));
 		}
 
 		/* Step 3 - External reverse links */
 		if ($allow_reverse_external_links)
 		{
-			$connections = array_merge($connections, $this->_getExternalReverseLinks());
+			$connections = array_merge($connections, $this->_getExternalReverseLinks($allow_drafts));
 		}
 
 		/* Step 4 - Contributor */
-		$connections = array_merge($connections, $this->_getContributorLinks());
+		$connections = array_merge($connections, $this->_getContributorLinks($allow_drafts));
 
 		return $connections;
 	}
@@ -196,15 +196,16 @@ class Connections_Extension extends ExtensionBase
 		}
 	}
 
-	function _getExplicitLinks()
+	function _getExplicitLinks($allow_unmatched_records = false)
 	{
 		/* Step 1 - Straightforward link relationships */
 		$my_connections = array();
 
-		$this->db->select('r.registry_object_id, r.key, r.class, r.title, r.slug, r.status, rr.relation_type, rr.relation_description, rr.origin')
+		$this->db->select('rr.registry_object_id, r.key, r.class, r.title, r.slug, r.status, rr.relation_type, rr.relation_description, rr.origin')
 				 ->from('registry_object_relationships rr')
-				 ->join('registry_objects r','rr.related_object_key = r.key')
-				 ->where('rr.registry_object_id',$this->id);
+				 ->join('registry_objects r','rr.related_object_key = r.key', ($allow_unmatched_records ? 'left' : ''))
+				 ->where('rr.registry_object_id',$this->id)
+				 ->where('rr.origin','EXPLICIT');
 		$query = $this->db->get();
 
 		foreach ($query->result_array() AS $row)
@@ -222,14 +223,14 @@ class Connections_Extension extends ExtensionBase
 
 
 
-	function _getInternalReverseLinks()
+	function _getInternalReverseLinks($allow_unmatched_records = false)
 	{
 		/* Step 2 - Internal reverse links */
 		$my_connections = array();
 
 		$this->db->select('r.registry_object_id, r.key, r.class, r.title, r.slug, r.status, rr.relation_type, rr.relation_description')
 						 ->from('registry_object_relationships rr')
-						 ->join('registry_objects r','rr.registry_object_id = r.registry_object_id')
+						 ->join('registry_objects r','rr.registry_object_id = r.registry_object_id', ($allow_unmatched_records ? 'left' : ''))
 						 ->where('rr.related_object_key',$this->ro->key)
 						 ->where('r.data_source_id',$this->ro->data_source_id)
 						 ->where('rr.origin !=','PRIMARY');
@@ -238,7 +239,6 @@ class Connections_Extension extends ExtensionBase
 		foreach ($query->result_array() AS $row)
 		{
 			$row['origin'] = "REVERSE_INT";
-
 			$my_connections[] = $row;
 		}
 
@@ -247,14 +247,14 @@ class Connections_Extension extends ExtensionBase
 
 
 
-	function _getExternalReverseLinks()
+	function _getExternalReverseLinks($allow_unmatched_records = false)
 	{
 		/* Step 3 - External reverse links */
 		$my_connections = array();
 
 		$this->db->select('r.registry_object_id, r.key, r.class, r.title, r.slug, r.status, rr.relation_type, rr.relation_description')
 						 ->from('registry_object_relationships rr')
-						 ->join('registry_objects r','rr.registry_object_id = r.registry_object_id')
+						 ->join('registry_objects r','rr.registry_object_id = r.registry_object_id', ($allow_unmatched_records ? 'left' : ''))
 						 ->where('rr.related_object_key',$this->ro->key)
 						 ->where('r.data_source_id !=',$this->ro->data_source_id);
 		$query = $this->db->get();
@@ -271,12 +271,12 @@ class Connections_Extension extends ExtensionBase
 
 
 
-	function _getContributorLinks()
+	function _getContributorLinks($allow_unmatched_records = false)
 	{
 		/* Step 4 - Contributor */
 		$my_connections = array();
 
-		$this->db->select('r.registry_object_id, r.class, r.title, r.slug, r.status')
+		$this->db->select('r.registry_object_id, r.class, r.title, r.slug, r.status, r.key')
 						 ->from('institutional_pages i')
 						 ->join('registry_objects r','i.registry_object_id = r.registry_object_id')
 						 ->where('i.group',$this->ro->group);
@@ -286,6 +286,7 @@ class Connections_Extension extends ExtensionBase
 		{
 			$row['origin'] = "CONTRIBUTOR";
 			$row['class'] = "contributor";
+			$row['relation_type'] = "(Automatically generated contributor page link)";
 			$my_connections[] = $row;
 		}
 

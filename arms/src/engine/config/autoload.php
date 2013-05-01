@@ -65,7 +65,7 @@ $autoload['libraries'] = array('session', 'database','user');
 */
 
 
-$autoload['helper'] = array('presentation', 'url', 'engine');
+$autoload['helper'] = array('presentation', 'url', 'engine', 'shared');
 
 
 

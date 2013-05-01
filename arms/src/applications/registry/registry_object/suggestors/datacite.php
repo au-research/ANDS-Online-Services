@@ -67,11 +67,14 @@ class Suggestor_datacite implements GenericSuggestor
 		{
 			foreach($content['response']['docs'] AS $doc)
 			{
-				$links[] = array("url"=>self::DATACITE_URL_PREFIX . $doc[self::DATACITE_URL_FIELD],
-								"title"=>ellipsis($doc['title'][0], self::DATACITE_TITLE_LENGTH),
-								"class"=>"external",
-								"expanded_html"=>$CI->load->view("registry_object/datacite_preview", $doc, true)
-								);
+				if ($doc['title'][0])
+				{
+					$links[] = array("url"=>self::DATACITE_URL_PREFIX . $doc[self::DATACITE_URL_FIELD],
+									"title"=>ellipsis($doc['title'][0], self::DATACITE_TITLE_LENGTH),
+									"class"=>"external",
+									"expanded_html"=>$CI->load->view("registry_object/datacite_preview", $doc, true)
+									);
+				}
 			}
 		}
 
