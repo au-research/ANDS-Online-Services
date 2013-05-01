@@ -1147,7 +1147,7 @@ $('#cancel-edit-form').live({
 	click: function(e){
 		e.preventDefault();
 		var ds_id = $(this).attr('data_source_id')
-		if (confirm("All unsaved changes will be lost. Do you want to continue?"))
+		if (window.confirm("All unsaved changes will be lost. Are you sure you want to exit?") === true)
 		{
 			changeHashTo('settings/'+ds_id);
 		}

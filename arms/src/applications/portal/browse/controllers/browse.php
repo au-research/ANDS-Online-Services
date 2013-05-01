@@ -66,19 +66,24 @@ class Browse extends MX_Controller {
 		}
 		$totalPage = ceil($data['numFound'] / (int) $rows);
 
-		if($currentPage!=1){
-			$prev = $start-$rows;
-			$next = $start+$rows;
-		}else if($currentPage==$totalPage){
+		if ($currentPage==$totalPage)
+		{
 			$prev = $start-$rows;
 			$next = false;
-		}else{
+		}
+		elseif ($currentPage != 1)
+		{
+			$prev = $start-$rows;
+			$next = $start+$rows;
+		}
+		else
+		{
 			$prev = false;
 			$next = $start+$rows;
 		}
 		$pagination = array("currentPage"=>$currentPage,"totalPage"=>$totalPage);
-		if($prev) $pagination['prev']=$prev;
-		if($next) $pagination['next']=$next;
+		if($prev!==false) $pagination['prev']=(string)$prev;
+		if($next!==false) $pagination['next']=(string)$next;
 		$result['pagination'] = $pagination;
 		$result['count'] = $data['numFound'];
 
