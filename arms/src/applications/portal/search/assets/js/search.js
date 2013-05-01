@@ -53,6 +53,14 @@ $(document).ready(function() {
 			 */
 		});
 
+	        //if we're showing the map, and using an old crappy browser,
+	        //limit the number of results
+	        if (typeof(searchData['map']) !== 'undefined' &&
+		        searchData['map'] === 'show' &&
+		        $.browser.msie === true &&
+		        parseInt($.browser.version) < 9) {
+		        searchData['rows'] = 500;
+		}
 
 		executeSearch(searchData, searchUrl);
 		initMap();
