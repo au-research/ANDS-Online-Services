@@ -94,9 +94,15 @@ $(function(){
 		}
 	});
 
-	$('#advanced-menu a').click(function(e){
+	$('#advanced-menu a').click(function(e, data){
 		var tab = $(this).attr('href');
 		changeHashTo('advanced/'+tab.substring(1, tab.length));
+		//trigger a QA save without looping by checking for our dodgy^H^H^H clever data hack
+		//c.f. AJAX ro save: base_url+'registry_object/save/ (~l400)
+		if ($(e.target).attr('id') === 'savePreview' && 
+			(typeof(data) === 'undefined')) {
+			$("#save").click();
+		}
 	});
 
 	$('#simple-menu a').click(function(e){
@@ -496,13 +502,12 @@ function initEditForm(){
 						//$('.record_title').html(data.title);
 						$('#qa_result').html(output);
 						formatQA($('#qa_result .qa'));
-						$('#advanced-menu li a[href=#qa]').click();
 					}else{
 						var template = $('#save-error-record-template').html();
 						var output = Mustache.render(template, data);
 						$('#qa_result').html(output);					
-						$('#advanced-menu li a[href=#qa]').click();
 					}
+					$('#advanced-menu li a[href=#qa]').trigger('click', {onlyShow: true});
 				},
 				error: function(data){
 					data = $.parseJSON(data.responseText);

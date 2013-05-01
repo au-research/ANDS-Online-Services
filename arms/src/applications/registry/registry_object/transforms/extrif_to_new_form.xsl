@@ -52,7 +52,7 @@
 			<xsl:if test="$ro_class != 'collection'">
 				<li><a href="#existencedates" data-toggle="tab">Existence Dates</a></li>
 			</xsl:if>
-			<li><a href="#qa" data-toggle="tab">QA</a></li>
+			<li><a href="#qa" id="savePreview" data-toggle="tab"><i class="icon-white icon-hdd"></i> Save &amp; Validate</a></li>
 		</ul>
 	</div>
 
