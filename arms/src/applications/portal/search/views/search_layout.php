@@ -67,7 +67,7 @@
 
 <script type="text/x-mustache" id="search-trunc-template">
 {{#trunc}}
-{{found}} records match your search query, however, only the top {{returned}} could be displayed on the map. <br/>Please refine your search by drawing a smaller search area (using the box tool <span style="display: inline-block; "><div style="top:3px; width: 16px; height: 16px; overflow: hidden; position: relative; "><img style="position: absolute; left: 0px; top: -16px; -webkit-user-select: none; border: 0px; padding: 0px; margin: 0px; width: auto; height: auto; " src="https://maps.gstatic.com/mapfiles/drawing.png" draggable="false"></div></span>) or selecting one or more additional search facets. 
+{{found}} records match your search query; however, only the top {{returned}} could be displayed on the map. <br/>Please refine your search by drawing a smaller search area (using the box tool <span style="display: inline-block; "><div style="top:3px; width: 16px; height: 16px; overflow: hidden; position: relative; "><img style="position: absolute; left: 0px; top: -16px; -webkit-user-select: none; border: 0px; padding: 0px; margin: 0px; width: auto; height: auto; " src="https://maps.gstatic.com/mapfiles/drawing.png" draggable="false"></div></span>) or selecting one or more additional search facets. 
 {{/trunc}}
 </script>
 

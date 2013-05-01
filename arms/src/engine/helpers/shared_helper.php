@@ -75,6 +75,7 @@ function format_relationship($from_class, $relationship_type, $origin=false){
 		"addsValueTo" =>array("Adds value to", "Value added by"),
 		"hasPrincipalInvestigator" =>array("Principal investigator", "Principal investigator of"),
 		"isPrincipalInvestigator" =>array("Principal investigator of", "Principal investigator"),
+		"isAvailableThrough" =>array("Available through", "Makes available"),
 	);
 	$typeArray['activity'] = array(
 		"hasAssociationWith" =>   array("Associated with", "Associated with"),
