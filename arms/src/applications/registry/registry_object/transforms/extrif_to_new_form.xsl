@@ -18,6 +18,8 @@
 	<xsl:template match="ro:registryObject">
 
 	<xsl:variable name="registry_object_id"><xsl:value-of select="//extRif:id"/></xsl:variable>
+	<xsl:variable name="dataSourceID"><xsl:value-of select="//extRif:dataSourceID"/></xsl:variable>
+	<xsl:variable name="dataSourceTitle"><xsl:value-of select="//extRif:dataSourceTitle"/></xsl:variable>
 	<xsl:variable name="display_title"><xsl:value-of select="//extRif:displayTitle" disable-output-escaping="yes" /></xsl:variable>
 
 	
@@ -66,7 +68,7 @@
 			</div>
 		</div>
 		<div id="breadcrumb" class="clear">
-			<a href="{$base_url}" title="Go to Home" class="tip-bottom">Home</a>
+			<a href="{$base_url}data_source/manage_records/{$dataSourceID}"><xsl:value-of select="$dataSourceTitle" /></a>
 			<a href="{$base_url}registry_object/view/{$registry_object_id}" title="" class="current"><xsl:value-of select="$display_title"/></a>
 			<a href="#" class="">Edit</a>
 		</div>
@@ -324,6 +326,8 @@
 
 
 	<xsl:template name="recordAdminTab">
+		<xsl:variable name="dataSourceTitle"><xsl:value-of select="//extRif:dataSourceTitle"/></xsl:variable>
+
 		<!-- Record Admin-->
 		<div id="admin" class="pane">
 			<fieldset>
@@ -331,48 +335,14 @@
 				<xsl:variable name="ro_type">
 					<xsl:apply-templates select="ro:collection/@type | ro:activity/@type | ro:party/@type  | ro:service/@type"/>
 				</xsl:variable>
-				<xsl:variable name="dataSourceID">
-					<xsl:value-of select="extRif:extendedMetadata/extRif:dataSourceID"/>
-				</xsl:variable>
 				<xsl:variable name="dateModified">
 					<xsl:apply-templates select="ro:collection/@dateModified | ro:activity/@dateModified | ro:party/@dateModified  | ro:service/@dateModified"/>
 				</xsl:variable>
 
 				<div class="control-group">
-					<label class="control-label" for="type">Type</label>
-					<div class="controls">
-						<input type="text" id="{generate-id()}_value" class="rifcs-type" vocab="{concat('RIFCS',$ro_class,'Type')}" name="type" value="{$ro_type}"/>
-						<p class="help-inline">
-							<small/>
-						</p>
-					</div>
-				</div>
-
-				<div class="control-group">
 					<label class="control-label" for="ds">Data Source</label>
 					<div class="controls">
-						<select id="data_sources_select"/>
-						<input type="text" id="data_source_id_value" class="input-small hide"
-							name="ds" value="{$dataSourceID}"/>
-					</div>
-				</div>
-				
-				
-				<div class="control-group">
-					<label class="control-label" for="originatingSource">Originating Source</label>
-					<div class="controls">
-						<span class="inputs_group">
-							<input type="text" id="originatingSource" name="originatingSource" placeholder="Value" value="{ro:originatingSource/text()}" class="inner_input"/>
-							<input type="text" id="originatingSource" class="inner_input_type rifcs-type" vocab="RIFCSOriginatingSourceType" name="originatingSourceType" placeholder="Type"  value="{ro:originatingSource/@type}"/>
-						</span>
-					</div>
-				</div>
-				
-
-				<div class="control-group">
-					<label class="control-label" for="group">Group</label>
-					<div class="controls">
-						<input type="text" class="input-xlarge" name="group" value="{@group}"/>
+						<input type="text" id="data_source_id_value" class="input-large" name="ds" value="{$dataSourceTitle}" disabled="disabled"/>
 					</div>
 				</div>
 
@@ -387,6 +357,41 @@
 						</p>
 					</div>
 				</div>
+				
+				<div class="control-group">
+					<label class="control-label" for="originatingSource">Originating Source</label>
+					<div class="controls">
+						<span class="inputs_group">
+							<input type="text" id="originatingSource" name="originatingSource" placeholder="Value" value="{ro:originatingSource/text()}" class="inner_input"/>
+							<input type="text" id="originatingSource" class="inner_input_type rifcs-type" vocab="RIFCSOriginatingSourceType" name="originatingSourceType" placeholder="Type"  value="{ro:originatingSource/@type}"/>
+						</span>
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label class="control-label" for="class">Class</label>
+					<div class="controls">
+						<input type="text" class="input" name="class" disabled="disabled" value="{$ro_class}" />
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label class="control-label" for="type">Type</label>
+					<div class="controls">
+						<input type="text" id="{generate-id()}_value" class="rifcs-type" vocab="{concat('RIFCS',$ro_class,'Type')}" name="type" value="{$ro_type}"/>
+						<p class="help-inline">
+							<small/>
+						</p>
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label class="control-label" for="group">Group</label>
+					<div class="controls">
+						<input type="text" class="input-xlarge" name="group" value="{@group}"/>
+					</div>
+				</div>
+
 
 				<div class="control-group">
 					<label class="control-label" for="date_modified">Date Modified</label>

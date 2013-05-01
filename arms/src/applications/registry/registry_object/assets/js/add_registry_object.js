@@ -289,7 +289,7 @@ function initEditForm(){
 	 * Replace the data source text input field with a chosen() select
 	 * @TODO: ACL on which data source is accessible on services/registry/get_datasources_list
 	 */
-	/*var selected_data_source = $('#data_source_id_value').val();
+	var selected_data_source = $('#data_source_id_value').val();
 	$.ajax({
 		type: 'GET',
 		dataType : 'json',
@@ -321,7 +321,7 @@ function initEditForm(){
 		$('.data_source_link').html(chosenvalue.html());
 		$('.data_source_link').attr("href",base_url + "data_source/manage_records/" + chosenvalue.val());
 //		$(".data_source_title")
-	})*/
+	})
 
 	$(document).on('mouseup', '.remove',function(e){
 		/*
