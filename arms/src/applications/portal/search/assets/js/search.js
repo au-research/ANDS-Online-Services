@@ -55,11 +55,10 @@ $(document).ready(function() {
 
 	        //if we're showing the map, and using an old crappy browser,
 	        //limit the number of results
-	        if (typeof(searchData['map']) !== 'undefined' &&
-		        searchData['map'] === 'show' &&
-		        $.browser.msie === true &&
-		        parseInt($.browser.version) < 9) {
-		        searchData['rows'] = 500;
+	        if (isMapView(searchData) &&
+		    $.browser.msie === true &&
+		    parseInt($.browser.version) < 9) {
+		      searchData['rows'] = 500;
 		}
 
 		executeSearch(searchData, searchUrl);
@@ -73,13 +72,17 @@ $(document).ready(function() {
 	 initExplanations('activity');
 });
 
+function isMapView(searchData) {
+        return (typeof(searchData['map']) !== 'undefined' &&
+		searchData['map'] === 'show');
+}
+
 function executeSearch(searchData, searchUrl){
 	resultPolygons = new Array();
 	clearOverlays();
         //if we're in the map view, don't fire a search unless we have
         //search terms, or spatial coverage data.
-        if (typeof(searchData['map']) !== 'undefined' &&
-	    searchData['map'] === 'show' &&
+        if (isMapView(searchData) &&
 	    typeof(searchData['q']) === 'undefined' &&
 	    typeof(searchData['spatial']) === 'undefined') {
 	        var template = $('#search-noterms-template').html();
@@ -95,7 +98,9 @@ function executeSearch(searchData, searchUrl){
 	}
         else {
 	        $('.container').css({opacity:0.5});
-	        $('#search_loading.hide').removeClass('hide');
+	        if (isMapView(searchData)) {
+	              $('#search_loading.hide').removeClass('hide');
+		}
 	        //add loading placeholder
 		$.ajax({
 			url:searchUrl,
@@ -108,8 +113,7 @@ function executeSearch(searchData, searchUrl){
 				$('#search-result, .pagination, #facet-result, #search_notice').empty();
 
 			        //truncated results notice; only display on map view
-			        if (typeof(searchData['map']) !== 'undefined' &&
-				    searchData['map'] === 'show') {
+			        if (isMapView(searchData)) {
 			          var template = $('#search-trunc-template').html();
 			          var truncdata = {trunc: (numFound !== numReturned),
 						   found: numFound,
@@ -157,7 +161,7 @@ function executeSearch(searchData, searchUrl){
 		}).always(function() {
 		            //remove loading placeholder
 			    $('.container').css({opacity:1});
-			    $('#search_loading').addClass('hide');
+			    $('#search_loading:not(".hide")').addClass('hide');
 		});
 	}
 }
