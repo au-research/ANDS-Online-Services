@@ -19,7 +19,8 @@
 			<div class="box">
 				<div class="box-header clearfix">
 					<h1>ANDS Online Services Dashboard</h1>	
-
+					<a href="<?php echo portal_url();?>" style="margin-top:5px;" class="btn btn-info pull-right" target="_blank">
+					<i class="icon-globe icon icon-white"></i> Visit Research Data Australia</a>
 				</div>
 				<div class="box-content">
 					<h4>ANDS Online Services News</h4>
@@ -105,9 +106,6 @@
 			<div class="box">
 				<div class="box-header clearfix">
 					<h1>My Data Sources</h1>
-
-					<a href="<?php echo portal_url();?>" style="margin-top:5px;" class="btn btn-info pull-right" target="_blank">
-					<i class="icon-globe icon icon-white"></i> Visit Research Data Australia</a>
 				</div>
 				<div class="box-content">
 						<?php

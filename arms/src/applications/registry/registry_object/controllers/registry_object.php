@@ -603,8 +603,16 @@ class Registry_object extends MX_Controller {
 						{
 							$ro->flag = 'f';
 						}
+						$old_ro_id = $ro->id;
 						if($ro->save())
 						{
+							// ID may have changed if a DRAFT record overwrites a PUBLISHED one
+							if ($ro->id != $old_ro_id)
+							{
+								// This will be used to redirect from the registry view page
+								$jsondata['new_ro_id'] = $ro->id;
+							}
+
 							if($a['name']=='status'&&$a['value']=='SUBMITTED_FOR_ASSESSMENT')
 							{
 								$data_source_id = $ro->getAttribute('data_source_id');

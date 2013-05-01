@@ -36,7 +36,14 @@ $(function(){
                         logErrorOnScreen('ERROR WHILST CHANGING RECORD STATUS: ' + data.error_message);
                     }
                     else{
-                        window.location.reload();
+                        if (typeof(data.new_ro_id) !== 'undefined')
+                        {
+                            window.location = base_url + 'registry_object/view/' + data.new_ro_id;
+                        }
+                        else
+                        {
+                            window.location.reload();
+                        }
                     }
                 }
                 else
