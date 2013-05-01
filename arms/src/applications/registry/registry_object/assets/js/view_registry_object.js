@@ -18,6 +18,66 @@ $(function(){
 		});
 	});
 
+    $('.status_change_action').on('click', function(e){
+        e.preventDefault();
+        url = base_url+'registry_object/update/';
+        data = {affected_ids:[$('#ro_id').val()], attributes:[{name:'status',value:$(this).attr('to')}], data_source_id:$('#data_source_id').val()};
+        $.ajax({
+            url:url, 
+            type: 'POST',
+            data: data,
+            dataType: 'JSON',
+            success: function(data){
+                if(data.status=='success')
+                {
+                    if(data.error_count != '0')
+                    {
+                        $("html, body").animate({ scrollTop: 0 });
+                        logErrorOnScreen('ERROR WHILST CHANGING RECORD STATUS: ' + data.error_message);
+                    }
+                    else{
+                        window.location.reload();
+                    }
+                }
+                else
+                {
+                    $("html, body").animate({ scrollTop: 0 });
+                    logErrorOnScreen('ERROR WHILST CHANGING RECORD STATUS: ' + data.message);
+                }
+            }
+        });
+    });
+
+    $('#delete_record_button').on('click', function(e){
+        e.preventDefault();
+        if (confirm('Are you sure you want to delete this record?' + "\n" 
+            + "NOTE: Non-PUBLISHED records cannot be recovered once deleted.") !== true) 
+        { 
+            return; 
+        }
+
+
+        var data =  {affected_ids:[$('#ro_id').val()], data_source_id:$('#data_source_id').val()};
+        $.ajax({
+            url: base_url+'registry_object/delete/', 
+            data: data,
+            type: 'POST',
+            success: function(data){
+                if (!data.status == "success")
+                {
+                    alert(data.message);
+                }
+                else
+                {
+                     window.location = base_url + 'data_source/manage_records/' + $('#data_source_id').val();
+                }
+            }
+        });
+
+    }); 
+
+
+
     $('.tag_form').submit(function(e){
         e.preventDefault();
         e.stopPropagation();

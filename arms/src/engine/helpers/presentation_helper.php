@@ -140,15 +140,15 @@ function ellipsis ($string, $length = 64)
 	}
 }
 
-function readable($text){
+function readable($text, $singular = false){
 	$text = strtolower($text);
 	switch($text){
         case "all": return 'All'; break;
-		case "draft": return 'Drafts';break;
+		case "draft": return ($singular ? 'Draft' : 'Drafts');break;
 		case "submitted_for_assessment": return 'Submitted for Assessment';break;
 		case "assessment_in_progress": return 'Assessment In Progress';break;
-		case "approved": return 'Approved Records';break;
-		case "published": return 'Published Records';break;
+		case "approved": return ($singular ? 'Approved' : 'Approved Records');break;
+		case "published": return  ($singular ? 'Published' : 'Published Records');break;
 		case "more_work_required": return 'More Work Required';break;
 		case "collection": return 'Collections';break;
 		case "party": return 'Parties';break;

@@ -228,10 +228,9 @@ a:hover {
 	background-image: -o-linear-gradient(top, #FFFFFF 0%, #EEEEEE 100%);
 	background-image: linear-gradient(top, #FFFFFF 0%, #EEEEEE 100%);
     border-top-left-radius: 8px;
-    height: 80px;
-    position: abslute;
+    display:block;
     width: 100%;
-    margin-top: -38px;
+    min-height:80px;
     z-index: 20;
 }
 
@@ -240,15 +239,14 @@ a:hover {
     font-size: 28px;
     font-weight: normal;
     float: left;
+    display:block;
     text-shadow: 0 1px 0 #ffffff;
     margin-left: 20px;
-    position: absolute;
 }
 
 .content-header .btn-group {
 	float: right;
 	right: 20px;
-	position: absolute;
 	margin-top:20px;
 }
 

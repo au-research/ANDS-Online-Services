@@ -6,7 +6,7 @@
 
 <?php  $this->load->view('header');?>
 <input type="hidden" value="<?php echo $data_source['id'];?>" id="data_source_id"/>
-<div id="content" style="margin-top:45px;margin-left:0px">
+<div id="content" style="margin-left:0px">
 	<div id="content-header">
 		<h1>Manage My Record</h1>
 		<div class="btn-group">

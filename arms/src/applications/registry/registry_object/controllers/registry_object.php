@@ -30,6 +30,7 @@ class Registry_object extends MX_Controller {
 			$data['ro_id'] = $ro_id;
 			$data['ds'] = $ds;
 			$data['revision'] = $revision;
+			$data['action_bar'] = array(); // list of status actions which can be performed 
 
 			if($revision!=''){
 				$data['viewing_revision'] = true;
@@ -47,7 +48,10 @@ class Registry_object extends MX_Controller {
 				{
 					$data['naitive_text'] = $ro->getNativeFormatData($revision);
 				}
-			}else {
+
+			}
+			else 
+			{
 				$data['viewing_revision'] = false;
 				$data['rif_html'] = $ro->transformForHtml();
 				$data['native_format'] = $ro->getNativeFormat();
@@ -55,6 +59,12 @@ class Registry_object extends MX_Controller {
 				{
 					$data['naitive_text'] = $ro->getNativeFormatData();
 				}
+
+				if($this->user->hasAffiliation($ds->record_owner))
+				{
+					$data['action_bar'] = $this->generateStatusActionBar($ro);
+				}
+
 			}
 
 			$data['revisions'] = $ro->getAllRevisions();
@@ -634,7 +644,7 @@ class Registry_object extends MX_Controller {
 		$this->load->model('registry_objects', 'ro');
 		$this->load->model('data_source/data_sources', 'ds');
 
-		if($select_all != "false"){
+		if($select_all && $select_all != "false"){
 
 			$filters = $this->input->post('filters');
 
@@ -652,7 +662,9 @@ class Registry_object extends MX_Controller {
 					$this->ro->deleteRegistryObject($r);
 				}
 			}
-		}else{
+		}
+		else
+		{
 			if ($affected_ids)
 			{
 				foreach($affected_ids as $id){
@@ -664,6 +676,8 @@ class Registry_object extends MX_Controller {
 
 		$ds = $this->ds->getByID($data_source_id);
 		$ds->updateStats();
+
+		echo json_encode(array("status"=>"success"));
 	}
 
 	
@@ -869,4 +883,45 @@ class Registry_object extends MX_Controller {
 		$status['count'] = sizeof($connections);
 		echo json_encode(array("status"=>$status,"connections"=>$connections));
 	}
+
+
+	/* Generate a list of actions which can be performed on the record (based on your role/status) */
+	private function generateStatusActionBar(_registry_object $ro)
+	{
+		$actions = array();
+
+		if ($this->user->hasFunction('REGISTRY_USER'))
+		{
+
+			switch($ro->status){
+
+				case 'DRAFT': 
+					$actions[] = 'SUBMITTED_FOR_ASSESSMENT';
+				break;
+
+				case 'MORE_WORK_REQUIRED': 
+					$actions[] = 'DRAFT';
+				break;
+
+				case 'SUBMITTED_FOR_ASSESSMENT': 
+					if($this->user->hasFunction('REGISTRY_STAFF')) { 
+						$actions[] = 'ASSESSMENT_IN_PROGRESS';
+					} 
+				break;
+				case 'ASSESSMENT_IN_PROGRESS': 
+					if($this->user->hasFunction('REGISTRY_STAFF')) { 
+						$actions[] = 'MORE_WORK_REQUIRED';
+						$actions[] = 'ASSESSMENT_IN_PROGRESS';
+					} 
+				break;
+				case 'APPROVED': 
+					$actions[] = 'PUBLISHED';
+					break;
+				case 'PUBLISHED': 
+				break;
+			}
+		}
+		return $actions;
+	}
+
 }

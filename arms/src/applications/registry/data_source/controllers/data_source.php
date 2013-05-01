@@ -591,7 +591,7 @@ class Data_source extends MX_Controller {
 		}
 		
 		
-		$jsonData['items'] = $items;
+		$jsonData['items'] = array_slice($items,$offset,$limit);
 		$jsonData = json_encode($jsonData);
 		echo $jsonData;
 	}

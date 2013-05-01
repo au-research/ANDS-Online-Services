@@ -56,16 +56,16 @@
 		</ul>
 	</div>
 
-	<div id="content" style="margin-top:45px;">
+	<div id="content" style="Manage My Datasources">
 		<div class="content-header">
-			<h1><xsl:value-of select="$display_title"/></h1>
+			<h1 style="max-width:80%;"><xsl:value-of select="$display_title"/></h1>
 			<div class="btn-group">
 				<!--a class="hide btn" title="Manage Files" id="master_export_xml"><i class="icon-download"></i> Export RIFCS</a>
 				<a class="hide btn btn-primary" title="Manage Files" id="validate">Validate</a-->
 				<a class="btn btn-primary" title="Manage Files" id="save"><i class="icon-white icon-hdd"></i> Save &amp; Validate</a>
 			</div>
 		</div>
-		<div id="breadcrumb">
+		<div id="breadcrumb" class="clear">
 			<a href="{$base_url}" title="Go to Home" class="tip-bottom">Home</a>
 			<a href="{$base_url}registry_object/view/{$registry_object_id}" title="" class="current"><xsl:value-of select="$display_title"/></a>
 			<a href="#" class="">Edit</a>

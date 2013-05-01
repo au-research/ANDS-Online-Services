@@ -5,7 +5,7 @@
 ?>
 
 <?php  $this->load->view('header');?>
-<div id="content" style="margin-top:45px;margin-left:0px">
+<div id="content" style="margin-left:0px">
 	<div class="content-header">
 		<h1><?php echo $list_title;?></h1>
 	</div>

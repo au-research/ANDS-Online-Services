@@ -11,7 +11,7 @@
  */
 ?>
 <?php $this->load->view('header');?>
-<div id="content" style="margin-top:45px;margin-left:0px">
+<div id="content" style="margin-left:0px">
 
 <section id="browse-datasources" class="hide">
 	<div class="content-header">
