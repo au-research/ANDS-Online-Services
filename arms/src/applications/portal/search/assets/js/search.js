@@ -667,9 +667,13 @@ function initMap(){
 	        changeHashTo(formatSearch());
 	        }
 
-	        map.setCenter(new google.maps.LatLng(-25.397, 133.644));
-
 	       });
+	     google.maps.event.addListenerOnce(map,
+									    "idle",
+									    function()
+									    {
+											map.setCenter(new google.maps.LatLng(-25.397, 133.644));
+									    });
 
 		var styles = [[{
 		    url: base_url+'assets/search/img/pin.png',
@@ -680,9 +684,11 @@ function initMap(){
 		  }]];
 
 		markerClusterer = new MarkerClusterer(map, null, { maxZoom: 12, gridSize: 100, styles: styles[0]});
-	    window.setTimeout(function(){
-	    	map.setCenter(new google.maps.LatLng(-25.397, 133.644));
-	    }, 500);
+	}
+	else
+	{
+		// Map already loaded...re-center it...
+		map.setCenter(new google.maps.LatLng(-25.397, 133.644));
 	}
 }
 
