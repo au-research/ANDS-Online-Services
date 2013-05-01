@@ -470,7 +470,7 @@ function initEditForm(){
 											'</div>');
 			$('#myModal .modal-footer').html('');
 			prettyPrint();
-			$('#myModal').modal();
+
 
 			//test validation
 			// $.ajax({
@@ -493,11 +493,15 @@ function initEditForm(){
 						var template = $('#save-record-template').html();
 						var output = Mustache.render(template, data);
 						//console.log($('.record_title'));
-						$('.record_title').html(data.title);
-						$('#myModal .modal-body').html(output);
-						formatQA($('#myModal .qa'));
+						//$('.record_title').html(data.title);
+						$('#qa_result').html(output);
+						formatQA($('#qa_result .qa'));
+						$('#advanced-menu li a[href=#qa]').click();
 					}else{
-						$('#myModal .modal-body').html(data.message);
+						var template = $('#save-error-record-template').html();
+						var output = Mustache.render(template, data);
+						$('#qa_result').html(output);					
+						$('#advanced-menu li a[href=#qa]').click();
 					}
 				},
 				error: function(data){
@@ -641,6 +645,10 @@ function validate(){
 				if(count_error > 0) addValidationTag(id, 'important', count_error);
 				if(count_warning > 0) addValidationTag(id, 'warning', count_warning);
 			});
+			var template = $('#save-record-template').html();
+			var output = Mustache.render(template, data);
+			$('#qa_result').html(output);
+			formatQA($('#qa_result .qa'));
 		}
 	});
 }
@@ -1032,15 +1040,15 @@ function getRIFCSforTab(tab, hasField){
 					if(type=='relation'){//special case for related object relation
 						fragment += '<'+type+' type="'+$('input[name=type]',this).val()+'">';
 						if($('input[name=description]', this).val()!=''){//if the relation has a description
-							fragment += '<description>'+$('input[name=description]', this).val()+'</description>';
+							fragment += '<description>'+htmlEntities($('input[name=description]', this).val())+'</description>';
 						}
 						if($('input[name=url]', this).val()!=''){//if the relation has a url
-							fragment += '<url>'+$('input[name=url]', this).val()+'</url>';
+							fragment += '<url>'+htmlEntities($('input[name=url]', this).val())+'</url>';
 						}
 						fragment += '</'+type+'>';
 					}else if(type=='relatedInfo'){//special case for relatedInfo
 						//identifier is required
-						fragment += '<identifier field_id="' +$(this).attr('field_id')+'" type="'+$('input[name=identifier_type]', this).val()+'">'+$('input[name=identifier]', this).val()+'</identifier>';
+						fragment += '<identifier field_id="' +$(this).attr('field_id')+'" type="'+$('input[name=identifier_type]', this).val()+'">'+htmlEntities($('input[name=identifier]', this).val())+'</identifier>';
 						//title and notes are not required, but useful nonetheless
 						// TO DO: find out where did you go wrong :-)
 						var formatIdentifiers = $('input[name=format_identifier]', this);
@@ -1049,33 +1057,39 @@ function getRIFCSforTab(tab, hasField){
 							fragment += '<format>';
 							$.each(formatIdentifiers, function(){
 								var ident = $(this);
-								fragment += '<identifier field_id="' +ident.attr('field_id')+'" type="'+ident.next('input[name="format_identifier_type"]').val()+'">'+ident.val()+'</identifier>';
+								fragment += '<identifier field_id="' +ident.attr('field_id')+'" type="'+ident.next('input[name="format_identifier_type"]').val()+'">'+htmlEntities(ident.val())+'</identifier>';
 							});
 							fragment += '</format>';
 						}
 						if($('input[name=title]', this).val()!=''){
-							fragment += '<title field_id="' +$(this).attr('field_id')+'">'+$('input[name=title]', this).val()+'</title>';
+							fragment += '<title field_id="' +$(this).attr('field_id')+'">'+htmlEntities($('input[name=title]', this).val())+'</title>';
 						}
 						if($('input[name=notes]', this).val()!=''){
-							fragment += '<notes field_id="' +$(this).attr('field_id')+'">'+$('input[name=notes]', this).val()+'</notes>';
+							fragment += '<notes field_id="' +$(this).attr('field_id')+'">'+htmlEntities($('input[name=notes]', this).val())+'</notes>';
 						}
 					}else if(type=='date'){
 						var dates = $('.aro_box_part[type=date]', this);
 						$.each(dates, function(){
 							fragment += '<'+$(this).attr('type')+' field_id="' +$(this).attr('field_id')+'" type="'+$('input[name=type]', this).val()+'">';
-							fragment += $('input[name=value]', this).val();
+							fragment += htmlEntities($('input[name=value]', this).val());
 							fragment +='</'+$(this).attr('type')+'>';
 						});
 					}else if(type=='startDate' || type=='endDate'){
-							fragment += '<'+$(this).attr('type')+' field_id="' +$(this).attr('field_id')+'" dateFormat="'+$('input[name=dateFormat]', this).val()+'">';
+							fragment += '<'+$(this).attr('type')+' field_id="' +$(this).attr('field_id')+'" dateFormat="'+htmlEntities($('input[name=dateFormat]', this).val())+'">';
 							fragment += $('input[name=value]', this).val();
 							fragment +='</'+$(this).attr('type')+'>';
 					}else if(type=='rightStatement' || type=='licence' || type=='accessRights' ){
-						 fragment += '<'+$(this).attr('type')+' rightsUri="'+$('input[name=rightsUri]', this).val()+'">'+$('input[name=value]', this).val()+'</'+$(this).attr('type')+'>';	
+						 fragment += '<'+$(this).attr('type')+' rightsUri="'+$('input[name=rightsUri]', this).val()+'">'+htmlEntities($('input[name=value]', this).val())+'</'+$(this).attr('type')+'>';	
 					}else if(type=='contributor'){
 						var contributors = $('.aro_box_part[type=contributor]', this);//tooltip not init
 						$.each(contributors, function(){
-							fragment += '<'+$(this).attr('type')+' field_id="' +$(this).attr('field_id')+'" seq="'+$('input[name=seq]', this).val()+'">';
+							var seq = $('input[name=seq]', this).val();
+							//if(seq <= 0 || isNaN(seq))
+							//{
+							//	seq = 0;
+							//	$('input[name=seq]', this).val(seq);
+							//}
+							fragment += '<'+$(this).attr('type')+' field_id="' +$(this).attr('field_id')+'" seq="'+seq+'">';
 							var contrib_name_part = $('.aro_box_part', this);
 							if(contrib_name_part.length === 0)
 							{
@@ -1087,7 +1101,7 @@ function getRIFCSforTab(tab, hasField){
 							var contrib_name_part = $('.aro_box_part', this);
 							$.each(contrib_name_part, function(){
 								fragment += '<'+$(this).attr('type')+' field_id="' +$(this).attr('field_id')+'" type="'+$('input[name=type]', this).val()+'">';
-								fragment += $('input[name=value]', this).val();
+								fragment += htmlEntities($('input[name=value]', this).val());
 								fragment +='</'+$(this).attr('type')+'>';
 							});
 							
@@ -1095,7 +1109,7 @@ function getRIFCSforTab(tab, hasField){
 						});
 					}else if(type=='dates_date'){
 						fragment += '<date field_id="' +$(this).attr('field_id')+'" type="'+$('input[name=type]', this).val()+'" dateFormat="W3CDTF">';
-						fragment += $('input[name=value]', this).val();
+						fragment += htmlEntities($('input[name=value]', this).val());
 						fragment +='</date>';
 					}else if(type=='temporal'){
 						fragment+='<temporal';
@@ -1105,25 +1119,24 @@ function getRIFCSforTab(tab, hasField){
 						$.each(dates, function(){
 							fragment += '<date';
 							if(hasField) fragment += ' field_id="' +$(this).attr('field_id')+'"';
-							fragment += ' type="'+$('input[name=type]', this).val()+'" dateFormat="'+$('input[name=dateFormat]', this).val()+'">'+$('input[name=value]', this).val()+'</date>';	
+							fragment += ' type="'+htmlEntities($('input[name=type]', this).val())+'" dateFormat="'+$('input[name=dateFormat]', this).val()+'">'+$('input[name=value]', this).val()+'</date>';	
 						});
 						var texts = $('.aro_box_part[type=text]', this);
 						$.each(texts, function(){
 							fragment += '<text';
 							if(hasField) fragment += ' field_id="' +$(this).attr('field_id')+'"';
-							fragment += '>'+$('input[name=value]', this).val()+'</text>';	
+							fragment += '>'+htmlEntities($('input[name=value]', this).val())+'</text>';	
 						});
 						fragment+='</temporal>';
 					}else{//generic
 						//check if there is an input[name="type"] in this box_part so that we can use as a type attribute
-						var type = $('input[name=type]', this).val();
-						if(type){
-							fragment += '<'+$(this).attr('type')
+						var typeAttrib = $('input[name=type]', this).val();
+						if(typeAttrib || type === 'identifier'){
+							fragment += '<'+type;
 							if(hasField) fragment += ' field_id="' +$(this).attr('field_id')+'"';
-							fragment += ' type="'+$('input[name=type]', this).val()+'">'+htmlEntities($('input[name=value]', this).val())+'</'+$(this).attr('type')+'>';	
+							fragment += ' type="'+typeAttrib+'">'+htmlEntities($('input[name=value]', this).val())+'</'+type+'>';	
 						}else{
-							var type = $(this).attr('type');
-							fragment += '<'+type+' field_id="' +$(this).attr('field_id')+'">'+$('input[name=value]', this).val()+'</'+type+'>';
+							fragment += '<'+type+' field_id="' +$(this).attr('field_id')+'">'+htmlEntities($('input[name=value]', this).val())+'</'+type+'>';
 						}
 					}
 				}else{//it's an element
@@ -1135,7 +1148,7 @@ function getRIFCSforTab(tab, hasField){
 			if($('textarea', this).length>0){
 				fragment += htmlEntities($('textarea', this).val());
 			}else if($('input[name=value]', this).length>0){
-				fragment += $('input[name=value]', this).val();//there's no textarea, just normal input
+				fragment += htmlEntities($('input[name=value]', this).val());//there's no textarea, just normal input
 			}
 		}
 			
@@ -1156,12 +1169,12 @@ function getRIFCSforTab(tab, hasField){
 						//opening tag
 						if($(this).attr('type')=='electronic'){
 							this_fragment +='<'+$(this).attr('type')+' type="'+$('input[name=type]', this).val()+'" field_id="' +$(this).attr('field_id')+'">';
-							this_fragment +='<value>'+$('input[name=value]',this).val()+'</value>';
+							this_fragment +='<value>'+htmlEntities($('input[name=value]',this).val())+'</value>';
 							//deal with args here
 							var args = $('.aro_box_part', this);
 							$.each(args, function(){
 								this_fragment += '<'+$(this).attr('type')+' field_id="' +$(this).attr('field_id')+'" type="'+$('input[name=type]', this).val()+'" required="'+$('input[name=required]', this).val()+'" use="'+$('input[name=use]', this).val()+'">';
-								this_fragment += $('input[name=value]', this).val();
+								this_fragment += htmlEntities($('input[name=value]', this).val());
 								this_fragment +='</'+$(this).attr('type')+'>';
 							});
 							this_fragment +='</'+$(this).attr('type')+'>';//closing tag
@@ -1171,14 +1184,14 @@ function getRIFCSforTab(tab, hasField){
 							this_fragment +='<'+$(this).attr('type')+' field_id="' +$(this).attr('field_id')+'" type="'+$('input[name=type]', this).val()+'">';
 							$.each(address_parts, function(){
 								this_fragment += '<'+$(this).attr('type')+' field_id="' +$(this).attr('field_id')+'" type="'+$('input[name=type]', this).val()+'">';
-								this_fragment += $('input[name=value]', this).val();
+								this_fragment += htmlEntities($('input[name=value]', this).val());
 								this_fragment +='</'+$(this).attr('type')+'>';
 							});
 							this_fragment +='</'+$(this).attr('type')+'>';//closing tag
 						}
 						else if($(this).attr('type')=='spatial'){
 							this_fragment += '<'+$(this).attr('type')+' field_id="' +$(this).attr('field_id')+'" type="'+$('input[name=type]', this).val()+'">';
-							this_fragment += $('input[name=value]', this).val();
+							this_fragment += htmlEntities($('input[name=value]', this).val());
 							this_fragment += '</'+$(this).attr('type')+'>';
 						}
 						else{

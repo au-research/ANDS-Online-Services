@@ -52,6 +52,7 @@
 			<xsl:if test="$ro_class != 'collection'">
 				<li><a href="#existencedates" data-toggle="tab">Existence Dates</a></li>
 			</xsl:if>
+			<li><a href="#qa" data-toggle="tab">QA</a></li>
 		</ul>
 	</div>
 
@@ -90,6 +91,10 @@
 			<xsl:if test="$ro_class != 'collection'">
 				<xsl:call-template name="ExistenceDatesTab"/>
 			</xsl:if>
+			<xsl:call-template name="recordQATab">
+				<xsl:with-param name="registry_object_id" select="$registry_object_id"/>
+				<xsl:with-param name="base_url" select="$base_url"/>
+			</xsl:call-template>
 		</form>
 		<xsl:call-template name="blankTemplate"/>
 		<div class="modal large hide" id="myModal">
@@ -416,6 +421,18 @@
 						</div>
 					</div>
 				</xsl:if>
+			</fieldset>
+		</div>
+	</xsl:template>
+
+
+	<xsl:template name="recordQATab">
+		<xsl:param name="registry_object_id"/>
+		<xsl:param name="base_url"/>
+		<div id="qa" class="pane">
+			<fieldset>
+				<a href="{$base_url}registry_object/view/{$registry_object_id}" title="View Record in Registry" class="btn btn-primary">View Record in Registry</a>
+				<div id="qa_result"/>
 			</fieldset>
 		</div>
 	</xsl:template>

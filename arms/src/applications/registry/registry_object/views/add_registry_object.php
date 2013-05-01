@@ -43,4 +43,12 @@
 </div>
 
 </script>
+<script type="text/x-mustache"  id="save-error-record-template">
+<div class="alert alert-error alert-block">This draft has not been saved due to validation errors in the record. <br/> Please refer to the tabs marked with a red error icon to the left of the page. </div>
+<div class="alert well alert-error alert-block"><pre>{{message}}</pre></div>
+
+</script>
+
+
+
 <?php $this->load->view('footer');?>

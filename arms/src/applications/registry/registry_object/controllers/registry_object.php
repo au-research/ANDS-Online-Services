@@ -157,7 +157,13 @@ class Registry_object extends MX_Controller {
 		$result = $ro->transformForQA(wrapRegistryObjects($xml));
 		$response['title'] = 'QA Result';
 		$scripts = preg_split('/(\)\;)|(\;\\n)/', $result, -1, PREG_SPLIT_NO_EMPTY);
-		$response['result '] = $result ;
+		$response["ro_status"] = "DRAFT";
+		$response["title"] = $ro->title;
+		$response["ro_id"] = $ro->id;
+		$response["ro_quality_level"] = $ro->quality_level;
+		$response["qa"] = $ro->get_quality_text();
+
+
 		foreach($scripts as $script)
 		{
 			$matches = preg_split('/(\"\,\")|(\(\")|(\"\))/', $script.")", -1, PREG_SPLIT_NO_EMPTY);
@@ -188,16 +194,22 @@ class Registry_object extends MX_Controller {
 
 		$this->importer->forceDraft();
 		$xml = $ro->cleanRIFCSofEmptyTags($xml);
-
-		$this->importer->setXML(wrapRegistryObjects($xml));
-		$this->importer->setDatasource($ds);
-		$this->importer->commit();
-
-		$error_log = $this->importer->getErrors();
-		if ($error_log){
-			throw new Exception("Errors during saving this registry object! " . BR . implode($error_log, BR));
+		$error_log = '';
+		$status = 'success';
+		try{
+			$this->importer->setXML(wrapRegistryObjects($xml));
+			$this->importer->setDatasource($ds);
+			$this->importer->commit();
 		}
-		else{
+		catch(Exception $e)
+		{
+			$status = 'error';
+			$error_log = $e->getMessage();
+		}
+		//if ($error_log){
+		//	throw new Exception("Errors during saving this registry object! " . BR . implode($error_log, BR));
+		//}
+		//else{
 			// Fetch updated registry object!
 			$ro = $this->ro->getByID($registry_object_id);
 			$this->load->model('data_source', 'ds');
@@ -205,17 +217,18 @@ class Registry_object extends MX_Controller {
 			$qa = $ds->qa_flag=='t' ? true : false;
 			$result = 
 				array(
-					"status"=>"success",
+					"status"=>$status,
 					"ro_status"=>"DRAFT",
 					"title"=>$ro->title,
 					"ro_id"=>$ro->id,
 					"ro_quality_level"=>$ro->quality_level,
 					"qa_$ro->quality_level"=>true,
+					"message"=>$error_log,
 					"qa"=>$ro->get_quality_text()
 					);
 			//if($qa) $result['qa'] = true;
 			echo json_encode($result);
-		}
+		//}
 	}
 
 
