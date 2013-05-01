@@ -456,7 +456,7 @@ function initConnectionGraph()
 
                                             if (data.slug)
                                             {
-                                                $('.viewRecord').attr("href",base_url + data.slug);
+                                                $('.viewRecord').attr("href", base_url + data.slug);
                                             }
                                             else
                                             {
@@ -534,9 +534,20 @@ function generatePreviewTip(element, slug, registry_object_id, relation_type)
                     $("div.descriptions", temp).html($("div.descriptions", temp).text());
                     $("div.descriptions", temp).html($("div.descriptions", temp).directText());
 
-                    this.set('content.text', temp.html());    
+                    if (data.slug){
+                        $('.viewRecord',temp).attr("href", base_url + data.slug);
+                    }
+                    else
+                    {
+                        $('.viewRecord').attr("href",base_url+"view/?id=" + data.registry_object_id);
+                    }
+                    this.set('content.text', temp.html());   
+
+
+
                     if (data.slug){
                         $('.viewRecordLink'+data.slug).attr("href",base_url + data.slug);
+                        $('.viewRecord').attr("href", base_url + data.slug);
                         if(relation_type){
                          $('.previewItemHeader'+data.slug).html(relation_type);
                         }                       

@@ -29,13 +29,14 @@ function format_relationship($from_class, $relationship_type, $origin=false){
 		"isDerivedFrom" =>array("Derived from", "Derives"),
 		"hasDerivedCollection" =>array("Derives", "Derived From"),
 		"supports" =>array("Supports", "Supported by"),	
-		"isAvaiableThrough" =>array("Available through", "Makes available"),	
+		"isAvailableThrough" =>array("Available through", "Makes available"),	
 		"isProducedBy" =>array("Produced by", "Produces"),
 		"produces" =>array("Produces", "Produced by"),
 		"isOperatedOnBy" =>array("Is operated on by", "Operates on"),
 		"hasPrincipalInvestigator" =>array("Principal investigator", "Principal investigator of"),
 		"isPrincipalInvestigator" =>array("Principal investigator of", "Principal investigator"),
 		"hasValueAddedBy" =>array("Value added by", "Adds value"),
+		"pointOfContact" =>array("Point of Contact", "Is point of contact for"),
 	);
 	$typeArray['party'] = array(
 		"hasAssociationWith" => array("Associated with", "Associated with"),
@@ -75,7 +76,6 @@ function format_relationship($from_class, $relationship_type, $origin=false){
 		"addsValueTo" =>array("Adds value to", "Value added by"),
 		"hasPrincipalInvestigator" =>array("Principal investigator", "Principal investigator of"),
 		"isPrincipalInvestigator" =>array("Principal investigator of", "Principal investigator"),
-		"isAvailableThrough" =>array("Available through", "Makes available"),
 	);
 	$typeArray['activity'] = array(
 		"hasAssociationWith" =>   array("Associated with", "Associated with"),
