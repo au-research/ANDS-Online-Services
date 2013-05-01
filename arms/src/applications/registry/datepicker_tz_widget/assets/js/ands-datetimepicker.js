@@ -160,7 +160,7 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
       //jQuery 1.9 ditched $.browser, so I'm checking for leadingWhitespace support
       //(something IE6-8 don't do)
       if ($.support.leadingWhitespace === false) {
-	$('<div class="alert alert-danger">This plugin requires a moderately modern browser.<br/> Did you know Internet Explorer was released way back in 2009? George W Bush was still president of America in 2009, which is also the year the film <em>Avatar</em> was released.<br/>Might be time to upgrade... </div>').insertAfter(this.$element);
+	$('<div class="alert alert-danger">This plugin requires a moderately modern browser.<br/> Did you know Internet Explorer 8 was released way back in 2009? George W Bush was still president of America in 2009, which is also the year the film <em>Avatar</em> was released.<br/>Might be time to upgrade... </div>').insertAfter(this.$element);
 	this.disable();
 	return false;
       }
