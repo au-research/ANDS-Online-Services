@@ -151,11 +151,14 @@ function executeSearch(searchData, searchUrl){
 				//in MSIE v8. On my local machine, this message started to appear around the 500
 				//record mark. 
 				//more information: http://support.microsoft.com/kb/175500
+				console.log("------");
 				$(docs).each(function(){
+					console.log(this.list_title + " (" + Math.floor(this.score * 100000)  + ")");
 				 	if(this.spatial_coverage_polygons){
 				 		resultPolygons[this.id] = new Array(this.display_title, this.spatial_coverage_polygons[0], this.spatial_coverage_centres[0]);
 				 	}
 				});
+				console.log("------");
 				initSearchPage();
 			        $('.sidebar.mapmode_sidebar').show();
 			},

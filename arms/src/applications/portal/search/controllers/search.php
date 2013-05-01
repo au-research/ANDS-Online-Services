@@ -32,9 +32,8 @@ class Search extends MX_Controller {
 		
 		$this->solr->setOpt('rows', $pp);
 		$this->solr->setOpt('defType', 'edismax');
-		$this->solr->setOpt('mm', '3');
+		$this->solr->setOpt('mm', '1');
 		$this->solr->setOpt('fl', '*, score');
-		$this->solr->setOpt('qf', 'id^1 group^0.8 display_title^0.5 list_title^0.5 fulltext^0.2');
 
 		if (!isset($filters["q"]))
 		{
@@ -67,7 +66,9 @@ class Search extends MX_Controller {
 				$value = urldecode($value);
 				switch($key){
 					case 'q': 
-						$this->solr->setOpt('q', '+fulltext:(*'.$value.'*)');
+						//echo 'id:"'.$value.'"^1 group:"'.$value.'"^0.8 display_title:"'.$value.'"^0.5 list_title:"'.$value.'"^0.5 fulltext:*'.$value.'*^0.2'
+						$this->solr->setOpt('q', 'id:"'.$value.'"^1 group:"'.$value.'"^0.8 display_title:"'.$value.'"^0.5 list_title:"'.$value.'"^0.5 fulltext:*'.$value.'*^0.2');
+						// 'fulltext:*'.$value.'*');
 					break;
 					case 'p': 
 						$page = (int)$value;
