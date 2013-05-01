@@ -23,7 +23,7 @@
 				if($t['selected']){
 					$s = 'current';
 				}else $s = '';
-				echo "<a href='javascript:;' class='filter icontip_".$t['facet_value'] . " " . $s."' filter_type='tab' filter_value=".$t['facet_value'].">".$t['display']."</a>";
+				echo "<a href='javascript:;' class='filter icontip_".$t['facet_value'] . " " . $s."' filter_type='class' filter_value=".$t['facet_value'].">".$t['display']."</a>";
 			}
 		?>
 		

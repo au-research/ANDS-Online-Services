@@ -39,9 +39,14 @@ $(document).ready(function() {
 					case 'group':
 						$('#selected_group').html(decodeURIComponent(value));
 						break;
-					case 'tab':
+					case 'class':
 						$('.tabs a').removeClass('current');
 						$('.tabs a[filter_value='+value+']').addClass('current');
+						break;
+					case 'tab':
+						searchData['class'] = value;
+						delete searchData['tab'];
+						changeHashTo(formatSearch());
 						break;
 				}
 				if(!searchData['q']) $('search_box').val('');
@@ -186,6 +191,10 @@ $(document).on('click', '.filter',function(e){
 	if($(this).attr('filter_type')=='subject_vocab_uri'){
 		delete(searchData['subject_vocab_uri_display']);
 	}
+	if($(this).attr('filter_type')=='class'){
+		$('.tabs a').removeClass('current');
+		$('.tabs a[filter_value=all]').addClass('current');
+	}
 	delete(searchData[filter_type]);
 	searchData['p']=1;
 	changeHashTo(formatSearch());
@@ -233,9 +242,21 @@ $(document).on('click', '.filter',function(e){
 		changeHashTo(formatSearch());
 	}
 }).on('click','.clearAll',function(e){
+	/* Reset the search page (set tab back to 'all') */
 	e.preventDefault();
-	searchData = {};
+
+	if (searchData['map'] == 'show')
+	{
+		// Stay on the map search if that's where we came from
+		searchData = {map:'show'};
+	}
+	else
+	{
+		searchData = {}
+	}
 	$('.adv_input').val('');
+	$('.tabs a').removeClass('current');
+	$('.tabs a[filter_value=all]').addClass('current');
 	changeHashTo(formatSearch());
 	$(this).hide();
 }).on('click', '.post', function(e){
@@ -271,10 +292,15 @@ function loadSubjectBrowse(val){
 		$('#subjectfacet').append($('<div/>'));
 		var sqc = '';
 		if(searchData['q']) sqc += "+fulltext:(*" + searchData['q'] + "*)";
-		if(searchData['tab'] && searchData['tab']!='all') sqc += ' +class:("'+searchData['tab']+'")';
+		if(searchData['class'] && searchData['class']!='all') sqc += ' +class:("'+searchData['class']+'")';
 		if(searchData['group']) sqc += '+group:("'+searchData['group']+'")';
 		if(searchData['type']) sqc += '+type:("'+searchData['type']+'")';
-		sqc += '&defType=edismax';
+		if (sqc == '')
+		{
+			sqc = "*:*";
+		}
+
+		//sqc += '&defType=edismax';
 		$('#subjectfacet div').vocab_widget({mode:'tree', repository:'anzsrc-for', sqc:encodeURIComponent(sqc), endpoint: window.default_base_url + 'registry/vocab_widget/proxy/'})
 		.on('treeselect.vocab.ands', function(event) {
 			var target = $(event.target);
@@ -320,7 +346,7 @@ function initSearchPage(){
 		$('.container').css({margin:'0 auto',width:'960px',padding:'10px 0 0 0'});
 		$('.main').css({width:'633px',padding:'20px 0 0 0'});
 		$('.facet_class').hide();
-		$('.sidebar').removeClass('mapmode_sidebar');
+		$('.sidebar').removeClass('mapmode_sidebar').show();
 		$('#search-result, .pagination, .page_title, .tabs').show();
 		$('html,body').animate({scrollTop: $('body').offset().top}, 750);//scroll to top
 
@@ -344,7 +370,7 @@ function initSearchPage(){
 		e.preventDefault();
 		if(searchData['map']){
 			//already map, hide map
-		        $('#search_notice').addClass('hide');
+		    $('#search_notice').addClass('hide');
 			$('#searchmap').hide();
 			delete searchData['map'];
 			delete searchData['spatial'];
@@ -352,6 +378,7 @@ function initSearchPage(){
 				searchBox.setMap(null);
 				//searchBox = null;
 			}
+			initSearchPage();
 		}else{
 			//no map, show map
 			searchData['map']='show';

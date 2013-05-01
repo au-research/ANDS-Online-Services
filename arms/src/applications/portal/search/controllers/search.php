@@ -78,7 +78,7 @@ class Search extends MX_Controller {
 						$this->solr->setOpt('start', $start);
 						$filteredSearch = true;
 						break;
-					case 'tab': 
+					case 'class': 
 						if($value!='all') $this->solr->addQueryCondition('+class:("'.$value.'")');
 						$filteredSearch = true;
 						break;
