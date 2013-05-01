@@ -157,8 +157,6 @@ function bindPaginationConnection(tt){
 }
 
 /*if (isPublished()) { $('#draft_status').removeClass("hide"); }*/
-
-
 function initInternalSuggestedLinks()
 {
 

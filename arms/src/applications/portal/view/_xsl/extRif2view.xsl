@@ -410,10 +410,8 @@
     <!-- DISPLAY DATES -->
     <xsl:if test="ro:dates">
         <p><xsl:text>&amp;nbsp;</xsl:text></p>
-        <h4>Dates</h4> 
-        <table>
-            <xsl:apply-templates select="ro:dates"/>
-        </table>  
+        <h4>Dates</h4>
+          <xsl:apply-templates select="ro:dates"/>
         <p>&amp;nbsp;</p>
     </xsl:if>           
     

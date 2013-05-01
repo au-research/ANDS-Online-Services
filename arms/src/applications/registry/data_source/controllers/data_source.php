@@ -152,7 +152,7 @@ class Data_source extends MX_Controller {
 		//administrative and loading stuffs
 		acl_enforce('REGISTRY_USER');
 		ds_acl_enforce($data_source_id);
-		// ds_acl_enforce($data_source_id);
+
 		header('Cache-Control: no-cache, must-revalidate');
 		header('Content-type: application/json');
 		$this->load->model('data_source/data_sources', 'ds');
