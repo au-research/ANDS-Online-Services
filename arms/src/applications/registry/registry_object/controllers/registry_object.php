@@ -843,7 +843,15 @@ class Registry_object extends MX_Controller {
 		$this->load->model('registry_object/registry_objects', 'ro');
 		$ro = $this->ro->getByID($ro_id);
 		if($ro){
-			$connections = $ro->getAllRelatedObjects(true); // allow drafts ?
+			$connections = $ro->getAllRelatedObjects(true); // allow drafts
+			foreach($connections AS &$link)
+			{
+				// Reverse the relationship description (note: this reverses to the "readable" version (i.e. not camelcase))
+				if ($link['registry_object_id'] && in_array($link['origin'], array('REVERSE_EXT','REVERSE_INT')))
+				{
+					$link['relation_type'] = format_relationship($link['class'], $link['relation_type'], $link['origin']);
+				}
+			}
 		}
 		$status['count'] = sizeof($connections);
 		echo json_encode(array("status"=>$status,"connections"=>$connections));
