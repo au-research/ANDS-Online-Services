@@ -65,33 +65,7 @@
  * © 2011 Colin Snover <http://zetafleet.com>
  * Released under MIT license.
  */
-/**
- * Date.parse with progressive enhancement for ISO 8601 <https://github.com/csnover/js-iso8601>
- * © 2011 Colin Snover <http://zetafleet.com>
- * Released under MIT license.
- */
 (function (Date, undefined) {
-}(Date));
-/**
- * @name jsTimezoneDetect
- * @version 1.0.5
- * @author Jon Nylander
- * @license MIT License - http://www.opensource.org/licenses/mit-license.php
- * For usage and examples, visit: http://pellepim.bitbucket.org/jstz/
- * Copyright (c) Jon Nylander
- */
-var jstz=function(){"use strict"
-var a="s",i=function(a){var i=-a.getTimezoneOffset()
-return null!==i?i:0},e=function(a,i,e){var r=new Date
-return void 0!==a&&r.setFullYear(a),r.setMonth(i),r.setDate(e),r},r=function(a){return i(e(a,0,2))},n=function(a){return i(e(a,5,2))},t=function(a){var e=a.getMonth()>7,t=e?n(a.getFullYear()):r(a.getFullYear()),s=i(a),c=0>t,A=t-s
-return c||e?0!==A:0>A},s=function(){var i=r(),e=n(),t=i-e
-return 0>t?i+",1":t>0?e+",1,"+a:i+",0"},c=function(){var a=s()
-return new jstz.TimeZone(jstz.olson.timezones[a])},A=function(){return s()},o=function(){return jstz.olson.timezones},u=function(a){var i=new Date(2010,6,15,1,0,0,0),e={"America/Denver":new Date(2011,2,13,3,0,0,0),"America/Mazatlan":new Date(2011,3,3,3,0,0,0),"America/Chicago":new Date(2011,2,13,3,0,0,0),"America/Mexico_City":new Date(2011,3,3,3,0,0,0),"America/Asuncion":new Date(2012,9,7,3,0,0,0),"America/Santiago":new Date(2012,9,3,3,0,0,0),"America/Campo_Grande":new Date(2012,9,21,5,0,0,0),"America/Montevideo":new Date(2011,9,2,3,0,0,0),"America/Sao_Paulo":new Date(2011,9,16,5,0,0,0),"America/Los_Angeles":new Date(2011,2,13,8,0,0,0),"America/Santa_Isabel":new Date(2011,3,5,8,0,0,0),"America/Havana":new Date(2012,2,10,2,0,0,0),"America/New_York":new Date(2012,2,10,7,0,0,0),"Europe/Helsinki":new Date(2013,2,31,5,0,0,0),"Pacific/Auckland":new Date(2011,8,26,7,0,0,0),"America/Halifax":new Date(2011,2,13,6,0,0,0),"America/Goose_Bay":new Date(2011,2,13,2,1,0,0),"America/Miquelon":new Date(2011,2,13,5,0,0,0),"America/Godthab":new Date(2011,2,27,1,0,0,0),"Europe/Moscow":i,"Asia/Amman":new Date(2013,2,29,1,0,0,0),"Asia/Beirut":new Date(2013,2,31,2,0,0,0),"Asia/Damascus":new Date(2013,3,6,2,0,0,0),"Asia/Jerusalem":new Date(2013,2,29,5,0,0,0),"Asia/Yekaterinburg":i,"Asia/Omsk":i,"Asia/Krasnoyarsk":i,"Asia/Irkutsk":i,"Asia/Yakutsk":i,"Asia/Vladivostok":i,"Asia/Baku":new Date(2013,2,31,4,0,0),"Asia/Yerevan":new Date(2013,2,31,3,0,0),"Asia/Kamchatka":i,"Asia/Gaza":new Date(2010,2,27,4,0,0),"Africa/Cairo":new Date(2010,4,1,3,0,0),"Europe/Minsk":i,"Pacific/Apia":new Date(2010,10,1,1,0,0,0),"Pacific/Fiji":new Date(2010,11,1,0,0,0),"Australia/Perth":new Date(2008,10,1,1,0,0,0)}
-return e[a]}
-return{determine:c,offset:A,timezones:o,date_is_dst:t,dst_start_for:u}}()
-jstz.TimeZone=function(a){"use strict"
-var i={"America/Denver":["America/Denver","America/Mazatlan"],"America/Chicago":["America/Chicago","America/Mexico_City"],"America/Santiago":["America/Santiago","America/Asuncion","America/Campo_Grande"],"America/Montevideo":["America/Montevideo","America/Sao_Paulo"],"Asia/Beirut":["Asia/Amman","Asia/Jerusalem","Asia/Beirut","Europe/Helsinki","Asia/Damascus"],"Pacific/Auckland":["Pacific/Auckland","Pacific/Fiji"],"America/Los_Angeles":["America/Los_Angeles","America/Santa_Isabel"],"America/New_York":["America/Havana","America/New_York"],"America/Halifax":["America/Goose_Bay","America/Halifax"],"America/Godthab":["America/Miquelon","America/Godthab"],"Asia/Dubai":["Europe/Moscow"],"Asia/Dhaka":["Asia/Yekaterinburg"],"Asia/Jakarta":["Asia/Omsk"],"Asia/Shanghai":["Asia/Krasnoyarsk","Australia/Perth"],"Asia/Tokyo":["Asia/Irkutsk"],"Australia/Brisbane":["Asia/Yakutsk"],"Pacific/Noumea":["Asia/Vladivostok"],"Pacific/Tarawa":["Asia/Kamchatka","Pacific/Fiji"],"Pacific/Tongatapu":["Pacific/Apia"],"Asia/Baghdad":["Europe/Minsk"],"Asia/Baku":["Asia/Yerevan","Asia/Baku"],"Africa/Johannesburg":["Asia/Gaza","Africa/Cairo"]},e=a,r=function(){for(var a=i[e],r=a.length,n=0,t=a[0];r>n;n+=1)if(t=a[n],jstz.date_is_dst(jstz.dst_start_for(t)))return e=t,void 0},n=function(){return typeof i[e]!="undefined"}
-return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones={"-720,0":"Pacific/Majuro","-660,0":"Pacific/Pago_Pago","-600,1":"America/Adak","-600,0":"Pacific/Honolulu","-570,0":"Pacific/Marquesas","-540,0":"Pacific/Gambier","-540,1":"America/Anchorage","-480,1":"America/Los_Angeles","-480,0":"Pacific/Pitcairn","-420,0":"America/Phoenix","-420,1":"America/Denver","-360,0":"America/Guatemala","-360,1":"America/Chicago","-360,1,s":"Pacific/Easter","-300,0":"America/Bogota","-300,1":"America/New_York","-270,0":"America/Caracas","-240,1":"America/Halifax","-240,0":"America/Santo_Domingo","-240,1,s":"America/Santiago","-210,1":"America/St_Johns","-180,1":"America/Godthab","-180,0":"America/Argentina/Buenos_Aires","-180,1,s":"America/Montevideo","-120,0":"America/Noronha","-60,1":"Atlantic/Azores","-60,0":"Atlantic/Cape_Verde","0,0":"UTC","0,1":"Europe/London","60,1":"Europe/Berlin","60,0":"Africa/Lagos","60,1,s":"Africa/Windhoek","120,1":"Asia/Beirut","120,0":"Africa/Johannesburg","180,0":"Asia/Baghdad","180,1":"Europe/Moscow","210,1":"Asia/Tehran","240,0":"Asia/Dubai","240,1":"Asia/Baku","270,0":"Asia/Kabul","300,1":"Asia/Yekaterinburg","300,0":"Asia/Karachi","330,0":"Asia/Kolkata","345,0":"Asia/Kathmandu","360,0":"Asia/Dhaka","360,1":"Asia/Omsk","390,0":"Asia/Rangoon","420,1":"Asia/Krasnoyarsk","420,0":"Asia/Jakarta","480,0":"Asia/Shanghai","480,1":"Asia/Irkutsk","525,0":"Australia/Perth","540,1":"Asia/Yakutsk","540,0":"Asia/Tokyo","570,0":"Australia/Darwin","570,1,s":"Australia/Adelaide","600,0":"Australia/Brisbane","600,1":"Asia/Vladivostok","600,1,s":"Australia/Sydney","630,1,s":"Australia/Lord_Howe","660,1":"Asia/Kamchatka","660,0":"Pacific/Noumea","690,0":"Pacific/Norfolk","720,1,s":"Pacific/Auckland","720,0":"Pacific/Tarawa","765,1,s":"Pacific/Chatham","780,0":"Pacific/Tongatapu","780,1,s":"Pacific/Apia","840,0":"Pacific/Kiritimati"};
     var origParse = Date.parse, numericKeys = [ 1, 4, 5, 6, 7, 10, 11 ];
     Date.parse = function (date) {
         var timestamp, struct, minutesOffset = 0;
@@ -126,6 +100,41 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
 
         return timestamp;
     };
+}(Date));
+/**
+ * @name jsTimezoneDetect
+ * @version 1.0.5
+ * @author Jon Nylander
+ * @license MIT License - http://www.opensource.org/licenses/mit-license.php
+ * For usage and examples, visit: http://pellepim.bitbucket.org/jstz/
+ * Copyright (c) Jon Nylander
+ */
+var jstz=function(){"use strict"
+var a="s",i=function(a){var i=-a.getTimezoneOffset()
+return null!==i?i:0},e=function(a,i,e){var r=new Date
+return void 0!==a&&r.setFullYear(a),r.setMonth(i),r.setDate(e),r},r=function(a){return i(e(a,0,2))},n=function(a){return i(e(a,5,2))},t=function(a){var e=a.getMonth()>7,t=e?n(a.getFullYear()):r(a.getFullYear()),s=i(a),c=0>t,A=t-s
+return c||e?0!==A:0>A},s=function(){var i=r(),e=n(),t=i-e
+return 0>t?i+",1":t>0?e+",1,"+a:i+",0"},c=function(){var a=s()
+return new jstz.TimeZone(jstz.olson.timezones[a])},A=function(){return s()},o=function(){return jstz.olson.timezones},u=function(a){var i=new Date(2010,6,15,1,0,0,0),e={"America/Denver":new Date(2011,2,13,3,0,0,0),"America/Mazatlan":new Date(2011,3,3,3,0,0,0),"America/Chicago":new Date(2011,2,13,3,0,0,0),"America/Mexico_City":new Date(2011,3,3,3,0,0,0),"America/Asuncion":new Date(2012,9,7,3,0,0,0),"America/Santiago":new Date(2012,9,3,3,0,0,0),"America/Campo_Grande":new Date(2012,9,21,5,0,0,0),"America/Montevideo":new Date(2011,9,2,3,0,0,0),"America/Sao_Paulo":new Date(2011,9,16,5,0,0,0),"America/Los_Angeles":new Date(2011,2,13,8,0,0,0),"America/Santa_Isabel":new Date(2011,3,5,8,0,0,0),"America/Havana":new Date(2012,2,10,2,0,0,0),"America/New_York":new Date(2012,2,10,7,0,0,0),"Europe/Helsinki":new Date(2013,2,31,5,0,0,0),"Pacific/Auckland":new Date(2011,8,26,7,0,0,0),"America/Halifax":new Date(2011,2,13,6,0,0,0),"America/Goose_Bay":new Date(2011,2,13,2,1,0,0),"America/Miquelon":new Date(2011,2,13,5,0,0,0),"America/Godthab":new Date(2011,2,27,1,0,0,0),"Europe/Moscow":i,"Asia/Amman":new Date(2013,2,29,1,0,0,0),"Asia/Beirut":new Date(2013,2,31,2,0,0,0),"Asia/Damascus":new Date(2013,3,6,2,0,0,0),"Asia/Jerusalem":new Date(2013,2,29,5,0,0,0),"Asia/Yekaterinburg":i,"Asia/Omsk":i,"Asia/Krasnoyarsk":i,"Asia/Irkutsk":i,"Asia/Yakutsk":i,"Asia/Vladivostok":i,"Asia/Baku":new Date(2013,2,31,4,0,0),"Asia/Yerevan":new Date(2013,2,31,3,0,0),"Asia/Kamchatka":i,"Asia/Gaza":new Date(2010,2,27,4,0,0),"Africa/Cairo":new Date(2010,4,1,3,0,0),"Europe/Minsk":i,"Pacific/Apia":new Date(2010,10,1,1,0,0,0),"Pacific/Fiji":new Date(2010,11,1,0,0,0),"Australia/Perth":new Date(2008,10,1,1,0,0,0)}
+return e[a]}
+return{determine:c,offset:A,timezones:o,date_is_dst:t,dst_start_for:u}}()
+jstz.TimeZone=function(a){"use strict"
+var i={"America/Denver":["America/Denver","America/Mazatlan"],"America/Chicago":["America/Chicago","America/Mexico_City"],"America/Santiago":["America/Santiago","America/Asuncion","America/Campo_Grande"],"America/Montevideo":["America/Montevideo","America/Sao_Paulo"],"Asia/Beirut":["Asia/Amman","Asia/Jerusalem","Asia/Beirut","Europe/Helsinki","Asia/Damascus"],"Pacific/Auckland":["Pacific/Auckland","Pacific/Fiji"],"America/Los_Angeles":["America/Los_Angeles","America/Santa_Isabel"],"America/New_York":["America/Havana","America/New_York"],"America/Halifax":["America/Goose_Bay","America/Halifax"],"America/Godthab":["America/Miquelon","America/Godthab"],"Asia/Dubai":["Europe/Moscow"],"Asia/Dhaka":["Asia/Yekaterinburg"],"Asia/Jakarta":["Asia/Omsk"],"Asia/Shanghai":["Asia/Krasnoyarsk","Australia/Perth"],"Asia/Tokyo":["Asia/Irkutsk"],"Australia/Brisbane":["Asia/Yakutsk"],"Pacific/Noumea":["Asia/Vladivostok"],"Pacific/Tarawa":["Asia/Kamchatka","Pacific/Fiji"],"Pacific/Tongatapu":["Pacific/Apia"],"Asia/Baghdad":["Europe/Minsk"],"Asia/Baku":["Asia/Yerevan","Asia/Baku"],"Africa/Johannesburg":["Asia/Gaza","Africa/Cairo"]},e=a,r=function(){for(var a=i[e],r=a.length,n=0,t=a[0];r>n;n+=1)if(t=a[n],jstz.date_is_dst(jstz.dst_start_for(t)))return e=t,void 0},n=function(){return typeof i[e]!="undefined"}
+return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones={"-720,0":"Pacific/Majuro","-660,0":"Pacific/Pago_Pago","-600,1":"America/Adak","-600,0":"Pacific/Honolulu","-570,0":"Pacific/Marquesas","-540,0":"Pacific/Gambier","-540,1":"America/Anchorage","-480,1":"America/Los_Angeles","-480,0":"Pacific/Pitcairn","-420,0":"America/Phoenix","-420,1":"America/Denver","-360,0":"America/Guatemala","-360,1":"America/Chicago","-360,1,s":"Pacific/Easter","-300,0":"America/Bogota","-300,1":"America/New_York","-270,0":"America/Caracas","-240,1":"America/Halifax","-240,0":"America/Santo_Domingo","-240,1,s":"America/Santiago","-210,1":"America/St_Johns","-180,1":"America/Godthab","-180,0":"America/Argentina/Buenos_Aires","-180,1,s":"America/Montevideo","-120,0":"America/Noronha","-60,1":"Atlantic/Azores","-60,0":"Atlantic/Cape_Verde","0,0":"UTC","0,1":"Europe/London","60,1":"Europe/Berlin","60,0":"Africa/Lagos","60,1,s":"Africa/Windhoek","120,1":"Asia/Beirut","120,0":"Africa/Johannesburg","180,0":"Asia/Baghdad","180,1":"Europe/Moscow","210,1":"Asia/Tehran","240,0":"Asia/Dubai","240,1":"Asia/Baku","270,0":"Asia/Kabul","300,1":"Asia/Yekaterinburg","300,0":"Asia/Karachi","330,0":"Asia/Kolkata","345,0":"Asia/Kathmandu","360,0":"Asia/Dhaka","360,1":"Asia/Omsk","390,0":"Asia/Rangoon","420,1":"Asia/Krasnoyarsk","420,0":"Asia/Jakarta","480,0":"Asia/Shanghai","480,1":"Asia/Irkutsk","525,0":"Australia/Perth","540,1":"Asia/Yakutsk","540,0":"Asia/Tokyo","570,0":"Australia/Darwin","570,1,s":"Australia/Adelaide","600,0":"Australia/Brisbane","600,1":"Asia/Vladivostok","600,1,s":"Australia/Sydney","630,1,s":"Australia/Lord_Howe","660,1":"Asia/Kamchatka","660,0":"Pacific/Noumea","690,0":"Pacific/Norfolk","720,1,s":"Pacific/Auckland","720,0":"Pacific/Tarawa","765,1,s":"Pacific/Chatham","780,0":"Pacific/Tongatapu","780,1,s":"Pacific/Apia","840,0":"Pacific/Kiritimati"};
+  /*
+   * Provide Date.toISOString() for older (i.e. MSIE8) browsers
+   */
+  if (!Date.prototype.toISOString) {
+    Date.prototype.toISOString = function (key) {
+      function pad(n) {return parseInt(n) < 10 ? '0' + n : n;}
+      return this.getUTCFullYear()   + '-' +
+        pad(this.getUTCMonth() + 1) + '-' +
+        pad(this.getUTCDate())      + 'T' +
+        pad(this.getUTCHours())     + ':' +
+        pad(this.getUTCMinutes())   + ':' +
+        pad(this.getUTCSeconds())   + 'Z';
+    };
+  }
 
 
   /**
@@ -148,71 +157,80 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
       this.options = options;
       this.$element = $(element);
       this.language = 'en';
+      //jQuery 1.9 ditched $.browser, so I'm checking for leadingWhitespace support
+      //(something IE6-8 don't do)
+      if ($.support.leadingWhitespace === false) {
+	$('<div class="alert alert-danger">This plugin requires a moderately modern browser.<br/> Did you know Internet Explorer was released way back in 2009? George W Bush was still president of America in 2009, which is also the year the film <em>Avatar</em> was released.<br/>Might be time to upgrade... </div>').insertAfter(this.$element);
+	this.disable();
+	return false;
+      }
+      else {
 
-      this.isInput = this.$element.is('input');
-      this.component = false;
-      if (this.$element.is('.input-append') || this.$element.is('.input-prepend')) {
+	this.isInput = this.$element.is('input');
+	this.component = false;
+	if (this.$element.is('.input-append') || this.$element.is('.input-prepend')) {
           this.component = this.$element.find('.add-on');
           $('<span class="help-block">' +
-	      'Datetime format is ' +
-	      '<a href="http://en.wikipedia.org/wiki/ISO_8601">' +
-	        'ISO-8601' +
-	      '</a>, UTC' +
+	    'Datetime format is ' +
+	    '<a href="http://en.wikipedia.org/wiki/ISO_8601">' +
+	    'ISO-8601' +
+	    '</a>, UTC' +
 	    '</span>').insertAfter(this.$element);
+	}
+
+	this.format = 'iso8601';
+
+	if (this.component) {
+          icon = this.component.find('i');
+	}
+	if (icon && icon.length) this.timeIcon = icon.data('time-icon');
+	if (!this.timeIcon) this.timeIcon = 'icon-time';
+	icon.addClass(this.timeIcon);
+
+	if (icon && icon.length) this.dateIcon = icon.data('date-icon');
+	if (!this.dateIcon) this.dateIcon = 'icon-calendar';
+	icon.removeClass(this.timeIcon);
+	icon.addClass(this.dateIcon);
+
+	this._timezone = this.jstz.determine().name();
+	this._oldtz = this._timezone;
+
+	var templateopts = {
+	  timeIcon: this.timeIcon,
+	  collapse: options.collapse,
+	  currTZ: this._timezone};
+
+	this.widget = $(getTemplate(templateopts)).appendTo('body');
+	this.startViewMode = this.viewMode = this.minViewMode = 0;
+
+	this.weekStart = options.weekStart||this.$element.data('date-weekstart')||0;
+	this.weekEnd = this.weekStart === 0 ? 6 : this.weekStart - 1;
+	this.fillDow();
+	this.fillMonths();
+	this.fillHours();
+	this.fillMinutes();
+	this.fillSeconds();
+
+	var zones = [];
+
+	$.each(WallTime.data.zones,
+	       function(name, zone) {
+		 zones.push({name: name, offset:zone[0]['_offset']});
+	       });
+
+	zones = zones.sort(function(a,b) {
+	  var ao = parseFloat(a.offset.replace(':', '.'), 10);
+	  var bo = parseFloat(b.offset.replace(':', '.'), 10);
+	  return ao - bo;
+	});
+	this.fillTZ(zones);
+
+	this.setup();
+	this.set();
+
+	this.showMode();
+	this._attachDatePickerEvents();
       }
-
-      this.format = 'iso8601';
-
-      if (this.component) {
-        icon = this.component.find('i');
-      }
-      if (icon && icon.length) this.timeIcon = icon.data('time-icon');
-      if (!this.timeIcon) this.timeIcon = 'icon-time';
-      icon.addClass(this.timeIcon);
-
-      if (icon && icon.length) this.dateIcon = icon.data('date-icon');
-      if (!this.dateIcon) this.dateIcon = 'icon-calendar';
-      icon.removeClass(this.timeIcon);
-      icon.addClass(this.dateIcon);
-
-      this._timezone = this.jstz.determine().name();
-      this._oldtz = this._timezone;
-
-      var templateopts = {
-	timeIcon: this.timeIcon,
-	collapse: options.collapse,
-	currTZ: this._timezone};
-
-      this.widget = $(getTemplate(templateopts)).appendTo('body');
-      this.startViewMode = this.viewMode = this.minViewMode = 0;
-
-      this.weekStart = options.weekStart||this.$element.data('date-weekstart')||0;
-      this.weekEnd = this.weekStart === 0 ? 6 : this.weekStart - 1;
-      this.fillDow();
-      this.fillMonths();
-      this.fillHours();
-      this.fillMinutes();
-      this.fillSeconds();
-
-      var zones = [];
-      $.each(WallTime.data.zones,
-	     function(name, zone) {
-	       zones.push({name: name, offset:zone[0]['_offset']});
-	     });
-
-      zones = zones.sort(function(a,b) {
-	var ao = parseFloat(a.offset.replace(':', '.'), 10);
-	var bo = parseFloat(b.offset.replace(':', '.'), 10);
-	return ao - bo;
-      });
-      this.fillTZ(zones);
-
-      this.setup();
-      this.set();
-
-      this.showMode();
-      this._attachDatePickerEvents();
-
     },
 
     show: function(e) {
@@ -231,12 +249,12 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
     },
 
     disable: function(){
-          this.$element.find('input').prop('disabled',true);
-          this._detachDatePickerEvents();
+      this.$element.find('input').prop('disabled',true);
+      this._detachDatePickerEvents();
     },
     enable: function(){
-          this.$element.find('input').prop('disabled',false);
-          this._attachDatePickerEvents();
+      this.$element.find('input').prop('disabled',false);
+      this._attachDatePickerEvents();
     },
 
     hide: function() {
@@ -256,15 +274,6 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
         date: this._date
       });
       this._detachDatePickerGlobalEvents();
-    },
-
-    whereami: function() {
-      var e = new Error('dummy');
-      var stack = e.stack.replace(/^[^\(]+?[\n$]/gm, '')
-	.replace(/^\s+at\s+/gm, '')
-	.replace(/^Object.<anonymous>\s*\(/gm, '{anonymous}()@')
-	.split('\n');
-      console.log(stack.join('\n'));
     },
 
     makeoffset: function(offset) {
@@ -291,8 +300,7 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
 
     // this sets the text box value with the value of this._date
     set: function() {
-	console.log(this._date);
-	var formatted = !this._unset ? this._date.toISOString().replace(/\.?\d*Z$/, 'Z') : '';
+      var formatted = !this._unset ? this._date.toISOString().replace(/\.?\d*Z$/, 'Z') : '';
       if (!this.isInput) {
         if (this.component){
           var input = this.$element.find('input');
@@ -313,10 +321,8 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
         this._unset = false;
       }
       if (typeof newDate === 'string') {
-	  console.log('setting date from string: ' + newDate);
         this._date = this.parseDate(newDate);
       } else if(newDate) {
-	console.log('setting date from object');
         this._date = new Date(newDate);
       }
       this.set();
@@ -357,7 +363,8 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
     notifyChange: function(){
       this.$element.trigger({
         type: 'changeDate',
-        date: this.getDate()
+        utcTime: this._walltime.utc,
+	tzTime: this._walltime.wallTime
       });
     },
 
@@ -366,7 +373,6 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
     // the view is the reset (via this.fillDate(),
     // this.fillTime())
     setup: function(){
-      console.log('setting up');
       var dateStr;
       if (this.isInput) {
         dateStr = this.$element.val();
@@ -374,17 +380,21 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
         dateStr = this.$element.find('input').val();
       }
       if (dateStr) {
-	console.log('(update) setting date from string: ' + dateStr);
         this._date = this.parseDate(dateStr);
 	this.set();
+      }
+      else {
+	var nd = new Date();
+	this._date = this.parseDate(nd.toISOString());
       }
       this.fillDate();
       this.fillTime();
     },
 
     parseDate: function(str) {
-	console.log([str, Date.parse(str)]);
-      return Date.parse(str);
+      this._walltime = WallTime.UTCToWallTime(Date.UTC(1970, 0, 1, 0, 0, 0, Date.parse(str)),
+					      this._timezone);
+      return this._walltime.utc;
     },
 
     fillDow: function() {
@@ -406,13 +416,17 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
       this.widget.find('.datepicker-months td').append(html);
     },
 
-    fillDate: function() {
-      var year = this._date.getUTCFullYear();
-      var month = this._date.getUTCMonth();
+    fillDate: function(theDate) {
+      if (typeof(theDate) === 'undefined') {
+	theDate = this._walltime.wallTime;
+      }
+
+      var year = theDate.getUTCFullYear();
+      var month = theDate.getUTCMonth();
       var currentDate = UTCDate(
-        this._date.getUTCFullYear(),
-        this._date.getUTCMonth(),
-        this._date.getUTCDate(),
+        theDate.getUTCFullYear(),
+        theDate.getUTCMonth(),
+        theDate.getUTCDate(),
         0, 0, 0, 0
       );
 
@@ -430,7 +444,7 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
       prevMonth.setUTCDate(day - (prevMonth.getUTCDay() - this.weekStart + 7) % 7);
 
       var nextMonth = new Date(prevMonth.valueOf());
-      nextMonth.setUTCDate(nextMonth.getUTCDate() + 42);
+      nextMonth.setUTCDate(nextMonth.getDate() + 42);
       nextMonth = nextMonth.valueOf();
       var html = [];
       var clsName;
@@ -458,18 +472,18 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
           clsName += ' disabled';
         }
         html.push('<td class="day' + clsName + '">' + prevMonth.getUTCDate() + '</td>');
-        if (prevMonth.getUTCDay() === this.weekEnd) {
+        if (prevMonth.getDay() === this.weekEnd) {
           html.push('</tr>');
         }
         prevMonth.setUTCDate(prevMonth.getUTCDate() + 1);
       }
       this.widget.find('.datepicker-days tbody').empty().append(html.join(''));
-      var currentYear = this._date.getUTCFullYear();
+      var currentYear = theDate.getUTCFullYear();
 
       var months = this.widget.find('.datepicker-months').find(
         'th:eq(1)').text(year).end().find('span').removeClass('active');
       if (currentYear === year) {
-        months.eq(this._date.getUTCMonth()).addClass('active');
+        months.eq(theDate.getUTCMonth()).addClass('active');
       }
 
       html = '';
@@ -540,10 +554,14 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
     },
 
     fillTZ: function(timezones) {
-      var dstlabel = ' <span class="label label-info"><small>DST</small></span>';
       var list = this.widget.find(
 	'.timepicker .timepicker-tz ul');
       list.parent().hide();
+      list.append('<li class="alert-warning alert">' +
+		    '<small>Offsets are for standard time; ' +
+		    'daylight saving time offsets are automatically ' +
+		    'calculated as required.</small>' +
+		  '</li>');
       $.each(timezones, function(idx, tz) {
 	var offset = tz.offset;
 	if (offset.substr(0,1) !== '-') {
@@ -552,7 +570,7 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
 	var name = tz.name;
 	var li = $('<li/>');
 	var button = $('<button class="btn btn-block" ' +
-		       'data-tz="' + tz + '" />');
+		       'data-tz="' + name + '" />');
 
 
 	if (name !== "UTC") {
@@ -567,17 +585,21 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
       });
     },
 
-    fillTime: function() {
-      if (!this._date)
+    fillTime: function(theTime) {
+      if (typeof(theTime) === 'undefined') {
+	theTime = this._walltime.wallTime;
+      }
+
+      if (!theTime)
         return;
+
       var timeComponents = this.widget.find('.timepicker span[data-time-component]');
       var table = timeComponents.closest('table');
-      var hour = this._date.getHours();
-      console.log('hour: ' + hour + ' (' + this._date + ')');
+      var hour = theTime.getUTCHours();
 
       hour = padLeft(hour.toString(), 2, '0');
-      var minute = padLeft(this._date.getMinutes().toString(), 2, '0');
-      var second = padLeft(this._date.getUTCSeconds().toString(), 2, '0');
+      var minute = padLeft(theTime.getUTCMinutes().toString(), 2, '0');
+      var second = padLeft(theTime.getUTCSeconds().toString(), 2, '0');
       timeComponents.filter('[data-time-component=hours]').text(hour);
       timeComponents.filter('[data-time-component=minutes]').text(minute);
       timeComponents.filter('[data-time-component=seconds]').text(second);
@@ -588,92 +610,117 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
       e.preventDefault();
       this._unset = false;
       var target = $(e.target).closest('span, td, th');
+      var newdate = this._walltime.wallTime;
+      var doNotify = false;
+
+
       if (target.length === 1) {
         if (! target.is('.disabled')) {
           switch(target[0].nodeName.toLowerCase()) {
-            case 'th':
-              switch(target[0].className) {
-                case 'switch':
-                  this.showMode(1);
-                  break;
-                case 'prev':
-                case 'next':
-                  var vd = this._date;
-                  var navFnc = DPGlobal.modes[this.viewMode].navFnc;
-                  var step = DPGlobal.modes[this.viewMode].navStep;
-                  if (target[0].className === 'prev') step = step * -1;
-                  vd['set' + navFnc](vd['get' + navFnc]() + step);
-                  this.fillDate();
-                  this.set();
-                  break;
-              }
+          case 'th':
+            switch(target[0].className) {
+            case 'switch':
+              this.showMode(1);
               break;
-            case 'span':
-              if (target.is('.month')) {
-                var month = target.parent().find('span').index(target);
-                this._date.setUTCMonth(month);
-              } else {
-                var year = parseInt(target.text(), 10) || 0;
-                this._date.setUTCFullYear(year);
-              }
-              this.showMode(-1);
-              this.fillDate();
-              this.set();
+            case 'prev':
+            case 'next':
+              var navFnc = DPGlobal.modes[this.viewMode].navFnc;
+              var step = DPGlobal.modes[this.viewMode].navStep;
+              if (target[0].className === 'prev') step = step * -1;
+              newdate['set' + navFnc](newdate['get' + navFnc]() + step);
               break;
-            case 'td':
-              if (target.is('.day')) {
-                var day = parseInt(target.text(), 10) || 1;
-                var month = this._date.getUTCMonth();
-                var year = this._date.getUTCFullYear();
-                if (target.is('.old')) {
-                  if (month === 0) {
-                    month = 11;
-                    year -= 1;
-                  } else {
-                    month -= 1;
-                  }
-                } else if (target.is('.new')) {
-                  if (month == 11) {
-                    month = 0;
-                    year += 1;
-                  } else {
-                    month += 1;
-                  }
+            }
+	    doNotify = true;
+            break;
+          case 'span':
+            if (target.is('.month')) {
+              var month = target.parent().find('span').index(target);
+              newdate.setUTCMonth(month);
+            } else {
+              var year = parseInt(target.text(), 10) || 0;
+              newdate.setUTCFullYear(year);
+            }
+	    doNotify = true;
+            this.showMode(-1);
+            break;
+          case 'td':
+            if (target.is('.day')) {
+	      doNotify = true;
+              var day = parseInt(target.text(), 10) || 1;
+              var month = newdate.getUTCMonth();
+              var year = newdate.getUTCFullYear();
+              if (target.is('.old')) {
+                if (month === 0) {
+                  month = 11;
+                  year -= 1;
+                } else {
+                  month -= 1;
                 }
-                this._date.set({year: year, month: month, day: day});
-                this.fillDate();
-                this.set();
-                this.notifyChange();
+              } else if (target.is('.new')) {
+                if (month == 11) {
+                  month = 0;
+                  year += 1;
+                } else {
+                  month += 1;
+                }
               }
-              break;
+	      newdate.setUTCDate(day);
+	      newdate.setUTCMonth(month);
+	      newdate.setUTCFullYear(year);
+            }
+            break;
           }
+
+	  this._walltime = WallTime.UTCToWallTime(WallTime.WallTimeToUTC(this._timezone,
+									 newdate.getUTCFullYear(),
+									 newdate.getUTCMonth(),
+									 newdate.getUTCDate(),
+									 newdate.getUTCHours(),
+									 newdate.getUTCMinutes(),
+									 newdate.getUTCSeconds()),
+						  this._timezone);
+
+          this._date = this._walltime.utc;
+          this.fillDate();
+          this.fillTime();
+          this.set();
+	  if (doNotify) {
+            this.notifyChange();
+	  }
+
         }
       }
     },
 
     actions: {
       incrementHours: function(e) {
-        this._date.addHours(1);
+	this._date.setUTCHours(this._date.getUTCHours() + 1);
+	this._walltime = WallTime.UTCToWallTime(this._date, this._timezone);
       },
 
       incrementMinutes: function(e) {
-        this._date.addMinutes(1);
+	this._date.setUTCMinutes(this._date.getUTCMinutes() + 1);
+	this._walltime = WallTime.UTCToWallTime(this._date, this._timezone);
       },
 
       incrementSeconds: function(e) {
-        this._date.addSeconds(1);
+	this._date.setUTCSeconds(this._date.getUTCSeconds() + 1);
+	this._walltime = WallTime.UTCToWallTime(this._date, this._timezone);
       },
 
       decrementHours: function(e) {
-	this._date.addHours(-1);
+	this._date.setUTCHours(this._date.getUTCHours() - 1);
+	this._walltime = WallTime.UTCToWallTime(this._date, this._timezone);
       },
 
       decrementMinutes: function(e) {
-        this._date.addMinutes(-1);
+	this._date.setUTCMinutes(this._date.getUTCMinutes() - 1);
+	this._walltime = WallTime.UTCToWallTime(this._date, this._timezone);
       },
 
       decrementSeconds: function(e) {
-        this._date.addSeconds(-1);
+	this._date.setUTCSeconds(this._date.getUTCSeconds() - 1);
+	this._walltime = WallTime.UTCToWallTime(this._date, this._timezone);
       },
 
       showPicker: function() {
@@ -698,6 +745,8 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
 
       showTZ: function() {
         this.widget.find('.timepicker .timepicker-picker').hide();
+	this.widget.find('.timepicker .timepicker-tz button').removeClass('btn-primary');
+	this.widget.find('.timepicker .timepicker-tz button[data-tz="' + this._timezone +'"]').addClass('btn-primary');
         this.widget.find('.timepicker .timepicker-tz').show();
       },
 
@@ -705,25 +754,12 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
 	var tgt = $(e.target);
 	if (tgt.is('button')) {
 	  var tz = tgt.data('tz');
-	  var offset = tgt.data('offset');
 	  var label = $('span.timepicker-tz');
 	  label.html('<i class="icon-globe"> </i> ' + tz);
-	  this._oldtz = $.extend(true, {}, this._timezone);
-	  this._timezone = {name: tz, offset: offset};
-	  console.log('setting the timezone');
-	  console.log(this._date.toISOString());
-	  var oldoffset = this.makeoffset(this._oldtz.offset.split(',')[0]);
-	  var oldhours = parseInt(oldoffset.substr(0,1) + oldoffset.substr(1,2)) * -1;
-	  var oldminutes = parseInt(oldoffset.substr(0,1) + oldoffset.substr(3,2)) * -1;
+	  this._walltime = WallTime.UTCToWallTime(this._date, tz);
+	  this._oldtz = $.extend({}, true, this._timezone);
+	  this._timezone = tz;
 
-	  this._date.addHours(oldhours);
-	  this._date.addMinutes(oldminutes);
-	  var newoffset = this.makeoffset(this._timezone.offset.split(',')[0]);
-	  this._date.setTimezoneOffset(newoffset);
-	  console.log(this._date.toISOString());
-	  this.set();
-	  this.fillTime();
-	  console.log(this._date.toISOString());
           this.actions.showPicker.call(this);
 
 	}
@@ -732,21 +768,48 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
       selectHour: function(e) {
         var tgt = $(e.target);
         var value = parseInt(tgt.text(), 10);
-        this._date.set({hour: value});
+	var newdate = this._walltime.wallTime;
+	newdate.setUTCHours(value);
+	this._walltime = WallTime.UTCToWallTime(WallTime.WallTimeToUTC(this._timezone,
+								       newdate.getUTCFullYear(),
+								       newdate.getUTCMonth(),
+								       newdate.getUTCDate(),
+								       newdate.getUTCHours(),
+								       newdate.getUTCMinutes(),
+								       newdate.getUTCSeconds()),
+						this._timezone);
         this.actions.showPicker.call(this);
       },
 
       selectMinute: function(e) {
         var tgt = $(e.target);
         var value = parseInt(tgt.text(), 10);
-        this._date.set({minute: value});
+	var newdate = this._walltime.wallTime;
+	newdate.setUTCMinutes(value);
+	this._walltime = WallTime.UTCToWallTime(WallTime.WallTimeToUTC(this._timezone,
+								       newdate.getUTCFullYear(),
+								       newdate.getUTCMonth(),
+								       newdate.getUTCDate(),
+								       newdate.getUTCHours(),
+								       newdate.getUTCMinutes(),
+								       newdate.getUTCSeconds()),
+						this._timezone);
         this.actions.showPicker.call(this);
       },
 
       selectSecond: function(e) {
         var tgt = $(e.target);
         var value = parseInt(tgt.text(), 10);
-        this._date.set({second: value});
+	var newdate = this._walltime.wallTime;
+	newdate.setUTCSeconds(value);
+	this._walltime = WallTime.UTCToWallTime(WallTime.WallTimeToUTC(this._timezone,
+								       newdate.getUTCFullYear(),
+								       newdate.getUTCMonth(),
+								       newdate.getUTCDate(),
+								       newdate.getUTCHours(),
+								       newdate.getUTCMinutes(),
+								       newdate.getUTCSeconds()),
+						this._timezone);
         this.actions.showPicker.call(this);
       }
 
@@ -766,10 +829,11 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
 	return;
       }
 
-      if (!this._date) this._date = Date.today().setTimeToNow()
       var action = $(e.currentTarget).data('action');
       var rv = this.actions[action].apply(this, arguments);
+      this._date = this._walltime.utc;
       this.set();
+      this.fillDate();
       this.fillTime();
       this.notifyChange();
       return rv;
@@ -988,10 +1052,10 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
         var parents = this.$element.parents();
         var inFixed = false;
         for (var i=0; i<parents.length; i++) {
-            if ($(parents[i]).css('position') == 'fixed') {
-                inFixed = true;
-                break;
-            }
+          if ($(parents[i]).css('position') == 'fixed') {
+            inFixed = true;
+            break;
+          }
         };
         return inFixed;
       } else {
@@ -1008,10 +1072,10 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
       if (!data) {
         $this.data('datetimepicker',
 		   (data = new DateTimePicker(
-		       this,
-		       $.extend({},
-				$.fn.datetimepicker.defaults,
-				options))));
+		     this,
+		     $.extend({},
+			      $.fn.datetimepicker.defaults,
+			      options))));
       }
       if (typeof option === 'string') data[option](val);
     });
@@ -1027,13 +1091,13 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
   var dates = $.fn.datetimepicker.dates = {
     en: {
       days: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday",
-        "Friday", "Saturday", "Sunday"],
+             "Friday", "Saturday", "Sunday"],
       daysShort: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
       daysMin: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
       months: ["January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"],
+               "July", "August", "September", "October", "November", "December"],
       monthsShort: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
-        "Aug", "Sep", "Oct", "Nov", "Dec"]
+		    "Aug", "Sep", "Oct", "Nov", "Dec"]
     }
   };
 
