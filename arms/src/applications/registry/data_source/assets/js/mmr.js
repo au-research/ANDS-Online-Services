@@ -1,4 +1,4 @@
-var selected_ids=[],selecting_status,select_all=false,processing=false,selected_some=true;
+var selected_ids=[],selecting_status,select_all=false,processing=false,selected_some=true,num_selected_records=0;
 var filters = {};
 $(function() {
 
@@ -496,7 +496,8 @@ function update_selected_list(status){
     {
         num = parseInt($('#'+status+' .count').html());
         num -=  $('.sortable[status='+select_all+'] li:not(.ro_selected)').length;
-    }
+    }  
+    num_selected_records = num;
 
     var list = $('.ro_box[status='+status+']');
     // var selected = $('div.selected_status', list);
@@ -568,10 +569,7 @@ function bindSortables(){
             cursor: "move",cursorAt:{top:-5,left:-5},scroll:true,
             helper: function(e){
                 var list = $(this).parents('.status_field');
-                if(select_all){
-                    total = $('.count', list).text();
-                }else total = selected_ids.length;
-                return $( "<span class='label label-info helper'>"+total+"</span>" );
+                return $( "<span class='label label-info helper'>"+ num_selected_records+"</span>" );
             },
             start: function(e, ui){
                 if(e.shiftKey){
@@ -579,7 +577,7 @@ function bindSortables(){
                 }else{
                     click_ro(e.currentTarget, 'select');
                 }
-                $(ui.helper[0]).html(selected_ids.length + " record" + (selected_ids.length == 1 ? "" : "s") )
+                $(ui.helper[0]).html(num_selected_records + " record" + (num_selected_records == 1 ? "" : "s") )
             },
             connectToSortable: target
         });
