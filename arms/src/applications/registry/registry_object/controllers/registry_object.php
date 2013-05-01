@@ -933,7 +933,14 @@ class Registry_object extends MX_Controller {
 				case 'ASSESSMENT_IN_PROGRESS': 
 					if($this->user->hasFunction('REGISTRY_STAFF')) { 
 						$actions[] = 'MORE_WORK_REQUIRED';
-						$actions[] = 'ASSESSMENT_IN_PROGRESS';
+						if ($manual_publish)
+						{
+							$actions[] = 'APPROVED';
+						}
+						else
+						{
+							$actions[] = 'PUBLISHED';
+						}	
 					} 
 				break;
 				case 'APPROVED': 
