@@ -144,7 +144,7 @@
 		<div class='selected_status hide'></div>
 		<ul class="sortable" connect_to="{{connectTo}}" status="{{name}}">
 			{{#items}}
-			<li id="{{id}}" data-toggle="context" data-target="#context-menu-{{status}}" class="status_{{status}} ro_item" status="{{status}}">
+			<li id="{{id}}" data-toggle="context" data-target="#context-menu-{{status}}" class="status_{{status}} ro_item {{#has_flag}}flagged{{/has_flag}}" status="{{status}}">
 			<div class="ro_item_header">
 				<div class="ro_title"><a ro_id="{{id}}" class="tip" tip="<b>{{title}}</b> - {{key}}">{{title}}</a></div>
 				<img class="class_icon" tip="{{class}}" src="<?php echo asset_url('img/{{class}}.png', 'base');?>"/>
@@ -193,7 +193,7 @@
 
 <script type="text/x-mustache" id="mmr_data_more">
 {{#items}}
-<li id="{{id}}" data-toggle="context" data-target="#context-menu-{{status}}" class="status_{{status}} ro_item" status="{{status}}">
+<li id="{{id}}" data-toggle="context" data-target="#context-menu-{{status}}" class="status_{{status}} ro_item {{#has_flag}}flagged{{/has_flag}}" status="{{status}}">
 	<div class="ro_item_header">
 		<div class="ro_title"><a ro_id="{{id}}" class="tip" tip="<b>{{title}}</b> - {{key}}">{{title}}</a></div>
 		<img class="class_icon" tip="{{class}}" src="<?php echo asset_url('img/{{class}}.png', 'base');?>"/>

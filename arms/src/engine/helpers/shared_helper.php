@@ -90,6 +90,7 @@ function format_relationship($from_class, $relationship_type, $origin=false){
 		"hasPrincipalInvestigator" =>array("Principal investigator", "Principal investigator of"),
 		"isPrincipalInvestigator" =>array("Principal investigator of", "Principal investigator"),
 	);
+	
 	$allTypesArray = array_merge($typeArray['collection'],$typeArray['party'],$typeArray['service'],$typeArray['activity']);
 
 	if($origin != 'EXPLICIT' && $origin != 'CONTRIBUTOR'){//reverse

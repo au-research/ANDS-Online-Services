@@ -418,8 +418,11 @@ class Data_source extends MX_Controller {
 		$hasGold = false;
 		foreach($affected_ids as $id){
 			$ro = $this->ro->getByID($id);
-			if($ro->flag=='t') $hasFlag = true;
-			if($ro->gold_status_flag=='t') $hasGold = true;
+			if ($ro)
+			{
+				if($ro->flag=='t') $hasFlag = true;
+				if($ro->gold_status_flag=='t') $hasGold = true;
+			}
 		}
 
 

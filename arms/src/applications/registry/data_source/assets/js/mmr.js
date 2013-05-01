@@ -474,6 +474,11 @@ function action_list(status, action){
         $.each($('li.ro_item', list), function(index, val) {
             $(this).addClass('ro_selected');
         });
+    }else if(action=='select_flagged'){
+        $('.sortable li').removeClass('ro_selected');
+        $.each($('li.ro_item.flagged', list), function(index, val) {
+            $(this).addClass('ro_selected');
+        });
     }
     selected_ids = $.unique(selected_ids);
     update_selected_list(status);
