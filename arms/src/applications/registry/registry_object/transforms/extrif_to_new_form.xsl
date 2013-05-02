@@ -1084,10 +1084,6 @@
 
 	<xsl:template match="ro:collection/ro:coverage | ro:activity/ro:coverage | ro:party/ro:coverage  | ro:service/ro:coverage">
 		<div class="aro_box" type="coverage">
-			<div class="aro_box_display clearfix">
-				<h1/>
-				<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
-			</div>
 			<xsl:apply-templates select="ro:temporal"/>
 			<xsl:apply-templates select="ro:spatial"/>
 		</div>
@@ -1096,19 +1092,20 @@
 
 	<xsl:template match="ro:temporal">
 		<div class="aro_box_part" type="temporal">
-			<div class="aro_box_display clearfix">
-
-			</div>
-			<xsl:apply-templates select="ro:date" mode="coverage"/>
-			<xsl:apply-templates select="ro:text"/>
-			<div class="separate_line"/>
-			<div class="controls">
-				<div class="btn-group">
-					<a href="javascript:;" class="btn btn-mini btn-primary addNew" type="coverage_date" add_new_type="coverage_date"><i class="icon-white icon-plus"></i> Date</a>
-					<a href="javascript:;" class="btn btn-mini btn-primary addNew" type="text" add_new_type="text"><i class="icon-white icon-plus"></i> Text</a>
+			<div class="control-group">
+				<div class="aro_box_display clearfix">
+					<label class="control-label" for="title">Temporal Coverage: </label>
 					<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
 				</div>
-
+				<xsl:apply-templates select="ro:date" mode="coverage"/>
+				<xsl:apply-templates select="ro:text"/>
+				<div class="separate_line"/>
+				<div class="controls">
+					<div class="btn-group">
+						<a href="javascript:;" class="btn btn-mini btn-primary addNew" type="coverage_date" add_new_type="coverage_date"><i class="icon-white icon-plus"></i> Date</a>
+						<a href="javascript:;" class="btn btn-mini btn-primary addNew" type="text" add_new_type="text"><i class="icon-white icon-plus"></i> Text</a>
+					</div>
+				</div>
 			</div>
 		</div>
 	</xsl:template>
@@ -1837,6 +1834,11 @@
 		</div>
 		
 		<div class="aro_box_part template" type="temporal">
+			<div class="control-group">
+				<div class="aro_box_display clearfix">
+					<label class="control-label" for="title">Temporal Coverage: </label>
+					<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
+				</div>
 			<div class="aro_box_part" type="coverage_date">
 				<div class="control-group">
 					<label class="control-label" for="title">Date: </label>
@@ -1868,16 +1870,24 @@
 				<div class="btn-group">
 					<a href="javascript:;" class="btn btn-mini btn-primary addNew" type="coverage_date" add_new_type="coverage_date"><i class="icon-white icon-plus"></i> Date</a>
 					<a href="javascript:;" class="btn btn-mini btn-primary addNew" type="text" add_new_type="text"><i class="icon-white icon-plus"></i> Text</a>
-					<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
 				</div>
+			</div>
 			</div>
 		</div>
 		
 		<div class="aro_box template" type="coverage">
-			<div class="separate_line"/>
-			<div class="btn-group">
-				<a href="javascript:;" class="btn btn-primary addNew" type="temporal" add_new_type="temporal"><i class="icon-white icon-plus"></i> Add Temporal Coverage</a>
-				<a href="javascript:;" class="btn btn-primary  addNew" type="spatial" add_new_type="spatial"><i class="icon-white icon-plus"></i> Add Spatial Coverage</a>
+			<div class="control-group">
+				<div class="aro_box_display clearfix">
+					<label class="control-label" for="title">Coverage: </label>
+					<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
+				</div>
+				<div class="controls">
+				<div class="separate_line"/>
+					<div class="btn-group">
+						<a href="javascript:;" class="btn btn-primary addNew" type="temporal" add_new_type="temporal"><i class="icon-white icon-plus"></i> Add Temporal Coverage</a>
+						<a href="javascript:;" class="btn btn-primary  addNew" type="spatial" add_new_type="spatial"><i class="icon-white icon-plus"></i> Add Spatial Coverage</a>
+					</div>					
+				</div>
 			</div>
 		</div>
 
