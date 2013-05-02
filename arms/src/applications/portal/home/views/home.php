@@ -3,7 +3,7 @@
 	<div class="intro">
 		<h3>What’s in Research Data Australia</h3>
 		
-		<a href="<?=base_url('search/#!/q=/tab=collection');?>">
+		<a href="<?=base_url('search/#!/q=/class=collection');?>">
 			<div class="intro_box">
 				<div class="intro_inner" id="collection_icon">
 					<h4>Collections <span>(<?php echo $collection;?>)</span></h4>
@@ -12,7 +12,7 @@
 			</div>
 		</a><!-- intro_box -->
 
-		<a href="<?=base_url('search/#!/q=/tab=party');?>">
+		<a href="<?=base_url('search/#!/q=/class=party');?>">
 			<div class="intro_box">
 				<div class="intro_inner" id="party_icon">
 					<h4>Parties <span>(<?php echo $party;?>)</span></h4>
@@ -21,7 +21,7 @@
 			</div>
 		</a><!-- intro_box -->
 
-		<a href="<?=base_url('search/#!/q=/tab=activity');?>">
+		<a href="<?=base_url('search/#!/q=/class=activity');?>">
 			<div class="intro_box">
 				<div class="intro_inner" id="activity_icon">
 					<h4>Activities <span>(<?php echo $activity;?>)</span></h4>
@@ -30,7 +30,7 @@
 			</div>
 		</a><!-- intro_box -->
 
-		<a href="<?=base_url('search/#!/q=/tab=service');?>">
+		<a href="<?=base_url('search/#!/q=/class=service');?>">
 			<div class="intro_box">
 				<div class="intro_inner" id="service_icon">
 					<h4>Services <span>(<?php echo $service;?>)</span></h4>

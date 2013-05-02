@@ -52,7 +52,11 @@ $(document).ready(function() {
 						changeHashTo(formatSearch());
 						break;
 				}
-				$('.clearAll').show();
+				// If there is a search specified (being on the map page doesn't count!), show the cancel search button
+				if (term != "map")
+				{
+					$('.clearAll').show();
+				}
 			}
 			/**
 			 * term could be: q, p, tab, group, type, subject, vocabUriFilter, licence, temporal, n, e, s, w, spatial
@@ -63,10 +67,11 @@ $(document).ready(function() {
 	        //if we're showing the map, and using an old crappy browser,
 	        //limit the number of results
 	        if (isMapView(searchData) &&
-		    $.browser.msie === true &&
-		    parseInt($.browser.version) < 9) {
-		      searchData['rows'] = 500;
-		}
+			    $.browser.msie === true &&
+			    parseInt($.browser.version) < 9) 
+	        {
+		      	searchData['rows'] = 500;
+			}
 
 		executeSearch(searchData, searchUrl);
 		initMap();
@@ -80,8 +85,7 @@ $(document).ready(function() {
 });
 
 function isMapView(searchData) {
-        return (typeof(searchData['map']) !== 'undefined' &&
-		searchData['map'] === 'show');
+        return (typeof(searchData['map']) !== 'undefined' && searchData['map'] === 'show');
 }
 
 function executeSearch(searchData, searchUrl){
