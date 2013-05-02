@@ -68,16 +68,16 @@ class Search extends MX_Controller {
 		 */
 		$filteredSearch = false;
 		if($filters){
-					
+			$this->solr->setOpt('q','');
 			foreach($filters as $key=>$value){
 				$value = urldecode($value);
 				switch($key){
 					case 'rq':
-						$this->solr->setOpt('q', $value);
+						$this->solr->addQueryCondition($value);
 					break;
 					case 'q': 
 						//echo 'id:"'.$value.'"^1 group:"'.$value.'"^0.8 display_title:"'.$value.'"^0.5 list_title:"'.$value.'"^0.5 fulltext:*'.$value.'*^0.2'
-						$this->solr->setOpt('q', '+(id:"'.$value.'"^1 group:"'.$value.'"^0.8 display_title:"'.$value.'"^0.5 list_title:"'.$value.'"^0.5 fulltext:*'.$value.'*^0.2)');
+						$this->solr->addQueryCondition('+(id:"'.$value.'"^1 group:"'.$value.'"^0.8 display_title:"'.$value.'"^0.5 list_title:"'.$value.'"^0.5 fulltext:*'.$value.'*^0.2)');
 						// 'fulltext:*'.$value.'*');
 					break;
 					case 'p': 

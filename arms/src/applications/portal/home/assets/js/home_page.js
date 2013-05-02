@@ -9,7 +9,7 @@ $(document).ready(function() {
 		$('.flexslider').flexslider({
 	    animation: "fade",
 	    controlNav: false,
-	    slideshowSpeed: 4500,
+	    slideshowSpeed: 7500,
 	    directionNav:false,
 	    pauseOnHover:true
 	  });
