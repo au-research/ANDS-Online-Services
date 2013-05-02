@@ -401,6 +401,11 @@ a.logo img {
 	float: left;
 	margin: 0 9px 0 0;	
 }	
+
+.lt-ie9 .search .inner input[type="text"]
+{
+	line-height:50px;
+}
 .text_select {
 	position: relative;
 	float: left;	

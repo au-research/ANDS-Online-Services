@@ -11,6 +11,12 @@
  */
 ?>
 <?php $this->load->view('header');?>
+<span>
+	<div class="pull-right">
+				<span class="label"><i class="icon-question-sign icon-white"></i> <a target="_blank" style="color:white;" href="http://ands.org.au/guides/cpguide/cpgdsaaccount.html"> New to these screens? Take a tour!</a></span>
+	</div>
+	&nbsp;
+</span>
 
 <div class="container" id="main-content">
 	<div class="row">
