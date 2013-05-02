@@ -309,8 +309,8 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 	 * Return a list of Spotlight Partners along with their brief description and location (URL)
 	 */
 	public function getSpotlight(){
-		$partners = array();
 		$this->output->set_content_type(rda::response_format);
+		$partners = array();
 
 		$this->load->helper('file');
 		$file = read_file('./applications/registry/spotlight/assets/spotlight.json');
@@ -329,7 +329,7 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 		}
 
 		// services_spotlight_partners_data_source
-		echo json_encode(array("items"=>$partners));
+		$this->output->set_output(json_encode(array("items"=>$partners)));
 	}
 
 
