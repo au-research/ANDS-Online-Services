@@ -36,6 +36,9 @@ $(document).ready(function() {
 					case 'q':
 						$('#search_box').val(value);
 						break;
+					case 'rq': // raw queries (such as those redirected from browse/topic see-more)
+						$('#search_box').val("<custom advanced search>");
+						break;
 					case 'group':
 						$('#selected_group').html(decodeURIComponent(value));
 						break;
@@ -49,7 +52,6 @@ $(document).ready(function() {
 						changeHashTo(formatSearch());
 						break;
 				}
-				if(!searchData['q']) $('search_box').val('');
 				$('.clearAll').show();
 			}
 			/**
@@ -156,14 +158,14 @@ function executeSearch(searchData, searchUrl){
 				//in MSIE v8. On my local machine, this message started to appear around the 500
 				//record mark. 
 				//more information: http://support.microsoft.com/kb/175500
-				console.log("------");
+				log("------");
 				$(docs).each(function(){
-					console.log(this.list_title + " (" + Math.floor(this.score * 100000)  + ")");
+					log(this.list_title + " (" + Math.floor(this.score * 100000)  + ")");
 				 	if(this.spatial_coverage_polygons){
 				 		resultPolygons[this.id] = new Array(this.display_title, this.spatial_coverage_polygons[0], this.spatial_coverage_centres[0]);
 				 	}
 				});
-				console.log("------");
+				log("------");
 				initSearchPage();
 			        $('.sidebar.mapmode_sidebar').show();
 			},
@@ -335,7 +337,7 @@ function initSearchPage(){
 		 processPolygons();
 		 resetZoom();
 		 $('.post').hover(function(){
-		 	//console.log($(this).attr('ro_id'));
+		 	//log($(this).attr('ro_id'));
 		 	clearPolygons();
 			polygonsArray[$(this).attr('ro_id')].setMap(map);
 		 },function(){
@@ -357,7 +359,7 @@ function initSearchPage(){
 			})
 	}
 
-	if(typeof searchData['q']=='undefined') {
+	if(typeof(searchData['q'])=='undefined' && typeof(searchData['rq'])=='undefined') {
 		$('#search_box').val('');
 	}
 
@@ -737,7 +739,7 @@ function processPolygons(){
 			title = resultPolygons[p][0];
 			polygons = resultPolygons[p][1];
 			centers = resultPolygons[p][2];
-			// console.log(id);
+			// log(id);
 			createResultPolygonWithMarker(polygons, centers, title, id);
 		}
 	}

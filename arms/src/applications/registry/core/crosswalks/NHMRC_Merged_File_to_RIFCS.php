@@ -137,9 +137,9 @@ class NHMRC_Merged_File_to_RIFCS extends Crosswalk
 
 
             $description = htmlentities("
-                            Chief Investigator(s): {$activity['CIA_NAME']}
+                            Lead Investigator: {$activity['CIA_NAME']}
                             " . ($investigators ? "
-                            Investigator(s): {$investigators}
+                            Co-Investigator(s): {$investigators}
                             " : "") . "
                             Total Grant Budget: \$AUD {$activity['TOTAL_GRANT_BUDGET']}
 

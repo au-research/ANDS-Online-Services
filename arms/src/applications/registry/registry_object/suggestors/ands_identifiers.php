@@ -83,7 +83,11 @@ class Suggestor_ands_identifiers implements GenericSuggestor
 			if($currentPage!=1){
 				$prev = $start-$rows;
 				$next = $start+$rows;
-			}else if($currentPage==$totalPage){
+			}
+			else if($currentPage==1&&$totalPage==1){
+				$prev = false;
+				$next = false;
+			}elseif($currentPage==$totalPage){
 				$prev = $start-$rows;
 				$next = false;
 			}else{
@@ -91,8 +95,8 @@ class Suggestor_ands_identifiers implements GenericSuggestor
 				$next = $start+$rows;
 			}
 			$pagination = array("currentPage"=>$currentPage,"totalPage"=>$totalPage);
-			if($prev) $pagination['prev']=$prev;
-			if($next) $pagination['next']=$next;
+			if($prev !== false) $pagination['prev']=(string)$prev;
+			if($next !== false) $pagination['next']=(string)$next;
 
 			$suggestions = array(
 				"count" => $result['response']['numFound'],

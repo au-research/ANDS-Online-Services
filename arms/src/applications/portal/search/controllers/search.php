@@ -20,7 +20,6 @@ class Search extends MX_Controller {
 		/**
 		 * Getting the stuffs Ready
 		 */
-		$pp = 15;//per page
 		$page = 1;
 		$start = 0;
 		$filters = $this->input->post('filters');
@@ -29,7 +28,15 @@ class Search extends MX_Controller {
 		/**
 		 * Default Search Parameters for RDA Portal search
 		 */
-		
+		if (isset($filters["rows"]))
+		{
+			$pp = (int) $filters["rows"];
+		}
+		else
+		{
+			$pp = 15; 
+		}
+				
 		$this->solr->setOpt('rows', $pp);
 		$this->solr->setOpt('defType', 'edismax');
 		$this->solr->setOpt('mm', '1');
@@ -65,6 +72,9 @@ class Search extends MX_Controller {
 			foreach($filters as $key=>$value){
 				$value = urldecode($value);
 				switch($key){
+					case 'rq':
+						$this->solr->setOpt('q', $value);
+					break;
 					case 'q': 
 						//echo 'id:"'.$value.'"^1 group:"'.$value.'"^0.8 display_title:"'.$value.'"^0.5 list_title:"'.$value.'"^0.5 fulltext:*'.$value.'*^0.2'
 						$this->solr->setOpt('q', 'id:"'.$value.'"^1 group:"'.$value.'"^0.8 display_title:"'.$value.'"^0.5 list_title:"'.$value.'"^0.5 fulltext:*'.$value.'*^0.2');

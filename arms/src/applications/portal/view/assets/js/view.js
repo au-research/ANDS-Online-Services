@@ -205,12 +205,15 @@ function initDataciteSeeAlso(){
 $('.show_accordion').live('click', function(e){
     e.preventDefault();
     var qTitle = $(this).attr('data-title');
+    $('#links_dialog').html(loading_icon);
     updateLinksDisplay($('#links_dialog'),$(this).attr('data-title'), $(this).attr('data-suggestor'), $(this).attr('data-start'), $(this).attr('data-rows'));
     $(this).qtip({
-        content:{text:$('#links_dialog')},
-        title: {
-            text: qTitle,
-            button: 'Close'
+        content:{
+            text:$('#links_dialog'),
+            title: {
+                text: $(this).attr('data-title'),
+                button: 'Close'
+            }
         },
         style: {
             classes: 'ui-tooltip-light ui-tooltip-shadow seealso-tooltip'
@@ -251,6 +254,8 @@ function updateLinksDisplay(container, title, suggestor, start, rows)
         // Cleanup data 
         for (var link in data.links)
         {
+            // Clean HTML tags
+            data.links[link]["description"] = htmlDecode(data.links[link]["description"]);
             //data.links[link].title = htmlDecode(data.links[link].title);
             if (data.links[link]["class"] == "external")
             {
@@ -260,7 +265,7 @@ function updateLinksDisplay(container, title, suggestor, start, rows)
         }
         var template = $('#link_list_template').html();
         var output = Mustache.render(template, data);
-        container.html(output);
+        container.html("<div>" + output + "</div>");
         if(!$('.suggestor_paging').html())
         {
             $('#separater').html('')

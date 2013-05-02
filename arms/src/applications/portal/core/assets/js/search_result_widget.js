@@ -111,8 +111,17 @@
 							
 						});
 					}
-					$("li:gt(5)", widget_results).hide(); 
-					$("li:nth-child(6)", widget_results).after("<br/><a href='#'  class=\"moreLink\">More...</a>");
+					var result_count = $("li", widget_results).length;
+					if ($("li", widget_results).length > 5)
+					{
+						$("li:gt(5)", widget_results).hide(); 
+						$("li:nth-child(6)", widget_results).after("<a href='#'  class=\"moreLink\"><br/>More...</a>");
+					}
+					else if (result_count == 0)
+					{
+						widget_results.append('<li class="no_results grey">No matching records...</li>');
+					}
+
 					$("a.moreLink").live("click", function() {
 						$(this).parent().children().slideDown();
 						$(this).remove();
@@ -121,7 +130,7 @@
 				}
 				else if (data['message']['numFound'] == 0)
 				{
-					widget_results.append('<li class="no_results">No matching records...</li>');
+					widget_results.append('<li class="no_results grey">No matching records...</li>');
 				}
 				else
 				{
@@ -139,7 +148,7 @@
 					
 					if (data['message']['numFound'] > ands.ands_search_record_limit)
 					{
-						widget_results.append("<br/><a class=\"moreLink\" href='"+ands.ands_search_portal_url+"search#!/q="+encodeURIComponent(ands.ands_search_query)+"'>More...</a>");
+						widget_results.append("<a style='margin-top:10px;' href='"+ands.ands_search_portal_url+"search#!/dq=<automatically generated search>/rq="+ands.ands_search_query+"'>More...</a>");
 					}
 					
 				}

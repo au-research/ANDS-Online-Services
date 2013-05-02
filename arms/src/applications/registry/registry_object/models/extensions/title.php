@@ -131,11 +131,18 @@ class Title_Extension extends ExtensionBase
 							(count($partyNameParts['suffix']) > 0 ? ", " . implode(" ", $partyNameParts['suffix']) : "") .
 							(count($partyNameParts['user_specified_type']) > 0 ? " " . implode(" ", $partyNameParts['user_specified_type']) . " " : ""));
 			
+			// Stop titles with prefixed commas from incorrectly specified types (above)
+			while (substr($list_title,0,2) == ", ")
+			{
+				$list_title = substr($list_title, 2);
+			}
 		
 		}
 		
 		// Some length checking...
 		if (strlen($display_title) > 255) { $display_title = substr($display_title,0,252) . "..."; }
+		if (strlen($display_title) == 0) { $display_title = self::DEFAULT_TITLE; }
+		if (strlen($list_title) == 0) { $list_title = self::DEFAULT_TITLE; }
 		if (strlen($list_title) > 255) { $list_title = substr($list_title,0,252) . "..."; }
 		return array("display_title"=>$display_title, "list_title" => $list_title);		
 	}
