@@ -732,8 +732,8 @@ a.browse_button{
 }
 .container .right .flexslider .excerpt {
 	padding: 0 0 6px;
-	height:165px;
-	overflow:auto;
+	min-height:165px;
+	/*overflow:auto;*/
 }
 .flex-container a:active,.flexslider a:active,.flex-container a:focus,.flexslider a:focus {
     outline:none;

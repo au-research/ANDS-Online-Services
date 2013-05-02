@@ -74,7 +74,7 @@ class Home extends MX_Controller {
 		$this->load->view('contact', $data);
 	}
 
-public function send(){
+	public function send(){
 		$this->load->library('user_agent');
 		$data['user_agent']=$this->agent->browser();
 		$name = $this->input->post('name');

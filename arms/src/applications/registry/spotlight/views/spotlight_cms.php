@@ -25,6 +25,8 @@
 									<input type="text" placeholder="Title" value="<?php echo $i['title'];?>" name="title">
 									<label>URL:</label>
 									<input type="text" placeholder="URL" value="<?php echo $i['url'];?>" name="url">
+									<label>Link Text: <small class="muted">(will display instead of the URL, if specified)</small></label>
+									<input type="text" placeholder="Link Display Text" value="<?php echo (isset($i['url_text']) ? $i['url_text'] : "");?>" name="url_text">
 									<label>Image URL:</label>
 									<input type="text" placeholder="Image URL" value="<?php echo $i['img_url'];?>" name="img_url">
 									<label>Visible:</label>
@@ -72,7 +74,7 @@
 						<div class="excerpt">
 							<?php echo $i['content'];?>
 						</div>
-						<a href="<?php echo $i['url'];?>"><strong><?php echo $i['url'];?></strong></a>
+						<a target="_blank" href="<?php echo $i['url'];?>"><strong><?php echo (isset($i['url_text']) && $i['url_text'] ? $i['url_text'] : $i['url']);?></strong></a>
 					</div>
 					<?php endforeach;?>
 				</div>

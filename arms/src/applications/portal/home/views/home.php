@@ -59,17 +59,17 @@
 
 <script type="text/x-mustache" id="spotlight_template">
 	<ul class="slides">
-	{{#partners}}
+	{{#items}}
 		<li>
 			<img src="{{img_url}}" alt="" />
 			<a href="{{url}}" class="title">{{{title}}}</a>
 			<div class="excerpt">
 				{{{description}}}
-				<p><a href="{{{url}}}"><strong>{{{url}}}</strong></a></p>
+				<p><a target="_blank" href="{{{url}}}"><strong>{{#url_text}}{{url_text}}{{/url_text}}{{^url_text}}{{#url}}{{url}}{{/url}}{{/url_text}}</strong></a></p>
 			</div>
 			
 		</li>
-	{{/partners}}
+	{{/items}}
 	</ul>
 </script>
 </div>

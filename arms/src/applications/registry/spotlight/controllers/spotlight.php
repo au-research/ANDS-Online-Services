@@ -38,6 +38,7 @@ class Spotlight extends MX_Controller {
 			'id'=>$largest_id+1,
 			'title'=>$this->input->post('title'),
 			'url'=>$this->input->post('url'),
+			'url_text'=>$this->input->post('url_text'),
 			'img_url'=>$this->input->post('img_url'),
 			'content'=>$this->input->post('content'),
 			'visible'=>$this->input->post('visible')
@@ -52,6 +53,7 @@ class Spotlight extends MX_Controller {
 			'id'=>$id,
 			'title'=>$this->input->post('title'),
 			'url'=>$this->input->post('url'),
+			'url_text'=>$this->input->post('url_text'),
 			'img_url'=>$this->input->post('img_url'),
 			'content'=>$this->input->post('content'),
 			'visible'=>$this->input->post('visible')
