@@ -369,6 +369,7 @@ function initEditForm(){
 		assignFieldID(new_dom);
 		initVocabWidgets(new_dom);
 		initMapWidget(new_dom);
+		//Core_bindFormValidation($('form'));
 		//log(new_dom);
 		//@TODO: check if it's inside a tooltip and perform reposition
 
@@ -489,7 +490,7 @@ function initEditForm(){
 			// });
 
 			//saving
-			log(xml);
+	
 			$.ajax({
 				url:base_url+'registry_object/save/'+ro_id, 
 				type: 'POST',
@@ -627,7 +628,7 @@ function validate(){
 	prettyPrint();
 
 	//validate
-	//log(xml);
+	log(xml);
 	$.ajax({
 		url:base_url+'registry_object/validate/'+ro_id, 
 		type: 'POST',
@@ -664,7 +665,7 @@ function addValidationMessage(tt, type){
 	var message = tt.message;
     var message = $('<div />').html(message).text();
 
-	// log(name, message);
+	 log(name, message);
 	if(name.match("^tab_")){
 		var tab = name.replace('tab_','');
 		$('#'+tab).prepend('<div class="alert alert-'+type+'">'+message+'</div>');
@@ -672,7 +673,7 @@ function addValidationMessage(tt, type){
 
 		if (typeof(tt.sub_field_id) !== 'undefined')
 		{
-			var field = $('*[name='+tt.sub_field_id+']','*[field_id='+name+']');
+			var field = $('*[name='+tt.sub_field_id+']:first','*[field_id='+name+']');
 		}
 		else
 		{
@@ -687,7 +688,10 @@ function addValidationMessage(tt, type){
 		{
 			$(field).append('<div class="alert alert-'+type+'">'+message+'</div>');
 		}
-		$(field).addClass('error');
+		if (!$(field).hasClass("aro_box"))
+		{
+			$(field).addClass('error');
+		}
 	}
 }
 
@@ -836,13 +840,12 @@ function assignFieldID(chunk){
 	}
 	else {
 		content = chunk;
-
+		$(chunk).attr('field_id', fieldID++);
 	}
 
-	$('input, .aro_box, .aro_box_part', content).each(function(){
+	$('div, input, .aro_box, .aro_box_part', content).each(function(){
 		if(!$(this).attr('field_id') || typeof(chunk) !== 'undefined') {
-			fieldID++;
-			$(this).attr('field_id', fieldID);
+			$(this).attr('field_id', fieldID++);
 		}
 	});
 }
@@ -1035,6 +1038,10 @@ function getRIFCSforTab(tab, hasField){
 			if($(input_field).length>0 && $(input_field).val()!=''){
 				fragment_meta += ' '+value+'="'+$(input_field).val()+'"';
 			}
+			else if(value == 'type' && (this_fragment_type == 'identifier' || this_fragment_type == 'dates') )
+			{
+				fragment_meta += ' '+value+'="'+$(input_field).val()+'"';
+			}
 			if(this_fragment_type!='citationMetadata' && this_fragment_type!='coverage' && this_fragment_type!='relatedObject') fragment +=fragment_meta;
 		});
 		fragment +='>';
@@ -1130,6 +1137,10 @@ function getRIFCSforTab(tab, hasField){
 						});
 					}else if(type=='dates_date'){
 						fragment += '<date field_id="' +$(this).attr('field_id')+'" type="'+$('input[name=type]', this).val()+'" dateFormat="W3CDTF">';
+						fragment += htmlEntities($('input[name=value]', this).val());
+						fragment +='</date>';
+					}else if(type=='citation_date'){
+						fragment += '<date field_id="' +$(this).attr('field_id')+'" type="'+$('input[name=type]', this).val()+'">';
 						fragment += htmlEntities($('input[name=value]', this).val());
 						fragment +='</date>';
 					}else if(type=='temporal'){

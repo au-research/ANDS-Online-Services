@@ -224,7 +224,7 @@
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>         
-        <xsl:apply-templates select="ro:description | ro:coverage | ro:location | ro:name | ro:identifier | ro:subject | ro:relatedObject | ro:relatedInfo | ro:accessPolicy | ro:rights | ro:existenceDates | ro:citationInfo"/>
+        <xsl:apply-templates select="ro:description | ro:coverage | ro:location | ro:name | ro:identifier | ro:subject | ro:relatedObject | ro:relatedInfo | ro:accessPolicy | ro:rights | ro:existenceDates | ro:citationInfo | ro:dates"/>
    </xsl:template>
     
     <xsl:template match="ro:party">
@@ -319,7 +319,7 @@
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>        
-        <xsl:apply-templates select="ro:description | ro:coverage | ro:location | ro:name | ro:identifier | ro:subject | ro:relatedObject | ro:relatedInfo | ro:relatedInfo | ro:rights | ro:existenceDates"/>
+        <xsl:apply-templates select="ro:description | ro:coverage | ro:location | ro:name | ro:identifier | ro:subject | ro:relatedObject | ro:relatedInfo | ro:relatedInfo | ro:rights | ro:existenceDates  | ro:dates"/>
     </xsl:template>
     
     
@@ -402,7 +402,7 @@
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>              
-         <xsl:apply-templates select="ro:description | ro:coverage | ro:location | ro:name | ro:identifier | ro:subject | ro:relatedObject | ro:relatedInfo | ro:relatedInfo | ro:rights | ro:existenceDates"/>
+         <xsl:apply-templates select="ro:description | ro:coverage | ro:location | ro:name | ro:identifier | ro:subject | ro:relatedObject | ro:relatedInfo | ro:relatedInfo | ro:rights | ro:existenceDates  | ro:dates"/>
     </xsl:template>
     
     
@@ -477,7 +477,7 @@
 	    	</xsl:choose>
         </xsl:if> --> 
         
-         <xsl:apply-templates select="ro:description | ro:coverage | ro:location | ro:name | ro:identifier | ro:subject | ro:relatedObject | ro:relatedInfo | ro:accessPolicy | ro:rights | ro:existenceDates"/>
+         <xsl:apply-templates select="ro:description | ro:coverage | ro:location | ro:name | ro:identifier | ro:subject | ro:relatedObject | ro:relatedInfo | ro:accessPolicy | ro:rights | ro:existenceDates  | ro:dates"/>
     </xsl:template>
     
     <!-- SERVICE LEVEL CHECKS -->
@@ -700,7 +700,7 @@
         <xsl:if test="string-length(.) = 0">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-	    			<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","An Identifier Value must be entered. &lt;span&gt;(e.g. '10.1234/5678' (a DOI))&lt;/span&gt;");</xsl:text>
+	    			<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","An Identifier Value must be entered. &lt;span&gt;(e.g. '10.1234/5678' (a DOI))&lt;/span&gt;","value");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="error">Identifier must have a value.</span>
@@ -710,7 +710,7 @@
         <xsl:if test="string-length(@type) &gt; 512">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-	    			<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Type must be less than 512 characters.");</xsl:text>
+	    			<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Type must be less than 512 characters.","type");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="error">Identifier Type must be less than 512 characters.</span>
@@ -720,7 +720,7 @@
         <xsl:if test="string-length(@type) = 0">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-	    			<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","An Identifier Type must be specified. &lt;span&gt;(e.g. 'doi')&lt;/span&gt;");</xsl:text>
+	    			<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","An Identifier Type must be specified. &lt;span&gt;(e.g. 'doi')&lt;/span&gt;","type");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="error">Identifier must have a type.</span>
@@ -1407,6 +1407,54 @@
     <xsl:template match="ro:rights">
 		<xsl:apply-templates select="ro:rightsStatement | ro:licence | ro:accessRights"/>
     </xsl:template>
+
+
+    <xsl:template match="ro:dates">
+		<xsl:if test="string-length(@type) = 0">
+            <xsl:choose>
+			    <xsl:when test="$output = 'script'">
+            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Dates Type must be specified. &lt;span&gt;(e.g. 'gdc.created')&lt;/span&gt;","type");</xsl:text>
+			    </xsl:when>
+			    <xsl:otherwise>
+					<span class="error">Dates Type must have a value.</span>
+			    </xsl:otherwise>
+	    	</xsl:choose>
+        </xsl:if>
+        <xsl:if test="not(ro:date)">
+            <xsl:choose>
+			    <xsl:when test="$output = 'script'">
+            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Dates Must have at least one Date Value");</xsl:text>
+			    </xsl:when>
+			    <xsl:otherwise>
+					<span class="error">Dates Must have at least one Date Value.</span>
+			    </xsl:otherwise>
+	    	</xsl:choose>
+        </xsl:if>
+        <xsl:apply-templates select="ro:date"/>
+    </xsl:template>
+
+    <xsl:template match="ro:date">
+		<xsl:if test="string-length(@type) = 0">
+            <xsl:choose>
+			    <xsl:when test="$output = 'script'">
+            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Date Type must be specified. &lt;span&gt;(e.g. 'dateFrom')&lt;/span&gt;","type");</xsl:text>
+			    </xsl:when>
+			    <xsl:otherwise>
+					<span class="error">Dates Type must have a value.</span>
+			    </xsl:otherwise>
+	    	</xsl:choose>
+        </xsl:if>
+        <xsl:if test="string-length(.) = 0">
+            <xsl:choose>
+			    <xsl:when test="$output = 'script'">
+            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Date Must have a Value","value");</xsl:text>
+			    </xsl:when>
+			    <xsl:otherwise>
+					<span class="error">Date Must have a Value.</span>
+			    </xsl:otherwise>
+	    	</xsl:choose>
+        </xsl:if>
+    </xsl:template>
         
     <xsl:template match="ro:rights/ro:rightsStatement">
         <xsl:if test="string-length(.) &gt; 12000">
@@ -1488,7 +1536,7 @@
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>
-		<xsl:apply-templates select="ro:identifier | ro:contributor | ro:title | ro:edition | ro:publisher | ro:placePublished | ro:date | ro:url | ro:context"/>
+		<xsl:apply-templates select="ro:identifier | ro:contributor | ro:title | ro:publisher | ro:date"/>
     </xsl:template>
     
     
@@ -1516,7 +1564,7 @@
         <xsl:if test="string-length(@type) = 0">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","An Identifier Type must be specified. &lt;span&gt;(e.g. 'handle')&lt;/span&gt;");</xsl:text>
+            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","An Identifier Type must be specified. &lt;span&gt;(e.g. 'handle')&lt;/span&gt;","type");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="error">Citation Metadata Identifier Type must have a value.</span>
@@ -1526,7 +1574,7 @@
         <xsl:if test="string-length(@type) &gt; 512">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-           			<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Identifier Type must be less than 512 characters.");</xsl:text>
+           			<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Identifier Type must be less than 512 characters.","type");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="error">Citation Metadata Identifier Type must be less than 512 characters.</span>
