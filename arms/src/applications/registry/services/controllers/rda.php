@@ -317,14 +317,18 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 		$file = json_decode($file, true);
 		foreach($file['items'] as $partner){
 			if($partner['visible']=='yes'){
-				$partners[] = array(
+				$item = array(
 					'title'=>$partner['title'],
 					'description'=>$partner['content'],
 					'img_url'=>$partner['img_url'],
 					'url'=>$partner['url'],
-					'url_text'=>isset($partner['url_text']) ? $partner['url_text'] : false,
 					'visible'=>$partner['visible']
 				);
+				if (isset($partner['url_text']) && $partner['url_text'])
+				{
+					$item['url_text'] = $partner['url_text'];
+				}
+				$partners[] = $item;
 			}
 		}
 

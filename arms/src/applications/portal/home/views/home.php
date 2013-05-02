@@ -65,7 +65,7 @@
 			<a href="{{url}}" class="title">{{{title}}}</a>
 			<div class="excerpt">
 				{{{description}}}
-				<p><a target="_blank" href="{{{url}}}"><strong>{{#url_text}}{{url_text}}{{/url_text}}{{^url_text}}{{#url}}{{url}}{{/url}}{{/url_text}}</strong></a></p>
+				<p><a target="_blank" href="{{{url}}}"><strong>{{#url_text}}{{url_text}}{{/url_text}}{{^url_text}}{{url}}{{/url_text}}</strong></a></p>
 			</div>
 			
 		</li>
