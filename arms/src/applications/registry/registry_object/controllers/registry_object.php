@@ -162,16 +162,25 @@ class Registry_object extends MX_Controller {
 		header('Cache-Control: no-cache, must-revalidate');
 		header('Content-type: application/json');
 		$xml = $this->input->post('xml');
-		$this->load->model('registry_objects', 'ro');
+		$this->load->model('registry_object/registry_objects', 'ro');
 		$ro = $this->ro->getByID($registry_object_id);
 		$result = $ro->transformForQA(wrapRegistryObjects($xml));
+
+		$this->load->model('data_source/data_sources', 'ds');
+		$ds = $this->ds->getByID($ro->data_source_id);
+
+		$qa = $ds->qa_flag=='t' ? true : false;
+
 		$response['title'] = 'QA Result';
 		$scripts = preg_split('/(\)\;)|(\;\\n)/', $result, -1, PREG_SPLIT_NO_EMPTY);
 		$response["ro_status"] = "DRAFT";
 		$response["title"] = $ro->title;
 		$response["ro_id"] = $ro->id;
+		$response["qa_required"] = $qa;
 		$response["ro_quality_level"] = $ro->quality_level;
 		$response["qa"] = $ro->get_quality_text();
+		$response["ro_quality_class"] = ($ro->quality_level >= 2 ? "success" : "important");
+		$response["qa_$ro->quality_level"] = true;
 
 
 		foreach($scripts as $script)
@@ -232,16 +241,17 @@ class Registry_object extends MX_Controller {
 		//else{
 			// Fetch updated registry object!
 			$ro = $this->ro->getByID($registry_object_id);
-			$this->load->model('data_source', 'ds');
-			$ds = $this->ds->getByID($ro->data_source_id);
+
 			$qa = $ds->qa_flag=='t' ? true : false;
 			$result = 
 				array(
 					"status"=>$status,
 					"ro_status"=>"DRAFT",
 					"title"=>$ro->title,
+					"qa_required"=>$qa,
 					"ro_id"=>$ro->id,
 					"ro_quality_level"=>$ro->quality_level,
+					"ro_quality_class"=>($ro->quality_level >= 2 ? "success" : "important"),
 					"qa_$ro->quality_level"=>true,
 					"message"=>$error_log,
 					"qa"=>$ro->get_quality_text()

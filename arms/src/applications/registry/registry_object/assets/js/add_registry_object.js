@@ -6,6 +6,8 @@ var editor = 'tinymce';
 var fieldID = 1;
 var SIMPLE_MODE = 'simple';
 var ADVANCED_MODE = 'advanced';
+var loading_box = "<div id='loading_box'><img src='"+base_url+"/assets/img/ajax-loader-large.gif' alt='Loading...' />"+
+					"<br/><br/><span id='loading_box_text'>Loading...</span></div>";
 
 $(function(){
 	$('body').css('background-color', '#454545');
@@ -13,6 +15,7 @@ $(function(){
 	//mode
 	aro_mode = 'advanced';
 	$('.pane').hide();
+
 	switchMode(aro_mode);
 	$('#mode-switch button').click(function(){
 		var to_mode = $(this).attr('aro-mode');
@@ -450,7 +453,7 @@ function initEditForm(){
 	$('#save').off().on({
 		click: function(e){
 			e.preventDefault();
-			validate();
+
 			if(editor=='tinymce') tinyMCE.triggerSave();//so that we can get the tinymce textarea.value without using tinymce.getContents
 			var allTabs = $('.pane');
 			var xml = '';
@@ -470,13 +473,18 @@ function initEditForm(){
 			});
 
 			xml+='</'+ro_class+'></registryObject>';
-			$('#myModal .modal-header h3').html('<h3>Save &amp; Validate Registry Object</h3>');
-			$('#myModal .modal-body').html('<div style="width:100%; margin:both; text-align:center;">' + 
-											'<img src="'+real_base_url+'assets/img/ajax-loader.gif" style="padding-top:25px;" />' +
-											'<p></p><p><small>Saving your Registry Object...</small></p>' +
+
+			/* Keep a backup of the form's RIFCS */
+			$('#myModal .modal-header h3').html('<h3>Take a backup of your Record\'s XML Contents</h3>');
+			$('#myModal .modal-body').html('<div style="width:100%; margin:both; text-align:left;">' + 
+											'<pre class="prettyprint linenums"><code class="language-xml">' + htmlEntities(formatXml(xml.replace(/ field_id=".*?"/mg, '')))+ '</code></pre>' +
 											'</div>');
 			$('#myModal .modal-footer').html('');
 			prettyPrint();
+
+			// Add some loading text...
+			$('#response_result').html(loadingBoxMessage("Saving &amp; Validating your Record...<p><br/></p><p><br/></p><p><br/></p><p><br/></p><small class='muted'>Been waiting a while? <a class='show_rifcs btn btn-link btn-mini muted'>Take a backup of your RIFCS XML</a> - just in case!</small>"));
+			validate();
 
 
 			//test validation
@@ -490,24 +498,34 @@ function initEditForm(){
 			// });
 
 			//saving
-	
 			$.ajax({
 				url:base_url+'registry_object/save/'+ro_id, 
 				type: 'POST',
 				data: {xml:xml},
 				success: function(data){
-					if(data.status=='success'){
+					if(data.status=='success')
+					{
+						// Generate the action button bar based on result data
+						var action_bar = generateActionBar(data);
+						if (action_bar)
+						{
+							data['action_bar'] = action_bar;
+						}
+
 						var template = $('#save-record-template').html();
 						var output = Mustache.render(template, data);
 						//console.log($('.record_title'));
 						//$('.record_title').html(data.title);
-						$('#qa_result').html(output);
-						formatQA($('#qa_result .qa'));
-					}else{
+						$('#response_result').html(output);
+						formatQA($('#response_result .qa'));
+					}
+					else
+					{
 						var template = $('#save-error-record-template').html();
 						var output = Mustache.render(template, data);
-						$('#qa_result').html(output);					
+						$('#response_result').html(output);
 					}
+
 					$('#advanced-menu li a[href=#qa]').trigger('click', {onlyShow: true});
 				},
 				error: function(data){
@@ -522,6 +540,13 @@ function initEditForm(){
 		click: function(e){
 			e.preventDefault();
 			validate();
+		}
+	});
+
+	$('.show_rifcs').die().live({
+		click: function(e) { 
+			console.log("ohi");
+			$('#myModal').modal(); 
 		}
 	});
 
@@ -595,9 +620,13 @@ function initEditForm(){
 	initRelatedObjects();
 	bindPartsTooltip();
 	assignFieldID();
-	initVocabWidgets($(document));
-	initMapWidget($(document));
+	
+	// Add some loading text...
+	$('#response_result').html(loadingBoxMessage("Loading your Record..."));
 
+	// And queue the widgets to load in a little while...
+	window.setTimeout(function() { initMapWidget($(document)); }, 500);
+	window.setTimeout(function() { initVocabWidgets($(document)); }, 650);
 
 }
 
@@ -651,10 +680,17 @@ function validate(){
 				if(count_error > 0) addValidationTag(id, 'important', count_error);
 				if(count_warning > 0) addValidationTag(id, 'warning', count_warning);
 			});
+
+			var action_bar = generateActionBar(data);
+			if (action_bar)
+			{
+				data['action_bar'] = action_bar;
+			}
+
 			var template = $('#save-record-template').html();
 			var output = Mustache.render(template, data);
-			$('#qa_result').html(output);
-			formatQA($('#qa_result .qa'));
+			$('#response_result').html(output);
+			formatQA($('#response_result .qa'));
 		}
 	});
 }
@@ -1272,9 +1308,9 @@ function formatQA(container){
         else if($(this).parent().attr('qld') == 1)
             $(this).text('Quality Level 1 - Required RIF-CS Schema Elements');
         else if($(this).parent().attr('qld') == 2)
-            $(this).html('Quality Level 2 - required Metadata Content Requirements.' );
+            $(this).html('Quality Level 2 - Required Metadata Content Requirements.' );
         else if($(this).parent().attr('qld') == 3)
-             $(this).html('Quality Level 3 - recommended Metadata Content Requirements.' );
+             $(this).html('Quality Level 3 - Recommended Metadata Content Requirements.' );
     });
     //hide all qa
     $('.qa_container', tooltip).each(function(){
@@ -1300,4 +1336,34 @@ function formatQA(container){
     });
     $('.qa_ok').addClass('success');
     $('.qa_error').addClass('warning');
+}
+
+function generateActionBar(data_response)
+{
+	var action_menu = '<dl class="dl-horizontal pull-left">' + 
+		 			 '	<dt><i class="icon icon-wrench"> </i> Record Actions</dt>';
+
+	if (typeof(data_response['qa_required']) !=='undefined' && data_response.qa_required)
+	{
+		action_menu += 	'   <dd><a class="btn btn-mini btn-warning status_action" to="SUBMITTED_FOR_ASSESSMENT"><i class="icon-white icon-share-alt"></i> Submit this Record for Assessment</a></dd>';
+	}
+		
+	action_menu +=   '<dd><a class="btn btn-mini"><i class="icon icon-arrow-left"></i> Finished Editing <em>(back to Manage My Records)</em></a></dd>' +
+					'</dl>';
+
+	var view_menu ='<dl class="dl-horizontal pull-left">' +
+					'  <dt><i class="icon icon-zoom-in"> </i> View Options</dt>' +
+					'  <dd><a href="'+base_url+'registry_object/view/'+data_response.ro_id+'" class="btn btn-mini btn-info">View this Record in the Registry</a></dd>' +
+					'  <dd><a href="'+portal_url+'view/?id='+data_response.ro_id+'" target="_blank" class="btn btn-mini btn-info"><i class="icon-white icon-globe"></i> Preview in Research Data Australia</a></dd>' +
+				   '</dl>';
+	console.log(action_menu);
+	return action_menu + " " + view_menu;
+}
+
+
+function loadingBoxMessage(message)
+{
+	var template = $(loading_box);
+	$('#loading_box_text', template).html("<em>" + (typeof(message) !== 'undefined' ? message : "Loading....") + "</em>");
+	return template;
 }

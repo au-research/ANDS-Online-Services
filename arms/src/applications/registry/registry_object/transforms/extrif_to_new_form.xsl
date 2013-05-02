@@ -121,13 +121,10 @@
 
 	<xsl:template name="simpleDescribeTab" mode="collection">
 		<!-- Record Admin-->
-		<div id="simple_describe" class="pane">
+		<div id="simple_describe" class="pane hide">
 			
 			<br/>
 			<span class="alert persist"><strong>A much simpler record editor is coming soon!</strong> In the meantime, please use the <a href="#!/advanced/admin">Advanced Mode</a> to edit records.</span>
-			<p><br/>
-				<img src="{$base_url}assets/img/under_construction.gif" />
-			</p>
 			<fieldset class="hide">
 				<legend>Describe your Data</legend>
 
@@ -436,8 +433,7 @@
 		<xsl:param name="base_url"/>
 		<div id="qa" class="pane">
 			<fieldset>
-				<a href="{$base_url}registry_object/view/{$registry_object_id}" title="View Record in Registry" class="btn btn-primary">View Record in Registry</a>
-				<div id="qa_result"/>
+				<div id="response_result"></div>
 			</fieldset>
 		</div>
 	</xsl:template>
