@@ -1247,16 +1247,6 @@
     </xsl:template>
     
     <xsl:template match="ro:coverage/ro:temporal/ro:text">
-    	<xsl:if test="string-length(.) = 0">
-            <xsl:choose>
-			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Temporal Coverage Text must have a value.");</xsl:text>
-			    </xsl:when>
-			    <xsl:otherwise>
-					<span class="error">Temporal Coverage Text must have a value.</span>
-			    </xsl:otherwise>
-	    	</xsl:choose>
-        </xsl:if>
         <xsl:if test="string-length(.) &gt; 512">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
@@ -1835,6 +1825,16 @@
     </xsl:template>
     
     <xsl:template match="ro:citationMetadata/ro:publisher">
+    	<xsl:if test="string-length(.) = 0">
+	        <xsl:choose>
+			    <xsl:when test="$output = 'script'">
+	        		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Citation Metadata Publisher must have a Value.","value");</xsl:text>
+			    </xsl:when>
+			    <xsl:otherwise>
+					<span class="error">Citation Metadata Publisher must have a Value.</span>
+			    </xsl:otherwise>
+	    	</xsl:choose>
+	    </xsl:if>
 	    <xsl:if test="string-length(.) &gt; 512">
 	        <xsl:choose>
 			    <xsl:when test="$output = 'script'">
