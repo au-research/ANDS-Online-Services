@@ -585,7 +585,7 @@ function loadContributorPagesEdit(data_source_id,inst_pages)
 			bind_ro_search();
 		},
 		error: function(data){
-		console.log(data);
+			log(data);
 		}
 	});
 	
@@ -844,7 +844,7 @@ function checkResponse(data)
 {
 	if (data.status == "ERROR")
 	{
-		console.log(data.message);
+		log(data.message);
 		logErrorOnScreen(data.message);
 	}
 }
@@ -1104,12 +1104,11 @@ function bind_ro_search()
 	$(".ro_search").each(function(){
 		if ($(this).attr('name').match(/contributor/))
 		{
-			console.log($('#data_source_id_input').val());
 			$(this).ro_search_widget({ endpoint: base_url + "registry_object_search/", 'class': "party", ds: $('#data_source_id_input').val() });
 		}
 		else
 		{
-			$(this).ro_search_widget({ endpoint: base_url + "registry_object_search/", 'class': "collection", ds: $('#data_source_id_input').val() });
+			$(this).ro_search_widget({ endpoint: base_url + "registry_object_search/", datasource: $('#data_source_id_input').val(), lock_presets: true });
 		}
 		
 	});
@@ -1228,7 +1227,7 @@ $('#save-edit-form').live({
 					}
 				},
 				error: function(data){
-					console.log(data)
+					log(data)
 					$('#myModal').modal();
 					logErrorOnScreen("An error occured whilst saving your changes!", $('#myModal .modal-body'));
 					$('#myModal .modal-body').append("<br/><pre>Could't communicate with server</pre>");

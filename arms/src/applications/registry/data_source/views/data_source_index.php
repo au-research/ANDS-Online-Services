@@ -561,7 +561,7 @@
 	 
 	    	<div class="widget-content">
 
-				<h4>Account Administration Information</h4>
+				<h4>Account Administration Information <sup><a href="http://ands.org.au/guides/cpguide/cpgdsaaccount.html#accountadmin" target="_blank" class="muted">?</a></sup></h4>
 				<dl class="dl-horizontal dl-wide">
 					<?php 
 					foreach($data_source_view_fields as $key=>$name){
@@ -578,7 +578,7 @@
 			 	</dl>
 			 	<h4>Records Management Settings</h4>
 			 	<dl class="dl-horizontal dl-wide">
-					<dt>Reverse Links</dt>
+					<dt>Reverse Links <sup><a href="http://ands.org.au/guides/cpguide/cpgdsaaccount.html#reverse" target="_blank" class="muted">?</a></sup></dt>
 					<dd>
 						<p>
 							
@@ -592,7 +592,7 @@
 					</dd>
 
 					{{#create_primary_relationships}}
-					<dt>Create Primary Relationships</dt>
+					<dt>Create Primary Relationships <sup><a href="http://ands.org.au/guides/cpguide/cpgdsaaccount.html#primary" target="_blank" class="muted">?</a></sup></dt>
 					<dd>
 						<p>
 							<div class="checkbox_view{{create_primary_relationships}}"> </div>
@@ -601,7 +601,7 @@
 					{{/create_primary_relationships}}
 					
 					{{#manual_publish}}
-					<dt>Manually Publish</dt>
+					<dt>Manually Publish <sup><a href="http://ands.org.au/guides/cpguide/cpgdsaaccount.html#quality" target="_blank" class="muted">?</a></sup></dt>
 					<dd>
 						<p>
 							<div class="checkbox_view{{manual_publish}}">		
@@ -611,7 +611,7 @@
 					{{/manual_publish}}
 
 					{{#qa_flag}}
-					<dt>Quality Assessment Required</dt>
+					<dt>Quality Assessment Required <sup><a href="http://ands.org.au/guides/cpguide/cpgdsaaccount.html#quality" target="_blank" class="muted">?</a></sup></dt>
 					<dd>
 						<p>
 							<div class="checkbox_view{{qa_flag}}">			</div>
@@ -620,7 +620,7 @@
 					{{/qa_flag}}
 
 					{{#assessment_notify_email_addr}}
-					<dt>Assessment Notification Email</dt>
+					<dt>Assessment Notification Email <sup><a href="http://ands.org.au/guides/cpguide/cpgdsaaccount.html#quality" target="_blank" class="muted">?</a></sup></dt>
 					<dd>
 						<p>
 							{{assessment_notify_email_addr}}
@@ -631,11 +631,11 @@
 		 		</dl>
 
 		 		<p>&nbsp;</p>
-			 	<h4>Contributor Pages <span class="label"><a href="http://ands.org.au/resource/contributor-hp-help.pdf" class="white" target="_blank"><i class="icon icon-white icon-question-sign"></i></a></span></h4> 
+			 	<h4>Contributor Pages <span class="label"><a href="http://ands.org.au/guides/cpguide/cpgdsaaccount.html#contrib" class="white" target="_blank"><i class="icon icon-white icon-question-sign"></i></a></span></h4> 
 				<div class="" id="contributor_groups"></div>
 			 	
 			 
-			 	<h4>Harvester Settings</h4>
+			 	<h4>Harvester Settings <sup><a href="http://ands.org.au/guides/cpguide/cpgdsaaccount.html#harvester" target="_blank" class="muted">?</a></sup></h4>
 			 	<dl class="dl-horizontal dl-wide">
 			 		{{#uri}}
 					<dt>URI</dt>
@@ -886,7 +886,7 @@
 			<div class="tab-content">
 				<div id="admin" class="tab-pane active">
 					<fieldset>
-						<legend>Account Administration Information</legend>
+						<legend>Account Administration Information <sup><a href="http://ands.org.au/guides/cpguide/cpgdsaaccount.html#accountadmin" target="_blank" class="muted">?</a></sup></legend>
 						<div class="control-group">
 							<label class="control-label">Key</label>
 							<div class="controls">
@@ -945,7 +945,7 @@
 					<fieldset>
 						<legend>Records Management Settings</legend>
 						<div class="control-group">
-							<label class="control-label">Reverse Links</label>
+							<label class="control-label">Reverse Links <sup><a href="http://ands.org.au/guides/cpguide/cpgdsaaccount.html#reverse" target="_blank" class="muted">?</a></sup></label>
 							<div class="controls">
 
 								<div class="normal-toggle-button" value="{{allow_reverse_internal_links}}">
@@ -961,9 +961,12 @@
 						</div>
 
 						<div class="control-group">
-							<label class="control-label">Create Primary Relationships</label>
+							<label class="control-label">
+								Create Primary <br/>Relationships
+								<sup><a href="http://ands.org.au/guides/cpguide/cpgdsaaccount.html#primary" target="_blank" class="muted">?</a></sup>
+							</label>
 							<div class="controls">
-								<div class="create-primary normal-toggle-button" value="{{create_primary_relationships}}">
+								<div class="create-primary normal-toggle-button" style="margin-top:9px;" value="{{create_primary_relationships}}">
     								<input type="checkbox" for="create_primary_relationships" name="create_primary_relationships">
 								</div>
 							</div>
@@ -971,7 +974,7 @@
 						
 						<div id="primary-relationship-form">
 							<div class="well">
-								<i>Datasources can have up to 2 primary relationships</i>
+								<i>Data Sources can have up to 2 Primary Records <sup><a href="http://ands.org.au/guides/cpguide/cpgdsaaccount.html#primary" target="_blank" class="muted">?</a></sup></i>
 								<div class="clearfix"></div>
 								<div class="pull-left">
 									<div class="control-group hide">
@@ -982,7 +985,7 @@
 									</div>
 									
 									<div class="control-group">
-										<label class="control-label"><br/><br/>Registry Object Key</label>
+										<label class="control-label"><br/><br/>Primary Record Key</label>
 										<div class="controls">
 											<span class="help-block">Relate all records to:</span>
 											<input type="text" class="input ro_search" name="primary_key_1" id="primary_key_1" value="{{primary_key_1}}"/>
@@ -1022,7 +1025,7 @@
 										</div>
 									</div>
 									<div class="control-group">
-										<label class="control-label"><br/><br/>Registry Object Key</label>
+										<label class="control-label"><br/><br/>Primary Record Key</label>
 										<div class="controls">
 											<span class="help-block">Relate all records to:</span>
 											<input type="text" class="input ro_search" name="primary_key_2" id="primary_key_2" value="{{primary_key_2}}"/>
@@ -1090,7 +1093,9 @@
 			  		{{/statuscounts}}
 								
 						<div class="control-group">
-							<label class="control-label">Manually Publish Records</label>
+							<label class="control-label">Manually Publish Records
+								<sup><a href="http://ands.org.au/guides/cpguide/cpgdsaaccount.html#quality" target="_blank" class="muted">?</a></sup>
+							</label>
 							<div class="controls">
 								<div class="normal-toggle-button manual_publish" value="{{manual_publish}}">
     								<input type="checkbox" for="manual_publish" id="check_manual_publish">
@@ -1101,9 +1106,11 @@
 						<span class="hidden" id="qa_flag_set">no</span>
 						<?php if ($this->user->hasFunction('REGISTRY_STAFF')): ?>
 							<div class="control-group">
-								<label class="control-label">Quality Assessment Required</label>
+								<label class="control-label">Quality Assessment Required
+									<sup><a href="http://ands.org.au/guides/cpguide/cpgdsaaccount.html#quality" target="_blank" class="muted">?</a></sup>
+								</label>
 								<div class="controls">
-									<div class="normal-toggle-button qa_flag" value="{{qa_flag}}">
+									<div class="normal-toggle-button qa_flag" style="margin-top:9px;" value="{{qa_flag}}">
 	    								<input type="checkbox" for="qa_flag" id="check_qa_flag">     																
 									</div>
 								</div>
@@ -1117,7 +1124,9 @@
 							</div>
 						<?php endif; ?>
 						<div class="control-group">
-							<label class="control-label" for="institution_pages">Contributor Pages</label>
+							<label class="control-label" for="institution_pages">Contributor Pages
+								<sup><a href="http://ands.org.au/guides/cpguide/cpgdsaaccount.html#contrib" target="_blank" class="muted">?</a></sup>
+							</label>
 							<div class="controls">
 								<input type="radio" class="contributor-page" name="institution_pages_radio" value="0"><p class="help-inline">Do not have contributor pages</p><br />
 								<input type="radio" class="contributor-page" name="institution_pages_radio" value="1"><p class="help-inline">Auto generate Contributor Pages for all my groups</p><br />
@@ -1132,7 +1141,9 @@
 				</div>
 				<div id="harvester" class="tab-pane">
 					<fieldset>
-						<legend>Harvester Settings</legend>
+						<legend>Harvester Settings
+							<sup><a href="http://ands.org.au/guides/cpguide/cpgdsaaccount.html#harvester" target="_blank" class="muted">?</a></sup>
+						</legend>
 						<div class="control-group">
 							<label class="control-label" for="uri">URI</label>
 							<div class="controls">

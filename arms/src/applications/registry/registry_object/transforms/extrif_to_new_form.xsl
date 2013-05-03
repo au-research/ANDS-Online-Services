@@ -1352,6 +1352,7 @@
 
 			<div class="aro_box_part" type="namePart">
 				<div class="control-group">
+					<label class="control-label" for="title">Name Part: </label>
 					<div class="controls">
 						<span class="inputs_group">
 							<input type="text" name="value" class="inner_input" value="" placeholder="Name Part Value"/>
