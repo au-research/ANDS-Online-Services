@@ -739,15 +739,15 @@ function addValidationMessage(tt, type){
 	var message = tt.message;
     var message = $('<div />').html(message).text();
 
-	 log(name, message, tt);
+
 	if(name.match("^tab_")){
 		var tab = name.replace('tab_','');
 		$('#'+tab).prepend('<div class="alert alert-'+type+'">'+message+'</div>');
 	}else{
 
 		if (typeof(tt.sub_field_id) !== 'undefined')
-		{
-			var field = $('*[name='+tt.sub_field_id+']:first','*[field_id='+name+']');
+		{		
+			var field = $('*[field_id='+name+']').parent().find('*[name='+tt.sub_field_id+']');
 		}
 		else
 		{
@@ -758,7 +758,8 @@ function addValidationMessage(tt, type){
 		if(containerfield.length === 0)
 			var containerfield = field.children('div.controls');	
 		if(containerfield.length === 0)
-			var containerfield = field.parents('div.controls');	
+			var containerfield = field.parents('div.aro_box_part');	
+		
 		if (containerfield.length > 0)
 		{
 			$(containerfield).append('<div class="alert alert-'+type+'">'+message+'</div>');
@@ -767,6 +768,7 @@ function addValidationMessage(tt, type){
 		{
 			$(field).append('<div class="alert alert-'+type+'">'+message+'</div>');
 		}
+
 		if (!$(field).hasClass("aro_box"))
 		{
 			$(field).addClass('error');
@@ -1106,7 +1108,7 @@ function getRIFCSforTab(tab, hasField){
 		 * The type => the input[name=type] of the box display (heading)
 		 */
 		var this_fragment_type = $(this).attr('type');
-		log("FRAGMENT TYPE " + this_fragment_type);
+		//log("FRAGMENT TYPE " + this_fragment_type);
 		fragment +='<'+this_fragment_type+'';
 		if(hasField) fragment +=' field_id="' +$(this).attr('field_id')+'"';
 		var valid_fragment_meta = ['type', 'dateFrom', 'dateTo', 'style', 'rightsURI'];//valid input type to be put as attributes
@@ -1143,7 +1145,7 @@ function getRIFCSforTab(tab, hasField){
 					
 					//deal with the type
 					var type = $(this).attr('type');
-					log("type: " + type);
+					//log("type: " + type);
 					if(type=='relation'){//special case for related object relation
 						fragment += '<'+type+' field_id="' +$(this).attr('field_id')+'" type="'+$('input[name=type]',this).val()+'">';
 						if($('input[name=description]', this).val()!=''){//if the relation has a description

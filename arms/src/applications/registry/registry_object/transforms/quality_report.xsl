@@ -1102,7 +1102,7 @@
         <xsl:if test="string-length(.) = 0">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","A Format Identifier Value must be entered. &lt;span&gt;(e.g. 'application/xml)&lt;/span&gt;");</xsl:text>
+            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","A Format Identifier Value must be entered. &lt;span&gt;(e.g. 'application/xml)&lt;/span&gt;","format_identifier");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="error">A Format Identifier must have a value.</span>
@@ -1112,7 +1112,7 @@
         <xsl:if test="string-length(.) &gt; 512">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","A Format Identifier Value must be less than 512 characters.",);</xsl:text>
+            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","A Format Identifier Value must be less than 512 characters.","format_identifier");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="error">Related Info Identifier value must be less than 512 characters.</span>
@@ -1122,7 +1122,7 @@
         <xsl:if test="string-length(@type) = 0">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","A Format Identifier Type must be specified. &lt;span&gt;(e.g. 'mediaType')&lt;/span&gt;");</xsl:text>
+            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","A Format Identifier Type must be specified. &lt;span&gt;(e.g. 'mediaType')&lt;/span&gt;","format_identifier_type");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="error">A Format Identifier must have a type.</span>
@@ -1132,7 +1132,7 @@
         <xsl:if test="string-length(@type) &gt; 512">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","A Format Identifier Type must be less than 512 characters.");</xsl:text>
+            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","A Format Identifier Type must be less than 512 characters.","format_identifier_type");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="error">A Format Identifier Type must be less than 512 characters.</span>
