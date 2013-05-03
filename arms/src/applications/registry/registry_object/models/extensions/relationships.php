@@ -116,16 +116,26 @@ class Relationships_Extension extends ExtensionBase
 	
 	function getRelatedClasses()
 	{
-		// Delete any old relationships (we only run this on ingest, so its a once-off update)
-		$this->db->where(array('registry_object_id' => $this->ro->id));
-		$this->db->select('DISTINCT(related_object_class)', FALSE)->from('registry_object_relationships');
-		$result = $this->db->get();	
+		/* Holy crap! Use getConnections to infer relationships to drafts and reverse links :-))) */
 		$classes = array();
-		foreach($result->result_array() AS $class)
+		$connections = array_pop($this->ro->getConnections(false));
+		if (isset($connections['activity']))
 		{
-			$classes[] = $class['related_object_class'];
+			$classes[] = "Activity";
 		}
-		$result->free_result();
+		if (isset($connections['collection']))
+		{
+			$classes[] = "Collection";
+		}
+		if (isset($connections['party']) || isset($connections['party_one']) || isset($connections['party_multi']))
+		{
+			$classes[] = "Party";
+		}
+		if (isset($connections['service']))
+		{
+			$classes[] = "Service";
+		}
+
 		return $classes;
 	}
 	
@@ -133,10 +143,6 @@ class Relationships_Extension extends ExtensionBase
 	{
 		$classes = "";
 		$list = $this->getRelatedClasses();
-		foreach($list AS $item)
-		{
-			$classes.=ucfirst($item);
-		}
-		return $classes;
+		return implode($list);
 	}
 }

@@ -97,6 +97,66 @@ $(function(){
 		}
 	});
 
+	/* Update record status from the Save & Validate panel */
+	$('.status_action').live('click', function(e){
+	    e.preventDefault();
+	    $(this).button('loading');
+	    url = base_url+'registry_object/update/';
+	    data = {affected_ids:[$('#ro_id').val()], attributes:[{name:'status',value:$(this).attr('to')}], data_source_id:$('#data_source_id').val()};
+	    $.ajax({
+	        url:url, 
+	        type: 'POST',
+	        data: data,
+	        dataType: 'JSON',
+	        success: function(data){
+
+	            if(data.status=='success')
+	            {
+	                if(data.error_count != '0')
+	                {
+	                	data.message = 'A critical error occured whilst changing the record status: ' + data.error_message;
+	                    var template = $('#save-error-record-template').html();
+						var output = Mustache.render(template, data);
+						$('#response_result').html(output);
+	                }
+	                else{
+	                	// The registry object ID has changed (we have overwritten another PUBLISHED object!)
+	                    if (typeof(data.new_ro_id) !== 'undefined')
+	                    {
+	                        window.location = base_url + 'registry_object/view/' + data.new_ro_id + "?message_code=" + "PUBLISHED_OVERWRITTEN";
+	                    }
+	                    else
+	                    {
+	                    	var suffix = '';
+	                    	if (typeof(data.message_code) !== 'undefined' && data.message_code)
+	                    	{
+								suffix = "?message_code=" + data.message_code;
+	                    	}
+	                       window.location = base_url + 'registry_object/view/' + $('#ro_id').val() + suffix;
+	                    }
+	                }
+	            }
+	            else
+	            {
+	                data.message = 'A critical error occured whilst changing the record status: ' + data.error_message + (typeof(data.message) !== 'undefined' ? data.message : '');
+                    var template = $('#save-error-record-template').html();
+					var output = Mustache.render(template, data);
+					$('#response_result').html(output);
+	            }
+
+	            $('.status_action').button('reset');
+	        },
+	        error: function(data)
+	        {
+	        	$('.status_action').button('reset');
+	        	data.message = 'A critical error occured whilst changing the record status. Unknown error code - contact ANDS Support if this persists.';
+                var template = $('#save-error-record-template').html();
+				var output = Mustache.render(template, data);
+				$('#response_result').html(output);
+	        }
+	    });
+	});
+
 	$('#advanced-menu a').click(function(e, data){
 		var tab = $(this).attr('href');
 		changeHashTo('advanced/'+tab.substring(1, tab.length));
@@ -159,7 +219,7 @@ function bindSearchRelatedEvents(tt, target){
 		// data_source_id_value
 		var ds_option = '';
 		if($('#ds_option').attr('checked')=='checked'){
-			ds_option = '/'+$('#data_source_id_value').val();
+			ds_option = '/'+$('#data_source_title').val();
 		}
 		var published_option = '';
 		if($('#published_option').attr('checked')=='checked'){
@@ -292,6 +352,8 @@ function initEditForm(){
 	 * Replace the data source text input field with a chosen() select
 	 * @TODO: ACL on which data source is accessible on services/registry/get_datasources_list
 	 */
+	 /*
+	 DISABLE THE ABILITY TO CHANGE DATA SOURCE FROM ARO [BG]
 	var selected_data_source = $('#data_source_id_value').val();
 	$.ajax({
 		type: 'GET',
@@ -323,8 +385,9 @@ function initEditForm(){
 		var chosenvalue = $(":selected", this);
 		$('.data_source_link').html(chosenvalue.html());
 		$('.data_source_link').attr("href",base_url + "data_source/manage_records/" + chosenvalue.val());
-//		$(".data_source_title")
+
 	})
+	*/
 
 	$(document).on('mouseup', '.remove',function(e){
 		/*
@@ -405,20 +468,6 @@ function initEditForm(){
 		bindPartsTooltip();
 	});
 	
-
-	//Export XML button for currentTab in pretty print and modal
-	$('.export_xml').die().live({
-		click: function(e){
-			e.preventDefault();
-			if(editor=='tinymce') tinyMCE.triggerSave();//so that we can get the tinymce textarea.value without using tinymce.getContents
-			var currentTab = $(this).parents('.pane');
-			var xml = getRIFCSforTab(currentTab,false);
-			$('#myModal .modal-body').html('<pre class="prettyprint linenums"><code class="language-xml">' + htmlEntities(formatXml(xml)) + '</code></pre>');
-			prettyPrint();
-			$('#myModal').modal();
-		}
-	});
-
 	//Export XML button for ALL TABS in pretty print and modal
 	$('#master_export_xml').die().live({
 		click: function(e){
@@ -484,7 +533,6 @@ function initEditForm(){
 
 			// Add some loading text...
 			$('#response_result').html(loadingBoxMessage("Saving &amp; Validating your Record...<p><br/></p><p><br/></p><p><br/></p><p><br/></p><small class='muted'>Been waiting a while? <a class='show_rifcs btn btn-link btn-mini muted'>Take a backup of your RIFCS XML</a> - just in case!</small>"));
-			validate();
 
 
 			//test validation
@@ -505,6 +553,8 @@ function initEditForm(){
 				success: function(data){
 					if(data.status=='success')
 					{
+						validate();
+
 						// Generate the action button bar based on result data
 						var action_bar = generateActionBar(data);
 						if (action_bar)
@@ -550,17 +600,6 @@ function initEditForm(){
 		}
 	});
 
-
-	//Load external XML modal dialog
-	$('#load_xml').die().live({
-		click: function(e){
-			e.preventDefault();
-			$('#myModal .modal-header h3').html('<h3>Paste RIFCS Here</h3>');
-			$('#myModal .modal-body').html('<textarea id="load_xml_rifcs"></textarea>');
-			$('#myModal .modal-footer').html('<button id="load_edit_xml" class="btn btn-primary">Load</button>');
-			$('#myModal').modal();
-		}
-	});
 
 	//This button stays inside the Load xml modal dialog
 	//This will post the input rifcs to the server and replace the current edit form with the response
@@ -657,7 +696,6 @@ function validate(){
 	prettyPrint();
 
 	//validate
-	log(xml);
 	$.ajax({
 		url:base_url+'registry_object/validate/'+ro_id, 
 		type: 'POST',
@@ -1343,25 +1381,45 @@ function formatQA(container){
     $('.qa_error').addClass('warning');
 }
 
+/*
+ * Generates the list of actions available to users after the save() method is called
+ */
 function generateActionBar(data_response)
 {
+	if(typeof(data_response['error_count']) !== 'undefined' && data_response['error_count'] > 0)
+	{
+		return "<div class='alert alert-block alert-error'><strong>This draft contains validation errors which must be corrected! </strong>" +
+				"<br/>Please refer to the tabs marked with a red error icon in the menu on the left.</div>";
+	}
+
 	var action_menu = '<dl class="dl-horizontal pull-left">' + 
 		 			 '	<dt><i class="icon icon-wrench"> </i> Record Actions</dt>';
 
 	if (typeof(data_response['qa_required']) !=='undefined' && data_response.qa_required)
 	{
-		action_menu += 	'   <dd><a class="btn btn-mini btn-warning status_action" to="SUBMITTED_FOR_ASSESSMENT"><i class="icon-white icon-share-alt"></i> Submit this Record for Assessment</a></dd>';
+		action_menu += 	'   <dd><a class="btn btn-small btn-fixed btn-warning strong status_action" data-loading-text="Submitting for Assessment..." to="SUBMITTED_FOR_ASSESSMENT"><i class="icon-white icon-share-alt"></i> Submit this Record for Assessment</a></dd>';
+	}
+	else
+	{
+		if(typeof(data_response['approve_required']) !=='undefined' && data_response.approve)
+		{
+			action_menu += 	'   <dd><a class="btn btn-small btn-fixed btn-warning strong status_action" data-loading-text="Approving Record..." to="APPROVE"><i class="icon-white icon-share-alt"></i> Move this record to Approved</a></dd>';
+		}
+		else
+		{
+			action_menu += 	'   <dd><a class="btn btn-small btn-fixed btn-success strong status_action" data-loading-text="Publishing Record..." to="PUBLISHED"><i class="icon-white icon-share-alt"></i> Publish this Record</a></dd>';
+		}
 	}
 		
-	action_menu +=   '<dd><a class="btn btn-mini"><i class="icon icon-arrow-left"></i> Finished Editing <em>(back to Manage My Records)</em></a></dd>' +
+	action_menu +=   '<dd><a href="'+base_url+'data_source/manage_records/'+data_response.data_source_id+'" class="btn btn-small btn-fixed strong"><i class="icon icon-arrow-left"></i> &nbsp; <span class="muted">Finished Editing <small><em>(back to Manage My Records)</em></small></span></a></dd>' +
 					'</dl>';
 
 	var view_menu ='<dl class="dl-horizontal pull-left">' +
 					'  <dt><i class="icon icon-zoom-in"> </i> View Options</dt>' +
-					'  <dd><a href="'+base_url+'registry_object/view/'+data_response.ro_id+'" class="btn btn-mini btn-info">View this Record in the Registry</a></dd>' +
-					'  <dd><a href="'+portal_url+'view/?id='+data_response.ro_id+'" target="_blank" class="btn btn-mini btn-info"><i class="icon-white icon-globe"></i> Preview in Research Data Australia</a></dd>' +
+					'  <dd><a href="'+base_url+'registry_object/view/'+data_response.ro_id+'" class="btn btn-fixed btn-small strong btn-info"><i class="icon-white icon-search"></i> View this Record in the Registry</a></dd>' +
+					'  <dd><a href="'+portal_url+'view/?id='+data_response.ro_id+'" target="_blank" class="btn btn-fixed btn-small strong btn-info"><i class="icon-white icon-globe"></i> Preview in Research Data Australia</a></dd>' +
 				   '</dl>';
-	console.log(action_menu);
+
 	return action_menu + " " + view_menu;
 }
 

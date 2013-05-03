@@ -24,6 +24,7 @@
 
 	
 	<div id="sidebar">
+		<input id="data_source_id" value="{$dataSourceID}" type="hidden" class="hide" />
 		<div id="mode-switch" class="btn-group" style="display:none; text-align: center;margin: 10px auto 0px auto;">
 			<button class="btn btn-primary" aro-mode="simple">Simple</button>
 			<button class="btn" aro-mode="advanced">Advanced</button>
@@ -339,7 +340,7 @@
 				<div class="control-group">
 					<label class="control-label" for="ds">Data Source</label>
 					<div class="controls">
-						<input type="text" id="data_source_id_value" class="input-large" name="ds" value="{$dataSourceTitle}" disabled="disabled"/>
+						<input type="text" id="data_source_title" class="input-large" name="ds" value="{$dataSourceTitle}" disabled="disabled"/>
 					</div>
 				</div>
 
@@ -450,7 +451,7 @@
 
 				<button class="btn btn-primary addNew" type="name" add_new_type="name">
 					<i class="icon-plus icon-white"/> Add Name </button>
-				<button class="hide btn export_xml btn-info"> Export XML fragment </button>
+				
 			</fieldset>
 		</div>
 	</xsl:template>
@@ -466,7 +467,7 @@
 
 				<button class="btn btn-primary addNew" type="dates" add_new_type="dates">
 					<i class="icon-plus icon-white"/> Add Dates </button>
-				<button class="hide btn export_xml btn-info"> Export XML fragment </button>
+				
 			</fieldset>
 		</div>
 	</xsl:template>
@@ -524,7 +525,7 @@
 	<xsl:template match="ro:collection/ro:name | ro:activity/ro:name | ro:party/ro:name  | ro:service/ro:name">
 		<div class="aro_box" type="name">
 			<div class="aro_box_display clearfix">
-				<a href="javascript:;" class="toggle"><i class="icon-plus"/></a>
+				<a href="javascript:;" class="toggle"><i class="icon-minus"/></a>
 				<input type="text" class="input-small rifcs-type" vocab="RIFCSNameType" name="type" placeholder="Type" value="{@type}"/>
 				<h1/>
 				<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
@@ -532,7 +533,7 @@
 
 			<xsl:apply-templates select="ro:namePart"/>
 			<div class="separate_line"/>
-			<div class="controls hide">
+			<div class="controls">
 				<button class="btn btn-primary addNew" type="namePart" add_new_type="namePart">
 					<i class="icon-plus icon-white"></i> Add Name Part
 				</button>
@@ -542,13 +543,16 @@
 
 	<xsl:template match="ro:namePart">
 		<xsl:param name="hide" select="'hide'"/>
-		<div class="aro_box_part {$hide}" type="namePart">
+		<div class="aro_box_part" type="namePart">
 			<div class="control-group">
 				<label class="control-label" for="title">Name Part: </label>
 				<div class="controls">
 					<span class="inputs_group">
 						<input type="text" name="value" class="inner_input" value="{text()}"/>
-						<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSNamePartType" name="type" placeholder="Type" value="{@type}"/>
+
+						<xsl:if test="//ro:party">
+							<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSNamePartType" name="type" placeholder="Type" value="{@type}"/>
+						</xsl:if>
 					</span>
 					<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
 				</div>
@@ -569,7 +573,7 @@
 					<i class="icon-plus icon-white"/> Add Description </button>
 				<button class="btn btn-primary addNew" type="rights" add_new_type="rights">
 					<i class="icon-plus icon-white"/> Add Rights </button>
-				<button class="hide btn export_xml btn-info"> Export XML fragment </button>
+				
 			</fieldset>
 		</div>
 	</xsl:template>
@@ -582,7 +586,7 @@
 				<div class="separate_line"/>
 				<button class="btn btn-primary addNew" type="accesspolicy" add_new_type="accesspolicy">
 					<i class="icon-plus icon-white"/> Add Access Policy </button>
-				<button class="hide btn export_xml btn-info"> Export XML fragment </button>
+
 			</fieldset>
 		</div>
 	</xsl:template>
@@ -597,7 +601,7 @@
 				<div class="btn-group">
 					<a href="javascript:;" class="btn btn-primary addNew" type="fullCitation" add_new_type="fullCitation">Add Full Citation</a>
 					<a href="javascript:;" class="btn btn-primary addNew" type="citationMetadata" add_new_type="citationMetadata">Add Citation Metadata</a>
-					<button class="hide btn export_xml btn-info"> Export XML fragment </button>
+					
 				</div>
 				
 			</fieldset>
@@ -748,7 +752,7 @@
 			</xsl:apply-templates>
 			<div class="separate_line"/>
 			<div class="controls">
-				<button class="btn btn-primary addNew" type="namePart" add_new_type="namePart"><i class="icon-plus icon-white"/> Add NamePart </button>
+				<button class="btn btn-primary addNew" type="namePart" add_new_type="namePart"><i class="icon-plus icon-white"/> Add Name Part </button>
 				<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/> Remove this contributor</button>
 			</div>
 			<hr/>
@@ -802,7 +806,7 @@
 				<div class="separate_line"/>
 				<button class="btn btn-primary addNew" type="subject" add_new_type="subject">
 					<i class="icon-plus icon-white"/> Add Subject </button>
-				<button class="hide btn export_xml btn-info"> Export XML fragment </button>
+				
 			</fieldset>
 		</div>
 	</xsl:template>
@@ -817,7 +821,7 @@
 				<div class="separate_line"/>
 				<button class="btn btn-primary addNew" type="identifier" add_new_type="identifier">
 					<i class="icon-plus icon-white"/> Add Identifier </button>
-				<button class="hide btn export_xml btn-info"> Export XML fragment </button>
+				
 			</fieldset>
 		</div>
 	</xsl:template>
@@ -831,7 +835,7 @@
 				<div class="separate_line"/>
 				<button class="btn btn-primary addNew" type="relatedObject" add_new_type="relatedObject">
 					<i class="icon-plus icon-white"/> Add Related Object </button>
-				<button class="hide btn export_xml btn-info"> Export XML fragment </button>
+				
 			</fieldset>
 		</div>
 	</xsl:template>
@@ -839,13 +843,13 @@
 	<xsl:template name="relatedinfosTab">
 		<div id="relatedinfos" class="pane">
 			<fieldset>
-				<legend>Related Infos</legend>
+				<legend>Related Information</legend>
 				<xsl:apply-templates
 					select="ro:collection/ro:relatedInfo | ro:activity/ro:relatedInfo | ro:party/ro:relatedInfo | ro:service/ro:relatedInfo"/>
 				<div class="separate_line"/>
 				<button class="btn btn-primary addNew" type="relatedinfo" add_new_type="relatedinfo">
-					<i class="icon-plus icon-white"/> Add related Info </button>
-				<button class="hide btn export_xml btn-info"> Export XML fragment </button>
+					<i class="icon-plus icon-white"/> Add Related Info </button>
+				
 			</fieldset>
 		</div>
 	</xsl:template>
@@ -859,7 +863,7 @@
 				<div class="separate_line"/>
 				<button class="btn btn-primary addNew" type="location" add_new_type="location">
 					<i class="icon-plus icon-white"/> Add Location </button>
-				<button class="hide btn export_xml btn-info"> Export XML fragment </button>
+				
 			</fieldset>
 		</div>
 	</xsl:template>
@@ -877,7 +881,7 @@
 						<a href="javascript:;" class="btn btn-primary addNew" type="spatial" add_new_type="spatial"><i class="icon-white icon-plus"></i> Add Spatial Coverage</a>
 					</div>
 				</div>
-				<button class="hide btn export_xml btn-info"> Export XML fragment </button>
+				
 			</fieldset>
 		</div>
 	</xsl:template>
@@ -890,7 +894,7 @@
 				<div class="separate_line"/>
 				<button class="btn btn-primary addNew" type="existenceDates" add_new_type="existenceDates">
 					<i class="icon-plus icon-white"/> Add Existence Date </button>
-				<button class="hide btn export_xml btn-info"> Export XML fragment </button>
+				
 			</fieldset>
 		</div>
 	</xsl:template>
@@ -1322,7 +1326,11 @@
 					<div class="controls">
 						<span class="inputs_group">
 							<input type="text" name="value" class="inner_input" value="" placeholder="Name Part Value"/>
-							<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSNamePartType" name="type" placeholder="Type" value=""/>
+
+							<xsl:if test="//ro:party">
+								<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSNamePartType" name="type" placeholder="Type" value=""/>
+							</xsl:if>
+
 						</span>
 						<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
 					</div>
@@ -1344,7 +1352,11 @@
 				<div class="controls">
 					<span class="inputs_group">
 						<input type="text" name="value" class="inner_input" value="" placeholder="Name Part Value"/>
-						<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSNamePartType" name="type" placeholder="Type" value=""/>
+					
+						<xsl:if test="//ro:party">
+							<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSNamePartType" name="type" placeholder="Type" value=""/>
+						</xsl:if>
+
 					</span>
 					<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
 				</div>
@@ -1743,7 +1755,7 @@
 			</div>
 			<div class="separate_line"/>
 			<div class="controls">
-				<button class="btn btn-primary addNew" type="namePart" add_new_type="namePart"><i class="icon-plus icon-white"/> Add NamePart </button>
+				<button class="btn btn-primary addNew" type="namePart" add_new_type="namePart"><i class="icon-plus icon-white"/> Add Name Part </button>
 				<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/> Remove this contributor</button>
 			</div>
 			<hr/>
@@ -1783,7 +1795,7 @@
 			</div>
 			<div class="separate_line"/>
 			<div class="controls">
-				<button class="btn btn-primary addNew" type="namePart" add_new_type="namePart"><i class="icon-plus icon-white"/> Add NamePart </button>
+				<button class="btn btn-primary addNew" type="namePart" add_new_type="namePart"><i class="icon-plus icon-white"/> Add Name Part </button>
 				<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/> Remove this contributor</button>
 			</div>
 			<hr/>

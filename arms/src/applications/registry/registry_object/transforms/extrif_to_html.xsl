@@ -14,6 +14,27 @@
 		<table class="recordTable" summary="Preview of Draft Registry Object">
 			<tbody class="recordFields">
 				<tr>
+					<td>Class: </td>
+					<td style="">
+						<xsl:choose>
+						
+							<xsl:when test="ro:collection">
+								Collection
+							</xsl:when>
+							<xsl:when test="ro:party">
+								Party
+							</xsl:when>
+							<xsl:when test="ro:activity">
+								Activity
+							</xsl:when>
+							<xsl:when test="ro:service">
+								Service
+							</xsl:when>
+
+						</xsl:choose>
+					</td>
+				</tr>
+				<tr>
 					<td>Type: </td>
 					<td style="">
 						<xsl:apply-templates select="ro:collection/@type | ro:activity/@type | ro:party/@type  | ro:service/@type"/>

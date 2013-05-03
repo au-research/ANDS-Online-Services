@@ -32,15 +32,14 @@ class Transforms_Extension extends ExtensionBase
 	}
 
 
-	function transformForQA($xml)
+	function transformForQA($xml, $data_source_key = null)
 	{
 		try{
 			$xslt_processor = Transforms::get_qa_transformer();
 			$dom = new DOMDocument();
-			//$dom->loadXML($this->ro->getXML());
 			$dom->loadXML($xml);
-			$dataSource = 'a';
-			$xslt_processor->setParameter('','dataSource',$dataSource);
+			$xslt_processor->setParameter('','dataSource', $data_source_key ?: $this->ro->data_source_key );
+			$xslt_processor->setParameter('','relatedObjectClassesStr',$this->ro->getRelatedClassesString());
 			return $xslt_processor->transformToXML($dom);
 		}catch (Exception $e)
 		{
@@ -49,7 +48,7 @@ class Transforms_Extension extends ExtensionBase
 		}
 	}
 	
-	function transformForHtml($revision='')
+	function transformForHtml($revision='', $data_source_key = null)
 	{
 		try{
 			$xslt_processor = Transforms::get_extrif_to_html_transformer();
@@ -58,7 +57,7 @@ class Transforms_Extension extends ExtensionBase
 			if($revision=='') {
 				$dom->loadXML(wrapRegistryObjects($this->ro->getRif()));
 			}else $dom->loadXML(wrapRegistryObjects($this->ro->getRif($revision)));
-			$xslt_processor->setParameter('','dataSource',$dataSource);
+			$xslt_processor->setParameter('','dataSource', $data_source_key ?: $this->ro->data_source_key );
 			return html_entity_decode($xslt_processor->transformToXML($dom));
 		}catch (Exception $e)
 		{
@@ -89,9 +88,7 @@ class Transforms_Extension extends ExtensionBase
 		try{
 			$xslt_processor = Transforms::get_extrif_to_form_transformer();
 			$dom = new DOMDocument();
-			//$dom->loadXML($this->ro->getXML());
 			$dom->loadXML($rifcs);
-			//$dom->loadXML($rifcs);
 			$xslt_processor->setParameter('','base_url',base_url());
 			return html_entity_decode($xslt_processor->transformToXML($dom));
 		}catch (Exception $e)

@@ -77,8 +77,8 @@ function init(filters){
             // $('.stick').sticky();
             window.setTimeout(function(){
                 $('#status_message').removeClass('alert-error').addClass('alert-info');
-                $('#status_message').hide();
-            }, 2000);
+                $('#status_message').fadeOut();
+            }, 8000);
 
         }
     });
@@ -874,8 +874,8 @@ function update(ids, attributes){
                     $('#status_message').html(data.error_message);
                 }
                 else{
-                  // $('#status_message').removeClass('alert-error').addClass('alert-info');
-                  // $('#status_message').html(data.success_message);
+                   $('#status_message').removeClass('alert-error').addClass('alert-info');
+                   $('#status_message').html(data.success_message);
                 }
 
                  $('#status_message').show();

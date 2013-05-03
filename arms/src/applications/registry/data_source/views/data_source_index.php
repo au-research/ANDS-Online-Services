@@ -582,12 +582,12 @@
 					<dd>
 						<p>
 							
-							<div class="checkbox_view{{allow_reverse_internal_links}}">Allow Reverse Internal Links </div> 
+							<div class="checkbox_view{{allow_reverse_internal_links}}">Allow reverse internal links </div> 
 					
 						</p>
 						<p>
 			
-							<div class="checkbox_view{{allow_reverse_external_links}}"> Allow Reverse External Links</div>
+							<div class="checkbox_view{{allow_reverse_external_links}}"> Allow reverse external links</div>
 						</p>
 					</dd>
 
@@ -951,12 +951,12 @@
 								<div class="normal-toggle-button" value="{{allow_reverse_internal_links}}">
     								<input type="checkbox" for="allow_reverse_internal_links">
 								</div>
-								<p class="help-inline">Allow reverse internal Links</p>
+								<p class="help-inline">Allow reverse internal links</p>
 								<br/><br/>
 								<div class="normal-toggle-button" value="{{allow_reverse_external_links}}">
     								<input type="checkbox" for="allow_reverse_external_links">
 								</div>
-								<p class="help-inline">Allow reverse external Links</p>
+								<p class="help-inline">Allow reverse external links</p>
 							</div>
 						</div>
 

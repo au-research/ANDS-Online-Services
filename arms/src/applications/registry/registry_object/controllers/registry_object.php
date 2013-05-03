@@ -11,6 +11,8 @@
  */
 class Registry_object extends MX_Controller {
 
+	private $maxVisibleRevisions = 15;
+
 	public function index(){
 		redirect(registry_url());
 	}
@@ -34,7 +36,7 @@ class Registry_object extends MX_Controller {
 
 			if($revision!=''){
 				$data['viewing_revision'] = true;
-				$data['rif_html'] = $ro->transformForHtml($revision);
+				$data['rif_html'] = $ro->transformForHtml($revision, $ds->title);
 				$data['native_format'] = $ro->getNativeFormat($revision);
 				$revRecord = $ro->getRevision($revision);
 				$time = date("F j, Y, g:i a", $revRecord[0]['timestamp']);
@@ -53,7 +55,7 @@ class Registry_object extends MX_Controller {
 			else 
 			{
 				$data['viewing_revision'] = false;
-				$data['rif_html'] = $ro->transformForHtml();
+				$data['rif_html'] = $ro->transformForHtml('', $ds->title);
 				$data['native_format'] = $ro->getNativeFormat();
 				if($ro->getNativeFormat($revision) != 'rif')
 				{
@@ -67,7 +69,7 @@ class Registry_object extends MX_Controller {
 
 			}
 
-			$data['revisions'] = $ro->getAllRevisions();
+			$data['revisions'] = array_slice($ro->getAllRevisions(),0,$this->maxVisibleRevisions);
 			$data['quality_text'] = $ro->get_quality_text();
 			//var_dump($data);
 			//exit();
@@ -170,14 +172,18 @@ class Registry_object extends MX_Controller {
 		$ds = $this->ds->getByID($ro->data_source_id);
 
 		$qa = $ds->qa_flag=='t' ? true : false;
+		$manual_publish = ($ds->manual_publish=='t' || $ds->manual_publish==DB_TRUE) ? true: false;
 
 		$response['title'] = 'QA Result';
 		$scripts = preg_split('/(\)\;)|(\;\\n)/', $result, -1, PREG_SPLIT_NO_EMPTY);
 		$response["ro_status"] = "DRAFT";
 		$response["title"] = $ro->title;
 		$response["ro_id"] = $ro->id;
+		$response["data_source_id"] = $ro->data_source_id;
 		$response["qa_required"] = $qa;
 		$response["ro_quality_level"] = $ro->quality_level;
+		$response["approve_required"] = $manual_publish;
+		$response["error_count"] = (int) $ro->error_count;
 		$response["qa"] = $ro->get_quality_text();
 		$response["ro_quality_class"] = ($ro->quality_level >= 2 ? "success" : "important");
 		$response["qa_$ro->quality_level"] = true;
@@ -243,12 +249,17 @@ class Registry_object extends MX_Controller {
 			$ro = $this->ro->getByID($registry_object_id);
 
 			$qa = $ds->qa_flag=='t' ? true : false;
+			$manual_publish = ($ds->manual_publish=='t' || $ds->manual_publish==DB_TRUE) ? true: false;
+
 			$result = 
 				array(
 					"status"=>$status,
 					"ro_status"=>"DRAFT",
 					"title"=>$ro->title,
 					"qa_required"=>$qa,
+					"data_source_id" => $ro->data_source_id,
+					"approve_required"=>$manual_publish,
+					"error_count"=> (int) $ro->error_count,
 					"ro_id"=>$ro->id,
 					"ro_quality_level"=>$ro->quality_level,
 					"ro_quality_class"=>($ro->quality_level >= 2 ? "success" : "important"),
@@ -549,18 +560,29 @@ class Registry_object extends MX_Controller {
 		$jsondata['success_count'] = 0;
 		$jsondata['error_count'] = 0;
 		$this->load->model('registry_objects', 'ro');
+
 		$this->load->model('data_source/data_sources', 'ds');
+		$data_source_id = $this->input->post('data_source_id');
+		$ds = $this->ds->getByID($data_source_id);
+		if (!$ds)
+		{
+			throw new Exception("Invalid Data Source ID specified");
+		}
+		ds_acl_enforce($ds->id);
+
 		$attributes = $this->input->post('attributes');
 
-		if(!$all){
+		if(!$all)
+		{
 
 			$affected_ids = $this->input->post('affected_ids');
 			$attributes = $this->input->post('attributes');
 
-		}else{
+		}
+		else
+		{
 
 			/* SELECT ALL-style update -- must use the filters to determine what's on-screen */
-			$data_source_id = $this->input->post('data_source_id');
 			$select_all = $this->input->post('select_all');
 			$excluded_records = $this->input->post('excluded_records') ?: array();
 			$filters = $this->input->post('filters');
@@ -582,6 +604,8 @@ class Registry_object extends MX_Controller {
 				}
 			}
 		}
+
+
 		$sentMail = false;
 		foreach($affected_ids as $id){
 			$ro = $this->ro->getByID($id);
@@ -623,18 +647,32 @@ class Registry_object extends MX_Controller {
 								$jsondata['new_ro_id'] = $ro->id;
 							}
 
-							if($a['name']=='status'&&$a['value']=='SUBMITTED_FOR_ASSESSMENT')
+							if($a['name']=='status')
 							{
-								$data_source_id = $ro->getAttribute('data_source_id');
-								$data_source = $this->ds->getByID($data_source_id);
-								if(($data_source->count_SUBMITTED_FOR_ASSESSMENT < 2) && !$sentMail){		
-									$this->ro->emailAssessor($data_source);
-									$sentMail = true;
-								}							
+								// Message Code for single-record status updates (from ARO screen)
+								$jsondata['message_code'] = $a['value'];
+								if($a['value']=='SUBMITTED_FOR_ASSESSMENT')
+								{
+									if(($ds->count_SUBMITTED_FOR_ASSESSMENT == 0) && !$sentMail){		
+										$this->ro->emailAssessor($ds);
+										$jsondata['message_code'] = 'SUBMITTED_FOR_ASSESSMENT_EMAIL_SENT';
+										$jsondata['success_message'] .= '<strong>Note:</strong> An ANDS Quality Assessor has been notified of your submitted record(s).</li>';
+										$sentMail = true;	
+									}
+									elseif ($ds->count_SUBMITTED_FOR_ASSESSMENT > 0 && !$sentMail) 
+									{
+										$jsondata['success_message'] .= '<strong>Note:</strong> You should contact your ANDS Client Liaison Officer to let them know your records are ready for assessment.</li>';
+										$sentMail = true;
+									}	
+								}
 							}
+
 							$jsondata['success_count']++;
-							$jsondata['success_message'] .= '<li>Updated '.$ro->title.' set '.$a['name'].' to value:'.$a['value']."</li>";
-						}else{
+							//$jsondata['success_message'] .= '<li>Updated '.$ro->title.' set '.$a['name'].' to value:'.$a['value']."</li>";
+
+						}
+						else
+						{
 							$jsondata['error_count']++;
 							$jsondata['error_message'] .= '<li>Failed to update '.$ro->title.' set '.$a['name'].' to value:'.$a['value']."</li>";
 							$jsondata['status'] = 'error';
@@ -649,7 +687,6 @@ class Registry_object extends MX_Controller {
 			}
 		}
 
-		$ds = $this->ds->getByID($this->input->post('data_source_id'));
 		$ds->updateStats();
 
 		$jsondata['error_message'] .= '</ul>';

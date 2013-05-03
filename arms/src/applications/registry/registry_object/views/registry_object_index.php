@@ -28,7 +28,7 @@ date_default_timezone_set('Australia/Melbourne');
 			</ul>
 						<div class="btn-group">
 				<?php 
-					if(!$viewing_revision) {
+					if(!$viewing_revision && (!in_array($ro->status, array(SUBMITTED_FOR_ASSESSMENT, ASSESSMENT_IN_PROGRESS)) || $this->user->hasFunction('REGISTRY_SUPERUSER'))) {
 						echo anchor('registry_object/edit/'.$ro->id, '<i class="icon-edit"></i> Edit', array('class'=>'btn btn-small', 'title'=>'Edit Registry Object'));
 						// XXX: Delete?
 					}
@@ -62,14 +62,50 @@ date_default_timezone_set('Australia/Melbourne');
 	<div class="container-fluid">
 		<div class="row-fluid">
 			<div class="span8">
+				<?php
+					// If we reached this page as a result of a record action in
+					// the add registry object screen, we display a message here...
+					switch($this->input->get('message_code'))
+					{
+						case "SUBMITTED_FOR_ASSESSMENT":
+							echo '<div class="alert alert-success"><strong>Congratulations!</strong> Your record has been submitted to ANDS for assessment and approval. <br/><small><strong>Note:</strong> You should contact your ANDS Client Liaison Officer to let them know the records are ready for assessment.</small></div>';
+						break;
+						case "SUBMITTED_FOR_ASSESSMENT_EMAIL_SENT":
+							echo '<div class="alert alert-success"><strong>Congratulations!</strong> Your record has been sent to ANDS for assessment and approval. An ANDS Quality Assessor has been notified by email. </div>';
+						break;
+						case "APPROVED":
+							echo '<div class="alert alert-success"><strong>Congratulations!</strong> Your record has been approved. It will be published to Research Data Australia when you change the status to Published.</div>';
+						break;
+						case "PUBLISHED":
+							echo '<div class="alert alert-success"><strong>Congratulations!</strong> Your record has been successfully published! It will now be visible in Research Data Australia ' . anchor(portal_url().$ro->slug, "here", array("target"=>"_blank")) . '.</div>';
+						break;
+						case "PUBLISHED_OVERWRITTEN":
+							echo '<div class="alert alert-success">Your record has been successfully published! It will now be visible in Research Data Australia ' . anchor(portal_url().$ro->slug, "here", array("target"=>"_blank")) .
+								 '. <br/><small><strong>Note:</strong> The previous published version of this record has been overwritten. It has been saved as a revision (below). </small>' . 
+								'</div>';
+						break;
+						default:
+					}
+				?>
+
 				<?php echo $rif_html;?>
 			</div>
 			<div class="span4">
 
 				<div>
 					<center>
-					<?php if($ro->status=='PUBLISHED'){$anchor = portal_url().$ro->slug;}else{$anchor = portal_url().'view/?id='.$ro->id ;} ?>
-					<?php echo anchor($anchor, '<i class="icon-globe icon icon-white"></i> View in Research Data Australia', array('class'=>'btn btn-primary','target'=>'_blank'));?>
+					<?php 
+						if($ro->status=='PUBLISHED')
+						{
+							$anchor = portal_url().$ro->slug;
+							echo anchor($anchor, '<i class="icon-globe icon icon-white"></i> &nbsp; View in Research Data Australia', array('class'=>'btn btn-info','target'=>'_blank'));
+						}
+						else
+						{
+							$anchor = portal_url().'view/?id='.$ro->id ;
+							echo anchor($anchor, '<i class="icon-globe icon-white"></i> &nbsp; Preview in Research Data Australia', array('class'=>'btn btn-info','target'=>'_blank'));
+						}
+					?>				
 					</center>
 				</div>
 
@@ -87,23 +123,6 @@ date_default_timezone_set('Australia/Melbourne');
 				<?php
 				endif;
 				?>
-
-				<div class="widget-box">
-					<div class="widget-title">
-						<h5>Revision</h5>
-						<a href="javascript:;" class="btn btn-small pull-right" style="margin-top:5px; margin-right:5px;" id="exportRIFCS"><i class="icon-eject"></i> Show RIFCS</a>
-					</div>
-					<div class="widget-content">
-						<ul>
-						<?php
-							foreach($revisions as $time=>$revision){
-								echo '<li>'.anchor('registry_object/view/'.$ro->id.'/'.$revision['id'], $time.$revision['current']).'</li>';
-							}
-						?>
-						</ul>
-
-					</div>
-				</div>
 
 				<?php 
 				if ($this->user->hasFunction('REGISTRY_USER') && $this->user->hasAffiliation($ds->record_owner)):
@@ -138,7 +157,7 @@ date_default_timezone_set('Australia/Melbourne');
 							
 							<?php if(!($viewing_revision && !$currentRevision))
 							{
-								echo "<tr><th>Status</th><td>" . readable($ro->status, true) . "</td></tr>"; 
+								echo "<tr><th>Status</th><td><strong>" . readable($ro->status, true) . "</strong></td></tr>"; 
 							}
 							else
 							{
@@ -166,8 +185,10 @@ date_default_timezone_set('Australia/Melbourne');
 									echo '<tr><th>Native Format</th><td><a href="javascript:;" class="btn btn-small" id="exportNative"><i class="icon-eject"></i>Export '.$native_format.'</a></td></tr>';
 								}
 							?>
-
-							<tr><td colspan="2"><a class="btn btn-small btn-danger pull-right" id="delete_record_button"> <i class="icon-white icon-warning-sign"></i> Delete Record <i class="icon-white icon-trash"></i> </a></td></tr>
+							<?php if(!($viewing_revision && !$currentRevision)): ?>
+								<tr><td colspan="2"><a class="btn btn-small btn-danger pull-right" id="delete_record_button"> <i class="icon-white icon-warning-sign"></i> Delete Record <i class="icon-white icon-trash"></i> </a></td></tr>
+							<?php endif; ?>
+							
 							<input type="hidden" id="registry_object_id" value="<?php echo $ro_id;?>"/>
 						</table>
 					</div>
@@ -176,6 +197,53 @@ date_default_timezone_set('Australia/Melbourne');
 				<?php
 				endif;
 				?>
+
+
+				<div class="widget-box">
+					<div class="widget-title">
+						<h5>Revision</h5>
+						<a href="javascript:;" class="btn btn-small pull-right" style="margin-top:5px; margin-right:5px;" id="exportRIFCS"><i class="icon-eject"></i> Show RIFCS</a>
+					</div>
+					<div class="widget-content">
+						<ul>
+						<?php
+							foreach($revisions as $time=>$_revision){
+								if (!$_revision['current'])
+								{
+									$link = 'registry_object/view/'.$ro->id.'/'.$_revision['id'];
+
+									// Bold if currently viewing this verision
+									if ($_revision['id'] == $revision)
+									{
+										$text = "<strong>" . $time . "</strong>";
+									}
+									else
+									{
+										$text = $time;
+									}
+								}
+								else
+								{
+									$link = 'registry_object/view/'.$ro->id;
+
+									if (!$revision)
+									{
+										$text = "<strong>" . $time . "</strong>";
+									}
+									else
+									{
+										$text = $time;
+									}
+								}
+								echo '<li>'.anchor($link, $text . ($_revision['current'] ? " (most recent version)" : "")).'</li>';
+							}
+						?>
+						</ul>
+
+					</div>
+				</div>
+
+
 
 				<?php 
 				if ($this->user->hasFunction('REGISTRY_STAFF')):

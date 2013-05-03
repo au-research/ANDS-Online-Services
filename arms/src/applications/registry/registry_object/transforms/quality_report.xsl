@@ -4,7 +4,8 @@
     <xsl:param name="dataSource"/>
     <xsl:param name="reverseLinks"/>
     <xsl:param name="output" select="'script'"/>
-    <xsl:param name="relatedObjectClassesStr" select="''"/>
+    <xsl:param name="relatedObjectClassesStr" select="''" />
+
     <xsl:template match="/">
         <xsl:apply-templates/>
     </xsl:template>
@@ -155,7 +156,7 @@
 	    	</xsl:choose>
         </xsl:if>  
         
-        <xsl:if test="not(ro:relatedObject/ro:key[@roclass = 'Activity']) and $output = 'script'">
+        <xsl:if test="not(contains($relatedObjectClassesStr, 'Activity') or ro:relatedObject/ro:key[@roclass = 'Activity']) and $output = 'script'">
             <xsl:text>SetInfos("tab_relatedObjects","The Collection must be related to at least one Activity record where available.</xsl:text><xsl:value-of select="$CA_roError_cont"/><xsl:text>","REC_RELATED_OBJECT_ACTIVITY");</xsl:text>
 		</xsl:if>
 		
@@ -163,7 +164,7 @@
 			<span class="info">The Collection must be related to at least one Activity record where available.<xsl:value-of select="$CA_roError_cont"/></span>
         </xsl:if>
         
-        <xsl:if test="not(ro:relatedObject/ro:key[@roclass = 'Party']) and $output = 'script'">
+        <xsl:if test="not(contains($relatedObjectClassesStr, 'Party') or ro:relatedObject/ro:key[@roclass = 'Party']) and $output = 'script'">
             <xsl:text>SetWarnings("tab_relatedObjects","The Collection must be related to at least one Party record.</xsl:text><xsl:value-of select="$CP_roError_cont"/><xsl:text>","REQ_RELATED_OBJECT_PARTY");</xsl:text>
         </xsl:if>
         
@@ -272,7 +273,7 @@
 	    	</xsl:choose>
         </xsl:if>    
                
-        <xsl:if test="not(ro:relatedObject/ro:key[@roclass = 'Activity']) and $output = 'script'">
+        <xsl:if test="not(contains($relatedObjectClassesStr, 'Activity') or ro:relatedObject/ro:key[@roclass = 'Activity']) and $output = 'script'">
             <xsl:text>SetInfos("tab_relatedObjects","It is recommended that the Party be related to at least one Activity record.</xsl:text><xsl:value-of select="$PA_roError_cont"/><xsl:text>","REC_RELATED_OBJECT_ACTIVITY");</xsl:text>
 		</xsl:if>
 		
@@ -280,7 +281,7 @@
 			<span class="info">It is recommended that the Party be related to at least one Activity record.<xsl:value-of select="$PA_roError_cont"/></span>
         </xsl:if>
         
-        <xsl:if test="not(ro:relatedObject/ro:key[@roclass = 'Collection']) and $output = 'script'">
+        <xsl:if test="not(contains($relatedObjectClassesStr, 'Collection') or ro:relatedObject/ro:key[@roclass = 'Collection']) and $output = 'script'">
             <xsl:text>SetWarnings("tab_relatedObjects","The Party must be related to at least one Collection record.</xsl:text><xsl:value-of select="$PC_roError_cont"/><xsl:text>","REQ_RELATED_OBJECT_COLLECTION");</xsl:text>
         </xsl:if>
         
@@ -367,7 +368,7 @@
 	    	</xsl:choose>
         </xsl:if>    
         
-        <xsl:if test="not(ro:relatedObject/ro:key[@roclass = 'Party']) and $output = 'script'">
+        <xsl:if test="not(contains($relatedObjectClassesStr, 'Party') or ro:relatedObject/ro:key[@roclass = 'Party']) and $output = 'script'">
             <xsl:text>SetWarnings("tab_relatedObjects","The Activity must be related to at least one Party record.</xsl:text><xsl:value-of select="$AP_roError_cont"/><xsl:text>","REQ_RELATED_OBJECT_PARTY");</xsl:text>
 		</xsl:if>
 		
@@ -375,7 +376,7 @@
 			<span class="warning">The Activity must be related to at least one Party record.<xsl:value-of select="$AP_roError_cont"/></span>
         </xsl:if>
               
-       <xsl:if test="not(ro:relatedObject/ro:key[@roclass = 'Collection']) and $output = 'script'">
+       <xsl:if test="not(contains($relatedObjectClassesStr, 'Collection') or ro:relatedObject/ro:key[@roclass = 'Collection']) and $output = 'script'">
             <xsl:text>SetInfos("tab_relatedObjects","The Activity must be related to at least one Collection record if available.</xsl:text><xsl:value-of select="$AC_roError_cont"/><xsl:text>","REC_RELATED_OBJECT_COLLECTION");</xsl:text>
         </xsl:if>
         
@@ -428,7 +429,7 @@
 	    	</xsl:choose>
         </xsl:if>
         
-        <xsl:if test="not(ro:relatedObject/ro:key[@roclass = 'Party']) and $output = 'script'">
+        <xsl:if test="not(contains($relatedObjectClassesStr, 'Party') or ro:relatedObject/ro:key[@roclass = 'Party']) and $output = 'script'">
             <xsl:text>SetInfos("tab_relatedObjects","It is recommended that the Service be related to at least one Party record.</xsl:text><xsl:value-of select="$SP_roError_cont"/><xsl:text>", "REC_RELATED_OBJECT_PARTY");</xsl:text>
 		</xsl:if>
 		
@@ -436,7 +437,7 @@
 			<span class="info">It is recommended that the Service be related to at least one Party record.<xsl:value-of select="$SP_roError_cont"/></span>
         </xsl:if>
         
-        <xsl:if test="not(ro:relatedObject/ro:key[@roclass = 'Collection']) and $output = 'script'">
+        <xsl:if test="not(contains($relatedObjectClassesStr, 'Collection') or ro:relatedObject/ro:key[@roclass = 'Collection']) and $output = 'script'">
             <xsl:text>SetWarnings("tab_relatedObjects","The Service must be related to at least one Collection record.</xsl:text><xsl:value-of select="$SC_roError_cont"/><xsl:text>","REQ_RELATED_OBJECT_COLLECTION");</xsl:text>
         </xsl:if>
         

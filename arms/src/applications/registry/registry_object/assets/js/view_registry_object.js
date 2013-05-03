@@ -144,9 +144,9 @@ function formatTip(tt){
         else if($(this).parent().attr('qld') == 1)
             $(this).text('Quality Level 1 - Required RIF-CS Schema Elements');
         else if($(this).parent().attr('qld') == 2)
-            $(this).html('Quality Level 2 - required Metadata Content Requirements.' );
+            $(this).html('Quality Level 2 - Required Metadata Content Requirements.' );
         else if($(this).parent().attr('qld') == 3)
-             $(this).html('Quality Level 3 - recommended Metadata Content Requirements.' );
+             $(this).html('Quality Level 3 - Recommended Metadata Content Requirements.' );
     });
     //hide all qa
     $('.qa_container', tooltip).each(function(){
@@ -199,6 +199,7 @@ function processRelatedObjects()
                 var id = this.registry_object_id;
                 var title = this.title;
                 var key = this.key;
+                var ro_class = this['class'];
                 var status = this.status;
                 var origin = this.origin;
                 var relationship = this.relation_type
@@ -206,7 +207,7 @@ function processRelatedObjects()
                 var revStr = '';
                 if(id)
                 {
-                    var linkTitle = '<a href="' + base_url + 'registry_object/view/'+id+'">'+title+'</a>'; 
+                    var linkTitle = '<a href="' + base_url + 'registry_object/view/'+id+'">'+title+'</a> <span class="muted">(' + ro_class + ')</span>'; 
                     title = linkTitle;
                 }
                 if(origin == 'REVERSE_EXT'|| origin == 'REVERSE_INT')
