@@ -21,7 +21,7 @@
 				<div class="widget-content nopadding">
 					<ul class="sortable">
 						<?php if (!is_array($ros)): ?> 
-							<li><div class="ro_content"><strong> No records to display&hellip;</strong></div></li>
+							<li><div class="ro_content">&nbsp; &nbsp;<strong> No records to display&hellip;</strong></div></li>
 						<?php else: ?>
 							<?php foreach($ros as $ro):?>
 							<li>

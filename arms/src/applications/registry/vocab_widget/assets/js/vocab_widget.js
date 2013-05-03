@@ -578,6 +578,7 @@
 
 	    if (typeof(data[this.settings.target_field]) !== 'undefined') {
 		this._container.val(data[this.settings.target_field]);
+		$(this._container).trigger('blur');
 		this._reset();
 	    }
 	    else {
@@ -827,7 +828,7 @@
 	    var handler = this;
 	    var lookfor = this._container.val().toLowerCase();
 	    var matches;
-	    if (lookfor.length) {
+	    if (true || lookfor.length) {
 		this._list.children('li').hide();
 		this._list.show();
 		matches = $.grep(this._list.children('li[role="vocab_item"]'),

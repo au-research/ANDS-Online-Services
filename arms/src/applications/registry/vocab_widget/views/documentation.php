@@ -61,7 +61,7 @@
 		It is also possible to use the widget in a more programmatic manner; refer to the 'core usage' section below for more details.
 	      </p>
 	      <p>
-		<a target="_blank" class="btn btn-success" href="<?=asset_url('demo.html');?>"><i class="icon-circle-arrow-right icon-white"></i> View the Demo</a>.
+		<a target="_blank" class="btn btn-success" href="<?=base_url('vocab_widget/demo/');?>"><i class="icon-circle-arrow-right icon-white"></i> View the Demo</a>.
 	      </p>
 	      <p>
 		The demonstrator provides examples of all helper modes, and core usage.
@@ -89,7 +89,7 @@
 		<div class="thumbnail span6">
 		  <img  src="<?php echo asset_url('demo/search_eg.png');?>">
 		  <div class="caption">
-		    <a class="btn btn-primary" target="_new" href="<?php echo asset_url('demo.html#search'); ?>">View live example</a><br/>
+		    <a class="btn btn-primary" target="_new" href="<?=base_url('vocab_widget/demo/#search');?>">View live example</a><br/>
 		    <small>(Click the orange button for sample code.)</small>
 		  </div>
 		</div>
@@ -121,7 +121,7 @@
 		<div class="thumbnail span6">
 		  <img  src="<?php echo asset_url('demo/tree_eg.png');?>">
 		  <div class="caption">
-		    <a class="btn btn-primary" target="_new" href="<?php echo asset_url('demo.html#tree'); ?>">View live example</a><br/>
+		    <a class="btn btn-primary" target="_new" href="<?=base_url('vocab_widget/demo/#tree');?>">View live example</a><br/>
 		    <small>(Click the orange button for sample code.)</small>
 		  </div>
 		</div>

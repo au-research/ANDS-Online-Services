@@ -108,6 +108,8 @@ function initVocabWidgets(container){
 			});
 				
 			elem.typeahead({source:dataArray,items:16});
+			// Trigger the onBlur validation script
+			elem.on('change', function() { $(this).trigger('blur'); });
 		});
 
 		widget.vocab_widget('repository', 'rifcs');

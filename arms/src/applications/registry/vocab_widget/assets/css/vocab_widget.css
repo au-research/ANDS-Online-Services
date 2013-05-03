@@ -3,7 +3,7 @@
  * specifically the image sprite `../img/d.png`
  */
 ul.vocab_list {
-    z-index: 1;
+    z-index: 2000;
     width: 300px;
     max-height: 300px;
     overflow-y: auto;
@@ -15,7 +15,7 @@ ul.vocab_list {
 }
 
 ul.vocab_list li {
-    line-height: 2;
+   /* line-height: 2;*/
     padding: .2em .8em .2em .4em;
     font-size: 0.8em;
     margin-bottom: 1em;
@@ -30,7 +30,7 @@ ul.vocab_list li[role="vocab_error"], .error {
 div.error { padding:0.5em }
 
 ul.vocab_list li[role="vocab_item"]:hover {
-    background-color: #CFCFCF;
+   /* background-color: #CFCFCF !important; */
     cursor: pointer;
 }
 
