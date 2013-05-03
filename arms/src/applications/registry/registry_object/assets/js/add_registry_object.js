@@ -741,10 +741,17 @@ function addValidationMessage(tt, type){
     var message = $('<div />').html(message).text();
 
 
-	if(name.match("^tab_")){
+	if(name.match("^tab_mandatoryInformation_")){
+		var tab = name.replace('tab_mandatoryInformation_','');
+		var field = $('#admin').find('*[name='+tab+']');
+		$(field).addClass('error');
+		$(field).parent().append('<div class="alert alert-'+type+'">'+message+'</div>');
+	}
+	else if(name.match("^tab_")){
 		var tab = name.replace('tab_','');
 		$('#'+tab).prepend('<div class="alert alert-'+type+'">'+message+'</div>');
-	}else{
+	}
+	else{
 
 		if (typeof(tt.sub_field_id) !== 'undefined')
 		{		
