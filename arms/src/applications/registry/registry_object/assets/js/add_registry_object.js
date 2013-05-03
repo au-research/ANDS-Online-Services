@@ -1122,7 +1122,7 @@ function getRIFCSforTab(tab, hasField){
 			if($(input_field).length>0 && $(input_field).val()!=''){
 				fragment_meta += ' '+value+'="'+htmlEntities($(input_field).val())+'"';
 			}
-			else if(value == 'type' && (this_fragment_type == 'identifier' || this_fragment_type == 'dates') )
+			else if(value == 'type' && (this_fragment_type == 'identifier' || this_fragment_type == 'dates' || this_fragment_type == 'description') )
 			{
 				fragment_meta += ' '+value+'="'+htmlEntities($(input_field).val())+'"';
 			}
