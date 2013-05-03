@@ -1186,7 +1186,7 @@
     	<xsl:if test="string-length(.) = 0">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Temporal Coverage Date must have a value.");</xsl:text>
+            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Temporal Coverage Date must have a value.","value");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="error">Temporal Coverage Date must have a value.</span>
@@ -1196,7 +1196,7 @@
         <xsl:if test="string-length(.) &gt; 512">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetWarnings("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Temporal Coverage Date value must be less than 512 characters.");</xsl:text>
+            		<xsl:text>SetWarnings("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Temporal Coverage Date value must be less than 512 characters.","value");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="warning">Temporal Coverage Date value must be less than 512 characters.</span>
@@ -1206,7 +1206,7 @@
         <xsl:if test="string-length(@type) = 0">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","A Temporal Coverage Date Type must be specified. &lt;span&gt;(e.g. 'dateFrom')&lt;/span&gt;");</xsl:text>
+            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","A Temporal Coverage Date Type must be specified. &lt;span&gt;(e.g. 'dateFrom')&lt;/span&gt;","type");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="error">Temporal Coverage Date must have a type.</span>
@@ -1216,7 +1216,7 @@
         <xsl:if test="string-length(@type) &gt; 512">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Temporal Coverage Date type must be less than 512 characters.");</xsl:text>
+            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Temporal Coverage Date type must be less than 512 characters.","type");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="error">Temporal Coverage Date type must be less than 512 characters.</span>
@@ -1226,7 +1226,7 @@
         <xsl:if test="string-length(@dateFormat) = 0">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","A Temporal Coverage Date Format must be specified. &lt;span&gt;(e.g. 'W3CDTF')&lt;/span&gt;");</xsl:text>
+            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","A Temporal Coverage Date Format must be specified. &lt;span&gt;(e.g. 'W3CDTF')&lt;/span&gt;","dateFormat");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="error">Temporal Coverage Date must have a dateFormat.</span>
@@ -1236,7 +1236,7 @@
         <xsl:if test="string-length(@dateFormat) &gt; 512">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Temporal Coverage Date dateFormat must be less than 512 characters.");</xsl:text>
+            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Temporal Coverage Date dateFormat must be less than 512 characters.","dateFormat");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="error">Temporal Coverage Date dateFormat must be less than 512 characters.</span>
@@ -1272,7 +1272,7 @@
         <xsl:if test="string-length(.) = 0">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","A Spatial Coverage Value must be entered.");</xsl:text>
+            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","A Spatial Coverage Value must be entered.","value");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="error">Spatial Coverage must have a value.</span>
@@ -1282,7 +1282,7 @@
         <xsl:if test="string-length(@type) = 0">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","A Spatial Coverage Type must be specified. &lt;span&gt;(e.g. 'gml')&lt;/span&gt;");</xsl:text>
+            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","A Spatial Coverage Type must be specified. &lt;span&gt;(e.g. 'gml')&lt;/span&gt;","type");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="error">Spatial Coverage Type must have a value.</span>
@@ -1292,7 +1292,7 @@
         <xsl:if test="string-length(@type) &gt; 512">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-           			<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Spatial Coverage Type value must be less than 512 characters.");</xsl:text>
+           			<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Spatial Coverage Type value must be less than 512 characters.","type");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="error">Spatial Coverage Type value must be less than 512 characters.</span>
