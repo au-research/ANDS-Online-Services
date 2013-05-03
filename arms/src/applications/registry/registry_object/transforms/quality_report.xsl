@@ -656,16 +656,16 @@
         <xsl:if test="string-length(.) = 0">
             <xsl:choose>
 			    <xsl:when test="$output = 'script' and ancestor::ro:activity">
-            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","A Name Part Value must be entered. &lt;span&gt;(e.g. 'Study of bacteria growth in Lake Macquarie 2010-2011')&lt;/span&gt;");</xsl:text>
+            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","A Name Part Value must be entered. &lt;span&gt;(e.g. 'Study of bacteria growth in Lake Macquarie 2010-2011')&lt;/span&gt;","value");</xsl:text>
 			    </xsl:when>
 			    <xsl:when test="$output = 'script' and ancestor::ro:collection">
-            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","A Name Part Value must be entered. &lt;span&gt;(e.g. 'Effects of Nicotine on the Human Body')&lt;/span&gt;");</xsl:text>
+            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","A Name Part Value must be entered. &lt;span&gt;(e.g. 'Effects of Nicotine on the Human Body')&lt;/span&gt;","value");</xsl:text>
 			    </xsl:when>
 			    <xsl:when test="$output = 'script' and ancestor::ro:service">
-            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","A Name Part Value must be entered. &lt;span&gt;(e.g. 'Australian Mammal Identification Portal')&lt;/span&gt;");</xsl:text>
+            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","A Name Part Value must be entered. &lt;span&gt;(e.g. 'Australian Mammal Identification Portal')&lt;/span&gt;","value");</xsl:text>
 			    </xsl:when>
 			    <xsl:when test="$output = 'script' and ancestor::ro:party">
-            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","A Name Part Value must be entered. &lt;span&gt; E.g. 'John')&lt;/span&gt;");</xsl:text>
+            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","A Name Part Value must be entered. &lt;span&gt; E.g. 'John')&lt;/span&gt;","value");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="error">Name Part must have a value.</span>
@@ -948,7 +948,7 @@
         <xsl:if test="string-length(.) = 0">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","A Related Object Key must be entered. &lt;span&gt;(e.g. 'exampleKey.1')&lt;/span&gt;");</xsl:text>
+            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","A Related Object Key must be entered. &lt;span&gt;(e.g. 'exampleKey.1')&lt;/span&gt;","key");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="error">Related Object Key must have a value.</span>
@@ -962,7 +962,7 @@
         <xsl:if test="string-length(@type) = 0">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","A Relation Type must be specified. &lt;span&gt;(e.g. 'isOwnedBy')&lt;/span&gt;");</xsl:text>
+            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","A Relation Type must be specified. &lt;span&gt;(e.g. 'isOwnedBy')&lt;/span&gt;","type");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="error">Each Relation type must have a value.</span>
@@ -972,7 +972,7 @@
         <xsl:if test="string-length(@type) &gt; 512">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetWarnings("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Relation type must be less than 512 characters");</xsl:text>
+            		<xsl:text>SetWarnings("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Relation type must be less than 512 characters","type");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="warning">Relation type must be less than 512 characters.</span>
@@ -1024,7 +1024,7 @@
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>
-        <xsl:apply-templates select="ro:identifier | ro:title | ro:notes"/>
+        <xsl:apply-templates select="ro:identifier | ro:title | ro:notes | ro:format"/>
     </xsl:template>
     
     <xsl:template match="ro:relatedInfo/ro:identifier">
@@ -1082,6 +1082,64 @@
 	    	</xsl:choose>
         </xsl:if>
     </xsl:template>
+
+    <xsl:template match="ro:relatedInfo/ro:format">
+        <xsl:if test="not(ro:identifier)">
+            <xsl:choose>
+			    <xsl:when test="$output = 'script'">
+            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Related Info Format must have an Identifier");</xsl:text>
+			    </xsl:when>
+			    <xsl:otherwise>
+					<span class="error">Related Info Format must have an Identifier.</span>
+			    </xsl:otherwise>
+	    	</xsl:choose>
+        </xsl:if>
+        <xsl:apply-templates select="ro:identifier"/>
+    </xsl:template>
+
+    <xsl:template match="ro:format/ro:identifier">
+        <xsl:if test="string-length(.) = 0">
+            <xsl:choose>
+			    <xsl:when test="$output = 'script'">
+            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","A Format Identifier Value must be entered. &lt;span&gt;(e.g. 'application/xml)&lt;/span&gt;");</xsl:text>
+			    </xsl:when>
+			    <xsl:otherwise>
+					<span class="error">A Format Identifier must have a value.</span>
+			    </xsl:otherwise>
+	    	</xsl:choose>
+        </xsl:if>
+        <xsl:if test="string-length(.) &gt; 512">
+            <xsl:choose>
+			    <xsl:when test="$output = 'script'">
+            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","A Format Identifier Value must be less than 512 characters.",);</xsl:text>
+			    </xsl:when>
+			    <xsl:otherwise>
+					<span class="error">Related Info Identifier value must be less than 512 characters.</span>
+			    </xsl:otherwise>
+	    	</xsl:choose>
+        </xsl:if>
+        <xsl:if test="string-length(@type) = 0">
+            <xsl:choose>
+			    <xsl:when test="$output = 'script'">
+            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","A Format Identifier Type must be specified. &lt;span&gt;(e.g. 'mediaType')&lt;/span&gt;");</xsl:text>
+			    </xsl:when>
+			    <xsl:otherwise>
+					<span class="error">A Format Identifier must have a type.</span>
+			    </xsl:otherwise>
+	    	</xsl:choose>
+        </xsl:if>
+        <xsl:if test="string-length(@type) &gt; 512">
+            <xsl:choose>
+			    <xsl:when test="$output = 'script'">
+            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","A Format Identifier Type must be less than 512 characters.");</xsl:text>
+			    </xsl:when>
+			    <xsl:otherwise>
+					<span class="error">A Format Identifier Type must be less than 512 characters.</span>
+			    </xsl:otherwise>
+	    	</xsl:choose>
+        </xsl:if>
+    </xsl:template>
+
     <xsl:template match="ro:relatedInfo/ro:notes">
         <xsl:if test="string-length(.) &gt; 512">
             <xsl:choose>
@@ -1544,7 +1602,7 @@
         <xsl:if test="string-length(.) = 0">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","An Identifier Value must be entered. &lt;span&gt;(e.g. 'exampleHandle/1234' (A handle))&lt;/span&gt;");</xsl:text>
+            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","An Identifier Value must be entered. &lt;span&gt;(e.g. 'exampleHandle/1234' (A handle))&lt;/span&gt;","value");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="error">Citation Metadata Identifier must have a value.</span>
@@ -1554,7 +1612,7 @@
         <xsl:if test="string-length(.) &gt; 512">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Identifier must be less than 512 characters.");</xsl:text>
+            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Identifier must be less than 512 characters.","value");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="error">Citation Metadata Identifier must be less than 512 characters.</span>
@@ -1611,7 +1669,7 @@
          <xsl:if test="string-length(.) = 0">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","A Name Part Value must be entered. &lt;span&gt;(e.g. 'John Doe')&lt;/span&gt;");</xsl:text>
+            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","A Name Part Value must be entered. &lt;span&gt;(e.g. 'John Doe')&lt;/span&gt;","value");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="error">Citation Metadata Contributor Name Part must have a value.</span>
@@ -1687,7 +1745,7 @@
 	    <xsl:if test="string-length(.) = 0">
 	        <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-	        		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","A Title must be entered. &lt;span&gt;(e.g. 'Aquaculture development in Australia')&lt;/span&gt;");</xsl:text>
+	        		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","A Title must be entered. &lt;span&gt;(e.g. 'Aquaculture development in Australia')&lt;/span&gt;","value");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="error">Citation Metadata Title must have a value.</span>

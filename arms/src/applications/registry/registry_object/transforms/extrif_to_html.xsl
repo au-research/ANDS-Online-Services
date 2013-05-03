@@ -213,7 +213,7 @@
 				<td>Citation:</td>
 				<td>
 					<table class="subtable">
-						<xsl:apply-templates select="ro:citationInfo"/>
+						<xsl:apply-templates select="ro:citationInfo/ro:citationMetadata | ro:citationInfo/ro:fullCitation"/>
 					</table>
 				</td>
 			</tr>

@@ -701,7 +701,7 @@ function addValidationMessage(tt, type){
 	var message = tt.message;
     var message = $('<div />').html(message).text();
 
-	 log(name, message);
+	 log(name, message, tt);
 	if(name.match("^tab_")){
 		var tab = name.replace('tab_','');
 		$('#'+tab).prepend('<div class="alert alert-'+type+'">'+message+'</div>');
@@ -715,7 +715,12 @@ function addValidationMessage(tt, type){
 		{
 			var field = $('*[field_id='+name+']');
 		}
-		var containerfield = field.parents('div.controls');
+		
+		var containerfield = field.parents('span.inputs_group');
+		if(containerfield.length === 0)
+			var containerfield = field.children('div.controls');	
+		if(containerfield.length === 0)
+			var containerfield = field.parents('div.controls');	
 		if (containerfield.length > 0)
 		{
 			$(containerfield).append('<div class="alert alert-'+type+'">'+message+'</div>');
@@ -1102,7 +1107,7 @@ function getRIFCSforTab(tab, hasField){
 					var type = $(this).attr('type');
 					log("type: " + type);
 					if(type=='relation'){//special case for related object relation
-						fragment += '<'+type+' type="'+$('input[name=type]',this).val()+'">';
+						fragment += '<'+type+' field_id="' +$(this).attr('field_id')+'" type="'+$('input[name=type]',this).val()+'">';
 						if($('input[name=description]', this).val()!=''){//if the relation has a description
 							fragment += '<description>'+htmlEntities($('input[name=description]', this).val())+'</description>';
 						}
