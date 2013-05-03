@@ -546,6 +546,7 @@ function initEditForm(){
 			// });
 
 			//saving
+			//log(xml);
 			$.ajax({
 				url:base_url+'registry_object/save/'+ro_id, 
 				type: 'POST',
@@ -747,7 +748,9 @@ function addValidationMessage(tt, type){
 
 		if (typeof(tt.sub_field_id) !== 'undefined')
 		{		
-			var field = $('*[field_id='+name+']').parent().find('*[name='+tt.sub_field_id+']');
+			var field = $('*[field_id='+name+']').find('*[name='+tt.sub_field_id+']');
+			if(field.length === 0)
+			field = $('*[field_id='+name+']').parent().find('*[name='+tt.sub_field_id+']');
 		}
 		else
 		{
@@ -1111,7 +1114,7 @@ function getRIFCSforTab(tab, hasField){
 		//log("FRAGMENT TYPE " + this_fragment_type);
 		fragment +='<'+this_fragment_type+'';
 		if(hasField) fragment +=' field_id="' +$(this).attr('field_id')+'"';
-		var valid_fragment_meta = ['type', 'dateFrom', 'dateTo', 'style', 'rightsURI'];//valid input type to be put as attributes
+		var valid_fragment_meta = ['type', 'dateFrom', 'dateTo', 'style', 'rightsURI', 'termIdentifier'];//valid input type to be put as attributes
 		var this_box = this;
 		$.each(valid_fragment_meta, function(index, value){
 			var fragment_meta = '';

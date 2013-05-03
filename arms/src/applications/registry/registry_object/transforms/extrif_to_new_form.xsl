@@ -983,16 +983,23 @@
 
 	<xsl:template match="ro:collection/ro:subject  | ro:activity/ro:subject  | ro:party/ro:subject   | ro:service/ro:subject">
 		<div class="aro_box" type="subject">
-			<div class="aro_box_display clearfix">
+			<div class="control-group">
+				<div class="aro_box_display clearfix">
+					<label class="control-label" for="title">Subject: </label>
+					<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
+				</div>
+				<div class="controls">
+				
 				<span class="inputs_group">
-					<input type="text" class="input-xlarge inner_input" placeholder="Value" value="{text()}" name="value"/>
-					<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSSubjectType" name="type" placeholder="type" value="{@type}"/>
+					<input type="text" class="input-xlarge inner_input" placeholder="Value" value="{text()}" name="value" required=""/>
+					<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSSubjectType" name="type" placeholder="type" value="{@type}" required=""/>
 				</span>
-				<button class="btn btn-mini btn-danger remove" type="button">
-					<i class="icon-remove icon-white"/>
-				</button>
+				  Term Identifier: <input type="text" class="input-xlarge" vocab="RIFCSSubjectTermIdentifier" name="termIdentifier" placeholder="termIdentifier" value="{@termIdentifier}"/>
+				</div>
 			</div>
 		</div>
+
+
 	</xsl:template>
 
 	<xsl:template match="ro:collection/ro:identifier  | ro:activity/ro:identifier  | ro:party/ro:identifier   | ro:service/ro:identifier">
@@ -1395,14 +1402,19 @@
 		</div>
 
 		<div class="aro_box template" type="subject">
-			<div class="aro_box_display clearfix">
+			<div class="control-group">
+				<div class="aro_box_display clearfix">
+					<label class="control-label" for="title">Subject: </label>
+					<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
+				</div>
+				<div class="controls">
+				
 				<span class="inputs_group">
-					<input type="text" class="input-xlarge inner_input" placeholder="Value" value="" name="value"/>
-					<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSSubjectType" name="type" placeholder="type" value=""/>
+					<input type="text" class="input-xlarge inner_input" placeholder="Value" value="" name="value" required=""/>
+					<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSSubjectType" name="type" placeholder="type" value="" required=""/>
 				</span>
-				<button class="btn btn-mini btn-danger remove" type="button">
-					<i class="icon-remove icon-white"/>
-				</button>
+				Term Identifier: <input type="text" class="input-xlarge" vocab="RIFCSSubjectTermIdentifier" name="termIdentifier" placeholder="termIdentifier" value=""/>
+				</div>
 			</div>
 		</div>
 

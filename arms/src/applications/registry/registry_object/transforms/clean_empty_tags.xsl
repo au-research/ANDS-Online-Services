@@ -16,8 +16,7 @@
     
     <!-- Note: No checks for @lang/@seq attributes -->
     <xsl:template match="location[not(@dateFrom) and not(@dateTo) and not(@type) and not(spatial/@type) and not(spatial/text()) and not(address/electronic/@type = '') and not(address/electronic/value/text()) and not(address/electronic/arg/value/text()) and not(address/electronic/arg/required/text()) and not(address/electronic/arg/@type) and not(address/electronic/arg/use/text()) and not(address/physical/@type) and not(address/physical/addressPart/@type) and not(address/physical/addressPart/text())]"/>
-    
-    
+   
     
     <xsl:template match="spatial[not(@type) and not(text())]"/>
     <xsl:template match="coverage[not(temporal/date/text()) and not(temporal/date/@dateFormat) and not(temporal/date/@type) and not(temporal/text()) and not(spatial/text()) and not(spatial/@type)]"/>
