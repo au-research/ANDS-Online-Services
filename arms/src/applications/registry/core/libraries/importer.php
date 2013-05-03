@@ -123,7 +123,7 @@ class Importer {
 				{
 					$payload = mb_convert_encoding($payload,"UTF-8"); 
 				}
-
+				$continueIngest = true;
 				// Build a SimpleXML object from the converted data
 				// We will throw an exception here if the payload isn't well-formed XML (which, by now, it should be)
 				try
@@ -132,29 +132,34 @@ class Importer {
 				}
 				catch (Exception $e)
 				{
-					$this->isImporting = false;
-					throw new Exception("Unable to parse XML into object (registryObject #".($idx+1)."): " . NL . $e->getMessage());
+					//$this->isImporting = false;
+					$this->ingest_failures++;
+					$continueIngest = false;
+					//$this->error_log[] = "Unable to parse XML into object (registryObject #".($idx+1)."): " . NL . $e->getMessage();
 				}
-
-				// Last chance to check valid format of the payload
-				$this->_validateRIFCS($payload);	
-							
-				$sxml->registerXPathNamespace("ro", RIFCS_NAMESPACE);
-
-				// Right then, lets start parsing each registryObject & importing! 
-				foreach($sxml->xpath('//ro:registryObject') AS $registryObject)
+				if($continueIngest)
 				{
-					$this->ingest_attempts++;
-					try
+				// Last chance to check valid format of the payload
+					$this->_validateRIFCS($payload);	
+								
+					$sxml->registerXPathNamespace("ro", RIFCS_NAMESPACE);
+
+					// Right then, lets start parsing each registryObject & importing! 
+					foreach($sxml->xpath('//ro:registryObject') AS $registryObject)
 					{
-						$this->_ingestRecord($registryObject);
-					}
-					catch (Exception $e)
-					{
-						$this->ingest_failures++;
-						$this->error_log[] = "Error whilst ingesting record #" . $this->ingest_attempts . ": " . $e->getMessage();
+						$this->ingest_attempts++;
+						try
+						{
+							$this->_ingestRecord($registryObject);
+						}
+						catch (Exception $e)
+						{
+							$this->ingest_failures++;
+							$this->error_log[] = "Error whilst ingesting record #" . $this->ingest_attempts . ": " . $e->getMessage();
+						}
 					}
 				}
+
 			}
 		$this->CI->benchmark->mark('ingest_stage_1_end');
 
