@@ -85,7 +85,6 @@
 
 
 					<span id="active_filters">
-						
 					</span>
 
 					<div class="btn-group pull-right" style="margin-right:35px;">

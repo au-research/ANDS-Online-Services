@@ -653,11 +653,21 @@ class Registry_object extends MX_Controller {
 								$jsondata['message_code'] = $a['value'];
 								if($a['value']=='SUBMITTED_FOR_ASSESSMENT')
 								{
-									if(($ds->count_SUBMITTED_FOR_ASSESSMENT == 0) && !$sentMail){		
-										$this->ro->emailAssessor($ds);
-										$jsondata['message_code'] = 'SUBMITTED_FOR_ASSESSMENT_EMAIL_SENT';
-										$jsondata['success_message'] .= '<strong>Note:</strong> An ANDS Quality Assessor has been notified of your submitted record(s).</li>';
-										$sentMail = true;	
+									if(($ds->count_SUBMITTED_FOR_ASSESSMENT == 0) && !$sentMail){
+										// If there is a notification email set, send a mail...
+										if ($ds->assessment_notify_email_addr)
+										{
+											$this->ro->emailAssessor($ds);
+											$jsondata['message_code'] = 'SUBMITTED_FOR_ASSESSMENT_EMAIL_SENT';
+											$jsondata['success_message'] .= '<strong>Note:</strong> An ANDS Quality Assessor has been notified of your submitted record(s).</li>';
+											$sentMail = true;
+										}
+										else
+										{
+											// Otherwise prompt to contact the CLO
+											$jsondata['success_message'] .= '<strong>Note:</strong> You should contact your ANDS Client Liaison Officer to let them know your records are ready for assessment.</li>';
+											$sentMail = true;
+										}
 									}
 									elseif ($ds->count_SUBMITTED_FOR_ASSESSMENT > 0 && !$sentMail) 
 									{

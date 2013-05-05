@@ -70,7 +70,7 @@ class Search extends MX_Controller {
 		if($filters){
 			$this->solr->setOpt('q','');
 			foreach($filters as $key=>$value){
-				$value = urldecode($value);
+				$value = rawurldecode($value);
 				switch($key){
 					case 'rq':
 						$this->solr->addQueryCondition($value);

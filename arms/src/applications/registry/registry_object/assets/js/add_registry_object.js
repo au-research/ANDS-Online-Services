@@ -8,6 +8,7 @@ var SIMPLE_MODE = 'simple';
 var ADVANCED_MODE = 'advanced';
 var loading_box = "<div id='loading_box'><img src='"+base_url+"/assets/img/ajax-loader-large.gif' alt='Loading...' />"+
 					"<br/><br/><span id='loading_box_text'>Loading...</span></div>";
+var default_help_link = "http://ands.org.au/guides/cpguide/";
 
 $(function(){
 	$('body').css('background-color', '#454545');
@@ -36,6 +37,7 @@ $(function(){
 			active_tab = words[1];
 
 			switchMode(aro_mode);
+			updateHelpLink();
 			if(aro_mode==ADVANCED_MODE){
 				$('.pane').hide();
 				$('#'+active_tab).show();
@@ -1435,6 +1437,20 @@ function generateActionBar(data_response)
 	return action_menu + " " + view_menu;
 }
 
+function updateHelpLink()
+{
+	// Update the help link
+	var tab_help_link = $("sup a.muted", $('#'+active_tab)).first().attr("href");
+	console.log(tab_help_link);
+	if (tab_help_link)
+	{
+		$('#aro_help_link').attr("href", tab_help_link);
+	}
+	else
+	{
+		$('#aro_help_link').attr("href", default_help_link);
+	}
+}
 
 function loadingBoxMessage(message)
 {

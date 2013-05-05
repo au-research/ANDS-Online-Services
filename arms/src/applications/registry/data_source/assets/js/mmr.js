@@ -230,6 +230,13 @@ function initLayout(){
                 else
                 text = 'Quality Level '+value;
             }
+
+            // Replace tag text with the "readable" version from the filter dropdown
+            if(key==='status' || key==='class')
+            {
+                text = $('.filter[value='+value+']').html().replace(/ \(.*/,'');
+            }
+
             $('#active_filters').append('<span class="btn removeFilter" name="'+key+'"><a href="javascript:;">'+text+' <i class="icon icon-remove"></i></a></span>');
         });
     });

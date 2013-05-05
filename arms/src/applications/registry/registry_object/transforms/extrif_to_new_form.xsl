@@ -73,7 +73,7 @@
 			<a href="{$base_url}registry_object/view/{$registry_object_id}" title="" class="current"><xsl:value-of select="$display_title"/></a>
 			<a href="#" class="">Edit</a>
 			<div class="pull-right">
-				<span class="label"><i class="icon-question-sign icon-white"></i> <a target="_blank" style="color:white;" href="http://ands.org.au/guides/cpguide/"> Help</a></span>
+				<span class="label"><i class="icon-question-sign icon-white"></i> <a id="aro_help_link" target="_blank" style="color:white;" href="http://ands.org.au/guides/cpguide/"> Help</a></span>
 			</div>
 		</div>
 		<form class="form-horizontal" id="edit-form">
