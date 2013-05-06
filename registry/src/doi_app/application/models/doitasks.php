@@ -131,7 +131,7 @@
 
 			if(!$client_id)
 			{
-				$errorMessages = doisGetUserMessage("MT009", $doi_id=NULL,$response_type,$app_id, $verbosemessage,$urlValue);
+				$errorMessages = doisGetUserMessage("MT009", $doiValue,$response_type,$app_id, $verbosemessage,$urlValue);
 
 			}else{				
 				if(!checkDoisClientDoi($doiValue,$client_id))
@@ -143,7 +143,8 @@
 		if($errorMessages == '')
 		{
 		$doidata = getxml($doiValue);		 			// check if doi is a valid doi and get information about it
-		
+
+
 		if($doidata->num_rows() > 0){
 			//we need to get the xml if that is to be updated as well
 			if($_POST){
@@ -152,8 +153,7 @@
 			
 			//first up, lets check that this client is permitted to update this doi.
 
-							
-			if($xml) // if the client has posted xml to be updated
+			if(isset($xml) && $xml) // if the client has posted xml to be updated
 			{
 				$doiObjects = new DOMDocument();
 						
@@ -189,39 +189,51 @@
 					if( $errors )
 					{
 						$verbosemessage = "Document Validation Error: ".$errors['message']."\n";						
-						$errorMessages = doisGetUserMessage("MT007", $doi_id=NULL,$response_type,$app_id, $verbosemessage,$urlValue);
+						$errorMessages = doisGetUserMessage("MT007", doiValue,$response_type,$app_id, $verbosemessage,$urlValue);
 					}				
 				}	
+			}
+			else
+			{
+				$xml = $doidata->row();
+				$xml = $xml->datacite_xml;
+				$doiObjects = new DOMDocument();
+				$doiObjects->loadXML($xml);	
 			}
 			
 			if( $errorMessages == '' )
 			{
 				// Update doi information
 				$updateError = updateDoiObject($doiValue,$doiObjects,$urlValue,$xml);	
+
 				if(!$updateError){	
-				// Update the DOI.
-					if($urlValue)
-					{
-						$response1 = $this->doisRequest("mint",$doiValue, $urlValue, $xml,$client_id);		
-					}
-					
+
+					/* Fix: 09/01/2013, DataCite requires metadata FIRST, then DOI call */
+					// Send DataCite the metadata first
+					// Update the DOI
 					if($doiObjects)
 					{
-						$response2 = $this->doisRequest("update",$doiValue, $urlValue, $xml,$client_id);			
+						$response2 = $this->doisRequest("update", $doiValue, $urlValue, $xml, $client_id);
 					}
-					
+
+					if($urlValue)
+					{
+						$response1 = $this->doisRequest("mint", $doiValue, $urlValue, $xml, $client_id);		
+					}
+
 					if( $response1 && $response2 )
 					{
+
 						if( doisGetResponseType($response1) == gDOIS_RESPONSE_SUCCESS && doisGetResponseType($response2) == gDOIS_RESPONSE_SUCCESS)
 						{
 							// We have successfully updated the doi through datacite.
-							$verbosemessage = $response1." ".$response2;
+							$verbosemessage = $response1." / ".$response2;
 							$notifyMessage = doisGetUserMessage("MT002", $doiValue,$response_type,$app_id, $verbosemessage,$urlValue);
 						}
 						else
 						{
-							$verbosemessage = $response;							
-							$errorMessages = doisGetUserMessage("MT010", $doi=NULL,$response_type,$app_id, $verbosemessage,$urlValue);
+							$verbosemessage = $response1." / ".$response2;						
+							$errorMessages = doisGetUserMessage("MT010", $doiValue,$response_type,$app_id, $verbosemessage,$urlValue);
 						}
 					}
 					else
@@ -239,7 +251,24 @@
 		}else{
 			$errorMessages = doisGetUserMessage("MT011", $doi_id=$doiValue,$response_type,$app_id, $verbosemessage,$urlValue);
 		}
-		}		
+		}
+
+
+		if($errorMessages)
+		{		
+			$outstr =  $errorMessages;	
+			//We need to log this activity as errorred
+
+			insertDoiActivity("UPDATE",$doiValue,"FAILURE",$client_id,$errorMessages);		
+		}
+			
+		if($notifyMessage)
+		{
+			//We need to log this activity
+			insertDoiActivity("UPDATE",$doiValue,"SUCCESS",$client_id,$notifyMessage);		
+			$outstr = $notifyMessage;
+		}
+					
 		echo $errorMessages;
 		echo $notifyMessage;		
 	}
@@ -432,15 +461,15 @@
 
 			if(!$insertResult){	
 				/* Fix: 09/01/2013, DataCite requires metadata FIRST, then DOI call */
-				// Send DataCite the metadata first				
-				$response = $this->doisRequest("update",$doiValue, $urlValue, $xml,$client_id);
+				// Send DataCite the metadata first
+				$response = $this->doisRequest("update",$doiValue, $urlValue, $xml, $client_id);
 	
 				if( $response )
 				{
 					if( doisGetResponseType($response) == gDOIS_RESPONSE_SUCCESS )
 					{
 						// Now ask to mint the DOI								
-						$response = $this->doisRequest("mint",$doiValue, $urlValue, $xml,$client_id);		
+						$response = $this->doisRequest("mint",$doiValue, $urlValue, $xml, $client_id);		
 		
 						if(doisGetResponseType($response) == gDOIS_RESPONSE_SUCCESS )			
 						{

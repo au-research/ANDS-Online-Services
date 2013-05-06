@@ -163,6 +163,11 @@ class Mydois extends MX_Controller {
 		$old_url = rawurldecode($this->input->get_post('old_url'));
 		$doi_id = rawurldecode($this->input->get_post('doi_id'));
 		$client_id = rawurldecode($this->input->get_post('client_id'));
+		
+		if (!$client_id || !$new_url || !$old_url || !$doi_id)
+		{
+			throw new Exception("Unable to update DOI. Not all parameters were given");
+		}
 
 		$query = $doi_db->where('client_id',$client_id)->select('*')->get('doi_client');
 		if (!$client_obj = $query->result()) throw new Exception ('Invalid Client ID');  
@@ -210,7 +215,7 @@ class Mydois extends MX_Controller {
 		}else{
 			//we got an error back or nothing so we need to tell the user something went wrong
 			if($result) $extrainfo = "The following error message was returned : ".$result;
-			throw new Exception ('Update of the doi was unsuccessful. '.$extrainfo);  
+			throw new Exception ('Update of the doi was unsuccessful. ' . $extrainfo);  
 		}
 	
 	}

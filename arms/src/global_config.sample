@@ -13,7 +13,11 @@ $ENV['ENABLED_MODULES'] = array(
 );
 
 // Set this to enable DOI query tool support
+// $ENV['gDOIS_SERVICE_BASE_URI'] = "https://mds.datacite.org/";
+// $ENV['gDOIS_DATACENTRE_NAME_PREFIX'] = "";
+// $ENV['gDOIS_DATACENTRE_NAME_MIDDLE'] = "";
 // $ENV['gDOIS_DATACITE_PASSWORD'] = "";
+// $ENV['gDOIS_RESPONSE_SUCCESS'] = "OK";
 
 $ENV['vocab_resolving_services'] =  array(
 	'anzsrc-seo' => array('resolvingService' => 'http://ands3.anu.edu.au:8080/sissvoc/api/anzsrc-seo/', 'uriprefix' => 'http://purl.org/au-research/vocabulary/anzsrc-seo/2008/'),
