@@ -479,12 +479,36 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
     },
 
     // this exposes the current datetime via a trigger
-    notifyChange: function(){
-      this.$element.trigger({
-        type: 'changeDate',
-        utcTime: this._walltime.utc,
-	tzTime: this._walltime.wallTime
-      });
+    notifyChange: function() {
+      this.validate();
+      this.$element.trigger('change.datepicker.ands',
+			    {utc: this._walltime.utc,
+			     tz: this._timezone});
+    },
+
+    notifyError: function(msg) {
+      this.$element.trigger('error.datepicker.ands',
+			    {msg: msg});
+    },
+
+    validate: function() {
+      var dateStr;
+      var valid = true;
+      var nd = new Date();
+      if (this.isInput) {
+        dateStr = this.$element.val();
+      } else {
+        dateStr = this.$element.find('input').val();
+      }
+      try {
+	nd = this.parseDate(dateStr);
+      }
+      catch (ex) {
+	valid = false;
+      }
+      valid = valid && (nd.toString() !== 'Invalid Date');
+      this.$element.trigger('valid.datepicker.ands',
+			    {valid: valid});
     },
 
     // this retrieves the value of the text box
@@ -493,6 +517,7 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
     // this.fillTime())
     setup: function(){
       var dateStr;
+      var nd = null;
       if (this.isInput) {
         dateStr = this.$element.val();
       } else {
@@ -500,10 +525,17 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
       }
       if (dateStr) {
         this._date = this.parseDate(dateStr);
-	this.set();
+	try {
+	  this.set();
+	}
+	catch (ex) {
+	  this.notifyError('Supplied date "' + dateStr + '" is invalid; reverting to "today-and-now"');
+	  nd = new Date();
+	  this._date = this.parseDate(nd.toISOString());
+	}
       }
       else {
-	var nd = new Date();
+	nd = new Date();
 	this._date = this.parseDate(nd.toISOString());
       }
       this.fillDate();
@@ -970,88 +1002,6 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
       e.preventDefault();
     },
 
-    // part of the following code was taken from
-    // http://cloud.github.com/downloads/digitalBush/jquery.maskedinput/jquery.maskedinput-1.3.js
-    keydown: function(e) {
-      var self = this, k = e.which, input = $(e.target);
-      if (k == 8 || k == 46) {
-        // backspace and delete cause the maskPosition
-        // to be recalculated
-        setTimeout(function() {
-          self._resetMaskPos(input);
-        });
-      }
-    },
-
-    keypress: function(e) {
-      var k = e.which;
-      if (k == 8 || k == 46) {
-        // For those browsers which will trigger
-        // keypress on backspace/delete
-        return;
-      }
-      var input = $(e.target);
-      var c = String.fromCharCode(k);
-      var val = input.val() || '';
-      val += c;
-      var mask = this._mask[this._maskPos];
-      if (!mask) {
-        return false;
-      }
-      if (mask.end != val.length) {
-        return;
-      }
-      if (!mask.pattern.test(val.slice(mask.start))) {
-        val = val.slice(0, val.length - 1);
-        while ((mask = this._mask[this._maskPos]) && mask.character) {
-          val += mask.character;
-          // advance mask position past static
-          // part
-          this._maskPos++;
-        }
-        val += c;
-        if (mask.end != val.length) {
-          input.val(val);
-          return false;
-        } else {
-          if (!mask.pattern.test(val.slice(mask.start))) {
-            input.val(val.slice(0, mask.start));
-            return false;
-          } else {
-            input.val(val);
-            this._maskPos++;
-            return false;
-          }
-        }
-      } else {
-        this._maskPos++;
-      }
-    },
-
-    change: function(e) {
-      var input = $(e.target);
-      var val = input.val();
-      if (this._formatPattern.test(val)) {
-        this.setup();
-        this.propagate(this._date.getTime());
-        this.notifyChange();
-        this.set();
-      } else if (val && val.trim()) {
-        this.propagate(this._date.getTime());
-        if (this._date) this.set();
-        else input.val('');
-      } else {
-        if (this._date) {
-          this.propagate(null);
-          // unset the date when the input is
-          // erased
-          this.notifyChange();
-          this._unset = true;
-        }
-      }
-      this._resetMaskPos(input);
-    },
-
     showMode: function(dir) {
       if (dir) {
         this.viewMode = Math.max(this.minViewMode, Math.min(
@@ -1095,8 +1045,7 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
 
       if (this.isInput) {
         this.$element.on({
-          'focus': $.proxy(this.show, this),
-          'change': $.proxy(this.change, this)
+          'focus': $.proxy(this.show, this)
         });
         if (this.options.maskInput) {
           this.$element.on({
@@ -1105,9 +1054,6 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
           });
         }
       } else {
-        this.$element.on({
-          'change': $.proxy(this.change, this)
-        }, 'input');
         if (this.options.maskInput) {
           this.$element.on({
             'keydown': $.proxy(this.keydown, this),
@@ -1139,8 +1085,7 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
 
       if (this.isInput) {
         this.$element.off({
-          'focus': this.show,
-          'change': this.change
+          'focus': this.show
         });
         if (this.options.maskInput) {
           this.$element.off({
@@ -1149,9 +1094,6 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
           });
         }
       } else {
-        this.$element.off({
-          'change': this.change
-        }, 'input');
         if (this.options.maskInput) {
           this.$element.off({
             'keydown': this.keydown,
@@ -1208,7 +1150,7 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
   };
 
   $.fn.datetimepicker.defaults = {
-    maskInput: true,
+    maskInput: false,
     collapse: true
   };
   $.fn.datetimepicker.Constructor = DateTimePicker;
