@@ -28,7 +28,7 @@
 
 	if (isset($contentData['contents']['subjects']))
 	{
-		$subjectDiv .= "<ul>";
+		$subjectDiv .= "<ul class='limit5'>";
 		foreach($contentData['contents']['subjects'] as $subject=> $value)
 		{
 							$url = portal_url().'search#!/tab=all/group='.$contentData['contents']['contributor'].'/s_subject_value_resolved='.rawurlencode($subject);

@@ -135,9 +135,10 @@ class NHMRC_Merged_File_to_RIFCS extends Crosswalk
             }
             $investigators = implode("; ", $investigators);
 
+            $formatted_media_summary = trim($activity['MEDIA_SUMMARY']);
+            if ($formatted_media_summary) { $formatted_media_summary . "\n\n"; }
 
-            $description = htmlentities("
-                            Lead Investigator: {$activity['CIA_NAME']}
+            $description = htmlentities("{$formatted_media_summary}Lead Investigator: {$activity['CIA_NAME']}
                             " . ($investigators ? "
                             Co-Investigator(s): {$investigators}
                             " : "") . "
@@ -252,7 +253,7 @@ class NHMRC_Merged_File_to_RIFCS extends Crosswalk
             $registryObject = '<registryObject group="'. self::NHMRC_GROUP .'">' . NL;
 
             // Create the purl key: http://purl.org/au-research/grants/nhmrc/1501
-            $registryObject .=  '<key>' . self::NHMRC_PARTY_PREFIX . md5($party['DW_INDIVIDUAL_ID']). '</key>' . NL;
+            $registryObject .=  '<key>' . self::NHMRC_PARTY_PREFIX . $party['DW_INDIVIDUAL_ID']. '</key>' . NL;
             $registryObject .=  '<originatingSource>'.self::NHMRC_ORIGINATING_SOURCE.'</originatingSource>' . NL;
 
             // It's an activity, duh? See activity_type business logic above
@@ -286,7 +287,14 @@ class NHMRC_Merged_File_to_RIFCS extends Crosswalk
             {
                 $registryObject .=      '<relatedObject>' . NL;
                 $registryObject .=         '<key>'. self::NHMRC_GRANT_PREFIX . $grant_id . '</key>' . NL;
-                $registryObject .=         '<relation type="isParticipantIn" />' . NL;
+                if( isset($party['GRANT_ROLE']) && $party['GRANT_ROLE'] == "CIA" )
+                {
+                    $registryObject .=         '<relation type="isPrincipalInvestigatorOf" />' . NL;
+                }
+                else
+                {
+                    $registryObject .=         '<relation type="isParticipantIn" />' . NL;
+                }
                 $registryObject .=      '</relatedObject>' . NL;
             }
 
@@ -305,7 +313,7 @@ class NHMRC_Merged_File_to_RIFCS extends Crosswalk
                     if (is_array($val)) { foreach ($val AS $subkey => $value) { $native_values[$subkey] = $value; } unset($native_values[$key]); }
                 }
                 // Hide the private DW_INDIVIDUAL_ID
-                $native_values['HASHED_DW_INDIVIDUAL_ID'] = md5($party['DW_INDIVIDUAL_ID']);
+                $native_values['HASHED_DW_INDIVIDUAL_ID'] = $party['DW_INDIVIDUAL_ID'];
 
             // Create the native format (csv) with prepended the column headings
             $registryObject .=              $this->wrapNativeFormat(array($this->csv_headings, $native_values)) . NL;

@@ -36,7 +36,18 @@ $('.subject_vocab_filter').click(function(e){
 
 function initViewPage()
 {
-    $('img.logo').error(function() { log("error loading image: " + $(this).attr('src')); $(this).addClass('hide'); })
+    $('img.logo').error(function() { log("error loading image: " + $(this).attr('src')); $(this).addClass('hide'); });
+
+    $('ul.limit5').each(function(){
+        if($('li', this).length>5){
+            $('li:gt(4)', this).hide();
+            $(this).append('<li><a href="javascript:;" class="show-all-subjects">Show More...</a></li>');
+            $('.show-all-subjects').click(function(){
+                $(this).parent().siblings().show();
+                $(this).parent().remove();
+            });
+        }
+    })
  //   $('#displaytitle').each(function(){console.log($(this));});
 }
 

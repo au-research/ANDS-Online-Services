@@ -284,10 +284,13 @@ class Connections_Extension extends ExtensionBase
 
 		foreach ($query->result_array() AS $row)
 		{
-			$row['origin'] = "CONTRIBUTOR";
-			$row['class'] = "contributor";
-			$row['relation_type'] = "(Automatically generated contributor page link)";
-			$my_connections[] = $row;
+			if ($row['registry_object_id'] != $this->ro->id)
+			{
+				$row['origin'] = "CONTRIBUTOR";
+				$row['class'] = "contributor";
+				$row['relation_type'] = "(Automatically generated contributor page link)";
+				$my_connections[] = $row;
+			}
 		}
 
 		return $my_connections;

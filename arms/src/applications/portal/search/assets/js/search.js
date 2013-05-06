@@ -24,6 +24,8 @@ $(document).ready(function() {
 		searchData = {};
 		fieldString = '';
 
+		// Flag whether to fire a new search after this logic
+		var refreshSearch = false;
 
 		$.each(words, function(){
 			var string = this.split('=');
@@ -49,7 +51,7 @@ $(document).ready(function() {
 					case 'tab':
 						searchData['class'] = value;
 						delete searchData['tab'];
-						changeHashTo(formatSearch());
+						refreshSearch = true;
 						break;
 				}
 				// If there is a search specified (being on the map page doesn't count!), show the cancel search button
@@ -57,6 +59,12 @@ $(document).ready(function() {
 				{
 					$('.clearAll').show();
 				}
+			}
+
+			if (refreshSearch)
+			{
+				changeHashTo(formatSearch());
+				return;
 			}
 			/**
 			 * term could be: q, p, tab, group, type, subject, vocabUriFilter, licence, temporal, n, e, s, w, spatial
