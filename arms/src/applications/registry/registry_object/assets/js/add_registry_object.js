@@ -459,7 +459,7 @@ function initEditForm(){
 		}
 		if(what=='dates_date' || what=='dates' || what=='date' || what == 'location'){
 			//initalize the datepicker, format is optional
-			$('input.ands_datepicker').parent().ands_datetimepicker();
+			// $('input.datepicker').ands_datetimepicker();
 			
 			//triggering the datepicker by focusing on it
 			$('.triggerDatePicker').die().live({
@@ -471,8 +471,11 @@ function initEditForm(){
 
 		//bind the tooltip parts UI in case of adding a new element with show Parts Elements
 		bindPartsTooltip();
+	}).on('click', 'input.datepicker', function(e){
+		$(this).ands_datetimepicker();
+		$(this).focus();
 	});
-	
+
 	//Export XML button for ALL TABS in pretty print and modal
 	$('#master_export_xml').die().live({
 		click: function(e){
@@ -636,7 +639,8 @@ function initEditForm(){
 	});
 
 	//initalize the datepicker, format is optional
-	$('input.ands_datepicker').parent().ands_datetimepicker();
+	// $('input.datepicker').ands_datetimepicker();
+	// 
 
 	//triggering the datepicker by focusing on it
 	$('.triggerDatePicker').die().live({
