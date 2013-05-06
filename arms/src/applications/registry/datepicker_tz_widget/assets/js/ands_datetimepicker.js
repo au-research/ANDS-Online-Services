@@ -289,12 +289,6 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
 	this.component = false;
 	if (this.$element.is('.input-append') || this.$element.is('.input-prepend')) {
           this.component = this.$element.find('.add-on');
-          $('<span class="help-block">' +
-	    'Datetime format is ' +
-	    '<a href="http://en.wikipedia.org/wiki/ISO_8601">' +
-	    'ISO-8601' +
-	    '</a>, UTC' +
-	    '</span>').insertAfter(this.$element);
 	}
 
 	this.format = 'iso8601';
@@ -1150,7 +1144,6 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
   };
 
   $.fn.ands_datetimepicker.defaults = {
-    maskInput: false,
     collapse: true
   };
   $.fn.ands_datetimepicker.Constructor = DateTimePicker;
