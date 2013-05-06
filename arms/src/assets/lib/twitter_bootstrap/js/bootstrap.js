@@ -1793,7 +1793,15 @@
       if (typeof this.onselect == "function")
           this.onselect(val)
 
-      return this.hide()
+      this.lookup(false)
+      if(this.$element.attr('vocab')=='RIFCSSubject'){
+        if(this.$element.val().length > 4 || this.$menu.children().length == 1){
+          return this.hide()
+        }
+      }else{
+        return this.hide()
+      }
+
     }
 
 
@@ -1975,6 +1983,7 @@
         case 13: // enter
           if (!this.shown) return
           this.select()
+          e.stopPropagation()
           break
 
         case 27: // escape
@@ -2014,7 +2023,11 @@
       var that = this
       e.stopPropagation()
       e.preventDefault()
-      setTimeout(function () { that.hide() }, 150)
+      setTimeout(function () {
+          if (!that.$menu.is(':hover')) {
+            that.hide();
+          }
+      }, 150);
     }
 
   , click: function (e) {

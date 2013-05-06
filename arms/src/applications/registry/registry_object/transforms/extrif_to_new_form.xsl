@@ -1013,7 +1013,7 @@
 				<div class="controls">
 				
 				<span class="inputs_group">
-					<input type="text" class="input-xlarge inner_input" placeholder="Value" value="{text()}" name="value" required=""/>
+					<input type="text" class="input-xlarge inner_input" placeholder="Value" value="{text()}" name="value" required="" vocab="RIFCSSubject"/>
 					<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSSubjectType" name="type" placeholder="type" value="{@type}" required=""/>
 				</span>
 				  Term Identifier: <input type="text" class="input-xlarge" vocab="RIFCSSubjectTermIdentifier" name="termIdentifier" placeholder="termIdentifier" value="{@termIdentifier}"/>
@@ -1433,7 +1433,7 @@
 				<div class="controls">
 				
 				<span class="inputs_group">
-					<input type="text" class="input-xlarge inner_input" placeholder="Value" value="" name="value" required=""/>
+					<input type="text" class="input-xlarge inner_input" placeholder="Value" value="" name="value" required="" vocab="RIFCSSubject"/>
 					<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSSubjectType" name="type" placeholder="type" value="" required=""/>
 				</span>
 				Term Identifier: <input type="text" class="input-xlarge" vocab="RIFCSSubjectTermIdentifier" name="termIdentifier" placeholder="termIdentifier" value=""/>
