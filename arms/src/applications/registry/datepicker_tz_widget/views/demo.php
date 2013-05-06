@@ -90,7 +90,7 @@ $("#datetime").on('error.datepicker.ands', function(event, message) {
 $("#datetime").ands_datetimepicker('validate');
 </pre>
   <p>
-    And listen out for a <strong>valid.datepicker.ands</strong> event; it will have an additional parameter with the valid status (true or false) as it's value.
+    And listen out for a <strong>valid.datepicker.ands</strong> event; it will have an additional parameter with the valid status (true or false) as its value.
   </p>
 </div>
 <?php $this->load->view('footer');?>
