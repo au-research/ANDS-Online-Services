@@ -356,7 +356,7 @@
 						<sup><a class="muted" href="http://www.ands.org.au/guides/cpguide/cpgkey.html" target="_blank" title="View Content Providers' Guide">?</a></sup>
 					</label>
 					<div class="controls">
-						<input type="text" class="input-xlarge" name="key" value="{ro:key}"/>
+						<input type="text" class="input-xlarge" required="" name="key" value="{ro:key}"/>
 						<button class="btn btn" id="generate_random_key">
 							<i class="icon-refresh"/> Generate Random Key </button>
 						<p class="help-inline">
@@ -389,7 +389,7 @@
 				<div class="control-group">
 					<label class="control-label" for="type">Type</label>
 					<div class="controls">
-						<input type="text" id="{generate-id()}_value" class="rifcs-type" vocab="{concat('RIFCS',$ro_class,'Type')}" name="type" value="{$ro_type}"/>
+						<input type="text" id="{generate-id()}_value" class="rifcs-type" required="" vocab="{concat('RIFCS',$ro_class,'Type')}" name="type" value="{$ro_type}"/>
 						<p class="help-inline">
 							<small/>
 						</p>
@@ -511,7 +511,7 @@
 				<div class="controls">
 					<span class="inputs_group">
 						<input type="text" name="value" class="inner_input datepicker" value="{text()}"/>
-						<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSTemporalCoverageDateType" name="type" placeholder="Type" value="{@type}"/>
+						<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSTemporalCoverageDateType" required="" name="type" placeholder="Type" value="{@type}"/>
 					</span>
 					<button class="btn btn-mini btn-danger remove">
 						<i class="icon-remove icon-white"/>
@@ -692,7 +692,7 @@
 				<div class="control-group">
 				<label class="control-label">URL:</label>
 					<div class="controls">
-						<input type="text" class="input-xlarge" name="value" placeholder="URL" value="{ro:url/text()}"/>
+						<input type="text" class="input-xlarge" name="value" valid-type="url" placeholder="URL" value="{ro:url/text()}"/>
 					</div>
 				</div>
 			</div>
@@ -1177,7 +1177,7 @@
 				<div class="controls">
 					<input type="text" class="rifcs-type" vocab="{concat('RIFCS',$ro_class,'RelationType')}" name="type" placeholder="Relation Type" value="{@type}"/>
 					<input type="text" class="inner_input input-large" name="description" placeholder="Description" value="{ro:description}"/>
-					<input type="text" class="input-small" name="url" placeholder="URL" value="{ro:url}"/>
+					<input type="text" class="input-small" name="url" valid-type="url" placeholder="URL" value="{ro:url}"/>
 					<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/> </button>
 				</div>
 			</div>
@@ -1466,7 +1466,7 @@
 					<div class="controls">
 						<input type="text" class="rifcs-type" vocab="{concat('RIFCS',$ro_class,'RelationType')}" name="type" placeholder="Relation Type" value=""/>
 						<input type="text" class="inner_input input-large" name="description" placeholder="Description" value=""/>
-						<input type="text" class="input-small" name="url" placeholder="URL" value=""/>
+						<input type="text" class="input-small" name="url" valid-type="url" placeholder="URL" value=""/>
 						<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/> </button>
 					</div>
 				</div>
@@ -1484,7 +1484,7 @@
 				<div class="controls">
 					<input type="text" class="rifcs-type" vocab="{concat('RIFCS',$ro_class,'RelationType')}" name="type" placeholder="Relation Type" value=""/>
 					<input type="text" class="inner_input input-large" name="description" placeholder="Description" value=""/>
-					<input type="text" class="input-small" name="url" placeholder="URL" value=""/>
+					<input type="text" class="input-small" name="url" valid-type="url" placeholder="URL" value=""/>
 					<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/> </button>
 				</div>
 			</div>
@@ -1730,7 +1730,7 @@
 				<div class="control-group">
 				<label class="control-label">URL:</label>
 					<div class="controls">
-						<input type="text" class="input-xlarge" name="value" placeholder="URL" value=""/>
+						<input type="text" class="input-xlarge" name="value" valid-type="url" placeholder="URL" value=""/>
 					</div>
 				</div>
 			</div>

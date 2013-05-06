@@ -166,6 +166,7 @@ class Registry_object extends MX_Controller {
 		$xml = $this->input->post('xml');
 		$this->load->model('registry_object/registry_objects', 'ro');
 		$ro = $this->ro->getByID($registry_object_id);
+		$xml = $ro->cleanRIFCSofEmptyTags($xml, 'false');
 		$result = $ro->transformForQA(wrapRegistryObjects($xml));
 
 		$this->load->model('data_source/data_sources', 'ds');

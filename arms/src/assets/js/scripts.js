@@ -492,48 +492,80 @@ function Core_bindFormValidation(form){
 	});
 }
 
+function markRequired(form){
+	$(form).attr('valid', false);
+	$('input,textarea', form).each(function(){
+		if(this.required)
+		{
+			var label = $(this).parent().find('.control-label');
+			if(label.length === 0)
+				label = $(this).parent().parent().find('.control-label');
+			if(label.length === 0)
+				label = $(this).parent().parent().parent().find('.control-label');
+			if($(label).parent().find('.required').length === 0)
+				$(label).prepend('<span class="muted required">* </span>');
+		}
+	});
+}
+
 function Core_checkValidField(form, field){
 	var valid = true;
-	if(field.required){//required validation
-		if($(field).val().length==0){
+	var warning = false;
+	if(field.required || $(field).attr('valid-type'))
+	{
+		if(field.required && $(field).val().length==0){
 			valid = false;
-		}else{
-			if(field.maxLength>0){//maxlength is specified
-				if($(field).val().length>field.maxLength){
-					valid = false;
-				}else{
-					valid = true;
-				}
-			}
-
-			if(field.minLength>0){//minlength is specified
-				if($(field).val().length<field.minLength){
-					valid = false;
-				}else{
-					valid = true;
-				}
-			}
-
+		}
+		else if($(field).attr('valid-type') && $(field).val().length > 0)
+		{
 			if($(field).attr('type')=='email'){//email validation
-				if(validateEmail($(field).val())){
+				valid = validateEmail($(field).val());
+
+			}
+			else if($(field).attr('valid-type')=='date'){//email validation
+				valid = true;//validateDate($(field).val());
+			}
+			else if($(field).attr('valid-type')=='url'){//email validation
+				if(validateUrl($(field).val())){
 					valid = true;
 				}else{
-					valid = false;
+					warning = true;
 				}
-			}else{
-				valid = true;
-			}		
+			}
 		}
 
 		if(valid){
 			$(field).closest('div.control-group').removeClass('error').addClass('success');
+			$(field).removeClass('error').addClass('success');
+			if($(field).parent().find('.validation').length > 0)
+			{
+				$(field).parent().find('.validation').remove();
+			}
+			if(warning)
+			{
+				$(field).closest('div.control-group').removeClass('success').addClass('warning');
+				$(field).removeClass('success').addClass('warning');
+				if($(field).parent().find('.validation').length === 0)
+				{
+					$(field).parent().append('<div class="alert alert-warning validation">Field should be a valid '+$(field).attr('valid-type')+'</div>');				
+				}
+			}
 			return true;
 		}else{
-			$(form).attr('valid', false); $(field).closest('div.control-group').removeClass('success').addClass('error');
+			$(form).attr('valid', false);
+			$(field).closest('div.control-group').removeClass('success').addClass('error');
+			$(field).removeClass('success').addClass('error');
+			if($(field).parent().find('.validation').length === 0)
+			{
+				if($(field).attr('valid-type'))
+					$(field).parent().append('<div class="alert alert-error validation">Field must be a valid '+$(field).attr('valid-type')+'</div>');
+				else
+					$(field).parent().append('<div class="alert alert-error validation">Field value must be entered</div>');			
+			}
 			return false;
 		}
+		
 	}
-
 	//never gonna get here for field needing validation
 	return valid;
 }
@@ -550,6 +582,25 @@ function Core_checkValidForm(form){
 	}else{
 		$(form).attr('valid', false);
 	}
+	var allTabs = $('.pane');
+	if(allTabs.length > 0)
+	{			
+		$('#advanced-menu .label').remove();
+		$.each(allTabs, function(){
+			var count_info = $('.alert-info', this).length;
+			var count_error = $('.alert-error', this).length;
+			var count_warning = $('.alert-warning', this).length;
+			var id = $(this).attr('id');
+			if(id != 'qa')
+			{
+				if(count_info > 0) addValidationTag(id, 'info', count_info);
+				if(count_error > 0) addValidationTag(id, 'important', count_error);
+				if(count_warning > 0) addValidationTag(id, 'warning', count_warning);
+			}
+		});
+	}
+
+
 	return valid;
 }
 
@@ -557,6 +608,17 @@ function validateEmail(email) {
     var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(email);
 } 
+
+function validateDate(dateText) { 
+	//log(dateText);
+	var re = /^([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))([T|\ ]((([01]\d|2[0-3])((:?)[0-5]\d)?|24\:?00)([\.,]\d+(?!:))?)?(\17[0-5]\d([\.,]\d+)?)?([zZ]|([\+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/;
+	return re.test(dateText);
+}
+
+function validateUrl(url) { 
+    var re = /(ftp|http):\/\/([_a-z\d\-]+(\.[_a-z\d\-]+)+)(([_a-z\d\-\\\.\/]+[_a-z\d\-\\\/])+)*/;
+    return re.test(url);
+}
 
 Number.prototype.pad = function (len) {
     return (new Array(len+1).join("0") + this).slice(-len);

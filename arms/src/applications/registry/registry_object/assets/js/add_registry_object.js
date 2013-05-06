@@ -72,8 +72,8 @@ $(function(){
 	});
 	$(window).hashchange();//initial hashchange event
 	initEditForm();
-
-	
+	//Core_bindFormValidation($('#edit-form'));
+	markRequired($('#edit-form'));
 	// === Sidebar navigation === //	
 	$('.submenu > a').click(function(e){
 		e.preventDefault();
@@ -529,7 +529,13 @@ function initEditForm(){
 			var admin = $('#admin');
 			var ro_class = $('#ro_class').val();//hidden value
 			var ro_id = $('#ro_id').val();
-
+			if($('input[name=key]', admin).val() == '') //Core_checkValidForm($('#edit-form')))
+			{
+				$('input[name=key]', admin).parent().append('<div class="alert alert-error validation">Registry Object Key Must Have a Value!</div>');
+			}
+			else
+			{
+				$('input[name=key]', admin).parent().find('.validation').remove();
 			xml += '<registryObject group="'+$('input[name=group]',admin).val()+'">';
 			xml += '<key>'+$('input[name=key]', admin).val()+'</key>';
 			xml += '<originatingSource type="'+$('input[name=originatingSourceType]', admin).val()+'">'+$('input[name=originatingSource]',admin).val()+'</originatingSource>';
@@ -609,6 +615,7 @@ function initEditForm(){
 					$('#myModal .modal-body').html(data.message);
 				}
 			});
+			}
 		}
 	});
 
@@ -1539,3 +1546,4 @@ $('#next_tab').live('click',function(e){
 $('#exit_tab').live('click',function(e){
 	window.location = $('#breadcrumb a:first').attr("href");
 });
+

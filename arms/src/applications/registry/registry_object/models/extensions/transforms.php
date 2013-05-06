@@ -98,13 +98,14 @@ class Transforms_Extension extends ExtensionBase
 		}
 	}
 
-	function cleanRIFCSofEmptyTags($rifcs){
+	function cleanRIFCSofEmptyTags($rifcs, $removeFormAttributes='true'){
 		try{
 			$xslt_processor = Transforms::get_form_to_cleanrif_transformer();
 			$dom = new DOMDocument();
 			//$dom->loadXML($this->ro->getXML());
 			$dom->loadXML($rifcs);
 			//$dom->loadXML($rifcs);
+			$xslt_processor->setParameter('','removeFormAttributes',$removeFormAttributes);
 			return $xslt_processor->transformToXML($dom);
 		}catch (Exception $e)
 		{
