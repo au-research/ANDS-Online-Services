@@ -272,14 +272,13 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
     constructor: DateTimePicker,
 
     init: function(element, options) {
-      var icon;
       this.options = options;
       this.$element = $(element);
       this.language = 'en';
       //jQuery 1.9 ditched $.browser, so I'm checking for leadingWhitespace support
       //(something IE6-8 don't do)
       if ($.support.leadingWhitespace === false) {
-	$('<div class="alert alert-danger">This plugin requires a moderately modern browser.<br/> Did you know Internet Explorer 8 was released way back in 2009? George W Bush was still president of America in 2009, which is also the year the film <em>Avatar</em> was released.<br/>Might be time to upgrade... </div>').insertAfter(this.$element);
+	this.notifyError('This web browser is too old to use the datetimepicker plugin; please update to something more recent than MSIE8!');
 	this.disable();
 	return false;
       }
@@ -292,18 +291,8 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
 	}
 
 	this.format = 'iso8601';
-
-	if (this.component) {
-          icon = this.component.find('i');
-	}
-	if (icon && icon.length) this.timeIcon = icon.data('time-icon');
-	if (!this.timeIcon) this.timeIcon = 'icon-time';
-	icon.addClass(this.timeIcon);
-
-	if (icon && icon.length) this.dateIcon = icon.data('date-icon');
-	if (!this.dateIcon) this.dateIcon = 'icon-calendar';
-	icon.removeClass(this.timeIcon);
-	icon.addClass(this.dateIcon);
+	this.timeIcon = 'icon-time';
+	this.dateIcon = 'icon-calendar';
 
 	this._timezone = this.jstz.determine().name();
 	this._oldtz = this._timezone;
@@ -1033,29 +1022,18 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
           expanded.collapse('hide');
           closed.collapse('show')
           $this.find('i').toggleClass(self.timeIcon + ' ' + self.dateIcon);
-          self.$element.find('.add-on i').toggleClass(self.timeIcon + ' ' + self.dateIcon);
         }
       });
 
       if (this.isInput) {
         this.$element.on({
-          'focus': $.proxy(this.show, this)
+          'focus': $.proxy(this.show, this),
+	  'blur': $.proxy(this.hide, this)
         });
-        if (this.options.maskInput) {
-          this.$element.on({
-            'keydown': $.proxy(this.keydown, this),
-            'keypress': $.proxy(this.keypress, this)
-          });
-        }
       } else {
-        if (this.options.maskInput) {
-          this.$element.on({
-            'keydown': $.proxy(this.keydown, this),
-            'keypress': $.proxy(this.keypress, this)
-          }, 'input');
-        }
         if (this.component){
           this.component.on('click', $.proxy(this.show, this));
+	  this.$element.on('click', $.proxy(this.show, this));
         } else {
           this.$element.on('click', $.proxy(this.show, this));
         }
@@ -1182,7 +1160,7 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
                 DPGlobal.template +
               '</div>' +
             '</li>' +
-            '<li class="picker-switch accordion-toggle"><a><i class="' + opts.timeIcon + '"></i></a></li>' +
+            '<li class="picker-switch accordion-toggle"><button class="btn btn-block"><i class="icon-time"></i></button></li>' +
             '<li' + (opts.collapse ? ' class="collapse"' : '') + '>' +
               '<div class="timepicker">' +
                 TPGlobal.getTemplate({currTz: opts.currTZ}) +
@@ -1266,11 +1244,11 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
     '<div class="timepicker-picker">' +
       '<table class="table-condensed">' +
         '<tr>' +
-          '<td><a href="#" class="btn" data-action="incrementHours"><i class="icon-chevron-up"></i></a></td>' +
+          '<td><button href="#" class="btn" data-action="incrementHours"><i class="icon-chevron-up"></i></button></td>' +
           '<td class="separator"></td>' +
-          '<td><a href="#" class="btn" data-action="incrementMinutes"><i class="icon-chevron-up"></i></a></td>' +
+          '<td><button href="#" class="btn" data-action="incrementMinutes"><i class="icon-chevron-up"></i></button></td>' +
 	  '<td class="separator"></td>' +
-          '<td><a href="#" class="btn" data-action="incrementSeconds"><i class="icon-chevron-up"></i></a></td>' +
+          '<td><button href="#" class="btn" data-action="incrementSeconds"><i class="icon-chevron-up"></i></button></td>' +
         '</tr>' +
         '<tr>' +
           '<td>' + TPGlobal.hourTemplate + '</td> ' +
@@ -1280,11 +1258,11 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
           '<td>' + TPGlobal.secondTemplate + '</td>' +
         '</tr>' +
         '<tr>' +
-          '<td><a href="#" class="btn" data-action="decrementHours"><i class="icon-chevron-down"></i></a></td>' +
+          '<td><button href="#" class="btn" data-action="decrementHours"><i class="icon-chevron-down"></i></button></td>' +
           '<td class="separator"></td>' +
-          '<td><a href="#" class="btn" data-action="decrementMinutes"><i class="icon-chevron-down"></i></a></td>' +
+          '<td><button href="#" class="btn" data-action="decrementMinutes"><i class="icon-chevron-down"></i></button></td>' +
 	  '<td class="separator"></td>' +
-          '<td><a href="#" class="btn" data-action="decrementSeconds"><i class="icon-chevron-down"></i></a></td>' +
+          '<td><button href="#" class="btn" data-action="decrementSeconds"><i class="icon-chevron-down"></i></button></td>' +
         '</tr>' +
 	 '<tr>' +
 	   '<td colspan="5">' +

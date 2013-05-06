@@ -12,12 +12,7 @@
       <legend>Predefined datetime of '2013-05-25T16:17:19Z'</legend>
       <div class="control-group">
 	<div class="controls">
-	  <div id="datetime" class="input-append date">
-	    <input type="text" value="2013-05-25T16:17:19Z" />
-	    <span class="add-on">
-	      <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
-	    </span>
-	  </div>
+	  <input id="datetime" type="text" value="2013-05-25T16:17:19Z" />
 	</div>
       </div>
     </fieldset>
@@ -25,12 +20,7 @@
       <legend>No predefined value (defaults to today and now)</legend>
       <div class="control-group">
 	<div class="controls">
-	  <div id="datetimenow" class="input-append date">
-	    <input type="text"  />
-	    <span class="add-on">
-	      <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
-	    </span>
-	  </div>
+	  <input id="datetimenow" type="text"  />
 	</div>
       </div>
     </fieldset>
@@ -51,15 +41,10 @@
     The plugin will read the containing input field for a valid ISO8601 (Zulu Time) date string on initialisation. If the value is empty or invalid, the current date and time will be used instead (with an appropriate 'error.datepicker.ands' event triggered; see 'Events' section below for more details).
   </p>
   <p>
-    Bind the widget to the input field's containing div. Being a bootstrap widget, this plugin expects the form element to be laid out as follows:
+    Bind the widget to the input field:
   </p>
 <pre class="prettyprint">
-&lt;div id="datetime" class="input-append date"&gt;
-  &lt;input type="text" value="2013-05-25T16:17:19Z"&gt;
-    &lt;span class="add-on"&gt;
-      &lt;i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar"&gt;&lt;/i&gt;
-    &lt;/span&gt;
-&lt;/div&gt;
+&lt;input id="datetime" type="text" value="2013-05-25T16:17:19Z"&gt;
 </pre>
   <p>
     And there's a javascript snippet to initialise the widget:
@@ -87,11 +72,11 @@ $("#datetime").on('change.datepicker.ands', function(event, details) {
   console.log('UTC date: ' + details.utc + '\nTimezone: ' + details.tz);
 });
 
-$("#datetime").on(valid.datepicker.ands', function(event, isValid) {
+$("#datetime").on('valid.datepicker.ands', function(event, isValid) {
   console.log('Current setting has is ' + (isValid ? '' : 'NOT ') + 'valid!');
 });
 
-$("#datetime").on(error.datepicker.ands', function(event, message) {
+$("#datetime").on('error.datepicker.ands', function(event, message) {
   console.log('Oops, a problem was encountered!\n' + message);
 });
 
