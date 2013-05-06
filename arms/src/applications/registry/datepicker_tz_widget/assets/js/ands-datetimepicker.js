@@ -562,16 +562,18 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
 		    'daylight saving time offsets are automatically ' +
 		    'calculated as required.</small>' +
 		  '</li>');
+      list.append('<li><button data-tz-toggle="true" class="btn-small btn-block btn-success">Show all timezones</button></li>');
       $.each(timezones, function(idx, tz) {
 	var offset = tz.offset;
 	if (offset.substr(0,1) !== '-') {
 	  offset = "+" + offset;
 	}
 	var name = tz.name;
-	var li = $('<li/>');
+	var intl = name.indexOf('Australia/') !== 0 ? 'yes' : 'no';
+
+	var li = $('<li data-intl="' + intl + '" />');
 	var button = $('<button class="btn btn-block" ' +
 		       'data-tz="' + name + '" />');
-
 
 	if (name !== "UTC") {
 	  button.html(name + ' <small>(' + offset + ')</small>');
@@ -748,20 +750,25 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
 	this.widget.find('.timepicker .timepicker-tz button').removeClass('btn-primary');
 	this.widget.find('.timepicker .timepicker-tz button[data-tz="' + this._timezone +'"]').addClass('btn-primary');
         this.widget.find('.timepicker .timepicker-tz').show();
+	this.widget.find('.timepicker .timepicker-tz ul.unstyled li[data-intl=yes]').hide();
+	this.widget.find('.timepicker .timepicker-tz ul.unstyled button.btn-primary').parent().show();
+	this.widget.find('.timepicker .timepicker-tz ul.unstyled button.btn-success').parent().show();
       },
 
       selectTZ: function(e) {
 	var tgt = $(e.target);
-	if (tgt.is('button')) {
+	if (tgt.is('button') && typeof(tgt.data('tz')) !== 'undefined') {
 	  var tz = tgt.data('tz');
 	  var label = $('span.timepicker-tz');
 	  label.html('<i class="icon-globe"> </i> ' + tz);
 	  this._walltime = WallTime.UTCToWallTime(this._date, tz);
 	  this._oldtz = $.extend({}, true, this._timezone);
 	  this._timezone = tz;
-
           this.actions.showPicker.call(this);
-
+	}
+	else if (tgt.is('button') && typeof(tgt.data('tz-toggle')) !== 'undefined') {
+	  this.widget.find('.timepicker .timepicker-tz ul.unstyled li[data-intl=yes]').show();
+	  tgt.parent().hide();
 	}
       },
 
