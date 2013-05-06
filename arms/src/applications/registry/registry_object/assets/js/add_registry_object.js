@@ -38,11 +38,16 @@ $(function(){
 
 			switchMode(aro_mode);
 			updateHelpLink();
+
 			if(aro_mode==ADVANCED_MODE){
 				$('.pane').hide();
 				$('#'+active_tab).show();
 				$('#advanced-menu a').parent().removeClass('active');
 				$('#advanced-menu a[href=#'+active_tab+']').parent().addClass('active');
+
+				// Prevent accidentally exiting the form and toggle navigation buttons
+				(active_tab == 'qa' ? (disableNavigationConfirmation() && disableTabNavigation()) : (enableTabNavigation() && enableNavigationConfirmation()));
+				
 			}
 			else if(aro_mode==SIMPLE_MODE){
 				$('.pane').hide();
@@ -604,7 +609,6 @@ function initEditForm(){
 
 	$('.show_rifcs').die().live({
 		click: function(e) { 
-			console.log("ohi");
 			$('#myModal').modal(); 
 		}
 	});
@@ -1472,3 +1476,55 @@ function loadingBoxMessage(message)
 	$('#loading_box_text', template).html("<em>" + (typeof(message) !== 'undefined' ? message : "Loading....") + "</em>");
 	return template;
 }
+
+function enableNavigationConfirmation()
+{
+	window.onbeforeunload = function(e) {
+   		return 'Are you sure you want to navigate away from this form? All unsaved changes will be lost!';
+	};
+	return true;
+}
+
+function disableNavigationConfirmation()
+{
+	window.onbeforeunload = null;
+	return true;
+}
+
+function disableTabNavigation()
+{
+	$('#tab_navigation_container').remove();
+	return true;
+}
+
+function enableTabNavigation()
+{
+	var buttons = "";
+
+	var disabled_prev = ($('#sidebar ul:visible .active:eq(0)').prev().length == 0);
+	var disabled_next = ($('#sidebar ul:visible .active').next().length == 0);
+
+	buttons += " <button id='prev_tab' class='btn-mini btn' "+ (disabled_prev ? "disabled='disabled'" : "") +">Previous Tab</button>";
+
+	buttons += " <button id='next_tab' class='btn-mini btn' "+ (disabled_next ? "disabled='disabled'" : "") +">Next Tab</button>";
+
+	buttons += " <button id='exit_tab' class='btn-mini btn pull-right'>Exit without saving</button>";
+
+	// Set the container to contain the buttons
+	if (!$('#tab_navigation_container').length)
+	{
+		$('#content').append("<div id='tab_navigation_container'>"+buttons+"</div>");
+	}
+	$('#tab_navigation_container').html(buttons);
+	return true;
+}
+
+$('#prev_tab').live('click',function(e){
+	$('a', $('#sidebar ul:visible li.active').prev()).trigger('click');
+});
+$('#next_tab').live('click',function(e){
+	$('a', $('#sidebar ul:visible li.active').next()).trigger('click');
+});
+$('#exit_tab').live('click',function(e){
+	window.location = $('#breadcrumb a:first').attr("href");
+});
