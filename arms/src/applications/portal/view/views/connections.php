@@ -44,12 +44,18 @@
 							$relationship = format_relationship($from_class, $entry['relation_type'], $entry['origin']);
 						}else{
 							$relationship = 'Contributor';
+						}	
+
+						$suffix = "";
+						if ( in_array($relationship, array('Principal investigator', 'principalInvestigatorOf')) )
+						{
+							$suffix = " <sup><small class='lightgrey'>(PI)</small></sup>";
 						}
 
 						if(!isset($conn[$entry['class']])){
-							$conn[$entry['class']] = $logo.'<p class="'.$entry['class'].' preview_connection"><a href="'.$url.'" '.$preview.' relation_type="'.$relationship.'">'.$entry['title'].'</a></p>';
+							$conn[$entry['class']] = $logo.'<p class="'.$entry['class'].' preview_connection"><a href="'.$url.'" '.$preview.' relation_type="'.$relationship.'">'.$entry['title'].$suffix.'</a></p>';
 						}else{
-							$conn[$entry['class']] .= $logo.'<p class="'.$entry['class'].' preview_connection"><a href="'.$url.'" '.$preview.' relation_type="'.$relationship.'">'.$entry['title'].'</a></p>';
+							$conn[$entry['class']] .= $logo.'<p class="'.$entry['class'].' preview_connection"><a href="'.$url.'" '.$preview.' relation_type="'.$relationship.'">'.$entry['title'].$suffix.'</a></p>';
 						}
 					}
 				}

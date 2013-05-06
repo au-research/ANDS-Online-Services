@@ -126,14 +126,14 @@ function prinfLoginForm($authenticators, $authenticator , $class)
 
 function printAlternativeLoginControl($authenticators)
 {
-	print "<div class='btn-group'>";
+	//print "<div class='btn-group'>"; // prevent double-padding in <div widget-title>
 	print "<a class='btn btn-small dropdown-toggle ' data-toggle='dropdown' href='#'>Alternative Login <b class='caret'></b></a>";
 	print "<ul class='dropdown-menu'>";
 		foreach($authenticators as $key => $value){
 			print "<li class=''><a href='javascript:;' class='loginSelector' id='".$key."'>".$value."</a></li>";
 		}
 	print "</ul>";
-	print "</div>";
+	//print "</div>";
 }
 
 function printAlternativeLoginForms($authenticators, $default_authenticator)

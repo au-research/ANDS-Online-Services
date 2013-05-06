@@ -27,7 +27,7 @@ class NHMRC_Merged_File_to_RIFCS extends Crosswalk
     const NHMRC_PARTY_PREFIX = 'http://nhmrc.gov.au/person/';
     const NHMRC_PROGRAM_TYPE_GROUP = 'Infrastructure Support';
     const NHMRC_NLA_KEY = 'http://nla.gov.au/nla.party-616216';
-    const NHMRC_LOGO = 'http://services.ands.org.au/documentation/logos/nhmrc_stacked.jpg';
+    const NHMRC_LOGO = 'http://services.ands.org.au/documentation/logos/nhmrc_stacked_small.jpg';
     const NHMRC_MIN_GRANT_YR = 2009;
 
     private $parsed_array = array();
@@ -119,8 +119,8 @@ class NHMRC_Merged_File_to_RIFCS extends Crosswalk
             // If MAIN_FUNDING_GROUP == 'Infrastructure Support', then "program", else "project"
             $activity_type = ($activity['MAIN_FUNDING_GROUP'] == self::NHMRC_PROGRAM_TYPE_GROUP ? "program" : "project");
 
-            $primary_name = $this->normalise_space($activity['SIMPLIFIED_TITLE']);
-            $alternative_name = $this->normalise_space($activity['SCIENTIFIC_TITLE']);
+            $primary_name = $this->normalise_space($activity['GRANT_SIMPLIFIED_TITLE']);
+            $alternative_name = $this->normalise_space($activity['GRANT_SCIENTIFIC_TITLE']);
 
 
             // Get the names of our investigators
@@ -138,7 +138,9 @@ class NHMRC_Merged_File_to_RIFCS extends Crosswalk
             $formatted_media_summary = trim($activity['MEDIA_SUMMARY']);
             if ($formatted_media_summary) { $formatted_media_summary . "\n\n"; }
 
-            $description = htmlentities("{$formatted_media_summary}Lead Investigator: {$activity['CIA_NAME']}
+            $description = htmlentities("{$formatted_media_summary}
+
+                            Lead Investigator: {$activity['CIA_NAME']}
                             " . ($investigators ? "
                             Co-Investigator(s): {$investigators}
                             " : "") . "
@@ -149,7 +151,7 @@ class NHMRC_Merged_File_to_RIFCS extends Crosswalk
                             End Year: {$activity['END_YR']}
 
                             Main Funding Group: {$activity['MAIN_FUNDING_GROUP']}
-                            Grant Type (Funding Scheme): {$activity['GRANT_TYPE']}
+                            Grant Type (Funding Scheme): {$activity['HIGHER_GRANT_TYPE']}
                             Grant Sub Type: {$activity['SUB_TYPE']}
             ");
 
@@ -180,9 +182,15 @@ class NHMRC_Merged_File_to_RIFCS extends Crosswalk
             $registryObject .=      '<description type="logo">'.self::NHMRC_LOGO.'</description>' . NL;
 
             // Include our subjects
-            $registryObject .=      '<subject type="local">'.$activity['BROAD_RESEARCH_AREA'].'</subject>' . NL;
-            $registryObject .=      '<subject type="anzsrc-for">'.$activity['FOR_CATEGORY'].'</subject>' . NL;
-            $registryObject .=      '<subject type="anzsrc-for">'.$activity['FIELD_OF_RESEARCH'].'</subject>' . NL;
+            $registryObject .=      ($activity['BROAD_RESEARCH_AREA'] ? 
+                                        '<subject type="local">'.$activity['BROAD_RESEARCH_AREA'].'</subject>' . NL 
+                                        : '');
+            $registryObject .=      ($activity['FOR_CATEGORY'] ? 
+                                        '<subject type="anzsrc-for">'.$activity['FOR_CATEGORY'].'</subject>' . NL
+                                        : '');
+            $registryObject .=      ($activity['FIELD_OF_RESEARCH'] ? 
+                                        '<subject type="anzsrc-for">'.$activity['FIELD_OF_RESEARCH'].'</subject>' . NL
+                                        : '');
 
             // And any keywords as local subjects
             foreach ($activity['keywords'] AS $kw)
@@ -276,7 +284,7 @@ class NHMRC_Merged_File_to_RIFCS extends Crosswalk
                 $registryObject .=      'Participant in the following NHMRC Grant(s):' . NL;
                 foreach ($party['grants'] AS $grant_id)
                 {
-                    $registryObject .= ' - ' . $this->normalise_space($this->grants[$grant_id]['SIMPLIFIED_TITLE']) . NL;
+                    $registryObject .= ' - ' . $this->normalise_space($this->grants[$grant_id]['GRANT_SIMPLIFIED_TITLE']) . NL;
                 }
                 $registryObject .=      '</description>' . NL;
 
@@ -379,7 +387,7 @@ class NHMRC_Merged_File_to_RIFCS extends Crosswalk
             {
                 $year_array[$heading] = $csv_value;
             }
-            else if (strpos($heading,'RESEARCH_KW_') === 0)
+            else if (strpos($heading,'RESEARCH_KW_') === 0 || strpos($heading,'HEALTH_KW_') === 0)
             {
                 $keyword_array[$heading] = $csv_value;
             }

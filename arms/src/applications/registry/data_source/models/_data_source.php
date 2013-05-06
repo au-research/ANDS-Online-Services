@@ -910,7 +910,7 @@ class _data_source {
 		$errors = '';
 		try
 		{
-			$dom_xml = file_get_contents($request);
+			$dom_xml = file_get_contents($request, false, stream_context_create(array('http'=>array('timeout' => 5))));
 			$resultMessage = new DOMDocument();
 			$result = $resultMessage->loadXML($dom_xml);
 		}

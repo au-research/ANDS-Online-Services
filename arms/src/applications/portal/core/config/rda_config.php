@@ -5,8 +5,9 @@ $config['registry_endpoint'] =  dirname(base_url()) . "/registry/services/rda/";
 
 $config['topics_datafile'] =  dirname(base_url()) . "/registry/assets/topics/topics.json";
 
+// Prevent these logos from coming up in the connections box
 $config['banned_images'] = array(
-	'http://services.ands.org.au/documentation/logos/nhmrc_stacked.jpg'
+	'http://services.ands.org.au/documentation/logos/nhmrc_stacked_small.jpg'
 );
 
 $config['protocol'] = 'https';//((strpos(base_url(), "http://") === 0) ? "http" : "https");
