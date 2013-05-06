@@ -1,6 +1,7 @@
 <?php $this->load->view('rda_header');?>
 <div id="search_loading" class="hide"><h3>Loading...</h3></div>
 <div id="search_notice" class="hide"></div>
+<div id="ie8_message" class="warning hide">Internet Explorer 8 has known issues displaying search results in the map: click 'No' to any prompts asking to stop processing scripts on this page. <br/>Upgrading to a modern web browser is <strong>highly</strong> recommended.</div>
 <div class="container less_padding">
 <div id="searchmap" class="hide"></div>
 <div class="main">

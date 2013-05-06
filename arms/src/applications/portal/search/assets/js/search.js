@@ -3,9 +3,9 @@ var searchUrl = base_url+'search/filter';
 var searchBox = null;
 var map = null;
 var pushPin = null;
-var resultPolygons = new Array();
-var markersArray = new Array();
-var polygonsArray = new Array();
+var resultPolygons = [];//new Array();
+var markersArray = [];//new Array();
+var polygonsDict = {};//new Array();
 var markerClusterer = null;
 var rectangleOptions = null;
 var infowindow = null;
@@ -72,15 +72,6 @@ $(document).ready(function() {
 			 */
 		});
 
-	        //if we're showing the map, and using an old crappy browser,
-	        //limit the number of results
-	        if (isMapView(searchData) &&
-			    $.browser.msie === true &&
-			    parseInt($.browser.version) < 9) 
-	        {
-		      	searchData['rows'] = 500;
-			}
-
 		executeSearch(searchData, searchUrl);
 		initMap();
 	});
@@ -97,7 +88,7 @@ function isMapView(searchData) {
 }
 
 function executeSearch(searchData, searchUrl){
-	resultPolygons = new Array();
+    resultPolygons.length = 0;
 	clearOverlays();
         //if we're in the map view, don't fire a search unless we have
         //search terms, or spatial coverage data.
@@ -107,7 +98,7 @@ function executeSearch(searchData, searchUrl){
 	        var template = $('#search-noterms-template').html();
 	        var output = Mustache.render(template);
 	        if (output.trim().length > 0) {
-	                $('#search_notice').html(output).removeClass('hide').removeClass('warning').addClass('info');
+	                $('#search_notice').html(output).removeClass('hide').addClass('info');
 		}
 	        else {
 		        $('#search_notice:not(.hide)').empty().addClass('hide');
@@ -131,24 +122,6 @@ function executeSearch(searchData, searchUrl){
 			        var numReturned = data.result.docs.length;
 				$('#search-result, .pagination, #facet-result, #search_notice').empty();
 
-			        //truncated results notice; only display on map view
-			        if (isMapView(searchData)) {
-			          var template = $('#search-trunc-template').html();
-			          var truncdata = {trunc: (numFound !== numReturned),
-						   found: numFound,
-						   returned: numReturned};
-			          var output = Mustache.render(template, truncdata);
-			          if (output.trim().length > 0) {
-			            $('#search_notice').html(output).removeClass('hide').removeClass('info').addClass('warning');
-				  }
-			          else {
-				    $('#search_notice:not(.hide)').empty().addClass('hide');
-				  }
-				}
-			        else {
-				  $('#search_notice:not(.hide)').empty().addClass('hide');
-				}
-
 				//search result
 				var template = $('#search-result-template').html();
 				var output = Mustache.render(template, data.result);
@@ -168,16 +141,47 @@ function executeSearch(searchData, searchUrl){
 				var docs = data.result.docs;
 				//this iteration is what causes the 'slow script' detection warning message
 				//in MSIE v8. On my local machine, this message started to appear around the 500
-				//record mark. 
+				//record mark.
 				//more information: http://support.microsoft.com/kb/175500
-				log("------");
+
+			        //if we're showing the map, and using an old crappy browser,
+			        //limit the number of results
+			        if (isMapView(searchData) &&
+				    $.browser.msie === true &&
+				    parseInt($.browser.version) < 9)
+			        {
+				    $('#ie8_message.hide').removeClass('hide');
+				    docs = docs.slice(0,500);
+				}
+
+			        //truncated results notice; only display on map view
+			        if (isMapView(searchData)) {
+			            var template = $('#search-trunc-template').html();
+			            var truncdata = {trunc: (numFound !== docs.length),
+						     found: numFound,
+						     returned: docs.length};
+			            var output = Mustache.render(template, truncdata);
+			            if (output.trim().length > 0) {
+					$('#search_notice').html(output).removeClass('hide').addClass('info');
+				    }
+			            else {
+					$('#search_notice:not(.hide)').empty().addClass('hide');
+				    }
+				}
+			        else {
+				    $('#search_notice:not(.hide)').empty().addClass('hide');
+				}
+
+
 				$(docs).each(function(){
-					log(this.list_title + " (" + Math.floor(this.score * 100000)  + ")");
-				 	if(this.spatial_coverage_polygons){
-				 		resultPolygons[this.id] = new Array(this.display_title, this.spatial_coverage_polygons[0], this.spatial_coverage_centres[0]);
+					//log(this.list_title + " (" + Math.floor(this.score * 100000)  + ")");
+				 	if(typeof(this.spatial_coverage_polygons) !== 'undefined'){
+					    resultPolygons.push([this.id,
+								 this.display_title,
+								 this.spatial_coverage_polygons[0],
+								 this.spatial_coverage_centres[0]]);
 				 	}
 				});
-				log("------");
 				initSearchPage();
 			        $('.sidebar.mapmode_sidebar').show();
 			},
@@ -342,6 +346,7 @@ function initSearchPage(){
 
 		if ($.browser.msie && $.browser.version <= 9.0) {
 			$('.sidebar').css({opacity:1,background:'#fff'});
+		        $('#ie8_message.hide').removeClass('hide');
 		}
 
 		$('.facet_class').show();
@@ -351,7 +356,7 @@ function initSearchPage(){
 		 $('.post').hover(function(){
 		 	//log($(this).attr('ro_id'));
 		 	clearPolygons();
-			polygonsArray[$(this).attr('ro_id')].setMap(map);
+			polygonsDict[$(this).attr('ro_id')].setMap(map);
 		 },function(){
 		 	clearPolygons();
 		 });
@@ -381,10 +386,12 @@ function initSearchPage(){
 
 	$('#search_map_toggle').unbind('click');
 	$('#search_map_toggle').click(function(e){
+	        $('#search_notice').addClass('hide');
+	        $('#ie8_message').addClass('hide');
+
 		e.preventDefault();
 		if(searchData['map']){
 			//already map, hide map
-		    $('#search_notice').addClass('hide');
 			$('#searchmap').hide();
 			delete searchData['map'];
 			delete searchData['spatial'];
@@ -395,6 +402,7 @@ function initSearchPage(){
 			initSearchPage();
 		}else{
 			//no map, show map
+	                $('#ie8_message.hide').removeClass('hide');
 			searchData['map']='show';
 			processPolygons();
 			resetZoom();
@@ -742,19 +750,14 @@ function initMap(){
 
 
 function processPolygons(){
-	if(resultPolygons.length)
-	{
-		for(p in resultPolygons)
-		{
-
-			id = p.toString();
-			title = resultPolygons[p][0];
-			polygons = resultPolygons[p][1];
-			centers = resultPolygons[p][2];
-			// log(id);
-			createResultPolygonWithMarker(polygons, centers, title, id);
-		}
-	}
+    $.each(resultPolygons, function(idx, elem) {
+	id = elem[0];
+	title = elem[1];
+	polygons = elem[2];
+	centers = elem[3];
+	// log(id);
+	createResultPolygonWithMarker(polygons, centers, title, id);
+    });
 }
 
 function createResultPolygonWithMarker(polygons, centers, title, id)
@@ -811,7 +814,7 @@ function createPolygon(coords, id)
 			    editable : false
 			  });
 	polygon.setMap(null);
-	polygonsArray[id] = polygon;
+	polygonsDict[id] = polygon;
 
 }
 
@@ -825,7 +828,7 @@ function createMarker(latlng, id)
 	marker.set("id", id);
 	google.maps.event.addListener(marker,"mouseover",function(){
 		clearPolygons();
-		polygonsArray[marker.id].setMap(map);
+	    polygonsDict[marker.id].setMap(map);
 	});
 	google.maps.event.addListener(marker,"click",function(){
 
@@ -835,7 +838,7 @@ function createMarker(latlng, id)
 		clearPolygons();
 	});
 	markerClusterer.addMarker(marker);
-	markersArray[id] = marker;
+        markersArray.push(marker);
 }
 
 
@@ -849,13 +852,9 @@ function clearOverlays()
 }
 
 function clearMarkers(){
-	if(markersArray.length>0){
-	  for (m in markersArray){
-	  	if(markersArray[m]){
-	    	markersArray[m].setMap(null);
-		}
-	  }
-	}
+    $.each(markersArray, function(idx, marker) {
+	marker.setMap(null);
+    });
 }
 
 function showPreviewWindowConent(mOverlay)
@@ -900,11 +899,9 @@ function showPreviewWindowConent(mOverlay)
 
 function clearPolygons()
 {
-	if(polygonsArray.length>0){
-	  for (p in polygonsArray){
-	    polygonsArray[p].setMap(null);
-	  }
-	}
+    $.each(polygonsDict, function(idx, polygon) {
+	polygon.setMap(null);
+    });
 }
 
 function resetZoom(){
@@ -915,7 +912,7 @@ function resetZoom(){
 	{
 		//map.setCenter(searchBox.getBounds().getCenter());
 		searchBox.setMap(map);
-		log(searchBox);
+		//log(searchBox);
 		//log("if searchBox lat:" + searchBox.getBounds().getCenter().lat() + " lng: " + searchBox.getBounds().getCenter().lng());
 		//map.fitBounds(searchBox.getBounds());
 	}
