@@ -65,6 +65,7 @@ class NHMRC_Merged_File_to_RIFCS extends Crosswalk
         // At least *try* and care about our memory management...
         unset($payload);
         $log[] = "[CROSSWALK] Attempting to execute crosswalk " . $this->identify();
+        $log[] = count($this->parsed_array) . " rows in initial input data";
 
         // First line has the column headings
         $this->csv_headings = array_shift($this->parsed_array);
@@ -382,7 +383,7 @@ class NHMRC_Merged_File_to_RIFCS extends Crosswalk
         foreach($csv_values AS $idx => $csv_value)
         {
             $csv_value = htmlentities($csv_value);
-            $heading = $this->csv_headings[$idx];
+            $heading = (isset($this->csv_headings[$idx]) ?: 'NO_HEADING');
             if (strpos($heading, 'YR_') === 0)
             {
                 $year_array[$heading] = $csv_value;
@@ -509,10 +510,10 @@ class NHMRC_Merged_File_to_RIFCS extends Crosswalk
         $valid = true; 
 
         // Memory hack...
-        $payload = explode("\n", $payload);
+        $payload = preg_split( '/\r\n|\r|\n/', $payload );
         $ref =& $payload;
         // Bizarrely, PHP doesn't support multiline in getcsv :-/
-        foreach($ref AS $line)
+        foreach($ref AS $idx => $line)
         {
             $csv = str_getcsv($line);
             if (count($csv) > 0)
@@ -527,6 +528,7 @@ class NHMRC_Merged_File_to_RIFCS extends Crosswalk
 
         unset($ref);
         unset($payload);
+        gc_collect_cycles();
 
         return $valid;
     }

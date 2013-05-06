@@ -1326,10 +1326,12 @@ public function getContributorGroupsEdit()
 
 			if ($error_log = $this->importer->getErrors())
 			{
-				$data_source->append_log($elogTitle.$log.$error_log, HARVEST_ERROR ,"HARVEST_ERROR");
+				$log = $elogTitle.$log.$error_log;
+				$data_source->append_log($log, HARVEST_ERROR ,"HARVEST_ERROR");
 			}
 			else{
-				$data_source->append_log($slogTitle.$log.$this->importer->getMessages(), HARVEST_INFO,"HARVEST_INFO");
+				$log = $slogTitle.$log.$this->importer->getMessages();
+				$data_source->append_log($log, HARVEST_INFO,"HARVEST_INFO");
 			}
 
 		}
@@ -1406,13 +1408,15 @@ public function getContributorGroupsEdit()
 
 			if ($error_log = $this->importer->getErrors())
 			{
-				$data_source->append_log($elogTitle.$log.NL.$error_log,  HARVEST_ERROR, "importer", "HARVEST_ERROR" );
+				$log = $elogTitle.$log.NL.$error_log;
+				$data_source->append_log($log,  HARVEST_ERROR, "importer", "HARVEST_ERROR" );
 			}
 			else{
+				$log = $slogTitle . $log;
 				$log .= "IMPORT COMPLETED" . NL;
 				$log .= "====================" . NL;
-				$log .= $this->importer->getMessages();
-				$data_source->append_log($slogTitle.$log.NL,  HARVEST_INFO, "importer", "HARVESTER_INFO" );
+				$log .= $this->importer->getMessages() . NL;
+				$data_source->append_log($log,  HARVEST_INFO, "importer", "HARVESTER_INFO" );
 			}
 
 
