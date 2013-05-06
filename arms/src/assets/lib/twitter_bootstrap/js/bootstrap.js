@@ -1970,6 +1970,8 @@
           break
 
         case 9: // tab
+          this.hide()
+          break
         case 13: // enter
           if (!this.shown) return
           this.select()
