@@ -186,9 +186,9 @@ function processRelatedObjects()
              var maxRelated = 0
              var showRelated = 0;
              var moreToShow = '';
-            if(data.connections.length>10)
+            if(data.connections.length>20)
             {
-                maxRelated = 10;
+                maxRelated = 20;
  
             }else{
                  maxRelated = data.connections.length;

@@ -250,7 +250,7 @@ class Registry_object extends MX_Controller {
 		$ro = $this->ro->getByID($registry_object_id);
 
 		//if the key has changed
-		if($ro->registry_object_key != $this->input->post('key')){
+		if($ro->key != $this->input->post('key')){
 			$ro = $this->ro->getAllByKey($this->input->post('key'));
 			$ro = $ro[0];
 		} 

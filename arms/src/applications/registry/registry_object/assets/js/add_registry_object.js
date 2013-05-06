@@ -510,6 +510,7 @@ function initEditForm(){
 	$('#save').off().on({
 		click: function(e){
 			e.preventDefault();
+			disableNavigationConfirmation();
 
 			if(editor=='tinymce') tinyMCE.triggerSave();//so that we can get the tinymce textarea.value without using tinymce.getContents
 			var allTabs = $('.pane');
@@ -564,7 +565,8 @@ function initEditForm(){
 					if(data.status=='success')
 					{
 						//check key changes
-						if(ro_id!==data.ro_id){
+						if($('#ro_id').val() != data.ro_id){
+							alert($('#ro_id').val() + " vs "+ data.ro_id)
 							window.location = base_url+'registry_object/edit/'+data.ro_id+'#!/advanced/qa';
 						}else{
 							validate();
@@ -592,6 +594,7 @@ function initEditForm(){
 					}
 
 					$('#advanced-menu li a[href=#qa]').trigger('click', {onlyShow: true});
+					enableNavigationConfirmation();
 				},
 				error: function(data){
 					data = $.parseJSON(data.responseText);

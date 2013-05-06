@@ -897,7 +897,7 @@
 	<xsl:template name="ExistenceDatesTab">
 		<div id="existencedates" class="pane">
 			<fieldset>
-				<legend>Existence dates <sup><a class="muted" href="http://ands.org.au/guides/cpguide/datestab.html" target="_blank" title="View Content Providers' Guide">?</a></sup></legend>
+				<legend>Existence Dates <sup><a class="muted" href="http://www.ands.org.au/guides/cpguide/cpgexistencedates.html" target="_blank" title="View Content Providers' Guide">?</a></sup></legend>
 				<xsl:apply-templates select="ro:activity/ro:existenceDates | ro:party/ro:existenceDates  | ro:service/ro:existenceDates"/>
 				<div class="separate_line"/>
 				<button class="btn btn-primary addNew" type="existenceDates" add_new_type="existenceDates">

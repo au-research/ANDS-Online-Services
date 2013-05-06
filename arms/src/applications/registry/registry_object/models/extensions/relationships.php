@@ -127,7 +127,7 @@ class Relationships_Extension extends ExtensionBase
 		{
 			$classes[] = "Collection";
 		}
-		if (isset($connections['party']) || isset($connections['party_one']) || isset($connections['party_multi']))
+		if (isset($connections['party']) || isset($connections['party_one']) || isset($connections['party_multi']) || isset($connections['contributor']))
 		{
 			$classes[] = "Party";
 		}
