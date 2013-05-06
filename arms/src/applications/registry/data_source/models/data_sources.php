@@ -91,7 +91,7 @@ class Data_sources extends CI_Model {
 	 * @param the data source ID
 	 * @return _data_source object or NULL
 	 */
-	function getOwnedDataSources()
+	function getOwnedDataSources($just_id = false)
 	{
 		$data_sources = array();
 		$affiliations = $this->user->affiliations();
@@ -114,7 +114,12 @@ class Data_sources extends CI_Model {
 			{				
 				foreach($query->result_array() AS $ds)
 				{
-					$data_sources[] =  new _data_source($ds['data_source_id']);
+					if($just_id){
+						$data_sources[] = $ds['data_source_id'];
+					}else{
+						$data_sources[] =  new _data_source($ds['data_source_id']);
+					}
+					
 				}
 			}
 		}

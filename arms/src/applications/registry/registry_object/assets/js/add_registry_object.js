@@ -828,7 +828,7 @@ function initVocabWidgets(container){
 		var widget = elem.vocab_widget({mode:'advanced'});
 		var vocab = _getVocab(elem.attr('vocab'));
 		elem.on('narrow.vocab.ands', function(event, data) {	
-		var dataArray = Array();
+			var dataArray = Array();
 			if(vocab == 'RIFCSSubjectType')
 			{				
 				$.each(data.items, function(idx, e) {
@@ -840,14 +840,23 @@ function initVocabWidgets(container){
 				});
 				
 				initSubjectWidget(elem);
-			}	
+				elem.typeahead({source:dataArray});
+			}
+			else if(vocab == 'GroupSuggestor')
+			{
+				$.getJSON(base_url+'registry_object/getGroupSuggestor', function(data){
+					elem.removeClass('rifcs-type-loading');
+					elem.typeahead({source:data});
+				});
+			}
 			else
 			{
 				$.each(data.items, function(idx, e) {
 					dataArray.push({value:e.label, subtext:e.definition});
 				});
+				elem.typeahead({source:dataArray});
 			}
-			elem.typeahead({source:dataArray});
+			
 		});
 
 		elem.on('error.vocab.ands', function(event, xhr) {
@@ -1447,7 +1456,6 @@ function updateHelpLink()
 {
 	// Update the help link
 	var tab_help_link = $("sup a.muted", $('#'+active_tab)).first().attr("href");
-	console.log(tab_help_link);
 	if (tab_help_link)
 	{
 		$('#aro_help_link').attr("href", tab_help_link);

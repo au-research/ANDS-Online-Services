@@ -402,7 +402,7 @@
 						<sup><a class="muted" href="http://www.ands.org.au/guides/cpguide/cpggroup.html" target="_blank" title="View Content Providers' Guide">?</a></sup>
 					</label>
 					<div class="controls">
-						<input type="text" class="input-xlarge" name="group" value="{@group}"/>
+						<input type="text" class="rifcs-type rifcs-type-loading" vocab="GroupSuggestor" name="group" value="{@group}"/>
 					</div>
 				</div>
 

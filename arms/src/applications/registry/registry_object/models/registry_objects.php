@@ -518,6 +518,13 @@ class Registry_objects extends CI_Model {
 					       })),$make_ro, $limit, $offset);
 	}
 
+	function getGroupSuggestor($data_source_ids){
+		$CI =& get_instance();
+		$result = $CI->db->select('distinct(value)')->from('registry_object_attributes ra')->where('attribute', 'group');
+		$result->join('registry_objects r','ra.registry_object_id = r.registry_object_id')->where_in('data_source_id', $data_source_ids);
+		return $result->get();
+	}
+
 	/**
 	 * Get a number of registry_objects that match the class requirement (or an empty array)
 	 *

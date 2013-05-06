@@ -346,6 +346,24 @@ class Registry_object extends MX_Controller {
 		echo json_encode($jsonData);
 	}
 
+	public function getGroupSuggestor(){
+		header('Cache-Control: no-cache, must-revalidate');
+		header('Content-type: application/json');
+		set_exception_handler('json_exception_handler');
+		$jsonData = array();
+
+		$this->load->model("data_source/data_sources","ds");
+	 	$dataSources = $this->ds->getOwnedDataSources(true);
+
+	 	$this->load->model("registry_objects","ro");
+	 	$groups = $this->ro->getGroupSuggestor($dataSources);
+	 	foreach($groups->result() as $g){
+	 		$jsonData[] = array('value'=>$g->value, 'subtext'=>'');
+	 	}
+
+		echo json_encode($jsonData);
+	}
+
 	public function manage_table($data_source_id = false){
 		acl_enforce('REGISTRY_USER');
 		ds_acl_enforce($data_source_id);
