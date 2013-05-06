@@ -17,16 +17,32 @@
       <div class="offset1 span10">
         <h2 class="alert alert-success">The actual demonstrator</h2>
 	<form class="form form-horizontal">
-	  <div class="control-group">
-	    <div class="controls">
-	      <div id="datetime" class="input-append date">
-		<input type="text" value="2013-05-25T16:17:19Z" />
-		<span class="add-on">
-		  <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
-		</span>
+	  <fieldset>
+	    <legend>Predefined datetime of '2013-05-25T16:17:19Z'</legend>
+	    <div class="control-group">
+	      <div class="controls">
+		<div id="datetime" class="input-append date">
+		  <input type="text" value="2013-05-25T16:17:19Z" />
+		  <span class="add-on">
+		    <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
+		  </span>
+		</div>
 	      </div>
-	    </div>
 	  </div>
+	  </fieldset>
+	  <fieldset>
+	    <legend>No predefined value (defaults to today and now)</legend>
+	    <div class="control-group">
+	      <div class="controls">
+		<div id="datetimenow" class="input-append date">
+		  <input type="text"  />
+		  <span class="add-on">
+		    <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
+		  </span>
+		</div>
+	      </div>
+	  </div>
+	  </fieldset>
 	</form>
 	<!--
 	<h2 class="alert">The boring details</h2>
@@ -78,7 +94,8 @@ $("#rosearch").on('selected.rosearch.ands', function(event, registry_object) { .
     <script type="text/javascript">
       var picker;
       $(document).ready(function() {
-        picker = $("#datetime").datetimepicker();
+        $("#datetime").datetimepicker();
+	$("#datetimenow").datetimepicker();
       });
     </script>
       </div>
