@@ -482,7 +482,7 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
     notifyChange: function() {
       this.validate();
       this.$element.trigger('change.datepicker.ands',
-			    {utc: this._walltime.utc,
+			    {utc: this._walltime.utc.toISOString(),
 			     tz: this._timezone});
     },
 
@@ -508,7 +508,7 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
       }
       valid = valid && (nd.toString() !== 'Invalid Date');
       this.$element.trigger('valid.datepicker.ands',
-			    {valid: valid});
+			    valid);
     },
 
     // this retrieves the value of the text box
@@ -1015,8 +1015,8 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
       this._detachDatePickerEvents();
       this._detachDatePickerGlobalEvents();
       this.widget.remove();
-      this.$element.removeData('datetimepicker');
-      this.component.removeData('datetimepicker');
+      this.$element.removeData('ands_datetimepicker');
+      this.component.removeData('ands_datetimepicker');
     },
 
     _attachDatePickerEvents: function() {
@@ -1070,10 +1070,10 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
 
     _attachDatePickerGlobalEvents: function() {
       $(window).on(
-        'resize.datetimepicker' + this.id, $.proxy(this.place, this));
+        'resize.ands_datetimepicker' + this.id, $.proxy(this.place, this));
       if (!this.isInput) {
         $(document).on(
-          'mousedown.datetimepicker' + this.id, $.proxy(this.hide, this));
+          'mousedown.ands_datetimepicker' + this.id, $.proxy(this.hide, this));
       }
     },
 
@@ -1109,9 +1109,9 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
     },
 
     _detachDatePickerGlobalEvents: function () {
-      $(window).off('resize.datetimepicker' + this.id);
+      $(window).off('resize.ands_datetimepicker' + this.id);
       if (!this.isInput) {
-        $(document).off('mousedown.datetimepicker' + this.id);
+        $(document).off('mousedown.ands_datetimepicker' + this.id);
       }
     },
 
@@ -1132,31 +1132,31 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
     }
   };
 
-  $.fn.datetimepicker = function ( option, val ) {
+  $.fn.ands_datetimepicker = function ( option, val ) {
     return this.each(function () {
       var $this = $(this),
-      data = $this.data('datetimepicker'),
+      data = $this.data('ands_datetimepicker'),
       options = typeof option === 'object' && option;
       if (!data) {
-        $this.data('datetimepicker',
+        $this.data('ands_datetimepicker',
 		   (data = new DateTimePicker(
 		     this,
 		     $.extend({},
-			      $.fn.datetimepicker.defaults,
+			      $.fn.ands_datetimepicker.defaults,
 			      options))));
       }
       if (typeof option === 'string') data[option](val);
     });
   };
 
-  $.fn.datetimepicker.defaults = {
+  $.fn.ands_datetimepicker.defaults = {
     maskInput: false,
     collapse: true
   };
-  $.fn.datetimepicker.Constructor = DateTimePicker;
+  $.fn.ands_datetimepicker.Constructor = DateTimePicker;
 
   var dpgId = 0;
-  var dates = $.fn.datetimepicker.dates = {
+  var dates = $.fn.ands_datetimepicker.dates = {
     en: {
       days: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday",
              "Friday", "Saturday", "Sunday"],
