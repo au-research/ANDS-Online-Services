@@ -25,21 +25,26 @@ class Mydois extends MX_Controller {
 
 		if($this->user->loggedIn())
 		{
-			$cosi_db = $this->load->database('cosi', TRUE);
-			$cosi_db->distinct()->select('parent_role_id')
-					->where_in('child_role_id', $this->user->affiliations())
-					->where('role_type_id', 'ROLE_DOI_APPID      ', 'after')
-					->join('dba.tbl_roles', 'role_id = parent_role_id')
-					->from('dba.tbl_role_relations');
-			$query = $cosi_db->get();
 
-			if ($query->num_rows() > 0)
+			if (count($this->user->affiliations()))
 			{
-				foreach ($query->result() AS $result)
+				$cosi_db = $this->load->database('cosi', TRUE);
+				$cosi_db->distinct()->select('parent_role_id')
+						->where_in('child_role_id', $this->user->affiliations())
+						->where('role_type_id', 'ROLE_DOI_APPID      ', 'after')
+						->join('dba.tbl_roles', 'role_id = parent_role_id')
+						->from('dba.tbl_role_relations');
+				$query = $cosi_db->get();
+
+				if ($query->num_rows() > 0)
 				{
-					$data['associated_app_ids'][] = $result->parent_role_id;
+					foreach ($query->result() AS $result)
+					{
+						$data['associated_app_ids'][] = $result->parent_role_id;
+					}
 				}
 			}
+			
 			$this->load->view('input_app_id', $data);
 		}else{
 			$this->load->view('login_required', $data);

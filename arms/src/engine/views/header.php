@@ -141,7 +141,7 @@
                   <li class=""><?php echo anchor('location_capture_widget/', 'Location Capture Widget');?></li>
                   <li class=""><?php echo anchor('vocab_widget/', 'Vocabulary Service Widget');?></li>
                 <?php endif; ?>
-              <?php if ($this->user->hasFunction('SPOTLIGHT_CMS_EDITOR')): ?>
+              <?php if ($this->user->hasFunction('PORTAL_STAFF')): ?>
                   <li class=""><?php echo anchor('spotlight/', 'Spotlight CMS Editor');?></li>
               <?php endif; ?>
             </ul>

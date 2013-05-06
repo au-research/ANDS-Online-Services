@@ -46,7 +46,16 @@ $(function(){
 				$('#advanced-menu a[href=#'+active_tab+']').parent().addClass('active');
 
 				// Prevent accidentally exiting the form and toggle navigation buttons
-				(active_tab == 'qa' ? (disableNavigationConfirmation() && disableTabNavigation()) : (enableTabNavigation() && enableNavigationConfirmation()));
+				if (active_tab == 'qa')
+				{
+					window.onbeforeunload=null;
+					disableTabNavigation();
+				}
+				else
+				{
+					enableTabNavigation();
+					enableNavigationConfirmation();
+				}
 				
 			}
 			else if(aro_mode==SIMPLE_MODE){
@@ -510,7 +519,7 @@ function initEditForm(){
 	$('#save').off().on({
 		click: function(e){
 			e.preventDefault();
-			disableNavigationConfirmation();
+			window.onbeforeunload=null;
 
 			if(editor=='tinymce') tinyMCE.triggerSave();//so that we can get the tinymce textarea.value without using tinymce.getContents
 			var allTabs = $('.pane');
@@ -594,7 +603,6 @@ function initEditForm(){
 					}
 
 					$('#advanced-menu li a[href=#qa]').trigger('click', {onlyShow: true});
-					enableNavigationConfirmation();
 				},
 				error: function(data){
 					data = $.parseJSON(data.responseText);
