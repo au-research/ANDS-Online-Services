@@ -245,28 +245,35 @@ class Registry_object extends MX_Controller {
 		//	throw new Exception("Errors during saving this registry object! " . BR . implode($error_log, BR));
 		//}
 		//else{
-			// Fetch updated registry object!
-			$ro = $this->ro->getByID($registry_object_id);
+		// Fetch updated registry object!
+		// $ro = $this->ro->getByID($registry_object_id);
+		$ro = $this->ro->getByID($registry_object_id);
 
-			$qa = $ds->qa_flag=='t' ? true : false;
-			$manual_publish = ($ds->manual_publish=='t' || $ds->manual_publish==DB_TRUE) ? true: false;
+		//if the key has changed
+		if($ro->registry_object_key != $this->input->post('key')){
+			$ro = $this->ro->getAllByKey($this->input->post('key'));
+			$ro = $ro[0];
+		} 
 
-			$result = 
-				array(
-					"status"=>$status,
-					"ro_status"=>"DRAFT",
-					"title"=>$ro->title,
-					"qa_required"=>$qa,
-					"data_source_id" => $ro->data_source_id,
-					"approve_required"=>$manual_publish,
-					"error_count"=> (int) $ro->error_count,
-					"ro_id"=>$ro->id,
-					"ro_quality_level"=>$ro->quality_level,
-					"ro_quality_class"=>($ro->quality_level >= 2 ? "success" : "important"),
-					"qa_$ro->quality_level"=>true,
-					"message"=>$error_log,
-					"qa"=>$ro->get_quality_text()
-					);
+		$qa = $ds->qa_flag=='t' ? true : false;
+		$manual_publish = ($ds->manual_publish=='t' || $ds->manual_publish==DB_TRUE) ? true: false;
+
+		$result = 
+			array(
+				"status"=>$status,
+				"ro_status"=>"DRAFT",
+				"title"=>$ro->title,
+				"qa_required"=>$qa,
+				"data_source_id" => $ro->data_source_id,
+				"approve_required"=>$manual_publish,
+				"error_count"=> (int) $ro->error_count,
+				"ro_id"=>$ro->id,
+				"ro_quality_level"=>$ro->quality_level,
+				"ro_quality_class"=>($ro->quality_level >= 2 ? "success" : "important"),
+				"qa_$ro->quality_level"=>true,
+				"message"=>$error_log,
+				"qa"=>$ro->get_quality_text()
+				);
 			//if($qa) $result['qa'] = true;
 			echo json_encode($result);
 		//}

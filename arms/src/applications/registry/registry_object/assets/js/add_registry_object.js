@@ -549,28 +549,34 @@ function initEditForm(){
 
 			//saving
 			//log(xml);
+			var ro_key = $('#admin input[name=key]').val();
 			$.ajax({
 				url:base_url+'registry_object/save/'+ro_id, 
 				type: 'POST',
-				data: {xml:xml},
+				data: {xml:xml,key:ro_key},
 				success: function(data){
 					if(data.status=='success')
 					{
-						validate();
+						//check key changes
+						if(ro_id!==data.ro_id){
+							window.location = base_url+'registry_object/edit/'+data.ro_id+'#!/advanced/qa';
+						}else{
+							validate();
 
-						// Generate the action button bar based on result data
-						var action_bar = generateActionBar(data);
-						if (action_bar)
-						{
-							data['action_bar'] = action_bar;
+							// Generate the action button bar based on result data
+							var action_bar = generateActionBar(data);
+							if (action_bar)
+							{
+								data['action_bar'] = action_bar;
+							}
+
+							var template = $('#save-record-template').html();
+							var output = Mustache.render(template, data);
+							//console.log($('.record_title'));
+							//$('.record_title').html(data.title);
+							$('#response_result').html(output);
+							formatQA($('#response_result .qa'));
 						}
-
-						var template = $('#save-record-template').html();
-						var output = Mustache.render(template, data);
-						//console.log($('.record_title'));
-						//$('.record_title').html(data.title);
-						$('#response_result').html(output);
-						formatQA($('#response_result .qa'));
 					}
 					else
 					{
