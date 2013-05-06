@@ -414,14 +414,10 @@
 					</label>
 					<div class="controls">
 						<div class="input-append">
-							<input type="text" class="input-large datepicker" name="date_modified"
-								value="{$dateModified}"/>
-							<button class="btn triggerDatePicker adminDatePicker" type="button">
-								<i class="icon-calendar"/>
-							</button>
-							<p class="help-inline">
-								<small/>
-							</p>
+							<input type="text" class="input-large ands_datepicker" name="date_modified" value="{$dateModified}"/>
+							<span class="add-on">
+						      <i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar"></i>
+						    </span>
 						</div>
 					</div>
 				</div>
@@ -434,14 +430,11 @@
 						</label>
 						<div class="controls">
 							<div class="input-append">
-								<input type="text" class="input-large datepicker" name="date_accessioned"
+								<input type="text" class="input-large ands_datepicker" name="date_accessioned"
 									value="{ro:collection/@dateAccessioned}"/>
-								<button class="btn triggerDatePicker adminDatePicker" type="button">
-									<i class="icon-calendar"/>
-								</button>
-								<p class="help-inline">
-									<small/>
-								</p>
+								<span class="add-on">
+							      <i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar"></i>
+							    </span>
 							</div>
 						</div>
 					</div>

@@ -78,6 +78,10 @@
             <script type="text/javascript" src="<?php echo base_url();?>assets/lib/bootstrap_datepicker/js/bootstrap-datepicker.js"></script>
             <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/lib/bootstrap_datepicker/css/datepicker.css" />
 
+        <?php elseif($lib=='ands_datepicker'):?>
+            <script type="text/javascript" src="<?php echo base_url();?>assets/datepicker_tz_widget/js/ands_datetimepicker.js"></script>
+            <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/datepicker_tz_widget/css/ands_datetimepicker.css" />
+
         <?php elseif($lib=='prettyprint'):?>
             <script type="text/javascript" src="<?php echo base_url();?>assets/lib/prettyprint/pretty.js"></script>
             <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/lib/prettyprint/pretty.css" />

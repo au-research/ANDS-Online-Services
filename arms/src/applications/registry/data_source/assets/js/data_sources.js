@@ -1080,9 +1080,7 @@ function load_datasource_edit(data_source_id, active_tab){
 
 
 			//initalize the datepicker, format is optional
-			$('#edit-datasource  .datepicker').datepicker({
-				format: 'yyyy-mm-dd'
-			});
+			$('#edit-datasource  .datepicker').parent().ands_datetimepicker();
 			//triggering the datepicker by focusing on it
 			$('.triggerDatePicker').die().live({
 				click: function(e){

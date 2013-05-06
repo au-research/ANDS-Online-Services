@@ -1204,7 +1204,9 @@
 							<div class="controls">																					
 								<div class="input-append">						
 									<input type="text" class="input-xlarge datepicker" name="harvest_date" value="{{harvest_date}}"/>
-									<button class="triggerDatePicker" type="button"><i class="icon-calendar"></i></button>								
+									<span class="add-on">
+								      <i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar"></i>
+								    </span>								
 								</div>
 							</div>
 						</div>

@@ -459,9 +459,7 @@ function initEditForm(){
 		}
 		if(what=='dates_date' || what=='dates' || what=='date' || what == 'location'){
 			//initalize the datepicker, format is optional
-			$('input.datepicker').datepicker({
-				format: 'yyyy-mm-dd'
-			});
+			$('input.ands_datepicker').parent().ands_datetimepicker();
 			
 			//triggering the datepicker by focusing on it
 			$('.triggerDatePicker').die().live({
@@ -638,9 +636,7 @@ function initEditForm(){
 	});
 
 	//initalize the datepicker, format is optional
-	$('input.datepicker').datepicker({
-		format: 'yyyy-mm-dd'
-	});
+	$('input.ands_datepicker').parent().ands_datetimepicker();
 
 	//triggering the datepicker by focusing on it
 	$('.triggerDatePicker').die().live({
