@@ -716,6 +716,7 @@
 							<button class="btn btn-primary addNew" type="contributor" add_new_type="contributor">
 								<i class="icon-plus icon-white"></i> Add Contributor
 							</button>
+							<hr/>
 						</div>
 					</div>
 				</div>
@@ -1766,6 +1767,11 @@
 			<div class="controls">
 				<button class="btn btn-primary addNew" type="namePart" add_new_type="namePart"><i class="icon-plus icon-white"/> Add Name Part </button>
 				<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/> Remove this contributor</button>
+				<hr/>
+			</div>
+			<div class="controls">
+				<div class="separate_line"/>
+				<button class="btn btn-primary addNew" type="contributor" add_new_type="contributor"><i class="icon-plus icon-white"/> Add Contributor </button>
 			</div>
 			<hr/>
 		</div>
