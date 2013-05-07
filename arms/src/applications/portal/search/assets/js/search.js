@@ -177,7 +177,6 @@ function executeSearch(searchData, searchUrl){
 					//log(this.list_title + " (" + Math.floor(this.score * 100000)  + ")");
 				 	if(typeof(this.spatial_coverage_polygons) !== 'undefined'){
 					    resultPolygons.push([this.id,
-								 this.display_title,
 								 this.spatial_coverage_polygons[0],
 								 this.spatial_coverage_centres[0]]);
 				 	}
@@ -523,14 +522,16 @@ function getTopLevelFacet(){
 }
 
 function postSearch(){
-	$('.sidebar ul').each(function(){
-		if($('li', this).length>5){
-			$('li:gt(4)', this).hide();
-			$(this).append('<li><a href="javascript:;" class="show-all-facet">Show More...</a></li>');
-			$('.show-all-facet').click(function(){
-				$(this).parent().siblings().show();
-				$(this).parent().remove();
-			});
+    $('.sidebar ul').each(function(idx, facet){
+
+		if($('li', facet).length>5){
+		    var $facet = $(facet);
+		    $('li:gt(4)', facet).hide();
+		    $facet.append('<li><a href="javascript:;" class="show-all-facet">Show More...</a></li>');
+		    $('.show-all-facet').click(function(){
+			$facet.parent().siblings().show();
+			$facet.parent().remove();
+		    });
 		}
 	});
 
@@ -752,22 +753,21 @@ function initMap(){
 function processPolygons(){
     $.each(resultPolygons, function(idx, elem) {
 	id = elem[0];
-	title = elem[1];
-	polygons = elem[2];
-	centers = elem[3];
+	polygons = elem[1];
+	centers = elem[2];
 	// log(id);
-	createResultPolygonWithMarker(polygons, centers, title, id);
+	createResultPolygonWithMarker(polygons, centers, id);
     });
 }
 
-function createResultPolygonWithMarker(polygons, centers, title, id)
+function createResultPolygonWithMarker(polygons, centers, id)
 {
 
 	//var coords = getCoordsFromInputField(polygons);
 	var centerCoords = getPointFromString(centers);
 	var coords = getCoordsFromString(polygons);
-	createMarker(centerCoords, id);
-    createPolygon(coords, id);
+        createMarker(centerCoords, id);
+        createPolygon(coords, id);
 }
 
 function getCoordsFromString(lonLatStr)
@@ -802,10 +802,10 @@ function getPointFromString(lonLatStr)
 
 function createPolygon(coords, id)
 {
-
+    if (typeof(polygonsDict[id]) === 'undefined') {
 	polygon = new google.maps.Polygon({
 			    paths: coords,
-			    map : map,
+			    map : null,
 			    strokeColor: '#008dce',
 			    strokeOpacity: 0.7,
 			    strokeWeight: 2,
@@ -813,9 +813,8 @@ function createPolygon(coords, id)
 			    fillOpacity: 0.2,
 			    editable : false
 			  });
-	polygon.setMap(null);
 	polygonsDict[id] = polygon;
-
+    }
 }
 
 function createMarker(latlng, id)
