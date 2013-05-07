@@ -336,7 +336,7 @@
 		<!-- Record Admin-->
 		<div id="admin" class="pane">
 			<fieldset>
-				<legend>Record Administration  <sup><a class="muted" href="http://ands.org.au/guides/cpguide/recordadmintab.html" target="_blank" title="View Content Providers' Guide">?</a></sup></legend>
+				<legend>Record Administration  <sup><a class="muted" href=" http://ands.org.au/guides/cpguide/" target="_blank" title="View Content Providers' Guide">?</a></sup></legend>
 				<xsl:variable name="ro_type">
 					<xsl:apply-templates select="ro:collection/@type | ro:activity/@type | ro:party/@type  | ro:service/@type"/>
 				</xsl:variable>
@@ -455,7 +455,7 @@
 	<xsl:template name="namesTab">
 		<div id="names" class="pane">
 			<fieldset>
-				<legend>Names <sup><a class="muted" href="http://ands.org.au/guides/cpguide/nametitletab.html" target="_blank" title="View Content Providers' Guide">?</a></sup></legend>
+				<legend>Names <sup><a class="muted" href="http://www.ands.org.au/guides/cpguide/cpgname.html" target="_blank" title="View Content Providers' Guide">?</a></sup></legend>
 
 				<xsl:apply-templates
 					select="ro:collection/ro:name | ro:activity/ro:name | ro:party/ro:name  | ro:service/ro:name"/>
@@ -575,7 +575,7 @@
 	<xsl:template name="descriptionRightsTab">
 		<div id="descriptions_rights" class="pane">
 			<fieldset>
-				<legend>Descriptions  <sup><a class="muted" href="http://ands.org.au/guides/cpguide/descriptiontab.html" target="_blank" title="View Content Providers' Guide">?</a></sup> / Rights <sup><a class="muted" href="http://ands.org.au/guides/cpguide/rightstab.html" target="_blank" title="View Content Providers' Guide">?</a></sup></legend>
+				<legend>Descriptions  <sup><a class="muted" href="http://www.ands.org.au/guides/cpguide/cpgdescription.html" target="_blank" title="View Content Providers' Guide">?</a></sup> / Rights <sup><a class="muted" href="http://www.ands.org.au/guides/cpguide/cpgrights.html" target="_blank" title="View Content Providers' Guide">?</a></sup></legend>
 				<xsl:apply-templates
 					select="ro:collection/ro:description | ro:activity/ro:description | ro:party/ro:description  | ro:service/ro:description"/>
 				<xsl:apply-templates
@@ -607,7 +607,7 @@
 	<xsl:template name="citationInfoTab">
 		<div id="citationInfos" class="pane">
 			<fieldset>
-				<legend>Citation Information <sup><a class="muted" href="http://ands.org.au/guides/cpguide/citationtab.html" target="_blank" title="View Content Providers' Guide">?</a></sup></legend>
+				<legend>Citation Information <sup><a class="muted" href="http://www.ands.org.au/guides/cpguide/cpgcitation.html" target="_blank" title="View Content Providers' Guide">?</a></sup></legend>
 				<xsl:apply-templates select="ro:collection/ro:citationInfo"/>
 				<div class="separate_line"/>
 				<div class="btn-group">
@@ -813,7 +813,7 @@
 	<xsl:template name="subjectsTab">
 		<div id="subjects" class="pane">
 			<fieldset>
-				<legend>Subjects <sup><a class="muted" href="http://ands.org.au/guides/cpguide/subjecttab.html" target="_blank" title="View Content Providers' Guide">?</a></sup></legend>
+				<legend>Subjects <sup><a class="muted" href="http://www.ands.org.au/guides/cpguide/cpgsubject.html" target="_blank" title="View Content Providers' Guide">?</a></sup></legend>
 				<xsl:apply-templates
 					select="ro:collection/ro:subject | ro:activity/ro:subject | ro:party/ro:subject  | ro:service/ro:subject"/>
 				<div class="separate_line"/>
@@ -828,7 +828,7 @@
 	<xsl:template name="identifiersTab">
 		<div id="identifiers" class="pane">
 			<fieldset>
-				<legend>Identifiers <sup><a class="muted" href="http://ands.org.au/guides/cpguide/identifierstab.html" target="_blank" title="View Content Providers' Guide">?</a></sup></legend>
+				<legend>Identifiers <sup><a class="muted" href="http://www.ands.org.au/guides/cpguide/cpgidentifiers.html" target="_blank" title="View Content Providers' Guide">?</a></sup></legend>
 				<xsl:apply-templates
 					select="ro:collection/ro:identifier | ro:activity/ro:identifier | ro:party/ro:identifier  | ro:service/ro:identifier"/>
 				<div class="separate_line"/>
@@ -842,7 +842,7 @@
 	<xsl:template name="relatedObjectsTab">
 		<div id="relatedObjects" class="pane">
 			<fieldset>
-				<legend>Related Objects <sup><a class="muted" href="http://ands.org.au/guides/cpguide/relationstab.html" target="_blank" title="View Content Providers' Guide">?</a></sup></legend>
+				<legend>Related Objects <sup><a class="muted" href="http://www.ands.org.au/guides/cpguide/cpgrelatedobject.html" target="_blank" title="View Content Providers' Guide">?</a></sup></legend>
 				<xsl:apply-templates
 					select="ro:collection/ro:relatedObject | ro:activity/ro:relatedObject | ro:party/ro:relatedObject  | ro:service/ro:relatedObject"/>
 				<div class="separate_line"/>
@@ -856,7 +856,7 @@
 	<xsl:template name="relatedinfosTab">
 		<div id="relatedinfos" class="pane">
 			<fieldset>
-				<legend>Related Information <sup><a class="muted" href="http://ands.org.au/guides/cpguide/relatedinfotab.html" target="_blank" title="View Content Providers' Guide">?</a></sup></legend>
+				<legend>Related Information <sup><a class="muted" href="http://www.ands.org.au/guides/cpguide/cpgrelatedinfo.html" target="_blank" title="View Content Providers' Guide">?</a></sup></legend>
 				<xsl:apply-templates
 					select="ro:collection/ro:relatedInfo | ro:activity/ro:relatedInfo | ro:party/ro:relatedInfo | ro:service/ro:relatedInfo"/>
 				<div class="separate_line"/>
@@ -870,7 +870,7 @@
 	<xsl:template name="locationsTab">
 		<div id="locations" class="pane">
 			<fieldset>
-				<legend>Locations <sup><a class="muted" href="http://ands.org.au/guides/cpguide/locationtab.html" target="_blank" title="View Content Providers' Guide">?</a></sup></legend>
+				<legend>Locations <sup><a class="muted" href="http://www.ands.org.au/guides/cpguide/cpglocationintro.html" target="_blank" title="View Content Providers' Guide">?</a></sup></legend>
 				<xsl:apply-templates
 					select="ro:collection/ro:location | ro:activity/ro:location | ro:party/ro:location  | ro:service/ro:location"/>
 				<div class="separate_line"/>
@@ -884,7 +884,7 @@
 	<xsl:template name="coverageTab">
 		<div id="coverages" class="pane">
 			<fieldset>
-				<legend>Coverage <sup><a class="muted" href="http://ands.org.au/guides/cpguide/coveragetab.html" target="_blank" title="View Content Providers' Guide">?</a></sup></legend>
+				<legend>Coverage <sup><a class="muted" href="http://www.ands.org.au/guides/cpguide/cpgcoverage.html" target="_blank" title="View Content Providers' Guide">?</a></sup></legend>
 				<xsl:apply-templates
 				select="ro:collection/ro:coverage | ro:activity/ro:coverage | ro:party/ro:coverage | ro:service/ro:coverage"/>
 				<div class="aro_box" type="coverage">

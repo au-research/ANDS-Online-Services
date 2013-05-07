@@ -78,7 +78,10 @@ class NHMRC_Merged_File_to_RIFCS extends Crosswalk
             // Map the column headings to each field, to simplify lookup
             $row = $this->mapCSVHeadings($csv_values);
 
-            if (!isset($row['GRANT_ID'])) continue; //skip blank rows
+            if (!isset($row['GRANT_ID']) || !isset($row['DW_INDIVIDUAL_ID'])) 
+            {
+                continue; //skip blank rows
+            }
 
             // First time we are seeing this grant...
             if (!isset($grants[$row['GRANT_ID']]))
@@ -429,7 +432,7 @@ class NHMRC_Merged_File_to_RIFCS extends Crosswalk
         {
             foreach($payload AS $row)
             {
-                $response .= htmlentities($this->sputcsv($row));
+                $response .= $this->sputcsv($row);
             }
         }
         else
@@ -511,13 +514,11 @@ class NHMRC_Merged_File_to_RIFCS extends Crosswalk
         $valid = true; 
 
         // Memory hack...
-        $payload = preg_split( '/\r\n|\r|\n/', $payload );
+        $payload = preg_split( '/\R+/', trim($payload) );
         $ref =& $payload;
         // Bizarrely, PHP doesn't support multiline in getcsv :-/
         foreach($ref AS $idx => $line)
         {
-            if ($idx > 100) { continue; }
-
             $csv = str_getcsv($line);
             if (count($csv) > 0)
             {
