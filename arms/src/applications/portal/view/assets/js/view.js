@@ -293,6 +293,10 @@ $('a.next_accordion_query').on('click', function(e){
 /* view page */
 /*************/
 
+$('a.collectionNote').on('click', function(e) {
+  e.preventDefault();
+});
+
 function isPublished()
 {
     return ($('#status', metadataContainer).html() == "PUBLISHED");
@@ -505,7 +509,20 @@ function initConnectionGraph()
     			        clickFolderMode: 3, // 1:activate, 2:expand, 3:activate and expand
     			        imagePath: "/",
     			        debugLevel: 0
-    			    });	
+    			    });
+		$('#collectionStructureWrapper a.hide.collectionNote')
+		    .qtip({
+		      content:{
+			title: {
+			  text:'Browse nested collections'
+			},
+			text: $('#collectionStructureQtip')
+		      },
+		      style: {
+			classes: 'ui-tooltip-light ui-tooltip-shadow previewPopup',
+			width: 550
+		      }
+		    }).removeClass('hide');
                 $('#collectionStructureWrapper').show();
                 }
             }, 
