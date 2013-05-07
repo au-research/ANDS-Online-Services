@@ -62,6 +62,13 @@
 		</div><!-- inner -->
 
 		<div class="advanced_search">
+		        <div id="adv_note_content" class="hide">
+			  <p>Selecting "Collections", "Activities", "Services", or "Parties" from the drop-down box will restrict the search to records of this class.</p>
+			  <p>A search string within the field “All of these words”, will return records containing all words entered into this field.</p>
+			  <p>A search string within the field “One or more of these words”, will return records containing any of the entered words within this field.</p>
+			  <p>Words entered into any or all of the three adjacent fields, “But not these words”, will ensure that records containing these words will not be returned. These fields should be used in conjunction with the preceding fields “All of these words” and/or  “One or more of these words”.</p>
+			  <p>Selecting “Restrict Temporal Range” and defining a date range within the slider bar, will return records that only contain a temporal coverage within the specified range.</p>
+			</div>
 			<div class="ad_close"><a href="#">x</a></div>
 			<div class="adv_inner">
 				<form action="/" method="post">
@@ -73,7 +80,10 @@
 							<option value="service">Services</option>
 							<option value="all">All Records</option>
 						</select>
-					   that have:
+					   that have
+					   <a href="#" class="adv_note">
+					     <img src="<?php echo asset_url('images/question_mark.png', 'core');?>" style="position:relative;top:-8px;width:16px"/>
+					   </a>:
 					</p>
 					<div class="inputs">
 						<label for="words">All of these words:</label>

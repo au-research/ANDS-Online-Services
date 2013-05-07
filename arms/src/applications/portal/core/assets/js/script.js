@@ -71,6 +71,18 @@ $(document).ready(function() {
     	    delayOut:200
 	});
 
+        $('a.adv_note').qtip({
+          content: {
+	    title: 'Search notes',
+	    text: $('#adv_note_content')
+	  },
+          show: 'mouseover',
+          hide: 'mouseout',
+          style: {
+            classes: 'ui-tooltip-light ui-tooltip-shadow'
+          }
+	});
+
     	$(this).addClass('exped');
     	$('.advanced_search').slideDown();
     	$("#slider").editRangeSlider("valueLabels","hide");
@@ -82,9 +94,11 @@ $(document).ready(function() {
     	return false;
     });
 
-    $('.ad_close > a').live('click', function(e){ e.preventDefault(); $('#ad_st').click(); });
+    $('a.adv_note').on('click', function(e) { e.preventDefault(); });
 
-    $('#searchTrigger').live('click', function(){
+    $('.ad_close > a').on('click', function(e){ e.preventDefault(); $('#ad_st').click(); });
+
+    $('#searchTrigger').on('click', function(){
     	window.location = base_url+'search/#!/q='+encodeURIComponent($('#search_box').val());
     });
     $('#search_box').keypress(function(e){
