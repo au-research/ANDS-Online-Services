@@ -434,7 +434,8 @@ class _data_source {
 								//we need to email services that we have created this page	
 								$subject = $title." contributor page has been generated under datasource ".$this->title;
 								$message = '<a href="'.base_url().'registry_object/view/'.$contributorPage[0]->id.'">'.$registry_object_key .'</a>';
-								$to = 'services@ands.org.au';
+								// $to = 'services@ands.org.au';
+								$to = 'dekarvn@gmail.com';
 								//$to = 'liz.woods@ands.org.au';
 								$headers  = 'MIME-Version: 1.0' . "\r\n";
 								$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
@@ -448,7 +449,7 @@ class _data_source {
 								"group"=> (string)$group,
 								"registry_object_id"=>$registry_object_id,
 								"authorative_data_source_id" => $data_source_id
-								);
+							);
 							$insert = $this->db->insert('institutional_pages',$data);
 						}
 					}

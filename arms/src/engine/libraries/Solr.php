@@ -29,7 +29,7 @@ class Solr {
      */
     function init(){
     	$this->solr_url = $this->CI->config->item('solr_url');
-    	$this->options = array('q'=>'','start'=>'0','indent'=>'on', 'wt'=>'json', 'fl'=>'*', 'rows'=>'10');
+    	$this->options = array('q'=>'*:*','start'=>'0','indent'=>'on', 'wt'=>'json', 'fl'=>'*', 'rows'=>'10');
         $this->multi_valued_fields = array('facet.field', 'fq');
     	return true;
     }

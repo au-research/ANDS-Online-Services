@@ -38,7 +38,7 @@ class Search extends MX_Controller {
 		}
 				
 		$this->solr->setOpt('rows', $pp);
-		$this->solr->setOpt('defType', 'edismax');
+		// $this->solr->setOpt('defType', 'edismax');
 		$this->solr->setOpt('mm', '1');
 		$this->solr->setOpt('fl', '*, score');
 
@@ -89,15 +89,15 @@ class Search extends MX_Controller {
 						$filteredSearch = true;
 						break;
 					case 'class': 
-						if($value!='all') $this->solr->addQueryCondition('+class:("'.$value.'")');
+						if($value!='all'){
+							$this->solr->addQueryCondition('+class:("'.$value.'")');
+						}else{
+							$this->solr->addQueryCondition('*:*');
+						}
 						$filteredSearch = true;
 						break;
 					case 'group': 
 						$this->solr->addQueryCondition('+group:("'.$value.'")');
-						$filteredSearch = true;
-						break;
-					case 'class': 
-						$this->solr->addQueryCondition('+class:'.$value);
 						$filteredSearch = true;
 						break;
 					case 'type': 
