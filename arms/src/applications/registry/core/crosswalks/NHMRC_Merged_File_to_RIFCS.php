@@ -65,20 +65,19 @@ class NHMRC_Merged_File_to_RIFCS extends Crosswalk
         // At least *try* and care about our memory management...
         unset($payload);
         $log[] = "[CROSSWALK] Attempting to execute crosswalk " . $this->identify();
-        $log[] = count($this->parsed_array) . " rows in initial input data";
+        $log[] = (count($this->parsed_array) - 1) . " rows in initial input data";
 
         // First line has the column headings
         $this->csv_headings = array_shift($this->parsed_array);
-
         $grants = &$this->grants;
         $people = &$this->people;
 
         // Loop through each row, create an instance in the grants/people arrays
     	while($csv_values = array_shift($this->parsed_array))
         {
-
             // Map the column headings to each field, to simplify lookup
             $row = $this->mapCSVHeadings($csv_values);
+
             if (!isset($row['GRANT_ID'])) continue; //skip blank rows
 
             // First time we are seeing this grant...
@@ -104,15 +103,15 @@ class NHMRC_Merged_File_to_RIFCS extends Crosswalk
         }
         $log[] = "[CROSSWALK] Setup mapping in-memory. " . count($this->grants) . " grants, " . count($this->people) . " people";
 
-        $this->renderParties();
-        $this->renderActivities();
+        $this->renderParties($log);
+        $this->renderActivities($log);
                     
     	return $this->returnChunks();
     }
 
 
 
-    private function renderActivities()
+    private function renderActivities(&$log)
     {
 
         foreach ($this->grants AS $activity)
@@ -223,11 +222,13 @@ class NHMRC_Merged_File_to_RIFCS extends Crosswalk
             $registryObject .=          '<identifier type="internal">'.$this->metadataFormat().'</identifier>' . NL;
             $registryObject .=          '<notes><![CDATA[' . NL;   
             // Create the native format (csv) with prepended the column headings, up to DW_INDIVIDUAL_ID
-            $native_values = array_slice($activity, 0, array_search('DW_INDIVIDUAL_ID', $activity));
+          
+            $native_values = $activity;
             foreach($native_values AS $key => &$val)
             {
-                if (is_array($val)) { foreach ($val AS $subkey => $value) { $native_values[$subkey] = $value; } unset($native_values[$key]); }
+                if (is_array($val)) { foreach ($val AS $subkey => $value) { if (!is_integer($subkey)) { $native_values[$subkey] = $value; } } unset($native_values[$key]); }
             }
+
             $registryObject .=              $this->wrapNativeFormat(array($this->csv_headings, $native_values)) . NL;
             $registryObject .=          ']]></notes>' . NL;
             $registryObject .=      '</relatedInfo>' . NL;
@@ -240,7 +241,7 @@ class NHMRC_Merged_File_to_RIFCS extends Crosswalk
 
 
 
-    private function renderParties()
+    private function renderParties(&$log)
     {
         foreach ($this->people AS $party)
         {
@@ -383,7 +384,7 @@ class NHMRC_Merged_File_to_RIFCS extends Crosswalk
         foreach($csv_values AS $idx => $csv_value)
         {
             $csv_value = htmlentities($csv_value);
-            $heading = (isset($this->csv_headings[$idx]) ?: 'NO_HEADING');
+            $heading = (isset($this->csv_headings[$idx]) ? $this->csv_headings[$idx] : 'NO_HEADING');
             if (strpos($heading, 'YR_') === 0)
             {
                 $year_array[$heading] = $csv_value;
@@ -515,6 +516,8 @@ class NHMRC_Merged_File_to_RIFCS extends Crosswalk
         // Bizarrely, PHP doesn't support multiline in getcsv :-/
         foreach($ref AS $idx => $line)
         {
+            if ($idx > 100) { continue; }
+
             $csv = str_getcsv($line);
             if (count($csv) > 0)
             {
