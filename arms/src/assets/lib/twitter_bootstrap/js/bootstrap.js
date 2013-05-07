@@ -2043,6 +2043,7 @@
   , focus: function(e){
       e.stopPropagation()
       e.preventDefault()
+      $('.typeahead').hide()
       this.lookup(true)
       return false
   }
