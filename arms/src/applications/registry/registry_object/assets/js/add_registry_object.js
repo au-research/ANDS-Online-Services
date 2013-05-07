@@ -579,7 +579,7 @@ function initEditForm(){
 				// });
 
 				//saving
-				//log(xml);
+				log(xml);
 				var ro_key = $('#admin input[name=key]').val();
 				$.ajax({
 					url:base_url+'registry_object/save/'+ro_id, 
@@ -775,32 +775,32 @@ function validate(){
 
 
 function addValidationMessage(tt, type){
-	var name = tt.field_id;
+	var field_id = tt.field_id;
 	var message = tt.message;
     var message = $('<div />').html(message).text();
 
 
 	if(name.match("^tab_mandatoryInformation_")){
-		var tab = name.replace('tab_mandatoryInformation_','');
+		var tab = field_id.replace('tab_mandatoryInformation_','');
 		var field = $('#admin').find('*[name='+tab+']');
 		$(field).addClass('error');
 		$(field).parent().append('<div class="alert alert-'+type+'">'+message+'</div>');
 	}
-	else if(name.match("^tab_")){
-		var tab = name.replace('tab_','');
+	else if(field_id.match("^tab_")){
+		var tab = field_id.replace('tab_','');
 		$('#'+tab).prepend('<div class="alert alert-'+type+'">'+message+'</div>');
 	}
 	else{
 
 		if (typeof(tt.sub_field_id) !== 'undefined')
 		{		
-			var field = $('*[field_id='+name+']').find('*[name='+tt.sub_field_id+']');
+			var field = $('*[field_id='+field_id+']').find('*[name='+tt.sub_field_id+']');
 			if(field.length === 0)
-			field = $('*[field_id='+name+']').parent().find('*[name='+tt.sub_field_id+']');
+			field = $('*[field_id='+field_id+']').parent().find('*[name='+tt.sub_field_id+']');
 		}
 		else
 		{
-			var field = $('*[field_id='+name+']');
+			var field = $('*[field_id='+field_id+']');
 		}
 		
 		var containerfield = field.parents('span.inputs_group');
@@ -1191,7 +1191,7 @@ function getRIFCSforTab(tab, hasField){
 			if($(input_field).length>0 && $(input_field).val()!=''){
 				fragment_meta += ' '+value+'="'+htmlEntities($(input_field).val())+'"';
 			}
-			else if(value == 'type' && (this_fragment_type == 'identifier' || this_fragment_type == 'dates' || this_fragment_type == 'description') )
+			else if(value == 'type' && (this_fragment_type == 'identifier' || this_fragment_type == 'dates' || this_fragment_type == 'description'  || this_fragment_type === 'subject') )
 			{
 				fragment_meta += ' '+value+'="'+htmlEntities($(input_field).val())+'"';
 			}
@@ -1265,25 +1265,25 @@ function getRIFCSforTab(tab, hasField){
 						var contributors = $('.aro_box_part[type=contributor]', this);//tooltip not init
 						$.each(contributors, function(){
 							var seq = htmlEntities($('input[name=seq]', this).val());
-							//if(seq <= 0 || isNaN(seq))
-							//{
-							//	seq = 0;
-							//	$('input[name=seq]', this).val(seq);
-							//}
+							if(seq <= 0 || isNaN(seq))
+							{
+								seq = 1;
+								$('input[name=seq]', this).val(seq);
+							}
 							fragment += '<'+$(this).attr('type')+' field_id="' +$(this).attr('field_id')+'" seq="'+seq+'">';
 							var contrib_name_part = $('.aro_box_part', this);
 							if(contrib_name_part.length === 0)
 							{
-								var template = $('.template[type=namePart]')[0];
+								var template = $('.template[type=contributor_namePart]')[0];
 								var where = $('.separate_line', this);
 								addNew(template, where);
 
 							}
 							var contrib_name_part = $('.aro_box_part', this);
 							$.each(contrib_name_part, function(){
-								fragment += '<'+$(this).attr('type')+' field_id="' +$(this).attr('field_id')+'" type="'+htmlEntities($('input[name=type]', this).val())+'">';
+								fragment += '<namePart field_id="' +$(this).attr('field_id')+'" type="'+htmlEntities($('input[name=type]', this).val())+'">';
 								fragment += htmlEntities($('input[name=value]', this).val());
-								fragment +='</'+$(this).attr('type')+'>';
+								fragment +='</namePart>';
 							});
 							
 							fragment +='</'+$(this).attr('type')+'>';
@@ -1293,8 +1293,8 @@ function getRIFCSforTab(tab, hasField){
 						fragment += htmlEntities($('input[name=value]', this).val());
 						fragment +='</date>';
 					}else if(type=='citation_date'){
-						fragment += '<date field_id="' +$(this).attr('field_id')+'" type="'+htmlEntities($('input[name=type]', this).val())+'">';
-						fragment += htmlEntities($('input[name=value]', this).val());
+						fragment += '<date field_id="' +$(this).attr('field_id')+'" type="'+($('input[name=type]', this).length !== 0 ?  htmlEntities($('input[name=type]', this).val()) : "")+'">';
+						fragment += ($('input[name=value]', this).length !== 0 ?  htmlEntities($('input[name=value]', this).val()) : "");
 						fragment +='</date>';
 					}else if(type=='temporal'){
 						fragment+='<temporal';
