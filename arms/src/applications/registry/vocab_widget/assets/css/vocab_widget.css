@@ -27,7 +27,7 @@ ul.vocab_list li[role="vocab_error"], .error {
     margin-bottom: 0px;
 }
 
-div.error { padding:0.5em }
+ul.vocab_list div.error { padding:0.5em }
 
 ul.vocab_list li[role="vocab_item"]:hover {
    /* background-color: #CFCFCF !important; */

@@ -73,7 +73,7 @@ $(function(){
 	});
 	$(window).hashchange();//initial hashchange event
 	initEditForm();
-	//Core_bindFormValidation($('#edit-form'));
+	Core_bindFormValidation($('#edit-form'));
 	markRequired($('#edit-form'));
 	// === Sidebar navigation === //	
 	$('.submenu > a').click(function(e){
@@ -452,7 +452,7 @@ function initEditForm(){
 		assignFieldID(new_dom);
 		initVocabWidgets(new_dom);
 		initMapWidget(new_dom);
-		//Core_bindFormValidation($('form'));
+		Core_bindFormValidation($('form'));
 		//log(new_dom);
 		//@TODO: check if it's inside a tooltip and perform reposition
 
@@ -594,7 +594,6 @@ function initEditForm(){
 						{
 							//check key changes
 							if($('#ro_id').val() != data.ro_id){
-								alert($('#ro_id').val() + " vs "+ data.ro_id)
 								window.location = base_url+'registry_object/edit/'+data.ro_id+'#!/advanced/qa';
 							}else{
 								validate();

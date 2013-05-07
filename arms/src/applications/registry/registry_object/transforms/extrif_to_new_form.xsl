@@ -1218,7 +1218,7 @@
 				<label class="control-label" for="title">Electronic Address: </label>
 				<div class="controls">
 					<span class="inputs_group">
-						<input type="text" class="inner_input" name="value" placeholder="Value" value="{ro:value}"/>
+						<input type="text" class="inner_input" name="value" placeholder="Value" value="{ro:value}" valid-type="url"/>
 						<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSElectronicAddressType" name="type" placeholder="Type" value="{@type}"/>
 					</span>
 					<xsl:if test="ancestor::ro:service">
