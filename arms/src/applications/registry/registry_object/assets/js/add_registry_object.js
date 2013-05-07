@@ -579,7 +579,7 @@ function initEditForm(){
 				// });
 
 				//saving
-				log(xml);
+				//log(xml);
 				var ro_key = $('#admin input[name=key]').val();
 				$.ajax({
 					url:base_url+'registry_object/save/'+ro_id, 
