@@ -36,10 +36,9 @@
 									</select>
 									<label>Content:</label>
 									<textarea name="content" class="editor"><?php echo $i['content'];?></textarea>
-									
 									<p/>
-								<button type="button" class="btn-primary save" _id="<?php echo $i['id'];?>">Save</button>
-								<button type="button" class="btn-link delete" _id="<?php echo $i['id'];?>">Delete</button>
+								<button type="button" class="btn btn-primary save" _id="<?php echo $i['id'];?>">Save</button>
+								<button type="button" class="btn btn-link delete" _id="<?php echo $i['id'];?>">Delete</button>
 							</fieldset>
 							</form>
 						</div>
@@ -52,16 +51,19 @@
 									<input type="text" placeholder="Title" value="" name="title" required>
 									<label>URL:</label>
 									<input type="text" placeholder="URL" value="" name="url" required>
+									<label>Link Text: <small class="muted">(will display instead of the URL, if specified)</small></label>
+									<input type="text" placeholder="Link Display Text" value="" name="url_text">
 									<label>Image URL:</label>
 									<input type="text" placeholder="Image URL" value="" name="img_url" required>
-									<label>Content:</label>
+									<label>Visible:</label>
 									<select name="visible" required>
 										<option value="no">Hidden</option>
 										<option value="yes">Visible</option>										
 									</select>
+									<label>Content:</label>
 									<textarea name="content" class="editor" required></textarea>
 									<p/>
-								<button type="button" class="btn-primary add">Add New</button>
+								<button type="button" class="btn btn-primary add">Add New</button>
 							</fieldset>
 							</form>
 						</div>

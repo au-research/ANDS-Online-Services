@@ -56,7 +56,7 @@ $(function(){
 			success: function(data){
 				if(data=='success') {
 					location.reload();
-				} else alert(data);
+				} else log(data);
 			}
 		});
 	});
@@ -71,7 +71,7 @@ $(function(){
 				success: function(data){
 					if(data=='success') {
 						window.location.reload(true);
-					} else alert(data);
+					} else log(data);
 				}
 			});
 		}
@@ -80,9 +80,8 @@ $(function(){
 	$('button.add').click(function(e){
 		e.preventDefault();
 		var form = $('form[_id=new]');
-		var jsonData = $(form).serializeArray();
 		if(editor=='tinymce') tinyMCE.triggerSave();
-		//console.log(jsonData);
+		var jsonData = $(form).serializeArray();
 		$.ajax({
 			url:base_url+'spotlight/add/', 
 			type: 'POST',
@@ -91,7 +90,7 @@ $(function(){
 			success: function(data){
 				if(data=='success') {
 				document.location.reload(true);
-				} else alert(data);
+				} else log(data);
 			}
 		});
 	});

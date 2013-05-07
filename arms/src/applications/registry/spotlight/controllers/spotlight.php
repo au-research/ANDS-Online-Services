@@ -99,7 +99,11 @@ class Spotlight extends MX_Controller {
 
 	private function checkIsWriteable()
 	{
-		if (file_exists($this->config->item('spotlight_data_file')) && !is_writable($this->config->item('spotlight_data_file')))
+		if(!file_exists($this->config->item('spotlight_data_file'))){
+			throw new Exception ("Spotlight Data File is not found - check file exists in: ". $this->config->item('spotlight_data_file'));
+		}
+
+		if (!is_writable($this->config->item('spotlight_data_file')))
 		{
 			throw new Exception ("Spotlight Data File is not writeable - check file permission in: " . $this->config->item('spotlight_data_file'));
 		}
