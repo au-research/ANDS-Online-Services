@@ -175,11 +175,7 @@ function initInternalSuggestedLinks()
 
 function initDataciteSeeAlso(){
     var suggestor = 'datacite';
-    if(isPublished()){
-        var url_suffix = "view/getSuggestedLinks/"+suggestor+"/"+0+"/"+0+"/?slug=" + getSLUG();
-    }else{
-        var url_suffix = "view/getSuggestedLinks/"+suggestor+"/"+0+"/"+0+"/?id=" + getRegistryObjectID();
-    }
+    var url_suffix = "view/getSuggestedLinks/"+suggestor+"/0/0"+ (isPublished() ? "/?slug=" + getSLUG() : "/?id=" + getRegistryObjectID());
 
     $.ajax({
         url:base_url+url_suffix,
@@ -213,27 +209,33 @@ function initDataciteSeeAlso(){
 /* Hook to capture class="show_accordion" */
 /* Note: will grab the current cursor and link target from
          bound data- attributes */
-$('.show_accordion').live('click', function(e){
+$('a.show_accordion').on('click', function(e){
     e.preventDefault();
-    var qTitle = $(this).attr('data-title');
-    $('#links_dialog').html(loading_icon);
-    updateLinksDisplay($('#links_dialog'),$(this).attr('data-title'), $(this).attr('data-suggestor'), $(this).attr('data-start'), $(this).attr('data-rows'));
-    $(this).qtip({
+    e.stopPropagation();
+    var handler = $(this);
+    var qTitle = handler.attr('data-title');
+    var dialog = $('#links_dialog');
+    dialog.html(loading_icon);
+    updateLinksDisplay(dialog,
+		       handler.attr('data-title'),
+		       handler.attr('data-suggestor'),
+		       handler.attr('data-start'),
+		       handler.attr('data-rows'));
+    handler.qtip({
         content:{
-            text:$('#links_dialog'),
+            text:dialog,
             title: {
-                text: $(this).attr('data-title'),
+                text: handler.attr('data-title'),
                 button: 'Close'
             }
         },
         style: {
             classes: 'ui-tooltip-light ui-tooltip-shadow seealso-tooltip'
         },
-        show:{event:'click',solo:true,ready:'true'},
+        show:{solo:true},
         hide:{fixed:true, event:'unfocus'},
         position:{my:'center right', at:'left center',viewport:$(window)}
-    });
-    
+    }).qtip('show');
 });
 
 function setRegistryLink()
@@ -251,29 +253,20 @@ function updateLinksDisplay(container, title, suggestor, start, rows)
     // Loading icon as display loads...
     container.html(loading_icon);
     // Specify the web service endpoint
-    if (isPublished()){
-        var url_suffix = "view/getSuggestedLinks/"+suggestor+"/"+start+"/"+rows+"/?slug=" + getSLUG();
-    }else{
-        var url_suffix = "view/getSuggestedLinks/"+suggestor+"/"+start+"/"+rows+"/?id=" + getRegistryObjectID();
-    }
-
-    log(base_url+url_suffix);
+    var url_suffix = "view/getSuggestedLinks/"+suggestor+"/"+start+"/"+rows+ (isPublished() ? "/?slug=" + getSLUG() : "/?id=" + getRegistryObjectID());
 
     // Fire off the request
     $.get(base_url + url_suffix, function(data){   
 
-        // Cleanup data 
-        for (var link in data.links)
-        {
+        // Cleanup data
+	data.links = $.map(data.links, function(link, idx) {
             // Clean HTML tags
-            data.links[link]["description"] = htmlDecode(data.links[link]["description"]);
-            //data.links[link].title = htmlDecode(data.links[link].title);
-            if (data.links[link]["class"] == "external")
-            {
-                data.links[link]["class"] = null;
-            } 
-            data.links[link].display_footer = (suggestor == 'datacite' ? null : 'true');
-        }
+	    link['description'] = htmlDecode(link['description']);
+	    link['class'] = (link['class'] === "external" ? null : link['class']);
+            link['display_footer'] = (suggestor === 'datacite' ? null : 'true');
+	    return link;
+	});
+
         var template = $('#link_list_template').html();
         var output = Mustache.render(template, data);
         container.html("<div>" + output + "</div>");
@@ -282,13 +275,16 @@ function updateLinksDisplay(container, title, suggestor, start, rows)
             $('#separater').html('')
         }
     },'json');
-
 }
 
-$('a.next_accordion_query').live('click', function(e){
+$('a.next_accordion_query').on('click', function(e){
     e.preventDefault();
     e = $(this);
-    updateAccordion($('#links_dialog'), e.attr("data-title"), e.attr("data-suggestor"), e.attr("data-start"), e.attr("data-rows"));
+    updateAccordion($('#links_dialog'),
+		    e.attr("data-title"),
+		    e.attr("data-suggestor"),
+		    e.attr("data-start"),
+		    e.attr("data-rows"));
 });
 
 
