@@ -1208,6 +1208,7 @@
 								      <i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar"></i>
 								    </span>								
 								</div>
+								<a href="javascript:;" tip="Remove harvest date" id="removeHarvestDate"><i class="icon icon-remove"></i></a>
 							</div>
 						</div>
 

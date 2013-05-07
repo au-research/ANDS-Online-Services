@@ -885,7 +885,6 @@ function load_datasource_edit(data_source_id, active_tab){
 			if(active_tab && $('#'+active_tab).length > 0){//if an active tab is specified and exists
 				$('.nav-tabs li a[href=#'+active_tab+']').click();
 			}
-			
 			$('#edit-datasource  .normal-toggle-button').each(function(){
 				
 
@@ -1045,6 +1044,10 @@ function load_datasource_edit(data_source_id, active_tab){
 				loadContributorPagesEdit(data_source_id,$(this).val());			
 			});
 			
+			$('#removeHarvestDate').click(function(e){
+				e.preventDefault();
+				$('input[name=harvest_date]').val('');
+			});
 
 			// Update harvest options once the chzn are setup
 			$('#edit-datasource .chzn-select').each(function(){
@@ -1079,17 +1082,13 @@ function load_datasource_edit(data_source_id, active_tab){
 			
 
 
-			//initalize the datepicker, format is optional
-			$('#edit-datasource  .datepicker').parent().ands_datetimepicker();
-			//triggering the datepicker by focusing on it
-			$('.triggerDatePicker').die().live({
-				click: function(e){
-				$(this).parent().children('input').focus();
-				}
+			//initalize the datepicker on click, format is optional
+			$('#edit-datasource  .datepicker').click(function(){
+				$(this).ands_datetimepicker();
+				$(this).focus();				
 			});
 
 			initVocabWidgets('#primary-relationship-form');
-
 		}
 
 	});
@@ -1151,91 +1150,83 @@ $('#cancel-edit-form').live({
 	}
 });
 
+$(document).on('click', '#save-edit-form', function(e){
+	e.preventDefault();
+	$(this).button('loading');
+	var jsonData = [];
+	$('#save-edit-form').button('loading');
+	var ds_id = $(this).attr('data_source_id')
+	jsonData.push({name:'data_source_id', value:ds_id});
+	
+	$('#edit-datasource #edit-form input, #edit-datasource #edit-form textarea').each(function(){
+		var label = $(this).attr('name');
+		var value = $(this).val();
 
-$('#save-edit-form').live({
-	click: function(e){
-		e.preventDefault();
-		var jsonData = [];
-		$(this).button('loading');
-		var ds_id = $(this).attr('data_source_id')
-		jsonData.push({name:'data_source_id', value:ds_id});
-		
-		$('#edit-datasource #edit-form input, #edit-datasource #edit-form textarea').each(function(){
-			var label = $(this).attr('name');
-			var value = $(this).val();
-
-			if($(this).attr('type')=='checkbox'){
-				var label = $(this).attr('for');
-				var value = $(this).is(':checked');
-				//if(label=='qa_flag'||label=='manual_publish')
-				//{
-					//var old_value = $('#'+label+'_old').html();
-					//if(old_value=='f'){old_value=false;}
-					//if(old_value=='t'){old_value=true;}
-					//if(value!=old_value)
-					//{					
-						//alert (label + "::" + value + ' old::'+ $('#'+label+'_old').html());
-					//}
+		if($(this).attr('type')=='checkbox'){
+			var label = $(this).attr('for');
+			var value = $(this).is(':checked');
+			//if(label=='qa_flag'||label=='manual_publish')
+			//{
+				//var old_value = $('#'+label+'_old').html();
+				//if(old_value=='f'){old_value=false;}
+				//if(old_value=='t'){old_value=true;}
+				//if(value!=old_value)
+				//{					
+					//alert (label + "::" + value + ' old::'+ $('#'+label+'_old').html());
 				//}
-			}
-
-			if($(this).attr('type')!='radio'){
-			//if(value!='' && value){
-				//console.log(label + " will be set to " + value)
-				jsonData.push({name:label, value:value});
-
 			//}
-			}
-		});
+		}
+
+		if($(this).attr('type')!='radio'){
+		//if(value!='' && value){
+			//console.log(label + " will be set to " + value)
+			jsonData.push({name:label, value:value});
+
+		//}
+		}
+	});
+
+	$('#edit-datasource #edit-form select').each(function(){
+		label = $(this).attr('for');
+		jsonData.push({name:label, value:$(this).val()});
+	});
 
 
-		$('#edit-datasource #edit-form select').each(function(){
-			label = $(this).attr('for');
-			jsonData.push({name:label, value:$(this).val()});
-		});
+	var validationErrors = validateFields(jsonData, ds_id);
 
-
-
-		var validationErrors = validateFields(jsonData, ds_id);
-
-		if(validationErrors)
-		{
-			$('#myModal').modal();
-			logErrorOnScreen(validationErrors, $('#myModal .modal-body'));
-				
-		}else{
-			var form = $('#edit-form');
-			var valid = Core_checkValidForm(form);
-			//console.log(valid);
-		
-			$.ajax({
-				url:'data_source/updateDataSource', 
-				type: 'POST',
-				data: jsonData,
-				success: function(data){
-					log(data.status);
-					if (data.status != "OK"){
-						$('#myModal').modal();
-						logErrorOnScreen("An error occured whilst saving your changes!", $('#myModal .modal-body'));
-						$('#myModal .modal-body').append("<br/><pre>" + data.message + "</pre>");
-					}else{
-						changeHashTo('view/'+ds_id);
-						createGrowl(true, "Data Source settings were successfully updated");
-						updateGrowls();
-					}
-				},
-				error: function(data){
-					log(data)
+	if(validationErrors)
+	{
+		$('#myModal').modal();
+		logErrorOnScreen(validationErrors, $('#myModal .modal-body'));
+			
+	}else{
+		var form = $('#edit-form');
+		var valid = Core_checkValidForm(form);
+		//console.log(valid);
+	
+		$.ajax({
+			url:'data_source/updateDataSource', 
+			type: 'POST',
+			data: jsonData,
+			success: function(data){
+				log(data.status);
+				if (data.status != "OK"){
 					$('#myModal').modal();
 					logErrorOnScreen("An error occured whilst saving your changes!", $('#myModal .modal-body'));
-					$('#myModal .modal-body').append("<br/><pre>Could't communicate with server</pre>");
+					$('#myModal .modal-body').append("<br/><pre>" + data.message + "</pre>");
+				}else{
+					changeHashTo('view/'+ds_id);
+					createGrowl(true, "Data Source settings were successfully updated");
+					updateGrowls();
 				}
-			});
-		}
-		/*var jsonString = ""+JSON.stringify(jsonData);
-		$('#myModal .modal-body').html('<pre>'+jsonString+'</pre>');
-		$('#myModal').modal();*/
-		$(this).button('reset');
+			},
+			error: function(data){
+				log(data)
+				$('#myModal').modal();
+				logErrorOnScreen("An error occured whilst saving your changes!", $('#myModal .modal-body'));
+				$('#myModal .modal-body').append("<br/><pre>Could't communicate with server</pre>");
+			}
+		});
 	}
 });
 
