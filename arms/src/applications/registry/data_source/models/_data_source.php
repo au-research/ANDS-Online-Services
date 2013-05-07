@@ -237,7 +237,8 @@ class _data_source {
 		}
 		else if($query_ds_slugs->num_rows>0)
 		{
-			$existing_slug = array_pop($query_ds_slugs->result_array());
+			$results = $query_ds_slugs->result_array();
+			$existing_slug = array_pop($results);
 
 			if($existing_slug['data_source_id']!=$this->id)
 			{

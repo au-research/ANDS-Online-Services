@@ -17,6 +17,9 @@ date_default_timezone_set('Australia/Melbourne');
 		
 		<h1 style="position:relative;padding-right:80px;max-width:60%;"><?php echo $ro->title;?> <?php if($viewing_revision) echo '<small>('.$revisionInfo.')</small>'?></h1>
 		
+		<input class="hide" type="hidden" value="<?php echo $ro->id;?>" id="ro_id"/>
+		<input class="hide" type="hidden" value="<?=$ds->id;?>" id="data_source_id"/>
+		<input type="hidden" id="registry_object_id" value="<?php echo $ro_id;?>"/>
 		<?php 
 		if ($this->user->hasFunction('REGISTRY_USER') && $this->user->hasAffiliation($ds->record_owner)):
 		?>
@@ -56,8 +59,6 @@ date_default_timezone_set('Australia/Melbourne');
 		<a href="#" class="current"><?php echo $ro->title;?> </a>
 		<?php if($viewing_revision) echo '<a href="#">('.$revisionInfo.')</a>'?>
 	</div>
-	<input class="hide" type="hidden" value="<?php echo $ro->id;?>" id="ro_id"/>
-	<input class="hide" type="hidden" value="<?=$ds->id;?>" id="data_source_id"/>
 
 	<div class="container-fluid">
 		<div class="row-fluid">
@@ -188,8 +189,6 @@ date_default_timezone_set('Australia/Melbourne');
 							<?php if(!($viewing_revision && !$currentRevision)): ?>
 								<tr><td colspan="2"><a class="btn btn-small btn-danger pull-right" id="delete_record_button"> <i class="icon-white icon-warning-sign"></i> Delete Record <i class="icon-white icon-trash"></i> </a></td></tr>
 							<?php endif; ?>
-							
-							<input type="hidden" id="registry_object_id" value="<?php echo $ro_id;?>"/>
 						</table>
 					</div>
 

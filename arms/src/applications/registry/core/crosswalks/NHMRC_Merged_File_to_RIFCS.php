@@ -78,8 +78,9 @@ class NHMRC_Merged_File_to_RIFCS extends Crosswalk
             // Map the column headings to each field, to simplify lookup
             $row = $this->mapCSVHeadings($csv_values);
 
-            if (!isset($row['GRANT_ID']) || !isset($row['DW_INDIVIDUAL_ID'])) 
+            if (!isset($row['GRANT_ID']) || !isset($row['DW_INDIVIDUAL_ID']) || trim($row['GRANT_SIMPLIFIED_TITLE']) == '') 
             {
+                $log[] = "[CROSSWALK] Ignoring blank/invalid row...";
                 continue; //skip blank rows
             }
 
@@ -101,7 +102,7 @@ class NHMRC_Merged_File_to_RIFCS extends Crosswalk
             $grants[$row['GRANT_ID']]['people'][] = $row['DW_INDIVIDUAL_ID'];
 
             // Link the grant to the person
-            $people[$row['DW_INDIVIDUAL_ID']]['grants'][] = $row['GRANT_ID'];
+            $people[$row['DW_INDIVIDUAL_ID']]['grants'][$row['GRANT_ROLE']] = $row['GRANT_ID'];
 
         }
         $log[] = "[CROSSWALK] Setup mapping in-memory. " . count($this->grants) . " grants, " . count($this->people) . " people";
@@ -124,7 +125,6 @@ class NHMRC_Merged_File_to_RIFCS extends Crosswalk
 
             $primary_name = $this->normalise_space($activity['GRANT_SIMPLIFIED_TITLE']);
             $alternative_name = $this->normalise_space($activity['GRANT_SCIENTIFIC_TITLE']);
-
 
             // Get the names of our investigators
             $investigators = array();
@@ -289,18 +289,22 @@ class NHMRC_Merged_File_to_RIFCS extends Crosswalk
                 $registryObject .=      'Participant in the following NHMRC Grant(s):' . NL;
                 foreach ($party['grants'] AS $grant_id)
                 {
-                    $registryObject .= ' - ' . $this->normalise_space($this->grants[$grant_id]['GRANT_SIMPLIFIED_TITLE']) . NL;
+                    if ($this->grants[$grant_id]['GRANT_SIMPLIFIED_TITLE'])
+                    {
+                        $registryObject .= ' - ' . $this->normalise_space($this->grants[$grant_id]['GRANT_SIMPLIFIED_TITLE']) . NL;
+                    }
                 }
                 $registryObject .=      '</description>' . NL;
 
             }
 
             // Relate to the grant key(s)
-            foreach ($party['grants'] AS $grant_id)
+            foreach ($party['grants'] AS $grant_role => $grant_id)
             {
                 $registryObject .=      '<relatedObject>' . NL;
                 $registryObject .=         '<key>'. self::NHMRC_GRANT_PREFIX . $grant_id . '</key>' . NL;
-                if( isset($party['GRANT_ROLE']) && $party['GRANT_ROLE'] == "CIA" )
+                
+                if( $grant_role == "CIA" )
                 {
                     $registryObject .=         '<relation type="isPrincipalInvestigatorOf" />' . NL;
                 }
@@ -519,9 +523,13 @@ class NHMRC_Merged_File_to_RIFCS extends Crosswalk
         // Bizarrely, PHP doesn't support multiline in getcsv :-/
         foreach($ref AS $idx => $line)
         {
-            $csv = str_getcsv($line);
+            $csv = str_getcsv($line, ",", '"', '\\');
             if (count($csv) > 0)
             {
+                foreach($csv AS &$val)
+                {
+                    $val = str_replace('\\"','"', $val);
+                }
                 $this->parsed_array[] = $csv;
             }
         }
