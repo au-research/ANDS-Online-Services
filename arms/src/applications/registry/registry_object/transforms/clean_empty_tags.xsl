@@ -22,12 +22,11 @@
     <!-- Note: No checks for @lang/@seq attributes -->
     <xsl:template match="location[not(@dateFrom) and not(@dateTo) and not(@type) and not(spatial/@type) and not(spatial/text()) and not(address/electronic/@type = '') and not(address/electronic/value/text()) and not(address/electronic/arg/value/text()) and not(address/electronic/arg/required/text()) and not(address/electronic/arg/@type) and not(address/electronic/arg/use/text()) and not(address/physical/@type) and not(address/physical/addressPart/@type) and not(address/physical/addressPart/text())]"/>
     <xsl:template match="relatedObject[not(key/text()) and not(relation/@type = '') and not(relation/description/text()) and not(relation/url/text())]"/> 
-    <xsl:template match="description[not(@type) and not(text())]"/>
-    
-    <xsl:template match="spatial[not(@type) and not(text())]"/>
-    <xsl:template match="namePart[not(@type) and not(text())]"/>
-    <xsl:template match="dates/date[not(text())]"/>
-    <xsl:template match="identifier[not(text()) and @type='']"/>
+    <xsl:template match="description[(not(@type) or @type='') and not(text())]"/>
+    <xsl:template match="spatial[(not(@type) or @type='') and not(text())]"/>
+    <xsl:template match="namePart[(not(@type) or @type='') and not(text()) and (following-sibling::namePart or preceding-sibling::namePart)]"/>
+    <!--xsl:template match="dates/date[not(text())]"/-->
+    <xsl:template match="identifier[not(text()) and (not(@type) or @type='')]"/>
     <xsl:template match="coverage[not(temporal/date/text()) and not(temporal/date/@dateFormat) and not(temporal/date/@type) and not(temporal/text()) and not(spatial/text()) and not(spatial/@type)]"/>
 
  

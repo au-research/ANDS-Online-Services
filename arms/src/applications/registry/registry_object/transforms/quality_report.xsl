@@ -1370,7 +1370,7 @@
     	<xsl:if test="string-length(.) = 0">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Existence Date must have a value.");</xsl:text>
+            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Existence Date must have a value.","value");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="error">Existence Start Date must have a value.</span>
@@ -1380,7 +1380,7 @@
         <xsl:if test="string-length(.) &gt; 512">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Existence Date must be less than 512 characters.");</xsl:text>
+            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Existence Date must be less than 512 characters.","value");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="error">Existence Start Date must be less than 512 characters.</span>
@@ -1390,7 +1390,7 @@
         <xsl:if test="string-length(@dateFormat) = 0">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-           			<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","A Date Format must be specified. &lt;span&gt;(e.g. 'W3CDTF')&lt;/span&gt;");</xsl:text>
+           			<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","A Date Format must be specified. &lt;span&gt;(e.g. 'W3CDTF')&lt;/span&gt;","dateFormat");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="error">Existence Start Date Format must have a value.</span>
@@ -1400,7 +1400,7 @@
         <xsl:if test="string-length(@dateFormat) &gt; 512">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-           			<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Date Format must be less than 512 characters.");</xsl:text>
+           			<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Date Format must be less than 512 characters.","dateFormat");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="error">Existence Start Date Format must be less than 512 characters.</span>
@@ -1413,7 +1413,7 @@
     	<xsl:if test="string-length(.) = 0">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Existence Date must have a value.");</xsl:text>
+            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Existence Date must have a value.","value");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="error">Existence End Date must have a value.</span>
@@ -1423,7 +1423,7 @@
         <xsl:if test="string-length(.) &gt; 512">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetWarnings("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Existence Date must be less than 512 characters.");</xsl:text>
+            		<xsl:text>SetWarnings("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Existence Date must be less than 512 characters.","value");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="warning">Existence End Date must be less than 512 characters.</span>
@@ -1433,7 +1433,7 @@
         <xsl:if test="string-length(@dateFormat) = 0">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-           			<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","A Date Format must be specified. &lt;span&gt;(e.g. 'W3CDTF')&lt;/span&gt;");</xsl:text>
+           			<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","A Date Format must be specified. &lt;span&gt;(e.g. 'W3CDTF')&lt;/span&gt;","dateFormat");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="error">Existence End Date Format must have a value.</span>
@@ -1443,7 +1443,7 @@
         <xsl:if test="string-length(@dateFormat) &gt; 512">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-           			<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Date Format must be less than 512 characters.");</xsl:text>
+           			<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Date Format must be less than 512 characters.","dateFormat");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="error">Existence End Date Format must be less than 512 characters.</span>

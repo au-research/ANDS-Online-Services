@@ -40,7 +40,9 @@
 			<li><a href="#names" data-toggle="tab">Names</a></li>
 			<li><a href="#descriptions_rights" data-toggle="tab">Descriptions/Rights</a></li>
 			<li><a href="#identifiers" data-toggle="tab">Identifiers</a></li>
-			<li><a href="#dates" data-toggle="tab">Dates</a></li>
+			<xsl:if test="$ro_class = 'collection'">
+				<li><a href="#dates" data-toggle="tab">Dates</a></li>
+			</xsl:if>
 			<li><a href="#locations" data-toggle="tab">Locations</a></li>
 			<li><a href="#coverages" data-toggle="tab">Coverage</a></li>
 			<li><a href="#relatedObjects" data-toggle="tab">Related Objects</a></li>
@@ -82,7 +84,9 @@
 			<xsl:call-template name="namesTab"/>
 			<xsl:call-template name="descriptionRightsTab"/>
 			<xsl:call-template name="identifiersTab"/>
-			<xsl:call-template name="datesTab"/>
+			<xsl:if test="$ro_class = 'collection'">
+				<xsl:call-template name="datesTab"/>
+			</xsl:if>
 			<xsl:call-template name="locationsTab"/>
 			<xsl:call-template name="coverageTab"/>
 			<xsl:call-template name="relatedObjectsTab"/>
