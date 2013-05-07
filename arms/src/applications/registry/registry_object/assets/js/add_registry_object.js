@@ -481,6 +481,10 @@ function initEditForm(){
 
 		//bind the tooltip parts UI in case of adding a new element with show Parts Elements
 		bindPartsTooltip();
+
+		//rebind the validations
+		markRequired($('#edit-form'));
+
 	}).on('click', 'input.datepicker', function(e){
 		$(this).ands_datetimepicker();
 		$(this).focus();
