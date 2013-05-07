@@ -155,6 +155,13 @@ class Registry extends MX_Controller {
 		$results['ro_key'] = $key;
 		$query = $this->db->select('*')->get_where('registry_objects', array("key"=>$key));
 		$results['ro_list'] = $query->result_array();
+		if(is_array($results['ro_list']) && count($results['ro_list'] > 0))
+		{
+			foreach ($results['ro_list'] AS &$item)
+			{
+				$item['status'] = readable($item['status'], true);
+			}
+		}
 		$results = json_encode($results);
 		echo $results;
 	}

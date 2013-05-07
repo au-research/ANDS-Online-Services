@@ -532,20 +532,19 @@ function initEditForm(){
 			var ro_class = $('#ro_class').val();//hidden value
 			var ro_id = $('#ro_id').val();
 			var ds_id = $('#data_source_id').val()
+			$('input[name=key]', admin).parent().find('.validation').remove();
 			if(ro_key == '') //Core_checkValidForm($('#edit-form')))
 			{
-				if($('input[name=key]', admin).parent().find('.validation').length === 0)
-					$('input[name=key]', admin).parent().append('<div class="alert alert-error validation">Registry Object Key must have a value!</div>');
+				$('input[name=key]', admin).parent().append('<div class="alert alert-error validation">Registry Object Key must have a value!</div>');
+				setTabInfo();
 			}
-			else if(originalKeyValue != ro_key && !isUniqueKey(ro_key, ro_id, ds_id))
-			{
-				
-				if($('input[name=key]', admin).parent().find('.validation').length === 0)
-					$('input[name=key]', admin).parent().append('<div class="alert alert-error validation">Registry Object Key must be unique!</div>');
+			else if(originalKeyValue != ro_key && (isUniqueMsg = isUniqueKey(ro_key, ro_id, ds_id)))
+			{				
+				$('input[name=key]', admin).parent().append('<div class="alert alert-error validation">'+ isUniqueMsg+ '</div>');
+				setTabInfo();
 			}
 			else
-			{
-				$('input[name=key]', admin).parent().find('.validation').remove();
+			{				
 				xml += '<registryObject group="'+$('input[name=group]',admin).val()+'">';
 				xml += '<key>'+$('input[name=key]', admin).val()+'</key>';
 				xml += '<originatingSource type="'+$('input[name=originatingSourceType]', admin).val()+'">'+$('input[name=originatingSource]',admin).val()+'</originatingSource>';
@@ -831,6 +830,20 @@ function addValidationTag(pane, type, num){
 	$(menu_item).append('<span class="label label-'+type+'">'+num+'</span>')
 }
 
+
+function setTabInfo(){
+	var allTabs = $('.pane');
+	$('#advanced-menu .label').remove();
+	$.each(allTabs, function(){
+		var count_info = $('.alert-info', this).length;
+		var count_error = $('.alert-error', this).length;
+		var count_warning = $('.alert-warning', this).length;
+		var id = $(this).attr('id');
+		if(count_info > 0) addValidationTag(id, 'info', count_info);
+		if(count_error > 0) addValidationTag(id, 'important', count_error);
+		if(count_warning > 0) addValidationTag(id, 'warning', count_warning);
+	});
+}
 function initSimpleModeFields()
 {
 	/* Show/hide full description field */
@@ -1559,21 +1572,20 @@ $('#exit_tab').live('click',function(e){
 
 function isUniqueKey(ro_key, ro_id, ds_id)
 {
-	var isUnique = true;
+	var isUniqueMsg = '';
 	$.ajax({
 		async: false,
 		type: 'GET',
 		data: {ro_key:ro_key},
 		url: base_url+'services/registry/check_unique_ro_key',
 		success: function(data){
-			log(data);
 			$.each(data.ro_list, function(idx, e) {
 				if(e.data_source_id != ds_id)
-					isUnique = false;
+					isUniqueMsg = 'Another record with the same key already exists in the Registry (in another Data Source). Please choose a unique key for this record.';
 				else if(e.status != 'PUBLISHED' && e.registry_object_id != ro_id)
-				 	isUnique = false;
+				 	isUniqueMsg = 'Another record with the same key already exists in your Data Source ('+e.status+'). Please choose a unique key for this record.';
 			});
 		}
 	});
-	return isUnique;
+	return isUniqueMsg;
 }
