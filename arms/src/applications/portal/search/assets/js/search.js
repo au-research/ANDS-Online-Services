@@ -150,7 +150,6 @@ function executeSearch(searchData, searchUrl){
 				    $.browser.msie === true &&
 				    parseInt($.browser.version) < 9)
 			        {
-				    $('#ie8_message.hide').removeClass('hide');
 				    docs = docs.slice(0,500);
 				}
 
@@ -345,7 +344,6 @@ function initSearchPage(){
 
 		if ($.browser.msie && $.browser.version <= 9.0) {
 			$('.sidebar').css({opacity:1,background:'#fff'});
-		        $('#ie8_message.hide').removeClass('hide');
 		}
 
 		$('.facet_class').show();
@@ -386,7 +384,6 @@ function initSearchPage(){
 	$('#search_map_toggle').unbind('click');
 	$('#search_map_toggle').click(function(e){
 	        $('#search_notice').addClass('hide');
-	        $('#ie8_message').addClass('hide');
 
 		e.preventDefault();
 		if(searchData['map']){
@@ -401,7 +398,6 @@ function initSearchPage(){
 			initSearchPage();
 		}else{
 			//no map, show map
-	                $('#ie8_message.hide').removeClass('hide');
 			searchData['map']='show';
 			processPolygons();
 			resetZoom();
