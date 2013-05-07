@@ -141,6 +141,27 @@ class Registry extends MX_Controller {
 		echo $total;
 	}
 
+
+
+	/**
+	 * check an ro_key to see uniqueness
+	 * @param  string ro_key
+	 * @return [results]
+	 */
+	public function check_unique_ro_key(){
+		$results= array();
+		$this->load->database();
+		$key = $this->input->get('ro_key');
+		$results['ro_key'] = $key;
+		$query = $this->db->select('*')->get_where('registry_objects', array("key"=>$key));
+		$results['ro_list'] = $query->result_array();
+		$results = json_encode($results);
+		echo $results;
+	}
+
+
+
+
 	/*
 	 * get_datasources_list
 	 * 

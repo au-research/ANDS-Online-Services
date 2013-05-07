@@ -4,6 +4,7 @@
 var aro_mode, active_tab;
 var editor = 'tinymce';
 var fieldID = 1;
+var originalKeyValue = '';
 var SIMPLE_MODE = 'simple';
 var ADVANCED_MODE = 'advanced';
 var loading_box = "<div id='loading_box'><img src='"+base_url+"/assets/img/ajax-loader-large.gif' alt='Loading...' />"+
@@ -305,7 +306,7 @@ function initEditForm(){
 			$(aro_box).children('*:not(.aro_box_display)').slideToggle();
 		}
 	});
-
+	originalKeyValue = $('input[name=key]', admin).val();
 	/*
 	 * Prevents the form from submitting when hit any button
 	 */
@@ -526,95 +527,104 @@ function initEditForm(){
 			var xml = '';
 
 			//admin tab
+			var ro_key = $('input[name=key]', admin).val();
 			var admin = $('#admin');
 			var ro_class = $('#ro_class').val();//hidden value
 			var ro_id = $('#ro_id').val();
-			if($('input[name=key]', admin).val() == '') //Core_checkValidForm($('#edit-form')))
+			var ds_id = $('#data_source_id').val()
+			if(ro_key == '') //Core_checkValidForm($('#edit-form')))
 			{
-				$('input[name=key]', admin).parent().append('<div class="alert alert-error validation">Registry Object Key Must Have a Value!</div>');
+				if($('input[name=key]', admin).parent().find('.validation').length === 0)
+					$('input[name=key]', admin).parent().append('<div class="alert alert-error validation">Registry Object Key must have a value!</div>');
+			}
+			else if(originalKeyValue != ro_key && !isUniqueKey(ro_key, ro_id, ds_id))
+			{
+				
+				if($('input[name=key]', admin).parent().find('.validation').length === 0)
+					$('input[name=key]', admin).parent().append('<div class="alert alert-error validation">Registry Object Key must be unique!</div>');
 			}
 			else
 			{
 				$('input[name=key]', admin).parent().find('.validation').remove();
-			xml += '<registryObject group="'+$('input[name=group]',admin).val()+'">';
-			xml += '<key>'+$('input[name=key]', admin).val()+'</key>';
-			xml += '<originatingSource type="'+$('input[name=originatingSourceType]', admin).val()+'">'+$('input[name=originatingSource]',admin).val()+'</originatingSource>';
-			xml += '<'+ro_class+' type="'+$('input[name=type]',admin).val()+'">';
+				xml += '<registryObject group="'+$('input[name=group]',admin).val()+'">';
+				xml += '<key>'+$('input[name=key]', admin).val()+'</key>';
+				xml += '<originatingSource type="'+$('input[name=originatingSourceType]', admin).val()+'">'+$('input[name=originatingSource]',admin).val()+'</originatingSource>';
+				xml += '<'+ro_class+' type="'+$('input[name=type]',admin).val()+'">';
 
-			$.each(allTabs, function(){
-				xml += getRIFCSforTab(this,false);
-			});
+				$.each(allTabs, function(){
+					xml += getRIFCSforTab(this,false);
+				});
 
-			xml+='</'+ro_class+'></registryObject>';
+				xml+='</'+ro_class+'></registryObject>';
 
-			/* Keep a backup of the form's RIFCS */
-			$('#myModal .modal-header h3').html('<h3>Take a backup of your Record\'s XML Contents</h3>');
-			$('#myModal .modal-body').html('<div style="width:100%; margin:both; text-align:left;">' + 
-											'<pre class="prettyprint linenums"><code class="language-xml">' + htmlEntities(formatXml(xml.replace(/ field_id=".*?"/mg, '')))+ '</code></pre>' +
-											'</div>');
-			$('#myModal .modal-footer').html('');
-			prettyPrint();
+				/* Keep a backup of the form's RIFCS */
+				$('#myModal .modal-header h3').html('<h3>Take a backup of your Record\'s XML Contents</h3>');
+				$('#myModal .modal-body').html('<div style="width:100%; margin:both; text-align:left;">' + 
+												'<pre class="prettyprint linenums"><code class="language-xml">' + htmlEntities(formatXml(xml.replace(/ field_id=".*?"/mg, '')))+ '</code></pre>' +
+												'</div>');
+				$('#myModal .modal-footer').html('');
+				prettyPrint();
 
-			// Add some loading text...
-			$('#response_result').html(loadingBoxMessage("Saving &amp; Validating your Record...<p><br/></p><p><br/></p><p><br/></p><p><br/></p><small class='muted'>Been waiting a while? <a class='show_rifcs btn btn-link btn-mini muted'>Take a backup of your RIFCS XML</a> - just in case!</small>"));
+				// Add some loading text...
+				$('#response_result').html(loadingBoxMessage("Saving &amp; Validating your Record...<p><br/></p><p><br/></p><p><br/></p><p><br/></p><small class='muted'>Been waiting a while? <a class='show_rifcs btn btn-link btn-mini muted'>Take a backup of your RIFCS XML</a> - just in case!</small>"));
 
 
-			//test validation
-			// $.ajax({
-			// 	url:base_url+'registry_object/validate/'+ro_id, 
-			// 	type: 'POST',
-			// 	data: {xml:xml},
-			// 	success: function(data){
-			// 		console.log(data);
-			// 	}
-			// });
+				//test validation
+				// $.ajax({
+				// 	url:base_url+'registry_object/validate/'+ro_id, 
+				// 	type: 'POST',
+				// 	data: {xml:xml},
+				// 	success: function(data){
+				// 		console.log(data);
+				// 	}
+				// });
 
-			//saving
-			//log(xml);
-			var ro_key = $('#admin input[name=key]').val();
-			$.ajax({
-				url:base_url+'registry_object/save/'+ro_id, 
-				type: 'POST',
-				data: {xml:xml,key:ro_key},
-				success: function(data){
-					if(data.status=='success')
-					{
-						//check key changes
-						if($('#ro_id').val() != data.ro_id){
-							alert($('#ro_id').val() + " vs "+ data.ro_id)
-							window.location = base_url+'registry_object/edit/'+data.ro_id+'#!/advanced/qa';
-						}else{
-							validate();
+				//saving
+				//log(xml);
+				var ro_key = $('#admin input[name=key]').val();
+				$.ajax({
+					url:base_url+'registry_object/save/'+ro_id, 
+					type: 'POST',
+					data: {xml:xml,key:ro_key},
+					success: function(data){
+						if(data.status=='success')
+						{
+							//check key changes
+							if($('#ro_id').val() != data.ro_id){
+								alert($('#ro_id').val() + " vs "+ data.ro_id)
+								window.location = base_url+'registry_object/edit/'+data.ro_id+'#!/advanced/qa';
+							}else{
+								validate();
 
-							// Generate the action button bar based on result data
-							var action_bar = generateActionBar(data);
-							if (action_bar)
-							{
-								data['action_bar'] = action_bar;
+								// Generate the action button bar based on result data
+								var action_bar = generateActionBar(data);
+								if (action_bar)
+								{
+									data['action_bar'] = action_bar;
+								}
+
+								var template = $('#save-record-template').html();
+								var output = Mustache.render(template, data);
+								//console.log($('.record_title'));
+								//$('.record_title').html(data.title);
+								$('#response_result').html(output);
+								formatQA($('#response_result .qa'));
 							}
-
-							var template = $('#save-record-template').html();
-							var output = Mustache.render(template, data);
-							//console.log($('.record_title'));
-							//$('.record_title').html(data.title);
-							$('#response_result').html(output);
-							formatQA($('#response_result .qa'));
 						}
-					}
-					else
-					{
-						var template = $('#save-error-record-template').html();
-						var output = Mustache.render(template, data);
-						$('#response_result').html(output);
-					}
+						else
+						{
+							var template = $('#save-error-record-template').html();
+							var output = Mustache.render(template, data);
+							$('#response_result').html(output);
+						}
 
-					$('#advanced-menu li a[href=#qa]').trigger('click', {onlyShow: true});
-				},
-				error: function(data){
-					data = $.parseJSON(data.responseText);
-					$('#myModal .modal-body').html(data.message);
-				}
-			});
+						$('#advanced-menu li a[href=#qa]').trigger('click', {onlyShow: true});
+					},
+					error: function(data){
+						data = $.parseJSON(data.responseText);
+						$('#myModal .modal-body').html(data.message);
+					}
+				});
 			}
 		}
 	});
@@ -1547,3 +1557,23 @@ $('#exit_tab').live('click',function(e){
 	window.location = $('#breadcrumb a:first').attr("href");
 });
 
+function isUniqueKey(ro_key, ro_id, ds_id)
+{
+	var isUnique = true;
+	$.ajax({
+		async: false,
+		type: 'GET',
+		data: {ro_key:ro_key},
+		url: base_url+'services/registry/check_unique_ro_key',
+		success: function(data){
+			log(data);
+			$.each(data.ro_list, function(idx, e) {
+				if(e.data_source_id != ds_id)
+					isUnique = false;
+				else if(e.status != 'PUBLISHED' && e.registry_object_id != ro_id)
+				 	isUnique = false;
+			});
+		}
+	});
+	return isUnique;
+}
