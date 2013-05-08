@@ -1638,11 +1638,20 @@
 					<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
 				</div>
 				<div class="controls">
-					<input type="text" class="input rifcs-type" vocab="RIFCSPhysicalAddressType" name="type" placeholder="Address Type" value=""/>				
-						<div class="separate_line"/>
-						<button class="btn btn-primary addNew" type="addressPart" add_new_type="addressPart">
-							<i class="icon-plus icon-white"></i> Add Address Part
-						</button>					
+					<input type="text" class="input rifcs-type" vocab="RIFCSPhysicalAddressType" name="type" placeholder="Address Type" value=""/>	
+					<div class="aro_box_part" type="addressPart">
+						<div class="control-group">
+							<span class="inputs_group">
+								<input type="text" class="inner_input" name="value" placeholder="value" value=""/>
+								<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSPhysicalAddressPartType" name="type" placeholder="Type" value=""/>
+							</span>
+							<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
+						</div>
+					</div>			
+					<div class="separate_line"/>
+					<button class="btn btn-primary addNew" type="addressPart" add_new_type="addressPart">
+						<i class="icon-plus icon-white"></i> Add Address Part
+					</button>					
 				</div>
 			</div>
 		</div>
