@@ -611,6 +611,11 @@ function generatePreviewTip(element, slug, registry_object_id, relation_type)
 
 function initDescriptionDisplay()
 {
+    if ($('#viewRenderer').val() == 'contributor')
+    {
+        return;
+    }
+    
     // Hide multiple descriptions, with option to display all
     $('.descriptions div:gt(0)').hide();
 

@@ -112,6 +112,7 @@
 				<p><input type="button" id="tag_submit" name="tag_submit" value="Submit"/></p>
 			</div>
 		</div-->    
+
       <xsl:choose>
 
        <xsl:when test="../extRif:extendedMetadata/extRif:displayTitle!=''">
@@ -133,8 +134,6 @@
 
 </xsl:choose>    
 
-<!-- DISPLAY LOGO -->
-<xsl:apply-templates select="../extRif:extendedMetadata/extRif:displayLogo"/>
 
 <!-- DISPLAY ALTERNATE TITLES/NAMES -->
 <xsl:apply-templates select="ro:name[@type='alternative']/ro:displayTitle"/>
@@ -145,16 +144,16 @@
 
 
             <div class="descriptions" style="position:relative;clear:both;">
-            	<xsl:if test="extRif:description/@type='brief'"><h2>Overview</h2></xsl:if>
-				<xsl:apply-templates select="extRif:description[@type= 'brief']" mode="content"/>
-				<xsl:apply-templates select="extRif:description[@type= 'full']" mode="content"/>
-            	<xsl:if test="extRif:description/@type='researchAreas'"><h2>Research and Key Research Areas</h2></xsl:if>				
-				<xsl:apply-templates select="extRif:description[@type= 'researchAreas']" mode="content"/>
+            	<xsl:if test="../extRif:extendedMetadata/extRif:description/@type='brief'"><h2>Overview</h2></xsl:if>
+				<xsl:apply-templates select="../extRif:extendedMetadata/extRif:description[@type= 'brief']" mode="content"/>
+				<xsl:apply-templates select="../extRif:extendedMetadata/extRif:description[@type= 'full']" mode="content"/>
+            	<xsl:if test="../extRif:extendedMetadata/extRif:description/@type='researchAreas'"><h2>Research and Key Research Areas</h2></xsl:if>				
+				<xsl:apply-templates select="../extRif:extendedMetadata/extRif:description[@type= 'researchAreas']" mode="content"/>
 				 <h2>Research Data Profile</h2>
                  %%%%CANNED_TEXT%%%%
-				<xsl:apply-templates select="extRif:description[@type= 'researchDataProfile']" mode="content"/>	
-	            <xsl:if test="extRif:description/@type='researchSupport'"><h2>Research Support</h2></xsl:if>						
-				<xsl:apply-templates select="extRif:description[@type= 'researchSupport']" mode="content"/>							
+				<xsl:apply-templates select="../extRif:extendedMetadata/extRif:description[@type= 'researchDataProfile']" mode="content"/>	
+	            <xsl:if test="../extRif:extendedMetadata/extRif:description/@type='researchSupport'"><h2>Research Support</h2></xsl:if>						
+				<xsl:apply-templates select="../extRif:extendedMetadata/extRif:description[@type= 'researchSupport']" mode="content"/>							
             </div>   
 
   <xsl:if test="ro:identifier">
@@ -312,8 +311,9 @@
 
 
 
-    <div class="page_title" id="displaytitle">
-       <h1><xsl:value-of select="."/></h1>
+    <div class="page_title"  id="displaytitle">
+      
+       <h1><xsl:value-of select="."/><xsl:apply-templates select="../extRif:logo"/></h1>
        <xsl:for-each select="//ro:existenceDates">
           <xsl:if test="./ro:startDate"><xsl:value-of select="./ro:startDate"/></xsl:if>
           - 
@@ -324,14 +324,12 @@
 
 </xsl:template>
     
-<xsl:template match="extRif:displayLogo">
-    <xsl:if test="extRif:displayLogo/text() != ''">
-        <div>
-            <img id="party_logo" style="max-width:130px;">
-            	<xsl:attribute name="src"><xsl:value-of select="."/></xsl:attribute>
-            	<xsl:attribute name="alt">Party Logo</xsl:attribute>
-            </img>
-        </div>
+<xsl:template match="extRif:logo">
+    <xsl:if test="text() != ''">
+      <img id="party_logo" class="logo right" style="max-width:130px;">
+      	<xsl:attribute name="src"><xsl:value-of select="."/></xsl:attribute>
+      	<xsl:attribute name="alt">Contributor Logo</xsl:attribute>
+      </img>
     </xsl:if>  
 </xsl:template> 
 

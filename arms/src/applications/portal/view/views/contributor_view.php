@@ -1,4 +1,5 @@
 <?php $this->load->view('rda_header');?>
+<input  type="hidden" class="hide" id="viewRenderer" value="contributor" />
 <div class="container less_padding">
 	<?php
 		if (isset($registry_object_contents))
