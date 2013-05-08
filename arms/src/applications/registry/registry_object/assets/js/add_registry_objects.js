@@ -14,7 +14,7 @@ $(function(){
 			$("#AddNewDS").modal('show');
 			initVocabWidgets();
 
-			Core_bindFormValidation($('#AddNewDS form'));
+			//Core_bindFormValidation($('#AddNewDS form'));
 		}
 	});	
     $('input[name=key]').on({
@@ -96,25 +96,47 @@ function initVocabWidgets(container){
 		container_elem = container;
 	}else container_elem = $(document);
 	$(".rifcs-type", container_elem).each(function(){
+		//log(this, 'bind vocab widget');
 		var elem = $(this);
 		var widget = elem.vocab_widget({mode:'advanced'});
 		var vocab = _getVocab(elem.attr('vocab'));
-		var dataArray = Array();
-
 		elem.on('narrow.vocab.ands', function(event, data) {	
-		
-			$.each(data.items, function(idx, e) {
-				dataArray.push({value:e.label, subtext:e.definition});
-			});
+			var dataArray = Array();
+			if(vocab == 'RIFCSSubjectType')
+			{				
+				$.each(data.items, function(idx, e) {
+					dataArray.push({value:e.notation, subtext:e.definition});
+				});
+				$(elem).off().on("change",function(e){
+					// $(elem).prev().val('');
+					initSubjectWidget(elem);
+				});
 				
-			elem.typeahead({source:dataArray,items:16});
-			// Trigger the onBlur validation script
-			elem.on('change', function() { $(this).trigger('blur'); });
+				initSubjectWidget(elem);
+				elem.typeahead({source:dataArray});
+			}
+			else if(vocab == 'GroupSuggestor')
+			{
+				$.getJSON(base_url+'registry_object/getGroupSuggestor', function(data){
+					elem.removeClass('rifcs-type-loading');
+					elem.typeahead({source:data});
+				});
+			}
+			else
+			{
+				$.each(data.items, function(idx, e) {
+					dataArray.push({value:e.label, subtext:e.definition});
+				});
+				elem.typeahead({source:dataArray});
+			}
+			
 		});
 
+		elem.on('error.vocab.ands', function(event, xhr) {
+			log(xhr);
+		});
 		widget.vocab_widget('repository', 'rifcs');
-		widget.vocab_widget('narrow', "http://purl.org/au-research/vocabulary/RIFCS/1.4/" + vocab);	
-		//}	 
+		widget.vocab_widget('narrow', "http://purl.org/au-research/vocabulary/RIFCS/1.4/" + vocab);		 
 	});
 
 }

@@ -167,9 +167,9 @@ class Data_source extends MX_Controller {
 		//QA and Auto Publish check, valid_statuses are populated accordingly
 		$qa = $data_source->qa_flag=='t' || $data_source->qa_flag==DB_TRUE ? true : false;
 		$manual_publish = ($data_source->manual_publish=='t' || $data_source->manual_publish==DB_TRUE) ? true: false;
-		$jsonData['valid_statuses'] = array('MORE_WORK_REQUIRED', 'DRAFT', 'PUBLISHED');
+		$jsonData['valid_statuses'] = array('DRAFT', 'PUBLISHED');
 		if($qa) {
-			array_push($jsonData['valid_statuses'], 'SUBMITTED_FOR_ASSESSMENT', 'ASSESSMENT_IN_PROGRESS');
+			array_push($jsonData['valid_statuses'], 'MORE_WORK_REQUIRED', 'SUBMITTED_FOR_ASSESSMENT', 'ASSESSMENT_IN_PROGRESS');
 		}
 		if($manual_publish){
 			array_push($jsonData['valid_statuses'], 'APPROVED');	

@@ -862,8 +862,7 @@ function update(ids, attributes){
     }
     $("html, body").animate({ scrollTop: 0 }, "slow");
     var text = total+' records updating...<img src="'+base_url+'assets/img/ajax-loader.gif" alt="Loading..Please wait.."/>';
-    $('#status_message').html(text);
-    $('#status_message').show();
+    $('#status_message').html(text).show();
     $.ajax({
         url:url, 
         type: 'POST',
@@ -875,18 +874,16 @@ function update(ids, attributes){
                 $('#status_message').removeClass('alert-info').addClass('alert-error');
                 $('#status_message').html(data.error_message);
             }else if(data.status=='success'){
-                if(data.error_count != '0')
-                {
+                $('#status_message').hide();
+                if(data.error_count != '0'){
                     $('#status_message').removeClass('alert-info').addClass('alert-error');
-                    $('#status_message').html(data.error_message);
+                    $('#status_message').html(data.error_message).show();
                 }
                 else{
                    $('#status_message').removeClass('alert-error').addClass('alert-info');
-                   $('#status_message').html(data.success_message);
+                   if(data.success_message!='') $('#status_message').html(data.success_message).show();
                 }
 
-                 $('#status_message').show();
-                
                 init(filters);
             }
         }

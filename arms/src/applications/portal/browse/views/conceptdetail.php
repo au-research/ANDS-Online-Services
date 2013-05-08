@@ -8,7 +8,7 @@
 	</tr>
 
 	<tr>
-		<td>ANZSRC Code</td><td><?php echo $notation;?></td>
+		<td>Field of Research Code</td><td><?php echo $notation;?></td>
 	</tr>
 
 	<tr class="vocabulary_metadata">

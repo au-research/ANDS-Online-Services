@@ -49,7 +49,7 @@ class Browse extends MX_Controller {
 			$item = array(
 				'title'=>$d->{'list_title'},
 				'class'=>$d->{'class'},
-				'description'=>$d->{'description'},
+				'description'=>html_entity_decode($d->{'description'}),
 				'url'=> base_url($d->{'slug'}),
 				'display_footer' => true
 			);

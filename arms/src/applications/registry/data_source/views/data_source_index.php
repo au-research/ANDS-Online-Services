@@ -119,8 +119,8 @@
 			</div>
 			<div class="btn-group item-control">
 	  			<button class="btn btn-small view page-control" data_source_id="{{id}}"><i class="icon-eye-open"></i> Dashboard</button>
-	  			<button class="btn btn-small mmr page-control" data_source_id="{{id}}"><i class="icon-folder-open"></i> Manage</button>
-		  		<button class="btn btn-small settings page-control" data_source_id="{{id}}"><i class="icon-edit"></i> Settings</button>
+	  			<button class="btn btn-small mmr page-control" data_source_id="{{id}}"><i class="icon-folder-open"></i> Manage Records</button>
+		  		<button class="btn btn-small edit page-control" data_source_id="{{id}}"><i class="icon-edit"></i> Edit Settings</button>
 			</div>
 
 			<div class="widget-content">
@@ -902,6 +902,7 @@
 							</div>
 						</div>
 
+						<?php if ($this->user->hasFunction('REGISTRY_SUPERUSER')):?>
 						<div class="control-group">
 							<label class="control-label" for="record_owner">Record Owner</label>
 							<div class="controls">			
@@ -911,12 +912,9 @@
 								<?php endforeach;?>
 								</select>
 								<input type="text" class="input-small hide" name="record_owner" id="record_owner" value="{{record_owner}}">
-
-
-
-
 							</div>
 						</div>
+						<?php endif;?>
 
 						<div class="control-group">
 							<label class="control-label" for="contact_name">Contact Name</label>

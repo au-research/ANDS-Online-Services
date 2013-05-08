@@ -59,7 +59,7 @@
 					<span class="label"><a href="http://www.ands.org.au/guides/cpguide/cpggroup.html" target="_blank" title="View Content Providers' Guide">?</a></span>
 				</label>
 				<div class="controls">
-					<input required type="text" class="input-xlarge" name="group" value="">
+					<input required type="text" class="input-xlarge rifcs-type" vocab="GroupSuggestor" name="group" value="">
 				</div>
 			</div>
 

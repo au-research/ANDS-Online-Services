@@ -82,7 +82,7 @@
                 <li class="btn btn-inverse dropdown">
                   <a class="dropdown-toggle" data-toggle="dropdown" href="#">My Data <b class="caret"></b></a>
                   <ul class="dropdown-menu pull-right">
-                    <li class=""><?php echo anchor('data_source/manage', 'Manage My Datasources');?></li>
+                    <li class=""><?php echo anchor('data_source/manage', 'Manage My Data Sources');?></li>
                     <li class=""><?php echo anchor('registry_object/add', '<i class="icon icon-plus"></i> Add New Record');?></li>
                     <li class="divider"></li>
                     <li class=""><?php echo anchor('registry_object/gold_standard', 'Gold Standard Records');?></li>

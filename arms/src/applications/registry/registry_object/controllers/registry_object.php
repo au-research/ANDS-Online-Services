@@ -318,6 +318,7 @@ class Registry_object extends MX_Controller {
 	  		$xml .= "<key>".$data['registry_object_key']."</key>".NL;
 	  		$xml .= "<originatingSource type=''>".$data['originating_source']."</originatingSource>".NL;
 	  		$xml .= "<".$data['ro_class']." type='".$data['type']."'>".NL;
+	  		$xml .= "<name type='primary'><namePart type='primary'>No Name/Title</namePart></name>";
 	  		$xml .= "</".$data['ro_class'].">".NL;
 			$xml .= "</registryObject>";
 			$this->importer->forceDraft();
