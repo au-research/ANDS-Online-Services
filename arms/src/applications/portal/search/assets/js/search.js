@@ -525,8 +525,8 @@ function postSearch(){
 		    $('li:gt(4)', facet).hide();
 		    $facet.append('<li><a href="javascript:;" class="show-all-facet">Show More...</a></li>');
 		    $('.show-all-facet').click(function(){
-			$facet.parent().siblings().show();
-			$facet.parent().remove();
+				$(this).parent().siblings().show();
+				$(this).parent().remove();
 		    });
 		}
 	});
