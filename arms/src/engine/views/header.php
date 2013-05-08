@@ -85,6 +85,8 @@
                     <li class=""><?php echo anchor('data_source/manage', 'Manage My Data Sources');?></li>
                     <li class=""><?php echo anchor('registry_object/add', '<i class="icon icon-plus"></i> Add New Record');?></li>
                     <li class="divider"></li>
+                    <li class=""><?php echo anchor(portal_url(), '<i class="icon-globe icon"></i> Research Data Australia',array("target"=>"_blank"));?></li>
+                    <li class="divider"></li>
                     <li class=""><?php echo anchor('registry_object/gold_standard', 'Gold Standard Records');?></li>
                   </ul>
                 </li>
