@@ -88,7 +88,12 @@ function isMapView(searchData) {
 }
 
 function executeSearch(searchData, searchUrl){
-    resultPolygons.length = 0;
+        if(infowindow)
+        {
+	  infowindow.close();
+        }
+
+        resultPolygons.length = 0;
 	clearOverlays();
         //if we're in the map view, don't fire a search unless we have
         //search terms, or spatial coverage data.
@@ -604,7 +609,9 @@ function SidebarToggle(controlDiv, map) {
 
 function initMap(){
 
-
+        if(infowindow) {
+	      infowindow.close();
+	}
 	if(searchBox){
 		searchBox.setMap(null);
 		searchBox = null;
