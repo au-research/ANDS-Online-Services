@@ -40,7 +40,7 @@ class NHMRC_Merged_File_to_RIFCS extends Crosswalk
 	 */
 	public function identify()
 	{
-		return "NHMRC Data to RIFCS";
+		return "NHMRC Grants CSV Data to RIFCS";
 	}
 
     /**
