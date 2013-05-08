@@ -625,7 +625,8 @@ class Registry_objects extends CI_Model {
 		// Add the XML content of this draft to the published record (and follow enrichment process, etc.)
 		$this->load->model('data_source/data_sources', 'ds');
 		$this->importer->_reset();
-		$this->importer->setXML(wrapRegistryObjects($registry_object->getRif()));
+		$this->importer->setXML(wrapRegistryObjects(html_entity_decode($registry_object->getRif())));
+		//echo $registry_object->getRif();
 		$this->importer->setDatasource($this->ds->getByID($registry_object->data_source_id));
 		$this->importer->forceDraft();
 		$this->importer->commit();

@@ -550,7 +550,7 @@
             <xsl:when test="string-length(@type) &gt; 512">
 	            <xsl:choose>
 				    <xsl:when test="$output = 'script'">
-                		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Type must be less than 512 characters.","type");</xsl:text>
+                		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Type must be less than 512 characters.");</xsl:text>
 				    </xsl:when>
 				    <xsl:otherwise>
 						<span class="error">Description Type must be less than 512 characters.</span>
@@ -560,7 +560,7 @@
             <xsl:when test="string-length(@type) = 0">
 	            <xsl:choose>
 				    <xsl:when test="$output = 'script'">
-                		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","A Description Type must be specified. &lt;span&gt;(e.g. 'full')&lt;/span&gt;","type");</xsl:text>
+                		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","A Description Type must be specified. &lt;span&gt;(e.g. 'full')&lt;/span&gt;");</xsl:text>
 				    </xsl:when>
 				    <xsl:otherwise>
 						<span class="error">Description Type must be specified.</span>
