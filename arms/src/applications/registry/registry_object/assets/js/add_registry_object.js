@@ -750,17 +750,7 @@ function validate(){
 			if(data.SetErrors) $.each(data.SetErrors, function(e,i){addValidationMessage(i, 'error');});
 			if(data.SetWarnings) $.each(data.SetWarnings, function(e,i){addValidationMessage(i, 'warning');});
 
-			var allTabs = $('.pane');
-			$('#advanced-menu .label').remove();
-			$.each(allTabs, function(){
-				var count_info = $('.alert-info', this).length;
-				var count_error = $('.alert-error', this).length;
-				var count_warning = $('.alert-warning', this).length;
-				var id = $(this).attr('id');
-				if(count_info > 0) addValidationTag(id, 'info', count_info);
-				if(count_error > 0) addValidationTag(id, 'important', count_error);
-				if(count_warning > 0) addValidationTag(id, 'warning', count_warning);
-			});
+			setTabInfo();
 
 			var action_bar = generateActionBar(data);
 			if (action_bar)
@@ -828,25 +818,12 @@ function addValidationMessage(tt, type){
 	}
 }
 
-function addValidationTag(pane, type, num){
+function addValidationTag(pane, type, num, message){
 	var menu_item = $('a[href="#'+pane+'"]');
-	$(menu_item).append('<span class="label label-'+type+'">'+num+'</span>')
+	$(menu_item).append('<span class="label label-'+type+'" tip="'+(typeof(message) !== 'undefined' ? message : '')+'" my="center left" at="center right">'+num+'</span>')
 }
 
 
-function setTabInfo(){
-	var allTabs = $('.pane');
-	$('#advanced-menu .label').remove();
-	$.each(allTabs, function(){
-		var count_info = $('.alert-info', this).length;
-		var count_error = $('.alert-error', this).length;
-		var count_warning = $('.alert-warning', this).length;
-		var id = $(this).attr('id');
-		if(count_info > 0) addValidationTag(id, 'info', count_info);
-		if(count_error > 0) addValidationTag(id, 'important', count_error);
-		if(count_warning > 0) addValidationTag(id, 'warning', count_warning);
-	});
-}
 function initSimpleModeFields()
 {
 	/* Show/hide full description field */
