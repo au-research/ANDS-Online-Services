@@ -885,7 +885,8 @@ function update(ids, attributes){
                 }
                 else{
                    $('#status_message').removeClass('alert-error').addClass('alert-info');
-                   if(data.success_message!='') $('#status_message').html(data.success_message).show();
+                   var data_success_message = $('<div>'+data.success_message+'</div>').text()
+                   if(data_success_message!='') $('#status_message').html(data.success_message).show();
                 }
 
                 init(filters);
