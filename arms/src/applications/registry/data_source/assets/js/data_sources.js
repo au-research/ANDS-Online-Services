@@ -19,13 +19,16 @@ $(function(){
 		{
 			try
 			{
+			        //shouldn't we check to ensure data.getResponseHeader('Content-Type') is actually (or at least startsWith) application/json???
+			        //otherwise the following will throw a SyntaxError always. Guess you need to ensure the server is setting correct Content-Type
+			        //headers...
 				data = $.parseJSON(data.responseText);
 				checkResponse(data);
 				return;
 			}
 			catch (e)
 			{
-				logErrorOnScreen("An unknown error occured whilst communicating with the server.");
+			        window.setTimeout(function(){logErrorOnScreen("An unknown error occured whilst communicating with the server.")}, 1500);
 			}
 		}
 	});
