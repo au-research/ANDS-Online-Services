@@ -200,7 +200,7 @@ class Importer {
 				$this->message_log[] = "Registry Object duplicates: " . $this->ingest_duplicate_ignore;
 			}
 			
-			if($CI->user->hasFunction('REGISTRY_SUPERUSER')) 
+			if($this->CI->user->hasFunction('REGISTRY_SUPERUSER')) 
 			{
 				$this->message_log[] = "Reindexed record count: " . $this->reindexed_records;
 			}
