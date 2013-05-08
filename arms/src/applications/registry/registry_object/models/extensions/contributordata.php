@@ -24,6 +24,7 @@ class ContributorData_Extension extends ExtensionBase
 		$this->_CI->load->library('solr');
 		$this->_CI->solr->setOpt('q', '*:*');
 		$this->_CI->solr->setOpt('fq', 'group:("'.$this->ro->getAttribute('group').'")');
+		$this->_CI->solr->setOpt('fq', '-id:("'.$this->ro->id.'")');		
 		$this->_CI->solr->setFacetOpt('field', 'class');
 		$this->_CI->solr->setFacetOpt('field', 'subject_value_resolved');		
 		$this->_CI->solr->setFacetOpt('mincount','1');
@@ -34,7 +35,7 @@ class ContributorData_Extension extends ExtensionBase
 		$classes = $this->_CI->solr->getFacetResult('class');
 
 		foreach($classes as $class=>$num){
-			$contributorData['contents'][readable($class)] = $num;
+			$contributorData['contents'][$class] = $num;
 		}
 
 
