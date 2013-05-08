@@ -99,7 +99,7 @@ class Data_sources extends CI_Model {
 		{
 			if ($this->user->hasFunction('REGISTRY_SUPERUSER'))
 			{
-				$query = $this->db->query("SELECT data_source_id FROM data_source_attributes WHERE `attribute` = 'record_owner'");	
+				$query = $this->db->query("SELECT data_source_id FROM data_sources");	
 			}
 			else
 			{

@@ -49,6 +49,8 @@
 
 					<p><small>To get started, click on the My Data link at the top of the screen and take a look around! You can always get back to this dashboard by clicking on the ANDS logo (top left).</small></p>
 
+					<p><small>The Publish My Data tool is temporarily unavailable at this time. Please contact ANDS Services Support team if you require assistance with your previously-created Publish My Data records.</small></p>
+
 					<p><small>As always, the ANDS Services Support team is here to help! If your question isn't answered by your Client Liaison Officer or the 
 						<a href="http://ands.org.au/resource/ands-faq.html" target="_blank">FAQ</a>, please contact ANDS Services Support at 
 						<a href="mailto:services@ands.org.au" target="_blank">services@ands.org.au</a>.</small></p>

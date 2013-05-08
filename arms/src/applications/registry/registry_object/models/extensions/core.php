@@ -114,7 +114,7 @@ class Core_extension extends ExtensionBase
 		return $this;
 	}
 	
-	function save()
+	function save($change_updated = true)
 	{
 		// A status change triggers special business logic
 		//echo $this->getAttribute("status"). " " .$this->getAttribute("original_status") ;
@@ -131,9 +131,12 @@ class Core_extension extends ExtensionBase
 				$this->handleStatusChange($this->getAttribute("status"));
 			}
 
-			// Mark this record as recently updated
-			$this->setAttribute("updated", time());
-
+			if ($change_updated)
+			{
+				// Mark this record as recently updated
+				$this->setAttribute("updated", time());
+			}
+			
 			foreach($this->attributes AS $attribute)
 			{
 				if ($attribute->dirty)

@@ -759,7 +759,7 @@ class _data_source {
 		}
 		catch (Exception $e)
 		{
-			$errors = $e->getMessage();
+			$errors = "Unable to send harvest request to the harvester!"; // $e->getMessage();
 			$logInfo['error'] = "Unable to send harvest request to the harvester!";
 		}
 		if( $errors )

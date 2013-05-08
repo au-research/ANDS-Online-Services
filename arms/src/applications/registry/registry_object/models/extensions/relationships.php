@@ -33,7 +33,8 @@ class Relationships_Extension extends ExtensionBase
 
 			if ($result->num_rows() > 0)
 			{
-				$record = array_shift($result->result_array());
+				$record = $result->result_array();
+				$record = array_shift($record);
 				$result->free_result();
 				$class = $record['class'];
 				$title = $record['title'];
@@ -118,7 +119,8 @@ class Relationships_Extension extends ExtensionBase
 	{
 		/* Holy crap! Use getConnections to infer relationships to drafts and reverse links :-))) */
 		$classes = array();
-		$connections = array_pop($this->ro->getConnections(false));
+		$connections = $this->ro->getConnections(false);
+		$connections = array_pop($connections);
 		if (isset($connections['activity']))
 		{
 			$classes[] = "Activity";

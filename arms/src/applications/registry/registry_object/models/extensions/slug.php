@@ -33,11 +33,13 @@ class Slug_Extension extends ExtensionBase
 		{
 			if ($query_ro_slugs->num_rows() > 0)
 			{
-				$existing_slug = array_pop($query_ro_slugs->result_array());
+				$ro_res = $query_ro_slugs->result_array();
+				$existing_slug = array_pop($ro_res);
 			}
 			else if ($query_url_mappings->num_rows() > 0)
 			{
-				$query_url_mappings = array_pop($query_ro_slugs->result_array());
+				$ro_res = $query_ro_slugs->result_array();
+				$query_url_mappings = array_pop($ro_res);
 			}
 
 

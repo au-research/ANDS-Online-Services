@@ -1,6 +1,6 @@
 <?php
 
-
+ini_set('memory_limit', '2048M');
 class Migrate extends MX_Controller
 {
 	private $input; // pointer to the shell input
@@ -8,63 +8,219 @@ class Migrate extends MX_Controller
 	private $exec_time; // time execution started
 	private $_CI; 	// an internal reference to the CodeIgniter Engine 
 	private $source;
+	private $scpr = "dba."; //schema prefix
+	private $recordLimit = 1500;
+	private $noEmails = true; // for debugging
 	
 	function index()
 	{
+		$scpr = $this->scpr; //schema prefix
+
 		set_error_handler(array(&$this, 'cli_error_handler'));
 		echo "Connected to migration target database..." . NL;
 
 		$this->source->select('*');
-		$query = $this->source->get('dba.tbl_data_sources');
+		$query = $this->source->get($scpr . 'tbl_data_sources');
 
 		$num_data_sources = $query->num_rows();
 		
-		/*echo $num_data_sources . " data sources found. Do you wish to migrate these data sources? [y/n]: ";
-
-		if ($this->getInput() != 'y'){
-			echo "Exiting..." . NL;
-			return;
-		}*/
 		// Start the clock...
-
 		$this->exec_time = microtime(true);
-		$this->load->model('data_source/data_sources','ds');
+
+		$this->_CI->load->model("registry_object/registry_objects", "ro");
+		$this->_CI->load->model('data_source/data_sources','ds');
 		foreach ($query->result() AS $result)
 		{
-			echo "Importing data source: " . $result->title . ".";
-			//var_dump($result);
-			//exit();
+			$data_source = $this->createOrUpdateDataSource($result);
+			
+			// Update logs (deletes any legacy logs and re-migrates them!)
+			//$this->importDataSourceLogs($data_source->key, $data_source->id);
+			//$data_source->append_log("Data Source was migrated to ANDS Online Services Release 10", "info", "legacy_log");
+
+			// Now start importing registry objects
+			//$this->deleteAllrecordsForDataSource($data_source);
+			//$data_source->updateStats();
+			//$this->migrateDraftRegistryObjectsForDatasource($data_source);
+			//$this->migrateDeletedRegistryObjectsForDatasource($data_source);
+			//$this->migrateRegistryObjectsForDatasource($data_source);
+
+			echo NL . NL;
+		}
+
+		//$this->updateDanglingSlugs();
+		$this->updateContributorPages();
+
+
+		echo NL . NL;
+
+	}
+
+	function updateContributorPages()
+	{
+		$query = $this->source->get('dba.tbl_institution_pages');
+		echo "[CONTRIBUTORS] Found " . $query->num_rows() . " contributor pages..." . NL;
+
+		$this->db->where('group !=', '')->delete('institutional_pages');
+
+		if ($query->num_rows() > 0)
+		{
+			foreach ($query->result() AS $contributor)
+			{
+				// Resolve RO keys to IDs
+				$registry_object = $this->ro->getPublishedByKey($contributor->registry_object_key);
+				if (!$registry_object) { 
+					$registry_object = $this->ro->getDraftByKey($contributor->registry_object_key);
+				}
+
+				$ds = $this->ds->getByKey($contributor->authoritive_data_source_key);
+			
+				if ($registry_object && $ds)
+				{
+
+					$this->db->insert("institutional_pages", 
+						array("group" => $contributor->object_group, 
+							  "registry_object_id" => $registry_object->id, 
+							  "authorative_data_source_id" => $ds->id
+						)
+					);
+				}
+				else
+				{
+					echo "Unable to match contributor page keys: " . $contributor->object_group . " (".$contributor->registry_object_key.")". NL;
+				}
+			}
+		}
+	}
+
+	function updateDanglingSlugs()
+	{
+		$query = $this->source->get_where('dba.tbl_url_mappings', array("registry_object_key"=>""));
+		echo "[SLUGS] Found " . $query->num_rows() . " dangling slugs...";
+		if ($query->num_rows() > 0)
+		{
+			foreach ($query->result() AS $slug)
+			{
+				$slug->url_fragment = substr($slug->url_fragment,0,255);
+
+				$count_query = $this->db->get_where("url_mappings", 
+					array("slug" => $slug->url_fragment));
+
+				if ($count_query->num_rows() == 0)
+				{
+					$this->db->insert("url_mappings", 
+						array("slug" => $slug->url_fragment, 
+							  "created" => $slug->date_created, 
+							  "updated" => max($slug->date_created, $slug->date_modified), 
+							  "search_title" => $slug->search_title
+						)
+					);
+				}
+				
+			}
+		}
+	}
+
+	function createOrUpdateDataSource($result)
+	{
+
+			// Fetch this data source (or create it if it doesn't exist yet)
 			$data_source = $this->ds->getByKey($result->data_source_key);
 			if($data_source === NULL)
-				$data_source = $this->ds->create($result->data_source_key, url_title($result->title)); // XXX: Generate slug.
-			
+			{
+				echo "Creating data source: " . $result->title . "..." . NL;
+				$this->ds->create($result->data_source_key, url_title($result->title));
+				$data_source = $this->ds->getByKey($result->data_source_key);
+			}
+			else
+			{
+				echo "Updating data source: " . $result->title . "..." . NL;
+			}
+
+
+			echo "----" . NL;
+			// Start setting attributes
 			$data_source->title = $result->title;
-			$data_source->setAttribute("provider_type", $result->provider_type);
-			$data_source->setAttribute("uri", $result->uri);
 			$data_source->setAttribute("contact_name", $result->contact_name);
 			$data_source->setAttribute("contact_email", $result->contact_email);
+
+			$data_source->setAttribute("record_owner", $result->record_owner); // this should be an org role in cosi...unchanged from R9
+
+			$data_source->created = strtotime($result->created_when); // convert our timestamps to UNIX
+			$data_source->updated = strtotime($result->modified_when); // convert our timestamps to UNIX
+
+			// Contact details unchanged
+			$data_source->setAttribute("contact_name", $result->contact_name);
+
+			if ($this->noEmails)
+			{
+				$data_source->setAttribute("contact_email", "ben.greenwood@ands.org.au");
+			}
+			else
+			{
+				$data_source->setAttribute("contact_email", $result->contact_email);
+			}
+			
+
+			// Notes have to be trimmed down to 255 characters
 			$data_source->setAttribute("notes", substr($result->notes, 0 ,255));
-			$data_source->setAttribute("record_owner", $result->record_owner);
-			$data_source->setAttribute("created_when", $result->created_when);
-			$data_source->setAttribute("modified_when", $result->modified_when);
-			$data_source->setAttribute("modified_who", $result->modified_who);
-			$data_source->setAttribute("harvest_method", $result->harvest_method);
+
+			// Don't track modified_who in R10
+			//$data_source->setAttribute("modified_who", $result->modified_who);
+
+			// Provider type values have changed...it now indicates the crosswalk provider type
+			$data_source->setAttribute("uri", ($result->uri != "http://" ? $result->uri : ""));
+			// Harvest method is the new provider_type...
+			// $data_source->setAttribute("harvest_method", $result->harvest_method);
+			if (trim($result->provider_type) == "OAI_RIF")
+			{
+				// RIF indicates OAI (why...)
+				$data_source->setAttribute("harvest_method", "RIF");
+			}
+			else
+			{
+				// "GET" means normal HTTP request
+				$data_source->setAttribute("harvest_method", "GET");
+			}
+			$result->provider_type = "rif"; // all datasources provide RIFCS
 			$data_source->setAttribute("oai_set", $result->oai_set);
-			$data_source->setAttribute("harvest_date", $result->harvest_date);
+
+			// Contact email field name is changed to be spelled correctly
+			if ($this->noEmails)
+			{
+				$data_source->setAttribute("assessment_notify_email_addr", "ben.greenwood@ands.org.au");
+			}
+			else
+			{
+				$data_source->setAttribute("assessment_notify_email_addr", $result->assessement_notification_email_addr);
+			}
+
+			// Hold onto this legacy value in case this NL feature comes back one day
+			$data_source->setAttribute("LEGACY-isil_value", $result->isil_value);
+			$data_source->setAttribute("LEGACY-push_to_nla", $result->push_to_nla);
+
+			// Translate the date to zulu timestamp (xsd:dateTime)
+			if($result->harvest_date)
+			{
+				$data_source->setAttribute("harvest_date", gmdate("Y-m-d\TH:i:s\Z", strtotime($result->harvest_date)));
+			}
+
 			$data_source->setAttribute("harvest_frequency", $result->harvest_frequency);
-			$data_source->setAttribute("isil_value", $result->isil_value);
-			$data_source->setAttribute("push_to_nla", $result->push_to_nla);
+
+			// Leo's retarded inverse flag logic
+			if($result->auto_publish == "f")
+			{
+				$data_source->setAttribute("manual_publish", "f");
+			}
+			else
+			{
+				$data_source->setAttribute("manual_publish", "t");
+			}
+
+			// Types remain "t" or "f"
 			$data_source->setAttribute("allow_reverse_internal_links", $result->allow_reverse_internal_links);
 			$data_source->setAttribute("allow_reverse_external_links", $result->allow_reverse_external_links);
-			$data_source->setAttribute("assessement_notify_email_addr", $result->assessement_notification_email_addr);
-			//$data_source->setAttribute("auto_publish", $result->auto_publish);
-			if($result->auto_publish)
-			{
-				$data_source->setAttribute("manual_publish", false);
-			}else{
-				$data_source->setAttribute("manual_publish", true);
-			}
 			$data_source->setAttribute("qa_flag", $result->qa_flag);
+
 			$data_source->setAttribute("create_primary_relationships", $result->create_primary_relationships);
 			$data_source->setAttribute("primary_key_1", $result->primary_key_1);
 			$data_source->setAttribute("class_1", $result->class_1);
@@ -72,123 +228,370 @@ class Migrate extends MX_Controller
 			$data_source->setAttribute("party_rel_1", $result->party_rel_1);
 			$data_source->setAttribute("activity_rel_1", $result->activity_rel_1);
 			$data_source->setAttribute("service_rel_1", $result->service_rel_1);
+
 			$data_source->setAttribute("primary_key_2", $result->primary_key_2);
 			$data_source->setAttribute("class_2", $result->class_2);
 			$data_source->setAttribute("collection_rel_2", $result->collection_rel_2);
 			$data_source->setAttribute("party_rel_2", $result->party_rel_2);
 			$data_source->setAttribute("activity_rel_2", $result->activity_rel_2);
 			$data_source->setAttribute("service_rel_2", $result->service_rel_2);
-			$data_source->setAttribute("time_zone_value", $result->time_zone_value);
+
+			// No idea what this is doing..it looks exactly the same as the harvest date...
+			$data_source->setAttribute("LEGACY-time_zone_value", $result->time_zone_value);
+
+
+			if($result->data_source_key == 'PUBLISH_MY_DATA')
+			{
+				$data_source->setAttribute("qa_flag", "t");
+			}
+
+			$data_source->setSlug($data_source->title);
 			$data_source->save();
-			$data_source->append_log("IMPORTED FROM: ".$this->source->database, "info");
-			echo "." .NL;
-
-			$this->deleteAllrecordsForDataSource($data_source);
-			// Now start importing registry objects
-			
-			
-			echo $data_source->key;
-			echo ". complete!" . NL;
-			//exit();
-		}
-
-		foreach($query->result() as $result){
-			$data_source = $this->ds->getByKey($result->data_source_key);
-			$this->migrateRegistryObjectsForDatasource($data_source);
-			$this->migrateDraftRegistryObjectsForDatasource($data_source);
-		}
-
-		foreach($query->result() as $result){
-			$data_source = $this->ds->getByKey($result->data_source_key);
-			$data_source->updateStats();
-		}
-
+			return $data_source;
 
 	}
+
+
+	function importDataSourceLogs($key, $id)
+	{
+		$this->source->select('*')->where('data_source_key', $key)->order_by('created_when', 'ASC');
+		$query = $this->source->get($this->scpr . 'tbl_data_source_logs');
+
+		if ($query->num_rows() > 0)
+		{
+			$this->db->delete('data_source_logs', array("data_source_id" => $id, "class" => "legacy_log"));
+
+			foreach ($query->result_array() AS $result)
+			{
+				if ($result['event_description'])
+				{
+					$this->db->insert("data_source_logs", 
+						array("data_source_id" => $id, 
+							  "date_modified" => strtotime($result['created_when']), 
+							  "type" => ($result['log_type'] == "INFO" ? "info" : "error"), 
+							  "log" => $result['event_description'], 
+							  "class" => "legacy_log")
+					);
+				}
+			}
+			echo "Included " . $query->num_rows() . " log entries." .NL;
+			return $query->num_rows();
+		}
+		return 0;
+	}
+
+
 
 	function migrateRegistryObjectsForDatasource(_data_source $data_source)
 	{
 		$query = $this->source->get_where("dba.tbl_registry_objects", array("data_source_key"=>$data_source->key));
 		$num_records = $query->num_rows();
-		echo "FOUND: ". $num_records . " records" .NL;
+		if ($num_records > $this->recordLimit) {
+			echo "[PUBLISHED RECORDS] Found ". $num_records . " records...skipping this datasource (>" . $this->recordLimit . ") " .NL;
+			return;
+		}
+
+		echo "[PUBLISHED RECORDS] Found ". $num_records . " records..." .NL;
+
 		$this->_CI->load->model("registry_object/registry_objects", "ro");
+		$count = 0;
+		$this->importer->_reset();
+
 		foreach ($query->result() AS $result)
 		{
+			$count++;
 			echo "Importing Record: " . $result->registry_object_key . "." .NL;
-			$gotXML = false;
-
-			$createdWho = $result->created_who;
-			$recordOwner = $result->record_owner;
-			$harvestId = NULL;
-			if($createdWho == $recordOwner && $createdWho != 'SYSTEM')					// created by direct import
-				$harvestId  = $recordOwner; 
-
-			//create(_data_source $data_source, $registry_object_key, $class, $title, $status, $slug, $record_owner, $harvestID)
 			
-
-			$registry_object = $this->ro->getPublishedByKey($result->registry_object_key);
-			//if($registry_object) $registry_object = $registry_object[0];
-
-			if($registry_object === NULL)
-				$registry_object = $this->ro->create($data_source, $result->registry_object_key, $result->registry_object_class, $result->display_title, $result->status, $result->url_slug, $recordOwner, $harvestId);
-			
-			
-			$registry_object->created = $result->created_when;
-			$registry_object->group = $result->object_group;
-			$registry_object->type = $result->type;
-			$registry_object->list_title = $result->list_title;
-			$query = $this->source->get_where("dba.tbl_raw_records", array("registry_object_key"=>$result->registry_object_key, "data_source"=>$data_source->key));
-			//$this->source->order_by("created_when", "desc"); 
-			$this->source->limit(1);
-			foreach ($query->result() AS $result)
+			if ($result->status != "PUBLISHED")
 			{
-				if($result->rifcs_fragment)
+				echo "Skipping approved record..." . NL;
+				continue;
+				// APPROVED records! :-/ what a pain...
+				//$this->importer->forceDraft();
+			}
+			else
+			{
+				$this->importer->forcePublish();
+			}
+
+			try
+			{
+				/* Get record RIFCS from raw_records table... */
+				$this->source->where(array("registry_object_key"=>$result->registry_object_key, "data_source"=>$data_source->key))
+							->order_by("created_when", "desc");
+
+				$record_data_query = $this->source->get("dba.tbl_raw_records");
+				$num_records = $query->num_rows();
+
+				if ($num_records > 0)
 				{
-					$registry_object->updateXML($result->rifcs_fragment);
-					$gotXML = true;
+					$rifcs_count = 0;
+					$this_ro_id = null;
+					foreach ($record_data_query->result() AS $record_data_result)
+					{
+						$rifcs_count++;
+
+						// Extract RIFCS XML
+						$registryObjects = simplexml_load_string(wrapRegistryObjects($record_data_result->rifcs_fragment));
+						$registryObjects->registerXPathNamespace('rif', 'http://ands.org.au/standards/rif-cs/registryObjects');
+						$registryObjectXML = $registryObjects->xpath('//rif:registryObject');
+						if (!$registryObjectXML[0])
+						{
+							throw new Exception("No RIFCS!");
+						}
+						$xml = wrapRegistryObjects($registryObjectXML[0]->asXML());
+
+						// First lot of record data...create the record
+						if($rifcs_count == 1)
+						{
+								$this->importer->setXML($xml);
+								if ($count == $num_records)
+								{
+									$this->importer->setPartialCommitOnly(FALSE);
+								}
+								else
+								{
+									$this->importer->setPartialCommitOnly(TRUE);
+								}
+
+								$this->importer->setDatasource($data_source);
+								$this->importer->commit();
+
+								$registryObject = $this->ro->getPublishedByKey($result->registry_object_key);
+								if ($registryObject)
+								{
+									$registryObject->record_owner = $result->created_who;
+									if ($result->record_owner != "SYSTEM")
+									{
+										$registryObject->created_who = "Harvester"; // extract the harvest ID
+										$registryObject->harvest_id = $result->record_owner;
+									}
+									else
+									{
+										$registryObject->created_who = $result->created_who;
+										$registryObject->harvest_id = "MANUAL-R9-IMPORT";
+									}
+									
+									$registryObject->manually_assessed = ($result->manually_assessed_flag == 0 ? "no" : "yes");
+									
+									if ($result->gold_status_flag == 1)
+									{
+										$registryObject->gold_status_flag = "t";
+									}
+									
+									$registryObject->flag = $result->flag;
+									$registryObject->created = strtotime($result->created_when);
+									$registryObject->updated = max($result->registry_date_modified, strtotime($result->status_modified_when));
+									// Update the raw record version too...
+									$this->db->where('registry_object_id', $registryObject->id);
+									$this->db->update('record_data', array("timestamp"=>$registryObject->updated)); 
+
+
+									// Slug checking (on old slugs pointing to this registry object)
+									$slug_query = $this->source->get_where('dba.tbl_url_mappings', 
+														array('registry_object_key' => $registryObject->key, 'url_fragment !=' => $registryObject->slug));
+
+									if ($slug_query->num_rows() > 0)
+									{
+										foreach ($slug_query->result() AS $slug)
+										{
+											$this->db->where(array('slug'=>$slug->url_fragment));
+											$slug_query2 = $this->db->get('url_mappings');
+											if ($slug_query2->num_rows() == 0)
+											{
+												$this->db->insert('url_mappings', array(
+													"slug"=>$slug->url_fragment,
+													"registry_object_id"=>$registryObject->id,
+													"created"=>time(),
+													"updated"=>time()
+												));
+											}
+											else
+											{
+												$this->db->where(array("slug"=>$slug->url_fragment));
+												$this->db->update('url_mappings', array(
+													"registry_object_id"=>$registryObject->id,
+													"updated"=>time()
+												));
+											}
+										}
+									}
+
+									// If we have a slug conflict!
+									if ($registryObject->slug != $result->url_slug)
+									{
+										$this->db->where(array('slug'=>$result->url_slug));
+										$slug_query = $this->db->get('url_mappings');
+										if ($slug_query->num_rows() == 0)
+										{
+											$this->db->insert('url_mappings', array(
+												"slug"=>$result->url_slug,
+												"registry_object_id"=>$registryObject->id,
+												"created"=>time(),
+												"updated"=>time()
+											));
+										}
+										else
+										{
+											$this->db->where(array("slug"=>$result->url_slug));
+											$this->db->update('url_mappings', array(
+												"registry_object_id"=>$registryObject->id,
+												"updated"=>time()
+											));
+										}
+										$registryObject->slug = $result->url_slug;
+									}
+
+
+									// Save without updating the "updated" date...
+									$registryObject->save(false);
+									$this_ro_id = $registryObject->id;
+
+									unset($registryObject);
+								}
+								else
+								{
+									throw new Exception("Appears that the record was not successfully created? Could not load after import!");
+								}
+						}
+						else
+						{
+							if (!is_null($this_ro_id) && $xml)
+							{
+								// Subsequent record data...just add an entry to the record_data table directly (no importer action required)
+								$this->db->insert("record_data", 
+									array("registry_object_id" => $this_ro_id, 
+										  "current" => "", 
+										  "data" => $xml, 
+										  "timestamp" => strtotime($record_data_result->created_when), 
+										  "scheme" => "rif",
+										  "hash"=>md5($xml))
+								);
+							}
+							else
+							{
+								echo "Failed to insert additional RO version data for this registry object..." . NL;
+							}
+						}
+					}
+
+				}	
+				else
+				{
+					throw new Exception("No record data could be retrieved from raw_records table...");
 				}
 
 			}
-			if($gotXML)
+			catch (Exception $e)
 			{
-				$registry_object->save();
-				$registry_object->addRelationships();
-				$registry_object->update_quality_metadata();
-				$registry_object->enrich();
+				echo "Unable to import record: " . $result->registry_object_key . "(" . $e->getMessage() . ")" .NL;
 			}
-			unset($registry_object);
 			
 		}
+		$this->importer->_reset();
 	}
 
 
+	function migrateDeletedRegistryObjectsForDatasource(_data_source $data_source)
+	{
+		$query = $this->source->query("SELECT rr.registry_object_key AS deleted_key, rifcs_fragment, rr.created_when FROM dba.tbl_raw_records rr LEFT JOIN dba.tbl_registry_objects r on r.registry_object_key = rr.registry_object_key WHERE r.registry_object_key IS NULL AND rr.data_source = ?", array($data_source->key));
+		$num_records = $query->num_rows();
+
+		echo "[DELETED RECORDS] Found ". $num_records . " deleted records to migrate..." .NL;
+		if ($num_records == 0) return; 
+
+		foreach ($query->result_array() AS $result)
+		{
+
+
+			$this->db->insert("deleted_registry_objects", 
+				array("data_source_id" => $data_source->id, 
+					  "key" => $result['deleted_key'], 
+					  "deleted" => strtotime($result['created_when']), 
+					  "title" => $result['deleted_key'],
+					  "record_data" => wrapRegistryObjects(unWrapRegistryObjects($result['rifcs_fragment'])))
+			);
+		}
+
+	}
 
 	function migrateDraftRegistryObjectsForDatasource(_data_source $data_source)
 	{
+		$this->load->library('importer');
+
 		$query = $this->source->get_where("dba.tbl_draft_registry_objects", array("registry_object_data_source"=>$data_source->key));
 		$num_records = $query->num_rows();
-		echo "FOUND: ". $num_records . " records" .NL;
-		$this->_CI->load->model("registry_object/registry_objects", "ro");
+
+		echo "[DRAFT RECORDS] Found ". $num_records . " draft records to migrate..." .NL;
+
+		$count = 0;
 		foreach ($query->result() AS $result)
 		{
+			$count++;
+
 			echo "Importing Draft Record: " . $result->draft_key . "." .NL;
 
-			
-			$recordOwner = $result->draft_owner;
-			$registry_object = $this->ro->create($data_source, $result->draft_key, $result->class, $result->registry_object_title, $result->status, NULL, $recordOwner, $recordOwner);
-			$registry_object->created = $result->date_created;
-			$registry_object->group = $result->registry_object_group;
-			$registry_object->type = $result->registry_object_type;
-			$registry_object->list_title = $result->registry_object_title;	
-			$registryObjects = simplexml_load_string($result->rifcs);
-			$registryObjects->registerXPathNamespace('rif', 'http://ands.org.au/standards/rif-cs/registryObjects');
-			$registryObject = $registryObjects->xpath('//rif:registryObject');
-			$registry_object->updateXML($registryObject[0]->asXML());
-			$registry_object->save();
-			unset($registry_object);
-			
+			try
+			{
+				$registryObjects = simplexml_load_string($result->rifcs);
+				$registryObjects->registerXPathNamespace('rif', 'http://ands.org.au/standards/rif-cs/registryObjects');
+				$registryObjectXML = $registryObjects->xpath('//rif:registryObject');
+				$xml = wrapRegistryObjects($this->cleanRIFCSofEmptyTags($registryObjectXML[0]->asXML()));
+
+				$this->importer->setXML($xml);
+				$this->importer->forceDraft();
+
+				if ($count == $num_records)
+				{
+					$this->importer->setPartialCommitOnly(FALSE);
+				}
+				else
+				{
+					$this->importer->setPartialCommitOnly(TRUE);
+				}
+				$this->importer->setDatasource($data_source);
+				$this->importer->commit();
+
+
+				$registryObject = $this->ro->getDraftByKey($result->draft_key);
+				if ($registryObject)
+				{
+					$registryObject->record_owner = $result->draft_owner;
+					$registryObject->original_status = $result->status;
+					$registryObject->status = $result->status;
+					
+					$registryObject->flag = $result->flag;
+					$registryObject->created_who = $result->draft_owner;
+					$registryObject->created = strtotime($result->date_created);
+					$registryObject->updated = strtotime($result->date_modified);
+
+					// Save without updating the "updated" date...
+					$registryObject->save(false);
+					unset($registryObject);
+				}
+			}
+			catch (Exception $e)
+			{
+				echo "Unable to import draft: " . $result->draft_key . "(" . $e->getMessage() . ")" .NL;
+			}
+
 		}
+		$this->importer->_reset();
 	}
+
+
+
+	function cleanRIFCSofEmptyTags($rifcs, $removeFormAttributes='true'){
+		$xslt_processor = Transforms::get_form_to_cleanrif_transformer();
+		$dom = new DOMDocument();
+		//$dom->loadXML($this->ro->getXML());
+		$dom->loadXML($rifcs);
+		//$dom->loadXML($rifcs);
+		$xslt_processor->setParameter('','removeFormAttributes',$removeFormAttributes);
+		return $xslt_processor->transformToXML($dom);
+	}
+
+
 
 	function deleteAllrecordsForDataSource(_data_source $data_source)
 	{
