@@ -468,7 +468,10 @@ function initConnectionGraph()
                                         //data: { "slug": node.data.slug, "registry_object_id": node.data.registry_object_id },
                                         success: function(data, status) {
                                             data = $.parseJSON(data);                                       
-                                            this.set('content.text', data.html);
+					    var decoded_content = $(data.html);
+					    var content_description = htmlDecode(decoded_content.find('.post .descriptions').html());
+					    decoded_content.find('.post .descriptions').html('<small>' + content_description + '</small>');
+                                            this.set('content.text', decoded_content);
 
                                             if (data.slug)
                                             {
