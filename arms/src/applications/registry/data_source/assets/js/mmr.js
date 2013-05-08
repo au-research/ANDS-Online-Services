@@ -157,8 +157,8 @@ function initLayout(){
     $('.pool').height(max_height+50);
 
     if(numBlock==1){
-        $('.pool').width('65%');
-    }
+        $('.pool').width('65%')
+    }else $('.pool').width('100%');
     //$('.ro_box[status=SUBMITTED_FOR_ASSESSMENT], .ro_box[status=APPROVED], .ro_box[status=ASSESSMENT_IN_PROGRESS],.ro_box[status=PUBLISHED]').height(max_height);
     //var draft_height = $('.ro_box[status=DRAFT]').height() + max_height - $('.ro_box[status=DRAFT]').parent('.block').height();
     // $('.ro_box[status=DRAFT]').height(draft_height);
