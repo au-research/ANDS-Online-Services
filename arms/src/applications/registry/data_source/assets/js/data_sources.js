@@ -259,7 +259,8 @@ function browse(view){
  */
 function load_more(page){
 	$.ajax({
-		url: 'data_source/getDataSources/'+page,
+	        //FIXME: [scm] do we really need base_url on the front, or should we fix/ammend the 'manage' route? (registry/data_source/manage => registry/data_source)
+		url: base_url + 'data_source/getDataSources/'+page,
 		type: 'GET',
 		contentType: 'application/json; charset=utf-8',
 		dataType: 'json',
