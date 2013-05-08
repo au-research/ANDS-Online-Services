@@ -13,6 +13,7 @@ class Maintenance extends MX_Controller {
 
 	
 	public function index(){
+		acl_enforce('REGISTRY_STAFF');
 		$data['title'] = 'ARMS Maintenance';
 		$data['small_title'] = '';
 		$data['scripts'] = array('maintenance');
@@ -22,6 +23,7 @@ class Maintenance extends MX_Controller {
 	}
 
 	function getStat(){
+		acl_enforce('REGISTRY_STAFF');
 		header('Cache-Control: no-cache, must-revalidate');
 		header('Content-type: application/json');
 
@@ -35,6 +37,7 @@ class Maintenance extends MX_Controller {
 	}
 
 	function getDataSourcesStat(){
+		acl_enforce('REGISTRY_STAFF');
 		header('Cache-Control: no-cache, must-revalidate');
 		header('Content-type: application/json');
 
@@ -70,6 +73,7 @@ class Maintenance extends MX_Controller {
 	}
 
 	function enrichDS($data_source_id){//TODO: XXX
+		acl_enforce('REGISTRY_STAFF');
 		header('Cache-Control: no-cache, must-revalidate');
 		header('Content-type: application/json');
 
@@ -98,6 +102,7 @@ class Maintenance extends MX_Controller {
 	 * @return json result
 	 */
 	function indexDS($data_source_id, $logit = false){
+		acl_enforce('REGISTRY_STAFF');
 		header('Cache-Control: no-cache, must-revalidate');
 		header('Content-type: application/json');
 
@@ -154,6 +159,7 @@ class Maintenance extends MX_Controller {
 	}
 
 	function clearDS($data_source_id, $logit = false){
+		acl_enforce('REGISTRY_STAFF');
 		header('Cache-Control: no-cache, must-revalidate');
 		header('Content-type: application/json');
 		$this->load->library('solr');
@@ -166,7 +172,7 @@ class Maintenance extends MX_Controller {
 	
 	function clearAll()
 	{
-		
+		acl_enforce('REGISTRY_STAFF');
 		$data = array();
 		$data['logs'] = '';
 		$this->load->model('data_source/data_sources', 'ds');
@@ -180,7 +186,7 @@ class Maintenance extends MX_Controller {
 
 	function indexAll()
 	{
-		
+		acl_enforce('REGISTRY_STAFF');
 		$data = array();
 		$data['logs'] = '';
 		$this->load->model('data_source/data_sources', 'ds');
