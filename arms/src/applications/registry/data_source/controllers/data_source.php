@@ -1197,10 +1197,11 @@ public function getContributorGroupsEdit()
 
 				if (!is_null($new_value))
 				{
+					$changed = $new_value !== $dataSource->{$attrib};
 					$dataSource->{$attrib} = $new_value;
 					if($attrib=='institution_pages')
 					{
-						$dataSource->setContributorPages($new_value,$POST);
+						$dataSource->setContributorPages($new_value, $POST, $changed);
 					}
 
 				}

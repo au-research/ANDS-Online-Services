@@ -376,7 +376,7 @@ class _data_source {
 		$this->_CI->importer->_reindexRecords($targetRecords);
 	}
 
-	function setContributorPages($value,$inputvalues)
+	function setContributorPages($value,$inputvalues,$notifyChange=true)
 	{
 		$data_source_id = $this->id;
 		$data_source_title = $this->title;
@@ -433,15 +433,18 @@ class _data_source {
 								$this->_CI->importer->forceDraft();		
 								$contributorPage = $this->_CI->ro->getAllByKey($registry_object_key);
 								//we need to email services that we have created this page	
+								if ($notifyChange)
+								{
 								$subject = $title." contributor page has been generated under datasource ".$this->title;
 								$message = '<a href="'.base_url().'registry_object/view/'.$contributorPage[0]->id.'">'.$registry_object_key .'</a>';
-								// $to = 'services@ands.org.au';
-								$to = 'dekarvn@gmail.com';
+									$to = 'services@ands.org.au';
+									//$to = 'dekarvn@gmail.com';
 								//$to = 'liz.woods@ands.org.au';
 								$headers  = 'MIME-Version: 1.0' . "\r\n";
 								$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
 								mail($to, $subject, $message, $headers);	
 							} 
+							}
 
 							$registry_object_id = $contributorPage[0]->id;
 							//we need to add the  group , registry_object_id and autoritive datasource to the institutional_pages table
@@ -503,6 +506,9 @@ class _data_source {
 										"authorative_data_source_id" => $data_source_id
 										);
 									$insert = $this->db->insert('institutional_pages',$data);
+									if ($notifyChange)
+									{
+
 									$subject = $contributorPage[0]->title." has been mapped as a contributor page for group ".$group." under datasource ".$data_source_title;
 									$message = '<a href="'.base_url().'registry_object/view/'.$contributorPage[0]->id.'">'.$contributorPage[0]->key .'</a>';
 									$to = 'services@ands.org.au';
@@ -510,6 +516,7 @@ class _data_source {
 									$headers  = 'MIME-Version: 1.0' . "\r\n";
 									$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
 									mail($to, $subject, $message, $headers);									
+									}
 								}else{
 									//how do we deal with the fact that its not a valid key?
 									throw new Exception("Could not save contributor for \"$group\".".NL."Record \"$registry_object_key\" does not seem to be a valid Party record?");
