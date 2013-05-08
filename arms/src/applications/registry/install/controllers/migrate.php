@@ -48,7 +48,7 @@ class Migrate extends MX_Controller
 		}
 
 		//$this->updateDanglingSlugs();
-		$this->updateContributorPages();
+		//$this->updateContributorPages();
 
 
 		echo NL . NL;
@@ -181,8 +181,9 @@ class Migrate extends MX_Controller
 				// "GET" means normal HTTP request
 				$data_source->setAttribute("harvest_method", "GET");
 			}
-			$result->provider_type = "rif"; // all datasources provide RIFCS
+			$data_source->provider_type = "rif"; // all datasources provide RIFCS
 			$data_source->setAttribute("oai_set", $result->oai_set);
+			$data_source->setAttribute("advanced_harvest_mode", $result->advanced_harvesting_mode);
 
 			// Contact email field name is changed to be spelled correctly
 			if ($this->noEmails)
@@ -297,22 +298,25 @@ class Migrate extends MX_Controller
 		$count = 0;
 		$this->importer->_reset();
 
+		$approved_records = array(); // approved records are now drafts, handle them seperately
+
 		foreach ($query->result() AS $result)
 		{
 			$count++;
-			echo "Importing Record: " . $result->registry_object_key . "." .NL;
 			
 			if ($result->status != "PUBLISHED")
 			{
-				echo "Skipping approved record..." . NL;
+				// Skip these -- we'll deal with them below (later)
+				$approved_records[] = $result;
 				continue;
-				// APPROVED records! :-/ what a pain...
-				//$this->importer->forceDraft();
 			}
 			else
 			{
 				$this->importer->forcePublish();
 			}
+
+
+			echo "Importing Record (#".$count."): " . $result->registry_object_key . "." .NL;
 
 			try
 			{
@@ -487,6 +491,129 @@ class Migrate extends MX_Controller
 				echo "Unable to import record: " . $result->registry_object_key . "(" . $e->getMessage() . ")" .NL;
 			}
 			
+		}
+
+		/* Handle the approved records */
+		// Very similar to above, except not published, no SLUG logic. 
+		if (count($approved_records) > 0)
+		{
+			$count = 0;
+			echo "[APPROVED RECORDS] Adding " . count($approved_records) . " approved records..." . NL;
+
+			foreach($approved_records AS $result)
+			{
+				$count++;
+
+				try
+				{
+					/* Get record RIFCS from raw_records table... */
+					$this->source->where(array("registry_object_key"=>$result->registry_object_key, "data_source"=>$data_source->key))
+								->order_by("created_when", "desc");
+
+					$record_data_query = $this->source->get("dba.tbl_raw_records");
+					$num_records = $query->num_rows();
+
+					if ($num_records > 0)
+					{
+						$rifcs_count = 0;
+						$this_ro_id = null;
+
+						foreach ($record_data_query->result() AS $record_data_result)
+						{
+							$rifcs_count++;
+
+							// First lot of record data...create the record
+							if($rifcs_count == 1)
+							{
+								$registryObjects = simplexml_load_string(wrapRegistryObjects($record_data_result->rifcs_fragment));
+								$registryObjects->registerXPathNamespace('rif', 'http://ands.org.au/standards/rif-cs/registryObjects');
+								$registryObjectXML = $registryObjects->xpath('//rif:registryObject');
+								if (count($registryObjectXML) == 0)
+								{
+									throw new Exception("No RIFCS!");
+								};
+								$xml = wrapRegistryObjects($registryObjectXML[0]->asXML());
+
+								$this->importer->setXML($xml);
+								$this->importer->forceDraft();
+
+								if ($count == count($approved_records))
+								{
+									$this->importer->setPartialCommitOnly(FALSE);
+								}
+								else
+								{
+									$this->importer->setPartialCommitOnly(TRUE);
+								}
+								$this->importer->setDatasource($data_source);
+								$this->importer->commit();
+
+
+								$registryObject = $this->ro->getDraftByKey($result->registry_object_key);
+								if ($registryObject)
+								{
+									$registryObject->record_owner = $result->created_who;
+									if ($result->record_owner != "SYSTEM")
+									{
+										$registryObject->created_who = "Harvester"; // extract the harvest ID
+										$registryObject->harvest_id = $result->record_owner;
+									}
+									else
+									{
+										$registryObject->created_who = $result->created_who;
+										$registryObject->harvest_id = "MANUAL-R9-IMPORT";
+									}
+									
+									$registryObject->manually_assessed = ($result->manually_assessed_flag == 0 ? "no" : "yes");
+									
+									if ($result->gold_status_flag == 1)
+									{
+										$registryObject->gold_status_flag = "t";
+									}
+
+									$registryObject->original_status = $result->status;
+									$registryObject->status = $result->status;
+
+									$registryObject->flag = $result->flag;
+									$registryObject->created = strtotime($result->created_when);
+									$registryObject->updated = max($result->registry_date_modified, strtotime($result->status_modified_when));
+									// Update the raw record version too...
+									$this->db->where('registry_object_id', $registryObject->id);
+									$this->db->update('record_data', array("timestamp"=>$registryObject->updated));
+
+									// Save without updating the "updated" date...
+									$registryObject->save(false);
+									$this_ro_id = $registryObject->id;
+									unset($registryObject);
+								}
+							}
+							else
+							{
+								if (!is_null($this_ro_id) && $xml)
+								{
+									// Subsequent record data...just add an entry to the record_data table directly (no importer action required)
+									$this->db->insert("record_data", 
+										array("registry_object_id" => $this_ro_id, 
+											  "current" => "", 
+											  "data" => $xml, 
+											  "timestamp" => strtotime($record_data_result->created_when), 
+											  "scheme" => "rif",
+											  "hash"=>md5($xml))
+									);
+								}
+								else
+								{
+									echo "Failed to insert additional RO version data for this registry object..." . NL;
+								}
+							}
+						}
+					}
+				}
+				catch (Exception $e)
+				{
+					echo "Unable to import draft: " . $result->draft_key . "(" . $e->getMessage() . ")" .NL;
+				}
+			}
 		}
 		$this->importer->_reset();
 	}

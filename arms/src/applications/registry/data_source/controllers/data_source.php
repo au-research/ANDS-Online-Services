@@ -1687,7 +1687,7 @@ public function getContributorGroupsEdit()
 						{
 							if($dataSource->harvest_method == 'RIF')
 							{
-								$logMsg = 'Received ' . $this->importer->ingest_attempts. ' new records from the OAI provider... (harvest ID: '.$harvestId.')' . NL . ' ---';
+								$logMsg = 'Received ' . $this->importer->ingest_attempts . ' new records from the OAI provider... (harvest ID: '.$harvestId.')' . NL . ' ---';
 							}
 
 							$gotData = true;
