@@ -99,7 +99,8 @@ function executeSearch(searchData, searchUrl){
         //search terms, or spatial coverage data.
         if (isMapView(searchData) &&
 	    typeof(searchData['q']) === 'undefined' &&
-	    typeof(searchData['spatial']) === 'undefined') {
+	    typeof(searchData['spatial']) === 'undefined' &&
+	    typeof(searchData['p']) === 'undefined') {
 	        var template = $('#search-noterms-template').html();
 	        var output = Mustache.render(template);
 	        if (output.trim().length > 0) {
