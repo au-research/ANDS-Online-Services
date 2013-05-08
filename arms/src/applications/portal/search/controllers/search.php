@@ -146,6 +146,10 @@ class Search extends MX_Controller {
 			}
 		}
 
+		if(trim($this->solr->getOpt('q'))==''){
+			$this->solr->addQueryCondition('*:*');
+		}
+
 //		var_dump($this->solr->constructFieldString());
 
 		/**
