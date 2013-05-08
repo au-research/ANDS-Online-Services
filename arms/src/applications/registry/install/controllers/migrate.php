@@ -43,6 +43,7 @@ class Migrate extends MX_Controller
 			//$this->migrateDraftRegistryObjectsForDatasource($data_source);
 			//$this->migrateDeletedRegistryObjectsForDatasource($data_source);
 			//$this->migrateRegistryObjectsForDatasource($data_source);
+			$this->reschedulePendingHarvests($data_source);
 
 			echo NL . NL;
 		}
@@ -53,6 +54,44 @@ class Migrate extends MX_Controller
 
 		echo NL . NL;
 
+	}
+
+	function reschedulePendingHarvests($data_source)
+	{
+		// Update the harvest date based on currently queued harvests
+		$harvest_request_query = $this->source->get_where('dba.tbl_harvest_requests', array("data_source_key"=>$data_source->key));
+		if ($harvest_request_query->num_rows())
+		{
+			echo "[HARVESTER] Rescheduling a previously scheduled harvest" . NL;
+			$harvest = $harvest_request_query->result_array();
+			$data_source->calcelAllharvests();
+			if ($harvest[0]['harvest_date'] == "")
+			{
+				// Schedule the harvest
+				$data_source->requestHarvest();
+			}
+			else
+			{
+				if ($harvest[0]['harvest_frequency'] == "daily")
+				{
+					// schedule for tomorrow at the same time
+					$timestamp = strtotime($harvest[0]["harvest_date"]);
+					$time_offset = (strtotime(gmdate("h:i:s A", $timestamp)) - strtotime("00:00:00"));
+					$data_source->harvest_date = gmdate("Y-m-d\TH:i:s\Z", (strtotime(date("m/d/y") . " 00:00:00 GMT") + $time_offset + ONE_DAY));
+				}
+				// If we're on a weekly schedule, make sure we have the same time and day of the week (in the future) and future-date the harvest
+				else if ($harvest[0]['harvest_frequency'] == "weekly" || $harvest[0]['harvest_frequency'] == "fortnightly")
+				{	
+					$timestamp = strtotime($harvest[0]["harvest_date"]);
+					$upcoming_date = " next " . strtolower(gmdate("l", $timestamp));
+					$time_offset = (strtotime(gmdate("h:i:s A", $timestamp)) - strtotime("00:00:00"));
+					$upcoming_timestamp = strtotime($upcoming_date) + $time_offset;
+					$data_source->harvest_date = gmdate("Y-m-d\TH:i:s\Z", $upcoming_timestamp);
+				}
+				$data_source->save();
+				$data_source->requestHarvest();
+			}
+		}
 	}
 
 	function updateContributorPages()
@@ -181,6 +220,7 @@ class Migrate extends MX_Controller
 				// "GET" means normal HTTP request
 				$data_source->setAttribute("harvest_method", "GET");
 			}
+
 			$data_source->provider_type = "rif"; // all datasources provide RIFCS
 			$data_source->setAttribute("oai_set", $result->oai_set);
 			$data_source->setAttribute("advanced_harvest_mode", $result->advanced_harvesting_mode);
