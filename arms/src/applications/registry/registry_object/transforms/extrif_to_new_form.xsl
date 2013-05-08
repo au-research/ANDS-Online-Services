@@ -1130,7 +1130,7 @@
 				<label class="control-label" for="title">Date: </label>
 				<div class="controls">
 					<span class="inputs_group">
-						<input type="text" class="inner_input" name="value" placeholder="Date Value" value="{text()}"/>
+						<input type="text" class="inner_input datepicker" name="value" placeholder="Date Value" value="{text()}"/>
 						<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSTemporalCoverageDateType" name="type" placeholder="Date Type" value="{@type}"/>
 					</span>
 					<input type="text" class="input-small rifcs-type" vocab="RIFCSDateFormat" name="dateFormat" placeholder="Date Format" value="{@dateFormat}"/>
@@ -1569,10 +1569,10 @@
 			<div class="aro_box_display clearfix">
 				<a href="javascript:;" class="toggle"><i class="icon-minus"/></a>
 				<div class="input-append">
-					<input type="text" class="input-large ands_datepicker" name="dateFrom" placeholder="dateFrom" value=""/>
+					<input type="text" class="input-large datepicker" name="dateFrom" placeholder="dateFrom" value=""/>
 				</div>
 				<div class="input-append">
-					<input type="text" class="input-large ands_datepicker" name="dateTo" placeholder="dateTo" value=""/>
+					<input type="text" class="input-large datepicker" name="dateTo" placeholder="dateTo" value=""/>
 				</div>
 				<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
 			</div>

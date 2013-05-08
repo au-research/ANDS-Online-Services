@@ -20,9 +20,9 @@
     
     <xsl:template match="dates">
         <xsl:choose>
-            <xsl:when test="date[text() != '' or @type='']">
+            <xsl:when test="date[text() != '' or @type != '']">
                 <xsl:copy>
-                    <xsl:apply-templates select="@* | node()" />
+                    <xsl:apply-templates select="@* | date[text() != '' or @type != '']" />
                 </xsl:copy>   
             </xsl:when>
         </xsl:choose>
@@ -44,7 +44,7 @@
         <xsl:choose>
             <xsl:when test="addressPart[@type != '' or text() != '']">
                 <xsl:copy>
-                    <xsl:apply-templates select="@* | node()" />
+                    <xsl:apply-templates select="@* | addressPart[@type != '' or text() != '']" />
                 </xsl:copy>   
             </xsl:when>
         </xsl:choose>
@@ -61,20 +61,30 @@
             </xsl:when>
         </xsl:choose>
     </xsl:template>
+
+    <xsl:template match="format">
+        <xsl:choose>
+            <xsl:when test="identifier[@type != '' or text() != '']">
+                <xsl:copy>
+                    <xsl:apply-templates select="identifier[@type != '' or text() != '']" />
+                </xsl:copy>   
+            </xsl:when>
+        </xsl:choose>
+    </xsl:template>
     
     <!-- Note: No checks for @lang/@seq attributes -->
     <xsl:template match="location[not(@dateFrom) and not(@dateTo) and not(@type) and not(spatial/@type) and not(spatial/text()) and not(address/electronic/@type = '') and not(address/electronic/value/text()) and not(address/electronic/arg/text()) and not(address/electronic/arg/@required) and not(address/electronic/arg/@type) and not(address/electronic/arg/@use) and not(address/physical/@type) and not(address/physical/addressPart/@type) and not(address/physical/addressPart/text())]"/>
     <xsl:template match="relatedObject[not(key/text()) and relation/@type = '' and not(relation/description/text()) and not(relation/url/text())]"/> 
     <xsl:template match="description[(not(@type) or @type='') and not(text())]"/>
     <xsl:template match="spatial[(not(@type) or @type='') and not(text())]"/>
+    <xsl:template match="text[not(text())]"/>
     <xsl:template match="addressPart[not(text()) or (not(@type) or @type='')]"/>
     <xsl:template match="subject[(not(@type) or @type='') and not(text())]"/>
     <xsl:template match="namePart[(not(@type) or @type='') and not(text()) and (following-sibling::namePart[text() != ''] or preceding-sibling::namePart[text() != ''])]"/>
     <xsl:template match="date[not(parent::citationMetadata) and not(text())]"/>
-    
     <xsl:template match="fullCitation[(not(@style) or @style='') and not(text()) ]"/>
     <xsl:template match="identifier[not(parent::citationMetadata) and not(parent::relatedInfo) and not(text()) and (not(@type) or @type='')]"/>
-    <xsl:template match="coverage[not(temporal/date/text()) and not(temporal/date/@dateFormat) and not(temporal/date/@type) and not(temporal/text()) and not(spatial/text()) and not(spatial/@type)]"/>
+    <xsl:template match="coverage[not(temporal/date/text()) and not(temporal/date/@dateFormat) and not(temporal/date/@type) and not(temporal/text/text()) and not(spatial/text()) and not(spatial/@type)]"/>
 
     <xsl:template match="citationMetadata[(not(identifier/@type) or identifier/@type='') and not(identifier/text()) and not(title/text()) and not(publisher/text())]"/>
 
