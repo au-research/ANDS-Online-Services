@@ -17,13 +17,18 @@ class Migrate extends MX_Controller
 		$scpr = $this->scpr; //schema prefix
 
 		set_error_handler(array(&$this, 'cli_error_handler'));
+		set_exception_handler(array(&$this, 'cli_exception_handler'));
 		echo "Connected to migration target database..." . NL;
 
 		$this->source->select('*');
-		$query = $this->source->get($scpr . 'tbl_data_sources');
 
+		$query = $this->source->get($scpr . 'tbl_data_sources');
 		$num_data_sources = $query->num_rows();
-		
+
+		echo "ohi";
+		echo "Would you like to filter by a data source name/key (leave blank to continue for all data sources): ";
+		$filter = strtolower($this->getInput());
+
 		// Start the clock...
 		$this->exec_time = microtime(true);
 
@@ -31,21 +36,36 @@ class Migrate extends MX_Controller
 		$this->_CI->load->model('data_source/data_sources','ds');
 		foreach ($query->result() AS $result)
 		{
-			$data_source = $this->createOrUpdateDataSource($result);
-			
-			// Update logs (deletes any legacy logs and re-migrates them!)
-			//$this->importDataSourceLogs($data_source->key, $data_source->id);
-			//$data_source->append_log("Data Source was migrated to ANDS Online Services Release 10", "info", "legacy_log");
+			if ($filter)
+			{
+				if (strpos(strtolower($result->data_source_key), $filter) === FALSE && strpos(strtolower($result->title), $filter) === FALSE)
+				{
+					continue;
+				}
+			}
+			try 
+			{
+				$data_source = $this->createOrUpdateDataSource($result);
+				
+				// Update logs (deletes any legacy logs and re-migrates them!)
+				//$this->importDataSourceLogs($data_source->key, $data_source->id);
+				//$data_source->append_log("Data Source was migrated to ANDS Online Services Release 10", "info", "legacy_log");
 
-			// Now start importing registry objects
-			//$this->deleteAllrecordsForDataSource($data_source);
-			//$data_source->updateStats();
-			//$this->migrateDraftRegistryObjectsForDatasource($data_source);
-			//$this->migrateDeletedRegistryObjectsForDatasource($data_source);
-			//$this->migrateRegistryObjectsForDatasource($data_source);
-			$this->reschedulePendingHarvests($data_source);
+				// Now start importing registry objects
+				//$this->deleteAllrecordsForDataSource($data_source);
+				//$data_source->updateStats();
+				$this->migrateDraftRegistryObjectsForDatasource($data_source);
+				$this->migrateDeletedRegistryObjectsForDatasource($data_source);
+				$this->migrateRegistryObjectsForDatasource($data_source);
+				//$this->reschedulePendingHarvests($data_source);
 
-			echo NL . NL;
+				echo NL . NL;
+			}
+			catch (Exception $e)
+			{
+				echo "****** EXCEPTION ***** " . NL . $e->getMessage() . NL . NL;
+				continue;
+			}
 		}
 
 		//$this->updateDanglingSlugs();
@@ -356,7 +376,7 @@ class Migrate extends MX_Controller
 			}
 
 
-			echo "Importing Record (#".$count."): " . $result->registry_object_key . "." .NL;
+			// echo "Importing Record (#".$count."): " . $result->registry_object_key . "." .NL;
 
 			try
 			{
@@ -574,6 +594,9 @@ class Migrate extends MX_Controller
 								};
 								$xml = wrapRegistryObjects($registryObjectXML[0]->asXML());
 
+								// Record size check - massive records (such as QFAB) have all their relatedObjects trimmed off...
+								$xml = $this->sanitizeXML($xml);
+
 								$this->importer->setXML($xml);
 								$this->importer->forceDraft();
 
@@ -670,13 +693,12 @@ class Migrate extends MX_Controller
 		foreach ($query->result_array() AS $result)
 		{
 
-
 			$this->db->insert("deleted_registry_objects", 
 				array("data_source_id" => $data_source->id, 
 					  "key" => $result['deleted_key'], 
 					  "deleted" => strtotime($result['created_when']), 
 					  "title" => $result['deleted_key'],
-					  "record_data" => wrapRegistryObjects(unWrapRegistryObjects($result['rifcs_fragment'])))
+					  "record_data" => $this->sanitizeXML(wrapRegistryObjects(unWrapRegistryObjects($result['rifcs_fragment']))))
 			);
 		}
 
@@ -696,7 +718,7 @@ class Migrate extends MX_Controller
 		{
 			$count++;
 
-			echo "Importing Draft Record: " . $result->draft_key . "." .NL;
+			// echo "Importing Draft Record: " . $result->draft_key . "." .NL;
 
 			try
 			{
@@ -774,6 +796,22 @@ class Migrate extends MX_Controller
 		}
 	}
 
+
+	function sanitizeXML($xml)
+	{
+
+		if (strlen($xml) > 100000)
+		{
+			$xml = preg_replace('/<relatedObject.*?<\/relatedObject>/ms', '', $xml);
+			if (strlen($xml) > 100000)
+			{
+				echo "Could not sanitize XML - contents too large" . NL;
+			}
+			return $xml;
+		}
+		return $xml;
+	}
+
 	function __construct()
     {
             parent::__construct();
@@ -807,16 +845,22 @@ class Migrate extends MX_Controller
      	echo NL .NL . "An error ($number) occurred on line $line in the file: $file:" . NL;
         echo $message . NL . NL;
         echo str_repeat("=", 15) . NL . NL;
-
+        return false;
        //"<pre>" . print_r($vars, 1) . "</pre>";
 
         // Make sure that you decide how to respond to errors (on the user's side)
         // Either echo an error message, or kill the entire project. Up to you...
         // The code below ensures that we only "die" if the error was more than
         // just a NOTICE.
-        if ( ($number !== E_NOTICE) && ($number < 2048) ) {
+        //if ( ($number !== E_NOTICE) && ($number < 2048) ) {
           //  die("Exiting on error...");
-        }
+        //}
 
 	}
+
+	function cli_exception_handler( $e ) {
+
+		echo "****** EXCEPTION ***** " . NL . $e->getMessage() . NL . NL;
+		return true;
+   	}
 }

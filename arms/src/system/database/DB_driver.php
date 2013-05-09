@@ -1194,8 +1194,15 @@ class CI_DB_driver {
 		}
 
 		$error =& load_class('Exceptions', 'core');
-		echo $error->show_error($heading, $message, 'error_db');
-		exit;
+		if (defined('IS_CLI_SCRIPT'))
+		{
+			throw new Exception("[DB Error] " . implode($message, NL));
+		}
+		else
+		{
+			echo $error->show_error($heading, $message, 'error_db');
+			exit;
+		}
 	}
 
 	// --------------------------------------------------------------------
