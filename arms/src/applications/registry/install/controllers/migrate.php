@@ -396,7 +396,8 @@ class Migrate extends MX_Controller
 						$rifcs_count++;
 
 						// Extract RIFCS XML
-						$registryObjects = simplexml_load_string(wrapRegistryObjects($record_data_result->rifcs_fragment));
+						$rifcs = $this->cleanRIFCSofEmptyTags($record_data_result->rifcs_fragment);
+						$registryObjects = simplexml_load_string(wrapRegistryObjects($rifcs));
 						$registryObjects->registerXPathNamespace('rif', 'http://ands.org.au/standards/rif-cs/registryObjects');
 						$registryObjectXML = $registryObjects->xpath('//rif:registryObject');
 						if (!$registryObjectXML[0])
@@ -585,7 +586,8 @@ class Migrate extends MX_Controller
 							// First lot of record data...create the record
 							if($rifcs_count == 1)
 							{
-								$registryObjects = simplexml_load_string(wrapRegistryObjects($record_data_result->rifcs_fragment));
+								$rifcs = $this->cleanRIFCSofEmptyTags($record_data_result->rifcs_fragment);
+								$registryObjects = simplexml_load_string(wrapRegistryObjects($rifcs));
 								$registryObjects->registerXPathNamespace('rif', 'http://ands.org.au/standards/rif-cs/registryObjects');
 								$registryObjectXML = $registryObjects->xpath('//rif:registryObject');
 								if (count($registryObjectXML) == 0)
@@ -722,11 +724,11 @@ class Migrate extends MX_Controller
 
 			try
 			{
-				$registryObjects = simplexml_load_string($result->rifcs);
+				$rifcs = $this->cleanRIFCSofEmptyTags($result->rifcs);
+				$registryObjects = simplexml_load_string(wrapRegistryObjects($rifcs));
 				$registryObjects->registerXPathNamespace('rif', 'http://ands.org.au/standards/rif-cs/registryObjects');
 				$registryObjectXML = $registryObjects->xpath('//rif:registryObject');
-				$xml = wrapRegistryObjects($this->cleanRIFCSofEmptyTags($registryObjectXML[0]->asXML()));
-
+				$xml = wrapRegistryObjects($registryObjectXML[0]->asXML());
 				$this->importer->setXML($xml);
 				$this->importer->forceDraft();
 
