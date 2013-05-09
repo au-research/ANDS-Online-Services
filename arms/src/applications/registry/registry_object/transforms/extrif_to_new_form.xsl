@@ -63,7 +63,15 @@
 
 	<div id="content" style="Manage My Datasources">
 		<div class="content-header">
-			<h1 style="max-width:80%;"><xsl:value-of select="$display_title"/></h1>
+			<h1 style="max-width:80%;">
+				<img class="class_icon">
+				<xsl:attribute name="tip">
+					<xsl:value-of select="$ro_class"/> 
+				</xsl:attribute>
+				<xsl:attribute name="src">
+					<xsl:value-of select="$base_url"/><xsl:text>../assets/img/</xsl:text><xsl:value-of select="$ro_class"/>.png</xsl:attribute>
+			</img><xsl:text> </xsl:text>
+				<xsl:value-of select="$display_title"/></h1>
 			<div class="btn-group">
 				<!--a class="hide btn" title="Manage Files" id="master_export_xml"><i class="icon-download"></i> Export RIFCS</a>
 				<a class="hide btn btn-primary" title="Manage Files" id="validate">Validate</a-->
