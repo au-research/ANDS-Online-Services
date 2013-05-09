@@ -81,6 +81,7 @@ $testDoiPrefix =  $this->config->item('test_doi_prefix');
 </div>
 
 </section>
+
 <div class="modal hide fade" id="updateDoiModal" tabindex="-1" role="dialog" aria-labelledby="updateDoiModal" aria-hidden="true">
   <div class="modal-body">
     <p>Loading...</p>
@@ -141,7 +142,30 @@ $testDoiPrefix =  $this->config->item('test_doi_prefix');
 
 </div>
 <?php $this->load->view('footer');?>
+<?php 
+if(isset($doi_update))
+{
+?>
+<div class="modal hide fade" id="updateDoiResult" tabindex="-1" role="dialog" aria-labelledby="updateDoiResult" aria-hidden="true">
+  <div class="modal-body">
+    <p>
+    	<div>
+    		DOI <?=$doi_update?> successfully updated
+    	</div>
+    </p>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+  </div>
+</div>
 
+<script >
+$("#updateDoiResult").modal();
+</script>
+
+<?php 
+}
+?>
 <?php 
 
 function getDoiTitle($doiXml)

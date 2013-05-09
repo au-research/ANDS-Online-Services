@@ -63,12 +63,17 @@ class Mydois extends MX_Controller {
 		
 		// Validate the appId
 		$appId = $this->input->get_post('app_id');
+		$doi_update = $this->input->get_post('doi_update');
 		if (!$appId)
 		{
 			$appId = $this->input->get_post('app_id_select');
 		}
 		$doiStatus = $this->input->get_post('doi_status');
 		$data['doi_appids'] = $this->user->doiappids();
+		if($doi_update)
+		{
+				$data['doi_update'] = $doi_update;	
+		}
 
 		if (!$appId) throw new Exception ('Invalid App ID');  
 		
@@ -226,8 +231,7 @@ class Mydois extends MX_Controller {
                'message'    => "DOI ".$doi_id." was successfully update to url '".$new_url."'",      
             	);
 			$doi_db->insert('activity_log', $logdata); 
-
-			redirect('/mydois/show/?app_id='.$client_obj->app_id, 'location');
+			redirect('/mydois/show/?app_id='.$client_obj->app_id.'&doi_update='.$doi_id, 'location');
 		}else{
 			//we got an error back or nothing so we need to tell the user something went wrong
 			if($result) $extrainfo = "The following error message was returned : ".$result;
