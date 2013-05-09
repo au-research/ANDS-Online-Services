@@ -9,7 +9,7 @@ class Migrate extends MX_Controller
 	private $_CI; 	// an internal reference to the CodeIgniter Engine 
 	private $source;
 	private $scpr = "dba."; //schema prefix
-	private $recordLimit = 1500;
+	private $recordLimit = 999999;
 	private $noEmails = true; // for debugging
 	
 	function index()
@@ -17,17 +17,15 @@ class Migrate extends MX_Controller
 		$scpr = $this->scpr; //schema prefix
 
 		set_error_handler(array(&$this, 'cli_error_handler'));
-		set_exception_handler(array(&$this, 'cli_exception_handler'));
 		echo "Connected to migration target database..." . NL;
 
 		$this->source->select('*');
-
 		$query = $this->source->get($scpr . 'tbl_data_sources');
-		$num_data_sources = $query->num_rows();
 
-		echo "ohi";
+		$num_data_sources = $query->num_rows();
+		
 		echo "Would you like to filter by a data source name/key (leave blank to continue for all data sources): ";
-		$filter = strtolower($this->getInput());
+		$filter = $this->getInput(); 
 
 		// Start the clock...
 		$this->exec_time = microtime(true);
@@ -43,29 +41,22 @@ class Migrate extends MX_Controller
 					continue;
 				}
 			}
-			try 
-			{
-				$data_source = $this->createOrUpdateDataSource($result);
-				
-				// Update logs (deletes any legacy logs and re-migrates them!)
-				//$this->importDataSourceLogs($data_source->key, $data_source->id);
-				//$data_source->append_log("Data Source was migrated to ANDS Online Services Release 10", "info", "legacy_log");
 
-				// Now start importing registry objects
-				//$this->deleteAllrecordsForDataSource($data_source);
-				//$data_source->updateStats();
-				$this->migrateDraftRegistryObjectsForDatasource($data_source);
-				$this->migrateDeletedRegistryObjectsForDatasource($data_source);
-				$this->migrateRegistryObjectsForDatasource($data_source);
-				//$this->reschedulePendingHarvests($data_source);
+			$data_source = $this->createOrUpdateDataSource($result);
+			
+			// Update logs (deletes any legacy logs and re-migrates them!)
+			//$this->importDataSourceLogs($data_source->key, $data_source->id);
+			//$data_source->append_log("Data Source was migrated to ANDS Online Services Release 10", "info", "legacy_log");
 
-				echo NL . NL;
-			}
-			catch (Exception $e)
-			{
-				echo "****** EXCEPTION ***** " . NL . $e->getMessage() . NL . NL;
-				continue;
-			}
+			// Now start importing registry objects
+			$this->deleteAllrecordsForDataSource($data_source);
+			//$data_source->updateStats();
+			//$this->migrateDraftRegistryObjectsForDatasource($data_source);
+			//$this->migrateDeletedRegistryObjectsForDatasource($data_source);
+			$this->migrateRegistryObjectsForDatasource($data_source);
+			//$this->reschedulePendingHarvests($data_source);
+
+			echo NL . NL;
 		}
 
 		//$this->updateDanglingSlugs();
@@ -345,7 +336,7 @@ class Migrate extends MX_Controller
 
 	function migrateRegistryObjectsForDatasource(_data_source $data_source)
 	{
-		$query = $this->source->get_where("dba.tbl_registry_objects", array("data_source_key"=>$data_source->key));
+		$query = $this->source->get_where("dba.tbl_registry_objects", array("data_source_key"=>$data_source->key,"status"=>'PUBLISHED'));
 		$num_records = $query->num_rows();
 		if ($num_records > $this->recordLimit) {
 			echo "[PUBLISHED RECORDS] Found ". $num_records . " records...skipping this datasource (>" . $this->recordLimit . ") " .NL;
@@ -362,20 +353,8 @@ class Migrate extends MX_Controller
 
 		foreach ($query->result() AS $result)
 		{
-			$count++;
-			
-			if ($result->status != "PUBLISHED")
-			{
-				// Skip these -- we'll deal with them below (later)
-				$approved_records[] = $result;
-				continue;
-			}
-			else
-			{
-				$this->importer->forcePublish();
-			}
-
-
+			$count++;			
+			$this->importer->forcePublish();
 			// echo "Importing Record (#".$count."): " . $result->registry_object_key . "." .NL;
 
 			try
@@ -410,6 +389,7 @@ class Migrate extends MX_Controller
 						if($rifcs_count == 1)
 						{
 								$this->importer->setXML($xml);
+
 								if ($count == $num_records)
 								{
 									$this->importer->setPartialCommitOnly(FALSE);
@@ -516,7 +496,7 @@ class Migrate extends MX_Controller
 								}
 								else
 								{
-									throw new Exception("Appears that the record was not successfully created? Could not load after import!");
+									throw new Exception("Appears that the record was not successfully created? Could not load after import!".$rifcs);
 								}
 						}
 						else
@@ -556,129 +536,144 @@ class Migrate extends MX_Controller
 
 		/* Handle the approved records */
 		// Very similar to above, except not published, no SLUG logic. 
-		if (count($approved_records) > 0)
+		$query = $this->source->get_where("dba.tbl_registry_objects", array("data_source_key"=>$data_source->key,"status"=>'APPROVED'));
+		$num_records = $query->num_rows();
+		if ($num_records > $this->recordLimit) {
+			echo "[APPROVED] Found ". $num_records . " records...skipping this datasource (>" . $this->recordLimit . ") " .NL;
+			return;
+		}
+
+		echo "[APPROVED RECORDS] Found ". $num_records . " records..." .NL;
+
+		$this->_CI->load->model("registry_object/registry_objects", "ro");
+		$count = 0;
+		$this->importer->_reset();
+		$this->importer->forceDraft();
+
+		foreach ($query->result() AS $result)
 		{
-			$count = 0;
-			echo "[APPROVED RECORDS] Adding " . count($approved_records) . " approved records..." . NL;
+			$count++;
 
-			foreach($approved_records AS $result)
+			try
 			{
-				$count++;
+				/* Get record RIFCS from raw_records table... */
+				$this->source->where(array("registry_object_key"=>$result->registry_object_key, "data_source"=>$data_source->key))
+							->order_by("created_when", "desc");
 
-				try
+				$record_data_query = $this->source->get("dba.tbl_raw_records");
+				$num_records = $query->num_rows();
+
+				if ($num_records > 0)
 				{
-					/* Get record RIFCS from raw_records table... */
-					$this->source->where(array("registry_object_key"=>$result->registry_object_key, "data_source"=>$data_source->key))
-								->order_by("created_when", "desc");
-
-					$record_data_query = $this->source->get("dba.tbl_raw_records");
-					$num_records = $query->num_rows();
-
-					if ($num_records > 0)
+					$rifcs_count = 0;
+					$this_ro_id = null;
+					foreach ($record_data_query->result() AS $record_data_result)
 					{
-						$rifcs_count = 0;
-						$this_ro_id = null;
+						$rifcs_count++;
 
-						foreach ($record_data_query->result() AS $record_data_result)
+						// First lot of record data...create the record
+						if($rifcs_count == 1)
 						{
-							$rifcs_count++;
-
-							// First lot of record data...create the record
-							if($rifcs_count == 1)
+							
+							$rifcs = $this->cleanRIFCSofEmptyTags($record_data_result->rifcs_fragment);
+							$registryObjects = simplexml_load_string(wrapRegistryObjects($rifcs));
+							$registryObjects->registerXPathNamespace('rif', 'http://ands.org.au/standards/rif-cs/registryObjects');
+							$registryObjectXML = $registryObjects->xpath('//rif:registryObject');
+							if (count($registryObjectXML) == 0)
 							{
-								$rifcs = $this->cleanRIFCSofEmptyTags($record_data_result->rifcs_fragment);
-								$registryObjects = simplexml_load_string(wrapRegistryObjects($rifcs));
-								$registryObjects->registerXPathNamespace('rif', 'http://ands.org.au/standards/rif-cs/registryObjects');
-								$registryObjectXML = $registryObjects->xpath('//rif:registryObject');
-								if (count($registryObjectXML) == 0)
+								throw new Exception("No RIFCS!");
+							};
+							$xml = wrapRegistryObjects($registryObjectXML[0]->asXML());
+
+							// Record size check - massive records (such as QFAB) have all their relatedObjects trimmed off...
+							if (strlen($xml) > 50000)
+							{
+								$xml = preg_replace('/<relatedObject.*?</relatedObject>/ms', '', $xml);
+								if (strlen($xml) > 50000)
 								{
-									throw new Exception("No RIFCS!");
-								};
-								$xml = wrapRegistryObjects($registryObjectXML[0]->asXML());
-
-								// Record size check - massive records (such as QFAB) have all their relatedObjects trimmed off...
-								$xml = $this->sanitizeXML($xml);
-
-								$this->importer->setXML($xml);
-								$this->importer->forceDraft();
-
-								if ($count == count($approved_records))
-								{
-									$this->importer->setPartialCommitOnly(FALSE);
+									echo "Skipping registry object - XML contents too large";
 								}
-								else
-								{
-									$this->importer->setPartialCommitOnly(TRUE);
-								}
-								$this->importer->setDatasource($data_source);
-								$this->importer->commit();
+							}
+							
+							$this->importer->setXML($xml);
 
 
-								$registryObject = $this->ro->getDraftByKey($result->registry_object_key);
-								if ($registryObject)
-								{
-									$registryObject->record_owner = $result->created_who;
-									if ($result->record_owner != "SYSTEM")
-									{
-										$registryObject->created_who = "Harvester"; // extract the harvest ID
-										$registryObject->harvest_id = $result->record_owner;
-									}
-									else
-									{
-										$registryObject->created_who = $result->created_who;
-										$registryObject->harvest_id = "MANUAL-R9-IMPORT";
-									}
-									
-									$registryObject->manually_assessed = ($result->manually_assessed_flag == 0 ? "no" : "yes");
-									
-									if ($result->gold_status_flag == 1)
-									{
-										$registryObject->gold_status_flag = "t";
-									}
-
-									$registryObject->original_status = $result->status;
-									$registryObject->status = $result->status;
-
-									$registryObject->flag = $result->flag;
-									$registryObject->created = strtotime($result->created_when);
-									$registryObject->updated = max($result->registry_date_modified, strtotime($result->status_modified_when));
-									// Update the raw record version too...
-									$this->db->where('registry_object_id', $registryObject->id);
-									$this->db->update('record_data', array("timestamp"=>$registryObject->updated));
-
-									// Save without updating the "updated" date...
-									$registryObject->save(false);
-									$this_ro_id = $registryObject->id;
-									unset($registryObject);
-								}
+							if ($count == $num_records)
+							{
+								$this->importer->setPartialCommitOnly(FALSE);
 							}
 							else
 							{
-								if (!is_null($this_ro_id) && $xml)
+								$this->importer->setPartialCommitOnly(TRUE);
+							}
+							$this->importer->setDatasource($data_source);
+							$this->importer->commit();
+
+							$registryObject = $this->ro->getDraftByKey($result->registry_object_key);
+							if ($registryObject)
+							{
+								$registryObject->record_owner = $result->created_who;
+								if ($result->record_owner != "SYSTEM")
 								{
-									// Subsequent record data...just add an entry to the record_data table directly (no importer action required)
-									$this->db->insert("record_data", 
-										array("registry_object_id" => $this_ro_id, 
-											  "current" => "", 
-											  "data" => $xml, 
-											  "timestamp" => strtotime($record_data_result->created_when), 
-											  "scheme" => "rif",
-											  "hash"=>md5($xml))
-									);
+									$registryObject->created_who = "Harvester"; // extract the harvest ID
+									$registryObject->harvest_id = $result->record_owner;
 								}
 								else
 								{
-									echo "Failed to insert additional RO version data for this registry object..." . NL;
+									$registryObject->created_who = $result->created_who;
+									$registryObject->harvest_id = "MANUAL-R9-IMPORT";
 								}
+								
+								$registryObject->manually_assessed = ($result->manually_assessed_flag == 0 ? "no" : "yes");
+								
+								if ($result->gold_status_flag == 1)
+								{
+									$registryObject->gold_status_flag = "t";
+								}
+
+								$registryObject->original_status = $result->status;
+								$registryObject->status = $result->status;
+
+								$registryObject->flag = $result->flag;
+								$registryObject->created = strtotime($result->created_when);
+								$registryObject->updated = max($result->registry_date_modified, strtotime($result->status_modified_when));
+								// Update the raw record version too...
+								$this->db->where('registry_object_id', $registryObject->id);
+								$this->db->update('record_data', array("timestamp"=>$registryObject->updated));
+
+								// Save without updating the "updated" date...
+								$registryObject->save(false);
+								$this_ro_id = $registryObject->id;
+								unset($registryObject);
+							}
+							else{
+								echo "FAILED :-(";
+							}
+
+							if (!is_null($this_ro_id) && $xml)
+							{
+								// Subsequent record data...just add an entry to the record_data table directly (no importer action required)
+								$this->db->insert("record_data", 
+									array("registry_object_id" => $this_ro_id, 
+										  "current" => "", 
+										  "data" => $xml, 
+										  "timestamp" => strtotime($record_data_result->created_when), 
+										  "scheme" => "rif",
+										  "hash"=>md5($xml))
+								);
+							}
+							else{
+								echo $this->importer->getErrors();
+								echo $this->importer->getMessages();
 							}
 						}
 					}
 				}
-				catch (Exception $e)
-				{
-					echo "Unable to import draft: " . $result->draft_key . "(" . $e->getMessage() . ")" .NL;
-				}
 			}
+			catch (Exception $e)
+			{
+				echo "Unable to import draft: " . $result->draft_key . "(" . $e->getMessage() . ")" .NL;
+			}			
 		}
 		$this->importer->_reset();
 	}
@@ -700,7 +695,7 @@ class Migrate extends MX_Controller
 					  "key" => $result['deleted_key'], 
 					  "deleted" => strtotime($result['created_when']), 
 					  "title" => $result['deleted_key'],
-					  "record_data" => $this->sanitizeXML(wrapRegistryObjects(unWrapRegistryObjects($result['rifcs_fragment']))))
+					  "record_data" => wrapRegistryObjects(unWrapRegistryObjects($result['rifcs_fragment'])))
 			);
 		}
 
@@ -724,11 +719,13 @@ class Migrate extends MX_Controller
 
 			try
 			{
+
 				$rifcs = $this->cleanRIFCSofEmptyTags($result->rifcs);
 				$registryObjects = simplexml_load_string(wrapRegistryObjects($rifcs));
 				$registryObjects->registerXPathNamespace('rif', 'http://ands.org.au/standards/rif-cs/registryObjects');
 				$registryObjectXML = $registryObjects->xpath('//rif:registryObject');
 				$xml = wrapRegistryObjects($registryObjectXML[0]->asXML());
+
 				$this->importer->setXML($xml);
 				$this->importer->forceDraft();
 
@@ -798,22 +795,6 @@ class Migrate extends MX_Controller
 		}
 	}
 
-
-	function sanitizeXML($xml)
-	{
-
-		if (strlen($xml) > 100000)
-		{
-			$xml = preg_replace('/<relatedObject.*?<\/relatedObject>/ms', '', $xml);
-			if (strlen($xml) > 100000)
-			{
-				echo "Could not sanitize XML - contents too large" . NL;
-			}
-			return $xml;
-		}
-		return $xml;
-	}
-
 	function __construct()
     {
             parent::__construct();
@@ -847,7 +828,7 @@ class Migrate extends MX_Controller
      	echo NL .NL . "An error ($number) occurred on line $line in the file: $file:" . NL;
         echo $message . NL . NL;
         echo str_repeat("=", 15) . NL . NL;
-        return false;
+        return true;
        //"<pre>" . print_r($vars, 1) . "</pre>";
 
         // Make sure that you decide how to respond to errors (on the user's side)
@@ -859,10 +840,4 @@ class Migrate extends MX_Controller
         //}
 
 	}
-
-	function cli_exception_handler( $e ) {
-
-		echo "****** EXCEPTION ***** " . NL . $e->getMessage() . NL . NL;
-		return true;
-   	}
 }
