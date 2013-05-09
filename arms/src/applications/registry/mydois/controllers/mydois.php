@@ -216,6 +216,17 @@ class Mydois extends MX_Controller {
 			$doi_db->where('doi_id', $doi_id);
 			$doi_db->update('doi_objects', $data); 
 
+			$client = str_replace("-","0",$client_id);
+			$logdata = array(
+               'timestamp' =>  "NOW()",
+               'client_id' => $client,
+               'activity' => "UPDATE", 
+               'doi_id'  => $doi_id, 
+               'result'    => "SUCCESS",  
+               'message'    => "DOI ".$doi_id." was successfully update to url '".$new_url."'",      
+            	);
+			$doi_db->insert('activity_log', $logdata); 
+
 			redirect('/mydois/show/?app_id='.$client_obj->app_id, 'location');
 		}else{
 			//we got an error back or nothing so we need to tell the user something went wrong
