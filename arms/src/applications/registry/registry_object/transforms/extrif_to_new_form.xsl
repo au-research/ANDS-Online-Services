@@ -86,7 +86,7 @@
 				<span class="label"><i class="icon-question-sign icon-white"></i> <a id="aro_help_link" target="_blank" style="color:white;" href="http://ands.org.au/guides/cpguide/"> Help</a></span>
 			</div>
 		</div>
-		<form class="form-horizontal" id="edit-form">
+		<form class="form-horizontal" id="edit-form" autocomplete="off">
 			<xsl:call-template name="simpleDescribeTab" mode="{$ro_class}"/>
 			<xsl:call-template name="recordAdminTab"/>
 			<xsl:call-template name="namesTab"/>

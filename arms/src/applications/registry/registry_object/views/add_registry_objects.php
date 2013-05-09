@@ -22,7 +22,7 @@
 		<div class="alert alert-error hide">
 			An Error Occured while adding your record
 		</div>
-		<form action="#" method="get" class="form-vertical">
+		<form action="#" method="get" class="form-vertical" autocomplete="off">
 			<div class="control-group" style="background-color:#ffffff;margin-bottom:10px;padding:0em">
 				<label class="control-label" for="key">Key 
 					<span class="label"><a href="http://www.ands.org.au/guides/cpguide/cpgkey.html" target="_blank" title="View Content Providers' Guide">?</a></span>
