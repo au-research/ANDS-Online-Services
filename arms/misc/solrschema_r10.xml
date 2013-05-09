@@ -179,7 +179,7 @@
 
     <!-- SUBJECTS -->
         <!-- <span class="inferred">The resolved value of the subject (if any) (i.e. "MATHEMATICAL SCIENCES").</span>-->
-        <field name="subject_value_resolved" type="text_en_splitting" indexed="true" stored="true"
+        <field name="subject_value_resolved" type="string" indexed="true" stored="true"
           multiValued="true"/>
 
         <!-- <span class="provided">The subject value provided to ANDS (usually an anzsrc code in notation form (i.e. 
