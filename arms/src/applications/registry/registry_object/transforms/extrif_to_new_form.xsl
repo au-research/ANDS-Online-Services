@@ -79,7 +79,7 @@
 			</div>
 		</div>
 		<div id="breadcrumb" class="clear">
-			<a href="{$base_url}data_source/manage_records/{$dataSourceID}"><xsl:value-of select="$dataSourceTitle" /></a>
+			<a href="{$base_url}data_source/manage_records/{$dataSourceID}"><xsl:value-of select="$dataSourceTitle" /> - Manage Records</a>
 			<a href="{$base_url}registry_object/view/{$registry_object_id}" title="" class="current"><xsl:value-of select="$display_title"/></a>
 			<a href="#" class="">Edit</a>
 			<div class="pull-right">
