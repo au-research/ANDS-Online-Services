@@ -772,8 +772,7 @@ function addValidationMessage(tt, type){
 	var message = tt.message;
     var message = $('<div />').html(message).text();
 
-
-	if(name.match("^tab_mandatoryInformation_")){
+	if(field_id.match("^tab_mandatoryInformation_")){
 		var tab = field_id.replace('tab_mandatoryInformation_','');
 		var field = $('#admin').find('*[name='+tab+']');
 		$(field).addClass('error');

@@ -414,7 +414,7 @@
 						<sup><a class="muted" href="http://www.ands.org.au/guides/cpguide/cpggroup.html" target="_blank" title="View Content Providers' Guide">?</a></sup>
 					</label>
 					<div class="controls">
-						<input type="text" class="rifcs-type rifcs-type-loading" vocab="GroupSuggestor" name="group" value="{@group}"/>
+						<input type="text" class="rifcs-type rifcs-type-loading" vocab="GroupSuggestor" name="group" required="" value="{@group}"/>
 					</div>
 				</div>
 
@@ -1810,7 +1810,6 @@
 								<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/> Remove this contributor</button>
 								<hr/>
 							</div>
-
 							<hr/>
 						</div>
 					</div>
