@@ -74,6 +74,7 @@ $(function(){
 	$(window).hashchange();//initial hashchange event
 	initEditForm();
 	Core_bindFormValidation($('#edit-form'));
+	setTabInfo();
 	markRequired($('#edit-form'));
 	// === Sidebar navigation === //	
 	$('.submenu > a').click(function(e){

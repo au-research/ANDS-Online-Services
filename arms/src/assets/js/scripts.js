@@ -479,7 +479,7 @@ function Core_bindFormValidation(form){
 	$('input,textarea', form).each(function(){
 		Core_checkValidField(form, this);
 		Core_checkValidForm(form);
-		$(this).die().live({
+		$(this).off().on({
 			blur: function(){
 				Core_checkValidField(form, this);
 				Core_checkValidForm(form);
@@ -495,8 +495,7 @@ function Core_bindFormValidation(form){
 function markRequired(form){
 	$(form).attr('valid', false);
 	$('input,textarea', form).each(function(){
-		if(this.required)
-		{
+		if(this.required){
 			var label = $(this).parent().find('.control-label');
 			if(label.length === 0)
 				label = $(this).parent().parent().find('.control-label');
@@ -535,7 +534,7 @@ function Core_checkValidField(form, field){
 		}
 
 		if(valid){
-			$(field).closest('div.control-group').removeClass('error').addClass('success');
+			// $(field).closest('div.control-group').removeClass('error').addClass('success');
 			$(field).removeClass('error').addClass('success');
 			if($(field).parent().find('.validation').length > 0)
 			{
@@ -564,7 +563,6 @@ function Core_checkValidField(form, field){
 			}
 			return false;
 		}
-		
 	}
 	//never gonna get here for field needing validation
 	return valid;
@@ -582,7 +580,6 @@ function Core_checkValidForm(form){
 	}else{
 		$(form).attr('valid', false);
 	}
-	setTabInfo();
 
 
 	return valid;
