@@ -1337,7 +1337,7 @@ function getRIFCSforTab(tab, hasField){
 					}else{//generic
 						//check if there is an input[name="type"] in this box_part so that we can use as a type attribute
 						var typeAttrib = $('input[name=type]', this).val();
-						if(typeAttrib || type === 'identifier'){
+						if(typeAttrib || type === 'identifier' || type === 'spatial'){
 							fragment += '<'+type;
 							if(hasField) fragment += ' field_id="' +$(this).attr('field_id')+'"';
 							fragment += ' type="'+htmlEntities(typeAttrib)+'">'+htmlEntities($('input[name=value]', this).val())+'</'+type+'>';	
