@@ -1142,13 +1142,13 @@
     </xsl:template>
 
     <xsl:template match="ro:relatedInfo/ro:notes">
-        <xsl:if test="string-length(.) &gt; 512">
+        <xsl:if test="string-length(.) &gt; 4000">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Related Info Notes must be less than 512 characters.","notes");</xsl:text>
+            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Related Info Notes must be less than 4000 characters.","notes");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
-					<span class="error">Related Info Notes must be less than 512 characters.</span>
+					<span class="error">Related Info Notes must be less than 4000 characters.</span>
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>
