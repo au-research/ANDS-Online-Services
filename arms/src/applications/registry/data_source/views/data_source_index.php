@@ -865,7 +865,7 @@
 		<a href="#!/view/{{data_source_id}}" class="">{{title}}</a>
 		<a href="javascript:;" class="current">Edit</a>
 		<div class="pull-right">
-			<span class="label"><i class="icon-question-sign icon-white"></i> <a target="_blank" style="color:white;" href="http://ands.org.au/guides/cpguide/cpgdsaaccount.html ">Help</a></span>
+			<span class="label"><i class="icon-question-sign icon-white"></i> <a target="_blank" style="color:white;" href="http://services.ands.org.au/documentation/SettingsHelp/ ">Help</a></span>
 		</div>
 	</div>
 <div class="container-fluid">
