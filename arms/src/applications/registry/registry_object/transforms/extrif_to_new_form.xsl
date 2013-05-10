@@ -1791,32 +1791,33 @@
 				<label class="control-label">Contributors:</label>
 					<div class="controls">
 						<div class="aro_box_part" type="contributor">
-			Contributor: <input type="text" class="input-small" name="seq" placeholder="Seq" value="1"/>
-			<div class="aro_box_part" type="contributor_namePart">
-				<div class="control-group">
-					<label class="control-label" for="title">Name Part: </label>
-					<div class="controls">
-						<span class="inputs_group">
-							<input type="text" name="value" class="inner_input" value="" placeholder="Value"/>
-							<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSNamePartType" name="type" placeholder="Type" value=""/>
-						</span>
-						<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
+							Contributor: <input type="text" class="input-small" name="seq" placeholder="Seq" value="1"/>
+							<div class="aro_box_part" type="contributor_namePart">
+								<div class="control-group">
+									<label class="control-label" for="title">Name Part: </label>
+									<div class="controls">
+										<span class="inputs_group">
+											<input type="text" name="value" class="inner_input" value="" placeholder="Value"/>
+											<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSNamePartType" name="type" placeholder="Type" value=""/>
+										</span>
+										<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
+									</div>
+								</div>
+							</div>
+							<div class="separate_line"/>
+							<div class="controls">
+								<button class="btn btn-primary addNew" type="contributor_namePart" add_new_type="contributor_namePart"><i class="icon-plus icon-white"/> Add Name Part </button>
+								<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/> Remove this contributor</button>
+								<hr/>
+							</div>
+
+							<hr/>
+						</div>
 					</div>
 				</div>
-			</div>
-			<div class="separate_line"/>
-			<div class="controls">
-				<button class="btn btn-primary addNew" type="contributor_namePart" add_new_type="contributor_namePart"><i class="icon-plus icon-white"/> Add Name Part </button>
-				<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/> Remove this contributor</button>
-				<hr/>
-			</div>
-			<div class="controls">
-				<div class="separate_line"/>
-				<button class="btn btn-primary addNew" type="contributor" add_new_type="contributor"><i class="icon-plus icon-white"/> Add Contributor </button>
-			</div>
-			<hr/>
-		</div>
-					</div>
+				<div class="controls">
+					<div class="separate_line"/>
+					<button class="btn btn-primary addNew" type="contributor" add_new_type="contributor"><i class="icon-plus icon-white"/> Add Contributor </button>
 				</div>
 			</div>
 
