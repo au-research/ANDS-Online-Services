@@ -1198,16 +1198,14 @@ $(document).on('click', '#save-edit-form', function(e){
 
 	var validationErrors = validateFields(jsonData, ds_id);
 
-	if(validationErrors)
-	{
+	if(validationErrors){
 		$('#myModal').modal();
 		logErrorOnScreen(validationErrors, $('#myModal .modal-body'));
-			
+		$('#save-edit-form').button('reset');
 	}else{
 		var form = $('#edit-form');
 		var valid = Core_checkValidForm(form);
 		//console.log(valid);
-	
 		$.ajax({
 			url:'data_source/updateDataSource', 
 			type: 'POST',
