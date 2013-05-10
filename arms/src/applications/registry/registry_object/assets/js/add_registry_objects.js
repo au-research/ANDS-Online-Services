@@ -6,7 +6,7 @@ $(function(){
 			e.preventDefault();
 			//console.log($(this).attr('id'));
 			var ro_class = $(this).attr('id');
-			var theInput = '<input type="text" class="input-xlarge rifcs-type" vocab="RIFCS'+ro_class+'Type" name="type" value="" required>';
+			var theInput = '<input type="text" class="input-xlarge rifcs-type" vocab="RIFCS'+ro_class+'Type" name="type" value="" required autocomplete="off">';
 			$('#ro_type').html(theInput);
 			$('#AddNewDS_confirm').attr('ro_class', ro_class);
 			$('#AddNewDS_confirm').html('Add New '+ro_class);
