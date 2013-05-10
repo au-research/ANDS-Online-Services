@@ -1080,11 +1080,13 @@
 
 			<div class="aro_box_display clearfix">
 				<a href="javascript:;" class="toggle"><i class="icon-minus"/></a>
+				Date From: 
 				<div class="input-append">
 					<input type="text" class="input-large datepicker" name="dateFrom" placeholder="dateFrom" value="{@dateFrom}"/>
 				</div>
+					Date To: 
 				<div class="input-append">
-					<input type="text" class="input-large datepicker" name="dateTo" placeholder="dateTo" value="{@dateTo}"/>
+				<input type="text" class="input-large datepicker" name="dateTo" placeholder="dateTo" value="{@dateTo}"/>
 				</div>
 				<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
 			</div>
@@ -1581,9 +1583,11 @@
 
 			<div class="aro_box_display clearfix">
 				<a href="javascript:;" class="toggle"><i class="icon-minus"/></a>
+				Date From: 
 				<div class="input-append">
 					<input type="text" class="input-large datepicker" name="dateFrom" placeholder="dateFrom" value=""/>
 				</div>
+				 Date To: 
 				<div class="input-append">
 					<input type="text" class="input-large datepicker" name="dateTo" placeholder="dateTo" value=""/>
 				</div>
