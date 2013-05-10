@@ -1810,24 +1810,24 @@
 	    </xsl:if>
     </xsl:template>
     
-    <xsl:template match="ro:citationMetadata/ro:edition">
-	    <xsl:if test="string-length(.) = 0">
+    <xsl:template match="ro:citationMetadata/ro:version">
+	  <!--  <xsl:if test="string-length(.) = 0">
 	        <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-	        		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","An Edition must be entered. &lt;span&gt;(e.g. '2nd edition')&lt;/span&gt;");</xsl:text>
+	        		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","A Version must be entered. &lt;span&gt;(e.g. '2nd edition')&lt;/span&gt;");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
-					<span class="error">Citation Metadata Edition must have a value.</span>
+					<span class="error">Citation Metadata Version must have a value.</span>
 			    </xsl:otherwise>
 	    	</xsl:choose>
-	    </xsl:if>
+	    </xsl:if> -->
 	    <xsl:if test="string-length(.) &gt; 512">
 	        <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-	        		<xsl:text>SetWarnings("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Edition must be less than 512 characters");</xsl:text>
+	        		<xsl:text>SetWarnings("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Version must be less than 512 characters");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
-					<span class="warning">Citation Metadata Edition must be less than 512 characters.</span>
+					<span class="warning">Citation Metadata Version must be less than 512 characters.</span>
 			    </xsl:otherwise>
 	    	</xsl:choose>
 	    </xsl:if>

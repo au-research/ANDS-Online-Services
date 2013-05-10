@@ -673,11 +673,16 @@
 			</div>
 
 
-			<div class="aro_box_part" type="edition">
+			<div class="aro_box_part" type="version">
 				<div class="control-group">
-				<label class="control-label">Edition:</label>
+				<label class="control-label">Version:</label>
 					<div class="controls">
-						<input type="text" class="input-xlarge" name="value" placeholder="Edition" value="{ro:edition/text()}"/>
+						<xsl:if test="ro:edition">
+							<input type="text" class="input-xlarge" name="value" placeholder="Edition" value="{ro:edition/text()}"/>
+						</xsl:if>
+						<xsl:if test="ro:version">
+							<input type="text" class="input-xlarge" name="value" placeholder="Version" value="{ro:version/text()}"/>
+						</xsl:if>
 					</div>
 				</div>
 			</div>
@@ -1736,11 +1741,11 @@
 			</div>
 
 
-			<div class="aro_box_part" type="edition">
+			<div class="aro_box_part" type="version">
 				<div class="control-group">
-				<label class="control-label">Edition:</label>
+				<label class="control-label">Version:</label>
 					<div class="controls">
-						<input type="text" class="input-xlarge" name="value" placeholder="Edition" value=""/>
+						<input type="text" class="input-xlarge" name="value" placeholder="Version" value=""/>
 					</div>
 				</div>
 			</div>
