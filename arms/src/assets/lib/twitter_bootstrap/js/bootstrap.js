@@ -1793,15 +1793,16 @@
       if (typeof this.onselect == "function")
           this.onselect(val)
 
+      // this.lookup(false)
+      // if(this.$element.attr('vocab')=='RIFCSSubject'){
+      //   if(this.$element.val().length > 4 || this.$menu.children().length == 1){
+      //     return this.hide()
+      //   }
+      // }else{
+      //   return this.hide()
+      // }
       this.lookup(false)
-      if(this.$element.attr('vocab')=='RIFCSSubject'){
-        if(this.$element.val().length > 4 || this.$menu.children().length == 1){
-          return this.hide()
-        }
-      }else{
-        return this.hide()
-      }
-
+      return this.hide()
     }
 
 

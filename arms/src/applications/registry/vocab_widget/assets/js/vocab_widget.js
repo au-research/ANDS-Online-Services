@@ -75,7 +75,10 @@
 
 	    //solr count query fragment injector and operator
 	    sqc: "",
-	    sqc_op: ""
+	    sqc_op: "",
+
+	    //display count or not
+	    display_count: true
 	};
 
 	// Default changes if we're running within the ANDS environments
@@ -708,7 +711,11 @@
 		.data('vocab', item)
 		.attr('data-vocab-node', item.about);
 
-	    titem.html('<span>'+item['label']+'</span>' + ' (' + item['count'] + ')');
+		if(this.settings.display_count){
+	    	titem.html('<span>'+item['label']+'</span>' + ' (' + item['count'] + ')');
+	    }else{
+	    	titem.html('<span>'+item['label']+'</span>');
+	    }
 
 	    if (item.narrower === false)
 	    {
@@ -721,7 +728,7 @@
 		handler._subclick(event);
 	    });
 
-	    if (item['count'] === 0) {
+	    if (item['count'] === 0 && this.settings.display_count) {
 		titem.addClass('tree_empty');
 	    }
 

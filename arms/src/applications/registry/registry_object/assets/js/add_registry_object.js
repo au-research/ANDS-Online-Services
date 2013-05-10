@@ -881,7 +881,6 @@ function initVocabWidgets(container){
 				});
 				elem.typeahead({source:dataArray});
 			}
-			
 		});
 
 		elem.on('error.vocab.ands', function(event, xhr) {
@@ -918,17 +917,47 @@ function initSubjectWidget(elem){
 	// WE MIGHT NEED A WHITE LIST HERE
 
 	if(vocab == 'anzsrc-for' || vocab =='anzsrc-seo'){
-		var widget = vocab_value.vocab_widget({mode:'advanced',cache: false, repository: vocab});
-		vocab_value.one('search.vocab.ands', function(event, data) {	
-			var dataArray = Array();
-			$.each(data.items, function(idx, e) {
-				dataArray.push({value:e.notation, subtext:e.label});
-			});
-			// log(dataArray);
-			vocab_value.typeahead({source:dataArray});
-			vocab_value.data('typeahead').source = dataArray;
+		// var widget = vocab_value.vocab_widget({mode:'advanced',cache: false, repository: vocab});
+		// vocab_value.one('search.vocab.ands', function(event, data) {	
+		// 	var dataArray = Array();
+		// 	$.each(data.items, function(idx, e) {
+		// 		dataArray.push({value:e.notation, subtext:e.label});
+		// 	});
+		// 	vocab_value.typeahead({source:dataArray});
+		// 	vocab_value.data('typeahead').source = dataArray;
+		// }).on('change',function(event, data){
+		// 	widget.vocab_widget('narrow', vocab_value.val());
+		// }).on('narrow.vocab.ands',function(event, data){
+		// 	// log(data);
+		// });
+		// widget.vocab_widget('search', '');
+		// 
+		$(vocab_value).qtip({
+			content:{text:'<div class="subject_chooser"></div>'},
+			prerender:true,
+			position:{
+				my:'center left',
+				at: 'center right',
+				viewport:$(window)
+			},
+			show: {event: 'click',ready:false},
+			hide: {event: 'unfocus'},
+			events: {
+				render: function(event, api) {
+					$(".subject_chooser", this).vocab_widget({mode:'tree', repository:vocab, display_count:false})
+					    .on('treeselect.vocab.ands', function(event) {
+							var target = $(event.target);
+							var data = target.data('vocab');
+							//alert('You clicked ' + data.label + '\r\n<' + data.about + '>');
+							vocab_value.val(data.notation);
+							log(data);
+					    });
+					api.elements.content.find('.hasTooltip').qtip('repopsition');
+					api.elements.content.find('.hasTooltip').qtip('update');
+				}
+			},
+			style: {classes: 'ui-tooltip-shadow ui-tooltip-bootstrap ui-tooltip-large'}
 		});
-		widget.vocab_widget('search', '');	
 	}
 }
 
