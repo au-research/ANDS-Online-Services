@@ -49,7 +49,7 @@
 			<li><a href="#subjects" data-toggle="tab">Subjects</a></li>
 			<li><a href="#relatedinfos" data-toggle="tab">Related Info</a></li>
 			<xsl:if test="$ro_class = 'service'">
-				<li><a href="#accesspolicies" data-toggle="tab">Accesspolicy</a></li>
+				<li><a href="#accesspolicies" data-toggle="tab">Access Policy</a></li>
 			</xsl:if>
 			<xsl:if test="$ro_class = 'collection'">
 				<li><a href="#citationInfos" data-toggle="tab">Citation Info</a></li>
