@@ -813,7 +813,7 @@
 			<div class="aro_box_part" type="licence">
 				<label>Licence</label>
 				<input type="text" class="input-xlarge" name="rightsUri" placeholder="Rights Uri" value="{ro:licence/@rightsUri}"/>
-				<input type="text" class="input-xlarge" name="value" placeholder="Value" value="{ro:licence/text()}"/>
+				<input type="text" class="input-xlarge rifcs-type" vocab="RIFCSLicenceType" name="value" placeholder="Value" value="{licence/text()}"/>
 			</div>		
 			<div class="aro_box_part" type="accessRights">
 				<label>Access Rights</label>
@@ -1437,7 +1437,7 @@
 			<div class="aro_box_part" type="licence">
 				<label>Licence</label>
 				<input type="text" class="input-xlarge" name="rightsUri" placeholder="Rights Uri" value="{licence/@rightsURI}"/>
-				<input type="text" class="input-xlarge" name="value" placeholder="Value" value="{licence/text()}"/>
+				<input type="text" class="input-xlarge rifcs-type" vocab="RIFCSLicenceType" name="value" placeholder="Value" value="{licence/text()}"/>
 			</div>		
 			<div class="aro_box_part" type="accessRights">
 				<label>Access Rights</label>
