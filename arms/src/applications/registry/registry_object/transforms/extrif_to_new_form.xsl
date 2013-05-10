@@ -928,6 +928,10 @@
 
 	<xsl:template match="ro:activity/ro:existenceDates | ro:party/ro:existenceDates  | ro:service/ro:existenceDates">
 		<div class="aro_box" type="existenceDates">
+			<div class="aro_box_display clearfix">
+					<label class="control-label" for="title"></label>
+					<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
+			</div>
 			<div class="aro_box_part" type="startDate">
 					<legend>Start Date</legend>
 					<span class="inputs_group">
@@ -942,9 +946,6 @@
 					<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSDateFormat" name="dateFormat" placeholder="endDate dateFormat" value="{ro:endDate/@dateFormat}"/>
 				</span>
 			</div>
-			<button class="btn btn-mini btn-danger remove">
-				<i class="icon-remove icon-white"/>
-			</button>
 			<p class="help-inline">
 				<small/>
 			</p>
@@ -1878,6 +1879,10 @@
 		
 		
 		<div class="aro_box template" type="existenceDates">
+			<div class="aro_box_display clearfix">
+					<label class="control-label" for="title"></label>
+					<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
+			</div>
 			<div class="aro_box_part" type="startDate">
 					<legend>Start Date</legend>
 					<span class="inputs_group">
@@ -1892,9 +1897,6 @@
 					<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSDateFormat" name="dateFormat" placeholder="endDate dateFormat" value=""/>
 				</span>
 			</div>
-			<button class="btn btn-mini btn-danger remove">
-				<i class="icon-remove icon-white"/>
-			</button>
 			<p class="help-inline">
 				<small/>
 			</p>

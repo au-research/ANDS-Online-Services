@@ -90,7 +90,7 @@
     <xsl:template match="description[(not(@type) or @type='') and not(text())]"/>
     <xsl:template match="spatial[(not(@type) or @type='') and not(text())]"/>
     <xsl:template match="text[not(text())]"/>
-    <xsl:template match="addressPart[not(text()) or (not(@type) or @type='')]"/>
+    <xsl:template match="addressPart[not(text()) and (not(@type) or @type='')]"/>
     <xsl:template match="subject[(not(@type) or @type='') and not(text())]"/>
     <xsl:template match="namePart[(not(@type) or @type='') and not(text()) and (following-sibling::namePart[text() != ''] or preceding-sibling::namePart[text() != ''])]"/>
     <xsl:template match="date[not(parent::citationMetadata) and not(text())]"/>

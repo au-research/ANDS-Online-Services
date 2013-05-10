@@ -322,7 +322,7 @@
         <xsl:if test="not(ro:existenceDates)">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetInfos("tab_existenceDates","Existence dates are recommended for the Party.","REC_EXISTENCEDATE");</xsl:text>
+            		<xsl:text>SetInfos("tab_existencedates","Existence dates are recommended for the Party.","REC_EXISTENCEDATE");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="info">Existence dates are recommended for the Party.</span>
@@ -405,7 +405,7 @@
         <xsl:if test="not(ro:existenceDates)">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetInfos("tab_existenceDates","Existence dates are recommended for the Activity.","REC_EXISTENCEDATE");</xsl:text>
+            		<xsl:text>SetInfos("tab_existencedates","Existence dates are recommended for the Activity.","REC_EXISTENCEDATE");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="info">Existence dates are recommended for the Activity.</span>
