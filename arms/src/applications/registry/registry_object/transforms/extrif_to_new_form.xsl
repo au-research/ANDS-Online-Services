@@ -1236,7 +1236,7 @@
 						<input type="text" class="inner_input" name="value" placeholder="Value" value="{ro:value}" valid-type="url"/>
 						<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSElectronicAddressType" name="type" placeholder="Type" value="{@type}"/>
 					</span>
-					<xsl:if test="ancestor::ro:service">
+					<xsl:if test="//ro:service">
 						<button class="btn btn-primary showParts"><i class="icon-chevron-right icon-white"></i></button>
 						<div class="parts hide">
 							<xsl:apply-templates select="ro:arg"/>
@@ -1633,10 +1633,9 @@
 						<input type="text" class="inner_input" name="value" placeholder="Value" value=""/>
 						<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSElectronicAddressType" name="type" placeholder="Type" value=""/>
 					</span>
-					<xsl:if test="ancestor::ro:service">
+					<xsl:if test="//ro:service">
 						<button class="btn btn-primary showParts"><i class="icon-chevron-right icon-white"></i></button>
 						<div class="parts hide">
-							<xsl:apply-templates select="ro:arg"/>
 							<div class="separate_line"/>
 							<button class="btn btn-primary addNew" type="arg" add_new_type="arg">
 								<i class="icon-plus icon-white"></i> Add Args
