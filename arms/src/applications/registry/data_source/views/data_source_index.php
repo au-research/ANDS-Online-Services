@@ -943,7 +943,7 @@
 					<fieldset>
 						<legend>Records Management Settings</legend>
 						<div class="control-group">
-							<label class="control-label">Reverse Links <sup><a href="http://ands.org.au/guides/cpguide/cpgdsaaccount.html#reverse" target="_blank" class="muted">?</a></sup></label>
+							<label class="control-label">Reverse Links <sup><a href="http://services.ands.org.au/documentation/SettingsHelp/#reverse_links" target="_blank" class="muted">?</a></sup></label>
 							<div class="controls">
 
 								<div class="normal-toggle-button" value="{{allow_reverse_internal_links}}">
@@ -961,7 +961,7 @@
 						<div class="control-group">
 							<label class="control-label">
 								Create Primary <br/>Relationships
-								<sup><a href="http://ands.org.au/guides/cpguide/cpgdsaaccount.html#primary" target="_blank" class="muted">?</a></sup>
+								<sup><a href="http://services.ands.org.au/documentation/SettingsHelp/#primary_rels" target="_blank" class="muted">?</a></sup>
 							</label>
 							<div class="controls">
 								<div class="create-primary normal-toggle-button" style="margin-top:9px;" value="{{create_primary_relationships}}">
@@ -972,7 +972,7 @@
 						
 						<div id="primary-relationship-form">
 							<div class="well">
-								<i>Data Sources can have up to 2 Primary Records <sup><a href="http://ands.org.au/guides/cpguide/cpgdsaaccount.html#primary" target="_blank" class="muted">?</a></sup></i>
+								<i>Data Sources can have up to 2 Primary Records <sup><a href="http://services.ands.org.au/documentation/SettingsHelp/#primary_rels" target="_blank" class="muted">?</a></sup></i>
 								<div class="clearfix"></div>
 								<div class="pull-left">
 									<div class="control-group hide">
@@ -1092,7 +1092,7 @@
 								
 						<div class="control-group">
 							<label class="control-label">Manually Publish Records
-								<sup><a href="http://ands.org.au/guides/cpguide/cpgdsaaccount.html#quality" target="_blank" class="muted">?</a></sup>
+								<sup><a href="http://services.ands.org.au/documentation/SettingsHelp/#man_publish" target="_blank" class="muted">?</a></sup>
 							</label>
 							<div class="controls">
 								<div class="normal-toggle-button manual_publish" value="{{manual_publish}}">
@@ -1105,7 +1105,7 @@
 						<?php if ($this->user->hasFunction('REGISTRY_STAFF')): ?>
 							<div class="control-group">
 								<label class="control-label">Quality Assessment Required
-									<sup><a href="http://ands.org.au/guides/cpguide/cpgdsaaccount.html#quality" target="_blank" class="muted">?</a></sup>
+									<sup><a href="http://services.ands.org.au/documentation/SettingsHelp/#qa_required" target="_blank" class="muted">?</a></sup>
 								</label>
 								<div class="controls">
 									<div class="normal-toggle-button qa_flag" style="margin-top:9px;" value="{{qa_flag}}">
@@ -1123,7 +1123,7 @@
 						<?php endif; ?>
 						<div class="control-group">
 							<label class="control-label" for="institution_pages">Contributor Pages
-								<sup><a href="http://ands.org.au/guides/cpguide/cpgdsaaccount.html#contrib" target="_blank" class="muted">?</a></sup>
+								<sup><a href="http://services.ands.org.au/documentation/SettingsHelp/#contributor_pages" target="_blank" class="muted">?</a></sup>
 							</label>
 							<div class="controls">
 								<input type="radio" class="contributor-page" name="institution_pages_radio" value="0"><p class="help-inline">Do not have contributor pages</p><br />
@@ -1140,7 +1140,7 @@
 				<div id="harvester" class="tab-pane">
 					<fieldset>
 						<legend>Harvester Settings
-							<sup><a href="http://ands.org.au/guides/cpguide/cpgdsaaccount.html#harvester" target="_blank" class="muted">?</a></sup>
+							<sup><a href="http://services.ands.org.au/documentation/SettingsHelp/#harvest_settings" target="_blank" class="muted">?</a></sup>
 						</legend>
 						<div class="control-group">
 							<label class="control-label" for="uri">URI</label>
