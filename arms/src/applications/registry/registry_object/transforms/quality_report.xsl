@@ -1471,7 +1471,7 @@
 		<xsl:if test="string-length(@type) = 0">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Dates Type must be specified. &lt;span&gt;(e.g. 'gdc.created')&lt;/span&gt;","type");</xsl:text>
+            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Dates Type must be specified. &lt;span&gt;(e.g. 'dc.created')&lt;/span&gt;","dates_type");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="error">Dates Type must have a value.</span>

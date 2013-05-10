@@ -786,9 +786,16 @@ function addValidationMessage(tt, type){
 
 		if (typeof(tt.sub_field_id) !== 'undefined')
 		{		
-			var field = $('*[field_id='+field_id+']').find('*[name='+tt.sub_field_id+']');
-			if(field.length === 0)
-			field = $('*[field_id='+field_id+']').parent().find('*[name='+tt.sub_field_id+']');
+			if(tt.sub_field_id == 'dates_type')
+			{
+				var field = $($('*[field_id='+field_id+']').find('.controls')[0]);
+				//log(field);
+			}			
+			else{
+				var field = $('*[field_id='+field_id+']').find('*[name='+tt.sub_field_id+']');
+				if(field.length === 0)
+				field = $('*[field_id='+field_id+']').parent().find('*[name='+tt.sub_field_id+']');
+			}
 		}
 		else
 		{
