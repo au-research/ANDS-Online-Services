@@ -45,22 +45,22 @@ class Migrate extends MX_Controller
 			$data_source = $this->createOrUpdateDataSource($result);
 			
 			// Update logs (deletes any legacy logs and re-migrates them!)
-			//$this->importDataSourceLogs($data_source->key, $data_source->id);
-			//$data_source->append_log("Data Source was migrated to ANDS Online Services Release 10", "info", "legacy_log");
+			$this->importDataSourceLogs($data_source->key, $data_source->id);
+			$data_source->append_log("Data Source was migrated to ANDS Online Services Release 10", "info", "legacy_log");
 
 			// Now start importing registry objects
 			$this->deleteAllrecordsForDataSource($data_source);
-			//$data_source->updateStats();
-			//$this->migrateDraftRegistryObjectsForDatasource($data_source);
-			//$this->migrateDeletedRegistryObjectsForDatasource($data_source);
+			$data_source->updateStats();
+			$this->migrateDraftRegistryObjectsForDatasource($data_source);
+			$this->migrateDeletedRegistryObjectsForDatasource($data_source);
 			$this->migrateRegistryObjectsForDatasource($data_source);
-			//$this->reschedulePendingHarvests($data_source);
+			$this->reschedulePendingHarvests($data_source);
 
 			echo NL . NL;
 		}
 
-		//$this->updateDanglingSlugs();
-		//$this->updateContributorPages();
+		$this->updateDanglingSlugs();
+		$this->updateContributorPages();
 
 
 		echo NL . NL;
@@ -355,7 +355,17 @@ class Migrate extends MX_Controller
 		{
 			$count++;			
 			$this->importer->forcePublish();
-			// echo "Importing Record (#".$count."): " . $result->registry_object_key . "." .NL;
+
+			// Slug quarrels...
+			if (strlen($result->url_slug) > 200)
+			{
+				$old_slug = $result->url_slug;
+				$result->url_slug = substr($result->url_slug, 0 , 200); // must trim the slug for new system
+			}
+			else
+			{
+				$old_slug = null;
+			}
 
 			try
 			{
@@ -393,6 +403,7 @@ class Migrate extends MX_Controller
 								if ($count == $num_records)
 								{
 									$this->importer->setPartialCommitOnly(FALSE);
+									//$this->importer->setPartialCommitOnly(TRUE);
 								}
 								else
 								{
@@ -401,6 +412,13 @@ class Migrate extends MX_Controller
 
 								$this->importer->setDatasource($data_source);
 								$this->importer->commit();
+								
+								/*
+								if ($this->importer->getMessages())
+								{
+									echo $this->importer->getMessages();
+								}
+								*/
 
 								$registryObject = $this->ro->getPublishedByKey($result->registry_object_key);
 								if ($registryObject)
@@ -427,19 +445,49 @@ class Migrate extends MX_Controller
 									$registryObject->flag = $result->flag;
 									$registryObject->created = strtotime($result->created_when);
 									$registryObject->updated = max($result->registry_date_modified, strtotime($result->status_modified_when));
+
 									// Update the raw record version too...
 									$this->db->where('registry_object_id', $registryObject->id);
 									$this->db->update('record_data', array("timestamp"=>$registryObject->updated)); 
 
+									// If we have a slug conflict
+									// (the newly generated slug doesn't match the original in the database)
+									if ($registryObject->slug != $result->url_slug)
+									{
+										$this->db->where(array('slug'=>$result->url_slug));
+										$slug_query = $this->db->get('url_mappings');
+										if ($slug_query->num_rows() == 0)
+										{
+											$this->db->insert('url_mappings', array(
+												"slug"=>$result->url_slug,
+												"registry_object_id"=>$registryObject->id,
+												"created"=>time(),
+												"updated"=>time()
+											));
+										}
+										else
+										{
+											$this->db->where(array("slug"=>$result->url_slug));
+											$this->db->update('url_mappings', array(
+												"registry_object_id"=>$registryObject->id,
+												"updated"=>time()
+											));
+										}
+									}
+
+
+									// Save (But don't update the "updated" timestamp!)
+									$registryObject->save(false);
 
 									// Slug checking (on old slugs pointing to this registry object)
 									$slug_query = $this->source->get_where('dba.tbl_url_mappings', 
-														array('registry_object_key' => $registryObject->key, 'url_fragment !=' => $registryObject->slug));
+												array('registry_object_key' => $registryObject->key, 'url_fragment !=' => ($old_slug ?: $result->url_slug)));
 
 									if ($slug_query->num_rows() > 0)
 									{
 										foreach ($slug_query->result() AS $slug)
 										{
+											$slug->url_fragment =  trim(substr($slug->url_fragment, 0, 200));
 											$this->db->where(array('slug'=>$slug->url_fragment));
 											$slug_query2 = $this->db->get('url_mappings');
 											if ($slug_query2->num_rows() == 0)
@@ -462,41 +510,15 @@ class Migrate extends MX_Controller
 										}
 									}
 
-									// If we have a slug conflict!
-									if ($registryObject->slug != $result->url_slug)
-									{
-										$this->db->where(array('slug'=>$result->url_slug));
-										$slug_query = $this->db->get('url_mappings');
-										if ($slug_query->num_rows() == 0)
-										{
-											$this->db->insert('url_mappings', array(
-												"slug"=>$result->url_slug,
-												"registry_object_id"=>$registryObject->id,
-												"created"=>time(),
-												"updated"=>time()
-											));
-										}
-										else
-										{
-											$this->db->where(array("slug"=>$result->url_slug));
-											$this->db->update('url_mappings', array(
-												"registry_object_id"=>$registryObject->id,
-												"updated"=>time()
-											));
-										}
-										$registryObject->slug = $result->url_slug;
-									}
 
 
-									// Save without updating the "updated" date...
-									$registryObject->save(false);
+									echo "*";
 									$this_ro_id = $registryObject->id;
-
 									unset($registryObject);
 								}
 								else
 								{
-									throw new Exception("Appears that the record was not successfully created? Could not load after import!".$rifcs);
+									throw new Exception("Appears that the record was not successfully created? Could not load after import!" . $xml);
 								}
 						}
 						else
@@ -533,6 +555,7 @@ class Migrate extends MX_Controller
 			}
 			
 		}
+		echo NL;
 
 		/* Handle the approved records */
 		// Very similar to above, except not published, no SLUG logic. 
