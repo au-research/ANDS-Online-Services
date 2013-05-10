@@ -950,7 +950,6 @@ function initSubjectWidget(elem){
 							var data = target.data('vocab');
 							//alert('You clicked ' + data.label + '\r\n<' + data.about + '>');
 							vocab_value.val(data.notation);
-							log(data);
 					    });
 					api.elements.content.find('.hasTooltip').qtip('repopsition');
 					api.elements.content.find('.hasTooltip').qtip('update');
