@@ -1149,18 +1149,29 @@ function initRelatedInfos(){
 function initEditor(){
 	
 	if(editor=='tinymce'){
-		tinyMCE.init({
-		    theme : "advanced",
-		    mode : "specific_textareas",
-		    editor_selector : "editor",
-		    theme_advanced_toolbar_location : "top",
-		    theme_advanced_buttons1 : "bold,italic,underline,separator,link,separator,justifyleft,justifycenter,justifyright,justifyfull,separator,outdent,indent,separator,undo,redo,code",
-		    theme_advanced_buttons2 : "",
-		    theme_advanced_buttons3 : "",
-		    height:"250px",
-		    width:"600px",
-		    entity_encoding : "raw",
-		    forced_root_block : ''
+		// tinyMCE.init({
+		//     theme : "advanced",
+		//     mode : "specific_textareas",
+		//     editor_selector : "editor",
+		//     theme_advanced_toolbar_location : "top",
+		//     theme_advanced_buttons1 : "bold,italic,underline,separator,link,separator,justifyleft,justifycenter,justifyright,justifyfull,separator,outdent,indent,separator,undo,redo,code",
+		//     theme_advanced_buttons2 : "",
+		//     theme_advanced_buttons3 : "",
+		//     height:"250px",
+		//     width:"600px",
+		//     entity_encoding : "raw",
+		//     forced_root_block : ''
+		// });
+		tinymce.init({
+		    selector: "textarea.editor",
+		    theme: "modern",
+		    plugins: [
+		        "advlist autolink lists link image charmap print preview hr anchor pagebreak",
+		        "searchreplace wordcount visualblocks visualchars code fullscreen",
+		        "insertdatetime media nonbreaking save table contextmenu directionality",
+		        "emoticons template paste"
+		    ],
+		    toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
 		});
 	}
 }

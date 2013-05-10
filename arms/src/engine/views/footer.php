@@ -69,7 +69,7 @@
             </script>
 
         <?php elseif($lib=='tinymce'):?>
-            <script type="text/javascript" src="<?php echo base_url();?>assets/lib/tiny_mce/tiny_mce.js"></script>
+            <script type="text/javascript" src="<?php echo base_url();?>assets/lib/tiny_mce4/tinymce.min.js"></script>
             <script>
                var editor = 'tinymce';
             </script>
