@@ -1171,6 +1171,9 @@ function initEditor(){
 		        "insertdatetime media nonbreaking save table contextmenu directionality",
 		        "emoticons template paste"
 		    ],
+		    height:"250px",
+		    width:"700px",
+		    entity_encoding : "raw",
 		    toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
 		});
 	}
