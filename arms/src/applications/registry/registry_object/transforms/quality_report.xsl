@@ -155,7 +155,16 @@
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>  
-        
+        <xsl:if test="not(ro:dates/ro:date)">
+        	<xsl:choose>
+			    <xsl:when test="$output = 'script'">
+            		<xsl:text>SetInfos("tab_dates","At least one dates element is recommended for the Collection.","REC_DATES");</xsl:text>
+			    </xsl:when>
+			    <xsl:otherwise>
+					<span class="info">At least one dates element is recommended for the Collection.</span>
+			    </xsl:otherwise>
+	    	</xsl:choose>
+        </xsl:if>
         <xsl:if test="not(contains($relatedObjectClassesStr, 'Activity') or ro:relatedObject/ro:key[@roclass = 'Activity']) and $output = 'script'">
             <xsl:text>SetInfos("tab_relatedObjects","The Collection must be related to at least one Activity record where available.</xsl:text><xsl:value-of select="$CA_roError_cont"/><xsl:text>","REC_RELATED_OBJECT_ACTIVITY");</xsl:text>
 		</xsl:if>
