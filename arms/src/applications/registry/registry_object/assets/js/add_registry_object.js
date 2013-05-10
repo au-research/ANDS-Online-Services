@@ -452,7 +452,8 @@ function initEditForm(){
 		assignFieldID(new_dom);
 		initVocabWidgets(new_dom);
 		initMapWidget(new_dom);
-		Core_bindFormValidation($('form'));
+		//Core_bindFormValidation($('form'));
+		
 		//log(new_dom);
 		//@TODO: check if it's inside a tooltip and perform reposition
 
