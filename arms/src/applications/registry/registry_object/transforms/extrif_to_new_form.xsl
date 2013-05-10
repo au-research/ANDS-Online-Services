@@ -882,6 +882,9 @@
 
 	<xsl:template name="locationsTab">
 		<div id="locations" class="pane">
+			<div class='well'>
+				Do not describe collection coverage here. Please use the Coverage tab instead.
+			</div>
 			<fieldset>
 				<legend>Locations <sup><a class="muted" href="http://www.ands.org.au/guides/cpguide/cpglocationintro.html" target="_blank" title="View Content Providers' Guide">?</a></sup></legend>
 				<xsl:apply-templates
@@ -896,6 +899,10 @@
 	
 	<xsl:template name="coverageTab">
 		<div id="coverages" class="pane">
+			<div class="well">
+				The Coverage element should be used to record the temporal and/or spatial coverage of the collection. <br/>
+				To record dates associated with an event in the life cycle of the collection (eg. date created) please use the Dates tab.
+			</div>
 			<fieldset>
 				<legend>Coverage <sup><a class="muted" href="http://www.ands.org.au/guides/cpguide/cpgcoverage.html" target="_blank" title="View Content Providers' Guide">?</a></sup></legend>
 				<xsl:apply-templates
@@ -907,7 +914,6 @@
 						<a href="javascript:;" class="btn btn-primary addNew" type="spatial" add_new_type="spatial"><i class="icon-white icon-plus"></i> Add Spatial Coverage</a>
 					</div>
 				</div>
-				
 			</fieldset>
 		</div>
 	</xsl:template>

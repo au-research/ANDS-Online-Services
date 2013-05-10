@@ -588,22 +588,7 @@ function Core_checkValidForm(form){
 	return valid;
 }
 
-function setTabInfo(){
-	var allTabs = $('.pane');
-	$('#advanced-menu .label').remove();
-	$.each(allTabs, function(){
-		var count_info = $('.alert-info', this).length;
-		var count_error = $('.alert-error', this).length;
-		var count_warning = $('.alert-warning', this).length;
-		var id = $(this).attr('id');
-		if(id != 'qa')
-		{
-			if(count_info > 0) addValidationTag(id, 'info', count_info, "Some metadata recommendation(s) not yet met<br/><small class='muted'>(Click for more info)</small>");
-			if(count_error > 0) addValidationTag(id, 'important', count_error, "Some field(s) contain errors!<br/><small class='muted'>(Click for more info)</small>");
-			if(count_warning > 0) addValidationTag(id, 'warning', count_warning, "Some metadata requirement(s) not yet met<br/><small class='muted'>(Click for more info)</small>");
-		}
-	});
-}
+
 
 
 
