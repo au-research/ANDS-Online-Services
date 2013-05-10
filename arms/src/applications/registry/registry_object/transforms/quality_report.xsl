@@ -1513,6 +1513,30 @@
 	    	</xsl:choose>
         </xsl:if>
     </xsl:template>
+
+
+    <xsl:template match="ro:temporal/ro:date">
+		<xsl:if test="string-length(@type) = 0">
+            <xsl:choose>
+			    <xsl:when test="$output = 'script'">
+            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Date Type must be specified. &lt;span&gt;(e.g. 'dateFrom')&lt;/span&gt;","date_type");</xsl:text>
+			    </xsl:when>
+			    <xsl:otherwise>
+					<span class="error">Dates Type must have a value.</span>
+			    </xsl:otherwise>
+	    	</xsl:choose>
+        </xsl:if>
+        <xsl:if test="string-length(.) = 0">
+            <xsl:choose>
+			    <xsl:when test="$output = 'script'">
+            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Date Must have a Value","date_value");</xsl:text>
+			    </xsl:when>
+			    <xsl:otherwise>
+					<span class="error">Date Must have a Value.</span>
+			    </xsl:otherwise>
+	    	</xsl:choose>
+        </xsl:if>
+    </xsl:template>
         
     <xsl:template match="ro:rights/ro:rightsStatement">
         <xsl:if test="string-length(.) &gt; 12000">

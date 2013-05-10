@@ -772,10 +772,11 @@ function addValidationMessage(tt, type){
 	var field_id = tt.field_id;
 	var message = tt.message;
     var message = $('<div />').html(message).text();
-
+	var containerfield = Array();
+	var field = null;
 	if(field_id.match("^tab_mandatoryInformation_")){
 		var tab = field_id.replace('tab_mandatoryInformation_','');
-		var field = $('#admin').find('*[name='+tab+']');
+		field = $('#admin').find('*[name='+tab+']');
 		$(field).addClass('error');
 		$(field).parent().append('<div class="alert alert-'+type+'">'+message+'</div>');
 	}
@@ -789,25 +790,31 @@ function addValidationMessage(tt, type){
 		{		
 			if(tt.sub_field_id == 'dates_type')
 			{
-				var field = $($('*[field_id='+field_id+']').find('.controls')[0]);
+				field = $($('*[field_id='+field_id+']').find('.controls')[0]);
+				//log(field);
+			}
+			else if(tt.sub_field_id == 'date_type')
+			{
+				field = $($('*[field_id='+field_id+']').find('.controls')[0]);
+				containerfield = field;
 				//log(field);
 			}			
 			else{
-				var field = $('*[field_id='+field_id+']').find('*[name='+tt.sub_field_id+']');
+				field = $('*[field_id='+field_id+']').find('*[name='+tt.sub_field_id+']');
 				if(field.length === 0)
 				field = $('*[field_id='+field_id+']').parent().find('*[name='+tt.sub_field_id+']');
 			}
 		}
 		else
 		{
-			var field = $('*[field_id='+field_id+']');
+			field = $('*[field_id='+field_id+']');
 		}
-		
-		var containerfield = field.parents('span.inputs_group');
 		if(containerfield.length === 0)
-			var containerfield = field.children('div.controls');	
+		 	containerfield = field.parents('span.inputs_group');
 		if(containerfield.length === 0)
-			var containerfield = field.parents('div.aro_box_part');	
+			containerfield = field.children('div.controls');	
+		if(containerfield.length === 0)
+			containerfield = field.parents('div.aro_box_part');	
 		
 		if (containerfield.length > 0)
 		{
