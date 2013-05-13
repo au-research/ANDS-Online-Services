@@ -55,7 +55,7 @@
 
     <xsl:template match="citationInfo">
         <xsl:choose>
-            <xsl:when test="fullCitation[@style != '' or text() != ''] or citationMetadata[identifier/@type !='' or identifier/text() != '' or title/text() != '' or publisher/text() != '']">
+            <xsl:when test="fullCitation[@style != '' or text() != ''] or citationMetadata[identifier/@type !='' or identifier/text() != '' or title/text() != '' or publisher/text() != ''or context/text() != '' or contributor/@seq !='']">
                 <xsl:copy>
                     <xsl:apply-templates select="@* | node()" />
                 </xsl:copy>   
@@ -63,7 +63,15 @@
         </xsl:choose>
     </xsl:template>
 
-
+  <xsl:template match="citationMetadata">
+        <xsl:choose>
+            <xsl:when test="dentifier/@type !='' or identifier/text() != '' or title/text() != '' or publisher/text() != ''or context/text() != '' or contributor/@seq !='' or contributor/namePart/text() != ''">
+                <xsl:copy>
+                    <xsl:apply-templates select="@* | node()" />
+                </xsl:copy>   
+            </xsl:when>
+        </xsl:choose>
+    </xsl:template>
 
 
     <xsl:template match="format">
@@ -148,7 +156,7 @@
     <xsl:template match="date[not(parent::citationMetadata) and not(text()) and not(@dateFormat or @dateFormat = '') and (not(@type) or @type='')]"/>
     <xsl:template match="fullCitation[(not(@style) or @style='') and not(text()) ]"/>
     <xsl:template match="identifier[not(parent::citationMetadata) and not(parent::relatedInfo) and not(text()) and (not(@type) or @type='')]"/>
-    <xsl:template match="citationMetadata[(not(identifier/@type) or identifier/@type='') and not(identifier/text()) and not(title/text()) and not(publisher/text()) and not(context/text())]"/>
+    <xsl:template match="citationMetadata[(not(identifier/@type) or identifier/@type='') and not(identifier/text()) and not(title/text()) and not(publisher/text()) and not(context/text()) and not(contributor/@seq) and not(contributor/namePart/text())]"/>
 
    
 </xsl:stylesheet>
