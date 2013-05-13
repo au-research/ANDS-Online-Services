@@ -76,6 +76,7 @@ class Search extends MX_Controller {
 						$this->solr->addQueryCondition($value);
 					break;
 					case 'q': 
+						$value = escapeSolrValue($value);
 						//echo 'id:"'.$value.'"^1 group:"'.$value.'"^0.8 display_title:"'.$value.'"^0.5 list_title:"'.$value.'"^0.5 fulltext:*'.$value.'*^0.2'
 						$this->solr->addQueryCondition('+(id:"'.$value.'"^1 group:"'.$value.'"^0.8 display_title:"'.$value.'"^0.5 list_title:"'.$value.'"^0.5 fulltext:*'.$value.'*^0.2)');
 						// 'fulltext:*'.$value.'*');
