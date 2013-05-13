@@ -96,7 +96,7 @@ class Registry_object_search extends MX_Controller {
 	    echo self::to_json(array_map(function($ds) {
 			return array('key' => $ds->getID(),
 				     'label' => $ds->title);
-		    }, $sources));
+		    }, $source));
 	}
 
 	/**

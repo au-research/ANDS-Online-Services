@@ -260,7 +260,7 @@
 	<?php echo anchor('data_source/manage', 'Manage My Datasources')?>
 	<a href="javascript:;" class="current">{{title}} - Dashboard</a>
 	<div class="pull-right">
-		<span class="label"><i class="icon-question-sign icon-white"></i> <a target="_blank" style="color:white;" href="http://ands.org.au/guides/cpguide/cpgdsaaccount.html ">Help</a></span>
+		<span class="label"><i class="icon-question-sign icon-white"></i> <a target="_blank" style="color:white;" href="http://services.ands.org.au/documentation/DashboardHelp/">Help</a></span>
 	</div>
 </div>
 
@@ -545,7 +545,7 @@
 		<a href="#!/view/{{data_source_id}}">{{title}} - Dashboard</a>
 		<a href="javascript:;" class="current">Settings</a>
 		<div class="pull-right">
-			<span class="label"><i class="icon-question-sign icon-white"></i> <a target="_blank" style="color:white;" href="http://ands.org.au/guides/cpguide/cpgdsaaccount.html ">Help</a></span>
+			<span class="label"><i class="icon-question-sign icon-white"></i> <a target="_blank" style="color:white;" href="http://services.ands.org.au/documentation/SettingsHelp/">Help</a></span>
 		</div>
 	</div>
 <div class="container-fluid">
@@ -561,7 +561,7 @@
 	 
 	    	<div class="widget-content">
 
-				<h4>Account Administration Information <sup><a href="http://ands.org.au/guides/cpguide/cpgdsaaccount.html#accountadmin" target="_blank" class="muted">?</a></sup></h4>
+				<h4>Account Administration Information <sup><a href="http://services.ands.org.au/documentation/SettingsHelp/#account_info" target="_blank" class="muted">?</a></sup></h4>
 				<dl class="dl-horizontal dl-wide">
 					<?php 
 					foreach($data_source_view_fields as $key=>$name){
@@ -578,7 +578,7 @@
 			 	</dl>
 			 	<h4>Records Management Settings</h4>
 			 	<dl class="dl-horizontal dl-wide">
-					<dt>Reverse Links <sup><a href="http://ands.org.au/guides/cpguide/cpgdsaaccount.html#reverse" target="_blank" class="muted">?</a></sup></dt>
+					<dt>Reverse Links <sup><a href="http://services.ands.org.au/documentation/SettingsHelp/#reverse_links" target="_blank" class="muted">?</a></sup></dt>
 					<dd>
 						<p>
 							
@@ -592,7 +592,7 @@
 					</dd>
 
 					{{#create_primary_relationships}}
-					<dt>Create Primary Relationships <sup><a href="http://ands.org.au/guides/cpguide/cpgdsaaccount.html#primary" target="_blank" class="muted">?</a></sup></dt>
+					<dt>Create Primary Relationships <sup><a href="http://services.ands.org.au/documentation/SettingsHelp/#primary_rels" target="_blank" class="muted">?</a></sup></dt>
 					<dd>
 						<p>
 							<div class="checkbox_view{{create_primary_relationships}}"> </div>
@@ -601,7 +601,7 @@
 					{{/create_primary_relationships}}
 					
 					{{#manual_publish}}
-					<dt>Manually Publish <sup><a href="http://ands.org.au/guides/cpguide/cpgdsaaccount.html#quality" target="_blank" class="muted">?</a></sup></dt>
+					<dt>Manually Publish <sup><a href="http://services.ands.org.au/documentation/SettingsHelp/#man_publish" target="_blank" class="muted">?</a></sup></dt>
 					<dd>
 						<p>
 							<div class="checkbox_view{{manual_publish}}">		
@@ -611,7 +611,7 @@
 					{{/manual_publish}}
 
 					{{#qa_flag}}
-					<dt>Quality Assessment Required <sup><a href="http://ands.org.au/guides/cpguide/cpgdsaaccount.html#quality" target="_blank" class="muted">?</a></sup></dt>
+					<dt>Quality Assessment Required <sup><a href="http://services.ands.org.au/documentation/SettingsHelp/#qa_required" target="_blank" class="muted">?</a></sup></dt>
 					<dd>
 						<p>
 							<div class="checkbox_view{{qa_flag}}">			</div>
@@ -620,7 +620,7 @@
 					{{/qa_flag}}
 
 					{{#assessment_notify_email_addr}}
-					<dt>Assessment Notification Email <sup><a href="http://ands.org.au/guides/cpguide/cpgdsaaccount.html#quality" target="_blank" class="muted">?</a></sup></dt>
+					<dt>Assessment Notification Email <sup><a href="http://services.ands.org.au/documentation/SettingsHelp/#qa_required" target="_blank" class="muted">?</a></sup></dt>
 					<dd>
 						<p>
 							{{assessment_notify_email_addr}}
@@ -631,11 +631,11 @@
 		 		</dl>
 
 		 		<p>&nbsp;</p>
-			 	<h4>Contributor Pages <span class="label"><a href="http://ands.org.au/guides/cpguide/cpgdsaaccount.html#contrib" class="white" target="_blank"><i class="icon icon-white icon-question-sign"></i></a></span></h4> 
+			 	<h4>Contributor Pages <span class="label"><a href="http://services.ands.org.au/documentation/SettingsHelp/#contributor_pgs" class="white" target="_blank"><i class="icon icon-white icon-question-sign"></i></a></span></h4> 
 				<div class="" id="contributor_groups"></div>
 			 	
 			 
-			 	<h4>Harvester Settings <sup><a href="http://ands.org.au/guides/cpguide/cpgdsaaccount.html#harvester" target="_blank" class="muted">?</a></sup></h4>
+			 	<h4>Harvester Settings <sup><a href="http://services.ands.org.au/documentation/SettingsHelp/#harvest_settings" target="_blank" class="muted">?</a></sup></h4>
 			 	<dl class="dl-horizontal dl-wide">
 			 		{{#uri}}
 					<dt>URI</dt>
