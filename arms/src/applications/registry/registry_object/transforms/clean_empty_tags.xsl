@@ -82,12 +82,32 @@
     </xsl:template>
 
 
+    <xsl:template match="coverage">
+        <xsl:choose>
+            <xsl:when test="(temporal/date/text()) or (temporal/date/@dateFormat) or (temporal/date/@type != '') or (temporal/text/text()) or (spatial/text()) or (spatial/@type != '')">
+                <xsl:copy>
+                    <xsl:apply-templates select="temporal | spatial" />
+                </xsl:copy>   
+            </xsl:when>
+        </xsl:choose>
+    </xsl:template>
 
     <xsl:template match="address">
         <xsl:choose>
             <xsl:when test="(electronic/value/text()) or (electronic/@type != '')  or (electronic/arg) or (physical/@type != '' ) or (physical/addresspart) or (physical/addresspart/@type != '')">
                 <xsl:copy>
                     <xsl:apply-templates select="electronic | physical" />
+                </xsl:copy>   
+            </xsl:when>
+        </xsl:choose>
+    </xsl:template>
+
+
+    <xsl:template match="temporal">
+        <xsl:choose>
+            <xsl:when test="(date/text()) or (date/@dateFormat) or (date/@type != '') or (text/text())">
+                <xsl:copy>
+                    <xsl:apply-templates select="date" />
                 </xsl:copy>   
             </xsl:when>
         </xsl:choose>
@@ -119,11 +139,10 @@
     <xsl:template match="addressPart[not(text()) and (not(@type) or @type='')]"/>
     <xsl:template match="subject[(not(@type) or @type='') and not(text())]"/>
     <xsl:template match="namePart[(not(@type) or @type='') and not(text()) and (following-sibling::namePart[text() != ''] or preceding-sibling::namePart[text() != ''])]"/>
-    <xsl:template match="date[not(parent::citationMetadata) and not(text())]"/>
+    <xsl:template match="date[not(parent::citationMetadata) and not(text()) and not(@dateFormat or @dateFormat = '') and (not(@type) or @type='')]"/>
     <xsl:template match="fullCitation[(not(@style) or @style='') and not(text()) ]"/>
     <xsl:template match="identifier[not(parent::citationMetadata) and not(parent::relatedInfo) and not(text()) and (not(@type) or @type='')]"/>
-    <xsl:template match="coverage[not(temporal/date/text()) and not(temporal/date/@dateFormat) and not(temporal/date/@type) and not(temporal/text/text()) and not(spatial/text()) and not(spatial/@type)]"/>
-    <xsl:template match="citationMetadata[(not(identifier/@type) or identifier/@type='') and not(identifier/text()) and not(title/text()) and not(publisher/text())]"/>
+    <xsl:template match="citationMetadata[(not(identifier/@type) or identifier/@type='') and not(identifier/text()) and not(title/text()) and not(publisher/text()) and not(context/text())]"/>
 
    
 </xsl:stylesheet>

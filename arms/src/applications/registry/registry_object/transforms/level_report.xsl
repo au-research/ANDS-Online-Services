@@ -154,6 +154,15 @@
 	       		<span class="qa_ok" level="3" field_id="errors_citationInfo" qa_id="REC_CITATION">Citation data for the collection is recommended.</span>
 			</xsl:otherwise>
 	    </xsl:choose>
+
+    	<xsl:choose>
+		    <xsl:when test="not(ro:dates/ro:date)">
+		    	<span class="qa_error" level="3" field_id="errors_citationInfo" qa_id="REC_DATES">At least one dates element is recommended for the Collection.</span>
+		    </xsl:when>
+		    <xsl:otherwise>
+		    	<span class="qa_ok" level="3" field_id="errors_citationInfo" qa_id="REC_DATES">At least one dates element is recommended for the Collection.</span>
+		    </xsl:otherwise>
+    	</xsl:choose>
 	 </xsl:template>
     
     <xsl:template match="ro:party">
