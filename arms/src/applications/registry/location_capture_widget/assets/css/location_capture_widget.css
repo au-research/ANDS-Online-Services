@@ -83,7 +83,7 @@ textarea.alw_tool,textarea.alw_tool:hover
 {
 	background: #bbbbbb ;
 	height: 24px;
-	padding: 3px 6px 0px 6px;
+	padding: 3px 6px;
 	background-color: #bbbbbb;
 	border-top: 1px solid #888888;
 	overflow: hidden;
@@ -143,7 +143,6 @@ textarea.alw_tool,textarea.alw_tool:hover
 
 .alw_dialog_content
 {
-	height: 208px;
 	white-space: normal;
 	overflow: auto;
 	margin: 0em 0.5em;
