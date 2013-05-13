@@ -521,7 +521,11 @@ class Data_source extends MX_Controller {
 		foreach($menu as $action=>$display){
 			if ($action != "nothing")
 			{
-				$html .='<li><a tabindex="-1" href="javascript:;" class="op" action="'.$action.'" status="'.$status.'">'.$display.'</a></li>';
+				if(sizeof($affected_ids)==1 && $action=='view'){
+					$ro = $this->ro->getByID($affected_ids[0]);
+					$href = base_url('registry_object/view/'.$ro->id);
+				}else $href = 'javascript:;';
+				$html .='<li><a tabindex="-1" href="'.$href.'" class="op" action="'.$action.'" status="'.$status.'">'.$display.'</a></li>';
 			}
 			else
 			{
