@@ -83,17 +83,20 @@ class Registry_object_search extends MX_Controller {
 	/**
 	 * Retrieve a list of known datasources. Request is made as a GET, with no
 	 * additional data parameters. Response is JSON.
-	 * @return an array of RO datasource structs
+	 * @return an array of RO datasource structs, sorted by title (case insensitive)
 	 */
 	public function sources() {
-		$this->json_header();
+	    $this->json_header();
 
-		$this->load->model('data_source/data_sources', 'ds');
-		echo self::to_json(array_map(function($ds) {
-					return array('key' => $ds->getID(),
-						     'label' => $ds->title);
-				},
-				(array)$this->ds->getAll(0)));
+	    $this->load->model('data_source/data_sources', 'ds');
+	    $source = (array)$this->ds->getAll(0);
+	    usort($source, function($a,$b) {
+		    return (strtolower($a->title) < strtolower($b->title)) ? -1 : 1;
+		});
+	    echo self::to_json(array_map(function($ds) {
+			return array('key' => $ds->getID(),
+				     'label' => $ds->title);
+		    }, $sources));
 	}
 
 	/**
