@@ -17,9 +17,10 @@
     "use strict";
     var WIDGET_NAME = "ANDS Location Capture Widget";
     var WIDGET_NS = "location_widget";
-    var DEFAULT_PROTOCOL = window.location.protocol === 'https:' ?
-	"https://" :
-	"http://";
+    var DEFAULT_PROTOCOL = "https://";
+    // var DEFAULT_PROTOCOL = window.location.protocol === 'https:' ?
+    // 	"https://" :
+    // 	"http://";
     var DEFAULT_SERVICE_POINT = DEFAULT_PROTOCOL +
 	'services.ands.org.au/api/resolver/';
 
