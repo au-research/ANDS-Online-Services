@@ -146,6 +146,8 @@ textarea.alw_tool,textarea.alw_tool:hover
 	height: 208px;
 	white-space: normal;
 	overflow: auto;
+	margin: 0em 0.5em;
+	padding: 0em 0.5em;
 }
 
 .alw_dialog_text
