@@ -112,7 +112,7 @@
             <script src="<?php echo base_url();?>assets/registry_object_search/js/rosearch_widget.js" type="text/javascript"></script>
 
         <?php elseif($lib=='google_map'):?>
-            <script src="http://maps.googleapis.com/maps/api/js?libraries=drawing&amp;sensor=false" type="text/javascript"></script>
+            <script src="https://maps.googleapis.com/maps/api/js?libraries=drawing&amp;sensor=false" type="text/javascript"></script>
 
         <?php endif; ?>
 
