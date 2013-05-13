@@ -799,7 +799,13 @@ function addValidationMessage(tt, type){
 				field = $($('*[field_id='+field_id+']').find('.controls')[0]);
 				containerfield = field;
 				//log(field);
-			}			
+			}
+			else if(tt.sub_field_id == 'citation_date')
+			{
+				field = $($('*[field_id='+field_id+']').find('.controls')[0]);
+				containerfield = field;
+				log(field);
+			}						
 			else{
 				field = $('*[field_id='+field_id+']').find('*[name='+tt.sub_field_id+']');
 				if(field.length === 0)

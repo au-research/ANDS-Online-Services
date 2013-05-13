@@ -1835,14 +1835,19 @@
 				<label class="control-label">Dates:</label>
 					<div class="controls">
 						<div class="aro_box_part">
-							<div class="separate_line"/>
-							<button class="btn btn-primary addNew" type="date" add_new_type="citation_date"><i class="icon-plus icon-white"></i> Add Date</button>
+							<span class="inputs_group">
+							<input type="text" class="inner_input datepicker" name="value" placeholder="Date Value" value=""/>
+							<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSCitationDateType" name="type" placeholder="Date Type" value=""/>
+							</span>
+							<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
+
 						</div>
+							<div class="separate_line"/>
+								<button class="btn btn-primary addNew" type="date" add_new_type="citation_date"><i class="icon-plus icon-white"></i> Add Date</button>
+							</div>						
 					</div>
-				</div>
+				</div>		
 			</div>
-			
-		</div>
 
 
 		<div class="aro_box_part template" type="contributor">
