@@ -112,7 +112,7 @@ class Registry_objects extends CI_Model {
 		{
 			$query = $db->get();
 		}
-		if ($query->num_rows() > 0)
+		if ($query && $query->num_rows() > 0)
 		{
 			$results = array();
 			foreach ($query->result_array() as $rec)

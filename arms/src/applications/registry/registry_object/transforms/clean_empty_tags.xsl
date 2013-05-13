@@ -30,6 +30,12 @@
         </xsl:attribute>
     </xsl:template>
 
+    <xsl:template match="@xml:lang">
+        <xsl:attribute name="xml:lang">
+          <xsl:value-of select="."/>
+        </xsl:attribute>
+    </xsl:template>
+
     <xsl:template match="@field_id | @tab_id | @roclass">
         <xsl:if test="$removeFormAttributes != 'true'">
                 <xsl:copy-of select="."/>

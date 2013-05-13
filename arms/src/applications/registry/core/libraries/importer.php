@@ -48,8 +48,8 @@ class Importer {
 				
 		// This is not a perfect science... the web server can still 
 		// reclaim the worker thread and terminate the PHP script execution....
-		ini_set('memory_limit', '1024M');
-		ini_set('max_execution_time',3*ONE_HOUR);
+		ini_set('memory_limit', '2048M');
+		ini_set('max_execution_time',5*ONE_HOUR);
 
 		set_time_limit(0);
 		ignore_user_abort(true);

@@ -9,7 +9,10 @@ class Migrate extends MX_Controller
 	private $_CI; 	// an internal reference to the CodeIgniter Engine 
 	private $source;
 	private $scpr = "dba."; //schema prefix
-	private $recordLimit = 999999;
+	private $recordLimit = 400;
+	private $recordLimitInvert = false;
+	private $start_ds_id = 15;
+	private $noReindex = false;
 	private $noEmails = true; // for debugging
 	
 	function index()
@@ -20,7 +23,14 @@ class Migrate extends MX_Controller
 		echo "Connected to migration target database..." . NL;
 
 		$this->source->select('*');
-		$query = $this->source->get($scpr . 'tbl_data_sources');
+		if ($this->start_ds_id)
+		{
+			$query = $this->source->get($scpr . 'tbl_data_sources', 999, $this->start_ds_id);
+		}
+		else
+		{
+			$query = $this->source->get($scpr . 'tbl_data_sources');
+		}
 
 		$num_data_sources = $query->num_rows();
 		
@@ -49,18 +59,18 @@ class Migrate extends MX_Controller
 			$data_source->append_log("Data Source was migrated to ANDS Online Services Release 10", "info", "legacy_log");
 
 			// Now start importing registry objects
-			$this->deleteAllrecordsForDataSource($data_source);
-			$data_source->updateStats();
+			//$this->deleteAllrecordsForDataSource($data_source);
+			//$data_source->updateStats();
 			$this->migrateDraftRegistryObjectsForDatasource($data_source);
-			$this->migrateDeletedRegistryObjectsForDatasource($data_source);
+			//$this->migrateDeletedRegistryObjectsForDatasource($data_source);
 			$this->migrateRegistryObjectsForDatasource($data_source);
-			$this->reschedulePendingHarvests($data_source);
+			//$this->reschedulePendingHarvests($data_source);
 
 			echo NL . NL;
 		}
 
-		$this->updateDanglingSlugs();
-		$this->updateContributorPages();
+		//$this->updateDanglingSlugs();
+		//$this->updateContributorPages();
 
 
 		echo NL . NL;
@@ -338,7 +348,8 @@ class Migrate extends MX_Controller
 	{
 		$query = $this->source->get_where("dba.tbl_registry_objects", array("data_source_key"=>$data_source->key,"status"=>'PUBLISHED'));
 		$num_records = $query->num_rows();
-		if ($num_records > $this->recordLimit) {
+		if ((!$this->recordLimitInvert && $num_records > $this->recordLimit) ||
+			($this->recordLimitInvert && $num_records <= $this->recordLimit)) {
 			echo "[PUBLISHED RECORDS] Found ". $num_records . " records...skipping this datasource (>" . $this->recordLimit . ") " .NL;
 			return;
 		}
@@ -402,8 +413,14 @@ class Migrate extends MX_Controller
 
 								if ($count == $num_records)
 								{
-									$this->importer->setPartialCommitOnly(FALSE);
-									//$this->importer->setPartialCommitOnly(TRUE);
+									if ($this->noReindex)
+									{
+										$this->importer->setPartialCommitOnly(TRUE);
+									}
+									else
+									{
+										$this->importer->setPartialCommitOnly(FALSE);
+									}
 								}
 								else
 								{
@@ -611,7 +628,7 @@ class Migrate extends MX_Controller
 							// Record size check - massive records (such as QFAB) have all their relatedObjects trimmed off...
 							if (strlen($xml) > 50000)
 							{
-								$xml = preg_replace('/<relatedObject.*?</relatedObject>/ms', '', $xml);
+								$xml = preg_replace('/<relatedObject.*?<\/relatedObject>|\s{2,}/ms', '', $xml);
 								if (strlen($xml) > 50000)
 								{
 									echo "Skipping registry object - XML contents too large";
@@ -702,6 +719,7 @@ class Migrate extends MX_Controller
 	}
 
 
+
 	function migrateDeletedRegistryObjectsForDatasource(_data_source $data_source)
 	{
 		$query = $this->source->query("SELECT rr.registry_object_key AS deleted_key, rifcs_fragment, rr.created_when FROM dba.tbl_raw_records rr LEFT JOIN dba.tbl_registry_objects r on r.registry_object_key = rr.registry_object_key WHERE r.registry_object_key IS NULL AND rr.data_source = ?", array($data_source->key));
@@ -712,13 +730,24 @@ class Migrate extends MX_Controller
 
 		foreach ($query->result_array() AS $result)
 		{
-
+			$xml = wrapRegistryObjects(unWrapRegistryObjects($result['rifcs_fragment']));
+			// Record size check - massive records (such as QFAB) have all their relatedObjects trimmed off...
+			if (strlen($xml) > 50000)
+			{
+				$xml = trim(preg_replace('/<relatedObject.*?<\/relatedObject>|\s{2,}/ms', '', $xml));
+				if (strlen($xml) > 50000)
+				{
+					echo "XML contents too large!!";
+					continue;
+				}
+			}
+			
 			$this->db->insert("deleted_registry_objects", 
 				array("data_source_id" => $data_source->id, 
 					  "key" => $result['deleted_key'], 
 					  "deleted" => strtotime($result['created_when']), 
 					  "title" => $result['deleted_key'],
-					  "record_data" => wrapRegistryObjects(unWrapRegistryObjects($result['rifcs_fragment'])))
+					  "record_data" => $xml)
 			);
 		}
 
@@ -742,11 +771,14 @@ class Migrate extends MX_Controller
 
 			try
 			{
-
 				$rifcs = $this->cleanRIFCSofEmptyTags($result->rifcs);
-				$registryObjects = simplexml_load_string(wrapRegistryObjects($rifcs));
+				$registryObjects = simplexml_load_string(wrapRegistryObjects(unWrapRegistryObjects($rifcs)));
 				$registryObjects->registerXPathNamespace('rif', 'http://ands.org.au/standards/rif-cs/registryObjects');
 				$registryObjectXML = $registryObjects->xpath('//rif:registryObject');
+				if (!isset($registryObjectXML[0]))
+				{
+					throw new Exception("No registryObject found in RIF namespace!");
+				}
 				$xml = wrapRegistryObjects($registryObjectXML[0]->asXML());
 
 				$this->importer->setXML($xml);

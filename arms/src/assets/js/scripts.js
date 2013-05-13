@@ -25,7 +25,7 @@ function checkResponse(data)
 $("#dashboard-datasource-chooser").chosen();
 $('#dashboard-datasource-chooser').live({
 	change: function(e){
-		window.location = 'data_source/manage#!/view/'+$(this).val();
+		window.location = base_url + 'data_source/manage#!/view/'+$(this).val();
 	}
 });
 
