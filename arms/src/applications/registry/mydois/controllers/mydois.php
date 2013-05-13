@@ -195,6 +195,22 @@ class Mydois extends MX_Controller {
 			throw new Exception ('You do not have authorisation to update DOI  '.$doi_id);  
 		}
 		$query = $doi_db->where('client_id',$client_id)->select('client_domain')->get('doi_client_domains');
+		if(!$new_url)
+		{
+			$message = "param 'url' required";
+			$client = str_replace("-","0",$client_id);
+			$logdata = array(
+               'timestamp' =>  "NOW()",
+               'client_id' => $client,
+               'activity' => "UPDATE", 
+               'doi_id'  => $doi_id, 
+               'result'    => "FAILURE",  
+               'message'    => $message,      
+            	);
+			$doi_db->insert('activity_log', $logdata); 
+			redirect('/mydois/show/?app_id='.$client_obj->app_id.'&doi_update='.urlencode($message)."&error=yes", 'location');
+		}
+		
 		$validDomain = false;
 		if ($query->num_rows() > 0)
 		{
@@ -206,6 +222,7 @@ class Mydois extends MX_Controller {
 				}
 			}
 		}
+
 		if(!$validDomain)
 		{
 			$message = "Invalid top level domain provided in url ";
@@ -223,21 +240,6 @@ class Mydois extends MX_Controller {
 		} 
 
 		if($client_id<10) $client_id = '-'.$client_id;	
-		if(!$new_url)
-		{
-			$message = "param 'url' required";
-			$client = str_replace("-","0",$client_id);
-			$logdata = array(
-               'timestamp' =>  "NOW()",
-               'client_id' => $client,
-               'activity' => "UPDATE", 
-               'doi_id'  => $doi_id, 
-               'result'    => "FAILURE",  
-               'message'    => $message,      
-            	);
-			$doi_db->insert('activity_log', $logdata); 
-			redirect('/mydois/show/?app_id='.$client_obj->app_id.'&doi_update='.urlencode($message)."&error=yes", 'location');
-		}
 
 		$requestURI =  $this->config->item('gDOIS_SERVICE_BASE_URI');
 		$authstr = $this->config->item('gDOIS_DATACENTRE_NAME_PREFIX').".".$this->config->item('gDOIS_DATACENTRE_NAME_MIDDLE').$client_id.":".$this->config->item('gDOIS_DATACITE_PASSWORD');	
