@@ -145,18 +145,35 @@ $testDoiPrefix =  $this->config->item('test_doi_prefix');
 <?php 
 if(isset($doi_update))
 {
+	//echo (substr($doi_update,0,5));
+	//{
+		//$doi_update = "<span class='error'>".$doi_update."</span>";
+	//}
 ?>
 <div class="modal hide fade" id="updateDoiResult" tabindex="-1" role="dialog" aria-labelledby="updateDoiResult" aria-hidden="true">
-  <div class="modal-body">
-    <p>
+	<div class="modal-header">
+		 <button type="button" class="close" data-dismiss="modal">×</button>
+		  <h3><?php if(isset($error)) { echo "Alert"; } else { echo '&nbsp;';}?></h3>
+	</div>	
+  	<div class="modal-body">
+   		<p>
     	<div>
-    		DOI <?=$doi_update?> successfully updated
+    		<?php 
+    		if(isset($error))
+    		{
+    		?>
+    			<p>An error has occurred:</p>
+    			<p>Update of the doi was unsuccessful. The following error message was returned:</p>
+    		<?php 
+    		}
+    		?>
+    		<p><?=$doi_update?></p>
     	</div>
     </p>
-  </div>
-  <div class="modal-footer">
-    <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-  </div>
+    </div>
+    <div class="modal-footer">
+    	<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+  	</div>
 </div>
 
 <script >

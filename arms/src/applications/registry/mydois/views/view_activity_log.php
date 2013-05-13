@@ -21,7 +21,7 @@
 	</thead>
 	<tbody>
 	<?php foreach($activities AS $act): ?>
-		<tr class="<?=($act->result == "ERROR" ? 'error' : 'success');?>">
+		<tr class="<?=($act->result == "FAILURE" ? 'error' : 'success');?>">
 			<td><small><?=$act->activity;?></small></td>
 			<td>
 				<small><?=date('Y-m-d H:i:s', strtotime($act->timestamp));?></small>
