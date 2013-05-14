@@ -40,6 +40,9 @@ class Auth extends CI_Controller {
 	
 	public function setUser(){
 		$sharedToken = '';
+		$data['title'] = 'Login';
+		$data['js_lib'] = array('core');
+		$data['scripts'] = array();
 		if(isset($_SERVER['shib-shared-token'])){
 			$sharedToken = $_SERVER['shib-shared-token'];
 		}else{
