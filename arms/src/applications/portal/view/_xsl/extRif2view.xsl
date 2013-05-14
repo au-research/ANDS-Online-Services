@@ -1193,7 +1193,7 @@
  <xsl:value-of select="." disable-output-escaping="yes"/><br />
 </xsl:template> 
 
-<xsl:template match="extRif:right[@type!='licence']">
+<xsl:template match="//extRif:right[@type!='licence']">
 
  <xsl:if test="./@type='rights' or ./@type='rightsStatement'"><h4>Rights statement</h4></xsl:if>
  <xsl:if test="./@type='accessRights'"><h4>Access rights</h4></xsl:if>
@@ -1205,7 +1205,8 @@
 </p>  
 
 </xsl:template> 
-<xsl:template match="extRif:right[@type='licence']">
+<xsl:template match="//extRif:right[@type='licence']">
+  <h4>Licence</h4>
   <p class="rights">
      <xsl:if test="string-length(substring-after(./@licence_type,'CC-'))>0">
         <img id="licence_logo" style="width:130px;">
