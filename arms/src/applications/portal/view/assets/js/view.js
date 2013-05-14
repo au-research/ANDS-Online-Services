@@ -368,7 +368,7 @@ function initConnectionGraph()
     {
         connection_params.id = getRegistryObjectID();
     }
-    $.get( base_url+"/view/connectionGraph",
+    $.get( base_url + "view/connectionGraph",
     		connection_params,
             function(data)
             {
