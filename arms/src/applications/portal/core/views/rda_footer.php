@@ -76,6 +76,8 @@
         var base_url = '<?php echo base_url();?>';
         var default_base_url = "<?php echo $this->config->item('default_base_url');?>";
         var suffix = '#!/';
+        <!-- urchin code -->
+        <?php echo urchin_for($this->config->item('rda_urchin_id')); ?>
     </script>
 
 	<!-- Zoo Scripts Untouched -->

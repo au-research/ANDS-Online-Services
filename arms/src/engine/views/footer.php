@@ -31,6 +31,8 @@
         var real_base_url = "<?php echo $this->config->item('default_base_url');?>";
         var suffix = '<?php echo url_suffix();?>';
         var editor = '';
+        <!-- urchin code -->
+        <?php echo urchin_for($this->config->item('svc_urchin_id')); ?>
     </script>
     <?php foreach($js_lib as $lib):?>
 

@@ -34,6 +34,9 @@ $ENV['shibboleth_sp'] = false;
 // Session Timeout (how long before the user is automatically logged out)
 $ENV['session_timeout'] = 7200; // 2 hours of inactivity before logout...
 
+/* Google Analytics account details */
+$ENV['rda_urchin_id'] = '';
+$ENV['svc_urchin_id'] = '';
 
 /* DATABASE CONFIGURATION */
 $eDBCONF = array();
