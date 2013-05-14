@@ -49,6 +49,7 @@ class Maintenance extends MX_Controller {
 		$this->load->library('solr');
 		$this->solr->setOpt('q', '*:*');
 		$this->solr->setFacetOpt('field', 'data_source_id');
+		$this->solr->setFacetOpt('limit', '9999');
 		$this->solr->executeSearch();
 		$data_sources_indexed_count = $this->solr->getFacetResult('data_source_id');
 
