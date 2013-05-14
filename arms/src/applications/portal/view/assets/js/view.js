@@ -209,7 +209,10 @@ function initDataciteSeeAlso(){
 /* Hook to capture class="show_accordion" */
 /* Note: will grab the current cursor and link target from
          bound data- attributes */
-$('a.show_accordion').on('click', function(e){
+/* Note: the datacite callback is pretty late to the party; attach the handler
+   on the document instead
+*/
+    $(document).on('click', 'a.show_accordion', function(e){
     e.preventDefault();
     e.stopPropagation();
     var handler = $(this);
