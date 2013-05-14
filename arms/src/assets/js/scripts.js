@@ -374,7 +374,7 @@ $.fn.YouTubePopup.defaults = {
     'useYouTubeTitle': true,
     'idAttribute': 'rel',
     'cssClass': '',
-    'draggable': false,
+    'draggable': true,
     'modal': true,
     'width': 1280,
     'height': 960,

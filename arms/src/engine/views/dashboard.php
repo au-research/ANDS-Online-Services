@@ -41,9 +41,9 @@
 
 					<p><small>
 					<ul>
-						<li>Day 1 Help - ANDS Registry (<em>PDF</em>)</li>
+						<li><a href="http://ands.org.au/resource/sw-release10.html" target="_blank">Release 10 Overview</a></li>
 						<li><a class="youtube" href="http://www.youtube.com/watch?v=R5q4t73aCoo"> Finding your way - ANDS Registry(<em>video</em>)</a></li>
-						<li>ANDS R10 Walkthrough (<em>webinar recording</em>)</li>
+						<li><a class="youtube" href="http://www.youtube.com/watch?v=AuKMPwNj-ng">ANDS R10 Walkthrough (<em>webinar recording</em>) </a></li>
 						<li><a href="http://ands.org.au/guides/content-providers-guide.html" target="_blank">ANDS Content Providers Guide</a> (<em>web page</em>)</li>
 						<li><a href="http://ands.org.au/resource/ands-faq.html" target="_blank">ANDS Online Services FAQ</a> (<em>web page</em>)</li>
 					</ul>
