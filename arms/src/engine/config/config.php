@@ -27,6 +27,24 @@ if (!isset($config['sissvoc_url']))
 	$config['sissvoc_url'] = "http://ands3.anu.edu.au:8080/sissvoc/api/";
 }
 
+
+// Fix URL resolution issues with aboslute URLs (for now...)
+if (isset($config['default_base_url']))
+{
+	if (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off' && strpos($config['default_base_url'],"https:") == FALSE)
+	{
+		$default_base_url = str_replace("http:","https:",$config['default_base_url']);
+	}
+	else
+	{
+		$default_base_url = $config['default_base_url'];
+	}
+}
+else
+{
+	die("Must specify an \$ENV['default_base_url'] in global_config.php");
+}
+
 /* For multiple-application environments, this "app" will be matched 
 by the $_GET['app'] which is rewritten in .htaccess. The array key is
 the full match (above). The active_application is the subfolder within 
@@ -41,7 +59,7 @@ $application_directives = array(
 
 	"portal" => 
 			array(	
-				"base_url" => "%%BASEURL%%/portal/",
+				"base_url" => "%%BASEURL%%/",
 				"active_application" => "portal",
 				"default_controller" => "home/index",
 				"routes" => array("topic/(:any)" => "topic/view_topic/$1","(:any)"=>"core/dispatcher/$1", ),
@@ -49,7 +67,15 @@ $application_directives = array(
 );
 
 /* If no application is matched, what should we default to? */
-$default_application = 'registry';
+if (PHP_SAPI == 'cli')
+{
+	$default_application = 'registry';
+} 
+else
+{
+	$default_application = 'portal';
+}
+
 $_GET['app'] = (!isset($_GET['app']) || $_GET['app'] == "" ? $default_application : $_GET['app']);
 
 /* Where in the world are we anyway? */
@@ -400,12 +426,20 @@ $config['rewrite_short_tags'] = TRUE;
 */
 $config['proxy_ips'] = '';
 
+/*
 $default_base_url = isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off' ? 'https' : 'http';
 $default_base_url .= '://'. (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : "cli");
 $default_base_url .= str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']);
+*/
 
 $config['default_base_url'] = $default_base_url;
+
 $config['app_routes'] = array();
+// Portal is the default app
+if ($_GET['app'] != "registry")
+{
+	$_GET['app'] = "portal";
+}
 
 /* Reroute our requests and setup the CI routing environment based on the active application */
 if (isset($application_directives[$_GET['app']]))
@@ -424,6 +458,7 @@ else
 	$active_application = "unknown";
 	$base_url = "";
 }
+
 $config['active_application'] = $active_application;
 
 $config['modules_locations'] = array(

@@ -87,7 +87,12 @@ class Maintenance extends MX_Controller {
 				try{
 					$ro = $this->ro->getByID($ro_id);
 					if($ro->getRif()){
+						$ro->addRelationships();
+						$ro->update_quality_metadata();
 						$ro->enrich();
+						unset($ro);
+						gc_collect_cycles();
+						clean_cycles();
 					}
 				}catch (Exception $e){
 					echo "<pre>error in: $e" . nl2br($e->getMessage()) . "</pre>" . BR;
@@ -193,6 +198,19 @@ class Maintenance extends MX_Controller {
 		$data_sources = $this->ds->getAll(0);
 		foreach($data_sources as $ds){
 			$data['logs'] .= $this->indexDS($ds->id, true);
+		}
+		echo json_encode($data);
+	}
+
+	function enrichAll()
+	{
+		acl_enforce('REGISTRY_STAFF');
+		$data = array();
+		$data['logs'] = '';
+		$this->load->model('data_source/data_sources', 'ds');
+		$data_sources = $this->ds->getAll(0);
+		foreach($data_sources as $ds){
+			$data['logs'] .= $this->enrichDS($ds->id);
 		}
 		echo json_encode($data);
 	}

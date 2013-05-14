@@ -1,4 +1,6 @@
 <?php
+$ENV['default_base_url'] = "<Base URL of your installation>"; //(excludes any registry/ or portal/)
+
 /* SOLR URL */
 $ENV['solr_url'] = "http://<your hostname>:8080/solr/";
 $ENV['sissvoc_url'] = "http://<your sissvoc resolver>:8080/sissvoc/api/";

@@ -109,7 +109,7 @@ function registry_url($suffix='')
 
 function portal_url($suffix='')
 {
-	return dirname(base_url()) . '/portal/' . $suffix;
+	return dirname(base_url()) . '/' . $suffix;
 }
 
 function current_protocol()

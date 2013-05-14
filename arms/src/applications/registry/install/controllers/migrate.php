@@ -9,10 +9,10 @@ class Migrate extends MX_Controller
 	private $_CI; 	// an internal reference to the CodeIgniter Engine 
 	private $source;
 	private $scpr = "dba."; //schema prefix
-	private $recordLimit = 400;
+	private $recordLimit = false;
 	private $recordLimitInvert = false;
-	private $start_ds_id = 15;
-	private $noReindex = false;
+	private $start_ds_id = null;
+	private $noReindex = true;
 	private $noEmails = true; // for debugging
 	
 	function index()
@@ -25,11 +25,11 @@ class Migrate extends MX_Controller
 		$this->source->select('*');
 		if ($this->start_ds_id)
 		{
-			$query = $this->source->get($scpr . 'tbl_data_sources', 999, $this->start_ds_id);
+			$query = $this->source->order_by('data_source_key')->get($scpr . 'tbl_data_sources', 999, $this->start_ds_id);
 		}
 		else
 		{
-			$query = $this->source->get($scpr . 'tbl_data_sources');
+			$query = $this->source->order_by('data_source_key')->get($scpr . 'tbl_data_sources');
 		}
 
 		$num_data_sources = $query->num_rows();
@@ -55,15 +55,15 @@ class Migrate extends MX_Controller
 			$data_source = $this->createOrUpdateDataSource($result);
 			
 			// Update logs (deletes any legacy logs and re-migrates them!)
-			$this->importDataSourceLogs($data_source->key, $data_source->id);
-			$data_source->append_log("Data Source was migrated to ANDS Online Services Release 10", "info", "legacy_log");
+			//$this->importDataSourceLogs($data_source->key, $data_source->id);
+			//$data_source->append_log("Data Source was migrated to ANDS Online Services Release 10", "info", "legacy_log");
 
 			// Now start importing registry objects
 			//$this->deleteAllrecordsForDataSource($data_source);
 			//$data_source->updateStats();
-			$this->migrateDraftRegistryObjectsForDatasource($data_source);
+			//$this->migrateDraftRegistryObjectsForDatasource($data_source);
 			//$this->migrateDeletedRegistryObjectsForDatasource($data_source);
-			$this->migrateRegistryObjectsForDatasource($data_source);
+			//$this->migrateRegistryObjectsForDatasource($data_source);
 			//$this->reschedulePendingHarvests($data_source);
 
 			echo NL . NL;
@@ -397,14 +397,14 @@ class Migrate extends MX_Controller
 
 						// Extract RIFCS XML
 						$rifcs = $this->cleanRIFCSofEmptyTags($record_data_result->rifcs_fragment);
-						$registryObjects = simplexml_load_string(wrapRegistryObjects($rifcs));
+						$registryObjects = simplexml_load_string(wrapRegistryObjects(unWrapRegistryObjects($rifcs)));
 						$registryObjects->registerXPathNamespace('rif', 'http://ands.org.au/standards/rif-cs/registryObjects');
 						$registryObjectXML = $registryObjects->xpath('//rif:registryObject');
-						if (!$registryObjectXML[0])
+						if (!isset($registryObjectXML[0]))
 						{
 							throw new Exception("No RIFCS!");
 						}
-						$xml = wrapRegistryObjects($registryObjectXML[0]->asXML());
+						$xml = wrapRegistryObjects(unWrapRegistryObjects($registryObjectXML[0]->asXML()));
 
 						// First lot of record data...create the record
 						if($rifcs_count == 1)
@@ -616,7 +616,7 @@ class Migrate extends MX_Controller
 						{
 							
 							$rifcs = $this->cleanRIFCSofEmptyTags($record_data_result->rifcs_fragment);
-							$registryObjects = simplexml_load_string(wrapRegistryObjects($rifcs));
+							$registryObjects = simplexml_load_string(wrapRegistryObjects(unWrapRegistryObjects($rifcs)));
 							$registryObjects->registerXPathNamespace('rif', 'http://ands.org.au/standards/rif-cs/registryObjects');
 							$registryObjectXML = $registryObjects->xpath('//rif:registryObject');
 							if (count($registryObjectXML) == 0)
@@ -828,7 +828,7 @@ class Migrate extends MX_Controller
 		$xslt_processor = Transforms::get_form_to_cleanrif_transformer();
 		$dom = new DOMDocument();
 		//$dom->loadXML($this->ro->getXML());
-		$dom->loadXML($rifcs);
+		$dom->loadXML(wrapRegistryObjects(unWrapRegistryObjects($rifcs)));
 		//$dom->loadXML($rifcs);
 		$xslt_processor->setParameter('','removeFormAttributes',$removeFormAttributes);
 		return $xslt_processor->transformToXML($dom);

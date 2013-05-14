@@ -36,7 +36,7 @@
         </xsl:attribute>
     </xsl:template>
 
-    <xsl:template match="@field_id | @tab_id | @roclass">
+    <xsl:template match="@schemaLocation | @field_id | @tab_id | @roclass">
         <xsl:if test="$removeFormAttributes != 'true'">
                 <xsl:copy-of select="."/>
         </xsl:if>
