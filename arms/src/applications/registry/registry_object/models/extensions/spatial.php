@@ -23,7 +23,7 @@ class Spatial_Extension extends ExtensionBase
 			$west  = null;
 			$east  = null;
 			$type = $spatial["type"];
-			$value = (string)$spatial;
+			$value = preg_replace('!\s+!', ' ', (string)$spatial);
 			if($type == 'kmlPolyCoords' || $type == 'gmlKmlPolyCoords')
 			{
 				if($this->isValidKmlPolyCoords($value))	
@@ -142,7 +142,7 @@ class Spatial_Extension extends ExtensionBase
 				$extents[] = $west." ".$south." ".$east." ".$north;
 			}
 
-		}	
+		}
 		return $extents;
 	}
 	
@@ -158,7 +158,7 @@ class Spatial_Extension extends ExtensionBase
 		{
 			
 			$type = $spatial["type"];
-			$value = (string)$spatial;
+			$value = preg_replace('!\s+!', ' ', (string)$spatial);
 			
 			if($this->isValidKmlPolyCoords($value) && ($type == 'kmlPolyCoords' || $type == 'gmlKmlPolyCoords'))
 			{
