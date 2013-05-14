@@ -104,12 +104,15 @@ function asset_url( $path, $loc = 'modules')
 
 function registry_url($suffix='')
 {
-	return dirname(base_url()) . '/registry/' . $suffix;
+	$CI =& get_instance();
+	return $CI->config->item('default_base_url') . 'registry/' . $suffix;
 }
 
 function portal_url($suffix='')
 {
-	return dirname(base_url()) . '/' . $suffix;
+	$CI =& get_instance();
+
+	return $CI->config->item('default_base_url') . $suffix;
 }
 
 function current_protocol()
