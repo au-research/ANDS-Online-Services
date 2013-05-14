@@ -60,7 +60,7 @@ class Migrate extends MX_Controller
 
 			// Now start importing registry objects
 			//$this->deleteAllrecordsForDataSource($data_source);
-			//$data_source->updateStats();
+			$data_source->updateStats();
 			//$this->migrateDraftRegistryObjectsForDatasource($data_source);
 			//$this->migrateDeletedRegistryObjectsForDatasource($data_source);
 			//$this->migrateRegistryObjectsForDatasource($data_source);

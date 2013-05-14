@@ -21,21 +21,21 @@ function removeXMLDeclaration($xml)
 
 function unWrapRegistryObjects($xml)
 {
-  return preg_replace(array('/<\?xml(.*)\?>/','/<registryObjects(.*?)>/','/<\/registryObjects>/') , '', $xml);
+  return preg_replace(array('/<\?xml(.*)\?>/s','/<registryObjects(.*?)>/s','/<\/registryObjects>/') , '', $xml);
 }
 
 
 function wrapRegistryObjects($xml)
 {
-	
-	$return = $xml;
+  
+  $return = $xml;
   if(strpos($xml,'<registryObjects') === false)
   {
-  	$return = '<?xml version="1.0" encoding="UTF-8"?>'.NL.'<registryObjects xmlns="http://ands.org.au/standards/rif-cs/registryObjects" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects http://services.ands.org.au/documentation/rifcs/schema/registryObjects.xsd">' . NL; 
-  	$return .= $xml;
-  	$return .= '</registryObjects>';
+    $return = '<?xml version="1.0" encoding="UTF-8"?>'.NL.'<registryObjects xmlns="http://ands.org.au/standards/rif-cs/registryObjects" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects http://services.ands.org.au/documentation/rifcs/schema/registryObjects.xsd">' . NL; 
+    $return .= $xml;
+    $return .= '</registryObjects>';
   }
-	return $return;		
+  return $return;   
 }
 
 function stripXMLHeader($xml)
@@ -90,4 +90,4 @@ function json_to_xml($obj){
   else
     throw new Exception("Unsupported type $obj");
 }
-	
+  
