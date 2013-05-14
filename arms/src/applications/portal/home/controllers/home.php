@@ -12,7 +12,6 @@ class Home extends MX_Controller {
 		//$this->solr->setOpt('fq', 'status:PUBLISHED');
 		$this->solr->setOpt('rows','0');
 		$this->solr->setFacetOpt('field', 'class');
-		$this->solr->setFacetOpt('field', 'group');
 		$this->solr->executeSearch();
 
 		//classes
@@ -22,11 +21,20 @@ class Home extends MX_Controller {
 			$data[$class] = $num;
 		}
 
+		$this->solr->init();
+		$this->solr->setOpt('q', 'class:("collection")');
+		//$this->solr->setOpt('fq', 'status:PUBLISHED');
+		$this->solr->setOpt('rows','0');
+		$this->solr->setFacetOpt('field', 'group');
+		$this->solr->executeSearch();
 		//groups
 		$groups = $this->solr->getFacetResult('group');
 		$data['groups'] = array();
 		foreach($groups as $group=>$num){
-			$data['groups'][$group] = $num;
+			if ($num > 0)
+			{
+				$data['groups'][$group] = $num;
+			}
 		}
 
 		$this->load->library('stats');
@@ -41,7 +49,7 @@ class Home extends MX_Controller {
 	function contributors(){
 		//solr for counts
 		$this->load->library('solr');
-		$this->solr->setOpt('q', '*:*');
+		$this->solr->setOpt('q', 'class:("collection")');
 		//$this->solr->setOpt('fq', 'status:PUBLISHED');
 		$this->solr->setOpt('rows','0');
 		$this->solr->setFacetOpt('field', 'class');
@@ -53,7 +61,10 @@ class Home extends MX_Controller {
 		$groups = $this->solr->getFacetResult('group');
 		$data['groups'] = array();
 		foreach($groups as $group=>$num){
-			$data['groups'][$group] = $num;
+			if ($num > 0)
+			{
+				$data['groups'][$group] = $num;
+			}
 		}
 		ksort($data['groups'], SORT_FLAG_CASE | SORT_NATURAL);
 

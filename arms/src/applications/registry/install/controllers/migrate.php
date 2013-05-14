@@ -9,8 +9,8 @@ class Migrate extends MX_Controller
 	private $_CI; 	// an internal reference to the CodeIgniter Engine 
 	private $source;
 	private $scpr = "dba."; //schema prefix
-	private $recordLimitMin = 99999;
-	private $recordLimitMax = 999999;
+	private $recordLimitMin = 0;
+	private $recordLimitMax = 4000;
 	private $start_ds_id = null;
 	private $noReindex = false;
 	private $noEmails = true; // for debugging
@@ -59,18 +59,18 @@ class Migrate extends MX_Controller
 			//$data_source->append_log("Data Source was migrated to ANDS Online Services Release 10", "info", "legacy_log");
 
 			// Now start importing registry objects
-			//$this->deleteAllrecordsForDataSource($data_source);
-			//$data_source->updateStats();
-			//$this->migrateRegistryObjectsForDatasource($data_source);
-			//$this->migrateDraftRegistryObjectsForDatasource($data_source);
-			//$this->migrateDeletedRegistryObjectsForDatasource($data_source);
+			$this->deleteAllrecordsForDataSource($data_source);
+			$data_source->updateStats();
+			$this->migrateRegistryObjectsForDatasource($data_source);
+			$this->migrateDraftRegistryObjectsForDatasource($data_source);
+			$this->migrateDeletedRegistryObjectsForDatasource($data_source);
 			//$this->reschedulePendingHarvests($data_source);
 
 			echo NL . NL;
 		}
 
 		//$this->updateDanglingSlugs();
-		//$this->updateContributorPages();
+		$this->updateContributorPages();
 
 
 		echo NL . NL;
@@ -422,6 +422,8 @@ class Migrate extends MX_Controller
 									else
 									{
 										$this->importer->setPartialCommitOnly(FALSE);
+									
+											
 									}
 								}
 								else
@@ -432,12 +434,12 @@ class Migrate extends MX_Controller
 								$this->importer->setDatasource($data_source);
 								$this->importer->commit();
 								
-								/*
+								
 								if ($this->importer->getMessages())
 								{
-									echo $this->importer->getMessages();
+									echo $this->importer->getMessages() . NL;
 								}
-								*/
+								
 
 								$registryObject = $this->ro->getPublishedByKey($result->registry_object_key);
 								if ($registryObject)
