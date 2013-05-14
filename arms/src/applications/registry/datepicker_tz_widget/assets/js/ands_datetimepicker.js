@@ -1052,10 +1052,12 @@ return n()&&r(),{name:function(){return e}}},jstz.olson={},jstz.olson.timezones=
     },
 
     _detachDatePickerEvents: function() {
-      this.widget.off('click', '.datepicker *', this.click);
-      this.widget.off('click', '[data-action]');
-      this.widget.off('mousedown', this.stopEvent);
-      this.widget.off('click.togglePicker');
+      if (typeof(this.widget) !== 'undefined') {
+	this.widget.off('click', '.datepicker *', this.click);
+	this.widget.off('click', '[data-action]');
+	this.widget.off('mousedown', this.stopEvent);
+	this.widget.off('click.togglePicker');
+      }
 
       if (this.isInput) {
         this.$element.off({
