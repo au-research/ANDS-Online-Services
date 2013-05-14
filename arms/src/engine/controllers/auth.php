@@ -111,7 +111,7 @@ class Auth extends CI_Controller {
 	
 	public function dashboard()
 	{
-		$data['title'] = 'My Dashboard';
+		$data['title'] = 'ANDS Online Services Home';
 		$data['js_lib'] = array('core');
 		$data['scripts'] = array();
 		
