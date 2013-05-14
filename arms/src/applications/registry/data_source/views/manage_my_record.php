@@ -19,6 +19,7 @@
 
 	<div id="breadcrumb">
 		<div class="pull-right">
+			<span class="label"><i class="icon-question-sign icon-white"></i><a class="youtube" href="http://www.youtube.com/watch?v=cuVQfTyBbNk" style="color:white;" > New to this screen? Take a tour!</a></span>&nbsp;
 			<span class="label"><i class="icon-question-sign icon-white"></i> <a target="_blank" style="color:white;" href="http://services.ands.org.au/documentation/MMRHelp/"> Help</a></span>
 		</div>
 		<?php echo anchor('/', '<i class="icon-home"></i> Home', array('class'=>'tip-bottom', 'title'=>'Go to Home'))?>
