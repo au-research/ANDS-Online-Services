@@ -9,10 +9,10 @@ class Migrate extends MX_Controller
 	private $_CI; 	// an internal reference to the CodeIgniter Engine 
 	private $source;
 	private $scpr = "dba."; //schema prefix
-	private $recordLimit = false;
-	private $recordLimitInvert = false;
+	private $recordLimitMin = 99999;
+	private $recordLimitMax = 999999;
 	private $start_ds_id = null;
-	private $noReindex = true;
+	private $noReindex = false;
 	private $noEmails = true; // for debugging
 	
 	function index()
@@ -60,10 +60,10 @@ class Migrate extends MX_Controller
 
 			// Now start importing registry objects
 			//$this->deleteAllrecordsForDataSource($data_source);
-			$data_source->updateStats();
+			//$data_source->updateStats();
+			//$this->migrateRegistryObjectsForDatasource($data_source);
 			//$this->migrateDraftRegistryObjectsForDatasource($data_source);
 			//$this->migrateDeletedRegistryObjectsForDatasource($data_source);
-			//$this->migrateRegistryObjectsForDatasource($data_source);
 			//$this->reschedulePendingHarvests($data_source);
 
 			echo NL . NL;
@@ -298,6 +298,8 @@ class Migrate extends MX_Controller
 			$data_source->setAttribute("activity_rel_2", $result->activity_rel_2);
 			$data_source->setAttribute("service_rel_2", $result->service_rel_2);
 
+			$data_source->setAttribute("institution_pages", $result->institution_pages);
+
 			// No idea what this is doing..it looks exactly the same as the harvest date...
 			$data_source->setAttribute("LEGACY-time_zone_value", $result->time_zone_value);
 
@@ -348,9 +350,9 @@ class Migrate extends MX_Controller
 	{
 		$query = $this->source->get_where("dba.tbl_registry_objects", array("data_source_key"=>$data_source->key,"status"=>'PUBLISHED'));
 		$num_records = $query->num_rows();
-		if ((!$this->recordLimitInvert && $num_records > $this->recordLimit) ||
-			($this->recordLimitInvert && $num_records <= $this->recordLimit)) {
-			echo "[PUBLISHED RECORDS] Found ". $num_records . " records...skipping this datasource (>" . $this->recordLimit . ") " .NL;
+		if ($num_records < $this->recordLimitMin || $num_records > $this->recordLimitMax)
+		{
+			echo "[PUBLISHED RECORDS] Found ". $num_records . " records...skipping this datasource (".$this->recordLimitMin . " / " . $this->recordLimitMax.") " .NL;
 			return;
 		}
 
@@ -578,8 +580,8 @@ class Migrate extends MX_Controller
 		// Very similar to above, except not published, no SLUG logic. 
 		$query = $this->source->get_where("dba.tbl_registry_objects", array("data_source_key"=>$data_source->key,"status"=>'APPROVED'));
 		$num_records = $query->num_rows();
-		if ($num_records > $this->recordLimit) {
-			echo "[APPROVED] Found ". $num_records . " records...skipping this datasource (>" . $this->recordLimit . ") " .NL;
+		if ($num_records > $this->recordLimitMax) {
+			echo "[APPROVED] Found ". $num_records . " records...skipping this datasource (>" . $this->recordLimitMax . ") " .NL;
 			return;
 		}
 
@@ -725,6 +727,12 @@ class Migrate extends MX_Controller
 		$query = $this->source->query("SELECT rr.registry_object_key AS deleted_key, rifcs_fragment, rr.created_when FROM dba.tbl_raw_records rr LEFT JOIN dba.tbl_registry_objects r on r.registry_object_key = rr.registry_object_key WHERE r.registry_object_key IS NULL AND rr.data_source = ?", array($data_source->key));
 		$num_records = $query->num_rows();
 
+		if ($num_records < $this->recordLimitMin || $num_records > $this->recordLimitMax)
+		{
+			echo "[DELETED RECORDS] Found ". $num_records . " records...skipping this datasource (".$this->recordLimitMin . " / " . $this->recordLimitMax.") " .NL;
+			return;
+		}
+		
 		echo "[DELETED RECORDS] Found ". $num_records . " deleted records to migrate..." .NL;
 		if ($num_records == 0) return; 
 
@@ -759,6 +767,12 @@ class Migrate extends MX_Controller
 
 		$query = $this->source->get_where("dba.tbl_draft_registry_objects", array("registry_object_data_source"=>$data_source->key));
 		$num_records = $query->num_rows();
+
+		if ($num_records < $this->recordLimitMin || $num_records > $this->recordLimitMax)
+		{
+			echo "[DRAFT RECORDS] Found ". $num_records . " records...skipping this datasource (".$this->recordLimitMin . " / " . $this->recordLimitMax.") " .NL;
+			return;
+		}
 
 		echo "[DRAFT RECORDS] Found ". $num_records . " draft records to migrate..." .NL;
 

@@ -384,22 +384,36 @@ class Importer {
 				$directly_affected_records = array_merge($related_keys, $directly_affected_records);
 				$imported_keys[] = $ro->key;
 
-				// Update our quality levels data!
-				$ro->update_quality_metadata();
-
 				// spatial resooultion, center, coords in enrich?
 				$ro->determineSpatialExtents();
-
-				// vocab indexing resolution
-
-				// Generate extrif
-				$ro->enrich();
 
 				unset($ro);
 			}
 			clean_cycles();
 		}
 		gc_collect_cycles();
+
+		// Two-stage enrich to get inverse links in quality metadata
+		// Only enrich records received in this harvest
+		foreach ($this->importedRecords AS $ro_id)
+		{
+
+			$ro = $this->CI->ro->getByID($ro_id);
+
+			// add reverse relationships
+			// previous relationships are reset by this call
+			if($ro)
+			{
+				// Update our quality levels data!
+				$ro->update_quality_metadata();
+				// Generate extrif
+				$ro->enrich();
+				unset($ro);
+			}
+			clean_cycles();
+		}
+		gc_collect_cycles();
+
 
 		// Exclude those keys we already processed above
 		$directly_affected_records = array_unique(array_diff($directly_affected_records, $imported_keys));

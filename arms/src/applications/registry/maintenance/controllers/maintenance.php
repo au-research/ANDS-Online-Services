@@ -84,11 +84,26 @@ class Maintenance extends MX_Controller {
 		$ids = $this->ro->getIDsByDataSourceID($data_source_id);
 		if($ids)
 		{
+
+			/* TWO-STAGE ENRICH */
 			foreach($ids as $ro_id){
 				try{
 					$ro = $this->ro->getByID($ro_id);
 					if($ro->getRif()){
 						$ro->addRelationships();
+						unset($ro);
+						gc_collect_cycles();
+						clean_cycles();
+					}
+				}catch (Exception $e){
+					echo "<pre>error in: $e" . nl2br($e->getMessage()) . "</pre>" . BR;
+				}
+			}
+
+			foreach($ids as $ro_id){
+				try{
+					$ro = $this->ro->getByID($ro_id);
+					if($ro->getRif()){
 						$ro->update_quality_metadata();
 						$ro->enrich();
 						unset($ro);
