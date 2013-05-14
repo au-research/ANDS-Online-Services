@@ -1325,7 +1325,7 @@ function getRIFCSforTab(tab, hasField){
 						var contributors = $('.aro_box_part[type=contributor]', this);//tooltip not init
 						$.each(contributors, function(){
 							var seq = htmlEntities($('input[name=seq]', this).val());
-							if(seq <= 0 || isNaN(seq))
+						        if(parseInt(seq) <= 0 || isNaN(seq))
 							{
 								seq = 1;
 								$('input[name=seq]', this).val(seq);

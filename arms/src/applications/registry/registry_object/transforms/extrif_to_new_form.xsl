@@ -604,7 +604,7 @@
 				<legend>Access Policy <sup><a class="muted" href="http://www.ands.org.au/guides/cpguide/cpgservice-accesspolicy.html" target="_blank" title="View Content Providers' Guide">?</a></sup></legend>
 				<xsl:apply-templates select="ro:service/ro:accessPolicy"/>
 				<div class="separate_line"/>
-				<button class="btn btn-primary addNew" type="accesspolicy" add_new_type="accesspolicy">
+				<button class="btn btn-primary addNew" type="accessPolicy" add_new_type="accessPolicy">
 					<i class="icon-plus icon-white"/> Add Access Policy </button>
 
 			</fieldset>
@@ -873,7 +873,7 @@
 				<xsl:apply-templates
 					select="ro:collection/ro:relatedInfo | ro:activity/ro:relatedInfo | ro:party/ro:relatedInfo | ro:service/ro:relatedInfo"/>
 				<div class="separate_line"/>
-				<button class="btn btn-primary addNew" type="relatedinfo" add_new_type="relatedinfo">
+				<button class="btn btn-primary addNew" type="relatedInfo" add_new_type="relatedInfo">
 					<i class="icon-plus icon-white"/> Add Related Info </button>
 				
 			</fieldset>
