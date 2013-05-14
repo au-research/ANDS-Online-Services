@@ -137,7 +137,7 @@ class Spatial_Extension extends ExtensionBase
 				}
 			}
 			//$msg = $msg.'<br/> north:'.$north.' south:'.$south.' west:'.$west.' east:'.$east;
-			if(isValidWSEN($west, $south, $east, $north))
+			if($this->isValidWSEN($west, $south, $east, $north))
 			{		
 				$extents[] = $west." ".$south." ".$east." ".$north;
 			}
@@ -192,7 +192,7 @@ class Spatial_Extension extends ExtensionBase
 					}
 				  	$tok = strtok(";");
 				}
-				if(isValidWSEN($west, $south, $east, $north)){
+				if($this->isValidWSEN($west, $south, $east, $north)){
 					if($north == $south && $east == $west){
 						$coords[] = $east.",".$north;	
 					}
@@ -221,7 +221,7 @@ class Spatial_Extension extends ExtensionBase
 					}
 				  	$tok = strtok(";");
 				}
-				if(isValidWSEN($east, $north, $east, $north)){
+				if($this->isValidWSEN($east, $north, $east, $north)){
 					$coords[] = $east.",".$north;
 				}					
 			}
@@ -317,7 +317,7 @@ class Spatial_Extension extends ExtensionBase
 		return $valid;
 	}
 
-	function isValidWSEN($west = null, $south = null, $east=null, $north=null)
+	function isValidWSEN($west = null, $south = null, $east = null, $north = null)
 	{
 
 		if($west == null || $west < -180 || $west > 180)
