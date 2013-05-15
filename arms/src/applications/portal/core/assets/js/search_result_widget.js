@@ -148,7 +148,7 @@
 					
 					if (data['message']['numFound'] > ands.ands_search_record_limit)
 					{
-						widget_results.append("<a style='margin-top:10px;' href='"+ands.ands_search_portal_url+"search#!/dq=<automatically generated search>/rq="+ands.ands_search_query+"'>More...</a>");
+						widget_results.append("<a style='margin-top:10px;' href='"+ands.ands_search_portal_url+"search#!/dq=<automatically generated search>/rq="+encodeURIComponent(ands.ands_search_query)+"'>More...</a>");
 					}
 					
 				}
