@@ -6,23 +6,16 @@ function print_pre($var)
 	echo "</pre>";
 } 
 
-function wrap_xml($xml, $scheme = 'rif')
+function display_date($timestamp=0)
 {
-	
-	$return = "";
-	switch($scheme)
-	{
-		
-		case "rif":
-			$return .= '<registryObjects xmlns="http://ands.org.au/standards/rif-cs/registryObjects" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://ands.org.au/standards/rif-cs/registryObjects http://services.ands.org.au/documentation/rifcs/schema/registryObjects.xsd">' . NL; 
-			$return .= $xml;
-			$return .= '</registryObjects>' . NL;
-				
-		break;
-	}
-	return $return;		
+    if (!$timestamp)
+    {
+        $timestamp = time();
+    }
+
+    return date("j F Y, g:i a", $timestamp);
 }
-	
+
 	
 $BENCHMARK_TIME = array();
 function bench($idx = 0)
@@ -42,18 +35,11 @@ function bench($idx = 0)
 	}
 }
 
-
-$cycles = 0;
-function clean_cycles()
+function first_line($string)
 {
-	global $cycles;
-	$cycles++;
-	if ($cycles > 100)
-	{
-		gc_collect_cycles();
-		$cycles = 0;
-	}
+	return strtok($string, "\r\n");
 }
+
 
 function curl_post($url, $post)
 {
@@ -85,9 +71,19 @@ function curl_post($url, $post)
     return $data;
 }
 
-function url_suffix(){
-	return '#!/';
+
+function curl_file_get_contents($URL)
+{
+        $c = curl_init();
+        curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($c, CURLOPT_URL, $URL);
+        $contents = curl_exec($c);
+        curl_close($c);
+
+        if ($contents) return $contents;
+            else return FALSE;
 }
+
 
 function formatResponse($response, $format='xml'){
 	header('Cache-Control: no-cache, must-revalidate');
@@ -107,4 +103,72 @@ function formatResponse($response, $format='xml'){
 		header ("content-type: text/xml");
 		print($response['message']);
 	}
+}
+
+function  timeAgo($timestamp, $granularity=2, $format='Y-m-d H:i:s'){
+        $difference = time() - $timestamp;
+        if($difference < 0) return '0 seconds ago';
+        elseif($difference < 864000){
+                $periods = array('week' => 604800,'day' => 86400,'hr' => 3600,'min' => 60,'sec' => 1);
+                $output = '';
+                foreach($periods as $key => $value){
+                        if($difference >= $value){
+                                $time = round($difference / $value);
+                                $difference %= $value;
+                                $output .= ($output ? ' ' : '').$time.' ';
+                                $output .= (($time > 1 && $key == 'day') ? $key.'s' : $key);
+                                $granularity--;
+                        }
+                        if($granularity == 0) break;
+                }
+                return ($output ? $output : '0 seconds').' ago';
+                 // return ($output ? $output : '0 seconds').'';
+        }
+        else return date($format, $timestamp); 
+}
+
+
+function ellipsis ($string, $length = 64)
+{
+	if (strlen($string) <= $length)
+	{
+		return $string;
+	}
+	else
+	{
+		return substr($string,0, $length-3) . "&hellip;";
+	}
+}
+
+function readable($text, $singular = false){
+	$text = strtolower($text);
+	switch($text){
+        case "all": return 'All'; break;
+		case "draft": return ($singular ? 'Draft' : 'Drafts');break;
+		case "submitted_for_assessment": return 'Submitted for Assessment';break;
+		case "assessment_in_progress": return 'Assessment In Progress';break;
+		case "approved": return ($singular ? 'Approved' : 'Approved Records');break;
+		case "published": return  ($singular ? 'Published' : 'Published Records');break;
+		case "more_work_required": return 'More Work Required';break;
+		case "collection": return 'Collections';break;
+		case "party": return 'Parties';break;
+		case "service": return 'Services';break;
+		case "activity": return 'Activities';break;
+	}
+}
+
+function array_to_TABCSV($data)
+{
+    $outstream = fopen("php://temp", 'r+');
+    foreach($data AS $row)
+    {
+    	fputcsv($outstream, $row, "\t", '"');
+    }
+    rewind($outstream);
+    $csv = '';
+    while (($buffer = fgets($outstream, 4096)) !== false) {
+    	$csv .= $buffer;
+    }
+    fclose($outstream);
+    return $csv;
 }

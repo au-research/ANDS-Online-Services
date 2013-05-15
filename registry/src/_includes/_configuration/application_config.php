@@ -73,6 +73,7 @@ $menu = new menu('mCOSI_ADMIN', 'Administration', gROOT_MENU_ID);
 $menu->margin_class = $eThemes[$eTheme][1];
 addMenu($menu);
 
+
 	// =============================================================================
 	// Role List
 	$activity = new activity('aCOSI_ROLE_LIST', 'List Roles', 'admin/role_list.php');
@@ -112,11 +113,7 @@ addMenu($menu);
 	$activity->only_show_if_active= true;
 	addActivity($activity);
 
-	$activity = new activity('aORCA_RUN_TASKS', 'Background Task Manager', 'orca/maintenance/show_tasks.php');
-	$activity->menu_id = 'mCOSI_ADMIN';
-	addActivity($activity);
-
-	// =============================================================================
+/*	// =============================================================================
 	// Documentation
 	$menu = new menu('mCOSI_DOCUMENTATION', 'Styles Documentation', 'mCOSI_ADMIN');
 	addMenu($menu);
@@ -150,11 +147,107 @@ addMenu($menu);
 		//$activity = new activity('aEXAMPLE_THEME_TWO', 'Example Theme Two', 'admin/documentation/themeexample_two.php');
 		//$activity->menu_id = 'mCOSI_DOCUMENTATION';
 		//addActivity($activity);
-
+*/
 // END - COSI ##################################################################
 
 
 
+
+// =============================================================================
+// PIDS IP Administration
+$menu = new menu('mORCA_PIDS_ADMINISTRATION', 'PIDS IP Administration', gROOT_MENU_ID);
+$menu->margin_class = 'marginLeftLightYellow';
+addMenu($menu);
+
+	// =============================================================================
+	// Add Trusted IP
+	$activity = new activity('aORCA_PIDS_IP_ADD', 'Add Trusted IP', 'orca/admin/add_trusted_pids_client.php');
+	$activity->menu_id = 'mORCA_PIDS_ADMINISTRATION';
+	addActivity($activity);
+
+	// =============================================================================
+	// List Trusted IPs
+	$activity = new activity('aORCA_PIDS_IP_LIST', 'List Trusted IPs', 'orca/admin/list_trusted_pids_client.php');
+	$activity->menu_id = 'mORCA_PIDS_ADMINISTRATION';
+	addActivity($activity);
+
+
+// =============================================================================
+// DOIS Administration
+$menu = new menu('mORCA_DOIS_ADMINISTRATION', 'DOIS Administration', gROOT_MENU_ID);
+$menu->margin_class = 'marginLeftLightYellow';
+addMenu($menu);
+
+	// =============================================================================
+	// Add Trusted IP
+	$activity = new activity('aORCA_DOIS_ADD', 'Add DOI client', 'orca/admin/add_trusted_dois_client.php');
+	$activity->menu_id = 'mORCA_DOIS_ADMINISTRATION';
+	addActivity($activity);
+
+	// =============================================================================
+	// List Trusted IPs
+	$activity = new activity('aORCA_DOIS_LIST', 'List Trusted DOI client', 'orca/admin/list_trusted_dois_client.php');
+	$activity->menu_id = 'mORCA_DOIS_ADMINISTRATION';
+	addActivity($activity);
+
+// BEGIN - PIDS-SELFSERVICE ####################################################
+/*******************************************************************************
+$Date: 2011-11-25 16:09:32 +1100 (Fri, 25 Nov 2011) $
+$Revision: 1634 $
+*******************************************************************************/
+// =============================================================================
+// Persistent Identifiers
+$menu = new menu('mPIDS_CONTAINER', 'Identify My Data', gROOT_MENU_ID);
+$menu->margin_class = 'marginLeftLightBlue';
+addMenu($menu);
+
+	// =============================================================================
+	// List
+	$activity = new activity('aPIDS_LIST', 'List My Identifiers', 'pids/index.php');
+	$activity->menu_id = 'mPIDS_CONTAINER';
+	$activity->help_content_uri = eAPP_ROOT.'pids/_helpcontent/hc_pids.php';
+	$activity->help_content_fragment_id = 'list';
+	addActivity($activity);
+
+	// =============================================================================
+	// Create
+	$activity = new activity('aPIDS_CREATE', 'Create Identifier', 'pids/create.php');
+	$activity->menu_id = 'mPIDS_CONTAINER';
+	$activity->help_content_uri = eAPP_ROOT.'pids/_helpcontent/hc_pids.php';
+	$activity->help_content_fragment_id = 'create';
+	addActivity($activity);
+
+	// =============================================================================
+	// View
+	$activity = new activity('aPIDS_VIEW', 'View Identifier', 'pids/view.php');
+	$activity->menu_id = 'mPIDS_CONTAINER';
+	$activity->only_show_if_active= true;
+	addActivity($activity);
+
+	// =============================================================================
+	// Add
+	$activity = new activity('aPIDS_ADD', 'Add Identifier Property', 'pids/add.php');
+	$activity->menu_id = 'mPIDS_CONTAINER';
+	$activity->only_show_if_active= true;
+	addActivity($activity);
+
+	// =============================================================================
+	// Edit
+	$activity = new activity('aPIDS_EDIT', 'Edit Identifier Property', 'pids/edit.php');
+	$activity->menu_id = 'mPIDS_CONTAINER';
+	$activity->only_show_if_active= true;
+	addActivity($activity);
+
+	// =============================================================================
+	// Delete
+	$activity = new activity('aPIDS_DELETE', '', 'pids/delete.php');
+	addActivity($activity);
+
+
+
+
+if (!ACL_ONLY_MODE)
+{
 
 // BEGIN - ORCA ################################################################
 /*******************************************************************************
@@ -166,6 +259,10 @@ $Revision: 1634 $
 $menu = new menu('mORCA_CONTAINER', 'Collections Registry', gROOT_MENU_ID);
 $menu->margin_class = 'marginLeftLightYellow';
 addMenu($menu);
+
+	$activity = new activity('aORCA_RUN_TASKS', 'Background Task Manager', 'orca/maintenance/show_tasks.php');
+	$activity->menu_id = 'mCOSI_ADMIN';
+	addActivity($activity);
 
 	/*
 	// =============================================================================
@@ -373,60 +470,6 @@ addMenu($menu);
 
 // END - ORCA ##################################################################
 
-
-
-// BEGIN - PIDS-SELFSERVICE ####################################################
-/*******************************************************************************
-$Date: 2011-11-25 16:09:32 +1100 (Fri, 25 Nov 2011) $
-$Revision: 1634 $
-*******************************************************************************/
-// =============================================================================
-// Persistent Identifiers
-$menu = new menu('mPIDS_CONTAINER', 'Identify My Data', gROOT_MENU_ID);
-$menu->margin_class = 'marginLeftLightBlue';
-addMenu($menu);
-
-	// =============================================================================
-	// List
-	$activity = new activity('aPIDS_LIST', 'List My Identifiers', 'pids/index.php');
-	$activity->menu_id = 'mPIDS_CONTAINER';
-	$activity->help_content_uri = eAPP_ROOT.'pids/_helpcontent/hc_pids.php';
-	$activity->help_content_fragment_id = 'list';
-	addActivity($activity);
-
-	// =============================================================================
-	// Create
-	$activity = new activity('aPIDS_CREATE', 'Create Identifier', 'pids/create.php');
-	$activity->menu_id = 'mPIDS_CONTAINER';
-	$activity->help_content_uri = eAPP_ROOT.'pids/_helpcontent/hc_pids.php';
-	$activity->help_content_fragment_id = 'create';
-	addActivity($activity);
-
-	// =============================================================================
-	// View
-	$activity = new activity('aPIDS_VIEW', 'View Identifier', 'pids/view.php');
-	$activity->menu_id = 'mPIDS_CONTAINER';
-	$activity->only_show_if_active= true;
-	addActivity($activity);
-
-	// =============================================================================
-	// Add
-	$activity = new activity('aPIDS_ADD', 'Add Identifier Property', 'pids/add.php');
-	$activity->menu_id = 'mPIDS_CONTAINER';
-	$activity->only_show_if_active= true;
-	addActivity($activity);
-
-	// =============================================================================
-	// Edit
-	$activity = new activity('aPIDS_EDIT', 'Edit Identifier Property', 'pids/edit.php');
-	$activity->menu_id = 'mPIDS_CONTAINER';
-	$activity->only_show_if_active= true;
-	addActivity($activity);
-
-	// =============================================================================
-	// Delete
-	$activity = new activity('aPIDS_DELETE', '', 'pids/delete.php');
-	addActivity($activity);
 
 
 // BEGIN - DOIS-SELFSERVICE ####################################################
@@ -670,42 +713,9 @@ addMenu($menu);
 			$activity->menu_id = 'mORCA_REPORTING';
 			//$activity->only_show_if_active= true;
 			addActivity($activity);		
-	// =============================================================================
-	// PIDS IP Administration
-	$menu = new menu('mORCA_PIDS_ADMINISTRATION', 'PIDS IP Administration', gROOT_MENU_ID);
-	$menu->margin_class = 'marginLeftLightYellow';
-	addMenu($menu);
-
-		// =============================================================================
-		// Add Trusted IP
-		$activity = new activity('aORCA_PIDS_IP_ADD', 'Add Trusted IP', 'orca/admin/add_trusted_pids_client.php');
-		$activity->menu_id = 'mORCA_PIDS_ADMINISTRATION';
-		addActivity($activity);
-
-		// =============================================================================
-		// List Trusted IPs
-		$activity = new activity('aORCA_PIDS_IP_LIST', 'List Trusted IPs', 'orca/admin/list_trusted_pids_client.php');
-		$activity->menu_id = 'mORCA_PIDS_ADMINISTRATION';
-		addActivity($activity);
 
 
-	// =============================================================================
-	// DOIS Administration
-	$menu = new menu('mORCA_DOIS_ADMINISTRATION', 'DOIS Administration', gROOT_MENU_ID);
-	$menu->margin_class = 'marginLeftLightYellow';
-	addMenu($menu);
 
-		// =============================================================================
-		// Add Trusted IP
-		$activity = new activity('aORCA_DOIS_ADD', 'Add DOI client', 'orca/admin/add_trusted_dois_client.php');
-		$activity->menu_id = 'mORCA_DOIS_ADMINISTRATION';
-		addActivity($activity);
-
-		// =============================================================================
-		// List Trusted IPs
-		$activity = new activity('aORCA_DOIS_LIST', 'List Trusted DOI client', 'orca/admin/list_trusted_dois_client.php');
-		$activity->menu_id = 'mORCA_DOIS_ADMINISTRATION';
-		addActivity($activity);
 
 		// =============================================================================
 	// Data Statistics
@@ -723,6 +733,9 @@ addMenu($menu);
 		$activity = new activity('aORCA_STATISTIC_VIEWS', 'Get Registry Object Statistics', 'http://'.eHOST.'/'.eROOT_DIR.'/orca/services/data_statistics_xls.php');
 		$activity->no_check_ssl= true;
 		addActivity($activity);
+
+
+} // END if(ACL_MODE_ONLY)
 
 // Tidy up
 // -----------------------------------------------------------------------------

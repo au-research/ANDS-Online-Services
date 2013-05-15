@@ -45,6 +45,13 @@ class MX_Router extends CI_Router
 	
 	public function _validate_request($segments) {
 
+		// Last-minute hack to remove the app from the request segments
+		// XXX: Need to fix this..
+		if(isset($segments[0]) && $segments[0]=="registry")
+		{
+			array_shift($segments);
+		}
+
 		if (count($segments) == 0) return $segments;
 
 		/* locate module controller */

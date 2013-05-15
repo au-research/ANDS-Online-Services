@@ -1,7 +1,5 @@
 <?php
 
-
-
 /*
  *---------------------------------------------------------------
  * APPLICATION ENVIRONMENT
@@ -35,7 +33,7 @@ if (defined('ENVIRONMENT'))
 	switch (ENVIRONMENT)
 	{
 		case 'development':
-			error_reporting(E_ALL);
+			error_reporting(E_ALL & ~E_STRICT);
 			ini_set('display_errors', '1');
 		break;
 	
@@ -51,7 +49,6 @@ if (defined('ENVIRONMENT'))
 
 // Pull in the global imports
 require_once('./global_config.php');
-
 /*
  *---------------------------------------------------------------
  * SYSTEM FOLDER NAME

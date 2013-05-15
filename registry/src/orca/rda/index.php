@@ -1,5 +1,9 @@
 <?php
 require_once(dirname(__FILE__).'/../../global_config.php');
+if (ACL_ONLY_MODE) 
+{
+	die('No access to ORCA or RDA in ACL-only mode.');
+}
 /*
  *---------------------------------------------------------------
  * APPLICATION ENVIRONMENT

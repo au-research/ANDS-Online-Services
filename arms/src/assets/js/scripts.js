@@ -14,17 +14,33 @@ function changeHashTo(hash){
 	window.location.hash = suffix+hash;
 }
 
+function checkResponse(data)
+{
+	if (data.status == "ERROR")
+	{
+		logErrorOnScreen(data.message);
+	}
+}
+
+$("#dashboard-datasource-chooser").chosen();
+$('#dashboard-datasource-chooser').live({
+	change: function(e){
+		window.location = base_url + 'data_source/manage#!/view/'+$(this).val();
+	}
+});
+
 
 function logErrorOnScreen(error, target){
 	var template = $('#error-template').html();
 	var output = Mustache.render(template, $("<div/>").html(error).html());
 	if (!target){
-		$('#main-content').prepend(output);
+		$('#content').prepend(output);
 	}
 	else{
 		target.html(output);
 	}
 }
+
 $(document).ready(function(){
 	$('#main-nav-user-account').qtip({
 		content: {
@@ -74,36 +90,90 @@ $(document).ready(function(){
 			},
 			position: {
 				my: my, // Use the corner...
-				at: at
+				at: at,
+				viewport: $(window)
 			},
 			style: {
-				classes: 'ui-tooltip-jtools ui-tooltip-shadow'
+				classes: 'ui-tooltip-bootstrap ui-tooltip-shadow'
 			}
 		}, event); // Pass through our original event to qTip
 	});
 
+	$('#main-nav-search').click(function(e){
+		e.preventDefault();
+		$('#navbar-search-form').toggle('slide',{direction:'right'});
+		$('#navbar-search-form input').focus();
+	});
+
+	$('.loginSelector').click(function(e){
+		e.preventDefault();
+		var auth = $(this).attr('id');
+		$('.loginForm').hide();
+		$('#'+auth+'_LoginForm').fadeIn();
+	});
+
+	$('#navbar-search-form input').keypress(function(e){
+		if(e.which==13){//enter
+			var query = $(this).val();
+			$(this).qtip({
+				content:{
+					text: 'Loading...', // The text to use whilst the AJAX request is loading},
+					ajax: {
+						url: base_url+'services/registry/search?query='+encodeURIComponent(query), // URL to the local file
+						type: 'GET', // POST or GET
+						data: {}, // Data to pass along with your request
+						success: function(data,status){
+							
+							if(data.length>0){
+								var html = '<div class="dropdown"><ul class="nav nav-list">';
+								$.each(data, function(){
+									var h ='<li class=""><a href="'+base_url+'registry_object/view/'+this.subtext+'">'+this.value+'</a></li>';
+									html +=h
+								});
+								html+='</ul></div>';
+								this.set('content.text', html);
+							}else{
+								this.set('content.text', 'No Result!');
+							}
+						}
+					}
+				},
+				show:{ready:true},
+				position:{my:'top center',at:'bottom center'},
+				hide:{fixed:true,event:'unfocus'},
+				style:{classes:'ui-tooltip-bootstrap ui-tooltip-shadow'}
+			});
+		}
+	});
+
+	$('#navbar-search-form').submit(function() {return false});
+	
+
 
 	//jgrowl
-	window.createGrowl = function(persistent, content) {
-	    // Use the last visible jGrowl qtip as our positioning target
-	    var target = $('.qtip.jgrowl:visible:last');
+	window.createGrowl = function(wrapAlert,text_data, target) {
+		if (wrapAlert)
+		{
+			text_data = "<div class='alert alert-info' style='margin-bottom:0px;'>" + text_data + "</div>";
+		}
+        // Use the last visible jGrowl qtip as our positioning target
+        if (!target)
+        {
+        	var target = $('.qtip.jgrowl:visible:last');
+        }
 
-	    // Create your jGrowl qTip...
-	    $('#main-content').qtip({
-	        // Any content config you want here really.... go wild!
-	        content: {
-	            text: content,
-	            title: {
-	                text: 'Attention!',
-	                button: true
-	            }
-	        },
-	        position: {
+        // Create your jGrowl qTip...
+        $(document.body).qtip({
+            // Any content config you want here really.... go wild!
+            content: {
+                text: text_data
+            },
+            position: {
                 my: 'top right',
                 // Not really important...
                 at: (target.length ? 'bottom' : 'top') + ' right',
                 // If target is window use 'top right' instead of 'bottom right'
-                target: target.length ? target : $('#main-content'),
+                target: target.length ? target : $(window),
                 // Use our target declared above
                 adjust: { y: 5 },
                 effect: function(api, newPos) {
@@ -112,94 +182,104 @@ $(document).ready(function(){
                         duration: 200,
                         queue: false
                     });
- 
+
                     // Store the final animate position
                     api.cache.finalPos = newPos; 
                 }
             },
-	        show: {
-	            event: false,
-	            // Don't show it on a regular event
-	            ready: true,
-	            // Show it when ready (rendered)
-	            effect: function() {
-	                $(this).stop(0, 1).fadeIn(400);
-	            },
-	            // Matches the hide effect
-	            delay: 0,
-	            // Needed to prevent positioning issues
-	            // Custom option for use with the .get()/.set() API, awesome!
-	            persistent: persistent
-	        },
-	        hide: {
-	            event: false,
-	            // Don't hide it on a regular event
-	            effect: function(api) {
-	                // Do a regular fadeOut, but add some spice!
-	                $(this).stop(0, 1).fadeOut(400).queue(function() {
-	                    // Destroy this tooltip after fading out
-	                    api.destroy();
+            show: {
+                event: false,
+                // Don't show it on a regular event
+                ready: true,
+                // Show it when ready (rendered)
+                effect: function() {
+                    $(this).stop(0, 1).fadeIn(400);
+                },
+                // Matches the hide effect
+                delay: 0,
+                // Needed to prevent positioning issues
+                // Custom option for use with the .get()/.set() API, awesome!
+                persistent: false
+            },
+            hide: {
+                event: 'unfocus click',
+                // Don't hide it on a regular event
+                effect: function(api) {
+                    // Do a regular fadeOut, but add some spice!
+                    $(this).stop(0, 1).fadeOut(400).queue(function() {
+                        // Destroy this tooltip after fading out
+                        api.destroy();
 
-	                    // Update positions
-	                    updateGrowls();
-	                })
-	            }
-	        },
-	        style: {
-	            classes: 'jgrowl ui-tooltip-jtools ui-tooltip-rounded',
-	            // Some nice visual classes
-	            tip: false // No tips for this one (optional ofcourse)
-	        },
-	        events: {
-	            render: function(event, api) {
-	                // Trigger the timer (below) on render
-	                timer.call(api.elements.tooltip, event);
-	            }
-	        }
-	    }).removeData('qtip');
-	};
+                        // Update positions
+                        updateGrowls();
+                    })
+                }
+            },
+            style: {
+                classes: 'jgrowl ui-tooltip-bootstrap ui-tooltip-rounded',
+                width: 360,
+                // Some nice visual classes
+                tip: false // No tips for this one (optional ofcourse)
+            },
+            events: {
+                render: function(event, api) {
+                    // Trigger the timer (below) on render
+                    timer.call(api.elements.tooltip, event);
+                }
+            }
+        }).removeData('qtip');
+    };
 
-	// Make it a window property see we can call it outside via updateGrowls() at any point
-	window.updateGrowls = function() {
-	    // Loop over each jGrowl qTip
-	    var each = $('.qtip.jgrowl'),
-	        width = each.outerWidth(),
-	        height = each.outerHeight(),
-	        gap = each.eq(0).qtip('option', 'position.adjust.y'),
-	        pos;
+    // Make it a window property see we can call it outside via updateGrowls() at any point
+    window.updateGrowls = function() {
+        // Loop over each jGrowl qTip
+        var each = $('.qtip.jgrowl'),
+            width = each.outerWidth(),
+            height = each.outerHeight(),
+            gap = each.eq(0).qtip('option', 'position.adjust.y'),
+            pos;
 
-	    each.each(function(i) {
-	        var api = $(this).data('qtip');
+        each.each(function(i) {
+            var api = $(this).data('qtip');
 
-	        // Set target to window for first or calculate manually for subsequent growls
-	        api.options.position.target = !i ? $('#main-content') : [
-	            pos.left + width, pos.top + (height * i) + Math.abs(gap * (i-1))
-	        ];
-	        api.set('position.at', 'top right');
-	        
-	        // If this is the first element, store its finak animation position
-	        // so we can calculate the position of subsequent growls above
-	        if(!i) { pos = api.cache.finalPos; }
-	    });
-	};
+            // Set target to window for first or calculate manually for subsequent growls
+            api.options.position.target = !i ? $(window) : [
+                pos.left + width, pos.top + (height * i) + Math.abs(gap * (i-1))
+            ];
+            api.set('position.at', 'top right');
+            
+            // If this is the first element, store its finak animation position
+            // so we can calculate the position of subsequent growls above
+            if(!i) { pos = api.cache.finalPos; }
+        });
+    };
 
-	// Setup our timer function
+    if (typeof(displayGrowl) !== 'undefined' && displayGrowl)
+    {
+    	createGrowl(true, displayGrowl, $('#user-nav'));
+    }
+
+    // Setup our timer function
     function timer(event) {
         var api = $(this).data('qtip'),
             lifespan = 5000; // 5 second lifespan
         
         // If persistent is set to true, don't do anything.
         if (api.get('show.persistent') === true) { return; }
- 
+
         // Otherwise, start/clear the timer depending on event type
         clearTimeout(api.timer);
         if (event.type !== 'mouseover') {
             api.timer = setTimeout(api.hide, lifespan);
         }
     }
+
+    // Utilise delegate so we don't have to rebind for every qTip!
+    $(document).delegate('.qtip.jgrowl', 'mouseover mouseout', timer);
 	/*createGrowl(false);
 	createGrowl(false);
 	updateGrowls();*/
+	
 
 
 	//cosi main login screen 
@@ -288,6 +368,34 @@ $(document).ready(function(){
 			$('#affiliation_signup').addClass('disabled');
 		}
 	});
+$.fn.YouTubePopup.defaults = {
+    'youtubeId': '',
+    'title': '',
+    'useYouTubeTitle': true,
+    'idAttribute': 'rel',
+    'cssClass': '',
+    'draggable': true,
+    'modal': true,
+    'width': 1280,
+    'height': 960,
+    'hideTitleBar': false,
+    'clickOutsideClose': true,
+    'overlayOpacity': 0.8,
+    'autohide': 2,
+    'autoplay': 1,
+    'color': 'red',
+    'color1': 'FFFFFF',
+    'color2': 'FFFFFF',
+    'controls': 1,
+    'fullscreen': 1,
+    'loop': 0,
+    'hd': 1,
+    'showinfo': 0,
+    'theme': 'light'
+	};
+
+	$("a.youtube").YouTubePopup();
+	$("button.youtube").YouTubePopup({ idAttribute: 'id', color: '#44ff99' });
 });
 
 jQuery.fn.extend({
@@ -315,33 +423,46 @@ jQuery.fn.extend({
 
 
 $.ajaxSetup({
-    error: function(err) {
-        //do stuff when things go wrong
-        console.error(err);
-        logErrorOnScreen(err.responseText);
-    }
+	dataType: 'json',
+	error: function(data)
+	{
+		try
+		{
+			data = $.parseJSON(data.responseText);
+			checkResponse(data);
+			return;
+		}
+		catch (e)
+		{
+			logErrorOnScreen("An unknown error occured whilst communicating with the server.");
+		}
+	}
 });
 
 // implement JSON.stringify serialization
-JSON.stringify = JSON.stringify || function (obj) {
-    var t = typeof (obj);
-    if (t != "object" || obj === null) {
-        // simple data type
-        if (t == "string") obj = '"'+obj+'"';
-        return String(obj);
-    }
-    else {
-        // recurse array or object
-        var n, v, json = [], arr = (obj && obj.constructor == Array);
-        for (n in obj) {
-            v = obj[n]; t = typeof(v);
-            if (t == "string") v = '"'+v+'"';
-            else if (t == "object" && v !== null) v = JSON.stringify(v);
-            json.push((arr ? "" : '"' + n + '":') + String(v));
-        }
-        return (arr ? "[" : "{") + String(json) + (arr ? "]" : "}");
-    }
-};
+//var JSON = {}
+if (typeof JSON !== 'undefined')
+{
+	JSON.stringify = JSON.stringify || function (obj) {
+	    var t = typeof (obj);
+	    if (t != "object" || obj === null) {
+	        // simple data type
+	        if (t == "string") obj = '"'+obj+'"';
+	        return String(obj);
+	    }
+	    else {
+	        // recurse array or object
+	        var n, v, json = [], arr = (obj && obj.constructor == Array);
+	        for (n in obj) {
+	            v = obj[n]; t = typeof(v);
+	            if (t == "string") v = '"'+v+'"';
+	            else if (t == "object" && v !== null) v = JSON.stringify(v);
+	            json.push((arr ? "" : '"' + n + '":') + String(v));
+	        }
+	        return (arr ? "[" : "{") + String(json) + (arr ? "]" : "}");
+	    }
+	};
+}
 
 function htmlEntities(str) {
     return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -383,7 +504,8 @@ function Core_bindFormValidation(form){
 	$(form).attr('valid', false);
 	$('input,textarea', form).each(function(){
 		Core_checkValidField(form, this);
-		$(this).die().live({
+		Core_checkValidForm(form);
+		$(this).off().on({
 			blur: function(){
 				Core_checkValidField(form, this);
 				Core_checkValidForm(form);
@@ -396,40 +518,78 @@ function Core_bindFormValidation(form){
 	});
 }
 
+function markRequired(form){
+	$(form).attr('valid', false);
+	$('input,textarea', form).each(function(){
+		if(this.required){
+			var label = $(this).parent().find('.control-label');
+			if(label.length === 0)
+				label = $(this).parent().parent().find('.control-label');
+			if(label.length === 0)
+				label = $(this).parent().parent().parent().find('.control-label');
+			if($(label).parent().find('.required').length === 0)
+				$(label).prepend('<span class="muted required">* </span>');
+		}
+	});
+}
+
 function Core_checkValidField(form, field){
 	var valid = true;
-	if(field.required){//required validation
-		if($(field).val().length==0){
+	var warning = false;
+	if(field.required || $(field).attr('valid-type'))
+	{
+		if(field.required && $(field).val().length==0){
 			valid = false;
-		}else{
-			if(field.maxLength>0){//maxlength is specified
-				if($(field).val().length>field.maxLength){
-					valid = false;
-				}else{
+		}
+		else if($(field).attr('valid-type') && $(field).val().length > 0)
+		{
+			if($(field).attr('type')=='email'){//email validation
+				valid = validateEmail($(field).val());
+
+			}
+			else if($(field).attr('valid-type')=='date'){//email validation
+				valid = true;//validateDate($(field).val());
+			}
+			else if($(field).attr('valid-type')=='url'){//email validation
+				if(validateUrl($(field).val())){
 					valid = true;
+				}else{
+					warning = true;
 				}
 			}
-
-			if($(field).attr('type')=='email'){//email validation
-				if(validateEmail($(field).val())){
-					valid = true;
-				}else{
-					valid = false;
-				}
-			}else{
-				valid = true;
-			}			
 		}
 
 		if(valid){
-			$(field).closest('div.control-group').removeClass('error').addClass('success');
+			// $(field).closest('div.control-group').removeClass('error').addClass('success');
+			$(field).removeClass('error').addClass('success');
+			if($(field).parent().find('.validation').length > 0)
+			{
+				$(field).parent().find('.validation').remove();
+			}
+			if(warning)
+			{
+				$(field).closest('div.control-group').removeClass('success').addClass('warning');
+				$(field).removeClass('success').addClass('warning');
+				if($(field).parent().find('.validation').length === 0)
+				{
+					$(field).parent().append('<div class="alert alert-warning validation">Field should be a valid '+$(field).attr('valid-type')+'</div>');				
+				}
+			}
 			return true;
 		}else{
-			$(form).attr('valid', false); $(field).closest('div.control-group').removeClass('success').addClass('error');
+			$(form).attr('valid', false);
+			$(field).closest('div.control-group').removeClass('success').addClass('error');
+			$(field).removeClass('success').addClass('error');
+			if($(field).parent().find('.validation').length === 0)
+			{
+				if($(field).attr('valid-type'))
+					$(field).parent().append('<div class="alert alert-error validation">Field must be a valid '+$(field).attr('valid-type')+'</div>');
+				else
+					$(field).parent().append('<div class="alert alert-error validation">Field value must be entered</div>');			
+			}
 			return false;
 		}
 	}
-
 	//never gonna get here for field needing validation
 	return valid;
 }
@@ -446,14 +606,41 @@ function Core_checkValidForm(form){
 	}else{
 		$(form).attr('valid', false);
 	}
+
+
 	return valid;
 }
+
+
+
+
 
 function validateEmail(email) { 
     var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(email);
 } 
 
+function validateDate(dateText) { 
+	//log(dateText);
+	var re = /^([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))([T|\ ]((([01]\d|2[0-3])((:?)[0-5]\d)?|24\:?00)([\.,]\d+(?!:))?)?(\17[0-5]\d([\.,]\d+)?)?([zZ]|([\+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/;
+	return re.test(dateText);
+}
+
+function validateUrl(url) { 
+    var re = /(ftp|http):\/\/([_a-z\d\-]+(\.[_a-z\d\-]+)+)(([_a-z\d\-\\\.\/]+[_a-z\d\-\\\/])+)*/;
+    return re.test(url);
+}
+
 Number.prototype.pad = function (len) {
     return (new Array(len+1).join("0") + this).slice(-len);
 }
+
+// usage: log('inside coolFunc',this,arguments);
+// http://paulirish.com/2009/log-a-lightweight-wrapper-for-consolelog/
+window.log = function(){
+  log.history = log.history || [];   // store logs to an array for reference
+  log.history.push(arguments);
+  if(this.console){
+    console.log( Array.prototype.slice.call(arguments) );
+  }
+};

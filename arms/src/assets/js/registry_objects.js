@@ -200,6 +200,8 @@ $(function(){
 			changeHashTo(view+'/'+id);
 		}
 	});
+
+
 	
 });
 
@@ -384,7 +386,7 @@ function initEditForm(){
 				type: 'GET',
 				url: base_url+'services/registry/get_random_key/',
 				success:function(data){
-					$(input).val(data)
+					$(input).val(data.key);
 				}
 			});
 		}
@@ -496,7 +498,7 @@ function initEditForm(){
 			var currentTab = $(this).parents('.tab-pane');
 			var xml = getRIFCSforTab(currentTab);
 			$('#myModal .modal-body').html('<pre class="prettyprint linenums"><code class="language-xml">' + htmlEntities(formatXml(xml)) + '</code></pre>');
-			prettyPrint();
+			//prettyPrint();
 			$('#myModal').modal();
 		}
 	});
@@ -515,7 +517,7 @@ function initEditForm(){
 			$('#myModal .modal-header h3').html('<h3>Export RIFCS</h3>');
 			$('#myModal .modal-body').html('<pre class="prettyprint linenums"><code class="language-xml">' + htmlEntities(formatXml(xml)) + '</code></pre>');
 			$('#myModal .modal-footer').html('<button class="btn btn-primary">Download</button>');
-			prettyPrint();
+			//prettyPrint();
 			$('#myModal').modal();
 		}
 	});

@@ -36,7 +36,10 @@ define('FOPEN_READ_WRITE_CREATE',				'a+b');
 define('FOPEN_WRITE_CREATE_STRICT',				'xb');
 define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 
-
+define('EXTRIF_NAMESPACE', "http://ands.org.au/standards/rif-cs/extendedRegistryObjects");
+define('RIFCS_NAMESPACE', "http://ands.org.au/standards/rif-cs/registryObjects");
+define('OAI_NAMESPACE', "http://www.openarchives.org/OAI/2.0/");
+define('RIFCS_SCHEME','rif');
 
 define('BR','<br/>');
 define('NL',"\n");
@@ -44,10 +47,6 @@ define('TAB',"\t");
 
 define('DB_TRUE',"t");
 define('DB_FALSE',"f");
-
-
-define('EXTRIF_NAMESPACE', "http://ands.org.au/standards/rif-cs/extendedRegistryObjects");
-define('RIFCS_NAMESPACE', "http://ands.org.au/standards/rif-cs/registryObjects");
 
 define('ENGINE_ENABLED_MODULE_LIST','ENGINE_ENABLED_MODULE_LIST');
 
@@ -73,6 +72,45 @@ define('gCOSI_AUTH_LDAP_UID', "uid=@@ROLE_ID@@");
 define('gCOSI_AUTH_LDAP_DN', gCOSI_AUTH_LDAP_UID . ", " . gCOSI_AUTH_LDAP_BASE_DN); 
 
 define('gSHIBBOLETH_SESSION_INITIATOR', '/Shibboleth.sso/Login');
+
+
+define('AUTH_USER_FRIENDLY_NAME', 'USER_FRIENDLY_NAME');
+define('AUTH_DEFAULT_FRIENDLY_NAME', 'unnamed user');
+define('AUTH_USER_IDENTIFIER','UNIQUE_USER_IDENTIFIER');
+define('AUTH_METHOD','AUTH_METHOD');
+
+
+define('AUTH_FUNCTION_ARRAY', 'registry_functions');
+define('AUTH_FUNCTION_DEFAULT_ATTRIBUTE', 'PUBLIC');
+define('AUTH_FUNCTION_LOGGED_IN_ATTRIBUTE','AUTHENTICATED_USER');
+define('AUTH_FUNCTION_SUPERUSER','REGISTRY_SUPERUSER');
+
+define('AUTH_AFFILIATION_ARRAY', 'registry_affiliations');
+
+/* classes for records */
+define('COLLECTION','collection');
+define('PARTY','party');
+define('ACTIVITY','activity');
+define('SERVICE','service');
+
+/*
+ * Status for records
+ */
+define('PUBLISHED', 'PUBLISHED');
+define('APPROVED', 'APPROVED');
+define('ASSESSMENT_IN_PROGRESS', 'ASSESSMENT_IN_PROGRESS');
+define('SUBMITTED_FOR_ASSESSMENT', 'SUBMITTED_FOR_ASSESSMENT');
+define('DRAFT', 'DRAFT');
+define('MORE_WORK_REQUIRED', 'MORE_WORK_REQUIRED');
+define('DELETED', 'DELETED');
+
+define('ONE_HOUR', 60*60);
+define('ONE_DAY', 60*ONE_HOUR);
+define('ONE_MONTH', 30*ONE_DAY);
+
+define('CONTRIBUTOR_PAGE_TEMPLATE', 'contributor');
+define('CONTRIBUTOR_PAGE_KEY_PREFIX', 'a61e9d0d');
+
 
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */

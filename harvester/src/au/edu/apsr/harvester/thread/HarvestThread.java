@@ -26,7 +26,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
+import java.net.URLConnection;
 import java.net.HttpURLConnection;
+import javax.net.ssl.HttpsURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -46,7 +48,7 @@ import au.edu.apsr.harvester.to.Fragment;
 import au.edu.apsr.harvester.to.Harvest;
 import au.edu.apsr.harvester.to.Request;
 import au.edu.apsr.harvester.util.ServletSupport;
-
+import au.edu.apsr.harvester.util.HttpsHack;
 /**
  * An abstract class all harvest classes must extend.
  * 
@@ -202,7 +204,24 @@ public abstract class HarvestThread extends TimerTask
 
         do
         {
-            conn = (HttpURLConnection)url.openConnection();
+            String protocol = url.getProtocol();  
+            boolean secure = "https".equals(protocol);
+            if(secure)
+            {
+                try
+                {
+                    HttpsHack.disableCertCheck();
+                    conn = (HttpsURLConnection)url.openConnection();
+                }
+                catch (Exception e)
+                {
+                    throw new IOException("unable to allow connection to url: " + url.toExternalForm());
+                }               
+            }
+            else
+            {
+                conn = (HttpURLConnection)url.openConnection(); 
+            }
             conn.setConnectTimeout(10000);
             conn.setRequestProperty("User-Agent", "APSRHarvester/1.0");
             conn.setRequestProperty("Accept-Encoding", "compress, gzip, identify");

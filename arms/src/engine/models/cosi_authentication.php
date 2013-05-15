@@ -49,11 +49,12 @@ class Cosi_authentication extends CI_Model {
     												));
 		if($result->num_rows() > 0){
 			$method = trim($result->row(1)->authentication_service_id);
-		}else{
-            if($method==gCOSI_AUTH_METHOD_SHIBBOLETH && isset($_SERVER['displayName'])){
-                //create user 
-                var_dump($method);
-                var_dump($_SERVER['displayName']);
+		}
+        else
+        {
+            if($method==gCOSI_AUTH_METHOD_SHIBBOLETH){
+                //create user if this is the first shib login
+                
                 $data = array(
                     'role_id' => $username,
                     'role_type_id'=>'ROLE_USER',
@@ -108,6 +109,7 @@ class Cosi_authentication extends CI_Model {
     				
 					return array(	
 									'result'=>1,
+                                    'authentication_service_id'=>$method,
     								'message'=>'Success',
 									'user_identifier'=>$result->row(1)->role_id,
 					    			'name'=>$result->row(1)->name,
@@ -137,7 +139,9 @@ class Cosi_authentication extends CI_Model {
 			$user_results = $this->getRolesAndActivitiesByRoleID ($username);   				
 			return array(	
 							'result'=>1,
+                            'authentication_service_id'=>$method,
     						'message'=>'Success',
+                            'auth_method' => $method,
 							'user_identifier'=>$username,
 					    	'name'=>$result->row(1)->name,
     						'last_login'=>$result->row(1)->last_login,
@@ -176,12 +180,15 @@ class Cosi_authentication extends CI_Model {
 				$LDAPAttributes = array();
 				$LDAPMessage = "";
 				$successful = authenticateWithLDAP($username, $password, $LDAPAttributes, $LDAPMessage);
-				if ($successful)
+
+				// if (count($LDAPAttributes) > 0)
+                if($successful)
 				{
 					$user_results = $this->getRolesAndActivitiesByRoleID ($username);
 					
 					return array(	
 									'result'=>1,
+                                    'authentication_service_id'=>$method,
 									'message'=>'Success',
 									'user_identifier'=>$username,
 					    			'name'=>(isset($LDAPAttributes['cn'][0]) ? $LDAPAttributes['cn'][0] : $result->row(1)->name), // implementation specific
@@ -219,6 +226,8 @@ class Cosi_authentication extends CI_Model {
     {
     	$ret = array('organisational_roles'=>array(), 'functional_roles'=>array(), 'activities'=>array());
 
+        $superadmin = false; // superadmins inherit all roles/functions
+
     	$roles = $this->getChildRoles($role_id);
     	foreach ($roles AS $role)
    		{
@@ -230,9 +239,25 @@ class Cosi_authentication extends CI_Model {
     		{
     			$ret['functional_roles'][] = $role['role_id'];
     			$ret['activities'] = array_merge($ret['activities'], $this->getChildActivities($role['role_id']));
+
+                // Check if we're a superuser
+                if ($role['role_id'] == AUTH_FUNCTION_SUPERUSER)
+                {
+                    $superadmin = true;
+                }
     		}
     					
     	}
+
+        // Superadmins get all organisational roles
+        if ($superadmin)
+        {
+            function getOnlyRoleIds(&$item, $key) { $item = $item['role_id']; }
+            $orgRoles = $this->getAllOrganisationalRoles();
+            array_walk( $orgRoles, 'getOnlyRoleIds' );
+
+            $ret['organisational_roles'] = array_merge($ret['organisational_roles'], $orgRoles);
+        }
     	
     	return $ret;
     				
@@ -245,6 +270,27 @@ class Cosi_authentication extends CI_Model {
             $roles[] = $r->child_role_id;
         }
         return $roles;
+    }
+
+   public function getDOIAppIdsInAffiliate($affiliates){
+        $doi_appids = array();
+        $the_affilates_string = '';
+        
+        foreach($affiliates as $an_affiliate)
+        {
+            $the_affilates_string .= "'".$an_affiliate."', ";
+        }
+        $the_affilates_string = trim($the_affilates_string,", ");
+
+        $user_appids = $this->cosi_db->query("SELECT dba.tbl_role_relations.parent_role_id 
+                                            FROM dba.tbl_role_relations, dba.tbl_roles
+                                            WHERE dba.tbl_role_relations.child_role_id IN (".$the_affilates_string.")
+                                            AND dba.tbl_role_relations.parent_role_id = dba.tbl_roles.role_id 
+                                            AND dba.tbl_roles.role_type_id = 'ROLE_DOI_APPID'");
+        foreach($user_appids->result() as $r){
+            $doi_appids[] = $r->parent_role_id;
+        }
+        return $doi_appids;
     }
 
     public function getAllOrganisationalRoles(){
@@ -272,6 +318,12 @@ class Cosi_authentication extends CI_Model {
         if($query){
             return true;
         }else return false;
+    }
+
+    public function updatePassword($username, $password)
+    {
+        $this->cosi_db->where("role_id", $username)->update("dba.tbl_authentication_built_in", array('passphrase_sha1' => sha1($password)));
+        return TRUE;
     }
     
     
@@ -307,6 +359,7 @@ class Cosi_authentication extends CI_Model {
     	
     	return $activities;
     }
-    
+
+   
 
 }

@@ -183,6 +183,7 @@ class CI_URI {
 		}
 
 		$uri = $_SERVER['REQUEST_URI'];
+
 		if (strpos($uri, $_SERVER['SCRIPT_NAME']) === 0)
 		{
 			$uri = substr($uri, strlen($_SERVER['SCRIPT_NAME']));

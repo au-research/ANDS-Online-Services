@@ -24,7 +24,7 @@ error_reporting(E_ALL|E_STRICT);
 //require 'orca_init.php';
 // Page processing
 // -----------------------------------------------------------------------------
-chdir("/var/www/home/orca");
+chdir("/var/www/htdocs/registry/orca");
 include('../global_config.php');
 include '_functions/orca_data_functions.php';
 include '../_includes/_functions/database_functions.php';

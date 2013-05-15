@@ -56,18 +56,19 @@ class Modules
 	public static function run($module) {
 		
 		$method = 'index';
-		
-		if(($pos = strrpos($module, '/')) != FALSE) {
+
+		if(($pos = strpos($module, '/')) != FALSE) {
 			$method = substr($module, $pos + 1);		
 			$module = substr($module, 0, $pos);
 		}
 
 		if($class = self::load($module)) {
-			
+
+			$method = array_shift(explode("/",$method));
 			if (method_exists($class, $method))	{
 				ob_start();
-				$args = func_get_args();
-				$output = call_user_func_array(array($class, $method), array_slice($args, 1));
+				$args = explode("/",array_pop(func_get_args()));
+				$output = call_user_func_array(array($class, $method), array_slice($args, 2));
 				$buffer = ob_get_clean();
 				return ($output !== NULL) ? $output : $buffer;
 			}
@@ -94,7 +95,6 @@ class Modules
 			if (empty($class)) return;
 	
 			/* set the module directory */
-			var_dump(APPPATH);
 			$path = APPPATH.'controllers/'.CI::$APP->router->fetch_directory();
 			
 			/* load the controller class */
@@ -168,6 +168,7 @@ class Modules
 	**/
 	public static function find($file, $module, $base) {
 	
+
 		$segments = explode('/', $file);
 
 		$file = array_pop($segments);
@@ -180,7 +181,9 @@ class Modules
 			$modules[array_shift($segments)] = ltrim(implode('/', $segments).'/','/');
 		}	
 
-		foreach (Modules::$locations as $location => $offset) {					
+		foreach (Modules::$locations as $location => $offset) {	
+			// Check the core folder if all else fails!
+			$modules["core"] = "";	
 			foreach($modules as $module => $subpath) {			
 				$fullpath = $location.$module.'/'.$base.$subpath;
 				
@@ -190,6 +193,7 @@ class Modules
 				if (is_file($fullpath.$file_ext)) return array($fullpath, $file);
 			}
 		}
+
 		
 		return array(FALSE, $file);	
 	}

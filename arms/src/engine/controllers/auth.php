@@ -5,7 +5,14 @@ class Auth extends CI_Controller {
 		$data['title'] = 'Login';
 		$data['js_lib'] = array('core');
 		$data['scripts'] = array();
+		//$config['authenticators'] = Array('Built in' => gCOSI_AUTH_METHOD_BUILT_IN, 'LDAP'=> gCOSI_AUTH_METHOD_LDAP, 'Shibboleth'=>gCOSI_AUTH_METHOD_SHIBBOLETH);
+		//$config['default_authenticator'] = gCOSI_AUTH_METHOD_BUILT_IN;
 		
+
+		$this->CI =& get_instance();
+		$data['default_authenticator'] = $this->CI->config->item('default_authenticator');
+		$data['authenticators'] = $this->CI->config->item('authenticators');
+		 
 		
 		if ($this->input->post('inputUsername') || $this->input->post('inputPassword') && !$this->user->loggedIn())
 		{
@@ -33,6 +40,9 @@ class Auth extends CI_Controller {
 	
 	public function setUser(){
 		$sharedToken = '';
+		$data['title'] = 'Login';
+		$data['js_lib'] = array('core');
+		$data['scripts'] = array();
 		if(isset($_SERVER['shib-shared-token'])){
 			$sharedToken = $_SERVER['shib-shared-token'];
 		}else{
@@ -104,7 +114,7 @@ class Auth extends CI_Controller {
 	
 	public function dashboard()
 	{
-		$data['title'] = 'My Dashboard';
+		$data['title'] = 'ANDS Online Services Home';
 		$data['js_lib'] = array('core');
 		$data['scripts'] = array();
 		
@@ -113,12 +123,6 @@ class Auth extends CI_Controller {
 			if(sizeof($this->user->affiliations())>0){
 				$data['hasAffiliation']=true;
 			}else $data['hasAffiliation']=false;
-
-			if (mod_enabled('data_source'))
-			{
-				$this->load->model('data_source/data_sources','ds');
-				$data['my_datasources'] = $this->ds->getOwnedDataSources();
-			}
 			
 			if (mod_enabled('vocab_service'))
 			{
@@ -128,6 +132,14 @@ class Auth extends CI_Controller {
 				$this->load->model('cosi_authentication', 'cosi');
 				$data['available_organisations'] = $this->cosi->getAllOrganisationalRoles();
 				asort($data['available_organisations']);
+			}
+
+			if (mod_enabled('registry'))
+			{
+				$db = $this->load->database( 'registry', TRUE );
+				$this->db = $db;
+				$this->load->model('data_source/data_sources','ds');
+				$data['data_sources']=$this->ds->getOwnedDataSources();
 			}
 
 			$this->load->view('dashboard', $data);
@@ -160,6 +172,46 @@ class Auth extends CI_Controller {
 				print "<br />\n";			
 			}
 		}
+	}
+
+	/* Interface for COSI built-in users to change their password from the default */
+	public function change_password()
+	{
+		$data['title'] = 'Change Built-in Password';
+		$data['js_lib'] = array('core');
+		$data['scripts'] = array();
+
+		if (!$this->user->loggedIn() || !$this->user->authMethod() == gCOSI_AUTH_METHOD_BUILT_IN)
+		{
+			throw new Exception("Unable to change password unless you are logged in as a built-in COSI user!");
+		}
+
+		if ($this->config->item('authentication_class') != 'cosi_authentication')
+		{
+			throw new Exception("Unable to change password unless the authentication framework is COSI!");
+		}
+
+		if ($this->input->post('password'))
+		{
+			if ($this->input->post('password') != $this->input->post('password_confirm'))
+			{
+				$data['error'] = "Both passwords must match! Please try again...";
+			}
+			elseif (strlen($this->input->post('password')) < 6)
+			{
+				$data['error'] = "Password must be 6 characters or longer! Please try again...";
+			}
+			else
+			{
+				$this->load->model('cosi_authentication', 'cosi');
+				$this->cosi->updatePassword($this->user->localIdentifier(), $this->input->post('password'));
+				$this->session->set_flashdata('message', 'Your password has been updated. This will be effective from your next login.');
+				redirect('/');
+			}
+		}
+
+		$this->load->view('change_password_form', $data);
+		
 	}
 
 }

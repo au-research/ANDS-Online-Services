@@ -1060,7 +1060,7 @@ function getRelatedObjectsPreview()
 		success:function(data){
 			$.each(data, function(i, item) {
 				$('.ro_preview[key="'+i+'"]').html(item.html);
-				$('#'+i.replace(/value/,"roclass")).val(item.class);				
+				$('#'+i.replace(/value/,"roclass")).val(item.class);			
 				});	
 			readyToAdvance = true;
 			advanceLoadingStatus();

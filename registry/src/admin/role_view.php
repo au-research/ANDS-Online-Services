@@ -196,6 +196,9 @@ switch( $roleTypeId )
 		print("<tr><td>Organisational Roles:</td><td>\n");
 		drawRoleRelationsForm($roleId, gROLE_ORGANISATIONAL);
 		print("</td></tr>\n");
+		print("<tr><td>DOI Application IDs:</td><td>\n");
+		drawRoleRelationsForm($roleId, "ROLE_DOI_APPID");
+		print("</td></tr>\n");
 		print("<tr><td>Descendants:</td><td>\n");
 		drawDescendants($roleId);
 		print("</td></tr>\n");

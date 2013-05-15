@@ -1,5 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `dbs_vocabs` /*!40100 DEFAULT CHARACTER SET utf8 */;
-USE `dbs_vocabs`;
 -- MySQL dump 10.13  Distrib 5.5.24, for osx10.5 (i386)
 --
 -- Host: ands3.anu.edu.au    Database: dbs_vocabs
@@ -21,7 +19,7 @@ USE `dbs_vocabs`;
 -- Table structure for table `sessions`
 --
 
-DROP TABLE IF EXISTS `sessions`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sessions` (
@@ -39,7 +37,7 @@ CREATE TABLE `sessions` (
 -- Table structure for table `vocab_change_history`
 --
 
-DROP TABLE IF EXISTS `vocab_change_history`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `vocab_change_history` (
@@ -48,14 +46,14 @@ CREATE TABLE `vocab_change_history` (
   `change_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `description` varchar(3000) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=112 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `vocab_metadata`
 --
 
-DROP TABLE IF EXISTS `vocab_metadata`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `vocab_metadata` (
@@ -75,14 +73,14 @@ CREATE TABLE `vocab_metadata` (
   `status` varchar(45) DEFAULT NULL,
   `subjects` varchar(512) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=87 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `vocab_version_formats`
 --
 
-DROP TABLE IF EXISTS `vocab_version_formats`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `vocab_version_formats` (
@@ -92,14 +90,14 @@ CREATE TABLE `vocab_version_formats` (
   `value` varchar(2048) DEFAULT NULL,
   `format` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=144 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `vocab_versions`
 --
 
-DROP TABLE IF EXISTS `vocab_versions`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `vocab_versions` (
@@ -109,7 +107,7 @@ CREATE TABLE `vocab_versions` (
   `title` varchar(45) DEFAULT NULL,
   `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=104 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 

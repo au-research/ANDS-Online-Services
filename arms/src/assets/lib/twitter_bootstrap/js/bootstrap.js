@@ -1789,12 +1789,22 @@
       else text = val
 
       this.$element.val(text)
-
+      this.$element.change();
       if (typeof this.onselect == "function")
           this.onselect(val)
 
+      // this.lookup(false)
+      // if(this.$element.attr('vocab')=='RIFCSSubject'){
+      //   if(this.$element.val().length > 4 || this.$menu.children().length == 1){
+      //     return this.hide()
+      //   }
+      // }else{
+      //   return this.hide()
+      // }
+      this.lookup(false)
       return this.hide()
     }
+
 
   , show: function () {
       var pos = $.extend({}, this.$element.offset(), {
@@ -1817,23 +1827,25 @@
       return this
     }
 
-  , lookup: function (event) {
+  , lookup: function (showall) {
       var that = this
         , items
         , q
         , value
-
+        
       this.query = this.$element.val()
+
+      this.process(this.source)
 
       if (typeof this.source == "function") {
         value = this.source(this, this.query)
         if (value) this.process(value)
       } else {
-        this.process(this.source)
+        if(showall) this.process(this.source, showall)
       }
     }
 
-  , process: function (results) {
+  , process: function (results, showall) {
       var that = this
         , items
         , q
@@ -1842,7 +1854,7 @@
           this.strings = false
 
       this.query = this.$element.val()
-
+      if(showall) this.query = '';
 
       /*if (!this.query) {
         return this.shown ? this.hide() : this
@@ -1967,9 +1979,12 @@
           break
 
         case 9: // tab
+          this.hide()
+          break
         case 13: // enter
           if (!this.shown) return
           this.select()
+          e.stopPropagation()
           break
 
         case 27: // escape
@@ -2009,7 +2024,11 @@
       var that = this
       e.stopPropagation()
       e.preventDefault()
-      setTimeout(function () { that.hide() }, 150)
+      setTimeout(function () {
+          if (!that.$menu.is(':hover')) {
+            that.hide();
+          }
+      }, 150);
     }
 
   , click: function (e) {
@@ -2025,9 +2044,13 @@
   , focus: function(e){
       e.stopPropagation()
       e.preventDefault()
-      this.lookup()
+      $('.typeahead').hide()
+      this.lookup(true)
       return false
   }
+  , updater: function (item) {
+      return item
+    }
 
   }
 
@@ -2047,7 +2070,7 @@
 
   $.fn.typeahead.defaults = {
     source: []
-  , items: 8
+  , items: 16
   , menu: '<ul class="typeahead dropdown-menu"></ul>'
   , item: '<li><a href="#"></a></li>'
   , onselect: null

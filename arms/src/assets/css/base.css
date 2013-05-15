@@ -1,6 +1,7 @@
 /*
  * MULTI level dropdown
  */
+html, body { height: 100%; }
 .sidebar-nav {
     padding: 9px 0;
 }
@@ -35,4 +36,3 @@
     top: 11px;
     left: -6px;
 }
-​

@@ -20,12 +20,15 @@ class User {
     	// Dynamically load the authentication_class (as defined in the config file)
     	$this->CI->load->model($this->CI->config->item('authentication_class'), 'auth');
 		$login_response = $this->CI->auth->authenticate($username, $password);
-		
+
 		if ($login_response['result'] == 1)
 		{
 			// Set the user's identifier and friendly name to the session
-			$this->CI->session->set_userdata(array(	AUTH_USER_IDENTIFIER	 => $login_response['user_identifier'] . "::",
-												AUTH_USER_FRIENDLY_NAME	 => $login_response['name']));
+			$this->CI->session->set_userdata(array(
+				AUTH_USER_IDENTIFIER	 => $login_response['user_identifier'] . "::",
+				AUTH_USER_FRIENDLY_NAME	 => $login_response['name'],
+				AUTH_METHOD 			 =>	$login_response['authentication_service_id'],
+			));
 			
 			// And extract the functions and affiliations							
 			$this->appendFunction(array_merge(array(AUTH_FUNCTION_LOGGED_IN_ATTRIBUTE),$login_response['functional_roles']));
@@ -75,6 +78,16 @@ class User {
 	{
 		return $this->hasFunction(AUTH_FUNCTION_LOGGED_IN_ATTRIBUTE);
 	}
+
+	function isLoggedIn()
+	{
+		return $this->loggedIn();
+	}
+
+	function isSuperAdmin()
+	{
+		return $this->hasAffiliation(AUTH_FUNCTION_SUPERUSER);
+	}
 	
 	/**
 	 * Return a user-friendly representation of the logged in user
@@ -108,7 +121,11 @@ class User {
 		}
 	}
 	
-	
+	function authMethod()
+	{
+		return $this->CI->session->userdata(AUTH_METHOD);
+	}	
+
 	/**
 	 * Return the local portion of the user's identifier
 	 */
@@ -148,6 +165,11 @@ class User {
 	 */
 	function hasFunction($name)
 	{
+		// Add superuser capabilities
+		if (in_array(AUTH_FUNCTION_SUPERUSER, $this->functions))
+		{
+			return TRUE;
+		}
 		return in_array($name, $this->functions);
 	}
 	
@@ -183,6 +205,10 @@ class User {
 	 */
 	function hasAffiliation($name)
 	{
+		if ($this->functions && in_array(AUTH_FUNCTION_SUPERUSER, $this->functions))
+		{
+			return TRUE;
+		}
 		if ($this->affiliations)
 		{
 			if (in_array($name, $this->affiliations))
@@ -192,7 +218,17 @@ class User {
 		}
 		return false;
 	}
-	
+
+	function doiappids()
+	{
+ 		$this->CI->load->model('cosi_authentication', 'cosi');
+		$doi_apps = $this->CI->cosi->getDOIAppIdsInAffiliate($this->affiliations());
+		if($doi_apps){	
+   			
+   			return $doi_apps;
+   		}
+	}
+
 	function __construct()
     {
         $this->CI =& get_instance();
@@ -219,18 +255,5 @@ class User {
 		$this->functions = $this->CI->session->userdata(AUTH_FUNCTION_ARRAY);
 		$this->affiliations = $this->CI->session->userdata(AUTH_AFFILIATION_ARRAY);
 	}
-		 
-
 }
-
-define('AUTH_USER_FRIENDLY_NAME', 'USER_FRIENDLY_NAME');
-define('AUTH_DEFAULT_FRIENDLY_NAME', 'unnamed user');
-define('AUTH_USER_IDENTIFIER','UNIQUE_USER_IDENTIFIER');
-
-
-define('AUTH_FUNCTION_ARRAY', 'registry_functions');
-define('AUTH_FUNCTION_DEFAULT_ATTRIBUTE', 'PUBLIC');
-define('AUTH_FUNCTION_LOGGED_IN_ATTRIBUTE','AUTHENTICATED_USER');
-
-define('AUTH_AFFILIATION_ARRAY', 'registry_affiliations');
 /* End of file User.php */

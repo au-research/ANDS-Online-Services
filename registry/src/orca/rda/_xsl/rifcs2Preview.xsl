@@ -1073,7 +1073,7 @@ Format 	URI:
              <div><xsl:attribute name="class"><xsl:value-of select="@type"/></xsl:attribute>
                 <p>
                 <xsl:if test="@type='deliverymethod'">
-                Delevery method: 
+                Delivery method: 
                 </xsl:if><xsl:value-of select="." disable-output-escaping="yes"/></p>
             </div>
         </p>                     

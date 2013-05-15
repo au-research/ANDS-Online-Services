@@ -1,0 +1,1 @@
+ALTER TABLE `harvest` CHANGE COLUMN `resumption_token` `resumption_token` VARCHAR(1024) NULL DEFAULT NULL  ;

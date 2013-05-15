@@ -1,5 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `dbs_harvester` /*!40100 DEFAULT CHARACTER SET latin1 */;
-USE `dbs_harvester`;
 -- MySQL dump 10.13  Distrib 5.5.24, for osx10.5 (i386)
 --
 -- Host: ands3.anu.edu.au    Database: dbs_harvester
@@ -21,7 +19,7 @@ USE `dbs_harvester`;
 -- Table structure for table `fragment`
 --
 
-DROP TABLE IF EXISTS `fragment`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `fragment` (
@@ -34,14 +32,14 @@ CREATE TABLE `fragment` (
   UNIQUE KEY `fragment_id` (`fragment_id`),
   KEY `fk_fragment_1_idx` (`harvest_id`),
   CONSTRAINT `fk_fragment_1` FOREIGN KEY (`harvest_id`) REFERENCES `harvest` (`harvest_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=2431 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `harvest`
 --
 
-DROP TABLE IF EXISTS `harvest`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `harvest` (
@@ -67,7 +65,7 @@ CREATE TABLE `harvest` (
 -- Table structure for table `harvest_parameter`
 --
 
-DROP TABLE IF EXISTS `harvest_parameter`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `harvest_parameter` (
@@ -84,21 +82,21 @@ CREATE TABLE `harvest_parameter` (
 -- Table structure for table `provider`
 --
 
-DROP TABLE IF EXISTS `provider`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `provider` (
   `provider_id` int(11) NOT NULL AUTO_INCREMENT,
   `source_url` varchar(256) DEFAULT NULL,
   PRIMARY KEY (`provider_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `request`
 --
 
-DROP TABLE IF EXISTS `request`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `request` (
@@ -106,14 +104,14 @@ CREATE TABLE `request` (
   `request` varchar(24) DEFAULT NULL,
   PRIMARY KEY (`request_id`),
   UNIQUE KEY `request_id` (`request_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `schedule`
 --
 
-DROP TABLE IF EXISTS `schedule`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `schedule` (

@@ -223,7 +223,13 @@
     	$results = $CI->db->get_where('doi_client', array('app_id'=>$app_id));
    			
 		if( $results->num_rows()>0 )
-		{			
+		{		
+			foreach($results->result() as $row)
+			{	
+				return $row->client_id;	
+			}
+			/* This does NOT do anything! */
+			/*
 			foreach($results->result() as $row)
 			{			
 				$iprange = explode(",",$row->ip_address);
@@ -236,6 +242,7 @@
 			{
 				return $row->client_id;					
 			}
+			*/
 	
 		}else{
 			return false;

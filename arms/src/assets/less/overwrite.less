@@ -1,16 +1,20 @@
 .chzn-container-single .chzn-single{height:26px;text-align:left;}
 .chzn-drop{text-align:left;}
-
+select{max-width:272px;width:auto;}
 .dl-horizontal{
 	dt{
-		line-height:22px;
+		line-height:20px;
 		color: @darkGray;
-		width:250px;
+		width:200px;
 	}
 	dd{
-		line-height:22px;
-		margin-left:260px;
+		line-height:20px;
+		margin-left:210px;
 	}
+}
+
+.qtip{
+	max-width:750px;
 }
 
 .dl-small{
@@ -23,8 +27,21 @@
 	}
 }
 
+.widget-title .btn-group
+{
+	margin-top: 4px; margin-right:4px;
+}
+
+ul.dropdown-menu li
+{
+	cursor: pointer;
+}
+
 form{
 	margin:0px;
+	fieldset{
+		margin:10px 15px;
+	}
 }
 
 .form-horizontal{
@@ -38,6 +55,9 @@ form{
 	}
 	.control-group{
 		margin-bottom:10px;
+	}
+	.form-actions{
+		padding-left:20px;
 	}
 }
 
@@ -130,10 +150,20 @@ body,html{
     margin-right: -475px;
 }
 
+.modal-body{
+	max-height:600px;
+}
+
 .btn-group-left button{
 	text-align:left;
 }
 
 .ui-tooltip-content{
 	padding:10px;
+}
+
+.navbar-search{margin-top:0;}
+
+.validation{
+	font-size:12px;
 }

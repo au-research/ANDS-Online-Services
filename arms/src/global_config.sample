@@ -1,13 +1,43 @@
 <?php
+$ENV['default_base_url'] = "<Base URL of your installation>"; //(excludes any registry/ or portal/)
+
+/* SOLR URL */
+$ENV['solr_url'] = "http://<your hostname>:8080/solr/";
+$ENV['sissvoc_url'] = "http://<your sissvoc resolver>:8080/sissvoc/api/";
+$ENV['harvester_base_url'] = "http://<your hostname>:8080/harvester/";
 
 /* ENABLED MODULES */
 $ENV['ENABLED_MODULES'] = array(
-#	'registry',
+	'registry',
 	'vocab_service',
 	'mydois',
 #	'abs_sdmx_querytool'
 );
 
+// Set this to enable DOI query tool support
+// $ENV['gDOIS_SERVICE_BASE_URI'] = "https://mds.datacite.org/";
+// $ENV['gDOIS_DATACENTRE_NAME_PREFIX'] = "";
+// $ENV['gDOIS_DATACENTRE_NAME_MIDDLE'] = "";
+// $ENV['gDOIS_DATACITE_PASSWORD'] = "";
+// $ENV['gDOIS_RESPONSE_SUCCESS'] = "OK";
+$ENV['gPIDS_URL_PREFIX'] = "https://demo.ands.org.au/registry/pids/";
+
+$ENV['vocab_resolving_services'] =  array(
+	'anzsrc-seo' => array('resolvingService' => 'http://ands3.anu.edu.au:8080/sissvoc/api/anzsrc-seo/', 'uriprefix' => 'http://purl.org/au-research/vocabulary/anzsrc-seo/2008/'),
+	'anzsrc-for' => array('resolvingService' => 'http://ands3.anu.edu.au:8080/sissvoc/api/anzsrc-for/', 'uriprefix' => 'http://purl.org/au-research/vocabulary/anzsrc-for/2008/'),
+);
+
+
+// Is this installation configured as a Shib Service Provider 
+// Note: enables AAF login (if Shibboleth 2 is properly configured)
+$ENV['shibboleth_sp'] = false;
+
+// Session Timeout (how long before the user is automatically logged out)
+$ENV['session_timeout'] = 7200; // 2 hours of inactivity before logout...
+
+/* Google Analytics account details */
+$ENV['rda_urchin_id'] = '';
+$ENV['svc_urchin_id'] = '';
 
 /* DATABASE CONFIGURATION */
 $eDBCONF = array();
@@ -28,6 +58,22 @@ $eDBCONF['registry']['autoinit'] = TRUE;
 $eDBCONF['registry']['stricton'] = FALSE;
 $eDBCONF['registry']['save_queries'] = FALSE; 
 
+$eDBCONF['portal']['hostname'] = 'localhost';
+$eDBCONF['portal']['username'] = 'webuser';
+$eDBCONF['portal']['password'] = '';
+$eDBCONF['portal']['database'] = 'dbs_portal';
+$eDBCONF['portal']['dbdriver'] = 'mysql';
+$eDBCONF['portal']['dbprefix'] = '';
+$eDBCONF['portal']['pconnect'] = TRUE;
+$eDBCONF['portal']['db_debug'] = TRUE;
+$eDBCONF['portal']['cache_on'] = FALSE;
+$eDBCONF['portal']['cachedir'] = '';
+$eDBCONF['portal']['char_set'] = 'utf8';
+$eDBCONF['portal']['dbcollat'] = 'utf8_general_ci';
+$eDBCONF['portal']['swap_pre'] = '';
+$eDBCONF['portal']['autoinit'] = TRUE;
+$eDBCONF['portal']['stricton'] = FALSE;
+$eDBCONF['portal']['save_queries'] = FALSE; 
 
 $eDBCONF['cosi']['hostname'] = 'ands-dev.anu.edu.au';
 $eDBCONF['cosi']['username'] = 'webuser';

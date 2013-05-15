@@ -1,26 +1,87 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
 global $ENV;
 
+/* What authencation class should we use to power the login/ACL? */
 $config['authentication_class'] = "cosi_authentication";
-$config[ENGINE_ENABLED_MODULE_LIST] = $ENV['ENABLED_MODULES'];
 
-date_default_timezone_set('Australia/Canberra');
-/*
-|--------------------------------------------------------------------------
-| Base Site URL
-|--------------------------------------------------------------------------
-|
-| URL to your CodeIgniter root. Typically this will be your base URL,
-| WITH a trailing slash:
-|
-|	http://example.com/
-|
-| If this is not set then CodeIgniter will guess the protocol, domain and
-| path to your installation.
-|
-*/
-$config['base_url']	= '';
-#$config['solr_url'] = 'http://ands3.anu.edu.au:8983/solr/';
+// Merge in the config options from global_config.php
+$config = array_merge($config, $ENV);
+$config[ENGINE_ENABLED_MODULE_LIST] = &$config['ENABLED_MODULES'];
+
+
+$config['authenticators'] = Array(gCOSI_AUTH_METHOD_BUILT_IN => 'Built in Authentiction', gCOSI_AUTH_METHOD_LDAP=>'LDAP', gCOSI_AUTH_METHOD_SHIBBOLETH => 'Australian Access Federation (AAF) credentials');
+if (isset($config['shibboleth_sp']) && $config['shibboleth_sp'])
+{
+	$config['default_authenticator'] = gCOSI_AUTH_METHOD_SHIBBOLETH;
+}
+else
+{
+	$config['default_authenticator'] = gCOSI_AUTH_METHOD_BUILT_IN;
+}
+
+
+// Default resolver
+if (!isset($config['sissvoc_url']))
+{
+	$config['sissvoc_url'] = "http://ands3.anu.edu.au:8080/sissvoc/api/";
+}
+
+
+// Fix URL resolution issues with aboslute URLs (for now...)
+if (isset($config['default_base_url']))
+{
+	if (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off' && strpos($config['default_base_url'],"https:") == FALSE)
+	{
+		$default_base_url = str_replace("http:","https:",$config['default_base_url']);
+	}
+	else
+	{
+		$default_base_url = $config['default_base_url'];
+	}
+}
+else
+{
+	die("Must specify an \$ENV['default_base_url'] in global_config.php");
+}
+
+/* For multiple-application environments, this "app" will be matched 
+by the $_GET['app'] which is rewritten in .htaccess. The array key is
+the full match (above). The active_application is the subfolder within 
+applications/ that contains this application's modules.  */
+$application_directives = array(
+	"registry" => 
+			array(	
+				"base_url" => "%%BASEURL%%/registry/",
+				"active_application" => "registry",
+				"default_controller" => "auth/dashboard",
+			),
+
+	"portal" => 
+			array(	
+				"base_url" => "%%BASEURL%%/",
+				"active_application" => "portal",
+				"default_controller" => "home/index",
+				"routes" => array("topic/(:any)" => "topic/view_topic/$1","(:any)"=>"core/dispatcher/$1", ),
+			)
+);
+
+/* If no application is matched, what should we default to? */
+if (PHP_SAPI == 'cli')
+{
+	$default_application = 'registry';
+} 
+else
+{
+	$default_application = 'portal';
+}
+
+$_GET['app'] = (!isset($_GET['app']) || $_GET['app'] == "" ? $default_application : $_GET['app']);
+
+/* Where in the world are we anyway? */
+$config['default_tz'] = 'Australia/Canberra';
+date_default_timezone_set($config['default_tz']);
+ini_set( 'default_charset', 'UTF-8' );
 
 /*
 |--------------------------------------------------------------------------
@@ -250,15 +311,17 @@ $config['encryption_key'] = 'dlk;df093uhjnkdfsa94123jknasdjklsda8921kljjlk';
 | 'sess_time_to_update'		= how many seconds between CI refreshing Session Information
 |
 */
-$config['sess_cookie_name']		= 'ands_session';
-$config['sess_expiration']		= 0;
+
+//fix logging out thing, expire in a long time!
+$config['sess_cookie_name']     = 'arms';
+$config['sess_expiration']      = (isset($ENV['session_timeout']) ? $ENV['session_timeout'] : 0);
 $config['sess_expire_on_close']	= FALSE;
-$config['sess_encrypt_cookie']	= FALSE;
-$config['sess_use_database']	= TRUE;
+$config['sess_encrypt_cookie']  = FALSE;
 $config['sess_table_name']		= 'sessions';
-$config['sess_match_ip']		= FALSE;
-$config['sess_match_useragent']	= TRUE;
-$config['sess_time_to_update']	= 300;
+$config['sess_use_database']    = TRUE;
+$config['sess_match_ip']        = FALSE;
+$config['sess_match_useragent'] = FALSE;
+$config['sess_time_to_update']  = 10000;
 
 /*
 |--------------------------------------------------------------------------
@@ -363,9 +426,73 @@ $config['rewrite_short_tags'] = TRUE;
 */
 $config['proxy_ips'] = '';
 
+/*
+$default_base_url = isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off' ? 'https' : 'http';
+$default_base_url .= '://'. (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : "cli");
+$default_base_url .= str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']);
+*/
+
+$config['default_base_url'] = $default_base_url;
+
+$config['app_routes'] = array();
+// Portal is the default app
+if ($_GET['app'] != "registry")
+{
+	$_GET['app'] = "portal";
+}
+
+/* Reroute our requests and setup the CI routing environment based on the active application */
+if (isset($application_directives[$_GET['app']]))
+{
+	$active_application = $application_directives[$_GET['app']]['active_application'];
+	$base_url = str_replace("%%BASEURL%%/", $default_base_url, $application_directives[$_GET['app']]['base_url']);
+	$_SERVER['SCRIPT_NAME'] = dirname($_SERVER['SCRIPT_NAME']) . "/" . $active_application . '/';
+
+	/* What is the default controller for this app? (will be inserted as the default route) */
+	$config['default_controller'] = $application_directives[$_GET['app']]['default_controller'];
+	$config['app_routes'] = (isset($application_directives[$_GET['app']]['routes']) ? $application_directives[$_GET['app']]['routes'] : array());
+	define("APP_PATH",'./applications/'.$active_application.'/');
+}
+else
+{
+	$active_application = "unknown";
+	$base_url = "";
+}
+
+$config['active_application'] = $active_application;
+
 $config['modules_locations'] = array(
-       'application/'.'modules/' => '../../application/modules/',
+       'applications/'.$active_application . '/' => '../../applications/'.$active_application . '/',
 );
+
+
+/*
+|--------------------------------------------------------------------------
+| Base Site URL
+|--------------------------------------------------------------------------
+|
+| URL to your CodeIgniter root. Typically this will be your base URL,
+| WITH a trailing slash:
+|
+|	http://example.com/
+|
+| If this is not set then CodeIgniter will guess the protocol, domain and
+| path to your installation.
+|
+*/
+$config['base_url']	= $base_url;
+$config['solr_url'] = $ENV['solr_url'];
+
+
+/*
+HTML Purifier config
+ */
+
+$config['Core_Encoding'] = 'UTF-8';
+$config['HTML_Doctype'] = 'XHTML 1.0 Transitional';
+$config['HTML_AllowedElements'] = 'a, abbr, acronym, b, blockquote, br, caption, cite, code, dd, del, dfn, div, dl, dt, em, h1, h2, h3, h4, h5, h6, i, img, ins, kbd, li, ol, p, pre, s, span, strike, strong, sub, sup, table, tbody, td, tfoot, th, thead, tr, tt, u, ul, var';
+$config['HTML_AllowedAttributes'] = 'a.href, a.rev, a.title, a.target, a.rel, abbr.title, acronym.title, blockquote.cite, div.align, div.class, div.id, img.src, img.alt, img.title, img.class, img.align, span.class, span.id, table.class, table.id, table.border, table.cellpadding, table.cellspacing, table.width, td.abbr, td.align, td.class, td.id, td.colspan, td.rowspan, td.valign, tr.align, tr.class, tr.id, tr.valign, th.abbr, th.align, th.class, th.id, th.colspan, th.rowspan, th.valign, img.width, img.height, img.style';
+$config['Cache_DefinitionImpl'] = null;
 
 /* End of file config.php */
 /* Location: ./application/config/config.php */

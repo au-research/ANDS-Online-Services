@@ -33,7 +33,7 @@ $qualityLevelProc = new XSLTProcessor();
 $qualityLevelProc->importStyleSheet($rmdQualityLevel);
 
 
-function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMessage, $created_who=SYSTEM, $status=PUBLISHED, $record_owner=SYSTEM, $xPath=NULL, $override_qa=false)
+function importRegistryObjects($registryObjects, $dataSourceKey, $runResultMessage, $created_who=SYSTEM, $status=PUBLISHED, $record_owner=SYSTEM, $xPath=NULL, $override_qa=false)
 {
 	global $gXPath;
 	global $xs;
@@ -320,47 +320,47 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 	
 						// identifier
 						// -----------------------------------------------------------------
-						importIdentifierTypes($registryObjectKey, $activity, "identifier", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+						importIdentifierTypes($registryObjectKey, $activity, "identifier", $runErrors, $totalAttemptedInserts, $totalInserts);
 	
 						// name
 						// -----------------------------------------------------------------
-						importComplexNameTypes($registryObjectKey, $activity, "name", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+						importComplexNameTypes($registryObjectKey, $activity, "name", $runErrors, $totalAttemptedInserts, $totalInserts);
 	
 						// location
 						// -----------------------------------------------------------------
-						importLocations($registryObjectKey, $activity, "location", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+						importLocations($registryObjectKey, $activity, "location", $runErrors, $totalAttemptedInserts, $totalInserts);
 	
 						// relatedObject
 						// -----------------------------------------------------------------
-						importRelatedObjectTypes($registryObjectKey, $activity, "relatedObject", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+						importRelatedObjectTypes($registryObjectKey, $activity, "relatedObject", $runErrors, $totalAttemptedInserts, $totalInserts);
 	
 						// subject
 						// -----------------------------------------------------------------
-						importSubjectTypes($registryObjectKey, $activity, "subject", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+						importSubjectTypes($registryObjectKey, $activity, "subject", $runErrors, $totalAttemptedInserts, $totalInserts);
 	
 						// description
 						// -----------------------------------------------------------------
-						importDescriptionTypes($registryObjectKey, $activity, "description", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+						importDescriptionTypes($registryObjectKey, $activity, "description", $runErrors, $totalAttemptedInserts, $totalInserts);
 	
 						// coverage
 						// -----------------------------------------------------------------
-						importCoverage($registryObjectKey, $activity, "coverage", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+						importCoverage($registryObjectKey, $activity, "coverage", $runErrors, $totalAttemptedInserts, $totalInserts);
 	
 						// citationInfo
 						// -----------------------------------------------------------------
-						importCitationInfo($registryObjectKey, $activity, "citationInfo", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+						importCitationInfo($registryObjectKey, $activity, "citationInfo", $runErrors, $totalAttemptedInserts, $totalInserts);
 	
 						// rights
 						// -----------------------------------------------------------------
-						importRights($registryObjectKey, $activity, "rights", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+						importRights($registryObjectKey, $activity, "rights", $runErrors, $totalAttemptedInserts, $totalInserts);
 	
 						// existenceDates
 						// -----------------------------------------------------------------
-						importExistenceDates($registryObjectKey, $activity, "existenceDates", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+						importExistenceDates($registryObjectKey, $activity, "existenceDates", $runErrors, $totalAttemptedInserts, $totalInserts);
 	
 						// relatedInfo
 						// -----------------------------------------------------------------
-						importRelatedInfo($registryObjectKey, $activity, "relatedInfo", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+						importRelatedInfo($registryObjectKey, $activity, "relatedInfo", $runErrors, $totalAttemptedInserts, $totalInserts);
 	
 					} // Activity
 	
@@ -379,53 +379,53 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 	
 						// identifier
 						// -----------------------------------------------------------------
-						importIdentifierTypes($registryObjectKey, $collection, "identifier", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+						importIdentifierTypes($registryObjectKey, $collection, "identifier", $runErrors, $totalAttemptedInserts, $totalInserts);
 	
 						// name
 						// -----------------------------------------------------------------
-						importComplexNameTypes($registryObjectKey, $collection, "name", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+						importComplexNameTypes($registryObjectKey, $collection, "name", $runErrors, $totalAttemptedInserts, $totalInserts);
 	
 
 						// dates
 						// -----------------------------------------------------------------
-						importDatesElt($registryObjectKey, $collection, "dates", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+						importDatesElt($registryObjectKey, $collection, "dates", $runErrors, $totalAttemptedInserts, $totalInserts);
 	
 						// location
 						// -----------------------------------------------------------------
-						importLocations($registryObjectKey, $collection, "location", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+						importLocations($registryObjectKey, $collection, "location", $runErrors, $totalAttemptedInserts, $totalInserts);
 	
 						// relatedObject
 						// -----------------------------------------------------------------
-						importRelatedObjectTypes($registryObjectKey, $collection, "relatedObject", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+						importRelatedObjectTypes($registryObjectKey, $collection, "relatedObject", $runErrors, $totalAttemptedInserts, $totalInserts);
 	
 						// subject
 						// -----------------------------------------------------------------
-						importSubjectTypes($registryObjectKey, $collection, "subject", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+						importSubjectTypes($registryObjectKey, $collection, "subject", $runErrors, $totalAttemptedInserts, $totalInserts);
 	
 						// description
 						// -----------------------------------------------------------------
-						importDescriptionTypes($registryObjectKey, $collection, "description", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+						importDescriptionTypes($registryObjectKey, $collection, "description", $runErrors, $totalAttemptedInserts, $totalInserts);
 	
 						// coverage
 						// -----------------------------------------------------------------
-						importCoverage($registryObjectKey, $collection, "coverage", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+						importCoverage($registryObjectKey, $collection, "coverage", $runErrors, $totalAttemptedInserts, $totalInserts);
 	
 						// citationInfo
 						// -----------------------------------------------------------------
-						importCitationInfo($registryObjectKey, $collection, "citationInfo", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+						importCitationInfo($registryObjectKey, $collection, "citationInfo", $runErrors, $totalAttemptedInserts, $totalInserts);
 	
 						// rights
 						// -----------------------------------------------------------------
-						importRights($registryObjectKey, $collection, "rights", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+						importRights($registryObjectKey, $collection, "rights", $runErrors, $totalAttemptedInserts, $totalInserts);
 	
 						// existenceDates
 						// -----------------------------------------------------------------
-						importExistenceDates($registryObjectKey, $collection, "existenceDates", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+						importExistenceDates($registryObjectKey, $collection, "existenceDates", $runErrors, $totalAttemptedInserts, $totalInserts);
 	
 	
 						// relatedInfo
 						// -----------------------------------------------------------------
-						importRelatedInfo($registryObjectKey, $collection, "relatedInfo", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+						importRelatedInfo($registryObjectKey, $collection, "relatedInfo", $runErrors, $totalAttemptedInserts, $totalInserts);
 	
 					} // Collection
 	
@@ -445,47 +445,47 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 	
 						// identifier
 						// -----------------------------------------------------------------
-						importIdentifierTypes($registryObjectKey, $party, "identifier", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+						importIdentifierTypes($registryObjectKey, $party, "identifier", $runErrors, $totalAttemptedInserts, $totalInserts);
 	
 						// name
 						// -----------------------------------------------------------------
-						importComplexNameTypes($registryObjectKey, $party, "name", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+						importComplexNameTypes($registryObjectKey, $party, "name", $runErrors, $totalAttemptedInserts, $totalInserts);
 	
 						// location
 						// -----------------------------------------------------------------
-						importLocations($registryObjectKey, $party, "location", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+						importLocations($registryObjectKey, $party, "location", $runErrors, $totalAttemptedInserts, $totalInserts);
 	
 						// relatedObject
 						// -----------------------------------------------------------------
-						importRelatedObjectTypes($registryObjectKey, $party, "relatedObject", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+						importRelatedObjectTypes($registryObjectKey, $party, "relatedObject", $runErrors, $totalAttemptedInserts, $totalInserts);
 	
 						// subject
 						// -----------------------------------------------------------------
-						importSubjectTypes($registryObjectKey, $party, "subject", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+						importSubjectTypes($registryObjectKey, $party, "subject", $runErrors, $totalAttemptedInserts, $totalInserts);
 	
 						// description
 						// -----------------------------------------------------------------
-						importDescriptionTypes($registryObjectKey, $party, "description", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+						importDescriptionTypes($registryObjectKey, $party, "description", $runErrors, $totalAttemptedInserts, $totalInserts);
 	
 						// coverage
 						// -----------------------------------------------------------------
-						importCoverage($registryObjectKey, $party, "coverage", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+						importCoverage($registryObjectKey, $party, "coverage", $runErrors, $totalAttemptedInserts, $totalInserts);
 	
 						// citationInfo
 						// -----------------------------------------------------------------
-						importCitationInfo($registryObjectKey, $party, "citationInfo", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+						importCitationInfo($registryObjectKey, $party, "citationInfo", $runErrors, $totalAttemptedInserts, $totalInserts);
 	
 						// rights
 						// -----------------------------------------------------------------
-						importRights($registryObjectKey, $party, "rights", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+						importRights($registryObjectKey, $party, "rights", $runErrors, $totalAttemptedInserts, $totalInserts);
 	
 						// existenceDates
 						// -----------------------------------------------------------------
-						importExistenceDates($registryObjectKey, $party, "existenceDates", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+						importExistenceDates($registryObjectKey, $party, "existenceDates", $runErrors, $totalAttemptedInserts, $totalInserts);
 	
 						// relatedInfo
 						// -----------------------------------------------------------------
-						importRelatedInfo($registryObjectKey, $party, "relatedInfo", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+						importRelatedInfo($registryObjectKey, $party, "relatedInfo", $runErrors, $totalAttemptedInserts, $totalInserts);
 	
 					} // Party
 	
@@ -502,51 +502,51 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 	
 						// identifier
 						// -----------------------------------------------------------------
-						importIdentifierTypes($registryObjectKey, $service, "identifier", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+						importIdentifierTypes($registryObjectKey, $service, "identifier", $runErrors, $totalAttemptedInserts, $totalInserts);
 	
 						// name
 						// -----------------------------------------------------------------
-						importComplexNameTypes($registryObjectKey, $service, "name", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+						importComplexNameTypes($registryObjectKey, $service, "name", $runErrors, $totalAttemptedInserts, $totalInserts);
 	
 						// location
 						// -----------------------------------------------------------------
-						importLocations($registryObjectKey, $service, "location", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+						importLocations($registryObjectKey, $service, "location", $runErrors, $totalAttemptedInserts, $totalInserts);
 	
 						// relatedObject
 						// -----------------------------------------------------------------
-						importRelatedObjectTypes($registryObjectKey, $service, "relatedObject", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+						importRelatedObjectTypes($registryObjectKey, $service, "relatedObject", $runErrors, $totalAttemptedInserts, $totalInserts);
 	
 						// subject
 						// -----------------------------------------------------------------
-						importSubjectTypes($registryObjectKey, $service, "subject", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+						importSubjectTypes($registryObjectKey, $service, "subject", $runErrors, $totalAttemptedInserts, $totalInserts);
 	
 						// description
 						// -----------------------------------------------------------------
-						importDescriptionTypes($registryObjectKey, $service, "description", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+						importDescriptionTypes($registryObjectKey, $service, "description", $runErrors, $totalAttemptedInserts, $totalInserts);
 	
 						// coverage
 						// -----------------------------------------------------------------
-						importCoverage($registryObjectKey, $service, "coverage", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+						importCoverage($registryObjectKey, $service, "coverage", $runErrors, $totalAttemptedInserts, $totalInserts);
 	
 						// citationInfo
 						// -----------------------------------------------------------------
-						importCitationInfo($registryObjectKey, $service, "citationInfo", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+						importCitationInfo($registryObjectKey, $service, "citationInfo", $runErrors, $totalAttemptedInserts, $totalInserts);
 	
 						// accessPolicy
 						// -----------------------------------------------------------------
-						importAccessPolicy($registryObjectKey, $service, "accessPolicy", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+						importAccessPolicy($registryObjectKey, $service, "accessPolicy", $runErrors, $totalAttemptedInserts, $totalInserts);
 	
 						// rights
 						// -----------------------------------------------------------------
-						importRights($registryObjectKey, $service, "rights", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+						importRights($registryObjectKey, $service, "rights", $runErrors, $totalAttemptedInserts, $totalInserts);
 	
 						// existenceDates
 						// -----------------------------------------------------------------
-						importExistenceDates($registryObjectKey, $service, "existenceDates", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+						importExistenceDates($registryObjectKey, $service, "existenceDates", $runErrors, $totalAttemptedInserts, $totalInserts);
 	
 						// relatedInfo
 						// -----------------------------------------------------------------
-						importRelatedInfo($registryObjectKey, $service, "relatedInfo", &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+						importRelatedInfo($registryObjectKey, $service, "relatedInfo", $runErrors, $totalAttemptedInserts, $totalInserts);
 	
 					} // Service
 
@@ -584,7 +584,7 @@ function importRegistryObjects($registryObjects, $dataSourceKey, &$runResultMess
 					//	$recordsCached++;
 					//}
 					
-					if(isContributorPage($registryObjectKey)&&$status=='PUBLISHED')
+					if(isContributorPage($registryObjectKey)&$status=='PUBLISHED')
 					{
 						$subject = $list_title.' contributor page was published on '.date("d-m-Y h:m:s");						
 						$mailBody = eHTTP_APP_ROOT.'orca/view.php?key='.urlencode($registryObjectKey);	
@@ -835,7 +835,7 @@ function importComplexNameTypes($registryObjectKey, $node, $elementName, $runErr
 		$totalAttemptedInserts++;
 		if( !$errors ) { $totalInserts++; } else { $runErrors .= "Failed to insert complexName for key $registryObjectKey\n"; }
 
-		importNameParts($id, $list->item($j), &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+		importNameParts($id, $list->item($j), $runErrors, $totalAttemptedInserts, $totalInserts);
 	}
 }
 
@@ -903,8 +903,8 @@ function importLocations($registryObjectKey, $node, $elementName, $runErrors, $t
 		$totalAttemptedInserts++;
 		if( !$errors ) { $totalInserts++; } else { $runErrors .= "Failed to insert location for key $registryObjectKey\n"; }
 
-		importSpatialTypes($id, $list->item($j), &$runErrors, &$totalAttemptedInserts, &$totalInserts, $registryObjectKey);
-		importAddresses($id, $list->item($j), &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+		importSpatialTypes($id, $list->item($j), $runErrors, $totalAttemptedInserts, $totalInserts, $registryObjectKey);
+		importAddresses($id, $list->item($j), $runErrors, $totalAttemptedInserts, $totalInserts);
 	}
 }
 
@@ -922,8 +922,8 @@ function importAddresses($location_id, $node, $runErrors, $totalAttemptedInserts
 		$totalAttemptedInserts++;
 		if( !$errors ) { $totalInserts++; } else { $runErrors .= "Failed to insert address for location $location_id\n"; }
 
-		importElectronicAddressTypes($id, $list->item($j), &$runErrors, &$totalAttemptedInserts, &$totalInserts);
-		importPhysicalAddressTypes($id, $list->item($j), &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+		importElectronicAddressTypes($id, $list->item($j), $runErrors, $totalAttemptedInserts, $totalInserts);
+		importPhysicalAddressTypes($id, $list->item($j), $runErrors, $totalAttemptedInserts, $totalInserts);
 	}
 }
 
@@ -943,7 +943,7 @@ function importElectronicAddressTypes($address_id, $node, $runErrors, $totalAtte
 		$totalAttemptedInserts++;
 		if( !$errors ) { $totalInserts++; } else { $runErrors .= "Failed to insert electronicAddress for address $address_id\n"; }
 
-		importElectronicAddressArgs($id, $list->item($j), &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+		importElectronicAddressArgs($id, $list->item($j), $runErrors, $totalAttemptedInserts, $totalInserts);
 	}
 }
 
@@ -983,7 +983,7 @@ function importPhysicalAddressTypes($address_id, $node, $runErrors, $totalAttemp
 		$totalAttemptedInserts++;
 		if( !$errors ) { $totalInserts++; } else { $runErrors .= "Failed to insert physicalAddress for address $address_id\n"; }
 
-		importAddressParts($id, $list->item($j), &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+		importAddressParts($id, $list->item($j), $runErrors, $totalAttemptedInserts, $totalInserts);
 	}
 }
 
@@ -1138,7 +1138,7 @@ function importSpatialExtent($id, $value, $type, $registryObjectKey)
 	$west  = null;
 	$east  = null;
 		$searchText = trim($value);
-		getExtentFromGoogle(trim($value), &$north, &$south, &$west, &$east);
+		getExtentFromGoogle(trim($value), $north, $south, $west, $east);
 	}
 	//$msg = $msg.'<br/> north:'.$north.' south:'.$south.' west:'.$west.' east:'.$east;
 	if($north != null && $south != null && $west  != null && $east != null && $north <= 90 && $south >= -90 && $west  >= -180 && $east <= 180){
@@ -1163,7 +1163,7 @@ function isValidKmlPolyCoords($coords)
 }
 
 
-function getExtentFromGoogle($value, &$north, &$south, &$west, &$east)
+function getExtentFromGoogle($value, $north, $south, $west, $east)
 {
 	
 	$url = "http://maps.google.com/maps/api/geocode/json?sensor=false&address=";
@@ -1257,7 +1257,7 @@ function importRelatedObjectTypes($registryObjectKey, $node, $elementName, $runE
 		$errors = insertRelatedObject($id, $registryObjectKey, $relatedRegistryObjectKey);
 		$totalAttemptedInserts++;
 		if( !$errors ) { $totalInserts++; } else { $runErrors .= "Failed to insert relatedObject for key $registryObjectKey\n"; }
-		importRelationDescriptions($id, $list->item($j), &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+		importRelationDescriptions($id, $list->item($j), $runErrors, $totalAttemptedInserts, $totalInserts);
 	}
 }
 
@@ -1582,8 +1582,8 @@ function importCoverage($registryObjectKey, $node, $elementName, $runErrors, $to
 			$totalAttemptedInserts++;
 			if( !$errors ) { $totalInserts++; } else { $runErrors .= "Failed to insert temporal coverage for key $registryObjectKey\n"; }
 
-			importTemporalCoverageDates($temporalCoverageId, $temporalCoverageElements->item($k), &$runErrors, &$totalAttemptedInserts, &$totalInserts);
-			importTemporalCoverageText($temporalCoverageId, $temporalCoverageElements->item($k), &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+			importTemporalCoverageDates($temporalCoverageId, $temporalCoverageElements->item($k), $runErrors, $totalAttemptedInserts, $totalInserts);
+			importTemporalCoverageText($temporalCoverageId, $temporalCoverageElements->item($k), $runErrors, $totalAttemptedInserts, $totalInserts);
 		}
 
 	}
@@ -1714,8 +1714,8 @@ function importCitationInfo($registryObjectKey, $node, $elementName, $runErrors,
 		$totalAttemptedInserts++;
 		if( !$errors ) { $totalInserts++; } else { $runErrors .= "Failed to insert citationMetadata for key $registryObjectKey\n"; }
 
-		importCitationDates($id, $list->item($j), &$runErrors, &$totalAttemptedInserts, &$totalInserts);
-		importCitationContributors($id, $list->item($j), &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+		importCitationDates($id, $list->item($j), $runErrors, $totalAttemptedInserts, $totalInserts);
+		importCitationContributors($id, $list->item($j), $runErrors, $totalAttemptedInserts, $totalInserts);
 	}
 }
 
@@ -1755,7 +1755,7 @@ function importCitationContributors($citationInfoId, $node, $runErrors, $totalAt
 		$totalAttemptedInserts++;
 		if( !$errors ) { $totalInserts++; } else { $runErrors .= "Failed to insert citationMetadata contributor for key $citationInfoId\n"; }
 
-		importCitationContributorNameParts($id, $list->item($j), &$runErrors, &$totalAttemptedInserts, &$totalInserts);
+		importCitationContributorNameParts($id, $list->item($j), $runErrors, $totalAttemptedInserts, $totalInserts);
 	}
 }
 
@@ -2122,7 +2122,7 @@ function getRelatedXml($dataSource,$rifcs,$objectClass){
 
 	$rifObject = new DomDocument();
 	//var_dump($rifcs);
-	$rifObject->loadXML($rifcs);
+	$rifObject->loadXML(str_replace('&','&amp;',$rifcs));
 	$theclasses = $rifObject->getElementsByTagName($objectClass);
 	if($theclasses->length<1) 	$theclasses = $rifObject->getElementsByTagName($objectClass = strtolower($objectClass));
 	$therelations = $rifObject->getElementsByTagName('relatedObject');
@@ -2452,7 +2452,7 @@ function runQualityLevelCheckForRegistryObject($registryObjectKey, $dataSourceKe
 
 
 
-	$qa_result = runQualityLevelCheckonDom($RegistryObjects, $relatedObjectClassesStr, $reverseLinks, &$level);
+	$qa_result = runQualityLevelCheckonDom($RegistryObjects, $relatedObjectClassesStr, $reverseLinks, $level);
 	if($gold_standard_flag==1) $level = 5;
 	$result = updateRegistryObjectQualityLevelResult($registryObjectKey, $level, $qa_result);
 	return $level;
@@ -2502,7 +2502,7 @@ function runQualityLevelCheckForDraftRegistryObject($registryObjectKey, $dataSou
 		    $warningCount = substr_count($qualityTestResult, 'class="warning"') + substr_count($qualityTestResult, 'class="info"');
 	        $result = updateDraftRegistryObjectQualityTestResult($registryObjectKey, $dataSourceKey, $qualityTestResult, $errorCount, $warningCount);
 
-			$qa_result = runQualityLevelCheckonDom($RegistryObjects, $relatedObjectClassesStr,$reverseLinks, &$level);
+			$qa_result = runQualityLevelCheckonDom($RegistryObjects, $relatedObjectClassesStr,$reverseLinks, $level);
 			$result = updateDraftRegistryObjectQualityLevelResult($registryObjectKey, $dataSourceKey, $level, $qa_result);
         }
 		return $level;
@@ -2556,7 +2556,7 @@ function runQuagmireCheckForRegistryObjectDIEDIEDIE($registryObjectKey, $dataSou
 	    $errorCount = substr_count($qualityTestResult, 'class="error"');
 		$warningCount = substr_count($qualityTestResult, 'class="warning"') + substr_count($qualityTestResult, 'class="info"');
         $result = updateRegistryObjectQualityTestResult($registryObjectKey, $qualityTestResult, $errorCount, $warningCount);
-		$qa_result = getQualityLevel($RegistryObjects,$objectClass,$relatedObjectClassesStr,&$level);
+		$qa_result = getQualityLevel($RegistryObjects,$objectClass,$relatedObjectClassesStr,$level);
 		$result = updateRegistryObjectQualityLevelResult($registryObjectKey, $level, $qa_result);
 		//print $qa_result;
 		return $result;
