@@ -103,7 +103,7 @@ class Importer {
 		$this->status = $this->_getDefaultRecordStatusForDataSource($this->dataSource);
 
 		// want to treat the payload as an array of split XML documents, even if it's not
-		// (I reckon that SimpleXML goes memory-ape if it's trying to process a 100k-line XML doc)
+		// (I reckon that SimpleXML goes memory-ape if it's trying to process a 100k-line XML doc)		
 		if (!is_array($this->xmlPayload))
 		{
 			// So fake it
@@ -123,11 +123,12 @@ class Importer {
 				{
 					$payload = mb_convert_encoding($payload,"UTF-8"); 
 				}
-				$continueIngest = true;
+				$continueIngest = true;				
 				// Build a SimpleXML object from the converted data
 				// We will throw an exception here if the payload isn't well-formed XML (which, by now, it should be)
 				try
 				{
+					$payload = $this->cleanNameSpace($payload);
 					$sxml = $this->_getSimpleXMLFromString($payload);
 				}
 				catch (Exception $e)
@@ -926,6 +927,16 @@ class Importer {
 		$this->message_log = array();
 
 		$this->start_time = null;
+	}
+
+
+	function cleanNameSpace($rifcs){
+		$xslt_processor = Transforms::get_clean_ns_transformer();
+		$dom = new DOMDocument();
+		//$dom->loadXML($this->ro->getXML());
+		$dom->loadXML(wrapRegistryObjects(unWrapRegistryObjects($rifcs)));
+		//$dom->loadXML($rifcs);
+		return $xslt_processor->transformToXML($dom);
 	}
 
 

@@ -12,6 +12,7 @@ class Transforms {
 	static $feed_to_rif_transformer = NULL;
 	static $extrif_to_dc_transformer = NULL;
 	static $form_to_cleanrif_transformer = NULL;
+	static $clean_ns_transformer = NULL;
 	
 
 	static function get_qa_transformer()
@@ -125,6 +126,21 @@ class Transforms {
 		}
 
 		return self::$form_to_cleanrif_transformer;
+	}
+
+
+	static function get_clean_ns_transformer()
+	{
+		if (is_null(self::$form_to_cleanrif_transformer))
+		{
+			$cleanNS = new DomDocument();
+			$cleanNS->load(APP_PATH.'registry_object/transforms/clean_ns.xsl');
+			$cleanNSproc = new XSLTProcessor();
+			$cleanNSproc->importStyleSheet($cleanNS);
+			self::$clean_ns_transformer =	$cleanNSproc;
+		}
+
+		return self::$clean_ns_transformer;
 	}
 	
 }		
