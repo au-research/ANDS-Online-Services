@@ -13,7 +13,7 @@
 	</div>
 	<div class="ro_preview_description hide">
 		{{description}}
-		{{expanded_html}}
+		{{{expanded_html}}}
 		{{#display_footer}}
 		<div class="ro_preview_footer">
 			<a href="{{url}}">View Full Record</a>
