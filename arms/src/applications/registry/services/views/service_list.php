@@ -105,12 +105,15 @@
 			    	
 			    	<div>
 			    		<blockquote>
-							<p class="lead">XXX</p>
+							<p class="lead">A low-barrier mechanism for repository interoperability (<a href="http://www.openarchives.org/pmh/" target="_blank">Open Archives Initiative Protocol for Metadata Harvesting (OAI-PMH)</a>)</p>
 						</blockquote>
 						<dl class="dl-horizontal">
 						  <dt>Service URL: </dt>
-						  <dd><code>.../services/&lt;your API key&gt;/oai/</code></dd>
+						  <dd><code><?=portal_url('services/oai/');?></code></dd>
 						</dl>
+						<p>
+				    		Records can be harvested from OAI-PMH in <?=anchor("services/oai?verb=ListSets","OAI Sets", array("target"=>"_blank"));?> according to their group, data source or registry object class.
+				    	</p>
 					</div>
 				
 			    </div>		    
