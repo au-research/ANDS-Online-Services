@@ -659,7 +659,7 @@ function getVocabularyHTML($vocabId, $termId=null)
 					$name = $XPath->evaluate("vc:name", $vocabNode)->item(0)->nodeValue;
 					$vocabHTML .= '<b>'.esc($name)."</b><br />\n";
 					$vocabHTML .= '<div class="vcTermGroup">'."\n";
-					getTermsHTML($XPath, $vocabNode, &$vocabHTML);
+					getTermsHTML($XPath, $vocabNode, $vocabHTML);
 					$vocabHTML .= "</div>\n";
 				}
 				else
@@ -692,7 +692,7 @@ function getTermsHTML($XPath, $termNode, $vocabHTML)
 			{
 				$vocabHTML .= '<b>'.esc($name)."</b><br />\n";
 				$vocabHTML .= '<div class="vcTermGroup">'."\n";
-				getTermsHTML($XPath, $term, &$vocabHTML);
+				getTermsHTML($XPath, $term, $vocabHTML);
 				$vocabHTML .= "</div>\n";
 			}
 			else
