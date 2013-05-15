@@ -116,7 +116,7 @@ $(function(){
 	});
 
 	/* Update record status from the Save & Validate panel */
-	$('.status_action').live('click', function(e){
+        $(document).on('click', '.status_action', function(e){
 	    e.preventDefault();
 	    $(this).button('loading');
 	    url = base_url+'registry_object/update/';
@@ -191,7 +191,7 @@ $(function(){
 		changeHashTo('simple/'+tab.substring(1, tab.length));
 	});
 
-	$('input').live('keypress',function(event){
+        $(document).on('keypress', 'input', function(event){
 		if (event.keyCode == 10 || event.keyCode == 13) {
         	event.preventDefault();
     	}
@@ -299,22 +299,20 @@ function initEditForm(){
 	 * toggle the plus and minus
 	 * slidetoggle everything except div.aro_box_display
 	 */
-	$('#edit-form .toggle').die().live({
-		click: function(e){
+        $(document).off('click', '#edit-form .toggle')
+	    .on('click', '#edit-form .toggle', function(e){
 			e.preventDefault();
 			$('i', this).toggleClass('icon-plus').toggleClass('icon-minus');
 			var aro_box = $(this).parents('.aro_box');
 			$(aro_box).children('*:not(.aro_box_display)').slideToggle();
-		}
 	});
 	originalKeyValue = $('input[name=key]', admin).val();
 	/*
 	 * Prevents the form from submitting when hit any button
 	 */
-	$('#edit-form button').die().live({
-		click: function(e){
+        $(document).off('click', '#edit-form button')
+	    .on('click', '#edit-form button', function(e){
 			e.preventDefault();
-		}
 	});
 	
 	/*
@@ -342,18 +340,17 @@ function initEditForm(){
 	/*
 	 * icon-chevron-down button that triggers the typeahead by focusing into the input
 	 */
-	$('.triggerTypeAhead').die().live({
-		click: function(e){
+        $(document).off('click', '.triggerTypeAhead')
+	    .on('click', '.triggerTypeAhead', function(e){
 			$(this).parent().children('input').focus()
-		}
 	});
 
 	/*
 	 * Generate the random key based on the services/registry/get_random_key dynamically on the server
 	 * @TODO: make sure the key is unique accross system, returns error message if fails
 	 */
-	$('#generate_random_key').die().live({
-		click:function(e){
+        $(document).off('click', '#generate_random_key')
+	    .on('click', '#generate_random_key', function(e){
 			e.preventDefault();
 			var input = $(this).prev('input');
 			$.ajax({
@@ -363,7 +360,6 @@ function initEditForm(){
 					$(input).val(data.key);
 				}
 			});
-		}
 	});
 
 	/*
@@ -474,10 +470,9 @@ function initEditForm(){
 			// $('input.datepicker').ands_datetimepicker();
 			
 			//triggering the datepicker by focusing on it
-			$('.triggerDatePicker').die().live({
-				click: function(e){
+		        $(document).off('click', '.triggerDatePicker')
+			    .on('click', '.triggerDatePicker', function(e){
 					$(this).parent().children('input').focus();
-				}
 			});
 		}
 
@@ -493,8 +488,8 @@ function initEditForm(){
 	});
 
 	//Export XML button for ALL TABS in pretty print and modal
-	$('#master_export_xml').die().live({
-		click: function(e){
+        $(document).off('click', '#master_export_xml')
+	    .on('click', '#master_export_xml', function(e){
 			e.preventDefault();
 			if(editor=='tinymce') tinyMCE.triggerSave();//so that we can get the tinymce textarea.value without using tinymce.getContents
 			var allTabs = $('.pane');
@@ -520,11 +515,10 @@ function initEditForm(){
 			$('#myModal .modal-footer').html('<button class="btn btn-primary">Download</button>');
 			prettyPrint();
 			$('#myModal').modal();
-		}
 	});
 
-	$('#save').off().on({
-		click: function(e){
+        $(document).off('click', '#save')
+	    .on('click', '#save', function(e){
 			e.preventDefault();
 			window.onbeforeunload=null;
 
@@ -630,27 +624,24 @@ function initEditForm(){
 					}
 				});
 			}
-		}
 	});
 
-	$('#validate').off().on({
-		click: function(e){
+        $(document).off('click', '#validate')
+	    .on('click', '#validate', function(e){
 			e.preventDefault();
 			validate();
-		}
 	});
 
-	$('.show_rifcs').die().live({
-		click: function(e) { 
+        $(document).off('click', '.show_rifcs')
+	    .on('click', '.show_rifcs', function(e) {
 			$('#myModal').modal(); 
-		}
 	});
 
 
 	//This button stays inside the Load xml modal dialog
 	//This will post the input rifcs to the server and replace the current edit form with the response
-	$('#load_edit_xml').die().live({
-		click: function(e){
+        $(document).off('click', '#load_edit_xml')
+	    .on('click', '#load_edit_xml', function(e){
 			var rifcs = $('textarea#load_xml_rifcs').val();
 			var ro_id = $('#ro_id').val();
 			//console.log(ro_id);
@@ -667,7 +658,6 @@ function initEditForm(){
 					}
 				});
 			}
-		}
 	});
 
 	//initalize the datepicker, format is optional
@@ -675,18 +665,16 @@ function initEditForm(){
 	// 
 
 	//triggering the datepicker by focusing on it
-	$('.triggerDatePicker').die().live({
-		click: function(e){
+        $(document).off('click', '.triggerDatePicker')
+	    .on('click', '.triggerDatePicker', function(e){
 			$(this).parent().children('input').focus();
-		}
 	});
 
-	$('.triggerMapWidget').die().live({
-		click: function(e){
+        $(document).off('click', '.triggerMapWidget')
+	    .on('click', '.triggerMapWidget', function(e){
 			var typeInput = $(this).parent().parent().find('input[name=type]');
 			$(typeInput).val('kmlPolyCoords');
 			initMapWidget($(this).parent().parent());
-		}
 	});
 
 	//Various calls to initialize different tabs
@@ -871,11 +859,9 @@ function initSimpleModeFields()
 		$('#simpleFullDescriptionToggle').parent().hide();
 	}
 
-	$('#simpleAddMoreIdentifiers').live({
-		click: function(e){
+        $(document).on('click', '#simpleAddMoreIdentifiers', function(e){
 			changeHashTo(ADVANCED_MODE+'/identifiers');
-		}
-	})
+	});
 
 }
 
@@ -1120,11 +1106,10 @@ function initNames(){
 		$(display).html(display_name);
 	});
 
-	$('#names input').die().live({
-		blur:function(e){
+        $(document).off('blur', '#names input')
+	    .on('blur', '#names input', function(e){
 			var thisName = $(this).parents('.aro_box[type=name]');
 			initNames();
-		}
 	});
 }
 
@@ -1622,13 +1607,13 @@ function enableTabNavigation()
 	return true;
 }
 
-$('#prev_tab').live('click',function(e){
+$(document).on('click', '#prev_tab', function(e){
 	$('a', $('#sidebar ul:visible li.active').prev()).trigger('click');
 });
-$('#next_tab').live('click',function(e){
+$(document).on('click', '#next_tab', function(e){
 	$('a', $('#sidebar ul:visible li.active').next()).trigger('click');
 });
-$('#exit_tab').live('click',function(e){
+$(document).on('click', '#exit_tab', function(e){
 	window.location = $('#breadcrumb a:first').attr("href");
 });
 
