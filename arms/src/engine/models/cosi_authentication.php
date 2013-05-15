@@ -178,7 +178,8 @@ class Cosi_authentication extends CI_Model {
 				$LDAPMessage = "";
 				$successful = authenticateWithLDAP($username, $password, $LDAPAttributes, $LDAPMessage);
 
-				if (count($LDAPAttributes) > 0)
+				// if (count($LDAPAttributes) > 0)
+                if($successful)
 				{
 					$user_results = $this->getRolesAndActivitiesByRoleID ($username);
 					
