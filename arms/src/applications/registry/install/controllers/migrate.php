@@ -318,7 +318,7 @@ class Migrate extends MX_Controller
 
 			// Leo's retarded inverse flag logic
 
-			if((string) $result->auto_publish == "t")
+			if((string) $result->auto_publish == "f")
 			{
 				$data_source->setAttribute("manual_publish", "f");
 			}

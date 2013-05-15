@@ -121,6 +121,7 @@ class nlaPullback extends MX_Controller
 			try
 			{
 				$sxml = @simplexml_load_string($response);
+				if (!$sxml) { throw new Exception("No valid data! " . $target_uri); }
 				$sxml->registerXPathNamespace("srw", "http://www.loc.gov/zing/srw/");
 				$count = $sxml->xpath("//srw:searchRetrieveResponse/srw:numberOfRecords");
 				if (is_array($count))
@@ -157,6 +158,7 @@ class nlaPullback extends MX_Controller
 				echo "Unable to load XML from NLA endpoint for ".$identifier.". Response: " . $e->getMessage() . NL;
 			}
 		}
+		ob_flush();flush();
 		return;
 	}
 
