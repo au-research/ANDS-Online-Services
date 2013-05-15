@@ -813,12 +813,14 @@
 			<div class="aro_box_part" type="licence">
 				<label>Licence</label>
 				<input type="text" class="input-xlarge" name="rightsUri" placeholder="Rights Uri" value="{ro:licence/@rightsUri}"/>
-				<input type="text" class="input-xlarge rifcs-type" vocab="RIFCSLicenceType" name="value" placeholder="Value" value="{licence/text()}"/>
+				<input type="text" class="input-xlarge" name="value" placeholder="Value" value="{ro:licence/text()}"/>
+				<input type="text" class="input-xlarge rifcs-type" vocab="RIFCSLicenceType" name="type" placeholder="Type" value="{ro:licence/@type}"/>				
 			</div>		
 			<div class="aro_box_part" type="accessRights">
 				<label>Access Rights</label>
 				<input type="text" class="input-xlarge" name="rightsUri" placeholder="Rights Uri" value="{ro:accessRights/@rightsUri}"/>
-				<input type="text" class="input-xlarge" name="value" placeholder="Value" value="{ro:accessRights/text()}"/>
+				<input type="text" class="input-xlarge" name="value" placeholder="Value" value="{ro:accessRights/text()}"/>				
+				<input type="text" class="input-xlarge" name="type" placeholder="Type" value="{ro:accessRights/@type}"/>			
 			</div>
 		</div>
 	</xsl:template>
@@ -1437,12 +1439,14 @@
 			<div class="aro_box_part" type="licence">
 				<label>Licence</label>
 				<input type="text" class="input-xlarge" name="rightsUri" placeholder="Rights Uri" value="{licence/@rightsURI}"/>
-				<input type="text" class="input-xlarge rifcs-type" vocab="RIFCSLicenceType" name="value" placeholder="Value" value="{licence/text()}"/>
+				<input type="text" class="input-xlarge" name="value" placeholder="Value" value="{ro:licence/text()}"/>
+				<input type="text" class="input-xlarge rifcs-type" vocab="RIFCSLicenceType" name="type" placeholder="Type" value="{ro:licence/@type}"/>	
 			</div>		
 			<div class="aro_box_part" type="accessRights">
 				<label>Access Rights</label>
 				<input type="text" class="input-xlarge" name="rightsUri" placeholder="Rights Uri" value="{accessRights/@rightsURI}"/>
-				<input type="text" class="input-xlarge" name="value" placeholder="Value" value="{accessRights/text()}"/>
+				<input type="text" class="input-xlarge" name="value" placeholder="Value" value="{ro:accessRights/text()}"/>				
+				<input type="text" class="input-xlarge" name="type" placeholder="Type" value="{ro:accessRights/@type}"/>
 			</div>
 		</div>
 

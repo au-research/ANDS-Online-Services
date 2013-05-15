@@ -1255,7 +1255,7 @@ function getRIFCSforTab(tab, hasField){
 			{
 				fragment_meta += ' '+value+'="'+htmlEntities($(input_field).val())+'"';
 			}
-			if(this_fragment_type!='citationMetadata' && this_fragment_type!='coverage' && this_fragment_type!='relatedObject') fragment +=fragment_meta;
+			if(this_fragment_type!='citationMetadata' && this_fragment_type!='coverage' && this_fragment_type!='relatedObject'&& this_fragment_type!='rights') fragment +=fragment_meta;
 		});
 		fragment +='>';
 		//finish fragment header
@@ -1319,13 +1319,15 @@ function getRIFCSforTab(tab, hasField){
 							fragment += '<'+$(this).attr('type')+' field_id="' +$(this).attr('field_id')+'" dateFormat="'+htmlEntities($('input[name=dateFormat]', this).val())+'">';
 							fragment += $('input[name=value]', this).val();
 							fragment +='</'+$(this).attr('type')+'>';
-					}else if(type=='rightStatement' || type=='licence' || type=='accessRights' ){
+					}else if(type=='rightStatement'){
 						 fragment += '<'+$(this).attr('type')+' rightsUri="'+htmlEntities($('input[name=rightsUri]', this).val())+'">'+htmlEntities($('input[name=value]', this).val())+'</'+$(this).attr('type')+'>';	
+					}else if(type=='licence' || type=='accessRights' ){
+						 fragment += '<'+$(this).attr('type')+' type="'+htmlEntities($('input[name=type]', this).val())+'" rightsUri="'+htmlEntities($('input[name=rightsUri]', this).val())+'">'+htmlEntities($('input[name=value]', this).val())+'</'+$(this).attr('type')+'>';	
 					}else if(type=='contributor'){
 						var contributors = $('.aro_box_part[type=contributor]', this);//tooltip not init
 						$.each(contributors, function(){
 							var seq = htmlEntities($('input[name=seq]', this).val());
-						        if(parseInt(seq) <= 0 || isNaN(seq))
+						    if(parseInt(seq) <= 0 || isNaN(seq))
 							{
 								seq = 1;
 								$('input[name=seq]', this).val(seq);
