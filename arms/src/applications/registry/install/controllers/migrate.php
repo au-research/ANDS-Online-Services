@@ -841,13 +841,16 @@ class Migrate extends MX_Controller
 
 
 	function cleanRIFCSofEmptyTags($rifcs, $removeFormAttributes='true'){
-		$xslt_processor = Transforms::get_form_to_cleanrif_transformer();
-		$dom = new DOMDocument();
-		//$dom->loadXML($this->ro->getXML());
-		$dom->loadXML(wrapRegistryObjects(unWrapRegistryObjects($rifcs)));
-		//$dom->loadXML($rifcs);
-		$xslt_processor->setParameter('','removeFormAttributes',$removeFormAttributes);
-		return $xslt_processor->transformToXML($dom);
+	    if (strlen($rifcs) > 50000) {
+		$rifcs = preg_replace('/<relatedObject.*?<\/relatedObject>|\s{2,}/ms', '', $rifcs);
+	    }
+	    $xslt_processor = Transforms::get_form_to_cleanrif_transformer();
+	    $dom = new DOMDocument();
+	    //$dom->loadXML($this->ro->getXML());
+	    $dom->loadXML(wrapRegistryObjects(unWrapRegistryObjects($rifcs)));
+	    //$dom->loadXML($rifcs);
+	    $xslt_processor->setParameter('','removeFormAttributes',$removeFormAttributes);
+	    return $xslt_processor->transformToXML($dom);
 	}
 
 

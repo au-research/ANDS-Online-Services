@@ -89,10 +89,13 @@ class Registry_objects extends CI_Model {
 		}
 
 		$CI =& get_instance();
-		$db = $CI->db;
+		$db =& $CI->db;
+
 		foreach ($pipeline as $p)
 		{
-			$db = call_user_func($p['fn'], $db, $p['args']);
+		    //do we need to catch the return value, seeing as we're passing db by reference? don't think so....
+		    call_user_func_array($p['fn'], array(&$db, &$p['args']));
+		    //$db = call_user_func($p['fn'], $db, $p['args']);
 		}
 		$results = null;
 		$query = false;
