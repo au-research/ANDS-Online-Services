@@ -59,18 +59,18 @@ class Migrate extends MX_Controller
 			//$data_source->append_log("Data Source was migrated to ANDS Online Services Release 10", "info", "legacy_log");
 
 			// Now start importing registry objects
-			$this->deleteAllrecordsForDataSource($data_source);
-			$data_source->updateStats();
-			$this->migrateRegistryObjectsForDatasource($data_source);
-			$this->migrateDraftRegistryObjectsForDatasource($data_source);
-			$this->migrateDeletedRegistryObjectsForDatasource($data_source);
+			//$this->deleteAllrecordsForDataSource($data_source);
+			//$data_source->updateStats();
+			//$this->migrateRegistryObjectsForDatasource($data_source);
+			//$this->migrateDraftRegistryObjectsForDatasource($data_source);
+			//$this->migrateDeletedRegistryObjectsForDatasource($data_source);
 			//$this->reschedulePendingHarvests($data_source);
 
 			echo NL . NL;
 		}
 
 		//$this->updateDanglingSlugs();
-		$this->updateContributorPages();
+		//$this->updateContributorPages();
 
 
 		echo NL . NL;
@@ -114,6 +114,54 @@ class Migrate extends MX_Controller
 			}
 		}
 	}
+
+	function enrich($data_source_id)
+    {
+
+    echo "ENRICHING..." . NL;
+    $this->exec_time = microtime(true);
+           	$this->load->model('registry_object/registry_objects', 'ro');
+            $this->load->model('data_source/data_sources', 'ds');
+
+    $ids = $this->ro->getIDsByDataSourceID($data_source_id);
+            if($ids)
+            {
+
+                   	/* TWO-STAGE ENRICH */
+
+                    echo '----STAGE 1-----' . NL . NL;
+                   	foreach($ids as $ro_id){
+                   	echo '.';
+                           	try{
+                                   	$ro = $this->ro->getByID($ro_id);
+                                   	if($ro->getRif()){
+                                            $ro->addRelationships();
+                                           	unset($ro);
+                                    }
+                           	}catch (Exception $e){
+                                   	echo "<pre>error in: $e" . nl2br($e->getMessage()) . "</pre>" . BR;
+                            }
+                   	}
+                   	echo '----STAGE 2----' . NL . NL;
+                    foreach($ids as $ro_id){
+                   	echo '*';
+                           	try{
+                                   	$ro = $this->ro->getByID($ro_id);
+                                   	if($ro->getRif()){
+                                           	$ro->update_quality_metadata();
+                                           	echo "^";
+                                           	$ro->enrich();
+                                           	unset($ro);
+                                           	gc_collect_cycles();
+                                           	clean_cycles();
+                                   	}
+                            }catch (Exception $e){
+                                   	echo "<pre>error in: $e" . nl2br($e->getMessage()) . "</pre>" . BR;
+                            }
+                    }
+            }
+
+    }
 
 	function updateContributorPages()
 	{
