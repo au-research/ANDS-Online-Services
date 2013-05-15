@@ -238,7 +238,13 @@ function initLayout(){
             // Replace tag text with the "readable" version from the filter dropdown
             if(key==='status' || key==='class')
             {
-                text = $('.filter[value='+value+']').html().replace(/ \(.*/,'');
+                text = $('.filter[value='+value+']').html();
+		if (typeof(text) !== 'undefined' && text !== null) {
+		    text = text.replace(/ \(.*/,'');
+		}
+		else {
+		    text = "Remove current filter";
+		}
             }
 
             $('#active_filters').append('<span class="btn removeFilter" name="'+key+'"><a href="javascript:;">'+text+' <i class="icon icon-remove"></i></a></span>');
