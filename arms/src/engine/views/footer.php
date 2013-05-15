@@ -128,7 +128,7 @@
 
 	<!-- Module-specific styles and scripts -->
     <?php if (isset($scripts)): foreach($scripts as $script):?>
-        <script src="<?php echo asset_url('js/' . $script);?>.js"></script>
+        <script src="<?php echo asset_url('js/' . $script);?>.js" defer></script>
     <?php endforeach; endif; ?>
 
     <?php if (isset($styles)): foreach($styles as $style):?>
