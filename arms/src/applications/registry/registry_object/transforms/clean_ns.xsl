@@ -39,5 +39,7 @@
         </xsl:attribute>
     </xsl:template>
 
+    <xsl:template match="@xsi:schemaLocation"/>
+
     
 </xsl:stylesheet>
