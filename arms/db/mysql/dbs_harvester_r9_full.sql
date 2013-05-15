@@ -135,3 +135,10 @@ CREATE TABLE `schedule` (
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2012-11-03 12:55:31
+
+INSERT INTO request VALUES(DEFAULT, 'Identify');
+INSERT INTO request VALUES(DEFAULT, 'ListSets');
+INSERT INTO request VALUES(DEFAULT, 'ListMetadataFormats');
+INSERT INTO request VALUES(DEFAULT, 'ListRecords');
+INSERT INTO request VALUES(DEFAULT, 'ListIdentifiers');
+INSERT INTO request VALUES(DEFAULT, 'GetRecord');

@@ -933,9 +933,7 @@ class Importer {
 	function cleanNameSpace($rifcs){
 		$xslt_processor = Transforms::get_clean_ns_transformer();
 		$dom = new DOMDocument();
-		//$dom->loadXML($this->ro->getXML());
-		$dom->loadXML(wrapRegistryObjects(unWrapRegistryObjects($rifcs)));
-		//$dom->loadXML($rifcs);
+		$dom->loadXML($rifcs);
 		return $xslt_processor->transformToXML($dom);
 	}
 
