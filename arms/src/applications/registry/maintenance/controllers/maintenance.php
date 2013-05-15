@@ -218,8 +218,7 @@ class Maintenance extends MX_Controller {
 		echo json_encode($data);
 	}
 
-	function enrichAll()
-	{
+	function enrichAll(){
 		acl_enforce('REGISTRY_STAFF');
 		$data = array();
 		$data['logs'] = '';
@@ -227,6 +226,19 @@ class Maintenance extends MX_Controller {
 		$data_sources = $this->ds->getAll(0);
 		foreach($data_sources as $ds){
 			$data['logs'] .= $this->enrichDS($ds->id);
+		}
+		echo json_encode($data);
+	}
+
+	function enrichMissing(){
+		acl_enforce('REGISTRY_STAFF');
+		$data['logs'] = '';
+		$this->load->model('registry_object/registry_objects', 'ro');
+		$unenriched = $this->ro->getUnEnriched();
+		foreach($unenriched->result() as $u){
+			$ro = $this->ro->getByID($u->registry_object_id);
+			$ro->enrich();
+			$data['logs'] .= $ro->id.' ';
 		}
 		echo json_encode($data);
 	}

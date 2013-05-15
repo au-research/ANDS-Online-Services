@@ -16,6 +16,7 @@
 	<div id="ds"></div>
 </div>
 
+
 <script type="text/x-mustache" id="stat-template">
 <div class="row-fluid">
 	<div class="span12 center" style="text-align: center;">					
@@ -52,6 +53,20 @@
 
 
 <script type="text/x-mustache" id="ds-template">
+<div class="row-fluid">
+	<div class="span12 center" style="text-align:center;">
+		<div class="btn-toolbar">
+			<div class="btn-group">
+				<button class="btn btn-danger task" op="enrich_all" data-loading-text="Loading..." >Enrich Everything</button>
+				<button class="btn btn-primary task" op="enrich_missing" data-loading-text="Loading...">Enrich Missing</button>
+			</div>
+			<div class="btn-group">
+				<button class="btn btn-danger task" op="index_all" data-loading-text="Loading...">Re Index Everything</button>
+				<button class="btn btn-primary task" op="index_missing" data-loading-text="Loading...">Index Missing</button>
+			</div>
+		</div>
+	</div>
+</div>
 <div class="widget-box">
 	<div class="widget-title">
 		<h5>Data Sources</h5>

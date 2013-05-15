@@ -59,6 +59,10 @@ $(document).on('click','button.task',function(){
 		case 'index_ds':url = base_url+'maintenance/indexDS/'+ds_id;break;
 		case 'enrich_ds':url = base_url+'maintenance/enrichDS/'+ds_id;break;
 		case 'clear_ds':url = base_url+'maintenance/clearDS/'+ds_id;break;
+		case 'enrich_all': url= base_url+'maintenance/enrichAll/';break;
+		case 'enrich_missing': url= base_url+'maintenance/enrichMissing/';break;
+		case 'index_all': url= base_url+'maintenance/indexAll/';break;
+		case 'index_missing': url= base_url+'maintenance/indexMissing/';break;
 	}
 	$.getJSON(url, function(data) {
 		updateDataSourcesStat();

@@ -518,6 +518,17 @@ class Registry_objects extends CI_Model {
 					       })),$make_ro, $limit, $offset);
 	}
 
+	function getUnEnriched(){
+		$CI =& get_instance();
+		$enrichedResult = $CI->db->select('registry_object_id')->from('record_data')->where('scheme', 'extrif')->get();
+		$enriched = array();
+		foreach($enrichedResult->result() as $e){
+			array_push($enriched, $e->registry_object_id);
+		}
+		$result = $CI->db->select('registry_object_id')->from('record_data')->where_not_in('registry_object_id', $enriched);
+		return $result->get();
+	}
+
 	function getGroupSuggestor($data_source_ids){
 		$CI =& get_instance();
 		$result = $CI->db->select('distinct(value)')->from('registry_object_attributes ra')->where('attribute', 'group');
