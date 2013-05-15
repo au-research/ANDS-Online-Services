@@ -269,7 +269,8 @@ class Migrate extends MX_Controller
 			$data_source->setAttribute("harvest_frequency", $result->harvest_frequency);
 
 			// Leo's retarded inverse flag logic
-			if($result->auto_publish == "f")
+
+			if((string) $result->auto_publish == "t")
 			{
 				$data_source->setAttribute("manual_publish", "f");
 			}
