@@ -15,11 +15,11 @@ limitations under the License.
 *******************************************************************************/
 
 require_once(dirname(__FILE__).'/../../global_config.php');
-if (ACL_ONLY_MODE) 
+/*if (ACL_ONLY_MODE) 
 {
 	die('No access to ORCA or RDA in ACL-only mode.');
 }
-
+*/
 // If not running within COSI, include COSI's environment variables
 // (needed for "lightweight" activities such as fetch_element)
 if (!defined("eHOST")) { require '../_includes/_environment/application_env.php'; }
