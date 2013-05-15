@@ -553,7 +553,7 @@
 <xsl:template match="extRif:displayLogo">
     <xsl:if test="extRif:displayLogo/text() != ''">
         <div>
-            <img id="party_logo" style="max-width:130px;">
+            <img id="party_logo" style="max-width:130px;max-height:none;height:auto">
             	<xsl:attribute name="src"><xsl:value-of select="."/></xsl:attribute>
             	<xsl:attribute name="alt">Party Logo</xsl:attribute>
             </img>
@@ -566,7 +566,8 @@
 </xsl:template> 
 
 <xsl:template match="extRif:logo">
-    <img class="logo" src="{.}"/>
+    <!-- these inline styles aren't great, but they're everywhere. check out #party_logo in the various transforms... -->
+    <img class="logo" style="max-width:130px;max-height:none;height:auto" src="{.}"/>
 </xsl:template> 
 
 <xsl:template match="ro:name[@type='abbreviated']">   
@@ -1209,7 +1210,7 @@
   <h4>Licence</h4>
   <p class="rights">
      <xsl:if test="string-length(substring-after(./@licence_type,'CC-'))>0">
-        <img id="licence_logo" style="width:130px;">
+        <img id="licence_logo" style="width:130px;height:auto">
             <xsl:attribute name="src"><xsl:value-of select="$base_url"/>
             <xsl:text>assets/core/images/icons/</xsl:text>
             <xsl:value-of select="./@licence_type"/>

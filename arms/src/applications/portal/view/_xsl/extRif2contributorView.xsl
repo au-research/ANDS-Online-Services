@@ -326,7 +326,7 @@
     
 <xsl:template match="extRif:logo">
     <xsl:if test="text() != ''">
-      <img id="party_logo" class="logo right" style="max-width:130px;">
+      <img id="party_logo" class="logo right" style="max-width:130px;height:auto;max-height:none">
       	<xsl:attribute name="src"><xsl:value-of select="."/></xsl:attribute>
       	<xsl:attribute name="alt">Contributor Logo</xsl:attribute>
       </img>
