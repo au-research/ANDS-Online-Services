@@ -79,6 +79,11 @@ class Home extends MX_Controller {
 		$this->load->view('about', $data);
 	}
 
+	function disclaimer(){
+		$data['title'] = 'Research Data Australia - Disclaimer';
+		$this->load->view('disclaimer', $data);
+	}
+
 	function contact(){
 			//	$data['scripts'] = array('home_page');
 		$data['title'] = 'Research Data Australia - Contact Us';
