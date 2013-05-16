@@ -41,7 +41,8 @@
 
 
     <!-- additional styles -->
- 
+ <link type="text/css"
+    href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/redmond/jquery-ui.css" rel="stylesheet" />   
     <?php
       if(isset($less)){
         foreach($less as $s){
