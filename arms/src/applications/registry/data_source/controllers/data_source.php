@@ -216,7 +216,7 @@ class Data_source extends MX_Controller {
 					array_push($st['menu'], array('action'=>'to_draft', 'display'=>'Move to Draft'));
 					break;
 				case 'SUBMITTED_FOR_ASSESSMENT':
-					if ($this->user->hasFunction('REGISTRY_STAFF'))
+					if ($this->user->hasFunction('ORCA_QUALITY_ASSESSOR'))
 					{
 						$st['ds_count']=$data_source->count_SUBMITTED_FOR_ASSESSMENT;
 						$st['connectTo']='ASSESSMENT_IN_PROGRESS';
@@ -225,7 +225,7 @@ class Data_source extends MX_Controller {
 					break;
 				case 'ASSESSMENT_IN_PROGRESS':
 					$st['ds_count']=$data_source->count_ASSESSMENT_IN_PROGRESS;
-					if ($this->user->hasFunction('REGISTRY_STAFF'))
+					if ($this->user->hasFunction('ORCA_QUALITY_ASSESSOR'))
 					{
 						if($manual_publish){
 							$st['connectTo']='APPROVED,MORE_WORK_REQUIRED';
