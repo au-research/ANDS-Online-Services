@@ -202,7 +202,7 @@ class Vocab {
             foreach($filters as $key=>$value){
                 $value = rawurldecode($value);
                 switch($key){
-                    case 'tab': 
+                    case 'class': 
                         if($value!='all') $CI->solr->addQueryCondition('+class:("'.$value.'")');
                         break;
                     case 'group': 
