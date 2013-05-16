@@ -67,7 +67,11 @@
 
     <xsl:if test="$theGroup = ''">
         <xsl:text>  /  </xsl:text>
-        <a href="{$base_url}search/browse/{./@group}" class="crumb"><xsl:value-of select="$group"/></a>			
+            <a>
+    <xsl:attribute name="href">
+     <xsl:value-of select="$base_url"/><xsl:value-of select="//extRif:extendedMetadata/extRif:slug"/>
+   </xsl:attribute><xsl:value-of select="$group"/></a>
+        
     </xsl:if>
 
     <xsl:text>  /  </xsl:text>
