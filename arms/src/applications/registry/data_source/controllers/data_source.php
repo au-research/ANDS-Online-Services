@@ -459,7 +459,7 @@ class Data_source extends MX_Controller {
 					$menu['delete'] = 'Delete Record';
 				break;
 				case 'SUBMITTED_FOR_ASSESSMENT':
-					if ($this->user->hasFunction('REGISTRY_STAFF'))
+					if ($this->user->hasFunction('ORCA_QUALITY_ASSESSOR'))
 					{
 						$menu['to_assess'] = 'Assessment In Progress';
 					}
@@ -471,7 +471,7 @@ class Data_source extends MX_Controller {
 					}
 				break;
 				case 'ASSESSMENT_IN_PROGRESS':
-					if ($this->user->hasFunction('REGISTRY_STAFF'))
+					if ($this->user->hasFunction('ORCA_QUALITY_ASSESSOR'))
 					{
 						if($manual_publish){
 							$menu['to_approve'] = 'Approve';
@@ -496,7 +496,7 @@ class Data_source extends MX_Controller {
 				case 'PUBLISHED':
 					$menu['to_draft'] = 'Create Draft Copy';
 					$menu['edit'] = 'Edit Record';
-					if ($this->user->hasFunction('REGISTRY_STAFF'))
+					if ($this->user->hasFunction('ORCA_QUALITY_ASSESSOR'))
 					{
 						if($hasGold)
 						{
