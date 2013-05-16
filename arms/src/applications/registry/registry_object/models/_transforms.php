@@ -131,7 +131,7 @@ class Transforms {
 
 	static function get_clean_ns_transformer()
 	{
-		if (is_null(self::$form_to_cleanrif_transformer))
+		if (is_null(self::$clean_ns_transformer))
 		{
 			$cleanNS = new DomDocument();
 			$cleanNS->load(APP_PATH.'registry_object/transforms/clean_ns.xsl');
