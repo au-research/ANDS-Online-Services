@@ -5,9 +5,10 @@
 	<div id="who_contributes">
 		<ul>
 			<?php 
-				foreach($groups as $g=>$count){
-					echo '<li><a href="'.base_url('search#!/q='.$g.'"').'>'.$g.' ('.$count.')</a></li>';
+				foreach($links as $l){
+					echo '<li>'.$l.'</li>';
 				}
+				
 			?>
 		</ul>
 	</div>

@@ -272,6 +272,16 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 		echo json_encode(array("contents"=>$contents));
 	}
 
+	public function getInstitutionals(){
+		$result = $this->db->select('registry_object_id')->from('institutional_pages')->get();
+		$inst = array();
+		foreach($result->result() as $r){
+			array_push($inst, $r->registry_object_id);
+		}
+		$result = $this->db->select('title, slug')->from('registry_objects')->where_in('registry_object_id', $inst)->get();
+		echo json_encode(array("contents"=>$result->result()));
+	}
+
 	/**
 	 * Fetch canned text for contributor page
 	 *
