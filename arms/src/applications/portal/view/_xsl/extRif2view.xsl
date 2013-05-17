@@ -45,18 +45,9 @@
 
   <div class="breadcrumb">
      <a href="{$base_url}">Home </a>
-
-     <xsl:if test="$theGroup">
+       <xsl:if test="$theGroup = ''">	
         <xsl:text>  /  </xsl:text>
-        <a>
-           <xsl:attribute name="href">
-               <xsl:value-of select="$base_url"/>view/group/?group=<xsl:value-of select="$theGroup"/>&amp;amp;groupName=<xsl:value-of select="./@group"/>
-           </xsl:attribute><xsl:value-of select="$group"/></a>				
-       </xsl:if>
-
-       <xsl:if test="$theGroup = ''">
-        <xsl:text>  /  </xsl:text>
-        <a href="{$base_url}search/#!/group={./@group}" class="crumb"><xsl:value-of select="$group"/></a>			
+        	  <a href="{$base_url}%%%%GROUP_LINK%%%%search/#!/group={./@group}" class="crumb"><xsl:value-of select="$group"/></a>    
     </xsl:if>
 
     <xsl:text>  /  </xsl:text>
