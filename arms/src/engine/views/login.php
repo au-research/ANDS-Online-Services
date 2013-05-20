@@ -34,13 +34,13 @@
 								<?php echo $error_message; ?>
 							</div>
 						<?php endif; ?>
-						<?php /* REMOVED - prints user's password to screen */
-						// if (isset($exception)): 
+						<?php /* REMOVED - prints user's password to screen
+						// USEFUL FOR DEBUGGING ONLY
 						if(false): ?>
 							<div class="alert alert-error">
 								Error: <?php echo $exception->getMessage(); ?>
 							</div>
-						<?php endif; ?>
+						<?php endif; */ ?>
 						<?php 
 						prinfLoginForm($authenticators, $default_authenticator, 'loginForm');
 						printAlternativeLoginForms($authenticators, $default_authenticator);
