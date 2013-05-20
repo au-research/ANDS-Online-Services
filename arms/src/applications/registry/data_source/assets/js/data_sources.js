@@ -12,26 +12,6 @@ var logTimer = 1000;
 var doLoadLogs = false;
 $(function(){
 
-	// Default error handler
-	$.ajaxSetup({
-		dataType: 'json',
-		error: function(data)
-		{
-			try
-			{
-			        //shouldn't we check to ensure data.getResponseHeader('Content-Type') is actually (or at least startsWith) application/json???
-			        //otherwise the following will throw a SyntaxError always. Guess you need to ensure the server is setting correct Content-Type
-			        //headers...
-				data = $.parseJSON(data.responseText);
-				checkResponse(data);
-				return;
-			}
-			catch (e)
-			{
-			        window.setTimeout(function(){logErrorOnScreen("An unknown error occured whilst communicating with the server.")}, 1500);
-			}
-		}
-	});
 	/*
 	 * suffix is determined in footer.php
 	 * Example: #!/browse/lists/

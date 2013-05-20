@@ -426,15 +426,21 @@ $.ajaxSetup({
 	dataType: 'json',
 	error: function(data)
 	{
+		console.log(data);
 		try
 		{
-			data = $.parseJSON(data.responseText);
-			checkResponse(data);
-			return;
+			//shouldn't we check to ensure data.getResponseHeader('Content-Type') is actually (or at least startsWith) application/json???
+	        //otherwise the following will throw a SyntaxError always. Guess you need to ensure the server is setting correct Content-Type
+	        //headers...
+	        if(data.readyState==4){
+				data = $.parseJSON(data.responseText);
+				if(data.status) checkResponse(data);
+				return;
+			}
 		}
 		catch (e)
 		{
-			logErrorOnScreen("An unknown error occured whilst communicating with the server.");
+			logErrorOnScreen("An unknown error occured whilst communicating with the server." + e);
 		}
 	}
 });
