@@ -426,7 +426,6 @@ $.ajaxSetup({
 	dataType: 'json',
 	error: function(data)
 	{
-		console.log(data);
 		try
 		{
 			//shouldn't we check to ensure data.getResponseHeader('Content-Type') is actually (or at least startsWith) application/json???
