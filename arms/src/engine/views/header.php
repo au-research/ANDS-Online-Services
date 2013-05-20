@@ -33,7 +33,7 @@
     <link rel="stylesheet" href="<?php echo base_url();?>assets/lib/chosen/chosen.css">
     <link rel="stylesheet" href="<?php echo base_url();?>assets/lib/bootstrap_toggle_button/jquery.toggle.buttons.css">
     <link rel="stylesheet" href="<?php echo base_url();?>assets/lib/qtip2/jquery.qtip.min.css">
-
+    <link rel="stylesheet" href="<?php echo base_url();?>assets/lib/youtubepopup/jquery-ui.css">
     <!-- unicorn -->
     <link href="<?php echo base_url();?>assets/lib/unicorn_styles/css/uniform.css" rel="stylesheet">
     <link href="<?php echo base_url();?>assets/lib/unicorn_styles/css/unicorn.main.css" rel="stylesheet">
@@ -41,8 +41,7 @@
 
 
     <!-- additional styles -->
- <link type="text/css"
-    href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/redmond/jquery-ui.css" rel="stylesheet" />   
+ 
     <?php
       if(isset($less)){
         foreach($less as $s){

@@ -34,13 +34,13 @@
 								<?php echo $error_message; ?>
 							</div>
 						<?php endif; ?>
-						<?php /* REMOVED - prints user's password to screen */
-						// if (isset($exception)): 
+						<?php /* REMOVED - prints user's password to screen
+						// USEFUL FOR DEBUGGING ONLY
 						if(false): ?>
 							<div class="alert alert-error">
 								Error: <?php echo $exception->getMessage(); ?>
 							</div>
-						<?php endif; ?>
+						<?php endif; */ ?>
 						<?php 
 						prinfLoginForm($authenticators, $default_authenticator, 'loginForm');
 						printAlternativeLoginForms($authenticators, $default_authenticator);
@@ -76,7 +76,7 @@ var $buoop = {vs:{i:7,f:3.6,o:10.6,s:4,n:9}}
 	 try {if ($buoop.ol) $buoop.ol();}catch (e) {} 
 	 var e = document.createElement("script"); 
 	 e.setAttribute("type", "text/javascript"); 
-	 e.setAttribute("src", "http://browser-update.org/update.js"); 
+	 e.setAttribute("src", "../../assets/js/update.js"); 
 	 document.body.appendChild(e); 
 	} 
 </script> 

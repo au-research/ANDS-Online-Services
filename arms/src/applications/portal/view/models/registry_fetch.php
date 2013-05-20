@@ -270,6 +270,12 @@ class Registry_fetch extends CI_Model
  		}
 	}
 
+	function fetchInstitutionalPages(){
+		$url = $this->config->item('registry_endpoint') . "getInstitutionals";
+		$response = json_decode(@file_get_contents($url), true);
+		return $response;
+	}
+
 }
 class PageNotValidException extends Exception {}
 class SlugNoLongerValidException extends Exception {}

@@ -68,6 +68,25 @@ class Home extends MX_Controller {
 		}
 		ksort($data['groups'], SORT_FLAG_CASE | SORT_NATURAL);
 
+		//contributors
+		$this->load->model('view/registry_fetch','registry');
+		$data['contributors'] = $this->registry->fetchInstitutionalPages();
+
+		$links = array();
+		foreach($data['groups'] as $g=>$count){
+			foreach($data['contributors']['contents'] as $c){
+				$l = '';
+				if($c['title']==$g){
+					$l = anchor($c['slug'], $g.' ('.$count.')', array('class'=>'contrib'));
+					break;
+				}else{
+					$l = anchor('search#!/q='.$g, $g.' ('.$count.')');
+				}
+			}
+			array_push($links, $l);
+		}
+		$data['links'] = $links;
+
 		$this->load->library('stats');
 		$this->stats->registerPageView();
 

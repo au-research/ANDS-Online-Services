@@ -47,7 +47,6 @@ class Auth extends CI_Controller {
 			$sharedToken = $_SERVER['shib-shared-token'];
 		}else{
 			$data['error_message'] = "Unable to login. Shibboleth IDP was not able to authenticate the given credentials.";
-			$data['exception'] = $e;
 			$this->load->view('login', $data);
 		}
 
@@ -58,7 +57,6 @@ class Auth extends CI_Controller {
 				redirect('/auth/dashboard/');
 			}else{
 				$data['error_message'] = "Unable to login. Please check your credentials are accurate.";
-				$data['exception'] = $e;
 				$this->load->view('login', $data);
 			}
 		}

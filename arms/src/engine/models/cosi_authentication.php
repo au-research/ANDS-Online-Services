@@ -64,7 +64,9 @@ class Cosi_authentication extends CI_Model {
                     //'email' => $_SERVER['mail']
                 );
 
-                $this->cosi_db->insert('dba.tbl_roles',$data);
+                if($username == $_SERVER['shib-shared-token']){
+                    $this->cosi_db->insert('dba.tbl_roles',$data);
+                }
 
                 $result = $this->cosi_db->get_where("dba.tbl_roles",    
                                                     array(

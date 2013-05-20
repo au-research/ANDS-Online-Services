@@ -67,11 +67,21 @@
 
     <xsl:if test="$theGroup = ''">
         <xsl:text>  /  </xsl:text>
-        <a href="{$base_url}search/browse/{./@group}" class="crumb"><xsl:value-of select="$group"/></a>			
+            <a>
+    <xsl:attribute name="href">
+     <xsl:value-of select="$base_url"/><xsl:value-of select="//extRif:extendedMetadata/extRif:slug"/>
+   </xsl:attribute><xsl:value-of select="$group"/></a>
+        
     </xsl:if>
 
     <xsl:text>  /  </xsl:text>
-    <a href="{$base_url}search/browse/{./@group}/{$objectClass}" class="crumb"><xsl:value-of select="$objectClass"/></a>
+       <a>
+      <xsl:attribute name="href">
+        <xsl:value-of select="$base_url"/>search/#!/group=<xsl:value-of select="./@group"/>/tab=<xsl:value-of select="translate($objectClass,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')"/>
+      </xsl:attribute>
+      <xsl:attribute name="class">crumb</xsl:attribute>
+      <xsl:value-of select="$objectClass"/>
+    </a>
   </div>	
 
             <!--  the following hidden elements dfine content to be used in further ajax calls -->

@@ -290,7 +290,7 @@ class Search extends MX_Controller {
                     case 'q': 
                         $this->solr->setOpt('q', "+fulltext:(*" . $value . "*)");
                         break;
-                    case 'tab': 
+                    case 'class': 
                         if($value!='all') $this->solr->addQueryCondition('+class:("'.$value.'")');
                         break;
                     case 'group': 
