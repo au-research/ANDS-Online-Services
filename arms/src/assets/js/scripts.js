@@ -649,3 +649,25 @@ window.log = function(){
     console.log( Array.prototype.slice.call(arguments) );
   }
 };
+
+function isUniqueKey(ro_key, ro_id, ds_id)
+{
+	var isUniqueMsg = '';
+	$.ajax({
+		async: false,
+		type: 'GET',
+		data: {ro_key:ro_key},
+		url: base_url+'services/registry/check_unique_ro_key',
+		success: function(data){
+			$.each(data.ro_list, function(idx, e) {
+				if(typeof(ds_id) == "undefined")
+					isUniqueMsg = 'Another record with the same key already exists in the Registry.<br/>Please choose a unique key for this record.';
+				if(e.data_source_id != ds_id)
+					isUniqueMsg = 'Another record with the same key already exists in the Registry (in another Data Source).<br/>Please choose a unique key for this record.';
+				else if(e.status != 'PUBLISHED' && ( typeof(ro_id) == "undefined" || e.registry_object_id != ro_id))
+				 	isUniqueMsg = 'Another record with the same key already exists in your Data Source ('+e.status+'). <br/>Please choose a unique key for this record.';
+			});
+		}
+	});
+	return isUniqueMsg;
+}

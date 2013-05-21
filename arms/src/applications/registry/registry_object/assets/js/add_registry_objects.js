@@ -45,6 +45,7 @@ $(function(){
 	$('#AddNewDS_confirm').die().live({
 		click:function(e){
 			e.preventDefault();
+
 			if(Core_checkValidForm($('#AddNewDS form'))){
 				registry_object_key = $('input[name=key]').val();
 				ro_class = $(this).attr('ro_class');
@@ -52,28 +53,34 @@ $(function(){
 				group = $('input[name=group]').val();
 				data_source_id = $('select[name=data_source_id]').val();
 				originating_source = $('input[name=originatingSource]').val();
-
-				var data = {data_source_id:data_source_id, registry_object_key:registry_object_key, ro_class:ro_class, type:type, group:group, originating_source:originating_source};
-				$.ajax({
-					type: 'POST',
-					url: base_url+'registry_object/add_new',
-					data:{data:data},
-					dataType:'JSON',
-					success:function(data){
-						if(data.status != 'ERROR')
-						{
-							$("#AddNewDS").modal('hide');
-							if(data.success) window.location = base_url+'registry_object/edit/'+data.ro_id+'#!/advanced/admin';
+				if(isUniqueMsg = isUniqueKey(registry_object_key, null, data_source_id))
+				{				
+					$('input[name=key]').parent().append('<div class="alert alert-error validation">'+ isUniqueMsg+ '</div>');
+				}
+				else
+				{
+					var data = {data_source_id:data_source_id, registry_object_key:registry_object_key, ro_class:ro_class, type:type, group:group, originating_source:originating_source};
+					$.ajax({
+						type: 'POST',
+						url: base_url+'registry_object/add_new',
+						data:{data:data},
+						dataType:'JSON',
+						success:function(data){
+							if(data.status != 'ERROR')
+							{
+								$("#AddNewDS").modal('hide');
+								if(data.success) window.location = base_url+'registry_object/edit/'+data.ro_id+'#!/advanced/admin';
+							}
+							else{
+								$('.alert-error').html(data.message);
+								$('.alert-error').show();
+							}
+						},
+						error:function(data){
+							console.log("error: " + data);
 						}
-						else{
-							$('.alert-error').html(data.message);
-							$('.alert-error').show();
-						}
-					},
-					error:function(data){
-						console.log("error: " + data);
-					}
-				});
+					});
+				}
 			}
 		}
 	});
