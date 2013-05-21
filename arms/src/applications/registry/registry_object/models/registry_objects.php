@@ -351,7 +351,8 @@ class Registry_objects extends CI_Model {
 								->where('data_source_id', $args['data_source_id'])
 								->where("attribute", "harvest_id")
 								->where("value !=", "")
-								->where("value !=", $args['harvest_id']);
+								->where("value !=", $args['harvest_id'])
+								->not_like('value', 'MANUAL-');
 							return $db;
 						    })),
 					$make_ro);
