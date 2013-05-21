@@ -310,6 +310,8 @@ class Data_source extends MX_Controller {
 	private function get_ros($filters, $getCount=false){
 		$results['items'] = array();
 		$this->load->model('registry_object/registry_objects', 'ro');
+		$this->load->model('data_source/data_sources', 'ds');
+
 		$filters['args']['data_source_id'] = $filters['ds_id'];
 		if(!$getCount){
 			//$ros = $this->ro->getByDataSourceID($filters['ds_id'], $filters['limit'], $filters['offset'], $filters['args'], false);
@@ -318,6 +320,18 @@ class Data_source extends MX_Controller {
 			//return sizeof($ros = $this->ro->getByDataSourceID($filters['ds_id'], 0, 0, $filters['args'], false));
 			return sizeof($ros = $this->ro->filter_by($filters['args'], 0, 0, false));
 		}
+
+		
+
+		//getting the data source and parse into the jsondata array
+		$data_source = $this->ds->getByID($filters['ds_id']);
+		foreach($data_source->attributes as $attrib=>$value){
+			$jsonData['ds'][$attrib] = $value->value;
+		}
+		//QA and Auto Publish check, valid_statuses are populated accordingly
+		$qa = $data_source->qa_flag=='t' || $data_source->qa_flag==DB_TRUE ? true : false;
+		$manual_publish = ($data_source->manual_publish=='t' || $data_source->manual_publish==DB_TRUE) ? true: false;
+
 		if($ros){
 			foreach($ros as $r){
 				$registry_object = $r; //$this->ro->getByID($r['registry_object_id']);
@@ -344,7 +358,15 @@ class Data_source extends MX_Controller {
 					case 'DRAFT': 
 						$item['editable'] = true; 
 						$item['advance']=true;
-						$item['connectTo']='SUBMITTED_FOR_ASSESSMENT';
+						if($qa){
+							$item['connectTo']='SUBMITTED_FOR_ASSESSMENT';
+						}else{
+							if($manual_publish){
+								$item['connectTo']='APPROVED';
+							}else{
+								$item['connectTo']='PUBLISHED';
+							}
+						}
 					break;
 					case 'MORE_WORK_REQUIRED': 
 						$item['editable'] = true; 
@@ -362,7 +384,11 @@ class Data_source extends MX_Controller {
 					case 'ASSESSMENT_IN_PROGRESS': 
 						if($this->user->hasFunction('REGISTRY_STAFF')) { 
 							$item['advance']=true; 
-							$item['connectTo']='APPROVED';
+							if($manual_publish){
+								$item['connectTo']='APPROVED';
+							}else{
+								$item['connectTo']='PUBLISHED';
+							}
 						} else { 
 							$item['noMoreOptions'] = true; 
 						} 
