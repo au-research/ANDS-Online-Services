@@ -109,6 +109,104 @@ class Home extends MX_Controller {
 		$this->load->view('contact', $data);
 	}
 
+	function sitemap(){
+
+    	parse_str($_SERVER['QUERY_STRING'], $_GET);
+    	$solr_url = $this->config->item('solr_url');
+    	$ds = '';
+    	if(isset($_GET['ds'])) $ds=$_GET['ds'];
+
+
+    	if($ds==''){
+			$fields = array(
+				'q'=>'*:*','version'=>'2.2','start'=>0,'rows'=>100, 'wt'=>'json',
+				'fl'=>'key'
+			);
+					/*prep*/
+			$fields_string='';
+	    	foreach($fields as $key=>$value) { $fields_string .= $key.'='.$value.'&'; }//build the string
+	    	$fields_string .= '&facet=true&facet.field=data_source_key';
+	    	rtrim($fields_string,'&');
+
+			//echo $solr_url.$fields_string;
+
+			$ch = curl_init();
+	    	//set the url, number of POST vars, POST data
+			curl_setopt($ch,CURLOPT_URL,$solr_url.'select');//post to SOLR
+			curl_setopt($ch,CURLOPT_POST,count($fields));//number of POST var
+			curl_setopt($ch,CURLOPT_POSTFIELDS,$fields_string);//post the field strings
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);//return to variable
+	    	$content = curl_exec($ch);//execute the curl
+
+	    	//echo 'json received+<pre>'.$content.'</pre>';
+
+	    	$res = json_decode($content);
+	    	$dsfacet = $res->{'facet_counts'}->{'facet_fields'}->{'data_source_key'};
+
+			header("Content-Type: text/xml");
+			// $this->output->set_content_type('text/xml');
+			echo '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+
+			for($i=0;$i<sizeof($dsfacet);$i+=2){
+				echo '<sitemap>';
+				echo '<loc>'.base_url().'home/sitemap/?ds='.$dsfacet[$i].'</loc>';
+				echo '<lastmod>'.date('Y-m-d').'</lastmod>';
+				echo '</sitemap>';
+			}
+
+			echo '</sitemapindex>';
+		}elseif($ds!=''){
+			$q = '*:* +data_source_key:("'.$ds.'")';
+			$q = urlencode($q);
+			$fields = array(
+				'q'=>$q,'version'=>'2.2','start'=>0,'rows'=>50000, 'wt'=>'json',
+				'fl'=>'key, slug, update_timestamp'
+			);
+					/*prep*/
+			$fields_string='';
+	    	foreach($fields as $key=>$value) { $fields_string .= $key.'='.$value.'&'; }//build the string
+	    	rtrim($fields_string,'&');
+
+			//echo $fields_string;
+
+			$ch = curl_init();
+	    	//set the url, number of POST vars, POST data
+			curl_setopt($ch,CURLOPT_URL,$solr_url.'select');//post to SOLR
+			curl_setopt($ch,CURLOPT_POST,count($fields));//number of POST var
+			curl_setopt($ch,CURLOPT_POSTFIELDS,$fields_string);//post the field strings
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);//return to variable
+	    	$content = curl_exec($ch);//execute the curl
+
+	    	//echo 'json received+<pre>'.$content.'</pre>';
+
+	    	$res = json_decode($content);
+	    	$keys = $res->{'response'}->{'docs'};
+	    	// var_dump($keys);
+
+			header("Content-Type: text/xml");
+			// $this->output->set_content_type('text/xml');
+			echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+
+			foreach($keys as $k){
+				//var_dump($k);
+				echo '<url>';
+				if ($k->{'slug'})
+				{
+					echo '<loc>'.base_url().$k->{'slug'}.'</loc>';
+				}
+				else
+				{
+					echo '<loc>'.base_url().'view/?key='.urlencode($k->{'key'}).'</loc>';
+				}
+				echo '<changefreq>weekly</changefreq>';
+				echo '<lastmod>'.date('Y-m-d', strtotime($k->{'update_timestamp'})).'</lastmod>';
+				echo '</url>';
+			}
+
+			echo '</urlset>';
+		}
+	}
+
 	public function send(){
 		$this->load->library('user_agent');
 		$data['user_agent']=$this->agent->browser();
