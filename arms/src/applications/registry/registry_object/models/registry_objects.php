@@ -676,7 +676,7 @@ class Registry_objects extends CI_Model {
 
 		//delete index
 		$this->load->library('Solr');
-		$this->solr->deleteByQueryCondition('id:'.$target_ro->id);
+		//$this->solr->deleteByQueryCondition('id:'.$target_ro->id);
 
 		if (isPublishedStatus($target_ro->status))
 		{
@@ -701,8 +701,17 @@ class Registry_objects extends CI_Model {
 			$reenrich_queue = array_merge($target_ro->getRelationships(), $reenrich_queue);
 
 			// Delete from the index
-			$this->solr->deleteByQueryCondition("id:(\"".$target_ro->id."\")");
-			$this->solr->commit();
+			$result = json_decode($this->solr->deleteByQueryCondition("id:(\"".$target_ro->id."\")"));
+
+			if($result->responseHeader->status != 0)
+			{			
+				$this->load->model('data_source/data_sources', 'ds');
+				$data_source = $this->ds->getByID($target_ro->data_source_id);
+				$data_source->append_log("Failed to erase from SOLR: id:" .$target_ro->id , 'error', 'registry_object');
+			}
+			else{
+				$this->solr->commit();
+			}
 		}
 
 		// Delete the actual registry object
@@ -788,7 +797,17 @@ class Registry_objects extends CI_Model {
 		}
 
 		// Delete from the index
-		$this->solr->deleteByQueryCondition("data_source_id:(\"".$data_source_id."\")");
+		$result = json_decode($this->solr->deleteByQueryCondition("data_source_id:(\"".$data_source_id."\")"));
+
+		if($result->responseHeader->status != 0)
+		{			
+			$this->load->model('data_source/data_sources', 'ds');
+			$data_source = $this->ds->getByID($data_source_id);
+			$data_source->append_log("Failed to erase from SOLR: ds_id:" .$data_source_id , 'error', 'data_source');
+		}
+
+
+
 		$this->solr->commit();
 
 	}

@@ -642,10 +642,13 @@ class _data_source {
 		{
 			foreach($oldRegistryObjects AS $target_ro_id)
 			{
-				$target_ro = $this->_CI->ro->getByID($target_ro_id);
-				$log = $target_ro->eraseFromDatabase();
-				if($log)
-					$this->append_log("ERROR REMOVING RECORD FROM PREVIOUS HARVEST: " .$target_ro_id, HARVEST_INFO, "harvester", "HARVESTER_INFO");
+				try{
+					$this->_CI->ro->deleteRegistryObject($target_ro_id);
+				}
+				catch(Exception $e)
+				{
+					$this->append_log("ERROR REMOVING RECORD FROM PREVIOUS HARVEST: " .$target_ro_id.NL.$e, HARVEST_INFO, "harvester", "HARVESTER_INFO");
+				}
 			}
 		}
 		$this->append_log("REMOVING RECORDS FROM PREVIOUS HARVEST: " .sizeof($oldRegistryObjects)." DELETED", HARVEST_INFO, "harvester","HARVESTER_INFO");	

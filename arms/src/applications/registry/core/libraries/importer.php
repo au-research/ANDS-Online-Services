@@ -330,6 +330,7 @@ class Importer {
 					$ro->updateTitles($ro->getSimpleXML());
 
 					// Only generate SLUGs for published records
+					$ro->setAttribute("harvest_id", $this->harvestID);
 					if (in_array($this->status, getPublishedStatusGroup()))
 					{
 						$ro->generateSlug();
