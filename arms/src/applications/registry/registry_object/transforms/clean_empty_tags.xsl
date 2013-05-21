@@ -63,9 +63,19 @@
         </xsl:choose>
     </xsl:template>
 
-  <xsl:template match="citationMetadata">
+    <xsl:template match="citationMetadata">
         <xsl:choose>
-            <xsl:when test="dentifier/@type !='' or identifier/text() != '' or title/text() != '' or publisher/text() != ''or context/text() != '' or contributor/@seq !='' or contributor/namePart/text() != ''">
+            <xsl:when test="identifier/@type !='' or identifier/text() != '' or title/text() != '' or publisher/text() != ''or context/text() != '' or contributor/@seq !='' or contributor/namePart/text() != ''">
+                <xsl:copy>
+                    <xsl:apply-templates select="@* | node()" />
+                </xsl:copy>   
+            </xsl:when>
+        </xsl:choose>
+    </xsl:template>
+
+    <xsl:template match="relatedInfo">
+        <xsl:choose>
+            <xsl:when test="identifier/@type !='' or identifier/text() != '' or @type != '' or format/identifier != '' or format/identifier/@type != '' or title/text() !='' or notes/text() != ''">
                 <xsl:copy>
                     <xsl:apply-templates select="@* | node()" />
                 </xsl:copy>   
