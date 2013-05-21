@@ -246,6 +246,13 @@ class Solr {
         }
     }
 
+    function deleteByID($id){
+        if($id){
+             $result = $this->deleteByQueryCondition('id:'.$id);
+        }
+    }
+
+
     function clear($data_source_id='all'){
         if($data_source_id!='all'){
             $query = 'data_source_id:("'.$data_source_id.'")';
