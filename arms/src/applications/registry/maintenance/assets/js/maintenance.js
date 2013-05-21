@@ -63,8 +63,11 @@ $(document).on('click','button.task',function(){
 		case 'enrich_missing': url= base_url+'maintenance/enrichMissing/';break;
 		case 'index_all': url= base_url+'maintenance/indexAll/';break;
 		case 'index_missing': url= base_url+'maintenance/indexMissing/';break;
+		case 'cleanNotExist': url= base_url+'maintenance/cleanNotExist/';break;
 	}
 	$.getJSON(url, function(data) {
 		updateDataSourcesStat();
 	});
+}).on('click','#refresh', function(){
+	initView();
 });

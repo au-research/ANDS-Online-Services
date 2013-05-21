@@ -191,8 +191,7 @@ class Maintenance extends MX_Controller {
 			return json_encode($data);
 	}
 	
-	function clearAll()
-	{
+	function clearAll(){
 		acl_enforce('REGISTRY_STAFF');
 		$data = array();
 		$data['logs'] = '';
@@ -205,8 +204,7 @@ class Maintenance extends MX_Controller {
 		echo json_encode($data);
 	}
 
-	function indexAll()
-	{
+	function indexAll(){
 		acl_enforce('REGISTRY_STAFF');
 		$data = array();
 		$data['logs'] = '';
@@ -242,6 +240,46 @@ class Maintenance extends MX_Controller {
 		}
 		echo json_encode($data);
 	}
+
+	/**
+	 * Clean the Index of records that doesn't exist
+	 * @return [type] [description]
+	 */
+	function cleanNotExist(){
+		acl_enforce('REGISTRY_STAFF');
+		header('Cache-Control: no-cache, must-revalidate');
+		header('Content-type: application/json');
+
+		$this->load->model('maintenance_stat', 'mm');
+		$this->load->model('registry_object/registry_objects', 'ro');
+
+		$solr_ids = $this->mm->getAllIDs('solr');
+		$data['logs'] = '';
+
+		//collect the unset array
+		$unset = array();
+		foreach($solr_ids as $id){
+			try{
+				$ro = $this->ro->getByID($id);
+				if(!$ro || !$ro->getRif() || $ro->status != 'PUBLISHED'){
+					array_push($unset, $id);
+				}
+				unset($ro);
+			}catch (Exception $e){
+				echo "<pre>error in: $e" . nl2br($e->getMessage()) . "</pre>" . BR;
+			}
+		}
+		
+		//actually delete them from the index
+		$this->load->library('solr');
+		foreach($unset as $id){
+			$this->solr->deleteByID($id);
+			$data['logs'] .= $id.' deleted from index | ';
+		}
+
+		echo json_encode($data);
+	}
+
 	/**
 	 * @ignore
 	 */
