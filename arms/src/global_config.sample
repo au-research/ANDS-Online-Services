@@ -1,7 +1,16 @@
 <?php
+/* Information about the environment the system is installed to */
 $ENV['default_base_url'] = "<Base URL of your installation>"; //(excludes any registry/ or portal/)
-$ENV['environment_name'] = "<The Environment name>";
-$ENV['deployment_state'] = "<prod or devl>";
+
+$ENV['environment_name'] = ""; // blank will leave the environment default
+$ENV['environment_colour'] = "#0088cc"; // optional, only applies when environment_name is set
+$ENV['deployment_state'] = "development";
+
+/* ERROR HANDLING */
+$ENV['site_admin'] = "Aliza Log";
+$ENV['site_admin_email'] = "<admin @ email>";
+
+
 /* SOLR URL */
 $ENV['solr_url'] = "http://<your hostname>:8080/solr/";
 $ENV['sissvoc_url'] = "http://<your sissvoc resolver>:8080/sissvoc/api/";
@@ -35,6 +44,9 @@ $ENV['shibboleth_sp'] = false;
 
 // Session Timeout (how long before the user is automatically logged out)
 $ENV['session_timeout'] = 7200; // 2 hours of inactivity before logout...
+
+ // Will affect the error reporting status
+$ENV['deployment_state'] = "<production or development>";
 
 /* Google Analytics account details */
 $ENV['rda_urchin_id'] = '';

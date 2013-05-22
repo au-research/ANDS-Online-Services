@@ -31,11 +31,25 @@
 <link rel="stylesheet" href="<?php echo asset_url('lib/jQRangeSlider/css/iThing.css', 'base');?>" type="text/css" media="screen" > 
 
 </head>
+<?php
+if($this->config->item('environment_name'))
+{
+  $environment_name = $this->config->item('environment_name');
+  $environment_colour = ($this->config->item('environment_colour') ?: "#0088cc");
+  $environment_header_style = " style='border-top: 4px solid " . $environment_colour . ";'";
+}
+?>
 <body>
-	<div class="header">
+	<div class="header" <?=$environment_header_style;?>>
 		<div class="head">
 			<div class="tagline">
 				<a href="<?php echo base_url();?>"><span>Research Data</span> Australia</a>
+				<?php
+					if ($environment_name)
+					{
+						echo "<small style='font-size:0.5em; color:". $environment_colour ."'>" . $environment_name . "</small>";
+					}
+				?>
 			</div><!-- tagline -->
 			<a href="<?php echo "http://www.ands.org.au/"; ?>" target="_blank" class="logo"><img src="<?php echo asset_url('images/logo.png','core');?>" alt="Research Data Australia Home Page Link (brought to you by ANDS)" /></a>
 			<ul class="top_nav">

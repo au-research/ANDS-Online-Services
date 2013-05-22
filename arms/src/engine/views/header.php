@@ -9,12 +9,20 @@
  * 
  */
 
-if($this->config->item('environment_name')!='Production')
-  { 
-    $topStyle = " style='border-top: 4px solid #0088cc;'";
-  }else{
-    $topStyle = '';
-  }
+// Page header style is blue if the environment is not Production
+if($this->config->item('environment_name'))
+{
+  $environment_name = $this->config->item('environment_name');
+  $environment_colour = $this->config->item('environment_colour');
+  $environment_header_style = " style='border-top: 4px solid " . ($env_colour ?: "#0088cc") . ";'";
+}
+else
+{
+  $environment_name = '';
+  $environment_colour = '';
+  $environment_header_style = '';
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -74,10 +82,11 @@ if($this->config->item('environment_name')!='Production')
 
 
 
-    <div id="header" <?php echo $topStyle?>">
+    <div id="header" <?=$environment_header_style;?>">
       <a href="<?php echo base_url();?>" title="Back to ANDS Online Services Home" tip="Back to ANDS Online Services Home" my="center left" at="center right">
         <img src="<?php echo base_url();?>/assets/img/ands_logo_white.png" alt="ANDS Logo White"/> 
       </a>
+      <strong style="color:<?=$environment_colour;?>;"><?=$environment_name;?></strong>
     </div>
     
 
