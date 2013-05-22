@@ -1617,22 +1617,3 @@ $(document).on('click', '#exit_tab', function(e){
 	window.location = $('#breadcrumb a:first').attr("href");
 });
 
-function isUniqueKey(ro_key, ro_id, ds_id)
-{
-	var isUniqueMsg = '';
-	$.ajax({
-		async: false,
-		type: 'GET',
-		data: {ro_key:ro_key},
-		url: base_url+'services/registry/check_unique_ro_key',
-		success: function(data){
-			$.each(data.ro_list, function(idx, e) {
-				if(e.data_source_id != ds_id)
-					isUniqueMsg = 'Another record with the same key already exists in the Registry (in another Data Source). Please choose a unique key for this record.';
-				else if(e.status != 'PUBLISHED' && e.registry_object_id != ro_id)
-				 	isUniqueMsg = 'Another record with the same key already exists in your Data Source ('+e.status+'). Please choose a unique key for this record.';
-			});
-		}
-	});
-	return isUniqueMsg;
-}
