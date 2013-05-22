@@ -8,6 +8,13 @@
  * @package ands/
  * 
  */
+
+if($this->config->item('environment_name')!='Production')
+  { 
+    $topStyle = " style='border-top: 4px solid #0088cc;'";
+  }else{
+    $topStyle = '';
+  }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -22,9 +29,7 @@
     <link href="<?php echo base_url();?>assets/lib/twitter_bootstrap/css/bootstrap.css" rel="stylesheet">
     <link href="<?php echo base_url();?>assets/lib/twitter_bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
 
-    <!-- ANDS Less file and general styling correction-->
-    <link href="<?php echo base_url();?>assets/css/base.css" rel="stylesheet">
-    <link href="<?php echo base_url();?>assets/less/arms.less" rel="stylesheet/less" type="text/css">
+
 
     <!-- ANDS print stylesheet-->
     <link href="<?php echo base_url();?>assets/css/print.css" rel="stylesheet/less" type="text/css" media="print">
@@ -38,7 +43,9 @@
     <link href="<?php echo base_url();?>assets/lib/unicorn_styles/css/uniform.css" rel="stylesheet">
     <link href="<?php echo base_url();?>assets/lib/unicorn_styles/css/unicorn.main.css" rel="stylesheet">
     <link href="<?php echo base_url();?>assets/lib/unicorn_styles/css/unicorn.grey.css" rel="stylesheet">
-
+    <!-- ANDS Less file and general styling correction-->
+    <link href="<?php echo base_url();?>assets/css/base.css" rel="stylesheet">
+    <link href="<?php echo base_url();?>assets/less/arms.less" rel="stylesheet/less" type="text/css">
 
     <!-- additional styles -->
  
@@ -67,7 +74,7 @@
 
 
 
-    <div id="header">
+    <div id="header" <?php echo $topStyle?>">
       <a href="<?php echo base_url();?>" title="Back to ANDS Online Services Home" tip="Back to ANDS Online Services Home" my="center left" at="center right">
         <img src="<?php echo base_url();?>/assets/img/ands_logo_white.png" alt="ANDS Logo White"/> 
       </a>
