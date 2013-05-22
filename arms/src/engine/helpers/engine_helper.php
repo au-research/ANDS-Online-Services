@@ -96,17 +96,21 @@ function notifySiteAdmin($errno, $errstr, $errfile, $errline)
 	if($_ci->config->item('site_admin_email') && $_ci->config->item('site_admin_email') != '<admin @ email>')
 	{		
 		$siteAdmin = ($_ci->config->item('site_admin') ? $_ci->config->item('site_admin') : 'Site Admin'); 
+
 		$siteInstance = ($_ci->config->item('environment_name') ? $_ci->config->item('environment_name') : 'Site Instance');
 		$siteState = ($_ci->config->item('deployment_state') ? " (".$_ci->config->item('deployment_state').")" : '');
+
 		$email = $_ci->load->library('email');
 		$email->from($_ci->config->item('site_admin_email'), $siteAdmin);
 		$email->to($_ci->config->item('site_admin_email')); 
 		$errDisp = error_level_tostring($errno);
+
 		$email->subject($errDisp.' occured on ' .$siteInstance.$siteState);
 		$message = 'MESSAGE:'.NL.$errstr . NL . "on line " . $errline . " (" . $errfile .")".NL.NL;
 		$serverArr = $_SERVER;
 		$serverArr['HTTP_COOKIE'] = 'NOT SHOWING...';
 		$message .= 'SERVER VARIABLES: '.NL.print_r($serverArr, true);
+
 		$email->message($message);	
 		$email->send();
 	}
