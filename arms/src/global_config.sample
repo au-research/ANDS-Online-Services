@@ -10,7 +10,6 @@ $ENV['deployment_state'] = "development";
 $ENV['site_admin'] = "Aliza Log";
 $ENV['site_admin_email'] = "<admin @ email>";
 
-
 /* SOLR URL */
 $ENV['solr_url'] = "http://<your hostname>:8080/solr/";
 $ENV['sissvoc_url'] = "http://<your sissvoc resolver>:8080/sissvoc/api/";
