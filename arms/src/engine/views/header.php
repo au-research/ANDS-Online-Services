@@ -14,7 +14,7 @@ if($this->config->item('environment_name'))
 {
   $environment_name = $this->config->item('environment_name');
   $environment_colour = $this->config->item('environment_colour');
-  $environment_header_style = " style='border-top: 4px solid " . ($env_colour ?: "#0088cc") . ";'";
+  $environment_header_style = " style='border-top: 4px solid " . ($environment_colour ?: "#0088cc") . ";'";
 }
 else
 {

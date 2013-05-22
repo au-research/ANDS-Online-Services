@@ -38,6 +38,12 @@ if($this->config->item('environment_name'))
   $environment_colour = ($this->config->item('environment_colour') ?: "#0088cc");
   $environment_header_style = " style='border-top: 4px solid " . $environment_colour . ";'";
 }
+else
+{
+	$environment_name = '';
+  	$environment_colour = '';
+  	$environment_header_style = '';
+}
 ?>
 <body>
 	<div class="header" <?=$environment_header_style;?>>
