@@ -42,7 +42,7 @@
 							</div>
 						<?php endif; */ ?>
 						<?php 
-						prinfLoginForm($authenticators, $default_authenticator, 'loginForm');
+						printLoginForm($authenticators, $default_authenticator, 'loginForm');
 						printAlternativeLoginForms($authenticators, $default_authenticator);
 						?>
 					</div>
@@ -86,7 +86,7 @@ var $buoop = {vs:{i:7,f:3.6,o:10.6,s:4,n:9}}
 
 <?php
 
-function prinfLoginForm($authenticators, $authenticator , $class)
+function printLoginForm($authenticators, $authenticator , $class)
 {
 	
 	if($authenticator == gCOSI_AUTH_METHOD_SHIBBOLETH)
@@ -140,7 +140,7 @@ function printAlternativeLoginForms($authenticators, $default_authenticator)
 {
 	foreach($authenticators as $key => $value){
 		if($key != $default_authenticator)
-			prinfLoginForm($authenticators, $key, 'loginForm hide');
+			printLoginForm($authenticators, $key, 'loginForm hide');
 	}
 }
 ?>
