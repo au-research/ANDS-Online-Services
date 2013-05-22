@@ -43,6 +43,9 @@ class Auth extends CI_Controller {
 		$data['title'] = 'Login';
 		$data['js_lib'] = array('core');
 		$data['scripts'] = array();
+		$this->CI =& get_instance();
+		$data['default_authenticator'] = $this->CI->config->item('default_authenticator');
+		$data['authenticators'] = $this->CI->config->item('authenticators');
 		if(isset($_SERVER['shib-shared-token'])){
 			$sharedToken = $_SERVER['shib-shared-token'];
 		}else{
@@ -55,7 +58,9 @@ class Auth extends CI_Controller {
 			if($this->user->authChallenge($sharedToken, ''))
 			{
 				redirect('/auth/dashboard/');
-			}else{
+			}
+			else
+			{
 				$data['error_message'] = "Unable to login. Please check your credentials are accurate.";
 				$this->load->view('login', $data);
 			}

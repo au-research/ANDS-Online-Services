@@ -46,8 +46,12 @@ function ds_acl_enforce($ds_id, $message = ''){
 
 function default_error_handler($errno, $errstr, $errfile, $errline)
 {
-	// Ignore E_STRICT mode
+	// Ignore E_STRICT no email either
 	if ($errno == E_STRICT) { return true; }
+
+	notifySiteAdmin($errno, $errstr, $errfile, $errline);
+	// hide E_NOTICE from users 
+	if ($errno == E_NOTICE) { return true; }
 
 	if (ENVIRONMENT == "development")
 	{
@@ -57,9 +61,55 @@ function default_error_handler($errno, $errstr, $errfile, $errline)
 	{
 		throw new Exception("An unexpected system error has occured. Please try again or report this error to the system administrator.");
 	}
+
+
 	return true;   /* Don't execute PHP internal error handler */
 
 }
+
+function error_level_tostring($errno)
+{
+    $errorlevels = array(
+        2047 => 'E_ALL',
+        1024 => 'E_USER_NOTICE',
+        512 => 'E_USER_WARNING',
+        256 => 'E_USER_ERROR',
+        128 => 'E_COMPILE_WARNING',
+        64 => 'E_COMPILE_ERROR',
+        32 => 'E_CORE_WARNING',
+        16 => 'E_CORE_ERROR',
+        8 => 'E_NOTICE',
+        4 => 'E_PARSE',
+        2 => 'E_WARNING',
+        1 => 'E_ERROR');
+    $result = "ERROR #(".$errno.")";
+    if(array_key_exists($errno, $errorlevels))
+    {
+    	$result =  $errorlevels[$errno]. " #(".$errno.")";
+    }
+    return $result;
+}
+
+function notifySiteAdmin($errno, $errstr, $errfile, $errline)
+{
+	$_ci =& get_instance();
+	if($_ci->config->item('site_admin_email') && $_ci->config->item('site_admin_email') != '<admin @ email>')
+	{		
+		$siteAdmin = ($_ci->config->item('site_admin') ? $_ci->config->item('site_admin') : 'Site Admin'); 
+		$siteInstance = ($_ci->config->item('site_instance') ? $_ci->config->item('site_instance') : 'Site Instance');
+		$email = $_ci->load->library('email');
+		$email->from($_ci->config->item('site_admin_email'), $siteAdmin);
+		$email->to($_ci->config->item('site_admin_email')); 
+		$errDisp = error_level_tostring($errno);
+		$email->subject($errDisp.' occured on ' .$siteInstance);
+		$message = $errstr . NL . "on line " . $errline . " (" . $errfile .")";
+		$email->message($message);	
+		$email->send();
+	}
+}
+
+
+
 set_error_handler("default_error_handler");
 
 function default_exception_handler( $e ) {
