@@ -100,6 +100,7 @@ function notifySiteAdmin($errno, $errstr, $errfile, $errline)
 		$siteInstance = ($_ci->config->item('environment_name') ? $_ci->config->item('environment_name') : 'Site Instance');
 		$siteState = ($_ci->config->item('deployment_state') ? " (".$_ci->config->item('deployment_state').")" : '');
 
+
 		$email = $_ci->load->library('email');
 		$email->from($_ci->config->item('site_admin_email'), $siteAdmin);
 		$email->to($_ci->config->item('site_admin_email')); 
