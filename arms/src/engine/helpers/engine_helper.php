@@ -103,7 +103,10 @@ function notifySiteAdmin($errno, $errstr, $errfile, $errline)
 		$email->to($_ci->config->item('site_admin_email')); 
 		$errDisp = error_level_tostring($errno);
 		$email->subject($errDisp.' occured on ' .$siteInstance.$siteState);
-		$message = $errstr . NL . "on line " . $errline . " (" . $errfile .")";
+		$message = 'MESSAGE:'.NL.$errstr . NL . "on line " . $errline . " (" . $errfile .")".NL.NL;
+		$serverArr = $_SERVER;
+		$serverArr['HTTP_COOKIE'] = 'NOT SHOWING...';
+		$message .= 'SERVER VARIABLES: '.NL.print_r($serverArr, true);
 		$email->message($message);	
 		$email->send();
 	}
