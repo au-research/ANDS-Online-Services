@@ -4,7 +4,8 @@ $ENV['default_base_url'] = "<Base URL of your installation>"; //(excludes any re
 $ENV['environment_name'] = "<The Environment name>";
 $ENV['deployment_state'] = "<prod or devl>";
 
-$ENV['site_admin'] = "<Admin Name>";
+/* ERROR HANDLING */
+$ENV['site_admin'] = "Aliza Log";
 $ENV['site_admin_email'] = "<admin @ email>";
 
 /* SOLR URL */
