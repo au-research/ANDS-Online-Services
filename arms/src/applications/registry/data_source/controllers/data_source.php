@@ -30,7 +30,7 @@ class Data_source extends MX_Controller {
 		$data['small_title'] = '';
 
 		$this->load->model("data_sources","ds");
-	 	$dataSources = $this->ddds->getOwnedDataSources();
+	 	$dataSources = $this->ds->getOwnedDataSources();
 
 		$items = array();
 		foreach($dataSources as $ds){
