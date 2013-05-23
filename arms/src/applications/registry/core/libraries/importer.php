@@ -20,6 +20,8 @@ class Importer {
 	private $maintainStatus;
 
 	private $status; // status of the currently ingested record
+	public $runBenchMark = true;
+	private $benchMarkLog;
 	public $isImporting = false; // flag stating whether the importer is running
 	private $importedRecords;
 
@@ -41,7 +43,18 @@ class Importer {
 	public $message_log = array();
 
 	private $valid_classes = array("collection","party","activity","service");
-
+	private $solrReqCount;
+	private $solrReqTime;
+	private $solrTransFormCount;
+	private $solrTransFormTime;
+	private $roBuildCount;
+	private $roBuildTime;
+	private $roEnrichCount;
+	private $roEnrichTime;
+	private $roQACount;
+	private $roQATime;
+	private $cCyclesCount;
+	private $cCyclesTime;
 	public function Importer()
 	{
 		$this->CI =& get_instance();
@@ -70,6 +83,7 @@ class Importer {
 		// Enable memory profiling...
 		//ini_set('xdebug.profiler_enable',1);
 		//xdebug_enable();
+		if($this->runBenchMark) $this->CI->benchmark->mark('ingest_start');
 		$this->isImporting = true;
 
 		//$this->CI->output->enable_profiler(TRUE);
@@ -85,12 +99,12 @@ class Importer {
 			$this->isImporting = false;
 		}
 
-		$this->CI->benchmark->mark('crosswalk_execution_start');
+		if($this->runBenchMark) $this->CI->benchmark->mark('crosswalk_execution_start');
 		
 			// Apply the crosswalk (if applicable)
 		$this->_executeCrosswalk();
 		
-		$this->CI->benchmark->mark('crosswalk_execution_end');
+		if($this->runBenchMark) $this->CI->benchmark->mark('crosswalk_execution_end');
 
 
 		// Set a a default HarvestID if necessary
@@ -110,7 +124,8 @@ class Importer {
 			$this->xmlPayload = array($this->xmlPayload);
 		}
 
-		$this->CI->benchmark->mark('ingest_stage_1_start');
+		if($this->runBenchMark) $this->CI->benchmark->mark('ingest_stage_1_start');
+
 			foreach ($this->xmlPayload AS $idx => $payload)
 			{
 				// Escape XML entities from the start...
@@ -162,21 +177,17 @@ class Importer {
 				}
 
 			}
-		$this->CI->benchmark->mark('ingest_stage_1_end');
+		if($this->runBenchMark) $this->CI->benchmark->mark('ingest_stage_1_end');
 
-
+		
 
 		// Partial commits mean that there is more to come in this harvest...woooah-on donkey
 		if (!$this->partialCommitOnly)
 		{
 			// And now, onto the second stage...
-			$this->CI->benchmark->mark('ingest_enrich_start');
-				$this->_enrichRecords();
-			$this->CI->benchmark->mark('ingest_enrich_end');
 
-			$this->CI->benchmark->mark('ingest_reindex_start');
-				$this->_reindexRecords();
-			$this->CI->benchmark->mark('ingest_reindex_end');
+			$this->_enrichRecords();
+			$this->_reindexRecords();
 		
 			// XXX: Don't do this...it's crappy
 			if ($this->dataSource)
@@ -205,10 +216,12 @@ class Importer {
 			{
 				$this->message_log[] = "Reindexed record count: " . $this->reindexed_records;
 			}
+
 			$this->message_log[] = $this->standardLog;
 		}
 
 		$this->isImporting = false;
+		if($this->runBenchMark) $this->CI->benchmark->mark('ingest_end');
 	}
 
 
@@ -366,10 +379,13 @@ class Importer {
 	 */
 	public function _enrichRecords($directly_affected_records = array())
 	{
+		
+		if($this->runBenchMark) $this->CI->benchmark->mark('ingest_enrich_start');
 		// Keep track of our imported keys...
 		$imported_keys = array();
 
 		// Only enrich records received in this harvest
+		if($this->runBenchMark) $this->CI->benchmark->mark('ingest_enrich_stage1_start');
 		foreach ($this->importedRecords AS $ro_id)
 		{
 
@@ -391,12 +407,14 @@ class Importer {
 
 				unset($ro);
 			}
-			clean_cycles();
+			//clean_cycles();
 		}
+		if($this->runBenchMark) $this->CI->benchmark->mark('ingest_enrich_stage1_end');
 		gc_collect_cycles();
 
 		// Two-stage enrich to get inverse links in quality metadata
 		// Only enrich records received in this harvest
+		if($this->runBenchMark) $this->CI->benchmark->mark('ingest_enrich_stage2_start');
 		foreach ($this->importedRecords AS $ro_id)
 		{
 
@@ -407,17 +425,50 @@ class Importer {
 			if($ro)
 			{
 				// Update our quality levels data!
+
+
+				if($this->runBenchMark)
+				{
+					$this->roQACount++;
+					$this->CI->benchmark->mark('ro_qa_start');
+				}
+				
 				$ro->update_quality_metadata();
+				
+				if($this->runBenchMark)
+				{
+					$this->CI->benchmark->mark('ro_qa_end');
+					$this->roQATime += $this->CI->benchmark->elapsed_time('ro_qa_start','ro_qa_end');
+				}
+
+				
 				// Generate extrif
+				// 
+				// 
+				if($this->runBenchMark)
+				{
+					$this->roEnrichCount++;
+					$this->CI->benchmark->mark('ro_enrich_start');
+				}
+				
 				$ro->enrich();
+				
+				if($this->runBenchMark)
+				{
+					$this->CI->benchmark->mark('ro_enrich_end');
+					$this->roEnrichTime += $this->CI->benchmark->elapsed_time('ro_enrich_start','ro_enrich_end');
+				}		
+
 				unset($ro);
 			}
-			clean_cycles();
+			//clean_cycles();
 		}
+		if($this->runBenchMark) $this->CI->benchmark->mark('ingest_enrich_stage2_end');
 		gc_collect_cycles();
 
 
 		// Exclude those keys we already processed above
+		if($this->runBenchMark) $this->CI->benchmark->mark('ingest_enrich_stage3_start');
 		$directly_affected_records = array_unique(array_diff($directly_affected_records, $imported_keys));
 
 		// enrich related records
@@ -435,11 +486,13 @@ class Importer {
 					$ro->update_quality_metadata();
 					$ro->enrich();
 					unset($ro);
-					clean_cycles();
+					//clean_cycles();
 				}
 			}
 		}
+		if($this->runBenchMark) $this->CI->benchmark->mark('ingest_enrich_stage3_end');
 		gc_collect_cycles();
+		if($this->runBenchMark) $this->CI->benchmark->mark('ingest_enrich_end');
 	}
 
 
@@ -448,6 +501,7 @@ class Importer {
 	 */
 	function _reindexRecords($specific_target_keys = array())
 	{
+		if($this->runBenchMark) $this->CI->benchmark->mark('ingest_reindex_start');
 
 		$this->CI->load->model('registry_object/registry_objects', 'ro');
 		$this->CI->load->model('data_source/data_sources', 'ds');
@@ -459,17 +513,69 @@ class Importer {
 		{
 			/// Called from outside the Importer
 			foreach ($specific_target_keys AS $key)
-			{
+			{				
+				if($this->runBenchMark)
+				{
+					$this->roBuildCount++;
+					$this->CI->benchmark->mark('ro_build_start');
+				}
+				
 				$ro = $this->CI->ro->getPublishedByKey($key);
+				
+				if($this->runBenchMark)
+				{
+					$this->CI->benchmark->mark('ro_build_end');
+					$this->roBuildTime += $this->CI->benchmark->elapsed_time('ro_build_start','ro_build_end');
+				}			
 				if ($ro)
 				{
+					if($this->runBenchMark)
+					{
+						$this->solrTransFormCount++;
+						$this->CI->benchmark->mark('solr_transform_start');
+					}
+					
 					$this->queueSOLRAdd($ro->transformForSOLR(false));
+					
+					if($this->runBenchMark)
+					{
+						$this->CI->benchmark->mark('solr_transform_end');
+						$this->solrTransFormTime += $this->CI->benchmark->elapsed_time('solr_transform_start','solr_transform_end');
+					}
 				}
+
+				if($this->runBenchMark)
+				{
+					$this->gcCyclesCount++;
+					$this->CI->benchmark->mark('gc_cycles_start');
+				}
+					
 				unset($ro);
 				gc_collect_cycles();
+					
+				if($this->runBenchMark)
+				{
+					$this->CI->benchmark->mark('gc_cycles_end');
+					$this->gcCyclesTime += $this->CI->benchmark->elapsed_time('gc_cycles_start','gc_cycles_end');
+				}
+
+
 			}
+			
 			$this->flushSOLRAdd();
+			
+			if($this->runBenchMark)
+			{
+				$this->CI->benchmark->mark('solr_commit_start');
+			}
+			
 			$this->commitSOLR();
+			
+			if($this->runBenchMark)
+			{
+				$this->CI->benchmark->mark('solr_commit_end');
+			}
+			if($this->runBenchMark) $this->CI->benchmark->mark('ingest_reindex_end');
 
 			return array("count"=>$this->reindexed_records, "errors"=>array());
 		}
@@ -480,20 +586,71 @@ class Importer {
 			$allAffectedRecords = array_merge($this->importedRecords, $this->affected_records);
 			foreach($allAffectedRecords AS $ro_id){
 
-				$ro = $this->CI->ro->getByID($ro_id);
+				
+					if($this->runBenchMark)
+					{
+						$this->roBuildCount++;
+						$this->CI->benchmark->mark('ro_build_start');
+					}
+					
+					$ro = $this->CI->ro->getByID($ro_id);
+					
+					if($this->runBenchMark)
+					{
+						$this->CI->benchmark->mark('ro_build_end');
+						$this->roBuildTime += $this->CI->benchmark->elapsed_time('ro_build_start','ro_build_end');
+					}
+
+
 				if ($ro && $ro->status == PUBLISHED)
 				{
+					if($this->runBenchMark)
+					{
+						$this->solrTransFormCount++;
+						$this->CI->benchmark->mark('solr_transform_start');
+					}
+					
 					$this->queueSOLRAdd($ro->transformForSOLR(false));
+					
+					if($this->runBenchMark)
+					{
+						$this->CI->benchmark->mark('solr_transform_end');
+						$this->solrTransFormTime += $this->CI->benchmark->elapsed_time('solr_transform_start','solr_transform_end');
+					}
 				}
+				if($this->runBenchMark)
+				{
+					$this->gcCyclesCount++;
+					$this->CI->benchmark->mark('gc_cycles_start');
+				}
+					
 				unset($ro);
 				gc_collect_cycles();
+					
+				if($this->runBenchMark)
+				{
+					$this->CI->benchmark->mark('gc_cycles_end');
+					$this->gcCyclesTime += $this->CI->benchmark->elapsed_time('gc_cycles_start','gc_cycles_end');
+				}
 			}
 
 			// Push through the last chunk...
 			$this->flushSOLRAdd();
+			if($this->runBenchMark)
+			{
+				$this->CI->benchmark->mark('solr_commit_start');
+			}
+			
 			$this->commitSOLR();
+			
+			if($this->runBenchMark)
+			{
+				$this->CI->benchmark->mark('solr_commit_end');
+			}
 		}
-
+		//gc_collect_cycles();
+		if($this->runBenchMark) $this->CI->benchmark->mark('ingest_reindex_end');
+		
 		return true;
 	}
 
@@ -774,6 +931,60 @@ class Importer {
 		return preg_replace('/ xsi:schemaLocation=".*?"/sm','', $string);
 	}
 
+	public function getBenchMarkLogs()
+	{
+		$totalTime = $this->CI->benchmark->elapsed_time('ingest_start', 'ingest_end');
+		$enrichTime = $this->CI->benchmark->elapsed_time('ingest_enrich_start', 'ingest_enrich_end');
+		$reIndexTime = $this->CI->benchmark->elapsed_time('ingest_reindex_start', 'ingest_reindex_end');
+		$ingestTime = $this->CI->benchmark->elapsed_time('ingest_stage_1_start','ingest_stage_1_end');
+		$crosswalkTime = $this->CI->benchmark->elapsed_time('crosswalk_execution_start','crosswalk_execution_end');
+		$this->benchMarkLog .= NL.'Importing ran for : '.gmdate("H:i:s", $totalTime);
+		$this->benchMarkLog .= NL.'Ingest ran for : '.gmdate("H:i:s", $ingestTime);
+		$this->benchMarkLog .= NL.'Crosswalk ran for : '.$crosswalkTime;
+		$this->benchMarkLog .= NL.'Enrich ran for : '.gmdate("H:i:s", $enrichTime);
+
+		$enrichS1Time = $this->CI->benchmark->elapsed_time('ingest_enrich_stage1_start', 'ingest_enrich_stage1_end');
+		$enrichS2Time = $this->CI->benchmark->elapsed_time('ingest_enrich_stage2_start', 'ingest_enrich_stage2_end');
+		$enrichS3Time = $this->CI->benchmark->elapsed_time('ingest_enrich_stage3_start', 'ingest_enrich_stage3_end');
+		$this->benchMarkLog .= NL.'.......Stage 1 : '.$enrichS1Time;
+		$this->benchMarkLog .= NL.'.......Stage 2 : '.$enrichS2Time;
+		if($this->roEnrichCount > 0 && $this->roQACount > 0)
+		{
+			$this->benchMarkLog .= NL.'______________Ro. Enrich Count: '.$this->roEnrichCount. ' total time: '.$this->roEnrichTime. ' avrg: ' .number_format($this->roEnrichTime/$this->roEnrichCount,4);
+			$this->benchMarkLog .= NL.'______________Ro. QA Count: '.$this->roQACount. ' total time: '.$this->roQATime. ' avrg: ' .number_format($this->roQATime/$this->roQACount,4);
+		}
+		$this->benchMarkLog .= NL.'.......Stage 3 : '.$enrichS3Time;
+
+
+		$this->benchMarkLog .= NL.'ReIndex ran for : '.gmdate("H:i:s", $reIndexTime);
+		if($this->roBuildCount > 0)
+		{
+			$this->benchMarkLog .= NL.'.......Ro. Build Count: '.$this->roBuildCount. ' total time: '.$this->roBuildTime. ' avrg: ' .number_format($this->roBuildTime/$this->roBuildCount,4);
+		}
+		if($this->gcCyclesCount > 0)
+		{
+			$this->benchMarkLog .= NL.'.......GC Cycles Count: '.$this->gcCyclesCount. ' total time: '.$this->gcCyclesTime. ' avrg: ' .number_format($this->gcCyclesTime/$this->gcCyclesCount,4);
+		}
+		if($this->solrTransFormCount > 0)
+		{
+			$this->benchMarkLog .= NL.'.......Ro. Transform Count: '.$this->solrTransFormCount. ' total time: '.$this->solrTransFormTime. ' avrg: ' .number_format($this->solrTransFormTime/$this->solrTransFormCount,4);
+		}
+		if($this->solrReqCount > 0)
+		{
+			$this->benchMarkLog .= NL.'.......SOLR_CHUNK_SIZE: '.self::SOLR_CHUNK_SIZE;
+			$this->benchMarkLog .= NL.'.......Solr Request Count : '.$this->solrReqCount. ' total time: '.$this->solrReqTime. ' avrg: ' .number_format($this->solrReqTime/$this->solrReqCount,4);
+		}
+		$solrCommitTime = $this->CI->benchmark->elapsed_time('solr_commit_start','solr_commit_end');
+		$this->benchMarkLog .= NL.'.......Solr Commit took : '.$solrCommitTime;
+		$this->benchMarkLog .= NL.'.......Memory Peak Usage : '.memory_get_peak_usage().' bytes';
+
+
+
+
+
+		return $this->benchMarkLog;
+	}
+
 	/**
 	 * 
 	 */
@@ -845,9 +1056,10 @@ class Importer {
 	 * * * */
 
 	var $solr_queue = array();
-	const SOLR_CHUNK_SIZE = 50;
+	const SOLR_CHUNK_SIZE = 400;
 	const SOLR_RESPONSE_CODE_OK = 0;
-
+	//var $solrReqCount = 0;
+	//var $solrReqTime = 0;
 	/**
 	 * Queue up a request to send to SOLR ("chunking" of <add><doc> statements)
 	 */
@@ -856,7 +1068,17 @@ class Importer {
 		$this->solr_queue[] = $doc_statement;
 		if (count($this->solr_queue) > self::SOLR_CHUNK_SIZE)
 		{
+			$this->solrReqCount++;
+			if($this->runBenchMark)
+			{
+				$this->CI->benchmark->mark('solr_flush_start');
+			}
 			$this->flushSOLRAdd();
+			if($this->runBenchMark)
+			{
+				$this->CI->benchmark->mark('solr_flush_end');
+				$this->solrReqTime += $this->CI->benchmark->elapsed_time('solr_flush_start','solr_flush_end');
+			}
 		}
 	}
 
@@ -926,8 +1148,20 @@ class Importer {
 		$this->maintainStatus = false;
 		$this->error_log = array();
 		$this->message_log = array();
-
+		$this->benchMarkLog = '';
 		$this->start_time = null;
+		$this->solrReqCount = 0;
+		$this->solrReqTime = 0;
+		$this->solrTransFormCount = 0;
+		$this->solrTransFormTime = 0;
+		$this->roBuildCount = 0;
+		$this->roBuildTime = 0;
+		$this->roEnrichCount = 0;
+		$this->roEnrichTime = 0;
+		$this->roQACount = 0;
+		$this->roQATime = 0;
+		$this->gcCyclesCount = 0;
+		$this->gcCyclesTime = 0;
 	}
 
 
