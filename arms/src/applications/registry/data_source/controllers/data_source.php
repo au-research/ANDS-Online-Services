@@ -1378,7 +1378,10 @@ public function getContributorGroupsEdit()
 			echo json_encode(array("response"=>"failure", "message"=>"An error occured whilst importing from this URL", "log"=>substr($log,0, 1000)));
 			return;	
 		}	
-	
+		
+		if($this->importer->runBenchMark)
+			$data_source->append_log('IMPORTER BENCHMARK RESULTS:'.NL.$this->importer->getBenchMarkLogs(), HARVEST_INFO, "importer", "BENCHMARK_INFO");
+
 		echo json_encode(array("response"=>"success", "message"=>"Import completed successfully!", "log"=>$log));	
 			
 	}
@@ -1468,7 +1471,9 @@ public function getContributorGroupsEdit()
 			echo json_encode(array("response"=>"failure", "message"=>"An error occured whilst importing from the specified XML", "log"=>substr($elogTitle.$log,0, 1000)));
 			return;	
 		}	
-		
+
+		if($this->importer->runBenchMark)
+			$data_source->append_log('IMPORTER BENCHMARK RESULTS:'.NL.$this->importer->getBenchMarkLogs(), HARVEST_INFO, "importer", "BENCHMARK_INFO");
 	
 		echo json_encode(array("response"=>"success", "message"=>"Import completed successfully!", "log"=>$log));	
 			
@@ -1624,133 +1629,138 @@ public function getContributorGroupsEdit()
 		{
 		$this->load->model("data_sources","ds");
 		$dataSource = $this->ds->getByHarvestID($harvestId);
-		$dataSource->harvest_method;
-
-
-			if (isset($POST['content'])){
-				$data =  $this->input->post('content');
-			}
-			if (isset($POST['errmsg'])){
-				$errmsg =  $this->input->post('errmsg');
-			}
-			if (isset($POST['done'])){
-				$done =  strtoupper($this->input->post('done'));
-			}
-			if (isset($POST['date'])){
-				$nextHarvestDate =  $this->input->post('date');
-			}
-			if (isset($POST['mode'])){
-				$mode =  strtoupper($this->input->post('mode'));
-			}
-
-			if($mode == 'TEST')
+			if($dataSource)// WE MIGHT GET A GHOST HARVEST
 			{
-				$logMsg = 'Test harvest completed successfully (harvest ID: '.$harvestId.')' . NL . ' ---';
-				$logMsgErr = 'An error occurred whilst testing harvester settings (harvest ID: '.$harvestId.')';
-			}
+				if (isset($POST['content'])){
+					$data =  $this->input->post('content');
+				}
+				if (isset($POST['errmsg'])){
+					$errmsg =  $this->input->post('errmsg');
+				}
+				if (isset($POST['done'])){
+					$done =  strtoupper($this->input->post('done'));
+				}
+				if (isset($POST['date'])){
+					$nextHarvestDate =  $this->input->post('date');
+				}
+				if (isset($POST['mode'])){
+					$mode =  strtoupper($this->input->post('mode'));
+				}
 
-			// OAI requests get a different message
-			if ($mode == 'HARVEST' && $dataSource->harvest_method == 'RIF')
-			{
-				$logMsg = 'Received some new records from the OAI provider... (harvest ID: '.$harvestId.')' . NL . ' ---';
-				$logMsgErr = 'An error occurred whilst receiving records from the OAI provider... (harvest ID: '.$harvestId.')';
-			}
-		
-
-			if($errmsg)
-			{
-				$dataSource->append_log($logMsgErr.NL."HARVESTER RESPONDED UNEXPECTEDLY: ".$errmsg, HARVEST_ERROR, "harvester","HARVESTER_ERROR");
-				$done = 'TRUE';			
-			}
-			else
-			{	
-				$this->load->library('importer');	
-				$this->importer->maintainStatus(); // records which already exist are harvested into their same status
-				$this->load->model('data_source/data_sources', 'ds');
-
-				$recordCount = preg_match_all("/<metadata>(.*?)<\/metadata>/sm", $data, $matches);
-
-				if(!$recordCount)
+				if($mode == 'TEST')
 				{
-					if (strpos('<error code="noRecordsMatch">',$data) !== FALSE)
-					{
-						$logMsg .= NL . "\tOAI Provider returned no matching records.";
-						$mode = "CANCELLED";
-						$done = true;
-					}
-					else
-					{
-						// Probably a DIRECT harvest?
-						$this->importer->setXML($data);
-					}
+					$logMsg = 'Test harvest completed successfully (harvest ID: '.$harvestId.')' . NL . ' ---';
+					$logMsgErr = 'An error occurred whilst testing harvester settings (harvest ID: '.$harvestId.')';
+				}
+
+				// OAI requests get a different message
+				if ($mode == 'HARVEST' && $dataSource->harvest_method == 'RIF')
+				{
+					$logMsg = 'Received some new records from the OAI provider... (harvest ID: '.$harvestId.')' . NL . ' ---';
+					$logMsgErr = 'An error occurred whilst receiving records from the OAI provider... (harvest ID: '.$harvestId.')';
+				}
+			
+
+				if($errmsg)
+				{
+					$dataSource->append_log($logMsgErr.NL."HARVESTER RESPONDED UNEXPECTEDLY: ".$errmsg, HARVEST_ERROR, "harvester","HARVESTER_ERROR");
+					$done = 'TRUE';			
 				}
 				else
-				{
-					$this->importer->setXML($matches[1]);
-				}
+				{	
+					$this->load->library('importer');	
+					$this->importer->maintainStatus(); // records which already exist are harvested into their same status
 
-				if ($dataSource->provider_type != RIFCS_SCHEME)
-				{
-					$this->importer->setCrosswalk($dataSource->provider_type);
-				}
+					$this->load->model('data_source/data_sources', 'ds');
 
-				$this->importer->setHarvestID($harvestId);
-				$this->importer->setDatasource($dataSource);
+					$recordCount = preg_match_all("/<metadata>(.*?)<\/metadata>/sm", $data, $matches);
 
-				if ($dataSource->harvest_method == 'RIF')
-				{
-					$this->importer->setPartialCommitOnly(TRUE);
-				}
-
-				if($mode == "HARVEST")
-				{
-					try
+					if(!$recordCount)
 					{
-						$this->importer->commit();
-
-
-						if($this->importer->getErrors())
+						if (strpos('<error code="noRecordsMatch">',$data) !== FALSE)
 						{
-							$dataSource->append_log($logMsgErr.NL.$this->importer->getMessages().NL.$this->importer->getErrors(), HARVEST_ERROR, 'harvester', "HARVESTER_ERROR");	
+							$logMsg .= NL . "\tOAI Provider returned no matching records.";
+							$mode = "CANCELLED";
+							$done = true;
 						}
 						else
 						{
-							if($dataSource->harvest_method == 'RIF')
-							{
-								$logMsg = 'Received ' . $this->importer->ingest_attempts . ' new records from the OAI provider... (harvest ID: '.$harvestId.')' . NL . ' ---';
-							}
-
-							$gotData = true;
-							$dataSource->append_log($logMsg.NL.$this->importer->getMessages(), HARVEST_INFO, 'oai', "HARVESTER_INFO");	
+							// Probably a DIRECT harvest?
+							$this->importer->setXML($data);
 						}
-						
-						$responseType = 'success';
 					}
-					catch (Exception $e)
+					else
 					{
-						$dataSource->append_log($logMsgErr.NL."CRITICAL ERROR: " . NL . $e->getMessage() . NL . $this->importer->getErrors(), HARVEST_ERROR, 'harvester',"HARVESTER_ERROR");	
-						$done = 'TRUE';
+						$this->importer->setXML($matches[1]);
+					}
+
+					if ($dataSource->provider_type != RIFCS_SCHEME)
+					{
+						$this->importer->setCrosswalk($dataSource->provider_type);
+					}
+
+					$this->importer->setHarvestID($harvestId);
+					$this->importer->setDatasource($dataSource);
+
+					if ($dataSource->harvest_method == 'RIF')
+					{
+						$this->importer->setPartialCommitOnly(TRUE);
+					}
+
+					if($mode == "HARVEST")
+					{
+						try
+						{
+							$this->importer->commit();
+
+
+							if($this->importer->getErrors())
+							{
+								$dataSource->append_log($logMsgErr.NL.$this->importer->getMessages().NL.$this->importer->getErrors(), HARVEST_ERROR, 'harvester', "HARVESTER_ERROR");	
+							}
+							else
+							{
+								if($dataSource->harvest_method == 'RIF')
+								{
+									$logMsg = 'Received ' . $this->importer->ingest_attempts . ' new records from the OAI provider... (harvest ID: '.$harvestId.')' . NL . ' ---';
+								}
+
+								$gotData = true;
+								$dataSource->append_log($logMsg.NL.$this->importer->getMessages(), HARVEST_INFO, 'oai', "HARVESTER_INFO");	
+							}
+							
+							$responseType = 'success';
+						}
+						catch (Exception $e)
+						{
+							$dataSource->append_log($logMsgErr.NL."CRITICAL ERROR: " . NL . $e->getMessage() . NL . $this->importer->getErrors(), HARVEST_ERROR, 'harvester',"HARVESTER_ERROR");	
+							$done = 'TRUE';
+						}
+					}
+					else
+					{
+						$dataSource->append_log($logMsg, HARVEST_INFO, "harvester", "HARVESTER_INFO");	
+					}	
+				}
+				if($done == 'TRUE')
+				{
+					$dataSource->cancelHarvestRequest($harvestId,false);
+					if($mode == 'HARVEST')
+					{
+						if($dataSource->advanced_harvest_mode == 'REFRESH' && $gotData)
+						{	
+							$dataSource->deleteOldRecords($harvestId);
+						} 
+						if($dataSource->harvest_frequency != '')
+						{
+							$dataSource->requestHarvest();
+						}
 					}
 				}
-				else
-				{
-					$dataSource->append_log($logMsg, HARVEST_INFO, "harvester", "HARVESTER_INFO");	
-				}	
 			}
-			if($done == 'TRUE')
+			else
 			{
-				$dataSource->cancelHarvestRequest($harvestId,false);
-				if($mode == 'HARVEST')
-				{
-					if($dataSource->advanced_harvest_mode == 'REFRESH' && $gotData)
-					{	
-						$dataSource->deleteOldRecords($harvestId);
-					} 
-					if($dataSource->harvest_frequency != '')
-					{
-						$dataSource->requestHarvest();
-					}
-				}
+				$message = "DataSource doesn't exists";
 			}
 			
 		}
@@ -1803,6 +1813,8 @@ public function getContributorGroupsEdit()
 				// clean-up after harvest?
 			}
 		}
+		if($this->importer->runBenchMark)
+		$dataSource->append_log('IMPORTER BENCHMARK RESULTS:'.NL.$this->importer->getBenchMarkLogs(), HARVEST_INFO, "importer", "BENCHMARK_INFO");
 
 
 	}
