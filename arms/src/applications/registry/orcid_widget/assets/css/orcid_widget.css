@@ -1,0 +1,38 @@
+
+/**
+ * Demonstration styles (not required for normal operation)
+ */
+div.formarea
+{
+    width: 500px;
+    padding:30px;
+    border: 1px solid #999;
+}
+
+form
+{
+    font-size:12px;
+}
+
+div.formfields
+{
+    padding:20px;
+    font-size:10px;
+}
+
+dl dt {
+    font-weight:bold;
+}
+
+dl dd {
+    margin-left:0px;
+    margin-bottom:10px;
+}
+
+fieldset legend { font-size: 14px; font-weight: bold; }
+
+.note { color: #999; background-color: #333; padding:0.5em; display:none; }
+
+.note pre { color: #ccc; }
+
+.note-toggle { background-color: orange; border-color: orange; border-radius: 5px; font-weight: bold; }
