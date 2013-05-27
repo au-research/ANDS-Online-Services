@@ -2,27 +2,29 @@ var selected_ids=[],selecting_status,select_all=false,processing=false,selected_
 var filters = {};
 $(function() {
 
-    //check if there's any get variable
-    var $_GET = {};
-    document.location.search.replace(/\??(?:([^=]+)=([^&]*)&?)/g, function () {
-        function decode(s) {
-            return decodeURIComponent(s.split("+").join(" "));
-        }
-        $_GET[decode(arguments[1])] = decode(arguments[2]);
-    });
-
     bindClickables();
-    //if filters are determined in the get variable, they will be json string, parse them and use them instead of default
-    if($_GET['filters']){
-        filters = jQuery.parseJSON($_GET['filters']);
-    }else{
-        var sort = {}; sort['updated'] = 'desc';
-        filters['sort'] = sort;
-    }
 
-    init(filters);
+    $(window).hashchange(function(){
+        var hash = window.location.hash;
+        var hash = location.href.substr(location.href.indexOf("#"));
+        var query = hash.substring(3, hash.length);
 
+        if(query) filters = jQuery.parseJSON(query);
+
+        if(filters['sort'] === undefined){
+            var sort = {}; sort['updated'] = 'desc';
+            filters['sort'] = sort;
+        }
+        init(filters);
+    });
+    $(window).hashchange(); //do the hashchange on page load
 });
+
+function formatFilters(filters){
+    var query_string = '';
+    query_string += JSON.stringify(filters);
+    return query_string;
+}
 
 function init(filters){
 
@@ -182,7 +184,7 @@ function initLayout(){
         }
 
         filters['search']=search_term;
-        init(filters);
+        changeHashTo(formatFilters(filters));
     })
     $('#search_form .search-query').on('keypress', function(){ $('button', $(this).parent()).html('Search'); });
 
@@ -213,7 +215,7 @@ function initLayout(){
         var sorting = {};
         sorting[sort] = value;
         filters['sort'] = sorting;
-        init(filters);
+        changeHashTo(formatFilters(filters));
     });
 
     $('#active_filters').html('');
@@ -254,7 +256,7 @@ function initLayout(){
     $('.removeFilter').unbind('click').click(function(){
         var name = $(this).attr('name');
         delete filters['filter'][name];
-        init(filters);
+        changeHashTo(formatFilters(filters));
     });
 
     $('.filter').unbind('click').click(function(e){
@@ -265,7 +267,7 @@ function initLayout(){
             if(filters['filter']){
                 filters['filter'][name] = value;
             }else filters['filter'] = filter;
-            init(filters);
+            changeHashTo(formatFilters(filters));
         }else{
             e.preventDefault();
             e.stopPropagation();
@@ -895,7 +897,7 @@ function update(ids, attributes){
                    if(data_success_message!='') $('#status_message').html(data.success_message).show();
                 }
 
-                init(filters);
+                changeHashTo(formatFilters(filters));
             }
         }
     });
@@ -916,7 +918,7 @@ function delete_ro(ids, selectAll){
         type: 'POST',
         data: {affected_ids:ids, filters:filters, select_all:selectAll, excluded_records: excluded_records, data_source_id:data_source_id},
         success: function(data){
-            init(filters);
+            changeHashTo(formatFilters(filters));
         }
     });
 }
