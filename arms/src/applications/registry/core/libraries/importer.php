@@ -52,10 +52,25 @@ class Importer {
 	private $roBuildTime;
 	private $roEnrichCount;
 	private $roEnrichTime;
+	private $roEnrichS1Time;
+	private $roEnrichS2Time;
+	private $roEnrichS3Time;
+	private $roEnrichS4Time;
+	private $roEnrichS5Time;
+	private $roEnrichS6Time;
+	private $roEnrichS7Time;
 	private $roQACount;
 	private $roQATime;
+	private $roQAS1Time;
+	private $roQAS2Time;
+	private $roQAS3Time;
+	private $roQAS4Time;
 	private $cCyclesCount;
 	private $cCyclesTime;
+
+
+
+
 	public function Importer()
 	{
 		$this->CI =& get_instance();
@@ -436,12 +451,16 @@ class Importer {
 					$this->CI->benchmark->mark('ro_qa_start');
 				}
 				
-				$ro->update_quality_metadata();
+				$ro->update_quality_metadata($this->runBenchMark);
 				
 				if($this->runBenchMark)
 				{
 					$this->CI->benchmark->mark('ro_qa_end');
 					$this->roQATime += $this->CI->benchmark->elapsed_time('ro_qa_start','ro_qa_end');
+					$this->roQAS1Time += $this->CI->benchmark->elapsed_time('ro_qa_start','ro_qa_s1_end');
+					$this->roQAS2Time += $this->CI->benchmark->elapsed_time('ro_qa_s1_end','ro_qa_s2_end');
+					$this->roQAS3Time += $this->CI->benchmark->elapsed_time('ro_qa_s2_end','ro_qa_s3_end');
+					$this->roQAS4Time += $this->CI->benchmark->elapsed_time('ro_qa_s3_end','ro_qa_end');
 				}
 
 				
@@ -454,12 +473,20 @@ class Importer {
 					$this->CI->benchmark->mark('ro_enrich_start');
 				}
 				
-				$ro->enrich();
+				$ro->enrich($this->runBenchMark);
 				
 				if($this->runBenchMark)
 				{
 					$this->CI->benchmark->mark('ro_enrich_end');
 					$this->roEnrichTime += $this->CI->benchmark->elapsed_time('ro_enrich_start','ro_enrich_end');
+					$this->roEnrichS1Time += $this->CI->benchmark->elapsed_time('ro_enrich_start','ro_enrich_s1_end');
+					$this->roEnrichS2Time += $this->CI->benchmark->elapsed_time('ro_enrich_s1_end','ro_enrich_s2_end');
+					$this->roEnrichS3Time += $this->CI->benchmark->elapsed_time('ro_enrich_s2_end','ro_enrich_s3_end');
+					$this->roEnrichS4Time += $this->CI->benchmark->elapsed_time('ro_enrich_s3_end','ro_enrich_s4_end');
+					$this->roEnrichS5Time += $this->CI->benchmark->elapsed_time('ro_enrich_s4_end','ro_enrich_s5_end');
+					$this->roEnrichS6Time += $this->CI->benchmark->elapsed_time('ro_enrich_s5_end','ro_enrich_s6_end');
+					$this->roEnrichS7Time += $this->CI->benchmark->elapsed_time('ro_enrich_s6_end','ro_enrich_end');
+
 				}		
 
 				unset($ro);
@@ -941,8 +968,7 @@ class Importer {
 
 
 	public function getBenchMarkLogs()
-	{
-		
+	{	
 		if($this->runBenchMark)
 		{
 			$totalTime = $this->CI->benchmark->elapsed_time('ingest_start', 'ingest_end');
@@ -1178,8 +1204,19 @@ class Importer {
 		$this->roBuildTime = 0;
 		$this->roEnrichCount = 0;
 		$this->roEnrichTime = 0;
+		$this->roEnrichS1Time = 0;
+		$this->roEnrichS2Time = 0;
+		$this->roEnrichS3Time = 0;
+		$this->roEnrichS4Time = 0;
+		$this->roEnrichS5Time = 0;
+		$this->roEnrichS6Time = 0;
+		$this->roEnrichS7Time = 0;
 		$this->roQACount = 0;
 		$this->roQATime = 0;
+		$this->roQAS1Time = 0;
+		$this->roQAS2Time = 0;
+		$this->roQAS3Time = 0;
+		$this->roQAS4Time = 0;
 		$this->gcCyclesCount = 0;
 		$this->gcCyclesTime = 0;
 	}

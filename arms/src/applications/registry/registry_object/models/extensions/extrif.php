@@ -11,7 +11,7 @@ class Extrif_Extension extends ExtensionBase
 	/*
 	 * 	Extrif
 	 */
-	function enrich()
+	function enrich($runBenchMark = false)
 	{
 		$this->_CI->load->model('data_source/data_sources','ds');	
 		$this->_CI->load->library('purifier');
@@ -54,6 +54,9 @@ class Extrif_Extension extends ExtensionBase
 				$extendedMetadata->addChild("extRif:listTitle", str_replace('&', '&amp;' , $this->ro->list_title), EXTRIF_NAMESPACE);
 				$theDescription = '';
 				$theDescriptionType = '';
+				
+				if($runBenchMark) $this->_CI->benchmark->mark('ro_enrich_s1_end');
+				
 				if($xml->{$this->ro->class}->description)
 				{
 					$logoAdded = false;
@@ -113,7 +116,9 @@ class Extrif_Extension extends ExtensionBase
 					$this->ro->set_metadata('the_description',$theDescription);
 
 				}
-
+				
+				if($runBenchMark) $this->_CI->benchmark->mark('ro_enrich_s2_end');
+				
 				$subjects = $extendedMetadata->addChild("extRif:subjects", NULL, EXTRIF_NAMESPACE);
 				
 				foreach ($this->ro->processSubjects() AS $subject)
@@ -124,7 +129,8 @@ class Extrif_Extension extends ExtensionBase
 					$subject_node->addChild("extRif:subject_resolved", $subject['resolved'], EXTRIF_NAMESPACE);
 					$subject_node->addChild("extRif:subject_uri", $subject['uri'], EXTRIF_NAMESPACE);
 				}
-
+				
+				if($runBenchMark) $this->_CI->benchmark->mark('ro_enrich_s3_end');
 	
 				foreach ($this->ro->processLicence() AS $right)
 				{
@@ -153,7 +159,10 @@ class Extrif_Extension extends ExtensionBase
 				//$extendedMetadata->addChild("extRif:displayLogo", NULL, EXTRIF_NAMESPACE);
 				
 				// xxx: spatial extents (sanity checking?)
+				if($runBenchMark) $this->_CI->benchmark->mark('ro_enrich_s4_end');
+				
 				$spatialLocations = $this->ro->getLocationAsLonLats();
+				
 				if($spatialLocations)
 				{
 					$spatialGeometry = $extendedMetadata->addChild("extRif:spatialGeometry", NULL, EXTRIF_NAMESPACE);
@@ -169,8 +178,10 @@ class Extrif_Extension extends ExtensionBase
 					}
 					$spatialGeometry->addChild("extRif:area", $sumOfAllAreas, EXTRIF_NAMESPACE);
 				}
-
+				if($runBenchMark) $this->_CI->benchmark->mark('ro_enrich_s5_end');
+				
 				$temporalCoverageList = $this->ro->processTemporal();
+				
 				if($temporalCoverageList)
 				{
 					$temporals = $extendedMetadata->addChild("extRif:temporal", NULL, EXTRIF_NAMESPACE);
@@ -184,7 +195,9 @@ class Extrif_Extension extends ExtensionBase
 					$temporals->addChild("extRif:temporal_earliest_year", $this->ro->getEarliestAsYear(), EXTRIF_NAMESPACE);
 					$temporals->addChild("extRif:temporal_latest_year", $this->ro->getLatestAsYear(), EXTRIF_NAMESPACE);
 				}	
-
+				
+				if($runBenchMark) $this->_CI->benchmark->mark('ro_enrich_s6_end');
+				
 				foreach ($this->ro->getRelatedObjects() AS $relatedObject)
 				{
 					$relatedObj = $extendedMetadata->addChild("extRif:related_object", NULL, EXTRIF_NAMESPACE);
