@@ -335,6 +335,15 @@ class Oai extends MX_Controller
 		$this->load->model('oai/Records', 'records');
 		$identifier = $this->input->get_post("identifier");
 		$format= $this->input->get_post("metadataPrefix");
+		if (!$identifier)
+		{
+			throw new Oai_BadArgument_Exceptions("Missing required argument 'identifier'");
+		}
+		if (!$format)
+		{
+			throw new Oai_BadArgument_Exceptions("Missing required argument 'metadataPrefix'");
+		}
+
 		$rec = $this->records->getByIdentifier($identifier);
 		if ($rec)
 		{
