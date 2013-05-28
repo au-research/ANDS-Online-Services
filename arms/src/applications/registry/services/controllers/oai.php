@@ -330,6 +330,64 @@ class Oai extends MX_Controller
 		}
 	}
 
+	public function get_record()
+	{
+		$this->load->model('oai/Records', 'records');
+		$identifier = $this->input->get_post("identifier");
+		$format= $this->input->get_post("metadataPrefix");
+		$rec = $this->records->getByIdentifier($identifier);
+		if ($rec)
+		{
+			$this->output->append_output("\t<GetRecord>\n");
+			$header = $rec->header();
+			$status = "";
+			$deleted = false;
+			if ($rec->is_deleted())
+			{
+				$status = " status='deleted'";
+				$deleted = true;
+			}
+
+			$this->output->append_output("\t\t<record>\n");
+			$this->output->append_output(sprintf("\t\t\t<header%s>\n", $status));
+			$this->output->append_output("\t\t\t\t<identifier>" .
+						     sprintf($header['identifier'],
+							     "ands.org.au") .
+						     "</identifier>\n");
+			$this->output->append_output("\t\t\t\t<datestamp>" .
+						     $header['datestamp'] .
+						     "</datestamp>\n");
+			if (array_key_exists('sets', $header))
+			{
+				foreach ($header['sets'] as $set)
+				{
+					$this->output->append_output("\t\t\t\t" .
+								     $set->asRef() .
+								     "\n");
+				}
+			}
+			$this->output->append_output("\t\t\t</header>\n");
+			if (!$deleted)
+			{
+				$this->output->append_output("\t\t\t<metadata>\n");
+				try
+				{
+				    $this->output->append_output( removeXMLDeclaration(wrapRegistryObjects($rec->metadata($format,
+										3))));
+				}
+				catch (Exception $e) {/*eek... would be good to log these...*/}
+				$this->output->append_output("\t\t\t</metadata>\n");
+			}
+			$this->output->append_output("\t\t</record>\n");
+			$this->output->append_output("\t</GetRecord>\n");
+		}
+		else 
+		{
+			$this->output->append_output("\t<GetRecord>\n");
+			$this->_inject_token(chr(0), 0, 0);
+			$this->output->append_output("\t</GetRecord>\n");
+		}
+	}
 
 	/*******
 	 *
