@@ -76,6 +76,7 @@
         var base_url = '<?php echo base_url();?>';
         var default_base_url = "<?php echo $this->config->item('default_base_url');?>";
         var suffix = '#!/';
+        var deployment_state = "<?php echo $this->config->item('deployment_state');?>";
         <!-- urchin code -->
         <?php echo urchin_for($this->config->item('rda_urchin_id')); ?>
     </script>
