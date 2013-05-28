@@ -22,7 +22,12 @@ class Administration extends MX_Controller {
 	public function triggerNLAHarvest()
 	{
 		echo "Executing pullback script...<i>this may take several minutes (depending on server load)</i>" .BR.BR; ob_flush();flush();
-		echo nl2br(file_get_contents(registry_url('maintenance/nlaPullback'))); ob_flush(); flush();
+		$ctx=stream_context_create(array('http'=>
+    		array(
+        	'timeout' => 1200 // 20 minutes
+    		)
+		));
+		echo nl2br(file_get_contents(registry_url('maintenance/nlaPullback'),false,$ctx)); ob_flush(); flush();
 	}
 
 	public function nla_pullback()
