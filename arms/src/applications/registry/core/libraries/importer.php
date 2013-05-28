@@ -423,11 +423,11 @@ class Importer {
 
 				unset($ro);
 			}
-			//clean_cycles();
+			clean_cycles();
 		}
 
 		if($this->runBenchMark) $this->CI->benchmark->mark('ingest_enrich_stage1_end');
-		gc_collect_cycles();
+		//gc_collect_cycles();
 
 
 		// Two-stage enrich to get inverse links in quality metadata
@@ -491,11 +491,11 @@ class Importer {
 
 				unset($ro);
 			}
-			//clean_cycles();
+			clean_cycles();
 		}
 
 		if($this->runBenchMark) $this->CI->benchmark->mark('ingest_enrich_stage2_end');
-		gc_collect_cycles();
+		//gc_collect_cycles();
 
 
 		// Exclude those keys we already processed above
@@ -517,13 +517,14 @@ class Importer {
 					$ro->update_quality_metadata();
 					$ro->enrich();
 					unset($ro);
-					//clean_cycles();
+					clean_cycles();
 				}
 			}
 		}
 		if($this->runBenchMark) $this->CI->benchmark->mark('ingest_enrich_stage3_end');
 
 		gc_collect_cycles();
+
 		if($this->runBenchMark) $this->CI->benchmark->mark('ingest_enrich_end');
 	}
 
