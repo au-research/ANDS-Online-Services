@@ -120,6 +120,27 @@ class Records extends CI_Model
 		
 	}
 
+	public function getByIdentifier($identifier)
+	{
+		$this->load->model('registry_object/Registry_objects', 'ro');	
+		$ro = $this->ro->getPublishedByKey($identifier);
+		if(!$ro && preg_match('/^oai:.*?::[0-9]+/', $identifier))
+		{
+			$ident = explode("::", $identifier);
+			$identifier = $ident[1];
+			$ro = $this->ro->getByID($identifier);
+		}
+		if($ro)
+		{
+			return new _record($ro, $this->db);
+		}		
+		else
+		{
+			throw new Oai_NoRecordsMatch_Exceptions("record not found");
+		}
+	}
+
+
 	/**
 	 * Get the OAI sets associated with this record ID
 	 * @param an OAI identifier

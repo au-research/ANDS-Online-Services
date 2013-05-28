@@ -386,7 +386,7 @@ class Importer {
 
 		unset($sxml);
 		unset($xml);
-		gc_collect_cycles();
+		//gc_collect_cycles();
 	}
 
 	/**
@@ -422,10 +422,10 @@ class Importer {
 
 				unset($ro);
 			}
-			//clean_cycles();
+			clean_cycles();
 		}
 		if($this->runBenchMark) $this->CI->benchmark->mark('ingest_enrich_stage1_end');
-		gc_collect_cycles();
+		//gc_collect_cycles();
 
 		// Two-stage enrich to get inverse links in quality metadata
 		// Only enrich records received in this harvest
@@ -488,10 +488,10 @@ class Importer {
 
 				unset($ro);
 			}
-			//clean_cycles();
+			clean_cycles();
 		}
 		if($this->runBenchMark) $this->CI->benchmark->mark('ingest_enrich_stage2_end');
-		gc_collect_cycles();
+		//gc_collect_cycles();
 
 
 		// Exclude those keys we already processed above
@@ -513,12 +513,12 @@ class Importer {
 					$ro->update_quality_metadata();
 					$ro->enrich();
 					unset($ro);
-					//clean_cycles();
+					clean_cycles();
 				}
 			}
 		}
 		if($this->runBenchMark) $this->CI->benchmark->mark('ingest_enrich_stage3_end');
-		gc_collect_cycles();
+		//gc_collect_cycles();
 		if($this->runBenchMark) $this->CI->benchmark->mark('ingest_enrich_end');
 	}
 
@@ -578,7 +578,7 @@ class Importer {
 				}
 					
 				unset($ro);
-				gc_collect_cycles();
+				//gc_collect_cycles();
 					
 				if($this->runBenchMark)
 				{
@@ -652,7 +652,7 @@ class Importer {
 				}
 					
 				unset($ro);
-				gc_collect_cycles();
+				//gc_collect_cycles();
 					
 				if($this->runBenchMark)
 				{
@@ -960,67 +960,66 @@ class Importer {
 
 	public function getBenchMarkLogs()
 	{
-		$totalTime = $this->CI->benchmark->elapsed_time('ingest_start', 'ingest_end');
-		$enrichTime = $this->CI->benchmark->elapsed_time('ingest_enrich_start', 'ingest_enrich_end');
-		$reIndexTime = $this->CI->benchmark->elapsed_time('ingest_reindex_start', 'ingest_reindex_end');
-		$ingestTime = $this->CI->benchmark->elapsed_time('ingest_stage_1_start','ingest_stage_1_end');
-		$crosswalkTime = $this->CI->benchmark->elapsed_time('crosswalk_execution_start','crosswalk_execution_end');
-		$this->benchMarkLog .= NL.'Importing ran for : '.gmdate("H:i:s", $totalTime);
-		$this->benchMarkLog .= NL.'Ingest ran for : '.gmdate("H:i:s", $ingestTime);
-		$this->benchMarkLog .= NL.'Crosswalk ran for : '.$crosswalkTime;
-		$this->benchMarkLog .= NL.'Enrich ran for : '.gmdate("H:i:s", $enrichTime);
-
-		$enrichS1Time = $this->CI->benchmark->elapsed_time('ingest_enrich_stage1_start', 'ingest_enrich_stage1_end');
-		$enrichS2Time = $this->CI->benchmark->elapsed_time('ingest_enrich_stage2_start', 'ingest_enrich_stage2_end');
-		$enrichS3Time = $this->CI->benchmark->elapsed_time('ingest_enrich_stage3_start', 'ingest_enrich_stage3_end');
-		$this->benchMarkLog .= NL.'.......Stage 1 : '.$enrichS1Time;
-		$this->benchMarkLog .= NL.'.......Stage 2 : '.$enrichS2Time;
-		if($this->roEnrichCount > 0 && $this->roQACount > 0)
+		
+		if($this->runBenchMark)
 		{
-			$this->benchMarkLog .= NL.'______________Ro. Enrich Count: '.$this->roEnrichCount. ' total time: '.$this->roEnrichTime. ' avrg: ' .number_format($this->roEnrichTime/$this->roEnrichCount,4);
-			$this->benchMarkLog .= NL.'____________________________S1 (xml) total time: '.$this->roEnrichS1Time. ' avrg: ' .number_format($this->roEnrichS1Time/$this->roEnrichCount,4);
-			$this->benchMarkLog .= NL.'____________________________S2 (description) total time: '.$this->roEnrichS2Time. ' avrg: ' .number_format($this->roEnrichS2Time/$this->roEnrichCount,4);
-			$this->benchMarkLog .= NL.'____________________________S3 (subjects) total time: '.$this->roEnrichS3Time. ' avrg: ' .number_format($this->roEnrichS3Time/$this->roEnrichCount,4);
-			$this->benchMarkLog .= NL.'____________________________S4 (Licence) total time: '.$this->roEnrichS4Time. ' avrg: ' .number_format($this->roEnrichS4Time/$this->roEnrichCount,4);
-			$this->benchMarkLog .= NL.'____________________________S5 (spatial) total time: '.$this->roEnrichS5Time. ' avrg: ' .number_format($this->roEnrichS5Time/$this->roEnrichCount,4);
-			$this->benchMarkLog .= NL.'____________________________S6 (temporal) total time: '.$this->roEnrichS6Time. ' avrg: ' .number_format($this->roEnrichS6Time/$this->roEnrichCount,4);
-			$this->benchMarkLog .= NL.'____________________________S7 (relatedObject) total time: '.$this->roEnrichS7Time. ' avrg: ' .number_format($this->roEnrichS7Time/$this->roEnrichCount,4);
-			$this->benchMarkLog .= NL.'______________Ro. QA Count: '.$this->roQACount. ' total time: '.$this->roQATime. ' avrg: ' .number_format($this->roQATime/$this->roQACount,4);
-			$this->benchMarkLog .= NL.'____________________________S1 (related str) total time: '.$this->roQAS1Time. ' avrg: ' .number_format($this->roQAS1Time/$this->roQACount,4);
-			$this->benchMarkLog .= NL.'____________________________S2 (quality) total time: '.$this->roQAS2Time. ' avrg: ' .number_format($this->roQAS2Time/$this->roQACount,4);
-			$this->benchMarkLog .= NL.'____________________________S3 (level) total time: '.$this->roQAS3Time. ' avrg: ' .number_format($this->roQAS3Time/$this->roQACount,4);
-			$this->benchMarkLog .= NL.'____________________________S4 (save) total time: '.$this->roQAS4Time. ' avrg: ' .number_format($this->roQAS4Time/$this->roQACount,4);
+			$totalTime = $this->CI->benchmark->elapsed_time('ingest_start', 'ingest_end');
+			$enrichTime = $this->CI->benchmark->elapsed_time('ingest_enrich_start', 'ingest_enrich_end');
+			$reIndexTime = $this->CI->benchmark->elapsed_time('ingest_reindex_start', 'ingest_reindex_end');
+			$ingestTime = $this->CI->benchmark->elapsed_time('ingest_stage_1_start','ingest_stage_1_end');
+			$crosswalkTime = $this->CI->benchmark->elapsed_time('crosswalk_execution_start','crosswalk_execution_end');
+			$this->benchMarkLog .= NL.'Importing ran for : '.gmdate("H:i:s", $totalTime);
+			$this->benchMarkLog .= NL.'Ingest ran for : '.gmdate("H:i:s", $ingestTime);
+			$this->benchMarkLog .= NL.'Crosswalk ran for : '.$crosswalkTime;
+			$this->benchMarkLog .= NL.'Enrich ran for : '.gmdate("H:i:s", $enrichTime);
 
+			$enrichS1Time = $this->CI->benchmark->elapsed_time('ingest_enrich_stage1_start', 'ingest_enrich_stage1_end');
+			$enrichS2Time = $this->CI->benchmark->elapsed_time('ingest_enrich_stage2_start', 'ingest_enrich_stage2_end');
+			$enrichS3Time = $this->CI->benchmark->elapsed_time('ingest_enrich_stage3_start', 'ingest_enrich_stage3_end');
+			$this->benchMarkLog .= NL.'.......Stage 1 : '.$enrichS1Time;
+			$this->benchMarkLog .= NL.'.......Stage 2 : '.$enrichS2Time;
+			if($this->roEnrichCount > 0 && $this->roQACount > 0)
+			{
+				$this->benchMarkLog .= NL.'______________Ro. Enrich Count: '.$this->roEnrichCount. ' total time: '.$this->roEnrichTime. ' avrg: ' .number_format($this->roEnrichTime/$this->roEnrichCount,4);
+				$this->benchMarkLog .= NL.'____________________________S1 (xml) total time: '.$this->roEnrichS1Time. ' avrg: ' .number_format($this->roEnrichS1Time/$this->roEnrichCount,4);
+				$this->benchMarkLog .= NL.'____________________________S2 (description) total time: '.$this->roEnrichS2Time. ' avrg: ' .number_format($this->roEnrichS2Time/$this->roEnrichCount,4);
+				$this->benchMarkLog .= NL.'____________________________S3 (subjects) total time: '.$this->roEnrichS3Time. ' avrg: ' .number_format($this->roEnrichS3Time/$this->roEnrichCount,4);
+				$this->benchMarkLog .= NL.'____________________________S4 (Licence) total time: '.$this->roEnrichS4Time. ' avrg: ' .number_format($this->roEnrichS4Time/$this->roEnrichCount,4);
+				$this->benchMarkLog .= NL.'____________________________S5 (spatial) total time: '.$this->roEnrichS5Time. ' avrg: ' .number_format($this->roEnrichS5Time/$this->roEnrichCount,4);
+				$this->benchMarkLog .= NL.'____________________________S6 (temporal) total time: '.$this->roEnrichS6Time. ' avrg: ' .number_format($this->roEnrichS6Time/$this->roEnrichCount,4);
+				$this->benchMarkLog .= NL.'____________________________S7 (relatedObject) total time: '.$this->roEnrichS7Time. ' avrg: ' .number_format($this->roEnrichS7Time/$this->roEnrichCount,4);
+				$this->benchMarkLog .= NL.'______________Ro. QA Count: '.$this->roQACount. ' total time: '.$this->roQATime. ' avrg: ' .number_format($this->roQATime/$this->roQACount,4);
+				$this->benchMarkLog .= NL.'____________________________S1 (related str) total time: '.$this->roQAS1Time. ' avrg: ' .number_format($this->roQAS1Time/$this->roQACount,4);
+				$this->benchMarkLog .= NL.'____________________________S2 (quality) total time: '.$this->roQAS2Time. ' avrg: ' .number_format($this->roQAS2Time/$this->roQACount,4);
+				$this->benchMarkLog .= NL.'____________________________S3 (level) total time: '.$this->roQAS3Time. ' avrg: ' .number_format($this->roQAS3Time/$this->roQACount,4);
+				$this->benchMarkLog .= NL.'____________________________S4 (save) total time: '.$this->roQAS4Time. ' avrg: ' .number_format($this->roQAS4Time/$this->roQACount,4);
+
+			}
+			$this->benchMarkLog .= NL.'.......Stage 3 : '.$enrichS3Time;
+
+
+			$this->benchMarkLog .= NL.'ReIndex ran for : '.gmdate("H:i:s", $reIndexTime);
+			if($this->roBuildCount > 0)
+			{
+				$this->benchMarkLog .= NL.'.......Ro. Build Count: '.$this->roBuildCount. ' total time: '.$this->roBuildTime. ' avrg: ' .number_format($this->roBuildTime/$this->roBuildCount,4);
+			}
+			if($this->gcCyclesCount > 0)
+			{
+				$this->benchMarkLog .= NL.'.......GC Cycles Count: '.$this->gcCyclesCount. ' total time: '.$this->gcCyclesTime. ' avrg: ' .number_format($this->gcCyclesTime/$this->gcCyclesCount,4);
+			}
+			if($this->solrTransFormCount > 0)
+			{
+				$this->benchMarkLog .= NL.'.......Ro. Transform Count: '.$this->solrTransFormCount. ' total time: '.$this->solrTransFormTime. ' avrg: ' .number_format($this->solrTransFormTime/$this->solrTransFormCount,4);
+			}
+			if($this->solrReqCount > 0)
+			{
+				$this->benchMarkLog .= NL.'.......SOLR_CHUNK_SIZE: '.self::SOLR_CHUNK_SIZE;
+				$this->benchMarkLog .= NL.'.......Solr Request Count : '.$this->solrReqCount. ' total time: '.$this->solrReqTime. ' avrg: ' .number_format($this->solrReqTime/$this->solrReqCount,4);
+			}
+			$solrCommitTime = $this->CI->benchmark->elapsed_time('solr_commit_start','solr_commit_end');
+			$this->benchMarkLog .= NL.'.......Solr Commit took : '.$solrCommitTime;
+			$this->benchMarkLog .= NL.'.......Memory Peak Usage : '.memory_get_peak_usage().' bytes';
 		}
-		$this->benchMarkLog .= NL.'.......Stage 3 : '.$enrichS3Time;
-
-
-		$this->benchMarkLog .= NL.'ReIndex ran for : '.gmdate("H:i:s", $reIndexTime);
-		if($this->roBuildCount > 0)
-		{
-			$this->benchMarkLog .= NL.'.......Ro. Build Count: '.$this->roBuildCount. ' total time: '.$this->roBuildTime. ' avrg: ' .number_format($this->roBuildTime/$this->roBuildCount,4);
-		}
-		if($this->gcCyclesCount > 0)
-		{
-			$this->benchMarkLog .= NL.'.......GC Cycles Count: '.$this->gcCyclesCount. ' total time: '.$this->gcCyclesTime. ' avrg: ' .number_format($this->gcCyclesTime/$this->gcCyclesCount,4);
-		}
-		if($this->solrTransFormCount > 0)
-		{
-			$this->benchMarkLog .= NL.'.......Ro. Transform Count: '.$this->solrTransFormCount. ' total time: '.$this->solrTransFormTime. ' avrg: ' .number_format($this->solrTransFormTime/$this->solrTransFormCount,4);
-		}
-		if($this->solrReqCount > 0)
-		{
-			$this->benchMarkLog .= NL.'.......SOLR_CHUNK_SIZE: '.self::SOLR_CHUNK_SIZE;
-			$this->benchMarkLog .= NL.'.......Solr Request Count : '.$this->solrReqCount. ' total time: '.$this->solrReqTime. ' avrg: ' .number_format($this->solrReqTime/$this->solrReqCount,4);
-		}
-		$solrCommitTime = $this->CI->benchmark->elapsed_time('solr_commit_start','solr_commit_end');
-		$this->benchMarkLog .= NL.'.......Solr Commit took : '.$solrCommitTime;
-		$this->benchMarkLog .= NL.'.......Memory Peak Usage : '.memory_get_peak_usage().' bytes';
-
-
-
-
-
 		return $this->benchMarkLog;
 	}
 
