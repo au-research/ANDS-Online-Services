@@ -124,6 +124,7 @@ function executeSearch(searchData, searchUrl){
 			data: {filters:searchData},
 			dataType:'json',
 			success: function(data){
+				
 				var numFound = data.result.numFound;
 			        var numReturned = data.result.docs.length;
 				$('#search-result, .pagination, #facet-result, #search_notice').empty();

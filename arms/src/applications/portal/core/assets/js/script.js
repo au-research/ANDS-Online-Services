@@ -244,7 +244,7 @@ function validateEmail(email)
 window.log = function(){
   log.history = log.history || [];   // store logs to an array for reference
   log.history.push(arguments);
-  if(this.console){
+  if(this.console && deployment_state!== undefined && deployment_state=='development'){
     console.log( Array.prototype.slice.call(arguments) );
   }
 };
