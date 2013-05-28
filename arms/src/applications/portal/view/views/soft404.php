@@ -11,7 +11,7 @@
 			<?php
 			echo '<p>You may be able to locate similar records by searching for the record by title: ';
 		
-			echo '<a href="' . base_url() . "search#!/q=" . rawurlencode($previously_valid_title) .'/p=1/tab=All/nq=1/">'.$previously_valid_title.'</a></p>';
+			echo '<a href="' . base_url() . "search#!/q=" . rawurlencode($previously_valid_title) .'/p=1/tab=all/nq=1/">'.$previously_valid_title.'</a></p>';
 		} elseif (isset($message))
 		{ ?>
  					<h3>404 Page Not Found.</h3>
