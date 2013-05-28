@@ -463,6 +463,7 @@ function initEditForm(){
 		 */
 		if(what=='description' || what=='rights'){
 			$('#descriptions_rights textarea').addClass('editor');
+
 			initEditor();
 		}
 		if(what=='dates_date' || what=='dates' || what=='date' || what == 'location'){
@@ -1172,6 +1173,7 @@ function initRelatedInfos(){
 function initEditor(){
 	
 	if(editor=='tinymce'){
+
 		// tinyMCE.init({
 		//     theme : "advanced",
 		//     mode : "specific_textareas",
@@ -1185,6 +1187,7 @@ function initEditor(){
 		//     entity_encoding : "raw",
 		//     forced_root_block : ''
 		// });
+		if(tinymce) tinyMCE.triggerSave();
 		tinymce.init({
 		    selector: "textarea.editor",
 		    theme: "modern",
