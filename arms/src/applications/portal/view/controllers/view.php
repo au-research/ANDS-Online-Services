@@ -15,6 +15,7 @@ class View extends MX_Controller {
 		}
 		else if (!$this->input->get('slug') && !$this->input->get('id'))
 		{			
+			header("HTTP/1.1 404 Not Found");			
 			$this->load->view('soft404');
 			return;
 		}
@@ -29,6 +30,7 @@ class View extends MX_Controller {
 			}
 			catch (SlugNoLongerValidException $e)
 			{
+				header("HTTP/1.1 404 Not Found");
 				$this->load->view('soft404', array('previously_valid_title'=>$e->getMessage()));
 				return;
 			}
@@ -57,6 +59,7 @@ class View extends MX_Controller {
 		// Check we actually got some data back (would probably have an exception before this)
 		if (!isset($extRif['data']) || !$extRif['data'])
 		{
+			header("HTTP/1.1 404 Not Found");				
 			$this->load->view('soft404');
 			return;
 		}
@@ -361,6 +364,8 @@ class View extends MX_Controller {
 			}
 			else
 			{
+				
+				header("HTTP/1.1 404 Not Found");	
 				$this->load->view('soft404');
 				return;
 			}
