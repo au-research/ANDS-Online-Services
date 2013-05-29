@@ -51,7 +51,10 @@ class Oai extends MX_Controller
 		      'ns'     => 'http://www.openarchives.org/OAI/2.0/oai_dc/'),
 		array('prefix' => 'rif',
 		      'schema' => 'http://services.ands.org.au/documentation/rifcs/1.3/schema/registryObjects.xsd',
-		      'ns'     => 'http://ands.org.au/standards/rif-cs/registryObjects'));
+		      'ns'     => 'http://ands.org.au/standards/rif-cs/registryObjects'),
+		array('prefix' => 'extRif',
+		      'schema' => '',
+		      'ns'     => 'http://ands.org.au/standards/rif-cs/extendedRegistryObjects'));
 
 	/**
 	 * nothing special; initialise the session and that's about it

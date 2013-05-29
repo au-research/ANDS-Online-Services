@@ -64,6 +64,9 @@ class _record
 		case 'rif':
 			$data = removeXMLDeclaration(wrapRegistryObjects($this->_rec->getRif()));
 			break;
+		case 'extRif':
+			$data = removeXMLDeclaration($this->_rec->getExtRif());
+			break;
 		}
 		if ($data)
 		{
