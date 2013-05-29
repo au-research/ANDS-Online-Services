@@ -250,6 +250,12 @@ function bindSearchRelatedEvents(tt, target){
 			success: function(data){
 				var template = $('#related_object_search_result').html();
 				var output = Mustache.render(template, data);
+				if(data.results.length<1)
+				{
+					var output = "<br /><p> No matches could be found.</p>";
+				}else{
+					var output = Mustache.render(template, data);					
+				}
 				$('#result', tooltip).html(output);
 				$('.select_related').click(function(){
 					$(target).val($(this).attr('key'));
