@@ -59,7 +59,7 @@ class _record
 			$data = $this->_rec->transformToDC();
 			break;
 		case 'rif':
-			$data = $this->_rec->getRif();
+			$data = removeXMLDeclaration(wrapRegistryObjects($this->_rec->getRif()));
 			break;
 		}
 		if ($data)
