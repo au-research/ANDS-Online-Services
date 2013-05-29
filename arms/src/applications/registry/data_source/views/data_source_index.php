@@ -257,7 +257,7 @@
 
 <div id="breadcrumb">
 	<?php echo anchor('/', '<i class="icon-home"></i> Home', array('class'=>'tip-bottom', 'tip'=>'Go to Home'))?>
-	<?php echo anchor('data_source/manage', 'Manage My Datasources')?>
+	<?php echo anchor('data_source/manage', 'Manage My Data Sources')?>
 	<a href="javascript:;" class="current">{{title}} - Dashboard</a>
 	<div class="pull-right">
 		<span class="label"><i class="icon-question-sign icon-white"></i> <a target="_blank" style="color:white;" href="http://services.ands.org.au/documentation/DashboardHelp/">Help</a></span>
@@ -541,7 +541,7 @@
 	</div>
 	<div id="breadcrumb">
 		<?php echo anchor('/', '<i class="icon-home"></i> Home', array('class'=>'tip-bottom', 'tip'=>'Go to Home'))?>
-		<?php echo anchor('data_source/manage', 'Manage My Datasources')?>
+		<?php echo anchor('data_source/manage', 'Manage My Data Sources')?>
 		<a href="#!/view/{{data_source_id}}">{{title}} - Dashboard</a>
 		<a href="javascript:;" class="current">Settings</a>
 		<div class="pull-right">
@@ -861,7 +861,7 @@
 	</div>
 	<div id="breadcrumb">
 		<?php echo anchor('/', '<i class="icon-home"></i> Home', array('class'=>'tip-bottom', 'tip'=>'Go to Home'))?>
-		<?php echo anchor('data_source/manage', 'Manage My Datasources')?>
+		<?php echo anchor('data_source/manage', 'Manage My Data Sources')?>
 		<a href="#!/view/{{data_source_id}}" class="">{{title}} - Dashboard</a>
 		<a href="javascript:;" class="current">Edit</a>
 		<div class="pull-right">

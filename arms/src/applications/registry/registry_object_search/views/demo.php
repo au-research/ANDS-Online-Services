@@ -45,7 +45,7 @@ $(document).ready(function() {
     <dt>class</dt>
     <dd>Registry object class to filter by (activity, party, collection, service). Defaults to 'all'.</dd>
     <dt>datasource</dt>
-    <dd>Datasource ID to filter by. Defaults to 'all'.</dd>
+    <dd>Data Source ID to filter by. Defaults to 'all'.</dd>
     <dt>lock_presets</dt>
     <dd>If <em>class</em> or <em>datasource</em> are set [to something other than 'all'], should the selection be locked? Defaults to boolean <code>false</code>.</dd>
     <dt>endpoint</dt>

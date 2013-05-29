@@ -37,7 +37,7 @@ function ds_acl_enforce($ds_id, $message = ''){
 			throw new Exception (($message ?: "You do not have permission to access this data source: ".$ds->title." (".$ds->record_owner.")"));
 		}
 	}else{
-		throw new Exception ("Datasource does not exists!");
+		throw new Exception ("Data Source does not exists!");
 	}
 }
 

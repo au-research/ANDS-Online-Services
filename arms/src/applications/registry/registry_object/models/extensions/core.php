@@ -201,7 +201,7 @@ class Core_extension extends ExtensionBase
 			if($existingRegistryObject && $existingRegistryObject->getAttribute('data_source_id') != $this->getAttribute('data_source_id'))
 			{
 				$otherDs = $this->_CI->ds->getByID($existingRegistryObject->getAttribute('data_source_id'));
-				throw new Exception("Registry Object with key ".$this->ro->key." already exists in the ".NL.$otherDs->title." Datasource");
+				throw new Exception("Registry Object with key ".$this->ro->key." already exists in the ".NL.$otherDs->title." Data Source");
 			}
 			else if ($existingRegistryObject)
 			{

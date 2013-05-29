@@ -26,7 +26,7 @@ class Data_source extends MX_Controller {
 		//$this->output->enable_profiler(TRUE);
 		acl_enforce('REGISTRY_USER');
 		
-		$data['title'] = 'Manage My Datasources';
+		$data['title'] = 'Manage My Data Sources';
 		$data['small_title'] = '';
 
 		$this->load->model("data_sources","ds");
@@ -892,7 +892,7 @@ public function getContributorGroupsEdit()
 
 		$id = isset($post['id']) ? $post['id'] : 0; //data source id
 		if($id==0) {
-			throw new Exception('Datasource ID must be provided');
+			throw new Exception('Data Source ID must be provided');
 			exit();
 		}
 		$offset = isset($post['offset']) ? (int) $post['offset'] : 0;
@@ -1893,7 +1893,7 @@ public function getContributorGroupsEdit()
 	/* Printable quality report */
 	function quality_report($id, $status_filter = null){
 		//$data['report'] = $this->getDataSourceReport($id);
-		$data['title'] = 'Datasource Report';
+		$data['title'] = 'Data Source Report';
 		$data['scripts'] = array();
 		$data['less']=array('charts');
 		$data['js_lib'] = array('core');
@@ -1949,7 +1949,7 @@ public function getContributorGroupsEdit()
 	/* Ben's chart report dashboard (google charts) */
 	function report($id){
 		//$data['report'] = $this->getDataSourceReport($id);
-		$data['title'] = 'Datasource Report';
+		$data['title'] = 'Data Source Report';
 		$data['scripts'] = array('ds_chart');
 		$data['js_lib'] = array('core','googleapi');
 		$data['less']=array('charts');
