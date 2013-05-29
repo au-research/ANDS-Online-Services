@@ -260,9 +260,9 @@ class Registry_fetch extends CI_Model
 	{
 		$url = $this->config->item('registry_endpoint') . "getSlugFromKey/?key=" . $key;
  		$response = json_decode(@file_get_contents($url), true);
- 		if (isset($response[0]['slug']))
+ 		if (isset($response[0]))
  		{
- 			return $response[0]['slug'];
+ 			return $response[0];
  		}
  		else
  		{

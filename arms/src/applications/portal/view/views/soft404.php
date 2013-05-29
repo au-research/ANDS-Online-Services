@@ -1,6 +1,5 @@
 <?php $this->load->view('rda_header');?>
 <div class="container less_padding">
-
 		<?php 
 		if (isset($previously_valid_title))
 		{ ?>
@@ -17,6 +16,13 @@
  					<h3>404 Page Not Found.</h3>
  					<hr />
  					<p>The page you requested was not found.</p>
+		<?php 
+
+		}elseif (isset($invalid_key))
+		{ ?>
+ 					<h3>404 Page Not Found.</h3>
+ 					<hr />
+ 					<p>The page you requested was not found. <?php echo $invalid_key?></p>
 		<?php 
 
 		}

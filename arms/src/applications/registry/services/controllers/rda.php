@@ -502,7 +502,7 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 	{
 		$key = $this->input->get("key");
 
-		$this->db->select("slug")->from("registry_objects")->where("key",$key);
+		$this->db->select("slug,registry_object_id,status")->from("registry_objects")->where("key",$key);
 		$query = $this->db->get();
 
 		if ($query->num_rows() > 0)
