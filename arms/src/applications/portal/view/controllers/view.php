@@ -358,15 +358,20 @@ class View extends MX_Controller {
 		{
 			$this->load->model('registry_fetch','registry');
 			$slug = $this->registry->getSlugFromKey($key);
+
 			if ($slug)
 			{
-				redirect("/" . $slug);
+				if($slug['status']==PUBLISHED)
+				{
+					redirect("/" . $slug['slug']);
+				}else{
+					redirect("/view/?id=" .$slug['registry_object_id']);
+				}
 			}
 			else
 			{
-				
 				header("HTTP/1.1 404 Not Found");	
-				$this->load->view('soft404');
+				$this->load->view('soft404', array('invalid_key'=>'Supplied key is not valid'));	
 				return;
 			}
 		}
