@@ -41,7 +41,13 @@
                 <xsl:copy-of select="."/>
         </xsl:if>
     </xsl:template>
-    
+
+     <xsl:template match="@dateModified | @dateAccessioned">
+        <xsl:if test=". != ''">
+                <xsl:copy-of select="."/>
+        </xsl:if>
+    </xsl:template>   
+
     <xsl:template match="dates">
         <xsl:choose>
             <xsl:when test="date[text() != '' or @type != '']">
