@@ -67,7 +67,25 @@
 					<td>
 						<xsl:apply-templates select="@group"/>
 					</td>
-				</tr>	
+				</tr>
+
+				<xsl:if test="ro:collection/@dateModified | ro:activity/@dateModified | ro:party/@dateModified  | ro:service/@dateModified">
+					<tr>
+						<td>Date Modified: </td>
+						<td style="">
+							<xsl:apply-templates select="ro:collection/@dateModified | ro:activity/@dateModified | ro:party/@dateModified  | ro:service/@dateModified"/>
+						</td>
+					</tr>
+				</xsl:if>
+
+				<xsl:if test="ro:collection/@dateAccessioned">				
+					<tr>
+						<td>Date Accessioned: </td>
+						<td style="">
+							<xsl:apply-templates select="ro:collection/@dateAccessioned"/>
+						</td>
+					</tr>
+				</xsl:if>
 			
 				<xsl:apply-templates select="ro:collection | ro:activity | ro:party | ro:service"/>
 						
@@ -117,6 +135,13 @@
 		<xsl:value-of select="."/>
 	</xsl:template>
 
+	<xsl:template match="ro:collection/@dateAccessioned">
+		<xsl:value-of select="."/>
+	</xsl:template>
+
+	<xsl:template match="ro:collection/@dateModified | ro:activity/@dateModified | ro:party/@dateModified  | ro:service/@dateModified">
+		<xsl:value-of select="."/>
+	</xsl:template>
 
 	<xsl:template match="ro:collection | ro:activity | ro:party | ro:service">
 

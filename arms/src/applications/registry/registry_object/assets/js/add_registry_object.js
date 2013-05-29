@@ -546,10 +546,16 @@ function initEditForm(){
 			}
 			else
 			{				
+				if($('input[name=date_accessioned]', admin).val())
+				{
+					var dateAccessioned = ' dateAccessioned="'+$('input[name=date_accessioned]', admin).val()+'"';
+				} else {
+					var dateAccessioned = '';
+				}
 				xml += '<registryObject group="'+$('input[name=group]',admin).val()+'">';
 				xml += '<key>'+$('input[name=key]', admin).val()+'</key>';
 				xml += '<originatingSource type="'+$('input[name=originatingSourceType]', admin).val()+'">'+$('input[name=originatingSource]',admin).val()+'</originatingSource>';
-				xml += '<'+ro_class+' type="'+$('input[name=type]',admin).val()+'">';
+				xml += '<'+ro_class+' type="'+$('input[name=type]',admin).val()+'" dateModified="'+$('input[name=date_modified]', admin).val()+'" '+dateAccessioned+'>';
 
 				$.each(allTabs, function(){
 					xml += getRIFCSforTab(this,false);
@@ -580,7 +586,7 @@ function initEditForm(){
 				// });
 
 				//saving
-				//log(xml);
+				log(xml);
 				var ro_key = $('#admin input[name=key]').val();
 				$.ajax({
 					url:base_url+'registry_object/save/'+ro_id, 
@@ -717,7 +723,8 @@ function validate(){
 	xml += '<key>'+$('input[name=key]', admin).val()+'</key>';
 	xml += '<originatingSource type="'+$('input[name=originatingSourceType]', admin).val()+'">'+$('input[name=originatingSource]',admin).val()+'</originatingSource>';
 	xml += '<'+ro_class+' type="'+$('input[name=type]',admin).val()+'">';
-
+	xml += '<date_modified>'+$('input[name=date_modified]', admin).val()+'</date_modified>';	
+	xml += '<date_accessioned>'+$('input[name=date_accessioned]', admin).val()+'</date_accessioned>';	
     $('.error' ,allTabs).each(function(){
         $(this).removeClass('error');
     });
