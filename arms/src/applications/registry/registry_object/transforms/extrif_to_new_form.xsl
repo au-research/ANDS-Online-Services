@@ -61,7 +61,7 @@
 		</ul>
 	</div>
 
-	<div id="content" style="Manage My Datasources">
+	<div id="content" style="Manage My Data Sources">
 		<div class="content-header">
 			<h1 style="max-width:80%;">
 				<img class="class_icon">
