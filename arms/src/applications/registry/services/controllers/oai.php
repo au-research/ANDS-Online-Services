@@ -185,7 +185,8 @@ class Oai extends MX_Controller
 			$output = sprintf("\t\t<metadataFormat>\n" .
 					  "\t\t\t<metadataPrefix>%s</metadataPrefix>\n" .
 					  "\t\t\t<schema>%s</schema>\n" .
-					  "\t\t\t<metadataNamespace>%s</metadataNamespace>\n",
+					  "\t\t\t<metadataNamespace>%s</metadataNamespace>\n" .
+					  "\t\t</metadataFormat>",
 					  $format['prefix'],
 					  $format['schema'],
 					  $format['ns']);
