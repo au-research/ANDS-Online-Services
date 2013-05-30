@@ -13,73 +13,54 @@ class Search extends MX_Controller {
 		$this->load->view('search_layout', $data);
 	}
 
-	function filter(){
-		header('Cache-Control: no-cache, must-revalidate');
-		header('Content-type: application/json');
-
-		/**
-		 * Getting the stuffs Ready
-		 */
-		$page = 1;
-		$start = 0;
-		$filters = $this->input->post('filters');
+	function solr_search($filters, $include_facet = true){
 		$this->load->library('solr');
 
-		/**
-		 * Default Search Parameters for RDA Portal search
-		 */
-		if (isset($filters["rows"]))
-		{
-			$pp = (int) $filters["rows"];
-		}
-		else
-		{
-			$pp = 15; 
-		}
-				
-		$this->solr->setOpt('rows', $pp);
-		// $this->solr->setOpt('defType', 'edismax');
-		$this->solr->setOpt('mm', '1');
-		$this->solr->setOpt('fl', '*, score');
+		$page = 1; $start = 0;
+		$pp = ( isset($filters['rows']) ? (int) $filters['rows'] : 15 );
 
-		if (!isset($filters["q"]))
-		{
+		$this->solr->setOpt('rows', $pp);
+		$this->solr->setOpt('defType', 'edismax');
+		$this->solr->setOpt('q.alt', '*:*');
+		$this->solr->setOpt('mm', '2'); //minimum should match optional clause
+		$this->solr->setOpt('fl', '*, score'); //we'll get the score as well
+
+		//if there's no query to search, eg. rda browsing
+		if (!isset($filters["q"])){
 			$this->solr->setOpt('q', '*:*');
 			$this->solr->setOpt('sort', 's_list_title asc');
 		}
 
-
-		$facets = array(
-			'class' => 'Class',
-			//'subject_value_resolved' => 'Subjects',
-			'group' => 'Contributed By',
-			'type' => 'Type',
-			'license_class' => 'Licence'
-		);
-		foreach($facets as $facet=>$display){
-			$this->solr->setFacetOpt('field', $facet);
+		//optional facets return, true for rda search
+		if($include_facet){
+			$facets = array(
+				'class' => 'Class',
+				'group' => 'Contributed By',
+				'type' => 'Type',
+				'license_class' => 'Licence'
+			);
+			foreach($facets as $facet=>$display){
+				$this->solr->setFacetOpt('field', $facet);
+			}
+			$this->solr->setFacetOpt('mincount','1');
+			$this->solr->setFacetOpt('limit','100');
+			$this->solr->setFacetOpt('sort','index');
 		}
-		$this->solr->setFacetOpt('mincount','1');
-		$this->solr->setFacetOpt('limit','100');
-		$this->solr->setFacetOpt('sort','index');
 
-		/**
-		 * Setting the SOLR OPTIONS based on the filters sent over AJAX
-		 */
-		$filteredSearch = false;
+		//boost
+		$this->solr->setOpt('bq', 'id^1 group^0.8 display_title^0.5 list_title^0.5 fulltext^0.2 (*:* group:("Australian Research Council"))^999 (*:* group:("National Health and Medical Research Council"))^999');
+
 		if($filters){
-			$this->solr->setOpt('q','');
 			foreach($filters as $key=>$value){
 				$value = rawurldecode($value);
 				switch($key){
 					case 'rq':
-						$this->solr->addQueryCondition($value);
+						$this->solr->clearOpt('defType');//returning to the default deftype
+						$this->solr->setOpt('q', $value);
 					break;
 					case 'q': 
-						$value = escapeSolrValue($value);
-						//echo 'id:"'.$value.'"^1 group:"'.$value.'"^0.8 display_title:"'.$value.'"^0.5 list_title:"'.$value.'"^0.5 fulltext:*'.$value.'*^0.2'
-						$this->solr->addQueryCondition('+(id:"'.$value.'"^1 group:"'.$value.'"^0.8 display_title:"'.$value.'"^0.5 list_title:"'.$value.'"^0.5 fulltext:*'.$value.'*^0.2)');
-						// 'fulltext:*'.$value.'*');
+						// $value = escapeSolrValue($value);
+						$this->solr->setOpt('q', 'fulltext:(*'.$value.'*)');
 					break;
 					case 'p': 
 						$page = (int)$value;
@@ -87,58 +68,41 @@ class Search extends MX_Controller {
 							$start = $pp * ($page-1);
 						}
 						$this->solr->setOpt('start', $start);
-						$filteredSearch = true;
 						break;
 					case 'class': 
-						if($value!='all'){
-							$this->solr->addQueryCondition('+class:("'.$value.'")');
-						}else{
-							$this->solr->addQueryCondition('*:*');
-						}
-						$filteredSearch = true;
+						if($value!='all') $this->solr->setOpt('fq', '+class:('.$value.')');
 						break;
 					case 'group': 
-						$this->solr->addQueryCondition('+group:("'.$value.'")');
-						$filteredSearch = true;
+						if($value!='all') $this->solr->setOpt('fq', '+group:("'.$value.'")');
 						break;
 					case 'type': 
-						$this->solr->addQueryCondition('+type:'.$value);
-						$filteredSearch = true;
+						if($value!='all') $this->solr->setOpt('fq', '+type:("'.$value.'")');
 						break;
 					case 'subject_value_resolved': 
-						$this->solr->addQueryCondition('+subject_value_resolved:("'.$value.'")');
-						$filteredSearch = true;
+						$this->solr->setOpt('fq', '+subject_value_resolved:("'.$value.'")');
 						break;
 					case 's_subject_value_resolved': 
-						$this->solr->addQueryCondition('+s_subject_value_resolved:("'.$value.'")');
-						$filteredSearch = true;
+						$this->solr->setOpt('fq', '+s_subject_value_resolved:("'.$value.'")');
 						break;
 					case 'subject_vocab_uri':
-						$this->solr->addQueryCondition('+subject_vocab_uri:("'.$value.'")');
-						$filteredSearch = true;
+						$this->solr->setOpt('fq', '+subject_vocab_uri:("'.$value.'")');
 						break;
 					case 'temporal':
 						$date = explode('-', $value);
-						$this->solr->addQueryCondition('+earliest_year:['.$date[0].' TO *]');
-						$this->solr->addQueryCondition('+latest_year:[* TO '.$date[1].']');
-						$filteredSearch = true;
+						$this->solr->setOpt('fq','+earliest_year:['.$date[0].' TO *]');
+						$this->solr->setOpt('fq','+latest_year:[* TO '.$date[1].']');
 						break;
 					case 'license_class': 
-						$this->solr->addQueryCondition('+license_class:("'.$value.'")');
-						$filteredSearch = true;
+						$this->solr->setOpt('fq','+license_class:("'.$value.'")');
 						break;
 					case 'spatial':
-						$this->solr->addQueryCondition('+spatial_coverage_extents:"Intersects('.$value.')"');
-						$filteredSearch = true;
+						$this->solr->setOpt('fq','+spatial_coverage_extents:"Intersects('.$value.')"');
 						break;
 					case 'map':
-						$this->solr->addQueryCondition('+spatial_coverage_area_sum:[0.00001 TO *]');
-						if (isset($filters['rows']) && is_numeric($filters['rows']))
-						{
+						$this->solr->setOpt('fq','+spatial_coverage_area_sum:[0.00001 TO *]');
+						if (isset($filters['rows']) && is_numeric($filters['rows'])){
 						    $this->solr->setOpt('rows', $filters['rows']);
-						}
-						else
-						{
+						}else{
 						    $this->solr->setOpt('rows', 1500);
 						}
 						$this->solr->setOpt('fl', 'id,spatial_coverage_area_sum,spatial_coverage_centres,spatial_coverage_extents,spatial_coverage_polygons');
@@ -147,23 +111,7 @@ class Search extends MX_Controller {
 			}
 		}
 
-		if(trim($this->solr->getOpt('q'))==''){
-			$this->solr->addQueryCondition('*:*');
-		}
-
-//		var_dump($this->solr->constructFieldString());
-
-		/**
-		 * Doing the search
-		 * smcphill 20130429: shouldn't need to store the entire result
-		 * in 'solr_result'; all the relevant bits get added to $data
-		 * later on (I think...)
-		 */
-		//$data['solr_result'] = $this->solr->executeSearch();
 		$this->solr->executeSearch();
-
-
-
 		/**
 		 * Getting the results back
 		 */
@@ -171,14 +119,6 @@ class Search extends MX_Controller {
 		$data['result'] = $this->solr->getResult();
 		$data['numFound'] = $this->solr->getNumFound();
 		$data['timeTaken'] = $data['solr_header']->{'QTime'} / 1000;
-
-		/**
-		 * Register the search term
-		 */
-		if(!$filteredSearch){
-			$this->stats->registerSearchTerm($this->solr->getOpt('q'));
-			$this->stats->registerSearchStats($this->solr->getOpt('q'),$data['numFound']);
-		}
 
 		/**
 		 * House cleaning on the facet_results
@@ -240,6 +180,26 @@ class Search extends MX_Controller {
 		$data['facet_counts'] = $this->solr->getFacet();
 		$data['fieldstrings'] = $this->solr->constructFieldString();
 
+		return $data;
+	}
+
+	function filter(){
+		header('Cache-Control: no-cache, must-revalidate');
+		header('Content-type: application/json');
+
+		$data = $this->solr_search($this->input->post('filters'), true);
+
+		$filteredSearch = true;
+
+		/**
+		 * Register the search term
+		 */
+		if(!$filteredSearch){
+			$this->stats->registerSearchTerm($this->solr->getOpt('q'));
+			$this->stats->registerSearchStats($this->solr->getOpt('q'),$data['numFound']);
+		}
+
+		
 		//return the result to the client
 		echo json_encode($data);
 	}

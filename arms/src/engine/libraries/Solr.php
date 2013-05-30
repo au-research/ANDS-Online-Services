@@ -185,10 +185,10 @@ class Solr {
         foreach($this->options as $key=>$value) {
             if(is_array($value)){
                 foreach($value as $v){
-                   $fields_string .= $key.'='.rawurlencode($v).'&';
+                   $fields_string .= $key.'='.($v).'&';
                 }
             }else{
-                $fields_string .= $key.'='.rawurlencode($value).'&';
+                $fields_string .= $key.'='.($value).'&';
             }
         }//build the string
         return $fields_string;
