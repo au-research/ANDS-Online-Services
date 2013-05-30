@@ -56,25 +56,13 @@
 
    <div class="breadcrumb">
     <a href="{$base_url}">Home </a>
-
-    <xsl:if test="$theGroup">
         <xsl:text>  /  </xsl:text>
-        <a>
-           <xsl:attribute name="href">
-               <xsl:value-of select="$base_url"/>view/group/?group=<xsl:value-of select="$theGroup"/>&amp;groupName=<xsl:value-of select="./@group"/>
-           </xsl:attribute><xsl:value-of select="$group"/></a>				
-    </xsl:if>
-
-    <xsl:if test="$theGroup = ''">
-        <xsl:text>  /  </xsl:text>
-            <a>
+    <a>
     <xsl:attribute name="href">
-     <xsl:value-of select="$base_url"/><xsl:value-of select="//extRif:extendedMetadata/extRif:slug"/>
-   </xsl:attribute><xsl:value-of select="$group"/></a>
-        
-    </xsl:if>
-
-    <xsl:text>  /  </xsl:text>
+        <xsl:value-of select="$base_url"/><xsl:value-of select="//extRif:extendedMetadata/extRif:slug"/>
+    </xsl:attribute>
+    <xsl:value-of select="$group"/></a>
+       <xsl:text>  /  </xsl:text>
        <a>
       <xsl:attribute name="href">
         <xsl:value-of select="$base_url"/>search/#!/group=<xsl:value-of select="./@group"/>/tab=<xsl:value-of select="translate($objectClass,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')"/>

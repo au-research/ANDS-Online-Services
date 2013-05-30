@@ -130,12 +130,7 @@ class View extends MX_Controller {
 		// well this was really uggly... we should fix it at ingest!
 		$data['registry_object_contents'] = str_replace('%%%%CONNECTIONS%%%%', $connDiv, $data['registry_object_contents']);
 		$data['registry_object_contents'] = str_replace('%%%%ANDS_SUGGESTED_LINKS%%%%', $suggestedLinksDiv, $data['registry_object_contents']);
-		if(isset($extRif['hasContributor']))
-		{
-			$data['registry_object_contents'] = str_replace("%%%%GROUP_LINK%%%%search/#!/group=".rawurlencode($extRif['contributorGroup']),$extRif['hasContributor'],$data['registry_object_contents']);
-		}else{
-			$data['registry_object_contents'] = str_replace("%%%%GROUP_LINK%%%%","",$data['registry_object_contents']);
-		}
+
 		$this->load->view('default_view', $data);
 
 	}

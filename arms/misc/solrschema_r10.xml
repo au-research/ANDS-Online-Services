@@ -117,6 +117,9 @@
         <!-- <span class="provided">The class of the record (one of "collection", "party", "activity", "service") </span> -->
         <field name="class" type="string" indexed="true" stored="true"/>
 
+        <!-- <span class="provided">The originating source for this record </span> -->
+        <field name="contributor_page" type="string" indexed="true" stored="true"/>        
+
     <!-- INTERNAL KEY FIELDS -->
         <!-- <span class="internal">The unique registry id of the record (generated internally during the ingest process)</span> -->
         <field name="id" type="string" indexed="true" stored="true" required="true"/>
@@ -151,6 +154,7 @@
 
         <!-- <span class="provided">The originating source for this record </span> -->
         <field name="originating_source" type="string" indexed="true" stored="true"/>
+
 
     <!-- LICENSE FACET -->
         <!-- <span class="provided">A full-text search of the entire record (and ANDS-inferred values)</span> -->

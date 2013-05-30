@@ -33,6 +33,7 @@
                 <xsl:apply-templates select="ro:originatingSource"/>
 	        	<xsl:apply-templates select="extRif:extendedMetadata/extRif:id"/>
                 <xsl:apply-templates select="extRif:extendedMetadata/extRif:dataSourceID"/>
+                <xsl:apply-templates select="extRif:extendedMetadata/extRif:contributor"/>                
                 <!--xsl:apply-templates select="extRif:extendedMetadata/extRif:updateTimestamp"/-->
 
                 <xsl:element name="field">
@@ -100,6 +101,13 @@
     <xsl:template match="extRif:dataSourceID">
         <xsl:element name="field">
             <xsl:attribute name="name">data_source_id</xsl:attribute>
+            <xsl:value-of select="."/>
+        </xsl:element>       
+    </xsl:template>
+
+    <xsl:template match="extRif:contributor">
+        <xsl:element name="field">
+            <xsl:attribute name="name">contributor_page</xsl:attribute>
             <xsl:value-of select="."/>
         </xsl:element>       
     </xsl:template>
