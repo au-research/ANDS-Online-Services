@@ -85,13 +85,7 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 			{
 				$record[0]['template'] = CONTRIBUTOR_PAGE_TEMPLATE;
 			}
-
-			if($hasContributor = $this->getContributorExists($record[0]['registry_object_id']))
-			{
-				$record[0]['hasContributor'] = $hasContributor[0];					
-				$record[0]['contributorGroup'] = $hasContributor[1];
-
-			}		
+	
 
 			echo json_encode($record[0]);
 			return;
@@ -135,43 +129,6 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 			return;
 			//throw new Exception("No data could be selected for the specified URL/ID");
 		}
-	}
-
-	/**
-	* Fetch details of an object's contributor if the contributor page exists and is published
-	* 
-	*
-	* @param id of the registry object to get contributor details for
-	*/
-	public function getContributorExists($ro_id)
-	{
-
-		// Get the RO instance for this registry object so we can fetch its contributor datat
-		//$this->load->model('registry_object/registry_objects', 'ro');
-
-		$registry_object = $this->ro->getByID($ro_id);
-	
-		$contributor_details = array();
-
-		if (!$registry_object)
-		{
-			throw new Exception("Unable to fetch contributor data registry object.");
-		}
-		
-		$contributor = $this->db->get_where('institutional_pages',array('group' => $registry_object->getAttribute('group')));
-
-		if ($contributor->num_rows>0)
-		{
-				$row = $contributor->row_array();
-				$contributor_object = $this->ro->getByID($row['registry_object_id']);
-				if($contributor_object->getAttribute('status')==PUBLISHED)
-				{
-					$contributor_details[0] = $contributor_object->getAttribute('slug');
-					$contributor_details[1] = $registry_object->getAttribute('group');
-					return $contributor_details;
-				}
-		}
-		return false;
 	}
 
 

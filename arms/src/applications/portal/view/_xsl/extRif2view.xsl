@@ -45,11 +45,22 @@
 
   <div class="breadcrumb">
      <a href="{$base_url}">Home </a>
-       <xsl:if test="$theGroup = ''">	
-        <xsl:text>  /  </xsl:text>
-        	  <a href="{$base_url}%%%%GROUP_LINK%%%%search/#!/group={./@group}" class="crumb"><xsl:value-of select="$group"/></a>    
-    </xsl:if>
-
+         <xsl:choose>
+        <xsl:when test="//extRif:extendedMetadata/extRif:contributor">
+          <xsl:text>  /  </xsl:text>
+            <a class="crumb">
+              <xsl:attribute name="href">
+                <xsl:value-of select="$base_url"/><xsl:value-of select="$group"/>
+              </xsl:attribute>
+              <xsl:value-of select="$group"/>
+            </a>    
+         </xsl:when> 
+         <xsl:otherwise>
+           <xsl:text>  /  </xsl:text>
+            <a href="{$base_url}search/#!/group={./@group}" class="crumb"><xsl:value-of select="$group"/></a>    
+     
+         </xsl:otherwise>
+       </xsl:choose>
     <xsl:text>  /  </xsl:text>
     <a>
       <xsl:attribute name="href">
