@@ -79,6 +79,9 @@ Only records which have coverage of the search region will be displayed.
 <script type="text/x-mustache" id="search-result-template">
 {{#docs}}
 	<div class="post clear" ro_id="{{id}}">
+		{{#contributor_page}}
+		<span class="contributor hide" slug="{{slug}}">{{contributor_page}}</span>
+		{{/contributor_page}}
 		{{#logo}}
 			<img src="{{logo}}" class="logo right"/>
 		{{/logo}}

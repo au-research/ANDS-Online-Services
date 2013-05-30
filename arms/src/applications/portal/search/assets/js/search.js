@@ -81,6 +81,8 @@ $(document).ready(function() {
 	 initExplanations('party');
 	 initExplanations('service');
 	 initExplanations('activity');
+
+	
 });
 
 function isMapView(searchData) {
@@ -189,6 +191,13 @@ function executeSearch(searchData, searchUrl){
 				});
 				initSearchPage();
 			        $('.sidebar.mapmode_sidebar').show();
+			        $(".contributor").each(function(){
+			        	if($(this).html() == $(this).attr('slug'))
+			        	{
+	 						$(this).parent().addClass('contrib');
+	 					}
+					});
+
 			},
 			error: function(data){
 				$('#search-result').html('There was a problem connecting to the server. Please try again in a little while...');
