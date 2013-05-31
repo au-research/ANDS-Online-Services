@@ -165,27 +165,15 @@ class View extends MX_Controller {
 			$data['cannedText'] = $this->registry->fetchContributorText((string)$this->input->get('slug'));
 			$cannedTextDiv = $this->load->view('cannedText', $data, true);
 		}
-		/*
-		XXX: Todo-> fix this for draft records
-		else if ($this->input->get('ia'))
-		{
-			$data['contentData'] = $this->registry->fetchContributorData((string)$this->input->get('id'));
-			$contentDiv = $this->load->view('contentData', $data, true);
-			$data['cannedText'] = $this->registry->fetchContributorText((string)$this->input->get('id'));
-			$cannedTextDiv = $this->load->view('cannedText', $data, true);
-		}
-		*/
 		else
 		{
-			$contentDiv = "<i class='lightgrey'>Contributor page data will be generated when this page is published</i>";
-			$cannedTextDiv = "<i class='lightgrey'>Contributor page details will be generated when this page is published</i>";
+			$data['contentData'] = $this->registry->fetchContributorDataById($this->input->get('id'));
+			$contentDiv = $this->load->view('contentData', $data, true);
+			$data['cannedText'] = $this->registry->fetchContributorTextById($this->input->get('id'));
+			$cannedTextDiv = $this->load->view('cannedText', $data, true);			
 		}
 
-
-
 		$connDiv = $this->load->view('connections', $data, true);
-
-		//$data['some_random_data_for_the_view_to_parse'] = $contributorData['data'];
 
 		$data['registry_object_contents'] = $this->registry->transformExtrifToHTMLContributorRecord($extRif['data']);
 		$data['registry_object_contents'] = str_replace('%%%%CONTENTS%%%%', $contentDiv, $data['registry_object_contents']);

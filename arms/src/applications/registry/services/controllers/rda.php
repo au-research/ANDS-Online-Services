@@ -253,9 +253,9 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 		{
 			$registry_object = $this->ro->getBySlug($this->input->get('slug'));
 		}
-		elseif ($this->input->get('registry_object_id'))
+		elseif ($this->input->get('id'))
 		{
-			$registry_object = $this->ro->getByID($this->input->get('registry_object_id'));
+			$registry_object = $this->ro->getByID($this->input->get('id'));
 		}
 
 		if (!$registry_object)
@@ -297,9 +297,9 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 		{
 			$registry_object = $this->ro->getBySlug($this->input->get('slug'));
 		}
-		elseif ($this->input->get('registry_object_id'))
+		elseif ($this->input->get('id'))
 		{
-			$registry_object = $this->ro->getByID($this->input->get('registry_object_id'));
+			$registry_object = $this->ro->getByID($this->input->get('id'));
 		}
 
 		if (!$registry_object)
@@ -310,7 +310,7 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 
 		// XXX: TODO: LIMIT and offset (pass to getSuggestedLinks...)
 	
-		$cannedText = $registry_object->getContributorText($group='Auscope');
+		$cannedText = $registry_object->getContributorText();
 
 		echo json_encode(array("theText"=>$cannedText));
 	}
