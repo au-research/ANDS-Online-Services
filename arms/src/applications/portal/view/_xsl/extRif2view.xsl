@@ -223,7 +223,7 @@
         
         <!-- HIERARCHY CHART (NEW) -->
         <div class="hide" id="collectionStructureWrapper">
-          <h4>Collection Structure <a href="#" class="hide collectionNote"><img src="{$base_url}/assets/core/images/question_mark.png" style="width:14px;position:relative;top:-8px"/></a></h4>
+          <h4>Browse nested collections <a href="#" class="hide collectionNote"><img src="{$base_url}/assets/core/images/question_mark.png" style="width:14px;position:relative;top:-8px"/></a></h4>
 	  <div id="collectionStructureQtip" class="hide">
 	    <p>Closely related collections to this collection (they have a parent-child relationship) are displayed in a browsable tree structure to provide contextual information for this collection and to facilitate discovery. Browse the related collections by expanding each tree node. Access a related collection of interest by clicking on the hyperlink.</p>
 	    <p>Please note that only collections using the reciprocal RIF-CS relationship type "isPartOf/hasPart" are listed here. Use the Collections Connections box on the right to access all related collections.</p>
