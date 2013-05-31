@@ -256,6 +256,43 @@ class Registry_fetch extends CI_Model
 		return $cannedText;
 	}
 
+function fetchContributorDataById($id)
+	{
+		$url = $this->config->item('registry_endpoint') . "getContributorData/?id=".$id;
+
+
+ 		$facetsForGroup = json_decode(@file_get_contents($url), true);
+
+ 		if (isset($facetsForGroup['contents']))
+		{
+			return $facetsForGroup;
+		}
+		else
+		{
+			var_dump($url);
+			throw new ErrorException("Error whilst fetching contributor page details: " . $facetsForGroup['message']);
+		}
+	
+		return $facetsForGroup;
+	}
+	function fetchContributorTextById($id)
+	{
+		$url = $this->config->item('registry_endpoint') . "getContributorText/?id=".$id;
+
+ 		$cannedText = json_decode(@file_get_contents($url), true);
+
+ 		if (isset($cannedText['theText']))
+		{
+			return $cannedText;
+		}
+		else
+		{
+			throw new ErrorException("Error whilst fetching contributor page details: " . var_export($cannedText,true));
+		}
+	
+		return $cannedText;
+	}
+
 	function getSlugFromKey($key)
 	{
 		$url = $this->config->item('registry_endpoint') . "getSlugFromKey/?key=" . $key;
