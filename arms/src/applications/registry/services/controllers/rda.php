@@ -76,16 +76,22 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 		if ($record && count($record) > 0)
 		{
 			// Contributor pages logic (constants in engine/config/)
-
 			$this->load->model('data_source/data_sources', 'ds');
-
-			$contributor = $this->db->get_where('institutional_pages',array('registry_object_id' => $record[0]['registry_object_id']));
-
+			//we have a reord, get the object to get the object's group
+			$theObject = $this->ro->getByID($record[0]['registry_object_id']);
+			//see if this group has a contributor page
+			$contributor = $this->db->get_where('institutional_pages',array('group' => $theObject->getAttribute('group')));
 			if ($contributor->num_rows>0)
-			{
-				$record[0]['template'] = CONTRIBUTOR_PAGE_TEMPLATE;
+			{				
+				//if there is a contributor page see if the key of the page is this one (to cater for when a draft and published contibutor page exists)
+				$contributorRecord = array_pop($contributor->result_array());
+				$theContributor = $this->ro->getByID($contributorRecord['registry_object_id']);
+				if($theContributor->getAttribute('key')==$record[0]['key'])
+				{
+					$record[0]['template'] = CONTRIBUTOR_PAGE_TEMPLATE;
+				}
+				
 			}
-	
 
 			echo json_encode($record[0]);
 			return;
