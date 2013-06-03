@@ -143,7 +143,7 @@ $(document).ready(function() {
     				google.visualization.events.addListener(chart, 'select', selectHandler); 
 
     				function selectHandler(e){   
-     					var targetString = '{"sort":{"updated":"desc"},"filter":{"class":"'+dataView.getValue(chart.getSelection()[0].row,0).toLowerString()+'","quality_level":"'+(chart.getSelection()[0].column)+'"}}'
+     					var targetString = '{"sort":{"updated":"desc"},"filter":{"class":"'+dataView.getValue(chart.getSelection()[0].row,0).toLowerCase()+'","quality_level":"'+(chart.getSelection()[0].column)+'"}}'
     					window.location.href = base_url + "data_source/manage_records/"+$('#data_source_id').val()+"/#!/" + targetString
       				}
 
