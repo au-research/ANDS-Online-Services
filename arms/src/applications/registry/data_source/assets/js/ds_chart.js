@@ -121,7 +121,7 @@ $(document).ready(function() {
 				  fontName:"'Arial'"
 				};
 				var dataView = new google.visualization.DataView(chart_data);
-
+				
 				// Set the display for all columns (Except the first!)
 				columns = [0];
 				for (var i=1; i<=chart_data.getNumberOfColumns()-1; i++)
@@ -139,6 +139,13 @@ $(document).ready(function() {
 
 					var chart = new google.visualization.BarChart(document.getElementById('overall_chart_div'));
 					chart.draw(dataView, options);
+
+    				google.visualization.events.addListener(chart, 'select', selectHandler); 
+
+    				function selectHandler(e){   
+     					var targetString = '{"sort":{"updated":"desc"},"filter":{"class":"'+dataView.getValue(chart.getSelection()[0].row,0).toLowerString()+'","quality_level":"'+(chart.getSelection()[0].column)+'"}}'
+    					window.location.href = base_url + "data_source/manage_records/"+$('#data_source_id').val()+"/#!/" + targetString
+      				}
 
 					var legendBar = '';
 					$.each(colorChart, function(i, val)
@@ -198,6 +205,13 @@ $(document).ready(function() {
 
 			        var chart = new google.visualization.PieChart(document.getElementById('status_chart_'+i));
 		       		chart.draw(table_data, options);
+
+    				google.visualization.events.addListener(chart, 'select', selectHandler); 
+
+    				function selectHandler(e){   
+     					var targetString = '{"sort":{"updated":"desc"},"filter":{"status":"'+table_data.getValue(chart.getSelection()[0].row,0).replace(/ /gi,"_").toUpperCase()+'","class":"'+i.toLowerCase()+'"}}'
+    					window.location.href = base_url + "data_source/manage_records/"+$('#data_source_id').val()+"/#!/" + targetString        				    				
+    				}
 				});
 
 				var legendBar = '';
