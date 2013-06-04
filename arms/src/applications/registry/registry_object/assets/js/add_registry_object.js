@@ -622,7 +622,11 @@ function initEditForm(){
 
 
 								//change title
-								if(data.title) window.document.title = 'Edit: '+decodeURIComponent(data.title);
+								if(data.title) {
+									window.document.title = 'Edit: '+decodeURIComponent(data.title);
+									$('#breadcrumb a.current').text(decodeURIComponent(data.title));
+								}
+
 							}
 						}
 						else
