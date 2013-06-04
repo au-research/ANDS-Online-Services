@@ -162,7 +162,46 @@
             </xsl:when>
         </xsl:choose>
     </xsl:template>
-    
+
+      <xsl:template match="accessRights">
+        <xsl:choose>
+            <xsl:when test="@type != '' or ./text() != '' or @rightsUri != ''">
+                <xsl:copy>
+                    <xsl:apply-templates select="@* | node()" />
+                </xsl:copy>   
+            </xsl:when>
+        </xsl:choose>
+    </xsl:template>  
+      <xsl:template match="licence">
+        <xsl:choose>
+            <xsl:when test="@type != '' or value/text() != '' or @rightsUri != ''">
+                <xsl:copy>
+                    <xsl:apply-templates select="@* | node()" />
+                </xsl:copy>   
+            </xsl:when>
+        </xsl:choose>
+    </xsl:template>
+
+      <xsl:template match="rightsStatement">
+        <xsl:choose>
+            <xsl:when test="value/text() != ''">
+                <xsl:copy>
+                    <xsl:apply-templates select="@* | node()" />
+                </xsl:copy>   
+            </xsl:when>
+        </xsl:choose>
+    </xsl:template> 
+
+       <xsl:template match="rights">
+        <xsl:choose>
+            <xsl:when test=". != ''">
+                <xsl:copy>
+                    <xsl:apply-templates select="@* | node()" />
+                </xsl:copy>   
+            </xsl:when>
+        </xsl:choose>
+    </xsl:template>    
+
     <xsl:template match="relatedObject[not(key/text()) and relation/@type = '' and not(relation/description/text()) and not(relation/url/text())]"/><xsl:template match="description[(not(@type) or @type='') and not(text())]"/>
     <xsl:template match="spatial[(not(@type) or @type='') and not(text())]"/>
     <xsl:template match="text[not(text())]"/>
