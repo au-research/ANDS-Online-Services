@@ -44,7 +44,7 @@ class Search extends MX_Controller {
 			}
 			$this->solr->setFacetOpt('mincount','1');
 			$this->solr->setFacetOpt('limit','100');
-			$this->solr->setFacetOpt('sort','index');
+			$this->solr->setFacetOpt('sort','count');
 		}
 
 		//boost
@@ -59,8 +59,8 @@ class Search extends MX_Controller {
 						$this->solr->setOpt('q', $value);
 					break;
 					case 'q': 
-						// $value = escapeSolrValue($value);
-						$this->solr->setOpt('q', 'fulltext:(*'.$value.'*)');
+						$value = escapeSolrValue($value);
+						$this->solr->setOpt('q', 'fulltext:('.$value.')');
 					break;
 					case 'p': 
 						$page = (int)$value;
@@ -112,12 +112,21 @@ class Search extends MX_Controller {
 		}
 
 		$this->solr->executeSearch();
+
+		//if no result is found, forsake the edismax and thus forsake the boost query and search again
+		// unicode characters
+		if($this->solr->getNumFound()==0){
+			$this->solr->clearOpt('defType');
+			$this->solr->clearOpt('bq');
+			$this->solr->executeSearch();
+		}
+
 		/**
 		 * Getting the results back
 		 */
-		$data['solr_header'] = $this->solr->getHeader();
 		$data['result'] = $this->solr->getResult();
 		$data['numFound'] = $this->solr->getNumFound();
+		$data['solr_header'] = $this->solr->getHeader();
 		$data['timeTaken'] = $data['solr_header']->{'QTime'} / 1000;
 
 		/**
@@ -128,7 +137,7 @@ class Search extends MX_Controller {
 			$facet_values = array();
 			$solr_facet_values = $this->solr->getFacetResult($facet);
 			if(count($solr_facet_values)>0){
-				uksort($solr_facet_values, "strnatcasecmp");
+				if(isset($filters['facetsort']) && $filters['facetsort']=='alpha') uksort($solr_facet_values, "strnatcasecmp");
 				foreach($solr_facet_values AS $title => $count){
 					if($count>0){
 						$facet_values[] = array(

@@ -592,7 +592,6 @@ function initEditForm(){
 				// });
 
 				//saving
-				log(xml);
 				var ro_key = $('#admin input[name=key]').val();
 				$.ajax({
 					url:base_url+'registry_object/save/'+ro_id, 
@@ -620,6 +619,10 @@ function initEditForm(){
 								//$('.record_title').html(data.title);
 								$('#response_result').html(output);
 								formatQA($('#response_result .qa'));
+
+
+								//change title
+								if(data.title) window.document.title = 'Edit: '+decodeURIComponent(data.title);
 							}
 						}
 						else
