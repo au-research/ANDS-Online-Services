@@ -126,9 +126,9 @@ function executeSearch(searchData, searchUrl){
 			data: {filters:searchData},
 			dataType:'json',
 			success: function(data){
-				log(data.fieldstrings);
+				log(data);
 				$.each(data.result.docs, function(){
-					// log(this.display_title, this.score, this.id);
+					log(this.display_title, this.score, this.id);
 				});
 
 				var numFound = data.result.numFound;
@@ -163,10 +163,10 @@ function executeSearch(searchData, searchUrl){
 				    $.browser.msie === true &&
 				    parseInt($.browser.version) < 9)
 			        {
-				    docs = docs.slice(0,500);
-				}
+					    docs = docs.slice(0,500);
+					}
 
-			        //truncated results notice; only display on map view
+				        //truncated results notice; only display on map view
 			        if (isMapView(searchData)) {
 			            var template = $('#search-trunc-template').html();
 			            var truncdata = {trunc: (numFound !== docs.length),
@@ -174,16 +174,13 @@ function executeSearch(searchData, searchUrl){
 						     returned: docs.length};
 			            var output = Mustache.render(template, truncdata);
 			            if (output.trim().length > 0) {
-					$('#search_notice').html(output).removeClass('hide').addClass('info');
-				    }
-			            else {
-					$('#search_notice:not(.hide)').empty().addClass('hide');
-				    }
-				}
-			        else {
-				    $('#search_notice:not(.hide)').empty().addClass('hide');
-				}
-
+							$('#search_notice').html(output).removeClass('hide').addClass('info');
+					    }else {
+							$('#search_notice:not(.hide)').empty().addClass('hide');
+					    }
+					}else {
+					    $('#search_notice:not(.hide)').empty().addClass('hide');
+					}
 
 				$(docs).each(function(){
 					//log(this.list_title + " (" + Math.floor(this.score * 100000)  + ")");
@@ -194,13 +191,13 @@ function executeSearch(searchData, searchUrl){
 				 	}
 				});
 				initSearchPage();
-			        $('.sidebar.mapmode_sidebar').show();
-			        $(".contributor").each(function(){
-			        	if($(this).html() == $(this).attr('slug'))
-			        	{
-	 						$(this).parent().addClass('contrib');
-	 					}
-					});
+		        $('.sidebar.mapmode_sidebar').show();
+		        $(".contributor").each(function(){
+		        	if($(this).html() == $(this).attr('slug'))
+		        	{
+ 						$(this).parent().addClass('contrib');
+ 					}
+				});
 
 			},
 			error: function(data){
@@ -403,8 +400,7 @@ function initSearchPage(){
 
 	$('#search_map_toggle').unbind('click');
 	$('#search_map_toggle').click(function(e){
-	        $('#search_notice').addClass('hide');
-
+	    $('#search_notice').addClass('hide');
 		e.preventDefault();
 		if(searchData['map']){
 			//already map, hide map
