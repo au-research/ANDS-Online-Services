@@ -45,6 +45,7 @@ class LicenceTypes_Extension extends ExtensionBase
 					if($right['licence_group']=='') $right['licence_group'] = 'Unknown';
 				}
 				$rights[] = $right;
+				unset($right);
 			}
 
 		}
