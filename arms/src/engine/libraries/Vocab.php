@@ -256,6 +256,18 @@ class Vocab {
                 if($c['collectionNum'] > 0) $tree['topConcepts'][] = $c;
             }
         }
+        $sort = array();
+        if(isset($filters['facetsort']) && $filters['facetsort']=='alpha'){ 
+            foreach($tree['topConcepts'] as $key=>$c){
+                $sort[$key] = $c['prefLabel'];
+            }
+            array_multisort($sort, SORT_ASC, $tree['topConcepts']);
+        }else{
+            foreach($tree['topConcepts'] as $key=>$c){
+                $sort[$key] = $c['collectionNum'];
+            }
+            array_multisort($sort, SORT_DESC, $tree['topConcepts']);
+        }
         return $tree;
     }
 

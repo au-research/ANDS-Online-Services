@@ -296,6 +296,15 @@ $(document).on('click', '.filter',function(e){
 	e.preventDefault();
 	var url = $('a.title', this).attr('href');
 	window.location = url;
+}).on('click', '#togglefacetsort', function(){
+	if($(this).hasClass('facetsortaz')){
+		$(this).removeClass('facetsortcount').addClass('facetsortaz');
+		searchData['facetsort']='alpha';
+	}else{
+		$(this).removeClass('facetsortaz').addClass('facetsortcount');
+		delete searchData['facetsort'];
+	}
+	changeHashTo(formatSearch());
 });
 
 function loadSubjectBrowse(val){
@@ -503,6 +512,13 @@ function initSearchPage(){
 	$('.showmore_excerpt').click(function(){
 		$(this).parent().html($(this).parent().children(0).html());
 	});
+
+	//init the facet sorting functionality
+	if(searchData['facetsort']){
+		$('#togglefacetsort').removeClass('facetsortaz').addClass('facetsortcount');
+	}else{
+		$('#togglefacetsort').addClass('facetsortaz').removeClass('facetsortcount');
+	}
 }
 
 function initExplanations(theType)
@@ -523,6 +539,7 @@ function getTopLevelFacet(){
 		type: 'POST',
 		data: {filters:searchData},
 		success: function(data){
+			log(data);
 			var template = $('#top-level-template').html();
 			var output = Mustache.render(template, data);
 			$('#top_concepts').html(output);
@@ -534,6 +551,18 @@ function getTopLevelFacet(){
 }
 
 function postSearch(){
+
+	// if(searchData['facetsort']=='alpha'){
+	// 	var mylist = $('ul#top_concepts');
+	// 	var listitems = mylist.children('li').get();
+	// 	listitems.sort(function(a, b) {
+	// 	   var compA = $(a).text().toUpperCase();
+	// 	   var compB = $(b).text().toUpperCase();
+	// 	   return (compA < compB) ? -1 : (compA > compB) ? 1 : 0;
+	// 	})
+	// 	$.each(listitems, function(idx, itm) { mylist.append(itm); });
+	// }
+
     $('.sidebar ul').each(function(idx, facet){
 
 		if($('li', facet).length>5){
@@ -546,6 +575,8 @@ function postSearch(){
 		    });
 		}
 	});
+
+
 
 	var selecting_facets = ['class', 'group','type','license_class'];
 	$.each(selecting_facets,function(){
