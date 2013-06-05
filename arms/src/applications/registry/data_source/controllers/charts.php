@@ -97,11 +97,16 @@ class Charts extends MX_Controller {
 							GROUP BY `value`, `class`;", $constraints);
 
 		$this->load->model("registry_object/registry_objects");
+		$chart_result['All Records'] = array();
 		foreach (Registry_objects::$classes AS $c => $c_label)
 		{
 			$chart_result[$c_label] = array();
+
 			foreach (Registry_objects::$quality_levels AS $q => $q_label)
 			{
+				if(!isset($chart_result['All'][$q_label])){
+				$chart_result['All Records'][$q_label] = 0;	
+				} 			
 				if ($q_label == "Gold Standard Record")
 				{
 					$gs_query = $this->db->query("SELECT count(*) AS count
@@ -116,6 +121,7 @@ class Charts extends MX_Controller {
 					
 					$gs_query = array_pop($gs_query->result_array());
 					$chart_result[$c_label][$q_label] = (int) $gs_query['count'];
+					$chart_result['All Records'][$q_label] = $chart_result['All Records'][$q_label] + (int) $gs_query['count'];
 				}
 				else
 				{
@@ -124,11 +130,13 @@ class Charts extends MX_Controller {
 			}
 		}
 
+
 		foreach ($query->result() AS $row)
 		{
 			if (isset($chart_result[Registry_objects::$classes[$row->class]]) && isset(Registry_objects::$quality_levels[$row->value]))
 			{
 				$chart_result[Registry_objects::$classes[$row->class]][Registry_objects::$quality_levels[$row->value]] = (int) $row->count;
+				$chart_result['All Records'][Registry_objects::$quality_levels[$row->value]] = $chart_result['All Records'][Registry_objects::$quality_levels[$row->value]] + (int) $row->count;
 			}
 		}
 

@@ -25,21 +25,23 @@ $(document).ready(function() {
 
 				// Calculate the sums of quality levels per status for % calculation
 				$.each(data, function(i, item){
-  					var miniSum=0;
-  					$.each(item, function(j, qa_i){
-  						if(!isNaN(qa_i))
-  						{
-  							miniSum += qa_i;
-
-  							if (qa_i != 0)
+					if(i != "All Records")
+					{
+  						var miniSum=0;
+  						$.each(item, function(j, qa_i){
+  							if(!isNaN(qa_i))
   							{
-  								columns[j] = true;
-  							}
+  								miniSum += qa_i;
+
+  								if (qa_i != 0)
+  								{
+  									columns[j] = true;
+  								}
  
-  						}
+  							}
   					});
   					data[i].sum = miniSum;
-
+  				}
   				});
 
 
