@@ -792,7 +792,8 @@ function addValidationMessage(tt, type){
 	}
 	else if(field_id.match("^tab_")){
 		var tab = field_id.replace('tab_','');
-		$('#'+tab).prepend('<div class="alert alert-'+type+'">'+message+'</div>');
+		var theTab = $('#'+tab);
+		$(theTab).prepend('<div class="alert alert-'+type+'">'+message+'</div>');
 	}
 	else{
 
