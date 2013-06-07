@@ -53,6 +53,12 @@ class Extrif_Extension extends ExtensionBase
 	
 				$extendedMetadata->addChild("extRif:displayTitle", str_replace('&', '&amp;' , $this->ro->title), EXTRIF_NAMESPACE);
 				$extendedMetadata->addChild("extRif:listTitle", str_replace('&', '&amp;' , $this->ro->list_title), EXTRIF_NAMESPACE);
+				try{
+					$extendedMetadata->addChild("extRif:simplifiedTitle", iconv('UTF-8', 'ASCII//TRANSLIT', str_replace('&', '&amp;' , $this->ro->list_title)), EXTRIF_NAMESPACE);
+				}catch(Exception $e){
+					throw new Exception ('iconv installation/configuration required for simplified title');
+				}
+
 				if($contributor)
 				{
 					$extendedMetadata->addChild("extRif:contributor", str_replace('&', '&amp;' , $contributor[0]), EXTRIF_NAMESPACE);

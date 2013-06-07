@@ -60,7 +60,7 @@ class Search extends MX_Controller {
 					break;
 					case 'q': 
 						$value = escapeSolrValue($value);
-						$this->solr->setOpt('q', 'fulltext:('.$value.')');
+						$this->solr->setOpt('q', 'fulltext:('.$value.') OR simplified_title:('.iconv('UTF-8', 'ASCII//TRANSLIT', $value).')');
 					break;
 					case 'p': 
 						$page = (int)$value;

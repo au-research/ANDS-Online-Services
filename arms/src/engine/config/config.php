@@ -27,6 +27,8 @@ if (!isset($config['sissvoc_url']))
 	$config['sissvoc_url'] = "http://ands3.anu.edu.au:8080/sissvoc/api/";
 }
 
+//default locale for character type conversion, instead of C or POSIX
+setlocale(LC_CTYPE, 'en_AU');
 
 // Fix URL resolution issues with aboslute URLs (for now...)
 if (isset($config['default_base_url']))
