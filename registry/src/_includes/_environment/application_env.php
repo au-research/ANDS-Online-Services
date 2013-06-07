@@ -27,7 +27,7 @@ define("eROOT_DIR", $cosi_root);
 define("ePROTOCOL", $default_protocol);
 define("eAPP_ROOT", ePROTOCOL.'://'.eHOST.'/'.eROOT_DIR.'/');
 define("eHTTP_APP_ROOT",  'http://'.eHOST.'/'.eROOT_DIR.'/');
-
+define("eAPP_ROOT_REGISTRY", ePROTOCOL.'://'.eHOST.'/registry/');
 define("eIMAGE_ROOT", eAPP_ROOT.'_images/');
 
 // Assume that the request root is set at the APP_ROOT

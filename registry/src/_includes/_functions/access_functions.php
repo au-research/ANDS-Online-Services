@@ -155,7 +155,7 @@ function authenticate($role_id, $passphrase, &$userMessage, &$userName, &$authDo
 				if( $successful )
 				{
 					$userName = getRoleName($role_id);
-					$authDomain = eAPP_ROOT;
+					$authDomain = eAPP_ROOT_REGISTRY;
 				}
 			    break;
 			case gAUTHENTICATION_LDAP:
