@@ -153,7 +153,9 @@ class Registry extends MX_Controller {
 		$this->load->database();
 		$key = $this->input->get('ro_key');
 		$results['ro_key'] = $key;
-		$query = $this->db->select('*')->get_where('registry_objects', array("key"=>$key));
+		// $query = $this->db->select('*')->get_where('registry_objects', array("binary key"=>$key), true);
+		//case sensitive search for key
+		$query = $this->db->where('binary `key` =', '"'.$key.'"', false)->get('registry_objects');
 		$results['ro_list'] = $query->result_array();
 		if(is_array($results['ro_list']) && count($results['ro_list'] > 0))
 		{
