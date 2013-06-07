@@ -49,6 +49,7 @@
 	            <!--xsl:apply-templates select="extRif:extendedMetadata/extRif:dataSourceKeyHash"/--> 
 	            <xsl:apply-templates select="extRif:extendedMetadata/extRif:displayTitle"/> 
                 <xsl:apply-templates select="extRif:extendedMetadata/extRif:listTitle"/> 
+                <xsl:apply-templates select="extRif:extendedMetadata/extRif:simplifiedTitle"/> 
 
                 <xsl:apply-templates select="extRif:extendedMetadata/extRif:right[@licence_group!='']" mode="licence_group"/>        
                 <xsl:apply-templates select="extRif:extendedMetadata/extRif:description" mode="value"/>
@@ -285,6 +286,13 @@
     <xsl:template match="extRif:listTitle">
         <xsl:element name="field">
             <xsl:attribute name="name">list_title</xsl:attribute>
+            <xsl:value-of select="."/>
+        </xsl:element>       
+    </xsl:template>
+
+    <xsl:template match="extRif:simplifiedTitle">
+        <xsl:element name="field">
+            <xsl:attribute name="name">simplified_title</xsl:attribute>
             <xsl:value-of select="."/>
         </xsl:element>       
     </xsl:template>

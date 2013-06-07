@@ -625,6 +625,7 @@ function initEditForm(){
 								if(data.title) {
 									window.document.title = 'Edit: '+decodeURIComponent(data.title);
 									$('#breadcrumb a.current').text(decodeURIComponent(data.title));
+									$('.content-header h1').text(decodeURIComponent(data.title));
 								}
 
 							}

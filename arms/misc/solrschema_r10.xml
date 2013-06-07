@@ -166,6 +166,8 @@
         <field name="display_title" type="text_en_splitting" indexed="true" stored="true"/>
         <!--<span class="provided">The alternate title of the record used when the record is displayed in a list</span>-->
         <field name="list_title" type="text_en_splitting" indexed="true" stored="true"/>
+        <!--<span class="provided">The simplified title of the record used when the record has special characters and/or unicode chars</span>-->
+        <field name="simplified_title" type="text_en_splitting" indexed="true" stored="true"/>
         
   
     <!-- DESCRIPTIONS -->
