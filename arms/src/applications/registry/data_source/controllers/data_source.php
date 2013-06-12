@@ -1812,9 +1812,10 @@ public function getContributorGroupsEdit()
 			{
 				// clean-up after harvest?
 			}
+			if($this->importer->runBenchMark)
+			$dataSource->append_log('IMPORTER BENCHMARK RESULTS:'.NL.$this->importer->getBenchMarkLogs(), HARVEST_INFO, "importer", "BENCHMARK_INFO");
 		}
-		if($this->importer->runBenchMark)
-		$dataSource->append_log('IMPORTER BENCHMARK RESULTS:'.NL.$this->importer->getBenchMarkLogs(), HARVEST_INFO, "importer", "BENCHMARK_INFO");
+
 
 
 	}

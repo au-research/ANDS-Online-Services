@@ -208,15 +208,16 @@ function reset_timezone()
 	date_default_timezone_set($CI->config->item('default_tz'));
 }
 
-$cycles = 0;
+$_gc_cycles = 0;
+
 function clean_cycles()
 {
-	global $cycles;
-	$cycles++;
-	if ($cycles > 100)
+	global $_gc_cycles;
+	$_gc_cycles++;
+	if ($_gc_cycles > 100)
 	{
 		gc_collect_cycles();
-		$cycles = 0;
+		$_gc_cycles = 0;
 	}
 }
 

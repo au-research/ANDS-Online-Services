@@ -13,6 +13,7 @@ class Transforms {
 	static $extrif_to_dc_transformer = NULL;
 	static $form_to_cleanrif_transformer = NULL;
 	static $clean_ns_transformer = NULL;
+	static $extrif_to_dci_transformer = NULL;
 	
 
 	static function get_qa_transformer()
@@ -141,6 +142,20 @@ class Transforms {
 		}
 
 		return self::$clean_ns_transformer;
+	}
+
+	static function get_extrif_to_dci_transformer()
+	{
+		if (is_null(self::$extrif_to_dci_transformer))
+		{
+			$dci_xsl = new DomDocument();
+			$dci_xsl->load(APP_PATH.'registry_object/transforms/extrif_to_dci.xsl');
+			$dciProc = new XSLTProcessor();
+			$dciProc->importStyleSheet($dci_xsl);
+			self::$extrif_to_dci_transformer = $dciProc;
+		}
+
+		return self::$extrif_to_dci_transformer;
 	}
 	
 }		

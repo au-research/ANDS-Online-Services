@@ -220,7 +220,7 @@ class Extrif_Extension extends ExtensionBase
 					$relatedObj->addChild("extRif:related_object_relation", $relatedObject['relation_type'], EXTRIF_NAMESPACE);
 					//$relatedObj->addChild("extRif:related_object_logo", $relatedObject['the_logo'], EXTRIF_NAMESPACE);
 				}
-
+				
 				// Friendlify dates =)
 				$xml = $this->ro->extractDatesForDisplay($xml);
 

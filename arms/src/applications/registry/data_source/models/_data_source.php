@@ -542,6 +542,8 @@ class _data_source {
 	private function clean_log_message($log_message)
 	{
 		// Some crude logic to try and clean up the log message if we have a heap of duplicate records (rubbish Geonetwork OAI providers)
+		if(is_array($log_message))
+			$log_message = var_export($log_message, true);
 		if (strlen($log_message) > 500)
 		{
 			$log_message = preg_replace('/Ignored a record received twice in this harvest.*\n/', '',$log_message,-1, $replacements);
@@ -643,7 +645,8 @@ class _data_source {
 			foreach($oldRegistryObjects AS $target_ro_id)
 			{
 				try{
-					$this->_CI->ro->deleteRegistryObject($target_ro_id);
+					$this->_CI->ro->eraseFromDatabase($target_ro_id);
+					//$this->_CI->ro->deleteRegistryObject($target_ro_id);
 				}
 				catch(Exception $e)
 				{
@@ -846,7 +849,7 @@ class _data_source {
 			elseif($harvestFrequency == 'fortnightly')
 				$nextHarvest = date("Y-m-d\TH:i:s\Z", strtotime('+2 week',time()));
 			elseif($harvestFrequency == 'monthly')
-				$nextHarvest = date("Y-m-d\TH:i:s\Z", strtotime('+1 wmonth',time()));
+				$nextHarvest = date("Y-m-d\TH:i:s\Z", strtotime('+1 month',time()));
 		}
 
 		$mode = 'harvest'; if( $testOnly ){ $mode = 'test'; }	
