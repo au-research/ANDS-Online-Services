@@ -22,7 +22,7 @@ ul.vocab_list li {
 }
 
 
-ul.vocab_list li[role="vocab_error"], .error {
+ul.vocab_list li[role="vocab_error"], ul.vocab_list li.error {
     background-color: #FFAAAA;
     margin-bottom: 0px;
 }

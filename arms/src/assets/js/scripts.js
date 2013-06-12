@@ -567,31 +567,32 @@ function Core_checkValidField(form, field){
 		if(valid){
 			// $(field).closest('div.control-group').removeClass('error').addClass('success');
 			$(field).removeClass('error').addClass('success');
-			if($(field).parent().find('.validation').length > 0)
-			{
-				$(field).parent().find('.validation').remove();
-			}
+			// if($(field).parent().find('.validation').length > 0)
+			// {
+			// 	$(field).parent().find('.validation').remove();
+			// }
 			if(warning)
 			{
-				$(field).closest('div.control-group').removeClass('success').addClass('warning');
-				$(field).removeClass('success').addClass('warning');
-				if($(field).parent().find('.validation').length === 0)
-				{
-					$(field).parent().append('<div class="alert alert-warning validation">Field should be a valid '+$(field).attr('valid-type')+'</div>');				
-				}
+				// $(field).closest('div.control-group').removeClass('success').removeClass('error').addClass('warning');
+				// $(field).removeClass('success').addClass('warning');
+				// $(field).parent().append('<div class="alert alert-warning validation">Field should be a valid '+$(field).attr('valid-type')+'</div>');				
+				Core_addValidationMessage($(field), 'warning', 'Field should be a valid '+$(field).attr('valid-type'));
 			}
 			return true;
 		}else{
 			$(form).attr('valid', false);
-			$(field).closest('div.control-group').removeClass('success').addClass('error');
-			$(field).removeClass('success').addClass('error');
-			if($(field).parent().find('.validation').length === 0)
-			{
-				if($(field).attr('valid-type'))
-					$(field).parent().append('<div class="alert alert-error validation">Field must be a valid '+$(field).attr('valid-type')+'</div>');
-				else
-					$(field).parent().append('<div class="alert alert-error validation">Field value must be entered</div>');			
+			// $(field).closest('div.control-group').removeClass('success').removeClass('warning').addClass('error');
+			// $(field).removeClass('success').addClass('error');
+
+			if($(field).attr('valid-type')){
+				Core_addValidationMessage($(field), 'error', 'Field must be a valid '+$(field).attr('valid-type'));
+				// $(field).parent().append('<div class="alert alert-error validation">Field must be a valid '+$(field).attr('valid-type')+'</div>');
+			}else{
+				// $(field).parent().append('<div class="alert alert-error validation">Field value must be entered</div>');
+				Core_addValidationMessage($(field), 'error', 'Field value must be entered');
+				// $(field).parent().append('<p class="help-inline validation">Field value must be entered</p>');			
 			}
+
 			return false;
 		}
 	}
@@ -611,12 +612,27 @@ function Core_checkValidForm(form){
 	}else{
 		$(form).attr('valid', false);
 	}
-
-
 	return valid;
 }
 
-
+function Core_addValidationMessage(field, type, message){
+	if($(field).is('input')){
+		var controls = $(field).closest('div.controls');
+		if(controls.length > 0){
+			$(controls).closest('.control-group').removeClass('error').removeClass('warning').removeClass('success').addClass(type);
+			if($('p.help-inline', controls).length > 0){
+				$('p.help-inline', controls).remove();
+			}
+			$(controls).append('<p class="help-inline">'+message+'</p>');
+		}
+	}else{ //is a random dom
+		if($('.alert-'+type, field).length > 0){//if there is already one
+			$('.alert-'+type, field).append('<br/>'+message);
+		}else{
+			$(field).prepend('<div class="alert alert-'+type+'">'+message+'</div>');
+		}
+	}
+}
 
 
 

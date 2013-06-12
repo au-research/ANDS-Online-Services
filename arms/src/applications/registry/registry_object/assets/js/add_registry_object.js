@@ -540,12 +540,7 @@ function initEditForm(){
 			var ro_id = $('#ro_id').val();
 			var ds_id = $('#data_source_id').val()
 			$('input[name=key]', admin).parent().find('.validation').remove();
-			if(ro_key == '') //Core_checkValidForm($('#edit-form')))
-			{
-				$('input[name=key]', admin).parent().append('<div class="alert alert-error validation">Registry Object Key must have a value!</div>');
-				setTabInfo();
-			}
-			else if(originalKeyValue != ro_key && (isUniqueMsg = isUniqueKey(ro_key, ro_id, ds_id)))
+			if(originalKeyValue != ro_key && (isUniqueMsg = isUniqueKey(ro_key, ro_id, ds_id)))
 			{				
 				$('input[name=key]', admin).parent().append('<div class="alert alert-error validation">'+ isUniqueMsg+ '</div>');
 				setTabInfo();
@@ -778,8 +773,47 @@ function validate(){
 	});
 }
 
-
 function addValidationMessage(tt, type){
+	var field_id = tt.field_id;
+	var message = tt.message;
+	var field = null;
+	message = $('<div />').html(message).text(); //dispel html from message
+
+	// log(field_id, message);
+
+	if(field_id.match("^tab_mandatoryInformation_")){
+		//on the mandatory tab
+		var tab = field_id.replace('tab_mandatoryInformation_','');
+		field = $('#admin').find('*[name='+tab+']');
+		// $(field).addClass('error');
+		// $(field).parent().append('<div class="alert alert-'+type+'">'+message+'</div>');
+		Core_addValidationMessage(field, type, message);
+	}
+	else if(field_id.match("^tab_")){
+		//on other tabs
+		var tab = field_id.replace('tab_','');
+		var theTab = $('#'+tab);
+		// $(theTab).prepend('<div class="alert alert-'+type+'">'+message+'</div>');
+	}else{
+		//it's a field
+		log(field_id, message, type);
+		var target = $('*[field_id='+field_id+']');
+
+		if(target.hasClass('aro_box')){
+			Core_addValidationMessage(target, type, message);
+		}else if(target.hasClass('aro_box_part')){
+			field = $('*[field_id='+field_id+'] input');
+			Core_addValidationMessage(field, type, message);
+		}
+		
+		
+	}
+}
+
+
+
+
+function addValidationMessagsdfasdfe_old(tt, type){
 	var field_id = tt.field_id;
 	var message = tt.message;
     var message = $('<div />').html(message).text();
@@ -854,12 +888,11 @@ function setTabInfo(){
 	var allTabs = $('.pane');
 	$('#advanced-menu .label').remove();
 	$.each(allTabs, function(){
-		var count_info = $('.alert-info', this).length;
-		var count_error = $('.alert-error', this).length;
-		var count_warning = $('.alert-warning', this).length;
+		var count_info = $('.info', this).length;
+		var count_error = $('.error, .alert-error', this).length;
+		var count_warning = $('.warning, .alert-warning', this).length;
 		var id = $(this).attr('id');
-		if(id != 'qa')
-		{
+		if(id != 'qa'){
 			if(count_info > 0) addValidationTag(id, 'info', count_info, "Some metadata recommendation(s) not yet met<br/><small class='muted'>(Click for more info)</small>");
 			if(count_error > 0) addValidationTag(id, 'important', count_error, "Some field(s) contain errors!<br/><small class='muted'>(Click for more info)</small>");
 			if(count_warning > 0) addValidationTag(id, 'warning', count_warning, "Some metadata requirement(s) not yet met<br/><small class='muted'>(Click for more info)</small>");
