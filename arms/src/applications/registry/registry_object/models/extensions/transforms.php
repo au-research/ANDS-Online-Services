@@ -73,10 +73,25 @@ class Transforms_Extension extends ExtensionBase
 		try{
 			$xslt_processor = Transforms::get_extrif_to_dc_transformer();
 			$dom = new DOMDocument();
-			$this->ro->enrich();
 			$dom->loadXML($this->ro->getExtRif());
 
 			return html_entity_decode($xslt_processor->transformToXML($dom));
+		}catch (Exception $e)
+		{
+			echo "UNABLE TO TRANSFORM" . BR;	
+			echo "<pre>" . nl2br($e->getMessage()) . "</pre>" . BR;
+		}
+	}
+
+
+	function transformToDCI()
+	{
+		try{
+			$xslt_processor = Transforms::get_extrif_to_dci_transformer();
+			$dom = new DOMDocument();
+			$dom->loadXML($this->ro->getExtRif());
+			$xslt_processor->setParameter('','dateProvided', date("Y-m-d"));
+			return $xslt_processor->transformToXML($dom);
 		}catch (Exception $e)
 		{
 			echo "UNABLE TO TRANSFORM" . BR;	

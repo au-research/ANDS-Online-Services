@@ -15,12 +15,12 @@
               	<xsl:apply-templates select="node()"/>
     		</xsl:when>
             <xsl:when test="local-name() = 'registryObject'">
-                <xsl:element name="{local-name()}">
+                <xsl:element name="{local-name()}" xmlns="http://ands.org.au/standards/rif-cs/registryObjects">
                     <xsl:apply-templates select="@group | node()"/>
                 </xsl:element>
             </xsl:when>
     		<xsl:otherwise>
-            	<xsl:element name="{local-name()}">
+            	<xsl:element name="{local-name()}" xmlns="http://ands.org.au/standards/rif-cs/registryObjects">
               		<xsl:apply-templates select="@*|node()"/>
             	</xsl:element>
     		</xsl:otherwise>

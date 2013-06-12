@@ -262,7 +262,6 @@ class _xml
 		$oldHash = '';
 		$this->current = $current;
 		$this->scheme = $scheme;
-
 		if($current == TRUE)
 		{
 
