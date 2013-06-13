@@ -73,20 +73,24 @@ class Home extends MX_Controller {
 		$data['contributors'] = $this->registry->fetchInstitutionalPages();
 
 		$links = array();
+
 		foreach($data['groups'] as $g=>$count){
-			foreach($data['contributors']['contents'] as $c){
-				$l = '';
-				if($c['title']==$g){
-					$l = anchor($c['slug'], $g.' ('.$count.')', array('class'=>'contrib'));
-					break;
-				}else{
-					$l = anchor('search#!/q='.$g, $g.' ('.$count.')');
+			$l = '';
+			if($data['contributors']){
+				foreach($data['contributors']['contents'] as $c){
+					if($c['title']==$g){
+						$l = anchor($c['slug'], $g.' ('.$count.')', array('class'=>'contrib'));
+						break;
+					}else{
+						$l = anchor('search#!/group='.rawurlencode($g), $g.' ('.$count.')');
+					}
 				}
+			}else{
+				$l = anchor('search#!/group='.rawurlencode($g), $g.' ('.$count.')');
 			}
 			array_push($links, $l);
 		}
 		$data['links'] = $links;
-
 		$this->load->library('stats');
 		$this->stats->registerPageView();
 
