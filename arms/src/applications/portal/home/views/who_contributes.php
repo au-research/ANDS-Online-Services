@@ -5,8 +5,10 @@
 	<div id="who_contributes">
 		<ul>
 			<?php 
-				foreach($links as $l){
-					echo '<li>'.$l.'</li>';
+				if($links){
+					foreach($links as $l){
+						echo '<li>'.$l.'</li>';
+					}
 				}
 				
 			?>
