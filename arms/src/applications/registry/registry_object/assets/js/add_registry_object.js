@@ -977,6 +977,7 @@ function initRelatedObjects(){
 	var relatedObjects = [];
 	$('#relatedObjects input[name=key]').each(function(){
 		relatedObjects.push($(this).val());
+		$(this).attr('value', $(this).val());
 	});
 
 	$(document).off('blur', '#relatedObjects input[name=key]').on('blur', '#relatedObjects input[name=key]', initRelatedObjects)
@@ -999,8 +1000,6 @@ function initRelatedObjects(){
 			}
 		}
 	});
-
-
 }
 
 function _getVocab(vocab)
