@@ -357,6 +357,30 @@ class Registry_object extends MX_Controller {
 		echo json_encode($jsonData);
 	}
 
+	//TODO:XXX
+	public function fetch_related_object_aro(){
+		header('Cache-Control: no-cache, must-revalidate');
+		header('Content-type: application/json');
+		set_exception_handler('json_exception_handler');
+		$jsonData['request'] = $this->input->post('related');
+		$this->load->model('registry_objects', 'ro');
+
+		$jsonData['result'] = array();
+		if($this->input->post('related')){
+			foreach($this->input->post('related') as $key){
+				$ro = $this->ro->getPublishedByKey($key);
+				if(!$ro) $ro = $this->ro->getDraftByKey($key);
+				if($ro){
+					$jsonData['result'][$key] = array('title'=>$ro->title, 'status'=>$ro->status, 'key'=>$ro->key, 'id'=>$ro->id);
+				}else{
+					$jsonData['result'][$key] = array('title'=>'Registry Object Not Found', 'status'=>'notfound');
+				}
+			}
+		}
+		$jsonData['success'] = true;
+		echo json_encode($jsonData);
+	}
+
 	public function getGroupSuggestor(){
 		header('Cache-Control: no-cache, must-revalidate');
 		header('Content-type: application/json');

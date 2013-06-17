@@ -565,8 +565,9 @@ function Core_checkValidField(form, field){
 		}
 
 		if(valid){
-			// $(field).closest('div.control-group').removeClass('error').addClass('success');
-			$(field).removeClass('error').addClass('success');
+			$(field).closest('div.control-group').removeClass('error').removeClass('warning').addClass('success');
+			Core_removeValidationMessage($(field));
+			// $(field).removeClass('error').addClass('success');
 			// if($(field).parent().find('.validation').length > 0)
 			// {
 			// 	$(field).parent().find('.validation').remove();
@@ -631,6 +632,17 @@ function Core_addValidationMessage(field, type, message){
 		}else{
 			$(field).prepend('<div class="alert alert-'+type+'">'+message+'</div>');
 		}
+	}
+}
+
+function Core_removeValidationMessage(field){
+	if($(field).is('input')){
+		var controls = $(field).closest('div.controls');
+		if(controls.length > 0){
+			$('p.help-inline', controls).remove();
+		}
+	}else{
+		$('.alert', field).remove();
 	}
 }
 
