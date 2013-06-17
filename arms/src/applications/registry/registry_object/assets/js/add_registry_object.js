@@ -259,7 +259,9 @@ function bindSearchRelatedEvents(tt, target){
 				$('#result', tooltip).html(output);
 				$('.select_related').click(function(){
 					$(target).val($(this).attr('key'));
+					$(target).attr('value', $(this).attr('key'));
 					tt.hide();
+					initRelatedObjects();
 				});
 			}
 		});
@@ -796,7 +798,6 @@ function addValidationMessage(tt, type){
 		// $(theTab).prepend('<div class="alert alert-'+type+'">'+message+'</div>');
 	}else{
 		//it's a field
-		log(field_id, message, type);
 		var target = $('*[field_id='+field_id+']');
 
 		if(target.hasClass('aro_box')){
@@ -973,7 +974,33 @@ function initVocabWidgets(container){
 
 function initRelatedObjects(){
 	//var names = $('#names .aro_box[type=name]');
-	
+	var relatedObjects = [];
+	$('#relatedObjects input[name=key]').each(function(){
+		relatedObjects.push($(this).val());
+	});
+
+	$(document).off('blur', '#relatedObjects input[name=key]').on('blur', '#relatedObjects input[name=key]', initRelatedObjects)
+	$.ajax({
+		url:base_url+'registry_object/fetch_related_object_aro/', 
+		type: 'POST',
+		data: {related:relatedObjects},
+		success: function(data){
+			if(data.result){
+				$('.related_title').remove();
+				$.each(data.result, function(i, v){
+					var theInput = $('input[value="'+i+'"]');
+					var box = $(theInput).closest('.aro_box');
+					if(v.status!='notfound'){
+						$(box).prepend('<div class="well related_title"><span class="tag status_'+v.status+'">'+v.status+'</span> '+v.title+'</div>');
+					}else{
+						$(box).prepend('<div class="well related_title">Registry Object Not Found</div>');
+					}
+				});
+			}
+		}
+	});
+
+
 }
 
 function _getVocab(vocab)
