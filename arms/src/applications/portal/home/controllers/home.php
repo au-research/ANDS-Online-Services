@@ -108,8 +108,21 @@ class Home extends MX_Controller {
 	}
 
 	function contact(){
-			//	$data['scripts'] = array('home_page');
 		$data['title'] = 'Research Data Australia - Contact Us';
+		if($this->input->get('sent')!=''){
+			$this->load->library('user_agent');
+			$data['user_agent']=$this->agent->browser();
+			$name = $this->input->post('name');
+			$email = $this->input->post('email');
+			$content = $this->input->post('content');
+			$this->load->library('email');
+			$this->email->from($email, $name);
+			$this->email->to('services@ands.org.au');
+			$this->email->subject('RDA Contact Us');
+			$this->email->message($content);
+			$this->email->send();
+			$data['sent'] = true;
+		}else $data['sent'] = false;
 		$this->load->view('contact', $data);
 	}
 
