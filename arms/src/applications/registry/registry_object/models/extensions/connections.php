@@ -62,6 +62,7 @@ class Connections_Extension extends ExtensionBase
 		/* Step 2 - Internal reverse links */
 		if ($allow_reverse_internal_links)
 		{
+
 			$unordered_connections = array_merge($unordered_connections, $this->_getInternalReverseLinks());
 		}
 

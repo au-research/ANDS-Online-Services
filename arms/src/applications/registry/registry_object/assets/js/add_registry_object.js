@@ -973,13 +973,13 @@ function initVocabWidgets(container){
 }
 
 function initRelatedObjects(){
-	//var names = $('#names .aro_box[type=name]');
+
+	//display current related objects title and status
 	var relatedObjects = [];
 	$('#relatedObjects input[name=key]').each(function(){
 		relatedObjects.push($(this).val());
 		$(this).attr('value', $(this).val());
 	});
-
 	$(document).off('blur', '#relatedObjects input[name=key]').on('blur', '#relatedObjects input[name=key]', initRelatedObjects)
 	$.ajax({
 		url:base_url+'registry_object/fetch_related_object_aro/', 
@@ -995,6 +995,22 @@ function initRelatedObjects(){
 						$(box).prepend('<div class="well related_title"><span class="tag status_'+v.status+'">'+v.status+'</span> '+v.title+'</div>');
 					}else{
 						$(box).prepend('<div class="well related_title">Registry Object Not Found</div>');
+					}
+				});
+			}
+		}
+	});
+
+	//reverse links and contributors page
+	$('.other_related_links').remove();
+	$.ajax({
+		url:base_url+'registry_object/getConnections/'+$(ro_id).val(), 
+		type: 'POST',
+		success: function(data){
+			if(data.connections){
+				$.each(data.connections, function(){
+					if(this.origin!='EXPLICIT'){
+						$('#relatedObjects').append('<div class="well other_related_links"><span class="tag"> '+this.relation_type+'</span>'+this.title+'</div>');
 					}
 				});
 			}
