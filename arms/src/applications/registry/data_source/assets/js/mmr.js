@@ -897,7 +897,7 @@ function update(ids, attributes){
                    if(data_success_message!='') $('#status_message').html(data.success_message).show();
                 }
 
-                changeHashTo(formatFilters(filters));
+                init(filters);
             }
         }
     });
@@ -918,7 +918,7 @@ function delete_ro(ids, selectAll){
         type: 'POST',
         data: {affected_ids:ids, filters:filters, select_all:selectAll, excluded_records: excluded_records, data_source_id:data_source_id},
         success: function(data){
-            changeHashTo(formatFilters(filters));
+            init(filters);
         }
     });
 }
