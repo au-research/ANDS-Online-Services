@@ -14,8 +14,6 @@ class Relationships_Extension extends ExtensionBase
 		// Delete any old relationships (we only run this on ingest, so its a once-off update)
 		$this->db->where(array('registry_object_id' => $this->ro->id));
 		$this->db->delete('registry_object_relationships');	
-
-		$related_keys = array();
 		$sxml = $this->ro->getSimpleXml();
 
 		/* Explicit relationships */
@@ -83,7 +81,7 @@ class Relationships_Extension extends ExtensionBase
 			);
 		}
 
-		return $related_keys;
+		return $explicit_keys;
 	}
 
 	function getRelationships()

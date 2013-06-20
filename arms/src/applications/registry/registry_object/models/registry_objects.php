@@ -654,13 +654,45 @@ class Registry_objects extends CI_Model {
 		return $this->getDraftByKey($registry_object->key);
 	}
 
+	public function deleteRegistryObjects($target_ro_ids, $finalise = true)
+	{
+		
+		$this->load->library('Solr');
+		$this->solr->deleteByIDsCondition($target_ro_ids);
+		$deleted_record_keys = array();
+		$affected_record_keys = array();
+
+		foreach($target_ro_ids AS $target_ro_id)
+		{
+			try{
+				$deletedRegObject = $this->getByID($target_ro_id);
+				$deleted_record_keys[] = $deletedRegObject->key;
+				$affected_record_keys = array_unique(array_merge($affected_record_keys, $this->deleteRegistryObject($target_ro_id, false)));
+			}
+			catch(Exception $e)
+			{
+				throw new Exception("ERROR REMOVING RECORD: " .$target_ro_id.NL.$e);
+			}
+		}
+		if($finalise)
+		{
+			// And then their related records get reindexed...
+			$this->importer->_enrichRecords($affected_record_keys);
+			$this->importer->_reindexRecords($affected_record_keys);
+		}
+
+
+		return array('deleted_record_keys'=>$deleted_record_keys, 'affected_record_keys'=>$affected_record_keys);
+	}
+
+
 	/**
 	 * Deletes a RegistryObject 
 	 *
 	 * @param the registry object key
 	 * @return TRUE if delete was successful
 	 */
-	public function deleteRegistryObject($target_ro, $dry_run = false)
+	public function deleteRegistryObject($target_ro, $finalise = true)
 	{
 		$reenrich_queue = array();
 
@@ -673,10 +705,12 @@ class Registry_objects extends CI_Model {
 				throw new Exception("Registry Object targeted for delete does not exist?");
 			}
 		}
-
-		//delete index
-		$this->load->library('Solr');
-		//$this->solr->deleteByQueryCondition('id:'.$target_ro->id);
+		if($finalise)
+		{
+			//delete index
+			$this->load->library('Solr');
+			$this->solr->deleteByQueryCondition('id:'.$target_ro->id);
+		}
 
 		if (isPublishedStatus($target_ro->status))
 		{
@@ -698,54 +732,40 @@ class Registry_objects extends CI_Model {
 			$this->db->insert('deleted_registry_objects');
 
 			// Re-enrich and reindex related
-			$reenrich_queue = array_merge($target_ro->getRelationships(), $reenrich_queue);
-
+			$reenrich_queue = $target_ro->getRelationships();
+			if($finalise)
+			{
 			// Delete from the index
-			$result = json_decode($this->solr->deleteByQueryCondition("id:(\"".$target_ro->id."\")"));
+				$result = json_decode($this->solr->deleteByQueryCondition("id:(\"".$target_ro->id."\")"));
 
-			if($result->responseHeader->status != 0)
-			{			
-				$this->load->model('data_source/data_sources', 'ds');
-				$data_source = $this->ds->getByID($target_ro->data_source_id);
-				$data_source->append_log("Failed to erase from SOLR: id:" .$target_ro->id , 'error', 'registry_object');
-			}
-			else{
-				$this->solr->commit();
+				if($result->responseHeader->status != 0)
+				{			
+					$this->load->model('data_source/data_sources', 'ds');
+					$data_source = $this->ds->getByID($target_ro->data_source_id);
+					$data_source->append_log("Failed to erase from SOLR: id:" .$target_ro->id , 'error', 'registry_object');
+				}
+				else{
+					$this->solr->commit();
+				}
 			}
 		}
 
 		// Delete the actual registry object
-		if (!$dry_run)
-		{
-			if (isDraftStatus($target_ro->status))
-			{
-				//$this->db->where('registry_object_id', $target_ro->id);
-				//$this->db->update('registry_objects', array(	"status" => "DELETED"
-				//									));
-				$this->load->model('data_source/data_sources', 'ds');
-				$data_source = $this->ds->getByID($target_ro->data_source_id);
-				$log = $target_ro->eraseFromDatabase($target_ro->id);
-				if($log)
-				$data_source->append_log("eraseFromDatabase " . $log, 'info', 'registry_object');
+		$this->load->model('data_source/data_sources', 'ds');
+		$data_source = $this->ds->getByID($target_ro->data_source_id);
+		$log = $target_ro->eraseFromDatabase($target_ro->id);
+		if($log)
+		$data_source->append_log("eraseFromDatabase " . $log, 'info', 'registry_object');
 
-			}
-			else
-			{
-				// Publish records get deleted
-				//$this->db->where('registry_object_id', $target_ro->id);
-				//$this->db->update('registry_objects', array(	"status" => "DELETED"
-				//										));
-				$this->load->model('data_source/data_sources', 'ds');
-				$data_source = $this->ds->getByID($target_ro->data_source_id);
-				$log = $target_ro->eraseFromDatabase($target_ro->id);
-				if($log)
-				$data_source->append_log("eraseFromDatabase " . $log, 'info', 'registry_object');
-				// And then their related records get reindexed...
-				$this->importer->_enrichRecords($reenrich_queue);
-				$this->importer->_reindexRecords($reenrich_queue);
-				log_message('debug', "Reindexed " . count($reenrich_queue) . " related record(s) when " . $target_ro->key . " was deleted.");
-			}
+		if($finalise)
+		{
+			// And then their related records get reindexed...
+			$this->importer->_enrichRecords($reenrich_queue);
+			$this->importer->_reindexRecords($reenrich_queue);
+			//log_message('debug', "Reindexed " . count($reenrich_queue) . " related record(s) when " . $target_ro->key . " was deleted.");
 		}
+
+		return $reenrich_queue;
 	}
 
 	public function getDeletedRegistryObjects($data_source_id)
@@ -815,8 +835,8 @@ class Registry_objects extends CI_Model {
 	public function getRecordsInDataSourceFromOldHarvest($data_source_id, $harvest_id)
 	{
 
-		$oldRegistryObjects = $this->getOldHarvestedRecordIDsByDataSourceID($data_source_id, $harvest_id);
-		return $oldRegistryObjects;
+		$oldRegistryObjectIDs = $this->getOldHarvestedRecordIDsByDataSourceID($data_source_id, $harvest_id);
+		return $oldRegistryObjectIDs;
 	}
 
 

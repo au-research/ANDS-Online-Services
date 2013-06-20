@@ -1356,7 +1356,7 @@ public function getContributorGroupsEdit()
 
 			$this->importer->setDatasource($data_source);
 			$this->importer->commit();
-
+			$taskLog =  $this->importer->finishImportTasks();
 
 			if ($error_log = $this->importer->getErrors())
 			{
@@ -1441,6 +1441,7 @@ public function getContributorGroupsEdit()
 
 			$this->importer->setDatasource($data_source);
 			$this->importer->commit();
+			$taskLog =  $this->importer->finishImportTasks();
 
 
 			if ($error_log = $this->importer->getErrors())
@@ -1631,6 +1632,9 @@ public function getContributorGroupsEdit()
 		$dataSource = $this->ds->getByHarvestID($harvestId);
 			if($dataSource)// WE MIGHT GET A GHOST HARVEST
 			{
+				
+
+
 				if (isset($POST['content'])){
 					$data =  $this->input->post('content');
 				}
@@ -1749,7 +1753,9 @@ public function getContributorGroupsEdit()
 					{
 						if($dataSource->advanced_harvest_mode == 'REFRESH' && $gotData)
 						{	
-							$dataSource->deleteOldRecords($harvestId);
+							$deleted_and_affected_record_keys = $dataSource->deleteOldRecords($harvestId);
+							$this->importer->addToDeletedList($deleted_and_affected_record_keys['deleted_record_keys']);
+							$this->importer->addToAffectedList($deleted_and_affected_record_keys['affected_record_keys']);
 						} 
 						if($dataSource->harvest_frequency != '')
 						{
@@ -1778,14 +1784,16 @@ public function getContributorGroupsEdit()
 		flush(); ob_flush();
 
 		// Continue post-harvest cleanup...
+		
 		if ($done =='TRUE' && $mode =='HARVEST' && $gotData)
 		{
 
-			if ($dataSource->harvest_method == 'RIF')
-			{
+			//if ($dataSource->harvest_method == 'RIF')
+			//{
 				$harvested_record_count = 0;
-				$this->db->select('value')->from('registry_object_attributes')->where(array('attribute'=>'harvest_id','value'=>$harvestId));
+				$this->db->select('registry_object_id')->from('registry_object_attributes')->where(array('attribute'=>'harvest_id','value'=>$harvestId));
 				$query = $this->db->get();
+				$importedIDList = $query->result_array();
 				$harvested_record_count = $query->num_rows();
 
 				if ($harvested_record_count < 300)
@@ -1798,20 +1806,29 @@ public function getContributorGroupsEdit()
 					$log_estimate = "+/- " . ceil($harvested_record_count / (60*5)) . " minutes";
 				}
 
-				$dataSource->append_log($harvested_record_count . ' records received from OAI Provider. Ingesting them into the registry... (harvest ID: '.$harvestId.')' . NL 
+				$dataSource->append_log($harvested_record_count . ' records received from Provider. Ingesting them into the registry... (harvest ID: '.$harvestId.')' . NL 
 										. "* This should take " . $log_estimate . NL . ' --- ' . NL . $dataSource->consolidateHarvestLogs($harvestId)
 										, HARVEST_INFO, "harvester", "HARVESTER_INFO");
 
 				// The importer will only get the last OAI chunk! so reindex the lot...
-				$dataSource->reindexAllRecords();
+				// 
+				//$dataSource->reindexAllRecords();
+				$importedIds = array();
+				foreach($importedIDList as $row){
+					$importedIds[] = $row['registry_object_id'];
+				}
+				$this->importer->addToImportedIDList($importedIds);
+				$taskLog =  $this->importer->finishImportTasks();
+				$dataSource->append_log('TaskLog '.NL.$taskLog, HARVEST_INFO, "harvester", "HARVESTER_INFO");
+
 				$dataSource->updateStats();
 
 				$dataSource->append_log('Harvest complete! '.$harvested_record_count.' records harvested and ingested into the registry...  (harvest ID: '.$harvestId.')', HARVEST_INFO, "harvester", "HARVESTER_INFO");
-			}
-			else
-			{
+			//}
+			//else
+			//{
 				// clean-up after harvest?
-			}
+			//}
 			if($this->importer->runBenchMark)
 			$dataSource->append_log('IMPORTER BENCHMARK RESULTS:'.NL.$this->importer->getBenchMarkLogs(), HARVEST_INFO, "importer", "BENCHMARK_INFO");
 		}

@@ -638,23 +638,24 @@ class _data_source {
 
 	function deleteOldRecords($harvest_id)
 	{
-		$this->_CI->load->model("registry_object/registry_objects", "ro");
-		$oldRegistryObjects = $this->_CI->ro->getRecordsInDataSourceFromOldHarvest($this->id, $harvest_id);
-		if($oldRegistryObjects)
+		$this->_CI->load->model("registry_object/registry_objects", "ro");	
+		$oldRegistryObjectIDs = $this->_CI->ro->getRecordsInDataSourceFromOldHarvest($this->id, $harvest_id);
+		$deleted_and_affected_record_keys = null;
+		if($oldRegistryObjectIDs)
 		{
-			foreach($oldRegistryObjects AS $target_ro_id)
+			try{
+				$deleted_and_affected_record_keys = $this->_CI->ro->deleteRegistryObjects($oldRegistryObjectIDs, false);
+			}
+			catch(Exception $e)
 			{
-				try{
-					$this->_CI->ro->eraseFromDatabase($target_ro_id);
-					//$this->_CI->ro->deleteRegistryObject($target_ro_id);
-				}
-				catch(Exception $e)
-				{
-					$this->append_log("ERROR REMOVING RECORD FROM PREVIOUS HARVEST: " .$target_ro_id.NL.$e, HARVEST_INFO, "harvester", "HARVESTER_INFO");
-				}
+				$this->append_log("ERROR REMOVING RECORD FROM PREVIOUS HARVEST: ".NL.$e, HARVEST_INFO, "harvester", "HARVESTER_INFO");
 			}
 		}
-		$this->append_log("REMOVING RECORDS FROM PREVIOUS HARVEST: " .sizeof($oldRegistryObjects)." DELETED", HARVEST_INFO, "harvester","HARVESTER_INFO");	
+		if(is_array($deleted_and_affected_record_keys) && array_key_exists('deleted_record_keys', $deleted_and_affected_record_keys))
+		{
+			$this->append_log("REMOVING RECORDS FROM PREVIOUS HARVEST: " .sizeof($deleted_and_affected_record_keys['deleted_record_keys'])." DELETED", HARVEST_INFO, "harvester","HARVESTER_INFO");	
+		}
+		return $deleted_and_affected_record_keys; //array('deleted_record_keys'=>$deleted_record_keys, 'affected_record_keys'=>$affected_record_keys);
 	}
 	/*
 	 * 	STATS
