@@ -3,7 +3,7 @@
 	xmlns:extRif="http://ands.org.au/standards/rif-cs/extendedRegistryObjects"
 	exclude-result-prefixes="extRif ro">
 	<xsl:output method="xml" encoding="UTF-8" indent="yes" omit-xml-declaration="yes"/>
-
+	<xsl:variable name="maxRelatedDisp" select="2"/>
 	<xsl:template match="/">
 		<xsl:apply-templates select="//ro:registryObject"/>
 	</xsl:template>
@@ -496,9 +496,18 @@
 	<xsl:template name="relatedObjectsTab">
 		<div id="relatedObjects" class="tab-pane">
 			<fieldset>
-				<legend>Related Objects</legend>
-				<xsl:apply-templates
-					select="ro:collection/ro:relatedObject | ro:activity/ro:relatedObject | ro:party/ro:relatedObject  | ro:service/ro:relatedObject"/>
+				<xsl:value-of select="$maxRelatedDisp"/>
+				<legend>Related Objects<xsl:value-of select="$maxRelatedDisp"/>SSS</legend>
+				<xsl:choose>
+					<xsl:when test="count(//ro:relatedObject) > $maxRelatedDisp">
+						<xsl:apply-templates select="ro:collection/ro:relatedObject | ro:activity/ro:relatedObject | ro:party/ro:relatedObject  | ro:service/ro:relatedObject"/>
+						<br/><legend>No More than <xsl:value-of select="$maxRelatedDisp"/> related Objects can be displayed</legend>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:apply-templates select="ro:collection/ro:relatedObject | ro:activity/ro:relatedObject | ro:party/ro:relatedObject  | ro:service/ro:relatedObject"/>
+					</xsl:otherwise>
+				</xsl:choose>
+
 				<div class="separate_line"/>
 				<button class="btn btn-primary addNew" type="relatedobject">
 					<i class="icon-plus icon-white"/> Add Related Object </button>
@@ -677,7 +686,7 @@
 		</div>
 	</xsl:template>
 
-	<xsl:template match="ro:collection/ro:relatedObject | ro:activity/ro:relatedObject | ro:party/ro:relatedObject  | ro:service/ro:relatedObject">
+	<xsl:template match="ro:collection/ro:relatedObject[position() < $maxRelatedDisp] | ro:activity/ro:relatedObject[position() < $maxRelatedDisp] | ro:party/ro:relatedObject[position() < $maxRelatedDisp]  | ro:service/ro:relatedObject[position() < $maxRelatedDisp]">
 		<div class="aro_box" type="relatedobject">
 			<div class="aro_box_display clearfix">
 				<a href="javascript:;" class="toggle">

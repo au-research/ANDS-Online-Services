@@ -246,10 +246,28 @@ class Solr {
         }
     }
 
+
+    function deleteByIDsCondition($ids)
+    {
+        $result = false;
+        if (is_array($ids))
+        {
+            $query = '';        
+            foreach($ids as $id)
+            {
+                $query .= 'id:'.$id.' ';
+            }
+            $result = $this->deleteByQueryCondition($query);
+        }
+        return $result;
+    }
+
     function deleteByID($id){
+        $result = false;
         if($id){
              $result = $this->deleteByQueryCondition('id:'.$id);
         }
+        return $result;
     }
 
 

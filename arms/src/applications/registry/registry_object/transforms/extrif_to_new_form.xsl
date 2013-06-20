@@ -4,7 +4,7 @@
 	exclude-result-prefixes="extRif ro">
 	<xsl:output method="html" encoding="UTF-8" indent="yes" omit-xml-declaration="yes"/>
 	<xsl:param name="base_url"/>
-
+	<xsl:variable name="maxRelatedDisp" select="50"/>
 
 	<xsl:variable name="ro_class">
 		<xsl:apply-templates select="ro:registryObject/ro:collection | ro:registryObject/ro:activity | ro:registryObject/ro:party  | ro:registryObject/ro:service" mode="getClass"/>
@@ -858,8 +858,15 @@
 		<div id="relatedObjects" class="pane">
 			<fieldset>
 				<legend>Related Objects <sup><a class="muted" href="http://www.ands.org.au/guides/cpguide/cpgrelatedobject.html" target="_blank" title="View Content Providers' Guide">?</a></sup></legend>
-				<xsl:apply-templates
-					select="ro:collection/ro:relatedObject | ro:activity/ro:relatedObject | ro:party/ro:relatedObject  | ro:service/ro:relatedObject"/>
+				<xsl:choose>
+					<xsl:when test="count(//ro:relatedObject) > $maxRelatedDisp">
+						<xsl:apply-templates select="ro:collection/ro:relatedObject | ro:activity/ro:relatedObject | ro:party/ro:relatedObject  | ro:service/ro:relatedObject"/>
+						<br/><legend>No More than <xsl:value-of select="$maxRelatedDisp"/> related Objects can be displayed</legend>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:apply-templates select="ro:collection/ro:relatedObject | ro:activity/ro:relatedObject | ro:party/ro:relatedObject  | ro:service/ro:relatedObject"/>
+					</xsl:otherwise>
+				</xsl:choose>
 				<div class="separate_line"/>
 				<button class="btn btn-primary addNew" type="relatedObject" add_new_type="relatedObject">
 					<i class="icon-plus icon-white"/> Add Related Object </button>
@@ -1056,7 +1063,8 @@
 		</div>
 	</xsl:template>
 
-	<xsl:template match="ro:collection/ro:relatedObject | ro:activity/ro:relatedObject | ro:party/ro:relatedObject  | ro:service/ro:relatedObject">
+	<xsl:template match="ro:collection/ro:relatedObject | ro:activity/ro:relatedObject| ro:party/ro:relatedObject | ro:service/ro:relatedObject">
+		<xsl:if test="position() &lt;= $maxRelatedDisp">
 		<div class="aro_box" type="relatedObject">
 			<div class="aro_box_display clearfix">
 				<a href="javascript:;" class="toggle"><i class="icon-minus"/></a>
@@ -1082,6 +1090,7 @@
 				<button class="btn btn-primary addNew" type="relation" add_new_type="relation"><i class="icon-plus icon-white"/> Add Relation </button>
 			</div>
 		</div>
+	</xsl:if>
 	</xsl:template>
 
 	<xsl:template match="ro:collection/ro:location | ro:activity/ro:location | ro:party/ro:location  | ro:service/ro:location">

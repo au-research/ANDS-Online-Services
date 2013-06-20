@@ -779,11 +779,15 @@ class Registry_object extends MX_Controller {
 		$this->load->model('registry_objects', 'ro');
 		$this->load->model('data_source/data_sources', 'ds');
 
+		
+
 		if($select_all && $select_all != "false"){
 
 			$filters = $this->input->post('filters');
 
+			
 			$args = array();
+
 			$args['sort'] = isset($filters['sort']) ? $filters['sort'] : array('updated'=>'desc');
 			$args['search'] = isset($filters['search']) ? $filters['search'] : false;
 			$args['or_filter'] = isset($filters['or_filter']) ? $filters['or_filter'] : false;
@@ -791,25 +795,26 @@ class Registry_object extends MX_Controller {
 			$args['data_source_id'] = $data_source_id;
 			$affected_ros = $this->ro->filter_by($args, 0, 0, true);
 
+			$affected_ids = array();
 			foreach($affected_ros as $r){
-				if (!in_array($r->registry_object_id, $excluded_records))
-				{
-					$this->ro->deleteRegistryObject($r);
+				if(!in_array($r->registry_object_id, $excluded_records)) {
+					array_push($affected_ids, $r->registry_object_id);
 				}
 			}
 		}
-		else
-		{
-			if ($affected_ids)
-			{
-				foreach($affected_ids as $id){
-					$ro = $this->ro->getByID($id);
-					$this->ro->deleteRegistryObject($ro);
-				}
-			}
-		}
-
 		$ds = $this->ds->getByID($data_source_id);
+
+		if (is_array($affected_ids) && sizeof($affected_ids)>0){
+			$this->load->library('importer');
+			$deleted_and_affected_record_keys = $this->ro->deleteRegistryObjects($affected_ids);
+			$this->importer->addToDeletedList($deleted_and_affected_record_keys['deleted_record_keys']);
+			$this->importer->addToAffectedList($deleted_and_affected_record_keys['affected_record_keys']);
+			$taskLog =  $this->importer->finishImportTasks();
+			$ds->append_log('delete TaskLog '.NL.$taskLog, HARVEST_INFO, "harvester", "HARVESTER_INFO");
+		}
+		
+
+
 		$ds->updateStats();
 
 		echo json_encode(array("status"=>"success"));

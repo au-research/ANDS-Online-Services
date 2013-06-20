@@ -34,8 +34,11 @@ class Importer {
 	public $ingest_new_record;
 
 	public $reindexed_records;
-	public $affected_records;
-	public $deleted_records;
+	
+	public $imported_record_keys;
+	public $affected_record_keys;
+	public $deleted_record_keys;
+
 	public $standardLog;
 	public $statusAlreadyChanged = false;
 
@@ -93,7 +96,7 @@ class Importer {
 	/**
 	 * 
 	 */
-	public function commit()
+	public function commit($finalise = true)
 	{
 		// Enable memory profiling...
 		//ini_set('xdebug.profiler_enable',1);
@@ -171,22 +174,46 @@ class Importer {
 				if($continueIngest)
 				{
 				// Last chance to check valid format of the payload
-					$this->_validateRIFCS($payload);	
-								
+					$reValidateBeforeIngest = false;
+				    try{
+						$this->_validateRIFCS($payload);	
+					}
+					catch(Exception $e)
+					{
+						$reValidateBeforeIngest = true;
+					}	
+
 					$sxml->registerXPathNamespace("ro", RIFCS_NAMESPACE);
 
 					// Right then, lets start parsing each registryObject & importing! 
 					foreach($sxml->xpath('//ro:registryObject') AS $registryObject)
 					{
 						$this->ingest_attempts++;
-						try
+						$continueWithIngest = true;
+						if($reValidateBeforeIngest)
 						{
-							$this->_ingestRecord($registryObject);
+							try{
+								$this->_validateRIFCS(wrapRegistryObjects($registryObject->asXML()));
+							}
+							catch(Exception $e)
+							{
+								$continueWithIngest = false;
+								$this->error_log[] = "Error whilst ingesting record #" . $this->ingest_attempts .NL.$registryObject->asXML(). ": " . $e->getMessage();
+							}
 						}
-						catch (Exception $e)
+
+
+						if($continueWithIngest)
 						{
-							$this->ingest_failures++;
-							$this->error_log[] = "Error whilst ingesting record #" . $this->ingest_attempts . ": " . $e->getMessage();
+							try
+							{
+								$this->_ingestRecord($registryObject);
+							}
+							catch (Exception $e)
+							{
+								$this->ingest_failures++;
+								$this->error_log[] = "Error whilst ingesting record #" . $this->ingest_attempts . ": " . $e->getMessage();
+							}
 						}
 					}
 				}
@@ -200,16 +227,12 @@ class Importer {
 		if (!$this->partialCommitOnly)
 		{
 			// And now, onto the second stage...
-
-			$this->_enrichRecords();
-			$this->_reindexRecords();
-		
 			// XXX: Don't do this...it's crappy
-			if ($this->dataSource)
-			{
+			//if ($this->dataSource)
+			//{
 				// Update the data source stats
-				$this->dataSource->updateStats();
-			}
+				//$this->dataSource->updateStats();
+			//}
 
 			// Finish up by returning our stats...
 			$time_taken = sprintf ("%.3f", (float) (microtime(true) - $this->start_time));
@@ -237,6 +260,11 @@ class Importer {
 
 		$this->isImporting = false;
 		if($this->runBenchMark) $this->CI->benchmark->mark('ingest_end');
+
+		if($finalise)
+		{
+			$taskLog = $this->finishImportTasks();
+		}
 	}
 
 
@@ -394,134 +422,200 @@ class Importer {
 	 */
 	public function _enrichRecords($directly_affected_records = array())
 	{
-		
-		if($this->runBenchMark) $this->CI->benchmark->mark('ingest_enrich_start');
-		// Keep track of our imported keys...
-		$imported_keys = array();
-
-		// Only enrich records received in this harvest
-		if($this->runBenchMark) $this->CI->benchmark->mark('ingest_enrich_stage1_start');
-		foreach ($this->importedRecords AS $ro_id)
-		{
-
-			$ro = $this->CI->ro->getByID($ro_id);
-
-			// add reverse relationships
-			// previous relationships are reset by this call
-			if($ro)
-			{
-				$related_keys = $ro->addRelationships();
-
-				// directly affected records are re-enriched below (and reindexed...)
-				// we consider any related record keys to be directly affected and reindex them...
-				$directly_affected_records = array_merge($related_keys, $directly_affected_records);
-				$imported_keys[] = $ro->key;
-
-				// spatial resooultion, center, coords in enrich?
-				$ro->determineSpatialExtents();
-
-				unset($ro);
-			}
-			clean_cycles();
+		$this->CI->load->model('registry_object/registry_objects', 'ro');
+		if($this->runBenchMark){
+			$this->CI->benchmark->mark('ingest_enrich_start');
 		}
-		if($this->runBenchMark) $this->CI->benchmark->mark('ingest_enrich_stage1_end');
-		//gc_collect_cycles();
-
-		// Two-stage enrich to get inverse links in quality metadata
-		// Only enrich records received in this harvest
-		if($this->runBenchMark) $this->CI->benchmark->mark('ingest_enrich_stage2_start');
-		foreach ($this->importedRecords AS $ro_id)
+		if (is_array($directly_affected_records) && count($directly_affected_records) > 0)
 		{
-
-			$ro = $this->CI->ro->getByID($ro_id);
-
-			// add reverse relationships
-			// previous relationships are reset by this call
-			if($ro)
+			foreach ($directly_affected_records AS $ro_key)
 			{
-				// Update our quality levels data!
+				$registryObjects = $this->CI->ro->getAllByKey($ro_key);
 
-
-				if($this->runBenchMark)
+				if (is_array($registryObjects))
 				{
-					$this->roQACount++;
-					$this->CI->benchmark->mark('ro_qa_start');
+					foreach ($registryObjects AS $ro)
+					{
+						$ro->addRelationships();
+						$ro->update_quality_metadata();
+						$ro->enrich();
+						unset($ro);
+						clean_cycles();
+					}
 				}
-				
-				$ro->update_quality_metadata($this->runBenchMark);
-				
-				if($this->runBenchMark)
-				{
-					$this->CI->benchmark->mark('ro_qa_end');
-					$this->roQATime += $this->CI->benchmark->elapsed_time('ro_qa_start','ro_qa_end');
-					$this->roQAS1Time += $this->CI->benchmark->elapsed_time('ro_qa_start','ro_qa_s1_end');
-					$this->roQAS2Time += $this->CI->benchmark->elapsed_time('ro_qa_s1_end','ro_qa_s2_end');
-					$this->roQAS3Time += $this->CI->benchmark->elapsed_time('ro_qa_s2_end','ro_qa_s3_end');
-					$this->roQAS4Time += $this->CI->benchmark->elapsed_time('ro_qa_s3_end','ro_qa_end');
-				}
-
-				
-				// Generate extrif
-				// 
-				// 
-				if($this->runBenchMark)
-				{
-					$this->roEnrichCount++;
-					$this->CI->benchmark->mark('ro_enrich_start');
-				}
-				
-				$ro->enrich($this->runBenchMark);
-				
-				if($this->runBenchMark)
-				{
-					$this->CI->benchmark->mark('ro_enrich_end');
-					$this->roEnrichTime += $this->CI->benchmark->elapsed_time('ro_enrich_start','ro_enrich_end');
-					$this->roEnrichS1Time += $this->CI->benchmark->elapsed_time('ro_enrich_start','ro_enrich_s1_end');
-					$this->roEnrichS2Time += $this->CI->benchmark->elapsed_time('ro_enrich_s1_end','ro_enrich_s2_end');
-					$this->roEnrichS3Time += $this->CI->benchmark->elapsed_time('ro_enrich_s2_end','ro_enrich_s3_end');
-					$this->roEnrichS4Time += $this->CI->benchmark->elapsed_time('ro_enrich_s3_end','ro_enrich_s4_end');
-					$this->roEnrichS5Time += $this->CI->benchmark->elapsed_time('ro_enrich_s4_end','ro_enrich_s5_end');
-					$this->roEnrichS6Time += $this->CI->benchmark->elapsed_time('ro_enrich_s5_end','ro_enrich_s6_end');
-					$this->roEnrichS7Time += $this->CI->benchmark->elapsed_time('ro_enrich_s6_end','ro_enrich_end');
-
-				}		
-
-				unset($ro);
 			}
-			clean_cycles();
 		}
-		if($this->runBenchMark) $this->CI->benchmark->mark('ingest_enrich_stage2_end');
-		//gc_collect_cycles();
 
+		if(is_array($this->importedRecords) && count($this->importedRecords) > 0)
+		{
+			if($this->runBenchMark){
+				$this->CI->benchmark->mark('ingest_enrich_stage1_start');
+			}
+			foreach ($this->importedRecords AS $ro_id)
+			{
 
-		// Exclude those keys we already processed above
-		if($this->runBenchMark) $this->CI->benchmark->mark('ingest_enrich_stage3_start');
-		$directly_affected_records = array_unique(array_diff($directly_affected_records, $imported_keys));
+				$ro = $this->CI->ro->getByID($ro_id);
 
-		// enrich related records
-		foreach ($directly_affected_records AS $ro_key)
+				// add reverse relationships
+				// previous relationships are reset by this call
+				if($ro)
+				{
+					$related_keys = $ro->addRelationships();
+					// directly affected records are re-enriched below (and reindexed...)
+					// we consider any related record keys to be directly affected and reindex them...
+					$this->addToAffectedList($related_keys);
+					// Keep track of our imported keys...
+					$this->imported_record_keys[] = $ro->key;
+					unset($ro);
+				}
+				clean_cycles();
+			}
+			if($this->runBenchMark) $this->CI->benchmark->mark('ingest_enrich_stage1_end');
+		}
+		if($this->runBenchMark) $this->CI->benchmark->mark('ingest_enrich_end');
+	}
+
+	public function finishImportTasks()
+	{
+
+		$importedRecCount = count($this->importedRecords);
+		$this->_enrichRecords();
+		$importedCount = count($this->imported_record_keys);
+		$this->_reindexRecords();
+		$affectedCount = count($this->affected_record_keys);
+		$deletedCount = count($this->deleted_record_keys);
+		$this->_enrichAffectedRecords();
+		$AllAffectedCount = count($this->affected_record_keys);
+		$this->_indexAllAffectedRecords();
+		$indexedAllCount = count($this->affected_record_keys);
+		return "importedREC: ".$importedRecCount.NL."reindexed: ".$indexedAllCount.NL."affected (imp. + ext): ".$AllAffectedCount.NL."affected (ext only): ".$affectedCount.NL."deleted: ".$deletedCount;
+	}
+
+	public function _enrichAffectedRecords()
+	{
+		$this->CI->load->model('registry_object/registry_objects', 'ro');
+		if($this->runBenchMark) $this->CI->benchmark->mark('enrich_affected_records_start');
+		$this->affected_record_keys = array_merge($this->imported_record_keys, $this->affected_record_keys);
+		$this->affected_record_keys = array_unique(array_diff($this->affected_record_keys, $this->deleted_record_keys));
+		foreach ($this->affected_record_keys AS $ro_key)
 		{
 			$registryObjects = $this->CI->ro->getAllByKey($ro_key);
-
 			if (is_array($registryObjects))
 			{
 				foreach ($registryObjects AS $ro)
 				{
-					$this->affected_records[$ro->id] = $ro->id;
-
 					$ro->addRelationships();
 					$ro->update_quality_metadata();
-					$ro->enrich();
+
+					if($this->runBenchMark)
+					{
+						$this->roEnrichCount++;
+						$this->CI->benchmark->mark('ro_enrich_start');
+					}
+
+					$ro->enrich($this->runBenchMark);
+
+					if($this->runBenchMark)
+					{
+						$this->CI->benchmark->mark('ro_enrich_end');
+						$this->roEnrichTime += $this->CI->benchmark->elapsed_time('ro_enrich_start','ro_enrich_end');
+						$this->roEnrichS1Time += $this->CI->benchmark->elapsed_time('ro_enrich_start','ro_enrich_s1_end');
+						$this->roEnrichS2Time += $this->CI->benchmark->elapsed_time('ro_enrich_s1_end','ro_enrich_s2_end');
+						$this->roEnrichS3Time += $this->CI->benchmark->elapsed_time('ro_enrich_s2_end','ro_enrich_s3_end');
+						$this->roEnrichS4Time += $this->CI->benchmark->elapsed_time('ro_enrich_s3_end','ro_enrich_s4_end');
+						$this->roEnrichS5Time += $this->CI->benchmark->elapsed_time('ro_enrich_s4_end','ro_enrich_s5_end');
+						$this->roEnrichS6Time += $this->CI->benchmark->elapsed_time('ro_enrich_s5_end','ro_enrich_s6_end');
+						$this->roEnrichS7Time += $this->CI->benchmark->elapsed_time('ro_enrich_s6_end','ro_enrich_end');
+
+					}
 					unset($ro);
 					clean_cycles();
 				}
 			}
 		}
-		if($this->runBenchMark) $this->CI->benchmark->mark('ingest_enrich_stage3_end');
-		//gc_collect_cycles();
-		if($this->runBenchMark) $this->CI->benchmark->mark('ingest_enrich_end');
+		if($this->runBenchMark) $this->CI->benchmark->mark('enrich_affected_records_end');
+
+
 	}
 
+
+	public function _indexAllAffectedRecords()
+	{
+		$this->CI->load->model('registry_object/registry_objects', 'ro');
+		$this->affected_record_keys = array_merge($this->imported_record_keys, $this->affected_record_keys);
+		$this->affected_record_keys = array_unique(array_diff($this->affected_record_keys, $this->deleted_record_keys));
+		if($this->runBenchMark) $this->CI->benchmark->mark('ingest_reindex_start');
+
+		foreach ($this->affected_record_keys AS $ro_key)
+		{
+			
+			if($this->runBenchMark)
+			{
+				$this->roBuildCount++;
+				$this->CI->benchmark->mark('ro_build_start');
+			}
+
+			$registryObjects = $this->CI->ro->getAllByKey($ro_key);
+
+			if($this->runBenchMark)
+			{
+				$this->CI->benchmark->mark('ro_build_end');
+				$this->roBuildTime += $this->CI->benchmark->elapsed_time('ro_build_start','ro_build_end');
+			}
+
+			if (is_array($registryObjects))
+			{
+				foreach ($registryObjects AS $ro)
+				{
+					if ($ro->status == PUBLISHED)
+					{
+						if($this->runBenchMark)
+						{
+							$this->solrTransFormCount++;
+							$this->CI->benchmark->mark('solr_transform_start');
+						}
+						
+						$this->queueSOLRAdd($ro->transformForSOLR(false));
+						
+						if($this->runBenchMark)
+						{
+							$this->CI->benchmark->mark('solr_transform_end');
+							$this->solrTransFormTime += $this->CI->benchmark->elapsed_time('solr_transform_start','solr_transform_end');
+						}
+					}
+					if($this->runBenchMark)
+					{
+						$this->gcCyclesCount++;
+						$this->CI->benchmark->mark('gc_cycles_start');
+					}
+				
+					unset($ro);
+			//gc_collect_cycles();
+				
+					if($this->runBenchMark)
+					{
+						$this->CI->benchmark->mark('gc_cycles_end');
+						$this->gcCyclesTime += $this->CI->benchmark->elapsed_time('gc_cycles_start','gc_cycles_end');
+					}
+				}
+			}
+		}
+
+		// Push through the last chunk...
+		$this->flushSOLRAdd();
+		if($this->runBenchMark)
+		{
+			$this->CI->benchmark->mark('solr_commit_start');
+		}
+		
+		$this->commitSOLR();
+		
+		if($this->runBenchMark)
+		{
+			$this->CI->benchmark->mark('solr_commit_end');
+		}
+		if($this->runBenchMark) $this->CI->benchmark->mark('ingest_reindex_end');
+	}
 
 	/**
 	 *
@@ -607,74 +701,7 @@ class Importer {
 			return array("count"=>$this->reindexed_records, "errors"=>array());
 		}
 
-		// Called from inside the Importer
-		else
-		{
-			$allAffectedRecords = array_merge($this->importedRecords, $this->affected_records);
-			foreach($allAffectedRecords AS $ro_id){
-
-				
-					if($this->runBenchMark)
-					{
-						$this->roBuildCount++;
-						$this->CI->benchmark->mark('ro_build_start');
-					}
-					
-					$ro = $this->CI->ro->getByID($ro_id);
-					
-					if($this->runBenchMark)
-					{
-						$this->CI->benchmark->mark('ro_build_end');
-						$this->roBuildTime += $this->CI->benchmark->elapsed_time('ro_build_start','ro_build_end');
-					}
-
-
-				if ($ro && $ro->status == PUBLISHED)
-				{
-					if($this->runBenchMark)
-					{
-						$this->solrTransFormCount++;
-						$this->CI->benchmark->mark('solr_transform_start');
-					}
-					
-					$this->queueSOLRAdd($ro->transformForSOLR(false));
-					
-					if($this->runBenchMark)
-					{
-						$this->CI->benchmark->mark('solr_transform_end');
-						$this->solrTransFormTime += $this->CI->benchmark->elapsed_time('solr_transform_start','solr_transform_end');
-					}
-				}
-				if($this->runBenchMark)
-				{
-					$this->gcCyclesCount++;
-					$this->CI->benchmark->mark('gc_cycles_start');
-				}
-					
-				unset($ro);
-				//gc_collect_cycles();
-					
-				if($this->runBenchMark)
-				{
-					$this->CI->benchmark->mark('gc_cycles_end');
-					$this->gcCyclesTime += $this->CI->benchmark->elapsed_time('gc_cycles_start','gc_cycles_end');
-				}
-			}
-
-			// Push through the last chunk...
-			$this->flushSOLRAdd();
-			if($this->runBenchMark)
-			{
-				$this->CI->benchmark->mark('solr_commit_start');
-			}
-			
-			$this->commitSOLR();
-			
-			if($this->runBenchMark)
-			{
-				$this->CI->benchmark->mark('solr_commit_end');
-			}
-		}
+		
 		//gc_collect_cycles();
 		if($this->runBenchMark) $this->CI->benchmark->mark('ingest_reindex_end');
 		
@@ -968,14 +995,14 @@ class Importer {
 			$reIndexTime = $this->CI->benchmark->elapsed_time('ingest_reindex_start', 'ingest_reindex_end');
 			$ingestTime = $this->CI->benchmark->elapsed_time('ingest_stage_1_start','ingest_stage_1_end');
 			$crosswalkTime = $this->CI->benchmark->elapsed_time('crosswalk_execution_start','crosswalk_execution_end');
-			$this->benchMarkLog .= NL.'Importing ran for : '.gmdate("H:i:s", $totalTime);
-			$this->benchMarkLog .= NL.'Ingest ran for : '.gmdate("H:i:s", $ingestTime);
+			$this->benchMarkLog .= NL.'Importing ran for : '.$totalTime;
+			$this->benchMarkLog .= NL.'Ingest ran for : '.$ingestTime;
 			$this->benchMarkLog .= NL.'Crosswalk ran for : '.$crosswalkTime;
-			$this->benchMarkLog .= NL.'Enrich ran for : '.gmdate("H:i:s", $enrichTime);
+			$this->benchMarkLog .= NL.'Enrich ran for : '.$enrichTime;
 
 			$enrichS1Time = $this->CI->benchmark->elapsed_time('ingest_enrich_stage1_start', 'ingest_enrich_stage1_end');
 			$enrichS2Time = $this->CI->benchmark->elapsed_time('ingest_enrich_stage2_start', 'ingest_enrich_stage2_end');
-			$enrichS3Time = $this->CI->benchmark->elapsed_time('ingest_enrich_stage3_start', 'ingest_enrich_stage3_end');
+			$enrichS3Time = $this->CI->benchmark->elapsed_time('enrich_affected_records_start', 'enrich_affected_records_end');
 			$this->benchMarkLog .= NL.'.......Stage 1 : '.$enrichS1Time;
 			$this->benchMarkLog .= NL.'.......Stage 2 : '.$enrichS2Time;
 			if($this->roEnrichCount > 0 && $this->roQACount > 0)
@@ -995,10 +1022,10 @@ class Importer {
 				$this->benchMarkLog .= NL.'____________________________S4 (save) total time: '.$this->roQAS4Time. ' avrg: ' .number_format($this->roQAS4Time/$this->roQACount,4);
 
 			}
-			$this->benchMarkLog .= NL.'.......Stage 3 : '.$enrichS3Time;
+			$this->benchMarkLog .= NL.'.......Enrich Affected Records : '.$enrichS3Time;
 
 
-			$this->benchMarkLog .= NL.'ReIndex ran for : '.gmdate("H:i:s", $reIndexTime);
+			$this->benchMarkLog .= NL.'ReIndex ran for : '. $reIndexTime;
 			if($this->roBuildCount > 0)
 			{
 				$this->benchMarkLog .= NL.'.......Ro. Build Count: '.$this->roBuildCount. ' total time: '.$this->roBuildTime. ' avrg: ' .number_format($this->roBuildTime/$this->roBuildCount,4);
@@ -1057,6 +1084,55 @@ class Importer {
 	}
 
 
+	public function updateDeletedList($oai_feed)
+	{
+		$gXPath = new DOMXpath($oai_feed);
+		$defaultNamespace = $gXPath->evaluate('/*')->item(0)->namespaceURI;
+		$gXPath->registerNamespace('oai', $defaultNamespace);
+		$deletedRegistryObjectList = $gXPath->evaluate("//oai:header[@status='deleted']");
+		for( $i=0; $i < $deletedRegistryObjectList->length; $i++ )
+		{
+			$deletedRegistryObject = $deletedRegistryObjectList->item($i);
+			$registryObjectKey = substr($gXPath->evaluate("$xs:identifier", $deletedRegistryObject)->item(0)->nodeValue, 0, 512);
+			$this->addToDeletedList($registryObjectKey);			
+		}
+	}
+
+	public function addToDeletedList($ro_keys)
+	{
+		if(is_array($ro_keys) && count($ro_keys) > 0)
+		{
+			$this->deleted_record_keys = array_unique(array_merge($this->deleted_record_keys, $ro_keys));
+		}
+		else if($ro_keys != '' && !array_key_exists($ro_keys, $this->deleted_record_keys))
+		{
+			$this->deleted_record_keys[] = $ro_keys;
+		}
+	}
+
+
+	public function addToAffectedList($ro_keys)
+	{
+		if(is_array($ro_keys) && count($ro_keys) > 0)
+		{
+			$this->affected_record_keys = array_unique(array_merge($this->affected_record_keys, $ro_keys));
+		}
+	}
+
+
+	public function addToImportedIDList($ro_ids)
+	{
+		if(is_array($ro_ids) && count($ro_ids) > 0)
+		{
+			$this->importedRecords = array_unique(array_merge($this->importedRecords, $ro_ids));
+		}
+	}
+
+	public function getImportedIDListAsJson()
+	{
+
+		return json_encode($this->importedRecords);
+	}
 
 	public function getErrors()
 	{
@@ -1169,7 +1245,9 @@ class Importer {
 		$this->xmlPayload = '';
 		$this->dataSource = null;
 		$this->importedRecords = array();
-		$this->affected_records = array();
+		$this->imported_record_keys = array();
+		$this->affected_record_keys = array();
+		$this->deleted_record_keys = array();
 		$this->partialCommitOnly = false;
 		$this->isImporting = false;
 		$this->solr_queue = array();
