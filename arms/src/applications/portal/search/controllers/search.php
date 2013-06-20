@@ -48,8 +48,8 @@ class Search extends MX_Controller {
 		}
 
 		//boost
-		//$this->solr->setOpt('bq', 'id^1 group^0.8 display_title^0.5 list_title^0.5 fulltext^0.2 (*:* -group:("Australian Research Council"))^3  (*:* -group:("National Health and Medical Research Council"))^3');
-		$this->solr->setOpt('bq', '(*:* -group:("Australian Research Council"))^3  (*:* -group:("National Health and Medical Research Council"))^3');
+		$this->solr->setOpt('bq', 'id^1 group^0.8 display_title^0.5 list_title^0.5 fulltext^0.2 (*:* -group:("Australian Research Council"))^3  (*:* -group:("National Health and Medical Research Council"))^3');
+		// $this->solr->setOpt('bq', '(*:* -group:("Australian Research Council"))^3  (*:* -group:("National Health and Medical Research Council"))^3');
 		if($filters){
 			foreach($filters as $key=>$value){
 				$value = rawurldecode($value);

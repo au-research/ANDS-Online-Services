@@ -126,7 +126,7 @@ function executeSearch(searchData, searchUrl){
 			data: {filters:searchData},
 			dataType:'json',
 			success: function(data){
-				log(data);
+				// log(data);
 				$.each(data.result.docs, function(){
 					log(this.display_title, this.score, this.id);
 				});

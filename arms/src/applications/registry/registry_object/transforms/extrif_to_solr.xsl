@@ -16,7 +16,11 @@
 
     <xsl:template match="ro:registryObject">
     
-        <doc>
+    <xsl:variable name="boost">
+        <xsl:call-template name="calcBoost"/>
+    </xsl:variable>
+
+        <doc boost="{$boost}">
         <xsl:variable name="roKey">
             <xsl:apply-templates select="ro:key"/>
         </xsl:variable>
@@ -110,7 +114,7 @@
         <xsl:element name="field">
             <xsl:attribute name="name">contributor_page</xsl:attribute>
             <xsl:value-of select="."/>
-        </xsl:element>       
+        </xsl:element>
     </xsl:template>
 
     <xsl:template match="extRif:updateTimestamp">
@@ -119,6 +123,13 @@
             <xsl:value-of select="."/>
         </xsl:element>       
     </xsl:template>    
+
+    <xsl:template name="calcBoost">
+        <xsl:choose>
+            <xsl:when test="extRif:extendedMetadata/extRif:slug=extRif:extendedMetadata/extRif:contributor">5</xsl:when>
+            <xsl:otherwise>1</xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
     
 
     <xsl:template match="extRif:flag">
