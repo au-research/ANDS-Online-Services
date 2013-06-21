@@ -285,26 +285,26 @@ class Core_extension extends ExtensionBase
 	{
 		$log ='';
 		$this->db->delete('registry_object_relationships', array('registry_object_id'=>$this->id));
-		if($error = $this->db->_error_message())
-		$log = NL."registry_object_relationships: " .$error;
+		//if($error = $this->db->_error_message())
+		//$log = NL."registry_object_relationships: " .$error;
 		$this->db->delete('registry_object_metadata', array('registry_object_id'=>$this->id));
-		if($error = $this->db->_error_message())
-		$log .= NL."registry_object_metadata: " .$error;
+		//if($error = $this->db->_error_message())
+		//$log .= NL."registry_object_metadata: " .$error;
 		$this->db->delete('registry_object_attributes', array('registry_object_id'=>$this->id));
-		if($error = $this->db->_error_message())
-		$log .= NL."registry_object_attributes: " .$error;
+		//if($error = $this->db->_error_message())
+		//$log .= NL."registry_object_attributes: " .$error;
 		$this->db->delete('record_data', array('registry_object_id'=>$this->id));
-		if($error = $this->db->_error_message())
-		$log .= NL."record_data: " .$error;
+		//if($error = $this->db->_error_message())
+		//$log .= NL."record_data: " .$error;
 		$this->db->delete('url_mappings', array('registry_object_id'=>$this->id));
-		if($error = $this->db->_error_message())
-		$log .= NL."url_mappings: " .$error;
+		//if($error = $this->db->_error_message())
+		//$log .= NL."url_mappings: " .$error;
 		//TODO: do we still need this table??
 		//$this->db->delete('spatial_extents', array('registry_object_id'=>$this->id));
 		//$log .= NL."spatial_extents: " .$this->db->_error_message();
 		$this->db->delete('registry_objects', array('registry_object_id'=>$this->id));
-		if($error = $this->db->_error_message())
-		$log .= NL."registry_objects: " .$error;
+		//if($error = $this->db->_error_message())
+		//$log .= NL."registry_objects: " .$error;
 		return $log;
 	}
 	

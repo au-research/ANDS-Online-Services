@@ -754,8 +754,8 @@ class Registry_objects extends CI_Model {
 		$this->load->model('data_source/data_sources', 'ds');
 		$data_source = $this->ds->getByID($target_ro->data_source_id);
 		$log = $target_ro->eraseFromDatabase($target_ro->id);
-		if($log)
-		$data_source->append_log("eraseFromDatabase " . $log, 'info', 'registry_object');
+		//if($log)
+		//$data_source->append_log("eraseFromDatabase " . $log, 'info', 'registry_object');
 
 		if($finalise)
 		{
