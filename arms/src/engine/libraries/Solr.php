@@ -249,16 +249,28 @@ class Solr {
 
     function deleteByIDsCondition($ids)
     {
-        $result = false;
+        $counter = 0;
+        $result = '';
+        $query = '';    
+
         if (is_array($ids))
         {
-            $query = '';        
+            $chunkSize = 1000;
+            $arraySize = count($ids);
+    
             foreach($ids as $id)
             {
+                $counter++;
                 $query .= 'id:'.$id.' ';
+                if($counter % $chunkSize === 0)
+                {
+                    $result .= $this->deleteByQueryCondition($query);
+                    $query = '';
+                }
             }
-            $result = $this->deleteByQueryCondition($query);
+            $result .= $this->deleteByQueryCondition($query);
         }
+
         return $result;
     }
 

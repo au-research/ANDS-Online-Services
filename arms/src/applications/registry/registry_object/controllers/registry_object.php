@@ -796,9 +796,12 @@ class Registry_object extends MX_Controller {
 			$affected_ros = $this->ro->filter_by($args, 0, 0, true);
 
 			$affected_ids = array();
-			foreach($affected_ros as $r){
-				if(!in_array($r->registry_object_id, $excluded_records)) {
-					array_push($affected_ids, $r->registry_object_id);
+			if(is_array($affected_ros))
+			{
+				foreach($affected_ros as $r){
+					if(!in_array($r->registry_object_id, $excluded_records)) {
+						array_push($affected_ids, $r->registry_object_id);
+					}
 				}
 			}
 		}
