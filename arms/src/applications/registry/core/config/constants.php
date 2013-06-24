@@ -8,6 +8,7 @@ define('HARVEST_INFO','info');
 define('HARVEST_TEST_MODE','TEST');
 define('HARVEST_COMPLETE','TRUE');
 
+define('IMPORT_INFO','info');
 
 define('EXTRIF_SCHEME','extRif');
 

@@ -330,23 +330,25 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 		$this->load->helper('file');
 		$file = read_file('./applications/registry/spotlight/assets/spotlight.json');
 		$file = json_decode($file, true);
-		foreach($file['items'] as $partner){
-			if($partner['visible']=='yes'){
-				$item = array(
-					'title'=>$partner['title'],
-					'description'=>$partner['content'],
-					'img_url'=>$partner['img_url'],
-					'url'=>$partner['url'],
-					'visible'=>$partner['visible']
-				);
-				if (isset($partner['url_text']) && $partner['url_text'])
-				{
-					$item['url_text'] = $partner['url_text'];
+		if(is_array($file['items']) && count($file['items']) > 0)
+		{
+			foreach($file['items'] as $partner){
+				if($partner['visible']=='yes'){
+					$item = array(
+						'title'=>$partner['title'],
+						'description'=>$partner['content'],
+						'img_url'=>$partner['img_url'],
+						'url'=>$partner['url'],
+						'visible'=>$partner['visible']
+					);
+					if (isset($partner['url_text']) && $partner['url_text'])
+					{
+						$item['url_text'] = $partner['url_text'];
+					}
+					$partners[] = $item;
 				}
-				$partners[] = $item;
 			}
 		}
-
 		// services_spotlight_partners_data_source
 		$this->output->set_output(json_encode(array("items"=>$partners)));
 	}
