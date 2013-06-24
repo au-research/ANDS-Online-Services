@@ -602,11 +602,11 @@ class _data_source {
 
 	function requestNewharvest()
 	{
-		$this->calcelAllharvests();
+		$this->cancelAllharvests();
 		$this->requestHarvest();
 	}
 
-	function calcelAllharvests()
+	function cancelAllharvests()
 	{
 		$oldRequests = $this->getHarvesterStatus();
 		if($oldRequests)

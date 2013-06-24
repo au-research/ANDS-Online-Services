@@ -809,11 +809,13 @@ class Registry_object extends MX_Controller {
 
 		if (is_array($affected_ids) && sizeof($affected_ids)>0){
 			$this->load->library('importer');
-			$deleted_and_affected_record_keys = $this->ro->deleteRegistryObjects($affected_ids);
+			$deleted_and_affected_record_keys = $this->ro->deleteRegistryObjects($affected_ids, false);
 			$this->importer->addToDeletedList($deleted_and_affected_record_keys['deleted_record_keys']);
 			$this->importer->addToAffectedList($deleted_and_affected_record_keys['affected_record_keys']);
-			$taskLog =  $this->importer->finishImportTasks();
-			$ds->append_log('delete TaskLog '.NL.$taskLog, HARVEST_INFO, "harvester", "HARVESTER_INFO");
+			$taskLog = $this->importer->finishImportTasks();
+			if($this->importer->runBenchMark){
+				$ds->append_log('delete Log '.NL.$taskLog, "IMPORTER_INFO", "harvester", "IMPORTER_INFO");
+			}
 		}
 		
 
