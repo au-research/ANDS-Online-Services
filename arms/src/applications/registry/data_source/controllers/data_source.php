@@ -1985,8 +1985,9 @@ public function getContributorGroupsEdit()
 		$this->load->view('chart_report', $data);
 	}
 
-	public function delete($id)
+	public function delete()
 	{
+		$ds_id = $this->input->post('ds_id');
 		$response = array();
 		$response['success'] = false;
 		$response['error'] = '';
@@ -1999,7 +2000,7 @@ public function getContributorGroupsEdit()
 			$response['error'] = $e->getMessage(); 
 		}
 
-		$dataSource = $this->ds->getByID($id);
+		$dataSource = $this->ds->getByID($ds_id);
 		
 		if($dataSource)
 		{
