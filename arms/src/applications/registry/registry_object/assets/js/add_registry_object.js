@@ -989,7 +989,7 @@ function initRelatedObjects(){
 			if(data.result){
 				$('.related_title').remove();
 				$.each(data.result, function(i, v){
-					var theInput = $('input[value="'+i+'"]');
+					var theInput = $('#relatedObjects input[value="'+i+'"]');
 					var box = $(theInput).closest('.aro_box');
 					if(v.status!='notfound'){
 						$(box).prepend('<div class="well related_title"><span class="tag status_'+v.status+'">'+v.status+'</span> '+v.title+'</div>');
