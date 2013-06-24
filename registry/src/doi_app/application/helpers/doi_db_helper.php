@@ -226,7 +226,7 @@
 		{		
 			foreach($results->result() as $row)
 			{	
-				return $row->client_id;	
+				if(test_ip($ip_address, $row->ip_address)) return $row->client_id;	
 			}
 			/* This does NOT do anything! */
 			/*
@@ -247,6 +247,64 @@
 		}else{
 			return false;
 		}
+	}
+
+	/**
+	 * Test a string free form IP against a range
+	 * @param  string $ip       the ip address to test on
+	 * @param  string $ip_range the ip address to match on / or a comma separated list of ips to match on
+	 * @return bool           returns true if the ip is found in some manner that match the ip range
+	 */
+	function test_ip($ip, $ip_range){
+		$ip_range = explode(',',$ip_range);
+		if(sizeof($ip_range)>1){
+			foreach($ip_range as $ip_to_match){
+				if(ip_match($ip,$ip_to_match)){
+					return true;
+				}
+				return false;
+			}
+		}else{
+			return ip_match($ip,$ip_range[0]);
+		}
+	}
+
+	/**
+	 * a helper function for test_ip
+	 * @param  string $ip    the ip address of most any form to test
+	 * @param  string $match the ip to perform a matching truth test
+	 * @return bool        return true/false depends on if the first ip match the second ip
+	 */
+	function ip_match($ip, $match){
+		if(ip2long($ip)){//is an actual IP
+			if($ip==$match){
+				return true;
+			}else return false;
+		}else{//is something weird
+			if(strpos($ip, '/')){//if it's a cidr notation
+				return cidr_match($match, $ip);
+			}else{//is a random string (let's say a host name)
+				$ip = gethostbyname($ip);
+				if($ip==$match){
+					return true;
+				}else return false;
+			}
+		}
+	}
+
+	/**
+	 * match an ip against a cidr
+	 * @param  string $ip   the ip address to perform a truth test on
+	 * @param  string $cidr the cidr in the form of xxx.xxx.xxx.xxx/xx to match on
+	 * @return bool       return true/false depends on the truth test
+	 */
+	function cidr_match($ip, $range){
+	    list ($subnet, $bits) = explode('/', $range);
+	    $ip = ip2long($ip);
+	    $subnet = ip2long($subnet);
+	    $mask = -1 << (32 - $bits);
+	    $subnet &= $mask; // nb: in case the supplied subnet wasn't correctly aligned
+	    return ($ip & $mask) == $subnet;
 	}
 	
 	function checkDoisClientDoi($doi_id,$client_id)
