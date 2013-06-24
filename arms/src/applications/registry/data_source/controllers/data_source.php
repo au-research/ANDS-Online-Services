@@ -1280,7 +1280,7 @@ public function getContributorGroupsEdit()
 			else 
 			{
 				$dataSource = $this->ds->getByID($id);
-				$dataSource->calcelAllharvests();
+				$dataSource->cancelAllharvests();
 				$dataSource->requestHarvest('','','','','','','','','','',false,true);
 				$jsonData['status'] = "OK";
 			}
@@ -1361,11 +1361,11 @@ public function getContributorGroupsEdit()
 			if ($error_log = $this->importer->getErrors())
 			{
 				$log = $elogTitle.$log.$error_log;
-				$data_source->append_log($log, HARVEST_ERROR ,"HARVEST_ERROR");
+				$data_source->append_log($log.NL.$taskLog, HARVEST_ERROR ,"HARVEST_ERROR");
 			}
 			else{
 				$log = $slogTitle.$log.$this->importer->getMessages();
-				$data_source->append_log($log, HARVEST_INFO,"HARVEST_INFO");
+				$data_source->append_log($log.NL.$taskLog, HARVEST_INFO,"HARVEST_INFO");
 			}
 
 		}

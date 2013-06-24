@@ -101,7 +101,10 @@ class Importer {
 		// Enable memory profiling...
 		//ini_set('xdebug.profiler_enable',1);
 		//xdebug_enable();
-		if($this->runBenchMark) $this->CI->benchmark->mark('ingest_start');
+		if($this->runBenchMark){
+			$this->CI->benchmark->mark('ingest_start');
+		}
+
 		$this->isImporting = true;
 
 		//$this->CI->output->enable_profiler(TRUE);
@@ -117,13 +120,15 @@ class Importer {
 			$this->isImporting = false;
 		}
 
-		if($this->runBenchMark) $this->CI->benchmark->mark('crosswalk_execution_start');
-		
+		if($this->runBenchMark){
+			$this->CI->benchmark->mark('crosswalk_execution_start');
+		}
 			// Apply the crosswalk (if applicable)
 		$this->_executeCrosswalk();
 		
-		if($this->runBenchMark) $this->CI->benchmark->mark('crosswalk_execution_end');
-
+		if($this->runBenchMark){
+			$this->CI->benchmark->mark('crosswalk_execution_end');
+		}
 
 		// Set a a default HarvestID if necessary
 		if (is_null($this->harvestID)) 
@@ -142,8 +147,9 @@ class Importer {
 			$this->xmlPayload = array($this->xmlPayload);
 		}
 
-		if($this->runBenchMark) $this->CI->benchmark->mark('ingest_stage_1_start');
-
+		if($this->runBenchMark){
+			$this->CI->benchmark->mark('ingest_stage_1_start');
+		}
 			foreach ($this->xmlPayload AS $idx => $payload)
 			{
 				// Escape XML entities from the start...
@@ -205,22 +211,38 @@ class Importer {
 
 						if($continueWithIngest)
 						{
-							try
-							{
-								$this->_ingestRecord($registryObject);
-							}
-							catch (Exception $e)
+							
+							if((string)$registryObject->key == '')
 							{
 								$this->ingest_failures++;
-								$this->error_log[] = "Error whilst ingesting record #" . $this->ingest_attempts . ": " . $e->getMessage();
+								$this->error_log[] = "Error whilst ingesting record #" . $this->ingest_attempts . ": " . "Registry Object 'key' must have a value";
+							}
+							else if((string)$registryObject['group'] == '')
+							{
+								$this->ingest_failures++;
+								$this->error_log[] = "Error whilst ingesting record #" . $this->ingest_attempts . ": " . "Registry Object '@group' must have a value";
+
+							}
+							else
+							{
+								try
+								{
+									$this->_ingestRecord($registryObject);
+								}
+								catch (Exception $e)
+								{
+									$this->ingest_failures++;
+									$this->error_log[] = "Error whilst ingesting record #" . $this->ingest_attempts . ": " . $e->getMessage();
+								}
 							}
 						}
 					}
 				}
 
 			}
-		if($this->runBenchMark) $this->CI->benchmark->mark('ingest_stage_1_end');
-
+		if($this->runBenchMark){
+			$this->CI->benchmark->mark('ingest_stage_1_end');
+		}
 		
 
 		// Partial commits mean that there is more to come in this harvest...woooah-on donkey
@@ -259,11 +281,16 @@ class Importer {
 		}
 
 		$this->isImporting = false;
-		if($this->runBenchMark) $this->CI->benchmark->mark('ingest_end');
+		if($this->runBenchMark){
+			$this->CI->benchmark->mark('ingest_end');
+		}
 
 		if($finalise)
 		{
 			$taskLog = $this->finishImportTasks();
+			if($this->runBenchMark){
+				$this->dataSource->append_log($taskLog, IMPORT_INFO, "importer","IMPORT_INFO");
+			}
 		}
 	}
 
@@ -497,7 +524,9 @@ class Importer {
 	public function _enrichAffectedRecords()
 	{
 		$this->CI->load->model('registry_object/registry_objects', 'ro');
-		if($this->runBenchMark) $this->CI->benchmark->mark('enrich_affected_records_start');
+		if($this->runBenchMark){
+			$this->CI->benchmark->mark('enrich_affected_records_start');
+		}
 		$this->affected_record_keys = array_unique(array_merge($this->imported_record_keys, $this->affected_record_keys));
 		$this->affected_record_keys = array_unique(array_diff($this->affected_record_keys, $this->deleted_record_keys));
 		foreach ($this->affected_record_keys AS $ro_key)
@@ -555,8 +584,9 @@ class Importer {
 				}
 			}
 		}
-		if($this->runBenchMark) $this->CI->benchmark->mark('enrich_affected_records_end');
-
+		if($this->runBenchMark){
+			$this->CI->benchmark->mark('enrich_affected_records_end');
+		}
 
 	}
 
@@ -566,7 +596,9 @@ class Importer {
 		$this->CI->load->model('registry_object/registry_objects', 'ro');
 		$this->affected_record_keys = array_unique(array_merge($this->imported_record_keys, $this->affected_record_keys));
 		$this->affected_record_keys = array_unique(array_diff($this->affected_record_keys, $this->deleted_record_keys));
-		if($this->runBenchMark) $this->CI->benchmark->mark('ingest_reindex_start');
+		if($this->runBenchMark){
+			$this->CI->benchmark->mark('ingest_reindex_start');
+		}
 
 		foreach ($this->affected_record_keys AS $ro_key)
 		{
@@ -635,8 +667,8 @@ class Importer {
 		if($this->runBenchMark)
 		{
 			$this->CI->benchmark->mark('solr_commit_end');
+			$this->CI->benchmark->mark('ingest_reindex_end');
 		}
-		if($this->runBenchMark) $this->CI->benchmark->mark('ingest_reindex_end');
 	}
 
 	/**
@@ -655,7 +687,10 @@ class Importer {
 		if (is_array($specific_target_keys) && count($specific_target_keys) > 0)
 		{
 			/// Called from outside the Importer
-			if($this->runBenchMark) $this->CI->benchmark->mark('ingest_reindex_start');
+			if($this->runBenchMark){
+				$this->CI->benchmark->mark('ingest_reindex_start');
+			}
+
 			foreach ($specific_target_keys AS $key)
 			{				
 				if($this->runBenchMark)
@@ -720,7 +755,9 @@ class Importer {
 				$this->CI->benchmark->mark('solr_commit_end');
 			}
 			
-			if($this->runBenchMark) $this->CI->benchmark->mark('ingest_reindex_end');
+			if($this->runBenchMark){
+				$this->CI->benchmark->mark('ingest_reindex_end');
+			}
 
 			return array("count"=>$this->reindexed_records, "errors"=>array());
 		}		

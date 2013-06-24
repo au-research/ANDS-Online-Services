@@ -85,7 +85,7 @@ class Migrate extends MX_Controller
 		{
 			echo "[HARVESTER] Rescheduling a previously scheduled harvest" . NL;
 			$harvest = $harvest_request_query->result_array();
-			$data_source->calcelAllharvests();
+			$data_source->cancelAllharvests();
 			if ($harvest[0]['harvest_date'] == "")
 			{
 				// Schedule the harvest
