@@ -276,6 +276,9 @@
 					  		<button class="btn edit page-control" data_source_id="{{data_source_id}}"><i class="icon-edit"></i> Edit Settings</button>
 					  		<button class="btn mmr page-control" data_source_id="{{data_source_id}}"><i class="icon-folder-open"></i> Manage Records</button>
 					  		<button class="btn mdr page-control" data_source_id="{{data_source_id}}"><i class="icon-time"></i> View Deleted Records</button>
+							<?php if ($this->user->hasFunction('REGISTRY_SUPERUSER')): ?>
+					  			<button class="btn btn-danger pull-right" data_source_title="{{title}}" data_source_id="{{data_source_id}}" id="delete_data_source_button"> <i class="icon-white icon-warning-sign"></i> Delete Data Source <i class="icon-white icon-trash"></i> </button>
+							<?php endif; ?>
 						</div>
 						<div class="btn-group pull-right">
 							<a class="btn dropdown-toggle ExportDataSource" data-toggle="modal" href="#exportDataSource" id="exportDS">

@@ -204,7 +204,7 @@ class Importer {
 							catch(Exception $e)
 							{
 								$continueWithIngest = false;
-								$this->error_log[] = "Error whilst ingesting record #" . $this->ingest_attempts .NL.$registryObject->asXML(). ": " . $e->getMessage();
+								$this->error_log[] = "Error whilst ingesting record #" . $this->ingest_attempts . ": " . $e->getMessage();
 							}
 						}
 
@@ -1158,7 +1158,7 @@ class Importer {
 		{
 			$this->deleted_record_keys = array_unique(array_merge($this->deleted_record_keys, $ro_keys));
 		}
-		else if($ro_keys != '' && !array_key_exists($ro_keys, $this->deleted_record_keys))
+		else if($ro_keys && $ro_keys != '' && !array_key_exists($ro_keys, $this->deleted_record_keys))
 		{
 			$this->deleted_record_keys[] = $ro_keys;
 		}

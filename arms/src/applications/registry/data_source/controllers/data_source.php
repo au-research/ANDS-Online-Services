@@ -1985,6 +1985,32 @@ public function getContributorGroupsEdit()
 		$this->load->view('chart_report', $data);
 	}
 
+	public function delete($id)
+	{
+		$response = array();
+		$response['success'] = false;
+		$response['error'] = '';
+		$this->load->model("data_source/data_sources","ds");
+		try{
+			acl_enforce(AUTH_FUNCTION_SUPERUSER);
+		}
+		catch(Exception $e)
+		{
+			$response['error'] = $e->getMessage(); 
+		}
+
+		$dataSource = $this->ds->getByID($id);
+		
+		if($dataSource)
+		{
+			$response = $dataSource->eraseFromDB();
+		}
+		else{
+			$response['error'] = 'No Data Source Found!';
+		}
+
+		echo json_encode($response);
+	}
 
 	function getDataSourceReport($id){
 		
