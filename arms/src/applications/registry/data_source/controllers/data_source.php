@@ -2004,7 +2004,8 @@ public function getContributorGroupsEdit()
 		
 		if($dataSource)
 		{
-			$response = $dataSource->eraseFromDB();
+			$response['log'] = $dataSource->eraseFromDB();
+			$response['success'] = true;
 		}
 		else{
 			$response['error'] = 'No Data Source Found!';
