@@ -202,7 +202,15 @@ $(function(){
 			var ds_title = $(this).attr('data_source_title');
 			if (window.confirm("You are about to delete data source '"+ ds_title +"'.\n Deleting this Data Source will remove it from the registry and delete all of its records.\n Do you want to continue?") === true)
 			{
-				window.location = base_url+'data_source/manage';
+				$.ajax({
+					url:base_url+'data_source/delete', 
+					type: 'POST',
+					data: {ds_id:ds_id},
+					success: function(data){
+						log(data);
+						window.location = base_url+'data_source/manage';
+					}
+				});
 			}
 		}
 	});
