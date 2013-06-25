@@ -217,6 +217,11 @@ class Importer {
 								$this->ingest_failures++;
 								$this->error_log[] = "Error whilst ingesting record #" . $this->ingest_attempts . ": " . "Registry Object 'key' must have a value";
 							}
+							if((string)$registryObject->originatingSource == '')
+							{
+								$this->ingest_failures++;
+								$this->error_log[] = "Error whilst ingesting record #" . $this->ingest_attempts . ": " . "Registry Object 'originatingSource' must have a value";
+							}
 							else if((string)$registryObject['group'] == '')
 							{
 								$this->ingest_failures++;
