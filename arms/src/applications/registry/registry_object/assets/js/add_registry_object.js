@@ -1326,7 +1326,7 @@ function getRIFCSforTab(tab, hasField){
 		 * The type => the input[name=type] of the box display (heading)
 		 */
 		var this_fragment_type = $(this).attr('type');
-		log("fragment: " + this_fragment_type);
+		//log("fragment: " + this_fragment_type);
 		fragment +='<'+this_fragment_type+'';
 		if(hasField) fragment +=' field_id="' +$(this).attr('field_id')+'"';
 		var valid_fragment_meta = ['type', 'dateFrom', 'dateTo', 'style', 'rightsURI', 'termIdentifier'];//valid input type to be put as attributes
@@ -1363,7 +1363,7 @@ function getRIFCSforTab(tab, hasField){
 					
 					//deal with the type
 					var type = $(this).attr('type');
-					log("type: " + type);
+					//log("type: " + type);
 					if(type=='relation'){//special case for related object relation
 						fragment += '<'+type+' field_id="' +$(this).attr('field_id')+'" type="'+htmlEntities($('input[name=type]',this).val())+'">';
 						if($('input[name=description]', this).val()!=''){//if the relation has a description
@@ -1559,7 +1559,6 @@ function getRIFCSforTab(tab, hasField){
 	if( $(tab).attr('id') === 'relatedObjects' && $('#relatedObjects_overflow').length > 0)
 	{
 		xml += $('#relatedObjects_overflow').html();
-		log('relatedObjects_overflow: ' + $('#relatedObjects_overflow').html());
 	}
 	return xml;
 }
