@@ -4,7 +4,7 @@
 	exclude-result-prefixes="extRif ro">
 	<xsl:output method="html" encoding="UTF-8" indent="yes" omit-xml-declaration="yes"/>
 	<xsl:param name="base_url"/>
-	<xsl:variable name="maxRelatedDisp" select="50"/>
+	<xsl:variable name="maxRelatedDisp" select="30"/>
 
 	<xsl:variable name="ro_class">
 		<xsl:apply-templates select="ro:registryObject/ro:collection | ro:registryObject/ro:activity | ro:registryObject/ro:party  | ro:registryObject/ro:service" mode="getClass"/>
@@ -128,7 +128,7 @@
 
 		<input type="hidden" class="hide" id="ro_id" value="{$registry_object_id}"/>
 		<input type="hidden" class="hide" id="ro_class" value="{$ro_class}"/>
-		<input type="hidden" class="hide" id="originatingSource" value="{$ro_class}"/>
+		<input type="hidden" class="hide" id="originatingSource" value="{ro:originatingSource/text()}"/>
 	</xsl:template>
 
 	<xsl:template match="ro:collection | ro:activity | ro:party  | ro:service" mode="getClass">
@@ -857,22 +857,31 @@
 	<xsl:template name="relatedObjectsTab">
 		<div id="relatedObjects" class="pane">
 			<fieldset>
-				<legend>Related Objects <sup><a class="muted" href="http://www.ands.org.au/guides/cpguide/cpgrelatedobject.html" target="_blank" title="View Content Providers' Guide">?</a></sup></legend>
-				<xsl:choose>
-					<xsl:when test="count(//ro:relatedObject) > $maxRelatedDisp">
-						<xsl:apply-templates select="ro:collection/ro:relatedObject | ro:activity/ro:relatedObject | ro:party/ro:relatedObject  | ro:service/ro:relatedObject"/>
-						<br/><legend>No More than <xsl:value-of select="$maxRelatedDisp"/> related Objects can be displayed</legend>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:apply-templates select="ro:collection/ro:relatedObject | ro:activity/ro:relatedObject | ro:party/ro:relatedObject  | ro:service/ro:relatedObject"/>
-					</xsl:otherwise>
-				</xsl:choose>
+				<legend>Related Objects 
+					<xsl:if test="count(//ro:relatedObject) > $maxRelatedDisp">
+					(<xsl:value-of select="count(//ro:relatedObject)"/>) <br/> No More than <xsl:value-of select="$maxRelatedDisp"/> related Objects can be displayed
+					</xsl:if>
+					<sup><a class="muted" href="http://www.ands.org.au/guides/cpguide/cpgrelatedobject.html" target="_blank" title="View Content Providers' Guide">?</a></sup></legend>
+					<xsl:for-each select="ro:collection/ro:relatedObject | ro:activity/ro:relatedObject | ro:party/ro:relatedObject  | ro:service/ro:relatedObject">
+						<xsl:if test="position() &lt;= $maxRelatedDisp">
+							<xsl:apply-templates select="." mode="form"/>
+						</xsl:if>
+					</xsl:for-each>
 				<div class="separate_line"/>
 				<button class="btn btn-primary addNew" type="relatedObject" add_new_type="relatedObject">
 					<i class="icon-plus icon-white"/> Add Related Object </button>
 				
 			</fieldset>
 		</div>
+		<xsl:if test="count(//ro:relatedObject) > $maxRelatedDisp">
+			<xml id="relatedObjects_overflow">
+				<xsl:for-each select="ro:collection/ro:relatedObject | ro:activity/ro:relatedObject | ro:party/ro:relatedObject  | ro:service/ro:relatedObject">
+					<xsl:if test="position() &gt; $maxRelatedDisp">
+						<xsl:apply-templates select="." mode="data"/>
+					</xsl:if>
+				</xsl:for-each>
+			</xml>
+		</xsl:if>
 	</xsl:template>
 
 	<xsl:template name="relatedinfosTab">
@@ -1063,8 +1072,7 @@
 		</div>
 	</xsl:template>
 
-	<xsl:template match="ro:collection/ro:relatedObject | ro:activity/ro:relatedObject| ro:party/ro:relatedObject | ro:service/ro:relatedObject">
-		<xsl:if test="position() &lt;= $maxRelatedDisp">
+	<xsl:template match="ro:collection/ro:relatedObject | ro:activity/ro:relatedObject| ro:party/ro:relatedObject | ro:service/ro:relatedObject" mode="form">
 		<div class="aro_box" type="relatedObject">
 			<div class="aro_box_display clearfix">
 				<a href="javascript:;" class="toggle"><i class="icon-minus"/></a>
@@ -1090,7 +1098,10 @@
 				<button class="btn btn-primary addNew" type="relation" add_new_type="relation"><i class="icon-plus icon-white"/> Add Relation </button>
 			</div>
 		</div>
-	</xsl:if>
+	</xsl:template>
+
+	<xsl:template match="ro:relatedObject | ro:relatedObject| ro:relatedObject | ro:relatedObject" mode="data">
+			<xsl:copy-of select="."/>
 	</xsl:template>
 
 	<xsl:template match="ro:collection/ro:location | ro:activity/ro:location | ro:party/ro:location  | ro:service/ro:location">
