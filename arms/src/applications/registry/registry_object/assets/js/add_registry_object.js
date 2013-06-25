@@ -565,7 +565,7 @@ function initEditForm(){
 				});
 
 				xml+='</'+ro_class+'></registryObject>';
-
+log(xml);
 				/* Keep a backup of the form's RIFCS */
 				$('#myModal .modal-header h3').html('<h3>Take a backup of your Record\'s XML Contents</h3>');
 				$('#myModal .modal-body').html('<div style="width:100%; margin:both; text-align:left;">' + 
@@ -1314,6 +1314,7 @@ function getRIFCSforTab(tab, hasField){
 	var currentTab = $(tab);
 	var boxes = $('.aro_box', currentTab);
 	var xml = '';
+	var lastFragment = '';
 	$.each(boxes, function(){
 		var fragment ='';
 		var fragment_type = '';
@@ -1325,7 +1326,7 @@ function getRIFCSforTab(tab, hasField){
 		 * The type => the input[name=type] of the box display (heading)
 		 */
 		var this_fragment_type = $(this).attr('type');
-		//log("FRAGMENT TYPE " + this_fragment_type);
+		log("fragment: " + this_fragment_type);
 		fragment +='<'+this_fragment_type+'';
 		if(hasField) fragment +=' field_id="' +$(this).attr('field_id')+'"';
 		var valid_fragment_meta = ['type', 'dateFrom', 'dateTo', 'style', 'rightsURI', 'termIdentifier'];//valid input type to be put as attributes
@@ -1362,7 +1363,7 @@ function getRIFCSforTab(tab, hasField){
 					
 					//deal with the type
 					var type = $(this).attr('type');
-					//log("type: " + type);
+					log("type: " + type);
 					if(type=='relation'){//special case for related object relation
 						fragment += '<'+type+' field_id="' +$(this).attr('field_id')+'" type="'+htmlEntities($('input[name=type]',this).val())+'">';
 						if($('input[name=description]', this).val()!=''){//if the relation has a description
@@ -1551,9 +1552,15 @@ function getRIFCSforTab(tab, hasField){
 		}
 
 		xml += fragment;
-		
+
 	});
 	 // xml=xml.replace(/<[\^>]+><\/[\S]+>/gim, "");
+	 // 
+	if( $(tab).attr('id') === 'relatedObjects' && $('#relatedObjects_overflow').length > 0)
+	{
+		xml += $('#relatedObjects_overflow').html();
+		log('relatedObjects_overflow: ' + $('#relatedObjects_overflow').html());
+	}
 	return xml;
 }
 
