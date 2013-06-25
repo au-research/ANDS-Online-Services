@@ -43,6 +43,9 @@ class Oai extends MX_Controller
 	 * Array of formats this provider can provide. Currently DC and RIF
 	 */
 	private $formats = array(
+		array('prefix' => 'dci',
+		      'schema' => '',
+		      'ns'     => ''),
 		array('prefix' => 'oai_dc',
 		      'schema' => 'http://www.openarchives.org/OAI/2.0/oai_dc.xsd',
 		      'ns'     => 'http://www.openarchives.org/OAI/2.0/oai_dc/'),

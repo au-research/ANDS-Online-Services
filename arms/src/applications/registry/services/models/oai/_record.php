@@ -55,6 +55,9 @@ class _record
 		$data = false;
 		switch($format)
 		{
+		case 'dci':
+			$data = $this->_rec->transformToDCI();
+			break;
 		case 'oai_dc':
 			$data = $this->_rec->transformToDC();
 			break;
