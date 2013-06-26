@@ -77,6 +77,7 @@
 		    if (typeof(handler) !== 'undefined') {;
 			$this.data('_handler', handler);
 			handler.ready();
+		//	console.log(handler)
 		    }
 		    else {
 			_alert('Handler not initialised');
@@ -182,13 +183,20 @@ var OrcidHandler = Class.extend({
 	    this._uid = this.makeUid();
 	    this._input = input;
 	    this.settings = settings;
-	    this._button = $('<a style="margin-left:1em" class="btn" data-toggle="modal" role="button"><i class="icon-search"> </i></a>');
+	    this._inputLabel = $("<span>http://orcid.org/</span>");
+	    this._inputMessage = $("<span class='orcid_message' id='"+this._uid+"-input-message' style='padding-left:100px'>ORCID Identifier<span><br />")
+	    this._inputLabel.insertBefore(this._input);
+	    this._inputMessage.insertBefore(this._inputLabel);
+	    //console.log(this._input);
+	    this._button = $('<a style="margin-left:1em" class="btn" data-toggle="modal" role="button">Search</i></a>');
+	    this._lookupbutton = $('<a style="margin-left:1em" class="btn" data-toggle="modal" role="button">Lookup</a>');	    
 	    this._button.attr('id', this._uid);
 	    this._button.insertAfter(this._input);
-
+	    this._lookupbutton.insertAfter(this._input);
 	    //set up the id lookups we're going to use
 	    this._uids = [];
 	    this._uids['modalid'] = this._uid + '-modal';
+	    this._uids['modalReturnId'] = this._uid + '-modal-return';	    
 	    this._uids['labelid'] = this._uid + '-modal-label';
 	    this._uids['txtid'] = this._uid + '-modal-input';
 	    this._uids['formid'] = this._uid + '-modal-form';
@@ -222,17 +230,18 @@ var OrcidHandler = Class.extend({
 	 * View helper; sets up the modal form, event handlers etc.
 	 */
 	makeModal: function() {
-	    var modal = $('<div id="' + this._uids['modalid'] + '" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true"></div>');
+		//alert(Url.Content);
+	    var modal = $('<div id="' + this._uids['modalid'] + '" class="modal hide fade orcid-modal" tabindex="-1" role="dialog" aria-hidden="true"></div>');
 	    //header
-	    modal.append('<div class="modal-header">' +
-			 '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>' +
-			 '<h4 id="' + this._uids['labelid'] + '">Search Orcid</h4>' +
-			 '</div>')
+	    modal.append('<div class="orcid-header">' +
+			 '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button><div class="orcid-image"> </div>' +
+			 '<h4 id="' + this._uids['labelid'] + '" class="orcid">Lookup</h4> ' + 
+			 '<hr /></div>')
 	    //body
 		.append('<div class="modal-body">' +
-			'<form id="' + this._uids['formid'] + '" class="form-horizontal" accept-charset="UTF-8">' +
+			'<form id="' + this._uids['formid'] + '" class="form" accept-charset="UTF-8">' +
 			'<div class="control-group">' +
-			'<label class="control-label" for="' + this._uids['txtid'] + '">Search</label>' +
+			'<label class="control-label" for="' + this._uids['txtid'] + '">Researcher name</label>' +
 			'<div class="controls input-append" style="display:block">' +
 			'<input type="text" autofocus="autofocus" id="' + this._uids['txtid'] + '" >' +
 			'<button class="btn btn-primary" type="submit"><i class="icon-white icon-search"> </i> </button>' +
@@ -244,7 +253,21 @@ var OrcidHandler = Class.extend({
 	    modal.attr('id', this._uids['modalid']);
 	    return modal;
 	},
-
+	makeReturnModal: function() {
+	    var returnDiv = $('<div id="' + this._uids['modalReturnId'] + '"  tabindex="-1" role="dialog" aria-hidden="true"></div>');
+	    //header
+	 //   modal.append('<div class="modal-header">' +
+		//	 '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>' +
+		//	 '<h4 id="' + this._uids['labelid'] + '">Search Orcid</h4>' +
+		//	 '</div>')
+	    //body
+		returnDiv.append('<div>' +
+			'<div class="return" > </div>' +
+			'</div>')
+	    returnDiv.attr('aria-labelledby', this._uids['labelid']);
+	    returnDiv.attr('id', this._uids['modalReturnId']);
+	    return returnDiv;
+	},
 
 	preconditions: function() {
 	    return [];
@@ -383,28 +406,75 @@ var OrcidHandler = Class.extend({
 	   
 	}, 
 
+/**
+	 * silly wrapper to provide input buffering.
+	 * `lookup` makes the ajax call
+	 */
+	orcid_lookup: function (event) {
+	    //this._reset();
+	    if (this._container.data('orcid_timer')) {
+		clearTimeout(this._container.data('orcid_timer'));
+	    }
+	    var handler = this;
+	    this._container.data('orcid_timer',
+				 setTimeout(function() {handler.lookup()},
+					    handler.settings.delay));
+	},
+	lookup: function() {
+	    var handler = this;
+	    var lookfor = this._container.val().toLowerCase();
+	    var matches;
+	    if (true || lookfor.length) {
+		this._list.children('li').hide();
+		this._list.show();
+		matches = $.grep(this._list.children('li[role="orcid_item"]'),
+				 function(e,i) {
+				     var item = $(e);
+				     var data = item.data(WIDGET_DATA);
+				     for (var fi in handler.settings.fields) {
+					 var field = handler.settings.fields[fi];
+					 if ((typeof(data[field]) !== 'undefined') &&
+					     data[field].substring(0,lookfor.length)
+					     .toLowerCase() === lookfor) {
+					     return true;
+					 }
+				     }
+				     return false;
+				 });
+		$(matches).show();
+	    }
+	},
 	
     });
 
  var SearchHandler = UIHandler.extend({
  
 	ready: function() {
+
+		$.ajaxSetup({
+     		timeout: 20000
+  		});
+
 	    var handler = this;
-	    this._modal = this.makeModal();
-	    this._modal.insertAfter(this._button);
 
 
-	    var modal = this._modal;
-	    this._button.on('click', function() {
-		modal.modal();
-	    });
+	  	  this._modal = this.makeModal();
+	  	  this._modal.insertAfter(this._button);
+	
 
-	    this._modal.on('hidden', function() {
-		modal.find('div.results').empty();
-		$("#" + handler._uids['txtid']).val('');
+	   	 var modal = this._modal;
+	    	this._button.on('click', function() {
+			modal.modal();
+	    	});
+
+	    	this._modal.on('hidden', function() {
+			modal.find('div.results').empty();
+			$("#" + handler._uids['txtid']).val('');
 		
-	    });
-
+	    	});
+	    this._returnModal = handler.makeReturnModal();
+	    this._returnModal.insertAfter(handler._button);
+	    var returnModal = this._returnModal;
 	    $("#" + this._uids['formid']).on('submit', function(e) {
 		e.preventDefault();
 
@@ -445,14 +515,102 @@ var OrcidHandler = Class.extend({
 					    		var orcid = e['orcid-profile']['orcid'].value;
 								var givenNames = e['orcid-profile']['orcid-bio']['personal-details']['given-names'].value;
 								var familyName = e['orcid-profile']['orcid-bio']['personal-details']['family-name'].value;		
-								var lb = $('<a class="orcidsearch-btn btn btn-small btn-block" type="button">' + orcid + '</a>');
+								var lb = $('<a class="orcidsearch-btn btn btn-small btn-block"></a>');
 								lb.data('orcid', e);
-								lb.append('<span class="class"> ' +givenNames+' '+familyName+ '</span>');
+								var infoStr = '';
+								var tooltip = toHtml(e['orcid-profile'],infoStr);
+								lb.append('<span class="class preview" title="'+tooltip+'" disname="'+givenNames+' '+familyName +'"> ' +givenNames+' '+familyName+ ' ' + ' ['+orcid+' ]</span>');
 								var li = $('<li style="text-align:left"/>');
 								li.append(lb);
 								list.append(li);
 					   	 	});
 					    	rdiv.append(list);
+					    	$('.preview').each(function(){       
+   								$(this).qtip({
+       							 content: {
+            						text: $(this).attr('title'),
+            					},
+       							position: {
+           						 	my: 'left center',
+          						  	at: 'right center',
+           						 	viewport: $(window)
+        						},
+        						show: {
+            						event: 'mouseover',
+        						},
+        						hide: {
+            						event: 'mouseout'
+        						},
+        						style: {
+            						classes: 'ui-tooltip-light ui-tooltip-shadow orcidPreview',
+            						width: 550
+       							 }
+    							}); 
+    						});
+						}
+					}else{
+						 rdiv.html('<div class="alert alert-small alert-error">' +
+				  'Search service failed... try again?</div>');
+					}
+				 })
+		    .done(function() {
+			rdiv.find('a.orcidsearch-btn').on('click', function(e) {		
+			    var record = $(e.currentTarget).data('orcid');
+			   // console.log(record)
+			    if (typeof(record[handler.settings.target_field]) === 'undefined') {
+				handler._input.val(record['orcid-profile']['orcid'].value);
+				handler._lookupbutton.trigger('click');
+				handler._inputMessage.html('ORCID Identifier<br />')
+				handler._inputMessage.attr('class','orcid_message')
+				handler._input.attr('class','')
+			    }
+			    else {
+				handler._input.val(record[handler.settings.target_field]);
+			    }
+			    modal.modal('hide');
+			});
+		    })
+		    .fail(function(data) {
+				rdiv.html('<div class="alert alert-small alert-error">' +
+				  'Search service failed... try again?</div>');
+		    });
+		}else{
+			rdiv.html('<div align="center">You must provide a search value.</div>');
+		}
+	    });
+		
+			this._lookupbutton.on('click', function() {
+
+			searchStr = handler._input.val();
+			var surl = handler.settings.endpoint;
+			var theAddress = 'http://pub.orcid.org/'+searchStr+'/orcid-bio';
+ 			var rdiv = $("#" + handler._uids['modalReturnId']);
+			rdiv.html('Loading result...');
+			var xhr = $.getJSON(surl,
+				    {
+					'address': theAddress
+				    },
+				    function(data) {
+				    if(data!=null)
+				    {
+						if (typeof(data['orcid-profile']) === 'undefined' ||
+					   	 data['orcid-profile'].length === 0) {
+					   	 	handler._inputMessage.html('Invalid ORCID Identifier<br />')
+					   	 	handler._inputMessage.attr('class','error-message')
+					   	 	handler._input.attr('class','error')
+					    	rdiv.html('<div align="center"></div>');
+						}
+						else {
+					    	rdiv.html('<div align="center"></div>');
+					    	var list = $('<ul class="unstyled" style="text-align:left;"/>');
+					    	var obj = data['orcid-profile'];
+
+					    	var resStr ='';
+					    	var dataArray = toHtml(data['orcid-profile'],resStr);
+							handler._inputMessage.html('ORCID Identifier<br />')
+							handler._inputMessage.attr('class','orcid_message')
+							handler._input.attr('class','')
+					    	rdiv.append(dataArray)
 						}
 					}else{
 						 rdiv.html('<div class="alert alert-small alert-error">' +
@@ -475,15 +633,85 @@ var OrcidHandler = Class.extend({
 				rdiv.html('<div class="alert alert-small alert-error">' +
 				  'Search service failed... try again?</div>');
 		    });
-		}else{
-			rdiv.html('<div align="center">You must provide a search value.</div>');
-		}
-	    });
-		
+				returnModal.show();
+	    	});
+
 	},
 
     });
 
+
+function toHtml(obj,resStr) {
+	resStr += "<div class='info-box'>"
+	resStr += "<h6>ORCID Identifier</h6>";
+	var orcid = eval(obj['orcid'])
+	resStr += orcid.value;
+
+	if(obj['orcid-bio']['biography'])
+	{	
+					    		
+		if(obj['orcid-bio']['biography'].value!='')	
+		{
+			resStr += "<h6>Biography</h6>";
+			resStr +="<p>"+obj['orcid-bio']['biography'].value+"</p>";
+		}
+	}
+	    					    	
+ 	if(obj['orcid-bio']['personal-details'])
+ 	{
+		resStr +="<h6>Personal Details</h6>"		 					    		
+		resStr +="<p>";
+ 		if(obj['orcid-bio']['personal-details']['credit-name'])
+ 			resStr +="Credit name: "+obj['orcid-bio']['personal-details']['credit-name'].value+" <br />";
+ 		if(obj['orcid-bio']['personal-details']['family-name']) 					    
+ 			resStr +="Family name: "+obj['orcid-bio']['personal-details']['family-name'].value+" <br />"; 
+ 		if(obj['orcid-bio']['personal-details']['given-names'])  					    
+  			resStr +="Given names: "+obj['orcid-bio']['personal-details']['given-names'].value+" <br />";
+ 		if(obj['orcid-bio']['personal-details']['other-names'])
+ 		{   					    		
+   			resStr +="Other names: ";
+   			var count = 0;	
+   			for(i=0; i< (obj['orcid-bio']['personal-details']['other-names'].length -1);i++)
+   			{
+   				resStr += obj['orcid-bio']['personal-details']['other-names']['other-name'][i].value + ", ";
+   				count++;
+   			}
+   				resStr += obj['orcid-bio']['personal-details']['other-names']['other-name'][count].value + "<br />";
+   		} 	
+ 	}
+
+ 	if(obj['orcid-bio']['keywords'])
+ 	{ 					    		
+   		resStr +="<h6>Keywords</h6>"
+   		var count = 0;	
+   		for(i=0; i< (obj['orcid-bio']['keywords']['keyword'].length -1);i++)
+   		{
+   			resStr += obj['orcid-bio']['keywords']['keyword'][i].value + ", ";
+   			count++;
+   		}
+   		resStr += obj['orcid-bio']['keywords']['keyword'][count].value + "<br />"; 					    		
+ 	}
+
+ 	if(obj['orcid-bio']['researcher-urls'])
+ 	{ 					    		
+   		resStr +="<h6>Research URLs</h6>"
+   		var count = 0;	
+   		for(i=0; i< (obj['orcid-bio']['researcher-urls']['researcher-url'].length -1);i++)
+   		{
+   			if(obj['orcid-bio']['researcher-urls']['researcher-url'][i].url.value!='')
+   				resStr += "URL : " + obj['orcid-bio']['researcher-urls']['researcher-url'][i].url.value + "<br /> ";
+   			if(obj['orcid-bio']['researcher-urls']['researcher-url'][i]['url-name'].value)
+   				resStr += "URL Name : " + obj['orcid-bio']['researcher-urls']['researcher-url'][i]['url-name'].value + "<br /> ";   					    			
+   			count++;
+   		}
+   		if(obj['orcid-bio']['researcher-urls']['researcher-url'][count].url.value!='')
+   			resStr += "URL : " + obj['orcid-bio']['researcher-urls']['researcher-url'][count].url.value + "<br />";
+   		if(obj['orcid-bio']['researcher-urls']['researcher-url'][count]['url-name'].value!='')
+   			resStr += "URL Name : " + obj['orcid-bio']['researcher-urls']['researcher-url'][count]['url-name'].value + "<br />";   					    		
+ 	} 					    					    					    						    	
+	resStr += "</div>"
+    return resStr;
+}
 /* Load the defined orcid widgets */
 
     $('.orcid_widget').each(function(){
@@ -491,4 +719,13 @@ var OrcidHandler = Class.extend({
 		var widget = elem.orcid_widget();
 
     })
+
+  /*      $('.orcid_lookup').each(function(){
+	   	var elem = $(this);
+		var widget = elem.orcid_widget({ mode: 'lookup' });
+
+    }) */
+
+   
+
 })( jQuery );

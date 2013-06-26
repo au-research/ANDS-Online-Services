@@ -14,10 +14,10 @@ $curl = curl_init();
   curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
   curl_setopt($curl, CURLOPT_TIMEOUT, 10);
 
-  $html = curl_exec($curl); // execute the curl command
+  $json = curl_exec($curl); // execute the curl command
   curl_close($curl); // close the connection
 
-  echo $html; // and finally, return $html 
+  echo $json; // and finally, return $html 
 
 
 
