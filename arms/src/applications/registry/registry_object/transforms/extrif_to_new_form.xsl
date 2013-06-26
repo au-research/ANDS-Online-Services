@@ -874,13 +874,13 @@
 			</fieldset>
 		</div>
 		<xsl:if test="count(//ro:relatedObject) > $maxRelatedDisp">
-			<xml id="relatedObjects_overflow">
+			<div id="relatedObjects_overflow">
 				<xsl:for-each select="ro:collection/ro:relatedObject | ro:activity/ro:relatedObject | ro:party/ro:relatedObject  | ro:service/ro:relatedObject">
 					<xsl:if test="position() &gt; $maxRelatedDisp">
 						<xsl:apply-templates select="." mode="data"/>
 					</xsl:if>
 				</xsl:for-each>
-			</xml>
+			</div>
 		</xsl:if>
 	</xsl:template>
 
