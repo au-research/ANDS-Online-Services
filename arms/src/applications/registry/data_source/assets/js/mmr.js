@@ -29,6 +29,11 @@ function formatFilters(filters){
 function init(filters){
 
     var data_source_id = $('#data_source_id').val();
+    if(filters['search'] && filters['search']!=''){
+        $('#search_form .search-query').val(filters['search']);
+        $('#search_form button').html('<i class="icon icon-remove"></i> Search');
+    }
+    
     //$('.pool').hide();
     //$('#status_message').removeClass('alert-error').addClass('alert-info');
     //$('#status_message').html('<em>Loading...</em> <img src="'+base_url+'assets/img/ajax-loader.gif" alt="Loading..Please wait.."/>');
