@@ -83,9 +83,15 @@ class Extrif_Extension extends ExtensionBase
 							$extendedMetadata->addChild("extrif:logo", $logoRef, EXTRIF_NAMESPACE);
 							$this->ro->set_metadata('the_logo', $logoRef);
 						}
-
+						$testDescription = $this->isHtml( html_entity_decode(html_entity_decode($description_str)) );
+						if($testDescription==true)
+						{
 						// Clean the HTML with purifier, but decode entities first (else they wont be picked up in the first place)
-						$clean_html = htmlentities(htmlentities($this->_CI->purifier->purify_html( html_entity_decode(html_entity_decode($description_str)) )));
+							$clean_html = htmlentities(htmlentities($this->_CI->purifier->purify_html( html_entity_decode(html_entity_decode($description_str)) )));
+						
+						}else{
+							$clean_html =  htmlentities(htmlentities($description_str));
+						}
 						$encoded_html = '';
 
 						// Check for <br/>'s
@@ -296,4 +302,20 @@ class Extrif_Extension extends ExtensionBase
 		}
 		return false;
 	}
+
+	function isHtml($string)
+	{
+     	/* preg_match("/<\/?\w+((\s+\w+(\s*=\s*(?:\".*?\"|'.*?'|[^'\">\s]+))?)+\s*|\s*)\/?>/",$string, $matches);
+     	if(count($matches)==0){
+        	//return FALSE;
+      	}else{
+         	return TRUE;
+      	} */
+      	if(str_replace("&gt;","",$string)!=$string ||str_replace("&lt;","",$string)!=$string ||str_replace("<","",$string)!=$string || str_replace(">","",$string)!=$string || str_replace("& ","",$string)!=$string )
+      	{
+      		return true;
+      	}else{
+      		return false;
+      	}
+    }
 }
