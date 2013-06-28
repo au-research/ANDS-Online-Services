@@ -297,7 +297,7 @@ $(document).on('click', '.filter',function(e){
 	var url = $('a.title', this).attr('href');
 	window.location = url;
 }).on('click', '#togglefacetsort', function(){
-	if($(this).hasClass('facetsortaz')){
+	if($(this).hasClass('facetsortcount')){
 		$(this).removeClass('facetsortcount').addClass('facetsortaz');
 		searchData['facetsort']='alpha';
 	}else{
@@ -515,9 +515,9 @@ function initSearchPage(){
 
 	//init the facet sorting functionality
 	if(searchData['facetsort']){
-		$('#togglefacetsort').removeClass('facetsortaz').addClass('facetsortcount');
+		$('#togglefacetsort').addClass('facetsortaz').removeClass('facetsortcount').attr('tip', 'Search option categories (below)  are currently being sorted alphabetically');
 	}else{
-		$('#togglefacetsort').addClass('facetsortaz').removeClass('facetsortcount');
+		$('#togglefacetsort').removeClass('facetsortaz').addClass('facetsortcount').attr('tip', 'Search option categories (below) are being sorted by the number of matching records');
 	}
 }
 

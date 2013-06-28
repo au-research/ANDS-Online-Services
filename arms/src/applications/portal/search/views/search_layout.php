@@ -53,7 +53,7 @@
 
 </div><!-- main -->
 <div class="sidebar">
-	<div id="togglefacetsort" class="facetsortaz" tip="Toggle Filter Sorting Order"></div>
+	<div id="togglefacetsort" class="facetsortcount" tip="Search option categories (below) are being sorted by the number of matching records"></div>
 	<div class="widget facet_subjects">
 	<h3 class="widget_title">Subjects</h3>
 	<div id="browse-subjects-container">
