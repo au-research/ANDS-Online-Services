@@ -234,37 +234,39 @@ function bindSearchRelatedEvents(tt, target){
 	});
 	$('.search_related', tooltip).click(function(){
 		var term = $('input', tooltip).val();
-		// data_source_id_value
-		var ds_option = '';
-		if($('#ds_option').attr('checked')=='checked'){
-			ds_option = '/'+$('#data_source_title').val();
-		}
-		var published_option = '';
-		if($('#published_option').attr('checked')=='checked'){
-			published_option = '&onlyPublished=yes';
-		}
-		var class_option = $('#class_related_search_option').val();
-		$.ajax({
-			url:base_url+'registry_object_search/search/'+class_option+ds_option+'?field=title&term='+term+published_option, 
-			type: 'GET',
-			success: function(data){
-				var template = $('#related_object_search_result').html();
-				var output = Mustache.render(template, data);
-				if(data.results.length<1)
-				{
-					var output = "<br /><p> No matches could be found.</p>";
-				}else{
-					var output = Mustache.render(template, data);					
-				}
-				$('#result', tooltip).html(output);
-				$('.select_related').click(function(){
-					$(target).val($(this).attr('key'));
-					$(target).attr('value', $(this).attr('key'));
-					tt.hide();
-					initRelatedObjects();
-				});
+		if(term!=''){
+			// data_source_id_value
+			var ds_option = '';
+			if($('#ds_option').attr('checked')=='checked'){
+				ds_option = '/'+$('#data_source_title').val();
 			}
-		});
+			var published_option = '';
+			if($('#published_option').attr('checked')=='checked'){
+				published_option = '&onlyPublished=yes';
+			}
+			var class_option = $('#class_related_search_option').val();
+			$.ajax({
+				url:base_url+'registry_object_search/search/'+class_option+ds_option+'?field=title&term='+term+published_option, 
+				type: 'GET',
+				success: function(data){
+					var template = $('#related_object_search_result').html();
+					var output = Mustache.render(template, data);
+					if(data.results.length<1)
+					{
+						var output = "<br /><p> No matches could be found.</p>";
+					}else{
+						var output = Mustache.render(template, data);					
+					}
+					$('#result', tooltip).html(output);
+					$('.select_related').click(function(){
+						$(target).val($(this).attr('key'));
+						$(target).attr('value', $(this).attr('key'));
+						tt.hide();
+						initRelatedObjects();
+					});
+				}
+			});
+		}
 	});
 	$('.show_advanced_search_related', tooltip).click(function(){
 		$('#advanced',tooltip).toggle();
@@ -977,7 +979,7 @@ function initRelatedObjects(){
 	//display current related objects title and status
 	var relatedObjects = [];
 	$('#relatedObjects input[name=key]').each(function(){
-		relatedObjects.push($(this).val());
+		if($(this).val()!='') relatedObjects.push($(this).val());
 		$(this).attr('value', $(this).val());
 	});
 	$(document).off('blur', '#relatedObjects input[name=key]').on('blur', '#relatedObjects input[name=key]', initRelatedObjects)
