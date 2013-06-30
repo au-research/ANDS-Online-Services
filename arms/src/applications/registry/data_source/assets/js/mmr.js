@@ -8,9 +8,8 @@ $(function() {
         var hash = window.location.hash;
         var hash = location.href.substr(location.href.indexOf("#"));
         var query = hash.substring(3, hash.length);
-
+        query = decodeURIComponent(query);
         if(query) filters = jQuery.parseJSON(query);
-
         if(filters['sort'] === undefined){
             var sort = {}; sort['updated'] = 'desc';
             filters['sort'] = sort;
