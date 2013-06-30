@@ -696,6 +696,7 @@ class Data_source extends MX_Controller {
 		$ds = $this->ds->create($this->input->post('key'), url_title($this->input->post('title')));
 		$ds->setAttribute('title', $this->input->post('title'));
 		$ds->setAttribute('record_owner', $this->input->post('record_owner'));
+		$ds->setAttribute('qa_flag', DB_TRUE);
 		foreach($ds->stockAttributes as $key=>$value)
 		{
 			if(!isset($ds->attributes[$key]))
