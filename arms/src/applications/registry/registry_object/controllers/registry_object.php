@@ -371,7 +371,7 @@ class Registry_object extends MX_Controller {
 				$ro = $this->ro->getPublishedByKey($key);
 				if(!$ro) $ro = $this->ro->getDraftByKey($key);
 				if($ro){
-					$jsonData['result'][$key] = array('title'=>$ro->title, 'status'=>$ro->status, 'key'=>$ro->key, 'id'=>$ro->id);
+					$jsonData['result'][$key] = array('title'=>$ro->title, 'status'=>$ro->status, 'key'=>$ro->key, 'id'=>$ro->id, 'class'=>$ro->class, 'link'=>base_url('registry_object/view/'.$ro->id));
 				}else{
 					$jsonData['result'][$key] = array('title'=>'Registry Object Not Found', 'status'=>'notfound');
 				}
