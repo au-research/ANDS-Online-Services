@@ -41,10 +41,26 @@ class Publish_my_data extends MX_Controller {
 			$this->load->model('data_source/data_sources', 'ds');
 			$ds = $this->ds->create(url_title($this->input->post('ds_title')), url_title($this->input->post('ds_title')));
 			$ds->setAttribute('title', $this->input->post('ds_title'));
+			$ds->setAttribute('contact_name', $this->input->post('name'));
+			$ds->setAttribute('contact_email', $this->input->post('email'));
 			$ds->setAttribute('record_owner', $org_role);
 			$ds->setAttribute('qa_flag', DB_TRUE);
 			if($this->input->post('notes')) $ds->setAttribute('notes', $this->input->post('notes'));		
 			$ds->save();
+
+			//send email
+			$this->load->library('user_agent');
+			$data['user_agent']=$this->agent->browser();
+			$name = $this->input->post('name');
+			$email = $this->input->post('email');
+			$content = "A new Publish My Data Datasource has been added to the registry. ". base_url()."data_source#!/view/".$ds->id;
+			$this->load->library('email');
+			$this->email->from($email, $name);
+			$this->email->to('services@ands.org.au');
+			$this->email->subject('Registry Publish My Data');
+			$this->email->message($content);
+			$this->email->send();
+
 			// echo 'create a new blank rifcs with data source belongs to this one';
 			// echo '. redirect to edit that rifcs
 			redirect('registry_object/add');
