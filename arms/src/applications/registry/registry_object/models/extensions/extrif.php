@@ -289,7 +289,7 @@ class Extrif_Extension extends ExtensionBase
 		
 		$contributor = $this->_CI->db->get_where('institutional_pages',array('group' => $registry_object->getAttribute('group')));
 
-		if ($contributor->num_rows>0)
+		if ($contributor->num_rows() >0)
 		{
 				$row = $contributor->row_array();
 				$contributor_object = $this->_CI->ro->getByID($row['registry_object_id']);
