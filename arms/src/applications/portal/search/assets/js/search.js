@@ -195,7 +195,7 @@ function executeSearch(searchData, searchUrl){
 		        $(".contributor").each(function(){
 		        	if($(this).html() == $(this).attr('slug'))
 		        	{
- 						$(this).parent().addClass('contrib');
+ 						// $(this).parent().addClass('contrib');
  					}
 				});
 
