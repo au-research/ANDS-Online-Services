@@ -1004,7 +1004,7 @@ function initRelatedObjects(){
 	});
 
 	//reverse links and contributors page
-	$('.other_related_links').remove();
+	$('.automated_links').remove();
 	$.ajax({
 		url:base_url+'registry_object/getConnections/'+$(ro_id).val(), 
 		type: 'POST',
@@ -1012,7 +1012,14 @@ function initRelatedObjects(){
 			if(data.connections){
 				$.each(data.connections, function(){
 					if(this.origin!='EXPLICIT'){
-						$('#relatedObjects').append('<div class="well other_related_links"><span class="tag"> '+this.relation_type+'</span>'+this.title+'</div>');
+						if($('#relatedObjects .automated_links ').length==0){
+							$('#relatedObjects').append('<fieldset class="automated_links"><legend>Other Connections</legend></fieldset>');
+						}
+
+						if(this.class=='contributor') this.class='party';
+						if(this.relation_type=='(Automatically generated contributor page link)') this.relation_type='Automatically generated contributor page link';
+
+						$('#relatedObjects .automated_links').append('<div class="well"><img class="class_icon" tip="'+this.class+'" style="width:20px;padding-right:10px;" src="'+base_url+'../assets/img/'+this.class+'.png"/> <span class="tag status_'+this.status+'">'+this.status+'</span> <a href="'+base_url+'registry_object/view/'+this.registry_object_id+'" target="_blank">'+this.title+'</a> <span class="muted">('+this.relation_type+')</span></div>');
 					}
 				});
 			}
