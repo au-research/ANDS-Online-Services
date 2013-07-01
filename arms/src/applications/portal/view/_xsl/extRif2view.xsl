@@ -1124,7 +1124,7 @@
         <xsl:value-of select="./ro:namePart[@type='']"/>.
     </xsl:if>
     <!-- catch-all statement for dodgy data -->
-    <xsl:if test="./ro:namePart[not (@type)] | ./ro:namePart[not(@type='familiy') and not(@type='given') and not(@type='initial') and not(@type='full') and not(@type='')]">
+    <xsl:if test="./ro:namePart[not (@type)] | ./ro:namePart[not(@type='family') and not(@type='given') and not(@type='initial') and not(@type='full') and not(@type='')]">
         <xsl:value-of select="./ro:namePart"/>.
     </xsl:if>                
 </xsl:template> 
