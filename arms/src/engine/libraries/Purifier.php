@@ -21,7 +21,8 @@ class Purifier {
         $this->config->set('HTML.Doctype', $this->CI->config->item('HTML_Doctype')); // replace with your doctype
         $this->config->set('HTML.AllowedElements', $this->CI->config->item('HTML_AllowedElements')); // sets allowed html elements that can be used.
         $this->config->set('HTML.AllowedAttributes', $this->CI->config->item('HTML_AllowedAttributes')); // sets allowed html attributes that can be used.
-        $this->config->set('Cache.DefinitionImpl', 'Serializer'); // disable caching, who cares about performance
+        $this->config->set('Cache.DefinitionImpl', 'Serializer'); 
+        $this->config->set('Cache.SerializerPath', '/tmp');
         $this->htmlPurifier = new HTMLPurifier($this->config);
     	return true;
     }
