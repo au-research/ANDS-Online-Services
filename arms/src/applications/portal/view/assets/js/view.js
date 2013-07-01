@@ -74,11 +74,11 @@ function initConnections(){
     $('.preview_connection').each(function(){
         if(typeof $('a', this).attr('slug')!=='undefined'){
 
-            generatePreviewTip($(this), $('a',this).attr('slug'), null, $('a', this).attr('relation_type'));
+            generatePreviewTip($(this), $('a',this).attr('slug'), null, $('a', this).attr('relation_type'), $('a', this).attr('relation_description'), $('a', this).attr('relation_url'));
 
         }else if($('a', this).attr('draft_id')!=''){
 
-            generatePreviewTip($(this), null, $('a',this).attr('draft_id'), $('a', this).attr('relation_type'));
+            generatePreviewTip($(this), null, $('a',this).attr('draft_id'), $('a', this).attr('relation_type'), $('a', this).attr('relation_description'), $('a', this).attr('relation_url'));
             $('a', this).prepend(draftText);
 
         }
@@ -537,12 +537,13 @@ function initConnectionGraph()
 
 }
 
-function generatePreviewTip(element, slug, registry_object_id, relation_type)
+function generatePreviewTip(element, slug, registry_object_id, relation_type, relation_description, relation_url)
 {
     var preview_url;
     if (slug != null)
     {
         preview_url = base_url + "preview/" + slug;
+        //alert(preview_url)
     }
     else
     {
@@ -562,7 +563,6 @@ function generatePreviewTip(element, slug, registry_object_id, relation_type)
                // data: { "slug": slug, "registry_object_id": registry_object_id },
                 success: function(data, status) {
                     data = $.parseJSON(data);        
-                    
                     // Clean up any HTML rubbish...                   
                     var temp = $('<span/>');
                     temp.html(data.html);
@@ -584,13 +584,32 @@ function generatePreviewTip(element, slug, registry_object_id, relation_type)
                         $('.viewRecordLink'+data.slug).attr("href",base_url + data.slug);
                         $('.viewRecord').attr("href", base_url + data.slug);
                         if(relation_type){
-                         $('.previewItemHeader'+data.slug).html(relation_type);
+                            var relDesc = '';
+                            if(relation_description)
+                            {
+                                relDesc = ' <br /><span style="color:#666666"><em>' + relation_description +'</em></span>'
+                            }
+                            var relUrl = '';
+                            if(relation_url)
+                            {
+                                relUrl = ' <a href="' + relation_url +'" target="_blank"><em>(URL)</em></a></span>'
+                            }
+                         $('.previewItemHeader'+data.slug).html(relation_type + relDesc + relUrl);
                         }                       
 
                     }else{
                         $('.viewRecordLink'+data.registry_object_id).attr("href",base_url+"view/?id=" + data.registry_object_id);
                         if(relation_type){
-                            $('.previewItemHeader'+data.registry_object_id).html(relation_type);
+                            if(relation_description)
+                            {
+                                relDesc = ' <br /><span style="color:#666666"><em>' + relation_description +'</em></span>'
+                            }
+                            var relUrl = '';
+                            if(relation_url)
+                            {
+                                relUrl = ' <a href="' + relation_url +'" target="_blank"><em>(URL)</em></a></span>'
+                            }                            
+                            $('.previewItemHeader'+data.registry_object_id).html(relation_type + relDesc + relUrl);
                         }
                     }                   
                 } 

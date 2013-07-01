@@ -51,11 +51,24 @@
 						{
 							$suffix = " <sup><small class='lightgrey'>(PI)</small></sup>";
 						}
+						if(isset($entry['relation_description']))
+						{
+							$relDesc = ' relation_description="'.$entry['relation_description'].'" ';
+						}else{
+							$relDesc = '';
+						}
+
+						if(isset($entry['relation_url']))
+						{
+							$relUrl = ' relation_url="'.$entry['relation_url'].'" ';
+						}else{
+							$relUrl = '';
+						}
 
 						if(!isset($conn[$entry['class']])){
-							$conn[$entry['class']] = $logo.'<p class="'.$entry['class'].' preview_connection"><a href="'.$url.'" '.$preview.' relation_type="'.$relationship.'">'.$entry['title'].$suffix.'</a></p>';
+							$conn[$entry['class']] = $logo.'<p class="'.$entry['class'].' preview_connection"><a href="'.$url.'" '.$preview.' relation_type="'.$relationship.'" '.$relDesc.' '.$relUrl.'>'.$entry['title'].$suffix.'</a></p>';
 						}else{
-							$conn[$entry['class']] .= $logo.'<p class="'.$entry['class'].' preview_connection"><a href="'.$url.'" '.$preview.' relation_type="'.$relationship.'">'.$entry['title'].$suffix.'</a></p>';
+							$conn[$entry['class']] .= $logo.'<p class="'.$entry['class'].' preview_connection"><a href="'.$url.'" '.$preview.' relation_type="'.$relationship.'" '.$relDesc.' '.$relUrl.'>'.$entry['title'].$suffix.'</a></p>';
 						}
 					}
 				}
