@@ -25,10 +25,10 @@ class Publish_my_data extends MX_Controller {
 
 	function publish(){
 		if($this->input->post()){
-			$org_role = 'PMD_'.$this->user->localIdentifier();
+			$org_role = 'PMD_'.url_title($this->input->post('ds_title'));
 			// echo 'creating org role: PMD_'. $this->input->post('name').'<br/>';
 			$this->load->model('cosi_authentication', 'cosi');
-			$this->cosi->createOrganisationalRole($org_role, $this->user->localIdentifier());
+			$this->cosi->createOrganisationalRole($org_role, $this->user->localIdentifier(), $this->input->post('ds_title'));
 			if(!$this->user->hasFunction('REGISTRY_USER') && sizeof($this->user->affiliations()==0)){
 				$this->cosi->registerAffiliation($this->user->localIdentifier(), 'REGISTRY_USER');
 				$this->cosi->registerAffiliation($this->user->localIdentifier(), $org_role);
