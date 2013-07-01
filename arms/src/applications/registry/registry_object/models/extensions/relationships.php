@@ -23,6 +23,8 @@ class Relationships_Extension extends ExtensionBase
 		{
 			$related_object_key = (string)$related_object->key;
 			$related_object_type = (string)$related_object->relation[0]['type'];
+			$related_object_relation_description = (string)$related_object->relation[0]->description;
+			$related_object_relation_url = (string)$related_object->relation[0]->url;
 
 			$result = $this->db->select('class, title')->get_where('registry_objects', array('key'=>(string)$related_object_key));
 			
@@ -45,7 +47,9 @@ class Relationships_Extension extends ExtensionBase
 						"registry_object_id"=>$this->ro->id, 
 						"related_object_key" => (string) $related_object_key,
 						'related_object_class'=> (string) $class,
-						"relation_type" => (string) $related_object_type
+						"relation_type" => (string) $related_object_type,
+						"relation_description" => (string) $related_object_relation_description,
+						"relation_url" => (string) $related_object_relation_url,
 				)
 			);
 		}
