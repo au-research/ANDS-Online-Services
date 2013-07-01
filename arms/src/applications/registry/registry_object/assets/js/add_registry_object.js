@@ -755,7 +755,7 @@ function validate(){
 		type: 'POST',
 		data: {xml:xml},
 		success: function(data){
-			//log(data);
+			log(data);
 			$('.alert:not(.persist)').remove();
 			if(data.SetInfos) $.each(data.SetInfos, function(e,i){addValidationMessage(i, 'info');});
 			if(data.SetErrors) $.each(data.SetErrors, function(e,i){addValidationMessage(i, 'error');});
@@ -783,7 +783,7 @@ function addValidationMessage(tt, type){
 	var field = null;
 	message = $('<div />').html(message).text(); //dispel html from message
 
-	// log(field_id, message);
+	if(type=='error') log(field_id, message);
 
 	if(field_id.match("^tab_mandatoryInformation_")){
 		//on the mandatory tab
@@ -797,7 +797,7 @@ function addValidationMessage(tt, type){
 		//on other tabs
 		var tab = field_id.replace('tab_','');
 		var theTab = $('#'+tab);
-		// $(theTab).prepend('<div class="alert alert-'+type+'">'+message+'</div>');
+		$(theTab).prepend('<div class="alert alert-'+type+'">'+message+'</div>');
 	}else{
 		//it's a field
 		var target = $('*[field_id='+field_id+']');
