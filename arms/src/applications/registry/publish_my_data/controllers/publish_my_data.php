@@ -43,6 +43,7 @@ class Publish_my_data extends MX_Controller {
 			$ds->setAttribute('title', $this->input->post('ds_title'));
 			$ds->setAttribute('contact_name', $this->input->post('name'));
 			$ds->setAttribute('contact_email', $this->input->post('email'));
+			$ds->setAttribute('assessment_notify_email_addr', 'services@ands.org.au');
 			$ds->setAttribute('record_owner', $org_role);
 			$ds->setAttribute('qa_flag', DB_TRUE);
 			if($this->input->post('notes')) $ds->setAttribute('notes', $this->input->post('notes'));		
