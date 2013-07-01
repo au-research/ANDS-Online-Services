@@ -14,14 +14,7 @@
     <xsl:template match="ro:registryObject">
         <dc xmlns="http://purl.org/dc/elements/1.1/">
 	        <xsl:apply-templates select="extRif:extendedMetadata/extRif:displayTitle"/>
-	        <xsl:choose>
-	        	<xsl:when test="extRif:description[@type='full']">
-	        		<xsl:apply-templates select="extRif:description[@type='full']"/>
-	        	</xsl:when>
-	        	<xsl:when test="extRif:description[@type='brief']">
-	        		<xsl:apply-templates select="extRif:description[@type='brief']"/>
-	        	</xsl:when>
-	        </xsl:choose>          	 
+	        <xsl:apply-templates select="extRif:extendedMetadata/extRif:the_description"/>       	 
             <xsl:apply-templates select="ro:collection | ro:party | ro:activity | ro:service"/>
         </dc>
     </xsl:template> 
@@ -37,7 +30,7 @@
         <xsl:apply-templates select="ro:identifier"/>     		    
     </xsl:template>
 
-    <xsl:template match="extRif:description">
+    <xsl:template match="extRif:the_description">
         <description xmlns="http://purl.org/dc/elements/1.1/">
             <xsl:value-of select="."/>
         </description>       
