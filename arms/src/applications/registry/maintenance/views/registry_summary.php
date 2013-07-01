@@ -68,7 +68,7 @@
 		<div class="row-fluid">
 			<div class="span12">
 				<center>
-					<h5>Data Source Reports for  all data sources filtered by quality: 
+					<h5>Data Source Reports for  all data sources: 
 					</h5>
 
 				</center>

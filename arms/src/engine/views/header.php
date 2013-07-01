@@ -164,6 +164,9 @@ else
               <?php if ($this->user->hasFunction('PORTAL_STAFF')): ?>
                   <li class=""><?php echo anchor('spotlight/', 'Spotlight CMS Editor');?></li>
               <?php endif; ?>
+               <?php if ($this->user->hasFunction('REGISTRY_STAFF')): ?>
+                  <li class=""><?php echo anchor('maintenance/registrySummary', 'Registry Quality Summary');?></li>
+              <?php endif; ?>             
             </ul>
           </li>
         <?php endif; ?>
