@@ -456,6 +456,7 @@ function initConnectionGraph()
                             {
                                 $(nodeSpan).find("span.dynatree-icon").css("background-position", "-57px -155px");
                             }
+                            $(nodeSpan).attr('title', $(nodeSpan).text());
 
                             /* Prepare the tooltip preview */
                             $('#' + node.li.id).qtip({

@@ -530,3 +530,21 @@ img.clearAll{
 .facetsortcount{
 	background: transparent url(../images/count.png) no-repeat;
 }
+
+/**
+ * Fix for Long titles on nested collections
+ */
+span.dynatree-node a{
+	max-width:300px;
+	text-overflow: ellipsis; 
+	-o-text-overflow: ellipsis; 
+	-icab-text-overflow: ellipsis; 
+	-khtml-text-overflow: ellipsis; 
+	-moz-text-overflow: ellipsis; 
+	-webkit-text-overflow: ellipsis;  
+	overflow:hidden;
+	overflow-wrap:none;
+	word-wrap:none;
+	word-break: keep-all;
+	white-space: nowrap;
+}
