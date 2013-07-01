@@ -263,7 +263,7 @@ function initTips(selector)
 				return $(this).attr('tip');
 			}
 		},
-		position:{my:'left center', at:'right center'},
+		position:{my:'left center', at:'right center', viewport: $(window)},
 		style: {
 	        classes: 'ui-tooltip-light'
 	    }
