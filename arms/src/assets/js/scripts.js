@@ -42,6 +42,23 @@ function logErrorOnScreen(error, target){
 }
 
 $(document).ready(function(){
+
+
+	if ($('.dash_news').height() > 380) {
+	    $('.dash_news').css({
+	        overflow: 'hidden',
+	        height: '480px'
+	    }).append($('<div class="dash_news_overflow"></>'));
+	    $('.dash_news').after('<div class="show_all_dash_news">Show All</div>');
+	    $('.show_all_dash_news').click(function () {
+	        $(this).remove();
+	        $('.dash_news_overflow').remove();
+	        $('.dash_news').css({
+	            height: 'auto'
+	        });
+	    });
+	}
+
 	$('#main-nav-user-account').qtip({
 		content: {
 			text: $('#user-account-info').html()
