@@ -293,7 +293,7 @@ class Extrif_Extension extends ExtensionBase
 		{
 				$row = $contributor->row_array();
 				$contributor_object = $this->_CI->ro->getByID($row['registry_object_id']);
-				if($contributor_object->getAttribute('status')==PUBLISHED)
+				if($contributor_object && $contributor_object->getAttribute('status')==PUBLISHED)
 				{
 					$contributor_details[0] = $contributor_object->getAttribute('slug');
 					$contributor_details[1] = $registry_object->getAttribute('group');
