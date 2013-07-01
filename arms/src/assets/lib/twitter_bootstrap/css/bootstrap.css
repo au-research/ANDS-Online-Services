@@ -1423,7 +1423,7 @@ input[type="checkbox"][readonly] {
 }
 .control-group.error .checkbox,
 .control-group.error .radio,
-.control-group.error input,
+.control-group.error input:first-child,
 .control-group.error select,
 .control-group.error textarea {
   color: #b94a48;
