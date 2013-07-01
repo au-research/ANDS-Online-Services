@@ -1279,7 +1279,6 @@ function initRelatedInfos(){
 function initEditor(){
 	
 	if(editor=='tinymce'){
-
 		// tinyMCE.init({
 		//     theme : "advanced",
 		//     mode : "specific_textareas",
@@ -1308,6 +1307,12 @@ function initEditor(){
 		    entity_encoding : "raw",
 		    toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
 		});
+
+		//reserve for future bindings
+		// $(document).off('change', '#descriptions_rights .rifcs-type[vocab=RIFCSDescriptionType]')
+		// 	.on('change', '#descriptions_rights .rifcs-type[vocab=RIFCSDescriptionType]', function(){
+
+		// });
 	}
 }
 
