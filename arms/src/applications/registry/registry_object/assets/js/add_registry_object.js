@@ -995,7 +995,7 @@ function initRelatedObjects(){
 					// var box = $(theInput).closest('.aro_box');
 					var box = $(theInput).parent();
 					if(v.status!='notfound'){
-						$(box).append('<div class="well related_title"><img class="class_icon" tip="'+v.class+'" style="width:20px;padding-right:10px;" src="'+base_url+'../assets/img/'+v.class+'.png"/><span class="tag status_'+v.status+'">'+v.status+'</span> <a href="'+v.link+'" target="_blank">'+v.title+'</a></div>');
+						$(box).append('<div class="well related_title"><img class="class_icon" tip="'+v.class+'" style="width:20px;padding-right:10px;" src="'+base_url+'../assets/img/'+v.class+'.png"/><span class="tag status_'+v.status+'">'+v.readable_status+'</span> <a href="'+v.link+'" target="_blank">'+v.title+'</a></div>');
 					}else{
 						$(box).prepend('<div class="well related_title">Registry Object Not Found</div>');
 					}
@@ -1020,7 +1020,7 @@ function initRelatedObjects(){
 						if(this.class=='contributor') this.class='party';
 						if(this.relation_type=='(Automatically generated contributor page link)') this.relation_type='Automatically generated contributor page link';
 
-						$('#relatedObjects .automated_links').append('<div class="well"><img class="class_icon" tip="'+this.class+'" style="width:20px;padding-right:10px;" src="'+base_url+'../assets/img/'+this.class+'.png"/> <span class="tag status_'+this.status+'">'+this.status+'</span> <a href="'+base_url+'registry_object/view/'+this.registry_object_id+'" target="_blank">'+this.title+'</a> <span class="muted">('+this.relation_type+')</span></div>');
+						$('#relatedObjects .automated_links').append('<div class="well"><img class="class_icon" tip="'+this.class+'" style="width:20px;padding-right:10px;" src="'+base_url+'../assets/img/'+this.class+'.png"/> <span class="tag status_'+this.status+'">'+this.readable_status+'</span> <a href="'+base_url+'registry_object/view/'+this.registry_object_id+'" target="_blank">'+this.title+'</a> <span class="muted">('+this.relation_type+')</span></div>');
 					}
 				});
 			}

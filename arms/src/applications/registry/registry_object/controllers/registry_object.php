@@ -371,7 +371,7 @@ class Registry_object extends MX_Controller {
 				$ro = $this->ro->getPublishedByKey($key);
 				if(!$ro) $ro = $this->ro->getDraftByKey($key);
 				if($ro){
-					$jsonData['result'][$key] = array('title'=>$ro->title, 'status'=>$ro->status, 'key'=>$ro->key, 'id'=>$ro->id, 'class'=>$ro->class, 'link'=>base_url('registry_object/view/'.$ro->id));
+					$jsonData['result'][$key] = array('title'=>$ro->title, 'status'=>$ro->status, 'key'=>$ro->key, 'id'=>$ro->id, 'class'=>$ro->class, 'link'=>base_url('registry_object/view/'.$ro->id), 'readable_status'=>readable($ro->status));
 				}else{
 					$jsonData['result'][$key] = array('title'=>'Registry Object Not Found', 'status'=>'notfound');
 				}
@@ -1023,6 +1023,7 @@ class Registry_object extends MX_Controller {
 				{
 					$link['relation_type'] = format_relationship($link['class'], $link['relation_type'], $link['origin']);
 				}
+				if($link['status']) $link['readable_status'] = readable($link['status']);
 			}
 		}
 		$status['count'] = sizeof($connections);
