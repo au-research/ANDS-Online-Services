@@ -32,30 +32,51 @@
 				</div>
 				<div class="box-content">
 					<h4>ANDS Online Services News</h4>
-					<p><small><strong>Welcome to ANDS Online Services Release 10!</strong></small></p>
-					<p><small>We are pleased to welcome you to your new ANDS Online Services dashboard. 
-						Release 10 introduces a complete rewrite of the ANDS Registry system, with a focus on performance and improved usability.</small></p>
+					<p><small><strong>Update - Service Release 10.1</strong></small> <small class="muted"><small>[July 2013]</small></small></p>
+						<p><small>
+							ANDS Online Services R10.1 addresses some minor issues across the Collections Registry and Research Data Australia.
+							Included in this release:
+							<ul style="list-style-type:circle;">
+								<li>harvest performance has been improved by over 40%</li>
+								<li>enhancements to the Add Registry Object screens (particularly on the Related Objects tab)</li>
+								<li>searching for special characters now possible on RDA</li>
+								<li>fixes to the Registry OAI provider</li>
+								<li>bulk delete operations have been significantly optimised</li>
+								<li><a target="_blank" href="https://github.com/au-research/ANDS-Online-Services/wiki/Release-10.1-Changelog">other minor fixes...</a></li>
+							</ul>
+						</small></p>
 
-					<p><small>Most of the software features are unchanged, but you might find them in new areas of the screen. To help you find your 
-						way around, we've created a number of helpful intructions and videos: </small></p>
+						<p><small>
+						Data Publishers whose are not part of an organisation that <a target="_blank" href="<?=portal_url('home/contributors')?>">contributes to Research Data Australia</a> 
+						(at the institutional level), will now have access to a fully-featured Publish My Data self-service tool to create and administer their collection metadata. 
+						This functionality will be automatically available for new users when they log into the registry for the first time. 
+						</small></p>					
 
-					<p><small>
-					<ul>
-						<li><a href="http://ands.org.au/resource/sw-release10.html" target="_blank">Release 10 Overview</a></li>
-						<li><a class="youtube" href="http://www.youtube.com/watch?v=R5q4t73aCoo"> Finding your way - ANDS Registry(<em>video</em>)</a></li>
-						<li><a class="youtube" href="http://www.youtube.com/watch?v=AuKMPwNj-ng">ANDS R10 Walkthrough (<em>webinar recording</em>) </a></li>
-						<li><a href="http://ands.org.au/guides/content-providers-guide.html" target="_blank">ANDS Content Providers Guide</a> (<em>web page</em>)</li>
-						<li><a href="http://ands.org.au/resource/ands-faq.html" target="_blank">ANDS Online Services FAQ</a> (<em>web page</em>)</li>
-					</ul>
-					</small></p>
+					<hr/>
+					<p><small><strong>Welcome to ANDS Online Services Release 10!</strong></small> <small class="muted"><small>[May 2013]</small></small></p>
+						<p><small>We are pleased to welcome you to your new ANDS Online Services dashboard. 
+							Release 10 introduces a complete rewrite of the ANDS Registry system, with a focus on performance and improved usability.</small></p>
 
-					<p><small>To get started, click on the My Data link at the top of the screen and take a look around! You can always get back to this dashboard by clicking on the ANDS logo (top left).</small></p>
+						<p><small>Most of the software features are unchanged, but you might find them in new areas of the screen. To help you find your 
+							way around, we've created a number of helpful intructions and videos: </small></p>
 
-					<p><small>The Publish My Data tool is temporarily unavailable at this time. Please contact ANDS Services Support team if you require assistance with your previously-created Publish My Data records.</small></p>
+						<p><small>
+						<ul>
+							<li><a href="http://ands.org.au/resource/sw-release10.html" target="_blank">Release 10 Overview</a></li>
+							<li><a class="youtube" href="http://www.youtube.com/watch?v=R5q4t73aCoo"> Finding your way - ANDS Registry(<em>video</em>)</a></li>
+							<li><a class="youtube" href="http://www.youtube.com/watch?v=AuKMPwNj-ng">ANDS R10 Walkthrough (<em>webinar recording</em>) </a></li>
+							<li><a href="http://ands.org.au/guides/content-providers-guide.html" target="_blank">ANDS Content Providers Guide</a> (<em>web page</em>)</li>
+							<li><a href="http://ands.org.au/resource/ands-faq.html" target="_blank">ANDS Online Services FAQ</a> (<em>web page</em>)</li>
+						</ul>
+						</small></p>
 
-					<p><small>As always, the ANDS Services Support team is here to help! If your question isn't answered by your Client Liaison Officer or the 
-						<a href="http://ands.org.au/resource/ands-faq.html" target="_blank">FAQ</a>, please contact ANDS Services Support at 
-						<a href="mailto:services@ands.org.au" target="_blank">services@ands.org.au</a>.</small></p>
+						<p><small>To get started, click on the My Data link at the top of the screen and take a look around! You can always get back to this dashboard by clicking on the ANDS logo (top left).</small></p>
+
+						<p><small>The Publish My Data tool is temporarily unavailable at this time. Please contact ANDS Services Support team if you require assistance with your previously-created Publish My Data records.</small></p>
+
+						<p><small>As always, the ANDS Services Support team is here to help! If your question isn't answered by your Client Liaison Officer or the 
+							<a href="http://ands.org.au/resource/ands-faq.html" target="_blank">FAQ</a>, please contact ANDS Services Support at 
+							<a href="mailto:services@ands.org.au" target="_blank">services@ands.org.au</a>.</small></p>
 
 
 				</div>
@@ -121,7 +142,21 @@
 						<?php
 							if(!$this->user->hasFunction('REGISTRY_USER'))
 							{
-								echo 'You are not registered as a Data Source Administrator.';
+								echo '<p>You are not registered as a Data Source Administrator.</p>';
+
+								if ($this->user->affiliations())
+								{
+									echo '<small><span class="label label-warning"> &nbsp; ! &nbsp;</span> You are already registered as an affiliate with an organisation.</small><br/>';
+									echo '<small><span class="label label-important"> &nbsp; ! &nbsp;</span> Please contact <a href="mailto:services@ands.org.au">services@ands.org.au</a> to register for a new Data Source.</small>';
+								}
+								else
+								{
+									echo '<br/><small><span class="label label-success"> &nbsp; ! &nbsp;</span> <strong> New Data Publishers </strong> <br/>
+										<p>If your institution does not already <a target="_blank" href="'.portal_url('home/contributors').'">contribute to Research Data Australia</a> (at the institutional level), 
+										you may wish to use the <a href="'.registry_url('publish_my_data').'"><b>Publish My Data self-service tool</b></a>.</p>
+										<p><small><em>Note:</em> Publish My Data self-service is intended for use by researchers at organisations where there is no formal data archiving service and where ANDS has no distributed services in place. 
+										Please first check for processes within your institution before using the self-service facility.</small></p></small><br/>';
+								}
 							}
 							elseif(sizeof($data_sources)>0){
 								echo '<ul>';
@@ -168,10 +203,10 @@
 								}
 								echo '</ul>';
 							}else{
-								echo 'You have no vocabularies.';
+								echo 'You have not published any vocabularies.';
 							}
 						}else{
-							echo 'You have no vocabularies.';
+							echo 'You have not published any vocabularies.';
 							//echo "You can't manage any vocabulary unless you are affiliate with an organisation";
 						}
 					?>
