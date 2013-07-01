@@ -1075,8 +1075,6 @@
 	<xsl:template match="ro:collection/ro:relatedObject | ro:activity/ro:relatedObject| ro:party/ro:relatedObject | ro:service/ro:relatedObject" mode="form">
 		<div class="aro_box" type="relatedObject">
 			<div class="aro_box_display clearfix">
-				<a href="javascript:;" class="toggle"><i class="icon-minus"/></a>
-				<h1/>
 				<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
 			</div>
 
@@ -1509,8 +1507,6 @@
 
 		<div class="aro_box template" type="relatedObject">
 			<div class="aro_box_display clearfix">
-				<a href="javascript:;" class="toggle"><i class="icon-minus"/></a>
-				<h1/>
 				<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
 			</div>
 
