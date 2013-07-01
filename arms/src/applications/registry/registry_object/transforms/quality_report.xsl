@@ -941,6 +941,16 @@
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>
+        <xsl:if test="not(ro:relation)">
+            <xsl:choose>
+			    <xsl:when test="$output = 'script'">
+            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Related Object must have a relation specified.");</xsl:text>
+			    </xsl:when>
+			    <xsl:otherwise>
+					<span class="error">Related Object must have a relation specified.</span>
+			    </xsl:otherwise>
+	    	</xsl:choose>
+        </xsl:if>
         <xsl:apply-templates select="ro:key | ro:relation"/>
     </xsl:template>
   
