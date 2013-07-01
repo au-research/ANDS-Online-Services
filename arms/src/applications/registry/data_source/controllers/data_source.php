@@ -1357,16 +1357,16 @@ public function getContributorGroupsEdit()
 
 			$this->importer->setDatasource($data_source);
 			$this->importer->commit(false);
-			$taskLog =  $this->importer->finishImportTasks();
+			$this->importer->finishImportTasks();
 
 			if ($error_log = $this->importer->getErrors())
 			{
 				$log = $elogTitle.$log.$error_log;
-				$data_source->append_log($log.NL.$taskLog, HARVEST_ERROR ,"HARVEST_ERROR");
+				$data_source->append_log($log, HARVEST_ERROR ,"HARVEST_ERROR");
 			}
 			//else{
 			$log = $slogTitle.$log.$this->importer->getMessages();
-			$data_source->append_log($log.NL.$taskLog, HARVEST_INFO,"HARVEST_INFO");
+			$data_source->append_log($log, HARVEST_INFO,"HARVEST_INFO");
 			//}
 
 		}
@@ -1442,7 +1442,7 @@ public function getContributorGroupsEdit()
 
 			$this->importer->setDatasource($data_source);
 			$this->importer->commit(false);
-			$taskLog =  $this->importer->finishImportTasks();
+			$this->importer->finishImportTasks();
 
 
 			if ($error_log = $this->importer->getErrors())
@@ -1824,13 +1824,7 @@ public function getContributorGroupsEdit()
 					$importedIds[] = $row['registry_object_id'];
 				}
 				$this->importer->addToImportedIDList($importedIds);
-				$taskLog =  $this->importer->finishImportTasks();
-				
-				if($this->importer->runBenchMark)
-				{
-					$dataSource->append_log('TaskLog '.NL.$taskLog, HARVEST_INFO, "harvester", "HARVESTER_INFO");
-				}
-
+				$this->importer->finishImportTasks();
 				$dataSource->updateStats();
 
 				$dataSource->append_log('Harvest complete! '.$harvested_record_count.' records harvested and ingested into the registry...  (harvest ID: '.$harvestId.')', HARVEST_INFO, "harvester", "HARVESTER_INFO");
@@ -2011,6 +2005,8 @@ public function getContributorGroupsEdit()
 		catch(Exception $e)
 		{
 			$response['error'] = $e->getMessage(); 
+			echo json_encode($response);
+			exit();
 		}
 
 		$dataSource = $this->ds->getByID($ds_id);
