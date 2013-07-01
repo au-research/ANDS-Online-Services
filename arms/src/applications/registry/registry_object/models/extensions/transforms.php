@@ -74,7 +74,7 @@ class Transforms_Extension extends ExtensionBase
 			$xslt_processor = Transforms::get_extrif_to_dc_transformer();
 			$dom = new DOMDocument();
 			$dom->loadXML($this->ro->getExtRif());
-
+			$xslt_processor->setParameter('','base_url',portal_url());
 			return html_entity_decode($xslt_processor->transformToXML($dom));
 		}catch (Exception $e)
 		{
