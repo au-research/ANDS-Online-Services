@@ -30,7 +30,7 @@
 					<a href="<?php echo portal_url();?>" style="margin-top:5px;" class="btn btn-info pull-right" target="_blank">
 					<i class="icon-globe icon icon-white"></i> Visit Research Data Australia</a>
 				</div>
-				<div class="box-content">
+				<div class="box-content dash_news">
 					<h4>ANDS Online Services News</h4>
 					<p><small><strong>Update - Service Release 10.1</strong></small> <small class="muted"><small>[July 2013]</small></small></p>
 						<p><small>
