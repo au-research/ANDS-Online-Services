@@ -221,14 +221,15 @@ h4 {
     color: #a5a5a5;
 }
 .show_all_dash_news {
-    background: #a5a5a5;
-    color: #fff;
+    color: @accentColor;
     cursor: pointer;
     width:160px;
-    font-size: 12px;
+    font-size: 14px;
     outline: 0;
-    padding: 0.2em 0.5em;
-    text-transform: uppercase;
+    padding: 0.2em 0em;
     z-index:999;
     margin:0 0 15px 0;
+    &:hover{
+    	text-decoration:underline;
+    }
 }
