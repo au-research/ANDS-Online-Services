@@ -1763,6 +1763,8 @@ public function getContributorGroupsEdit()
 							$dataSource->requestHarvest();
 						}
 					}
+					$importer_log = $this->importer->getMessages();
+					$dataSource->append_log($importer_log, HARVEST_INFO,"HARVEST_INFO");
 				}
 			}
 			else
@@ -1786,7 +1788,7 @@ public function getContributorGroupsEdit()
 
 		// Continue post-harvest cleanup...
 		
-		if ($done =='TRUE' && $mode =='HARVEST' && $gotData)
+		if ($done =='TRUE' && $mode =='HARVEST')
 		{
 
 			//if ($dataSource->harvest_method == 'RIF')
@@ -1820,7 +1822,11 @@ public function getContributorGroupsEdit()
 				}
 				$this->importer->addToImportedIDList($importedIds);
 				$taskLog =  $this->importer->finishImportTasks();
-				$dataSource->append_log('TaskLog '.NL.$taskLog, HARVEST_INFO, "harvester", "HARVESTER_INFO");
+				
+				if($this->importer->runBenchMark)
+				{
+					$dataSource->append_log('TaskLog '.NL.$taskLog, HARVEST_INFO, "harvester", "HARVESTER_INFO");
+				}
 
 				$dataSource->updateStats();
 
@@ -1831,7 +1837,10 @@ public function getContributorGroupsEdit()
 				// clean-up after harvest?
 			//}
 			if($this->importer->runBenchMark)
-			$dataSource->append_log('IMPORTER BENCHMARK RESULTS:'.NL.$this->importer->getBenchMarkLogs(), HARVEST_INFO, "importer", "BENCHMARK_INFO");
+			{
+				$dataSource->append_log('IMPORTER BENCHMARK RESULTS:'.NL.$this->importer->getBenchMarkLogs(), HARVEST_INFO, "importer", "BENCHMARK_INFO");
+			}
+
 		}
 
 

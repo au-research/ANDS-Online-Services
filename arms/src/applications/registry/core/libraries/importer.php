@@ -20,7 +20,7 @@ class Importer {
 	private $maintainStatus;
 
 	private $status; // status of the currently ingested record
-	public $runBenchMark = true;
+	public $runBenchMark = false;
 	private $benchMarkLog;
 	public $isImporting = false; // flag stating whether the importer is running
 	private $importedRecords;
@@ -251,8 +251,8 @@ class Importer {
 		
 
 		// Partial commits mean that there is more to come in this harvest...woooah-on donkey
-		if (!$this->partialCommitOnly)
-		{
+		//if (!$this->partialCommitOnly)
+		//{
 			// And now, onto the second stage...
 			// XXX: Don't do this...it's crappy
 			//if ($this->dataSource)
@@ -283,7 +283,7 @@ class Importer {
 			}
 
 			$this->message_log[] = $this->standardLog;
-		}
+		//}
 
 		$this->isImporting = false;
 		if($this->runBenchMark){
