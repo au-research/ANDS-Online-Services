@@ -982,7 +982,7 @@ function initRelatedObjects(){
 		if($(this).val()!='') relatedObjects.push($(this).val());
 		$(this).attr('value', $(this).val());
 	});
-	$(document).off('blur', '#relatedObjects input[name=key]').on('blur', '#relatedObjects input[name=key]', initRelatedObjects)
+	$(document).off('blur', '#relatedObjects input[name=key]').on('change', '#relatedObjects input[name=key]', initRelatedObjects)
 	$.ajax({
 		url:base_url+'registry_object/fetch_related_object_aro/', 
 		type: 'POST',
@@ -997,7 +997,7 @@ function initRelatedObjects(){
 					if(v.status!='notfound'){
 						$(box).append('<div class="well related_title"><img class="class_icon" tip="'+v.class+'" style="width:20px;padding-right:10px;" src="'+base_url+'../assets/img/'+v.class+'.png"/><span class="tag status_'+v.status+'">'+v.readable_status+'</span> <a href="'+v.link+'" target="_blank">'+v.title+'</a></div>');
 					}else{
-						$(box).prepend('<div class="well related_title">Registry Object Not Found</div>');
+						$(box).append('<div class="well related_title">Registry Object Not Found</div>');
 					}
 				});
 			}
