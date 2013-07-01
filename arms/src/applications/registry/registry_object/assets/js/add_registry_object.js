@@ -992,9 +992,10 @@ function initRelatedObjects(){
 				$('.related_title').remove();
 				$.each(data.result, function(i, v){
 					var theInput = $('#relatedObjects input[value="'+i+'"]');
-					var box = $(theInput).closest('.aro_box');
+					// var box = $(theInput).closest('.aro_box');
+					var box = $(theInput).parent();
 					if(v.status!='notfound'){
-						$(box).prepend('<div class="well related_title"><img class="class_icon" tip="'+v.class+'" style="width:20px;padding-right:10px;" src="'+base_url+'../assets/img/'+v.class+'.png"/><span class="tag status_'+v.status+'">'+v.status+'</span> <a href="'+v.link+'" target="_blank">'+v.title+'</a></div>');
+						$(box).append('<div class="well related_title"><img class="class_icon" tip="'+v.class+'" style="width:20px;padding-right:10px;" src="'+base_url+'../assets/img/'+v.class+'.png"/><span class="tag status_'+v.status+'">'+v.status+'</span> <a href="'+v.link+'" target="_blank">'+v.title+'</a></div>');
 					}else{
 						$(box).prepend('<div class="well related_title">Registry Object Not Found</div>');
 					}
