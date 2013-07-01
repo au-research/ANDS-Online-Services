@@ -1364,10 +1364,10 @@ public function getContributorGroupsEdit()
 				$log = $elogTitle.$log.$error_log;
 				$data_source->append_log($log.NL.$taskLog, HARVEST_ERROR ,"HARVEST_ERROR");
 			}
-			else{
-				$log = $slogTitle.$log.$this->importer->getMessages();
-				$data_source->append_log($log.NL.$taskLog, HARVEST_INFO,"HARVEST_INFO");
-			}
+			//else{
+			$log = $slogTitle.$log.$this->importer->getMessages();
+			$data_source->append_log($log.NL.$taskLog, HARVEST_INFO,"HARVEST_INFO");
+			//}
 
 		}
 		catch (Exception $e)
@@ -1450,13 +1450,13 @@ public function getContributorGroupsEdit()
 				$log = $elogTitle.$log.NL.$error_log;
 				$data_source->append_log($log,  HARVEST_ERROR, "importer", "HARVEST_ERROR" );
 			}
-			else{
-				$log = $slogTitle . $log;
-				$log .= "IMPORT COMPLETED" . NL;
-				$log .= "====================" . NL;
-				$log .= $this->importer->getMessages() . NL;
-				$data_source->append_log($log,  HARVEST_INFO, "importer", "HARVESTER_INFO" );
-			}
+			//else{
+			$log = $slogTitle . $log;
+			$log .= "IMPORT COMPLETED" . NL;
+			$log .= "====================" . NL;
+			$log .= $this->importer->getMessages() . NL;
+			$data_source->append_log($log,  HARVEST_INFO, "importer", "HARVESTER_INFO" );
+			//}
 
 
 
@@ -1620,7 +1620,7 @@ public function getContributorGroupsEdit()
 		$errmsg = '';
 		$message = 'THANK YOU';
 		$harvestId = false;
-		$gotData = false;
+		$gotErrors = false;
 		$logMsg = 'Harvest completed successfully';
 		$logMsgErr = 'An error occurred whilst trying to harvest records';
 
@@ -1722,17 +1722,18 @@ public function getContributorGroupsEdit()
 							if($this->importer->getErrors())
 							{
 								$dataSource->append_log($logMsgErr.NL.$this->importer->getMessages().NL.$this->importer->getErrors(), HARVEST_ERROR, 'harvester', "HARVESTER_ERROR");	
+								$gotErrors = true;
 							}
-							else
+							//else
+							//{
+							if($dataSource->harvest_method == 'RIF')
 							{
-								if($dataSource->harvest_method == 'RIF')
-								{
-									$logMsg = 'Received ' . $this->importer->ingest_attempts . ' new records from the OAI provider... (harvest ID: '.$harvestId.')' . NL . ' ---';
-								}
-
-								$gotData = true;
-								$dataSource->append_log($logMsg.NL.$this->importer->getMessages(), HARVEST_INFO, 'oai', "HARVESTER_INFO");	
+								$logMsg = 'Received ' . $this->importer->ingest_attempts . ' new records from the OAI provider... (harvest ID: '.$harvestId.')' . NL . ' ---';
 							}
+
+
+							$dataSource->append_log($logMsg.NL.$this->importer->getMessages(), HARVEST_INFO, 'oai', "HARVESTER_INFO");	
+							//}
 							
 							$responseType = 'success';
 						}
@@ -1752,7 +1753,7 @@ public function getContributorGroupsEdit()
 					$dataSource->cancelHarvestRequest($harvestId,false);
 					if($mode == 'HARVEST')
 					{
-						if($dataSource->advanced_harvest_mode == 'REFRESH' && $gotData)
+						if($dataSource->advanced_harvest_mode == 'REFRESH' && !$gotErrors)
 						{	
 							$deleted_and_affected_record_keys = $dataSource->deleteOldRecords($harvestId);
 							$this->importer->addToDeletedList($deleted_and_affected_record_keys['deleted_record_keys']);
@@ -1763,7 +1764,9 @@ public function getContributorGroupsEdit()
 							$dataSource->requestHarvest();
 						}
 					}
-					$importer_log = $this->importer->getMessages();
+					$importer_log = "IMPORT COMPLETED" . NL;
+					$importer_log .= "====================" . NL;
+					$importer_log .= $this->importer->getMessages() . NL;
 					$dataSource->append_log($importer_log, HARVEST_INFO,"HARVEST_INFO");
 				}
 			}
