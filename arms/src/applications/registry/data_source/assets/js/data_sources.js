@@ -24,6 +24,7 @@ $(function(){
 		logTimer = 1000;
 		doLoadLogs = false;
 		var hash = location.hash;
+		hash = decodeURIComponent(hash);
 		if(hash.indexOf(suffix)==0){//if the hash starts with a particular suffix
 			var words = hash.substring(suffix.length, hash.length).split('/');
 			var action = words[0];//action will be the first word found
