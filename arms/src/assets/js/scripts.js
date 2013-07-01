@@ -45,6 +45,7 @@ $(document).ready(function(){
 
 
 	if ($('.dash_news').height() > 380) {
+		var orig_height = $('.dash_news').height();
 	    $('.dash_news').css({
 	        overflow: 'hidden',
 	        height: '480px'
@@ -52,9 +53,9 @@ $(document).ready(function(){
 	    $('.dash_news').after('<div class="show_all_dash_news">Show All</div>');
 	    $('.show_all_dash_news').click(function () {
 	        $(this).remove();
-	        $('.dash_news_overflow').remove();
-	        $('.dash_news').css({
-	            height: 'auto'
+	        $('.dash_news_overflow').fadeOut();
+	        $('.dash_news').animate({
+	        	height:orig_height+10
 	        });
 	    });
 	}
