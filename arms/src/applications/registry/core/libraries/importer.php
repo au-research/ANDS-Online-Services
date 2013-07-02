@@ -204,7 +204,7 @@ class Importer {
 							catch(Exception $e)
 							{
 								$continueWithIngest = false;
-								$this->error_log[] = "Error whilst ingesting record #" . $this->ingest_attempts . ": " . $e->getMessage();
+								$this->error_log[] = "Error whilst ingesting record #" . $this->ingest_attempts . ": " . $e->getMessage() .NL.$registryObject->asXML();
 							}
 						}
 
