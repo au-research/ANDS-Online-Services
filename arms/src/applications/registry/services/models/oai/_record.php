@@ -22,6 +22,12 @@ class _record
 		return strtolower($this->_rec->status) === "deleted";
 	}
 
+	public function is_collection()
+	{
+		return strtolower($this->_rec->class) === "collection";
+	}
+
+
 	public function header()
 	{
 		$this->header = array();

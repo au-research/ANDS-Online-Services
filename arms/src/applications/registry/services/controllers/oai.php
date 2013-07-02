@@ -292,37 +292,39 @@ class Oai extends MX_Controller
 					$status = " status='deleted'";
 					$deleted = true;
 				}
-
-				$this->output->append_output("\t\t<record>\n");
-				$this->output->append_output(sprintf("\t\t\t<header%s>\n", $status));
-				$this->output->append_output("\t\t\t\t<identifier>" .
-							     sprintf($header['identifier'],
-								     "ands.org.au") .
-							     "</identifier>\n");
-				$this->output->append_output("\t\t\t\t<datestamp>" .
-							     $header['datestamp'] .
-							     "</datestamp>\n");
-				if (array_key_exists('sets', $header))
+				if($rec->is_collection() || $format != 'dci')
 				{
-					foreach ($header['sets'] as $set)
+					$this->output->append_output("\t\t<record>\n");
+					$this->output->append_output(sprintf("\t\t\t<header%s>\n", $status));
+					$this->output->append_output("\t\t\t\t<identifier>" .
+								     sprintf($header['identifier'],
+									     "ands.org.au") .
+								     "</identifier>\n");
+					$this->output->append_output("\t\t\t\t<datestamp>" .
+								     $header['datestamp'] .
+								     "</datestamp>\n");
+					if (array_key_exists('sets', $header))
 					{
-						$this->output->append_output("\t\t\t\t" .
-									     $set->asRef() .
-									     "\n");
+						foreach ($header['sets'] as $set)
+						{
+							$this->output->append_output("\t\t\t\t" .
+										     $set->asRef() .
+										     "\n");
+						}
 					}
-				}
-				$this->output->append_output("\t\t\t</header>\n");
-				if (!$deleted)
-				{
-					$this->output->append_output("\t\t\t<metadata>\n");
-					try
+					$this->output->append_output("\t\t\t</header>\n");
+					if (!$deleted)
 					{
-					    $this->output->append_output( $rec->metadata($format,3));
+						$this->output->append_output("\t\t\t<metadata>\n");
+						try
+						{
+						    $this->output->append_output( $rec->metadata($format,3));
+						}
+						catch (Exception $e) {/*eek... would be good to log these...*/}
+						$this->output->append_output("\t\t\t</metadata>\n");
 					}
-					catch (Exception $e) {/*eek... would be good to log these...*/}
-					$this->output->append_output("\t\t\t</metadata>\n");
+					$this->output->append_output("\t\t</record>\n");
 				}
-				$this->output->append_output("\t\t</record>\n");
 			}
 			$this->_inject_token($newtoken, $response['count'], $response['cursor']);
 			$this->output->append_output("\t</ListRecords>\n");
