@@ -806,7 +806,11 @@ function addValidationMessage(tt, type){
 			Core_addValidationMessage(target, type, message);
 		}else if(target.hasClass('aro_box_part')){
 			field = $('*[field_id='+field_id+'] input');
-			Core_addValidationMessage(field, type, message);
+			if(field.length!=0) {
+				Core_addValidationMessage(field, type, message);
+			}else{
+				Core_addValidationMessage(target, type, message);
+			}
 		}
 		
 		
