@@ -47,7 +47,7 @@
 						</small></p>
 
 						<p><small>
-						Data Publishers whose are not part of an organisation that <a target="_blank" href="<?=portal_url('home/contributors')?>">contributes to Research Data Australia</a> 
+						Data Publishers who are not part of an organisation that <a target="_blank" href="<?=portal_url('home/contributors')?>">contributes to Research Data Australia</a> 
 						(at the institutional level), will now have access to a fully-featured Publish My Data self-service tool to create and administer their collection metadata. 
 						This functionality will be automatically available for new users when they log into the registry for the first time. 
 						</small></p>					
