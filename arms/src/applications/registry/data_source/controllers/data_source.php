@@ -930,8 +930,9 @@ public function getContributorGroupsEdit()
 				$lastLogIdSet = true;	
 				}
 				$item['date_modified'] = timeAgo($log['date_modified']);
-				$item['harvester_error_type'] = $log['harvester_error_type'];				
-				array_push($items, $item);
+				$item['harvester_error_type'] = $log['harvester_error_type'];	
+				if($log['harvester_error_type'] != 'BENCHMARK_INFO' || $this->user->hasFunction(AUTH_FUNCTION_SUPERUSER))			
+					array_push($items, $item);
 			}
 		}
 		$jsonData['count'] = $count;
