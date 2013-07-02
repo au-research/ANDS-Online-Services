@@ -417,19 +417,22 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 		// Loop through to get all immediate ancestors and build their trees
 		$trees = array();
 		$ancestors = $this->connectiontree->getImmediateAncestors($this_registry_object, $published_only);
+		// var_dump($ancestors);
 		if ($ancestors)
 		{
 			$unique_ancestors = array();
-			foreach ($this->connectiontree->getImmediateAncestors($this_registry_object, $published_only) AS $ancestor_element)
+			foreach ($ancestors AS $ancestor_element)
 			{
-				$root_element_id = $this->connectiontree->getRootAncestor($this->ro->getByID($ancestor_element['registry_object_id']), $published_only);
-				$root_registry_object = $this->ro->getByID($root_element_id->id);
+				if($this_registry_object->id!=$ancestor_element['registry_object_id']){
+					$root_element_id = $this->connectiontree->getRootAncestor($this->ro->getByID($ancestor_element['registry_object_id']), $published_only);
+					$root_registry_object = $this->ro->getByID($root_element_id->id);
 
-				// Only generate the tree if this is a unique ancestor
-				if (!isset($unique_ancestors[$root_registry_object->id]))
-				{
-					$unique_ancestors[$root_registry_object->id] = true;
-					$trees[] = $this->connectiontree->get($root_registry_object, $depth, $published_only);
+					// Only generate the tree if this is a unique ancestor
+					if (!isset($unique_ancestors[$root_registry_object->id]))
+					{
+						$unique_ancestors[$root_registry_object->id] = true;
+						$trees[] = $this->connectiontree->get($root_registry_object, $depth, $published_only);
+					}
 				}
 			}
 		}
