@@ -142,18 +142,19 @@
 <!-- Error Templates -->
 <div class="hide" id="harvesterErrorTpl">
 
-<h4>Harvester Error</h4>
+	<h4>Harvester Error</h4>
 
-<p><b>There was a problem communicating with the data source provider. </b></p>
+	<p><b>There was a problem communicating with the data source provider. </b></p>
 
-<p>
-	<b>Ensure that</b>
-<ul class="padded_list">
-	<li>The URL you provided is valid (including http:// or https://). </li>
-	<li>The URL you provided is available on the internet (i.e. not an internal intranet link). </li>
-	<li>If an OAI-PMH provider, the response is a valid OAI response. </li>
-	<li>If a HTTPS provider, the server is NOT using self-signed certificates. </li>
-</ul></p>
+	<p>
+		<b>Ensure that</b>
+		<ul class="padded_list">
+			<li>The URL you provided is valid (including http:// or https://). </li>
+			<li>The URL you provided is available on the internet (i.e. not an internal intranet link). </li>
+			<li>If an OAI-PMH provider, the response is a valid OAI response. </li>
+			<li>If a HTTPS provider, the server is NOT using self-signed certificates. </li>
+		</ul>
+	</p>
 
 </div>
 
