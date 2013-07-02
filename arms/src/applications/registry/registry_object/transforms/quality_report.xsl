@@ -617,7 +617,7 @@
         <xsl:if test="not(ro:namePart)">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>Part","Each Name must have at least one Name Part.");</xsl:text>
+            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Each Name must have at least one Name Part.");</xsl:text>
 			    </xsl:when>
 			    <xsl:otherwise>
 					<span class="error">Each Name must have at least one Name Part.</span>
