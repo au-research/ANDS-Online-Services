@@ -55,7 +55,8 @@ $(function(){
 				originating_source = $('input[name=originatingSource]').val();
 				if(isUniqueMsg = isUniqueKey(registry_object_key, null, data_source_id))
 				{				
-					$('input[name=key]').parent().append('<div class="alert alert-error validation">'+ isUniqueMsg+ '</div>');
+					Core_addValidationMessage($('input[name=key]'), 'error', isUniqueMsg);
+					// $('input[name=key]').parent().append('<div class="alert alert-error validation">'+ isUniqueMsg+ '</div>');
 				}
 				else
 				{
