@@ -49,6 +49,8 @@ class User {
 	 */
 	function logout()
 	{
+		session_start();
+		unset($this->session->userdata); 
 		$this->CI->session->sess_destroy(); //???
 		redirect('/');
 	}
