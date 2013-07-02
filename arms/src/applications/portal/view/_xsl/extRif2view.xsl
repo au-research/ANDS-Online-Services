@@ -50,7 +50,7 @@
           <xsl:text>  /  </xsl:text>
             <a class="crumb">
               <xsl:attribute name="href">
-                <xsl:value-of select="$base_url"/><xsl:value-of select="$group"/>
+                <xsl:value-of select="$base_url"/><xsl:value-of select="//extRif:extendedMetadata/extRif:contributor"/>
               </xsl:attribute>
               <xsl:value-of select="$group"/>
             </a>    
