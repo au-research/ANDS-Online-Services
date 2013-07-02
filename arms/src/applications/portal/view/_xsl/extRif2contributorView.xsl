@@ -219,7 +219,7 @@
 
 <!--  we will now transform the rights handside stuff -->
 <div class="sidebar">
-
+<h3 id="draft_status" class="hide" style="color:#FF6688;">DRAFT PREVIEW</h3>
  		<xsl:if test="ro:location/ro:address/ro:electronic/@type='url' or ro:location/ro:address/ro:electronic/@type='email'  or ro:location/ro:address/ro:physical">		
 		    <div class="right-box">
 			<h2>Contact</h2>
