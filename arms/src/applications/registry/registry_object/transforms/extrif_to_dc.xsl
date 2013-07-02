@@ -14,9 +14,13 @@
     <xsl:template match="ro:registryObject">
         <dc xmlns="http://purl.org/dc/elements/1.1/">
 	        <xsl:apply-templates select="extRif:extendedMetadata/extRif:displayTitle"/>
+            <publisher xmlns="http://purl.org/dc/elements/1.1/">
+                <xsl:value-of select="@group"/>
+            </publisher>
             <identifier xmlns="http://purl.org/dc/elements/1.1/">
                 <xsl:value-of select="concat($base_url,extRif:extendedMetadata/extRif:slug)"/>
-            </identifier>     	 
+            </identifier>  
+            <xsl:apply-templates select="extRif:extendedMetadata/extRif:related_object[extRif:related_object_class = 'party']"/>
             <xsl:apply-templates select="ro:collection | ro:party | ro:activity | ro:service"/>
             <xsl:apply-templates select="extRif:extendedMetadata/extRif:subjects/extRif:subject/extRif:subject_resolved"/>
         </dc>
@@ -31,9 +35,20 @@
    
     <xsl:template match="ro:collection | ro:party | ro:activity | ro:service">
         <xsl:apply-templates select="ro:identifier"/>
+        <xsl:apply-templates select="ro:relatedInfo"/>
         <xsl:apply-templates select="ro:description"/>   
         <xsl:apply-templates select="ro:coverage"/>  	
+    </xsl:template>
 
+    <xsl:template match="ro:relatedInfo">
+        <xsl:apply-templates select="ro:identifier"/>
+    </xsl:template>
+
+
+    <xsl:template match="extRif:related_object">
+        <contributor xmlns="http://purl.org/dc/elements/1.1/">
+            <xsl:value-of select="concat(extRif:related_object_display_title,' (',extRif:related_object_relation,')') "/>
+        </contributor>   
     </xsl:template>
 
     <xsl:template match="extRif:subject_resolved">
@@ -49,13 +64,13 @@
 
     <xsl:template match="ro:spatial">
         <coverage xmlns="http://purl.org/dc/elements/1.1/">
-            <xsl:text>Spatial:</xsl:text><xsl:value-of select="."/>
+            <xsl:text>Spatial: </xsl:text><xsl:value-of select="."/>
         </coverage>  
     </xsl:template>  
 
     <xsl:template match="ro:temporal">
         <coverage xmlns="http://purl.org/dc/elements/1.1/">
-            <xsl:text>Temporal:</xsl:text><xsl:value-of select="extRif:friendly_date"/>
+            <xsl:text>Temporal: </xsl:text><xsl:value-of select="extRif:friendly_date"/>
         </coverage>        
     </xsl:template>
 
@@ -116,13 +131,12 @@
                 <xsl:when test="@type = 'uri' or @type = 'url'">
                     <xsl:value-of select="."/>                        
                 </xsl:when>
-                <xsl:otherwise test="@type = 'uri' or @type = 'url'">
-                    <xsl:value-of select="."/>                        
+                <xsl:otherwise>
+                    <xsl:value-of select="concat('(',@type,') ',.)"/>                        
                 </xsl:otherwise>
             </xsl:choose>
         </identifier>
     </xsl:template>
- 
-   
+    
 </xsl:stylesheet>
 
