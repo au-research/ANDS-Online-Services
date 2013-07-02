@@ -240,7 +240,7 @@ function browse(view){
 		$('section').hide();
 		$('#items').removeClass();
 		$('#items').addClass(view);
-		$('#browse-datasources').slideDown();
+		$('#browse-datasources').show();
 		$('#datasource-chooser').focus();
 	}else{
 		logErrorOnScreen('invalid View Argument');

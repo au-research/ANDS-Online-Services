@@ -82,7 +82,7 @@ else
 
 
 
-    <div id="header" <?=$environment_header_style;?>">
+    <div id="header" <?=$environment_header_style;?>>
       <a href="<?php echo base_url();?>" title="Back to ANDS Online Services Home" tip="Back to ANDS Online Services Home" my="center left" at="center right">
         <img src="<?php echo base_url();?>/assets/img/ands_logo_white.png" alt="ANDS Logo White"/> 
       </a>
