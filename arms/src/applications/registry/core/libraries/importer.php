@@ -1348,6 +1348,7 @@ class Importer {
 		$this->roQAS4Time = 0;
 		$this->gcCyclesCount = 0;
 		$this->gcCyclesTime = 0;
+		$this->runBenchMark = $this->CI->config->item('importer_benchmark_enabled');
 	}
 
 

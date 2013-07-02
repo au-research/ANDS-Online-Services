@@ -5,7 +5,7 @@ $ENV['default_base_url'] = "<Base URL of your installation>"; //(excludes any re
 $ENV['environment_name'] = ""; // blank will leave the environment default
 $ENV['environment_colour'] = "#0088cc"; // optional, only applies when environment_name is set
 $ENV['deployment_state'] = "development";
-
+$ENV['importer_benchmark_enabled'] = true; 
 /* ERROR HANDLING */
 $ENV['site_admin'] = "Aliza Log";
 $ENV['site_admin_email'] = "<admin @ email>";
