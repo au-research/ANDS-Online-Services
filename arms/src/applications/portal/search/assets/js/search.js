@@ -128,7 +128,7 @@ function executeSearch(searchData, searchUrl){
 			success: function(data){
 				// log(data);
 				$.each(data.result.docs, function(){
-					log(this.display_title, this.score, this.id);
+					// log(this.display_title, this.score, this.id);
 				});
 
 				var numFound = data.result.numFound;
@@ -183,7 +183,6 @@ function executeSearch(searchData, searchUrl){
 					}
 
 				$(docs).each(function(){
-					//log(this.list_title + " (" + Math.floor(this.score * 100000)  + ")");
 				 	if(typeof(this.spatial_coverage_polygons) !== 'undefined'){
 					    resultPolygons.push([this.id,
 								 this.spatial_coverage_polygons[0],
@@ -377,7 +376,6 @@ function initSearchPage(){
 		 processPolygons();
 		 resetZoom();
 		 $('.post').hover(function(){
-		 	//log($(this).attr('ro_id'));
 		 	clearPolygons();
 			polygonsDict[$(this).attr('ro_id')].setMap(map);
 		 },function(){
@@ -442,7 +440,7 @@ function initSearchPage(){
 	if(searchData['q']){
 		var q = searchData['q'];
 		q = decodeURIComponent(q);
-		if(q.indexOf('"')!='-1'){
+		if((q.split('"').length-1) % 2 === 0){//if the number of quote is even
 			all = q.match(/"([^"]+)"/)[1];//anything inside quote
 			rest = q.split(q.match(/"([^"]+)"/)[0]).join('');
 		}else {
@@ -539,7 +537,6 @@ function getTopLevelFacet(){
 		type: 'POST',
 		data: {filters:searchData},
 		success: function(data){
-			log(data);
 			var template = $('#top-level-template').html();
 			var output = Mustache.render(template, data);
 			$('#top_concepts').html(output);
