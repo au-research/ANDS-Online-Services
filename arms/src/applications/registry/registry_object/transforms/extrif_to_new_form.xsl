@@ -497,7 +497,7 @@
 		<div class="aro_box" type="dates">
 
 			<div class="aro_box_display clearfix">
-				<a href="javascript:;" class="toggle"><i class="icon-minus"/></a>
+				<button class="btn-link toggle"><i class="icon-minus"/></button>
 				<div class="controls">
 					<input type="text" class="input-small rifcs-type" vocab="RIFCSDatesType" name="type" placeholder="Date Type" value="{@type}"/>
 				</div>
@@ -545,7 +545,7 @@
 	<xsl:template match="ro:collection/ro:name | ro:activity/ro:name | ro:party/ro:name  | ro:service/ro:name">
 		<div class="aro_box" type="name">
 			<div class="aro_box_display clearfix">
-				<a href="javascript:;" class="toggle"><i class="icon-minus"/></a>
+				<button class="btn-link toggle"><i class="icon-minus"/></button>
 				<input type="text" class="input-small rifcs-type" vocab="RIFCSNameType" name="type" placeholder="Type" value="{@type}"/>
 				<h1/>
 				<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
@@ -619,8 +619,8 @@
 				<xsl:apply-templates select="ro:collection/ro:citationInfo"/>
 				<div class="separate_line"/>
 				<div class="btn-group">
-					<a href="javascript:;" class="btn btn-primary addNew" type="fullCitation" add_new_type="fullCitation">Add Full Citation</a>
-					<a href="javascript:;" class="btn btn-primary addNew" type="citationMetadata" add_new_type="citationMetadata">Add Citation Metadata</a>
+					<button class="btn btn-primary addNew" type="fullCitation" add_new_type="fullCitation">Add Full Citation</button>
+					<button class="btn btn-primary addNew" type="citationMetadata" add_new_type="citationMetadata">Add Citation Metadata</button>
 					
 				</div>
 				
@@ -636,7 +636,7 @@
 	<xsl:template match="ro:fullCitation">
 		<div class="aro_box" type="fullCitation">
 			<div class="aro_box_display clearfix">
-				<a href="javascript:;" class="toggle"><i class="icon-minus"></i></a>
+				<button class="btn-link toggle"><i class="icon-minus"></i></button>
 				<input type="text" class="input-small rifcs-type" vocab="RIFCSCitationStyle" name="style" placeholder="Style" value="{@style}"/>
 				<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
 				<h1>Full Citation</h1>
@@ -648,7 +648,7 @@
 	<xsl:template match="ro:citationMetadata">
 		<div class="aro_box" type="citationMetadata">
 			<div class="aro_box_display clearfix">
-				<a href="javascript:;" class="toggle"><i class="icon-minus"></i></a><h1>Citation Metadata</h1>
+				<button class="btn-link toggle"><i class="icon-minus"></i></button><h1>Citation Metadata</h1>
 				<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
 			</div>
 			<div class="aro_box_part" type="identifier">
@@ -928,8 +928,8 @@
 				<div class="aro_box" type="coverage">
 					<div class="separate_line"/>
 					<div class="btn-group">
-						<a href="javascript:;" class="btn btn-primary addNew" type="temporal" add_new_type="temporal"><i class="icon-white icon-plus"></i> Add Temporal Coverage</a>
-						<a href="javascript:;" class="btn btn-primary addNew" type="spatial" add_new_type="spatial"><i class="icon-white icon-plus"></i> Add Spatial Coverage</a>
+						<button class="btn btn-primary addNew" type="temporal" add_new_type="temporal"><i class="icon-white icon-plus"></i> Add Temporal Coverage</button>
+						<button class="btn btn-primary addNew" type="spatial" add_new_type="spatial"><i class="icon-white icon-plus"></i> Add Spatial Coverage</button>
 					</div>
 				</div>
 			</fieldset>
@@ -980,7 +980,7 @@
 	<xsl:template match="ro:collection/ro:relatedInfo | ro:activity/ro:relatedInfo | ro:party/ro:relatedInfo | ro:service/ro:relatedInfo">
 		<div class="aro_box" type="relatedInfo">
 			<div class="aro_box_display clearfix">
-				<a href="javascript:;" class="toggle"><i class="icon-minus"/></a>
+				<button class="btn-link toggle"><i class="icon-minus"/></button>
 				<input type="text" class="input-small rifcs-type" vocab="RIFCSRelatedInformationType" name="type" placeholder="Type" value="{@type}"/>
 				<h1/>
 				<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
@@ -1106,7 +1106,7 @@
 		<div class="aro_box" type="location">
 
 			<div class="aro_box_display clearfix">
-				<a href="javascript:;" class="toggle"><i class="icon-minus"/></a>
+				<button class="btn-link toggle"><i class="icon-minus"/></button>
 				Date From: 
 				<div class="input-append">
 					<input type="text" class="input-large datepicker" name="dateFrom" placeholder="dateFrom" value="{@dateFrom}"/>
@@ -1123,8 +1123,8 @@
 				<xsl:apply-templates select="ro:address"/>
 				<div class="separate_line"/>
 				<div class="btn-group">
-					<a href="javascript:;" class="btn btn-primary addNew" type="electronic" add_new_type="electronic"><i class="icon icon-white icon-plus"></i> Electronic Address</a>
-					<a href="javascript:;" class="btn btn-primary addNew" type="physical" add_new_type="physical"><i class="icon icon-white icon-plus"></i> Physical Address</a>
+					<button class="btn btn-primary addNew" type="electronic" add_new_type="electronic"><i class="icon icon-white icon-plus"></i> Electronic Address</button>
+					<button class="btn btn-primary addNew" type="physical" add_new_type="physical"><i class="icon icon-white icon-plus"></i> Physical Address</button>
 				</div>
 			</div>
 
@@ -1158,8 +1158,8 @@
 				<div class="separate_line"/>
 				<div class="controls">
 					<div class="btn-group">
-						<a href="javascript:;" class="btn btn-mini btn-primary addNew" type="coverage_date" add_new_type="coverage_date"><i class="icon-white icon-plus"></i> Date</a>
-						<a href="javascript:;" class="btn btn-mini btn-primary addNew" type="text" add_new_type="text"><i class="icon-white icon-plus"></i> Text</a>
+						<button class="btn btn-mini btn-primary addNew" type="coverage_date" add_new_type="coverage_date"><i class="icon-white icon-plus"></i> Date</button>
+						<button class="btn btn-mini btn-primary addNew" type="text" add_new_type="text"><i class="icon-white icon-plus"></i> Text</button>
 					</div>
 				</div>
 			</div>
@@ -1371,7 +1371,7 @@
 		<div class="aro_box template" type="name">
 
 			<div class="aro_box_display clearfix">
-				<a href="javascript:;" class="toggle"><i class="icon-minus"/></a>
+				<button class="btn-link toggle"><i class="icon-minus"/></button>
 				<input type="text" class="input-small rifcs-type" vocab="RIFCSNameType" name="type" placeholder="Type" value=""/>
 				<h1/>
 				<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
@@ -1554,7 +1554,7 @@
 
 		<div class="aro_box template" type="relatedInfo">
 			<div class="aro_box_display clearfix">
-				<a href="javascript:;" class="toggle"><i class="icon-minus"/></a>
+				<button class="btn-link toggle"><i class="icon-minus"/></button>
 				<input type="text" class="input-small rifcs-type" vocab="RIFCSRelatedInformationType" name="type" placeholder="Type" value=""/>
 				<h1/>
 				<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
@@ -1609,7 +1609,7 @@
 		<div class="aro_box template" type="location">
 
 			<div class="aro_box_display clearfix">
-				<a href="javascript:;" class="toggle"><i class="icon-minus"/></a>
+				<button class="btn-link toggle"><i class="icon-minus"/></button>
 				Date From: 
 				<div class="input-append">
 					<input type="text" class="input-large datepicker" name="dateFrom" placeholder="dateFrom" value=""/>
@@ -1625,8 +1625,8 @@
 				<h1>Address</h1>
 				<div class="separate_line"/>
 				<div class="btn-group">
-					<a href="javascript:;" class="btn btn-primary addNew" type="electronic" add_new_type="electronic"><i class="icon icon-white icon-plus"></i> Electronic Address</a>
-					<a href="javascript:;" class="btn btn-primary addNew" type="physical" add_new_type="physical"><i class="icon icon-white icon-plus"></i> Physical Address</a>
+					<button class="btn btn-primary addNew" type="electronic" add_new_type="electronic"><i class="icon icon-white icon-plus"></i> Electronic Address</button>
+					<button class="btn btn-primary addNew" type="physical" add_new_type="physical"><i class="icon icon-white icon-plus"></i> Physical Address</button>
 				</div>
 			</div>
 
@@ -1734,7 +1734,7 @@
 
 		<div class="aro_box template" type="fullCitation">
 			<div class="aro_box_display clearfix">
-				<a href="javascript:;" class="toggle"><i class="icon-minus"></i></a>
+				<button class="btn-link toggle"><i class="icon-minus"></i></button>
 				<input type="text" class="input-small rifcs-type" vocab="RIFCSCitationStyle" name="style" placeholder="Style" value="{@style}"/>
 				<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
 				<h1>Full Citation</h1>
@@ -1746,7 +1746,7 @@
 
 		<div class="aro_box template" type="citationMetadata">
 			<div class="aro_box_display clearfix">
-				<a href="javascript:;" class="toggle"><i class="icon-minus"></i></a><h1>Citation Metadata</h1>
+				<button class="btn-link toggle"><i class="icon-minus"></i></button><h1>Citation Metadata</h1>
 				<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
 			</div>
 			<div class="aro_box_part" type="identifier">
@@ -1968,8 +1968,8 @@
 			<div class="separate_line"/>
 			<div class="controls">
 				<div class="btn-group">
-					<a href="javascript:;" class="btn btn-mini btn-primary addNew" type="coverage_date" add_new_type="coverage_date"><i class="icon-white icon-plus"></i> Date</a>
-					<a href="javascript:;" class="btn btn-mini btn-primary addNew" type="text" add_new_type="text"><i class="icon-white icon-plus"></i> Text</a>
+					<button class="btn btn-mini btn-primary addNew" type="coverage_date" add_new_type="coverage_date"><i class="icon-white icon-plus"></i> Date</button>
+					<button class="btn btn-mini btn-primary addNew" type="text" add_new_type="text"><i class="icon-white icon-plus"></i> Text</button>
 				</div>
 			</div>
 			</div>
@@ -1984,8 +1984,8 @@
 				<div class="controls">
 				<div class="separate_line"/>
 					<div class="btn-group">
-						<a href="javascript:;" class="btn btn-primary addNew" type="temporal" add_new_type="temporal"><i class="icon-white icon-plus"></i> Add Temporal Coverage</a>
-						<a href="javascript:;" class="btn btn-primary  addNew" type="spatial" add_new_type="spatial"><i class="icon-white icon-plus"></i> Add Spatial Coverage</a>
+						<button class="btn btn-primary addNew" type="temporal" add_new_type="temporal"><i class="icon-white icon-plus"></i> Add Temporal Coverage</button>
+						<button class="btn btn-primary  addNew" type="spatial" add_new_type="spatial"><i class="icon-white icon-plus"></i> Add Spatial Coverage</button>
 					</div>					
 				</div>
 			</div>
@@ -1994,7 +1994,7 @@
 		<div class="aro_box template" type="dates">
 
 				<div class="aro_box_display clearfix">
-					<a href="javascript:;" class="toggle"><i class="icon-minus"/></a>
+					<button class="btn-link toggle"><i class="icon-minus"/></button>
 					<input type="text" class="input-small rifcs-type" vocab="RIFCSDatesType" name="type" placeholder="Date Type" value=""/>
 					<h1/>
 					<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
