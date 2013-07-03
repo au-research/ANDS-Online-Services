@@ -22,7 +22,6 @@ $(document).ready(function() {
 				var chart_data = new google.visualization.DataTable();
 				var columns = {};
 
-
 				// Calculate the sums of quality levels per status for % calculation
 				$.each(data, function(i, item){
 					if(i != "All Records")
@@ -52,7 +51,7 @@ $(document).ready(function() {
   					{
   						chart_data.addColumn({
   	  				        	label:i,
-  	  				        	type:'number'
+  	  				        	type:'number',
   	  				    });
   					}
   				});
@@ -66,7 +65,12 @@ $(document).ready(function() {
 					"Quality Level 3": '#6DA539',
 					"Gold Standard Record": '#4491AB',
 				}
-
+				var levelChart = {
+					"Quality Level 1": 1,
+					"Quality Level 2": 2,
+					"Quality Level 3": 3,
+					"Gold Standard Record": 4,
+				}
 				for (_class in data)
 				{
 					var row = [_class];
@@ -74,6 +78,7 @@ $(document).ready(function() {
 					{
 						if (_quality != 'sum')
 						{
+							//console.log(_quality)
 							if (columns[_quality])
 							{
 								// If it hasn't already, add it to the color chart
@@ -90,8 +95,10 @@ $(document).ready(function() {
 
 								// Calculate value as a percentage!
 								var numRecords = parseInt(data[_class][_quality]);
-								var sumRecords = parseInt(data[_class].sum)
-								row.push({v:numRecords/sumRecords, f:numRecords + " record(s)"});
+								var sumRecords = parseInt(data[_class].sum);
+								var qualityLevel = {_quality: levelChart[_quality]}
+								row.push({v:numRecords/sumRecords, f:numRecords + " record(s)", p: qualityLevel});
+
 							}
 						}
 						else
@@ -104,6 +111,7 @@ $(document).ready(function() {
 					if (data[_class].sum > 0)
 					{
 						chart_data.addRow(row);
+						//console.log(chart_data)
 					}
 				}
 
@@ -131,6 +139,7 @@ $(document).ready(function() {
 					if (chart_data.getColumnLabel(i) != 'Sum')
 					{
 						columns.push(i);
+						
 					}
 				}
 
@@ -145,8 +154,11 @@ $(document).ready(function() {
     				google.visualization.events.addListener(chart, 'select', selectHandler); 
 
     				function selectHandler(e){   
-     					var targetString = '{"sort":{"updated":"desc"},"filter":{"class":"'+dataView.getValue(chart.getSelection()[0].row,0).toLowerCase()+'","quality_level":"'+(chart.getSelection()[0].column)+'"}}'
+    					var selected = chart.getSelection();
+     					var quality = dataView.getProperties(selected[0].row,selected[0].column); 
+     					var targetString = '{"sort":{"updated":"desc"},"filter":{"class":"'+dataView.getValue(chart.getSelection()[0].row,0).toLowerCase()+'","quality_level":"'+quality._quality+'"}}'
     					window.location.href = base_url + "data_source/manage_records/"+$('#data_source_id').val()+"/#!/" + targetString
+
       				}
 
 					var legendBar = '';
