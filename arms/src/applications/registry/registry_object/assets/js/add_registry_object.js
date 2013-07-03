@@ -895,7 +895,7 @@ function setTabInfo(){
 	var allTabs = $('.pane');
 	$('#advanced-menu .label').remove();
 	$.each(allTabs, function(){
-		var count_info = $('.info', this).length;
+		var count_info = $('.info, .alert-info', this).length;
 		var count_error = $('.error, .alert-error', this).length;
 		var count_warning = $('.warning, .alert-warning', this).length;
 		var id = $(this).attr('id');
