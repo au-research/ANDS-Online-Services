@@ -1335,6 +1335,7 @@
 	<xsl:template match="ro:accessPolicy">
 		<div class="aro_box" type="accessPolicy">
 			<input type="text" class="input-xlarge" name="value" placeholder="value" value="{text()}"/>
+			<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
 		</div>
 	</xsl:template>
 
@@ -1730,6 +1731,7 @@
 
 		<div class="aro_box template" type="accessPolicy">
 			<input type="text" class="input-xlarge" name="value" placeholder="value" value=""/>
+			<button class="btn btn-mini btn-danger remove"><i class="icon-remove icon-white"/></button>
 		</div>
 
 		<div class="aro_box template" type="fullCitation">
