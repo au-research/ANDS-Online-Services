@@ -1386,16 +1386,20 @@
     </xsl:template>
     
     <xsl:template match="ro:existenceDates/ro:startDate">
-    	<xsl:if test="string-length(.) = 0">
-            <xsl:choose>
-			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Existence Date must have a value.","value");</xsl:text>
-			    </xsl:when>
-			    <xsl:otherwise>
-					<span class="error">Existence Start Date must have a value.</span>
-			    </xsl:otherwise>
-	    	</xsl:choose>
-        </xsl:if>
+
+		<xsl:if test="string-length(@dateFormat) &gt; 0">
+	    	<xsl:if test="string-length(.) = 0">
+	            <xsl:choose>
+				    <xsl:when test="$output = 'script'">
+	            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Existence Date must have a value.","value");</xsl:text>
+				    </xsl:when>
+				    <xsl:otherwise>
+						<span class="error">Existence Start Date must have a value.</span>
+				    </xsl:otherwise>
+		    	</xsl:choose>
+	        </xsl:if>
+	    </xsl:if>
+
         <xsl:if test="string-length(.) &gt; 512">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
@@ -1406,16 +1410,20 @@
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>
-        <xsl:if test="string-length(@dateFormat) = 0">
-            <xsl:choose>
-			    <xsl:when test="$output = 'script'">
-           			<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","A Date Format must be specified. &lt;span&gt;(e.g. 'W3CDTF')&lt;/span&gt;","dateFormat");</xsl:text>
-			    </xsl:when>
-			    <xsl:otherwise>
-					<span class="error">Existence Start Date Format must have a value.</span>
-			    </xsl:otherwise>
-	    	</xsl:choose>
-        </xsl:if>
+
+        <xsl:if test="string-length(.) &gt; 0">
+	        <xsl:if test="string-length(@dateFormat) = 0">
+	            <xsl:choose>
+				    <xsl:when test="$output = 'script'">
+	           			<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","A Date Format must be specified. &lt;span&gt;(e.g. 'W3CDTF')&lt;/span&gt;","dateFormat");</xsl:text>
+				    </xsl:when>
+				    <xsl:otherwise>
+						<span class="error">Existence Start Date Format must have a value.</span>
+				    </xsl:otherwise>
+		    	</xsl:choose>
+	        </xsl:if>
+	    </xsl:if>
+
         <xsl:if test="string-length(@dateFormat) &gt; 512">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
@@ -1429,15 +1437,17 @@
     </xsl:template>
     
     <xsl:template match="ro:existenceDates/ro:endDate">
-    	<xsl:if test="string-length(.) = 0">
-            <xsl:choose>
-			    <xsl:when test="$output = 'script'">
-            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Existence Date must have a value.","value");</xsl:text>
-			    </xsl:when>
-			    <xsl:otherwise>
-					<span class="error">Existence End Date must have a value.</span>
-			    </xsl:otherwise>
-	    	</xsl:choose>
+    	<xsl:if test="string-length(@dateFormat) &gt; 0">
+	    	<xsl:if test="string-length(.) = 0">
+	            <xsl:choose>
+				    <xsl:when test="$output = 'script'">
+	            		<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","Existence Date must have a value.","value");</xsl:text>
+				    </xsl:when>
+				    <xsl:otherwise>
+						<span class="error">Existence End Date must have a value.</span>
+				    </xsl:otherwise>
+		    	</xsl:choose>
+	        </xsl:if>
         </xsl:if>
         <xsl:if test="string-length(.) &gt; 512">
             <xsl:choose>
@@ -1449,16 +1459,20 @@
 			    </xsl:otherwise>
 	    	</xsl:choose>
         </xsl:if>
-        <xsl:if test="string-length(@dateFormat) = 0">
-            <xsl:choose>
-			    <xsl:when test="$output = 'script'">
-           			<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","A Date Format must be specified. &lt;span&gt;(e.g. 'W3CDTF')&lt;/span&gt;","dateFormat");</xsl:text>
-			    </xsl:when>
-			    <xsl:otherwise>
-					<span class="error">Existence End Date Format must have a value.</span>
-			    </xsl:otherwise>
-	    	</xsl:choose>
-        </xsl:if>
+
+		<xsl:if test="string-length(.) &gt; 0">
+	        <xsl:if test="string-length(@dateFormat) = 0">
+	            <xsl:choose>
+				    <xsl:when test="$output = 'script'">
+	           			<xsl:text>SetErrors("</xsl:text><xsl:value-of select="@field_id"/><xsl:text>","A Date Format must be specified. &lt;span&gt;(e.g. 'W3CDTF')&lt;/span&gt;","dateFormat");</xsl:text>
+				    </xsl:when>
+				    <xsl:otherwise>
+						<span class="error">Existence End Date Format must have a value.</span>
+				    </xsl:otherwise>
+		    	</xsl:choose>
+	        </xsl:if>
+	    </xsl:if>
+
         <xsl:if test="string-length(@dateFormat) &gt; 512">
             <xsl:choose>
 			    <xsl:when test="$output = 'script'">
