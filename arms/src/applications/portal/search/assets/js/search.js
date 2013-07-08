@@ -55,12 +55,10 @@ $(document).ready(function() {
 						break;
 				}
 				// If there is a search specified (being on the map page doesn't count!), show the cancel search button
-				if (term != "map")
-				{
+				if (term != "map"){
 					$('.clearAll').show();
 				}
 			}
-
 			if (refreshSearch)
 			{
 				changeHashTo(formatSearch());
@@ -211,14 +209,18 @@ function executeSearch(searchData, searchUrl){
 }
 
 $(document).on('click', '.filter',function(e){
-	searchData['p']=1;
-	searchData[$(this).attr('filter_type')] = $(this).attr('filter_value');
-	if($(this).attr('filter_type')=='subject_vocab_uri'){
-		searchData['subject_vocab_uri_display'] = $(this).text();
+	if(!$(this).hasClass('remove_facet')){
+		searchData['p']=1;
+		searchData[$(this).attr('filter_type')] = $(this).attr('filter_value');
+		if($(this).attr('filter_type')=='subject_vocab_uri'){
+			searchData['subject_vocab_uri_display'] = $(this).text();
+		}
+		//searchData.push({label:$(this).attr('facet_type'),value:encodeURIComponent($(this).attr('facet_value'))});
+		changeHashTo(formatSearch());
 	}
-	//searchData.push({label:$(this).attr('facet_type'),value:encodeURIComponent($(this).attr('facet_value'))});
-	changeHashTo(formatSearch());
 }).on('click', '.remove_facet', function(e){
+	e.preventDefault();
+	e.stopPropagation();
 	var filter_type = $(this).attr('filter_type');
 	if($(this).attr('filter_type')=='subject_vocab_uri'){
 		delete(searchData['subject_vocab_uri_display']);
@@ -404,7 +406,6 @@ function initSearchPage(){
 	/* Question Mark For license facet */
 	$('h3', '.facet_license_class').append(' <a target="_blank" href="http://www.ands.edu.au/guides/cpguide/cpgrights.html"> <img src="'+base_url+'assets/core/images/question_mark.png" width="14px"></a>');
 
-
 	$('#search_map_toggle').unbind('click');
 	$('#search_map_toggle').click(function(e){
 	    $('#search_notice').addClass('hide');
@@ -541,8 +542,6 @@ function getTopLevelFacet(){
 			var template = $('#top-level-template').html();
 			var output = Mustache.render(template, data);
 			$('#top_concepts').html(output);
-		},
-		complete:function(data){
 			postSearch();
 		}
 	});
@@ -586,24 +585,27 @@ function postSearch(){
 	});
 
 	if(searchData['s_subject_value_resolved']){
-		var html = '<li><img src="'+base_url+'assets/core/images/delete.png" filter_type="s_subject_value_resolved" tip="Deselect this search constraint" class="remove_facet"/><a href="javascript:;" class="filter remove_facet" tip="Deselect this search constraint" filter_type="s_subject_value_resolved">'+searchData['s_subject_value_resolved']+'</a></li>';
-		$('.facet_subjects ul').prepend(html);
+		addDeleteFacet('s_subject_value_resolved', searchData['s_subject_value_resolved']);
 	}
 
 	if(searchData['subject_vocab_uri']){
-		var html = '<li><img src="'+base_url+'assets/core/images/delete.png" filter_type="subject_vocab_uri" class="remove_facet" tip="Deselect this search constraint" /><a href="javascript:;" class="filter remove_facet" tip="Deselect this search constraint" filter_type="subject_vocab_uri">'+searchData['subject_vocab_uri_display']+'</a></li>';
+		addDeleteFacet('subject_vocab_uri', searchData['subject_vocab_uri_display']);
 		$('.filter[filter_value="'+decodeURIComponent(searchData['subject_vocab_uri'])+'"]').remove();
-		$('.facet_subjects ul').prepend(html);
 	}
 
 	if(searchData['temporal']){
 		var temporal = searchData['temporal'].split('-');
-		var html = '<li><img src="'+base_url+'assets/core/images/delete.png" filter_type="temporal" class="remove_facet" /><a href="javascript:;" class="filter remove_facet" tip="Deselect this search constraint" filter_type="temporal">'+temporal[0]+'-'+temporal[1]+'</a></li>';
-		$('.facet_subjects ul').prepend(html);
+		addDeleteFacet('temporal', temporal[0]+'-'+temporal[1]);
 	}
+
 	initTips('a.remove_facet');
 }
 
+function addDeleteFacet(type, text){
+	$('.remove_facet[filter_type='+type+']').parent().remove();
+	var html = '<li><img src="'+base_url+'assets/core/images/delete.png" filter_type="'+type+'" class="remove_facet" /><a href="javascript:;" class="remove_facet" tip="Deselect this search constraint" filter_type="'+type+'">'+text+'</a></li>';
+	$('.facet_subjects ul').prepend(html);
+}
 
 function ellipsis (string, length){
 	if (string.length <= length){
