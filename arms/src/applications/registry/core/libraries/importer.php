@@ -21,7 +21,6 @@ class Importer {
 
 	public $runBenchMark = false;
 	private $status; // status of the currently ingested record
-	public $runBenchMark = false;
 	private $benchMarkLog;
 	public $isImporting = false; // flag stating whether the importer is running
 	private $importedRecords;
