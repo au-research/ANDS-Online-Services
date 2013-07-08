@@ -21,6 +21,7 @@ class Importer {
 
 	public $runBenchMark = false;
 	private $status; // status of the currently ingested record
+
 	private $benchMarkLog;
 	public $isImporting = false; // flag stating whether the importer is running
 	private $importedRecords;
@@ -509,8 +510,6 @@ class Importer {
 			 $this->CI->benchmark->mark('ingest_enrich_stage1_end');
 		}
 
-		if($this->runBenchMark) $this->CI->benchmark->mark('ingest_enrich_end');
-
 	}
 
 	public function finishImportTasks()
@@ -664,12 +663,6 @@ class Importer {
 			}
 		}
 
-		if($this->runBenchMark) $this->CI->benchmark->mark('ingest_enrich_stage3_end');
-
-		gc_collect_cycles();
-
-		if($this->runBenchMark) $this->CI->benchmark->mark('ingest_enrich_end');
-
 		// Push through the last chunk...
 		$this->flushSOLRAdd();
 		if($this->runBenchMark)
@@ -776,7 +769,6 @@ class Importer {
 			}
 
 			return array("count"=>$this->reindexed_records, "errors"=>array());
-
 		}		
 		//gc_collect_cycles();	
 		return true;
@@ -1058,7 +1050,6 @@ class Importer {
 	{
 		return preg_replace('/ xsi:schemaLocation=".*?"/sm','', $string);
 	}
-
 
 	public function getBenchMarkLogs()
 	{	

@@ -352,7 +352,6 @@ class Oai extends MX_Controller
 			throw new Oai_BadArgument_Exceptions("Missing required argument 'metadataPrefix'");
 		}
 
-
 		$rec = $this->records->getByIdentifier($identifier);
 		if ($rec)
 		{
