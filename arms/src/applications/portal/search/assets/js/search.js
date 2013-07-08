@@ -440,10 +440,11 @@ function initSearchPage(){
 	if(searchData['q']){
 		var q = searchData['q'];
 		q = decodeURIComponent(q);
-		if((q.split('"').length-1) % 2 === 0){//if the number of quote is even
+
+		if((q.split('"').length-1) % 2 === 0 && q.split('"').length!=1){//if the number of quote is even
 			all = q.match(/"([^"]+)"/)[1];//anything inside quote
 			rest = q.split(q.match(/"([^"]+)"/)[0]).join('');
-		}else {
+		}else{
 			all ='';
 			rest = q;
 		}
