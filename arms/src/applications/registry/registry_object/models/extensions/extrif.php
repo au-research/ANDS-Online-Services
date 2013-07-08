@@ -311,7 +311,7 @@ class Extrif_Extension extends ExtensionBase
       	}else{
          	return TRUE;
       	} */
-      	if(str_replace("&gt;","",$string)!=$string ||str_replace("&lt;","",$string)!=$string ||str_replace("<","",$string)!=$string || str_replace(">","",$string)!=$string || str_replace("& ","",$string)!=$string )
+      	if(str_replace("&gt;","",$string)!=$string || str_replace("&lt;","",$string)!=$string || str_replace("<","",$string)!=$string || str_replace(">","",$string)!=$string || str_replace("& ","",$string)!=$string )
       	{
       		return true;
       	}else{

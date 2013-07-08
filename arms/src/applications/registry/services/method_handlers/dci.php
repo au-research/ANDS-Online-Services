@@ -7,7 +7,7 @@ class DCIMethod extends MethodHandler
 		'q' => '*:*',
 		'fl' => 'id',
         'wt' => 'json',
-        'rows' => 20
+        'rows' => 200
     );
 	
 	//var $params, $options, $formatter; 

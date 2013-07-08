@@ -12,7 +12,7 @@
     <xsl:template match="ro:registryObject"/>
 
     <xsl:template match="ro:registryObject[ro:collection]">
-        <DataRecord ProviderID="999999999">
+        <DataRecord>
             <Header>
                 <DateProvided>
                     <xsl:value-of select="$dateProvided"/>
@@ -28,11 +28,21 @@
                 </RecordIdentifier>
             </Header>
             <BibliographicData>
-                <xsl:if test="ro:collection/ro:citationInfo/ro:citationMetadata/ro:contributor">
-                    <AuthorList>
-                        <xsl:apply-templates select="ro:collection/ro:citationInfo/ro:citationMetadata/ro:contributor"/>
-                    </AuthorList>
-                </xsl:if>
+                <AuthorList>
+                    <xsl:choose>
+                        <xsl:when test="ro:collection/ro:citationInfo/ro:citationMetadata/ro:contributor">
+                            <xsl:apply-templates select="ro:collection/ro:citationInfo/ro:citationMetadata/ro:contributor"/>
+                        </xsl:when>
+                        <xsl:when test="extRif:extendedMetadata/extRif:related_object[extRif:related_object_relation = '']">
+                            <xsl:apply-templates select="ro:collection/ro:citationInfo/ro:citationMetadata/ro:contributor"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <Author seq="1">
+                                <AuthorName>Anonymus</AuthorName>
+                            </Author>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </AuthorList>
                 <TitleList>
                     <ItemTitle TitleType="English title">
                         <xsl:apply-templates select="extRif:extendedMetadata/extRif:displayTitle"/>
@@ -75,30 +85,28 @@
                     <xsl:apply-templates select="extRif:extendedMetadata/extRif:the_description"/>
                 </Abstract>
             </xsl:if>
-            <Rights_Licensing>
-                <xsl:choose>
-                    <xsl:when test="extRif:extendedMetadata/extRif:right">
+
+            <xsl:choose>
+                <xsl:when test="extRif:extendedMetadata/extRif:right">
+                    <Rights_Licensing>
                         <RightsStatement>
                             <xsl:apply-templates select="extRif:extendedMetadata/extRif:right[@type='rightsStatement'] | extRif:extendedMetadata/extRif:right[@type='accessRights'] | extRif:extendedMetadata/extRif:right[@type='rights']"/>
                         </RightsStatement>
                         <LicenseStatement>
                             <xsl:apply-templates select="extRif:extendedMetadata/extRif:right[@type='licence']"/>
                         </LicenseStatement>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <RightsStatement>NO RIGHTS STATEMENT WAS PROVIDED</RightsStatement>
-                        <LicenseStatement>NO LICENSE STATEMENT WAS PROVIDED</LicenseStatement>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </Rights_Licensing>
+                    </Rights_Licensing>
+                </xsl:when>
+            </xsl:choose>
+            
             <!-- <ParentDataRef/> <relatedObject>
                 <key>EMBL-NC-1</key>
                 <relation type="isPartOf"/>
                 </relatedObject>-->
             <!-- PROBABLY THEY WANT THEIR INTERNAL IDs -->
-            <!--xsl:if test="ro:collection/ro:relatedObject/ro:relation/@type = 'isPartOf'">          
+            <xsl:if test="ro:collection/ro:relatedObject/ro:relation/@type = 'isPartOf'">          
                 <ParentDataRef><xsl:apply-templates select="ro:collection/ro:relatedObject[ro:relation/@type = 'isPartOf']/ro:key"/></ParentDataRef>
-            </xsl:if-->
+            </xsl:if>
 
             <DescriptorsData>
                 <xsl:if test="extRif:extendedMetadata/extRif:subjects/extRif:subject/extRif:subject_resolved">
@@ -161,9 +169,9 @@
                     </xs:complexType>
                 </xs:element>
                 -->
-                <xsl:if test="extRif:extendedMetadata/extRif:related_object/extRif:related_object_display_title">
+                <xsl:if test="ro:collection/ro:subject[@type = 'AU-ANL:PEAU'] or ro:collection/ro:subject[@type = 'orcid']">
                     <NamedPersonList>
-                        <xsl:apply-templates select="extRif:extendedMetadata/extRif:related_object/extRif:related_object_display_title"/>
+                        <xsl:apply-templates select="ro:collection/ro:subject[@type = 'AU-ANL:PEAU'] | ro:collection/ro:subject[@type = 'orcid']" mode="namedPerson"/>
                     </NamedPersonList>
                 </xsl:if>
 
@@ -250,7 +258,7 @@
         </xsl:choose>
     </xsl:template>
 
-    <xsl:template match="extRif:related_object_display_title">
+    <xsl:template match="ro:subject" mode="namedPerson">
         <NamedPerson>
             <xsl:value-of select="."/>
         </NamedPerson>
