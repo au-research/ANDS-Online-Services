@@ -1,8 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
+<?xml version="1.0"?>
 <xsl:stylesheet xmlns:ro="http://ands.org.au/standards/rif-cs/registryObjects" xmlns:extRif="http://ands.org.au/standards/rif-cs/extendedRegistryObjects" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0" exclude-result-prefixes="ro extRif">
 
-    <xsl:output method="xml" indent="yes" omit-xml-declaration="yes" encoding="UTF-8"/>
+    <xsl:output omit-xml-declaration="yes"/>
     <xsl:strip-space elements="*"/>
     <xsl:param name="dateProvided"/>
     <xsl:template match="/">
@@ -30,12 +29,15 @@
             <BibliographicData>
                 <AuthorList>
                     <xsl:choose>
+                        <!-- see if we have citationMetadatata -->
                         <xsl:when test="ro:collection/ro:citationInfo/ro:citationMetadata/ro:contributor">
                             <xsl:apply-templates select="ro:collection/ro:citationInfo/ro:citationMetadata/ro:contributor"/>
                         </xsl:when>
-                        <xsl:when test="extRif:extendedMetadata/extRif:related_object[extRif:related_object_relation = '']">
-                            <xsl:apply-templates select="ro:collection/ro:citationInfo/ro:citationMetadata/ro:contributor"/>
+                        <!-- use RelatedObjects then -->
+                        <xsl:when test="extRif:extendedMetadata/extRif:related_object[extRif:related_object_relation = 'hasPrincipalInvestigator'] or extRif:extendedMetadata/extRif:related_object[extRif:related_object_relation = 'principalInvestigator'] or extRif:extendedMetadata/extRif:related_object[extRif:related_object_relation = 'author'] or extRif:extendedMetadata/extRif:related_object[extRif:related_object_relation = 'coInvestigator']">
+                            <xsl:apply-templates select="extRif:extendedMetadata/extRif:related_object[extRif:related_object_relation = 'hasPrincipalInvestigator'] | extRif:extendedMetadata/extRif:related_object[extRif:related_object_relation = 'principalInvestigator'] | extRif:extendedMetadata/extRif:related_object[extRif:related_object_relation = 'author'] | extRif:extendedMetadata/extRif:related_object[extRif:related_object_relation = 'coInvestigator']"/>
                         </xsl:when>
+                        <!-- otherwise anonymus -->
                         <xsl:otherwise>
                             <Author seq="1">
                                 <AuthorName>Anonymus</AuthorName>
@@ -271,6 +273,16 @@
             </AuthorName>
         </Author>
     </xsl:template>
+
+    <xsl:template match="extRif:related_object">
+        <Author seq="{position()}">
+            <AuthorName>
+                <xsl:apply-templates select="extRif:related_object_display_title"/>
+            </AuthorName>
+        </Author>
+    </xsl:template>
+
+
 
     <xsl:template match="ro:namePart">
         <xsl:value-of select="."/>

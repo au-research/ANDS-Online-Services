@@ -8,11 +8,11 @@ class DCIInterface extends FormatHandler
 	function display($payload)
 	{
 		
-		$dciDoc = '<?xml version="1.0" encoding="UTF-8"?>'.NL;
-		$dciDoc .= '<DigitalContentData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="DCI_schema_providers_V4.1.xsd">'.NL;
-        $dciDoc .= implode($payload);
-        $dciDoc .= '</DigitalContentData>';
-        echo $dciDoc;
+		echo "<?xml version=\"1.0\"?>".NL;
+		echo '<DigitalContentData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="DCI_schema_providers_V4.1.xsd">'.NL;
+        echo implode($payload);
+        echo '</DigitalContentData>';
+        //echo $dciDoc;
 	}
     
 	function error($message)
