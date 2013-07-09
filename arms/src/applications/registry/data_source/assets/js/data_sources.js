@@ -47,6 +47,7 @@ $(function(){
 			}
 		}else{//there is no hash suffix
 			browse('lists');
+			load_more(1);//init the load_more function | load the first page
 		}
 	});
 	$(window).hashchange();//initial hashchange event
@@ -57,7 +58,6 @@ $(function(){
 		changeHashTo('browse/'+$(this).attr('name'));
 		currentView = $(this).attr('name');
 	});
-	load_more(1);//init the load_more function | load the first page
 
 	//load_more button binding, once clicked will increment the page value
 	$('#load_more').click(function(){

@@ -18,6 +18,7 @@ class Doi_ip_test extends MX_Controller {
 		 */
 		$test_cases = array(
 			array('Host Name against IP', 'ands3.anu.edu.au', '130.56.62.109', true),
+			array('Sample Test', '130.56.111.71', '130.56.60.97,130.56.111.71', true),
 			array('Host Name against IP', 'ands3.anu.edu.au', '130.56.62.129', false),
 			array('Host Name against IP', 'hello world!#$%$#%', '130.56.62.129', false),
 			array('Test Matching Exact', '127.0.0.1', '127.0.0.1', true),
@@ -54,8 +55,8 @@ class Doi_ip_test extends MX_Controller {
 				if($this->ip_match($ip,$ip_to_match)){
 					return true;
 				}
-				return false;
 			}
+			return false;
 		}else{
 			return $this->ip_match($ip,$ip_range[0]);
 		}
