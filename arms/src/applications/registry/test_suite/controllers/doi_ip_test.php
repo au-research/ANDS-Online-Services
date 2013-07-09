@@ -68,10 +68,6 @@ class Doi_ip_test extends MX_Controller {
 				{
 					return true;
 				}
-				else
-				{
-					return false;
-				}
 			}
 			else
 			{
@@ -81,7 +77,7 @@ class Doi_ip_test extends MX_Controller {
 						return true;
 					}
 				}
-				return false;
+
 			}
 			return false;
 		}else{
