@@ -542,6 +542,8 @@ function getTopLevelFacet(){
 			var template = $('#top-level-template').html();
 			var output = Mustache.render(template, data);
 			$('#top_concepts').html(output);
+		},
+		complete:function(){
 			postSearch();
 		}
 	});
