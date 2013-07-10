@@ -21,7 +21,8 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_URI} !(.*)/$
 RewriteRule ^(.*)$ $1/ [L]
 
-RewriteCond $1 !^(index\.php|robots\.txt|favicon\.ico|legacy)
+
+RewriteCond $1 !^(index\.php|robots\.txt|favicon\.ico|legacy|googledocverificationidfile\.html)
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*?)/(.*)$ ./index.php?/$2&app=$1 [L,QSA]
