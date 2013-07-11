@@ -576,10 +576,6 @@
     <p class="abbrev_displayTitle">Also known as: <xsl:apply-templates/></p>
 </xsl:template>
 
-<xsl:template match="ro:namePart[last()]">
-    <xsl:value-of select="."/>    
-</xsl:template>
-
 <xsl:template match="ro:namePart">
     <xsl:value-of select="."/><xsl:text>, </xsl:text>    
 </xsl:template>
@@ -1107,26 +1103,19 @@
 </span>                                                     
 </xsl:template> 
 
-<xsl:template match="ro:contributor">       
-    <xsl:if test="./ro:namePart/@type='family'">
-        <xsl:value-of select="./ro:namePart[@type='family']"/>,
-    </xsl:if>
-    <xsl:if test="./ro:namePart/@type='given'">
-        <xsl:value-of select="./ro:namePart[@type='given']"/>.
-    </xsl:if>
+<xsl:template match="ro:contributor">
+  <xsl:variable name="displayName">       
+    <xsl:apply-templates select="./ro:namePart[@type='family']"/>
+    <xsl:apply-templates select="./ro:namePart[@type='given']"/>
     <xsl:if test="./ro:namePart/@type='initial' and not(./ro:namePart/@type='given')">
-        <xsl:value-of select="./ro:namePart[@type='initial']"/>.
+        <xsl:apply-templates select="./ro:namePart[@type='initial']"/>
     </xsl:if>   
-    <xsl:if test="./ro:namePart/@type='full'">
-        <xsl:value-of select="./ro:namePart[@type='full']"/>.
-    </xsl:if>
-    <xsl:if test="./ro:namePart/@type=''">
-        <xsl:value-of select="./ro:namePart[@type='']"/>.
-    </xsl:if>
+    <xsl:apply-templates select="./ro:namePart[@type='full']"/>
+    <xsl:apply-templates select="./ro:namePart[@type='']"/>
     <!-- catch-all statement for dodgy data -->
-    <xsl:if test="./ro:namePart[not (@type)] | ./ro:namePart[not(@type='family') and not(@type='given') and not(@type='initial') and not(@type='full') and not(@type='')]">
-        <xsl:value-of select="./ro:namePart"/>.
-    </xsl:if>                
+    <xsl:apply-templates select="./ro:namePart[not (@type)] | ./ro:namePart[not(@type='family') and not(@type='given') and not(@type='initial') and not(@type='full') and not(@type='')]"/>   
+  </xsl:variable> 
+  <xsl:value-of select="concat(substring($displayName,1,string-length($displayName)-2),' ')"/>     
 </xsl:template> 
 
 <xsl:template match="//ro:citationInfo/ro:citationMetadata/ro:date">
