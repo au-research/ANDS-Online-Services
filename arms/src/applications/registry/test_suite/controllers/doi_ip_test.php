@@ -17,6 +17,8 @@ class Doi_ip_test extends MX_Controller {
 		 * @var in the form of array(test_name, 1st argument, 2nd argument, expected_result)
 		 */
 		$test_cases = array(
+			array('Test IP in CSV Range w/ more than 2 values (list mode)', '192.168.10.14', '192.168.10.1,192.168.10.15,192.168.10.14', true),
+			array('Test IP in CSV Range w/ 2 values (range mode)', '192.168.10.14', '168.168.10.1,192.168.10.15', true),
 			array('Host Name against IP', 'ands3.anu.edu.au', '130.56.62.109', true),
 			array('Sample Test', '130.56.111.71', '130.56.60.97,130.56.111.71', true),
 			array('Host Name against IP', 'ands3.anu.edu.au', '130.56.62.129', false),
