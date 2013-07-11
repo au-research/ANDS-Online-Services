@@ -17,6 +17,8 @@ class Doi_ip_test extends MX_Controller {
 		 * @var in the form of array(test_name, 1st argument, 2nd argument, expected_result)
 		 */
 		$test_cases = array(
+			array('Test IP in CSV Range w/ more than 2 values (list mode)', '192.168.10.14', '192.168.10.1,192.168.10.15,192.168.10.14', true),
+			array('Test IP in CSV Range w/ 2 values (range mode)', '192.168.10.14', '168.168.10.1,192.168.10.15', true),
 			array('Host Name against IP', 'ands3.anu.edu.au', '130.56.62.109', true),
 			array('Host Name against IP', 'ands3.anu.edu.au', '130.56.62.129', false),
 			array('Host Name against IP', 'hello world!#$%$#%', '130.56.62.129', false),
@@ -50,9 +52,34 @@ class Doi_ip_test extends MX_Controller {
 	function test_ip($ip, $ip_range){
 		$ip_range = explode(',',$ip_range);
 		if(sizeof($ip_range)>1){
-			foreach($ip_range as $ip_to_match){
-				if($this->ip_match($ip,$ip_to_match)){
+
+			$target_ip = ip2long($ip);
+			// If exactly 2, then treat the values as the upper and lower bounds of a range for checking
+			// AND the target_ip is valid
+			if (count($ip_range) == 2 && $target_ip)
+			{
+				// convert dotted quad notation to long for numeric comparison
+				$lower_bound = ip2long($ip_range[0]);
+				$upper_bound = ip2long($ip_range[1]);
+
+				// If the target_ip is valid
+				if ($target_ip >= $lower_bound && $target_ip <= $upper_bound)
+				{
 					return true;
+				}
+				else
+				{
+					return false;
+				}
+
+			}
+			else
+			{
+				// Else, fallback to treating them as a list 
+				foreach($ip_range as $ip_to_match){
+					if($this->ip_match($ip,$ip_to_match)){
+						return true;
+					}
 				}
 				return false;
 			}
