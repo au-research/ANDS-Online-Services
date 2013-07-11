@@ -1622,6 +1622,7 @@ public function getContributorGroupsEdit()
 		$message = 'THANK YOU';
 		$harvestId = false;
 		$gotErrors = false;
+		$ghostHarvest = false;
 		$logMsg = 'Harvest completed successfully';
 		$logMsgErr = 'An error occurred whilst trying to harvest records';
 
@@ -1634,9 +1635,6 @@ public function getContributorGroupsEdit()
 		$dataSource = $this->ds->getByHarvestID($harvestId);
 			if($dataSource)// WE MIGHT GET A GHOST HARVEST
 			{
-				
-
-
 				if (isset($POST['content'])){
 					$data =  $this->input->post('content');
 				}
@@ -1760,10 +1758,6 @@ public function getContributorGroupsEdit()
 							$this->importer->addToDeletedList($deleted_and_affected_record_keys['deleted_record_keys']);
 							$this->importer->addToAffectedList($deleted_and_affected_record_keys['affected_record_keys']);
 						} 
-						if($dataSource->harvest_frequency != '')
-						{
-							$dataSource->requestHarvest();
-						}
 					}
 					$importer_log = "IMPORT COMPLETED" . NL;
 					$importer_log .= "====================" . NL;
@@ -1774,6 +1768,7 @@ public function getContributorGroupsEdit()
 			else
 			{
 				$message = "DataSource doesn't exists";
+				$ghostHarvest = true;				
 			}
 			
 		}
@@ -1794,7 +1789,6 @@ public function getContributorGroupsEdit()
 		
 		if ($done =='TRUE' && $mode =='HARVEST')
 		{
-
 			//if ($dataSource->harvest_method == 'RIF')
 			//{
 				$harvested_record_count = 0;
@@ -1826,6 +1820,18 @@ public function getContributorGroupsEdit()
 				}
 				$this->importer->addToImportedIDList($importedIds);
 				$this->importer->finishImportTasks();
+
+				if($dataSource->advanced_harvest_mode == 'INCREMENTAL')
+				{
+					date_default_timezone_set('UTC');
+					$dataSource->setAttribute("last_harvest_run_date",date("Y-m-d\TH:i:s\Z", time()));
+					date_default_timezone_set('Australia/Canberra');
+				}
+				else
+				{
+					$dataSource->setAttribute("last_harvest_run_date",'');
+				}
+
 				$dataSource->updateStats();
 
 				$dataSource->append_log('Harvest complete! '.$harvested_record_count.' records harvested and ingested into the registry...  (harvest ID: '.$harvestId.')', HARVEST_INFO, "harvester", "HARVESTER_INFO");
@@ -1838,9 +1844,34 @@ public function getContributorGroupsEdit()
 			{
 				$dataSource->append_log('IMPORTER BENCHMARK RESULTS:'.NL.$this->importer->getBenchMarkLogs(), HARVEST_INFO, "importer", "BENCHMARK_INFO");
 			}
+			
+
+
+			if($dataSource->harvest_frequency != '')
+			{							
+				$dataSource->requestHarvest();
+			}
+
 
 		}
+		if($ghostHarvest) // in case it was a 'ghost' harvest, just tell the harvester to delete it
+		{
 
+			$harvesterBaseURI = $this->config->item('harvester_base_url');
+			$request = $harvesterBaseURI."deleteHarvestRequest?harvestid=".$harvestId;
+			$errors = '';
+			try
+			{
+				$dom_xml = file_get_contents($request, false, stream_context_create(array('http'=>array('timeout' => 5))));
+				$resultMessage = new DOMDocument();
+				$result = $resultMessage->loadXML($dom_xml);
+			}
+			catch (Exception $e)
+			{
+				$errors = $e->getMessage(); // no place to log errors
+			}
+
+		}
 
 
 	}

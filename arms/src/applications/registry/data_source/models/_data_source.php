@@ -652,6 +652,8 @@ class _data_source {
 			foreach($oldRequests as $request)
 			{	
 				$this->deleteHarvestRequest($request['id']);
+				$this->cancelHarvestRequest($request['id']); // TO DO CHECK ME PLEASE!!!
+
 			}			
 		}
 	}
@@ -870,7 +872,6 @@ class _data_source {
         if($nextHarvest == '')
 			$nextHarvest = $harvestDate;	
 
-		
 		date_default_timezone_set('UTC');
 		if($immediate)
 		{
@@ -896,14 +897,17 @@ class _data_source {
 
 		$dispDateTime = date("j F Y, g:i a"	,strtotime($nextHarvest));
 		$msg = 'Scheduled for: '.$dispDateTime ." (".$nextHarvest.")";
+		if($advancedHarvestMode == 'INCREMENTAL')
+		{
+			if($this->getAttribute("last_harvest_run_date") != '')
+			{
+				$msg .= NL.'Icremental harvest from: '.date("j F Y, g:i a"	,strtotime($this->getAttribute("last_harvest_run_date")));
+			}
+		}
 		$status = "SCHEDULED FOR ". $dispDateTime;	
 		
 		$harvestRequestId = $this->insertHarvestRequest($harvestFrequency, $OAISet, $created, $updated, $dispDateTime, $status);
 		
-
-
-
-
 		$msg .= NL.'URI: '.$dataSourceURI;
 		$msg .= NL.'Provider Type: '.$providerType;
 		$msg .= NL.'Harvest Method: '.$harvestMethod;
@@ -926,7 +930,13 @@ class _data_source {
 			$harvestRequest .= '&date='.urlencode($nextHarvest);
 			$harvestRequest .= '&frequency='.urlencode($harvestFrequency);
 		}
-
+		if($advancedHarvestMode == 'INCREMENTAL')
+		{
+			if($this->getAttribute("last_harvest_run_date") != '')
+			{
+				$harvestRequest .= '&from='.$this->getAttribute("last_harvest_run_date");
+			}
+		}
 		// Submit the request.
 		//$logID = 0;
 		//if($dataSourceURI && $dataSourceURI != 'http://')
