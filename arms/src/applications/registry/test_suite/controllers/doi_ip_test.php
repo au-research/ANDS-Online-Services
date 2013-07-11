@@ -72,7 +72,6 @@ class Doi_ip_test extends MX_Controller {
 				{
 					return false;
 				}
-
 			}
 			else
 			{
