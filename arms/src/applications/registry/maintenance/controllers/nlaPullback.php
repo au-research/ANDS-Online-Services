@@ -12,6 +12,7 @@ class nlaPullback extends MX_Controller
 	private $nlaPartyDataSourceKey;  // what data source do we put them into?  
 	private $nlaServiceURI;
 	private $dataSource = null; // pointer to target DS. leave as null
+	private $mode = '';
 
 	function index()
 	{
@@ -90,7 +91,6 @@ class nlaPullback extends MX_Controller
 		}
 
 	}
-
 
 	function extractRIFCSfromQueue($pullback_queue)
 	{
@@ -175,11 +175,22 @@ class nlaPullback extends MX_Controller
   	 	set_exception_handler(array($this, 'cli_exception_handler'));
         define('IS_CLI_SCRIPT', true);
 
+
+
         /* Load config */
         $this->load->config('nla_pullback');
+
+		parse_str(substr(strrchr($_SERVER['REQUEST_URI'], "?"), 1), $_GET);
+		if(isset($_GET['mode']))
+		{
+ 			$this->mode=$_GET['mode'];
+		}
+
 		$this->nlaPartyPrefix = $this->config->item('nlaPartyPrefix'); 
-		$this->nlaPartyDataSourceKey = $this->config->item('nlaPartyDataSourceKey'); 
-		$this->nlaServiceURI = $this->config->item('nlaServiceURI');
+		$this->nlaPartyDataSourceKey = $this->config->item('nlaPartyDataSourceKey'.$this->mode); 
+		$this->nlaServiceURI = $this->config->item('nlaServiceURI'.$this->mode);
+
+
 
 		if (!$this->nlaPartyDataSourceKey)
 		{
@@ -192,8 +203,8 @@ class nlaPullback extends MX_Controller
 		$this->dataSource = $this->_CI->ds->getByKey($this->nlaPartyDataSourceKey);
 		if (!$this->dataSource)
 		{
-			$this->dataSource = $this->ds->create($this->nlaPartyDataSourceKey, $this->config->item('nlaPartyDataSourceDefaultTitle'));
-			$this->dataSource->setAttribute('title', $this->config->item('nlaPartyDataSourceDefaultTitle'));
+			$this->dataSource = $this->ds->create($this->nlaPartyDataSourceKey, $this->config->item('nlaPartyDataSourceDefaultTitle'.$this->mode));
+			$this->dataSource->setAttribute('title', $this->config->item('nlaPartyDataSourceDefaultTitle'.$this->mode));
 			$this->dataSource->setAttribute('record_owner', 'SYSTEM');
 			$this->dataSource->save();
 			$this->dataSource->updateStats();
@@ -204,7 +215,7 @@ class nlaPullback extends MX_Controller
     function __destruct() 
     {
        print NL . NL . "Execution finished! Took " . sprintf ("%.3f", (float) (microtime(true) - $this->start_time)) . "s" . NL;
-       $this->dataSource->append_log("Performing pullback of NLA records..." . NL . ob_get_contents());
+       $this->dataSource->append_log("Performing pullback of ".$this->mode." NLA records..." . NL . ob_get_contents());
        ob_end_flush();
    	}
 
