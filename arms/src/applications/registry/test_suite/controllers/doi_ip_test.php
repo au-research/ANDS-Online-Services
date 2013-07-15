@@ -51,16 +51,38 @@ class Doi_ip_test extends MX_Controller {
 	function test_ip($ip, $ip_range){
 		$ip_range = explode(',',$ip_range);
 		if(sizeof($ip_range)>1){
-			foreach($ip_range as $ip_to_match){
-				if($this->ip_match($ip,$ip_to_match)){
+
+			$target_ip = ip2long($ip);
+			// If exactly 2, then treat the values as the upper and lower bounds of a range for checking
+			// AND the target_ip is valid
+			if (count($ip_range) == 2 && $target_ip)
+			{
+				// convert dotted quad notation to long for numeric comparison
+				$lower_bound = ip2long($ip_range[0]);
+				$upper_bound = ip2long($ip_range[1]);
+
+				// If the target_ip is valid
+				if ($target_ip >= $lower_bound && $target_ip <= $upper_bound)
+				{
 					return true;
 				}
+			}
+			else
+			{
+				// Else, fallback to treating them as a list 
+				foreach($ip_range as $ip_to_match){
+					if($this->ip_match($ip,$ip_to_match)){
+						return true;
+					}
+				}
+
 			}
 			return false;
 		}else{
 			return $this->ip_match($ip,$ip_range[0]);
 		}
 	}
+
 
 	/**
 	 * a helper function for test_ip
