@@ -465,10 +465,11 @@ class _data_source {
 							{
 								//we need to automatically create the group party record if it dosn't exist				
 								$xml = wrapRegistryObjects($this->_CI->rifcs->xml($data_source_key ,$registry_object_key,$title,$group));
+								$this->_CI->importer->forceDraft();									
 								$this->_CI->importer->setXML($xml);
 								$this->_CI->importer->setDatasource($this);
 								$the_key = $this->_CI->importer->commit();
-								$this->_CI->importer->forceDraft();		
+	
 								$contributorPage = $this->_CI->ro->getAllByKey($registry_object_key);
 								//we need to email services that we have created this page	
 								if ($notifyChange)

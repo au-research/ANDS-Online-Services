@@ -46,6 +46,7 @@ class nlaPullback extends MX_Controller
 		$this->load->library('solr');
 		$this->solr->setOpt('q', 'identifier_value:"'.$this->nlaPartyPrefix.'*" -data_source_id:'.$this->dataSource->id);
 		$this->solr->setOpt('fl','identifier_value');
+		$this->solr->setOpt('rows',1000);		
 		$this->solr->executeSearch();
 		if ($this->solr->getNumFound() > 0)
 		{
