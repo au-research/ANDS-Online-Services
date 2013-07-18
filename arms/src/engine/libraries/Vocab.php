@@ -253,20 +253,26 @@ class Vocab {
                 $c['prefLabel'] = $resolved_concept->{'result'}->{'primaryTopic'}->{'prefLabel'}->{'_value'};
                 $c['uri'] = $resolved_concept->{'result'}->{'primaryTopic'}->{'_about'};
                 $c['collectionNum'] = $this->getNumCollections($c['uri'],$filters);
-                if($c['collectionNum'] > 0) $tree['topConcepts'][] = $c;
+                if($c['collectionNum'] > 0){
+                    $tree['topConcepts'][] = $c;
+                }
             }
         }
-        $sort = array();
-        if(isset($filters['facetsort']) && $filters['facetsort']=='alpha'){ 
-            foreach($tree['topConcepts'] as $key=>$c){
-                $sort[$key] = $c['prefLabel'];
+       
+        if(isset($tree['topConcepts']) && is_array($tree['topConcepts']))
+        {
+            $sort = array();
+            if(isset($filters['facetsort']) && $filters['facetsort']=='alpha'){ 
+                foreach((array)$tree['topConcepts'] as $key=>$c){
+                    $sort[$key] = $c['prefLabel'];
+                }
+                array_multisort($sort, SORT_ASC, $tree['topConcepts']);
+            }else{
+                foreach((array)$tree['topConcepts'] as $key=>$c){
+                    $sort[$key] = $c['collectionNum'];
+                }
+                array_multisort($sort, SORT_DESC, $tree['topConcepts']);
             }
-            array_multisort($sort, SORT_ASC, $tree['topConcepts']);
-        }else{
-            foreach($tree['topConcepts'] as $key=>$c){
-                $sort[$key] = $c['collectionNum'];
-            }
-            array_multisort($sort, SORT_DESC, $tree['topConcepts']);
         }
         return $tree;
     }
