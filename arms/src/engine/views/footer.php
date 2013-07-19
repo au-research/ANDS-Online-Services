@@ -52,7 +52,7 @@
             <script src="<?php echo base_url();?>assets/lib/bootstrap_toggle_button/jquery.toggle.buttons.js" type="text/javascript"></script>
             <script src="<?php echo base_url();?>assets/lib/qtip2/jquery.qtip.min.js" type="text/javascript"></script>
             <script src="<?php echo base_url();?>assets/lib/youtubepopup/jquery.youtubepopup.min.js" type="text/javascript"></script>            
-            <script src="<?php echo base_url();?>assets/registry_object_search/js/rosearch_widget.js" type="text/javascript"></script>
+            <!--script src="<?php echo base_url();?>assets/registry_object_search/js/rosearch_widget.js" type="text/javascript"></script-->
 
         <?php elseif($lib=='graph'):?>
 

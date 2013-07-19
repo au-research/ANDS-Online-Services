@@ -224,13 +224,13 @@ class Cosi_authentication extends CI_Model {
     
     
     
-    public function getRolesAndActivitiesByRoleID ($role_id)
+    public function getRolesAndActivitiesByRoleID ($role_id, $recursive = true)
     {
     	$ret = array('organisational_roles'=>array(), 'functional_roles'=>array(), 'activities'=>array());
 
         $superadmin = false; // superadmins inherit all roles/functions
 
-    	$roles = $this->getChildRoles($role_id);
+    	$roles = $this->getChildRoles($role_id, $recursive);
     	foreach ($roles AS $role)
    		{
     		if (trim($role['role_type_id']) == gCOSI_AUTH_ROLE_ORGANISATIONAL)
@@ -252,7 +252,7 @@ class Cosi_authentication extends CI_Model {
     	}
 
         // Superadmins get all organisational roles
-        if ($superadmin)
+        if ($superadmin && $recursive)
         {
             function getOnlyRoleIds(&$item, $key) { $item = $item['role_id']; }
             $orgRoles = $this->getAllOrganisationalRoles();
@@ -329,7 +329,7 @@ class Cosi_authentication extends CI_Model {
     }
     
     
-    private function getChildRoles($role_id)
+    private function getChildRoles($role_id, $recursive = true)
     {
     	$roles = array();
     	
@@ -342,7 +342,7 @@ class Cosi_authentication extends CI_Model {
     	foreach($related_roles->result() AS $row)
     	{
     		$roles[] = array("role_id" => $row->parent_role_id, "role_type_id" => $row->role_type_id);
-    		$roles = array_merge($roles, $this->getChildRoles($row->parent_role_id));
+    		if($recursive) $roles = array_merge($roles, $this->getChildRoles($row->parent_role_id));
     	}
     	
     	return $roles;
