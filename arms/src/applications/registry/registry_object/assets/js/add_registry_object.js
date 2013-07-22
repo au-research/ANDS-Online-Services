@@ -567,7 +567,7 @@ function initEditForm(){
 				});
 
 				xml+='</'+ro_class+'></registryObject>';
-log(xml);
+
 				/* Keep a backup of the form's RIFCS */
 				$('#myModal .modal-header h3').html('<h3>Take a backup of your Record\'s XML Contents</h3>');
 				$('#myModal .modal-body').html('<div style="width:100%; margin:both; text-align:left;">' + 
@@ -755,7 +755,7 @@ function validate(){
 		type: 'POST',
 		data: {xml:xml},
 		success: function(data){
-			log(data);
+			// log(data);
 			$('.alert:not(.persist)').remove();
 			if(data.SetInfos) $.each(data.SetInfos, function(e,i){addValidationMessage(i, 'info');});
 			if(data.SetErrors) $.each(data.SetErrors, function(e,i){addValidationMessage(i, 'error');});
