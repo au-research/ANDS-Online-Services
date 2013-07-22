@@ -175,7 +175,7 @@
     
     <xsl:template match="licence">
         <xsl:choose>
-            <xsl:when test="@type != '' or value/text() != '' or @rightsUri != ''">
+            <xsl:when test="@type != '' or text() != '' or @rightsUri != ''">
                 <xsl:copy>
                     <xsl:apply-templates select="@* | node()" />
                 </xsl:copy>   
@@ -185,7 +185,7 @@
 
     <xsl:template match="rightsStatement">
         <xsl:choose>
-            <xsl:when test="value/text() != ''">
+            <xsl:when test="text() != ''">
                 <xsl:copy>
                     <xsl:apply-templates select="@* | node()" />
                 </xsl:copy>   

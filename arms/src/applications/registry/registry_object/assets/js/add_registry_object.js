@@ -1424,8 +1424,8 @@ function getRIFCSforTab(tab, hasField){
 							fragment += '<'+$(this).attr('type')+' field_id="' +$(this).attr('field_id')+'" dateFormat="'+htmlEntities($('input[name=dateFormat]', this).val())+'">';
 							fragment += $('input[name=value]', this).val();
 							fragment +='</'+$(this).attr('type')+'>';
-					}else if(type=='rightStatement'){
-						 fragment += '<'+$(this).attr('type')+' rightsUri="'+htmlEntities($('input[name=rightsUri]', this).val())+'">'+htmlEntities($('input[name=value]', this).val())+'</'+$(this).attr('type')+'>';	
+					}else if(type=='rightsStatement'){
+						  fragment += '<'+$(this).attr('type')+' rightsUri="'+htmlEntities($('input[name=rightsUri]', this).val())+'">'+htmlEntities($('input[name=value]', this).val())+'</'+$(this).attr('type')+'>';	
 					}else if(type=='licence' || type=='accessRights' ){
 						 fragment += '<'+$(this).attr('type')+' type="'+htmlEntities($('input[name=type]', this).val())+'" rightsUri="'+htmlEntities($('input[name=rightsUri]', this).val())+'">'+htmlEntities($('input[name=value]', this).val())+'</'+$(this).attr('type')+'>';	
 					}else if(type=='contributor'){
