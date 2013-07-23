@@ -1029,6 +1029,11 @@
         <xsl:text> </xsl:text>      
         <xsl:value-of select="./ro:publisher"/>.
     </xsl:if>
+    <xsl:if test="./ro:url != ''">
+        <br/>    
+          <a href="{./ro:url}" class="external"><xsl:value-of select="./ro:url"/></a>
+        <br/>
+    </xsl:if>
     <xsl:if test="./ro:identifier != ''">
        <xsl:apply-templates select="./ro:identifier[@type = 'doi']"  mode="doi_prefixedLink"/>  
        <xsl:apply-templates select="./ro:identifier[@type = 'uri']"  mode="uri_prefixedLink"/>  
@@ -1042,26 +1047,7 @@
        <xsl:apply-templates select="./ro:identifier[@type != 'doi' and @type != 'uri' and @type != 'URL' and @type != 'url' and @type != 'purl' and @type != 'handle' and @type != 'AU-ANL:PEAU' and @type != 'ark' and @type!='orcid']"  mode="other_prefixedLink"/>
        <xsl:text>.</xsl:text>
    </xsl:if>
-    <!--xsl:if test="./ro:version != ''">
-        <xsl:text> </xsl:text>
-        <xsl:value-of select="./ro:version"/>.
-    </xsl:if>   
-    <xsl:if test="./ro:placePublished != ''">
-        <xsl:text> </xsl:text>      
-        <xsl:value-of select="./ro:placePublished"/>.
-    </xsl:if>
-    <xsl:if test="./ro:publisher != ''">
-        <xsl:text> </xsl:text>      
-        <xsl:value-of select="./ro:publisher"/>.
-    </xsl:if>        
-    <xsl:if test="./ro:url != ''">
-        <xsl:text> </xsl:text>      
-        <xsl:value-of select="./ro:url"/>
-    </xsl:if>
-    <xsl:if test="./ro:context != ''">
-        <xsl:text> </xsl:text>      
-        , <xsl:value-of select="./ro:context"/>
-    </xsl:if-->
+   
     <xsl:if test="./ro:identifier != ''">
       <xsl:variable name="theResolvedURL">
         <xsl:apply-templates select="./ro:identifier[@type = 'doi']"  mode="doi_resolveURL"/>  
@@ -1073,7 +1059,6 @@
         <xsl:apply-templates select="./ro:identifier[@type = 'AU-ANL:PEAU']"  mode="nla_resolveURL"/>
         <xsl:apply-templates select="./ro:identifier[@type = 'ark']"  mode="ark_resolveURL"/>  
         <xsl:apply-templates select="./ro:identifier[@type = 'orcid']"  mode="orcid_resolveURL"/>  
-        <xsl:apply-templates select="./ro:identifier[@type != 'doi' and @type != 'uri' and @type != 'URL' and @type != 'url' and @type != 'purl' and @type != 'handle' and @type != 'AU-ANL:PEAU' and @type != 'ark' and @type != 'orcid']"  mode="other_resolveURL"/>
       </xsl:variable>
 
       <br/>
