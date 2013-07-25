@@ -103,11 +103,22 @@ class Roles extends CI_Model {
     }
 
     function descendants($role_id){
+        $res = array();
         $result = $this->cosi_db->query("SELECT rr.parent_role_id, r.role_type_id, r.name, r.role_id
                                             FROM dba.tbl_role_relations rr  
                                             JOIN dba.tbl_roles r ON r.role_id = rr.child_role_id                               
                                             WHERE rr.parent_role_id = '" . $role_id . "'
                                               AND r.enabled='t'");
+        if($result->num_rows() > 0){
+            foreach($result->result() as $r){
+                $res[] = $r;
+                $childs = $this->descendants($r->role_id);
+                if(sizeof($childs) > 0){
+                    $r->childs = $childs;
+                }else $r->childs = false;
+            }
+        }
+        return $res;
         return $result->result();
     }
 

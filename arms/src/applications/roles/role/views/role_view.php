@@ -25,7 +25,7 @@
 		<div class="span8">
 
 
-			<?php if(trim($role->role_type_id)=='ROLE_ORGANISATIONAL'):?>
+			<?php if(trim($role->role_type_id)=='ROLE_ORGANISATIONAL' || trim($role->role_type_id)=='ROLE_FUNCTIONAL'):?>
 			<div class="widget-box">
 				<div class="widget-title">
 					<h5>Users</h5>
@@ -36,6 +36,15 @@
 							foreach($users as $u){
 								echo '<li>';
 								echo anchor('/role/view/'.rawurlencode($u->role_id), $u->name);
+								if($u->childs){
+									echo '<ul>';
+									foreach($u->childs as $uu){
+										echo '<li>';
+										echo anchor('/role/view/'.rawurlencode($uu->role_id), $uu->name);
+										echo '</li>';
+									}
+									echo '</ul>';
+								}
 								//echo '<a href="javascript:;" class="remove_relation" tip="Remove This Role Relation" parent="'.$c->parent_role_id.'" child="'.$role->role_id.'"><i class="icon icon-remove"></i></a>';
 								echo '</li>';
 							}

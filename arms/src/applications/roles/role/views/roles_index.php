@@ -13,6 +13,9 @@
 <?php  $this->load->view('header');?>
 <div class="content-header">
 	<h1>Roles Management</h1>
+	<div class="btn-group">
+				<a href="<?php echo base_url()?>role/add" class="btn btn-large"><i class="icon icon-plus"></i> Add Role</a>
+			</div>
 </div>
 <div id="breadcrumb" style="clear:both;">
 	<?php echo anchor('/', '<i class="icon-home"></i> Home', array('class'=>'tip-bottom', 'title'=>'Go to Home')); ?>

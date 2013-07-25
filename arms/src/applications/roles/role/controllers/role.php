@@ -38,7 +38,7 @@ class Role extends MX_Controller {
 		$data['missingFunctionalRoles'] = array_diff($allFunctionalRoles, $data['recursiveRoles']['functional_roles']);
 		$data['missingOrgRoles'] = array_diff($allOrgRoles, $data['recursiveRoles']['organisational_roles']);
 
-		if(trim($data['role']->role_type_id)=='ROLE_ORGANISATIONAL'){
+		if(trim($data['role']->role_type_id)=='ROLE_ORGANISATIONAL' || trim($data['role']->role_type_id)=='ROLE_FUNCTIONAL'){
 			$data['users'] = $this->roles->descendants(rawurldecode($role_id));
 		}
 
@@ -64,7 +64,9 @@ class Role extends MX_Controller {
 	public function edit($role_id){
 		$role_id = rawurldecode($role_id);
 		if($this->input->get('posted')){
-			$this->roles->edit_role($role_id, $this->input->post());
+			$post = $this->input->post();
+			if(!isset($post['enabled'])) $post['enabled']='f';
+			$this->roles->edit_role($role_id, $post);
 		}
 		$data['role'] = $this->roles->get_role($role_id);
 		$data['title'] = 'Edit - '.$data['role']->name;
