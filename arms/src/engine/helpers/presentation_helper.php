@@ -141,7 +141,7 @@ function ellipsis ($string, $length = 64)
 }
 
 function readable($text, $singular = false){
-	$text = strtolower($text);
+	$text = trim(strtolower($text));
 	switch($text){
         case "all": return 'All'; break;
 		case "draft": return ($singular ? 'Draft' : 'Drafts');break;
@@ -154,6 +154,15 @@ function readable($text, $singular = false){
 		case "party": return 'Parties';break;
 		case "service": return 'Services';break;
 		case "activity": return 'Activities';break;
+        case "role_user": return 'User';break;
+        case "role_organisational": return 'Organisation';break;
+        case "role_functional": return 'Functional';break;
+        case "role_doi_appid": return 'DOI Application Identifier';break;
+        case "t": return "<i class='icon icon-ok'></i>";break;
+        case "f": return "<i class='icon icon-remove'></i>";break;
+        case "authentication_built_in": return "Built-in";break;
+        case "authentication_ldap": return "LDAP";break;
+        case "authentication_shibboleth": return "Shibboleth";break;
 	}
 }
 

@@ -41,7 +41,7 @@
 				<tr>
 					<td><a href="<?php echo base_url();?>role/view/{{{role_id}}}">{{name}}</a></td>
 					<td><span class="label">{{type}}</span></td>
-					<td>{{enabled}}</td>
+					<td>{{{enabled}}}</td>
 				</tr>
 			{{/.}}
 			</tbody>

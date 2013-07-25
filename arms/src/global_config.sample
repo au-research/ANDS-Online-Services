@@ -18,6 +18,7 @@ $ENV['harvester_base_url'] = "http://<your hostname>:8080/harvester/";
 
 /* ENABLED MODULES */
 $ENV['ENABLED_MODULES'] = array(
+	'roles',
 	'registry',
 	'vocab_service',
 	'mydois',

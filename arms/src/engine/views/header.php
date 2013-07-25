@@ -83,7 +83,7 @@ else
 
 
     <div id="header" <?=$environment_header_style;?>>
-      <a href="<?php echo base_url();?>" title="Back to ANDS Online Services Home" tip="Back to ANDS Online Services Home" my="center left" at="center right">
+      <a href="<?php echo registry_url();?>" title="Back to ANDS Online Services Home" tip="Back to ANDS Online Services Home" my="center left" at="center right">
         <img src="<?php echo base_url();?>/assets/img/ands_logo_white.png" alt="ANDS Logo White"/> 
       </a>
       <strong style="color:<?=$environment_colour;?>;"><?=$environment_name;?></strong>
@@ -95,16 +95,27 @@ else
 
             <ul class="nav btn-group">
             
+              <?php if($this->user->hasFunction('REGISTRY_SUPERUSER') && mod_enabled('roles')):?>
+                <li class="btn btn-inverse dropdown">
+                  <a class="dropdown-toggle" data-toggle="dropdown" href="#">Roles <b class="caret"></b></a>
+                  <ul class="dropdown-menu pull-right">
+                    <li class=""><?php echo anchor(roles_url(''), 'List Roles');?></li>
+                    <li class=""><?php echo anchor(roles_url('role/add'), '<i class="icon icon-plus"></i> Add New Role');?></li>
+                  </ul>
+                </li>
+              <?php endif;?>
+
+
               <?php if($this->user->hasFunction('REGISTRY_USER') && mod_enabled('registry')): ?>
                 <li class="btn btn-inverse dropdown">
                   <a class="dropdown-toggle" data-toggle="dropdown" href="#">My Data <b class="caret"></b></a>
                   <ul class="dropdown-menu pull-right">
-                    <li class=""><?php echo anchor('data_source/manage', 'Manage My Data Sources');?></li>
-                    <li class=""><?php echo anchor('registry_object/add', '<i class="icon icon-plus"></i> Add New Record');?></li>
+                    <li class=""><?php echo anchor(registry_url('data_source/manage'), 'Manage My Data Sources');?></li>
+                    <li class=""><?php echo anchor(registry_url('registry_object/add'), '<i class="icon icon-plus"></i> Add New Record');?></li>
                     <li class="divider"></li>
                     <li class=""><?php echo anchor(portal_url(), '<i class="icon-globe icon"></i> Research Data Australia',array("target"=>"_blank"));?></li>
                     <li class="divider"></li>
-                    <li class=""><?php echo anchor('registry_object/gold_standard', 'Gold Standard Records');?></li>
+                    <li class=""><?php echo anchor(registry_url('registry_object/gold_standard'), 'Gold Standard Records');?></li>
                   </ul>
                 </li>
               <?php endif; ?>
@@ -120,7 +131,7 @@ else
 
                     <?php if ($this->user->hasFunction('DOI_USER') && mod_enabled('mydois')): ?>
                       <li>
-                        <?php echo anchor('mydois', 'My Digital Object Identifiers (DOI)');?>
+                        <?php echo anchor(registry_url('mydois'), 'My Digital Object Identifiers (DOI)');?>
                       </li>
                     <?php endif; ?>
 
@@ -132,14 +143,14 @@ else
               <li class="btn btn-inverse dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">Vocabularies <b class="caret"></b></a>
                 <ul class="dropdown-menu pull-right">
-                  <li class=""><?php echo anchor('vocab_service/', 'Browse Vocabularies');?></li>
+                  <li class=""><?php echo anchor(registry_url('vocab_service/'), 'Browse Vocabularies');?></li>
                   <?php if($this->user->loggedIn()):?>
-                    <li class=""><?php echo anchor('vocab_service/addVocabulary', 'Publish');?></li>
+                    <li class=""><?php echo anchor(registry_url('vocab_service/addVocabulary'), 'Publish');?></li>
                   <?php else:?>
-                    <li class=""><?php echo anchor('vocab_service/publish', 'Publish');?></li>
+                    <li class=""><?php echo anchor(registry_url('vocab_service/publish'), 'Publish');?></li>
                   <?php endif;?>
-                  <li class=""><?php echo anchor('vocab_service/support', 'Support');?></li>
-                  <li class=""><?php echo anchor('vocab_service/about', 'About');?></li>
+                  <li class=""><?php echo anchor(registry_url('vocab_service/support'), 'Support');?></li>
+                  <li class=""><?php echo anchor(registry_url('vocab_service/about'), 'About');?></li>
                 </ul>
               </li>
               <?php endif;?>

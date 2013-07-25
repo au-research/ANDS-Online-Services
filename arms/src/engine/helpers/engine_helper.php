@@ -174,6 +174,12 @@ function portal_url($suffix='')
 	return $CI->config->item('default_base_url') . $suffix;
 }
 
+function roles_url($suffix=''){
+	$CI =& get_instance();
+
+	return $CI->config->item('default_base_url') . 'roles/'. $suffix;
+}
+
 function current_protocol()
 {
 	$url = parse_url(site_url());

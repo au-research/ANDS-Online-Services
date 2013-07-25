@@ -55,11 +55,88 @@ class Roles extends CI_Model {
         }
     }
 
-    function list_childs($parent_role_id){
-        $result = $this->cosi_db->get_where("dba.tbl_role_relations",    
-                                                    array(
-                                                        "parent_role_id"=>$parent_role_id
-                                                    ));
+    
+
+    function add_relation($parent_role_id, $child_role_id){
+        $result = $this->cosi_db->insert('dba.tbl_role_relations', 
+            array(
+                'parent_role_id'=>$parent_role_id,
+                'child_role_id'=>$child_role_id,
+                'created_who'=>$this->user->identifier()
+            )
+        );
+    }
+
+    function remove_relation($parent_role_id, $child_role_id){
+        $result = $this->cosi_db->delete('dba.tbl_role_relations',
+            array(
+                'parent_role_id'=>$parent_role_id,
+                'child_role_id'=>$child_role_id
+            )
+        );
+    }
+
+    function list_childs($role_id){
+        $res = array();
+        // $role = $this->get_role($role_id);
+
+        
+        $result = $this->cosi_db->query("SELECT rr.parent_role_id, r.role_type_id, r.name, r.role_id
+                                            FROM dba.tbl_role_relations rr  
+                                            JOIN dba.tbl_roles r ON r.role_id = rr.parent_role_id                               
+                                            WHERE rr.child_role_id = '" . $role_id . "'
+                                              AND r.enabled='t'");
+        
+
+        if($result->num_rows() > 0){
+            foreach($result->result() as $r){
+                $res[] = $r;
+                $childs = $this->list_childs($r->parent_role_id);
+                if(sizeof($childs) > 0){
+                    $r->childs = $childs;
+                }else{
+                    $r->childs = false;
+                }
+            }
+        }
+        return $res;
+    }
+
+    function descendants($role_id){
+        $result = $this->cosi_db->query("SELECT rr.parent_role_id, r.role_type_id, r.name, r.role_id
+                                            FROM dba.tbl_role_relations rr  
+                                            JOIN dba.tbl_roles r ON r.role_id = rr.child_role_id                               
+                                            WHERE rr.parent_role_id = '" . $role_id . "'
+                                              AND r.enabled='t'");
         return $result->result();
+    }
+
+    function add_role($post){
+        $result = $this->cosi_db->insert('dba.tbl_roles', 
+            array(
+                'role_id'=>$post['role_id'],
+                'name'=>$post['name'],
+                'role_type_id'=>$post['role_type_id'],
+                'enabled'=> ($post['enabled']=='on' ? 't' : 'f'),
+                'authentication_service_id'=> trim($post['authentication_service_id']),
+                'created_who'=>$this->user->identifier()
+            )
+        );
+    }
+
+    function edit_role($role_id, $post){
+        $this->cosi_db->where('role_id', $role_id);
+        $this->cosi_db->update('dba.tbl_roles', 
+            array(
+                'name'=> $post['name'],
+                'enabled'=>($post['enabled']=='on' ? 't' : 'f')
+            )
+        ); 
+    }
+
+    function delete_role($role_id){
+        $this->cosi_db->delete('dba.tbl_role_relations', array('parent_role_id' => $role_id));
+        $this->cosi_db->delete('dba.tbl_role_relations', array('child_role_id' => $role_id));
+        $this->cosi_db->delete('dba.tbl_roles', array('role_id' => $role_id));
     }
 }

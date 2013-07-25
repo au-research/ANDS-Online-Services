@@ -24,18 +24,69 @@ class Role extends MX_Controller {
 		$data['role'] = $this->roles->get_role(rawurldecode($role_id));
 
 		$this->load->model('cosi_authentication', 'cosi');
-		$data['roles'] = $this->cosi->getRolesAndActivitiesByRoleID($role_id,false); //only get explicit
+		$data['childs'] = $this->roles->list_childs($role_id); //only get explicit
 		$data['recursiveRoles'] = $this->cosi->getRolesAndActivitiesByRoleID($role_id);
 
 		$allFunctionalRoles = array();
+		$allOrgRoles = array();
 		foreach($this->roles->list_roles('ROLE_FUNCTIONAL') as $f){
 			array_push($allFunctionalRoles, $f->role_id);
 		}
+		foreach($this->roles->list_roles('ROLE_ORGANISATIONAL') as $o){
+			array_push($allOrgRoles, $o->role_id);
+		}
 		$data['missingFunctionalRoles'] = array_diff($allFunctionalRoles, $data['recursiveRoles']['functional_roles']);
+		$data['missingOrgRoles'] = array_diff($allOrgRoles, $data['recursiveRoles']['organisational_roles']);
+
+		if(trim($data['role']->role_type_id)=='ROLE_ORGANISATIONAL'){
+			$data['users'] = $this->roles->descendants(rawurldecode($role_id));
+		}
 
 		$data['title'] = 'View Role - '.$data['role']->name;
+		$data['scripts'] = array('role_view');
 		$data['js_lib'] = array('core');
 		$this->load->view('role_view', $data);
+	}
+
+	public function add(){
+		if($this->input->get('posted')){
+			$post = $this->input->post();
+			if(trim($post['authentication_service_id'])=='') unset($post['authentication_service_id']);
+			$this->roles->add_role($post);
+			$this->index();
+		}else{
+			$data['title'] = 'Add New Role';
+			$data['js_lib'] = array('core');
+			$this->load->view('role_add', $data);
+		}
+	}
+
+	public function edit($role_id){
+		$role_id = rawurldecode($role_id);
+		if($this->input->get('posted')){
+			$this->roles->edit_role($role_id, $this->input->post());
+		}
+		$data['role'] = $this->roles->get_role($role_id);
+		$data['title'] = 'Edit - '.$data['role']->name;
+		$data['js_lib'] = array('core');
+		$this->load->view('role_edit', $data);
+	}
+
+	public function delete(){
+		$this->roles->delete_role($this->input->post('role_id'));
+	}
+
+	public function add_relation(){
+		$this->roles->add_relation($this->input->post('parent'), $this->input->post('child'));
+	}
+
+	public function remove_relation(){
+		$this->roles->remove_relation($this->input->post('parent'), $this->input->post('child'));
+	}
+
+	public function test(){
+		// $this->roles->add_relation('REGISTRY_SUPERUSER', 'u4297901');
+		echo json_encode($this->roles->descendants('AuScope'));
 	}
 
 	public function all_roles(){
@@ -49,8 +100,8 @@ class Role extends MX_Controller {
 			$role = array(
 				'role_id' => rawurlencode($role->role_id),
 				'name' => $role->name,
-				'type' => $role->role_type_id,
-				'enabled' => $role->enabled,
+				'type' => readable($role->role_type_id),
+				'enabled' => readable($role->enabled),
 				'last_modified' => $role->modified_when,
 				'auth_service' => $role->authentication_service_id
 			);

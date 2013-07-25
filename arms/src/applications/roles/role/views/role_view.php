@@ -23,23 +23,68 @@
 	<div class="row-fluid">
 
 		<div class="span8">
+
+
+			<?php if(trim($role->role_type_id)=='ROLE_ORGANISATIONAL'):?>
+			<div class="widget-box">
+				<div class="widget-title">
+					<h5>Users</h5>
+				</div>
+				<div class="widget-content">
+					<ul>
+						<?php 
+							foreach($users as $u){
+								echo '<li>';
+								echo anchor('/role/view/'.rawurlencode($u->role_id), $u->name);
+								//echo '<a href="javascript:;" class="remove_relation" tip="Remove This Role Relation" parent="'.$c->parent_role_id.'" child="'.$role->role_id.'"><i class="icon icon-remove"></i></a>';
+								echo '</li>';
+							}
+						?>
+					</ul>
+				</div>
+			</div>
+			<?php endif;?>
+
 			<div class="widget-box">
 				<div class="widget-title"><h5>Functional Roles</h5></div>
 				<div class="widget-content">
 					<ul>
-					<?php foreach($roles['functional_roles'] as $f):?>
-						<li><?php echo anchor('/role/view/'.rawurlencode($f), $f);?> <i class="icon icon-remove"></i></li>
+					<?php foreach($childs as $c):?>
+						<?php
+							if(trim($c->role_type_id) == "ROLE_FUNCTIONAL"){
+								echo '<li>';
+								echo anchor('/role/view/'.rawurlencode($c->parent_role_id), $c->name);
+								echo '<a href="javascript:;" class="remove_relation" tip="Remove This Role Relation" parent="'.$c->parent_role_id.'" child="'.$role->role_id.'"><i class="icon icon-remove"></i></a>';
+								if($c->childs){
+									echo '<ul>';
+									foreach($c->childs as $cc){
+										echo '<li>';
+										echo anchor('/role/view/'.rawurlencode($cc->parent_role_id), $cc->name);
+										if($cc->childs){
+											foreach($cc->childs as $ccc){
+												echo '<ul>';
+												echo anchor('/role/view/'.rawurlencode($ccc->parent_role_id), $ccc->name);
+												echo '</ul>';
+											}
+										}
+										echo '</li>';
+									}
+									echo '</ul>';
+								}
+								echo '</li>';
+							}
+						?>
 					<?php endforeach;?>
 					</ul>
 					<form class="form-inline">
-					<select>
-						<option value=""></option>
-						<?php foreach($missingFunctionalRoles as $f):?>
-							<option value="<?php echo $f;?>"><?php echo $f;?></option>
-						<?php endforeach ?>
-					</select>
-					<a href="javascript:;" class="btn"><i class="icon icon-plus"></i> Add</a>
-				</form>
+						<select>
+							<option value=""></option>
+							<?php foreach($missingFunctionalRoles as $f):?>
+								<option value="<?php echo $f;?>"><?php echo $f;?></option>
+							<?php endforeach ?>
+						</select>
+						<a href="javascript:;" child="<?php echo $role->role_id;?>"class="btn add_role" tip="Add This Role Relation"><i class="icon icon-plus"></i> Add</a>
+					</form>
 				</div>
 			</div>
 
@@ -47,10 +92,24 @@
 				<div class="widget-title"><h5>Organisational Roles</h5></div>
 				<div class="widget-content">
 					<ul>
-					<?php foreach($roles['organisational_roles'] as $f):?>
-						<li><?php echo $f;?></li>
+					<?php foreach($childs as $c):?>
+						<?php
+							if(trim($c->role_type_id) == "ROLE_ORGANISATIONAL"){
+								echo '<li>';
+								echo anchor('/role/view/'.rawurlencode($c->parent_role_id), $c->name);
+								echo '<a href="javascript:;" class="remove_relation" parent="'.$c->parent_role_id.'" child="'.$role->role_id.'" tip="Remove This Role Relation"><i class="icon icon-remove"></i></a>';
+								echo '</li>';
+							}
+						?>
 					<?php endforeach;?>
 					</ul>
+					<select>
+						<option value=""></option>
+						<?php foreach($missingOrgRoles as $f):?>
+							<option value="<?php echo $f;?>"><?php echo $f;?></option>
+						<?php endforeach ?>
+					</select>
+					<a href="javascript:;" child="<?php echo $role->role_id;?>"class="btn add_role" tip="Add This Role Relation"><i class="icon icon-plus"></i> Add</a>
 				</div>
 			</div>
 		</div>
@@ -73,11 +132,15 @@
 							</tr>
 							<tr>
 								<th>Type</th>
-								<td><?php echo $role->role_type_id;?></td>
+								<td><?php echo readable($role->role_type_id);?></td>
+							</tr>
+							<tr>
+								<th>Authentication Service</th>
+								<td><?php echo readable($role->authentication_service_id);?></td>
 							</tr>
 							<tr>
 								<th>Enabled</th>
-								<td><?php echo $role->enabled;?></td>
+								<td><?php echo readable($role->enabled);?></td>
 							</tr>
 							<tr>
 								<th>Last Login</th>
@@ -102,7 +165,7 @@
 						</tbody>
 					</table>  
 					<?php echo anchor('role/edit/'.rawurlencode($role->role_id), 'Edit', array('class'=>'btn btn-primary'));?>
-					<?php echo anchor('role/delete/'.rawurlencode($role->role_id), 'Delete', array('class'=>'btn btn-danger'));?>
+					<a class="btn btn-danger" id="delete_role" role_id="<?php echo $role->role_id?>">Delete</a>
 				</div>
 			</div>
 			
