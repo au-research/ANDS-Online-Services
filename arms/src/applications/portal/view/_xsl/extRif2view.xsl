@@ -936,13 +936,15 @@
 <!-- ARK IDENTIFIER DISPLAY MODES -->
 <xsl:template match="ro:identifier" mode="ark_resolveURL">      
   <xsl:choose> 
-     <xsl:when test="string-length(substring-after(.,'http://'))>0">
-       <xsl:value-of select="(substring-after(.,'http://'))"/>
-   </xsl:when>                    
-
-   <xsl:otherwise>
-       <xsl:value-of select="."/>
-   </xsl:otherwise>   
+    <xsl:when test="string-length(substring-after(.,'http://'))>0">
+      <xsl:value-of select="(substring-after(.,'http://'))"/>
+    </xsl:when>                    
+    <xsl:when test="string-length(substring-after(.,'https://'))>0">
+      <xsl:value-of select="(substring-after(.,'https://'))"/>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="."/>
+    </xsl:otherwise>   
   </xsl:choose>
 </xsl:template>
 
@@ -1071,13 +1073,31 @@
         <xsl:apply-templates select="./ro:identifier[@type = 'purl']" mode="purl_resolveURL"/>
         <xsl:apply-templates select="./ro:identifier[@type = 'handle']" mode="handle_resolveURL"/>
         <xsl:apply-templates select="./ro:identifier[@type = 'AU-ANL:PEAU']" mode="nla_resolveURL"/>
-        <xsl:apply-templates select="./ro:identifier[@type = 'ark']" mode="ark_resolveURL"/>
+        <xsl:apply-templates select="./ro:identifier[@type = 'ark']" mode="other_resolveURL"/>
         <xsl:apply-templates select="./ro:identifier[@type = 'orcid']" mode="orcid_resolveURL"/>
         <!--xsl:apply-templates select="./ro:identifier[@type != 'doi' and @type != 'uri' and @type != 'URL' and @type != 'url' and @type != 'purl' and @type != 'handle' and @type != 'AU-ANL:PEAU' and @type != 'ark' and @type != 'orcid']" mode="other_resolveURL"/-->
       </xsl:variable>
 
       <xsl:choose>
-      <xsl:when test="./ro:identifier[@type = 'doi' or @type = 'uri' or @type = 'URL' or @type = 'url' or @type = 'purl' or @type = 'handle' or @type = 'AU-ANL:PEAU' or @type = 'ark' or @type = 'orcid']">
+        <xsl:when test="./ro:identifier[@type = 'ark'] and (string-length(substring-after($theResolvedURL,'http://'))>0 or string-length(substring-after($theResolvedURL,'https://'))>0)">
+        <br/>
+          <a>
+            <xsl:attribute name="class">identifier</xsl:attribute>
+            <xsl:attribute name="href"><xsl:value-of select="$theResolvedURL"/></xsl:attribute>
+            <xsl:attribute name="title">Resolve this ARK identifier</xsl:attribute>
+            <xsl:value-of select="$theResolvedURL"/>
+          </a> 
+        </xsl:when>
+        <xsl:when test="./ro:identifier[@type = 'ark'] and string-length(substring-after($theResolvedURL,'/ark:/'))>0">
+        <br/>
+          <a>
+            <xsl:attribute name="class">identifier</xsl:attribute>
+            <xsl:attribute name="href"><xsl:value-of select="concat('http://',$theResolvedURL)"/></xsl:attribute>
+            <xsl:attribute name="title">Resolve this ARK identifier</xsl:attribute>
+            <xsl:value-of select="$theResolvedURL"/>
+          </a> 
+        </xsl:when>
+        <xsl:when test="./ro:identifier[@type = 'doi' or @type = 'uri' or @type = 'URL' or @type = 'url' or @type = 'purl' or @type = 'handle' or @type = 'AU-ANL:PEAU' or @type = 'orcid']">
           <br/>
           <a>
             <xsl:attribute name="class">identifier</xsl:attribute>
@@ -1133,7 +1153,7 @@
     <xsl:if test="position()>1">
         <xsl:text>,</xsl:text>
     </xsl:if>       
-    <xsl:value-of select="."/> 
+    <xsl:value-of select="substring(.,1,4)"/> 
 </xsl:template> 
 
 <xsl:template match="ro:location/ro:address/ro:electronic">
