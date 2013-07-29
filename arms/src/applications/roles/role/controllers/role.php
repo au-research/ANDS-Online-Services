@@ -1,16 +1,19 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
- * Administration controller
+ * Role Controller
  * 
- * Base stub for administrative control of the registry
+ * Base controller for role management for the Registry
  * 
- * @author Ben Greenwood <ben.greenwood@ands.org.au>
- * @package ands/services
+ * @author Minh Duc Nguyen <minh.nguyen@ands.org.au>
  * 
  */
 class Role extends MX_Controller {
 	
+	/**
+	 * default controller, returns the role management dashboard
+	 * @return view 
+	 */
 	public function index(){
 		// var_dump($this->user->functions());
 		$data['title'] = 'List Roles';
@@ -19,6 +22,11 @@ class Role extends MX_Controller {
 		$this->load->view('roles_index', $data);
 	}
 
+	/**
+	 * view controller, returns the view of a role with all of its roles, org and func roles included
+	 * @param  string $role_id role_id is now in the url, so needs to be decoded correctly for usage
+	 * @return view          
+	 */
 	public function view($role_id){
 		
 		$data['role'] = $this->roles->get_role(rawurldecode($role_id));
@@ -48,6 +56,11 @@ class Role extends MX_Controller {
 		$this->load->view('role_view', $data);
 	}
 
+	/**
+	 * Controller to handle adding new roles
+	 * If a new role is posted, go back to the dashboard else return the default view
+	 * @return view
+	 */
 	public function add(){
 		if($this->input->get('posted')){
 			$post = $this->input->post();
@@ -61,6 +74,12 @@ class Role extends MX_Controller {
 		}
 	}
 
+	/**
+	 * Controller to handle updating roles
+	 * Of an edited role is posted, do the update
+	 * @param  string $role_id encoded role_id
+	 * @return view
+	 */
 	public function edit($role_id){
 		$role_id = rawurldecode($role_id);
 		if($this->input->get('posted')){
@@ -74,39 +93,60 @@ class Role extends MX_Controller {
 		$this->load->view('role_edit', $data);
 	}
 
+	/**
+	 * Delete a Role
+	 * Invoke the delete role model function
+	 * @return true
+	 */
 	public function delete(){
 		$this->roles->delete_role($this->input->post('role_id'));
 	}
 
+	/**
+	 * Adding relation
+	 * Invoke the add relation model function
+	 * @param parent_id
+	 * @param child_id
+	 * @return true
+	 */
 	public function add_relation(){
 		$this->roles->add_relation($this->input->post('parent'), $this->input->post('child'));
 	}
 
+	/**
+	 * Removing a relation
+	 * @param parent_id
+	 * @param child_id
+	 * @return true
+	 */
 	public function remove_relation(){
 		$this->roles->remove_relation($this->input->post('parent'), $this->input->post('child'));
 	}
 
-	public function test(){
-		// $this->roles->add_relation('REGISTRY_SUPERUSER', 'u4297901');
-		// echo json_encode($this->roles->descendants('AuScope'));
-		
-		// $this->roles->migrate_from_cosi();
-		// echo 'Done';
-		echo DB_TRUE;
-		// $this->db->query('use dbs_registry');
-	}
-
+	/**
+	 * Provide a way to migrate from old cosi
+	 * @return true
+	 */
 	public function migrate_from_cosi(){
 		$this->roles->migrate_from_cosi();
 		echo 'Done';
 	}
 
-
-
+	/**
+	 * Return All Roles in JSON form for Web applications
+	 * @return json
+	 */
 	public function all_roles(){
+		header('Cache-Control: no-cache, must-revalidate');
+		header('Content-type: application/json');
 		echo json_encode($this->roles->all_roles());
 	}
 
+	/**
+	 * List All Roles that fit in a role_type_id in JSON form
+	 * @param  string $role_type_id
+	 * @return json                
+	 */
 	public function list_roles($role_type_id = false){
 		if(!$role_type_id) $role_type_id = false;
 		$roles = array();
@@ -124,7 +164,10 @@ class Role extends MX_Controller {
 		echo json_encode($roles);
 	}
 
-
+	/**
+	 * Construct the controller
+	 * Default to REGISTRY_SUPERUSER access
+	 */
 	public function __construct(){
 		parent::__construct();
 		acl_enforce('REGISTRY_SUPERUSER');

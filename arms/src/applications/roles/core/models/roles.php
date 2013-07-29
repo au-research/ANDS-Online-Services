@@ -18,21 +18,33 @@ $Date: 2009-08-11 12:57:09 +1000 (Tue, 11 Aug 2009) $
 $Revision: 32 $
 *******************************************************************************/
 
+/**
+ * Base Model for Roles Management
+ * @author Minh Duc Nguyen <minh.nguyen@ands.org.au>
+ */
 class Roles extends CI_Model {
 
 	private $cosi_db = null;
 	
-    function __construct()
-    {
+    function __construct(){
         parent::__construct();
 		$this->cosi_db = $this->load->database('roles', TRUE);
     }
 
+    /**
+     * function to return all of the available roles, enabled or not
+     * @return array_object
+     */
     function all_roles(){
         $result = $this->cosi_db->get("roles");
         return $result->result();
     }
 
+    /**
+     * returns a list of role based on the role_type_id
+     * @param  string $role_type_id if not provided, return all roles
+     * @return array_object               
+     */
     function list_roles($role_type_id){
         if($role_type_id){
             $result = $this->cosi_db->get_where("roles",    
@@ -45,6 +57,11 @@ class Roles extends CI_Model {
         return $result->result();
     }
 
+    /**
+     * retrieve a single role
+     * @param  string $role_id the role_id identifier
+     * @return object          
+     */
     function get_role($role_id){
         $result = $this->cosi_db->get_where("roles",    
                                                     array(
@@ -55,16 +72,28 @@ class Roles extends CI_Model {
         }
     }
 
+    /**
+     * add a relation between roles, this adds an entry into the role_relations table
+     * @param string $parent_role_id    
+     * @param string $child_role_id 
+     */
     function add_relation($parent_role_id, $child_role_id){
         $result = $this->cosi_db->insert('role_relations', 
             array(
                 'parent_role_id'=>$parent_role_id,
                 'child_role_id'=>$child_role_id,
-                'created_who'=>$this->user->identifier()
+                'created_who'=>$this->user->localIdentifier()
             )
         );
+        return $result;
     }
 
+    /**
+     * this function remove a relation between 2 roles, explicit parent and child must be provided
+     * @param  string $parent_role_id
+     * @param  string $child_role_id 
+     * @return result                
+     */
     function remove_relation($parent_role_id, $child_role_id){
         $result = $this->cosi_db->delete('role_relations',
             array(
@@ -72,8 +101,14 @@ class Roles extends CI_Model {
                 'child_role_id'=>$child_role_id
             )
         );
+        return $result;
     }
 
+    /**
+     * recursive function that goes through and collect all of the (parents) of a role
+     * @param  string $role_id
+     * @return array_object if an object has a child, object->childs will be a list of the child objects
+     */
     function list_childs($role_id){
         $res = array();
         // $role = $this->get_role($role_id);
@@ -100,6 +135,11 @@ class Roles extends CI_Model {
         return $res;
     }
 
+    /**
+     * basically reverse of the list_childs function, search for all (childs) of a role
+     * @param  string $role_id
+     * @return array_object
+     */
     function descendants($role_id){
         $res = array();
         $result = $this->cosi_db->query("SELECT rr.parent_role_id, r.role_type_id, r.name, r.role_id
@@ -117,11 +157,14 @@ class Roles extends CI_Model {
             }
         }
         return $res;
-        return $result->result();
     }
 
+    /**
+     * Register a Role in the roles table, if the role has authentication built in, then create another entry in the relevant table
+     * @param [type] $post [description]
+     */
     function add_role($post){
-        $result = $this->cosi_db->insert('roles', 
+        $this->cosi_db->insert('roles', 
             array(
                 'role_id'=>$post['role_id'],
                 'name'=>$post['name'],
@@ -143,6 +186,12 @@ class Roles extends CI_Model {
         }
     }
 
+    /**
+     * Update a role name and enable status
+     * @param  string $role_id
+     * @param  array $post    
+     * @return true          
+     */
     function edit_role($role_id, $post){
         $this->cosi_db->where('role_id', $role_id);
         $this->cosi_db->update('roles', 
@@ -153,12 +202,21 @@ class Roles extends CI_Model {
         ); 
     }
 
+    /**
+     * Remove a role and all relations associated with it
+     * @param  string $role_id
+     * @return true
+     */
     function delete_role($role_id){
         $this->cosi_db->delete('role_relations', array('parent_role_id' => $role_id));
         $this->cosi_db->delete('role_relations', array('child_role_id' => $role_id));
         $this->cosi_db->delete('roles', array('role_id' => $role_id));
     }
 
+    /**
+     * Migrate from old PGSQL COSI database to the new one, recommended to run before the usage of roles management
+     * @return true
+     */
     function migrate_from_cosi(){
         $this->load->dbforge();
 

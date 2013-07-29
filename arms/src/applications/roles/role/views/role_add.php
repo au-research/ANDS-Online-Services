@@ -1,11 +1,9 @@
 <?php 
 
 /**
- * Core Maintenance Dashboard
+ * Adding Role Interface
  *  
  * @author Minh Duc Nguyen <minh.nguyen@ands.org.au>
- * @see ands/vocab_services/_vocab
- * @package ands/vocab_services
  * 
  */
 ?>
