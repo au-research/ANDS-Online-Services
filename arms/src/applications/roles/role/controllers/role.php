@@ -92,7 +92,7 @@ class Role extends MX_Controller {
 		
 		// $this->roles->migrate_from_cosi();
 		// echo 'Done';
-
+		echo DB_TRUE;
 		// $this->db->query('use dbs_registry');
 	}
 

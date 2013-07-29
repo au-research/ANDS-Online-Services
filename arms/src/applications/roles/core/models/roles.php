@@ -126,11 +126,21 @@ class Roles extends CI_Model {
                 'role_id'=>$post['role_id'],
                 'name'=>$post['name'],
                 'role_type_id'=>$post['role_type_id'],
-                'enabled'=> ($post['enabled']=='on' ? 't' : 'f'),
+                'enabled'=> ($post['enabled']=='on' ? DB_TRUE : DB_FALSE),
                 'authentication_service_id'=> trim($post['authentication_service_id']),
-                'created_who'=>$this->user->identifier()
+                'created_who'=>$this->user->localIdentifier()
             )
         );
+        if($post['authentication_service_id']=='AUTHENTICATION_BUILT_IN'){
+            $this->cosi_db->insert('authentication_built_in',
+                array(
+                    'role_id'=>$post['role_id'],
+                    'passphrase_sha1'=>sha1('abc123'),
+                    'created_who'=>$this->user->localIdentifier(),
+                    'modified_who'=>$this->user->localIdentifier()
+                )
+            );
+        }
     }
 
     function edit_role($role_id, $post){
@@ -138,7 +148,7 @@ class Roles extends CI_Model {
         $this->cosi_db->update('roles', 
             array(
                 'name'=> $post['name'],
-                'enabled'=>($post['enabled']=='on' ? 't' : 'f')
+                'enabled'=>($post['enabled']=='on' ? DB_TRUE : DB_FALSE)
             )
         ); 
     }
@@ -153,6 +163,8 @@ class Roles extends CI_Model {
         $this->load->dbforge();
 
         $this->load->database('roles', true);
+
+        $this->old_cosi_db = $this->load->database('cosi', true);
 
         //Removes the existing table
         $this->dbforge->drop_table('roles');
@@ -174,7 +186,7 @@ class Roles extends CI_Model {
                 'type'=>'VARCHAR','constraint'=> 32
             ),
             'enabled'=>array(
-                'type'=>'boolean', 'default'=>1
+                'type'=>'VARCHAR', 'constraint'=>1, 'default'=>'t'
             ),
             'created_when'=>array(
                 'type'=>'timestamp'
@@ -197,16 +209,15 @@ class Roles extends CI_Model {
         $this->dbforge->add_key('role_id', true);
         $this->dbforge->create_table('roles', true);
 
-        $all_roles = $this->all_roles();
-
-        foreach($all_roles as $r){
+        $all_roles = $this->old_cosi_db->get('dba.tbl_roles');
+        foreach($all_roles->result() as $r){
             $this->db->insert('roles',
                 array(
                     'role_id'=>$r->role_id,
                     'role_type_id'=>$r->role_type_id,
                     'name'=>$r->name,
-                    'authentication_service_id'=>($r->authentication_service_id ? $r->authentication_service_id: ''),
-                    'enabled'=>($r->enabled=='t' ? '1': '0'),
+                    'authentication_service_id'=>($r->authentication_service_id ? trim($r->authentication_service_id) : ''),
+                    'enabled'=>($r->enabled==DB_TRUE ? DB_TRUE: DB_FALSE),
                     'created_when'=>$r->created_when,
                     'created_who'=>$r->created_who,
                     'modified_who'=>$r->modified_who,
@@ -240,7 +251,7 @@ class Roles extends CI_Model {
         $this->dbforge->add_field('id');
         $this->dbforge->add_field($fields);
         $this->dbforge->create_table('role_relations', true);
-        $all_relations = $this->cosi_db->get('dba.tbl_role_relations');
+        $all_relations = $this->old_cosi_db->get('dba.tbl_role_relations');
         foreach($all_relations->result() as $r){
             $this->db->insert('role_relations',
                 array(
@@ -279,7 +290,7 @@ class Roles extends CI_Model {
         $this->dbforge->add_field($fields);
         $this->dbforge->add_key('role_id', true);
         $this->dbforge->create_table('authentication_built_in', true);
-        $all_built_in = $this->cosi_db->get('dba.tbl_authentication_built_in');
+        $all_built_in = $this->old_cosi_db->get('dba.tbl_authentication_built_in');
         foreach($all_built_in->result() as $r){
             $this->db->insert('authentication_built_in', 
                 array(

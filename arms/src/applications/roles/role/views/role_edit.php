@@ -45,7 +45,7 @@
 						</div>
 						<div class="control-group">
 							<label for="" class="control-label">Enabled</label>
-							<div class="controls"><input type="checkbox" name="enabled" <?php echo ($role->enabled=='t' ? 'checked=checked': '');?>></div>
+							<div class="controls"><input type="checkbox" name="enabled" <?php echo ($role->enabled==DB_TRUE ? 'checked=checked': '');?>></div>
 						</div>
 						<div class="control-group">
 							<label for="" class="control-label">Authentication Service</label>
