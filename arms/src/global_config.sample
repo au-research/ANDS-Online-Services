@@ -72,6 +72,23 @@ $eDBCONF['registry']['autoinit'] = TRUE;
 $eDBCONF['registry']['stricton'] = FALSE;
 $eDBCONF['registry']['save_queries'] = FALSE; 
 
+$eDBCONF['roles']['hostname'] = 'localhost';
+$eDBCONF['roles']['username'] = 'webuser';
+$eDBCONF['roles']['password'] = '';
+$eDBCONF['roles']['database'] = 'dbs_roles';
+$eDBCONF['roles']['dbdriver'] = 'mysql';
+$eDBCONF['roles']['dbprefix'] = '';
+$eDBCONF['roles']['pconnect'] = TRUE;
+$eDBCONF['roles']['db_debug'] = TRUE;
+$eDBCONF['roles']['cache_on'] = FALSE;
+$eDBCONF['roles']['cachedir'] = '';
+$eDBCONF['roles']['char_set'] = 'utf8';
+$eDBCONF['roles']['dbcollat'] = 'utf8_general_ci';
+$eDBCONF['roles']['swap_pre'] = '';
+$eDBCONF['roles']['autoinit'] = TRUE;
+$eDBCONF['roles']['stricton'] = FALSE;
+$eDBCONF['roles']['save_queries'] = FALSE; 
+
 $eDBCONF['portal']['hostname'] = 'localhost';
 $eDBCONF['portal']['username'] = 'webuser';
 $eDBCONF['portal']['password'] = '';

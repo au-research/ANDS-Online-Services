@@ -160,6 +160,8 @@ function readable($text, $singular = false){
         case "role_doi_appid": return 'DOI Application Identifier';break;
         case "t": return "<i class='icon icon-ok'></i>";break;
         case "f": return "<i class='icon icon-remove'></i>";break;
+        case "1": return "<i class='icon icon-ok'></i>";break;
+        case "0": return "<i class='icon icon-remove'></i>";break;
         case "authentication_built_in": return "Built-in";break;
         case "authentication_ldap": return "LDAP";break;
         case "authentication_shibboleth": return "Shibboleth";break;

@@ -25,28 +25,28 @@ class Roles extends CI_Model {
     function __construct()
     {
         parent::__construct();
-		$this->cosi_db = $this->load->database('cosi', TRUE);
+		$this->cosi_db = $this->load->database('roles', TRUE);
     }
 
     function all_roles(){
-        $result = $this->cosi_db->get("dba.tbl_roles");
-        return $result->result_array();
+        $result = $this->cosi_db->get("roles");
+        return $result->result();
     }
 
     function list_roles($role_type_id){
         if($role_type_id){
-            $result = $this->cosi_db->get_where("dba.tbl_roles",    
+            $result = $this->cosi_db->get_where("roles",    
                                                     array(
                                                         "role_type_id"=>$role_type_id                                                        
                                                     ));
         }else{
-            $result = $this->cosi_db->get("dba.tbl_roles");
+            $result = $this->cosi_db->get("roles");
         }
         return $result->result();
     }
 
     function get_role($role_id){
-        $result = $this->cosi_db->get_where("dba.tbl_roles",    
+        $result = $this->cosi_db->get_where("roles",    
                                                     array(
                                                         "role_id"=>$role_id
                                                     ));
@@ -55,10 +55,8 @@ class Roles extends CI_Model {
         }
     }
 
-    
-
     function add_relation($parent_role_id, $child_role_id){
-        $result = $this->cosi_db->insert('dba.tbl_role_relations', 
+        $result = $this->cosi_db->insert('role_relations', 
             array(
                 'parent_role_id'=>$parent_role_id,
                 'child_role_id'=>$child_role_id,
@@ -68,7 +66,7 @@ class Roles extends CI_Model {
     }
 
     function remove_relation($parent_role_id, $child_role_id){
-        $result = $this->cosi_db->delete('dba.tbl_role_relations',
+        $result = $this->cosi_db->delete('role_relations',
             array(
                 'parent_role_id'=>$parent_role_id,
                 'child_role_id'=>$child_role_id
@@ -82,8 +80,8 @@ class Roles extends CI_Model {
 
         
         $result = $this->cosi_db->query("SELECT rr.parent_role_id, r.role_type_id, r.name, r.role_id
-                                            FROM dba.tbl_role_relations rr  
-                                            JOIN dba.tbl_roles r ON r.role_id = rr.parent_role_id                               
+                                            FROM role_relations rr  
+                                            JOIN roles r ON r.role_id = rr.parent_role_id                               
                                             WHERE rr.child_role_id = '" . $role_id . "'
                                               AND r.enabled='t'");
         
@@ -105,8 +103,8 @@ class Roles extends CI_Model {
     function descendants($role_id){
         $res = array();
         $result = $this->cosi_db->query("SELECT rr.parent_role_id, r.role_type_id, r.name, r.role_id
-                                            FROM dba.tbl_role_relations rr  
-                                            JOIN dba.tbl_roles r ON r.role_id = rr.child_role_id                               
+                                            FROM role_relations rr  
+                                            JOIN roles r ON r.role_id = rr.child_role_id                               
                                             WHERE rr.parent_role_id = '" . $role_id . "'
                                               AND r.enabled='t'");
         if($result->num_rows() > 0){
@@ -123,7 +121,7 @@ class Roles extends CI_Model {
     }
 
     function add_role($post){
-        $result = $this->cosi_db->insert('dba.tbl_roles', 
+        $result = $this->cosi_db->insert('roles', 
             array(
                 'role_id'=>$post['role_id'],
                 'name'=>$post['name'],
@@ -137,7 +135,7 @@ class Roles extends CI_Model {
 
     function edit_role($role_id, $post){
         $this->cosi_db->where('role_id', $role_id);
-        $this->cosi_db->update('dba.tbl_roles', 
+        $this->cosi_db->update('roles', 
             array(
                 'name'=> $post['name'],
                 'enabled'=>($post['enabled']=='on' ? 't' : 'f')
@@ -146,8 +144,154 @@ class Roles extends CI_Model {
     }
 
     function delete_role($role_id){
-        $this->cosi_db->delete('dba.tbl_role_relations', array('parent_role_id' => $role_id));
-        $this->cosi_db->delete('dba.tbl_role_relations', array('child_role_id' => $role_id));
-        $this->cosi_db->delete('dba.tbl_roles', array('role_id' => $role_id));
+        $this->cosi_db->delete('role_relations', array('parent_role_id' => $role_id));
+        $this->cosi_db->delete('role_relations', array('child_role_id' => $role_id));
+        $this->cosi_db->delete('roles', array('role_id' => $role_id));
+    }
+
+    function migrate_from_cosi(){
+        $this->load->dbforge();
+
+        $this->load->database('roles', true);
+
+        //Removes the existing table
+        $this->dbforge->drop_table('roles');
+        $this->dbforge->drop_table('role_relations');
+        $this->dbforge->drop_table('authentication_built_in');
+
+        //roles table schema
+        $fields = array(
+            'role_id' => array(
+                'type'=>'VARCHAR','constraint'=> 255
+            ),
+            'role_type_id'=>array(
+                'type'=>'VARCHAR','constraint'=> 20
+            ),
+            'name'=>array(
+                'type'=>'VARCHAR','constraint'=> 255
+            ),
+            'authentication_service_id'=>array(
+                'type'=>'VARCHAR','constraint'=> 32
+            ),
+            'enabled'=>array(
+                'type'=>'boolean', 'default'=>1
+            ),
+            'created_when'=>array(
+                'type'=>'timestamp'
+            ),
+            'created_who'=>array(
+                'type'=>'VARCHAR', 'constraint'=>255,'default'=>'SYSTEM'
+            ),
+            'modified_who'=>array(
+                'type'=>'VARCHAR', 'constraint'=>255,'default'=>'SYSTEM'
+            ),
+            'modified_when'=>array(
+                'type'=>'timestamp'
+            ),
+            'last_login'=>array(
+                'type'=>'timestamp'
+            ),
+        );
+        $this->dbforge->add_field('id');
+        $this->dbforge->add_field($fields);
+        $this->dbforge->add_key('role_id', true);
+        $this->dbforge->create_table('roles', true);
+
+        $all_roles = $this->all_roles();
+
+        foreach($all_roles as $r){
+            $this->db->insert('roles',
+                array(
+                    'role_id'=>$r->role_id,
+                    'role_type_id'=>$r->role_type_id,
+                    'name'=>$r->name,
+                    'authentication_service_id'=>($r->authentication_service_id ? $r->authentication_service_id: ''),
+                    'enabled'=>($r->enabled=='t' ? '1': '0'),
+                    'created_when'=>$r->created_when,
+                    'created_who'=>$r->created_who,
+                    'modified_who'=>$r->modified_who,
+                    'modified_when'=>$r->modified_when,
+                    'last_login'=>$r->last_login
+                )
+            );
+        }
+
+        //role relations
+        $fields = array(
+            'parent_role_id'=>array(
+                'type'=>'VARCHAR','constraint'=>255
+            ),
+            'child_role_id'=>array(
+                'type'=>'VARCHAR','constraint'=>255
+            ),
+            'created_who'=>array(
+                'type'=>'VARCHAR','constraint'=>255,'default'=>'SYSTEM'
+            ),
+            'created_when'=>array(
+                'type'=>'timestamp'
+            ),
+            'modified_when'=>array(
+                'type'=>'timestamp'
+            ),
+            'modified_who'=>array(
+                'type'=>'VARCHAR','constraint'=>255,'default'=>'SYSTEM'
+            ),
+        );
+        $this->dbforge->add_field('id');
+        $this->dbforge->add_field($fields);
+        $this->dbforge->create_table('role_relations', true);
+        $all_relations = $this->cosi_db->get('dba.tbl_role_relations');
+        foreach($all_relations->result() as $r){
+            $this->db->insert('role_relations',
+                array(
+                    'parent_role_id'=>$r->parent_role_id,
+                    'child_role_id'=>$r->child_role_id,
+                    'created_who'=>$r->created_who,
+                    'created_when'=>$r->created_when,
+                    'modified_when'=>$r->modified_when,
+                    'modified_who'=>$r->modified_who
+                )
+            );
+        }
+
+        //authentication_built_in
+        $fields = array(
+            'role_id'=>array(
+                'type'=>'VARCHAR', 'constraint'=>255
+            ),
+            'passphrase_sha1'=>array(
+                'type'=>'VARCHAR', 'constraint'=>40
+            ),
+            'created_who'=>array(
+                'type'=>'VARCHAR','constraint'=>255,'default'=>'SYSTEM'
+            ),
+            'created_when'=>array(
+                'type'=>'timestamp'
+            ),
+            'modified_when'=>array(
+                'type'=>'timestamp'
+            ),
+            'modified_who'=>array(
+                'type'=>'VARCHAR','constraint'=>255,'default'=>'SYSTEM'
+            )
+        );
+        $this->dbforge->add_field('id');
+        $this->dbforge->add_field($fields);
+        $this->dbforge->add_key('role_id', true);
+        $this->dbforge->create_table('authentication_built_in', true);
+        $all_built_in = $this->cosi_db->get('dba.tbl_authentication_built_in');
+        foreach($all_built_in->result() as $r){
+            $this->db->insert('authentication_built_in', 
+                array(
+                    'role_id'=>$r->role_id,
+                    'passphrase_sha1'=>$r->passphrase_sha1,
+                    'created_who'=>$r->created_who,
+                    'created_when'=>$r->created_when,
+                    'modified_when'=>$r->modified_when,
+                    'modified_who'=>$r->modified_who
+                )
+            );
+        }
+
     }
 }

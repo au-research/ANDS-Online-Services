@@ -88,8 +88,20 @@ class Role extends MX_Controller {
 
 	public function test(){
 		// $this->roles->add_relation('REGISTRY_SUPERUSER', 'u4297901');
-		echo json_encode($this->roles->descendants('AuScope'));
+		// echo json_encode($this->roles->descendants('AuScope'));
+		
+		// $this->roles->migrate_from_cosi();
+		// echo 'Done';
+
+		// $this->db->query('use dbs_registry');
 	}
+
+	public function migrate_from_cosi(){
+		$this->roles->migrate_from_cosi();
+		echo 'Done';
+	}
+
+
 
 	public function all_roles(){
 		echo json_encode($this->roles->all_roles());
