@@ -3,7 +3,7 @@
 global $ENV;
 
 /* What authencation class should we use to power the login/ACL? */
-$config['authentication_class'] = "cosi_authentication";
+$config['authentication_class'] = "role_authentication";
 
 // Merge in the config options from global_config.php
 $config = array_merge($config, $ENV);

@@ -112,14 +112,15 @@ class Roles extends CI_Model {
     function list_childs($role_id){
         $res = array();
         // $role = $this->get_role($role_id);
-
         
-        $result = $this->cosi_db->query("SELECT rr.parent_role_id, r.role_type_id, r.name, r.role_id
-                                            FROM role_relations rr  
-                                            JOIN roles r ON r.role_id = rr.parent_role_id                               
-                                            WHERE rr.child_role_id = '" . $role_id . "'
-                                              AND r.enabled='t'");
-        
+        $result = $this->cosi_db
+                ->select('role_relations.parent_role_id, roles.role_type_id, roles.name, roles.role_id')
+                ->from('role_relations')
+                ->join('roles', 'roles.role_id = role_relations.parent_role_id')
+                ->where('role_relations.child_role_id', $role_id)
+                ->where('enabled', 't')
+                ->where('role_relations.parent_role_id !=', $role_id)
+                ->get();
 
         if($result->num_rows() > 0){
             foreach($result->result() as $r){
@@ -142,11 +143,16 @@ class Roles extends CI_Model {
      */
     function descendants($role_id){
         $res = array();
-        $result = $this->cosi_db->query("SELECT rr.parent_role_id, r.role_type_id, r.name, r.role_id
-                                            FROM role_relations rr  
-                                            JOIN roles r ON r.role_id = rr.child_role_id                               
-                                            WHERE rr.parent_role_id = '" . $role_id . "'
-                                              AND r.enabled='t'");
+    
+        $result = $this->cosi_db
+                    ->select('role_relations.parent_role_id, roles.role_type_id, roles.name, roles.role_id')
+                    ->from('role_relations')
+                    ->join('roles', 'roles.role_id = role_relations.child_role_id')
+                    ->where('role_relations.parent_role_id', $role_id)
+                    ->where('enabled', 't')
+                    ->where('role_relations.child_role_id !=', $role_id)
+                    ->get();
+
         if($result->num_rows() > 0){
             foreach($result->result() as $r){
                 $res[] = $r;

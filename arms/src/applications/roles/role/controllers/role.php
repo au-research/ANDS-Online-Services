@@ -22,6 +22,10 @@ class Role extends MX_Controller {
 		$this->load->view('roles_index', $data);
 	}
 
+	public function test(){
+		echo json_encode($this->roles->descendants('AusStage'));
+	}
+
 	/**
 	 * view controller, returns the view of a role with all of its roles, org and func roles included
 	 * @param  string $role_id role_id is now in the url, so needs to be decoded correctly for usage
@@ -170,7 +174,7 @@ class Role extends MX_Controller {
 	 */
 	public function __construct(){
 		parent::__construct();
-		acl_enforce('REGISTRY_SUPERUSER');
+		// acl_enforce('REGISTRY_SUPERUSER');
 		$this->load->model('roles');
 	}
 }
