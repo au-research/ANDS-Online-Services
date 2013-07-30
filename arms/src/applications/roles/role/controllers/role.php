@@ -177,7 +177,7 @@ class Role extends MX_Controller {
 	 */
 	public function __construct(){
 		parent::__construct();
-		// acl_enforce('REGISTRY_SUPERUSER');
+		acl_enforce('REGISTRY_SUPERUSER');
 		$this->load->model('roles');
 	}
 }
