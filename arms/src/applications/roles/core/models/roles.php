@@ -227,7 +227,7 @@ class Roles extends CI_Model {
         $this->load->dbforge();
 
         $this->old_cosi_db = $this->load->database('cosi', true);
-        $this->new_cosi_db = $this->load->database('roles', true;)
+        $this->new_cosi_db = $this->load->database('roles', true);
         $this->dbforge->set_database($this->new_cosi_db);
 
         //Removes the existing table
