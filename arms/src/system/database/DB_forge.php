@@ -88,6 +88,20 @@ class CI_DB_forge {
 	// --------------------------------------------------------------------
 
 	/**
+	 * set database connection
+	 *
+	 * @access	public
+	 * @author  Minh Duc Nguyen <minh.nguyen@ands.org.au>
+	 * @param	resource  database connection
+	 * @return	null
+	 */
+	function set_database($db){
+		$this->db = $db;
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
 	 * Add Key
 	 *
 	 * @access	public

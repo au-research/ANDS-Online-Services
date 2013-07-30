@@ -23,7 +23,10 @@ class Role extends MX_Controller {
 	}
 
 	public function test(){
-		echo json_encode($this->roles->descendants('AusStage'));
+		echo 'test';
+		// $this->load->database('roles');
+        // var_dump($this->db->get('registry_objects'));
+		//echo json_encode($this->roles->descendants('AusStage'));
 	}
 
 	/**
