@@ -155,6 +155,12 @@ else
               </li>
               <?php endif;?>
 
+              <?php if($this->user->hasFunction('REGISTRY_SUPERUSER')):?>
+              <li class="btn btn-inverse">
+                <?php echo anchor(registry_url('maintenance'), 'Maintenance');?>
+              </li>
+              <?php endif;?>
+
 
               <?php if($this->user->hasFunction('AUTHENTICATED_USER')): ?>
           <li class="btn btn-inverse dropdown">

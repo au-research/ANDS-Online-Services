@@ -12,8 +12,19 @@
 
 <?php  $this->load->view('header');?>
 <div class="container-fluid" id="main-content">
-	<div id="stat"></div>
-	<div id="ds"></div>
+	<div class="row-fluid">
+		<div class="span12  well">
+			<form class="form form-inline">
+            <div class="input-append">
+			  <input id="idkey" type="text" placeholder="ID or Key">
+			  <button id="syncRO" class="btn" type="button" tip="Enrich and Index">Sync</button>
+			</div>
+			<span id="result"></span>
+          </form>
+		</div>
+	</div>
+	<div id="stat">Loading Stats...</div>
+	<div id="ds">Loading Data Sources Table...</div>
 </div>
 
 
