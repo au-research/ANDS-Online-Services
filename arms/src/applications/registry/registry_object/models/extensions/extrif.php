@@ -131,6 +131,8 @@ class Extrif_Extension extends ExtensionBase
 					$theDescription = strip_tags(html_entity_decode(html_entity_decode($theDescription)), '<p><br/><br />');
 					$extrifTheDescription = $extendedMetadata->addChild("extRif:the_description", $theDescription, EXTRIF_NAMESPACE);
 					$this->ro->set_metadata('the_description',$theDescription);
+					$theDescription = strip_tags($theDescription);
+					$extrifTheDescription = $extendedMetadata->addChild("extRif:dci_description", $theDescription, EXTRIF_NAMESPACE);
 
 				}
 				
