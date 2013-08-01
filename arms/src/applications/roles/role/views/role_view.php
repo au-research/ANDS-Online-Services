@@ -55,7 +55,6 @@
 						<a href="javascript:;" child="<?php echo $role->role_id;?>"class="btn add_role add_role_reverse" tip="Add This Role Relation"><i class="icon icon-plus"></i> Add</a>
 					</form>
 				</div>
-			</div>
 			<?php endif;?>
 
 			<?php if(trim($role->role_type_id)=='ROLE_ORGANISATIONAL' && $data_sources['status']=='OK'):?>
