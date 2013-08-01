@@ -72,6 +72,12 @@ $application_directives = array(
 				"base_url" => "%%BASEURL%%/roles/",
 				"active_application" => "roles",
 				"default_controller" => "role/index"
+			),
+	"identifier" =>
+			array(
+				"base_url" => "%%BASEURL%%/identifier/",
+				"active_application" => "identifier",
+				"default_controller" => "pids/index"
 			)
 );
 
@@ -445,7 +451,7 @@ $config['default_base_url'] = $default_base_url;
 
 $config['app_routes'] = array();
 // Portal is the default app
-if ($_GET['app'] != "registry" && $_GET['app'] != "roles")
+if ($_GET['app'] != "registry" && $_GET['app'] != "roles" && $_GET['app'] !='identifier')
 {
 	$_GET['app'] = "portal";
 }
