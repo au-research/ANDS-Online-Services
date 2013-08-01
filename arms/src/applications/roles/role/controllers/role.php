@@ -23,7 +23,7 @@ class Role extends MX_Controller {
 	}
 
 	public function test(){
-		echo 'test';
+		echo json_encode($this->roles->get_datasources('Joels Organisation'));
 		// $this->load->database('roles');
         // var_dump($this->db->get('registry_objects'));
 		//echo json_encode($this->roles->descendants('AusStage'));
@@ -34,27 +34,23 @@ class Role extends MX_Controller {
 	 * @param  string $role_id role_id is now in the url, so needs to be decoded correctly for usage
 	 * @return view          
 	 */
-	public function view($role_id){
-		
+	public function view(){
+		$role_id = $this->input->get('role_id');
+
 		$data['role'] = $this->roles->get_role(rawurldecode($role_id));
 
 		$this->load->model('cosi_authentication', 'cosi');
 		$data['childs'] = $this->roles->list_childs($role_id); //only get explicit
-		$data['recursiveRoles'] = $this->cosi->getRolesAndActivitiesByRoleID($role_id);
 
-		$allFunctionalRoles = array();
-		$allOrgRoles = array();
-		foreach($this->roles->list_roles('ROLE_FUNCTIONAL') as $f){
-			array_push($allFunctionalRoles, $f->role_id);
-		}
-		foreach($this->roles->list_roles('ROLE_ORGANISATIONAL') as $o){
-			array_push($allOrgRoles, $o->role_id);
-		}
-		$data['missingFunctionalRoles'] = array_diff($allFunctionalRoles, $data['recursiveRoles']['functional_roles']);
-		$data['missingOrgRoles'] = array_diff($allOrgRoles, $data['recursiveRoles']['organisational_roles']);
+		$data['missingRoles'] = $this->roles->get_missing(rawurldecode($role_id));
 
 		if(trim($data['role']->role_type_id)=='ROLE_ORGANISATIONAL' || trim($data['role']->role_type_id)=='ROLE_FUNCTIONAL'){
 			$data['users'] = $this->roles->descendants(rawurldecode($role_id));
+			$data['missingUsers'] = $this->roles->missing_descendants(rawurldecode($role_id), $data['users']);
+		}
+
+		if(trim($data['role']->role_type_id)=='ROLE_ORGANISATIONAL'){
+			$data['data_sources'] = $this->roles->get_datasources($data['role']->role_id);
 		}
 
 		$data['title'] = 'View Role - '.$data['role']->name;
@@ -73,7 +69,7 @@ class Role extends MX_Controller {
 			$post = $this->input->post();
 			if(trim($post['authentication_service_id'])=='') unset($post['authentication_service_id']);
 			$this->roles->add_role($post);
-			$this->index();
+			redirect('role/view/'.rawurlencode($post['role_id']));
 		}else{
 			$data['title'] = 'Add New Role';
 			$data['js_lib'] = array('core');
@@ -93,11 +89,13 @@ class Role extends MX_Controller {
 			$post = $this->input->post();
 			if(!isset($post['enabled'])) $post['enabled']='f';
 			$this->roles->edit_role($role_id, $post);
+			redirect('role/view/'.rawurlencode($role_id));
+		}else{
+			$data['role'] = $this->roles->get_role($role_id);
+			$data['title'] = 'Edit - '.$data['role']->name;
+			$data['js_lib'] = array('core');
+			$this->load->view('role_edit', $data);
 		}
-		$data['role'] = $this->roles->get_role($role_id);
-		$data['title'] = 'Edit - '.$data['role']->name;
-		$data['js_lib'] = array('core');
-		$this->load->view('role_edit', $data);
 	}
 
 	/**

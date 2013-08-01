@@ -166,6 +166,76 @@ class Roles extends CI_Model {
     }
 
     /**
+     * getting all the missing descendants for organisational view
+     * @param  string $role_id     
+     * @param  array $descendants 
+     * @return array_object              
+     */
+    function missing_descendants($role_id, $descendants){
+        $ownedRoles = array();
+        // $descendants = new RecursiveIteratorIterator(new RecursiveArrayIterator($descendants));
+        foreach($descendants as $d) $ownedRoles[] = $d->role_id;
+        $this->cosi_db->select('role_id, name, role_type_id')->from('roles')->where('role_type_id', 'ROLE_USER');
+        if(sizeof($ownedRoles) > 0) $this->cosi_db->where_not_in('role_id', $ownedRoles);
+        $result = $this->cosi_db->get();
+
+        $res = array();
+        foreach($result->result() as $r) $res[] = $r;
+        return $res;
+    }
+
+    /**
+     * use a service provided by the registry to find out all the data sources affiliated with an org role
+     * @param  string $org_role 
+     * @return array           
+     */
+    function get_datasources($org_role){
+        $url = $this->config->item('registry_endpoint') .'get_datasources/?record_owner='.rawurlencode($org_role);
+        $contents = json_decode(@file_get_contents($url),true);
+        return $contents;
+    }
+
+    /**
+     * getting the missing functional and org role that a role has
+     * missing functional role is recursive based on the getRolesAndActivityByRoleID function based in the role_authentication model
+     * missing org role is based on the owned org role (separate query)
+     * @param  string $role_id the role to be queried on
+     * @return array         ['functional']['organisational']
+     */
+    function get_missing($role_id){
+        $res = array('functional'=>array(), 'organisational'=>array());
+
+        $this->load->model('role_authentication', 'cosi');
+        $recursiveRoles = $this->cosi->getRolesAndActivitiesByRoleID($role_id);
+
+        //missing functional roles black magic
+        $this->cosi_db->select('role_id, name, role_type_id')->from('roles')->where('role_type_id', 'ROLE_FUNCTIONAL');
+        if(sizeof($recursiveRoles['functional_roles']) > 0) $this->cosi_db->where_not_in('role_id', $recursiveRoles['functional_roles']);
+        $result = $this->cosi_db->get();
+
+        foreach($result->result() as $r) $res['functional'][] = $r;
+
+        //missing org roles black magic
+        $ownedOrgRole = $this->cosi_db
+                ->select('parent_role_id')
+                ->from('role_relations')
+                ->join('roles', 'roles.role_id = role_relations.parent_role_id')
+                ->where('role_relations.child_role_id', $role_id)
+                ->where('roles.role_type_id', 'ROLE_ORGANISATIONAL')
+                ->where('enabled', 't')
+                ->where('role_relations.parent_role_id !=', $role_id)
+                ->get();
+        $owned = array();
+        foreach($ownedOrgRole->result() as $o) $owned[] = $o->parent_role_id;
+        $this->cosi_db->select('role_id, name, role_type_id')->from('roles')->where('role_type_id', 'ROLE_ORGANISATIONAL');
+        if(sizeof($owned)>0) $this->cosi_db->where_not_in('role_id', $owned);
+        $result = $this->cosi_db->get();
+        foreach($result->result() as $r) $res['organisational'][] = $r;
+
+        return $res;
+    }
+
+    /**
      * Register a Role in the roles table, if the role has authentication built in, then create another entry in the relevant table
      * @param [type] $post [description]
      */

@@ -11,17 +11,24 @@ $(document).on('click','.remove_relation',function(){
 			location.reload();
 		}
 	});
+
 }).on('click', '.add_role', function(){
-	var parent = $(this).prev('select').val();
+	var parent = $(this).prevAll('select.chosen').val();
 	var child = $(this).attr('child');
-	$.ajax({
-		url:base_url+'role/add_relation/', 
-		type: 'POST',
-		data: {parent:parent,child:child},
-		success: function(data){
-			location.reload();
-		}
-	});
+	if($(this).hasClass('add_role_reverse')){
+		parent = $(this).attr('child');
+		child = $(this).prevAll('select.chosen').val();
+	}
+	if(parent!=''){
+		$.ajax({
+			url:base_url+'role/add_relation/', 
+			type: 'POST',
+			data: {parent:parent,child:child},
+			success: function(data){
+				location.reload();
+			}
+		});
+	}
 }).on('click', '#delete_role', function(){
 	if(confirm('Are you sure you want to delete this role and all role relations related to this role? This action is irreversible')){
 		var role_id = $(this).attr('role_id');
@@ -34,4 +41,6 @@ $(document).on('click','.remove_relation',function(){
 			}
 		});
 	}
+}).on('change', '.chosen', function(){
+	// $(this).trigger("liszt:updated");
 });

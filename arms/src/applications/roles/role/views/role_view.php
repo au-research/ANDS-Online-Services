@@ -11,9 +11,8 @@
 	<h1><?php echo $role->name;?></h1>
 </div>
 <div id="breadcrumb" style="clear:both;">
-	<?php echo anchor('/', '<i class="icon-home"></i> Home', array('class'=>'tip-bottom', 'title'=>'Go to Home')); ?>
-	<?php echo anchor('/role', 'List Roles'); ?>
-	<?php echo anchor('/roles/view/'.rawurlencode($role->role_id), $role->name, array('class'=>'current'));?>
+	<?php echo anchor('/', '<i class="icon-home"></i> List Roles'); ?>
+	<?php echo anchor('/role/view/?role_id='.rawurlencode($role->role_id), $role->name, array('class'=>'current'));?>
 </div>
 <div class="container-fluid">
 	<div class="row-fluid">
@@ -31,12 +30,12 @@
 						<?php 
 							foreach($users as $u){
 								echo '<li>';
-								echo anchor('/role/view/'.rawurlencode($u->role_id), $u->name);
+								echo anchor('/role/view/?role_id='.rawurlencode($u->role_id), $u->name);
 								if($u->childs){
 									echo '<ul>';
 									foreach($u->childs as $uu){
 										echo '<li>';
-										echo anchor('/role/view/'.rawurlencode($uu->role_id), $uu->name);
+										echo anchor('/role/view/?role_id='.rawurlencode($uu->role_id), $uu->name);
 										echo '</li>';
 									}
 									echo '</ul>';
@@ -46,6 +45,38 @@
 							}
 						?>
 					</ul>
+					<form class="form-inline">
+						<select class="chosen">
+							<option value=""></option>
+							<?php foreach($missingUsers as $u):?>
+								<option value="<?php echo $u->role_id;?>"><?php echo $u->name;?></option>
+							<?php endforeach;?>
+						</select>
+						<a href="javascript:;" child="<?php echo $role->role_id;?>"class="btn add_role add_role_reverse" tip="Add This Role Relation"><i class="icon icon-plus"></i> Add</a>
+					</form>
+				</div>
+			</div>
+			<?php endif;?>
+
+			<?php if(trim($role->role_type_id)=='ROLE_ORGANISATIONAL' && $data_sources['status']=='OK'):?>
+			<div class="widget-box">
+				<div class="widget-title">
+					<h5>Data sources</h5>
+				</div>
+				<div class="widget-content">
+					<?php if($data_sources['numFound'] > 0):?>
+						<ul>
+						<?php 
+							foreach($data_sources['result'] as $ds){
+								echo '<li>';
+								echo anchor($ds['registry_url'], $ds['title'], array('tip'=>$ds['key']));
+								echo '</li>';
+							}
+						?>
+						</ul>
+					<?php else:?>
+						<p>No data source is affiliate with this organisational role</p>
+					<?php endif; ?>
 				</div>
 			</div>
 			<?php endif;?>
@@ -58,17 +89,17 @@
 						<?php
 							if(trim($c->role_type_id) == "ROLE_FUNCTIONAL"){
 								echo '<li>';
-								echo anchor('/role/view/'.rawurlencode($c->parent_role_id), $c->name);
+								echo anchor('/role/view/?role_id='.rawurlencode($c->parent_role_id), $c->name);
 								echo '<a href="javascript:;" class="remove_relation" tip="Remove This Role Relation" parent="'.$c->parent_role_id.'" child="'.$role->role_id.'"><i class="icon icon-remove"></i></a>';
 								if($c->childs){
 									echo '<ul>';
 									foreach($c->childs as $cc){
 										echo '<li>';
-										echo anchor('/role/view/'.rawurlencode($cc->parent_role_id), $cc->name);
+										echo anchor('/role/view/?role_id='.rawurlencode($cc->parent_role_id), $cc->name);
 										if($cc->childs){
 											foreach($cc->childs as $ccc){
 												echo '<ul>';
-												echo anchor('/role/view/'.rawurlencode($ccc->parent_role_id), $ccc->name);
+												echo anchor('/role/view/?role_id='.rawurlencode($ccc->parent_role_id), $ccc->name);
 												echo '</ul>';
 											}
 										}
@@ -82,10 +113,10 @@
 					<?php endforeach;?>
 					</ul>
 					<form class="form-inline">
-						<select>
+						<select class="chosen">
 							<option value=""></option>
-							<?php foreach($missingFunctionalRoles as $f):?>
-								<option value="<?php echo $f;?>"><?php echo $f;?></option>
+							<?php foreach($missingRoles['functional'] as $f):?>
+								<option value="<?php echo $f->role_id;?>"><?php echo $f->name;?></option>
 							<?php endforeach ?>
 						</select>
 						<a href="javascript:;" child="<?php echo $role->role_id;?>"class="btn add_role" tip="Add This Role Relation"><i class="icon icon-plus"></i> Add</a>
@@ -101,20 +132,22 @@
 						<?php
 							if(trim($c->role_type_id) == "ROLE_ORGANISATIONAL"){
 								echo '<li>';
-								echo anchor('/role/view/'.rawurlencode($c->parent_role_id), $c->name);
+								echo anchor('/role/view/?role_id='.rawurlencode($c->parent_role_id), $c->name);
 								echo '<a href="javascript:;" class="remove_relation" parent="'.$c->parent_role_id.'" child="'.$role->role_id.'" tip="Remove This Role Relation"><i class="icon icon-remove"></i></a>';
 								echo '</li>';
 							}
 						?>
 					<?php endforeach;?>
 					</ul>
-					<select>
-						<option value=""></option>
-						<?php foreach($missingOrgRoles as $f):?>
-							<option value="<?php echo $f;?>"><?php echo $f;?></option>
-						<?php endforeach ?>
-					</select>
-					<a href="javascript:;" child="<?php echo $role->role_id;?>"class="btn add_role" tip="Add This Role Relation"><i class="icon icon-plus"></i> Add</a>
+					<form class="form-inline">
+						<select class="chosen">
+							<option value=""></option>
+							<?php foreach($missingRoles['organisational'] as $f):?>
+								<option value="<?php echo $f->role_id;?>"><?php echo $f->name;?></option>
+							<?php endforeach ?>
+						</select>
+						<a href="javascript:;" child="<?php echo $role->role_id;?>"class="btn add_role" tip="Add This Role Relation"><i class="icon icon-plus"></i> Add</a>
+					</form>
 				</div>
 			</div>
 		</div>

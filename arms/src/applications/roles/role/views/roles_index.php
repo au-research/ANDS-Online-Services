@@ -14,8 +14,7 @@
 			</div>
 </div>
 <div id="breadcrumb" style="clear:both;">
-	<?php echo anchor('/', '<i class="icon-home"></i> Home', array('class'=>'tip-bottom', 'title'=>'Go to Home')); ?>
-	<?php echo anchor('/roles', 'List Roles', array('class'=>'current')); ?>
+	<?php echo anchor('/roles', '<i class="icon-home"></i> List Roles', array('class'=>'current')); ?>
 </div>
 <div class="container-fluid" id="main-content">
 	<div id="roles">Loading...</div>
@@ -38,7 +37,7 @@
 			<tbody>
 			{{#.}}
 				<tr>
-					<td><a href="<?php echo base_url();?>role/view/{{{role_id}}}">{{name}}</a></td>
+					<td><a href="<?php echo base_url();?>role/view/?role_id={{{role_id}}}">{{name}}</a></td>
 					<td><span class="label">{{type}}</span></td>
 					<td>{{{enabled}}}</td>
 				</tr>
