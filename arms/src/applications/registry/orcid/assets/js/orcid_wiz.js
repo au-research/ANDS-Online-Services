@@ -10,6 +10,8 @@ $(document).on('click', '#view_xml', function(){
 	$('#myModal').modal();
 }).on('click', '#start_import', function(){
 	$('#alert-msg').slideUp();
+	$('#error-msg').slideUp();
+	console.log(xml);
 	var xml = load_orcid_xml();
 	$(this).button('loading');
 	var button = this;
@@ -22,8 +24,13 @@ $(document).on('click', '#view_xml', function(){
 	     	$(button).button('reset');
 	     	$('#alert-msg').slideDown();
 	     }else{
-	     	log(data);
+	     	$(button).button('reset');
+	     	$('#error-msg').html(data).slideDown();
 	     }
+	   },
+	   error: function(data){
+	   	$(button).button('reset');
+	   	$('#error-msg').html(data.responseText).slideDown();
 	   }
 	});
 });

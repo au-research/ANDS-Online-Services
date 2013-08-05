@@ -65,6 +65,7 @@
 					<a class="btn btn-small" id="view_xml">View ORCID XML</a>
 					<p></p>
 					<div class="alert alert-success hide" id="alert-msg">Your works have been updated in the ORCID registry</div>
+					<div class="alert alert-error hide" id="error-msg">There was a problem accessing the server. Please try again.</div>
 				</div>
 			</div>
 		</div>

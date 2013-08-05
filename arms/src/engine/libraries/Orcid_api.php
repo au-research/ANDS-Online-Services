@@ -103,7 +103,7 @@ class Orcid_api {
             $url = $this->api_uri.$this->get_orcid_id().'/orcid-profile/';
             $context = stream_context_create($opts);
             if($this->get_access_token()) $url.='?access_token='.$this->get_access_token();
-            $result = file_get_contents($url, true, $context);
+            $result = @file_get_contents($url, true, $context);
             return $result;
         }
     }
@@ -126,8 +126,9 @@ class Orcid_api {
         $url.='?access_token='.$this->get_access_token();
         // $data = curl_post($url, $xml, array('Accept: application/json'));
         $data = curl_post($url, $xml);
+        // return $data;
         if(trim($data)==''){
-            return true;
+            return 1;
         }else return $data;
     }
 

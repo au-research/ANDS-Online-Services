@@ -46,6 +46,9 @@ class Orcid extends MX_Controller {
 				if($access_token = $this->orcid_api->get_access_token()){
 					// var_dump($this->orcid_api->get_orcid_id());
 					$bio = $this->orcid_api->get_full();
+					if(!$bio){
+						redirect(registry_url('orcid'));
+					}
 					$bio = json_decode($bio, true);
 					$this->wiz($bio);
 				}else{
@@ -78,7 +81,7 @@ class Orcid extends MX_Controller {
 				$xml .= $ro->transformToORCID();
 			}
 		}
-		$msg =  '<?xml version="1.0" encoding="UTF-8"?><orcid-message xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.orcid.org/ns/orcid http://orcid.github.com/ORCID-Parent/schemas/orcid-message/1.0.7/orcid-message-1.0.7.xsd" xmlns="http://www.orcid.org/ns/orcid"><message-version>1.0.7</message-version><orcid-profile><orcid-activites><orcid-works visibility="public">'.$xml.'</orcid-works></orcid-activites></orcid-profile></orcid-message>';
+		
 	echo '<?xml version="1.0" encoding="UTF-8"?>
 <orcid-message
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -104,11 +107,7 @@ class Orcid extends MX_Controller {
 		$this->load->library('Orcid_api');
 		$xml = $this->input->post('xml');
 		$result = $this->orcid_api->append_works($xml);
-		if($result){
-			echo '1';
-		}else{
-			echo json_encode($result);
-		}
+		echo $result;
 	}
 
 	/**
