@@ -329,7 +329,7 @@
                     <xsl:apply-templates select="ro:namePart[@type = 'family']"/>
                     <xsl:apply-templates select="ro:namePart[@type = 'given']"/>
                     <xsl:apply-templates select="ro:namePart[@type = 'title']"/>
-                    <xsl:apply-templates select="ro:namePart[@type != 'title' and @type != 'family' and @type = 'title' and @type = '' and not(@type)]"/>
+                    <xsl:apply-templates select="ro:namePart[@type = '' or not(@type)]"/>
                 </xsl:variable>
                 <xsl:value-of select="substring($title,1,string-length($title)-2)"/>
             </AuthorName>
