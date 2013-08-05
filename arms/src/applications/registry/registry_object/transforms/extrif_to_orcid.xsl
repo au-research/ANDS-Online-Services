@@ -25,10 +25,20 @@
                 </short-description>
             </xsl:if>
             <xsl:if test="ro:collection/ro:citationInfo/ro:fullCitation">
-            <work-citation>
-              <work-citation-type><xsl:value-of select="ro:collection/ro:citationInfo/ro:fullCitation/@style"/></work-citation-type>
-              <citation><xsl:value-of select="ro:collection/ro:citationInfo/ro:fullCitation/text()"/></citation>
-            </work-citation>
+                <work-citation>
+                    <work-citation-type>
+                        <xsl:variable name="style" select="ro:collection/ro:citationInfo/ro:fullCitation/@style"/>
+                        <xsl:choose>
+                            <xsl:when test="$style = 'Harvard'">
+                                <xsl:text>formatted-harvard</xsl:text>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:text>formatted-unspecified</xsl:text>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </work-citation-type>
+                    <citation><xsl:value-of select="ro:collection/ro:citationInfo/ro:fullCitation/text()"/></citation>
+                </work-citation>
             </xsl:if>
             <xsl:if test="$work-type != ''">
                 <work-type><xsl:value-of select="$work-type"/></work-type>
