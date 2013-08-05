@@ -88,38 +88,7 @@ class Orcid extends MX_Controller {
 <orcid-profile>
   <orcid-activities>
     <orcid-works> 
-      <orcid-work>
-        <work-title>
-          <title>Minhgy again</title>
-          <subtitle>My Subtitle</subtitle>
-        </work-title>
-        <short-description>My Abstract</short-description>
-        <work-citation>
-          <work-citation-type>formatted-apa</work-citation-type>
-          <citation>My correctly formatted citation</citation>
-        </work-citation>
-        <work-type>journal-article</work-type>
-        <publication-date>
-          <year>2010</year>
-          <month>11</month>
-        </publication-date>
-        <work-external-identifiers>
-          <work-external-identifier>
-            <work-external-identifier-type>other-id</work-external-identifier-type>
-            <work-external-identifier-id>1234</work-external-identifier-id>
-          </work-external-identifier>
-        </work-external-identifiers>
-        <url>www.orcid.org</url>
-        <work-contributors>
-          <contributor>
-            <credit-name>LastName, FirstName</credit-name>
-            <contributor-attributes>
-              <contributor-sequence>first</contributor-sequence>
-              <contributor-role>author</contributor-role>
-            </contributor-attributes>
-          </contributor>
-        </work-contributors>
-      </orcid-work>
+      '.$xml.'
     </orcid-works>
   </orcid-activities>
 </orcid-profile>
