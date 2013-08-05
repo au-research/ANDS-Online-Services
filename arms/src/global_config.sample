@@ -43,6 +43,12 @@ $ENV['vocab_resolving_services'] =  array(
 // Note: enables AAF login (if Shibboleth 2 is properly configured)
 $ENV['shibboleth_sp'] = false;
 
+//ORCID config
+$ENV['gORCID_SERVICE_BASE_URI'] = 'http://sandbox-1.orcid.org/';
+$ENV['gORCID_API_URI'] = 'http://api.sandbox-1.orcid.org/';
+$ENV['gORCID_CLIENT_ID'] = '';
+$ENV['gORCID_CLIENT_SECRET'] = '';
+
 // Session Timeout (how long before the user is automatically logged out)
 $ENV['session_timeout'] = 7200; // 2 hours of inactivity before logout...
 
