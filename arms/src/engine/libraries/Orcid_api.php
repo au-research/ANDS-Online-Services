@@ -108,5 +108,28 @@ class Orcid_api {
         }
     }
 
+    /**
+     * POST xml to orcid works
+     * @param  [type] $xml [description]
+     * @return [type]      [description]
+     */
+    function append_works($xml){
+        if(!$this->get_orcid_id() && !$this->get_access_token()){
+            return false;
+        }
+        // $post_array = array(
+        //     'xml'=>$xml,
+        //     'access_token'=>$this->get_access_token()
+        // );
+        // $post_string = http_build_query($post_array);
+        $url = $this->api_uri.$this->get_orcid_id().'/orcid-works/';
+        $url.='?access_token='.$this->get_access_token();
+        // $data = curl_post($url, $xml, array('Accept: application/json'));
+        $data = curl_post($url, $xml);
+        if(trim($data)==''){
+            return true;
+        }else return $data;
+    }
+
     
 }

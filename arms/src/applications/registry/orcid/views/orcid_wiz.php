@@ -17,6 +17,7 @@
 		</div>
 		<div class="widget-content">
 			<h4><?php echo $name;?> <span class="label label-info"><?php echo $orcid_id; ?></span></h4>
+			<?php echo $this->session->userdata('access_token') ?>
 		</div>
 	</div>
 
@@ -50,7 +51,7 @@
 							<?php
 								if(sizeof($suggested_collections) > 0){
 									foreach($suggested_collections as $c){
-										echo '<li class="to_import">';
+										echo '<li class="to_import" ro_id="'.$c['registry_object_id'].'">';
 										echo '<a>'.$c['title'].'</a>';
 										echo '</li>';
 									}
@@ -58,11 +59,12 @@
 									echo 'Add a work to be imported!';
 								}
 							?>
-							
 						</ul>
 					</div>
-					<a class="btn btn-primary">Start Importing</a>
-					<a class="btn btn-small">View ORCID XML</a>
+					<a class="btn btn-primary" id="start_import">Start Importing</a>
+					<a class="btn btn-small" id="view_xml">View ORCID XML</a>
+					<p></p>
+					<div class="alert alert-success hide" id="alert-msg">Your works have been updated in the ORCID registry</div>
 				</div>
 			</div>
 		</div>
@@ -70,4 +72,15 @@
 
 </div>
 
+
+<div class="modal hide" id="myModal">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">×</button>
+    <h3>Alert</h3>
+  </div>
+  <div class="modal-body"></div>
+  <div class="modal-footer">
+    
+  </div>
+</div>
 <?php $this->load->view('footer');?>

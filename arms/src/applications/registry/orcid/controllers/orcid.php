@@ -14,7 +14,7 @@ class Orcid extends MX_Controller {
 	function index(){
 		$data['title'] = 'Login to ORCID';
 		$data['js_lib'] = array('core');
-		$data['link'] = $this->config->item('gORCID_SERVICE_BASE_URI').'oauth/authorize?client_id='.$this->config->item('gORCID_CLIENT_ID').'&response_type=code&scope=/orcid-profile/read-limited&redirect_uri=';
+		$data['link'] = $this->config->item('gORCID_SERVICE_BASE_URI').'oauth/authorize?client_id='.$this->config->item('gORCID_CLIENT_ID').'&response_type=code&scope=/orcid-profile/read-limited /orcid-works/create&redirect_uri=';
 		$data['link'].=registry_url('orcid/auth');
 		// $data['link'].='http://devl.ands.org.au/workareas/minh/ands/arms/src/registry/orcid/auth';
 		// $data['link'].='https://developers.google.com/oauthplayground';
@@ -64,6 +64,85 @@ class Orcid extends MX_Controller {
 	}
 
 	/**
+	 * returns the orcid xml
+	 * @param array(ro_id)
+	 * @return xml 
+	 */
+	function get_orcid_xml(){
+		$ro_ids = $this->input->post('ro_ids');
+		$this->load->model('registry_object/registry_objects', 'ro');
+		$xml = '';
+		foreach($ro_ids as $id){
+			$ro = $this->ro->getByID($id);
+			if($ro){
+				$xml .= $ro->transformToORCID();
+			}
+		}
+		$msg =  '<?xml version="1.0" encoding="UTF-8"?><orcid-message xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.orcid.org/ns/orcid http://orcid.github.com/ORCID-Parent/schemas/orcid-message/1.0.7/orcid-message-1.0.7.xsd" xmlns="http://www.orcid.org/ns/orcid"><message-version>1.0.7</message-version><orcid-profile><orcid-activites><orcid-works visibility="public">'.$xml.'</orcid-works></orcid-activites></orcid-profile></orcid-message>';
+	echo '<?xml version="1.0" encoding="UTF-8"?>
+<orcid-message
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.orcid.org/ns/orcid http://orcid.github.com/ORCID-Parent/schemas/orcid-message/1.0.7/orcid-message-1.0.7.xsd"
+    xmlns="http://www.orcid.org/ns/orcid">
+<message-version>1.0.7</message-version>
+<orcid-profile>
+  <orcid-activities>
+    <orcid-works> 
+      <orcid-work>
+        <work-title>
+          <title>Minhgy again</title>
+          <subtitle>My Subtitle</subtitle>
+        </work-title>
+        <short-description>My Abstract</short-description>
+        <work-citation>
+          <work-citation-type>formatted-apa</work-citation-type>
+          <citation>My correctly formatted citation</citation>
+        </work-citation>
+        <work-type>journal-article</work-type>
+        <publication-date>
+          <year>2010</year>
+          <month>11</month>
+        </publication-date>
+        <work-external-identifiers>
+          <work-external-identifier>
+            <work-external-identifier-type>other-id</work-external-identifier-type>
+            <work-external-identifier-id>1234</work-external-identifier-id>
+          </work-external-identifier>
+        </work-external-identifiers>
+        <url>www.orcid.org</url>
+        <work-contributors>
+          <contributor>
+            <credit-name>LastName, FirstName</credit-name>
+            <contributor-attributes>
+              <contributor-sequence>first</contributor-sequence>
+              <contributor-role>author</contributor-role>
+            </contributor-attributes>
+          </contributor>
+        </work-contributors>
+      </orcid-work>
+    </orcid-works>
+  </orcid-activities>
+</orcid-profile>
+</orcid-message>';
+// echo $msg;
+	}
+
+	/**
+	 * Push an orcid xml to append to the orcid works profile
+	 * @return true 
+	 */
+	function push_orcid_xml(){
+		$this->load->library('Orcid_api');
+		$xml = $this->input->post('xml');
+		$result = $this->orcid_api->append_works($xml);
+		if($result){
+			echo '1';
+		}else{
+			echo json_encode($result);
+		}
+	}
+
+	/**
 	 * The wizard?
 	 * @return view 
 	 */
@@ -71,7 +150,7 @@ class Orcid extends MX_Controller {
 		$data['bio'] = $bio['orcid-profile'];
 		$data['title']='Import Your Work';
 		$data['scripts']=array('orcid_wiz');
-		$data['js_lib']=array('core');
+		$data['js_lib']=array('core','prettyprint');
 
 		// echo json_encode($data['bio']);
 		$orcid_id = $data['bio']['orcid']['value'];

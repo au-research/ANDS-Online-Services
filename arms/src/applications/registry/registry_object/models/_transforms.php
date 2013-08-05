@@ -14,6 +14,7 @@ class Transforms {
 	static $form_to_cleanrif_transformer = NULL;
 	static $clean_ns_transformer = NULL;
 	static $extrif_to_dci_transformer = NULL;
+	static $extrif_to_orcid_transformer = NULL;
 	
 
 	static function get_qa_transformer()
@@ -157,5 +158,22 @@ class Transforms {
 
 		return self::$extrif_to_dci_transformer;
 	}
+
+	static function get_extrif_to_orcid_transformer()
+	{
+		if (is_null(self::$extrif_to_orcid_transformer))
+		{
+			$orcid_xsl = new DomDocument();
+			$orcid_xsl->load(APP_PATH.'registry_object/transforms/extrif_to_orcid.xsl');
+			$orcidProc = new XSLTProcessor();
+			$orcidProc->importStyleSheet($orcid_xsl);
+			self::$extrif_to_orcid_transformer = $orcidProc;
+		}
+
+		return self::$extrif_to_orcid_transformer;
+	}
+
+
+	
 	
 }		
