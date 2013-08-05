@@ -74,16 +74,20 @@ function curl_post($url, $post, $header=false)
 }
 
 
-function curl_file_get_contents($URL)
+function curl_file_get_contents($URL, $header)
 {
-        $c = curl_init();
-        curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($c, CURLOPT_URL, $URL);
-        $contents = curl_exec($c);
-        curl_close($c);
+    $c = curl_init();
+    if(!$header){
+        $header = array("Content-type:text/xml; charset=utf-8");
+    }
+    curl_setopt($c, CURLOPT_HTTPHEADER, $header);
+    curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($c, CURLOPT_URL, $URL);
+    $contents = curl_exec($c);
+    curl_close($c);
 
-        if ($contents) return $contents;
-            else return FALSE;
+    if ($contents) return $contents;
+        else return FALSE;
 }
 
 

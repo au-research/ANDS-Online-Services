@@ -46,9 +46,7 @@ class Orcid extends MX_Controller {
 				if($access_token = $this->orcid_api->get_access_token()){
 					// var_dump($this->orcid_api->get_orcid_id());
 					$bio = $this->orcid_api->get_full();
-					if(!$bio){
-						redirect(registry_url('orcid'));
-					}
+					if(!$bio) redirect(registry_url('orcid'));
 					$bio = json_decode($bio, true);
 					$this->wiz($bio);
 				}else{
@@ -58,6 +56,7 @@ class Orcid extends MX_Controller {
 		}else{
 			if($access_token = $this->orcid_api->get_access_token()){
 				$bio = $this->orcid_api->get_full();
+				if(!$bio) redirect(registry_url('orcid'));
 				$bio = json_decode($bio, true);
 				$this->wiz($bio);
 			}else{

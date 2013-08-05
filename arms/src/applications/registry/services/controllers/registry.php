@@ -89,7 +89,7 @@ class Registry extends MX_Controller {
 
 		$vocab_results = array();
 		foreach($query->result() as $row){
-			$item = array('value'=>$row->title, 'subtext'=>$row->registry_object_id);
+			$item = array('value'=>$row->title, 'id'=>$row->registry_object_id);
 			array_push($vocab_results, $item);
 		}
 

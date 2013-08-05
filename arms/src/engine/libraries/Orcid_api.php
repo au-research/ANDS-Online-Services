@@ -92,19 +92,25 @@ class Orcid_api {
      */
     function get_full(){
         $opts = array(
-            'http'=>array(
-                'method'=>'GET',
-                'header'=>'Accept: application/orcid+json'
-            )
+            'method'=>'GET',
+            'header'=>'Accept: application/orcid+json'
         );
+        $header = array("Accept:application/orcid+json; charset=utf-8");
         if(!$this->get_orcid_id() && !$this->get_access_token()){
             return false;
         }else{
             $url = $this->api_uri.$this->get_orcid_id().'/orcid-profile/';
-            $context = stream_context_create($opts);
+            // $context = stream_context_create($opts);
             if($this->get_access_token()) $url.='?access_token='.$this->get_access_token();
-            $result = @file_get_contents($url, true, $context);
-            return $result;
+            // $result = @file_get_contents($url.'s', true, $context);
+            // $result = curl_post($url,'', array('header'=>'Accept: application/orcid+json'));
+            $result = curl_file_get_contents($url, $header);
+            $re = json_decode($result, true);
+            if(isset($re['error-desc'])){
+                return false;
+            }else{
+                return $result;
+            }    
         }
     }
 
@@ -117,14 +123,8 @@ class Orcid_api {
         if(!$this->get_orcid_id() && !$this->get_access_token()){
             return false;
         }
-        // $post_array = array(
-        //     'xml'=>$xml,
-        //     'access_token'=>$this->get_access_token()
-        // );
-        // $post_string = http_build_query($post_array);
         $url = $this->api_uri.$this->get_orcid_id().'/orcid-works/';
         $url.='?access_token='.$this->get_access_token();
-        // $data = curl_post($url, $xml, array('Accept: application/json'));
         $data = curl_post($url, $xml);
         // return $data;
         if(trim($data)==''){

@@ -33,11 +33,31 @@ $(document).on('click', '#view_xml', function(){
 	   	$('#error-msg').html(data.responseText).slideDown();
 	   }
 	});
+}).on('click', '.remove', function(){
+	$(this).parent().fadeOut();
+}).on('click', '.add', function(){
+	$(this).parent().appendTo('#works ul');
+}).on('submit', '.form-search', function(e){
+	e.preventDefault();
+	e.stopPropagation();
+	var term = $(this).find('.search-query').val();
+	if(term!=''){
+		$.ajax({
+		   type:"GET",
+		   async:false,
+		   url:base_url+"services/registry/search/?query="+encodeURIComponent(term),
+		   success:function(data){
+		      var template = '<ul>{{#.}}<li class="to_import" ro_id="{{id}}"><a href="'+base_url+'registry_object/view/{{id}}" target="_blank">{{value}}</a>  <a href="javascript:;" class="add"><i class="icon icon-plus"></i></a></li>{{/.}}</ul>';
+			  var output = Mustache.render(template, data);
+			  $('#result').html(output);
+		   }
+		});
+	}
 });
 
 function load_orcid_xml(){
 	var ids=[];
-	$('.to_import').each(function(){
+	$('#works li.to_import').each(function(){
 		ids.push($(this).attr('ro_id'));
 	});
 	return xml = $.ajax({

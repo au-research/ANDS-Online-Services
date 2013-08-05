@@ -17,7 +17,7 @@
 		</div>
 		<div class="widget-content">
 			<h4><?php echo $name;?> <span class="label label-info"><?php echo $orcid_id; ?></span></h4>
-			<?php echo $this->session->userdata('access_token') ?>
+			<?php //echo $this->session->userdata('access_token') ?>
 		</div>
 	</div>
 
@@ -33,9 +33,10 @@
 					    <input type="text" class="search-query">
 					    <button type="submit" class="btn">Search</button>
 					  </div>
-					  <a class="btn btn-link">Advanced Search <b class="caret"></b></a>
+					  <!--a class="btn btn-link">Advanced Search <b class="caret"></b></a-->
 					</form>
-
+					<hr/>
+					<div id="result">Search for collections to be imported</div>
 				</div>
 			</div>
 		</div>
@@ -43,7 +44,6 @@
 			<div class="widget-box">
 				<div class="widget-title">
 					<h5>Works to be imported</h5>
-					
 				</div>
 				<div class="widget-content">
 					<div id="works">
@@ -52,7 +52,8 @@
 								if(sizeof($suggested_collections) > 0){
 									foreach($suggested_collections as $c){
 										echo '<li class="to_import" ro_id="'.$c['registry_object_id'].'">';
-										echo '<a>'.$c['title'].'</a>';
+										echo anchor('registry_object/view/'.$c['registry_object_id'],$c['title'], array('target'=>'_blank', 'tip'=>$c['key']));
+										echo '  <a class="remove" href="javascript:;"><i class="icon icon-remove"></i></a>';
 										echo '</li>';
 									}
 								}else{
