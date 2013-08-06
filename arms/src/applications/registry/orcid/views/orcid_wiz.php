@@ -11,15 +11,7 @@
 	<h1>Import Your Work</h1>
 </div>
 <div class="container-fluid" id="main-content">
-	<div class="widget-box">
-		<div class="widget-title">
-			<h5>Import Your Work from Research Data Australia</h5>
-		</div>
-		<div class="widget-content">
-			<h4><?php echo $name;?> <span class="label label-info"><?php echo $orcid_id; ?></span></h4>
-			<?php //echo $this->session->userdata('access_token') ?>
-		</div>
-	</div>
+	
 
 	<div class="row-fluid">
 		<div class="span6">
@@ -69,6 +61,26 @@
 					<div class="alert alert-error hide" id="error-msg">There was a problem accessing the server. Please try again.</div>
 				</div>
 			</div>
+		</div>
+	</div>
+
+	<div class="widget-box">
+		<div class="widget-title">
+			<h5><?php echo $name;?> - Works</h5>
+		</div>
+		<div class="widget-content">
+			<div class="dash_news">
+			<?php foreach($bio['orcid-activities']['orcid-works']['orcid-work'] as $w):?>
+				<h5><?php echo $w['work-title']['title']['value']; ?></h5>
+				<p>
+					<?php echo $w['url']['value'];?><br/>
+					<?php echo $w['short-description']; ?>
+				</p>
+				<hr/>
+			<?php endforeach;?>
+			</div>
+			<?php //var_dump($bio['orcid-activities']); ?>
+
 		</div>
 	</div>
 

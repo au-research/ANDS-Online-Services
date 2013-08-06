@@ -16,8 +16,6 @@ class Orcid extends MX_Controller {
 		$data['js_lib'] = array('core');
 		$data['link'] = $this->config->item('gORCID_SERVICE_BASE_URI').'oauth/authorize?client_id='.$this->config->item('gORCID_CLIENT_ID').'&response_type=code&scope=/orcid-profile/read-limited /orcid-works/create&redirect_uri=';
 		$data['link'].=registry_url('orcid/auth');
-		// $data['link'].='http://devl.ands.org.au/workareas/minh/ands/arms/src/registry/orcid/auth';
-		// $data['link'].='https://developers.google.com/oauthplayground';
 		$this->load->view('login_orcid', $data);
 	}
 
@@ -41,8 +39,6 @@ class Orcid extends MX_Controller {
 				$this->wiz($bio);
 			}else{
 
-				// var_dump($data);
-				// redirect(registry_url('orcid'));
 				if($access_token = $this->orcid_api->get_access_token()){
 					// var_dump($this->orcid_api->get_orcid_id());
 					$bio = $this->orcid_api->get_full();
