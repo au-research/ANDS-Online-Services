@@ -49,16 +49,16 @@ function default_error_handler($errno, $errstr, $errfile, $errline)
 	// Ignore E_STRICT no email either
 	if ($errno == E_STRICT) { return true; }
 
-	notifySiteAdmin($errno, $errstr, $errfile, $errline);
-	// hide E_NOTICE from users 
-	if ($errno == E_NOTICE) { return true; }
-
 	if (ENVIRONMENT == "development")
 	{
 		throw new Exception($errstr . NL . "on line " . $errline . " (" . $errfile .")");
 	}
 	else
 	{
+		// hide E_NOTICE from users 
+		if ($errno == E_NOTICE) { return true; }
+		
+		notifySiteAdmin($errno, $errstr, $errfile, $errline);
 		throw new Exception("An unexpected system error has occured. Please try again or report this error to the system administrator.");
 	}
 
