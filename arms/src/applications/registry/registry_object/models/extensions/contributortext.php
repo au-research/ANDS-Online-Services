@@ -62,7 +62,7 @@ class ContributorText_Extension extends ExtensionBase
 		elseif($subjectNum==1)
 		{
 			$subjectWord = 'area';		
-			$subjectStr = ', which covers the subject '.$subjectWord.' <a href="'.portal_url().'search#!/tab=all/group='.rawurlencode($group).'/s_subject_value_resolved='.rawurlencode($subjectCount[0]).'">'.$subjectCount[0].'</a>.';
+			$subjectStr = ', which covers the subject '.$subjectWord.' <a href="'.portal_url().'search#!/tab=all/group='.rawurlencode($groupName).'/s_subject_value_resolved='.rawurlencode($subjectCount[0]).'">'.$subjectCount[0].'</a>.';
 		}
 		elseif($subjectNum==2)
 		{
