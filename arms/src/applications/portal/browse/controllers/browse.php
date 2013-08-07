@@ -15,11 +15,20 @@ class Browse extends MX_Controller {
 	public function loadVocab(){
 		$url = $this->input->post('url');
 		$this->load->library('vocab');
+
+		// Some sanity checking for cases where user clicks before the tree has fully rendered
+		if (!$url)
+		{
+			echo "No details could be retrieved for null vocabulary URL";
+			return;
+		}
+
 		$data['r'] = json_decode($this->vocab->getConceptDetail('anzsrc-for', $url));
-		$data['notation'] = $data['prefLabel'] = $data['r']->{'result'}->{'primaryTopic'}->{'notation'};
+		$data['notation'] = $data['r']->{'result'}->{'primaryTopic'}->{'notation'};
 		$data['vocab'] = 'anzsrc-for';
 		$data['prefLabel'] = $data['r']->{'result'}->{'primaryTopic'}->{'prefLabel'}->{'_value'};
 		$data['uri']=$data['r']->{'result'}->{'primaryTopic'}->{'_about'};
+
 		$this->load->view('conceptdetail', $data);
 	}
 
