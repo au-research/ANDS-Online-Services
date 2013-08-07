@@ -16,7 +16,7 @@ class ContributorText_Extension extends ExtensionBase
 		//$this->_CI->solr->setOpt('rows','0');
 		$this->_CI->solr->setFacetOpt('field', 'class');
 		$this->_CI->solr->setFacetOpt('field', 'subject_value_resolved');		
-		$this->_CI->solr->setFacetOpt('mincount','0');
+		$this->_CI->solr->setFacetOpt('mincount','1');
 		$this->_CI->solr->executeSearch();
 		$groupName = $this->ro->getAttribute('group');
 		//$group = (string)$group;
