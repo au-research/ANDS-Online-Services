@@ -45,11 +45,14 @@ class User {
     }
 	
 	/**
-	 * Return whether a user is authenticated or not
+	 * Logout the current user, destroying their current session data
 	 */
 	function logout()
 	{
-		session_start();
+		if(!session_id())
+		{
+			session_start();
+		}
 		unset($this->session->userdata); 
 		$this->CI->session->sess_destroy(); //???
 		redirect('/');
