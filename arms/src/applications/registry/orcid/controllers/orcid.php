@@ -29,7 +29,6 @@ class Orcid extends MX_Controller {
 			$code = $this->input->get('code');
 			$data = json_decode($this->orcid_api->oauth($code),true);
 			
-			
 			if(isset($data['access_token'])){
 				// var_dump($data);
 				$this->orcid_api->set_access_token($data['access_token']);
@@ -59,6 +58,44 @@ class Orcid extends MX_Controller {
 				redirect(registry_url('orcid'));
 			}
 		}
+	}
+
+	function import_to_orcid(){
+		$ro_ids = $this->input->post('ro_ids');
+		$this->load->model('registry_object/registry_objects', 'ro');
+		$xml = '';
+		foreach($ro_ids as $id){
+			$ro = $this->ro->getByID($id);
+			if($ro){
+				$xml .= $ro->transformToORCID();
+			}
+			unset($ro);
+		}
+		$xml = '<?xml version="1.0" encoding="UTF-8"?>
+<orcid-message
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.orcid.org/ns/orcid http://orcid.github.com/ORCID-Parent/schemas/orcid-message/1.0.7/orcid-message-1.0.7.xsd"
+    xmlns="http://www.orcid.org/ns/orcid">
+<message-version>1.0.7</message-version>
+<orcid-profile>
+  <orcid-activities>
+    <orcid-works> 
+      '.$xml.'
+    </orcid-works>
+  </orcid-activities>
+</orcid-profile>
+</orcid-message>';
+		$this->load->library('Orcid_api');
+		$result = $this->orcid_api->append_works($xml);
+		if($result==1){
+			foreach($ro_ids as $id){
+				$ro = $this->ro->getByID($id);
+				$ro->setAttribute('imported_by_orcid', $this->orcid_api->get_orcid_id());
+				$ro->save();
+				unset($ro);
+			}
+		}
+		echo $result;
 	}
 
 	/**
@@ -138,7 +175,7 @@ class Orcid extends MX_Controller {
 				$ro = $this->ro->getByID($d->{'id'});
 				$connections = $ro->getConnections(true,'collection');
 				// var_dump($connections[0]['collection']);
-				if(sizeof($connections[0]['collection']) > 0) {
+				if(isset($connections[0]['collection']) && sizeof($connections[0]['collection']) > 0) {
 					$suggested_collections=array_merge($suggested_collections, $connections[0]['collection']);
 				}
 				unset($ro);
@@ -163,13 +200,34 @@ class Orcid extends MX_Controller {
 				unset($ro);
 			}
 		}
-		
+
+		$data['imported'] = $this->ro->getByAttribute('imported_by_orcid', $orcid_id);
 		// echo sizeof($suggested_collections);
 		
 		$data['name'] = $name;
 		$data['orcid_id'] = $orcid_id;
 		$data['suggested_collections'] = $suggested_collections;
 		$this->load->view('orcid_wiz', $data);
+	}
+
+	function imported($orcid_id){
+		$this->load->model('registry_object/registry_objects', 'ro');
+		$imported = $this->ro->getByAttribute('imported_by_orcid', $orcid_id);
+		$im = array();
+		foreach($imported as $ro){
+			array_push(
+				$im, array(
+					'id'=>$ro->registry_object_id,
+					'title'=>$ro->title,
+					'slug'=>$ro->slug
+				)
+			);
+		}
+		$data = array();
+		$data['imported'] = $im;
+
+		if(sizeof($imported)==0) $data['no_result'] = "You haven't import any collections";
+		echo json_encode($data);
 	}
 }
 	

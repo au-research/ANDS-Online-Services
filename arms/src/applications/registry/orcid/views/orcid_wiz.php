@@ -7,14 +7,15 @@
 ?>
 
 <?php  $this->load->view('header');?>
+<input type="hidden" id="orcid" value="<?php echo $orcid_id; ?>"/>
 <div class="content-header">
 	<h1>Import Your Work</h1>
 </div>
-<div class="container-fluid" id="main-content">
-	
 
+<div class="container-fluid" id="main-content">
 	<div class="row-fluid">
-		<div class="span6">
+
+		<div class="span8">
 			<div class="widget-box">
 				<div class="widget-title">
 					<h5>Search for your relevant works in Research Data Australia</h5>
@@ -22,70 +23,79 @@
 				<div class="widget-content">
 					<form class="form-search">
 					  <div class="input-append">
-					    <input type="text" class="search-query">
+					    <input type="text" class="search-query" value="<?php echo $name; ?>">
 					    <button type="submit" class="btn">Search</button>
 					  </div>
 					  <!--a class="btn btn-link">Advanced Search <b class="caret"></b></a-->
 					</form>
 					<hr/>
-					<div id="result">Search for collections to be imported</div>
+					<div id="result"></div>
 				</div>
 			</div>
 		</div>
-		<div class="span6">
+
+		<div class="span4">
 			<div class="widget-box">
-				<div class="widget-title">
-					<h5>Works to be imported</h5>
-				</div>
+				<div class="widget-title"><h5>Suggested Dataset</h5></div>
 				<div class="widget-content">
-					<div id="works">
-						<ul>
-							<?php
-								if(sizeof($suggested_collections) > 0){
-									foreach($suggested_collections as $c){
-										echo '<li class="to_import" ro_id="'.$c['registry_object_id'].'">';
-										echo anchor('registry_object/view/'.$c['registry_object_id'],$c['title'], array('target'=>'_blank', 'tip'=>$c['key']));
-										echo '  <a class="remove" href="javascript:;"><i class="icon icon-remove"></i></a>';
-										echo '</li>';
-									}
-								}else{
-									echo 'Add a work to be imported!';
+					<?php
+						if(sizeof($suggested_collections) > 0){
+							foreach($suggested_collections as $c){
+								echo '<div class="suggested_collections" ro_id="'.$c['registry_object_id'].'">';
+								echo '<a href="'.portal_url($c['slug']).'">'.$c['title'].'</a>';
+								echo '   <a class="remove" href="javascript:;"><i class="icon icon-remove" tip="Remove"></i></a>';
+								echo '</div>';
+							}
+							echo '<hr/><a class="btn import_all_to_orcid btn-primary" ro_id="{{id}}"><i class="icon-white icon-plus"></i> Import All to ORCID</a>';
+						}else{
+							echo 'We found no relevant collections, please use the search widget';
+						}
+					?>
+				</div>
+			</div>
+
+			<div class="widget-box">
+				<div class="widget-title"><h5>Already Imported from us</h5></div>
+				<div class="widget-content" id="imported_records">
+					<ul>
+						<?php
+							if(sizeof($imported) > 0){
+								foreach($imported as $c){
+									echo '<li class="imported" ro_id="'.$c->registry_object_id.'">';
+									echo anchor('registry_object/view/'.$c->registry_object_id,$c->title);
+									echo '</li>';
 								}
-							?>
-						</ul>
-					</div>
-					<a class="btn btn-primary" id="start_import">Start Importing</a>
-					<a class="btn btn-small" id="view_xml">View ORCID XML</a>
-					<p></p>
-					<div class="alert alert-success hide" id="alert-msg">Your works have been updated in the ORCID registry</div>
-					<div class="alert alert-error hide" id="error-msg">There was a problem accessing the server. Please try again.</div>
+							}else{
+								echo "You haven't import any collections";
+							}
+						?>
+					</ul>
 				</div>
 			</div>
 		</div>
+
 	</div>
-
-	<div class="widget-box">
-		<div class="widget-title">
-			<h5><?php echo $name;?> - Works</h5>
-		</div>
-		<div class="widget-content">
-			<div class="dash_news">
-			<?php foreach($bio['orcid-activities']['orcid-works']['orcid-work'] as $w):?>
-				<h5><?php echo $w['work-title']['title']['value']; ?></h5>
-				<p>
-					<?php echo $w['url']['value'];?><br/>
-					<?php echo $w['short-description']; ?>
-				</p>
-				<hr/>
-			<?php endforeach;?>
-			</div>
-			<?php //var_dump($bio['orcid-activities']); ?>
-
-		</div>
-	</div>
-
 </div>
 
+<script type="text/x-mustache"  id="template">
+{{#docs}}
+	<h5><a href="<?php echo portal_url();?>{{slug}}">{{display_title}}</a></h5>
+	<p>{{{description}}}</p>
+	<p>
+		<a class="btn import_to_orcid btn-primary" ro_id="{{id}}"><i class="icon-white icon-plus"></i> Import to ORCID</a>
+	</p>
+	<hr/>
+{{/docs}}
+</script>
+
+<script type="text/x-mustache"  id="imported">
+<ul>
+{{#imported}}
+	<li><a href="<?php echo portal_url();?>{{slug}}">{{title}}</a></li>
+{{/imported}}
+</ul>
+{{no_result}}
+</script>
 
 <div class="modal hide" id="myModal">
   <div class="modal-header">

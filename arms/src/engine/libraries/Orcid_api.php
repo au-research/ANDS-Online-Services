@@ -106,7 +106,7 @@ class Orcid_api {
             // $result = curl_post($url,'', array('header'=>'Accept: application/orcid+json'));
             $result = curl_file_get_contents($url, $header);
             $re = json_decode($result, true);
-            if(isset($re['error-desc'])){
+            if(isset($re['error'])){
                 return false;
             }else{
                 return $result;
