@@ -48,29 +48,30 @@ class Auth extends CI_Controller {
 		$data['authenticators'] = $this->CI->config->item('authenticators');
 		if(isset($_SERVER['shib-shared-token'])){
 			$sharedToken = $_SERVER['shib-shared-token'];
+			try 
+			{
+				if($this->user->authChallenge($sharedToken, ''))
+				{
+					redirect('/auth/dashboard/');
+				}
+				else
+				{
+					$data['error_message'] = "Unable to login. Please check your credentials are accurate.";
+					$this->load->view('login', $data);
+				}
+			}
+			catch (Exception $e)
+			{
+				$data['error_message'] = "Unable to login. Please check your credentials are accurate.";
+				$data['exception'] = $e;
+				$this->load->view('login', $data);
+			}
 		}else{
 			$data['error_message'] = "Unable to login. Shibboleth IDP was not able to authenticate the given credentials.";
 			$this->load->view('login', $data);
 		}
 
-		try 
-		{
-			if($this->user->authChallenge($sharedToken, ''))
-			{
-				redirect('/auth/dashboard/');
-			}
-			else
-			{
-				$data['error_message'] = "Unable to login. Please check your credentials are accurate.";
-				$this->load->view('login', $data);
-			}
-		}
-		catch (Exception $e)
-		{
-			$data['error_message'] = "Unable to login. Please check your credentials are accurate.";
-			$data['exception'] = $e;
-			$this->load->view('login', $data);
-		}
+		
 
 	}
 
