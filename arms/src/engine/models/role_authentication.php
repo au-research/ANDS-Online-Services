@@ -62,8 +62,8 @@ class Role_authentication extends CI_Model {
                     'role_type_id'=>'ROLE_USER',
                     'authentication_service_id'=>$method,
                     'enabled'=>DB_TRUE,
-                    'name'=> $_SERVER['displayName']
-                    //'email' => $_SERVER['mail']
+                    'name'=> $_SERVER['displayName'],
+                    'auth_domain' => 'aaf.edu.au'
                 );
 
                 if($username == $_SERVER['shib-shared-token']){
@@ -117,6 +117,7 @@ class Role_authentication extends CI_Model {
     								'message'=>'Success',
 									'user_identifier'=>$result->row(1)->role_id,
 					    			'name'=>$result->row(1)->name,
+                                    'auth_domain' => 'BUILT_IN',
     								'last_login'=>$result->row(1)->last_login,
     								'activities'=>$user_results['activities'],
     								'organisational_roles'=>$user_results['organisational_roles'],
@@ -148,6 +149,7 @@ class Role_authentication extends CI_Model {
                             'auth_method' => $method,
 							'user_identifier'=>$username,
 					    	'name'=>$result->row(1)->name,
+                            'auth_domain' => 'aaf.edu.au',
     						'last_login'=>$result->row(1)->last_login,
     						'activities'=>$user_results['activities'],
     						'organisational_roles'=>$user_results['organisational_roles'],
@@ -196,7 +198,8 @@ class Role_authentication extends CI_Model {
 									'message'=>'Success',
 									'user_identifier'=>$username,
 					    			'name'=>(isset($LDAPAttributes['cn'][0]) ? $LDAPAttributes['cn'][0] : $result->row(1)->name), // implementation specific
-									'last_login'=>$result->row(1)->last_login,
+									'auth_domain' => gCOSI_AUTH_LDAP_HOST,
+                                    'last_login'=>$result->row(1)->last_login,
 									'activities'=>$user_results['activities'],
 									'organisational_roles'=>$user_results['organisational_roles'],
 									'functional_roles'=>$user_results['functional_roles']

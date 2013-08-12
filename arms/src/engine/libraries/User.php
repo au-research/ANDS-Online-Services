@@ -28,6 +28,7 @@ class User {
 				AUTH_USER_IDENTIFIER	 => $login_response['user_identifier'] . "::",
 				AUTH_USER_FRIENDLY_NAME	 => $login_response['name'],
 				AUTH_METHOD 			 =>	$login_response['authentication_service_id'],
+				AUTH_DOMAIN 			 =>	$login_response['auth_domain'],
 			));
 			
 			// And extract the functions and affiliations							

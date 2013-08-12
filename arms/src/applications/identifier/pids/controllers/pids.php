@@ -12,10 +12,21 @@ class Pids extends MX_Controller {
 	 * @return view 
 	 */
 	function index(){
-		$data['title'] = 'List PIDs';
+		$data['title'] = 'My Identifiers';
 		$data['scripts'] = array('pids');
 		$data['js_lib'] = array('core', 'dataTables');
+
+		$this->load->model('cosi_authentication', 'cosi');
+		// var_dump($this->user->identifier());
+		// var_dump($this->cosi->getRolesAndActivitiesByRoleID($this->user->localIdentifier()));
+
 		$this->load->view('pids_index', $data);
+	}
+
+	function list_trusted_clients(){
+		$this->load->model('_pids', 'pids');
+		$trusted_clients = $this->pids->getTrustedClients();
+		echo json_encode($trusted_clients);
 	}
 
 	/**
@@ -23,41 +34,29 @@ class Pids extends MX_Controller {
 	 * @return json 
 	 */
 	function list_pids(){
-		$pids = array(
-			array('id'=>1,'stuff'=>2),
-			array('id'=>2,'stuff'=>3),
-			array('id'=>3,'stuff'=>4),
-			array('id'=>6,'stuff'=>5),
-			array('id'=>1,'stuff'=>2),
-			array('id'=>2,'stuff'=>3),
-			array('id'=>3,'stuff'=>4),
-			array('id'=>6,'stuff'=>5),
-			array('id'=>1,'stuff'=>2),
-			array('id'=>2,'stuff'=>3),
-			array('id'=>3,'stuff'=>4),
-			array('id'=>6,'stuff'=>5),
-			array('id'=>1,'stuff'=>2),
-			array('id'=>2,'stuff'=>3),
-			array('id'=>3,'stuff'=>4),
-			array('id'=>6,'stuff'=>5),
-			array('id'=>1,'stuff'=>2),
-			array('id'=>2,'stuff'=>3),
-			array('id'=>3,'stuff'=>4),
-			array('id'=>6,'stuff'=>5),
-			array('id'=>1,'stuff'=>2),
-			array('id'=>2,'stuff'=>3),
-			array('id'=>3,'stuff'=>4),
-			array('id'=>6,'stuff'=>5),
-			array('id'=>1,'stuff'=>2),
-			array('id'=>2,'stuff'=>3),
-			array('id'=>3,'stuff'=>4),
-			array('id'=>6,'stuff'=>5),
-			array('id'=>1,'stuff'=>2),
-			array('id'=>2,'stuff'=>3),
-			array('id'=>3,'stuff'=>4),
-			array('id'=>6,'stuff'=>5),
-		);
+		$this->load->model('_pids', 'pids');
+		$this->load->model('cosi_authentication', 'cosi');
+	 	//var_dump($this->user->identifier());
+		//var_dump($this->cosi->getRolesAndActivitiesByRoleID($this->user->localIdentifier()));
+		//$ownerHandle = $this->pids->getOwnerHandle($this->user->localIdentifier(), 'ldaps://ldap.anu.edu.au::http://services.ands.org.au/home/orca/user/');
+		$ownerHandle = $this->pids->getOwnerHandle('wron-repository','csiro.au');
+		if($ownerHandle)
+		$pids = $this->pids->getHandles($ownerHandle);
 		echo json_encode($pids);
 	}
+
+	function get_pids_details(){
+		$this->load->model('_pids', 'pids');
+		$this->load->model('cosi_authentication', 'cosi');
+	 	//var_dump($this->user->identifier());
+		//var_dump($this->cosi->getRolesAndActivitiesByRoleID($this->user->localIdentifier()));
+		//$ownerHandle = $this->pids->getOwnerHandle($this->user->localIdentifier(), 'ldaps://ldap.anu.edu.au::http://services.ands.org.au/home/orca/user/');
+		$handleArray = array('102.100.100/55','102.100.100/100','102.100.100/5356','102.100.100/5686');
+		$pidsDetails = $this->pids->getHandlesDetails($handleArray);
+		echo json_encode($pidsDetails);
+	}
+
+	function updateBy
+
 }
 	
