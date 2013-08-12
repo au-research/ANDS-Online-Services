@@ -357,27 +357,30 @@
 
     <xsl:template name="getCreatedDate">
         <xsl:choose>
-            <xsl:when test="ro:collection/ro:citationInfo/ro:citationMetadata/ro:date[@type='created']">
-                <xsl:value-of select="ro:collection/ro:citationInfo/ro:citationMetadata/ro:date[@type='created']"/>
+            <xsl:when test="ro:collection/ro:citationInfo/ro:citationMetadata/ro:date[@type='publicationDate']">
+                <xsl:value-of select="ro:collection/ro:citationInfo/ro:citationMetadata/ro:date[@type='publicationDate']"/>
             </xsl:when>
             <xsl:when test="ro:collection/ro:citationInfo/ro:citationMetadata/ro:date[@type='issued']">
                 <xsl:value-of select="ro:collection/ro:citationInfo/ro:citationMetadata/ro:date[@type='issued']"/>
             </xsl:when>
-            <xsl:when test="ro:collection/ro:dates[@type='created']">
-                <xsl:value-of select="substring(ro:collection/ro:dates[@type='created']/ro:date,1,4)"/>
+            <xsl:when test="ro:collection/ro:citationInfo/ro:citationMetadata/ro:date[@type='created']">
+                <xsl:value-of select="ro:collection/ro:citationInfo/ro:citationMetadata/ro:date[@type='created']"/>
+            </xsl:when>
+            <xsl:when test="ro:collection/ro:dates[@type='dc.issued']">
+                <xsl:value-of select="substring(ro:collection/ro:dates[@type='dc.issued']/ro:date,1,4)"/>
+            </xsl:when>
+            <xsl:when test="ro:collection/ro:dates[@type='dc.available']">
+                <xsl:value-of select="substring(ro:collection/ro:dates[@type='dc.available']/ro:date,1,4)"/>
             </xsl:when>
             <xsl:when test="ro:collection/ro:dates[@type='dc.created']">
                 <xsl:value-of select="substring(ro:collection/ro:dates[@type='dc.created']/ro:date,1,4)"/>
-            </xsl:when>
-            <xsl:when test="ro:collection/ro:location/@dateFrom">
-                <xsl:value-of select="substring(ro:collection/ro:location/@dateFrom,1,4)"/>
-            </xsl:when>
-            <xsl:when test="ro:collection/ro:coverage/ro:temporal/ro:date[@type= 'dateFrom']">
-                <xsl:value-of select="substring(ro:collection/ro:coverage/ro:temporal/ro:date[@type= 'dateFrom']/text() ,1,4)"/>
             </xsl:when>        
             <xsl:when test="ro:collection/@dateModified">
                 <xsl:value-of select="substring(ro:collection/@dateModified,1,4)"/>
             </xsl:when>
+            <xsl:when test="ro:collection/@dateAccessioned">
+                <xsl:value-of select="substring(ro:collection/@dateAccessioned,1,4)"/>
+            </xsl:when>           
         </xsl:choose>
     </xsl:template>
 
