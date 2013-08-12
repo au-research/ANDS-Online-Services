@@ -9,6 +9,10 @@
  * 
  */
 
+// Variable defaults
+$js_lib = !isset($js_lib) ? array() : $js_lib;
+$title = !isset($title) ? "" : $title;
+
 // Page header style is blue if the environment is not Production
 if($this->config->item('environment_name'))
 {
@@ -28,7 +32,7 @@ else
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title><?php echo $title;?></title>
+    <title><?php echo $title; ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">

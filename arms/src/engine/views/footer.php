@@ -8,6 +8,8 @@
  * @package ands/
  *
  */
+// Variable defaults
+$js_lib = !isset($js_lib) ? array() : $js_lib;
 ?>
 <div id="page-footer" class="clearfix">&nbsp;
 </div>
