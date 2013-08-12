@@ -49,6 +49,7 @@ input.error{border:1px solid red;}
   	padding:5px;
    	border-radius:15px;
     -moz-border-radius: 15px;	
+    width:500px;
 }
 .orcid-modal{
 	background-color:#ffffff;

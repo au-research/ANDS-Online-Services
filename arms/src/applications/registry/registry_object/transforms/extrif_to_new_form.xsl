@@ -1066,7 +1066,7 @@
 				<div class="controls">
 					<span class="inputs_group">
 						<input type="text" class="input-xlarge inner_input" placeholder="Value"  value="{text()}" name="value" required=""/>
-						<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSIdentifierType" name="type" placeholder="type" value="{@type}"/>
+						<input type="text" class="inner_input_type rifcs-type identifierType" vocab="RIFCSIdentifierType" name="type" placeholder="type" value="{@type}"/>
 					</span>
 					<button class="btn btn-mini btn-danger remove">
 						<i class="icon-remove icon-white"/>
@@ -1500,7 +1500,7 @@
 				<div class="controls">
 					<span class="inputs_group">
 						<input type="text" class="input-xlarge inner_input" placeholder="Value" value="" name="value" required=""/>
-						<input type="text" class="inner_input_type rifcs-type" vocab="RIFCSIdentifierType" name="type" placeholder="type" value=""/>
+						<input type="text" class="inner_input_type rifcs-type identifierType" vocab="RIFCSIdentifierType" name="type" placeholder="type" value=""/>
 					</span>
 					<button class="btn btn-mini btn-danger remove">
 						<i class="icon-remove icon-white"/>
