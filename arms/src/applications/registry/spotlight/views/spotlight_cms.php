@@ -27,7 +27,7 @@
 									<input type="text" placeholder="URL" value="<?php echo $i['url'];?>" name="url">
 									<label>Link Text: <small class="muted">(will display instead of the URL, if specified)</small></label>
 									<input type="text" placeholder="Link Display Text" value="<?php echo (isset($i['url_text']) ? $i['url_text'] : "");?>" name="url_text">
-									<label>Image URL:</label>
+									<label>Image URL: <small>(<?=anchor(apps_url('uploader/'), "upload a new image", array("target"=>"_blank"));?>)</small></label>
 									<input type="text" placeholder="Image URL" value="<?php echo $i['img_url'];?>" name="img_url">
 									<label>Image Attribution <small class="muted">(will display on mouse over on image)</small></label>
 									<input type="text" placeholder="Image Attribution" value="<?php echo $i['img_attr'];?>" name="img_attr">
