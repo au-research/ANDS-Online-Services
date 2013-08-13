@@ -5,7 +5,7 @@ RewriteBase /
 
 RewriteRule ^services/ registry/ [R=301,L]
 
-RewriteCond $1 ^(css|img|js|less|lib|uploads)
+RewriteCond $1 ^(css|img|js|less|lib|uploads|shared)
 RewriteRule ^assets/(.*?)/(.*)$ assets/$1/$2 [L]
 RewriteRule ^assets/(.*?)/(.*)$ applications/portal/$1/assets/$2 [L]
 
@@ -20,7 +20,6 @@ RewriteRule ^(.*?)/assets/(.*?)/(.*)$ applications/$1/$2/assets/$3 [L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_URI} !(.*)/$
 RewriteRule ^(.*)$ $1/ [L]
-
 
 RewriteCond $1 !^(index\.php|robots\.txt|favicon\.ico|legacy|googledocverificationidfile\.html)
 RewriteCond %{REQUEST_FILENAME} !-f

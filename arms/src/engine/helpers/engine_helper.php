@@ -147,6 +147,8 @@ function asset_url( $path, $loc = 'modules')
 
 	if($loc == 'base'){
 		return $CI->config->item('default_base_url').'assets/'.$path;
+	}else if($loc == 'shared'){
+		return $CI->config->item('default_base_url').'assets/shared/'.$path;
 	}else if($loc == 'core'){
 		return base_url( 'assets/core/' . $path );
 	}else if($loc == 'modules'){

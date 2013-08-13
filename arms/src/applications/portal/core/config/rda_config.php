@@ -3,7 +3,7 @@
 // The endpoint on the registry from which data is retrieved
 $config['registry_endpoint'] =  base_url() . "/registry/services/rda/";
 
-$config['topics_datafile'] =  base_url() . "/registry/assets/topics/topics.json";
+$config['topics_datafile'] =  asset_url("topics/topics.json", "shared");
 
 // Prevent these logos from coming up in the connections box
 $config['banned_images'] = array(
