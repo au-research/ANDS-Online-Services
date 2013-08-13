@@ -40,6 +40,8 @@ class Spotlight extends MX_Controller {
 			'url'=>$this->input->post('url'),
 			'url_text'=>$this->input->post('url_text'),
 			'img_url'=>$this->input->post('img_url'),
+			'img_attr'=>$this->input->post('img_attr'),
+			'new_window'=>$this->input->post('new_window'),
 			'content'=>$this->input->post('content'),
 			'visible'=>$this->input->post('visible')
 		);
@@ -55,6 +57,8 @@ class Spotlight extends MX_Controller {
 			'url'=>$this->input->post('url'),
 			'url_text'=>$this->input->post('url_text'),
 			'img_url'=>$this->input->post('img_url'),
+			'img_attr'=>$this->input->post('img_attr'),
+			'new_window'=>$this->input->post('new_window'),
 			'content'=>$this->input->post('content'),
 			'visible'=>$this->input->post('visible')
 		);

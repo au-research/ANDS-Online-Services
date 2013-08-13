@@ -819,6 +819,20 @@ a.browse_button{
     cursor:pointer;
     text-indent:-9999px;
 }
+.pauseicon{
+	width:37px;
+    height:37px;
+	padding: 0 4px 0 0;    
+    display:inline-block;
+    cursor:pointer;
+    text-indent:-9999px;
+    background:url(images/pause.png) no-repeat 0 0;
+    position:absolute;
+    top:0;
+    right:0;
+    display:none;
+    opacity:0.5;
+}
 .flex-direction-nav .flex-prev {
     background:url(images/prev.png) no-repeat 0 0;
 }

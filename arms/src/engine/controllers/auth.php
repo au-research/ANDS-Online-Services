@@ -46,6 +46,8 @@ class Auth extends CI_Controller {
 		$this->CI =& get_instance();
 		$data['default_authenticator'] = $this->CI->config->item('default_authenticator');
 		$data['authenticators'] = $this->CI->config->item('authenticators');
+		var_dump($_SERVER);
+		// var_dump($this->CI->session);
 		if(isset($_SERVER['shib-shared-token'])){
 			$sharedToken = $_SERVER['shib-shared-token'];
 			try 

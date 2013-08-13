@@ -338,9 +338,11 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 						'title'=>$partner['title'],
 						'description'=>$partner['content'],
 						'img_url'=>$partner['img_url'],
+						'img_attr'=>$partner['img_attr'],
 						'url'=>$partner['url'],
 						'visible'=>$partner['visible']
 					);
+					if($partner['new_window']=='yes') $item['new_window']=$partner['new_window'];
 					if (isset($partner['url_text']) && $partner['url_text'])
 					{
 						$item['url_text'] = $partner['url_text'];

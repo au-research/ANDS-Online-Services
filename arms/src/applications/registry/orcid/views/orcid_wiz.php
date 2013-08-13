@@ -79,7 +79,7 @@
 
 <script type="text/x-mustache"  id="template">
 {{#docs}}
-	<h5><a href="<?php echo portal_url();?>{{slug}}">{{display_title}}</a></h5>
+	<h5><a href="<?php echo portal_url();?>{{slug}}" target="_blank">{{display_title}}</a></h5>
 	<p>{{{description}}}</p>
 	<p>
 		<a class="btn import_to_orcid btn-primary" ro_id="{{id}}"><i class="icon-white icon-plus"></i> Import to ORCID</a>
@@ -91,7 +91,7 @@
 <script type="text/x-mustache"  id="imported">
 <ul>
 {{#imported}}
-	<li><a href="<?php echo portal_url();?>{{slug}}">{{title}}</a></li>
+	<li><a href="<?php echo portal_url();?>{{slug}}" target="_blank">{{title}}</a></li>
 {{/imported}}
 </ul>
 {{no_result}}

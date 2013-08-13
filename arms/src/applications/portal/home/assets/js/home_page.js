@@ -7,12 +7,23 @@ $(document).ready(function() {
 		var output = Mustache.render(template, data);
 		$('#spotlight').html(output);
 		$('.flexslider').flexslider({
-	    animation: "fade",
-	    controlNav: false,
-	    slideshowSpeed: 7500,
-	    directionNav:false,
-	    pauseOnHover:true
-	  });
+		    animation: "fade",
+		    controlNav: false,
+		    slideshowSpeed: 7500,
+		    directionNav:true,
+		    pauseOnHover:true,
+		    pausePlay: false,
+		  });
+		$('.slides li img').qtip({
+			position:{my:'left center', at:'center right', viewport:$(window)},
+			style: {classes: 'ui-tooltip-light ui-tooltip-shadow',width: '150px'},
+		}, event); // Pass through our original event to qTip
+
+		$('#spotlight').on('mouseover', function(){
+			$('.pauseicon', this).show();
+		}).on('mouseout', function(){
+			$('.pauseicon', this).hide();
+		});
 	}
 
 	$('#show_who_contributes').qtip({

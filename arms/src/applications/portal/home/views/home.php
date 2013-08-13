@@ -58,14 +58,15 @@
 
 
 <script type="text/x-mustache" id="spotlight_template">
+<div class="pauseicon"></div>
 	<ul class="slides">
 	{{#items}}
 		<li>
-			<img src="{{img_url}}" alt="" />
+			<img src="{{img_url}}" tip="{{img_attr}}" alt="{{img_attr}}" title="{{img_attr}}" />
 			<a href="{{url}}" class="title">{{{title}}}</a>
 			<div class="excerpt">
 				{{{description}}}
-				<p><a target="_blank" href="{{{url}}}"><strong>{{#url_text}}{{url_text}}{{/url_text}}{{^url_text}}{{url}}{{/url_text}}</strong></a></p>
+				<p><a {{#new_window}}target="_blank"{{/new_window}} href="{{{url}}}"><strong>{{#url_text}}{{url_text}}{{/url_text}}{{^url_text}}{{url}}{{/url_text}}</strong></a></p>
 			</div>
 			
 		</li>

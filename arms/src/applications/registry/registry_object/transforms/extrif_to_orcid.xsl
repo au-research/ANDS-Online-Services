@@ -2,6 +2,7 @@
 
 <xsl:stylesheet xmlns:ro="http://ands.org.au/standards/rif-cs/registryObjects" xmlns:extRif="http://ands.org.au/standards/rif-cs/extendedRegistryObjects" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0" exclude-result-prefixes="ro extRif">
 <xsl:param name="base_url"/>
+<xsl:param name="rda_url"/>
 <!-- http://support.orcid.org/knowledgebase/articles/118795-->
     <xsl:output indent="yes" omit-xml-declaration="yes"/>
     <xsl:strip-space elements="*"/>
@@ -125,12 +126,13 @@
                     <xsl:apply-templates select="//ro:identifier"/>
                 </work-external-identifiers>
             </xsl:if>
-            <xsl:variable name="sourceUrl">
+            <!-- <xsl:variable name="sourceUrl">
                 <xsl:call-template name="getSourceURL"/>
             </xsl:variable>
             <xsl:if test="$sourceUrl != ''">
                 <url><xsl:value-of select="$sourceUrl"/></url>
-            </xsl:if>
+            </xsl:if> -->
+            <url><xsl:value-of select="$rda_url"/></url>
             <xsl:if test="ro:collection/ro:citationInfo/ro:citationMetadata/ro:contributor">
                 <work-contributors>
                     <xsl:apply-templates select="ro:collection/ro:citationInfo/ro:citationMetadata/ro:contributor"/>

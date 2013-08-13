@@ -57,7 +57,9 @@ function load_imported(){
 		var output = Mustache.render(template, data);
 		$('#imported_records').html(output);
 		$(data.imported).each(function(){
-			$('a.import_to_orcid[ro_id='+this.id+']').button('loading').text('Imported').removeClass('import_to_orcid').addClass('disabled').attr('disabled', true);
+			$('a.import_to_orcid[ro_id='+this.id+']')
+				.text('Re-import to ORCID')
+				.removeClass('btn-primary');
 		});
 	});
 }

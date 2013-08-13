@@ -29,6 +29,13 @@
 									<input type="text" placeholder="Link Display Text" value="<?php echo (isset($i['url_text']) ? $i['url_text'] : "");?>" name="url_text">
 									<label>Image URL:</label>
 									<input type="text" placeholder="Image URL" value="<?php echo $i['img_url'];?>" name="img_url">
+									<label>Image Attribution <small class="muted">(will display on mouse over on image)</small></label>
+									<input type="text" placeholder="Image Attribution" value="<?php echo $i['img_attr'];?>" name="img_attr">
+									<label>Open In:</label>
+									<select name="new_window" required>
+										<option value="no">Same Window</option>
+										<option value="yes" <?php echo $i['new_window']=='yes' ? 'selected=selected': '';?>>New Window</option>
+									</select>
 									<label>Visible:</label>
 									<select name="visible" required>
 										<option value="no">Hidden</option>
@@ -55,6 +62,13 @@
 									<input type="text" placeholder="Link Display Text" value="" name="url_text">
 									<label>Image URL:</label>
 									<input type="text" placeholder="Image URL" value="" name="img_url" required>
+									<label>Image Attribution</label>
+									<input type="text" placeholder="Image Attribution" value="" name="img_attr">
+									<label>Open In:</label>
+									<select name="new_window" required>
+										<option value="no">Same Window</option>
+										<option value="yes">New Window</option>
+									</select>
 									<label>Visible:</label>
 									<select name="visible" required>
 										<option value="no">Hidden</option>
