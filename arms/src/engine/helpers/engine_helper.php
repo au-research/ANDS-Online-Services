@@ -180,6 +180,12 @@ function roles_url($suffix=''){
 	return $CI->config->item('default_base_url') . 'roles/'. $suffix;
 }
 
+function apps_url($suffix=''){
+	$CI =& get_instance();
+
+	return $CI->config->item('default_base_url') . 'apps/'. $suffix;
+}
+
 function identifier_url($suffix=''){
 	$CI =& get_instance();
 

@@ -17,76 +17,70 @@ $recent_uploads = isset($recent_uploads) ? $recent_uploads : array();
 <div id="content" style="margin-left:0px">
 <section>
 	<div class="span12">
-		<div class="box">
-			<div class="box-header clearfix">
-				<h3>Image Uploader</h3>
-			</div>
 
-			<div class="row-fluid">
+		<h3>Image Uploader</h3>
+		<div class="row-fluid">
 
-				<div class="span8">
-					<div class="box">
-						<div class="box-header clearfix">
-							<h5>Recent Uploads</h5>
-						</div>
-
-						<div class="well">
-							<table class="table table-striped">
-								<thead>
-								<tr>
-									<th>Date Uploaded</th>
-									<th>Optimised File</th>
-									<th>Original File</th>
-								</tr>
-								<?php if (!$recent_uploads):?>
-									<tr>
-										<td colspan="3"><small><em>No files have been uploaded</em></small></td>
-									</tr>
-								<?php else: ?>
-									<?php foreach ($recent_uploads AS $upload): ?>
-										<tr>
-											<td><?=date("j F Y", $upload['date_modified']);?></td>
-											<td><a href="<?=asset_url('uploads/' . $upload['optimised_filename'],'base');?>"><?=$upload['filename'];?></a></td>
-											<td><a href="<?=asset_url('uploads/' . $upload['filename'],'base');?>">(recover)</a></td>
-										</tr>
-									<?php endforeach; ?>
-								<?php endif; ?>
-							</table>
-						</div>
-					</div>
+			<div class="span8">
+				<div class="box-header clearfix">
+					<h5>Recent Uploads</h5>
 				</div>
 
-				<div class="span4">
-					<div class="widget-box">
-						<div class="widget-title"><h5>Upload a new Image</h5></div>
-						<div class="widget-content">
+				<div class="well">
+					<table class="table table-striped">
+						<thead>
+						<tr>
+							<th>Date Uploaded</th>
+							<th>Optimised File</th>
+							<th>Original File</th>
+						</tr>
+						<?php if (!$recent_uploads):?>
+							<tr>
+								<td colspan="3"><small><em>No files have been uploaded</em></small></td>
+							</tr>
+						<?php else: ?>
+							<?php foreach ($recent_uploads AS $upload): ?>
+								<tr>
+									<td><?=date("j F Y", $upload['date_modified']);?></td>
+									<td><a href="<?=asset_url('uploads/' . $upload['optimised_filename'],'base');?>" target="_blank"><?=$upload['filename'];?></a></td>
+									<td><a href="<?=asset_url('uploads/' . $upload['filename'],'base');?>" target="_blank">(recover)</a></td>
+								</tr>
+							<?php endforeach; ?>
+						<?php endif; ?>
+					</table>
+				</div>
+			</div>
 
-							<?php if (isset($success_message)): ?>
-								<div class="alert alert-info">
-									<?=$success_message;?>
-								</div>
-							<?php endif; ?>
+			<div class="span4">
+				<div class="widget-box" style="margin-top:40px;">
+					<div class="widget-title"><h5>Upload a new Image</h5></div>
+					<div class="widget-content">
 
-							<?php if (isset($error_message)): ?>
-								<div class="alert alert-error">
-								 	<?=$error_message;?>
-								</div>
-							<?php endif; ?>
-				
-								<p>Select an image to upload (png, jpg or gif).</p>
-							 	<p><small><strong>File to upload:</strong></small></p>
-								<?php echo form_open_multipart(base_url('uploader/upload'));?>
-									<input type="file" name="new_file" />
+						<?php if (isset($success_message)): ?>
+							<div class="alert alert-info">
+								<?=$success_message;?>
+							</div>
+						<?php endif; ?>
 
-									<br /><br />
+						<?php if (isset($error_message)): ?>
+							<div class="alert alert-error">
+							 	<?=$error_message;?>
+							</div>
+						<?php endif; ?>
+			
+							<p>Select an image to upload (png, jpg or gif).</p>
+						 	<p><small><strong>File to upload:</strong></small></p>
+							<?php echo form_open_multipart(base_url('uploader/upload'));?>
+								<input type="file" name="new_file" />
 
-									<input type="submit" value="Upload File" />
+								<br /><br />
+
+								<input type="submit" value="Upload File" />
 
 
-							 	<p><br/><small>* The image will be automatically converted and compressed to fit the RDA spotlight rotator.</small></p>
+						 	<p><br/><small>* The image will be automatically converted and compressed to fit the RDA spotlight rotator.</small></p>
 
-								</form>
-						</div>
+							</form>
 					</div>
 				</div>
 			</div>
@@ -94,8 +88,9 @@ $recent_uploads = isset($recent_uploads) ? $recent_uploads : array();
 	</div>
 </div>
 
-
 </section>
 
+</div>
+<br class="clear"/>
 
 <?php $this->load->view('footer');?>

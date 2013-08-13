@@ -159,65 +159,80 @@ else
               </li>
               <?php endif;?>
 
-              <?php if($this->user->hasFunction('REGISTRY_SUPERUSER')):?>
-              <li class="btn btn-inverse">
-                <?php echo anchor(registry_url('maintenance'), 'Maintenance');?>
-              </li>
-              <?php endif;?>
+              
 
 
               <?php if($this->user->hasFunction('AUTHENTICATED_USER')): ?>
-          <li class="btn btn-inverse dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Tools <b class="caret"></b></a>
-            <ul class="dropdown-menu pull-right">
-              
-              <?php if ($this->user->hasFunction('REGISTRY_SUPERUSER')): ?>
-                  <li class=""><?php echo anchor('administration/', 'Administration Panel');?></li>
+                <li class="btn btn-inverse dropdown">
+                  <a class="dropdown-toggle" data-toggle="dropdown" href="#">Tools <b class="caret"></b></a>
+                  <ul class="dropdown-menu pull-right">
+                    
+
+                    <?php if ($this->user->hasFunction('AUTHENTICATED_USER')): ?>
+                        <li class=""><?php echo anchor(registry_url('services/'), 'Registry Web Services');?></li>
+                        <li class=""><?php echo anchor(registry_url('location_capture_widget/'), 'Location Capture Widget');?></li>
+                        <li class=""><?php echo anchor(registry_url('vocab_widget/'), 'Vocabulary Service Widget');?></li>
+                    <?php endif; ?>
+
+                    <?php if ($this->user->hasFunction('PORTAL_STAFF')): ?>
+                        <li class="divider"></li>
+                        <li class=""><?php echo anchor(registry_url('spotlight/'), 'Spotlight CMS Editor');?></li>
+                        <li class=""><?php echo anchor(apps_url('uploader/'), 'CMS Image Uploader');?></li>
+                    <?php endif; ?>
+
+                    <?php if ($this->user->hasFunction('REGISTRY_STAFF')): ?>
+                        <li class="divider"></li>
+                        <li class=""><?php echo anchor(registry_url('maintenance/registrySummary'), 'Registry Quality Summary');?></li>
+                    <?php endif; ?>       
+
+                    <?php if (($this->user->hasFunction('PUBLIC')) && mod_enabled('abs_sdmx_querytool')): ?>
+                      <li class="divider"></li>
+                      <li class=""><?php echo anchor(apps_url('abs_sdmx_querytool'), 'ABS SDMX Query Tool');?></li>
+                    <?php endif; ?>      
+
+                  </ul>
+                </li>
               <?php endif; ?>
-              <?php if (($this->user->hasFunction('PUBLIC')) && mod_enabled('abs_sdmx_querytool')): ?>
-                <li class=""><?php echo anchor('abs_sdmx_querytool/', 'ABS SDMX Query Tool');?></li>
-              <?php endif; ?>
-              <?php if ($this->user->hasFunction('AUTHENTICATED_USER')): ?>
-                  <li class=""><?php echo anchor('location_capture_widget/', 'Location Capture Widget');?></li>
-                  <li class=""><?php echo anchor('vocab_widget/', 'Vocabulary Service Widget');?></li>
-                  <li class=""><?php echo anchor('services/', 'Web Services');?></li>
-                <?php endif; ?>
-              <?php if ($this->user->hasFunction('PORTAL_STAFF')): ?>
-                  <li class=""><?php echo anchor('spotlight/', 'Spotlight CMS Editor');?></li>
-              <?php endif; ?>
-               <?php if ($this->user->hasFunction('REGISTRY_STAFF')): ?>
-                  <li class=""><?php echo anchor('maintenance/registrySummary', 'Registry Quality Summary');?></li>
-              <?php endif; ?>             
-            </ul>
-          </li>
-        <?php endif; ?>
+
+              <?php if($this->user->hasFunction('REGISTRY_SUPERUSER')):?>
+              <li class="btn btn-inverse dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Administration <b class="caret"></b></a>
+                <ul class="dropdown-menu pull-right">
+                  
+                  <?php if ($this->user->hasFunction('REGISTRY_SUPERUSER')): ?>
+                      <li class=""><?php echo anchor(registry_url('administration'), 'Administration Panel');?></li>
+                      <li class=""><?php echo anchor(registry_url('maintenance'), 'Maintenance Dashboard');?></li>
+                  <?php endif; ?>
+                </ul>
+              </li>
+              <?php endif;?>
           
-        <?php if($this->user->hasFunction('REGISTRY_USER') && mod_enabled('registry')): ?>
-          <form class="navbar-search pull-left hide" id="navbar-search-form">
-            <input type="text" class="search-query" placeholder="Search">
-          </form>
-          <li class="btn btn-inverse">
+            <?php if($this->user->hasFunction('REGISTRY_USER') && mod_enabled('registry')): ?>
+              <form class="navbar-search pull-left hide" id="navbar-search-form">
+                <input type="text" class="search-query" placeholder="Search">
+              </form>
+              <li class="btn btn-inverse">
 
-            <a href="javascript:;" id="main-nav-search"><i class="icon-search icon-white"></i></a>
-          </li>
-      <?php endif; ?>
-        
-      <?php if($this->user->hasFunction('PUBLIC')): ?>
-      <?php if($this->user->isLoggedIn()): ?>
-        <?php $link = "Logged in as <strong>" . $this->user->name() . '</strong>' . BR .
-                  '<div class="pull-right">' .
-                  ($this->user->authMethod() == gCOSI_AUTH_METHOD_BUILT_IN ? anchor("auth/change_password", "Change Password") . " / " : "") . 
-                  anchor("auth/logout", "Logout") .
-                  '</div>';
-        ?>
-      <?php else: ?>
-        <?php $link = anchor("auth/login", "Login"); ?>
-      <?php endif; ?>
+                <a href="javascript:;" id="main-nav-search"><i class="icon-search icon-white"></i></a>
+              </li>
+          <?php endif; ?>
+            
+          <?php if($this->user->hasFunction('PUBLIC')): ?>
+          <?php if($this->user->isLoggedIn()): ?>
+            <?php $link = "Logged in as <strong>" . $this->user->name() . '</strong>' . BR .
+                      '<div class="pull-right">' .
+                      ($this->user->authMethod() == gCOSI_AUTH_METHOD_BUILT_IN ? anchor("auth/change_password", "Change Password") . " / " : "") . 
+                      anchor("auth/logout", "Logout") .
+                      '</div>';
+            ?>
+          <?php else: ?>
+            <?php $link = anchor("auth/login", "Login"); ?>
+          <?php endif; ?>
 
-          <li class="btn btn-inverse ">
-            <a href="javascript:;" id="main-nav-user-account" title="<?=htmlentities($link);?>"><i class="icon-user icon-white"></i></a>
-          </li>
-        <?php endif; ?>
+              <li class="btn btn-inverse ">
+                <a href="javascript:;" id="main-nav-user-account" title="<?=htmlentities($link);?>"><i class="icon-user icon-white"></i></a>
+              </li>
+            <?php endif; ?>
                 
             </ul>
         </div>
