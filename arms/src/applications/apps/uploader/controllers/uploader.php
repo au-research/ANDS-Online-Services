@@ -4,8 +4,8 @@ class Uploader extends MX_Controller {
 
 	// Immutable settings
 	const COMPRESSION_PERCENTAGE = 80; // JPEG compression percentage
-	const IMAGE_WIDTH = 350; //pixels, image will be proprtionally resized to fit (if needed)
-	const IMAGE_HEIGHT= 200;
+	const IMAGE_WIDTH = 470; //pixels, image will be proprtionally resized to fit (if needed)
+	const IMAGE_HEIGHT= 90;
 	const MAX_FILE_SIZE_KB = 4096;
 	const MAX_FILE_NAME_LEN = 64;
 	const FILE_PREFIX = "img_"; // settings for the compressed/optimised generated file, filename
