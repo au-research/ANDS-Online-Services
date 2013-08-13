@@ -104,12 +104,42 @@ class _pids extends CI_Model
 		$requestBody  = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
 		$requestBody .= '<request name="'.$serviceName.'">'."\n";
 		$requestBody .= '  <properties>'."\n";
-		$requestBody .= '    <property name="appId" value="'.$this->PIDS_APP_ID.'AAAAA" />'."\n";
+		$requestBody .= '    <property name="appId" value="'.$this->PIDS_APP_ID.'" />'."\n";
 		$requestBody .= '    <property name="identifier" value="'.$this->user->localIdentifier().'" />'."\n";
 		$requestBody .= '    <property name="authDomain" value="'.$this->user->authMethod().'" />'."\n";
 		$requestBody .= '  </properties>'."\n";
 		$requestBody .= '</request>';
 		
+$context  = stream_context_create(array('http' => array('method' => 'POST', 'header' => 'Content-Type: text/plain', 'content' => $requestBody)));
+	//$result = file_get_contents($requestURI, false, $context);
+	// create curl resource
+	$ch = curl_init();
+
+	// set url
+	curl_setopt($ch, CURLOPT_URL, $requestURI);
+
+	//return the transfer as a string
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+	curl_setopt($ch, CURLOPT_POST, TRUE);
+	curl_setopt($ch, CURLOPT_POSTFIELDS, $requestBody);
+	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);//VERY IMPORTANT, skip SSL
+
+	// $output contains the output string
+	$result = curl_exec($ch);
+	if (curl_errno($ch)) {
+       print "curl_error:" . curl_error($ch).'<br/>';
+    } else {
+       curl_close($ch);
+       print "curl exited okay\n";
+       print $requestBody.NL;
+       print $requestURI.NL;
+       echo "Data returned...\n";
+       echo "------------------------------------\n";
+       echo $result;
+       echo "------------------------------------\n";
+    } 
+	var_dump($result);
+		/*
 		echo $requestURI;
 		$result = curl_post($requestURI, $requestBody);
 		
@@ -119,6 +149,7 @@ class _pids extends CI_Model
 			$resultXML = $result;
 		}
 		return $resultXML;
+		*/
 	}
 
 	function pidsGetHandleListDescription($handle)

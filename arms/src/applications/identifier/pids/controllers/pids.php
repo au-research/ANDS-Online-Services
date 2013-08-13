@@ -35,9 +35,9 @@ class Pids extends MX_Controller {
 		$response = array();
 		$serviceName = "mint";
 		$parameters  = "type=".'DESC';
-		$parameters .= "&value=".'HELLO PIDS';
+		$parameters .= "&value=".'HELLO%20PIDS';
 		$response = $this->pids->pidsRequest($serviceName, $parameters);
-		echo json_encode($response);
+	
 		if( $response )
 		{
 			if( pidsGetResponseType($response) == 'SUCCESS' )
@@ -87,7 +87,7 @@ class Pids extends MX_Controller {
 	function get_handler($handler)
 	{
 		$this->load->model('_pids', 'pids');
-		//$handler = '6523765276345';
+		$handler = '10378.2/6345';
 		$serviceName = "getHandle";
 		$parameters = "handle=".urlencode($handler);
 		$response = $this->pids->pidsRequest($serviceName, $parameters);
