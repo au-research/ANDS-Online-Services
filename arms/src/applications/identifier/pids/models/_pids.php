@@ -4,11 +4,17 @@
 class _pids extends CI_Model
 {
 
+	private $_CI; 
 	private $pid_db = null;
+	private $PIDS_SERVICE_BASE_URI = null;
+	private $PIDS_APP_ID = null;
 
 	function __construct(){
 		parent::__construct();
+		$this->_CI =& get_instance();
 		$this->pid_db = $this->load->database('pids', TRUE);
+		$this->PIDS_APP_ID = $this->_CI->config->item('pids_server_app_id');
+		$this->PIDS_SERVICE_BASE_URI = $this->_CI->config->item('pids_server_base_url');
 	}
 
 	function getTrustedClients(){
@@ -92,35 +98,22 @@ class _pids extends CI_Model
 	function pidsRequest($serviceName, $parameters)
 	{
 		$resultXML = '';
-		USER_DOMAIN
-		$requestURI = gPIDS_SERVICE_BASE_URI.$serviceName."?".$parameters;
+		
+		$requestURI = $this->PIDS_SERVICE_BASE_URI.$serviceName."?".$parameters;
 		
 		$requestBody  = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
 		$requestBody .= '<request name="'.$serviceName.'">'."\n";
 		$requestBody .= '  <properties>'."\n";
-		$requestBody .= '    <property name="appId" value="'.gPIDS_APP_ID.'" />'."\n";
-		$requestBody .= '    <property name="identifier" value="'.getSessionVar(sROLE_ID).'" />'."\n";
-		$requestBody .= '    <property name="authDomain" value="'.getSessionVar(sAUTH_DOMAIN).'" />'."\n";
+		$requestBody .= '    <property name="appId" value="'.$this->PIDS_APP_ID.'AAAAA" />'."\n";
+		$requestBody .= '    <property name="identifier" value="'.$this->user->localIdentifier().'" />'."\n";
+		$requestBody .= '    <property name="authDomain" value="'.$this->user->authMethod().'" />'."\n";
 		$requestBody .= '  </properties>'."\n";
 		$requestBody .= '</request>';
 		
-		$context  = stream_context_create(array('http' => array('method' => 'POST', 'header' => 'Content-Type: text/plain', 'content' => $requestBody)));
-		//$result = file_get_contents($requestURI, false, $context);
-		// create curl resource
-		$ch = curl_init();
-
-		// set url
-		curl_setopt($ch, CURLOPT_URL, $requestURI);
-
-		//return the transfer as a string
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_POST, TRUE);
-		curl_setopt($ch, CURLOPT_POSTFIELDS, $requestBody);
-		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);//VERY IMPORTANT, skip SSL
-
-		// $output contains the output string
-		$result = curl_exec($ch);
-		//var_dump($output);
+		echo $requestURI;
+		$result = curl_post($requestURI, $requestBody);
+		
+		var_dump($result);
 		if( $result )
 		{
 			$resultXML = $result;

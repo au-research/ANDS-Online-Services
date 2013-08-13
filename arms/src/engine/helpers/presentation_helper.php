@@ -46,7 +46,7 @@ function curl_post($url, $post, $header=false)
     if(!$header){
         $header = array("Content-type:text/xml; charset=utf-8");
     }
-
+echo $post;
     $ch = curl_init();
 
     curl_setopt($ch, CURLOPT_URL, $url);
@@ -60,7 +60,7 @@ function curl_post($url, $post, $header=false)
     $data = curl_exec($ch);
 	
 	
-    /*if (curl_errno($ch)) {
+    if (curl_errno($ch)) {
        print "curl_error:" . curl_error($ch).'<br/>';
     } else {
        curl_close($ch);
@@ -69,7 +69,7 @@ function curl_post($url, $post, $header=false)
        echo "------------------------------------\n";
        echo $data;
        echo "------------------------------------\n";
-    } */
+    } 
     return $data;
 }
 

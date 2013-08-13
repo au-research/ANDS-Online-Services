@@ -29,6 +29,34 @@ class Pids extends MX_Controller {
 		echo json_encode($trusted_clients);
 	}
 
+	function mint()
+	{
+		$this->load->model('_pids', 'pids');
+		$response = array();
+		$serviceName = "mint";
+		$parameters  = "type=".'DESC';
+		$parameters .= "&value=".'HELLO PIDS';
+		$response = $this->pids->pidsRequest($serviceName, $parameters);
+		echo json_encode($response);
+		if( $response )
+		{
+			if( pidsGetResponseType($response) == 'SUCCESS' )
+			{
+				$response['handle'] = pidsGetHandleValue($response);
+			}
+			else
+			{
+				$response['error'] = pidsGetUserMessage($response);
+			}
+		}
+		else
+		{	
+			$response['error'] = 'There was an error communicating with the pids service.';
+		}
+
+		echo json_encode($response);
+	}
+
 	/**
 	 * list all pids web service for the pids dashboard
 	 * @return json 
@@ -56,7 +84,17 @@ class Pids extends MX_Controller {
 		echo json_encode($pidsDetails);
 	}
 
-	function updateBy
+	function get_handler($handler)
+	{
+		$this->load->model('_pids', 'pids');
+		//$handler = '6523765276345';
+		$serviceName = "getHandle";
+		$parameters = "handle=".urlencode($handler);
+		$response = $this->pids->pidsRequest($serviceName, $parameters);
+		echo json_encode($response);
+
+	}
+	//function updateBy
 
 }
 	
