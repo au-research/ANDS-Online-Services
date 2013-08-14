@@ -24,3 +24,4 @@ arms/src/.htaccess
 /doco/
 /misc/
 *~
+arms/src/applications/registry/spotlight/assets/spotlight.json
