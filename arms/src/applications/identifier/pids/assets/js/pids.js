@@ -5,15 +5,15 @@ $(function(){
 });
 
 function initView(){
-	listTrustedClients();
-	//listPIDs();
+	//listTrustedClients();
+	listPIDs();
 }
 
 function listPIDs() {
 
 	$.getJSON(base_url+'pids/list_pids', function(data) {
 		console.log(data);
-		var template = $('#trusted_clients-template').html();
+		var template = $('#pids-list-template').html();
 		var output = Mustache.render(template, data);
 		$('#pids').html(output).css('opacity', '1');
 		$('.data-table').dataTable({

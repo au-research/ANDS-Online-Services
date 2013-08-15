@@ -213,7 +213,8 @@ public class MintServlet extends HttpServlet
             else
             {
                 log.info("Unable to get identifier properties: " + auth.getProperty("identifier") + " " + auth.getProperty("authDomain"));
-                ServletSupport.doErrorResponse(response, "Identifier not found", Constants.MESSAGE_TYPE_USER);            
+                ServletSupport.doErrorResponse(response, "Identifier not found", Constants.MESSAGE_TYPE_USER);  
+                return;          
             }
             
             ArrayList<Handle> al = new ArrayList<Handle>();

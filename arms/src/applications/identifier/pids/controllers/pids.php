@@ -32,29 +32,28 @@ class Pids extends MX_Controller {
 	function mint()
 	{
 		$this->load->model('_pids', 'pids');
-		$response = array();
+		$responseArray = array();
 		$serviceName = "mint";
 		$parameters  = "type=".'DESC';
 		$parameters .= "&value=".'HELLO%20PIDS';
 		$response = $this->pids->pidsRequest($serviceName, $parameters);
-	
 		if( $response )
 		{
-			if( pidsGetResponseType($response) == 'SUCCESS' )
+			if( $this->pids->pidsGetResponseType($response) == 'SUCCESS' )
 			{
-				$response['handle'] = pidsGetHandleValue($response);
+				$responseArray['handle'] = $this->pids->pidsGetHandleValue($response);
 			}
 			else
 			{
-				$response['error'] = pidsGetUserMessage($response);
+				$responseArray['error'] = $this->pids->pidsGetUserMessage($response);
 			}
 		}
 		else
 		{	
-			$response['error'] = 'There was an error communicating with the pids service.';
+			$responseArray['error'] = 'There was an error communicating with the pids service.';
 		}
 
-		echo json_encode($response);
+		echo json_encode($responseArray);
 	}
 
 	/**
@@ -64,10 +63,12 @@ class Pids extends MX_Controller {
 	function list_pids(){
 		$this->load->model('_pids', 'pids');
 		$this->load->model('cosi_authentication', 'cosi');
+		$authDomain = $this->user->authDomain();
+		$identifier = $this->user->localIdentifier();
 	 	//var_dump($this->user->identifier());
 		//var_dump($this->cosi->getRolesAndActivitiesByRoleID($this->user->localIdentifier()));
 		//$ownerHandle = $this->pids->getOwnerHandle($this->user->localIdentifier(), 'ldaps://ldap.anu.edu.au::http://services.ands.org.au/home/orca/user/');
-		$ownerHandle = $this->pids->getOwnerHandle('wron-repository','csiro.au');
+		$ownerHandle = $this->pids->getOwnerHandle($identifier,$authDomain);
 		if($ownerHandle)
 		$pids = $this->pids->getHandles($ownerHandle);
 		echo json_encode($pids);
@@ -87,11 +88,10 @@ class Pids extends MX_Controller {
 	function get_handler($handler)
 	{
 		$this->load->model('_pids', 'pids');
-		$handler = '10378.2/6345';
 		$serviceName = "getHandle";
 		$parameters = "handle=".urlencode($handler);
 		$response = $this->pids->pidsRequest($serviceName, $parameters);
-		echo json_encode($response);
+		echo $response;
 
 	}
 	//function updateBy

@@ -24,6 +24,8 @@ class _pids extends CI_Model
 
 	function getOwnerHandle($userIdentifier, $userDomain)
 	{
+		$this->_CI->session->set_userdata(PIDS_USER_IDENTIFIER, $userIdentifier);
+		$this->_CI->session->set_userdata(PIDS_USER_DOMAIN, $userDomain);
 		$identifierStr = $userIdentifier.'####'.$userDomain;
 		$query = $this->pid_db->get_where("public.handles", array("type"=>'DESC', 'data'=>$identifierStr));
 		if($query->num_rows()>0){
@@ -34,7 +36,7 @@ class _pids extends CI_Model
 
 	function getHandles($ownerHandle)
 	{
-		$query = $this->pid_db->get_where("public.handles", array("type"=>'AGENTID', 'data'=>$ownerHandle));
+		$query = $this->pid_db->get_where("public.handles", array('handle !='=> $ownerHandle,"type"=>'AGENTID', 'data'=>$ownerHandle));
 		if($query->num_rows()>0){
 			return $query->result_array();
 		}
@@ -77,7 +79,7 @@ class _pids extends CI_Model
 			$messageType = strtoupper($responseDOMDoc->getElementsByTagName("message")->item(0)->getAttribute("type"));
 			if( $messageType == 'USER' )
 			{
-				$userMessage = esc($responseDOMDoc->getElementsByTagName("message")->item(0)->nodeValue);
+				$userMessage = $responseDOMDoc->getElementsByTagName("message")->item(0)->nodeValue;
 			}
 		}
 		return $userMessage;
@@ -97,59 +99,27 @@ class _pids extends CI_Model
 
 	function pidsRequest($serviceName, $parameters)
 	{
-		$resultXML = '';
 		
+		$userIdentifier = $this->_CI->session->userdata(PIDS_USER_IDENTIFIER);
+		$userDomain = $this->_CI->session->userdata(PIDS_USER_DOMAIN);
+
+		$resultXML = '';		
 		$requestURI = $this->PIDS_SERVICE_BASE_URI.$serviceName."?".$parameters;
-		
 		$requestBody  = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
 		$requestBody .= '<request name="'.$serviceName.'">'."\n";
 		$requestBody .= '  <properties>'."\n";
 		$requestBody .= '    <property name="appId" value="'.$this->PIDS_APP_ID.'" />'."\n";
-		$requestBody .= '    <property name="identifier" value="'.$this->user->localIdentifier().'" />'."\n";
-		$requestBody .= '    <property name="authDomain" value="'.$this->user->authMethod().'" />'."\n";
+		$requestBody .= '    <property name="identifier" value="'.$userIdentifier.'" />'."\n";
+		$requestBody .= '    <property name="authDomain" value="'.$userDomain.'" />'."\n";
 		$requestBody .= '  </properties>'."\n";
 		$requestBody .= '</request>';
-		
-$context  = stream_context_create(array('http' => array('method' => 'POST', 'header' => 'Content-Type: text/plain', 'content' => $requestBody)));
-	//$result = file_get_contents($requestURI, false, $context);
-	// create curl resource
-	$ch = curl_init();
-
-	// set url
-	curl_setopt($ch, CURLOPT_URL, $requestURI);
-
-	//return the transfer as a string
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-	curl_setopt($ch, CURLOPT_POST, TRUE);
-	curl_setopt($ch, CURLOPT_POSTFIELDS, $requestBody);
-	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);//VERY IMPORTANT, skip SSL
-
-	// $output contains the output string
-	$result = curl_exec($ch);
-	if (curl_errno($ch)) {
-       print "curl_error:" . curl_error($ch).'<br/>';
-    } else {
-       curl_close($ch);
-       print "curl exited okay\n";
-       print $requestBody.NL;
-       print $requestURI.NL;
-       echo "Data returned...\n";
-       echo "------------------------------------\n";
-       echo $result;
-       echo "------------------------------------\n";
-    } 
-	var_dump($result);
-		/*
-		echo $requestURI;
-		$result = curl_post($requestURI, $requestBody);
-		
-		var_dump($result);
+		$result = curl_post($requestURI, $requestBody, array("Content-Type: text/plain"));
 		if( $result )
 		{
 			$resultXML = $result;
 		}
 		return $resultXML;
-		*/
+		
 	}
 
 	function pidsGetHandleListDescription($handle)
