@@ -117,7 +117,7 @@ class Role_authentication extends CI_Model {
     								'message'=>'Success',
 									'user_identifier'=>$result->row(1)->role_id,
 					    			'name'=>$result->row(1)->name,
-                                    'auth_domain' => 'researchdata.ands.org.au',
+                                    'auth_domain' => 'researchdata.ands.org.au', // TODO: use a global varialbe here!!
     								'last_login'=>$result->row(1)->last_login,
     								'activities'=>$user_results['activities'],
     								'organisational_roles'=>$user_results['organisational_roles'],

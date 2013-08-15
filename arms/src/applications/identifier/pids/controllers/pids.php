@@ -63,16 +63,32 @@ class Pids extends MX_Controller {
 	function list_pids(){
 		$this->load->model('_pids', 'pids');
 		$this->load->model('cosi_authentication', 'cosi');
-		$authDomain = $this->user->authDomain();
-		$identifier = $this->user->localIdentifier();
-	 	//var_dump($this->user->identifier());
-		//var_dump($this->cosi->getRolesAndActivitiesByRoleID($this->user->localIdentifier()));
-		//$ownerHandle = $this->pids->getOwnerHandle($this->user->localIdentifier(), 'ldaps://ldap.anu.edu.au::http://services.ands.org.au/home/orca/user/');
+		$handles = array();
+		$pidsDetails = array();
+		$response = array();
+		
+
+		$params = $this->input->post('params');
+
+		$offset = (isset($params['offset'])? $params['offset']: 0);
+		$limit = (isset($params['limit'])? $params['limit']: 10);
+		$searchText = (isset($params['searchText '])? $params['searchText ']: null);
+		$authDomain = (isset($params['authDomain'])? $params['authDomain']: $this->user->authDomain());
+		$identifier = (isset($params['identifier'])? $params['identifier']: $this->user->localIdentifier());
+
 		$ownerHandle = $this->pids->getOwnerHandle($identifier,$authDomain);
 		if($ownerHandle)
-		$pids = $this->pids->getHandles($ownerHandle);
-		echo json_encode($pids);
+		{
+			$handles = $this->pids->getHandles($ownerHandle, $searchText);
+			$response['result_count'] = sizeof($handles);
+			$response['owner_handle'] = $ownerHandle;
+			$response['pids'] = $this->pids->getHandlesDetails(array_slice($handles, $offset, $limit));
+		}
+
+		echo json_encode($response);
 	}
+
+
 
 	function get_pids_details(){
 		$this->load->model('_pids', 'pids');

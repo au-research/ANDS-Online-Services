@@ -34,12 +34,22 @@ class _pids extends CI_Model
 		}
 	}
 
-	function getHandles($ownerHandle)
+	function getHandles($ownerHandle, $searchText = null)
 	{
-		$query = $this->pid_db->get_where("public.handles", array('handle !='=> $ownerHandle,"type"=>'AGENTID', 'data'=>$ownerHandle));
-		if($query->num_rows()>0){
-			return $query->result_array();
+		$aHandles = array();
+		$query = $this->pid_db->select('handle')->from('public.handles')->where('handle !=',$ownerHandle)->where("type",'AGENTID')->where('data',$ownerHandle)->get();
+		if($query->num_rows()>0 && $searchText)
+		{
+			$handles = $query->result_array();
+			$query = $this->pid_db->select('handle')->from("public.handles")->like('DESC',$searchText)->where_in("handle",$handles)->get();
 		}
+		if($query->num_rows()>0){
+			foreach($query->result_array() as $r)
+				{
+					$aHandles[] = $r['handle'];
+				}
+		}
+		return $aHandles;
 	}
 
 
