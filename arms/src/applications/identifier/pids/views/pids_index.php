@@ -9,12 +9,49 @@
 <?php  $this->load->view('header');?>
 <div class="content-header">
 	<h1>Persistent Identifier Service (PIDS)</h1>
+	<div class="btn-group">
+		<a data-toggle="modal" href="#mint_modal" href="javascript:;" class="btn btn-large">Mint</a>
+	</div>
 </div>
 <div id="breadcrumb" style="clear:both;">
 	<?php echo anchor('/pids', '<i class="icon-home"></i> List My Identifiers', array('class'=>'current')); ?>
 </div>
 <div class="container-fluid" id="main-content">
 	<div id="pids">Loading...</div>
+</div>
+
+
+<div class="modal hide fade" id="mint_modal">
+	<div class="modal-header">
+		<a href="javascript:;" class="close" data-dismiss="modal">×</a>
+		<h3>Mint a new PID</h3>
+	</div>
+	
+	<div class="modal-screen-container">
+		<div class="modal-body">
+			<div class="alert alert-info">
+				Please provide the relevant information
+			</div>
+			<form action="#" method="get" class="form-horizontal" id="mint_form">
+				<div class="control-group">
+					<label class="control-label">URL</label>
+					<div class="controls">
+						<input type="text" name="url"/>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">Description</label>
+					<div class="controls">
+						<input type="text" name="desc"/>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<a id="mint_confirm" href="javascript:;" class="btn btn-primary" data-loading-text="Minting...">Mint</a>
+		<a href="#" class="btn hide" data-dismiss="modal">Close</a>
+	</div>
 </div>
 
 <script type="text/x-mustache" id="pids-list-template">

@@ -16,6 +16,10 @@ $ENV['solr_url'] = "http://<your hostname>:8080/solr/";
 $ENV['sissvoc_url'] = "http://<your sissvoc resolver>:8080/sissvoc/api/";
 $ENV['harvester_base_url'] = "http://<your hostname>:8080/harvester/";
 
+//PIDS
+$ENV['pids_server_base_url'] = "https://<your hostname>:8443/pids/";
+$ENV['pids_server_app_id'] = "";
+
 /* ENABLED MODULES */
 $ENV['ENABLED_MODULES'] = array(
 	'roles',
@@ -129,6 +133,22 @@ $eDBCONF['cosi']['autoinit'] = FALSE;
 $eDBCONF['cosi']['stricton'] = FALSE;
 $eDBCONF['cosi']['save_queries'] = FALSE; 
 
+$eDBCONF['pids']['hostname'] = 'devl.ands.org.au';
+$eDBCONF['pids']['username'] = 'pidmaster';
+$eDBCONF['pids']['password'] = '';
+$eDBCONF['pids']['database'] = 'pids';
+$eDBCONF['pids']['dbdriver'] = 'postgre';
+$eDBCONF['pids']['dbprefix'] = '';
+$eDBCONF['pids']['pconnect'] = TRUE;
+$eDBCONF['pids']['db_debug'] = TRUE;
+$eDBCONF['pids']['cache_on'] = FALSE;
+$eDBCONF['pids']['cachedir'] = '';
+$eDBCONF['pids']['char_set'] = 'utf8';
+$eDBCONF['pids']['dbcollat'] = 'utf8_general_ci';
+$eDBCONF['pids']['swap_pre'] = '';
+$eDBCONF['pids']['autoinit'] = FALSE;
+$eDBCONF['pids']['stricton'] = FALSE;
+$eDBCONF['pids']['save_queries'] = FALSE; 
 
 $eDBCONF['vocabs']['hostname'] = 'localhost';
 $eDBCONF['vocabs']['username'] = 'webuser';

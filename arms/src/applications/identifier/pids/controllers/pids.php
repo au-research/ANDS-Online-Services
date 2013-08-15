@@ -12,6 +12,7 @@ class Pids extends MX_Controller {
 	 * @return view 
 	 */
 	function index(){
+		acl_enforce('PID_USER');
 		$data['title'] = 'My Identifiers';
 		$data['scripts'] = array('pids');
 		$data['js_lib'] = array('core', 'dataTables');
@@ -29,8 +30,7 @@ class Pids extends MX_Controller {
 		echo json_encode($trusted_clients);
 	}
 
-	function mint()
-	{
+	function mint(){
 		$this->load->model('_pids', 'pids');
 		$responseArray = array();
 		$serviceName = "mint";
@@ -52,7 +52,6 @@ class Pids extends MX_Controller {
 		{	
 			$responseArray['error'] = 'There was an error communicating with the pids service.';
 		}
-
 		echo json_encode($responseArray);
 	}
 
@@ -77,6 +76,7 @@ class Pids extends MX_Controller {
 		$identifier = (isset($params['identifier'])? $params['identifier']: $this->user->localIdentifier());
 
 		$ownerHandle = $this->pids->getOwnerHandle($identifier,$authDomain);
+
 		if($ownerHandle)
 		{
 			$handles = $this->pids->getHandles($ownerHandle, $searchText);
@@ -94,8 +94,8 @@ class Pids extends MX_Controller {
 
 			$response['pids'] = $pidsDetails;
 		}
-
 		echo json_encode($response);
+
 	}
 
 

@@ -1,7 +1,18 @@
-
-
 $(function(){
 	initView();
+});
+
+$(document).on('click', '#mint_confirm', function(){
+	var url = $('#mint_form input[name=url]').val();
+	var desc = $('#mint_form input[name=desc]').val();
+	$.ajax({
+		url: base_url+'pids/mint',
+		type: 'POST',
+		data: {url:url, desc:desc},
+		success: function(data){
+			$('#mint_modal').modal('hide');
+		}
+	});
 });
 
 function initView(){
