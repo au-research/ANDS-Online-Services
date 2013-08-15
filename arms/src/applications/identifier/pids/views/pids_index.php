@@ -17,7 +17,21 @@
 	<?php echo anchor('/pids', '<i class="icon-home"></i> List My Identifiers', array('class'=>'current')); ?>
 </div>
 <div class="container-fluid" id="main-content">
-	<div id="pids">Loading...</div>
+	<div class="widget-box">
+		<div class="widget-title">
+			<h5>PIDs</h5>
+		</div>
+		<div class="widget-content">
+			<form class="form-search">
+			  <div class="input-append">
+			    <input type="text" class="span2 search-query" id="search_query">
+			    <button type="submit" class="btn">Search</button>
+			  </div>
+			</form>
+			<hr/>
+			<div id="pids">Loading...</div>
+		</div>
+	</div>
 </div>
 
 
@@ -55,31 +69,48 @@
 </div>
 
 <script type="text/x-mustache" id="pids-list-template">
-<div class="widget-box">
-	<div class="widget-title">
-		<h5>Identifiers</h5>
-	</div>
-	<div class="widget-content nopadding">
-		<table class="table table-bordered data-table">
-			<thead>
-				<tr>
-					<th>Handle</th>
-					<th>Info type</th>
-					<th>Value</th>
-				</tr>
-			</thead>
-			<tbody>
-			{{#.}}
-				<tr>
-					<td>{{handle}}</td>
-					<td>{{type}}</td>
-					<td>{{data}}</td>
-				</tr>
-			{{/.}}
-			</tbody>
-		</table>  
-	</div>
-</div>
+<p>Total number of PIDs owned: <strong>{{result_count}}</strong></p>
+{{#no_result}}
+<div class="well">No result!</div>
+{{/no_result}}
+<hr/>
+{{#pids}}
+	<h5>{{handle}}</h5>
+	<dl class="dl-horizontal">
+	{{#DESC}}
+		<dt>Description</dt>
+		<dd>{{DESC}}</dd>
+	{{/DESC}}
+	{{#URL}}
+		<dt>URL</dt>
+		<dd>{{URL}}</dd>
+	{{/URL}}
+	</dl>
+<hr/>
+{{/pids}}
+{{#hasMore}}
+<a href="javascript:;" class="btn btn-block load_more" next_offset="{{next_offset}}">Load More <i class="icon icon-arrow-down"></i></a>
+{{/hasMore}}
+</script>
+
+<script type="text/x-mustache" id="pids-more-template">
+{{#pids}}
+	<h5>{{handle}}</h5>
+	<dl class="dl-horizontal">
+	{{#DESC}}
+		<dt>Description</dt>
+		<dd>{{DESC}}</dd>
+	{{/DESC}}
+	{{#URL}}
+		<dt>URL</dt>
+		<dd>{{URL}}</dd>
+	{{/URL}}
+	</dl>
+<hr/>
+{{/pids}}
+{{#hasMore}}
+<a href="javascript:;" class="btn btn-block load_more" next_offset="{{next_offset}}">Load More <i class="icon icon-arrow-down"></i></a>
+{{/hasMore}}
 </script>
 
 <script type="text/x-mustache" id="trusted_clients-template">

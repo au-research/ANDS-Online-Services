@@ -37,19 +37,50 @@ class _pids extends CI_Model
 	function getHandles($ownerHandle, $searchText = null)
 	{
 		$aHandles = array();
-		$query = $this->pid_db->select('handle')->from('public.handles')->where('handle !=',$ownerHandle)->where("type",'AGENTID')->where('data',$ownerHandle)->get();
-		if($query->num_rows()>0 && $searchText)
-		{
-			$handles = $query->result_array();
-			$query = $this->pid_db->select('handle')->from("public.handles")->like('DESC',$searchText)->where_in("handle",$handles)->get();
+		$query = $this->pid_db
+			->select('handle')->distinct()
+			->from('public.handles')
+			->where('handle !=',$ownerHandle)
+			->where("type",'AGENTID')
+			->where('data',$ownerHandle)
+			->order_by('handle', 'asc')
+			->get();
+
+		if($query->num_rows() == 0){
+			$result = array();
+			return $result;
 		}
-		if($query->num_rows()>0){
+
+		if($searchText){
+			$handles = $query->result_array();
 			foreach($query->result_array() as $r)
+			{
+				$aHandles[] = $r['handle'];
+			}
+			$searchQuery = $this->pid_db
+					->select('handle')->distinct()
+					->from('public.search_view')
+					->where('handle !=', $ownerHandle)
+					->like('data', $searchText)
+					->or_like('handle', $searchText)
+					->where_in('handle', $aHandles)
+					->order_by('handle', 'asc')
+					->get();
+			if($searchQuery->num_rows()==0) return array();
+			foreach($searchQuery->result_array() as $r){
+				$result[] = $r['handle'];
+			}
+			return $result;
+		}else{
+			if($query->num_rows()>0){
+				foreach($query->result_array() as $r)
 				{
 					$aHandles[] = $r['handle'];
 				}
+			}
+			return $aHandles;
 		}
-		return $aHandles;
+		
 	}
 
 

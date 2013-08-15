@@ -97,10 +97,9 @@ class Pids extends MX_Controller {
 		
 
 		$params = $this->input->post('params');
-
 		$offset = (isset($params['offset'])? $params['offset']: 0);
 		$limit = (isset($params['limit'])? $params['limit']: 10);
-		$searchText = (isset($params['searchText '])? $params['searchText ']: null);
+		$searchText = (isset($params['searchText'])? $params['searchText']: null);
 		$authDomain = (isset($params['authDomain'])? $params['authDomain']: $this->user->authDomain());
 		$identifier = (isset($params['identifier'])? $params['identifier']: $this->user->localIdentifier());
 
@@ -111,20 +110,36 @@ class Pids extends MX_Controller {
 			$handles = $this->pids->getHandles($ownerHandle, $searchText);
 			$response['result_count'] = sizeof($handles);
 			$response['owner_handle'] = $ownerHandle;
-			$result = $this->pids->getHandlesDetails(array_slice($handles, $offset, $limit));
-			foreach($result as $r)
-			{
-				if($r['type'] == 'DESC' || $r['type'] == 'URL')
+			if($response['result_count'] > 0){
+				$result = $this->pids->getHandlesDetails(array_slice($handles, $offset, $limit));
+				foreach($result as $r)
 				{
-					$pidsDetails[$r['handle']]['handle'] = $r['handle'];
-					$pidsDetails[$r['handle']][$r['type']] = $r['data'];
+					if($r['type'] == 'DESC' || $r['type'] == 'URL')
+					{
+						// $pidsDetails[] = array(
+						// 	'handle'=>$r['handle'],
+						// 	$r['type']=>$r['data']
+						// );
+						$pidsDetails[$r['handle']]['handle'] = $r['handle'];
+						$pidsDetails[$r['handle']][$r['type']] = $r['data'];
+					}
 				}
-			}
+				$result = array();
+				foreach($pidsDetails as $r){
+					array_push($result, $r);
+				}
 
-			$response['pids'] = $pidsDetails;
+				$response['pids'] = $result;
+			}else{
+				$response['no_result'] = true;
+			}
+		}
+
+		if(($offset + $limit) < $response['result_count']){
+			$response['hasMore'] = true;
+			$response['next_offset'] = $offset + $limit;
 		}
 		echo json_encode($response);
-
 	}
 
 

@@ -1,3 +1,4 @@
+var params = {};
 $(function(){
 	initView();
 });
@@ -15,28 +16,43 @@ $(document).on('click', '#mint_confirm', function(){
 			$('#mint_modal').modal('hide');
 		}
 	});
+}).on('click', '.load_more', function(){
+	params['offset'] = $(this).attr('next_offset');
+	var button = $(this);
+	$.ajax({
+		url: base_url+'pids/list_pids', 
+		type: 'POST',
+		data: {params:params},
+		success: function(data){
+			var template = $('#pids-more-template').html();
+			var output = Mustache.render(template, data);
+			button.after(output);
+			button.remove();
+		}
+	});
+}).on('submit', '.form-search', function(e){
+	e.preventDefault();
+	params['offset']=0;
+	params['searchText'] = $('#search_query').val();
+	listPIDs(params);
 });
 
 function initView(){
-	//listTrustedClients();
-	listPIDs();
+	params['offset'] = 0;
+	listPIDs(params);
 }
 
-function listPIDs() {
-
-	$.getJSON(base_url+'pids/list_pids', function(data) {
-		console.log(data);
-		var template = $('#pids-list-template').html();
-		var output = Mustache.render(template, data);
-		$('#pids').html(output).css('opacity', '1');
-		$('.data-table').dataTable({
-			"aaSorting": [[ 1, "desc" ]],
-			"bJQueryUI": true,
-			"sPaginationType": "full_numbers",
-			"sDom": '<""l>t<"F"fp>',
-			"iDisplayLength": 10
-		});
-		//$('.updateSOLRstat').click(updateSOLRstat);
+function listPIDs(params) {
+	$.ajax({
+		url: base_url+'pids/list_pids', 
+		type: 'POST',
+		data: {params:params},
+		success: function(data){
+			console.log(data);
+			var template = $('#pids-list-template').html();
+			var output = Mustache.render(template, data);
+			$('#pids').html(output);
+		}
 	});
 }
 
