@@ -82,7 +82,17 @@ class Pids extends MX_Controller {
 			$handles = $this->pids->getHandles($ownerHandle, $searchText);
 			$response['result_count'] = sizeof($handles);
 			$response['owner_handle'] = $ownerHandle;
-			$response['pids'] = $this->pids->getHandlesDetails(array_slice($handles, $offset, $limit));
+			$result = $this->pids->getHandlesDetails(array_slice($handles, $offset, $limit));
+			foreach($result as $r)
+			{
+				if($r['type'] == 'DESC' || $r['type'] == 'URL')
+				{
+					$pidsDetails[$r['handle']]['handle'] = $r['handle'];
+					$pidsDetails[$r['handle']][$r['type']] = $r['data'];
+				}
+			}
+
+			$response['pids'] = $pidsDetails;
 		}
 
 		echo json_encode($response);
