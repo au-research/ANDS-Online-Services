@@ -9,7 +9,7 @@
 <?php  $this->load->view('header');?>
 <input type="hidden" id="orcid" value="<?php echo $orcid_id; ?>"/>
 <div class="content-header">
-	<h1>Import Your Work</h1>
+	<h1><img src="http://orcid.org/sites/all/themes/orcid/img/orcid-logo.png"/> Import Your Datasets to ORCID</h1>
 </div>
 
 <div class="container-fluid" id="main-content">
@@ -36,7 +36,12 @@
 
 		<div class="span4">
 			<div class="widget-box">
-				<div class="widget-title"><h5>Suggested Dataset</h5></div>
+				<div class="widget-title">
+					<span class="icon">
+						<a href="javascript:;" tip="The Suggested Datasets section will list any datasets from Research Data Australia, which are either directly related to your ORCID ID or are related to a researcher matching your full name."><i class="icon icon-question-sign"></i></a>
+					</span>
+					<h5>Suggested Datasets</h5>
+				</div>
 				<div class="widget-content">
 					<?php
 						if(sizeof($suggested_collections) > 0){
@@ -55,7 +60,7 @@
 			</div>
 
 			<div class="widget-box">
-				<div class="widget-title"><h5>Already Imported from us</h5></div>
+				<div class="widget-title"><h5>Datasets already imported from Research Data Australia</h5></div>
 				<div class="widget-content" id="imported_records">
 					<ul>
 						<?php
