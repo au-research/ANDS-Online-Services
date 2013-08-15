@@ -11,14 +11,27 @@
 	<h1>Login ORCID</h1>
 </div>
 <div class="container-fluid" id="main-content">
-	<div class="widget-box">
-		<div class="widget-title">
-			<h5>Login</h5>
+	<div class="row-fluid">
+		<div class="span3">&nbsp;</div>
+		<div class="span6">
+			<div class="widget-box">
+				<div class="widget-title">
+					<h5>Login</h5>
+				</div>
+				<div class="widget-content">
+					<p>
+						
+					</p>
+					<img src="http://orcid.org/sites/all/themes/orcid/img/orcid-logo.png" style="display:block;margin:10px auto;"/>
+					<p>
+						<a href="<?php echo $link?>" class="btn btn-block btn-primary">Login with ORCID ID</a>
+					</p>
+				</div>
+			</div>
 		</div>
-		<div class="widget-content">
-			<a href="<?php echo $link?>" class="btn btn-primary">Login with ORCID ID</a>
-		</div>
+		<div class="span3"></div>
 	</div>
+	
 </div>
 
 <script type="text/x-mustache" id="roles-template">
