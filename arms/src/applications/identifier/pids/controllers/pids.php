@@ -32,24 +32,53 @@ class Pids extends MX_Controller {
 
 	function mint(){
 		$this->load->model('_pids', 'pids');
-		$responseArray = array();
-		$serviceName = "mint";
-		$parameters  = "type=".'DESC';
-		$parameters .= "&value=".'HELLO%20PIDS';
-		$response = $this->pids->pidsRequest($serviceName, $parameters);
-		if( $response )
-		{
-			if( $this->pids->pidsGetResponseType($response) == 'SUCCESS' )
-			{
+
+		$url = urlencode($this->input->post('url'));
+		$desc = urlencode($this->input->post('desc'));
+
+		if($url && $desc){
+			//do desc -> update with url
+			$response = $this->pids->pidsRequest('mint', 'type=DESC&value='.$desc);
+			if($response){
 				$responseArray['handle'] = $this->pids->pidsGetHandleValue($response);
+				$updateResponse = $this->pids->pidsRequest('addValue', 'type=URL&value='.$url.'&handle='.$responseArray['handle']);
+				if($updateResponse){
+					$responseArray['result']='ok';
+					$responseArray['message']='success';
+				}else{
+					$responseArray['result']='error';
+					$responseArray['message'] = 'There was an error communicating with the pids service. update failed.';
+				}
+				echo json_encode($responseArray);
+			}else{
+				$responseArray['result']='error';
+				$responseArray['message'] = 'There was an error communicating with the pids service.';
+				echo json_encode($responseArray);
 			}
-			else
-			{
+		}else if($url){
+			//do url only
+			$response = $this->pids->pidsRequest('mint', 'type=URL&value='.$url);
+			$this->handleResponse($response);
+		}else if($desc){
+			//do desc
+			$response = $this->pids->pidsRequest('mint', 'type=DESC&value='.$desc);
+			$this->handleResponse($response);
+		}else{
+			$responseArray['result']='error';
+			$responseArray['message']='Either URL or DESC must be specified';
+			echo json_encode($responseArray);
+		}
+	}
+
+	function handleResponse($response){
+		$responseArray = array();
+		if($response){
+			if($this->pids->pidsGetResponseType($response) == 'SUCCESS'){
+				$responseArray['handle'] = $this->pids->pidsGetHandleValue($response);
+			}else{
 				$responseArray['error'] = $this->pids->pidsGetUserMessage($response);
 			}
-		}
-		else
-		{	
+		}else{	
 			$responseArray['error'] = 'There was an error communicating with the pids service.';
 		}
 		echo json_encode($responseArray);

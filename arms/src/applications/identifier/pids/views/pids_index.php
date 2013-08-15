@@ -10,7 +10,7 @@
 <div class="content-header">
 	<h1>Persistent Identifier Service (PIDS)</h1>
 	<div class="btn-group">
-		<a data-toggle="modal" href="#mint_modal" href="javascript:;" class="btn btn-large">Mint</a>
+		<a data-toggle="modal" href="#mint_modal" href="javascript:;" class="btn btn-large"><i class="icon icon-plus"></i> Mint</a>
 	</div>
 </div>
 <div id="breadcrumb" style="clear:both;">
@@ -36,7 +36,7 @@
 				<div class="control-group">
 					<label class="control-label">URL</label>
 					<div class="controls">
-						<input type="text" name="url"/>
+						<input type="url" name="url" value="http://"/>
 					</div>
 				</div>
 				<div class="control-group">
