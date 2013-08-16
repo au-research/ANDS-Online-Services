@@ -77,9 +77,20 @@ class Pids extends MX_Controller {
 		$handle = urlencode($this->input->post('handle'));
 
 		$serviceName = "modifyValueByIndex";
-		$parameters  = "handle=".urlencode($handle);
-		$parameters .= "&index=".urlencode($index);
-		$parameters .= "&value=".urlencode($propertyValue);
+		$parameters  = "handle=".$handle;
+		$parameters .= "&index=".$index;
+		$parameters .= "&value=".$propertyValue;
+		$response = pidsRequest($serviceName, $parameters);
+		echo json_encode($response);
+	}
+
+	function delete_value_by_index()
+	{			
+		$index = urlencode($this->input->post('index'));
+		$handle = urlencode($this->input->post('handle'));
+		$serviceName = "deleteValueByIndex";
+		$parameters  = "handle=".$handle;
+		$parameters .= "&index=".$index;
 		$response = pidsRequest($serviceName, $parameters);
 		echo json_encode($response);
 	}
