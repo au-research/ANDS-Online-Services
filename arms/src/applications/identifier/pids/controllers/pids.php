@@ -70,6 +70,21 @@ class Pids extends MX_Controller {
 		}
 	}
 
+	function modify_value_by_index()
+	{			
+		$index = urlencode($this->input->post('index'));
+		$propertyValue = urlencode($this->input->post('value'));
+		$handle = urlencode($this->input->post('handle'));
+
+		$serviceName = "modifyValueByIndex";
+		$parameters  = "handle=".urlencode($handle);
+		$parameters .= "&index=".urlencode($index);
+		$parameters .= "&value=".urlencode($propertyValue);
+		$response = pidsRequest($serviceName, $parameters);
+		echo json_encode($response);
+	}
+
+
 	function handleResponse($response){
 		$responseArray = array();
 		if($response){
@@ -121,7 +136,7 @@ class Pids extends MX_Controller {
 						// 	$r['type']=>$r['data']
 						// );
 						$pidsDetails[$r['handle']]['handle'] = $r['handle'];
-						$pidsDetails[$r['handle']][$r['type']] = $r['data'];
+						$pidsDetails[$r['handle']][$r['type']] = array($r['data'], $r['idx']);
 					}
 				}
 				$result = array();
