@@ -138,6 +138,31 @@ class _pids extends CI_Model
 		return $handleValue;
 	}
 
+	function modify_value_by_index($handle, $value, $index)
+	{			
+		$index = urlencode($index);
+		$propertyValue = urlencode($value);
+		$handle = urlencode($handle);
+
+		$serviceName = "modifyValueByIndex";
+		$parameters  = "handle=".$handle;
+		$parameters .= "&index=".$index;
+		$parameters .= "&value=".$propertyValue;
+		$response = $this->pidsRequest($serviceName, $parameters);
+		return json_encode($response);
+	}
+
+	function delete_value_by_index($handle, $index)
+	{			
+		$index = urlencode($index);
+		$handle = urlencode($handle);
+		$serviceName = "deleteValueByIndex";
+		$parameters  = "handle=".$handle;
+		$parameters .= "&index=".$index;
+		$response = $this->pidsRequest($serviceName, $parameters);
+		return json_encode($response);
+	}
+
 	function pidsRequest($serviceName, $parameters)
 	{
 		
@@ -170,7 +195,7 @@ class _pids extends CI_Model
 	    // Get the handle to display the first property
 		$serviceName = "getHandle";
 		$parameters = "handle=".urlencode($handle);
-		$response = pidsRequest($serviceName, $parameters);
+		$response = $this->pidsRequest($serviceName, $parameters);
 		
 		if( $response )
 		{

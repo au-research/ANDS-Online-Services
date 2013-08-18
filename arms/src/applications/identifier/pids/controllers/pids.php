@@ -15,13 +15,42 @@ class Pids extends MX_Controller {
 		acl_enforce('PID_USER');
 		$data['title'] = 'My Identifiers';
 		$data['scripts'] = array('pids');
-		$data['js_lib'] = array('core', 'dataTables');
+		$data['js_lib'] = array('core');
 
 		$this->load->model('cosi_authentication', 'cosi');
 		// var_dump($this->user->identifier());
 		// var_dump($this->cosi->getRolesAndActivitiesByRoleID($this->user->localIdentifier()));
 
 		$this->load->view('pids_index', $data);
+	}
+
+	public function view(){
+		acl_enforce('PID_USER');
+		$this->load->model('_pids', 'pids');
+		$handle = $this->input->get('handle');
+		if($handle){
+			$handle = $this->pids->getHandlesDetails(array($handle));
+			// echo json_encode($handle);
+			$pid = array();
+			foreach($handle as $h){
+				$pid['handle'] = $h['handle'];
+				if($h['type']=='DESC') {
+					$pid['desc'] = $h['data'];
+					$pid['desc_index'] = $h['idx'];
+				}
+				if($h['type']=='URL') {
+					$pid['url'] = $h['data'];
+					$pid['url_index'] = $h['idx'];
+				}
+			}
+			$data['pid'] = $pid;
+			$data['title'] = 'View Handle: '.$pid['handle'];
+			$data['scripts'] = array('pid');
+			$data['js_lib'] = array('core');
+			$this->load->view('pid_view', $data);
+		}else{
+			$this->index();
+		}
 	}
 
 	function list_trusted_clients(){
@@ -70,30 +99,36 @@ class Pids extends MX_Controller {
 		}
 	}
 
-	function modify_value_by_index()
-	{			
-		$index = urlencode($this->input->post('index'));
-		$propertyValue = urlencode($this->input->post('value'));
-		$handle = urlencode($this->input->post('handle'));
-
-		$serviceName = "modifyValueByIndex";
-		$parameters  = "handle=".$handle;
-		$parameters .= "&index=".$index;
-		$parameters .= "&value=".$propertyValue;
-		$response = pidsRequest($serviceName, $parameters);
+	function update(){
+		$this->load->model('_pids', 'pids');
+		$post = $this->input->post('jsonData');
+		$handle = $post['handle'];
+		$response = array();
+		if(isset($post['url'])){
+			if($post['url']!=''){
+				if($post['url_index']!=''){
+					$response['url'] = $this->pids->modify_value_by_index($handle, $post['url'], $post['url_index']);
+				}else{
+					$response['url'] = $this->pids->pidsRequest('addValue', 'type=URL&value='.urlencode($post['url']).'&handle='.urlencode($handle));
+				}
+			}else{
+				$response['url'] = $this->pids->delete_value_by_index($handle, $post['url_index']);
+			}
+		}
+		if(isset($post['desc'])){
+			if($post['desc']!=''){
+				if($post['desc_index']!=''){
+					$response['desc'] = $this->pids->modify_value_by_index($handle, $post['desc'], $post['desc_index']);
+				}else{
+					$response['url'] = $this->pids->pidsRequest('addValue', 'type=DESC&value='.urlencode($post['desc']).'&handle='.urlencode($handle));
+				}
+			}else{
+				$response['desc'] = $this->pids->delete_value_by_index($handle, $post['desc_index']);
+			}
+		}
 		echo json_encode($response);
 	}
 
-	function delete_value_by_index()
-	{			
-		$index = urlencode($this->input->post('index'));
-		$handle = urlencode($this->input->post('handle'));
-		$serviceName = "deleteValueByIndex";
-		$parameters  = "handle=".$handle;
-		$parameters .= "&index=".$index;
-		$response = pidsRequest($serviceName, $parameters);
-		echo json_encode($response);
-	}
 
 
 	function handleResponse($response){
@@ -147,7 +182,9 @@ class Pids extends MX_Controller {
 						// 	$r['type']=>$r['data']
 						// );
 						$pidsDetails[$r['handle']]['handle'] = $r['handle'];
-						$pidsDetails[$r['handle']][$r['type']] = array($r['data'], $r['idx']);
+						// $pidsDetails[$r['handle']][$r['type']] = array($r['idx']=>$r['data']);
+						$pidsDetails[$r['handle']][$r['type']] = $r['data'];
+
 					}
 				}
 				$result = array();

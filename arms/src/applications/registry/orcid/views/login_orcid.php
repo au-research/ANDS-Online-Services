@@ -8,7 +8,7 @@
 
 <?php  $this->load->view('header');?>
 <div class="content-header">
-	<h1>Login ORCID</h1>
+	<h1>Login to ORCID</h1>
 </div>
 <div class="container-fluid" id="main-content">
 	<div class="row-fluid">

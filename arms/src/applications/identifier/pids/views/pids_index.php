@@ -17,21 +17,28 @@
 	<?php echo anchor('/pids', '<i class="icon-home"></i> List My Identifiers', array('class'=>'current')); ?>
 </div>
 <div class="container-fluid" id="main-content">
-	<div class="widget-box">
-		<div class="widget-title">
-			<h5>PIDs</h5>
+	<div class="row-fluid">
+		<div class="span2">&nbsp;</div>
+		<div class="span8">
+			<div class="widget-box">
+				<div class="widget-title">
+					<h5>PIDs</h5>
+				</div>
+				<div class="widget-content">
+					<form class="form-search">
+					  <div class="input-append">
+					    <input type="text" class="search-query" id="search_query">
+					    <button type="submit" class="btn">Search</button>
+					  </div>
+					</form>
+					<hr/>
+					<div id="pids">Loading...</div>
+				</div>
+			</div>
 		</div>
-		<div class="widget-content">
-			<form class="form-search">
-			  <div class="input-append">
-			    <input type="text" class="span2 search-query" id="search_query">
-			    <button type="submit" class="btn">Search</button>
-			  </div>
-			</form>
-			<hr/>
-			<div id="pids">Loading...</div>
-		</div>
+		<div class="span3"></div>
 	</div>
+	
 </div>
 
 
@@ -75,11 +82,11 @@
 {{/no_result}}
 <hr/>
 {{#pids}}
-	<h5>{{handle}}</h5>
+	<h5><a href="<?php echo base_url();?>pids/view/?handle={{handle}}">{{handle}}</a></h5>
 	<dl class="dl-horizontal">
 	{{#DESC}}
 		<dt>Description</dt>
-		<dd>{{DESC}}</dd>
+		<dd><span class="desc">{{DESC}}</span></dd>
 	{{/DESC}}
 	{{#URL}}
 		<dt>URL</dt>
@@ -95,7 +102,7 @@
 
 <script type="text/x-mustache" id="pids-more-template">
 {{#pids}}
-	<h5>{{handle}}</h5>
+	<h5><a href="<?php echo base_url();?>pids/view/?handle={{handle}}">{{handle}}</a></h5>
 	<dl class="dl-horizontal">
 	{{#DESC}}
 		<dt>Description</dt>
