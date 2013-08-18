@@ -125,7 +125,6 @@ class Spotlight extends MX_Controller {
 	private function read(){
 		$this->load->helper('file');
 		$file = read_file($this->config->item('spotlight_data_file'));
-		//$file = file_get_contents(asset_url('spotlight.json'));
 		return json_decode($file,true);
 	}
 

@@ -176,7 +176,7 @@ else
 
                     <?php if ($this->user->hasFunction('PORTAL_STAFF')): ?>
                         <li class="divider"></li>
-                        <li class=""><?php echo anchor(registry_url('spotlight/'), 'Spotlight CMS Editor');?></li>
+                        <li class=""><?php echo anchor(apps_url('spotlight/'), 'Spotlight CMS Editor');?></li>
                         <li class=""><?php echo anchor(apps_url('uploader/'), 'CMS Image Uploader');?></li>
                     <?php endif; ?>
 

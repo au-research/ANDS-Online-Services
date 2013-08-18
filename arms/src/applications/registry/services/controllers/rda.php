@@ -328,7 +328,7 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 		$partners = array();
 
 		$this->load->helper('file');
-		$file = read_file('./applications/registry/spotlight/assets/spotlight.json');
+		$file = read_file('./assets/shared/spotlight/spotlight.json');
 		$file = json_decode($file, true);
 		if(is_array($file['items']) && count($file['items']) > 0)
 		{
