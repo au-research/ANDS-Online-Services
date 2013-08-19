@@ -267,3 +267,9 @@ URCHIN;
 		"but the provided account details were empty... -->\n";
 	}
 }
+
+function is_dev(){
+	if(ENVIRONMENT=='development'){
+		return true;
+	}else return false;
+}

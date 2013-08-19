@@ -31,6 +31,19 @@ else
 <!DOCTYPE html>
 <html lang="en">
   <head>
+
+    <?php if(is_dev()):?>
+    <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>/vendor/maximebf/debugbar/src/DebugBar/Resources/vendor/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/lib/DebugBar/Resources/vendor/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/lib/DebugBar/Resources/debugbar.css">
+    <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/lib/DebugBar/Resources/widgets.css">
+    <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/lib/DebugBar/Resources/openhandler.css">
+    <script type="text/javascript" src="<?php echo base_url(); ?>assets/lib/DebugBar/Resources/vendor/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="<?php echo base_url(); ?>assets/lib/DebugBar/Resources/debugbar.js"></script>
+    <script type="text/javascript" src="<?php echo base_url(); ?>assets/lib/DebugBar/Resources/widgets.js"></script>
+    <script type="text/javascript" src="<?php echo base_url(); ?>assets/lib/DebugBar/Resources/openhandler.js"></script>
+    <?php endif;?>
+
     <meta charset="UTF-8" />
     <title><?php echo $title; ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -84,7 +97,7 @@ else
 
 <body<?php echo(array_search('prettyprint', $js_lib) !== FALSE ? ' onload="prettyPrint();"' : '');?>>
 
-
+<?php if(is_dev()) echo $debugbarRenderer->render(); ?>
 
     <div id="header" <?=$environment_header_style;?>>
       <a href="<?php echo registry_url();?>" title="Back to ANDS Online Services Home" tip="Back to ANDS Online Services Home" my="center left" at="center right">

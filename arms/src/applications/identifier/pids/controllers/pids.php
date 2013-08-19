@@ -25,6 +25,12 @@ class Pids extends MX_Controller {
 	}
 
 	public function view(){
+
+		$this->load->library('debugbar');
+		$this->debugbar->addMsg('viewing a pid');
+		$this->debugbar->addMsg('SOME STUFFF');
+		$data['debugbarRenderer']=$this->debugbar->debugbarRenderer();
+
 		acl_enforce('PID_USER');
 		$this->load->model('_pids', 'pids');
 		$handle = $this->input->get('handle');
