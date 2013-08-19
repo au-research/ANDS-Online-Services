@@ -65,6 +65,16 @@ class Pids extends MX_Controller {
 		echo json_encode($trusted_clients);
 	}
 
+	function add_trusted_client()
+	{
+		$this->load->model('_pids', 'pids');
+		$ip = trim(urlencode($this->input->post('ip')));
+		$desc = trim(urlencode($this->input->post('desc')));
+		$appId = trim(urlencode($this->input->post('appId')));
+		$response = $this->pids->addTrustedClient($ip, $desc, $appId);
+		echo json_encode($response);
+	}
+
 	function mint(){
 		$this->load->model('_pids', 'pids');
 

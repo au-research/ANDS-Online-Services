@@ -22,6 +22,54 @@ class _pids extends CI_Model
 		return $result->result_array();
 	}
 
+
+	function addTrustedClient($ip, $desc, $appId){
+			$requestURI = $this->PIDS_SERVICE_BASE_URI.'addClient?ip=';
+			$requestURI .= "?ip=".$ip."&desc=".$desc;
+			$requestURI .= (strlen($appId)==40 ? "&appId=" . $appId : '');		
+			$response = file_get_contents($requestURI);
+			$result_array = array();
+			if (!$response) {
+				$result_array['errorMessages'] = "Error whilst attempting to fetch from URI: " . $this->PIDS_SERVICE_BASE_URI;
+			} else {
+			
+				$responseDOMDoc = new DOMDocument();
+				$result = $responseDOMDoc->loadXML($response);
+				if( $result )
+				{
+					$messageType = strtoupper($responseDOMDoc->getElementsByTagName("response")->item(0)->getAttribute("type"));
+					if( $messageType == 'SUCCESS' )
+					{
+						
+						$xPath = new DOMXPath($responseDOMDoc);
+						$nodeList = $xPath->query("//property[@name='appId']");
+						$appId = $nodeList->item(0)->getAttribute("value");
+						
+						if( strlen($appId) == 40 )
+						{
+							$result_array['app_id'] = $appId;
+						} 
+						else 
+						{
+							$result_array['errorMessages'] = "Could not extract appId. Status of request unknown.<br/>";
+						}
+						
+					} elseif ( $messageType == 'FAILURE' ) {
+						
+						foreach ($responseDOMDoc->getElementsByTagName("response")->item(0)->getElementsByTagName("message") AS $message) {
+						    $result_array['errorMessages'] = $message->nodeValue . "<br/>";
+						}
+					}
+					
+				} else {
+					
+					$result_array['errorMessages'] = "Error whilst attempting to load XML response. Response could not be parsed.";
+				}
+			}		
+			return $result_array;
+
+	}
+
 	function getOwnerHandle($userIdentifier, $userDomain)
 	{
 		$this->_CI->session->set_userdata(PIDS_USER_IDENTIFIER, $userIdentifier);
