@@ -204,7 +204,7 @@ class Orcid extends MX_Controller {
 		$data['imported'] = $this->ro->getByAttribute('imported_by_orcid', $orcid_id);
 		// echo sizeof($suggested_collections);
 		
-		$data['tip'] = 'The Suggested Datasets section will list any datasets from Research Data Australia, which are either directly related to your ORCID ID or are related to a researcher matching your sur name.';
+		$data['tip'] = 'The Suggested Datasets section will list any datasets from Research Data Australia, which are either directly related to your ORCID ID or are related to a researcher matching your surname.';
 
 		$data['name'] = $name;
 		$data['orcid_id'] = $orcid_id;
