@@ -137,7 +137,6 @@ You understand that:
 						<input type="checkbox" name="agree" checked=checked/> I Agree
 					</div>
 				</div>
-
 			</form>
 		</div>
 	</div>
@@ -154,18 +153,23 @@ You understand that:
 {{/no_result}}
 <hr/>
 {{#pids}}
-	<h5><a href="<?php echo base_url();?>pids/view/?handle={{handle}}">{{handle}}</a></h5>
-	<dl class="dl-horizontal">
-	{{#DESC}}
-		<dt>Description</dt>
-		<dd><span class="desc">{{DESC}}</span></dd>
-	{{/DESC}}
-	{{#URL}}
-		<dt>URL</dt>
-		<dd>{{URL}}</dd>
-	{{/URL}}
-	</dl>
-<hr/>
+<div class="widget-box">
+	<div class="widget-title">
+		<h5><a href="<?php echo base_url();?>pids/view/?handle={{handle}}">{{handle}}</a></h5>
+	</div>
+	<div class="widget-content">
+	<dl>
+		{{#DESC}}
+			<dt>Description</dt>
+			<dd><span class="desc">{{DESC}}</span></dd>
+		{{/DESC}}
+		{{#URL}}
+			<dt>URL</dt>
+			<dd>{{URL}}</dd>
+		{{/URL}}
+		</dl>
+	</div>	
+</div>
 {{/pids}}
 {{#hasMore}}
 <a href="javascript:;" class="btn btn-block load_more" next_offset="{{next_offset}}">Load More <i class="icon icon-arrow-down"></i></a>
@@ -174,18 +178,23 @@ You understand that:
 
 <script type="text/x-mustache" id="pids-more-template">
 {{#pids}}
-	<h5><a href="<?php echo base_url();?>pids/view/?handle={{handle}}">{{handle}}</a></h5>
-	<dl class="dl-horizontal">
-	{{#DESC}}
-		<dt>Description</dt>
-		<dd>{{DESC}}</dd>
-	{{/DESC}}
-	{{#URL}}
-		<dt>URL</dt>
-		<dd>{{URL}}</dd>
-	{{/URL}}
-	</dl>
-<hr/>
+<div class="widget-box">
+	<div class="widget-title">
+		<h5><a href="<?php echo base_url();?>pids/view/?handle={{handle}}">{{handle}}</a></h5>
+	</div>
+	<div class="widget-content">
+	<dl>
+		{{#DESC}}
+			<dt>Description</dt>
+			<dd><span class="desc">{{DESC}}</span></dd>
+		{{/DESC}}
+		{{#URL}}
+			<dt>URL</dt>
+			<dd>{{URL}}</dd>
+		{{/URL}}
+		</dl>
+	</div>	
+</div>
 {{/pids}}
 {{#hasMore}}
 <a href="javascript:;" class="btn btn-block load_more" next_offset="{{next_offset}}">Load More <i class="icon icon-arrow-down"></i></a>
