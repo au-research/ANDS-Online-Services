@@ -97,7 +97,7 @@ else
 
 <body<?php echo(array_search('prettyprint', $js_lib) !== FALSE ? ' onload="prettyPrint();"' : '');?>>
 
-<?php if(is_dev()) echo $debugbarRenderer->render(); ?>
+<?php if(is_dev() && isset($debugbarRenderer)) echo $debugbarRenderer->render(); ?>
 
     <div id="header" <?=$environment_header_style;?>>
       <a href="<?php echo registry_url();?>" title="Back to ANDS Online Services Home" tip="Back to ANDS Online Services Home" my="center left" at="center right">
