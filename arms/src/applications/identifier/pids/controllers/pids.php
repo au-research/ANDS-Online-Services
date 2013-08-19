@@ -60,6 +60,7 @@ class Pids extends MX_Controller {
 	}
 
 	function list_trusted(){
+		acl_enforce('SUPERUSER');
 		$data['title'] = 'List Trusted Clients';
 		$data['scripts'] = array('trusted_clients');
 		$data['js_lib'] = array('core', 'dataTables');
@@ -71,8 +72,8 @@ class Pids extends MX_Controller {
 		echo json_encode($trusted_clients);
 	}
 
-	function add_trusted_client()
-	{
+	function add_trusted_client(){
+		acl_enforce('SUPERUSER');
 		$posted = $this->input->post('jsonData');
 		$ip = trim(urlencode($posted['ip']));
 		$desc = trim(urlencode($posted['desc']));
