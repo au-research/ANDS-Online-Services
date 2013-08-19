@@ -70,6 +70,30 @@ class _pids extends CI_Model
 
 	}
 
+	function getPidOwners()
+	{
+		$result = array();
+		$searchQuery = $this->pid_db
+					->select('*')
+					->from('public.search_view')
+					->like('data', '####')
+					->get();
+		if($searchQuery->num_rows()==0) return array();
+		foreach($searchQuery->result_array() as $r){
+			$result[] = array('handle'=>$r['handle'], 'identifier'=>$r['data']);
+		}
+		return $result;
+	}
+
+	function setOwnerHandle($pid_handler , $owner_handler)
+	{
+		$this->db->where('type', 'AGENTID');
+		$this->db->where('handle', $pid_handler);
+		$query = $this->db->update('public.handles', array('data',$owner_handler)); 
+		return $query;
+	}
+
+
 	function getOwnerHandle($userIdentifier, $userDomain)
 	{
 		$this->_CI->session->set_userdata(PIDS_USER_IDENTIFIER, $userIdentifier);

@@ -150,7 +150,18 @@ class Pids extends MX_Controller {
 		echo json_encode($response);
 	}
 
+	function update_ownership()
+	{
+		$post = $this->input->post('jsonData');
+		$response = $this->pids->setOwnerHandle($post['current'],$post['reassign']);
+		echo json_encode($response);
+	}
 
+	function get_pid_owners()
+	{
+		$response = $this->pids->getPidOwners();
+		echo json_encode($response);
+	}
 
 	function handleResponse($response){
 		$responseArray = array();
