@@ -11,12 +11,15 @@
 	<h1>Persistent Identifier Service (PIDS)</h1>
 	<div class="btn-group">
 		<a data-toggle="modal" href="#mint_modal" href="javascript:;" class="btn btn-large"><i class="icon icon-plus"></i> Mint</a>
+		<?php echo anchor('/pids/list_trusted','List Trusted Clients', array('class'=>'btn btn-large')); ?>
 	</div>
 </div>
 <div id="breadcrumb" style="clear:both;">
 	<?php echo anchor('/pids', '<i class="icon-home"></i> List My Identifiers', array('class'=>'current')); ?>
 </div>
+<input type="hidden" value="<?php echo $identifier; ?>" id="identifier"/>
 <div class="container-fluid" id="main-content">
+
 	<div class="row-fluid">
 		<div class="span2">&nbsp;</div>
 		<div class="span8">
@@ -26,10 +29,17 @@
 				</div>
 				<div class="widget-content">
 					<form class="form-search">
+						<select class="chosen" id="pid_chooser">
+							<option value=""></option>
+							<?php foreach($orgRole as $o): ?>
+							<option value="<?php echo $o ?>"><?php echo $o; ?></option>
+							<?php endforeach; ?>
+						</select>
 					  <div class="input-append">
 					    <input type="text" class="search-query" id="search_query">
 					    <button type="submit" class="btn">Search</button>
 					  </div>
+
 					</form>
 					<hr/>
 					<div id="pids">Loading...</div>

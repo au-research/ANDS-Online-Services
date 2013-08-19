@@ -117,8 +117,6 @@ function notifySiteAdmin($errno, $errstr, $errfile, $errline)
 	}
 }
 
-
-
 set_error_handler("default_error_handler");
 
 function default_exception_handler( $e ) {

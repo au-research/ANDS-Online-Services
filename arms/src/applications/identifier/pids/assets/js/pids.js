@@ -12,8 +12,9 @@ $(document).on('click', '#mint_confirm', function(){
 		type: 'POST',
 		data: {url:url, desc:desc},
 		success: function(data){
-			$(this).button('reset');
-			$('#mint_modal').modal('hide');
+			// $(this).button('reset');
+			// $('#mint_modal').modal('hide');
+			location.reload();
 		}
 	});
 }).on('click', '.load_more', function(){
@@ -35,6 +36,8 @@ $(document).on('click', '#mint_confirm', function(){
 	params['offset']=0;
 	params['searchText'] = $('#search_query').val();
 	listPIDs(params);
+}).on('change', '#pid_chooser', function(){
+	window.location = "?identifier="+$(this).val();
 });
 
 function initView(){
@@ -43,12 +46,20 @@ function initView(){
 }
 
 function listPIDs(params) {
+	$('#pids').html('');
+	params['identifier'] = $('#identifier').val();
+	$('#pid_chooser').val(params['identifier']).trigger('liszt:updated');
+	if(params['identifier']!='My Identifiers'){
+		params['authDomain'] = 'researchdata.ands.org.au';
+	}else{
+		delete params['identifier'];
+		delete params['authDomain'];
+	}
 	$.ajax({
 		url: base_url+'pids/list_pids', 
 		type: 'POST',
 		data: {params:params},
 		success: function(data){
-			console.log(data);
 			var template = $('#pids-list-template').html();
 			var output = Mustache.render(template, data);
 			$('#pids').html(output);
@@ -56,20 +67,3 @@ function listPIDs(params) {
 	});
 }
 
-function listTrustedClients() {
-
-	$.getJSON(base_url+'pids/list_trusted_clients/', function(data) {
-		console.log(data);
-		var template = $('#trusted_clients-template').html();
-		var output = Mustache.render(template, data);
-		$('#pids').html(output).css('opacity', '1');
-		$('.data-table').dataTable({
-			"aaSorting": [[ 1, "desc" ]],
-			"bJQueryUI": true,
-			"sPaginationType": "full_numbers",
-			"sDom": '<""l>t<"F"fp>',
-			"iDisplayLength": 10
-		});
-		//$('.updateSOLRstat').click(updateSOLRstat);
-	});
-}

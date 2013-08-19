@@ -12,31 +12,31 @@ class Pids extends MX_Controller {
 	 * @return view 
 	 */
 	function index(){
-		acl_enforce('PID_USER');
 		$data['title'] = 'My Identifiers';
 		$data['scripts'] = array('pids');
 		$data['js_lib'] = array('core');
 
-		$this->load->model('cosi_authentication', 'cosi');
-		// var_dump($this->user->identifier());
-		// var_dump($this->cosi->getRolesAndActivitiesByRoleID($this->user->localIdentifier()));
+		$this->load->library('debugbar');
+		$data['debugbarRenderer']=$this->debugbar->debugbarRenderer();
 
+		$data['orgRole'] = $this->user->affiliations();
+		array_unshift($data['orgRole'], 'My Identifiers');
+		$this->debugbar->addMsg($data['orgRole']);
+
+
+		$data['identifier'] = $this->input->get('identifier');
 		$this->load->view('pids_index', $data);
 	}
 
 	public function view(){
 
 		$this->load->library('debugbar');
-		$this->debugbar->addMsg('viewing a pid');
-		$this->debugbar->addMsg('SOME STUFFF');
 		$data['debugbarRenderer']=$this->debugbar->debugbarRenderer();
 
-		acl_enforce('PID_USER');
-		$this->load->model('_pids', 'pids');
 		$handle = $this->input->get('handle');
 		if($handle){
 			$handle = $this->pids->getHandlesDetails(array($handle));
-			// echo json_encode($handle);
+			$this->debugbar->addMsg($handle);
 			$pid = array();
 			foreach($handle as $h){
 				$pid['handle'] = $h['handle'];
@@ -59,24 +59,29 @@ class Pids extends MX_Controller {
 		}
 	}
 
+	function list_trusted(){
+		$data['title'] = 'List Trusted Clients';
+		$data['scripts'] = array('trusted_clients');
+		$data['js_lib'] = array('core', 'dataTables');
+		$this->load->view('trusted_clients_index', $data);
+	}
+
 	function list_trusted_clients(){
-		$this->load->model('_pids', 'pids');
 		$trusted_clients = $this->pids->getTrustedClients();
 		echo json_encode($trusted_clients);
 	}
 
 	function add_trusted_client()
 	{
-		$this->load->model('_pids', 'pids');
-		$ip = trim(urlencode($this->input->post('ip')));
-		$desc = trim(urlencode($this->input->post('desc')));
-		$appId = trim(urlencode($this->input->post('appId')));
+		$posted = $this->input->post('jsonData');
+		$ip = trim(urlencode($posted['ip']));
+		$desc = trim(urlencode($posted['desc']));
+		$appId = trim(urlencode($posted['app_id']));
 		$response = $this->pids->addTrustedClient($ip, $desc, $appId);
 		echo json_encode($response);
 	}
 
 	function mint(){
-		$this->load->model('_pids', 'pids');
 
 		$url = urlencode($this->input->post('url'));
 		$desc = urlencode($this->input->post('desc'));
@@ -116,7 +121,6 @@ class Pids extends MX_Controller {
 	}
 
 	function update(){
-		$this->load->model('_pids', 'pids');
 		$post = $this->input->post('jsonData');
 		$handle = $post['handle'];
 		$response = array();
@@ -166,13 +170,10 @@ class Pids extends MX_Controller {
 	 * @return json 
 	 */
 	function list_pids(){
-		$this->load->model('_pids', 'pids');
-		$this->load->model('cosi_authentication', 'cosi');
 		$handles = array();
 		$pidsDetails = array();
 		$response = array();
 		
-
 		$params = $this->input->post('params');
 		$offset = (isset($params['offset'])? $params['offset']: 0);
 		$limit = (isset($params['limit'])? $params['limit']: 10);
@@ -224,7 +225,6 @@ class Pids extends MX_Controller {
 
 
 	function get_pids_details(){
-		$this->load->model('_pids', 'pids');
 		$this->load->model('cosi_authentication', 'cosi');
 	 	//var_dump($this->user->identifier());
 		//var_dump($this->cosi->getRolesAndActivitiesByRoleID($this->user->localIdentifier()));
@@ -236,12 +236,16 @@ class Pids extends MX_Controller {
 
 	function get_handler($handler)
 	{
-		$this->load->model('_pids', 'pids');
 		$serviceName = "getHandle";
 		$parameters = "handle=".urlencode($handler);
 		$response = $this->pids->pidsRequest($serviceName, $parameters);
 		echo $response;
 
+	}
+
+	function __construct(){
+		acl_enforce('PID_USER');
+		$this->load->model('_pids', 'pids');
 	}
 	//function updateBy
 
