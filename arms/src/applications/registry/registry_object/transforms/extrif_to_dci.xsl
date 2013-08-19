@@ -127,7 +127,8 @@
                 </relatedObject>-->
             <!-- PROBABLY THEY WANT THEIR INTERNAL IDs -->
             <xsl:if test="ro:collection/ro:relatedObject/ro:relation/@type = 'isPartOf'">          
-                <ParentDataRef><xsl:apply-templates select="ro:collection/ro:relatedObject[ro:relation/@type = 'isPartOf']/ro:key"/></ParentDataRef>
+                <!-- XXX: Temporary fix to only include the first isPartOf relationship (can be many-to-many in RIFCS, but not DCI) -->
+                <ParentDataRef><xsl:apply-templates select="ro:collection/ro:relatedObject[ro:relation/@type = 'isPartOf'][1]/ro:key"/></ParentDataRef>
             </xsl:if>
 
             <DescriptorsData>
