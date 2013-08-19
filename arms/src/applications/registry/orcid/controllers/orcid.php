@@ -165,7 +165,7 @@ class Orcid extends MX_Controller {
 
 		//find parties of similar names
 		$this->solr->setOpt('fq', '+class:party');
-		$this->solr->setOpt('fq', '+display_title:('.$name.')');
+		$this->solr->setOpt('fq', '+display_title:('.$last_name.')');
 		$this->solr->executeSearch();
 
 		if($this->solr->getNumFound() > 0){
@@ -204,6 +204,8 @@ class Orcid extends MX_Controller {
 		$data['imported'] = $this->ro->getByAttribute('imported_by_orcid', $orcid_id);
 		// echo sizeof($suggested_collections);
 		
+		$data['tip'] = 'The Suggested Datasets section will list any datasets from Research Data Australia, which are either directly related to your ORCID ID or are related to a researcher matching your sur name.';
+
 		$data['name'] = $name;
 		$data['orcid_id'] = $orcid_id;
 		$data['suggested_collections'] = $suggested_collections;

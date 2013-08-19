@@ -38,9 +38,9 @@
 			<div class="widget-box">
 				<div class="widget-title">
 					<span class="icon">
-						<a href="javascript:;" tip="The Suggested Datasets section will list any datasets from Research Data Australia, which are either directly related to your ORCID ID or are related to a researcher matching your full name."><i class="icon icon-question-sign"></i></a>
+						<a href="javascript:;" tip="<?php echo $tip; ?>"><i class="icon icon-question-sign"></i></a>
 					</span>
-					<h5>Suggested Datasets</h5>
+					<h5 tip="<?php echo $tip; ?>">Suggested Datasets</h5>
 				</div>
 				<div class="widget-content">
 					<?php
