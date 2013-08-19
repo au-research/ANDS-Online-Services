@@ -74,9 +74,11 @@ class Services extends MX_Controller {
 		$handler = $this->getMethodHandler($service_mapping[$method]['method_handler']);
 		$handler->initialise($options, $this->input->get(), $formatter);
 		$this->output->set_content_type($formatter->output_mimetype());
-		
+
 		// All the setup is finished! Palm off the handling of the request...
+		ob_start();
 		$status = ($handler->handle() ? SUCCESS : FAILURE);
+		$this->output->set_output(ob_get_clean());
 
 		// Log this request
 		$this->registerServiceRequest($api_key, $params, $status);
