@@ -53,6 +53,7 @@
 
 </div><!-- main -->
 <div class="sidebar">
+	<h2>Refine Search</h2>
 	<div id="togglefacetsort" class="facetsortcount" tip="Search option categories (below) are being sorted by the number of matching records"></div>
 	<div class="widget facet_subjects">
 	<h3 class="widget_title">Subjects</h3>

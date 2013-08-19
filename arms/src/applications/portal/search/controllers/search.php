@@ -36,8 +36,8 @@ class Search extends MX_Controller {
 			$facets = array(
 				'class' => 'Class',
 				'group' => 'Contributed By',
+				'license_class' => 'Licence',
 				'type' => 'Type',
-				'license_class' => 'Licence'
 			);
 			foreach($facets as $facet=>$display){
 				$this->solr->setFacetOpt('field', $facet);
