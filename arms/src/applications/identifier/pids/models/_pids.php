@@ -87,9 +87,9 @@ class _pids extends CI_Model
 
 	function setOwnerHandle($pid_handler , $owner_handler)
 	{
-		$this->db->where('type', 'AGENTID');
-		$this->db->where('handle', $pid_handler);
-		$query = $this->db->update('public.handles', array('data',$owner_handler)); 
+		$this->pid_db->where('type', 'AGENTID');
+		$this->pid_db->where('handle', $pid_handler);
+		$query = $this->pid_db->update('public.handles', array('data'=>$owner_handler)); 
 		return $query;
 	}
 

@@ -27,13 +27,15 @@ $(document).on('click', '#update_confirm', function(){
 }).on('click', '#confirm_reassign', function(){
 	var this_handle = $(this).attr('handle');
 	var new_handle = $('#reassign_value').val();
-	console.log(this_handle, new_handle);
-	// $.ajax({
-	// 	url:base_url+'pids/update_ownership/', 
-	// 	type: 'POST',
-	// 	data: {current:this_handle,reassign:new_handle},
-	// 	success: function(data){
-	// 		location.reload();
-	// 	}
-	// });
+	var jsonData = {};
+	jsonData['current'] = this_handle;
+	jsonData['reassign'] = new_handle;
+	$.ajax({
+		url:base_url+'pids/update_ownership/', 
+		type: 'POST',
+		data: {jsonData:jsonData},
+		success: function(data){
+			window.location = base_url+'pids';
+		}
+	});
 });

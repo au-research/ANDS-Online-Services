@@ -50,6 +50,8 @@ class Pids extends MX_Controller {
 				}
 			}
 			$data['pid'] = $pid;
+			$data['pid_owners'] = $this->pids->getPidOwners();
+			$this->debugbar->addMsg($data['pid_owners']);
 			$data['title'] = 'View Handle: '.$pid['handle'];
 			$data['scripts'] = array('pid');
 			$data['js_lib'] = array('core');

@@ -32,8 +32,8 @@
 						<hr/>
 						Re-assign the ownership of this handle to: 
 						<select name="" id="reassign_value" class="chosen">
-							<?php foreach($this->user->affiliations() as $a): ?>
-							<option value="<?php echo $a; ?>"><?php echo $a; ?></option>
+							<?php foreach($pid_owners as $a): ?>
+							<option value="<?php echo $a['handle']; ?>"><?php echo $a['identifier']; ?></option>
 							<?php endforeach; ?>
 						</select>
 						<a href="javascript:;" class="btn btn-primary" id="confirm_reassign" handle="<?php echo $pid['handle']; ?>">Confirm</a>
