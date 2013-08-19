@@ -1,5 +1,5 @@
 $(function(){
-	
+	$('#reassign').hide();
 });
 
 $(document).on('click', '#update_confirm', function(){
@@ -21,4 +21,19 @@ $(document).on('click', '#update_confirm', function(){
 	});
 }).on('change', "#edit_modal input", function(){
 	$(this).attr('changed', 'true');
+}).on('click', '#reassign_toggle', function(){
+	$(this).hide();
+	$('#reassign').show();
+}).on('click', '#confirm_reassign', function(){
+	var this_handle = $(this).attr('handle');
+	var new_handle = $('#reassign_value').val();
+	console.log(this_handle, new_handle);
+	// $.ajax({
+	// 	url:base_url+'pids/update_ownership/', 
+	// 	type: 'POST',
+	// 	data: {current:this_handle,reassign:new_handle},
+	// 	success: function(data){
+	// 		location.reload();
+	// 	}
+	// });
 });

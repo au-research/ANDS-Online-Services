@@ -26,7 +26,19 @@
 						<?php endif; ?>
 					</dl>
 					<a data-toggle="modal" href="#edit_modal" href="javascript:;" class="btn btn-primary">Edit</a>
-					<a data-toggle="modal" href="#delete_modal" href="javascript:;" class="btn btn-link">Delete</a>
+					<a href="javascript:;" class="btn btn-link" id="reassign_toggle">Re-assign Ownership</a>
+
+					<span id="reassign">
+						<hr/>
+						Re-assign the ownership of this handle to: 
+						<select name="" id="reassign_value" class="chosen">
+							<?php foreach($this->user->affiliations() as $a): ?>
+							<option value="<?php echo $a; ?>"><?php echo $a; ?></option>
+							<?php endforeach; ?>
+						</select>
+						<a href="javascript:;" class="btn btn-primary" id="confirm_reassign" handle="<?php echo $pid['handle']; ?>">Confirm</a>
+					</span>
+
 				</div>
 			</div>
 		</div>
