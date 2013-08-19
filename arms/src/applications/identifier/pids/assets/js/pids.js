@@ -4,6 +4,7 @@ $(function(){
 });
 
 $(document).on('click', '#mint_confirm', function(){
+	if($(this).hasClass('disabled')) return false;
 	$(this).button('loading');
 	var url = $('#mint_form input[name=url]').val();
 	var desc = $('#mint_form input[name=desc]').val();
@@ -38,6 +39,10 @@ $(document).on('click', '#mint_confirm', function(){
 	listPIDs(params);
 }).on('change', '#pid_chooser', function(){
 	window.location = "?identifier="+$(this).val();
+}).on('change', '#mint_form input[name=agree]', function(){
+	if(this.checked){
+		$('#mint_confirm').removeClass('disabled');
+	}else $('#mint_confirm').addClass('disabled');
 });
 
 function initView(){
@@ -48,6 +53,7 @@ function initView(){
 function listPIDs(params) {
 	$('#pids').html('');
 	params['identifier'] = $('#identifier').val();
+	if(params['identifier']=='') params['identifier'] = 'My Identifiers';
 	$('#pid_chooser').val(params['identifier']).trigger('liszt:updated');
 	if(params['identifier']!='My Identifiers'){
 		params['authDomain'] = 'researchdata.ands.org.au';
