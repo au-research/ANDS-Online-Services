@@ -22,7 +22,7 @@
 					<p>
 						
 					</p>
-					<img src="<?php echo asset_url('img/orcid-logo.png'); ?>" style="display:block;margin:10px auto;"/>
+					<img src="<?php echo asset_url('img/orcid_tagline.png'); ?>" style="display:block;margin:10px auto;"/>
 					<p>
 						<a href="<?php echo $link?>" class="btn btn-block btn-primary">Login with ORCID ID</a>
 					</p>

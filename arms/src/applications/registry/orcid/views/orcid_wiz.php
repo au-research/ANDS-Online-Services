@@ -9,7 +9,7 @@
 <?php  $this->load->view('header');?>
 <input type="hidden" id="orcid" value="<?php echo $orcid_id; ?>"/>
 <div class="content-header">
-	<h1>Import Your Datasets to <img style="margin: -13px 0 0 1px;" src="<?php echo asset_url('img/orcid-logo.png'); ?>"/></h1>
+	<h1>Import Your Datasets to <img style="margin: -13px 0 0 1px;" src="<?php echo asset_url('img/orcid_tagline_small.png'); ?>"/></h1>
 </div>
 
 <div class="container-fluid" id="main-content">
