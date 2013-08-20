@@ -50,7 +50,10 @@
 	<strong>Party</strong><br />
 	Researcher or research organisation that creates or maintains research datasets or collections.
 </div>
-
+<div id="topic_explanation" class="hide">
+	<strong>Topic</strong><br />
+	Topics pages collate areas of research interest together, and associate research datasets, people and activities from within the Australian Research Data Commons.
+</div>
 </div><!-- main -->
 <div class="sidebar">
 	<h2>Refine Search</h2>
@@ -89,7 +92,7 @@ Only records which have coverage of the search region will be displayed.
 		{{/logo}}
 		{{#class}}
 			<img src="<?php echo base_url();?>assets/img/{{class}}.png" class="class_icon icontip_{{class}}" type="{{class}}"/>
-	        {{/class}}
+	    {{/class}}
 		{{#list_title}}
 			<a href="<?php echo base_url();?>{{slug}}" class="title">{{list_title}}</a>
 		{{/list_title}}

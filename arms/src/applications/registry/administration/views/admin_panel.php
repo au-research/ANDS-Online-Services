@@ -42,6 +42,12 @@
 						</a>
 					</p>
 
+					<p>
+						<a href="<?=apps_url('topics/update_index');?>">
+							Update Topic List
+						</a>
+					</p>
+
 			    </div>
 			    
 			</div>

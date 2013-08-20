@@ -398,6 +398,9 @@ function initSearchPage(){
 			    initExplanations($(this).attr('type'));
 			})
 	}
+	
+	// Put an orange glow around topic pages to highlight them in the search results!
+	$('div[ro_id^="topic_"]').css('background-color','rgba(255, 122, 0, 0.18)')
 
 	if(typeof(searchData['q'])=='undefined' && typeof(searchData['rq'])=='undefined') {
 		$('#search_box').val('');
