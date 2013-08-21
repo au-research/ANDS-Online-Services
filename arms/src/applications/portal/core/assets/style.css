@@ -757,7 +757,8 @@ a.browse_button{
 	height:90px;
 	width:auto!important;
     display:block;
-    margin: 0 0 16px;
+    margin: 0 37px 16px 0px;
+    float:right;
 }
 .flex-pauseplay span {
     text-transform:capitalize;
@@ -831,7 +832,8 @@ a.browse_button{
     top:0;
     right:0;
     display:none;
-    opacity:0.5;
+    opacity:0.1;
+    z-index:9999;
 }
 .flex-direction-nav .flex-prev {
     background:url(images/prev.png) no-repeat 0 0;
