@@ -351,7 +351,7 @@ class Rda extends MX_Controller implements GenericPortalEndpoint
 				}
 			}
 		}
-		$partnerl = array_reverse($partners);
+		$partners = array_reverse($partners);
 		// services_spotlight_partners_data_source
 		$this->output->set_output(json_encode(array("items"=>$partners)));
 	}
