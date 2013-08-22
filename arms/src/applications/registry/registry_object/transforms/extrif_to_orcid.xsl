@@ -108,7 +108,7 @@
                     <xsl:when test="ro:collection/@type='Theological Text'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
                     <xsl:when test="ro:collection/@type='Thesis'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
                     <xsl:when test="ro:collection/@type='Web Site'"><xsl:value-of select="ro:collection/@type"/></xsl:when>
-                    <xsl:otherwise></xsl:otherwise>
+                    <xsl:otherwise>Other</xsl:otherwise>
                 </xsl:choose>
             </work-type>
             <xsl:variable name="createdDate">
