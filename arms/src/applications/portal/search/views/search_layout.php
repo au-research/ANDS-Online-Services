@@ -107,7 +107,7 @@ Only records which have coverage of the search region will be displayed.
 
 <script type="text/x-mustache" id="pagination-template">
 <div class="results_navi">
-	<div class="results">{{numFound}} results ({{timeTaken}} seconds)</div>
+	<div class="results"><span id="numFound">{{numFound}}</span> results ({{timeTaken}} seconds)</div>
 	{{{pagination}}}
 	<div class="clear"></div>
 </div>

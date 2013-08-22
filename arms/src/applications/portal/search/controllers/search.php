@@ -13,6 +13,14 @@ class Search extends MX_Controller {
 		$this->load->view('search_layout', $data);
 	}
 
+	function filter(){
+		header('Cache-Control: no-cache, must-revalidate');
+		header('Content-type: application/json');
+		$data = $this->solr_search($this->input->post('filters'), true);
+		//return the result to the client
+		echo json_encode($data);
+	}
+
 	function solr_search($filters, $include_facet = true){
 		$this->load->library('solr');
 
@@ -60,6 +68,7 @@ class Search extends MX_Controller {
 					break;
 					case 'q': 
 						$value = escapeSolrValue($value);
+						$data['search_term'] = $value;
 						$this->solr->setOpt('q', 'fulltext:('.$value.') OR simplified_title:('.iconv('UTF-8', 'ASCII//TRANSLIT', $value).')');
 					break;
 					case 'p': 
@@ -192,25 +201,19 @@ class Search extends MX_Controller {
 		return $data;
 	}
 
-	function filter(){
+	function suggest(){
 		header('Cache-Control: no-cache, must-revalidate');
 		header('Content-type: application/json');
+		$search = $this->input->get('q');
+		$terms = $this->stats->getSearchSuggestion($search);
+		echo json_encode($terms);
+	}
 
-		$data = $this->solr_search($this->input->post('filters'), true);
-
-		$filteredSearch = true;
-
-		/**
-		 * Register the search term
-		 */
-		if(!$filteredSearch){
-			$this->stats->registerSearchTerm($this->solr->getOpt('q'));
-			$this->stats->registerSearchStats($this->solr->getOpt('q'),$data['numFound']);
-		}
-
-		
-		//return the result to the client
-		echo json_encode($data);
+	function registerSearchTerm(){
+		$search_term = $this->input->get('q');
+		$this->stats->registerSearchTerm($this->input->post('term'));
+		$this->stats->registerSearchStats($this->input->post('term'), $this->input->post('num_found'));
+		$this->stats->updateSearchTermOccurence();
 	}
 
 	function getAllSubjects($vocab_type){

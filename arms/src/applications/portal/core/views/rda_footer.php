@@ -122,6 +122,7 @@
 
 	<!-- base libraries -->
 	<script type="text/javascript" src="<?php echo asset_url('lib/less-1.3.0.min.js', 'base');?>" type="text/javascript"></script>
+	<script type="text/javascript" src="<?php echo asset_url('lib/typeahead.min.js', 'base');?>" type="text/javascript"></script>
 	<script type="text/javascript" src="<?php echo asset_url('lib/mustache.js','base');?>"></script>
 	<script type="text/javascript" src="<?php echo asset_url('lib/jquery.ba-hashchange.min.js', 'base');?>"></script> <!-- Monitoring on Hash Change-->
     

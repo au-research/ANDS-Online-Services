@@ -469,6 +469,18 @@ function initSearchPage(){
 		});
 	}
 
+	//update search term
+	if(searchData['q']){
+		$.ajax({
+			url:base_url+'search/registerSearchTerm', 
+			type: 'POST',
+			data: {term:searchData['q'], num_found:$('#numFound').text()},
+			success: function(data){
+				
+			}
+		});
+	}
+
 	if(searchData['temporal']){
 		$('#rst_range').attr('checked', 'checked');
 		$('#slider').show();

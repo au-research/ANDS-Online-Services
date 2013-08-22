@@ -51,7 +51,6 @@ class Stats {
 		$this->db->insert('page_views', $values);
 	}
 
-
 	/**
 	 * Register a click from our website to an outgoing
 	 * link.
@@ -137,7 +136,7 @@ class Stats {
 		$values['search_term'] = $search_term;
 
 		// The number of objects returned from the search
-		$values['occurrence'] = $occurence;		
+		$values['occurrence'] = $occurence;
 	
 
 		$this->db->insert('search_result_counts', $values);
@@ -195,6 +194,24 @@ class Stats {
 				$this->db->insert('search_occurence', array('term'=>$match['term'], 'occurence'=>$match['occurence']));
 			}
 		}
+	}
+
+	/**
+	 * return a list of top 5 ranked search suggestion, ordered by search occurence
+	 * @param  string $like the term to match with
+	 * @return array       
+	 */
+	public function getSearchSuggestion($like)
+	{
+		$result = array();
+		if($like){
+			$this->db->select('term')->order_by('occurence', 'desc')->limit(5)->like('term', $like);
+			$matches = $this->db->get('search_occurence');
+			foreach($matches->result() as $match){
+				array_push($result, $match->term);
+			}
+		}
+		return $result;
 	}
 
 
