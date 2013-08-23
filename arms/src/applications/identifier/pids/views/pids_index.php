@@ -200,32 +200,4 @@ You understand that:
 <a href="javascript:;" class="btn btn-block load_more" next_offset="{{next_offset}}">Load More <i class="icon icon-arrow-down"></i></a>
 {{/hasMore}}
 </script>
-
-<script type="text/x-mustache" id="trusted_clients-template">
-<div class="widget-box">
-	<div class="widget-title">
-		<h5>Trusted Clients</h5>
-	</div>
-	<div class="widget-content nopadding">
-		<table class="table table-bordered data-table">
-			<thead>
-				<tr>
-					<th>IP</th>
-					<th>App ID</th>
-					<th>Description </th>
-				</tr>
-			</thead>
-			<tbody>
-			{{#.}}
-				<tr>
-					<td>{{ip_address}}</td>
-					<td>{{app_id}}</td>
-					<td>{{description}}</td>
-				</tr>
-			{{/.}}
-			</tbody>
-		</table>  
-	</div>
-</div>
-</script>
 <?php $this->load->view('footer');?>

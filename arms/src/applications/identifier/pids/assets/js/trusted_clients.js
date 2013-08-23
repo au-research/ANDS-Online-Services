@@ -22,6 +22,19 @@ $(document).on('click', '#add_confirm', function(){
 }).on('click', '#app_id_show', function(){
 	$(this).hide();
 	$('#app_id_field').show();
+}).on('click', '.remove', function(){
+	var ip = $(this).attr('ip');
+	var app_id = $(this).attr('app_id');
+	if(confirm('Are you sure you want to delete this trusted ip: ')){
+		$.ajax({
+			url:base_url+'pids/remove_trusted_client', 
+			type: 'POST',
+			data: {ip:ip,app_id:app_id},
+			success: function(data){
+				location.reload();
+			}
+		});
+	}
 });
 
 function listTrustedClients() {

@@ -67,7 +67,10 @@ class _pids extends CI_Model
 				}
 			}		
 			return $result_array;
+	}
 
+	function removeTrustedClient($ip, $appId){
+		$this->pid_db->delete('public.trusted_client', array('ip_address'=>$ip, 'app_id'=>$appId));
 	}
 
 	function getPidOwners()

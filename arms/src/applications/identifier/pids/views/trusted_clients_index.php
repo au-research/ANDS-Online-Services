@@ -76,6 +76,7 @@
 					<th>IP</th>
 					<th>App ID</th>
 					<th>Description </th>
+					<th>Action </th>
 				</tr>
 			</thead>
 			<tbody>
@@ -84,6 +85,7 @@
 					<td>{{ip_address}}</td>
 					<td>{{app_id}}</td>
 					<td>{{description}}</td>
+					<td><a href="javascript:;" class="remove btn btn-small btn-danger" tip="Remove" ip="{{ip_address}}" app_id="{{app_id}}"><i class="icon-white icon-remove"></i</a</td>
 				</tr>
 			{{/.}}
 			</tbody>

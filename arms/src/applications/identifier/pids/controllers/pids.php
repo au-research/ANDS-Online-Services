@@ -84,6 +84,14 @@ class Pids extends MX_Controller {
 		echo json_encode($response);
 	}
 
+	function remove_trusted_client(){
+		acl_enforce('SUPERUSER');
+		$ip = $this->input->post('ip');
+		$appId = $this->input->post('app_id');
+		$response = $this->pids->removeTrustedClient($ip, $appId);
+		echo json_encode($response);
+	}
+
 	function mint(){
 
 		$url = urlencode($this->input->post('url'));
