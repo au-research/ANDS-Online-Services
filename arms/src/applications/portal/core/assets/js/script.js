@@ -2,8 +2,6 @@
 $(document).ready(function() {
 	initTips();
 
-	console.log(base_url+'search/suggest');
-
 	$('#search_box').typeahead({
 		name:'Search Suggestion',
 		remote: base_url+'search/suggest/?q=%QUERY'

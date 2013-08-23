@@ -79,6 +79,7 @@
         var deployment_state = "<?php echo $this->config->item('deployment_state');?>";
         <!-- urchin code -->
         <?php echo urchin_for($this->config->item('rda_urchin_id')); ?>
+        var urchin_id = "<?php echo $this->config->item('rda_urchin_id');?>";
     </script>
 
 	<!-- Zoo Scripts Untouched -->

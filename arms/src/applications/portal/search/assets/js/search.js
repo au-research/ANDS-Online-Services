@@ -360,6 +360,12 @@ function loadSubjectBrowse(val){
 function initSearchPage(){
 	getTopLevelFacet();
 
+	if(urchin_id!='' && searchData['q']!=''){
+		var pageTracker = _gat._getTracker(urchin_id);
+		pageTracker._initData(); 
+		pageTracker._trackPageview('/search_results.php?q='+searchData['q']); 
+	}
+
 	$('.tabs').show();
 
 	//see if we need to init the map
