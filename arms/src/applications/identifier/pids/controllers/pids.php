@@ -16,12 +16,12 @@ class Pids extends MX_Controller {
 		$data['scripts'] = array('pids');
 		$data['js_lib'] = array('core');
 
-		$this->load->library('debugbar');
-		$data['debugbarRenderer']=$this->debugbar->debugbarRenderer();
+		// $this->load->library('debugbar');
+		// $data['debugbarRenderer']=$this->debugbar->debugbarRenderer();
 
 		$data['orgRole'] = $this->user->affiliations();
 		array_unshift($data['orgRole'], 'My Identifiers');
-		$this->debugbar->addMsg($data['orgRole']);
+		// $this->debugbar->addMsg($data['orgRole']);
 
 
 		$data['identifier'] = $this->input->get('identifier');

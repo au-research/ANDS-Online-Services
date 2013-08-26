@@ -43,6 +43,8 @@ $(document).on('click', '#mint_confirm', function(){
 	if(this.checked){
 		$('#mint_confirm').removeClass('disabled');
 	}else $('#mint_confirm').addClass('disabled');
+}).on('click', '#toggleTerms', function(){
+	$('#terms').toggle();
 });
 
 function initView(){

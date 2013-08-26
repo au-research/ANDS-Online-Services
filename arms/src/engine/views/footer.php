@@ -33,7 +33,7 @@ $js_lib = !isset($js_lib) ? array() : $js_lib;
         var real_base_url = "<?php echo $this->config->item('default_base_url');?>";
         var suffix = '<?php echo url_suffix();?>';
         var editor = '';
-        <!-- urchin code -->
+        //urchin code
         <?php echo urchin_for($this->config->item('svc_urchin_id')); ?>
     </script>
     <?php foreach($js_lib as $lib):?>

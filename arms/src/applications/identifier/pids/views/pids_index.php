@@ -79,10 +79,7 @@
 						<input type="text" name="desc"/>
 					</div>
 				</div>
-				<div class="control-group">
-					<label class="control-label"></label>
-					<div class="controls">
-						<div style="height:130px;overflow-x:scroll;border:1px solid #ccc;"><p>You have asked to mint a persistent identifier through ANDS <i>Identify
+<div style="height:175px;overflow:auto;border:1px solid #ccc;display:none;" id="terms"><p>You have asked to mint a persistent identifier through ANDS <i>Identify
 My Data</i> self-service. This means that you will enter location and/or
 description information relating to the object you wish to identify and
 ANDS will provide you with a persistent identifier for that object.</p>
@@ -137,7 +134,10 @@ You understand that:
 	the longevity or reliability of the Handle system or the CNRI.</li>
 </ul>
 </div>
-						<input type="checkbox" name="agree" checked=checked/> I Agree
+				<div class="control-group">
+					<label class="control-label"></label>
+					<div class="controls">
+						<input type="checkbox" name="agree" checked=checked/> I Agree To the <a href="javascript:;" id="toggleTerms">Terms and Conditions</a>
 					</div>
 				</div>
 			</form>
