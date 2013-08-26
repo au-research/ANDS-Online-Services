@@ -3,22 +3,28 @@ $(function(){
 });
 
 $(document).on('click', '#update_confirm', function(){
-	var jsonData = {};
+	var jsonData = [];
 	jsonData['handle'] = $(this).attr('handle');
 	$(this).button('loading');
-	$('#edit_modal input[changed=true]').each(function(){
-		jsonData[$(this).attr('name')] = $(this).val();
-		jsonData[$(this).attr('name')+'_index'] = $(this).attr('idx');
+	jsonData['values'] = [];
+	$('#edit_form input[changed=true]').each(function(){
+		var type = $(this).attr('name');
+
+		jsonData['values'].push({
+			type:type,
+			idx:($(this).attr('idx')?$(this).attr('idx'):-1),
+			value:$(this).val()
+		});
 	});
-	// console.log(jsonData);
-	$.ajax({
-		url:base_url+'pids/update/', 
-		type: 'POST',
-		data: {jsonData:jsonData},
-		success: function(data){
-			location.reload();
-		}
-	});
+	console.log(jsonData);
+	// $.ajax({
+	// 	url:base_url+'pids/update/', 
+	// 	type: 'POST',
+	// 	data: {jsonData:jsonData},
+	// 	success: function(data){
+	// 		location.reload();
+	// 	}
+	// });
 }).on('change', "#edit_modal input", function(){
 	$(this).attr('changed', 'true');
 }).on('click', '#reassign_toggle', function(){
@@ -38,4 +44,11 @@ $(document).on('click', '#update_confirm', function(){
 			window.location = base_url+'pids';
 		}
 	});
+}).on('click', '.add_new', function(){
+	var type = $(this).attr('add-type');
+	if(type=='desc'){
+		var new_dom = $('#new_desc').clone().insertBefore($('#separate_line')).removeClass('hide');
+	}else if(type=='url'){
+		var new_dom = $('#new_url').clone().insertBefore($('#separate_line')).removeClass('hide');
+	}
 });

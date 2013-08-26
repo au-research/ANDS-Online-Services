@@ -29,10 +29,8 @@ class Pids extends MX_Controller {
 	}
 
 	public function view(){
-
 		$this->load->library('debugbar');
 		$data['debugbarRenderer']=$this->debugbar->debugbarRenderer();
-
 		$handle = $this->input->get('handle');
 		if($handle){
 			$handle = $this->pids->getHandlesDetails(array($handle));
@@ -50,13 +48,15 @@ class Pids extends MX_Controller {
 					//$pid['url_index'] = $h['idx'];
 				}
 			}
+			if(!isset($pid['desc'])) $pid['desc'] = array();
+			if(!isset($pid['url'])) $pid['url'] = array();
 			$data['pid'] = $pid;
 			$data['pid_owners'] = $this->pids->getPidOwners();
 			$this->debugbar->addMsg($data['pid_owners']);
+			$this->debugbar->addMsg($pid);
 			$data['title'] = 'View Handle: '.$pid['handle'];
 			$data['scripts'] = array('pid');
 			$data['js_lib'] = array('core');
-			$this->debugbar->addMsg($data);
 			$this->load->view('pid_view', $data);
 		}else{
 			$this->index();
@@ -247,25 +247,12 @@ class Pids extends MX_Controller {
 		echo json_encode($response);
 	}
 
-
-
-	function get_pids_details(){
-		$this->load->model('cosi_authentication', 'cosi');
-	 	//var_dump($this->user->identifier());
-		//var_dump($this->cosi->getRolesAndActivitiesByRoleID($this->user->localIdentifier()));
-		//$ownerHandle = $this->pids->getOwnerHandle($this->user->localIdentifier(), 'ldaps://ldap.anu.edu.au::http://services.ands.org.au/home/orca/user/');
-		$handleArray = array('102.100.100/55','102.100.100/100','102.100.100/5356','102.100.100/5686');
-		$pidsDetails = $this->pids->getHandlesDetails($handleArray);
-		echo json_encode($pidsDetails);
-	}
-
 	function get_handler($handler)
 	{
 		$serviceName = "getHandle";
 		$parameters = "handle=".urlencode($handler);
 		$response = $this->pids->pidsRequest($serviceName, $parameters);
 		echo $response;
-
 	}
 
 	function __construct(){

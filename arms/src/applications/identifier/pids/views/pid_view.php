@@ -81,20 +81,43 @@
 			<div class="alert alert-info">
 				Please provide the relevant information
 			</div>
-			<form action="#" method="get" class="form-horizontal" id="mint_form">
-				<div class="control-group">
-					<label class="control-label">URL</label>
-					<div class="controls">
-						<input type="url" name="url" value="<?php echo (isset($pid['url'])? $pid['url']:''); ?>" idx="<?php echo (isset($pid['url_index'])? $pid['url_index']:''); ?>" changed="false"/>
-					</div>
-				</div>
+			<form action="#" method="get" class="form-horizontal" id="edit_form">
+				<?php foreach($pid['desc'] as $idx=>$desc):?>
 				<div class="control-group">
 					<label class="control-label">Description</label>
 					<div class="controls">
-						<input type="text" name="desc" value="<?php echo (isset($pid['desc'])? $pid['desc']:''); ?>" idx="<?php echo (isset($pid['desc_index'])? $pid['desc_index']:''); ?>" changed="false"/>
+						<input type="text" name="desc" value="<?php echo $desc; ?>" idx="<?php echo $idx; ?>" changed="false"/>
+					</div>
+				</div>
+				<?php endforeach; ?>
+				<?php foreach($pid['url'] as $idx=>$url):?>
+				<div class="control-group">
+					<label class="control-label">URL</label>
+					<div class="controls">
+						<input type="text" name="url" value="<?php echo $url; ?>" idx="<?php echo $idx; ?>" changed="false"/>
+					</div>
+				</div>
+				<?php endforeach; ?>
+				<div id="separate_line"></div>
+				<div class="control-group">
+					<div class="controls">
+						<a href="javascript:;" class="btn btn-primary add_new" add-type="url"><i class="icon icon-plus"></i> Add URL</a>
+						<a href="javascript:;" class="btn btn-primary add_new" add-type="desc"><i class="icon icon-plus"></i> Add Description</a>
 					</div>
 				</div>
 			</form>
+			<div class="control-group hide" id="new_desc">
+				<label class="control-label">Description</label>
+				<div class="controls">
+					<input type="text" name="desc" value="" changed="false"/>
+				</div>
+			</div>
+			<div class="control-group hide" id="new_url">
+				<label class="control-label">URL</label>
+				<div class="controls">
+					<input type="text" name="url" value="" changed="false"/>
+				</div>
+			</div>
 		</div>
 	</div>
 	<div class="modal-footer">
