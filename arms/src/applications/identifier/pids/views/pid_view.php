@@ -18,11 +18,17 @@
 					<dl>
 						<?php if(isset($pid['desc'])): ?>
 						<dt>Description</dt>
-						<dd><?php echo $pid['desc']; ?></dd>
+						<dd><?php 
+						foreach($pid['desc'] as $key=>$value)
+						echo $value.' ('.$key.')'; 
+						?></dd>
 						<?php endif; ?>
 						<?php if(isset($pid['url'])): ?>
 						<dt>URL</dt>
-						<dd><?php echo $pid['url']; ?></dd>
+						<dd><?php 
+						foreach($pid['url'] as $key=>$value)
+						echo $value.' ('.$key.')'; 
+						?></dd>
 						<?php endif; ?>
 					</dl>
 					<a data-toggle="modal" href="#edit_modal" href="javascript:;" class="btn btn-primary">Edit</a>

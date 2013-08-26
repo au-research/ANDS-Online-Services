@@ -36,17 +36,18 @@ class Pids extends MX_Controller {
 		$handle = $this->input->get('handle');
 		if($handle){
 			$handle = $this->pids->getHandlesDetails(array($handle));
-			$this->debugbar->addMsg($handle);
+			
 			$pid = array();
 			foreach($handle as $h){
 				$pid['handle'] = $h['handle'];
+
 				if($h['type']=='DESC') {
-					$pid['desc'] = $h['data'];
-					$pid['desc_index'] = $h['idx'];
+					$pid['desc'][$h['idx']] = $h['data'];
+					//$pid['desc_index'] = $h['idx'];
 				}
 				if($h['type']=='URL') {
-					$pid['url'] = $h['data'];
-					$pid['url_index'] = $h['idx'];
+					$pid['url'][$h['idx']] = $h['data'];
+					//$pid['url_index'] = $h['idx'];
 				}
 			}
 			$data['pid'] = $pid;
@@ -55,6 +56,7 @@ class Pids extends MX_Controller {
 			$data['title'] = 'View Handle: '.$pid['handle'];
 			$data['scripts'] = array('pid');
 			$data['js_lib'] = array('core');
+			$this->debugbar->addMsg($data);
 			$this->load->view('pid_view', $data);
 		}else{
 			$this->index();
@@ -223,7 +225,7 @@ class Pids extends MX_Controller {
 						// );
 						$pidsDetails[$r['handle']]['handle'] = $r['handle'];
 						// $pidsDetails[$r['handle']][$r['type']] = array($r['idx']=>$r['data']);
-						$pidsDetails[$r['handle']][$r['type']] = $r['data'];
+						$pidsDetails[$r['handle']][$r['type']][] = $r['data'];
 
 					}
 				}
