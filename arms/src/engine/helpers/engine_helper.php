@@ -20,12 +20,25 @@ function acl_enforce($function_name, $message = '')
 	$_ci =& get_instance();
 	if (!$_ci->user->isLoggedIn())
 	{
-		throw new Exception (($message ?: "Access to this function requires you to be logged in. Perhaps you have been automatically logged out?"));
+		redirect('auth/login/?error=login_required&redirect='.curPageURL());
+		// throw new Exception (($message ?: "Access to this function requires you to be logged in. Perhaps you have been automatically logged out?"));
 	}
 	else if (!$_ci->user->hasFunction($function_name))
 	{
 		throw new Exception (($message ?: "You do not have permission to use this function (".$function_name."). Perhaps you have been logged out?"));
 	}
+}
+
+function curPageURL() {
+	$pageURL = 'http';
+	if (isset($_SERVER['HTTPS']) && $_SERVER["HTTPS"] == "on") {$pageURL .= "s";}
+	$pageURL .= "://";
+	if ($_SERVER["SERVER_PORT"] != "80") {
+		$pageURL .= $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"].$_SERVER["REQUEST_URI"];
+	} else {
+		$pageURL .= $_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];
+	}
+	return $pageURL;
 }
 
 function ds_acl_enforce($ds_id, $message = ''){

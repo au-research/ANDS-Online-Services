@@ -206,7 +206,7 @@ function printLoginForm($authenticators, $authenticator , $class, $redirect="")
     {
         print "<div class='".$class."' id='".$authenticator."_LoginForm'>";
         print " <form class='form' action='".base_url("auth/login")."' method='post'>";
-        print " <input type='text' name='redirect' value=".$redirect."/>";
+        print " <input type='hidden' name='redirect' value=".$redirect."/>";
         print "   <div class='control-group'>";
         print "     <div class='controls'>";
         print "         <label>Username</label>";

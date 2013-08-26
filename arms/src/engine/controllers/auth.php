@@ -43,7 +43,7 @@ class Auth extends CI_Controller {
 
 		if($this->input->get('redirect')) {
 			$data['redirect'] = $this->input->get('redirect');
-		}else $data['redirect'] = 'auth/dashboard';
+		}else $data['redirect'] = '';
 		
 		$this->load->view('login', $data);
 	}
@@ -69,10 +69,10 @@ class Auth extends CI_Controller {
 			{
 				if($this->user->authChallenge($sharedToken, ''))
 				{
-					if($this->input->get('redirect')){
+					if($this->input->get('redirect')!='auth/dashboard/'){
 						redirect($this->input->get('redirect'));
 					}else{
-						redirect('/auth/dashboard/');
+						redirect(base_url()+'auth/dashboard/');
 					}
 				}
 				else
