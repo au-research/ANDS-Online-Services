@@ -47,8 +47,8 @@ $(document).on('click', '#update_confirm', function(){
 }).on('click', '.add_new', function(){
 	var type = $(this).attr('add-type');
 	if(type=='desc'){
-		var new_dom = $('#new_desc').clone().insertBefore($('#separate_line')).removeClass('hide');
+		var new_dom = $('#new_desc').clone().insertBefore($('#separate_line')).removeClass('hide').removeAttr('id');
 	}else if(type=='url'){
-		var new_dom = $('#new_url').clone().insertBefore($('#separate_line')).removeClass('hide');
+		var new_dom = $('#new_url').clone().insertBefore($('#separate_line')).removeClass('hide').removeAttr('id');
 	}
 });
