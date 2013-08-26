@@ -129,9 +129,7 @@ class Pids extends MX_Controller {
 	}
 
 	function update(){
-		$post = $this->input->post();
-		var_dump($post);
-		exit();
+		$post = $this->input->post('jsonData');
 		$handle = $post['handle'];
 		$values = $post['values'];
 		$response = array();
