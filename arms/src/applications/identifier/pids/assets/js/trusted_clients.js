@@ -6,22 +6,31 @@ function init () {
 }
 
 $(document).on('click', '#add_confirm', function(){
-	$(this).button('loading');
+	var thisButton = $(this);
+	thisButton.button('loading');
 	var jsonData = {};
-	$('#add_trusted_client_form input').each(function(){
+	$('#add_trusted_client_form input, #add_trusted_client_form select').each(function(){
 		jsonData[$(this).attr('name')] = $(this).val();
 	});
+	$('#result_msg').html('').removeClass('label');
 	$.ajax({
 		url:base_url+'pids/add_trusted_client/', 
 		type: 'POST',
 		data: {jsonData:jsonData},
 		success: function(data){
-			location.reload();
+			if(data.errorMessages){
+				$('#result_msg').html(data.errorMessages).addClass('label label-important');
+				thisButton.button('reset');
+			}else{
+				listTrustedClients();
+				$('#add_trusted_client_modal').modal('hide');
+			}
 		}
 	});
 }).on('click', '#app_id_show', function(){
 	$(this).hide();
 	$('#app_id_field').show();
+	$('#app_id_field select').chosen();
 }).on('click', '.remove', function(){
 	var ip = $(this).attr('ip');
 	var app_id = $(this).attr('app_id');
@@ -31,13 +40,14 @@ $(document).on('click', '#add_confirm', function(){
 			type: 'POST',
 			data: {ip:ip,app_id:app_id},
 			success: function(data){
-				location.reload();
+				listTrustedClients();
 			}
 		});
 	}
 });
 
 function listTrustedClients() {
+	$('#trsuted_clients').html('loading');
 	$.getJSON(base_url+'pids/list_trusted_clients/', function(data) {
 		var template = $('#trusted_clients-template').html();
 		var output = Mustache.render(template, data);

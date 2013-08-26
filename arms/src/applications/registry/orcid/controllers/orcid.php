@@ -150,7 +150,7 @@ class Orcid extends MX_Controller {
 		$data['bio'] = $bio['orcid-profile'];
 		$data['title']='Import Your Work';
 		$data['scripts']=array('orcid_wiz');
-		$data['js_lib']=array('core','prettyprint');
+		$data['js_lib']=array('core','prettyprint', 'bootstro');
 
 		// echo json_encode($data['bio']);
 		$orcid_id = $data['bio']['orcid']['value'];

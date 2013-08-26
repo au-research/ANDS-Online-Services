@@ -6,16 +6,16 @@
 	</div>
 </div>
 <div id="breadcrumb" style="clear:both;">
-	<?php echo anchor('/pids', '<i class="icon-home"></i> List My Identifiers'); ?>
-	<?php echo anchor('/list_trusted', 'List Trusted Clients', array('class'=>'current')); ?>
+	<?php echo anchor('pids', '<i class="icon-home"></i> List My Identifiers'); ?>
+	<?php echo anchor('pids/list_trusted', 'List Trusted Clients', array('class'=>'current')); ?>
 </div>
 <div class="container-fluid" id="main-content">
 	<div class="row-fluid">
-		<div class="span2">&nbsp;</div>
-		<div class="span8">
+		<!-- <div class="span2">&nbsp;</div> -->
+		<div class="span12">
 			<div id="trusted_clients">Loading...</div>
 		</div>
-		<div class="span3"></div>
+		<!-- <div class="span3"></div> -->
 	</div>
 </div>
 
@@ -51,7 +51,12 @@
 				<div class="control-group hide" id="app_id_field">
 					<label class="control-label">App ID</label>
 					<div class="controls">
-						<input type="text" name="app_id"/>
+						<select name="app_id">
+							<option value=""></option>
+							<?php foreach($all_app_id as $a): ?>
+							<option value="<?php echo $a;?>"><?php echo $a; ?></option>
+							<?php endforeach; ?>
+						</select>
 					</div>
 				</div>
 			</form>
@@ -59,6 +64,7 @@
 	</div>
 
 	<div class="modal-footer">
+		<span id="result_msg"></span>
 		<a id="add_confirm" href="javascript:;" class="btn btn-primary" data-loading-text="Adding...This might take several seconds">Add Trusted Client</a>
 		<a href="#" class="btn hide" data-dismiss="modal">Close</a>
 	</div>
@@ -75,6 +81,7 @@
 				<tr>
 					<th>IP</th>
 					<th>App ID</th>
+					<th>Date Created</th>
 					<th>Description </th>
 					<th>Action </th>
 				</tr>
@@ -84,6 +91,7 @@
 				<tr>
 					<td>{{ip_address}}</td>
 					<td>{{app_id}}</td>
+					<td>{{created_when}}</td>
 					<td>{{description}}</td>
 					<td><a href="javascript:;" class="remove btn btn-small btn-danger" tip="Remove" ip="{{ip_address}}" app_id="{{app_id}}"><i class="icon-white icon-remove"></i</a</td>
 				</tr>

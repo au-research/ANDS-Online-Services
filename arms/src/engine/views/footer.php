@@ -120,6 +120,10 @@ $js_lib = !isset($js_lib) ? array() : $js_lib;
             <link href="<?php echo base_url();?>assets/registry_object_search/css/rosearch_widget.css" rel="stylesheet" type="text/css">
             <script src="<?php echo base_url();?>assets/registry_object_search/js/rosearch_widget.js" type="text/javascript"></script>
 
+        <?php elseif($lib=='bootstro'):?>
+            <link href="<?php echo base_url();?>assets/lib/bootstro/bootstro.min.css" rel="stylesheet" type="text/css">
+            <script src="<?php echo base_url();?>assets/lib/bootstro/bootstro.min.js" type="text/javascript"></script>
+
         <?php elseif($lib=='google_map'):?>
             <script src="https://maps.googleapis.com/maps/api/js?libraries=drawing&amp;sensor=false" type="text/javascript"></script>
 

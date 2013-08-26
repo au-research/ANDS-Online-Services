@@ -66,6 +66,7 @@ class Pids extends MX_Controller {
 		$data['title'] = 'List Trusted Clients';
 		$data['scripts'] = array('trusted_clients');
 		$data['js_lib'] = array('core', 'dataTables');
+		$data['all_app_id'] = $this->pids->getAllAppID();
 		$this->load->view('trusted_clients_index', $data);
 	}
 

@@ -4127,7 +4127,7 @@ a.thumbnail:hover {
   position: absolute;
   top: 0;
   left: 0;
-  z-index: 1010;
+  z-index: 99999;
   display: none;
   width: 236px;
   padding: 1px;

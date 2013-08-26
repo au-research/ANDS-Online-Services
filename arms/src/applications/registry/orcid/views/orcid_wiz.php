@@ -16,7 +16,7 @@
 	<div class="row-fluid">
 
 		<div class="span8">
-			<div class="widget-box">
+			<div class="widget-box bootstro" data-bootstro-title="AWESOME" data-bootstro-content="STUFF" id="start-bootstro">
 				<div class="widget-title">
 					<h5>Search for your relevant works in Research Data Australia</h5>
 				</div>

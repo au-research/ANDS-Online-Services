@@ -69,6 +69,16 @@ class _pids extends CI_Model
 			return $result_array;
 	}
 
+	function getAllAppID(){
+		$result = array();
+		$query = $this->pid_db->select('app_id')->distinct()->from('public.trusted_client')->get();
+		if($query->num_rows()==0) return array();
+		foreach($query->result_array() as $r){
+			$result[] = $r['app_id'];
+		}
+		return $result;
+	}
+
 	function removeTrustedClient($ip, $appId){
 		$this->pid_db->delete('public.trusted_client', array('ip_address'=>$ip, 'app_id'=>$appId));
 	}

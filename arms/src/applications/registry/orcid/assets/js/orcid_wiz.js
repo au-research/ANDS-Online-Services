@@ -2,6 +2,7 @@ $(function(){
 	$('.form-search').submit();
 	load_imported();
 	$('.stick').sticky();
+	bootstro.start('#start-bootstro');
 });
 
 $(document).on('click', '.remove', function(){
