@@ -26,19 +26,22 @@
 			<div class="widget-box">
 				<div class="widget-title">
 					<h5>PIDs</h5>
+					<select class="chosen" id="pid_chooser">
+						<option value=""></option>
+						<?php foreach($orgRole as $o): ?>
+						<option value="<?php echo $o ?>"><?php echo $o; ?></option>
+						<?php endforeach; ?>
+					</select>
 				</div>
 				<div class="widget-content">
 					<form class="form-search">
-						<select class="chosen" id="pid_chooser">
-							<option value=""></option>
-							<?php foreach($orgRole as $o): ?>
-							<option value="<?php echo $o ?>"><?php echo $o; ?></option>
-							<?php endforeach; ?>
-						</select>
-					  <div class="input-append">
+					
+					<div class="input-append">
 					    <input type="text" class="search-query" id="search_query">
 					    <button type="submit" class="btn">Search</button>
-					  </div>
+					</div>
+
+
 
 					</form>
 					<hr/>

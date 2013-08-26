@@ -20,7 +20,11 @@ class Auth extends CI_Controller {
 			{
 				if($this->user->authChallenge($this->input->post('inputUsername'), $this->input->post('inputPassword')))
 				{
-					redirect('/');
+					if($this->input->post('redirect')){
+						redirect($this->input->post('redirect'));
+					}else{
+						redirect('/');
+					}
 				}
 			}
 			catch (Exception $e)
@@ -29,6 +33,17 @@ class Auth extends CI_Controller {
 				$data['exception'] = $e;
 			}
 		}
+
+		if($this->input->get('error')){
+			$error = $this->input->get('error');
+			if($error=='login_required'){
+				$data['error_message'] = "Access to this function requires you to be logged in. Perhaps you have been automatically logged out?";
+			}
+		}
+
+		if($this->input->get('redirect')) {
+			$data['redirect'] = $this->input->get('redirect');
+		}else $data['redirect'] = 'auth/dashboard';
 		
 		$this->load->view('login', $data);
 	}
@@ -54,7 +69,11 @@ class Auth extends CI_Controller {
 			{
 				if($this->user->authChallenge($sharedToken, ''))
 				{
-					redirect('/auth/dashboard/');
+					if($this->input->get('redirect')){
+						redirect($this->input->get('redirect'));
+					}else{
+						redirect('/auth/dashboard/');
+					}
 				}
 				else
 				{

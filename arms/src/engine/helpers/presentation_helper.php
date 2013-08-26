@@ -191,7 +191,7 @@ function array_to_TABCSV($data)
 }
 
 
-function printLoginForm($authenticators, $authenticator , $class)
+function printLoginForm($authenticators, $authenticator , $class, $redirect="")
 {
     
     if($authenticator == gCOSI_AUTH_METHOD_SHIBBOLETH)
@@ -206,6 +206,7 @@ function printLoginForm($authenticators, $authenticator , $class)
     {
         print "<div class='".$class."' id='".$authenticator."_LoginForm'>";
         print " <form class='form' action='".base_url("auth/login")."' method='post'>";
+        print " <input type='text' name='redirect' value=".$redirect."/>";
         print "   <div class='control-group'>";
         print "     <div class='controls'>";
         print "         <label>Username</label>";
@@ -241,10 +242,10 @@ function printAlternativeLoginControl($authenticators)
     //print "</div>";
 }
 
-function printAlternativeLoginForms($authenticators, $default_authenticator)
+function printAlternativeLoginForms($authenticators, $default_authenticator, $redirect)
 {
     foreach($authenticators as $key => $value){
         if($key != $default_authenticator)
-            printLoginForm($authenticators, $key, 'loginForm hide');
+            printLoginForm($authenticators, $key, 'loginForm hide', $redirect);
     }
 }

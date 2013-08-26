@@ -42,8 +42,8 @@
 							</div>
 						<?php endif; */ ?>
 						<?php 
-						printLoginForm($authenticators, $default_authenticator, 'loginForm');
-						printAlternativeLoginForms($authenticators, $default_authenticator);
+						printLoginForm($authenticators, $default_authenticator, 'loginForm', $redirect);
+						printAlternativeLoginForms($authenticators, $default_authenticator, $redirect);
 						?>
 					</div>
 
