@@ -22,7 +22,7 @@ $(document).on('click', '#update_confirm', function(){
 		type: 'POST',
 		data: {jsonData:jsonData},
 		success: function(data){
-			console.log(data);
+			location.reload();
 		}
 	});
 }).on('change', "#edit_modal input", function(){
