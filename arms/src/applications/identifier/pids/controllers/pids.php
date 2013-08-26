@@ -135,7 +135,9 @@ class Pids extends MX_Controller {
 	}
 
 	function update(){
-		$post = $this->input->post('jsonData');
+		$post = $this->input->post();
+		var_dump($post);
+		exit();
 		$handle = $post['handle'];
 		$response = array();
 		if(isset($post['url'])){
@@ -244,6 +246,7 @@ class Pids extends MX_Controller {
 			$response['hasMore'] = true;
 			$response['next_offset'] = $offset + $limit;
 		}
+		if($searchText) $response['search_query'] = $searchText;
 		echo json_encode($response);
 	}
 

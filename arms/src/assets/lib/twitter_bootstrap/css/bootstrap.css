@@ -589,6 +589,9 @@ dt {
 dd {
   margin-left: 10px;
 }
+.dl-nomargin{
+  margin:0;
+}
 .dl-horizontal dt {
   float: left;
   width: 120px;

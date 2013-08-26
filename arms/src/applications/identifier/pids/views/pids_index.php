@@ -34,17 +34,6 @@
 					</select>
 				</div>
 				<div class="widget-content">
-					<form class="form-search">
-					
-					<div class="input-append">
-					    <input type="text" class="search-query" id="search_query">
-					    <button type="submit" class="btn">Search</button>
-					</div>
-
-
-
-					</form>
-					<hr/>
 					<div id="pids">Loading...</div>
 				</div>
 			</div>
@@ -149,7 +138,13 @@ You understand that:
 </div>
 
 <script type="text/x-mustache" id="pids-list-template">
-<p>Total number of PIDs owned: <strong>{{result_count}}</strong></p>
+<form class="form-search">		
+	<div class="input-append">
+	    <input type="text" class="search-query" id="search_query" value="{{search_query}}"/>
+	    <button type="submit" class="btn">Search</button>
+	</div>
+	Total number of PIDs owned: <strong>{{result_count}}</strong>
+</form>
 {{#no_result}}
 <div class="well">No result!</div>
 {{/no_result}}
@@ -160,7 +155,7 @@ You understand that:
 		<h5><a href="<?php echo base_url();?>pids/view/?handle={{handle}}">{{handle}}</a></h5>
 	</div>
 	<div class="widget-content">
-	<dl>
+	<dl class="dl-nomargin">
 		{{#DESC}}
 			<dt>Description</dt>
 			<dd><span class="desc">{{DESC}}</span></dd>

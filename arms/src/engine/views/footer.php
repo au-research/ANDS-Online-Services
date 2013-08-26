@@ -27,7 +27,7 @@ $js_lib = !isset($js_lib) ? array() : $js_lib;
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script>
-        // localStorage.clear(); enable for chrome to refresh LESS
+        // localStorage.clear(); //enable for chrome to refresh LESS
         var base_url = '<?php echo base_url();?>';
         var portal_url = '<?php echo portal_url();?>';
         var real_base_url = "<?php echo $this->config->item('default_base_url');?>";

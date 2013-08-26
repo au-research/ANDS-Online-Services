@@ -3,7 +3,7 @@ $(function(){
 });
 
 $(document).on('click', '#update_confirm', function(){
-	var jsonData = [];
+	var jsonData = {};
 	jsonData['handle'] = $(this).attr('handle');
 	$(this).button('loading');
 	jsonData['values'] = [];
@@ -17,14 +17,14 @@ $(document).on('click', '#update_confirm', function(){
 		});
 	});
 	console.log(jsonData);
-	// $.ajax({
-	// 	url:base_url+'pids/update/', 
-	// 	type: 'POST',
-	// 	data: {jsonData:jsonData},
-	// 	success: function(data){
-	// 		location.reload();
-	// 	}
-	// });
+	$.ajax({
+		url:base_url+'pids/update/', 
+		type: 'POST',
+		data: {jsonData:jsonData},
+		success: function(data){
+			console.log(data);
+		}
+	});
 }).on('change', "#edit_modal input", function(){
 	$(this).attr('changed', 'true');
 }).on('click', '#reassign_toggle', function(){
