@@ -103,21 +103,15 @@ class Pids extends MX_Controller {
 		if($url && $desc){
 			//do desc -> update with url
 			$response = $this->pids->pidsRequest('mint', 'type=DESC&value='.$desc);
-			if($response){
+			if($this->pids->pidsGetResponseType($response) == 'SUCCESS'){
 				$responseArray['handle'] = $this->pids->pidsGetHandleValue($response);
 				$updateResponse = $this->pids->pidsRequest('addValue', 'type=URL&value='.$url.'&handle='.$responseArray['handle']);
-				if($updateResponse){
-					$responseArray['result']='ok';
-					$responseArray['message']='success';
-				}else{
-					$responseArray['result']='error';
-					$responseArray['message'] = 'There was an error communicating with the pids service. update failed.';
+				if($this->pids->pidsGetResponseType($updateResponse) != 'SUCCESS'){
+					$this->handleResponse($updateResponse);
 				}
-				echo json_encode($responseArray);
+				$this->handleResponse($response);
 			}else{
-				$responseArray['result']='error';
-				$responseArray['message'] = 'There was an error communicating with the pids service.';
-				echo json_encode($responseArray);
+				$this->handleResponse($response);
 			}
 		}else if($url){
 			//do url only
@@ -139,27 +133,32 @@ class Pids extends MX_Controller {
 		var_dump($post);
 		exit();
 		$handle = $post['handle'];
+		$values = $post['values'];
 		$response = array();
-		if(isset($post['url'])){
-			if($post['url']!=''){
-				if($post['url_index']!=''){
-					$response['url'] = $this->pids->modify_value_by_index($handle, $post['url'], $post['url_index']);
-				}else{
-					$response['url'] = $this->pids->pidsRequest('addValue', 'type=URL&value='.urlencode($post['url']).'&handle='.urlencode($handle));
+		$response['message'] = array();
+		if(sizeof($values) > 0)
+		{
+			foreach($values as $v)
+			{
+				$index = $v['idx'];
+				$type = strtoupper($v['type']);
+				$value = $v['value'];
+		//pid value update
+				if($index > 0 && $value != '')
+				{
+					$response['message'][] = $this->pids->modify_value_by_index($handle, $value, $index);
+
 				}
-			}else{
-				$response['url'] = $this->pids->delete_value_by_index($handle, $post['url_index']);
-			}
-		}
-		if(isset($post['desc'])){
-			if($post['desc']!=''){
-				if($post['desc_index']!=''){
-					$response['desc'] = $this->pids->modify_value_by_index($handle, $post['desc'], $post['desc_index']);
-				}else{
-					$response['url'] = $this->pids->pidsRequest('addValue', 'type=DESC&value='.urlencode($post['desc']).'&handle='.urlencode($handle));
+		//pid value new
+				elseif($index < 0 && $value != '')
+				{
+					$response['message'][] = $this->pids->pidsRequest('addValue', 'type='.$type.'&value='.urlencode($value).'&handle='.urlencode($handle));
+
 				}
-			}else{
-				$response['desc'] = $this->pids->delete_value_by_index($handle, $post['desc_index']);
+		//pid value delete
+				else{
+					$response['message'][] = $this->pids->delete_value_by_index($handle, $index);
+				}
 			}
 		}
 		echo json_encode($response);
