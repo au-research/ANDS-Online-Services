@@ -222,6 +222,8 @@ class Pids extends MX_Controller {
 						// 	'handle'=>$r['handle'],
 						// 	$r['type']=>$r['data']
 						// );
+						if($r['type']=='DESC') $pidsDetails[$r['handle']]['hasDESC'] = true;
+						if($r['type']=='URL') $pidsDetails[$r['handle']]['hasURL'] = true;
 						$pidsDetails[$r['handle']]['handle'] = $r['handle'];
 						// $pidsDetails[$r['handle']][$r['type']] = array($r['idx']=>$r['data']);
 						$pidsDetails[$r['handle']][$r['type']][] = $r['data'];

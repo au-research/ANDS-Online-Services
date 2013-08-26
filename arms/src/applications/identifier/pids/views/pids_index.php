@@ -156,12 +156,12 @@ You understand that:
 	</div>
 	<div class="widget-content">
 	<dl class="dl-nomargin">
+		{{#hasDESC}}<dt>Description</dt>{{/hasDESC}}
 		{{#DESC}}
-			<dt>Description</dt>
-			<dd><span class="desc">{{DESC}}</span></dd>
+			<dd><span class="desc">{{.}}</span></dd>
 		{{/DESC}}
+		{{#hasURL}}<dt>URL</dt>{{/hasURL}}
 		{{#URL}}
-			<dt>URL</dt>
 			<dd>{{URL}}</dd>
 		{{/URL}}
 		</dl>

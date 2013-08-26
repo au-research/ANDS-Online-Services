@@ -68,6 +68,7 @@ function listPIDs(params) {
 		type: 'POST',
 		data: {params:params},
 		success: function(data){
+			console.log(data);
 			var template = $('#pids-list-template').html();
 			var output = Mustache.render(template, data);
 			$('#pids').html(output);
