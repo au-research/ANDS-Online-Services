@@ -218,6 +218,7 @@ class Pids extends MX_Controller {
 				foreach($result as $r)
 				{
 					$pidsDetails[$r['handle']]['resolver_url'] = $this->pids->pidsGetHandleURI($r['handle']);
+					$pidsDetails[$r['handle']]['handle'] = $r['handle'];
 					if($r['type'] == 'DESC' || $r['type'] == 'URL')
 					{
 						// $pidsDetails[] = array(
@@ -226,7 +227,7 @@ class Pids extends MX_Controller {
 						// );
 						if($r['type']=='DESC') $pidsDetails[$r['handle']]['hasDESC'] = true;
 						if($r['type']=='URL') $pidsDetails[$r['handle']]['hasURL'] = true;
-						$pidsDetails[$r['handle']]['handle'] = $r['handle'];
+						//$pidsDetails[$r['handle']]['handle'] = $r['handle'];
 						// $pidsDetails[$r['handle']][$r['type']] = array($r['idx']=>$r['data']);
 						$pidsDetails[$r['handle']][$r['type']][] = $r['data'];
 
