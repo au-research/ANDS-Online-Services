@@ -120,6 +120,7 @@
 		</div>
 	</div>
 	<div class="modal-footer">
+		<div class="progress progress-striped active hide" id="progress-bar"></div>
 		<a id="update_confirm" href="javascript:;" class="btn btn-primary" data-loading-text="Updating..." handle="<?php echo $pid['handle']; ?>">Update</a>
 		<a href="#" class="btn hide" data-dismiss="modal">Close</a>
 	</div>

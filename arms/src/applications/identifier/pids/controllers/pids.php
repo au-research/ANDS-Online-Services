@@ -129,37 +129,25 @@ class Pids extends MX_Controller {
 		}
 	}
 
-	function update(){
-		$post = $this->input->post('jsonData');
-		$handle = $post['handle'];
-		$values = $post['values'];
+	/**
+	 * Webservice for updating a single handle
+	 * @return json response 
+	 */
+	function update_handle(){
+		$index = $this->input->post('idx');
+		$type = strtoupper($this->input->post('type'));
+		$value = $this->input->post('value');
+		$handle = $this->input->post('handle');
 		$response = array();
-		$response['message'] = array();
-		if(sizeof($values) > 0)
-		{
-			foreach($values as $v)
-			{
-				$index = $v['idx'];
-				$type = strtoupper($v['type']);
-				$value = $v['value'];
-		//pid value update
-				if($index > 0 && $value != '')
-				{
-					$response['message'][] = $this->pids->modify_value_by_index($handle, $value, $index);
-
-				}
-		//pid value new
-				elseif($index < 0 && $value != '')
-				{
-					$response['message'][] = $this->pids->pidsRequest('addValue', 'type='.$type.'&value='.urlencode($value).'&handle='.urlencode($handle));
-
-				}
-		//pid value delete
-				else{
-					$response['message'][] = $this->pids->delete_value_by_index($handle, $index);
-				}
-			}
+		if($index > 0 && $value!=''){
+			$message = $this->pids->modify_value_by_index($handle, $value, $index);
+		}else if($index < 0 && $value!=''){
+			$message = $this->pids->pidsRequest('addValue', 'type='.$type.'&value='.urlencode($value).'&handle='.urlencode($handle));
+		}else{
+			$message = $this->pids->delete_value_by_index($handle, $index);
 		}
+		$response['result'] = $this->pids->pidsGetResponseType($message);
+		$response['message'] = $this->pids->pidsGetUserMessage($message);
 		echo json_encode($response);
 	}
 

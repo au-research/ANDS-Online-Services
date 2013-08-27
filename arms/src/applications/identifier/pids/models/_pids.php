@@ -236,7 +236,8 @@ class _pids extends CI_Model
 		$parameters .= "&index=".$index;
 		$parameters .= "&value=".$propertyValue;
 		$response = $this->pidsRequest($serviceName, $parameters);
-		return json_encode($response);
+		return $response;
+		// return json_encode($response);
 	}
 
 	function delete_value_by_index($handle, $index)
@@ -247,7 +248,8 @@ class _pids extends CI_Model
 		$parameters  = "handle=".$handle;
 		$parameters .= "&index=".$index;
 		$response = $this->pidsRequest($serviceName, $parameters);
-		return json_encode($response);
+		return $response;
+		// return json_encode($response);
 	}
 
 	function pidsRequest($serviceName, $parameters)
