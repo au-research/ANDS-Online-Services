@@ -93,7 +93,9 @@ class _pids extends CI_Model
 					->get();
 		if($searchQuery->num_rows()==0) return array();
 		foreach($searchQuery->result_array() as $r){
-			$result[] = array('handle'=>$r['handle'], 'identifier'=>$r['data']);
+			$arr = explode("####", $r['data'], 2);
+			$identifier = $arr[0];
+			$result[] = array('handle'=>$r['handle'], 'identifier'=>$identifier);
 		}
 		return $result;
 	}

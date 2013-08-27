@@ -55,6 +55,7 @@ class Pids extends MX_Controller {
 			$this->debugbar->addMsg($data['pid_owners']);
 			$this->debugbar->addMsg($pid);
 			$data['title'] = 'View Handle: '.$pid['handle'];
+			$data['resolver_url'] = $this->pids->pidsGetHandleURI($pid['handle']);
 			$data['scripts'] = array('pid');
 			$data['js_lib'] = array('core');
 			$this->load->view('pid_view', $data);
@@ -216,6 +217,7 @@ class Pids extends MX_Controller {
 				$result = $this->pids->getHandlesDetails(array_slice($handles, $offset, $limit));
 				foreach($result as $r)
 				{
+					$pidsDetails[$r['handle']]['resolver_url'] = $this->pids->pidsGetHandleURI($r['handle']);
 					if($r['type'] == 'DESC' || $r['type'] == 'URL')
 					{
 						// $pidsDetails[] = array(

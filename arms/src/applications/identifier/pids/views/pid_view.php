@@ -15,6 +15,7 @@
 					<h5><?php echo $pid['handle'];?></h5>
 				</div>
 				<div class="widget-content">
+					Resolver Link: <?php echo '<a href="'.$resolver_url.'">'.$resolver_url.'</a>' ?>
 					<dl>
 						<?php if(isset($pid['desc'])): ?>
 							<dt>Description</dt>

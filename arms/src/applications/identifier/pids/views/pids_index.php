@@ -155,6 +155,9 @@ You understand that:
 		<h5><a href="<?php echo base_url();?>pids/view/?handle={{handle}}">{{handle}}</a></h5>
 	</div>
 	<div class="widget-content">
+	{{#resolver_url}}
+		Resolver Link: <a href="{{resolver_url}}">{{resolver_url}}</a>
+	{{/resolver_url}}
 	<dl class="dl-nomargin">
 		{{#hasDESC}}<dt>Description</dt>{{/hasDESC}}
 		{{#DESC}}
