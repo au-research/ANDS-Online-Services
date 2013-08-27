@@ -211,9 +211,9 @@ class Search extends MX_Controller {
 
 	function registerSearchTerm(){
 		$search_term = $this->input->get('q');
-		$this->stats->registerSearchTerm($this->input->post('term'));
-		$this->stats->registerSearchStats($this->input->post('term'), $this->input->post('num_found'));
-		$this->stats->updateSearchTermOccurence();
+		$this->stats->registerSearchTerm($this->input->post('term'),$this->input->post('num_found'));
+		// $this->stats->registerSearchStats($this->input->post('term'), $this->input->post('num_found'));
+		// $this->stats->updateSearchTermOccurence();
 	}
 
 	function getAllSubjects($vocab_type){
