@@ -142,8 +142,32 @@ class Stats {
 		}
 	}
 
+	/**
+	 * magic that results in the ranking of which we used to suggest search terms
+	 * @param  int $occurence 
+	 * @param  int $num_found 
+	 * @return int ranking
+	 */
 	private function calculate_ranking($occurence, $num_found){
-		return $occurence * $num_found;
+		return $occurence * log($num_found);
+	}
+
+	/**
+	 * return a list of top 5 ranked search suggestion, ordered by search occurence
+	 * @param  string $like the term to match with
+	 * @return array       
+	 */
+	public function getSearchSuggestion($like)
+	{
+		$result = array();
+		if($like){
+			$this->db->select('term')->order_by('ranking', 'desc')->limit(5)->like('term', $like)->where('ranking >', 0);
+			$matches = $this->db->get('search_occurence');
+			foreach($matches->result() as $match){
+				array_push($result, $match->term);
+			}
+		}
+		return $result;
 	}
 
 	/**
@@ -221,24 +245,6 @@ class Stats {
 				$this->db->insert('search_occurence', array('term'=>$match['term'], 'occurence'=>$match['occurence']));
 			}
 		}
-	}
-
-	/**
-	 * return a list of top 5 ranked search suggestion, ordered by search occurence
-	 * @param  string $like the term to match with
-	 * @return array       
-	 */
-	public function getSearchSuggestion($like)
-	{
-		$result = array();
-		if($like){
-			$this->db->select('term')->order_by('ranking', 'desc')->limit(5)->like('term', $like)->where('ranking >', 0);
-			$matches = $this->db->get('search_occurence');
-			foreach($matches->result() as $match){
-				array_push($result, $match->term);
-			}
-		}
-		return $result;
 	}
 
 
