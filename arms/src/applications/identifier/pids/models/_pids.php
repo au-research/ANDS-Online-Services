@@ -22,7 +22,6 @@ class _pids extends CI_Model
 		return $result->result_array();
 	}
 
-
 	function addTrustedClient($ip, $desc, $appId){
 			$requestURI = $this->PIDS_SERVICE_BASE_URI.'addClient';
 			$requestURI .= "?ip=".$ip."&desc=".$desc;

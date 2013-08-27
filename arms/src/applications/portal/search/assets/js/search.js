@@ -124,18 +124,18 @@ function executeSearch(searchData, searchUrl){
 			data: {filters:searchData},
 			dataType:'json',
 			success: function(data){
-				// log(data);
+				console.log(data);
 				$.each(data.result.docs, function(){
 					// log(this.display_title, this.score, this.id);
 				});
 
 				var numFound = data.result.numFound;
-			        var numReturned = data.result.docs.length;
+			    var numReturned = data.result.docs.length;
 				$('#search-result, .pagination, #facet-result, #search_notice').empty();
 
 				//search result
 				var template = $('#search-result-template').html();
-				var output = Mustache.render(template, data.result);
+				var output = Mustache.render(template, data);
 				$('#search-result').html(output);
 
 				//pagination
@@ -475,8 +475,8 @@ function initSearchPage(){
 		});
 	}
 
-	//update search term
-	if(searchData['q']){
+	//update search term if there's no blocking ie no fuzzy search conducted or no result
+	if(searchData['q']!='' && $('.block-record').length==0){
 		$.ajax({
 			url:base_url+'search/registerSearchTerm', 
 			type: 'POST',

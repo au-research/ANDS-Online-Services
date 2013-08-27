@@ -82,35 +82,57 @@ Only records which have coverage of the search region will be displayed.
 </script>
 
 <script type="text/x-mustache" id="search-result-template">
-{{#docs}}
-	<div class="post clear" ro_id="{{id}}">
-		{{#contributor_page}}
-		<span class="contributor hide" slug="{{slug}}">{{contributor_page}}</span>
-		{{/contributor_page}}
-		{{#logo}}
-			<img src="{{logo}}" class="logo right"/>
-		{{/logo}}
-		{{#class}}
-			<img src="<?php echo base_url();?>assets/img/{{class}}.png" class="class_icon icontip_{{class}}" type="{{class}}"/>
-	    {{/class}}
-		{{#list_title}}
-			<a href="<?php echo base_url();?>{{slug}}" class="title">{{list_title}}</a>
-		{{/list_title}}
-		{{#description}}
-			<div class="excerpt">
-			  {{description}}
-			</div>
-	        {{/description}}
+{{#fuzzy_result}}
+	<div class="block-record hide"></div>
+	<p>Your search term -<b>{{search_term}}</b>- did not return any result. Here are some alternatives that might match your queries</p>
+{{/fuzzy_result}}
+{{#no_result}}
+	<div class="block-record hide"></div>
+	<p>The search term - <b>{{search_term}}</b> did not return any result.</p>
+	<p>Suggestion:</p>
+	<ul>
+		<li>Make sure that all words are spelled correctly.</li>
+		<li>Try different keywords.</li>
+		<li>Try more general keywords.</li>
+	</ul>
+{{/no_result}}
+{{#has_result}}
+	<div class="results_navi">
+		<div class="results"><span id="numFound">{{numFound}}</span> results ({{timeTaken}} seconds)</div>
+		{{{pagination}}}
+		<div class="clear"></div>
 	</div>
-{{/docs}}
+	{{#result.docs}}
+		<div class="post clear" ro_id="{{id}}">
+			{{#contributor_page}}
+			<span class="contributor hide" slug="{{slug}}">{{contributor_page}}</span>
+			{{/contributor_page}}
+			{{#logo}}
+				<img src="{{logo}}" class="logo right"/>
+			{{/logo}}
+			{{#class}}
+				<img src="<?php echo base_url();?>assets/img/{{class}}.png" class="class_icon icontip_{{class}}" type="{{class}}"/>
+		    {{/class}}
+			{{#list_title}}
+				<a href="<?php echo base_url();?>{{slug}}" class="title">{{list_title}}</a>
+			{{/list_title}}
+			{{#description}}
+				<div class="excerpt">
+				  {{description}}
+				</div>
+		        {{/description}}
+		</div>
+	{{/result.docs}}
+	<div class="results_navi">
+		<div class="results"><span id="numFound">{{numFound}}</span> results ({{timeTaken}} seconds)</div>
+		{{{pagination}}}
+		<div class="clear"></div>
+	</div>
+{{/has_result}}
 </script>
 
 <script type="text/x-mustache" id="pagination-template">
-<div class="results_navi">
-	<div class="results"><span id="numFound">{{numFound}}</span> results ({{timeTaken}} seconds)</div>
-	{{{pagination}}}
-	<div class="clear"></div>
-</div>
+
 </script>
 
 <script type="text/x-mustache" id="facet-template">

@@ -130,6 +130,26 @@ class Search extends MX_Controller {
 			$this->solr->executeSearch();
 		}
 
+		//if still no result is found, do a fuzzy search, store the old search term and search again
+		if($this->solr->getNumFound()==0){
+			$new_search_term = $data['search_term'].'~0.7';
+			$this->solr->setOpt('q', 'fulltext:('.$new_search_term.') OR simplified_title:('.iconv('UTF-8', 'ASCII//TRANSLIT', $new_search_term).')');
+			$this->solr->executeSearch();
+			if($this->solr->getNumFound() > 0){
+				$data['fuzzy_result'] = true;
+			}
+		}
+
+		//give up, cry a lot
+		if($this->solr->getNumFound()==0){
+			$data['no_result'] = true;
+		}else{
+			//continue on life
+			$data['has_result'] = true;
+		}
+
+		//continue on life
+		
 		/**
 		 * Getting the results back
 		 */
@@ -198,6 +218,9 @@ class Search extends MX_Controller {
 		$data['facet_counts'] = $this->solr->getFacet();
 		$data['fieldstrings'] = $this->solr->constructFieldString();
 
+
+
+
 		return $data;
 	}
 
@@ -212,8 +235,6 @@ class Search extends MX_Controller {
 	function registerSearchTerm(){
 		$search_term = $this->input->get('q');
 		$this->stats->registerSearchTerm($this->input->post('term'),$this->input->post('num_found'));
-		// $this->stats->registerSearchStats($this->input->post('term'), $this->input->post('num_found'));
-		// $this->stats->updateSearchTermOccurence();
 	}
 
 	function getAllSubjects($vocab_type){
