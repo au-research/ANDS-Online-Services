@@ -19,13 +19,13 @@
 					<h5>Login</h5>
 				</div>
 				<div class="widget-content">
-					<p>
-						
-					</p>
 					<img src="<?php echo asset_url('img/orcid_tagline.png'); ?>" style="display:block;margin:10px auto;"/>
 					<p>
 						<a href="<?php echo $link?>" class="btn btn-block btn-primary">Login with ORCID ID</a>
 					</p>
+					<div class="alert alert-info">
+						This is a demonstration of ORCID Integration Wizard with <a href="http://researchdata.ands.org.au">Research Data Australia</a>. A <a href="http://sandbox-1.orcid.org/oauth/signin" target="_blank">Sandbox ORCID account</a> is required for testing.
+					</div>
 				</div>
 			</div>
 		</div>

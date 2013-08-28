@@ -145,7 +145,7 @@ You understand that:
 	    <input type="text" class="search-query" id="search_query" value="{{search_query}}"/>
 	    <button type="submit" class="btn">Search</button>
 	</div>
-	Total number of PIDs owned: <strong>{{result_count}}</strong>
+	Total number of Identifiers owned: <strong>{{result_count}}</strong>
 </form>
 {{#no_result}}
 <div class="well">No result!</div>
