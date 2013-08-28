@@ -81,7 +81,7 @@ Only records which have coverage of the search region will be displayed.
 <script type="text/x-mustache" id="search-result-template">
 {{#fuzzy_result}}
 	<div class="block-record hide"></div>
-	<p>Your search term -<b>{{search_term}}</b>- did not return any result. Here are some alternatives that might match your queries</p>
+	<p class="fuzzy-suggest">Your search for '<b>{{search_term}}</b>' returned 0 results. Below are some alternatives which closely match your query.</p>
 {{/fuzzy_result}}
 {{#no_result}}
 	<div class="block-record hide"></div>
