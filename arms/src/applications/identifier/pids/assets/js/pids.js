@@ -6,6 +6,7 @@ $(function(){
 $(document).on('click', '#mint_confirm', function(){
 	if($(this).hasClass('disabled')) return false;
 	$(this).button('loading');
+	var theButton = this;
 	var url = $('#mint_form input[name=url]').val();
 	var desc = $('#mint_form input[name=desc]').val();
 	$.ajax({
@@ -13,9 +14,12 @@ $(document).on('click', '#mint_confirm', function(){
 		type: 'POST',
 		data: {url:url, desc:desc},
 		success: function(data){
-			// $(this).button('reset');
-			// $('#mint_modal').modal('hide');
-			location.reload();
+			if(data.error){
+				$('#result').html(data.error).addClass('label label-important');
+				$(theButton).button('reset');
+			}else{
+				location.reload();
+			}
 		}
 	});
 }).on('click', '.load_more', function(){

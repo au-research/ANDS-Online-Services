@@ -1,12 +1,13 @@
 <?php  $this->load->view('header');?>
 <div class="content-header">
-	<h1>Persistent Identifier Service (PIDS)</h1>
+	<h1>List Trusted Clients</h1>
 	<div class="btn-group">
 		<a data-toggle="modal" href="#add_trusted_client_modal" href="javascript:;" class="btn btn-large"><i class="icon icon-plus"></i> Add Trusted Clients</a>
 	</div>
 </div>
 <div id="breadcrumb" style="clear:both;">
-	<?php echo anchor('pids', '<i class="icon-home"></i> List My Identifiers'); ?>
+	<?php echo anchor(registry_url('auth/dashboard'), '<i class="icon-home"></i> Home'); ?>
+	<?php echo anchor('/pids', 'Identify My Data'); ?>
 	<?php echo anchor('pids/list_trusted', 'List Trusted Clients', array('class'=>'current')); ?>
 </div>
 <div class="container-fluid" id="main-content">

@@ -3,7 +3,8 @@
 	<h1><?php echo $pid['handle'];?></h1>
 </div>
 <div id="breadcrumb" style="clear:both;">
-	<?php echo anchor('/pids', '<i class="icon-home"></i> List My Identifiers'); ?>
+	<?php echo anchor(registry_url('auth/dashboard'), '<i class="icon-home"></i> Home'); ?>
+	<?php echo anchor('/pids', 'Identify My Data'); ?>
 	<?php echo anchor('/pids/view/?handle='.$pid['handle'], $pid['handle'], array('class'=>'current')); ?>
 </div>
 <div class="container-fluid" id="main-content">
@@ -15,15 +16,16 @@
 					<h5><?php echo $pid['handle'];?></h5>
 				</div>
 				<div class="widget-content">
-					Resolver Link: <?php echo '<a href="'.$resolver_url.'">'.$resolver_url.'</a>' ?>
 					<dl>
-						<?php if(isset($pid['desc'])): ?>
+						<dt>Resolver Link</dt>
+						<dd><?php echo '<a href="'.$resolver_url.'">'.$resolver_url.'</a>' ?></dd>
+						<?php if(isset($pid['desc']) && sizeof($pid['desc'])>0): ?>
 							<dt>Description</dt>
 							<?php foreach($pid['desc'] as $key=>$value): ?>
 							<dd><?php echo $value; ?></dd>
 							<?php endforeach; ?>
 						<?php endif; ?>
-						<?php if(isset($pid['url'])): ?>
+						<?php if(isset($pid['url']) && sizeof($pid['url'])>0): ?>
 							<dt>URL</dt>
 							<?php foreach($pid['url'] as $key=>$value): ?>
 							<dd><?php echo $value; ?></dd>
@@ -32,7 +34,6 @@
 					</dl>
 					<a data-toggle="modal" href="#edit_modal" href="javascript:;" class="btn btn-primary">Edit</a>
 					<a href="javascript:;" class="btn btn-link" id="reassign_toggle">Re-assign Ownership</a>
-
 					<span id="reassign">
 						<hr/>
 						Re-assign the ownership of this handle to: 

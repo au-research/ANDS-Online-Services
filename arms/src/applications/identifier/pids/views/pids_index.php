@@ -8,14 +8,15 @@
 
 <?php  $this->load->view('header');?>
 <div class="content-header">
-	<h1>Persistent Identifier Service (PIDS)</h1>
+	<h1>Identify My Data</h1>
 	<div class="btn-group">
 		<a data-toggle="modal" href="#mint_modal" href="javascript:;" class="btn btn-large"><i class="icon icon-plus"></i> Mint a new Identifier</a>
 		<?php if($this->user->hasFunction('SUPERUSER')) echo anchor('/pids/list_trusted','List Trusted Clients', array('class'=>'btn btn-large')); ?>
 	</div>
 </div>
 <div id="breadcrumb" style="clear:both;">
-	<?php echo anchor('/pids', '<i class="icon-home"></i> List My Identifiers', array('class'=>'current')); ?>
+	<?php echo anchor(registry_url('auth/dashboard'), '<i class="icon-home"></i> Home'); ?>
+	<?php echo anchor('/pids', '<i class="icon-home"></i> Identify My Data', array('class'=>'current')); ?>
 </div>
 <input type="hidden" value="<?php echo $identifier; ?>" id="identifier"/>
 <div class="container-fluid" id="main-content">
@@ -25,7 +26,7 @@
 		<div class="span8">
 			<div class="widget-box">
 				<div class="widget-title">
-					<h5>PIDs</h5>
+					<h5></h5>
 					<select class="chosen" id="pid_chooser">
 						<option value=""></option>
 						<?php foreach($orgRole as $o): ?>
@@ -46,7 +47,7 @@
 <div class="modal hide fade" id="mint_modal">
 	<div class="modal-header">
 		<a href="javascript:;" class="close" data-dismiss="modal">×</a>
-		<h3>Mint a new PID</h3>
+		<h3>Mint a new Identifier</h3>
 	</div>
 	
 	<div class="modal-screen-container">
@@ -58,7 +59,7 @@
 				<div class="control-group">
 					<label class="control-label">URL</label>
 					<div class="controls">
-						<input type="url" name="url" value="http://"/>
+						<input type="url" name="url" value="" placeholder="http://"/>
 					</div>
 				</div>
 				<div class="control-group">
@@ -132,6 +133,7 @@ You understand that:
 		</div>
 	</div>
 	<div class="modal-footer">
+		<span id="result"></span>
 		<a id="mint_confirm" href="javascript:;" class="btn btn-primary" data-loading-text="Minting...">Mint</a>
 		<a href="#" class="btn hide" data-dismiss="modal">Close</a>
 	</div>
@@ -155,18 +157,19 @@ You understand that:
 		<h5><a href="<?php echo base_url();?>pids/view/?handle={{handle}}">{{handle}}</a></h5>
 	</div>
 	<div class="widget-content">
-	{{#resolver_url}}
-		Resolver Link: <a href="{{resolver_url}}">{{resolver_url}}</a>
-	{{/resolver_url}}
-	<dl class="dl-nomargin">
-		{{#hasDESC}}<dt>Description</dt>{{/hasDESC}}
-		{{#DESC}}
-			<dd><span class="desc">{{.}}</span></dd>
-		{{/DESC}}
-		{{#hasURL}}<dt>URL</dt>{{/hasURL}}
-		{{#URL}}
-			<dd>{{URL}}</dd>
-		{{/URL}}
+		<dl class="dl-nomargin">
+			{{#resolver_url}}
+				<dt>Resolver Link</dt> 
+				<dd><a href="{{resolver_url}}">{{resolver_url}}</a></dd>
+			{{/resolver_url}}
+			{{#hasDESC}}<dt>Description</dt>{{/hasDESC}}
+			{{#DESC}}
+				<dd><span class="desc">{{.}}</span></dd>
+			{{/DESC}}
+			{{#hasURL}}<dt>URL</dt>{{/hasURL}}
+			{{#URL}}
+				<dd>{{URL}}</dd>
+			{{/URL}}
 		</dl>
 	</div>	
 </div>
@@ -183,15 +186,19 @@ You understand that:
 		<h5><a href="<?php echo base_url();?>pids/view/?handle={{handle}}">{{handle}}</a></h5>
 	</div>
 	<div class="widget-content">
-	<dl>
-		{{#DESC}}
-			<dt>Description</dt>
-			<dd><span class="desc">{{DESC}}</span></dd>
-		{{/DESC}}
-		{{#URL}}
-			<dt>URL</dt>
-			<dd>{{URL}}</dd>
-		{{/URL}}
+		<dl class="dl-nomargin">
+			{{#resolver_url}}
+				<dt>Resolver Link</dt> 
+				<dd><a href="{{resolver_url}}">{{resolver_url}}</a></dd>
+			{{/resolver_url}}
+			{{#hasDESC}}<dt>Description</dt>{{/hasDESC}}
+			{{#DESC}}
+				<dd><span class="desc">{{.}}</span></dd>
+			{{/DESC}}
+			{{#hasURL}}<dt>URL</dt>{{/hasURL}}
+			{{#URL}}
+				<dd>{{URL}}</dd>
+			{{/URL}}
 		</dl>
 	</div>	
 </div>
