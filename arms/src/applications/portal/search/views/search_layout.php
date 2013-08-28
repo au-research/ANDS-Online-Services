@@ -30,10 +30,7 @@
 		<!-- <a href="javascript:;" class="toggle_sidebar"></a>	 -->
 		<div class="clear"></div>
 	</div>
-	
-	<div class="pagination"></div>
 	<div id="search-result"></div>
-	<div class="pagination"></div>
 <div id="collection_explanation" class="hide">
 	<strong>Collection</strong><br />
 	Research dataset or collection of research materials.

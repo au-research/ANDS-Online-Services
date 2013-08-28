@@ -132,7 +132,12 @@ class Search extends MX_Controller {
 
 		//if still no result is found, do a fuzzy search, store the old search term and search again
 		if($this->solr->getNumFound()==0){
-			$new_search_term = $data['search_term'].'~0.7';
+			$new_search_term_array = explode(' ', $data['search_term']);
+			$new_search_term='';
+			foreach($new_search_term_array as $c ){
+				$new_search_term .= $c.'~0.8 ';
+			}
+			// $new_search_term = $data['search_term'].'~0.7';
 			$this->solr->setOpt('q', 'fulltext:('.$new_search_term.') OR simplified_title:('.iconv('UTF-8', 'ASCII//TRANSLIT', $new_search_term).')');
 			$this->solr->executeSearch();
 			if($this->solr->getNumFound() > 0){
