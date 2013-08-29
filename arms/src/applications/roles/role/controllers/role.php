@@ -39,6 +39,7 @@ class Role extends MX_Controller {
 
 		$data['role'] = $this->roles->get_role(rawurldecode($role_id));
 
+
 		$this->load->model('cosi_authentication', 'cosi');
 		$data['childs'] = $this->roles->list_childs($role_id); //only get explicit
 
@@ -69,7 +70,7 @@ class Role extends MX_Controller {
 			$post = $this->input->post();
 			if(trim($post['authentication_service_id'])=='') unset($post['authentication_service_id']);
 			$this->roles->add_role($post);
-			redirect('role/view/'.rawurlencode($post['role_id']));
+			redirect('role/view/?role_id='.rawurlencode($post['role_id']));
 		}else{
 			$data['title'] = 'Add New Role';
 			$data['js_lib'] = array('core');
