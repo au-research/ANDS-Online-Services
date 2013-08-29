@@ -48,7 +48,17 @@
 		<h3>Who contributes to Research Data Australia?</h3>
 		<p><a href="<?=base_url('home/contributors');?>" id=""><strong><?php echo sizeof($groups);?> research organisations</strong></a> from around Australia contribute information to Research Data Australia.</p> 			
 		<a href="<?=base_url('home/contributors');?>" id=""><strong>See All</strong></a>
-	</div><!-- right -->		
+		<p></p>
+		<!-- AddThis Button BEGIN -->
+		<div class="addthis_toolbox addthis_default_style ">
+			<a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+			<a class="addthis_button_tweet"></a>
+			<a class="addthis_counter addthis_pill_style"></a>
+		</div>
+		<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=xa-521ea5093dcee175&async=1"></script>
+		<!-- AddThis Button END -->
+		<a href="javascript:;" class="sharing_widget">Share</a>
+	</div>
 	<div class="clear"></div>
 
 	

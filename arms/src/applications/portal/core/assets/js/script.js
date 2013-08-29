@@ -1,4 +1,3 @@
-
 $(document).ready(function() {
 	initTips();
 
@@ -203,6 +202,12 @@ $(document).ready(function() {
 			}
 		}
 	});
+
+
+$(document).on('click', '.sharing_widget', function(){
+	addthis.init();
+	$(this).remove();
+});
 
 function validateEmail(email) 
 {

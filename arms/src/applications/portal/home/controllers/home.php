@@ -46,6 +46,7 @@ class Home extends MX_Controller {
 		$this->load->view('home', $data);
 	}
 
+
 	function contributors(){
 		//solr for counts
 		$this->load->library('solr');
