@@ -25,6 +25,7 @@ class Records extends CI_Model
 		$args['clause'] = array();
 		$args['wherein'] = false;
 		$count = '';
+		$deleted_records = array();
 		if ($after)
 		{
 			$args["clause"]["registry_object_attributes.value >="] = $after->getTimestamp();
@@ -72,7 +73,10 @@ class Records extends CI_Model
 					 false);
 
 		// get the deleted ones! and added to the count...
-		$deleted_records = $this->ro->getDeletedRegistryObjects($delArgs);
+		if($after && $before)
+		{
+			$deleted_records = $this->ro->getDeletedRegistryObjects($delArgs);
+		}
 		if (is_array($count) && isset($count[0]["count(distinct(registry_objects.registry_object_id))"]))
 		{
 			$count[0]["count(distinct(registry_objects.registry_object_id))"] = (int)$count[0]["count(distinct(registry_objects.registry_object_id))"] + sizeof($deleted_records);
@@ -153,15 +157,33 @@ class Records extends CI_Model
 	{
 		$this->load->model('registry_object/Registry_objects', 'ro');	
 		$ro = $this->ro->getPublishedByKey($identifier);
+		$deleted = false;
+		$del_ro = null;
 		if(!$ro && preg_match('/^oai:.*?::[0-9]+/', $identifier))
 		{
 			$ident = explode("::", $identifier);
 			$identifier = $ident[1];
 			$ro = $this->ro->getByID($identifier);
 		}
+		if(!$ro)
+		{
+			$deleted_records = $this->ro->getDeletedRegistryObjects(array('key'=>$identifier));
+			if(is_array($deleted_records))
+			{
+				foreach ($deleted_records as $del_ro)
+				{
+					$ro = (object) array('registry_object_id'=>$del_ro['key'], 'status' => 'deleted', 'deleted'=>$del_ro['deleted'], 'sets' => array('class'=>$del_ro['class'],'group'=>$del_ro['group'],'datasource'=>$del_ro['datasource'] )); 
+					$deleted = true;
+				}
+			}
+
+		}
 		if($ro)
 		{
-			return new _record($ro, $this->db);
+			if($deleted)
+				return $ro;
+			else
+				return new _record($ro, $this->db);
 		}		
 		else
 		{
