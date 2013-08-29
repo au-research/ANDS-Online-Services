@@ -714,19 +714,36 @@ class Registry_objects extends CI_Model {
 
 		if (isPublishedStatus($target_ro->status))
 		{
+			
+			$this->load->model('data_source/data_sources', 'ds');
+			$data_source = $this->ds->getByID($target_ro->data_source_id);
+			
 			// Handle URL backup
+			
+
+
+
 			$this->db->where('registry_object_id', $target_ro->id);
 			$this->db->update('url_mappings', array(	"registry_object_id"=>NULL, 
 														"search_title"=>$target_ro->title, 
 														"updated"=>time()
 													));
 
+			//remore previous records from the deleted_registry_objects table
+			
+			$this->db->delete('deleted_registry_objects', array('key'=>$target_ro->key));
+			
 			// Add to deleted_records table
+
+
 			$this->db->set(array(
 								'data_source_id'=>$target_ro->data_source_id,
 								'key'=>$target_ro->key,
 								'deleted'=>time(),
 								'title'=>$target_ro->title,
+								'class'=>$target_ro->class,
+								'group'=>str_replace("0x20"," ",$target_ro->group),
+								'ds_slug'=>$data_source->slug,
 								'record_data'=>$target_ro->getRif(),
 							));
 			$this->db->insert('deleted_registry_objects');
@@ -740,8 +757,6 @@ class Registry_objects extends CI_Model {
 
 				if($result->responseHeader->status != 0)
 				{			
-					$this->load->model('data_source/data_sources', 'ds');
-					$data_source = $this->ds->getByID($target_ro->data_source_id);
 					$data_source->append_log("Failed to erase from SOLR: id:" .$target_ro->id , 'error', 'registry_object');
 				}
 				else{
@@ -768,9 +783,9 @@ class Registry_objects extends CI_Model {
 		return $reenrich_queue;
 	}
 
-	public function getDeletedRegistryObjects($data_source_id)
+	public function getDeletedRegistryObjects($search_criteria)
 	{
-		$query = $this->db->get_where('deleted_registry_objects', array("data_source_id" => $data_source_id));
+		$query = $this->db->get_where('deleted_registry_objects', $search_criteria);
 		if ($query->num_rows() == 0)
 		{
 			return NULL;

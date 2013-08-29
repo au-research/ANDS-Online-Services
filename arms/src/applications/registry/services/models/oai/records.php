@@ -20,18 +20,21 @@ class Records extends CI_Model
 		$this->load->model('oai/Sets', 'sets');
 		$this->load->model('registry_object/Registry_objects', 'ro');
 		$args = array();
-		$args['rawclause'] = array("registry_objects.status in" => "('PUBLISHED', 'DELETED')");
+		$delArgs = array();
+		$args['rawclause'] = array('registry_objects.status' => "'PUBLISHED'");
 		$args['clause'] = array();
 		$args['wherein'] = false;
 		$count = '';
 		if ($after)
 		{
 			$args["clause"]["registry_object_attributes.value >="] = $after->getTimestamp();
+			$delArgs['deleted >='] = $after->getTimestamp();
 		}
 
 		if ($before)
 		{
 			$args["clause"]["registry_object_attributes.value <="] = $before->getTimestamp();
+			$delArgs['deleted <='] = $before->getTimestamp();
 		}
 
 		if ($after or $before)
@@ -42,6 +45,7 @@ class Records extends CI_Model
 		if ($set)
 		{
 			$args["wherein"] = $this->sets->getIDsForSet($set);
+			$delArgs[$set->source] = $set->val;
 		}
 
 		if(!($set&&!$args["wherein"]))
@@ -66,6 +70,16 @@ class Records extends CI_Model
 							     return $db;
 						     })),
 					 false);
+
+		// get the deleted ones! and added to the count...
+		$deleted_records = $this->ro->getDeletedRegistryObjects($delArgs);
+		if (is_array($count) && isset($count[0]["count(distinct(registry_objects.registry_object_id))"]))
+		{
+			$count[0]["count(distinct(registry_objects.registry_object_id))"] = (int)$count[0]["count(distinct(registry_objects.registry_object_id))"] + sizeof($deleted_records);
+		}
+		else{
+			$count[0]["count(distinct(registry_objects.registry_object_id))"] = sizeof($deleted_records);
+		}
 		}
 		if (!is_array($count)||$count[0]["count(distinct(registry_objects.registry_object_id))"]==0)
 		{
@@ -100,12 +114,21 @@ class Records extends CI_Model
 					   true,
 					   100,
 					   $start);
-		if (isset($records))
+
+		if (isset($records) || isset($deleted_records))
 		{
 			foreach ($records as &$ro)
 			{
 				$ro = new _record($ro, $this->db);
 				$ro->sets = $this->sets->get($ro->id);
+			}
+			if(isset($deleted_records))
+			{
+				foreach ($deleted_records as $del_ro)
+				{
+					$del_ro = (object) array('registry_object_id'=>$del_ro['key'], 'status' => 'deleted', 'deleted'=>$del_ro['deleted'], 'sets' => array('class'=>$del_ro['class'],'group'=>$del_ro['group'],'datasource'=>$del_ro['datasource'] )); 
+					$records[] = $del_ro;
+				}
 			}
 			return array('records' => $records,
 			     'cursor' => $start + count($records),
