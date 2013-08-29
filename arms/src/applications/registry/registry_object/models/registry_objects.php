@@ -742,8 +742,8 @@ class Registry_objects extends CI_Model {
 								'deleted'=>time(),
 								'title'=>$target_ro->title,
 								'class'=>$target_ro->class,
-								'group'=>str_replace("0x20"," ",$target_ro->group),
-								'ds_slug'=>$data_source->slug,
+								'group'=> str_replace(" ", "0x20", $target_ro->group),
+								'datasource'=> str_replace(" ", "0x20", $data_source->slug),
 								'record_data'=>$target_ro->getRif(),
 							));
 			$this->db->insert('deleted_registry_objects');

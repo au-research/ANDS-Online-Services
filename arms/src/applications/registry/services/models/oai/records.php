@@ -117,10 +117,16 @@ class Records extends CI_Model
 
 		if (isset($records) || isset($deleted_records))
 		{
-			foreach ($records as &$ro)
+			if(isset($records))
 			{
-				$ro = new _record($ro, $this->db);
-				$ro->sets = $this->sets->get($ro->id);
+				foreach ($records as &$ro)
+				{
+					$ro = new _record($ro, $this->db);
+					$ro->sets = $this->sets->get($ro->id);
+				}
+			}
+			else{
+				$records = array();
 			}
 			if(isset($deleted_records))
 			{

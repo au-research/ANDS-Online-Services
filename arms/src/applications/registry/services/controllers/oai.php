@@ -300,11 +300,11 @@ class Oai extends MX_Controller
 				{
 					$this->output->append_output("\t\t<record>\n");
 					$this->output->append_output(sprintf("\t\t\t<header%s>\n", $status));
-					$this->output->append_output("\t\t\t<identifier>" . sprintf($rec->registry_object_id, "ands.org.au") . "</identifier>\n");
-					$this->output->append_output("\t\t\t<datestamp>" .gmdate('Y-m-d\TH:i:s\+\Z', $rec->deleted) ."</datestamp>\n");
+					$this->output->append_output("\t\t\t\t<identifier>" . sprintf($rec->registry_object_id, "ands.org.au") . "</identifier>\n");
+					$this->output->append_output("\t\t\t\t<datestamp>" .gmdate('Y-m-d\TH:i:s\+\Z', $rec->deleted) ."</datestamp>\n");
 					foreach ($rec->sets as $key=>$val)
 					{
-						$this->output->append_output(sprintf("\t\t\t<setSpec>%s:%s</setSpec>\n", $key, $val));
+						$this->output->append_output(sprintf("\t\t\t\t<setSpec>%s:%s</setSpec>\n", $key, $val));
 					}
 					$this->output->append_output("\t\t\t</header>\n");
 					$this->output->append_output("\t\t</record>\n");
