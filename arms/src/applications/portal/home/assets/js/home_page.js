@@ -12,16 +12,15 @@ $(document).ready(function() {
 		    slideshowSpeed: 7500,
 		    directionNav:true,
 		    pauseOnHover:true,
-		    pausePlay: false,
 		  });
 		$('.slides li img').qtip({
 			position:{my:'left center', at:'center right', viewport:$(window)},
 			style: {classes: 'ui-tooltip-light ui-tooltip-shadow',width: '150px'},
-		}, event); // Pass through our original event to qTip
+		}); // Pass through our original event to qTip
 
-		$('#spotlight').on('mouseover', function(){
+		$(document).on('mouseover', '#spotlight', function(){
 			$('.pauseicon', this).show();
-		}).on('mouseout', function(){
+		}).on('mouseout', '#spotlight', function(){
 			$('.pauseicon', this).hide();
 		});
 	}
