@@ -29,8 +29,6 @@
 	</div>
 </div>
 
-
-
 <div class="modal hide fade" id="add_blob_modal">
 	<div class="modal-header">
 		<a href="javascript:;" class="close" data-dismiss="modal">×</a>
