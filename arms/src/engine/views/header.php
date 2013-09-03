@@ -12,7 +12,7 @@
 // Variable defaults
 $js_lib = !isset($js_lib) ? array() : $js_lib;
 $title = !isset($title) ? "" : $title;
-
+$base_url = str_replace('/apps','',base_url());
 // Page header style is blue if the environment is not Production
 if($this->config->item('environment_name'))
 {
@@ -51,26 +51,26 @@ else
     <meta name="author" content="">
 
     <!-- Twitter Bootstrap Styles -->
-    <link href="<?php echo base_url();?>assets/lib/twitter_bootstrap/css/bootstrap.css" rel="stylesheet">
-    <link href="<?php echo base_url();?>assets/lib/twitter_bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="<?php echo$base_url;?>assets/lib/twitter_bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="<?php echo$base_url;?>assets/lib/twitter_bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
 
 
 
     <!-- ANDS print stylesheet-->
-    <link href="<?php echo base_url();?>assets/css/print.css" rel="stylesheet/less" type="text/css" media="print">
+    <link href="<?php echo$base_url;?>assets/css/print.css" rel="stylesheet/less" type="text/css" media="print">
 
     <!-- Libraries Styles-->
-    <link rel="stylesheet" href="<?php echo base_url();?>assets/lib/chosen/chosen.css">
-    <link rel="stylesheet" href="<?php echo base_url();?>assets/lib/bootstrap_toggle_button/jquery.toggle.buttons.css">
-    <link rel="stylesheet" href="<?php echo base_url();?>assets/lib/qtip2/jquery.qtip.min.css">
-    <link rel="stylesheet" href="<?php echo base_url();?>assets/lib/youtubepopup/jquery-ui.css">
+    <link rel="stylesheet" href="<?php echo$base_url;?>assets/lib/chosen/chosen.css">
+    <link rel="stylesheet" href="<?php echo$base_url;?>assets/lib/bootstrap_toggle_button/jquery.toggle.buttons.css">
+    <link rel="stylesheet" href="<?php echo$base_url;?>assets/lib/qtip2/jquery.qtip.min.css">
+    <link rel="stylesheet" href="<?php echo$base_url;?>assets/lib/youtubepopup/jquery-ui.css">
     <!-- unicorn -->
-    <link href="<?php echo base_url();?>assets/lib/unicorn_styles/css/uniform.css" rel="stylesheet">
-    <link href="<?php echo base_url();?>assets/lib/unicorn_styles/css/unicorn.main.css" rel="stylesheet">
-    <link href="<?php echo base_url();?>assets/lib/unicorn_styles/css/unicorn.grey.css" rel="stylesheet">
+    <link href="<?php echo$base_url;?>assets/lib/unicorn_styles/css/uniform.css" rel="stylesheet">
+    <link href="<?php echo$base_url;?>assets/lib/unicorn_styles/css/unicorn.main.css" rel="stylesheet">
+    <link href="<?php echo$base_url;?>assets/lib/unicorn_styles/css/unicorn.grey.css" rel="stylesheet">
     <!-- ANDS Less file and general styling correction-->
-    <link href="<?php echo base_url();?>assets/css/base.css" rel="stylesheet">
-    <link href="<?php echo base_url();?>assets/less/arms.less" rel="stylesheet/less" type="text/css">
+    <link href="<?php echo$base_url;?>assets/css/base.css" rel="stylesheet">
+    <link href="<?php echo$base_url;?>assets/less/arms.less" rel="stylesheet/less" type="text/css">
 
     <!-- additional styles -->
  
@@ -101,7 +101,7 @@ else
 
     <div id="header" <?=$environment_header_style;?>>
       <a href="<?php echo registry_url();?>" title="Back to ANDS Online Services Home" tip="Back to ANDS Online Services Home" my="center left" at="center right">
-        <img src="<?php echo base_url();?>/assets/img/ands_logo_white.png" alt="ANDS Logo White"/> 
+        <img src="<?php echo$base_url;?>/assets/img/ands_logo_white.png" alt="ANDS Logo White"/> 
       </a>
       <strong style="color:<?=$environment_colour;?>;"><?=$environment_name;?></strong>
     </div>
@@ -217,6 +217,7 @@ else
                   <?php if ($this->user->hasFunction('REGISTRY_SUPERUSER')): ?>
                       <li class=""><?php echo anchor(registry_url('administration'), 'Administration Panel');?></li>
                       <li class=""><?php echo anchor(registry_url('maintenance'), 'Maintenance Dashboard');?></li>
+                        <li class=""><?php echo anchor(apps_url('statistics'), 'Statistics');?></li>
                   <?php endif; ?>
                 </ul>
               </li>
