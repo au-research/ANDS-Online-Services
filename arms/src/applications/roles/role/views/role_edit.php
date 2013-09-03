@@ -11,7 +11,7 @@
 	<h1>Edit Role - <?php echo $role->name;?></h1>
 </div>
 <div id="breadcrumb" style="clear:both;">
-	<?php echo anchor('/', '<i class="icon-home"></i> Home', array('class'=>'tip-bottom', 'title'=>'Go to Home')); ?>
+	<?php echo anchor(registry_url('auth/dashboard'), '<i class="icon-home"></i> Home'); ?>
 	<?php echo anchor('/role', 'List Roles'); ?>
 	<?php echo anchor('role/view/?role_id='.rawurlencode($role->role_id), $role->name); ?>
 	<?php echo anchor('/role/edit/'.rawurlencode($role->role_id), 'Edit Role',array('class'=>'current'));?>

@@ -16,7 +16,7 @@
 </div>
 <div id="breadcrumb" style="clear:both;">
 	<?php echo anchor(registry_url('auth/dashboard'), '<i class="icon-home"></i> Home'); ?>
-	<?php echo anchor('/pids', '<i class="icon-home"></i> Identify My Data', array('class'=>'current')); ?>
+	<?php echo anchor('/pids', 'Identify My Data', array('class'=>'current')); ?>
 </div>
 <input type="hidden" value="<?php echo $identifier; ?>" id="identifier"/>
 <div class="container-fluid" id="main-content">
