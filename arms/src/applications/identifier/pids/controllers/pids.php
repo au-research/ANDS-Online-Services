@@ -249,7 +249,7 @@ class Pids extends MX_Controller {
 	}
 
 	function __construct(){
-		acl_enforce('PID_USER');
+		acl_enforce('PIDS_USER');
 		$this->load->model('_pids', 'pids');
 	}
 	//function updateBy
