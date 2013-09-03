@@ -168,6 +168,22 @@ $eDBCONF['vocabs']['autoinit'] = TRUE;
 $eDBCONF['vocabs']['stricton'] = FALSE;
 $eDBCONF['vocabs']['save_queries'] = FALSE; 
 
+$eDBCONF['statistics']['hostname'] = 'localhost';
+$eDBCONF['statistics']['username'] = 'webuser';
+$eDBCONF['statistics']['password'] = '';
+$eDBCONF['statistics']['database'] = 'dbs_statistics';
+$eDBCONF['statistics']['dbdriver'] = 'mysql';
+$eDBCONF['statistics']['dbprefix'] = '';
+$eDBCONF['statistics']['pconnect'] = FALSE;
+$eDBCONF['statistics']['db_debug'] = TRUE;
+$eDBCONF['statistics']['cache_on'] = FALSE;
+$eDBCONF['statistics']['cachedir'] = '';
+$eDBCONF['statistics']['char_set'] = 'utf8';
+$eDBCONF['statistics']['dbcollat'] = 'utf8_general_ci';
+$eDBCONF['statistics']['swap_pre'] = '';
+$eDBCONF['statistics']['autoinit'] = TRUE;
+$eDBCONF['statistics']['stricton'] = FALSE;
+$eDBCONF['statistics']['save_queries'] = FALSE; 
 
 $eDBCONF['dois']['hostname'] = 'ands-dev.anu.edu.au';
 $eDBCONF['dois']['username'] = 'webuser';
