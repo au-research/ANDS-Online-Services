@@ -23,7 +23,7 @@ class Auth extends CI_Controller {
 					if($this->input->post('redirect')){
 						redirect($this->input->post('redirect'));
 					}else{
-						redirect('/');
+						redirect(base_url().'auth/dashboard');
 					}
 				}
 			}
@@ -43,7 +43,7 @@ class Auth extends CI_Controller {
 
 		if($this->input->get('redirect')) {
 			$data['redirect'] = $this->input->get('redirect');
-		}else $data['redirect'] = '';
+		}else $data['redirect'] = base_url().'auth/dashboard';
 		
 		$this->load->view('login', $data);
 	}
@@ -70,7 +70,7 @@ class Auth extends CI_Controller {
 					if($this->input->get('redirect')!='auth/dashboard/'){
 						redirect($this->input->get('redirect'));
 					}else{
-						redirect(base_url()+'auth/dashboard/');
+						redirect(base_url().'auth/dashboard');
 					}
 				}
 				else

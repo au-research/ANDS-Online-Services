@@ -23,6 +23,7 @@ $ENV['pids_server_app_id'] = "";
 /* ENABLED MODULES */
 $ENV['ENABLED_MODULES'] = array(
 	'roles',
+	'pids',
 	'registry',
 	'vocab_service',
 	'mydois',
