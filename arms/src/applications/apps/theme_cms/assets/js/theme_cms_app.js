@@ -74,6 +74,11 @@ function ListCtrl($scope, pages_factory){
 
 function ViewPage($scope, $routeParams, pages_factory, $location){
 
+	$scope.sortableOptions = {
+		handle:'.widget-title',
+		connectWith: '.region'
+	}
+
 	pages_factory.getPage($routeParams.slug).then(function(data){
 		$scope.page = data;
 		$scope.page.left = $scope.page.left || [];
@@ -115,6 +120,15 @@ function ViewPage($scope, $routeParams, pages_factory, $location){
 		if(region=='left'){
 			$scope.page.left.splice(index, 1);
 		}
+	}
+
+	$scope.addImage = function(c){
+		if(!c.img_list) c.img_list = [];
+		c.img_list.push({'src':''});
+	}
+
+	$scope.removeImage = function(c, index){
+		c.img_list.splice(index, 1);
 	}
 
 }

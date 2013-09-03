@@ -113,7 +113,7 @@
 					<div class="widget-title">
 						<h5>Main Content</h5>
 					</div>
-					<div ui-sortable ng-model="page.left" class="widget-content">
+					<div ui-sortable="sortableOptions" ng-model="page.left" class="widget-content region">
 						<div ng-repeat="c in page.left">
 							<div class="widget-box">
 								<div class="widget-title">
@@ -130,6 +130,9 @@
 								<div class="widget-content">
 									<div ng-hide="c.editing">
 										<div ng-bind-html="c.content" ng-show="c.type == 'html'"></div>
+										<div ng-show="c.type=='gallery'" ng-repeat="img in c.img_list">
+											<img src="{{img.src}}" alt="">
+										</div>
 										<hr/>
 										<a href="" ng-click="edit(c)" class="btn">Edit</a>
 										<a href="" ng-click="delete_blob('left', $index)" class="btn btn-danger"><i class="icon-white icon-trash"></i></a>
@@ -137,14 +140,18 @@
 
 									<div ng-show="c.editing">
 
-										<form>
-											<input type="text" ng-model="c.title">
+										<form class="form">
+											<label for="title">Title</label><input type="text" ng-model="c.title">
+											<hr/>
 											<div ng-show="c.type == 'html'">
 												<textarea ui-tinymce ng-model="c.content"></textarea>
 											</div>
 
 											<div ng-show="c.type == 'gallery'">
-												Gallery
+												<div ng-repeat="img in c.img_list">
+													Image Link: <input type="text" ng-model="img.src"> <a href="" class="" ng-click="removeImage(c, $index)"><i class="icon icon-remove"></i></a>
+												</div>
+												<a href="" class="btn btn-primary" ng-click="addImage(c)"><i class="icon-white icon-plus"></i> Add Image</a>
 											</div>
 											
 
@@ -165,9 +172,9 @@
 					<div class="widget-title">
 						<h5>Sidebar</h5>
 					</div>
-					<div class="widget-content">
+					<div class="widget-content region">
 						<!-- <div class="alert alert-info" ng-hide="page.right">There are no content here, add something</div> -->
-						<div ng-repeat="c in page.right">
+						<div ui-sortable="sortableOptions" ng-repeat="c in page.right">
 							<div class="widget-box">
 								<div class="widget-title">
 									<h5>{{c.title}}</h5>
