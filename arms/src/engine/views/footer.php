@@ -127,6 +127,13 @@ $js_lib = !isset($js_lib) ? array() : $js_lib;
         <?php elseif($lib=='google_map'):?>
             <script src="https://maps.googleapis.com/maps/api/js?libraries=drawing&amp;sensor=false" type="text/javascript"></script>
 
+         <?php elseif($lib=='angular'):?>
+            <script src="<?php echo base_url();?>assets/lib/angular.min.js"></script>
+            <script src="<?php echo base_url();?>assets/lib/angularmod/angular-slugify.js"></script>
+            <script src="<?php echo base_url();?>assets/lib/angularmod/sortable.js"></script>
+            <script src="<?php echo base_url();?>assets/lib/angularmod/tinymce.js"></script>
+            <script src="<?php echo base_url();?>assets/lib/angularmod/angular-sanitize-1.0.1.js"></script>
+
         <?php endif; ?>
 
     <?php endforeach;?>
