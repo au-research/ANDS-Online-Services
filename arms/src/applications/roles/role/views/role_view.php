@@ -11,7 +11,8 @@
 	<h1><?php echo $role->name;?></h1>
 </div>
 <div id="breadcrumb" style="clear:both;">
-	<?php echo anchor('/', '<i class="icon-home"></i> List Roles'); ?>
+	<?php echo anchor(registry_url('auth/dashboard'), '<i class="icon-home"></i> Home'); ?>
+	<?php echo anchor('/', 'List Roles'); ?>
 	<?php echo anchor('/role/view/?role_id='.rawurlencode($role->role_id), $role->name, array('class'=>'current'));?>
 </div>
 <div class="container-fluid">
