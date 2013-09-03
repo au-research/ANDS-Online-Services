@@ -90,7 +90,7 @@ class Role extends MX_Controller {
 			$post = $this->input->post();
 			if(!isset($post['enabled'])) $post['enabled']='f';
 			$this->roles->edit_role($role_id, $post);
-			redirect('role/view/'.rawurlencode($role_id));
+			redirect('role/view/?role_id='.rawurlencode($role_id));
 		}else{
 			$data['role'] = $this->roles->get_role($role_id);
 			$data['title'] = 'Edit - '.$data['role']->name;
