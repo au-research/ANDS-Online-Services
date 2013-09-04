@@ -209,10 +209,10 @@ class Auth extends CI_Controller {
 			throw new Exception("Unable to change password unless you are logged in as a built-in COSI user!");
 		}
 
-		if ($this->config->item('authentication_class') != 'cosi_authentication')
-		{
-			throw new Exception("Unable to change password unless the authentication framework is COSI!");
-		}
+		// if ($this->config->item('authentication_class') != 'cosi_authentication')
+		// {
+		// 	throw new Exception("Unable to change password unless the authentication framework is COSI!");
+		// }
 
 		if ($this->input->post('password'))
 		{
