@@ -204,6 +204,11 @@
 					</table>  
 					<?php echo anchor('role/edit/'.rawurlencode($role->role_id), 'Edit', array('class'=>'btn btn-primary'));?>
 					<a class="btn btn-danger" id="delete_role" role_id="<?php echo $role->role_id?>">Delete</a>
+
+					<?php if($role->authentication_service_id == 'AUTHENTICATION_BUILT_IN') 
+						echo '<button class="btn btn-danger" id="reset_pw" role_id="'.$role->role_id.'">Reset Password</button>'
+					?>
+					<span id="msg"></span>
 				</div>
 			</div>
 			
