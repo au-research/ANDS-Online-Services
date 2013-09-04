@@ -15,7 +15,7 @@
 <div id="breadcrumb" style="clear:both;">
 	<?php echo anchor(registry_url('auth/dashboard'), '<i class="icon-home"></i> Home'); ?>
 	<?php echo anchor('/', 'List Roles'); ?>
-	<?php echo anchor('/roles/add/', 'Add Role',array('class'=>'current'));?>
+	<?php echo anchor('/role/add/', 'Add Role',array('class'=>'current'));?>
 </div>
 <div class="container-fluid">
 	<div class="row-fluid">
