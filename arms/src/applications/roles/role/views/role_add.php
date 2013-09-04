@@ -26,6 +26,9 @@
 				<div class="widget-title"><h5>Add Role</h5></div>
 				<div class="widget-content">
 					<form action="?posted=true" method="post" class="form-horizontal">
+						<?php if(isset($message)): ?>
+							<div class="alert alert-danger"><?php echo $message ?></div>
+						<?php endif; ?>
 						<div class="control-group">
 							<label for="" class="control-label">ID *</label>
 							<div class="controls"><input type="text" name="role_id" required></div>
