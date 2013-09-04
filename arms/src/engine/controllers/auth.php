@@ -226,8 +226,8 @@ class Auth extends CI_Controller {
 			}
 			else
 			{
-				$this->load->model('cosi_authentication', 'cosi');
-				$this->cosi->updatePassword($this->user->localIdentifier(), $this->input->post('password'));
+				$this->load->model('role_authentication', 'role');
+				$this->role->updatePassword($this->user->localIdentifier(), $this->input->post('password'));
 				$this->session->set_flashdata('message', 'Your password has been updated. This will be effective from your next login.');
 				redirect('/');
 			}
