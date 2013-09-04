@@ -60,6 +60,17 @@ class Role extends MX_Controller {
 		$this->load->view('role_view', $data);
 	}
 
+	public function checkUniqueRoleId($roleId)
+	{
+		header('Cache-Control: no-cache, must-revalidate');
+		header('Content-type: application/json');
+		$result = array();
+		$result['unique'] = true;
+		if($this->roles->get_role($roleId))
+			$result['unique'] = false;
+		echo json_encode($result);
+	}
+
 	/**
 	 * Controller to handle adding new roles
 	 * If a new role is posted, go back to the dashboard else return the default view
@@ -68,15 +79,27 @@ class Role extends MX_Controller {
 	public function add(){
 		if($this->input->get('posted')){
 			$post = $this->input->post();
-			if(trim($post['authentication_service_id'])=='') unset($post['authentication_service_id']);
-			$this->roles->add_role($post);
-			redirect('role/view/?role_id='.rawurlencode($post['role_id']));
+			$roleId = rawurlencode($post['role_id']);
+			if($this->roles->get_role($roleId))
+			{
+				$data['title'] = 'Add New Role';
+				$data['js_lib'] = array('core');
+				$data['message'] = 'Role ID "'.$roleId.'" already exists';
+				$this->load->view('role_add', $data);
+			}
+			else{
+				if(trim($post['authentication_service_id'])=='') unset($post['authentication_service_id']);
+				$this->roles->add_role($post);
+				redirect('role/view/?role_id='.rawurlencode($post['role_id']));
+			}
 		}else{
 			$data['title'] = 'Add New Role';
 			$data['js_lib'] = array('core');
 			$this->load->view('role_add', $data);
 		}
 	}
+
+
 
 	/**
 	 * Controller to handle updating roles
