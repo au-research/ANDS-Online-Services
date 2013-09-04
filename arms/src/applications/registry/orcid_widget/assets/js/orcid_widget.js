@@ -197,7 +197,7 @@ var OrcidHandler = Class.extend({
 	    this._inputMessage.insertBefore(this._inputLabel);
 	    //console.log(this._input);
 	    this._button = $('<a style="margin-left:1em;float:none;line-height:17px;" class="btn btn-small" data-toggle="modal" role="button">Search</i></a>');
-	    this._lookupbutton = $('<a style="margin-left:1em;positon:relative;float:none;line-height:17px;" class="btn btn-small" data-toggle="modal" role="button">Lookup</a>');	    
+	    this._lookupbutton = $('<a style="margin-left:1em;positon:relative;float:none;line-height:17px;" class="btn btn-small lookup-btn" data-toggle="modal" role="button">Lookup</a>');	    
 	    this._button.attr('id', this._uid);
 	    this._button.insertAfter(afterPos);
 	    this._lookupbutton.insertAfter(afterPos);
