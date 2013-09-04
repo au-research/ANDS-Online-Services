@@ -24,7 +24,7 @@ $(function(){
 			var array = $(this).sortable('toArray');
 			// console.log(array);
 			$.ajax({
-				url:base_url+'spotlight/saveOrder', 
+				url:real_base_url+'apps/spotlight/saveOrder', 
 				type: 'POST',
 				dataType: "html",
 				data: {data:array},
@@ -52,7 +52,7 @@ $(function(){
 		var jsonData = $(form).serializeArray();
 		//console.log(jsonData);
 		$.ajax({
-			url:base_url+'spotlight/save/'+id, 
+			url:real_base_url+'apps/spotlight/save/'+id, 
 			type: 'POST',
 			data: jsonData,
 			dataType: "html",
@@ -68,7 +68,7 @@ $(function(){
 		var id = $(this).attr('_id');
 		if(confirm('Are you sure you want to delete this record?')){
 			$.ajax({
-				url:base_url+'spotlight/delete/'+id, 
+				url:real_base_url+'apps/spotlight/delete/'+id, 
 				type: 'POST',
 				dataType: "html",
 				success: function(data){
@@ -86,7 +86,7 @@ $(function(){
 		if(editor=='tinymce') tinyMCE.triggerSave();
 		var jsonData = $(form).serializeArray();
 		$.ajax({
-			url:base_url+'spotlight/add/', 
+			url:real_base_url+'apps/spotlight/add/', 
 			type: 'POST',
 			dataType: "html",
 			data: jsonData,
@@ -101,7 +101,7 @@ $(function(){
 
 function save(jsonData){
 	$.ajax({
-		url:base_url+'spotlight/save', 
+		url:real_base_url+'apps/spotlight/save', 
 		type: 'POST',
 		dataType: "html",
 		data: {data:jsonData},
