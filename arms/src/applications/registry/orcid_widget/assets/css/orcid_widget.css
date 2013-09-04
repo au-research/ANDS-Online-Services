@@ -64,10 +64,10 @@ input.error{border:1px solid red;}
 
 }
 .orcid-image{
-	background-image:url('../img/orcid-logo.jpg');
+	background-image:url('../img/orcid_tagline_small.png');
 	background-repeat:no-repeat;
 	background-position:right; 
-	width:100px;
+	width:140px;
 	height:50px;
 	position:relative;
 	float:right;
