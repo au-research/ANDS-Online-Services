@@ -18,7 +18,7 @@
 		<a href="#/" class="current">Theme CMS</a>
 	</div>
 	
-	<div class="container-fluid" ng-show="pages.length > 0">
+	<div class="container-fluid">
 		<div class="widget-box">
 			<div class="widget-title">
 				<h5>Pages</h5>
@@ -29,13 +29,16 @@
 						<a href="#/view/{{page}}">{{page}}</a>
 					</li>
 				</ul>
+				<div ng-show="pages.length == 0" class="alert alert-info">
+					There are no existing pages. Create new one with the button bellow
+				</div>
+				<hr>
+				<a class="btn" href="#/new_page"><i class="icon icon-plus"></i> New Page</a>
 			</div>
 		</div>
 	</div>
 
-	<div ng-show="pages.length == 0">
-		Nothing here, create something
-	</div>
+	
 </div>
 
 <div id="new_page_template" class="hide">
@@ -56,7 +59,7 @@
 				<form ng-submit="addPage()" class="form">
 					<fieldset>
 						<label for="">Theme Page Title: </label>
-						<input type="text" placeholder="Theme Page Title" name="title" ng-model="new_page_title"><br/>
+						<input type="text" placeholder="Theme Page Title" name="title" ng-model="new_page_title" required><br/>
 						<span class="help-block" ng-show="new_page_title">A file name {{new_page_title | slugify}}.json will be automatically generated upon creation</span>
 						<button type="submit" class="btn btn-primary">Add New Page</button>
 					</fieldset>
@@ -114,7 +117,7 @@
 						<h5>Main Content</h5>
 					</div>
 					<div ui-sortable="sortableOptions" ng-model="page.left" class="widget-content region">
-						<div ng-repeat="c in page.left">
+						<div ng-repeat="c in page.left" ng-dblclick="edit(c)">
 							<div class="widget-box">
 								<div class="widget-title">
 									<h5>{{c.title}} <small>{{c.type}}</small></h5>
@@ -130,8 +133,13 @@
 								<div class="widget-content">
 									<div ng-hide="c.editing">
 										<div ng-bind-html="c.content" ng-show="c.type == 'html'"></div>
-										<div ng-show="c.type=='gallery'" ng-repeat="img in c.img_list">
+										<div ng-show="c.type=='gallery'" ng-repeat="img in c.gallery">
 											<img src="{{img.src}}" alt="">
+										</div>
+										<div ng-show="c.type=='list_ro'">
+											<ul>
+												<li ng-repeat="ro in c.list_ro">{{ro.key}}</li>
+											</ul>
 										</div>
 										<hr/>
 										<a href="" ng-click="edit(c)" class="btn">Edit</a>
@@ -148,10 +156,29 @@
 											</div>
 
 											<div ng-show="c.type == 'gallery'">
-												<div ng-repeat="img in c.img_list">
-													Image Link: <input type="text" ng-model="img.src"> <a href="" class="" ng-click="removeImage(c, $index)"><i class="icon icon-remove"></i></a>
+												<div ng-repeat="img in c.gallery">
+													Image Link: <input type="text" ng-model="img.src"> <a href="" class="" ng-click="removeFromList('gallery', c, $index)"><i class="icon icon-remove"></i></a>
 												</div>
-												<a href="" class="btn btn-primary" ng-click="addImage(c)"><i class="icon-white icon-plus"></i> Add Image</a>
+												<a href="" class="btn btn-primary" ng-click="addToList('gallery', c)"><i class="icon-white icon-plus"></i> Add Image</a>
+											</div>
+
+											<div ng-show="c.type == 'list_ro'">
+												<div ng-repeat="ro in c.list_ro">
+													Registry Object Key: <input type="text" ng-model="ro.key"> <a href="" class="" ng-click="removeFromList('list_ro', c, $index)"><i class="icon icon-remove"></i></a>
+												</div>
+												<a href="" class="btn btn-primary" ng-click="addToList('list_ro', c)"><i class="icon-white icon-plus"></i> Add Registry Object</a>
+											</div>
+
+											<div ng-show="c.type == 'search'">
+												Search Query: <input type="text" ng-model="c.search.query">
+												<div></div>
+												<a href="" class="btn" ng-click="addToList('search_filters', c.search.fq)"><i class="icon icon-plus"></i> Add Filter</a>
+												<a href="" class="btn" ng-click="preview_search(c)">Preview Search</a>
+												<div ng-show="c.search.id">
+													<ul>
+														<li ng-repeat="doc in search_result.result.docs">{{doc.display_title}}</li>
+													</ul>
+												</div>
 											</div>
 											
 

@@ -1,7 +1,7 @@
 <?php
 
 class Theme_cms extends MX_Controller {
-	private $directory = './assets/theme_pages/';
+	private $directory = './assets/shared/theme_pages/';
 
 	function index(){
 		$this->checkWritable();
@@ -36,7 +36,9 @@ class Theme_cms extends MX_Controller {
 	}
 
 	public function delete_page(){
-		unlink($this->directory.$this->input->post('slug').'.json');
+		$data = file_get_contents('php://input');
+		$array = json_decode($data);
+		unlink($this->directory.$array->slug.'.json');
 	}
 
 	public function save_page(){

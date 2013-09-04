@@ -14,32 +14,32 @@ angular.module('theme_cms_app', ['slugifier', 'ui.sortable', 'ui.tinymce', 'ngSa
 				return promise;
 			},
 			newPage: function(postData){
-				// postData = JSON.stringify(postData);
-				var promise = $http({
-					method: 'POST',
-					url: base_url+'theme_cms/new_page/',
-					data: postData
-				}).then(function(response){
+				var promise = $http.post(base_url+'theme_cms/new_page/', postData).then(function(response){
 					return response.data;
 				});
 				return promise;
 			},
 			deletePage: function(slug){
-				var promise = $http({
-					method: 'POST',
-					url: base_url+'theme_cms/delete_page/',
-					data: $.param({'slug': slug})
-				}).then(function(response){
+				var promise = $http.post(base_url+'theme_cms/delete_page', {'slug':slug}).then(function(response){
 					return response.data;
 				});
 				return promise;
+				
 			},
 			savePage: function(postData){
-				var promise = $http({
-					method: 'POST',
-					url: base_url+'theme_cms/save_page/',
-					data: postData
-				}).then(function(response){
+				var promise = $http.post(base_url+'theme_cms/save_page', postData).then(function(response){
+					return response.data;
+				});
+				return promise;
+			}
+		}
+	}).
+	factory('search_factory', function($http){
+		return{
+			search: function(query, fq){
+				var url = real_base_url+'registry/services/registry/solr_search/?query='+query;
+				// console.log(url);
+				var promise = $http.get(url).then(function(response){
 					return response.data;
 				});
 				return promise;
@@ -60,10 +60,6 @@ angular.module('theme_cms_app', ['slugifier', 'ui.sortable', 'ui.tinymce', 'ngSa
 				controller: ViewPage,
 				template:$('#view_page_template').html()
 			})
-			.when('/delete/:slug', {
-				controller: DeletePage,
-				template:$('#delete_page_template').html()
-			})
 	})
 
 function ListCtrl($scope, pages_factory){
@@ -72,11 +68,14 @@ function ListCtrl($scope, pages_factory){
 	});
 }
 
-function ViewPage($scope, $routeParams, pages_factory, $location){
+function ViewPage($scope, $routeParams, pages_factory, $location, search_factory){
 
 	$scope.sortableOptions = {
 		handle:'.widget-title',
-		connectWith: '.region'
+		connectWith: '.region',
+		stop: function(ev, ui){
+			$scope.save();
+		}
 	}
 
 	pages_factory.getPage($routeParams.slug).then(function(data){
@@ -114,21 +113,35 @@ function ViewPage($scope, $routeParams, pages_factory, $location){
 	$scope.edit = function(c){
 		if(c.editing){
 			c.editing = false;
+			$scope.save();
 		}else c.editing = true;
 	}
 	$scope.delete_blob = function(region, index){
-		if(region=='left'){
-			$scope.page.left.splice(index, 1);
+		$scope.page[region].splice(index, 1);
+	}
+
+	$scope.addToList = function(list_type, list){
+		var newObj = {};
+		switch(list_type){
+			case 'gallery': newObj = {'src':''}; break;
+			case 'list_ro': newObj = {'key':''}; break;
 		}
+		if(!list[list_type]) list[list_type] = [];
+		list[list_type].push(newObj);
 	}
 
-	$scope.addImage = function(c){
-		if(!c.img_list) c.img_list = [];
-		c.img_list.push({'src':''});
+	$scope.removeFromList = function(list_type, list, index){
+		list[list_type].splice(index, 1);
 	}
 
-	$scope.removeImage = function(c, index){
-		c.img_list.splice(index, 1);
+	$scope.preview_search = function(c){
+		if(c.search.query){
+			c.search.id = Math.random().toString(36).substring(7);
+			search_factory.search(c.search.query, null).then(function(data){
+				console.log(data);
+				$scope.search_result = data;
+			});
+		}
 	}
 
 }
@@ -149,14 +162,4 @@ function NewPageCtrl($scope, pages_factory, Slug){
 			}
 		});
 	}
-}
-
-
-
-function DeletePage ($scope, $routeParams, pages_factory) {
-	pages_factory.getPage($routeParams.slug).then(function(data){
-		$scope.page = data;
-		$scope.page.left = $scope.page.left || [];
-		$scope.page.right = $scope.page.right || [];
-	});
 }
