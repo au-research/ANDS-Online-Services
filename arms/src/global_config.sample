@@ -117,23 +117,6 @@ $eDBCONF['portal']['autoinit'] = TRUE;
 $eDBCONF['portal']['stricton'] = FALSE;
 $eDBCONF['portal']['save_queries'] = FALSE; 
 
-$eDBCONF['cosi']['hostname'] = 'ands-dev.anu.edu.au';
-$eDBCONF['cosi']['username'] = 'webuser';
-$eDBCONF['cosi']['password'] = '';
-$eDBCONF['cosi']['database'] = 'dbs_cosi';
-$eDBCONF['cosi']['dbdriver'] = 'postgre';
-$eDBCONF['cosi']['dbprefix'] = '';
-$eDBCONF['cosi']['pconnect'] = FALSE;
-$eDBCONF['cosi']['db_debug'] = TRUE;
-$eDBCONF['cosi']['cache_on'] = FALSE;
-$eDBCONF['cosi']['cachedir'] = '';
-$eDBCONF['cosi']['char_set'] = 'utf8';
-$eDBCONF['cosi']['dbcollat'] = 'utf8_general_ci';
-$eDBCONF['cosi']['swap_pre'] = '';
-$eDBCONF['cosi']['autoinit'] = FALSE;
-$eDBCONF['cosi']['stricton'] = FALSE;
-$eDBCONF['cosi']['save_queries'] = FALSE; 
-
 $eDBCONF['pids']['hostname'] = 'devl.ands.org.au';
 $eDBCONF['pids']['username'] = 'pidmaster';
 $eDBCONF['pids']['password'] = '';

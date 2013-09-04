@@ -40,7 +40,7 @@ class Role extends MX_Controller {
 		$data['role'] = $this->roles->get_role(rawurldecode($role_id));
 
 
-		$this->load->model('cosi_authentication', 'cosi');
+		$this->load->model('role_authentication', 'cosi');
 		$data['childs'] = $this->roles->list_childs($role_id); //only get explicit
 
 		$data['missingRoles'] = $this->roles->get_missing(rawurldecode($role_id));
