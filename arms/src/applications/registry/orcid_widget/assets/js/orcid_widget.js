@@ -191,13 +191,13 @@ var OrcidHandler = Class.extend({
 			var beforePos = this._input;
 		}
 	    this.settings = settings;
-	    this._inputLabel = $("<span id='"+this._uid+"-url'>http://orcid.org/</span>");
+	    this._inputLabel = $("<span id='"+this._uid+"-url'>http://orcid.org/ </span>");
 	    this._inputMessage = $("<span class='orcid_message' id='"+this._uid+"-input-message' style='padding-left:100px'>ORCID Identifier<span><br />")
 	    this._inputLabel.insertBefore(beforePos);
 	    this._inputMessage.insertBefore(this._inputLabel);
 	    //console.log(this._input);
-	    this._button = $('<a style="margin-left:1em;float:none" class="btn" data-toggle="modal" role="button">Search</i></a>');
-	    this._lookupbutton = $('<a style="margin-left:1em;positon:relative;float:none" class="btn" data-toggle="modal" role="button">Lookup</a>');	    
+	    this._button = $('<a style="margin-left:1em;float:none;line-height:17px;" class="btn btn-small" data-toggle="modal" role="button">Search</i></a>');
+	    this._lookupbutton = $('<a style="margin-left:1em;positon:relative;float:none;line-height:17px;" class="btn btn-small" data-toggle="modal" role="button">Lookup</a>');	    
 	    this._button.attr('id', this._uid);
 	    this._button.insertAfter(afterPos);
 	    this._lookupbutton.insertAfter(afterPos);
