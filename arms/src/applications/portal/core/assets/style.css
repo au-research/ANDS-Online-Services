@@ -801,7 +801,8 @@ a.browse_button{
 }
  /* Hide the slides before the JS is loaded. Avoids image jumping */
 .flexslider .slides img {
-	height:90px;
+	/*height:90px;*/
+	max-height:303px;
 	width:auto!important;
     display:block;
     margin: 0 37px 16px 0px;
