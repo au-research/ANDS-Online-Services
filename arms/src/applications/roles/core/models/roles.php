@@ -278,6 +278,12 @@ class Roles extends CI_Model {
         ); 
     }
 
+    function reset_built_in_passphrase($role_id)
+    {
+        $this->cosi_db->where('role_id', $role_id);
+        $this->cosi_db->update('authentication_built_in', array('passphrase_sha1'=>sha1('abc123'))); 
+    }
+
     /**
      * Remove a role and all relations associated with it
      * @param  string $role_id

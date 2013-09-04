@@ -43,4 +43,21 @@ $(document).on('click','.remove_relation',function(){
 	}
 }).on('change', '.chosen', function(){
 	// $(this).trigger("liszt:updated");
-});
+}).on('click', '#reset_pw', function(){
+	var role_id = $(this).attr('role_id');
+	$('#msg').html('').removeClass('label label-success label-important');
+	$.ajax({
+		url:base_url+'role/resetPassphrase/'+role_id, 
+		type: 'GET',
+		success: function(data){
+			if(data.success){
+				$('#msg').addClass('label label-success').html('Success');
+			}else{
+				$('#msg').addClass('label label-important').html('Failed');
+			}
+			console.log(data);
+			// location.reload();
+		}
+	});
+})
+;

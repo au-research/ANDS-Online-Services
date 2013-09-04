@@ -71,6 +71,19 @@ class Role extends MX_Controller {
 		echo json_encode($result);
 	}
 
+	public function resetPassphrase($roleId)
+	{
+		$user = $this->roles->get_role($roleId);
+		$result = array();
+		$result['success'] = false;
+		if($this->roles->get_role($roleId) && $user->authentication_service_id =='AUTHENTICATION_BUILT_IN')
+		{
+			$this->roles->reset_built_in_passphrase($roleId);
+			$result['success'] = true;
+		}
+		echo json_encode($result);
+	}
+
 	/**
 	 * Controller to handle adding new roles
 	 * If a new role is posted, go back to the dashboard else return the default view
