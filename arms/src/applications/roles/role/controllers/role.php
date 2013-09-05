@@ -45,6 +45,11 @@ class Role extends MX_Controller {
 
 		$data['missingRoles'] = $this->roles->get_missing(rawurldecode($role_id));
 
+		if(trim($data['role']->role_type_id)=='ROLE_USER' || trim($data['role']->role_type_id)=='ROLE_ORGANISATIONAL'){
+			$data['doi_app_id'] = $this->roles->list_childs(rawurldecode($role_id), true);
+			$data['missing_doi'] = $this->roles->missing_descendants(rawurldecode($role_id), $data['doi_app_id'], true);
+		}
+
 		if(trim($data['role']->role_type_id)=='ROLE_ORGANISATIONAL' || trim($data['role']->role_type_id)=='ROLE_FUNCTIONAL'){
 			$data['users'] = $this->roles->descendants(rawurldecode($role_id));
 			$data['missingUsers'] = $this->roles->missing_descendants(rawurldecode($role_id), $data['users']);
@@ -97,6 +102,7 @@ class Role extends MX_Controller {
 			{
 				$data['title'] = 'Add New Role';
 				$data['js_lib'] = array('core');
+				$data['scripts'] = array('role_add');
 				$data['message'] = 'Role ID "'.$roleId.'" already exists';
 				$this->load->view('role_add', $data);
 			}
@@ -107,6 +113,7 @@ class Role extends MX_Controller {
 			}
 		}else{
 			$data['title'] = 'Add New Role';
+			$data['scripts'] = array('role_add');
 			$data['js_lib'] = array('core');
 			$this->load->view('role_add', $data);
 		}
