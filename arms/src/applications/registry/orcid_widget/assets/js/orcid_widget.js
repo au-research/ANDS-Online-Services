@@ -251,7 +251,7 @@ var OrcidHandler = Class.extend({
 			'<div class="control-group">' +
 			'<label class="control-label" for="' + this._uids['txtid'] + '">Researcher name</label>' +
 			'<div class="controls input-append" style="display:block">' +
-			'<input type="text" autofocus="autofocus" id="' + this._uids['txtid'] + '" >' +
+			'<input type="text" autofocus="autofocus" id="' + this._uids['txtid'] + '" class="search_input">' +
 			'<button class="btn-primary search_orcid" type="submit" id="' + this._uids['txtid'] + '_button"><i class="icon-white icon-search"> </i> </button>' +
 			'</div></div>' +
 			'</form>' +
@@ -418,7 +418,7 @@ var OrcidHandler = Class.extend({
 	   
 	}, 
 
-/**
+	/**
 	 * silly wrapper to provide input buffering.
 	 * `lookup` makes the ajax call
 	 */
@@ -486,9 +486,10 @@ var OrcidHandler = Class.extend({
 	    this._returnModal = handler.makeReturnModal();
 	    this._returnModal.insertAfter(handler._button);
 	    var returnModal = this._returnModal;
-	   // alert("#" + this._uids['formid'] + "_button")
-	    $('.search_orcid').click(function(e) {
-	    //	alert("we have a hit")
+	   
+
+	    var doSearch = function(e) {
+
 		e.preventDefault();
 
 		var searchVal = $("#" + handler._uids['txtid']).val();
@@ -592,23 +593,32 @@ var OrcidHandler = Class.extend({
 		}else{
 			rdiv.html('<div align="center">You must provide a search value.</div>');
 		}
-	    });
-		
-			this._lookupbutton.on('click', function() {
+	    }
 
-			searchStr = handler._input.val();
-			var surl = handler.settings.endpoint;
-			var theAddress = 'http://pub.orcid.org/'+searchStr+'/orcid-bio';
- 			var rdiv = $("#" + handler._uids['modalReturnId']);
-			rdiv.html('Loading result...');
-			var xhr = $.getJSON(surl,
-				    {
-					'address': theAddress
-				    },
-				    function(data) {
-				    if(data!=null)
-				    {
-						if (typeof(data['orcid-profile']) === 'undefined' ||
+	    $('.search_input').keydown(function(e) {
+   			// test for the enter key
+   			if (e.keyCode == 13) {
+      			$('.search_orcid').trigger('click');
+   			}
+		});
+
+	 	$('.search_orcid').click(doSearch);	
+	 	
+		this._lookupbutton.on('click', function() {
+
+		searchStr = handler._input.val();
+		var surl = handler.settings.endpoint;
+		var theAddress = 'http://pub.orcid.org/'+searchStr+'/orcid-bio';
+ 		var rdiv = $("#" + handler._uids['modalReturnId']);
+		rdiv.html('Loading result...');
+		var xhr = $.getJSON(surl,
+			{
+				'address': theAddress
+			},
+			function(data) {
+				if(data!=null)
+				{
+					if (typeof(data['orcid-profile']) === 'undefined' ||
 					   	 data['orcid-profile'].length === 0) {
 					   	 	handler._inputMessage.html('Invalid ORCID Identifier<br />')
 					   	 	handler._inputMessage.attr('class','error-message')
@@ -649,7 +659,7 @@ var OrcidHandler = Class.extend({
 				  'Search service failed... try again?</div>');
 		    });
 				returnModal.show();
-	    	});
+	    });
 
 	},
 
