@@ -597,12 +597,11 @@ var OrcidHandler = Class.extend({
 		}
 	    }
 
-	    $('.search_input').keydown(function(e) {
-   			// test for the enter key
-   			if (e.keyCode == 13) {
+	    $(document).on('keydown', '.search_input', function(e){
+	    	if (e.keyCode == 13) {
       			$('.search_orcid').trigger('click');
    			}
-		});
+	    });
 
 	 	$('.search_orcid').click(doSearch);	
 	 	
