@@ -20,6 +20,7 @@ class Solr {
 	function __construct(){
         $this->CI =& get_instance();
 		$this->CI->load->library('session');
+        $this->CI->load->helper('engine_helper');
 		$this->init();
     }
 
@@ -200,7 +201,7 @@ class Solr {
                     $this->setOpt('q', $value);
                 break;
                 case 'q': 
-                    $value = escapeSolrValue($value);
+                    $value = $this->escapeSolrValue($value);
                     $this->setOpt('q', 'fulltext:('.$value.') OR simplified_title:('.iconv('UTF-8', 'ASCII//TRANSLIT', $value).')');
                 break;
                 case 'p': 
@@ -248,6 +249,12 @@ class Solr {
                     }
                     $this->setOpt('fl', 'id,spatial_coverage_area_sum,spatial_coverage_centres,spatial_coverage_extents,spatial_coverage_polygons');
                     break;
+                case 'boost':
+                    $this->addQueryCondition('OR key:("'.$value.'")^100');
+                    break;
+                case 'fl':
+                    $this->setOpt('fl', $value);
+                    break;
             }
         }
     }
@@ -284,6 +291,19 @@ class Solr {
 			throw new Exception('SOLR Query failed....ERROR:'.$content.'<br/> QUERY: '.$this->constructFieldString());
 		}
 	}
+
+    function escapeSolrValue($string){
+        //$string = urldecode($string);
+        $match = array('\\','&', '|', '!', '(', ')', '{', '}', '[', ']', '^', '~', '*', '?', ':', ';', '/');
+        $replace = array('\\\\','&', '\\|', '\\!', '\\(', '\\)', '\\{', '\\}', '\\[', '\\]', '\\^', '\\~', '\\*', '\\?', '\\:', '\\;', '\\/');
+        $string = str_replace($match, $replace, $string);
+
+        if(substr_count($string, '"') % 2 != 0){
+            $string = str_replace('"', '\\"', $string);
+        }
+
+        return $string;
+    }
 
     /**
      * Post a set of documents to SOLR

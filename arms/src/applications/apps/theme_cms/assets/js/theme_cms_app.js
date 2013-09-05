@@ -2,32 +2,32 @@ angular.module('theme_cms_app', ['slugifier', 'ui.sortable', 'ui.tinymce', 'ngSa
 	factory('pages_factory', function($http){
 		return {
 			listAll : function(){
-				var promise = $http.get(base_url+'theme_cms/list_pages').then(function(response){
+				var promise = $http.get(apps_url+'theme_cms/list_pages').then(function(response){
 					return response.data;
 				});
 				return promise;
 			},
 			getPage : function(slug){
-				var promise = $http.get(base_url+'theme_cms/get/'+slug).then(function(response){
+				var promise = $http.get(apps_url+'theme_cms/get/'+slug).then(function(response){
 					return response.data;
 				});
 				return promise;
 			},
 			newPage: function(postData){
-				var promise = $http.post(base_url+'theme_cms/new_page/', postData).then(function(response){
+				var promise = $http.post(apps_url+'theme_cms/new_page/', postData).then(function(response){
 					return response.data;
 				});
 				return promise;
 			},
 			deletePage: function(slug){
-				var promise = $http.post(base_url+'theme_cms/delete_page', {'slug':slug}).then(function(response){
+				var promise = $http.post(apps_url+'theme_cms/delete_page', {'slug':slug}).then(function(response){
 					return response.data;
 				});
 				return promise;
 				
 			},
 			savePage: function(postData){
-				var promise = $http.post(base_url+'theme_cms/save_page', postData).then(function(response){
+				var promise = $http.post(apps_url+'theme_cms/save_page', postData).then(function(response){
 					return response.data;
 				});
 				return promise;
@@ -36,14 +36,27 @@ angular.module('theme_cms_app', ['slugifier', 'ui.sortable', 'ui.tinymce', 'ngSa
 	}).
 	factory('search_factory', function($http){
 		return{
-			search: function(query, fq){
-				var url = real_base_url+'registry/services/registry/solr_search/?query='+query;
-				// console.log(url);
-				var promise = $http.get(url).then(function(response){
+			search: function(filters){
+				var promise = $http.post(real_base_url+'registry/services/registry/post_solr_search', {'filters':filters}).then(function(response){
 					return response.data;
 				});
 				return promise;
+
+				// var url = real_base_url+'registry/services/registry/solr_search/?query='+query;
+				// var promise = $http.get(url).then(function(response){
+				// 	return response.data;
+				// });
+				// return promise;
 			}
+		}
+	}).
+	filter('facet_display', function(){
+		return function(text){
+			var res = '';
+			for(var i = 0 ;i<text.length-1;i=i+2){
+				res+='<li>'+text[i]+' ('+text[i+1]+')'+'</li>';
+			}
+			return res;
 		}
 	}).
 	config(function($routeProvider){
@@ -82,6 +95,18 @@ function ViewPage($scope, $routeParams, pages_factory, $location, search_factory
 		$scope.page = data;
 		$scope.page.left = $scope.page.left || [];
 		$scope.page.right = $scope.page.right || [];
+		$scope.search_result = {};
+		$scope.available_search = {};
+		$($scope.page.left).each(function(){
+			if(this.type=='search'){
+				$scope.preview_search(this);
+			}
+		});
+		$scope.available_facets = [
+			{type:'class', name:'Class'},
+			{type:'group', name:'Research Groups'},
+			{type:'license_class', name:'Licences'}
+		]
 	});
 	$scope.addContent = function(region){
 		var blob = {'title':'New Content', 'type':'html', 'content':''};
@@ -120,30 +145,61 @@ function ViewPage($scope, $routeParams, pages_factory, $location, search_factory
 		$scope.page[region].splice(index, 1);
 	}
 
-	$scope.addToList = function(list_type, list){
+	$scope.addToList = function(blob, list){
 		var newObj = {};
-		switch(list_type){
-			case 'gallery': newObj = {'src':''}; break;
-			case 'list_ro': newObj = {'key':''}; break;
+		switch(blob.type){
+			case 'gallery': 
+				newObj = {'src':''};
+				if(!blob.gallery) blob.gallery = []; list = blob.gallery;
+				break;
+			case 'list_ro': 
+				newObj = {'key':''};
+				if(!blob.list_ro) blob.list_ro = []; list = blob.list_ro
+				break;
+			case 'search': 
+				newObj = {name:'', value:''};
+				if(!blob.search.fq) blob.search.fq = []; list = blob.search.fq;
+				break;
 		}
-		if(!list[list_type]) list[list_type] = [];
-		list[list_type].push(newObj);
+		list.push(newObj);
 	}
 
-	$scope.removeFromList = function(list_type, list, index){
-		list[list_type].splice(index, 1);
+	$scope.setFilterType = function(filter, type){
+		filter.name = type;
+	}
+
+	$scope.removeFromList = function(list, index){
+		list.splice(index, 1);
 	}
 
 	$scope.preview_search = function(c){
 		if(c.search.query){
-			c.search.id = Math.random().toString(36).substring(7);
-			search_factory.search(c.search.query, null).then(function(data){
-				console.log(data);
-				$scope.search_result = data;
+			if(!c.search.id) c.search.id = Math.random().toString(36).substring(7);
+			var filters = $scope.constructSearchFilters(c);
+			search_factory.search(filters).then(function(data){
+				$scope.search_result[c.search.id] = {name:c.title, data:data, search_id:c.search.id};
+				$scope.$watch('search_result', function(){
+					$scope.available_search = [];
+					angular.forEach($scope.search_result, function(key, value){
+						$scope.available_search.push({search_id:key.search_id, name:key.name});
+					});
+				});
 			});
 		}
 	}
 
+	
+
+	$scope.constructSearchFilters = function(c){
+		var filters = {};
+		filters['include_facet'] = true;
+		filters['fl'] = 'id, display_title';
+		if(c.search.query) filters['q'] = c.search.query;
+		$(c.search.fq).each(function(){
+			if(this.name) filters[this.name] = this.value;
+		});
+		return filters;
+	}
 }
 
 function NewPageCtrl($scope, pages_factory, Slug){

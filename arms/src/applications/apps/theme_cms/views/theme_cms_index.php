@@ -112,109 +112,22 @@
 
 		<div class="row-fluid">
 			<div class="span8">
-				<div class="widget-box">
-					<div class="widget-title">
-						<h5>Main Content</h5>
-					</div>
-					<div ui-sortable="sortableOptions" ng-model="page.left" class="widget-content region">
-						<div ng-repeat="c in page.left" ng-dblclick="edit(c)">
-							<div class="widget-box">
-								<div class="widget-title">
-									<h5>{{c.title}} <small>{{c.type}}</small></h5>
-									<select ng-model="c.type">
-										<option value="html">HTML Contents</option>
-										<option value="gallery">Image Gallery</option>
-										<option value="list_ro">List of Registry Objects</option>
-										<option value="separator">Separator</option>
-										<option value="search">Search Results</option>
-										<option value="separator">Facet</option>
-									</select>
-								</div>
-								<div class="widget-content">
-									<div ng-hide="c.editing">
-										<div ng-bind-html="c.content" ng-show="c.type == 'html'"></div>
-										<div ng-show="c.type=='gallery'" ng-repeat="img in c.gallery">
-											<img src="{{img.src}}" alt="">
-										</div>
-										<div ng-show="c.type=='list_ro'">
-											<ul>
-												<li ng-repeat="ro in c.list_ro">{{ro.key}}</li>
-											</ul>
-										</div>
-										<hr/>
-										<a href="" ng-click="edit(c)" class="btn">Edit</a>
-										<a href="" ng-click="delete_blob('left', $index)" class="btn btn-danger"><i class="icon-white icon-trash"></i></a>
-									</div>
-
-									<div ng-show="c.editing">
-
-										<form class="form">
-											<label for="title">Title</label><input type="text" ng-model="c.title">
-											<hr/>
-											<div ng-show="c.type == 'html'">
-												<textarea ui-tinymce ng-model="c.content"></textarea>
-											</div>
-
-											<div ng-show="c.type == 'gallery'">
-												<div ng-repeat="img in c.gallery">
-													Image Link: <input type="text" ng-model="img.src"> <a href="" class="" ng-click="removeFromList('gallery', c, $index)"><i class="icon icon-remove"></i></a>
-												</div>
-												<a href="" class="btn btn-primary" ng-click="addToList('gallery', c)"><i class="icon-white icon-plus"></i> Add Image</a>
-											</div>
-
-											<div ng-show="c.type == 'list_ro'">
-												<div ng-repeat="ro in c.list_ro">
-													Registry Object Key: <input type="text" ng-model="ro.key"> <a href="" class="" ng-click="removeFromList('list_ro', c, $index)"><i class="icon icon-remove"></i></a>
-												</div>
-												<a href="" class="btn btn-primary" ng-click="addToList('list_ro', c)"><i class="icon-white icon-plus"></i> Add Registry Object</a>
-											</div>
-
-											<div ng-show="c.type == 'search'">
-												Search Query: <input type="text" ng-model="c.search.query">
-												<div></div>
-												<a href="" class="btn" ng-click="addToList('search_filters', c.search.fq)"><i class="icon icon-plus"></i> Add Filter</a>
-												<a href="" class="btn" ng-click="preview_search(c)">Preview Search</a>
-												<div ng-show="c.search.id">
-													<ul>
-														<li ng-repeat="doc in search_result.result.docs">{{doc.display_title}}</li>
-													</ul>
-												</div>
-											</div>
-											
-
-										</form>
-										<hr/>
-										<a href="" ng-click="edit(c)" class="btn">Done</a>
-									</div>
-								</div>
-							</div>
-						</div>
-						<hr/>
-						<a href="" ng-click="addContent('left')" class="btn btn-primary"><i class="icon-white icon-plus"></i> Add Content</a>
-					</div>
-				</div>
+				<?php 
+					$data = array(
+						'title'=>'Main Content',
+						'region'=>'left'
+					);
+					$this->load->view('content', $data);
+				?>
 			</div>
 			<div class="span4">
-				<div class="widget-box">
-					<div class="widget-title">
-						<h5>Sidebar</h5>
-					</div>
-					<div class="widget-content region">
-						<!-- <div class="alert alert-info" ng-hide="page.right">There are no content here, add something</div> -->
-						<div ui-sortable="sortableOptions" ng-repeat="c in page.right">
-							<div class="widget-box">
-								<div class="widget-title">
-									<h5>{{c.title}}</h5>
-								</div>
-								<div class="widget-content">
-									{{c.content}}
-								</div>
-							</div>
-						</div>
-						<hr/>
-						<a href="" ng-click="addContent('right')" class="btn btn-primary"><i class="icon-white icon-plus"></i> Add Content</a>
-					</div>
-				</div>
+				<?php 
+					$data = array(
+						'title'=>'Side Bar',
+						'region'=>'right'
+					);
+					$this->load->view('content', $data);
+				?>
 			</div>
 		</div>
 		{{page | json}}
