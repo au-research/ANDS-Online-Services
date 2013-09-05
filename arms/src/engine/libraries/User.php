@@ -58,8 +58,8 @@ class User {
 
 	public function refreshAffiliations($role_id)
 	{
-		$this->CI->load->model('cosi_authentication', 'cosi');
-		$roles = $this->CI->cosi->getRolesAndActivitiesByRoleID($role_id);
+		$this->CI->load->model($this->CI->config->item('authentication_class'), 'auth');
+		$roles = $this->CI->auth->getRolesAndActivitiesByRoleID($role_id);
 		if($roles){
 			$this->appendAffiliation($roles['organisational_roles']);
 		}
@@ -228,8 +228,8 @@ class User {
 
 	function doiappids()
 	{
- 		$this->CI->load->model('cosi_authentication', 'cosi');
-		$doi_apps = $this->CI->cosi->getDOIAppIdsInAffiliate($this->affiliations());
+ 		$this->CI->load->model($this->CI->config->item('authentication_class'), 'auth');
+		$doi_apps = $this->CI->auth->getDOIAppIdsInAffiliate($this->affiliations());
 		if($doi_apps){	
    			
    			return $doi_apps;
