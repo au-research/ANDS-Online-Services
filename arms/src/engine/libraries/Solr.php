@@ -176,6 +176,82 @@ class Solr {
         $this->options['q'].=' '. $condition;
     }
 
+    function setFilters($filters){
+        $page = 1; $start = 0;
+        $pp = ( isset($filters['rows']) ? (int) $filters['rows'] : 15 );
+
+        $this->setOpt('rows', $pp);
+        $this->setOpt('defType', 'edismax');
+        $this->setOpt('q.alt', '*:*');
+        $this->setOpt('mm', '2'); //minimum should match optional clause
+        $this->setOpt('fl', '*, score'); //we'll get the score as well
+
+        //if there's no query to search, eg. rda browsing
+        if (!isset($filters["q"])){
+            $this->setOpt('q', '*:*');
+            $this->setOpt('sort', 'score desc, s_list_title asc');
+        }
+
+        foreach($filters as $key=>$value){
+            $value = rawurldecode($value);
+            switch($key){
+                case 'rq':
+                    $this->clearOpt('defType');//returning to the default deftype
+                    $this->setOpt('q', $value);
+                break;
+                case 'q': 
+                    $value = escapeSolrValue($value);
+                    $this->setOpt('q', 'fulltext:('.$value.') OR simplified_title:('.iconv('UTF-8', 'ASCII//TRANSLIT', $value).')');
+                break;
+                case 'p': 
+                    $page = (int)$value;
+                    if($page>1){
+                        $start = $pp * ($page-1);
+                    }
+                    $this->setOpt('start', $start);
+                    break;
+                case 'class': 
+                    if($value!='all') $this->setOpt('fq', '+class:('.$value.')');
+                    break;
+                case 'group': 
+                    if($value!='all') $this->setOpt('fq', '+group:("'.$value.'")');
+                    break;
+                case 'type': 
+                    if($value!='all') $this->setOpt('fq', '+type:("'.$value.'")');
+                    break;
+                case 'subject_value_resolved': 
+                    $this->setOpt('fq', '+subject_value_resolved:("'.$value.'")');
+                    break;
+                case 's_subject_value_resolved': 
+                    $this->setOpt('fq', '+s_subject_value_resolved:("'.$value.'")');
+                    break;
+                case 'subject_vocab_uri':
+                    $this->setOpt('fq', '+subject_vocab_uri:("'.$value.'")');
+                    break;
+                case 'temporal':
+                    $date = explode('-', $value);
+                    $this->setOpt('fq','+earliest_year:['.$date[0].' TO *]');
+                    $this->setOpt('fq','+latest_year:[* TO '.$date[1].']');
+                    break;
+                case 'license_class': 
+                    $this->setOpt('fq','+license_class:("'.$value.'")');
+                    break;
+                case 'spatial':
+                    $this->setOpt('fq','+spatial_coverage_extents:"Intersects('.$value.')"');
+                    break;
+                case 'map':
+                    $this->setOpt('fq','+spatial_coverage_area_sum:[0.00001 TO *]');
+                    if (isset($filters['rows']) && is_numeric($filters['rows'])){
+                        $this->setOpt('rows', $filters['rows']);
+                    }else{
+                        $this->setOpt('rows', 1500);
+                    }
+                    $this->setOpt('fl', 'id,spatial_coverage_area_sum,spatial_coverage_centres,spatial_coverage_extents,spatial_coverage_polygons');
+                    break;
+            }
+        }
+    }
+
     /**
      * Construct a field string based on SOLR OPTIONS, for posting
      * @return string fields_string

@@ -188,49 +188,29 @@ class Vocab {
     function getNumCollections($uri,$filters){
         $CI =& get_instance();
         $CI->load->library('solr');
-        $CI->solr->setOpt('defType', 'edismax');
-        $CI->solr->setOpt('mm', '3');
-        $CI->solr->setOpt('q.alt', '*:*');
-        $CI->solr->setOpt('qf', 'id^10 group^8 display_title^5 list_title^5 fulltext^1.2');
-        $CI->solr->setOpt('q', "");
 
         if($filters){
-            if (isset($filters["q"]))
-            {
-                $CI->solr->setOpt('q', "+fulltext:(*" . rawurldecode($filters["q"]) . "*)");
+            $CI->solr->setFilters($filters);
+        }
+        $CI->solr->setOpt('fq', '+subject_vocab_uri:("'.$uri.'")');
+        $CI->solr->executeSearch();
+
+        //if still no result is found, do a fuzzy search, store the old search term and search again
+        if($CI->solr->getNumFound()==0){
+            $new_search_term_array = explode(' ', escapeSolrValue($filters['q']));
+            $new_search_term='';
+            foreach($new_search_term_array as $c ){
+                $new_search_term .= $c.'~0.7 ';
             }
-            foreach($filters as $key=>$value){
-                $value = rawurldecode($value);
-                switch($key){
-                    case 'class': 
-                        if($value!='all') $CI->solr->addQueryCondition('+class:("'.$value.'")');
-                        break;
-                    case 'group': 
-                        $CI->solr->addQueryCondition('+group:("'.$value.'")');
-                        break;
-                    case 'type': 
-                        $CI->solr->addQueryCondition('+type:'.$value);
-                        break;
-                    case 'license_class': 
-                        $CI->solr->addQueryCondition('+license_class:("'.$value.'")');
-                        break;
-                    case 'temporal':
-                        $date = explode('-', $value);
-                        $CI->solr->addQueryCondition('+earliest_year:['.$date[0].' TO *]');
-                        $CI->solr->addQueryCondition('+latest_year:[* TO '.$date[1].']');
-                        $filteredSearch = true;
-                        break;             
-                    case 'spatial':
-                        $CI->solr->addQueryCondition('+spatial_coverage_extents:"Intersects('.$value.')"');
-                        break;
-                    case 'map':
-                        $CI->solr->addQueryCondition('+spatial_coverage_area_sum:[0.00001 TO *]');
-                        break;
-                }
+            $CI->solr->setOpt('q', 'fulltext:('.$new_search_term.') OR simplified_title:('.iconv('UTF-8', 'ASCII//TRANSLIT', $new_search_term).')');
+            // $CI->solr->addQueryCondition('AND subject_vocab_uri:("'.$uri.'")');
+            $CI->solr->executeSearch();
+            if($CI->solr->getNumFound() > 0){
+                $data['fuzzy_result'] = true;
             }
         }
-        $CI->solr->addQueryCondition('+subject_vocab_uri:("'.$uri.'")');
-        $CI->solr->executeSearch();
+
+    
         return $CI->solr->getNumFound();
      //    return $CI->solr->constructFieldString();
     }
