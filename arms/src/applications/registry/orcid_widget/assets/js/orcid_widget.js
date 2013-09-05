@@ -535,6 +535,8 @@ var OrcidHandler = Class.extend({
 								lb.data('orcid', e);
 								var infoStr = '';
 								var tooltip = toHtml(e['orcid-profile'],infoStr);
+								if(tooltip.length>1200)
+								tooltip = tooltip.substring(0,1200) + " ..."
 								lb.append('<span class="class preview" title="'+tooltip+'" disname="'+givenNames+' '+familyName +'"> ' +givenNames+' '+familyName+ ' ' + ' ['+orcid+' ]</span>');
 								var li = $('<li style="text-align:left"/>');
 								li.append(lb);
@@ -678,7 +680,9 @@ function toHtml(obj,resStr) {
 		if(obj['orcid-bio']['biography'].value!='')	
 		{
 			resStr += "<h6>Biography</h6>";
-			resStr +="<p>"+obj['orcid-bio']['biography'].value+"</p>";
+			var biography = obj['orcid-bio']['biography'].value		
+			biography = biography.replace(/"/g,'&quot;');		
+			resStr +="<p>"+biography+"</p>";
 		}
 	}
 	    					    	
