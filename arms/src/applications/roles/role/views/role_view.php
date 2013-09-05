@@ -18,9 +18,8 @@
 <div class="container-fluid">
 	<div class="row-fluid">
 
+		<?php if(trim($role->role_type_id)!='ROLE_DOI_APPID'): ?>
 		<div class="span8">
-
-
 			<?php if(trim($role->role_type_id)=='ROLE_ORGANISATIONAL' || trim($role->role_type_id)=='ROLE_FUNCTIONAL'):?>
 			<div class="widget-box">
 				<div class="widget-title">
@@ -150,9 +149,39 @@
 					</form>
 				</div>
 			</div>
+
+			<?php if(trim($role->role_type_id)=='ROLE_ORGANISATIONAL' || trim($role->role_type_id)=='ROLE_USER'):?>
+			<div class="widget-box">
+				<div class="widget-title"><h5>DOI Application Identifier</h5></div>
+				<div class="widget-content">
+					<ul>
+					<?php foreach($doi_app_id as $c):?>
+						<?php
+							if(trim($c->role_type_id) == "ROLE_DOI_APPID"){
+								echo '<li>';
+								echo anchor('/role/view/?role_id='.rawurlencode($c->parent_role_id), $c->name);
+								echo '<a href="javascript:;" class="remove_relation" parent="'.$c->parent_role_id.'" child="'.$role->role_id.'" tip="Remove This Role Relation"><i class="icon icon-remove"></i></a>';
+								echo '</li>';
+							}
+						?>
+					<?php endforeach;?>
+					</ul>
+					<form class="form-inline">
+						<select class="chosen">
+							<option value=""></option>
+							<?php foreach($missing_doi as $f):?>
+								<option value="<?php echo $f->role_id;?>"><?php echo $f->name;?></option>
+							<?php endforeach ?>
+						</select>
+						<a href="javascript:;" child="<?php echo $role->role_id;?>"class="btn add_role" tip="Add This Role Relation"><i class="icon icon-plus"></i> Add</a>
+					</form>
+				</div>
+			</div>
+			<?php endif; ?>
 		</div>
+		<?php endif; ?>
 		
-		<div class="span4">
+		<div class="<?php echo ((trim($role->role_type_id)=='ROLE_DOI_APPID') ? 'span8' : 'span4');?>">
 			<div class="widget-box">
 				<div class="widget-title">
 					<h5><?php echo $role->name;?></h5>

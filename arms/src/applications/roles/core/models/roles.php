@@ -109,7 +109,7 @@ class Roles extends CI_Model {
      * @param  string $role_id
      * @return array_object if an object has a child, object->childs will be a list of the child objects
      */
-    function list_childs($role_id){
+    function list_childs($role_id, $include_doi=false){
         $res = array();
         // $role = $this->get_role($role_id);
         
@@ -124,7 +124,11 @@ class Roles extends CI_Model {
 
         if($result->num_rows() > 0){
             foreach($result->result() as $r){
-                $res[] = $r;
+                if(trim($r->role_type_id)=='ROLE_DOI_APPID' && $include_doi){
+                    $res[] = $r;
+                }else if(!$include_doi){
+                    $res[] = $r;
+                }
                 $childs = $this->list_childs($r->parent_role_id);
                 if(sizeof($childs) > 0){
                     $r->childs = $childs;
@@ -141,7 +145,7 @@ class Roles extends CI_Model {
      * @param  string $role_id
      * @return array_object
      */
-    function descendants($role_id){
+    function descendants($role_id, $include_doi=false){
         $res = array();
     
         $result = $this->cosi_db
@@ -155,7 +159,12 @@ class Roles extends CI_Model {
 
         if($result->num_rows() > 0){
             foreach($result->result() as $r){
-                $res[] = $r;
+                if(trim($r->role_type_id)=='ROLE_DOI_APPID' && $include_doi){
+                    $res[] = $r;
+                }else if(!$include_doi){
+                    $res[] = $r;
+                }
+                
                 $childs = $this->descendants($r->role_id);
                 if(sizeof($childs) > 0){
                     $r->childs = $childs;
@@ -171,16 +180,23 @@ class Roles extends CI_Model {
      * @param  array $descendants 
      * @return array_object              
      */
-    function missing_descendants($role_id, $descendants){
+    function missing_descendants($role_id, $descendants, $include_doi=false){
         $ownedRoles = array();
         // $descendants = new RecursiveIteratorIterator(new RecursiveArrayIterator($descendants));
         foreach($descendants as $d) $ownedRoles[] = $d->role_id;
         $this->cosi_db->select('role_id, name, role_type_id')->from('roles')->where('role_type_id', 'ROLE_USER');
+        if($include_doi) $this->cosi_db->or_where('role_type_id', 'ROLE_DOI_APPID');
         if(sizeof($ownedRoles) > 0) $this->cosi_db->where_not_in('role_id', $ownedRoles);
         $result = $this->cosi_db->get();
 
         $res = array();
-        foreach($result->result() as $r) $res[] = $r;
+        foreach($result->result() as $r) {
+            if($include_doi && trim($r->role_type_id)=='ROLE_DOI_APPID'){
+                $res[] = $r;
+            }else if(!$include_doi){
+                $res[] = $r;
+            }
+        }
         return $res;
     }
 
