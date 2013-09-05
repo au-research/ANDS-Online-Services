@@ -221,8 +221,8 @@ class Roles extends CI_Model {
     function get_missing($role_id){
         $res = array('functional'=>array(), 'organisational'=>array());
 
-        $this->load->model('role_authentication', 'cosi');
-        $recursiveRoles = $this->cosi->getRolesAndActivitiesByRoleID($role_id);
+        $this->load->model($this->config->item('authentication_class'), 'auth');
+        $recursiveRoles = $this->auth->getRolesAndActivitiesByRoleID($role_id);
 
         //missing functional roles black magic
         $this->cosi_db->select('role_id, name, role_type_id')->from('roles')->where('role_type_id', 'ROLE_FUNCTIONAL');

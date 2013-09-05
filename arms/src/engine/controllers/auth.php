@@ -101,10 +101,10 @@ class Auth extends CI_Controller {
 		$orgRole = $this->input->post('orgRole');
 		$thisRole = $this->input->post('thisRole');
 		$jsonData = array();
-		$this->load->model('cosi_authentication', 'cosi');
+		$this->load->model($this->config->item('authentication_class'), 'auth');
 
 		if($new){
-			$this->cosi->createOrganisationalRole($orgRole, $thisRole);
+			$this->auth->createOrganisationalRole($orgRole, $thisRole);
 		}
 
 		if(in_array($orgRole, $this->user->affiliations())){
@@ -140,7 +140,6 @@ class Auth extends CI_Controller {
 		$data['title'] = 'ANDS Online Services Home';
 		$data['js_lib'] = array('core');
 		$data['scripts'] = array();
-		
 		if($this->user->loggedIn()) 
 		{
 			if(sizeof($this->user->affiliations())>0){
@@ -152,8 +151,8 @@ class Auth extends CI_Controller {
 				$this->load->model('vocab_service/vocab_services','vocab');
 				$data['group_vocabs']=$this->vocab->getGroupVocabs();
 				//$data['owned_vocabs']=$this->vocab->getOwnedVocabs(false);
-				$this->load->model('cosi_authentication', 'cosi');
-				$data['available_organisations'] = $this->cosi->getAllOrganisationalRoles();
+				$this->load->model($this->config->item('authentication_class'), 'auth');
+				$data['available_organisations'] = $this->auth->getAllOrganisationalRoles();
 				asort($data['available_organisations']);
 			}
 
@@ -226,7 +225,7 @@ class Auth extends CI_Controller {
 			}
 			else
 			{
-				$this->load->model('role_authentication', 'role');
+				$this->load->model($this->config->item('authentication_class'), 'role');
 				$this->role->updatePassword($this->user->localIdentifier(), $this->input->post('password'));
 				$this->session->set_flashdata('message', 'Your password has been updated. This will be effective from your next login.');
 				redirect('/');
