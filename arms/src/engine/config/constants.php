@@ -73,6 +73,7 @@ define('gCOSI_AUTH_LDAP_DN', gCOSI_AUTH_LDAP_UID . ", " . gCOSI_AUTH_LDAP_BASE_D
 
 define('gSHIBBOLETH_SESSION_INITIATOR', '/Shibboleth.sso/Login');
 
+define('gPIDS_IDENTIFIER_SUFFIX','researchdata.ands.org.au');
 
 define('AUTH_USER_FRIENDLY_NAME', 'USER_FRIENDLY_NAME');
 define('AUTH_DEFAULT_FRIENDLY_NAME', 'unnamed user');

@@ -32,8 +32,8 @@ class Mydois extends MX_Controller {
 				$roles_db->distinct()->select('parent_role_id')
 						->where_in('child_role_id', $this->user->affiliations())
 						->where('role_type_id', 'ROLE_DOI_APPID      ', 'after')
-						->join('dba.tbl_roles', 'role_id = parent_role_id')
-						->from('dba.tbl_role_relations');
+						->join('roles', 'role_id = parent_role_id')
+						->from('role_relations');
 				$query = $roles_db->get();
 
 				if ($query->num_rows() > 0)
