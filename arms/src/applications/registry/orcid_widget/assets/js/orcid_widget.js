@@ -35,7 +35,7 @@
 	   // cache: true,
 
 	    //search mode: what to show when no hits? set to boolean(false) to supress
-	    nohits_msg: "No matches found <br /> If you wish to register for an orcid please click <a href='https://orcid.org/register' target='_blank'>here</a>",
+	    nohits_msg: '<p>No matches found<br/>If you wish to register for an orcid please click <a href="https://orcid.org/register" target="_blank" style="float:none;padding:0px">here</a></p>',
 
 	    //what to show when there's some weird error? set to boolean(false)
 	    //to supress
