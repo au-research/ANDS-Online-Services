@@ -189,12 +189,12 @@ class Vocab {
         $CI =& get_instance();
         $CI->load->library('solr');
 
-
-
+        // var_dump($filters);
+        $CI->solr->clearOpt('fq');
         if($filters){
              $CI->solr->setFilters($filters);
         }
-        $CI->solr->clearOpt('fq');
+        
         $CI->solr->setOpt('fq', '+subject_vocab_uri:("'.$uri.'")');
 
         // var_dumP($CI->solr->constructFieldString());
