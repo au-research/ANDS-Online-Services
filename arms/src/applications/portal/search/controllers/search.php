@@ -51,7 +51,7 @@ class Search extends MX_Controller {
 			$this->solr->setFilters($filters);
 		}
 
-		$data['search_term'] = $filters['q'];
+		$data['search_term'] = (isset($filters['q']) ? $filters['q'] : '');
 
 		$this->solr->executeSearch();
 
