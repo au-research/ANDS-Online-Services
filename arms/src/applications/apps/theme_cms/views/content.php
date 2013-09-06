@@ -138,9 +138,10 @@
 
 							<div ng-show="c.type == 'relation'">
 								<form action="">
+									<div class="alert alert-info" ng-show="boosted_key">Boosted Keys are found in your search.</div>
 									<div class="input-prepend input-append" ng-repeat="ro in boosted_key">
 										<span class="add-on">Key</span>
-										<input type="text" ng-model="ro.key">
+										<input type="text" ng-model="ro">
 										<a href="" class="btn" ng-click="removeFromList(c.relation, $index)"><i class="icon icon-remove"></i></a>
 									</div>
 								</form>

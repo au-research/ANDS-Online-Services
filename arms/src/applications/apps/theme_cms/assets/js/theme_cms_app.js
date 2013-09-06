@@ -98,7 +98,8 @@ function ViewPage($scope, $routeParams, pages_factory, $location, search_factory
 		$scope.page.left = $scope.page.left || [];
 		$scope.page.right = $scope.page.right || [];
 		$scope.search_result = {};
-		$scope.available_search = {};
+		$scope.available_search = [];
+		$scope.boosted_key = [];
 		$($scope.page.left).each(function(){
 			if(this.type=='search'){
 				$scope.preview_search(this);
@@ -179,9 +180,19 @@ function ViewPage($scope, $routeParams, pages_factory, $location, search_factory
 		if(c.search.query){
 			if(!c.search.id) c.search.id = Math.random().toString(36).substring(7);
 			var filters = $scope.constructSearchFilters(c);
-			console.log(filters);
+			
+
+			if(filters['boost_key']){
+				if(filters['boost_key'] instanceof Array){
+					$(filters['boost_key']).each(function(){
+						$scope.boosted_key.push(this);
+					});
+				}else{
+					$scope.boosted_key.push(filters['boost_key']);
+				}
+			}
+			console.log($scope.boosted_key);
 			search_factory.search(filters).then(function(data){
-				console.log(data);
 				$scope.search_result[c.search.id] = {name:c.title, data:data, search_id:c.search.id};
 				$scope.$watch('search_result', function(){
 					$scope.available_search = [];
