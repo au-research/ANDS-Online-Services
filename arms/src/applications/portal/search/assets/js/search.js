@@ -334,12 +334,16 @@ function loadSubjectBrowse(val){
 		$('#subjectfacet div').remove();
 		$('#subjectfacet').append($('<div/>'));
 		var sqc = '';
-		if(searchData['q']) sqc += "+fulltext:(*" + searchData['q'] + "*)";
+		if(searchData['q'] && $('.fuzzy-suggest').length==0){
+			console.log($('.fuzzy-suggest').length);
+			sqc += "+fulltext:(" + searchData['q'] + ")";
+		}else if(searchData['q'] && $('.fuzzy-suggest').length >0){
+			sqc +='+fulltext:('+searchData['q']+'~0.7)';
+		}
 		if(searchData['class'] && searchData['class']!='all') sqc += ' +class:("'+searchData['class']+'")';
 		if(searchData['group']) sqc += '+group:("'+searchData['group']+'")';
 		if(searchData['type']) sqc += '+type:("'+searchData['type']+'")';
-		if (sqc == '')
-		{
+		if (sqc == ''){
 			sqc = "*:*";
 		}
 
