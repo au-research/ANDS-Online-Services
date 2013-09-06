@@ -87,6 +87,7 @@
 		<?php echo anchor(registry_url('auth/dashboard'), '<i class="icon-home"></i> Home'); ?>
 		<a href="#/">Theme CMS</a>
 		<a href="#/view/{{page.slug}}" class="current">{{page.title}}</a>
+		<div class='pull-right muted' style="margin:10px 30px 0px 0px;"><small>{{saved_msg}}</small></div>
 	</div>
 	
 	<div class="container-fluid">

@@ -194,7 +194,7 @@ class Solr {
         }
 
         foreach($filters as $key=>$value){
-            $value = rawurldecode($value);
+            if(!is_array($value)) $value = rawurldecode($value);
             switch($key){
                 case 'rq':
                     $this->clearOpt('defType');//returning to the default deftype
@@ -249,8 +249,14 @@ class Solr {
                     }
                     $this->setOpt('fl', 'id,spatial_coverage_area_sum,spatial_coverage_centres,spatial_coverage_extents,spatial_coverage_polygons');
                     break;
-                case 'boost':
-                    $this->addQueryCondition('OR key:("'.$value.'")^100');
+                case 'boost_key':
+                    if(is_array($value)){
+                        foreach($value as $v){
+                            $this->addQueryCondition(' OR key:("'.$v.'")^100');
+                        }
+                    }else{
+                        $this->addQueryCondition(' OR key:("'.$value.'")^100');
+                    }
                     break;
                 case 'fl':
                     $this->setOpt('fl', $value);

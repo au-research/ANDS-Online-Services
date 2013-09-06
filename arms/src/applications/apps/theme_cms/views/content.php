@@ -14,6 +14,7 @@
 						<option value="separator">Separator</option>
 						<option value="search">Search Results</option>
 						<option value="facet">Facet</option>
+						<option value="relation">Relation</option>
 					</select>
 				</div>
 				<div class="widget-content">
@@ -34,8 +35,7 @@
 							<a href="">View Full Search</a>
 						</div>
 
-						<div ng-show="c.type=='facet'" ng-bind-html="search_result[c.facet.search_id].data.facet.facet_fields[c.facet.type] | facet_display">
-						</div>
+						<div ng-show="c.type=='facet'" ng-bind-html="search_result[c.facet.search_id].data.facet.facet_fields[c.facet.type] | facet_display"></div>
 
 						<hr/>
 						<a href="" ng-click="edit(c)" class="btn">Edit</a>
@@ -75,7 +75,6 @@
 
 							<div ng-show="c.type == 'search'">
 								<form class="form-search" ng-submit="preview_search(c)">
-									<small ng-show="c.search.id">Search ID: {{c.search.id}}</small>
 									<div class="input-append">
 										<input type="text" name="search-query" class="" ng-model="c.search.query" placeholder="Search Query">
 										<button type="submit" class="btn" ng-click="preview_search(c)">Preview Search</button>
@@ -107,7 +106,10 @@
 								<div ng-show="search_result[c.search.id]">
 									<div ng-show="search_result[c.search.id].data.numFound > 0">
 										<ul>
-											<li ng-repeat="doc in search_result[c.search.id].data.result.docs"><a href="<?php echo portal_url();?>{{doc.slug}}" target="_blank">{{doc.display_title}}</a></li>
+											<li ng-repeat="doc in search_result[c.search.id].data.result.docs">
+												<a href="<?php echo portal_url();?>{{doc.slug}}" target="_blank">{{doc.display_title}}</a>
+												<a href="" tip="Boost This Record" ng-click="addBoost(c, doc.key)"><i class="icon icon-arrow-up"></i></a>
+											</li>
 										</ul>
 										<a href="">View Full Search</a>
 									</div>
@@ -133,6 +135,17 @@
 									</div>
 								</form>
 							</div>
+
+							<div ng-show="c.type == 'relation'">
+								<form action="">
+									<div class="input-prepend input-append" ng-repeat="ro in boosted_key">
+										<span class="add-on">Key</span>
+										<input type="text" ng-model="ro.key">
+										<a href="" class="btn" ng-click="removeFromList(c.relation, $index)"><i class="icon icon-remove"></i></a>
+									</div>
+								</form>
+							</div>
+
 						</form>
 						<hr/>
 						<a href="" ng-click="edit(c)" class="btn">Done</a>

@@ -53,8 +53,10 @@ angular.module('theme_cms_app', ['slugifier', 'ui.sortable', 'ui.tinymce', 'ngSa
 	filter('facet_display', function(){
 		return function(text){
 			var res = '';
-			for(var i = 0 ;i<text.length-1;i=i+2){
-				res+='<li>'+text[i]+' ('+text[i+1]+')'+'</li>';
+			if(text){
+				for(var i = 0 ;i<text.length-1;i=i+2){
+					res+='<li>'+text[i]+' ('+text[i+1]+')'+'</li>';
+				}
 			}
 			return res;
 		}
@@ -106,7 +108,7 @@ function ViewPage($scope, $routeParams, pages_factory, $location, search_factory
 			{type:'class', name:'Class'},
 			{type:'group', name:'Research Groups'},
 			{type:'license_class', name:'Licences'}
-		]
+		];
 	});
 	$scope.addContent = function(region){
 		var blob = {'title':'New Content', 'type':'html', 'content':''};
@@ -131,7 +133,8 @@ function ViewPage($scope, $routeParams, pages_factory, $location, search_factory
 
 	$scope.save = function(){
 		pages_factory.savePage($scope.page).then(function(data){
-			console.log(data);
+			var now = new Date();
+			$scope.saved_msg = 'Last Saved: '+now; 
 		});
 	}
 
@@ -176,7 +179,9 @@ function ViewPage($scope, $routeParams, pages_factory, $location, search_factory
 		if(c.search.query){
 			if(!c.search.id) c.search.id = Math.random().toString(36).substring(7);
 			var filters = $scope.constructSearchFilters(c);
+			console.log(filters);
 			search_factory.search(filters).then(function(data){
+				console.log(data);
 				$scope.search_result[c.search.id] = {name:c.title, data:data, search_id:c.search.id};
 				$scope.$watch('search_result', function(){
 					$scope.available_search = [];
@@ -188,15 +193,30 @@ function ViewPage($scope, $routeParams, pages_factory, $location, search_factory
 		}
 	}
 
-	
+	$scope.addBoost = function(blob,key){
+		if(!blob.search.fq) blob.search.fq = [];
+		blob.search.fq.push({name:'boost_key', value:key});
+	}
 
 	$scope.constructSearchFilters = function(c){
 		var filters = {};
+		var placeholder = '';
 		filters['include_facet'] = true;
-		filters['fl'] = 'id, display_title';
+		filters['fl'] = 'id, display_title, slug, key';
 		if(c.search.query) filters['q'] = c.search.query;
 		$(c.search.fq).each(function(){
-			if(this.name) filters[this.name] = this.value;
+			if(this.name){
+				if(filters[this.name]){
+					if(filters[this.name] instanceof Array){
+						filters[this.name].push(this.value);
+					}else{
+						placeholder = filters[this.name];
+						filters[this.name] = [];
+						filters[this.name].push(placeholder);
+						filters[this.name].push(this.value);
+					}
+				}else filters[this.name] = this.value;
+			}
 		});
 		return filters;
 	}
