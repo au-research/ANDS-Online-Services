@@ -78,7 +78,7 @@ $recent_uploads = isset($recent_uploads) ? $recent_uploads : array();
 								<input type="submit" value="Upload File" />
 
 
-						 	<p><br/><small>* The image will be automatically converted and compressed to fit the RDA spotlight rotator.</small></p>
+						 	<p><br/><small>* The image will be automatically converted and compressed to fit the RDA spotlight rotator. <?=(isset($max_filesize) ? "Max file size: " . $max_filesize . "K." : "");?></small></p>
 
 							</form>
 					</div>
