@@ -101,7 +101,7 @@ class Registry_object extends MX_Controller {
 	public function add(){
 		$data['title'] = 'Add Registry Objects';
 		$data['scripts'] = array('add_registry_objects');
-		$data['js_lib'] = array('core','prettyprint','vocab_widget');
+		$data['js_lib'] = array('core','prettyprint','orcid_widget');
 		$data['content'] = "ADD NEW";
 
 		$this->load->model("data_source/data_sources","ds");
@@ -155,7 +155,7 @@ class Registry_object extends MX_Controller {
 		
 		$data['title'] = 'Edit: '.$ro->title;
 		$data['scripts'] = array('add_registry_object');
-		$data['js_lib'] = array('core', 'tinymce', 'ands_datepicker', 'prettyprint','vocab_widget','google_map','location_capture_widget');
+		$data['js_lib'] = array('core', 'tinymce', 'ands_datepicker', 'prettyprint','vocab_widget','orcid_widget', 'google_map','location_capture_widget');
 		$this->load->view("add_registry_object", $data);
 	}
 
@@ -831,7 +831,7 @@ class Registry_object extends MX_Controller {
 		$this->load->model('registry_objects', 'ro');
 		$ro = $this->ro->getByID($id);
 		$ro->enrich();
-		echo $ro->getExtRif();
+		//echo $ro->getExtRif();
 		//exit();
 		//$ro->enrich();	
 		//$ro->update_quality_metadata();		

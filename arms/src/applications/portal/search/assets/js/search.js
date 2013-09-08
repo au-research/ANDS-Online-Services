@@ -124,18 +124,18 @@ function executeSearch(searchData, searchUrl){
 			data: {filters:searchData},
 			dataType:'json',
 			success: function(data){
-				// log(data);
+				console.log(data);
 				$.each(data.result.docs, function(){
 					// log(this.display_title, this.score, this.id);
 				});
 
 				var numFound = data.result.numFound;
-			        var numReturned = data.result.docs.length;
+			    var numReturned = data.result.docs.length;
 				$('#search-result, .pagination, #facet-result, #search_notice').empty();
 
 				//search result
 				var template = $('#search-result-template').html();
-				var output = Mustache.render(template, data.result);
+				var output = Mustache.render(template, data);
 				$('#search-result').html(output);
 
 				//pagination
@@ -334,12 +334,16 @@ function loadSubjectBrowse(val){
 		$('#subjectfacet div').remove();
 		$('#subjectfacet').append($('<div/>'));
 		var sqc = '';
-		if(searchData['q']) sqc += "+fulltext:(*" + searchData['q'] + "*)";
+		if(searchData['q'] && $('.fuzzy-suggest').length==0){
+			console.log($('.fuzzy-suggest').length);
+			sqc += "+fulltext:(" + searchData['q'] + ")";
+		}else if(searchData['q'] && $('.fuzzy-suggest').length >0){
+			sqc +='+fulltext:('+searchData['q']+'~0.7)';
+		}
 		if(searchData['class'] && searchData['class']!='all') sqc += ' +class:("'+searchData['class']+'")';
 		if(searchData['group']) sqc += '+group:("'+searchData['group']+'")';
 		if(searchData['type']) sqc += '+type:("'+searchData['type']+'")';
-		if (sqc == '')
-		{
+		if (sqc == ''){
 			sqc = "*:*";
 		}
 
@@ -359,6 +363,12 @@ function loadSubjectBrowse(val){
 
 function initSearchPage(){
 	getTopLevelFacet();
+
+	if(urchin_id!='' && searchData['q']!=''){
+		var pageTracker = _gat._getTracker(urchin_id);
+		pageTracker._initData(); 
+		pageTracker._trackPageview('/search_results.php?q='+searchData['q']); 
+	}
 
 	$('.tabs').show();
 
@@ -398,6 +408,9 @@ function initSearchPage(){
 			    initExplanations($(this).attr('type'));
 			})
 	}
+	
+	// Put an orange glow around topic pages to highlight them in the search results!
+	$('div[ro_id^="topic_"]').css('background-color','rgba(255, 122, 0, 0.18)')
 
 	if(typeof(searchData['q'])=='undefined' && typeof(searchData['rq'])=='undefined') {
 		$('#search_box').val('');
@@ -463,6 +476,18 @@ function initSearchPage(){
 		$('.adv_input').val($.trim(inputs));
 		$('.adv_not').each(function(e,k){//populate the nots
 			$(this).val(nots[e]);
+		});
+	}
+
+	//update search term if there's no blocking ie no fuzzy search conducted or no result
+	if(searchData['q']!='' && $('.block-record').length==0){
+		$.ajax({
+			url:base_url+'search/registerSearchTerm', 
+			type: 'POST',
+			data: {term:searchData['q'], num_found:$('#numFound').text()},
+			success: function(data){
+				
+			}
 		});
 	}
 

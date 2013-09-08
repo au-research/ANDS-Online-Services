@@ -28,6 +28,7 @@ class User {
 				AUTH_USER_IDENTIFIER	 => $login_response['user_identifier'] . "::",
 				AUTH_USER_FRIENDLY_NAME	 => $login_response['name'],
 				AUTH_METHOD 			 =>	$login_response['authentication_service_id'],
+				AUTH_DOMAIN 			 =>	$login_response['auth_domain']
 			));
 			
 			// And extract the functions and affiliations							
@@ -55,14 +56,14 @@ class User {
 		}
 		unset($this->session->userdata); 
 		$this->CI->session->sess_destroy(); //???
-		redirect('/');
+		redirect('/auth/login/');
 	}
 	
 
 	public function refreshAffiliations($role_id)
 	{
-		$this->CI->load->model('cosi_authentication', 'cosi');
-		$roles = $this->CI->cosi->getRolesAndActivitiesByRoleID($role_id);
+		$this->CI->load->model($this->CI->config->item('authentication_class'), 'auth');
+		$roles = $this->CI->auth->getRolesAndActivitiesByRoleID($role_id);
 		if($roles){
 			$this->appendAffiliation($roles['organisational_roles']);
 		}
@@ -129,6 +130,11 @@ class User {
 	function authMethod()
 	{
 		return $this->CI->session->userdata(AUTH_METHOD);
+	}	
+
+	function authDomain()
+	{
+		return $this->CI->session->userdata(AUTH_DOMAIN);
 	}	
 
 	/**
@@ -226,8 +232,8 @@ class User {
 
 	function doiappids()
 	{
- 		$this->CI->load->model('cosi_authentication', 'cosi');
-		$doi_apps = $this->CI->cosi->getDOIAppIdsInAffiliate($this->affiliations());
+ 		$this->CI->load->model($this->CI->config->item('authentication_class'), 'auth');
+		$doi_apps = $this->CI->auth->getDOIAppIdsInAffiliate($this->affiliations());
 		if($doi_apps){	
    			
    			return $doi_apps;

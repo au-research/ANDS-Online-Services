@@ -115,6 +115,33 @@ $(function(){
 		}
 	});
 
+	$(document).on('change','.identifierType',function(e){
+		var prevInput = $(this).prev();
+
+		if($(this).val()=='orcid')
+		{
+			if(!prevInput.hasClass('orcid_widget'))
+			{
+				prevInput.addClass('orcid_widget');
+				prevInput.orcid_widget();
+			}
+		}else{
+
+			if(prevInput.hasClass('orcid_widget'))
+			{
+				prevInput.removeClass('orcid_widget');
+				prevInput.val('');
+				if(prevInput.hasClass('error'))prevInput.removeClass('error')
+				$(this).closest('span').prev().remove();
+				$(this).closest('span').prev().remove();
+				$(this).parent().next().remove();
+				$(this).parent().next().remove();
+				$(this).parent().next().remove();
+				$(this).parent().next().remove();
+			}
+		}
+	});
+
 	/* Update record status from the Save & Validate panel */
         $(document).on('click', '.status_action', function(e){
 	    e.preventDefault();
@@ -707,6 +734,7 @@ function initEditForm(){
 			- short (1 line) for descriptions / rights
 	 */
 	initNames();
+	initIdentifiers();
 	initDescriptions();
 	initRelatedInfos();
 	initRelatedObjects();
@@ -1225,6 +1253,17 @@ function initNames(){
 	});
 }
 
+function initIdentifiers() {
+	var identifiers = $('#identifiers .inputs_group');
+	$.each(identifiers, function(){
+		var type = $('input[name=type]', this).val();
+		if(type=='orcid'){
+			$('input[name=value]', this).addClass('orcid_widget').orcid_widget();
+		}
+		//click all the lookup button
+		$('a.lookup-btn').click();
+	});
+}
 
 /*
  * Initialize the descriptions tab (aro_box_display)

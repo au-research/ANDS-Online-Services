@@ -20,12 +20,25 @@ function acl_enforce($function_name, $message = '')
 	$_ci =& get_instance();
 	if (!$_ci->user->isLoggedIn())
 	{
-		throw new Exception (($message ?: "Access to this function requires you to be logged in. Perhaps you have been automatically logged out?"));
+		redirect('auth/login/?error=login_required&redirect='.curPageURL());
+		// throw new Exception (($message ?: "Access to this function requires you to be logged in. Perhaps you have been automatically logged out?"));
 	}
 	else if (!$_ci->user->hasFunction($function_name))
 	{
 		throw new Exception (($message ?: "You do not have permission to use this function (".$function_name."). Perhaps you have been logged out?"));
 	}
+}
+
+function curPageURL() {
+	$pageURL = 'http';
+	if (isset($_SERVER['HTTPS']) && $_SERVER["HTTPS"] == "on") {$pageURL .= "s";}
+	$pageURL .= "://";
+	if ($_SERVER["SERVER_PORT"] != "80") {
+		$pageURL .= $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"].$_SERVER["REQUEST_URI"];
+	} else {
+		$pageURL .= $_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];
+	}
+	return $pageURL;
 }
 
 function ds_acl_enforce($ds_id, $message = ''){
@@ -117,8 +130,6 @@ function notifySiteAdmin($errno, $errstr, $errfile, $errline)
 	}
 }
 
-
-
 set_error_handler("default_error_handler");
 
 function default_exception_handler( $e ) {
@@ -147,6 +158,8 @@ function asset_url( $path, $loc = 'modules')
 
 	if($loc == 'base'){
 		return $CI->config->item('default_base_url').'assets/'.$path;
+	}else if($loc == 'shared'){
+		return $CI->config->item('default_base_url').'assets/shared/'.$path;
 	}else if($loc == 'core'){
 		return base_url( 'assets/core/' . $path );
 	}else if($loc == 'modules'){
@@ -172,6 +185,24 @@ function portal_url($suffix='')
 	$CI =& get_instance();
 
 	return $CI->config->item('default_base_url') . $suffix;
+}
+
+function roles_url($suffix=''){
+	$CI =& get_instance();
+
+	return $CI->config->item('default_base_url') . 'roles/'. $suffix;
+}
+
+function apps_url($suffix=''){
+	$CI =& get_instance();
+
+	return $CI->config->item('default_base_url') . 'apps/'. $suffix;
+}
+
+function identifier_url($suffix=''){
+	$CI =& get_instance();
+
+	return $CI->config->item('default_base_url') . 'identifier/'. $suffix;
 }
 
 function current_protocol()
@@ -246,4 +277,29 @@ URCHIN;
 		return "<!-- this would be the code snippet for Google Analytics, " .
 		"but the provided account details were empty... -->\n";
 	}
+}
+
+function is_dev(){
+	if(ENVIRONMENT=='development'){
+		return true;
+	}else return false;
+}
+
+function maxUploadSizeBytes()
+{
+	// Helper function to convert "2M" to bytes
+	$normalize = function($size) {
+		if (preg_match('/^([\d\.]+)([KMG])$/i', $size, $match)) {
+		$pos = array_search($match[2], array("K", "M", "G"));
+			if ($pos !== false) {
+			$size = $match[1] * pow(1024, $pos + 1);
+			}
+		}
+		return $size;
+	};
+	$max_upload = $normalize(ini_get('upload_max_filesize'));
+	$max_post = $normalize(ini_get('post_max_size'));
+	$memory_limit = $normalize(ini_get('memory_limit'));
+	$maxFileSize = min($max_upload, $max_post, $memory_limit);
+	return $maxFileSize;
 }

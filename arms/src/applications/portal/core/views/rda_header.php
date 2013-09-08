@@ -83,7 +83,7 @@ else
 		</div><!-- inner -->
 
 		<div class="advanced_search">
-		        <div id="adv_note_content" class="hide">
+		    <div id="adv_note_content" class="hide">
 			  <p>Selecting "Collections", "Activities", "Services", or "Parties" from the drop-down box will restrict the search to records of this class.</p>
 			  <p>A search string within the field “All of these words”, will return records containing all words entered into this field.</p>
 			  <p>A search string within the field “One or more of these words”, will return records containing any of the entered words within this field.</p>

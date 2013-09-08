@@ -10,7 +10,7 @@ $(function(){
 
 	 setInterval(function(){
 	 	updateStat();
-	 }, 10000);
+	 }, 60000);
 });
 
 function initView(){
@@ -23,7 +23,6 @@ function updateStat() {
 	//get Stat
 	// $('#stat').css('opacity', '0.5');
 	$.getJSON(base_url+'maintenance/getStat', function(data) {
-		console.log(data);
 		var template = $('#stat-template').html();
 		var output = Mustache.render(template, data);
 		$('#stat').html(output);
@@ -70,4 +69,17 @@ $(document).on('click','button.task',function(){
 	});
 }).on('click','#refresh', function(){
 	initView();
+}).on('click', '#syncRO', function(){
+	var idkey = $('#idkey').val();
+	$('#result').html('Syncing...')
+	if(idkey!=''){
+		$.ajax({
+			url:base_url+'maintenance/sync', 
+			type: 'POST',
+			data: {idkey:idkey},
+			success: function(data){
+				$('#result').html(data.message);
+			}
+		});
+	}
 });

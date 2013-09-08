@@ -89,12 +89,35 @@ class Registry extends MX_Controller {
 
 		$vocab_results = array();
 		foreach($query->result() as $row){
-			$item = array('value'=>$row->title, 'subtext'=>$row->registry_object_id);
+			$item = array('value'=>$row->title, 'id'=>$row->registry_object_id);
 			array_push($vocab_results, $item);
 		}
 
 		$vocab_results = json_encode($vocab_results);
 		echo $vocab_results;
+	}
+
+	public function solr_search(){
+		header('Cache-Control: no-cache, must-revalidate');
+		header('Content-type: application/json');
+		$this->load->library('solr');
+		$start=0;
+		$start = ($this->input->get('start')?$this->input->get('start'):'0');
+		$query = ($this->input->get('query')?$this->input->get('query'):'*:*');
+		$fq = ($this->input->get('fq')?$this->input->get('fq'):'');
+		
+		$query = $this->input->get('query');
+		$this->solr->setOpt('defType', 'edismax');
+		$this->solr->setOpt('start', $start);
+		$this->solr->setOpt('q', 'fulltext:('.$query.')');
+		if($fq!='') $this->solr->setOpt('fq', $fq);
+		$this->solr->executeSearch();
+		$data['result'] = $this->solr->getResult();
+		$data['numFound'] = $this->solr->getNumFound();
+		$data['solr_header'] = $this->solr->getHeader();
+		$data['fieldstrings'] = $this->solr->constructFieldString();
+		$data['timeTaken'] = $data['solr_header']->{'QTime'} / 1000;
+		echo json_encode($data);
 	}
 
 	/*

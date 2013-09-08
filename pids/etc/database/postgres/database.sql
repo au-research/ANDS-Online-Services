@@ -49,3 +49,19 @@ GRANT INSERT ON TABLE handles, nas, trusted_client TO pidmaster;
 GRANT UPDATE ON TABLE handles, nas, trusted_client TO pidmaster;
 GRANT DELETE ON TABLE handles, nas, trusted_client TO pidmaster;
 GRANT USAGE ON SEQUENCE handlesuffix_seq TO pidmaster;
+
+-- R 10.2 release changes
+ALTER TABLE trusted_client ADD COLUMN created_when timestamp with time zone DEFAULT now();
+
+CREATE OR REPLACE VIEW search_view AS 
+SELECT encode(handles.handle, 'escape'::text) AS handle, encode(handles.data, 'escape'::text) AS data
+FROM handles
+WHERE handles.type = 'DESC'::bytea OR handles.type = 'URL'::bytea;
+
+ALTER TABLE search_view
+  OWNER TO pidmaster;
+
+CREATE OR REPLACE RULE "_RETURN" AS
+ON SELECT TO search_view DO INSTEAD  SELECT encode(handles.handle, 'escape'::text) AS handle, encode(handles.data, 'escape'::text) AS data
+FROM handles
+WHERE handles.type = 'DESC'::bytea OR handles.type = 'URL'::bytea;

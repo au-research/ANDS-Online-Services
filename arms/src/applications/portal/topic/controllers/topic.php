@@ -6,7 +6,6 @@ class Topic extends MX_Controller {
 	public function index()
 	{
 		$data['title']='Research Data Australia';
-
 		$data['topics'] = $this->getFromDataFile();
 		$data['image_base_url'] = $this->image_base_url;
 		$this->load->view('list_topics', $data);

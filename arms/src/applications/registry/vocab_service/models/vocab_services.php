@@ -530,9 +530,9 @@ class Vocab_services extends CI_Model {
 		$vocabs = array();
 		$users = array();
 		$affiliations = $this->user->affiliations();
-		$this->load->model('cosi_authentication', 'cosi');
+		$this->load->model($this->config->item('authentication_class'), 'role');
 		foreach($affiliations as $a){
-			$users = array_merge($users, $this->cosi->getRolesInAffiliate($a));
+			$users = array_merge($users, $this->role->getRolesInAffiliate($a));
 		}
 		$users = array_unique($users);
 		foreach($users as $u){

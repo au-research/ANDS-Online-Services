@@ -43,7 +43,6 @@ function logErrorOnScreen(error, target){
 
 $(document).ready(function(){
 
-
 	if ($('.dash_news').height() > 380) {
 		var orig_height = $('.dash_news').height();
 	    $('.dash_news').css({

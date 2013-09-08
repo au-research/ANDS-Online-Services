@@ -116,7 +116,7 @@ class Data_source extends MX_Controller {
 
 		$deletedRecords = array();
 		$data['ds'] = $this->ds->getByID($data_source_id);
-		$ids = $this->ro->getDeletedRegistryObjects($data_source_id);
+		$ids = $this->ro->getDeletedRegistryObjects(array('data_source_id'=> $data_source_id));
 		$data['record_count'] = sizeof($ids);
 		if(sizeof($ids) > 0){
 			

@@ -20,7 +20,11 @@ class Auth extends CI_Controller {
 			{
 				if($this->user->authChallenge($this->input->post('inputUsername'), $this->input->post('inputPassword')))
 				{
-					redirect('/');
+					if($this->input->post('redirect')){
+						redirect($this->input->post('redirect'));
+					}else{
+						redirect(registry_url().'auth/dashboard');
+					}
 				}
 			}
 			catch (Exception $e)
@@ -29,6 +33,17 @@ class Auth extends CI_Controller {
 				$data['exception'] = $e;
 			}
 		}
+
+		if($this->input->get('error')){
+			$error = $this->input->get('error');
+			if($error=='login_required'){
+				$data['error_message'] = "Access to this function requires you to be logged in. Perhaps you have been automatically logged out?";
+			}
+		}
+
+		if($this->input->get('redirect')) {
+			$data['redirect'] = $this->input->get('redirect');
+		}else $data['redirect'] = registry_url().'auth/dashboard';
 		
 		$this->load->view('login', $data);
 	}
@@ -48,29 +63,34 @@ class Auth extends CI_Controller {
 		$data['authenticators'] = $this->CI->config->item('authenticators');
 		if(isset($_SERVER['shib-shared-token'])){
 			$sharedToken = $_SERVER['shib-shared-token'];
+			try 
+			{
+				if($this->user->authChallenge($sharedToken, ''))
+				{
+					if($this->input->get('redirect')!='auth/dashboard/'){
+						redirect($this->input->get('redirect'));
+					}else{
+						redirect(registry_url().'auth/dashboard');
+					}
+				}
+				else
+				{
+					$data['error_message'] = "Unable to login. Please check your credentials are accurate.";
+					$this->load->view('login', $data);
+				}
+			}
+			catch (Exception $e)
+			{
+				$data['error_message'] = "Unable to login. Please check your credentials are accurate.";
+				$data['exception'] = $e;
+				$this->load->view('login', $data);
+			}
 		}else{
 			$data['error_message'] = "Unable to login. Shibboleth IDP was not able to authenticate the given credentials.";
 			$this->load->view('login', $data);
 		}
 
-		try 
-		{
-			if($this->user->authChallenge($sharedToken, ''))
-			{
-				redirect('/auth/dashboard/');
-			}
-			else
-			{
-				$data['error_message'] = "Unable to login. Please check your credentials are accurate.";
-				$this->load->view('login', $data);
-			}
-		}
-		catch (Exception $e)
-		{
-			$data['error_message'] = "Unable to login. Please check your credentials are accurate.";
-			$data['exception'] = $e;
-			$this->load->view('login', $data);
-		}
+		
 
 	}
 
@@ -81,10 +101,10 @@ class Auth extends CI_Controller {
 		$orgRole = $this->input->post('orgRole');
 		$thisRole = $this->input->post('thisRole');
 		$jsonData = array();
-		$this->load->model('cosi_authentication', 'cosi');
+		$this->load->model($this->config->item('authentication_class'), 'auth');
 
 		if($new){
-			$this->cosi->createOrganisationalRole($orgRole, $thisRole);
+			$this->auth->createOrganisationalRole($orgRole, $thisRole);
 		}
 
 		if(in_array($orgRole, $this->user->affiliations())){
@@ -120,7 +140,6 @@ class Auth extends CI_Controller {
 		$data['title'] = 'ANDS Online Services Home';
 		$data['js_lib'] = array('core');
 		$data['scripts'] = array();
-		
 		if($this->user->loggedIn()) 
 		{
 			if(sizeof($this->user->affiliations())>0){
@@ -132,8 +151,8 @@ class Auth extends CI_Controller {
 				$this->load->model('vocab_service/vocab_services','vocab');
 				$data['group_vocabs']=$this->vocab->getGroupVocabs();
 				//$data['owned_vocabs']=$this->vocab->getOwnedVocabs(false);
-				$this->load->model('cosi_authentication', 'cosi');
-				$data['available_organisations'] = $this->cosi->getAllOrganisationalRoles();
+				$this->load->model($this->config->item('authentication_class'), 'auth');
+				$data['available_organisations'] = $this->auth->getAllOrganisationalRoles();
 				asort($data['available_organisations']);
 			}
 
@@ -189,10 +208,10 @@ class Auth extends CI_Controller {
 			throw new Exception("Unable to change password unless you are logged in as a built-in COSI user!");
 		}
 
-		if ($this->config->item('authentication_class') != 'cosi_authentication')
-		{
-			throw new Exception("Unable to change password unless the authentication framework is COSI!");
-		}
+		// if ($this->config->item('authentication_class') != 'cosi_authentication')
+		// {
+		// 	throw new Exception("Unable to change password unless the authentication framework is COSI!");
+		// }
 
 		if ($this->input->post('password'))
 		{
@@ -206,8 +225,8 @@ class Auth extends CI_Controller {
 			}
 			else
 			{
-				$this->load->model('cosi_authentication', 'cosi');
-				$this->cosi->updatePassword($this->user->localIdentifier(), $this->input->post('password'));
+				$this->load->model($this->config->item('authentication_class'), 'role');
+				$this->role->updatePassword($this->user->localIdentifier(), $this->input->post('password'));
 				$this->session->set_flashdata('message', 'Your password has been updated. This will be effective from your next login.');
 				redirect('/');
 			}

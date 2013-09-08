@@ -35,7 +35,7 @@
 	   // cache: true,
 
 	    //search mode: what to show when no hits? set to boolean(false) to supress
-	    nohits_msg: "No matches found <br /> If you wish to register for an orcid please click <a href='https://orcid.org/register' target='_blank'>here</a>",
+	    nohits_msg: '<p>No matches found<br/>If you wish to register for an orcid please click <a href="https://orcid.org/register" target="_blank" style="float:none;padding:0px">here</a></p>',
 
 	    //what to show when there's some weird error? set to boolean(false)
 	    //to supress
@@ -182,17 +182,25 @@ var OrcidHandler = Class.extend({
 
 	    this._uid = this.makeUid();
 	    this._input = input;
+	    if(this._input.parent().is("span"))
+	    {
+	    	var afterPos = this._input.parent();
+	    	var beforePos = this._input.parent();
+		}else{
+			var afterPos = this._input;
+			var beforePos = this._input;
+		}
 	    this.settings = settings;
-	    this._inputLabel = $("<span>http://orcid.org/</span>");
+	    this._inputLabel = $("<span id='"+this._uid+"-url'>http://orcid.org/ </span>");
 	    this._inputMessage = $("<span class='orcid_message' id='"+this._uid+"-input-message' style='padding-left:100px'>ORCID Identifier<span><br />")
-	    this._inputLabel.insertBefore(this._input);
+	    this._inputLabel.insertBefore(beforePos);
 	    this._inputMessage.insertBefore(this._inputLabel);
 	    //console.log(this._input);
-	    this._button = $('<a style="margin-left:1em" class="btn" data-toggle="modal" role="button">Search</i></a>');
-	    this._lookupbutton = $('<a style="margin-left:1em" class="btn" data-toggle="modal" role="button">Lookup</a>');	    
+	    this._button = $('<a style="margin-left:1em;float:none;line-height:17px;" class="btn btn-small" data-toggle="modal" role="button">Search</i></a>');
+	    this._lookupbutton = $('<a style="margin-left:1em;positon:relative;float:none;line-height:17px;" class="btn btn-small lookup-btn" data-toggle="modal" role="button">Lookup</a>');	    
 	    this._button.attr('id', this._uid);
-	    this._button.insertAfter(this._input);
-	    this._lookupbutton.insertAfter(this._input);
+	    this._button.insertAfter(afterPos);
+	    this._lookupbutton.insertAfter(afterPos);
 	    //set up the id lookups we're going to use
 	    this._uids = [];
 	    this._uids['modalid'] = this._uid + '-modal';
@@ -243,8 +251,8 @@ var OrcidHandler = Class.extend({
 			'<div class="control-group">' +
 			'<label class="control-label" for="' + this._uids['txtid'] + '">Researcher name</label>' +
 			'<div class="controls input-append" style="display:block">' +
-			'<input type="text" autofocus="autofocus" id="' + this._uids['txtid'] + '" >' +
-			'<button class="btn btn-primary" type="submit"><i class="icon-white icon-search"> </i> </button>' +
+			'<input type="text" autofocus="autofocus" id="' + this._uids['txtid'] + '" class="search_input">' +
+			'<button class="btn-primary search_orcid" type="submit" id="' + this._uids['txtid'] + '_button"><i class="icon-white icon-search"> </i> </button>' +
 			'</div></div>' +
 			'</form>' +
 			'<div class="results"></div>' +
@@ -345,6 +353,10 @@ var OrcidHandler = Class.extend({
 	    return url;
 	},
 
+	destroy: function(){
+
+		alert("we need to detach the widget!!")
+	}
 
     });
 
@@ -406,7 +418,7 @@ var OrcidHandler = Class.extend({
 	   
 	}, 
 
-/**
+	/**
 	 * silly wrapper to provide input buffering.
 	 * `lookup` makes the ajax call
 	 */
@@ -460,7 +472,6 @@ var OrcidHandler = Class.extend({
 
 	  	  this._modal = this.makeModal();
 	  	  this._modal.insertAfter(this._button);
-	
 
 	   	 var modal = this._modal;
 	    	this._button.on('click', function() {
@@ -475,7 +486,10 @@ var OrcidHandler = Class.extend({
 	    this._returnModal = handler.makeReturnModal();
 	    this._returnModal.insertAfter(handler._button);
 	    var returnModal = this._returnModal;
-	    $("#" + this._uids['formid']).on('submit', function(e) {
+	   
+
+	    var doSearch = function(e) {
+
 		e.preventDefault();
 
 		var searchVal = $("#" + handler._uids['txtid']).val();
@@ -490,11 +504,13 @@ var OrcidHandler = Class.extend({
 			searchStr = searchStr + searchTerms[i] + "+AND+";
 		}
 		searchStr = searchStr + searchTerms[searchTerms.length-1];
+		//alert("#" + this._uids['formid'] + "_button")
+		var rdiv = $("#" + handler._uids['modalid'] + " div.results");
 		if(searchStr!='')
 		{
 			var surl = handler.settings.endpoint;
 			var theAddress = 'http://pub.orcid.org/search/orcid-bio?q='+searchStr+'&start=0&rows=100'+'&wt=json';
- 			var rdiv = $("#" + handler._uids['modalid'] + " div.results");
+ 			//var rdiv = $("#" + handler._uids['modalid'] + " div.results");
 			rdiv.html('Loading results... (100 maximum)');
 			var xhr = $.getJSON(surl,
 				    {
@@ -519,6 +535,8 @@ var OrcidHandler = Class.extend({
 								lb.data('orcid', e);
 								var infoStr = '';
 								var tooltip = toHtml(e['orcid-profile'],infoStr);
+								if(tooltip.length>1200)
+								tooltip = tooltip.substring(0,1200) + " ..."
 								lb.append('<span class="class preview" title="'+tooltip+'" disname="'+givenNames+' '+familyName +'"> ' +givenNames+' '+familyName+ ' ' + ' ['+orcid+' ]</span>');
 								var li = $('<li style="text-align:left"/>');
 								li.append(lb);
@@ -562,7 +580,7 @@ var OrcidHandler = Class.extend({
 				handler._lookupbutton.trigger('click');
 				handler._inputMessage.html('ORCID Identifier<br />')
 				handler._inputMessage.attr('class','orcid_message')
-				handler._input.attr('class','')
+				if(handler._input.hasClass('error')) handler._input.removeClass('error')
 			    }
 			    else {
 				handler._input.val(record[handler.settings.target_field]);
@@ -577,27 +595,35 @@ var OrcidHandler = Class.extend({
 		}else{
 			rdiv.html('<div align="center">You must provide a search value.</div>');
 		}
-	    });
-		
-			this._lookupbutton.on('click', function() {
+	    }
 
-			searchStr = handler._input.val();
-			var surl = handler.settings.endpoint;
-			var theAddress = 'http://pub.orcid.org/'+searchStr+'/orcid-bio';
- 			var rdiv = $("#" + handler._uids['modalReturnId']);
-			rdiv.html('Loading result...');
-			var xhr = $.getJSON(surl,
-				    {
-					'address': theAddress
-				    },
-				    function(data) {
-				    if(data!=null)
-				    {
-						if (typeof(data['orcid-profile']) === 'undefined' ||
+	    $(document).on('keydown', '.search_input', function(e){
+	    	if (e.keyCode == 13) {
+      			$('.search_orcid').trigger('click');
+   			}
+	    });
+
+	 	$('.search_orcid').click(doSearch);	
+	 	
+		this._lookupbutton.on('click', function() {
+
+		searchStr = handler._input.val();
+		var surl = handler.settings.endpoint;
+		var theAddress = 'http://pub.orcid.org/'+searchStr+'/orcid-bio';
+ 		var rdiv = $("#" + handler._uids['modalReturnId']);
+		rdiv.html('Loading result...');
+		var xhr = $.getJSON(surl,
+			{
+				'address': theAddress
+			},
+			function(data) {
+				if(data!=null)
+				{
+					if (typeof(data['orcid-profile']) === 'undefined' ||
 					   	 data['orcid-profile'].length === 0) {
 					   	 	handler._inputMessage.html('Invalid ORCID Identifier<br />')
 					   	 	handler._inputMessage.attr('class','error-message')
-					   	 	handler._input.attr('class','error')
+					   	 	handler._input.addClass('error')
 					    	rdiv.html('<div align="center"></div>');
 						}
 						else {
@@ -609,7 +635,7 @@ var OrcidHandler = Class.extend({
 					    	var dataArray = toHtml(data['orcid-profile'],resStr);
 							handler._inputMessage.html('ORCID Identifier<br />')
 							handler._inputMessage.attr('class','orcid_message')
-							handler._input.attr('class','')
+							handler._input.removeClass('error')
 					    	rdiv.append(dataArray)
 						}
 					}else{
@@ -634,7 +660,7 @@ var OrcidHandler = Class.extend({
 				  'Search service failed... try again?</div>');
 		    });
 				returnModal.show();
-	    	});
+	    });
 
 	},
 
@@ -653,7 +679,9 @@ function toHtml(obj,resStr) {
 		if(obj['orcid-bio']['biography'].value!='')	
 		{
 			resStr += "<h6>Biography</h6>";
-			resStr +="<p>"+obj['orcid-bio']['biography'].value+"</p>";
+			var biography = obj['orcid-bio']['biography'].value		
+			biography = biography.replace(/"/g,'&quot;');		
+			resStr +="<p>"+biography+"</p>";
 		}
 	}
 	    					    	

@@ -3,6 +3,7 @@ class _set
 {
   public $spec;
   public $name;
+  public $val;
   public $source;
 
   private $valid_sources = array("datasource", "group", "class");
@@ -14,7 +15,7 @@ class _set
   {
       $this->spec = sprintf("%s:%s", $ns, urlencode($spec));
       $this->name = $name;
-
+      $this->val = $spec;
       if (!in_array($ns, $this->valid_sources))
       {
 	  throw new Oai_BadArgument_Exceptions("unknown set spec '$this->spec'");

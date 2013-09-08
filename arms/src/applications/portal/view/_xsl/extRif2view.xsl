@@ -442,7 +442,16 @@
   <xsl:if test="ro:location/ro:address/ro:electronic/@type='url' 
     or ro:rights or ro:location/ro:address/ro:electronic/@type='email' or ro:location/ro:address/ro:physical">     
     <div class="right-box">
-        
+        <!-- AddThis Button BEGIN -->
+        <div class="addthis_toolbox addthis_default_style ">
+          <a class="addthis_button_facebook_like"></a>
+          <a class="addthis_button_tweet"></a>
+          <a class="addthis_counter addthis_pill_style"></a>
+        </div>
+        <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=xa-521ea5093dcee175&amp;async=1"></script>
+        <!-- AddThis Button END -->
+        <a href="javascript:;" class="sharing_widget">Share</a>
+
         <h2>Access</h2>
         <div class="limitHeight300">
             <xsl:if test="ro:location/ro:address/ro:electronic/@type='url'">
@@ -1043,6 +1052,7 @@
        <xsl:apply-templates select="current()[@type='orcid']" mode = "orcid_prefixedLink"/>
        <xsl:apply-templates select="./ro:identifier[@type != 'doi' and @type != 'uri' and @type != 'URL' and @type != 'url' and @type != 'purl' and @type != 'handle' and @type != 'AU-ANL:PEAU' and @type != 'ark' and @type!='orcid']" mode="other_prefixedLink"/>
        <xsl:text>.</xsl:text>
+
     </xsl:if>
   <!--xsl:if test="./ro:version != ''">
   <xsl:text> </xsl:text>
@@ -1076,6 +1086,7 @@
         <xsl:apply-templates select="./ro:identifier[@type = 'ark']" mode="other_resolveURL"/>
         <xsl:apply-templates select="./ro:identifier[@type = 'orcid']" mode="orcid_resolveURL"/>
         <!--xsl:apply-templates select="./ro:identifier[@type != 'doi' and @type != 'uri' and @type != 'URL' and @type != 'url' and @type != 'purl' and @type != 'handle' and @type != 'AU-ANL:PEAU' and @type != 'ark' and @type != 'orcid']" mode="other_resolveURL"/-->
+
       </xsl:variable>
 
       <xsl:choose>

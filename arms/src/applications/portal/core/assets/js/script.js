@@ -1,6 +1,13 @@
 $(document).ready(function() {
 	initTips();
 
+	$('#search_box').typeahead({
+		name:'Search Suggestion',
+		remote: base_url+'search/suggest/?q=%QUERY'
+	}).on('typeahead:selected', function(){
+		window.location = base_url+'search/#!/q='+encodeURIComponent($('#search_box').val());
+	});
+	$('.twitter-typeahead').attr('style', '');
 
 	if ($.browser.msie && $.browser.version <= 9.0) {
 		$('#who_contributes li').css({
@@ -195,6 +202,12 @@ $(document).ready(function() {
 			}
 		}
 	});
+
+
+$(document).on('click', '.sharing_widget', function(){
+	addthis.init();
+	$(this).remove();
+});
 
 function validateEmail(email) 
 {

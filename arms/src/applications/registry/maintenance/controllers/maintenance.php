@@ -281,6 +281,49 @@ class Maintenance extends MX_Controller {
 	}
 
 	/**
+	 * Sync a single registry object by key or by id
+	 * @return json
+	 */
+	function sync(){
+		acl_enforce('REGISTRY_STAFF');
+		header('Cache-Control: no-cache, must-revalidate');
+		header('Content-type: application/json');
+
+		$this->load->model('registry_object/registry_objects', 'ro');
+		$this->load->library('solr');
+
+		$use = 'id';
+		$idkey = $this->input->post('idkey');
+		
+		$ro = $this->ro->getByID($idkey);
+		if(!$ro) {
+			$ro = $this->ro->getAllByKey($idkey);
+			$use = 'keys';
+		}
+		if(!$ro) {
+			$data['status']='error';
+			$data['message'] = '<i class="icon icon-remove"></i> No Registry Object Found!';
+		}else{
+			if($use=='id'){
+				$ro->enrich();
+				$solrXML = $ro->transformForSOLR();
+				$this->solr->addDoc("<add>".$solrXML."</add>");
+				$this->solr->commit();
+			}elseif($use=='keys'){
+				foreach($ro as $r){
+					$r->enrich();
+					$solrXML = $r->transformForSOLR();
+					$this->solr->addDoc("<add>".$solrXML."</add>");
+					$this->solr->commit();
+				}
+			}
+			$data['status'] = 'success';
+			$data['message'] = '<i class="icon icon-ok"></i> Done!';
+		}
+		echo json_encode($data);
+	}
+
+	/**
 	 * @ignore
 	 */
 	public function __construct(){

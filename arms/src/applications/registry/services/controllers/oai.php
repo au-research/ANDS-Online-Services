@@ -284,15 +284,33 @@ class Oai extends MX_Controller
 			$this->output->append_output("\t<ListRecords>\n");
 			foreach ($response['records'] as $rec)
 			{
-				$header = $rec->header();
+				
 				$status = "";
 				$deleted = false;
-				if ($rec->is_deleted())
+				if (isset($rec->status) &&  $rec->status == 'deleted')
 				{
 					$status = " status='deleted'";
 					$deleted = true;
 				}
-				if($rec->is_collection() || $format != 'dci')
+				else{
+					$header = $rec->header();
+				}
+				
+				if($deleted)
+				{
+					$this->output->append_output("\t\t<record>\n");
+					$this->output->append_output(sprintf("\t\t\t<header%s>\n", $status));
+					$this->output->append_output("\t\t\t\t<identifier>" . sprintf($rec->registry_object_id, "ands.org.au") . "</identifier>\n");
+					$this->output->append_output("\t\t\t\t<datestamp>" .gmdate('Y-m-d\TH:i:s\+\Z', $rec->deleted) ."</datestamp>\n");
+					foreach ($rec->sets as $key=>$val)
+					{
+						$this->output->append_output(sprintf("\t\t\t\t<setSpec>%s:%s</setSpec>\n", $key, $val));
+					}
+					$this->output->append_output("\t\t\t</header>\n");
+					$this->output->append_output("\t\t</record>\n");
+
+				}
+				elseif($rec->is_collection() || $format != 'dci')
 				{
 					$this->output->append_output("\t\t<record>\n");
 					$this->output->append_output(sprintf("\t\t\t<header%s>\n", $status));
@@ -313,16 +331,13 @@ class Oai extends MX_Controller
 						}
 					}
 					$this->output->append_output("\t\t\t</header>\n");
-					if (!$deleted)
+					$this->output->append_output("\t\t\t<metadata>\n");
+					try
 					{
-						$this->output->append_output("\t\t\t<metadata>\n");
-						try
-						{
-						    $this->output->append_output( $rec->metadata($format,3));
-						}
-						catch (Exception $e) {/*eek... would be good to log these...*/}
-						$this->output->append_output("\t\t\t</metadata>\n");
+					    $this->output->append_output( $rec->metadata($format,3));
 					}
+					catch (Exception $e) {/*eek... would be good to log these...*/}
+					$this->output->append_output("\t\t\t</metadata>\n");
 					$this->output->append_output("\t\t</record>\n");
 				}
 			}
@@ -355,37 +370,54 @@ class Oai extends MX_Controller
 		$rec = $this->records->getByIdentifier($identifier);
 		if ($rec)
 		{
-			$this->output->append_output("\t<GetRecord>\n");
-			$header = $rec->header();
 			$status = "";
 			$deleted = false;
-			if ($rec->is_deleted())
+			$this->output->append_output("\t<GetRecord>\n");
+			if (isset($rec->status) &&  $rec->status == 'deleted')
 			{
 				$status = " status='deleted'";
 				$deleted = true;
 			}
-
-			$this->output->append_output("\t\t<record>\n");
-			$this->output->append_output(sprintf("\t\t\t<header%s>\n", $status));
-			$this->output->append_output("\t\t\t\t<identifier>" .
-						     sprintf($header['identifier'],
-							     "ands.org.au") .
-						     "</identifier>\n");
-			$this->output->append_output("\t\t\t\t<datestamp>" .
-						     $header['datestamp'] .
-						     "</datestamp>\n");
-			if (array_key_exists('sets', $header))
-			{
-				foreach ($header['sets'] as $set)
-				{
-					$this->output->append_output("\t\t\t\t" .
-								     $set->asRef() .
-								     "\n");
-				}
+			else{
+				$header = $rec->header();
 			}
-			$this->output->append_output("\t\t\t</header>\n");
-			if (!$deleted)
+			
+			if($deleted)
 			{
+				$this->output->append_output("\t\t<record>\n");
+				$this->output->append_output(sprintf("\t\t\t<header%s>\n", $status));
+				$this->output->append_output("\t\t\t\t<identifier>" . sprintf($rec->registry_object_id, "ands.org.au") . "</identifier>\n");
+				$this->output->append_output("\t\t\t\t<datestamp>" .gmdate('Y-m-d\TH:i:s\+\Z', $rec->deleted) ."</datestamp>\n");
+				foreach ($rec->sets as $key=>$val)
+				{
+					$this->output->append_output(sprintf("\t\t\t\t<setSpec>%s:%s</setSpec>\n", $key, $val));
+				}
+				$this->output->append_output("\t\t\t</header>\n");
+				$this->output->append_output("\t\t</record>\n");
+
+			}
+			else
+			{
+
+				$this->output->append_output("\t\t<record>\n");
+				$this->output->append_output(sprintf("\t\t\t<header%s>\n", $status));
+				$this->output->append_output("\t\t\t\t<identifier>" .
+							     sprintf($header['identifier'],
+								     "ands.org.au") .
+							     "</identifier>\n");
+				$this->output->append_output("\t\t\t\t<datestamp>" .
+							     $header['datestamp'] .
+							     "</datestamp>\n");
+				if (array_key_exists('sets', $header))
+				{
+					foreach ($header['sets'] as $set)
+					{
+						$this->output->append_output("\t\t\t\t" .
+									     $set->asRef() .
+									     "\n");
+					}
+				}
+				$this->output->append_output("\t\t\t</header>\n");
 				$this->output->append_output("\t\t\t<metadata>\n");
 				try
 				{
@@ -393,8 +425,9 @@ class Oai extends MX_Controller
 				}
 				catch (Exception $e) {/*eek... would be good to log these...*/}
 				$this->output->append_output("\t\t\t</metadata>\n");
+				$this->output->append_output("\t\t</record>\n");
+				
 			}
-			$this->output->append_output("\t\t</record>\n");
 			$this->output->append_output("\t</GetRecord>\n");
 		}
 		else 

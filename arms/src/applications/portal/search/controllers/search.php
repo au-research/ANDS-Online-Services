@@ -13,31 +13,28 @@ class Search extends MX_Controller {
 		$this->load->view('search_layout', $data);
 	}
 
+	function filter(){
+		header('Cache-Control: no-cache, must-revalidate');
+		header('Content-type: application/json');
+		$data = $this->solr_search($this->input->post('filters'), true);
+		//return the result to the client
+		echo json_encode($data);
+	}
+
 	function solr_search($filters, $include_facet = true){
 		$this->load->library('solr');
 
-		$page = 1; $start = 0;
-		$pp = ( isset($filters['rows']) ? (int) $filters['rows'] : 15 );
+		
 
-		$this->solr->setOpt('rows', $pp);
-		$this->solr->setOpt('defType', 'edismax');
-		$this->solr->setOpt('q.alt', '*:*');
-		$this->solr->setOpt('mm', '2'); //minimum should match optional clause
-		$this->solr->setOpt('fl', '*, score'); //we'll get the score as well
-
-		//if there's no query to search, eg. rda browsing
-		if (!isset($filters["q"])){
-			$this->solr->setOpt('q', '*:*');
-			$this->solr->setOpt('sort', 'score desc, s_list_title asc');
-		}
+		
 
 		//optional facets return, true for rda search
 		if($include_facet){
 			$facets = array(
 				'class' => 'Class',
 				'group' => 'Contributed By',
+				'license_class' => 'Licence',
 				'type' => 'Type',
-				'license_class' => 'Licence'
 			);
 			foreach($facets as $facet=>$display){
 				$this->solr->setFacetOpt('field', $facet);
@@ -51,65 +48,10 @@ class Search extends MX_Controller {
 		$this->solr->setOpt('bq', 'id^1 group^0.8 display_title^0.5 list_title^0.5 fulltext^0.2 (*:* -group:("Australian Research Council"))^3  (*:* -group:("National Health and Medical Research Council"))^3');
 		// $this->solr->setOpt('bq', '(*:* -group:("Australian Research Council"))^3  (*:* -group:("National Health and Medical Research Council"))^3');
 		if($filters){
-			foreach($filters as $key=>$value){
-				$value = rawurldecode($value);
-				switch($key){
-					case 'rq':
-						$this->solr->clearOpt('defType');//returning to the default deftype
-						$this->solr->setOpt('q', $value);
-					break;
-					case 'q': 
-						$value = escapeSolrValue($value);
-						$this->solr->setOpt('q', 'fulltext:('.$value.') OR simplified_title:('.iconv('UTF-8', 'ASCII//TRANSLIT', $value).')');
-					break;
-					case 'p': 
-						$page = (int)$value;
-						if($page>1){
-							$start = $pp * ($page-1);
-						}
-						$this->solr->setOpt('start', $start);
-						break;
-					case 'class': 
-						if($value!='all') $this->solr->setOpt('fq', '+class:('.$value.')');
-						break;
-					case 'group': 
-						if($value!='all') $this->solr->setOpt('fq', '+group:("'.$value.'")');
-						break;
-					case 'type': 
-						if($value!='all') $this->solr->setOpt('fq', '+type:("'.$value.'")');
-						break;
-					case 'subject_value_resolved': 
-						$this->solr->setOpt('fq', '+subject_value_resolved:("'.$value.'")');
-						break;
-					case 's_subject_value_resolved': 
-						$this->solr->setOpt('fq', '+s_subject_value_resolved:("'.$value.'")');
-						break;
-					case 'subject_vocab_uri':
-						$this->solr->setOpt('fq', '+subject_vocab_uri:("'.$value.'")');
-						break;
-					case 'temporal':
-						$date = explode('-', $value);
-						$this->solr->setOpt('fq','+earliest_year:['.$date[0].' TO *]');
-						$this->solr->setOpt('fq','+latest_year:[* TO '.$date[1].']');
-						break;
-					case 'license_class': 
-						$this->solr->setOpt('fq','+license_class:("'.$value.'")');
-						break;
-					case 'spatial':
-						$this->solr->setOpt('fq','+spatial_coverage_extents:"Intersects('.$value.')"');
-						break;
-					case 'map':
-						$this->solr->setOpt('fq','+spatial_coverage_area_sum:[0.00001 TO *]');
-						if (isset($filters['rows']) && is_numeric($filters['rows'])){
-						    $this->solr->setOpt('rows', $filters['rows']);
-						}else{
-						    $this->solr->setOpt('rows', 1500);
-						}
-						$this->solr->setOpt('fl', 'id,spatial_coverage_area_sum,spatial_coverage_centres,spatial_coverage_extents,spatial_coverage_polygons');
-						break;
-				}
-			}
+			$this->solr->setFilters($filters);
 		}
+
+		$data['search_term'] = (isset($filters['q']) ? $filters['q'] : '');
 
 		$this->solr->executeSearch();
 
@@ -121,6 +63,31 @@ class Search extends MX_Controller {
 			$this->solr->executeSearch();
 		}
 
+		//if still no result is found, do a fuzzy search, store the old search term and search again
+		if($this->solr->getNumFound()==0){
+			$new_search_term_array = explode(' ', escapeSolrValue($filters['q']));
+			$new_search_term='';
+			foreach($new_search_term_array as $c ){
+				$new_search_term .= $c.'~0.7 ';
+			}
+			// $new_search_term = $data['search_term'].'~0.7';
+			$this->solr->setOpt('q', 'fulltext:('.$new_search_term.') OR simplified_title:('.iconv('UTF-8', 'ASCII//TRANSLIT', $new_search_term).')');
+			$this->solr->executeSearch();
+			if($this->solr->getNumFound() > 0){
+				$data['fuzzy_result'] = true;
+			}
+		}
+
+		//give up, cry a lot
+		if($this->solr->getNumFound()==0){
+			$data['no_result'] = true;
+		}else{
+			//continue on life
+			$data['has_result'] = true;
+		}
+
+		//continue on life
+		
 		/**
 		 * Getting the results back
 		 */
@@ -160,6 +127,8 @@ class Search extends MX_Controller {
 		 * Pagination prep
 		 * Page: {{page}}/{{totalPage}} |  <a href="#">First</a>  <span class="current">1</span>  <a href="#">2</a>  <a href="#">3</a>  <a href="#">4</a>  <a href="#">Last</a>
 		 */
+		$page = (isset($filters['p']) ? ((int) $filters['p']) : 1);
+		$pp = ( isset($filters['rows']) ? (int) $filters['rows'] : 15 );
 		$range = 3;
 		$pagi = '';
 		$pagi .= '<div class="page_navi">';
@@ -189,28 +158,23 @@ class Search extends MX_Controller {
 		$data['facet_counts'] = $this->solr->getFacet();
 		$data['fieldstrings'] = $this->solr->constructFieldString();
 
+
+
+
 		return $data;
 	}
 
-	function filter(){
+	function suggest(){
 		header('Cache-Control: no-cache, must-revalidate');
 		header('Content-type: application/json');
+		$search = $this->input->get('q');
+		$terms = $this->stats->getSearchSuggestion($search);
+		echo json_encode($terms);
+	}
 
-		$data = $this->solr_search($this->input->post('filters'), true);
-
-		$filteredSearch = true;
-
-		/**
-		 * Register the search term
-		 */
-		if(!$filteredSearch){
-			$this->stats->registerSearchTerm($this->solr->getOpt('q'));
-			$this->stats->registerSearchStats($this->solr->getOpt('q'),$data['numFound']);
-		}
-
-		
-		//return the result to the client
-		echo json_encode($data);
+	function registerSearchTerm(){
+		$search_term = $this->input->get('q');
+		$this->stats->registerSearchTerm($this->input->post('term'),$this->input->post('num_found'));
 	}
 
 	function getAllSubjects($vocab_type){
@@ -253,52 +217,26 @@ class Search extends MX_Controller {
 		$this->solr->clearOpt('fq');
 
 		if($filters){
-            foreach($filters as $key=>$value){
-                $value = urldecode($value);
-                switch($key){
-                    case 'q': 
-                        $this->solr->setOpt('q', "+fulltext:(*" . $value . "*)");
-                        break;
-                    case 'class': 
-                        if($value!='all') $this->solr->addQueryCondition('+class:("'.$value.'")');
-                        break;
-                    case 'group': 
-                        $this->solr->addQueryCondition('+group:("'.$value.'")');
-                        break;
-                    case 'type': 
-                        $this->solr->addQueryCondition('+type:'.$value);
-                        break;
-                    case 's_subject_value_resolved': 
-						$this->solr->addQueryCondition('+s_subject_value_resolved:("'.$value.'")');
-						$filteredSearch = true;
-						break;
-					case 'subject_vocab_uri':
-						$this->solr->addQueryCondition('+subject_vocab_uri:("'.$value.'")');
-						$filteredSearch = true;
-						break;
-					case 'temporal':
-						$date = explode('-', $value);
-						$this->solr->addQueryCondition('+earliest_year:['.$date[0].' TO *]');
-						$this->solr->addQueryCondition('+latest_year:[* TO '.$date[1].']');
-						$filteredSearch = true;
-						break;
-                    case 'license_class': 
-                        $this->solr->addQueryCondition('+license_class:("'.$value.'")');
-                        break;             
-                    case 'spatial':
-                        $this->solr->addQueryCondition('+spatial_coverage_extents:"Intersects('.$value.')"');
-                        break;
-                    case 'map':
-						$this->solr->addQueryCondition('+spatial_coverage_area_sum:[0.00001 TO *]');
-						break;
-                }
-            }
+            $this->solr->setFilters($filters);
         }
         $this->solr->addQueryCondition('+subject_type:"'.$type.'"');
 		$this->solr->setFacetOpt('pivot', 'subject_type,subject_value_resolved');
 		$this->solr->setFacetOpt('sort', 'subject_value_resolved');
 		$this->solr->setFacetOpt('limit', '25000');
 		$content = $this->solr->executeSearch();
+
+		//if still no result is found, do a fuzzy search, store the old search term and search again
+		if($this->solr->getNumFound()==0){
+			$new_search_term_array = explode(' ', $filters['q']);
+			$new_search_term='';
+			foreach($new_search_term_array as $c ){
+				$new_search_term .= $c.'~0.7 ';
+			}
+			// $new_search_term = $data['search_term'].'~0.7';
+			$this->solr->setOpt('q', 'fulltext:('.$new_search_term.') OR simplified_title:('.iconv('UTF-8', 'ASCII//TRANSLIT', $new_search_term).')');
+			$this->solr->executeSearch();
+		}
+
 		$facets = $this->solr->getFacet();
 		$facet_pivots = $facets->{'facet_pivot'}->{'subject_type,subject_value_resolved'};
 		//echo json_encode($facet_pivots);

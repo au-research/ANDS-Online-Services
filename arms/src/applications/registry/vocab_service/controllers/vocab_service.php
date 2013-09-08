@@ -845,8 +845,8 @@ class Vocab_service extends MX_Controller {
 
 	public function affiliation(){
 
-		$this->load->model('cosi_authentication', 'cosi');
-		$data['available_organisations'] = $this->cosi->getAllOrganisationalRoles();
+		$this->load->model($this->config->item('authentication_class'), 'role');
+		$data['available_organisations'] = $this->role->getAllOrganisationalRoles();
 		asort($data['available_organisations']);
 		
 

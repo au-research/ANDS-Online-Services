@@ -99,6 +99,22 @@ class Transforms_Extension extends ExtensionBase
 		}
 	}
 
+	function transformToORCID()
+	{
+		try{
+			$xslt_processor = Transforms::get_extrif_to_orcid_transformer();
+			$dom = new DOMDocument();
+			$dom->loadXML($this->ro->getExtRif());
+			$xslt_processor->setParameter('','dateProvided', date("Y-m-d"));
+			$xslt_processor->setParameter('','rda_url', portal_url($this->ro->slug));
+			return $xslt_processor->transformToXML($dom);
+		}catch (Exception $e)
+		{
+			echo "UNABLE TO TRANSFORM" . BR;	
+			echo "<pre>" . nl2br($e->getMessage()) . "</pre>" . BR;
+		}
+	}
+
 	function transformCustomForFORM($rifcs){
 		try{
 			$xslt_processor = Transforms::get_extrif_to_form_transformer();

@@ -85,6 +85,7 @@ class Doi_ip_test extends MX_Controller {
 		}
 	}
 
+
 	/**
 	 * a helper function for test_ip
 	 * @param  string $ip    the ip address of most any form to test

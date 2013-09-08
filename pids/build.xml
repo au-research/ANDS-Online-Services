@@ -9,7 +9,11 @@
 
 <project name="pids" default="build_wars" basedir=".">
 
-  <taskdef resource="net/sf/antcontrib/antlib.xml"/>
+  <taskdef resource="net/sf/antcontrib/antlib.xml">
+  <classpath>
+    <pathelement location="/usr/share/ant/lib/ant-contrib-1.0b3.jar"/>
+  </classpath>
+</taskdef>
 
   <!-- ============================================================= -->
   <!-- Description                                                   -->

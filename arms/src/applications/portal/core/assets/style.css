@@ -398,9 +398,58 @@ a.logo img {
 	border: none;
 	color: #3f3f3f;
 	font-weight: bold;
-	float: left;
 	margin: 0 9px 0 0;	
+	display:inline-block;
+	position:relative;
 }	
+
+img.clearAll{
+	cursor:pointer;
+	position:absolute;
+	left:8px;
+	top:14px;
+	display:none;
+}
+
+#searchTrigger {
+	z-index:99;
+	cursor:pointer;
+	position:absolute;
+	left:358px;
+	top:12px;
+}
+
+.tt-hint {
+  color: #999
+}
+
+.tt-dropdown-menu {
+  width: 422px;
+  top:60% !important;
+  left:1px;
+  padding: 8px 0;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  -webkit-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+     -moz-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+          box-shadow: 0 5px 10px rgba(0,0,0,.2);
+}
+
+.tt-suggestion {
+  padding: 3px 20px;
+  font-size: 16px;
+  line-height: 21px;
+}
+
+.tt-suggestion.tt-is-under-cursor {
+  color: #fff;
+  background-color: #a3be99;
+}
+
+.tt-suggestion p {
+  margin: 0;
+}
 
 .lt-ie9 .search .inner input[type="text"]
 {
@@ -456,7 +505,6 @@ a.search_map {
 	width: 229px;
 	height: 48px;
 	background: url(images/search_map.png) no-repeat 0 0;
-	float: left;
 	color: #3f3f3f;
 	font-weight: bold;	
 	padding: 16px 0 0 18px;	
@@ -466,7 +514,6 @@ a.browse_button{
 	display:inline-block;
 	width:229px;
 	height:48px;
-	float:left;
 	color: #3f3f3f;
 	font-weight: bold;	
 	padding: 16px 0 0 18px;	
@@ -754,10 +801,13 @@ a.browse_button{
 }
  /* Hide the slides before the JS is loaded. Avoids image jumping */
 .flexslider .slides img {
-	height:90px;
+	/*height:90px;*/
+	max-height:170px;
 	width:auto!important;
     display:block;
-    margin: 0 0 16px;
+    margin: 0 37px 16px 0px;
+    padding:0 0 15px 15px;
+    float:right;
 }
 .flex-pauseplay span {
     text-transform:capitalize;
@@ -818,6 +868,21 @@ a.browse_button{
     display:inline-block;
     cursor:pointer;
     text-indent:-9999px;
+}
+.pauseicon{
+	width:37px;
+    height:37px;
+	padding: 0 4px 0 0;    
+    display:inline-block;
+    cursor:pointer;
+    text-indent:-9999px;
+    background:url(images/pause.png) no-repeat 0 0;
+    position:absolute;
+    top:0;
+    right:0;
+    display:none;
+    opacity:0.1;
+    z-index:9999;
 }
 .flex-direction-nav .flex-prev {
     background:url(images/prev.png) no-repeat 0 0;

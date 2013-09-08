@@ -3,7 +3,7 @@
 global $ENV;
 
 /* What authencation class should we use to power the login/ACL? */
-$config['authentication_class'] = "cosi_authentication";
+$config['authentication_class'] = "role_authentication";
 
 // Merge in the config options from global_config.php
 $config = array_merge($config, $ENV);
@@ -65,6 +65,24 @@ $application_directives = array(
 				"active_application" => "portal",
 				"default_controller" => "home/index",
 				"routes" => array("topic/(:any)" => "topic/view_topic/$1","(:any)"=>"core/dispatcher/$1", ),
+			),
+	"apps" =>
+			array(
+				"base_url" => "%%BASEURL%%/apps/",
+				"active_application" => "apps",
+				"default_controller" => "uploader/index"
+			),
+	"roles" =>
+			array(
+				"base_url" => "%%BASEURL%%/roles/",
+				"active_application" => "roles",
+				"default_controller" => "role/index"
+			),
+	"identifier" =>
+			array(
+				"base_url" => "%%BASEURL%%/identifier/",
+				"active_application" => "identifier",
+				"default_controller" => "pids/index"
 			)
 );
 
@@ -438,7 +456,7 @@ $config['default_base_url'] = $default_base_url;
 
 $config['app_routes'] = array();
 // Portal is the default app
-if ($_GET['app'] != "registry")
+if (!array_key_exists($_GET['app'], $application_directives))
 {
 	$_GET['app'] = "portal";
 }

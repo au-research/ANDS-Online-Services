@@ -8,7 +8,6 @@ class Stats {
 	private $CI;
 	private $db;
 
-
 	/**
 	 * Register a page view and essential information
 	 * about the request for statistical purposes
@@ -50,7 +49,6 @@ class Stats {
 
 		$this->db->insert('page_views', $values);
 	}
-
 
 	/**
 	 * Register a click from our website to an outgoing
@@ -94,7 +92,7 @@ class Stats {
 	 * @param note			optionally specifies a note to 
 	 *						be appended to the entry
 	 */
-	public function registerSearchTerm($search_term, $note=null)
+	public function registerSearchTerm($search_term, $num_found, $note=null)
 	{
 		$values = array();
 
@@ -103,14 +101,14 @@ class Stats {
 
 		// The term which was searched for
 		$values['term'] = $search_term;
+		$values['num_found'] = $num_found;
 
 		// Details about the user that browsed here
 		$values['ip_address'] = $this->CI->input->ip_address();
 		$values['user_agent'] = $this->CI->input->user_agent();
 
 		// Including their login id if they are already logged in
-		if($this->CI->user->loggedIn())
-		{
+		if($this->CI->user->loggedIn()){
 			$values['login_identifier'] = $this->CI->user->identifier();
 		}
 
@@ -118,6 +116,58 @@ class Stats {
 		if ($note) { $values['note'] = $note; }
 
 		$this->db->insert('search_terms', $values);
+
+		//increment or update search_occurence and update the ranking
+		
+		$existing_terms = $this->db->select('*')->where('term', $search_term)->limit(1)->get('search_occurence');
+		if($existing_terms->num_rows() == 0){
+			//there is none, add a new one
+			$new_term['term'] = $search_term;
+			$new_term['occurence'] = 1;
+			$new_term['num_found'] = $num_found;
+			$new_term['ranking'] = $this->calculate_ranking(1, $num_found);
+			$this->db->insert('search_occurence', $new_term);
+		}else{
+			//there is already 1
+			foreach($existing_terms->result() as $term){
+				$new_occurence = $term->occurence + 1;
+				$data = array(
+					'occurence' => $new_occurence,
+					'num_found' => $num_found,
+					'ranking' => $this->calculate_ranking($new_occurence, $num_found)
+				);
+				$this->db->where('term', $search_term);
+				$this->db->update('search_occurence', $data);
+			}
+		}
+	}
+
+	/**
+	 * magic that results in the ranking of which we used to suggest search terms
+	 * @param  int $occurence 
+	 * @param  int $num_found 
+	 * @return int ranking
+	 */
+	private function calculate_ranking($occurence, $num_found){
+		return $occurence * log($num_found);
+	}
+
+	/**
+	 * return a list of top 5 ranked search suggestion, ordered by search occurence
+	 * @param  string $like the term to match with
+	 * @return array       
+	 */
+	public function getSearchSuggestion($like)
+	{
+		$result = array();
+		if($like){
+			$this->db->select('term')->order_by('ranking', 'desc')->limit(5)->like('term', $like)->where('ranking >', 0);
+			$matches = $this->db->get('search_occurence');
+			foreach($matches->result() as $match){
+				array_push($result, $match->term);
+			}
+		}
+		return $result;
 	}
 
 	/**
@@ -137,7 +187,7 @@ class Stats {
 		$values['search_term'] = $search_term;
 
 		// The number of objects returned from the search
-		$values['occurrence'] = $occurence;		
+		$values['occurrence'] = $occurence;
 	
 
 		$this->db->insert('search_result_counts', $values);
