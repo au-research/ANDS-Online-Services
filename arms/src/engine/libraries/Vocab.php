@@ -189,14 +189,19 @@ class Vocab {
         $CI =& get_instance();
         $CI->load->library('solr');
 
+        // var_dump($filters);
+        $CI->solr->clearOpt('fq');
         if($filters){
-            $CI->solr->setFilters($filters);
+             $CI->solr->setFilters($filters);
         }
+        
         $CI->solr->setOpt('fq', '+subject_vocab_uri:("'.$uri.'")');
+
+        // var_dumP($CI->solr->constructFieldString());
         $CI->solr->executeSearch();
 
         //if still no result is found, do a fuzzy search, store the old search term and search again
-        if($CI->solr->getNumFound()==0){
+        if($CI->solr->getNumFound()==0 && isset($filters['q'])){
             $new_search_term_array = explode(' ', escapeSolrValue($filters['q']));
             $new_search_term='';
             foreach($new_search_term_array as $c ){

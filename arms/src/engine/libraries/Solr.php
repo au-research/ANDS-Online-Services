@@ -201,7 +201,7 @@ class Solr {
                     $this->setOpt('q', $value);
                 break;
                 case 'q': 
-                    $value = $this->escapeSolrValue($value);
+                    $value = escapeSolrValue($value);
                     $this->setOpt('q', 'fulltext:('.$value.') OR simplified_title:('.iconv('UTF-8', 'ASCII//TRANSLIT', $value).')');
                 break;
                 case 'p': 

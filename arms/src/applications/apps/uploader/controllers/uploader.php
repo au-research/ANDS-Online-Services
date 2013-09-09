@@ -4,8 +4,10 @@ class Uploader extends MX_Controller {
 
 	// Immutable settings
 	const COMPRESSION_PERCENTAGE = 80; // JPEG compression percentage
-	const IMAGE_WIDTH = 470; //pixels, image will be proprtionally resized to fit (if needed)
-	const IMAGE_HEIGHT= 90;
+	const IMAGE_LANDSCAPE_WIDTH = 450; //pixels, image will be proprtionally resized to fit (if needed)
+	const IMAGE_LANDSCAPE_HEIGHT= 350;
+	const IMAGE_PORTRAIT_WIDTH = 303; //pixels, image will be proprtionally resized to fit (if needed)
+	const IMAGE_PORTRAIT_HEIGHT= 303;
 	const MAX_FILE_SIZE_KB = 4096;
 	const MAX_FILE_NAME_LEN = 64;
 	const FILE_PREFIX = "img_"; // settings for the compressed/optimised generated file, filename
@@ -26,6 +28,7 @@ class Uploader extends MX_Controller {
 		$data['recent_uploads'] = $this->getRecentUploads();
 		$data['title'] = "Image Uploader";
 		$data['js_lib'] = array('core');
+		$data['max_filesize'] = min(maxUploadSizeBytes()/1024,self::MAX_FILE_SIZE_KB);
 		$this->load->view('uploader', $data);
 	}
 
@@ -35,7 +38,7 @@ class Uploader extends MX_Controller {
 		// Default settings/restrictions
 		$config['upload_path'] = $this->directory;
 		$config['allowed_types'] = 'gif|jpg|png|jpeg';	
-		$config['max_size']	= self::MAX_FILE_SIZE_KB;
+		$config['max_size']	= min(maxUploadSizeBytes()/1024,self::MAX_FILE_SIZE_KB);
 		$config['max_width']  = '0'; // no restriction (image will be resized anyway!)
 		$config['max_height']  = '0';
 		$config['max_filename']  = self::MAX_FILE_NAME_LEN;
@@ -60,7 +63,15 @@ class Uploader extends MX_Controller {
 
 			// Create the optimised image
 			// "bestfit" param will ensure that the image is downscaled proportionally if needed
-			$image->resizeImage(self::IMAGE_WIDTH,self::IMAGE_HEIGHT, Imagick::FILTER_LANCZOS, 1, true);
+			if ($image->getImageWidth() >= $image->getImageHeight() 
+				&& $image->getImageWidth() > self::IMAGE_LANDSCAPE_WIDTH || $image->getImageHeight() > self::IMAGE_LANDSCAPE_HEIGHT)
+			{
+				$image->resizeImage(self::IMAGE_LANDSCAPE_WIDTH,self::IMAGE_LANDSCAPE_HEIGHT, Imagick::FILTER_LANCZOS, 1, true);
+			}
+			else if ($image->getImageWidth() > self::IMAGE_PORTRAIT_WIDTH || $image->getImageHeight() > self::IMAGE_PORTRAIT_HEIGHT)
+			{
+				$image->resizeImage(self::IMAGE_PORTRAIT_WIDTH,self::IMAGE_PORTRAIT_HEIGHT, Imagick::FILTER_LANCZOS, 1, true);
+			}
 			$image->setImageCompression(Imagick::COMPRESSION_JPEG);
 			$image->setCompression(Imagick::COMPRESSION_JPEG);
 			$image->setCompressionQuality(self::COMPRESSION_PERCENTAGE); 
@@ -72,6 +83,7 @@ class Uploader extends MX_Controller {
 			$data['recent_uploads'] = $this->getRecentUploads();
 			$data['title'] = "Image Uploader";
 			$data['js_lib'] = array('core');
+			$data['max_filesize'] = $config['max_size'];
 
 			$this->load->view('uploader', $data);
 		}

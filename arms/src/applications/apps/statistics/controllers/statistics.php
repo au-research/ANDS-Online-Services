@@ -45,15 +45,16 @@ class Statistics extends MX_Controller {
 			$theMonth = date("m",$from);
 			$theYear = date("Y",$from);
 		}
-		$regsitry_statistics =array();
+		$registry_statistics =array();
 		$newMonth = mktime(0, 0, 0, $theMonth + 1, 0, $theYear);
 		$aMonth = mktime(0, 0, 0, $theMonth, 1, $theYear);				
 		while($aMonth<=$to)
 		{
-			$CI =& get_instance();
-			$db =& $CI->db;
+			//$CI =& get_instance();
+			//$db =& $CI->db;
+			$db = $this->load->database('registry', TRUE);
 			$query = $db->query("SELECT COUNT(`registry_objects`.`class`) as theCount, `registry_objects`.`class`   
-				FROM `dbs_registry`.`registry_object_attributes` , `dbs_registry`.`registry_objects`
+				FROM `registry_object_attributes` , `registry_objects`
 				WHERE `registry_objects`.`registry_object_id` = `registry_object_attributes`.`registry_object_id`
 				AND `registry_object_attributes`.`attribute` = 'created' 
 				AND `registry_objects`.`status` = 'PUBLISHED'
@@ -286,7 +287,7 @@ function getCitationStatistics()
 		$statistics_db = $this->load->database('statistics', TRUE);
 
 		$query = $registry_db->query("SELECT COUNT(DISTINCT(`registry_objects`.`registry_object_id`)) as collection_count, `data_sources`.`data_source_id`
-							FROM `dbs_registry`.`registry_objects`, `dbs_registry`.`data_sources`
+							FROM `registry_objects`,`data_sources`
 							WHERE `registry_objects`.`data_source_id` = `data_sources`.`data_source_id`
 							AND `registry_objects`.`class` = 'collection'
 							AND `registry_objects`.`status` = 'PUBLISHED'
@@ -299,7 +300,7 @@ function getCitationStatistics()
 		}
 
 		$citationMetadata_query = $registry_db->query("SELECT COUNT(DISTINCT(`record_data`.`registry_object_id`)) as citationMetadata_count,  `registry_objects`.`data_source_id`
-							FROM `dbs_registry`.`record_data`, `dbs_registry`.`registry_objects` 
+							FROM `record_data`, `registry_objects` 
 							WHERE `record_data`.`data` LIKE '%citationMetadata%' 
 							AND `record_data`.`scheme` = 'rif' 
 							AND `record_data`.`current` = 'TRUE'
@@ -313,7 +314,7 @@ function getCitationStatistics()
 
 
 		$fullCitation_query = $registry_db->query("SELECT COUNT(DISTINCT(`record_data`.`registry_object_id`)) as fullCitation_count,  `registry_objects`.`data_source_id`
-							FROM `dbs_registry`.`record_data`, `dbs_registry`.`registry_objects` 
+							FROM `record_data`, `registry_objects` 
 							WHERE `record_data`.`data` LIKE '%fullCitation%' 
 							AND `record_data`.`scheme` = 'rif' 
 							AND `record_data`.`current` = 'TRUE'

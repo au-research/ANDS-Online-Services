@@ -139,18 +139,18 @@ else
 
               <?php if($this->user->hasFunction('AUTHENTICATED_USER') && (mod_enabled('pids') || mod_enabled('mydois'))): ?>
                 <li class="btn btn-inverse dropdown">
-                  <a class="dropdown-toggle" data-toggle="dropdown" href="#">Identifiers <b class="caret"></b></a>
+                  <a class="dropdown-toggle" data-toggle="dropdown" href="#">My Identifiers <b class="caret"></b></a>
                   <ul class="dropdown-menu pull-right">
 
                     <?php if (mod_enabled('pids') && $this->config->item('gPIDS_URL_PREFIX')): ?>
                       <li>
-                        <?php echo anchor(identifier_url('pids'), 'Identify My Data');?>
+                        <?php echo anchor(identifier_url('pids'), 'Identify My Data (PIDS)');?>
                       </li>
                     <?php endif; ?>
 
                     <?php if ($this->user->hasFunction('DOI_USER') && mod_enabled('mydois')): ?>
                       <li>
-                        <?php echo anchor(registry_url('mydois'), 'My Digital Object Identifiers (DOI)');?>
+                        <?php echo anchor(registry_url('mydois'), 'Digital Object Identifiers (DOI)');?>
                       </li>
                     <?php endif; ?>
 

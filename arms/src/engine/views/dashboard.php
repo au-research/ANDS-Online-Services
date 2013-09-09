@@ -32,6 +32,23 @@
 				</div>
 				<div class="box-content dash_news">
 					<h4>ANDS Online Services News</h4>
+					<p><small><strong>Update - Service Release 10.2</strong></small> <small class="muted"><small>[September 2013]</small></small></p>
+						<p><small>
+							ANDS Online Services R10.2 adds some minor functionality across the Collections Registry and Research Data Australia as well as adding new experimental web services for interfacing with external partners.
+							Highlights of this release include:
+							<ul style="list-style-type:circle;">
+								<li>experimental interface for exporting RIFCS collection records to ORCID</li>
+								<li>improvements to the spotlight rotator in Research Data Australia</li>
+								<li>enhancements to web services (including OAI provider and DCI web service)</li>
+								<li>a new Identify My Data (PIDS) interface</li>
+								<li><a target="_blank" href="https://github.com/au-research/ANDS-Online-Services/wiki/Release-10.2-Changelog">other minor fixes...</a></li>
+							</ul>
+						</small></p>			
+							<p><small>As always, the ANDS Services Support team is here to help! If your question isn't answered by your Client Liaison Officer or the 
+							<a href="http://ands.org.au/resource/ands-faq.html" target="_blank">FAQ page</a>, please contact ANDS Services Support at 
+							<a href="mailto:services@ands.org.au" target="_blank">services@ands.org.au</a>.</small></p>	
+
+					<hr/>
 					<p><small><strong>Update - Service Release 10.1</strong></small> <small class="muted"><small>[July 2013]</small></small></p>
 						<p><small>
 							ANDS Online Services R10.1 addresses some minor issues across the Collections Registry and Research Data Australia.

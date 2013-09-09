@@ -47,7 +47,7 @@ class MX_Router extends CI_Router
 
 		// Last-minute hack to remove the app from the request segments
 		// XXX: Need to fix this..
-		if(isset($segments[0]) && $segments[0]=="registry")
+		if(isset($segments[0]) && in_array($segments[0], array_keys($this->config->item('application_directives'))))
 		{
 			array_shift($segments);
 		}

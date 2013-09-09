@@ -1,6 +1,6 @@
 ## ANDS Registry
 
-**Latest Release:** 10.0 ([R10 Installation Notes](https://github.com/au-research/ANDS-Online-Services/wiki/R.10-Installation-and-Configuration))
+**Latest Release:** 10.2 ([R10 Changelog](https://github.com/au-research/ANDS-Online-Services/wiki/Release-10.2-Changelog))
 
 
 ## Installation Guide
