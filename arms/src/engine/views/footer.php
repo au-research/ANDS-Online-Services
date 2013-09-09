@@ -134,11 +134,12 @@ $base_url = str_replace('/apps','/registry',base_url());
             <script src="https://maps.googleapis.com/maps/api/js?libraries=drawing&amp;sensor=false" type="text/javascript"></script>
 
          <?php elseif($lib=='angular'):?>
-            <script src="<?php echo base_url();?>assets/lib/angular.min.js"></script>
-            <script src="<?php echo base_url();?>assets/lib/angularmod/angular-slugify.js"></script>
-            <script src="<?php echo base_url();?>assets/lib/angularmod/sortable.js"></script>
-            <script src="<?php echo base_url();?>assets/lib/angularmod/tinymce.js"></script>
-            <script src="<?php echo base_url();?>assets/lib/angularmod/angular-sanitize-1.0.1.js"></script>
+            <script type="text/javascript" src="<?php echo asset_url('lib/angular.min.js', 'base') ?>"></script>
+            <script type="text/javascript" src="<?php echo asset_url('lib/angularmod/angular-slugify.js', 'base') ?>"></script>
+            <script type="text/javascript" src="<?php echo asset_url('lib/angularmod/sortable.js', 'base') ?>"></script>
+            <script type="text/javascript" src="<?php echo asset_url('lib/angularmod/tinymce.js', 'base') ?>"></script>
+            <script type="text/javascript" src="<?php echo asset_url('lib/angularmod/angular-sanitize-1.0.1.js', 'base') ?>"></script>
+
 
         <?php endif; ?>
 
