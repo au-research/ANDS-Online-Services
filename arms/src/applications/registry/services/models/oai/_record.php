@@ -62,7 +62,9 @@ class _record
 		switch($format)
 		{
 		case 'dci':
-			$data = $this->_rec->transformToDCI();
+			$data = "<DigitalContentData>\n";
+			$data .= $this->_rec->transformToDCI();
+			$data .= "\n</DigitalContentData>";
 			break;
 		case 'oai_dc':
 			$data = $this->_rec->transformToDC();
