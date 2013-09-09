@@ -50,10 +50,11 @@ class Statistics extends MX_Controller {
 		$aMonth = mktime(0, 0, 0, $theMonth, 1, $theYear);				
 		while($aMonth<=$to)
 		{
-			$CI =& get_instance();
-			$db =& $CI->db;
+			//$CI =& get_instance();
+			//$db =& $CI->db;
+			$db = $this->load->database('registry', TRUE);
 			$query = $db->query("SELECT COUNT(`registry_objects`.`class`) as theCount, `registry_objects`.`class`   
-				FROM `dbs_registry`.`registry_object_attributes` , `dbs_registry`.`registry_objects`
+				FROM `registry_object_attributes` , `registry_objects`
 				WHERE `registry_objects`.`registry_object_id` = `registry_object_attributes`.`registry_object_id`
 				AND `registry_object_attributes`.`attribute` = 'created' 
 				AND `registry_objects`.`status` = 'PUBLISHED'
