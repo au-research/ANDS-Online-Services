@@ -85,7 +85,7 @@ $application_directives = array(
 				"default_controller" => "pids/index"
 			)
 );
-
+$config['application_directives'] = $application_directives;
 /* If no application is matched, what should we default to? */
 if (PHP_SAPI == 'cli')
 {
