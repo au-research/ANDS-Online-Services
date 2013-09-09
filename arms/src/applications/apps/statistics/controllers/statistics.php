@@ -287,7 +287,7 @@ function getCitationStatistics()
 		$statistics_db = $this->load->database('statistics', TRUE);
 
 		$query = $registry_db->query("SELECT COUNT(DISTINCT(`registry_objects`.`registry_object_id`)) as collection_count, `data_sources`.`data_source_id`
-							FROM `dbs_registry`.`registry_objects`, `dbs_registry`.`data_sources`
+							FROM `registry_objects`,`data_sources`
 							WHERE `registry_objects`.`data_source_id` = `data_sources`.`data_source_id`
 							AND `registry_objects`.`class` = 'collection'
 							AND `registry_objects`.`status` = 'PUBLISHED'
@@ -300,7 +300,7 @@ function getCitationStatistics()
 		}
 
 		$citationMetadata_query = $registry_db->query("SELECT COUNT(DISTINCT(`record_data`.`registry_object_id`)) as citationMetadata_count,  `registry_objects`.`data_source_id`
-							FROM `dbs_registry`.`record_data`, `dbs_registry`.`registry_objects` 
+							FROM `record_data`, `registry_objects` 
 							WHERE `record_data`.`data` LIKE '%citationMetadata%' 
 							AND `record_data`.`scheme` = 'rif' 
 							AND `record_data`.`current` = 'TRUE'
@@ -314,7 +314,7 @@ function getCitationStatistics()
 
 
 		$fullCitation_query = $registry_db->query("SELECT COUNT(DISTINCT(`record_data`.`registry_object_id`)) as fullCitation_count,  `registry_objects`.`data_source_id`
-							FROM `dbs_registry`.`record_data`, `dbs_registry`.`registry_objects` 
+							FROM `record_data`, `registry_objects` 
 							WHERE `record_data`.`data` LIKE '%fullCitation%' 
 							AND `record_data`.`scheme` = 'rif' 
 							AND `record_data`.`current` = 'TRUE'
