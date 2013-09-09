@@ -30,11 +30,11 @@
 									<label>Image URL: <small>(<?=anchor(apps_url('uploader/'), "upload a new image", array("target"=>"_blank"));?>)</small></label>
 									<input type="text" placeholder="Image URL" value="<?php echo $i['img_url'];?>" name="img_url">
 									<label>Image Attribution <small class="muted">(will display on mouse over on image)</small></label>
-									<input type="text" placeholder="Image Attribution" value="<?php echo $i['img_attr'];?>" name="img_attr">
+									<input type="text" placeholder="Image Attribution" value="<?php if(isset($i['img_attr'])) echo $i['img_attr'];?>" name="img_attr">
 									<label>Open In:</label>
 									<select name="new_window" required>
 										<option value="no">Same Window</option>
-										<option value="yes" <?php echo $i['new_window']=='yes' ? 'selected=selected': '';?>>New Window</option>
+										<option value="yes" <?php if(isset($i['new_window'])) echo $i['new_window']=='yes' ? 'selected=selected': '';?>>New Window</option>
 									</select>
 									<label>Visible:</label>
 									<select name="visible" required>
