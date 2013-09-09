@@ -45,7 +45,7 @@ class Statistics extends MX_Controller {
 			$theMonth = date("m",$from);
 			$theYear = date("Y",$from);
 		}
-		$regsitry_statistics =array();
+		$registry_statistics =array();
 		$newMonth = mktime(0, 0, 0, $theMonth + 1, 0, $theYear);
 		$aMonth = mktime(0, 0, 0, $theMonth, 1, $theYear);				
 		while($aMonth<=$to)
