@@ -21,7 +21,7 @@
 					<div ng-hide="c.editing">
 						<div ng-bind-html="c.content" ng-show="c.type == 'html'"></div>
 						<div ng-show="c.type=='gallery'" ng-repeat="img in c.gallery">
-							<img src="{{img.src}}" alt="">
+							<img src="{{img.src}}" alt="" style="width:100px;">
 						</div>
 						<div ng-show="c.type=='list_ro'">
 							<ul>

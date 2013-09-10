@@ -187,6 +187,9 @@ class Solr {
         $this->setOpt('mm', '2'); //minimum should match optional clause
         $this->setOpt('fl', '*, score'); //we'll get the score as well
 
+        //boost
+        $this->setOpt('bq', 'id^1 group^0.8 display_title^0.5 list_title^0.5 fulltext^0.2 (*:* -group:("Australian Research Council"))^3  (*:* -group:("National Health and Medical Research Council"))^3');
+
         //if there's no query to search, eg. rda browsing
         if (!isset($filters["q"])){
             $this->setOpt('q', '*:*');
@@ -201,7 +204,7 @@ class Solr {
                     $this->setOpt('q', $value);
                 break;
                 case 'q': 
-                    $value = escapeSolrValue($value);
+                    $value = $this->escapeSolrValue($value);
                     $this->setOpt('q', 'fulltext:('.$value.') OR simplified_title:('.iconv('UTF-8', 'ASCII//TRANSLIT', $value).')');
                 break;
                 case 'p': 

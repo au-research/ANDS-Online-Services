@@ -124,6 +124,7 @@ class Registry extends MX_Controller {
 		header('Cache-Control: no-cache, must-revalidate');
 		header('Content-type: application/json');
 		$this->load->library('solr');
+		$this->load->helper('presentation_helper');
 		$filters = $this->input->post('filters');
 
 		//check php input for filters (angularjs ajax)

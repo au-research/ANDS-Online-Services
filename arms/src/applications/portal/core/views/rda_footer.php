@@ -77,6 +77,7 @@
         var default_base_url = "<?php echo $this->config->item('default_base_url');?>";
         var suffix = '#!/';
         var deployment_state = "<?php echo $this->config->item('deployment_state');?>";
+        var rda_service_url = "<?php echo $this->config->item('registry_endpoint'); ?>"
         <!-- urchin code -->
         <?php echo urchin_for($this->config->item('rda_urchin_id')); ?>
         var urchin_id = "<?php echo $this->config->item('rda_urchin_id');?>";
@@ -115,6 +116,9 @@
 		    <?php endif; ?>
 		    <?php if ($lib=='vocab_widget'): ?>
 		    	<script src="<?php echo asset_url('applications/registry/vocab_widget/assets/js/vocab_widget.js', 'base_path')?>" type="text/javascript"></script>
+		    <?php endif; ?>
+		    <?php if ($lib=='angular'): ?>
+		    	<script type="text/javascript" src="<?php echo asset_url('lib/angular.min.js', 'base') ?>"></script>
 		    <?php endif; ?>
 		<?php endforeach;?>
 	<?php endif; ?>
