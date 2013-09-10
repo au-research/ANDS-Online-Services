@@ -2,6 +2,7 @@
 
 class Theme_cms extends MX_Controller {
 	private $directory = './assets/shared/theme_pages/';
+	private $index_file = 'theme_cms_index.json';
 
 	function index(){
 		$this->checkWritable();
@@ -64,20 +65,32 @@ class Theme_cms extends MX_Controller {
 	}
 
 	public function list_pages(){
+		$index = read_file($this->directory.$this->index_file);
+		echo $index;
+	}
+
+	public function build_index(){
 		$root = scandir($this->directory, 1);
+		$result = array();
 		$result = array();
 		foreach($root as $value){
 			if($value === '.' || $value === '..') {continue;} 
 			$pieces = explode(".", $value);
 			if(is_file("$this->directory/$value")) {
-				$result[]=$pieces[0];
-				continue;
+				
+				$file = json_decode(read_file($this->directory.$pieces[0].'.json'), true);
+				$result[] = array(
+					'title' => $file['title'],
+					'slug' => $file['slug'],
+					'status' => (isset($file['status'])?$file['status']:'')
+				);
 			} 
-			foreach(find_all_files("$dir/$value") as $value){ 
-				$result[]=$pieces[0]; 
-			}
 		}
-		echo json_encode($result);
+		if(!write_file($this->directory.$this->index_file, json_encode($result), 'w+')){
+			echo 'Failed to write index file';
+		} else {
+			echo 'Index File Written';
+		}
 	}
 	
 	// Initialise

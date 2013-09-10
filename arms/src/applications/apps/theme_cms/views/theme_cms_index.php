@@ -26,7 +26,7 @@
 			<div class="widget-content">
 				<ul>
 					<li ng-repeat="page in pages">
-						<a href="#/view/{{page}}">{{page}}</a>
+						<a href="#/view/{{page.slug}}">{{page.title}}</a>
 					</li>
 				</ul>
 				<div ng-show="pages.length == 0" class="alert alert-info">
