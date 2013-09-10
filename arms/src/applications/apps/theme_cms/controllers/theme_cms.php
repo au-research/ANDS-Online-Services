@@ -34,12 +34,14 @@ class Theme_cms extends MX_Controller {
 		if($this->write($array->slug, $data)){
 			echo 1;
 		}else echo 0;
+		$this->build_index();
 	}
 
 	public function delete_page(){
 		$data = file_get_contents('php://input');
 		$array = json_decode($data);
 		unlink($this->directory.$array->slug.'.json');
+		$this->build_index();
 	}
 
 	public function save_page(){
@@ -77,19 +79,20 @@ class Theme_cms extends MX_Controller {
 			if($value === '.' || $value === '..') {continue;} 
 			$pieces = explode(".", $value);
 			if(is_file("$this->directory/$value")) {
-				
-				$file = json_decode(read_file($this->directory.$pieces[0].'.json'), true);
-				$result[] = array(
-					'title' => $file['title'],
-					'slug' => $file['slug'],
-					'status' => (isset($file['status'])?$file['status']:'')
-				);
+				if($pieces[0].'.json'!=$this->index_file){
+					$file = json_decode(read_file($this->directory.$pieces[0].'.json'), true);
+					$result[] = array(
+						'title' => (isset($file['title'])?$file['title']:'No Title'),
+						'slug' => (isset($file['slug'])?$file['slug']:$pieces[0]),
+						'status' => (isset($file['status'])?$file['status']:'')
+					);
+				}
 			} 
 		}
 		if(!write_file($this->directory.$this->index_file, json_encode($result), 'w+')){
-			echo 'Failed to write index file';
+			return false;
 		} else {
-			echo 'Index File Written';
+			return true;
 		}
 	}
 	

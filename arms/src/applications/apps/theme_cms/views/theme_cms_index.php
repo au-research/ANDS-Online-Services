@@ -3,9 +3,6 @@
 	<div ng-view></div>
 </div>
 
-
-
-
 <div id="list_template" class="hide">
 	<div class="content-header">
 		<h1>Theme CMS</h1>
@@ -37,8 +34,6 @@
 			</div>
 		</div>
 	</div>
-
-	
 </div>
 
 <div id="new_page_template" class="hide">
