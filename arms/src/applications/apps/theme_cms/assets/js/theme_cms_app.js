@@ -41,12 +41,6 @@ angular.module('theme_cms_app', ['slugifier', 'ui.sortable', 'ui.tinymce', 'ngSa
 					return response.data;
 				});
 				return promise;
-
-				// var url = real_base_url+'registry/services/registry/solr_search/?query='+query;
-				// var promise = $http.get(url).then(function(response){
-				// 	return response.data;
-				// });
-				// return promise;
 			}
 		}
 	}).
@@ -75,6 +69,22 @@ angular.module('theme_cms_app', ['slugifier', 'ui.sortable', 'ui.tinymce', 'ngSa
 				controller: ViewPage,
 				template:$('#view_page_template').html()
 			})
+	}).
+	directive('roSearch', function(){
+		return {
+			restrict : 'A',
+			link: function(scope, element){
+				$(element).ro_search_widget();
+			}
+		}
+	}).
+	directive('colorbox', function(){
+		return {
+			restrict: 'AC',
+			link: function(scope, element, attrs){
+				$(element).colorbox(attrs.colorbox);
+			}
+		}
 	})
 
 function ListCtrl($scope, pages_factory){

@@ -47,6 +47,14 @@
 					<h2><?php echo $f['title']; ?></h2>
 					<div class="theme_facet" search-id="<?php echo $f['facet']['search_id'] ?>" facet-type="<?php echo $f['facet']['type'] ?>"></div>
 				<?php endif; ?>
+
+				<?php if($f['type']=='gallery'): ?>
+					<ul>
+						<?php foreach($f['gallery'] as $i): ?>
+						<li><img src="<?php echo $i['src'];?>" alt=""></li>
+						<?php endforeach; ?>
+					</ul>
+				<?php endif; ?>
 			</div>
 		<?php endforeach; ?>
 	</div>

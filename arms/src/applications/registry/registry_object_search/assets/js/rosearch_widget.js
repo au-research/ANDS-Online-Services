@@ -26,7 +26,7 @@
 	    //search a specific datasource (by default)
 	    'datasource': "all",
 	    //where is the search proxy?
-	    'endpoint': "http://ands3.anu.edu.au/workareas/smcphill/ands-online-services/arms/src/registry/registry_object_search/",
+	    'endpoint': "",
 	    /**
 	     * what to show when there's some weird error? set to boolean(false)
 	     * to supress
@@ -212,7 +212,7 @@
 	    this._uid = this.makeUid();
 	    this._input = input;
 	    this.settings = settings;
-	    this._button = $('<a style="margin-left:1em" class="btn" data-toggle="modal" role="button"><i class="icon-search"> </i></a>');
+	    this._button = $('<a style="" class="btn" data-toggle="modal" role="button"><i class="icon-search"> </i></a>');
 	    this._button.attr('id', this._uid);
 	    this._button.insertAfter(this._input);
 

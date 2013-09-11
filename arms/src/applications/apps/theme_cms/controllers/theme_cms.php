@@ -8,7 +8,7 @@ class Theme_cms extends MX_Controller {
 		$this->checkWritable();
 		$data['title']='Theme CMS';
 		$data['scripts'] = array('theme_cms_app');
-		$data['js_lib'] = array('core', 'tinymce', 'angular');
+		$data['js_lib'] = array('core', 'tinymce', 'angular', 'rosearch_widget', 'colorbox');
 		$this->load->view('theme_cms_index', $data);
 	}
 

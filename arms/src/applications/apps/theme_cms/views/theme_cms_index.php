@@ -66,9 +66,6 @@
 	</div>
 </div>
 
-
-
-
 <div id="view_page_template" class="hide">
 	<div class="content-header">
 		<h1>{{page.title}}</h1>

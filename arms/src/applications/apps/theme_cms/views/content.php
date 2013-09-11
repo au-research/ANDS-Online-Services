@@ -20,8 +20,8 @@
 				<div class="widget-content">
 					<div ng-hide="c.editing">
 						<div ng-bind-html="c.content" ng-show="c.type == 'html'"></div>
-						<div ng-show="c.type=='gallery'" ng-repeat="img in c.gallery">
-							<img src="{{img.src}}" alt="" style="width:100px;">
+						<div ng-show="c.type=='gallery'">
+							<a colorbox ng-repeat="img in c.gallery" href="{{img.src}}" rel="{{c.title}}"><img src="{{img.src}}" alt="" style="width:100px;" rel="{{c.title}}"></a>
 						</div>
 						<div ng-show="c.type=='list_ro'">
 							<ul>
@@ -66,7 +66,7 @@
 								<div ng-repeat="ro in c.list_ro">
 									<div class="input-prepend input-append">
 										<span class="add-on">Key</span>
-										<input type="text" ng-model="ro.key">
+										<input type="text" ng-model="ro.key" ro-search>
 										<a href="" class="btn" ng-click="removeFromList(c.list_ro, $index)"><i class="icon icon-remove"></i></a>
 									</div>
 								</div>

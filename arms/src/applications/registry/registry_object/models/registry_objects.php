@@ -451,7 +451,7 @@ class Registry_objects extends CI_Model {
 				if(in_array($key, $white_list) && array_key_exists('data_source_id', $args)){
 					$ff = $this->getByAttributeDatasource($args['data_source_id'], $key, $value, false, false);
 				}else{
-					$ff = $this->getByAttributeSQL($key, $value, $args['data_source_id']);
+					$ff = $this->getByAttributeSQL($key, $value, false);
 					$filtering = true;
 				}
 
