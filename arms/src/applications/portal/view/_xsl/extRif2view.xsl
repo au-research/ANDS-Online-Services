@@ -408,6 +408,7 @@
         </xsl:if> 
         
         <!--</p> SUBJECTS WRAPPER--> 
+
     </div>  
 </xsl:if>
 
@@ -433,6 +434,15 @@
 
 
     </div>
+    <a href="javascript:;" class="sharing_widget">Share</a>
+    <!-- AddThis Button BEGIN -->
+    <div class="addthis_toolbox addthis_default_style ">
+      <a class="addthis_button_facebook_like"></a>
+      <a class="addthis_button_tweet"></a>
+      <a class="addthis_counter addthis_pill_style"></a>
+    </div>
+    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=xa-521ea5093dcee175&amp;async=1"></script>
+    <!-- AddThis Button END -->
 </div>      
 
 
@@ -442,15 +452,8 @@
   <xsl:if test="ro:location/ro:address/ro:electronic/@type='url' 
     or ro:rights or ro:location/ro:address/ro:electronic/@type='email' or ro:location/ro:address/ro:physical">     
     <div class="right-box">
-        <!-- AddThis Button BEGIN -->
-        <div class="addthis_toolbox addthis_default_style ">
-          <a class="addthis_button_facebook_like"></a>
-          <a class="addthis_button_tweet"></a>
-          <a class="addthis_counter addthis_pill_style"></a>
-        </div>
-        <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=xa-521ea5093dcee175&amp;async=1"></script>
-        <!-- AddThis Button END -->
-        <a href="javascript:;" class="sharing_widget">Share</a>
+        
+        
 
         <h2>Access</h2>
         <div class="limitHeight300">
@@ -522,8 +525,6 @@
         </div>
       </xsl:if>
   </div>
-
-
 
 </div> 
 <div class="container_clear"></div>
