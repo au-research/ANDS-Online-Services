@@ -349,6 +349,7 @@ function getCitationStatistics()
 							WHERE `record_data`.`data` LIKE '%citationMetadata%' 
 							AND `record_data`.`scheme` = 'rif' 
 							AND `record_data`.`current` = 'TRUE'
+							AND `registry_objects`.`status` = 'PUBLISHED'							
 							AND `record_data`.`registry_object_id` = `registry_objects`.`registry_object_id`
 							AND `registry_objects`.`class` = 'collection'
 							GROUP BY `registry_objects`.`data_source_id`");
@@ -363,13 +364,14 @@ function getCitationStatistics()
 							WHERE `record_data`.`data` LIKE '%fullCitation%' 
 							AND `record_data`.`scheme` = 'rif' 
 							AND `record_data`.`current` = 'TRUE'
+							AND `registry_objects`.`status` = 'PUBLISHED'							
 							AND `record_data`.`registry_object_id` = `registry_objects`.`registry_object_id`
 							AND `registry_objects`.`class` = 'collection'
 							GROUP BY `registry_objects`.`data_source_id`");
 		foreach($fullCitation_query->result() as $key=>$row)
 		{
 			$query = $statistics_db->query("UPDATE  `citations` SET `fullCitation_count` = ".$row->fullCitation_count." WHERE `data_source_id` = ".$row->data_source_id);
-		}		
+		}	
 	}
 
 	// Initialise
