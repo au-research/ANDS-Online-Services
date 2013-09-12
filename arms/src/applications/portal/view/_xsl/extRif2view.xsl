@@ -408,6 +408,7 @@
         </xsl:if> 
         
         <!--</p> SUBJECTS WRAPPER--> 
+
     </div>  
 </xsl:if>
 
@@ -433,6 +434,7 @@
 
 
     </div>
+    <a href="javascript:;" class="sharing_widget">Share</a>
 </div>      
 
 
@@ -450,7 +452,7 @@
         </div>
         <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=xa-521ea5093dcee175&amp;async=1"></script>
         <!-- AddThis Button END -->
-        <a href="javascript:;" class="sharing_widget">Share</a>
+        
 
         <h2>Access</h2>
         <div class="limitHeight300">
@@ -522,8 +524,6 @@
         </div>
       </xsl:if>
   </div>
-
-
 
 </div> 
 <div class="container_clear"></div>
