@@ -107,7 +107,7 @@ else
 					   </a>:
 					</p>
 					<div class="inputs">
-						<label for="words">All of these words:</label>
+						<label for="words">This exact phrase:</label>
 						<input type="text" name="words" class="adv_all b_inputs" /> 
 					</div><!-- inputs -->	
 					<div class="inputs">
