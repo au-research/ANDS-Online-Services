@@ -72,7 +72,7 @@
 	<ul class="slides">
 	{{#items}}
 		<li>
-			<img src="{{img_url}}" tip="{{img_attr}}" alt="{{img_attr}}" title="{{img_attr}}" />
+			<img src="{{img_url}}" alt="{{title}}" {{#title}}title="{{title}}"{{/title}} />
 			<a href="{{url}}" class="title">{{{title}}}</a>
 			<div class="excerpt">
 				{{{description}}}

@@ -16,7 +16,7 @@ $(document).ready(function() {
 		$('.slides li img').qtip({
 			position:{my:'left center', at:'center right', viewport:$(window)},
 			style: {classes: 'ui-tooltip-light ui-tooltip-shadow',width: '150px'},
-		}); // Pass through our original event to qTip
+		});
 
 		$(document).on('mouseover', '#spotlight', function(){
 			$('.pauseicon', this).show();

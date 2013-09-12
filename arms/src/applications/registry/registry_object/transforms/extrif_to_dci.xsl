@@ -50,7 +50,7 @@
                         <!-- otherwise anonymus -->
                         <xsl:otherwise>
                             <Author seq="1">
-                                <AuthorName>Anonymus</AuthorName>
+                                <AuthorName>Anonymous</AuthorName>
                             </Author>
                         </xsl:otherwise>
                     </xsl:choose>

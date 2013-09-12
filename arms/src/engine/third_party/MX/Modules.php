@@ -168,9 +168,16 @@ class Modules
 	**/
 	public static function find($file, $module, $base) {
 	
-
+		global $CFG;
 		$segments = explode('/', $file);
 
+		// Find files located outside this application directory
+		// i.e. if the first segment is the name of an application, include it in the search
+		if(in_array($segments[0], array_keys($CFG->item('application_directives'))))
+		{
+			Modules::$locations[substr(dirname(APP_PATH) . "/" . $segments[0] . "/",2)] = "../." . dirname(APP_PATH) . "/" . $segments[0] . "/";
+			array_shift($segments); // remove the application name now that we've included that app as a search location
+		}
 		$file = array_pop($segments);
 		$file_ext = (pathinfo($file, PATHINFO_EXTENSION)) ? $file : $file.EXT;
 		
@@ -179,17 +186,17 @@ class Modules
 		
 		if ( ! empty($segments)) {
 			$modules[array_shift($segments)] = ltrim(implode('/', $segments).'/','/');
-		}	
+		}
 
 		foreach (Modules::$locations as $location => $offset) {	
 			// Check the core folder if all else fails!
 			$modules["core"] = "";	
 			foreach($modules as $module => $subpath) {			
 				$fullpath = $location.$module.'/'.$base.$subpath;
-				
+
 				if ($base == 'libraries/' AND is_file($fullpath.ucfirst($file_ext))) 
 					return array($fullpath, ucfirst($file));
-					
+				
 				if (is_file($fullpath.$file_ext)) return array($fullpath, $file);
 			}
 		}

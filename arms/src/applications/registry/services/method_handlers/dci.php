@@ -4,7 +4,7 @@ require_once(SERVICES_MODULE_PATH . 'method_handlers/_method_handler.php');
 class DCIMethod extends MethodHandler
 {
 	private $default_params = array(
-		'q' => '*:*',
+		'q' => '*:* +class:("collection")',
 		'fl' => 'id',
         'wt' => 'json',
         'rows' => 200
