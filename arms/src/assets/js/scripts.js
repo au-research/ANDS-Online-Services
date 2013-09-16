@@ -144,7 +144,7 @@ $(document).ready(function(){
 							if(data.length>0){
 								var html = '<div class="dropdown"><ul class="nav nav-list">';
 								$.each(data, function(){
-									var h ='<li class=""><a href="'+base_url+'registry_object/view/'+this.subtext+'">'+this.value+'</a></li>';
+									var h ='<li class=""><a href="'+base_url+'registry_object/view/'+this.id+'">'+this.value+'</a></li>';
 									html +=h
 								});
 								html+='</ul></div>';
