@@ -84,6 +84,7 @@ ul.dynatree-container
 	/*border: 1px dotted gray;*/
 	overflow: auto;
 	height: 100%; /* issue 263 */
+	width: 90%;
 }
 
 ul.dynatree-container ul
