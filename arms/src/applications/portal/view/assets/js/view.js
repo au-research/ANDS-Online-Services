@@ -88,7 +88,7 @@ function initConnections(){
         var slug = $(this).attr('ro_slug');
         var id = $(this).attr('ro_id');
         var relation_type = $(this).attr('relation_type');
-        var page = ($(this).attr('page') != '' ? $(this).attr('page') : 1);
+        var page = (typeof $(this).attr('page') != 'undefined' ? $(this).attr('page') : 1);
         if(slug != '')
             var url = base_url+'view/getConnections/?page='+page+'&slug='+slug+'&relation_type='+relation_type;
         if(typeof id != 'undefined' && id != '')
